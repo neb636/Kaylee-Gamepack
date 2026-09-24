@@ -91,7 +91,7 @@ export function MarkCount({ onDone }: StationProps) {
           )
         })}
       </div>
-      <div style={{ minHeight: 140 }}>
+      <div style={{ width: '100%', minHeight: 140 }}>
         {asking && <HowMany key={round} answer={n} onCorrect={() => void correct()} onHint={() => void countTogether(n, setHighlight, alive)} />}
       </div>
     </Stage>
