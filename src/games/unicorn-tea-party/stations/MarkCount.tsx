@@ -60,7 +60,7 @@ export function MarkCount({ onDone }: StationProps) {
 
   const box = 'min(460px, 60vw, 42vh)'
   return (
-    <Stage prompt={prompt}>
+    <Stage prompt={prompt} queuePrompt={asking}>
       <div style={{ position: 'relative', width: box, height: box }}>
         <svg viewBox="0 0 100 100" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible' }}>
           {slots.map(([x, y], i) => (
@@ -91,7 +91,7 @@ export function MarkCount({ onDone }: StationProps) {
           )
         })}
       </div>
-      <div style={{ width: '100%', minHeight: 140 }}>
+      <div style={{ width: '100%', minHeight: 140, display: 'grid', placeItems: 'center' }}>
         {asking && <HowMany key={round} answer={n} onCorrect={() => void correct()} onHint={() => void countTogether(n, setHighlight, alive)} />}
       </div>
     </Stage>

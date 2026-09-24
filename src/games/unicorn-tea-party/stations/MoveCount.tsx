@@ -1,8 +1,8 @@
 // Station 2 - Move and count: drag (or tap) scattered sugar stars into the teapot.
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
-import { DragArea, Draggable, DropZone, numberWord, randomInt, say, shuffle, sounds, useAlive } from '../../../sdk'
-import { art, countTogether, HowMany, Stage, type StationProps } from '../shared'
+import { DragArea, DropZone, numberWord, randomInt, say, shuffle, sounds, useAlive } from '../../../sdk'
+import { art, countTogether, Draggable, HowMany, Stage, type StationProps } from '../shared'
 
 /** Random, non-overlapping spots in a 4x3 grid (with a little wobble). */
 function scatter(n: number) {
@@ -56,7 +56,7 @@ export function MoveCount({ onDone }: StationProps) {
         : 'Move the next stars into the teapot and count them.'
 
   return (
-    <Stage prompt={prompt}>
+    <Stage prompt={prompt} queuePrompt={asking}>
       <DragArea style={{ width: '100%', maxWidth: 900, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ position: 'relative', width: '100%', flex: 1, minHeight: 'min(260px, 28vh)' }}>
           <AnimatePresence>
@@ -80,7 +80,8 @@ export function MoveCount({ onDone }: StationProps) {
         <DropZone id="teapot" style={{ position: 'relative' }}>
           <motion.div key={pot} animate={pot ? { rotate: [0, -8, 8, 0], scale: [1, 1.1, 1] } : {}} style={{ position: 'relative' }}>
             <img src={art.teapot} alt="teapot" style={{ width: 'min(260px, 34vw, 24vh)' }} />
-            {moved.length > 0 && (
+            {/* Running count while she moves stars; hidden for the question so it doesn't give the answer away. */}
+            {moved.length > 0 && (!asking || highlight !== null) && (
               <div style={{ position: 'absolute', top: '42%', left: 0, right: 0, textAlign: 'center' }}>
                 <motion.span
                   key={moved.length}
