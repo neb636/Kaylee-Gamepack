@@ -9,7 +9,11 @@ permissions:
   contents: write
   pull-requests: write
 
-concurrency: preview-${{ github.event.number }}
+concurrency:
+  # The main deploy writes to this same branch. A shared group prevents push races.
+  group: gh-pages-publish
+  cancel-in-progress: false
+  queue: max
 
 jobs:
   preview:

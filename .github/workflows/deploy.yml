@@ -9,8 +9,10 @@ permissions:
   contents: write
 
 concurrency:
-  group: pages-deploy
+  # PR previews also push to gh-pages; serialize both workflows' writes.
+  group: gh-pages-publish
   cancel-in-progress: false
+  queue: max
 
 jobs:
   deploy:
