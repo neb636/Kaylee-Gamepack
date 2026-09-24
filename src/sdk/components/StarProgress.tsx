@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 
 /** A row of stars that fill up as Kaylee makes progress. */
-export function StarProgress({ done, total, size = 36 }: { done: number; total: number; size?: number }) {
+export function StarProgress({ done, total, size = 36 }: { done: number; total: number; size?: number | string }) {
   return (
     <div style={{ display: 'flex', gap: 6, alignItems: 'center' }} aria-label={`${done} of ${total}`}>
       {Array.from({ length: total }, (_, i) => (
