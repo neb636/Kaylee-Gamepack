@@ -1,4 +1,6 @@
 import { motion } from 'motion/react'
+import posthog, { isPostHogEnabled } from '../posthog'
+import { gameLogger } from '../posthog-logger'
 import { go } from '../router'
 import { Mascot, say, sounds, useTrophies, type GameMeta } from './sdk-internal'
 import { games } from './registry'
@@ -13,6 +15,13 @@ function GameCard({ meta, hero, won }: { meta: GameMeta; hero?: boolean; won: bo
       initial={{ y: 30, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       onClick={() => {
+        if (isPostHogEnabled) {
+          posthog.capture('game_session_started', {
+            game_id: meta.id,
+            previously_completed: won,
+          })
+        }
+        gameLogger.sessionStarted(meta.id, won)
         sounds.pop()
         void say(meta.title)
         go.game(meta.id)
