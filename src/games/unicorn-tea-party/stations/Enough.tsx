@@ -67,9 +67,7 @@ export function Enough({ onDone }: StationProps) {
   )
 
   const prompt = asking
-    ? cupsLeft === 0 && served.length < guests.length
-      ? 'No more cups! Does every friend have a cup?'
-      : 'Does every friend have a cup?'
+    ? 'Does every friend have a cup?'
     : round === 0
       ? 'The friends are here for tea! Give each one a cup, then we will see if there are enough.'
       : 'More friends are here! Give each one a cup.'
