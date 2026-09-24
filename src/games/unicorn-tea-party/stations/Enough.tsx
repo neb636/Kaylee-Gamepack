@@ -1,7 +1,7 @@
 // Station 6 - Are there enough? Give each plushie guest one teacup, then decide if there were enough cups.
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo, useState } from 'react'
-import { ChoiceCards, DragArea, Draggable, DropZone, KID_NAME, randomInt, say, sample, shuffle, sounds, useAlive } from '../../../sdk'
+import { ChoiceCards, DragArea, Draggable, DropZone, randomInt, say, sample, shuffle, sounds, useAlive } from '../../../sdk'
 import { art, Stage, type StationProps } from '../shared'
 
 const GUESTS = [
@@ -34,23 +34,23 @@ export function Enough({ onDone }: StationProps) {
     const target = guest ?? guests.findIndex((_, i) => !served.includes(i))
     if (target < 0 || served.includes(target)) {
       sounds.oops()
-      void say('That friend already has a cup! One cup for each friend.')
+      void say('That friend has a cup already. Give the next cup to someone without one!')
       return false
     }
     sounds.pop()
     setServed((s) => [...s, target])
-    void say(`A cup for ${guests[target].name}!`)
+    void say(`Here's a cup for ${guests[target].name}!`)
     return true
   }
 
   const correct = async () => {
     const hungry = guests.find((_, i) => !served.includes(i))
-    const why = hungry
-      ? `Not enough! ${hungry.name} doesn't have a cup.`
+    const response = hungry
+      ? `No, there aren't enough cups. ${hungry.name} is still waiting! You spotted that!`
       : cups > guests.length
-        ? 'Yes, there are enough! Every friend has a cup, and there is one extra!'
-        : 'Yes, there are enough! Every friend has one cup!'
-    await say(`${why} Great job, Kaylee!`)
+        ? "Yes! Everyone has a cup, and there's one left over!"
+        : 'Yes! Everyone has a cup!'
+    await say(response)
     if (!alive()) return
     if (round + 1 < rounds.length) {
       setRound(round + 1)
@@ -67,10 +67,10 @@ export function Enough({ onDone }: StationProps) {
   )
 
   const prompt = asking
-    ? 'Are there enough cups for every friend?'
+    ? 'Does every friend have a cup?'
     : round === 0
-      ? `Are there enough? The friends are here for tea! ${KID_NAME}, give each friend one teacup.`
-      : 'New friends! Give each friend one teacup.'
+      ? 'The friends are here for tea! Give each one a cup, then we will see if there are enough.'
+      : 'More friends are here! Give each one a cup.'
 
   const guestSize = `min(170px, calc((100vw - 60px) / ${guests.length} - 16px), 17vh)`
   return (
@@ -114,7 +114,7 @@ export function Enough({ onDone }: StationProps) {
         </div>
       </DragArea>
       <div style={{ minHeight: 140 }}>
-        {asking && <ChoiceCards key={round} size={Math.min(170, window.innerHeight * 0.14)} choices={choices} onCorrect={() => void correct()} hint="Look at the friends. Does every friend have a cup?" />}
+        {asking && <ChoiceCards key={round} size={Math.min(170, window.innerHeight * 0.14)} choices={choices} onCorrect={() => void correct()} hint="Look closely. Does every friend have a cup?" />}
       </div>
     </Stage>
   )

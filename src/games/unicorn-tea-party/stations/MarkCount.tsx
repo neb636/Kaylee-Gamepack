@@ -26,7 +26,7 @@ export function MarkCount({ onDone }: StationProps) {
       sounds.oops()
       setWiggle(i)
       setTimeout(() => setWiggle(null), 400)
-      void say('That one already has a mark!')
+      void say('You marked that flower already. Pick another one!')
       return
     }
     const next = [...marked, i]
@@ -36,7 +36,12 @@ export function MarkCount({ onDone }: StationProps) {
   }
 
   const correct = async () => {
-    await say(`Yes! ${numberWord(n)} flowers! Great job, Kaylee! Marking is a great strategy!`)
+    const response = round === 0
+      ? `There are ${numberWord(n)} flowers! A strategy is a plan that helps you. Marking each flower helped you keep track!`
+      : round === 1
+        ? `You counted ${numberWord(n)} flowers! Every mark helped you keep track!`
+        : `You marked all ${numberWord(n)} flowers! What a beautiful bouquet!`
+    await say(response)
     if (!alive()) return
     if (round + 1 < rounds.length) {
       setRound(round + 1)
@@ -46,12 +51,12 @@ export function MarkCount({ onDone }: StationProps) {
   }
 
   const prompt = asking
-    ? 'How many flowers are in the bouquet?'
+    ? 'How many flowers did you mark?'
     : round === 0
-      ? "Mark and count! The flowers can't move. Tap each flower to mark it, and count."
+      ? "These flowers won't move, so mark each one as you count."
       : round === rounds.length - 1
-        ? 'Bonus round! A big bouquet! Mark each flower and count.'
-        : 'A new bouquet! Mark each flower and count.'
+        ? 'A big bouquet! Mark each flower and count as you go.'
+        : 'Here is another bouquet. Mark each flower and count.'
 
   const box = 'min(460px, 60vw, 42vh)'
   return (

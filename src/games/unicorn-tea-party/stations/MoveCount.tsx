@@ -33,7 +33,12 @@ export function MoveCount({ onDone }: StationProps) {
   }
 
   const correct = async () => {
-    await say(`Yes! ${numberWord(n)} stars in the teapot! Great job, Kaylee!`)
+    const response = round === 0
+      ? `You moved ${numberWord(n)} stars into the teapot! Nicely done!`
+      : round === 1
+        ? `The teapot has ${numberWord(n)} stars. You counted them all!`
+        : `All ${numberWord(n)} stars made it into the teapot! Wonderful work!`
+    await say(response)
     if (!alive()) return
     if (round + 1 < rounds.length) {
       setRound(round + 1)
@@ -43,12 +48,12 @@ export function MoveCount({ onDone }: StationProps) {
   }
 
   const prompt = asking
-    ? 'How many stars did you put in the teapot?'
+    ? 'How many stars are in the teapot?'
     : round === 0
-      ? 'Move and count! Drag each sugar star into the teapot and count.'
+      ? 'Drag each star into the teapot, counting as you go.'
       : round === rounds.length - 1
-        ? 'Bonus round! Move every star and count!'
-        : 'More stars! Move each one into the teapot.'
+        ? "Let's fill the teapot with stars! Count as you move them."
+        : 'Move the next stars into the teapot and count them.'
 
   return (
     <Stage prompt={prompt}>
@@ -90,7 +95,7 @@ export function MoveCount({ onDone }: StationProps) {
           </motion.div>
         </DropZone>
       </DragArea>
-      <div style={{ minHeight: 140 }}>
+      <div style={{ width: 'min(100%, 430px)', minHeight: 140, display: 'grid', placeItems: 'center' }}>
         {asking && <HowMany key={round} answer={n} onCorrect={() => void correct()} onHint={() => void countTogether(n, setHighlight, alive)} />}
       </div>
     </Stage>

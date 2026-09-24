@@ -34,7 +34,12 @@ export function QuickLook({ onDone }: StationProps) {
 
   const correct = async () => {
     setShowDots(true)
-    await say(`Yes! ${numberWord(n)}! You have super eyes, Kaylee!`)
+    const response = round === 0
+      ? `You spotted ${numberWord(n)} dots! Nice work!`
+      : round === 1
+        ? `There were ${numberWord(n)} dots. You spotted them all!`
+        : `You saw ${numberWord(n)} ${n === 1 ? 'dot' : 'dots'} right away!`
+    await say(response)
     if (!alive()) return
     setShowDots(false)
     if (round + 1 < rounds.length) {
@@ -46,10 +51,10 @@ export function QuickLook({ onDone }: StationProps) {
   const prompt =
     phase === 'ready'
       ? round === 0
-        ? "Challenge! I'll show you some dots for just two seconds. Can you tell how many without counting?"
+        ? "Let's play a quick look game. I'll show the dots for two seconds, then you tell me how many you saw."
         : 'Ready for another quick look?'
       : phase === 'peek'
-        ? 'Look quick!'
+        ? 'Look now!'
         : 'How many dots did you see?'
 
   return (

@@ -20,15 +20,22 @@ const STATIONS: { name: string; icon: string; Component: ComponentType<StationPr
   { name: 'Are there enough?', icon: '🫖', Component: Enough },
 ]
 
-const WORDS = ['one', 'two', 'three', 'four', 'five', 'six']
+const STATION_INTROS = [
+  'First, touch and count!',
+  'Next, move and count!',
+  'Now, mark and count!',
+  "Let's match the numbers!",
+  'Time for a quick look!',
+  'Last stop! Are there enough cups?',
+]
 const RAINBOW = ['#FF8FB8', '#FFC2A8', '#FBEA9A', '#8FE3C8', '#A8DCFF', '#B9A6F5']
 
 function RainbowMap({ station, onGo }: { station: number; onGo: () => void }) {
   const s = STATIONS[station]
   useEffect(() => {
-    const intro = station === 0 ? `Welcome to Sparkle's tea party, ${KID_NAME}! Help Sparkle get ready by counting. ` : ''
-    void say(`${intro}Stop ${WORDS[station]}! ${s.name}!`)
-  }, [station, s.name])
+    const intro = station === 0 ? `Welcome to Sparkle's tea party, ${KID_NAME}! Let's count some treats. ` : ''
+    void say(`${intro}${STATION_INTROS[station]}`)
+  }, [station])
   return (
     <div
       className="screen"
