@@ -1,0 +1,121 @@
+name: New lesson → new game
+
+# Open an issue with the "🦄 New lesson" template (label: new-lesson) and Codex builds a new game + PR.
+# To re-run for an issue: remove the new-lesson label and add it again.
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  # Opening an issue with a label fires both "opened" and "labeled"; keep only one run.
+  group: new-game-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  build-game:
+    # Only the repo owner can trigger this (the repo is public, and runs cost OpenAI credits).
+    if: >-
+      github.event.issue.user.login == github.repository_owner &&
+      github.event.sender.login == github.repository_owner &&
+      contains(github.event.issue.labels.*.name, 'new-lesson') &&
+      (github.event.action == 'opened' || github.event.label.name == 'new-lesson')
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+      GH_TOKEN: ${{ secrets.GH_PAT }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      - name: Say we're on it
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --body "🦄✨ Codex is reading the lesson and dreaming up a new game. A pull request will show up here when it's ready (usually 15–40 minutes). [Watch progress](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+
+      - name: Download the lesson (photos + text)
+        run: |
+          node scripts/fetch-issue-images.mjs
+          npm run --silent games > .lesson-input/existing-games.md
+
+      - name: Codex builds the game
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/prompts/new-game.md
+          model: ${{ vars.CODEX_MODEL || 'gpt-6-sol' }}
+          permission-profile: ':workspace'
+          output-file: .lesson-input/codex-final.md
+
+      - name: Keep changes inside the game folder
+        run: scripts/keep-game-only.sh
+
+      - name: Check the game
+        id: check
+        continue-on-error: true
+        run: npm run check 2>&1 | tee .lesson-input/check.log; exit ${PIPESTATUS[0]}
+
+      - name: Codex fixes failures (one try)
+        if: steps.check.outcome == 'failure'
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/prompts/fix.md
+          model: ${{ vars.CODEX_MODEL || 'gpt-6-sol' }}
+          permission-profile: ':workspace'
+
+      - name: Keep (after fix) changes inside the game folder
+        if: steps.check.outcome == 'failure'
+        run: scripts/keep-game-only.sh
+
+      - name: Check again
+        if: steps.check.outcome == 'failure'
+        run: npm run check
+
+      - name: Prepare PR text
+        run: |
+          title="$(head -n1 .lesson-input/pr-title.txt 2>/dev/null || true)"
+          echo "PR_TITLE=${title:-New game for lesson #$ISSUE_NUMBER}" >> "$GITHUB_ENV"
+          {
+            cat .lesson-input/pr-body.md 2>/dev/null || cat .lesson-input/codex-final.md
+            cat .lesson-input/reverted.md 2>/dev/null || true
+            echo
+            echo "---"
+            echo "Closes #$ISSUE_NUMBER"
+            echo
+            echo "📱 A preview link for the iPad will be posted below in a minute."
+            echo "💬 Want changes? Comment \`/codex <what to change>\` on this PR (inline comments work too)."
+          } > .lesson-input/pr-final.md
+
+      - name: Open the pull request
+        id: pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GH_PAT }}
+          branch: lesson/issue-${{ github.event.issue.number }}
+          commit-message: ${{ env.PR_TITLE }}
+          title: ${{ env.PR_TITLE }}
+          body-path: .lesson-input/pr-final.md
+          labels: new-game
+
+      - name: Link the PR on the issue
+        if: steps.pr.outputs.pull-request-url
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --body "🎉 New game ready for review: ${{ steps.pr.outputs.pull-request-url }}"
+
+      - name: Report failure
+        if: failure()
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --body "😿 Something went wrong building this game. [See the logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}). Remove and re-add the \`new-lesson\` label to try again."
