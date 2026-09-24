@@ -8,6 +8,12 @@ issue. You turn that lesson into **a brand-new, fun game**, and he reviews it in
 Kaylee loves **unicorns, the color pink, winning, and trophies with her name on them.**
 She likes seeing and hearing her name. She **cannot read yet**.
 
+## Pull request review
+
+When opening a new PR, request **@neb636** as a reviewer. If GitHub rejects the request
+because @neb636 authored the PR, say so explicitly in the PR and ask him to review it
+before merge. Do not silently skip the review request.
+
 ## What you build: exactly one new folder
 
 ```
