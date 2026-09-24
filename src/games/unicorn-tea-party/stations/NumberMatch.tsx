@@ -17,12 +17,17 @@ export function NumberMatch({ onDone }: StationProps) {
   const n = rounds[round]
 
   const matched = async () => {
-    await say(`Yes! ${numberWord(n)}! Great job, Kaylee!`)
+    const response = round === 0
+      ? `That's ${numberWord(n)}! You matched the dots!`
+      : round === 1
+        ? `${numberWord(n)} ${n === 1 ? 'dot' : 'dots'}! You found the number, Kaylee!`
+        : `You matched ${numberWord(n)} dots!`
+    await say(response)
     if (alive()) setPhase('hop')
   }
 
   const hopped = async () => {
-    await say('Hooray! Sparkle loves hopping!')
+    await say('Sparkle loved those hops!')
     if (!alive()) return
     if (round + 1 < rounds.length) {
       setRound(round + 1)
@@ -32,10 +37,10 @@ export function NumberMatch({ onDone }: StationProps) {
 
   const prompt =
     phase === 'hop'
-      ? `Tap Sparkle ${numberWord(n)} times to make her hop!`
+      ? `Tap Sparkle ${numberWord(n)} ${n === 1 ? 'time' : 'times'} to make her hop!`
       : round === rounds.length - 1
-        ? 'Bonus card! How many dots? Find the matching number.'
-        : 'Number match! How many dots? Find the matching number.'
+        ? 'Bonus card! Count the dots and find their number.'
+        : 'How many dots do you see? Tap the matching number.'
 
   return (
     <Stage prompt={prompt}>

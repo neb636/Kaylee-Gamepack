@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
-import { useEffect, useMemo, type ReactNode } from 'react'
-import { ChoiceCards, numberWord, SayButton, say, shuffle, sounds, wait } from '../../sdk'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { numberWord, SayButton, say, shuffle, sounds, wait } from '../../sdk'
 import bear from './assets/bear.webp'
 import bunny from './assets/bunny.webp'
 import cupcake from './assets/cupcake.webp'
@@ -82,19 +82,68 @@ export function numberChoices(answer: number) {
 /** "How many?" with number cards. Wrong taps call onHint so the station can count together with her. */
 export function HowMany({ answer, onCorrect, onHint }: { answer: number; onCorrect: () => void; onHint: () => void }) {
   const choices = useMemo(() => numberChoices(answer), [answer])
+  const [shaking, setShaking] = useState<number | null>(null)
+  const [picked, setPicked] = useState<number | null>(null)
+
+  const tap = (number: number) => {
+    if (picked !== null || shaking === number) return
+    if (number === answer) {
+      setPicked(number)
+      sounds.correct()
+      setTimeout(onCorrect, 700)
+      return
+    }
+
+    sounds.oops()
+    setShaking(number)
+    setTimeout(() => setShaking(null), 500)
+    onHint()
+  }
+
   return (
-    <ChoiceCards
-      size={Math.min(130, window.innerHeight * 0.14)}
-      choices={choices.map((n) => ({ key: n, content: n, correct: n === answer, ariaLabel: `number ${n}` }))}
-      onCorrect={onCorrect}
-      onWrong={onHint}
-    />
+    <div style={{ width: 'min(100%, 430px)', display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 'clamp(8px, 2vw, 16px)' }}>
+      {choices.map((number, i) => (
+        <motion.button
+          key={number}
+          aria-label={`number ${number}`}
+          initial={{ scale: 0, rotate: -10 }}
+          animate={
+            shaking === number
+              ? { x: [0, -14, 14, -10, 10, 0], scale: 1, rotate: 0 }
+              : picked === number
+                ? { scale: [1, 1.2, 1.08], rotate: [0, -6, 6, 0] }
+                : { scale: picked !== null ? 0.9 : 1, rotate: 0, opacity: picked !== null ? 0.4 : 1 }
+          }
+          transition={{ type: 'spring', bounce: 0.5, delay: picked === null && shaking === null ? i * 0.07 : 0 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => tap(number)}
+          style={{
+            justifySelf: 'center',
+            width: 'min(100%, 130px)',
+            aspectRatio: '1 / 1',
+            minWidth: 0,
+            padding: 0,
+            borderRadius: 28,
+            background: picked === number ? 'var(--mint)' : '#fff',
+            boxShadow: 'var(--shadow)',
+            fontSize: 'clamp(48px, 12vw, 64px)',
+            lineHeight: 1,
+            fontWeight: 700,
+            display: 'grid',
+            placeItems: 'center',
+            overflow: 'hidden',
+          }}
+        >
+          {number}
+        </motion.button>
+      ))}
+    </div>
   )
 }
 
 /** Point at each item and say the numbers out loud together. */
 export async function countTogether(n: number, setHighlight: (i: number | null) => void, alive: () => boolean) {
-  await say("Let's count together!")
+  await say("Let's count them together!")
   for (let i = 0; i < n; i++) {
     if (!alive()) return
     setHighlight(i)
@@ -104,7 +153,7 @@ export async function countTogether(n: number, setHighlight: (i: number | null) 
   }
   if (!alive()) return
   setHighlight(null)
-  await say('How many?')
+  await say('How many were there?')
 }
 
 // Dot positions (in %) that are easy to "just see" (like dice), for 1-10 dots.

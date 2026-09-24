@@ -20,7 +20,7 @@ export function TouchCount({ onDone }: StationProps) {
       sounds.oops()
       setWiggle(i)
       setTimeout(() => setWiggle(null), 400)
-      void say('You already counted that one!')
+      void say('You counted that cupcake already. Tap a different one!')
       return
     }
     const next = [...counted, i]
@@ -30,7 +30,12 @@ export function TouchCount({ onDone }: StationProps) {
   }
 
   const correct = async () => {
-    await say(`Yes! ${numberWord(n)} cupcakes! Great job, Kaylee! Great counting strategy!`)
+    const response = round === 0
+      ? `You counted ${numberWord(n)} cupcakes! Nicely done!`
+      : round === 1
+        ? `There are ${numberWord(n)} cupcakes. You counted them all!`
+        : `All ${numberWord(n)} cupcakes are counted! Wonderful work!`
+    await say(response)
     if (!alive()) return
     if (round + 1 < rounds.length) {
       setRound(round + 1)
@@ -39,12 +44,12 @@ export function TouchCount({ onDone }: StationProps) {
   }
 
   const prompt = asking
-    ? 'How many cupcakes are there?'
+    ? 'How many cupcakes did you count?'
     : round === 0
-      ? 'Touch and count! The cupcakes are in a line. Tap each cupcake and count.'
+      ? 'Tap each cupcake, one at a time, and count as you go.'
       : round === rounds.length - 1
-        ? 'Bonus round! Lots of cupcakes! Tap each one and count.'
-        : 'More cupcakes! Tap each one and count.'
+        ? 'Look at all these cupcakes! Tap each one and count.'
+        : "Let's count the next group. Tap each cupcake once."
 
   const size = `min(170px, calc((100vw - 60px) / ${n} - 10px))`
   return (
