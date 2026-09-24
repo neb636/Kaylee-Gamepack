@@ -30,6 +30,7 @@ export function TouchCount({ onDone }: StationProps) {
   }
 
   const correct = async () => {
+    if (!alive()) return
     const response = round === 0
       ? `You counted ${numberWord(n)} cupcakes! Nicely done!`
       : round === 1

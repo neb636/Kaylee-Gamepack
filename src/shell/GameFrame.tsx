@@ -2,6 +2,8 @@ import { motion } from 'motion/react'
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import { go } from '../router'
 import { findGame, type GameEntry } from './registry'
+import { AdultDialog } from './AdultDialog'
+import { useSettings } from './settings'
 import { Mascot, sounds, StarProgress, stopSpeaking } from './sdk-internal'
 import { WinCeremony } from './WinCeremony'
 
@@ -15,6 +17,9 @@ declare global {
 function RunningGame({ entry }: { entry: GameEntry }) {
   const Game = useMemo(() => lazy(entry.load), [entry])
   const [round, setRound] = useState(0) // bump to restart the game
+  const [debugStartLesson, setDebugStartLesson] = useState<string | undefined>()
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const { debugMode } = useSettings()
   const [progress, setProgressState] = useState({ done: 0, total: 0 })
   const [won, setWon] = useState(false)
 
@@ -39,7 +44,7 @@ function RunningGame({ entry }: { entry: GameEntry }) {
             </div>
           }
         >
-          <Game onWin={onWin} setProgress={setProgress} />
+          <Game onWin={onWin} setProgress={setProgress} debugStartLesson={debugStartLesson} />
         </Suspense>
       </div>
 
@@ -73,7 +78,29 @@ function RunningGame({ entry }: { entry: GameEntry }) {
             <StarProgress done={progress.done} total={progress.total} size="clamp(24px, 7vw, 36px)" />
           </div>
         )}
+        {debugMode && entry.meta.debugLessons.length > 0 && !won && (
+          <button type="button" aria-label="Debug lessons" onClick={() => setPickerOpen(true)} style={{ pointerEvents: 'auto', marginLeft: 'auto', minWidth: 88, minHeight: 64, padding: '8px 16px', borderRadius: 999, background: '#fff', boxShadow: 'var(--shadow)', fontSize: 22, fontWeight: 700 }}>Debug</button>
+        )}
       </div>
+
+      {pickerOpen && debugMode && (
+        <AdultDialog title="Jump to a lesson" onClose={() => setPickerOpen(false)}>
+          <div style={{ display: 'grid', gap: 12 }}>
+            {entry.meta.debugLessons.map((lesson, index) => (
+              <button key={lesson.id} type="button" onClick={() => {
+                stopSpeaking()
+                setPickerOpen(false)
+                setWon(false)
+                setProgressState({ done: index, total: entry.meta.debugLessons.length })
+                setDebugStartLesson(lesson.id)
+                setRound((value) => value + 1)
+              }} style={{ minHeight: 72, padding: '10px 16px', borderRadius: 18, background: 'var(--lavender)', textAlign: 'left', fontSize: 25, fontWeight: 600 }}>
+                {index + 1}. {lesson.label}
+              </button>
+            ))}
+          </div>
+        </AdultDialog>
+      )}
 
       {won && (
         <WinCeremony
@@ -81,6 +108,7 @@ function RunningGame({ entry }: { entry: GameEntry }) {
           onPlayAgain={() => {
             setWon(false)
             setProgressState({ done: 0, total: 0 })
+            setDebugStartLesson(undefined)
             setRound((r) => r + 1)
           }}
           onHome={go.home}

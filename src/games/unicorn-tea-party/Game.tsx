@@ -11,13 +11,13 @@ import { NumberMatch } from './stations/NumberMatch'
 import { QuickLook } from './stations/QuickLook'
 import { TouchCount } from './stations/TouchCount'
 
-const STATIONS: { name: string; icon: string; Component: ComponentType<StationProps> }[] = [
-  { name: 'Touch and count', icon: '👆', Component: TouchCount },
-  { name: 'Move and count', icon: '✋', Component: MoveCount },
-  { name: 'Mark and count', icon: '✔️', Component: MarkCount },
-  { name: 'Number match', icon: '🃏', Component: NumberMatch },
-  { name: 'Quick look challenge', icon: '👀', Component: QuickLook },
-  { name: 'Are there enough?', icon: '🫖', Component: Enough },
+const STATIONS: { id: string; name: string; icon: string; Component: ComponentType<StationProps> }[] = [
+  { id: 'touch-count', name: 'Touch and count', icon: '👆', Component: TouchCount },
+  { id: 'move-count', name: 'Move and count', icon: '✋', Component: MoveCount },
+  { id: 'mark-count', name: 'Mark and count', icon: '✔️', Component: MarkCount },
+  { id: 'number-match', name: 'Number match', icon: '🃏', Component: NumberMatch },
+  { id: 'quick-look', name: 'Quick look challenge', icon: '👀', Component: QuickLook },
+  { id: 'enough', name: 'Are there enough?', icon: '🫖', Component: Enough },
 ]
 
 const STATION_INTROS = [
@@ -86,9 +86,9 @@ function RainbowMap({ station, onGo }: { station: number; onGo: () => void }) {
   )
 }
 
-export default function Game({ onWin, setProgress }: GameProps) {
-  const [station, setStation] = useState(0)
-  const [playing, setPlaying] = useState(false)
+export default function Game({ onWin, setProgress, debugStartLesson }: GameProps) {
+  const [station, setStation] = useState(() => Math.max(0, STATIONS.findIndex((item) => item.id === debugStartLesson)))
+  const [playing, setPlaying] = useState(() => debugStartLesson !== undefined)
 
   useEffect(() => setProgress(station, STATIONS.length), [station, setProgress])
 

@@ -36,6 +36,7 @@ export function MarkCount({ onDone }: StationProps) {
   }
 
   const correct = async () => {
+    if (!alive()) return
     const response = round === 0
       ? `There are ${numberWord(n)} flowers! A strategy is a plan that helps you. Marking each flower helped you keep track!`
       : round === 1

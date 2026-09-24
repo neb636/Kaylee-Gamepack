@@ -23,6 +23,8 @@ export interface GameMeta {
   createdAt: string
   /** Engraved on the trophy under KAYLEE, e.g. "Counting Champion". */
   trophyTitle: string
+  /** Adult debug picker entries. Each id starts a lesson independently. */
+  debugLessons: { id: string; label: string }[]
 }
 
 export interface GameProps {
@@ -30,4 +32,6 @@ export interface GameProps {
   onWin: () => void
   /** Fills the stars at the top of the screen, e.g. setProgress(2, 6). */
   setProgress: (done: number, total: number) => void
+  /** If set, mount directly at this lesson with fresh local game state. */
+  debugStartLesson?: string
 }
