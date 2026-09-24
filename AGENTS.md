@@ -87,6 +87,12 @@ Dad does not want the same flow every time. Before designing, read `.lesson-inpu
 (or run `npm run games`). **Pick a core mechanic and a setting that the recent games did not use.**
 Don't copy the tea-party "stations on a rainbow path" structure. Invent a fresh shape of game.
 
+**Not just a quiz.** A string of "pick the right card" questions is not a game. The core of every game
+must be *hands-on play in a little world*: dragging, building, dressing, feeding, sorting, catching,
+growing, decorating, finding things in a scene. Answer cards are fine as a small part, not the whole thing.
+Give it a tiny story ("Sparkle's garden needs help before the party!") and a visible payoff that builds
+up as she plays (the castle gets taller, the garden blooms, the snowman gets his hat).
+
 Idea bank (mix, remix, or invent your own):
 - **Feed the unicorn**: drag the right snack into Sparkle's mouth (letters, shapes, counts, healthy foods).
 - **Pop the balloons / bubbles** that match (a sound, a number, a color word...).
