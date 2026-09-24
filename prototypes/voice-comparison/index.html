@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kaylee voice prototypes</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; padding: 32px 20px; background: #f8efff; color: #342347; font-family: ui-rounded, "Arial Rounded MT Bold", system-ui, sans-serif; }
+      main { width: min(100%, 860px); margin: auto; }
+      h1 { font-size: clamp(2rem, 5vw, 3.2rem); margin: 0 0 12px; }
+      p { font-size: 1.12rem; line-height: 1.5; }
+      .script { padding: 18px 22px; border-radius: 20px; background: #fff; box-shadow: 0 4px 20px #6e408d16; }
+      .options { display: grid; gap: 18px; margin-top: 24px; }
+      article { padding: 22px; border: 2px solid #ead8f6; border-radius: 24px; background: #fff; box-shadow: 0 6px 20px #6e408d16; }
+      h2 { margin: 0 0 8px; font-size: 1.5rem; }
+      article p { margin: 0 0 16px; }
+      audio { display: block; width: 100%; min-height: 54px; }
+      .note { font-size: .95rem; color: #6a5879; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>🦄 Kaylee voice prototypes</h1>
+      <p>Three neural voices speaking the same game moment. Tap each player to compare their sound on the iPad.</p>
+      <p class="script">“Hi Kaylee! Sparkle is getting ready for a tea party. Can you put three cupcakes on the table? Let's count together. One... two... three! You did it, Kaylee! Sparkle is so happy!”</p>
+      <div class="options">
+        <article>
+          <h2>1 · Warm guide</h2>
+          <p>A gentle, conversational voice for instructions and encouragement.</p>
+          <audio controls preload="metadata" src="warm-guide.mp3"></audio>
+        </article>
+        <article>
+          <h2>2 · Bright buddy</h2>
+          <p>A cheerful, clear voice with a little more energy.</p>
+          <audio controls preload="metadata" src="bright-buddy.mp3"></audio>
+        </article>
+        <article>
+          <h2>3 · Sparkle character</h2>
+          <p>A playful character voice that could speak as the unicorn.</p>
+          <audio controls preload="metadata" src="sparkle-character.mp3"></audio>
+        </article>
+      </div>
+      <p class="note">These are voice samples only. No app speech has been changed yet.</p>
+    </main>
+  </body>
+</html>

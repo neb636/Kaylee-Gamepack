@@ -7,7 +7,7 @@ export function TrophyRoom() {
   useSayOnMount(
     trophies.length === 0
       ? `Play a game to win your very first trophy, ${KID_NAME}!`
-      : `Wow, ${KID_NAME}! You have ${trophies.length} ${trophies.length === 1 ? 'trophy' : 'trophies'}!`,
+      : `Wow, ${KID_NAME}! Look at all your trophies!`,
   )
   return (
     <div className="screen" style={{ background: 'linear-gradient(var(--lavender), var(--cream))', gap: 24 }}>

@@ -1,7 +1,7 @@
 // Station 6 - Are there enough? Give each plushie guest one teacup, then decide if there were enough cups.
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo, useState } from 'react'
-import { ChoiceCards, DragArea, Draggable, DropZone, KID_NAME, praise, randomInt, say, sample, shuffle, sounds, useAlive } from '../../../sdk'
+import { ChoiceCards, DragArea, Draggable, DropZone, KID_NAME, randomInt, say, sample, shuffle, sounds, useAlive } from '../../../sdk'
 import { art, Stage, type StationProps } from '../shared'
 
 const GUESTS = [
@@ -50,7 +50,7 @@ export function Enough({ onDone }: StationProps) {
       : cups > guests.length
         ? 'Yes, there are enough! Every friend has a cup, and there is one extra!'
         : 'Yes, there are enough! Every friend has one cup!'
-    await say(`${why} ${praise()}`)
+    await say(`${why} Great job, Kaylee!`)
     if (!alive()) return
     if (round + 1 < rounds.length) {
       setRound(round + 1)

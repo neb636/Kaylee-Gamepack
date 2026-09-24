@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "playwright test",
-    "check": "npm run typecheck && npm run build && npm run test",
+    "check": "node scripts/generate-voice.mjs --check && npm run typecheck && npm run build && npm run test",
     "icons": "node scripts/build-icons.mjs",
     "art": "node scripts/optimize-art.mjs",
     "games": "node scripts/list-games.mjs"

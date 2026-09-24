@@ -1,7 +1,7 @@
 // Station 3 - Mark and count: flowers in a bouquet can't move, so tap each to put a mark on it.
 import { motion } from 'motion/react'
 import { useState } from 'react'
-import { numberWord, praise, randomInt, say, shuffle, sounds, useAlive } from '../../../sdk'
+import { numberWord, randomInt, say, shuffle, sounds, useAlive } from '../../../sdk'
 import { art, countTogether, HowMany, Stage, type StationProps } from '../shared'
 
 // Messy bouquet spots (percent of the bouquet box). Deliberately NOT in a line.
@@ -36,7 +36,7 @@ export function MarkCount({ onDone }: StationProps) {
   }
 
   const correct = async () => {
-    await say(`Yes! ${numberWord(n)} flowers! ${praise()} Marking is a great strategy!`)
+    await say(`Yes! ${numberWord(n)} flowers! Great job, Kaylee! Marking is a great strategy!`)
     if (!alive()) return
     if (round + 1 < rounds.length) {
       setRound(round + 1)

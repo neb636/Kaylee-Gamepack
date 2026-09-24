@@ -1,7 +1,7 @@
 // Station 5 - Challenge: see the dots for only 2 seconds. Can she tell how many without counting?
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
-import { BigButton, numberWord, praise, randomInt, say, sounds, useAlive, wait } from '../../../sdk'
+import { BigButton, numberWord, randomInt, say, sounds, useAlive, wait } from '../../../sdk'
 import { countTogether, DotCard, HowMany, Stage, type StationProps } from '../shared'
 
 type Phase = 'ready' | 'peek' | 'ask'
@@ -34,7 +34,7 @@ export function QuickLook({ onDone }: StationProps) {
 
   const correct = async () => {
     setShowDots(true)
-    await say(`Yes! ${numberWord(n)}! You have super eyes, ${praise()}`)
+    await say(`Yes! ${numberWord(n)}! You have super eyes, Kaylee!`)
     if (!alive()) return
     setShowDots(false)
     if (round + 1 < rounds.length) {
