@@ -17,6 +17,7 @@ export function NumberMatch({ onDone }: StationProps) {
   const n = rounds[round]
 
   const matched = async () => {
+    if (!alive()) return
     const response = round === 0
       ? `That's ${numberWord(n)}! You matched the dots!`
       : round === 1
@@ -27,6 +28,7 @@ export function NumberMatch({ onDone }: StationProps) {
   }
 
   const hopped = async () => {
+    if (!alive()) return
     await say('Sparkle loved those hops!')
     if (!alive()) return
     if (round + 1 < rounds.length) {

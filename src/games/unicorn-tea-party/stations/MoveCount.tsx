@@ -33,6 +33,7 @@ export function MoveCount({ onDone }: StationProps) {
   }
 
   const correct = async () => {
+    if (!alive()) return
     const response = round === 0
       ? `You moved ${numberWord(n)} stars into the teapot! Nicely done!`
       : round === 1

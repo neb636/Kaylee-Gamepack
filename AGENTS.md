@@ -46,6 +46,11 @@ const meta: GameMeta = {
   source: { issue: 12, pages: ['issue #12 photos'] },
   createdAt: '2026-10-02',                 // today's date, YYYY-MM-DD
   trophyTitle: 'Seasons Superstar',        // engraved under KAYLEE on her trophy
+  debugLessons: [
+    { id: 'spring', label: 'Spring dress-up' },
+    { id: 'summer', label: 'Summer dress-up' },
+    { id: 'sort', label: 'Sort by season' },
+  ], // stable, unique ids; each starts a self-contained lesson
 }
 export default meta
 ```
@@ -53,10 +58,14 @@ export default meta
 ```tsx
 // src/games/<id>/Game.tsx
 import type { GameProps } from '../../sdk'
-export default function Game({ onWin, setProgress }: GameProps) { ... }
+export default function Game({ onWin, setProgress, debugStartLesson }: GameProps) { ... }
 ```
 
 - Call `setProgress(done, total)` as she advances (fills stars in the top bar).
+- Declare every independently testable lesson in `meta.debugLessons` in play order. When
+  `debugStartLesson` is provided, start directly at that lesson with fresh state and set the
+  matching progress. A jump remounts the game; no lesson may require state from earlier lessons.
+  Keep delayed callbacks and async speech from an old lesson from advancing a new one.
 - Call `onWin()` **once** at the end. The shell then shows confetti, a fanfare, and a gold
   trophy engraved **KAYLEE** + your `trophyTitle`, and saves it to her Trophy Room. Don't build
   your own ending/trophy screen.
@@ -174,6 +183,10 @@ Follow `art/STYLE.md` exactly (style prompt, sprites on pure white, backgrounds 
    skip it (CI runs it after you).
 3. Re-read the design rules above. Is every instruction spoken? Is there no way to fail? Is it
    different from the recent games? Does it work in landscape?
+4. For manual testing, open **For Adults** on the home menu, answer **2 × 10 = 20**, and turn on
+   Debug Mode. In a game, tap **Debug**, answer again, and jump to each lesson. Check that each
+   lesson starts correctly, progress matches its position, and the final lesson can reach the
+   normal trophy ceremony. Turn Debug Mode off when finished.
 
 ## Local commands
 

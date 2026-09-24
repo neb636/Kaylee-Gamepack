@@ -44,6 +44,7 @@ export function Enough({ onDone }: StationProps) {
   }
 
   const correct = async () => {
+    if (!alive()) return
     const hungry = guests.find((_, i) => !served.includes(i))
     const response = hungry
       ? `No, there aren't enough cups. ${hungry.name} is still waiting! You spotted that!`

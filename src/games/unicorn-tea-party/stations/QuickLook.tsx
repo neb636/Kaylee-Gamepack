@@ -33,6 +33,7 @@ export function QuickLook({ onDone }: StationProps) {
   }
 
   const correct = async () => {
+    if (!alive()) return
     setShowDots(true)
     const response = round === 0
       ? `You spotted ${numberWord(n)} dots! Nice work!`

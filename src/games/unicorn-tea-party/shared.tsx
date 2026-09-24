@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { numberWord, SayButton, say, shuffle, sounds, wait } from '../../sdk'
 import bear from './assets/bear.webp'
 import bunny from './assets/bunny.webp'
@@ -84,13 +84,15 @@ export function HowMany({ answer, onCorrect, onHint }: { answer: number; onCorre
   const choices = useMemo(() => numberChoices(answer), [answer])
   const [shaking, setShaking] = useState<number | null>(null)
   const [picked, setPicked] = useState<number | null>(null)
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current) }, [])
 
   const tap = (number: number) => {
     if (picked !== null || shaking === number) return
     if (number === answer) {
       setPicked(number)
       sounds.correct()
-      setTimeout(onCorrect, 700)
+      timer.current = setTimeout(onCorrect, 700)
       return
     }
 

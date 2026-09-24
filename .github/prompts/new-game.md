@@ -19,6 +19,8 @@ First read `AGENTS.md` completely and follow it. It is the source of truth.
    keep it to about 10 images or fewer). Process with `npm run art -- <game-id>` and check the contact sheet.
 4. Build `src/games/<game-id>/` (meta.ts, Game.tsx, anything else). Include `voice-lines.json` with every exact phrase that can reach `say()`, including prompts, hints, number variations, the card title, trophy announcement, and Trophy Room line. The workflow generates Sparkle's audio from this list. Keep phrases finite and explicit so no moment is silent. Only touch your game folder and
    `art/source/games/<game-id>/`.
+   List each self-contained lesson in `meta.debugLessons` and support `debugStartLesson` in `GameProps`.
+   Use the adult-gated Debug picker to test every lesson without playing earlier ones.
 5. Run `npm run typecheck` and `npm run build` and fix everything. Try `npm run test` too (skip if the sandbox
    blocks local ports).
 6. Write two files for the pull request:

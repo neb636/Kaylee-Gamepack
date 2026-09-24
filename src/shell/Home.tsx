@@ -1,7 +1,10 @@
 import { motion } from 'motion/react'
+import { useState } from 'react'
 import { go } from '../router'
 import { Mascot, say, sounds, useTrophies, type GameMeta } from './sdk-internal'
+import { AdultDialog } from './AdultDialog'
 import { games } from './registry'
+import { setDebugMode, useSettings } from './settings'
 import { subjectStyle } from './subjects'
 
 function GameCard({ meta, hero, won }: { meta: GameMeta; hero?: boolean; won: boolean }) {
@@ -68,6 +71,8 @@ function GameCard({ meta, hero, won }: { meta: GameMeta; hero?: boolean; won: bo
 
 export function Home() {
   const trophies = useTrophies()
+  const settings = useSettings()
+  const [adultsOpen, setAdultsOpen] = useState(false)
   const [newest, ...rest] = games
   const won = (id: string) => trophies.some((t) => t.gameId === id)
   return (
@@ -115,6 +120,16 @@ export function Home() {
           More games coming soon!
         </div>
       </div>
+      <button type="button" onClick={() => setAdultsOpen(true)} style={{ alignSelf: 'center', minHeight: 64, padding: '10px 24px', borderRadius: 999, background: '#fff', boxShadow: 'var(--shadow)', fontSize: 24, fontWeight: 600 }}>For Adults</button>
+      {adultsOpen && (
+        <AdultDialog title="Adult Settings" onClose={() => setAdultsOpen(false)}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 18, minHeight: 88, padding: 18, borderRadius: 20, background: '#fff', fontSize: 28, fontWeight: 600 }}>
+            <span style={{ flex: 1 }}>Debug Mode</span>
+            <input type="checkbox" checked={settings.debugMode} onChange={(event) => setDebugMode(event.target.checked)} style={{ width: 44, height: 44, accentColor: 'var(--hotpink)' }} />
+          </label>
+          <p style={{ fontSize: 20, color: 'var(--ink-soft)' }}>When on, a Debug button in each game lets you jump to a lesson.</p>
+        </AdultDialog>
+      )}
     </div>
   )
 }

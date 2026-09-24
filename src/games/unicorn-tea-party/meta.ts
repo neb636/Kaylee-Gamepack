@@ -14,6 +14,14 @@ const meta: GameMeta = {
   source: { pages: ['example-lesson-plan/page-1.png', 'example-lesson-plan/page-2.png'] },
   createdAt: '2026-09-23',
   trophyTitle: 'Counting Champion',
+  debugLessons: [
+    { id: 'touch-count', label: 'Touch and count' },
+    { id: 'move-count', label: 'Move and count' },
+    { id: 'mark-count', label: 'Mark and count' },
+    { id: 'number-match', label: 'Number match' },
+    { id: 'quick-look', label: 'Quick look challenge' },
+    { id: 'enough', label: 'Are there enough?' },
+  ],
 }
 
 export default meta
