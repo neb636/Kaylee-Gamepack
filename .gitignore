@@ -7,3 +7,4 @@ playwright-report
 *.log
 # Full-size generated game art is scratch space; the app uses the small webp copies in src/games/*/assets/
 art/source/games/
+.env

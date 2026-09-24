@@ -4,6 +4,7 @@ import '@fontsource/fredoka/400.css'
 import '@fontsource/fredoka/600.css'
 import '@fontsource/fredoka/700.css'
 import './theme.css'
+import './posthog'
 import App from './App'
 
 createRoot(document.getElementById('root')!).render(

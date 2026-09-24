@@ -2,6 +2,8 @@
 // Six short stations along a rainbow path, one per strategy/activity on the school paper.
 import { motion } from 'motion/react'
 import { useEffect, useState, type ComponentType } from 'react'
+import posthog, { isPostHogEnabled } from '../../posthog'
+import { gameLogger } from '../../posthog-logger'
 import { BigButton, KID_NAME, Mascot, say, type GameProps } from '../../sdk'
 import { art, type StationProps } from './shared'
 import { Enough } from './stations/Enough'
@@ -93,7 +95,23 @@ export default function Game({ onWin, setProgress }: GameProps) {
   useEffect(() => setProgress(station, STATIONS.length), [station, setProgress])
 
   const next = () => {
+    const currentStation = STATIONS[station]
+    if (isPostHogEnabled) {
+      posthog.capture('game_station_completed', {
+        game_id: 'unicorn-tea-party',
+        station_index: station + 1,
+        station_name: currentStation.name,
+      })
+    }
+    gameLogger.stationCompleted('unicorn-tea-party', station + 1)
     if (station + 1 >= STATIONS.length) {
+      if (isPostHogEnabled) {
+        posthog.capture('game_completed', {
+          game_id: 'unicorn-tea-party',
+          station_count: STATIONS.length,
+        })
+      }
+      gameLogger.completed('unicorn-tea-party', STATIONS.length)
       setProgress(STATIONS.length, STATIONS.length)
       onWin()
       return
@@ -102,7 +120,23 @@ export default function Game({ onWin, setProgress }: GameProps) {
     setPlaying(false)
   }
 
-  if (!playing) return <RainbowMap station={station} onGo={() => setPlaying(true)} />
+  if (!playing) {
+    return (
+      <RainbowMap
+        station={station}
+        onGo={() => {
+          if (isPostHogEnabled) {
+            posthog.capture('game_station_started', {
+              game_id: 'unicorn-tea-party',
+              station_index: station + 1,
+              station_name: STATIONS[station].name,
+            })
+          }
+          setPlaying(true)
+        }}
+      />
+    )
+  }
   const { Component } = STATIONS[station]
   return <Component key={station} onDone={next} />
 }

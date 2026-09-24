@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef } from 'react'
+import posthog, { isPostHogEnabled } from '../posthog'
 import { awardTrophy, bigCelebration, BigButton, KID_NAME, Mascot, say, sounds, Trophy, type GameMeta } from './sdk-internal'
 
 /** The same big, happy ending for every game: confetti + a trophy with her name on it. */
@@ -36,7 +37,16 @@ export function WinCeremony({ meta, onPlayAgain, onHome, onTrophies }: { meta: G
         </motion.div>
       </div>
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', marginTop: 12 }}>
-        <BigButton color="white" onClick={onPlayAgain} ariaLabel="Play again">
+        <BigButton
+          color="white"
+          onClick={() => {
+            if (isPostHogEnabled) {
+              posthog.capture('game_restarted', { game_id: meta.id })
+            }
+            onPlayAgain()
+          }}
+          ariaLabel="Play again"
+        >
           🔁 Again
         </BigButton>
         <BigButton color="butter" onClick={onTrophies} ariaLabel="My trophies">
