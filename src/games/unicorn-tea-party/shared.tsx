@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { numberWord, SayButton, say, shuffle, sounds, wait } from '../../sdk'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { Draggable as SdkDraggable, numberWord, SayButton, say, shuffle, sounds, wait, type DraggableProps } from '../../sdk'
 import bear from './assets/bear.webp'
 import bunny from './assets/bunny.webp'
 import cupcake from './assets/cupcake.webp'
@@ -18,8 +18,31 @@ export interface StationProps {
   onDone: () => void
 }
 
-/** Station layout: background, a prompt bubble under the top bar, then the play area. */
-export function Stage({ prompt, children }: { prompt: string; children: ReactNode }) {
+/**
+ * The SDK Draggable also fires onTap when the finger lifts after a drag, so one drag
+ * could count twice (drop + tap). Ignore that trailing tap.
+ */
+export function Draggable({ onDrop, onTap, ...rest }: DraggableProps) {
+  const lastDrop = useRef(0)
+  return (
+    <SdkDraggable
+      {...rest}
+      onDrop={(zone) => {
+        lastDrop.current = Date.now()
+        return onDrop(zone)
+      }}
+      onTap={() => {
+        if (Date.now() - lastDrop.current > 400) onTap?.()
+      }}
+    />
+  )
+}
+
+/**
+ * Station layout: background, a prompt bubble under the top bar, then the play area.
+ * `queuePrompt` waits for the current line (like the last counted number) instead of cutting it off.
+ */
+export function Stage({ prompt, queuePrompt = false, children }: { prompt: string; queuePrompt?: boolean; children: ReactNode }) {
   return (
     <div
       style={{
@@ -36,16 +59,17 @@ export function Stage({ prompt, children }: { prompt: string; children: ReactNod
         overflow: 'hidden',
       }}
     >
-      <PromptBubble text={prompt} />
+      <PromptBubble text={prompt} queue={queuePrompt} />
       <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24 }}>{children}</div>
     </div>
   )
 }
 
 /** Big readable instruction that is also spoken (and can be heard again). */
-export function PromptBubble({ text }: { text: string }) {
+export function PromptBubble({ text, queue = false }: { text: string; queue?: boolean }) {
   useEffect(() => {
-    void say(text)
+    void say(text, { interrupt: !queue })
+    // Only a new prompt should speak; switching queue mode alone should not repeat it.
   }, [text])
   return (
     <motion.div
@@ -88,6 +112,7 @@ export function HowMany({ answer, onCorrect, onHint }: { answer: number; onCorre
   const tap = (number: number) => {
     if (picked !== null || shaking === number) return
     if (number === answer) {
+      stopCountTogether()
       setPicked(number)
       sounds.correct()
       setTimeout(onCorrect, 700)
@@ -141,19 +166,37 @@ export function HowMany({ answer, onCorrect, onHint }: { answer: number; onCorre
   )
 }
 
-/** Point at each item and say the numbers out loud together. */
+let countRun = 0
+
+/** Stop a "count together" hint that is still running (she answered, or another hint started). */
+export function stopCountTogether() {
+  countRun++
+}
+
+/**
+ * Point at each item and say the numbers out loud together.
+ * Resolves true if it finished, false if it was stopped part way.
+ */
 export async function countTogether(n: number, setHighlight: (i: number | null) => void, alive: () => boolean) {
+  const run = ++countRun
+  const stopped = () => {
+    if (!alive()) return true
+    if (run === countRun) return false
+    setHighlight(null)
+    return true
+  }
   await say("Let's count them together!")
   for (let i = 0; i < n; i++) {
-    if (!alive()) return
+    if (stopped()) return false
     setHighlight(i)
     sounds.note(i)
     await say(numberWord(i + 1))
     await wait(150)
   }
-  if (!alive()) return
+  if (stopped()) return false
   setHighlight(null)
   await say('How many were there?')
+  return run === countRun
 }
 
 // Dot positions (in %) that are easy to "just see" (like dice), for 1-10 dots.

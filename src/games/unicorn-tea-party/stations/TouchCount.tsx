@@ -53,7 +53,7 @@ export function TouchCount({ onDone }: StationProps) {
 
   const size = `min(170px, calc((100vw - 60px) / ${n} - 10px))`
   return (
-    <Stage prompt={prompt}>
+    <Stage prompt={prompt} queuePrompt={asking}>
       <div style={{ flex: 1 }} />
       <div style={{ display: 'flex', gap: 10, justifyContent: 'center', alignItems: 'flex-end', marginBottom: '6vh' }}>
         {Array.from({ length: n }, (_, i) => {
@@ -78,7 +78,7 @@ export function TouchCount({ onDone }: StationProps) {
           )
         })}
       </div>
-      <div style={{ width: '100%', minHeight: 140 }}>
+      <div style={{ width: '100%', minHeight: 140, display: 'grid', placeItems: 'center' }}>
         {asking && <HowMany key={round} answer={n} onCorrect={() => void correct()} onHint={() => void countTogether(n, setHighlight, alive)} />}
       </div>
     </Stage>

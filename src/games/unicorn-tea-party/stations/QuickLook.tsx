@@ -28,8 +28,8 @@ export function QuickLook({ onDone }: StationProps) {
 
   const hint = async () => {
     setShowDots(true)
-    await countTogether(n, setHighlight, alive)
-    if (alive()) setShowDots(false)
+    // If she answers while we count, correct() keeps the dots showing.
+    if (await countTogether(n, setHighlight, alive)) setShowDots(false)
   }
 
   const correct = async () => {
