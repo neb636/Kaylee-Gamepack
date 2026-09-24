@@ -63,6 +63,9 @@ export default function Game({ onWin, setProgress }: GameProps) { ... }
 - Your game fills the whole screen (`position: absolute; inset: 0`). Must work in **portrait
   and landscape** on iPad (820×1180, 1180×820, 1024×1366) and not overflow. Size things with
   `min(..px, ..vw, ..vh)`.
+- **Fill the screen** in both orientations: the play area should use the full height (flex: 1, center
+  vertically, scale items up on tall portrait screens). No big empty bands. The school-paper example
+  `unicorn-tea-party` uses a full-bleed scene with the action sitting on the table.
 
 ## Design rules (important)
 
