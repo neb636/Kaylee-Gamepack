@@ -29,6 +29,23 @@ test('home screen lists every game', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
+test('first tap plays a generated Sparkle voice clip', async ({ page }) => {
+  const errors = trackErrors(page)
+  await page.addInitScript(() => {
+    Object.defineProperty(Navigator.prototype, 'webdriver', { get: () => false })
+    const observed = window as unknown as { __voiceStarts: number }
+    observed.__voiceStarts = 0
+    const original = AudioBufferSourceNode.prototype.start
+    AudioBufferSourceNode.prototype.start = function (...args) {
+      observed.__voiceStarts++
+      return original.apply(this, args)
+    }
+  })
+  await start(page)
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __voiceStarts: number }).__voiceStarts)).toBeGreaterThan(0)
+  expect(errors).toEqual([])
+})
+
 test('SDK playground renders', async ({ page }) => {
   const errors = trackErrors(page)
   await start(page, '#/playground')

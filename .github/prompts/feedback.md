@@ -10,6 +10,7 @@ First read `AGENTS.md` completely and follow it.
 ## Steps
 1. Figure out which game folder(s) this PR adds (see `pr.md`) and make the requested changes there.
    If he asks for new or changed art, generate it following `art/STYLE.md` and run `npm run art -- <game-id>`.
+   If spoken text changes, update `voice-lines.json` with every exact possible phrase. The workflow regenerates the clips.
 2. Run `npm run typecheck` and `npm run build` and fix everything (try `npm run test` if the sandbox allows).
 3. Write `.lesson-input/reply.md`: a short, friendly summary for Dad of what you changed (bullets), plus any
    question if something in his feedback was unclear.

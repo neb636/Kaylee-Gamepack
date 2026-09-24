@@ -1,6 +1,6 @@
 // Station 4 - Number match: find the number that matches the dot card, then tap Sparkle that many times to make her hop.
 import { useState } from 'react'
-import { Mascot, numberWord, praise, randomInt, say, TapCounter, useAlive } from '../../../sdk'
+import { Mascot, numberWord, randomInt, say, TapCounter, useAlive } from '../../../sdk'
 import { countTogether, DotCard, HowMany, Stage, type StationProps } from '../shared'
 
 export function NumberMatch({ onDone }: StationProps) {
@@ -17,7 +17,7 @@ export function NumberMatch({ onDone }: StationProps) {
   const n = rounds[round]
 
   const matched = async () => {
-    await say(`Yes! ${numberWord(n)}! ${praise()}`)
+    await say(`Yes! ${numberWord(n)}! Great job, Kaylee!`)
     if (alive()) setPhase('hop')
   }
 

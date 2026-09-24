@@ -1,7 +1,7 @@
 // Station 2 - Move and count: drag (or tap) scattered sugar stars into the teapot.
 import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
-import { DragArea, Draggable, DropZone, numberWord, praise, randomInt, say, shuffle, sounds, useAlive } from '../../../sdk'
+import { DragArea, Draggable, DropZone, numberWord, randomInt, say, shuffle, sounds, useAlive } from '../../../sdk'
 import { art, countTogether, HowMany, Stage, type StationProps } from '../shared'
 
 /** Random, non-overlapping spots in a 4x3 grid (with a little wobble). */
@@ -33,7 +33,7 @@ export function MoveCount({ onDone }: StationProps) {
   }
 
   const correct = async () => {
-    await say(`Yes! ${numberWord(n)} stars in the teapot! ${praise()}`)
+    await say(`Yes! ${numberWord(n)} stars in the teapot! Great job, Kaylee!`)
     if (!alive()) return
     if (round + 1 < rounds.length) {
       setRound(round + 1)

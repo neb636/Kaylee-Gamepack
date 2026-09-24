@@ -57,7 +57,11 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
       - run: npm ci
+      - run: python -m pip install edge-tts==7.2.8
       - run: npx playwright install --with-deps chromium
 
       - name: Gather the feedback and the original lesson
@@ -95,7 +99,7 @@ jobs:
       - name: Check the game
         id: check
         continue-on-error: true
-        run: npm run check 2>&1 | tee .lesson-input/check.log; exit ${PIPESTATUS[0]}
+        run: (node scripts/generate-voice.mjs && npm run check) 2>&1 | tee .lesson-input/check.log; exit ${PIPESTATUS[0]}
 
       - name: Codex fixes failures (one try)
         if: steps.check.outcome == 'failure'
@@ -112,7 +116,7 @@ jobs:
 
       - name: Check again
         if: steps.check.outcome == 'failure'
-        run: npm run check
+        run: node scripts/generate-voice.mjs && npm run check
 
       - name: Commit and push
         run: |

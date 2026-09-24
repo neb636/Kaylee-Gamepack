@@ -1,7 +1,7 @@
 // Station 1 - Touch and count: cupcakes in a line, tap each one once while counting.
 import { motion } from 'motion/react'
 import { useState } from 'react'
-import { numberWord, praise, randomInt, say, sounds, useAlive } from '../../../sdk'
+import { numberWord, randomInt, say, sounds, useAlive } from '../../../sdk'
 import { art, CountBadge, countTogether, HowMany, Stage, type StationProps } from '../shared'
 
 export function TouchCount({ onDone }: StationProps) {
@@ -30,7 +30,7 @@ export function TouchCount({ onDone }: StationProps) {
   }
 
   const correct = async () => {
-    await say(`Yes! ${numberWord(n)} cupcakes! ${praise()} Great counting strategy!`)
+    await say(`Yes! ${numberWord(n)} cupcakes! Great job, Kaylee! Great counting strategy!`)
     if (!alive()) return
     if (round + 1 < rounds.length) {
       setRound(round + 1)
