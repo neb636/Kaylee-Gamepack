@@ -68,6 +68,10 @@ export default function Game({ onWin, setProgress }: GameProps) { ... }
 - **Fill the screen** in both orientations: the play area should use the full height (flex: 1, center
   vertically, scale items up on tall portrait screens). No big empty bands. The school-paper example
   `unicorn-tea-party` uses a full-bleed scene with the action sitting on the table.
+- Review the new game at 375×667 (short iPhone), 390×844 (iPhone), 820×1180 (iPad portrait),
+  1180×820 (iPad landscape), and 1440×900 (desktop). Keep every required control visible or
+  reachable by scrolling; check both width and available height. Browser emulation is a useful
+  first pass; Dad checks Safari and the Home Screen app on a real device from the PR preview.
 
 ## Design rules (important)
 
@@ -174,6 +178,13 @@ Follow `art/STYLE.md` exactly (style prompt, sprites on pure white, backgrounds 
    skip it (CI runs it after you).
 3. Re-read the design rules above. Is every instruction spoken? Is there no way to fail? Is it
    different from the recent games? Does it work in landscape?
+4. For a new game, run `node scripts/capture-qa.mjs <game-id>` after building. Open the resulting
+   contact sheet and individual screenshots. Play through the game's actual interactions at the
+   device sizes above, especially its busiest round and the final choice. Check that controls are
+   visible or scrollable, text is legible, and nothing overlaps the top bar. Fix and recheck the
+   new game before the PR. The capture script's trophy screenshot uses a test hook to review the
+   shared ending; it does not replace playing through the game. Report shared-shell defects so
+   they can be fixed separately; the new-game workflow only keeps edits to the new game folder.
 
 ## Local commands
 

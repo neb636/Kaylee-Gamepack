@@ -20,7 +20,8 @@ First read `AGENTS.md` completely and follow it. It is the source of truth.
 4. Build `src/games/<game-id>/` (meta.ts, Game.tsx, anything else). Include `voice-lines.json` with every exact phrase that can reach `say()`, including prompts, hints, number variations, the card title, trophy announcement, and Trophy Room line. The workflow generates Sparkle's audio from this list. Keep phrases finite and explicit so no moment is silent. Only touch your game folder and
    `art/source/games/<game-id>/`.
 5. Run `npm run typecheck` and `npm run build` and fix everything. Try `npm run test` too (skip if the sandbox
-   blocks local ports).
+   blocks local ports). The workflow performs a separate browser playthrough and screenshot review
+   after the voice clips and build are ready, before it opens the PR.
 6. Write two files for the pull request:
    - `.lesson-input/pr-title.txt`: one line, e.g. `New game: Dress Sparkle for the Seasons 🍂`
    - `.lesson-input/pr-body.md`: for Dad, friendly and short:
