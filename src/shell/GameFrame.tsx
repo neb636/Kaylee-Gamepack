@@ -52,7 +52,7 @@ function RunningGame({ entry }: { entry: GameEntry }) {
           right: 16,
           display: 'flex',
           alignItems: 'center',
-          gap: 16,
+          gap: 'clamp(8px, 2vw, 16px)',
           pointerEvents: 'none',
           zIndex: 20,
         }}
@@ -64,13 +64,13 @@ function RunningGame({ entry }: { entry: GameEntry }) {
             sounds.pop()
             go.home()
           }}
-          style={{ pointerEvents: 'auto', width: 76, height: 76, borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 38, display: 'grid', placeItems: 'center' }}
+          style={{ pointerEvents: 'auto', flex: '0 0 76px', width: 76, height: 76, borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 38, display: 'grid', placeItems: 'center' }}
         >
           🏠
         </motion.button>
         {progress.total > 0 && (
-          <div style={{ background: 'rgba(255,255,255,0.85)', borderRadius: 999, padding: '8px 18px', boxShadow: 'var(--shadow)' }}>
-            <StarProgress done={progress.done} total={progress.total} />
+          <div style={{ background: 'rgba(255,255,255,0.85)', borderRadius: 999, padding: '8px clamp(8px, 2vw, 18px)', boxShadow: 'var(--shadow)' }}>
+            <StarProgress done={progress.done} total={progress.total} size="clamp(24px, 7vw, 36px)" />
           </div>
         )}
       </div>

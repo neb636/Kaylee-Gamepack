@@ -87,7 +87,7 @@ export function QuickLook({ onDone }: StationProps) {
           />
         )}
       </div>
-      <div style={{ minHeight: 140, marginTop: 20 }}>
+      <div style={{ width: '100%', minHeight: 140, marginTop: 20, display: 'grid', placeItems: 'center' }}>
         {phase === 'ready' && (
           <BigButton size="xl" onClick={() => void peek()}>
             I'm ready! 👀
