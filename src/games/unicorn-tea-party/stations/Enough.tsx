@@ -67,7 +67,9 @@ export function Enough({ onDone }: StationProps) {
   )
 
   const prompt = asking
-    ? 'Does every friend have a cup?'
+    ? cupsLeft === 0 && served.length < guests.length
+      ? 'No more cups! Does every friend have a cup?'
+      : 'Does every friend have a cup?'
     : round === 0
       ? 'The friends are here for tea! Give each one a cup, then we will see if there are enough.'
       : 'More friends are here! Give each one a cup.'
@@ -77,12 +79,12 @@ export function Enough({ onDone }: StationProps) {
     <Stage prompt={prompt}>
       <DragArea style={{ width: '100%', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', gap: 20 }}>
         {/* Cups waiting on the tray */}
-        <div style={{ display: 'flex', gap: 16, minHeight: 'min(110px, 12vh)', alignItems: 'center', background: 'rgba(255,255,255,0.75)', borderRadius: 999, padding: '8px 28px', boxShadow: 'var(--shadow)' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8, width: 'min(100%, 560px)', minHeight: 'min(110px, 12vh)', alignItems: 'center', background: 'rgba(255,255,255,0.75)', borderRadius: 40, padding: '8px 12px', boxShadow: 'var(--shadow)' }}>
           <AnimatePresence>
             {Array.from({ length: cupsLeft }, (_, i) => (
-              <motion.div key={`${round}-${served.length + i}`} initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
+              <motion.div key={`${round}-${i}`} initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0, position: 'absolute' }}>
                 <Draggable onDrop={(zone) => (zone ? serve(Number(zone.split('-')[1])) : false)} onTap={() => serve()} disabled={asking}>
-                  <img src={art.teacup} alt="teacup" style={{ width: 'min(96px, 10vh)' }} />
+                  <img src={art.teacup} alt="teacup" style={{ width: 'min(76px, 8vh, 19vw)' }} />
                 </Draggable>
               </motion.div>
             ))}
