@@ -34,7 +34,8 @@ function RainbowMap({ station, onGo }: { station: number; onGo: () => void }) {
   const s = STATIONS[station]
   useEffect(() => {
     const intro = station === 0 ? `Welcome to Sparkle's tea party, ${KID_NAME}! Let's count some treats. ` : ''
-    void say(`${intro}${STATION_INTROS[station]}`)
+    // The home card has just spoken the game title. Let it finish before the intro.
+    void say(`${intro}${STATION_INTROS[station]}`, { interrupt: false })
   }, [station])
   return (
     <div
