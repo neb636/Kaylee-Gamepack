@@ -1,0 +1,28 @@
+name: 🦄 New lesson → new game
+description: Upload photos of Kaylee's school papers and Codex will build a new game from them.
+title: "New lesson: "
+labels: ["new-lesson"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Drop in photos of the school paper(s). Codex will read them, invent a **new kind of game**, draw the art,
+        and open a pull request with a preview link you can try on the iPad.
+        Reply on the PR with `/codex <your feedback>` to change anything before merging.
+  - type: textarea
+    id: photos
+    attributes:
+      label: Photos of the school papers
+      description: Drag photos here (or leave empty and describe the topic below).
+      placeholder: Drop images here
+  - type: input
+    id: topic
+    attributes:
+      label: Topic (optional)
+      description: What is she learning? Helpful if the photo is blurry, or if there's no photo.
+      placeholder: e.g. the four seasons, the letter B, counting to 10
+  - type: textarea
+    id: notes
+    attributes:
+      label: Ideas or things Kaylee is into lately (optional)
+      placeholder: e.g. she's obsessed with mermaids this week

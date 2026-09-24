@@ -1,0 +1,144 @@
+name: PR feedback → Codex
+
+# Comment "/codex <what to change>" on a PR (or on a line of code in the PR) and Codex updates it.
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: feedback-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  revise:
+    # Only the repo owner, only on PRs, only comments starting with /codex.
+    if: >-
+      github.event.comment.user.login == github.repository_owner &&
+      startsWith(github.event.comment.body, '/codex') &&
+      (github.event.issue.pull_request || github.event.pull_request)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ secrets.GH_PAT }}
+      PR_NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+      COMMENT_ID: ${{ github.event.comment.id }}
+      # Untrusted text only ever goes through env vars (never ${{ }} inside run:).
+      COMMENT_BODY: ${{ github.event.comment.body }}
+      COMMENT_PATH: ${{ github.event.comment.path }}
+      COMMENT_LINE: ${{ github.event.comment.line }}
+      COMMENT_HUNK: ${{ github.event.comment.diff_hunk }}
+    steps:
+      - name: 👀 react so Dad knows it's working
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request_review_comment" ]; then
+            gh api -X POST "repos/${{ github.repository }}/pulls/comments/$COMMENT_ID/reactions" -f content=eyes
+          else
+            gh api -X POST "repos/${{ github.repository }}/issues/comments/$COMMENT_ID/reactions" -f content=eyes
+          fi
+
+      - name: Find the PR branch
+        run: |
+          branch="$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json headRefName -q .headRefName)"
+          echo "BRANCH=$branch" >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GH_PAT }}
+          ref: ${{ env.BRANCH }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      - name: Gather the feedback and the original lesson
+        run: |
+          issue="$(echo "$BRANCH" | sed -n 's#^lesson/issue-\([0-9]*\)$#\1#p')"
+          if [ -n "$issue" ]; then ISSUE_NUMBER="$issue" node scripts/fetch-issue-images.mjs; else mkdir -p .lesson-input; fi
+          {
+            echo "# Feedback from Dad"
+            echo
+            printf '%s\n' "${COMMENT_BODY#/codex}"
+            if [ -n "$COMMENT_PATH" ]; then
+              echo
+              echo "## This was an inline comment on \`$COMMENT_PATH\` line $COMMENT_LINE"
+              echo '```diff'
+              printf '%s\n' "$COMMENT_HUNK"
+              echo '```'
+            fi
+          } > .lesson-input/feedback.md
+          gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json title,body,files \
+            -q '"# " + .title + "\n\n" + .body + "\n\n## Changed files\n" + ([.files[].path] | join("\n"))' > .lesson-input/pr.md
+          npm run --silent games > .lesson-input/existing-games.md
+
+      - name: Codex updates the game
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/prompts/feedback.md
+          model: ${{ vars.CODEX_MODEL || 'gpt-6-sol' }}
+          permission-profile: ':workspace'
+          output-file: .lesson-input/codex-final.md
+
+      - name: Keep changes inside the game folder
+        run: scripts/keep-game-only.sh
+
+      - name: Check the game
+        id: check
+        continue-on-error: true
+        run: npm run check 2>&1 | tee .lesson-input/check.log; exit ${PIPESTATUS[0]}
+
+      - name: Codex fixes failures (one try)
+        if: steps.check.outcome == 'failure'
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/prompts/fix.md
+          model: ${{ vars.CODEX_MODEL || 'gpt-6-sol' }}
+          permission-profile: ':workspace'
+
+      - name: Keep (after fix) changes inside the game folder
+        if: steps.check.outcome == 'failure'
+        run: scripts/keep-game-only.sh
+
+      - name: Check again
+        if: steps.check.outcome == 'failure'
+        run: npm run check
+
+      - name: Commit and push
+        run: |
+          git config user.name "codex-bot"
+          git config user.email "codex-bot@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "NO_CHANGES=1" >> "$GITHUB_ENV"
+          else
+            summary="$(printf '%s' "${COMMENT_BODY#/codex}" | tr '\n' ' ' | cut -c1-60)"
+            git commit -m "Codex: ${summary}"
+            git push
+          fi
+
+      - name: Reply on the PR
+        run: |
+          {
+            if [ -n "$NO_CHANGES" ]; then echo "🤔 Codex didn't change any files."; echo; fi
+            cat .lesson-input/reply.md 2>/dev/null || cat .lesson-input/codex-final.md
+            cat .lesson-input/reverted.md 2>/dev/null || true
+            echo
+            echo "📱 The preview link above will update in a minute."
+          } > .lesson-input/reply-final.md
+          gh pr comment "$PR_NUMBER" --repo "${{ github.repository }}" --body-file .lesson-input/reply-final.md
+
+      - name: Report failure
+        if: failure()
+        run: |
+          gh pr comment "$PR_NUMBER" --repo "${{ github.repository }}" --body "😿 Codex couldn't apply that feedback. [See the logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."

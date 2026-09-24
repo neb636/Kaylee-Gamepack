@@ -1,0 +1,22 @@
+// Everything a game needs. Games import ONLY from here (and their own folder):
+//   import { say, sounds, ChoiceCards, praise, type GameProps } from '../../sdk'
+
+export type { GameMeta, GameProps } from './types'
+export { say, stopSpeaking, type SayOptions } from './speech'
+export { sounds } from './sounds'
+export { burst, bigCelebration } from './confetti'
+export { KID_NAME, wait, randomInt, pick, shuffle, sample, praise, numberWord } from './helpers'
+export { useAlive, useSayOnMount } from './hooks'
+
+export { BigButton, type BigButtonProps } from './components/BigButton'
+export { ChoiceCards, type Choice, type ChoiceCardsProps } from './components/ChoiceCards'
+export { DragArea, Draggable, DropZone, type DraggableProps } from './components/Drag'
+export { SortIntoBins, type SortItem, type SortBin, type SortIntoBinsProps } from './components/SortIntoBins'
+export { MatchPairs, type Pair } from './components/MatchPairs'
+export { TapToReveal } from './components/TapToReveal'
+export { TapCounter } from './components/TapCounter'
+export { Mascot, type MascotPose } from './components/Mascot'
+export { StarProgress } from './components/StarProgress'
+export { SayButton } from './components/SayButton'
+export { Scene } from './components/Scene'
+export { Trophy } from './components/Trophy'
