@@ -1,6 +1,6 @@
 // Station 6 - Are there enough? Give each plushie guest one teacup, then decide if there were enough cups.
 import { AnimatePresence, motion } from 'motion/react'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { ChoiceCards, DragArea, Draggable, DropZone, randomInt, say, sample, shuffle, sounds, useAlive } from '../../../sdk'
 import { art, Stage, type StationProps } from '../shared'
 
@@ -23,24 +23,42 @@ export function Enough({ onDone }: StationProps) {
   const [rounds] = useState(() => shuffle<Kind>(['enough', 'short', 'extra']).map(makeRound))
   const [round, setRound] = useState(0)
   const [served, setServed] = useState<number[]>([]) // guest indexes that have a cup
+  const [usedCups, setUsedCups] = useState<number[]>([])
+  const lastDragEnd = useRef(0)
   const alive = useAlive()
   const { guests, cups } = rounds[round]
-  const cupsLeft = cups - served.length
+  const cupsLeft = cups - usedCups.length
   const asking = cupsLeft === 0 || served.length === guests.length
   const enough = cups >= guests.length
 
-  const serve = (guest?: number) => {
+  const serve = (guest?: number, cup?: number) => {
     if (asking) return false
     const target = guest ?? guests.findIndex((_, i) => !served.includes(i))
-    if (target < 0 || served.includes(target)) {
+    const chosenCup = cup ?? Array.from({ length: cups }, (_, i) => i).find((i) => !usedCups.includes(i))
+    if (chosenCup === undefined || usedCups.includes(chosenCup)) return false
+    if (!Number.isInteger(target) || target < 0 || target >= guests.length || served.includes(target)) {
       sounds.oops()
       void say('That friend has a cup already. Give the next cup to someone without one!')
       return false
     }
     sounds.pop()
-    setServed((s) => [...s, target])
+    setServed((s) => s.includes(target) ? s : [...s, target])
+    setUsedCups((used) => used.includes(chosenCup) ? used : [...used, chosenCup])
     void say(`Here's a cup for ${guests[target].name}!`)
     return true
+  }
+
+  const dragCup = (cup: number, zone: string | null) => {
+    // Motion can fire onTap as well as onDragEnd for the same release.
+    lastDragEnd.current = Date.now()
+    return zone?.startsWith('guest-') ? serve(Number(zone.slice('guest-'.length)), cup) : false
+  }
+
+  const tapCup = (cup: number) => {
+    // Let a paired drag-end event arrive before treating this as a simple tap.
+    window.setTimeout(() => {
+      if (Date.now() - lastDragEnd.current > 250) serve(undefined, cup)
+    }, 100)
   }
 
   const correct = async () => {
@@ -55,6 +73,7 @@ export function Enough({ onDone }: StationProps) {
     if (round + 1 < rounds.length) {
       setRound(round + 1)
       setServed([])
+      setUsedCups([])
     } else onDone()
   }
 
@@ -79,9 +98,9 @@ export function Enough({ onDone }: StationProps) {
         {/* Cups waiting on the tray */}
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8, width: 'min(100%, 560px)', minHeight: 'min(110px, 12vh)', alignItems: 'center', background: 'rgba(255,255,255,0.75)', borderRadius: 40, padding: '8px 12px', boxShadow: 'var(--shadow)' }}>
           <AnimatePresence>
-            {Array.from({ length: cupsLeft }, (_, i) => (
+            {Array.from({ length: cups }, (_, i) => i).filter((i) => !usedCups.includes(i)).map((i) => (
               <motion.div key={`${round}-${i}`} initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0, position: 'absolute' }}>
-                <Draggable onDrop={(zone) => (zone ? serve(Number(zone.split('-')[1])) : false)} onTap={() => serve()} disabled={asking}>
+                <Draggable onDrop={(zone) => dragCup(i, zone)} onTap={() => tapCup(i)} disabled={asking}>
                   <img src={art.teacup} alt="teacup" style={{ width: 'min(76px, 8vh, 19vw)' }} />
                 </Draggable>
               </motion.div>
