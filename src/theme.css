@@ -17,7 +17,7 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   font-family: 'Fredoka', ui-rounded, 'SF Pro Rounded', system-ui, sans-serif;
   color: var(--ink);
-  background: var(--cream);
+  background: var(--pink);
 }
 
 * {
