@@ -1,4 +1,7 @@
+import babyCroc from './assets/baby-croc.webp'
 import bgBeach from './assets/bg-beach.webp'
+import bgBillabong from './assets/bg-billabong.webp'
+import colorCroc from './assets/bg-color-croc.webp'
 import colorKoala from './assets/bg-color-koala.webp'
 import colorOpera from './assets/bg-color-opera.webp'
 import colorPip from './assets/bg-color-pip-beach.webp'
@@ -11,6 +14,8 @@ import clownfish from './assets/clownfish.webp'
 import gumLeaf from './assets/gum-leaf.webp'
 import koalaAwake from './assets/koala-awake.webp'
 import koalaSleep from './assets/koala-sleep.webp'
+import crocEgg from './assets/croc-egg.webp'
+import croc from './assets/croc-mama.webp'
 import kookaburra from './assets/kookaburra.webp'
 import mama from './assets/mama-kangaroo.webp'
 import octopus from './assets/octopus.webp'
@@ -25,16 +30,21 @@ import sunHat from './assets/sun-hat.webp'
 import water from './assets/water-bottle.webp'
 
 export const art = {
+  babyCroc,
   bgBeach,
+  bgBillabong,
   bgForest,
   bgNight,
   bgOpera,
   bgOutback,
   bgReef,
   clownfish,
+  colorCroc,
   colorKoala,
   colorOpera,
   colorPip,
+  croc,
+  crocEgg,
   gumLeaf,
   koalaAwake,
   koalaSleep,

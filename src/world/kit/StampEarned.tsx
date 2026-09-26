@@ -34,7 +34,7 @@ export function StampEarned({ activity, onClose }: { activity: ActivityInfo; onC
       animate={{ opacity: 1 }}
       style={{ position: 'absolute', inset: 0, zIndex: 40, background: 'rgba(217, 204, 255, 0.98)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 'min(20px, 3vh)', padding: 'var(--top-clear) 20px 20px' }}
     >
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 'min(24px, 4vw)' }}>
+      <div style={{ position: 'relative', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: 'min(24px, 4vw)', maxWidth: '100%' }}>
         <motion.div
           initial={{ scale: 3, rotate: -40, opacity: 0 }}
           animate={{ scale: 1, rotate: -12, opacity: 1 }}

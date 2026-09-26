@@ -26,6 +26,10 @@ const PUPPET_SCENARIOS = [
   ['koko', 'chew', 1.2],
   ['koko', 'yuck', 1.1],
   ['koko', 'yawn', 1.8],
+  ['chompy', 'snap', 1.1],
+  ['chompy', 'gulp', 1.1],
+  ['chompy', 'swim', 2.2],
+  ['chompy', 'cheer', 1.2],
   ['sparkle', 'cheer', 1.4],
   ['sparkle', 'wave', 1.4],
 ].map(([id, action, seconds]) => ({
@@ -87,6 +91,36 @@ const GAME_SCENARIOS = [
         }
         await page.mouse.up()
       } else await leaf.click({ force: true })
+    },
+  },
+  {
+    name: 'croc-ride',
+    seconds: 3,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/australia/croc`)
+      await page.waitForTimeout(500)
+      await skip(page)
+      await page.waitForTimeout(600)
+      for (let i = 0; i < 3; i++) {
+        await page.getByRole('button', { name: 'egg' }).first().click({ force: true }).catch(() => {})
+        await page.waitForTimeout(i === 0 ? 3500 : 400) // Sparkle tells the chirp fact after the first egg
+      }
+      await page.waitForTimeout(9000) // the chirp fact and the carry line
+    },
+    act: async (page) => {
+      const baby = page.getByRole('button', { name: 'baby crocodile' }).first()
+      const chompy = page.locator('[data-dropzone="chompy"]').first()
+      const from = await baby.boundingBox().catch(() => null)
+      const to = await chompy.boundingBox().catch(() => null)
+      if (!from || !to) throw new Error('no baby crocodile or Chompy found')
+      // Slow drag toward her snout (the right end) so her jaw has time to open wide.
+      await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2)
+      await page.mouse.down()
+      for (let i = 1; i <= 14; i++) {
+        await page.mouse.move(from.x + from.width / 2 + ((to.x + to.width * 0.8 - from.x - from.width / 2) * i) / 14, from.y + from.height / 2 + ((to.y + to.height * 0.45 - from.y - from.height / 2) * i) / 14)
+        await page.waitForTimeout(45)
+      }
+      await page.mouse.up()
     },
   },
 ]

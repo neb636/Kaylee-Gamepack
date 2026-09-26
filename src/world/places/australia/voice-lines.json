@@ -21,7 +21,7 @@
     "voice": "pip"
   },
   {
-    "text": "Get all five stamps to start the party!",
+    "text": "Get all the stamps to start the party!",
     "voice": "pip"
   },
   "Kaylee, you did it! You won the Australia Explorer trophy!",
@@ -45,6 +45,14 @@
   {
     "text": "That's my Pip!",
     "voice": "mama"
+  },
+  {
+    "text": "Hee hee! Snap snap!",
+    "voice": "chompy"
+  },
+  {
+    "text": "I'm a friendly croc!",
+    "voice": "chompy"
   },
   {
     "text": "Welcome to the outback! It's hot and dry here.",
@@ -157,6 +165,36 @@
   "That's a crab!",
   "That's a puffer fish!",
   "That's a seashell!",
+  {
+    "text": "G'day! I'm Chompy! My eggs are hatching!",
+    "voice": "chompy"
+  },
+  "Tap the eggs to help the babies hatch!",
+  "Baby crocs chirp to call their mama!",
+  {
+    "text": "Eee! Eee!",
+    "voice": "hatchling"
+  },
+  "Mama crocs carry their babies in their mouth!",
+  "Put each baby in Chompy's mouth!",
+  {
+    "text": "one",
+    "voice": "chompy"
+  },
+  {
+    "text": "two",
+    "voice": "chompy"
+  },
+  {
+    "text": "three",
+    "voice": "chompy"
+  },
+  {
+    "text": "Gentle as a cuddle!",
+    "voice": "chompy"
+  },
+  "Tap Chompy to make her go snap snap!",
+  "Crocodiles grow new teeth all their lives!",
   "At night in Australia, you can see the Southern Cross stars!",
   "Tap the five twinkly stars!",
   "You found the Southern Cross!",
@@ -197,6 +235,10 @@
     "text": "I'm Pat the platypus! Hooray!",
     "voice": "pat"
   },
+  {
+    "text": "Snap snap! My babies say hi!",
+    "voice": "chompy"
+  },
   "Sydney has some of the biggest fireworks in the world!",
   {
     "text": "Thank you, Kaylee! You're a true Aussie mate!",
@@ -207,6 +249,7 @@
   "Sea turtle sticker! Sea turtles lived when the dinosaurs did!",
   "Kookaburra sticker! Kookaburras sound like they are laughing!",
   "Platypus sticker! A platypus has a bill like a duck!",
+  "Crocodile sticker! The biggest reptile in the world!",
   "Much of Australia is hot and sunny, with big dry deserts.",
   "In Australia, people say G'day! It means hello!",
   "In Australia, Christmas comes in summer! Beach day!",
@@ -214,6 +257,7 @@
   "The Sydney Opera House looks like big white sails!",
   "Australia is a country and a whole continent!",
   "The Great Barrier Reef is so big, you can see it from space!",
+  "Crocodiles live in warm rivers up north. Always stay far from their water!",
   "This is Australia! Tap a picture to learn more.",
   "Want to see real koalas?",
   "Want to see real kangaroos hop?",
