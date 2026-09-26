@@ -16,6 +16,7 @@ const meta: PlaceMeta = {
     { id: 'forest', name: 'Gum Tree Forest', icon: '🌿', pos: { x: 76, y: 50 }, sticker: { name: 'koala', img: art.koalaAwake, fact: L.stickers.koala } },
     { id: 'reef', name: 'Great Barrier Reef', icon: '🐠', pos: { x: 84, y: 24 }, sticker: { name: 'sea turtle', img: art.turtle, fact: L.stickers.turtle } },
     { id: 'stars', name: 'Starry Night', icon: '✨', pos: { x: 20, y: 50 }, sticker: { name: 'kookaburra', img: art.kookaburra, fact: L.stickers.kookaburra } },
+    { id: 'croc', name: 'Crocodile River', icon: '🐊', pos: { x: 49, y: 21 }, sticker: { name: 'crocodile', img: art.croc, fact: L.stickers.croc } },
     { id: 'postcard', name: 'Beach Postcard', icon: '🏖️', pos: { x: 72, y: 76 }, sticker: { name: 'platypus', img: art.platypus, fact: L.stickers.platypus } },
   ],
   facts: [
@@ -26,11 +27,13 @@ const meta: PlaceMeta = {
     { icon: '🎭', label: 'Opera House', say: L.facts.opera },
     { icon: '🌏', label: 'Continent', say: L.facts.continent },
     { icon: '🐠', label: 'Reef', say: L.facts.reef },
+    { icon: '🐊', label: 'Crocodiles', say: L.facts.crocs },
   ],
   coloringPages: [
     { id: 'australia-pip', img: art.colorPip },
     { id: 'australia-koala', img: art.colorKoala },
     { id: 'australia-opera', img: art.colorOpera },
+    { id: 'australia-croc', img: art.colorCroc },
   ],
   // Real-world videos for the Theater (button in the country's top bar). `after` offers one when that activity is done.
   videos: [
@@ -38,7 +41,7 @@ const meta: PlaceMeta = {
     { id: 'koala', youtubeId: 'oI3ADcDH0Uc', icon: '🐨', title: 'Real koalas', say: L.videos.koala, after: 'forest' },
     { id: 'reef', youtubeId: 'YN8F-Gddcb0', icon: '🐠', title: 'The Great Barrier Reef', say: L.videos.reef, after: 'reef' },
     { id: 'overview', youtubeId: 'y699qXKDVwE', icon: '🌏', title: 'All about Australia', say: L.videos.overview, start: 23 },
-    { id: 'crocodile', youtubeId: '0hfGznoj_BQ', icon: '🐊', title: 'Crocodiles', say: L.videos.crocodile },
+    { id: 'crocodile', youtubeId: '0hfGznoj_BQ', icon: '🐊', title: 'Crocodiles', say: L.videos.crocodile, after: 'croc' },
   ],
   passportLine: L.passport,
   createdAt: '2026-09-25',

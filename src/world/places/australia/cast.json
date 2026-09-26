@@ -29,6 +29,16 @@
       "voice": "echo",
       "pitch": 4,
       "instructions": "You are Pat, a small, enthusiastic platypus boy from Australia. Excited and proud, a bit squeaky, cheering. Friendly Australian accent."
+    },
+    "chompy": {
+      "voice": "alloy",
+      "pitch": -1,
+      "instructions": "You are Chompy, a big, friendly mama saltwater crocodile from the Top End of Australia. Warm, playful and a little goofy, with a soft, slightly throaty voice and a big grin. Friendly Australian accent. Relaxed, gentle pace, like a kind auntie."
+    },
+    "hatchling": {
+      "voice": "shimmer",
+      "pitch": 4,
+      "instructions": "You are a tiny baby crocodile that just hatched from its egg. Make short, very high, squeaky, excited little chirps. Tiny and cute."
     }
   }
 }

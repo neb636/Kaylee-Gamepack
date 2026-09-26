@@ -42,7 +42,7 @@ function PlacePage({ meta, stamps }: { meta: PlaceMeta; stamps: string[] }) {
       </div>
 
       {/* Stamps: each is also the sticker she earned. */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(88px, 16vw, 130px), 1fr))', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(88px, 13vw, 130px), 1fr))', gap: 12 }}>
         {meta.activities.map((a, i) => {
           const have = stamps.includes(a.id)
           return (

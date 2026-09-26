@@ -75,6 +75,39 @@ const SCREENS = [
       await p.waitForTimeout(4500)
     },
   },
+  { name: 'croc-story', hash: '#/world/australia/croc', wait: 250 },
+  { name: 'croc-hatch', hash: '#/world/australia/croc', act: skip },
+  {
+    name: 'croc-ride',
+    hash: '#/world/australia/croc',
+    act: async (p) => {
+      await skip(p)
+      for (let i = 0; i < 3; i++) {
+        await p.getByRole('button', { name: 'egg' }).first().click({ force: true }).catch(() => {})
+        await p.waitForTimeout(i === 0 ? 3500 : 300) // Sparkle tells the chirp fact after the first egg
+      }
+      await p.waitForTimeout(9000)
+      await p.getByRole('button', { name: 'baby crocodile' }).first().click({ force: true }).catch(() => {})
+      await p.waitForTimeout(700)
+    },
+  },
+  {
+    name: 'croc-swim',
+    hash: '#/world/australia/croc',
+    act: async (p) => {
+      await skip(p)
+      for (let i = 0; i < 3; i++) {
+        await p.getByRole('button', { name: 'egg' }).first().click({ force: true }).catch(() => {})
+        await p.waitForTimeout(i === 0 ? 3500 : 300) // Sparkle tells the chirp fact after the first egg
+      }
+      await p.waitForTimeout(9000)
+      for (let i = 0; i < 3; i++) {
+        await p.getByRole('button', { name: 'baby crocodile' }).first().click({ force: true }).catch(() => {})
+        await p.waitForTimeout(500)
+      }
+      await p.waitForTimeout(7000)
+    },
+  },
   {
     name: 'postcard-color',
     hash: '#/world/australia/postcard',

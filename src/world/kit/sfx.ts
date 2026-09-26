@@ -96,4 +96,13 @@ export const sfx = {
   munch: () => [0, 0.17, 0.34].forEach((d) => noise(0.11, 0.35, 'bandpass', 900 + Math.random() * 500, 900, d, 1.2)),
   /** A little "fwip" for putting something on. */
   fwip: () => noise(0.14, 0.08, 'bandpass', 1200, 4000, 0, 2),
+  /** An eggshell cracking: two dry little ticks. */
+  crack: () => [0, 0.07].forEach((d) => noise(0.05, 0.3, 'highpass', 2500, 3500, d, 1.5)),
+  /** A baby animal's squeaky chirp. */
+  chirp: () => [0, 0.14].forEach((d) => tone(1500, 2600, 0.09, 0.08, 'triangle', d)),
+  /** A big friendly jaw "chomp": a woody knock with a low thud. */
+  chomp: () => {
+    noise(0.07, 0.4, 'bandpass', 1400, 600, 0, 2.5)
+    tone(160, 70, 0.14, 0.2)
+  },
 }

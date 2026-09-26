@@ -7,6 +7,7 @@ const as = (voice: string) => (text: string) => ({ text, voice })
 const pip = as('pip')
 const mama = as('mama')
 const koko = as('koko')
+const chompy = as('chompy')
 const COUNT = ['one', 'two', 'three', 'four', 'five']
 
 export const L = {
@@ -15,13 +16,14 @@ export const L = {
   hubFirst: pip('Tap a spot on the map!'),
   hubNext: pip(`Where should we go next, ${NAME}?`),
   hubParty: pip('Everyone is here! Tap the party!'),
-  partyLocked: pip('Get all five stamps to start the party!'),
+  partyLocked: pip('Get all the stamps to start the party!'),
   trophyWin: `${NAME}, you did it! You won the Australia Explorer trophy!`,
   trophyRoom: `${NAME}, Australia Explorer! From Australia.`,
   tickle: {
     pip: [pip('Hee hee! That tickles!'), pip("Boing! I love hopping!")],
     koko: [koko('Hehe! Cuddles!'), koko('Mmm, I love gum leaves.')],
     mama: [mama("That's my Pip!")],
+    chompy: [chompy('Hee hee! Snap snap!'), chompy("I'm a friendly croc!")],
   },
 
   outback: {
@@ -74,6 +76,18 @@ export const L = {
       shell: "That's a seashell!",
     },
   },
+  croc: {
+    story: [chompy("G'day! I'm Chompy! My eggs are hatching!")],
+    hatch: 'Tap the eggs to help the babies hatch!',
+    chirp: 'Baby crocs chirp to call their mama!',
+    eee: as('hatchling')('Eee! Eee!'),
+    carry: 'Mama crocs carry their babies in their mouth!',
+    ride: "Put each baby in Chompy's mouth!",
+    count: COUNT.slice(0, 3).map(chompy),
+    gentle: chompy('Gentle as a cuddle!'),
+    snap: 'Tap Chompy to make her go snap snap!',
+    teeth: 'Crocodiles grow new teeth all their lives!',
+  },
   stars: {
     story: 'At night in Australia, you can see the Southern Cross stars!',
     tap: 'Tap the five twinkly stars!',
@@ -98,6 +112,7 @@ export const L = {
     shelly: as('shelly')('Hello from the reef!'),
     kooky: as('kooky')('Ha ha ha! Kookaburras love to laugh!'),
     pat: as('pat')("I'm Pat the platypus! Hooray!"),
+    chompy: chompy('Snap snap! My babies say hi!'),
     fireworks: 'Sydney has some of the biggest fireworks in the world!',
     thanks: pip(`Thank you, ${NAME}! You're a true Aussie mate!`),
   },
@@ -107,6 +122,7 @@ export const L = {
     turtle: 'Sea turtle sticker! Sea turtles lived when the dinosaurs did!',
     kookaburra: 'Kookaburra sticker! Kookaburras sound like they are laughing!',
     platypus: 'Platypus sticker! A platypus has a bill like a duck!',
+    croc: 'Crocodile sticker! The biggest reptile in the world!',
   },
   facts: {
     weather: 'Much of Australia is hot and sunny, with big dry deserts.',
@@ -116,6 +132,7 @@ export const L = {
     opera: 'The Sydney Opera House looks like big white sails!',
     continent: 'Australia is a country and a whole continent!',
     reef: "The Great Barrier Reef is so big, you can see it from space!",
+    crocs: 'Crocodiles live in warm rivers up north. Always stay far from their water!',
   },
   passport: 'This is Australia! Tap a picture to learn more.',
   videos: {

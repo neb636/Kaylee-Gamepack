@@ -23,6 +23,7 @@ const SCENARIOS = [
   { name: 'forest', id: 'forest', hash: '#/world/australia/forest' },
   { name: 'reef', id: 'reef', hash: '#/world/australia/reef' },
   { name: 'stars', id: 'stars', hash: '#/world/australia/stars' },
+  { name: 'croc', id: 'croc', hash: '#/world/australia/croc' },
   { name: 'postcard', id: 'postcard', hash: '#/world/australia/postcard' },
   { name: 'party (finale)', id: 'party', hash: '#/world/australia/party', stampAll: true },
 ].filter((s) => !flag('only') || flag('only').split(',').includes(s.id))

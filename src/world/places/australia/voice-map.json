@@ -42,11 +42,11 @@
     "file": "f69f66732e11.mp3"
   },
   {
-    "text": "Get all five stamps to start the party!",
+    "text": "Get all the stamps to start the party!",
     "voice": "pip",
     "sig": "aa4b0c6b7d",
-    "ms": 2728,
-    "file": "bfa10b4a4e47.mp3"
+    "ms": 2522,
+    "file": "4ffc25295302.mp3"
   },
   {
     "text": "Kaylee, you did it! You won the Australia Explorer trophy!",
@@ -96,6 +96,20 @@
     "sig": "7cae6c13ff",
     "ms": 1501,
     "file": "c19a223f1e9f.mp3"
+  },
+  {
+    "text": "Hee hee! Snap snap!",
+    "voice": "chompy",
+    "sig": "e2d4495aeb",
+    "ms": 1743,
+    "file": "a6a5dacf383b.mp3"
+  },
+  {
+    "text": "I'm a friendly croc!",
+    "voice": "chompy",
+    "sig": "e2d4495aeb",
+    "ms": 1300,
+    "file": "b04d64346b07.mp3"
   },
   {
     "text": "Welcome to the outback! It's hot and dry here.",
@@ -413,6 +427,90 @@
     "file": "d2789f280fbb.mp3"
   },
   {
+    "text": "G'day! I'm Chompy! My eggs are hatching!",
+    "voice": "chompy",
+    "sig": "e2d4495aeb",
+    "ms": 3176,
+    "file": "cc30b3c721d1.mp3"
+  },
+  {
+    "text": "Tap the eggs to help the babies hatch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3343,
+    "file": "65b8ea7a52ab.mp3"
+  },
+  {
+    "text": "Baby crocs chirp to call their mama!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3143,
+    "file": "461742fa9b62.mp3"
+  },
+  {
+    "text": "Eee! Eee!",
+    "voice": "hatchling",
+    "sig": "0f5791156e",
+    "ms": 1610,
+    "file": "e79264a2897c.mp3"
+  },
+  {
+    "text": "Mama crocs carry their babies in their mouth!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3899,
+    "file": "8c0bca8dadab.mp3"
+  },
+  {
+    "text": "Put each baby in Chompy's mouth!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2677,
+    "file": "f19b0afa1749.mp3"
+  },
+  {
+    "text": "one",
+    "voice": "chompy",
+    "sig": "e2d4495aeb",
+    "ms": 609,
+    "file": "02f996eaa2c7.mp3"
+  },
+  {
+    "text": "two",
+    "voice": "chompy",
+    "sig": "e2d4495aeb",
+    "ms": 474,
+    "file": "f8e9a6b3e712.mp3"
+  },
+  {
+    "text": "three",
+    "voice": "chompy",
+    "sig": "e2d4495aeb",
+    "ms": 557,
+    "file": "c40b8b8b4785.mp3"
+  },
+  {
+    "text": "Gentle as a cuddle!",
+    "voice": "chompy",
+    "sig": "e2d4495aeb",
+    "ms": 1671,
+    "file": "5b6c5c6b9b51.mp3"
+  },
+  {
+    "text": "Tap Chompy to make her go snap snap!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3568,
+    "file": "7be0e754f9ce.mp3"
+  },
+  {
+    "text": "Crocodiles grow new teeth all their lives!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3838,
+    "file": "bef7f5fac9b9.mp3"
+  },
+  {
     "text": "At night in Australia, you can see the Southern Cross stars!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -546,6 +644,13 @@
     "file": "c0810b5b40e6.mp3"
   },
   {
+    "text": "Snap snap! My babies say hi!",
+    "voice": "chompy",
+    "sig": "e2d4495aeb",
+    "ms": 3467,
+    "file": "69e13a55b8e8.mp3"
+  },
+  {
     "text": "Sydney has some of the biggest fireworks in the world!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -595,6 +700,13 @@
     "file": "9e3ed4da18e8.mp3"
   },
   {
+    "text": "Crocodile sticker! The biggest reptile in the world!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4282,
+    "file": "141e7681485c.mp3"
+  },
+  {
     "text": "Much of Australia is hot and sunny, with big dry deserts.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -642,6 +754,13 @@
     "sig": "ed7dbdac3d",
     "ms": 5104,
     "file": "8f5982bbaf15.mp3"
+  },
+  {
+    "text": "Crocodiles live in warm rivers up north. Always stay far from their water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5399,
+    "file": "23fd34606afa.mp3"
   },
   {
     "text": "This is Australia! Tap a picture to learn more.",

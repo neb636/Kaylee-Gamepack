@@ -1,4 +1,4 @@
-// Australia: "Pip's G'day Party". Five spots on the map in any order; each gives a stamp and a party guest.
+// Australia: "Pip's G'day Party". Six spots on the map in any order; each gives a stamp and a party guest.
 // Once every stamp is collected, the sunset party at the Sydney Opera House is the finale.
 import { motion } from 'motion/react'
 import { createElement, useEffect, useState, type ComponentType, type ReactNode, type Ref } from 'react'
@@ -8,6 +8,7 @@ import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
 import { VideoBreak } from '../../kit/Theater'
 import type { PlaceProps, PlaceVideo } from '../../types'
+import { Croc } from './activities/Croc'
 import { Forest } from './activities/Forest'
 import { Outback } from './activities/Outback'
 import { Party } from './activities/Party'
@@ -16,6 +17,7 @@ import { Reef } from './activities/Reef'
 import { StarryFlag } from './activities/StarryFlag'
 import { art } from './art'
 import { L } from './lines'
+import { Chompy } from './puppets/Chompy'
 import { Koko } from './puppets/Koko'
 import { Mama } from './puppets/Mama'
 import { Pip } from './puppets/Pip'
@@ -25,7 +27,7 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { outback: Outback, forest: Forest, reef: Reef, stars: StarryFlag, postcard: Postcard }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { outback: Outback, forest: Forest, reef: Reef, stars: StarryFlag, croc: Croc, postcard: Postcard }
 
 export interface Guest {
   img: string
@@ -42,6 +44,7 @@ export const GUESTS: Record<string, Guest> = {
   forest: { img: art.koalaAwake, line: L.party.koko, name: 'Koko', render: (ref, height) => createElement(Koko, { ref, height }) },
   reef: { img: art.turtle, line: L.party.shelly, name: 'Shelly', render: buddy(art.turtle, 'shelly') },
   stars: { img: art.kookaburra, line: L.party.kooky, name: 'Kooky', render: buddy(art.kookaburra, 'kooky') },
+  croc: { img: art.croc, line: L.party.chompy, name: 'Chompy', render: (ref, height) => createElement(Chompy, { ref, height: `calc(${height} * 0.8)`, babies: 2 }) },
   postcard: { img: art.platypus, line: L.party.pat, name: 'Pat', render: buddy(art.platypus, 'pat') },
 }
 
@@ -122,7 +125,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                 aria-label={a.name}
                 initial={{ scale: 0 }}
                 animate={{ scale: 1, y: done ? 0 : [0, -8, 0] }}
-                transition={{ scale: { delay: i * 0.08, type: 'spring' }, y: { repeat: Infinity, duration: 1.4, delay: i * 0.2 } }}
+                transition={{ scale: { delay: i * 0.06, type: 'spring' }, y: { repeat: Infinity, duration: 1.4, delay: i * 0.2 } }}
                 whileTap={{ scale: 0.85 }}
                 className={done ? undefined : 'world-glow'}
                 onClick={() => {
