@@ -68,6 +68,19 @@
     display: none;
   }
 }
+/* Phones held upright: Sparkle and three buttons don't fit in one row, so Sparkle waves from her own row above them. */
+@media (orientation: portrait) and (max-width: 600px) {
+  .world .world-side {
+    flex-wrap: wrap;
+    align-content: center;
+    row-gap: 4px;
+  }
+  .world .world-side-mascot {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
 
 .world .party-panel {
   width: min(100%, 720px);
