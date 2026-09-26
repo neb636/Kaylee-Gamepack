@@ -8,3 +8,7 @@ playwright-report
 # Full-size generated game art is scratch space; the app uses the small webp copies in src/games/*/assets/
 art/source/games/
 .env
+# Full-size generated world art is scratch space too
+art/source/world/
+# Luna QA screenshots and reports
+qa-output/

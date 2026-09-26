@@ -4,10 +4,14 @@
 const manifests = {
   ...import.meta.glob('../shell/voice-map.json', { eager: true, import: 'default' }),
   ...import.meta.glob('../games/*/voice-map.json', { eager: true, import: 'default' }),
+  ...import.meta.glob('../world/voice-map.json', { eager: true, import: 'default' }),
+  ...import.meta.glob('../world/places/*/voice-map.json', { eager: true, import: 'default' }),
 } as Record<string, string[]>
 const files = {
   ...import.meta.glob('../shell/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
   ...import.meta.glob('../games/*/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
+  ...import.meta.glob('../world/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
+  ...import.meta.glob('../world/places/*/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
 } as Record<string, string>
 
 const clips = new Map<string, string>()

@@ -44,6 +44,9 @@ Only the repo owner can trigger the AI workflows.
 - `src/sdk/`: building blocks for games: speech (`say`), sounds, confetti, choice cards,
   drag & drop, sorting bins, memory match, the Sparkle mascot, and more. Try them at `#/playground`.
 - `src/games/<id>/`: one folder per game, found automatically. **A new game never touches anything else.**
+- `src/world/`: **Around the World**, a map Kaylee explores in Sparkle's balloon, with a passport, a coloring book,
+  and one folder per country in `src/world/places/<id>/` (Australia first). Countries are added by hand, not by the
+  issue workflow; see "Around the World" in `AGENTS.md`.
 - `AGENTS.md`: the rules and ideas Codex follows when building games (read this to change how games are designed).
 - `art/STYLE.md`: the art style prompt. `art/source/`: full-size art (per-game originals are git-ignored scratch; the app uses small webp copies).
 - `.github/workflows/`:
@@ -62,6 +65,8 @@ npm run check                # typecheck + build + Playwright smoke tests
 node scripts/generate-voice.mjs --check  # verify that every listed line has audio
 npm run art -- <game-id>     # generated PNGs -> cut-out webp
 npm run icons                # rebuild app icons from art/source/icon-1024.png
+node scripts/world-voice-lines.mjs       # Around the World: lines.ts -> voice-lines.json
+node scripts/qa-screens.mjs              # screenshots at 4 iPad + 3 iPhone sizes -> qa-output/ (build first)
 ```
 
 Build a game locally with Codex (same prompt the workflow uses):

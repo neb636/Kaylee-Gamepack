@@ -12,6 +12,12 @@ const gamesRoot = path.join(root, 'src/games')
 for (const entry of await readdir(gamesRoot, { withFileTypes: true })) {
   if (entry.isDirectory()) folders.push(path.join(gamesRoot, entry.name))
 }
+// Around the World: the world map itself plus one folder per country.
+folders.push(path.join(root, 'src/world'))
+const placesRoot = path.join(root, 'src/world/places')
+for (const entry of await readdir(placesRoot, { withFileTypes: true })) {
+  if (entry.isDirectory()) folders.push(path.join(placesRoot, entry.name))
+}
 
 const jobs = []
 const catalogs = []

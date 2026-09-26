@@ -184,3 +184,38 @@ npm run art -- <id>  # PNG -> webp with background cutout
 npm run games        # table of existing games
 npm run icons        # rebuild app icons from art/source/icon-1024.png
 ```
+
+## Around the World (a separate section, not a game)
+
+`#/world` is a world map Kaylee explores in Sparkle's hot-air balloon. Each country is one folder in
+`src/world/places/<id>/` and is found automatically (like games). The school-paper workflow above never touches it;
+countries are added by hand in a normal PR. Australia (`src/world/places/australia/`) is the reference.
+
+```
+src/world/places/<id>/
+  meta.ts          # PlaceMeta: name, emoji, flag, mapPos (% on the world map), friend, activities[], facts[], coloringPages[]
+  Place.tsx        # default export: the country map (hub) + its activities + the finale (gets PlaceProps)
+  lines.ts         # EVERY phrase that can be spoken; voice-lines.json is generated from it
+  activities/*.tsx # 4-6 short activities
+  assets/*.webp    # from art/source/world/<id>/*.png via `npm run art -- world`
+```
+
+What Kaylee told us after the first game, so follow it for every country:
+- **Any order.** Every activity is open from the start and earns a passport stamp + animal sticker right away.
+  Collecting every stamp unlocks a short finale, then `onWin()` shows the shell's trophy ceremony.
+- **Short.** 45-90 seconds and 3-5 touches per activity. Difficulty rises inside each activity (3 hops, then 5).
+- **Story, not lectures.** A friend (Pip the joey in Australia) needs help; each stamp adds a guest to the finale.
+  At most 1-2 short spoken lines before her hands are busy (`kit/StoryBeat`, tap anywhere skips). Facts are
+  tap-to-hear extras (passport page, stamp screen), never required listening.
+- Teach real things: climate, a hello word, the flag, animals, a landmark, one culture fact.
+
+Reusable pieces in `src/world/kit/`: `Stage` + `PromptBubble`, `StoryBeat`, `StampEarned`, `ColoringPage`
+(flood-fill coloring on line art named `bg-color-*`), `Flag` (SVG flags: add new ones there, never generate flags),
+`TopBar`/`FitBox` (keeps map pins aligned with the art). `src/world/world.css` has the size variables
+(`--top-clear`, `--target`, ...) that shrink on iPhone landscape.
+
+Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),
+generate art with Codex (`codex exec -m gpt-6-sol -c model_reasoning_effort="medium" ...`, style rules from
+`art/STYLE.md`), then `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`, `npm run check`,
+and a visual QA pass: `npm run build && node scripts/qa-screens.mjs` (screens at 4 iPad + 3 iPhone sizes in
+`qa-output/`), or the `luna-qa` Claude agent, which runs Luna (Codex) with `.github/prompts/luna-qa.md`.

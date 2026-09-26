@@ -77,3 +77,57 @@ for (const id of gameIds) {
     expect(errors).toEqual([])
   })
 }
+
+// Around the World: every folder in src/world/places with a meta.ts + Place.tsx is a country.
+const placeIds = readdirSync('src/world/places', { withFileTypes: true })
+  .filter((d) => d.isDirectory() && existsSync(`src/world/places/${d.name}/meta.ts`) && existsSync(`src/world/places/${d.name}/Place.tsx`))
+  .map((d) => d.name)
+
+test('Around the World: map, passport and coloring book open', async ({ page }) => {
+  const errors = trackErrors(page)
+  await start(page)
+  await page.getByRole('button', { name: 'Around the World' }).click()
+  await expect(page.getByRole('button', { name: 'My passport' })).toBeVisible()
+  await page.getByRole('button', { name: 'africa' }).click({ force: true })
+  await page.getByRole('button', { name: 'My passport' }).click({ force: true })
+  await expect(page.getByText('My Passport')).toBeVisible()
+  await page.goto('./#/world/coloring')
+  await page.locator('button[aria-label^="color page"]').first().click()
+  await expect(page.getByLabel('coloring page')).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+for (const id of placeIds) {
+  test(`place "${id}": every activity loads, stamps save, and the finale awards a trophy`, async ({ page }) => {
+    const errors = trackErrors(page)
+    await start(page, `#/world/${id}`)
+    await expect(page.getByRole('button', { name: 'World map' })).toBeVisible()
+    await page.getByRole('button', { name: 'Skip' }).click({ force: true }).catch(() => {})
+
+    // Open each activity spot (the glowing buttons on the country map) and come back.
+    await page.waitForTimeout(800)
+    for (const activity of await page.evaluate(() => [...document.querySelectorAll('[class*="world-glow"][aria-label]')].map((b) => b.getAttribute('aria-label')))) {
+      if (!activity || activity === 'Party') continue
+      await page.getByRole('button', { name: activity }).click({ force: true })
+      await expect(page.getByRole('button', { name: 'Back to the map' })).toBeVisible()
+      await page.waitForTimeout(800)
+      expect(await page.locator('button').count()).toBeGreaterThan(1)
+      await page.getByRole('button', { name: 'Back to the map' }).click()
+      await page.waitForTimeout(400)
+    }
+
+    // Collect every stamp through the dev hook; stamps survive a reload.
+    await page.evaluate(() => window.__kayleeWorld?.stampAll())
+    await page.reload()
+    await page.getByRole('button', { name: /let's play/i }).click()
+    await expect(page.getByRole('button', { name: 'Party' })).toBeVisible()
+    await page.getByRole('button', { name: 'Party' }).click({ force: true })
+    await expect(page.getByRole('button', { name: 'Back to the map' })).toBeVisible()
+
+    await page.evaluate(() => window.__kaylee?.win())
+    await expect(page.getByRole('heading', { name: /you did it, kaylee/i })).toBeVisible()
+    await page.getByRole('button', { name: 'My trophies' }).click()
+    await expect(page.getByText('KAYLEE').first()).toBeVisible()
+    expect(errors).toEqual([])
+  })
+}
