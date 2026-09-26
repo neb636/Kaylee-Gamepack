@@ -133,6 +133,34 @@
     "file": "52b75b269ef9.mp3"
   },
   {
+    "text": "Sparkle's Theater!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1762,
+    "file": "b762c63a5550.mp3"
+  },
+  {
+    "text": "Pick a video to watch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1540,
+    "file": "a5adb3de29da.mp3"
+  },
+  {
+    "text": "The end! Great watching, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2558,
+    "file": "6b7188a17962.mp3"
+  },
+  {
+    "text": "Oh no, the video can't play right now.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2810,
+    "file": "c6305d70fd1d.mp3"
+  },
+  {
     "text": "one",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",

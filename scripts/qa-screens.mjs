@@ -101,6 +101,27 @@ const SCREENS = [
     },
   },
   { name: 'australia-hub-stamps', hash: '#/world/australia', stampAll: true },
+  { name: 'theater-world', hash: '#/world/theater', wait: 1200 },
+  {
+    name: 'theater-poster',
+    hash: '#/world/theater',
+    act: async (p) => {
+      await p.getByRole('button', { name: /^Watch / }).first().click()
+      await p.waitForTimeout(1400)
+    },
+  },
+  { name: 'theater-australia', hash: '#/world/australia/theater', wait: 1200 },
+  {
+    name: 'video-break',
+    hash: '#/world/australia/forest',
+    act: async (p) => {
+      await skip(p)
+      await p.evaluate(() => window.__kayleeWorld?.finish?.())
+      await p.waitForTimeout(1200)
+      await p.getByRole('button', { name: 'Back to the map' }).first().click()
+      await p.waitForTimeout(1400)
+    },
+  },
   { name: 'party', hash: '#/world/australia/party', stampAll: true, act: skip },
   { name: 'passport-full', hash: '#/world/passport', stampAll: true },
   {

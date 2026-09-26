@@ -32,6 +32,15 @@ const meta: PlaceMeta = {
     { id: 'australia-koala', img: art.colorKoala },
     { id: 'australia-opera', img: art.colorOpera },
   ],
+  // Real-world videos: the Theater sits at the Sydney Opera House. `after` offers one when that activity is done.
+  videos: [
+    { id: 'kangaroo', youtubeId: '-nQzs_4WhO0', icon: '🦘', title: 'Real kangaroos', say: L.videos.kangaroo, after: 'outback' },
+    { id: 'koala', youtubeId: 'oI3ADcDH0Uc', icon: '🐨', title: 'Real koalas', say: L.videos.koala, after: 'forest' },
+    { id: 'reef', youtubeId: 'YN8F-Gddcb0', icon: '🐠', title: 'The Great Barrier Reef', say: L.videos.reef, after: 'reef' },
+    { id: 'overview', youtubeId: 'y699qXKDVwE', icon: '🌏', title: 'All about Australia', say: L.videos.overview, start: 23 },
+    { id: 'crocodile', youtubeId: '0hfGznoj_BQ', icon: '🐊', title: 'Crocodiles', say: L.videos.crocodile },
+  ],
+  theaterPos: { x: 90, y: 71 },
   passportLine: L.passport,
   createdAt: '2026-09-25',
 }

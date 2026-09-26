@@ -23,6 +23,23 @@ export interface PlaceFact {
   say: Line
 }
 
+/** A real-world YouTube video: in the Theater, and (with `after`) offered when an activity is finished. */
+export interface PlaceVideo {
+  id: string
+  /** The `v=` part of the YouTube link. */
+  youtubeId: string
+  /** Big emoji badge on the ticket card. */
+  icon: string
+  /** Short name for Dad, e.g. "Real koalas". */
+  title: string
+  /** Spoken when the video is offered or picked. Must be in the place's voice lines. */
+  say: Line
+  /** Start this many seconds in. */
+  start?: number
+  /** Offered right after this activity's stamp. */
+  after?: string
+}
+
 export interface PlaceMeta {
   id: string
   name: string
@@ -39,6 +56,10 @@ export interface PlaceMeta {
   facts: PlaceFact[]
   /** Line-art pages for the coloring book. */
   coloringPages: { id: string; img: string }[]
+  /** Videos for the Theater (and after activities). */
+  videos?: PlaceVideo[]
+  /** Where the Theater spot sits on the country map, in % of the map picture. */
+  theaterPos?: { x: number; y: number }
   /** Spoken on the passport page: "This is Australia!" */
   passportLine: Line
   createdAt: string
