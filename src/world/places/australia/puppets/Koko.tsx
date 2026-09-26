@@ -2,6 +2,7 @@
 // talks in her own voice, and can chew, say yuck, yawn, cheer, dance and wiggle. `sleepy` droops her eyelids to sleep.
 import { forwardRef, useId, useRef, type CSSProperties } from 'react'
 import { bell, clamp, lerp, setA, setT, show, smooth, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../sdk'
+import { inkPass as inkPassIn, line as lineIn, useInk } from './ink'
 
 export interface KokoProps {
   height: string
@@ -16,6 +17,8 @@ const FUR = '#B8B1CC'
 const BELLY = '#DCD5EE'
 const PINK = '#FF9DB6'
 const INK = '#3A2A33'
+const inkPass = () => inkPassIn(undefined, INK)
+const line = (width?: number) => lineIn(width, INK)
 
 /** A fluffy scalloped ellipse: `bumps` round tufts, only where `weight(angle)` > 0. */
 function blob(cx: number, cy: number, rx: number, ry: number, bumps: number, depth: number, weight: (a: number) => number = () => 1, n = 220) {
@@ -29,12 +32,14 @@ function blob(cx: number, cy: number, rx: number, ry: number, bumps: number, dep
   return `M${pts.join('L')}Z`
 }
 const win = (a: number, from: number, to: number) => (a > from && a < to ? Math.sin(((a - from) / (to - from)) * Math.PI) : 0)
-// Fluffy cheeks low on each side of the head, like the art.
-const HEAD = blob(250, 176, 162, 116, 36, 0.07, (a) => win(a, 0.05, 1.05) + win(a, Math.PI - 1.05, Math.PI - 0.05))
-const EAR_L = blob(96, 112, 80, 82, 12, 0.13)
-const EAR_R = blob(404, 112, 80, 82, 12, 0.13)
+// A few soft tufts on the cheeks, low on each side of the head, like the art.
+const HEAD = blob(250, 176, 162, 116, 20, 0.06, (a) => win(a, 0.1, 1.0) + win(a, Math.PI - 1.0, Math.PI - 0.1))
+// Ears: fluffy on the outside, smooth where they tuck behind the head.
+const EAR_L = blob(96, 112, 80, 82, 10, 0.12, (a) => 0.25 + 0.75 * Math.max(0, -Math.cos(a - 0.4)))
+const EAR_R = blob(404, 112, 80, 82, 10, 0.12, (a) => 0.25 + 0.75 * Math.max(0, Math.cos(a + 0.4)))
 const BODY = 'M250 258 C338 258 390 330 392 396 C394 452 342 472 250 472 C158 472 106 452 108 396 C110 330 162 258 250 258Z'
-const TUFT = 'M214 76 C208 50 230 40 242 58 C244 34 270 34 268 56 C282 40 302 52 290 74 Z'
+const TUFT = 'M216 80 C210 54 230 44 242 60 C244 38 268 38 268 58 C282 44 300 56 288 80 Z'
+const ARM = 'M-31 -22 C-31 -42 31 -42 31 -22 C31 20 30 48 26 64 C20 88 -20 88 -26 64 C-30 48 -31 20 -31 -22Z'
 const NOSE = 'M250 128 C272 128 282 150 283 170 C284 190 270 199 250 199 C230 199 216 190 217 170 C218 150 228 128 250 128Z'
 
 function mouthPath(m: number) {
@@ -68,6 +73,7 @@ type Part =
 export const Koko = forwardRef<PuppetHandle, KokoProps>(function Koko({ height, style, sleepy = 0, full = 0 }, ref) {
   const id = useId().replace(/:/g, '')
   const st = useRef({ sleepy: 0, full: 0, headRot: 0, earL: spring(140, 7), earR: spring(140, 7) }).current
+  const ink = useInk<Part>()
   const { svg, part } = usePuppet<Part>(ref, {
     voice: 'koko',
     actions: { chew: 1.3, yuck: 1.1, yawn: 1.9, cheer: 1.1, dance: 1.8, wiggle: 0.7 },
@@ -176,8 +182,8 @@ export const Koko = forwardRef<PuppetHandle, KokoProps>(function Koko({ height, 
       setT(p.head, `translate(0 ${headY}) rotate(${headRot} 250 272)`)
       setT(p.earL, `rotate(${earL} 150 150)`)
       setT(p.earR, `rotate(${earR} 350 150)`)
-      setT(p.armL, `translate(158 300) rotate(${armL})`)
-      setT(p.armR, `translate(342 300) rotate(${armR})`)
+      setT(p.armL, `translate(150 318) rotate(${armL})`)
+      setT(p.armR, `translate(350 318) rotate(${armR})`)
       setT(p.blushL, `translate(152 190) scale(${blush})`)
       setT(p.blushR, `translate(348 190) scale(${blush})`)
 
@@ -208,6 +214,7 @@ export const Koko = forwardRef<PuppetHandle, KokoProps>(function Koko({ height, 
       setA(p.tongueOut, 'd', `M232 212 L232 ${214 + 16 * tongueOut} Q250 ${230 + 30 * tongueOut} 268 ${214 + 16 * tongueOut} L268 212Z`)
       show(p.zzz, sl > 0.95)
       if (sl > 0.95) setT(p.zzz, `translate(${392 + Math.sin(t * 1.3) * 6} ${150 - ((t * 18) % 30)})`)
+      ink.sync(p)
     },
   })
 
@@ -223,31 +230,97 @@ export const Koko = forwardRef<PuppetHandle, KokoProps>(function Koko({ height, 
           <circle cx="5" cy="5" r="2.4" fill="#fff" />
         </g>
         <rect ref={part(`eye${side}Lid`)} x="-20" y="-40" width="40" height="0" fill={FUR} clipPath={`url(#${id}-eye${side})`} />
-        <path ref={part(`eye${side}LidLine`)} fill="none" stroke={INK} strokeWidth="4.5" strokeLinecap="round" />
+        <path ref={part(`eye${side}LidLine`)} fill="none" stroke={INK} strokeWidth="3.6" strokeLinecap="round" />
       </g>
-      <path ref={part(`eye${side}Happy`)} d="M-15 5 Q0 -14 15 5" fill="none" stroke={INK} strokeWidth="5.5" strokeLinecap="round" style={{ display: 'none' }} />
+      <path ref={part(`eye${side}Happy`)} d="M-15 5 Q0 -14 15 5" fill="none" stroke={INK} strokeWidth="4.5" strokeLinecap="round" style={{ display: 'none' }} />
       <g ref={part(`eye${side}Sleep`)} style={{ display: 'none' }}>
-        <path d="M-15 -2 Q0 11 15 -2" fill="none" stroke={INK} strokeWidth="5" strokeLinecap="round" />
-        <path d={side === 'L' ? 'M-15 -2 L-21 -8 M-10 3 L-14 -4' : 'M15 -2 L21 -8 M10 3 L14 -4'} stroke={INK} strokeWidth="3.5" strokeLinecap="round" />
+        <path d="M-15 -2 Q0 11 15 -2" fill="none" stroke={INK} strokeWidth="4.2" strokeLinecap="round" />
+        <path d={side === 'L' ? 'M-15 -2 L-21 -8 M-10 3 L-14 -4' : 'M15 -2 L21 -8 M10 3 L14 -4'} stroke={INK} strokeWidth="3" strokeLinecap="round" />
       </g>
-      <path ref={part(`eye${side}Squeeze`)} d={side === 'L' ? 'M-12 -9 L9 0 L-12 9' : 'M12 -9 L-9 0 L12 9'} fill="none" stroke={INK} strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'none' }} />
+      <path ref={part(`eye${side}Squeeze`)} d={side === 'L' ? 'M-12 -9 L9 0 L-12 9' : 'M12 -9 L-9 0 L12 9'} fill="none" stroke={INK} strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'none' }} />
     </g>
   )
 
-  const arm = (side: 'L' | 'R') => (
-    <g ref={part(side === 'L' ? 'armL' : 'armR')} transform={side === 'L' ? 'translate(158 300) rotate(-44)' : 'translate(342 300) rotate(44)'}>
-      <rect x="-30" y="-30" width="60" height="112" rx="30" fill={FUR} stroke={INK} strokeWidth="5" />
-      <path d="M-10 66 L-10 77 M8 66 L8 77" stroke={INK} strokeWidth="3.5" strokeLinecap="round" />
+  // Each group is drawn twice: an ink copy (one outline around the whole group), then the fills and details on top.
+  const r = (name: Part, pass: boolean) => (pass ? ink.twin(name) : part(name))
+  const arm = (side: 'L' | 'R', pass: boolean) => (
+    <g ref={r(side === 'L' ? 'armL' : 'armR', pass)} transform={side === 'L' ? 'translate(150 318) rotate(-44)' : 'translate(350 318) rotate(44)'}>
+      <path d={ARM} fill={FUR} />
+      {!pass && (
+        <>
+          <path d="M-9 68 L-9 78 M9 68 L9 78" {...line(3)} />
+          {/* Fur over the top of the arm's outline, so the arm grows out of the shoulder instead of ending in a cap. */}
+          <ellipse cy="-16" rx="26" ry="18" fill={FUR} />
+        </>
+      )}
     </g>
   )
 
-  const foot = (side: 'L' | 'R') => (
+  // Legs curl forward: the soles are part of the body's outline, with a crease where they meet the belly.
+  const foot = (side: 'L' | 'R', pass: boolean) => (
     <g transform={side === 'L' ? 'translate(138 430) rotate(-14)' : 'translate(362 430) rotate(14) scale(-1 1)'}>
-      <ellipse rx="60" ry="52" fill={FUR} stroke={INK} strokeWidth="5" />
-      <ellipse cx="6" cy="14" rx="30" ry="24" fill={PINK} />
-      <circle cx="-26" cy="-14" r="9" fill={PINK} />
-      <circle cx="-6" cy="-26" r="9.5" fill={PINK} />
-      <circle cx="18" cy="-24" r="9" fill={PINK} />
+      <ellipse rx="60" ry="52" fill={FUR} />
+      {!pass && (
+        <>
+          <path d="M-48 -31 A60 52 0 0 1 50 29" {...line()} />
+          <ellipse cx="6" cy="14" rx="30" ry="24" fill={PINK} />
+          <circle cx="-26" cy="-14" r="9" fill={PINK} />
+          <circle cx="-6" cy="-26" r="9.5" fill={PINK} />
+          <circle cx="18" cy="-24" r="9" fill={PINK} />
+        </>
+      )}
+    </g>
+  )
+
+  const lower = (pass: boolean) => (
+    <>
+      <g ref={r('body', pass)}>
+        <path d={BODY} fill={FUR} />
+      </g>
+      {!pass && (
+        <g ref={part('belly')}>
+          <ellipse cx="250" cy="388" rx="80" ry="72" fill={BELLY} />
+        </g>
+      )}
+      {foot('L', pass)}
+      {foot('R', pass)}
+    </>
+  )
+
+  const head = (pass: boolean) => (
+    <g ref={r('head', pass)}>
+      <g ref={r('earL', pass)}>
+        <path d={EAR_L} fill={FUR} />
+        {!pass && <ellipse cx="114" cy="124" rx="42" ry="48" fill={PINK} />}
+      </g>
+      <g ref={r('earR', pass)}>
+        <path d={EAR_R} fill={FUR} />
+        {!pass && <ellipse cx="386" cy="124" rx="42" ry="48" fill={PINK} />}
+      </g>
+      {/* The head keeps its own outline over the ears (the tuft on top melts into it). */}
+      {!pass && (
+        <g {...inkPass()}>
+          <path d={TUFT} />
+          <path d={HEAD} />
+        </g>
+      )}
+      <path d={TUFT} fill={FUR} />
+      <path d={HEAD} fill={FUR} />
+      {!pass && (
+        <>
+          <path d="M156 124 Q170 113 184 121 M316 121 Q330 113 344 124" {...line(3.4)} />
+          <ellipse ref={part('blushL')} rx="20" ry="12" fill={PINK} opacity="0.85" transform="translate(152 190)" />
+          <ellipse ref={part('blushR')} rx="20" ry="12" fill={PINK} opacity="0.85" transform="translate(348 190)" />
+          {eye('L', 174)}
+          {eye('R', 326)}
+          <path ref={part('mouth')} fill="#8E2B3B" stroke={INK} strokeWidth="3.4" style={{ display: 'none' }} />
+          <path ref={part('tongue')} fill="#FF8FA8" clipPath={`url(#${id}-mouth)`} style={{ display: 'none' }} />
+          <path ref={part('smile')} d="M232 214 Q241 225 250 216 Q259 225 268 214" {...line(3.4)} />
+          <path ref={part('tongueOut')} fill="#FF8FA8" stroke={INK} strokeWidth="3" style={{ display: 'none' }} />
+          <path d={NOSE} fill={INK} />
+          <ellipse cx="240" cy="146" rx="7" ry="10" fill="#fff" opacity="0.28" transform="rotate(-20 240 146)" />
+        </>
+      )}
     </g>
   )
 
@@ -259,39 +332,16 @@ export const Koko = forwardRef<PuppetHandle, KokoProps>(function Koko({ height, 
         </clipPath>
       </defs>
       <g ref={part('root')} strokeLinejoin="round">
-        <g ref={part('body')}>
-          <path d={BODY} fill={FUR} stroke={INK} strokeWidth="5" />
-        </g>
-        <g ref={part('belly')}>
-          <ellipse cx="250" cy="388" rx="80" ry="72" fill={BELLY} />
-        </g>
-        {foot('L')}
-        {foot('R')}
-        <g ref={part('head')}>
-          <g ref={part('earL')}>
-            <path d={EAR_L} fill={FUR} stroke={INK} strokeWidth="5" />
-            <ellipse cx="114" cy="124" rx="42" ry="48" fill={PINK} />
+        <g {...inkPass()}>{lower(true)}</g>
+        {lower(false)}
+        <g {...inkPass()}>{head(true)}</g>
+        {head(false)}
+        {(['L', 'R'] as const).map((s) => (
+          <g key={s}>
+            <g {...inkPass()}>{arm(s, true)}</g>
+            {arm(s, false)}
           </g>
-          <g ref={part('earR')}>
-            <path d={EAR_R} fill={FUR} stroke={INK} strokeWidth="5" />
-            <ellipse cx="386" cy="124" rx="42" ry="48" fill={PINK} />
-          </g>
-          <path d={TUFT} fill={FUR} stroke={INK} strokeWidth="5" />
-          <path d={HEAD} fill={FUR} stroke={INK} strokeWidth="5" />
-          <path d="M156 124 Q170 113 184 121 M316 121 Q330 113 344 124" fill="none" stroke={INK} strokeWidth="4.5" strokeLinecap="round" />
-          <ellipse ref={part('blushL')} rx="20" ry="12" fill={PINK} opacity="0.85" transform="translate(152 190)" />
-          <ellipse ref={part('blushR')} rx="20" ry="12" fill={PINK} opacity="0.85" transform="translate(348 190)" />
-          {eye('L', 174)}
-          {eye('R', 326)}
-          <path ref={part('mouth')} fill="#8E2B3B" stroke={INK} strokeWidth="4.5" style={{ display: 'none' }} />
-          <path ref={part('tongue')} fill="#FF8FA8" clipPath={`url(#${id}-mouth)`} style={{ display: 'none' }} />
-          <path ref={part('smile')} d="M232 214 Q241 225 250 216 Q259 225 268 214" fill="none" stroke={INK} strokeWidth="4.5" strokeLinecap="round" />
-          <path ref={part('tongueOut')} fill="#FF8FA8" stroke={INK} strokeWidth="4" style={{ display: 'none' }} />
-          <path d={NOSE} fill={INK} />
-          <ellipse cx="240" cy="146" rx="7" ry="10" fill="#fff" opacity="0.28" transform="rotate(-20 240 146)" />
-        </g>
-        {arm('L')}
-        {arm('R')}
+        ))}
         <g ref={part('zzz')} style={{ display: 'none' }} fontFamily="Fredoka, sans-serif" fontWeight="700" fill="#7E6FC7">
           <text fontSize="44">z</text>
           <text x="26" y="-30" fontSize="32">z</text>
