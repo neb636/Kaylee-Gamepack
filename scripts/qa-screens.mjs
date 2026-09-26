@@ -101,6 +101,37 @@ const SCREENS = [
     },
   },
   { name: 'australia-hub-stamps', hash: '#/world/australia', stampAll: true },
+  { name: 'theater-world', hash: '#/world/theater', wait: 1200 },
+  {
+    name: 'theater-poster',
+    hash: '#/world/theater',
+    act: async (p) => {
+      await p.getByRole('button', { name: /^Watch / }).first().click()
+      await p.waitForTimeout(1400)
+    },
+  },
+  {
+    name: 'theater-full',
+    hash: '#/world/theater',
+    act: async (p) => {
+      await p.getByRole('button', { name: /^Watch / }).first().click()
+      await p.waitForTimeout(600)
+      await p.evaluate(() => window.__kayleeTheaterFull?.())
+      await p.waitForTimeout(800)
+    },
+  },
+  { name: 'theater-australia', hash: '#/world/australia/theater', wait: 1200 },
+  {
+    name: 'video-break',
+    hash: '#/world/australia/forest',
+    act: async (p) => {
+      await skip(p)
+      await p.evaluate(() => window.__kayleeWorld?.finish?.())
+      await p.waitForTimeout(1200)
+      await p.getByRole('button', { name: 'Back to the map' }).first().click()
+      await p.waitForTimeout(1400)
+    },
+  },
   { name: 'party', hash: '#/world/australia/party', stampAll: true, act: skip },
   { name: 'passport-full', hash: '#/world/passport', stampAll: true },
   {
@@ -127,8 +158,8 @@ try {
     const context = await device(browser, vp)
     const page = await context.newPage()
     let current = ''
-    page.on('console', (m) => m.type() === 'error' && errors.push(`${vp.name} ${current}: ${m.text()}`))
-    page.on('pageerror', (e) => errors.push(`${vp.name} ${current}: ${e.message}`))
+    page.on('console', (m) => m.type() === 'error' && !/youtube/i.test(`${m.text()} ${m.location().url}`) && errors.push(`${vp.name} ${current}: ${m.text()}`))
+    page.on('pageerror', (e) => !/youtube/i.test(e.message) && errors.push(`${vp.name} ${current}: ${e.message}`))
     await openApp(page, base)
     for (const [i, s] of SCREENS.entries()) {
       current = s.name

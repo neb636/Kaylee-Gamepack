@@ -8,9 +8,12 @@ const gameIds = readdirSync('src/games', { withFileTypes: true })
 
 function trackErrors(page: Page) {
   const errors: string[] = []
-  page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`))
+  // The Theater's YouTube embed (loaded ahead of the tap) reports its own noise; only our errors count.
+  page.on('pageerror', (e) => {
+    if (!/youtube/i.test(e.message)) errors.push(`pageerror: ${e.message}`)
+  })
   page.on('console', (m) => {
-    if (m.type() === 'error') errors.push(`console: ${m.text()}`)
+    if (m.type() === 'error' && !/youtube/i.test(`${m.text()} ${m.location().url}`)) errors.push(`console: ${m.text()}`)
   })
   return errors
 }
@@ -94,6 +97,12 @@ test('Around the World: map, passport and coloring book open', async ({ page }) 
   await page.goto('./#/world/coloring')
   await page.locator('button[aria-label^="color page"]').first().click()
   await expect(page.getByLabel('coloring page')).toBeVisible()
+  // Theater: ticket cards open a poster with a big play button (the video itself isn't played in tests).
+  await page.goto('./#/world/theater')
+  await page.getByRole('button', { name: /^Watch / }).first().click()
+  await expect(page.getByRole('button', { name: 'Play the video' })).toBeVisible()
+  await page.getByRole('button', { name: 'All videos' }).click()
+  await expect(page.getByRole('button', { name: /^Watch / }).first()).toBeVisible()
   expect(errors).toEqual([])
 })
 
@@ -112,6 +121,15 @@ for (const id of placeIds) {
       await expect(page.getByRole('button', { name: 'Back to the map' })).toBeVisible()
       await page.waitForTimeout(800)
       expect(await page.locator('button').count()).toBeGreaterThan(1)
+      await page.getByRole('button', { name: 'Back to the map' }).click()
+      await page.waitForTimeout(400)
+    }
+
+    // The Theater button in the country's top bar (if it has videos) opens its ticket shelf.
+    const theater = page.getByRole('button', { name: 'Theater', exact: true })
+    if (await theater.count()) {
+      await theater.click({ force: true })
+      await expect(page.getByRole('button', { name: /^Watch / }).first()).toBeVisible()
       await page.getByRole('button', { name: 'Back to the map' }).click()
       await page.waitForTimeout(400)
     }

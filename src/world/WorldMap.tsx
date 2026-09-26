@@ -7,6 +7,7 @@ import balloon from './assets/balloon.webp'
 import crayons from './assets/crayon-box.webp'
 import mapArt from './assets/bg-world-map.webp'
 import passportArt from './assets/passport.webp'
+import theaterArt from './assets/theater.webp'
 import { BarPill, FitBox, TopBar } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
 import { places, type PlaceEntry } from './registry'
@@ -174,6 +175,7 @@ export function WorldMap() {
           </div>
           <SideButton img={passportArt} label="My passport" color="var(--pink)" badge={totalStamps(passport)} onClick={() => go.world('passport')} />
           <SideButton img={crayons} label="Coloring book" color="var(--butter)" onClick={() => go.world('coloring')} />
+          <SideButton img={theaterArt} label="Theater" color="var(--lavender)" onClick={() => go.world('theater')} />
         </div>
       </div>
 

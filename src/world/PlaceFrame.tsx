@@ -2,9 +2,13 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
 import { go } from '../router'
-import { Mascot, StarProgress, stopSpeaking, type GameMeta } from '../sdk'
+import { motion } from 'motion/react'
+import { Mascot, sounds, StarProgress, stopSpeaking, type GameMeta } from '../sdk'
 import { WinCeremony } from '../shell/WinCeremony'
+import theaterArt from './assets/theater.webp'
 import { BarPill, TopBar } from './kit/Chrome'
+import { Flag } from './kit/Flag'
+import { Theater } from './kit/Theater'
 import { findPlace, type PlaceEntry } from './registry'
 import { addStamp, markVisited, resetPassport, setStamps, usePassport } from './stamps'
 import type { PlaceMeta } from './types'
@@ -12,7 +16,7 @@ import type { PlaceMeta } from './types'
 declare global {
   interface Window {
     /** Test/dev hooks for Around the World. */
-    __kayleeWorld?: { stampAll: () => void; reset: () => void }
+    __kayleeWorld?: { stampAll: () => void; reset: () => void; /** Finishes the open activity (set by the country). */ finish?: () => void }
   }
 }
 
@@ -88,10 +92,25 @@ function RunningPlace({ entry, activity }: { entry: PlaceEntry; activity?: strin
           </div>
         }
       >
-        <Place meta={meta} activity={activity} stamps={stamps} openActivity={openActivity} backToMap={backToMap} earnStamp={earnStamp} onWin={onWin} setProgress={setProgress} />
+        {activity === 'theater' ? (
+          <Theater
+            places={[meta]}
+            onExit={backToMap}
+            exitIcon="🗺️"
+            exitLabel="Back to the map"
+            title={
+              <>
+                <Flag id={meta.flag} width="1.6em" style={{ borderRadius: 4 }} /> 🎬
+              </>
+            }
+          />
+        ) : (
+          <Place meta={meta} activity={activity} stamps={stamps} openActivity={openActivity} backToMap={backToMap} earnStamp={earnStamp} onWin={onWin} setProgress={setProgress} />
+        )}
       </Suspense>
 
-      {activity ? (
+      {/* The theater draws its own top bar (its back button goes to the shelf while a video plays). */}
+      {activity === 'theater' ? null : activity ? (
         <TopBar icon="🗺️" label="Back to the map" onBack={backToMap}>
           {progress.total > 0 && (
             <BarPill>
@@ -104,6 +123,22 @@ function RunningPlace({ entry, activity }: { entry: PlaceEntry; activity?: strin
           <BarPill>
             📕 {stamps.length}/{meta.activities.length}
           </BarPill>
+          {!!meta.videos?.length && (
+            <motion.button
+              aria-label="Theater"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1, rotate: [-5, 5, -5] }}
+              transition={{ scale: { type: 'spring', delay: 0.3 }, rotate: { repeat: Infinity, duration: 2.4, ease: 'easeInOut' } }}
+              whileTap={{ scale: 0.85 }}
+              onClick={() => {
+                sounds.pop()
+                openActivity('theater')
+              }}
+              style={{ pointerEvents: 'auto', flex: '0 0 var(--btn)', width: 'var(--btn)', height: 'var(--btn)', borderRadius: '50%', background: 'var(--lavender)', border: '4px solid #fff', boxShadow: 'var(--shadow)', padding: 6 }}
+            >
+              <img src={theaterArt} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            </motion.button>
+          )}
         </TopBar>
       )}
 

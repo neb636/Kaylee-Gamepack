@@ -118,4 +118,11 @@ export const L = {
     reef: "The Great Barrier Reef is so big, you can see it from space!",
   },
   passport: 'This is Australia! Tap a picture to learn more.',
+  videos: {
+    koala: 'Want to see real koalas?',
+    kangaroo: 'Want to see real kangaroos hop?',
+    reef: "Let's swim on the Great Barrier Reef!",
+    overview: "Let's explore all of Australia!",
+    crocodile: "Let's see the crocodiles! Snap snap!",
+  },
 }

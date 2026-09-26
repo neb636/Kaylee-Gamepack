@@ -6,7 +6,8 @@ import { Buddy, say, sounds, type Line, type PuppetHandle } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
-import type { PlaceProps } from '../../types'
+import { VideoBreak } from '../../kit/Theater'
+import type { PlaceProps, PlaceVideo } from '../../types'
 import { Forest } from './activities/Forest'
 import { Outback } from './activities/Outback'
 import { Party } from './activities/Party'
@@ -47,6 +48,7 @@ export const GUESTS: Record<string, Guest> = {
 export default function Place(props: PlaceProps) {
   const { meta, activity, stamps, backToMap, earnStamp, setProgress, onWin } = props
   const [justEarned, setJustEarned] = useState<string | null>(null)
+  const [videoAfter, setVideoAfter] = useState<PlaceVideo | null>(null)
 
   if (activity === 'party') {
     const ready = meta.activities.every((a) => stamps.includes(a.id))
@@ -57,21 +59,34 @@ export default function Place(props: PlaceProps) {
   const Activity = activity ? ACTIVITIES[activity] : undefined
   const info = meta.activities.find((a) => a.id === activity)
   if (Activity && info) {
+    const finish = () => {
+      earnStamp(info.id)
+      setJustEarned(info.id)
+    }
+    if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
     return (
       <>
-        <Activity
-          key={activity}
-          setProgress={setProgress}
-          onDone={() => {
-            earnStamp(info.id)
-            setJustEarned(info.id)
-          }}
-        />
+        <Activity key={activity} setProgress={setProgress} onDone={finish} />
         {justEarned === info.id && (
           <StampEarned
             activity={info}
             onClose={() => {
               setJustEarned(null)
+              // A real-world video about what she just played comes next (skippable), then the map.
+              const video = meta.videos?.find((v) => v.after === info.id)
+              if (video) {
+                setProgress(0, 0) // hides the activity's stars so they don't sit on the video
+                setVideoAfter(video)
+              }
+              else backToMap()
+            }}
+          />
+        )}
+        {videoAfter && (
+          <VideoBreak
+            video={videoAfter}
+            onDone={() => {
+              setVideoAfter(null)
               backToMap()
             }}
           />
