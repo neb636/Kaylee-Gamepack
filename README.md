@@ -38,12 +38,18 @@ Only the repo owner can trigger the AI workflows.
 
 - **Vite + React + TypeScript**, static site on GitHub Pages, no login, no server.
   Trophies are saved on the iPad (localStorage).
-- Spoken lines use a pre-generated Sparkle character voice. The new-game and PR-feedback workflows
-  generate the clips from each game's `voice-lines.json`; the iPad plays bundled audio files.
+- Spoken lines are pre-recorded with OpenAI text-to-speech, one voice per character (`src/sdk/cast.json` plus a
+  `cast.json` per game or country). The new-game and PR-feedback workflows record the clips from each folder's
+  `voice-lines.json` (needs the `OPENAI_API_KEY` secret; locally put it in `.env`); the iPad plays bundled audio files.
+- Characters are live SVG puppets (`src/sdk/puppet/`): they blink, watch her finger, talk with moving mouths, and act
+  things out. Try them at `#/world/puppets`.
 - `src/shell/`: the app wrapper (splash, home, game frame, trophy ceremony, trophy room). Built once.
 - `src/sdk/`: building blocks for games: speech (`say`), sounds, confetti, choice cards,
   drag & drop, sorting bins, memory match, the Sparkle mascot, and more. Try them at `#/playground`.
 - `src/games/<id>/`: one folder per game, found automatically. **A new game never touches anything else.**
+- `src/world/`: **Around the World**, a map Kaylee explores in Sparkle's balloon, with a passport, a coloring book,
+  and one folder per country in `src/world/places/<id>/` (Australia first). Countries are added by hand, not by the
+  issue workflow; see "Around the World" in `AGENTS.md`.
 - `AGENTS.md`: the rules and ideas Codex follows when building games (read this to change how games are designed).
 - `art/STYLE.md`: the art style prompt. `art/source/`: full-size art (per-game originals are git-ignored scratch; the app uses small webp copies).
 - `.github/workflows/`:
@@ -60,8 +66,12 @@ npm install
 npm run dev                  # http://localhost:5173 (add #/playground for the SDK demo)
 npm run check                # typecheck + build + Playwright smoke tests
 node scripts/generate-voice.mjs --check  # verify that every listed line has audio
+node scripts/generate-voice.mjs          # record missing/changed lines (OPENAI_API_KEY in .env, needs ffmpeg)
+node scripts/voice-audition.mjs pip nova coral  # hear a character in a few voices
 npm run art -- <game-id>     # generated PNGs -> cut-out webp
 npm run icons                # rebuild app icons from art/source/icon-1024.png
+node scripts/world-voice-lines.mjs       # Around the World: lines.ts -> voice-lines.json
+node scripts/qa-screens.mjs              # screenshots at 4 iPad + 3 iPhone sizes -> qa-output/ (build first)
 ```
 
 Build a game locally with Codex (same prompt the workflow uses):

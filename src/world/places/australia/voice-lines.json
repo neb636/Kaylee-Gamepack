@@ -1,0 +1,218 @@
+[
+  "Australia",
+  {
+    "text": "G'day, Kaylee! I'm Pip the kangaroo!",
+    "voice": "pip"
+  },
+  {
+    "text": "G'day means hello! Help with my party?",
+    "voice": "pip"
+  },
+  {
+    "text": "Tap a spot on the map!",
+    "voice": "pip"
+  },
+  {
+    "text": "Where should we go next, Kaylee?",
+    "voice": "pip"
+  },
+  {
+    "text": "Everyone is here! Tap the party!",
+    "voice": "pip"
+  },
+  {
+    "text": "Get all five stamps to start the party!",
+    "voice": "pip"
+  },
+  "Kaylee, you did it! You won the Australia Explorer trophy!",
+  "Kaylee, Australia Explorer! From Australia.",
+  {
+    "text": "Hee hee! That tickles!",
+    "voice": "pip"
+  },
+  {
+    "text": "Boing! I love hopping!",
+    "voice": "pip"
+  },
+  {
+    "text": "Hehe! Cuddles!",
+    "voice": "koko"
+  },
+  {
+    "text": "Mmm, I love gum leaves.",
+    "voice": "koko"
+  },
+  {
+    "text": "That's my Pip!",
+    "voice": "mama"
+  },
+  {
+    "text": "Welcome to the outback! It's hot and dry here.",
+    "voice": "pip"
+  },
+  "Give Pip the things she needs for the hot sun!",
+  {
+    "text": "A sun hat for shade!",
+    "voice": "pip"
+  },
+  {
+    "text": "Sunglasses for the bright sun!",
+    "voice": "pip"
+  },
+  {
+    "text": "Water to drink in the heat!",
+    "voice": "pip"
+  },
+  {
+    "text": "Brrr? No way! It's hot in the outback!",
+    "voice": "pip"
+  },
+  {
+    "text": "I'm ready! Let's hop!",
+    "voice": "pip"
+  },
+  "Tap to make Pip hop! Hop three times to the water hole.",
+  {
+    "text": "one",
+    "voice": "pip"
+  },
+  {
+    "text": "two",
+    "voice": "pip"
+  },
+  {
+    "text": "three",
+    "voice": "pip"
+  },
+  {
+    "text": "four",
+    "voice": "pip"
+  },
+  {
+    "text": "five",
+    "voice": "pip"
+  },
+  {
+    "text": "Splash! A water hole!",
+    "voice": "pip"
+  },
+  "Now hop five times to Uluru, the big red rock!",
+  {
+    "text": "There you are, Pip! Hop into my pouch!",
+    "voice": "mama"
+  },
+  {
+    "text": "Baby kangaroos ride in their mama's pouch!",
+    "voice": "pip"
+  },
+  {
+    "text": "I'm Koko the koala! I'm sooo hungry!",
+    "voice": "koko"
+  },
+  "Feed Koko two gum leaves!",
+  "Now feed her four leaves!",
+  {
+    "text": "one",
+    "voice": "koko"
+  },
+  {
+    "text": "two",
+    "voice": "koko"
+  },
+  {
+    "text": "three",
+    "voice": "koko"
+  },
+  {
+    "text": "four",
+    "voice": "koko"
+  },
+  {
+    "text": "Yuck! Koalas only eat gum leaves!",
+    "voice": "koko"
+  },
+  {
+    "text": "Mmm! More, please!",
+    "voice": "koko"
+  },
+  {
+    "text": "Yawn! Koalas sleep almost all day.",
+    "voice": "koko"
+  },
+  "Tap the notes to sing Koko a lullaby!",
+  "Shh! Koko is fast asleep.",
+  "Let's dive into the Great Barrier Reef!",
+  "Find the sea turtle!",
+  "Find the clownfish!",
+  "Find the starfish!",
+  "Find the octopus! It likes to hide.",
+  "You found Shelly the sea turtle!",
+  "You found the clownfish!",
+  "You found the starfish!",
+  "You found the octopus! It has eight arms!",
+  "That's the sea turtle!",
+  "That's a clownfish!",
+  "That's a starfish!",
+  "That's the octopus!",
+  "That's a crab!",
+  "That's a puffer fish!",
+  "That's a seashell!",
+  "At night in Australia, you can see the Southern Cross stars!",
+  "Tap the five twinkly stars!",
+  "You found the Southern Cross!",
+  "The stars are on Australia's flag!",
+  "Drag the big star onto the flag!",
+  "The big star has seven points!",
+  "Which one is Australia's flag?",
+  "Look for the stars you found!",
+  "Let's color a postcard from the beach to send home!",
+  "Pick a color, then tap to paint!",
+  "Tap send when you are done!",
+  {
+    "text": "G'day, mate! In Australia, mate means friend.",
+    "voice": "pip"
+  },
+  {
+    "text": "Party time at the Sydney Opera House!",
+    "voice": "pip"
+  },
+  "Tap each friend to make them dance!",
+  {
+    "text": "G'day, Kaylee! Thanks for helping Pip!",
+    "voice": "mama"
+  },
+  {
+    "text": "Yum! Thanks for the gum leaves!",
+    "voice": "koko"
+  },
+  {
+    "text": "Hello from the reef!",
+    "voice": "shelly"
+  },
+  {
+    "text": "Ha ha ha! Kookaburras love to laugh!",
+    "voice": "kooky"
+  },
+  {
+    "text": "I'm Pat the platypus! Hooray!",
+    "voice": "pat"
+  },
+  "Sydney has some of the biggest fireworks in the world!",
+  {
+    "text": "Thank you, Kaylee! You're a true Aussie mate!",
+    "voice": "pip"
+  },
+  "Kangaroo sticker! Kangaroos can only hop forward, never backward!",
+  "Koala sticker! A baby koala is called a joey, just like a kangaroo!",
+  "Sea turtle sticker! Sea turtles lived when the dinosaurs did!",
+  "Kookaburra sticker! Kookaburras sound like they are laughing!",
+  "Platypus sticker! A platypus has a bill like a duck!",
+  "Much of Australia is hot and sunny, with big dry deserts.",
+  "In Australia, people say G'day! It means hello!",
+  "In Australia, Christmas comes in summer! Beach day!",
+  "Kangaroos, koalas and platypuses all live in Australia!",
+  "The Sydney Opera House looks like big white sails!",
+  "Australia is a country and a whole continent!",
+  "The Great Barrier Reef is so big, you can see it from space!",
+  "This is Australia! Tap a picture to learn more."
+]

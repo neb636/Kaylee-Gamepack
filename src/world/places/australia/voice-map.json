@@ -1,0 +1,653 @@
+[
+  {
+    "text": "Australia",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1104,
+    "file": "b40c3a067e65.mp3"
+  },
+  {
+    "text": "G'day, Kaylee! I'm Pip the kangaroo!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2923,
+    "file": "324f69e94d48.mp3"
+  },
+  {
+    "text": "G'day means hello! Help with my party?",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 3486,
+    "file": "4a1dfce0fe10.mp3"
+  },
+  {
+    "text": "Tap a spot on the map!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 1546,
+    "file": "8f685b5afe9e.mp3"
+  },
+  {
+    "text": "Where should we go next, Kaylee?",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2073,
+    "file": "64f53538c1c0.mp3"
+  },
+  {
+    "text": "Everyone is here! Tap the party!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2062,
+    "file": "f69f66732e11.mp3"
+  },
+  {
+    "text": "Get all five stamps to start the party!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2728,
+    "file": "bfa10b4a4e47.mp3"
+  },
+  {
+    "text": "Kaylee, you did it! You won the Australia Explorer trophy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5198,
+    "file": "88419f3377fb.mp3"
+  },
+  {
+    "text": "Kaylee, Australia Explorer! From Australia.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4603,
+    "file": "662d95899efb.mp3"
+  },
+  {
+    "text": "Hee hee! That tickles!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2220,
+    "file": "32a2e3cb8f89.mp3"
+  },
+  {
+    "text": "Boing! I love hopping!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2303,
+    "file": "8897b1bdfd8c.mp3"
+  },
+  {
+    "text": "Hehe! Cuddles!",
+    "voice": "koko",
+    "sig": "23ca917126",
+    "ms": 2489,
+    "file": "e15188f28be5.mp3"
+  },
+  {
+    "text": "Mmm, I love gum leaves.",
+    "voice": "koko",
+    "sig": "23ca917126",
+    "ms": 2712,
+    "file": "fd278b28475d.mp3"
+  },
+  {
+    "text": "That's my Pip!",
+    "voice": "mama",
+    "sig": "7cae6c13ff",
+    "ms": 1501,
+    "file": "c19a223f1e9f.mp3"
+  },
+  {
+    "text": "Welcome to the outback! It's hot and dry here.",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 3407,
+    "file": "f5366cf5348e.mp3"
+  },
+  {
+    "text": "Give Pip the things she needs for the hot sun!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4200,
+    "file": "c3dc98dfcc37.mp3"
+  },
+  {
+    "text": "A sun hat for shade!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 1602,
+    "file": "c85cb5949310.mp3"
+  },
+  {
+    "text": "Sunglasses for the bright sun!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2130,
+    "file": "33fb3a3f29d8.mp3"
+  },
+  {
+    "text": "Water to drink in the heat!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2288,
+    "file": "35ecc6fcfb91.mp3"
+  },
+  {
+    "text": "Brrr? No way! It's hot in the outback!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 3624,
+    "file": "34b09f71751c.mp3"
+  },
+  {
+    "text": "I'm ready! Let's hop!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2122,
+    "file": "a38d531cb6e2.mp3"
+  },
+  {
+    "text": "Tap to make Pip hop! Hop three times to the water hole.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4926,
+    "file": "ffec67753d5a.mp3"
+  },
+  {
+    "text": "one",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 598,
+    "file": "8ace7138b8dc.mp3"
+  },
+  {
+    "text": "two",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 444,
+    "file": "82f990030e09.mp3"
+  },
+  {
+    "text": "three",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 491,
+    "file": "676177444b63.mp3"
+  },
+  {
+    "text": "four",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 533,
+    "file": "df9e2c832867.mp3"
+  },
+  {
+    "text": "five",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 632,
+    "file": "728e38fcbfd2.mp3"
+  },
+  {
+    "text": "Splash! A water hole!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2196,
+    "file": "270480f4c6fa.mp3"
+  },
+  {
+    "text": "Now hop five times to Uluru, the big red rock!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4665,
+    "file": "f7bb352a570b.mp3"
+  },
+  {
+    "text": "There you are, Pip! Hop into my pouch!",
+    "voice": "mama",
+    "sig": "7cae6c13ff",
+    "ms": 2907,
+    "file": "3697a67449a9.mp3"
+  },
+  {
+    "text": "Baby kangaroos ride in their mama's pouch!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2804,
+    "file": "4599024839e9.mp3"
+  },
+  {
+    "text": "I'm Koko the koala! I'm sooo hungry!",
+    "voice": "koko",
+    "sig": "23ca917126",
+    "ms": 4808,
+    "file": "b6b5ddf0e678.mp3"
+  },
+  {
+    "text": "Feed Koko two gum leaves!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2450,
+    "file": "7a4a1217fbfc.mp3"
+  },
+  {
+    "text": "Now feed her four leaves!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2821,
+    "file": "dd7919294d1f.mp3"
+  },
+  {
+    "text": "one",
+    "voice": "koko",
+    "sig": "23ca917126",
+    "ms": 806,
+    "file": "0dfbe8d153c2.mp3"
+  },
+  {
+    "text": "two",
+    "voice": "koko",
+    "sig": "23ca917126",
+    "ms": 544,
+    "file": "55faabde48d8.mp3"
+  },
+  {
+    "text": "three",
+    "voice": "koko",
+    "sig": "23ca917126",
+    "ms": 695,
+    "file": "c32abd85970c.mp3"
+  },
+  {
+    "text": "four",
+    "voice": "koko",
+    "sig": "23ca917126",
+    "ms": 792,
+    "file": "c7d5e8bfb726.mp3"
+  },
+  {
+    "text": "Yuck! Koalas only eat gum leaves!",
+    "voice": "koko",
+    "sig": "23ca917126",
+    "ms": 3569,
+    "file": "42d0c4aef475.mp3"
+  },
+  {
+    "text": "Mmm! More, please!",
+    "voice": "koko",
+    "sig": "23ca917126",
+    "ms": 2700,
+    "file": "2fec62adf918.mp3"
+  },
+  {
+    "text": "Yawn! Koalas sleep almost all day.",
+    "voice": "koko",
+    "sig": "23ca917126",
+    "ms": 5083,
+    "file": "6c4d739185cb.mp3"
+  },
+  {
+    "text": "Tap the notes to sing Koko a lullaby!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3465,
+    "file": "d63dcbb1af15.mp3"
+  },
+  {
+    "text": "Shh! Koko is fast asleep.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4604,
+    "file": "c6b1dfad3deb.mp3"
+  },
+  {
+    "text": "Let's dive into the Great Barrier Reef!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2979,
+    "file": "b2c08c2a0ec3.mp3"
+  },
+  {
+    "text": "Find the sea turtle!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1793,
+    "file": "11502c005d65.mp3"
+  },
+  {
+    "text": "Find the clownfish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1727,
+    "file": "1bb621fa0971.mp3"
+  },
+  {
+    "text": "Find the starfish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2169,
+    "file": "a8436a113657.mp3"
+  },
+  {
+    "text": "Find the octopus! It likes to hide.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2858,
+    "file": "bf154aa02d56.mp3"
+  },
+  {
+    "text": "You found Shelly the sea turtle!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2250,
+    "file": "1a0d807f0c62.mp3"
+  },
+  {
+    "text": "You found the clownfish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2038,
+    "file": "90debe4fb089.mp3"
+  },
+  {
+    "text": "You found the starfish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2038,
+    "file": "041a7a3e8067.mp3"
+  },
+  {
+    "text": "You found the octopus! It has eight arms!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4318,
+    "file": "86fbf5f0aa89.mp3"
+  },
+  {
+    "text": "That's the sea turtle!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1220,
+    "file": "c0326f71c0f6.mp3"
+  },
+  {
+    "text": "That's a clownfish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1852,
+    "file": "96e3a35c40bd.mp3"
+  },
+  {
+    "text": "That's a starfish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1434,
+    "file": "c58803f5c8d0.mp3"
+  },
+  {
+    "text": "That's the octopus!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2389,
+    "file": "384e4b470f0f.mp3"
+  },
+  {
+    "text": "That's a crab!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1283,
+    "file": "12fce1cdfde5.mp3"
+  },
+  {
+    "text": "That's a puffer fish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1757,
+    "file": "912119695ee3.mp3"
+  },
+  {
+    "text": "That's a seashell!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1668,
+    "file": "d2789f280fbb.mp3"
+  },
+  {
+    "text": "At night in Australia, you can see the Southern Cross stars!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4562,
+    "file": "5e4d92fbe1bd.mp3"
+  },
+  {
+    "text": "Tap the five twinkly stars!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2412,
+    "file": "eddc3faa5272.mp3"
+  },
+  {
+    "text": "You found the Southern Cross!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2051,
+    "file": "e1af6c3f9d1b.mp3"
+  },
+  {
+    "text": "The stars are on Australia's flag!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2835,
+    "file": "b48e6d18fb20.mp3"
+  },
+  {
+    "text": "Drag the big star onto the flag!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3354,
+    "file": "ac44ce61b74d.mp3"
+  },
+  {
+    "text": "The big star has seven points!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3076,
+    "file": "6b85eb223cb6.mp3"
+  },
+  {
+    "text": "Which one is Australia's flag?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2210,
+    "file": "8bc63050df09.mp3"
+  },
+  {
+    "text": "Look for the stars you found!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2394,
+    "file": "f5cca318521c.mp3"
+  },
+  {
+    "text": "Let's color a postcard from the beach to send home!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3759,
+    "file": "e99ddd6380a2.mp3"
+  },
+  {
+    "text": "Pick a color, then tap to paint!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2459,
+    "file": "52b75b269ef9.mp3"
+  },
+  {
+    "text": "Tap send when you are done!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2149,
+    "file": "48dda587fecb.mp3"
+  },
+  {
+    "text": "G'day, mate! In Australia, mate means friend.",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 4046,
+    "file": "6848a321f9c4.mp3"
+  },
+  {
+    "text": "Party time at the Sydney Opera House!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2594,
+    "file": "dc3a87ea2e0c.mp3"
+  },
+  {
+    "text": "Tap each friend to make them dance!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2668,
+    "file": "01c54da18175.mp3"
+  },
+  {
+    "text": "G'day, Kaylee! Thanks for helping Pip!",
+    "voice": "mama",
+    "sig": "7cae6c13ff",
+    "ms": 3160,
+    "file": "c304ef25158c.mp3"
+  },
+  {
+    "text": "Yum! Thanks for the gum leaves!",
+    "voice": "koko",
+    "sig": "23ca917126",
+    "ms": 3229,
+    "file": "1857f0ad262a.mp3"
+  },
+  {
+    "text": "Hello from the reef!",
+    "voice": "shelly",
+    "sig": "200bf3c3c7",
+    "ms": 2118,
+    "file": "c7087fadb100.mp3"
+  },
+  {
+    "text": "Ha ha ha! Kookaburras love to laugh!",
+    "voice": "kooky",
+    "sig": "7ccda205cc",
+    "ms": 3090,
+    "file": "5b4b593feea7.mp3"
+  },
+  {
+    "text": "I'm Pat the platypus! Hooray!",
+    "voice": "pat",
+    "sig": "1ac3df48c8",
+    "ms": 3843,
+    "file": "c0810b5b40e6.mp3"
+  },
+  {
+    "text": "Sydney has some of the biggest fireworks in the world!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3681,
+    "file": "9a0b8f24d15b.mp3"
+  },
+  {
+    "text": "Thank you, Kaylee! You're a true Aussie mate!",
+    "voice": "pip",
+    "sig": "aa4b0c6b7d",
+    "ms": 2620,
+    "file": "acad69d79398.mp3"
+  },
+  {
+    "text": "Kangaroo sticker! Kangaroos can only hop forward, never backward!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5815,
+    "file": "4e20f9a6eb37.mp3"
+  },
+  {
+    "text": "Koala sticker! A baby koala is called a joey, just like a kangaroo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5815,
+    "file": "45bf1e28d44c.mp3"
+  },
+  {
+    "text": "Sea turtle sticker! Sea turtles lived when the dinosaurs did!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4286,
+    "file": "3433b8476cfc.mp3"
+  },
+  {
+    "text": "Kookaburra sticker! Kookaburras sound like they are laughing!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4391,
+    "file": "2f67a62dcbf0.mp3"
+  },
+  {
+    "text": "Platypus sticker! A platypus has a bill like a duck!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4131,
+    "file": "9e3ed4da18e8.mp3"
+  },
+  {
+    "text": "Much of Australia is hot and sunny, with big dry deserts.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5919,
+    "file": "f2da5706be3f.mp3"
+  },
+  {
+    "text": "In Australia, people say G'day! It means hello!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4224,
+    "file": "8d6bec66bebc.mp3"
+  },
+  {
+    "text": "In Australia, Christmas comes in summer! Beach day!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4745,
+    "file": "0fb8e6d68c9c.mp3"
+  },
+  {
+    "text": "Kangaroos, koalas and platypuses all live in Australia!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 6783,
+    "file": "0edca88acb65.mp3"
+  },
+  {
+    "text": "The Sydney Opera House looks like big white sails!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4890,
+    "file": "d4ec58535b94.mp3"
+  },
+  {
+    "text": "Australia is a country and a whole continent!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3681,
+    "file": "4e394314a298.mp3"
+  },
+  {
+    "text": "The Great Barrier Reef is so big, you can see it from space!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5104,
+    "file": "8f5982bbaf15.mp3"
+  },
+  {
+    "text": "This is Australia! Tap a picture to learn more.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3688,
+    "file": "83993efa171f.mp3"
+  }
+]

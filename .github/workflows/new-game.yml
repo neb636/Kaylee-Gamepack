@@ -38,11 +38,9 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
       - run: npm ci
-      - run: python -m pip install edge-tts==7.2.8
+      # Voice clips: OpenAI text-to-speech, trimmed and loudness-matched with ffmpeg.
+      - run: command -v ffmpeg || (sudo apt-get update && sudo apt-get install -y ffmpeg)
       - run: npx playwright install --with-deps chromium
 
       - name: Say we're on it
@@ -66,10 +64,17 @@ jobs:
       - name: Keep changes inside the game folder
         run: scripts/keep-game-only.sh
 
+      # Only this step gets the API key (the tests run code written by Codex, so they don't).
+      - name: Record the voice lines
+        continue-on-error: true
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node scripts/generate-voice.mjs 2>&1 | tee .lesson-input/voice.log; exit ${PIPESTATUS[0]}
+
       - name: Check the game
         id: check
         continue-on-error: true
-        run: (node scripts/generate-voice.mjs && npm run check) 2>&1 | tee .lesson-input/check.log; exit ${PIPESTATUS[0]}
+        run: npm run check 2>&1 | tee .lesson-input/check.log; exit ${PIPESTATUS[0]}
 
       - name: Codex fixes failures (one try)
         if: steps.check.outcome == 'failure'
@@ -84,9 +89,15 @@ jobs:
         if: steps.check.outcome == 'failure'
         run: scripts/keep-game-only.sh
 
+      - name: Record the voice lines again
+        if: steps.check.outcome == 'failure'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node scripts/generate-voice.mjs
+
       - name: Check again
         if: steps.check.outcome == 'failure'
-        run: node scripts/generate-voice.mjs && npm run check
+        run: npm run check
 
       - name: Prepare PR text
         run: |

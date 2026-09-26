@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { say } from './speech'
+import { say, type Line } from './speech'
 
 /**
  * Returns a function that tells you if the component is still on screen.
@@ -17,7 +17,7 @@ export function useAlive() {
 }
 
 /** Say something when a screen first appears. */
-export function useSayOnMount(text: string) {
+export function useSayOnMount(text: Line) {
   useEffect(() => {
     void say(text)
   }, [text])

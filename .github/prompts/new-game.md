@@ -17,7 +17,7 @@ First read `AGENTS.md` completely and follow it. It is the source of truth.
    Make it delightful: pink, unicorns, her name, lots of celebration, no failing.
 3. Generate the art with your image generation tool following `art/STYLE.md` (cover + what the game needs;
    keep it to about 10 images or fewer). Process with `npm run art -- <game-id>` and check the contact sheet.
-4. Build `src/games/<game-id>/` (meta.ts, Game.tsx, anything else). Include `voice-lines.json` with every exact phrase that can reach `say()`, including prompts, hints, number variations, the card title, trophy announcement, and Trophy Room line. The workflow generates Sparkle's audio from this list. Keep phrases finite and explicit so no moment is silent. Only touch your game folder and
+4. Build `src/games/<game-id>/` (meta.ts, Game.tsx, anything else). Include `voice-lines.json` with every exact phrase that can reach `say()`, including prompts, hints, number variations, the card title, trophy announcement, and Trophy Room line. The workflow records the audio from this list: plain strings are Sparkle (the guide); give your own characters voices with a `cast.json` and `{ "text", "voice" }` entries (see "Voices" in AGENTS.md). Keep phrases finite, explicit and short so no moment is silent. Make the characters feel alive: `<SparklePuppet>` for Sparkle, a puppet or `<Buddy>` for your characters (see "Characters that feel alive"). Only touch your game folder and
    `art/source/games/<game-id>/`.
 5. Run `npm run typecheck` and `npm run build` and fix everything. Try `npm run test` too (skip if the sandbox
    blocks local ports).

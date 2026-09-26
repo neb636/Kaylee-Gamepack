@@ -2,11 +2,14 @@
 //   import { say, sounds, ChoiceCards, praise, type GameProps } from '../../sdk'
 
 export type { GameMeta, GameProps } from './types'
-export { say, stopSpeaking, type SayOptions } from './speech'
+export { say, stopSpeaking, lineText, lineVoice, speechLevel, speakingVoice, type Line, type SayOptions } from './speech'
 export { sounds } from './sounds'
 export { burst, bigCelebration } from './confetti'
 export { KID_NAME, wait, randomInt, pick, shuffle, sample, praise, numberWord } from './helpers'
 export { useAlive, useSayOnMount } from './hooks'
+export { usePuppet, spring, setT, setA, show, clamp, lerp, smooth, bell, span, wobble, type PuppetFrame, type PuppetHandle, type PuppetOptions } from './puppet/core'
+export { Buddy, type BuddyAction } from './puppet/Buddy'
+export { SparklePuppet, SPARKLE_ACTIONS, type SparkleAction, type SparklePuppetProps } from './puppet/Sparkle'
 
 export { BigButton, type BigButtonProps } from './components/BigButton'
 export { ChoiceCards, type Choice, type ChoiceCardsProps } from './components/ChoiceCards'

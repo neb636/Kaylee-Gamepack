@@ -3,6 +3,8 @@
 //   art/source/mascot/*.png            -> src/assets/mascot/*.webp
 //   art/source/trophy/*.png            -> src/assets/trophy/*.webp
 //   art/source/games/<game-id>/*.png   -> src/games/<game-id>/assets/*.webp
+//   art/source/world/_shared/*.png     -> src/world/assets/*.webp
+//   art/source/world/<place-id>/*.png  -> src/world/places/<place-id>/assets/*.webp
 //
 // Image generators give us RGB images with no transparency, so sprites are
 // drawn on plain white and we cut the white background out here (flood fill
@@ -24,6 +26,7 @@ function destFor(file) {
   const [top, ...rest] = rel.split('/')
   const name = basename(file, '.png') + '.webp'
   if (top === 'games') return join('src/games', rest[0], 'assets', name)
+  if (top === 'world') return rest[0] === '_shared' ? join('src/world/assets', name) : join('src/world/places', rest[0], 'assets', name)
   if (top === 'mascot' || top === 'trophy') return join('src/assets', top, name)
   return null // e.g. icon-1024.png (handled by build-icons.mjs)
 }

@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import { useState, type ReactNode } from 'react'
 import { sounds } from '../sounds'
-import { say } from '../speech'
+import { say, type Line } from '../speech'
 
 export interface Choice {
   key: string | number
@@ -17,7 +17,7 @@ export interface ChoiceCardsProps {
   /** Called when she taps a wrong card. If not given, `hint` is spoken. There is never a "fail". */
   onWrong?: (choice: Choice) => void
   /** Spoken after a wrong tap when there's no onWrong. */
-  hint?: string
+  hint?: Line
   /** Card size in px (square). */
   size?: number
   /** Card background color. */

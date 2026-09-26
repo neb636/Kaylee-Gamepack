@@ -5,6 +5,50 @@ import { go } from '../router'
 import { Mascot, say, sounds, useTrophies, type GameMeta } from './sdk-internal'
 import { games } from './registry'
 import { subjectStyle } from './subjects'
+import worldCover from '../world/assets/cover-world.webp'
+import { WORLD_LINES } from '../world/lines'
+import { totalStamps, usePassport } from '../world/stamps'
+
+/** The big door into Around the World. */
+function WorldTile() {
+  const stamps = totalStamps(usePassport())
+  return (
+    <motion.button
+      aria-label="Around the World"
+      whileTap={{ scale: 0.96 }}
+      initial={{ y: 30, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      onClick={() => {
+        if (isPostHogEnabled) posthog.capture('world_opened', { stamp_count: stamps })
+        sounds.sparkle()
+        void say(WORLD_LINES.title)
+        go.world()
+      }}
+      style={{
+        position: 'relative',
+        background: 'linear-gradient(135deg, #FFD6E7, #D9CCFF)',
+        borderRadius: 'var(--radius)',
+        boxShadow: 'var(--shadow)',
+        border: '6px solid #fff',
+        padding: 16,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'clamp(12px, 3vw, 28px)',
+        width: '100%',
+        textAlign: 'left',
+      }}
+    >
+      <img src={worldCover} alt="" style={{ width: 'min(34vw, 300px)', aspectRatio: '1', borderRadius: 24, objectFit: 'cover' }} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
+        <div style={{ fontSize: 'clamp(30px, 5.5vw, 56px)', fontWeight: 700, lineHeight: 1.05, color: 'var(--hotpink)' }}>Around the World</div>
+        <div style={{ fontSize: 'clamp(32px, 5vw, 48px)' }}>🦘 🐪 🐼 🐘</div>
+        <div style={{ alignSelf: 'flex-start', background: 'var(--hotpink)', color: '#fff', borderRadius: 999, padding: '10px 26px', fontSize: 'clamp(22px, 3.4vw, 32px)', fontWeight: 700, boxShadow: 'var(--shadow)' }}>
+          {stamps > 0 ? `📕 ${stamps} ▶` : 'Fly! 🎈'}
+        </div>
+      </div>
+    </motion.button>
+  )
+}
 
 function GameCard({ meta, hero, won }: { meta: GameMeta; hero?: boolean; won: boolean }) {
   const s = subjectStyle(meta.subject)
@@ -96,6 +140,8 @@ export function Home() {
           🏆 {trophies.length}
         </motion.button>
       </header>
+
+      <WorldTile />
 
       {newest && <GameCard meta={newest.meta} hero won={won(newest.meta.id)} />}
 

@@ -5,6 +5,7 @@ import { Home } from './shell/Home'
 import { Playground } from './shell/Playground'
 import { Splash } from './shell/Splash'
 import { TrophyRoom } from './shell/TrophyRoom'
+import { World } from './world/World'
 
 export default function App() {
   const route = useRoute()
@@ -18,6 +19,8 @@ export default function App() {
       return <TrophyRoom />
     case 'playground':
       return <Playground />
+    case 'world':
+      return <World place={route.place} activity={route.activity} />
     default:
       return <Home />
   }
