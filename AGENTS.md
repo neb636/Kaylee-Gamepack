@@ -283,3 +283,6 @@ QA (after `npm run build`; WebKit, because the iPad runs Safari: `npx playwright
 - The `playtest-qa` Claude agent (Opus) runs all three, looks at every image with a 5-year-old-playtest checklist and
   reports ranked findings; fix them and run it again. `luna-qa` (Luna in Codex) is an optional second opinion.
 - Lip sync and sound can't be heard by automated browsers: listen on the iPad.
+
+
+After every task is completed. Commit your work and open a draft pr and assign me (neb636).
