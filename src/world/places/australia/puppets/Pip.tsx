@@ -38,10 +38,10 @@ export const Pip = forwardRef<PuppetHandle, PipProps>(function Pip({ height, sty
       setT(p.head, `translate(0 ${r.crouch * 12 + r.headY}) rotate(${r.head} 200 238)`)
       setT(p.earL, `translate(162 112) rotate(${-18 - r.ears * 0.9})`)
       setT(p.earR, `translate(238 112) rotate(${18 + r.ears})`)
-      setT(p.tail, `translate(150 392) rotate(${r.tail})`)
-      setT(p.armL, `translate(163 282) rotate(${r.armL[0] + 6})`)
+      setT(p.tail, `translate(134 420) rotate(${r.tail})`)
+      setT(p.armL, `translate(165 284) rotate(${r.armL[0] + 6})`)
       setT(p.foreL, `translate(0 36) rotate(${r.armL[1] - 16})`)
-      setT(p.armR, `translate(237 282) scale(-1 1) rotate(${r.armR[0] + 6})`)
+      setT(p.armR, `translate(235 284) scale(-1 1) rotate(${r.armR[0] + 6})`)
       setT(p.foreR, `translate(0 36) rotate(${r.armR[1] - 16})`)
       setT(p.footL, `translate(150 458) rotate(${r.feet} 44 0)`)
       setT(p.footR, `translate(250 458) rotate(${r.feet} 44 0)`)
@@ -80,8 +80,9 @@ export const Pip = forwardRef<PuppetHandle, PipProps>(function Pip({ height, sty
   const lower = (pass: boolean) => (
     <>
       <g ref={r('tail', pass)}>
-        <path fill={FUR} d="M18 -34 C-30 -30 -86 -14 -118 -54 C-132 -72 -122 -96 -104 -88 C-98 -66 -66 -46 -20 -40 C-2 -38 14 -10 20 16 Z" />
-        {!pass && <path fill={CREAM} d="M-6 -14 C-48 -16 -88 -26 -110 -60 C-92 -38 -56 -30 -8 -26 Z" />}
+        {/* Thick at the base (hidden behind the haunch), sweeping out and curling up to a round tip; cream underneath. */}
+        <path fill={FUR} d="M16 -24 C-24 -14 -62 -26 -86 -70 C-92 -84 -112 -88 -116 -70 C-120 -22 -66 22 12 24 Z" />
+        {!pass && <path fill={CREAM} d="M12 24 C-66 22 -120 -22 -116 -70 C-108 -34 -64 4 10 10 Z" />}
       </g>
       <g ref={r('footL', pass)}>
         <path fill={FUR} d="M-52 6 C-56 -14 -26 -24 6 -22 C38 -20 62 -8 60 6 C58 18 -48 20 -52 6 Z" />
@@ -92,8 +93,9 @@ export const Pip = forwardRef<PuppetHandle, PipProps>(function Pip({ height, sty
         {!pass && <path {...line()} d="M40 -2 L43 8 M26 -4 L27 9" />}
       </g>
       {/* A pear-shaped body; the thighs sit over the belly with just a crease on their inner edge. */}
-      <path fill={FUR} d="M200 228 C240 228 258 270 266 320 C272 360 284 396 280 424 C274 450 236 454 200 454 C164 454 126 450 120 424 C116 396 128 360 134 320 C142 270 160 228 200 228Z" />
-      {!pass && <path fill={CREAM} d="M200 252 C226 252 238 300 242 346 C246 392 234 438 200 442 C166 438 154 392 158 346 C162 300 174 252 200 252Z" />}
+      {/* The neck reaches well up under the head, so the head never floats off the body when she hops or talks. */}
+      <path fill={FUR} d="M200 188 C222 188 236 200 242 222 C250 254 260 286 266 320 C272 360 284 396 280 424 C274 450 236 454 200 454 C164 454 126 450 120 424 C116 396 128 360 134 320 C140 286 150 254 158 222 C164 200 178 188 200 188Z" />
+      {!pass && <path fill={CREAM} d="M200 206 C211 206 214 250 216 290 C220 318 238 322 242 350 C246 396 234 438 200 442 C166 438 154 396 158 350 C162 322 180 318 184 290 C186 250 189 206 200 206Z" />}
       <path fill={FUR} d="M150 342 C112 342 98 386 102 416 C106 444 138 454 168 446 C180 426 178 368 150 342Z" />
       <path fill={FUR} d="M250 342 C288 342 302 386 298 416 C294 444 262 454 232 446 C220 426 222 368 250 342Z" />
       {!pass && <path {...line()} d="M154 346 C174 368 180 420 168 446 M246 346 C226 368 220 420 232 446 M106 428 C118 448 144 452 166 447 M294 428 C282 448 256 452 234 447" />}
@@ -102,13 +104,13 @@ export const Pip = forwardRef<PuppetHandle, PipProps>(function Pip({ height, sty
   // Arms: upper arm → forearm → paw, outlined as one limb.
   const arm = (s: 'L' | 'R', pass: boolean) => (
     <g ref={r(s === 'L' ? 'armL' : 'armR', pass)}>
-      <path fill={FUR} d="M-15 -4 C-15 -16 15 -16 15 -4 L13 38 C13 46 -13 46 -13 38 Z" />
+      {/* The upper arm's outline is open at the top (just its two sides, ending in round caps), so the arm grows out of
+          the shoulder instead of ending in an outlined cap. */}
+      {pass ? <path fill="none" d="M-15 0 L-13 38 C-13 46 13 46 13 38 L15 0" /> : <path fill={FUR} d="M-15 0 C-15 -6 15 -6 15 0 L13 38 C13 46 -13 46 -13 38 Z" />}
       <g ref={r(s === 'L' ? 'foreL' : 'foreR', pass)}>
         <path fill={FUR} d="M-12 0 C-12 -10 12 -10 12 0 L13 22 C22 26 20 46 0 46 C-20 46 -22 26 -13 22 Z" />
         {!pass && <path {...line(2.4)} d="M-5 38 L-5 44 M5 38 L5 44" />}
       </g>
-      {/* Fur over the top of the arm's outline, so the arm grows out of the shoulder instead of ending in a cap. */}
-      {!pass && <ellipse fill={FUR} cx="0" cy="-8" rx="13" ry="13" />}
     </g>
   )
   const head = (pass: boolean) => (

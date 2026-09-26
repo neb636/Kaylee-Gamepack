@@ -16,7 +16,7 @@ export interface RooPose {
   head: number
   headY: number
   /** Arm angles (degrees): upper arm and forearm. 0 = hanging down, negative swings toward the chest, positive swings
-   *  out and up (150 = raised high). The right arm is mirrored by the puppet, so the same numbers work for both. */
+   *  out and up (135 = raised in a V). The right arm is mirrored by the puppet, so the same numbers work for both. */
   armL: [number, number]
   armR: [number, number]
   ears: number
@@ -95,8 +95,9 @@ export function rooMotion(hopHeight: number) {
       pose.feet = air * 18
       if (action === 'cheer') {
         const up = bell(span(q, 0.1, 0.95))
-        pose.armL = [170 * up + Math.sin(t * 16) * 12 * up, -38 + 30 * up]
-        pose.armR = [170 * up + Math.sin(t * 16 + 1) * 12 * up, -38 + 30 * up]
+        // Arms up in a V, out past the sides of the head (straight up would hide the paws behind it).
+        pose.armL = [138 * up + Math.sin(t * 16) * 10 * up, -38 + 26 * up]
+        pose.armR = [138 * up + Math.sin(t * 16 + 1) * 10 * up, -38 + 26 * up]
         pose.brow = up
       } else {
         pose.armL = [35 * air + pose.crouch * 10, -38 - 28 * air]
@@ -104,7 +105,8 @@ export function rooMotion(hopHeight: number) {
       }
     } else if (action === 'wave') {
       const up = bell(span(q, 0, 1)) ** 0.4
-      pose.armR = [160 * up, -38 + 30 * up + Math.sin(t * 14) * 28 * up]
+      // Upper arm out to the side, forearm up, the paw waving beside the head.
+      pose.armR = [98 * up, -38 + 92 * up + Math.sin(t * 14) * 20 * up]
       pose.head += 6 * up
       pose.happy = up > 0.5
       pose.open = 0.3 * up
@@ -115,8 +117,8 @@ export function rooMotion(hopHeight: number) {
       pose.lean = Math.sin(beat / 2) * 10 * on
       pose.lift = Math.abs(Math.sin(beat)) * 22 * on
       pose.sy *= 1 - Math.abs(Math.cos(beat)) * 0.06 * on
-      pose.armL = [(110 + Math.sin(beat) * 50) * on, -38 + 20 * on]
-      pose.armR = [(110 - Math.sin(beat) * 50) * on, -38 + 20 * on]
+      pose.armL = [(105 + Math.sin(beat) * 35) * on, -38 + 20 * on]
+      pose.armR = [(105 - Math.sin(beat) * 35) * on, -38 + 20 * on]
       pose.head += Math.sin(beat / 2) * 8 * on
       pose.happy = true
       pose.open = 0.5 * on

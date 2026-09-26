@@ -35,17 +35,22 @@ export interface Guest {
   name: string
   /** The live character at the party (a puppet, or a Buddy for the flat sprites). */
   render: (ref: Ref<PuppetHandle>, height: string) => ReactNode
+  /** Size of what `render` draws, relative to the height it is given: width and height (so the party can stand
+   *  everyone on the promenade without overlapping). */
+  box: [w: number, h: number]
+  /** Low, wide friends stand in the front row at the party, upright ones behind them. */
+  row: 'front' | 'back'
 }
 const buddy = (img: string, voice: string) => (ref: Ref<PuppetHandle>, height: string) => createElement(Buddy, { ref, img, voice, height })
 
 /** Which guest each stamp brings to the party. */
 export const GUESTS: Record<string, Guest> = {
-  outback: { img: art.mama, line: L.party.mama, name: 'Mama Kangaroo', render: (ref, height) => createElement(Mama, { ref, height: `calc(${height} * 1.3)` }) },
-  forest: { img: art.koalaAwake, line: L.party.koko, name: 'Koko', render: (ref, height) => createElement(Koko, { ref, height }) },
-  reef: { img: art.turtle, line: L.party.shelly, name: 'Shelly', render: buddy(art.turtle, 'shelly') },
-  stars: { img: art.kookaburra, line: L.party.kooky, name: 'Kooky', render: buddy(art.kookaburra, 'kooky') },
-  croc: { img: art.croc, line: L.party.chompy, name: 'Chompy', render: (ref, height) => createElement(Chompy, { ref, height: `calc(${height} * 0.8)`, babies: 2 }) },
-  postcard: { img: art.platypus, line: L.party.pat, name: 'Pat', render: buddy(art.platypus, 'pat') },
+  outback: { img: art.mama, line: L.party.mama, name: 'Mama Kangaroo', row: 'back', box: [0.87, 1.3], render: (ref, height) => createElement(Mama, { ref, height: `calc(${height} * 1.3)` }) },
+  forest: { img: art.koalaAwake, line: L.party.koko, name: 'Koko', row: 'back', box: [1.02, 1], render: (ref, height) => createElement(Koko, { ref, height }) },
+  reef: { img: art.turtle, line: L.party.shelly, name: 'Shelly', row: 'front', box: [1.38, 1], render: buddy(art.turtle, 'shelly') },
+  stars: { img: art.kookaburra, line: L.party.kooky, name: 'Kooky', row: 'back', box: [0.96, 1], render: buddy(art.kookaburra, 'kooky') },
+  croc: { img: art.croc, line: L.party.chompy, name: 'Chompy', row: 'front', box: [1.44, 0.8], render: (ref, height) => createElement(Chompy, { ref, height: `calc(${height} * 0.8)`, babies: 2 }) },
+  postcard: { img: art.platypus, line: L.party.pat, name: 'Pat', row: 'front', box: [1.15, 1], render: buddy(art.platypus, 'pat') },
 }
 
 export default function Place(props: PlaceProps) {
@@ -190,32 +195,37 @@ function PartyPanel({ stamps, total, ready, onOpen, order }: { stamps: string[];
         borderRadius: 28,
         border: `5px solid ${ready ? 'var(--gold)' : '#fff'}`,
         boxShadow: 'var(--shadow)',
-        background: `url(${art.bgOpera}) center / cover`,
+        background: `url(${art.bgOpera}) center bottom / cover`,
         overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        padding: 8,
+        containerType: 'size',
+        padding: 0,
       }}
     >
-      <div style={{ position: 'absolute', top: 8, left: 8, right: 8, display: 'flex', justifyContent: 'center', gap: 4 }}>
-        {order.map((id) => (
-          <span key={id} style={{ fontSize: 'clamp(18px, 3vmin, 28px)', filter: stamps.includes(id) ? 'none' : 'grayscale(1) opacity(0.4)' }}>
-            ⭐
-          </span>
-        ))}
-      </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'flex-end', gap: 2 }}>
-        <img src={art.pip} alt="" style={{ height: 'clamp(54px, 11vmin, 110px)' }} />
-        {order
-          .filter((id) => stamps.includes(id))
-          .map((id) => (
-            <motion.img key={id} src={GUESTS[id].img} alt="" initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ height: 'clamp(44px, 9vmin, 90px)' }} />
+      <div style={{ position: 'absolute', top: 8, left: 8, right: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
+          {order.map((id) => (
+            <span key={id} style={{ fontSize: 'clamp(18px, 3vmin, 28px)', filter: stamps.includes(id) ? 'none' : 'grayscale(1) opacity(0.4)' }}>
+              ⭐
+            </span>
           ))}
+        </div>
+        <div style={{ background: ready ? 'var(--hotpink)' : 'rgba(255,255,255,0.9)', color: ready ? '#fff' : 'var(--ink)', borderRadius: 999, padding: '4px 16px', fontWeight: 700, fontSize: 'clamp(18px, 3vmin, 28px)', boxShadow: 'var(--shadow)' }}>
+          {ready ? '🎉 Party!' : `🎉 ${stamps.length}/${total}`}
+        </div>
       </div>
-      <div style={{ background: ready ? 'var(--hotpink)' : 'rgba(255,255,255,0.9)', color: ready ? '#fff' : 'var(--ink)', borderRadius: 999, padding: '4px 16px', marginTop: 6, fontWeight: 700, fontSize: 'clamp(18px, 3vmin, 28px)' }}>
-        {ready ? '🎉 Party!' : `🎉 ${stamps.length}/${total}`}
+      {/* Feet on the promenade: the picture is anchored to the bottom, and the tiles are its bottom ~15%. If the friends
+          need a second row, it stands just behind the first (overlapping, not floating up by the railing). */}
+      <div style={{ ['--h' as string]: 'min(90px, 26cqh, 21cqw)', position: 'absolute', left: 4, right: 4, bottom: 'max(6cqh, 4cqw)', display: 'flex', flexWrap: 'wrap-reverse', justifyContent: 'center', alignItems: 'flex-end', columnGap: 2 }}>
+        {[{ id: 'pip', img: art.pip, scale: 1.2 }, ...order.filter((id) => stamps.includes(id)).map((id) => ({ id, img: GUESTS[id].img, scale: 1 }))].map((f, i) => (
+          <motion.img
+            key={f.id}
+            src={f.img}
+            alt=""
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            style={{ height: `calc(var(--h) * ${f.scale})`, marginTop: 'calc(var(--h) * -0.6)', position: 'relative', zIndex: 10 - i, transformOrigin: '50% 100%' }}
+          />
+        ))}
       </div>
     </motion.button>
   )
