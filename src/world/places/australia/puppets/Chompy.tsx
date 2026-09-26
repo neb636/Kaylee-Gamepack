@@ -5,6 +5,7 @@
 import { forwardRef, useId, useRef, type CSSProperties } from 'react'
 import { bell, clamp, lerp, setA, setT, show, smooth, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../sdk'
 import { art } from '../art'
+import { inkPass, useInk } from './ink'
 
 export interface ChompyProps {
   height: string
@@ -21,7 +22,9 @@ const SKIN_DARK = '#6CBF8C'
 const BELLY = '#FBEA9A'
 const PINK = '#FF8FB8'
 const BOW = '#FF4F9A'
-const MOUTH = '#B93B63'
+const THROAT = '#8E2A55'
+const MOUTH = '#D9507F'
+const TONGUE = '#FF8DB1'
 const TOOTH = '#FFF7F0'
 const W = 5
 
@@ -29,15 +32,13 @@ const W = 5
 const HIP: [number, number] = [182, 268] // where the tail joins the body
 const NECK: [number, number] = [430, 262] // the head turns here
 const HINGE: [number, number] = [472, 262] // the lower jaw turns here
-const UPPER_TIP: [number, number] = [664, 256]
+const UPPER_TIP: [number, number] = [662, 258]
 const JAW_LEN = 186
 
 const BODY = 'M156 276 C150 208 236 186 318 186 C398 186 450 214 454 266 C458 322 404 348 316 350 C230 352 160 340 156 276Z'
 const BELLY_PATH = 'M176 300 C222 330 300 340 362 336 C404 332 436 318 452 290 C448 334 402 350 316 350 C236 352 184 338 176 300Z'
-// A big round dome of a head with the long snout reaching forward to an upturned nose bump.
-const HEAD = 'M398 228 C388 160 428 112 484 112 C540 112 568 150 572 196 C606 200 640 204 662 214 C686 224 684 256 660 258 L482 262 C434 266 404 258 398 228Z'
-const EYE_BUMP_FAR = 'M524 164 C520 130 552 118 570 136 C584 150 580 176 566 184Z'
-const NOSE_BUMP = 'M626 214 C620 186 664 178 676 204 C682 218 674 228 660 228Z'
+// A big round dome of a head with the long snout reaching forward and rising into a round nose bump, all one outline.
+const HEAD = 'M398 228 C388 160 428 112 484 112 C540 112 568 150 572 196 C590 199 606 202 620 204 C624 186 642 176 660 176 C684 176 698 194 696 216 C694 242 680 258 656 258 L482 262 C434 266 404 258 398 228Z'
 // Lower jaw, drawn around its hinge (0,0) closed: tucked under the snout, with a pale chin and throat.
 const JAW = 'M-26 -2 C-24 26 10 42 60 42 C110 42 158 30 186 10 C196 2 192 -8 180 -8 L-10 -8 C-22 -8 -26 -6 -26 -2Z'
 const CHIN = 'M-22 12 C-6 34 30 42 60 42 C110 42 158 30 186 10 C176 26 140 18 100 20 C50 22 6 22 -22 12Z'
@@ -93,7 +94,6 @@ type Part =
   | 'body'
   | 'tail'
   | 'tailBand'
-  | 'tailLine'
   | 'tailSpots'
   | 'tailBumps'
   | 'head'
@@ -103,6 +103,7 @@ type Part =
   | 'legFR'
   | 'legBL'
   | 'legBR'
+  | 'tailInk'
   | 'blush'
   | 'bow'
   | 'rider0'
@@ -113,6 +114,7 @@ type Part =
 /** Chompy the crocodile. Actions: snap, gulp, swim, cheer, dance, wiggle, nod. Voice: chompy. */
 export const Chompy = forwardRef<PuppetHandle, ChompyProps>(function Chompy({ height, style, inMouth = 0, babies = 0 }, ref) {
   const id = useId().replace(/:/g, '')
+  const ink = useInk<Part>()
   const st = useRef({ tailA: spring(60, 6), tailB: spring(40, 4.5), rootRot: 0, jaw: 0 }).current
   const props = useRef({ inMouth, babies })
   props.current = { inMouth, babies }
@@ -178,8 +180,8 @@ export const Chompy = forwardRef<PuppetHandle, ChompyProps>(function Chompy({ he
         rootX += Math.sin(s) * 6 * env
         tailTarget += Math.sin(s) * 34 * env
         tipTarget += Math.sin(s - 1) * 50 * env
-        paddle = Math.sin(s * 1.5) * 38 * env
-        legSwing = -20 * env
+        paddle = Math.sin(s * 1.5) * 24 * env
+        legSwing = -10 * env
         headRot += Math.sin(s + 0.5) * 3 * env
         eye = 'happy'
       } else if (act === 'cheer') {
@@ -221,7 +223,7 @@ export const Chompy = forwardRef<PuppetHandle, ChompyProps>(function Chompy({ he
       const tail = tailPath(ta, tb)
       setA(p.tail, 'd', tail.d)
       setA(p.tailBand, 'd', tail.band)
-      setA(p.tailLine, 'd', tail.d)
+      setA(p.tailInk, 'd', tail.d)
       // Bumps along the inside of the curl and spots on the tail follow the curve.
       const place = (group: Element | undefined, from: number, step: number, out: number) => {
         const kids = group?.children
@@ -245,10 +247,12 @@ export const Chompy = forwardRef<PuppetHandle, ChompyProps>(function Chompy({ he
       const a = (j * Math.PI) / 180
       const lx = HINGE[0] + Math.cos(a) * JAW_LEN
       const ly = HINGE[1] + Math.sin(a) * JAW_LEN
-      // The front of the open mouth bows forward in a soft curve instead of a straight cut.
-      const fx = (UPPER_TIP[0] - 8 + lx) / 2 + 22 * Math.cos(a / 2)
-      const fy = (UPPER_TIP[1] + 2 + ly) / 2 + 22 * Math.sin(a / 2)
-      setA(p.mouth, 'd', `M${HINGE[0] - 10} ${HINGE[1] - 4} L${UPPER_TIP[0] - 8} ${UPPER_TIP[1] + 2} Q${fx} ${fy} ${lx} ${ly} Z`)
+      // The open side of the mouth curves in a little toward the throat, so it reads as a hollow, not a bag.
+      const ux = UPPER_TIP[0] - 14
+      const uy = UPPER_TIP[1] - 6
+      const fx = (ux + lx) / 2 - 16 * Math.cos(a / 2)
+      const fy = (uy + ly) / 2 - 16 * Math.sin(a / 2)
+      setA(p.mouth, 'd', `M${HINGE[0] - 16} ${HINGE[1] - 10} L${ux} ${uy} Q${fx} ${fy} ${lx + Math.sin(a) * 8} ${ly - Math.cos(a) * 8} Z`)
       show(p.mouth, j > 1.5)
       // Legs swing together for hops and dances, and paddle in turn (diagonal pairs) when she swims.
       setT(p.legFL, `rotate(${legSwing + paddle} 404 300)`)
@@ -256,6 +260,7 @@ export const Chompy = forwardRef<PuppetHandle, ChompyProps>(function Chompy({ he
       setT(p.legFR, `rotate(${-legSwing * 0.8 - paddle} 436 296)`)
       setT(p.legBR, `rotate(${-legSwing * 0.8 + paddle} 258 296)`)
       setT(p.blush, `translate(478 222) scale(${blush})`)
+      ink.sync(p)
       setT(p.bow, `rotate(${bow} 452 118)`)
 
       // Babies riding on her back bob out of time with each other.
@@ -295,16 +300,34 @@ export const Chompy = forwardRef<PuppetHandle, ChompyProps>(function Chompy({ he
     </g>
   )
 
-  // Chunky legs with cream toenails.
-  const leg = (name: Part, x: number, y: number, far: boolean) => (
+  // Chunky legs: a round haunch that melts into the body, a short ankle and a foot pointing forward with cream claws.
+  // Near legs share one outline with the body and tail (the ink pass), so there is no seam where they join; a soft
+  // crease over the haunch shows the leg. Far legs sit behind the body with their own outline, in a darker green.
+  const legPath = (x: number, y: number) =>
+    `M${x - 34} ${y - 14} C${x - 40} ${y + 20} ${x - 32} ${y + 48} ${x - 30} ${y + 62} C${x - 32} ${y + 74} ${x - 24} ${y + 80} ${x - 10} ${y + 80} L${x + 40} ${y + 80} C${x + 58} ${y + 80} ${x + 60} ${y + 60} ${x + 42} ${y + 56} C${x + 32} ${y + 54} ${x + 26} ${y + 46} ${x + 28} ${y + 34} C${x + 34} ${y + 8} ${x + 30} ${y - 18} ${x + 8} ${y - 26} C${x - 12} ${y - 32} ${x - 30} ${y - 28} ${x - 34} ${y - 14}Z`
+  const claws = (x: number, y: number) =>
+    [x + 6, x + 22, x + 38].map((tx) => (
+      <path key={tx} d={`M${tx - 7} ${y + 80} C${tx - 8} ${y + 70} ${tx + 6} ${y + 68} ${tx + 8} ${y + 78} C${tx + 8} ${y + 84} ${tx - 6} ${y + 86} ${tx - 7} ${y + 80}Z`} fill={TOOTH} stroke={INK} strokeWidth="3.2" />
+    ))
+  const farLeg = (name: Part, x: number, y: number) => (
     <g ref={part(name)}>
-      <path d={`M${x - 30} ${y} C${x - 42} ${y + 26} ${x - 38} ${y + 56} ${x - 30} ${y + 72} C${x - 26} ${y + 84} ${x + 40} ${y + 84} ${x + 42} ${y + 72} C${x + 44} ${y + 62} ${x + 34} ${y + 54} ${x + 32} ${y + 44} C${x + 38} ${y + 30} ${x + 36} ${y + 10} ${x + 28} ${y}Z`} fill={far ? SKIN_DARK : SKIN} stroke={INK} strokeWidth={W} strokeLinejoin="round" />
-      {[x - 12, x + 6, x + 24].map((tx) => (
-        <path key={tx} d={`M${tx - 8} ${y + 80} Q${tx - 8} ${y + 68} ${tx} ${y + 68} Q${tx + 8} ${y + 68} ${tx + 8} ${y + 80}Z`} fill={TOOTH} stroke={INK} strokeWidth="3.2" />
-      ))}
-      {!far && <ellipse cx={x - 4} cy={y + 30} rx="10" ry="7" fill={SKIN_DARK} />}
+      <path d={legPath(x, y)} fill={SKIN_DARK} stroke={INK} strokeWidth={W} />
+      {claws(x, y)}
     </g>
   )
+  const nearLeg = (name: Part, x: number, y: number) => (
+    <g ref={part(name)}>
+      <path d={legPath(x, y)} fill={SKIN} />
+      <path d={`M${x - 33} ${y + 26} C${x - 36} ${y + 2} ${x - 26} ${y - 22} ${x - 2} ${y - 25} C${x + 20} ${y - 26} ${x + 32} ${y - 6} ${x + 30} ${y + 22}`} fill="none" stroke={INK} strokeWidth="4" strokeLinecap="round" />
+      <ellipse cx={x - 6} cy={y + 16} rx="11" ry="8" fill={SKIN_DARK} />
+      <ellipse cx={x + 12} cy={y + 38} rx="7" ry="5" fill={SKIN_DARK} />
+      {claws(x, y)}
+    </g>
+  )
+  const NEAR_LEGS: [Part, number, number][] = [
+    ['legBL', 226, 300],
+    ['legFL', 404, 300],
+  ]
 
   // A tiny hatchling head peeking out between her teeth.
   const peek = (x: number, i: number) => (
@@ -329,66 +352,79 @@ export const Chompy = forwardRef<PuppetHandle, ChompyProps>(function Chompy({ he
 
   return (
     <svg ref={svg} viewBox="0 0 720 400" aria-label="Chompy the crocodile" style={{ height, aspectRatio: '720 / 400', overflow: 'visible', display: 'block', ...style }}>
+      <defs>
+        <linearGradient id={`${id}-mouth`} gradientUnits="userSpaceOnUse" x1={HINGE[0]} y1="0" x2={UPPER_TIP[0]} y2="0">
+          <stop offset="0" stopColor={THROAT} />
+          <stop offset="0.7" stopColor={MOUTH} />
+        </linearGradient>
+      </defs>
       <g ref={part('root')} strokeLinejoin="round">
-        {/* Far legs, then the tail, then the body over the tail's base. */}
-        {leg('legFR', 436, 296, true)}
-        {leg('legBR', 258, 296, true)}
+        {/* Far legs and the bumps on the back and tail sit behind, each with their own outline. */}
+        {farLeg('legFR', 436, 296)}
+        {farLeg('legBR', 258, 296)}
         <g ref={part('tailBumps')}>
           {Array.from({ length: 7 }, (_, i) => (
             <path key={i} d="M-16 4 Q-16 22 0 22 Q16 22 16 4Z" fill={SKIN_DARK} stroke={INK} strokeWidth="4.5" />
           ))}
         </g>
-        <path ref={part('tail')} d={tailPath(0, 0).d} fill={SKIN} />
-        <path ref={part('tailBand')} d={tailPath(0, 0).band} fill={BELLY} />
-        {/* The outline again on top, so the pale band doesn't cover half of it. */}
-        <path ref={part('tailLine')} d={tailPath(0, 0).d} fill="none" stroke={INK} strokeWidth={W} />
-        <g ref={part('tailSpots')}>
-          {Array.from({ length: 5 }, (_, i) => (
-            <ellipse key={i} rx="13" ry="9" fill={SKIN_DARK} />
+        {[
+          [206, 204],
+          [242, 194],
+          [278, 190],
+          [314, 189],
+          [350, 192],
+          [386, 200],
+        ].map(([x, y]) => (
+          <path key={x} d={`M${x - 19} ${y + 10} Q${x - 19} ${y - 18} ${x} ${y - 18} Q${x + 19} ${y - 18} ${x + 19} ${y + 10}Z`} fill={SKIN_DARK} stroke={INK} strokeWidth="4.5" />
+        ))}
+        {/* One outline around the tail, body and near legs together (see ink.ts), so they read as one animal. */}
+        <g {...inkPass(W, INK)}>
+          <path ref={part('tailInk')} d={tailPath(0, 0).d} />
+          <path d={BODY} />
+          {NEAR_LEGS.map(([name, x, y]) => (
+            <path key={name} ref={ink.twin(name)} d={legPath(x, y)} />
           ))}
         </g>
         <g ref={part('body')}>
-          {/* Bumps along her back */}
-          {[
-            [206, 204],
-            [242, 194],
-            [278, 190],
-            [314, 189],
-            [350, 192],
-            [386, 200],
-          ].map(([x, y]) => (
-            <path key={x} d={`M${x - 19} ${y + 10} Q${x - 19} ${y - 18} ${x} ${y - 18} Q${x + 19} ${y - 18} ${x + 19} ${y + 10}Z`} fill={SKIN_DARK} stroke={INK} strokeWidth="4.5" />
-          ))}
-          <path d={BODY} fill={SKIN} stroke={INK} strokeWidth={W} />
+          <path d={BODY} fill={SKIN} />
           <path d={BELLY_PATH} fill={BELLY} />
           {SPOTS.map(([x, y, rx, ry]) => (
             <ellipse key={`${x}-${y}`} cx={x} cy={y} rx={rx} ry={ry} fill={SKIN_DARK} />
           ))}
         </g>
-        {leg('legBL', 226, 300, false)}
+        {/* The tail is filled over the body, so its pale underside flows into her belly without a break. */}
+        <path ref={part('tail')} d={tailPath(0, 0).d} fill={SKIN} />
+        <path ref={part('tailBand')} d={tailPath(0, 0).band} fill={BELLY} />
+        <g ref={part('tailSpots')}>
+          {Array.from({ length: 5 }, (_, i) => (
+            <ellipse key={i} rx="13" ry="9" fill={SKIN_DARK} />
+          ))}
+        </g>
+        {nearLeg('legBL', 226, 300)}
         <g ref={part('head')}>
           {/* Lower jaw and the inside of the mouth sit behind the upper head. */}
-          <path ref={part('mouth')} fill={MOUTH} stroke={INK} strokeWidth="4" style={{ display: 'none' }} />
+          <path ref={part('mouth')} fill={`url(#${id}-mouth)`} style={{ display: 'none' }} />
           <g ref={part('jaw')} transform={`translate(${HINGE[0]} ${HINGE[1]})`}>
-            <path d="M24 -6 C40 -26 110 -30 150 -12 L150 -6Z" fill="#FF8FA8" stroke={INK} strokeWidth="3.5" />
+            {/* A soft tongue lying along the lower jaw (hidden under the snout while the mouth is shut). */}
+            <path d="M-4 -6 C6 -30 70 -36 120 -26 C146 -21 160 -14 160 -8 L-4 -6Z" fill={TONGUE} />
+            <path d="M40 -18 C70 -24 100 -24 124 -18" fill="none" stroke="#E86D98" strokeWidth="3.5" strokeLinecap="round" />
             {LOWER_TEETH.map((x) => (
               <path key={x} d={`M${x - 8} -6 Q${x} -22 ${x + 8} -6Z`} fill={TOOTH} stroke={INK} strokeWidth="3" />
             ))}
             <path d={JAW} fill={SKIN} stroke={INK} strokeWidth={W} />
             <path d={CHIN} fill={BELLY} />
           </g>
-          <path d={EYE_BUMP_FAR} fill={SKIN} stroke={INK} strokeWidth={W} />
           <path d={HEAD} fill={SKIN} stroke={INK} strokeWidth={W} />
           {UPPER_TEETH.map((x) => (
             <path key={x} d={`M${x - 9} ${UPPER_TIP[1] - 2} Q${x} ${UPPER_TIP[1] + 20} ${x + 9} ${UPPER_TIP[1] - 2}Z`} fill={TOOTH} stroke={INK} strokeWidth="3" />
           ))}
           {/* Babies peek out between her lips. */}
           {Array.from({ length: Math.min(3, inMouth) }, (_, i) => peek(526 + i * 54, i))}
-          <path d={NOSE_BUMP} fill={SKIN} stroke={INK} strokeWidth={W} />
-          {/* The nose bump melts into the snout. */}
-          <path d="M628 222 C640 226 660 228 672 224 L672 240 L628 240Z" fill={SKIN} />
-          <ellipse cx="652" cy="206" rx="6" ry="8" fill={INK} />
-          {eye('F', 550, 162, 0.82)}
+          {/* Two nostrils on top of the nose bump: the far one peeks over the near one. */}
+          <ellipse cx="674" cy="192" rx="5" ry="6" fill={INK} transform="rotate(20 674 192)" />
+          <ellipse cx="654" cy="196" rx="6.5" ry="8" fill={INK} transform="rotate(-10 654 196)" />
+          <path d="M626 226 Q640 234 656 232" fill="none" stroke={SKIN_DARK} strokeWidth="5" strokeLinecap="round" />
+          {eye('F', 541, 165, 0.8)}
           {eye('N', 506, 168, 1)}
           {/* A big smile curling up at the back of her mouth. */}
           <path d="M482 262 C470 262 456 256 450 244" fill="none" stroke={INK} strokeWidth="4.5" strokeLinecap="round" />
@@ -399,7 +435,7 @@ export const Chompy = forwardRef<PuppetHandle, ChompyProps>(function Chompy({ he
             <circle cx="452" cy="120" r="10" fill={BOW} stroke={INK} strokeWidth="4.5" />
           </g>
         </g>
-        {leg('legFL', 404, 300, false)}
+        {nearLeg('legFL', 404, 300)}
         {RIDERS.map((r, i) => (
           <g key={i} ref={part(`rider${i}` as Part)} style={{ display: 'none' }}>
             <image href={art.babyCroc} x={r.x - r.h / 2} y={r.y} width={r.h} height={r.h} />
