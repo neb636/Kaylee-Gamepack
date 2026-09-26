@@ -4,11 +4,9 @@ import { motion } from 'motion/react'
 import { createElement, useEffect, useState, type ComponentType, type ReactNode, type Ref } from 'react'
 import { Buddy, say, sounds, type Line, type PuppetHandle } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
-import { Flag } from '../../kit/Flag'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
-import { Theater, VideoBreak } from '../../kit/Theater'
-import theaterArt from '../../assets/theater.webp'
+import { VideoBreak } from '../../kit/Theater'
 import type { PlaceProps, PlaceVideo } from '../../types'
 import { Forest } from './activities/Forest'
 import { Outback } from './activities/Outback'
@@ -52,22 +50,6 @@ export default function Place(props: PlaceProps) {
   const [justEarned, setJustEarned] = useState<string | null>(null)
   const [videoAfter, setVideoAfter] = useState<PlaceVideo | null>(null)
 
-  if (activity === 'theater') {
-    return (
-      <Theater
-        places={[meta]}
-        onExit={backToMap}
-        exitIcon="🗺️"
-        exitLabel="Back to the map"
-        title={
-          <>
-            <Flag id={meta.flag} width="1.6em" style={{ borderRadius: 4 }} /> 🎬
-          </>
-        }
-      />
-    )
-  }
-
   if (activity === 'party') {
     const ready = meta.activities.every((a) => stamps.includes(a.id))
     if (!ready) return <Hub {...props} />
@@ -92,7 +74,10 @@ export default function Place(props: PlaceProps) {
               setJustEarned(null)
               // A real-world video about what she just played comes next (skippable), then the map.
               const video = meta.videos?.find((v) => v.after === info.id)
-              if (video) setVideoAfter(video)
+              if (video) {
+                setProgress(0, 0) // hides the activity's stars so they don't sit on the video
+                setVideoAfter(video)
+              }
               else backToMap()
             }}
           />
@@ -165,33 +150,6 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
               </motion.button>
             )
           })}
-          {meta.theaterPos && !!meta.videos?.length && (
-            <motion.button
-              aria-label="Theater"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1, rotate: [-4, 4, -4] }}
-              transition={{ scale: { delay: meta.activities.length * 0.08, type: 'spring' }, rotate: { repeat: Infinity, duration: 2.4, ease: 'easeInOut' } }}
-              whileTap={{ scale: 0.85 }}
-              onClick={() => {
-                sounds.pop()
-                openActivity('theater')
-              }}
-              style={{
-                position: 'absolute',
-                left: `${meta.theaterPos.x}%`,
-                top: `${meta.theaterPos.y}%`,
-                translate: '-50% -50%',
-                width: 'clamp(60px, 13cqw, 118px)',
-                aspectRatio: '1',
-                borderRadius: '50%',
-                background: 'var(--lavender)',
-                border: '5px solid var(--hotpink)',
-                boxShadow: 'var(--shadow)',
-              }}
-            >
-              <img src={theaterArt} alt="" style={{ position: 'absolute', inset: '8%', width: '84%', height: '84%', objectFit: 'contain' }} />
-            </motion.button>
-          )}
         </FitBox>
         <PartyPanel stamps={stamps} total={meta.activities.length} onOpen={() => (allDone ? openActivity('party') : void say(L.partyLocked))} ready={allDone} order={meta.activities.map((a) => a.id)} />
       </div>

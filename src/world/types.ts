@@ -56,10 +56,8 @@ export interface PlaceMeta {
   facts: PlaceFact[]
   /** Line-art pages for the coloring book. */
   coloringPages: { id: string; img: string }[]
-  /** Videos for the Theater (and after activities). */
+  /** Videos for the Theater (its button shows in the country's top bar) and after activities. */
   videos?: PlaceVideo[]
-  /** Where the Theater spot sits on the country map, in % of the map picture. */
-  theaterPos?: { x: number; y: number }
   /** Spoken on the passport page: "This is Australia!" */
   passportLine: Line
   createdAt: string

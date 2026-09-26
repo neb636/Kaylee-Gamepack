@@ -8,9 +8,12 @@ const gameIds = readdirSync('src/games', { withFileTypes: true })
 
 function trackErrors(page: Page) {
   const errors: string[] = []
-  page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`))
+  // The Theater's YouTube embed (loaded ahead of the tap) reports its own noise; only our errors count.
+  page.on('pageerror', (e) => {
+    if (!/youtube/i.test(e.message)) errors.push(`pageerror: ${e.message}`)
+  })
   page.on('console', (m) => {
-    if (m.type() === 'error') errors.push(`console: ${m.text()}`)
+    if (m.type() === 'error' && !/youtube/i.test(`${m.text()} ${m.location().url}`)) errors.push(`console: ${m.text()}`)
   })
   return errors
 }
@@ -122,10 +125,9 @@ for (const id of placeIds) {
       await page.waitForTimeout(400)
     }
 
-    // The country's Theater spot (if it has videos) opens its ticket shelf.
+    // The Theater button in the country's top bar (if it has videos) opens its ticket shelf.
     const theater = page.getByRole('button', { name: 'Theater', exact: true })
     if (await theater.count()) {
-      await page.waitForTimeout(800) // it springs in after the activity spots
       await theater.click({ force: true })
       await expect(page.getByRole('button', { name: /^Watch / }).first()).toBeVisible()
       await page.getByRole('button', { name: 'Back to the map' }).click()

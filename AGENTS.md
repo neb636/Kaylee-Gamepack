@@ -265,8 +265,9 @@ so the friend talks), `StampEarned`, `sfx` (boing, thump, splash, pop, fwip), `C
 (flood-fill coloring on line art named `bg-color-*`), `Flag` (SVG flags: add new ones there, never generate flags),
 `TopBar`/`FitBox` (keeps map pins aligned with the art).
 `Theater` + `VideoBreak` + `YouTubePlayer`: real-world YouTube videos. List them in `meta.videos` (`after: '<activity>'`
-offers one, skippable, right after that activity's stamp) and set `meta.theaterPos` for the country map's Theater spot;
-the world map's Theater shows every country's videos. The player covers YouTube's pause/end suggestions with its own screens. `src/world/world.css` has the size variables
+offers one, skippable, right after that activity's stamp); a country with videos gets a Theater button in its top bar,
+and the world map's Theater shows every country's videos. The player starts on one tap, hides YouTube's controls, links
+and suggestions behind its own screens, and goes full screen with a swipe up (or its corner button). `src/world/world.css` has the size variables
 (`--top-clear`, `--target`, ...) that shrink on iPhone landscape.
 
 Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),

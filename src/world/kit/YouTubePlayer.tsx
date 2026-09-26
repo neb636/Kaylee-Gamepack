@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
 import { BigButton, Mascot, say, sounds, stopSpeaking } from '../../sdk'
 import { WORLD_LINES } from '../lines'
 import type { PlaceVideo } from '../types'
@@ -8,7 +8,10 @@ import { FitBox } from './Chrome'
 // The bits of the YouTube IFrame API we use (loaded from YouTube at runtime, no npm package).
 interface YTPlayer {
   playVideo: () => void
+  pauseVideo: () => void
   seekTo: (seconds: number, allowSeekAhead: boolean) => void
+  getCurrentTime: () => number
+  getDuration: () => number
   destroy: () => void
 }
 interface YTEvent {
@@ -58,94 +61,152 @@ function loadApi(): Promise<YTNamespace> {
   return api
 }
 
-type State = 'poster' | 'loading' | 'playing' | 'paused' | 'ended' | 'error'
+/** `tap-video`: the browser blocked our play call (iOS can), so her next tap goes to the video itself. */
+type State = 'poster' | 'loading' | 'tap-video' | 'playing' | 'paused' | 'ended' | 'error'
 
 /**
- * A kid-safe YouTube screen: a big ▶ poster first, then the video inline. Our own overlays cover YouTube's
- * "more videos" panels when it pauses or ends, and a strip over the title keeps taps from leaving the app.
+ * A kid-safe YouTube screen. The player loads hidden under a big ▶ poster, so one tap starts it (a tap is the only
+ * way a phone lets a video play with sound). YouTube's own controls are off and its title bar, share and logo are
+ * cropped out of view; our layer on top turns taps into pause, swipes up/down into full screen, and covers
+ * YouTube's "more videos" panels with our own pause and end screens.
  */
-export function YouTubePlayer({ video, onDone }: { video: PlaceVideo; onDone: () => void }) {
+export function YouTubePlayer({ video, onDone, full, onFull }: { video: PlaceVideo; onDone: () => void; full: boolean; onFull: (full: boolean) => void }) {
   const [state, setState] = useState<State>('poster')
   const [thumbOk, setThumbOk] = useState(true)
   const wrap = useRef<HTMLDivElement>(null)
   const player = useRef<YTPlayer | null>(null)
+  const ready = useRef(false)
+  const wantPlay = useRef(false)
+  const stateRef = useRef(state)
+  stateRef.current = state
 
   useEffect(() => {
-    void loadApi().catch(() => {}) // warm up so the tap starts faster
+    let gone = false
+    const fail = () => {
+      if (gone || !wantPlay.current) return // offline before she tapped: say so when she does
+      setState('error')
+      void say(WORLD_LINES.videoOffline)
+    }
+    loadApi()
+      .then((YT) => {
+        if (gone || !wrap.current) return
+        // The API replaces the element it gets, so give it one React doesn't own.
+        const host = document.createElement('div')
+        wrap.current.replaceChildren(host)
+        player.current = new YT.Player(host, {
+          videoId: video.youtubeId,
+          host: 'https://www.youtube-nocookie.com',
+          width: '100%',
+          height: '100%',
+          playerVars: { playsinline: 1, controls: 0, disablekb: 1, fs: 0, rel: 0, modestbranding: 1, iv_load_policy: 3, cc_load_policy: 0, start: video.start ?? 0 },
+          events: {
+            onReady: (e) => {
+              ready.current = true
+              if (wantPlay.current) e.target.playVideo() // she tapped before it was ready
+            },
+            onStateChange: (e) => {
+              if (e.data === PLAYING) {
+                stopSpeaking()
+                setState('playing')
+              } else if (e.data === PAUSED) setState('paused')
+              else if (e.data === ENDED) {
+                sounds.sparkle()
+                void say(WORLD_LINES.videoEnd)
+                setState('ended')
+              }
+            },
+            onError: () => {
+              wantPlay.current = true
+              fail()
+            },
+          },
+        })
+      })
+      .catch(fail)
     return () => {
+      gone = true
       player.current?.destroy()
       player.current = null
     }
-  }, [])
+  }, [video.youtubeId, video.start])
 
-  const start = async () => {
+  const start = () => {
     sounds.pop()
     stopSpeaking()
-    setState('loading')
-    try {
-      const YT = await loadApi()
-      if (!wrap.current) return
-      // The API replaces the element it gets, so give it one React doesn't own.
-      const host = document.createElement('div')
-      wrap.current.replaceChildren(host)
-      player.current = new YT.Player(host, {
-        videoId: video.youtubeId,
-        host: 'https://www.youtube-nocookie.com',
-        width: '100%',
-        height: '100%',
-        playerVars: { autoplay: 1, playsinline: 1, rel: 0, modestbranding: 1, iv_load_policy: 3, fs: 1, start: video.start ?? 0 },
-        events: {
-          onReady: (e) => e.target.playVideo(),
-          onStateChange: (e) => {
-            if (e.data === PLAYING) {
-              stopSpeaking()
-              setState('playing')
-            } else if (e.data === PAUSED) setState('paused')
-            else if (e.data === ENDED) {
-              sounds.sparkle()
-              void say(WORLD_LINES.videoEnd)
-              setState('ended')
-            }
-          },
-          onError: () => fail(),
-        },
-      })
-    } catch {
-      fail()
+    wantPlay.current = true
+    if (!player.current && !api) {
+      // YouTube never loaded (offline).
+      setState('error')
+      void say(WORLD_LINES.videoOffline)
+      return
     }
-  }
-  const fail = () => {
-    setState('error')
-    void say(WORLD_LINES.videoOffline)
+    setState('loading')
+    // Called inside the tap, so the browser counts it as hers and plays with sound.
+    if (ready.current) player.current?.playVideo()
+    // If it still isn't playing, the browser wanted a tap on the video itself: uncover it and let her tap it.
+    setTimeout(() => {
+      if (stateRef.current === 'loading') setState('tap-video')
+    }, 2500)
   }
   const resume = () => {
     sounds.pop()
     player.current?.playVideo()
   }
+  const pause = () => player.current?.pauseVideo()
   const replay = () => {
     sounds.pop()
     player.current?.seekTo(video.start ?? 0, true)
     player.current?.playVideo()
   }
 
-  const started = state !== 'poster'
+  // Tap = pause, swipe up = full screen, swipe down = back to the theater.
+  const down = useRef<{ x: number; y: number } | null>(null)
+  const onPointerDown = (e: PointerEvent) => {
+    down.current = { x: e.clientX, y: e.clientY }
+  }
+  const onPointerUp = (e: PointerEvent) => {
+    if (!down.current) return
+    const dx = e.clientX - down.current.x
+    const dy = e.clientY - down.current.y
+    down.current = null
+    if (Math.abs(dy) > 40 && Math.abs(dy) > Math.abs(dx)) {
+      if ((dy < 0) !== full) {
+        sounds.whoosh()
+        onFull(!full)
+      }
+    } else if (Math.hypot(dx, dy) < 16) pause()
+  }
+
   return (
     <FitBox ratio={16 / 9}>
-      <div style={{ position: 'absolute', inset: 0, borderRadius: 'clamp(16px, 3cqmin, 28px)', overflow: 'hidden', border: '5px solid #fff', boxShadow: '0 0 0 6px var(--gold), var(--shadow)', background: '#1d1224', containerType: 'size' }}>
-        <div ref={wrap} className="yt-host" style={{ position: 'absolute', inset: 0 }} />
+      <div className={`yt-frame${full ? ' full' : ''}`}>
+        <div ref={wrap} className="yt-host" />
 
-        {/* Taps on the title/channel bar would open YouTube; swallow them. */}
-        {(state === 'playing' || state === 'loading') && <div aria-hidden style={{ position: 'absolute', left: 0, right: 0, top: 0, height: '14%' }} />}
+        {state === 'playing' && (
+          <div aria-label="Pause the video" role="button" onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerCancel={() => (down.current = null)} style={{ position: 'absolute', inset: 0, touchAction: 'none', cursor: 'pointer' }}>
+            <Progress player={player} />
+            <FullButton full={full} onFull={onFull} />
+          </div>
+        )}
+        {state === 'loading' && <div aria-hidden style={{ position: 'absolute', inset: 0 }} />}
+        {state === 'tap-video' && (
+          <motion.span
+            aria-hidden
+            animate={{ scale: [1, 1.15, 1], opacity: [0.9, 0.5, 0.9] }}
+            transition={{ repeat: Infinity, duration: 1.2 }}
+            style={{ position: 'absolute', left: '50%', top: '50%', translate: '-50% -50%', width: 'clamp(110px, 36cqmin, 200px)', aspectRatio: '1', borderRadius: '50%', border: '8px solid var(--gold)', pointerEvents: 'none' }}
+          />
+        )}
 
-        {!started && (
-          <button aria-label="Play the video" onClick={() => void start()} style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', background: 'var(--lavender)' }}>
+        {(state === 'poster' || state === 'loading') && (
+          <button aria-label="Play the video" onClick={start} disabled={state === 'loading'} style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', background: 'var(--lavender)' }}>
             {thumbOk ? (
               <img src={`https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg`} alt="" onError={() => setThumbOk(false)} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
               <span style={{ position: 'absolute', fontSize: '40cqmin', opacity: 0.35 }}>{video.icon}</span>
             )}
             <span style={{ position: 'absolute', left: 'clamp(10px, 3cqmin, 24px)', top: 'clamp(10px, 3cqmin, 24px)', width: 'clamp(56px, 18cqmin, 110px)', aspectRatio: '1', borderRadius: '50%', background: '#fff', display: 'grid', placeItems: 'center', fontSize: 'clamp(30px, 10cqmin, 60px)', boxShadow: 'var(--shadow)' }}>{video.icon}</span>
-            <BigPlay />
+            {state === 'loading' ? <Spinner /> : <BigPlay />}
           </button>
         )}
 
@@ -153,6 +214,7 @@ export function YouTubePlayer({ video, onDone }: { video: PlaceVideo; onDone: ()
           {state === 'paused' && (
             <Cover key="paused" onClick={resume} label="Keep watching">
               <BigPlay />
+              {full && <FullButton full onFull={onFull} />}
             </Cover>
           )}
           {state === 'ended' && (
@@ -184,6 +246,45 @@ export function YouTubePlayer({ video, onDone }: { video: PlaceVideo; onDone: ()
   )
 }
 
+/** A thin pink bar along the bottom, since YouTube's own controls are hidden. */
+function Progress({ player }: { player: { current: YTPlayer | null } }) {
+  const [p, setP] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => {
+      const d = player.current?.getDuration() ?? 0
+      if (d > 0) setP(Math.min(1, (player.current?.getCurrentTime() ?? 0) / d))
+    }, 500)
+    return () => clearInterval(id)
+  }, [player])
+  return (
+    <div aria-hidden style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 'clamp(6px, 1.6cqmin, 10px)', background: 'rgba(255,255,255,0.3)' }}>
+      <div style={{ height: '100%', width: `${p * 100}%`, background: 'var(--hotpink)', transition: 'width 0.5s linear' }} />
+    </div>
+  )
+}
+
+/** Corner button that does what the swipe does (grow to full screen / shrink back). */
+function FullButton({ full, onFull }: { full: boolean; onFull: (full: boolean) => void }) {
+  return (
+    <motion.button
+      aria-label={full ? 'Small screen' : 'Full screen'}
+      whileTap={{ scale: 0.85 }}
+      onPointerDown={(e) => e.stopPropagation()}
+      onPointerUp={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation()
+        sounds.whoosh()
+        onFull(!full)
+      }}
+      style={{ position: 'absolute', right: 'clamp(8px, 2.5cqmin, 20px)', bottom: 'clamp(14px, 4cqmin, 28px)', width: 'clamp(52px, 13cqmin, 76px)', aspectRatio: '1', borderRadius: '50%', background: 'rgba(255,255,255,0.85)', boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center' }}
+    >
+      <svg viewBox="0 0 24 24" width="55%" height="55%" fill="none" stroke="var(--ink)" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round">
+        {full ? <path d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6" /> : <path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6" />}
+      </svg>
+    </motion.button>
+  )
+}
+
 function BigPlay() {
   return (
     <motion.span
@@ -194,6 +295,17 @@ function BigPlay() {
     >
       ▶
     </motion.span>
+  )
+}
+
+function Spinner() {
+  return (
+    <motion.span
+      aria-hidden
+      animate={{ rotate: 360 }}
+      transition={{ repeat: Infinity, duration: 0.9, ease: 'linear' }}
+      style={{ position: 'relative', width: 'clamp(80px, 24cqmin, 130px)', aspectRatio: '1', borderRadius: '50%', border: '12px solid rgba(255,255,255,0.6)', borderTopColor: 'var(--hotpink)' }}
+    />
   )
 }
 
