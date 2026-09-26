@@ -129,6 +129,42 @@ jobs:
         if: steps.check.outcome == 'failure'
         run: npm run check
 
+      - name: Identify the PR game
+        run: |
+          gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json files -q '.files[].path' \
+            | sed -n 's#^src/games/\([^/]*\)/.*#\1#p' | sort -u > .lesson-input/game-ids.txt
+          if [ "$(wc -l < .lesson-input/game-ids.txt)" -ne 1 ]; then
+            echo "Expected one game in the PR" >&2
+            exit 1
+          fi
+          cp .lesson-input/game-ids.txt .lesson-input/game-id.txt
+
+      - name: Codex reviews the updated game in the browser
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/prompts/visual-qa.md
+          model: ${{ vars.CODEX_MODEL || 'gpt-6-sol' }}
+          permission-profile: ':workspace'
+          output-file: .lesson-input/qa-agent-final.md
+
+      - name: Keep QA fixes inside the game folder and verify
+        run: |
+          scripts/keep-game-only.sh
+          node scripts/generate-voice.mjs
+          npm run check
+          npm run build
+          node scripts/capture-qa.mjs "$(cat .lesson-input/game-id.txt)"
+
+      - name: Upload visual review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: updated-game-visual-qa
+          path: qa-screenshots/
+          if-no-files-found: warn
+          retention-days: 30
+
       - name: Commit and push
         run: |
           git config user.name "codex-bot"
@@ -148,6 +184,10 @@ jobs:
             if [ -n "$NO_CHANGES" ]; then echo "🤔 Codex didn't change any files."; echo; fi
             cat .lesson-input/reply.md 2>/dev/null || cat .lesson-input/codex-final.md
             cat .lesson-input/reverted.md 2>/dev/null || true
+            echo
+            echo "## Browser review"
+            cat .lesson-input/qa-summary.md 2>/dev/null || echo "See screenshot artifact."
+            echo "📸 [Updated screenshots](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts) (artifact: updated-game-visual-qa)."
             echo
             echo "📱 The preview link above will update in a minute."
           } > .lesson-input/reply-final.md
