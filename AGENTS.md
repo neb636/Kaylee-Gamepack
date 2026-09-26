@@ -263,7 +263,10 @@ What Kaylee told us after the first game, so follow it for every country:
 Reusable pieces in `src/world/kit/`: `Stage` + `PromptBubble`, `StoryBeat` (pass `friend={<Pip height="100%" />}`
 so the friend talks), `StampEarned`, `sfx` (boing, thump, splash, pop, fwip), `ColoringPage`
 (flood-fill coloring on line art named `bg-color-*`), `Flag` (SVG flags: add new ones there, never generate flags),
-`TopBar`/`FitBox` (keeps map pins aligned with the art). `src/world/world.css` has the size variables
+`TopBar`/`FitBox` (keeps map pins aligned with the art).
+`Theater` + `VideoBreak` + `YouTubePlayer`: real-world YouTube videos. List them in `meta.videos` (`after: '<activity>'`
+offers one, skippable, right after that activity's stamp) and set `meta.theaterPos` for the country map's Theater spot;
+the world map's Theater shows every country's videos. The player covers YouTube's pause/end suggestions with its own screens. `src/world/world.css` has the size variables
 (`--top-clear`, `--target`, ...) that shrink on iPhone landscape.
 
 Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),
@@ -280,3 +283,6 @@ QA (after `npm run build`; WebKit, because the iPad runs Safari: `npx playwright
 - The `playtest-qa` Claude agent (Opus) runs all three, looks at every image with a 5-year-old-playtest checklist and
   reports ranked findings; fix them and run it again. `luna-qa` (Luna in Codex) is an optional second opinion.
 - Lip sync and sound can't be heard by automated browsers: listen on the iPad.
+
+
+After every task is completed. Commit your work and open a draft pr and assign me (neb636).

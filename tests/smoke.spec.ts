@@ -94,6 +94,12 @@ test('Around the World: map, passport and coloring book open', async ({ page }) 
   await page.goto('./#/world/coloring')
   await page.locator('button[aria-label^="color page"]').first().click()
   await expect(page.getByLabel('coloring page')).toBeVisible()
+  // Theater: ticket cards open a poster with a big play button (the video itself isn't played in tests).
+  await page.goto('./#/world/theater')
+  await page.getByRole('button', { name: /^Watch / }).first().click()
+  await expect(page.getByRole('button', { name: 'Play the video' })).toBeVisible()
+  await page.getByRole('button', { name: 'All videos' }).click()
+  await expect(page.getByRole('button', { name: /^Watch / }).first()).toBeVisible()
   expect(errors).toEqual([])
 })
 
@@ -112,6 +118,16 @@ for (const id of placeIds) {
       await expect(page.getByRole('button', { name: 'Back to the map' })).toBeVisible()
       await page.waitForTimeout(800)
       expect(await page.locator('button').count()).toBeGreaterThan(1)
+      await page.getByRole('button', { name: 'Back to the map' }).click()
+      await page.waitForTimeout(400)
+    }
+
+    // The country's Theater spot (if it has videos) opens its ticket shelf.
+    const theater = page.getByRole('button', { name: 'Theater', exact: true })
+    if (await theater.count()) {
+      await page.waitForTimeout(800) // it springs in after the activity spots
+      await theater.click({ force: true })
+      await expect(page.getByRole('button', { name: /^Watch / }).first()).toBeVisible()
       await page.getByRole('button', { name: 'Back to the map' }).click()
       await page.waitForTimeout(400)
     }

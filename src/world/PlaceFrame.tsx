@@ -12,7 +12,7 @@ import type { PlaceMeta } from './types'
 declare global {
   interface Window {
     /** Test/dev hooks for Around the World. */
-    __kayleeWorld?: { stampAll: () => void; reset: () => void }
+    __kayleeWorld?: { stampAll: () => void; reset: () => void; /** Finishes the open activity (set by the country). */ finish?: () => void }
   }
 }
 
@@ -91,7 +91,8 @@ function RunningPlace({ entry, activity }: { entry: PlaceEntry; activity?: strin
         <Place meta={meta} activity={activity} stamps={stamps} openActivity={openActivity} backToMap={backToMap} earnStamp={earnStamp} onWin={onWin} setProgress={setProgress} />
       </Suspense>
 
-      {activity ? (
+      {/* The theater draws its own top bar (its back button goes to the shelf while a video plays). */}
+      {activity === 'theater' ? null : activity ? (
         <TopBar icon="🗺️" label="Back to the map" onBack={backToMap}>
           {progress.total > 0 && (
             <BarPill>
