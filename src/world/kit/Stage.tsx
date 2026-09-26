@@ -1,9 +1,9 @@
 import { motion } from 'motion/react'
 import { useEffect, type CSSProperties, type ReactNode } from 'react'
-import { SayButton, say } from '../../sdk'
+import { lineText, SayButton, say, type Line } from '../../sdk'
 
 /** Activity layout: a full-bleed picture, a spoken prompt under the top bar, then the play area. */
-export function Stage({ bg, prompt, children, style }: { bg: string; prompt?: string; children: ReactNode; style?: CSSProperties }) {
+export function Stage({ bg, prompt, children, style }: { bg: string; prompt?: Line; children: ReactNode; style?: CSSProperties }) {
   return (
     <div
       style={{
@@ -29,13 +29,13 @@ export function Stage({ bg, prompt, children, style }: { bg: string; prompt?: st
 }
 
 /** Short instruction that is spoken when it appears and can be heard again. */
-export function PromptBubble({ text, speak = true }: { text: string; speak?: boolean }) {
+export function PromptBubble({ text, speak = true }: { text: Line; speak?: boolean }) {
   useEffect(() => {
     if (speak) void say(text)
   }, [text, speak])
   return (
     <motion.div
-      key={text}
+      key={lineText(text)}
       className="stage-prompt"
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
@@ -53,7 +53,7 @@ export function PromptBubble({ text, speak = true }: { text: string; speak?: boo
         zIndex: 5,
       }}
     >
-      <p style={{ fontSize: 'var(--prompt-font)', fontWeight: 600, lineHeight: 1.15 }}>{text}</p>
+      <p style={{ fontSize: 'var(--prompt-font)', fontWeight: 600, lineHeight: 1.15 }}>{lineText(text)}</p>
       <div style={{ width: 'var(--say-size)', height: 'var(--say-size)', flexShrink: 0, display: 'grid', placeItems: 'center' }}>
         <SayButton text={text} size={56} />
       </div>

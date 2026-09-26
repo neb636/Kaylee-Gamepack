@@ -1,21 +1,135 @@
 [
-  "Hi Kaylee! Let's play!",
-  "Play a game to win your very first trophy, Kaylee!",
-  "Wow, Kaylee! Look at all your trophies!",
-  "Hi Kaylee! Tap me to hear it again.",
-  "Find the unicorn!",
-  "Hot!",
-  "Cold!",
-  "ice cream",
-  "mittens",
-  "flip flops",
-  "snowman",
-  "A is for apple",
-  "B is for bear",
-  "C is for cat",
-  "Hmm, let's try again!",
-  "Hmm, does it go there? Let's try another one!",
-  "one",
-  "two",
-  "three"
+  {
+    "text": "Hi Kaylee! Let's play!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2823,
+    "file": "1bfb96529d07.mp3"
+  },
+  {
+    "text": "Play a game to win your very first trophy, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3441,
+    "file": "e5f83004a3cd.mp3"
+  },
+  {
+    "text": "Wow, Kaylee! Look at all your trophies!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3583,
+    "file": "4ecd9e049a66.mp3"
+  },
+  {
+    "text": "Hi Kaylee! Tap me to hear it again.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2810,
+    "file": "e489531dada6.mp3"
+  },
+  {
+    "text": "Find the unicorn!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1961,
+    "file": "a154e7ad6db3.mp3"
+  },
+  {
+    "text": "Hot!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 555,
+    "file": "d9a2b2e53ca7.mp3"
+  },
+  {
+    "text": "Cold!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 651,
+    "file": "6b7ce37c4594.mp3"
+  },
+  {
+    "text": "ice cream",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 875,
+    "file": "ea1669ec7de0.mp3"
+  },
+  {
+    "text": "mittens",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1007,
+    "file": "c2af9cab138e.mp3"
+  },
+  {
+    "text": "flip flops",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1933,
+    "file": "1e4d8639e025.mp3"
+  },
+  {
+    "text": "snowman",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1066,
+    "file": "30e990377606.mp3"
+  },
+  {
+    "text": "A is for apple",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1599,
+    "file": "80652409b076.mp3"
+  },
+  {
+    "text": "B is for bear",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2294,
+    "file": "acaea679e6f8.mp3"
+  },
+  {
+    "text": "C is for cat",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2287,
+    "file": "d97c5e3f40f9.mp3"
+  },
+  {
+    "text": "Hmm, let's try again!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2227,
+    "file": "25a1e0652022.mp3"
+  },
+  {
+    "text": "Hmm, does it go there? Let's try another one!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4002,
+    "file": "1f4ca14dcc93.mp3"
+  },
+  {
+    "text": "one",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 503,
+    "file": "c9ef24a23ffe.mp3"
+  },
+  {
+    "text": "two",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 507,
+    "file": "46219e4daa43.mp3"
+  },
+  {
+    "text": "three",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 522,
+    "file": "5178f972e423.mp3"
+  }
 ]

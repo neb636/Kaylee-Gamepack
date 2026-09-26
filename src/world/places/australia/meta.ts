@@ -25,6 +25,7 @@ const meta: PlaceMeta = {
     { icon: '🐨', label: 'Animals', say: L.facts.animals },
     { icon: '🎭', label: 'Opera House', say: L.facts.opera },
     { icon: '🌏', label: 'Continent', say: L.facts.continent },
+    { icon: '🐠', label: 'Reef', say: L.facts.reef },
   ],
   coloringPages: [
     { id: 'australia-pip', img: art.colorPip },

@@ -1,36 +1,16 @@
-// Screenshots every Around the World screen (plus home) at iPad and iPhone sizes for visual QA.
+// Screenshots every Around the World screen (plus home and the puppet lab) at iPad and iPhone sizes for visual QA.
 //
-//   npm run build && node scripts/qa-screens.mjs [--webkit] [--only=iphone-landscape] [--routes=home,world]
+//   npm run build && node scripts/qa-screens.mjs [--chromium] [--only=iphone-landscape,ipad-portrait] [--routes=home,world-map]
 //
-// Writes qa-output/<browser>-<viewport>/<nn>-<screen>.png and qa-output/errors.txt (console errors per screen).
-import { chromium, webkit } from '@playwright/test'
-import { spawn } from 'node:child_process'
-import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
+// WebKit by default (the iPad runs Safari), touch + mobile emulation, rendered at 2x and saved at 1x (CSS pixels).
+// Writes qa-output/<browser>-<viewport>/<nn>-<screen>.png and qa-output/errors.txt (console errors, overflow, failed steps).
+// A failed step never stops the run: it is listed in errors.txt and the screenshot is taken anyway.
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
+import { browserName, device, flag, launch, openApp, out, pad, serve, skip, VIEWPORTS as ALL_VIEWPORTS } from './qa-lib.mjs'
 
-const root = path.resolve(import.meta.dirname, '..')
-const out = path.join(root, 'qa-output')
-const args = process.argv.slice(2)
-const flag = (name) => args.find((a) => a.startsWith(`--${name}=`))?.split('=')[1]
-const browserType = args.includes('--webkit') ? webkit : chromium
-const browserName = args.includes('--webkit') ? 'webkit' : 'chromium'
+export const VIEWPORTS = ALL_VIEWPORTS.filter((v) => !flag('only') || flag('only').split(',').includes(v.name))
 const PORT = 4179
-
-export const VIEWPORTS = [
-  { name: 'ipad-portrait', width: 820, height: 1180 },
-  { name: 'ipad-landscape', width: 1180, height: 820 },
-  { name: 'ipadpro-portrait', width: 1024, height: 1366 },
-  { name: 'ipadpro-landscape', width: 1366, height: 1024 },
-  { name: 'iphone-portrait', width: 390, height: 844 },
-  { name: 'iphone-landscape', width: 844, height: 390 },
-  { name: 'iphonemax-portrait', width: 430, height: 932 },
-].filter((v) => !flag('only') || flag('only').split(',').includes(v.name))
-
-const skip = async (page) => {
-  const b = page.getByRole('button', { name: 'Skip' })
-  if (await b.isVisible().catch(() => false)) await b.click({ force: true }).catch(() => {})
-  await page.waitForTimeout(700)
-}
 
 // Each screen: how to get there from a fresh start. `page.goto` keeps localStorage between screens.
 const SCREENS = [
@@ -56,6 +36,7 @@ const SCREENS = [
       if (box) for (const [fx, fy] of [[0.5, 0.5], [0.2, 0.2], [0.8, 0.3]]) await c.click({ force: true, position: { x: box.width * fx, y: box.height * fy } })
     },
   },
+  { name: 'puppet-lab', hash: '#/world/puppets', wait: 1200 },
   { name: 'australia-intro', hash: '#/world/australia', reset: true, wait: 300 },
   { name: 'australia-hub', hash: '#/world/australia', act: skip },
   { name: 'outback-story', hash: '#/world/australia/outback', wait: 250 },
@@ -113,7 +94,7 @@ const SCREENS = [
       await skip(p)
       for (const star of await p.getByRole('button', { name: 'star' }).all()) await star.click({ force: true })
       await p.waitForTimeout(4500)
-      await p.getByRole('button', { name: 'star' }).first().click({ force: true }).catch(() => {})
+      await p.locator('svg.world-glow').first().click({ force: true }).catch(() => {}) // the big seven-point star
       await p.waitForTimeout(1500)
       await p.getByRole('button', { name: 'australia flag' }).click({ force: true }).catch(() => {})
       await p.waitForTimeout(2000)
@@ -133,59 +114,50 @@ const SCREENS = [
   },
 ].filter((s) => !flag('routes') || flag('routes').split(',').includes(s.name))
 
-async function waitForServer(url) {
-  for (let i = 0; i < 60; i++) {
-    try {
-      if ((await fetch(url)).ok) return
-    } catch {
-      /* not up yet */
-    }
-    await new Promise((r) => setTimeout(r, 250))
-  }
-  throw new Error(`Server did not start at ${url}`)
-}
-
-const server = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort'], { cwd: root, stdio: 'ignore' })
-const base = `http://localhost:${PORT}/`
+const { base, stop } = await serve(PORT)
 const errors = []
 try {
-  await waitForServer(base)
-  rmSync(out, { recursive: true, force: true })
-  const browser = await browserType.launch()
+  mkdirSync(out, { recursive: true })
+  // Only clear this browser's screenshot folders (qa-output also holds motion/, pacing.md, voice samples...).
+  for (const name of readdirSync(out)) if (name.startsWith(`${browserName}-`)) rmSync(path.join(out, name), { recursive: true, force: true })
+  const browser = await launch()
   for (const vp of VIEWPORTS) {
     const dir = path.join(out, `${browserName}-${vp.name}`)
     mkdirSync(dir, { recursive: true })
-    const context = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, hasTouch: true, deviceScaleFactor: 1 })
+    const context = await device(browser, vp)
     const page = await context.newPage()
     let current = ''
     page.on('console', (m) => m.type() === 'error' && errors.push(`${vp.name} ${current}: ${m.text()}`))
     page.on('pageerror', (e) => errors.push(`${vp.name} ${current}: ${e.message}`))
-    await page.goto(base)
-    await page.getByRole('button', { name: /let's play/i }).click()
+    await openApp(page, base)
     for (const [i, s] of SCREENS.entries()) {
       current = s.name
-      if (s.reset) await page.evaluate(() => localStorage.clear())
-      if (s.stampAll) {
-        await page.goto(`${base}#/world/australia`)
-        await page.waitForTimeout(400)
-        await skip(page)
-        await page.evaluate(() => window.__kayleeWorld?.stampAll())
-      }
-      await page.goto(`${base}#/blank`)
-      await page.goto(`${base}${s.hash}`)
-      await page.waitForTimeout(s.wait ?? 900)
       try {
+        if (s.reset) await page.evaluate(() => localStorage.clear())
+        if (s.stampAll) {
+          await page.goto(`${base}#/world/australia`)
+          await page.waitForTimeout(400)
+          await skip(page)
+          await page.evaluate(() => window.__kayleeWorld?.stampAll())
+        }
+        await page.goto(`${base}#/blank`)
+        await page.goto(`${base}${s.hash}`)
+        // Going to the same address again reloads the app: tap through the splash if it came back.
+        await page.getByRole('button', { name: /let's play/i }).click({ timeout: 700 }).catch(() => {})
+        await page.waitForTimeout(s.wait ?? 900)
         if (s.act) await s.act(page)
       } catch (e) {
         errors.push(`${vp.name} ${s.name}: step failed: ${e.message.split('\n')[0]}`)
       }
-      const file = path.join(dir, `${String(i).padStart(2, '0')}-${s.name}.png`)
-      await page.screenshot({ path: file })
+      const file = path.join(dir, `${pad(i)}-${s.name}.png`)
+      await page.screenshot({ path: file, scale: 'css' }).catch((e) => errors.push(`${vp.name} ${s.name}: screenshot failed: ${e.message.split('\n')[0]}`))
       // Overflow check: anything wider/taller than the screen that would scroll or clip?
-      const overflow = await page.evaluate(() => {
-        const el = document.scrollingElement
-        return el.scrollWidth > innerWidth + 1 || el.scrollHeight > innerHeight + 1 ? `${el.scrollWidth}x${el.scrollHeight}` : null
-      })
+      const overflow = await page
+        .evaluate(() => {
+          const el = document.scrollingElement
+          return el.scrollWidth > innerWidth + 1 || el.scrollHeight > innerHeight + 1 ? `${el.scrollWidth}x${el.scrollHeight}` : null
+        })
+        .catch(() => null)
       if (overflow) errors.push(`${vp.name} ${s.name}: page overflows the screen (${overflow})`)
     }
     await context.close()
@@ -193,7 +165,7 @@ try {
   }
   await browser.close()
 } finally {
-  server.kill()
+  stop()
 }
 writeFileSync(path.join(out, 'errors.txt'), errors.join('\n') + '\n')
 console.log(errors.length ? `${errors.length} problems, see qa-output/errors.txt` : 'No console errors or overflow.')

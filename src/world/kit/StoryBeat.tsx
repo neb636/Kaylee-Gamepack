@@ -1,20 +1,29 @@
 import { motion } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
-import { Mascot, say, stopSpeaking, useAlive, wait } from '../../sdk'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { Buddy, lineText, lineVoice, say, SparklePuppet, stopSpeaking, useAlive, wait, type Line, type PuppetHandle } from '../../sdk'
 
 /**
  * A tiny bit of story: a friend says 1-2 short lines, then the play starts.
  * Tapping anywhere skips straight to the play (she never has to sit through talking).
+ * Sparkle is a live puppet whose mouth moves on her lines. Pass `friend` (a puppet, e.g. `<Pip />`) so the friend's
+ * mouth moves on theirs; a flat `img` becomes a Buddy that bounces along with the friend's voice.
  */
-export function StoryBeat({ lines, img, onDone, bg }: { lines: string[]; img?: string; onDone: () => void; bg?: string }) {
+export function StoryBeat({ lines, img, friend, onDone, bg }: { lines: Line[]; img?: string; friend?: ReactNode; onDone: () => void; bg?: string }) {
   const [index, setIndex] = useState(0)
   const alive = useAlive()
   const done = useRef(false)
+  const sparkle = useRef<PuppetHandle>(null)
+  const friendVoice = lines.map(lineVoice).find((v) => v !== 'sparkle')
   const finish = () => {
     if (done.current) return
     done.current = true
     onDone()
   }
+
+  useEffect(() => {
+    const t = setTimeout(() => void sparkle.current?.play('wave'), 350)
+    return () => clearTimeout(t)
+  }, [])
 
   useEffect(() => {
     void (async () => {
@@ -57,19 +66,14 @@ export function StoryBeat({ lines, img, onDone, bg }: { lines: string[]; img?: s
         animate={{ scale: 1, y: 0, opacity: 1 }}
         style={{ background: '#fff', borderRadius: 'var(--radius)', padding: 'min(18px, 3vh) 28px', boxShadow: 'var(--shadow)', fontSize: 'clamp(22px, min(4vw, 5vh), 40px)', fontWeight: 600, maxWidth: 'min(760px, 100%)', textAlign: 'center', lineHeight: 1.2 }}
       >
-        {lines[index]}
+        {lineText(lines[index])}
       </motion.div>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'min(16px, 2vw)', maxWidth: '100%' }}>
-        <Mascot pose="wave" size={Math.min(220, window.innerHeight * 0.28, window.innerWidth * (img ? 0.4 : 0.6))} />
-        {img && (
-          <motion.img
-            src={img}
-            alt=""
-            initial={{ x: 120, opacity: 0 }}
-            animate={{ x: 0, opacity: 1, y: [0, -14, 0] }}
-            transition={{ y: { repeat: Infinity, duration: 1.4 }, default: { type: 'spring', bounce: 0.4 } }}
-            style={{ height: 'min(260px, 32vh, 40vw)', maxWidth: '44vw', objectFit: 'contain' }}
-          />
+        <SparklePuppet ref={sparkle} height={img || friend ? 'min(290px, 30vh, 40vw)' : 'min(380px, 34vh, 62vw)'} lookToward={img || friend ? 0.6 : 0} />
+        {(friend || img) && (
+          <motion.div initial={{ x: 120, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: 'spring', bounce: 0.4 }} style={{ maxWidth: '44vw', height: friend ? 'min(290px, 34vh, 42vw)' : undefined, display: 'flex', alignItems: 'flex-end' }}>
+            {friend ?? <Buddy img={img!} voice={friendVoice} height="min(290px, 34vh, 42vw)" />}
+          </motion.div>
         )}
       </div>
       <motion.div animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1 }} style={{ background: 'var(--hotpink)', color: '#fff', borderRadius: 999, padding: '10px 30px', fontSize: 30, fontWeight: 700, boxShadow: 'var(--shadow)' }}>

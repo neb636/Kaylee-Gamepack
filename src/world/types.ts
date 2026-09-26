@@ -1,4 +1,6 @@
 // Around the World: every country is one folder in src/world/places/<id>/ with a meta.ts + Place.tsx.
+import type { ReactNode, Ref } from 'react'
+import type { Line, PuppetHandle } from '../sdk'
 import type { FlagId } from './kit/Flag'
 
 export interface ActivityInfo {
@@ -11,14 +13,14 @@ export interface ActivityInfo {
   /** Where the spot sits on the country map, in % of the map picture. */
   pos: { x: number; y: number }
   /** The animal sticker she earns. `img` is an imported sprite. */
-  sticker: { name: string; img: string; fact: string }
+  sticker: { name: string; img: string; fact: Line }
 }
 
 export interface PlaceFact {
   icon: string
   label: string
   /** Spoken when she taps it. Must be in the place's voice lines. */
-  say: string
+  say: Line
 }
 
 export interface PlaceMeta {
@@ -38,7 +40,7 @@ export interface PlaceMeta {
   /** Line-art pages for the coloring book. */
   coloringPages: { id: string; img: string }[]
   /** Spoken on the passport page: "This is Australia!" */
-  passportLine: string
+  passportLine: Line
   createdAt: string
 }
 
@@ -57,4 +59,14 @@ export interface PlaceProps {
   onWin: () => void
   /** Fills the stars in the top bar during an activity. */
   setProgress: (done: number, total: number) => void
+}
+
+/** A character for the puppet lab (#/world/puppets). Countries list theirs in places/<id>/puppets/index.ts. */
+export interface PuppetEntry {
+  id: string
+  name: string
+  render: (ref: Ref<PuppetHandle>, height: string) => ReactNode
+  actions: string[]
+  /** Lines to test lip sync with (must be in voice lines). */
+  lines?: Line[]
 }

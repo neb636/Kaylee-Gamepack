@@ -1,117 +1,807 @@
 [
-  "Unicorn Tea Party",
-  "Kaylee, you did it! You won the Counting Champion trophy!",
-  "Kaylee, Counting Champion! From Unicorn Tea Party.",
-  "Welcome to Sparkle's tea party, Kaylee! Let's count some treats. First, touch and count!",
-  "Next, move and count!",
-  "Now, mark and count!",
-  "Let's match the numbers!",
-  "Time for a quick look!",
-  "Last stop! Are there enough cups?",
-  "You counted that cupcake already. Tap a different one!",
-  "You marked that flower already. Pick another one!",
-  "That friend has a cup already. Give the next cup to someone without one!",
-  "Let's count them together!",
-  "How many were there?",
-  "Sparkle loved those hops!",
-  "How many cupcakes did you count?",
-  "Tap each cupcake, one at a time, and count as you go.",
-  "Look at all these cupcakes! Tap each one and count.",
-  "Let's count the next group. Tap each cupcake once.",
-  "How many stars are in the teapot?",
-  "Drag each star into the teapot, counting as you go.",
-  "Let's fill the teapot with stars! Count as you move them.",
-  "Move the next stars into the teapot and count them.",
-  "How many flowers did you mark?",
-  "These flowers won't move, so mark each one as you count.",
-  "A big bouquet! Mark each flower and count as you go.",
-  "Here is another bouquet. Mark each flower and count.",
-  "How many dots do you see? Tap the matching number.",
-  "Bonus card! Count the dots and find their number.",
-  "Let's play a quick look game. I'll show the dots for two seconds, then you tell me how many you saw.",
-  "Ready for another quick look?",
-  "Look now!",
-  "How many dots did you see?",
-  "Does every friend have a cup?",
-  "The friends are here for tea! Give each one a cup, then we will see if there are enough.",
-  "More friends are here! Give each one a cup.",
-  "Look closely. Does every friend have a cup?",
-  "No, there aren't enough cups. Bear is still waiting! You spotted that!",
-  "No, there aren't enough cups. Bunny is still waiting! You spotted that!",
-  "No, there aren't enough cups. Kitty is still waiting! You spotted that!",
-  "No, there aren't enough cups. Puppy is still waiting! You spotted that!",
-  "Yes! Everyone has a cup, and there's one left over!",
-  "Yes! Everyone has a cup!",
-  "Here's a cup for Bear!",
-  "Here's a cup for Bunny!",
-  "Here's a cup for Kitty!",
-  "Here's a cup for Puppy!",
-  "one",
-  "two",
-  "three",
-  "four",
-  "five",
-  "six",
-  "seven",
-  "eight",
-  "nine",
-  "ten",
-  "You counted two cupcakes! Nicely done!",
-  "You counted three cupcakes! Nicely done!",
-  "You counted four cupcakes! Nicely done!",
-  "There are three cupcakes. You counted them all!",
-  "There are four cupcakes. You counted them all!",
-  "There are five cupcakes. You counted them all!",
-  "All six cupcakes are counted! Wonderful work!",
-  "All seven cupcakes are counted! Wonderful work!",
-  "All eight cupcakes are counted! Wonderful work!",
-  "You moved two stars into the teapot! Nicely done!",
-  "You moved three stars into the teapot! Nicely done!",
-  "You moved four stars into the teapot! Nicely done!",
-  "The teapot has three stars. You counted them all!",
-  "The teapot has four stars. You counted them all!",
-  "The teapot has five stars. You counted them all!",
-  "All six stars made it into the teapot! Wonderful work!",
-  "All seven stars made it into the teapot! Wonderful work!",
-  "There are three flowers! A strategy is a plan that helps you. Marking each flower helped you keep track!",
-  "There are four flowers! A strategy is a plan that helps you. Marking each flower helped you keep track!",
-  "There are five flowers! A strategy is a plan that helps you. Marking each flower helped you keep track!",
-  "You counted two flowers! Every mark helped you keep track!",
-  "You counted three flowers! Every mark helped you keep track!",
-  "You counted four flowers! Every mark helped you keep track!",
-  "You counted five flowers! Every mark helped you keep track!",
-  "You marked all six flowers! What a beautiful bouquet!",
-  "You marked all seven flowers! What a beautiful bouquet!",
-  "You marked all eight flowers! What a beautiful bouquet!",
-  "That's two! You matched the dots!",
-  "That's three! You matched the dots!",
-  "That's four! You matched the dots!",
-  "That's five! You matched the dots!",
-  "one dot! You found the number, Kaylee!",
-  "two dots! You found the number, Kaylee!",
-  "three dots! You found the number, Kaylee!",
-  "four dots! You found the number, Kaylee!",
-  "five dots! You found the number, Kaylee!",
-  "You matched six dots!",
-  "You matched seven dots!",
-  "You matched eight dots!",
-  "You matched nine dots!",
-  "You spotted two dots! Nice work!",
-  "You spotted three dots! Nice work!",
-  "There were four dots. You spotted them all!",
-  "There were five dots. You spotted them all!",
-  "You saw one dot right away!",
-  "You saw two dots right away!",
-  "You saw three dots right away!",
-  "You saw four dots right away!",
-  "You saw five dots right away!",
-  "Tap Sparkle one time to make her hop!",
-  "Tap Sparkle two times to make her hop!",
-  "Tap Sparkle three times to make her hop!",
-  "Tap Sparkle four times to make her hop!",
-  "Tap Sparkle five times to make her hop!",
-  "Tap Sparkle six times to make her hop!",
-  "Tap Sparkle seven times to make her hop!",
-  "Tap Sparkle eight times to make her hop!",
-  "Tap Sparkle nine times to make her hop!"
+  {
+    "text": "Unicorn Tea Party",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1591,
+    "file": "7bccd6d36bf3.mp3"
+  },
+  {
+    "text": "Kaylee, you did it! You won the Counting Champion trophy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4271,
+    "file": "076fecab06de.mp3"
+  },
+  {
+    "text": "Kaylee, Counting Champion! From Unicorn Tea Party.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4303,
+    "file": "6145c93baf40.mp3"
+  },
+  {
+    "text": "Welcome to Sparkle's tea party, Kaylee! Let's count some treats. First, touch and count!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 7982,
+    "file": "7f5b17b8cbd4.mp3"
+  },
+  {
+    "text": "Next, move and count!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1994,
+    "file": "99576f9361c8.mp3"
+  },
+  {
+    "text": "Now, mark and count!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2489,
+    "file": "6bfb94a7925d.mp3"
+  },
+  {
+    "text": "Let's match the numbers!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1717,
+    "file": "a8d34d17ba3d.mp3"
+  },
+  {
+    "text": "Time for a quick look!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1519,
+    "file": "f25a3a5a2d8d.mp3"
+  },
+  {
+    "text": "Last stop! Are there enough cups?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3215,
+    "file": "38b4fab3317a.mp3"
+  },
+  {
+    "text": "You counted that cupcake already. Tap a different one!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4223,
+    "file": "efd7b64a3df4.mp3"
+  },
+  {
+    "text": "You marked that flower already. Pick another one!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3842,
+    "file": "e48774a7bc5e.mp3"
+  },
+  {
+    "text": "That friend has a cup already. Give the next cup to someone without one!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4997,
+    "file": "cdc5e12bbcc8.mp3"
+  },
+  {
+    "text": "Let's count them together!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1818,
+    "file": "08d0ebde9ec0.mp3"
+  },
+  {
+    "text": "How many were there?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1859,
+    "file": "299bdecadae1.mp3"
+  },
+  {
+    "text": "Sparkle loved those hops!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2180,
+    "file": "43ac61dc942f.mp3"
+  },
+  {
+    "text": "How many cupcakes did you count?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2033,
+    "file": "78b60835dc3d.mp3"
+  },
+  {
+    "text": "Tap each cupcake, one at a time, and count as you go.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4130,
+    "file": "6dab70dfc8ce.mp3"
+  },
+  {
+    "text": "Look at all these cupcakes! Tap each one and count.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4470,
+    "file": "676f0fb3c9b0.mp3"
+  },
+  {
+    "text": "Let's count the next group. Tap each cupcake once.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5340,
+    "file": "c035460172d8.mp3"
+  },
+  {
+    "text": "How many stars are in the teapot?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2451,
+    "file": "1c7d937ac737.mp3"
+  },
+  {
+    "text": "Drag each star into the teapot, counting as you go.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3722,
+    "file": "5fda82402895.mp3"
+  },
+  {
+    "text": "Let's fill the teapot with stars! Count as you move them.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4315,
+    "file": "482fb6ca3dbf.mp3"
+  },
+  {
+    "text": "Move the next stars into the teapot and count them.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3923,
+    "file": "f59f12e64c8d.mp3"
+  },
+  {
+    "text": "How many flowers did you mark?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2247,
+    "file": "b2da4c344871.mp3"
+  },
+  {
+    "text": "These flowers won't move, so mark each one as you count.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4060,
+    "file": "7125797b813b.mp3"
+  },
+  {
+    "text": "A big bouquet! Mark each flower and count as you go.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4462,
+    "file": "1db6139d77de.mp3"
+  },
+  {
+    "text": "Here is another bouquet. Mark each flower and count.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4914,
+    "file": "5be1176ceca5.mp3"
+  },
+  {
+    "text": "How many dots do you see? Tap the matching number.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4568,
+    "file": "b18d48ba59d7.mp3"
+  },
+  {
+    "text": "Bonus card! Count the dots and find their number.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3991,
+    "file": "ccaaf0591df5.mp3"
+  },
+  {
+    "text": "Let's play a quick look game. I'll show the dots for two seconds, then you tell me how many you saw.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 6955,
+    "file": "46bb9104f3ee.mp3"
+  },
+  {
+    "text": "Ready for another quick look?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2062,
+    "file": "dc217e139590.mp3"
+  },
+  {
+    "text": "Look now!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1247,
+    "file": "644602568998.mp3"
+  },
+  {
+    "text": "How many dots did you see?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2504,
+    "file": "41eb56a41536.mp3"
+  },
+  {
+    "text": "Does every friend have a cup?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2300,
+    "file": "49253df6feb3.mp3"
+  },
+  {
+    "text": "The friends are here for tea! Give each one a cup, then we will see if there are enough.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 6111,
+    "file": "eca1067bf576.mp3"
+  },
+  {
+    "text": "More friends are here! Give each one a cup.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4604,
+    "file": "7f18af9e8186.mp3"
+  },
+  {
+    "text": "Look closely. Does every friend have a cup?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3491,
+    "file": "ea825b7c116f.mp3"
+  },
+  {
+    "text": "No, there aren't enough cups. Bear is still waiting! You spotted that!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 6260,
+    "file": "bfd9af1898fe.mp3"
+  },
+  {
+    "text": "No, there aren't enough cups. Bunny is still waiting! You spotted that!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5709,
+    "file": "712004abb773.mp3"
+  },
+  {
+    "text": "No, there aren't enough cups. Kitty is still waiting! You spotted that!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 6353,
+    "file": "02c4dd2e2f21.mp3"
+  },
+  {
+    "text": "No, there aren't enough cups. Puppy is still waiting! You spotted that!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 6568,
+    "file": "30455dcb4b7d.mp3"
+  },
+  {
+    "text": "Yes! Everyone has a cup, and there's one left over!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4163,
+    "file": "54819b2a9955.mp3"
+  },
+  {
+    "text": "Yes! Everyone has a cup!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2158,
+    "file": "8ae15e811ee6.mp3"
+  },
+  {
+    "text": "Here's a cup for Bear!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1679,
+    "file": "7c90452cb057.mp3"
+  },
+  {
+    "text": "Here's a cup for Bunny!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1837,
+    "file": "b10fca4a3a43.mp3"
+  },
+  {
+    "text": "Here's a cup for Kitty!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1620,
+    "file": "380ac9bcde82.mp3"
+  },
+  {
+    "text": "Here's a cup for Puppy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1723,
+    "file": "acc4df468267.mp3"
+  },
+  {
+    "text": "one",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 555,
+    "file": "c9ef24a23ffe.mp3"
+  },
+  {
+    "text": "two",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 570,
+    "file": "46219e4daa43.mp3"
+  },
+  {
+    "text": "three",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 602,
+    "file": "5178f972e423.mp3"
+  },
+  {
+    "text": "four",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 639,
+    "file": "36b61d157333.mp3"
+  },
+  {
+    "text": "five",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 859,
+    "file": "00d1ccd4d052.mp3"
+  },
+  {
+    "text": "six",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 770,
+    "file": "8cdf36ea60b5.mp3"
+  },
+  {
+    "text": "seven",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 546,
+    "file": "c1ae7908aee0.mp3"
+  },
+  {
+    "text": "eight",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 503,
+    "file": "350cc7c731d3.mp3"
+  },
+  {
+    "text": "nine",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 781,
+    "file": "caed374bbb62.mp3"
+  },
+  {
+    "text": "ten",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 607,
+    "file": "a51db52724e4.mp3"
+  },
+  {
+    "text": "You counted two cupcakes! Nicely done!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4053,
+    "file": "df146bdab523.mp3"
+  },
+  {
+    "text": "You counted three cupcakes! Nicely done!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2797,
+    "file": "702dc21a4705.mp3"
+  },
+  {
+    "text": "You counted four cupcakes! Nicely done!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3694,
+    "file": "1d849d4e8619.mp3"
+  },
+  {
+    "text": "There are three cupcakes. You counted them all!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4328,
+    "file": "130505fc1449.mp3"
+  },
+  {
+    "text": "There are four cupcakes. You counted them all!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3402,
+    "file": "abee238dd9bf.mp3"
+  },
+  {
+    "text": "There are five cupcakes. You counted them all!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4257,
+    "file": "72978752e61f.mp3"
+  },
+  {
+    "text": "All six cupcakes are counted! Wonderful work!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4483,
+    "file": "348f4cb40609.mp3"
+  },
+  {
+    "text": "All seven cupcakes are counted! Wonderful work!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4082,
+    "file": "d0c47e940943.mp3"
+  },
+  {
+    "text": "All eight cupcakes are counted! Wonderful work!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4436,
+    "file": "93153b5ee6f4.mp3"
+  },
+  {
+    "text": "You moved two stars into the teapot! Nicely done!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3989,
+    "file": "e77aa11ad9b8.mp3"
+  },
+  {
+    "text": "You moved three stars into the teapot! Nicely done!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4216,
+    "file": "ca45809aae62.mp3"
+  },
+  {
+    "text": "You moved four stars into the teapot! Nicely done!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4789,
+    "file": "d84b8752b371.mp3"
+  },
+  {
+    "text": "The teapot has three stars. You counted them all!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4130,
+    "file": "025ccda49b50.mp3"
+  },
+  {
+    "text": "The teapot has four stars. You counted them all!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4618,
+    "file": "7067088b11ad.mp3"
+  },
+  {
+    "text": "The teapot has five stars. You counted them all!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5508,
+    "file": "e6922a947578.mp3"
+  },
+  {
+    "text": "All six stars made it into the teapot! Wonderful work!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4178,
+    "file": "b01dc4329f66.mp3"
+  },
+  {
+    "text": "All seven stars made it into the teapot! Wonderful work!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5707,
+    "file": "c5c1445256e0.mp3"
+  },
+  {
+    "text": "There are three flowers! A strategy is a plan that helps you. Marking each flower helped you keep track!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 8730,
+    "file": "05334f62020c.mp3"
+  },
+  {
+    "text": "There are four flowers! A strategy is a plan that helps you. Marking each flower helped you keep track!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 7110,
+    "file": "6bc9bc3486c8.mp3"
+  },
+  {
+    "text": "There are five flowers! A strategy is a plan that helps you. Marking each flower helped you keep track!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 8840,
+    "file": "3e5ae1f9e022.mp3"
+  },
+  {
+    "text": "You counted two flowers! Every mark helped you keep track!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4935,
+    "file": "bc6c5af4e658.mp3"
+  },
+  {
+    "text": "You counted three flowers! Every mark helped you keep track!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5121,
+    "file": "54e7b0fbe341.mp3"
+  },
+  {
+    "text": "You counted four flowers! Every mark helped you keep track!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4343,
+    "file": "141f9ba1092b.mp3"
+  },
+  {
+    "text": "You counted five flowers! Every mark helped you keep track!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4760,
+    "file": "95a63c04d796.mp3"
+  },
+  {
+    "text": "You marked all six flowers! What a beautiful bouquet!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4311,
+    "file": "13c947569f5b.mp3"
+  },
+  {
+    "text": "You marked all seven flowers! What a beautiful bouquet!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5221,
+    "file": "ed1976c0506e.mp3"
+  },
+  {
+    "text": "You marked all eight flowers! What a beautiful bouquet!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5143,
+    "file": "b6636a30efd0.mp3"
+  },
+  {
+    "text": "That's two! You matched the dots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2933,
+    "file": "6e835545f94e.mp3"
+  },
+  {
+    "text": "That's three! You matched the dots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3006,
+    "file": "677ab2e93faf.mp3"
+  },
+  {
+    "text": "That's four! You matched the dots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3146,
+    "file": "af2c5caf6445.mp3"
+  },
+  {
+    "text": "That's five! You matched the dots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3010,
+    "file": "101560f3d4b1.mp3"
+  },
+  {
+    "text": "one dot! You found the number, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3118,
+    "file": "2ef8487fc727.mp3"
+  },
+  {
+    "text": "two dots! You found the number, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3514,
+    "file": "c06d60732366.mp3"
+  },
+  {
+    "text": "three dots! You found the number, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3643,
+    "file": "ae90667b554f.mp3"
+  },
+  {
+    "text": "four dots! You found the number, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3252,
+    "file": "c447395576fa.mp3"
+  },
+  {
+    "text": "five dots! You found the number, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3154,
+    "file": "280aaffc06c5.mp3"
+  },
+  {
+    "text": "You matched six dots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2426,
+    "file": "7a0d60c48d5f.mp3"
+  },
+  {
+    "text": "You matched seven dots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2558,
+    "file": "2060599f3c7a.mp3"
+  },
+  {
+    "text": "You matched eight dots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2691,
+    "file": "6d225ba33489.mp3"
+  },
+  {
+    "text": "You matched nine dots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2180,
+    "file": "d9798ca61b68.mp3"
+  },
+  {
+    "text": "You spotted two dots! Nice work!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3434,
+    "file": "1834bccd1168.mp3"
+  },
+  {
+    "text": "You spotted three dots! Nice work!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3325,
+    "file": "b7218026c5fc.mp3"
+  },
+  {
+    "text": "There were four dots. You spotted them all!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3331,
+    "file": "f442862155a4.mp3"
+  },
+  {
+    "text": "There were five dots. You spotted them all!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3332,
+    "file": "a8b96ef187a2.mp3"
+  },
+  {
+    "text": "You saw one dot right away!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2743,
+    "file": "74ccc38e7145.mp3"
+  },
+  {
+    "text": "You saw two dots right away!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3163,
+    "file": "577a5eec0794.mp3"
+  },
+  {
+    "text": "You saw three dots right away!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2553,
+    "file": "5bfb7609d0e4.mp3"
+  },
+  {
+    "text": "You saw four dots right away!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3412,
+    "file": "f04108833915.mp3"
+  },
+  {
+    "text": "You saw five dots right away!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2561,
+    "file": "12abd2f123dd.mp3"
+  },
+  {
+    "text": "Tap Sparkle one time to make her hop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3658,
+    "file": "3743d155b5e0.mp3"
+  },
+  {
+    "text": "Tap Sparkle two times to make her hop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3104,
+    "file": "560c7d7f75f2.mp3"
+  },
+  {
+    "text": "Tap Sparkle three times to make her hop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3957,
+    "file": "c98bcf57bd3d.mp3"
+  },
+  {
+    "text": "Tap Sparkle four times to make her hop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4340,
+    "file": "168ca3b46abe.mp3"
+  },
+  {
+    "text": "Tap Sparkle five times to make her hop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4100,
+    "file": "20086e075386.mp3"
+  },
+  {
+    "text": "Tap Sparkle six times to make her hop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3378,
+    "file": "66b55a7c7cb8.mp3"
+  },
+  {
+    "text": "Tap Sparkle seven times to make her hop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3378,
+    "file": "0d965e2da3b4.mp3"
+  },
+  {
+    "text": "Tap Sparkle eight times to make her hop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3075,
+    "file": "bc5343baffc6.mp3"
+  },
+  {
+    "text": "Tap Sparkle nine times to make her hop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3458,
+    "file": "b56fda0908de.mp3"
+  }
 ]

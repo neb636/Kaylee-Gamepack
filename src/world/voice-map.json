@@ -1,38 +1,254 @@
 [
-  "Around the World!",
-  "Let's fly around the world, Kaylee! Tap the sparkly pin.",
-  "Where should we fly, Kaylee?",
-  "Up, up and away!",
-  "That's North America!",
-  "That's South America!",
-  "That's Europe!",
-  "That's Africa!",
-  "That's Asia! It's the biggest continent.",
-  "That's Australia! It's a country and a continent.",
-  "That's Antarctica! Brrr, it's icy!",
-  "This is home!",
-  "We'll fly to Egypt soon! It has pyramids!",
-  "We'll fly to China soon! It has pandas!",
-  "We'll fly to Thailand soon! It has elephants!",
-  "This is your passport, Kaylee! Every stamp is a place you helped.",
-  "Fly to more places to fill your passport!",
-  "Pick a page to color!",
-  "Pick a color, then tap to paint!",
-  "one",
-  "two",
-  "three",
-  "four",
-  "five",
-  "six",
-  "seven",
-  "eight",
-  "nine",
-  "ten",
-  "Great job, Kaylee!",
-  "Yay!",
-  "You did it!",
-  "Amazing, Kaylee!",
-  "Super!",
-  "Hooray!",
-  "Hmm, let's try again!"
+  {
+    "text": "Around the World!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1976,
+    "file": "3bb97b151bd4.mp3"
+  },
+  {
+    "text": "Let's fly around the world, Kaylee! Tap the sparkly pin.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3974,
+    "file": "965d4aa4c6d2.mp3"
+  },
+  {
+    "text": "Where should we fly, Kaylee?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2319,
+    "file": "afd76fcdbf71.mp3"
+  },
+  {
+    "text": "Up, up and away!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1999,
+    "file": "6f0c88638a1f.mp3"
+  },
+  {
+    "text": "That's North America!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2378,
+    "file": "b7df37c6a637.mp3"
+  },
+  {
+    "text": "That's South America!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1469,
+    "file": "50398fdf7202.mp3"
+  },
+  {
+    "text": "That's Europe!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1359,
+    "file": "d6531a7b1537.mp3"
+  },
+  {
+    "text": "That's Africa!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1442,
+    "file": "505e864a15a5.mp3"
+  },
+  {
+    "text": "That's Asia! It's the biggest continent.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3456,
+    "file": "47574fe73de6.mp3"
+  },
+  {
+    "text": "That's Australia! It's a country and a continent.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4860,
+    "file": "b5008799c5a3.mp3"
+  },
+  {
+    "text": "That's Antarctica! Brrr, it's icy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4242,
+    "file": "fd9d2c2c836f.mp3"
+  },
+  {
+    "text": "This is home!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1411,
+    "file": "cc3fbb839d61.mp3"
+  },
+  {
+    "text": "We'll fly to Egypt soon! It has pyramids!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4377,
+    "file": "28d4d1287874.mp3"
+  },
+  {
+    "text": "We'll fly to China soon! It has pandas!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4065,
+    "file": "541a047b1f47.mp3"
+  },
+  {
+    "text": "We'll fly to Thailand soon! It has elephants!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4376,
+    "file": "0391e0b86cdb.mp3"
+  },
+  {
+    "text": "This is your passport, Kaylee! Every stamp is a place you helped.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5279,
+    "file": "594483aadfbd.mp3"
+  },
+  {
+    "text": "Fly to more places to fill your passport!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3314,
+    "file": "10bd5086995d.mp3"
+  },
+  {
+    "text": "Pick a page to color!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1850,
+    "file": "30547069102c.mp3"
+  },
+  {
+    "text": "Pick a color, then tap to paint!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2810,
+    "file": "52b75b269ef9.mp3"
+  },
+  {
+    "text": "one",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 544,
+    "file": "c9ef24a23ffe.mp3"
+  },
+  {
+    "text": "two",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 482,
+    "file": "46219e4daa43.mp3"
+  },
+  {
+    "text": "three",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 574,
+    "file": "5178f972e423.mp3"
+  },
+  {
+    "text": "four",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 580,
+    "file": "36b61d157333.mp3"
+  },
+  {
+    "text": "five",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 524,
+    "file": "00d1ccd4d052.mp3"
+  },
+  {
+    "text": "six",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 927,
+    "file": "8cdf36ea60b5.mp3"
+  },
+  {
+    "text": "seven",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 815,
+    "file": "c1ae7908aee0.mp3"
+  },
+  {
+    "text": "eight",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 522,
+    "file": "350cc7c731d3.mp3"
+  },
+  {
+    "text": "nine",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 645,
+    "file": "caed374bbb62.mp3"
+  },
+  {
+    "text": "ten",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 639,
+    "file": "a51db52724e4.mp3"
+  },
+  {
+    "text": "Great job, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1400,
+    "file": "6d177aab71d4.mp3"
+  },
+  {
+    "text": "Yay!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1043,
+    "file": "3179787a9757.mp3"
+  },
+  {
+    "text": "You did it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1065,
+    "file": "8d60f1247c80.mp3"
+  },
+  {
+    "text": "Amazing, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1480,
+    "file": "916e57304c4b.mp3"
+  },
+  {
+    "text": "Super!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 724,
+    "file": "ac0ca7a06ade.mp3"
+  },
+  {
+    "text": "Hooray!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1035,
+    "file": "eb97bebc1a52.mp3"
+  },
+  {
+    "text": "Hmm, let's try again!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2117,
+    "file": "25a1e0652022.mp3"
+  }
 ]

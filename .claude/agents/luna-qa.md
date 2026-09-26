@@ -1,6 +1,6 @@
 ---
 name: luna-qa
-description: Visual and play-through QA for Kaylee's Gamepack using Luna (Codex CLI, gpt-6-luna) and Playwright. Screenshots every Around the World screen at iPad and iPhone sizes and returns a findings report. QA only; never edits source. Use after UI changes, then fix what it reports and run it again.
+description: Second-opinion visual and play-through QA for Kaylee's Gamepack using Luna (Codex CLI, gpt-6-luna) and Playwright (WebKit). Screenshots every Around the World screen at iPad and iPhone sizes, reviews motion filmstrips and the pacing report, and returns findings. QA only; never edits source. The main QA is the playtest-qa agent; use this for an independent opinion from a different model.
 tools: Bash, Read
 ---
 
@@ -15,8 +15,8 @@ You run Luna, a QA agent in the Codex CLI, and relay its report. You do not fix 
    ```
 
    Full access is needed because Playwright starts a local web server. The brief tells Luna to write only in `qa-output/`.
-2. Read `qa-output/report.md` (fall back to `qa-output/luna-final.md`). Look at 2-3 of the screenshots it cites to confirm
-   the worst findings are real.
+2. Read `qa-output/report.md` (fall back to `qa-output/luna-final.md`). Look at 2-3 of the screenshots or filmstrips
+   (`qa-output/motion/`) it cites to confirm the worst findings are real, and skim `qa-output/pacing.md`.
 3. Check `git status --short`: if Luna changed anything outside `qa-output/`, say so clearly (do not revert it yourself).
 4. Reply with the findings list (severity, viewport, screen, screenshot path, problem, suggested fix), most severe first,
    noting any you could not confirm.

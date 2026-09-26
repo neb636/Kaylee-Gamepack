@@ -1,11 +1,14 @@
 import { motion } from 'motion/react'
-import { useEffect, useState } from 'react'
-import { BigButton, burst, say, sounds } from '../../sdk'
+import { useEffect, useRef, useState } from 'react'
+import { BigButton, Buddy, burst, lineText, say, SparklePuppet, sounds, type PuppetHandle } from '../../sdk'
 import type { ActivityInfo } from '../types'
 
 /** Stamp slam + animal sticker + one spoken fun fact, then back to the country map. */
 export function StampEarned({ activity, onClose }: { activity: ActivityInfo; onClose: () => void }) {
   const [ready, setReady] = useState(false)
+  const buddy = useRef<PuppetHandle>(null)
+  const sparkle = useRef<PuppetHandle>(null)
+  const roomy = window.innerHeight > 560 && window.innerWidth > 600
   useEffect(() => {
     sounds.sparkle()
     const t1 = setTimeout(() => {
@@ -13,10 +16,15 @@ export function StampEarned({ activity, onClose }: { activity: ActivityInfo; onC
       burst(0.5, 0.45)
     }, 450)
     const t2 = setTimeout(() => setReady(true), 900)
+    const t3 = setTimeout(() => {
+      void buddy.current?.play('cheer')
+      void sparkle.current?.play('cheer')
+    }, 850)
     void say(activity.sticker.fact)
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
+      clearTimeout(t3)
     }
   }, [activity])
 
@@ -24,7 +32,7 @@ export function StampEarned({ activity, onClose }: { activity: ActivityInfo; onC
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      style={{ position: 'absolute', inset: 0, zIndex: 40, background: 'rgba(217, 204, 255, 0.94)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 'min(20px, 3vh)', padding: 'var(--top-clear) 20px 20px' }}
+      style={{ position: 'absolute', inset: 0, zIndex: 40, background: 'rgba(217, 204, 255, 0.98)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 'min(20px, 3vh)', padding: 'var(--top-clear) 20px 20px' }}
     >
       <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 'min(24px, 4vw)' }}>
         <motion.div
@@ -35,17 +43,22 @@ export function StampEarned({ activity, onClose }: { activity: ActivityInfo; onC
         >
           {activity.icon}
         </motion.div>
-        <motion.img
-          src={activity.sticker.img}
-          alt={activity.sticker.name}
+        <motion.div
           initial={{ scale: 0, rotate: 30 }}
-          animate={{ scale: 1, rotate: 0, y: [0, -10, 0] }}
-          transition={{ scale: { delay: 0.6, type: 'spring' }, rotate: { delay: 0.6 }, y: { repeat: Infinity, duration: 1.6 } }}
-          style={{ height: 'min(240px, 34vh, 40vw)', objectFit: 'contain', filter: 'drop-shadow(0 0 0 #fff) drop-shadow(0 6px 0 rgba(0,0,0,.12))' }}
-        />
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ scale: { delay: 0.6, type: 'spring' }, rotate: { delay: 0.6 } }}
+          style={{ display: 'flex', alignItems: 'flex-end', filter: 'drop-shadow(0 6px 0 rgba(0,0,0,.12))' }}
+        >
+          <Buddy ref={buddy} img={activity.sticker.img} alt={activity.sticker.name} height="min(240px, 34vh, 40vw)" />
+        </motion.div>
+        {roomy && (
+          <motion.div initial={{ x: 80, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.3, type: 'spring' }}>
+            <SparklePuppet ref={sparkle} height="min(220px, 26vh, 26vw)" lookToward={-0.6} />
+          </motion.div>
+        )}
       </div>
       <p style={{ fontSize: 'clamp(22px, min(4vw, 5vh), 36px)', fontWeight: 600, textAlign: 'center', maxWidth: 720, background: '#fff', borderRadius: 'var(--radius)', padding: '12px 24px', boxShadow: 'var(--shadow)' }}>
-        {activity.sticker.fact}
+        {lineText(activity.sticker.fact)}
       </p>
       {ready && (
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>

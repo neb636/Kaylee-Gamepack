@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { sounds } from '../../sdk'
 
 export const CRAYONS = ['#FF4F9A', '#FF8FB8', '#B9A6F5', '#7FB2FF', '#8FE3C8', '#5CBF6B', '#FBEA9A', '#FFB347', '#E0603E', '#A8764F', '#FFF7F0', '#6B5D73']
@@ -60,7 +60,8 @@ function floodFill(img: ImageData, x: number, y: number, color: string): boolean
  * A coloring-book page: pick a crayon, tap an area to fill it. There are no wrong colors.
  * `onFill(count)` reports how many areas she has painted.
  */
-export function ColoringPage({ src, onFill }: { src: string; onFill?: (count: number) => void }) {
+/** `action` (e.g. a Send button) sits at the end of the palette, so it never covers the picture or the colors. */
+export function ColoringPage({ src, onFill, action }: { src: string; onFill?: (count: number) => void; action?: ReactNode }) {
   const canvas = useRef<HTMLCanvasElement>(null)
   const history = useRef<ImageData[]>([])
   const fills = useRef(0)
@@ -151,6 +152,7 @@ export function ColoringPage({ src, onFill }: { src: string; onFill?: (count: nu
         >
           ↩️
         </motion.button>
+        {action && <div style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'center' }}>{action}</div>}
       </div>
     </div>
   )

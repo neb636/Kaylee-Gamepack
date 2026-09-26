@@ -1,0 +1,11 @@
+{
+  "_about": "Who speaks in the app and how they sound. Plain strings in any voice-lines.json are spoken by the default speaker. Folders (games, countries) can add their own speakers in a cast.json next to their voice-lines.json. Changing a speaker regenerates only that speaker's clips. Audition options with: node scripts/voice-audition.mjs <speaker> <voice> [<voice>...]",
+  "default": "sparkle",
+  "speakers": {
+    "sparkle": {
+      "voice": "coral",
+      "pitch": 1,
+      "instructions": "You are Sparkle, a sweet, cheerful little pink unicorn talking to a 5-year-old girl. Warm and smiley, gently excited, like a kind big sister. Speak clearly and a little slowly, with playful sing-song emphasis on the fun words. American accent. Never shout."
+    }
+  }
+}

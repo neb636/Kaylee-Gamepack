@@ -1,8 +1,8 @@
 // Australia: "Pip's G'day Party". Five spots on the map in any order; each gives a stamp and a party guest.
 // Once every stamp is collected, the sunset party at the Sydney Opera House is the finale.
 import { motion } from 'motion/react'
-import { useEffect, useState, type ComponentType } from 'react'
-import { say, sounds } from '../../../sdk'
+import { createElement, useEffect, useState, type ComponentType, type ReactNode, type Ref } from 'react'
+import { Buddy, say, sounds, type Line, type PuppetHandle } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
@@ -15,6 +15,9 @@ import { Reef } from './activities/Reef'
 import { StarryFlag } from './activities/StarryFlag'
 import { art } from './art'
 import { L } from './lines'
+import { Koko } from './puppets/Koko'
+import { Mama } from './puppets/Mama'
+import { Pip } from './puppets/Pip'
 
 export interface ActivityProps {
   onDone: () => void
@@ -23,13 +26,22 @@ export interface ActivityProps {
 
 const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { outback: Outback, forest: Forest, reef: Reef, stars: StarryFlag, postcard: Postcard }
 
+export interface Guest {
+  img: string
+  line: Line
+  name: string
+  /** The live character at the party (a puppet, or a Buddy for the flat sprites). */
+  render: (ref: Ref<PuppetHandle>, height: string) => ReactNode
+}
+const buddy = (img: string, voice: string) => (ref: Ref<PuppetHandle>, height: string) => createElement(Buddy, { ref, img, voice, height })
+
 /** Which guest each stamp brings to the party. */
-export const GUESTS: Record<string, { img: string; line: string; name: string }> = {
-  outback: { img: art.mama, line: L.party.mama, name: 'Mama Kangaroo' },
-  forest: { img: art.koalaAwake, line: L.party.koko, name: 'Koko' },
-  reef: { img: art.turtle, line: L.party.shelly, name: 'Shelly' },
-  stars: { img: art.kookaburra, line: L.party.kooky, name: 'Kooky' },
-  postcard: { img: art.platypus, line: L.party.pat, name: 'Pat' },
+export const GUESTS: Record<string, Guest> = {
+  outback: { img: art.mama, line: L.party.mama, name: 'Mama Kangaroo', render: (ref, height) => createElement(Mama, { ref, height: `calc(${height} * 1.3)` }) },
+  forest: { img: art.koalaAwake, line: L.party.koko, name: 'Koko', render: (ref, height) => createElement(Koko, { ref, height }) },
+  reef: { img: art.turtle, line: L.party.shelly, name: 'Shelly', render: buddy(art.turtle, 'shelly') },
+  stars: { img: art.kookaburra, line: L.party.kooky, name: 'Kooky', render: buddy(art.kookaburra, 'kooky') },
+  postcard: { img: art.platypus, line: L.party.pat, name: 'Pat', render: buddy(art.platypus, 'pat') },
 }
 
 export default function Place(props: PlaceProps) {
@@ -129,7 +141,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
       {intro && (
         <StoryBeat
           lines={L.intro}
-          img={art.pip}
+          friend={<Pip height="100%" />}
           bg={art.bgOpera}
           onDone={() => {
             introSeen = true
