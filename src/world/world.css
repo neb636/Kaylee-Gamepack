@@ -2,6 +2,8 @@
 .world {
   --btn: 76px;
   --top-clear: calc(var(--safe-top) + 104px);
+  /* Always clears the top bar, even on short screens (where --top-clear lets content sit beside the buttons). */
+  --bar-clear: calc(var(--safe-top) + var(--btn) + 24px);
   --prompt-font: clamp(22px, 3.4vw, 34px);
   --say-size: 64px;
   --target: 96px;
@@ -49,20 +51,6 @@
 }
 .world-glow {
   animation: world-glow 1.2s ease-in-out infinite;
-}
-
-.world .crayons {
-  width: min(100%, calc(var(--target) * 7 + 80px));
-}
-@media (orientation: landscape) {
-  .world .crayons {
-    width: calc(var(--target) * 2 + 36px);
-  }
-}
-@media (orientation: landscape) and (max-height: 560px) {
-  .world .crayons {
-    width: calc(var(--target) * 3 + 46px);
-  }
 }
 
 .world .world-side {
