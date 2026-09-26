@@ -19,6 +19,8 @@ export const VIEWPORTS = [
   { name: 'iphone-portrait', width: 390, height: 844 },
   { name: 'iphone-landscape', width: 844, height: 390 },
   { name: 'iphonemax-portrait', width: 430, height: 932 },
+  { name: 'desktop', width: 1440, height: 900, desktop: true },
+  { name: 'laptop', width: 1280, height: 720, desktop: true },
 ]
 
 /** Serves dist/ with vite preview; returns { base, stop }. */
@@ -39,9 +41,10 @@ export async function serve(port) {
 
 export const launch = () => browserType.launch()
 
-/** A touch-screen context like the real device (Chromium and WebKit both support isMobile). */
+/** A touch-screen context like the real device (Chromium and WebKit both support isMobile); desktops get a mouse. */
 export function device(browser, vp, extra = {}) {
-  return browser.newContext({ viewport: { width: vp.width, height: vp.height }, hasTouch: true, isMobile: true, deviceScaleFactor: 2, ...extra })
+  const touch = !vp.desktop
+  return browser.newContext({ viewport: { width: vp.width, height: vp.height }, hasTouch: touch, isMobile: touch, deviceScaleFactor: 2, ...extra })
 }
 
 /** Open the app and tap through the splash (the first tap unlocks audio on iPad). */
