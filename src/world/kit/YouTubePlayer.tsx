@@ -79,6 +79,22 @@ export function YouTubePlayer({ video, onDone, full, onFull }: { video: PlaceVid
   const wantPlay = useRef(false)
   const stateRef = useRef(state)
   stateRef.current = state
+  const fullRef = useRef({ full, onFull })
+  fullRef.current = { full, onFull }
+
+  // Turning a phone or iPad sideways while a video is on goes full screen; turning it back upright leaves it (like the
+  // YouTube app). Touch devices only, so resizing a desktop window doesn't flip it.
+  useEffect(() => {
+    if (!window.matchMedia('(pointer: coarse)').matches) return
+    const landscape = window.matchMedia('(orientation: landscape)')
+    const onTurn = () => {
+      if (!['loading', 'tap-video', 'playing', 'paused'].includes(stateRef.current)) return
+      const { full, onFull } = fullRef.current
+      if (landscape.matches !== full) onFull(landscape.matches)
+    }
+    landscape.addEventListener('change', onTurn)
+    return () => landscape.removeEventListener('change', onTurn)
+  }, [])
 
   useEffect(() => {
     let gone = false
@@ -185,7 +201,6 @@ export function YouTubePlayer({ video, onDone, full, onFull }: { video: PlaceVid
         {state === 'playing' && (
           <div aria-label="Pause the video" role="button" onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerCancel={() => (down.current = null)} style={{ position: 'absolute', inset: 0, touchAction: 'none', cursor: 'pointer' }}>
             <Progress player={player} />
-            <FullButton full={full} onFull={onFull} />
           </div>
         )}
         {state === 'loading' && <div aria-hidden style={{ position: 'absolute', inset: 0 }} />}
@@ -214,7 +229,8 @@ export function YouTubePlayer({ video, onDone, full, onFull }: { video: PlaceVid
           {state === 'paused' && (
             <Cover key="paused" onClick={resume} label="Keep watching">
               <BigPlay />
-              {full && <FullButton full onFull={onFull} />}
+              {/* Full screen has no room beside the video, so the way back out is on the pause screen. */}
+              {full && <FullButton full onFull={onFull} corner />}
             </Cover>
           )}
           {state === 'ended' && (
@@ -263,12 +279,14 @@ function Progress({ player }: { player: { current: YTPlayer | null } }) {
   )
 }
 
-/** Corner button that does what the swipe does (grow to full screen / shrink back). */
-function FullButton({ full, onFull }: { full: boolean; onFull: (full: boolean) => void }) {
+/** Does what the swipe does: grow to full screen / shrink back. Sits beside the video (or in a corner of the pause
+ *  screen in full screen), never on a playing video. */
+export function FullButton({ full, onFull, corner }: { full: boolean; onFull: (full: boolean) => void; corner?: boolean }) {
   return (
     <motion.button
       aria-label={full ? 'Small screen' : 'Full screen'}
-      whileTap={{ scale: 0.85 }}
+      className="full-btn"
+      whileTap={{ scale: 0.88 }}
       onPointerDown={(e) => e.stopPropagation()}
       onPointerUp={(e) => e.stopPropagation()}
       onClick={(e) => {
@@ -276,9 +294,9 @@ function FullButton({ full, onFull }: { full: boolean; onFull: (full: boolean) =
         sounds.whoosh()
         onFull(!full)
       }}
-      style={{ position: 'absolute', right: 'clamp(8px, 2.5cqmin, 20px)', bottom: 'clamp(14px, 4cqmin, 28px)', width: 'clamp(52px, 13cqmin, 76px)', aspectRatio: '1', borderRadius: '50%', background: 'rgba(255,255,255,0.85)', boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center' }}
+      style={corner ? { position: 'absolute', right: 'clamp(12px, 3cqmin, 28px)', bottom: 'clamp(12px, 3cqmin, 28px)' } : undefined}
     >
-      <svg viewBox="0 0 24 24" width="55%" height="55%" fill="none" stroke="var(--ink)" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round">
+      <svg viewBox="0 0 24 24" width="46%" height="46%" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round">
         {full ? <path d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6" /> : <path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6" />}
       </svg>
     </motion.button>
