@@ -2,7 +2,7 @@
 import { forwardRef, useState, type CSSProperties } from 'react'
 import { setA, setT, show, usePuppet, type PuppetHandle } from '../../../../sdk'
 import { art } from '../art'
-import { inkPass, line, useInk } from './ink'
+import { inkPass, line, useInk } from '../../../kit/ink'
 import { ROO_ACTIONS, rooMotion } from './roo'
 
 export interface PipProps {

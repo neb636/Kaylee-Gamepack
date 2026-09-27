@@ -1,0 +1,849 @@
+[
+  {
+    "text": "Egypt",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 893,
+    "file": "1332551271fb.mp3"
+  },
+  {
+    "text": "Ahlan, Kaylee! I'm Miu the kitten!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2677,
+    "file": "f0a9264e46ee.mp3"
+  },
+  {
+    "text": "Ahlan means hello! Come explore Egypt with me!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 3227,
+    "file": "828af80e622d.mp3"
+  },
+  {
+    "text": "Tap a spot on the map!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2019,
+    "file": "2b277baca996.mp3"
+  },
+  {
+    "text": "Where to next, Kaylee?",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 1498,
+    "file": "cf52a8b209a1.mp3"
+  },
+  {
+    "text": "Everyone is here! Tap the light show!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2829,
+    "file": "2fd40e3bbd39.mp3"
+  },
+  {
+    "text": "Get all the stamps to start the light show!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2608,
+    "file": "2cff34c8d3a4.mp3"
+  },
+  {
+    "text": "Kaylee, you did it! You won the Egypt Explorer trophy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4954,
+    "file": "ea76ebc434eb.mp3"
+  },
+  {
+    "text": "Kaylee, Egypt Explorer! From Egypt.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4015,
+    "file": "37f0cd741f29.mp3"
+  },
+  {
+    "text": "Purr! That tickles!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2254,
+    "file": "6d4465d3c182.mp3"
+  },
+  {
+    "text": "Meow! Hee hee!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 1494,
+    "file": "050762f5ed93.mp3"
+  },
+  {
+    "text": "Harrumph! Hello, little one.",
+    "voice": "jamal",
+    "sig": "ce572dcece",
+    "ms": 2759,
+    "file": "1f263da0dd8f.mp3"
+  },
+  {
+    "text": "Mmm, I love sweet dates!",
+    "voice": "jamal",
+    "sig": "ce572dcece",
+    "ms": 3353,
+    "file": "8d6ebc356dd2.mp3"
+  },
+  {
+    "text": "Ho ho! That tickles!",
+    "voice": "sphinx",
+    "sig": "10ab3a11c9",
+    "ms": 2027,
+    "file": "1d16c0f56851.mp3"
+  },
+  {
+    "text": "Hee hee! My bandages are ticklish!",
+    "voice": "tutu",
+    "sig": "84ef0f00ed",
+    "ms": 3053,
+    "file": "b48f5aa45931.mp3"
+  },
+  {
+    "text": "I'm Jamal the camel. Let's build a pyramid!",
+    "voice": "jamal",
+    "sig": "ce572dcece",
+    "ms": 4586,
+    "file": "9211fcd2bcd9.mp3"
+  },
+  {
+    "text": "Drag the stone onto the glowing spot!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3209,
+    "file": "b951baa69549.mp3"
+  },
+  {
+    "text": "One!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 508,
+    "file": "a35ba4bdd660.mp3"
+  },
+  {
+    "text": "Two!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 428,
+    "file": "d8e75d578320.mp3"
+  },
+  {
+    "text": "Three!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 475,
+    "file": "f2fb88eaa04b.mp3"
+  },
+  {
+    "text": "Three big stones on the bottom!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2570,
+    "file": "eec5c6518671.mp3"
+  },
+  {
+    "text": "Now pick the smaller stone. Small stones go on top!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5195,
+    "file": "84df74c4f27b.mp3"
+  },
+  {
+    "text": "Oof! Too big for up there!",
+    "voice": "jamal",
+    "sig": "ce572dcece",
+    "ms": 2398,
+    "file": "7e92ddf27739.mp3"
+  },
+  {
+    "text": "Two stones in the middle!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2479,
+    "file": "ebe2a50362aa.mp3"
+  },
+  {
+    "text": "Now one little stone on the very top!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3883,
+    "file": "06411b2eb01c.mp3"
+  },
+  {
+    "text": "Last, the golden cap! It is a triangle!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4378,
+    "file": "b53bc3b1616f.mp3"
+  },
+  {
+    "text": "Wow! Our pyramid is shining!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2714,
+    "file": "f855f4debc43.mp3"
+  },
+  {
+    "text": "Long ago, Egyptians built pyramids for their kings, the pharaohs!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5557,
+    "file": "49676d855478.mp3"
+  },
+  {
+    "text": "Let's sneak inside the pyramid! It's dark in here!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 3620,
+    "file": "8e0426cacd94.mp3"
+  },
+  {
+    "text": "Drag Miu through the tunnel to the scarab!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3435,
+    "file": "9e12ff23ea33.mp3"
+  },
+  {
+    "text": "Now find two scarabs!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2756,
+    "file": "922825a888eb.mp3"
+  },
+  {
+    "text": "Find the way to the treasure room!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2550,
+    "file": "888a8d60aa67.mp3"
+  },
+  {
+    "text": "A scarab! Egyptians loved these beetles.",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2722,
+    "file": "139b70ffaedb.mp3"
+  },
+  {
+    "text": "Shh! A sleepy bat! Not this way.",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 3969,
+    "file": "bec0e553faeb.mp3"
+  },
+  {
+    "text": "Not this way! Hee hee.",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2349,
+    "file": "998cad73647e.mp3"
+  },
+  {
+    "text": "The treasure room! Tap the golden box!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3708,
+    "file": "90fd39a92d07.mp3"
+  },
+  {
+    "text": "This gold mask was made for a boy king called Tut!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4007,
+    "file": "78f5b4a2e47c.mp3"
+  },
+  {
+    "text": "Yawn! Ahlan, Kaylee! I'm Tutu!",
+    "voice": "tutu",
+    "sig": "84ef0f00ed",
+    "ms": 3583,
+    "file": "c74766902e52.mp3"
+  },
+  {
+    "text": "I napped for thousands of years! Hee hee!",
+    "voice": "tutu",
+    "sig": "84ef0f00ed",
+    "ms": 3118,
+    "file": "0d80120a8ef2.mp3"
+  },
+  {
+    "text": "All aboard! Let's sail down the Nile River!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2563,
+    "file": "735db5fb276b.mp3"
+  },
+  {
+    "text": "Drag the boat up and down to catch the lotus flowers!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4940,
+    "file": "4c42d3d5c03e.mp3"
+  },
+  {
+    "text": "Bump! Hee hee, hello!",
+    "voice": "hippo",
+    "sig": "cb61c1d477",
+    "ms": 3758,
+    "file": "985ff06c7063.mp3"
+  },
+  {
+    "text": "The farm is thirsty! Pull the bucket down three times!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4800,
+    "file": "52d50451862a.mp3"
+  },
+  {
+    "text": "This farm is thirsty too! Pull the bucket five times!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4896,
+    "file": "37454c2ff247.mp3"
+  },
+  {
+    "text": "Four!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 618,
+    "file": "139d02290716.mp3"
+  },
+  {
+    "text": "Five!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 664,
+    "file": "34fcccf414f7.mp3"
+  },
+  {
+    "text": "Look! The water makes the plants grow!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2753,
+    "file": "0ea60dab0f5c.mp3"
+  },
+  {
+    "text": "Egypt is mostly sandy desert. The Nile makes it green!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4933,
+    "file": "030c9f823f79.mp3"
+  },
+  {
+    "text": "The Nile is one of the longest rivers in the world!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3729,
+    "file": "3fa8dc3c5f9e.mp3"
+  },
+  {
+    "text": "Oh no! Someone is buried in the sand!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2827,
+    "file": "bb4cc63f6b37.mp3"
+  },
+  {
+    "text": "Rub the sand away!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2039,
+    "file": "78c19963c3f6.mp3"
+  },
+  {
+    "text": "Ah... ah... achoo!",
+    "voice": "sphinx",
+    "sig": "10ab3a11c9",
+    "ms": 3589,
+    "file": "11b0db21426d.mp3"
+  },
+  {
+    "text": "Thank you! I'm the Sphinx!",
+    "voice": "sphinx",
+    "sig": "10ab3a11c9",
+    "ms": 2119,
+    "file": "b71793ea0d07.mp3"
+  },
+  {
+    "text": "Now brush the sand off his paws!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2874,
+    "file": "d5ea6654fd64.mp3"
+  },
+  {
+    "text": "Two big lion paws!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2270,
+    "file": "3784c8c99301.mp3"
+  },
+  {
+    "text": "Now brush off his back!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2141,
+    "file": "4e740f21f748.mp3"
+  },
+  {
+    "text": "The Sphinx has a lion's body and a person's head!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3756,
+    "file": "a7bd9033cf52.mp3"
+  },
+  {
+    "text": "You found pieces of an old pot! Put it back together!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4526,
+    "file": "c8a5b4d68331.mp3"
+  },
+  {
+    "text": "Good as new!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 1638,
+    "file": "3b28ca137fdb.mp3"
+  },
+  {
+    "text": "Thank you, Kaylee! Hmm, have you seen my nose?",
+    "voice": "sphinx",
+    "sig": "10ab3a11c9",
+    "ms": 4314,
+    "file": "dad5355122c9.mp3"
+  },
+  {
+    "text": "Hee hee! His nose fell off a long, long time ago!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 3320,
+    "file": "0941834b9ed9.mp3"
+  },
+  {
+    "text": "Long ago, Egyptians wrote with little pictures called hieroglyphs!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 4291,
+    "file": "d6bdda0c7766.mp3"
+  },
+  {
+    "text": "Let's write your name, Kaylee, like a pharaoh!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4294,
+    "file": "3ecae37fd5b1.mp3"
+  },
+  {
+    "text": "Press and hold the stamp that matches!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3046,
+    "file": "2d2b91be87e4.mp3"
+  },
+  {
+    "text": "K says kuh! Find the basket!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3366,
+    "file": "24f8f88da695.mp3"
+  },
+  {
+    "text": "A says ay! Find the bird!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3341,
+    "file": "fd0f0889d569.mp3"
+  },
+  {
+    "text": "Y says yuh! Find the two reeds!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3901,
+    "file": "cdd5dde4d918.mp3"
+  },
+  {
+    "text": "L says lll! Find the lion!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3575,
+    "file": "9e763af13bf1.mp3"
+  },
+  {
+    "text": "E says ee! Find the reed!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4269,
+    "file": "b20e9ee85025.mp3"
+  },
+  {
+    "text": "E again! One more reed!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2538,
+    "file": "c0d126653936.mp3"
+  },
+  {
+    "text": "Look for the same picture!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1863,
+    "file": "7ad9082b49fc.mp3"
+  },
+  {
+    "text": "Kaylee! That says Kaylee!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2409,
+    "file": "433630cbfdc0.mp3"
+  },
+  {
+    "text": "Kings and queens wrote their names in an oval like this!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4570,
+    "file": "374da84c7b51.mp3"
+  },
+  {
+    "text": "Welcome to my market stall! Let's make koshari!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 3294,
+    "file": "737ef47ba6af.mp3"
+  },
+  {
+    "text": "Ahlan! One koshari, please!",
+    "voice": "jamal",
+    "sig": "ce572dcece",
+    "ms": 3224,
+    "file": "ef5813870283.mp3"
+  },
+  {
+    "text": "Follow the recipe! First, the rice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4694,
+    "file": "e2a8300546f8.mp3"
+  },
+  {
+    "text": "Next, the lentils!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1874,
+    "file": "ca2d24ff5fac.mp3"
+  },
+  {
+    "text": "Now the pasta!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2047,
+    "file": "e96f22bfc8a3.mp3"
+  },
+  {
+    "text": "Now the tomato sauce!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2054,
+    "file": "d4544eac7527.mp3"
+  },
+  {
+    "text": "Crispy onions on top!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2105,
+    "file": "9f8fa479a209.mp3"
+  },
+  {
+    "text": "Look at the recipe! What comes next?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2853,
+    "file": "be5f1d3fc3da.mp3"
+  },
+  {
+    "text": "Koshari is a yummy Egyptian food!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2719,
+    "file": "09d9d07019d0.mp3"
+  },
+  {
+    "text": "Shukran!",
+    "voice": "jamal",
+    "sig": "ce572dcece",
+    "ms": 903,
+    "file": "5c96b79443d1.mp3"
+  },
+  {
+    "text": "Shukran means thank you!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 1699,
+    "file": "29a7ae2dff3b.mp3"
+  },
+  {
+    "text": "Ahlan! Extra crispy onions, please!",
+    "voice": "fennec",
+    "sig": "a1f2b6ed72",
+    "ms": 3180,
+    "file": "31cb07f54e1b.mp3"
+  },
+  {
+    "text": "Add three pinches of onions!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2202,
+    "file": "84e4b0d82868.mp3"
+  },
+  {
+    "text": "Shukran!",
+    "voice": "fennec",
+    "sig": "a1f2b6ed72",
+    "ms": 988,
+    "file": "0bdf0357bf1a.mp3"
+  },
+  {
+    "text": "Ahlan! Mint tea, please!",
+    "voice": "hippo",
+    "sig": "cb61c1d477",
+    "ms": 2432,
+    "file": "be221cd0bde8.mp3"
+  },
+  {
+    "text": "Press and hold to pour! Let go at the gold line!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4582,
+    "file": "8a58b954b14d.mp3"
+  },
+  {
+    "text": "Whoops! A little too much! Hee hee.",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 2810,
+    "file": "b14d8d8c1c0a.mp3"
+  },
+  {
+    "text": "Shukran!",
+    "voice": "hippo",
+    "sig": "cb61c1d477",
+    "ms": 892,
+    "file": "90b043bee213.mp3"
+  },
+  {
+    "text": "The light show is starting!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 1760,
+    "file": "b688288a3cc3.mp3"
+  },
+  {
+    "text": "Drag a light onto the pyramids!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2957,
+    "file": "ee10f0ad8172.mp3"
+  },
+  {
+    "text": "Harrumph! What a pretty show!",
+    "voice": "jamal",
+    "sig": "ce572dcece",
+    "ms": 2725,
+    "file": "f4ea457d8f31.mp3"
+  },
+  {
+    "text": "Hee hee! I love the lights!",
+    "voice": "tutu",
+    "sig": "84ef0f00ed",
+    "ms": 2049,
+    "file": "c15648f382fb.mp3"
+  },
+  {
+    "text": "Hello from the Nile!",
+    "voice": "hippo",
+    "sig": "cb61c1d477",
+    "ms": 1742,
+    "file": "5948b90d191a.mp3"
+  },
+  {
+    "text": "Ho ho! I shine at night!",
+    "voice": "sphinx",
+    "sig": "10ab3a11c9",
+    "ms": 2468,
+    "file": "8c5a3e9a9503.mp3"
+  },
+  {
+    "text": "Hello! I love writing too!",
+    "voice": "ibis",
+    "sig": "964c4498f6",
+    "ms": 2576,
+    "file": "c312684e4062.mp3"
+  },
+  {
+    "text": "Yum! Thank you for the koshari!",
+    "voice": "fennec",
+    "sig": "a1f2b6ed72",
+    "ms": 2268,
+    "file": "043b179b8ad3.mp3"
+  },
+  {
+    "text": "Pull the rope to raise Egypt's flag!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2654,
+    "file": "d94fbcd69a22.mp3"
+  },
+  {
+    "text": "Egypt's flag is red, white and black, with a golden eagle!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4939,
+    "file": "801f03c4f7f0.mp3"
+  },
+  {
+    "text": "Shukran, Kaylee! You're a true Egypt explorer!",
+    "voice": "miu",
+    "sig": "e1570748b7",
+    "ms": 3580,
+    "file": "b011408ae19f.mp3"
+  },
+  {
+    "text": "Camel sticker! Camels store fat in their humps for long trips!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5871,
+    "file": "eb96e7f2fb19.mp3"
+  },
+  {
+    "text": "Scarab sticker! Egyptians thought scarabs were lucky!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4694,
+    "file": "a27c893aa4b6.mp3"
+  },
+  {
+    "text": "Hippo sticker! Hippos love the cool Nile water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4707,
+    "file": "c7991fc6cdf7.mp3"
+  },
+  {
+    "text": "Fennec fox sticker! Big ears help it stay cool in the desert!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4998,
+    "file": "73853b975a18.mp3"
+  },
+  {
+    "text": "Ibis sticker! Egyptians drew this bird in their picture writing!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4572,
+    "file": "46a046dc1b33.mp3"
+  },
+  {
+    "text": "Kitty sticker! In Egypt, cats were loved like family!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4541,
+    "file": "183b348eb28f.mp3"
+  },
+  {
+    "text": "Egypt is hot and sunny, and it hardly ever rains!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 6458,
+    "file": "752d0bc5345e.mp3"
+  },
+  {
+    "text": "In Egypt, people say Ahlan! It means hello!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4232,
+    "file": "9a92b1571029.mp3"
+  },
+  {
+    "text": "Shukran means thank you in Arabic, the language of Egypt!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4706,
+    "file": "4a9b41cc015b.mp3"
+  },
+  {
+    "text": "The pyramids are more than four thousand years old!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3375,
+    "file": "0491bd76b682.mp3"
+  },
+  {
+    "text": "The Nile River gives Egypt water for farms and for drinking.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5114,
+    "file": "8b4b10e77866.mp3"
+  },
+  {
+    "text": "Long ago, Egyptians wrote with pictures called hieroglyphs!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4503,
+    "file": "5fe7767f270a.mp3"
+  },
+  {
+    "text": "In ancient Egypt, cats were loved like family!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4422,
+    "file": "1d499bb2a1db.mp3"
+  },
+  {
+    "text": "Koshari is rice, lentils and pasta with yummy sauce!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5062,
+    "file": "0cd6ea1d2ddc.mp3"
+  },
+  {
+    "text": "This is Egypt! Tap a picture to learn more.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4134,
+    "file": "60166deee3f4.mp3"
+  },
+  {
+    "text": "Want to see the real pyramids?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2663,
+    "file": "39366caf9d96.mp3"
+  },
+  {
+    "text": "Let's see the real Nile River!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3134,
+    "file": "dd02bd9147c3.mp3"
+  },
+  {
+    "text": "Want to see the real Sphinx?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2779,
+    "file": "16d30d3e2540.mp3"
+  },
+  {
+    "text": "Let's see real camels!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2295,
+    "file": "ea544f87f861.mp3"
+  }
+]
