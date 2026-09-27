@@ -55,6 +55,15 @@ export const sounds = {
   sparkle: () => [0, 1, 2, 3].forEach((i) => tone(SCALE[6 + i], i * 0.05, 0.25, 'sine', 0.08)),
   /** Swoosh when something flies somewhere. */
   whoosh: () => tone(300, 0, 0.3, 'sine', 0.1, 900),
+  /** Little lift when she picks something up. */
+  pickup: () => tone(440, 0, 0.1, 'sine', 0.12, 660),
+  /** Soft plop when she puts something down anywhere. */
+  place: () => tone(620, 0, 0.09, 'triangle', 0.16, 380),
+  /** Satisfying click when a piece snaps into its spot. */
+  snap: () => {
+    tone(1400, 0, 0.05, 'square', 0.06)
+    tone(988, 0.03, 0.16, 'triangle', 0.18)
+  },
   /** Big victory fanfare. */
   fanfare: () => {
     ;[0, 2, 4, 5].forEach((s, i) => tone(SCALE[s], i * 0.14, 0.3, 'triangle', 0.2))
