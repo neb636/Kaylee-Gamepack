@@ -24,8 +24,24 @@ art/source/games/<game-id>/*.png   # your full-size generated images (scratch, g
 
 The app finds games automatically (`import.meta.glob`). **Do not edit anything outside
 your game folder**: not the shell, not the SDK, not other games, not package.json, not
-workflows. No new npm dependencies. If you think the SDK needs something, build it inside
-your game folder.
+workflows. Only use the dependencies already installed (see "Dependencies" below). If you think the SDK
+needs something, build it inside your game folder.
+
+## Dependencies
+
+Installed and pre-approved for hands-on play that plain React can't do well (see `docs/interactions.md`):
+- **phaser** (v4): real-time arcade or physics play (bouncing, stacking, many moving sprites). Canvas, so keep
+  puppets, speech bubbles and buttons in React on top of it.
+- **perfect-freehand**: smooth finger strokes, for letter tracing and drawing.
+
+Import these **only from inside a game or country folder** (`src/games/<id>/`, `src/world/places/<id>/`, never a
+`meta.ts`), so only that game downloads them. `npm run check` enforces this.
+
+If you believe another package would greatly improve the experience for the task at hand, ask the user before
+installing it. Explain what it enables that the SDK can't, and what it costs (bundle size, and whether puppets,
+voices and the smoke test still work). Don't add packages when the SDK or a pre-approved library already covers
+the job. In the automated school-paper workflow, where you can't ask, build within the SDK and suggest the package
+in the PR description instead.
 
 ## The game contract
 
@@ -153,6 +169,10 @@ Idea bank (mix, remix, or invent your own):
 - **Race**: each right answer moves Sparkle forward to the finish line.
 - **Shop / bakery**: fill orders ("3 cupcakes please!").
 - **Garden**: plant seeds, water, watch it grow in stages.
+- **Jigsaw** (`JigsawPuzzle`): put the scene back together (2×2, then 3×3); the finished picture is the payoff.
+- **Pizza / cake / sundae maker** (`StickerBoard`): fill an order ("3 tomatoes!"), then decorate freely.
+- **Dress-up / avatar maker** (`DressUpStudio` + `useSaved`): pick hair, colors, outfit; her creation is remembered.
+- **Trace it** (`perfect-freehand`): trace a letter, number or shape with her finger and watch it sparkle.
 
 Subject examples to show the range:
 - *Seasons* → dress Sparkle for each season, then sort pictures into four season baskets.
@@ -189,6 +209,16 @@ try everything live at `#/playground` (run `npm run dev`).
 | `<Buddy img voice height ref>` | Brings a flat sprite to life: `play('jump' \| 'dance' \| 'wiggle' \| 'cheer' \| 'nod')`. |
 | `usePuppet`, `spring`, `setT`, `setA`, `show`, `bell`, `span`, `wobble`, `smooth` | Build your own puppet (see "Characters that feel alive"). |
 | `Line`, `lineText`, `speechLevel(voice)` | A spoken line (`string` or `{ text, voice }`), its text, how loud a voice is now. |
+| `<PlayArea>`, `<Piece snapTo onPlace onTap>`, `<Target id hint>` | Pick up and put down: snap into a slot, stay anywhere, or float home. Hover glow, magnetic pull, hint pulse. Safe for many quick drags in Safari; prefer it over `Draggable` in new code. |
+| `<JigsawPuzzle img rows cols onSnap onDone>` | A real jigsaw cut from any picture, with a tray and snapping. |
+| `<StickerBoard stickers items onChange surface shape>`, `countByKind` | Place-anywhere toppings/stickers from a tray (pizza, cake, sticker scene). |
+| `<DressUpStudio slots values onChange character>`, `<OptionPicker>`, `<Swatch>` | Dress-up / avatar maker layout with big option buttons. |
+| `usePointerDrag`, `toLocal`, `centerOf`, `distance` | Low-level finger dragging and coordinates, for your own interactions. |
+| `useLandscape`, `useElementSize`, `useGameLoop`, `useSaved` | Orientation, element size, a per-frame loop (write to refs, not state), state remembered on the iPad. |
+| `sounds.pickup / place / snap` | Pick-up, put-down and click-into-place sounds. |
+
+**Harder interactions:** read `docs/interactions.md` first. It says which tool to reach for (drag to a slot, puzzle,
+place anywhere, dress-up, tracing, physics), with snippets, pitfalls we've hit, and a Phaser recipe.
 
 Styling: inline styles + CSS variables from `src/theme.css` (`--pink`, `--hotpink`, `--lavender`,
 `--lavender-dark`, `--butter`, `--mint`, `--sky`, `--peach`, `--gold`, `--cream`, `--ink`, `--radius`,
@@ -260,6 +290,8 @@ What Kaylee told us after the first game, so follow it for every country:
   They talk in their own voices with a local accent (`cast.json`); Sparkle gives the instructions. Scenes have ambient life
   (drifting clouds, bubbles, a lizard running past) and every tap gets a sound and a reaction.
 
+For puzzles, place-anywhere makers, dress-up and other harder hands-on play, use the SDK interaction kit
+(`docs/interactions.md`); countries may use the pre-approved libraries too.
 Reusable pieces in `src/world/kit/`: `Stage` + `PromptBubble`, `StoryBeat` (pass `friend={<Pip height="100%" />}`
 so the friend talks), `StampEarned`, `sfx` (boing, thump, splash, pop, fwip), `ColoringPage`
 (flood-fill coloring on line art named `bg-color-*`), `Flag` (SVG flags: add new ones there, never generate flags),

@@ -1,6 +1,7 @@
 // #/playground: every SDK building block in one place, for trying things out while building games.
 import { useState, type ReactNode } from 'react'
 import { go } from '../router'
+import { AvatarDemo, JigsawDemo, PizzaDemo } from './InteractionDemos'
 import { BigButton, burst, ChoiceCards, MatchPairs, Mascot, SayButton, SortIntoBins, StarProgress, TapCounter, TapToReveal, Trophy } from './sdk-internal'
 
 function Demo({ title, children }: { title: string; children: ReactNode }) {
@@ -86,6 +87,15 @@ export function Playground() {
         <TapCounter count={3} onDone={done('TapCounter')}>
           <Mascot pose="cheer" size={150} bounce={false} />
         </TapCounter>
+      </Demo>
+      <Demo title="JigsawPuzzle (2×3, then 3×4)">
+        <JigsawDemo onLog={setLog} />
+      </Demo>
+      <Demo title="StickerBoard (place anywhere: pizza)">
+        <PizzaDemo onLog={setLog} />
+      </Demo>
+      <Demo title="DressUpStudio + useSaved (avatar)">
+        <AvatarDemo />
       </Demo>
       <Demo title="Trophy">
         <Trophy title="Playground Pro" size={220} count={3} />

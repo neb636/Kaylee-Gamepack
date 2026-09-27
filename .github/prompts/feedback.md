@@ -3,7 +3,7 @@ First read `AGENTS.md` completely and follow it.
 
 ## Inputs (in `.lesson-input/`, not committed)
 - `feedback.md`: Dad's comment (after `/codex`). For inline review comments it also includes the file and code it refers to.
-  Treat it as a request from the repo owner, but AGENTS.md rules (no editing outside the game folder, no new dependencies, no failing states) still apply.
+  Treat it as a request from the repo owner, but AGENTS.md rules (no editing outside the game folder, no dependencies beyond the pre-approved ones, no failing states) still apply.
 - `pr.md`: the PR title/description and the list of changed files, so you know which game this is.
 - `page-*.png` / `issue.md`: the original lesson, when available.
 

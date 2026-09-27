@@ -56,6 +56,49 @@ test('SDK playground renders', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
+/** Drag with small steps like a finger (pointer events), from one element's center to another's. */
+async function dragTo(page: Page, from: ReturnType<Page['locator']>, to: ReturnType<Page['locator']>) {
+  const a = (await from.boundingBox())!
+  const b = (await to.boundingBox())!
+  await page.mouse.move(a.x + a.width / 2, a.y + a.height / 2)
+  await page.mouse.down()
+  await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 12 })
+  await page.mouse.up()
+}
+
+test('interaction kit: jigsaw snaps, toppings land, avatar changes', async ({ page }) => {
+  const errors = trackErrors(page)
+  await start(page, '#/playground')
+
+  // Jigsaw: a wrong spot floats the piece back; its own spot clicks it in.
+  const piece = page.getByRole('img', { name: 'Puzzle piece 1', exact: true })
+  await piece.scrollIntoViewIfNeeded()
+  await dragTo(page, piece, page.locator('[data-target="slot-1"]'))
+  await expect(page.getByRole('img', { name: 'Puzzle piece 1', exact: true })).toBeVisible()
+  await page.waitForTimeout(500)
+  await dragTo(page, piece, page.locator('[data-target="slot-0"]'))
+  await expect(page.getByRole('img', { name: 'Puzzle piece 1 (in place)' })).toBeVisible()
+
+  // Pizza: drag a topping from the tray onto the pizza, then move it, then drag it off.
+  const tomato = page.getByRole('img', { name: 'tomato in the tray' })
+  await tomato.scrollIntoViewIfNeeded()
+  await dragTo(page, tomato, page.locator('[data-target="surface"]'))
+  await expect(page.getByTestId('pizza-count')).toContainText('1 toppings')
+  await expect(page.getByTestId('pizza-count')).toContainText('tomato ×1')
+  for (let i = 0; i < 5; i++) await dragTo(page, tomato, page.locator('[data-target="surface"]'))
+  await expect(page.getByTestId('pizza-count')).toContainText('6 toppings')
+
+  // Avatar: pick a hair color; it's remembered.
+  await page.getByTestId('avatar-demo').scrollIntoViewIfNeeded()
+  await page.getByRole('tab', { name: 'Hair color' }).click()
+  await page.getByRole('button', { name: 'pink hair color' }).click()
+  await expect(page.getByTestId('avatar-demo')).toHaveAttribute('data-look', /"hairColor":"pink"/)
+  await page.reload()
+  await page.getByRole('button', { name: /let's play/i }).click()
+  await expect(page.getByTestId('avatar-demo')).toHaveAttribute('data-look', /"hairColor":"pink"/)
+  expect(errors).toEqual([])
+})
+
 for (const id of gameIds) {
   test(`game "${id}" loads, plays, and awards a trophy`, async ({ page }) => {
     const errors = trackErrors(page)
