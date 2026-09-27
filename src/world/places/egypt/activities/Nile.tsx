@@ -206,7 +206,7 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
           style={{ position: 'absolute', left: `${BOAT_X}%`, translate: '-50% -82%', height: 'min(34cqh, 30cqw)', aspectRatio: '1', zIndex: 3, pointerEvents: 'none' }}
         >
           <motion.div animate={{ y: [0, -5, 0], rotate: [-1.5, 1.5, -1.5] }} transition={{ repeat: Infinity, duration: 2.4 }} style={{ position: 'relative', width: '100%', height: '100%' }}>
-            <div style={{ position: 'absolute', left: '36%', bottom: '24%', height: '36%', zIndex: 1 }}>
+            <div style={{ position: 'absolute', left: '16%', bottom: '17%', height: '36%', zIndex: 3 }}>
               <Miu ref={miu} height="100%" />
             </div>
             <img src={art.felucca} alt="" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', zIndex: 2 }} />

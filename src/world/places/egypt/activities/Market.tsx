@@ -150,7 +150,7 @@ function Counter({ top, children }: { top?: ReactNode; children: ReactNode }) {
 function Bowl({ layers, size }: { layers: Food[]; size: string }) {
   return (
     <div style={{ position: 'relative', width: size, aspectRatio: '1.25' }}>
-      <div style={{ position: 'absolute', left: '10%', right: '10%', bottom: '44%', height: '60%', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
+      <div style={{ position: 'absolute', left: '10%', right: '10%', bottom: '50%', height: '60%', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
         <AnimatePresence>
           {layers.map((f, i) => (
             <motion.div
@@ -172,7 +172,7 @@ function Bowl({ layers, size }: { layers: Food[]; size: string }) {
           ))}
         </AnimatePresence>
       </div>
-      <img src={art.koshariBowl} alt="" draggable={false} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'bottom', clipPath: 'inset(28% 0 0 0)', zIndex: 10 }} />
+      <img src={art.koshariBowl} alt="" draggable={false} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'bottom', clipPath: 'inset(46% 0 0 0)', zIndex: 10 }} />
     </div>
   )
 }

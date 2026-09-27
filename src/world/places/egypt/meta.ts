@@ -13,11 +13,11 @@ const meta: PlaceMeta = {
   // Spots sit by the landmarks on the map picture: the pyramids and Sphinx at Giza, Cairo, the Nile, a temple.
   activities: [
     { id: 'pyramid', name: 'Pyramid Builders', icon: '🔺', pos: { x: 18, y: 26 }, sticker: { name: 'camel', img: art.jamal, fact: L.stickers.camel } },
-    { id: 'passage', name: 'Secret Passage', icon: '🔦', pos: { x: 46, y: 24 }, sticker: { name: 'scarab', img: art.scarab, fact: L.stickers.scarab } },
+    { id: 'passage', name: 'Secret Passage', icon: '🔥', pos: { x: 46, y: 24 }, sticker: { name: 'scarab', img: art.scarab, fact: L.stickers.scarab } },
     { id: 'sphinx', name: 'Wake the Sphinx', icon: '🦁', pos: { x: 36, y: 42 }, sticker: { name: 'fennec fox', img: art.fennec, fact: L.stickers.fennec } },
     { id: 'nile', name: 'Sail the Nile', icon: '⛵', pos: { x: 50, y: 56 }, sticker: { name: 'hippo', img: art.hippo, fact: L.stickers.hippo } },
     { id: 'scribe', name: 'Write Like a Pharaoh', icon: '📜', pos: { x: 67, y: 66 }, sticker: { name: 'ibis', img: art.ibis, fact: L.stickers.ibis } },
-    { id: 'market', name: "Miu's Market", icon: '🏮', pos: { x: 64, y: 22 }, sticker: { name: 'kitty', img: art.miu, fact: L.stickers.cat } },
+    { id: 'market', name: "Miu's Market", icon: '🍲', pos: { x: 64, y: 22 }, sticker: { name: 'kitty', img: art.miu, fact: L.stickers.cat } },
   ],
   facts: [
     { icon: '☀️', label: 'Weather', say: L.facts.weather },

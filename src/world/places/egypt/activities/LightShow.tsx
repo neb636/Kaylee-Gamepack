@@ -44,7 +44,8 @@ export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; on
   const lightsLeft = guests.length - awake
   const roping = lightsLeft === 0 && !fireworks
 
-  useEffect(() => setProgress(awake + (flag >= ROPE_PULLS ? 1 : 0), guests.length + 1), [awake, flag, guests.length, setProgress])
+  // Four stars (two friends each, then the flag): seven would crowd the prompt on a phone.
+  useEffect(() => setProgress(Math.floor(awake / 2) + (flag >= ROPE_PULLS ? 1 : 0), Math.ceil(guests.length / 2) + 1), [awake, flag, guests.length, setProgress])
 
   // Everyone dances while the fireworks go.
   useEffect(() => {
@@ -121,7 +122,8 @@ export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; on
   // Everyone stands on the sand in one row, as big as fits.
   const cast = [{ box: [0.87, 1] as [number, number] }, { box: [0.75, 1] as [number, number] }, ...guests]
   const widths = cast.reduce((s, c) => s + c.box[0], 0)
-  const h = `min(${landscape ? 26 : 16}vh, ${94 / widths}vw)`
+  // Portrait: two rows, so the friends she collected are big enough to see. Landscape: one row, clear of the lights.
+  const h = landscape ? `min(26vh, ${84 / widths}vw)` : `min(19vh, ${(94 * 2) / (widths + 1.4)}vw)`
 
   return (
     <Stage bg={art.bgGizaNight} prompt={fireworks ? undefined : roping ? L.show.rope : L.show.beam} style={{ backgroundImage: 'none', backgroundColor: '#3B2E6E' }}>
@@ -169,7 +171,7 @@ export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; on
 
         {/* The lights to drag, down the right side. */}
         {!roping && !fireworks && (
-          <div style={{ position: 'absolute', right: 'max(12px, env(safe-area-inset-right))', top: landscape ? '18%' : '22%', display: 'flex', flexDirection: 'column', gap: 'min(12px, 1.6vh)', zIndex: 5 }}>
+          <div style={{ ['--light' as string]: 'min(var(--target), calc((100vh - var(--top-clear) - 40px) / 7.5))', position: 'absolute', right: 'max(12px, env(safe-area-inset-right))', top: 'max(var(--top-clear), 12vh)', display: 'flex', flexDirection: 'column', gap: 'min(12px, 1.4vh)', zIndex: 5 }}>
             {/* Used lights shrink away but stay mounted (unmounting a light mid-drag leaves the drag stuck). */}
             {COLORS.map((c, i) => (
               <motion.div key={c} initial={{ scale: 0 }} animate={{ scale: used.includes(c) ? 0 : 1 }} transition={{ delay: used.includes(c) ? 0.2 : i * 0.05 }} style={{ pointerEvents: used.includes(c) ? 'none' : 'auto', height: used.includes(c) ? 0 : undefined }}>
@@ -179,11 +181,22 @@ export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; on
           </div>
         )}
 
+        {/* Until the first light is used: a hand shows the way from the lights to the big pyramid. */}
+        {awake === 0 && !busy && (
+          <motion.div
+            animate={{ x: [0, -window.innerWidth * 0.35], y: [0, window.innerHeight * 0.08], opacity: [0, 1, 1, 0] }}
+            transition={{ repeat: Infinity, duration: 1.8, repeatDelay: 0.6 }}
+            style={{ position: 'absolute', right: 'calc(var(--target) * 0.6)', top: 'calc(max(var(--top-clear), 12vh) + 30px)', fontSize: 'min(64px, 9vmin)', zIndex: 6, pointerEvents: 'none' }}
+          >
+            👆
+          </motion.div>
+        )}
+
         {/* The flag and its rope. */}
-        {(roping || fireworks) && <FlagPole raised={flag / ROPE_PULLS} onPull={() => void pull()} glow={flag === 0} />}
+        {(roping || fireworks) && <FlagPole raised={flag / ROPE_PULLS} onPull={() => void pull()} glow={flag === 0} bottom={landscape ? '32vh' : '50vh'} />}
 
         {/* Everyone on the sand: Sparkle, Miu, then each friend (in the dark until a light wakes them). */}
-        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom) + 2vh)', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '0.5vw', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', left: 0, right: landscape ? 'calc(var(--target) + 24px)' : 0, bottom: 'calc(var(--safe-bottom) + 2vh)', display: 'flex', flexWrap: landscape ? 'nowrap' : 'wrap', justifyContent: 'center', alignItems: 'flex-end', gap: '0.5vw', rowGap: '1vh', padding: landscape ? 0 : '0 3vw', pointerEvents: 'none' }}>
           <SparklePuppet ref={sparkle} height={h} />
           <Miu ref={miu} height={`calc(${h} * 0.8)`} />
           {guests.map((g, i) => (
@@ -231,8 +244,8 @@ function DragLight({ color, glow, onDrop }: { color: string; glow: boolean; onDr
       }}
       className={glow && !off ? 'world-glow' : undefined}
       style={{
-        width: 'var(--target)',
-        height: 'var(--target)',
+        width: 'var(--light)',
+        height: 'var(--light)',
         borderRadius: '50%',
         background: `radial-gradient(circle at 35% 35%, #fff 0 18%, ${color} 45%, ${color}AA 70%)`,
         border: '4px solid #fff',
@@ -249,9 +262,9 @@ function DragLight({ color, glow, onDrop }: { color: string; glow: boolean; onDr
 }
 
 /** A flagpole on the right: pull the rope down (or tap it) and the flag climbs a third of the way each time. */
-function FlagPole({ raised, onPull, glow }: { raised: number; onPull: () => void; glow: boolean }) {
+function FlagPole({ raised, onPull, glow, bottom }: { raised: number; onPull: () => void; glow: boolean; bottom: string }) {
   return (
-    <div style={{ position: 'absolute', right: '6vw', top: '14vh', bottom: '30vh', width: 'min(26vw, 200px)', zIndex: 5 }}>
+    <div style={{ position: 'absolute', right: '6vw', top: 'max(var(--top-clear), 12vh)', bottom, width: 'min(26vw, 200px)', zIndex: 5 }}>
       <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 10, borderRadius: 5, background: '#E9D6B0', border: '3px solid #3A2A33' }} />
       <div style={{ position: 'absolute', left: -6, top: -14, width: 22, height: 22, borderRadius: '50%', background: 'var(--gold)', border: '3px solid #3A2A33' }} />
       <motion.div animate={{ bottom: `${raised * 78}%` }} transition={{ type: 'spring', bounce: 0.3 }} style={{ position: 'absolute', left: 10 }}>

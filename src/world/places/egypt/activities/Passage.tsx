@@ -67,6 +67,8 @@ function Tunnels({ maze, first, prompt, onExit }: { maze: Maze; first: boolean; 
   const [moved, setMoved] = useState(false)
   const [facing, setFacing] = useState(1)
   const [leaving, setLeaving] = useState(false)
+  const [walking, setWalking] = useState(false)
+  const walk = useRef({ on: false, last: 0 })
   const miu = useRef<PuppetHandle>(null)
   const bats = useRef<Record<string, PuppetHandle | null>>({})
   const finger = useRef<Pt | null>(null)
@@ -89,6 +91,11 @@ function Tunnels({ maze, first, prompt, onExit }: { maze: Maze; first: boolean; 
       raf = requestAnimationFrame(tick)
       const dt = Math.min(0.05, (now - last) / 1000)
       last = now
+      // Walking while she moves, settling back to sitting a moment after she stops.
+      if (walk.current.on && now - walk.current.last > 200) {
+        walk.current.on = false
+        setWalking(false)
+      }
       const f = finger.current
       if (!f || leaving) return
       const cur = pointAt(maze, posRef.current)
@@ -101,6 +108,11 @@ function Tunnels({ maze, first, prompt, onExit }: { maze: Maze; first: boolean; 
       if (Math.abs(np.x - cur.x) > 0.05) setFacing(np.x > cur.x ? 1 : -1)
       posRef.current = next
       setPos(next)
+      walk.current.last = now
+      if (!walk.current.on) {
+        walk.current.on = true
+        setWalking(true)
+      }
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
@@ -152,7 +164,7 @@ function Tunnels({ maze, first, prompt, onExit }: { maze: Maze; first: boolean; 
   const sv = (p: Pt) => (landscape ? p : { x: p.y, y: p.x })
 
   return (
-    <Stage bg={art.bgTomb} prompt={prompt} style={{ backgroundColor: '#2A1A2E', backgroundImage: 'none' }}>
+    <Stage bg={art.bgTomb} prompt={open && maze.scarabs.length > 0 ? L.passage.door : prompt} style={{ backgroundColor: '#2A1A2E', backgroundImage: 'none' }}>
       <div
         style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', containerType: 'size', touchAction: 'none' }}
         onPointerDown={(e) => {
@@ -164,8 +176,7 @@ function Tunnels({ maze, first, prompt, onExit }: { maze: Maze; first: boolean; 
         onPointerMove={(e) => {
           if (finger.current && box.current) finger.current = toMaze(e)
         }}
-        onPointerUp={() => (finger.current = null)}
-        onPointerCancel={() => (finger.current = null)}
+        // Letting go keeps the target, so a quick tap sends Miu walking there too.
       >
         <div ref={box} style={{ position: 'relative', width: landscape ? `min(96cqw, calc(88cqh * ${W / H}))` : `min(94cqw, calc(86cqh * ${H / W}))`, aspectRatio: landscape ? `${W} / ${H}` : `${H} / ${W}` }}>
           <svg viewBox={view} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible' }}>
@@ -238,7 +249,7 @@ function Tunnels({ maze, first, prompt, onExit }: { maze: Maze; first: boolean; 
           })}
           {/* Miu with her torch. */}
           <div style={{ position: 'absolute', left: `${b.x}%`, top: `${b.y}%`, translate: '-50% -78%', height: unit * 20, zIndex: 5, pointerEvents: 'none', display: 'flex', alignItems: 'flex-end' }}>
-            <Miu ref={miu} height="100%" flip={facing < 0} torch />
+            <Miu ref={miu} height="100%" flip={facing < 0} torch walking={walking} />
           </div>
         </div>
       </div>

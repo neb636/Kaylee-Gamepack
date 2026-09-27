@@ -17,7 +17,7 @@ import { ALL_GLYPHS, Glyph, NAME_GLYPHS, type GlyphId } from './glyphs'
 
 const PROMPTS = [L.scribe.k, L.scribe.a, L.scribe.y, L.scribe.l, L.scribe.e, L.scribe.e2]
 const HINTED = 3 // the first three spots show a faint outline
-const HOLD_MS = 700
+const HOLD_MS = 550
 
 function choicesFor(i: number): GlyphId[] {
   const want = NAME_GLYPHS[i].glyph
@@ -33,7 +33,7 @@ export function Scribe({ onDone, setProgress }: ActivityProps) {
   const [help, setHelp] = useState(false)
   const [framed, setFramed] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
-  const toldHold = useRef(false)
+  const early = useRef(0)
   const busy = useRef(false)
   const ibis = useRef<PuppetHandle>(null)
   const miu = useRef<PuppetHandle>(null)
@@ -41,7 +41,8 @@ export function Scribe({ onDone, setProgress }: ActivityProps) {
   const landscape = useLandscape()
   const want = NAME_GLYPHS[Math.min(done, NAME_GLYPHS.length - 1)].glyph
 
-  useEffect(() => setProgress(done, NAME_GLYPHS.length), [done, setProgress])
+  // Three stars (one per two letters): six would crowd the prompt on a phone.
+  useEffect(() => setProgress(Math.floor(done / 2), NAME_GLYPHS.length / 2), [done, setProgress])
   useEffect(() => () => clearTimeout(timer.current), [])
 
   const press = (g: GlyphId) => {
@@ -63,11 +64,8 @@ export function Scribe({ onDone, setProgress }: ActivityProps) {
     if (!holding) return
     clearTimeout(timer.current)
     setHolding(null)
-    // Let go too soon: tell her how, once.
-    if (!busy.current && !toldHold.current) {
-      toldHold.current = true
-      void say(L.scribe.hold)
-    }
+    // Let go too soon: tell her how (again every other time, so tapping never feels broken).
+    if (!busy.current && early.current++ % 2 === 0) void say(L.scribe.hold)
   }
 
   const stamp = async () => {
@@ -99,7 +97,7 @@ export function Scribe({ onDone, setProgress }: ActivityProps) {
     if (alive()) onDone()
   }
 
-  if (story) return <StoryBeat lines={[L.scribe.story, L.scribe.name]} friend={<Miu height="100%" />} bg={art.bgScribe} onDone={() => setStory(false)} />
+  if (story) return <StoryBeat lines={[L.scribe.story]} friend={<Miu height="100%" />} bg={art.bgScribe} onDone={() => setStory(false)} />
 
   const slot = landscape ? 'min(12cqw, 30cqh)' : 'min(10cqh, 26cqw)'
   const stampSize = landscape ? 'min(19cqh, 13cqw)' : 'min(12cqh, 22cqw)'

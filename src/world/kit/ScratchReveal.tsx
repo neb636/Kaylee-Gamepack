@@ -120,11 +120,28 @@ export const ScratchReveal = forwardRef<ScratchRevealHandle, ScratchRevealProps>
       report(true)
     },
     clearRegion: (g) => {
+      // A soft, lumpy hole (overlapping feathered puffs), like sand blowing away, not a window cut out.
       wipe((c, w, h) => {
-        c.fillStyle = '#000'
-        c.beginPath()
-        c.ellipse(((g.x + g.w / 2) / 100) * w, ((g.y + g.h / 2) / 100) * h, (g.w / 100) * w * 0.62, (g.h / 100) * h * 0.62, 0, 0, Math.PI * 2)
-        c.fill()
+        const puff = (cx: number, cy: number, r: number) => {
+          const grad = c.createRadialGradient(cx, cy, 0, cx, cy, r)
+          grad.addColorStop(0, 'rgba(0,0,0,1)')
+          grad.addColorStop(0.6, 'rgba(0,0,0,1)')
+          grad.addColorStop(1, 'rgba(0,0,0,0)')
+          c.fillStyle = grad
+          c.beginPath()
+          c.arc(cx, cy, r, 0, Math.PI * 2)
+          c.fill()
+        }
+        const cx = ((g.x + g.w / 2) / 100) * w
+        const cy = ((g.y + g.h / 2) / 100) * h
+        const rx = (g.w / 100) * w * 0.5
+        const ry = (g.h / 100) * h * 0.5
+        puff(cx, cy, Math.max(rx, ry) * 0.9)
+        for (let i = 0; i < 14; i++) {
+          const a = (i / 14) * Math.PI * 2
+          const k = 0.55 + ((i * 37) % 10) / 30
+          puff(cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k, Math.min(rx, ry) * (0.55 + ((i * 53) % 10) / 40))
+        }
       })
       report(true)
     },

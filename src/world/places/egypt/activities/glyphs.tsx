@@ -47,6 +47,8 @@ const DRAW: Record<GlyphId, () => ReactElement> = {
       {/* Lying lion facing right: body, mane and head, front paws forward, tail curled up behind */}
       <path d="M18 70 C18 54 30 48 46 48 H64 C70 48 74 52 74 58 V74 H22 C19 74 18 72 18 70 Z" />
       <circle cx="76" cy="46" r="15" />
+      {/* Mane */}
+      <path d="M62 34 C58 44 58 56 64 64 C58 60 54 50 56 40 Z M70 30 C64 28 60 32 58 38 L66 36 Z" />
       <path d="M86 42 C92 42 94 48 90 52 L84 52 Z" />
       <path d="M66 74 H94 C96 74 96 80 92 80 H66 Z" />
       <path d="M20 62 C8 60 6 46 12 38" fill="none" stroke={INK} strokeWidth="5" strokeLinecap="round" />

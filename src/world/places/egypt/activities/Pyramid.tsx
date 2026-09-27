@@ -135,7 +135,7 @@ export function Pyramid({ onDone, setProgress }: ActivityProps) {
   if (story) return <StoryBeat lines={[L.pyramid.story]} friend={<Jamal height="100%" />} bg={art.bgGizaDay} onDone={() => setStory(false)} />
 
   const site = (
-    <div style={{ position: 'relative', width: landscape ? 'min(100%, 115cqh)' : 'min(100%, 70cqh)', aspectRatio: '1.25', containerType: 'size' }}>
+    <div style={{ position: 'relative', width: 'min(100%, calc(100cqh * 1.25))', aspectRatio: '1.25', containerType: 'size' }}>
       {SLOTS.map((s, i) => {
         const { w, h } = SIZE[s.size]
         const box = { position: 'absolute' as const, left: `${s.x - w / 2}%`, bottom: `${s.bottom}%`, width: `${w}%`, height: `${h}%` }
@@ -187,21 +187,22 @@ export function Pyramid({ onDone, setProgress }: ActivityProps) {
           ✨
         </motion.div>
       )}
-      <div style={{ position: 'absolute', right: '-2%', bottom: 0, height: '38%', pointerEvents: 'none', zIndex: 3 }}>
-        <Miu ref={miu} height="100%" />
-      </div>
     </div>
   )
 
   // Jamal and his sled with the stones he brought. She drags a stone (or taps it) to the glowing slot.
   const hauler = (
-    <div style={{ position: 'relative', display: 'flex', alignItems: 'flex-end', height: landscape ? 'min(40cqh, 26cqw)' : 'min(24cqh, 38cqw)', maxWidth: landscape ? '44%' : '100%', flexShrink: 0 }}>
+    <div style={{ position: 'relative', display: 'flex', alignItems: 'flex-end', height: landscape ? 'min(40cqh, 19cqw)' : 'min(24cqh, 38cqw)', flexShrink: 0, maxWidth: landscape ? '42%' : '100%' }}>
       <motion.div key={sled.id} initial={{ x: '-70vw' }} animate={{ x: 0 }} transition={{ duration: 1.1, ease: 'easeOut' }} style={{ display: 'flex', alignItems: 'flex-end', height: '100%' }}>
-        <div role="button" aria-label="Jamal" onClick={() => !busy.current && (void jamal.current?.play('chew'), void say(pick(L.tickle.jamal)))} style={{ height: '100%', aspectRatio: '470 / 430', flexShrink: 0 }}>
+        <div role="button" aria-label="Jamal" onClick={() => !busy.current && (void jamal.current?.play('chew'), void say(pick(L.tickle.jamal)))} style={{ position: 'relative', height: '100%', aspectRatio: '470 / 430', flexShrink: 0 }}>
           <Jamal ref={jamal} height="100%" />
+          {/* Miu rides on Jamal's hump */}
+          <div style={{ position: 'absolute', left: '30%', bottom: '58%', height: '42%', pointerEvents: 'none' }}>
+            <Miu ref={miu} height="100%" />
+          </div>
         </div>
         {/* The sled: two runners and a deck, with the stones on it. */}
-        <div style={{ position: 'relative', height: '72%', aspectRatio: sled.sizes.length > 1 ? '2' : '1.3', marginLeft: '-4%', flexShrink: 0, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '6%', paddingBottom: '10%' }}>
+        <div style={{ position: 'relative', height: '72%', aspectRatio: sled.sizes.length > 1 ? '1.7' : '1.2', marginLeft: '-8%', flexShrink: 0, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '6%', paddingBottom: '10%' }}>
           <svg viewBox="0 0 200 40" preserveAspectRatio="none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, width: '100%', height: '18%', overflow: 'visible' }}>
             <path d="M6 14 H194 Q200 14 198 22 L196 26 H10 Q2 26 2 20 Z" fill="#C98A5A" stroke="#3A2A33" strokeWidth="4" vectorEffect="non-scaling-stroke" />
             <path d="M0 34 Q0 40 10 40 H186 Q198 40 200 28" fill="none" stroke="#8C5A3A" strokeWidth="5" strokeLinecap="round" vectorEffect="non-scaling-stroke" />

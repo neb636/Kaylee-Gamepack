@@ -12,6 +12,8 @@ export interface MiuProps {
   onTap?: () => void
   /** Holds a torch (the flame flickers). */
   torch?: boolean
+  /** Trotting along (bob, lean, swinging paws, a happy tail) while she's being moved. */
+  walking?: boolean
 }
 
 const FUR = '#F6C68E'
@@ -28,7 +30,7 @@ export const MIU_ACTIONS = { pounce: 0.9, purr: 1.6, stretch: 1.2, cheer: 1, wav
 type Part = 'root' | 'shadow' | 'head' | 'earL' | 'earR' | 'tail' | 'armL' | 'armR' | 'torch' | 'flame' | 'eyeL' | 'eyeR' | 'openL' | 'openR' | 'pupilL' | 'pupilR' | 'happyL' | 'happyR' | 'mouth' | 'tongue' | 'smile' | 'whiskers' | 'blushL' | 'blushR'
 
 /** Miu the kitten. Actions: pounce, purr, stretch, cheer, wave, shake, sniff, dance, wiggle. Voice: miu. */
-export const Miu = forwardRef<PuppetHandle, MiuProps>(function Miu({ height, style, flip, onTap, torch }, ref) {
+export const Miu = forwardRef<PuppetHandle, MiuProps>(function Miu({ height, style, flip, onTap, torch, walking }, ref) {
   const st = useRef({ headRot: 0, lift: 0, earL: spring(160, 8), earR: spring(160, 8), tail: spring(90, 6), flick: 0, nextFlick: 2 }).current
   const ink = useInk<Part>()
   const { svg, part } = usePuppet<Part>(ref, {
@@ -56,6 +58,16 @@ export const Miu = forwardRef<PuppetHandle, MiuProps>(function Miu({ height, sty
       let tailWag = Math.sin(t * 1.6) * 10
       let blush = 1
 
+      if (walking && !act) {
+        const step = t * 13
+        lift = Math.abs(Math.sin(step)) * 14
+        rot = 5 + Math.sin(step) * 3
+        sy *= 1 - Math.abs(Math.cos(step)) * 0.04
+        armL += Math.sin(step) * 16
+        armR += Math.sin(step + Math.PI) * 10
+        tailWag = 18 + Math.sin(step) * 16
+        headRot += Math.sin(step) * 3
+      }
       if (act === 'pounce' || act === 'cheer') {
         const crouch = bell(span(q, 0, 0.25))
         const air = bell(span(q, 0.25, 0.72))
@@ -92,7 +104,8 @@ export const Miu = forwardRef<PuppetHandle, MiuProps>(function Miu({ height, sty
         mouth = Math.max(mouth, e * 0.9)
         headRot -= 4 * e
       } else if (act === 'wave') {
-        armR = lerp(armR, -150, env) + Math.sin(q * Math.PI * 7) * 22 * env
+        // Wave out to the side, above the shoulder, so the paw doesn't cover her face.
+        armR = lerp(armR, -118, env) + Math.sin(q * Math.PI * 7) * 18 * env
         headRot += 6 * env
         happy = true
         mouth = Math.max(mouth, 0.3 * env)

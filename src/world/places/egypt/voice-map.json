@@ -147,11 +147,11 @@
     "file": "eec5c6518671.mp3"
   },
   {
-    "text": "Now pick the smaller stone. Small stones go on top!",
+    "text": "Pick the small stone!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 5195,
-    "file": "84df74c4f27b.mp3"
+    "ms": 1896,
+    "file": "4574d930a71b.mp3"
   },
   {
     "text": "Oof! Too big for up there!",
@@ -203,11 +203,18 @@
     "file": "8e0426cacd94.mp3"
   },
   {
-    "text": "Drag Miu through the tunnel to the scarab!",
+    "text": "Drag Miu to the scarab!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3435,
-    "file": "9e12ff23ea33.mp3"
+    "ms": 2543,
+    "file": "de2ae4a5cc51.mp3"
+  },
+  {
+    "text": "Now find the door!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1593,
+    "file": "63e46c021607.mp3"
   },
   {
     "text": "Now find two scarabs!",
@@ -280,11 +287,11 @@
     "file": "735db5fb276b.mp3"
   },
   {
-    "text": "Drag the boat up and down to catch the lotus flowers!",
+    "text": "Catch the lotus flowers!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4940,
-    "file": "4c42d3d5c03e.mp3"
+    "ms": 1785,
+    "file": "84c03767676a.mp3"
   },
   {
     "text": "Bump! Hee hee, hello!",
@@ -294,18 +301,18 @@
     "file": "985ff06c7063.mp3"
   },
   {
-    "text": "The farm is thirsty! Pull the bucket down three times!",
+    "text": "Pull the bucket three times!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4800,
-    "file": "52d50451862a.mp3"
+    "ms": 2276,
+    "file": "73cc636e1ea9.mp3"
   },
   {
-    "text": "This farm is thirsty too! Pull the bucket five times!",
+    "text": "Now pull it five times!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4896,
-    "file": "37454c2ff247.mp3"
+    "ms": 2538,
+    "file": "56eff35b3745.mp3"
   },
   {
     "text": "Four!",
@@ -427,18 +434,11 @@
     "file": "0941834b9ed9.mp3"
   },
   {
-    "text": "Long ago, Egyptians wrote with little pictures called hieroglyphs!",
+    "text": "Let's write your name like a pharaoh, Kaylee!",
     "voice": "miu",
     "sig": "e1570748b7",
-    "ms": 4291,
-    "file": "d6bdda0c7766.mp3"
-  },
-  {
-    "text": "Let's write your name, Kaylee, like a pharaoh!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4294,
-    "file": "3ecae37fd5b1.mp3"
+    "ms": 3364,
+    "file": "a514880b263e.mp3"
   },
   {
     "text": "Press and hold the stamp that matches!",
@@ -504,11 +504,11 @@
     "file": "433630cbfdc0.mp3"
   },
   {
-    "text": "Kings and queens wrote their names in an oval like this!",
+    "text": "Egyptians wrote with pictures called hieroglyphs!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4570,
-    "file": "374da84c7b51.mp3"
+    "ms": 2928,
+    "file": "5755fbc57a59.mp3"
   },
   {
     "text": "Welcome to my market stall! Let's make koshari!",
@@ -525,11 +525,11 @@
     "file": "ef5813870283.mp3"
   },
   {
-    "text": "Follow the recipe! First, the rice!",
+    "text": "First, the rice!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4694,
-    "file": "e2a8300546f8.mp3"
+    "ms": 1879,
+    "file": "afc726d93cb4.mp3"
   },
   {
     "text": "Next, the lentils!",

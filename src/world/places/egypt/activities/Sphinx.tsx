@@ -22,14 +22,19 @@ const DONE_AT = 0.5 // share of a region she has to rub before the rest puffs aw
 
 // The sand box is a bit taller than the Sphinx, so the heap has a rounded top above his headdress.
 const PAD_TOP = 0.12
-const toSand = (r: RevealRegion): RevealRegion => ({ x: r.x, w: r.w, y: (PAD_TOP * 100 + r.y) / (1 + PAD_TOP), h: r.h / (1 + PAD_TOP) })
+// ...and wider, so the heap slopes down to the ground on both sides.
+const PAD_X = 0.08
+const toSand = (r: RevealRegion): RevealRegion => ({ x: (PAD_X * 100 + r.x) / (1 + 2 * PAD_X), w: r.w / (1 + 2 * PAD_X), y: (PAD_TOP * 100 + r.y) / (1 + PAD_TOP), h: r.h / (1 + PAD_TOP) })
 const REGIONS = STAGES.map((s) => toSand(SPHINX_REGIONS[s]))
-// Pot pieces hidden under the sand on his back (in % of the sand box).
+// Pot pieces hidden under the sand on his back (in % of the Sphinx).
 const PIECE_SPOTS = [
-  { x: 74, y: 66 },
-  { x: 84, y: 56 },
+  { x: 76, y: 62 },
+  { x: 86, y: 52 },
   { x: 92, y: 76 },
-]
+].map((p) => {
+  const r = toSand({ x: p.x, y: p.y, w: 0, h: 0 })
+  return { x: r.x, y: r.y }
+})
 // The pot comes apart in three bands (clip-path insets: top, bottom).
 const PIECES = [
   { top: 0, bottom: 62 },
@@ -40,21 +45,23 @@ const PIECES = [
 /** Paints the heap of sand: a big rounded dune with a few ripples and pebbles. */
 function paintSand(ctx: CanvasRenderingContext2D, w: number, h: number) {
   ctx.clearRect(0, 0, w, h)
-  // The very top of his headdress pokes out of the heap.
+  // A dune: it slopes down to the ground on both sides, and the very top of his headdress pokes out.
   const top = h * 0.2
+  const ridge = new Path2D()
+  ridge.moveTo(-w * 0.02, h * 1.01)
+  ridge.bezierCurveTo(w * 0.02, h * 0.62, w * 0.12, top, w * 0.4, top)
+  ridge.bezierCurveTo(w * 0.56, top, w * 0.62, h * 0.28, w * 0.78, h * 0.32)
+  ridge.bezierCurveTo(w * 0.94, h * 0.36, w * 0.99, h * 0.7, w * 1.02, h * 1.01)
+  const heap = new Path2D(ridge)
+  heap.closePath()
   ctx.fillStyle = '#F2C98E'
-  ctx.beginPath()
-  ctx.moveTo(0, h)
-  ctx.lineTo(0, h * 0.42)
-  ctx.bezierCurveTo(w * 0.08, h * 0.26, w * 0.24, top, w * 0.4, top)
-  ctx.bezierCurveTo(w * 0.55, top, w * 0.62, h * 0.26, w * 0.8, h * 0.3)
-  ctx.bezierCurveTo(w * 0.92, h * 0.34, w, h * 0.42, w, h * 0.5)
-  ctx.lineTo(w, h)
-  ctx.closePath()
-  ctx.fill()
+  ctx.fill(heap)
+  // Only the top of the dune gets a line; its feet melt into the ground.
   ctx.lineWidth = Math.max(3, w * 0.006)
   ctx.strokeStyle = '#C99B6A'
-  ctx.stroke()
+  ctx.stroke(ridge)
+  ctx.fillStyle = '#F2C98E'
+  ctx.fillRect(0, h * 0.94, w, h * 0.06)
   // Ripples
   ctx.strokeStyle = '#E3B477'
   ctx.lineCap = 'round'
@@ -115,7 +122,7 @@ export function Sphinx({ onDone, setProgress }: ActivityProps) {
       await sphinx.current?.play('sneeze')
       if (!alive()) return
       void say(L.sphinx.sneeze)
-      sand.current?.clearCircle(40, 30, 22)
+      sand.current?.clearCircle(REGIONS[0].x + REGIONS[0].w / 2, 30, 20)
       burst(0.4, 0.4)
       await wait(900)
       if (!alive()) return
@@ -190,7 +197,7 @@ export function Sphinx({ onDone, setProgress }: ActivityProps) {
 
   const prompt = stageIndex >= 0 ? PROMPTS[phase as Stage3] : phase === 'pot' ? L.sphinx.pieces : undefined
   const hintRegion = stageIndex >= 0 && !rubbed ? REGIONS[stageIndex] : null
-  const aspect = SPHINX_BOX[0] / (SPHINX_BOX[1] * (1 + PAD_TOP))
+  const aspect = (SPHINX_BOX[0] * (1 + 2 * PAD_X)) / (SPHINX_BOX[1] * (1 + PAD_TOP))
 
   return (
     <Stage bg={art.bgSphinx} prompt={prompt} style={{ backgroundPosition: 'center bottom' }}>
@@ -201,7 +208,7 @@ export function Sphinx({ onDone, setProgress }: ActivityProps) {
             role="button"
             aria-label="Sphinx"
             onClick={() => phase === 'end' && !busy.current && (void sphinx.current?.play('smile'), void say(pick(L.tickle.sphinx)))}
-            style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: `${100 / (1 + PAD_TOP)}%` }}
+            style={{ position: 'absolute', left: `${(PAD_X * 100) / (1 + 2 * PAD_X)}%`, width: `${100 / (1 + 2 * PAD_X)}%`, bottom: 0, height: `${100 / (1 + PAD_TOP)}%` }}
           >
             <SphinxPuppet ref={sphinx} height="100%" asleep={!awake} />
           </div>
