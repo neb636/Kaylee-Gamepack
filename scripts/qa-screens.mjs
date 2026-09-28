@@ -166,6 +166,23 @@ const SCREENS = [
     },
   },
   { name: 'party', hash: '#/world/australia/party', stampAll: true, act: skip },
+  { name: 'china-intro', hash: '#/world/china', reset: true, wait: 300 },
+  { name: 'china-hub', hash: '#/world/china', act: skip },
+  { name: 'dumplings-arrive', hash: '#/world/china/dumplings', reset: true, wait: 400 },
+  { name: 'dumplings-oldtown', hash: '#/world/china/dumplings', reset: true, act: skip },
+  {
+    name: 'dumplings-kitchen',
+    hash: '#/world/china/dumplings',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.getByRole('button', { name: 'zig-zag bridge' }).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(2600)
+      await p.getByRole('button', { name: 'dumpling house door' }).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(2200)
+    },
+  },
+  { name: 'china-parade-stub', hash: '#/world/china/party', wait: 800 },
   { name: 'passport-full', hash: '#/world/passport', stampAll: true },
   {
     name: 'win-ceremony',
