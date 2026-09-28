@@ -26,6 +26,8 @@ const SCENARIOS = [
   { name: 'croc', id: 'croc', hash: '#/world/australia/croc' },
   { name: 'postcard', id: 'postcard', hash: '#/world/australia/postcard' },
   { name: 'party (finale)', id: 'party', hash: '#/world/australia/party', stampAll: true },
+  { name: 'china intro + map', id: 'china', hash: '#/world/china', reset: true, play: false },
+  { name: 'china dumpling house', id: 'dumplings', hash: '#/world/china/dumplings', reset: true },
   { name: 'egypt intro + map', id: 'egypt-intro', hash: '#/world/egypt', reset: true, play: false },
   { name: 'pyramid', id: 'pyramid', hash: '#/world/egypt/pyramid' },
   { name: 'passage', id: 'passage', hash: '#/world/egypt/passage' },

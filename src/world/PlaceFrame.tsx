@@ -123,6 +123,11 @@ function RunningPlace({ entry, activity }: { entry: PlaceEntry; activity?: strin
           <BarPill>
             📕 {stamps.length}/{meta.activities.length}
           </BarPill>
+          {!!meta.puzzles?.length && (
+            <motion.button aria-label="Puzzle book" whileTap={{ scale: 0.85 }}
+              onClick={() => { sounds.pop(); go.world('puzzles', meta.id) }}
+              style={{ pointerEvents: 'auto', width: 'var(--btn)', height: 'var(--btn)', flexShrink: 0, borderRadius: '50%', background: 'var(--mint)', border: '4px solid #fff', fontSize: 'calc(var(--btn) * .5)', boxShadow: 'var(--shadow)' }}>🧩</motion.button>
+          )}
           {!!meta.videos?.length && (
             <motion.button
               aria-label="Theater"
