@@ -2,7 +2,7 @@
 // talks in her own voice, and can chew, say yuck, yawn, cheer, dance and wiggle. `sleepy` droops her eyelids to sleep.
 import { forwardRef, useId, useRef, type CSSProperties } from 'react'
 import { bell, clamp, lerp, setA, setT, show, smooth, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../sdk'
-import { inkPass as inkPassIn, line as lineIn, useInk } from './ink'
+import { inkPass as inkPassIn, line as lineIn, useInk } from '../../../kit/ink'
 
 export interface KokoProps {
   height: string
