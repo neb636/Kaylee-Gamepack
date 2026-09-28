@@ -32,6 +32,27 @@ const PUPPET_SCENARIOS = [
   ['chompy', 'cheer', 1.2],
   ['sparkle', 'cheer', 1.4],
   ['sparkle', 'wave', 1.4],
+  ['doudou', 'hop', 1.0],
+  ['doudou', 'run', 1.1],
+  ['doudou', 'pour', 1.8],
+  ['cheffu', 'knead', 1.8],
+  ['cheffu', 'laugh', 1.8],
+  ['cheffu', 'aiyo', 1.7],
+  ['dumpling', 'squish', 0.7],
+  ['dumpling', 'hop', 0.9],
+  ['dumpling-steaming', 'wobble', 1.1],
+  ['miu', 'pounce', 1.1],
+  ['miu', 'purr', 1.7],
+  ['miu', 'wave', 1.3],
+  ['miu-torch', 'shake', 1],
+  ['jamal', 'walk', 1.2],
+  ['jamal', 'chew', 1.4],
+  ['jamal', 'cheer', 1.2],
+  ['sphinx', 'sneeze', 1.4],
+  ['sphinx-asleep', 'wake', 1.3],
+  ['tutu', 'yawn', 1.9],
+  ['tutu', 'wave', 1.3],
+  ['tutu', 'giggle', 1.1],
 ].map(([id, action, seconds]) => ({
   name: `${id}-${action}`,
   seconds,
@@ -121,6 +142,52 @@ const GAME_SCENARIOS = [
         await page.waitForTimeout(45)
       }
       await page.mouse.up()
+    },
+  },
+  {
+    name: 'passage-walk',
+    seconds: 2.5,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/egypt/passage`)
+      await page.waitForTimeout(500)
+      await skip(page)
+      await page.waitForTimeout(600)
+    },
+    act: async (page) => {
+      // Drag Miu along the first tunnel and round the corner (torchlight follows her).
+      const box = await page.locator('svg[viewBox="0 0 160 100"], svg[viewBox="0 0 100 160"]').first().boundingBox()
+      if (!box) throw new Error('no maze found')
+      const land = box.width > box.height
+      const at = (x, y) => (land ? { x: box.x + (x / 160) * box.width, y: box.y + (y / 100) * box.height } : { x: box.x + (y / 100) * box.width, y: box.y + (x / 160) * box.height })
+      const a = at(80, 76)
+      await page.mouse.move(a.x, a.y)
+      await page.mouse.down()
+      await page.waitForTimeout(1100)
+      const b = at(80, 30)
+      await page.mouse.move(b.x, b.y)
+      await page.waitForTimeout(1000)
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'sphinx-rub',
+    seconds: 2.5,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/egypt/sphinx`)
+      await page.waitForTimeout(500)
+      await skip(page)
+      await page.waitForTimeout(600)
+    },
+    act: async (page) => {
+      const c = await page.getByLabel('Rub the sand away').boundingBox()
+      if (!c) throw new Error('no sand found')
+      for (let row = 0; row < 5; row++) {
+        const y = c.y + c.height * (0.18 + row * 0.08)
+        await page.mouse.move(c.x + c.width * 0.22, y)
+        await page.mouse.down()
+        for (let k = 1; k <= 8; k++) await page.mouse.move(c.x + c.width * (0.22 + k * 0.045), y, { steps: 2 })
+        await page.mouse.up()
+      }
     },
   },
 ]

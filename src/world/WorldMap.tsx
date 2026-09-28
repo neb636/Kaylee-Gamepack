@@ -27,7 +27,6 @@ const CONTINENTS: { key: keyof typeof WORLD_LINES.continents; x: number; y: numb
 
 const COMING_SOON: { id: keyof typeof WORLD_LINES.soon; emoji: string; x: number; y: number }[] = [
   { id: 'egypt', emoji: '🐪', x: 53, y: 42 },
-  { id: 'china', emoji: '🐼', x: 77, y: 36 },
   { id: 'thailand', emoji: '🐘', x: 74, y: 49 },
 ]
 const HOME = { x: 19, y: 33 }

@@ -1,0 +1,257 @@
+[
+  "China",
+  "Nee how, Kaylee!",
+  "Nee how means hello in China!",
+  "Tap the glowing lantern!",
+  "Where should we go next, Kaylee?",
+  "Tap the dragon parade!",
+  "This lantern opens soon!",
+  "Light up the lanterns to start the parade!",
+  "The dragon parade is coming soon!",
+  "Kaylee, you did it! You won the China Explorer trophy!",
+  "Kaylee, China Explorer! From China.",
+  {
+    "text": "Nong how, Kaylee!",
+    "voice": "doudou"
+  },
+  {
+    "text": "Chef Fu needs our help!",
+    "voice": "doudou"
+  },
+  "Tap the zig-zag bridge!",
+  "Zig-zag bridges keep bad luck away!",
+  "Tap the dumpling house door!",
+  {
+    "text": "Aiyo! So many hungry customers, and no helper!",
+    "voice": "cheffu"
+  },
+  {
+    "text": "Just four dumplings, please.",
+    "voice": "grandpa"
+  },
+  "Push the dough three times!",
+  {
+    "text": "Ee!",
+    "voice": "cheffu"
+  },
+  {
+    "text": "Are!",
+    "voice": "cheffu"
+  },
+  {
+    "text": "San!",
+    "voice": "cheffu"
+  },
+  {
+    "text": "Smooth and shiny! Ee, are, san means one, two, three!",
+    "voice": "cheffu"
+  },
+  "Swipe the dough to make a long snake!",
+  "Tap to cut the snake into four pieces!",
+  "One!",
+  "Two!",
+  "Three!",
+  "Four!",
+  "Five!",
+  "Six!",
+  "Roll the rolling pin back and forth!",
+  {
+    "text": "A perfect round wrapper!",
+    "voice": "cheffu"
+  },
+  "Tap the bowl for one spoonful!",
+  {
+    "text": "Ho ho ho! Just one spoonful!",
+    "voice": "cheffu"
+  },
+  "Draw a circle around the dumpling to fold it!",
+  {
+    "text": "Beautiful! Real chefs make eighteen folds!",
+    "voice": "cheffu"
+  },
+  {
+    "text": "Watch my quick hands!",
+    "voice": "cheffu"
+  },
+  "Fold these dumplings too!",
+  "One, two, three, four dumplings!",
+  "Put each dumpling in the basket, on the cabbage leaf!",
+  "The cabbage leaf keeps them from sticking!",
+  "Tap the lid to close the basket!",
+  "Tap the knob to heat the water!",
+  "Hot water makes steam. Steam cooks dumplings!",
+  "Pop the steam puffs!",
+  "Tap the lid to peek!",
+  {
+    "text": "Ta-da! Soup dumplings!",
+    "voice": "cheffu"
+  },
+  "Carry the basket to Grandpa Turtle's table!",
+  {
+    "text": "Hot soup inside! Nibble, sip, eat.",
+    "voice": "grandpa"
+  },
+  "Tap the dumpling to take a little nibble!",
+  "Tap again to sip the soup!",
+  "Now eat it all up!",
+  {
+    "text": "How chir! Delicious!",
+    "voice": "grandpa"
+  },
+  {
+    "text": "Aiyo! The lunch rush!",
+    "voice": "cheffu"
+  },
+  {
+    "text": "Two pink and two green, please!",
+    "voice": "bunnies"
+  },
+  {
+    "text": "I'll have two yellow, please, dear.",
+    "voice": "goose"
+  },
+  "Tap the pink dough!",
+  "Tap the green dough!",
+  "That one is not pink. Find the pink dough!",
+  "That one is not green. Find the green dough!",
+  "Cream!",
+  "Pink!",
+  "Green!",
+  "Yellow!",
+  "Now fill it and fold it!",
+  {
+    "text": "I'll make Mrs. Goose's dumplings!",
+    "voice": "cheffu"
+  },
+  "Stack the baskets on the wok!",
+  "Dumpling chefs stack their baskets up high!",
+  "Take the pink ribbon basket to the Bunny Twins!",
+  "Take the yellow ribbon basket to Mrs. Goose!",
+  {
+    "text": "Not mine, dear!",
+    "voice": "grandpa"
+  },
+  {
+    "text": "Not mine, dear!",
+    "voice": "goose"
+  },
+  {
+    "text": "Not ours!",
+    "voice": "bunnies"
+  },
+  {
+    "text": "Yay! Pink and green! Thank you!",
+    "voice": "bunnies"
+  },
+  {
+    "text": "Splendid! Thank you, dear.",
+    "voice": "goose"
+  },
+  "Tap the table two times to say thank you for the tea!",
+  "In China, a tap tap on the table means thank you!",
+  {
+    "text": "More tea?",
+    "voice": "doudou"
+  },
+  "Ding ding! Someone is here!",
+  {
+    "text": "Five dumplings, please!",
+    "voice": "baobao"
+  },
+  {
+    "text": "No, six!",
+    "voice": "baobao"
+  },
+  "Tap the colors to make six dumplings!",
+  "Uh oh! Tap the sneaky monkey!",
+  {
+    "text": "Hee hee! Sorry!",
+    "voice": "houhou"
+  },
+  "Six dumplings! Now steam them!",
+  "Take the basket to Bao Bao's table!",
+  {
+    "text": "Mmm! How chir! I love dumplings!",
+    "voice": "baobao"
+  },
+  "Great cooking! Ready for the next customers?",
+  "Everyone is clapping for you!",
+  {
+    "text": "Shyeh shyeh, Chef Kaylee! A chef hat for you!",
+    "voice": "cheffu"
+  },
+  {
+    "text": "Achoo! Thank you, Kaylee!",
+    "voice": "lulu"
+  },
+  {
+    "text": "Take some dumplings to the New Year parade!",
+    "voice": "doudou"
+  },
+  "Har gow! Shrimp dumplings!",
+  "Char siu bao! A fluffy bun!",
+  "An egg tart! Sweet and yummy!",
+  "A sesame ball! Crunchy and chewy!",
+  "Spring rolls! Crispy!",
+  "Dim sum means lots of little dishes to share!",
+  {
+    "text": "Hee hee! Woof!",
+    "voice": "doudou"
+  },
+  {
+    "text": "Shanghai is the biggest city in China!",
+    "voice": "doudou"
+  },
+  {
+    "text": "Ho ho ho!",
+    "voice": "cheffu"
+  },
+  {
+    "text": "Dumplings make everyone happy!",
+    "voice": "cheffu"
+  },
+  {
+    "text": "Slow and steady, like me.",
+    "voice": "grandpa"
+  },
+  {
+    "text": "Hello, little chef.",
+    "voice": "grandpa"
+  },
+  {
+    "text": "Hee hee hee!",
+    "voice": "bunnies"
+  },
+  {
+    "text": "We're twins!",
+    "voice": "bunnies"
+  },
+  {
+    "text": "Oh, how lovely.",
+    "voice": "goose"
+  },
+  {
+    "text": "Honk! Pardon me.",
+    "voice": "goose"
+  },
+  {
+    "text": "More dumplings, please!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Hee hee! I love you!",
+    "voice": "baobao"
+  },
+  "Squishy!",
+  "Hello, little dumpling!",
+  "Pekingese sticker! These puppies from China look like tiny lions!",
+  "In China, people say nee how! It means hello!",
+  "Shanghai is the biggest city in China! It has a tower with pink balls!",
+  "Soup dumplings come from Shanghai. There is soup inside!",
+  "Dim sum is lots of little dishes, shared with tea.",
+  "Chinese New Year has lanterns, dragons and red envelopes!",
+  "Giant pandas live in the bamboo mountains of China.",
+  "The Great Wall of China is super long!",
+  "China is a huge country with snowy places and sunny beaches!",
+  "This is China! Tap a picture to learn more."
+]

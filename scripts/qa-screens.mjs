@@ -166,6 +166,23 @@ const SCREENS = [
     },
   },
   { name: 'party', hash: '#/world/australia/party', stampAll: true, act: skip },
+  { name: 'china-intro', hash: '#/world/china', reset: true, wait: 300 },
+  { name: 'china-hub', hash: '#/world/china', act: skip },
+  { name: 'dumplings-arrive', hash: '#/world/china/dumplings', reset: true, wait: 400 },
+  { name: 'dumplings-oldtown', hash: '#/world/china/dumplings', reset: true, act: skip },
+  {
+    name: 'dumplings-kitchen',
+    hash: '#/world/china/dumplings',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.getByRole('button', { name: 'zig-zag bridge' }).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(2600)
+      await p.getByRole('button', { name: 'dumpling house door' }).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(2200)
+    },
+  },
+  { name: 'china-parade-stub', hash: '#/world/china/party', wait: 800 },
   { name: 'passport-full', hash: '#/world/passport', stampAll: true },
   {
     name: 'win-ceremony',
@@ -176,6 +193,57 @@ const SCREENS = [
       await p.waitForTimeout(1500)
     },
   },
+  // Egypt
+  { name: 'egypt-intro', hash: '#/world/egypt', reset: true, wait: 300 },
+  { name: 'egypt-hub', hash: '#/world/egypt', act: skip },
+  { name: 'pyramid-story', hash: '#/world/egypt/pyramid', wait: 250 },
+  {
+    name: 'pyramid-build',
+    hash: '#/world/egypt/pyramid',
+    act: async (p) => {
+      await skip(p)
+      await p.waitForTimeout(1200)
+      for (let i = 0; i < 4; i++) {
+        await p.getByRole('button', { name: /(mid|big) stone/ }).last().click({ force: true, timeout: 1500 }).catch(() => {})
+        await p.waitForTimeout(1600)
+      }
+    },
+  },
+  { name: 'passage-maze', hash: '#/world/egypt/passage', act: skip },
+  { name: 'sphinx-sand', hash: '#/world/egypt/sphinx', act: skip },
+  {
+    name: 'sphinx-rubbed',
+    hash: '#/world/egypt/sphinx',
+    act: async (p) => {
+      await skip(p)
+      const c = await p.getByLabel('Rub the sand away').boundingBox()
+      if (!c) return
+      for (let row = 0; row < 4; row++) {
+        const y = c.y + c.height * (0.2 + row * 0.1)
+        await p.mouse.move(c.x + c.width * 0.2, y)
+        await p.mouse.down()
+        for (let k = 1; k <= 8; k++) await p.mouse.move(c.x + c.width * (0.2 + k * 0.05), y)
+        await p.mouse.up()
+      }
+      await p.waitForTimeout(800)
+    },
+  },
+  { name: 'nile-sail', hash: '#/world/egypt/nile', act: async (p) => (await skip(p), await p.waitForTimeout(2500)) },
+  { name: 'scribe-stamps', hash: '#/world/egypt/scribe', act: skip },
+  {
+    name: 'market-koshari',
+    hash: '#/world/egypt/market',
+    act: async (p) => {
+      await skip(p)
+      await p.waitForTimeout(3500)
+      for (const f of ['rice', 'lentils']) {
+        await p.getByRole('button', { name: f, exact: true }).click({ force: true, timeout: 1500 }).catch(() => {})
+        await p.waitForTimeout(500)
+      }
+    },
+  },
+  { name: 'egypt-hub-stamps', hash: '#/world/egypt', stampAll: 'egypt' },
+  { name: 'light-show', hash: '#/world/egypt/party', stampAll: 'egypt', act: skip },
 ].filter((s) => !flag('routes') || flag('routes').split(',').includes(s.name))
 
 const { base, stop } = await serve(PORT)
@@ -199,7 +267,7 @@ try {
       try {
         if (s.reset) await page.evaluate(() => localStorage.clear())
         if (s.stampAll) {
-          await page.goto(`${base}#/world/australia`)
+          await page.goto(`${base}#/world/${s.stampAll === true ? 'australia' : s.stampAll}`)
           await page.waitForTimeout(400)
           await skip(page)
           await page.evaluate(() => window.__kayleeWorld?.stampAll())

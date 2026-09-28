@@ -26,6 +26,16 @@ const SCENARIOS = [
   { name: 'croc', id: 'croc', hash: '#/world/australia/croc' },
   { name: 'postcard', id: 'postcard', hash: '#/world/australia/postcard' },
   { name: 'party (finale)', id: 'party', hash: '#/world/australia/party', stampAll: true },
+  { name: 'china intro + map', id: 'china', hash: '#/world/china', reset: true, play: false },
+  { name: 'china dumpling house', id: 'dumplings', hash: '#/world/china/dumplings', reset: true },
+  { name: 'egypt intro + map', id: 'egypt-intro', hash: '#/world/egypt', reset: true, play: false },
+  { name: 'pyramid', id: 'pyramid', hash: '#/world/egypt/pyramid' },
+  { name: 'passage', id: 'passage', hash: '#/world/egypt/passage' },
+  { name: 'sphinx', id: 'sphinx', hash: '#/world/egypt/sphinx' },
+  { name: 'nile', id: 'nile', hash: '#/world/egypt/nile' },
+  { name: 'scribe', id: 'scribe', hash: '#/world/egypt/scribe' },
+  { name: 'market', id: 'market', hash: '#/world/egypt/market' },
+  { name: 'light show (finale)', id: 'show', hash: '#/world/egypt/party', stampAll: 'egypt' },
 ].filter((s) => !flag('only') || flag('only').split(',').includes(s.id))
 
 // Is there something (other than the story overlay, the top bar or a "hear it again" button) she can touch?
@@ -74,7 +84,7 @@ try {
       await openApp(page, base)
       if (s.reset) await page.evaluate(() => localStorage.clear())
       if (s.stampAll) {
-        await page.goto(`${base}#/world/australia`)
+        await page.goto(`${base}#/world/${s.stampAll === true ? 'australia' : s.stampAll}`)
         await page.waitForTimeout(500)
         await skip(page)
         await page.evaluate(() => window.__kayleeWorld?.stampAll())
