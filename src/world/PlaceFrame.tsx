@@ -105,7 +105,7 @@ function RunningPlace({ entry, activity }: { entry: PlaceEntry; activity?: strin
             }
           />
         ) : (
-          <Place meta={meta} activity={activity} stamps={stamps} openActivity={openActivity} backToMap={backToMap} earnStamp={earnStamp} onWin={onWin} setProgress={setProgress} />
+          <Place key={activity ?? 'hub'} meta={meta} activity={activity} stamps={stamps} openActivity={openActivity} backToMap={backToMap} earnStamp={earnStamp} onWin={onWin} setProgress={setProgress} />
         )}
       </Suspense>
 
