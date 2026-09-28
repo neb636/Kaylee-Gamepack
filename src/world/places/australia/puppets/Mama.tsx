@@ -2,7 +2,7 @@
 // is drawn between her belly and the front of the pouch, so it peeks out and moves with her.
 import { forwardRef, useId, useState, type CSSProperties, type ReactNode } from 'react'
 import { setA, setT, show, usePuppet, type PuppetHandle } from '../../../../sdk'
-import { inkPass, line, useInk } from './ink'
+import { inkPass, line, useInk } from '../../../kit/ink'
 import { ROO_ACTIONS, rooMotion } from './roo'
 
 export interface MamaProps {

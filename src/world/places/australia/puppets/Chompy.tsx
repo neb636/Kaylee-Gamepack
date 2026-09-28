@@ -5,7 +5,7 @@
 import { forwardRef, useId, useRef, type CSSProperties } from 'react'
 import { bell, clamp, lerp, setA, setT, show, smooth, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../sdk'
 import { art } from '../art'
-import { inkPass, useInk } from './ink'
+import { inkPass, useInk } from '../../../kit/ink'
 
 export interface ChompyProps {
   height: string
