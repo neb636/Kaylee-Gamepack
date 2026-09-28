@@ -170,10 +170,11 @@ export function WorldMap() {
 
         <div className="world-side" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'min(20px, 3vw)', flexShrink: 0 }}>
           <div className="world-side-mascot">
-            <Mascot pose="wave" size={Math.min(170, window.innerHeight * 0.2)} />
+            <Mascot pose="wave" size={Math.min(170, window.innerHeight * 0.12)} />
           </div>
           <SideButton img={passportArt} label="My passport" color="var(--pink)" badge={totalStamps(passport)} onClick={() => go.world('passport')} />
           <SideButton img={crayons} label="Coloring book" color="var(--butter)" onClick={() => go.world('coloring')} />
+          <SideButton icon="🧩" label="Puzzle book" color="var(--mint)" onClick={() => go.world('puzzles')} />
           <SideButton img={theaterArt} label="Theater" color="var(--lavender)" onClick={() => go.world('theater')} />
         </div>
       </div>
@@ -183,7 +184,7 @@ export function WorldMap() {
   )
 }
 
-function SideButton({ img, label, color, onClick, badge }: { img: string; label: string; color: string; onClick: () => void; badge?: number }) {
+function SideButton({ img, icon, label, color, onClick, badge }: { img?: string; icon?: string; label: string; color: string; onClick: () => void; badge?: number }) {
   return (
     <motion.button
       aria-label={label}
@@ -192,9 +193,9 @@ function SideButton({ img, label, color, onClick, badge }: { img: string; label:
         sounds.pop()
         onClick()
       }}
-      style={{ position: 'relative', width: 'clamp(88px, min(18vw, 17vh), 150px)', aspectRatio: '1', borderRadius: 32, background: color, boxShadow: 'var(--shadow)', border: '5px solid #fff', display: 'grid', placeItems: 'center', padding: 8 }}
+      style={{ position: 'relative', width: 'clamp(88px, min(18vw, 13vh), 150px)', aspectRatio: '1', borderRadius: 32, background: color, boxShadow: 'var(--shadow)', border: '5px solid #fff', display: 'grid', placeItems: 'center', padding: 8 }}
     >
-      <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      {icon ? <span style={{ fontSize: 'clamp(40px, 8vmin, 80px)' }}>{icon}</span> : <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
       {badge !== undefined && badge > 0 && (
         <span style={{ position: 'absolute', top: -10, right: -10, background: 'var(--hotpink)', color: '#fff', borderRadius: 999, minWidth: 44, height: 44, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 24, boxShadow: 'var(--shadow)', padding: '0 8px' }}>{badge}</span>
       )}

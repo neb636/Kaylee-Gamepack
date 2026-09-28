@@ -1,3 +1,6 @@
+import puzzlePyramids from './assets/scene-puzzle-pyramids.webp'
+import puzzleNile from './assets/scene-puzzle-nile.webp'
+import puzzleSphinx from './assets/scene-puzzle-sphinx.webp'
 import type { PlaceMeta } from '../../types'
 import { art } from './art'
 import { L } from './lines'
@@ -29,6 +32,11 @@ const meta: PlaceMeta = {
     { icon: '🐈', label: 'Cats', say: L.facts.cats },
     { icon: '🍲', label: 'Koshari', say: L.facts.food },
     { icon: '🚩', label: 'Flag', say: L.facts.flag },
+  ],
+  puzzles: [
+    { id: 'egypt-pyramids', name: 'Pyramids of Giza', img: puzzlePyramids },
+    { id: 'egypt-nile', name: 'Sailing the Nile', img: puzzleNile },
+    { id: 'egypt-sphinx', name: 'Sphinx and Friends', img: puzzleSphinx },
   ],
   coloringPages: [
     { id: 'egypt-miu', img: art.colorMiu },

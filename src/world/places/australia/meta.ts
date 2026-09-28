@@ -1,3 +1,6 @@
+import puzzleKangaroos from './assets/scene-puzzle-kangaroos.webp'
+import puzzleReef from './assets/scene-puzzle-reef.webp'
+import puzzleSydney from './assets/scene-puzzle-sydney.webp'
 import type { PlaceMeta } from '../../types'
 import { art } from './art'
 import { L } from './lines'
@@ -28,6 +31,11 @@ const meta: PlaceMeta = {
     { icon: '🌏', label: 'Continent', say: L.facts.continent },
     { icon: '🐠', label: 'Reef', say: L.facts.reef },
     { icon: '🐊', label: 'Crocodiles', say: L.facts.crocs },
+  ],
+  puzzles: [
+    { id: 'australia-kangaroos', name: 'Outback Kangaroos', img: puzzleKangaroos },
+    { id: 'australia-reef', name: 'Great Barrier Reef', img: puzzleReef },
+    { id: 'australia-sydney', name: 'Sydney Harbour', img: puzzleSydney },
   ],
   coloringPages: [
     { id: 'australia-pip', img: art.colorPip },
