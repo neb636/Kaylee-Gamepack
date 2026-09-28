@@ -244,6 +244,109 @@
   },
   "Squishy!",
   "Hello, little dumpling!",
+  {
+    "text": "My tummy is rumbling!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Pandas eat bamboo all day!",
+    "voice": "baobao"
+  },
+  "Swipe up to grow the bamboo three tall!",
+  {
+    "text": "Three tall! Wow!",
+    "voice": "baobao"
+  },
+  "It is three tall already!",
+  {
+    "text": "Crunch crunch! Yum!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Mmm! More bamboo, please!",
+    "voice": "baobao"
+  },
+  "Make this one taller than that one!",
+  "Grow the glowing bamboo!",
+  "Same height! Grow one more!",
+  "Taller! This one is taller, and that one is shorter!",
+  "Which one is the tallest? Tap it!",
+  "Look for the one that reaches the highest!",
+  "That one is shorter. Find the tallest!",
+  "The tallest bamboo!",
+  "Now, which one is the shortest? Tap the short one!",
+  "Look for the smallest one!",
+  "That one is taller. Find the shortest!",
+  "The shortest bamboo!",
+  "Bao Bao climbs the tallest bamboo!",
+  {
+    "text": "Up, up, up!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Whoa! Wheeee!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Soft leaves! Hee hee!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Yum! Best snack ever!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Hee hee hee!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Oops! I knocked bricks off the Great Wall!",
+    "voice": "houhou"
+  },
+  "The Great Wall is so long, it can't fit on the screen!",
+  "Slide the wall sideways to follow Hou Hou! Or tap the arrow!",
+  "Hou Hou ran ahead! Follow him!",
+  {
+    "text": "Over here, Kaylee!",
+    "voice": "houhou"
+  },
+  "Red, gold, red, gold... what comes next?",
+  "Red, gold, gold, red, gold... what comes next?",
+  "Red, gold, jade, red... what comes next?",
+  "Red, gold, jade, red, gold... and then?",
+  "Red, gold, red, gold, red! Try the glowing brick!",
+  "Red, gold, gold, red, gold, gold! Try the glowing brick!",
+  "Red, gold, jade, red, gold! Try the glowing brick!",
+  "Red, gold, jade, red, gold, jade! Try the glowing brick!",
+  {
+    "text": "Yay! Thank you, Kaylee!",
+    "voice": "houhou"
+  },
+  {
+    "text": "Hee hee! The wall is getting strong!",
+    "voice": "houhou"
+  },
+  {
+    "text": "Hooray! The whole wall is fixed!",
+    "voice": "houhou"
+  },
+  "Tap the tower to light the signal fire!",
+  "Long ago, soldiers sent smoke signals from tower to tower!",
+  "The message zoomed all along the Great Wall!",
+  {
+    "text": "Hee hee!",
+    "voice": "houhou"
+  },
+  {
+    "text": "Tickles!",
+    "voice": "houhou"
+  },
+  "Giant panda sticker! Panda babies are born as tiny as a stick of butter!",
+  "Golden monkey sticker! These monkeys have sky-blue faces!",
   "Pekingese sticker! These puppies from China look like tiny lions!",
   "In China, people say nee how! It means hello!",
   "Shanghai is the biggest city in China! It has a tower with pink balls!",
