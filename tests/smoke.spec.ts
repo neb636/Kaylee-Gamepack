@@ -192,3 +192,19 @@ for (const id of placeIds) {
     expect(errors).toEqual([])
   })
 }
+
+test('Around the World: leaving an activity video clears it before another scene', async ({ page }) => {
+  const errors = trackErrors(page)
+  await start(page, '#/world/australia/outback')
+  await expect.poll(() => page.evaluate(() => typeof window.__kayleeWorld?.finish)).toBe('function')
+  await page.evaluate(() => window.__kayleeWorld?.finish?.())
+  await page.getByRole('button', { name: 'Back to the map' }).last().click()
+  await expect(page.getByRole('button', { name: 'Skip the video' })).toBeVisible()
+
+  await page.getByRole('button', { name: 'Back to the map' }).first().click()
+  await expect(page).toHaveURL(/#\/world\/australia$/)
+  await page.getByRole('button', { name: 'Gum Tree Forest' }).click({ force: true })
+  await expect(page).toHaveURL(/#\/world\/australia\/forest$/)
+  await expect(page.getByRole('button', { name: 'Skip the video' })).toHaveCount(0)
+  expect(errors).toEqual([])
+})
