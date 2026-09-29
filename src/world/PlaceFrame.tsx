@@ -105,7 +105,8 @@ function RunningPlace({ entry, activity }: { entry: PlaceEntry; activity?: strin
             }
           />
         ) : (
-          <Place meta={meta} activity={activity} stamps={stamps} openActivity={openActivity} backToMap={backToMap} earnStamp={earnStamp} onWin={onWin} setProgress={setProgress} />
+          // Leaving an activity must discard its pending stamp/video before another one opens.
+          <Place key={activity ?? 'map'} meta={meta} activity={activity} stamps={stamps} openActivity={openActivity} backToMap={backToMap} earnStamp={earnStamp} onWin={onWin} setProgress={setProgress} />
         )}
       </Suspense>
 
