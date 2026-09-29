@@ -13,6 +13,7 @@ import { L } from '../lines'
 import type { ActivityProps } from '../Place'
 import { Jamal } from '../puppets/Jamal'
 import { Miu } from '../puppets/Miu'
+import { PyramidStone } from './PyramidStone'
 
 type Size = 'big' | 'mid' | 'small' | 'cap'
 // Each stone's size in % of the building site: width and height. Rows get smaller toward the top, like a real pyramid.
@@ -141,16 +142,15 @@ export function Pyramid({ onDone, setProgress }: ActivityProps) {
         const box = { position: 'absolute' as const, left: `${s.x - w / 2}%`, bottom: `${s.bottom}%`, width: `${w}%`, height: `${h}%` }
         if (i < placed)
           return (
-            <motion.img
+            <motion.div
               key={i}
-              src={s.size === 'cap' ? art.capstone : art.stoneBlock}
-              alt=""
-              draggable={false}
               initial={{ y: '-60%', scale: 1.15, opacity: 0.4 }}
               animate={{ y: 0, scale: 1, opacity: 1 }}
               transition={{ type: 'spring', bounce: 0.35, duration: 0.45 }}
-              style={{ ...box, objectFit: s.size === 'cap' ? 'contain' : 'fill', objectPosition: 'bottom', filter: shine && s.size === 'cap' ? 'drop-shadow(0 0 18px #FFE27A)' : undefined }}
-            />
+              style={{ ...box, filter: shine && s.size === 'cap' ? 'drop-shadow(0 0 18px #FFE27A)' : undefined }}
+            >
+              <PyramidStone cap={s.size === 'cap'} variant={i} />
+            </motion.div>
           )
         if (i === placed)
           return (
@@ -158,8 +158,10 @@ export function Pyramid({ onDone, setProgress }: ActivityProps) {
               <motion.div
                 animate={{ opacity: [0.55, 1, 0.55] }}
                 transition={{ repeat: Infinity, duration: 1.2 }}
-                style={{ width: '100%', height: '100%', borderRadius: s.size === 'cap' ? 0 : 12, clipPath: s.size === 'cap' ? 'polygon(50% 0, 100% 100%, 0 100%)' : undefined, border: '5px dashed #fff', background: 'rgba(255, 200, 61, 0.45)' }}
-              />
+                style={{ width: '100%', height: '100%' }}
+              >
+                <PyramidStone cap={s.size === 'cap'} outline />
+              </motion.div>
             </DropZone>
           )
         return null
@@ -213,7 +215,7 @@ export function Pyramid({ onDone, setProgress }: ActivityProps) {
               <motion.div key={`${sled.id}-${i}`} animate={wiggle === i ? WIGGLE : {}} style={{ height: `${(s.h / SIZE.big.h) * 88}%`, aspectRatio: size === 'cap' ? '1.1' : String((s.w / s.h) * 1.25), position: 'relative', zIndex: 2 }}>
                 <Draggable disabled={arriving} onDrop={(zone) => (zone === 'slot' ? void give(i) : false)} onTap={() => void give(i)} style={{ width: '100%', height: '100%' }}>
                   <div role="button" aria-label={`${size} stone`} className={help && size === want ? 'world-glow' : undefined} style={{ width: '100%', height: '100%', borderRadius: 12, minWidth: 'calc(var(--target) * 0.8)', minHeight: 'calc(var(--target) * 0.6)' }}>
-                    <img src={size === 'cap' ? art.capstone : art.stoneBlock} alt="" draggable={false} style={{ width: '100%', height: '100%', objectFit: size === 'cap' ? 'contain' : 'fill' }} />
+                    <PyramidStone cap={size === 'cap'} variant={placed} />
                   </div>
                 </Draggable>
               </motion.div>
