@@ -38,6 +38,14 @@ const PUPPET_SCENARIOS = [
   ['cheffu', 'knead', 1.8],
   ['cheffu', 'laugh', 1.8],
   ['cheffu', 'aiyo', 1.7],
+  ['houhou', 'cheer', 1.3],
+  ['houhou', 'hop', 0.9],
+  ['houhou', 'shake', 1.1],
+  ['houhou', 'oops', 1.4],
+  ['houhou', 'run', 1.0],
+  ['houhou', 'point', 1.3],
+  ['houhou', 'swing', 1.4],
+  ['houhou', 'giggle', 1.1],
   ['dumpling', 'squish', 0.7],
   ['dumpling', 'hop', 0.9],
   ['dumpling-steaming', 'wobble', 1.1],
@@ -53,6 +61,17 @@ const PUPPET_SCENARIOS = [
   ['tutu', 'yawn', 1.9],
   ['tutu', 'wave', 1.3],
   ['tutu', 'giggle', 1.1],
+  ['baobao', 'wave', 1.5],
+  ['baobao', 'cheer', 1.3],
+  ['baobao', 'hop', 0.9],
+  ['baobao', 'nod', 0.8],
+  ['baobao', 'shake', 1.0],
+  ['baobao', 'wiggle', 0.9],
+  ['baobao', 'munch', 1.7],
+  ['baobao', 'sneeze', 1.8],
+  ['baobao', 'roll', 1.6],
+  ['baobao', 'climb', 1.7],
+  ['baobao-bamboo', 'munch', 1.7],
 ].map(([id, action, seconds]) => ({
   name: `${id}-${action}`,
   seconds,
@@ -189,6 +208,103 @@ const GAME_SCENARIOS = [
         await page.mouse.up()
       }
     },
+  },
+  {
+    name: 'bamboo-grow',
+    seconds: 2.2,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/china/bamboo`)
+      await page.waitForTimeout(500)
+      await skip(page)
+      await page.waitForTimeout(900)
+    },
+    act: async (page) => {
+      // A real swipe up on the sprout, then a tap.
+      const b = await page.getByRole('button', { name: 'bamboo shoot' }).first().boundingBox()
+      const x = b.x + b.width / 2
+      const y = b.y + b.height * 0.7
+      await page.mouse.move(x, y)
+      await page.mouse.down()
+      for (let i = 1; i <= 6; i++) {
+        await page.mouse.move(x, y - i * 14)
+        await page.waitForTimeout(30)
+      }
+      await page.mouse.up()
+      await page.waitForTimeout(900)
+      await page.getByRole('button', { name: 'bamboo shoot' }).first().click({ force: true })
+    },
+  },
+  {
+    name: 'bamboo-payoff',
+    seconds: 12,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/china/bamboo`)
+      await page.waitForTimeout(500)
+      await skip(page)
+      await page.waitForTimeout(900)
+      const shoot = () => page.getByRole('button', { name: 'bamboo shoot' })
+      for (let i = 0; i < 3; i++) {
+        await shoot().first().click({ force: true }).catch(() => {})
+        await page.waitForTimeout(500)
+      }
+      await page.waitForTimeout(6500) // she cheers, then munches
+      for (let i = 0; i < 3; i++) {
+        await shoot().nth(1).click({ force: true }).catch(() => {})
+        await page.waitForTimeout(500)
+      }
+      await page.waitForTimeout(8500)
+      await page.getByRole('button', { name: 'bamboo 2' }).click({ force: true }).catch(() => {})
+      await page.waitForTimeout(3500)
+    },
+    act: (page) => page.getByRole('button', { name: 'bamboo 3' }).click({ force: true }),
+  },
+  {
+    name: 'wall-brick-snap',
+    seconds: 1.6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/china/wall`)
+      await page.waitForTimeout(500)
+      await skip(page)
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      // Drag the red brick into the first hole.
+      const bb = await page.getByRole('button', { name: 'red brick' }).first().boundingBox()
+      const hb = await page.locator('[data-target="hole"]').boundingBox()
+      const from = { x: bb.x + bb.width / 2, y: bb.y + bb.height / 2 }
+      const to = { x: hb.x + hb.width / 2, y: hb.y + hb.height / 2 }
+      await page.mouse.move(from.x, from.y)
+      await page.mouse.down()
+      await page.mouse.move((from.x + to.x) / 2, (from.y + to.y) / 2, { steps: 6 })
+      await page.mouse.move(to.x, to.y, { steps: 6 })
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'wall-beacon',
+    seconds: 12,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/china/wall`)
+      await page.waitForTimeout(500)
+      await skip(page)
+      await page.waitForTimeout(2000)
+      // Fix every gap by tapping the right bricks (the arrow pans to each hole when needed).
+      for (const name of ['red', 'gold', 'gold', 'jade']) {
+        for (let i = 0; i < 20; i++) {
+          const hole = page.locator('[data-target="hole"]')
+          const b = (await hole.count()) ? await hole.boundingBox() : null
+          const vw = page.viewportSize().width
+          if (b && b.x > 20 && b.x + b.width < vw - 20) break
+          if (i % 4 === 3) await page.getByRole('button', { name: 'follow Hou Hou' }).click({ force: true }).catch(() => {})
+          await page.waitForTimeout(600)
+        }
+        await page.waitForTimeout(700)
+        await page.getByRole('button', { name: `${name} brick` }).first().click({ force: true }).catch(() => {})
+        await page.waitForTimeout(3200)
+      }
+      await page.waitForTimeout(4500)
+    },
+    act: (page) => page.getByRole('button', { name: 'beacon tower' }).click({ force: true }),
   },
 ]
 

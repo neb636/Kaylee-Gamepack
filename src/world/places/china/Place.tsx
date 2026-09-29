@@ -1,5 +1,5 @@
 // China: "Bao Bao's Dragon Parade" (plan: planning/around-the-world/china.md). Built in stages: the scroll map and the
-// Shanghai Dumpling House come first; the other six lanterns glow "coming soon" until their activities exist.
+// Shanghai Dumpling House came first, then the Bamboo Forest and the Great Wall; the other four lanterns glow "coming soon" until their activities exist.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { BigButton, say, SparklePuppet, sounds, type PuppetHandle } from '../../../sdk'
@@ -7,7 +7,9 @@ import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
+import { BambooForest } from './activities/bamboo/BambooForest'
 import { DumplingHouse } from './activities/dumplings/DumplingHouse'
+import { GreatWall } from './activities/wall/GreatWall'
 import { art } from './art'
 import { L } from './lines'
 import { Lantern } from './props'
@@ -19,18 +21,18 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { dumplings: DumplingHouse }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { bamboo: BambooForest, wall: GreatWall, dumplings: DumplingHouse }
 
 /** The seven lantern spots on the scroll map (the painted cream circles in scene-china-map), in % of the picture.
  *  Only activities listed in meta.activities are playable; the rest say "coming soon". */
 const LANTERNS = [
-  { id: 'wall', name: 'The Great Wall', icon: '🧱', x: 51.4, y: 25.6 },
-  { id: 'bamboo', name: 'Bamboo Forest', icon: '🎋', x: 44, y: 42.7 },
+  { id: 'wall', name: 'The Great Wall', icon: '🧱', x: 51.4, y: 25.6, face: art.houhou },
+  { id: 'bamboo', name: 'Bamboo Forest', icon: '🎋', x: 44, y: 42.7, face: art.baobao },
   { id: 'hotpot', name: 'Hotpot Night', icon: '🍲', x: 52.7, y: 47.1 },
   { id: 'brush', name: 'The Magic Brush', icon: '🖌️', x: 58, y: 58.8 },
   { id: 'race', name: 'The Great Race', icon: '🐭', x: 73.6, y: 61.7 },
   { id: 'train', name: 'Bullet Train', icon: '🚄', x: 79.4, y: 14.8 },
-  { id: 'dumplings', name: 'Dumpling House', icon: '🥟', x: 84.4, y: 47.6 },
+  { id: 'dumplings', name: 'Dumpling House', icon: '🥟', x: 84.4, y: 47.6, face: art.doudou },
 ]
 
 export default function Place(props: PlaceProps) {
@@ -137,7 +139,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
               >
                 <Lantern lit={done} dim={!open}>
                   {done ? (
-                    <img src={art.doudou} alt="" style={{ width: '120%', objectFit: 'contain' }} />
+                    <img src={spot.face ?? art.doudou} alt="" style={{ width: '120%', objectFit: 'contain' }} />
                   ) : (
                     <span style={{ fontSize: big ? 'clamp(28px, 4.6cqw, 50px)' : 'clamp(22px, 3.4cqw, 38px)', opacity: open ? 1 : 0.6 }}>{spot.icon}</span>
                   )}

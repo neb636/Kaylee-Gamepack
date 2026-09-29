@@ -130,7 +130,60 @@ export const L = {
     },
   },
 
+  // Bamboo Forest (activities/bamboo) and the Great Wall (activities/wall).
+  bamboo: {
+    arrive: [baobao('My tummy is rumbling!'), baobao('Pandas eat bamboo all day!')],
+    // Round 1: grow one shoot three tall.
+    grow3: 'Swipe up! Grow it three tall!',
+    count: ['One!', 'Two!', 'Three!'],
+    threeTall: baobao('Three tall! Wow!'),
+    enough: 'Three tall is enough!',
+    munch: [baobao('Crunch crunch! Yum!'), baobao('Mmm! More bamboo, please!')],
+    // Round 2: make one taller than the other.
+    grow2: 'Make this one taller than that one!',
+    glowHint: 'Grow the glowing bamboo!',
+    same: 'Same height! Grow one more!',
+    taller: 'Taller! And that one is shorter!',
+    // Round 3: tallest and shortest.
+    tallestQ: 'Which one is the tallest? Tap it!',
+    tallestHint: 'Look for the tallest one!',
+    tallestWrong: 'Too short! Find the tallest!',
+    tallestYes: 'The tallest bamboo!',
+    shortestQ: 'Which one is the shortest? Tap it!',
+    shortestHint: 'Look for the short one!',
+    shortestWrong: 'Too tall! Find the shortest!',
+    shortestYes: 'The shortest bamboo!',
+    // Payoff.
+    climb: 'Bao Bao climbs the tallest bamboo!',
+    up: baobao('Up, up, up!'),
+    whoa: baobao('Whoa! Wheeee!'),
+    leaves: baobao('Soft leaves! Hee hee!'),
+    yum: baobao('Yum! Best snack ever!'),
+    giggle: [baobao('Hee hee hee!'), baobao('Wheee!')],
+  },
+  wall: {
+    oops: houhou('Oops! I knocked bricks off the Great Wall!'),
+    long: 'The wall is so long! Slide it to see more!',
+    follow: 'Slide the wall, or tap the arrow!',
+    follow2: 'Hou Hou ran ahead! Follow him!',
+    // The pattern out loud (once per gap); a wrong brick just points at the glowing one.
+    pattern: [
+      'Red, gold, red, gold... what comes next?',
+      'Red, gold, gold, red, gold... what comes next?',
+      'Red, gold, jade, red... what comes next?',
+    ],
+    pattern3b: 'One more! What comes next?',
+    hint: 'Try the glowing brick!',
+    fixed: [houhou('Yay! Thank you, Kaylee!'), houhou('Hee hee! The wall is getting strong!'), houhou('Hooray! The whole wall is fixed!')],
+    beacon: 'Tap the tower to light the signal fire!',
+    signal: 'Soldiers sent smoke signals tower to tower!',
+    signalEnd: 'The message zoomed along the wall!',
+    tap: [houhou('Hee hee!'), houhou('Tickles!')],
+  },
+
   stickers: {
+    bamboo: 'Giant panda sticker! Panda babies are born as tiny as a stick of butter!',
+    wall: 'Golden monkey sticker! These monkeys have sky-blue faces!',
     dumplings: 'Pekingese sticker! These puppies from China look like tiny lions!',
   },
   facts: {

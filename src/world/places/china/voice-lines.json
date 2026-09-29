@@ -244,6 +244,102 @@
   },
   "Squishy!",
   "Hello, little dumpling!",
+  {
+    "text": "My tummy is rumbling!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Pandas eat bamboo all day!",
+    "voice": "baobao"
+  },
+  "Swipe up! Grow it three tall!",
+  {
+    "text": "Three tall! Wow!",
+    "voice": "baobao"
+  },
+  "Three tall is enough!",
+  {
+    "text": "Crunch crunch! Yum!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Mmm! More bamboo, please!",
+    "voice": "baobao"
+  },
+  "Make this one taller than that one!",
+  "Grow the glowing bamboo!",
+  "Same height! Grow one more!",
+  "Taller! And that one is shorter!",
+  "Which one is the tallest? Tap it!",
+  "Look for the tallest one!",
+  "Too short! Find the tallest!",
+  "The tallest bamboo!",
+  "Which one is the shortest? Tap it!",
+  "Look for the short one!",
+  "Too tall! Find the shortest!",
+  "The shortest bamboo!",
+  "Bao Bao climbs the tallest bamboo!",
+  {
+    "text": "Up, up, up!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Whoa! Wheeee!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Soft leaves! Hee hee!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Yum! Best snack ever!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Hee hee hee!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Oops! I knocked bricks off the Great Wall!",
+    "voice": "houhou"
+  },
+  "The wall is so long! Slide it to see more!",
+  "Slide the wall, or tap the arrow!",
+  "Hou Hou ran ahead! Follow him!",
+  "Red, gold, red, gold... what comes next?",
+  "Red, gold, gold, red, gold... what comes next?",
+  "Red, gold, jade, red... what comes next?",
+  "One more! What comes next?",
+  "Try the glowing brick!",
+  {
+    "text": "Yay! Thank you, Kaylee!",
+    "voice": "houhou"
+  },
+  {
+    "text": "Hee hee! The wall is getting strong!",
+    "voice": "houhou"
+  },
+  {
+    "text": "Hooray! The whole wall is fixed!",
+    "voice": "houhou"
+  },
+  "Tap the tower to light the signal fire!",
+  "Soldiers sent smoke signals tower to tower!",
+  "The message zoomed along the wall!",
+  {
+    "text": "Hee hee!",
+    "voice": "houhou"
+  },
+  {
+    "text": "Tickles!",
+    "voice": "houhou"
+  },
+  "Giant panda sticker! Panda babies are born as tiny as a stick of butter!",
+  "Golden monkey sticker! These monkeys have sky-blue faces!",
   "Pekingese sticker! These puppies from China look like tiny lions!",
   "In China, people say nee how! It means hello!",
   "Shanghai is the biggest city in China! It has a tower with pink balls!",

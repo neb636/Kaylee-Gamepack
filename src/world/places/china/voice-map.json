@@ -590,8 +590,8 @@
   {
     "text": "Hee hee! Sorry!",
     "voice": "houhou",
-    "sig": "05b592baa9",
-    "ms": 2162,
+    "sig": "52d59a76fc",
+    "ms": 1604,
     "file": "f873442a16f6.mp3"
   },
   {
@@ -789,6 +789,321 @@
     "sig": "ed7dbdac3d",
     "ms": 2386,
     "file": "fd6402987a38.mp3"
+  },
+  {
+    "text": "My tummy is rumbling!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 2533,
+    "file": "445be09be208.mp3"
+  },
+  {
+    "text": "Pandas eat bamboo all day!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 2657,
+    "file": "04937aca2f6d.mp3"
+  },
+  {
+    "text": "Swipe up! Grow it three tall!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4194,
+    "file": "0705a67969c3.mp3"
+  },
+  {
+    "text": "Three tall! Wow!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 1664,
+    "file": "5f06ab0b7830.mp3"
+  },
+  {
+    "text": "Three tall is enough!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1931,
+    "file": "7f4da6d5481d.mp3"
+  },
+  {
+    "text": "Crunch crunch! Yum!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 1731,
+    "file": "191f63e0ca65.mp3"
+  },
+  {
+    "text": "Mmm! More bamboo, please!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 2058,
+    "file": "08baec795e3b.mp3"
+  },
+  {
+    "text": "Make this one taller than that one!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2647,
+    "file": "e3e12f9a9ac3.mp3"
+  },
+  {
+    "text": "Grow the glowing bamboo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1874,
+    "file": "6a1093a7c4cf.mp3"
+  },
+  {
+    "text": "Same height! Grow one more!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2340,
+    "file": "1ab886f59fd2.mp3"
+  },
+  {
+    "text": "Taller! And that one is shorter!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3015,
+    "file": "2d67b6de3de5.mp3"
+  },
+  {
+    "text": "Which one is the tallest? Tap it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3301,
+    "file": "0de52a73ff46.mp3"
+  },
+  {
+    "text": "Look for the tallest one!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2503,
+    "file": "ef6502d09853.mp3"
+  },
+  {
+    "text": "Too short! Find the tallest!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2262,
+    "file": "b08ecbf9fe28.mp3"
+  },
+  {
+    "text": "The tallest bamboo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2070,
+    "file": "76a7bb853049.mp3"
+  },
+  {
+    "text": "Which one is the shortest? Tap it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2891,
+    "file": "4bf8a5b36937.mp3"
+  },
+  {
+    "text": "Look for the short one!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1443,
+    "file": "6c87aa5dbf65.mp3"
+  },
+  {
+    "text": "Too tall! Find the shortest!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3021,
+    "file": "0480c704d103.mp3"
+  },
+  {
+    "text": "The shortest bamboo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2138,
+    "file": "171093f3ee82.mp3"
+  },
+  {
+    "text": "Bao Bao climbs the tallest bamboo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2570,
+    "file": "984e921f68f4.mp3"
+  },
+  {
+    "text": "Up, up, up!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 1853,
+    "file": "33d21230d12b.mp3"
+  },
+  {
+    "text": "Whoa! Wheeee!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 1965,
+    "file": "fdacb7fc99c9.mp3"
+  },
+  {
+    "text": "Soft leaves! Hee hee!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 1833,
+    "file": "cbfcfb97ff7a.mp3"
+  },
+  {
+    "text": "Yum! Best snack ever!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 2280,
+    "file": "17b524e50241.mp3"
+  },
+  {
+    "text": "Hee hee hee!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 1362,
+    "file": "7c997d8b591c.mp3"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 802,
+    "file": "0e21a0ddc07e.mp3"
+  },
+  {
+    "text": "Oops! I knocked bricks off the Great Wall!",
+    "voice": "houhou",
+    "sig": "52d59a76fc",
+    "ms": 3801,
+    "file": "ad467c479c3e.mp3"
+  },
+  {
+    "text": "The wall is so long! Slide it to see more!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4094,
+    "file": "415c03771952.mp3"
+  },
+  {
+    "text": "Slide the wall, or tap the arrow!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3412,
+    "file": "df8268d21400.mp3"
+  },
+  {
+    "text": "Hou Hou ran ahead! Follow him!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2926,
+    "file": "5c03d58ccd71.mp3"
+  },
+  {
+    "text": "Red, gold, red, gold... what comes next?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4818,
+    "file": "560396bda99b.mp3"
+  },
+  {
+    "text": "Red, gold, gold, red, gold... what comes next?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4473,
+    "file": "50d6fff4bc38.mp3"
+  },
+  {
+    "text": "Red, gold, jade, red... what comes next?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5182,
+    "file": "f503aeb45044.mp3"
+  },
+  {
+    "text": "One more! What comes next?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2316,
+    "file": "1ae00e850ae2.mp3"
+  },
+  {
+    "text": "Try the glowing brick!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2586,
+    "file": "bc406767e06d.mp3"
+  },
+  {
+    "text": "Yay! Thank you, Kaylee!",
+    "voice": "houhou",
+    "sig": "52d59a76fc",
+    "ms": 2193,
+    "file": "ec32f8c4b8d6.mp3"
+  },
+  {
+    "text": "Hee hee! The wall is getting strong!",
+    "voice": "houhou",
+    "sig": "52d59a76fc",
+    "ms": 2769,
+    "file": "a81010576e12.mp3"
+  },
+  {
+    "text": "Hooray! The whole wall is fixed!",
+    "voice": "houhou",
+    "sig": "52d59a76fc",
+    "ms": 3002,
+    "file": "1752ca43c660.mp3"
+  },
+  {
+    "text": "Tap the tower to light the signal fire!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2560,
+    "file": "74e959bd4c51.mp3"
+  },
+  {
+    "text": "Soldiers sent smoke signals tower to tower!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3592,
+    "file": "adac23a30bf9.mp3"
+  },
+  {
+    "text": "The message zoomed along the wall!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2570,
+    "file": "576779e30d2e.mp3"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "houhou",
+    "sig": "52d59a76fc",
+    "ms": 764,
+    "file": "2bea6eb60ef7.mp3"
+  },
+  {
+    "text": "Tickles!",
+    "voice": "houhou",
+    "sig": "52d59a76fc",
+    "ms": 798,
+    "file": "cbb00a6fdd67.mp3"
+  },
+  {
+    "text": "Giant panda sticker! Panda babies are born as tiny as a stick of butter!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 6863,
+    "file": "6b0b70fcb6a2.mp3"
+  },
+  {
+    "text": "Golden monkey sticker! These monkeys have sky-blue faces!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4746,
+    "file": "9be7acdcdc08.mp3"
   },
   {
     "text": "Pekingese sticker! These puppies from China look like tiny lions!",

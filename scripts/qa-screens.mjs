@@ -182,6 +182,33 @@ const SCREENS = [
       await p.waitForTimeout(2200)
     },
   },
+  { name: 'bamboo-story', hash: '#/world/china/bamboo', reset: true, wait: 400 },
+  { name: 'bamboo-round1', hash: '#/world/china/bamboo', reset: true, act: skip },
+  {
+    name: 'bamboo-grown',
+    hash: '#/world/china/bamboo',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.getByRole('button', { name: 'bamboo shoot' }).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(900)
+      await p.getByRole('button', { name: 'bamboo shoot' }).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(900)
+    },
+  },
+  { name: 'wall-story', hash: '#/world/china/wall', reset: true, wait: 400 },
+  { name: 'wall-gap1', hash: '#/world/china/wall', reset: true, act: skip },
+  {
+    name: 'wall-gap1-wrong',
+    hash: '#/world/china/wall',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.waitForTimeout(1500)
+      await p.getByRole('button', { name: 'gold brick' }).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(700)
+    },
+  },
   { name: 'china-parade-stub', hash: '#/world/china/party', wait: 800 },
   { name: 'passport-full', hash: '#/world/passport', stampAll: true },
   {
