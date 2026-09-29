@@ -34,8 +34,19 @@ const LEG = 'M0 -56 C30 -56 52 -30 52 2 C52 36 28 58 0 58 C-28 58 -52 36 -52 2 C
 const EAR = 'M0 -68 C26 -68 46 -50 46 -28 C46 -6 26 8 0 8 C-26 8 -46 -6 -46 -28 C-46 -50 -26 -68 0 -68Z'
 const BOWS = 'M0 0 C-2 -30 22 -48 46 -40 C64 -30 62 -2 46 10 C30 20 10 12 0 0Z M0 0 C2 30 -22 48 -46 40 C-64 30 -62 2 -46 -10 C-30 -20 -10 -12 0 0Z'
 
+/**
+ * Optional clothes, all in the 400x480 viewBox and moving with the part they sit on: `head` (hats, scarf; drawn inside the
+ * head group, so it turns and bobs with her), `body` (ring, coat; over her legs and belly, under her paws), `arm` (mittens;
+ * drawn in each arm's own coordinates: shoulder at 0,0, paw pads near y=78, and it is mirrored for the right arm).
+ */
+export interface BaoBaoWear {
+  head?: ReactNode
+  body?: ReactNode
+  arm?: ReactNode
+}
+
 /** Bao Bao the baby panda. Actions: wave, cheer, hop, nod, shake, wiggle, munch, sneeze, roll, climb. Voice: baobao. */
-export const BaoBao = forwardRef<PuppetHandle, { height?: string; style?: CSSProperties; flip?: boolean; onTap?: () => void; bamboo?: boolean; hold?: ReactNode; rollBy?: number }>(function BaoBao({ height, style, flip, onTap, bamboo, hold, rollBy = 0 }, ref) {
+export const BaoBao = forwardRef<PuppetHandle, { height?: string; style?: CSSProperties; flip?: boolean; onTap?: () => void; bamboo?: boolean; hold?: ReactNode; rollBy?: number; wear?: BaoBaoWear }>(function BaoBao({ height, style, flip, onTap, bamboo, hold, rollBy = 0, wear }, ref) {
   const [m] = useState(() => ({ earL: spring(150, 9), earR: spring(150, 9), bow: spring(120, 7), prevY: 0, rolled: false, lastAction: null as string | null, rollFrom: 0 }))
   const ink = useInk<Part>()
   const clipId = useId().replace(/:/g, '')
@@ -300,6 +311,7 @@ export const BaoBao = forwardRef<PuppetHandle, { height?: string; style?: CSSPro
           ))}
         </g>
       )}
+      {!pass && wear?.arm}
     </g>
   )
   const leg = (s: 'L' | 'R', pass: boolean) => (
@@ -384,6 +396,7 @@ export const BaoBao = forwardRef<PuppetHandle, { height?: string; style?: CSSPro
         </g>
       )}
       {bow(pass)}
+      {!pass && wear?.head}
     </g>
   )
   const bambooG = (
@@ -410,6 +423,7 @@ export const BaoBao = forwardRef<PuppetHandle, { height?: string; style?: CSSPro
             {leg(s, false)}
           </g>
         ))}
+        {wear?.body}
         <g {...inkPass()}>{headG(true)}</g>
         {headG(false)}
         {bambooG}

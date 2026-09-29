@@ -2,8 +2,7 @@ import type { PlaceMeta } from '../../types'
 import { art } from './art'
 import { L } from './lines'
 
-// China is being built in stages: the Dumpling House, the Bamboo Forest and the Great Wall so far. The other four lanterns on the
-// scroll map (see LANTERNS in Place.tsx) are "coming soon" until their activities exist, so they aren't listed here.
+// China: seven lanterns on the scroll map (positions match LANTERNS in Place.tsx), any order, then the Dragon Parade.
 const meta: PlaceMeta = {
   id: 'china',
   name: 'China',
@@ -15,6 +14,10 @@ const meta: PlaceMeta = {
   activities: [
     { id: 'bamboo', name: 'Bamboo Forest', icon: '🎋', pos: { x: 44, y: 42.7 }, sticker: { name: 'Giant panda', img: art.baobao, fact: L.stickers.bamboo } },
     { id: 'wall', name: 'The Great Wall', icon: '🧱', pos: { x: 51.4, y: 25.6 }, sticker: { name: 'Golden snub-nosed monkey', img: art.houhou, fact: L.stickers.wall } },
+    { id: 'hotpot', name: 'Hotpot Night', icon: '🍲', pos: { x: 52.7, y: 47.1 }, sticker: { name: 'Red panda', img: art.hong, fact: L.stickers.hotpot } },
+    { id: 'brush', name: 'The Magic Brush', icon: '🖌️', pos: { x: 58, y: 58.8 }, sticker: { name: 'Red-crowned crane', img: art.crane, fact: L.stickers.brush } },
+    { id: 'race', name: 'The Great Race', icon: '🐭', pos: { x: 73.6, y: 61.7 }, sticker: { name: 'Ox', img: art.ox, fact: L.stickers.race } },
+    { id: 'train', name: 'Bullet Train', icon: '🚄', pos: { x: 79.4, y: 14.8 }, sticker: { name: 'Amur tiger', img: art.tiger, fact: L.stickers.train } },
     { id: 'dumplings', name: 'Dumpling House', icon: '🥟', pos: { x: 84.4, y: 47.6 }, sticker: { name: 'Pekingese puppy', img: art.doudou, fact: L.stickers.dumplings } },
   ],
   facts: [
@@ -26,8 +29,42 @@ const meta: PlaceMeta = {
     { icon: '🐼', label: 'Pandas', say: L.facts.pandas },
     { icon: '🧱', label: 'Great Wall', say: L.facts.wall },
     { icon: '🗺️', label: 'Big country', say: L.facts.big },
+    { icon: '💖', label: 'Xièxie!', say: L.facts.thanks },
+    { icon: '✋', label: '1, 2, 3', say: L.facts.counting },
+    { icon: '❤️', label: 'Red', say: L.facts.red },
+    { icon: '🐉', label: 'Dragons', say: L.facts.dragons },
+    { icon: '🥢', label: 'Chopsticks', say: L.facts.chopsticks },
+    { icon: '🪁', label: 'Inventions', say: L.facts.inventions },
+    { icon: '😋', label: 'Hǎo chī!', say: L.facts.haochi },
+    { icon: '🚩', label: 'Flag', say: L.facts.flag },
+    { icon: '👨‍👩‍👧', label: 'People', say: L.facts.people },
   ],
-  coloringPages: [],
+  coloringPages: [
+    { id: 'china-baobao', img: art.colorBaobao },
+    { id: 'china-cheffu', img: art.colorCheffu },
+    { id: 'china-dragon', img: art.colorDragon },
+    { id: 'china-lantern', img: art.colorLantern },
+    { id: 'china-ox', img: art.colorOx },
+    { id: 'china-shanghai', img: art.colorShanghai },
+    { id: 'china-wall', img: art.colorWall },
+  ],
+  // Real-world videos for the Theater (button in the country's top bar). `after` offers one when that activity is done.
+  videos: [
+    { id: 'pandas', youtubeId: '3wfKUtBlmbA', icon: '🐼', title: 'Real baby pandas', say: L.videos.pandas, after: 'bamboo' },
+    { id: 'wall', youtubeId: '0aeO98y6vp0', icon: '🧱', title: 'The Great Wall from above', say: L.videos.wall, after: 'wall' },
+    { id: 'red-pandas', youtubeId: 'bQTr5gL-lh4', icon: '🦊', title: 'Real red pandas', say: L.videos.redPandas, after: 'hotpot' },
+    { id: 'calligraphy', youtubeId: 'k5pe-x71faY', icon: '🖌️', title: 'Water calligraphy in the park', say: L.videos.calligraphy, after: 'brush' },
+    { id: 'race', youtubeId: 'LUMjQ0s92GM', icon: '🐭', title: 'The Great Race story', say: L.videos.race, after: 'race' },
+    { id: 'train', youtubeId: 'zPnsrtHVuGY', icon: '🚄', title: 'Bullet train window', say: L.videos.train, after: 'train' },
+    { id: 'dumplings', youtubeId: 'N0URdguUszA', icon: '🥟', title: 'Real soup dumplings', say: L.videos.dumplings, after: 'dumplings' },
+    { id: 'shanghai', youtubeId: 'nJnDM4-DIas', icon: '🏙️', title: 'Shanghai at night', say: L.videos.shanghai },
+    { id: 'dragon-dance', youtubeId: '06AqFBheDNI', icon: '🐉', title: 'A real dragon dance', say: L.videos.dragonDance },
+    { id: 'harbin', youtubeId: 'ctcBLN0hfS0', icon: '❄️', title: 'The ice city', say: L.videos.harbin },
+    { id: 'li-river', youtubeId: '0W-jxZi4Uw4', icon: '⛰️', title: 'The Li River', say: L.videos.liRiver, start: 60 },
+    { id: 'counting', youtubeId: 'GMCn3JA57HQ', icon: '🔢', title: 'Count to ten in Chinese', say: L.videos.counting },
+    { id: 'new-year', youtubeId: 'OND-2-ZwmUI', icon: '🧧', title: 'Chinese New Year', say: L.videos.newYear },
+    { id: 'overview', youtubeId: 'IouJbmaaa6g', icon: '🌏', title: 'Where is China?', say: L.videos.overview },
+  ],
   passportLine: L.passport,
   createdAt: '2026-09-27',
 }
