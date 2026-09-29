@@ -1,3 +1,4 @@
+import { Seek } from './seek/Seek'
 import { useState } from 'react'
 import { useRoute } from './router'
 import { GameFrame } from './shell/GameFrame'
@@ -13,6 +14,8 @@ export default function App() {
 
   if (!started) return <Splash onStart={() => setStarted(true)} />
   switch (route.name) {
+    case 'seek':
+      return <Seek id={route.id} />
     case 'game':
       return <GameFrame id={route.id} />
     case 'trophies':

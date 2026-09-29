@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react'
 
 export type Route =
   | { name: 'home' }
+  | { name: 'seek'; id?: string }
   | { name: 'game'; id: string }
   | { name: 'trophies' }
   | { name: 'playground' }
@@ -11,6 +12,7 @@ export type Route =
 function parse(hash: string): Route {
   const [, first, second, third] = hash.replace(/^#/, '').split('/')
   if (first === 'game' && second) return { name: 'game', id: decodeURIComponent(second) }
+  if (first === 'seek') return { name: 'seek', id: second ? decodeURIComponent(second) : undefined }
   if (first === 'trophies') return { name: 'trophies' }
   if (first === 'playground') return { name: 'playground' }
   if (first === 'world') return { name: 'world', place: second ? decodeURIComponent(second) : undefined, activity: third ? decodeURIComponent(third) : undefined }
@@ -30,6 +32,7 @@ const subscribe = (cb: () => void) => {
 export const useRoute = () => useSyncExternalStore(subscribe, () => current)
 
 export const go = {
+  seek: (id?: string) => (location.hash = id ? `#/seek/${encodeURIComponent(id)}` : '#/seek'),
   home: () => (location.hash = '#/'),
   game: (id: string) => (location.hash = `#/game/${encodeURIComponent(id)}`),
   trophies: () => (location.hash = '#/trophies'),

@@ -1,3 +1,4 @@
+import { SeekTile } from '../seek/Seek'
 import { motion } from 'motion/react'
 import posthog, { isPostHogEnabled } from '../posthog'
 import { gameLogger } from '../posthog-logger'
@@ -142,6 +143,7 @@ export function Home() {
       </header>
 
       <WorldTile />
+      <SeekTile />
 
       {newest && <GameCard meta={newest.meta} hero won={won(newest.meta.id)} />}
 
