@@ -1,6 +1,8 @@
 # Italy: "Lupa Sings at the Opera" (plan)
 
-Status: proposal, 2026-09-28. Nothing built yet. Folder will be `src/world/places/italy/`. There's no Italy pin in
+Status: 2026-09-28, the boot-map hub and activity 1 (the Pizzeria in Naples) are built; the other six arches say
+"coming soon". Decisions from Dad: build the Pizzeria in one go (no approval gates), the 1889 storybook shows real
+people (Queen Margherita and Raffaele Esposito) in the flat style, and toppings stay veggie + olives (no salami). Folder will be `src/world/places/italy/`. There's no Italy pin in
 `COMING_SOON` yet, so add a new one: on `bg-world-map` the boot sits at about **x 48.5, y 31** (just south-west of
 the pink castle). Check it on the iPad. `kit/Flag.tsx` needs an `italy` flag (three vertical stripes: green, white,
 red). It's easy to draw, and we never generate flags.
