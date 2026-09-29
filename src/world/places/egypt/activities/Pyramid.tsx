@@ -21,7 +21,7 @@ const SIZE: Record<Size, { w: number; h: number }> = {
   big: { w: 30, h: 20 },
   mid: { w: 24, h: 17 },
   small: { w: 18, h: 14 },
-  cap: { w: 20, h: 16 },
+  cap: { w: 16, h: 10 },
 }
 // The slots, bottom row first: x = center in %, bottom in % of the site.
 const SLOTS: { size: Size; x: number; bottom: number }[] = [
@@ -184,7 +184,7 @@ export function Pyramid({ onDone, setProgress }: ActivityProps) {
           initial={{ scale: 0, rotate: 0 }}
           animate={{ scale: [0, 1.3, 1], rotate: 90 }}
           transition={{ duration: 0.8 }}
-          style={{ position: 'absolute', left: '50%', bottom: '64%', translate: '-50% 0', fontSize: '12cqh', pointerEvents: 'none' }}
+          style={{ position: 'absolute', left: '50%', bottom: '60%', translate: '-50% 0', fontSize: '12cqh', pointerEvents: 'none' }}
         >
           ✨
         </motion.div>
@@ -212,7 +212,7 @@ export function Pyramid({ onDone, setProgress }: ActivityProps) {
           {sled.sizes.map((size, i) => {
             const s = SIZE[size]
             return (
-              <motion.div key={`${sled.id}-${i}`} animate={wiggle === i ? WIGGLE : {}} style={{ height: `${(s.h / SIZE.big.h) * 88}%`, aspectRatio: size === 'cap' ? '1.1' : String((s.w / s.h) * 1.25), position: 'relative', zIndex: 2 }}>
+              <motion.div key={`${sled.id}-${i}`} animate={wiggle === i ? WIGGLE : {}} style={{ height: `${(s.h / SIZE.big.h) * 88}%`, aspectRatio: String((s.w / s.h) * 1.25), position: 'relative', zIndex: 2 }}>
                 <Draggable disabled={arriving} onDrop={(zone) => (zone === 'slot' ? void give(i) : false)} onTap={() => void give(i)} style={{ width: '100%', height: '100%' }}>
                   <div role="button" aria-label={`${size} stone`} className={help && size === want ? 'world-glow' : undefined} style={{ width: '100%', height: '100%', borderRadius: 12, minWidth: 'calc(var(--target) * 0.8)', minHeight: 'calc(var(--target) * 0.6)' }}>
                     <PyramidStone cap={size === 'cap'} variant={placed} />
