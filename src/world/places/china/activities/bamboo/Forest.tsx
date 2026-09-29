@@ -14,7 +14,7 @@ import { Ambient } from './Ambient'
 import { Stalk, stalkPoint, type StalkHandle } from './Stalk'
 
 const B = L.bamboo
-const TOTAL = 9
+const TOTAL = 6
 type Phase = 'r1' | 'break1' | 'r2' | 'break2' | 'r3a' | 'r3b' | 'payoff'
 const R3 = [3, 5, 2] // bamboo heights in round 3: the tallest is in the middle, the shortest on the right
 const tween = (from: number, to: number, duration: number, onUpdate: (v: number) => void, ease: 'linear' | 'easeIn' | 'easeInOut' | 'easeOut' = 'easeInOut') =>
@@ -57,7 +57,8 @@ export function Forest({ onDone, setProgress }: ActivityProps) {
   const a = fw * (landscape ? 0.4 : 0.41)
   const b = fw * (landscape ? 0.94 : 0.97)
   const colX = (i: number, n: number) => a + ((i + 0.5) * (b - a)) / n
-  const colW = Math.min(150, ((b - a) / Math.max(n(heights), 3)) * 0.96)
+  const phone = Math.min(fw, fh) < 420
+  const colW = Math.max(phone ? 72 : 110, Math.min(150, ((b - a) / Math.max(n(heights), 3)) * 0.96))
   const cols = heights.length
   const landX2 = Math.min(colX(2, 3), fw - baoW * 0.55 - 6) // keep the leaf pile (and Bao Bao landing) on screen
   const pileW = Math.min(seg * 3.6, fw * 0.3)
@@ -112,8 +113,9 @@ export function Forest({ onDone, setProgress }: ActivityProps) {
     setHeights([next])
     growFx(next - 1)
     void say(B.count[next - 1])
-    setProgress(next, TOTAL)
+    if (next === 2) setProgress(1, TOTAL)
     if (next === 3) {
+      setProgress(2, TOTAL)
       busy.current = true
       void (async () => {
         await wait(1100)
@@ -153,9 +155,12 @@ export function Forest({ onDone, setProgress }: ActivityProps) {
     const next = cur + 1
     setHeights([2, next])
     growFx(next)
-    setProgress(3 + next, TOTAL)
-    if (next === 2) void say(B.same)
+    if (next === 2) {
+      setProgress(3, TOTAL)
+      void say(B.same)
+    }
     if (next === 3) {
+      setProgress(4, TOTAL)
       busy.current = true
       void (async () => {
         await wait(500)
@@ -188,7 +193,7 @@ export function Forest({ onDone, setProgress }: ActivityProps) {
       bump(col)
       burst()
       void bao.current?.play('cheer')
-      setProgress(tallest ? 7 : 8, TOTAL)
+      if (tallest) setProgress(5, TOTAL)
       void (async () => {
         await say(tallest ? B.tallestYes : B.shortestYes)
         await wait(500)
@@ -347,6 +352,14 @@ export function Forest({ onDone, setProgress }: ActivityProps) {
             {guide !== null && phase.startsWith('r3') && (
               <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} style={{ position: 'absolute', left: a - 40, width: b - a + 80, top: ground - guide * seg - seg * 0.18, borderTop: `5px dashed ${INK}`, opacity: 0.7, zIndex: 2, transformOrigin: '0 50%', pointerEvents: 'none' }} />
             )}
+            <AnimatePresence>
+              {phase === 'r1' && heights[0] === 0 && (
+                <motion.div key="cue" initial={{ opacity: 0 }} animate={{ opacity: 1, y: [0, -seg * 0.6, 0] }} exit={{ opacity: 0, scale: 0.5 }} transition={{ y: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }, opacity: { duration: 0.4 } }} style={{ position: 'absolute', left: colX(0, 1) - 30, top: ground - seg * 1.9, width: 60, textAlign: 'center', fontSize: Math.max(40, seg * 0.7), lineHeight: 1, zIndex: 5, pointerEvents: 'none', filter: 'drop-shadow(0 0 8px rgba(255,200,61,1))' }}>
+                  <div style={{ color: 'var(--hotpink)', fontWeight: 900 }}>⬆</div>
+                  <div>👆</div>
+                </motion.div>
+              )}
+            </AnimatePresence>
             {heights.map((h, i) => (
               <Stalk
                 key={`${round}-${i}`}
@@ -363,6 +376,7 @@ export function Forest({ onDone, setProgress }: ActivityProps) {
                 glow={(phase === 'r2' && i === 1) || (phase === 'r1') || answer === i}
                 dim={dimmed.includes(i)}
                 markers={phase === 'r1' ? 3 : undefined}
+                minHit={phone ? 100 : 160}
                 hidden={hideStalks || hiddenCols.includes(i)}
                 disabled={busy.current && phase !== 'r3a' && phase !== 'r3b'}
                 label={phase === 'r3a' || phase === 'r3b' ? `bamboo ${i + 1}` : 'bamboo shoot'}

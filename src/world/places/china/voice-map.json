@@ -805,11 +805,11 @@
     "file": "04937aca2f6d.mp3"
   },
   {
-    "text": "Swipe up to grow the bamboo three tall!",
+    "text": "Swipe up! Grow it three tall!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4885,
-    "file": "492f2314f84c.mp3"
+    "ms": 4194,
+    "file": "0705a67969c3.mp3"
   },
   {
     "text": "Three tall! Wow!",
@@ -819,11 +819,11 @@
     "file": "5f06ab0b7830.mp3"
   },
   {
-    "text": "It is three tall already!",
+    "text": "Three tall is enough!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4367,
-    "file": "d84f20af964b.mp3"
+    "ms": 1931,
+    "file": "7f4da6d5481d.mp3"
   },
   {
     "text": "Crunch crunch! Yum!",
@@ -861,11 +861,11 @@
     "file": "1ab886f59fd2.mp3"
   },
   {
-    "text": "Taller! This one is taller, and that one is shorter!",
+    "text": "Taller! And that one is shorter!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4288,
-    "file": "d3f94e2db036.mp3"
+    "ms": 3015,
+    "file": "2d67b6de3de5.mp3"
   },
   {
     "text": "Which one is the tallest? Tap it!",
@@ -875,18 +875,18 @@
     "file": "0de52a73ff46.mp3"
   },
   {
-    "text": "Look for the one that reaches the highest!",
+    "text": "Look for the tallest one!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3324,
-    "file": "e6095340f2f5.mp3"
+    "ms": 2503,
+    "file": "ef6502d09853.mp3"
   },
   {
-    "text": "That one is shorter. Find the tallest!",
+    "text": "Too short! Find the tallest!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3020,
-    "file": "d000947d09e3.mp3"
+    "ms": 2262,
+    "file": "b08ecbf9fe28.mp3"
   },
   {
     "text": "The tallest bamboo!",
@@ -896,25 +896,25 @@
     "file": "76a7bb853049.mp3"
   },
   {
-    "text": "Now, which one is the shortest? Tap the short one!",
+    "text": "Which one is the shortest? Tap it!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4796,
-    "file": "1d710b31c5a0.mp3"
+    "ms": 2891,
+    "file": "4bf8a5b36937.mp3"
   },
   {
-    "text": "Look for the smallest one!",
+    "text": "Look for the short one!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2514,
-    "file": "1c688864fca1.mp3"
+    "ms": 1443,
+    "file": "6c87aa5dbf65.mp3"
   },
   {
-    "text": "That one is taller. Find the shortest!",
+    "text": "Too tall! Find the shortest!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4083,
-    "file": "4b4d5f095c89.mp3"
+    "ms": 3021,
+    "file": "0480c704d103.mp3"
   },
   {
     "text": "The shortest bamboo!",
@@ -980,18 +980,18 @@
     "file": "ad467c479c3e.mp3"
   },
   {
-    "text": "The Great Wall is so long, it can't fit on the screen!",
+    "text": "The wall is so long! Slide it to see more!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3499,
-    "file": "ead4ee0a6f28.mp3"
+    "ms": 4094,
+    "file": "415c03771952.mp3"
   },
   {
-    "text": "Slide the wall sideways to follow Hou Hou! Or tap the arrow!",
+    "text": "Slide the wall, or tap the arrow!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 5381,
-    "file": "2498e2c267c8.mp3"
+    "ms": 3412,
+    "file": "df8268d21400.mp3"
   },
   {
     "text": "Hou Hou ran ahead! Follow him!",
@@ -999,13 +999,6 @@
     "sig": "ed7dbdac3d",
     "ms": 2926,
     "file": "5c03d58ccd71.mp3"
-  },
-  {
-    "text": "Over here, Kaylee!",
-    "voice": "houhou",
-    "sig": "52d59a76fc",
-    "ms": 1192,
-    "file": "cde08e8b43d7.mp3"
   },
   {
     "text": "Red, gold, red, gold... what comes next?",
@@ -1029,39 +1022,18 @@
     "file": "f503aeb45044.mp3"
   },
   {
-    "text": "Red, gold, jade, red, gold... and then?",
+    "text": "One more! What comes next?",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4350,
-    "file": "8d13bab431c2.mp3"
+    "ms": 2316,
+    "file": "1ae00e850ae2.mp3"
   },
   {
-    "text": "Red, gold, red, gold, red! Try the glowing brick!",
+    "text": "Try the glowing brick!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 5378,
-    "file": "d25d741f17c7.mp3"
-  },
-  {
-    "text": "Red, gold, gold, red, gold, gold! Try the glowing brick!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 5511,
-    "file": "14773401e391.mp3"
-  },
-  {
-    "text": "Red, gold, jade, red, gold! Try the glowing brick!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 6105,
-    "file": "9c7a4a5e84b5.mp3"
-  },
-  {
-    "text": "Red, gold, jade, red, gold, jade! Try the glowing brick!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 5631,
-    "file": "ffca6c9be984.mp3"
+    "ms": 2586,
+    "file": "bc406767e06d.mp3"
   },
   {
     "text": "Yay! Thank you, Kaylee!",
@@ -1092,18 +1064,18 @@
     "file": "74e959bd4c51.mp3"
   },
   {
-    "text": "Long ago, soldiers sent smoke signals from tower to tower!",
+    "text": "Soldiers sent smoke signals tower to tower!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4394,
-    "file": "b1a2d213b2c4.mp3"
+    "ms": 3592,
+    "file": "adac23a30bf9.mp3"
   },
   {
-    "text": "The message zoomed all along the Great Wall!",
+    "text": "The message zoomed along the wall!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3099,
-    "file": "ddaeb4545c4e.mp3"
+    "ms": 2570,
+    "file": "576779e30d2e.mp3"
   },
   {
     "text": "Hee hee!",

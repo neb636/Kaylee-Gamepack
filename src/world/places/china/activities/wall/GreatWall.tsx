@@ -35,7 +35,6 @@ const PAINTED = [
 ]
 
 interface Geom extends WallGeom {
-  top: number
   B: number
   Bh: number
   pitch: number
@@ -47,38 +46,50 @@ interface Geom extends WallGeom {
   towerH: number
   towerCx: number
   towerTop: number
+  /** Phone landscape: the bricks to choose from sit in a grid at the right instead of a row at the bottom. */
+  short: boolean
+  trayW: number
+  /** Width on the right that is covered by the tray grid (short screens) and can't show the wall. */
+  reserve: number
 }
 
 function makeGeom(W: number, H: number): Geom {
-  const pw = Math.max(H * 3, W)
+  const short = W > H && H < 560
+  // The panorama is at least 3x the screen height (more on phone landscape, so the bricks can be bigger), and never
+  // narrower than the screen. Everything below is laid out inside it, so nothing can go past the painted art.
+  const pw = Math.max(H * 3 * (short ? 1.45 : 1), W)
   const hh = pw / 3
-  const B = clamp(Math.min(hh * 0.108, (W - 70) / 7), 64, 112)
+  const B = clamp(Math.min(112, hh * 0.12, W * 0.2), 40, 112)
   const Bh = B * BRICK_RATIO
   const pitch = B * 1.08
   const pad = B * 0.12
-  const towerH = hh * 0.36
+  const trayW = clamp(B * 1.35, 96, 140)
+  const trayH = short ? 0 : trayW * BRICK_RATIO + 28
+  const faceY1 = Math.min(hh * 0.845, H - trayH - 16 - (short ? 8 : 0))
+  const faceH = Math.max(hh * 0.12, Bh + 22)
+  const walkY1 = faceY1 - faceH
+  const walkH = hh * 0.065
+  const walkY0 = walkY1 - walkH
+  const towerH = Math.min(hh * 0.36, faceY1 - H * 0.2)
   const towerW = (towerH * 479) / 512
   const towerCx = pw - towerW / 2 - hh * 0.06
   const towerLeft = towerCx - towerW / 2
   const widths = GAPS.map((g) => g.seq.length * pitch + pad * 2)
-  const start = hh * 0.2
-  const space = Math.max(hh * 0.04, (towerLeft - hh * 0.05 - start - widths.reduce((a, b) => a + b, 0)) / 2)
+  const start = hh * 0.16
+  const space = Math.max(hh * 0.03, (towerLeft - hh * 0.05 - start - widths.reduce((a, b) => a + b, 0)) / 2)
   let x = start
   const gaps = widths.map((width) => {
     const gap = { left: x, width }
     x += width + space
     return gap
   })
-  const walkY0 = hh * 0.635
-  const walkY1 = hh * 0.705
-  const faceH = Math.max(hh * 0.12, Bh + 24)
-  const faceY1 = walkY1 + faceH
   return {
-    pw, hh, top: H - hh, B, Bh, pitch, pad, gaps,
-    parapetY: hh * 0.6, walkY0, walkY1, faceY1,
+    pw, hh, B, Bh, pitch, pad, gaps, short, trayW,
+    reserve: short ? trayW * 2 + 12 + 24 : 0,
+    parapetY: walkY0 - hh * 0.035, walkY0, walkY1, faceY1,
     rowY: walkY1 + (faceH - Bh) / 2,
-    houH: hh * 0.3,
-    footY: walkY0 + hh * 0.055,
+    houH: Math.min(hh * 0.3, H * 0.36),
+    footY: walkY0 + walkH * 0.75,
     towerW, towerH, towerCx, towerTop: faceY1 - towerH + hh * 0.02,
   }
 }
@@ -107,6 +118,9 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const beaconSaid = useRef(false)
   const patternSaid = useRef(false)
   const nudge = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const houWrap = useRef<HTMLDivElement>(null)
+  const houRunning = useRef(false)
+  const houX = useRef(-1)
 
   const [story, setStory] = useState(true)
   const [, setPhaseState] = useState<Phase>('story')
@@ -117,9 +131,10 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const [glow, setGlow] = useState<BrickColor | null>(null)
   const [hidden, setHidden] = useState<BrickColor[]>([])
   const [wiggle, setWiggle] = useState<{ c: BrickColor; n: number } | null>(null)
-  const [houX, setHouX] = useState(-1)
+  const [houXs, setHouXs] = useState(-1)
   const [houMs, setHouMs] = useState(0)
   const [dir, setDir] = useState<-1 | 0 | 1>(0)
+  const [cue, setCue] = useState(true)
   const [prompt, setPrompt] = useState<Line>(W_.oops)
   const [fires, setFires] = useState(0)
   const [bubble, setBubble] = useState(true)
@@ -140,6 +155,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const applyPan = (x: number) => {
     panRef.current = clamp(x, 0, maxPan())
     if (layer.current) layer.current.style.transform = `translate3d(${-panRef.current}px,0,0)`
+    clampHou()
   }
   const glideTo = (target: number, ms = 900) =>
     new Promise<void>((res) => {
@@ -157,39 +173,54 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
       }
       requestAnimationFrame(step)
     })
-  /** Where the camera should look for the current job: the gap she is fixing, or the beacon tower. */
-  const targetX = () => {
-    const gg = G.current
-    if (!gg) return 0
-    if (phase.current === 'beacon' || phase.current === 'fire') return gg.towerCx
-    const gap = gg.gaps[Math.min(round.current, 2)]
-    return gap.left + gap.width / 2
+  /** The thing she is working on right now, as a span of the panorama: the hole to fill, or the beacon tower. */
+  const jobSpan = () => {
+    const gg = G.current!
+    if (phase.current === 'beacon' || phase.current === 'fire') return { l: gg.towerCx - gg.towerW / 2, r: gg.towerCx + gg.towerW / 2 }
+    const gap = GAPS[Math.min(round.current, 2)]
+    const l = gg.gaps[Math.min(round.current, 2)].left + gg.pad + gap.missing[Math.min(hole.current, gap.missing.length - 1)] * gg.pitch
+    return { l, r: l + gg.B }
   }
-  /** -1 / 0 / 1: the current job (gap or tower) is off to the left, on screen, or off to the right. */
-  const where = (): -1 | 0 | 1 => {
+  /** The part of the screen where the wall is showing (the tray grid covers the right side on phone landscape). */
+  const usable = () => {
     const gg = G.current
-    if (!gg) return 0
     const w = WH.current.W
-    const beacon = phase.current === 'beacon' || phase.current === 'fire'
-    const gap = gg.gaps[Math.min(round.current, 2)]
-    const l = (beacon ? gg.towerCx - gg.towerW / 2 : gap.left) - panRef.current
-    const r = (beacon ? gg.towerCx + gg.towerW / 2 : gap.left + gap.width) - panRef.current
-    if (r - l > w * 0.9) return l < 0 && r < w * 0.5 ? -1 : l > w * 0.5 ? 1 : 0 // wider than the screen: its middle counts
-    return l < w * 0.02 ? -1 : r > w * 0.98 ? 1 : 0
+    return { lo: w * 0.03, hi: w - (gg?.reserve ?? 0) - w * 0.03 }
+  }
+  /** -1 / 0 / 1: the job is off to the left, fully on screen, or off to the right. */
+  const where = (): -1 | 0 | 1 => {
+    if (!G.current) return 0
+    const { l, r } = jobSpan()
+    const { lo, hi } = usable()
+    const sl = l - panRef.current
+    const sr = r - panRef.current
+    if (sl >= lo && sr <= hi) return 0
+    return sl + (sr - sl) / 2 < (lo + hi) / 2 ? -1 : 1
   }
   const refresh = () => {
-    setDir(where())
-    if (where() === 0 && arrived.current) {
+    const d = where()
+    setDir(d)
+    clampHou()
+    if (d === 0) {
       if (phase.current === 'follow') void beginBricks()
-      if (phase.current === 'beacon' && !beaconSaid.current) {
+      if (phase.current === 'beacon' && arrived.current && !beaconSaid.current) {
         beaconSaid.current = true
         void speak(W_.beacon)
       }
     }
   }
   const goToTarget = async () => {
-    await glideTo(targetX() - WH.current.W * 0.55)
+    const { l, r } = jobSpan()
+    const { lo, hi } = usable()
+    await glideTo((l + r) / 2 - (lo + (hi - lo) * 0.6))
     refresh()
+    // Never stuck: after the camera has done its best, the round goes on.
+    if (!alive()) return
+    if (phase.current === 'follow') void beginBricks()
+    if (phase.current === 'beacon' && !beaconSaid.current) {
+      beaconSaid.current = true
+      void speak(W_.beacon)
+    }
   }
   const armNudge = () => {
     clearTimeout(nudge.current)
@@ -198,6 +229,17 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
     }, 9000)
   }
   useEffect(() => () => clearTimeout(nudge.current), [])
+  /** Keep Hou Hou's whole body on screen while the camera slides (he slides along with the edge of the screen). */
+  const clampHou = () => {
+    const gg = G.current
+    const el = houWrap.current
+    if (!gg || !el || houRunning.current || houX.current < 0) return
+    const half = gg.houH * 0.46
+    const { lo, hi } = usable()
+    const sx = houX.current - panRef.current
+    const target = clamp(sx, lo + half + 4, hi - half - 4)
+    el.style.transform = `translateX(${target - sx}px)`
+  }
 
   const drag = useRef<{ id: number; x: number; pan: number; moved: boolean } | null>(null)
   const down = (e: RPointerEvent<HTMLDivElement>) => {
@@ -216,7 +258,10 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
         /* pointer already gone */
       }
     }
-    if (d.moved) applyPan(d.pan - dx)
+    if (d.moved) {
+      setCue(false)
+      applyPan(d.pan - dx)
+    }
   }
   const up = () => {
     const d = drag.current
@@ -227,15 +272,23 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   // ---- Hou Hou runs ahead ----
   const runTo = async (x: number) => {
     const gg = G.current!
-    const dist = Math.abs(x - (houX < 0 ? x : houX))
+    const from = houX.current < 0 ? x : houX.current
+    const dist = Math.abs(x - from)
     const ms = clamp(500 + (dist / gg.hh) * 700, 600, 2600)
+    // He runs from where he really stands (the camera may have pinned him to the screen edge), so undo the pin first.
+    if (houWrap.current) houWrap.current.style.transform = 'none'
+    houRunning.current = true
     setHouMs(ms)
-    setHouX(x)
-    if (dist < 4) return
-    sounds.whoosh()
-    const t0 = performance.now()
-    while (performance.now() - t0 < ms - 300 && alive()) await hou.current?.play('run')
-    await wait(200)
+    houX.current = x
+    setHouXs(x)
+    if (dist >= 4) {
+      sounds.whoosh()
+      const t0 = performance.now()
+      while (performance.now() - t0 < ms - 300 && alive()) await hou.current?.play('run')
+      await wait(200)
+    }
+    houRunning.current = false
+    clampHou()
   }
 
   // ---- The rounds ----
@@ -251,8 +304,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
     setGlow(null)
     setHidden([])
     setPhase('follow')
-    const gap = G.current!.gaps[r]
-    await runTo(gap.left - G.current!.hh * 0.08)
+    await runTo(jobSpan().l - G.current!.B * 1.5 - G.current!.houH * 0.3)
     if (!alive()) return
     arrived.current = true
     void hou.current?.play('point')
@@ -273,12 +325,17 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const sayPattern = () => speak(round.current === 2 && hole.current === 1 ? W_.pattern3b : W_.pattern[round.current])
 
   const tryBrick = (c: BrickColor): boolean => {
-    if (phase.current === 'follow' || (phase.current === 'brick' && !isReady())) {
+    if (phase.current !== 'follow' && phase.current !== 'brick') return false
+    if (where() !== 0) {
       sounds.pop()
       void goToTarget()
       return false
     }
-    if (phase.current !== 'brick') return false
+    // The hole is on screen: she can fix it right away, even before Hou Hou has finished pointing it out.
+    if (phase.current === 'follow') {
+      setPhase('brick')
+      clearTimeout(nudge.current)
+    }
     const gp = GAPS[round.current]
     const want = gp.seq[gp.missing[hole.current]] as BrickColor
     if (c !== want) {
@@ -291,7 +348,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
       // Help: after a wrong brick the wrong choices fade away one by one, so the right one is easy to find.
       const wrongOnes = order[round.current].filter((x) => x !== want && !hidden.includes(x))
       if (wrongOnes.length > 0 && wrongs.current >= (gp.choices.length === 2 ? 2 : 1)) setHidden((h) => [...h, wrongOnes[0]])
-      void speak(round.current === 2 && hole.current === 1 ? W_.hint3b : W_.hint[round.current])
+      void speak(W_.hint)
       return false
     }
     // Right brick!
@@ -311,7 +368,6 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
     } else void finishGap(round.current)
     return true
   }
-  const isReady = () => where() === 0
   const finishGap = async (r: number) => {
     setPhase('follow')
     arrived.current = false
@@ -335,7 +391,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
     arrived.current = false
     beaconSaid.current = false
     setDir(1)
-    await runTo(G.current!.towerCx - G.current!.hh * 0.24)
+    await runTo(G.current!.towerCx - G.current!.towerW / 2 - G.current!.houH * 0.5)
     if (!alive()) return
     arrived.current = true
     void hou.current?.play('point')
@@ -373,8 +429,9 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
 
   // Set up once we know the size: Hou Hou starts at the left end.
   useEffect(() => {
-    if (g && houX < 0) {
-      setHouX(g.hh * 0.1)
+    if (g && houX.current < 0) {
+      houX.current = g.hh * 0.1
+      setHouXs(g.hh * 0.1)
       setProgress(0, TOTAL)
     }
   }, [!!g])
@@ -394,10 +451,10 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   }
 
   const tray = order[Math.min(rnd, 2)].filter((c) => !hidden.includes(c))
-  const trayW = g ? g.B * 1.25 : 100
+  const trayW = g ? g.trayW : 100
   const brickAt = (gi: number, k: number) => (g ? g.gaps[gi].left + g.pad + k * g.pitch : 0)
   const houStyle = g
-    ? { left: houX < 0 ? 0 : houX, top: g.footY - g.houH, height: g.houH, transition: `left ${houMs}ms cubic-bezier(.45,.05,.4,1)` }
+    ? { left: houXs < 0 ? 0 : houXs, top: g.footY - g.houH, height: g.houH, transition: `left ${houMs}ms cubic-bezier(.45,.05,.4,1)` }
     : {}
 
   return (
@@ -411,7 +468,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
             onPointerMove={move}
             onPointerUp={up}
             onPointerCancel={up}
-            style={{ position: 'absolute', left: 0, top: g.top, width: g.pw, height: g.hh, touchAction: 'none', willChange: 'transform', cursor: 'grab', userSelect: 'none', WebkitUserSelect: 'none' }}
+            style={{ position: 'absolute', left: 0, top: 0, width: g.pw, height: g.hh, touchAction: 'none', willChange: 'transform', cursor: 'grab', userSelect: 'none', WebkitUserSelect: 'none' }}
           >
             <div style={{ position: 'absolute', inset: 0, background: `url(${art.bgWall}) center / 100% 100%` }} />
             <Ambient g={g} />
@@ -451,13 +508,15 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
             <Fires g={g} count={fires} />
             {/* Hou Hou on the walkway. */}
             <div style={{ position: 'absolute', translate: '-50% 0', zIndex: 4, ...houStyle }}>
-              <HouHou ref={hou} height="100%" onTap={tickle} />
+              <div ref={houWrap} style={{ height: '100%', transition: 'transform 140ms ease-out' }}>
+                <HouHou ref={hou} height="100%" onTap={tickle} />
+              </div>
             </div>
           </div>
 
           {/* Bricks to choose from. Fixed to the screen so they stay put while the wall slides. */}
           {!story && phase.current !== 'beacon' && phase.current !== 'fire' && (
-            <div style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom) + 10px)', display: 'flex', justifyContent: 'center', gap: 'min(24px, 3vw)', zIndex: 15, pointerEvents: 'none' }}>
+            <div style={g.short ? { position: 'absolute', right: 12, bottom: 'calc(var(--safe-bottom) + 8px)', width: g.trayW * 2 + 12, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, justifyItems: 'center', zIndex: 15, pointerEvents: 'none' } : { position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom) + 12px)', display: 'flex', justifyContent: 'center', gap: 'min(24px, 3vw)', zIndex: 15, pointerEvents: 'none' }}>
               {tray.map((c) => (
                 <motion.div key={`${rnd}-${c}`} initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ type: 'spring', bounce: 0.4 }} style={{ pointerEvents: 'auto' }}>
                   <Piece
@@ -487,17 +546,20 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
           aria-label="follow Hou Hou"
           onClick={() => {
             sounds.pop()
+            setCue(false)
             void goToTarget()
           }}
-          animate={dir !== 0 ? { scale: [1, 1.15, 1] } : { scale: 1, opacity: 0.85 }}
-          transition={dir !== 0 ? { repeat: Infinity, duration: 1 } : {}}
-          className={dir !== 0 ? 'world-glow' : undefined}
-          style={{ position: 'absolute', top: '36%', [dir < 0 ? 'left' : 'right']: 12, width: 'calc(var(--target) + 12px)', height: 'calc(var(--target) + 12px)', borderRadius: '50%', border: `5px solid ${INK}`, background: 'var(--hotpink)', color: '#fff', fontSize: 44, fontWeight: 700, zIndex: 16, display: 'grid', placeItems: 'center', boxShadow: 'var(--shadow)', transform: dir < 0 ? 'scaleX(-1)' : undefined }}
+          animate={dir !== 0 || cue ? { scale: [1, 1.15, 1] } : { scale: 1, opacity: 0.85 }}
+          transition={dir !== 0 || cue ? { repeat: Infinity, duration: 1 } : {}}
+          className={dir !== 0 || cue ? 'world-glow' : undefined}
+          style={{ position: 'absolute', top: g?.short ? '24%' : '36%', [dir < 0 ? 'left' : 'right']: 12, width: 'calc(var(--target) + 12px)', height: 'calc(var(--target) + 12px)', borderRadius: '50%', border: `5px solid ${INK}`, background: 'var(--hotpink)', color: '#fff', fontSize: 44, fontWeight: 700, zIndex: 16, display: 'grid', placeItems: 'center', boxShadow: 'var(--shadow)', transform: dir < 0 ? 'scaleX(-1)' : undefined }}
         >
           ▶
         </motion.button>
       )}
 
+      {/* A soft cream band behind the top bar so the stars show up on the pale sky. */}
+      {!story && <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 'calc(var(--safe-top) + 96px)', background: 'linear-gradient(rgba(255,247,240,0.9), rgba(255,247,240,0.55) 55%, rgba(255,247,240,0))', zIndex: 13, pointerEvents: 'none' }} />}
       {!story && bubble && (
         <div style={{ position: 'absolute', left: 0, right: 0, top: 'var(--top-clear)', display: 'flex', justifyContent: 'center', padding: '0 12px', zIndex: 14, pointerEvents: 'none' }}>
           <div style={{ pointerEvents: 'auto' }}>

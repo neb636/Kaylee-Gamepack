@@ -36,6 +36,8 @@ export interface StalkProps {
   label: string
   /** Called on a swipe up or a tap. */
   onAct: () => void
+  /** Smallest tappable height in px (even for a tiny sprout). */
+  minHit?: number
   /** Number markers beside the stalk up to this many segments (round 1). */
   markers?: number
   hidden?: boolean
@@ -60,13 +62,13 @@ export function stalkPoint(seg: number, bend: number, dist: number) {
   return { x, y, angle: bend * jj }
 }
 
-export const Stalk = forwardRef<StalkHandle, StalkProps>(function Stalk({ segs, seg, colW, room, x, ground, bend = 0, glow, dim, label, onAct, markers, hidden, disabled, style }, ref) {
+export const Stalk = forwardRef<StalkHandle, StalkProps>(function Stalk({ segs, seg, colW, room, x, ground, bend = 0, glow, dim, label, onAct, markers, hidden, disabled, style, minHit = 160 }, ref) {
   const btn = useRef<HTMLButtonElement>(null)
   const inner = useRef<HTMLDivElement>(null)
   const fired = useRef(false)
   const H = (room + 0.6) * seg
   // The tappable box is only as tall as the stalk right now (plus a margin), so empty sky above a short stalk isn't hit.
-  const Hb = Math.min(H, Math.max(140, (segs + 1.5) * seg + seg * 0.2))
+  const Hb = Math.min(H, Math.max(minHit, (segs + 1.5) * seg + seg * 0.2))
   const base = H - seg * 0.18
   const w = Math.min(colW * 0.62, seg * 1.0)
 
@@ -140,7 +142,7 @@ export const Stalk = forwardRef<StalkHandle, StalkProps>(function Stalk({ segs, 
       <div ref={inner} style={{ position: 'absolute', left: 0, bottom: 0, width: colW, height: H, transformOrigin: '50% 90%', transition: 'transform .25s', animation: glow ? 'bamboo-glow 1.3s ease-in-out infinite' : undefined }}>
         <style>{`@keyframes bamboo-glow{0%,100%{filter:drop-shadow(0 0 3px rgba(255,200,61,.9))}50%{filter:drop-shadow(0 0 16px rgba(255,200,61,1))}}`}</style>
         <svg width={colW} height={H} viewBox={`0 0 ${colW} ${H}`} style={{ display: 'block', overflow: 'visible', pointerEvents: 'none' }}>
-          <ellipse cx={colW / 2} cy={base + 4} rx={w * 1.05} ry={seg * 0.16} fill={DIRT} stroke={INK} strokeWidth={SW} />
+          <ellipse cx={colW / 2} cy={base + 4} rx={Math.min(w * 1.05, colW * 0.47)} ry={seg * 0.16} fill={DIRT} stroke={INK} strokeWidth={SW} />
           <g transform={`translate(${colW / 2} ${base})`}>{chain(0)}</g>
           <ellipse cx={colW / 2 - w * 0.5} cy={base + 8} rx={w * 0.5} ry={seg * 0.1} fill="#B98A62" />
           <ellipse cx={colW / 2 + w * 0.45} cy={base + 9} rx={w * 0.4} ry={seg * 0.08} fill="#B98A62" />
