@@ -1,0 +1,252 @@
+[
+  "Italy",
+  {
+    "text": "Ciao, Kaylee! I'm Lupa!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Help me get ready to sing at the opera?",
+    "voice": "lupa"
+  },
+  "Tap the glowing pizza!",
+  "Where should we go next, Kaylee?",
+  "This spot opens soon!",
+  "Italy is shaped like a boot! Kick!",
+  "Lupa's opera night is coming soon!",
+  "Help friends to fill up Lupa's band!",
+  {
+    "text": "Awooo!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Hee hee! Ciao!",
+    "voice": "lupa"
+  },
+  {
+    "text": "I love to sing!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Ho ho ho!",
+    "voice": "bruno"
+  },
+  {
+    "text": "Pizza time!",
+    "voice": "bruno"
+  },
+  {
+    "text": "That tickles!",
+    "voice": "bruno"
+  },
+  {
+    "text": "Hello, dear!",
+    "voice": "bufala"
+  },
+  {
+    "text": "Coo coo! Ciao!",
+    "voice": "gino"
+  },
+  {
+    "text": "I am the emperor.",
+    "voice": "cesare"
+  },
+  {
+    "text": "What a lovely kitchen!",
+    "voice": "queen"
+  },
+  {
+    "text": "For the Queen!",
+    "voice": "raffaele"
+  },
+  {
+    "text": "Welcome to Naples! Pizza was born here!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Zio Bruno needs a helper chef!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Benvenuta, Chef Kaylee!",
+    "voice": "bruno"
+  },
+  {
+    "text": "Let me tell you the story of the most famous pizza!",
+    "voice": "bruno"
+  },
+  "Long ago, a queen named Margherita came to Naples.",
+  {
+    "text": "For the Queen, I will make a special pizza!",
+    "voice": "raffaele"
+  },
+  {
+    "text": "Hello! I would love a pizza, please.",
+    "voice": "queen"
+  },
+  "Flick the dough up to spin it!",
+  "Again! Flick it up!",
+  {
+    "text": "Bellissimo! A big round pizza!",
+    "voice": "bruno"
+  },
+  {
+    "text": "Bellissimo! A big round pizza!",
+    "voice": "raffaele"
+  },
+  "Swirl the ladle to spread the sauce!",
+  {
+    "text": "Perfetto! Red tomato sauce!",
+    "voice": "bruno"
+  },
+  {
+    "text": "Perfetto! Red tomato sauce!",
+    "voice": "raffaele"
+  },
+  "Tomatoes love the hot, sunny weather in Italy!",
+  "Put three pieces of white mozzarella on the pizza!",
+  "Now three green basil leaves!",
+  {
+    "text": "Red, white and green, like the flag of Italy!",
+    "voice": "raffaele"
+  },
+  "Slide the pizza into the oven!",
+  "This oven is super hot! Pizza bakes in ninety seconds!",
+  "Tap the pizza to turn it!",
+  "Turn it again!",
+  "It is golden! Pull the pizza out!",
+  "Tap the pizza to give it to the Queen!",
+  {
+    "text": "Buonissima! Red, white and green!",
+    "voice": "queen"
+  },
+  {
+    "text": "So we call it pizza Margherita!",
+    "voice": "bruno"
+  },
+  {
+    "text": "Mamma mia! Customers!",
+    "voice": "bruno"
+  },
+  {
+    "text": "Fresh mozzarella, from my family's milk!",
+    "voice": "bufala"
+  },
+  "Mozzarella is made from milk. Some comes from buffalo!",
+  {
+    "text": "Five olives on mine, please!",
+    "voice": "bufala"
+  },
+  "Tap the order to start!",
+  {
+    "text": "Mozzarella!",
+    "voice": "bruno"
+  },
+  "Put five olives on the pizza!",
+  "One!",
+  "Two!",
+  "Three!",
+  "Four!",
+  "Five!",
+  "Six!",
+  "Seven!",
+  "Eight!",
+  "Oops, too many! Drag one off the pizza.",
+  "That's the order!",
+  "Cut it in half! Drag across the pizza.",
+  "Two halves!",
+  "Drag all the way across the pizza!",
+  {
+    "text": "One half for me, one for my baby!",
+    "voice": "bufala"
+  },
+  "Tap the pizza to serve it!",
+  {
+    "text": "Buonissima! Grazie!",
+    "voice": "bufala"
+  },
+  {
+    "text": "Ciao! Half mushrooms, half olives, please!",
+    "voice": "gino"
+  },
+  {
+    "text": "I made this one for you. Watch!",
+    "voice": "bruno"
+  },
+  "Mushrooms go on this half!",
+  "Olives go on that half!",
+  "Put mushrooms on one half and olives on the other!",
+  "Cut it into four slices! Two cuts!",
+  "Now cut the other way!",
+  "Four slices!",
+  {
+    "text": "Four slices, for me and my friends!",
+    "voice": "gino"
+  },
+  {
+    "text": "Delizioso! Grazie mille!",
+    "voice": "gino"
+  },
+  "When someone says grazie, you say prego!",
+  {
+    "text": "Now make a pizza just for YOU, Chef Kaylee!",
+    "voice": "bruno"
+  },
+  "Red sauce or pink sauce?",
+  "Red tomato sauce!",
+  "Pink beet sauce! Yum!",
+  "Put on anything you like!",
+  {
+    "text": "Mmm... mozzarella...",
+    "voice": "cesare"
+  },
+  "Uh oh! Tap the sneaky cat!",
+  {
+    "text": "Oh. Sorry. Here you go.",
+    "voice": "cesare"
+  },
+  "Tap the check when you like it!",
+  "Cut it any way you like!",
+  {
+    "text": "Buonissima, Kaylee!",
+    "voice": "lupa"
+  },
+  "Mozzarella!",
+  "Basil!",
+  "Olive!",
+  "Mushroom!",
+  "Peperoni! In Italy, that means peppers!",
+  "Tomato!",
+  "Great job, Chef Kaylee!",
+  {
+    "text": "Everybody loves your pizza!",
+    "voice": "bruno"
+  },
+  {
+    "text": "Now watch me spin!",
+    "voice": "bruno"
+  },
+  {
+    "text": "Grazie, Chef Kaylee! A chef hat for you!",
+    "voice": "bruno"
+  },
+  {
+    "text": "And my mandolin, for Lupa's band!",
+    "voice": "bruno"
+  },
+  {
+    "text": "Yay! Our first friend for the band!",
+    "voice": "lupa"
+  },
+  "Brown bear sticker! Bears live in the mountains of Italy!",
+  "In Italy, people say ciao! It means hello and goodbye!",
+  "Grazie means thank you!",
+  "One, two, three in Italian: uno, due, tre!",
+  "Italy is shaped like a boot, kicking a ball!",
+  "Italy has hot, sunny summers, and snowy mountains up north!",
+  "Pizza comes from Naples, in Italy!",
+  "Pizza Margherita is red, white and green, like Italy's flag!",
+  "Long ago, the Romans built roads, arenas and water bridges!",
+  "Italy has volcanoes! One is right next to Naples!",
+  "Italy's flag has three stripes: green, white and red!",
+  "This is Italy! Tap a picture to learn more."
+]
