@@ -351,7 +351,7 @@ export function Cutter({ pizza, need, onCut, onDone }: { pizza: PizzaState; need
     let a = ((Math.round(angle / 45) * 45) % 180 + 180) % 180
     if (need === 2 && cuts.length === 1) {
       const diff = Math.abs(((a - cuts[0] + 90) % 180 + 180) % 180 - 90)
-      if (diff > 60) {
+      if (diff < 60) {
         sounds.oops()
         void say(P.otherWay)
         return

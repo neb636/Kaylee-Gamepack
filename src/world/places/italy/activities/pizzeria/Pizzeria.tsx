@@ -87,15 +87,16 @@ export function Pizzeria({ onDone, setProgress }: ActivityProps) {
   const b = SERVICES[service].beats[beat]
   const next = () => setBeat((i) => i + 1)
 
+  // Each story beat needs its own playback and skip state, even when two are consecutive.
   switch (b.k) {
     case 'arrive':
-      return <StoryBeat lines={P.arrive} friend={<Lupa height="100%" />} bg={art.bgNaplesBay} onDone={next} />
+      return <StoryBeat key={b.k} lines={P.arrive} friend={<Lupa height="100%" />} bg={art.bgNaplesBay} onDone={next} />
     case 'hello':
-      return <StoryBeat lines={[P.hello, P.storyIntro]} friend={<Bruno height="100%" />} bg={art.bgPizzeriaFront} onDone={next} />
+      return <StoryBeat key={b.k} lines={[P.hello, P.storyIntro]} friend={<Bruno height="100%" />} bg={art.bgPizzeriaFront} onDone={next} />
     case 'story':
-      return <StoryBeat lines={[P.story1, P.story2]} img={art.raffaele} bg={art.bgNaples1889} onDone={next} />
+      return <StoryBeat key={b.k} lines={[P.story1, P.story2]} img={art.raffaele} bg={art.bgNaples1889} onDone={next} />
     case 'named':
-      return <StoryBeat lines={[P.named]} friend={<Bruno height="100%" />} bg={art.bgPizzeriaFront} onDone={next} />
+      return <StoryBeat key={b.k} lines={[P.named]} friend={<Bruno height="100%" />} bg={art.bgPizzeriaFront} onDone={next} />
     case 'job':
       return (
         <Job
