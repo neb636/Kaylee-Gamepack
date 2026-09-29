@@ -277,7 +277,7 @@ function OperaSoon({ backToMap }: { backToMap: () => void }) {
         <SparklePuppet ref={sparkle} height="min(300px, 34vh, 40vw)" lookToward={0.5} />
         <Lupa ref={lupa} height="min(260px, 30vh, 36vw)" onTap={() => void lupa.current?.play('howl')} />
       </div>
-      <BigButton onClick={backToMap} ariaLabel="Back to the map of Italy">
+      <BigButton onClick={backToMap} ariaLabel="Return to Italy">
         🍕 ▶
       </BigButton>
     </div>
