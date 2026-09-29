@@ -1,19 +1,25 @@
 // China: "Bao Bao's Dragon Parade" (plan: planning/around-the-world/china.md). Built in stages: the scroll map and the
-// Shanghai Dumpling House came first, then the Bamboo Forest and the Great Wall; the other four lanterns glow "coming soon" until their activities exist.
+// Shanghai Dumpling House came first, then the Bamboo Forest and the Great Wall, then Hotpot Night, the Magic Brush, the Great Race,
+// the Bullet Train and the Dragon Parade finale. Every lantern is open from the start; each stamp brings a friend to the parade.
 import { motion } from 'motion/react'
-import { useEffect, useRef, useState, type ComponentType } from 'react'
-import { BigButton, say, SparklePuppet, sounds, type PuppetHandle } from '../../../sdk'
+import { useEffect, useState, type ComponentType } from 'react'
+import { say, sounds } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
-import type { PlaceProps } from '../../types'
+import { VideoBreak } from '../../kit/Theater'
+import type { PlaceProps, PlaceVideo } from '../../types'
 import { BambooForest } from './activities/bamboo/BambooForest'
+import { MagicBrush } from './activities/brush/MagicBrush'
 import { DumplingHouse } from './activities/dumplings/DumplingHouse'
+import { Hotpot } from './activities/hotpot/Hotpot'
+import { Parade } from './activities/parade/Parade'
+import { GreatRace } from './activities/race/GreatRace'
+import { BulletTrain } from './activities/train/BulletTrain'
 import { GreatWall } from './activities/wall/GreatWall'
 import { art } from './art'
 import { L } from './lines'
 import { Lantern } from './props'
-import { DouDou } from './puppets/DouDou'
 import { INK } from './puppets/ink'
 
 export interface ActivityProps {
@@ -21,25 +27,38 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { bamboo: BambooForest, wall: GreatWall, dumplings: DumplingHouse }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = {
+  bamboo: BambooForest,
+  wall: GreatWall,
+  hotpot: Hotpot,
+  brush: MagicBrush,
+  race: GreatRace,
+  train: BulletTrain,
+  dumplings: DumplingHouse,
+}
 
 /** The seven lantern spots on the scroll map (the painted cream circles in scene-china-map), in % of the picture.
- *  Only activities listed in meta.activities are playable; the rest say "coming soon". */
+ *  `face` is the friend who shows in the lantern once it's lit. Only activities listed in meta.activities are playable. */
 const LANTERNS = [
   { id: 'wall', name: 'The Great Wall', icon: '🧱', x: 51.4, y: 25.6, face: art.houhou },
   { id: 'bamboo', name: 'Bamboo Forest', icon: '🎋', x: 44, y: 42.7, face: art.baobao },
-  { id: 'hotpot', name: 'Hotpot Night', icon: '🍲', x: 52.7, y: 47.1 },
-  { id: 'brush', name: 'The Magic Brush', icon: '🖌️', x: 58, y: 58.8 },
-  { id: 'race', name: 'The Great Race', icon: '🐭', x: 73.6, y: 61.7 },
-  { id: 'train', name: 'Bullet Train', icon: '🚄', x: 79.4, y: 14.8 },
+  { id: 'hotpot', name: 'Hotpot Night', icon: '🍲', x: 52.7, y: 47.1, face: art.hong },
+  { id: 'brush', name: 'The Magic Brush', icon: '🖌️', x: 58, y: 58.8, face: art.crane },
+  { id: 'race', name: 'The Great Race', icon: '🐭', x: 73.6, y: 61.7, face: art.mouse },
+  { id: 'train', name: 'Bullet Train', icon: '🚄', x: 79.4, y: 14.8, face: art.tiger },
   { id: 'dumplings', name: 'Dumpling House', icon: '🥟', x: 84.4, y: 47.6, face: art.doudou },
 ]
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, earnStamp, setProgress, backToMap } = props
+  const { meta, activity, stamps, earnStamp, setProgress, backToMap, onWin } = props
   const [justEarned, setJustEarned] = useState<string | null>(null)
+  const [videoAfter, setVideoAfter] = useState<PlaceVideo | null>(null)
 
-  if (activity === 'party') return <ParadeSoon backToMap={backToMap} />
+  if (activity === 'party') {
+    const ready = meta.activities.every((a) => stamps.includes(a.id))
+    if (!ready) return <Hub {...props} />
+    return <Parade setProgress={setProgress} onDone={onWin} />
+  }
 
   const Activity = activity ? ACTIVITIES[activity] : undefined
   const info = meta.activities.find((a) => a.id === activity)
@@ -57,6 +76,20 @@ export default function Place(props: PlaceProps) {
             activity={info}
             onClose={() => {
               setJustEarned(null)
+              // A real-world video about what she just played comes next (skippable), then the map.
+              const video = meta.videos?.find((v) => v.after === info.id)
+              if (video) {
+                setProgress(0, 0)
+                setVideoAfter(video)
+              } else backToMap()
+            }}
+          />
+        )}
+        {videoAfter && (
+          <VideoBreak
+            video={videoAfter}
+            onDone={() => {
+              setVideoAfter(null)
               backToMap()
             }}
           />
@@ -75,15 +108,17 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const [intro, setIntro] = useState(stamps.length === 0 && !introSeen)
   const [unroll] = useState(() => !unrolled)
   const [wiggle, setWiggle] = useState<string | null>(null)
+  const [postcard, setPostcard] = useState<PlaceVideo | null>(null)
   const playable = new Set(meta.activities.map((a) => a.id))
+  const allDone = meta.activities.every((a) => stamps.includes(a.id))
 
   useEffect(() => {
     unrolled = true
   }, [])
   useEffect(() => {
     if (intro) return
-    void say(stamps.length === 0 ? L.hubFirst : L.hubNext)
-  }, [intro, stamps.length])
+    void say(allDone ? L.hubParty : stamps.length === 0 ? L.hubFirst : L.hubNext)
+  }, [intro, allDone, stamps.length])
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#BFE8D6', padding: 'var(--top-clear) 12px calc(var(--safe-bottom) + 12px)', display: 'flex', overflow: 'hidden' }}>
@@ -149,8 +184,12 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
               </motion.button>
             )
           })}
+          {POSTCARDS.map((p, i) => {
+            const video = meta.videos?.find((v) => v.id === p.video)
+            return video && <Postcard key={p.video} video={video} x={p.x} y={p.y} delay={(unroll ? 0.8 : 0.2) + i * 0.08} onOpen={() => setPostcard(video)} />
+          })}
         </FitBox>
-        <ParadePanel lit={stamps.length} total={LANTERNS.length} onOpen={() => openActivity('party')} />
+        <ParadePanel lit={stamps.length} total={LANTERNS.length} ready={allDone} onOpen={() => (allDone ? openActivity('party') : void say(L.partyLocked))} />
       </div>
       {intro && (
         <StoryBeat
@@ -162,7 +201,52 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
           }}
         />
       )}
+      {postcard && <VideoBreak video={postcard} onDone={() => setPostcard(null)} />}
     </div>
+  )
+}
+
+/** Real-world video postcards pinned on the painted landmarks of the scroll map (videos from meta.videos). */
+const POSTCARDS = [
+  { video: 'harbin', x: 67, y: 8 }, // the snowy northeast: Harbin's ice city
+  { video: 'dragon-dance', x: 85, y: 84 }, // the South China Sea corner: a New Year dragon dance
+  { video: 'shanghai', x: 70, y: 31 }, // the Shanghai skyline at night
+  { video: 'li-river', x: 41.5, y: 62 }, // Guilin's pointy hills and the Li River
+  { video: 'overview', x: 14, y: 84 }, // the empty corner of the scroll: where is China?
+]
+
+function Postcard({ video, x, y, delay, onOpen }: { video: PlaceVideo; x: number; y: number; delay: number; onOpen: () => void }) {
+  return (
+    <motion.button
+      aria-label={`Video: ${video.title}`}
+      initial={{ scale: 0 }}
+      animate={{ scale: 1, rotate: [-6, 3, -6], y: [0, -4, 0] }}
+      transition={{ scale: { delay, type: 'spring', duration: 0.5 }, rotate: { repeat: Infinity, duration: 3.4 }, y: { repeat: Infinity, duration: 2.2 } }}
+      whileTap={{ scale: 0.85 }}
+      onClick={() => {
+        sounds.pop()
+        onOpen()
+      }}
+      style={{
+        position: 'absolute',
+        left: `${x}%`,
+        top: `${y}%`,
+        translate: '-50% -50%',
+        width: 'clamp(42px, 6.2cqw, 66px)',
+        aspectRatio: '1.15',
+        padding: 0,
+        borderRadius: 12,
+        border: `4px solid ${INK}`,
+        background: '#FFF7F0',
+        boxShadow: '0 5px 0 rgba(110,59,36,.25)',
+        display: 'grid',
+        placeItems: 'center',
+        fontSize: 'clamp(18px, 3cqw, 32px)',
+      }}
+    >
+      {video.icon}
+      <span style={{ position: 'absolute', right: '-18%', bottom: '-18%', width: '52%', aspectRatio: '1', borderRadius: '50%', background: '#E8504F', border: `3px solid ${INK}`, color: '#fff', fontSize: 'clamp(11px, 1.6cqw, 16px)', display: 'grid', placeItems: 'center' }}>▶</span>
+    </motion.button>
   )
 }
 
@@ -183,17 +267,17 @@ function Petals() {
   )
 }
 
-/** The dragon parade: one lantern lights up for every stamp. The finale itself comes with the last activity. */
-function ParadePanel({ lit, total, onOpen }: { lit: number; total: number; onOpen: () => void }) {
+/** The dragon parade: one lantern lights up for every stamp; when all seven glow, the finale opens. */
+function ParadePanel({ lit, total, ready, onOpen }: { lit: number; total: number; ready: boolean; onOpen: () => void }) {
   return (
     <motion.button
       aria-label="Party"
+      className={ready ? 'party-panel world-glow' : 'party-panel'}
       whileTap={{ scale: 0.95 }}
       onClick={() => {
         sounds.pop()
         onOpen()
       }}
-      className="party-panel"
       style={{ position: 'relative', flexShrink: 0, borderRadius: 28, border: `5px solid ${INK}`, boxShadow: 'var(--shadow)', background: '#4B3B7A', overflow: 'hidden', containerType: 'size', padding: 0 }}
     >
       <div style={{ position: 'absolute', left: '4%', right: '4%', top: '6%', display: 'flex', justifyContent: 'space-between' }}>
@@ -212,31 +296,5 @@ function ParadePanel({ lit, total, onOpen }: { lit: number; total: number; onOpe
         </span>
       </div>
     </motion.button>
-  )
-}
-
-/** Finale stub (route `party`): the dragon parade arrives when every lantern is lit. */
-function ParadeSoon({ backToMap }: { backToMap: () => void }) {
-  const sparkle = useRef<PuppetHandle>(null)
-  const dou = useRef<PuppetHandle>(null)
-  useEffect(() => {
-    void say(L.paradeSoon)
-    const t = setTimeout(() => {
-      void sparkle.current?.play('wave')
-      void dou.current?.play('wave')
-    }, 400)
-    return () => clearTimeout(t)
-  }, [])
-  return (
-    <div style={{ position: 'absolute', inset: 0, background: `url(${art.bgBund}) center / cover`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', gap: 'min(20px, 3vh)', padding: 'var(--top-clear) 20px calc(var(--safe-bottom) + 28px)' }}>
-      <div style={{ background: '#fff', borderRadius: 'var(--radius)', padding: '12px 26px', boxShadow: 'var(--shadow)', fontSize: 'clamp(22px, min(4vw, 5vh), 38px)', fontWeight: 600, textAlign: 'center' }}>🐉 {L.paradeSoon}</div>
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'min(20px, 3vw)' }}>
-        <SparklePuppet ref={sparkle} height="min(300px, 34vh, 40vw)" lookToward={0.5} />
-        <DouDou ref={dou} height="min(260px, 30vh, 36vw)" onTap={() => void dou.current?.play('hop')} />
-      </div>
-      <BigButton onClick={backToMap} ariaLabel="Back to the lanterns">
-        🏮 ▶
-      </BigButton>
-    </div>
   )
 }

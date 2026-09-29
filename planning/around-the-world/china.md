@@ -1,7 +1,10 @@
 # China: "Bao Bao's Dragon Parade" (plan)
 
-Status: proposal, 2026-09-27. Nothing built yet. Folder will be `src/world/places/china/` (pin already waiting in
-`COMING_SOON` in `src/world/WorldMap.tsx` at x 77, y 36).
+Status (2026-09-28): **everything in this plan is built** in `src/world/places/china/`: the scroll map, all seven
+activities (Dumpling House, Bamboo Forest, Great Wall, Hotpot Night, Magic Brush, Great Race, Bullet Train), the Dragon
+Parade finale, 16 passport facts, 7 coloring pages, and 14 real videos (one after each activity, the rest in the Theater
+and pinned as postcards on the scroll map). Still open: the questions for Dad at the bottom (her zodiac animal is
+`KAYLEE_ZODIAC = 'ox'` in `activities/race/GreatRace.tsx`), and listening to the Mandarin clips on the iPad.
 
 ## The story in one breath
 

@@ -338,9 +338,437 @@
     "text": "Tickles!",
     "voice": "houhou"
   },
+  {
+    "text": "Hotpot time, Kaylee! Everybody cooks together!",
+    "voice": "nainai"
+  },
+  "Bao Bao wants noodles!",
+  "Hong wants something green from the mild side!",
+  "Nai Nai wants two dumplings!",
+  "Tap a food, then tap the soup!",
+  "Tap the noodles, then tap the soup!",
+  "Green! Try the bok choy!",
+  "The mild side is the white soup!",
+  "Dumplings! We need two!",
+  "Wait for the sparkle!",
+  "Sparkly! It is ready!",
+  "Tap the chopsticks, then tap the sparkly food!",
+  "People in China eat with chopsticks!",
+  "Spin the table with your finger!",
+  "Spin the table to Bao Bao!",
+  "Spin the table to Hong!",
+  "Spin the table to Nai Nai!",
+  {
+    "text": "Shyeh shyeh!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Shyeh shyeh!",
+    "voice": "hong"
+  },
+  {
+    "text": "Shyeh shyeh!",
+    "voice": "nainai"
+  },
+  "Shyeh shyeh means thank you!",
+  {
+    "text": "Whoa! Big bubbles!",
+    "voice": "hong"
+  },
+  {
+    "text": "Tingly lips!",
+    "voice": "hong"
+  },
+  "Everyone shares one pot in the middle!",
+  "A round table means everybody can reach!",
+  "Sichuan peppers make your lips tingle!",
+  "Everybody eat together!",
+  {
+    "text": "Yum yum!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Hao chi! Delicious!",
+    "voice": "nainai"
+  },
+  {
+    "text": "Hooray!",
+    "voice": "hong"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Eep!",
+    "voice": "hong"
+  },
+  {
+    "text": "Ho ho ho!",
+    "voice": "nainai"
+  },
+  {
+    "text": "This magic brush makes pictures come alive!",
+    "voice": "crane"
+  },
+  "Paint a person! Follow the glowing line.",
+  "Now paint a mountain!",
+  "Now paint the sun!",
+  "Now paint a tree!",
+  "Now paint something big!",
+  "Last one! Paint the moon!",
+  "Now the next line!",
+  "Start at the glowing dot!",
+  "Try again! Follow the glowing line.",
+  {
+    "text": "Ren!",
+    "voice": "crane"
+  },
+  {
+    "text": "Shahn!",
+    "voice": "crane"
+  },
+  {
+    "text": "Rr!",
+    "voice": "crane"
+  },
+  {
+    "text": "Moo!",
+    "voice": "crane"
+  },
+  {
+    "text": "Dah!",
+    "voice": "crane"
+  },
+  {
+    "text": "Yweh!",
+    "voice": "crane"
+  },
+  "Ren means person!",
+  "Shan means mountain!",
+  "Ri means sun!",
+  "Mu means tree!",
+  "Da means big!",
+  "Yue means moon!",
+  "The water writing fades away, but the picture stays!",
+  {
+    "text": "I can be big too!",
+    "voice": "baobao"
+  },
+  "Good night, moon!",
+  "Now paint your name, Kaylee! In Chinese!",
+  {
+    "text": "Ky lee!",
+    "voice": "crane"
+  },
+  "Tap the red stamp!",
+  "Your name, stamped with a red seal, Kaylee!",
+  "Chinese isn't written with letters. Some characters started as pictures!",
+  {
+    "text": "What a beautiful painting!",
+    "voice": "crane"
+  },
+  {
+    "text": "Oh my!",
+    "voice": "crane"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "crane"
+  },
+  "The Jade Emperor is holding a big race across the river!",
+  {
+    "text": "I'm small, but I'm clever!",
+    "voice": "mouse"
+  },
+  "Mouse can't swim! Put Mouse on Ox's back!",
+  "Drag Mouse onto Ox's back!",
+  {
+    "text": "Hop on, little one!",
+    "voice": "ox"
+  },
+  "Tap Ox to paddle!",
+  {
+    "text": "Almost there!",
+    "voice": "ox"
+  },
+  "Mouse jumps off first!",
+  {
+    "text": "Squeak! I won!",
+    "voice": "mouse"
+  },
+  {
+    "text": "Well done, little one!",
+    "voice": "ox"
+  },
+  "Tiger swims across all by himself!",
+  {
+    "text": "Splash, splash! I can swim!",
+    "voice": "tiger"
+  },
+  "Rabbit hops! Put stones in the glowing spots!",
+  "Put a stone on a glowing spot!",
+  "Now Rabbit can hop across!",
+  {
+    "text": "Hop, hop, hop!",
+    "voice": "rabbit"
+  },
+  {
+    "text": "I stopped to make rain for a thirsty village!",
+    "voice": "dragon"
+  },
+  "Tap the clouds to make it rain!",
+  "Tap a glowing cloud!",
+  "The flowers are so happy!",
+  {
+    "text": "Whoosh! Now I can fly!",
+    "voice": "dragon"
+  },
+  "Everybody wins a step! Who came first?",
+  "Who came first? Put Mouse on the first step!",
+  "Who came second? Put that animal on the second step!",
+  "Who came third? Put that animal on the third step!",
+  "Now the last two! Who came fourth?",
+  "And who came fifth?",
+  "Mouse jumped off Ox first!",
+  "Ox carried Mouse. Ox came second!",
+  "Tiger swam across third!",
+  "Rabbit hopped over the stones. Rabbit came fourth!",
+  "Dragon stopped to make rain. Dragon came fifth!",
+  "Try the glowing one!",
+  "First place!",
+  "Second place!",
+  "Third place!",
+  "Fourth place!",
+  "Fifth place!",
+  "Who came right after Ox? Tap that animal!",
+  "Tiger came right after Ox! Tap the glowing one!",
+  "Yes! Tiger came right after Ox!",
+  "Everybody won a place! Hooray!",
+  "There are twelve zodiac animals, one for every year!",
+  "Kaylee, you were born in the Year of the Ox!",
+  "Kaylee, you were born in the Year of the Rat!",
+  {
+    "text": "Moo-hoo! Hooray, Kaylee!",
+    "voice": "ox"
+  },
+  {
+    "text": "Squeak! Hooray, Kaylee!",
+    "voice": "mouse"
+  },
+  "This year, 2026, is the Year of the Horse!",
+  "Shh! Someone is sleeping. Tap the cat!",
+  "The cat overslept and missed the race! That is why there is no Year of the Cat!",
+  {
+    "text": "Squeak!",
+    "voice": "mouse"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "mouse"
+  },
+  {
+    "text": "Moo!",
+    "voice": "ox"
+  },
+  {
+    "text": "China is so big! Let's ride the super-fast train!",
+    "voice": "baobao"
+  },
+  "Push the lever up to zoom!",
+  "Push it up!",
+  "China has some of the fastest trains in the world!",
+  "China is so big! Snowy in the north, sunny beach in the south!",
+  "Toot toot!",
+  "Harbin! It is far up north. Brrr, snow!",
+  "Hainan! It is far down south. So hot!",
+  "The Gobi Desert! Sunny days and chilly nights!",
+  "The Himalayas! The tallest mountains in the world!",
+  "Keep Bao Bao warm!",
+  "The tiger is shivering! Give him the scarf!",
+  "Get Bao Bao ready for the beach!",
+  "It is a hot, sunny day! What does Bao Bao need?",
+  "Now it is night, and cold! What does Bao Bao need?",
+  "Which one fits the tall, snowy mountains?",
+  {
+    "text": "A swim ring in the snow? Silly!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Mittens at the beach? Silly!",
+    "voice": "baobao"
+  },
+  {
+    "text": "A blanket in the hot sun? Silly!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Mittens in the desert sun? Silly!",
+    "voice": "baobao"
+  },
+  {
+    "text": "A sun hat at night? Silly!",
+    "voice": "baobao"
+  },
+  {
+    "text": "I am not thirsty. I am cold!",
+    "voice": "baobao"
+  },
+  {
+    "text": "A sun hat on a snowy mountain? Silly!",
+    "voice": "baobao"
+  },
+  {
+    "text": "A swim ring on a mountain? Silly!",
+    "voice": "baobao"
+  },
+  {
+    "text": "I need something warm!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Brrr! I need the scarf!",
+    "voice": "tiger"
+  },
+  {
+    "text": "Mittens! So cozy!",
+    "voice": "baobao"
+  },
+  {
+    "text": "A warm hat! Yay!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Ahh! Warm now. Thank you!",
+    "voice": "tiger"
+  },
+  {
+    "text": "A sun hat! Yay!",
+    "voice": "baobao"
+  },
+  {
+    "text": "A swim ring! Wheee!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Glug glug! Yum!",
+    "voice": "baobao"
+  },
+  {
+    "text": "A cozy blanket!",
+    "voice": "baobao"
+  },
+  {
+    "text": "A big warm coat!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Brrr! So cold!",
+    "voice": "tiger"
+  },
+  {
+    "text": "Hello, little panda!",
+    "voice": "camel"
+  },
+  {
+    "text": "Hello up here!",
+    "voice": "yak"
+  },
+  {
+    "text": "Tickles!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Rrr, hello!",
+    "voice": "tiger"
+  },
+  {
+    "text": "Two humps, no hurry.",
+    "voice": "camel"
+  },
+  {
+    "text": "Hello, friend!",
+    "voice": "yak"
+  },
+  {
+    "text": "What a trip! Thank you, Kaylee!",
+    "voice": "baobao"
+  },
+  {
+    "text": "I'm Long Long! Let's dance, Kaylee!",
+    "voice": "longlong"
+  },
+  "Drag Long Long around the lanterns!",
+  "Follow the glowing lanterns!",
+  {
+    "text": "Shyeh shyeh for the bamboo!",
+    "voice": "baobao"
+  },
+  {
+    "text": "Shyeh shyeh for fixing the wall!",
+    "voice": "houhou"
+  },
+  {
+    "text": "Shyeh shyeh for the hotpot!",
+    "voice": "hong"
+  },
+  {
+    "text": "Shyeh shyeh for the magic brush!",
+    "voice": "crane"
+  },
+  {
+    "text": "Shyeh shyeh for the race!",
+    "voice": "mouse"
+  },
+  {
+    "text": "Shyeh shyeh for the train ride!",
+    "voice": "tiger"
+  },
+  {
+    "text": "Shyeh shyeh for the dumplings!",
+    "voice": "cheffu"
+  },
+  {
+    "text": "Wheee! What a dance, Kaylee!",
+    "voice": "longlong"
+  },
+  "Tap the drum! Make the dragon dance!",
+  {
+    "text": "Boom boom! I love it!",
+    "voice": "longlong"
+  },
+  "Great drumming, Kaylee!",
+  "Tap the sky to make fireworks!",
+  "Fireworks were invented in China!",
+  "Tap the flag to raise it!",
+  "China's flag is red, with one big gold star and four little stars!",
+  "Bao Bao has a red envelope! Tap to open it!",
+  "A red envelope is called a hong bao!",
+  {
+    "text": "Sheen nyen kwy luh, Kaylee! Happy New Year!",
+    "voice": "baobao"
+  },
+  "Let's see real baby pandas!",
+  "Want to see the real Great Wall?",
+  "Let's see real red pandas!",
+  "Look! Painting with water!",
+  "Want to hear the Great Race story?",
+  "Zoom! A real bullet train!",
+  "See real soup dumplings!",
+  "Let's see Shanghai at night!",
+  "Look, a real dragon dance!",
+  "Let's see where China is!",
+  "Wow, a city made of ice!",
+  "Let's count in Chinese!",
+  "Let's float down the Li River!",
+  "What is Chinese New Year?",
   "Giant panda sticker! Panda babies are born as tiny as a stick of butter!",
   "Golden monkey sticker! These monkeys have sky-blue faces!",
   "Pekingese sticker! These puppies from China look like tiny lions!",
+  "Red panda sticker! Red pandas stand up tall when they are surprised!",
+  "Crane sticker! Red-crowned cranes dance to say hello!",
+  "Ox sticker! You were born in the Year of the Ox!",
+  "Tiger sticker! Amur tigers live where it is snowy and cold!",
   "In China, people say nee how! It means hello!",
   "Shanghai is the biggest city in China! It has a tower with pink balls!",
   "Soup dumplings come from Shanghai. There is soup inside!",
@@ -349,5 +777,11 @@
   "Giant pandas live in the bamboo mountains of China.",
   "The Great Wall of China is super long!",
   "China is a huge country with snowy places and sunny beaches!",
+  "One, two, three in Chinese: ee, are, san!",
+  "In China, red is the color of luck and happiness!",
+  "Chinese dragons are kind! They bring rain and good luck.",
+  "Paper, kites and fireworks were first made in China!",
+  "How chir means delicious!",
+  "More people live in China than almost anywhere in the world!",
   "This is China! Tap a picture to learn more."
 ]

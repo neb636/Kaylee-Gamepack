@@ -209,7 +209,16 @@ const SCREENS = [
       await p.waitForTimeout(700)
     },
   },
-  { name: 'china-parade-stub', hash: '#/world/china/party', wait: 800 },
+  { name: 'hotpot-story', hash: '#/world/china/hotpot', reset: true, wait: 400 },
+  { name: 'hotpot-play', hash: '#/world/china/hotpot', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
+  { name: 'brush-story', hash: '#/world/china/brush', reset: true, wait: 400 },
+  { name: 'brush-play', hash: '#/world/china/brush', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
+  { name: 'race-story', hash: '#/world/china/race', reset: true, wait: 400 },
+  { name: 'race-play', hash: '#/world/china/race', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
+  { name: 'train-story', hash: '#/world/china/train', reset: true, wait: 400 },
+  { name: 'train-play', hash: '#/world/china/train', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
+  { name: 'china-parade', hash: '#/world/china/party', stampAll: 'china', act: async (p) => { await skip(p); await p.waitForTimeout(2500) } },
+  { name: 'china-hub-done', hash: '#/world/china', stampAll: 'china', act: skip },
   { name: 'passport-full', hash: '#/world/passport', stampAll: true },
   {
     name: 'win-ceremony',
