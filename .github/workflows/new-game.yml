@@ -99,6 +99,41 @@ jobs:
         if: steps.check.outcome == 'failure'
         run: npm run check
 
+      - name: Identify the new game
+        run: |
+          mapfile -t games < <(git ls-files --others --exclude-standard 'src/games/*/meta.ts')
+          if [ "${#games[@]}" -ne 1 ]; then
+            echo "Expected exactly one new game; found ${#games[@]}" >&2
+            exit 1
+          fi
+          basename "$(dirname "${games[0]}")" > .lesson-input/game-id.txt
+
+      - name: Codex reviews the new game in the browser
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/prompts/visual-qa.md
+          model: ${{ vars.CODEX_MODEL || 'gpt-6-sol' }}
+          permission-profile: ':workspace'
+          output-file: .lesson-input/qa-agent-final.md
+
+      - name: Keep QA fixes inside the game folder and verify
+        run: |
+          scripts/keep-game-only.sh
+          node scripts/generate-voice.mjs
+          npm run check
+          npm run build
+          node scripts/capture-qa.mjs "$(cat .lesson-input/game-id.txt)"
+
+      - name: Upload visual review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: new-game-visual-qa
+          path: qa-screenshots/
+          if-no-files-found: warn
+          retention-days: 30
+
       - name: Prepare PR text
         run: |
           title="$(head -n1 .lesson-input/pr-title.txt 2>/dev/null || true)"
@@ -106,6 +141,11 @@ jobs:
           {
             cat .lesson-input/pr-body.md 2>/dev/null || cat .lesson-input/codex-final.md
             cat .lesson-input/reverted.md 2>/dev/null || true
+            echo
+            echo "## Browser review"
+            cat .lesson-input/qa-summary.md 2>/dev/null || echo "See screenshot artifact and playable preview."
+            echo
+            echo "📸 [Screenshots and contact sheet](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts) (artifact: new-game-visual-qa)."
             echo
             echo "---"
             echo "Closes #$ISSUE_NUMBER"
