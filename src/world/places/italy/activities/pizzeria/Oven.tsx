@@ -116,12 +116,14 @@ export function Oven({ pizza, old, onBake, onDone }: { pizza: PizzaState; old?: 
       {/* The peel with the raw pizza, waiting in front of the oven: drag it up into the mouth (or tap it). */}
       <AnimatePresence>
         {phase === 'peel' && (
-          <motion.div key="peel" initial={{ y: 200, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ opacity: 0 }} style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 70px)', translate: '-50% 0', zIndex: 6 }}>
+          <motion.div key="peel" initial={{ y: 200, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ opacity: 0 }} style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 112px)', translate: '-50% 0', zIndex: 6 }}>
             <Piece id="peel" snapTo="mouth" snapRadius={140} label="pizza on the peel" onPlace={({ target }) => (target === 'mouth' ? (slideIn(), 'snap') : 'home')} onTap={slideIn}>
-              <div style={{ position: 'relative', width: landscape ? 'min(40vh, 30vw)' : 'min(52vw, 34vh)' }}>
-                <img src={art.peel} alt="" draggable={false} style={{ width: '100%', display: 'block', pointerEvents: 'none' }} />
-                <div style={{ position: 'absolute', left: '11%', top: '4%', width: '78%' }}>
-                  <PizzaView pizza={shown} size="100%" />
+              <div style={{ position: 'relative', width: landscape ? 'min(48vh, 34vw)' : 'min(62vw, 40vh)', aspectRatio: '283 / 282' }}>
+                <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', transform: 'scaleY(0.55)', transformOrigin: '50% 0' }}>
+                  <img src={art.peel} alt="" draggable={false} style={{ width: '100%', display: 'block', pointerEvents: 'none' }} />
+                  <div style={{ position: 'absolute', left: '11%', top: '4%', width: '78%' }}>
+                    <PizzaView pizza={shown} size="100%" />
+                  </div>
                 </div>
               </div>
             </Piece>

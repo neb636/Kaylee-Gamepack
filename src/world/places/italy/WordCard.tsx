@@ -30,7 +30,7 @@ export function WordCard({ word }: { word: WordId | null }) {
           animate={{ scale: 1, rotate: -3 }}
           exit={{ scale: 0, opacity: 0 }}
           transition={{ type: 'spring', bounce: 0.45 }}
-          style={{ position: 'absolute', right: 'max(12px, 3vw)', top: 'calc(var(--top-clear) + 8px)', zIndex: 35, background: '#FFF7F0', border: `5px solid ${INK}`, borderRadius: 20, padding: '0 0 8px', boxShadow: 'var(--shadow)', textAlign: 'center', pointerEvents: 'none', overflow: 'hidden', minWidth: 150 }}
+          style={{ position: 'absolute', right: 'max(12px, 3vw)', top: 'calc(var(--safe-top) + 10px)', zIndex: 35, background: '#FFF7F0', border: `5px solid ${INK}`, borderRadius: 20, padding: '0 0 8px', boxShadow: 'var(--shadow)', textAlign: 'center', pointerEvents: 'none', overflow: 'hidden', minWidth: 150 }}
         >
           <div style={{ display: 'flex', height: 10, marginBottom: 4 }}>
             <div style={{ flex: 1, background: '#3FA56A' }} />

@@ -1,6 +1,5 @@
-// Layout pieces shared by every pizzeria screen: the kitchen (chef behind the counter, the work top in the middle, the
-// order ticket), the station tabs along the bottom (like the famous pizza games), the storybook frame for 1889, and a
-// CoverBox that pins things to spots in a background picture however the screen crops it.
+// Shared pizzeria layouts: an overhead prep board with a separate chef window and order ticket,
+// station tabs, the 1889 storybook frame, and a CoverBox that anchors things to background art.
 import { motion } from 'motion/react'
 import { useRef, type CSSProperties, type ReactNode } from 'react'
 import { Buddy, PlayArea, useElementSize, useLandscape, type Line } from '../../../../../sdk'
@@ -23,7 +22,7 @@ const STATIONS: { id: StationId; icon: string }[] = [
 export function StationBar({ at }: { at: StationId }) {
   const i = STATIONS.findIndex((s) => s.id === at)
   return (
-    <div aria-hidden style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 8px)', translate: '-50% 0', display: 'flex', gap: 'min(1.4vw, 10px)', padding: '6px 10px', background: 'rgba(255,247,240,.9)', border: `4px solid ${INK}`, borderRadius: 999, boxShadow: 'var(--shadow)', zIndex: 15, pointerEvents: 'none' }}>
+    <div aria-hidden style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 26px)', translate: '-50% 0', display: 'flex', gap: 'min(1.4vw, 10px)', padding: '6px 10px', background: 'rgba(255,247,240,.9)', border: `4px solid ${INK}`, borderRadius: 999, boxShadow: 'var(--shadow)', zIndex: 15, pointerEvents: 'none' }}>
       {STATIONS.map((s, j) => (
         <motion.div
           key={s.id}
@@ -85,40 +84,38 @@ export interface KitchenProps {
   children?: ReactNode
 }
 
-/** The kitchen: tiled back wall, the chef behind the counter on the left, the work top in the middle, the ticket on
- *  the right. The generated wall already has a counter painted in it; our marble lip sits over the chef's legs. */
+/** Prep is seen from overhead. The chef has a separate little kitchen window, so the round pizza and its
+ * tools share one camera angle on the marble worktop rather than floating in front of a kitchen wall. */
 export function Kitchen({ chef, at, prompt, ticket, word, old, children }: KitchenProps) {
   const landscape = useLandscape()
-  const chefH = landscape ? 'min(58vh, 34vw)' : 'min(34vh, 50vw)'
   return (
-    <PlayArea style={{ position: 'absolute', inset: 0, overflow: 'hidden', ['--ticket' as string]: landscape ? 'min(24vh, 17vw, 200px)' : 'min(15vh, 24vw, 170px)' }}>
-      <div style={{ position: 'absolute', inset: 0, background: `url(${landscape ? art.bgPizzeriaKitchen : art.bgPizzeriaKitchenTall}) center top / cover`, filter: old ? OLD : undefined }} />
-      {/* The chef, behind the counter lip (about a quarter of him hides below it). */}
-      <div style={{ position: 'absolute', left: landscape ? '2%' : '1%', bottom: `calc(${landscape ? '17%' : '13%'} - ${chefH} * 0.22)`, height: chefH, zIndex: 2, filter: old ? OLD : undefined }}>{chef}</div>
-      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: landscape ? '17%' : '13%', background: '#F4ECE4', borderTop: `6px solid ${INK}`, boxShadow: 'inset 0 10px 0 #FFFFFF, inset 0 -14px 0 #E8DCCF', zIndex: 3, filter: old ? OLD : undefined }} />
-      {/* The work area: centered, clear of the top bar, the prompt and the station bar. */}
+    <PlayArea style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#F3E8DE', ['--ticket' as string]: landscape ? 'min(24vh, 17vw, 200px)' : 'min(15vh, 24vw, 170px)' }}>
+      <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'repeating-linear-gradient(128deg, transparent 0 170px, #DED3C833 172px 175px, transparent 177px 330px), linear-gradient(35deg, #FFF9F2, #EEE2D6)', border: `24px solid ${old ? '#D9B386' : '#CB956D'}`, boxShadow: `inset 0 0 0 4px ${INK}, inset 0 0 35px #9B73582B`, filter: old ? OLD : undefined }} />
+      {/* A front-facing portrait belongs in its own window, away from the overhead workspace. */}
+      <div style={{ position: 'absolute', left: '3%', top: 'calc(var(--top-clear) + 96px)', width: 'var(--ticket)', height: 'calc(var(--ticket) * 1.1)', border: `4px solid ${INK}`, borderRadius: 24, overflow: 'hidden', background: `url(${art.bgPizzeriaKitchen}) center / cover`, zIndex: 2, filter: old ? OLD : undefined }}>
+        <div style={{ position: 'absolute', inset: '6% 0 -24%', display: 'flex', justifyContent: 'center' }}>{chef}</div>
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '14%', background: '#F4ECE4', borderTop: `4px solid ${INK}` }} />
+      </div>
       <div
+        data-pizza-worktop
         style={{
           position: 'absolute',
-          left: landscape ? 'calc(min(58vh, 34vw) * 0.62)' : '2%',
-          right: landscape ? 'calc(var(--ticket) + 3%)' : '2%',
-          top: landscape ? 'calc(var(--top-clear) + 78px)' : 'calc(var(--top-clear) + 78px + var(--ticket) * 0.5)',
-          bottom: landscape ? 'calc(var(--safe-bottom) + 76px)' : `calc(var(--safe-bottom) + 76px + ${landscape ? '0px' : '0px'})`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 6,
-          containerType: 'size',
+          left: landscape ? 'calc(var(--ticket) + 5%)' : '4%',
+          right: landscape ? 'calc(var(--ticket) + 5%)' : '4%',
+          top: landscape ? 'calc(var(--top-clear) + 100px)' : 'calc(var(--top-clear) + 116px + var(--ticket) * 1.1)',
+          bottom: 'calc(var(--safe-bottom) + 104px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 6, containerType: 'size',
         }}
       >
-        {children}
+        {/* An overhead wooden board grounds all the prep tools on a tangible surface. */}
+        <div aria-hidden style={{ position: 'absolute', inset: -8, borderRadius: 36, background: 'repeating-linear-gradient(0deg, #E9C59D 0 60px, #DFB68B 61px 63px, #E9C59D 64px 125px)', border: `4px solid ${INK}`, boxShadow: '0 8px 0 #6E3B2426', pointerEvents: 'none', filter: old ? OLD : undefined }} />
+        <div style={{ position: 'absolute', inset: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', containerType: 'size' }}>{children}</div>
       </div>
-      {ticket && <div style={{ position: 'absolute', right: landscape ? '2%' : '3%', top: landscape ? 'calc(var(--top-clear) + 90px)' : 'calc(var(--top-clear) + 76px)', zIndex: 7, pointerEvents: 'none', width: 'var(--ticket)', display: 'flex', justifyContent: 'center' }}>{ticket}</div>}
+      {ticket && <div style={{ position: 'absolute', right: '3%', top: 'calc(var(--top-clear) + 96px)', zIndex: 7, pointerEvents: 'none', width: 'var(--ticket)', display: 'flex', justifyContent: 'center' }}>{ticket}</div>}
       {prompt && (
-        <div style={{ position: 'absolute', left: 0, right: 0, top: 'var(--top-clear)', display: 'flex', justifyContent: 'center', padding: '0 12px', zIndex: 20, pointerEvents: 'none' }}>
-          <div style={{ pointerEvents: 'auto' }}>
-            <PromptBubble text={prompt} />
-          </div>
+        <div style={{ position: 'absolute', left: 0, right: 0, top: 'var(--top-clear)', display: 'flex', justifyContent: 'center', padding: '0 28px', zIndex: 20, pointerEvents: 'none' }}>
+          <div style={{ pointerEvents: 'auto' }}><PromptBubble text={prompt} /></div>
         </div>
       )}
       <StationBar at={at} />
