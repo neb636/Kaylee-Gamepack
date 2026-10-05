@@ -35,11 +35,11 @@
     "file": "a9423d7db7af.mp3"
   },
   {
-    "text": "Tap the glowing pizza!",
+    "text": "Tap a glowing place!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 1955,
-    "file": "1d599b1333af.mp3"
+    "ms": 2037,
+    "file": "14a21d4e1e7d.mp3"
   },
   {
     "text": "Where should we go next, Kaylee?",
@@ -735,6 +735,146 @@
     "file": "08ef245ca29c.mp3"
   },
   {
+    "text": "Help water reach my fountain!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2402,
+    "file": "6243704471e8.mp3"
+  },
+  {
+    "text": "Start with the tallest arch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2559,
+    "file": "5adeccaecc0a.mp3"
+  },
+  {
+    "text": "Now the middle-sized arch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2622,
+    "file": "65c601a452cc.mp3"
+  },
+  {
+    "text": "Finish with the shortest arch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3114,
+    "file": "eeeeb3d77aff.mp3"
+  },
+  {
+    "text": "Try the tallest arch. It glows!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3147,
+    "file": "8f92fca2af9c.mp3"
+  },
+  {
+    "text": "Try the middle-sized arch. It glows!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4053,
+    "file": "6456673f5eb5.mp3"
+  },
+  {
+    "text": "Try the shortest arch. It glows!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2786,
+    "file": "f7243a961853.mp3"
+  },
+  {
+    "text": "Tap the water drop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2042,
+    "file": "9d5d948ab117.mp3"
+  },
+  {
+    "text": "Water flows downhill! Visit the fountain!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3830,
+    "file": "c5528c6da3b5.mp3"
+  },
+  {
+    "text": "An aqueduct carries water to a city!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3256,
+    "file": "999887c5be12.mp3"
+  },
+  {
+    "text": "Toss three coins into the fountain!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2828,
+    "file": "afcfcabdb596.mp3"
+  },
+  {
+    "text": "Drag your coin to the glowing water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2576,
+    "file": "0c06048b2f86.mp3"
+  },
+  {
+    "text": "One coin!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1353,
+    "file": "0abafcf56b8a.mp3"
+  },
+  {
+    "text": "Two coins!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1299,
+    "file": "5c3f623a633e.mp3"
+  },
+  {
+    "text": "Three coins!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1305,
+    "file": "d1efd2414aaa.mp3"
+  },
+  {
+    "text": "Tap the star for Lupa!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2456,
+    "file": "52293e485f3c.mp3"
+  },
+  {
+    "text": "I wish to sing! Grazie, Kaylee!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 3181,
+    "file": "ef7a8dba464e.mp3"
+  },
+  {
+    "text": "Splash! Splash!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2078,
+    "file": "bd2733589ad7.mp3"
+  },
+  {
+    "text": "The fountain coins help people in need!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2598,
+    "file": "8a26fa8e87cc.mp3"
+  },
+  {
+    "text": "Wolves live in Italy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2440,
+    "file": "4637576768da.mp3"
+  },
+  {
     "text": "Brown bear sticker! Bears live in the mountains of Italy!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -789,6 +929,13 @@
     "sig": "ed7dbdac3d",
     "ms": 5306,
     "file": "b49f0126ddc1.mp3"
+  },
+  {
+    "text": "An aqueduct feeds Trevi Fountain!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3012,
+    "file": "026d669b1216.mp3"
   },
   {
     "text": "Long ago, the Romans built roads, arenas and water bridges!",

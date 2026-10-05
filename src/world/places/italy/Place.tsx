@@ -1,5 +1,5 @@
 // Italy: "Lupa Sings at the Opera" (plan: planning/around-the-world/italy.md). Built in stages: the boot map and the
-// Pizzeria in Naples came first; the other six arches say "coming soon" until their activities exist.
+// Pizzeria in Naples came first; the unfinished arches say "coming soon" until their activities exist.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react'
 import { BigButton, say, SparklePuppet, sounds, type PuppetHandle } from '../../../sdk'
@@ -8,6 +8,7 @@ import { sfx } from '../../kit/sfx'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
+import { Trevi } from './activities/trevi/Trevi'
 import { Pizzeria } from './activities/pizzeria/Pizzeria'
 import { art } from './art'
 import { L } from './lines'
@@ -19,7 +20,7 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria, trevi: Trevi }
 
 /** The seven arches on the boot map, on their landmarks in scene-italy-map (in % of the picture), and the instrument each
  *  friend brings to Lupa's band. Only activities listed in meta.activities are playable; the rest say "coming soon". */
@@ -27,7 +28,7 @@ const SPOTS = [
   { id: 'venice', name: 'Venice', icon: '🛶', x: 59, y: 19, band: '🪗' },
   { id: 'pisa', name: 'Leaning Tower', icon: '🗼', x: 39.5, y: 27, band: '🔔' },
   { id: 'colosseum', name: 'The Colosseum', icon: '🏛️', x: 48, y: 41, band: '📯' },
-  { id: 'trevi', name: 'Trevi Fountain', icon: '⛲', x: 58.5, y: 45, band: '⭐' },
+  { id: 'trevi', name: 'Trevi Fountain', icon: '⛲', x: 58.5, y: 45, face: art.lupa, band: '⭐' },
   { id: 'pizzeria', name: 'Pizzeria in Naples', icon: '🍕', x: 65.4, y: 61.5, face: art.bruno, band: art.mandolin },
   { id: 'olives', name: 'Olive Grove', icon: '🫒', x: 83, y: 57, band: '🪘' },
   { id: 'etna', name: 'Snow on a Volcano', icon: '🌋', x: 51.5, y: 84, band: '🎹' },

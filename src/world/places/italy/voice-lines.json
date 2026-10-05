@@ -10,7 +10,7 @@
     "text": "Help me get ready to sing at the opera?",
     "voice": "lupa"
   },
-  "Tap the glowing pizza!",
+  "Tap a glowing place!",
   "Where should we go next, Kaylee?",
   "This spot opens soon!",
   "Italy is shaped like a boot! Kick!",
@@ -239,6 +239,35 @@
     "text": "Yay! Our first friend for the band!",
     "voice": "lupa"
   },
+  {
+    "text": "Help water reach my fountain!",
+    "voice": "lupa"
+  },
+  "Start with the tallest arch!",
+  "Now the middle-sized arch!",
+  "Finish with the shortest arch!",
+  "Try the tallest arch. It glows!",
+  "Try the middle-sized arch. It glows!",
+  "Try the shortest arch. It glows!",
+  "Tap the water drop!",
+  "Water flows downhill! Visit the fountain!",
+  "An aqueduct carries water to a city!",
+  "Toss three coins into the fountain!",
+  "Drag your coin to the glowing water!",
+  "One coin!",
+  "Two coins!",
+  "Three coins!",
+  "Tap the star for Lupa!",
+  {
+    "text": "I wish to sing! Grazie, Kaylee!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Splash! Splash!",
+    "voice": "lupa"
+  },
+  "The fountain coins help people in need!",
+  "Wolves live in Italy!",
   "Brown bear sticker! Bears live in the mountains of Italy!",
   "In Italy, people say ciao! It means hello and goodbye!",
   "Grazie means thank you!",
@@ -247,6 +276,7 @@
   "Italy has hot, sunny summers, and snowy mountains up north!",
   "Pizza comes from Naples, in Italy!",
   "Pizza Margherita is red, white and green, like Italy's flag!",
+  "An aqueduct feeds Trevi Fountain!",
   "Long ago, the Romans built roads, arenas and water bridges!",
   "Italy has volcanoes! One is right next to Naples!",
   "Italy's flag has three stripes: green, white and red!",

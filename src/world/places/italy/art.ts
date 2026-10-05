@@ -1,3 +1,4 @@
+import bgTrevi from './assets/bg-trevi.webp'
 import basil from './assets/basil.webp'
 import basketOlives from './assets/basket-olives.webp'
 import bgNaples1889 from './assets/bg-naples-1889.webp'
@@ -30,6 +31,7 @@ import spina from './assets/spina.webp'
 import tomato from './assets/tomato.webp'
 
 export const art = {
+  bgTrevi,
   basil,
   basketOlives,
   bgNaples1889,

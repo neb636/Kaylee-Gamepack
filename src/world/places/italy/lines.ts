@@ -19,7 +19,7 @@ export const L = {
   trophyWin: `${NAME}, you did it! You won the Italy Explorer trophy!`,
   trophyRoom: `${NAME}, Italy Explorer! From Italy.`,
   intro: [lupa(`Ciao, ${NAME}! I'm Lupa!`), lupa('Help me get ready to sing at the opera?')],
-  hubFirst: 'Tap the glowing pizza!',
+  hubFirst: 'Tap a glowing place!',
   hubNext: `Where should we go next, ${NAME}?`,
   soon: 'This spot opens soon!',
   boot: 'Italy is shaped like a boot! Kick!',
@@ -126,7 +126,24 @@ export const L = {
     band: lupa('Yay! Our first friend for the band!'),
   },
 
+  trevi: {
+    intro: lupa('Help water reach my fountain!'),
+    build: ['Start with the tallest arch!', 'Now the middle-sized arch!', 'Finish with the shortest arch!'],
+    hints: ['Try the tallest arch. It glows!', 'Try the middle-sized arch. It glows!', 'Try the shortest arch. It glows!'],
+    water: 'Tap the water drop!',
+    visit: 'Water flows downhill! Visit the fountain!',
+    aqueduct: 'An aqueduct carries water to a city!',
+    coins: 'Toss three coins into the fountain!',
+    coinHint: 'Drag your coin to the glowing water!',
+    count: ['One coin!', 'Two coins!', 'Three coins!'],
+    star: 'Tap the star for Lupa!',
+    wish: lupa(`I wish to sing! Grazie, ${NAME}!`),
+    tickle: lupa('Splash! Splash!'),
+    charity: 'The fountain coins help people in need!',
+  },
+
   stickers: {
+    trevi: 'Wolves live in Italy!',
     pizzeria: 'Brown bear sticker! Bears live in the mountains of Italy!',
   },
   facts: {
@@ -137,6 +154,7 @@ export const L = {
     weather: 'Italy has hot, sunny summers, and snowy mountains up north!',
     pizza: 'Pizza comes from Naples, in Italy!',
     margherita: 'Pizza Margherita is red, white and green, like Italy\'s flag!',
+    trevi: 'An aqueduct feeds Trevi Fountain!',
     romans: 'Long ago, the Romans built roads, arenas and water bridges!',
     volcano: 'Italy has volcanoes! One is right next to Naples!',
     flag: 'Italy\'s flag has three stripes: green, white and red!',
