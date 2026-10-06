@@ -12,6 +12,7 @@ import { L } from '../../lines'
 import { INK } from '../../puppets/ink'
 import { counts, PizzaBase, PizzaCuts, PizzaToppings, RAW, stickersFor, type Order, type PizzaState, type Sauce, type Topping } from './pizza'
 import { IngredientBoard } from './IngredientBoard'
+import './toppings.css'
 
 const P = L.pizza
 /** The pizza's size inside the work area (the area is a size container). */
@@ -306,7 +307,7 @@ export function Toppings({ pizza, order, kinds, onChange, onDone }: { pizza: Piz
   }
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div className="italy-pizza-toppings" style={{ position: 'relative', width: '100%', height: '100%' }}>
       <Board
         stickers={stickersFor(kinds)}
         items={pizza.items}

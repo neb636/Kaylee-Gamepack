@@ -1,0 +1,5 @@
+/* Ordered pizzas have at most two ingredients, so their tray needs no scrolling.
+   Let the SDK's raised drag layer paint outside the tray and over the pizza. */
+.italy-pizza-toppings [data-target='surface'] + div {
+  overflow: visible !important; /* Override StickerBoard's inline scrolling styles. */
+}
