@@ -11,6 +11,7 @@ import { art } from '../../art'
 import { L } from '../../lines'
 import { INK } from '../../puppets/ink'
 import { counts, PizzaBase, PizzaCuts, PizzaToppings, RAW, stickersFor, type Order, type PizzaState, type Sauce, type Topping } from './pizza'
+import { IngredientBoard } from './IngredientBoard'
 
 const P = L.pizza
 /** The pizza's size inside the work area (the area is a size container). */
@@ -63,9 +64,9 @@ export function Dough({ onToss, onDone }: { onToss?: (n: number) => void; onDone
       style={{ position: 'relative', width: PIZZA, height: PIZZA, display: 'grid', placeItems: 'center', touchAction: 'none', cursor: 'pointer' }}
     >
       {/* Flour dusted on the counter */}
-      <div style={{ position: 'absolute', width: '96%', height: '30%', bottom: '8%', borderRadius: '50%', background: 'rgba(255,255,255,.55)' }} />
+      <div style={{ position: 'absolute', width: '96%', height: '96%', bottom: '2%', borderRadius: '50%', background: 'rgba(255,255,255,.55)' }} />
       <motion.div
-        animate={flying ? { y: [0, -height * 0.75, 0], rotate: [0, 540, 720], scaleY: [1, 0.7, 1] } : { y: 0, rotate: 0, scaleY: 1 }}
+        animate={flying ? { y: [0, -height * 0.28, 0], rotate: [0, 540, 720], scaleY: [1, 0.7, 1] } : { y: 0, rotate: 0, scaleY: 1 }}
         transition={flying ? { duration: 0.9, times: [0, 0.5, 1], ease: ['easeOut', 'easeIn'] } : { type: 'spring', bounce: 0.6 }}
         style={{ width: `${s * 100}%`, height: `${s * 100}%`, position: 'relative' }}
       >
@@ -103,6 +104,7 @@ export function SauceSwirl({ pizza, color, onDone }: { pizza: PizzaState; color:
   const { width: size } = useElementSize(box)
   const covered = useRef(new Set<number>())
   const down = useRef(false)
+  const strokes = useRef<{ x: number; y: number }[]>([])
   const [done, setDone] = useState(false)
   const [meter, setMeter] = useState(0)
   const lastSplat = useRef(0)
@@ -126,7 +128,17 @@ export function SauceSwirl({ pizza, color, onDone }: { pizza: PizzaState; color:
     c.height = size * dpr
     const ctx = c.getContext('2d')!
     ctx.scale(dpr, dpr)
-  }, [size])
+    // Repaint the same fractional strokes after rotation; resizing a canvas clears its pixels.
+    ctx.beginPath()
+    ctx.arc(size / 2, size / 2, SAUCE_R * size, 0, Math.PI * 2)
+    ctx.clip()
+    ctx.fillStyle = SAUCE_COLOR[color]
+    for (const p of strokes.current) {
+      ctx.beginPath()
+      ctx.arc(p.x * size, p.y * size, BRUSH * size, 0, Math.PI * 2)
+      ctx.fill()
+    }
+  }, [size, color])
 
   const paint = (clientX: number, clientY: number) => {
     const el = box.current
@@ -136,6 +148,7 @@ export function SauceSwirl({ pizza, color, onDone }: { pizza: PizzaState; color:
     const fx = (clientX - r.left) / r.width
     const fy = (clientY - r.top) / r.height
     if (ladle.current) ladle.current.style.transform = `translate(${fx * r.width - r.width * 0.2}px, ${fy * r.height - r.width * 0.22}px) rotate(-20deg)`
+    strokes.current.push({ x: fx, y: fy })
     const ctx = c.getContext('2d')!
     ctx.save()
     ctx.beginPath()
@@ -247,6 +260,7 @@ export function toppingPrompt(order: Order, items: Placed[]) {
 }
 
 export function Toppings({ pizza, order, kinds, onChange, onDone }: { pizza: PizzaState; order: Order; kinds: Topping[]; onChange: (items: Placed[]) => void; onDone: () => void }) {
+  const Board = order.free ? IngredientBoard : StickerBoard
   const finished = useRef(false)
   const alive = useAlive()
   const extras = pizza.items.filter((i) => i.kind !== 'mozzarella' || order.want?.mozzarella).length
@@ -293,14 +307,16 @@ export function Toppings({ pizza, order, kinds, onChange, onDone }: { pizza: Piz
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <StickerBoard
+      <Board
         stickers={stickersFor(kinds)}
         items={pizza.items}
         onChange={change}
-        shape="circle"
+        {...(!order.free ? { shape: 'circle' as const } : {})}
         surface={
           <div style={{ position: 'relative', width: '100%', height: '100%' }}>
             <PizzaBase pizza={pizza} />
+            {/* Auto-sprinkled cheese is not a selectable sticker in the olive/mushroom orders. */}
+            <PizzaToppings items={pizza.items.filter((it) => !kinds.includes(it.kind as Topping))} />
             {order.halves && (
               <svg viewBox="-110 -110 220 220" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
                 <line x1="0" y1="-78" x2="0" y2="78" stroke="#FFF7F0" strokeWidth="4" strokeDasharray="9 8" strokeLinecap="round" />

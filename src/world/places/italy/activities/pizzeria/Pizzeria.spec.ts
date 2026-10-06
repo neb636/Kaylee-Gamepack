@@ -5,6 +5,17 @@ async function start(page: Page) {
   await page.getByRole('button', { name: /let's play/i }).click()
 }
 
+// A story can finish naturally while the browser is locating its skip control.
+async function skipIntro(page: Page) {
+  const skip = page.getByRole('button', { name: 'Skip', exact: true })
+  const order = page.getByRole('button', { name: 'Start the order', exact: true })
+  for (let i = 0; i < 3; i++) {
+    await skip.or(order).first().waitFor()
+    if (await order.isVisible()) break
+    await skip.tap()
+  }
+}
+
 async function spreadSauce(page: Page) {
   const pizza = page.getByRole('button', { name: 'pizza to spread sauce on', exact: true })
   await expect(pizza).toBeVisible()
@@ -60,12 +71,13 @@ test('each introduction plays automatically and can be skipped independently', a
 
   await page.reload()
   await page.getByRole('button', { name: /let's play/i }).click()
-  for (let i = 0; i < 3; i++) await page.getByRole('button', { name: 'Skip', exact: true }).tap()
+  await skipIntro(page)
   await expect(page.getByRole('button', { name: 'Start the order', exact: true })).toBeVisible()
 })
 
 for (const viewport of [{ width: 820, height: 1180 }, { width: 1180, height: 820 }]) {
   test(`all four pizzas can be served and earn a stamp (${viewport.width}×${viewport.height})`, async ({ page }) => {
+    test.setTimeout(300_000) // Four complete orders include the real recorded dialogue.
     await page.setViewportSize(viewport)
     const errors: string[] = []
     page.on('pageerror', (error) => errors.push(error.message))
@@ -93,6 +105,7 @@ for (const viewport of [{ width: 820, height: 1180 }, { width: 1180, height: 820
     }
     await spreadSauce(page)
     await expect(page.getByRole('img', { name: 'olive in the tray', exact: true })).toBeVisible()
+    await expect(page.locator('[data-target="surface"] img[src*="mozzarella-piece"]')).toHaveCount(7)
     for (let i = 0; i < 5; i++) await topping(page, 'olive')
     await bakeAndServe(page, 1)
     await page.getByRole('button', { name: 'Start the order', exact: true }).tap()
@@ -111,6 +124,17 @@ for (const viewport of [{ width: 820, height: 1180 }, { width: 1180, height: 820
     await spreadSauce(page)
     await expect(page.getByRole('img', { name: 'basil in the tray', exact: true })).toBeVisible()
     await page.screenshot({ path: `/tmp/italy-own-${viewport.width}.png` })
+    // All six choices must be visible without scrolling, with full-size finger targets.
+    const work = (await page.locator('[data-pizza-worktop]').boundingBox())!
+    for (const kind of ['mozzarella', 'basil', 'olive', 'mushroom', 'pepper', 'tomato']) {
+      const tray = (await page.getByRole('img', { name: `${kind} in the tray`, exact: true }).boundingBox())!
+      expect(tray.width).toBeGreaterThanOrEqual(88)
+      expect(tray.height).toBeGreaterThanOrEqual(88)
+      expect(tray.x).toBeGreaterThanOrEqual(work.x)
+      expect(tray.y).toBeGreaterThanOrEqual(work.y)
+      expect(tray.x + tray.width).toBeLessThanOrEqual(work.x + work.width)
+      expect(tray.y + tray.height).toBeLessThanOrEqual(work.y + work.height)
+    }
     for (let i = 0; i < 3; i++) await topping(page, 'basil')
     await page.getByRole('button', { name: 'My pizza is done', exact: true }).tap()
     await page.getByRole('img', { name: 'pizza on the peel', exact: true }).tap()
@@ -125,3 +149,31 @@ for (const viewport of [{ width: 820, height: 1180 }, { width: 1180, height: 820
     expect(errors).toEqual([])
   })
 }
+
+test('painted sauce stays visible when the iPad rotates', async ({ page }) => {
+  await page.setViewportSize({ width: 820, height: 1180 })
+  await start(page)
+  await skipIntro(page)
+  await page.getByRole('button', { name: 'Start the order', exact: true }).tap()
+  for (let i = 0; i < 3; i++) {
+    await page.getByRole('button', { name: 'dough', exact: true }).tap()
+    await page.waitForTimeout(1000)
+  }
+  const sauce = page.getByRole('button', { name: 'pizza to spread sauce on', exact: true })
+  await expect(sauce).toBeVisible()
+  const box = (await sauce.boundingBox())!
+  await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2)
+  const coverage = () => sauce.locator('canvas').evaluate((element) => {
+    const canvas = element as HTMLCanvasElement
+    const data = canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height).data
+    let painted = 0
+    for (let i = 3; i < data.length; i += 4) if (data[i] > 0) painted++
+    return painted / (canvas.width * canvas.height)
+  })
+  const before = await coverage()
+  expect(before).toBeGreaterThan(0.01)
+  await page.setViewportSize({ width: 1180, height: 820 })
+  await expect.poll(coverage).toBeGreaterThan(before * 0.9)
+  await page.setViewportSize({ width: 820, height: 1180 })
+  await expect.poll(coverage).toBeGreaterThan(before * 0.9)
+})

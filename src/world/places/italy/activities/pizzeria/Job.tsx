@@ -269,7 +269,7 @@ function ToppingsStep({ spec, pizza, onChange, onDone }: { spec: JobSpec; pizza:
               sounds.place()
               setCat('gone')
             }}
-            style={{ position: 'absolute', right: 0, bottom: 0, zIndex: 9, background: 'none', border: 'none', padding: 0, height: 'min(40cqh, 240px)' }}
+            style={{ position: 'absolute', left: 0, bottom: 0, zIndex: 9, background: 'none', border: 'none', padding: 0, height: 'min(40cqh, 240px)' }}
           >
             <Buddy img={art.cesare} voice="cesare" height="100%" />
             {cat === 'sneak' && <img src={art.mozzarellaPiece} alt="" style={{ position: 'absolute', left: '2%', top: '46%', width: '34%' }} />}

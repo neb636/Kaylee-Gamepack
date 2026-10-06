@@ -32,7 +32,7 @@ export function FrontRoom({ customer, old, colorIn, prompt, ticket, pizza, onSer
   const [served, setServed] = useState(false)
   const bg = old ? art.bgNaples1889 : landscape ? art.bgPizzeriaFront : art.bgPizzeriaFrontTall
   const custH = landscape ? 'min(56vh, 36vw)' : 'min(40vh, 62vw)'
-  const counterH = landscape ? '27%' : '24%'
+  const counterH = landscape ? '31%' : '27%'
   const filter = old && !colorIn ? OLD : 'none'
   return (
     <PlayArea style={{ position: 'absolute', inset: 0, overflow: 'hidden', ['--ticket' as string]: landscape ? 'min(28vh, 20vw, 230px)' : 'min(20vh, 32vw, 210px)' }}>
@@ -53,9 +53,9 @@ export function FrontRoom({ customer, old, colorIn, prompt, ticket, pizza, onSer
       {/* The counter: a wooden front with a marble top (or a little wooden table on the old street). */}
       <motion.div animate={{ filter }} transition={{ duration: 1.6 }} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: counterH, zIndex: 3 }}>
         <div style={{ position: 'absolute', inset: 0, background: old ? '#C98B5B' : '#E48A62', borderTop: `6px solid ${INK}` }}>
-          <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: '26%', background: old ? '#E0B07E' : '#F7F1EA', borderBottom: `5px solid ${INK}` }} />
+          <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: '62%', background: old ? '#E0B07E' : '#F7F1EA', borderBottom: `5px solid ${INK}` }} />
           {!old && (
-            <div style={{ position: 'absolute', left: '3%', right: '3%', top: '38%', bottom: '12%', display: 'flex', gap: '2%' }}>
+            <div style={{ position: 'absolute', left: '3%', right: '3%', top: '70%', bottom: '8%', display: 'flex', gap: '2%' }}>
               {[0, 1, 2, 3, 4].map((i) => (
                 <div key={i} style={{ flex: 1, background: i % 2 ? '#F2A07A' : '#FFE27A', border: `4px solid ${INK}`, borderRadius: 14 }} />
               ))}
@@ -75,7 +75,6 @@ export function FrontRoom({ customer, old, colorIn, prompt, ticket, pizza, onSer
           <motion.button
             key="pizza"
             aria-label="Serve the pizza"
-            className={onServe && !served ? 'world-glow' : undefined}
             initial={{ y: 80, opacity: 0 }}
             animate={served ? { x: landscape ? '-90%' : '-60%', y: '-40%', scale: 0.4, opacity: 0 } : { y: 0, opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -86,9 +85,9 @@ export function FrontRoom({ customer, old, colorIn, prompt, ticket, pizza, onSer
               sounds.whoosh()
               onServe()
             }}
-            style={{ position: 'absolute', left: landscape ? '52%' : '42%', bottom: `calc(${counterH} * 0.55)`, zIndex: 6, background: 'none', border: 'none', padding: 0, borderRadius: '50%' }}
+            style={{ position: 'absolute', left: landscape ? '52%' : '42%', bottom: `calc(${counterH} * 0.42)`, zIndex: 6, background: 'none', border: 'none', padding: 0, borderRadius: '50%' }}
           >
-            <div style={{ transform: 'scaleY(0.62)', transformOrigin: '50% 100%' }}>
+            <div style={{ transform: 'scaleY(0.45)', transformOrigin: '50% 100%', borderRadius: '50%' }} className={onServe && !served ? 'world-glow' : undefined}>
               <PizzaView pizza={pizza} size={landscape ? 'min(40vh, 30vw)' : 'min(46vw, 30vh)'} />
             </div>
           </motion.button>
