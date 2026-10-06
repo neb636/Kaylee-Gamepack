@@ -35,6 +35,11 @@ async function topping(page: Page, kind: string, x = 0.5) {
   await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2)
   await page.mouse.down()
   await page.mouse.move(to.x + to.width * x, to.y + to.height / 2, { steps: 12 })
+  // A raised z-index cannot escape a clipping tray or a lower stacking context.
+  // Check the held ingredient actually paints above the pizza before releasing it.
+  await expect.poll(() => page.evaluate(({ x, y }) =>
+    document.elementFromPoint(x, y)?.closest('[data-piece]')?.getAttribute('aria-label'),
+  { x: to.x + to.width * x, y: to.y + to.height / 2 })).toBe(`${kind} in the tray`)
   await page.mouse.up()
   await page.waitForTimeout(100)
 }
