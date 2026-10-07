@@ -526,7 +526,8 @@ export function Parade({ onDone, setProgress }: ActivityProps) {
   const baoH = g ? clamp(Math.min(g.H * 0.4, g.W * 0.36), 130, 380) : 200
 
   return (
-    <div ref={box} style={{ position: 'absolute', inset: 0, overflow: 'hidden', touchAction: 'none', backgroundColor: '#3B2C7A', backgroundImage: `url(${g && g.W > g.H ? art.bgParade : art.bgParadeTall})`, backgroundSize: 'cover', backgroundPosition: 'center bottom' }}>
+    // Keep the parade's high-z-index props below the shell's top bar and trophy ceremony.
+    <div ref={box} style={{ position: 'absolute', inset: 0, isolation: 'isolate', overflow: 'hidden', touchAction: 'none', backgroundColor: '#3B2C7A', backgroundImage: `url(${g && g.W > g.H ? art.bgParade : art.bgParadeTall})`, backgroundSize: 'cover', backgroundPosition: 'center bottom' }}>
       {/* the prompt */}
       <div style={{ position: 'absolute', top: 'var(--top-clear)', left: g?.short ? 296 : 0, right: g?.short ? 12 : 0, display: 'flex', justifyContent: "center", zIndex: 3000, pointerEvents: 'none' }}>
         <div style={{ pointerEvents: 'auto' }}>
