@@ -1,6 +1,3 @@
-import archMid from './assets/arch-mid.webp'
-import archShort from './assets/arch-short.webp'
-import archTall from './assets/arch-tall.webp'
 import basil from './assets/basil.webp'
 import basketOlives from './assets/basket-olives.webp'
 import bgAqueductTall from './assets/bg-aqueduct-tall.webp'
@@ -54,9 +51,6 @@ import tambourine from './assets/tambourine.webp'
 import tomato from './assets/tomato.webp'
 
 export const art = {
-  archMid,
-  archShort,
-  archTall,
   basil,
   basketOlives,
   bgAqueduct,
