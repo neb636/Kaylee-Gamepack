@@ -140,6 +140,27 @@
     "file": "2b078a1a33d4.mp3"
   },
   {
+    "text": "Hee hee! Prickly!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 2313,
+    "file": "897b5d3d5c9a.mp3"
+  },
+  {
+    "text": "Ciao ciao!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 1001,
+    "file": "99164b56e054.mp3"
+  },
+  {
+    "text": "Olives! Yum!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 1701,
+    "file": "34450ab8fa70.mp3"
+  },
+  {
     "text": "What a lovely kitchen!",
     "voice": "queen",
     "sig": "ceac643602",
@@ -735,11 +756,613 @@
     "file": "08ef245ca29c.mp3"
   },
   {
+    "text": "Ciao, Kaylee! The olives are ready!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 2556,
+    "file": "d4e2b9b45d21.mp3"
+  },
+  {
+    "text": "Help me pick them for olive oil!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 1850,
+    "file": "0b38d0c65335.mp3"
+  },
+  {
+    "text": "Drag the rake along the glowing branch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3078,
+    "file": "242228e0b8f6.mp3"
+  },
+  {
+    "text": "Now comb this branch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2457,
+    "file": "74e6264c21b3.mp3"
+  },
+  {
+    "text": "One more branch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1693,
+    "file": "c06b9f965750.mp3"
+  },
+  {
+    "text": "Slide the rake all the way to the end!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3062,
+    "file": "dd251770d450.mp3"
+  },
+  {
+    "text": "Eek! They stuck on my quills!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 2432,
+    "file": "2e88cb46b145.mp3"
+  },
+  {
+    "text": "Oops! Again!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 1320,
+    "file": "34236ee314c3.mp3"
+  },
+  {
+    "text": "Tap Spina to shake them off!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2827,
+    "file": "8265e8e02223.mp3"
+  },
+  {
+    "text": "Hee hee! Into the basket!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 1717,
+    "file": "4c5898a100ce.mp3"
+  },
+  {
+    "text": "Olives in the net!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1277,
+    "file": "7926768fd2f9.mp3"
+  },
+  {
+    "text": "Great combing, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2038,
+    "file": "3ee6d0ab4393.mp3"
+  },
+  {
+    "text": "The net is full!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2376,
+    "file": "3433076be555.mp3"
+  },
+  {
+    "text": "Olive trees love hot, dry, sunny summers!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4888,
+    "file": "aaabe128a774.mp3"
+  },
+  {
+    "text": "Into the basket! Grazie!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 2179,
+    "file": "9649dec875b1.mp3"
+  },
+  {
+    "text": "This olive is green. Tap the sun!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3421,
+    "file": "b1608e005850.mp3"
+  },
+  {
+    "text": "Purple! Tap the sun again!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2538,
+    "file": "960b06741a84.mp3"
+  },
+  {
+    "text": "Black! Now it is ripe!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2150,
+    "file": "05d927f7b1bf.mp3"
+  },
+  {
+    "text": "Put them in order! Green, then purple, then black!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4663,
+    "file": "ca6b8f0f3aec.mp3"
+  },
+  {
+    "text": "Green goes in the one sun bowl!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2863,
+    "file": "2825c964a1b4.mp3"
+  },
+  {
+    "text": "Purple goes in the two sun bowl!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2942,
+    "file": "acd161933be5.mp3"
+  },
+  {
+    "text": "Black goes in the three sun bowl!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2997,
+    "file": "d2b9ac055372.mp3"
+  },
+  {
+    "text": "Green, purple, black! Well done, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3946,
+    "file": "55b59a97f2fa.mp3"
+  },
+  {
+    "text": "Mmm! Let me try one!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 2180,
+    "file": "8ca75bffcbb5.mp3"
+  },
+  {
+    "text": "Bleh! Bitter!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 1770,
+    "file": "fcc30c49c10b.mp3"
+  },
+  {
+    "text": "Fresh olives are too bitter! They have to soak first.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4318,
+    "file": "2961f94603ea.mp3"
+  },
+  {
+    "text": "Welcome to the frantoio, the olive mill!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 2754,
+    "file": "dae20881e982.mp3"
+  },
+  {
+    "text": "Drop ten olives in the big funnel!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2799,
+    "file": "20f738a3a3c4.mp3"
+  },
+  {
+    "text": "Drag an olive up to the funnel, or tap the basket!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4087,
+    "file": "16492a4f5151.mp3"
+  },
+  {
+    "text": "Nine!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 702,
+    "file": "995d584b869d.mp3"
+  },
+  {
+    "text": "Ten!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 561,
+    "file": "ce43989de1c5.mp3"
+  },
+  {
+    "text": "It takes lots of olives to make oil!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2821,
+    "file": "b3f5d43acc50.mp3"
+  },
+  {
+    "text": "Here comes the big stone wheel!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2366,
+    "file": "d3fa2677bae5.mp3"
+  },
+  {
+    "text": "Squish, squish, squish!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 1742,
+    "file": "977a1892e442.mp3"
+  },
+  {
+    "text": "Look! Golden olive oil!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2536,
+    "file": "3148b69213ce.mp3"
+  },
+  {
+    "text": "Hold the jug to pour! Fill it all the way!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4018,
+    "file": "6db67ba8c916.mp3"
+  },
+  {
+    "text": "Full! All the way to the top!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2610,
+    "file": "b64e32aa1dc5.mp3"
+  },
+  {
+    "text": "Now fill it halfway, to the dotted line!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4148,
+    "file": "453bec437bf9.mp3"
+  },
+  {
+    "text": "A little more! Up to the dotted line!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3268,
+    "file": "e95aed672210.mp3"
+  },
+  {
+    "text": "Hee hee! Just a taste!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 1514,
+    "file": "5983b7939919.mp3"
+  },
+  {
+    "text": "Half! Halfway full!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4226,
+    "file": "fd4e1c3db2f2.mp3"
+  },
+  {
+    "text": "Olive oil goes on almost everything in Italy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3776,
+    "file": "e7e5f3459973.mp3"
+  },
+  {
+    "text": "Bruschetta for everyone! Bread with olive oil!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 3400,
+    "file": "30a7109fba49.mp3"
+  },
+  {
+    "text": "Crunch! Buonissima!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 2355,
+    "file": "018c49494beb.mp3"
+  },
+  {
+    "text": "And my tambourine, for Lupa's band!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 2578,
+    "file": "2411525ac714.mp3"
+  },
+  {
+    "text": "Tap the tambourine!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1768,
+    "file": "3e1c8775df98.mp3"
+  },
+  {
+    "text": "Let's dance the pizzica!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 1616,
+    "file": "bc0700c53841.mp3"
+  },
+  {
+    "text": "Yay! A tambourine for the band!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 3143,
+    "file": "fab0b41391e8.mp3"
+  },
+  {
+    "text": "Oh no! The Trevi Fountain is dry!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 4107,
+    "file": "7c918c223bc5.mp3"
+  },
+  {
+    "text": "Where did the water go?",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 1827,
+    "file": "7193a28e3c9b.mp3"
+  },
+  {
+    "text": "Tap the hill and listen!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2067,
+    "file": "978cf5a83c1c.mp3"
+  },
+  {
+    "text": "Shh! I hear water!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2468,
+    "file": "ed904381272d.mp3"
+  },
+  {
+    "text": "It's getting louder!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 1351,
+    "file": "ab0d1d7da71c.mp3"
+  },
+  {
+    "text": "Tap the rocks!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1093,
+    "file": "174b35c1ab1a.mp3"
+  },
+  {
+    "text": "Acqua! You found water!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2347,
+    "file": "c52cbfff6891.mp3"
+  },
+  {
+    "text": "Long ago, a girl helped the Romans find water.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3738,
+    "file": "acc3ddacaca7.mp3"
+  },
+  {
+    "text": "Today, that girl is YOU, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3292,
+    "file": "2905309a41e3.mp3"
+  },
+  {
+    "text": "Build a water bridge to Rome!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2546,
+    "file": "ad5c1144510e.mp3"
+  },
+  {
+    "text": "Drag the arch that fits each gap!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3041,
+    "file": "891aeb096397.mp3"
+  },
+  {
+    "text": "It fits!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 1002,
+    "file": "7ae6f075e02f.mp3"
+  },
+  {
+    "text": "Perfetto!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 879,
+    "file": "2a763c71cbf0.mp3"
+  },
+  {
+    "text": "Brava, Kaylee!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 1544,
+    "file": "9c9737ef4036.mp3"
+  },
+  {
+    "text": "Water only flows downhill!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2516,
+    "file": "4441dc0e3fce.mp3"
+  },
+  {
+    "text": "Try the glowing arch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1682,
+    "file": "44d79d965c16.mp3"
+  },
+  {
+    "text": "Now tap an arch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1686,
+    "file": "45220c5d071f.mp3"
+  },
+  {
+    "text": "Now all the way to Rome! Look closely!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4203,
+    "file": "f4a4a73fc931.mp3"
+  },
+  {
+    "text": "The Romans called a water bridge an aqueduct!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3204,
+    "file": "320cdb0c98f3.mp3"
+  },
+  {
+    "text": "Tap the spring to turn on the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2177,
+    "file": "aa4d726ddf11.mp3"
+  },
+  {
+    "text": "Follow the water with your finger!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2703,
+    "file": "68f9ee206dda.mp3"
+  },
+  {
+    "text": "The water is going to Rome!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2349,
+    "file": "5de3a0c7ee0b.mp3"
+  },
+  {
+    "text": "Bellissima! The fountain is full!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 3414,
+    "file": "e7f84cbe43ff.mp3"
+  },
+  {
+    "text": "The Romans built this water bridge 2,000 years ago!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4302,
+    "file": "313d41fdefef.mp3"
+  },
+  {
+    "text": "And it still fills the fountain today!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2437,
+    "file": "d42ce4a12263.mp3"
+  },
+  {
+    "text": "Flick the coin up into the fountain!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2551,
+    "file": "ff90e6983781.mp3"
+  },
+  {
+    "text": "Swipe up on the coin!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2125,
+    "file": "56d253be6731.mp3"
+  },
+  {
+    "text": "One more coin!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1547,
+    "file": "54638c568f7d.mp3"
+  },
+  {
+    "text": "Now you will come back to Rome one day, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2830,
+    "file": "52f03d4cccfd.mp3"
+  },
+  {
+    "text": "My turn!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 953,
+    "file": "f08b15e69501.mp3"
+  },
+  {
+    "text": "I wish I could sing!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 1553,
+    "file": "eebb61b8cb6f.mp3"
+  },
+  {
+    "text": "A wishing star! It will wait for Lupa's big night.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4474,
+    "file": "1fbf361c1e00.mp3"
+  },
+  {
+    "text": "Coins from the fountain help people who need it.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3424,
+    "file": "eada6e7250dd.mp3"
+  },
+  {
     "text": "Brown bear sticker! Bears live in the mountains of Italy!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
     "ms": 3501,
     "file": "7b58c2d4dc63.mp3"
+  },
+  {
+    "text": "Porcupine sticker! Crested porcupines live in Italy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5079,
+    "file": "d04627838689.mp3"
+  },
+  {
+    "text": "Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5683,
+    "file": "a9226cd7ce5a.mp3"
+  },
+  {
+    "text": "Let's see how olive oil is made!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2775,
+    "file": "e056fa5ac5de.mp3"
+  },
+  {
+    "text": "Let's toss a coin in the real Trevi Fountain!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3790,
+    "file": "0bdfd0c6a0c3.mp3"
+  },
+  {
+    "text": "Look! A real Roman water bridge!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3261,
+    "file": "8412395e1f18.mp3"
   },
   {
     "text": "In Italy, people say ciao! It means hello and goodbye!",
@@ -810,6 +1433,20 @@
     "sig": "ed7dbdac3d",
     "ms": 4294,
     "file": "0e624184787c.mp3"
+  },
+  {
+    "text": "Some olive trees in Italy are more than a thousand years old!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4847,
+    "file": "b9722345cb36.mp3"
+  },
+  {
+    "text": "The story says a kind mama wolf took care of the twins who built Rome!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 6518,
+    "file": "41939ecc40cb.mp3"
   },
   {
     "text": "This is Italy! Tap a picture to learn more.",

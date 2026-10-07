@@ -53,6 +53,18 @@
     "voice": "cesare"
   },
   {
+    "text": "Hee hee! Prickly!",
+    "voice": "spina"
+  },
+  {
+    "text": "Ciao ciao!",
+    "voice": "spina"
+  },
+  {
+    "text": "Olives! Yum!",
+    "voice": "spina"
+  },
+  {
     "text": "What a lovely kitchen!",
     "voice": "queen"
   },
@@ -239,7 +251,177 @@
     "text": "Yay! Our first friend for the band!",
     "voice": "lupa"
   },
+  {
+    "text": "Ciao, Kaylee! The olives are ready!",
+    "voice": "spina"
+  },
+  {
+    "text": "Help me pick them for olive oil!",
+    "voice": "spina"
+  },
+  "Drag the rake along the glowing branch!",
+  "Now comb this branch!",
+  "One more branch!",
+  "Slide the rake all the way to the end!",
+  {
+    "text": "Eek! They stuck on my quills!",
+    "voice": "spina"
+  },
+  {
+    "text": "Oops! Again!",
+    "voice": "spina"
+  },
+  "Tap Spina to shake them off!",
+  {
+    "text": "Hee hee! Into the basket!",
+    "voice": "spina"
+  },
+  "Olives in the net!",
+  "Great combing, Kaylee!",
+  "The net is full!",
+  "Olive trees love hot, dry, sunny summers!",
+  {
+    "text": "Into the basket! Grazie!",
+    "voice": "spina"
+  },
+  "This olive is green. Tap the sun!",
+  "Purple! Tap the sun again!",
+  "Black! Now it is ripe!",
+  "Put them in order! Green, then purple, then black!",
+  "Green goes in the one sun bowl!",
+  "Purple goes in the two sun bowl!",
+  "Black goes in the three sun bowl!",
+  "Green, purple, black! Well done, Kaylee!",
+  {
+    "text": "Mmm! Let me try one!",
+    "voice": "spina"
+  },
+  {
+    "text": "Bleh! Bitter!",
+    "voice": "spina"
+  },
+  "Fresh olives are too bitter! They have to soak first.",
+  {
+    "text": "Welcome to the frantoio, the olive mill!",
+    "voice": "spina"
+  },
+  "Drop ten olives in the big funnel!",
+  "Drag an olive up to the funnel, or tap the basket!",
+  "Nine!",
+  "Ten!",
+  "It takes lots of olives to make oil!",
+  "Here comes the big stone wheel!",
+  {
+    "text": "Squish, squish, squish!",
+    "voice": "spina"
+  },
+  "Look! Golden olive oil!",
+  "Hold the jug to pour! Fill it all the way!",
+  "Full! All the way to the top!",
+  "Now fill it halfway, to the dotted line!",
+  "A little more! Up to the dotted line!",
+  {
+    "text": "Hee hee! Just a taste!",
+    "voice": "spina"
+  },
+  "Half! Halfway full!",
+  "Olive oil goes on almost everything in Italy!",
+  {
+    "text": "Bruschetta for everyone! Bread with olive oil!",
+    "voice": "spina"
+  },
+  {
+    "text": "Crunch! Buonissima!",
+    "voice": "spina"
+  },
+  {
+    "text": "And my tambourine, for Lupa's band!",
+    "voice": "spina"
+  },
+  "Tap the tambourine!",
+  {
+    "text": "Let's dance the pizzica!",
+    "voice": "spina"
+  },
+  {
+    "text": "Yay! A tambourine for the band!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Oh no! The Trevi Fountain is dry!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Where did the water go?",
+    "voice": "lupa"
+  },
+  "Tap the hill and listen!",
+  {
+    "text": "Shh! I hear water!",
+    "voice": "lupa"
+  },
+  {
+    "text": "It's getting louder!",
+    "voice": "lupa"
+  },
+  "Tap the rocks!",
+  {
+    "text": "Acqua! You found water!",
+    "voice": "lupa"
+  },
+  "Long ago, a girl helped the Romans find water.",
+  "Today, that girl is YOU, Kaylee!",
+  "Build a water bridge to Rome!",
+  "Drag the arch that fits each gap!",
+  {
+    "text": "It fits!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Perfetto!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Brava, Kaylee!",
+    "voice": "lupa"
+  },
+  "Water only flows downhill!",
+  "Try the glowing arch!",
+  "Now tap an arch!",
+  "Now all the way to Rome! Look closely!",
+  "The Romans called a water bridge an aqueduct!",
+  "Tap the spring to turn on the water!",
+  "Follow the water with your finger!",
+  {
+    "text": "The water is going to Rome!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Bellissima! The fountain is full!",
+    "voice": "lupa"
+  },
+  "The Romans built this water bridge 2,000 years ago!",
+  "And it still fills the fountain today!",
+  "Flick the coin up into the fountain!",
+  "Swipe up on the coin!",
+  "One more coin!",
+  "Now you will come back to Rome one day, Kaylee!",
+  {
+    "text": "My turn!",
+    "voice": "lupa"
+  },
+  {
+    "text": "I wish I could sing!",
+    "voice": "lupa"
+  },
+  "A wishing star! It will wait for Lupa's big night.",
+  "Coins from the fountain help people who need it.",
   "Brown bear sticker! Bears live in the mountains of Italy!",
+  "Porcupine sticker! Crested porcupines live in Italy!",
+  "Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!",
+  "Let's see how olive oil is made!",
+  "Let's toss a coin in the real Trevi Fountain!",
+  "Look! A real Roman water bridge!",
   "In Italy, people say ciao! It means hello and goodbye!",
   "Grazie means thank you!",
   "One, two, three in Italian: uno, due, tre!",
@@ -250,5 +432,7 @@
   "Long ago, the Romans built roads, arenas and water bridges!",
   "Italy has volcanoes! One is right next to Naples!",
   "Italy's flag has three stripes: green, white and red!",
+  "Some olive trees in Italy are more than a thousand years old!",
+  "The story says a kind mama wolf took care of the twins who built Rome!",
   "This is Italy! Tap a picture to learn more."
 ]

@@ -16,6 +16,11 @@ export const WORDS = {
   delizioso: { it: 'Delizioso!', en: 'delicious' },
   mammaMia: { it: 'Mamma mia!', en: 'oh my!' },
   zio: { it: 'Zio', en: 'uncle' },
+  acqua: { it: 'Acqua!', en: 'water' },
+  brava: { it: 'Brava!', en: 'well done' },
+  bellissima: { it: 'Bellissima!', en: 'so beautiful' },
+  frantoio: { it: 'Frantoio', en: 'olive mill' },
+  bruschetta: { it: 'Bruschetta', en: 'toast with olive oil' },
 } as const
 export type WordId = keyof typeof WORDS
 

@@ -34,6 +34,11 @@
       "voice": "verse",
       "pitch": 0,
       "instructions": "You are Raffaele Esposito, a proud, friendly pizza maker in Naples in 1889, in a gentle children's storybook. Excited and honored to cook for the Queen. English with a warm Italian accent from Naples. Say Italian words like a native speaker."
+    },
+    "spina": {
+      "voice": "nova",
+      "pitch": 4,
+      "instructions": "You are Spina, a bouncy, giggly little crested porcupine girl from Puglia in southern Italy, about five years old. Cheerful, a bit clumsy, laughs at herself. English with a light, warm Italian accent. Say Italian words like a native speaker. Quick, bright and playful."
     }
   }
 }
