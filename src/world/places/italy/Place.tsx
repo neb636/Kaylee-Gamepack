@@ -8,7 +8,9 @@ import { sfx } from '../../kit/sfx'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
+import { OliveGrove } from './activities/olives/OliveGrove'
 import { Pizzeria } from './activities/pizzeria/Pizzeria'
+import { Trevi } from './activities/trevi/Trevi'
 import { art } from './art'
 import { L } from './lines'
 import { INK } from './puppets/ink'
@@ -19,7 +21,7 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria, olives: OliveGrove, trevi: Trevi }
 
 /** The seven arches on the boot map, on their landmarks in scene-italy-map (in % of the picture), and the instrument each
  *  friend brings to Lupa's band. Only activities listed in meta.activities are playable; the rest say "coming soon". */
@@ -27,9 +29,9 @@ const SPOTS = [
   { id: 'venice', name: 'Venice', icon: '🛶', x: 59, y: 19, band: '🪗' },
   { id: 'pisa', name: 'Leaning Tower', icon: '🗼', x: 39.5, y: 27, band: '🔔' },
   { id: 'colosseum', name: 'The Colosseum', icon: '🏛️', x: 48, y: 41, band: '📯' },
-  { id: 'trevi', name: 'Trevi Fountain', icon: '⛲', x: 58.5, y: 45, band: '⭐' },
+  { id: 'trevi', name: 'Trevi Fountain', icon: '⛲', x: 58.5, y: 45, face: art.lupa, band: '⭐' },
   { id: 'pizzeria', name: 'Pizzeria in Naples', icon: '🍕', x: 65.4, y: 61.5, face: art.bruno, band: art.mandolin },
-  { id: 'olives', name: 'Olive Grove', icon: '🫒', x: 83, y: 57, band: '🪘' },
+  { id: 'olives', name: 'Olive Grove', icon: '🫒', x: 83, y: 57, face: art.spina, band: art.tambourine },
   { id: 'etna', name: 'Snow on a Volcano', icon: '🌋', x: 51.5, y: 84, band: '🎹' },
 ]
 

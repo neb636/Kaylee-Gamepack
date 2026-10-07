@@ -12,6 +12,7 @@ const gino = as('gino')
 const cesare = as('cesare')
 const queen = as('queen')
 const raffaele = as('raffaele')
+const spina = as('spina')
 const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!']
 
 export const L = {
@@ -31,6 +32,7 @@ export const L = {
     bufala: [bufala('Hello, dear!')],
     gino: [gino('Coo coo! Ciao!')],
     cesare: [cesare('I am the emperor.')],
+    spina: [spina('Hee hee! Prickly!'), spina('Ciao ciao!'), spina('Olives! Yum!')],
     queen: [queen('What a lovely kitchen!')],
     raffaele: [raffaele('For the Queen!')],
   },
@@ -126,8 +128,116 @@ export const L = {
     band: lupa('Yay! Our first friend for the band!'),
   },
 
+  // 🫒 The Olive Grove (activities/olives). Every spoken line of the activity goes in here.
+  olives: {
+    arrive: [spina(`Ciao, ${NAME}! The olives are ready!`), spina('Help me pick them for olive oil!')],
+
+    // Comb the branches.
+    comb: 'Drag the rake along the glowing branch!',
+    combNext: 'Now comb this branch!',
+    combLast: 'One more branch!',
+    combHint: 'Slide the rake all the way to the end!',
+    bonk: spina('Eek! They stuck on my quills!'),
+    bonkAgain: spina('Oops! Again!'),
+    tapSpina: 'Tap Spina to shake them off!',
+    shook: spina('Hee hee! Into the basket!'),
+    branchDone: ['Olives in the net!', `Great combing, ${NAME}!`, 'The net is full!'],
+    sun: 'Olive trees love hot, dry, sunny summers!',
+    toBasket: spina('Into the basket! Grazie!'),
+
+    // Green to black.
+    ripenIntro: 'This olive is green. Tap the sun!',
+    purple: 'Purple! Tap the sun again!',
+    black: 'Black! Now it is ripe!',
+    sortIntro: 'Put them in order! Green, then purple, then black!',
+    hintGreen: 'Green goes in the one sun bowl!',
+    hintPurple: 'Purple goes in the two sun bowl!',
+    hintBlack: 'Black goes in the three sun bowl!',
+    sortDone: `Green, purple, black! Well done, ${NAME}!`,
+    tryOne: spina('Mmm! Let me try one!'),
+    bitter: spina('Bleh! Bitter!'),
+    bitterWhy: 'Fresh olives are too bitter! They have to soak first.',
+
+    // The olive mill.
+    mill: spina('Welcome to the frantoio, the olive mill!'),
+    millDrop: 'Drop ten olives in the big funnel!',
+    millHint: 'Drag an olive up to the funnel, or tap the basket!',
+    count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!', 'Nine!', 'Ten!'],
+    lots: 'It takes lots of olives to make oil!',
+    roll: 'Here comes the big stone wheel!',
+    squish: spina('Squish, squish, squish!'),
+    oil: 'Look! Golden olive oil!',
+
+    // Pour to the line.
+    pourFull: 'Hold the jug to pour! Fill it all the way!',
+    full: 'Full! All the way to the top!',
+    pourHalf: 'Now fill it halfway, to the dotted line!',
+    more: 'A little more! Up to the dotted line!',
+    tooMuch: spina('Hee hee! Just a taste!'),
+    half: 'Half! Halfway full!',
+    everything: 'Olive oil goes on almost everything in Italy!',
+
+    // Payoff.
+    bruschetta: spina('Bruschetta for everyone! Bread with olive oil!'),
+    yum: spina('Crunch! Buonissima!'),
+    tambourine: spina("And my tambourine, for Lupa's band!"),
+    tapTambourine: 'Tap the tambourine!',
+    pizzica: spina("Let's dance the pizzica!"),
+    band: lupa('Yay! A tambourine for the band!'),
+  },
+
+  // ⛲ The Trevi Fountain (activities/trevi). Every spoken line of the activity goes in here.
+  trevi: {
+    // Story: the fountain has no water.
+    dry: lupa('Oh no! The Trevi Fountain is dry!'),
+    where: lupa('Where did the water go?'),
+    // 1. Find the spring on the hill.
+    listen: 'Tap the hill and listen!',
+    hear: lupa('Shh! I hear water!'),
+    louder: lupa('It\'s getting louder!'),
+    tapRocks: 'Tap the rocks!',
+    found: lupa('Acqua! You found water!'),
+    girl1: 'Long ago, a girl helped the Romans find water.',
+    girl2: `Today, that girl is YOU, ${NAME}!`,
+    // 2. Build the aqueduct (a water bridge) over the valley.
+    bridge: 'Build a water bridge to Rome!',
+    drag: 'Drag the arch that fits each gap!',
+    fits: [lupa('It fits!'), lupa('Perfetto!'), lupa(`Brava, ${NAME}!`)],
+    downhill: 'Water only flows downhill!',
+    glowing: 'Try the glowing arch!',
+    pickArch: 'Now tap an arch!',
+    round2: 'Now all the way to Rome! Look closely!',
+    aqueduct: 'The Romans called a water bridge an aqueduct!',
+    // 3. Water on!
+    waterOn: 'Tap the spring to turn on the water!',
+    follow: 'Follow the water with your finger!',
+    toRome: lupa('The water is going to Rome!'),
+    // 4. The fountain fills up.
+    full: lupa('Bellissima! The fountain is full!'),
+    romans: 'The Romans built this water bridge 2,000 years ago!',
+    still: 'And it still fills the fountain today!',
+    // 5. Toss a coin.
+    flick: 'Flick the coin up into the fountain!',
+    flickHint: 'Swipe up on the coin!',
+    one: 'One!',
+    oneMore: 'One more coin!',
+    two: 'Two!',
+    comeBack: `Now you will come back to Rome one day, ${NAME}!`,
+    lupaTurn: lupa('My turn!'),
+    wish: lupa('I wish I could sing!'),
+    star: 'A wishing star! It will wait for Lupa\'s big night.',
+    help: 'Coins from the fountain help people who need it.',
+  },
+
   stickers: {
     pizzeria: 'Brown bear sticker! Bears live in the mountains of Italy!',
+    olives: 'Porcupine sticker! Crested porcupines live in Italy!',
+    trevi: 'Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!',
+  },
+  videos: {
+    olives: "Let's see how olive oil is made!",
+    trevi: "Let's toss a coin in the real Trevi Fountain!",
+    aqueduct: 'Look! A real Roman water bridge!',
   },
   facts: {
     hello: 'In Italy, people say ciao! It means hello and goodbye!',
@@ -140,6 +250,8 @@ export const L = {
     romans: 'Long ago, the Romans built roads, arenas and water bridges!',
     volcano: 'Italy has volcanoes! One is right next to Naples!',
     flag: 'Italy\'s flag has three stripes: green, white and red!',
+    olives: 'Some olive trees in Italy are more than a thousand years old!',
+    wolf: 'The story says a kind mama wolf took care of the twins who built Rome!',
   },
   passport: 'This is Italy! Tap a picture to learn more.',
 }
