@@ -204,3 +204,25 @@ export function Road({ W, top, H, A }: { W: number; top: number; H: number; A: n
     </svg>
   )
 }
+
+/**
+ * Soft rolling hills between the painting and the valley: they overlap the painting's ground edge so only its sky, far
+ * hills and Rome show, and the near terrain sits in front of them.
+ */
+export function BackHills({ W, H, horizon, A }: { W: number; H: number; horizon: { y: number; h: number }; A: number }) {
+  const sw = inkW(A) * 0.8
+  const rise = horizon.h * 0.055
+  const pts: string[] = []
+  for (let x = -20; x <= W + 20; x += 10) {
+    const y = horizon.y - rise - Math.sin(x / (W * 0.21) + 0.6) * rise * 0.28 - Math.sin(x / (W * 0.083) + 2) * rise * 0.12
+    pts.push(`${f(x)} ${f(y)}`)
+  }
+  const edge = `M${pts.join(' L')}`
+  return (
+    <svg width={W} height={H} style={{ position: 'absolute', left: 0, top: 0, pointerEvents: 'none' }} aria-hidden>
+      <path d={`${edge} L${W + 20} ${H + 10} L-20 ${H + 10} Z`} fill="#B7D873" />
+      <path d={edge} transform={`translate(0 ${f(A * 0.05)})`} fill="none" stroke="#C9E48C" strokeWidth={A * 0.1} />
+      <path d={edge} fill="none" stroke={INK} strokeWidth={sw} strokeLinejoin="round" />
+    </svg>
+  )
+}

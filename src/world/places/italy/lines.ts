@@ -142,26 +142,26 @@ export const L = {
     tapSpina: 'Tap Spina to shake them off!',
     shook: spina('Hee hee! Into the basket!'),
     branchDone: ['Olives in the net!', `Great combing, ${NAME}!`, 'The net is full!'],
-    sun: 'Olive trees love hot, dry, sunny summers!',
+    sun: 'Olive trees love hot, dry summers!',
     toBasket: spina('Into the basket! Grazie!'),
 
     // Green to black.
     ripenIntro: 'This olive is green. Tap the sun!',
     purple: 'Purple! Tap the sun again!',
     black: 'Black! Now it is ripe!',
-    sortIntro: 'Put them in order! Green, then purple, then black!',
+    sortIntro: 'Green, then purple, then black!',
     hintGreen: 'Green goes in the one sun bowl!',
     hintPurple: 'Purple goes in the two sun bowl!',
     hintBlack: 'Black goes in the three sun bowl!',
     sortDone: `Green, purple, black! Well done, ${NAME}!`,
     tryOne: spina('Mmm! Let me try one!'),
     bitter: spina('Bleh! Bitter!'),
-    bitterWhy: 'Fresh olives are too bitter! They have to soak first.',
+    bitterWhy: ['Fresh olives are too bitter!', 'They have to soak first.'],
 
     // The olive mill.
     mill: spina('Welcome to the frantoio, the olive mill!'),
     millDrop: 'Drop ten olives in the big funnel!',
-    millHint: 'Drag an olive up to the funnel, or tap the basket!',
+    millHint: 'Drop an olive in the funnel!',
     count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!', 'Nine!', 'Ten!'],
     lots: 'It takes lots of olives to make oil!',
     roll: 'Here comes the big stone wheel!',
@@ -171,14 +171,14 @@ export const L = {
     // Pour to the line.
     pourFull: 'Hold the jug to pour! Fill it all the way!',
     full: 'Full! All the way to the top!',
-    pourHalf: 'Now fill it halfway, to the dotted line!',
-    more: 'A little more! Up to the dotted line!',
+    pourHalf: 'Now fill it halfway!',
+    more: 'A little more, to the line!',
     tooMuch: spina('Hee hee! Just a taste!'),
-    half: 'Half! Halfway full!',
+    half: 'Halfway full!',
     everything: 'Olive oil goes on almost everything in Italy!',
 
     // Payoff.
-    bruschetta: spina('Bruschetta for everyone! Bread with olive oil!'),
+    bruschetta: spina('Bruschetta for everyone!'),
     yum: spina('Crunch! Buonissima!'),
     tambourine: spina("And my tambourine, for Lupa's band!"),
     tapTambourine: 'Tap the tambourine!',
@@ -189,7 +189,7 @@ export const L = {
   // ⛲ The Trevi Fountain (activities/trevi). Every spoken line of the activity goes in here.
   trevi: {
     // Story: the fountain has no water.
-    dry: lupa('Oh no! The Trevi Fountain is dry!'),
+    dry: lupa('Oh no! It\'s dry!'),
     where: lupa('Where did the water go?'),
     // 1. Find the spring on the hill.
     listen: 'Tap the hill and listen!',
@@ -214,7 +214,8 @@ export const L = {
     toRome: lupa('The water is going to Rome!'),
     // 4. The fountain fills up.
     full: lupa('Bellissima! The fountain is full!'),
-    romans: 'The Romans built this water bridge 2,000 years ago!',
+    romans: 'The Romans built this water bridge!',
+    longAgo: 'That was 2,000 years ago!',
     still: 'And it still fills the fountain today!',
     // 5. Toss a coin.
     flick: 'Flick the coin up into the fountain!',
@@ -225,7 +226,8 @@ export const L = {
     comeBack: `Now you will come back to Rome one day, ${NAME}!`,
     lupaTurn: lupa('My turn!'),
     wish: lupa('I wish I could sing!'),
-    star: 'A wishing star! It will wait for Lupa\'s big night.',
+    star: 'A wishing star!',
+    starWaits: 'It waits for Lupa\'s big night.',
     help: 'Coins from the fountain help people who need it.',
   },
 

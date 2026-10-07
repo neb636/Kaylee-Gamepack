@@ -82,36 +82,40 @@ export function Stand({ x, y, h, w, z, children, style }: { x: number; y: number
   )
 }
 
-/** A woven basket seen from the side, with a heap of olives that grows with `fill` (0..1). Box ratio 1.2 : 1. */
+/** A woven basket seen straight from the side (eye level): only a thin sliver of the rim shows, and a heap of olives
+ *  peeks over it, growing with `fill` (0..1). Box ratio 200 : 168, flat bottom on the ground. */
 export function Basket({ fill, glow }: { fill: number; glow?: boolean }) {
   const f = Math.max(0, Math.min(1, fill))
-  // Olives in the heap, back to front; the first ones show first.
+  // Olives in the heap, lowest first, so the heap grows up out of the basket.
   const heap: { x: number; y: number; c: OliveColor; r: number }[] = [
-    { x: 60, y: 62, c: 'green', r: -20 }, { x: 140, y: 62, c: 'black', r: 25 }, { x: 100, y: 64, c: 'green', r: 5 },
-    { x: 80, y: 52, c: 'purple', r: -10 }, { x: 120, y: 50, c: 'green', r: 15 }, { x: 46, y: 50, c: 'black', r: -30 },
-    { x: 154, y: 50, c: 'green', r: 30 }, { x: 100, y: 40, c: 'black', r: 0 }, { x: 66, y: 38, c: 'green', r: -15 },
-    { x: 134, y: 36, c: 'purple', r: 20 }, { x: 88, y: 28, c: 'green', r: 10 }, { x: 114, y: 24, c: 'green', r: -10 },
-    { x: 100, y: 12, c: 'black', r: 5 },
+    { x: 46, y: 80, c: 'green', r: -20 }, { x: 78, y: 80, c: 'black', r: 15 }, { x: 110, y: 80, c: 'green', r: 5 }, { x: 142, y: 80, c: 'purple', r: -10 }, { x: 160, y: 80, c: 'green', r: 25 },
+    { x: 62, y: 66, c: 'purple', r: 10 }, { x: 94, y: 64, c: 'green', r: -15 }, { x: 126, y: 64, c: 'black', r: 20 }, { x: 150, y: 68, c: 'green', r: -25 },
+    { x: 78, y: 50, c: 'green', r: 5 }, { x: 110, y: 48, c: 'purple', r: -5 }, { x: 138, y: 52, c: 'green', r: 15 },
+    { x: 96, y: 34, c: 'black', r: -10 }, { x: 124, y: 36, c: 'green', r: 10 },
   ]
   const shown = Math.round(f * heap.length)
   return (
     <svg viewBox="0 0 200 168" style={{ width: '100%', display: 'block', overflow: 'visible', filter: glow ? 'drop-shadow(0 0 10px #FFE27A) drop-shadow(0 0 4px #FFC83D)' : undefined }}>
-      {/* handle */}
-      <path d="M38 76 C38 10 162 10 162 76" fill="none" stroke={INK} strokeWidth="18" strokeLinecap="round" />
-      <path d="M38 76 C38 10 162 10 162 76" fill="none" stroke="#E2A066" strokeWidth="9" strokeLinecap="round" />
+      {/* handle, arching over from the sides */}
+      <path d="M30 86 C30 4 170 4 170 86" fill="none" stroke={INK} strokeWidth="17" strokeLinecap="round" />
+      <path d="M30 86 C30 4 170 4 170 86" fill="none" stroke="#E2A066" strokeWidth="8" strokeLinecap="round" />
+      {/* the far rim: a thin sliver of the basket's opening, seen almost edge-on */}
+      <ellipse cx="100" cy="88" rx="84" ry="6" fill="#B8733F" stroke={INK} strokeWidth="5" />
       {heap.slice(0, shown).map((o, i) => (
-        <OliveG key={i} color={o.c} x={o.x} y={o.y + 16} rot={o.r} s={0.95} />
+        <OliveG key={i} color={o.c} x={o.x} y={o.y} rot={o.r} s={0.95} />
       ))}
-      {/* body: wider at the rim, flat bottom on the ground */}
-      <path d="M18 78 L182 78 L166 160 Q100 168 34 160Z" fill="#E2A066" stroke={INK} strokeWidth="6" strokeLinejoin="round" />
-      <path d="M30 128 L170 128 L166 156 Q100 164 34 156Z" fill="#CC8650" />
-      {[96, 112, 128, 144].map((y) => (
-        <path key={y} d={`M${24 + (y - 78) * 0.2} ${y} L${176 - (y - 78) * 0.2} ${y}`} stroke={INK} strokeWidth="3" opacity="0.55" />
+      {/* the body, wider at the top, flat on the ground */}
+      <path d="M16 90 Q100 98 184 90 L168 158 Q100 166 32 158Z" fill="#E2A066" stroke={INK} strokeWidth="6" strokeLinejoin="round" />
+      <path d="M26 132 Q100 140 174 132 L168 156 Q100 163 32 156Z" fill="#CC8650" />
+      {[108, 122, 138].map((y) => (
+        <path key={y} d={`M${18 + (y - 90) * 0.24} ${y} Q100 ${y + 7} ${182 - (y - 90) * 0.24} ${y}`} fill="none" stroke={INK} strokeWidth="3" opacity="0.5" />
       ))}
-      {[50, 75, 100, 125, 150].map((x) => (
-        <path key={x} d={`M${x} 84 L${x + (x < 100 ? 3 : x > 100 ? -3 : 0)} 156`} stroke={INK} strokeWidth="2.6" opacity="0.4" />
+      {[52, 76, 100, 124, 148].map((x) => (
+        <path key={x} d={`M${x} 96 L${x + (x - 100) * -0.08} 158`} stroke={INK} strokeWidth="2.6" opacity="0.4" />
       ))}
-      <rect x="12" y="70" width="176" height="18" rx="9" fill="#EDB57C" stroke={INK} strokeWidth="6" />
+      {/* the near rim: a braided band */}
+      <path d="M12 88 Q100 100 188 88" fill="none" stroke={INK} strokeWidth="15" strokeLinecap="round" />
+      <path d="M12 88 Q100 100 188 88" fill="none" stroke="#EDB57C" strokeWidth="7" strokeLinecap="round" />
     </svg>
   )
 }
