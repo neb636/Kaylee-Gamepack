@@ -378,7 +378,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
       {/* Roses landing on the stage. */}
       {roseList.map((r) =>
         r.caught ? null : (
-          <motion.button key={r.id} aria-label="Rose" initial={{ x: r.x * W - 50, y: -120, rotate: -40 }} animate={{ y: stageY - 60 - (r.id % 3) * 40, rotate: 30 }} transition={{ duration: 1.6, ease: 'easeOut' }} onClick={() => catchRose(r.id)} style={{ position: 'absolute', left: 0, top: 0, width: 100, height: 100, background: 'none', border: 'none', padding: 0, zIndex: 15 }}>
+          <motion.button key={r.id} aria-label="Rose" initial={{ x: r.x * W - 50, y: -120, rotate: -40 }} animate={{ y: Math.min(H - 100, stageY + 6 + (r.id % 3) * 14), rotate: 30 }} transition={{ duration: 1.6, ease: 'easeOut' }} onClick={() => catchRose(r.id)} style={{ position: 'absolute', left: 0, top: 0, width: 100, height: 100, background: 'none', border: 'none', padding: 0, zIndex: 15 }}>
             <img src={art.rose} alt="" draggable={false} style={{ width: '100%', height: '100%' }} />
           </motion.button>
         ),

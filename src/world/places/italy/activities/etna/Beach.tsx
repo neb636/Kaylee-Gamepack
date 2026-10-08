@@ -190,7 +190,7 @@ export function Beach({ onStep, onDone }: { onStep: () => void; onDone: () => vo
   const fh = Math.min(bh * (landscape ? 0.28 : 0.15), W * 0.26, 250)
   const vx = (f: number) => -ox + W * f
   const spots: Record<Who, number> = landscape ? { lupa: vx(0.3), tortoise: vx(0.52), mona: vx(0.74) } : { lupa: vx(0.33), tortoise: vx(0.57), mona: vx(0.81) }
-  const ninoX = landscape ? vx(0.1) : vx(0.1)
+  const ninoX = landscape ? vx(0.1) : vx(0.13)
   const item = Math.max(96, Math.min(150, Math.min(W, H) * 0.16))
   const standY = H - item * 1.25 - 16
   const cupX = W * 0.5
@@ -274,7 +274,7 @@ export function Beach({ onStep, onDone }: { onStep: () => void; onDone: () => vo
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 10, background: '#FFF7F0', border: `5px solid ${INK}`, borderRadius: 24, boxShadow: 'var(--shadow)' }}>
               <img src={art.piano} alt="" draggable={false} style={{ height: 'max(90px, min(14vh, 130px))', display: landscape || W > 700 ? 'block' : 'none' }} />
               {KEYS.map((_, i) => (
-                <motion.button key={i} aria-label={`Key ${i + 1}`} className={step === 'piano' && !keysHit.includes(i) && keysHit.length === i ? 'world-glow' : undefined} animate={{ y: pressed === i ? 8 : 0 }} onPointerDown={() => void key(i)} style={{ width: 'max(88px, min(12vw, 120px))', height: 'max(120px, min(18vh, 170px))', borderRadius: '0 0 18px 18px', background: keysHit.includes(i) ? KEY_COLORS[i] : '#fff', border: `5px solid ${INK}`, padding: 0 }} />
+                <motion.button key={i} aria-label={`Key ${i + 1}`} className={step === 'piano' && !keysHit.includes(i) && keysHit.length === i ? 'world-glow' : undefined} animate={{ y: pressed === i ? 8 : 0 }} onPointerDown={() => void key(i)} style={{ width: 'max(88px, min(12vw, 120px))', height: 'max(120px, min(18vh, 170px))', borderRadius: '0 0 18px 18px', background: keysHit.includes(i) ? KEY_COLORS[i] : `${KEY_COLORS[i]}55`, border: `5px solid ${INK}`, padding: 0 }} />
               ))}
             </div>
           </motion.div>
