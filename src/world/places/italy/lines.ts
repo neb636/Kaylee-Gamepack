@@ -15,6 +15,8 @@ const raffaele = as('raffaele')
 const spina = as('spina')
 const civetta = as('civetta')
 const tortoise = as('tortoise')
+const nino = as('nino')
+const mona = as('mona')
 const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!']
 
 export const L = {
@@ -26,16 +28,18 @@ export const L = {
   hubNext: `Where should we go next, ${NAME}?`,
   soon: 'This spot opens soon!',
   boot: 'Italy is shaped like a boot! Kick!',
-  bandSoon: 'Lupa\'s opera night is coming soon!',
+  bandLocked: 'Help every friend first, then the opera can start!',
   bandNeed: 'Help friends to fill up Lupa\'s band!',
   tickle: {
     lupa: [lupa('Awooo!'), lupa('Hee hee! Ciao!'), lupa('I love to sing!')],
     bruno: [bruno('Ho ho ho!'), bruno('Pizza time!'), bruno('That tickles!')],
     bufala: [bufala('Hello, dear!')],
-    gino: [gino('Coo coo! Ciao!')],
+    gino: [gino('Coo coo! Ciao!'), gino('Row, row, row!'), gino('I love my gondola!')],
     cesare: [cesare('I am the emperor.'), cesare('Purrr... hello.'), cesare('Ahem. Bow, please.')],
     civetta: [civetta('Hoo hoo!'), civetta('Let\'s find out!'), civetta('I love science!')],
     tortoise: [tortoise('Hellooo...')],
+    nino: [nino('Hee-haw!'), nino('Lemons? Yum!'), nino('Hee hee, that tickles!')],
+    mona: [mona('Arf arf! Ciao!')],
     spina: [spina('Hee hee! Prickly!'), spina('Ciao ciao!'), spina('Olives! Yum!')],
     queen: [queen('What a lovely kitchen!')],
     raffaele: [raffaele('For the Queen!')],
@@ -320,11 +324,134 @@ export const L = {
     band: lupa('Yay! Bells for the band!'),
   },
 
+  // 🛶 Venice (activities/venice). Every spoken line of the activity goes in here.
+  venice: {
+    arrive: [gino(`Ciao, ${NAME}! Welcome to Venice!`), gino('Here the streets are water! Hop in!')],
+    // Row.
+    row: 'Drag the oar back to row!',
+    rowMore: 'Again! Row, row!',
+    rowHint: 'Swipe the oar this way!',
+    sing: [gino('La la la, my gondola!'), gino('Row, row, over the water!'), gino('Venice, bella Venezia!')],
+    // Forks.
+    fork: 'The canal splits in two!',
+    left: 'Turn left!',
+    right: 'Turn right!',
+    leftHand: 'Left is this hand!',
+    rightHand: 'Right is this hand!',
+    deadEnd: gino('Ha ha! A dead end!'),
+    quack: 'Quack!',
+    backUp: gino('Back we go!'),
+    tryOther: 'Try the other way!',
+    goodTurn: [gino('Bravissima!'), gino('Perfetto! This way!')],
+    // The low bridge.
+    bridge: 'A low bridge! Tap Sparkle to duck!',
+    ducked: gino('Phew! Just in time!'),
+    rialto: 'Venice has over four hundred bridges!',
+    // The boat ambulance.
+    ambulance: 'Look! In Venice, even ambulances are boats!',
+    noCars: 'There are no cars in Venice!',
+    // The mask shop.
+    shop: gino('Here we are! The mask shop!'),
+    carnival: 'Venice has a big costume party called Carnevale!',
+    paint: 'Paint this side of the mask!',
+    mirror: 'Look! The other side paints itself!',
+    mirrorWhy: 'Both sides match, like a mirror!',
+    paintMore: 'Paint a little more!',
+    colors: 'Tap a color!',
+    stickers: 'Now add three sparkly gems!',
+    stickersHint: 'Drag a gem onto the mask!',
+    count: ['One!', 'Two!', 'Three!'],
+    done: 'Tap the check when you like it!',
+    wear: 'Sparkle, try it on!',
+    pretty: `So pretty, ${NAME}!`,
+    // Payoff: fireworks over the lagoon.
+    night: gino('Look! Fireworks over the water!'),
+    tapSky: 'Tap the sky for fireworks!',
+    reflect: 'The fireworks shine in the water!',
+    accordion: gino("My accordion, for Lupa's band!"),
+    tapAccordion: 'Tap the accordion!',
+    band: lupa('Yay! An accordion for the band!'),
+  },
+
+  // 🌋 Snow on a Volcano (activities/etna). Every spoken line of the activity goes in here.
+  etna: {
+    arrive: [nino(`Ciao, ${NAME}! I'm Nino!`), nino("It's so hot! Let's get snow from the volcano!")],
+    // Climb.
+    climb: 'Drag Nino up the path!',
+    climbHint: 'Drag Nino along the path, up the mountain!',
+    hot: nino('Phew! So hot by the beach!'),
+    lemons: 'Lemons grow here in the hot sun!',
+    cool: nino('Ahh, cooler in the forest!'),
+    cold: nino('Brrr! Snow! So cold!'),
+    scarf: 'A scarf for Nino!',
+    higher: 'The higher you go, the colder it gets!',
+    // Pack the snow.
+    pack: 'Drag snow into Nino\'s baskets!',
+    packHint: 'Drag the snow onto Nino!',
+    count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!'],
+    puff: 'Etna is a volcano! It puffs smoke!',
+    tallest: 'Etna is the tallest volcano in Europe!',
+    full: nino('My baskets are full!'),
+    // Zoom down.
+    zoom: 'Tap Nino to zoom down!',
+    wheee: nino('Wheee!'),
+    // Granita on the beach.
+    melting: lupa("We're melting!"),
+    monaHello: mona('So hot! Arf!'),
+    long1: 'Long ago, people brought snow down from Etna.',
+    long2: 'They made icy treats called granita!',
+    scoop: 'Tap the basket to scoop snow!',
+    scoopTwo: 'Two scoops for Mona! Tap the basket!',
+    scoopMore: 'One more scoop!',
+    squeeze: 'Press and hold the lemon to squeeze!',
+    squeezeMore: 'Keep holding!',
+    sicily: 'Sicily has the best lemons!',
+    serve: 'Tap the granita to give it away!',
+    yum: [lupa('Brrr! Yummy!'), tortoise('Mmm... so... cold...'), mona('Arf! Two scoops! Yum!')],
+    freeze: 'Brain freeze! Hee hee!',
+    weather: 'Italy has snowy mountains and hot, sunny beaches!',
+    // Payoff.
+    piano: nino("I'm strong! I'll carry the piano to Lupa's band!"),
+    pianoFact: 'The piano was invented in Italy!',
+    tapPiano: 'Tap the piano keys!',
+    band: lupa('Yay! A piano for the band!'),
+  },
+
+  // 🎭 Opera night (the finale, activities/opera). Every spoken line of it goes in here.
+  opera: {
+    arrive: [lupa(`${NAME}! The band is ready!`), lupa("It's opera night in Verona!")],
+    arena: 'This arena is almost 2,000 years old!',
+    candles: 'Tap the seats to light the candles!',
+    candlesMore: 'More candles!',
+    candlesDone: 'So many little lights!',
+    wand: `You are the conductor, ${NAME}! Here is your wand!`,
+    big: 'Swing the wand big!',
+    forte: 'Big swings play loud! Forte means loud!',
+    small: 'Now swing it tiny!',
+    piano: 'Tiny swings play soft! Piano means soft!',
+    swingHint: 'Move your finger back and forth!',
+    solo: 'Tap a friend for a solo!',
+    soloYay: 'A solo!',
+    lupaTurn: lupa("It's my turn... I'm scared!"),
+    star: 'Look! Lupa\'s wishing star! Tap it!',
+    sing: lupa('Laaaaaa!'),
+    sang: lupa('I sang! My wish came true!'),
+    brava: [bruno(`Brava, ${NAME}!`), spina('Brava, Lupa!'), cesare('Bravissime!')],
+    roses: 'Catch the roses!',
+    jets: 'Look up! The Italian air show!',
+    flag: 'Green, white and red! Like a pizza Margherita!',
+    gelato: lupa('Gelato for everyone!'),
+    bye: lupa(`Grazie, ${NAME}! Ciao for now!`),
+    trophy: 'Tap the trophy!',
+  },
+
   stickers: {
     pizzeria: 'Brown bear sticker! Bears live in the mountains of Italy!',
     olives: 'Porcupine sticker! Crested porcupines live in Italy!',
     colosseum: 'Cat sticker! Lots of cats live in the old ruins of Rome!',
     pisa: 'Little owl sticker! Little owls live all over Italy!',
+    venice: 'Pigeon sticker! Lots of pigeons live in Venice!',
+    etna: 'Donkey sticker! Donkeys carry things up the hills of Sicily!',
     trevi: 'Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!',
   },
   videos: {
@@ -333,6 +460,8 @@ export const L = {
     aqueduct: 'Look! A real Roman water bridge!',
     colosseum: "Let's see the real Colosseum in Rome!",
     pisa: "Let's see the real Leaning Tower!",
+    venice: "Let's ride a real gondola in Venice!",
+    etna: "Look! The real Mount Etna!",
   },
   facts: {
     hello: 'In Italy, people say ciao! It means hello and goodbye!',
@@ -348,6 +477,12 @@ export const L = {
     olives: 'Some olive trees in Italy are more than a thousand years old!',
     numbers: 'Romans wrote five like this: V!',
     pisa: 'The Leaning Tower of Pisa leans because the ground is soft!',
+    morning: 'Buongiorno means good morning!',
+    venice: 'In Venice, the streets are water! People ride in boats!',
+    music: 'The piano and the violin were first made in Italy!',
+    gelato: 'Gelato is Italian ice cream! Yum!',
+    pantheon: 'The Pantheon in Rome has a big hole in its roof. When it rains, rain falls inside!',
+    etna: 'Etna is the tallest volcano in Europe!',
     wolf: 'The story says a kind mama wolf took care of the twins who built Rome!',
   },
   passport: 'This is Italy! Tap a picture to learn more.',

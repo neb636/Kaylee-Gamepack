@@ -63,11 +63,11 @@
     "file": "d56337050994.mp3"
   },
   {
-    "text": "Lupa's opera night is coming soon!",
+    "text": "Help every friend first, then the opera can start!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3108,
-    "file": "06827862e352.mp3"
+    "ms": 3853,
+    "file": "d5c5d00c10eb.mp3"
   },
   {
     "text": "Help friends to fill up Lupa's band!",
@@ -133,6 +133,20 @@
     "file": "68bb0b68e241.mp3"
   },
   {
+    "text": "Row, row, row!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 2554,
+    "file": "d09d2cb130d6.mp3"
+  },
+  {
+    "text": "I love my gondola!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 1902,
+    "file": "99516535be95.mp3"
+  },
+  {
     "text": "I am the emperor.",
     "voice": "cesare",
     "sig": "959ae58ccf",
@@ -180,6 +194,34 @@
     "sig": "82816bc927",
     "ms": 2199,
     "file": "e5e42e642c85.mp3"
+  },
+  {
+    "text": "Hee-haw!",
+    "voice": "nino",
+    "sig": "ad4ad52d17",
+    "ms": 1161,
+    "file": "013d2527e9d5.mp3"
+  },
+  {
+    "text": "Lemons? Yum!",
+    "voice": "nino",
+    "sig": "ad4ad52d17",
+    "ms": 1890,
+    "file": "9f46962e2007.mp3"
+  },
+  {
+    "text": "Hee hee, that tickles!",
+    "voice": "nino",
+    "sig": "ad4ad52d17",
+    "ms": 1682,
+    "file": "7a82f981045e.mp3"
+  },
+  {
+    "text": "Arf arf! Ciao!",
+    "voice": "mona",
+    "sig": "bad0fe7678",
+    "ms": 1595,
+    "file": "3f181bb259a1.mp3"
   },
   {
     "text": "Hee hee! Prickly!",
@@ -1939,6 +1981,741 @@
     "file": "1e9085fbcf43.mp3"
   },
   {
+    "text": "Ciao, Kaylee! Welcome to Venice!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 3112,
+    "file": "2ad008e717f4.mp3"
+  },
+  {
+    "text": "Here the streets are water! Hop in!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 2582,
+    "file": "722cfbd95266.mp3"
+  },
+  {
+    "text": "Drag the oar back to row!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2074,
+    "file": "bc2d2162b43f.mp3"
+  },
+  {
+    "text": "Again! Row, row!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2227,
+    "file": "d223d01d4e14.mp3"
+  },
+  {
+    "text": "Swipe the oar this way!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1951,
+    "file": "7a1dd84e89c5.mp3"
+  },
+  {
+    "text": "La la la, my gondola!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 2741,
+    "file": "befb789de67a.mp3"
+  },
+  {
+    "text": "Row, row, over the water!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 2984,
+    "file": "156795afad29.mp3"
+  },
+  {
+    "text": "Venice, bella Venezia!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 2820,
+    "file": "2cc81ec391e7.mp3"
+  },
+  {
+    "text": "The canal splits in two!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2000,
+    "file": "25d5fd4dfb66.mp3"
+  },
+  {
+    "text": "Turn left!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1379,
+    "file": "d262c7f01ae3.mp3"
+  },
+  {
+    "text": "Turn right!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 904,
+    "file": "0698f2af191a.mp3"
+  },
+  {
+    "text": "Left is this hand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1726,
+    "file": "079a5be907f5.mp3"
+  },
+  {
+    "text": "Right is this hand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2648,
+    "file": "f0f94599f442.mp3"
+  },
+  {
+    "text": "Ha ha! A dead end!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 2722,
+    "file": "d88a991d9d5b.mp3"
+  },
+  {
+    "text": "Quack!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 670,
+    "file": "f8dce37f9198.mp3"
+  },
+  {
+    "text": "Back we go!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 1409,
+    "file": "e88da055fa22.mp3"
+  },
+  {
+    "text": "Try the other way!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1343,
+    "file": "a93476ebaa90.mp3"
+  },
+  {
+    "text": "Bravissima!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 1383,
+    "file": "75490bed0dbb.mp3"
+  },
+  {
+    "text": "Perfetto! This way!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 2228,
+    "file": "5a9c886b02a5.mp3"
+  },
+  {
+    "text": "A low bridge! Tap Sparkle to duck!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3626,
+    "file": "e4a7850700b4.mp3"
+  },
+  {
+    "text": "Phew! Just in time!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 2539,
+    "file": "4e20f4dc6561.mp3"
+  },
+  {
+    "text": "Venice has over four hundred bridges!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2755,
+    "file": "fdd7f4a9ab8f.mp3"
+  },
+  {
+    "text": "Look! In Venice, even ambulances are boats!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4486,
+    "file": "cc864ff05eab.mp3"
+  },
+  {
+    "text": "There are no cars in Venice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2258,
+    "file": "c09c9106d71f.mp3"
+  },
+  {
+    "text": "Here we are! The mask shop!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 3047,
+    "file": "fc642bee1b67.mp3"
+  },
+  {
+    "text": "Venice has a big costume party called Carnevale!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4143,
+    "file": "011c6c373e6c.mp3"
+  },
+  {
+    "text": "Paint this side of the mask!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3383,
+    "file": "d53b0ccb80b1.mp3"
+  },
+  {
+    "text": "Look! The other side paints itself!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3060,
+    "file": "33d87213d732.mp3"
+  },
+  {
+    "text": "Both sides match, like a mirror!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2910,
+    "file": "265b20107eda.mp3"
+  },
+  {
+    "text": "Paint a little more!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1226,
+    "file": "4af4fcda2e86.mp3"
+  },
+  {
+    "text": "Tap a color!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 899,
+    "file": "6998be21a35d.mp3"
+  },
+  {
+    "text": "Now add three sparkly gems!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2702,
+    "file": "41c398b80be5.mp3"
+  },
+  {
+    "text": "Drag a gem onto the mask!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2637,
+    "file": "52c693de262d.mp3"
+  },
+  {
+    "text": "Sparkle, try it on!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2132,
+    "file": "54fe228721dc.mp3"
+  },
+  {
+    "text": "So pretty, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1903,
+    "file": "d2229d468971.mp3"
+  },
+  {
+    "text": "Look! Fireworks over the water!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 2848,
+    "file": "ab042d55d73b.mp3"
+  },
+  {
+    "text": "Tap the sky for fireworks!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2291,
+    "file": "0ce47ca72117.mp3"
+  },
+  {
+    "text": "The fireworks shine in the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3511,
+    "file": "b13187e8bfdf.mp3"
+  },
+  {
+    "text": "My accordion, for Lupa's band!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 2736,
+    "file": "22ac7cd7c441.mp3"
+  },
+  {
+    "text": "Tap the accordion!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1329,
+    "file": "75a3b120bdb8.mp3"
+  },
+  {
+    "text": "Yay! An accordion for the band!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2707,
+    "file": "71f5d5af79f7.mp3"
+  },
+  {
+    "text": "Ciao, Kaylee! I'm Nino!",
+    "voice": "nino",
+    "sig": "ad4ad52d17",
+    "ms": 2744,
+    "file": "470ed4860e90.mp3"
+  },
+  {
+    "text": "It's so hot! Let's get snow from the volcano!",
+    "voice": "nino",
+    "sig": "ad4ad52d17",
+    "ms": 3705,
+    "file": "699e6dd45573.mp3"
+  },
+  {
+    "text": "Drag Nino up the path!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2072,
+    "file": "150078090506.mp3"
+  },
+  {
+    "text": "Drag Nino along the path, up the mountain!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3615,
+    "file": "f96ff20d7dcc.mp3"
+  },
+  {
+    "text": "Phew! So hot by the beach!",
+    "voice": "nino",
+    "sig": "ad4ad52d17",
+    "ms": 2946,
+    "file": "459a51cba081.mp3"
+  },
+  {
+    "text": "Lemons grow here in the hot sun!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2537,
+    "file": "14d168d9880d.mp3"
+  },
+  {
+    "text": "Ahh, cooler in the forest!",
+    "voice": "nino",
+    "sig": "ad4ad52d17",
+    "ms": 2173,
+    "file": "f0bd24729ac4.mp3"
+  },
+  {
+    "text": "Brrr! Snow! So cold!",
+    "voice": "nino",
+    "sig": "ad4ad52d17",
+    "ms": 4032,
+    "file": "f8f9d61c2949.mp3"
+  },
+  {
+    "text": "A scarf for Nino!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2168,
+    "file": "6fffaaa1d3a4.mp3"
+  },
+  {
+    "text": "The higher you go, the colder it gets!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3418,
+    "file": "291026be8429.mp3"
+  },
+  {
+    "text": "Drag snow into Nino's baskets!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3492,
+    "file": "909b33070fd7.mp3"
+  },
+  {
+    "text": "Drag the snow onto Nino!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3007,
+    "file": "3ca2d65f1108.mp3"
+  },
+  {
+    "text": "Etna is a volcano! It puffs smoke!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3978,
+    "file": "220344310431.mp3"
+  },
+  {
+    "text": "Etna is the tallest volcano in Europe!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2984,
+    "file": "c9c2ca06869a.mp3"
+  },
+  {
+    "text": "My baskets are full!",
+    "voice": "nino",
+    "sig": "ad4ad52d17",
+    "ms": 1694,
+    "file": "785dc73fa0fe.mp3"
+  },
+  {
+    "text": "Tap Nino to zoom down!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2338,
+    "file": "bdb50afd9bc1.mp3"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "nino",
+    "sig": "ad4ad52d17",
+    "ms": 1479,
+    "file": "7e568c69f20b.mp3"
+  },
+  {
+    "text": "We're melting!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 811,
+    "file": "4a025d9a3594.mp3"
+  },
+  {
+    "text": "So hot! Arf!",
+    "voice": "mona",
+    "sig": "bad0fe7678",
+    "ms": 2010,
+    "file": "106718bab723.mp3"
+  },
+  {
+    "text": "Long ago, people brought snow down from Etna.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4034,
+    "file": "de8bfe1afceb.mp3"
+  },
+  {
+    "text": "They made icy treats called granita!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3254,
+    "file": "1bafd3975a38.mp3"
+  },
+  {
+    "text": "Tap the basket to scoop snow!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2457,
+    "file": "db24e9539cae.mp3"
+  },
+  {
+    "text": "Two scoops for Mona! Tap the basket!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3356,
+    "file": "07715e066a80.mp3"
+  },
+  {
+    "text": "One more scoop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1485,
+    "file": "5e57500a495e.mp3"
+  },
+  {
+    "text": "Press and hold the lemon to squeeze!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2722,
+    "file": "655084d1fb3c.mp3"
+  },
+  {
+    "text": "Keep holding!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1046,
+    "file": "9cde40c7ee1e.mp3"
+  },
+  {
+    "text": "Sicily has the best lemons!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2866,
+    "file": "3b6e4849b906.mp3"
+  },
+  {
+    "text": "Tap the granita to give it away!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2841,
+    "file": "47c0478511cc.mp3"
+  },
+  {
+    "text": "Brrr! Yummy!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 1906,
+    "file": "d982334ecf4f.mp3"
+  },
+  {
+    "text": "Mmm... so... cold...",
+    "voice": "tortoise",
+    "sig": "82816bc927",
+    "ms": 3365,
+    "file": "d850d3cd4992.mp3"
+  },
+  {
+    "text": "Arf! Two scoops! Yum!",
+    "voice": "mona",
+    "sig": "bad0fe7678",
+    "ms": 2691,
+    "file": "39ed055df6f1.mp3"
+  },
+  {
+    "text": "Brain freeze! Hee hee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2235,
+    "file": "8557e8a99af9.mp3"
+  },
+  {
+    "text": "Italy has snowy mountains and hot, sunny beaches!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3755,
+    "file": "d6daa6c4dae9.mp3"
+  },
+  {
+    "text": "I'm strong! I'll carry the piano to Lupa's band!",
+    "voice": "nino",
+    "sig": "ad4ad52d17",
+    "ms": 4150,
+    "file": "7e576210c16c.mp3"
+  },
+  {
+    "text": "The piano was invented in Italy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2666,
+    "file": "23fb845547e3.mp3"
+  },
+  {
+    "text": "Tap the piano keys!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1817,
+    "file": "3e9d66007dfa.mp3"
+  },
+  {
+    "text": "Yay! A piano for the band!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2427,
+    "file": "8f16ae7829ef.mp3"
+  },
+  {
+    "text": "Kaylee! The band is ready!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2252,
+    "file": "6b7fcc4833bd.mp3"
+  },
+  {
+    "text": "It's opera night in Verona!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2667,
+    "file": "4b3a6b05a612.mp3"
+  },
+  {
+    "text": "This arena is almost 2,000 years old!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3455,
+    "file": "6a714173e8e0.mp3"
+  },
+  {
+    "text": "Tap the seats to light the candles!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3043,
+    "file": "d82ebb559590.mp3"
+  },
+  {
+    "text": "More candles!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1405,
+    "file": "50ed0efb8209.mp3"
+  },
+  {
+    "text": "So many little lights!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3338,
+    "file": "11efa24054b5.mp3"
+  },
+  {
+    "text": "You are the conductor, Kaylee! Here is your wand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4096,
+    "file": "b7bc2bec0d49.mp3"
+  },
+  {
+    "text": "Swing the wand big!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1904,
+    "file": "216aba1ae244.mp3"
+  },
+  {
+    "text": "Big swings play loud! Forte means loud!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4549,
+    "file": "edc79bf745d3.mp3"
+  },
+  {
+    "text": "Now swing it tiny!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1948,
+    "file": "416a63ff52fa.mp3"
+  },
+  {
+    "text": "Tiny swings play soft! Piano means soft!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5797,
+    "file": "e8ea601d2af1.mp3"
+  },
+  {
+    "text": "Move your finger back and forth!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2292,
+    "file": "911b7c6150d8.mp3"
+  },
+  {
+    "text": "Tap a friend for a solo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2513,
+    "file": "54d1f3d048fc.mp3"
+  },
+  {
+    "text": "A solo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1173,
+    "file": "97f037ebd133.mp3"
+  },
+  {
+    "text": "It's my turn... I'm scared!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2727,
+    "file": "73e46c2835a6.mp3"
+  },
+  {
+    "text": "Look! Lupa's wishing star! Tap it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3618,
+    "file": "0f44db4f8aeb.mp3"
+  },
+  {
+    "text": "Laaaaaa!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 1406,
+    "file": "49176e116c37.mp3"
+  },
+  {
+    "text": "I sang! My wish came true!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 3053,
+    "file": "9abfaa2f0134.mp3"
+  },
+  {
+    "text": "Brava, Kaylee!",
+    "voice": "bruno",
+    "sig": "f4e1c1c7ae",
+    "ms": 1669,
+    "file": "ff3c4f74c81c.mp3"
+  },
+  {
+    "text": "Brava, Lupa!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 1474,
+    "file": "5e849f1c0433.mp3"
+  },
+  {
+    "text": "Bravissime!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 1772,
+    "file": "dc798a0be8ee.mp3"
+  },
+  {
+    "text": "Catch the roses!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1730,
+    "file": "99d9fbc6e7e4.mp3"
+  },
+  {
+    "text": "Look up! The Italian air show!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2708,
+    "file": "a3c6add6599a.mp3"
+  },
+  {
+    "text": "Green, white and red! Like a pizza Margherita!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4275,
+    "file": "6a3531b45d51.mp3"
+  },
+  {
+    "text": "Gelato for everyone!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2263,
+    "file": "f1c31c1f5cef.mp3"
+  },
+  {
+    "text": "Grazie, Kaylee! Ciao for now!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 3177,
+    "file": "9333a4b8a0e8.mp3"
+  },
+  {
+    "text": "Tap the trophy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1245,
+    "file": "e56b776f7f2e.mp3"
+  },
+  {
     "text": "Brown bear sticker! Bears live in the mountains of Italy!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1965,6 +2742,20 @@
     "sig": "ed7dbdac3d",
     "ms": 5132,
     "file": "4b0c0ffa5bd5.mp3"
+  },
+  {
+    "text": "Pigeon sticker! Lots of pigeons live in Venice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3749,
+    "file": "cf6248a5c528.mp3"
+  },
+  {
+    "text": "Donkey sticker! Donkeys carry things up the hills of Sicily!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5242,
+    "file": "a5186d79290b.mp3"
   },
   {
     "text": "Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!",
@@ -2007,6 +2798,20 @@
     "sig": "ed7dbdac3d",
     "ms": 3262,
     "file": "940fecece04d.mp3"
+  },
+  {
+    "text": "Let's ride a real gondola in Venice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3459,
+    "file": "ccbbf248486b.mp3"
+  },
+  {
+    "text": "Look! The real Mount Etna!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2830,
+    "file": "57fdb8af56a4.mp3"
   },
   {
     "text": "In Italy, people say ciao! It means hello and goodbye!",
@@ -2098,6 +2903,41 @@
     "sig": "ed7dbdac3d",
     "ms": 5795,
     "file": "c83c6dafd0f4.mp3"
+  },
+  {
+    "text": "Buongiorno means good morning!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2932,
+    "file": "f238cfcd66f2.mp3"
+  },
+  {
+    "text": "In Venice, the streets are water! People ride in boats!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4635,
+    "file": "967d495adda3.mp3"
+  },
+  {
+    "text": "The piano and the violin were first made in Italy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3897,
+    "file": "5cd903db1ee0.mp3"
+  },
+  {
+    "text": "Gelato is Italian ice cream! Yum!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3827,
+    "file": "d11fb02d9321.mp3"
+  },
+  {
+    "text": "The Pantheon in Rome has a big hole in its roof. When it rains, rain falls inside!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 7353,
+    "file": "4d5040cdbc7e.mp3"
   },
   {
     "text": "The story says a kind mama wolf took care of the twins who built Rome!",

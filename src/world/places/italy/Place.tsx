@@ -1,18 +1,21 @@
-// Italy: "Lupa Sings at the Opera" (plan: planning/around-the-world/italy.md). Built in stages: the boot map and the
-// Pizzeria in Naples came first; arches whose activities aren't built yet say "coming soon".
+// Italy: "Lupa Sings at the Opera" (plan: planning/around-the-world/italy.md). Seven arches on the boot map, open in any
+// order; each friend Kaylee helps brings an instrument to Lupa's band, and a full band unlocks opera night in Verona.
 import { motion } from 'motion/react'
-import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react'
-import { BigButton, say, SparklePuppet, sounds, type PuppetHandle } from '../../../sdk'
+import { useEffect, useState, type ComponentType, type ReactNode } from 'react'
+import { say, sounds } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { sfx } from '../../kit/sfx'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
 import { Colosseum } from './activities/colosseum/Colosseum'
+import { Etna } from './activities/etna/Etna'
 import { OliveGrove } from './activities/olives/OliveGrove'
+import { Opera } from './activities/opera/Opera'
 import { Pisa } from './activities/pisa/Pisa'
 import { Pizzeria } from './activities/pizzeria/Pizzeria'
 import { Trevi } from './activities/trevi/Trevi'
+import { Venice } from './activities/venice/Venice'
 import { art } from './art'
 import { L } from './lines'
 import { INK } from './puppets/ink'
@@ -23,25 +26,29 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria, olives: OliveGrove, trevi: Trevi, colosseum: Colosseum, pisa: Pisa }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria, olives: OliveGrove, trevi: Trevi, colosseum: Colosseum, pisa: Pisa, venice: Venice, etna: Etna }
 
 /** The seven arches on the boot map, on their landmarks in scene-italy-map (in % of the picture), and the instrument each
- *  friend brings to Lupa's band. Only activities listed in meta.activities are playable; the rest say "coming soon". */
+ *  friend brings to Lupa's band. Only activities listed in meta.activities are playable. */
 const SPOTS = [
-  { id: 'venice', name: 'Venice', icon: '🛶', x: 59, y: 19, band: '🪗' },
+  { id: 'venice', name: 'Venice', icon: '🛶', x: 59, y: 19, face: art.gino, band: art.accordion },
   { id: 'pisa', name: 'Leaning Tower', icon: '🗼', x: 39.5, y: 27, face: art.civetta, band: '🔔' },
   { id: 'colosseum', name: 'The Colosseum', icon: '🏛️', x: 48, y: 41, face: art.cesare, band: art.romanHorn },
   { id: 'trevi', name: 'Trevi Fountain', icon: '⛲', x: 58.5, y: 45, face: art.lupa, band: '⭐' },
   { id: 'pizzeria', name: 'Pizzeria in Naples', icon: '🍕', x: 65.4, y: 61.5, face: art.bruno, band: art.mandolin },
   { id: 'olives', name: 'Olive Grove', icon: '🫒', x: 83, y: 57, face: art.spina, band: art.tambourine },
-  { id: 'etna', name: 'Snow on a Volcano', icon: '🌋', x: 51.5, y: 84, band: '🎹' },
+  { id: 'etna', name: 'Snow on a Volcano', icon: '🌋', x: 51.5, y: 84, face: art.nino, band: art.piano },
 ]
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, earnStamp, setProgress, backToMap } = props
+  const { meta, activity, stamps, earnStamp, setProgress, backToMap, onWin } = props
   const [justEarned, setJustEarned] = useState<string | null>(null)
 
-  if (activity === 'party') return <OperaSoon backToMap={backToMap} />
+  if (activity === 'party') {
+    const ready = meta.activities.every((a) => stamps.includes(a.id))
+    if (!ready) return <Hub {...props} />
+    return <Opera setProgress={setProgress} onDone={onWin} />
+  }
 
   const Activity = activity ? ACTIVITIES[activity] : undefined
   const info = meta.activities.find((a) => a.id === activity)
@@ -160,7 +167,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
             )
           })}
         </FitBox>
-        <BandPanel done={SPOTS.filter((s) => stamps.includes(s.id))} total={SPOTS.length} onOpen={() => openActivity('party')} />
+        <BandPanel done={SPOTS.filter((s) => stamps.includes(s.id))} total={SPOTS.length} ready={meta.activities.every((a) => stamps.includes(a.id))} onOpen={(ready) => (ready ? openActivity('party') : void say(L.bandLocked))} />
       </div>
       {intro && (
         <StoryBeat
@@ -222,18 +229,18 @@ function Ambient() {
   )
 }
 
-/** Lupa's band: a little stage where one friend's instrument appears for every stamp. The opera finale comes later. */
-function BandPanel({ done, total, onOpen }: { done: typeof SPOTS; total: number; onOpen: () => void }) {
-  const seats = Array.from({ length: total - 1 }, (_, i) => done[i])
+/** Lupa's band: a little stage where one friend's instrument appears for every stamp. A full band opens opera night. */
+function BandPanel({ done, total, ready, onOpen }: { done: typeof SPOTS; total: number; ready: boolean; onOpen: (ready: boolean) => void }) {
+  const seats = Array.from({ length: total }, (_, i) => done[i])
   return (
     <motion.button
       aria-label="Party"
       whileTap={{ scale: 0.95 }}
       onClick={() => {
         sounds.pop()
-        onOpen()
+        onOpen(ready)
       }}
-      className="party-panel"
+      className={ready ? 'party-panel world-glow' : 'party-panel'}
       style={{ position: 'relative', flexShrink: 0, borderRadius: 28, border: `5px solid ${INK}`, boxShadow: 'var(--shadow)', background: '#6B4F8F', overflow: 'hidden', containerType: 'size', padding: 0 }}
     >
       {/* Stage curtains and boards */}
@@ -259,31 +266,5 @@ function BandPanel({ done, total, onOpen }: { done: typeof SPOTS; total: number;
         </span>
       </div>
     </motion.button>
-  )
-}
-
-/** Finale stub (route `party`): Lupa's opera night arrives when the band is full. */
-function OperaSoon({ backToMap }: { backToMap: () => void }) {
-  const sparkle = useRef<PuppetHandle>(null)
-  const lupa = useRef<PuppetHandle>(null)
-  useEffect(() => {
-    void say(L.bandSoon)
-    const t = setTimeout(() => {
-      void sparkle.current?.play('wave')
-      void lupa.current?.play('howl')
-    }, 400)
-    return () => clearTimeout(t)
-  }, [])
-  return (
-    <div style={{ position: 'absolute', inset: 0, background: `url(${art.bgNaplesBay}) center / cover`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', gap: 'min(20px, 3vh)', padding: 'var(--top-clear) 20px calc(var(--safe-bottom) + 28px)' }}>
-      <div style={{ background: '#fff', borderRadius: 'var(--radius)', padding: '12px 26px', boxShadow: 'var(--shadow)', fontSize: 'clamp(22px, min(4vw, 5vh), 38px)', fontWeight: 600, textAlign: 'center' }}>🎭 {L.bandSoon}</div>
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'min(20px, 3vw)' }}>
-        <SparklePuppet ref={sparkle} height="min(300px, 34vh, 40vw)" lookToward={0.5} />
-        <Lupa ref={lupa} height="min(260px, 30vh, 36vw)" onTap={() => void lupa.current?.play('howl')} />
-      </div>
-      <BigButton onClick={backToMap} ariaLabel="Return to Italy">
-        🍕 ▶
-      </BigButton>
-    </div>
   )
 }

@@ -2,8 +2,8 @@ import type { PlaceMeta } from '../../types'
 import { art } from './art'
 import { L } from './lines'
 
-// Italy is being built in stages (plan: planning/around-the-world/italy.md). The Pizzeria, the Olive Grove, the Trevi Fountain,
-// the Colosseum and the Leaning Tower are built; the other two arches on the boot map (see SPOTS in Place.tsx) say "coming soon" until their activities exist.
+// Italy (plan: planning/around-the-world/italy.md): seven activities on the boot map (see SPOTS in Place.tsx), then opera
+// night in Verona as the finale.
 const meta: PlaceMeta = {
   id: 'italy',
   name: 'Italy',
@@ -18,13 +18,16 @@ const meta: PlaceMeta = {
     { id: 'colosseum', name: 'The Colosseum', icon: '🏛️', pos: { x: 48, y: 41 }, sticker: { name: 'Roman cat', img: art.cesare, fact: L.stickers.colosseum } },
     { id: 'pisa', name: 'Leaning Tower', icon: '🗼', pos: { x: 39.5, y: 27 }, sticker: { name: 'Little owl', img: art.civetta, fact: L.stickers.pisa } },
     { id: 'trevi', name: 'Trevi Fountain', icon: '⛲', pos: { x: 58.5, y: 45 }, sticker: { name: 'Italian wolf', img: art.lupa, fact: L.stickers.trevi } },
+    { id: 'venice', name: 'Venice', icon: '🛶', pos: { x: 59, y: 19 }, sticker: { name: 'Venetian pigeon', img: art.gino, fact: L.stickers.venice } },
+    { id: 'etna', name: 'Snow on a Volcano', icon: '🌋', pos: { x: 51.5, y: 84 }, sticker: { name: 'Sicilian donkey', img: art.nino, fact: L.stickers.etna } },
   ],
   facts: [
     { icon: '👋', label: 'Ciao!', say: L.facts.hello },
+    { icon: '☀️', label: 'Buongiorno!', say: L.facts.morning },
     { icon: '💖', label: 'Grazie!', say: L.facts.thanks },
     { icon: '🔢', label: 'Uno, due, tre', say: L.facts.count },
     { icon: '👢', label: 'The boot', say: L.facts.boot },
-    { icon: '☀️', label: 'Weather', say: L.facts.weather },
+    { icon: '🌦️', label: 'Weather', say: L.facts.weather },
     { icon: '🍕', label: 'Pizza', say: L.facts.pizza },
     { icon: '🌿', label: 'Margherita', say: L.facts.margherita },
     { icon: '🫒', label: 'Olives', say: L.facts.olives },
@@ -32,10 +35,28 @@ const meta: PlaceMeta = {
     { icon: 'Ⅴ', label: 'Numbers', say: L.facts.numbers },
     { icon: '🗼', label: 'Pisa', say: L.facts.pisa },
     { icon: '🐺', label: "Rome's wolf", say: L.facts.wolf },
+    { icon: '🛶', label: 'Venice', say: L.facts.venice },
     { icon: '🌋', label: 'Volcanoes', say: L.facts.volcano },
+    { icon: '🏔️', label: 'Etna', say: L.facts.etna },
+    { icon: '🎹', label: 'Music', say: L.facts.music },
+    { icon: '🍨', label: 'Gelato', say: L.facts.gelato },
+    { icon: '⛪', label: 'Pantheon', say: L.facts.pantheon },
     { icon: '🚩', label: 'Flag', say: L.facts.flag },
   ],
-  coloringPages: [],
+  coloringPages: [
+    { id: 'italy-lupa', img: art.colorLupa },
+    { id: 'italy-bruno', img: art.colorBruno },
+    { id: 'italy-colosseum', img: art.colorColosseum },
+    { id: 'italy-pisa', img: art.colorPisa },
+    { id: 'italy-gondola', img: art.colorGondola },
+    { id: 'italy-mask', img: art.colorMask },
+    { id: 'italy-trevi', img: art.colorTrevi },
+  ],
+  puzzles: [
+    { id: 'italy-colosseum', name: 'The Colosseum at Sunset', img: art.puzzleColosseum },
+    { id: 'italy-venice', name: "Gino's Gondola", img: art.puzzleVenice },
+    { id: 'italy-cinque-terre', name: 'Picnic by the Sea', img: art.puzzleCinqueTerre },
+  ],
   // Real-world videos for the Theater. `after` offers one when that activity is done.
   videos: [
     { id: 'olive-oil', youtubeId: 'JO7Jc3D2ijc', icon: '🫒', title: 'How Olive Oil Is Made', say: L.videos.olives, after: 'olives' },

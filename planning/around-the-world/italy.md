@@ -4,7 +4,11 @@ Status: 2026-09-28, the boot-map hub and activity 1 (the Pizzeria in Naples) are
 the Trevi Fountain are built too (every scene in one eye-level side-view camera; see "One camera per scene" below).
 Later on 2026-10-07: the Colosseum (Cesare puppet; the trapdoors are a cutaway of the tunnels under the floor, seen
 from the side) and the Leaning Tower of Pisa (Civetta puppet; the tower is its own upright picture that leans in code)
-are built too. Venice and Etna still say "coming soon". Decisions from Dad: build the Pizzeria in one go (no approval gates), the 1889 storybook shows real
+are built too. 2026-10-07 (last): Venice (rowing, left/right forks, the low bridge, the mirror mask), Snow on a Volcano
+(climb with a thermometer, pack snow, granita on the beach) and the opera finale in Verona (candles, conducting forte and
+piano, Lupa's high note, roses, the air show, gelato) are built, plus the seven coloring pages, three picture puzzles and the rest of the facts.
+Gino and Nino are Buddies (flat sprites), not puppets. Still open: videos for Venice, Etna and the finale (real IDs, not
+guessed), Sparkle's chef hat in the finale. Decisions from Dad: build the Pizzeria in one go (no approval gates), the 1889 storybook shows real
 people (Queen Margherita and Raffaele Esposito) in the flat style, and toppings stay veggie + olives (no salami). Folder will be `src/world/places/italy/`. There's no Italy pin in
 `COMING_SOON` yet, so add a new one: on `bg-world-map` the boot sits at about **x 48.5, y 31** (just south-west of
 the pink castle). Check it on the iPad. `kit/Flag.tsx` needs an `italy` flag (three vertical stripes: green, white,
