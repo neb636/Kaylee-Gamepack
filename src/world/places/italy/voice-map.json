@@ -140,6 +140,48 @@
     "file": "2b078a1a33d4.mp3"
   },
   {
+    "text": "Purrr... hello.",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 1563,
+    "file": "913654052cb7.mp3"
+  },
+  {
+    "text": "Ahem. Bow, please.",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 2931,
+    "file": "e16562000073.mp3"
+  },
+  {
+    "text": "Hoo hoo!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 932,
+    "file": "ceae216462f0.mp3"
+  },
+  {
+    "text": "Let's find out!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 993,
+    "file": "85d34e285277.mp3"
+  },
+  {
+    "text": "I love science!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 2075,
+    "file": "b525d5357284.mp3"
+  },
+  {
+    "text": "Hellooo...",
+    "voice": "tortoise",
+    "sig": "82816bc927",
+    "ms": 2199,
+    "file": "e5e42e642c85.mp3"
+  },
+  {
     "text": "Hee hee! Prickly!",
     "voice": "spina",
     "sig": "cb98c37ff1",
@@ -1344,6 +1386,559 @@
     "file": "eada6e7250dd.mp3"
   },
   {
+    "text": "I am Cesare, Emperor of the Colosseum!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 3771,
+    "file": "58514146c8b3.mp3"
+  },
+  {
+    "text": "Tonight: a surprise show!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 2546,
+    "file": "10102d015be0.mp3"
+  },
+  {
+    "text": "But it is so hot!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 2220,
+    "file": "2ff92b5b7022.mp3"
+  },
+  {
+    "text": "Rome is hot and sunny in summer!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3418,
+    "file": "16074eda35c8.mp3"
+  },
+  {
+    "text": "Pull the rope down to make shade!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3133,
+    "file": "6927d45373db.mp3"
+  },
+  {
+    "text": "Pull the next rope!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2088,
+    "file": "9fb7090a9caa.mp3"
+  },
+  {
+    "text": "One more rope!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1813,
+    "file": "dcd1e02eaabe.mp3"
+  },
+  {
+    "text": "Drag the rope handle all the way down!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2869,
+    "file": "796d21324eeb.mp3"
+  },
+  {
+    "text": "Ahh, shade!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 1595,
+    "file": "780e0bfe91d6.mp3"
+  },
+  {
+    "text": "Ahh, much better!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 2365,
+    "file": "4e1ef2ef1fbb.mp3"
+  },
+  {
+    "text": "Ahh! Grazie!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 1754,
+    "file": "2fa2777387ec.mp3"
+  },
+  {
+    "text": "Long ago, sailors pulled the shade ropes!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3851,
+    "file": "61b9e71cd71e.mp3"
+  },
+  {
+    "text": "Under the floor are secret tunnels and elevators!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3809,
+    "file": "73a767d0264b.mp3"
+  },
+  {
+    "text": "Romans wrote numbers with lines!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2212,
+    "file": "8749db9a573c.mp3"
+  },
+  {
+    "text": "Door one!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 2914,
+    "file": "e8ff9db01e98.mp3"
+  },
+  {
+    "text": "Door two!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 1123,
+    "file": "1e5ff3d50ea3.mp3"
+  },
+  {
+    "text": "Door three!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 1504,
+    "file": "cac9b24609eb.mp3"
+  },
+  {
+    "text": "Door four!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 1241,
+    "file": "4e47a19ae6dc.mp3"
+  },
+  {
+    "text": "Door five!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 1391,
+    "file": "23c57c0a995e.mp3"
+  },
+  {
+    "text": "Tap the door with the right number!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1956,
+    "file": "9cc7caf6f529.mp3"
+  },
+  {
+    "text": "One line. One!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1606,
+    "file": "3e5155861c64.mp3"
+  },
+  {
+    "text": "One, two lines. Two!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2660,
+    "file": "2da106d651d5.mp3"
+  },
+  {
+    "text": "One, two, three lines. Three!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3741,
+    "file": "6c4ea2e5b4d1.mp3"
+  },
+  {
+    "text": "Four is one line, then a V!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2762,
+    "file": "6f90c24348f9.mp3"
+  },
+  {
+    "text": "Five looks like a V!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2119,
+    "file": "b229a20f244c.mp3"
+  },
+  {
+    "text": "Pull the lever down!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2015,
+    "file": "4a71ac6087f2.mp3"
+  },
+  {
+    "text": "Drag the lever all the way down!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2515,
+    "file": "26ec031a733a.mp3"
+  },
+  {
+    "text": "Up goes the elevator!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1904,
+    "file": "1231e0f4f100.mp3"
+  },
+  {
+    "text": "Ta-da! Olive juggling!",
+    "voice": "spina",
+    "sig": "cb98c37ff1",
+    "ms": 1821,
+    "file": "295952fb88e3.mp3"
+  },
+  {
+    "text": "Ta-da! The spinning pigeon!",
+    "voice": "gino",
+    "sig": "94eab962c4",
+    "ms": 2605,
+    "file": "766741c811a0.mp3"
+  },
+  {
+    "text": "Ta... daaa...",
+    "voice": "tortoise",
+    "sig": "82816bc927",
+    "ms": 2476,
+    "file": "c342db07d4f2.mp3"
+  },
+  {
+    "text": "Ta-da! Pizza spin!",
+    "voice": "bruno",
+    "sig": "f4e1c1c7ae",
+    "ms": 2122,
+    "file": "43314eac31f6.mp3"
+  },
+  {
+    "text": "Ta-da! Awoooo!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2073,
+    "file": "4c1e19a73ad4.mp3"
+  },
+  {
+    "text": "A very, very slow bow!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3890,
+    "file": "9f6967f4f33b.mp3"
+  },
+  {
+    "text": "Now the big doors: four and five!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 3225,
+    "file": "507e7389de93.mp3"
+  },
+  {
+    "text": "V is five! Just like you, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4045,
+    "file": "38e6169c0707.mp3"
+  },
+  {
+    "text": "Everybody, up!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 1299,
+    "file": "d7f72cf479cd.mp3"
+  },
+  {
+    "text": "Swipe across the crowd to make a wave!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3116,
+    "file": "0e51d89c5eaf.mp3"
+  },
+  {
+    "text": "Again! Make a wave!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2103,
+    "file": "6ab41583f032.mp3"
+  },
+  {
+    "text": "Bravissimi! What a show!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 2467,
+    "file": "8aab9cb4cecf.mp3"
+  },
+  {
+    "text": "The Colosseum is almost 2,000 years old!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4121,
+    "file": "e506bb1d2fb1.mp3"
+  },
+  {
+    "text": "Grazie, Kaylee. I bow to you.",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 3153,
+    "file": "826ede3a842d.mp3"
+  },
+  {
+    "text": "My Roman horn, for Lupa's band!",
+    "voice": "cesare",
+    "sig": "959ae58ccf",
+    "ms": 2643,
+    "file": "3eeb232a8a89.mp3"
+  },
+  {
+    "text": "Tap the horn!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1507,
+    "file": "756932a0d7ef.mp3"
+  },
+  {
+    "text": "Yay! A horn for the band!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2515,
+    "file": "245678b7676d.mp3"
+  },
+  {
+    "text": "Hoo! I am Professoressa Civetta!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 2973,
+    "file": "4db47aa3dc6c.mp3"
+  },
+  {
+    "text": "My tower leans more and more! Help!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 3218,
+    "file": "07969aecb97e.mp3"
+  },
+  {
+    "text": "The tower leans because the ground is soft!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4017,
+    "file": "23e8671d2159.mp3"
+  },
+  {
+    "text": "Drag a heavy weight to the high side!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3338,
+    "file": "25f28a6fa202.mp3"
+  },
+  {
+    "text": "Another weight!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1324,
+    "file": "5a8fe3fe4d37.mp3"
+  },
+  {
+    "text": "One more weight!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1809,
+    "file": "c4464f4fd56c.mp3"
+  },
+  {
+    "text": "Oops! Put it on the other side!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2579,
+    "file": "fff4a410f1af.mp3"
+  },
+  {
+    "text": "Hoo! It leans more!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 1856,
+    "file": "162bc4066176.mp3"
+  },
+  {
+    "text": "Hoo! It is getting better!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 2668,
+    "file": "3322095c5149.mp3"
+  },
+  {
+    "text": "Yes! Keep going!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 2051,
+    "file": "796968cb1d0f.mp3"
+  },
+  {
+    "text": "It stopped! Hoo-ray!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 1833,
+    "file": "2558d8a8ba8c.mp3"
+  },
+  {
+    "text": "It still leans a little. That is why it is famous!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4257,
+    "file": "e62fcdb1b1e0.mp3"
+  },
+  {
+    "text": "Builders really did this, with heavy weights!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3510,
+    "file": "1a549824a9de.mp3"
+  },
+  {
+    "text": "Let's take the famous photo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2009,
+    "file": "cbade9170c38.mp3"
+  },
+  {
+    "text": "Drag Sparkle until her hoof holds up the tower!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3859,
+    "file": "1d3ac8a94b97.mp3"
+  },
+  {
+    "text": "Closer to the tower!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1810,
+    "file": "404e15e725a8.mp3"
+  },
+  {
+    "text": "Say cheese! Snap!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3004,
+    "file": "b95c3b917518.mp3"
+  },
+  {
+    "text": "A scientist named Galileo lived here!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3420,
+    "file": "8110a7296e4b.mp3"
+  },
+  {
+    "text": "Let's drop things from the top! Like Galileo!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 3767,
+    "file": "8b06873f4fa4.mp3"
+  },
+  {
+    "text": "Which one lands first? Tap it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3118,
+    "file": "f7396ecfd69f.mp3"
+  },
+  {
+    "text": "Tap the drop button!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1639,
+    "file": "1b852d22908f.mp3"
+  },
+  {
+    "text": "They land at the same time!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1923,
+    "file": "d99278d8cc01.mp3"
+  },
+  {
+    "text": "Heavy and light fall just as fast!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4082,
+    "file": "b6aff2552d64.mp3"
+  },
+  {
+    "text": "The feather floats down slowly!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4151,
+    "file": "e8c9d381a58d.mp3"
+  },
+  {
+    "text": "The air pushes the feather!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2511,
+    "file": "061658d9f6f6.mp3"
+  },
+  {
+    "text": "Now you pick! Tap two things to drop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4091,
+    "file": "5900b54ce787.mp3"
+  },
+  {
+    "text": "Pick one more!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1402,
+    "file": "28faf3588c7e.mp3"
+  },
+  {
+    "text": "You were right!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1082,
+    "file": "e82112fc6e33.mp3"
+  },
+  {
+    "text": "Good guess!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1396,
+    "file": "a55f01f3ffc3.mp3"
+  },
+  {
+    "text": "The tower is a bell tower! Seven bells!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 4311,
+    "file": "f3c7c7b85aa4.mp3"
+  },
+  {
+    "text": "Tap the bells, one by one!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2317,
+    "file": "f30441487f86.mp3"
+  },
+  {
+    "text": "Do, re, mi! Music!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2746,
+    "file": "d40213607abd.mp3"
+  },
+  {
+    "text": "Grazie! My bells, for Lupa's band!",
+    "voice": "civetta",
+    "sig": "61253580b8",
+    "ms": 3492,
+    "file": "49417ae3baea.mp3"
+  },
+  {
+    "text": "Yay! Bells for the band!",
+    "voice": "lupa",
+    "sig": "1200e8d792",
+    "ms": 2418,
+    "file": "1e9085fbcf43.mp3"
+  },
+  {
     "text": "Brown bear sticker! Bears live in the mountains of Italy!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1356,6 +1951,20 @@
     "sig": "ed7dbdac3d",
     "ms": 5079,
     "file": "d04627838689.mp3"
+  },
+  {
+    "text": "Cat sticker! Lots of cats live in the old ruins of Rome!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4300,
+    "file": "0530bfdfd976.mp3"
+  },
+  {
+    "text": "Little owl sticker! Little owls live all over Italy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5132,
+    "file": "4b0c0ffa5bd5.mp3"
   },
   {
     "text": "Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!",
@@ -1384,6 +1993,20 @@
     "sig": "ed7dbdac3d",
     "ms": 3261,
     "file": "8412395e1f18.mp3"
+  },
+  {
+    "text": "Let's see the real Colosseum in Rome!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3126,
+    "file": "e0595ea8f84d.mp3"
+  },
+  {
+    "text": "Let's see the real Leaning Tower!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3262,
+    "file": "940fecece04d.mp3"
   },
   {
     "text": "In Italy, people say ciao! It means hello and goodbye!",
@@ -1461,6 +2084,20 @@
     "sig": "ed7dbdac3d",
     "ms": 4847,
     "file": "b9722345cb36.mp3"
+  },
+  {
+    "text": "Romans wrote five like this: V!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3327,
+    "file": "bc6f22a6ac84.mp3"
+  },
+  {
+    "text": "The Leaning Tower of Pisa leans because the ground is soft!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5795,
+    "file": "c83c6dafd0f4.mp3"
   },
   {
     "text": "The story says a kind mama wolf took care of the twins who built Rome!",

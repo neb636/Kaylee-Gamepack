@@ -1,8 +1,10 @@
 # Italy: "Lupa Sings at the Opera" (plan)
 
 Status: 2026-09-28, the boot-map hub and activity 1 (the Pizzeria in Naples) are built. 2026-10-07: the Olive Grove and
-the Trevi Fountain are built too (every scene in one eye-level side-view camera; see "One camera per scene" below); the
-other four arches say "coming soon". Decisions from Dad: build the Pizzeria in one go (no approval gates), the 1889 storybook shows real
+the Trevi Fountain are built too (every scene in one eye-level side-view camera; see "One camera per scene" below).
+Later on 2026-10-07: the Colosseum (Cesare puppet; the trapdoors are a cutaway of the tunnels under the floor, seen
+from the side) and the Leaning Tower of Pisa (Civetta puppet; the tower is its own upright picture that leans in code)
+are built too. Venice and Etna still say "coming soon". Decisions from Dad: build the Pizzeria in one go (no approval gates), the 1889 storybook shows real
 people (Queen Margherita and Raffaele Esposito) in the flat style, and toppings stay veggie + olives (no salami). Folder will be `src/world/places/italy/`. There's no Italy pin in
 `COMING_SOON` yet, so add a new one: on `bg-world-map` the boot sits at about **x 48.5, y 31** (just south-west of
 the pink castle). Check it on the iPad. `kit/Flag.tsx` needs an `italy` flag (three vertical stripes: green, white,

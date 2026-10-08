@@ -238,6 +238,12 @@ Follow `art/STYLE.md` exactly (style prompt, sprites on pure white, backgrounds 
   `node scripts/contact-sheet.mjs src/games/<game-id>/assets` and **look at** `/tmp/contact-sheet.png`.
   Regenerate anything that cut out badly.
 - Never put text/letters/numbers inside generated images. Render letters and numbers with HTML text instead (crisp and correct).
+- **One camera per scene (this keeps going wrong, so check it every time).** Pick the camera before you generate
+  anything, usually straight-on, eye-level side view (like a theater stage, things stand on a ground line). Every
+  background, prop, sprite, puppet and SVG shown in that scene uses that same camera: no top-down plate, pizza or table
+  in a side-view scene, no 3/4 building next to flat side-view props. Write the camera into every image prompt
+  ("straight-on eye-level side view, no top-down, no 3/4, no perspective tilt"), then look at each sprite composited on
+  its background (`node scripts/contact-sheet.mjs` and a real screenshot) and regenerate any that disagree.
 
 ## Checks before you finish
 
