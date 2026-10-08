@@ -13,6 +13,8 @@ const cesare = as('cesare')
 const queen = as('queen')
 const raffaele = as('raffaele')
 const spina = as('spina')
+const civetta = as('civetta')
+const tortoise = as('tortoise')
 const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!']
 
 export const L = {
@@ -31,7 +33,9 @@ export const L = {
     bruno: [bruno('Ho ho ho!'), bruno('Pizza time!'), bruno('That tickles!')],
     bufala: [bufala('Hello, dear!')],
     gino: [gino('Coo coo! Ciao!')],
-    cesare: [cesare('I am the emperor.')],
+    cesare: [cesare('I am the emperor.'), cesare('Purrr... hello.'), cesare('Ahem. Bow, please.')],
+    civetta: [civetta('Hoo hoo!'), civetta('Let\'s find out!'), civetta('I love science!')],
+    tortoise: [tortoise('Hellooo...')],
     spina: [spina('Hee hee! Prickly!'), spina('Ciao ciao!'), spina('Olives! Yum!')],
     queen: [queen('What a lovely kitchen!')],
     raffaele: [raffaele('For the Queen!')],
@@ -231,15 +235,104 @@ export const L = {
     help: 'Coins from the fountain help people who need it.',
   },
 
+  // 🏛️ The Colosseum (activities/colosseum). Every spoken line of the activity goes in here.
+  colosseum: {
+    arrive: [cesare('I am Cesare, Emperor of the Colosseum!'), cesare('Tonight: a surprise show!')],
+    // 1. The sun-shade.
+    hot: cesare('But it is so hot!'),
+    hotFact: 'Rome is hot and sunny in summer!',
+    pull: 'Pull the rope down to make shade!',
+    pullNext: 'Pull the next rope!',
+    pullLast: 'One more rope!',
+    pullHint: 'Drag the rope handle all the way down!',
+    shade: [cesare('Ahh, shade!'), cesare('Ahh, much better!'), cesare('Ahh! Grazie!')],
+    sailors: 'Long ago, sailors pulled the shade ropes!',
+    // 2. Roman numeral trapdoors.
+    under: 'Under the floor are secret tunnels and elevators!',
+    lines: 'Romans wrote numbers with lines!',
+    call: [cesare('Door one!'), cesare('Door two!'), cesare('Door three!'), cesare('Door four!'), cesare('Door five!')],
+    tapDoor: 'Tap the door with the right number!',
+    countLines: ['One line. One!', 'One, two lines. Two!', 'One, two, three lines. Three!'],
+    four: 'Four is one line, then a V!',
+    five: 'Five looks like a V!',
+    lever: 'Pull the lever down!',
+    leverHint: 'Drag the lever all the way down!',
+    up: 'Up goes the elevator!',
+    pop: {
+      spina: spina('Ta-da! Olive juggling!'),
+      gino: gino('Ta-da! The spinning pigeon!'),
+      tortoise: tortoise('Ta... daaa...'),
+      bruno: bruno('Ta-da! Pizza spin!'),
+      lupa: lupa('Ta-da! Awoooo!'),
+    },
+    slowBow: 'A very, very slow bow!',
+    round2: cesare('Now the big doors: four and five!'),
+    youAreFive: `V is five! Just like you, ${NAME}!`,
+    // 3. Grand finale: every door opens, the crowd does a wave.
+    allDoors: cesare('Everybody, up!'),
+    wave: 'Swipe across the crowd to make a wave!',
+    waveAgain: 'Again! Make a wave!',
+    bravo: cesare('Bravissimi! What a show!'),
+    old: 'The Colosseum is almost 2,000 years old!',
+    // Payoff.
+    bow: cesare(`Grazie, ${NAME}. I bow to you.`),
+    horn: cesare("My Roman horn, for Lupa's band!"),
+    tapHorn: 'Tap the horn!',
+    band: lupa('Yay! A horn for the band!'),
+  },
+
+  // 🗼 The Leaning Tower of Pisa (activities/pisa). Every spoken line of the activity goes in here.
+  pisa: {
+    arrive: [civetta('Hoo! I am Professoressa Civetta!'), civetta('My tower leans more and more! Help!')],
+    // 1. Balance it.
+    soft: 'The tower leans because the ground is soft!',
+    weights: 'Drag a heavy weight to the high side!',
+    weightNext: 'Another weight!',
+    weightLast: 'One more weight!',
+    wrongSide: 'Oops! Put it on the other side!',
+    creak: civetta('Hoo! It leans more!'),
+    better: [civetta('Hoo! It is getting better!'), civetta('Yes! Keep going!'), civetta('It stopped! Hoo-ray!')],
+    stillLeans: 'It still leans a little. That is why it is famous!',
+    engineers: 'Builders really did this, with heavy weights!',
+    // 2. The famous photo.
+    photo: 'Let\'s take the famous photo!',
+    pushSparkle: 'Drag Sparkle until her hoof holds up the tower!',
+    closer: 'Closer to the tower!',
+    snap: 'Say cheese! Snap!',
+    // 3. Galileo's drop.
+    galileo: 'A scientist named Galileo lived here!',
+    climb: civetta('Let\'s drop things from the top! Like Galileo!'),
+    whichFirst: 'Which one lands first? Tap it!',
+    findOut: civetta('Let\'s find out!'),
+    drop: 'Tap the drop button!',
+    same: 'They land at the same time!',
+    sameWhy: 'Heavy and light fall just as fast!',
+    feather: 'The feather floats down slowly!',
+    air: 'The air pushes the feather!',
+    youPick: 'Now you pick! Tap two things to drop!',
+    pickOne: 'Pick one more!',
+    youWere: ['You were right!', 'Good guess!'],
+    // Payoff: the seven bells.
+    bells: civetta('The tower is a bell tower! Seven bells!'),
+    ringBells: 'Tap the bells, one by one!',
+    scale: 'Do, re, mi! Music!',
+    giveBells: civetta("Grazie! My bells, for Lupa's band!"),
+    band: lupa('Yay! Bells for the band!'),
+  },
+
   stickers: {
     pizzeria: 'Brown bear sticker! Bears live in the mountains of Italy!',
     olives: 'Porcupine sticker! Crested porcupines live in Italy!',
+    colosseum: 'Cat sticker! Lots of cats live in the old ruins of Rome!',
+    pisa: 'Little owl sticker! Little owls live all over Italy!',
     trevi: 'Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!',
   },
   videos: {
     olives: "Let's see how olive oil is made!",
     trevi: "Let's toss a coin in the real Trevi Fountain!",
     aqueduct: 'Look! A real Roman water bridge!',
+    colosseum: "Let's see the real Colosseum in Rome!",
+    pisa: "Let's see the real Leaning Tower!",
   },
   facts: {
     hello: 'In Italy, people say ciao! It means hello and goodbye!',
@@ -253,6 +346,8 @@ export const L = {
     volcano: 'Italy has volcanoes! One is right next to Naples!',
     flag: 'Italy\'s flag has three stripes: green, white and red!',
     olives: 'Some olive trees in Italy are more than a thousand years old!',
+    numbers: 'Romans wrote five like this: V!',
+    pisa: 'The Leaning Tower of Pisa leans because the ground is soft!',
     wolf: 'The story says a kind mama wolf took care of the twins who built Rome!',
   },
   passport: 'This is Italy! Tap a picture to learn more.',

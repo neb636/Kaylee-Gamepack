@@ -14,6 +14,16 @@ attach `art/source/mascot/wave.png` as the character reference.
 > mint #8FE3C8, sky #A8DCFF, peach #FFC2A8, cream #FFF7F0, gold #FFC83D, ink #2B2330.
 > The attached reference is only for mood/style (flat, bold, playful). Do not copy it.
 
+### Camera (every image)
+
+> CAMERA: straight-on, eye-level side view, like a flat theater stage. Objects stand on a ground line and are seen
+> from the front or the side. No top-down view, no bird's-eye view, no 3/4 view, no perspective tilt, no looking down
+> into bowls, plates or boxes.
+
+Every picture used together in one scene (background, props, sprites) must share the same camera. If a scene really
+needs another camera (a map seen from above), then every sprite on it uses that camera instead. Check sprites on their
+background before committing.
+
 ### Sprites (things she taps or drags)
 
 > Draw a single isolated object centered on a completely plain solid pure white (#FFFFFF)
