@@ -2,7 +2,8 @@
 // in the water below. Then Gino plays his accordion (tap it to squeeze) and gives it to Lupa's band.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { bigCelebration, Buddy, say, SparklePuppet, sounds, useAlive, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { bigCelebration, Buddy, say, SparklePuppet, sounds, useAlive, useSaved, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { MaskArt, maskOnFace, type MaskData } from './MaskShop'
 import { art } from '../../art'
 import { L } from '../../lines'
 import { FinishButton, PromptRow, useCover } from '../scene'
@@ -22,6 +23,7 @@ export function Lagoon({ onStep, onDone }: { onStep: () => void; onDone: () => v
   const [phase, setPhase] = useState<'sky' | 'accordion' | 'end'>('sky')
   const [squeeze, setSqueeze] = useState(0)
   const count = useRef(0)
+  const [mask] = useSaved<MaskData | null>('italy-mask', null)
   const waterY = oy + bh * 0.62
 
   useEffect(() => {
@@ -95,7 +97,14 @@ export function Lagoon({ onStep, onDone }: { onStep: () => void; onDone: () => v
       </div>
       {/* Gino and Sparkle on the water's edge. */}
       <div style={{ position: 'absolute', left: landscape ? '6%' : '4%', bottom: 'calc(var(--safe-bottom) + 12px)', zIndex: 4, display: 'flex', alignItems: 'flex-end', gap: 8, pointerEvents: 'none' }}>
-        <SparklePuppet ref={sparkle} height={`${gh}px`} lookToward={0.5} />
+        <div style={{ position: 'relative' }}>
+          <SparklePuppet ref={sparkle} height={`${gh}px`} lookToward={0.5} />
+          {mask && (
+            <div style={{ position: 'absolute', left: maskOnFace(gh).left, top: maskOnFace(gh).top, width: maskOnFace(gh).width, rotate: `${maskOnFace(gh).rotate}deg` }}>
+              <MaskArt data={mask} id="lagoon-mask" />
+            </div>
+          )}
+        </div>
         <Buddy ref={gino} img={art.gino} voice="gino" height={`${gh}px`} />
       </div>
       <AnimatePresence>

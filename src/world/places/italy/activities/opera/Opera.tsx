@@ -18,7 +18,7 @@ import type { ActivityProps } from '../../Place'
 import { INK } from '../../puppets/ink'
 import { Lupa } from '../../puppets/Lupa'
 import { PromptRow, useCover } from '../scene'
-import { MaskArt, type MaskData } from '../venice/MaskShop'
+import { MaskArt, maskOnFace, type MaskData } from '../venice/MaskShop'
 import { Band, cheer, highNote, type Voice } from './music'
 
 const O = L.opera
@@ -340,7 +340,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
       {/* Lupa's wishing star. */}
       <AnimatePresence>
         {star === 'down' && (
-          <motion.button aria-label="Wishing star" className="world-glow" initial={{ y: -H * 0.6, scale: 0.4 }} animate={{ y: 0, scale: 1, rotate: [0, 12, -12, 0] }} exit={{ scale: 2.5, opacity: 0 }} transition={{ y: { duration: 2, ease: 'easeOut' }, rotate: { repeat: Infinity, duration: 1.4 } }} onClick={() => void tapStar()} style={{ position: 'absolute', left: cx - 60, top: stageY - lh - 150, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,226,122,.35)', border: 'none', fontSize: 84, zIndex: 20, padding: 0 }}>
+          <motion.button aria-label="Wishing star" className="world-glow" initial={{ y: -H * 0.6, scale: 0.4 }} animate={{ y: 0, scale: 1, rotate: [0, 12, -12, 0] }} exit={{ scale: 2.5, opacity: 0 }} transition={{ y: { duration: 2, ease: 'easeOut' }, rotate: { repeat: Infinity, duration: 1.4 } }} onClick={() => void tapStar()} style={{ position: 'absolute', left: cx - 60, top: Math.max(H < 560 ? 70 : 120, stageY - lh - 150), width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,226,122,.35)', border: 'none', fontSize: 84, zIndex: 20, padding: 0 }}>
             ⭐
           </motion.button>
         )}
@@ -388,7 +388,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
       <div style={{ position: 'absolute', left: landscape ? '2%' : '1%', bottom: 'calc(var(--safe-bottom) + 6px)', zIndex: 9, pointerEvents: 'none' }}>
         <SparklePuppet ref={sparkle} height={`${sh}px`} lookToward={0.6} />
         {mask && (
-          <div style={{ position: 'absolute', left: sh * 0.44, top: sh * 0.18, width: sh * 0.42, rotate: '6deg' }}>
+          <div style={{ position: 'absolute', left: maskOnFace(sh).left, top: maskOnFace(sh).top, width: maskOnFace(sh).width, rotate: `${maskOnFace(sh).rotate}deg` }}>
             <MaskArt data={mask} id="opera-mask" />
           </div>
         )}

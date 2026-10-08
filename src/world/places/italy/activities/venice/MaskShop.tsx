@@ -40,6 +40,15 @@ export function strokePath(points: Pt[], size = 26): string {
   return d + ' Z'
 }
 
+/** Where the mask sits on a SparklePuppet `h` px tall (from her eyes in the puppet's 836 x 960 viewBox), relative to the
+ *  puppet's top-left corner. Its eye holes line up with her eyes; `flip` when she faces the other way. */
+export function maskOnFace(h: number, flip = false) {
+  const eyesX = (flip ? 1 - 0.358 : 0.358) * (836 / 960) * h
+  // A bit narrower than her eye span, so her mouth stays free to talk; centered on her eyes (the mask's eye line is 47% down).
+  const width = 0.53 * h
+  return { left: eyesX - width / 2, top: 0.376 * h - 0.47 * 0.65 * width, width, rotate: flip ? -10 : 10 }
+}
+
 /** The finished mask (also shown in the opera finale). */
 export function MaskArt({ data, live, id = 'mask' }: { data: MaskData; live?: { color: string; pts: Pt[] } | null; id?: string }) {
   const all = live ? [...data.strokes, live] : data.strokes
@@ -263,8 +272,16 @@ export function MaskShop({ onStep, onDone }: { onStep: () => void; onDone: () =>
 
   // Layout: the mask big in the middle; colors and gems in a tray along the bottom; Sparkle in the bottom corner.
   const tray = Math.max(88, Math.min(120, Math.min(W, H) * 0.13))
-  const maskW = Math.min(W * (landscape ? 0.6 : 0.88), (H - 200 - tray * 1.4) * 1.54)
-  const sh = Math.min(H * 0.3, W * 0.3, 280)
+  // Short phone-landscape screens: the tray stands up on the right and Sparkle sits small in the bottom-left corner, so
+  // the mask can be big enough to paint.
+  const short = landscape && H < 560
+  const trayW = tray * 2 + 50
+  const sh = short ? Math.min(H * 0.32, 120) : Math.min(H * 0.3, W * 0.3, 280)
+  const maskW = short ? Math.min(W - trayW - sh - 40, (H - 110) * 1.5) : Math.min(W * (landscape ? 0.6 : 0.88), (H - 200 - tray * 1.4) * 1.54)
+  const maskHome = short ? { left: sh + 10 + (W - trayW - sh - 10 - maskW) / 2, top: 96 } : { left: (W - maskW) / 2 - (landscape ? W * 0.06 : 0), top: Math.max(H * 0.5 - maskW * 0.33 - tray * 0.4, 150) }
+  // Where Sparkle stands, and where her face is (the mask flies there).
+  const spot = short ? { left: 6, bottom: 4 } : { left: W - (landscape ? 0.03 * W : 0.04 * W) - sh, bottom: tray * 1.25 }
+  const onFace = maskOnFace(sh, !short)
   const wearing = step === 'wear' || step === 'done'
 
   return (
@@ -272,15 +289,15 @@ export function MaskShop({ onStep, onDone }: { onStep: () => void; onDone: () =>
       {W > 0 && <div style={{ position: 'absolute', left: ox, top: oy, width: bw, height: bh, background: `url(${landscape ? art.bgMaskShop : art.bgMaskShopTall}) center / 100% 100%` }} />}
 
       {/* Sparkle, waiting to try it on. */}
-      <div style={{ position: 'absolute', right: landscape ? '3%' : '4%', bottom: tray * 1.25, zIndex: 6 }}>
-        <SparklePuppet ref={sparkle} height={`${sh}px`} lookToward={-0.5} flip />
+      <div style={{ position: 'absolute', left: spot.left, bottom: spot.bottom, zIndex: 6 }}>
+        <SparklePuppet ref={sparkle} height={`${sh}px`} lookToward={short ? 0.5 : -0.5} flip={!short} />
       </div>
 
       {/* The mask. While painting it's big in the middle; then it flies to Sparkle's face. */}
       {W > 0 && (
         <motion.div
           initial={false}
-          animate={wearing ? { left: W - (landscape ? 0.03 * W : 0.04 * W) - sh * 0.62, top: H - tray * 1.25 - sh * 0.8, width: sh * 0.5, rotate: -6 } : { left: (W - maskW) / 2 - (landscape ? W * 0.06 : 0), top: Math.max(H * 0.5 - maskW * 0.33 - tray * 0.4, 150), width: maskW, rotate: 0 }}
+          animate={wearing ? { left: spot.left + onFace.left, top: H - spot.bottom - sh + onFace.top, width: onFace.width, rotate: onFace.rotate } : { ...maskHome, width: maskW, rotate: 0 }}
           transition={{ type: 'spring', bounce: 0.3, duration: 0.9 }}
           style={{ position: 'absolute', zIndex: wearing ? 7 : 4 }}
         >
@@ -298,7 +315,7 @@ export function MaskShop({ onStep, onDone }: { onStep: () => void; onDone: () =>
       {/* The tray: colors while painting, gems after. */}
       <AnimatePresence>
         {(step === 'paint' || step === 'gems') && (
-          <motion.div initial={{ y: 200 }} animate={{ y: 0 }} exit={{ y: 200 }} style={{ position: 'absolute', left: '50%', translate: '-50% 0', bottom: 'calc(var(--safe-bottom) + 10px)', zIndex: 10, display: 'flex', gap: 12, padding: 10, background: 'rgba(255,247,240,.92)', border: `5px solid ${INK}`, borderRadius: 30, boxShadow: 'var(--shadow)' }}>
+          <motion.div initial={{ y: 200 }} animate={{ y: 0 }} exit={{ y: 200 }} style={{ position: 'absolute', ...(short ? { right: 8, top: '50%', translate: '0 -40%', width: trayW, flexWrap: 'wrap' as const, justifyContent: 'center' } : { left: '50%', translate: '-50% 0', bottom: 'calc(var(--safe-bottom) + 10px)' }), zIndex: 10, display: 'flex', gap: 12, padding: 10, background: 'rgba(255,247,240,.92)', border: `5px solid ${INK}`, borderRadius: 30, boxShadow: 'var(--shadow)' }}>
             {step === 'paint' &&
               COLORS.map((c) => (
                 <motion.button key={c} aria-label="Color" whileTap={{ scale: 0.9 }} onClick={() => (sounds.pop(), setColor(c))} style={{ width: tray, height: tray, borderRadius: '50%', background: c, border: `5px solid ${INK}`, boxShadow: c === color ? `0 0 0 6px #fff, 0 0 0 10px ${INK}` : 'none', padding: 0 }} />

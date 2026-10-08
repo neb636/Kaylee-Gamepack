@@ -43,16 +43,17 @@ export function Canal({ leg, onStep, onArrive }: { leg: 0 | 1 | 2; onStep: () =>
   const sirenDone = useRef(false)
 
   // Geometry (picture px). The gondola picture is about twice as wide as tall; its water line is ~82% down.
-  const G = landscape ? Math.min(bw * 0.5, bh * 0.9) : Math.min(bw * 0.86, bh * 0.4)
+  const G = landscape ? Math.min(bw * 0.5, bh * 0.9) : Math.min(bw * 0.76, bh * 0.4)
   const gH = G / GONDOLA_RATIO
   const waterY = bh * (landscape ? 0.84 : 0.8)
   const gTop = waterY - gH * 0.82
-  const gx = -ox + W * (landscape ? 0.42 : 0.5)
+  const gx = -ox + W * (landscape ? 0.42 : 0.38)
   const legLen = LEG * bw
-  const bridgeW = G * 1.45
+  const bridgeW = G * (landscape ? 1.45 : 1)
   const bridgeH = bridgeW / BRIDGE_RATIO
   const bridgeStop = legLen * 0.42
-  const bridgeX = bridgeStop + gx + G * 0.5 + bridgeW * 0.5
+  // The gondola stops with the bridge's near steps over its front, just ahead of Sparkle, so the whole arch is in view.
+  const bridgeX = bridgeStop + gx + G * 0.15 + bridgeW * 0.5
 
   useEffect(() => {
     void (async () => {

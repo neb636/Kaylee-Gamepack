@@ -40,6 +40,8 @@ const CRATER: Record<'wide' | 'tall', Pt> = { wide: { x: 0.53, y: 0.15 }, tall: 
 /** Where the trail turns cooler (into the forest), then cold (the lava rocks and snow), as a fraction of the way up. */
 const ZONES: Record<'wide' | 'tall', [number, number]> = { wide: [0.3, 0.84], tall: [0.36, 0.84] }
 const SNOWBALLS = 5
+/** Nino's height on short phone-landscape screens. */
+const SHORT_NINO = 76
 
 function lengths(pts: Pt[]) {
   const seg = pts.slice(1).map((p, i) => Math.hypot(p.x - pts[i].x, p.y - pts[i].y))
@@ -82,7 +84,15 @@ function nearest(pts: Pt[], p: Pt): number {
 }
 
 export function Mountain({ onStep, onDone }: { onStep: () => void; onDone: () => void }) {
-  const { box, W, H, bw, bh, ox, oy, landscape } = useCover(0.5)
+  const cover = useCover(0.5)
+  const { box, W, H, landscape } = cover
+  // On short phone-landscape screens the whole trail can't fit under the top bar at full width, so the volcano shrinks to
+  // fit (a soft blurred copy fills the sides) and the summit stays clear of the home button and stars.
+  const short = landscape && H > 0 && H < 560
+  const bh = short ? Math.min(cover.bh, (H - 100 - SHORT_NINO * 1.15) / 0.6) : cover.bh
+  const bw = short ? bh * 1.5 : cover.bw
+  const ox = short ? (W - bw) / 2 : cover.ox
+  const oy = short ? H - bh * 0.9 : cover.oy
   const alive = useAlive()
   const nino = useRef<PuppetHandle>(null)
   const key = landscape ? 'wide' : 'tall'
@@ -252,8 +262,8 @@ export function Mountain({ onStep, onDone }: { onStep: () => void; onDone: () =>
     onDone()
   }
 
-  const nh = Math.max(110, Math.min(bh * (landscape ? 0.17 : 0.11), 210))
-  const ball = Math.max(88, nh * 0.55)
+  const nh = short ? SHORT_NINO : Math.max(110, Math.min(bh * (landscape ? 0.17 : 0.11), 210))
+  const ball = short ? 66 : Math.max(88, nh * 0.55)
   const top = along(path, 1)
   const pts = path.map((p) => `${p.x * bw},${p.y * bh}`).join(' ')
   const crater = CRATER[key]
@@ -261,6 +271,7 @@ export function Mountain({ onStep, onDone }: { onStep: () => void; onDone: () =>
 
   return (
     <div ref={box} style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: '#A8DCFF' }}>
+      {short && <div aria-hidden style={{ position: 'absolute', inset: -20, background: `url(${art.bgEtna}) center / cover`, filter: 'blur(10px)', opacity: 0.8 }} />}
       {W > 0 && (
         <PlayArea style={{ position: 'absolute', left: ox, top: oy, width: bw, height: bh, background: `url(${landscape ? art.bgEtna : art.bgEtnaTall}) center / 100% 100%` }}>
           {/* The trail. */}
