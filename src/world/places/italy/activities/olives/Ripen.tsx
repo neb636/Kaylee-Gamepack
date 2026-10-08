@@ -158,8 +158,10 @@ export function Ripen({ onStar, onDone }: { onStar: (n: number) => void; onDone:
     await say(O.bitter)
     if (!alive()) return
     void sparkle.current?.play('nod')
-    await say(O.bitterWhy)
-    if (!alive()) return
+    for (const line of O.bitterWhy) {
+      await say(line)
+      if (!alive()) return
+    }
     setPhase('done')
     await wait(500)
     if (alive()) onDone()

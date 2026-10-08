@@ -10,7 +10,7 @@ export const SLOPE = 0.05
 /** Height of the stone channel (trough) on top of the arches. */
 export const TROUGH = 0.2
 /** Left edge of the first bay (the hill ends here). */
-export const XB = 1.9
+export const XB = 1.55
 /** The spring rock on top of the hill (x range) and where the hill channel starts. */
 export const ROCK = { x0: 0.08, x1: 1.38, h: (1.3 * 547) / 965, mouth: 0.72 }
 export const CHANNEL_START = 1.18
@@ -39,7 +39,7 @@ const PTS: [number, number][] = [
   [-1.6, 0.14],
   [0, 0],
   [1.45, 0],
-  [XB, 0.38],
+  [XB + 0.18, 0.3],
   [bayCenter(0), KINDS.s],
   [bayCenter(1), KINDS.t],
   [bayCenter(2), KINDS.m],

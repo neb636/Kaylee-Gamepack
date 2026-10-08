@@ -8,6 +8,7 @@ import { burst, say, SparklePuppet, sounds, useAlive, useLandscape, wait, type L
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
 import { L } from '../../lines'
+import { INK } from '../../puppets/ink'
 import { Spina } from '../../puppets/Spina'
 import { Basket, OliveSvg, Scene, Stand, SunButton, type OliveColor } from './bits'
 
@@ -135,19 +136,21 @@ export function Grove({ onBranch, onDone }: { onBranch: (n: number) => void; onD
 
   // Where olives land in the net: the pile grows in little columns across it.
   const netLeft = lay.net.x - lay.net.w / 2
-  const netH = lay.net.w * (95 / 1024) * ratio // % of scene height
-  const netTop = lay.net.y - netH * 0.66
+  const netH = lay.net.w * (NET_H / 1000) * ratio // % of scene height
+  const netTop = lay.net.y - netH
   const oliveH = oliveW * 1.25 * ratio // % of scene height
   const landing = (x: number): Pt => {
     const cols = pile.current.length
-    let c = Math.round(((x - netLeft) / lay.net.w) * (cols - 1))
+    let c = Math.round(((x - netLeft) / lay.net.w - 0.12) / 0.76 * (cols - 1))
     c = Math.max(1, Math.min(cols - 2, c))
     // Spill to the lower neighbor so the heap stays a heap.
     if (pile.current[c - 1] < pile.current[c] - 1) c -= 1
     else if (pile.current[c + 1] < pile.current[c] - 1) c += 1
     const n = pile.current[c]++
-    const cx = netLeft + ((c + 0.5) / cols) * lay.net.w + (Math.random() - 0.5) * 0.8
-    return [cx, netTop - oliveH * 0.05 - n * oliveH * 0.6]
+    const u = 0.12 + (c / (cols - 1)) * 0.76
+    // They rest in the hammock's belly, just above its near edge.
+    const bottom = netTop + (netEdge(u, NEAR) - 7) / NET_H * netH
+    return [netLeft + u * lay.net.w + (Math.random() - 0.5) * 0.6, bottom - oliveH * 0.45 - n * oliveH * 0.55]
   }
 
   const spinaHead = (): Pt => [lay.spina.x + 1, lay.spina.y - lay.spina.h * 0.78]
@@ -435,21 +438,24 @@ export function Grove({ onBranch, onDone }: { onBranch: (n: number) => void; onD
         </div>
       </div>
 
-      {/* Olives in the net, behind the net's front so they peek over its edge. */}
+      <div style={{ position: 'absolute', left: `${netLeft}%`, top: `${netTop}%`, width: `${lay.net.w}%`, height: `${netH}%`, zIndex: 2, pointerEvents: 'none' }}>
+        <NetBack />
+      </div>
+      {/* Olives in the net: in front of its far side, behind its near side, so they sit IN it. */}
       {inNet.map((o) => (
         <div key={o.id} style={{ position: 'absolute', left: `${o.x}%`, top: `${o.y}%`, width: `${oliveW}cqw`, translate: '-50% -50%', rotate: `${o.rot}deg`, zIndex: 3, pointerEvents: 'none' }}>
           <OliveSvg color={o.color} />
         </div>
       ))}
-      <motion.img
+      <motion.div
         key={netBounce}
-        src={art.oliveNet}
-        alt=""
-        initial={{ scaleY: 0.9 }}
+        initial={{ scaleY: 0.92 }}
         animate={{ scaleY: 1 }}
         transition={{ type: 'spring', bounce: 0.6, duration: 0.35 }}
-        style={{ position: 'absolute', left: `${netLeft}%`, bottom: `${100 - lay.net.y}%`, width: `${lay.net.w}%`, transformOrigin: '50% 100%', zIndex: 4, pointerEvents: 'none' }}
-      />
+        style={{ position: 'absolute', left: `${netLeft}%`, top: `${netTop}%`, width: `${lay.net.w}%`, height: `${netH}%`, transformOrigin: '50% 30%', zIndex: 4, pointerEvents: 'none' }}
+      >
+        <NetFront />
+      </motion.div>
 
       <Stand x={lay.basket.x} y={lay.basket.y} w={`${lay.basket.w}cqw`} z={6}>
         <Basket fill={basket / 22} />
@@ -478,5 +484,70 @@ export function Grove({ onBranch, onDone }: { onBranch: (n: number) => void; onD
         ))}
       </AnimatePresence>
     </Scene>
+  )
+}
+
+// --- The olive net, seen from the side --------------------------------------------------------------------------------
+// A low hammock strung between two little stakes standing on the soil. Its far edge is high, its near edge droops lower,
+// and the olives sit in the belly between them. Drawn in two layers (far half behind the olives, near half in front).
+const NET_H = 150
+const FAR = { y: 34, ctrl: 64 }
+const NEAR = { y: 44, ctrl: 132 }
+const STAKES = [26, 974]
+/** y of a net edge at u (0..1 along the net). */
+function netEdge(u: number, e: { y: number; ctrl: number }) {
+  return e.y + 2 * u * (1 - u) * (e.ctrl - e.y)
+}
+const edge = (e: { y: number; ctrl: number }) => `M${STAKES[0]} ${e.y} Q500 ${e.ctrl} ${STAKES[1]} ${e.y}`
+const MID = { y: 38, ctrl: 98 }
+const MESH = Array.from({ length: 27 }, (_, i) => -60 + i * 40)
+
+function Mesh({ id, from, to, fill }: { id: string; from: { y: number; ctrl: number }; to: { y: number; ctrl: number }; fill: string }) {
+  return (
+    <>
+      <defs>
+        <clipPath id={id}>
+          <path d={`${edge(from)} L${STAKES[1]} ${to.y} Q500 ${to.ctrl} ${STAKES[0]} ${to.y} Z`} />
+        </clipPath>
+      </defs>
+      <g clipPath={`url(#${id})`}>
+        <rect x="0" y="0" width="1000" height={NET_H} fill={fill} />
+        {MESH.map((x) => (
+          <g key={x}>
+            <path d={`M${x} 0 l${NET_H * 0.6} ${NET_H}`} stroke="#3F7F4A" strokeWidth="4" />
+            <path d={`M${x + NET_H * 0.6} 0 l${-NET_H * 0.6} ${NET_H}`} stroke="#3F7F4A" strokeWidth="4" />
+          </g>
+        ))}
+      </g>
+    </>
+  )
+}
+
+function NetBack() {
+  return (
+    <svg viewBox={`0 0 1000 ${NET_H}`} style={{ width: '100%', height: '100%', display: 'block', overflow: 'visible' }}>
+      <Mesh id="olive-net-far" from={FAR} to={MID} fill="#8ACB86" />
+      <path d={edge(FAR)} fill="none" stroke={INK} strokeWidth="9" strokeLinecap="round" />
+      <path d={edge(FAR)} fill="none" stroke="#5DBB7A" strokeWidth="4" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function NetFront() {
+  return (
+    <svg viewBox={`0 0 1000 ${NET_H}`} style={{ width: '100%', height: '100%', display: 'block', overflow: 'visible' }}>
+      <g opacity="0.92">
+        <Mesh id="olive-net-near" from={MID} to={NEAR} fill="#9FD89A" />
+      </g>
+      <path d={edge(NEAR)} fill="none" stroke={INK} strokeWidth="11" strokeLinecap="round" />
+      <path d={edge(NEAR)} fill="none" stroke="#5DBB7A" strokeWidth="5" strokeLinecap="round" />
+      {/* the stakes, standing on the soil, with the net's corners tied to them */}
+      {STAKES.map((x) => (
+        <g key={x}>
+          <rect x={x - 9} y="22" width="18" height={NET_H - 20} rx="6" fill="#A47652" stroke={INK} strokeWidth="5" />
+          <circle cx={x} cy="40" r="10" fill="#5DBB7A" stroke={INK} strokeWidth="4" />
+        </g>
+      ))}
+    </svg>
   )
 }

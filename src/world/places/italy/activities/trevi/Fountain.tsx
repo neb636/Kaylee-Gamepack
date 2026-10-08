@@ -72,6 +72,8 @@ export function Fountain({ onStep, onDone, showWord }: { onStep: () => void; onD
       void sparkle.current?.play('wave')
       await say(T.romans)
       if (!alive() || coinsRef.current > 0) return
+      await say(T.longAgo)
+      if (!alive() || coinsRef.current > 0) return
       await say(T.still)
       if (!alive() || coinsRef.current > 0) return
       setPrompt(T.flick)
@@ -127,6 +129,8 @@ export function Fountain({ onStep, onDone, showWord }: { onStep: () => void; onD
     void sparkle.current?.play('cheer')
     await wait(900)
     await say(T.star)
+    if (!alive()) return
+    await say(T.starWaits)
     if (!alive()) return
     await say(T.help)
     if (!alive()) return

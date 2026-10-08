@@ -16,7 +16,7 @@ import { Lupa } from '../../puppets/Lupa'
 import type { WordId } from '../../WordCard'
 import { water } from './audio'
 import { BAYS, bayCenter, bayX, BUILT_FROM, CHANNEL_START, groundY, KINDS, lineY, makeGeom, ROCK, ROUNDS, TROUGH, WORLD_END, XB, type Geom, type Kind } from './geom'
-import { ArchShape, ArchSvg, GapOutline, GROOVE_DRY, inkW, Road, STONE, Terrain, Trough, TroughWall, WATER, WATER_DEEP } from './Stone'
+import { ArchShape, ArchSvg, BackHills, GapOutline, GROOVE_DRY, inkW, Road, STONE, Terrain, Trough, TroughWall, WATER, WATER_DEEP } from './Stone'
 
 const T = L.trevi
 type Phase = 'spring' | 'build' | 'waterOn' | 'flowing' | 'rome'
@@ -66,6 +66,11 @@ export function Aqueduct({ onStep, onDone, showWord }: { onStep: () => void; onD
     camSet.current = true
   }, [g?.A, g?.cam1, g?.cam2])
   const camPx = useTransform(cam, (c) => -c * (G.current?.A ?? 0))
+
+  useEffect(() => {
+    const t = setTimeout(() => void sparkle.current?.play('wave'), 700)
+    return () => clearTimeout(t)
+  }, [])
 
   const say2 = async (...lines: Parameters<typeof say>[0][]) => {
     for (const l of lines) {
@@ -302,13 +307,19 @@ export function Aqueduct({ onStep, onDone, showWord }: { onStep: () => void; onD
   }
 
   const bg = landscape ? art.bgAqueduct : art.bgAqueductTall
-  const bigH = g ? Math.max(g.friendH, Math.min(1.7 * g.A, W * 0.25, H * 0.3)) : 0
+  const bigH = g ? Math.max(g.friendH, landscape ? Math.min(1.7 * g.A, W * 0.3, H * 0.3) : Math.min(W * 0.4, H * 0.28)) : 0
+  // Where the painting's meadow starts (its hard ground edge), in screen px: the back hills cover it.
+  const bgRatio = landscape ? 1.5 : 1024 / 1536
+  const bgW = Math.max(W, H * bgRatio)
+  const bgH = bgW / bgRatio
+  const horizon = { y: (H - bgH) / 2 + (landscape ? 0.5674 : 0.531) * bgH, h: bgH }
   const friendScale = g && phase === 'build' ? g.friendH / bigH : 1
   const trayKinds = ROUNDS[round].tray
   return (
     <div ref={box} onPointerMove={follow} onPointerDown={follow} style={{ position: 'absolute', inset: 0, overflow: 'hidden', background: `#B3D268 url(${bg}) center / cover`, touchAction: 'none' }}>
       {g && (
         <>
+          <BackHills W={W} H={H} horizon={horizon} A={g.A} />
           {phase === 'spring' && <div aria-hidden onClick={tapElsewhere} style={{ position: 'absolute', inset: 0, zIndex: 1 }} />}
           <motion.div style={{ position: 'absolute', left: 0, top: 0, width: 0, height: H, x: camPx, zIndex: 2 }}>
             <World g={g} phase={phase} taps={taps} placed={placed} round={round} trial={trial} hint={hint} hover={hover} selBay={selBay} entry={entry.current} rings={rings} splashes={splashes} head={head} rockHint={rockHint} />
@@ -318,6 +329,16 @@ export function Aqueduct({ onStep, onDone, showWord }: { onStep: () => void; onD
                 onClick={tapHill}
                 style={{ position: 'absolute', left: -1.6 * g.A, top: lineY(g, 0) - 0.9 * g.A, width: (XB + 1.3) * g.A, height: 2.1 * g.A, background: 'none', border: 'none', padding: 0, borderRadius: '40% 40% 0 0', zIndex: 3 }}
               />
+            )}
+            {phase === 'spring' && taps === 0 && (
+              <motion.div
+                aria-hidden
+                animate={{ y: [0, -g.A * 0.22, 0], scale: [1, 0.92, 1] }}
+                transition={{ repeat: Infinity, duration: 1.1 }}
+                style={{ position: 'absolute', left: ROCK.mouth * g.A, top: lineY(g, 0) + g.A * 0.12, translate: '-50% 0', fontSize: Math.max(40, g.A * 0.55), pointerEvents: 'none', zIndex: 4, filter: 'drop-shadow(0 4px 4px rgba(110,59,36,.3))' }}
+              >
+                👆
+              </motion.div>
             )}
             {phase === 'build' &&
               open.map((b) => (
@@ -500,14 +521,17 @@ function World(props: {
 
       {/* The spring rock (a generated sticker) sits on the hilltop. */}
       <motion.g
-        animate={rockHint ? { scale: [1, 1.05, 1] } : { scale: 1 }}
-        transition={rockHint ? { repeat: Infinity, duration: 1 } : undefined}
+        animate={phase === 'spring' ? { scale: rockHint ? [1, 1.07, 1] : [1, 1.035, 1] } : { scale: 1 }}
+        transition={phase === 'spring' ? { repeat: Infinity, duration: rockHint ? 1 : 1.4 } : undefined}
         style={{ originX: `${ROCK.mouth * A}px`, originY: `${lineY(g, ROCK.mouth)}px` }}
       >
-        {rockHint && <ellipse cx={(ROCK.x0 + ROCK.x1) * A * 0.5} cy={rockY + rockH * 0.55} rx={rockW * 0.62} ry={rockH * 0.7} fill="#FFE27A" opacity={0.55} />}
+        {phase === 'spring' && <motion.ellipse cx={(ROCK.x0 + ROCK.x1) * A * 0.5} cy={rockY + rockH * 0.55} rx={rockW * 0.62} ry={rockH * 0.7} fill="#FFE27A" animate={{ opacity: rockHint ? [0.4, 0.75, 0.4] : [0.15, 0.45, 0.15] }} transition={{ repeat: Infinity, duration: 1.4 }} />}
+        {false && <ellipse cx={(ROCK.x0 + ROCK.x1) * A * 0.5} cy={rockY + rockH * 0.55} rx={rockW * 0.62} ry={rockH * 0.7} fill="#FFE27A" opacity={0.55} />}
         <image href={art.springRock} x={ROCK.x0 * A} y={rockY} width={rockW} height={rockH} />
       </motion.g>
 
+      {/* "Listen!": sound waves pulse out of the rocks until she has found the spring. */}
+      {phase === 'spring' && <ListenWaves x={(ROCK.x1 + 0.05) * A} y={rockY + rockH * 0.45} A={A} />}
       {/* Before she finds it: a little wet glint at the rock's mouth that grows with each tap. */}
       {!springOut && taps > 0 && (
         <motion.ellipse key={taps} cx={mouth.x} cy={mouth.y} initial={{ rx: 0, ry: 0 }} animate={{ rx: A * 0.06 * taps, ry: A * 0.025 * taps }} fill={WATER} stroke={INK} strokeWidth={sw * 0.6} />
@@ -632,6 +656,38 @@ function SoundRings({ x, y, A }: { x: number; y: number; A: number }) {
           initial={{ x, y, opacity: 1 }}
           animate={{ x: x + d * A * 0.3, y: [y, y - A * 0.45, y - A * 0.1], opacity: [1, 1, 0] }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
+        />
+      ))}
+    </g>
+  )
+}
+
+/** Little sound-wave arcs ")))" beside the rocks, looping: something is making a noise in there. */
+function ListenWaves({ x, y, A }: { x: number; y: number; A: number }) {
+  return (
+    <g>
+      {[0, 1, 2].map((i) => (
+        <motion.path
+          key={i}
+          d={`M${x + A * (0.08 + i * 0.12)} ${y - A * (0.14 + i * 0.06)} q${A * (0.09 + i * 0.03)} ${A * (0.14 + i * 0.06)} 0 ${A * (0.28 + i * 0.12)}`}
+          fill="none"
+          stroke="#fff"
+          strokeWidth={inkW(A) * 1.4}
+          strokeLinecap="round"
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ repeat: Infinity, duration: 1.4, delay: i * 0.22 }}
+        />
+      ))}
+      {[0, 1, 2].map((i) => (
+        <motion.path
+          key={`l${i}`}
+          d={`M${x - A * (1.38 + i * 0.12)} ${y - A * (0.14 + i * 0.06)} q${-A * (0.09 + i * 0.03)} ${A * (0.14 + i * 0.06)} 0 ${A * (0.28 + i * 0.12)}`}
+          fill="none"
+          stroke="#fff"
+          strokeWidth={inkW(A) * 1.4}
+          strokeLinecap="round"
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ repeat: Infinity, duration: 1.4, delay: i * 0.22 }}
         />
       ))}
     </g>

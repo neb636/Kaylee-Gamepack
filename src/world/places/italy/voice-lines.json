@@ -279,7 +279,7 @@
   "Olives in the net!",
   "Great combing, Kaylee!",
   "The net is full!",
-  "Olive trees love hot, dry, sunny summers!",
+  "Olive trees love hot, dry summers!",
   {
     "text": "Into the basket! Grazie!",
     "voice": "spina"
@@ -287,7 +287,7 @@
   "This olive is green. Tap the sun!",
   "Purple! Tap the sun again!",
   "Black! Now it is ripe!",
-  "Put them in order! Green, then purple, then black!",
+  "Green, then purple, then black!",
   "Green goes in the one sun bowl!",
   "Purple goes in the two sun bowl!",
   "Black goes in the three sun bowl!",
@@ -300,13 +300,14 @@
     "text": "Bleh! Bitter!",
     "voice": "spina"
   },
-  "Fresh olives are too bitter! They have to soak first.",
+  "Fresh olives are too bitter!",
+  "They have to soak first.",
   {
     "text": "Welcome to the frantoio, the olive mill!",
     "voice": "spina"
   },
   "Drop ten olives in the big funnel!",
-  "Drag an olive up to the funnel, or tap the basket!",
+  "Drop an olive in the funnel!",
   "Nine!",
   "Ten!",
   "It takes lots of olives to make oil!",
@@ -318,16 +319,16 @@
   "Look! Golden olive oil!",
   "Hold the jug to pour! Fill it all the way!",
   "Full! All the way to the top!",
-  "Now fill it halfway, to the dotted line!",
-  "A little more! Up to the dotted line!",
+  "Now fill it halfway!",
+  "A little more, to the line!",
   {
     "text": "Hee hee! Just a taste!",
     "voice": "spina"
   },
-  "Half! Halfway full!",
+  "Halfway full!",
   "Olive oil goes on almost everything in Italy!",
   {
-    "text": "Bruschetta for everyone! Bread with olive oil!",
+    "text": "Bruschetta for everyone!",
     "voice": "spina"
   },
   {
@@ -348,7 +349,7 @@
     "voice": "lupa"
   },
   {
-    "text": "Oh no! The Trevi Fountain is dry!",
+    "text": "Oh no! It's dry!",
     "voice": "lupa"
   },
   {
@@ -400,7 +401,8 @@
     "text": "Bellissima! The fountain is full!",
     "voice": "lupa"
   },
-  "The Romans built this water bridge 2,000 years ago!",
+  "The Romans built this water bridge!",
+  "That was 2,000 years ago!",
   "And it still fills the fountain today!",
   "Flick the coin up into the fountain!",
   "Swipe up on the coin!",
@@ -414,7 +416,8 @@
     "text": "I wish I could sing!",
     "voice": "lupa"
   },
-  "A wishing star! It will wait for Lupa's big night.",
+  "A wishing star!",
+  "It waits for Lupa's big night.",
   "Coins from the fountain help people who need it.",
   "Brown bear sticker! Bears live in the mountains of Italy!",
   "Porcupine sticker! Crested porcupines live in Italy!",

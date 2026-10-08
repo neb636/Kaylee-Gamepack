@@ -137,7 +137,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   left: `${spot.x}%`,
                   top: `${spot.y}%`,
                   translate: '-50% -50%',
-                  width: big ? 'clamp(80px, 12cqw, 126px)' : 'clamp(60px, 8.5cqw, 90px)',
+                  width: big ? 'clamp(80px, 12cqw, 126px)' : 'clamp(60px, 9.2cqw, 96px)',
                   padding: 0,
                   background: 'none',
                   border: 'none',

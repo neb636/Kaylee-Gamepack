@@ -847,11 +847,11 @@
     "file": "3433076be555.mp3"
   },
   {
-    "text": "Olive trees love hot, dry, sunny summers!",
+    "text": "Olive trees love hot, dry summers!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4888,
-    "file": "aaabe128a774.mp3"
+    "ms": 2936,
+    "file": "8b6ed930ebc0.mp3"
   },
   {
     "text": "Into the basket! Grazie!",
@@ -882,11 +882,11 @@
     "file": "05d927f7b1bf.mp3"
   },
   {
-    "text": "Put them in order! Green, then purple, then black!",
+    "text": "Green, then purple, then black!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4663,
-    "file": "ca6b8f0f3aec.mp3"
+    "ms": 2986,
+    "file": "a65086136bd2.mp3"
   },
   {
     "text": "Green goes in the one sun bowl!",
@@ -931,11 +931,18 @@
     "file": "fcc30c49c10b.mp3"
   },
   {
-    "text": "Fresh olives are too bitter! They have to soak first.",
+    "text": "Fresh olives are too bitter!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4318,
-    "file": "2961f94603ea.mp3"
+    "ms": 2767,
+    "file": "76a066c2a7d4.mp3"
+  },
+  {
+    "text": "They have to soak first.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2728,
+    "file": "a96b32ce05fa.mp3"
   },
   {
     "text": "Welcome to the frantoio, the olive mill!",
@@ -952,11 +959,11 @@
     "file": "20f738a3a3c4.mp3"
   },
   {
-    "text": "Drag an olive up to the funnel, or tap the basket!",
+    "text": "Drop an olive in the funnel!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4087,
-    "file": "16492a4f5151.mp3"
+    "ms": 2282,
+    "file": "59091b5489e3.mp3"
   },
   {
     "text": "Nine!",
@@ -1015,18 +1022,18 @@
     "file": "b64e32aa1dc5.mp3"
   },
   {
-    "text": "Now fill it halfway, to the dotted line!",
+    "text": "Now fill it halfway!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4148,
-    "file": "453bec437bf9.mp3"
+    "ms": 2315,
+    "file": "93b0d18f54a2.mp3"
   },
   {
-    "text": "A little more! Up to the dotted line!",
+    "text": "A little more, to the line!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3268,
-    "file": "e95aed672210.mp3"
+    "ms": 2080,
+    "file": "20017c6b7a53.mp3"
   },
   {
     "text": "Hee hee! Just a taste!",
@@ -1036,11 +1043,11 @@
     "file": "5983b7939919.mp3"
   },
   {
-    "text": "Half! Halfway full!",
+    "text": "Halfway full!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4226,
-    "file": "fd4e1c3db2f2.mp3"
+    "ms": 1378,
+    "file": "ba2c24f40e47.mp3"
   },
   {
     "text": "Olive oil goes on almost everything in Italy!",
@@ -1050,11 +1057,11 @@
     "file": "e7e5f3459973.mp3"
   },
   {
-    "text": "Bruschetta for everyone! Bread with olive oil!",
+    "text": "Bruschetta for everyone!",
     "voice": "spina",
     "sig": "cb98c37ff1",
-    "ms": 3400,
-    "file": "30a7109fba49.mp3"
+    "ms": 1514,
+    "file": "49c3df0ee6ec.mp3"
   },
   {
     "text": "Crunch! Buonissima!",
@@ -1092,11 +1099,11 @@
     "file": "fab0b41391e8.mp3"
   },
   {
-    "text": "Oh no! The Trevi Fountain is dry!",
+    "text": "Oh no! It's dry!",
     "voice": "lupa",
     "sig": "1200e8d792",
-    "ms": 4107,
-    "file": "7c918c223bc5.mp3"
+    "ms": 2057,
+    "file": "503935853747.mp3"
   },
   {
     "text": "Where did the water go?",
@@ -1253,11 +1260,18 @@
     "file": "e7f84cbe43ff.mp3"
   },
   {
-    "text": "The Romans built this water bridge 2,000 years ago!",
+    "text": "The Romans built this water bridge!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4302,
-    "file": "313d41fdefef.mp3"
+    "ms": 2264,
+    "file": "bce9fd0a7dd1.mp3"
+  },
+  {
+    "text": "That was 2,000 years ago!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3053,
+    "file": "05e4963bd410.mp3"
   },
   {
     "text": "And it still fills the fountain today!",
@@ -1309,11 +1323,18 @@
     "file": "eebb61b8cb6f.mp3"
   },
   {
-    "text": "A wishing star! It will wait for Lupa's big night.",
+    "text": "A wishing star!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4474,
-    "file": "1fbf361c1e00.mp3"
+    "ms": 1363,
+    "file": "4142301d6283.mp3"
+  },
+  {
+    "text": "It waits for Lupa's big night.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3124,
+    "file": "affe6e3d8124.mp3"
   },
   {
     "text": "Coins from the fountain help people who need it.",
