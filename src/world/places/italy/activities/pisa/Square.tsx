@@ -30,7 +30,7 @@ const DROPS: [Thing, Thing][] = [
 /** Spots in the pictures (fractions of the picture). The tower's base sits on the lawn, in front of the far edge. */
 const LAYOUT = {
   wide: { base: { x: 0.62, y: 0.87 }, towerH: 0.66, weight: 0.15, tray: 0.88, sparkle: { x: 0.09, h: 0.24 }, photoStart: 0.86, civetta: { x: 0.25, h: 0.17 }, choices: { x: 0.25, y: 0.42 }, bells: 0.5 },
-  tall: { base: { x: 0.6, y: 0.885 }, towerH: 0.43, weight: 0.085, tray: 0.915, sparkle: { x: 0.09, h: 0.12 }, photoStart: 0.88, civetta: { x: 0.22, h: 0.09 }, choices: { x: 0.5, y: 0.25 }, bells: 0.45 },
+  tall: { base: { x: 0.607, y: 0.885 }, towerH: 0.36, weight: 0.07, tray: 0.915, sparkle: { x: 0.09, h: 0.1 }, photoStart: 0.88, civetta: { x: 0.31, h: 0.08 }, choices: { x: 0.5, y: 0.25 }, bells: 0.45 },
 }
 /** The tower picture: 1024 x 1536, the tower's flat bottom at 97.7% and its body half as wide as ~24% of the picture. */
 const T_RATIO = 1024 / 1536
@@ -48,10 +48,13 @@ export function Square({ onStep, onDone }: { onStep: () => void; onDone: () => v
   const alive = useAlive()
   const lay = landscape ? LAYOUT.wide : LAYOUT.tall
   const ratio = landscape ? 1.5 : 1024 / 1536
-  const bw = Math.max(W, H * ratio)
+  // The tall picture is mostly sky, so on a tall screen it's zoomed in a little and kept on the ground (the action fills
+  // the screen instead of the bottom half).
+  const zoom = landscape ? 1 : 1.25
+  const bw = Math.max(W, H * ratio) * zoom
   const bh = bw / ratio
   const ox = (W - bw) / 2
-  const oy = Math.min(0, H - bh) * (W / Math.max(H, 1) > 1.7 ? 1 : 0.5)
+  const oy = landscape ? Math.min(0, H - bh) * (W / Math.max(H, 1) > 1.7 ? 1 : 0.5) : H - bh
 
   const civetta = useRef<PuppetHandle>(null)
   const sparkle = useRef<PuppetHandle>(null)
@@ -87,8 +90,6 @@ export function Square({ onStep, onDone }: { onStep: () => void; onDone: () => v
       await animate(lean, LEAN_MAX, { duration: 2.6, ease: 'easeInOut' })
       clearInterval(creak)
       if (!alive()) return
-      void civetta.current?.play('think')
-      await say(P.soft)
       if (!alive() || placedRef.current > 0) return
       setPrompt({ text: P.weights, speak: true })
     })()
@@ -111,6 +112,12 @@ export function Square({ onStep, onDone }: { onStep: () => void; onDone: () => v
     void sparkle.current?.play(n === 3 ? 'cheer' : 'nod')
     await say(P.better[n - 1])
     if (!alive()) return
+    // Why it leans, once her hands have started the job.
+    if (n === 1 && placedRef.current === 1) {
+      void civetta.current?.play('think')
+      await say(P.soft)
+      if (!alive()) return
+    }
     if (n < 3) {
       if (placedRef.current === n) setPrompt({ text: n === 1 ? P.weightNext : P.weightLast, speak: true })
       return
@@ -200,13 +207,13 @@ export function Square({ onStep, onDone }: { onStep: () => void; onDone: () => v
     civY.set(sGround)
   }, [bw, bh, landscape])
   // Things to drop are a bit smaller on a tall screen, so they hang clear of the tower and stay on screen.
-  const itemScale = landscape ? 1 : 0.72
+  const itemScale = landscape ? 1 : 0.6
   const itemMax = 0.1 * bh * itemScale
   /** Where Civetta hovers: beside the top, with both things hanging clear of the tower. */
   const hover = () => {
     const top = onTower(IH * 0.9)
     const reach = civH * 0.42 + itemMax * 0.5 + 10
-    return { x: Math.min(top.x + half + reach, bw - reach), y: top.y + civH * 0.9 }
+    return { x: Math.min(top.x + half + reach, W - ox - reach), y: Math.max(top.y + civH * 0.9, -oy + 110 + civH) }
   }
 
   const fly = async (to: { x: number; y: number }) => {
@@ -514,7 +521,7 @@ export function Square({ onStep, onDone }: { onStep: () => void; onDone: () => v
         )}
       </AnimatePresence>
       {prompt && !finish && (
-        <div style={{ position: 'absolute', left: 0, right: 0, top: 'var(--top-clear)', display: 'flex', justifyContent: landscape ? 'flex-start' : 'center', padding: landscape ? '0 24px 0 max(24px, 3vw)' : '0 24px', zIndex: 50, pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', left: 0, right: 0, top: 'var(--top-clear)', display: 'flex', justifyContent: H < 560 ? 'flex-end' : landscape ? 'flex-start' : 'center', padding: landscape ? '0 24px 0 max(24px, 3vw)' : '0 24px', zIndex: 50, pointerEvents: 'none' }}>
           <div style={{ pointerEvents: 'auto' }}>
             <PromptBubble text={prompt.text} speak={prompt.speak} />
           </div>

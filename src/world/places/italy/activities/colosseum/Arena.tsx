@@ -51,7 +51,8 @@ export function Arena({ onStep, onDone }: { onStep: () => void; onDone: () => vo
   const bw = Math.max(W, H * ratio)
   const bh = bw / ratio
   const ox = (W - bw) / 2
-  const oy = (H - bh) / 2
+  // On very wide screens (phones sideways) keep the floor and the tunnels, and crop the sky.
+  const oy = (H - bh) * (W / Math.max(H, 1) > 1.7 ? 1 : 0.5)
 
   const cesare = useRef<PuppetHandle>(null)
   const sparkle = useRef<PuppetHandle>(null)
@@ -273,7 +274,9 @@ export function Arena({ onStep, onDone }: { onStep: () => void; onDone: () => vo
   }
 
   const doWave = async (dir: 1 | -1) => {
-    if (phase !== 'finale' || busy.current) return
+    if (phase !== 'finale') return
+    // Still finishing the last wave: a happy cheer so the swipe isn't ignored, then she can go again.
+    if (busy.current) return void setCheerN((n) => n + 1)
     busy.current = true
     setWaveDir(dir)
     setWaveN((n) => n + 1)
@@ -371,7 +374,7 @@ export function Arena({ onStep, onDone }: { onStep: () => void; onDone: () => vo
           ))}
           <Awning bw={bw} bh={bh} pulled={pulled} bottom={lay.canvas} />
 
-          {/* The wave: swipe across the stands. */}
+          {/* The wave: swipe across the stands (anywhere on the screen counts, so friends in front never block it). */}
           {phase === 'finale' && (
             <div
               aria-label="The crowd"
@@ -380,10 +383,10 @@ export function Arena({ onStep, onDone }: { onStep: () => void; onDone: () => vo
               onPointerMove={crowdMove}
               onPointerUp={crowdUp}
               onPointerCancel={() => (swipe.current = null)}
-              style={{ position: 'absolute', left: 0, right: 0, top: lay.canvas * bh, height: floorY - lay.canvas * bh - fh * 0.2, zIndex: 320, touchAction: 'none' }}
+              style={{ position: 'absolute', left: -ox, top: -oy, width: W, height: H, zIndex: 460, touchAction: 'none' }}
             >
               {waves.current === 0 && (
-                <motion.div aria-hidden animate={{ x: [-bw * 0.15, bw * 0.15], opacity: [0, 1, 1, 0] }} transition={{ repeat: Infinity, duration: 1.6 }} style={{ position: 'absolute', left: '50%', top: '42%', translate: '-50% -50%', fontSize: Math.max(48, size * 1.1), pointerEvents: 'none' }}>
+                <motion.div aria-hidden animate={{ x: [-bw * 0.15, bw * 0.15], opacity: [0, 1, 1, 0] }} transition={{ repeat: Infinity, duration: 1.6 }} style={{ position: 'absolute', left: '50%', top: '36%', translate: '-50% -50%', fontSize: Math.max(48, size * 1.1), pointerEvents: 'none' }}>
                   👉
                 </motion.div>
               )}
@@ -438,7 +441,7 @@ export function Arena({ onStep, onDone }: { onStep: () => void; onDone: () => vo
           {/* Ropes to the sun-shade. */}
           {phase === 'shade' &&
             lay.ropes.map((x, i) => (
-              <Rope key={i} x={x * bw} top={lay.ropeTop * bh} rest={lay.handle * bh} pull={lay.pull * bh} done={pulled[i]} glow={!pulled[i] && pulled.filter(Boolean).length === i} onPull={() => void pullRope(i)} onHint={() => void say(C.pullHint)} />
+              <Rope key={i} x={x * bw} top={lay.ropeTop * bh} rest={Math.max(lay.handle * bh, -oy + 130)} pull={lay.pull * bh} done={pulled[i]} glow={!pulled[i] && pulled.filter(Boolean).length === i} onPull={() => void pullRope(i)} onHint={() => void say(C.pullHint)} />
             ))}
 
           {/* Sparkle and Cesare stand at the two ends of the arena floor. */}
@@ -482,7 +485,7 @@ export function Arena({ onStep, onDone }: { onStep: () => void; onDone: () => vo
                 transition={{ type: 'spring', bounce: 0.5 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => void blowHorn()}
-                style={{ position: 'absolute', left: lay.horn.x * bw, top: lay.horn.y * bh, width: Math.max(120, lay.horn.s * bh), height: Math.max(120, lay.horn.s * bh), translate: '-50% -50%', zIndex: 520, background: 'none', border: 'none', borderRadius: '50%', padding: 0 }}
+                style={{ position: 'absolute', left: lay.horn.x * bw, top: Math.max(lay.horn.y * bh, -oy + 110 + Math.max(120, lay.horn.s * bh) / 2), width: Math.max(120, lay.horn.s * bh), height: Math.max(120, lay.horn.s * bh), translate: '-50% -50%', zIndex: 520, background: 'none', border: 'none', borderRadius: '50%', padding: 0 }}
               >
                 <motion.img key={blows} src={art.romanHorn} alt="" draggable={false} animate={blows ? { rotate: [0, -10, 8, -6, 0], scale: [1, 1.15, 1] } : { y: [0, -6, 0] }} transition={blows ? { duration: 1.4 } : { repeat: Infinity, duration: 1.3 }} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
                 {blows > 0 && <Notes key={`n${blows}`} />}
@@ -502,7 +505,7 @@ export function Arena({ onStep, onDone }: { onStep: () => void; onDone: () => vo
         )}
       </AnimatePresence>
       {prompt && !finish && (
-        <div style={{ position: 'absolute', left: 0, right: 0, top: 'var(--top-clear)', display: 'flex', justifyContent: 'center', padding: '0 24px', zIndex: 50, pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', left: 0, right: 0, top: 'var(--top-clear)', display: 'flex', justifyContent: H < 560 ? 'flex-end' : 'center', padding: '0 24px', zIndex: 50, pointerEvents: 'none' }}>
           <div style={{ pointerEvents: 'auto' }}>
             <PromptBubble text={prompt.text} speak={prompt.speak} />
           </div>
@@ -615,8 +618,8 @@ function Rope({ x, top, rest, pull, done, glow, onPull, onHint }: { x: number; t
   const knob = Math.max(92, pull * 0.8)
   return (
     <>
-      <motion.div aria-hidden style={{ position: 'absolute', left: x - 4, top, width: 8, height: len, background: '#C98B5B', border: `3px solid ${INK}`, borderRadius: 4, zIndex: 340 }} />
-      <motion.div style={{ position: 'absolute', left: x - knob / 2, top: rest - 8, y: dy, width: knob, height: knob, zIndex: 341 }}>
+      <motion.div aria-hidden style={{ position: 'absolute', left: x - 4, top, width: 8, height: len, background: '#C98B5B', border: `3px solid ${INK}`, borderRadius: 4, zIndex: 450 }} />
+      <motion.div style={{ position: 'absolute', left: x - knob / 2, top: rest - 8, y: dy, width: knob, height: knob, zIndex: 451 }}>
         <button ref={ref} type="button" aria-label="Rope" className={glow ? 'world-glow' : undefined} style={{ width: '100%', height: '100%', borderRadius: '50%', display: 'grid', placeItems: 'center', touchAction: 'none', cursor: 'grab', background: 'rgba(255,255,255,.01)', border: 'none', padding: 0 }}>
           {/* The wooden toggle and a rope loop */}
           <svg viewBox="-50 -50 100 100" style={{ width: '78%', overflow: 'visible' }}>
