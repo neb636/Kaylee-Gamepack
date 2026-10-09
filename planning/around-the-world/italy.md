@@ -10,6 +10,14 @@ people (Queen Margherita and Raffaele Esposito) in the flat style, and toppings 
 the pink castle). Check it on the iPad. `kit/Flag.tsx` needs an `italy` flag (three vertical stripes: green, white,
 red). It's easy to draw, and we never generate flags.
 
+**2026-10-08: the rebuild.** The first builds of Venice, Snow on a Volcano and the opera (PR #46) followed this plan
+but weren't fun: one-off mechanics, quiz-like choices, lots of talk, layouts that broke on iPhone. From now on each
+activity is re-planned with `ACTIVITY-TEMPLATE.md` (read `docs/play-design.md` first) and rebuilt **one per session and
+PR**, toy first: a greybox of the core verb that Dad plays on the iPad before any art. Venice is re-planned below
+(Sago Mini Boats style). The other activities keep their first descriptions until their own session re-plans them;
+treat those as a list of ideas and facts, not a script. Suggested order: Venice, Snow on a Volcano, the opera finale,
+then whichever built activity Kaylee likes least.
+
 ## The story in one breath
 
 Lupa, an Italian wolf cub, lives in Rome. Every summer there's a big **opera night** in a 2,000-year-old Roman arena
@@ -38,7 +46,7 @@ girl. And a howling wolf who wants to sing is a story a 5-year-old gets right aw
 | Hide-and-seek in a scene | Reef, Passage | **Roman numeral trapdoors**: "Open door III!" and a friend pops up from under the Colosseum floor |
 | Pick the right answer | several | **Predict, then test**: "Which lands first, the big melon or the little lemon?" Drop them off Pisa and see |
 | (nothing yet) | | **Balance**: put heavy weights on the high side so the Leaning Tower stops tipping |
-| Throttle / swipe to move | Bullet Train, Bamboo | **Row a gondola** with oar strokes and follow **left / right** directions |
+| Throttle / swipe to move | Bullet Train, Bamboo | **Drive a water taxi**: grab the gondola, steer it, and deliver friends to the **left / right** |
 | Free drawing | Magic Brush | **Mirror painting**: paint half a Carnival mask and the other half paints itself (symmetry) |
 | Four climates on a train | Bullet Train | **Higher = colder** on one volcano: lead a donkey up Mount Etna from the lemon trees to the snow |
 | Party guests arrive / drag lights / drive a dragon | Party, Light Show, Parade | **Conduct**: big wand swings make the band play *forte* (loud), small ones play *piano* (soft) |
@@ -80,7 +88,7 @@ tre!*). Check the transcription flags from `generate-voice.mjs` and listen to ev
   dolphins jump in the sea, the Leaning Tower wobbles when tapped ("Whoa!"), sailboats bob.
 - Intro (under 6 s): Lupa: "Chow, Kaylee! I'm Lupa!" / "Chow means hello! Help me sing at the opera?"
 
-## The seven activities (any order; 1-6 take 45-90 s each, the Pizzeria about 3-4 min in three short services; each gets harder as it goes)
+## The seven activities (any order; 1.5-3 min of play each with hands busy, the Pizzeria about 3-4 min in three short services; each gets richer as it goes)
 
 ### 1. Pizzeria in Naples 🍕 (the big one: pizza history, the Margherita, the flag)
 
@@ -252,27 +260,108 @@ Dough, Sauce, Toppings, Oven, Cutter, Storybook, services}.tsx`.
 - New tech: a torque/lean model (lean angle springs toward a target set by weight on each side), predict-then-test
   flow, a camera viewfinder photo moment.
 
-### 6. Venice 🛶 (a city on the water, directions, Carnival masks)
+### 6. Venice: Gino's Water Taxi 🛶 (a city on the water, left and right, Carnival masks)
 
-- **Story**: Gino: "Welcome to Venice! Here the streets are water! Hop in my gondola!"
-- **Play**:
-  1. **Row**: each stroke of the oar (drag the oar back in a sweep) makes the gondola glide. Gino sings while they go.
-  2. **Left or right?** At each canal fork Sparkle says "Turn **left** at the pink house!" She taps the left or right
-     arrow sign, or steers with the oar. The wrong way leads to a dead end with a friendly duck; Gino laughs, backs
-     up, and the right sign glows. (Left/right is hard at 5, so her left and right hands light up on screen, and
-     Sparkle gives the hint "the hand with the ring" or "the side with the pink house".)
-  3. **Duck!** A low bridge is coming; tap Sparkle to duck just in time (no timing fail: the gondola slows and waits
-     for her).
-  4. **Mirror mask**: they arrive at a mask shop for **Carnevale** (Venice's famous costume party). She paints and
-     puts stickers on the **left half** of a mask, and the right half copies it like a mirror (symmetry). Gems,
-     feathers, glitter. Sparkle wears the mask, and it stays on for the finale.
-- **Payoff**: fireworks over the lagoon reflect in the water; Gino brings his **accordion** to the band.
-- **Real facts**: Venice is built on water, with over 100 little islands; there are no cars, so even the fire trucks and
-  ambulances are boats (one zooms by); the Rialto is a famous bridge; gondolas are black and rowed with one oar.
-- **Sticker**: Venetian pigeon (or the winged lion of Venice, the city's symbol).
-- New tech: stroke gesture (drag direction + length gives a speed impulse), fork choices baked into a scrolling canal,
-  a mirrored drawing canvas (`perfect-freehand` stroke points reflected across the center line) + `StickerBoard` with
-  mirrored placement.
+Rewritten 2026-10-08 after the first build missed (see "What went wrong" in `docs/play-design.md`). Model: **Sago Mini
+Boats** (grab the boat and go, stop to meet friends, silly boats) and **Toca Boca** (a little world where everything
+reacts and nothing is wrong). Uses `ACTIVITY-TEMPLATE.md`.
+
+**One-line pitch:** Gino the pigeon runs Venice's pinkest water taxi; Kaylee drives it up and down the canal, picking
+up friends and taking them home, until the whole canal is lit up for the Carnevale fireworks.
+
+**The toy (core verb): grab the gondola and drive it.** She puts her finger on the gondola and pulls: it surges after
+her finger with a little water lag, leaves a foamy wake, bobs and tilts, and slows down softly when she lets go.
+Pull right and the canal scrolls right; pull left and the boat turns around (a happy little spin) and goes left. Pull it
+down a bit and it rides close to the front edge of the water; up a bit and it rides by the houses (two "lanes", so she
+can steer around things). Gino rows faster the faster she pulls, and sings when they're going fast.
+- How it feels: a bathtub toy. Heavy enough to drift, light enough to bounce off a post with a *boing* and a wobble.
+- Why it's fun with no goal: pushing a boat through water and watching the wake and the splashes is fun on its own;
+  the canal is full of things to bump into and poke. Greybox test: a brown rectangle on a blue band, posts and boxes for
+  houses, a wake made of circles. If dragging that around isn't fun for 30 seconds, tune the feel before anything else.
+
+**How the verb deepens (same verb, three times):**
+1. **Cruise (just the toy).** No goal for the first moments: Gino says "Grab my gondola!" and she drives. Mooring posts
+   to boing off, pigeons on the posts that scatter, a duck family that follows the boat if she goes slowly. After she's
+   driven a bit (or ~15 s), the first friend waves from a doorstep.
+2. **Water taxi (deliveries, left and right by driving).** Friends wait on doorsteps along the canal. She steers close
+   to a doorstep and they hop in (Lupa, Spina, Cesare, a nonna pigeon with shopping). Each says where they want to go:
+   "To the pink house, please!" Sparkle adds **"It's to the LEFT!"** and a left hand glows at the left edge of the
+   screen (the hand on the same side as the house). She drives there; when the boat comes near the right doorstep the
+   friend hops off with a thank-you and a little gift. If she goes the other way, nothing is wrong: the friend points
+   and giggles "Other way!", the hand pulses, and there's more canal to enjoy on the way back. 3-4 rides: first
+   the house is on screen, then just off screen, then she hears only "left" or "right" (the house is far away).
+   Left and right are the screen's sides, which are also *her* left and right while she holds the iPad, so it's real
+   left/right, not the boat's.
+3. **Acqua alta (the water rises).** A gentle "bloop bloop": high tide comes in (real: Venice's *acqua alta*). The
+   water level climbs, so the bridges get **lower**. Now when a low bridge comes she taps Sparkle (or Gino) to duck; if
+   she doesn't, Gino's hat bonks off and floats behind them, and she can drive back to scoop it up (silly, never a
+   failure). The pigeons in the square stand in the water in tiny rain boots, and people cross on raised wooden
+   walkways (real *passerelle*). Last ride of the tide: take Gino to the mask shop.
+
+**Side verb (one): the mirror mask.** At the mask shop for **Carnevale**, she paints the left half of a mask with her
+finger (big brush, 5 colors, glitter) and the right half paints itself like a mirror; then she presses gems on, and each
+gets a twin. Short and free: no target pattern, a check button when she likes it. Sparkle wears it at the finale.
+
+**Her choices:** which boat at the start (the real black gondola, a pink swan gondola, a bathtub with a rubber duck,
+a pizza-slice boat: silly, Sago-style, and a different one next time); which friend to pick up first (two wave at
+once); where to drive between rides; her mask colors and gems.
+
+**Pokeables (all react, none are the answer):** shutters that open (a cat stretches, a nonna shakes out a tablecloth,
+a baby pigeon waves), laundry lines that flap, a bell tower that bongs, the duck family (quack and dive), pigeons
+(scatter and come back), the **water ambulance** that zooms by (tap: siren and wave, "even ambulances are boats!"),
+a **vaporetto** water bus (tap: it toots back), a fire boat that sprays a rainbow arc, the winged lion statue
+(tap: a tiny roar), and splashing the water itself.
+
+**Silly moments instead of failure:** bump a post: boing and Gino's eyes spin; go the wrong way: the friend points and
+laughs; skip the duck: hat overboard; drive in circles: Gino gets dizzy and sings off-key; drive really fast: big
+spray and a "Wheee!".
+
+**Story frame (≤ 2 lines):** Gino: "Ciao, Kaylee! In Venice, the streets are water!" / "Grab my gondola!"
+Sparkle talks only when: the first friend waves, a destination is given ("It's to the LEFT!"), the tide starts, the
+first low bridge appears, she hasn't moved for ~8 s ("Pull the boat!"), and the mask shop. Friends do the rest in their
+own voices with short lines ("Grazie!", "Other way!", "Wheee!").
+
+**What it teaches, by doing:** Venice is a city on water where boats are the cars (she *is* the taxi); left and right
+(she drives that way); high water and why bridges matter (she ducks); symmetry (the mirror mask). Tap-to-hear facts
+(stamp screen, passport): Venice is built on 118 little islands with more than 400 bridges; there are no cars, so
+ambulances, fire trucks and buses are boats; gondolas are black and rowed with one oar; gondoliers sing.
+
+**Payoff (builds while she plays):** each friend she drops off hangs a lantern on the line over the canal, and the
+canal fills with light as it gets toward evening; after the mask, it's night: fireworks over the lagoon reflect in
+the water, every friend she drove waves from a window, and Gino brings his **accordion** to Lupa's band.
+
+**Replay:** pick a different boat; the friends, their houses and their gifts are shuffled each time; her mask is saved.
+
+**Numbers:** about 30-40 touches in 2-3 minutes (drives count as touches; the duck taps and pokeables add more), nearly
+all of them driving or poking, only the destination is a "question", and she answers it by driving. 2 lines before
+the first touch.
+
+**Camera and art:** straight-on side view (theater stage), like the other Italy scenes. A canal world about 5 screens
+wide that scrolls both ways, built from layers that move at different speeds:
+- sky with drifting clouds (slowest), far bell towers and domes (slow), the row of canal houses (the canal's speed),
+  mooring posts and a near walkway edge (faster), and the water (drawn in code: moving wave lines, wake and splashes).
+- **The houses are separate sprites**, about 8 different facades (pink, butter, lavender, peach... one clearly *the*
+  pink house, a mask shop with a striped awning), laid out in code so the street never repeats or mirrors. Shutters,
+  laundry and window friends are their own small sprites on top of the facades.
+- Bridges (3 heights) and the Rialto as foreground sprites the boat passes under; boats (gondola variants, vaporetto,
+  ambulance, fire boat) as sprites. No emoji in the scene; the left and right hands are UI chips drawn in the same style.
+- Puppets: **Gino becomes a puppet** (rowing arms, hat on a spring that can pop off, a dizzy face, a singing beak),
+  Sparkle rides on the cushion (`SparklePuppet`, ducks with a squash). The friends who ride are their puppets from the
+  other activities, sitting in the boat.
+
+**Screens:** the logical stage is the canal band: water plus the ground floor and first floor of the houses must always
+be in view; the extra height on tall screens shows more sky and rooftops (portrait iPad gets the full houses and bell
+towers), the extra width shows more canal. iPhone landscape shows the water band and the boat bigger, with rooftops cut;
+the boat, the doorsteps and the bridges always fit under the top bar.
+
+**Tech:** DOM + `useGameLoop` (a camera x, parallax layers as transforms, the boat as a spring toward her finger),
+because the puppets ride in the boat and only a handful of things move at once. Phaser isn't needed. Riskiest piece to
+prototype first: the boat-drag feel (lag, drift, the turnaround spin, bouncing off posts) at iPad and iPhone sizes,
+with a 60 fps camera in Safari. The mirror mask reuses the first build's `MaskShop` idea (strokes reflected across the
+center line).
+
+**Gates:** (1) greybox: drive the box boat along a box canal with posts and one doorstep friend; Dad plays it.
+(2) Art: the house sprites, layers, boats, Gino's puppet. (3) The rides, the tide, the mask, voices, QA.
 
 ### 7. Snow on a Volcano 🌋🍋 (Sicily: weather and altitude, lemon granita)
 
@@ -420,7 +509,7 @@ Volcano), the Frecce Tricolori air show, and an overview of Italy.
 4. Puppet animation (howl, pounce, wag; toss, catch, laugh) with filmstrip passes.
 5. **Pizzeria first** (the showpiece): Service 1 end to end → `playtest-qa` → Services 2-3.
 6. Then the rest, in the order that reuses the most tech: Olive Grove (pour, rake) → Trevi (arches, water) → Colosseum
-   (numerals, ropes) → Pisa (balance, drop) → Venice (rowing, mirror) → Etna (path follow, thermometer).
+   (numerals, ropes) → Pisa (balance, drop) → Venice (drive the boat, mirror) → Etna (path follow, thermometer).
 7. Finale: candles, conducting (stroke amplitude → volume, stroke rate → tempo), Lupa's note, Frecce Tricolori, `onWin()`.
 8. `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`, then listen to every Italian word.
 9. `npm run check`, then `qa-screens`, `qa-motion`, `qa-pacing` and the `playtest-qa` agent; fix and repeat.
@@ -453,4 +542,5 @@ Volcano), the Frecce Tricolori air show, and an overview of Italy.
    gondola parade** (masks, fireworks on the water)? The opera frame ties the band and Lupa's story together.
 4. **Pizza toppings**: keep it veggie + olives (easy to draw, plus the *peperoni* joke), or add salami for realism?
 5. Is **left/right** in Venice OK at her level? If it's too hard, the canal signs become **colors** ("follow the pink
-   house") and left/right becomes the hint.
+   house") and left/right becomes the hint. (The 2026-10-08 Venice rewrite does both: the house is the target and
+   "left"/"right" is the screen side she drives toward, with a glowing hand on that side.)

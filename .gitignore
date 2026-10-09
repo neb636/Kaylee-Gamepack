@@ -10,5 +10,5 @@ art/source/games/
 .env
 # Full-size generated world art is scratch space too
 art/source/world/
-# Luna QA screenshots and reports
+# QA screenshots and reports
 qa-output/

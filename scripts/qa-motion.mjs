@@ -11,7 +11,7 @@ import { spawnSync } from 'node:child_process'
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import sharp from 'sharp'
-import { browserName, device, flag, launch, openApp, out, serve, skip, VIEWPORTS } from './qa-lib.mjs'
+import { browserName, device, filmstrip, flag, launch, openApp, out, serve, skip, VIEWPORTS } from './qa-lib.mjs'
 
 const dir = path.join(out, 'motion')
 const vp = VIEWPORTS.find((v) => v.name === (flag('viewport') ?? 'ipad-landscape')) ?? VIEWPORTS[1]
@@ -72,6 +72,18 @@ const PUPPET_SCENARIOS = [
   ['baobao', 'roll', 1.6],
   ['baobao', 'climb', 1.7],
   ['baobao-bamboo', 'munch', 1.7],
+  ['lupa', 'howl', 1.9],
+  ['lupa', 'hop', 0.9],
+  ['lupa', 'wag', 1.3],
+  ['bruno', 'toss', 1.6],
+  ['bruno', 'laugh', 1.6],
+  ['spina', 'shake', 1.1],
+  ['spina', 'puff', 1.1],
+  ['cesare', 'flick', 1.1],
+  ['cesare', 'bow', 1.4],
+  ['civetta', 'swivel', 1.4],
+  ['civetta', 'flap', 1.1],
+  ['civetta', 'hoot', 1.1],
 ].map(([id, action, seconds]) => ({
   name: `${id}-${action}`,
   seconds,
@@ -325,23 +337,6 @@ async function film(page, clip, seconds, act) {
   const err = await acting
   if (err instanceof Error) throw err
   return frames
-}
-
-async function filmstrip(frames, file) {
-  const picks = Array.from({ length: 12 }, (_, i) => frames[Math.round((i * (frames.length - 1)) / 11)])
-  const w = 320
-  const meta = await sharp(picks[0].buf).metadata()
-  const h = Math.round((meta.height / meta.width) * w)
-  const tiles = await Promise.all(
-    picks.map(async ({ t, buf }) => {
-      const label = Buffer.from(`<svg width="${w}" height="${h}"><rect x="4" y="4" width="62" height="24" rx="8" fill="rgba(0,0,0,.55)"/><text x="12" y="22" font-family="sans-serif" font-size="16" fill="#fff">${t.toFixed(2)}s</text></svg>`)
-      return sharp(buf).resize(w, h).composite([{ input: label }]).png().toBuffer()
-    }),
-  )
-  await sharp({ create: { width: 4 * w + 12, height: 3 * h + 8, channels: 3, background: '#fff' } })
-    .composite(tiles.map((input, i) => ({ input, left: (i % 4) * (w + 4), top: Math.floor(i / 4) * (h + 4) })))
-    .png()
-    .toFile(file)
 }
 
 async function gif(frames, file) {
