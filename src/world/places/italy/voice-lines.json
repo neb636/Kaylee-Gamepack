@@ -555,70 +555,6 @@
     "voice": "lupa"
   },
   {
-    "text": "Hoo! I am Professoressa Civetta!",
-    "voice": "civetta"
-  },
-  {
-    "text": "My tower leans more and more! Help!",
-    "voice": "civetta"
-  },
-  "The tower leans because the ground is soft!",
-  "Drag a heavy weight to the high side!",
-  "Another weight!",
-  "One more weight!",
-  "Oops! Put it on the other side!",
-  {
-    "text": "Hoo! It leans more!",
-    "voice": "civetta"
-  },
-  {
-    "text": "Hoo! It is getting better!",
-    "voice": "civetta"
-  },
-  {
-    "text": "Yes! Keep going!",
-    "voice": "civetta"
-  },
-  {
-    "text": "It stopped! Hoo-ray!",
-    "voice": "civetta"
-  },
-  "It still leans a little. That is why it is famous!",
-  "Builders really did this, with heavy weights!",
-  "Let's take the famous photo!",
-  "Drag Sparkle until her hoof holds up the tower!",
-  "Closer to the tower!",
-  "Say cheese! Snap!",
-  "A scientist named Galileo lived here!",
-  {
-    "text": "Let's drop things from the top! Like Galileo!",
-    "voice": "civetta"
-  },
-  "Which one lands first? Tap it!",
-  "Tap the drop button!",
-  "They land at the same time!",
-  "Heavy and light fall just as fast!",
-  "The feather floats down slowly!",
-  "The air pushes the feather!",
-  "Now you pick! Tap two things to drop!",
-  "Pick one more!",
-  "You were right!",
-  "Good guess!",
-  {
-    "text": "The tower is a bell tower! Seven bells!",
-    "voice": "civetta"
-  },
-  "Tap the bells, one by one!",
-  "Do, re, mi! Music!",
-  {
-    "text": "Grazie! My bells, for Lupa's band!",
-    "voice": "civetta"
-  },
-  {
-    "text": "Yay! Bells for the band!",
-    "voice": "lupa"
-  },
-  {
     "text": "Ciao, Kaylee! In Venice, the streets are water!",
     "voice": "gino"
   },
@@ -826,16 +762,6 @@
     "voice": "civetta"
   },
   "A lantern for the canal!",
-  "High water! Acqua alta!",
-  "Low bridge! Tap Gino to duck!",
-  {
-    "text": "Bonk! My hat!",
-    "voice": "gino"
-  },
-  {
-    "text": "My hat! Grazie!",
-    "voice": "gino"
-  },
   {
     "text": "Now take me to the mask shop!",
     "voice": "gino"
@@ -862,14 +788,12 @@
   "Brown bear sticker! Bears live in the mountains of Italy!",
   "Porcupine sticker! Crested porcupines live in Italy!",
   "Cat sticker! Lots of cats live in the old ruins of Rome!",
-  "Little owl sticker! Little owls live all over Italy!",
   "Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!",
   "Pigeon sticker! Lots of pigeons live in Venice!",
   "Let's see how olive oil is made!",
   "Let's toss a coin in the real Trevi Fountain!",
   "Look! A real Roman water bridge!",
   "Let's see the real Colosseum in Rome!",
-  "Let's see the real Leaning Tower!",
   "Venice is a city on the water! It has more than four hundred bridges, and the buses and ambulances are boats!",
   "In Italy, people say ciao! It means hello and goodbye!",
   "Grazie means thank you!",
@@ -883,7 +807,6 @@
   "Italy's flag has three stripes: green, white and red!",
   "Some olive trees in Italy are more than a thousand years old!",
   "Romans wrote five like this: V!",
-  "The Leaning Tower of Pisa leans because the ground is soft!",
   "The story says a kind mama wolf took care of the twins who built Rome!",
   "This is Italy! Tap a picture to learn more."
 ]

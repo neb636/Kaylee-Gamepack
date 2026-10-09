@@ -6,13 +6,10 @@ import catWindow from '../../assets/venice-cat-window.webp'
 import duck from '../../assets/venice-duck.webp'
 import duckling from '../../assets/venice-duckling.webp'
 import fireboat from '../../assets/venice-fireboat-hd.webp'
-import hand from '../../assets/venice-hand.webp'
 import lantern from '../../assets/venice-lantern.webp'
 import laundry from '../../assets/venice-laundry-hd.webp'
 import lion from '../../assets/venice-lion.webp'
 import nonnaWindow from '../../assets/venice-nonna-window.webp'
-import passerella from '../../assets/venice-passerella-hd.webp'
-import pigeonBoots from '../../assets/venice-pigeon-boots.webp'
 import pigeonFly from '../../assets/venice-pigeon-fly.webp'
 import pigeon from '../../assets/venice-pigeon.webp'
 import vaporetto from '../../assets/venice-vaporetto-hd.webp'
@@ -20,7 +17,6 @@ import boatBathtub from '../../assets/venice-boat-bathtub-hd.webp'
 import boatGondola from '../../assets/venice-boat-gondola-hd.webp'
 import boatPizza from '../../assets/venice-boat-pizza-hd.webp'
 import boatSwan from '../../assets/venice-boat-swan-hd.webp'
-import bridgeHigh from '../../assets/venice-bridge-high-hd.webp'
 import bridgeLow from '../../assets/venice-bridge-low-hd.webp'
 import bridgeMid from '../../assets/venice-bridge-mid-hd.webp'
 import cloud1 from '../../assets/venice-cloud-1.webp'
@@ -65,7 +61,6 @@ export const BOAT_FEEL: Record<BoatKind, { speed: number; drag: number; rock: nu
 export const BRIDGES = {
   low: { img: bridgeLow, aspect: 2.943, opening: 0.3 },
   mid: { img: bridgeMid, aspect: 1.835, opening: 0.5 },
-  high: { img: bridgeHigh, aspect: 1.501, opening: 0.7 },
 } as const
 
 export const skyline = { belltower: { img: farBelltower, aspect: 0.174 }, dome: { img: farDome, aspect: 1.524 }, rooftops: { img: farRooftops, aspect: 2.829 } } as const
@@ -76,7 +71,6 @@ export const posts = { near: postBlue, front: postPink, aspect: 0.148 } as const
 export const critters = {
   pigeon: { img: pigeon, aspect: 0.969 },
   pigeonFly: { img: pigeonFly, aspect: 1.145 },
-  pigeonBoots: { img: pigeonBoots, aspect: 0.906 },
   duck: { img: duck, aspect: 1.43 },
   duckling: { img: duckling, aspect: 1.151 },
   lion: { img: lion, aspect: 0.604 },
@@ -93,5 +87,5 @@ export const TRAFFIC = {
   fireboat: { img: fireboat, aspect: 2.246, length: 300 },
 } as const
 export type TrafficKind = keyof typeof TRAFFIC
-export const ui = { hand: { img: hand, aspect: 0.811 }, lantern: { img: lantern, aspect: 0.803 } } as const
-export const props = { laundry: { img: laundry, aspect: 3.821 }, passerella: { img: passerella, aspect: 8.678 } } as const
+export const ui = { lantern: { img: lantern, aspect: 0.803 } } as const
+export const props = { laundry: { img: laundry, aspect: 3.821 } } as const

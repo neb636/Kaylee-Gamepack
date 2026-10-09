@@ -7,8 +7,8 @@ export const FEEL = {
   /** How hard the boat chases her finger (spring stiffness) and how much the water holds it back (damping). */
   followK: 34,
   followDamp: 8.5,
-  /** Top speed in units per second (a wide screen is ~1200 units across). */
-  maxSpeed: 900,
+  /** Top speed in units per second (a wide screen is ~1200 units across). Slow enough that she can stop at a door. */
+  maxSpeed: 600,
   /** Coasting after she lets go: speed is multiplied by exp(-coastDrag * seconds) (1.1 = half speed in ~0.6 s). */
   coastDrag: 1.1,
   /** Up/down between the two lanes: follow stiffness while dragging, settle stiffness after she lets go. */
@@ -40,14 +40,16 @@ export const FEEL = {
    *  (units) the boat must be from the post's lane to slip past (lanes are 152 apart, so 40 = about a quarter of the way over). */
   postHitLength: 0.78,
   postHitDepth: 40,
-  /** Post height above the water (units). */
-  postHeight: 140,
+  /** Post height above the water (units). Short, so they don't hide the doors behind them. */
+  postHeight: 95,
   dodgeAfter: 2,
   dodgeKick: 380,
   /** Wake: a foam circle every N units travelled, how long each lives (s); spray droplets above this speed. */
   wakeEvery: 36,
   wakeLife: 1.1,
-  sprayAbove: 560,
+  sprayAbove: 380,
+  /** Going this fast (units/s) for a moment makes Gino sing "Wheee!". */
+  wheeeAbove: 520,
   /** Camera: it leads the boat by its speed × leadTime (at most maxLead of the screen width), catching up at cameraRate/s.
    *  It leads by speed, not by the way the boat faces, so a finger resting on a still boat never makes it creep. */
   leadTime: 0.3,
@@ -143,27 +145,17 @@ export const doorX = (i: number) => HOUSES[i].x + HOUSES[i].door
 
 export const MASKSHOP = HOUSES.findIndex((h) => h.facade === 'maskshop')
 
-/** Bridges over the main canal (drawn in front of the boat, which passes under them): canal x of the center and width.
- *  Their arch tops (crowns) all sit at BRIDGE_CROWN: Gino's hat clears it in normal water, but at high water (TIDE) the
- *  boat rises and he has to duck. Kept away from the pink house and the mask shop doors. */
 const mid = (i: number) => Math.round((doorX(i) + doorX(i + 1)) / 2)
-export const MAIN_BRIDGES: { x: number; w: number }[] = []
-export const BRIDGE_CROWN = -110
-/** How far the water rises at acqua alta (units). */
-export const TIDE = 72
 
 /** Mooring posts: x along the canal and which lane they stand in. Near-lane posts stand halfway between two doors (a
  *  post in that lane shields the doors behind it, so she dodges round through the front lane; see FEEL.dodgeAfter). */
 const between = mid
+/** Few and far apart (about one per screen), so there is room to steer round each one. */
 export const POSTS: { x: number; lane: 'near' | 'front' }[] = [
   { x: between(1), lane: 'near' },
-  { x: Math.round(CANAL * 0.2), lane: 'front' },
-  { x: between(4), lane: 'near' },
-  { x: Math.round(CANAL * 0.47), lane: 'front' },
+  { x: Math.round(CANAL * 0.44), lane: 'front' },
   { x: between(8), lane: 'near' },
-  { x: Math.round(CANAL * 0.72), lane: 'front' },
-  { x: between(11), lane: 'near' },
-  { x: Math.round(CANAL * 0.93), lane: 'front' },
+  { x: Math.round(CANAL * 0.86), lane: 'front' },
 ]
 
 /** The far skyline (period FAR): bell towers, a domed church and rooftop clusters, standing on y = -180 (behind the
@@ -194,8 +186,6 @@ export const BOLLARDS = [90, 520, 860, 1260]
 /** Wrap a distance along a loop of length `period` into [-period/2, period/2). */
 export const wrap = (d: number, period: number) => ((((d + period / 2) % period) + period) % period) - period / 2
 export const mod = (a: number, n: number) => ((a % n) + n) % n
-
-MAIN_BRIDGES.push({ x: doorX(3) + 260, w: 1000 }, { x: mid(8), w: 900 }, { x: SIDE_CANALS[2].x + SIDE / 2, w: 950 })
 
 /** The duck family's home on the water (canal x); they paddle after the boat when it goes slowly nearby. */
 export const DUCK_HOME = Math.round(CANAL * 0.35)

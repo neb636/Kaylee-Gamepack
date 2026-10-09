@@ -1,9 +1,9 @@
-// Professoressa Civetta, a little owl scientist from Pisa: a layered SVG puppet (reference:
+// Professoressa Civetta, a little Italian owl scientist: a layered SVG puppet (reference:
 // art/source/world/italy/civetta.png). A chubby round owl (little owls have no ear tufts) with a speckled brown back, a
 // cream belly with brown chevrons, huge lemon-yellow eyes behind round pink glasses and a tiny peach beak. Her signature
 // move is `swivel`: like a real owl, her head turns all the way round to show the back of her head (little owls have two
 // pale "false eye" spots there), then comes back from the other side. `hold` raises both wings out to the sides to hold
-// things up (Galileo's drop); `flying` beats the wings and tucks the feet.
+// things up; `flying` beats the wings and tucks the feet.
 import { forwardRef, useId, useRef, useState, type CSSProperties } from 'react'
 import { bell, lerp, setA, setT, show, smooth, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../sdk'
 import { BLUSH, EYE, INK, inkPass, line, useInk } from './ink'
