@@ -60,7 +60,8 @@ export const WATER_H = 330
 export const BOAT = { length: 264, halfLength: 124, scale: 264 / 230 } as const
 
 /** The logical stage: the smallest canal area that must always show (wide screens / tall screens), scaled to fit. */
-export const STAGE = { wideW: 1200, tallW: 760, minH: 600 } as const
+/** phoneW: very tall screens (phone portrait) zoom in further, so the boat stays big enough to grab. */
+export const STAGE = { wideW: 1200, tallW: 760, phoneW: 600, minH: 600 } as const
 
 export interface House {
   x: number

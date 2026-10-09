@@ -44,8 +44,8 @@ interface Particle {
 }
 
 function layoutFor(W: number, H: number): Layout {
-  const wide = W > H
-  const s = Math.min(W / (wide ? STAGE.wideW : STAGE.tallW), H / STAGE.minH)
+  const stageW = W > H ? STAGE.wideW : H / W > 1.7 ? STAGE.phoneW : STAGE.tallW
+  const s = Math.min(W / stageW, H / STAGE.minH)
   return { W, H, s, viewW: W / s, waterTop: H - WATER_H * s }
 }
 
@@ -170,7 +170,8 @@ export function Venice({ setProgress }: ActivityProps) {
 
   useGameLoop((dt) => {
     const L = layoutRef.current
-    if (!L) return
+    // Two frames can share a timestamp (dt = 0): skip it, or the tilt filter divides by zero and the NaN sticks forever.
+    if (!L || dt <= 0) return
     const s = g.current
     s.t += dt
     const prevVx = s.vx
