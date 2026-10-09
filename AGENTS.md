@@ -360,7 +360,6 @@ QA (after `npm run build`; WebKit, because the iPad runs Safari: `npx playwright
   2. The `playtest-qa` agent (Opus) reads that report, the play strips, filmstrips, pacing and the activity code, scores
      each activity on the fun check in `docs/play-design.md` (fun / OK / thin) and writes the ranked to-do list
      `qa-output/playtest-report.md`. Fix it and run both again.
-  `luna-qa` (Luna in Codex) is an optional second opinion from a different model, not part of the normal loop.
 - QA passing means it works, not that it's fun. Only Dad's iPad test of the greybox and the finished activity says that.
 - Lip sync and sound can't be heard by automated browsers: listen on the iPad.
 
