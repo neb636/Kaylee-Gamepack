@@ -25,6 +25,10 @@ she get stuck?** Spend your effort there, not on re-checking pixels.
   for its characters. Open those images with Read.
 - Spot-check layout-qa: open 3-4 screenshots it listed as fine for the activities under test, and every screenshot
   behind its blocker/major findings. If it missed something real, add it and note "missed by layout-qa".
+- White patches in cutouts: open every `qa-output/art/*.png` sheet for sprites used by the activities under test and
+  check layout-qa's hole / fine calls (a white gap between legs, inside a handle or between railings is a hole; eye
+  whites, clouds and white food are fine). Holes go in your findings as **major**, even though they look small: they
+  are what Dad keeps catching in PR review.
 
 If you need a moment the scripts don't capture, you may run a single script with `--only=` / `--routes=`.
 
