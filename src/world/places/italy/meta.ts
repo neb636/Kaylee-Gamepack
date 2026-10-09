@@ -3,7 +3,7 @@ import { art } from './art'
 import { L } from './lines'
 
 // Italy is being built in stages (plan: planning/around-the-world/italy.md). The Pizzeria, the Olive Grove, the Trevi Fountain,
-// the Colosseum and the Leaning Tower are built; the other two arches on the boot map (see SPOTS in Place.tsx) say "coming soon" until their activities exist.
+// the Colosseum and the Leaning Tower are built, and Venice is a greybox toy (gate 1); Etna (see SPOTS in Place.tsx) says "coming soon" until its activity exists.
 const meta: PlaceMeta = {
   id: 'italy',
   name: 'Italy',
@@ -17,6 +17,8 @@ const meta: PlaceMeta = {
     { id: 'olives', name: 'Olive Grove', icon: '🫒', pos: { x: 83, y: 57 }, sticker: { name: 'Crested porcupine', img: art.spina, fact: L.stickers.olives } },
     { id: 'colosseum', name: 'The Colosseum', icon: '🏛️', pos: { x: 48, y: 41 }, sticker: { name: 'Roman cat', img: art.cesare, fact: L.stickers.colosseum } },
     { id: 'pisa', name: 'Leaning Tower', icon: '🗼', pos: { x: 39.5, y: 27 }, sticker: { name: 'Little owl', img: art.civetta, fact: L.stickers.pisa } },
+    // Gate 1 greybox: the sticker line gets its voice with the rest of Venice's lines in gate 3.
+    { id: 'venice', name: 'Venice', icon: '🛶', pos: { x: 59, y: 19 }, sticker: { name: 'Pigeon', img: art.gino, fact: 'Pigeon sticker! Lots of pigeons live in Venice!' } },
     { id: 'trevi', name: 'Trevi Fountain', icon: '⛲', pos: { x: 58.5, y: 45 }, sticker: { name: 'Italian wolf', img: art.lupa, fact: L.stickers.trevi } },
   ],
   facts: [

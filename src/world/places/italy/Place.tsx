@@ -13,6 +13,7 @@ import { OliveGrove } from './activities/olives/OliveGrove'
 import { Pisa } from './activities/pisa/Pisa'
 import { Pizzeria } from './activities/pizzeria/Pizzeria'
 import { Trevi } from './activities/trevi/Trevi'
+import { Venice } from './activities/venice/Venice'
 import { art } from './art'
 import { L } from './lines'
 import { INK } from './puppets/ink'
@@ -23,12 +24,12 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria, olives: OliveGrove, trevi: Trevi, colosseum: Colosseum, pisa: Pisa }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria, olives: OliveGrove, trevi: Trevi, colosseum: Colosseum, pisa: Pisa, venice: Venice }
 
 /** The seven arches on the boot map, on their landmarks in scene-italy-map (in % of the picture), and the instrument each
  *  friend brings to Lupa's band. Only activities listed in meta.activities are playable; the rest say "coming soon". */
 const SPOTS = [
-  { id: 'venice', name: 'Venice', icon: '🛶', x: 59, y: 19, band: '🪗' },
+  { id: 'venice', name: 'Venice', icon: '🛶', x: 59, y: 19, face: art.gino, band: '🪗' },
   { id: 'pisa', name: 'Leaning Tower', icon: '🗼', x: 39.5, y: 27, face: art.civetta, band: '🔔' },
   { id: 'colosseum', name: 'The Colosseum', icon: '🏛️', x: 48, y: 41, face: art.cesare, band: art.romanHorn },
   { id: 'trevi', name: 'Trevi Fountain', icon: '⛲', x: 58.5, y: 45, face: art.lupa, band: '⭐' },

@@ -320,6 +320,35 @@ const GAME_SCENARIOS = [
   },
 ]
 
+// Venice greybox: grab the gondola, pull it right (wake, tilt, the canal scrolls), then back left (the happy spin).
+const veniceDrive = (name, seconds, moves) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/italy/venice`)
+    await page.waitForTimeout(1200)
+  },
+  act: async (page) => {
+    const b = await page.locator('[aria-label="gondola"]').boundingBox()
+    if (!b) throw new Error('no gondola found')
+    // The gondola element is its waterline anchor; grab just above it, on the hull.
+    const x = b.x
+    const y = b.y - 30
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    for (const [dx, dy, ms] of moves) {
+      const steps = Math.max(2, Math.round(ms / 40))
+      await page.mouse.move(x + dx * vp.width, y + dy * vp.height, { steps })
+      await page.waitForTimeout(ms)
+    }
+    await page.mouse.up()
+  },
+})
+GAME_SCENARIOS.push(
+  veniceDrive('venice-drive', 3.2, [[0.3, 0, 1200], [0.3, -0.1, 600], [-0.35, -0.1, 900]]),
+  veniceDrive('venice-coast', 2.4, [[0.35, 0, 450]]),
+)
+
 const all = [...PUPPET_SCENARIOS, ...GAME_SCENARIOS].filter((s) => !flag('only') || flag('only').split(',').includes(s.name))
 
 const ffmpeg = (a) => spawnSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...a], { encoding: 'utf8' })
