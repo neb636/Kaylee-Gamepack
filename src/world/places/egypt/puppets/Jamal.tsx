@@ -23,7 +23,7 @@ const line = (width?: number) => lineIn(width, INK)
 export const JAMAL_ACTIONS = { walk: 1.1, chew: 1.3, cheer: 1.1, shake: 0.9, nod: 0.7, wiggle: 0.6, dance: 1.8 }
 
 type Leg = 'legBL' | 'legBR' | 'legFL' | 'legFR'
-type Part = 'root' | 'shadow' | 'neck' | 'head' | 'tail' | Leg | 'eyes' | 'lidL' | 'lidR' | 'lidLineL' | 'lidLineR' | 'happy' | 'jaw' | 'mouth' | 'earL' | 'earR'
+type Part = 'root' | 'shadow' | 'neck' | 'head' | 'tail' | Leg | 'eyes' | 'lidL' | 'lidR' | 'lidLineL' | 'lidLineR' | 'happy' | 'jaw' | 'mouth' | 'smile' | 'earL' | 'earR'
 
 // Leg tops (hips and shoulders), in viewBox units.
 const LEGS: { id: Leg; x: number; back: boolean; phase: number }[] = [
@@ -55,7 +55,7 @@ export const Jamal = forwardRef<PuppetHandle, JamalProps>(function Jamal({ heigh
       let rot = 0
       let neckTarget = Math.sin(t * 0.9) * 3 + look.y * 3
       let headTarget = look.x * 6 + Math.sin(t * 1.3) * 2
-      let lid = 0.22 // gentle, slightly sleepy eyes
+      let lid = 0.1 // relaxed, friendly eyes
       let happy = false
       let jaw = f.mouth * 0.9
       let tailWag = Math.sin(t * 1.4) * 8
@@ -144,7 +144,8 @@ export const Jamal = forwardRef<PuppetHandle, JamalProps>(function Jamal({ heigh
         setA(edge, 'd', closed > 0.04 ? `M${x - w} ${y} Q${x} ${y + 5} ${x + w} ${y}` : '')
       }
       const j = Math.min(1, jaw)
-      setT(p.jaw, `translate(0 ${j * 12}) rotate(${j * 4} 470 146)`)
+      setT(p.jaw, `translate(0 ${j * 5})`)
+      show(p.smile, j <= 0.05)
       setA(p.mouth, 'd', j > 0.05 ? `M446 146 Q470 ${146 + 4 + 14 * j} 494 146 Z` : '')
       ink.sync(p)
     },
@@ -154,8 +155,9 @@ export const Jamal = forwardRef<PuppetHandle, JamalProps>(function Jamal({ heigh
 
   const leg = (l: (typeof LEGS)[number], pass: boolean) => (
     <g key={l.id} ref={r(l.id, pass)}>
-      <path fill={l.back ? FUR_DARK : FUR} d={`M${l.x - 16} 290 L${l.x - 12} 370 C${l.x - 18} 380 ${l.x - 18} 392 ${l.x - 11} 400 L${l.x - 10} 446 L${l.x + 10} 446 L${l.x + 11} 400 C${l.x + 18} 392 ${l.x + 18} 380 ${l.x + 12} 370 L${l.x + 16} 290 Z`} />
-      <path fill={HOOF} d={`M${l.x - 16} 444 C${l.x - 18} 462 ${l.x + 20} 462 ${l.x + 18} 444 Z`} />
+      <path fill={l.back ? FUR_DARK : FUR} d={`M${l.x - 16} 290 L${l.x - 12} 370 C${l.x - 14} 380 ${l.x - 14} 390 ${l.x - 10} 398 L${l.x - 10} 446 L${l.x + 10} 446 L${l.x + 10} 398 C${l.x + 14} 390 ${l.x + 14} 380 ${l.x + 12} 370 L${l.x + 16} 290 Z`} />
+      <path fill={l.back ? FUR_DARK : FUR} d={`M${l.x - 13} 440 C${l.x - 23} 440 ${l.x - 24} 454 ${l.x - 14} 457 C${l.x - 4} 460 ${l.x + 16} 459 ${l.x + 20} 452 Q${l.x + 24} 440 ${l.x + 12} 440 Z`} />
+      {!pass && <path {...line(2)} d={`M${l.x + 3} 450 L${l.x + 3} 457`} />}
     </g>
   )
 
@@ -191,14 +193,15 @@ export const Jamal = forwardRef<PuppetHandle, JamalProps>(function Jamal({ heigh
         {/* Head and big soft muzzle */}
         <path fill={FUR} d="M452 58 C492 58 510 84 508 110 C520 120 522 150 500 160 C484 168 456 168 440 160 C414 150 402 128 404 104 C406 76 424 58 452 58 Z" />
         <g ref={r('jaw', pass)}>
-          <path fill={BELLY} d="M446 146 C448 162 492 164 496 146 C492 152 450 152 446 146 Z" />
+          <path fill={BELLY} d="M436 132 C436 118 460 112 480 114 C504 116 514 128 510 142 C506 154 486 158 466 156 C446 154 436 146 436 132 Z" />
+          {!pass && <>
+            <path ref={part('mouth')} fill="#B8323F" stroke={INK} strokeWidth="3" d="" />
+            <path ref={part('smile')} {...line(3.2)} d="M446 146 Q470 154 494 146" />
+            <path {...line(3.4)} d="M462 128 Q466 124 470 128 M486 126 Q490 122 494 126" />
+          </>}
         </g>
         {!pass && (
           <>
-            <path fill={BELLY} d="M436 132 C436 118 460 112 480 114 C504 116 514 128 510 142 C506 154 486 158 466 156 C446 154 436 146 436 132 Z" />
-            <path ref={part('mouth')} fill="#B8323F" stroke={INK} strokeWidth="3" d="" />
-            <path {...line(3.2)} d="M446 146 Q470 154 494 146" />
-            <path {...line(3.4)} d="M462 128 Q466 124 470 128 M486 126 Q490 122 494 126" />
             <ellipse fill="#FF9DB0" opacity="0.8" cx="420" cy="122" rx="13" ry="8" />
             <g ref={part('eyes')}>
               {[432, 472].map((x) => (
@@ -227,16 +230,25 @@ export const Jamal = forwardRef<PuppetHandle, JamalProps>(function Jamal({ heigh
     </g>
   )
 
-  // The woven blanket over the hump, with gold tassels.
+  // The cloth follows the hump's silhouette all the way over its peak. Clip the weave
+  // to the drape so the colored bands never spill over its curved edges.
+  const drape = 'M174 178 C186 122 232 94 262 94 C302 94 332 130 342 178 L350 238 Q262 260 166 238 Z'
   const blanket = (
     <g strokeLinejoin="round">
-      <path d="M190 150 C214 118 300 116 326 152 L336 238 C290 250 226 250 180 238 Z" fill="#FF8FB8" stroke={INK} strokeWidth="5" />
-      <path d="M186 196 C230 206 296 206 332 196" fill="none" stroke="#8FE3C8" strokeWidth="12" />
-      <path d="M200 172 L214 184 L228 172 L242 184 L256 172 L270 184 L284 172 L298 184 L312 172" fill="none" stroke="#FFC83D" strokeWidth="5" />
-      {[196, 222, 248, 274, 300, 326].map((x, i) => (
-        <g key={x} transform={`translate(${x} ${240 + (i === 0 || i === 5 ? -4 : 2)})`}>
-          <line y2="12" stroke={INK} strokeWidth="3" />
-          <path d="M-6 12 H6 L4 28 H-4 Z" fill="#FFC83D" stroke={INK} strokeWidth="3" />
+      <defs>
+        <clipPath id={`${id}-blanket`}><path d={drape} /></clipPath>
+      </defs>
+      <path d={drape} fill="#FF8FB8" />
+      <g clipPath={`url(#${id}-blanket)`}>
+        <path d="M172 182 Q262 204 344 182" fill="none" stroke="#8FE3C8" strokeWidth="14" />
+        <path d="M188 151 L202 163 L216 151 L230 163 L244 151 L258 163 L272 151 L286 163 L300 151 L314 163 L328 151" fill="none" stroke="#FFC83D" strokeWidth="5" />
+        <path d="M164 226 Q262 248 352 226" fill="none" stroke="#FFC83D" strokeWidth="5" />
+      </g>
+      <path d={drape} fill="none" stroke={INK} strokeWidth="3.2" />
+      {[180, 210, 240, 270, 300, 330].map((x) => (
+        <g key={x} transform={`translate(${x} ${249 - 11 * ((x - 258) / 92) ** 2})`}>
+          <line y2="9" stroke={INK} strokeWidth="2.5" />
+          <path d="M-5 9 H5 L3 22 H-3 Z" fill="#FFC83D" stroke={INK} strokeWidth="2.5" />
         </g>
       ))}
     </g>
