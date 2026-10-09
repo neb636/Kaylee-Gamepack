@@ -307,6 +307,20 @@ const SCREENS = [
   })),
   { name: 'etna-story', hash: '#/world/italy/etna', reset: true, wait: 400 },
   { name: 'etna-play', hash: '#/world/italy/etna', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
+  // Etna moments, reached through its QA hook (window.__etnaQA.jump): the lemon grove, the chestnut forest and stream,
+  // the cold (snow falling, the scarf on the snow house), the snow drifts, the full cart going down, the granita stand
+  // and the piano payoff.
+  ...['grove', 'forest', 'cold', 'snow', 'full', 'granita', 'payoff'].map((to) => ({
+    name: `etna-${to}`,
+    hash: '#/world/italy/etna',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.waitForTimeout(500)
+      await p.evaluate((t) => window.__etnaQA?.jump(t), to)
+      await p.waitForTimeout(to === 'payoff' ? 2500 : 1500)
+    },
+  })),
   { name: 'italy-hub-stamps', hash: '#/world/italy', stampAll: 'italy' },
   { name: 'italy-opera', hash: '#/world/italy/party', stampAll: 'italy', act: async (p) => { await skip(p); await p.waitForTimeout(2500) } },
 ].filter((s) => !flag('routes') || flag('routes').split(',').includes(s.name))

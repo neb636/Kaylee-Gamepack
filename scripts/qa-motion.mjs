@@ -19,6 +19,11 @@ const PORT = 4183
 
 // Puppet scenarios: [puppet id, action, seconds to film]. Missing puppets/actions are skipped, not failures.
 const PUPPET_SCENARIOS = [
+  ['nino', 'hop', 1.0],
+  ['nino', 'bray', 1.4],
+  ['nino', 'kick', 1.0],
+  ['nino', 'sneeze', 1.2],
+  ['nino-cold', 'shake', 1.0],
   ['pip', 'hop', 1.2],
   ['pip', 'cheer', 1.4],
   ['pip', 'shake', 1.1],
@@ -357,6 +362,39 @@ const veniceDrive = (name, seconds, moves) => ({
 GAME_SCENARIOS.push(
   veniceDrive('venice-drive', 3.2, [[0.3, 0, 1200], [0.3, -0.1, 600], [-0.35, -0.1, 900]]),
   veniceDrive('venice-coast', 2.4, [[0.35, 0, 450]]),
+)
+
+// Snow on a Volcano: grab Nino and lead him up the trail (trot, the cart rattles after him), then back the other way
+// (he hops round and the cart swings round behind him); and in the cold, with snow falling.
+const etnaDrive = (name, seconds, jump, moves) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/italy/etna`)
+    await page.waitForTimeout(600)
+    await skip(page)
+    await page.evaluate((j) => window.__etnaQA?.jump(j), jump)
+    await page.waitForTimeout(900)
+  },
+  act: async (page) => {
+    const b = await page.locator('[aria-label="Nino"]').boundingBox()
+    if (!b) throw new Error('no Nino found')
+    // The Nino element is his hooves' anchor; grab him by the body.
+    const x = b.x
+    const y = b.y - 60
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    for (const [dx, dy, ms] of moves) {
+      const steps = Math.max(2, Math.round(ms / 40))
+      await page.mouse.move(x + dx * vp.width, y + dy * vp.height, { steps })
+      await page.waitForTimeout(ms)
+    }
+    await page.mouse.up()
+  },
+})
+GAME_SCENARIOS.push(
+  etnaDrive('etna-trot', 3.2, 'grove', [[0.3, 0, 1200], [-0.3, 0, 1200]]),
+  etnaDrive('etna-cold', 3.2, 'cold', [[0.25, 0, 900]]),
 )
 
 const all = [...PUPPET_SCENARIOS, ...GAME_SCENARIOS].filter((s) => !flag('only') || flag('only').split(',').includes(s.name))

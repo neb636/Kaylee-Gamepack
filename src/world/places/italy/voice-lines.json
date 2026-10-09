@@ -77,6 +77,22 @@
     "voice": "tortoise"
   },
   {
+    "text": "Hee-haw!",
+    "voice": "nino"
+  },
+  {
+    "text": "Hee hee! That tickles!",
+    "voice": "nino"
+  },
+  {
+    "text": "I love lemons!",
+    "voice": "nino"
+  },
+  {
+    "text": "Hi hi!",
+    "voice": "marina"
+  },
+  {
     "text": "Hee hee! Prickly!",
     "voice": "spina"
   },
@@ -785,11 +801,144 @@
     "voice": "gino"
   },
   "Even ambulances are boats in Venice!",
+  {
+    "text": "Ciao! It's sooo hot!",
+    "voice": "nino"
+  },
+  {
+    "text": "Let's get snow from Etna!",
+    "voice": "nino"
+  },
+  "Pull Nino up the mountain!",
+  "Pull Nino down to the beach!",
+  {
+    "text": "Phew! It's so hot!",
+    "voice": "nino"
+  },
+  "Tap a lemon to pick it!",
+  "Lemon!",
+  "Orange!",
+  "Sicily grows lemons and oranges!",
+  {
+    "text": "Ouch! Prickly!",
+    "voice": "nino"
+  },
+  {
+    "text": "Ahh! Cooler up here!",
+    "voice": "nino"
+  },
+  {
+    "text": "Ow! A chestnut!",
+    "voice": "nino"
+  },
+  {
+    "text": "Splish splash!",
+    "voice": "nino"
+  },
+  {
+    "text": "Brrr! I'm cold!",
+    "voice": "nino"
+  },
+  "The higher we go, the colder it gets!",
+  "Tap the scarf for Nino!",
+  {
+    "text": "Ahh, cozy! Grazie!",
+    "voice": "nino"
+  },
+  "Long ago, people kept snow in stone snow houses!",
+  "Snow! Bump Nino into the snow!",
+  "Bump it again!",
+  "The cart is full of snow!",
+  "Now zoom down to the beach!",
+  {
+    "text": "Ah-choo!",
+    "voice": "nino"
+  },
+  "Etna is a volcano! It puffs smoke!",
+  "Etna is the tallest volcano in Europe!",
+  {
+    "text": "Wheeeee!",
+    "voice": "nino"
+  },
+  {
+    "text": "Hot again! Bye bye, scarf!",
+    "voice": "nino"
+  },
+  "Lower down, it gets warmer!",
+  {
+    "text": "Snow! Yay!",
+    "voice": "lupa"
+  },
+  "Let's make granita!",
+  "Tap the snow to fill the cup!",
+  "Tap a cup!",
+  {
+    "text": "One scoop, please!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Two scoops, please!",
+    "voice": "marina"
+  },
+  {
+    "text": "Three scoops, please!",
+    "voice": "tortoise"
+  },
+  {
+    "text": "Ha ha! A snow mountain!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Wow! So big!",
+    "voice": "marina"
+  },
+  {
+    "text": "Oh my! So much!",
+    "voice": "tortoise"
+  },
+  "Squeeze a lemon or an orange!",
+  "Press and hold the fruit!",
+  {
+    "text": "Brrr! Brain freeze! Hee hee!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Mmm! So cold!",
+    "voice": "marina"
+  },
+  {
+    "text": "Ahhh... nice and cool...",
+    "voice": "tortoise"
+  },
+  {
+    "text": "So hot! Snow, please!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Hot, hot, hot!",
+    "voice": "marina"
+  },
+  {
+    "text": "Sooo... hot...",
+    "voice": "tortoise"
+  },
+  "Long ago, donkeys carried snow down to make granita!",
+  {
+    "text": "And my piano, for Lupa's band!",
+    "voice": "nino"
+  },
+  "Tap the piano!",
+  "The piano was invented in Italy!",
+  {
+    "text": "Yay! A piano for the band!",
+    "voice": "lupa"
+  },
   "Brown bear sticker! Bears live in the mountains of Italy!",
   "Porcupine sticker! Crested porcupines live in Italy!",
   "Cat sticker! Lots of cats live in the old ruins of Rome!",
   "Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!",
   "Pigeon sticker! Lots of pigeons live in Venice!",
+  "Donkey sticker! Little donkeys live in Sicily!",
   "Let's see how olive oil is made!",
   "Let's toss a coin in the real Trevi Fountain!",
   "Look! A real Roman water bridge!",
@@ -803,7 +952,8 @@
   "Pizza comes from Naples, in Italy!",
   "Pizza Margherita is red, white and green, like Italy's flag!",
   "Long ago, the Romans built roads, arenas and water bridges!",
-  "Italy has volcanoes! One is right next to Naples!",
+  "Italy has volcanoes! Etna is the tallest one in Europe!",
+  "Granita is icy lemon snow from Sicily!",
   "Italy's flag has three stripes: green, white and red!",
   "Some olive trees in Italy are more than a thousand years old!",
   "Romans wrote five like this: V!",

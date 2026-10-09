@@ -3,7 +3,8 @@
 Status: 2026-09-28, the boot-map hub and activity 1 (the Pizzeria in Naples) are built. 2026-10-07: the Olive Grove and
 the Trevi Fountain are built too (every scene in one eye-level side-view camera; see "One camera per scene" below).
 Later on 2026-10-07: the Colosseum (Cesare puppet; the trapdoors are a cutaway of the tunnels under the floor, seen
-from the side) is built too. Venice and Etna still say "coming soon". Decisions from Dad: build the Pizzeria in one go (no approval gates), the 1889 storybook shows real
+from the side) is built too. 2026-10-09: Venice (Gino's Water Taxi) and Snow on a Volcano (Nino's snow cart) are rebuilt;
+all six activities are in, and the opera finale is next. Decisions from Dad: build the Pizzeria in one go (no approval gates), the 1889 storybook shows real
 people (Queen Margherita and Raffaele Esposito) in the flat style, and toppings stay veggie + olives (no salami). Folder will be `src/world/places/italy/`. There's no Italy pin in
 `COMING_SOON` yet, so add a new one: on `bg-world-map` the boot sits at about **x 48.5, y 31** (just south-west of
 the pink castle). Check it on the iPad. `kit/Flag.tsx` needs an `italy` flag (three vertical stripes: green, white,
@@ -337,31 +338,80 @@ center line).
 **Gates:** (1) greybox: drive the box boat along a box canal with posts and one doorstep friend; Dad plays it.
 (2) Art: the house sprites, layers, boats, Gino's puppet. (3) The rides, the tide, the mask, voices, QA.
 
-### 6. Snow on a Volcano 🌋🍋 (Sicily: weather and altitude, lemon granita)
+### 6. Snow on a Volcano 🌋🍋 (Sicily: higher is colder, lemon granita)
 
-- **Story**: Nino: "It's sooo hot on the beach! Let's get snow from the top of Mount Etna!"
-- **Real history**: long ago, before freezers, Sicilians **carried snow down from Mount Etna** on donkeys and mules,
-  kept it in stone snow-houses, and made icy treats with it. That's how *granita* started.
-- **Play**:
-  1. **Climb**: drag Nino along the zig-zag trail up the volcano (he follows her finger). The big **thermometer**
-     in the corner drops as they go up: lemon trees and beach (🌞 *Hot!*) → chestnut forest (*cooler*) → black lava rocks
-     and snow (*Brr, cold!*). Nino's ears droop in the heat, then he shivers and gets a scarf. "The higher you go, the
-     **colder** it gets!"
-  2. **Pack the snow**: swipe snow into Nino's baskets and count 1 to 5. Etna puffs a friendly little smoke cloud, and Sparkle says
-     "Etna is a volcano! Its snow and soil help things grow."
-  3. **Zoom down** (tap and wheee) to the hot beach, where three friends are melting: a Mediterranean monk seal
-     fanning herself, a sunbather tortoise, Lupa panting.
-  4. **Make granita**: pile snow into cups and **squeeze a lemon** over it (press and hold on the lemon, it squishes,
-     juice drips; lemons from Sicily are famous). Serve each friend. Harder: "Two scoops for the seal!"
-- **Payoff**: everyone cools down with happy brain-freeze faces, and Nino brings the **piano** to the band (a donkey
-  who carries a piano up a volcano is strong enough to carry it to Verona).
-- **Weather taught here**: Italy is **snowy in the mountains** and **hot and sunny by the sea**, sometimes on the same
-  day; the north (the Alps) has cold snowy winters, the south has long hot summers.
-- **Real facts**: Etna is the tallest volcano in Europe, and it's active (it puffs smoke); Sicily grows lemons,
-  oranges and pistachios; Italy has sea on three sides.
-- **Sticker**: Sicilian donkey.
-- New tech: path-follow drag (the character trails the finger along a spline), altitude-linked background crossfades
-  and a thermometer, press-and-hold squeeze.
+Rebuilt 2026-10-09 from the first build (PR #46: "tracing a line", a thermometer, snow piles that looked like clouds; see
+`docs/play-design.md`). Built in one go at Dad's request (no gates). Code: `activities/etna/`, puppet `puppets/Nino.tsx`.
+
+**One-line pitch:** it's sooo hot on the beach and three friends are melting at the granita stand; Kaylee leads Nino the
+donkey and his painted Sicilian cart up Mount Etna to bring back snow, then makes them granita.
+
+**The toy (core verb): grab Nino and lead him along the trail.** Her finger grabs Nino (or his cart) and he trots after
+it: legs in diagonal pairs, ears and tail on springs, the cart rattling behind with Sparkle riding in it and its wheel
+turning. He is slower uphill (heavy) and faster downhill (a full cart rolls), stops when she lets go (donkeys don't
+coast), and hops round when she pulls him the other way, the cart swinging round behind him.
+- Greybox test (skipped at Dad's request): would dragging a donkey up a slope be fun for 30 s? The bet is that a
+  trotting, reacting donkey with a cart is, like Venice's boat.
+
+**How the verb deepens (same verb, three times):**
+1. **Up through the heat.** Beach (pant, sweat drop, tongue out) → the lemon grove (tap lemons and oranges on the trees
+   and they fly into the cart) → the chestnut forest, a stream he splashes through. Nino says "Ahh! Cooler up here!"
+2. **Into the cold.** Lava rocks and steam vents; snow starts falling (screen-space flakes, heavier the higher he goes),
+   the sky turns pale, Nino shivers when he stands still and his breath puffs out. A pink scarf hangs on the old stone
+   snow house (a real *neviera*): tap it and it flies onto him ("Ahh, cozy! Grazie!"). She *feels* higher is colder.
+3. **Snow, then zoom down.** Five snow drifts on the snow field: walk Nino into each and the snow flies into the cart as
+   a snowball (Sparkle counts one to five). Then "Now zoom down to the beach!": a full cart rolls fast downhill (wheee),
+   and lower down it's warm again and the scarf comes off ("Hot again! Bye bye, scarf!").
+Side verb: **granita** at the stand. Pick a friend's cup (any order), tap the snow in the cart to scoop (Lupa wants
+one, Marina the monk seal two, Nonna Tina the tortoise three; a bubble of dashed snowballs shows how many, extra scoops
+make a silly snow mountain), then press and hold a lemon or an orange to squeeze it over the snow until it turns
+yellow or orange. The friend eats it: brain freeze, giggles, grazie.
+
+**Her choices:** which fruit to pick on the way (or none), which cup first, lemon or orange for each, how many scoops,
+when to stop and poke things.
+
+**Pokeables:** the sun (sizzle), the sea (splash), the umbrella, the crab (scuttle), the gull (flies off and comes back),
+lemon trees, prickly pears ("Ouch! Prickly!"), the lizard (runs off), chestnut trees (a burr bonks Nino if he's under
+it), the goat (hops and bleats), lava rocks, steam vents (hiss and puff), the snow house (a fact), snowy pines (snow
+falls on Nino: "Ah-choo!"), the crater (rumble, big puffs, two volcano facts), Nino himself (giggle or bray), the
+ground (sand, dirt, ash or snow puffs), the friends at the stand.
+
+**Silly moments:** a chestnut bonk, a sneeze under a pine, panting in the heat, a donkey kick and a bray when idle, a
+snow mountain in a cup.
+
+**Story frame:** Nino: "Ciao! I'm Nino. It's sooo hot!" / "Let's get snow from the top of Etna!" Sparkle: "Pull Nino up
+the mountain!" During play Sparkle speaks when: the first fruit tree, the cold, the scarf, the snow, the count, the
+full cart, warming up again, and after ~8 s idle ("Pull Nino up the mountain!" / "...down to the beach!" with a pulsing
+ring on Nino and an edge chip: snow to the right, Lupa to the left).
+
+**What it teaches, by doing:** higher is colder and lower is warmer (she walks him there and back); Sicily grows lemons
+and oranges; Etna is a volcano that puffs (and the tallest in Europe); long ago snow was kept in stone snow houses and
+carried down by donkeys to make granita; counting to five; one, two, three scoops. The piano was invented in Italy.
+
+**Payoff:** fruit and then five snowballs pile up in the cart; three cooled-down friends; Nino's toy piano appears for
+Lupa's band (tap the keys: notes, Sparkle dances, Lupa howls along), then the stamp (Sicilian donkey sticker).
+
+**Replay:** different fruit, different order, different flavors; every poke is optional.
+
+**Numbers:** with a fast bot, 20 s up and 12 s down of pure dragging; with a 5-year-old's strokes and poking, about
+2-3 minutes on the mountain and about 1 minute at the stand. Roughly 15-25 drags, 10+ pokes, 5 drifts, 6 scoops, 3
+squeezes, 8 piano keys. 2 lines before the first touch.
+
+**Camera and art:** straight-on side view. The trail is the ground line, drawn in code in the flat style (brown outline,
+zone top bands, a painted trail stripe): sand, red earth with grass, forest green, black ash, snow. Layers: sky color
+(warm blue → pale), the far view of Etna (slow parallax, fades as you reach the top), drifting clouds, the trail world,
+snowfall on top. Generated sprites (`assets/etna-*`): far volcano, lemon tree, lemon, orange, prickly pear, chestnut
+tree, snowy pine, lava rocks, snow drift, stone snow house, umbrella, granita stand, monk seal, goat, lizard, gull,
+crab. Code-drawn: the Sicilian cart, the scarf, the steam, the crater smoke, the cups, the piano.
+Puppets: **Nino** (new), Lupa; Marina and Nonna Tina are Buddies.
+
+**Screens:** the logical stage is ~1350 units wide on landscape, 860 on portrait, 680 on phone portrait, at least 760
+tall; the ground under Nino sits at 66% of the screen height, so tall screens show more sky. The granita stand is its
+own scaled stage (wide and tall layouts).
+
+**Tech:** DOM + `useGameLoop` (like Venice): camera x/y, parallax layers as transforms, Nino as a spring toward her
+finger along x, the cart on a spring behind him. Feel numbers in `activities/etna/mountain.ts` (FEEL).
+QA hook: `window.__etnaQA.jump('grove' | 'forest' | 'cold' | 'snow' | 'full' | 'granita' | 'payoff')`.
 
 ## Finale: Opera Night at the Arena (route `party`, aria-label "Party")
 

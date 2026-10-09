@@ -31,6 +31,7 @@ import millBasin from './assets/mill-basin.webp'
 import millstone from './assets/millstone.webp'
 import mozzarellaPiece from './assets/mozzarella-piece.webp'
 import mozzarella from './assets/mozzarella.webp'
+import nino from './assets/nino.webp'
 import mushroom from './assets/mushroom.webp'
 import oilJug from './assets/oil-jug.webp'
 import oliveBowl from './assets/olive-bowl.webp'
@@ -96,6 +97,7 @@ export const art = {
   mozzarella,
   mozzarellaPiece,
   mushroom,
+  nino,
   oilJug,
   olive,
   oliveBowl,

@@ -7,6 +7,7 @@ import { Cesare, CESARE_ACTIONS } from './Cesare'
 import { Civetta, CIVETTA_ACTIONS } from './Civetta'
 import { Gino, GINO_ACTIONS } from './Gino'
 import { Lupa, LUPA_ACTIONS } from './Lupa'
+import { Nino, NINO_ACTIONS } from './Nino'
 import { Spina, SPINA_ACTIONS } from './Spina'
 
 const P = L.pizza
@@ -26,4 +27,7 @@ export const PUPPETS: PuppetEntry[] = [
   { id: 'gino-dizzy', name: 'Gino (dizzy, hat off)', render: (ref, height) => createElement(Gino, { ref, height, dizzy: true, hatOff: true }), actions: Object.keys(GINO_ACTIONS) },
   { id: 'gino-ducking', name: 'Gino (ducking)', render: (ref, height) => createElement(Gino, { ref, height, oar: true, ducking: true }), actions: Object.keys(GINO_ACTIONS) },
   { id: 'gino-accordion', name: 'Gino (accordion)', render: (ref, height) => createElement(Gino, { ref, height, accordion: true, singing: true }), actions: Object.keys(GINO_ACTIONS) },
+  { id: 'nino', name: 'Nino', render: (ref, height) => createElement(Nino, { ref, height }), actions: Object.keys(NINO_ACTIONS), lines: [] },
+  { id: 'nino-hot', name: 'Nino (hot)', render: (ref, height) => createElement(Nino, { ref, height, hot: 1 }), actions: Object.keys(NINO_ACTIONS) },
+  { id: 'nino-cold', name: 'Nino (cold, scarf)', render: (ref, height) => createElement(Nino, { ref, height, cold: 1, scarf: true }), actions: Object.keys(NINO_ACTIONS) },
 ]
