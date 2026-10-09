@@ -3,8 +3,7 @@
 Status: 2026-09-28, the boot-map hub and activity 1 (the Pizzeria in Naples) are built. 2026-10-07: the Olive Grove and
 the Trevi Fountain are built too (every scene in one eye-level side-view camera; see "One camera per scene" below).
 Later on 2026-10-07: the Colosseum (Cesare puppet; the trapdoors are a cutaway of the tunnels under the floor, seen
-from the side) and the Leaning Tower of Pisa (Civetta puppet; the tower is its own upright picture that leans in code)
-are built too. Venice and Etna still say "coming soon". Decisions from Dad: build the Pizzeria in one go (no approval gates), the 1889 storybook shows real
+from the side) is built too. Venice and Etna still say "coming soon". Decisions from Dad: build the Pizzeria in one go (no approval gates), the 1889 storybook shows real
 people (Queen Margherita and Raffaele Esposito) in the flat style, and toppings stay veggie + olives (no salami). Folder will be `src/world/places/italy/`. There's no Italy pin in
 `COMING_SOON` yet, so add a new one: on `bg-world-map` the boot sits at about **x 48.5, y 31** (just south-west of
 the pink castle). Check it on the iPad. `kit/Flag.tsx` needs an `italy` flag (three vertical stripes: green, white,
@@ -22,7 +21,7 @@ then whichever built activity Kaylee likes least.
 
 Lupa, an Italian wolf cub, lives in Rome. Every summer there's a big **opera night** in a 2,000-year-old Roman arena
 in Verona, and Lupa wants to sing in it more than anything, but all she can do is howl. Each friend Kaylee helps comes
-back with a **real Italian instrument** (the mandolin from Naples, the tambourine from Puglia, the bells of Pisa...)
+back with a **real Italian instrument** (the mandolin from Naples, the tambourine from Puglia, the Roman horn...)
 and joins Lupa's little band. At the Trevi Fountain Lupa makes her wish: "I wish I could sing!" At the finale Kaylee
 **conducts** the band with a magic wand, Lupa's howl turns into a beautiful high note, the whole arena shouts
 **"Brava, Kaylee!"**, and jets paint Italy's flag across the sky.
@@ -44,8 +43,6 @@ girl. And a howling wolf who wants to sing is a story a 5-year-old gets right aw
 | Circle / push / back-and-forth gestures | Dumpling House | **Comb** olive branches downward; **pour** oil up to a line (full, half full) |
 | Stack by size / patterns | Pyramid, Great Wall | **Fit arches to gaps** so an aqueduct slopes downhill, then watch real water flow |
 | Hide-and-seek in a scene | Reef, Passage | **Roman numeral trapdoors**: "Open door III!" and a friend pops up from under the Colosseum floor |
-| Pick the right answer | several | **Predict, then test**: "Which lands first, the big melon or the little lemon?" Drop them off Pisa and see |
-| (nothing yet) | | **Balance**: put heavy weights on the high side so the Leaning Tower stops tipping |
 | Throttle / swipe to move | Bullet Train, Bamboo | **Drive a water taxi**: grab the gondola, steer it, and deliver friends to the **left / right** |
 | Free drawing | Magic Brush | **Mirror painting**: paint half a Carnival mask and the other half paints itself (symmetry) |
 | Four climates on a train | Bullet Train | **Higher = colder** on one volcano: lead a donkey up Mount Etna from the lemon trees to the snow |
@@ -64,7 +61,7 @@ the instructions.
 | `bruno` | **Zio Bruno**, a Marsican brown bear (Italy's own rare bear, from Abruzzo). The pizzaiolo, big and jolly, flour on his nose, famous dough spinner | onyx -2 | **Puppet**: arms that toss and catch dough, belly laugh bounce, chef hat on a spring | mandolin (Naples) |
 | `spina` | **Spina**, a crested porcupine (Italy is one of the only places in Europe with porcupines). Bouncy, a bit clumsy: olives get stuck on her quills | nova +4 | **Puppet**: quills puff up and rattle, olives stick to them, *shake* action | tambourine (the *pizzica* dance of Puglia) |
 | `cesare` | **Cesare**, a big, slow, proud cat from the ruins of Rome (Rome has a real cat home inside ancient ruins). Wears a leafy crown and thinks he's the emperor. Secretly sweet | fable -2 | Buddy (puppet if time: tail flick, slow blink) | a Roman horn (fanfare) |
-| `civetta` | **Professoressa Civetta**, a little owl scientist with round glasses and a telescope, a fan of Galileo. Curious, says "Let's find out!" | sage 0 | **Puppet**: **head swivel** (owls really turn their heads way around), blinking, wing flaps | Pisa's seven bells |
+| `civetta` | **Professoressa Civetta**, a little owl scientist with round glasses and a telescope, a Venice water-taxi passenger. Curious, says "Let's find out!" | sage 0 | **Puppet**: **head swivel** (owls really turn their heads way around), blinking, wing flaps | passenger in Venice |
 | `gino` | **Gino**, a Venetian pigeon gondolier in a striped shirt and straw hat. Sings while he rows (real gondoliers do) | ash +2 | Buddy | accordion (made in Castelfidardo, Italy) |
 | `nino` | **Nino**, a little Sicilian donkey. Sleepy, strong, loves lemons | echo +2 | Buddy (puppet if time: ears that droop in the heat, perk up in the cold) | the piano (invented in Italy) |
 | customers | **Signora Bufala** (a water buffalo who brings the mozzarella), Lupa, Spina, Gino. The Queen for the 1889 story (see open questions) | ballad -1, lupa, spina, gino | Buddies at the counter | |
@@ -79,16 +76,16 @@ tre!*). Check the transcription flags from `generate-voice.mjs` and listen to ev
 - **Italy is shaped like a boot**, kicking a ball (Sicily). That's the first thing she learns. Intro: the balloon
   lands, the boot gives a little **kick** and Sicily bounces like a ball (tap the toe to do it again, every time).
 - Style: sunny, pastel "summer postcard" Italy. Terracotta roofs, the colorful pastel houses of Cinque Terre, blue sea
-  on three sides, the snowy Alps across the top, Venice's canals in the north-east, Pisa's tower, Rome in the middle,
+  on three sides, the snowy Alps across the top, Venice's canals in the north-east, Rome in the middle,
   Vesuvius by Naples, the cone-roofed **trulli** houses of Puglia on the heel, Etna on Sicily.
-- The 7 spots are little **Roman arches**. Unvisited arches have a curtain; finished ones open and the friend peeks out.
+- The 6 spots are little **Roman arches**. Unvisited arches have a curtain; finished ones open and the friend peeks out.
   The Pizzeria's arch in Naples is bigger, with a pizza icon.
 - The **band stage** runs along the bottom: an empty stage with Lupa alone at first, then one friend and instrument per stamp.
 - Ambient life: a Vespa zips along a road and toots, a gondola glides through Venice, Vesuvius puffs a tiny cloud,
-  dolphins jump in the sea, the Leaning Tower wobbles when tapped ("Whoa!"), sailboats bob.
+  dolphins jump in the sea, sailboats bob.
 - Intro (under 6 s): Lupa: "Chow, Kaylee! I'm Lupa!" / "Chow means hello! Help me sing at the opera?"
 
-## The seven activities (any order; 1.5-3 min of play each with hands busy, the Pizzeria about 3-4 min in three short services; each gets richer as it goes)
+## The six activities (any order; 1.5-3 min of play each with hands busy, the Pizzeria about 3-4 min in three short services; each gets richer as it goes)
 
 ### 1. Pizzeria in Naples 🍕 (the big one: pizza history, the Margherita, the flag)
 
@@ -237,30 +234,7 @@ Dough, Sauce, Toppings, Oven, Cutter, Storybook, services}.tsx`.
 - New tech: rope pull (vertical drag with resistance + snap), numeral-labeled `Target`s, an elevator that rises from
   below the floor mask, and a stadium-wave swipe.
 
-### 5. The Leaning Tower of Pisa 🗼 (science: gravity and balance)
-
-- **Story**: Civetta: "Hoo! My tower is leaning more and more! Can you help it stand?"
-- **Play**:
-  1. **Balance it**: the tower slowly leans (a gentle creak, never falls). She drags heavy weights onto the **high
-     side** until the lean stops. Weights on the wrong side make it creak and tilt a bit more, then Sparkle points
-     ("Put it on the *other* side!") and that side glows. (This is really what engineers did: they put heavy weights
-     on one side and took soil away from under the other, and the tower stopped leaning more.)
-  2. **The famous photo**: Kaylee drags Sparkle's hoof until it lines up with the tower, like she's holding it up
-     (the pose every visitor does). Snap! The photo goes into her passport.
-  3. **Galileo's drop** (a scientist from Pisa, long ago): at the top, Civetta holds up two things. "Which will land
-     **first**?" She taps her guess. Every guess is fine ("Let's find out!"), then she taps *drop*:
-     - Round 1: a big melon and a small lemon **land at the same time**! (heavy and light fall the same speed)
-     - Round 2: a lemon and a **feather**. The feather floats slowly. "The air pushes the feather!"
-     - Round 3: Sparkle's guess. Kaylee picks two things herself and drops them.
-- **Payoff**: the tower is really a **bell tower** with seven bells, one for each note of the music scale. The bells
-  ring up the scale do-re-mi (tap each one), and Civetta brings the **bells** to the band.
-- **Real facts**: the tower leans because the ground under it is soft; it took about 200 years to build; Galileo
-  studied how things fall and looked at the stars with a telescope.
-- **Sticker**: little owl.
-- New tech: a torque/lean model (lean angle springs toward a target set by weight on each side), predict-then-test
-  flow, a camera viewfinder photo moment.
-
-### 6. Venice: Gino's Water Taxi 🛶 (a city on the water, left and right, Carnival masks)
+### 5. Venice: Gino's Water Taxi 🛶 (a city on the water, left and right, Carnival masks)
 
 Rewritten 2026-10-08 after the first build missed (see "What went wrong" in `docs/play-design.md`). Model: **Sago Mini
 Boats** (grab the boat and go, stop to meet friends, silly boats) and **Toca Boca** (a little world where everything
@@ -363,7 +337,7 @@ center line).
 **Gates:** (1) greybox: drive the box boat along a box canal with posts and one doorstep friend; Dad plays it.
 (2) Art: the house sprites, layers, boats, Gino's puppet. (3) The rides, the tide, the mask, voices, QA.
 
-### 7. Snow on a Volcano 🌋🍋 (Sicily: weather and altitude, lemon granita)
+### 6. Snow on a Volcano 🌋🍋 (Sicily: weather and altitude, lemon granita)
 
 - **Story**: Nino: "It's sooo hot on the beach! Let's get snow from the top of Mount Etna!"
 - **Real history**: long ago, before freezers, Sicilians **carried snow down from Mount Etna** on donkeys and mules,
@@ -394,7 +368,7 @@ center line).
 1. Dusk at the **Arena di Verona**, a real Roman arena almost 2,000 years old where operas are still sung on summer
    nights. People really light **little candles** in the stands as it gets dark: she taps the stands and candles
    flicker on everywhere.
-2. The band she built is on stage: Bruno (mandolin), Spina (tambourine), Cesare (horn), Civetta (bells), Gino
+2. The band she built is on stage: Bruno (mandolin), Spina (tambourine), Cesare (horn), Gino
    (accordion), Nino (piano). Sparkle wears the Venice mask and the chef hat. Lupa is in the middle, shy.
 3. **Kaylee conducts** with a sparkly wand (the conductor's stick):
    - Swing the wand **big** → the band plays **forte** (loud), everyone bounces big.
@@ -426,7 +400,6 @@ center line).
 | 🏛️ | Romans | "Long ago, the Romans built roads, arenas and water bridges!" |
 | Ⅴ | Numbers | "Romans wrote five like this: V!" |
 | 🐺 | Rome's wolf | "The story says a kind mama wolf took care of the twins who built Rome!" |
-| 🗼 | Pisa | "The Leaning Tower of Pisa leans because the ground is soft!" |
 | 🛶 | Venice | "In Venice, the streets are water! People ride in boats!" |
 | 🌋 | Volcanoes | "Italy has volcanoes! Etna is the tallest one in Europe!" |
 | 🎻 | Music | "The piano and the violin were first made in Italy!" |
@@ -441,7 +414,6 @@ center line).
 - **Romulus, Remus and the she-wolf** (gently), which is why the friend is a wolf cub.
 - **Roman numerals** (I-V, and she's V), the **Colosseum's secret elevators and sun-shade**.
 - **Aqueducts** and water flowing downhill, the **Trevi Fountain** legend of the girl who found the spring, the coin toss.
-- **The Leaning Tower**: why it leans, how engineers saved it, its seven bells, and **Galileo's falling experiment**.
 - **Venice**: a city on water, boat ambulances, gondoliers who sing, **Carnevale** masks (symmetry).
 - **Mount Etna snow → granita**, and "higher is colder" (weather).
 - **Water buffalo mozzarella**, tomatoes from America, UNESCO pizza spinning, the 90-second oven, *peperoni* = peppers.
@@ -468,7 +440,7 @@ center line).
 
 ## Coloring pages (`bg-color-*`)
 
-Lupa howling at the moon · Bruno spinning pizza dough · the Colosseum · the Leaning Tower with Civetta · a gondola
+Lupa howling at the moon · Bruno spinning pizza dough · the Colosseum · a gondola
 under a Venice bridge · a Carnival mask · the Trevi Fountain.
 
 ## Picture puzzles (`meta.puzzles`, `scene-puzzle-*`)
@@ -479,21 +451,21 @@ The Colosseum at sunset · Venice's Grand Canal with gondolas · the Amalfi / Ci
 
 Pick real, kid-safe YouTube clips when building (IDs TBD, don't guess them): a Naples pizzaiolo spinning dough and the
 wood-fired oven (after Pizzeria), an olive harvest with nets (after Olive Grove), the Trevi Fountain (after Trevi),
-the Colosseum from above (after Colosseum), the Leaning Tower (after Pisa), gondolas in Venice (after Venice), Etna puffing (after Snow on a
+the Colosseum from above (after Colosseum), gondolas in Venice (after Venice), Etna puffing (after Snow on a
 Volcano), the Frecce Tricolori air show, and an overview of Italy.
 
 ## Art list (`art/source/world/italy/`, style per `art/STYLE.md`, generated with Codex)
 
 - `scene-italy-map.png` (the boot, landmarks as tiny icons, no text), `bg-pizzeria-counter`, `bg-pizzeria-oven`,
   `bg-naples-1889` (storybook sepia version), `bg-olive-grove` (trulli), `bg-olive-mill`, `bg-rome-aqueduct` (wide),
-  `bg-trevi`, `bg-colosseum` (from above, trapdoors in the floor), `bg-pisa`, `bg-venice-canal` (tall/wide scroll),
+  `bg-trevi`, `bg-colosseum` (from above, trapdoors in the floor), `bg-venice-canal` (tall/wide scroll),
   `bg-mask-shop`, `bg-etna` (tall: beach at the bottom, snow at the top), `bg-sicily-beach`, `bg-verona-arena-night`.
 - Character references for puppets: `lupa.png`, `bruno.png`, `spina.png`, `civetta.png` (then `cesare`, `nino` if
   they become puppets).
 - Buddies and props: signora-bufala, gino, cesare, nino, monk seal, tortoise, duck, the Queen (storybook), toppings
   (mozzarella, basil, olive, mushroom, pepper, cherry tomato), pizza peel, pizza wheel, dough ball, olive rake, olive
-  jug and bottles, arches (tall/short), coins, trapdoors, weights, melon/lemon/feather, gondola, mask blank, gems and
-  feathers, snow basket, granita cup, lemon, the six instruments, candles, roses.
+  jug and bottles, arches (tall/short), coins, trapdoors, gondola, mask blank, gems and
+  feathers, snow basket, granita cup, lemon, the five instruments, candles, roses.
 - The pizza itself (base, sauce, browning, slices) is **SVG/canvas in code**, not a picture, because it changes as she
   makes it.
 - **No flags** (use `kit/Flag` `italy`) and **no text, letters or numbers in images**: Roman numerals on the trapdoors
@@ -509,7 +481,7 @@ Volcano), the Frecce Tricolori air show, and an overview of Italy.
 4. Puppet animation (howl, pounce, wag; toss, catch, laugh) with filmstrip passes.
 5. **Pizzeria first** (the showpiece): Service 1 end to end → `playtest-qa` → Services 2-3.
 6. Then the rest, in the order that reuses the most tech: Olive Grove (pour, rake) → Trevi (arches, water) → Colosseum
-   (numerals, ropes) → Pisa (balance, drop) → Venice (drive the boat, mirror) → Etna (path follow, thermometer).
+   (numerals, ropes) → Venice (drive the boat, mirror) → Etna (path follow, thermometer).
 7. Finale: candles, conducting (stroke amplitude → volume, stroke rate → tempo), Lupa's note, Frecce Tricolori, `onWin()`.
 8. `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`, then listen to every Italian word.
 9. `npm run check`, then `qa-screens`, `qa-motion`, `qa-pacing` and the `playtest-qa` agent; fix and repeat.
@@ -522,7 +494,7 @@ Volcano), the Frecce Tricolori air show, and an overview of Italy.
 
 - Smoke test: finale route `party` with aria-label exactly **"Party"**; at least **2 real `<button>`s** in each activity
   about 800 ms after the story is skipped.
-- Many quick drags (toppings, weights, arches, snow): use `PlayArea`/`StickerBoard`/plain pointer events, not motion
+- Many quick drags (toppings, arches, snow): use `PlayArea`/`StickerBoard`/plain pointer events, not motion
   `drag` that unmounts on drop (WebKit dead-drag bug).
 - The flick, sauce swirl, rake, oar and conducting gestures need `touch-action: none` and must not trigger Safari's
   back-swipe near the left edge (keep the gesture areas away from the edge).
@@ -534,8 +506,7 @@ Volcano), the Frecce Tricolori air show, and an overview of Italy.
 
 ## Open questions for Dad
 
-1. **Seven activities + a 3-4 minute Pizzeria**, the same size as China. OK, or cut one? If one goes, I'd drop the
-   **Colosseum** and move Roman numerals to the Trevi Fountain (the aqueduct arches get numbers I-V).
+1. **Six activities, including a 3-4 minute Pizzeria.** Keep this scope for the remaining rebuilds.
 2. **The 1889 storybook**: draw Queen Margherita and the pizza maker as **people** in the flat style (true to history,
    and the only people in the country), or as animals like everyone else (e.g., a royal swan queen)?
 3. **Finale**: **opera night in Verona** (planned: conducting, *piano/forte*, Lupa's wish) or a **Venice Carnival

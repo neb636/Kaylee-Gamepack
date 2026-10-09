@@ -52,7 +52,6 @@ const SCENARIOS = [
   { name: 'italy olive grove', id: 'olives', hash: '#/world/italy/olives', reset: true },
   { name: 'italy trevi fountain', id: 'trevi', hash: '#/world/italy/trevi', reset: true },
   { name: 'italy colosseum', id: 'colosseum', hash: '#/world/italy/colosseum', reset: true },
-  { name: 'italy leaning tower', id: 'pisa', hash: '#/world/italy/pisa', reset: true },
   { name: 'italy venice', id: 'venice', hash: '#/world/italy/venice', reset: true },
   { name: 'italy snow on a volcano', id: 'etna', hash: '#/world/italy/etna', reset: true },
   { name: 'italy opera (finale)', id: 'opera', hash: '#/world/italy/party', stampAll: 'italy' },

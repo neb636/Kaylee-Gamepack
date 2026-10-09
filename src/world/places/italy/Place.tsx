@@ -10,7 +10,6 @@ import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
 import { Colosseum } from './activities/colosseum/Colosseum'
 import { OliveGrove } from './activities/olives/OliveGrove'
-import { Pisa } from './activities/pisa/Pisa'
 import { Pizzeria } from './activities/pizzeria/Pizzeria'
 import { Trevi } from './activities/trevi/Trevi'
 import { Venice } from './activities/venice/Venice'
@@ -24,13 +23,12 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria, olives: OliveGrove, trevi: Trevi, colosseum: Colosseum, pisa: Pisa, venice: Venice }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria, olives: OliveGrove, trevi: Trevi, colosseum: Colosseum, venice: Venice }
 
-/** The seven arches on the boot map, on their landmarks in scene-italy-map (in % of the picture), and the instrument each
+/** The six arches on the boot map, on their landmarks in scene-italy-map (in % of the picture), and the instrument each
  *  friend brings to Lupa's band. Only activities listed in meta.activities are playable; the rest say "coming soon". */
 const SPOTS = [
   { id: 'venice', name: 'Venice', icon: '🛶', x: 59, y: 19, face: art.gino, band: '🪗' },
-  { id: 'pisa', name: 'Leaning Tower', icon: '🗼', x: 39.5, y: 27, face: art.civetta, band: '🔔' },
   { id: 'colosseum', name: 'The Colosseum', icon: '🏛️', x: 48, y: 41, face: art.cesare, band: art.romanHorn },
   { id: 'trevi', name: 'Trevi Fountain', icon: '⛲', x: 58.5, y: 45, face: art.lupa, band: '⭐' },
   { id: 'pizzeria', name: 'Pizzeria in Naples', icon: '🍕', x: 65.4, y: 61.5, face: art.bruno, band: art.mandolin },
