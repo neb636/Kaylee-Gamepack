@@ -53,6 +53,13 @@ export const BOATS = {
 } as const
 export type BoatKind = keyof typeof BOATS
 export const BOAT_ORDER: BoatKind[] = ['gondola', 'swan', 'bathtub', 'pizza']
+/** Each boat handles a little differently: top speed, how fast it slows when let go, how much it rocks. */
+export const BOAT_FEEL: Record<BoatKind, { speed: number; drag: number; rock: number }> = {
+  gondola: { speed: 1, drag: 1, rock: 1 },
+  swan: { speed: 0.95, drag: 0.75, rock: 0.8 },
+  bathtub: { speed: 0.9, drag: 1.15, rock: 1.9 },
+  pizza: { speed: 1.15, drag: 1, rock: 1.1 },
+}
 
 /** Bridges, side view. opening = how high the arch opening reaches (share of the height from the bottom). */
 export const BRIDGES = {

@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { sfx } from '../../../../kit/sfx'
 import { INK } from '../../puppets/ink'
 import { BRIDGES, clouds, critters, houses, posts, props, skyline, windowFriends } from './art'
-import { BOLLARDS, BRIDGE_CROWN, CLOUD_LIST, FEEL, LANE, LION_X, MAIN_BRIDGES, PIGEONS, QUAY_Y, SIDE_CANALS, SKYLINE, type Facade, type House as HouseData } from './canal'
+import { BOLLARDS, BRIDGE_CROWN, CLOUD_LIST, FEEL, LANE, LION_X, PIGEONS, QUAY_Y, SIDE_CANALS, SKYLINE, type Facade, type House as HouseData } from './canal'
 import { vsfx } from './sfx'
 
 /** Where a window friend pops up on each facade: x center and sill y (shares of the facade's width and height). */
@@ -99,10 +99,10 @@ export function SideCanals() {
 }
 
 /** The bridges over the main canal, drawn in front of the boat (it passes under them). Each is placed by its crown. */
-export function MainBridges() {
+export function MainBridges({ list }: { list: { x: number; w: number }[] }) {
   return (
     <>
-      {MAIN_BRIDGES.map((b) => {
+      {list.map((b) => {
         const h = b.w / BRIDGES.high.aspect
         const top = BRIDGE_CROWN + BRIDGES.high.opening * h - h
         return <img key={b.x} src={BRIDGES.high.img} alt="" draggable={false} style={{ position: 'absolute', left: b.x - b.w / 2, top, width: b.w, height: h, pointerEvents: 'none' }} />
@@ -210,7 +210,7 @@ function Lion() {
 
 /** The stone edge of the walkway nearest to us (pale Istrian stone with a brown outline), its bollards, pigeons and the
  *  winged lion; it moves faster than the canal because it's closer. At high water, wooden walkways (passerelle) go up. */
-export function Foreground({ width, high }: { width: number; high: boolean }) {
+export function Foreground({ width, high, party }: { width: number; high: boolean; party?: boolean }) {
   return (
     <>
       <div style={{ position: 'absolute', left: 0, top: QUAY_Y, width, height: 400, background: '#F1E2CC', borderTop: `5px solid ${INK}`, pointerEvents: 'none' }} />
@@ -219,7 +219,8 @@ export function Foreground({ width, high }: { width: number; high: boolean }) {
         <div key={x} style={{ position: 'absolute', left: x, top: QUAY_Y - 32, width: 36, height: 44, borderRadius: '18px 18px 6px 6px', background: '#E48A62', border: `5px solid ${INK}`, pointerEvents: 'none' }} />
       ))}
       {high && <img src={props.passerella.img} alt="" draggable={false} style={{ position: 'absolute', left: 760, top: QUAY_Y - 40, width: 520, height: 520 / props.passerella.aspect, pointerEvents: 'none' }} />}
-      <Lion />
+      {/* At the party the friends stand on the walkway, so the lion steps aside. */}
+      {!party && <Lion />}
       {PIGEONS.map((x) => (
         <Pigeon key={x} x={x} boots={high} />
       ))}

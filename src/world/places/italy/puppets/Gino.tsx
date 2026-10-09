@@ -88,7 +88,7 @@ export const Gino = forwardRef<PuppetHandle, GinoProps>(function Gino({ height, 
       let tilt = Math.sin(t * 0.9) * 2.5 + f.look.x * 4
       let headY = breathe * 1.5
       let wingLRot = holding ? -66 : 12
-      let wingRRot = holding ? 178 : 12
+      let wingRRot = holding ? 152 : 12
       let oarRot = 0
       let happy = false
       let open = 0
@@ -141,9 +141,9 @@ export const Gino = forwardRef<PuppetHandle, GinoProps>(function Gino({ height, 
       } else if (a === 'bonk') {
         // Bonk! His head jolts down and he squashes, then shakes it off.
         const hit = bell(span(q, 0, 0.3))
-        sy -= hit * 0.16
-        sx += hit * 0.1
-        headY += hit * 18
+        sy -= hit * 0.26
+        sx += hit * 0.16
+        headY += hit * 30
         tilt += Math.sin(q * Math.PI * 6) * 9 * (1 - q)
       } else if (a === 'giggle') {
         happy = true
@@ -163,8 +163,8 @@ export const Gino = forwardRef<PuppetHandle, GinoProps>(function Gino({ height, 
       // Accordion: wings hold the two ends out to the sides and squeeze in and out.
       const squeeze = P.accordion ? Math.sin(t * 4) : 0
       if (P.accordion) {
-        wingLRot = 70 + squeeze * 10
-        wingRRot = 70 + squeeze * 10
+        wingLRot = 22 + squeeze * 9
+        wingRRot = 22 + squeeze * 9
         tilt += squeeze * 4
       }
 
@@ -177,7 +177,7 @@ export const Gino = forwardRef<PuppetHandle, GinoProps>(function Gino({ height, 
       setT(p.oar, `rotate(${oarRot} 300 215)`)
       show(p.oar, holding)
       show(p.accordion, P.accordion)
-      setT(p.bellows, `translate(200 344) scale(${1 + squeeze * 0.16} 1) translate(-200 -344)`)
+      setT(p.bellows, `translate(200 344) scale(${1 + squeeze * 0.24} 1) translate(-200 -344)`)
 
       // The hat: on a spring (it lags behind his head and wobbles), flies off with a spin, drops back on.
       const dtc = Math.max(dt, 1 / 120)

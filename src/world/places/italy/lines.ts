@@ -322,7 +322,8 @@ export const L = {
 
   // 🛶 Venice: Gino's Water Taxi. Gino tells the story; Sparkle only speaks when something new happens (or she's stuck).
   venice: {
-    arrive: [gino(`Ciao, ${NAME}! In Venice, the streets are water!`), gino('Grab my gondola!')],
+    arrive: [gino(`Ciao, ${NAME}! In Venice, the streets are water!`)],
+    grab: gino('Grab my gondola!'),
     pickBoat: 'Pick a boat!',
     boat: {
       gondola: gino('A real gondola! Bellissima!'),
@@ -360,6 +361,8 @@ export const L = {
     maskPaint: 'Paint one side. Watch the other side!',
     maskGems: 'Now add sparkly gems!',
     maskDone: 'What a beautiful mask!',
+    maskOoh: 'Ooh! So pretty!',
+    maskCheck: 'Tap the check when you love it!',
     night: 'Look! The canal is all lit up!',
     fireworks: gino('Fireworks for Carnevale!'),
     accordion: gino("My accordion, for Lupa's band!"),
