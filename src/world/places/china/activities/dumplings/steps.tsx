@@ -166,7 +166,7 @@ export function Chop({ onDone, color = 'cream' }: StepProps) {
   )
 }
 
-/** Drag the rolling pin back and forth over the ball: every pass flattens it, four passes make a round wrapper. */
+/** Drag the horizontal rolling pin up and down over the ball: every pass flattens it, four passes make a round wrapper. */
 export function Roll({ chef, onDone, color = 'cream' }: StepProps) {
   const pin = useRef<HTMLDivElement>(null)
   const [passes, setPasses] = useState(0)
@@ -189,16 +189,16 @@ export function Roll({ chef, onDone, color = 'cream' }: StepProps) {
   }
   usePointerDrag(pin, {
     onStart: () => (track.current = { dir: 0, from: 0 }),
-    onMove: ({ dx }) => {
-      const w = window.innerWidth
-      const x = Math.max(-w * 0.2, Math.min(w * 0.2, dx))
-      if (pin.current) pin.current.style.transform = `translateX(${x}px)`
+    onMove: ({ dy }) => {
+      const h = pin.current?.parentElement?.clientHeight ?? 400
+      const y = Math.max(-h * 0.25, Math.min(h * 0.25, dy))
+      if (pin.current) pin.current.style.transform = `translateY(${y}px)`
       const t = track.current
-      const dir = Math.sign(x - t.from)
-      if (Math.abs(x - t.from) > w * 0.06) {
+      const dir = Math.sign(y - t.from)
+      if (Math.abs(y - t.from) > h * 0.12) {
         if (dir !== t.dir && t.dir !== 0) pass()
         t.dir = dir
-        t.from = x
+        t.from = y
       }
     },
     onEnd: () => {
@@ -206,7 +206,8 @@ export function Roll({ chef, onDone, color = 'cream' }: StepProps) {
       if (track.current.dir !== 0) pass()
     },
     onTap: () => {
-      pin.current?.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(12vw)' }, { transform: 'translateX(-12vw)' }, { transform: 'translateX(0)' }], { duration: 600 })
+      const travel = (pin.current?.parentElement?.clientHeight ?? 400) * 0.2
+      pin.current?.animate([{ transform: 'translateY(0)' }, { transform: `translateY(${-travel}px)` }, { transform: `translateY(${travel}px)` }, { transform: 'translateY(0)' }], { duration: 600 })
       pass()
     },
     disabled: passes >= 4,
@@ -220,7 +221,7 @@ export function Roll({ chef, onDone, color = 'cream' }: StepProps) {
       {passes < 4 && (
         <div ref={pin} role="button" aria-label="rolling pin" style={{ position: 'absolute', bottom: '20%', width: 'min(80cqw, 520px)', cursor: 'grab', padding: '20px 0' }}>
           <RollingPin />
-          <motion.div animate={{ x: [-60, 60, -60] }} transition={{ repeat: Infinity, duration: 1.4 }} style={{ position: 'absolute', left: '50%', top: '70%', fontSize: 40, pointerEvents: 'none' }}>
+          <motion.div animate={{ y: [-40, 40, -40] }} transition={{ repeat: Infinity, duration: 1.4 }} style={{ position: 'absolute', left: '50%', top: '70%', fontSize: 40, pointerEvents: 'none' }}>
             👆
           </motion.div>
         </div>
