@@ -293,7 +293,20 @@ const SCREENS = [
   { name: 'pisa-story', hash: '#/world/italy/pisa', reset: true, wait: 400 },
   { name: 'pisa-play', hash: '#/world/italy/pisa', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
   { name: 'venice-story', hash: '#/world/italy/venice', reset: true, wait: 400 },
-  { name: 'venice-play', hash: '#/world/italy/venice', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
+  { name: 'venice-pick', hash: '#/world/italy/venice', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(900) } },
+  // Venice moments, reached through its QA hook (window.__veniceQA.jump): driving, a friend riding with the LEFT/RIGHT
+  // hand, high water at a bridge, the mirror mask, the night finale.
+  ...['play', 'ride', 'tide', 'mask', 'finale'].map((to) => ({
+    name: `venice-${to}`,
+    hash: '#/world/italy/venice',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.waitForTimeout(500)
+      await p.evaluate((t) => window.__veniceQA?.jump(t), to)
+      await p.waitForTimeout(to === 'tide' ? 3800 : to === 'finale' ? 2500 : 1500)
+    },
+  })),
   { name: 'etna-story', hash: '#/world/italy/etna', reset: true, wait: 400 },
   { name: 'etna-play', hash: '#/world/italy/etna', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
   { name: 'italy-hub-stamps', hash: '#/world/italy', stampAll: 'italy' },

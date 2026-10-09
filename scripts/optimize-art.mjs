@@ -9,7 +9,8 @@
 // Image generators give us RGB images with no transparency, so sprites are
 // drawn on plain white and we cut the white background out here (flood fill
 // from the edges, so white *inside* the drawing is kept).
-// Files whose name starts with "scene", "cover" or "bg" stay opaque.
+// Files whose name starts with "scene", "cover" or "bg" stay opaque. Sprites are at most 512 px, or 1024 px when
+// the name ends in "-hd" (big scenery like house facades).
 //
 // Usage:
 //   npm run art                  # all images
@@ -40,8 +41,9 @@ function walk(dir) {
 
 const isOpaque = (file) => /^(scene|cover|bg)/.test(basename(file))
 
-/** Flood-fill near-white pixels connected to the border and make them transparent. */
-async function cutout(file) {
+/** Flood-fill near-white pixels connected to the border and make them transparent. With `holes`, also clear big
+ *  enclosed pure-white areas (an archway or window you can see through), which the border fill can't reach. */
+async function cutout(file, holes = false) {
   const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
   const { width: w, height: h } = info
   const px = new Uint8ClampedArray(data.buffer, data.byteOffset, data.length)
@@ -71,6 +73,36 @@ async function cutout(file) {
       px[p * 4 + 3] = Math.round(((d - HARD) / (SOFT - HARD)) * 255)
     }
   }
+  if (holes) {
+    const minArea = w * h * 0.002
+    for (let start = 0; start < w * h; start++) {
+      if (seen[start] || dist(start * 4) > 15) continue
+      // Collect the whole enclosed white region, then clear it only if it's big (small white specks are highlights).
+      const region = []
+      const edge = []
+      const todo = [start]
+      seen[start] = 1
+      while (todo.length) {
+        const p = todo.pop()
+        region.push(p)
+        const x = p % w
+        const y = (p / w) | 0
+        for (const q of [x > 0 ? p - 1 : -1, x < w - 1 ? p + 1 : -1, y > 0 ? p - w : -1, y < h - 1 ? p + w : -1]) {
+          if (q < 0 || seen[q]) continue
+          const d = dist(q * 4)
+          if (d > SOFT) continue
+          // Only pure white grows the hole (cream fills like #FFF7F0 stay); everything up to SOFT fades as its edge.
+          if (d <= 15) {
+            seen[q] = 1
+            todo.push(q)
+          } else edge.push(q)
+        }
+      }
+      if (region.length < minArea) continue
+      for (const p of region) px[p * 4 + 3] = 0
+      for (const p of edge) px[p * 4 + 3] = Math.min(px[p * 4 + 3], Math.round((Math.max(0, dist(p * 4) - 15) / (SOFT - 15)) * 255))
+    }
+  }
   return sharp(Buffer.from(px.buffer, px.byteOffset, px.length), { raw: { width: w, height: h, channels: 4 } })
     .png()
     .toBuffer()
@@ -86,9 +118,12 @@ for (const file of files) {
     const box = basename(file).includes('-wide') ? { width: 3400, height: 1100 } : { width: 1600, height: 1600 }
     await sharp(file).resize({ ...box, fit: 'inside', withoutEnlargement: true }).webp({ quality: 82 }).toFile(dest)
   } else {
-    const cut = await cutout(file)
+    const cut = await cutout(file, basename(file, '.png').endsWith('-hd'))
     const trimmed = await sharp(cut).trim({ threshold: 1 }).toBuffer()
-    await sharp(trimmed).resize({ width: 512, height: 512, fit: 'inside', withoutEnlargement: true }).webp({ quality: 85, alphaQuality: 90 }).toFile(dest)
+    // Big scenery sprites (`*-hd`, e.g. house facades and bridges shown at full screen height) keep up to 1024 px
+    // and get their see-through holes cleared.
+    const max = basename(file, '.png').endsWith('-hd') ? 1024 : 512
+    await sharp(trimmed).resize({ width: max, height: max, fit: 'inside', withoutEnlargement: true }).webp({ quality: 85, alphaQuality: 90 }).toFile(dest)
   }
   console.log(`${file} -> ${dest}`)
 }

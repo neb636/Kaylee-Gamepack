@@ -5,6 +5,7 @@ import { L } from '../lines'
 import { Bruno, BRUNO_ACTIONS } from './Bruno'
 import { Cesare, CESARE_ACTIONS } from './Cesare'
 import { Civetta, CIVETTA_ACTIONS } from './Civetta'
+import { Gino, GINO_ACTIONS } from './Gino'
 import { Lupa, LUPA_ACTIONS } from './Lupa'
 import { Spina, SPINA_ACTIONS } from './Spina'
 
@@ -19,4 +20,10 @@ export const PUPPETS: PuppetEntry[] = [
   { id: 'civetta-hold', name: 'Civetta (holding)', render: (ref, height) => createElement(Civetta, { ref, height, hold: true }), actions: ['hoot', 'nod'] },
   { id: 'civetta-flying', name: 'Civetta (flying)', render: (ref, height) => createElement(Civetta, { ref, height, flying: true }), actions: ['hoot'] },
   { id: 'spina-olives', name: 'Spina (olives)', render: (ref, height) => createElement(Spina, { ref, height, stuck: 4 }), actions: ['shake', 'puff', 'hop', 'dance'] },
+  { id: 'gino', name: 'Gino', render: (ref, height) => createElement(Gino, { ref, height }), actions: Object.keys(GINO_ACTIONS), lines: [...L.venice.arrive, L.venice.wheee, L.venice.dizzy, L.venice.hatBack, ...L.tickle.gino] },
+  { id: 'gino-oar', name: 'Gino (rowing)', render: (ref, height) => createElement(Gino, { ref, height, oar: true, rowSpeed: 0.6 }), actions: Object.keys(GINO_ACTIONS) },
+  { id: 'gino-singing', name: 'Gino (singing)', render: (ref, height) => createElement(Gino, { ref, height, oar: true, singing: true, rowSpeed: 1 }), actions: Object.keys(GINO_ACTIONS) },
+  { id: 'gino-dizzy', name: 'Gino (dizzy, hat off)', render: (ref, height) => createElement(Gino, { ref, height, dizzy: true, hatOff: true }), actions: Object.keys(GINO_ACTIONS) },
+  { id: 'gino-ducking', name: 'Gino (ducking)', render: (ref, height) => createElement(Gino, { ref, height, oar: true, ducking: true }), actions: Object.keys(GINO_ACTIONS) },
+  { id: 'gino-accordion', name: 'Gino (accordion)', render: (ref, height) => createElement(Gino, { ref, height, accordion: true, singing: true }), actions: Object.keys(GINO_ACTIONS) },
 ]

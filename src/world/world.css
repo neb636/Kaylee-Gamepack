@@ -30,6 +30,23 @@
     margin-left: calc(var(--btn) + 190px);
     align-self: flex-start;
   }
+  /* Activities with more stars in the top bar push the prompt further right. */
+  .world .wide-bar .stage-prompt {
+    margin-left: calc(var(--btn) + 250px);
+  }
+  /* Venice's mask shop: the palette goes beside the mask, so the mask gets the height. */
+  .world .venice-mask-body {
+    flex-direction: row !important;
+  }
+  .world .venice-lanterns {
+    top: calc(var(--safe-top) + 2px) !important;
+    left: calc(var(--btn) + 250px) !important;
+  }
+  .world .venice-palette {
+    display: grid !important;
+    grid-template-columns: repeat(2, auto);
+    align-content: center;
+  }
 }
 
 .world-split {
