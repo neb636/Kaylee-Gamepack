@@ -1,6 +1,6 @@
 // The kitchen stations. Each one is a different finger move:
 //   Dough     flick up (or tap) to toss and spin the dough; three tosses make a big round base.
-//   Sauce     press and swirl the ladle; red paints wherever it goes until the base is covered.
+//   Sauce     press and swirl the ladle; the chosen sauce paints until the base is covered.
 //   Toppings  a StickerBoard: drag toppings onto the pizza (counts, halves, or anything she likes).
 //   Cutter    drag the pizza wheel across: one cut = two halves, two cuts = four slices.
 import { AnimatePresence, motion } from 'motion/react'
@@ -93,6 +93,7 @@ export function Dough({ onToss, onDone }: { onToss?: (n: number) => void; onDone
 // --- Sauce -------------------------------------------------------------------------------------------------------
 
 const SAUCE_COLOR: Record<Sauce, string> = { red: '#E8574F', pink: '#F27AA6' }
+const SAUCE_FILTER: Record<Sauce, string> = { red: '', pink: 'hue-rotate(-28deg) saturate(1.1) brightness(1.15)' }
 const GRID = 14
 const SAUCE_R = 80 / 220 // sauce radius as a fraction of the pizza box
 const BRUSH = 0.13 // brush radius as a fraction of the pizza box
@@ -198,7 +199,7 @@ export function SauceSwirl({ pizza, color, onDone }: { pizza: PizzaState; color:
           src={art.ladle}
           alt=""
           draggable={false}
-          style={{ position: 'absolute', left: 0, top: 0, width: '40%', pointerEvents: 'none', transform: 'translate(30%, 28%) rotate(-20deg)', filter: 'drop-shadow(0 6px 0 rgba(110,59,36,.25))' }}
+          style={{ position: 'absolute', left: 0, top: 0, width: '40%', pointerEvents: 'none', transform: 'translate(30%, 28%) rotate(-20deg)', filter: `${SAUCE_FILTER[color]} drop-shadow(0 6px 0 rgba(110,59,36,.25))` }}
         />
       </div>
       {/* Tomato meter: fills up as the sauce covers the pizza. */}
@@ -228,7 +229,7 @@ export function PickSauce({ onPick }: { onPick: (s: Sauce) => void }) {
           }}
           style={{ width: 'min(40cqw, 60cqh, 280px)', aspectRatio: '1', background: 'none', border: 'none', padding: 0, position: 'relative' }}
         >
-          <img src={art.sauceBowl} alt="" style={{ width: '100%', filter: s === 'pink' ? 'hue-rotate(-28deg) saturate(1.1) brightness(1.15)' : undefined }} />
+          <img src={art.sauceBowl} alt="" style={{ width: '100%', filter: SAUCE_FILTER[s] || undefined }} />
         </motion.button>
       ))}
     </div>
