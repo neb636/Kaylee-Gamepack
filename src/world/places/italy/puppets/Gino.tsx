@@ -62,7 +62,8 @@ export interface GinoProps {
   accordion?: boolean
 }
 
-const HAT_BASE = 'translate(30 36) scale(0.86) rotate(-8 214 76)'
+/** Centered on top of his head (the crown hides the top of it, the brim sits just above his brows), tipped a little. */
+const HAT_BASE = 'translate(-4 13) scale(0.95) rotate(-5 215 84)'
 
 /** Gino the gondolier pigeon. Voice: gino. */
 export const Gino = forwardRef<PuppetHandle, GinoProps>(function Gino({ height, style, flip, onTap, oar = false, hatOff = false, dizzy = false, singing = false, rowSpeed = 0, rowRef, ducking = false, accordion = false }, ref) {
@@ -319,9 +320,6 @@ export const Gino = forwardRef<PuppetHandle, GinoProps>(function Gino({ height, 
   )
   const hatG = (pass: boolean) => (
     <g ref={r('hat', pass)} transform={HAT_BASE}>
-      {/* Ribbon tails flutter out behind (to his left, our right). */}
-      <path fill={RIBBON} d="M282 84 C304 96 318 118 324 142 L308 136 L304 152 C296 130 286 112 270 98Z" />
-      <path fill={RIBBON} d="M276 90 C288 112 292 136 288 160 L276 150 L266 162 C270 138 270 118 262 100Z" />
       <path fill={STRAW} d="M100 84 C100 72 330 72 330 84 C330 98 100 98 100 84Z" />
       <path fill={STRAW} d="M146 82 L150 34 C150 22 280 22 282 34 L286 82Z" />
       {!pass && (

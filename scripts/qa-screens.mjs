@@ -295,8 +295,8 @@ const SCREENS = [
   { name: 'venice-story', hash: '#/world/italy/venice', reset: true, wait: 400 },
   { name: 'venice-pick', hash: '#/world/italy/venice', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(900) } },
   // Venice moments, reached through its QA hook (window.__veniceQA.jump): driving, a friend riding with the LEFT/RIGHT
-  // hand, high water at a bridge, the mirror mask, the night finale.
-  ...['play', 'ride', 'tide', 'mask', 'finale'].map((to) => ({
+  // "go this way" bubble, Gino's trip to the mask shop, the mirror mask, the night finale.
+  ...['play', 'ride', 'trip', 'mask', 'finale'].map((to) => ({
     name: `venice-${to}`,
     hash: '#/world/italy/venice',
     reset: true,
@@ -304,7 +304,7 @@ const SCREENS = [
       await skip(p)
       await p.waitForTimeout(500)
       await p.evaluate((t) => window.__veniceQA?.jump(t), to)
-      await p.waitForTimeout(to === 'tide' ? 3800 : to === 'finale' ? 2500 : 1500)
+      await p.waitForTimeout(to === 'trip' ? 6000 : to === 'finale' ? 2500 : 1500)
     },
   })),
   { name: 'etna-story', hash: '#/world/italy/etna', reset: true, wait: 400 },
