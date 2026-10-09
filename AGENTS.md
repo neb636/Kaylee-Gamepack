@@ -239,6 +239,11 @@ Follow `art/STYLE.md` exactly (style prompt, sprites on pure white, backgrounds 
 - Save to `art/source/games/<game-id>/<name>.png`, run `npm run art -- <game-id>`, then
   `node scripts/contact-sheet.mjs src/games/<game-id>/assets` and **look at** `/tmp/contact-sheet.png`.
   Regenerate anything that cut out badly.
+- **White patches inside cutouts** (this keeps reaching PR review). The cutout only clears white that touches the
+  picture's edge, so white the drawing encloses stays: between legs, inside a handle or ring, between railings. Run
+  `node scripts/qa-art.mjs <game-id>` and open each sheet in `qa-output/art/`. Fix every hole (regenerate with the gap
+  filled, name the image `*-hd` so big holes are cleared, or `node scripts/clear-white.mjs <sprite.webp> x,y`), and
+  mark sprites whose white is real (eye whites, clouds) with `node scripts/qa-art.mjs --ok <sprite.webp> "eye whites"`.
 - Never put text/letters/numbers inside generated images. Render letters and numbers with HTML text instead (crisp and correct).
 - **One camera per scene (this keeps going wrong, so check it every time).** Pick the camera before you generate
   anything, usually straight-on, eye-level side view (like a theater stage, things stand on a ground line). Every
@@ -348,6 +353,8 @@ QA (after `npm run build`; WebKit, because the iPad runs Safari: `npx playwright
 - `node scripts/qa-screens.mjs`: every screen at 4 iPad + 3 iPhone sizes with touch emulation (`qa-output/webkit-*/`).
 - `node scripts/qa-motion.mjs`: filmstrips + gifs of puppet actions and game moments (`qa-output/motion/`). Still
   screenshots can't show whether something feels alive; filmstrips can.
+- `node scripts/qa-art.mjs`: white patches left inside sprite cutouts (`qa-output/art/`), the gap between a pigeon's
+  legs that shows white over the sky. Every hole is a major finding; fix it before the PR.
 - `node scripts/qa-pacing.mjs`: seconds of talk before her first touch and in total, from the real clip lengths, plus
   the fun numbers: talk per touch, seconds with nothing to touch, how many different things she touched, and a play
   strip (12 frames across a whole auto-played run, `qa-output/play/`). `--video` also records each run

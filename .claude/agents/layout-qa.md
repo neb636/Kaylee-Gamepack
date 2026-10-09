@@ -17,6 +17,7 @@ npm run build
 node scripts/qa-screens.mjs          # WebKit, touch, 7 viewports -> qa-output/webkit-<viewport>/*.png, qa-output/errors.txt
 node scripts/qa-motion.mjs           # puppet actions + game moments -> qa-output/motion/<scenario>.png, motion/report.txt
 node scripts/qa-pacing.mjs --video   # talk, talk per tap, play strips -> qa-output/pacing.md, qa-output/play/*.png, qa-output/video/
+node scripts/qa-art.mjs              # white patches left inside sprite cutouts -> qa-output/art/*.png, art/report.txt
 ```
 
 If you were told which country or activities to check, still run everything, but you may add `--routes=` (qa-screens,
@@ -54,6 +55,27 @@ Then check it against this list and write down every problem you can actually se
 Then read `qa-output/errors.txt` (console errors, overflow) and `qa-output/motion/report.txt` (skipped or failed
 scenarios), and open each filmstrip in `qa-output/motion/`: flag parts that detach, pop, clip or jump (not style).
 Copy the table from `qa-output/pacing.md` into your report as is (don't interpret it).
+
+## 2b. White patches in cutouts
+
+Sprites are generated on white and the white is cut away from the outside in, so white the drawing closes off stays
+behind: between a pigeon's legs, inside a teapot handle, between a boat's railings, in the gap between two friends.
+On a sky or water background it shows as a white blob. Kaylee notices; Dad has had to catch these in PR review.
+
+Open every sheet listed in `qa-output/art/report.txt` (left: the sprite on blue; right: white regions outlined in red).
+For each red box, decide:
+- **Hole (finding, major):** a place where the background should show through. Gaps between legs, arms or bodies,
+  inside handles, rings, hooks and hang-holes, between railings, spokes, branches or leaves. Ask: "would this be
+  see-through on the real thing?"
+- **Fine (not a finding):** eye whites and highlights, teeth, shine, white fur or feathers, clouds, sails, white food,
+  painted stripes.
+- **Unsure:** list it as minor with "unsure" and the sheet path.
+
+Report each hole as `major | all | <screens that show the sprite> | qa-output/art/<sheet>.png | white patch <where> in
+<sprite.webp> (box at x,y) | clear it: fix the source and rerun npm run art, or node scripts/clear-white.mjs <sprite>
+x,y`. Also flag any white blob you see around or inside a sprite in the regular screenshots (check 6) that the
+script missed. Don't run `--ok` yourself (that edits `scripts/`); list fine ones under "white is fine" in one line so
+whoever fixes the findings can mark them.
 
 ## 3. Report
 

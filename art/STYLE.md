@@ -49,3 +49,7 @@ Always attach `art/source/mascot/wave.png` when drawing Sparkle in a new pose or
 3. `node scripts/contact-sheet.mjs src/games/<game-id>/assets` makes `/tmp/contact-sheet.png`
    (sprites on purple). Look at it: if a sprite lost part of its body (white areas leaking), regenerate
    that sprite with a stronger outline or a non-white color.
+4. `node scripts/qa-art.mjs <game-id>` finds the opposite problem: white the drawing encloses (between legs, inside a
+   handle or ring, between railings) can't be reached from the edge, so it stays white and shows as a blob over the
+   scene. Open each sheet in `qa-output/art/`, clear every hole (see `AGENTS.md`), and mark sprites whose white is real
+   (eye whites, clouds) with `--ok`.

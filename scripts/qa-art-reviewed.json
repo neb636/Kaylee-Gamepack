@@ -1,0 +1,234 @@
+{
+  "src/assets/mascot/cheer.webp": {
+    "hash": "67c36ddc8faf",
+    "note": "Sparkle's face, eyes and horn"
+  },
+  "src/assets/mascot/think.webp": {
+    "hash": "a81c64787975",
+    "note": "Sparkle's face, eyes and horn"
+  },
+  "src/assets/mascot/wave.webp": {
+    "hash": "067af1dd6859",
+    "note": "Sparkle's face, eyes and horn"
+  },
+  "src/assets/trophy/trophy.webp": {
+    "hash": "17cec3b54881",
+    "note": "name plate"
+  },
+  "src/games/unicorn-tea-party/assets/cupcake.webp": {
+    "hash": "287183ad41f9",
+    "note": "cherry shine"
+  },
+  "src/games/unicorn-tea-party/assets/star.webp": {
+    "hash": "7fba82c328ff",
+    "note": "highlight"
+  },
+  "src/world/assets/passport.webp": {
+    "hash": "536c7bb9e860",
+    "note": "page edges"
+  },
+  "src/world/places/australia/assets/baby-croc.webp": {
+    "hash": "bad51547dea2",
+    "note": "eye highlights"
+  },
+  "src/world/places/australia/assets/clownfish.webp": {
+    "hash": "a7aeccb0db4d",
+    "note": "white stripes and eyes"
+  },
+  "src/world/places/australia/assets/croc-mama.webp": {
+    "hash": "58b724ddc530",
+    "note": "eye highlight"
+  },
+  "src/world/places/china/assets/bamboo-bundle.webp": {
+    "hash": "e3d7471d707d",
+    "note": "cut bamboo ends"
+  },
+  "src/world/places/china/assets/bok-choy.webp": {
+    "hash": "ec44887f8164",
+    "note": "stem highlight"
+  },
+  "src/world/places/china/assets/bullet-train.webp": {
+    "hash": "98155e6c8429",
+    "note": "white train body"
+  },
+  "src/world/places/china/assets/doudou.webp": {
+    "hash": "59fdf168a262",
+    "note": "eye highlights"
+  },
+  "src/world/places/china/assets/dragon.webp": {
+    "hash": "90d42ff492e6",
+    "note": "white cloud under the dragon"
+  },
+  "src/world/places/china/assets/houhou.webp": {
+    "hash": "f8941b9f4c4e",
+    "note": "eye whites"
+  },
+  "src/world/places/china/assets/lulu.webp": {
+    "hash": "f8475a47d502",
+    "note": "eye highlights"
+  },
+  "src/world/places/china/assets/mouse.webp": {
+    "hash": "632fd448c3c2",
+    "note": "eye highlights"
+  },
+  "src/world/places/china/assets/rabbit.webp": {
+    "hash": "8b03d20cc0a3",
+    "note": "white fur"
+  },
+  "src/world/places/china/assets/sesame-ball.webp": {
+    "hash": "09fe0f6502ef",
+    "note": "sesame seeds"
+  },
+  "src/world/places/egypt/assets/capstone.webp": {
+    "hash": "bb261e9be7cd",
+    "note": "gold tip shine"
+  },
+  "src/world/places/egypt/assets/felucca.webp": {
+    "hash": "b510a92961d9",
+    "note": "white sail"
+  },
+  "src/world/places/egypt/assets/fennec.webp": {
+    "hash": "bd1d191cc6e1",
+    "note": "eye highlights"
+  },
+  "src/world/places/egypt/assets/gold-mask.webp": {
+    "hash": "5d6a3f591484",
+    "note": "eye whites"
+  },
+  "src/world/places/egypt/assets/hippo.webp": {
+    "hash": "488411379b2f",
+    "note": "eye highlights"
+  },
+  "src/world/places/egypt/assets/ibis.webp": {
+    "hash": "681ae819ad93",
+    "note": "white feathers"
+  },
+  "src/world/places/egypt/assets/jamal.webp": {
+    "hash": "96c9d5d1e2d8",
+    "note": "eye highlights"
+  },
+  "src/world/places/egypt/assets/koshari-bowl.webp": {
+    "hash": "49acc20c9de6",
+    "note": "bowl inside"
+  },
+  "src/world/places/egypt/assets/miu.webp": {
+    "hash": "0fcc78906b51",
+    "note": "eyes and white tail tip"
+  },
+  "src/world/places/egypt/assets/pasta.webp": {
+    "hash": "9d43b8a6b1d6",
+    "note": "bowl shine"
+  },
+  "src/world/places/egypt/assets/rice.webp": {
+    "hash": "c9accb834246",
+    "note": "white rice"
+  },
+  "src/world/places/egypt/assets/scarab.webp": {
+    "hash": "05604ab582bc",
+    "note": "shell shine"
+  },
+  "src/world/places/egypt/assets/sphinx.webp": {
+    "hash": "75b3526cb5d5",
+    "note": "eye highlights"
+  },
+  "src/world/places/egypt/assets/tutu.webp": {
+    "hash": "5bd3252b9546",
+    "note": "eye highlights"
+  },
+  "src/world/places/italy/assets/bruno.webp": {
+    "hash": "e1258debbe08",
+    "note": "chef hat and apron"
+  },
+  "src/world/places/italy/assets/bufala.webp": {
+    "hash": "5fc9c5036937",
+    "note": "eye highlight"
+  },
+  "src/world/places/italy/assets/civetta.webp": {
+    "hash": "ec3b5bcb5926",
+    "note": "eye highlights"
+  },
+  "src/world/places/italy/assets/gino.webp": {
+    "hash": "6342591d4ced",
+    "note": "striped shirt and eyes"
+  },
+  "src/world/places/italy/assets/ladle.webp": {
+    "hash": "5fcc9ce4db9e",
+    "note": "shine"
+  },
+  "src/world/places/italy/assets/lupa.webp": {
+    "hash": "4b3c748e7380",
+    "note": "eye highlights"
+  },
+  "src/world/places/italy/assets/mozzarella-piece.webp": {
+    "hash": "fbe8c713ce0d",
+    "note": "white cheese"
+  },
+  "src/world/places/italy/assets/mozzarella.webp": {
+    "hash": "1affcdc21c4b",
+    "note": "white cheese"
+  },
+  "src/world/places/italy/assets/oil-jug.webp": {
+    "hash": "d9a3a3317f5f",
+    "note": "painted stripes"
+  },
+  "src/world/places/italy/assets/olive-bowl.webp": {
+    "hash": "e393b2a847f5",
+    "note": "white bowl"
+  },
+  "src/world/places/italy/assets/olive.webp": {
+    "hash": "5063035eb0d6",
+    "note": "shine"
+  },
+  "src/world/places/italy/assets/queen-margherita.webp": {
+    "hash": "f254830595a7",
+    "note": "white dress"
+  },
+  "src/world/places/italy/assets/spina.webp": {
+    "hash": "5a7e6cd88596",
+    "note": "eye highlights"
+  },
+  "src/world/places/italy/assets/tower-pisa.webp": {
+    "hash": "344d9f09284e",
+    "note": "white marble"
+  },
+  "src/world/places/italy/assets/venice-boat-bathtub-hd.webp": {
+    "hash": "471e5fa5c192",
+    "note": "white tub and bubbles"
+  },
+  "src/world/places/italy/assets/venice-cat-window.webp": {
+    "hash": "d84efab2d9d2",
+    "note": "eye highlight"
+  },
+  "src/world/places/italy/assets/venice-cloud-1.webp": {
+    "hash": "57d32f9fc4cc",
+    "note": "cloud"
+  },
+  "src/world/places/italy/assets/venice-cloud-2.webp": {
+    "hash": "5da2f6a466cf",
+    "note": "cloud"
+  },
+  "src/world/places/italy/assets/venice-house-coral-hd.webp": {
+    "hash": "fc016c4ea79e",
+    "note": "white trim"
+  },
+  "src/world/places/italy/assets/venice-house-maskshop-hd.webp": {
+    "hash": "c41230d48172",
+    "note": "1px white trim lines"
+  },
+  "src/world/places/italy/assets/venice-house-pink-hd.webp": {
+    "hash": "ae046217f37b",
+    "note": "1px white trim line"
+  },
+  "src/world/places/italy/assets/venice-laundry-hd.webp": {
+    "hash": "e646c9abd5c1",
+    "note": "white laundry"
+  },
+  "src/world/places/italy/assets/venice-post-blue.webp": {
+    "hash": "59638f5170f2",
+    "note": "white stripes"
+  },
+  "src/world/places/italy/assets/venice-post-pink.webp": {
+    "hash": "f62e34a12063",
+    "note": "white stripes"
+  }
+}
