@@ -51,30 +51,16 @@ import tambourine from './assets/tambourine.webp'
 import tomato from './assets/tomato.webp'
 import bgColosseum from './assets/bg-colosseum.webp'
 import bgColosseumTall from './assets/bg-colosseum-tall.webp'
-import bgPisa from './assets/bg-pisa.webp'
-import bgPisaTall from './assets/bg-pisa-tall.webp'
 import civetta from './assets/civetta.webp'
-import feather from './assets/feather.webp'
-import lemon from './assets/lemon.webp'
-import melon from './assets/melon.webp'
 import romanHorn from './assets/roman-horn.webp'
 import tortoise from './assets/tortoise.webp'
-import towerPisa from './assets/tower-pisa.webp'
-import weight from './assets/weight.webp'
 
 export const art = {
   bgColosseum,
   bgColosseumTall,
-  bgPisa,
-  bgPisaTall,
   civetta,
-  feather,
-  lemon,
-  melon,
   romanHorn,
   tortoise,
-  towerPisa,
-  weight,
   basil,
   basketOlives,
   bgAqueduct,

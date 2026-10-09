@@ -281,45 +281,6 @@ export const L = {
     band: lupa('Yay! A horn for the band!'),
   },
 
-  // 🗼 The Leaning Tower of Pisa (activities/pisa). Every spoken line of the activity goes in here.
-  pisa: {
-    arrive: [civetta('Hoo! I am Professoressa Civetta!'), civetta('My tower leans more and more! Help!')],
-    // 1. Balance it.
-    soft: 'The tower leans because the ground is soft!',
-    weights: 'Drag a heavy weight to the high side!',
-    weightNext: 'Another weight!',
-    weightLast: 'One more weight!',
-    wrongSide: 'Oops! Put it on the other side!',
-    creak: civetta('Hoo! It leans more!'),
-    better: [civetta('Hoo! It is getting better!'), civetta('Yes! Keep going!'), civetta('It stopped! Hoo-ray!')],
-    stillLeans: 'It still leans a little. That is why it is famous!',
-    engineers: 'Builders really did this, with heavy weights!',
-    // 2. The famous photo.
-    photo: 'Let\'s take the famous photo!',
-    pushSparkle: 'Drag Sparkle until her hoof holds up the tower!',
-    closer: 'Closer to the tower!',
-    snap: 'Say cheese! Snap!',
-    // 3. Galileo's drop.
-    galileo: 'A scientist named Galileo lived here!',
-    climb: civetta('Let\'s drop things from the top! Like Galileo!'),
-    whichFirst: 'Which one lands first? Tap it!',
-    findOut: civetta('Let\'s find out!'),
-    drop: 'Tap the drop button!',
-    same: 'They land at the same time!',
-    sameWhy: 'Heavy and light fall just as fast!',
-    feather: 'The feather floats down slowly!',
-    air: 'The air pushes the feather!',
-    youPick: 'Now you pick! Tap two things to drop!',
-    pickOne: 'Pick one more!',
-    youWere: ['You were right!', 'Good guess!'],
-    // Payoff: the seven bells.
-    bells: civetta('The tower is a bell tower! Seven bells!'),
-    ringBells: 'Tap the bells, one by one!',
-    scale: 'Do, re, mi! Music!',
-    giveBells: civetta("Grazie! My bells, for Lupa's band!"),
-    band: lupa('Yay! Bells for the band!'),
-  },
-
   // 🛶 Venice: Gino's Water Taxi. Gino tells the story; Sparkle only speaks when something new happens (or she's stuck).
   venice: {
     arrive: [gino(`Ciao, ${NAME}! In Venice, the streets are water!`)],
@@ -373,7 +334,6 @@ export const L = {
     pizzeria: 'Brown bear sticker! Bears live in the mountains of Italy!',
     olives: 'Porcupine sticker! Crested porcupines live in Italy!',
     colosseum: 'Cat sticker! Lots of cats live in the old ruins of Rome!',
-    pisa: 'Little owl sticker! Little owls live all over Italy!',
     trevi: 'Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!',
     venice: 'Pigeon sticker! Lots of pigeons live in Venice!',
   },
@@ -382,7 +342,6 @@ export const L = {
     trevi: "Let's toss a coin in the real Trevi Fountain!",
     aqueduct: 'Look! A real Roman water bridge!',
     colosseum: "Let's see the real Colosseum in Rome!",
-    pisa: "Let's see the real Leaning Tower!",
   },
   facts: {
     venice: 'Venice is a city on the water! It has more than four hundred bridges, and the buses and ambulances are boats!',
@@ -398,7 +357,6 @@ export const L = {
     flag: 'Italy\'s flag has three stripes: green, white and red!',
     olives: 'Some olive trees in Italy are more than a thousand years old!',
     numbers: 'Romans wrote five like this: V!',
-    pisa: 'The Leaning Tower of Pisa leans because the ground is soft!',
     wolf: 'The story says a kind mama wolf took care of the twins who built Rome!',
   },
   passport: 'This is Italy! Tap a picture to learn more.',

@@ -192,3 +192,17 @@ for (const id of placeIds) {
     expect(errors).toEqual([])
   })
 }
+
+test('Italy ignores retired saved stamps and keeps current activities', async ({ page }) => {
+  const errors = trackErrors(page)
+  await page.addInitScript(() => {
+    localStorage.setItem('kaylee-gamepack:/:world', JSON.stringify({ visited: ['italy'], stamps: { italy: ['retired-activity', 'pizzeria'] } }))
+  })
+  await start(page, '#/world/italy')
+  await expect(page.getByText('📕 1/5', { exact: true })).toBeVisible()
+  for (const name of ['Pizzeria in Naples', 'Olive Grove', 'The Colosseum', 'Venice', 'Trevi Fountain']) {
+    await expect(page.getByRole('button', { name, exact: true })).toBeVisible()
+  }
+  expect(await page.locator('button[aria-label]').evaluateAll((buttons) => buttons.filter((b) => b.getAttribute('aria-label')?.includes('Tower')).length)).toBe(0)
+  expect(errors).toEqual([])
+})

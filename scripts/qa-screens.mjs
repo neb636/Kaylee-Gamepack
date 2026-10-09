@@ -290,8 +290,6 @@ const SCREENS = [
   { name: 'trevi-play', hash: '#/world/italy/trevi', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
   { name: 'colosseum-story', hash: '#/world/italy/colosseum', reset: true, wait: 400 },
   { name: 'colosseum-play', hash: '#/world/italy/colosseum', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
-  { name: 'pisa-story', hash: '#/world/italy/pisa', reset: true, wait: 400 },
-  { name: 'pisa-play', hash: '#/world/italy/pisa', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
   { name: 'venice-story', hash: '#/world/italy/venice', reset: true, wait: 400 },
   { name: 'venice-pick', hash: '#/world/italy/venice', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(900) } },
   // Venice moments, reached through its QA hook (window.__veniceQA.jump): driving, a friend riding with the LEFT/RIGHT

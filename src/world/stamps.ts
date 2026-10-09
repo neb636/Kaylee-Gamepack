@@ -1,5 +1,6 @@
 // Kaylee's passport: which countries she visited and which stamps she earned, saved on this device.
 import { useSyncExternalStore } from 'react'
+import { places } from './registry'
 
 export interface PassportData {
   visited: string[]
@@ -16,6 +17,11 @@ function read(): PassportData {
   if (!cache) {
     try {
       cache = { ...EMPTY, ...(JSON.parse(localStorage.getItem(KEY) ?? '{}') as Partial<PassportData>) }
+      // Retired activities must not count toward the current passport or country's progress.
+      for (const { meta } of places) {
+        const current = new Set(meta.activities.map((a) => a.id))
+        if (cache.stamps[meta.id]) cache.stamps[meta.id] = cache.stamps[meta.id].filter((id) => current.has(id))
+      }
     } catch {
       cache = EMPTY
     }
