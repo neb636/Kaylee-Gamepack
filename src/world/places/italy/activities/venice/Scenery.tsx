@@ -4,7 +4,7 @@ import { motion } from 'motion/react'
 import { useState } from 'react'
 import { sounds } from '../../../../../sdk'
 import { INK } from '../../puppets/ink'
-import { BOLLARDS, CLOUD_LIST, LANE, ROOFTOPS, type House as HouseData } from './canal'
+import { BOLLARDS, CLOUD_LIST, FEEL, LANE, ROOFTOPS, type House as HouseData } from './canal'
 
 const OUT = 4
 
@@ -67,9 +67,9 @@ export function Post({ x, lane, postRef }: { x: number; lane: 'near' | 'front'; 
       style={{
         position: 'absolute',
         left: x - 15,
-        top: base - 210,
+        top: base - FEEL.postHeight - 26,
         width: 30,
-        height: 210,
+        height: FEEL.postHeight + 26,
         borderRadius: '15px 15px 4px 4px',
         border: `${OUT}px solid ${INK}`,
         background: lane === 'near' ? 'repeating-linear-gradient(-30deg, #fff 0 22px, #5D8FD8 22px 44px)' : 'repeating-linear-gradient(-30deg, #fff 0 22px, #E2617A 22px 44px)',

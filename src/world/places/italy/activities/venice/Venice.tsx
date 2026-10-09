@@ -215,8 +215,8 @@ export function Venice({ setProgress }: ActivityProps) {
     POSTS.forEach((post, i) => {
       const dx = wrap(s.bx - post.x, CANAL)
       const dy = s.by - LANE[post.lane]
-      const reachX = BOAT.halfLength + 14
-      const reachY = 62
+      const reachX = BOAT.halfLength * FEEL.postHitLength + 12
+      const reachY = FEEL.postHitDepth
       if (Math.abs(dx) >= reachX || Math.abs(dy) >= reachY) return
       const sx = Math.sign(dx) || 1
       const sy = Math.sign(dy) || 1

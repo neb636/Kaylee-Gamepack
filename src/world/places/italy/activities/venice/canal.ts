@@ -36,6 +36,12 @@ export const FEEL = {
   postWobble: 0.08,
   /** Bumping the same post this many times in a row (within 1.5 s) bounces the boat into the other lane, so pushing
    *  into a post slides round it instead of boinging forever. */
+  /** Post hit zone: how much of the boat's half-length counts (the bow and stern tips can overlap a post) and how far
+   *  (units) the boat must be from the post's lane to slip past (lanes are 120 apart, so 40 = a third of the way over). */
+  postHitLength: 0.78,
+  postHitDepth: 40,
+  /** Post height above the water (units). */
+  postHeight: 140,
   dodgeAfter: 2,
   dodgeKick: 380,
   /** Wake: a foam circle every N units travelled, how long each lives (s); spray droplets above this speed. */
