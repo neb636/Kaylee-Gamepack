@@ -14,37 +14,47 @@ export const FEEL = {
   /** Up/down between the two lanes: follow stiffness while dragging, settle stiffness after she lets go. */
   laneFollowK: 26,
   laneSettleK: 12,
-  /** Moving backwards faster than this (units/s) turns the boat around with a spin. */
+  /** Moving backwards faster than this (units/s), with her finger behind the boat, turns it round with a spin.
+   *  No turning for turnAfterBump seconds after a post bump (a bounce isn't a turn). */
   turnSpeed: 70,
-  /** The happy spin: seconds, number of half-turns (odd, so it ends facing the other way), hop height. */
-  spinTime: 0.62,
-  spinHalfTurns: 3,
-  spinHop: 26,
+  turnAfterBump: 0.45,
+  /** The happy spin: seconds, number of half-turns (odd, so it ends facing the other way), hop height. The flat boat
+   *  never gets thinner than spinMinWidth of its width, so it doesn't vanish mid-turn. */
+  spinTime: 0.45,
+  spinHalfTurns: 1,
+  spinHop: 40,
+  spinMinWidth: 0.25,
   /** Bobbing: height (units), speed (radians/s); rocking in degrees; tilt (degrees per unit/s² of acceleration). */
-  bob: 4.5,
+  bob: 6,
   bobSpeed: 2.4,
-  rock: 1.8,
+  rock: 2.5,
   tiltPerAccel: 0.0055,
   maxTilt: 9,
   /** Posts: bounce strength (share of the speed kept), how long her pull is weakened after a bump, post wobble. */
   bounce: 0.7,
   stunTime: 0.32,
-  postWobble: 0.045,
+  postWobble: 0.08,
   /** Bumping the same post this many times in a row (within 1.5 s) bounces the boat into the other lane, so pushing
    *  into a post slides round it instead of boinging forever. */
   dodgeAfter: 2,
   dodgeKick: 380,
   /** Wake: a foam circle every N units travelled, how long each lives (s); spray droplets above this speed. */
-  wakeEvery: 22,
-  wakeLife: 1.3,
+  wakeEvery: 36,
+  wakeLife: 1.1,
   sprayAbove: 560,
   /** Camera: it leads the boat by its speed × leadTime (at most maxLead of the screen width), catching up at cameraRate/s.
    *  It leads by speed, not by the way the boat faces, so a finger resting on a still boat never makes it creep. */
-  leadTime: 0.22,
-  maxLead: 0.18,
-  cameraRate: 2.6,
-  /** How close (units) the boat must be to a doorstep, in the lane by the houses, for a friend to hop in or out. */
+  leadTime: 0.3,
+  maxLead: 0.25,
+  cameraRate: 3.5,
+  /** How close (units) the boat must be to a doorstep for a friend to hop in or out: in the lane by the houses at any
+   *  speed, or in the front lane when slower than frontBoardSpeed. */
   doorReach: 170,
+  frontBoardSpeed: 300,
+  /** A new friend pops out of a door this far ahead of the boat (units), in the way it's going. */
+  friendAhead: [300, 700],
+  /** Squash and stretch strength (bumps, a friend landing, the spin's landing). */
+  squash: 0.35,
 } as const
 
 /** Parallax: how fast each layer moves compared with the canal (1 = the house row and the boat). */
@@ -118,7 +128,7 @@ export const POSTS: { x: number; lane: 'near' | 'front' }[] = [
   { x: 820, lane: 'near' },
   { x: 1338, lane: 'front' },
   { x: 2150, lane: 'front' },
-  { x: 2669, lane: 'near' },
+  { x: 1763, lane: 'near' },
   { x: 3300, lane: 'front' },
   { x: 3988, lane: 'near' },
   { x: 4700, lane: 'front' },

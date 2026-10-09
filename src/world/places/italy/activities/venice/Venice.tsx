@@ -73,7 +73,7 @@ export function Venice({ setProgress }: ActivityProps) {
   const g = useRef({
     t: 0,
     bx: 360,
-    by: LANE.front as number,
+    by: LANE.near as number,
     vx: 0,
     vy: 0,
     accel: 0,
@@ -100,6 +100,8 @@ export function Venice({ setProgress }: ActivityProps) {
     friend: { phase: 'none' as FriendPhase, house: -1, last: -1, t: 0, x: 0, y: 0, fromX: 0, fromY: 0, tap: -1, spawnIn: 5 },
   })
   const layoutRef = useRef<Layout | null>(null)
+  const friendColorRef = useRef(friendColor)
+  friendColorRef.current = friendColor
   layoutRef.current = layout
 
   // ---- DOM handles written by the loop ----
@@ -126,7 +128,9 @@ export function Venice({ setProgress }: ActivityProps) {
   const onPointerDown = (e: PointerEvent) => {
     const L = layoutRef.current
     const s = g.current
-    if (!L || s.drag || (e.target as HTMLElement).closest('button')) return
+    // The boat wins over a house behind it; the friend (a button) keeps its own taps.
+    if (!L || s.drag || (e.target as HTMLElement).closest('[aria-label="friend"]')) return
+    const onButton = !!(e.target as HTMLElement).closest('button')
     const r = root.current!.getBoundingClientRect()
     const px = e.clientX - r.left
     const py = e.clientY - r.top
@@ -137,12 +141,14 @@ export function Venice({ setProgress }: ActivityProps) {
     const rx = Math.max(BOAT.halfLength + 50, 70 / L.s)
     const ry = Math.max(95, 70 / L.s)
     if ((dx / rx) ** 2 + (dy / ry) ** 2 < 1) {
+      // Captured by the stage, so the house underneath never gets the click.
+      e.stopPropagation()
       root.current!.setPointerCapture(e.pointerId)
       s.drag = { id: e.pointerId, fx: px, fy: py, gx: dx, gy: p.y - s.by }
       s.idle = 0
       startSwish()
       sfx.fwip()
-    } else if (p.y > 8) {
+    } else if (!onButton && p.y > 8) {
       // Tap the water: a splash.
       sfx.splash()
       for (let i = 0; i < 3; i++) spawn(s.wake, WAKE_POOL, { x: p.x, y: p.y, vx: 0, vy: 0, age: -i * 0.12, life: 0.9, size: 30 })
@@ -175,11 +181,13 @@ export function Venice({ setProgress }: ActivityProps) {
     const s = g.current
     s.t += dt
     const prevVx = s.vx
+    let pull = 0 // which way her finger is pulling (-1, 0, 1)
 
     // ---- The boat: chase the finger, or coast ----
     if (s.drag) {
       const p = toCanal(L, s.drag.fx, s.drag.fy)
       const tx = p.x - s.drag.gx
+      pull = Math.abs(tx - s.bx) > 40 ? Math.sign(tx - s.bx) : 0
       const ty = Math.min(LANE.front, Math.max(LANE.near, p.y - s.drag.gy))
       const k = FEEL.followK * (s.stun > 0 ? 0.15 : 1)
       s.vx += (k * (tx - s.bx) - FEEL.followDamp * s.vx) * dt
@@ -228,7 +236,7 @@ export function Venice({ setProgress }: ActivityProps) {
           s.vy = -s.vy * FEEL.bounce + sy * 30
         }
       }
-      if (impact > 50 && s.bumpCooldown <= 0) {
+      if (impact > 50 && s.bumpCooldown <= 0 && s.dodge <= 0) {
         sfx.boing()
         s.bumpCooldown = 0.4
         s.stun = FEEL.stunTime
@@ -252,7 +260,8 @@ export function Venice({ setProgress }: ActivityProps) {
     }
 
     // ---- Turning round: a happy spin with a hop ----
-    if (s.vx * s.facing < -FEEL.turnSpeed && s.spin < 0) {
+    const turning = s.vx * s.facing < -FEEL.turnSpeed && (!s.drag || pull * s.facing < 0) && s.t - s.lastBump > FEEL.turnAfterBump
+    if (turning && s.spin < 0) {
       s.spinFrom = s.facing
       s.facing = -s.facing
       s.spin = 0
@@ -264,13 +273,18 @@ export function Venice({ setProgress }: ActivityProps) {
     if (s.spin >= 0) {
       s.spin += dt
       const p = Math.min(1, s.spin / FEEL.spinTime)
-      flip = s.spinFrom * Math.cos(FEEL.spinHalfTurns * Math.PI * p)
+      const c = Math.cos(FEEL.spinHalfTurns * Math.PI * p)
+      flip = s.spinFrom * Math.sign(c || -1) * Math.max(FEEL.spinMinWidth, Math.abs(c))
       hop = Math.sin(Math.PI * p) * FEEL.spinHop
-      if (p >= 1) s.spin = -1
+      if (p >= 1) {
+        s.spin = -1
+        s.squashV += 3 // lands with a squash
+        sfx.splash()
+      }
     }
 
     // ---- Squash (bumps, a friend landing) ----
-    s.squashV += (-320 * s.squash - 16 * s.squashV) * dt
+    s.squashV += (-320 * s.squash - 12 * s.squashV) * dt
     s.squash += s.squashV * dt
 
     // ---- Wake and spray ----
@@ -279,13 +293,16 @@ export function Venice({ setProgress }: ActivityProps) {
       s.sinceWake = 0
       s.wakeFlip = -s.wakeFlip
       const stern = s.bx - Math.sign(s.vx) * BOAT.halfLength * 0.8
-      spawn(s.wake, WAKE_POOL, { x: stern, y: s.by + 6 + s.wakeFlip * 7, vx: 0, vy: 0, age: 0, life: FEEL.wakeLife, size: 18 + speed * 0.025 })
+      spawn(s.wake, WAKE_POOL, { x: stern, y: s.by + 6 + s.wakeFlip * 7, vx: 0, vy: s.wakeFlip * 30, age: 0, life: FEEL.wakeLife, size: 18 + speed * 0.025 })
     }
     if (speed > FEEL.sprayAbove && Math.random() < ((speed - FEEL.sprayAbove) / 300) * dt * 30) {
       const dir = Math.sign(s.vx)
       spawn(s.spray, SPRAY_POOL, { x: s.bx + dir * BOAT.halfLength * 0.9, y: s.by, vx: dir * (speed * 0.25 + Math.random() * 80), vy: -220 - Math.random() * 220, age: 0, life: 0.65, size: 9 + Math.random() * 9 })
     }
-    for (const p of s.wake) p.age += dt
+    for (const p of s.wake) {
+      p.age += dt
+      p.y += p.vy * dt
+    }
     for (const p of s.spray) {
       p.age += dt
       p.vy += 1100 * dt
@@ -304,7 +321,7 @@ export function Venice({ setProgress }: ActivityProps) {
     const f = s.friend
     const bob = Math.sin(s.t * FEEL.bobSpeed) * FEEL.bob + Math.sin(s.t * 1.3) * FEEL.bob * 0.4
     const seat = { x: s.bx, y: s.by - 26 - FRIEND_R + bob - hop }
-    const nearHouses = s.by < LANE_SPLIT
+    const canBoard = s.by < LANE_SPLIT || speed < FEEL.frontBoardSpeed
     f.t += dt
     if (f.tap >= 0) f.tap += dt
     if (f.tap > 0.5) f.tap = -1
@@ -317,7 +334,7 @@ export function Venice({ setProgress }: ActivityProps) {
         const options = HOUSES.map((_, i) => i).filter((i) => i !== PINK && i !== f.last)
         const ahead = options.filter((i) => {
           const d = wrap(doorX(i) - s.bx, CANAL) * dir
-          return d > 500 && d < 1400
+          return d > FEEL.friendAhead[0] && d < FEEL.friendAhead[1]
         })
         f.house = (ahead.length ? ahead : options)[Math.floor(Math.random() * (ahead.length ? ahead.length : options.length))]
         f.phase = 'waiting'
@@ -334,7 +351,7 @@ export function Venice({ setProgress }: ActivityProps) {
       fx = door
       fy = -FRIEND_R - 6 - Math.abs(Math.sin(f.t * (close ? 7 : 3))) * (close ? 22 : 8) - tapHop
       fScale = Math.min(1, f.t / 0.3) // pops out of the door
-      if (Math.abs(door - s.bx) < FEEL.doorReach && nearHouses) {
+      if (Math.abs(door - s.bx) < FEEL.doorReach && canBoard) {
         f.phase = 'hopIn'
         f.t = 0
         f.fromX = fx
@@ -365,7 +382,7 @@ export function Venice({ setProgress }: ActivityProps) {
       fx = seat.x
       fy = seat.y - tapHop * 0.6
       const pinkDoor = s.bx + wrap(doorX(PINK) - s.bx, CANAL)
-      if (Math.abs(pinkDoor - s.bx) < FEEL.doorReach && nearHouses) {
+      if (Math.abs(pinkDoor - s.bx) < FEEL.doorReach && canBoard) {
         f.phase = 'hopOut'
         f.t = 0
         f.fromX = fx
@@ -418,7 +435,7 @@ export function Venice({ setProgress }: ActivityProps) {
       boatEl.current.style.transform = `translate3d(${screenX(s.bx)}px,${s.by + bob - hop}px,0) scale(${depth}) rotate(${-tiltAccel + rock}deg)`
       boatEl.current.style.zIndex = s.by < LANE_SPLIT ? '3' : '5'
     }
-    if (hullEl.current) hullEl.current.style.transform = `scale(${flip * (1 + s.squash * 0.1)}, ${1 - s.squash * 0.1})`
+    if (hullEl.current) hullEl.current.style.transform = `scale(${flip * (1 + s.squash * FEEL.squash)}, ${1 - s.squash * FEEL.squash})`
     if (ringEl.current) ringEl.current.style.opacity = s.idle > 4 ? String(0.55 + 0.45 * Math.sin(s.t * 6)) : '0'
     if (friendEl.current) {
       const el = friendEl.current
@@ -427,12 +444,17 @@ export function Venice({ setProgress }: ActivityProps) {
       // At the doorstep the friend is behind the near posts; in the boat, with the boat.
       el.style.zIndex = f.phase === 'waiting' || f.phase === 'inside' ? '1' : s.by < LANE_SPLIT ? '3' : '5'
     }
-    // Where's the pink house? (A placeholder for gate 3's glowing hand.) Only while a friend rides and it's off screen.
-    const pinkScreen = screenX(s.bx + wrap(doorX(PINK) - s.bx, CANAL))
-    const showArrow = f.phase === 'riding' && (pinkScreen < 0 || pinkScreen > L.viewW)
+    // Edge pointers (placeholders for gate 3's glowing hands): to the waiting friend (in its color) or, while a friend
+    // rides, to the pink house, whenever that door is off screen.
+    const goal = f.phase === 'waiting' ? doorX(f.house) : f.phase === 'riding' ? doorX(PINK) : null
+    const goalScreen = goal === null ? L.viewW / 2 : screenX(s.bx + wrap(goal - s.bx, CANAL))
     const pulse = 1 + 0.12 * Math.sin(s.t * 7)
-    if (arrowL.current) arrowL.current.style.transform = `scale(${showArrow && pinkScreen < 0 ? pulse : 0})`
-    if (arrowR.current) arrowR.current.style.transform = `scale(${showArrow && pinkScreen > L.viewW ? pulse : 0})`
+    for (const [el, show] of [[arrowL.current, goalScreen < 0], [arrowR.current, goalScreen > L.viewW]] as const) {
+      if (!el) continue
+      el.style.transform = `scale(${show ? pulse : 0})`
+      const dot = el.firstElementChild as HTMLElement | null
+      if (dot) dot.style.background = f.phase === 'waiting' ? friendColorRef.current : '#FF8CC6'
+    }
 
     wakeEls.current.forEach((el, i) => {
       if (!el) return
@@ -461,7 +483,7 @@ export function Venice({ setProgress }: ActivityProps) {
   return (
     <div
       ref={root}
-      onPointerDown={onPointerDown}
+      onPointerDownCapture={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
