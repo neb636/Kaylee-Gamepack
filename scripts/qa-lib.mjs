@@ -3,6 +3,7 @@
 import { chromium, webkit } from '@playwright/test'
 import { spawn } from 'node:child_process'
 import path from 'node:path'
+import sharp from 'sharp'
 
 export const root = path.resolve(import.meta.dirname, '..')
 export const out = path.join(root, 'qa-output')
@@ -61,3 +62,21 @@ export async function skip(page) {
 }
 
 export const pad = (n) => String(n).padStart(2, '0')
+
+/** 12 frames ([{ t, buf }], evenly picked) in a 4x3 grid, each stamped with its time in seconds, saved as a PNG. */
+export async function filmstrip(frames, file) {
+  const picks = Array.from({ length: 12 }, (_, i) => frames[Math.round((i * (frames.length - 1)) / 11)])
+  const w = 320
+  const meta = await sharp(picks[0].buf).metadata()
+  const h = Math.round((meta.height / meta.width) * w)
+  const tiles = await Promise.all(
+    picks.map(async ({ t, buf }) => {
+      const label = Buffer.from(`<svg width="${w}" height="${h}"><rect x="4" y="4" width="62" height="24" rx="8" fill="rgba(0,0,0,.55)"/><text x="12" y="22" font-family="sans-serif" font-size="16" fill="#fff">${t.toFixed(2)}s</text></svg>`)
+      return sharp(buf).resize(w, h).composite([{ input: label }]).png().toBuffer()
+    }),
+  )
+  await sharp({ create: { width: 4 * w + 12, height: 3 * h + 8, channels: 3, background: '#fff' } })
+    .composite(tiles.map((input, i) => ({ input, left: (i % 4) * (w + 4), top: Math.floor(i / 4) * (h + 4) })))
+    .png()
+    .toFile(file)
+}

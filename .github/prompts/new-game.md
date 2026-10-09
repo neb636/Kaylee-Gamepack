@@ -14,6 +14,7 @@ First read `AGENTS.md` completely and follow it. It is the source of truth.
 2. Design a game for a 5-year-old that practices exactly those skills. **Choose a core mechanic and setting
    that are different from the recent games in `existing-games.md`** (see "Make every game DIFFERENT" in AGENTS.md).
    It must be hands-on play in a little world with a tiny story and a payoff that builds up (see "Not just a quiz").
+   Read `docs/play-design.md`: pick one core verb that is fun as a toy, make it deepen, make the scene react to taps.
    Make it delightful: pink, unicorns, her name, lots of celebration, no failing.
 3. Generate the art with your image generation tool following `art/STYLE.md` (cover + what the game needs;
    keep it to about 10 images or fewer). Process with `npm run art -- <game-id>` and check the contact sheet.

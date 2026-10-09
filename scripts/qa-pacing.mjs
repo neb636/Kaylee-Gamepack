@@ -6,14 +6,18 @@
 // Automated browsers skip audio, but every say() is logged in window.__kayleeSpeech with the clip's real length (ms,
 // from voice-map.json), so the talk before the first touch is the sum of the lines spoken before anything tappable
 // appears. It then auto-plays each activity like a child would (taps things, prefers glowing hints) to total the talk.
-// Writes qa-output/pacing.md.
-import { readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+// It also reports the fun numbers from docs/play-design.md: talk per touch, seconds with nothing to touch, and how many
+// different things she touched, and saves a play strip (12 frames across the whole run) per activity.
+// Writes qa-output/pacing.md and qa-output/play/<id>.png; --video also records each run to qa-output/video/<id>.webm.
+import { readdirSync, readFileSync, renameSync, writeFileSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
-import { browserName, device, flag, launch, openApp, out, root, serve, skip, VIEWPORTS } from './qa-lib.mjs'
+import { args, browserName, device, filmstrip, flag, launch, openApp, out, root, serve, skip, VIEWPORTS } from './qa-lib.mjs'
 
 const PORT = 4185
 const TOO_MUCH_BEFORE_TOUCH = 6 // seconds
 const LONG_LINE = 4 // seconds
+const TALK_PER_TOUCH = 1.5 // seconds of talk per touch during play
+const video = args.includes('--video')
 const vp = VIEWPORTS[0] // iPad portrait
 
 const SCENARIOS = [
@@ -43,6 +47,15 @@ const SCENARIOS = [
   { name: 'scribe', id: 'scribe', hash: '#/world/egypt/scribe' },
   { name: 'market', id: 'market', hash: '#/world/egypt/market' },
   { name: 'light show (finale)', id: 'show', hash: '#/world/egypt/party', stampAll: 'egypt' },
+  { name: 'italy intro + map', id: 'italy', hash: '#/world/italy', reset: true, play: false },
+  { name: 'italy pizzeria', id: 'pizzeria', hash: '#/world/italy/pizzeria', reset: true },
+  { name: 'italy olive grove', id: 'olives', hash: '#/world/italy/olives', reset: true },
+  { name: 'italy trevi fountain', id: 'trevi', hash: '#/world/italy/trevi', reset: true },
+  { name: 'italy colosseum', id: 'colosseum', hash: '#/world/italy/colosseum', reset: true },
+  { name: 'italy leaning tower', id: 'pisa', hash: '#/world/italy/pisa', reset: true },
+  { name: 'italy venice', id: 'venice', hash: '#/world/italy/venice', reset: true },
+  { name: 'italy snow on a volcano', id: 'etna', hash: '#/world/italy/etna', reset: true },
+  { name: 'italy opera (finale)', id: 'opera', hash: '#/world/italy/party', stampAll: 'italy' },
 ].filter((s) => !flag('only') || flag('only').split(',').includes(s.id))
 
 // Is there something (other than the story overlay, the top bar or a "hear it again" button) she can touch?
@@ -80,13 +93,17 @@ const finishedScreen = () => [...document.querySelectorAll('button')].some((b) =
 
 const secs = (ms) => (ms / 1000).toFixed(1)
 const results = []
+mkdirSync(path.join(out, 'play'), { recursive: true })
+if (video) mkdirSync(path.join(out, 'video'), { recursive: true })
 const { base, stop } = await serve(PORT)
 try {
   const browser = await launch()
   for (const s of SCENARIOS) {
-    const context = await device(browser, vp)
+    const context = await device(browser, vp, video ? { recordVideo: { dir: path.join(out, 'video'), size: { width: vp.width / 2, height: vp.height / 2 } } } : {})
     const page = await context.newPage()
-    const r = { ...s, before: [], after: [], all: [], taps: 0, finished: null, notes: [] }
+    const r = { ...s, before: [], after: [], all: [], taps: 0, idleMs: 0, touched: new Set(), frames: [], finished: null, notes: [] }
+    const p0 = Date.now()
+    const snap = async () => r.frames.push({ t: (Date.now() - p0) / 1000, buf: await page.screenshot({ type: 'jpeg', quality: 70, scale: 'css' }) })
     try {
       await openApp(page, base)
       if (s.reset) await page.evaluate(() => localStorage.clear())
@@ -126,7 +143,9 @@ try {
           await skip(page).catch(() => {})
           const things = await page.evaluate(interactive)
           if (!things.length) {
+            // Nothing to touch: she'd be waiting (story, an animation, a friend talking).
             await page.waitForTimeout(500)
+            r.idleMs += 500
             continue
           }
           const glowing = things.filter((t) => t.glow)
@@ -139,8 +158,11 @@ try {
           const y = t.label === 'coloring page' || t.label === 'canvas' ? t.y + (Math.random() - 0.5) * t.h * 0.8 : t.y
           await page.mouse.click(x, y)
           r.taps++
+          r.touched.add(t.label)
           await page.waitForTimeout(450)
+          if (r.taps % 3 === 1) await snap()
         }
+        await snap()
         if (r.finished === null) r.finished = false
         await page.waitForTimeout(800)
       }
@@ -149,12 +171,20 @@ try {
       r.notes.push(`failed: ${e.message.split('\n')[0]}`)
     }
     await context.close()
+    if (r.frames.length >= 2) await filmstrip(r.frames, path.join(out, 'play', `${s.id}.png`)).catch(() => {})
+    r.frames = []
+    if (video) {
+      const file = await page.video()?.path().catch(() => null)
+      if (file) renameSync(file, path.join(out, 'video', `${s.id}.webm`))
+    }
     const sum = (list) => list.reduce((a, l) => a + (l.ms || 0), 0)
     r.beforeMs = sum(r.before)
     r.totalMs = sum(r.all)
     r.missingMs = r.all.filter((l) => !l.ms).length
+    // Only meaningful when the auto-player finished (it can't drag, so it gets stuck on drag-only steps).
+    r.perTouch = r.finished && r.taps ? (r.totalMs - r.beforeMs) / 1000 / r.taps : null
     results.push(r)
-    console.log(`${s.name}: ${secs(r.beforeMs)}s before first touch, ${secs(r.totalMs)}s total talk, ${r.taps} taps${r.finished === false ? ' (did not finish)' : ''}`)
+    console.log(`${s.name}: ${secs(r.beforeMs)}s before first touch, ${secs(r.totalMs)}s total talk, ${r.taps} taps, ${r.perTouch?.toFixed(1) ?? '-'}s talk per tap, ${secs(r.idleMs)}s nothing to touch${r.finished === false ? ' (did not finish)' : ''}`)
   }
   await browser.close()
 } finally {
@@ -185,14 +215,21 @@ const md = [
   '',
   `Talk before first touch is the spoken time (real clip lengths) before anything tappable appears. Over ${TOO_MUCH_BEFORE_TOUCH}s is flagged ⚠️.`,
   'Total talk comes from an automatic child-like play-through (random taps, glowing hints first), so it includes hints for wrong taps.',
+  `Talk per tap is the talk after the first touch divided by the taps it took to finish (over ${TALK_PER_TOUCH}s is flagged ⚠️: she listens more than she plays).`,
+  'Nothing to touch is the time during play with no tappable thing on screen, waiting for animations (speech is instant here, so waiting on talk shows up in talk per tap instead).',
+  'Different things is how many differently-labeled things the auto-player touched (low = one thing to do).',
+  'Taps only: drags, swipes and holds are not exercised, so an activity that needs them won\'t finish here (talk per tap is then left out; judge it from the code and the play strip). Play strips: `qa-output/play/<id>.png`.',
   '',
-  '| Screen | Talk before first touch | Lines before touch | Total talk | Taps | Finished | Notes |',
-  '|---|---|---|---|---|---|---|',
+  '| Screen | Talk before first touch | Lines before touch | Total talk | Taps | Talk per tap | Nothing to touch | Different things | Finished | Notes |',
+  '|---|---|---|---|---|---|---|---|---|---|',
   ...results.map((r) => {
     const flagged = r.beforeMs > TOO_MUCH_BEFORE_TOUCH * 1000 ? ' ⚠️' : ''
     const finished = r.finished === null ? '-' : r.finished ? 'yes' : 'no'
     const notes = [...r.notes, r.missingMs ? `${r.missingMs} lines without a clip length` : ''].filter(Boolean).join('; ')
-    return `| ${r.name} | ${secs(r.beforeMs)}s${flagged} | ${r.before.length} | ${secs(r.totalMs)}s | ${r.taps} | ${finished} | ${notes} |`
+    const perTouch = r.perTouch === null ? '-' : `${r.perTouch.toFixed(1)}s${r.perTouch > TALK_PER_TOUCH ? ' ⚠️' : ''}`
+    const idle = r.play === false ? '-' : `${secs(r.idleMs)}s`
+    const kinds = r.play === false ? '-' : r.touched.size
+    return `| ${r.name} | ${secs(r.beforeMs)}s${flagged} | ${r.before.length} | ${secs(r.totalMs)}s | ${r.taps} | ${perTouch} | ${idle} | ${kinds} | ${finished} | ${notes} |`
   }),
   '',
   '## What she hears before she can touch anything',

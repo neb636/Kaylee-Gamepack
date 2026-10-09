@@ -9,9 +9,10 @@ You run Luna, a QA agent in the Codex CLI, and relay its report. You do not fix 
 1. From the repo root, run (this can take 10-25 minutes; use a long timeout or run it in the background and wait):
 
    ```
-   mkdir -p qa-output && codex exec -m gpt-6-luna -c model_reasoning_effort="medium" \
+   mkdir -p qa-output && { cat .github/prompts/luna-qa.md; printf '\nUnder test: %s\n' "<country and activities from your request, or 'every country'>"; } \
+     | codex exec -m gpt-6-luna -c model_reasoning_effort="medium" \
      --sandbox danger-full-access --skip-git-repo-check \
-     -o qa-output/luna-final.md - < .github/prompts/luna-qa.md > qa-output/luna.log 2>&1
+     -o qa-output/luna-final.md - > qa-output/luna.log 2>&1
    ```
 
    Full access is needed because Playwright starts a local web server. The brief tells Luna to write only in `qa-output/`.
@@ -19,4 +20,4 @@ You run Luna, a QA agent in the Codex CLI, and relay its report. You do not fix 
    (`qa-output/motion/`) it cites to confirm the worst findings are real, and skim `qa-output/pacing.md`.
 3. Check `git status --short`: if Luna changed anything outside `qa-output/`, say so clearly (do not revert it yourself).
 4. Reply with the findings list (severity, viewport, screen, screenshot path, problem, suggested fix), most severe first,
-   noting any you could not confirm.
+   noting any you could not confirm. Keep Luna's fun scores (per `docs/play-design.md`) in the reply.

@@ -5,8 +5,9 @@ You may only write inside `qa-output/` (screenshots, your own throwaway Playwrig
 
 ## The app
 An iPad/iPhone learning app for Kaylee, age 5, who cannot read. Pink, unicorn, cute. Read `AGENTS.md` (design rules)
-for context. The section under test is **Around the World** (`#/world`), especially the country **Australia**
-(`#/world/australia` and its activities `outback`, `forest`, `reef`, `stars`, `postcard`, and the `party` finale).
+and `docs/play-design.md` (what makes an activity fun) for context. The section under test is **Around the World**
+(`#/world`). The country (and activities) under test are named at the end of this brief; if none are named, test every
+country. A country's activity ids are in `src/world/places/<country>/meta.ts`; the finale is the route `party`.
 
 ## Steps
 1. `npm run build`
@@ -16,9 +17,10 @@ for context. The section under test is **Around the World** (`#/world`), especia
 3. `node scripts/qa-motion.mjs` then look at every filmstrip in `qa-output/motion/*.png` (12 frames, stamped with
    seconds; `report.txt` lists skipped scenarios). These show the animated characters (puppets): judge whether they feel
    alive (crouch before a hop, squash on landing, ears/tail that lag and settle, blinking) or stiff and broken.
-4. `node scripts/qa-pacing.mjs` then read `qa-output/pacing.md`: seconds of talk before she can touch anything (flag
-   over ~6s), total talk per activity, lines longer than 4s.
-5. Play through each Australia activity to the end yourself at **iPad portrait (820x1180)** and **iPhone landscape
+4. `node scripts/qa-pacing.mjs --video` then read `qa-output/pacing.md`: seconds of talk before she can touch anything
+   (flag over ~6s), total talk, talk per tap (flag over ~1.5s), seconds with nothing to touch, how many different
+   things were touched, lines longer than 4s. Look at each play strip in `qa-output/play/` (12 frames across a whole run).
+5. Play through each activity under test to the end yourself at **iPad portrait (820x1180)** and **iPhone landscape
    (844x390)** with your own Playwright script in `qa-output/` (serve with `npx vite preview --port 4181`; use
    `webkit` with `hasTouch: true, isMobile: true`; `scripts/qa-lib.mjs` has helpers you can import).
    Tips: first click the "Let's play" button; use `click({ force: true })` (many things bob forever, so they are never
@@ -35,7 +37,11 @@ for context. The section under test is **Around the World** (`#/world`), especia
 - Art: cutouts clean (no white halos/holes), things sized sensibly, overlays (hat/sunglasses on Pip) land in the right place.
 - Every activity can be finished with no way to get stuck; wrong answers give a gentle wiggle, never a dead end.
 - Characters move like living things (filmstrips), not like pictures sliding around; nothing detaches or clips.
-- Not too much talking before she can play (pacing.md).
+- Not too much talking before she can play, or between touches (pacing.md).
+- **Is it fun?** Score each activity on the fun check in `docs/play-design.md`: a core verb that's fun with no goal and
+  gets richer, her finger touching the real thing (not invisible swipe zones or answer buttons), her own choices, 5+
+  things in the scene that react to a tap, a silly or magical moment, learning by doing. Say plainly when an activity
+  is mostly listening, waiting or quiz questions, even if nothing is broken.
 - Anything that looks broken, ugly, confusing for a 5-year-old, or not "pink and cute".
 
 ## Report

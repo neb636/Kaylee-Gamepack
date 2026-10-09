@@ -153,6 +153,8 @@ must be *hands-on play in a little world*: dragging, building, dressing, feeding
 growing, decorating, finding things in a scene. Answer cards are fine as a small part, not the whole thing.
 Give it a tiny story ("Sparkle's garden needs help before the party!") and a visible payoff that builds
 up as she plays (the castle gets taller, the garden blooms, the snowman gets his hat).
+`docs/play-design.md` explains how to make it feel like a toy (one core verb that deepens, everything reacts,
+learning by doing) and has a fun check to run before you finish.
 
 Idea bank (mix, remix, or invent your own):
 - **Feed the unicorn**: drag the right snack into Sparkle's mouth (letters, shapes, counts, healthy foods).
@@ -254,7 +256,7 @@ Follow `art/STYLE.md` exactly (style prompt, sprites on pure white, backgrounds 
    `window.__kaylee.win()`). It needs a local web server; if your sandbox can't open ports,
    skip it (CI runs it after you).
 3. Re-read the design rules above. Is every instruction spoken? Is there no way to fail? Is it
-   different from the recent games? Does it work in landscape?
+   different from the recent games? Does it work in landscape? Run the fun check in `docs/play-design.md`.
 
 ## Local commands
 
@@ -286,10 +288,19 @@ src/world/places/<id>/
 What Kaylee told us after the first game, so follow it for every country:
 - **Any order.** Every activity is open from the start and earns a passport stamp + animal sticker right away.
   Collecting every stamp unlocks a short finale, then `onWin()` shows the shell's trophy ceremony.
-- **Short.** 45-90 seconds and 3-5 touches per activity. Difficulty rises inside each activity (3 hops, then 5).
+- **Talk short, play long.** What bored her was listening and forced easy rounds, never touching. At most 1-2 short
+  spoken lines before her hands are busy, then keep them busy: about 1.5-3 minutes and 20-40 touches per activity,
+  nearly all of them *playing* (steering, pouring, building), not answering. Sparkle speaks when something new appears
+  or when she's stuck for ~8 s, not after every action. Difficulty rises inside each activity.
+- **A toy first (the Toca Boca / Sago Mini way, see `docs/play-design.md`).** Each activity has **one core verb** that is
+  fun with no goal (grab the boat and steer it, tilt the jug and pour), and that verb gets richer three times instead of
+  being swapped for a new one-off mechanic each beat (one side verb at most). Her finger touches the real thing (no
+  invisible swipe zones, no arrow or answer buttons standing in for doing it). Every object in the scene reacts to a
+  tap, odd play gets a silly reaction instead of an "oops", and the lesson is something she *does* (steer into the left
+  canal), not something she picks from cards.
 - **Story, not lectures.** A friend (Pip the joey in Australia) needs help; each stamp adds a guest to the finale.
-  At most 1-2 short spoken lines before her hands are busy (`kit/StoryBeat`, tap anywhere skips). Facts are
-  tap-to-hear extras (passport page, stamp screen), never required listening.
+  `kit/StoryBeat` (tap anywhere skips) carries the 1-2 opening lines. Facts are tap-to-hear extras (passport page,
+  stamp screen), never required listening.
 - Teach real things: climate, a hello word, the flag, animals, a landmark, one culture fact.
 - **Alive, not animated pictures.** The friend and the main animals are puppets that act out what happens (Pip fans
   herself in the heat, crouches before each hop and lands in a puff of dust; Koko's mouth opens as a leaf comes near).
@@ -308,6 +319,26 @@ and the world map's Theater shows every country's videos. The player starts on o
 and suggestions behind its own screens, and goes full screen with a swipe up (or its corner button). `src/world/world.css` has the size variables
 (`--top-clear`, `--target`, ...) that shrink on iPhone landscape.
 
+**Building activities: one per PR, toy first.** Plan each activity with `planning/around-the-world/ACTIVITY-TEMPLATE.md`
+(core verb, how it deepens, her choices, things to poke, touch count). Then build in gates, and stop at each one:
+1. **Greybox toy:** only the core verb, with placeholder shapes (no generated art, no voices), on the PR preview.
+   Dad plays it on the iPad. If it isn't fun yet, change the toy, not the decoration.
+2. **Art and puppets**, then 3. **the full loop** (story, voices, payoff) and QA.
+One activity per PR (the finale is its own PR). An OK to "build it in one go" covers that one activity, not the next ones.
+A plan that reads well can still be thin to play: judge it by the verbs and the numbers, not the prose.
+
+**Screens.** The iPad is where she plays: every iPad size must look great. iPhones must work (nothing cut off,
+targets ≥ 64px) but may be simpler. Lay each play scene out on a **logical stage** (one for wide screens, one for tall)
+that scales to fit, with the extra edge filled by more of the scene (sky above, water below, a blurred extension at the
+sides). Don't cover-crop a painting and then place things by per-device fractions: that's how Etna's summit ended up
+under the top bar. Whatever the activity is about (the crater, the canal fork) stays inside the stage's safe zone.
+
+**Scenes are worlds, not pictures.** Generate scenes as layers (sky, far, mid, near, foreground) that move at
+different speeds when the camera moves; a strip that scrolls must tile seamlessly (no mirrored copies). What she touches
+or follows is part of the art (paint the trail into the mountain), not lines drawn by code over a painting. No emoji as
+objects in a scene (fine in UI chips), and code-drawn props use the same flat 5-unit-outline style. Two different things
+must not look alike (snow piles that look like clouds).
+
 Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),
 generate backgrounds, props and character reference pictures with Codex (`codex exec -m gpt-6-sol -c
 model_reasoning_effort="medium" ...`, style rules from `art/STYLE.md`), build the friend's puppets, cast their voices,
@@ -317,10 +348,16 @@ QA (after `npm run build`; WebKit, because the iPad runs Safari: `npx playwright
 - `node scripts/qa-screens.mjs`: every screen at 4 iPad + 3 iPhone sizes with touch emulation (`qa-output/webkit-*/`).
 - `node scripts/qa-motion.mjs`: filmstrips + gifs of puppet actions and game moments (`qa-output/motion/`). Still
   screenshots can't show whether something feels alive; filmstrips can.
-- `node scripts/qa-pacing.mjs`: seconds of talk before her first touch and in total, from the real clip lengths
-  (`qa-output/pacing.md`). Keep talk before the first touch under ~6 seconds.
-- The `playtest-qa` Claude agent (Opus) runs all three, looks at every image with a 5-year-old-playtest checklist and
-  reports ranked findings; fix them and run it again. `luna-qa` (Luna in Codex) is an optional second opinion.
+- `node scripts/qa-pacing.mjs`: seconds of talk before her first touch and in total, from the real clip lengths, plus
+  the fun numbers: talk per touch, seconds with nothing to touch, how many different things she touched, and a play
+  strip (12 frames across a whole auto-played run, `qa-output/play/`). `--video` also records each run
+  (`qa-output/video/`). Keep talk before the first touch under ~6 seconds and talk per touch under ~1.5 s.
+- **Every new activity adds itself to all three scripts** (screens, a motion scenario for its core verb, pacing).
+  A screen QA never looked at is a screen nobody checked.
+- The `playtest-qa` Claude agent (Opus) runs all three, looks at every image with a 5-year-old-playtest checklist,
+  scores each activity on the fun check in `docs/play-design.md`, and reports ranked findings; fix them and run it
+  again. `luna-qa` (Luna in Codex) is an optional second opinion.
+- QA passing means it works, not that it's fun. Only Dad's iPad test of the greybox and the finished activity says that.
 - Lip sync and sound can't be heard by automated browsers: listen on the iPad.
 
 
