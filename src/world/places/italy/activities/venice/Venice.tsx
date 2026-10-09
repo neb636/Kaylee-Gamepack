@@ -1,38 +1,56 @@
-// 🛶 Venice: Gino's Water Taxi (plan: planning/around-the-world/italy.md § 6). GATES 1-2: THE TOY, WITH ITS ART.
-// The core verb: put a finger on the boat and drive it along a canal that loops both ways. It chases the finger with a
-// little water lag, coasts and slows when let go, bobs and tilts, spins round happily when it turns, rides in two lanes,
-// boings off posts and leaves a wake. One doorstep friend hops in when the boat comes close and hops off at the pink
-// house, to prove the ride loop. Gate 2 dressed it: generated facades, skyline, bridges, posts and boats, with Gino
-// (static for now) rowing and Sparkle riding. No voices yet; the rides, tide, pokeables and mask come in gate 3.
+// 🛶 Venice: Gino's Water Taxi (plan: planning/around-the-world/italy.md § 6).
+// The toy (one core verb): put a finger on the boat and drive it along a canal that loops both ways. It chases the
+// finger with a little water lag, coasts and slows when let go, bobs and tilts, spins round happily when it turns, rides
+// in two lanes, boings off posts and leaves a wake. The same verb deepens three times:
+//   1. Cruise: just the toy (and lots to poke: houses, pigeons, the lion, bell towers, ducks, passing boats).
+//   2. Water taxi: friends wave from doorsteps; drive close and they hop in, say where they're going ("the yellow house")
+//      and Sparkle says LEFT or RIGHT (a hand glows on that side). She drives there herself. 3 rides, each farther away;
+//      the second time two friends wave at once and she picks who goes first.
+//   3. Acqua alta: the water rises, so the bridges get low. Tap the boat to duck; if not, Gino's hat bonks off and
+//      floats behind (drive back to scoop it up). Last ride: Gino to the mask shop.
+// Side verb: paint a mirror mask (MaskShop). Payoff: one lantern per friend delivered while the sky turns to evening,
+// then night, fireworks, the friends wave from the walkway and Gino plays his accordion for Lupa's band.
 // All feel numbers are in canal.ts (FEEL). Everything per-frame is written straight to the DOM from one game loop.
+import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent, type ReactNode, type RefObject } from 'react'
-import { burst, sounds, SparklePuppet, useGameLoop } from '../../../../../sdk'
+import { burst, say, sounds, SparklePuppet, useGameLoop, useSaved, type Line, type PuppetHandle } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
+import { PromptBubble } from '../../../../kit/Stage'
+import { StoryBeat } from '../../../../kit/StoryBeat'
+import { art as italyArt } from '../../art'
+import { L as LINES } from '../../lines'
 import type { ActivityProps } from '../../Place'
-import { INK } from '../../puppets/ink'
-import { BOAT, CANAL, CLOUDS, doorX, FAR, FEEL, FORE, HOUSES, LANE, LANE_SPLIT, mod, PARALLAX, PINK, POSTS, STAGE, WATER_H, wrap } from './canal'
 import { Cesare } from '../../puppets/Cesare'
 import { Civetta } from '../../puppets/Civetta'
-import { Gino } from '../../puppets/Gino'
+import { Gino, GinoHat } from '../../puppets/Gino'
+import { INK } from '../../puppets/ink'
 import { Lupa } from '../../puppets/Lupa'
 import { Spina } from '../../puppets/Spina'
-import { BOAT_ORDER, BOATS, type BoatKind } from './art'
-import { BigBridge, Clouds, Foreground, House, Post, SideCanals, Skyline } from './Scenery'
+import { BOAT_ORDER, BOATS, critters, TRAFFIC, ui, type BoatKind, type TrafficKind } from './art'
+import { BOAT, CANAL, CLOUDS, doorX, DUCK_HOME, FAR, FEEL, FORE, HOUSES, LANE, LANE_SPLIT, MAIN_BRIDGES, MASKSHOP, mod, PARALLAX, PINK, POSTS, STAGE, TIDE, WATER_H, wrap } from './canal'
+import { MaskShop, MaskView, type MaskData } from './MaskShop'
+import { Clouds, Foreground, House, MainBridges, Post, SideCanals, Skyline } from './Scenery'
+import { vsfx } from './sfx'
 import { setSwish, startSwish, stopSwish } from './swish'
 
-/** Stars: one per friend taken home (the greybox keeps going after three). */
-const TOTAL = 3
+const V = LINES.venice
+/** Stars: three rides, reaching the mask shop, the mask. */
+const TOTAL = 5
+const RIDES = 3
 const WAKE_POOL = 48
 const SPRAY_POOL = 24
-/** The friends who wait on doorsteps (their puppets from the other activities) and their color for the edge pointer. */
+/** The friends who wait on doorsteps (their puppets from the other activities). */
 const FRIENDS = [
-  { id: 'lupa', Puppet: Lupa, color: '#C9B8D8' },
-  { id: 'spina', Puppet: Spina, color: '#E8C6A0' },
-  { id: 'cesare', Puppet: Cesare, color: '#F2B872' },
-  { id: 'civetta', Puppet: Civetta, color: '#D8B48C' },
+  { id: 'lupa', Puppet: Lupa, face: italyArt.lupa },
+  { id: 'spina', Puppet: Spina, face: italyArt.spina },
+  { id: 'cesare', Puppet: Cesare, face: italyArt.cesare },
+  { id: 'civetta', Puppet: Civetta, face: italyArt.civetta },
 ] as const
+type FriendId = (typeof FRIENDS)[number]['id']
 /** Heights (canal units) of the riders and of a doorstep friend. */
 const RIDER = { gino: 150, sparkle: 92, friend: 104 }
+/** Sky colors, from noon to night (one step per lantern). */
+const SKIES = ['linear-gradient(#9FD8F2, #CDEBF7 55%, #FFE9F1)', 'linear-gradient(#A8D4F0, #F3E2E8 60%, #FFE2C8)', 'linear-gradient(#B9C4EE, #F8CFD9 55%, #FFD2A8)', 'linear-gradient(#8F8FD8, #E7A9C8 55%, #FFC29A)', 'linear-gradient(#2E3266, #5A4A8E 60%, #A3679B)']
 
 interface Layout {
   W: number
@@ -45,8 +63,19 @@ interface Layout {
   waterTop: number
 }
 
-type FriendPhase = 'none' | 'waiting' | 'hopIn' | 'riding' | 'hopOut' | 'inside'
-
+type Stage = 'story' | 'pick' | 'play' | 'mask' | 'finale'
+type ActorPhase = 'none' | 'waiting' | 'hopIn' | 'riding' | 'hopOut' | 'inside'
+interface Actor {
+  kind: number
+  phase: ActorPhase
+  house: number
+  /** The door it hops out at (any house of the target's color). */
+  outDoor: number
+  t: number
+  fromX: number
+  fromY: number
+  tap: number
+}
 interface Particle {
   x: number
   y: number
@@ -63,13 +92,25 @@ function layoutFor(W: number, H: number): Layout {
   return { W, H, s, viewW: W / s, waterTop: H - WATER_H * s }
 }
 
-export function Venice({ setProgress }: ActivityProps) {
+const shuffled = <T,>(a: readonly T[]) => [...a].sort(() => Math.random() - 0.5)
+
+export function Venice({ onDone, setProgress }: ActivityProps) {
   const root = useRef<HTMLDivElement>(null)
   const [layout, setLayout] = useState<Layout | null>(null)
-  const [delivered, setDelivered] = useState(0)
-  const [friendKind, setFriendKind] = useState(0)
+  const [stage, setStage] = useState<Stage>('story')
   const [boat, setBoat] = useState<BoatKind>('gondola')
-  useEffect(() => setProgress(Math.min(delivered, TOTAL), TOTAL), [delivered])
+  const [kinds, setKinds] = useState<[number, number]>([0, 1])
+  const [stars, setStars] = useState(0)
+  const [lanterns, setLanterns] = useState(0)
+  const [high, setHigh] = useState(false)
+  const [gino, setGino] = useState({ hatOff: false, ducking: false, dizzy: false, singing: false })
+  const [delivered, setDelivered] = useState<number[]>([])
+  const [mask, setMask] = useSaved<MaskData | null>('italy:venice-mask', null)
+  const [trafficKind, setTrafficKind] = useState<TrafficKind>('vaporetto')
+  const [spraying, setSpraying] = useState(false)
+  useEffect(() => setProgress(Math.min(stars, TOTAL), TOTAL), [stars])
+  const rowRef = useRef(0)
+  const ginoRef = useRef<PuppetHandle>(null)
 
   // Fit the logical stage to the screen (the extra height becomes sky, the extra width more canal).
   useEffect(() => {
@@ -84,6 +125,7 @@ export function Venice({ setProgress }: ActivityProps) {
   useEffect(() => stopSwish, [])
 
   // ---- Mutable game state (the loop reads and writes it every frame; React never sees it). ----
+  const order = useRef(shuffled([0, 1, 2, 3]))
   const g = useRef({
     t: 0,
     bx: 360,
@@ -94,6 +136,7 @@ export function Venice({ setProgress }: ActivityProps) {
     facing: 1,
     spin: -1, // seconds into the turnaround spin, or -1
     spinFrom: 1,
+    spins: [] as number[],
     squash: 0,
     squashV: 0,
     stun: 0,
@@ -111,12 +154,36 @@ export function Venice({ setProgress }: ActivityProps) {
     wake: [] as Particle[],
     spray: [] as Particle[],
     posts: POSTS.map(() => ({ a: 0, w: 0 })),
-    friend: { phase: 'none' as FriendPhase, house: -1, last: -1, t: 0, x: 0, y: 0, fromX: 0, fromY: 0, tap: -1, spawnIn: 5 },
+    // The director
+    stage: 'story' as Stage,
+    playT: 0,
+    rides: 0,
+    actors: [0, 1].map((): Actor => ({ kind: 0, phase: 'none', house: -1, outDoor: -1, t: 0, fromX: 0, fromY: 0, tap: -1 })),
+    rider: -1, // actor slot riding, or -1
+    target: -1, // house index she's driving to, or -1
+    lastSide: 0,
+    minDist: 0,
+    otherWays: 0,
+    closeHinted: false,
+    nearT: 0,
+    spawnAt: -1, // playT when the next friend(s) appear
+    tide: -1, // seconds since the tide started rising, or -1
+    tideY: 0,
+    maskTrip: false,
+    duckT: 0,
+    duckHinted: false,
+    bridgePassed: MAIN_BRIDGES.map(() => false),
+    hat: { off: false, x: 0, y: 0 },
+    fastT: 0,
+    lastTalk: -99,
+    cool: {} as Record<string, number>,
+    traffic: { active: false, x: 0, dir: 1, next: 14 },
+    ducks: [0, 1, 2].map((i) => ({ x: DUCK_HOME - i * 70, dive: -1 })),
   })
   const layoutRef = useRef<Layout | null>(null)
-  const friendKindRef = useRef(friendKind)
-  friendKindRef.current = friendKind
   layoutRef.current = layout
+  const stateRef = useRef({ kinds, gino })
+  stateRef.current = { kinds, gino }
 
   // ---- DOM handles written by the loop ----
   const layers = useRef<Record<string, HTMLDivElement | null>>({})
@@ -124,9 +191,14 @@ export function Venice({ setProgress }: ActivityProps) {
   const boatEl = useRef<HTMLDivElement>(null)
   const hullEl = useRef<HTMLDivElement>(null)
   const ringEl = useRef<HTMLDivElement>(null)
-  const friendEl = useRef<HTMLDivElement>(null)
-  const arrowL = useRef<HTMLDivElement>(null)
-  const arrowR = useRef<HTMLDivElement>(null)
+  const actorEls = useRef<(HTMLDivElement | null)[]>([])
+  const handL = useRef<HTMLDivElement>(null)
+  const handR = useRef<HTMLDivElement>(null)
+  const chipEls = useRef<(HTMLDivElement | null)[]>([])
+  const markerEl = useRef<HTMLDivElement>(null)
+  const hatEl = useRef<HTMLDivElement>(null)
+  const trafficEl = useRef<HTMLDivElement>(null)
+  const duckEls = useRef<(HTMLDivElement | null)[]>([])
   const wakeEls = useRef<(HTMLDivElement | null)[]>([])
   const sprayEls = useRef<(HTMLDivElement | null)[]>([])
   const postEls = useRef<(HTMLDivElement | null)[][]>([[], []])
@@ -135,25 +207,39 @@ export function Venice({ setProgress }: ActivityProps) {
     if (list.length >= max) list.shift()
     list.push(p)
   }
+  /** Speak (and remember when, so Sparkle stays quiet while lines are fresh). `queue` waits for the current line. */
+  const talk = (line: Line, queue = false) => {
+    g.current.lastTalk = g.current.t
+    void say(line, { interrupt: !queue })
+  }
+  /** True at most once per `secs` for this key. */
+  const cooled = (key: string, secs: number) => {
+    const s = g.current
+    if ((s.cool[key] ?? -99) > s.t - secs) return false
+    s.cool[key] = s.t
+    return true
+  }
 
   /** Screen point (px, relative to the stage) → canal coordinates. */
-  const toCanal = (L: Layout, px: number, py: number) => ({ x: g.current.cam + px / L.s - L.viewW / 2, y: (py - L.waterTop) / L.s })
+  const toCanal = (L: Layout, px: number, py: number) => ({ x: g.current.cam + px / L.s - L.viewW / 2, y: (py - L.waterTop) / L.s - g.current.tideY })
 
   const onPointerDown = (e: PointerEvent) => {
     const L = layoutRef.current
     const s = g.current
-    // The boat wins over a house behind it; the friend (a button) keeps its own taps.
-    if (!L || s.drag || (e.target as HTMLElement).closest('[aria-label="friend"]')) return
-    const onButton = !!(e.target as HTMLElement).closest('button')
+    // The boat wins over a house behind it; buttons on top (friends, pokeables, passing boats) keep their own taps.
+    if (!L || s.drag || s.stage !== 'play') return
+    const target = e.target as HTMLElement
+    if (target.closest('[data-own-tap]')) return
+    const onButton = !!target.closest('button, [role="button"]')
     const r = root.current!.getBoundingClientRect()
     const px = e.clientX - r.left
     const py = e.clientY - r.top
     const p = toCanal(L, px, py)
     const dx = p.x - s.bx
-    const dy = p.y - (s.by - 24)
-    // Generous grab area around the boat (at least ~70px on small screens), so a five-year-old's finger finds it.
+    const dy = p.y - (s.by - 40)
+    // Generous grab area around the boat and its riders (at least ~70px on small screens).
     const rx = Math.max(BOAT.halfLength + 50, 70 / L.s)
-    const ry = Math.max(95, 70 / L.s)
+    const ry = Math.max(115, 70 / L.s)
     if ((dx / rx) ** 2 + (dy / ry) ** 2 < 1) {
       // Captured by the stage, so the house underneath never gets the click.
       e.stopPropagation()
@@ -177,23 +263,173 @@ export function Venice({ setProgress }: ActivityProps) {
     d.fy = e.clientY - r.top
   }
   const onPointerUp = (e: PointerEvent) => {
-    const d = g.current.drag
+    const s = g.current
+    const d = s.drag
     if (d?.id !== e.pointerId) return
-    g.current.drag = null
-    // GATE 2 REVIEW ONLY: a quick tap on the boat swaps it for the next one (gate 3 replaces this with the boat picker).
-    if (e.type === 'pointerup' && performance.now() - d.at < 260 && Math.hypot(d.fx - d.x0, d.fy - d.y0) < 12) {
-      setBoat((k) => BOAT_ORDER[(BOAT_ORDER.indexOf(k) + 1) % BOAT_ORDER.length])
-      sfx.pop()
+    s.drag = null
+    // A quick tap on the boat (no drag): at high water Gino ducks; otherwise he giggles.
+    if (e.type === 'pointerup' && performance.now() - d.at < 280 && Math.hypot(d.fx - d.x0, d.fy - d.y0) < 14) {
+      if (s.tide >= 0) {
+        s.duckT = 1.7
+        sounds.whoosh()
+      } else {
+        void ginoRef.current?.play('giggle')
+        if (cooled('tickle', 6)) talk(V.tickle)
+      }
     }
   }
 
-  const tapFriend = () => {
-    const f = g.current.friend
-    if (f.phase === 'waiting' || f.phase === 'riding') {
-      f.tap = 0
+  const tapActor = (slot: number) => {
+    const a = g.current.actors[slot]
+    if (a.phase === 'waiting' || a.phase === 'riding') {
+      a.tap = 0
       sfx.chirp()
+      if (cooled(`hello${slot}`, 6) && a.phase === 'waiting') talk(V.hello[FRIENDS[a.kind].id as FriendId])
     }
   }
+  const tapTraffic = () => {
+    if (trafficKind === 'vaporetto') vsfx.toot()
+    else if (trafficKind === 'ambulance') {
+      vsfx.siren()
+      if (cooled('ambulance', 60)) talk(V.ambulance)
+    } else {
+      setSpraying(true)
+      sfx.splash()
+      setTimeout(() => setSpraying(false), 1600)
+    }
+  }
+  const tapDuck = (i: number) => {
+    g.current.ducks[i].dive = 0
+    vsfx.quack()
+  }
+
+  // ---- The director's moments (called from the loop) ----
+  /** Puts a friend on a doorstep `min`-`max` units away (side: -1 left, 1 right, 0 either). */
+  const placeFriend = (slot: number, kind: number, min: number, max: number, side: number) => {
+    const s = g.current
+    const taken = s.actors.filter((a) => a.phase !== 'none').map((a) => a.house)
+    const ok = (i: number, lo: number, hi: number) => {
+      const d = wrap(doorX(i) - s.bx, CANAL)
+      return i !== PINK && i !== MASKSHOP && !taken.includes(i) && Math.abs(d) > lo && Math.abs(d) < hi && (side === 0 || Math.sign(d) === side)
+    }
+    let options = HOUSES.map((_, i) => i).filter((i) => ok(i, min, max))
+    if (!options.length) options = HOUSES.map((_, i) => i).filter((i) => ok(i, 200, 2000))
+    if (!options.length) options = HOUSES.map((_, i) => i).filter((i) => i !== PINK && i !== MASKSHOP && !taken.includes(i))
+    const a = s.actors[slot]
+    a.house = options[Math.floor(Math.random() * options.length)]
+    a.kind = kind
+    a.phase = 'waiting'
+    a.t = 0
+    setKinds((k) => (slot === 0 ? [kind, k[1]] : [k[0], kind]))
+  }
+  /** Picks where the friend in the boat wants to go: on screen, then just off screen, then the far pink house. */
+  const chooseTarget = (fromHouse: number) => {
+    const s = g.current
+    // The last ride is far away (she only hears LEFT or RIGHT): the pink house if it's far enough, or another far house.
+    const far = s.rides >= RIDES - 1
+    if (far && Math.abs(wrap(doorX(PINK) - s.bx, CANAL)) > 1300) return PINK
+    const [lo, hi] = s.rides === 0 ? [320, 640] : s.rides === 1 ? [760, 1400] : [1400, CANAL / 2]
+    const from = HOUSES[fromHouse].facade
+    const good = (i: number, side: number) => {
+      const d = wrap(doorX(i) - s.bx, CANAL)
+      // Any house of that color counts as arriving, so no house of that color may be closer than the planned distance.
+      const twinsFar = HOUSES.every((h, j) => h.facade !== HOUSES[i].facade || Math.abs(wrap(doorX(j) - s.bx, CANAL)) >= Math.abs(d))
+      return i !== MASKSHOP && (far || i !== PINK) && HOUSES[i].facade !== from && twinsFar && Math.abs(d) > lo && Math.abs(d) < hi && (side === 0 || Math.sign(d) === side)
+    }
+    // Ride 2 goes the other way from ride 1 if it can (so she uses both LEFT and RIGHT).
+    for (const side of [-s.lastSide, 0]) {
+      const options = HOUSES.map((_, i) => i).filter((i) => good(i, side))
+      if (options.length) return options[Math.floor(Math.random() * options.length)]
+    }
+    return HOUSES.map((_, i) => i).find((i) => i !== PINK && i !== MASKSHOP && HOUSES[i].facade !== from) ?? PINK
+  }
+  const sayDirection = (target: number, queue: boolean) => {
+    const s = g.current
+    const side = Math.sign(wrap(doorX(target) - s.bx, CANAL)) || 1
+    s.lastSide = side
+    talk(side < 0 ? V.left : V.right, queue)
+  }
+  const startRide = (slot: number) => {
+    const s = g.current
+    const a = s.actors[slot]
+    s.rider = slot
+    s.target = chooseTarget(a.house)
+    s.minDist = Math.abs(wrap(doorX(s.target) - s.bx, CANAL))
+    s.otherWays = 0
+    s.closeHinted = false
+    const id = FRIENDS[a.kind].id as FriendId
+    talk(V.dest[id][HOUSES[s.target].facade as keyof (typeof V.dest)['lupa']])
+    sayDirection(s.target, true)
+  }
+  const finishRide = (slot: number) => {
+    const s = g.current
+    const a = s.actors[slot]
+    s.rides++
+    s.rider = -1
+    s.target = -1
+    setStars((n) => n + 1)
+    setLanterns((n) => n + 1)
+    setDelivered((d) => [...d, a.kind])
+    if (s.rides === 1) talk(V.lantern, true)
+    s.spawnAt = s.playT + 2.2
+  }
+  const startTide = () => {
+    const s = g.current
+    s.tide = 0
+    setHigh(true)
+    vsfx.bloop()
+    talk(V.tide)
+  }
+  const startMaskTrip = () => {
+    const s = g.current
+    s.maskTrip = true
+    s.target = MASKSHOP
+    s.minDist = Math.abs(wrap(doorX(MASKSHOP) - s.bx, CANAL))
+    s.otherWays = 0
+    talk(V.maskTrip)
+    sayDirection(MASKSHOP, true)
+  }
+  const reachMaskShop = () => {
+    const s = g.current
+    s.target = -1
+    s.maskTrip = false
+    s.drag = null
+    s.stage = 'mask'
+    setStage('mask')
+    setStars((n) => n + 1)
+    setLanterns((n) => n + 1)
+    talk(V.maskArrive)
+  }
+
+  // QA hook: jump straight to a moment (screens), and read where the boat is.
+  useEffect(() => {
+    if (!navigator.webdriver) return
+    const w = window as unknown as { __veniceQA?: { jump: (to: string) => void } }
+    w.__veniceQA = {
+      jump: (to: string) => {
+        const s = g.current
+        if (to === 'pick') return void ((s.stage = 'pick'), setStage('pick'))
+        s.stage = 'play'
+        setStage('play')
+        if (to === 'ride') {
+          placeFriend(0, order.current[0], 100, 200, 1)
+          s.actors[0].phase = 'riding'
+          startRide(0)
+        } else if (to === 'tide') {
+          s.rides = RIDES
+          setLanterns(RIDES)
+          startTide()
+        } else if (to === 'mask') reachMaskShop()
+        else if (to === 'finale') {
+          setDelivered(order.current.slice(0, 3))
+          setLanterns(4)
+          s.stage = 'finale'
+          setStage('finale')
+        }
+      },
+    }
+    return () => void delete w.__veniceQA
+  }, [])
 
   useGameLoop((dt) => {
     const L = layoutRef.current
@@ -203,6 +439,8 @@ export function Venice({ setProgress }: ActivityProps) {
     s.t += dt
     const prevVx = s.vx
     let pull = 0 // which way her finger is pulling (-1, 0, 1)
+    const playing = s.stage === 'play'
+    if (playing) s.playT += dt
 
     // ---- The boat: chase the finger, or coast ----
     if (s.drag) {
@@ -219,7 +457,7 @@ export function Venice({ setProgress }: ActivityProps) {
       s.vx *= Math.exp(-FEEL.coastDrag * dt)
       const lane = s.by < LANE_SPLIT ? LANE.near : LANE.front
       s.vy += (FEEL.laneSettleK * (lane - s.by) - 2 * Math.sqrt(FEEL.laneSettleK) * 0.8 * s.vy) * dt
-      s.idle += dt
+      if (playing) s.idle += dt
     }
     s.vx = Math.max(-FEEL.maxSpeed, Math.min(FEEL.maxSpeed, s.vx))
     s.bx += s.vx * dt
@@ -231,6 +469,7 @@ export function Venice({ setProgress }: ActivityProps) {
     const speed = Math.abs(s.vx)
     s.travelled += speed * dt
     s.accel += ((s.vx - prevVx) / dt - s.accel) * Math.min(1, dt * 10)
+    rowRef.current = Math.min(1, speed / FEEL.maxSpeed + (s.drag ? 0.15 : 0))
 
     // ---- Mooring posts: boing off them with a wobble ----
     POSTS.forEach((post, i) => {
@@ -273,6 +512,7 @@ export function Venice({ setProgress }: ActivityProps) {
         s.squashV += Math.min(4, impact / 120)
         s.posts[i].w += -sx * Math.min(6, impact * FEEL.postWobble * 0.05)
         for (let k = 0; k < 4; k++) spawn(s.spray, SPRAY_POOL, { x: s.bx - dx, y: LANE[post.lane] + 10, vx: (Math.random() - 0.5) * 200, vy: -200 - Math.random() * 180, age: 0, life: 0.6, size: 10 + Math.random() * 8 })
+        if (impact > 300 && Math.random() < 0.4 && cooled('boing', 10)) talk(V.boing)
       }
     })
     for (const p of s.posts) {
@@ -280,7 +520,7 @@ export function Venice({ setProgress }: ActivityProps) {
       p.a += p.w * dt
     }
 
-    // ---- Turning round: a happy spin with a hop ----
+    // ---- Turning round: a happy spin with a hop (three in a row and Gino gets dizzy) ----
     const turning = s.vx * s.facing < -FEEL.turnSpeed && (!s.drag || pull * s.facing < 0) && s.t - s.lastBump > FEEL.turnAfterBump
     if (turning && s.spin < 0) {
       s.spinFrom = s.facing
@@ -288,6 +528,12 @@ export function Venice({ setProgress }: ActivityProps) {
       s.spin = 0
       sounds.whoosh()
       for (let i = 0; i < 4; i++) spawn(s.wake, WAKE_POOL, { x: s.bx + (i - 1.5) * 50, y: s.by + 18, vx: 0, vy: 0, age: -i * 0.05, life: 1, size: 36 })
+      s.spins = [...s.spins.filter((t) => t > s.t - 6), s.t]
+      if (s.spins.length >= 3 && cooled('dizzy', 15)) {
+        setGino((v) => ({ ...v, dizzy: true }))
+        setTimeout(() => setGino((v) => ({ ...v, dizzy: false })), 2600)
+        talk(V.dizzy)
+      }
     }
     let flip = s.facing
     let hop = 0
@@ -307,6 +553,14 @@ export function Venice({ setProgress }: ActivityProps) {
     // ---- Squash (bumps, a friend landing) ----
     s.squashV += (-320 * s.squash - 12 * s.squashV) * dt
     s.squash += s.squashV * dt
+
+    // ---- Going fast: spray, and Gino sings "Wheee!" ----
+    s.fastT = speed > 760 ? s.fastT + dt : 0
+    if (s.fastT > 0.8 && cooled('wheee', 14)) {
+      talk(V.wheee)
+      setGino((v) => ({ ...v, singing: true }))
+      setTimeout(() => setGino((v) => ({ ...v, singing: false })), 2500)
+    }
 
     // ---- Wake and spray ----
     s.sinceWake += speed * dt
@@ -337,98 +591,220 @@ export function Venice({ setProgress }: ActivityProps) {
     const lead = Math.max(-FEEL.maxLead * L.viewW, Math.min(FEEL.maxLead * L.viewW, s.vx * FEEL.leadTime))
     s.cam += (s.bx + lead - s.cam) * (1 - Math.exp(-FEEL.cameraRate * dt))
     const screenX = (x: number) => x - s.cam + L.viewW / 2
+    const onScreen = (x: number) => Math.abs(wrap(x - s.cam, CANAL)) < L.viewW / 2 - 60
 
-    // ---- The doorstep friend ----
-    const f = s.friend
+    // ---- The tide (acqua alta): the water rises, the bridges get low ----
+    if (s.tide >= 0) {
+      s.tide += dt
+      const k = Math.min(1, s.tide / 3)
+      s.tideY = -TIDE * (k * k * (3 - 2 * k))
+      if (s.tide > 4.6 && !s.maskTrip && s.target < 0 && s.stage === 'play') startMaskTrip()
+    }
+    const highWater = s.tide >= 0
+    s.duckT -= dt
+    const ducking = s.duckT > 0
+    if (ducking !== stateRef.current.gino.ducking) setGino((v) => ({ ...v, ducking }))
+    let approaching = false
+    if (highWater && playing) {
+      MAIN_BRIDGES.forEach((b, i) => {
+        const dx = wrap(s.bx - b.x, CANAL)
+        if (Math.abs(dx) > b.w * 0.6) s.bridgePassed[i] = false
+        if (Math.abs(dx) < 650 && Math.abs(dx) > b.w * 0.1 && Math.sign(dx) === -Math.sign(s.vx || 1)) {
+          approaching = true
+          if (!s.duckHinted) {
+            s.duckHinted = true
+            talk(V.duck)
+          }
+        }
+        // Under the crown of the arch without ducking: bonk! The hat flies off and floats behind.
+        if (Math.abs(dx) < b.w * 0.1 && !ducking && !s.bridgePassed[i]) {
+          s.bridgePassed[i] = true
+          sfx.thump()
+          void ginoRef.current?.play('bonk')
+          if (!s.hat.off) {
+            s.hat = { off: true, x: s.bx - s.facing * 90, y: s.by }
+            setGino((v) => ({ ...v, hatOff: true }))
+            talk(V.bonk)
+          }
+        }
+      })
+    }
+    // Scoop the floating hat back up by driving to it.
+    if (s.hat.off && Math.abs(wrap(s.hat.x - s.bx, CANAL)) < 130 && Math.abs(s.hat.y - s.by) < 90 && s.t - (s.cool.hatOffAt ?? 0) > 0.6) {
+      s.hat.off = false
+      setGino((v) => ({ ...v, hatOff: false }))
+      sounds.sparkle()
+      talk(V.hatBack)
+    }
+    if (!s.hat.off) s.cool.hatOffAt = s.t
+
+    // ---- Friends on doorsteps and in the boat ----
     const bob = Math.sin(s.t * FEEL.bobSpeed) * FEEL.bob + Math.sin(s.t * 1.3) * FEEL.bob * 0.4
-    // Feet position of a rider in the middle of the boat.
     const seat = { x: s.bx - 8 * s.facing, y: s.by - 12 + bob - hop }
     const canBoard = s.by < LANE_SPLIT || speed < FEEL.frontBoardSpeed
-    f.t += dt
-    if (f.tap >= 0) f.tap += dt
-    if (f.tap > 0.5) f.tap = -1
-    const tapHop = f.tap >= 0 ? Math.sin(Math.PI * (f.tap / 0.5)) * 40 : 0
-    if (f.phase === 'none') {
-      f.spawnIn -= dt
-      if (f.spawnIn <= 0) {
-        // Pop out of a door ahead of the boat (in the direction it's going), not the pink house and not the last one.
-        const dir = s.facing
-        const options = HOUSES.map((_, i) => i).filter((i) => i !== PINK && i !== f.last)
-        const ahead = options.filter((i) => {
-          const d = wrap(doorX(i) - s.bx, CANAL) * dir
-          return d > FEEL.friendAhead[0] && d < FEEL.friendAhead[1]
-        })
-        f.house = (ahead.length ? ahead : options)[Math.floor(Math.random() * (ahead.length ? ahead.length : options.length))]
-        f.phase = 'waiting'
-        f.t = 0
-        setFriendKind((k) => (k + 1 + Math.floor(Math.random() * (FRIENDS.length - 1))) % FRIENDS.length)
-      }
-    }
-    let fx = 0
-    let fy = 0
-    let fScale = 1
-    if (f.phase === 'waiting') {
-      const door = s.bx + wrap(doorX(f.house) - s.bx, CANAL)
-      const close = Math.abs(door - s.bx) < 700
-      fx = door
-      fy = -4 - Math.abs(Math.sin(f.t * (close ? 7 : 3))) * (close ? 22 : 8) - tapHop
-      fScale = Math.min(1, f.t / 0.3) // pops out of the door
-      if (Math.abs(door - s.bx) < FEEL.doorReach && canBoard) {
-        f.phase = 'hopIn'
-        f.t = 0
-        f.fromX = fx
-        f.fromY = fy
-        sfx.boing()
-      }
-    } else if (f.phase === 'hopIn' || f.phase === 'hopOut') {
-      const p = Math.min(1, f.t / 0.5)
-      const pinkDoor = s.bx + wrap(doorX(PINK) - s.bx, CANAL)
-      const to = f.phase === 'hopIn' ? seat : { x: pinkDoor, y: -4 }
-      fx = f.fromX + (to.x - f.fromX) * p
-      fy = f.fromY + (to.y - f.fromY) * p - Math.sin(Math.PI * p) * 120
-      if (p >= 1) {
-        if (f.phase === 'hopIn') {
-          f.phase = 'riding'
-          sfx.pop()
-          s.squashV += 2.5
-        } else {
-          f.phase = 'inside'
-          sounds.correct()
-          burst(screenX(fx) * L.s / L.W, (L.waterTop + fy * L.s) / L.H)
-          setDelivered((n) => n + 1)
+    // When to put friends out: the first after a little cruising, then after each ride.
+    if (playing && s.rides < RIDES && s.rider < 0 && s.actors.every((a) => a.phase === 'none' || a.phase === 'inside')) {
+      if (s.spawnAt < 0 && s.rides === 0 && (s.playT > 10 || s.travelled > 1300)) s.spawnAt = s.playT
+      if (s.spawnAt >= 0 && s.playT >= s.spawnAt) {
+        s.spawnAt = -1
+        if (s.rides === 0) {
+          placeFriend(0, order.current[0], 320, 700, s.facing)
+          talk(V.firstFriend)
+        } else if (s.rides === 1) {
+          // Two friends wave at once, one each way: she picks who goes first.
+          placeFriend(0, order.current[1], 380, 900, -1)
+          placeFriend(1, order.current[2], 380, 900, 1)
+          talk(V.twoFriends)
         }
-        f.t = 0
-      }
-    } else if (f.phase === 'riding') {
-      fx = seat.x
-      fy = seat.y - tapHop * 0.6
-      const pinkDoor = s.bx + wrap(doorX(PINK) - s.bx, CANAL)
-      if (Math.abs(pinkDoor - s.bx) < FEEL.doorReach && canBoard) {
-        f.phase = 'hopOut'
-        f.t = 0
-        f.fromX = fx
-        f.fromY = fy
-        sfx.boing()
-      }
-    } else if (f.phase === 'inside') {
-      fx = s.bx + wrap(doorX(PINK) - s.bx, CANAL)
-      fy = -4
-      fScale = Math.max(0, 1 - f.t / 0.4)
-      if (f.t > 0.9) {
-        f.last = f.house
-        f.phase = 'none'
-        f.spawnIn = 2.5
       }
     }
-    f.x = fx
-    f.y = fy
+    if (playing && s.rides >= RIDES && s.tide < 0 && s.rider < 0 && s.spawnAt >= 0 && s.playT >= s.spawnAt) {
+      s.spawnAt = -1
+      startTide()
+    }
+    s.actors.forEach((a, slot) => {
+      a.t += dt
+      if (a.tap >= 0) a.tap += dt
+      if (a.tap > 0.5) a.tap = -1
+      const tapHop = a.tap >= 0 ? Math.sin(Math.PI * (a.tap / 0.5)) * 40 : 0
+      let fx = 0
+      let fy = 0
+      let fScale = 1
+      if (a.phase === 'waiting') {
+        const door = s.bx + wrap(doorX(a.house) - s.bx, CANAL)
+        const close = Math.abs(door - s.bx) < 700
+        fx = door
+        fy = -4 - Math.abs(Math.sin(a.t * (close ? 7 : 3))) * (close ? 22 : 8) - tapHop
+        fScale = Math.min(1, a.t / 0.3) // pops out of the door
+        if (playing && s.rider < 0 && s.target < 0 && Math.abs(door - s.bx) < FEEL.doorReach && canBoard) {
+          a.phase = 'hopIn'
+          a.t = 0
+          a.fromX = fx
+          a.fromY = fy
+          s.rider = slot
+          sfx.boing()
+        }
+      } else if (a.phase === 'hopIn' || a.phase === 'hopOut') {
+        const p = Math.min(1, a.t / 0.5)
+        const to = a.phase === 'hopIn' ? seat : { x: s.bx + wrap(doorX(a.outDoor) - s.bx, CANAL), y: -4 }
+        fx = a.fromX + (to.x - a.fromX) * p
+        fy = a.fromY + (to.y - a.fromY) * p - Math.sin(Math.PI * p) * 120
+        if (p >= 1) {
+          if (a.phase === 'hopIn') {
+            a.phase = 'riding'
+            sfx.pop()
+            s.squashV += 2.5
+            startRide(slot)
+          } else {
+            a.phase = 'inside'
+            sounds.correct()
+            burst((screenX(fx) * L.s) / L.W, (L.waterTop + fy * L.s) / L.H)
+            finishRide(slot)
+          }
+          a.t = 0
+        }
+      } else if (a.phase === 'riding') {
+        fx = seat.x
+        fy = seat.y - tapHop * 0.6
+        // Arrived? Any house of the right color counts (there's no wrong one).
+        const facade = HOUSES[s.target]?.facade
+        const near = HOUSES.findIndex((h, i) => h.facade === facade && Math.abs(wrap(doorX(i) - s.bx, CANAL)) < FEEL.doorReach)
+        if (near >= 0 && canBoard) {
+          a.phase = 'hopOut'
+          a.outDoor = near
+          a.t = 0
+          a.fromX = fx
+          a.fromY = fy
+          sfx.boing()
+          talk(V.thanks[FRIENDS[a.kind].id as FriendId])
+        } else if (near >= 0) {
+          // Next to the door but zooming past in the front lane for a while: a hint.
+          s.nearT += dt
+          if (s.nearT > 1.5 && !s.closeHinted) {
+            s.closeHinted = true
+            talk(V.driveClose)
+          }
+        } else s.nearT = 0
+      } else if (a.phase === 'inside') {
+        fx = s.bx + wrap(doorX(a.outDoor) - s.bx, CANAL)
+        fy = -4
+        fScale = Math.max(0, 1 - a.t / 0.4)
+        if (a.t > 0.9) a.phase = 'none'
+      }
+      const el = actorEls.current[slot]
+      if (el) {
+        el.style.display = a.phase === 'none' ? 'none' : 'block'
+        el.style.transform = `translate3d(${screenX(fx)}px,${fy + (a.phase === 'riding' || a.phase === 'hopIn' ? s.tideY : 0)}px,0) scale(${fScale})`
+        // At the doorstep a friend is behind the near posts; in the boat, with the boat.
+        el.style.zIndex = a.phase === 'waiting' || a.phase === 'inside' ? '1' : s.by < LANE_SPLIT ? '3' : '5'
+      }
+    })
+
+    // ---- Wrong way? The friend giggles "Other way!" (nothing is wrong; there's more canal to enjoy) ----
+    if (s.target >= 0 && playing) {
+      const dist = Math.abs(wrap(doorX(s.target) - s.bx, CANAL))
+      s.minDist = Math.min(s.minDist, dist)
+      if (dist > s.minDist + 520 && s.otherWays < 3) {
+        s.otherWays++
+        s.minDist = dist
+        const rider = s.rider >= 0 ? s.actors[s.rider] : null
+        // A friend giggles "Other way!"; on Gino's trip to the mask shop, Sparkle just says the side again.
+        if (rider) talk(V.otherWay[FRIENDS[rider.kind].id as FriendId])
+        else sayDirection(s.target, false)
+      }
+      // Reached the mask shop with Gino.
+      if (s.maskTrip && Math.abs(wrap(doorX(MASKSHOP) - s.bx, CANAL)) < FEEL.doorReach && canBoard) reachMaskShop()
+    }
+
+    // ---- "Pull the boat!" when she hasn't moved it for a while ----
+    if (playing && !s.drag && s.idle > 8 && s.t - s.lastTalk > 8 && cooled('stuck', 16)) talk(V.stuck)
+
+    // ---- Passing boats in the back lane (a water bus, an ambulance, a fire boat) ----
+    const tr = s.traffic
+    if (playing) {
+      if (!tr.active) {
+        tr.next -= dt
+        if (tr.next <= 0) {
+          tr.active = true
+          tr.dir = -s.facing || -1
+          tr.x = s.cam - tr.dir * (L.viewW / 2 + 500)
+          setTrafficKind(['vaporetto', 'ambulance', 'fireboat'][Math.floor(s.t / 7) % 3] as TrafficKind)
+        }
+      } else {
+        tr.x += tr.dir * 230 * dt
+        if (Math.abs(tr.x - s.cam) > L.viewW / 2 + 700) {
+          tr.active = false
+          tr.next = 16 + Math.random() * 12
+        }
+      }
+    }
+
+    // ---- The duck family: paddles after the boat when it goes slowly nearby ----
+    const mama = s.ducks[0]
+    const dBoat = wrap(s.bx - mama.x, CANAL)
+    const follow = Math.abs(dBoat) < 650 && speed < 260
+    const goal = follow ? mama.x + dBoat - s.facing * (BOAT.halfLength + 60) : mama.x + wrap(DUCK_HOME - mama.x, CANAL)
+    mama.x += Math.max(-110, Math.min(110, (goal - mama.x) * 1.2)) * dt
+    for (let i = 1; i < s.ducks.length; i++) {
+      const d = s.ducks[i]
+      const want = s.ducks[i - 1].x + wrap(-s.facing * 70, CANAL)
+      d.x += Math.max(-130, Math.min(130, wrap(want - d.x, CANAL) * 2)) * dt
+    }
+    s.ducks.forEach((d, i) => {
+      if (d.dive >= 0) d.dive += dt
+      if (d.dive > 1.2) d.dive = -1
+      const el = duckEls.current[i]
+      if (!el) return
+      const sink = d.dive >= 0 ? Math.sin(Math.PI * Math.min(1, d.dive / 1.2)) * 46 : 0
+      el.style.transform = `translate3d(${screenX(s.bx + wrap(d.x - s.bx, CANAL))}px,${WATER_H - 66 + s.tideY * 0.2 + sink + Math.sin(s.t * 3 + i) * 2}px,0) scaleX(${follow ? -s.facing : 1})`
+      el.style.opacity = String(1 - sink / 60)
+    })
 
     // ---- Write it all to the DOM ----
     const shift = (name: string, factor: number, period: number) => {
       const el = layers.current[name]
       if (el) el.style.transform = `translate3d(${-mod(s.cam * factor - L.viewW / 2, period)}px,0,0)`
     }
-    shift('clouds', PARALLAX.clouds, CLOUDS)
     // Clouds also drift on their own.
     const cl = layers.current.clouds
     if (cl) cl.style.transform = `translate3d(${-mod(s.cam * PARALLAX.clouds + s.t * 6 - L.viewW / 2, CLOUDS)}px,0,0)`
@@ -442,6 +818,8 @@ export function Venice({ setProgress }: ActivityProps) {
       const el = layers.current[name]
       if (el) el.style.backgroundPosition = `${-mod(s.cam * factor + s.t * (name === 'waveBack' ? 8 : -5), 240)}px 0`
     }
+    const water = layers.current.water
+    if (water) water.style.transform = `translate3d(0,${s.tideY}px,0)`
     POSTS.forEach((_, i) => {
       for (const tile of postEls.current) {
         const el = tile[i]
@@ -453,29 +831,44 @@ export function Venice({ setProgress }: ActivityProps) {
     const tiltAccel = Math.max(-FEEL.maxTilt, Math.min(FEEL.maxTilt, s.accel * FEEL.tiltPerAccel * Math.sign(flip || 1)))
     const rock = Math.sin(s.t * 1.8) * FEEL.rock + Math.max(-4, Math.min(4, s.vy * 0.03))
     if (boatEl.current) {
-      boatEl.current.style.transform = `translate3d(${screenX(s.bx)}px,${s.by + bob - hop}px,0) scale(${depth}) rotate(${-tiltAccel + rock}deg)`
+      boatEl.current.style.transform = `translate3d(${screenX(s.bx)}px,${s.by + bob - hop + s.tideY}px,0) scale(${depth}) rotate(${-tiltAccel + rock}deg)`
       boatEl.current.style.zIndex = s.by < LANE_SPLIT ? '3' : '5'
     }
     if (hullEl.current) hullEl.current.style.transform = `scale(${flip * (1 + s.squash * FEEL.squash)}, ${1 - s.squash * FEEL.squash})`
-    if (ringEl.current) ringEl.current.style.opacity = s.idle > 4 ? String(0.55 + 0.45 * Math.sin(s.t * 6)) : '0'
-    if (friendEl.current) {
-      const el = friendEl.current
-      el.style.display = f.phase === 'none' ? 'none' : 'block'
-      el.style.transform = `translate3d(${screenX(fx)}px,${fy}px,0) scale(${fScale})`
-      // At the doorstep the friend is behind the near posts; in the boat, with the boat.
-      el.style.zIndex = f.phase === 'waiting' || f.phase === 'inside' ? '1' : s.by < LANE_SPLIT ? '3' : '5'
+    // The ring pulses when she hasn't touched the boat for a while, or when a low bridge is coming (tap to duck).
+    if (ringEl.current) ringEl.current.style.opacity = (s.idle > 4 && playing) || (approaching && !ducking) ? String(0.55 + 0.45 * Math.sin(s.t * 6)) : '0'
+    if (hatEl.current) {
+      hatEl.current.style.display = s.hat.off ? 'block' : 'none'
+      hatEl.current.style.transform = `translate3d(${screenX(s.bx + wrap(s.hat.x - s.bx, CANAL))}px,${s.hat.y + s.tideY - 10 + Math.sin(s.t * 2.4) * 5}px,0) rotate(${Math.sin(s.t * 1.7) * 8}deg)`
     }
-    // Edge pointers (placeholders for gate 3's glowing hands): to the waiting friend (in its color) or, while a friend
-    // rides, to the pink house, whenever that door is off screen.
-    const goal = f.phase === 'waiting' ? doorX(f.house) : f.phase === 'riding' ? doorX(PINK) : null
-    const goalScreen = goal === null ? L.viewW / 2 : screenX(s.bx + wrap(goal - s.bx, CANAL))
-    const pulse = 1 + 0.12 * Math.sin(s.t * 7)
-    for (const [el, show] of [[arrowL.current, goalScreen < 0], [arrowR.current, goalScreen > L.viewW]] as const) {
-      if (!el) continue
-      el.style.transform = `scale(${show ? pulse : 0})`
-      const dot = el.firstElementChild as HTMLElement | null
-      if (dot) dot.style.background = f.phase === 'waiting' ? FRIENDS[friendKindRef.current].color : '#FF8CC6'
+    if (trafficEl.current) {
+      trafficEl.current.style.display = tr.active ? 'block' : 'none'
+      trafficEl.current.style.transform = `translate3d(${screenX(tr.x)}px,${34 + s.tideY}px,0) scaleX(${tr.dir})`
     }
+
+    // Where to go: the glowing hand at the screen edge on the target's side (LEFT or RIGHT) while it's off screen, and a
+    // gold ring at the door once it's on screen.
+    const pulse = 1 + 0.1 * Math.sin(s.t * 7)
+    const tx = s.target >= 0 ? doorX(s.target) : null
+    const tSide = tx === null ? 0 : Math.sign(wrap(tx - s.bx, CANAL))
+    const tOn = tx !== null && onScreen(tx)
+    if (handL.current) handL.current.style.transform = `scale(${tx !== null && !tOn && tSide < 0 && playing ? pulse : 0})`
+    if (handR.current) handR.current.style.transform = `scale(${tx !== null && !tOn && tSide > 0 && playing ? pulse : 0})`
+    if (markerEl.current) {
+      markerEl.current.style.display = tx !== null && tOn && playing ? 'block' : 'none'
+      if (tx !== null) markerEl.current.style.transform = `translate3d(${screenX(s.bx + wrap(tx - s.bx, CANAL))}px,0,0) scale(${pulse})`
+    }
+    // Friends waiting off screen: their face in a bubble at that edge.
+    s.actors.forEach((a, slot) => {
+      const el = chipEls.current[slot]
+      if (!el) return
+      const door = a.house >= 0 ? doorX(a.house) : 0
+      const show = a.phase === 'waiting' && playing && !onScreen(door) && s.rider < 0
+      const side = Math.sign(wrap(door - s.bx, CANAL))
+      el.style.display = show ? 'block' : 'none'
+      el.style.left = side < 0 ? '12px' : `${L.W - 12 - el.offsetWidth}px`
+      el.style.transform = `scale(${pulse})`
+    })
 
     wakeEls.current.forEach((el, i) => {
       if (!el) return
@@ -484,23 +877,38 @@ export function Venice({ setProgress }: ActivityProps) {
       const k = p.age / p.life
       const size = p.size * (1 + 2.2 * k)
       el.style.opacity = String(0.8 * (1 - k))
-      el.style.transform = `translate3d(${screenX(p.x) - 20}px,${p.y - 20}px,0) scale(${size / 40}, ${(size / 40) * 0.42})`
+      el.style.transform = `translate3d(${screenX(p.x) - 20}px,${p.y - 20 + s.tideY}px,0) scale(${size / 40}, ${(size / 40) * 0.42})`
     })
     sprayEls.current.forEach((el, i) => {
       if (!el) return
       const p = s.spray[i]
       if (!p) return void (el.style.opacity = '0')
       el.style.opacity = String(1 - p.age / p.life)
-      el.style.transform = `translate3d(${screenX(p.x) - 10}px,${p.y - 10}px,0) scale(${p.size / 20})`
+      el.style.transform = `translate3d(${screenX(p.x) - 10}px,${p.y - 10 + s.tideY}px,0) scale(${p.size / 20})`
     })
 
     setSwish(s.drag || speed > 40 ? speed / FEEL.maxSpeed : 0)
 
-    // QA hook: where the boat is (canal x, lane y, speed) and the friend's phase.
-    if (navigator.webdriver) (window as unknown as { __venice?: object }).__venice = { bx: s.bx, by: s.by, vx: s.vx, friend: f.phase, delivered: delivered }
+    if (navigator.webdriver) (window as unknown as { __venice?: object }).__venice = { bx: s.bx, by: s.by, vx: s.vx, stage: s.stage, rides: s.rides, rider: s.rider, target: s.target, tide: s.tide, actors: s.actors.map((a) => a.phase), targetDx: s.target >= 0 ? wrap(doorX(s.target) - s.bx, CANAL) : null, waitDx: s.actors.map((a) => (a.phase === 'waiting' ? wrap(doorX(a.house) - s.bx, CANAL) : null)), hatDx: s.hat.off ? wrap(s.hat.x - s.bx, CANAL) : null, ducking, bridgeDx: MAIN_BRIDGES.map((b) => wrap(b.x - s.bx, CANAL)).sort((a, b) => Math.abs(a) - Math.abs(b))[0] }
   }, layout !== null)
 
+  const pickBoat = (k: BoatKind) => {
+    setBoat(k)
+    g.current.stage = 'play'
+    setStage('play')
+    talk(V.boat[k])
+  }
+  const maskDone = (m: MaskData) => {
+    setMask(m)
+    setStars((n) => n + 1)
+    talk(V.maskDone)
+    g.current.stage = 'finale'
+    setTimeout(() => setStage('finale'), 900)
+  }
+
   const L = layout
+  const night = stage === 'finale'
+  const sky = SKIES[night ? 4 : Math.min(3, lanterns)]
   return (
     <div
       ref={root}
@@ -509,7 +917,7 @@ export function Venice({ setProgress }: ActivityProps) {
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
       onLostPointerCapture={onPointerUp}
-      style={{ position: 'absolute', inset: 0, overflow: 'hidden', touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none', background: 'linear-gradient(#9FD8F2, #CDEBF7 55%, #FFE9F1)' }}
+      style={{ position: 'absolute', inset: 0, overflow: 'hidden', touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none', background: sky, transition: 'background 2s' }}
     >
       {L && (
         <div style={{ position: 'absolute', left: 0, top: L.waterTop, width: L.viewW, height: 0, transform: `scale(${L.s})`, transformOrigin: '0 0' }}>
@@ -519,18 +927,33 @@ export function Venice({ setProgress }: ActivityProps) {
           <Layer refFn={layerRef('far')} period={FAR}>
             <Skyline />
           </Layer>
-          {/* The water, with two bands of little waves that move at different speeds. */}
-          <div style={{ position: 'absolute', left: 0, top: 0, width: L.viewW, height: WATER_H + 400, background: '#6EC3E6', borderTop: `4px solid ${INK}` }} />
-          {/* One flat darker band toward the front of the water (no gradients in this style). */}
-          <div style={{ position: 'absolute', left: 0, top: 176, width: L.viewW, height: WATER_H + 300, background: '#5DB4DC' }} />
-          <div ref={layerRef('waveBack')} style={{ ...waves, top: 34, height: 60, opacity: 0.45 }} />
-          <div ref={layerRef('waveFront')} style={{ ...waves, top: 150, height: 120, backgroundSize: '240px 60px', opacity: 0.6 }} />
+          {/* The water (it rises at acqua alta), with two bands of little waves that move at different speeds. */}
+          <div ref={layerRef('water')} style={{ position: 'absolute', left: 0, top: 0, width: L.viewW, pointerEvents: 'none' }}>
+            <div style={{ position: 'absolute', left: 0, top: 0, width: L.viewW, height: WATER_H + 400, background: '#6EC3E6', borderTop: `4px solid ${INK}` }} />
+            {/* One flat darker band toward the front of the water (no gradients in this style). */}
+            <div style={{ position: 'absolute', left: 0, top: LANE_SPLIT + 30, width: L.viewW, height: WATER_H + 300, background: '#5DB4DC' }} />
+            <div ref={layerRef('waveBack')} style={{ ...waves, top: 34, height: 120, opacity: 0.45 }} />
+            <div ref={layerRef('waveFront')} style={{ ...waves, top: LANE_SPLIT + 30, height: 260, backgroundSize: '240px 60px', opacity: 0.6 }} />
+          </div>
           <Layer refFn={layerRef('canal')} period={CANAL} z={1}>
             <SideCanals />
             {HOUSES.map((h, i) => (
-              <House key={i} house={h} />
+              <House key={i} house={h} index={i} />
             ))}
           </Layer>
+          {/* A passing boat in the back lane: tap it (toot, siren, a rainbow spray). */}
+          <div ref={trafficEl} style={{ position: 'absolute', left: 0, top: 0, zIndex: 2, display: 'none' }}>
+            {(() => {
+              const k = TRAFFIC[trafficKind]
+              const h = k.length / k.aspect
+              return (
+                <button aria-label={trafficKind} data-own-tap onClick={tapTraffic} style={{ position: 'absolute', left: -k.length / 2, top: -h * 0.8, width: k.length, height: h, padding: 0, border: 'none', background: 'none' }}>
+                  <img src={k.img} alt="" draggable={false} style={{ width: '100%', height: '100%', display: 'block' }} />
+                  {spraying && <div style={{ position: 'absolute', left: '58%', top: -150, width: 260, height: 160, borderRadius: '50% 50% 0 0', border: '14px solid transparent', borderTopColor: '#FF8FB8', borderRightColor: '#FFE27A', borderLeftColor: '#8FE3C8', opacity: 0.85 }} />}
+                </button>
+              )
+            })()}
+          </div>
           <Layer refFn={layerRef('nearPosts')} period={CANAL} z={2} tiles={(tile) => POSTS.map((p, i) => (p.lane === 'near' ? <Post key={i} x={p.x} lane={p.lane} postRef={(el) => void (postEls.current[tile][i] = el)} /> : null))} />
           {/* Wake rings sit on the water, under the boat. */}
           <div style={{ position: 'absolute', left: 0, top: 0, zIndex: 2, pointerEvents: 'none' }}>
@@ -538,23 +961,43 @@ export function Venice({ setProgress }: ActivityProps) {
               <div key={i} ref={(el) => void (wakeEls.current[i] = el)} style={{ position: 'absolute', left: 0, top: 0, width: 40, height: 40, borderRadius: '50%', border: '5px solid rgba(255,255,255,.95)', opacity: 0 }} />
             ))}
           </div>
-          {/* The doorstep friend: one of the friends' puppets, positioned by its feet. */}
-          <div ref={friendEl} style={{ position: 'absolute', left: 0, top: 0, display: 'none', zIndex: 1 }}>
-            <button
-              aria-label="friend"
-              onClick={tapFriend}
-              style={{ position: 'absolute', left: (-RIDER.friend * 400) / 480 / 2, top: -RIDER.friend, height: RIDER.friend, aspectRatio: '400 / 480', padding: 0, background: 'none', border: 'none' }}
-            >
-              {(() => {
-                const P = FRIENDS[friendKind].Puppet
-                return <P key={friendKind} height="100%" />
-              })()}
-            </button>
+          {/* The gold ring at the destination door, once it's on screen. */}
+          <div ref={markerEl} style={{ position: 'absolute', left: 0, top: 0, zIndex: 1, display: 'none', pointerEvents: 'none' }}>
+            <div className="world-glow" style={{ position: 'absolute', left: -60, top: -150, width: 120, height: 150, borderRadius: '60px 60px 8px 8px', border: '8px solid #FFC83D' }} />
           </div>
-          <Boat kind={boat} boatRef={boatEl} hullRef={hullEl} ringRef={ringEl} />
+          {/* Doorstep friends: their puppets, positioned by their feet. */}
+          {[0, 1].map((slot) => {
+            const P = FRIENDS[kinds[slot]].Puppet
+            return (
+              <div key={slot} ref={(el) => void (actorEls.current[slot] = el)} style={{ position: 'absolute', left: 0, top: 0, display: 'none', zIndex: 1 }}>
+                <button aria-label="friend" data-own-tap onClick={() => tapActor(slot)} style={{ position: 'absolute', left: (-RIDER.friend * 400) / 480 / 2, top: -RIDER.friend, height: RIDER.friend, aspectRatio: '400 / 480', padding: 0, background: 'none', border: 'none' }}>
+                  <P key={kinds[slot]} height="100%" />
+                </button>
+              </div>
+            )
+          })}
+          {/* Gino's hat, floating on the water after a bonk: drive to it to scoop it up. */}
+          <div ref={hatEl} style={{ position: 'absolute', left: 0, top: 0, zIndex: 4, display: 'none', pointerEvents: 'none' }}>
+            <div style={{ position: 'absolute', left: -50, top: -40 }}>
+              <GinoHat height="64px" />
+            </div>
+          </div>
+          <Boat kind={boat} boatRef={boatEl} hullRef={hullEl} ringRef={ringEl} ginoRef={ginoRef} rowRef={rowRef} gino={gino} mask={night ? mask : null} night={night} />
           <Layer refFn={layerRef('frontPosts')} period={CANAL} z={4} tiles={(tile) => POSTS.map((p, i) => (p.lane === 'front' ? <Post key={i} x={p.x} lane={p.lane} postRef={(el) => void (postEls.current[tile][i] = el)} /> : null))} />
+          {/* The duck family, in front of the front lane. */}
+          {[0, 1, 2].map((i) => {
+            const k = i === 0 ? critters.duck : critters.duckling
+            const h = i === 0 ? 70 : 42
+            return (
+              <div key={i} ref={(el) => void (duckEls.current[i] = el)} style={{ position: 'absolute', left: 0, top: 0, zIndex: 6 }}>
+                <button aria-label={i === 0 ? 'duck' : 'duckling'} data-own-tap onClick={() => tapDuck(i)} style={{ position: 'absolute', left: (-h * k.aspect) / 2, top: -h, width: h * k.aspect, height: h, padding: 0, border: 'none', background: 'none' }}>
+                  <img src={k.img} alt="" draggable={false} style={{ width: '100%', height: '100%', display: 'block' }} />
+                </button>
+              </div>
+            )
+          })}
           <Layer refFn={layerRef('bridge')} period={CANAL} z={6}>
-            <BigBridge />
+            <MainBridges />
           </Layer>
           <div style={{ position: 'absolute', left: 0, top: 0, zIndex: 7, pointerEvents: 'none' }}>
             {Array.from({ length: SPRAY_POOL }, (_, i) => (
@@ -562,20 +1005,35 @@ export function Venice({ setProgress }: ActivityProps) {
             ))}
           </div>
           <Layer refFn={layerRef('fore')} period={FORE} z={8}>
-            <Foreground width={FORE} />
+            <Foreground width={FORE} high={high} />
           </Layer>
-          {/* Pink-house pointers at the screen edges (placeholders for gate 3's glowing left/right hands). */}
-          {(['left', 'right'] as const).map((side) => (
-            <div
-              key={side}
-              ref={side === 'left' ? arrowL : arrowR}
-              style={{ position: 'absolute', zIndex: 9, top: LANE.near - 50, left: side === 'left' ? 8 : L.viewW - 108, width: 100, height: 100, transform: 'scale(0)', pointerEvents: 'none', display: 'grid', placeItems: 'center' }}
-            >
-              <div style={{ width: 84, height: 84, borderRadius: '50%', background: '#FF8CC6', border: `5px solid ${INK}`, display: 'grid', placeItems: 'center', color: '#fff', fontSize: 54, fontWeight: 700, lineHeight: 1 }}>{side === 'left' ? '‹' : '›'}</div>
-            </div>
-          ))}
         </div>
       )}
+
+      {/* Evening and night: a tint over the canal (not a CSS filter: WebKit drops layers this wide when filtered). */}
+      <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none', background: night ? 'rgba(34,28,90,.38)' : lanterns >= 3 ? 'rgba(120,60,120,.1)' : 'transparent', transition: 'background 2s' }} />
+      {/* The LEFT and RIGHT hands (screen edges, at the water), and friends waiting off screen. */}
+      {L && (
+        <>
+          {(['left', 'right'] as const).map((side) => (
+            <div key={side} ref={side === 'left' ? handL : handR} aria-hidden style={{ position: 'absolute', zIndex: 12, top: L.waterTop + (LANE.near - 150) * L.s, [side]: 10, height: 'min(150px, 22vh)', aspectRatio: String(ui.hand.aspect), transform: 'scale(0)', pointerEvents: 'none', filter: 'drop-shadow(0 0 14px #FFC83D) drop-shadow(0 0 6px #FFC83D)' }}>
+              <img src={ui.hand.img} alt="" draggable={false} style={{ width: '100%', height: '100%', transform: side === 'right' ? 'scaleX(-1)' : undefined }} />
+            </div>
+          ))}
+          {[0, 1].map((slot) => (
+            <div key={slot} ref={(el) => void (chipEls.current[slot] = el)} aria-hidden style={{ position: 'absolute', zIndex: 12, top: L.waterTop + (LANE.near - 40) * L.s - 40, width: 'min(84px, 14vh)', height: 'min(84px, 14vh)', borderRadius: '50%', background: '#FFF7F0', border: `5px solid ${INK}`, boxShadow: '0 0 0 6px #FFC83D', display: 'none', overflow: 'hidden', pointerEvents: 'none' }}>
+              <img src={FRIENDS[kinds[slot]].face} alt="" style={{ width: '120%', marginLeft: '-10%', marginTop: '6%' }} />
+            </div>
+          ))}
+        </>
+      )}
+
+      <Lanterns count={night ? 4 : lanterns} night={night} />
+
+      {stage === 'story' && <StoryBeat lines={V.arrive} friend={<Gino height="100%" />} onDone={() => ((g.current.stage = 'pick'), setStage('pick'))} />}
+      {stage === 'pick' && <BoatPicker onPick={pickBoat} />}
+      {stage === 'mask' && <MaskShop onDone={maskDone} saved={mask} />}
+      {stage === 'finale' && <Finale friends={delivered} onDone={onDone} />}
     </div>
   )
 }
@@ -603,25 +1061,145 @@ function Layer({ refFn, period, z = 0, children, tiles }: { refFn: (el: HTMLDivE
   )
 }
 
-/** The boat (gondola sprite, side view, prow on the right before flipping) with Gino rowing at the stern and Sparkle
- *  sitting at the front. The riders flip with the boat when it turns round. */
-function Boat({ kind, boatRef, hullRef, ringRef }: { kind: BoatKind; boatRef: RefObject<HTMLDivElement | null>; hullRef: RefObject<HTMLDivElement | null>; ringRef: RefObject<HTMLDivElement | null> }) {
+/** The boat (side view, prow on the right before flipping) with Gino rowing at the stern and Sparkle up front. The
+ *  riders flip with the boat when it turns round. At the finale Gino plays the accordion and Sparkle wears her mask. */
+function Boat({ kind, boatRef, hullRef, ringRef, ginoRef, rowRef, gino, mask, night }: { kind: BoatKind; boatRef: RefObject<HTMLDivElement | null>; hullRef: RefObject<HTMLDivElement | null>; ringRef: RefObject<HTMLDivElement | null>; ginoRef: RefObject<PuppetHandle | null>; rowRef: { current: number }; gino: { hatOff: boolean; ducking: boolean; dizzy: boolean; singing: boolean }; mask: MaskData | null; night: boolean }) {
   const b = BOATS[kind]
   const w = BOAT.length * 1.15
   const h = w / b.aspect
   return (
     <div ref={boatRef} aria-label="gondola" style={{ position: 'absolute', left: 0, top: 0, zIndex: 5, touchAction: 'none', width: 1, height: 1, transformOrigin: '0 0' }}>
-      {/* "Grab me" ring: pulses when she hasn't touched the boat for a few seconds. */}
-      <div ref={ringRef} style={{ position: 'absolute', left: -BOAT.halfLength - 34, top: -120, width: BOAT.halfLength * 2 + 68, height: 180, borderRadius: '50%', border: '7px solid #FFC83D', boxShadow: '0 0 24px #FFC83D', opacity: 0, pointerEvents: 'none' }} />
+      {/* "Grab me" ring: pulses when she hasn't touched the boat for a while, or when it's time to duck. */}
+      <div ref={ringRef} style={{ position: 'absolute', left: -BOAT.halfLength - 34, top: -150, width: BOAT.halfLength * 2 + 68, height: 210, borderRadius: '50%', border: '7px solid #FFC83D', boxShadow: '0 0 24px #FFC83D', opacity: 0, pointerEvents: 'none' }} />
       <div ref={hullRef} style={{ position: 'absolute', left: -w / 2, top: -h * b.waterline, width: w, height: h, transformOrigin: `50% ${b.waterline * 100}%` }}>
-        {/* Gino stands at the stern (left), the oar going down behind the boat; Sparkle sits up front. */}
         <div style={{ position: 'absolute', left: w * b.gino[0], bottom: h * b.gino[1], height: RIDER.gino, aspectRatio: '400 / 480' }}>
-          <Gino oar height="100%" />
+          <Gino ref={ginoRef} oar={!night} accordion={night} singing={gino.singing || night} hatOff={gino.hatOff} ducking={gino.ducking} dizzy={gino.dizzy} rowRef={rowRef} height="100%" />
         </div>
-        <div style={{ position: 'absolute', left: w * b.sparkle[0], bottom: h * b.sparkle[1], height: RIDER.sparkle }}>
+        <motion.div animate={{ scaleY: gino.ducking ? 0.7 : 1 }} transition={{ type: 'spring', duration: 0.3 }} style={{ position: 'absolute', left: w * b.sparkle[0], bottom: h * b.sparkle[1], height: RIDER.sparkle, transformOrigin: '50% 100%' }}>
           <SparklePuppet height={`${RIDER.sparkle}px`} lookToward={0.5} />
-        </div>
+          {mask && (
+            <div style={{ position: 'absolute', left: RIDER.sparkle * 0.36, top: RIDER.sparkle * 0.2, width: RIDER.sparkle * 0.56 }}>
+              <MaskView data={mask} />
+            </div>
+          )}
+        </motion.div>
         <img src={b.img} alt="" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
+      </div>
+    </div>
+  )
+}
+
+/** The payoff: a string of lanterns over the canal, one per friend taken home (and one for Gino). Lit up at night. */
+function Lanterns({ count, night }: { count: number; night: boolean }) {
+  return (
+    <div aria-hidden style={{ position: 'absolute', left: '22%', right: '4%', top: 'calc(var(--safe-top) + 14px)', height: 120, zIndex: 11, pointerEvents: 'none' }}>
+      <svg viewBox="0 0 100 20" preserveAspectRatio="none" style={{ position: 'absolute', inset: 0, width: '100%', height: 40, overflow: 'visible' }}>
+        <path d="M0 2 Q50 22 100 2" fill="none" stroke={INK} strokeWidth="0.5" vectorEffect="non-scaling-stroke" style={{ strokeWidth: 3 }} />
+      </svg>
+      {[0, 1, 2, 3].map((i) => {
+        const x = 14 + i * 24
+        const sag = 2 + 18 * Math.sin((Math.PI * x) / 100)
+        return (
+          <AnimatePresence key={i}>
+            {i < count && (
+              <motion.img
+                src={ui.lantern.img}
+                alt=""
+                initial={{ y: -80, opacity: 0, rotate: -20 }}
+                animate={{ y: 0, opacity: 1, rotate: [8, -6, 3, 0] }}
+                transition={{ type: 'spring', duration: 0.9 }}
+                style={{ position: 'absolute', left: `${x}%`, top: sag * 1.8, height: 'min(70px, 10vh)', translate: '-50% 0', filter: night ? 'drop-shadow(0 0 18px #FFE27A) brightness(1.15)' : undefined, transformOrigin: '50% 0' }}
+              />
+            )}
+          </AnimatePresence>
+        )
+      })}
+    </div>
+  )
+}
+
+/** Choose a boat (a silly one is fine). */
+function BoatPicker({ onPick }: { onPick: (k: BoatKind) => void }) {
+  return (
+    <div style={{ position: 'absolute', inset: 0, zIndex: 20, background: 'rgba(255,247,240,.82)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 16px)', gap: 'min(16px, 2vh)' }}>
+      <PromptBubble text={V.pickBoat} />
+      <div style={{ flex: 1, minHeight: 0, width: '100%', maxWidth: 1000, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'min(20px, 3vw)', alignContent: 'center' }}>
+        {BOAT_ORDER.map((k, i) => (
+          <motion.button
+            key={k}
+            aria-label={`${k} boat`}
+            initial={{ scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1, y: [0, -6, 0] }}
+            transition={{ scale: { delay: i * 0.08, type: 'spring' }, opacity: { delay: i * 0.08 }, y: { repeat: Infinity, duration: 1.8, delay: i * 0.3 } }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => {
+              sounds.pop()
+              onPick(k)
+            }}
+            style={{ background: '#BFE6F7', border: `5px solid ${INK}`, borderRadius: 28, padding: 'min(16px, 2vh)', minHeight: 96, maxHeight: '32vh', display: 'grid', placeItems: 'center', boxShadow: 'var(--shadow)' }}
+          >
+            <img src={BOATS[k].img} alt="" draggable={false} style={{ width: '100%', maxHeight: 'calc(32vh - 40px)', objectFit: 'contain' }} />
+          </motion.button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/** Night on the canal: fireworks over the lagoon (tap the sky for more), the friends she drove wave from the walkway,
+ *  Gino plays his accordion. Then the stamp. */
+function Finale({ friends, onDone }: { friends: number[]; onDone: () => void }) {
+  const [shots, setShots] = useState<{ id: number; x: number; y: number; c: string }[]>([])
+  const next = useRef(0)
+  const refs = useRef<(PuppetHandle | null)[]>([])
+  const fire = (x: number, y: number) => {
+    const id = next.current++
+    vsfx.firework()
+    setShots((s) => [...s.slice(-6), { id, x, y, c: ['#FF8FB8', '#FFE27A', '#8FE3C8', '#B9A6F5', '#6EC3E6'][id % 5] }])
+  }
+  useEffect(() => {
+    void say(V.night)
+    void say(V.fireworks, { interrupt: false })
+    void say(V.accordion, { interrupt: false })
+    const auto = setInterval(() => fire(15 + Math.random() * 70, 12 + Math.random() * 22), 900)
+    const wave = setInterval(() => refs.current.forEach((r, i) => setTimeout(() => void r?.play('cheer'), i * 250)), 2600)
+    const done = setTimeout(onDone, 11000)
+    return () => (clearInterval(auto), clearInterval(wave), clearTimeout(done))
+  }, [])
+  return (
+    <div
+      onPointerDown={(e) => {
+        const r = (e.currentTarget as HTMLElement).getBoundingClientRect()
+        fire(((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100)
+      }}
+      style={{ position: 'absolute', inset: 0, zIndex: 15 }}
+    >
+      {shots.map((s) => (
+        <div key={s.id} style={{ position: 'absolute', left: `${s.x}%`, top: `${s.y}%`, pointerEvents: 'none' }}>
+          {Array.from({ length: 12 }, (_, i) => {
+            const a = (i / 12) * Math.PI * 2
+            return (
+              <motion.div
+                key={i}
+                initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+                animate={{ x: Math.cos(a) * 90, y: Math.sin(a) * 90 + 30, opacity: 0, scale: 0.4 }}
+                transition={{ duration: 1.3, ease: 'easeOut' }}
+                style={{ position: 'absolute', width: 14, height: 14, marginLeft: -7, marginTop: -7, borderRadius: '50%', background: s.c, boxShadow: `0 0 12px ${s.c}` }}
+              />
+            )
+          })}
+        </div>
+      ))}
+      {/* The friends she drove, on the walkway in front, waving. */}
+      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom) + 4px)', display: 'flex', justifyContent: 'center', gap: 'min(28px, 4vw)', pointerEvents: 'none' }}>
+        {friends.map((k, i) => {
+          const P = FRIENDS[k].Puppet
+          return (
+            <motion.div key={i} initial={{ y: 200 }} animate={{ y: 0 }} transition={{ delay: 0.4 + i * 0.25, type: 'spring' }} style={{ height: 'min(150px, 20vh)' }}>
+              <P ref={(r: PuppetHandle | null) => void (refs.current[i] = r)} height="100%" />
+            </motion.div>
+          )
+        })}
       </div>
     </div>
   )

@@ -37,7 +37,7 @@ export const FEEL = {
   /** Bumping the same post this many times in a row (within 1.5 s) bounces the boat into the other lane, so pushing
    *  into a post slides round it instead of boinging forever. */
   /** Post hit zone: how much of the boat's half-length counts (the bow and stern tips can overlap a post) and how far
-   *  (units) the boat must be from the post's lane to slip past (lanes are 120 apart, so 40 = a third of the way over). */
+   *  (units) the boat must be from the post's lane to slip past (lanes are 152 apart, so 40 = about a quarter of the way over). */
   postHitLength: 0.78,
   postHitDepth: 40,
   /** Post height above the water (units). */
@@ -67,17 +67,19 @@ export const FEEL = {
 export const PARALLAX = { clouds: 0.06, far: 0.35, canal: 1, foreground: 1.35, waterBack: 0.85, waterFront: 1.15 } as const
 
 /** The two lanes (boat center y): by the houses and by the front of the water. */
-export const LANE = { near: 92, front: 212 } as const
+export const LANE = { near: 104, front: 256 } as const
 export const LANE_SPLIT = (LANE.near + LANE.front) / 2
 
 /** Water from the waterline to the bottom of the screen, including the stone edge in the foreground. */
-export const WATER_H = 330
+export const WATER_H = 420
+/** Where the stone edge of the near walkway starts (it covers the bottom of the water). */
+export const QUAY_Y = WATER_H - 40
 /** The boat is drawn on a 230×100 grid, scaled up by `scale`. */
 export const BOAT = { length: 264, halfLength: 124, scale: 264 / 230 } as const
 
 /** The logical stage: the smallest canal area that must always show (wide screens / tall screens), scaled to fit. */
 /** phoneW: very tall screens (phone portrait) zoom in further, so the boat stays big enough to grab. */
-export const STAGE = { wideW: 1200, tallW: 760, phoneW: 600, minH: 600 } as const
+export const STAGE = { wideW: 1200, tallW: 760, phoneW: 600, minH: 690 } as const
 
 /** The house facades (sprites in art.ts): width / height of the picture, and where the door is (share of the width). */
 export const FACADES = {
@@ -139,12 +141,20 @@ export const CANAL = cursor
 export const PINK = HOUSES.findIndex((h) => h.pink)
 export const doorX = (i: number) => HOUSES[i].x + HOUSES[i].door
 
-/** The big bridge over the main canal (in front of the boat), canal x of its center and its width. */
-export const BIG_BRIDGE = { x: doorX(3) + 260, w: 1000 }
+export const MASKSHOP = HOUSES.findIndex((h) => h.facade === 'maskshop')
+
+/** Bridges over the main canal (drawn in front of the boat, which passes under them): canal x of the center and width.
+ *  Their arch tops (crowns) all sit at BRIDGE_CROWN: Gino's hat clears it in normal water, but at high water (TIDE) the
+ *  boat rises and he has to duck. Kept away from the pink house and the mask shop doors. */
+const mid = (i: number) => Math.round((doorX(i) + doorX(i + 1)) / 2)
+export const MAIN_BRIDGES: { x: number; w: number }[] = []
+export const BRIDGE_CROWN = -110
+/** How far the water rises at acqua alta (units). */
+export const TIDE = 72
 
 /** Mooring posts: x along the canal and which lane they stand in. Near-lane posts stand halfway between two doors (a
  *  post in that lane shields the doors behind it, so she dodges round through the front lane; see FEEL.dodgeAfter). */
-const between = (i: number) => Math.round((doorX(i) + doorX(i + 1)) / 2)
+const between = mid
 export const POSTS: { x: number; lane: 'near' | 'front' }[] = [
   { x: between(1), lane: 'near' },
   { x: Math.round(CANAL * 0.2), lane: 'front' },
@@ -184,3 +194,11 @@ export const BOLLARDS = [90, 520, 860, 1260]
 /** Wrap a distance along a loop of length `period` into [-period/2, period/2). */
 export const wrap = (d: number, period: number) => ((((d + period / 2) % period) + period) % period) - period / 2
 export const mod = (a: number, n: number) => ((a % n) + n) % n
+
+MAIN_BRIDGES.push({ x: doorX(3) + 260, w: 1000 }, { x: mid(8), w: 900 }, { x: SIDE_CANALS[2].x + SIDE / 2, w: 950 })
+
+/** The duck family's home on the water (canal x); they paddle after the boat when it goes slowly nearby. */
+export const DUCK_HOME = Math.round(CANAL * 0.35)
+/** Pigeons on the near walkway (x in the foreground layer) and the winged lion statue. */
+export const PIGEONS = [180, 640, 1100]
+export const LION_X = 380

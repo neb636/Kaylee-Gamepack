@@ -84,6 +84,13 @@ const PUPPET_SCENARIOS = [
   ['civetta', 'swivel', 1.4],
   ['civetta', 'flap', 1.1],
   ['civetta', 'hoot', 1.1],
+  ['gino-oar', 'cheer', 1.4],
+  ['gino', 'cheer', 1.3],
+  ['gino', 'bonk', 1.1],
+  ['gino', 'giggle', 1.1],
+  ['gino-singing', 'nod', 1.2],
+  ['gino-dizzy', 'hop', 1.2],
+  ['gino-accordion', 'nod', 1.6],
 ].map(([id, action, seconds]) => ({
   name: `${id}-${action}`,
   seconds,
@@ -326,7 +333,10 @@ const veniceDrive = (name, seconds, moves) => ({
   seconds,
   setup: async (page, base) => {
     await page.goto(`${base}#/world/italy/venice`)
-    await page.waitForTimeout(1200)
+    await page.waitForTimeout(600)
+    await skip(page)
+    await page.evaluate(() => window.__veniceQA?.jump('play'))
+    await page.waitForTimeout(800)
   },
   act: async (page) => {
     const b = await page.locator('[aria-label="gondola"]').boundingBox()
@@ -347,6 +357,27 @@ const veniceDrive = (name, seconds, moves) => ({
 GAME_SCENARIOS.push(
   veniceDrive('venice-drive', 3.2, [[0.3, 0, 1200], [0.3, -0.1, 600], [-0.35, -0.1, 900]]),
   veniceDrive('venice-coast', 2.4, [[0.35, 0, 450]]),
+  {
+    // High water: the boat goes under a bridge without ducking, so Gino's hat bonks off and floats behind.
+    name: 'venice-bonk',
+    seconds: 3,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/italy/venice`)
+      await page.waitForTimeout(600)
+      await skip(page)
+      await page.evaluate(() => window.__veniceQA?.jump('tide'))
+      await page.waitForTimeout(4000)
+    },
+    act: async (page) => {
+      const b = await page.locator('[aria-label="gondola"]').boundingBox()
+      const dx = await page.evaluate(() => window.__venice?.bridgeDx ?? 400)
+      await page.mouse.move(b.x, b.y - 40)
+      await page.mouse.down()
+      await page.mouse.move(b.x + Math.sign(dx) * vp.width * 0.3, b.y - 40, { steps: 6 })
+      await page.waitForTimeout(2400)
+      await page.mouse.up()
+    },
+  },
 )
 
 const all = [...PUPPET_SCENARIOS, ...GAME_SCENARIOS].filter((s) => !flag('only') || flag('only').split(',').includes(s.name))

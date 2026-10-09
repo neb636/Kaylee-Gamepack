@@ -1,5 +1,21 @@
 // Venice's own sprites (generated with Codex, style per art/STYLE.md + ../../STYLE.md, cut out by `npm run art -- venice-`).
 // Kept here rather than in ../../art.ts so only this activity imports them.
+import ambulance from '../../assets/venice-ambulance-hd.webp'
+import babypigeonWindow from '../../assets/venice-babypigeon-window.webp'
+import catWindow from '../../assets/venice-cat-window.webp'
+import duck from '../../assets/venice-duck.webp'
+import duckling from '../../assets/venice-duckling.webp'
+import fireboat from '../../assets/venice-fireboat-hd.webp'
+import hand from '../../assets/venice-hand.webp'
+import lantern from '../../assets/venice-lantern.webp'
+import laundry from '../../assets/venice-laundry-hd.webp'
+import lion from '../../assets/venice-lion.webp'
+import nonnaWindow from '../../assets/venice-nonna-window.webp'
+import passerella from '../../assets/venice-passerella-hd.webp'
+import pigeonBoots from '../../assets/venice-pigeon-boots.webp'
+import pigeonFly from '../../assets/venice-pigeon-fly.webp'
+import pigeon from '../../assets/venice-pigeon.webp'
+import vaporetto from '../../assets/venice-vaporetto-hd.webp'
 import boatBathtub from '../../assets/venice-boat-bathtub-hd.webp'
 import boatGondola from '../../assets/venice-boat-gondola-hd.webp'
 import boatPizza from '../../assets/venice-boat-pizza-hd.webp'
@@ -48,3 +64,27 @@ export const BRIDGES = {
 export const skyline = { belltower: { img: farBelltower, aspect: 0.174 }, dome: { img: farDome, aspect: 1.524 }, rooftops: { img: farRooftops, aspect: 2.829 } } as const
 export const clouds = { 1: { img: cloud1, aspect: 2.51 }, 2: { img: cloud2, aspect: 1.501 } } as const
 export const posts = { near: postBlue, front: postPink, aspect: 0.148 } as const
+
+/** Things to poke and passers-by. aspect = width / height. */
+export const critters = {
+  pigeon: { img: pigeon, aspect: 0.969 },
+  pigeonFly: { img: pigeonFly, aspect: 1.145 },
+  pigeonBoots: { img: pigeonBoots, aspect: 0.906 },
+  duck: { img: duck, aspect: 1.43 },
+  duckling: { img: duckling, aspect: 1.151 },
+  lion: { img: lion, aspect: 0.604 },
+} as const
+/** Who pops up in a window when she taps a house. */
+export const windowFriends = [
+  { img: catWindow, aspect: 1.164 },
+  { img: nonnaWindow, aspect: 1.169 },
+  { img: babypigeonWindow, aspect: 1.202 },
+] as const
+export const TRAFFIC = {
+  vaporetto: { img: vaporetto, aspect: 3.593, length: 420 },
+  ambulance: { img: ambulance, aspect: 3.22, length: 300 },
+  fireboat: { img: fireboat, aspect: 2.246, length: 300 },
+} as const
+export type TrafficKind = keyof typeof TRAFFIC
+export const ui = { hand: { img: hand, aspect: 0.811 }, lantern: { img: lantern, aspect: 0.803 } } as const
+export const props = { laundry: { img: laundry, aspect: 3.821 }, passerella: { img: passerella, aspect: 8.678 } } as const

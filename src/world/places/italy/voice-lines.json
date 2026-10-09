@@ -618,16 +618,257 @@
     "text": "Yay! Bells for the band!",
     "voice": "lupa"
   },
+  {
+    "text": "Ciao, Kaylee! In Venice, the streets are water!",
+    "voice": "gino"
+  },
+  {
+    "text": "Grab my gondola!",
+    "voice": "gino"
+  },
+  "Pick a boat!",
+  {
+    "text": "A real gondola! Bellissima!",
+    "voice": "gino"
+  },
+  {
+    "text": "A swan boat! So fancy!",
+    "voice": "gino"
+  },
+  {
+    "text": "A bathtub? Ha ha! Splish splash!",
+    "voice": "gino"
+  },
+  {
+    "text": "A pizza boat! Delizioso!",
+    "voice": "gino"
+  },
+  "Pull the boat!",
+  {
+    "text": "Wheee!",
+    "voice": "gino"
+  },
+  {
+    "text": "Boing! Mamma mia!",
+    "voice": "gino"
+  },
+  {
+    "text": "Ooh, I'm dizzy!",
+    "voice": "gino"
+  },
+  {
+    "text": "Coo coo! That tickles!",
+    "voice": "gino"
+  },
+  "Look! A friend is waving!",
+  "Two friends! Who goes first?",
+  "Drive close to the door!",
+  "It's to the LEFT!",
+  "It's to the RIGHT!",
+  {
+    "text": "To the pink house, please!",
+    "voice": "lupa"
+  },
+  {
+    "text": "To the yellow house, please!",
+    "voice": "lupa"
+  },
+  {
+    "text": "To the blue house, please!",
+    "voice": "lupa"
+  },
+  {
+    "text": "To the green house, please!",
+    "voice": "lupa"
+  },
+  {
+    "text": "To the red house, please!",
+    "voice": "lupa"
+  },
+  {
+    "text": "To the purple house, please!",
+    "voice": "lupa"
+  },
+  {
+    "text": "To the orange house, please!",
+    "voice": "lupa"
+  },
+  {
+    "text": "To the pink house, please!",
+    "voice": "spina"
+  },
+  {
+    "text": "To the yellow house, please!",
+    "voice": "spina"
+  },
+  {
+    "text": "To the blue house, please!",
+    "voice": "spina"
+  },
+  {
+    "text": "To the green house, please!",
+    "voice": "spina"
+  },
+  {
+    "text": "To the red house, please!",
+    "voice": "spina"
+  },
+  {
+    "text": "To the purple house, please!",
+    "voice": "spina"
+  },
+  {
+    "text": "To the orange house, please!",
+    "voice": "spina"
+  },
+  {
+    "text": "To the pink house, please!",
+    "voice": "cesare"
+  },
+  {
+    "text": "To the yellow house, please!",
+    "voice": "cesare"
+  },
+  {
+    "text": "To the blue house, please!",
+    "voice": "cesare"
+  },
+  {
+    "text": "To the green house, please!",
+    "voice": "cesare"
+  },
+  {
+    "text": "To the red house, please!",
+    "voice": "cesare"
+  },
+  {
+    "text": "To the purple house, please!",
+    "voice": "cesare"
+  },
+  {
+    "text": "To the orange house, please!",
+    "voice": "cesare"
+  },
+  {
+    "text": "To the pink house, please!",
+    "voice": "civetta"
+  },
+  {
+    "text": "To the yellow house, please!",
+    "voice": "civetta"
+  },
+  {
+    "text": "To the blue house, please!",
+    "voice": "civetta"
+  },
+  {
+    "text": "To the green house, please!",
+    "voice": "civetta"
+  },
+  {
+    "text": "To the red house, please!",
+    "voice": "civetta"
+  },
+  {
+    "text": "To the purple house, please!",
+    "voice": "civetta"
+  },
+  {
+    "text": "To the orange house, please!",
+    "voice": "civetta"
+  },
+  {
+    "text": "Other way! Hee hee!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Other way! Hee hee!",
+    "voice": "spina"
+  },
+  {
+    "text": "Other way, please.",
+    "voice": "cesare"
+  },
+  {
+    "text": "Hoo! Other way!",
+    "voice": "civetta"
+  },
+  {
+    "text": "Grazie, Kaylee!",
+    "voice": "lupa"
+  },
+  {
+    "text": "Grazie, Kaylee!",
+    "voice": "spina"
+  },
+  {
+    "text": "Grazie, Kaylee.",
+    "voice": "cesare"
+  },
+  {
+    "text": "Grazie, Kaylee!",
+    "voice": "civetta"
+  },
+  {
+    "text": "Ciao! Can I ride?",
+    "voice": "lupa"
+  },
+  {
+    "text": "Ciao! Me too!",
+    "voice": "spina"
+  },
+  {
+    "text": "A ride, please.",
+    "voice": "cesare"
+  },
+  {
+    "text": "Hoo! A ride?",
+    "voice": "civetta"
+  },
+  "A lantern for the canal!",
+  "High water! Acqua alta!",
+  "Low bridge! Tap Gino to duck!",
+  {
+    "text": "Bonk! My hat!",
+    "voice": "gino"
+  },
+  {
+    "text": "My hat! Grazie!",
+    "voice": "gino"
+  },
+  {
+    "text": "Now take me to the mask shop!",
+    "voice": "gino"
+  },
+  {
+    "text": "The mask shop! Let's make a mask for Carnevale!",
+    "voice": "gino"
+  },
+  "Paint one side. Watch the other side!",
+  "Now add sparkly gems!",
+  "What a beautiful mask!",
+  "Look! The canal is all lit up!",
+  {
+    "text": "Fireworks for Carnevale!",
+    "voice": "gino"
+  },
+  {
+    "text": "My accordion, for Lupa's band!",
+    "voice": "gino"
+  },
+  "Even ambulances are boats in Venice!",
   "Brown bear sticker! Bears live in the mountains of Italy!",
   "Porcupine sticker! Crested porcupines live in Italy!",
   "Cat sticker! Lots of cats live in the old ruins of Rome!",
   "Little owl sticker! Little owls live all over Italy!",
   "Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!",
+  "Pigeon sticker! Lots of pigeons live in Venice!",
   "Let's see how olive oil is made!",
   "Let's toss a coin in the real Trevi Fountain!",
   "Look! A real Roman water bridge!",
   "Let's see the real Colosseum in Rome!",
   "Let's see the real Leaning Tower!",
+  "Venice is a city on the water! It has more than four hundred bridges, and the buses and ambulances are boats!",
   "In Italy, people say ciao! It means hello and goodbye!",
   "Grazie means thank you!",
   "One, two, three in Italian: uno, due, tre!",
