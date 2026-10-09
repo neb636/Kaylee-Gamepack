@@ -354,9 +354,13 @@ QA (after `npm run build`; WebKit, because the iPad runs Safari: `npx playwright
   (`qa-output/video/`). Keep talk before the first touch under ~6 seconds and talk per touch under ~1.5 s.
 - **Every new activity adds itself to all three scripts** (screens, a motion scenario for its core verb, pacing).
   A screen QA never looked at is a screen nobody checked.
-- The `playtest-qa` Claude agent (Opus) runs all three, looks at every image with a 5-year-old-playtest checklist,
-  scores each activity on the fun check in `docs/play-design.md`, and reports ranked findings; fix them and run it
-  again. `luna-qa` (Luna in Codex) is an optional second opinion.
+- QA runs in two steps, so the expensive model only does the judging:
+  1. The `layout-qa` agent (Haiku, cheap) runs all three scripts, opens every screenshot and filmstrip, and writes
+     `qa-output/layout-report.md`: what's cut off, overlapping, too small, under the top bar or broken.
+  2. The `playtest-qa` agent (Opus) reads that report, the play strips, filmstrips, pacing and the activity code, scores
+     each activity on the fun check in `docs/play-design.md` (fun / OK / thin) and writes the ranked to-do list
+     `qa-output/playtest-report.md`. Fix it and run both again.
+  `luna-qa` (Luna in Codex) is an optional second opinion from a different model, not part of the normal loop.
 - QA passing means it works, not that it's fun. Only Dad's iPad test of the greybox and the finished activity says that.
 - Lip sync and sound can't be heard by automated browsers: listen on the iPad.
 

@@ -1,6 +1,6 @@
 ---
 name: luna-qa
-description: Second-opinion visual and play-through QA for Kaylee's Gamepack using Luna (Codex CLI, gpt-6-luna) and Playwright (WebKit). Screenshots every Around the World screen at iPad and iPhone sizes, reviews motion filmstrips and the pacing report, and returns findings. QA only; never edits source. The main QA is the playtest-qa agent; use this for an independent opinion from a different model.
+description: Second-opinion visual and play-through QA for Kaylee's Gamepack using Luna (Codex CLI, gpt-6-luna) and Playwright (WebKit). Screenshots every Around the World screen at iPad and iPhone sizes, reviews motion filmstrips and the pacing report, and returns findings. QA only; never edits source. The normal loop is layout-qa (Haiku) then playtest-qa (Opus); use this only when you want an independent opinion from a different model.
 tools: Bash, Read
 ---
 
