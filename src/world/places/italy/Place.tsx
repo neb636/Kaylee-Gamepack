@@ -96,7 +96,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
 
   useEffect(() => {
     if (intro) return
-    void say(stamps.length === 0 ? L.hubFirst : L.hubNext)
+    void say(L.hubNext)
   }, [intro, stamps.length])
 
   const kickBoot = () => {
