@@ -65,7 +65,7 @@ function make(tall: boolean, w: number, h: number, sea: number, cliffTop: number
   const left = at(CLIFF.caveL)
   const right = at(CLIFF.caveR)
   const span = right - left
-  const chickH = tall ? 82 : 86
+  const chickH = tall ? 88 : 94
   return {
     tall,
     w,
@@ -81,7 +81,7 @@ function make(tall: boolean, w: number, h: number, sea: number, cliffTop: number
       top: cliffTop + CLIFF.caveTop * cliffH,
       lip: { x: at(CLIFF.lipX), y: floor + 6 },
       // Pepa's order: one fish-shaped spot per fish, on the rock face above the burrow.
-      fish: [0, 1, 2].map((i) => ({ x: left + span * (0.22 + i * 0.28), y: cliffTop + CLIFF.caveTop * cliffH - (tall ? 46 : 50) })),
+      fish: [0, 1, 2].map((i) => ({ x: left + span * (0.14 + i * 0.36), y: cliffTop + CLIFF.caveTop * cliffH - (tall ? 46 : 50) })),
     },
     pepa: { x: left + span * 0.2, h: tall ? 128 : 136 },
     chicks: [0.5, 0.72, 0.94].map((f) => ({ x: left + span * f, h: chickH })),
@@ -91,7 +91,7 @@ function make(tall: boolean, w: number, h: number, sea: number, cliffTop: number
   }
 }
 
-const WIDE = make(false, 1600, 1000, 650, 280, 820, -50, {
+const WIDE = make(false, 1600, 1000, 650, 280, 820, -62, {
   anchor: { x: 418, y: 0 },
   slots: [418, 300, 182],
   rock: { x: 1110, y: 0, w: 400, top: 0 },
@@ -115,12 +115,12 @@ const WIDE = make(false, 1600, 1000, 650, 280, 820, -50, {
   sun: { x: 1361, y: 172, r: 70 },
 })
 
-const TALL = make(true, 1000, 1400, 665, 325, 740, -40, {
+const TALL = make(true, 1000, 1400, 665, 325, 740, -52, {
   anchor: { x: 385, y: 0 },
   slots: [385, 278, 171],
-  rock: { x: 680, y: 0, w: 310, top: 0 },
-  lobo: { x: 780, h: 118 },
-  sparkle: { x: 925, h: 170 },
+  rock: { x: 655, y: 0, w: 310, top: 0 },
+  lobo: { x: 758, h: 118 },
+  sparkle: { x: 893, h: 170 },
   tern: { x: 46, h: 64 },
   diverH: 140,
   near: { x: [540, 700], y: [800, 940] },

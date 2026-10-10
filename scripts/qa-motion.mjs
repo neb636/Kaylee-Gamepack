@@ -439,6 +439,7 @@ const penguinLaunch = (name, seconds, jump, pull) => ({
     await page.goto(`${base}#/world/peru/penguins`)
     await page.waitForTimeout(600)
     await skip(page)
+    await page.waitForSelector('[aria-label="penguin"]', { timeout: 20000 })
     if (jump) await page.evaluate((j) => window.__penguinQA?.jump(j), jump)
     await page.waitForTimeout(jump === 'swim' ? 3200 : 900)
   },

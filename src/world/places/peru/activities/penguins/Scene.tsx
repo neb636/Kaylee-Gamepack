@@ -15,8 +15,9 @@ const bare = { padding: 0, background: 'none', border: 'none' } as const
 export const WATER = '#5DB8EC'
 
 /** The underwater tint (over the cliff's foot and the rock), light rays, and the sandy sea floor. */
-export function Underwater({ S }: { S: PenguinStage }) {
-  const deep = S.h - S.sea
+/** `floor`: the sea floor (stage units), at the bottom of the screen even when the screen is taller than the stage. */
+export function Underwater({ S, floor }: { S: PenguinStage; floor: number }) {
+  const deep = floor - S.sea
   return (
     <div aria-hidden style={{ position: 'absolute', left: -400, top: S.sea, width: S.w + 800, height: deep + 400, pointerEvents: 'none', zIndex: 6, overflow: 'hidden' }}>
       <div style={{ position: 'absolute', inset: 0, background: 'rgba(52,150,215,.42)' }} />
@@ -31,10 +32,10 @@ export function Underwater({ S }: { S: PenguinStage }) {
       ))}
       {/* Sea floor: sand with a few pebbles (and more sand past the stage's edge on very wide or tall screens). */}
       <div style={{ position: 'absolute', left: 0, right: 0, top: deep, bottom: 0, background: '#F2C98F' }} />
-      <svg viewBox={`0 0 ${S.w} 80`} preserveAspectRatio="none" style={{ position: 'absolute', left: 400, top: deep - 70, width: S.w, height: 70 }}>
-        <path d={`M0 30Q${S.w * 0.25} 10 ${S.w * 0.5} 26T${S.w} 22V80H0Z`} fill="#F2C98F" stroke={INK} strokeWidth="5" />
+      <svg viewBox={`0 0 ${S.w + 800} 80`} style={{ position: 'absolute', left: 0, top: deep - 70, width: S.w + 800, height: 70 }}>
+        <path d={`M0 26Q${400 + S.w * 0.25} 10 ${400 + S.w * 0.5} 26T${S.w + 800} 22V80H0Z`} fill="#F2C98F" stroke={INK} strokeWidth="5" />
         {[0.55, 0.7, 0.86].map((x) => (
-          <ellipse key={x} cx={S.w * x} cy="44" rx="16" ry="9" fill="#D9CCFF" stroke={INK} strokeWidth="4" />
+          <ellipse key={x} cx={400 + S.w * x} cy="44" rx="16" ry="9" fill="#D9CCFF" stroke={INK} strokeWidth="4" />
         ))}
       </svg>
     </div>
