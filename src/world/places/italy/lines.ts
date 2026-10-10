@@ -392,6 +392,11 @@ export const L = {
     trevi: "Let's toss a coin in the real Trevi Fountain!",
     aqueduct: 'Look! A real Roman water bridge!',
     colosseum: "Let's see the real Colosseum in Rome!",
+    pizza: "Let's watch a real pizza maker in Naples!",
+    venice: "Let's ride a real gondola in Venice!",
+    etna: "Look! The real Mount Etna is puffing!",
+    frecce: 'Watch the planes paint the flag in the sky!',
+    italy: "Let's fly all over Italy!",
   },
   facts: {
     venice: 'Venice is a city on the water! It has more than four hundred bridges, and the buses and ambulances are boats!',
@@ -409,6 +414,10 @@ export const L = {
     olives: 'Some olive trees in Italy are more than a thousand years old!',
     numbers: 'Romans wrote five like this: V!',
     wolf: 'The story says a kind mama wolf took care of the twins who built Rome!',
+    morning: 'Buongiorno means good morning!',
+    music: 'The piano and the violin were first made in Italy!',
+    gelato: 'Gelato is Italian ice cream! Yum!',
+    pantheon: 'The Pantheon in Rome has a big hole in its roof. When it rains, rain falls inside!',
   },
   passport: 'This is Italy! Tap a picture to learn more.',
 }

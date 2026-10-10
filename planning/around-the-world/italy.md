@@ -4,7 +4,8 @@ Status: 2026-09-28, the boot-map hub and activity 1 (the Pizzeria in Naples) are
 the Trevi Fountain are built too (every scene in one eye-level side-view camera; see "One camera per scene" below).
 Later on 2026-10-07: the Colosseum (Cesare puppet; the trapdoors are a cutaway of the tunnels under the floor, seen
 from the side) is built too. 2026-10-09: Venice (Gino's Water Taxi) and Snow on a Volcano (Nino's snow cart) are rebuilt;
-all six activities are in, and the opera finale is next. Decisions from Dad: build the Pizzeria in one go (no approval gates), the 1889 storybook shows real
+all six activities are in, and the opera finale is next. 2026-10-10: the extras are in too: 19 passport facts, six
+coloring pages, three picture puzzles and nine Theater videos (every activity offers one after its stamp). Decisions from Dad: build the Pizzeria in one go (no approval gates), the 1889 storybook shows real
 people (Queen Margherita and Raffaele Esposito) in the flat style, and toppings stay veggie + olives (no salami). Folder will be `src/world/places/italy/`. There's no Italy pin in
 `COMING_SOON` yet, so add a new one: on `bg-world-map` the boot sits at about **x 48.5, y 31** (just south-west of
 the pink castle). Check it on the iPad. `kit/Flag.tsx` needs an `italy` flag (three vertical stripes: green, white,
@@ -454,7 +455,7 @@ QA hook: `window.__etnaQA.jump('grove' | 'forest' | 'cold' | 'snow' | 'full' | '
 | 🌋 | Volcanoes | "Italy has volcanoes! Etna is the tallest one in Europe!" |
 | 🎻 | Music | "The piano and the violin were first made in Italy!" |
 | 🍨 | Gelato | "Gelato is Italian ice cream! Yum!" |
-| 🫙 | Pantheon | "The Pantheon in Rome has a big hole in its roof. When it rains, rain falls inside!" |
+| 🌧️ | Pantheon | "The Pantheon in Rome has a big hole in its roof. When it rains, rain falls inside!" |
 | 🚩 | Flag | "Italy's flag has three stripes: green, white and red!" |
 
 ## Things you didn't list, now in the plan
@@ -488,21 +489,30 @@ QA hook: `window.__etnaQA.jump('grove' | 'forest' | 'cold' | 'snow' | 'full' | '
 - **La Befana**, the kind witch who brings sweets on January 6 (seasonal special).
 - **Ibex in the Dolomites**, cable cars, cowbells.
 
-## Coloring pages (`bg-color-*`)
+## Coloring pages (`bg-color-*`, built 2026-10-10)
 
 Lupa howling at the moon · Bruno spinning pizza dough · the Colosseum · a gondola
 under a Venice bridge · a Carnival mask · the Trevi Fountain.
 
-## Picture puzzles (`meta.puzzles`, `scene-puzzle-*`)
+## Picture puzzles (`meta.puzzles`, `scene-puzzle-*`, built 2026-10-10)
 
 The Colosseum at sunset · Venice's Grand Canal with gondolas · the Amalfi / Cinque Terre pastel houses by the sea.
 
 ## Videos (Theater)
 
-Pick real, kid-safe YouTube clips when building (IDs TBD, don't guess them): a Naples pizzaiolo spinning dough and the
-wood-fired oven (after Pizzeria), an olive harvest with nets (after Olive Grove), the Trevi Fountain (after Trevi),
-the Colosseum from above (after Colosseum), gondolas in Venice (after Venice), Etna puffing (after Snow on a
-Volcano), the Frecce Tricolori air show, and an overview of Italy.
+Real, kid-safe YouTube clips (every ID checked with YouTube's oEmbed; Dad vets them on the iPad):
+
+| After | Video | ID |
+|---|---|---|
+| Pizzeria | The Neapolitan art of making pizza (The Telegraph, 1:14) | `RNYAyadocEo` |
+| Olive Grove | How olive oil is made | `JO7Jc3D2ijc` |
+| Trevi | Toss a coin in the Trevi Fountain | `D0kM_OXvtog` |
+| Colosseum | Colosseum like never before: 4K drone aerial view (Antiqua Archeologia, 2:15) | `wcl0k1WPat0` |
+| Venice | A magical gondola ride through the Grand Canal (Cook4U, 2:27) | `sDOaveSMFMs` |
+| Snow on a Volcano | Drone footage captures breathtaking Mount Etna eruption (Guardian News, 0:54) | `YqbNdDxa_i4` |
+| (Theater only) | Roman aqueducts in Italy | `u8aGuJowIwo` |
+| (Theater only) | Arte in volo con le Frecce Tricolori (Aeronautica Militare, 1:10) | `MBhyWfeKSgA` |
+| (Theater only) | Italy for Kids, real-life footage (Playdate With Stacy, 1:23) | `x_LU5E9dsYc` |
 
 ## Art list (`art/source/world/italy/`, style per `art/STYLE.md`, generated with Codex)
 

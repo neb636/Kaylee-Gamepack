@@ -4,6 +4,7 @@ const trips = [
   { country: 'australia', activity: 'outback', next: 'Gum Tree Forest', nextId: 'forest' },
   { country: 'china', activity: 'bamboo', next: 'The Great Wall', nextId: 'wall' },
   { country: 'egypt', activity: 'pyramid', next: 'Secret Passage', nextId: 'passage' },
+  { country: 'italy', activity: 'olives', next: 'Trevi Fountain', nextId: 'trevi' },
 ]
 
 for (const trip of trips) {

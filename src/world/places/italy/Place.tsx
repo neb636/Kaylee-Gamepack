@@ -7,7 +7,8 @@ import { FitBox } from '../../kit/Chrome'
 import { sfx } from '../../kit/sfx'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
-import type { PlaceProps } from '../../types'
+import { VideoBreak } from '../../kit/Theater'
+import type { PlaceProps, PlaceVideo } from '../../types'
 import { Colosseum } from './activities/colosseum/Colosseum'
 import { Etna } from './activities/etna/Etna'
 import { OliveGrove } from './activities/olives/OliveGrove'
@@ -40,6 +41,7 @@ const SPOTS = [
 export default function Place(props: PlaceProps) {
   const { meta, activity, earnStamp, setProgress, backToMap } = props
   const [justEarned, setJustEarned] = useState<string | null>(null)
+  const [videoAfter, setVideoAfter] = useState<PlaceVideo | null>(null)
 
   if (activity === 'party') return <OperaSoon backToMap={backToMap} />
 
@@ -59,6 +61,20 @@ export default function Place(props: PlaceProps) {
             activity={info}
             onClose={() => {
               setJustEarned(null)
+              // A real-world video about what she just played comes next (skippable), then the map.
+              const video = meta.videos?.find((v) => v.after === info.id)
+              if (video) {
+                setProgress(0, 0)
+                setVideoAfter(video)
+              } else backToMap()
+            }}
+          />
+        )}
+        {videoAfter && (
+          <VideoBreak
+            video={videoAfter}
+            onDone={() => {
+              setVideoAfter(null)
               backToMap()
             }}
           />
