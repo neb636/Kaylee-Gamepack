@@ -1,4 +1,4 @@
-// Snow on a Volcano's own sound effects (synthesized, like ../../../../kit/sfx.ts): a goat's bleat, a steam vent's
+// Snow on a Volcano's own sound effects (synthesized, like ../../../../kit/sfx.ts): a steam vent's
 // hiss, the volcano's friendly rumble, a crunchy snow "pomf", a lemon squish, a crab's click and a gull's squawk.
 let ctx: AudioContext | undefined
 function audio() {
@@ -50,7 +50,6 @@ function noise(dur: number, vol: number, filter: BiquadFilterType, freq: number,
 }
 
 export const esfx = {
-  bleat: () => [0, 0.09, 0.18, 0.27].forEach((d, i) => tone(i % 2 ? 470 : 520, i % 2 ? 440 : 500, 0.1, 0.09, 'sawtooth', d)),
   hiss: () => noise(0.9, 0.12, 'highpass', 3000, 6000),
   rumble: () => (noise(1.4, 0.3, 'lowpass', 180, 60), tone(70, 40, 1.2, 0.2, 'sine')),
   pomf: () => (noise(0.25, 0.25, 'lowpass', 900, 300), tone(180, 90, 0.2, 0.1, 'sine')),

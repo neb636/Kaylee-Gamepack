@@ -7,9 +7,9 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useState, type ReactNode } from 'react'
 import { sfx } from '../../../../kit/sfx'
 import { INK } from '../../puppets/ink'
-import { ASPECT, etnaArt } from './art'
+import { ASPECT, etnaArt, STAND_BANDS } from './art'
 import type { Fruit } from './Cart'
-import { CACTI, CRAB_X, CRATER_X, DRIFTS, GOAT_X, ground, GULL_X, LIZARD_X, NEVIERA_X, ROCKS, SEA_X, SEA_Y, SIZE, STREAM, TREES, UMBRELLA_X, VENTS, WORLD, ZONES } from './mountain'
+import { CACTI, CRAB_X, CRATER_X, DRIFTS, ground, GULL_X, ROCKS, SCARF_X, SEA_X, SEA_Y, SIZE, STREAM, TREES, UMBRELLA_X, VENTS, WORLD, ZONES } from './mountain'
 import { esfx } from './sfx'
 
 const CHUNK = 800
@@ -229,21 +229,17 @@ export function Trees({ onFruit, onChestnut, onPine }: TreeTaps) {
 
 export interface PropTaps {
   onCactus: () => void
-  onGoat: () => void
-  onNeviera: () => void
   onVent: (x: number) => void
   onCrater: () => void
   onDrift: (i: number) => void
   onUmbrella: () => void
 }
 
-/** Everything else along the trail: cacti, the lizard, the goat, lava rocks, steam vents, the stone snow house, the
- *  crater, and on the beach the umbrella, the crab and the gull. */
-export function Props({ onCactus, onGoat, onNeviera, onVent, onCrater, onUmbrella }: PropTaps) {
-  const [lizard, setLizard] = useState(0)
+/** Everything else along the trail: cacti, lava rocks, steam vents, the crater, and on the beach the umbrella, the
+ *  crab and the gull. */
+export function Props({ onCactus, onVent, onCrater, onUmbrella }: PropTaps) {
   const [crab, setCrab] = useState(0)
   const [gull, setGull] = useState(0)
-  const [goat, setGoat] = useState(0)
   return (
     <>
       <Prop x={UMBRELLA_X} img={etnaArt.umbrella} h={SIZE.umbrella} aspect={ASPECT.umbrella} label="umbrella" sink={20} onTap={onUmbrella} />
@@ -253,25 +249,6 @@ export function Props({ onCactus, onGoat, onNeviera, onVent, onCrater, onUmbrell
       {ROCKS.map((x, i) => (
         <Prop key={x} x={x} img={etnaArt.lavaRock} h={SIZE.rock * (1 + (i % 2) * 0.3)} aspect={ASPECT.lavaRock} label="lava rocks" onTap={esfx.thud} />
       ))}
-      <Prop x={NEVIERA_X} img={etnaArt.neviera} h={SIZE.neviera} aspect={ASPECT.neviera} label="snow house" onTap={onNeviera} />
-      {/* The lizard on its warm stone: runs off and comes back. */}
-      <motion.button
-        aria-label="lizard"
-        data-poke
-        onClick={() => (setLizard((n) => n + 1), sfx.fwip())}
-        style={{ position: 'absolute', left: LIZARD_X - (SIZE.lizard * ASPECT.lizard) / 2, top: ground(LIZARD_X) - SIZE.lizard + 6, width: SIZE.lizard * ASPECT.lizard, height: SIZE.lizard, padding: 0, border: 'none', background: 'none', zIndex: 1 }}
-      >
-        <motion.img key={lizard} src={etnaArt.lizard} alt="" draggable={false} initial={false} animate={lizard ? { x: [0, 160, 160, 0], opacity: [1, 0, 0, 1] } : {}} transition={{ duration: 2.4, times: [0, 0.25, 0.7, 1] }} style={{ width: '100%', height: '100%' }} />
-      </motion.button>
-      {/* The goat on the path: hops and bleats. */}
-      <motion.button
-        aria-label="goat"
-        data-poke
-        onClick={() => (setGoat((n) => n + 1), onGoat())}
-        style={{ position: 'absolute', left: GOAT_X - (SIZE.goat * ASPECT.goat) / 2, top: ground(GOAT_X) - SIZE.goat + 8, width: SIZE.goat * ASPECT.goat, height: SIZE.goat, padding: 0, border: 'none', background: 'none', zIndex: 1 }}
-      >
-        <motion.img key={goat} src={etnaArt.goat} alt="" draggable={false} initial={false} animate={goat ? { y: [0, -70, 0, -30, 0], scaleY: [1, 1.08, 0.9, 1.04, 1] } : {}} transition={{ duration: 0.9 }} style={{ width: '100%', height: '100%', transformOrigin: '50% 100%' }} />
-      </motion.button>
       {/* Steam vents in the lava: they puff on their own, and when tapped. */}
       {VENTS.map((x) => (
         <Vent key={x} x={x} onTap={() => onVent(x)} />
@@ -351,28 +328,34 @@ function Crater({ onTap }: { onTap: () => void }) {
   )
 }
 
-/** The scarf hanging on the snow house's door: tap it and it flies onto Nino. */
+/** The scarf draped over a wooden trail post where the cold starts: tap it and it flies onto Nino. */
 export function Scarf({ taken, glow, onTap }: { taken: boolean; glow: boolean; onTap: () => void }) {
-  const x = NEVIERA_X + 70
-  const y = ground(NEVIERA_X) - SIZE.neviera * 0.5
-  if (taken) return null
+  const x = SCARF_X
+  const y = ground(SCARF_X) - SIZE.post - 19
   return (
-    <motion.button
-      aria-label="scarf"
-      data-poke
-      className={glow ? 'world-glow' : undefined}
-      animate={{ rotate: [-6, 6, -6] }}
-      transition={{ repeat: Infinity, duration: 1.6 }}
-      onClick={onTap}
-      style={{ position: 'absolute', left: x - 60, top: y - 20, width: 120, height: 140, padding: 10, border: 'none', background: 'none', borderRadius: 20, transformOrigin: '50% 0', zIndex: glow ? 8 : 2 }}
-    >
-      <svg viewBox="0 0 100 130" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
-        <circle cx="50" cy="8" r="6" fill="#B9814F" stroke={INK} strokeWidth="4" />
-        <path d="M30 12 C40 4 60 4 70 12 L76 110 L56 112 L50 30 L44 112 L24 110Z" fill="#FF8FB8" stroke={INK} strokeWidth="5" strokeLinejoin="round" />
-        <path d="M27 70 L46 72 M27 90 L46 92 M54 72 L74 70 M54 92 L75 90" stroke="#FFF7F0" strokeWidth="7" />
-        <path d="M26 112 l-2 12 M36 112 l-1 12 M58 113 l0 12 M68 112 l2 12" stroke={INK} strokeWidth="4" strokeLinecap="round" />
+    <>
+      <svg viewBox="-40 -10 80 200" style={{ position: 'absolute', left: x - 40, top: ground(SCARF_X) - SIZE.post - 10, width: 80, height: SIZE.post + 20, overflow: 'visible', pointerEvents: 'none', zIndex: 1 }}>
+        <path d="M-14 4 Q-14 -4 -6 -4 L6 -4 Q14 -4 14 4 L14 190 L-14 190Z" fill="#B9814F" stroke={INK} strokeWidth="5" strokeLinejoin="round" />
+        <path d="M-6 20 L-6 170" stroke="#9A6A3E" strokeWidth="4" strokeLinecap="round" />
       </svg>
-    </motion.button>
+      {!taken && (
+        <motion.button
+          aria-label="scarf"
+          data-poke
+          className={glow ? 'world-glow' : undefined}
+          animate={{ rotate: [-6, 6, -6] }}
+          transition={{ repeat: Infinity, duration: 1.6 }}
+          onClick={onTap}
+          style={{ position: 'absolute', left: x - 60, top: y, width: 120, height: 140, padding: 10, border: 'none', background: 'none', borderRadius: 20, transformOrigin: '50% 0', zIndex: glow ? 8 : 2 }}
+        >
+          <svg viewBox="0 0 100 130" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
+            <path d="M30 12 C40 4 60 4 70 12 L76 110 L56 112 L50 30 L44 112 L24 110Z" fill="#FF8FB8" stroke={INK} strokeWidth="5" strokeLinejoin="round" />
+            <path d="M27 70 L46 72 M27 90 L46 92 M54 72 L74 70 M54 92 L75 90" stroke="#FFF7F0" strokeWidth="7" />
+            <path d="M26 112 l-2 12 M36 112 l-1 12 M58 113 l0 12 M68 112 l2 12" stroke={INK} strokeWidth="4" strokeLinecap="round" />
+          </svg>
+        </motion.button>
+      )}
+    </>
   )
 }
 
@@ -422,9 +405,10 @@ export function Clouds({ refFn }: { refFn: (el: HTMLDivElement | null) => void }
   )
 }
 
-/** The granita stand on the beach (the friends wait behind its counter). `counter` draws only the counter part, in
- *  front of the friends. */
-export function Stand({ x, h, counter }: { x: number; h: number; counter?: boolean }) {
+/** The granita stand on the beach (the friends wait inside it). `part` draws only its counter or its awning, in front
+ *  of the friends. */
+export function Stand({ x, h, part }: { x: number; h: number; part?: 'counter' | 'awning' }) {
   const w = h * ASPECT.stand
-  return <img src={etnaArt.stand} alt="" draggable={false} style={{ position: 'absolute', left: x - w / 2, top: ground(x) - h + 8, width: w, height: h, clipPath: counter ? 'inset(55% 0 0 0)' : undefined, pointerEvents: 'none', zIndex: counter ? 3 : 1 }} />
+  const clip = part === 'counter' ? `inset(${STAND_BANDS.counter * 100}% 0 0 0)` : part === 'awning' ? `inset(0 0 ${(1 - STAND_BANDS.awning) * 100}% 0)` : undefined
+  return <img src={etnaArt.stand} alt="" draggable={false} style={{ position: 'absolute', left: x - w / 2, top: ground(x) - h + 8, width: w, height: h, clipPath: clip, pointerEvents: 'none', zIndex: part ? 3 : 1 }} />
 }

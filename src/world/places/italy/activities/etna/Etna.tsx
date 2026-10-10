@@ -4,8 +4,8 @@
 // everything on the way. The same verb deepens three times:
 //   1. Up through the heat: the beach, then the lemon grove (tap fruit and it lands in the cart), the chestnut forest,
 //      a stream to splash through. Nino pants in the heat; higher up he cools down.
-//   2. Into the cold: snow starts falling, Nino shivers and his breath puffs, the scarf on the old stone snow house
-//      warms him up. She *feels* "higher is colder" by walking there.
+//   2. Into the cold: snow starts falling, Nino shivers and his breath puffs, the scarf on a trail post warms him
+//      up. She *feels* "higher is colder" by walking there.
 //   3. Snow: pull Nino into five snow drifts and the snow piles into the cart (one, two... five!), then zoom back down
 //      to the beach (a full cart rolls fast downhill: wheee), where it gets hot again and the scarf comes off.
 // Side verb (Granita.tsx): scoop the snow into cups and squeeze a lemon or an orange over it for three melting friends.
@@ -22,10 +22,10 @@ import type { ActivityProps } from '../../Place'
 import { INK } from '../../puppets/ink'
 import { Lupa } from '../../puppets/Lupa'
 import { Nino, type NinoMood } from '../../puppets/Nino'
-import { etnaArt } from './art'
+import { etnaArt, STAND_BANDS } from './art'
 import { CART, CartArt, Flyer, type Fruit } from './Cart'
 import { Granita } from './Granita'
-import { BEACH_END, DRIFT_RAMS, DRIFTS, FEEL, ground, NEVIERA_X, SIZE, slope, snowfall, STAGE, STAND_X, START_X, STREAM, warmth, WORLD, X_MAX, X_MIN, zoneAt } from './mountain'
+import { BEACH_END, DRIFT_RAMS, DRIFTS, FEEL, ground, SCARF_X, SIZE, slope, snowfall, STAGE, STAND_X, START_X, STREAM, warmth, WORLD, X_MAX, X_MIN, zoneAt } from './mountain'
 import { Clouds, Drift, FarVolcano, Ground, Props, Scarf, Sea, Stand, Trees } from './Scenery'
 import { esfx } from './sfx'
 
@@ -301,11 +301,6 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
       if (cooled('prickly', 12)) react(E.prickly)
     }
   }
-  const onGoat = () => esfx.bleat()
-  const onNeviera = () => {
-    sfx.thump()
-    if (first('neviera')) talk(E.neviera)
-  }
   const onVent = (x: number) => {
     esfx.hiss()
     puff(x, ground(x) - 20, '#F4F2FA', 6, 300)
@@ -339,7 +334,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
     setScarf(true)
     setScarfGlow(false)
     sounds.sparkle()
-    fly([NEVIERA_X + 70, ground(NEVIERA_X) - 150])
+    fly([SCARF_X, ground(SCARF_X) - 150])
     setTimeout(() => {
       void ninoRef.current?.play('cheer')
       talk(E.cozy)
@@ -348,7 +343,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
   const tapFriend = (i: number) => {
     void friendRefs.current[i]?.play(i === 0 ? 'wiggle' : 'jump')
     sfx.chirp()
-    const id = (['lupa', 'marina', 'tortoise'] as const)[i]
+    const id = (['lupa', 'marina', 'pina'] as const)[i]
     if (cooled(`friend${i}`, 8)) react(g.current.snow >= DRIFTS.length ? E.yay : E.hotFriend[id])
   }
 
@@ -466,9 +461,9 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
       }
       // Shivering while he stands in the cold.
       if (x > 4150 && !s.scarf && speed < 20 && s.idle > 2 && cooled('brr', 25)) react(E.cold)
-      if (x > NEVIERA_X - 600 && !s.scarf && first('scarfGlow')) setScarfGlow(true)
-      // Only when he's at the snow house and stopped (never once he's gone by).
-      if (Math.abs(x - NEVIERA_X) < 260 && speed < 60 && !s.scarf && first('scarfHint')) talk(E.scarf)
+      if (x > SCARF_X - 600 && !s.scarf && first('scarfGlow')) setScarfGlow(true)
+      // Only when he's at the scarf and stopped (never once he's gone by).
+      if (Math.abs(x - SCARF_X) < 260 && speed < 60 && !s.scarf && first('scarfHint')) talk(E.scarf)
       if (x > 4850 && first('snow')) star(2)
       // Snow drifts stop him: she bumps Nino into each one (one bump, then two, then three for the big last one)
       // and the snow flies into the cart as a snowball. A slow steady push counts as a bump too.
@@ -553,7 +548,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
       }
       // Stuck? Sparkle reminds her which way (and the ring around Nino pulses).
       if (s.idle > 8 && s.t - s.lastTalk > 8 && cooled('stuck', 16)) talk(full ? E.pullDown : E.pull)
-      if (!s.scarf && s.idle > 9 && Math.abs(x - NEVIERA_X) < 400 && cooled('scarfAgain', 25)) talk(E.scarf)
+      if (!s.scarf && s.idle > 9 && Math.abs(x - SCARF_X) < 400 && cooled('scarfAgain', 25)) talk(E.scarf)
     }
 
     // ---- Camera: follows Nino, leading by his speed; a little to the left at first (to see the friends) ----
@@ -652,7 +647,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
   const L = layout
   const ninoH = SIZE.nino
   const ninoW = ninoH * NINO_ASPECT
-  const friendBase = ground(STAND_X) - 330 + 8 + 330 * 0.565
+  const friendTop = ground(STAND_X) - 330 + 8 + 330 * STAND_BANDS.window + 3
   return (
     <div
       ref={root}
@@ -689,20 +684,21 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
             </div>
             <Sea onTap={onSea} />
             <Trees onFruit={onFruit} onChestnut={onChestnut} onPine={onPine} />
-            <Props onCactus={onCactus} onGoat={onGoat} onNeviera={onNeviera} onVent={onVent} onCrater={onCrater} onDrift={onDriftTap} onUmbrella={onUmbrella} />
+            <Props onCactus={onCactus} onVent={onVent} onCrater={onCrater} onDrift={onDriftTap} onUmbrella={onUmbrella} />
             <Scarf taken={scarf} glow={scarfGlow} onTap={takeScarf} />
-            {/* The granita stand, with three hot friends waiting behind its counter. */}
+            {/* The granita stand, with three hot friends waiting inside it (behind its counter and awning). */}
             <Stand x={STAND_X} h={330} />
             {[
-              { x: STAND_X - 115, h: 170, el: (i: number) => <Lupa ref={(r) => void (friendRefs.current[i] = r)} height="100%" /> },
-              { x: STAND_X + 5, h: 130, el: (i: number) => <Buddy ref={(r) => void (friendRefs.current[i] = r)} img={etnaArt.seal} voice="marina" height="100%" /> },
-              { x: STAND_X + 120, h: 80, el: (i: number) => <Buddy ref={(r) => void (friendRefs.current[i] = r)} img={italyArt.tortoise} voice="tortoise" height="100%" flip /> },
+              { x: STAND_X - 115, h: 140, el: (i: number) => <Lupa ref={(r) => void (friendRefs.current[i] = r)} height="100%" /> },
+              { x: STAND_X + 5, h: 115, el: (i: number) => <Buddy ref={(r) => void (friendRefs.current[i] = r)} img={etnaArt.seal} voice="marina" height="100%" /> },
+              { x: STAND_X + 120, h: 115, el: (i: number) => <Buddy ref={(r) => void (friendRefs.current[i] = r)} img={etnaArt.piglet} voice="pina" height="100%" /> },
             ].map((f, i) => (
-              <button key={i} aria-label="friend" data-poke onClick={() => tapFriend(i)} style={{ position: 'absolute', left: f.x - f.h * 0.6, top: friendBase - f.h, width: f.h * 1.2, height: f.h, padding: 0, border: 'none', background: 'none', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
+              <button key={i} aria-label="friend" data-poke onClick={() => tapFriend(i)} style={{ position: 'absolute', left: f.x - f.h * 0.6, top: friendTop, width: f.h * 1.2, height: f.h, padding: 0, border: 'none', background: 'none', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
                 {f.el(i)}
               </button>
             ))}
-            <Stand x={STAND_X} h={330} counter />
+            <Stand x={STAND_X} h={330} part="counter" />
+            <Stand x={STAND_X} h={330} part="awning" />
             {/* The cart, with Sparkle riding in it. */}
             <div ref={cartEl} style={{ position: 'absolute', left: 0, top: 0, zIndex: 4, transformOrigin: '0 0' }}>
               <div ref={cartFlip}>
