@@ -336,6 +336,25 @@ const SCREENS = [
       await p.waitForTimeout(to === 'star' ? 2600 : 1200)
     },
   })),
+  { name: 'peru-intro', hash: '#/world/peru', reset: true, wait: 300 },
+  { name: 'peru-hub', hash: '#/world/peru', act: skip },
+  { name: 'alpaca-story', hash: '#/world/peru/alpaca', reset: true, wait: 400 },
+  { name: 'alpaca-play', hash: '#/world/peru/alpaca', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
+  // Luna's Fluffy Day moments, reached through its QA hook (window.__peruQA.jump): the clippers, the family's turn,
+  // the yarn and the cactus, the hats tray, the journal photo.
+  ...['clip', 'family', 'yarn', 'hats', 'photo'].map((to) => ({
+    name: `alpaca-${to}`,
+    hash: '#/world/peru/alpaca',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.waitForTimeout(500)
+      await p.evaluate((t) => window.__peruQA?.jump(t), to)
+      await p.waitForTimeout(to === 'family' ? 2400 : 1500)
+    },
+  })),
+  { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
+  { name: 'peru-balloon-soon', hash: '#/world/peru/party', stampAll: 'peru', wait: 800 },
 ].filter((s) => !flag('routes') || flag('routes').split(',').includes(s.name))
 
 const { base, stop } = await serve(PORT)

@@ -351,7 +351,7 @@ objects in a scene (fine in UI chips), and code-drawn props use the same flat 5-
 must not look alike (snow piles that look like clouds).
 
 Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),
-generate backgrounds, props and character reference pictures with Codex (`codex exec -m gpt-6-sol -c
+generate backgrounds, props and character reference pictures with Codex (`codex exec -m gpt-6.1-sol -c
 model_reasoning_effort="medium" ...`, style rules from `art/STYLE.md`), build the friend's puppets, cast their voices,
 then `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`, `npm run check`, and QA (below).
 
