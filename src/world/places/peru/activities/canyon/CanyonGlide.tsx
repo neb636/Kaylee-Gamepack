@@ -13,7 +13,7 @@
 // game loop; React only sees phase changes.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
-import { burst, Buddy, say, sounds, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, sounds, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
@@ -71,7 +71,7 @@ const VISIBLE: Record<string, SwirlId[]> = {
   more: ['low', 'nest'],
   follow: ['nest', 'falls', 'river'],
   afternoon: ['falls', 'ledge', 'river'],
-  solo: ['ledge', 'big'],
+  solo: ['big'],
 }
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
@@ -140,6 +140,8 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
     firstGrab: 0,
     saidLift: false,
     trying: 0,
+    tryingNow: 0,
+    tryGlow: false,
     saidWarm: false,
     diving: 0,
     lastWhoosh: -99,
@@ -494,7 +496,8 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
   const place = (el: HTMLElement | null, b: Flyer, w: number, view: { w: number; h: number; cx: number; cy: number }, sitting = false) => {
     if (!el) return
     const h = (w * view.h) / view.w
-    const fv = Math.abs(b.faceVis) < 0.08 ? 0.08 * Math.sign(b.faceVis || 1) : b.faceVis
+    // Turning round: a quick flip with a little squash, never a paper-thin sliver.
+    const fv = (b.faceVis >= 0 ? 1 : -1) * (0.6 + 0.4 * Math.abs(b.faceVis))
     el.style.transform = `translate(${(b.x - (w * view.cx) / view.w).toFixed(1)}px, ${(b.y - (h * view.cy) / view.h).toFixed(1)}px) rotate(${(sitting ? 0 : b.pitch).toFixed(2)}deg) scaleX(${fv.toFixed(3)})`
   }
 
@@ -578,7 +581,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
       // Too fast for her: she calls, and Coco slows down until she's close.
       if (!G.waiting && apart > 560) {
         G.waiting = true
-        if (t - G.lastWait > 9) {
+        if (t - G.lastWait > 5) {
           G.lastWait = t
           say1(C.wait)
           nudge(pluma, 'flap')
@@ -596,7 +599,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
         csfx.lift()
         if (!G.saidLift && rider === c && G.phase !== 'story') {
           G.saidLift = true
-          say1(C.upWeGo)
+          void say(C.upWeGo, { interrupt: false })
         } else if (G.plumaOut && t - G.lastWhee > 12 && G.phase !== 'finale') {
           G.lastWhee = t
           say1(C.wheee)
@@ -607,18 +610,34 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
         G.counted = true
         if (rider === c && (G.phase === 'morning' || G.phase === 'follow')) rode()
       }
-      if (G.phase === 'solo' && id === 'big') {
-        G.soloTime += dt
-        if (G.soloTime > 2.2) void finale()
-      }
     } else if (lift < 0.1) G.inSwirl = null
+    // Pluma's own glide counts as soon as she's inside the big swirl's column (floating at its top too).
+    if (G.phase === 'solo') {
+      const big = SWIRLS[5]
+      if (Math.abs(pl.x - big.x) < big.w * 0.5 && pl.y > big.top - 80 && pl.y < big.bottom) {
+        G.soloTime += dt
+        if (G.soloTime > 1.6) void finale()
+      }
+    }
 
     // "I need warm air to go up!" once, when she pulls him up in plain air for a while.
     if (trying && G.phase !== 'start') {
       G.trying += dt
+      G.tryingNow += dt
       if (G.trying > 2.6 && !G.saidWarm) {
         G.saidWarm = true
         say1(C.needWarm)
+      }
+      // Still pulling him up without warm air: the swirls glow and the arrow points to the nearest one.
+      if (G.tryingNow > 3 && !G.tryGlow) {
+        G.tryGlow = true
+        setGlow(true)
+      }
+    } else if (!trying) {
+      G.tryingNow = 0
+      if (G.tryGlow && c.lift > 0.3) {
+        G.tryGlow = false
+        setGlow(false)
       }
     }
 
@@ -790,7 +809,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
   /** What she's heading for now (for the edge arrow). */
   function goalFor(G: typeof g.current, rider: Flyer): { x: number; y: number } | null {
     // Low down in plain air (or in the morning): the nearest warm air.
-    if (G.phase === 'morning' || (rider.y > 2250 && rider.lift < 0.2 && G.phase !== 'solo')) {
+    if (G.phase === 'morning' || ((rider.y > 2250 || G.tryingNow > 3) && rider.lift < 0.2 && G.phase !== 'solo')) {
       if (rider.lift > 0.2) return null
       let best: { x: number; y: number } | null = null
       let bd = Infinity
@@ -906,7 +925,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
               <Cloud key={i} ref={(el) => void (cloudEls.current[i] = el)} w={cl.w} />
             ))}
             {SWIRLS.map((sw) => (
-              <SwirlArt key={sw.id} s={sw} on={VISIBLE[swirlSet].includes(sw.id)} glow={glow && (phase === 'morning' || (phase === 'solo' && sw.id === 'big'))} />
+              <SwirlArt key={sw.id} s={sw} on={VISIBLE[swirlSet].includes(sw.id)} glow={(glow && phase !== 'start') || (phase === 'solo' && sw.id === 'big')} />
             ))}
             <River onTap={() => void 0} />
             <Wall side="left" sun={sun.left} />
@@ -922,7 +941,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
             {/* Pokeables. */}
             <Critter ref={viscacha} label="Viscacha" img={art.canyonViscacha} aspect={ASPECT.viscacha} x={1150} bottom={2622} h={150} onTap={() => (nudge(viscacha, 'jump'), csfx.squeak())} />
             <Critter ref={cactus} label="Cactus" img={art.canyonCactus} aspect={ASPECT.cactus} x={70} bottom={LOOKOUT.y + 4} h={250} onTap={() => (nudge(cactus, 'wiggle'), csfx.tweet())} />
-            <Critter ref={swallow} label="Swallow nest" img={art.canyonSwallow} aspect={ASPECT.swallowNest} x={2280} bottom={1240} h={100} onTap={() => (nudge(swallow, 'jump'), csfx.tweet())} />
+            <Critter ref={swallow} label="Swallow nest" img={art.canyonSwallow} aspect={ASPECT.swallowNest} x={2280} bottom={1260} h={140} onTap={() => (nudge(swallow, 'jump'), csfx.tweet())} />
             <Lookout flash={touristFlash} buddy={tourists} onTap={touristCheer} />
             {!friendsUp &&
               PERCHED.map((x, i) => (
@@ -950,7 +969,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
                     nudge(pluma, G.nestTaps % 2 ? 'giggle' : 'wobble')
                     say1(G.nestTaps++ === 0 ? C.scared : C.nestTap)
                   }}
-                  style={{ padding: 0, background: 'none', border: 'none', width: PLUMA_W, height: PLUMA_W, display: 'block' }}
+                  style={{ padding: 0, background: 'none', border: 'none', width: PLUMA_W, height: PLUMA_W, display: 'block', pointerEvents: phase === 'start' || phase === 'story' ? 'none' : undefined }}
                 >
                   <Chick ref={pluma} height={`${PLUMA_W}px`} drive={plumaDrive} />
                 </button>
@@ -999,7 +1018,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
 
       <AnimatePresence>{flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.9 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 26 }} />}</AnimatePresence>
 
-      {phase === 'story' && <StoryBeat lines={C.story} bg={art.bgCanyonFar} friend={<Buddy img={art.coco} voice="coco" height="100%" />} onDone={startPlay} />}
+      {phase === 'story' && <StoryBeat lines={C.story} bg={art.bgCanyonFar} friend={<Condor height="100%" />} onDone={startPlay} />}
     </div>
   )
 }

@@ -15,7 +15,7 @@ const meta: PlaceMeta = {
   trophyTitle: 'Peru Explorer',
   activities: [
     { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', pos: { x: 70, y: 74 }, sticker: { name: 'Alpaca', img: art.luna, fact: L.sticker } },
-    { id: 'condor', name: "Coco's Canyon Glide", icon: '🦅', pos: { x: 57.5, y: 88 }, sticker: { name: 'Condor', img: art.coco, fact: L.condorSticker } },
+    { id: 'condor', name: "Coco's Canyon Glide", icon: '🦅', pos: { x: 57.5, y: 88 }, sticker: { name: 'Condor', img: art.canyonPerched, fact: L.condorSticker } },
   ],
   facts: [
     { icon: '🌎', label: 'South America', say: L.facts.location },

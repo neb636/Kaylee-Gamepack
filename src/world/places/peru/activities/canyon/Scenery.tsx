@@ -97,7 +97,6 @@ export function Ledges() {
       {bush(1120, 2600, 1.1)}
       {bush(1950, 2620, 1)}
       {bush(600, 1050, 0.8)}
-      {bush(2440, 700, 0.8)}
       {bush(80, LEFT_RIM + 2, 1)}
       {bush(2900, RIGHT_RIM + 2, 1.1)}
       {/* The nest: a ring of twigs on the ledge. */}

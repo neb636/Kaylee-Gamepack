@@ -114,8 +114,8 @@ export const Condor = forwardRef<PuppetHandle, CondorProps>(function Condor(prop
       if (a === 'swoop') wing += bell(span(q, 0, 0.5)) * 40 - bell(span(q, 0.5, 1)) * 14
       const near = springs.near.step(wing, f.dt)
       const far = springs.far.step(wing * 0.85 - 12, f.dt)
-      // Resting: a tall V (the near wing almost upright, the far one lower). Folding sweeps them back and down.
-      put(p.wingNear, 'transform', `rotate(${(26 - near).toFixed(2)} 330 228)`)
+      // Resting: a soaring V (the near wing raised, the far one lower). Folding sweeps them back and down.
+      put(p.wingNear, 'transform', `rotate(${(16 - near).toFixed(2)} 330 228)`)
       put(p.wingFar, 'transform', `translate(-30 -12) rotate(${(-8 - far).toFixed(2)} 330 228)`)
       // Fingers lag behind the wing and flutter in the wind.
       FINGERS.forEach((fg, i) => {
