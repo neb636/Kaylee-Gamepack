@@ -24,7 +24,6 @@ export const L = {
   trophyWin: `${NAME}, you did it! You won the Italy Explorer trophy!`,
   trophyRoom: `${NAME}, Italy Explorer! From Italy.`,
   intro: [lupa(`Ciao, ${NAME}! I'm Lupa!`), lupa('Help me get ready to sing at the opera?')],
-  hubFirst: 'Tap the glowing pizza!',
   hubNext: `Where should we go next, ${NAME}?`,
   soon: 'This spot opens soon!',
   boot: 'Italy is shaped like a boot! Kick!',
