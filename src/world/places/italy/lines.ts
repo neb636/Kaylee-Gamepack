@@ -15,6 +15,8 @@ const raffaele = as('raffaele')
 const spina = as('spina')
 const civetta = as('civetta')
 const tortoise = as('tortoise')
+const nino = as('nino')
+const marina = as('marina')
 const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!']
 
 export const L = {
@@ -36,6 +38,8 @@ export const L = {
     cesare: [cesare('I am the emperor.'), cesare('Purrr... hello.'), cesare('Ahem. Bow, please.')],
     civetta: [civetta('Hoo hoo!'), civetta('Let\'s find out!'), civetta('I love science!')],
     tortoise: [tortoise('Hellooo...')],
+    nino: [nino('Hee-haw!'), nino('Hee hee! That tickles!'), nino('I love lemons!')],
+    marina: [marina('Hi hi!')],
     spina: [spina('Hee hee! Prickly!'), spina('Ciao ciao!'), spina('Olives! Yum!')],
     queen: [queen('What a lovely kitchen!')],
     raffaele: [raffaele('For the Queen!')],
@@ -326,12 +330,62 @@ export const L = {
     ambulance: 'Even ambulances are boats in Venice!',
   },
 
+  // 🌋 Snow on a Volcano (activities/etna). Nino tells the story; Sparkle only speaks when something new happens (or she's stuck).
+  etna: {
+    arrive: [nino("Ciao! It's sooo hot!"), nino("Let's get snow from Etna!")],
+    pull: 'Pull Nino up the mountain!',
+    pullDown: 'Pull Nino down to the beach!',
+    // Things on the way up (all of them are pokeables: none of them is an answer).
+    hot: nino("Phew! It's so hot!"),
+    pick: 'Tap a lemon to pick it!',
+    lemon: 'Lemon!',
+    orange: 'Orange!',
+    citrus: 'Sicily grows lemons and oranges!',
+    prickly: nino('Ouch! Prickly!'),
+    cooler: nino('Ahh! Cooler up here!'),
+    bonk: nino('Ow! A chestnut!'),
+    splash: nino('Splish splash!'),
+    cold: nino("Brrr! I'm cold!"),
+    colder: 'The higher we go, the colder it gets!',
+    scarf: 'Tap the scarf for Nino!',
+    cozy: nino('Ahh, cozy! Grazie!'),
+    neviera: 'Long ago, people kept snow in stone snow houses!',
+    snow: 'Snow! Bump Nino into the snow!',
+    again: 'Bump it again!',
+    count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!'],
+    full: 'The cart is full of snow!',
+    down: 'Now zoom down to the beach!',
+    achoo: nino('Ah-choo!'),
+    volcano: 'Etna is a volcano! It puffs smoke!',
+    tallest: 'Etna is the tallest volcano in Europe!',
+    wheee: nino('Wheeeee!'),
+    warmer: nino('Hot again! Bye bye, scarf!'),
+    lower: 'Lower down, it gets warmer!',
+    // The granita stand on the beach.
+    yay: lupa('Snow! Yay!'),
+    granita: "Let's make granita!",
+    tapSnow: 'Tap the snow to fill the cup!',
+    tapCup: 'Tap a cup!',
+    order: { lupa: lupa('One scoop, please!'), marina: marina('Two scoops, please!'), tortoise: tortoise('Three scoops, please!') },
+    more: { lupa: lupa('Ha ha! A snow mountain!'), marina: marina('Wow! So big!'), tortoise: tortoise('Oh my! So much!') },
+    squeeze: 'Squeeze a lemon or an orange!',
+    hold: 'Press and hold the fruit!',
+    eat: { lupa: lupa('Brrr! Brain freeze! Hee hee!'), marina: marina('Mmm! So cold!'), tortoise: tortoise('Ahhh... nice and cool...') },
+    hotFriend: { lupa: lupa('So hot! Snow, please!'), marina: marina('Hot, hot, hot!'), tortoise: tortoise('Sooo... hot...') },
+    history: 'Long ago, donkeys carried snow down to make granita!',
+    piano: nino("And my piano, for Lupa's band!"),
+    tapPiano: 'Tap the piano!',
+    pianoFact: 'The piano was invented in Italy!',
+    band: lupa('Yay! A piano for the band!'),
+  },
+
   stickers: {
     pizzeria: 'Brown bear sticker! Bears live in the mountains of Italy!',
     olives: 'Porcupine sticker! Crested porcupines live in Italy!',
     colosseum: 'Cat sticker! Lots of cats live in the old ruins of Rome!',
     trevi: 'Wolf sticker! The story says a kind mama wolf took care of the twins who built Rome!',
     venice: 'Pigeon sticker! Lots of pigeons live in Venice!',
+    etna: 'Donkey sticker! Little donkeys live in Sicily!',
   },
   videos: {
     olives: "Let's see how olive oil is made!",
@@ -349,7 +403,8 @@ export const L = {
     pizza: 'Pizza comes from Naples, in Italy!',
     margherita: 'Pizza Margherita is red, white and green, like Italy\'s flag!',
     romans: 'Long ago, the Romans built roads, arenas and water bridges!',
-    volcano: 'Italy has volcanoes! One is right next to Naples!',
+    volcano: 'Italy has volcanoes! Etna is the tallest one in Europe!',
+    granita: 'Granita is icy lemon snow from Sicily!',
     flag: 'Italy\'s flag has three stripes: green, white and red!',
     olives: 'Some olive trees in Italy are more than a thousand years old!',
     numbers: 'Romans wrote five like this: V!',

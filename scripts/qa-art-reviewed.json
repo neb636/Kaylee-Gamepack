@@ -147,6 +147,26 @@
     "hash": "ec3b5bcb5926",
     "note": "eye highlights"
   },
+  "src/world/places/italy/assets/etna-goat.webp": {
+    "hash": "b88538ccaa45",
+    "note": "eye white"
+  },
+  "src/world/places/italy/assets/etna-granita-stand-hd.webp": {
+    "hash": "2ff92efb6a38",
+    "note": "white flowers and a highlight line"
+  },
+  "src/world/places/italy/assets/etna-neviera-hd.webp": {
+    "hash": "64bc445a2925",
+    "note": "snow on the roof"
+  },
+  "src/world/places/italy/assets/etna-pine-snow-hd.webp": {
+    "hash": "267cac2a6a50",
+    "note": "snow on the branches"
+  },
+  "src/world/places/italy/assets/etna-snowdrift.webp": {
+    "hash": "b7c0af14d40c",
+    "note": "sparkles in the snow"
+  },
   "src/world/places/italy/assets/gino.webp": {
     "hash": "6342591d4ced",
     "note": "striped shirt and eyes"

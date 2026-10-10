@@ -2,8 +2,8 @@ import type { PlaceMeta } from '../../types'
 import { art } from './art'
 import { L } from './lines'
 
-// Italy is being built in stages (plan: planning/around-the-world/italy.md). The Pizzeria, the Olive Grove, the Trevi Fountain,
-// the Colosseum and Venice are built; Etna (see SPOTS in Place.tsx) says "coming soon" until its activity exists.
+// Italy is being built in stages (plan: planning/around-the-world/italy.md). All six activities are built (the Pizzeria,
+// the Olive Grove, the Trevi Fountain, the Colosseum, Venice and Snow on a Volcano); the opera finale comes next.
 const meta: PlaceMeta = {
   id: 'italy',
   name: 'Italy',
@@ -17,6 +17,7 @@ const meta: PlaceMeta = {
     { id: 'olives', name: 'Olive Grove', icon: '🫒', pos: { x: 83, y: 57 }, sticker: { name: 'Crested porcupine', img: art.spina, fact: L.stickers.olives } },
     { id: 'colosseum', name: 'The Colosseum', icon: '🏛️', pos: { x: 48, y: 41 }, sticker: { name: 'Roman cat', img: art.cesare, fact: L.stickers.colosseum } },
     { id: 'venice', name: 'Venice', icon: '🛶', pos: { x: 59, y: 19 }, sticker: { name: 'Pigeon', img: art.gino, fact: L.stickers.venice } },
+    { id: 'etna', name: 'Snow on a Volcano', icon: '🌋', pos: { x: 51.5, y: 84 }, sticker: { name: 'Sicilian donkey', img: art.nino, fact: L.stickers.etna } },
     { id: 'trevi', name: 'Trevi Fountain', icon: '⛲', pos: { x: 58.5, y: 45 }, sticker: { name: 'Italian wolf', img: art.lupa, fact: L.stickers.trevi } },
   ],
   facts: [
@@ -33,6 +34,7 @@ const meta: PlaceMeta = {
     { icon: '🛶', label: 'Venice', say: L.facts.venice },
     { icon: '🐺', label: "Rome's wolf", say: L.facts.wolf },
     { icon: '🌋', label: 'Volcanoes', say: L.facts.volcano },
+    { icon: '🍋', label: 'Granita', say: L.facts.granita },
     { icon: '🚩', label: 'Flag', say: L.facts.flag },
   ],
   coloringPages: [],
