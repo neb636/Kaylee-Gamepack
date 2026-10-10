@@ -39,8 +39,14 @@ background before committing.
 
 ## Mascot: Sparkle 🦄
 A chubby kawaii pink unicorn: pink #FF8FB8 body, cream muzzle, hot-pink + lavender mane and tail,
-white/ink striped horn, big dark eyes with tiny lashes, blush cheeks. Existing poses live in
-`src/assets/mascot/` (wave, cheer, think) and are available through `<Mascot pose=... />`.
+white/ink striped horn, big dark eyes with tiny lashes, blush cheeks. The canonical design lives in
+`src/sdk/puppet/Sparkle.tsx`. Use `<SparklePuppet>` for every live character;
+`<Mascot pose=... />` uses that same puppet with a square layout and resting expression.
+Do not copy Sparkle SVG paths into a game or draw a separate live version.
+The PNG references in `art/source/mascot/` and WebP copies in `src/assets/mascot/`
+(wave, cheer, think) are exports of this puppet, not independently generated characters.
+After changing her design, refresh them with `node scripts/qa-sparkle.mjs --export-reference`
+against a current production preview (see the command at the top of that script).
 Always attach `art/source/mascot/wave.png` when drawing Sparkle in a new pose or scene.
 
 ## Pipeline

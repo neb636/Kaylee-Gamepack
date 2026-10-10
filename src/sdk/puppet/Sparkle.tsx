@@ -4,9 +4,9 @@
 //   <SparklePuppet ref={sparkle} height="min(30vh, 260px)" />
 //   sparkle.current?.play('cheer')
 //
-// Drawn in the same coordinates as the mascot art (art/source/mascot/wave.png, 1024 px square) so it can be traced and
-// compared side by side: flat fills, no outlines, a big round head with a small cream muzzle, a pink-and-lavender swirl
-// around the horn, and a wavy striped mane and tail.
+// The canonical live Sparkle. Mascot wraps this drawing; art/source/mascot/*.png are exported from it.
+// Flat fills, no outlines, a big round head with a cream muzzle, a pink-and-lavender forelock,
+// and continuous striped mane and tail silhouettes. Keep ear/hair roots overlapped inside the head.
 import { forwardRef, useId, useRef, type CSSProperties } from 'react'
 import { bell, setA, setT, show, span, spring, usePuppet, wobble, type PuppetHandle } from './core'
 
@@ -22,6 +22,8 @@ export interface SparklePuppetProps {
   flip?: boolean
   /** Turn her head a little toward something: -1 (her left/screen left) to 1 (screen right). */
   lookToward?: number
+  /** Resting expression used by the legacy Mascot adapter; actions still take precedence. */
+  mood?: 'wave' | 'cheer' | 'think'
 }
 
 type Part =
@@ -45,17 +47,8 @@ const EYES: [number, number, number][] = [
   [294, 362, -1],
   [525, 404, 1],
 ]
-// The tail is four ribbons of the same curve, each shifted down and back a little: pink and lavender stripes like the art.
-// The curve comes in two pieces joined at TAIL_JOINT so the curly end can swing after the base.
-const TAIL_JOINT: [number, number] = [166, -44]
-const TAIL_BASE = 'M-24 40 C-8 -70 106 -112 166 -44'
-const TAIL_TIP = 'M0 0 C34 40 38 104 14 150'
-const TAIL_BANDS: [number, number, string][] = [
-  [0, 0, HOT],
-  [-18, 26, LAV],
-  [-36, 50, HOT],
-  [-52, 72, LAV],
-]
+// A continuous tail with inset stripes, and an overlapping curled tip for follow-through.
+const TAIL_JOINT: [number, number] = [210, 200]
 // Motion distances were tuned in the old 440-unit drawing; this one is about 1.9 times bigger.
 const K = 1.9
 
@@ -69,7 +62,7 @@ function Hoof({ x, y, w, h, dark }: { x: number; y: number; w: number; h: number
   )
 }
 
-export const SparklePuppet = forwardRef<PuppetHandle, SparklePuppetProps>(function SparklePuppet({ height, style, pose = 'stand', flip, lookToward = 0 }, ref) {
+export const SparklePuppet = forwardRef<PuppetHandle, SparklePuppetProps>(function SparklePuppet({ height, style, pose = 'stand', flip, lookToward = 0, mood = 'wave' }, ref) {
   const clip = useId().replace(/:/g, '')
   const springs = useRef({ mane: spring(120, 8), fore: spring(160, 9), tail: spring(90, 7), tip: spring(70, 6), ear: spring(200, 10) })
   const prev = useRef({ y: 0, rot: 0 })
@@ -96,12 +89,13 @@ export const SparklePuppet = forwardRef<PuppetHandle, SparklePuppetProps>(functi
       let headY = breathe * 1.5 * K
       let arm = -61 + Math.sin(t * 1.7) * 3 // raised front hoof, resting wave
       let leg = 0
-      let happy = false
+      const resting = a ? 'wave' : mood
+      let happy = resting === 'cheer'
       let mouthOpen = 0.62 + f.mouth * 0.7
-      let closedSmile = false
-      let lookUp = 0
+      let closedSmile = resting === 'think' && !f.talking
+      let lookUp = resting === 'think' ? 0.6 : 0
       let sparkle = 0
-      let thinking = false
+      let thinking = resting === 'think'
 
       if (a === 'hop' || a === 'cheer') {
         const crouch = bell(span(q, 0, 0.22))
@@ -153,18 +147,19 @@ export const SparklePuppet = forwardRef<PuppetHandle, SparklePuppetProps>(functi
       const foreA = s.fore.step(vy * 0.02 - vr * 0.08, f.dt)
       const tailA = s.tail.step(-vy * 0.045 + Math.sin(t * 1.6) * 6, f.dt)
       const tipA = s.tip.step(tailA * 0.9 + Math.sin(t * 1.6 - 0.8) * 5, f.dt)
-      const earA = s.ear.step(-vy * 0.02, f.dt)
+      // Keep roots buried in the head even at the strongest hop/ear twitch.
+      const earA = Math.max(-10, Math.min(10, s.ear.step(-vy * 0.02, f.dt)))
       const twitch = t % 4.7 < 0.2 ? Math.sin(((t % 4.7) / 0.2) * Math.PI) * 14 : 0
 
       const [fx, fy] = FEET
       setT(p.root, `translate(0 ${-lift}) translate(${fx} ${fy}) rotate(${rot}) scale(${sx} ${sy}) translate(${-fx} ${-fy})`)
       setT(p.body, `translate(0 ${breathe * -1.5})`)
       setT(p.head, `translate(0 ${headY}) rotate(${headRot} ${NECK[0]} ${NECK[1]})`)
-      setT(p.earL, `translate(314 206) rotate(${-4 + earA - twitch * 0.4})`)
-      setT(p.earR, `translate(622 274) rotate(${4 - earA + twitch})`)
-      setT(p.forelock, `rotate(${foreA} 450 200)`)
-      setT(p.foreBack, `rotate(${foreA * 0.6} 450 200)`)
-      setT(p.maneBack, `rotate(${maneA} 610 250)`)
+      setT(p.earL, `translate(318 266) rotate(${-4 + earA - twitch * 0.4})`)
+      setT(p.earR, `translate(584 302) rotate(${4 - earA + twitch})`)
+      setT(p.forelock, `rotate(${Math.max(-9, Math.min(9, foreA))} 450 232)`)
+      setT(p.foreBack, `rotate(${Math.max(-5, Math.min(5, foreA * 0.6))} 450 232)`)
+      setT(p.maneBack, `rotate(${Math.max(-12, Math.min(12, maneA))} 610 310)`)
       setT(p.tail, `translate(700 646) rotate(${tailA})`)
       setT(p.tailTip, `translate(${TAIL_JOINT[0]} ${TAIL_JOINT[1]}) rotate(${tipA - tailA * 0.3})`)
       setT(p.arm, `translate(362 650) rotate(${arm})`)
@@ -203,6 +198,7 @@ export const SparklePuppet = forwardRef<PuppetHandle, SparklePuppetProps>(functi
 
   return (
     <svg
+      data-sparkle="puppet"
       ref={svg}
       viewBox="110 22 836 960"
       style={{ height, width: 'auto', aspectRatio: '836 / 960', overflow: 'visible', display: 'block', transform: flip ? 'scaleX(-1)' : undefined, ...style }}
@@ -221,16 +217,12 @@ export const SparklePuppet = forwardRef<PuppetHandle, SparklePuppetProps>(functi
       <g ref={part('root')}>
         {/* Tail: striped pink and lavender, in two linked pieces so the curly end swings after the base. */}
         <g ref={part('tail')} transform="translate(700 646)">
-          {TAIL_BANDS.map(([dx, dy, c], i) => (
-            <path key={i} d={TAIL_BASE} transform={`translate(${dx} ${dy})`} fill="none" stroke={c} strokeWidth="74" strokeLinecap="round" />
-          ))}
+          <path fill={HOT} d="M-30 44 C-16 -62 68 -112 144 -80 C220 -48 240 48 214 128 C202 168 196 196 218 216 C194 252 150 232 142 200 C132 164 154 136 152 98 C150 54 112 16 74 20 C46 22 28 44 20 78Z" />
+          <path fill={LAV} d="M-16 42 C4 -38 74 -84 132 -56 C194 -26 208 42 190 106 C176 156 162 190 184 216 C154 208 152 180 160 146 C176 82 160 36 118 6 C76 -24 30 0 10 58Z" />
+          <path fill={LAV} d="M16 68 C36 20 76 4 108 24 C148 50 160 92 148 130 C142 150 136 172 140 188 C108 190 98 168 104 142 C116 98 100 62 76 56 C54 50 40 64 32 82Z" />
           <g ref={part('tailTip')} transform={`translate(${TAIL_JOINT[0]} ${TAIL_JOINT[1]})`}>
-            {/* The end of the top ribbon flicks up and out. */}
-            <path fill={HOT} d="M-10 150 C20 186 72 180 88 140 C102 170 88 206 50 212 C18 216 -6 196 -10 150Z" />
-            {TAIL_BANDS.map(([dx, dy, c], i) => (
-              // Lower ribbons stop sooner, so only the top ones curl at the end.
-              <path key={i} d={TAIL_TIP} transform={`translate(${dx} ${dy})`} fill="none" stroke={c} strokeWidth={74 - i * 6} strokeLinecap="round" pathLength={1} strokeDasharray={`${1 - i * 0.2} 2`} />
-            ))}
+            <path fill={HOT} d="M-54 -44 C-60 -8 -38 16 -14 16 C4 16 16 6 24 -6 C28 34 4 66 -26 62 C-64 58 -78 30 -70 0Z" />
+            <path fill={LAV} d="M-58 -22 C-60 10 -38 30 -14 30 C-2 30 6 26 14 20 C4 44 -18 50 -38 40 C-62 28 -70 8 -64 -12Z" />
           </g>
         </g>
 
@@ -258,29 +250,30 @@ export const SparklePuppet = forwardRef<PuppetHandle, SparklePuppetProps>(functi
           <path d="M-36 -148 Q0 -162 36 -148" fill="none" stroke={HOOF_DARK} strokeWidth="7" strokeLinecap="round" />
         </g>
 
-        {/* Mane down the back of her neck and over her shoulder (swings) */}
-        <g ref={part('maneBack')}>
-          <path fill={HOT} d="M584 222 C656 208 724 262 716 336 C748 366 750 436 712 470 C730 504 712 548 666 556 C682 526 670 498 642 490 L596 300 Z" />
-          <path fill={LAV} d="M638 300 C700 304 748 352 744 410 C762 432 758 466 732 474 C738 454 728 442 712 446 C720 400 692 350 632 336 Z" />
-          <path fill={LAV} d="M596 462 C648 470 676 520 662 574 C654 602 624 618 598 608 C618 596 628 574 616 552 C604 532 588 514 596 462Z" />
-          <path fill={HOT} d="M556 534 C612 550 622 624 592 668 C576 692 544 696 522 686 C548 672 558 650 544 628 C526 604 522 564 556 534Z" />
-        </g>
         <g ref={part('head')}>
+          {/* One continuous mane silhouette; inset lavender ribbons follow the same waves.
+              The root overlaps the skull, and this whole assembly inherits the head transform. */}
+          <g ref={part('maneBack')}>
+            <path fill={HOT} d="M560 218 C650 206 724 256 722 328 C720 364 694 382 706 412 C718 442 748 448 748 448 C740 486 706 494 682 482 C696 522 678 558 648 574 C626 586 616 608 626 630 C594 638 562 618 562 590 C562 566 582 552 586 534 C594 508 572 494 578 468 C590 428 620 402 610 366 C602 334 574 314 560 218Z" />
+            <path fill={LAV} d="M616 258 C680 264 708 304 694 344 C684 374 658 390 668 422 C678 450 706 464 730 458 C712 478 680 468 656 442 C632 416 638 386 650 358 C664 324 642 298 610 292Z" />
+            <path fill={LAV} d="M614 442 C648 476 666 510 646 542 C630 568 600 572 598 600 C578 586 584 560 602 538 C624 510 620 480 604 468Z" />
+            <path fill={HOT} d="M584 528 C622 552 616 592 598 620 C584 642 582 664 600 682 C560 694 532 670 536 640 C540 612 562 604 558 580 C554 556 562 538 584 528Z" />
+          </g>
           {/* Swirl behind the horn: a lavender band over the top of her head, then pink falling down the right side. */}
           <g ref={part('foreBack')}>
             <path fill={HOT} d="M462 100 C540 70 616 110 634 186 C646 236 628 282 598 312 C600 270 590 232 566 204 C546 160 510 124 462 100Z" />
             <path fill={LAV} d="M350 208 C352 146 406 104 470 100 C530 96 578 132 592 186 C600 222 594 256 580 280 C566 240 534 214 494 206 Z" />
           </g>
-          <g ref={part('earL')} transform="translate(314 206) rotate(-4)">
-            <path fill={PINK} d="M-54 14 C-62 -40 -46 -92 -20 -114 C12 -102 42 -62 50 -4 Z" />
-            <path fill={EAR} d="M-36 0 C-42 -38 -32 -72 -18 -90 C2 -78 22 -48 26 -12 Z" />
+          <g data-sparkle-part="earL" ref={part('earL')} transform="translate(318 266) rotate(-4)">
+            <path fill={PINK} d="M-56 40 C-66 -12 -62 -78 -32 -122 C4 -112 40 -66 54 -18 L54 42 Z" />
+            <path fill={EAR} d="M-34 4 C-44 -28 -44 -72 -28 -96 C-4 -84 20 -52 28 -20 Z" />
           </g>
-          <g ref={part('earR')} transform="translate(622 274) rotate(4)">
-            <path fill={PINK} d="M-44 -6 C-24 -60 26 -100 76 -106 C92 -70 80 -18 40 26 Z" />
-            <path fill={EAR} d="M-20 -14 C-2 -52 34 -80 64 -88 C72 -60 62 -26 34 4 Z" />
+          <g data-sparkle-part="earR" ref={part('earR')} transform="translate(584 302) rotate(4)">
+            <path fill={PINK} d="M-48 34 C-42 -26 0 -96 54 -124 C86 -92 86 -42 56 4 L22 50 Z" />
+            <path fill={EAR} d="M-20 6 C-16 -32 18 -76 48 -98 C66 -74 62 -42 40 -14 Z" />
           </g>
           {/* Head */}
-          <path fill={PINK} d="M400 204 C522 190 632 252 642 372 C652 472 598 548 498 562 C430 572 332 568 280 546 C220 520 190 470 196 410 C198 350 222 298 264 262 C302 228 352 208 400 204Z" />
+          <path data-sparkle-part="scalp" fill={PINK} d="M400 204 C522 190 632 252 642 372 C652 472 598 548 498 562 C430 572 332 568 280 546 C220 520 190 470 196 410 C198 350 222 298 264 262 C302 228 352 208 400 204Z" />
           <ellipse cx="238" cy="416" rx="33" ry="28" fill={BLUSH} opacity="0.45" />
           <ellipse cx="546" cy="484" rx="34" ry="28" fill={BLUSH} opacity="0.45" />
           {/* Muzzle */}
@@ -318,13 +311,11 @@ export const SparklePuppet = forwardRef<PuppetHandle, SparklePuppetProps>(functi
             <path d="M416 106 Q456 110 504 78" fill="none" />
             <path d="M428 70 Q460 72 494 46" fill="none" />
           </g>
-          {/* Forelock swirl in front of the horn (swings): a thick pink curl from her left ear, under the horn, sweeping up
-              to the right, with a lavender band hugging it. */}
+          {/* Rounded forelock, rooted across the crown; a single lavender stripe follows
+              the pink curl instead of separate wedges that read as loose pieces of hair. */}
           <g ref={part('forelock')}>
-            <path fill={LAV} d="M436 236 C486 214 556 212 588 252 C604 272 604 296 592 312 C576 284 546 268 508 268 C476 268 452 282 436 300 Z" />
-            <path fill={HOT} d="M316 232 C300 190 330 158 374 158 C412 158 440 178 472 174 C502 170 522 150 524 124 C554 146 562 196 534 234 C504 272 444 284 392 280 C350 276 324 260 316 232Z" />
-            <path fill={LAV} d="M372 176 C406 168 442 190 474 186 C454 200 430 204 404 198 C390 194 380 186 372 176Z" />
-            <path fill="#E83E88" d="M330 222 C326 196 344 180 366 184 C352 192 348 206 356 220 Z" />
+            <path fill={HOT} d="M310 230 C294 196 310 160 346 146 C340 180 364 198 408 198 C450 198 486 182 520 158 C546 192 538 230 514 252 C488 278 446 288 402 282 C356 276 324 258 310 230Z" />
+            <path fill={LAV} d="M338 184 C360 218 404 224 448 210 C468 204 488 194 510 182 C498 214 466 238 426 242 C386 246 352 226 338 184Z" />
           </g>
           {/* Hoof under her chin while she thinks */}
           <g ref={part('chin')} style={{ display: 'none' }}>
