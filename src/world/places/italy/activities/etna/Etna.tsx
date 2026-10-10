@@ -691,7 +691,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
             {[
               { x: STAND_X - 115, h: 140, el: (i: number) => <Lupa ref={(r) => void (friendRefs.current[i] = r)} height="100%" /> },
               { x: STAND_X + 5, h: 115, el: (i: number) => <Buddy ref={(r) => void (friendRefs.current[i] = r)} img={etnaArt.seal} voice="marina" height="100%" /> },
-              { x: STAND_X + 120, h: 115, el: (i: number) => <Buddy ref={(r) => void (friendRefs.current[i] = r)} img={etnaArt.piglet} voice="pina" height="100%" /> },
+              { x: STAND_X + 108, h: 115, el: (i: number) => <Buddy ref={(r) => void (friendRefs.current[i] = r)} img={etnaArt.piglet} voice="pina" height="100%" /> },
             ].map((f, i) => (
               <button key={i} aria-label="friend" data-poke onClick={() => tapFriend(i)} style={{ position: 'absolute', left: f.x - f.h * 0.6, top: friendTop, width: f.h * 1.2, height: f.h, padding: 0, border: 'none', background: 'none', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
                 {f.el(i)}

@@ -44,4 +44,4 @@ export const ASPECT = {
 
 /** Where the granita stand's parts are, as shares of its height: the awning's lowest stripe, the window's top (just under
  *  the scallops), and the counter's top. Friends stand in the window; the awning and counter are drawn again over them. */
-export const STAND_BANDS = { awning: 0.28, window: 0.31, counter: 0.545 } as const
+export const STAND_BANDS = { awning: 0.28, window: 0.31, counter: 0.549 } as const
