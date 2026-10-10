@@ -1,0 +1,62 @@
+.peru-screen { position:absolute; inset:0; display:flex; flex-direction:column; padding:var(--top-clear) 16px calc(var(--safe-bottom) + 12px); background:#A8DCFF center/cover; overflow:hidden; color:var(--ink); }
+.peru-screen * { box-sizing:border-box; }
+.peru-prompt { z-index:2; display:flex; align-items:center; align-self:center; gap:12px; min-height:88px; max-width:100%; flex-shrink:0; background:#FFF7F0; border:4px solid #fff; border-radius:28px; padding:2px 12px; box-shadow:var(--shadow); }
+.peru-prompt p { margin:0; font-size:clamp(20px,3vmin,32px); font-weight:600; text-align:center; max-width:520px; }
+.peru-play-layout { position:absolute; inset:0; display:grid; grid-template-columns: minmax(0, 1fr) minmax(160px, 30%); gap:12px; --peru-piece:clamp(120px, min(19vw,24vh), 206px); }
+.peru-hero { display:flex; min-height:0; min-width:0; align-items:center; justify-content:center; }
+.peru-luna-slot { position:relative; height:min(100%, 71vh, 83vw); aspect-ratio:2/3; flex-shrink:0; }
+.peru-tray { display:flex; flex-direction:column; gap:min(24px,3vh); justify-content:center; align-items:center; min-height:0; }
+.peru-zip-pull { position:absolute; top:80%; left:50%; transform:translate(-50%,-50%); width:88px; height:88px; border:5px solid #2B2330; border-radius:24px; background:#FFC83D; box-shadow:0 5px 0 #a9791b; font-size:52px; line-height:1; color:#2B2330; z-index:3; }
+.peru-zip-star { position:absolute; top:59%; left:50%; transform:translateX(-50%); font-size:40px; pointer-events:none; }
+.peru-zip-track { position:absolute; top:68.7%; bottom:20%; left:50%; width:8px; transform:translateX(-50%); border-radius:8px; background:#FFF7F0; border:2px solid #2B2330; pointer-events:none; }
+.peru-zip-card { background:#FFF7F0; border:5px solid #fff; border-radius:30px; padding:20px; font-size:min(90px,10vmin); display:flex; flex-direction:column; align-items:center; box-shadow:var(--shadow); }
+.peru-zip-card span { font-size:60%; }
+.peru-ambient { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+.peru-cloud { position:absolute; width:100px; height:25px; left:7%; top:17%; border-radius:50px; background:#FFF7F0; }
+.peru-cloud::before { content:''; position:absolute; width:50px; height:40px; left:23px; top:-18px; border-radius:50%; background:#FFF7F0; }
+.peru-hub-layout { flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,34%); gap:20px; align-items:center; z-index:1; }
+.peru-map { container-type:size; position:relative; width:100%; height:100%; min-height:0; background:#A8DCFF; border:5px solid #fff; border-radius:32px; overflow:hidden; box-shadow:var(--shadow); }
+.peru-map svg { width:100%; height:100%; }
+.peru-map-pin { position:absolute; transform:translate(-50%,-50%); width:clamp(88px,11vmin,120px); height:clamp(88px,11vmin,120px); border-radius:28px; border:5px solid #fff; background:#FFF7F0; box-shadow:var(--shadow); font-size:40px; }
+.peru-map-pin small { position:absolute; right:-8px; bottom:-6px; font-size:25px; }
+.peru-journal { background:#FFF7F0; border:7px solid #FF8FB8; border-radius:28px; padding:16px; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:100%; box-shadow:var(--shadow); }
+.peru-journal button { min-width:0; min-height:88px; border-radius:18px; border:3px dashed #D9CCFF; background:#fff; font-size:34px; }
+.peru-hub-side { min-height:0; display:flex; flex-direction:column; align-items:center; gap:12px; }
+.peru-hub-side h1 { margin:0; font-size:clamp(24px,4vmin,40px); }
+.peru-finale-button { width:100%; min-height:88px; font-size:40px; border-radius:24px; background:#D9CCFF; border:4px solid #fff; box-shadow:var(--shadow); }
+@media (orientation:portrait) {
+ .peru-play-layout { grid-template-columns:1fr; grid-template-rows:minmax(0,1fr) auto; --peru-piece:clamp(120px,21vw,185px); }
+ .peru-luna-slot { height:min(100%,58vh,105vw); }
+ .peru-tray { flex-direction:row; padding:10px 0; }
+ .peru-zip-card { flex-direction:row; gap:16px; padding:10px 24px; height:var(--peru-piece); }
+ .peru-hub-layout { grid-template-columns:1fr; grid-template-rows:minmax(0,1fr) auto; gap:10px; }
+ .peru-hub-side { display:grid; grid-template-columns:1fr 1.5fr; gap:8px; }
+ .peru-hub-side h1 { display:none; }
+ .peru-hub-side .peru-finale-button { grid-column:1/-1; }
+ .peru-journal { padding:8px; }
+}
+@media (max-height:500px) {
+ .peru-screen { padding-left:8px; padding-right:8px; }
+ .peru-prompt { min-height:60px; padding:0 8px; gap:6px; }
+ .peru-prompt > svg { display:none; }
+ .peru-prompt button { width:60px!important; height:60px!important; font-size:30px!important; }
+ .peru-prompt p { font-size:18px; }
+ .peru-play-layout { --peru-piece:88px; gap:4px; grid-template-columns:minmax(0,1fr) 110px; }
+ .peru-luna-slot { height:min(100%,62vh); }
+ .peru-tray { gap:8px; }
+ .peru-zip-pull { width:64px; height:64px; font-size:38px; }
+ .peru-hub-layout { grid-template-columns:minmax(0,1fr) 220px; gap:8px; }
+ .peru-hub-side h1,.peru-hub-side > svg { display:none; }
+ .peru-journal { padding:6px; }
+ .peru-journal button { min-height:44px; font-size:26px; }
+ .peru-finale-button { min-height:60px; font-size:32px; }
+}
+
+.peru-map-content { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(100cqw,85.714cqh); height:min(100cqh,116.667cqw); }
+
+@media (max-width:500px) and (orientation:portrait) {
+ .peru-map-pin { display:none; }
+ .peru-map-pin[data-discovery="cozy-andes"] { display:block; }
+ .peru-journal { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .peru-hub-side { grid-template-columns:1fr 1.6fr; }
+}

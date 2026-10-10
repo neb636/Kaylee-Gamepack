@@ -2,7 +2,7 @@
 import { motion } from 'motion/react'
 import { useId, type CSSProperties, type ReactElement } from 'react'
 
-export type FlagId = 'australia' | 'china' | 'thailand' | 'egypt' | 'italy'
+export type FlagId = 'australia' | 'china' | 'thailand' | 'egypt' | 'italy' | 'peru'
 
 /** Points of a star polygon centred on (cx, cy). */
 export function starPoints(cx: number, cy: number, outer: number, points: number, innerRatio = 4 / 9) {
@@ -136,7 +136,12 @@ function Italy() {
   )
 }
 
-const FLAGS: Record<FlagId, () => ReactElement> = { australia: () => <Australia />, china: China, thailand: Thailand, egypt: Egypt, italy: Italy }
+// Peru's plain national flag: equal vertical red, white, red stripes; no coat of arms.
+function Peru() {
+  return <><rect width="10080" height="5040" fill="#D91023" /><rect x="3360" width="3360" height="5040" fill="#fff" /></>
+}
+
+const FLAGS: Record<FlagId, () => ReactElement> = { australia: () => <Australia />, china: China, thailand: Thailand, egypt: Egypt, italy: Italy, peru: Peru }
 
 /** A flag with a white rounded border. Width sets the size (flags here are all 2:1). */
 export function Flag({ id, width = 200, parts, style }: { id: FlagId; width?: number | string; parts?: AustraliaFlagParts; style?: CSSProperties }) {
