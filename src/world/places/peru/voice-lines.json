@@ -244,7 +244,7 @@
     "text": "Gracias!",
     "voice": "pepa"
   },
-  "Look! The egg is wiggling!",
+  "Kaylee, look! The egg is wiggling!",
   {
     "text": "A new baby!",
     "voice": "pepa"
@@ -253,6 +253,10 @@
   "The chicks are ready to swim! Pull them back!",
   {
     "text": "Their very first swim!",
+    "voice": "pepa"
+  },
+  {
+    "text": "Gracias, Kaylee!",
     "voice": "pepa"
   },
   "Click! A picture for Luna's journal!",

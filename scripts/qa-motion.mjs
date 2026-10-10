@@ -459,7 +459,7 @@ const penguinLaunch = (name, seconds, jump, pull) => ({
     await page.mouse.up()
   },
 })
-GAME_SCENARIOS.push(penguinLaunch('penguin-launch', 4.5, null, 0.13), penguinLaunch('penguin-fish', 5, 'fish', 0.09), penguinLaunch('penguin-chick-swim', 4.5, 'swim', 0.08))
+GAME_SCENARIOS.push(penguinLaunch('penguin-launch', 8, null, 0.13), penguinLaunch('penguin-fish', 5, 'fish', 0.09), penguinLaunch('penguin-chick-swim', 4.5, 'swim', 0.08))
 
 // Opera greybox: swing the conductor's wand (big swings bounce the band high, little ones sway), then stop (freeze).
 const operaSwing = (name, seconds, size, ms) => ({

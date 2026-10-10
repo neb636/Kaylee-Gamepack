@@ -581,11 +581,11 @@
     "file": "748b0882b170.mp3"
   },
   {
-    "text": "Look! The egg is wiggling!",
+    "text": "Kaylee, look! The egg is wiggling!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2975,
-    "file": "9355f71c8332.mp3"
+    "ms": 3334,
+    "file": "3a4d330c3a0e.mp3"
   },
   {
     "text": "A new baby!",
@@ -614,6 +614,13 @@
     "sig": "5bda623ab7",
     "ms": 1699,
     "file": "1d22f0a5fcfa.mp3"
+  },
+  {
+    "text": "Gracias, Kaylee!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 1080,
+    "file": "e5df440efe89.mp3"
   },
   {
     "text": "Click! A picture for Luna's journal!",

@@ -37,7 +37,7 @@ const TOTAL = ORDERS.length + 2
 /** Launches before the fish appear. */
 const SPLASHES = 4
 /** Fish that make a chick perfectly round. */
-const ROUND = 4
+const ROUND = 3
 const DIVERS: PenguinKind[] = ['chubby', 'tiny', 'tuft']
 const SKY = '#A6DCFB'
 
@@ -162,6 +162,16 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
   const [flash, setFlash] = useState(0)
   const [hint, setHint] = useState<null | 'front' | 'chicks'>(null)
   const [frontId, setFrontId] = useState(-1)
+  const [artReady, setArtReady] = useState(false)
+  useEffect(() => {
+    const srcs = [art.cliff, art.seaRock, art.bgCoast, art.bgCoastTall]
+    void Promise.all(srcs.map((src) => {
+      const img = new Image()
+      img.src = src
+      return img.decode().catch(() => {})
+    })).then(() => alive() && setArtReady(true))
+  }, [])
+  const [launched, setLaunched] = useState(false)
 
   const sparkle = useRef<PuppetHandle>(null)
   const pepa = useRef<PuppetHandle>(null)
@@ -170,6 +180,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
   const splash = useRef<SplashHandle>(null)
   const dots = useRef<(SVGCircleElement | null)[]>([])
   const ring = useRef<SVGEllipseElement | null>(null)
+  const band = useRef<(SVGPathElement | null)[]>([null, null])
   const pelicanEl = useRef<HTMLDivElement>(null)
   const pelicanImg = useRef<HTMLImageElement>(null)
 
@@ -206,6 +217,17 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     flyerId: 1,
     busy: false,
     fedOnce: false,
+    /** Friends' chatter (wheee, Lobo) stays quiet until then, so it never cuts off Pepa's order or a new moment. */
+    importantUntil: 0,
+    loboTalk: 0,
+    weedSaid: false,
+    launches: 0,
+    giggles: 0,
+    roundSaid: [false, false, false],
+    exitX: -200,
+    nextBeg: 0,
+    hx: 0,
+    hy: 0,
     pelican: { on: 'off' as 'off' | 'fly' | 'float' | 'leave', t: 0, x: 0, y: 0, from: { x: 0, y: 0 }, school: null as School | null, next: 0, told: false },
     time: 0,
   })
@@ -235,6 +257,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
   const SR = useRef<PenguinStage | null>(null)
   const prevS = useRef<PenguinStage | null>(null)
   SR.current = S
+  g.current.exitX = -ox / scale - 200
 
   // The three divers queue on the ledge (placed again if the stage switches between wide and tall).
   useEffect(() => {
@@ -244,6 +267,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       for (const kind of shuffle([...DIVERS])) addSwimmer(kind, -1, kind === 'tiny' ? S.diverH * 0.82 : kind === 'chubby' ? S.diverH * 1.03 : S.diverH)
       G.queue = G.sw.map((s) => s.id)
       publish()
+      setFrontId(G.queue[0])
     }
     if (prevS.current !== S) {
       // Wide <-> tall: everyone in the queue jumps to their spot; anything mid-flight lands home.
@@ -282,12 +306,24 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     return r ? { x: (cx - r.left) / scale, y: (cy - r.top) / scale } : { x: 0, y: 0 }
   }
   const say1 = (line: Line) => void say(line)
+  /** A line she must hear (an order, a new moment): chatter stays quiet for its length. */
+  const sayKey = (line: Line, secs = 3.5) => {
+    g.current.importantUntil = performance.now() + secs * 1000
+    return say(line)
+  }
+  /** Friends' chatter: dropped while an important line plays, never cuts one off. */
+  const chat = (line: Line) => {
+    if (performance.now() < g.current.importantUntil) return
+    void say(line, { interrupt: false })
+  }
 
   // ---- The story, then play ----
   const startPlay = () => {
     setPhase('splash')
     setPrompt(P.pull)
     g.current.lastTouch = g.current.lastProgress = performance.now()
+    // Show the pull (a ghost finger on the front penguin) until her first launch.
+    setTimeout(() => alive() && !g.current.launches && setHint('front'), 4000)
   }
 
   // ---- Fish schools ----
@@ -344,7 +380,14 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     return pts
   }
 
-  const showPreview = (vx: number, vy: number, on: boolean) => {
+  const showPreview = (vx: number, vy: number, on: boolean, at?: Pt) => {
+    const T = SR.current
+    // The kelp band stretched from the launch rock to the penguin.
+    for (const b of band.current) {
+      if (!b) continue
+      b.style.display = at && T ? '' : 'none'
+      if (at && T) b.setAttribute('d', `M${T.anchor.x + 52} ${T.ledge - 6}Q${(T.anchor.x + 52 + at.x) / 2} ${T.ledge + 18} ${at.x + 10} ${at.y + 10}`)
+    }
     const pts = on ? trajectory(vx, vy, dots.current.length + 1) : []
     dots.current.forEach((d, i) => {
       if (!d) return
@@ -377,11 +420,15 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     s.live.current.pull = 0
     s.live.current.sock = false
     psfx.launch(k)
-    G.lastProgress = performance.now()
+    // While the chicks wait for their fish, only feeding them counts as progress (so the hint still comes).
+    if (!G.feeding) G.lastProgress = performance.now()
+    G.launches++
+    if (G.launches === 1) setLaunched(true)
+    G.hx = s.x
     if (k < 0.15) {
       psfx.blip()
-      say1(P.blip)
-    } else if (G.talked++ < 2 || Math.random() < 0.2) say1(P.wheee[Math.floor(Math.random() * P.wheee.length)])
+      chat(P.blip)
+    } else if (G.talked++ < 2 || Math.random() < 0.2) chat(P.wheee[Math.floor(Math.random() * P.wheee.length)])
     setHint(null)
     setPromptAway(true)
     setFrontId(G.queue[0] ?? -1)
@@ -403,7 +450,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
 
   const canLaunch = () => {
     const p = g.current.phase
-    return p === 'splash' || p === 'fish' || p === 'swim'
+    return p === 'splash' || p === 'fish' || p === 'hatch' || p === 'swim'
   }
 
   // ---- In the water ----
@@ -415,16 +462,26 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     psfx.splash(big)
     // Lobo gets splashed.
     const lx = T.lobo.x
-    if (s.kind !== 'chick' && Math.abs(s.x - lx) < 190 && performance.now() > G.loboBusy) {
+    if (s.kind !== 'chick' && Math.abs(s.x - lx) < T.rock.w * 0.45 && performance.now() > G.loboBusy) {
       G.loboBusy = performance.now() + 3000
       void lobo.current?.play('dive')
       setTimeout(() => alive() && setSeaweed(true), 1200)
       setTimeout(() => {
         if (!alive()) return
-        say1(P.lobo[seaweedRef.current ? 2 : 0])
         void lobo.current?.play('clap')
+        psfx.bark()
+        // He talks about it once in a while (the seaweed hat only the first time); otherwise he just barks.
+        const now = performance.now()
+        if (now > G.loboTalk) {
+          G.loboTalk = now + 15000
+          chat(P.lobo[G.weedSaid ? 0 : 2])
+          G.weedSaid = true
+        }
       }, 2200)
     }
+    // A splash next to the floating pelican sends him flapping off.
+    const pel = G.pelican
+    if (pel.on === 'float' && Math.abs(s.x - pel.x) < 160) scarePelican()
     if (G.phase === 'splash' && s.kind !== 'chick') {
       G.splashes++
       if (G.splashes === SPLASHES) void startFishing()
@@ -514,7 +571,15 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       deliver(s)
     } else if (s.live.current.sock) {
       void s.puppet.current?.play('proud')
-      if (G.socks++ % 3 === 0) say1(P.sock)
+      if (G.socks++ % 3 === 0) chat(P.sock)
+    }
+    if (G.phase === 'swim' || G.phase === 'parade' || G.phase === 'done') {
+      // The chicks' turn now: this diver climbs up and walks off behind the others.
+      const top = { x: T.slots[T.slots.length - 1], y: standY(s, T.ledge) }
+      s.path = [{ kind: 'hop', p: [{ x: s.x, y: s.y }, top], h: 120, dur: 0.7, mode: 'stand', turn: false, end: () => retire(s) }]
+      s.seg = 0
+      s.t = 0
+      return
     }
     const back = { x: T.slots[Math.min(G.queue.length, T.slots.length - 1)], y: standY(s, T.ledge) }
     s.path = [
@@ -555,7 +620,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
         if (!alive()) return
         setOrder({ need: G.need, filled: G.filled })
         sounds.note(2 + i * 2)
-        say1(P.count[i])
+        void say(P.count[i], { interrupt: false })
         if (G.filled === G.need) startFeeding()
       }, 650)
       G.lastProgress = performance.now()
@@ -572,11 +637,11 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     setFeeding(true)
     setQuiet(true)
     setPrompt(P.idle.feed)
-    for (let i = 0; i < G.chicks; i++) setTimeout(() => alive() && void chicks.current[i]?.play('beg'), i * 250)
+    for (let i = 0; i < G.chicks; i++) setTimeout(() => alive() && void chicks.current[i]?.play(G.fed[i] >= ROUND ? 'wiggle' : 'beg'), i * 250)
     psfx.peep(3)
     if (!G.fedOnce) {
       G.fedOnce = true
-      setTimeout(() => alive() && say1(P.feed), 500)
+      setTimeout(() => alive() && void sayKey(P.feed, 2.4), 500)
     }
     G.lastProgress = performance.now()
   }
@@ -588,7 +653,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     G.filled = 0
     setOrder({ need: G.need, filled: 0 })
     void pepa.current?.play('flap')
-    await say(P.orders[G.need - 1])
+    await sayKey(P.orders[G.need - 1], 2.2)
   }
 
   /** She taps a chick: if fish are waiting, Pepa feeds it one. */
@@ -596,10 +661,17 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     const G = g.current
     const T = SR.current
     G.lastTouch = performance.now()
-    if (!T || G.phase === 'swim' || G.phase === 'parade') return
-    if (!G.feeding || G.filled <= 0) {
+    if (!T) return
+    if (G.phase === 'swim' || G.phase === 'parade' || !G.feeding || G.filled <= 0) {
       void chicks.current[i]?.play(Math.random() < 0.5 ? 'peep' : 'hop')
       psfx.peep(2)
+      return
+    }
+    // A full, round chick shakes its head while a sibling is still hungry: share!
+    if (G.fed[i] >= ROUND && G.fed.slice(0, G.chicks).some((n) => n < ROUND)) {
+      void chicks.current[i]?.play('wiggle')
+      psfx.peep(1)
+      for (let j = 0; j < G.chicks; j++) if (G.fed[j] < ROUND) void chicks.current[j]?.play('beg')
       return
     }
     const k = --G.filled
@@ -610,8 +682,14 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       if (!alive()) return
       void chicks.current[i]?.play('gulp')
       psfx.gulp()
+      sounds.note(2 + (G.need - k - 1) * 2)
       G.fed[i]++
       setFull(G.fed.map((n) => Math.min(1, n / ROUND)))
+      splash.current?.sparkle(T.chicks[i].x, T.burrow.floor - T.chicks[i].h * 0.5)
+      if (G.fed[i] >= ROUND && !G.roundSaid[i]) {
+        G.roundSaid[i] = true
+        chat(P.yum[1])
+      }
     }, 600)
     G.lastProgress = performance.now()
     if (G.filled === 0) void orderFed()
@@ -630,7 +708,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     star(2 + G.order)
     sounds.sparkle()
     void pepa.current?.play('cheer')
-    await say(P.yum[G.order % P.yum.length])
+    await sayKey(G.order % 2 ? P.yum[2] : P.yum[0], 1.5)
     if (!alive()) return
     G.order++
     G.busy = false
@@ -662,7 +740,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     const G = g.current
     setPhase('hatch')
     setPrompt(null)
-    await say(P.egg)
+    await sayKey(P.egg)
     for (let c = 0; c < 3; c++) {
       if (!alive()) return
       setEggCrack(c)
@@ -676,7 +754,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     psfx.peep(4)
     sounds.sparkle()
     void pepa.current?.play('cheer')
-    await say(P.hatch)
+    await sayKey(P.hatch, 1.5)
     if (!alive()) return
     void chicks.current[2]?.play('cheer')
     G.twist = true
@@ -697,19 +775,26 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     setRough(false)
     G.twist = false
     star(TOTAL - 1)
-    // The divers waddle off the back of the ledge to make room; the chicks hop up to the launch rock.
-    const divers = G.sw.filter((s) => s.kind !== 'chick')
+    // The fattest chicks ever: everyone is round for the big day.
+    G.fed = G.fed.map((n) => Math.max(n, ROUND))
+    setFull([1, 1, 1])
+    // The divers in line waddle off the back of the ledge to make room (ones still out swimming follow when they're
+    // back); the chicks hop up to the launch rock.
+    if (G.held) {
+      const h = byId(G.held.id)
+      if (h) {
+        h.state = 'queue'
+        h.live.current.mode = 'stand'
+        h.live.current.pull = 0
+      }
+      G.held = null
+      showPreview(0, 0, false)
+    }
+    const waiting = G.sw.filter((s) => s.kind !== 'chick' && s.state === 'queue')
     G.queue = []
-    divers.forEach((s, i) => {
-      s.state = 'path'
-      s.path = [
-        { kind: 'wait', p: [], dur: i * 0.3, mode: 'stand', turn: false },
-        { kind: 'hop', p: [{ x: s.x, y: s.y }, { x: -160, y: standY(s, T.ledge) }], h: 30, dur: 1.4, mode: 'stand', turn: false, end: () => ((s.state = 'off'), (s.shown = false)) },
-      ]
-      s.seg = 0
-      s.t = 0
-    })
-    await say(P.swimGo)
+    waiting.forEach((s, i) => retire(s, i * 0.3))
+    G.sw.forEach((s) => (s.live.current.fish = false))
+    await sayKey(P.swimGo, 3.5)
     if (!alive()) return
     for (let i = 0; i < 3; i++) {
       const c = T.chicks[i]
@@ -745,6 +830,19 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     G.lastProgress = performance.now()
   }
 
+  /** A diver walks off the back of the ledge (past the screen edge) for the chicks' turn. */
+  const retire = (s: Swimmer, delay = 0) => {
+    const T = SR.current!
+    const ground = standY(s, T.ledge)
+    s.state = 'path'
+    s.path = [
+      { kind: 'wait', p: [], dur: delay, mode: 'stand', turn: false },
+      { kind: 'hop', p: [{ x: s.x, y: s.y }, { x: g.current.exitX, y: ground }], h: 26, dur: Math.max(0.8, (s.x - g.current.exitX) / 260), mode: 'stand', turn: false, end: () => ((s.state = 'off'), (s.shown = false)) },
+    ]
+    s.seg = 0
+    s.t = 0
+  }
+
   const chickBack = (s: Swimmer) => {
     const G = g.current
     s.state = 'off'
@@ -753,7 +851,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     setTimeout(() => alive() && void chicks.current[s.chick]?.play('cheer'), 50)
     psfx.peep(3)
     G.swimHome++
-    if (G.swimHome === 1) say1(P.firstSwim)
+    if (G.swimHome === 1) void sayKey(P.firstSwim, 1.8)
     if (G.swimHome === 3) void parade()
   }
 
@@ -795,7 +893,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     psfx.click()
     setFlash((f) => f + 1)
     burst(0.6, 0.6)
-    await say(P.photo)
+    await sayKey(P.photo)
     await wait(2200)
     if (!alive()) return
     setPepaHome(true)
@@ -803,11 +901,25 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     await wait(300)
     void pepa.current?.play('cheer')
     chicks.current.forEach((c) => void c?.play('cheer'))
-    await say(P.yum[2])
+    await sayKey(P.thanks, 1.5)
     await wait(600)
     if (!alive()) return
     setPhase('done')
     onDone()
+  }
+
+  /** The floating pelican is startled (a tap, or a splash beside him): gulps air, wobbles his pouch, flaps off, and
+   *  the fish he was after gather right back where they were. */
+  const scarePelican = () => {
+    const pel = g.current.pelican
+    if (pel.on !== 'float') return
+    psfx.squawk()
+    psfx.gulp()
+    pel.on = 'leave'
+    pel.t = 0
+    pelicanImg.current?.animate([{ transform: 'scale(1,1)' }, { transform: 'scale(1.2,0.85)' }, { transform: 'scale(0.9,1.15)' }, { transform: 'scale(1,1)' }], { duration: 500 })
+    if (pel.school && pel.school.away > 0.3) pel.school.away = 0.3
+    g.current.lastProgress = performance.now()
   }
 
   // ---- Pointer handling on the stage ----
@@ -819,15 +931,21 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     const T = SR.current
     if (!T || G.held) return
     const swEl = target.closest('[data-swimmer]') as HTMLElement | null
-    if (swEl && canLaunch()) {
+    if (swEl) {
       const s = byId(Number(swEl.dataset.swimmer))
       if (!s || s.state !== 'queue') return
+      if (!canLaunch() || (G.phase === 'swim') !== (s.kind === 'chick')) {
+        void s.puppet.current?.play('giggle')
+        sounds.pop()
+        return
+      }
       // Any penguin in the queue can go next: it steps up to the launch rock.
       G.queue = [s.id, ...G.queue.filter((id) => id !== s.id)]
       setFrontId(s.id)
       s.state = 'held'
-      s.x = T.anchor.x
-      s.y = standY(s, T.ledge)
+      // It hops up to the launch rock (the loop glides it there).
+      G.hx = T.anchor.x
+      G.hy = standY(s, T.ledge)
       s.left = false
       s.live.current.mode = 'crouch'
       s.live.current.pull = 0
@@ -836,6 +954,10 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       e.currentTarget.setPointerCapture(e.pointerId)
       sounds.pop()
       setHint(null)
+      return
+    }
+    if (target.closest('[data-pelican]')) {
+      scarePelican()
       return
     }
     const scEl = target.closest('[data-school]') as HTMLElement | null
@@ -867,11 +989,11 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       say1(P.whoa)
     }
     // It crouches and slides back along the rock with her finger (a rubbery slingshot).
-    s.x = T.anchor.x + clamp(dx, -T.pullR * 1.1, T.pullR * 0.25) * 0.45
-    s.y = standY(s, T.ledge) + clamp(dy * 0.12, -8, 14)
+    G.hx = T.anchor.x + clamp(dx, -T.pullR * 1.1, T.pullR * 0.25) * 0.55
+    G.hy = standY(s, T.ledge) + clamp(dy * 0.12, -8, 14)
     if (G.held.moved) psfx.stretch(Math.min(1, raw))
     const l = launchOf(dx, dy)
-    showPreview(l.vx, l.vy, G.held.moved && l.k >= 0.08)
+    showPreview(l.vx, l.vy, G.held.moved && l.k >= 0.08, { x: G.hx, y: G.hy })
   }
 
   const onUp = (e: ReactPointerEvent<HTMLDivElement>) => {
@@ -885,7 +1007,14 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     if (!s) return
     const l = launchOf(h.dx, h.dy)
     if (!h.moved || l.k < 0.05) {
-      // Just a tap: it flaps and giggles, and stays in front.
+      // Just a tap: it flaps and giggles, and stays in front. After a couple of taps it hops in anyway (a little
+      // jump), so taps lead to the verb too.
+      if (++G.giggles >= 3 && G.launches < 2) {
+        G.giggles = 0
+        const small = launchOf(-T.pullR * 0.3, T.pullR * 0.2)
+        launch(s, small.vx, small.vy, small.k)
+        return
+      }
       s.state = 'queue'
       s.live.current.mode = 'stand'
       s.live.current.pull = 0
@@ -927,6 +1056,13 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
         }
         s.rot = 0
         L.mode = 'stand'
+      } else if (s.state === 'held') {
+        // Glide (with a little hop if it came from the back of the line) toward where her finger puts it.
+        const d = G.hx - s.x
+        s.x += d * Math.min(1, dt * 16)
+        s.y += (G.hy - s.y) * Math.min(1, dt * 16) - Math.min(30, Math.abs(d) * 0.25) * Math.min(1, dt * 16)
+        s.rot = 0
+        s.left = false
       } else if (s.state === 'fly') {
         s.vy += T.gravity * dt
         s.x += s.vx * dt
@@ -938,15 +1074,15 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
         s.rot = (Math.atan2(s.vy, Math.abs(s.vx) + 1) * 180) / Math.PI + 90
         s.left = s.vx < 0
         // Boing! Off Lobo's rock (and his belly).
-        if (!s.bounced && s.vy > 0 && s.x > T.rock.x + 30 && s.x < T.rock.x + T.rock.w - 30 && s.y > T.rock.top - 30 && s.y < T.rock.top + 20) {
+        if (!s.bounced && !s.target && s.vy > 0 && s.x > T.rock.x + 30 && s.x < T.rock.x + T.rock.w - 30 && s.y > T.rock.top - 30 && s.y < T.rock.top + 20) {
           s.bounced = true
           s.vy = -Math.abs(s.vy) * 0.55 - 200
           s.vx = -Math.abs(s.vx) * 0.4 - 160
           psfx.bounce()
           void lobo.current?.play('giggle')
-          if (now > G.loboBusy) {
-            G.loboBusy = now + 2500
-            say1(P.lobo[1])
+          if (now > G.loboTalk) {
+            G.loboTalk = now + 15000
+            chat(P.lobo[1])
           }
         }
         if (s.y >= T.sea && s.vy > 0) splashDown(s)
@@ -1035,7 +1171,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
         psfx.dive()
         if (!pel.told) {
           pel.told = true
-          say1(P.pelican)
+          void sayKey(P.pelican, 2.5)
         }
       } else pel.next = G.time + 2
     }
@@ -1072,13 +1208,23 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       const fl = pel.on === 'fly' || pel.on === 'leave'
       const w = fl ? (T.tall ? 200 : 240) : T.tall ? 130 : 150
       pelicanEl.current.style.display = pel.on === 'off' ? 'none' : ''
+      pelicanEl.current.style.pointerEvents = pel.on === 'float' ? 'auto' : 'none'
       pelicanEl.current.style.width = `${w}px`
       pelicanEl.current.style.transform = `translate(${(pel.x - w / 2).toFixed(1)}px, ${(pel.y - (fl ? w * 0.4 : w * 0.7)).toFixed(1)}px) scale(${pel.on === 'fly' ? -1 : 1}, 1) rotate(${pel.on === 'fly' ? -35 : 0}deg)`
       if (pelicanImg.current) pelicanImg.current.src = fl ? art.pelicanFly : art.pelicanFloat
     }
 
+    // Hungry chicks keep begging while fish are waiting for them.
+    if (G.feeding && G.time > G.nextBeg) {
+      G.nextBeg = G.time + 3
+      const hungry = [0, 1, 2].filter((i) => i < G.chicks && G.fed[i] < ROUND)
+      const i = hungry.length ? hungry[Math.floor(Math.random() * hungry.length)] : Math.floor(Math.random() * G.chicks)
+      void chicks.current[i]?.play('beg')
+      psfx.peep(2)
+    }
+
     // The quiet guide: Sparkle speaks only when she's been still for a while.
-    const quiet = Math.max(G.lastProgress, G.lastTouch)
+    const quiet = G.feeding ? G.lastProgress : Math.max(G.lastProgress, G.lastTouch)
     if (!G.busy && !G.held && now - quiet > 8000 && now - G.lastHint > 12000) {
       const p = G.phase
       let line: Line | null = null
@@ -1088,7 +1234,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       else if (p === 'swim') line = P.idle.swim
       if (line) {
         G.lastHint = now
-        say1(line)
+        void sayKey(line, 3)
         setHint(G.feeding ? 'chicks' : 'front')
       }
     }
@@ -1166,7 +1312,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
           onPointerMove={onMove}
           onPointerUp={onUp}
           onPointerCancel={onUp}
-          style={{ position: 'absolute', left: ox, top: oy, width: S.w, height: S.h, transform: `scale(${scale})`, transformOrigin: '0 0' }}
+          style={{ position: 'absolute', left: ox, top: oy, width: S.w, height: S.h, transform: `scale(${scale})`, transformOrigin: '0 0', opacity: artReady ? 1 : 0, transition: 'opacity .3s' }}
         >
           {/* Far: the desert sky, the sun, the hills with the Candelabra, the bay. */}
           <img src={S.tall ? art.bgCoastTall : art.bgCoast} alt="" draggable={false} style={{ position: 'absolute', left: S.w / 2 - (S.bg.w * bgF) / 2, top: S.sea - (S.sea - S.bg.y) * bgF, width: S.bg.w * bgF, height: S.bg.h * bgF, pointerEvents: 'none' }} />
@@ -1243,7 +1389,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
                 <motion.div
                   initial={i === 2 ? { scale: 0 } : false}
                   animate={{ scale: 1 }}
-                  className={hint === 'chicks' && feeding ? 'peru-tool-glow' : undefined}
+                  className={feeding && full[i] < 1 ? 'peru-tool-glow' : undefined}
                   style={{ position: 'absolute', left: colW / 2 - w / 2, top: S.burrow.floor - S.burrow.top - c.h * 0.94, width: w, height: c.h, transformOrigin: '50% 100%' }}
                 >
                   <Chick ref={(r) => void (chicks.current[i] = r)} height="100%" full={full[i]} tuft={i} label={`chick ${i + 1}`} />
@@ -1275,7 +1421,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
               sounds.pop()
               say1(P.facts[g.current.facts++ % P.facts.length])
             }}
-            style={{ position: 'absolute', left: S.sparkle.x - S.sparkle.h * 0.45, top: S.rock.top + 14 - S.sparkle.h, width: S.sparkle.h * 0.9, height: S.sparkle.h, padding: 0, background: 'none', border: 'none', zIndex: 6, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
+            style={{ position: 'absolute', left: S.sparkle.x - S.sparkle.h * 0.36, top: S.rock.top + 14 - S.sparkle.h, width: S.sparkle.h * 0.72, height: S.sparkle.h, padding: 0, background: 'none', border: 'none', zIndex: 6, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
           >
             <SparklePuppet ref={sparkle} height={`${S.sparkle.h}px`} lookToward={0.3} />
           </motion.button>
@@ -1302,6 +1448,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
                 }}
                 style={{ position: 'absolute', left: 0, top: 0, width: 180, height: 100, zIndex: 9, touchAction: 'none', transition: 'opacity .5s', willChange: 'transform' }}
               >
+                <div style={{ position: 'absolute', left: 0, right: 0, top: -40, bottom: -40 }} />
                 <motion.div animate={{ opacity: [0.35, 0.7, 0.35] }} transition={{ repeat: Infinity, duration: 1.6 }} style={{ position: 'absolute', inset: 6, borderRadius: '50%', background: 'radial-gradient(closest-side, rgba(255,247,240,.8), rgba(255,247,240,0))' }} />
                 <svg viewBox="0 0 180 100" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible', pointerEvents: 'none' }}>
                   {[0, 1, 2, 3].map((f) => (
@@ -1320,7 +1467,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
             ))}
 
           {/* The pelican (in the twist). */}
-          <div ref={pelicanEl} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', zIndex: 11, pointerEvents: 'none' }}>
+          <div ref={pelicanEl} data-pelican aria-label="pelican" style={{ position: 'absolute', left: 0, top: 0, display: 'none', zIndex: 11, pointerEvents: 'none', touchAction: 'none' }}>
             <img ref={pelicanImg} src={art.pelicanFly} alt="" draggable={false} style={{ width: '100%', display: 'block' }} />
           </div>
 
@@ -1338,6 +1485,9 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
                 }}
                 style={{ position: 'absolute', left: 0, top: 0, width: b.w, height: sw.h, zIndex: 10, touchAction: 'none', cursor: canPull ? 'grab' : 'default', transformOrigin: `${b.fx * 100}% 55%`, willChange: 'transform' }}
               >
+                {/* A bigger invisible grab pad (small phone screens). */}
+                <div style={{ position: 'absolute', inset: -34 }} />
+                {hint === 'front' && sw.id === frontId && !launched && <GhostFinger />}
                 {hint === 'front' && sw.id === frontId && (
                   <div aria-hidden style={{ position: 'absolute', left: '50%', top: '50%', width: 150, height: 150, marginLeft: -75, marginTop: -75, pointerEvents: 'none' }}>
                     <div className="peru-hint-ring" style={{ width: '100%', height: '100%', borderRadius: '50%', border: '8px solid #FFC83D', boxShadow: '0 0 0 4px rgba(255,255,255,.7)' }} />
@@ -1359,6 +1509,9 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
             {Array.from({ length: 13 }, (_, i) => (
               <circle key={i} ref={(el) => void (dots.current[i] = el)} r={7 + i * 0.4} fill="#FFF7F0" stroke={INK} strokeWidth="3" style={{ display: 'none' }} />
             ))}
+            {/* The rubbery kelp band of the slingshot (shown while she pulls). */}
+            <path ref={(el) => void (band.current[0] = el)} fill="none" stroke={INK} strokeWidth="15" strokeLinecap="round" style={{ display: 'none' }} />
+            <path ref={(el) => void (band.current[1] = el)} fill="none" stroke="#7CC79A" strokeWidth="8" strokeLinecap="round" style={{ display: 'none' }} />
             <ellipse ref={ring} cy={S.sea} rx="54" ry="16" fill="none" stroke="#FF4F9A" strokeWidth="7" strokeDasharray="14 10" style={{ display: 'none' }} />
           </svg>
 
@@ -1383,7 +1536,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
         </div>
       )}
 
-      {prompt && phase !== 'story' && !promptAway && (
+      {prompt && phase !== 'story' && (!promptAway || feeding) && (
         <div style={{ position: 'absolute', left: 0, right: 0, top: 0, paddingTop: 'var(--top-clear)', paddingRight: S && !S.tall ? 16 : 0, display: 'flex', justifyContent: S && !S.tall ? 'flex-end' : 'center', pointerEvents: 'none', zIndex: 25 }}>
           <div style={{ pointerEvents: 'auto', maxWidth: 'calc(100% - 24px)' }}>
             <PromptBubble key={lineKey(prompt)} text={prompt} speak={!quiet} />
@@ -1395,5 +1548,23 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
 
       {phase === 'story' && <StoryBeat lines={P.story} bg={art.bgCoast} friend={<Penguin kind="pepa" height="100%" />} onDone={startPlay} />}
     </div>
+  )
+}
+
+/** Shows the pull: a soft finger presses on the front penguin, drags it back and down, and lets go. */
+function GhostFinger() {
+  return (
+    <motion.div
+      aria-hidden
+      initial={{ x: 0, y: 0, opacity: 0, scale: 1 }}
+      animate={{ x: [0, 0, -130, -130], y: [0, 0, 60, 60], opacity: [0, 0.95, 0.95, 0], scale: [1.2, 0.9, 0.9, 1.1] }}
+      transition={{ repeat: Infinity, duration: 2.2, times: [0, 0.2, 0.75, 1], repeatDelay: 0.5 }}
+      style={{ position: 'absolute', left: '50%', top: '45%', width: 70, height: 70, marginLeft: -35, marginTop: -35, pointerEvents: 'none', zIndex: 2 }}
+    >
+      <svg viewBox="-40 -40 80 80" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
+        <circle r="30" fill="rgba(255,247,240,.75)" stroke={INK} strokeWidth="5" />
+        <circle r="14" fill="#FF8FB8" stroke={INK} strokeWidth="4" />
+      </svg>
+    </motion.div>
   )
 }
