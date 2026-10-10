@@ -179,9 +179,10 @@ function Payoff({ onDone }: { onDone: () => void }) {
       await say(P.spin)
       await wait(900)
       if (!alive()) return
-      setBeat('hat')
       sounds.sparkle()
-      void sparkle.current?.play('cheer')
+      await sparkle.current?.play('cheer')
+      if (!alive()) return
+      setBeat('hat')
       showWord('grazie')
       await say(P.hat)
       if (!alive()) return
@@ -206,19 +207,14 @@ function Payoff({ onDone }: { onDone: () => void }) {
           <SparklePuppet ref={sparkle} height={cast} />
           <AnimatePresence>
             {beat !== 'clap' && (
-              <motion.div key="hat" initial={{ x: '-180%', y: '-140%', rotate: -40, scale: 0.6 }} animate={{ x: '0%', y: '0%', rotate: -12, scale: 1 }} transition={{ type: 'spring', bounce: 0.45, duration: 0.9 }} style={{ position: 'absolute', left: '36%', top: '-16%', width: '32%', pointerEvents: 'none' }}>
+              <motion.div key="hat" initial={{ x: '-180%', y: '-140%', rotate: -40, scale: 0.6 }} animate={{ x: '0%', y: '0%', rotate: 0, scale: 1 }} transition={{ type: 'spring', bounce: 0.45, duration: 0.9 }} style={{ position: 'absolute', left: '25%', top: '0%', width: '34%', pointerEvents: 'none' }}>
                 <ChefHat />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
         <div style={{ position: 'relative', height: `calc(${cast} * 0.9)` }}>
-          <Lupa ref={lupa} height="100%" onTap={() => void lupa.current?.play('howl')} />
-          <AnimatePresence>
-            {(beat === 'mandolin' || beat === 'done') && (
-              <motion.img key="mandolin" src={art.mandolin} alt="" initial={{ x: '-260%', y: '-80%', rotate: -60, scale: 0.5 }} animate={{ x: '0%', y: '0%', rotate: 20, scale: 1 }} transition={{ type: 'spring', bounce: 0.4, duration: 1 }} style={{ position: 'absolute', right: '-30%', bottom: '10%', width: '55%', pointerEvents: 'none' }} />
-            )}
-          </AnimatePresence>
+          <Lupa ref={lupa} height="100%" mandolin={beat === 'mandolin' || beat === 'done' ? art.mandolin : undefined} onTap={() => void lupa.current?.play('howl')} />
         </div>
       </div>
       <AnimatePresence>
