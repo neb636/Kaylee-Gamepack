@@ -9,10 +9,12 @@ import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
+import { Terraces } from './activities/terraces/Terraces'
 import { art } from './art'
 import { L } from './lines'
 import { PeruMap, MAP_RATIO } from './PeruMap'
 import { Alpaca, HatShape, INK } from './puppets/Alpaca'
+import { Tika } from './puppets/Tika'
 import './peru.css'
 
 export interface ActivityProps {
@@ -20,7 +22,7 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, 'machu-picchu': Terraces }
 
 /** The five places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
 export const SPOTS = [
@@ -54,6 +56,9 @@ export default function Place(props: PlaceProps) {
   }
   return <Hub {...props} />
 }
+
+/** Pins that show their friend instead of an emoji. */
+const PIN_IMG: Record<string, string> = { alpaca: art.luna, 'machu-picchu': art.tika }
 
 // Luna says hello once per visit to the app.
 let introSeen = false
@@ -119,8 +124,8 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   zIndex: 3,
                 }}
               >
-                {spot.id === 'alpaca' ? (
-                  <img src={art.luna} alt="" style={{ height: '80%', maxWidth: '80%', objectFit: 'contain' }} />
+                {PIN_IMG[spot.id] ? (
+                  <img src={PIN_IMG[spot.id]} alt="" style={{ height: '80%', maxWidth: '80%', objectFit: 'contain' }} />
                 ) : (
                   <span style={{ fontSize: 'clamp(26px, 5.5cqw, 42px)', opacity: open ? 1 : 0.6 }}>{spot.icon}</span>
                 )}
@@ -189,7 +194,8 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
             onClick={() => {
               sounds.pop()
               if (done && spot.id === 'alpaca') void say(L.alpacaWindow)
-              else if (spot.id === 'alpaca') open(spot.id)
+              else if (done && spot.id === 'machu-picchu') void say(L.terracesWindow)
+              else if (spot.id === 'alpaca' || spot.id === 'machu-picchu') open(spot.id)
               else void say(L.soon)
             }}
             style={{ minWidth: 0, minHeight: 0, borderRadius: 14, border: `3px ${done ? 'solid' : 'dashed'} ${INK}`, background: done ? '#FFE27A' : '#FFF7F0', display: 'grid', placeItems: 'center', padding: 2, overflow: 'hidden' }}
@@ -203,6 +209,11 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
                   </g>
                 ))}
               </svg>
+            ) : done && spot.id === 'machu-picchu' ? (
+              // Tika's photobomb at Machu Picchu.
+              <div style={{ width: '100%', height: '100%', borderRadius: 10, overflow: 'hidden', background: 'linear-gradient(#A8DCFF 0 55%, #8FD86F 55%)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+                <Tika height="94%" pose="grin" />
+              </div>
             ) : <span style={{ fontSize: 'min(30px, 7cqmin)', opacity: 0.35 }}>{spot.icon}</span>}
           </motion.button>
         )

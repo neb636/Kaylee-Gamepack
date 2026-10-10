@@ -239,6 +239,10 @@
     "hash": "f62e34a12063",
     "note": "white stripes"
   },
+  "src/world/places/peru/assets/bear.webp": {
+    "hash": "880413e8e0db",
+    "note": "eye whites"
+  },
   "src/world/places/peru/assets/beetle.webp": {
     "hash": "6b3337a432d0",
     "note": "eye whites"
@@ -255,6 +259,14 @@
     "hash": "bf0c422672f3",
     "note": "cream comb"
   },
+  "src/world/places/peru/assets/cock-of-the-rock.webp": {
+    "hash": "ec5aab29fbb7",
+    "note": "eye white"
+  },
+  "src/world/places/peru/assets/cria.webp": {
+    "hash": "50870a8023d1",
+    "note": "eye whites"
+  },
   "src/world/places/peru/assets/dandelion.webp": {
     "hash": "ebe3a0ffc9dc",
     "note": "dandelion seed puff"
@@ -270,5 +282,13 @@
   "src/world/places/peru/assets/pond.webp": {
     "hash": "e688e6a9c3d3",
     "note": "water highlights"
+  },
+  "src/world/places/peru/assets/potato-plant.webp": {
+    "hash": "e40d38551f92",
+    "note": "white potato flowers"
+  },
+  "src/world/places/peru/assets/viscacha.webp": {
+    "hash": "45dfa2397075",
+    "note": "eye whites"
   }
 }

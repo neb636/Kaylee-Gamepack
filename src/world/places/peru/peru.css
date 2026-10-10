@@ -90,3 +90,58 @@
     opacity: 0.5;
   }
 }
+/* Tika's Mountain Terraces: a glowing gap, a glowing stone, drifting clouds, a bobbing bird, a hovering hummingbird. */
+.terr-glow {
+  animation: terr-glow 0.9s ease-in-out infinite;
+}
+@keyframes terr-glow {
+  0%,
+  100% {
+    stroke-opacity: 1;
+  }
+  50% {
+    stroke-opacity: 0.25;
+  }
+}
+.terr-stone-glow svg {
+  animation: peru-tool-glow 1s ease-in-out infinite;
+}
+.terr-drift {
+  animation: terr-drift 9s ease-in-out infinite alternate;
+}
+@keyframes terr-drift {
+  from {
+    transform: translateX(-30px);
+  }
+  to {
+    transform: translateX(30px);
+  }
+}
+.terr-bob {
+  animation: terr-bob 2.4s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+@keyframes terr-bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -6px;
+  }
+}
+.terr-hover {
+  animation: terr-hover 0.6s ease-in-out infinite alternate;
+}
+@keyframes terr-hover {
+  from {
+    translate: 0 -5px;
+  }
+  to {
+    translate: 0 5px;
+  }
+}
+/* The terraces' stage is much taller than the screen: clip it so focusing a button can never scroll it. */
+.terr-root {
+  overflow: clip;
+}

@@ -155,6 +155,131 @@
   "Snip the fluffy puffs!",
   "Tap the cactus!",
   "Drag a hat onto an alpaca!",
+  {
+    "text": "Oh no! Our grass steps fell down!",
+    "voice": "tika"
+  },
+  "Fit the stones back in, Kaylee!",
+  {
+    "text": "Clonk!",
+    "voice": "tika"
+  },
+  {
+    "text": "It fits!",
+    "voice": "tika"
+  },
+  {
+    "text": "Like a puzzle!",
+    "voice": "tika"
+  },
+  {
+    "text": "Perfect!",
+    "voice": "tika"
+  },
+  "Look for the glowing spot!",
+  {
+    "text": "Our terrace is back!",
+    "voice": "tika"
+  },
+  {
+    "text": "Yum! Fresh grass!",
+    "voice": "tika"
+  },
+  {
+    "text": "Another step!",
+    "voice": "tika"
+  },
+  {
+    "text": "We made it to the top!",
+    "voice": "tika"
+  },
+  "What should we grow here?",
+  {
+    "text": "Potatoes!",
+    "voice": "tika"
+  },
+  {
+    "text": "Corn!",
+    "voice": "tika"
+  },
+  {
+    "text": "Flowers!",
+    "voice": "tika"
+  },
+  "Build the next step!",
+  {
+    "text": "Come on up, friends!",
+    "voice": "tika"
+  },
+  "This stone has so many corners!",
+  {
+    "text": "So many clouds! I can't see!",
+    "voice": "tika"
+  },
+  "The last wall! Up in the clouds!",
+  "Look! Machu Picchu!",
+  "The Inca built Machu Picchu long ago!",
+  "Tap the camera for Luna's journal!",
+  {
+    "text": "Me too!",
+    "voice": "tika"
+  },
+  {
+    "text": "Cheese!",
+    "voice": "tika"
+  },
+  {
+    "text": "My best side!",
+    "voice": "tika"
+  },
+  {
+    "text": "Say llama!",
+    "voice": "tika"
+  },
+  {
+    "text": "One more!",
+    "voice": "tika"
+  },
+  {
+    "text": "A picture for Luna's journal!",
+    "voice": "tika"
+  },
+  {
+    "text": "Dance, dance, dance!",
+    "voice": "tika"
+  },
+  {
+    "text": "Who, me?",
+    "voice": "tika"
+  },
+  {
+    "text": "Hey! A stage!",
+    "voice": "tika"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "tika"
+  },
+  {
+    "text": "Hola!",
+    "voice": "tika"
+  },
+  {
+    "text": "Munch munch.",
+    "voice": "tika"
+  },
+  "A shy spectacled bear!",
+  "Peru has thousands of kinds of potatoes!",
+  "The stones fit together like a puzzle!",
+  "Llamas can carry things up the mountain!",
+  "Drag a stone into a hole!",
+  "Tap a seed bag to plant it!",
+  "Tap the camera!",
+  {
+    "text": "Me at Machu Picchu!",
+    "voice": "tika"
+  },
+  "Llama sticker! Llamas can carry things up mountains!",
   "Alpaca sticker! Alpacas have soft, warm fleece!",
   "Peru is in South America!",
   "Peru has a coast, mountains, and rainforest!",
@@ -162,8 +287,6 @@
   "People in Peru also speak Quechua and Aymara!",
   "Peru has penguins on its desert coast!",
   "Alpacas live high in the mountains!",
-  "The Inca built Machu Picchu long ago!",
-  "Peru has thousands of kinds of potatoes!",
   "Peru's flag is red, white, red!",
   "Peru's bird is bright orange!",
   "This is Peru! Tap a picture to explore."

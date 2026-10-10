@@ -20,4 +20,19 @@ import map from './assets/scene-peru-map.webp'
 import stoneWall from './assets/stone-wall.webp'
 import twig from './assets/twig.webp'
 
-export const art = { abuela, basket, beetle, bgAndes, bgAndesTall, bird, brush, burr, cactus, clippers, cover, dandelion, hummingbird, lizard, luna, map, paco, pond, post, stoneWall, twig }
+import bear from './assets/bear.webp'
+import bgMp from './assets/bg-machu-picchu.webp'
+import bgMpTall from './assets/bg-machu-picchu-tall.webp'
+import bush from './assets/bush.webp'
+import cockRock from './assets/cock-of-the-rock.webp'
+import corn from './assets/corn.webp'
+import cria from './assets/cria.webp'
+import doorway from './assets/doorway.webp'
+import kantuta from './assets/kantuta.webp'
+import llamaBrown from './assets/llama-brown.webp'
+import llamaGrey from './assets/llama-grey.webp'
+import potatoPlant from './assets/potato-plant.webp'
+import tika from './assets/tika.webp'
+import viscacha from './assets/viscacha.webp'
+
+export const art = { bear, bgMp, bgMpTall, bush, cockRock, corn, cria, doorway, kantuta, llamaBrown, llamaGrey, potatoPlant, tika, viscacha, abuela, basket, beetle, bgAndes, bgAndesTall, bird, brush, burr, cactus, clippers, cover, dandelion, hummingbird, lizard, luna, map, paco, pond, post, stoneWall, twig }

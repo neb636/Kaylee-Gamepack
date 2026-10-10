@@ -353,6 +353,21 @@ const SCREENS = [
       await p.waitForTimeout(to === 'family' ? 2400 : 1500)
     },
   })),
+  { name: 'terraces-story', hash: '#/world/peru/machu-picchu', reset: true, wait: 400 },
+  { name: 'terraces-play', hash: '#/world/peru/machu-picchu', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
+  // Tika's Mountain Terraces, reached through its QA hook (window.__terracesQA.jump): the second and third walls, the
+  // last wall in the clouds, and the photobomb at the top.
+  ...[1, 2, 3, 'photo'].map((to) => ({
+    name: `terraces-${to === 'photo' ? 'photo' : `wall${to}`}`,
+    hash: '#/world/peru/machu-picchu',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.waitForTimeout(500)
+      await p.evaluate((t) => window.__terracesQA?.jump(t), to)
+      await p.waitForTimeout(1500)
+    },
+  })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party', stampAll: 'peru', wait: 800 },
 ].filter((s) => !flag('routes') || flag('routes').split(',').includes(s.name))
