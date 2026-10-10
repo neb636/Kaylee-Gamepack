@@ -16,13 +16,17 @@ export interface Puff {
 
 export const VIEW = { w: 600, h: 640, feetY: 620 }
 /** The head's own little SVG (it rotates as a separate layer, so the big body only repaints when a puff changes). */
-export const HEAD_BOX = { x: 350, y: -15, w: 210, h: 265 }
+export const HEAD_BOX = { x: 330, y: -30, w: 250, h: 290 }
 /** Where the head turns on the neck. */
 export const NECK_PIVOT = { x: 455, y: 215 }
 /** Middle of the head (where a hat goes and where a dropped hat counts as "on"). */
 export const HAT_SPOT = { x: 455, y: 95 }
 /** Middle of the fleecy body, for aiming flying wool and tool hints. */
 export const BODY_MID = { x: 290, y: 380 }
+
+/** Where the legs stand (the far pair is drawn behind the body, a little darker). */
+export const FAR_LEGS = [168, 372]
+export const NEAR_LEGS = [204, 408]
 
 /** A small seeded random generator, so every alpaca's fleece looks the same each time it's drawn. */
 function prng(seed: number) {
@@ -54,10 +58,15 @@ export function makeFleece(seed: number, bangs: boolean): Puff[] {
   add(92, 350, 24, 'tail')
   add(74, 372, 22, 'tail')
   add(90, 394, 21, 'tail')
-  for (const x of [168, 372]) add(x + 2, 498, 22, 'leg')
-  for (const x of [204, 408]) {
-    add(x, 500, 24, 'leg')
-    add(x - 1, 534, 22, 'leg')
+  // Fluffy upper legs ("leg warmers"): overlapping clumps that taper toward the knee.
+  for (const x of FAR_LEGS) {
+    add(x + 2, 490, 23, 'leg')
+    add(x + 1, 518, 20, 'leg')
+  }
+  for (const x of NEAR_LEGS) {
+    add(x, 494, 25, 'leg')
+    add(x - 1, 522, 22, 'leg')
+    add(x, 546, 19, 'leg')
   }
 
   // Body: a hex grid inside an ellipse, nudged a little so it looks woolly rather than tiled.
@@ -73,31 +82,43 @@ export function makeFleece(seed: number, bangs: boolean): Puff[] {
     }
   }
 
-  // Neck: a capsule from the shoulders up to the jaw.
-  const a = { x: 392, y: 338 }
-  const b = { x: 452, y: 222 }
+  // Neck: a thick, nearly upright capsule from the chest up to the jaw (alpacas carry their heads high).
+  const a = { x: 404, y: 346 }
+  const b = { x: 452, y: 214 }
   for (let row = 0, y = 190; y <= 380; row++, y += 30) {
-    for (let x = 340 + (row % 2 ? 17 : 0); x <= 510; x += 34) {
-      if (segDist(x, y, a.x, a.y, b.x, b.y) > 38) continue
+    for (let x = 336 + (row % 2 ? 17 : 0); x <= 520; x += 34) {
+      if (segDist(x, y, a.x, a.y, b.x, b.y) > 44) continue
       if (((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 < 0.8) continue
       add(x + jitter(), y + jitter(), 25 + rnd() * 5, 'neck')
     }
   }
 
   // The topknot on her head, and (Luna only) the long bangs over her eyes.
-  for (const [x, y] of [
-    [424, 92],
-    [455, 80],
-    [486, 92],
-    [440, 64],
-    [470, 64],
-  ]) add(x, y, 21, 'top')
-  if (bangs) for (const [x, y] of [
-    [431, 130],
-    [457, 124],
-    [483, 131],
-  ]) add(x, y, 23, 'bang')
+  for (const [x, y, r] of [
+    [424, 100, 22],
+    [455, 94, 24],
+    [486, 100, 22],
+    [438, 70, 23],
+    [472, 70, 23],
+  ]) add(x, y, r, 'top')
+  if (bangs) for (const [x, y, r] of [
+    [424, 132, 22],
+    [455, 128, 24],
+    [486, 132, 22],
+  ]) add(x, y, r, 'bang')
   return puffs
+}
+
+/** The fluffy hood framing the face (part of the head drawing, never clipped): a ring over the top and down the cheeks. */
+export function makeHood(seed: number): Puff[] {
+  const rnd = prng(seed + 101)
+  const out: Puff[] = []
+  for (let k = 0; k <= 10; k++) {
+    const th = ((-32 + k * 24.4) * Math.PI) / 180
+    const r = 23 + rnd() * 5 + (k === 0 || k === 10 ? 4 : 0)
+    out.push({ id: -1 - k, x: 455 + Math.cos(th) * 70, y: 154 - Math.sin(th) * 76, r, zone: 'top', curl: rnd() * 360 })
+  }
+  return out
 }
 
 /** Puffs that count for "how much is clipped" (the topknot and bangs are extras). */
@@ -149,3 +170,16 @@ export const SHORN_NECK = scallopPath(
   ],
   5,
 )
+
+/** Short fleece on an upper leg (what's left after the leg clumps are clipped). */
+export const shornLeg = (x: number) =>
+  scallopPath(
+    [
+      [x - 19, 446],
+      [x + 19, 446],
+      [x + 16, 540],
+      [x - 16, 540],
+    ],
+    4,
+    18,
+  )
