@@ -22,6 +22,12 @@ import bruno from './assets/bruno.webp'
 import bruschetta from './assets/bruschetta.webp'
 import bufala from './assets/bufala.webp'
 import cesare from './assets/cesare.webp'
+import colorBruno from './assets/bg-color-bruno.webp'
+import colorColosseum from './assets/bg-color-colosseum.webp'
+import colorGondola from './assets/bg-color-gondola.webp'
+import colorLupa from './assets/bg-color-lupa.webp'
+import colorMask from './assets/bg-color-mask.webp'
+import colorTrevi from './assets/bg-color-trevi.webp'
 import coin from './assets/coin.webp'
 import gino from './assets/gino.webp'
 import ladle from './assets/ladle.webp'
@@ -86,6 +92,12 @@ export const art = {
   bruschetta,
   bufala,
   cesare,
+  colorBruno,
+  colorColosseum,
+  colorGondola,
+  colorLupa,
+  colorMask,
+  colorTrevi,
   coin,
   gino,
   ladle,
