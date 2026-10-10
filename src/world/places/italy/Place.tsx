@@ -11,6 +11,7 @@ import type { PlaceProps } from '../../types'
 import { Colosseum } from './activities/colosseum/Colosseum'
 import { Etna } from './activities/etna/Etna'
 import { OliveGrove } from './activities/olives/OliveGrove'
+import { Opera } from './activities/opera/Opera'
 import { Pizzeria } from './activities/pizzeria/Pizzeria'
 import { Trevi } from './activities/trevi/Trevi'
 import { Venice } from './activities/venice/Venice'
@@ -23,6 +24,10 @@ export interface ActivityProps {
   onDone: () => void
   setProgress: (done: number, total: number) => void
 }
+
+/** The opera finale is a greybox (gate 1) that Dad plays on the PR preview, so it opens without all six stamps for now.
+ *  Gate 3 sets this back to true: the opera waits until the band is full. */
+const OPERA_LOCKED = false
 
 const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { pizzeria: Pizzeria, olives: OliveGrove, trevi: Trevi, colosseum: Colosseum, venice: Venice, etna: Etna }
 
@@ -38,10 +43,14 @@ const SPOTS = [
 ]
 
 export default function Place(props: PlaceProps) {
-  const { meta, activity, earnStamp, setProgress, backToMap } = props
+  const { meta, activity, stamps, earnStamp, setProgress, backToMap, onWin } = props
   const [justEarned, setJustEarned] = useState<string | null>(null)
 
-  if (activity === 'party') return <OperaSoon backToMap={backToMap} />
+  if (activity === 'party') {
+    const ready = meta.activities.every((a) => stamps.includes(a.id))
+    if (OPERA_LOCKED && !ready) return <OperaSoon backToMap={backToMap} />
+    return <Opera setProgress={setProgress} onDone={onWin} />
+  }
 
   const Activity = activity ? ACTIVITIES[activity] : undefined
   const info = meta.activities.find((a) => a.id === activity)
@@ -222,7 +231,7 @@ function Ambient() {
   )
 }
 
-/** Lupa's band: a little stage where one friend's instrument appears for every stamp. The opera finale comes later. */
+/** Lupa's band: a little stage where one friend's instrument appears for every stamp. Tap it for the opera finale. */
 function BandPanel({ done, total, onOpen }: { done: typeof SPOTS; total: number; onOpen: () => void }) {
   const seats = Array.from({ length: total - 1 }, (_, i) => done[i])
   return (
@@ -262,7 +271,7 @@ function BandPanel({ done, total, onOpen }: { done: typeof SPOTS; total: number;
   )
 }
 
-/** Finale stub (route `party`): Lupa's opera night arrives when the band is full. */
+/** Before the band is full (route `party`): Lupa's opera night arrives when every stamp is collected. */
 function OperaSoon({ backToMap }: { backToMap: () => void }) {
   const sparkle = useRef<PuppetHandle>(null)
   const lupa = useRef<PuppetHandle>(null)

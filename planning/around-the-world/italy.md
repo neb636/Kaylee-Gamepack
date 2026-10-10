@@ -413,7 +413,96 @@ own scaled stage (wide and tall layouts).
 finger along x, the cart on a spring behind him. Feel numbers in `activities/etna/mountain.ts` (FEEL).
 QA hook: `window.__etnaQA.jump('grove' | 'forest' | 'cold' | 'snow' | 'full' | 'granita' | 'payoff')`.
 
-## Finale: Opera Night at the Arena (route `party`, aria-label "Party")
+## Finale: Opera Night at the Arena 🎭 (route `party`, aria-label "Party"; Verona: *piano* and *forte*, fast and slow)
+
+Re-planned 2026-10-10 with `ACTIVITY-TEMPLATE.md` (the first build's description is kept below as the list of ideas
+and facts). Code: `activities/opera/`. Gate 1 (greybox) is built; gates 2-3 wait for Dad's iPad test.
+
+**One-line pitch:** Lupa is too shy to sing at her own opera night; Kaylee picks up the conductor's wand and leads the
+band she gathered, loud and soft, fast and slow, until Lupa is brave enough to sing her big note.
+
+**The toy (core verb): swing the conductor's wand and the band plays.** She grabs the sparkly wand from the podium,
+and every swing is one beat of the tune (a stroke ends wherever her finger turns around, so a back-and-forth, an
+up-and-down or a circle all work). Swing fast and the music goes fast; swing slowly and it slows down; stop and the
+whole band **freezes** mid-note, then carries on when she swings again. **Big swings play *forte*** (loud, everyone
+bounces high), **little swings play *piano*** (soft, everyone sways and tiptoes).
+- How it feels: an instant music box. No waiting for a loop to start: her hand *is* the tempo. The wand leaves a
+  sparkle trail, and the band members watch the wand.
+- Why it's fun with no goal: making a whole band follow your hand (and freeze when you stop) is powerful and funny.
+  Greybox test: five colored blocks with instrument labels that bounce, a synthesized tarantella, a star-tipped stick
+  under her finger. If swinging that for 30 seconds isn't fun, tune the beat detection and sound before anything else.
+
+**How the verb deepens (same verb, three times):**
+1. **Light up the arena (just the toy).** Dusk at the Arena di Verona. Every beat she conducts lights another candle
+   in the stands, and the sky turns from dusk to night as the arena fills with light (real: the audience lights little
+   candles at sundown). Sparkle names it once, the first time she swings big ("Big swings: *forte*! Loud!") and the
+   first time she swings small ("Little swings: *piano*. Soft!").
+2. **The audience asks (invitations, answered by conducting).** A baby owl in the stands is falling asleep: play
+   *piano* and she dozes off (swing big and she pops awake with round eyes, then yawns again: silly, not wrong). Then
+   the crowd wants to dance: play *forte* and they stand up and do the wave. Then **solos**: hold the wand on one
+   friend (or tap them) and a spotlight picks them out; their instrument plays loud and the rest go soft. She gives
+   three solos, to whoever she likes.
+3. **Lupa sings (the twist).** The wishing star from the Trevi Fountain floats down to Lupa; Kaylee taps it. Now Lupa
+   sings the tune as she conducts: very quietly at first (she's shy) and louder as the swings grow (a *crescendo*).
+   Then "Lift the wand up high!": the higher Kaylee lifts it, the higher Lupa's note climbs, to a big opera note. The
+   crowd jumps up: "Brava, Kaylee! Brava, Lupa!" and roses fly onto the stage.
+Side verb: none. The ending reuses the wand: she sweeps it across the sky and **the Frecce Tricolori** jets follow it,
+painting green, white and red smoke into the flag.
+
+**Her choices:** loud or soft, fast or slow, when to stop (freeze!), who gets a solo and in what order, how high Lupa
+sings, where the jets fly.
+
+**Pokeables:** each band member (tap: one note of their instrument and a little flourish), crowd members (stand up,
+cheer "Bravo!"), the baby owl, the moon (it winks), a pigeon on the arena wall, the stage curtain, the candles (a
+tapped candle flares), roses (tap to catch), Sparkle.
+
+**Silly moments (instead of failure):** stop and everyone freezes like statues (one keeps wobbling); swing super fast
+and the tune races, the band spins dizzy and Cesare's horn honks; swing tiny and the band tiptoes while the crowd leans
+in; wake the baby owl with *forte* and she blinks, round-eyed.
+
+**Story frame (≤ 2 lines):** Lupa: "So many people... I'm too shy to sing!" / Sparkle: "Kaylee, grab the wand and lead
+the band!" Sparkle speaks during play only when: the first big swing (*forte*), the first small swing (*piano*), the
+baby owl, the dance, the solos, the star, "lift it high", and after ~8 s with no swinging ("Swing the wand!").
+
+**What it teaches, by doing:** *piano* means soft and *forte* means loud in Italian (she makes both); fast and slow
+(tempo); the Arena di Verona is a real Roman arena where operas are sung on summer nights and people light candles;
+the flag's colors in the sky (the Frecce Tricolori are Italy's real air-show team). Tap-to-hear facts: the piano and
+the violin were first made in Italy; "Brava!" is what Italians shout at the opera.
+
+**Payoff (builds while she plays):** candles fill the arena, the night sky comes out, the band gets louder and fuller,
+Lupa sings, then the flag in the sky and the cast picnic with **her own pizza** from the Pizzeria (saved) and gelato for
+everyone. Lupa hugs her and `onWin()` starts the trophy ceremony: "Grazie, Kaylee! Ciao for now!"
+
+**Replay:** the solo order is hers, the tempo is hers, two tunes (the tarantella, and a slower lullaby for the owl),
+her pizza changes with her last Pizzeria visit.
+
+**Numbers:** about 25-40 touches in 2-3 minutes (each new swing is a touch; the solos, roses, crowd and pokeables add
+the rest), almost all of them conducting. 2 lines before the first touch.
+
+**Camera and art:** straight-on, eye-level view from the audience, like the other Italy scenes. Layers: night sky with
+the moon and stars (slowest), the arena's far wall of arches with candlelit stands, the stage with its curtain, the
+band row, the near stands and the backs of the audience's heads in the foreground. The candles are part of the stands
+art (lit by code with a glow on top). Sprites: candles, roses, the baby owl, crowd members, the podium and wand,
+instruments, the three jets, a picnic blanket and gelato. Puppets: Lupa, Bruno (mandolin), Spina (tambourine),
+Cesare (horn), Gino (accordion), Nino (piano), each needs a playing pose; Sparkle wears the Venice mask and the chef hat.
+
+**Screens:** wide stage about 1600 × 1000, tall about 1000 × 1400. The band row, Lupa and the podium stay inside the
+safe zone on every device; wide screens put all six in one row with Lupa in the middle, tall screens put them in two
+rows (three behind, Lupa and two in front). The extra height becomes sky (for the jets), the extra width more stands.
+The wand works anywhere on screen, but the swing area stays away from the left edge (Safari back-swipe).
+
+**Tech:** DOM + `useGameLoop` (wand, trail and bounces written straight to the DOM) and a small Web Audio sequencer in
+`activities/opera/band.ts`: every detected stroke schedules one beat (three eighth notes of a 6/8 tarantella) over the
+predicted beat length, so the tempo follows her hand; each instrument has its own gain (solos, *piano*/*forte*), and
+notes still waiting are cancelled if she speeds up. Riskiest pieces, prototyped in the greybox: stroke detection that
+feels right for a five-year-old's swing, and sound starting instantly on iPad Safari.
+
+**Gates:** (1) greybox: colored blocks for the band, synthesized music, the whole loop with text bubbles and no voices.
+**Stop: Dad plays it on the iPad.** (2) The arena art, the playing poses for the six puppets. (3) Voices, the story,
+the picnic with her saved pizza, QA. While gate 1 is under test, the opera opens even without all six stamps so it can
+be played on the PR preview; gate 3 puts the lock back.
+
+The first build's description (ideas and facts):
 
 1. Dusk at the **Arena di Verona**, a real Roman arena almost 2,000 years old where operas are still sung on summer
    nights. People really light **little candles** in the stands as it gets dark: she taps the stands and candles
