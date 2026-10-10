@@ -34,6 +34,7 @@ export function PuppetLab({ only }: { only?: string }) {
 function Card({ entry, big }: { entry: PuppetEntry; big: boolean }) {
   const ref = useRef<PuppetHandle>(null)
   const [line, setLine] = useState(0)
+  const height = big ? (entry.id.startsWith('sparkle') ? 'min(60vh, 640px, 84vw)' : 'min(60vh, 640px)') : '300px'
   useEffect(() => {
     ;(window.__puppets ??= {})[entry.id] = ref.current
     return () => {
@@ -44,7 +45,7 @@ function Card({ entry, big }: { entry: PuppetEntry; big: boolean }) {
   return (
     <div data-puppet={entry.id} style={{ background: 'rgba(255,255,255,0.6)', borderRadius: 28, padding: 16, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, width: big ? 'min(92vw, 900px)' : 360 }}>
       <b style={{ fontSize: 24 }}>{entry.name}</b>
-      <div style={{ height: big ? 'min(60vh, 640px)' : 300, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>{entry.render(ref, big ? 'min(60vh, 640px)' : '300px')}</div>
+      <div style={{ height, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>{entry.render(ref, height)}</div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
         {entry.actions.map((a) => (
           <button key={a} aria-label={`${entry.id} ${a}`} onClick={() => (sounds.pop(), void ref.current?.play(a))} style={{ padding: '10px 16px', borderRadius: 999, background: 'var(--pink)', color: '#fff', fontWeight: 700 }}>

@@ -112,6 +112,12 @@ export default function Game({ onWin, setProgress }: GameProps) { ... }
 
 ## Characters that feel alive
 
+**One Sparkle everywhere:** `src/sdk/puppet/Sparkle.tsx` owns her design. Use the SDK
+`SparklePuppet` (or the square `Mascot` adapter) in games, countries and menus; never
+copy her SVG or import an old pose image as a live character. The reference pictures
+in `art/source/mascot/` are exported from that puppet for consistent generated covers.
+See `docs/sparkle.md` for attachment rules, reference exports and visual QA.
+
 A character is a **puppet**: layered SVG whose parts (ears, eyes, mouth, arms, tail) are separate `<g>` groups that
 `usePuppet` moves every frame. That is what makes it feel alive:
 - **Idle life** comes free: breathing, random blinks, eyes that follow her finger (`f.look`), and a mouth that opens with
@@ -207,7 +213,7 @@ try everything live at `#/playground` (run `npm run dev`).
 | `<SayButton text>` | 🔊 hear-it-again button. |
 | `<Scene bg>` | Full-screen background image wrapper. |
 | `<StarProgress>`, `<Trophy>` | Used by the shell; available if useful. |
-| `<SparklePuppet ref pose? height>` | Live Sparkle: `play('wave' \| 'cheer' \| 'hop' \| 'nod' \| 'think' \| 'dance' \| 'wiggle')`. Prefer it over `<Mascot>`. |
+| `<SparklePuppet ref pose? height>` | Live Sparkle: `play('wave' \| 'cheer' \| 'hop' \| 'nod' \| 'think' \| 'dance' \| 'wiggle')`. Prefer it over `<Mascot>`. Both use the same canonical drawing. |
 | `<Buddy img voice height ref>` | Brings a flat sprite to life: `play('jump' \| 'dance' \| 'wiggle' \| 'cheer' \| 'nod')`. |
 | `usePuppet`, `spring`, `setT`, `setA`, `show`, `bell`, `span`, `wobble`, `smooth` | Build your own puppet (see "Characters that feel alive"). |
 | `Line`, `lineText`, `speechLevel(voice)` | A spoken line (`string` or `{ text, voice }`), its text, how loud a voice is now. |
