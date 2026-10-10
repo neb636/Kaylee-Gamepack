@@ -87,7 +87,7 @@ jobs:
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/prompts/feedback.md
-          model: ${{ vars.CODEX_MODEL || 'gpt-6-sol' }}
+          model: ${{ vars.CODEX_MODEL || 'gpt-6.1-sol' }}
           permission-profile: ':workspace'
           output-file: .lesson-input/codex-final.md
 
@@ -112,7 +112,7 @@ jobs:
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           prompt-file: .github/prompts/fix.md
-          model: ${{ vars.CODEX_MODEL || 'gpt-6-sol' }}
+          model: ${{ vars.CODEX_MODEL || 'gpt-6.1-sol' }}
           permission-profile: ':workspace'
 
       - name: Keep (after fix) changes inside the game folder

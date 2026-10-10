@@ -30,7 +30,7 @@ Only the repo owner can trigger the AI workflows.
      for **this repo only** with *Contents*, *Pull requests*, and *Issues* set to **Read and write**.
      (Needed because PRs opened with the default token don't trigger the CI/preview workflows.
      Leave *Workflows* off so the AI can never change the workflows.)
-2. **Variable** (same page → *Variables*): `CODEX_MODEL` = `gpt-6-sol` (optional; that's the default).
+2. **Variable** (same page → *Variables*): `CODEX_MODEL` = `gpt-6.1-sol` (optional; that's the default).
 3. After the first deploy to `main` creates the `gh-pages` branch:
    Settings → Pages → *Deploy from a branch* → `gh-pages` / `(root)`.
 
@@ -79,5 +79,5 @@ Build a game locally with Codex (same prompt the workflow uses):
 ```bash
 node scripts/fetch-issue-images.mjs --dir path/to/photos "topic text"
 npm run --silent games > .lesson-input/existing-games.md
-codex exec -m gpt-6-sol --sandbox workspace-write - < .github/prompts/new-game.md
+codex exec -m gpt-6.1-sol --sandbox workspace-write - < .github/prompts/new-game.md
 ```

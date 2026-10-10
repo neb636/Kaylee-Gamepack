@@ -96,6 +96,16 @@ const PUPPET_SCENARIOS = [
   ['gino-singing', 'nod', 1.2],
   ['gino-dizzy', 'hop', 1.2],
   ['gino-accordion', 'nod', 1.6],
+  ['luna', 'hop', 1.0],
+  ['luna', 'giggle', 1.2],
+  ['luna', 'shiver', 1.5],
+  ['luna', 'lean', 1.3],
+  ['luna', 'look', 1.9],
+  ['luna-hat', 'cheer', 1.4],
+  ['paco', 'roll', 2.0],
+  ['paco', 'giggle', 1.2],
+  ['abuela', 'yawn', 1.9],
+  ['abuela-asleep', 'nod', 1.0],
 ].map(([id, action, seconds]) => ({
   name: `${id}-${action}`,
   seconds,
@@ -396,6 +406,29 @@ GAME_SCENARIOS.push(
   etnaDrive('etna-trot', 3.2, 'grove', [[0.3, 0, 1200], [-0.3, 0, 1200]]),
   etnaDrive('etna-cold', 3.2, 'cold', [[0.25, 0, 900]]),
 )
+
+// Luna's Fluffy Day: rub the brush over Luna's fleece (tangles turn shiny, sparkles, things pop out), then the
+// clippers (puffs snip off and float into the basket).
+const fluffyRub = (name, seconds, jump) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/peru/alpaca`)
+    await page.waitForTimeout(600)
+    await skip(page)
+    if (jump) await page.evaluate((j) => window.__peruQA?.jump(j), jump)
+    await page.waitForTimeout(900)
+  },
+  act: async (page) => {
+    const b = await page.locator('[aria-label="Luna"]').first().boundingBox()
+    if (!b) throw new Error('no Luna found')
+    await page.mouse.move(b.x + b.width * 0.2, b.y + b.height * 0.5)
+    await page.mouse.down()
+    for (let i = 0; i < 5; i++) await page.mouse.move(b.x + b.width * (i % 2 ? 0.2 : 0.75), b.y + b.height * (0.48 + i * 0.05), { steps: 10 })
+    await page.mouse.up()
+  },
+})
+GAME_SCENARIOS.push(fluffyRub('fluffy-brush', 2.4), fluffyRub('fluffy-clip', 2.6, 'clip'))
 
 // Opera greybox: swing the conductor's wand (big swings bounce the band high, little ones sway), then stop (freeze).
 const operaSwing = (name, seconds, size, ms) => ({

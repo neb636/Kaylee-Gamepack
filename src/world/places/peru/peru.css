@@ -1,0 +1,92 @@
+/* Peru hub: Luna, her journal and the balloon share one panel beside the map (landscape) or under it (portrait). */
+.world .peru-panel > * {
+  position: absolute;
+  box-sizing: border-box;
+}
+.world .peru-panel-luna {
+  left: 4%;
+  right: 4%;
+  top: 2%;
+  height: 40%;
+}
+.world .peru-panel .peru-journal {
+  left: 4%;
+  right: 4%;
+  top: 44%;
+  height: 34%;
+}
+.world .peru-panel-balloon {
+  left: 18%;
+  right: 18%;
+  top: 81%;
+  bottom: 3%;
+}
+@media (orientation: portrait) {
+  .world .peru-panel-luna {
+    left: 1%;
+    right: auto;
+    width: 30%;
+    top: 4%;
+    height: 92%;
+  }
+  .world .peru-panel .peru-journal {
+    left: 31%;
+    right: 22%;
+    top: 6%;
+    height: 88%;
+  }
+  .world .peru-panel-balloon {
+    left: auto;
+    right: 3%;
+    width: 17%;
+    top: 14%;
+    bottom: 14%;
+  }
+}
+.peru-tool-glow img {
+  animation: peru-tool-glow 1s ease-in-out infinite;
+}
+@keyframes peru-tool-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(255, 200, 61, 0));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 18px rgba(255, 200, 61, 1));
+    transform: scale(1.08);
+  }
+}
+/* Cold alpacas: little breath clouds puff out and fade, over and over. */
+.peru-breath {
+  animation: peru-breath 1.6s ease-out infinite;
+  transform-box: fill-box;
+  transform-origin: 0% 100%;
+}
+@keyframes peru-breath {
+  0% {
+    opacity: 0;
+    transform: translate(-10px, 6px) scale(0.4);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(18px, -14px) scale(1.15);
+  }
+}
+.peru-hint-ring {
+  animation: peru-hint 1s ease-in-out infinite;
+}
+@keyframes peru-hint {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.5;
+  }
+}

@@ -238,5 +238,37 @@
   "src/world/places/italy/assets/venice-post-pink.webp": {
     "hash": "f62e34a12063",
     "note": "white stripes"
+  },
+  "src/world/places/peru/assets/beetle.webp": {
+    "hash": "6b3337a432d0",
+    "note": "eye whites"
+  },
+  "src/world/places/peru/assets/bird.webp": {
+    "hash": "ef041f44b0a0",
+    "note": "eye whites"
+  },
+  "src/world/places/peru/assets/brush.webp": {
+    "hash": "7e3a04d40575",
+    "note": "cream bristles (handle hole cleared)"
+  },
+  "src/world/places/peru/assets/clippers.webp": {
+    "hash": "bf0c422672f3",
+    "note": "cream comb"
+  },
+  "src/world/places/peru/assets/dandelion.webp": {
+    "hash": "ebe3a0ffc9dc",
+    "note": "dandelion seed puff"
+  },
+  "src/world/places/peru/assets/hummingbird.webp": {
+    "hash": "fa4e2664a346",
+    "note": "eye whites"
+  },
+  "src/world/places/peru/assets/lizard.webp": {
+    "hash": "dd192538d728",
+    "note": "eye whites"
+  },
+  "src/world/places/peru/assets/pond.webp": {
+    "hash": "e688e6a9c3d3",
+    "note": "water highlights"
   }
 }
