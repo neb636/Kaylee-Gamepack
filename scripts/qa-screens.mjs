@@ -323,6 +323,19 @@ const SCREENS = [
   })),
   { name: 'italy-hub-stamps', hash: '#/world/italy', stampAll: 'italy' },
   { name: 'italy-opera', hash: '#/world/italy/party', stampAll: 'italy', act: async (p) => { await skip(p); await p.waitForTimeout(2500) } },
+  // Opera moments, reached through its QA hook (window.__operaQA.jump): the owl, the solos, the wishing star, Lupa's high
+  // note, the jets' sky and the picnic.
+  ...['owl', 'solo', 'star', 'high', 'sky', 'picnic'].map((to) => ({
+    name: `opera-${to}`,
+    hash: '#/world/italy/party',
+    stampAll: 'italy',
+    act: async (p) => {
+      await skip(p)
+      await p.waitForTimeout(500)
+      await p.evaluate((t) => window.__operaQA?.jump(t), to)
+      await p.waitForTimeout(to === 'star' ? 2600 : 1200)
+    },
+  })),
 ].filter((s) => !flag('routes') || flag('routes').split(',').includes(s.name))
 
 const { base, stop } = await serve(PORT)

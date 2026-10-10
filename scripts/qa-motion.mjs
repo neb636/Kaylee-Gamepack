@@ -397,6 +397,30 @@ GAME_SCENARIOS.push(
   etnaDrive('etna-cold', 3.2, 'cold', [[0.25, 0, 900]]),
 )
 
+// Opera greybox: swing the conductor's wand (big swings bounce the band high, little ones sway), then stop (freeze).
+const operaSwing = (name, seconds, size, ms) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/italy/party`)
+    await page.waitForTimeout(600)
+    await skip(page)
+    await page.waitForTimeout(400)
+  },
+  act: async (page) => {
+    const x = vp.width * 0.5
+    const y = vp.height * 0.4
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    for (let i = 0; i < 6; i++) {
+      await page.mouse.move(x + (i % 2 ? -1 : 1) * size * vp.width, y + 10, { steps: 8 })
+      await page.waitForTimeout(ms)
+    }
+    await page.mouse.up()
+  },
+})
+GAME_SCENARIOS.push(operaSwing('opera-forte', 3.4, 0.35, 280), operaSwing('opera-piano', 3.4, 0.05, 280))
+
 const all = [...PUPPET_SCENARIOS, ...GAME_SCENARIOS].filter((s) => !flag('only') || flag('only').split(',').includes(s.name))
 
 const ffmpeg = (a) => spawnSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...a], { encoding: 'utf8' })
