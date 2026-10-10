@@ -3,6 +3,7 @@
 // pointy ears and bushy tail ride on springs (they perk, lag and flop), she crouches before every hop, and her big
 // party trick is a howl: head back, ears flat, a round "ooo" mouth. (She dreams of singing at the opera.)
 import { forwardRef, useState, type CSSProperties } from 'react'
+import { motion } from 'motion/react'
 import { bell, lerp, setA, setT, show, smooth, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../sdk'
 import { BLUSH, EYE, INK, inkPass, line, TONGUE, useInk } from './ink'
 
@@ -86,7 +87,7 @@ const LEG = tufts([[-30, -30], [30, -30], [34, 8], [31, 34], [-31, 34], [-34, 8]
 const FOOT = soft([[-34, 8], [-26, -8], [0, -14], [26, -8], [34, 8], [22, 16], [-22, 16]], 0.12)
 
 /** Lupa the wolf cub. Actions: hop, cheer, wave, howl, run, nod, wiggle, wag, sniff, shake. Voice: lupa. */
-export const Lupa = forwardRef<PuppetHandle, { height?: string; style?: CSSProperties; flip?: boolean; onTap?: () => void }>(function Lupa({ height, style, flip, onTap }, ref) {
+export const Lupa = forwardRef<PuppetHandle, { height?: string; style?: CSSProperties; flip?: boolean; onTap?: () => void; mandolin?: string }>(function Lupa({ height, style, flip, onTap, mandolin }, ref) {
   const [m] = useState(() => ({ earL: spring(160, 9), earR: spring(160, 9), tail: spring(80, 6), prevLift: 0 }))
   const ink = useInk<Part>()
   const { svg, part } = usePuppet<Part>(ref, {
@@ -226,8 +227,9 @@ export const Lupa = forwardRef<PuppetHandle, { height?: string; style?: CSSPrope
       setT(p.earL, `translate(128 80) rotate(${-20 - eL})`)
       setT(p.earR, `translate(272 80) scale(-1 1) rotate(${-20 - eR})`)
       setT(p.tail, `translate(282 404) rotate(${tl})`)
-      setT(p.armL, `translate(${116 + shL * 0.2} ${302 + shL}) rotate(${armL})`)
-      setT(p.armR, `translate(${284 - shR * 0.2} ${302 + shR}) scale(-1 1) rotate(${armR})`)
+      // With the instrument tucked across her belly, both paws rest on it instead of waving beside it.
+      setT(p.armL, mandolin ? 'translate(116 302) rotate(-56)' : `translate(${116 + shL * 0.2} ${302 + shL}) rotate(${armL})`)
+      setT(p.armR, mandolin ? 'translate(284 302) scale(-1 1) rotate(68)' : `translate(${284 - shR * 0.2} ${302 + shR}) scale(-1 1) rotate(${armR})`)
       setT(p.legL, `translate(156 420) rotate(${legL})`)
       setT(p.legR, `translate(244 420) rotate(${-legR})`)
       setT(p.nose, `translate(200 168) scale(${noseS}) translate(-200 -168)`)
@@ -407,6 +409,12 @@ export const Lupa = forwardRef<PuppetHandle, { height?: string; style?: CSSPrope
         {scarf(false)}
         <g {...inkPass()}>{headG(true)}</g>
         {headG(false)}
+        {/* Inside the moving root, behind her paws: the mandolin travels with her body during a howl or hop. */}
+        {mandolin && (
+          <motion.g initial={{ opacity: 0, x: -160, y: -100, scale: 0.6 }} animate={{ opacity: 1, x: 0, y: 0, scale: 1 }} transition={{ type: 'spring', bounce: 0.25, duration: 0.9 }}>
+            <image href={mandolin} x="128" y="245" width="220" height="235" transform="rotate(20 238 362)" />
+          </motion.g>
+        )}
         {(['L', 'R'] as const).map((s) => (
           <g key={s}>
             <g {...inkPass()}>{arm(s, true)}</g>
