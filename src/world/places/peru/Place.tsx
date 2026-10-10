@@ -24,11 +24,11 @@ const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: Fluff
 
 /** The five places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
 export const SPOTS = [
-  { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', x: 39, y: 74 },
-  { id: 'machu-picchu', name: "Tika's Mountain Terraces", icon: '⛰️', x: 55, y: 62.5 },
-  { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', x: 72, y: 72 },
-  { id: 'condor', name: "Coco's Canyon Glide", icon: '🦅', x: 63.5, y: 86 },
-  { id: 'river', name: "Rosa's Rainy River", icon: '🐬', x: 64, y: 27 },
+  { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', x: 38.75, y: 75 },
+  { id: 'machu-picchu', name: "Tika's Mountain Terraces", icon: '⛰️', x: 51.5, y: 60 },
+  { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', x: 71.7, y: 73 },
+  { id: 'condor', name: "Coco's Canyon Glide", icon: '🦅', x: 57.5, y: 88 },
+  { id: 'river', name: "Rosa's Rainy River", icon: '🐬', x: 61.25, y: 27.5 },
 ]
 
 export default function Place(props: PlaceProps) {
@@ -106,8 +106,8 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   left: `${spot.x}%`,
                   top: `${spot.y}%`,
                   translate: '-50% -50%',
-                  width: open ? 'clamp(76px, 15cqw, 120px)' : 'clamp(66px, 11.5cqw, 92px)',
-                  height: open ? 'clamp(76px, 15cqw, 120px)' : 'clamp(66px, 11.5cqw, 92px)',
+                  width: open ? 'clamp(76px, 11cqw, 120px)' : 'clamp(66px, 8.5cqw, 92px)',
+                  height: open ? 'clamp(76px, 11cqw, 120px)' : 'clamp(66px, 8.5cqw, 92px)',
                   borderRadius: '50%',
                   padding: 0,
                   background: done ? '#FFE27A' : '#FFF7F0',

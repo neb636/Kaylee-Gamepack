@@ -16,7 +16,8 @@ import luna from './assets/luna.webp'
 import paco from './assets/paco.webp'
 import pond from './assets/pond.webp'
 import post from './assets/post.webp'
+import map from './assets/scene-peru-map.webp'
 import stoneWall from './assets/stone-wall.webp'
 import twig from './assets/twig.webp'
 
-export const art = { abuela, basket, beetle, bgAndes, bgAndesTall, bird, brush, burr, cactus, clippers, cover, dandelion, hummingbird, lizard, luna, paco, pond, post, stoneWall, twig }
+export const art = { abuela, basket, beetle, bgAndes, bgAndesTall, bird, brush, burr, cactus, clippers, cover, dandelion, hummingbird, lizard, luna, map, paco, pond, post, stoneWall, twig }
