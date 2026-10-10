@@ -259,9 +259,8 @@ export function Granita({ fruit: picked, onStar, onDone }: { fruit: Fruit[]; onS
         <img src={etnaArt.stand} alt="" draggable={false} style={{ ...abs(st.x - standW / 2, standTop, standW, st.h), pointerEvents: 'none' }} />
         {FRIENDS.map((id, i) => {
           const h = id === 'lupa' ? 250 : id === 'marina' ? 200 : 120
-          const lift = id === 'tortoise' ? 70 : 0
           return (
-            <button key={id} aria-label={id} onClick={() => choose(i)} style={{ ...abs(st.x + P.friendX[i] - h * 0.62, friendFeet - h - lift, h * 1.24, h), padding: 0, border: 'none', background: 'none', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
+            <button key={id} aria-label={id} onClick={() => choose(i)} style={{ ...abs(st.x + P.friendX[i] - h * 0.62, friendFeet - h, h * 1.24, h), padding: 0, border: 'none', background: 'none', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
               {id === 'lupa' ? <Lupa ref={(r) => void (friendRefs.current[i] = r)} height="100%" /> : <Buddy ref={(r) => void (friendRefs.current[i] = r)} img={id === 'marina' ? etnaArt.seal : italyArt.tortoise} voice={id} height="100%" flip={id === 'tortoise'} />}
             </button>
           )
@@ -303,11 +302,11 @@ export function Granita({ fruit: picked, onStar, onDone }: { fruit: Fruit[]; onS
         </div>
         <div style={{ position: 'absolute', left: P.cart.x, top: P.cart.y, zIndex: 1 }}>
           <div style={{ transform: 'scaleX(-1)' }}>
-            <CartArt wheelRef={wheel} fruit={picked} snow={payoff ? 0 : Math.max(1, Math.ceil(5 - cups.reduce((n, c) => n + c.scoops, 0) / 2))} piano={payoff} />
-            {/* Sparkle sits on the load (in front, so her cheers and piano dances show). */}
-            <div style={{ position: 'absolute', left: payoff ? 30 : -60, top: -CART.floor - 70 - 96 + 26 - (payoff ? 40 : 30), height: 96 }}>
-              <SparklePuppet ref={sparkleRef} height="96px" lookToward={0.5} />
-            </div>
+            <CartArt wheelRef={wheel} hitch={[P.cart.x - P.nino.x - 34, -60]} fruit={picked} snow={payoff ? 0 : Math.max(1, Math.ceil(5 - cups.reduce((n, c) => n + c.scoops, 0) / 2))} piano={payoff} rider={
+              <div style={{ position: 'absolute', left: -42, top: -CART.floor - 55 - 96, height: 96 }}>
+                <SparklePuppet ref={sparkleRef} height="96px" lookToward={0.5} />
+              </div>
+            } />
           </div>
           {!payoff && (
             <motion.button
