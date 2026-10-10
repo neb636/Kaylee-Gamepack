@@ -530,6 +530,8 @@ Same gates as every country (`ACTIVITY-TEMPLATE.md`), and Dad's staged visual ap
    alpaca, brush and clippers. **Stop: Dad plays it on the iPad.**
 2. Then one activity per PR, each starting with a greybox Dad plays before any art: Penguin Cliff (riskiest feel: the
    pull and splash), Canyon Glide, Rainy River, Mountain Terraces.
+   *Penguin Cliff was built in one go (no greybox gate, at Dad's request, 2026-10-10): code in
+   `activities/penguins/`, puppets `Penguin.tsx`, `Chick.tsx`, `Lobo.tsx`.*
 3. The finale in its own PR once all five exist. Until then the balloon says "Our expedition opens soon!" and the
    country doesn't award its trophy.
 

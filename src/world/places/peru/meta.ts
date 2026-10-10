@@ -2,8 +2,8 @@ import type { PlaceMeta } from '../../types'
 import { art } from './art'
 import { L } from './lines'
 
-// Peru is built one activity at a time (plan: planning/around-the-world/peru.md). Luna's Fluffy Day is the first;
-// the other four places on Luna's map say "coming soon", and the balloon finale comes once all five exist.
+// Peru is built one activity at a time (plan: planning/around-the-world/peru.md). Luna's Fluffy Day and Pepa's
+// Penguin Cliff are built; the other three places on Luna's map say "coming soon", and the balloon finale comes once all five exist.
 const meta: PlaceMeta = {
   id: 'peru',
   name: 'Peru',
@@ -12,7 +12,10 @@ const meta: PlaceMeta = {
   mapPos: { x: 25.5, y: 61 },
   friend: { name: 'Luna the alpaca', img: art.luna },
   trophyTitle: 'Peru Explorer',
-  activities: [{ id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', pos: { x: 70, y: 74 }, sticker: { name: 'Alpaca', img: art.luna, fact: L.sticker } }],
+  activities: [
+    { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', pos: { x: 70, y: 74 }, sticker: { name: 'Alpaca', img: art.luna, fact: L.sticker } },
+    { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', pos: { x: 38.75, y: 75 }, sticker: { name: 'Humboldt penguin', img: art.pepa, fact: L.penguinSticker } },
+  ],
   facts: [
     { icon: '🌎', label: 'South America', say: L.facts.location },
     { icon: '🏜️', label: 'Three worlds', say: L.facts.worlds },

@@ -20,4 +20,18 @@ import map from './assets/scene-peru-map.webp'
 import stoneWall from './assets/stone-wall.webp'
 import twig from './assets/twig.webp'
 
-export const art = { abuela, basket, beetle, bgAndes, bgAndesTall, bird, brush, burr, cactus, clippers, cover, dandelion, hummingbird, lizard, luna, map, paco, pond, post, stoneWall, twig }
+import bgCoast from './assets/bg-coast.webp'
+import bgCoastTall from './assets/bg-coast-tall.webp'
+import boat from './assets/boat.webp'
+import cliff from './assets/cliff-hd.webp'
+import crab from './assets/crab.webp'
+import tern from './assets/inca-tern.webp'
+import jellyfish from './assets/jellyfish.webp'
+import kelp from './assets/kelp.webp'
+import pelicanFloat from './assets/pelican-float.webp'
+import pelicanFly from './assets/pelican-fly.webp'
+import pepa from './assets/pepa.webp'
+import seaRock from './assets/sea-rock.webp'
+import sock from './assets/seaweed-sock.webp'
+
+export const art = { abuela, basket, beetle, bgAndes, bgAndesTall, bgCoast, bgCoastTall, bird, boat, brush, burr, cactus, cliff, clippers, cover, crab, dandelion, hummingbird, jellyfish, kelp, lizard, luna, map, paco, pelicanFloat, pelicanFly, pepa, pond, post, seaRock, sock, stoneWall, tern, twig }

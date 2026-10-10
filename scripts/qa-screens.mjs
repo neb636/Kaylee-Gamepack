@@ -353,6 +353,21 @@ const SCREENS = [
       await p.waitForTimeout(to === 'family' ? 2400 : 1500)
     },
   })),
+  { name: 'penguins-story', hash: '#/world/peru/penguins', reset: true, wait: 400 },
+  { name: 'penguins-play', hash: '#/world/peru/penguins', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1500) } },
+  // Pepa's Penguin Cliff moments, reached through its QA hook (window.__penguinQA.jump): the fish schools, feeding the
+  // chicks, the twist (third chick, swell, pelican), the chicks' first swim, the family parade.
+  ...['fish', 'feed', 'twist', 'swim', 'parade'].map((to) => ({
+    name: `penguins-${to}`,
+    hash: '#/world/peru/penguins',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.waitForTimeout(500)
+      await p.evaluate((t) => window.__penguinQA?.jump(t), to)
+      await p.waitForTimeout(to === 'parade' ? 3200 : to === 'twist' ? 2400 : 1800)
+    },
+  })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party', stampAll: 'peru', wait: 800 },
 ].filter((s) => !flag('routes') || flag('routes').split(',').includes(s.name))
