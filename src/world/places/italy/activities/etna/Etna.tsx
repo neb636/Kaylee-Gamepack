@@ -109,7 +109,6 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
     vx: 0,
     facing: 1,
     cartX: START_X - FEEL.cartGap,
-    cartV: 0,
     camX: START_X - 200,
     camY: 0,
     drag: null as null | { id: number; fx: number; fy: number; gx: number; x0: number; y0: number; at: number },
@@ -145,6 +144,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
   const ninoFlip = useRef<HTMLDivElement>(null)
   const cartEl = useRef<HTMLDivElement>(null)
   const cartFlip = useRef<HTMLDivElement>(null)
+  const shaftRef = useRef<SVGPathElement>(null)
   const wheelRef = useRef<SVGGElement>(null)
   const ringEl = useRef<HTMLDivElement>(null)
   const chipEl = useRef<HTMLDivElement>(null)
@@ -432,10 +432,8 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
       sounds.whoosh()
       void ninoRef.current?.play('hop')
     }
-    // The cart rolls after its hitch spot behind him.
-    const hitch = s.x - s.facing * FEEL.cartGap
-    s.cartV += (FEEL.cartK * (hitch - s.cartX) - FEEL.cartDamp * s.cartV) * dt
-    s.cartX += s.cartV * dt
+    // A rigid hitch keeps the cart attached at any speed, including reversals.
+    s.cartX = s.x - s.facing * FEEL.cartGap
 
     // Legs and weather for the puppet.
     const m = mood.current
@@ -590,9 +588,22 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
     const angle = (x: number) => (Math.atan(slope(x)) * 180) / Math.PI
     if (ninoEl.current) ninoEl.current.style.transform = `translate3d(${s.x}px,${ground(s.x)}px,0) rotate(${angle(s.x) * 0.7}deg)`
     if (ninoFlip.current) ninoFlip.current.style.transform = `scaleX(${s.facing})`
-    const cartDir = Math.sign(s.x - s.cartX) || s.facing
+    // Directors can move Nino too (snow bumps), so resolve the hitch after those moves.
+    s.cartX = s.x - s.facing * FEEL.cartGap
+    const cartDir = s.facing
+    const cartAngle = Math.atan(slope(s.cartX))
     if (cartEl.current) cartEl.current.style.transform = `translate3d(${s.cartX}px,${ground(s.cartX)}px,0) rotate(${angle(s.cartX)}deg)`
     if (cartFlip.current) cartFlip.current.style.transform = `scaleX(${cartDir})`
+    // Transform Nino's harness into the cart's rotated, mirrored local coordinates.
+    // This keeps the shaft on his body even when the two stand on different slopes.
+    const ninoAngle = Math.atan(slope(s.x)) * 0.7
+    const hx = s.facing * 38
+    const hy = -68
+    const dx = s.x + hx * Math.cos(ninoAngle) - hy * Math.sin(ninoAngle) - s.cartX
+    const dy = ground(s.x) + hx * Math.sin(ninoAngle) + hy * Math.cos(ninoAngle) - ground(s.cartX)
+    const hitchX = (dx * Math.cos(cartAngle) + dy * Math.sin(cartAngle)) * cartDir
+    const hitchY = -dx * Math.sin(cartAngle) + dy * Math.cos(cartAngle)
+    shaftRef.current?.setAttribute('d', `M${CART.w / 2 - 20} ${-CART.floor - 26} L${hitchX} ${hitchY - 6} L${hitchX} ${hitchY + 6} L${CART.w / 2 - 20} ${-CART.floor - 12}Z`)
     if (wheelRef.current) wheelRef.current.setAttribute('transform', `translate(0 ${-CART.wheel}) rotate(${((s.cartX / CART.wheel) * 180) / Math.PI * cartDir})`)
     // The ring around Nino pulses when she hasn't touched him for a while.
     if (ringEl.current) ringEl.current.style.opacity = s.idle > 4 && playing ? String(0.55 + 0.45 * Math.sin(s.t * 6)) : '0'
@@ -641,7 +652,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
   const L = layout
   const ninoH = SIZE.nino
   const ninoW = ninoH * NINO_ASPECT
-  const friendBase = ground(STAND_X) - 96
+  const friendBase = ground(STAND_X) - 330 + 8 + 330 * 0.565
   return (
     <div
       ref={root}
@@ -687,7 +698,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
               { x: STAND_X + 5, h: 130, el: (i: number) => <Buddy ref={(r) => void (friendRefs.current[i] = r)} img={etnaArt.seal} voice="marina" height="100%" /> },
               { x: STAND_X + 120, h: 80, el: (i: number) => <Buddy ref={(r) => void (friendRefs.current[i] = r)} img={italyArt.tortoise} voice="tortoise" height="100%" flip /> },
             ].map((f, i) => (
-              <button key={i} aria-label="friend" data-poke onClick={() => tapFriend(i)} style={{ position: 'absolute', left: f.x - f.h * 0.6, top: friendBase - f.h - (i === 2 ? 40 : 0), width: f.h * 1.2, height: f.h, padding: 0, border: 'none', background: 'none', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
+              <button key={i} aria-label="friend" data-poke onClick={() => tapFriend(i)} style={{ position: 'absolute', left: f.x - f.h * 0.6, top: friendBase - f.h, width: f.h * 1.2, height: f.h, padding: 0, border: 'none', background: 'none', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
                 {f.el(i)}
               </button>
             ))}
@@ -695,11 +706,11 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
             {/* The cart, with Sparkle riding in it. */}
             <div ref={cartEl} style={{ position: 'absolute', left: 0, top: 0, zIndex: 4, transformOrigin: '0 0' }}>
               <div ref={cartFlip}>
-                <CartArt wheelRef={wheelRef} fruit={fruit} snow={snow} />
-                {/* Sparkle rides on top of the load (in front of the snowballs, so she's always seen). */}
-                <div style={{ position: 'absolute', left: -46, top: -CART.floor - 70 - SIZE.sparkle + 26 - Math.min(snow, 3) * 14, height: SIZE.sparkle }}>
-                  <SparklePuppet ref={sparkleRef} height={`${SIZE.sparkle}px`} lookToward={0.5} />
-                </div>
+                <CartArt wheelRef={wheelRef} shaftRef={shaftRef} fruit={fruit} snow={snow} rider={
+                  <div style={{ position: 'absolute', left: -46, top: -CART.floor - 55 - SIZE.sparkle, height: SIZE.sparkle }}>
+                    <SparklePuppet ref={sparkleRef} height={`${SIZE.sparkle}px`} lookToward={0.5} />
+                  </div>
+                } />
               </div>
             </div>
             {/* Nino. */}

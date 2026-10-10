@@ -18,9 +18,6 @@ export const FEEL = {
   stopDrag: 7,
   /** Pulling the other way faster than this turns him round (with a hop); the cart swings round behind him. */
   turnSpeed: 60,
-  /** The cart follows its hitch spot behind him on a spring. */
-  cartK: 40,
-  cartDamp: 11,
   /** Distance (units) from Nino's center to the cart's center. */
   cartGap: 205,
   /** How far apart his steps are (units per full leg cycle). */
