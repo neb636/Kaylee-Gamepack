@@ -92,6 +92,10 @@
     "voice": "marina"
   },
   {
+    "text": "Oink oink!",
+    "voice": "pina"
+  },
+  {
     "text": "Hee hee! Prickly!",
     "voice": "spina"
   },
@@ -808,7 +812,7 @@
     "text": "Let's get snow from Etna!",
     "voice": "nino"
   },
-  "Pull Nino up the mountain!",
+  "Pull Nino up the mountain to get snow!",
   "Pull Nino down to the beach!",
   {
     "text": "Phew! It's so hot!",
@@ -844,7 +848,6 @@
     "text": "Ahh, cozy! Grazie!",
     "voice": "nino"
   },
-  "Long ago, people kept snow in stone snow houses!",
   "Snow! Bump Nino into the snow!",
   "Bump it again!",
   "The cart is full of snow!",
@@ -881,7 +884,7 @@
   },
   {
     "text": "Three scoops, please!",
-    "voice": "tortoise"
+    "voice": "pina"
   },
   {
     "text": "Ha ha! A snow mountain!",
@@ -892,8 +895,8 @@
     "voice": "marina"
   },
   {
-    "text": "Oh my! So much!",
-    "voice": "tortoise"
+    "text": "Oink! So much snow!",
+    "voice": "pina"
   },
   "Squeeze a lemon or an orange!",
   "Press and hold the fruit!",
@@ -906,8 +909,8 @@
     "voice": "marina"
   },
   {
-    "text": "Ahhh... nice and cool...",
-    "voice": "tortoise"
+    "text": "Mmm! Yummy and cold!",
+    "voice": "pina"
   },
   {
     "text": "So hot! Snow, please!",
@@ -918,8 +921,8 @@
     "voice": "marina"
   },
   {
-    "text": "Sooo... hot...",
-    "voice": "tortoise"
+    "text": "Oink! I'm so hot!",
+    "voice": "pina"
   },
   "Long ago, donkeys carried snow down to make granita!",
   {

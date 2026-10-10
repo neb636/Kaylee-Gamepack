@@ -123,11 +123,10 @@ export const TREES = [
   { kind: 'pine', x: 5920 },
 ] as const
 export const CACTI = [1400, 2250]
-export const LIZARD_X = 1820
-export const GOAT_X = 3600
-export const ROCKS = [3870, 4310, 4700]
+export const ROCKS = [3870, 4240, 4700]
 export const VENTS = [4080, 4500]
-export const NEVIERA_X = 4380
+/** The scarf, hanging on a wooden post where the cold starts. */
+export const SCARF_X = 4390
 export const DRIFTS = [5160, 5380, 5620, 5860, 6090]
 /** How many bumps each drift takes before its snow flies into the cart (it gets harder near the top). */
 export const DRIFT_RAMS = [1, 1, 2, 2, 3]
@@ -146,10 +145,8 @@ export const SIZE = {
   cactus: 190,
   rock: 120,
   drift: 130,
-  neviera: 300,
+  post: 170,
   umbrella: 300,
-  goat: 150,
-  lizard: 70,
   crab: 64,
   gull: 92,
 } as const

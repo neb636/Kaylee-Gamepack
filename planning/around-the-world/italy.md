@@ -358,13 +358,13 @@ coast), and hops round when she pulls him the other way, the cart swinging round
 1. **Up through the heat.** Beach (pant, sweat drop, tongue out) → the lemon grove (tap lemons and oranges on the trees
    and they fly into the cart) → the chestnut forest, a stream he splashes through. Nino says "Ahh! Cooler up here!"
 2. **Into the cold.** Lava rocks and steam vents; snow starts falling (screen-space flakes, heavier the higher he goes),
-   the sky turns pale, Nino shivers when he stands still and his breath puffs out. A pink scarf hangs on the old stone
-   snow house (a real *neviera*): tap it and it flies onto him ("Ahh, cozy! Grazie!"). She *feels* higher is colder.
+   the sky turns pale, Nino shivers when he stands still and his breath puffs out. A pink scarf hangs on a wooden trail
+   post: tap it and it flies onto him ("Ahh, cozy! Grazie!"). She *feels* higher is colder.
 3. **Snow, then zoom down.** Five snow drifts on the snow field: walk Nino into each and the snow flies into the cart as
    a snowball (Sparkle counts one to five). Then "Now zoom down to the beach!": a full cart rolls fast downhill (wheee),
    and lower down it's warm again and the scarf comes off ("Hot again! Bye bye, scarf!").
 Side verb: **granita** at the stand. Pick a friend's cup (any order), tap the snow in the cart to scoop (Lupa wants
-one, Marina the monk seal two, Nonna Tina the tortoise three; a bubble of dashed snowballs shows how many, extra scoops
+one, Marina the monk seal two, Pina the piglet three; a bubble of dashed snowballs shows how many, extra scoops
 make a silly snow mountain), then press and hold a lemon or an orange to squeeze it over the snow until it turns
 yellow or orange. The friend eats it: brain freeze, giggles, grazie.
 
@@ -372,8 +372,8 @@ yellow or orange. The friend eats it: brain freeze, giggles, grazie.
 when to stop and poke things.
 
 **Pokeables:** the sun (sizzle), the sea (splash), the umbrella, the crab (scuttle), the gull (flies off and comes back),
-lemon trees, prickly pears ("Ouch! Prickly!"), the lizard (runs off), chestnut trees (a burr bonks Nino if he's under
-it), the goat (hops and bleats), lava rocks, steam vents (hiss and puff), the snow house (a fact), snowy pines (snow
+lemon trees, prickly pears ("Ouch! Prickly!"), chestnut trees (a burr bonks Nino if he's under
+it), lava rocks, steam vents (hiss and puff), snowy pines (snow
 falls on Nino: "Ah-choo!"), the crater (rumble, big puffs, two volcano facts), Nino himself (giggle or bray), the
 ground (sand, dirt, ash or snow puffs), the friends at the stand.
 
@@ -402,8 +402,8 @@ squeezes, 8 piano keys. 2 lines before the first touch.
 zone top bands, a painted trail stripe): sand, red earth with grass, forest green, black ash, snow. Layers: sky color
 (warm blue → pale), the far view of Etna (slow parallax, fades as you reach the top), drifting clouds, the trail world,
 snowfall on top. Generated sprites (`assets/etna-*`): far volcano, lemon tree, lemon, orange, prickly pear, chestnut
-tree, snowy pine, lava rocks, snow drift, stone snow house, umbrella, granita stand, monk seal, goat, lizard, gull,
-crab. Code-drawn: the Sicilian cart, the scarf, the steam, the crater smoke, the cups, the piano.
+tree, snowy pine, lava rocks, snow drift, umbrella, granita stand, monk seal, piglet, gull,
+crab. Code-drawn: the Sicilian cart, the scarf and its post, the steam, the crater smoke, the cups, the piano.
 Puppets: **Nino** (new), Lupa; Marina and Nonna Tina are Buddies.
 
 **Screens:** the logical stage is ~1350 units wide on landscape, 860 on portrait, 680 on phone portrait, at least 760

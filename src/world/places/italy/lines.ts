@@ -17,6 +17,7 @@ const civetta = as('civetta')
 const tortoise = as('tortoise')
 const nino = as('nino')
 const marina = as('marina')
+const pina = as('pina')
 const COUNT = ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!']
 
 export const L = {
@@ -39,6 +40,7 @@ export const L = {
     tortoise: [tortoise('Hellooo...')],
     nino: [nino('Hee-haw!'), nino('Hee hee! That tickles!'), nino('I love lemons!')],
     marina: [marina('Hi hi!')],
+    pina: [pina('Oink oink!')],
     spina: [spina('Hee hee! Prickly!'), spina('Ciao ciao!'), spina('Olives! Yum!')],
     queen: [queen('What a lovely kitchen!')],
     raffaele: [raffaele('For the Queen!')],
@@ -332,7 +334,7 @@ export const L = {
   // 🌋 Snow on a Volcano (activities/etna). Nino tells the story; Sparkle only speaks when something new happens (or she's stuck).
   etna: {
     arrive: [nino("Ciao! It's sooo hot!"), nino("Let's get snow from Etna!")],
-    pull: 'Pull Nino up the mountain!',
+    pull: 'Pull Nino up the mountain to get snow!',
     pullDown: 'Pull Nino down to the beach!',
     // Things on the way up (all of them are pokeables: none of them is an answer).
     hot: nino("Phew! It's so hot!"),
@@ -348,7 +350,6 @@ export const L = {
     colder: 'The higher we go, the colder it gets!',
     scarf: 'Tap the scarf for Nino!',
     cozy: nino('Ahh, cozy! Grazie!'),
-    neviera: 'Long ago, people kept snow in stone snow houses!',
     snow: 'Snow! Bump Nino into the snow!',
     again: 'Bump it again!',
     count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!'],
@@ -365,12 +366,12 @@ export const L = {
     granita: "Let's make granita!",
     tapSnow: 'Tap the snow to fill the cup!',
     tapCup: 'Tap a cup!',
-    order: { lupa: lupa('One scoop, please!'), marina: marina('Two scoops, please!'), tortoise: tortoise('Three scoops, please!') },
-    more: { lupa: lupa('Ha ha! A snow mountain!'), marina: marina('Wow! So big!'), tortoise: tortoise('Oh my! So much!') },
+    order: { lupa: lupa('One scoop, please!'), marina: marina('Two scoops, please!'), pina: pina('Three scoops, please!') },
+    more: { lupa: lupa('Ha ha! A snow mountain!'), marina: marina('Wow! So big!'), pina: pina('Oink! So much snow!') },
     squeeze: 'Squeeze a lemon or an orange!',
     hold: 'Press and hold the fruit!',
-    eat: { lupa: lupa('Brrr! Brain freeze! Hee hee!'), marina: marina('Mmm! So cold!'), tortoise: tortoise('Ahhh... nice and cool...') },
-    hotFriend: { lupa: lupa('So hot! Snow, please!'), marina: marina('Hot, hot, hot!'), tortoise: tortoise('Sooo... hot...') },
+    eat: { lupa: lupa('Brrr! Brain freeze! Hee hee!'), marina: marina('Mmm! So cold!'), pina: pina('Mmm! Yummy and cold!') },
+    hotFriend: { lupa: lupa('So hot! Snow, please!'), marina: marina('Hot, hot, hot!'), pina: pina("Oink! I'm so hot!") },
     history: 'Long ago, donkeys carried snow down to make granita!',
     piano: nino("And my piano, for Lupa's band!"),
     tapPiano: 'Tap the piano!',

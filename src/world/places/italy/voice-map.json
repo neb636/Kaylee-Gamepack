@@ -203,6 +203,13 @@
     "file": "f41a988b46d2.mp3"
   },
   {
+    "text": "Oink oink!",
+    "voice": "pina",
+    "sig": "f7536f75e9",
+    "ms": 1307,
+    "file": "003550ef9e61.mp3"
+  },
+  {
     "text": "Hee hee! Prickly!",
     "voice": "spina",
     "sig": "cb98c37ff1",
@@ -2219,11 +2226,11 @@
     "file": "ef33fb3d2778.mp3"
   },
   {
-    "text": "Pull Nino up the mountain!",
+    "text": "Pull Nino up the mountain to get snow!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2306,
-    "file": "081a0a45de7a.mp3"
+    "ms": 3695,
+    "file": "4bb289d30901.mp3"
   },
   {
     "text": "Pull Nino down to the beach!",
@@ -2322,13 +2329,6 @@
     "sig": "5d4d98ca5c",
     "ms": 2654,
     "file": "4e051f35caad.mp3"
-  },
-  {
-    "text": "Long ago, people kept snow in stone snow houses!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4814,
-    "file": "8741042bf0e2.mp3"
   },
   {
     "text": "Snow! Bump Nino into the snow!",
@@ -2444,10 +2444,10 @@
   },
   {
     "text": "Three scoops, please!",
-    "voice": "tortoise",
-    "sig": "82816bc927",
-    "ms": 2344,
-    "file": "ce5edc51dbc5.mp3"
+    "voice": "pina",
+    "sig": "f7536f75e9",
+    "ms": 1399,
+    "file": "24af93f59204.mp3"
   },
   {
     "text": "Ha ha! A snow mountain!",
@@ -2464,11 +2464,11 @@
     "file": "328ae3f60793.mp3"
   },
   {
-    "text": "Oh my! So much!",
-    "voice": "tortoise",
-    "sig": "82816bc927",
-    "ms": 2225,
-    "file": "4c4722dfc505.mp3"
+    "text": "Oink! So much snow!",
+    "voice": "pina",
+    "sig": "f7536f75e9",
+    "ms": 2164,
+    "file": "e23409e85976.mp3"
   },
   {
     "text": "Squeeze a lemon or an orange!",
@@ -2499,11 +2499,11 @@
     "file": "3d9e44df0807.mp3"
   },
   {
-    "text": "Ahhh... nice and cool...",
-    "voice": "tortoise",
-    "sig": "82816bc927",
-    "ms": 3707,
-    "file": "beeb13829f2d.mp3"
+    "text": "Mmm! Yummy and cold!",
+    "voice": "pina",
+    "sig": "f7536f75e9",
+    "ms": 2498,
+    "file": "c74cadd73a78.mp3"
   },
   {
     "text": "So hot! Snow, please!",
@@ -2520,11 +2520,11 @@
     "file": "2f9f956b25da.mp3"
   },
   {
-    "text": "Sooo... hot...",
-    "voice": "tortoise",
-    "sig": "82816bc927",
-    "ms": 3345,
-    "file": "4dfae0f92d3f.mp3"
+    "text": "Oink! I'm so hot!",
+    "voice": "pina",
+    "sig": "f7536f75e9",
+    "ms": 2047,
+    "file": "12d2b52b42e2.mp3"
   },
   {
     "text": "Long ago, donkeys carried snow down to make granita!",
