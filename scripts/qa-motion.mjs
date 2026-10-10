@@ -430,6 +430,45 @@ const fluffyRub = (name, seconds, jump) => ({
 })
 GAME_SCENARIOS.push(fluffyRub('fluffy-brush', 2.4), fluffyRub('fluffy-clip', 2.6, 'clip'))
 
+// Coco's Canyon Glide: hold a finger in the sky and Coco banks after it, sinking slowly in plain air; steer him into a
+// swirl of warm air and he circles up (wings up, fingers spread); pull down for a dive (wings fold) and a swoop.
+const canyonFly = (name, seconds, jump, path) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/peru/condor`)
+    await page.waitForTimeout(600)
+    await skip(page)
+    if (jump) await page.evaluate((j) => window.__canyonQA?.jump(j), jump)
+    await page.waitForTimeout(900)
+  },
+  act: async (page) => {
+    const vp = page.viewportSize()
+    // `path`: world targets [x, y, ms]; the finger sits where that point is on screen (clamped to the screen).
+    let down = false
+    for (const [x, y, ms] of path) {
+      const end = Date.now() + ms
+      while (Date.now() < end) {
+        const w = await page.evaluate(() => window.__canyonQA?.where())
+        if (!w) break
+        const sx = Math.min(vp.width - 20, Math.max(20, (x - w.cam.x) * w.s))
+        const sy = Math.min(vp.height - 20, Math.max(140, (y - w.cam.y) * w.s))
+        if (!down) {
+          await page.mouse.move(sx, sy)
+          await page.mouse.down()
+          down = true
+        } else await page.mouse.move(sx, sy)
+        await page.waitForTimeout(100)
+      }
+    }
+    await page.mouse.up()
+  },
+})
+GAME_SCENARIOS.push(
+  canyonFly('canyon-ride', 4, null, [[1340, 1800, 1500], [1340, 900, 2500]]),
+  canyonFly('canyon-dive', 3.2, 'follow', [[1700, 2600, 2000], [2000, 2100, 1200]]),
+)
+
 // Opera greybox: swing the conductor's wand (big swings bounce the band high, little ones sway), then stop (freeze).
 const operaSwing = (name, seconds, size, ms) => ({
   name,

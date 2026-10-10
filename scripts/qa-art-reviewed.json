@@ -251,6 +251,22 @@
     "hash": "7e3a04d40575",
     "note": "cream bristles (handle hole cleared)"
   },
+  "src/world/places/peru/assets/canyon-condor-perched.webp": {
+    "hash": "a3227d31331d",
+    "note": "eye white"
+  },
+  "src/world/places/peru/assets/canyon-pluma.webp": {
+    "hash": "091a48387501",
+    "note": "eye whites"
+  },
+  "src/world/places/peru/assets/canyon-tourists.webp": {
+    "hash": "277f4c2e4526",
+    "note": "white shirts and hat band; leg gap cleared"
+  },
+  "src/world/places/peru/assets/canyon-viscacha.webp": {
+    "hash": "4fc8c4fbacbb",
+    "note": "eye white"
+  },
   "src/world/places/peru/assets/clippers.webp": {
     "hash": "bf0c422672f3",
     "note": "cream comb"

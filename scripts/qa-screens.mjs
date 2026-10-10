@@ -353,6 +353,21 @@ const SCREENS = [
       await p.waitForTimeout(to === 'family' ? 2400 : 1500)
     },
   })),
+  { name: 'condor-story', hash: '#/world/peru/condor', reset: true, wait: 400 },
+  { name: 'condor-start', hash: '#/world/peru/condor', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1500) } },
+  // Coco's Canyon Glide moments, reached through its QA hook (window.__canyonQA.jump): leading Pluma to the places,
+  // the sun on the other wall (the ridge), Pluma flying by herself, the condor circle at the end.
+  ...['follow', 'ridge', 'solo', 'finale'].map((to) => ({
+    name: `condor-${to}`,
+    hash: '#/world/peru/condor',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.waitForTimeout(500)
+      await p.evaluate((t) => window.__canyonQA?.jump(t), to)
+      await p.waitForTimeout(to === 'finale' ? 1200 : 3000)
+    },
+  })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party', stampAll: 'peru', wait: 800 },
 ].filter((s) => !flag('routes') || flag('routes').split(',').includes(s.name))

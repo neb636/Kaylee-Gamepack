@@ -1,5 +1,5 @@
 // Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md). Built one activity per PR: Luna's
-// Fluffy Day is first. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
+// Fluffy Day and Coco's Canyon Glide so far. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
 // (route `party`) waits until all five exist.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
@@ -8,6 +8,7 @@ import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
+import { CanyonGlide } from './activities/canyon/CanyonGlide'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
 import { art } from './art'
 import { L } from './lines'
@@ -20,7 +21,7 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, condor: CanyonGlide }
 
 /** The five places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
 export const SPOTS = [
@@ -119,8 +120,8 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   zIndex: 3,
                 }}
               >
-                {spot.id === 'alpaca' ? (
-                  <img src={art.luna} alt="" style={{ height: '80%', maxWidth: '80%', objectFit: 'contain' }} />
+                {spot.id === 'alpaca' || spot.id === 'condor' ? (
+                  <img src={spot.id === 'alpaca' ? art.luna : art.coco} alt="" style={{ height: '80%', maxWidth: '80%', objectFit: 'contain' }} />
                 ) : (
                   <span style={{ fontSize: 'clamp(26px, 5.5cqw, 42px)', opacity: open ? 1 : 0.6 }}>{spot.icon}</span>
                 )}
@@ -145,7 +146,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
           >
             <Alpaca ref={luna} kind="luna" height="min(100%, 30cqw)" hat={lunaDone ? (hats?.luna ?? 'pink') : null} label="Luna" />
           </motion.button>
-          <Journal stamps={stamps} hats={hats} open={(id) => playable.has(id) && openActivity(id)} />
+          <Journal stamps={stamps} hats={hats} playable={playable} open={(id) => playable.has(id) && openActivity(id)} />
           <motion.button
             aria-label="Party"
             whileTap={{ scale: 0.92 }}
@@ -176,7 +177,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
 }
 
 /** Luna's explorer journal: five picture windows, one per corner of Peru, filled as she earns each stamp. */
-function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string, string | null> | null; open: (id: string) => void }) {
+function Journal({ stamps, hats, playable, open }: { stamps: string[]; hats: Record<string, string | null> | null; playable: Set<string>; open: (id: string) => void }) {
   return (
     <div aria-label="Explorer journal" className="peru-journal" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', gap: 'min(8px, 2cqmin)', background: '#FF8FB8', border: `4px solid ${INK}`, borderRadius: 20, padding: 'min(8px, 2cqmin)' }}>
       {SPOTS.map((spot, i) => {
@@ -189,7 +190,8 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
             onClick={() => {
               sounds.pop()
               if (done && spot.id === 'alpaca') void say(L.alpacaWindow)
-              else if (spot.id === 'alpaca') open(spot.id)
+              else if (done && spot.id === 'condor') void say(L.condorWindow)
+              else if (playable.has(spot.id)) open(spot.id)
               else void say(L.soon)
             }}
             style={{ minWidth: 0, minHeight: 0, borderRadius: 14, border: `3px ${done ? 'solid' : 'dashed'} ${INK}`, background: done ? '#FFE27A' : '#FFF7F0', display: 'grid', placeItems: 'center', padding: 2, overflow: 'hidden' }}
@@ -203,6 +205,12 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
                   </g>
                 ))}
               </svg>
+            ) : done && spot.id === 'condor' ? (
+              // Coco and Pluma, wingtip to wingtip.
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', gap: '2%' }}>
+                <img src={art.coco} alt="" style={{ width: '58%', maxHeight: '90%', objectFit: 'contain' }} />
+                <img src={art.pluma} alt="" style={{ width: '32%', maxHeight: '70%', objectFit: 'contain' }} />
+              </div>
             ) : <span style={{ fontSize: 'min(30px, 7cqmin)', opacity: 0.35 }}>{spot.icon}</span>}
           </motion.button>
         )
