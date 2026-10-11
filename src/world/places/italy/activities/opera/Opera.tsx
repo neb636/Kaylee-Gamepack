@@ -364,7 +364,8 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
   const poke = (kind: string, i: number) => {
     const st = g.current
     if (kind === 'member') {
-      if (st.stage === 'solo' || st.stage === 'star') return giveSolo(i)
+      // Lupa sings her own part later (she isn't in BAND), so tapping her during the solos is just a poke.
+      if ((st.stage === 'solo' || st.stage === 'star') && i !== LUPA) return giveSolo(i)
       pluck(i === LUPA ? 'lupa' : BAND[i].part)
       st.kick[i].v -= 380
     } else if (kind === 'owl') {

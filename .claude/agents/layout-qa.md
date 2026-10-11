@@ -20,14 +20,20 @@ node scripts/qa-pacing.mjs --video   # talk, talk per tap, play strips -> qa-out
 node scripts/qa-art.mjs              # white patches left inside sprite cutouts -> qa-output/art/*.png, art/report.txt
 ```
 
-If you were told which country or activities to check, still run everything, but you may add `--routes=` (qa-screens,
-screen names start with the activity id, e.g. `venice-play`) or `--only=` (qa-pacing ids, qa-motion scenario names) to
-rerun a part. Scripts keep going when a step fails and list it: a failed step is a finding only if the UI really broke;
+**Scope.** If you were told which activities to check, check only those (a sweep of the whole app costs a lot of
+screenshots for nothing; CI already pokes every section of every activity for exceptions):
+- `qa-screens --routes=<activity ids>`: screen names start with the activity id, so `--routes=venice,etna` takes every
+  `venice-*` and `etna-*` screen.
+- `qa-motion --only=<prefixes>` (scenario names such as `venice-drive`; the activity's characters too),
+  `qa-pacing --only=<activity ids>`, and `qa-art <place or game id>`.
+- Run everything (no filters) only when asked for a full sweep, or when the change is in shared code (`src/world/kit`,
+  `src/sdk`, `src/shell`, `src/world/*.tsx`, theme/CSS) and you weren't told otherwise. Scripts keep going when a step fails and list it: a failed step is a finding only if the UI really broke;
 if the script's guess about the UI is out of date, say "script out of date" instead.
 
 ## 2. Look at every screenshot
 
-Open EVERY png in each `qa-output/webkit-*/` folder with Read, one by one. Don't sample, don't guess from file names.
+Open EVERY png the run produced in each `qa-output/webkit-*/` folder with Read, one by one. Don't sample, don't guess
+from file names.
 
 For each screenshot, first write two short notes (in your scratch work, not the report):
 - **Subject:** what this screen is about. The main picture (a volcano with its crater and smoke, a gondola on a canal,

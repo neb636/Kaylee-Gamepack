@@ -265,7 +265,7 @@ Follow `art/STYLE.md` exactly (style prompt, sprites on pure white, backgrounds 
    (locally it needs `OPENAI_API_KEY` in `.env` and ffmpeg).
 2. `npm run test` (Playwright smoke test: loads every game, checks for console errors, calls
    `window.__kaylee.win()`). It needs a local web server; if your sandbox can't open ports,
-   skip it (CI runs it after you).
+   skip it (CI runs it after you). CI also runs `npm run tap-around` (WebKit: every section poked like a child would).
 3. Re-read the design rules above. Is every instruction spoken? Is there no way to fail? Is it
    different from the recent games? Does it work in landscape? Run the fun check in `docs/play-design.md`.
 
@@ -386,6 +386,15 @@ QA (after `npm run build`; WebKit, because the iPad runs Safari: `npx playwright
   (`qa-output/video/`). Keep talk before the first touch under ~6 seconds and talk per touch under ~1.5 s.
 - **Every new activity adds itself to all three scripts** (screens, a motion scenario for its core verb, pacing).
   A screen QA never looked at is a screen nobody checked.
+- **When to run it (scope).** CI already opens and pokes every section of every activity on every PR
+  (`tests/tap-around.spec.ts`, WebKit) and fails on any exception, so the agents are only for what a test can't judge:
+  - **Full QA (both agents, below)** when an activity reaches its art gate or its full-loop gate, or a country is
+    added. Tell the agents which activities; they check only those.
+  - **Small changes** (a bug fix, text, a voice line, one moment): no QA agents. Run `npm run check`, screenshot the
+    section you changed (`node scripts/qa-screens.mjs --only=ipad-portrait,ipad-landscape --routes=<activity id>`, or
+    open its section link), and look at it.
+  - **Shared code** (`src/world/kit`, `src/sdk`, `src/shell`): also `npm run tap-around` locally, and screenshot two or
+    three screens that use what you changed.
 - QA runs in two steps, so the expensive model only does the judging:
   1. The `layout-qa` agent (Haiku, cheap) runs all three scripts, opens every screenshot and filmstrip, and writes
      `qa-output/layout-report.md`: what's cut off, overlapping, too small, under the top bar or broken.
