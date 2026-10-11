@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
 import { bell, burst, bigCelebration, lineText, say, sounds, span, stopSpeaking, useAlive, useElementSize, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { Flag } from '../../../../kit/Flag'
+import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
@@ -19,6 +20,7 @@ import { GongArt, PARADE_WORDS, ParadeCard, type Word } from './Bits'
 import { Fireworks, type FireworksHandle } from './Fireworks'
 import { Friend } from './Friend'
 import { GUESTS } from './guests'
+import SECTIONS from './sections'
 
 const P = L.parade
 const TOTAL = 5
@@ -32,6 +34,9 @@ const backOut = (t: number) => 1 + 2.7 * Math.pow(t - 1, 3) + 1.7 * Math.pow(t -
 const FIRE = ['#FF7FB0', '#FFD04A', '#FF7FB0', '#7DE0B0', '#C9A8FF', '#FF6B6B']
 
 type Stage = 'arrive' | 'drive' | 'drum' | 'sky' | 'flag' | 'envelope'
+/** Stars already earned when a section starts (a deep link starts there with the friends already in the dragon). */
+const STARS_AT: Record<Stage, number> = { arrive: 0, drive: 0, drum: 1, sky: 2, flag: 3, envelope: 4 }
+const PROMPT_AT: Record<Stage, Line> = { arrive: P.arrive, drive: P.drive, drum: P.drum, sky: P.sky, flag: P.flag, envelope: P.envelope }
 
 interface Geo {
   W: number
@@ -75,11 +80,14 @@ export function Parade({ onDone, setProgress }: ActivityProps) {
   const G = useRef<Geo | null>(null)
   G.current = g
 
-  const [stage, setStageState] = useState<Stage>('arrive')
-  const stageRef = useRef<Stage>('arrive')
-  const [prompt, setPrompt] = useState<Line>(P.arrive)
-  const [word, setWord] = useState<Word | null>(null)
-  const [shown, setShown] = useState(0)
+  const { start, enter } = useSections(SECTIONS)
+  // A deep link past the arrival starts with every friend already in the dragon.
+  const linked = start && start !== 'arrive' ? start : null
+  const [stage, setStageState] = useState<Stage>(linked ?? 'arrive')
+  const stageRef = useRef<Stage>(linked ?? 'arrive')
+  const [prompt, setPrompt] = useState<Line>(PROMPT_AT[linked ?? 'arrive'])
+  const [word, setWord] = useState<Word | null>(linked === 'envelope' ? PARADE_WORDS.hongbao : null)
+  const [shown, setShown] = useState(linked ? GUESTS.length : 0)
   const [lit, setLit] = useState<boolean[]>(() => Array(N_DOTS).fill(false))
   const [hintRing, setHintRing] = useState(true)
   const [drumN, setDrumN] = useState(0)
@@ -95,10 +103,10 @@ export function Parade({ onDone, setProgress }: ActivityProps) {
   const headEl = useRef<HTMLDivElement>(null)
   const segEls = useRef<(HTMLDivElement | null)[]>([])
   const friendEls = useRef<(HTMLDivElement | null)[]>([])
-  const appear = useRef<number[]>(GUESTS.map(() => -1))
+  const appear = useRef<number[]>(GUESTS.map(() => (linked ? performance.now() / 1000 - 1 : -1)))
   const face = useRef<number[]>(GUESTS.map(() => 1))
   const litRef = useRef<boolean[]>(Array(N_DOTS).fill(false))
-  const skipped = useRef(false)
+  const skipped = useRef(!!linked)
   const finished = useRef(false)
 
   // The dragon: the head's position, the trail it leaves, and where she is in the loop.
@@ -114,6 +122,7 @@ export function Parade({ onDone, setProgress }: ActivityProps) {
   const setStage = (s: Stage) => {
     stageRef.current = s
     setStageState(s)
+    enter(s)
   }
   const speak = async (l: Line) => {
     setPrompt(l)
@@ -330,6 +339,12 @@ export function Parade({ onDone, setProgress }: ActivityProps) {
     })()
   }
   useEffect(() => {
+    enter(stageRef.current)
+    if (linked) {
+      setProgress(STARS_AT[linked], TOTAL)
+      void say(PROMPT_AT[linked])
+      return
+    }
     void (async () => {
       await wait(350)
       if (!alive()) return

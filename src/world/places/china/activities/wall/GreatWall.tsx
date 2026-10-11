@@ -5,6 +5,7 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
 import { burst, Piece, PlayArea, say, shuffle, sounds, Target, useAlive, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
@@ -13,6 +14,7 @@ import { HouHou } from '../../puppets/HouHou'
 import { INK } from '../../puppets/ink'
 import type { ActivityProps } from '../../Place'
 import { Brick, BRICK_RATIO, BRICKS, WallWalk, type BrickColor, type WallGeom } from './Bricks'
+import SECTIONS from './sections'
 
 const W_ = L.wall
 const TOTAL = 4
@@ -97,6 +99,9 @@ function makeGeom(W: number, H: number): Geom {
 type Phase = 'story' | 'follow' | 'brick' | 'beacon' | 'fire'
 
 export function GreatWall({ onDone, setProgress }: ActivityProps) {
+  const { start, param, enter } = useSections(SECTIONS)
+  /** A deep link to a gap: earlier gaps are already fixed. */
+  const linkGap = start === 'follow' || start === 'brick' ? Number(param('gap')) - 1 : start === 'beacon' || start === 'fire' ? 3 : 0
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(box)
   const alive = useAlive()
@@ -122,11 +127,13 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const houRunning = useRef(false)
   const houX = useRef(-1)
 
-  const [story, setStory] = useState(true)
+  const [story, setStory] = useState(!start || start === 'story')
   const [, setPhaseState] = useState<Phase>('story')
   const [rnd, setRnd] = useState(0)
   const [holeIdx, setHoleIdx] = useState(0)
-  const [filled, setFilled] = useState<Record<string, boolean>>({})
+  const [filled, setFilled] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(GAPS.slice(0, linkGap).flatMap((gp, gi) => gp.missing.map((k) => [`${gi}-${k}`, true]))),
+  )
   const [hint, setHint] = useState(false)
   const [glow, setGlow] = useState<BrickColor | null>(null)
   const [hidden, setHidden] = useState<BrickColor[]>([])
@@ -135,7 +142,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const [houMs, setHouMs] = useState(0)
   const [dir, setDir] = useState<-1 | 0 | 1>(0)
   const [cue, setCue] = useState(true)
-  const [prompt, setPrompt] = useState<Line>(W_.oops)
+  const [prompt, setPrompt] = useState<Line>(start === 'beacon' ? W_.pattern3b : W_.oops) // the beacon starts after the last pattern
   const [fires, setFires] = useState(0)
   const [bubble, setBubble] = useState(true)
   const [order] = useState(() => GAPS.map((gp) => shuffle(gp.choices)))
@@ -209,10 +216,14 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
       }
     }
   }
-  const goToTarget = async () => {
+  /** Where the camera rests to show the job. */
+  const targetPan = () => {
     const { l, r } = jobSpan()
     const { lo, hi } = usable()
-    await glideTo((l + r) / 2 - (lo + (hi - lo) * 0.6))
+    return (l + r) / 2 - (lo + (hi - lo) * 0.6)
+  }
+  const goToTarget = async () => {
+    await glideTo(targetPan())
     refresh()
     // Never stuck: after the camera has done its best, the round goes on.
     if (!alive()) return
@@ -292,7 +303,16 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   }
 
   // ---- The rounds ----
-  const startRound = async (r: number) => {
+  /** Where Hou Hou stands to point at gap r. */
+  const spotFor = (r: number) => {
+    const saved = round.current
+    round.current = r
+    const x = jobSpan().l - G.current!.B * 1.5 - G.current!.houH * 0.3
+    round.current = saved
+    return x
+  }
+  const startRound = async (r: number, linkedBrick = false) => {
+    if (!linkedBrick) enter('follow', { gap: String(r + 1) })
     round.current = r
     hole.current = 0
     wrongs.current = 0
@@ -304,7 +324,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
     setGlow(null)
     setHidden([])
     setPhase('follow')
-    await runTo(jobSpan().l - G.current!.B * 1.5 - G.current!.houH * 0.3)
+    await runTo(spotFor(r))
     if (!alive()) return
     arrived.current = true
     void hou.current?.play('point')
@@ -316,6 +336,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const beginBricks = async () => {
     if (phase.current !== 'follow') return
     setPhase('brick')
+    enter('brick', { gap: String(round.current + 1) })
     clearTimeout(nudge.current)
     void hou.current?.play('point')
     if (round.current === 0 && !patternSaid.current) void sounds.pop()
@@ -334,6 +355,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
     // The hole is on screen: she can fix it right away, even before Hou Hou has finished pointing it out.
     if (phase.current === 'follow') {
       setPhase('brick')
+      enter('brick', { gap: String(round.current + 1) })
       clearTimeout(nudge.current)
     }
     const gp = GAPS[round.current]
@@ -388,6 +410,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   }
   const startBeacon = async () => {
     setPhase('beacon')
+    enter('beacon')
     arrived.current = false
     beaconSaid.current = false
     setDir(1)
@@ -401,6 +424,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const lightBeacon = async () => {
     if (phase.current !== 'beacon') return
     setPhase('fire')
+    enter('fire')
     clearTimeout(nudge.current)
     const gg = G.current!
     void goToTarget()
@@ -432,12 +456,40 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
     if (g && houX.current < 0) {
       houX.current = g.hh * 0.1
       setHouXs(g.hh * 0.1)
-      setProgress(0, TOTAL)
+      setProgress(Math.min(linkGap, 3), TOTAL)
     }
   }, [!!g])
   useEffect(() => {
+    if (story) enter('story')
+  }, [])
+  useEffect(() => {
     if (story || !g) return
-    void startRound(0)
+    if (!start || start === 'story') return void startRound(0)
+    // A deep link: Hou Hou and the camera wait where the previous moment left them, then the section plays as usual.
+    const place = (x: number, r: number) => {
+      houX.current = x
+      setHouXs(x)
+      round.current = r
+      applyPan(targetPan())
+    }
+    if (start === 'follow') {
+      if (linkGap > 0) place(spotFor(linkGap - 1), linkGap - 1)
+      void startRound(linkGap)
+    } else if (start === 'brick') {
+      place(spotFor(linkGap), linkGap)
+      void startRound(linkGap, true)
+    } else {
+      place(spotFor(2), 2)
+      if (start === 'beacon') void startBeacon()
+      else {
+        const tower = G.current!.towerCx - G.current!.towerW / 2 - G.current!.houH * 0.5
+        houX.current = tower
+        setHouXs(tower)
+        setPhase('beacon')
+        applyPan(targetPan())
+        void lightBeacon()
+      }
+    }
   }, [story, !!g])
   useEffect(() => {
     applyPan(panRef.current) // keep it in range when the screen turns
