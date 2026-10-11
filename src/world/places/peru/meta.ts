@@ -3,8 +3,7 @@ import { art } from './art'
 import { L } from './lines'
 
 // Peru is built one activity at a time (plan: planning/around-the-world/peru.md). Luna's Fluffy Day, Pepa's Penguin
-// Cliff, Coco's Canyon Glide and Rosa's Rainy River are built; the last place on Luna's map says "coming soon", and
-// the balloon finale comes once all five exist.
+// Cliff, Tika's Mountain Terraces, Coco's Canyon Glide and Rosa's Rainy River are all built; the balloon finale comes next.
 const meta: PlaceMeta = {
   id: 'peru',
   name: 'Peru',
@@ -15,6 +14,7 @@ const meta: PlaceMeta = {
   trophyTitle: 'Peru Explorer',
   activities: [
     { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', pos: { x: 70, y: 74 }, sticker: { name: 'Alpaca', img: art.luna, fact: L.sticker } },
+    { id: 'machu-picchu', name: "Tika's Mountain Terraces", icon: '⛰️', pos: { x: 51.5, y: 60 }, sticker: { name: 'Llama', img: art.tika, fact: L.terracesSticker } },
     { id: 'penguins', name: "Pepa's Penguin Cliff", icon: '🐧', pos: { x: 38.75, y: 75 }, sticker: { name: 'Humboldt penguin', img: art.pepa, fact: L.penguinSticker } },
     { id: 'condor', name: "Coco's Canyon Glide", icon: '🦅', pos: { x: 57.5, y: 88 }, sticker: { name: 'Condor', img: art.canyonPerched, fact: L.condorSticker } },
     { id: 'river', name: "Rosa's Rainy River", icon: '🌧️', pos: { x: 61, y: 28 }, sticker: { name: 'Pink dolphin', img: art.rosa, fact: L.river.sticker } },

@@ -12,10 +12,12 @@ import { CanyonGlide } from './activities/canyon/CanyonGlide'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
 import { PenguinCliff } from './activities/penguins/PenguinCliff'
 import { RainyRiver } from './activities/river/RainyRiver'
+import { Terraces } from './activities/terraces/Terraces'
 import { art } from './art'
 import { L } from './lines'
 import { PeruMap, MAP_RATIO } from './PeruMap'
 import { Alpaca, HatShape, INK } from './puppets/Alpaca'
+import { Tika } from './puppets/Tika'
 import './peru.css'
 
 export interface ActivityProps {
@@ -23,9 +25,7 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, penguins: PenguinCliff, condor: CanyonGlide, river: RainyRiver }
-/** The friend's picture on each built place's map pin. */
-const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, condor: art.coco, river: art.rosa }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, penguins: PenguinCliff, 'machu-picchu': Terraces, condor: CanyonGlide, river: RainyRiver }
 
 /** The five places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
 export const SPOTS = [
@@ -59,6 +59,9 @@ export default function Place(props: PlaceProps) {
   }
   return <Hub {...props} />
 }
+
+/** Pins that show their friend instead of an emoji. */
+const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, 'machu-picchu': art.tika, condor: art.coco, river: art.rosa }
 
 // Luna says hello once per visit to the app.
 let introSeen = false
@@ -195,6 +198,7 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
               sounds.pop()
               if (done && spot.id === 'alpaca') void say(L.alpacaWindow)
               else if (done && spot.id === 'penguins') void say(L.penguinWindow)
+              else if (done && spot.id === 'machu-picchu') void say(L.terracesWindow)
               else if (done && spot.id === 'condor') void say(L.condorWindow)
               else if (done && spot.id === 'river') void say(L.riverWindow)
               else if (PIN_IMG[spot.id]) open(spot.id)
@@ -211,6 +215,11 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
                   </g>
                 ))}
               </svg>
+            ) : done && spot.id === 'machu-picchu' ? (
+              // Tika's photobomb at Machu Picchu.
+              <div style={{ width: '100%', height: '100%', borderRadius: 10, overflow: 'hidden', background: 'linear-gradient(#A8DCFF 0 55%, #8FD86F 55%)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+                <Tika height="94%" pose="grin" />
+              </div>
             ) : done && spot.id === 'penguins' ? (
               // Pepa and her three round chicks, porpoising home.
               <img src={art.pepa} alt="" style={{ height: '88%', maxWidth: '90%', objectFit: 'contain' }} />

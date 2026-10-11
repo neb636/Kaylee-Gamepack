@@ -15,6 +15,11 @@
       "pitch": -1,
       "instructions": "You are Abuela Killa, Luna's kind, sleepy alpaca grandma from the Andes of Peru. Warm, slow and loving, a little yawny, like a cozy grandma. Light, natural Peruvian Spanish accent. Gentle pace. Do not add words that are not in the text."
     },
+    "tika": {
+      "voice": "coral",
+      "pitch": 1,
+      "instructions": "You are Tika, a cheeky, bouncy young llama girl who lives at Machu Picchu in Peru, about seven years old. Playful, a little mischievous and proud, giggly. Speak English with a light, natural Peruvian Spanish accent, never exaggerated; say Hola the Spanish way. Short clear phrases for a five-year-old. Do not add words or laughter that are not in the text."
+    },
     "pepa": {
       "voice": "shimmer",
       "pitch": 2,

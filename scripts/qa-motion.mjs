@@ -434,6 +434,41 @@ const fluffyRub = (name, seconds, jump) => ({
 })
 GAME_SCENARIOS.push(fluffyRub('fluffy-brush', 2.4), fluffyRub('fluffy-clip', 2.6, 'clip'))
 
+// Tika's Mountain Terraces: drag a stone off the pile into its own gap (magnetic pull, clonk, dust, shake), then one
+// into a wrong gap (bonk, rolls back). `jump` starts on a later wall.
+const terracesStone = (name, seconds, wrong, jump) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/peru/machu-picchu`)
+    await page.waitForTimeout(600)
+    await skip(page)
+    if (jump) await page.evaluate((j) => window.__terracesQA?.jump(j), jump)
+    await page.waitForTimeout(1500)
+  },
+  act: async (page) => {
+    const r = await page.evaluate((wrong) => {
+      const el = document.querySelector('[data-stone]')
+      if (!el) return null
+      const gaps = [...document.querySelectorAll('[data-gap]')]
+      const gap = gaps.find((g) => (g.dataset.gap === el.dataset.stone) !== wrong)
+      if (!gap) return null
+      const b = el.getBoundingClientRect()
+      const t = gap.getBoundingClientRect()
+      return { x: b.left + b.width / 2, y: b.top + b.height / 2, tx: t.left + t.width / 2, ty: t.top + t.height / 2 }
+    }, wrong)
+    if (!r) throw new Error('no stone or gap found')
+    await page.mouse.move(r.x, r.y)
+    await page.mouse.down()
+    for (let i = 1; i <= 12; i++) {
+      await page.mouse.move(r.x + ((r.tx - r.x) * i) / 12, r.y + ((r.ty - r.y) * i) / 12)
+      await page.waitForTimeout(40)
+    }
+    await page.mouse.up()
+  },
+})
+GAME_SCENARIOS.push(terracesStone('terraces-clonk', 2.4, false), terracesStone('terraces-bonk', 2.4, true), terracesStone('terraces-clouds', 2.4, false, 3))
+
 // Pepa's Penguin Cliff: grab the front penguin on the launch rock, pull it back (it crouches, the dotted arc shows the
 // splash spot), let go: the leap, the splash, the underwater swim. `jump` starts later (fish schools, the chicks' swim).
 const penguinLaunch = (name, seconds, jump, pull) => ({
@@ -464,6 +499,7 @@ const penguinLaunch = (name, seconds, jump, pull) => ({
   },
 })
 GAME_SCENARIOS.push(penguinLaunch('penguin-launch', 8, null, 0.13), penguinLaunch('penguin-fish', 5, 'fish', 0.09), penguinLaunch('penguin-chick-swim', 4.5, 'swim', 0.08))
+
 // Coco's Canyon Glide: hold a finger in the sky and Coco banks after it, sinking slowly in plain air; steer him into a
 // swirl of warm air and he circles up (wings up, fingers spread); pull down for a dive (wings fold) and a swoop.
 const canyonFly = (name, seconds, jump, path) => ({
@@ -502,6 +538,7 @@ GAME_SCENARIOS.push(
   canyonFly('canyon-ride', 4, null, [[1340, 1800, 1500], [1340, 900, 2500]]),
   canyonFly('canyon-dive', 3.2, 'follow', [[1700, 2600, 2000], [2000, 2100, 1200]]),
 )
+
 // Rosa's Rainy River: grab the cloud and squeeze it (it squishes and rains), wiggle it over the river (harder rain, a
 // rumble), then a lily bud unrolling in the lagoon's rain.
 const riverSqueeze = (name, seconds, jump) => ({
