@@ -37,6 +37,10 @@
     "text": "My fluffy chicks!",
     "voice": "pepa"
   },
+  {
+    "text": "My rainbow river!",
+    "voice": "rosa"
+  },
   "By the sea, Peru has a sandy desert!",
   "The Andes mountains are tall and cold!",
   "Half of Peru is rainforest!",
@@ -275,6 +279,190 @@
   "Tap a chick to feed it!",
   "Pull a chick back, then let go!",
   "Penguin sticker! Penguins live in Peru too!",
+  {
+    "text": "My chick Pluma is scared to fly.",
+    "voice": "coco"
+  },
+  "Grab Coco and show her how!",
+  "Fly into the warm air!",
+  {
+    "text": "Ahh, warm air! Up we go!",
+    "voice": "coco"
+  },
+  {
+    "text": "I need warm air to go up!",
+    "voice": "coco"
+  },
+  {
+    "text": "Whoooosh!",
+    "voice": "coco"
+  },
+  {
+    "text": "Achoo!",
+    "voice": "coco"
+  },
+  {
+    "text": "It's so high!",
+    "voice": "pluma"
+  },
+  {
+    "text": "Come on, Pluma! Fly with me!",
+    "voice": "coco"
+  },
+  {
+    "text": "I'll try! Here I come!",
+    "voice": "pluma"
+  },
+  "Lead Pluma to the shiny circles!",
+  {
+    "text": "Wait for me!",
+    "voice": "pluma"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "pluma"
+  },
+  {
+    "text": "I'm dizzy!",
+    "voice": "pluma"
+  },
+  {
+    "text": "Ooh, a waterfall!",
+    "voice": "pluma"
+  },
+  {
+    "text": "Hello, friends!",
+    "voice": "coco"
+  },
+  {
+    "text": "People are waving!",
+    "voice": "pluma"
+  },
+  {
+    "text": "Smile for the photo!",
+    "voice": "coco"
+  },
+  "The sun moved! Find the new warm air!",
+  "Fly to the very top!",
+  {
+    "text": "I can fly by myself!",
+    "voice": "pluma"
+  },
+  "Now you fly Pluma, Kaylee!",
+  "Fly Pluma into the big swirl!",
+  {
+    "text": "Look at me, Kaylee!",
+    "voice": "pluma"
+  },
+  {
+    "text": "My Pluma can fly! Gracias, Kaylee!",
+    "voice": "coco"
+  },
+  {
+    "text": "Hi, Dad!",
+    "voice": "pluma"
+  },
+  "Grab Coco and fly!",
+  "Fly to a shiny circle!",
+  "Condors hardly flap their wings!",
+  "Condor wings are wider than a grown-up is tall!",
+  "This canyon is super deep!",
+  "The sun warms the air, and warm air rises!",
+  {
+    "text": "I can fly!",
+    "voice": "pluma"
+  },
+  "Condor sticker! Condors soar on warm air!",
+  {
+    "text": "Hola! I want to visit my forest friends!",
+    "voice": "rosa"
+  },
+  "Squeeze the cloud to make rain!",
+  {
+    "text": "Hiiiiii...",
+    "voice": "sloth"
+  },
+  {
+    "text": "Ooh... a shower...",
+    "voice": "sloth"
+  },
+  "I'm all wet! Hee hee!",
+  "Make it rain on the river!",
+  {
+    "text": "Wheee! More water!",
+    "voice": "rosa"
+  },
+  {
+    "text": "Hola, capybaras!",
+    "voice": "rosa"
+  },
+  {
+    "text": "Ahh... a swim!",
+    "voice": "capy"
+  },
+  {
+    "text": "Hola, sloth!",
+    "voice": "rosa"
+  },
+  {
+    "text": "Hiii, Rosa...",
+    "voice": "sloth"
+  },
+  {
+    "text": "Hola, monkeys!",
+    "voice": "rosa"
+  },
+  {
+    "text": "Splash! Splash!",
+    "voice": "monkey"
+  },
+  "The river grows into the forest!",
+  {
+    "text": "Let's swim to the lagoon!",
+    "voice": "rosa"
+  },
+  "Rain on the lagoon!",
+  "Rain on the lily buds!",
+  "Lily pads! Help the friends hop on!",
+  "Hop, frog!",
+  {
+    "text": "Wheee!",
+    "voice": "monkey"
+  },
+  {
+    "text": "Comfy!",
+    "voice": "capy"
+  },
+  "Flap, flap, macaw!",
+  "Bye-bye, cloud! Hello, sun!",
+  {
+    "text": "A rainbow! Gracias, Kaylee!",
+    "voice": "rosa"
+  },
+  "Click! A picture for Luna!",
+  {
+    "text": "Hee hee!",
+    "voice": "rosa"
+  },
+  {
+    "text": "Pfff! Bubbles!",
+    "voice": "rosa"
+  },
+  {
+    "text": "Splashy!",
+    "voice": "rosa"
+  },
+  {
+    "text": "I live in a river, not the sea!",
+    "voice": "rosa"
+  },
+  "This dolphin lives in a river!",
+  "Some fish eat fruit!",
+  "Hold the cloud to make rain!",
+  "Drag the cloud over the river!",
+  "Drag the cloud over the lagoon!",
+  "Drag a friend onto a lily pad!",
+  "Pink dolphin sticker! These dolphins live in rivers!",
   "Alpaca sticker! Alpacas have soft, warm fleece!",
   "Peru is in South America!",
   "Peru has a coast, mountains, and rainforest!",
