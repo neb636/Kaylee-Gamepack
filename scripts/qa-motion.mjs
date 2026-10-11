@@ -106,6 +106,10 @@ const PUPPET_SCENARIOS = [
   ['paco', 'giggle', 1.2],
   ['abuela', 'yawn', 1.9],
   ['abuela-asleep', 'nod', 1.0],
+  ['rosa', 'spout', 1.4],
+  ['rosa', 'jump', 1.6],
+  ['rosa', 'giggle', 1.2],
+  ['rosa', 'cheer', 1.4],
 ].map(([id, action, seconds]) => ({
   name: `${id}-${action}`,
   seconds,
@@ -429,6 +433,33 @@ const fluffyRub = (name, seconds, jump) => ({
   },
 })
 GAME_SCENARIOS.push(fluffyRub('fluffy-brush', 2.4), fluffyRub('fluffy-clip', 2.6, 'clip'))
+
+// Rosa's Rainy River: grab the cloud and squeeze it (it squishes and rains), wiggle it over the river (harder rain, a
+// rumble), then a lily bud unrolling in the lagoon's rain.
+const riverSqueeze = (name, seconds, jump) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/peru/river`)
+    await page.waitForTimeout(600)
+    await skip(page)
+    if (jump) await page.evaluate((j) => window.__peruRiverQA?.jump(j), jump)
+    await page.waitForTimeout(jump ? 3200 : 900)
+  },
+  act: async (page) => {
+    const b = await page.locator('[aria-label="rain cloud"]').first().boundingBox()
+    if (!b) throw new Error('no cloud found')
+    const x = b.x + b.width / 2
+    const y = b.y + b.height / 2
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    await page.waitForTimeout(700)
+    for (let i = 0; i < 6; i++) await page.mouse.move(x + (i % 2 ? 60 : -60) + i * 12, y + (i % 2 ? 10 : -10), { steps: 6 })
+    await page.waitForTimeout(600)
+    await page.mouse.up()
+  },
+})
+GAME_SCENARIOS.push(riverSqueeze('river-squeeze', 3.2), riverSqueeze('river-lagoon-rain', 3.2, 'lagoon'))
 
 // Opera greybox: swing the conductor's wand (big swings bounce the band high, little ones sway), then stop (freeze).
 const operaSwing = (name, seconds, size, ms) => ({

@@ -295,6 +295,12 @@ a lift inside swirls). Riskiest piece to prototype: the sink-and-lift feel. Sink
 
 ### 4. Rosa's Rainy River 🌧️ (Amazon rainforest: rain, the flooding forest, pink river dolphins)
 
+> **Built 2026-10-10** in one pass at Dad's request (no greybox gate): `activities/river/`. Changes from this plan:
+> the sloth hangs from a liana low over the river (the tree branch was too high for the water to reach), and the
+> monkeys hop down into the floating canoe once the river is full (their branch was too high to splash from). Rosa
+> leaps over the bank into the lagoon while the camera pans. The lily friends are three of frog, monkey, baby capybara
+> and macaw (shuffled). A tap on the water (or on Rosa) sends the cloud over to rain there, for taps-only play.
+
 **One-line pitch:** it's the dry season and Rosa can't reach her friends in the forest; Kaylee makes it rain until the
 river floods the forest, and Rosa swims between the trees to visit everyone.
 

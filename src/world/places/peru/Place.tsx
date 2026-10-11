@@ -1,5 +1,5 @@
 // Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md). Built one activity per PR: Luna's
-// Fluffy Day is first. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
+// Fluffy Day and Rosa's Rainy River so far. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
 // (route `party`) waits until all five exist.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
@@ -9,6 +9,7 @@ import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
+import { RainyRiver } from './activities/river/RainyRiver'
 import { art } from './art'
 import { L } from './lines'
 import { PeruMap, MAP_RATIO } from './PeruMap'
@@ -20,7 +21,9 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, river: RainyRiver }
+/** The friend's picture on each built place's map pin. */
+const PIN_IMG: Record<string, string> = { alpaca: art.luna, river: art.rosa }
 
 /** The five places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
 export const SPOTS = [
@@ -119,8 +122,8 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   zIndex: 3,
                 }}
               >
-                {spot.id === 'alpaca' ? (
-                  <img src={art.luna} alt="" style={{ height: '80%', maxWidth: '80%', objectFit: 'contain' }} />
+                {PIN_IMG[spot.id] ? (
+                  <img src={PIN_IMG[spot.id]} alt="" style={{ height: '80%', maxWidth: '80%', objectFit: 'contain' }} />
                 ) : (
                   <span style={{ fontSize: 'clamp(26px, 5.5cqw, 42px)', opacity: open ? 1 : 0.6 }}>{spot.icon}</span>
                 )}
@@ -189,7 +192,8 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
             onClick={() => {
               sounds.pop()
               if (done && spot.id === 'alpaca') void say(L.alpacaWindow)
-              else if (spot.id === 'alpaca') open(spot.id)
+              else if (done && spot.id === 'river') void say(L.riverWindow)
+              else if (PIN_IMG[spot.id]) open(spot.id)
               else void say(L.soon)
             }}
             style={{ minWidth: 0, minHeight: 0, borderRadius: 14, border: `3px ${done ? 'solid' : 'dashed'} ${INK}`, background: done ? '#FFE27A' : '#FFF7F0', display: 'grid', placeItems: 'center', padding: 2, overflow: 'hidden' }}
@@ -203,6 +207,16 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
                   </g>
                 ))}
               </svg>
+            ) : done && spot.id === 'river' ? (
+              // Rosa leaping under the rainbow she made.
+              <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                <svg viewBox="-60 -60 120 66" style={{ position: 'absolute', inset: '4% 0 auto', width: '100%' }}>
+                  {['#FF6B6B', '#FFB347', '#FFE27A', '#8FE3C8', '#7FB2FF'].map((c, k) => (
+                    <path key={c} d={`M${-54 + k * 7} 0A${54 - k * 7} ${54 - k * 7} 0 0 1 ${54 - k * 7} 0`} fill="none" stroke={c} strokeWidth="7.5" />
+                  ))}
+                </svg>
+                <img src={art.rosa} alt="" style={{ position: 'absolute', left: '12%', bottom: '8%', width: '76%', objectFit: 'contain', rotate: '-12deg' }} />
+              </div>
             ) : <span style={{ fontSize: 'min(30px, 7cqmin)', opacity: 0.35 }}>{spot.icon}</span>}
           </motion.button>
         )
