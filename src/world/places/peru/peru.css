@@ -90,3 +90,50 @@
     opacity: 0.5;
   }
 }
+/* Rosa's Rainy River: raindrops (a little outlined teardrop) and the splash crown where one lands. */
+.peru-drop {
+  width: 14px;
+  height: 24px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 24'%3E%3Cpath d='M7 1.5Q12.5 11 12.5 15.5A5.5 5.5 0 0 1 1.5 15.5Q1.5 11 7 1.5Z' fill='%2389CFF5' stroke='%232B2330' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.peru-splash {
+  width: 36px;
+  height: 18px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 18'%3E%3Cg fill='%2389CFF5' stroke='%232B2330' stroke-width='2'%3E%3Ccircle cx='6' cy='9' r='3.5'/%3E%3Ccircle cx='18' cy='5' r='4'/%3E%3Ccircle cx='30' cy='9' r='3.5'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+}
+/* Ants marching along the bank. */
+.peru-march {
+  animation: peru-march 14s linear infinite;
+}
+@keyframes peru-march {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--march));
+  }
+}
+.peru-legs {
+  animation: peru-legs 0.3s ease-in-out infinite alternate;
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+@keyframes peru-legs {
+  from {
+    transform: rotate(-14deg);
+  }
+  to {
+    transform: rotate(14deg);
+  }
+}
+/* Wet macaws fluff up into feather balls, then smooth down. */
+@keyframes peru-fluff {
+  0%,
+  100% {
+    scale: 1 1;
+  }
+  20%,
+  75% {
+    scale: 1.3 0.82;
+  }
+}

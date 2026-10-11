@@ -251,6 +251,10 @@
     "hash": "7e3a04d40575",
     "note": "cream bristles (handle hole cleared)"
   },
+  "src/world/places/peru/assets/capybara-baby.webp": {
+    "hash": "e2cac35a96ab",
+    "note": "eye white"
+  },
   "src/world/places/peru/assets/clippers.webp": {
     "hash": "bf0c422672f3",
     "note": "cream comb"
@@ -258,6 +262,14 @@
   "src/world/places/peru/assets/dandelion.webp": {
     "hash": "ebe3a0ffc9dc",
     "note": "dandelion seed puff"
+  },
+  "src/world/places/peru/assets/fish.webp": {
+    "hash": "0f36183321ef",
+    "note": "eye white"
+  },
+  "src/world/places/peru/assets/frog.webp": {
+    "hash": "9b5e78eb512e",
+    "note": "eye whites"
   },
   "src/world/places/peru/assets/hummingbird.webp": {
     "hash": "fa4e2664a346",
@@ -267,8 +279,16 @@
     "hash": "dd192538d728",
     "note": "eye whites"
   },
+  "src/world/places/peru/assets/monkey.webp": {
+    "hash": "219a375d9c62",
+    "note": "cream face mask and eye white"
+  },
   "src/world/places/peru/assets/pond.webp": {
     "hash": "e688e6a9c3d3",
     "note": "water highlights"
+  },
+  "src/world/places/peru/assets/toucan.webp": {
+    "hash": "95bc4b48b221",
+    "note": "eye white"
   }
 }
