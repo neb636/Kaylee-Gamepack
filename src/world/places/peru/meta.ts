@@ -32,6 +32,14 @@ const meta: PlaceMeta = {
     { icon: '🐦', label: 'National bird', say: L.facts.bird },
   ],
   coloringPages: [],
+  // Offered after the matching activity's stamp, and available anytime in the Theater.
+  videos: [
+    { id: 'condor', youtubeId: 'ErDB-fIKoa0', icon: '🦅', title: 'Real condors', say: L.videos.condor, after: 'condor' },
+    { id: 'machu-picchu', youtubeId: '4OXaQuMpdN8', icon: '⛰️', title: 'Machu Picchu', say: L.videos.machuPicchu, after: 'machu-picchu' },
+    { id: 'penguins', youtubeId: 'O8qilxaBR20', icon: '🐧', title: 'Real penguins', say: L.videos.penguins, after: 'penguins' },
+    { id: 'alpacas', youtubeId: 'BVl_Y9heRyk', icon: '🦙', title: 'Real alpacas', say: L.videos.alpacas, after: 'alpaca' },
+    { id: 'dolphin', youtubeId: 'izl38tb7z5E', icon: '🐬', title: 'River dolphins', say: L.videos.dolphin, after: 'river' },
+  ],
   passportLine: L.passport,
   createdAt: '2026-10-10',
 }

@@ -9,7 +9,8 @@ import { BigButton, say, SparklePuppet, sounds, useSaved, type PuppetHandle } fr
 import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
-import type { PlaceProps } from '../../types'
+import { VideoBreak } from '../../kit/Theater'
+import type { PlaceProps, PlaceVideo } from '../../types'
 import { CanyonGlide } from './activities/canyon/CanyonGlide'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
 import { PenguinCliff } from './activities/penguins/PenguinCliff'
@@ -41,6 +42,7 @@ export const SPOTS = [
 export default function Place(props: PlaceProps) {
   const { meta, activity, earnStamp, setProgress, backToMap } = props
   const [justEarned, setJustEarned] = useState<string | null>(null)
+  const [videoAfter, setVideoAfter] = useState<PlaceVideo | null>(null)
 
   if (activity === 'party') return <BalloonSoon backToMap={backToMap} />
 
@@ -55,7 +57,28 @@ export default function Place(props: PlaceProps) {
     return (
       <>
         <Activity key={activity} setProgress={setProgress} onDone={finish} />
-        {justEarned === info.id && <StampEarned activity={info} onClose={backToMap} />}
+        {justEarned === info.id && (
+          <StampEarned
+            activity={info}
+            onClose={() => {
+              setJustEarned(null)
+              const video = meta.videos?.find((v) => v.after === info.id)
+              if (video) {
+                setProgress(0, 0)
+                setVideoAfter(video)
+              } else backToMap()
+            }}
+          />
+        )}
+        {videoAfter && (
+          <VideoBreak
+            video={videoAfter}
+            onDone={() => {
+              setVideoAfter(null)
+              backToMap()
+            }}
+          />
+        )}
       </>
     )
   }
