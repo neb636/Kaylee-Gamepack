@@ -100,6 +100,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
   const [puff, setPuff] = useState<Record<number, number>>({})
   const [poke, setPoke] = useState<Record<string, number>>({})
   const [spitBall, setSpitBall] = useState(0)
+  const [fog, setFog] = useState<Set<string>>(() => new Set())
 
   // One random wall layout per visit (replay): the gaps' jitter, a mirror flip, the pile's order.
   const [seed] = useState(() => Math.floor(Math.random() * 1e6) + 1)
@@ -154,6 +155,9 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     busy: false,
     dustId: 1,
     flowerEaten: false,
+    lastScrape: 0,
+    /** Top wall: stones still wrapped in cloud (a puff clears each one). */
+    fogged: new Set<string>(),
   })
   const setPhase = (p: Phase) => {
     g.current.phase = p
@@ -348,7 +352,8 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     sfx.munch()
     await say(T.wallDone[kk])
     if (!alive()) return
-    if (kk === 1) say1(T.friends)
+    if (kk === 1) await say(T.friends)
+    if (!alive()) return
     setPhase('seeds')
     setPrompt(T.seeds)
     G.lastProgress = performance.now()
@@ -376,7 +381,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
         if (!alive()) return
         setEaten(kk)
         void tika.current?.play('smug')
-        say1(T.innocent)
+        void say(T.innocent, { interrupt: false })
       }, 2600)
     }
     // Climb to the next wall.
@@ -387,6 +392,10 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     moveCam(camFor(next))
     await wait(1700)
     if (!alive()) return
+    if (next === N - 1) {
+      G.fogged = new Set(orders[next])
+      setFog(new Set(G.fogged))
+    }
     setK(next)
     setPhase('build')
     G.lastProgress = performance.now()
@@ -408,8 +417,6 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     sounds.fanfare()
     burst(0.5, 0.35)
     await say(T.reveal)
-    if (!alive()) return
-    await say(T.built)
     if (!alive()) return
     setPhase('photo')
     setPrompt(T.photo)
@@ -434,7 +441,6 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
       await wait(1500)
       if (alive()) say1(T.journal)
     }
-    if (n >= 4) void finish()
   }
 
   const finish = async () => {
@@ -486,12 +492,27 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     const target = e.target as Element
     if (target.closest('button')) return
     const el = target.closest('[data-stone]') as HTMLElement | null
+    if (!el && G.phase === 'build' && !G.held) {
+      // A tap on a gap wiggles the stone that fits it.
+      const p = toStage(e.clientX, e.clientY)
+      const near = nearestGap(p.x, p.y)
+      if (near.st && near.d < Math.max(near.st.w, near.st.h) * 0.5) {
+        stoneEls.current.get(near.st.id)?.animate([{ translate: '0 0' }, { translate: '0 -24px' }, { translate: '0 0' }, { translate: '0 -12px' }, { translate: '0 0' }], { duration: 600 })
+        sounds.pop()
+      }
+      return
+    }
     if (!el || G.phase !== 'build' || G.held) return
     const id = el.dataset.stone!
     const home = pileRef.current.get(id)
     if (!home) return
     const p = toStage(e.clientX, e.clientY)
     e.currentTarget.setPointerCapture(e.pointerId)
+    if (G.fogged.has(id)) {
+      G.fogged.delete(id)
+      setFog(new Set(G.fogged))
+      tsfx.puff()
+    }
     // Keep the stone where she grabbed it (a little above her finger so she can see it), lifted to full size.
     const clampO = (v: number) => Math.max(-40, Math.min(40, v))
     G.held = { id, pid: e.pointerId, sx: p.x, sy: p.y, ox: clampO(home.x - p.x), oy: clampO(home.y - p.y) - 20, x: p.x, y: p.y, moved: false }
@@ -521,7 +542,15 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
       x += (own.x - x) * k2
       y += (own.y - y) * k2
     }
-    setStone(h.id, x, y, 1, 0)
+    // The many-cornered stone is heavy: it lags behind her finger and scrapes along.
+    if (st.corners) {
+      setStone(h.id, x, y, 1, 260, 'ease-out')
+      const now = performance.now()
+      if (now - G.lastScrape > 380) {
+        G.lastScrape = now
+        tsfx.lift()
+      }
+    } else setStone(h.id, x, y, 1, 0)
     const near = nearestGap(x, y)
     const hv = near.st && near.d < Math.max(near.st.w, near.st.h) * 0.6 ? near.st.id : null
     setHover((cur) => (cur === hv ? cur : hv))
@@ -534,7 +563,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     G.held = null
     setHover(null)
     const el = stoneEls.current.get(h.id)
-    if (el) el.style.zIndex = ''
+    if (el) el.style.zIndex = '20'
     const st = stoneById(G.k, h.id)
     if (!h.moved) {
       // A tap shows where it goes; a second tap puts it there.
@@ -859,6 +888,8 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
           draggable={false}
           style={{ position: 'absolute', left: -ox / scale, width: size.W / scale, top: paintTop, height: S.paintH, objectFit: 'cover', objectPosition: '50% 0', transition: `top ${cam.dur}s cubic-bezier(.45,0,.3,1)`, pointerEvents: 'none' }}
         />
+        {/* A bank of cloud hides Machu Picchu as she climbs, and rolls away at the top. */}
+        <div aria-hidden style={{ position: 'absolute', left: -ox / scale, width: size.W / scale, top: paintTop + (S.tall ? 0.48 : 0.58) * S.paintH - S.h * 0.26, height: S.h * 0.52, background: '#F4F1FA', borderRadius: '40% 40% 30% 30%', boxShadow: '0 0 60px 40px #F4F1FA', opacity: revealed ? 0 : k >= 2 ? 1 : 0.75, transform: revealed ? 'translateY(-60%) scale(1.2)' : 'none', transition: `opacity 1.6s, transform 2s, top ${cam.dur}s cubic-bezier(.45,0,.3,1)`, pointerEvents: 'none' }} />
         {/* Below the painting: more of its green hills. */}
         <div style={{ position: 'absolute', left: -ox / scale, width: size.W / scale, top: paintTop + S.paintH - 4, height: S.h * 2, background: S.tall ? '#91DC9C' : '#A8D879', transition: `top ${cam.dur}s cubic-bezier(.45,0,.3,1)`, pointerEvents: 'none' }} />
         {worldEl}
@@ -930,6 +961,14 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
               <svg width={st.w} height={st.h} style={{ position: 'absolute', left: PAD, top: PAD, overflow: 'visible', pointerEvents: 'none' }}>
                 <Stone st={st} local />
               </svg>
+              {/* Up in the clouds: a puff of cloud hides the stone until she touches it. */}
+              <AnimatePresence>
+                {fog.has(st.id) && (
+                  <motion.div key="fog" initial={{ opacity: 0 }} animate={{ opacity: 0.97 }} exit={{ opacity: 0, scale: 1.6 }} transition={{ duration: 0.4 }} style={{ position: 'absolute', left: PAD + st.w / 2 - Math.max(st.w, st.h * 1.6) * 0.65, top: PAD + st.h / 2 - Math.max(st.w, st.h * 1.6) * 0.36, pointerEvents: 'none' }}>
+                    <CloudShape w={Math.max(st.w, st.h * 1.6) * 1.3} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           )
         })}
@@ -1018,7 +1057,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
         <div aria-hidden style={{ position: 'absolute', right: 'max(16px, var(--safe-right, 0px))', bottom: 'calc(var(--safe-bottom) + 16px)', width: 'min(130px, 18vw)', height: 'min(150px, 21vw)', zIndex: 26 }}>
           {photos.map((p, i) => (
             <motion.div key={i} initial={{ scale: 1.6, opacity: 0, rotate: 0 }} animate={{ scale: 1, opacity: 1, rotate: ((i * 37) % 17) - 8 }} style={{ position: 'absolute', inset: 0, background: '#FFF7F0', border: `4px solid ${INK}`, borderRadius: 10, padding: '8% 8% 24%', boxShadow: '0 6px 0 rgba(43,35,48,.2)' }}>
-              <div style={{ width: '100%', height: '100%', background: 'linear-gradient(#A8DCFF 0 55%, #8FD86F 55%)', borderRadius: 4, overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
+              <div style={{ width: '100%', height: '100%', background: `url(${art.bgMp}) 60% 60% / cover`, borderRadius: 4, overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
                 <Tika height="92%" pose={p} />
               </div>
             </motion.div>

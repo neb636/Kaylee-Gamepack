@@ -539,18 +539,11 @@
     "file": "436d66d412f3.mp3"
   },
   {
-    "text": "Look! Machu Picchu!",
+    "text": "Kaylee, look! Machu Picchu!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2234,
-    "file": "cacf44c6afd6.mp3"
-  },
-  {
-    "text": "The Inca built Machu Picchu long ago!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4148,
-    "file": "4db8b2b5b95b.mp3"
+    "ms": 2712,
+    "file": "883fb9d49e0c.mp3"
   },
   {
     "text": "Tap the camera for Luna's journal!",
@@ -754,6 +747,13 @@
     "sig": "ed7dbdac3d",
     "ms": 3194,
     "file": "bc8bce10ce46.mp3"
+  },
+  {
+    "text": "The Inca built Machu Picchu long ago!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4148,
+    "file": "4db8b2b5b95b.mp3"
   },
   {
     "text": "Peru's flag is red, white, red!",
