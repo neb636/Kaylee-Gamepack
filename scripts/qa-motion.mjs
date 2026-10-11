@@ -11,7 +11,7 @@ import { spawnSync } from 'node:child_process'
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import sharp from 'sharp'
-import { browserName, device, filmstrip, flag, launch, openApp, out, serve, skip, VIEWPORTS } from './qa-lib.mjs'
+import { activityQA, browserName, device, filmstrip, flag, launch, openApp, out, serve, skip, VIEWPORTS } from './qa-lib.mjs'
 
 const dir = path.join(out, 'motion')
 const vp = VIEWPORTS.find((v) => v.name === (flag('viewport') ?? 'ipad-landscape')) ?? VIEWPORTS[1]
@@ -411,160 +411,10 @@ GAME_SCENARIOS.push(
   etnaDrive('etna-cold', 3.2, 'cold', [[0.25, 0, 900]]),
 )
 
-// Luna's Fluffy Day: rub the brush over Luna's fleece (tangles turn shiny, sparkles, things pop out), then the
-// clippers (puffs snip off and float into the basket).
-const fluffyRub = (name, seconds, jump) => ({
-  name,
-  seconds,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/alpaca`)
-    await page.waitForTimeout(600)
-    await skip(page)
-    if (jump) await page.evaluate((j) => window.__peruQA?.jump(j), jump)
-    await page.waitForTimeout(900)
-  },
-  act: async (page) => {
-    const b = await page.locator('[aria-label="Luna"]').first().boundingBox()
-    if (!b) throw new Error('no Luna found')
-    await page.mouse.move(b.x + b.width * 0.2, b.y + b.height * 0.5)
-    await page.mouse.down()
-    for (let i = 0; i < 5; i++) await page.mouse.move(b.x + b.width * (i % 2 ? 0.2 : 0.75), b.y + b.height * (0.48 + i * 0.05), { steps: 10 })
-    await page.mouse.up()
-  },
-})
-GAME_SCENARIOS.push(fluffyRub('fluffy-brush', 2.4), fluffyRub('fluffy-clip', 2.6, 'clip'))
 
-// Tika's Mountain Terraces: drag a stone off the pile into its own gap (magnetic pull, clonk, dust, shake), then one
-// into a wrong gap (bonk, rolls back). `jump` starts on a later wall.
-const terracesStone = (name, seconds, wrong, jump) => ({
-  name,
-  seconds,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/machu-picchu`)
-    await page.waitForTimeout(600)
-    await skip(page)
-    if (jump) await page.evaluate((j) => window.__terracesQA?.jump(j), jump)
-    await page.waitForTimeout(1500)
-  },
-  act: async (page) => {
-    const r = await page.evaluate((wrong) => {
-      const el = document.querySelector('[data-stone]')
-      if (!el) return null
-      const gaps = [...document.querySelectorAll('[data-gap]')]
-      const gap = gaps.find((g) => (g.dataset.gap === el.dataset.stone) !== wrong)
-      if (!gap) return null
-      const b = el.getBoundingClientRect()
-      const t = gap.getBoundingClientRect()
-      return { x: b.left + b.width / 2, y: b.top + b.height / 2, tx: t.left + t.width / 2, ty: t.top + t.height / 2 }
-    }, wrong)
-    if (!r) throw new Error('no stone or gap found')
-    await page.mouse.move(r.x, r.y)
-    await page.mouse.down()
-    for (let i = 1; i <= 12; i++) {
-      await page.mouse.move(r.x + ((r.tx - r.x) * i) / 12, r.y + ((r.ty - r.y) * i) / 12)
-      await page.waitForTimeout(40)
-    }
-    await page.mouse.up()
-  },
-})
-GAME_SCENARIOS.push(terracesStone('terraces-clonk', 2.4, false), terracesStone('terraces-bonk', 2.4, true), terracesStone('terraces-clouds', 2.4, false, 3))
 
-// Pepa's Penguin Cliff: grab the front penguin on the launch rock, pull it back (it crouches, the dotted arc shows the
-// splash spot), let go: the leap, the splash, the underwater swim. `jump` starts later (fish schools, the chicks' swim).
-const penguinLaunch = (name, seconds, jump, pull) => ({
-  name,
-  seconds,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/penguins`)
-    await page.waitForTimeout(600)
-    await skip(page)
-    await page.waitForSelector('[aria-label="penguin"]', { timeout: 20000 })
-    if (jump) await page.evaluate((j) => window.__penguinQA?.jump(j), jump)
-    await page.waitForTimeout(jump === 'swim' ? 3200 : 900)
-  },
-  act: async (page) => {
-    const boxes = await page.$$eval('[aria-label="penguin"], [aria-label="penguin chick"]', (els) =>
-      els.filter((e) => getComputedStyle(e).display !== 'none').map((e) => {
-        const r = e.getBoundingClientRect()
-        return { x: r.x + r.width / 2, y: r.y + r.height / 2 }
-      }),
-    )
-    const front = boxes.sort((a, b) => b.x - a.x)[0]
-    if (!front) throw new Error('no penguin found')
-    await page.mouse.move(front.x, front.y)
-    await page.mouse.down()
-    await page.mouse.move(front.x - pull * vp.width, front.y + pull * vp.height * 0.5, { steps: 12 })
-    await page.waitForTimeout(400)
-    await page.mouse.up()
-  },
-})
-GAME_SCENARIOS.push(penguinLaunch('penguin-launch', 8, null, 0.13), penguinLaunch('penguin-fish', 5, 'fish', 0.09), penguinLaunch('penguin-chick-swim', 4.5, 'swim', 0.08))
 
-// Coco's Canyon Glide: hold a finger in the sky and Coco banks after it, sinking slowly in plain air; steer him into a
-// swirl of warm air and he circles up (wings up, fingers spread); pull down for a dive (wings fold) and a swoop.
-const canyonFly = (name, seconds, jump, path) => ({
-  name,
-  seconds,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/condor`)
-    await page.waitForTimeout(600)
-    await skip(page)
-    if (jump) await page.evaluate((j) => window.__canyonQA?.jump(j), jump)
-    await page.waitForTimeout(900)
-  },
-  act: async (page) => {
-    const vp = page.viewportSize()
-    // `path`: world targets [x, y, ms]; the finger sits where that point is on screen (clamped to the screen).
-    let down = false
-    for (const [x, y, ms] of path) {
-      const end = Date.now() + ms
-      while (Date.now() < end) {
-        const w = await page.evaluate(() => window.__canyonQA?.where())
-        if (!w) break
-        const sx = Math.min(vp.width - 20, Math.max(20, (x - w.cam.x) * w.s))
-        const sy = Math.min(vp.height - 20, Math.max(140, (y - w.cam.y) * w.s))
-        if (!down) {
-          await page.mouse.move(sx, sy)
-          await page.mouse.down()
-          down = true
-        } else await page.mouse.move(sx, sy)
-        await page.waitForTimeout(100)
-      }
-    }
-    await page.mouse.up()
-  },
-})
-GAME_SCENARIOS.push(
-  canyonFly('canyon-ride', 4, null, [[1340, 1800, 1500], [1340, 900, 2500]]),
-  canyonFly('canyon-dive', 3.2, 'follow', [[1700, 2600, 2000], [2000, 2100, 1200]]),
-)
 
-// Rosa's Rainy River: grab the cloud and squeeze it (it squishes and rains), wiggle it over the river (harder rain, a
-// rumble), then a lily bud unrolling in the lagoon's rain.
-const riverSqueeze = (name, seconds, jump) => ({
-  name,
-  seconds,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/river`)
-    await page.waitForTimeout(600)
-    await skip(page)
-    if (jump) await page.evaluate((j) => window.__peruRiverQA?.jump(j), jump)
-    await page.waitForTimeout(jump ? 3200 : 900)
-  },
-  act: async (page) => {
-    const b = await page.locator('[aria-label="rain cloud"]').first().boundingBox()
-    if (!b) throw new Error('no cloud found')
-    const x = b.x + b.width / 2
-    const y = b.y + b.height / 2
-    await page.mouse.move(x, y)
-    await page.mouse.down()
-    await page.waitForTimeout(700)
-    for (let i = 0; i < 6; i++) await page.mouse.move(x + (i % 2 ? 60 : -60) + i * 12, y + (i % 2 ? 10 : -10), { steps: 6 })
-    await page.waitForTimeout(600)
-    await page.mouse.up()
-  },
-})
-GAME_SCENARIOS.push(riverSqueeze('river-squeeze', 3.2), riverSqueeze('river-lagoon-rain', 3.2, 'lagoon'))
 
 // Opera greybox: swing the conductor's wand (big swings bounce the band high, little ones sway), then stop (freeze).
 const operaSwing = (name, seconds, size, ms) => ({
@@ -590,7 +440,7 @@ const operaSwing = (name, seconds, size, ms) => ({
 })
 GAME_SCENARIOS.push(operaSwing('opera-forte', 3.4, 0.35, 280), operaSwing('opera-piano', 3.4, 0.05, 280))
 
-const all = [...PUPPET_SCENARIOS, ...GAME_SCENARIOS].filter((s) => !flag('only') || flag('only').split(',').includes(s.name))
+const all = [...PUPPET_SCENARIOS, ...GAME_SCENARIOS, ...(await activityQA('motion', { skip, vp }))].filter((s) => !flag('only') || flag('only').split(',').includes(s.name))
 
 const ffmpeg = (a) => spawnSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...a], { encoding: 'utf8' })
 const hasFfmpeg = !ffmpeg(['-version']).error

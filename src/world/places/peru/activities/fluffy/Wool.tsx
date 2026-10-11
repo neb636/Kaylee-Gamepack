@@ -4,7 +4,7 @@
 import { motion } from 'motion/react'
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { useGameLoop } from '../../../../../sdk'
-import { art } from '../../art'
+import { art } from './art'
 import { INK } from '../../puppets/Alpaca'
 
 /** How many puffs fill the basket to the brim. */

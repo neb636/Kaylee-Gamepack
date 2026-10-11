@@ -7,7 +7,7 @@
 // A failed step never stops the run: it is listed in errors.txt and the screenshot is taken anyway.
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
-import { browserName, device, flag, launch, openApp, out, pad, serve, skip, VIEWPORTS as ALL_VIEWPORTS } from './qa-lib.mjs'
+import { activityQA, browserName, device, flag, launch, openApp, out, pad, serve, skip, VIEWPORTS as ALL_VIEWPORTS } from './qa-lib.mjs'
 
 export const VIEWPORTS = ALL_VIEWPORTS.filter((v) => !flag('only') || flag('only').split(',').includes(v.name))
 const PORT = 4179
@@ -338,94 +338,10 @@ const SCREENS = [
   })),
   { name: 'peru-intro', hash: '#/world/peru', reset: true, wait: 300 },
   { name: 'peru-hub', hash: '#/world/peru', act: skip },
-  { name: 'alpaca-story', hash: '#/world/peru/alpaca', reset: true, wait: 400 },
-  { name: 'alpaca-play', hash: '#/world/peru/alpaca', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
-  // Luna's Fluffy Day moments, reached through its QA hook (window.__peruQA.jump): the clippers, the family's turn,
-  // the yarn and the cactus, the hats tray, the journal photo.
-  ...['clip', 'family', 'yarn', 'hats', 'photo'].map((to) => ({
-    name: `alpaca-${to}`,
-    hash: '#/world/peru/alpaca',
-    reset: true,
-    act: async (p) => {
-      await skip(p)
-      await p.waitForTimeout(500)
-      await p.evaluate((t) => window.__peruQA?.jump(t), to)
-      await p.waitForTimeout(to === 'family' ? 2400 : 1500)
-    },
-  })),
-  { name: 'terraces-story', hash: '#/world/peru/machu-picchu', reset: true, wait: 400 },
-  { name: 'terraces-play', hash: '#/world/peru/machu-picchu', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
-  // Tika's Mountain Terraces, reached through its QA hook (window.__terracesQA.jump): the second and third walls, the
-  // last wall in the clouds, and the photobomb at the top.
-  ...[1, 2, 3, 'photo'].map((to) => ({
-    name: `terraces-${to === 'photo' ? 'photo' : `wall${to}`}`,
-    hash: '#/world/peru/machu-picchu',
-    reset: true,
-    act: async (p) => {
-      await skip(p)
-      await p.waitForTimeout(500)
-      await p.evaluate((t) => window.__terracesQA?.jump(t), to)
-      await p.waitForTimeout(1500)
-    },
-  })),
-  { name: 'penguins-story', hash: '#/world/peru/penguins', reset: true, wait: 400 },
-  { name: 'penguins-play', hash: '#/world/peru/penguins', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1500) } },
-  // Pepa's Penguin Cliff moments, reached through its QA hook (window.__penguinQA.jump): the fish schools, feeding the
-  // chicks, the twist (third chick, swell, pelican), the chicks' first swim, the family parade.
-  ...['fish', 'feed', 'twist', 'swim', 'parade'].map((to) => ({
-    name: `penguins-${to}`,
-    hash: '#/world/peru/penguins',
-    reset: true,
-    act: async (p) => {
-      await skip(p)
-      await p.waitForTimeout(500)
-      await p.evaluate((t) => window.__penguinQA?.jump(t), to)
-      await p.waitForTimeout(to === 'parade' ? 3200 : to === 'twist' ? 2400 : 1800)
-    },
-  })),
-  { name: 'condor-story', hash: '#/world/peru/condor', reset: true, wait: 400 },
-  { name: 'condor-start', hash: '#/world/peru/condor', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1500) } },
-  // Coco's Canyon Glide moments, reached through its QA hook (window.__canyonQA.jump): leading Pluma to the places,
-  // the sun on the other wall (the ridge), Pluma flying by herself, the condor circle at the end.
-  ...['follow', 'ridge', 'solo', 'finale'].map((to) => ({
-    name: `condor-${to}`,
-    hash: '#/world/peru/condor',
-    reset: true,
-    act: async (p) => {
-      await skip(p)
-      await p.waitForTimeout(500)
-      await p.evaluate((t) => window.__canyonQA?.jump(t), to)
-      await p.waitForTimeout(to === 'finale' ? 1200 : 3000)
-    },
-  })),
-  { name: 'river-story', hash: '#/world/peru/river', reset: true, wait: 400 },
-  { name: 'river-play', hash: '#/world/peru/river', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
-  // Rosa's Rainy River moments, reached through its QA hook (window.__peruRiverQA): raining on the river, the river
-  // view once it's filled, the lagoon, the lily pads with the friends, the rainbow.
-  {
-    name: 'river-rain',
-    hash: '#/world/peru/river',
-    reset: true,
-    act: async (p) => {
-      await skip(p)
-      await p.evaluate(() => window.__peruRiverQA?.rain(0.5, 12))
-      await p.waitForTimeout(3500)
-    },
-  },
-  ...['river', 'lagoon', 'pads', 'rainbow'].map((to) => ({
-    name: `river-${to === 'river' ? 'full' : to}`,
-    hash: '#/world/peru/river',
-    reset: true,
-    act: async (p) => {
-      await skip(p)
-      await p.waitForTimeout(500)
-      if (to === 'river') await p.evaluate(() => window.__peruRiverQA?.rain(0.5, 40))
-      else await p.evaluate((t) => window.__peruRiverQA?.jump(t), to)
-      await p.waitForTimeout(to === 'river' ? 30000 : to === 'rainbow' ? 2600 : 3200)
-    },
-  })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
+  { name: 'peru-hub-done', hash: '#/world/peru', stampAll: 'peru', act: skip },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party', stampAll: 'peru', wait: 800 },
+  ...(await activityQA('screens', { skip })),
 ].filter((s) => !flag('routes') || flag('routes').split(',').includes(s.name))
 
 const { base, stop } = await serve(PORT)

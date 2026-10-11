@@ -16,6 +16,26 @@ export interface ActivityInfo {
   sticker: { name: string; img: string; fact: Line }
 }
 
+/**
+ * What a country keeps in each activity folder's info.ts: the ActivityInfo the shared code needs, plus the hub bits.
+ * Places find these with import.meta.glob, so adding an activity never means editing a shared list.
+ */
+export interface ActivityManifest extends ActivityInfo {
+  /** Sorts the country's activity list (passport, stamps). Ties and gaps are fine; unset sorts last, then by id. */
+  order?: number
+  /** The friend's face on the country map pin. Without one the pin shows `icon`. */
+  pin?: string
+  /** Spoken when the friend's journal window is tapped. */
+  window?: Line
+}
+
+/** Sort + strip a country's manifests into the plain ActivityInfo list PlaceMeta wants. */
+export function toActivities(manifests: ActivityManifest[]): ActivityInfo[] {
+  return [...manifests]
+    .sort((a, b) => (a.order ?? 99) - (b.order ?? 99) || a.id.localeCompare(b.id))
+    .map((m) => ({ id: m.id, name: m.name, icon: m.icon, pos: m.pos, sticker: m.sticker }))
+}
+
 export interface PlaceFact {
   icon: string
   label: string

@@ -8,7 +8,9 @@
 // which are holes.
 //
 // Sprites someone already looked at and found fine (only real white, like eye whites or a cloud) are listed in
-// scripts/qa-art-reviewed.json with a hash of the file, so they aren't flagged again until the picture changes.
+// a "<sprite>.reviewed.json" file next to the sprite (hash of the file + why it's fine), so they aren't flagged again until
+// the picture changes. One file per sprite means two activities built in parallel never edit the same file. (Older marks
+// still live in scripts/qa-art-reviewed.json and are read too.)
 //
 // Usage:
 //   node scripts/qa-art.mjs                          # every sprite under src/
@@ -25,6 +27,14 @@ import { basename, join } from 'node:path'
 const REVIEWED = 'scripts/qa-art-reviewed.json'
 const reviewed = JSON.parse(readFileSync(REVIEWED, 'utf8'))
 const hashOf = (file) => createHash('sha1').update(readFileSync(file)).digest('hex').slice(0, 12)
+const sidecar = (file) => `${file}.reviewed.json`
+const reviewedHash = (file) => {
+  try {
+    return JSON.parse(readFileSync(sidecar(file), 'utf8')).hash
+  } catch {
+    return reviewed[file]?.hash
+  }
+}
 
 if (process.argv[2] === '--ok') {
   const [file, note] = process.argv.slice(3)
@@ -32,9 +42,7 @@ if (process.argv[2] === '--ok') {
     console.error('usage: node scripts/qa-art.mjs --ok <sprite.webp> "why its white is fine"')
     process.exit(1)
   }
-  reviewed[file] = { hash: hashOf(file), note }
-  const sorted = Object.fromEntries(Object.entries(reviewed).sort(([a], [b]) => a.localeCompare(b)))
-  writeFileSync(REVIEWED, JSON.stringify(sorted, null, 2) + '\n')
+  writeFileSync(sidecar(file), JSON.stringify({ hash: hashOf(file), note }, null, 2) + '\n')
   console.log(`${file} marked fine`)
   process.exit(0)
 }
@@ -61,7 +69,7 @@ mkdirSync(OUT, { recursive: true })
 const lines = []
 let skipped = 0
 for (const file of sprites) {
-  if (reviewed[file]?.hash === hashOf(file)) {
+  if (reviewedHash(file) === hashOf(file)) {
     skipped++
     continue
   }

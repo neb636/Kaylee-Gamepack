@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "playwright test",
+    "check:parallel": "node scripts/check-parallel-safe.mjs",
     "check": "node scripts/generate-voice.mjs --check && node scripts/check-heavy-imports.mjs && npm run typecheck && npm run build && npm run test",
     "icons": "node scripts/build-icons.mjs",
     "art": "node scripts/optimize-art.mjs",

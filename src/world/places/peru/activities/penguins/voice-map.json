@@ -1,0 +1,296 @@
+[
+  {
+    "text": "My fluffy chicks!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 1976,
+    "file": "3de6b1a162f0.mp3"
+  },
+  {
+    "text": "Hola! My chicks are hungry!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 2346,
+    "file": "c5a94f011efc.mp3"
+  },
+  {
+    "text": "Pull a penguin back, then let go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2896,
+    "file": "7e1fc97c0fcb.mp3"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "pingo",
+    "sig": "59d0d06102",
+    "ms": 1436,
+    "file": "6c8abeada84e.mp3"
+  },
+  {
+    "text": "Splash!",
+    "voice": "pingo",
+    "sig": "59d0d06102",
+    "ms": 1058,
+    "file": "f4de41918e01.mp3"
+  },
+  {
+    "text": "Yippee!",
+    "voice": "pingo",
+    "sig": "59d0d06102",
+    "ms": 634,
+    "file": "daedfba94fea.mp3"
+  },
+  {
+    "text": "Whoa!",
+    "voice": "pingo",
+    "sig": "59d0d06102",
+    "ms": 580,
+    "file": "5f16b15bbaed.mp3"
+  },
+  {
+    "text": "A teeny splash!",
+    "voice": "pingo",
+    "sig": "59d0d06102",
+    "ms": 1755,
+    "file": "df3dcbdb9d51.mp3"
+  },
+  {
+    "text": "I found a sock!",
+    "voice": "pingo",
+    "sig": "59d0d06102",
+    "ms": 2151,
+    "file": "42f1bfeae5fe.mp3"
+  },
+  {
+    "text": "Hey! You splashed me!",
+    "voice": "lobo",
+    "sig": "1ae02eaef4",
+    "ms": 2350,
+    "file": "0f90a33abed2.mp3"
+  },
+  {
+    "text": "Do it again!",
+    "voice": "lobo",
+    "sig": "1ae02eaef4",
+    "ms": 950,
+    "file": "a816bd904f22.mp3"
+  },
+  {
+    "text": "Ha ha! Seaweed hat!",
+    "voice": "lobo",
+    "sig": "1ae02eaef4",
+    "ms": 2455,
+    "file": "20ee9d732732.mp3"
+  },
+  {
+    "text": "Arf arf!",
+    "voice": "lobo",
+    "sig": "1ae02eaef4",
+    "ms": 997,
+    "file": "98e202bc2ef3.mp3"
+  },
+  {
+    "text": "I love splashes!",
+    "voice": "lobo",
+    "sig": "1ae02eaef4",
+    "ms": 2155,
+    "file": "0a7de1e550ba.mp3"
+  },
+  {
+    "text": "Hola, Kaylee!",
+    "voice": "lobo",
+    "sig": "1ae02eaef4",
+    "ms": 1860,
+    "file": "c85435da8d16.mp3"
+  },
+  {
+    "text": "Jump near the shiny fish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2013,
+    "file": "68e30223edb2.mp3"
+  },
+  {
+    "text": "One fish, please!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 1736,
+    "file": "34ccaf5db543.mp3"
+  },
+  {
+    "text": "Two fish, please!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 1667,
+    "file": "d17b24bcfd56.mp3"
+  },
+  {
+    "text": "Three fish, please!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 1904,
+    "file": "9e9f1901936e.mp3"
+  },
+  {
+    "text": "One!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 645,
+    "file": "87ed107b16cf.mp3"
+  },
+  {
+    "text": "Two!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 541,
+    "file": "e53b779eaf65.mp3"
+  },
+  {
+    "text": "Three!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 722,
+    "file": "b98340c9d88a.mp3"
+  },
+  {
+    "text": "Feed my chicks, Kaylee!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 1617,
+    "file": "bda8367837fd.mp3"
+  },
+  {
+    "text": "Yummy!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 720,
+    "file": "1ab0b570b22e.mp3"
+  },
+  {
+    "text": "So round and fluffy!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 2061,
+    "file": "453a7103ddc0.mp3"
+  },
+  {
+    "text": "Gracias!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 894,
+    "file": "748b0882b170.mp3"
+  },
+  {
+    "text": "Kaylee, look! The egg is wiggling!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3334,
+    "file": "3a4d330c3a0e.mp3"
+  },
+  {
+    "text": "A new baby!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 1442,
+    "file": "18842a633f79.mp3"
+  },
+  {
+    "text": "A pelican wants fish too!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2661,
+    "file": "a92c175ae702.mp3"
+  },
+  {
+    "text": "The chicks are ready to swim! Pull them back!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3331,
+    "file": "380b1700e2f4.mp3"
+  },
+  {
+    "text": "Their very first swim!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 1699,
+    "file": "1d22f0a5fcfa.mp3"
+  },
+  {
+    "text": "Gracias, Kaylee!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 1080,
+    "file": "e5df440efe89.mp3"
+  },
+  {
+    "text": "Click! A picture for Luna's journal!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2702,
+    "file": "73df44cc1cba.mp3"
+  },
+  {
+    "text": "Hola, Kaylee!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 1437,
+    "file": "054456522459.mp3"
+  },
+  {
+    "text": "My babies love fish!",
+    "voice": "pepa",
+    "sig": "5bda623ab7",
+    "ms": 2045,
+    "file": "d5d3fe16bfcd.mp3"
+  },
+  {
+    "text": "These birds have white mustaches!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2846,
+    "file": "12d2f3a87ca8.mp3"
+  },
+  {
+    "text": "Peru has penguins!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1809,
+    "file": "5d40ec847595.mp3"
+  },
+  {
+    "text": "The ocean here is cold and full of fish!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3643,
+    "file": "bfea771b7797.mp3"
+  },
+  {
+    "text": "Penguins fly underwater with their wings!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2692,
+    "file": "3d9bc79f59d2.mp3"
+  },
+  {
+    "text": "Tap a chick to feed it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1856,
+    "file": "da3f4ad11897.mp3"
+  },
+  {
+    "text": "Pull a chick back, then let go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4138,
+    "file": "ede35d8e705b.mp3"
+  },
+  {
+    "text": "Penguin sticker! Penguins live in Peru too!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3857,
+    "file": "11dba6a857df.mp3"
+  }
+]

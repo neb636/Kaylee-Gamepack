@@ -4,6 +4,10 @@ Copy this for each activity in a country plan (or for a rebuild). Read `docs/pla
 to fill in, the activity isn't ready to build yet. Keep it short: a plan that reads like a story can hide play that is
 thin, so the **verbs** and **numbers** matter more than the prose.
 
+When you build it, put everything in its own `activities/<folder>/` (info, game, journal tile, lines, cast, art, puppets,
+QA scenarios) and edit no shared file, so several activities can be built in parallel without merge conflicts. See
+"Parallel-safe activities" in `AGENTS.md`.
+
 ```markdown
 ### <n>. <Name> <emoji> (<place>: <what it teaches>)
 

@@ -3,8 +3,8 @@
 import { motion } from 'motion/react'
 import { useState } from 'react'
 import { say, sounds } from '../../../../../sdk'
-import { art } from '../../art'
-import { L } from '../../lines'
+import { art } from './art'
+import { L as HUB } from '../../lines'
 import { INK } from '../../puppets/Alpaca'
 import { fsfx } from './sfx'
 
@@ -128,7 +128,7 @@ export function Post({ cx, bottom, h, bird, onBird }: { cx: number; bottom: numb
         onClick={() => {
           setOpen((o) => o + 1)
           sounds.pop()
-          void say(L.journal)
+          void say(HUB.journal)
         }}
         animate={{ rotate: [-3, 3, -3] }}
         transition={{ repeat: Infinity, duration: 3 }}
