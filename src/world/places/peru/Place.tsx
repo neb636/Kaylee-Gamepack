@@ -63,7 +63,7 @@ export default function Place(props: PlaceProps) {
 }
 
 /** Pins that show their friend instead of an emoji. */
-const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, 'machu-picchu': art.tika, condor: art.coco, river: art.rosa }
+const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, 'machu-picchu': art.mpPin, condor: art.coco, river: art.rosa }
 
 // Luna says hello once per visit to the app.
 let introSeen = false

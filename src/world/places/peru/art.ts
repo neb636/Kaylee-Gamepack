@@ -30,6 +30,7 @@ import hummingbird from './assets/hummingbird.webp'
 import lizard from './assets/lizard.webp'
 import luna from './assets/luna.webp'
 import macaw from './assets/macaw.webp'
+import mpPin from './assets/machu-picchu-pin.webp'
 import monkey from './assets/monkey.webp'
 import paco from './assets/paco.webp'
 import pond from './assets/pond.webp'
@@ -73,5 +74,5 @@ import seaRock from './assets/sea-rock.webp'
 import sock from './assets/seaweed-sock.webp'
 
 export const art = {
-  abuela, basket, bear, beetle, bgAmazon, bgAndes, bgAndesTall, bgCanyonFar, bgCoast, bgCoastTall, bgMp, bgMpTall, bird, boat, brush, burr, bush, butterfly, cactus, canoe, canyonCactus, canyonCloud, canyonPerched, canyonSwallow, canyonTourists, canyonViscacha, capybara, capybaraBaby, cliff, clippers, cockRock, coco, corn, cover, crab, cria, dandelion, doorway, fish, frog, hummingbird, jellyfish, kantuta, kelp, lizard, llamaBrown, llamaGrey, luna, macaw, map, monkey, paco, pelicanFloat, pelicanFly, pepa, pluma, pond, post, potatoPlant, rosa, seaRock, sloth, sock, stoneWall, tern, tika, toucan, treeMonkey, treeSloth, twig, viscacha,
+  abuela, basket, bear, beetle, bgAmazon, bgAndes, bgAndesTall, bgCanyonFar, bgCoast, bgCoastTall, bgMp, bgMpTall, bird, boat, brush, burr, bush, butterfly, cactus, canoe, canyonCactus, canyonCloud, canyonPerched, canyonSwallow, canyonTourists, canyonViscacha, capybara, capybaraBaby, cliff, clippers, cockRock, coco, corn, cover, crab, cria, dandelion, doorway, fish, frog, hummingbird, jellyfish, kantuta, kelp, lizard, llamaBrown, llamaGrey, luna, macaw, map, monkey, mpPin, paco, pelicanFloat, pelicanFly, pepa, pluma, pond, post, potatoPlant, rosa, seaRock, sloth, sock, stoneWall, tern, tika, toucan, treeMonkey, treeSloth, twig, viscacha,
 }
