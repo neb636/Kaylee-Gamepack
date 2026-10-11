@@ -16,8 +16,9 @@ import { BigButton, burst, Buddy, say, shuffle, sounds, SparklePuppet, useAlive,
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
-import { art } from '../../art'
-import { L } from '../../lines'
+import { art } from './art'
+import { L as HUB } from '../../lines'
+import { L } from './lines'
 import type { ActivityProps } from '../../Place'
 import { INK } from '../../puppets/Alpaca'
 import { Tika, TIKA_POSES, TIKA_VIEW, type TikaPose } from '../../puppets/Tika'
@@ -814,7 +815,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
           pokeIt('bird')
           if (!g.current.birdSaid) {
             g.current.birdSaid = true
-            say1(L.facts.bird)
+            say1(HUB.facts.bird)
           }
         }}
         style={{ position: 'absolute', left: birdAt.x - birdAt.h * 0.5, top: birdAt.y - birdAt.h, width: birdAt.h, height: birdAt.h, padding: 0, background: 'none', border: 'none', zIndex: 2 }}
@@ -980,7 +981,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
           onClick={() => {
             void sparkle.current?.play('nod')
             sounds.pop()
-            say1([T.puzzle, T.potatoes, T.carry, L.facts.machuPicchu][g.current.facts++ % 4])
+            say1([T.puzzle, T.potatoes, T.carry, HUB.facts.machuPicchu][g.current.facts++ % 4])
           }}
           style={{ position: 'absolute', left: mx(S.sparkle.cx) - S.sparkle.h * 0.45, top: S.sparkle.bottom - S.sparkle.h, width: S.sparkle.h * 0.9, height: S.sparkle.h, padding: 0, background: 'none', border: 'none', zIndex: 15, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
         >

@@ -80,3 +80,24 @@ export async function filmstrip(frames, file) {
     .png()
     .toFile(file)
 }
+
+/**
+ * Scenarios that activities bring along. Every src/world/places/<country>/activities/<id>/qa.mjs default-exports
+ * `(ctx) => ({ screens, motion, pacing })`; the QA scripts call this for their own kind, so adding an activity never
+ * edits a shared script (two activities built in parallel can't conflict here).
+ */
+export async function activityQA(kind, ctx) {
+  const { existsSync, readdirSync } = await import('node:fs')
+  const { pathToFileURL } = await import('node:url')
+  const places = path.join(root, 'src/world/places')
+  const found = []
+  for (const place of existsSync(places) ? readdirSync(places).sort() : []) {
+    const dir = path.join(places, place, 'activities')
+    if (!existsSync(dir)) continue
+    for (const id of readdirSync(dir).sort()) {
+      const file = path.join(dir, id, 'qa.mjs')
+      if (existsSync(file)) found.push(...((await import(pathToFileURL(file).href)).default(ctx)[kind] ?? []))
+    }
+  }
+  return found
+}

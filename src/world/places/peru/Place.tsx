@@ -1,23 +1,19 @@
-// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md). Built one activity per PR: Luna's
-// Fluffy Day, Coco's Canyon Glide and Rosa's Rainy River so far. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
-// (route `party`) waits until all five exist.
+// Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md). Built one activity per PR. Each
+// activity is a folder (activities/<id>/) that this file finds by itself: info.ts (name, pin, sticker), Activity.tsx
+// (the game), JournalTile.tsx (its picture in the journal), so a new activity never edits this file. Places on Luna's
+// map without an activity yet say "coming soon", and the balloon finale (route `party`) waits until all five exist.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { BigButton, say, SparklePuppet, sounds, useSaved, type PuppetHandle } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
-import type { PlaceProps } from '../../types'
-import { CanyonGlide } from './activities/canyon/CanyonGlide'
-import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
-import { PenguinCliff } from './activities/penguins/PenguinCliff'
-import { RainyRiver } from './activities/river/RainyRiver'
-import { Terraces } from './activities/terraces/Terraces'
+import type { ActivityManifest, PlaceProps } from '../../types'
+import { HATS_KEY } from './activities/fluffy/FluffyDay'
 import { art } from './art'
 import { L } from './lines'
 import { PeruMap, MAP_RATIO } from './PeruMap'
-import { Alpaca, HatShape, INK } from './puppets/Alpaca'
-import { Tika } from './puppets/Tika'
+import { Alpaca, INK } from './puppets/Alpaca'
 import './peru.css'
 
 export interface ActivityProps {
@@ -25,7 +21,20 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, penguins: PenguinCliff, 'machu-picchu': Terraces, condor: CanyonGlide, river: RainyRiver }
+// Activities find themselves: a folder's id comes from its info.ts, and its game / journal picture sit in the same folder.
+const folderOf = (path: string) => path.split('/')[2]
+const manifests = import.meta.glob<{ default: ActivityManifest }>('./activities/*/info.ts', { eager: true })
+const games = import.meta.glob<{ default: ComponentType<ActivityProps> }>('./activities/*/Activity.tsx', { eager: true })
+const tiles = import.meta.glob<{ default: ComponentType }>('./activities/*/JournalTile.tsx', { eager: true })
+const BUILT: Record<string, { info: ActivityManifest; Game?: ComponentType<ActivityProps>; Tile?: ComponentType }> = {}
+for (const [path, m] of Object.entries(manifests)) {
+  const folder = folderOf(path)
+  BUILT[m.default.id] = {
+    info: m.default,
+    Game: games[`./activities/${folder}/Activity.tsx`]?.default,
+    Tile: tiles[`./activities/${folder}/JournalTile.tsx`]?.default,
+  }
+}
 
 /** The five places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
 export const SPOTS = [
@@ -42,7 +51,7 @@ export default function Place(props: PlaceProps) {
 
   if (activity === 'party') return <BalloonSoon backToMap={backToMap} />
 
-  const Activity = activity ? ACTIVITIES[activity] : undefined
+  const Activity = activity ? BUILT[activity]?.Game : undefined
   const info = meta.activities.find((a) => a.id === activity)
   if (Activity && info) {
     const finish = () => {
@@ -59,9 +68,6 @@ export default function Place(props: PlaceProps) {
   }
   return <Hub {...props} />
 }
-
-/** Pins that show their friend instead of an emoji. */
-const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, 'machu-picchu': art.tika, condor: art.coco, river: art.rosa }
 
 // Luna says hello once per visit to the app.
 let introSeen = false
@@ -127,8 +133,8 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   zIndex: 3,
                 }}
               >
-                {PIN_IMG[spot.id] ? (
-                  <img src={PIN_IMG[spot.id]} alt="" style={{ height: '80%', maxWidth: '80%', objectFit: 'contain' }} />
+                {BUILT[spot.id]?.info.pin ? (
+                  <img src={BUILT[spot.id].info.pin} alt="" style={{ height: '80%', maxWidth: '80%', objectFit: 'contain' }} />
                 ) : (
                   <span style={{ fontSize: 'clamp(26px, 5.5cqw, 42px)', opacity: open ? 1 : 0.6 }}>{spot.icon}</span>
                 )}
@@ -153,7 +159,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
           >
             <Alpaca ref={luna} kind="luna" height="min(100%, 30cqw)" hat={lunaDone ? (hats?.luna ?? 'pink') : null} label="Luna" />
           </motion.button>
-          <Journal stamps={stamps} hats={hats} open={(id) => playable.has(id) && openActivity(id)} />
+          <Journal stamps={stamps} open={(id) => playable.has(id) && openActivity(id)} />
           <motion.button
             aria-label="Party"
             whileTap={{ scale: 0.92 }}
@@ -184,11 +190,12 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
 }
 
 /** Luna's explorer journal: five picture windows, one per corner of Peru, filled as she earns each stamp. */
-function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string, string | null> | null; open: (id: string) => void }) {
+function Journal({ stamps, open }: { stamps: string[]; open: (id: string) => void }) {
   return (
     <div aria-label="Explorer journal" className="peru-journal" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', gap: 'min(8px, 2cqmin)', background: '#FF8FB8', border: `4px solid ${INK}`, borderRadius: 20, padding: 'min(8px, 2cqmin)' }}>
       {SPOTS.map((spot, i) => {
         const done = stamps.includes(spot.id)
+        const Tile = BUILT[spot.id]?.Tile
         return (
           <motion.button
             key={spot.id}
@@ -196,50 +203,14 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
             whileTap={{ scale: 0.9 }}
             onClick={() => {
               sounds.pop()
-              if (done && spot.id === 'alpaca') void say(L.alpacaWindow)
-              else if (done && spot.id === 'penguins') void say(L.penguinWindow)
-              else if (done && spot.id === 'machu-picchu') void say(L.terracesWindow)
-              else if (done && spot.id === 'condor') void say(L.condorWindow)
-              else if (done && spot.id === 'river') void say(L.riverWindow)
-              else if (PIN_IMG[spot.id]) open(spot.id)
+              const built = BUILT[spot.id]
+              if (done && built?.info.window) void say(built.info.window)
+              else if (built) open(spot.id)
               else void say(L.soon)
             }}
             style={{ minWidth: 0, minHeight: 0, borderRadius: 14, border: `3px ${done ? 'solid' : 'dashed'} ${INK}`, background: done ? '#FFE27A' : '#FFF7F0', display: 'grid', placeItems: 'center', padding: 2, overflow: 'hidden' }}
           >
-            {done && spot.id === 'alpaca' ? (
-              // The three pompom hats she picked for Luna, Paco and Abuela.
-              <svg viewBox="-190 -80 380 170" style={{ width: '100%', height: '100%' }}>
-                {(['luna', 'paco', 'abuela'] as const).map((w, k) => (
-                  <g key={w} transform={`translate(${(k - 1) * 120} 0)`}>
-                    <HatShape color={hats?.[w] ?? ['pink', 'brown', 'hotpink'][k]} />
-                  </g>
-                ))}
-              </svg>
-            ) : done && spot.id === 'machu-picchu' ? (
-              // Tika's photobomb at Machu Picchu.
-              <div style={{ width: '100%', height: '100%', borderRadius: 10, overflow: 'hidden', background: 'linear-gradient(#A8DCFF 0 55%, #8FD86F 55%)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-                <Tika height="94%" pose="grin" />
-              </div>
-            ) : done && spot.id === 'penguins' ? (
-              // Pepa and her three round chicks, porpoising home.
-              <img src={art.pepa} alt="" style={{ height: '88%', maxWidth: '90%', objectFit: 'contain' }} />
-            ) : done && spot.id === 'condor' ? (
-              // Coco and Pluma, wingtip to wingtip.
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', gap: '2%' }}>
-                <img src={art.coco} alt="" style={{ width: '58%', maxHeight: '90%', objectFit: 'contain' }} />
-                <img src={art.pluma} alt="" style={{ width: '32%', maxHeight: '70%', objectFit: 'contain' }} />
-              </div>
-            ) : done && spot.id === 'river' ? (
-              // Rosa leaping under the rainbow she made.
-              <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                <svg viewBox="-60 -60 120 66" style={{ position: 'absolute', inset: '4% 0 auto', width: '100%' }}>
-                  {['#FF6B6B', '#FFB347', '#FFE27A', '#8FE3C8', '#7FB2FF'].map((c, k) => (
-                    <path key={c} d={`M${-54 + k * 7} 0A${54 - k * 7} ${54 - k * 7} 0 0 1 ${54 - k * 7} 0`} fill="none" stroke={c} strokeWidth="7.5" />
-                  ))}
-                </svg>
-                <img src={art.rosa} alt="" style={{ position: 'absolute', left: '12%', bottom: '8%', width: '76%', objectFit: 'contain', rotate: '-12deg' }} />
-              </div>
-            ) : <span style={{ fontSize: 'min(30px, 7cqmin)', opacity: 0.35 }}>{spot.icon}</span>}
+            {done && Tile ? <Tile /> : <span style={{ fontSize: 'min(30px, 7cqmin)', opacity: 0.35 }}>{spot.icon}</span>}
           </motion.button>
         )
       })}

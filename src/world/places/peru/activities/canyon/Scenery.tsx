@@ -5,7 +5,7 @@
 import { motion } from 'motion/react'
 import { forwardRef, useState, type ReactNode } from 'react'
 import { Buddy, type PuppetHandle } from '../../../../../sdk'
-import { art } from '../../art'
+import { art } from './art'
 import { INK } from '../../puppets/Alpaca'
 import { FALLS_TOP, LEFT_FACE, LEFT_RIM, LOOKOUT, NEST, PLACES, RIGHT_FACE, RIGHT_RIM, RIVER_Y, WORLD, type PlaceId, type Swirl } from './canyon'
 import { csfx } from './sfx'

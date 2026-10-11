@@ -5,7 +5,7 @@
 import { motion } from 'motion/react'
 import { forwardRef, useEffect, useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react'
 import { Buddy, sounds, type PuppetHandle } from '../../../../../sdk'
-import { art } from '../../art'
+import { art } from './art'
 import { INK } from '../../puppets/Alpaca'
 import { rsfx } from './sfx'
 

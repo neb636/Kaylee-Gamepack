@@ -11,7 +11,7 @@
 // Writes qa-output/pacing.md and qa-output/play/<id>.png; --video also records each run to qa-output/video/<id>.webm.
 import { readdirSync, readFileSync, renameSync, writeFileSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
-import { args, browserName, device, filmstrip, flag, launch, openApp, out, root, serve, skip, VIEWPORTS } from './qa-lib.mjs'
+import { activityQA, args, browserName, device, filmstrip, flag, launch, openApp, out, root, serve, skip, VIEWPORTS } from './qa-lib.mjs'
 
 const PORT = 4185
 const TOO_MUCH_BEFORE_TOUCH = 6 // seconds
@@ -56,11 +56,7 @@ const SCENARIOS = [
   { name: 'italy snow on a volcano', id: 'etna', hash: '#/world/italy/etna', reset: true },
   { name: 'italy opera (finale)', id: 'opera', hash: '#/world/italy/party', stampAll: 'italy' },
   { name: 'peru intro + map', id: 'peru', hash: '#/world/peru', reset: true, play: false },
-  { name: "peru luna's fluffy day", id: 'alpaca', hash: '#/world/peru/alpaca', reset: true },
-  { name: "peru tika's mountain terraces", id: 'machu-picchu', hash: '#/world/peru/machu-picchu', reset: true },
-  { name: "peru pepa's penguin cliff", id: 'penguins', hash: '#/world/peru/penguins', reset: true },
-  { name: "peru coco's canyon glide", id: 'condor', hash: '#/world/peru/condor', reset: true },
-  { name: "peru rosa's rainy river", id: 'river', hash: '#/world/peru/river', reset: true },
+  ...(await activityQA('pacing', { skip })),
 ].filter((s) => !flag('only') || flag('only').split(',').includes(s.id))
 
 // Is there something (other than the story overlay, the top bar or a "hear it again" button) she can touch?

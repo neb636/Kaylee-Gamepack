@@ -1,10 +1,10 @@
 // #/world/puppets: every puppet with buttons for its actions and lines, for building and QA-ing characters.
-// Each country lists its puppets in places/<id>/puppets/index.ts. QA can drive them: window.__puppets[id].play('hop').
+// Countries list their puppets in places/<id>/puppets/index.ts, and activities in places/<id>/activities/<id>/puppets.ts. QA can drive them: window.__puppets[id].play('hop').
 import { useEffect, useRef, useState } from 'react'
 import { lineText, say, sounds, type Line, type PuppetHandle } from '../sdk'
 import type { PuppetEntry } from './types'
 
-const modules = import.meta.glob<{ PUPPETS: PuppetEntry[] }>(['./places/*/puppets/index.ts', './kit/puppets.ts'], { eager: true })
+const modules = import.meta.glob<{ PUPPETS: PuppetEntry[] }>(['./places/*/puppets/index.ts', './places/*/activities/*/puppets.ts', './kit/puppets.ts'], { eager: true })
 const ALL = Object.values(modules).flatMap((m) => m.PUPPETS)
 
 declare global {

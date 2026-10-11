@@ -25,7 +25,16 @@ const PIPELINE = 2 // bump to regenerate everything after changing the audio pro
 
 // --- Find every folder with spoken lines ---------------------------------------------------------------------------
 const subfolders = async (dir) => (await readdir(path.join(root, dir), { withFileTypes: true })).filter((e) => e.isDirectory()).map((e) => path.join(root, dir, e.name))
-const folders = [path.join(root, 'src/shell'), ...(await subfolders('src/games')), path.join(root, 'src/world'), ...(await subfolders('src/world/places'))]
+const places = await subfolders('src/world/places')
+// A country's activities can have their own voice folder (activities/<id>/lines.ts, cast.json, voice-lines.json, voice-map.json,
+// voice/), so two activities built in parallel never touch the same generated file. They inherit the country's speakers.
+const activityFolders = []
+for (const place of places) {
+  const dir = path.join(place, 'activities')
+  if (existsSync(dir)) for (const entry of await readdir(dir, { withFileTypes: true })) if (entry.isDirectory() && existsSync(path.join(dir, entry.name, 'voice-lines.json'))) activityFolders.push(path.join(dir, entry.name))
+}
+const folders = [path.join(root, 'src/shell'), ...(await subfolders('src/games')), path.join(root, 'src/world'), ...places, ...activityFolders]
+const parentCast = (folder) => (path.basename(path.dirname(folder)) === 'activities' ? path.join(folder, '../../cast.json') : null)
 
 const readJson = async (file, fallback) => {
   try {
@@ -46,7 +55,8 @@ let stale = 0
 for (const folder of folders) {
   const rel = path.relative(root, folder)
   const raw = await readJson(path.join(folder, 'voice-lines.json'))
-  const cast = { ...globalCast.speakers, ...(await readJson(path.join(folder, 'cast.json'), {})).speakers }
+  const inherited = parentCast(folder) ? (await readJson(parentCast(folder), {})).speakers : {}
+  const cast = { ...globalCast.speakers, ...inherited, ...(await readJson(path.join(folder, 'cast.json'), {})).speakers }
   if (!Array.isArray(raw) || !raw.length) throw new Error(`${rel}/voice-lines.json must be a nonempty list`)
   const lines = raw.map((entry) => {
     const line = typeof entry === 'string' ? { text: entry, voice: globalCast.default } : entry
