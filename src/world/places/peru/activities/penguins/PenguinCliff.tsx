@@ -8,7 +8,8 @@ import { numberParam, listParam } from '../../sectionState'
 // hop; big pull, big splash and a deep dive. The same verb deepens three times:
 //   1. Splash: just jump. Splash Lobo the sea lion (he dives and pops up in a seaweed hat), bounce off his belly.
 //   2. Fishing: shimmering anchovy schools, near and shallow or far and deep. A penguin that dives near one comes back
-//      with a fish. Pepa orders "Two fish, please!"; fish-shaped spots above the burrow fill one by one, then she taps
+//      with a fish. While she pulls, the splash ring turns gold (and the school glows) when the dive will catch one; after
+//      a miss, a gold circle on the water (and a faint arc) shows where to land. Pepa orders "Two fish, please!"; fish-shaped spots above the burrow fill one by one, then she taps
 //      the chick she wants to feed (it gulps and gets rounder).
 //   3. The twist: the egg hatches a third hungry chick, waves swell so the schools slide nearer and farther, and a
 //      pelican dives for the same fish (they scatter and gather somewhere new: never a loss, just a new aim).
@@ -33,8 +34,10 @@ import { psfx } from './sfx'
 import { Splash, type SplashHandle } from './Splash'
 
 const P = L.penguins
-/** Pepa's orders, in fish. The first three are fishing; the last two come with the twist (third chick, pelican, waves). */
-const ORDERS = [1, 2, 3, 2, 3]
+/** Pepa's orders, in fish. The first two are fishing; the rest come with the twist (third chick, pelican, waves). */
+const ORDERS = [1, 2, 2, 2]
+/** The order the egg hatches before. */
+const TWIST_AT = 2
 /** Stars: splashing, each order fed, the chicks' first swim. */
 const TOTAL = ORDERS.length + 2
 /** Launches before the fish appear. */
@@ -43,6 +46,9 @@ const SPLASHES = 4
 const ROUND = 3
 const DIVERS: PenguinKind[] = ['chubby', 'tiny', 'tuft']
 const SKY = '#A6DCFB'
+const GOLD = '#FFC83D'
+/** Fixed physics step for a flight: the loop and the aim preview step it the same way, so the preview is exact. */
+const STEP = 1 / 120
 
 type Phase = 'story' | 'splash' | 'fish' | 'hatch' | 'swim' | 'parade' | 'done'
 type Pt = { x: number; y: number }
@@ -82,6 +88,8 @@ interface Swimmer {
   k: number
   target: School | null
   bounced: boolean
+  /** Flight time not yet stepped. */
+  acc: number
   /** Visible at all (divers step off for the chicks' swim; the parade swimmers wait backstage). */
   shown: boolean
 }
@@ -132,6 +140,36 @@ const boxOf = (kind: Swimmer['kind'], h: number) =>
 /** Body center while standing on the ground at y. */
 const standY = (sw: Pick<Swimmer, 'kind' | 'h'>, ground: number) => ground - sw.h * (boxOf(sw.kind, sw.h).fy - 0.55)
 
+type Body = { x: number; y: number; vx: number; vy: number; bounced: boolean }
+/** One physics step of a flying penguin: gravity, the stage's right edge, and a boing off Lobo's rock (not when it was
+ *  sent at a school). Returns true on the bounce. */
+const flyStep = (T: PenguinStage, b: Body, aimed: boolean) => {
+  b.vy += T.gravity * STEP
+  b.x += b.vx * STEP
+  b.y += b.vy * STEP
+  if (b.x > T.w - 50) {
+    b.x = T.w - 50
+    b.vx = Math.min(0, b.vx)
+  }
+  if (!b.bounced && !aimed && b.vy > 0 && b.x > T.rock.x + 30 && b.x < T.rock.x + T.rock.w - 30 && b.y > T.rock.top - 30 && b.y < T.rock.top + 20) {
+    b.bounced = true
+    b.vy = -Math.abs(b.vy) * 0.55 - 200
+    b.vx = -Math.abs(b.vx) * 0.4 - 160
+    return true
+  }
+  return false
+}
+/** The whole flight of a launch, stepped exactly like the real one: every point, and where it splashes. */
+const simulate = (T: PenguinStage, vx: number, vy: number) => {
+  const b: Body = { x: T.anchor.x, y: T.anchor.y - 60, vx, vy, bounced: false }
+  const pts: Pt[] = []
+  for (let i = 0; i < 2000 && !(b.y >= T.sea && b.vy > 0); i++) {
+    flyStep(T, b, false)
+    pts.push({ x: b.x, y: b.y })
+  }
+  return { pts, land: { x: b.x, y: T.sea } }
+}
+
 export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
   const { start, param, enter } = useSections(SECTIONS)
   const seeded = useRef(false)
@@ -180,6 +218,9 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
   const splash = useRef<SplashHandle>(null)
   const dots = useRef<(SVGCircleElement | null)[]>([])
   const ring = useRef<SVGEllipseElement | null>(null)
+  const ringFish = useRef<SVGGElement | null>(null)
+  const guideEl = useRef<HTMLDivElement>(null)
+  const guideDots = useRef<(SVGCircleElement | null)[]>([])
   const band = useRef<(SVGPathElement | null)[]>([null, null])
   const pelicanEl = useRef<HTMLDivElement>(null)
   const pelicanImg = useRef<HTMLImageElement>(null)
@@ -230,6 +271,13 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     hy: 0,
     pelican: { on: 'off' as 'off' | 'fly' | 'float' | 'leave', t: 0, x: 0, y: 0, from: { x: 0, y: 0 }, school: null as School | null, next: 0, told: false },
     time: 0,
+    /** The school the pull in hand will catch (it glows). */
+    aim: null as School | null,
+    /** Dives that came back empty since the last catch; after one, the gold landing guide shows where to jump. */
+    misses: 0,
+    guide: { school: null as School | null, x: 0, w: 0, pts: [] as Pt[], next: 0 },
+    aimSaid: false,
+    gots: 0,
   })
   const setPhase = (p: Phase) => {
     g.current.phase = p
@@ -294,7 +342,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
 
   const addSwimmer = (kind: Swimmer['kind'], chick: number, h: number) => {
     const G = g.current
-    const s: Swimmer = { id: G.nextId++, kind, chick, h, live: { current: penguinLive() }, puppet: { current: null }, el: null, x: -400, y: 0, rot: 0, left: false, state: 'queue', vx: 0, vy: 0, path: [], seg: 0, t: 0, k: 0, target: null, bounced: false, shown: true }
+    const s: Swimmer = { id: G.nextId++, kind, chick, h, live: { current: penguinLive() }, puppet: { current: null }, el: null, x: -400, y: 0, rot: 0, left: false, state: 'queue', vx: 0, vy: 0, path: [], seg: 0, t: 0, k: 0, target: null, bounced: false, acc: 0, shown: true }
     G.sw.push(s)
     return s
   }
@@ -367,40 +415,81 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     return { k, vx: Math.cos(ang) * v, vy: Math.sin(ang) * v }
   }
 
-  /** Where a launch from the rock lands on the sea (for the dotted preview and aim). */
-  const trajectory = (vx: number, vy: number, n: number) => {
+  /** The school a dive from a splash at x (pull strength k) swims to, if any. The real dive and the aim preview both
+   *  use this, so a gold ring always means a fish. */
+  const diveTarget = (x: number, k: number) => {
     const T = SR.current!
-    const pts: Pt[] = []
-    const y0 = T.anchor.y - 60
-    const tEnd = (vy + Math.sqrt(vy * vy + 2 * T.gravity * (T.sea - y0))) / T.gravity
-    for (let i = 1; i <= n; i++) {
-      const t = (tEnd * i) / n
-      pts.push({ x: Math.min(T.w - 40, T.anchor.x + vx * t), y: y0 + vy * t + 0.5 * T.gravity * t * t })
+    const G = g.current
+    if (!G.schools.length || !schoolsRef.current) return null
+    const depthMax = T.h - T.sea - 90
+    const guess = { x: x + 140, y: T.sea + 90 + k * (depthMax - 90) }
+    let best = T.tall ? 230 : 270
+    let school: School | null = null
+    for (const sc of G.schools) {
+      if (sc.count <= 0 || sc.away > 0) continue
+      const d = Math.hypot(sc.cx - guess.x, (sc.cy - guess.y) * 0.6)
+      if (d < best) {
+        best = d
+        school = sc
+      }
     }
-    return pts
+    return school
   }
 
-  const showPreview = (vx: number, vy: number, on: boolean, at?: Pt) => {
+  const showPreview = (vx: number, vy: number, on: boolean, at?: Pt, k = 0) => {
     const T = SR.current
+    const G = g.current
     // The kelp band stretched from the launch rock to the penguin.
     for (const b of band.current) {
       if (!b) continue
       b.style.display = at && T ? '' : 'none'
       if (at && T) b.setAttribute('d', `M${T.anchor.x + 52} ${T.ledge - 6}Q${(T.anchor.x + 52 + at.x) / 2} ${T.ledge + 18} ${at.x + 10} ${at.y + 10}`)
     }
-    const pts = on ? trajectory(vx, vy, dots.current.length + 1) : []
+    const fl = on && T ? simulate(T, vx, vy) : null
+    const n = dots.current.length
     dots.current.forEach((d, i) => {
       if (!d) return
-      d.style.display = on ? '' : 'none'
-      if (on) {
-        d.setAttribute('cx', pts[i].x.toFixed(1))
-        d.setAttribute('cy', pts[i].y.toFixed(1))
+      d.style.display = fl ? '' : 'none'
+      if (fl) {
+        const p = fl.pts[Math.min(fl.pts.length - 1, Math.round(((i + 1) * (fl.pts.length - 1)) / (n + 1)))]
+        d.setAttribute('cx', p.x.toFixed(1))
+        d.setAttribute('cy', p.y.toFixed(1))
       }
     })
+    // Where it splashes; gold with a fish when the dive will catch one.
+    const aim = fl ? diveTarget(fl.land.x, k) : null
+    if (aim && aim !== G.aim) sounds.note(7)
+    G.aim = aim
     if (ring.current) {
-      ring.current.style.display = on ? '' : 'none'
-      if (on) ring.current.setAttribute('cx', pts[pts.length - 1].x.toFixed(1))
+      ring.current.style.display = fl ? '' : 'none'
+      if (fl) {
+        ring.current.setAttribute('cx', fl.land.x.toFixed(1))
+        ring.current.setAttribute('stroke', aim ? GOLD : '#FF4F9A')
+        ring.current.setAttribute('fill', aim ? 'rgba(255,200,61,.35)' : 'none')
+        ring.current.setAttribute('stroke-dasharray', aim ? 'none' : '14 10')
+      }
     }
+    if (ringFish.current) {
+      ringFish.current.style.display = aim && fl ? '' : 'none'
+      if (aim && fl) ringFish.current.setAttribute('transform', `translate(${fl.land.x.toFixed(1)} ${(T!.sea - 46).toFixed(1)})`)
+    }
+  }
+
+  /** The landing guide for a school: where (and on what arc) a jump lands to catch it, from sampled pulls. */
+  const aimFor = (sc: School) => {
+    const T = SR.current!
+    const hits: { x: number; pts: Pt[] }[] = []
+    for (let a = -76; a <= -16; a += 6) {
+      for (let k = 0.1; k <= 1.001; k += 0.06) {
+        const v = T.vmax * (0.3 + 0.7 * k)
+        const f = simulate(T, Math.cos((a * Math.PI) / 180) * v, Math.sin((a * Math.PI) / 180) * v)
+        if (diveTarget(f.land.x, k) === sc) hits.push({ x: f.land.x, pts: f.pts })
+      }
+    }
+    if (!hits.length) return null
+    hits.sort((p, q) => p.x - q.x)
+    const mid = hits[hits.length >> 1]
+    return { x: mid.x, w: clamp(hits[hits.length - 1].x - hits[0].x, 110, 190), pts: mid.pts }
   }
 
   const launch = (s: Swimmer, vx: number, vy: number, k: number, target: School | null = null) => {
@@ -415,6 +504,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     s.k = k
     s.target = target
     s.bounced = false
+    s.acc = 0
     s.left = false
     s.live.current.mode = 'air'
     s.live.current.pull = 0
@@ -488,19 +578,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     }
     // Under the water: a quick swim to a school (if she aimed near one), then home.
     const depthMax = T.h - T.sea - 90
-    let school = s.target
-    if (!school && G.schools.length && schoolsRef.current && s.kind !== 'chick') {
-      const guess = { x: s.x + 140, y: T.sea + 90 + s.k * (depthMax - 90) }
-      let best = T.tall ? 230 : 270
-      for (const sc of G.schools) {
-        if (sc.count <= 0 || sc.away > 0) continue
-        const d = Math.hypot(sc.cx - guess.x, (sc.cy - guess.y) * 0.6)
-        if (d < best) {
-          best = d
-          school = sc
-        }
-      }
-    }
+    const school = s.target ?? (s.kind !== 'chick' ? diveTarget(s.x, s.k) : null)
     s.target = school
     const B = school ? { x: school.cx, y: school.cy } : { x: clamp(s.x + 140, T.shore + 120, T.w - 70), y: clamp(T.sea + 90 + s.k * (depthMax - 90) * (s.kind === 'chick' ? 0.5 : 1), T.sea + 70, T.h - 100) }
     const path: Seg[] = []
@@ -542,6 +620,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
   }
 
   const catchFish = (s: Swimmer) => {
+    const G = g.current
     const sc = s.target
     if (sc && sc.count > 0 && sc.away <= 0 && Math.hypot(sc.cx - s.x, sc.cy - s.y) < 190) {
       sc.count--
@@ -549,9 +628,30 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       splash.current?.sparkle(s.x, s.y)
       sounds.pop()
       if (sc.count <= 0) sc.away = 1.6
-    } else if (g.current.phase === 'fish' && s.kind !== 'chick' && Math.random() < 0.35) {
-      s.live.current.sock = true
+      // Caught one: the guide goes away, and so does its prompt.
+      if (G.misses && G.aimSaid && !G.feeding) {
+        setQuiet(true)
+        setPrompt(P.fishGo)
+      }
+      G.misses = 0
+      if (G.gots < P.got.length) chat(P.got[G.gots++])
+    } else if (G.phase === 'fish' && s.kind !== 'chick') {
+      if (Math.random() < 0.35) s.live.current.sock = true
+      // A miss while Pepa waits for fish: show where to land (said once; the gold circle does the rest).
+      if (!G.feeding && G.need > G.filled && ++G.misses === 1) {
+        G.guide.next = 0
+        if (!G.aimSaid) {
+          G.aimSaid = true
+          setQuiet(false)
+          setPrompt(P.aim)
+          G.importantUntil = performance.now() + 2500
+        }
+      }
     }
+  }
+  const guideOn = () => {
+    const G = g.current
+    return G.misses > 0 && G.phase === 'fish' && !G.feeding && G.need > G.filled && !G.busy
   }
 
   /** A swimmer climbs out onto the burrow's lip: drops off its fish (or shows off its sock), then hops up to the queue. */
@@ -675,6 +775,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       return
     }
     const k = --G.filled
+    setHint(null)
     setOrder({ need: G.need, filled: G.filled })
     void pepa.current?.play('feed')
     fly(T.burrow.fish[k], { x: T.chicks[i].x, y: T.burrow.floor - T.chicks[i].h * 0.55 })
@@ -713,7 +814,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     G.order++
     G.busy = false
     G.lastProgress = performance.now()
-    if (G.order === 3) void hatch()
+    if (G.order === TWIST_AT) void hatch()
     else if (G.order >= ORDERS.length) void swimTime()
     else void nextOrder()
   }
@@ -993,7 +1094,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     G.hy = standY(s, T.ledge) + clamp(dy * 0.12, -8, 14)
     if (G.held.moved) psfx.stretch(Math.min(1, raw))
     const l = launchOf(dx, dy)
-    showPreview(l.vx, l.vy, G.held.moved && l.k >= 0.08, { x: G.hx, y: G.hy })
+    showPreview(l.vx, l.vy, G.held.moved && l.k >= 0.08, { x: G.hx, y: G.hy }, l.k)
   }
 
   const onUp = (e: ReactPointerEvent<HTMLDivElement>) => {
@@ -1064,28 +1165,25 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
         s.rot = 0
         s.left = false
       } else if (s.state === 'fly') {
-        s.vy += T.gravity * dt
-        s.x += s.vx * dt
-        s.y += s.vy * dt
-        if (s.x > T.w - 50) {
-          s.x = T.w - 50
-          s.vx = Math.min(0, s.vx)
-        }
-        s.rot = (Math.atan2(s.vy, Math.abs(s.vx) + 1) * 180) / Math.PI + 90
-        s.left = s.vx < 0
-        // Boing! Off Lobo's rock (and his belly).
-        if (!s.bounced && !s.target && s.vy > 0 && s.x > T.rock.x + 30 && s.x < T.rock.x + T.rock.w - 30 && s.y > T.rock.top - 30 && s.y < T.rock.top + 20) {
-          s.bounced = true
-          s.vy = -Math.abs(s.vy) * 0.55 - 200
-          s.vx = -Math.abs(s.vx) * 0.4 - 160
-          psfx.bounce()
-          void lobo.current?.play('giggle')
-          if (now > G.loboTalk) {
-            G.loboTalk = now + 15000
-            chat(P.lobo[1])
+        // Fixed steps, exactly like the aim preview, so it splashes right where the ring was.
+        s.acc += dt
+        while (s.state === 'fly' && s.acc >= STEP) {
+          s.acc -= STEP
+          // Boing! Off Lobo's rock (and his belly).
+          if (flyStep(T, s, !!s.target)) {
+            psfx.bounce()
+            void lobo.current?.play('giggle')
+            if (now > G.loboTalk) {
+              G.loboTalk = now + 15000
+              chat(P.lobo[1])
+            }
           }
+          if (s.y >= T.sea && s.vy > 0) splashDown(s)
         }
-        if (s.y >= T.sea && s.vy > 0) splashDown(s)
+        if (s.state === 'fly') {
+          s.rot = (Math.atan2(s.vy, Math.abs(s.vx) + 1) * 180) / Math.PI + 90
+          s.left = s.vx < 0
+        }
       } else if (s.state === 'path') {
         const seg = s.path[s.seg]
         if (!seg) {
@@ -1144,7 +1242,10 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       sc.cx = sc.x + swell
       sc.cy = sc.y + (G.twist ? Math.cos(G.time * 0.55 + sc.id * 2) * 20 : 0)
       if (sc.el) {
-        sc.el.style.transform = `translate(${(sc.cx - 90).toFixed(1)}px, ${(sc.cy - 50).toFixed(1)}px)`
+        // The school she's aiming at (or the one the guide points to) glows and swells.
+        const lit = sc.away <= 0 && (G.held ? G.aim === sc : guideOn() && G.guide.school === sc)
+        sc.el.style.transform = `translate(${(sc.cx - 90).toFixed(1)}px, ${(sc.cy - 50).toFixed(1)}px) scale(${lit ? 1.15 : 1})`
+        sc.el.style.filter = lit ? `drop-shadow(0 0 12px ${GOLD})` : ''
         sc.el.style.opacity = sc.away > 0 ? '0' : '1'
         sc.el.style.pointerEvents = sc.away > 0 || sc.count <= 0 ? 'none' : 'auto'
       }
@@ -1158,6 +1259,37 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
         f.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${Math.sin(a) > 0 ? -1.3 : 1.3} 1.3)`)
       })
     }
+
+    // After a miss: a gold circle on the water where a jump catches fish, and a faint arc to it (kept up to date as the
+    // schools move; the arc steps aside while she pulls, her own preview shows then).
+    const gd = G.guide
+    const showGuide = guideOn()
+    if (showGuide && G.time >= gd.next) {
+      gd.next = G.time + 0.3
+      const live = G.schools.filter((sc) => sc.count > 0 && sc.away <= 0)
+      const sc = live.find((x) => x === gd.school) ?? live.find((x) => x.band === 'near') ?? live[0]
+      const a = sc ? aimFor(sc) : null
+      gd.school = a ? sc! : null
+      if (a) Object.assign(gd, a)
+    }
+    const guideVis = showGuide && !!gd.school
+    if (guideEl.current) {
+      guideEl.current.style.display = guideVis ? '' : 'none'
+      if (guideVis) {
+        guideEl.current.style.width = `${gd.w}px`
+        guideEl.current.style.transform = `translate(${(gd.x - gd.w / 2).toFixed(1)}px, ${(T.sea - 150).toFixed(1)}px)`
+      }
+    }
+    guideDots.current.forEach((d, i, all) => {
+      if (!d) return
+      const vis = guideVis && !G.held && gd.pts.length > 0
+      d.style.display = vis ? '' : 'none'
+      if (vis) {
+        const p = gd.pts[Math.min(gd.pts.length - 1, Math.round(((i + 1) * (gd.pts.length - 1)) / (all.length + 1)))]
+        d.setAttribute('cx', p.x.toFixed(1))
+        d.setAttribute('cy', p.y.toFixed(1))
+      }
+    })
 
     // The pelican dives for a school now and then (in the twist).
     const pel = G.pelican
@@ -1230,7 +1362,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       let line: Line | null = null
       if (G.feeding) line = P.idle.feed
       else if (p === 'splash') line = P.idle.launch
-      else if (p === 'fish') line = P.idle.fish
+      else if (p === 'fish') line = guideOn() ? P.aim : P.idle.fish
       else if (p === 'swim') line = P.idle.swim
       if (line) {
         G.lastHint = now
@@ -1247,10 +1379,10 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     const payoff = to === 'swim' || to === 'parade'
     G.splashes = SPLASHES
     G.chicks = Math.round(numberParam(param('chicks'), late ? 3 : 2, 2, 3))
-    G.fed = listParam(param('fed'), payoff ? [4, 4, 4] : late ? [2, 2, 0] : [0, 0, 0], 0, 12)
+    G.fed = listParam(param('fed'), payoff ? [4, 4, 4] : late ? [2, 1, 0] : [0, 0, 0], 0, 12)
     setChickCount(G.chicks); setEggCrack(G.chicks === 3 ? 3 : 0)
     setFull(G.fed.map((n) => Math.min(1, n / ROUND)))
-    G.order = Math.round(numberParam(param('order'), payoff ? ORDERS.length : late ? 3 : to === 'feed' ? 1 : 0, 0, ORDERS.length))
+    G.order = Math.round(numberParam(param('order'), payoff ? ORDERS.length : late ? TWIST_AT : to === 'feed' ? 1 : 0, 0, ORDERS.length))
     G.need = ORDERS[G.order] ?? 0
     G.filled = Math.round(numberParam(param('filled'), to === 'feed' ? G.need : 0, 0, G.need))
     setOrder(payoff ? null : { need: G.need, filled: G.filled })
@@ -1368,6 +1500,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
               )
             }
             if (!chickHome[i]) return null
+            const hungry = [0, 1, 2].find((j) => j < chickCount && full[j] < 1) ?? 0
             // A tall hit column per chick (from the burrow's roof down to the sea), so small fingers can't miss.
             const colW = (S.burrow.right - S.burrow.left) * 0.25
             return (
@@ -1380,9 +1513,12 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
                 <motion.div
                   initial={i === 2 ? { scale: 0 } : false}
                   animate={{ scale: 1 }}
-                  className={feeding && full[i] < 1 ? 'peru-tool-glow' : undefined}
+                  className={feeding && full[i] < 1 ? 'peru-chick-glow' : undefined}
                   style={{ position: 'absolute', left: colW / 2 - w / 2, top: S.burrow.floor - S.burrow.top - c.h * 0.94, width: w, height: c.h, transformOrigin: '50% 100%' }}
                 >
+                  {hint === 'chicks' && feeding && i === hungry && (
+                    <div aria-hidden className="peru-hint-ring" style={{ position: 'absolute', left: '50%', top: '50%', width: c.h * 1.4, height: c.h * 1.4, marginLeft: -c.h * 0.7, marginTop: -c.h * 0.7, borderRadius: '50%', border: `8px solid ${GOLD}`, boxShadow: '0 0 0 4px rgba(255,255,255,.7)', pointerEvents: 'none' }} />
+                  )}
                   <Chick ref={(r) => void (chicks.current[i] = r)} height="100%" full={full[i]} tuft={i} label={`chick ${i + 1}`} />
                 </motion.div>
               </motion.button>
@@ -1481,7 +1617,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
                 {hint === 'front' && sw.id === frontId && !launched && <GhostFinger />}
                 {hint === 'front' && sw.id === frontId && (
                   <div aria-hidden style={{ position: 'absolute', left: '50%', top: '50%', width: 150, height: 150, marginLeft: -75, marginTop: -75, pointerEvents: 'none' }}>
-                    <div className="peru-hint-ring" style={{ width: '100%', height: '100%', borderRadius: '50%', border: '8px solid #FFC83D', boxShadow: '0 0 0 4px rgba(255,255,255,.7)' }} />
+                    <div className="peru-hint-ring" style={{ width: '100%', height: '100%', borderRadius: '50%', border: `8px solid ${GOLD}`, boxShadow: '0 0 0 4px rgba(255,255,255,.7)' }} />
                   </div>
                 )}
                 <div style={{ width: '100%', height: '100%', pointerEvents: 'none' }}>
@@ -1495,8 +1631,20 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
             )
           })}
 
+          {/* After a miss: the gold landing circle (bobbing, with an arrow down to it). */}
+          <div ref={guideEl} aria-hidden style={{ position: 'absolute', left: 0, top: 0, height: 180, display: 'none', pointerEvents: 'none', zIndex: 8 }}>
+            <motion.svg viewBox="-30 -30 60 50" animate={{ y: [0, 16, 0] }} transition={{ repeat: Infinity, duration: 0.9 }} style={{ position: 'absolute', left: '50%', top: 0, width: 64, marginLeft: -32, overflow: 'visible' }}>
+              <path d="M-14 -24H14V0H26L0 22L-26 0H-14Z" fill={GOLD} stroke={INK} strokeWidth="5" strokeLinejoin="round" />
+            </motion.svg>
+            <div className="peru-hint-ring" style={{ position: 'absolute', left: 0, right: 0, top: 150 - 26, height: 52, borderRadius: '50%', border: `8px solid ${GOLD}`, background: 'rgba(255,200,61,.3)', boxShadow: '0 0 0 4px rgba(255,255,255,.7)' }} />
+          </div>
+
           {/* The dotted arc of a pull, and where it will splash. */}
           <svg aria-hidden viewBox={`0 0 ${S.w} ${S.h}`} style={{ position: 'absolute', inset: 0, width: S.w, height: S.h, pointerEvents: 'none', zIndex: 13, overflow: 'visible' }}>
+            {/* The guide's faint arc: a jump that lands in the gold circle. */}
+            {Array.from({ length: 9 }, (_, i) => (
+              <circle key={`g${i}`} ref={(el) => void (guideDots.current[i] = el)} r={6 + i * 0.4} fill={GOLD} fillOpacity="0.55" stroke={INK} strokeOpacity="0.4" strokeWidth="2.5" style={{ display: 'none' }} />
+            ))}
             {Array.from({ length: 13 }, (_, i) => (
               <circle key={i} ref={(el) => void (dots.current[i] = el)} r={7 + i * 0.4} fill="#FFF7F0" stroke={INK} strokeWidth="3" style={{ display: 'none' }} />
             ))}
@@ -1504,6 +1652,12 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
             <path ref={(el) => void (band.current[0] = el)} fill="none" stroke={INK} strokeWidth="15" strokeLinecap="round" style={{ display: 'none' }} />
             <path ref={(el) => void (band.current[1] = el)} fill="none" stroke="#7CC79A" strokeWidth="8" strokeLinecap="round" style={{ display: 'none' }} />
             <ellipse ref={ring} cy={S.sea} rx="54" ry="16" fill="none" stroke="#FF4F9A" strokeWidth="7" strokeDasharray="14 10" style={{ display: 'none' }} />
+            {/* A fish over the ring: this jump will catch one. */}
+            <g ref={ringFish} style={{ display: 'none' }}>
+              <g transform="scale(1.1)">
+                <FishShape />
+              </g>
+            </g>
           </svg>
 
           <Splash ref={splash} />
