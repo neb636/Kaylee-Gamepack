@@ -4,11 +4,20 @@ import beetle from './assets/beetle.webp'
 import bgAmazon from './assets/bg-amazon.webp'
 import bgAndesTall from './assets/bg-andes-tall.webp'
 import bgAndes from './assets/bg-andes.webp'
+import bgCanyonFar from './assets/bg-canyon-far.webp'
 import bird from './assets/bird.webp'
 import brush from './assets/brush.webp'
 import burr from './assets/burr.webp'
 import butterfly from './assets/butterfly.webp'
 import cactus from './assets/cactus.webp'
+import canyonCactus from './assets/canyon-cactus.webp'
+import canyonCloud from './assets/canyon-cloud.webp'
+import coco from './assets/canyon-coco.webp'
+import canyonPerched from './assets/canyon-condor-perched.webp'
+import pluma from './assets/canyon-pluma.webp'
+import canyonSwallow from './assets/canyon-swallow-nest.webp'
+import canyonTourists from './assets/canyon-tourists.webp'
+import canyonViscacha from './assets/canyon-viscacha.webp'
 import canoe from './assets/canoe.webp'
 import capybaraBaby from './assets/capybara-baby.webp'
 import capybara from './assets/capybara.webp'
@@ -35,5 +44,5 @@ import treeSloth from './assets/tree-sloth-hd.webp'
 import twig from './assets/twig.webp'
 
 export const art = {
-  abuela, basket, beetle, bgAmazon, bgAndes, bgAndesTall, bird, brush, burr, butterfly, cactus, canoe, capybara, capybaraBaby, clippers, cover, dandelion, fish, frog, hummingbird, lizard, luna, macaw, map, monkey, paco, pond, post, rosa, sloth, stoneWall, toucan, treeMonkey, treeSloth, twig,
+  abuela, basket, beetle, bgAmazon, bgAndes, bgAndesTall, bgCanyonFar, bird, brush, burr, butterfly, cactus, canoe, canyonCactus, canyonCloud, canyonPerched, canyonSwallow, canyonTourists, canyonViscacha, capybara, capybaraBaby, clippers, coco, cover, dandelion, fish, frog, hummingbird, lizard, luna, macaw, map, monkey, paco, pluma, pond, post, rosa, sloth, stoneWall, toucan, treeMonkey, treeSloth, twig,
 }

@@ -1,5 +1,5 @@
 // Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md). Built one activity per PR: Luna's
-// Fluffy Day and Rosa's Rainy River so far. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
+// Fluffy Day, Coco's Canyon Glide and Rosa's Rainy River so far. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
 // (route `party`) waits until all five exist.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
@@ -8,6 +8,7 @@ import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
+import { CanyonGlide } from './activities/canyon/CanyonGlide'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
 import { RainyRiver } from './activities/river/RainyRiver'
 import { art } from './art'
@@ -21,9 +22,9 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, river: RainyRiver }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, condor: CanyonGlide, river: RainyRiver }
 /** The friend's picture on each built place's map pin. */
-const PIN_IMG: Record<string, string> = { alpaca: art.luna, river: art.rosa }
+const PIN_IMG: Record<string, string> = { alpaca: art.luna, condor: art.coco, river: art.rosa }
 
 /** The five places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
 export const SPOTS = [
@@ -192,6 +193,7 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
             onClick={() => {
               sounds.pop()
               if (done && spot.id === 'alpaca') void say(L.alpacaWindow)
+              else if (done && spot.id === 'condor') void say(L.condorWindow)
               else if (done && spot.id === 'river') void say(L.riverWindow)
               else if (PIN_IMG[spot.id]) open(spot.id)
               else void say(L.soon)
@@ -207,6 +209,12 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
                   </g>
                 ))}
               </svg>
+            ) : done && spot.id === 'condor' ? (
+              // Coco and Pluma, wingtip to wingtip.
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', gap: '2%' }}>
+                <img src={art.coco} alt="" style={{ width: '58%', maxHeight: '90%', objectFit: 'contain' }} />
+                <img src={art.pluma} alt="" style={{ width: '32%', maxHeight: '70%', objectFit: 'contain' }} />
+              </div>
             ) : done && spot.id === 'river' ? (
               // Rosa leaping under the rainbow she made.
               <div style={{ position: 'relative', width: '100%', height: '100%' }}>

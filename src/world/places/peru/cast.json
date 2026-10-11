@@ -15,6 +15,16 @@
       "pitch": -1,
       "instructions": "You are Abuela Killa, Luna's kind, sleepy alpaca grandma from the Andes of Peru. Warm, slow and loving, a little yawny, like a cozy grandma. Light, natural Peruvian Spanish accent. Gentle pace. Do not add words that are not in the text."
     },
+    "coco": {
+      "voice": "ash",
+      "pitch": -1,
+      "instructions": "You are Coco, a big, calm and proud Andean condor dad from Colca Canyon in Peru. Kind, warm, a little grand, like a gentle grown-up who loves his little chick. Speak English with a light, natural Peruvian Spanish accent, never exaggerated; say Gracias the Spanish way. Slow, steady, short clear phrases for a five-year-old. On Whoooosh, a big joyful swooping sound. Do not add words that are not in the text."
+    },
+    "pluma": {
+      "voice": "coral",
+      "pitch": 4,
+      "instructions": "You are Pluma, a tiny fluffy baby condor chick from Peru, about four years old, a bit shy and nervous at first, then thrilled and proud. Light, natural Peruvian Spanish accent. Small, sweet, excited voice, short phrases. Do not add words or laughter that are not in the text."
+    },
     "rosa": {
       "voice": "shimmer",
       "pitch": 2,
