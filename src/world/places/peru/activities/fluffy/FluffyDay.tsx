@@ -1,3 +1,5 @@
+import { useSections } from '../../../../kit/sections'
+import SECTIONS from './sections'
 // ✂️ Luna's Fluffy Day (Andes highlands near Cusco: alpacas, fleece, cold mountain air). Plan:
 // planning/around-the-world/peru.md § 1.
 // The toy (one core verb): rub the fleece with a tool. Her finger holds a big brush (then round clippers) and every puff
@@ -53,11 +55,6 @@ interface Flyer {
   kind: 'fly' | 'walk' | 'toss' | 'drop'
 }
 
-declare global {
-  interface Window {
-    __peruQA?: { jump: (to: 'clip' | 'family' | 'yarn' | 'hats' | 'photo') => void }
-  }
-}
 
 /** Five things stuck in Luna's fleece, at puffs far enough apart (shuffled every time she plays). */
 function stuckItems(rig: AlpacaRig): (StuckItem & { kind: ItemKind })[] {
@@ -77,6 +74,8 @@ const mainFraction = (rig: AlpacaRig | null) => {
 }
 
 export function FluffyDay({ onDone, setProgress }: ActivityProps) {
+  const { start, param, enter } = useSections(SECTIONS)
+  const seeded = useRef(false)
   const alive = useAlive()
   const root = useRef<HTMLDivElement>(null)
   const stageEl = useRef<HTMLDivElement>(null)
@@ -110,7 +109,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
   const [pinkDrop, setPinkDrop] = useState(false)
 
   // Her hat choices are remembered for Luna's journal window on the map.
-  const [, saveHats] = useSaved<Record<Who, string | null> | null>(HATS_KEY, null)
+  const [savedHats, saveHats] = useSaved<Record<Who, string | null> | null>(HATS_KEY, null)
   const rigs = useRef<Record<Who, { current: AlpacaRig | null }>>({ luna: { current: null }, paco: { current: null }, abuela: { current: null } }).current
   const puppets = useRef<Record<Who, { current: PuppetHandle | null }>>({ luna: { current: null }, paco: { current: null }, abuela: { current: null } }).current
   const sparkle = useRef<PuppetHandle>(null)
@@ -777,72 +776,59 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
     }
   })
 
-  // ---- QA hook: jump to a later moment (motion and screen QA) ----
-  useEffect(() => {
-    const snipAll = (who: Who, share: number) => {
+  const seedSection = (to: string) => {
+    if (to === 'brush') return startPlay()
+    const G = g.current
+    const at = ['clip', 'family', 'yarn', 'hats', 'photo'].indexOf(to)
+    for (const who of FAMILY) {
       const rig = rigs[who].current
-      if (!rig) return
-      for (const p of rig.puffs) if (isMain(p) && Math.random() < share) rig.snip(p.id)
+      if (!rig) continue
+      if (who === 'luna') {
+        rig.puffs.forEach((p) => rig.brush(p.id))
+        rig.bangsAside()
+        items?.forEach((_, i) => { rig.dropItem(i); G.itemsOut.add(i) })
+      }
+      if ((who === 'luna' && at >= 1) || at >= 2) {
+        for (const p of rig.puffs) if (isMain(p) && Math.random() < 0.85) rig.snip(p.id)
+        G.done[who] = true
+      }
     }
-    window.__peruQA = {
-      jump: (to) => {
-        const G = g.current
-        const order = ['clip', 'family', 'yarn', 'hats', 'photo']
-        const at = order.indexOf(to)
-        const rig = rigs.luna.current
-        if (rig) {
-          rig.puffs.forEach((p) => rig.brush(p.id))
-          rig.bangsAside()
-          items?.forEach((_, i) => {
-            rig.dropItem(i)
-            G.itemsOut.add(i)
-          })
-        }
-        G.bangs = true
-        G.pondReady = false
-        setPondGlow(false)
-        setWalking(false)
-        setTool('clippers')
-        if (at >= 1) {
-          snipAll('luna', 0.85)
-          G.done.luna = true
-          setCold((c) => ({ ...c, luna: true }))
-          setArrived(true)
-        }
-        if (at >= 2) {
-          snipAll('paco', 0.85)
-          snipAll('abuela', 0.85)
-          G.done.paco = G.done.abuela = true
-          setCold({ luna: true, paco: true, abuela: true })
-        }
-        G.busy = false
-        if (to === 'clip') {
-          setPhase('clip')
-          setPrompt(F.clippers)
-        } else if (to === 'family') {
-          setPhase('family')
-          setPrompt(F.familyGo)
-        } else if (to === 'yarn') toYarn()
-        else {
-          setYarn('pink')
-          setTray(HATS)
-          setPhase('hats')
-          setPrompt(F.hats)
-          if (to === 'photo') {
-            G.hats = { luna: 'pink', paco: 'brown', abuela: 'hotpink' }
-            setHats(G.hats)
-            setTray(['cream'])
-            setCold({ luna: false, paco: false, abuela: false })
-            void photo()
-          }
-        }
-        G.lastTouch = performance.now()
-      },
+    G.bangs = true
+    G.busy = false
+    setTool('clippers')
+    setArrived(at >= 1)
+    setCold({ luna: at >= 1, paco: at >= 2, abuela: at >= 2 })
+    star([1, 2, 4, 5, 6][at])
+    if (to === 'clip') { setPhase('clip'); setPrompt(F.clippers) }
+    else if (to === 'family') { setPhase('family'); setPrompt(F.familyGo) }
+    else if (to === 'yarn') toYarn()
+    else {
+      setYarn(param('yarn') === 'cream' ? 'cream' : 'pink')
+      const colors = param('hats').split(',')
+      const fallback = to === 'photo' ? ['pink', 'brown', 'hotpink'] : [null, null, null]
+      G.hats = Object.fromEntries(FAMILY.map((who, i) => [who, HATS.includes(colors[i]) ? colors[i] : colors[i] === 'none' ? null : fallback[i]])) as Record<Who, string | null>
+      // A photo needs all three hats; bare photo links use the sample above.
+      if (to === 'photo' && param('hats') === 'none') G.hats = savedHats ?? { luna: 'pink', paco: 'brown', abuela: 'hotpink' }
+      setHats(G.hats)
+      setTray(HATS.filter((color) => !Object.values(G.hats).includes(color)))
+      setCold(Object.fromEntries(FAMILY.map((who) => [who, !G.hats[who]])) as Record<Who, boolean>)
+      if (to === 'photo') void photo()
+      else { setPhase('hats'); setPrompt(F.hats) }
     }
-    return () => {
-      delete window.__peruQA
-    }
+    G.lastTouch = performance.now()
+  }
+
+  // Seed only once, after the logical stage and puppets exist. Ordinary play keeps its original transitions.
+  useEffect(() => {
+    if (seeded.current || !(S && items && FAMILY.every((who) => rigs[who].current))) return
+    seeded.current = true
+    if (start && start !== 'story') seedSection(start)
   })
+  useEffect(() => {
+    if ((!seeded.current && phase !== 'story') || (phase === 'story' && start && start !== 'story')) return
+    if (phase === 'story' || phase === 'brush' || phase === 'clip' || phase === 'family' || phase === 'yarn' || phase === 'hats' || phase === 'photo')
+      enter(phase, { yarn: yarn ?? 'cream', hats: FAMILY.map((who) => hats[who] ?? 'none').join(',') })
+  }, [phase, yarn, hats, size.W, items])
 
   const toolOn = phase === 'brush' || phase === 'clip' || phase === 'family'
   const sky = S?.tall ? SKY.tall : SKY.wide
@@ -1045,7 +1031,7 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
 
       <AnimatePresence>{flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.9 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 26 }} />}</AnimatePresence>
 
-      {phase === 'story' && <StoryBeat lines={F.story} bg={art.bgAndes} friend={<Alpaca kind="luna" height="100%" bangs />} onDone={startPlay} />}
+      {phase === 'story' && (!start || start === 'story') && <StoryBeat lines={F.story} bg={art.bgAndes} friend={<Alpaca kind="luna" height="100%" bangs />} onDone={startPlay} />}
     </div>
   )
 }

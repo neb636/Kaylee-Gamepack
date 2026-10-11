@@ -4,7 +4,7 @@ import { expect, test, type Page } from '@playwright/test'
 // section, and every activity must declare its sections, so PR links like #/world/italy/pizzeria/own always work.
 
 /** Countries not migrated to sections yet (each one's PR removes it from this list). */
-const PENDING = ['australia', 'china', 'egypt', 'peru']
+const PENDING = ['australia', 'china', 'egypt']
 
 async function start(page: Page, hash: string) {
   await page.goto(`./${hash}`)
