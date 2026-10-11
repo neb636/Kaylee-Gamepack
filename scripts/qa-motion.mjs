@@ -411,10 +411,8 @@ const fluffyRub = (name, seconds, jump) => ({
   name,
   seconds,
   setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/alpaca`)
+    await page.goto(`${base}#/world/peru/alpaca/${jump || 'brush'}`)
     await page.waitForTimeout(600)
-    await skip(page)
-    if (jump) await page.evaluate((j) => window.__peruQA?.jump(j), jump)
     await page.waitForTimeout(900)
   },
   act: async (page) => {
@@ -434,10 +432,8 @@ const terracesStone = (name, seconds, wrong, jump) => ({
   name,
   seconds,
   setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/machu-picchu`)
+    await page.goto(`${base}#/world/peru/machu-picchu/${jump ? (jump === 'photo' ? 'photo' : `wall-${jump + 1}`) : 'wall-1'}`)
     await page.waitForTimeout(600)
-    await skip(page)
-    if (jump) await page.evaluate((j) => window.__terracesQA?.jump(j), jump)
     await page.waitForTimeout(1500)
   },
   act: async (page) => {
@@ -469,11 +465,9 @@ const penguinLaunch = (name, seconds, jump, pull) => ({
   name,
   seconds,
   setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/penguins`)
+    await page.goto(`${base}#/world/peru/penguins/${jump || 'splash'}`)
     await page.waitForTimeout(600)
-    await skip(page)
     await page.waitForSelector('[aria-label="penguin"]', { timeout: 20000 })
-    if (jump) await page.evaluate((j) => window.__penguinQA?.jump(j), jump)
     await page.waitForTimeout(jump === 'swim' ? 3200 : 900)
   },
   act: async (page) => {
@@ -500,10 +494,8 @@ const canyonFly = (name, seconds, jump, path) => ({
   name,
   seconds,
   setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/condor`)
+    await page.goto(`${base}#/world/peru/condor/${jump || 'start'}`)
     await page.waitForTimeout(600)
-    await skip(page)
-    if (jump) await page.evaluate((j) => window.__canyonQA?.jump(j), jump)
     await page.waitForTimeout(900)
   },
   act: async (page) => {
@@ -539,10 +531,8 @@ const riverSqueeze = (name, seconds, jump) => ({
   name,
   seconds,
   setup: async (page, base) => {
-    await page.goto(`${base}#/world/peru/river`)
+    await page.goto(`${base}#/world/peru/river/${jump || 'forest'}`)
     await page.waitForTimeout(600)
-    await skip(page)
-    if (jump) await page.evaluate((j) => window.__peruRiverQA?.jump(j), jump)
     await page.waitForTimeout(jump ? 3200 : 900)
   },
   act: async (page) => {

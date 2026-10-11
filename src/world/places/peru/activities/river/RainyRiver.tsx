@@ -1,3 +1,6 @@
+import { useSections } from '../../../../kit/sections'
+import SECTIONS from './sections'
+import { numberParam, listParam } from '../../sectionState'
 // 🐬 Rosa's Rainy River (Amazon rainforest: rain, the flooding forest, pink river dolphins). Plan:
 // planning/around-the-world/peru.md § 4.
 // The toy (one core verb): grab the rain cloud and squeeze it. Holding it makes it rain right there (harder when she
@@ -54,11 +57,13 @@ type Wet = 'lbirds' | 'plant0' | 'plant1' | 'plant2' | 'frog' | 'ants' | 'sloth'
 
 declare global {
   interface Window {
-    __peruRiverQA?: { jump: (to: 'river' | 'lagoon' | 'pads' | 'rainbow') => void; rain: (x: number, seconds: number) => void; state: () => object }
+    __peruRiverQA?: { rain: (x: number, seconds: number) => void; state: () => object }
   }
 }
 
 export function RainyRiver({ onDone, setProgress }: ActivityProps) {
+  const { start, param, enter } = useSections(SECTIONS)
+  const seeded = useRef(false)
   const alive = useAlive()
   const root = useRef<HTMLDivElement>(null)
   const stageEl = useRef<HTMLDivElement>(null)
@@ -77,7 +82,11 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
   const [fruits, setFruits] = useState<{ gone: boolean; at?: { x: number; y: number }; fish: number }[]>([0, 1, 2].map(() => ({ gone: false, fish: 0 })))
   const [babyOnBack, setBabyOnBack] = useState(false)
   const [buds, setBuds] = useState([0, 0, 0])
-  const [padCritters] = useState<PadCritter[]>(() => shuffle([...PAD_CRITTERS]).slice(0, 3))
+  const [padCritters] = useState<PadCritter[]>(() => {
+    if (!start) return shuffle([...PAD_CRITTERS]).slice(0, 3)
+    const chosen = param('critters').split(',').filter((id): id is PadCritter => (PAD_CRITTERS as readonly string[]).includes(id))
+    return chosen.length === 3 ? chosen : ['frog', 'monkey', 'capy']
+  })
   /** For each lily friend: the pad it sits on (or null while it waits on the bank). */
   const [seats, setSeats] = useState<(number | null)[]>([null, null, null])
   const [glow, setGlow] = useState<null | 'cloud' | 'friends' | 'river' | 'lagoon'>(null)
@@ -905,42 +914,54 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
     )
   }
 
-  // ---- QA hook: jump to a later moment, or rain at a spot (motion and screen QA) ----
+  const seedSection = (to: string) => {
+    const G = g.current
+    const S0 = lay.current.S!
+    const later = ['swim', 'lagoon', 'pads', 'rainbow'].includes(to)
+    const pads = to === 'pads' || to === 'rainbow'
+    G.plants = listParam(param('plants'), to === 'forest' ? [0, 0, 0] : [3, 2, 3], 0, 3)
+    setPlants(G.plants)
+    setFrogUp(numberParam(param('frog'), to === 'forest' ? 0 : 1, 0, 1) === 1)
+    G.slothEyes = numberParam(param('sloth'), to === 'forest' ? 0 : 1, 0, 1); setSlothEyes(G.slothEyes)
+    G.river = G.shownRiver = numberParam(param('river'), later ? 1 : 0, 0, 1)
+    G.lagoon = G.shownLagoon = numberParam(param('lagoon'), pads ? 1 : 0, 0, 1)
+    G.buds = listParam(param('buds'), pads ? [2, 2, 2] : [0, 0, 0], 0, 2); setBuds(G.buds)
+    G.reached = later ? 3 : 0
+    star(to === 'forest' ? 0 : to === 'river' ? 1 : pads ? 5 : 4)
+    G.busy = false
+    if (to === 'swim') { setPhase('river'); void toLagoon(); return }
+    if (later) {
+      G.rosa.target = null; G.rosa.basin = 'lagoon'
+      const pool = waterSpan(S0.lagoon, levelY(S0.lagoonLow, S0.lagoonHigh, G.lagoon))
+      G.rosa.x = (pool[0] + pool[1]) / 2
+      G.cam = S0.camLagoon; setCam(1)
+      G.cloud.x = G.cloud.tx = S0.camLagoon + S0.w * 0.5
+    }
+    G.seats = param('seats').split(',').map((n) => n === 'none' ? null : Number(n)).slice(0, 3)
+    if (G.seats.length !== 3) G.seats = [null, null, null]
+    G.seats = G.seats.map((n, i, all) => n !== null && Number.isInteger(n) && n >= 0 && n <= 2 && all.indexOf(n) === i ? n : null)
+    setSeats(G.seats)
+    if (to === 'rainbow') {
+      if (param('seats') === 'none') { G.seats = [0, 1, 2]; setSeats(G.seats) }
+      setPhase('pads'); void finale()
+    } else { setPhase(to as Phase); setPrompt(to === 'forest' ? R.squeeze : to === 'river' ? R.river : pads ? R.pads : R.lagoon) }
+    G.lastTouch = performance.now()
+  }
+
+  // Seed only once, after the logical stage and puppets exist. Ordinary play keeps its original transitions.
+  useEffect(() => {
+    if (seeded.current || !lay.current.S) return
+    seeded.current = true
+    if (start && start !== 'story') seedSection(start)
+  })
+  useEffect(() => {
+    if ((!seeded.current && phase !== 'story') || (phase === 'story' && start && start !== 'story')) return
+    if (phase !== 'done') enter(phase, { plants: plants.join(','), frog: frogUp ? '1' : '0', sloth: String(slothEyes), river: String(g.current.river), lagoon: String(g.current.lagoon), buds: buds.join(','), seats: seats.map((n) => n ?? 'none').join(','), critters: padCritters.join(',') })
+  }, [phase, plants, frogUp, slothEyes, buds, seats, size.W])
+  // ---- QA helpers: rain at a spot and read state ----
   useEffect(() => {
     window.__peruRiverQA = {
-      jump: (to) => {
-        const G = g.current
-        const S0 = lay.current.S
-        if (!S0) return
-        G.plants = [3, 2, 3]
-        setPlants(G.plants)
-        setFrogUp(true)
-        G.slothEyes = 1
-        setSlothEyes(1)
-        if (to === 'river') {
-          G.phase = 'forest'
-          toRiver()
-          return
-        }
-        G.river = G.shownRiver = 1
-        G.reached = 3
-        star(4)
-        G.rosa.target = null
-        G.rosa.basin = 'lagoon'
-        const pool = waterSpan(S0.lagoon, levelY(S0.lagoonLow, S0.lagoonHigh, 0))
-        G.rosa.x = (pool[0] + pool[1]) / 2
-        setCam(1)
-        G.cloud.x = G.cloud.tx = S0.camLagoon + S0.w * 0.5
-        G.busy = false
-        setPhase('lagoon')
-        setPrompt(R.lagoon)
-        if (to === 'lagoon') return
-        G.lagoon = G.shownLagoon = 1
-        G.buds = [2, 2, 2]
-        setBuds(G.buds)
-        toPads()
-        if (to === 'rainbow') [0, 1, 2].forEach((i) => seat(i, i))
-      },
+
       state: () => {
         const G = g.current
         return { phase: G.phase, river: +G.river.toFixed(3), shown: +G.shownRiver.toFixed(3), lagoon: +G.lagoon.toFixed(3), reached: G.reached, rain: +G.rain.toFixed(2), cloud: Math.round(G.cloud.x), seen: [...G.seen], buds: G.buds }
@@ -1302,7 +1323,7 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
 
       <AnimatePresence>{flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.9 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 26 }} />}</AnimatePresence>
 
-      {phase === 'story' && <StoryBeat lines={R.story} bg={art.bgAmazon} friend={<Rosa height="60%" />} onDone={startPlay} />}
+      {phase === 'story' && (!start || start === 'story') && <StoryBeat lines={R.story} bg={art.bgAmazon} friend={<Rosa height="60%" />} onDone={startPlay} />}
     </div>
   )
 }
