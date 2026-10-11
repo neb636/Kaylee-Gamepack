@@ -25,19 +25,18 @@ export const ROSA_POINTS = { blowhole: [902, 344], beak: [1244, 552], middle: [6
 
 // ---- The spine: s = 0 at the root of the tail, s = 1 at the neck. ----
 const N = 22
-const X0 = 250
+const X0 = 330
 const X1 = 830
 const restY = (s: number) => 612 - 30 * s - 18 * Math.sin(Math.PI * s)
-const gauss = (s: number, at: number, w: number) => Math.exp(-(((s - at) / w) ** 2))
-/** Half-thickness above the spine: a slim tail stock swelling to a round back, with a boto's low dorsal ridge. */
-const top = (s: number) => 24 + 108 * smooth(s / 0.78) + 16 * gauss(s, 0.5, 0.07)
-/** Half-thickness below the spine: a round tummy. */
-const under = (s: number) => 22 + 102 * smooth(s / 0.74) + 16 * gauss(s, 0.68, 0.2)
+/** Half-thickness above the spine: a slim tail stock swelling to a round back that rises into her forehead. */
+const top = (s: number) => 24 + 112 * smooth(s / 0.75) + 42 * Math.max(0, (s - 0.72) / 0.28) ** 2
+/** Half-thickness below the spine: a round tummy that tucks in a little at the throat. */
+const under = (s: number) => 24 + 128 * smooth(s / 0.55) - 26 * smooth((s - 0.6) / 0.4)
 /** How much of the underside is cream (countershading), fading out before the tail. */
-const cream = (s: number) => 82 * smooth((s - 0.08) / 0.6)
+const cream = (s: number) => under(s) * 0.58 * smooth((s - 0.04) / 0.5)
 const NECK: [number, number] = [X1, restY(1)]
-const REST_TAIL = Math.atan2(restY(0.02) - restY(0), (X1 - X0) * 0.02)
-const REST_NECK = Math.atan2(restY(1) - restY(0.98), (X1 - X0) * 0.02)
+const REST_TAIL = Math.atan2(restY(1 / N) - restY(0), (X1 - X0) / N)
+const REST_NECK = Math.atan2(restY(1) - restY(1 - 1 / N), (X1 - X0) / N)
 
 type Pt = [number, number]
 /** A smooth path through points (Catmull-Rom as cubic Béziers). `move` starts a new path, otherwise it continues. */
@@ -60,8 +59,8 @@ const FLUKES = 'M34 -20 C0 -26 -40 -60 -86 -112 C-100 -128 -126 -126 -124 -100 C
 const FLIPPER = 'M-40 -24 C-30 50 -60 130 -104 190 C-118 210 -100 226 -78 216 C10 176 64 100 60 -20Z'
 /** Head in her rest pose (absolute units): the back edge hides inside the body; a round melon; a soft scoop into the
  *  beak; the upper beak back along the mouth line to the corner; then the round chin. The lower beak is the jaw. */
-const HEAD = 'M716 474 C724 458 736 450 752 449 C800 446 846 340 940 334 C1018 332 1064 384 1072 440 C1078 478 1100 498 1142 510 C1184 520 1214 526 1234 532 C1256 538 1256 562 1232 564 C1160 570 1070 582 996 590 C1004 612 1034 638 1012 645 C990 652 950 668 920 686 C886 706 836 704 760 690Z'
-const HEAD_CREAM = 'M740 628 C820 638 900 636 960 622 C985 615 998 606 1004 598 L1070 598 L1070 760 L740 760Z'
+const HEAD = 'M716 474 L800 440 L812 418 L830 404 C846 395 858 382 868 370 C890 348 912 334 940 334 C1018 332 1064 384 1072 440 C1078 478 1100 498 1142 510 C1184 520 1214 526 1234 532 C1256 538 1256 562 1232 564 C1160 570 1070 582 996 590 C1004 612 1034 638 1012 645 C990 652 950 668 920 686 C886 706 846 708 830 708 L760 704Z'
+const HEAD_CREAM = 'M740 634 C820 640 900 636 960 622 C985 615 998 606 1004 598 L1070 598 L1070 760 L740 760Z'
 /** The mouth corner, where the jaw hinges. */
 const HINGE: Pt = [1000, 592]
 /** The lower beak around the hinge: its top edge is the mouth line, its underside sweeps back into the chin. */
@@ -173,8 +172,10 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
         happy = true
       }
 
-      // The spine for this frame: the swim wave (held still at the neck), plus arch, curl and shimmy on springs.
+      // The spine for this frame: the swim wave (held still at the neck), plus arch, curl and shimmy on springs. Her
+      // nods and looks bend the front of the spine too, so the head and the body under it always turn together.
       const bend = st.bend.step(arch, dt)
+      const nod = Math.tan((st.head.step(head, dt) * Math.PI) / 180) * ((X1 - X0) / 0.8)
       const spine = pts.spine
       const up = pts.up
       for (let i = 0; i <= N; i++) {
@@ -183,6 +184,7 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
         let d = amp * r ** 1.7 * Math.sin(st.phase - 2.6 * r)
         d += bend * (((s - 0.55) / 0.55) ** 2 - 0.3)
         d += curl * r ** 2.2
+        d += nod * Math.max(0, s - 0.6) ** 2
         d += shimmy * Math.sin(t * 26 - s * 7) * (0.3 + r * 0.7)
         spine[i] = [X0 + (X1 - X0) * s, restY(s) + d]
       }
@@ -204,7 +206,7 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
         top0.push([px + n[0] * top(s), py + n[1] * top(s)])
         bot.push([px - n[0] * under(s), py - n[1] * under(s)])
         if (s >= 0.08) inner.push([px - n[0] * (under(s) - cream(s)), py - n[1] * (under(s) - cream(s))])
-        if (s >= 0.4 && s <= 0.8) ridge.push([px + n[0] * top(s) * 0.66, py + n[1] * top(s) * 0.66])
+        if (s >= 0.36 && s <= 0.72) ridge.push([px + n[0] * top(s) * 0.66, py + n[1] * top(s) * 0.66])
         if (s >= 0.14 && s <= 0.3) ridge2.push([px + n[0] * top(s) * 0.45, py + n[1] * top(s) * 0.45])
       }
       const outline = `${through(top0, true)}${through(bot.slice().reverse(), false)}Z`
@@ -227,9 +229,9 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
       const fy = spine[fi][1] - up[fi][1] * fs
       const fl = st.flip.step(flip, dt)
       setT(p.flipper, `translate(${fx.toFixed(1)} ${fy.toFixed(1)}) rotate(${(fa + fl).toFixed(2)})`)
-      // The head rides the neck, turned with it, plus her own nods and looks.
+      // The head rides the neck, turned exactly as the front of the body is.
       const tn = Math.atan2(spine[N][1] - spine[N - 1][1], spine[N][0] - spine[N - 1][0]) - REST_NECK
-      const hd = st.head.step(head + ((tn * 180) / Math.PI) * 0.8, dt)
+      const hd = (tn * 180) / Math.PI
       setT(p.head, `translate(${(spine[N][0] - NECK[0]).toFixed(1)} ${(spine[N][1] - NECK[1]).toFixed(1)}) rotate(${hd.toFixed(2)} ${NECK[0]} ${NECK[1]})`)
       st.jaw += (jaw - st.jaw) * Math.min(1, dt * 22)
       setT(p.jaw, `translate(${HINGE[0]} ${HINGE[1]}) rotate(${Math.max(0, st.jaw).toFixed(2)})`)
@@ -305,8 +307,8 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
           <path d={HEAD} fill={PINK} />
           <path d={HEAD_CREAM} fill={BELLY} clipPath={`url(#${id}-head)`} />
           {/* Paint over the head's back edge, where it lies on her body, so no hairline seam shows. */}
-          <path d="M760 690 L745 628" fill="none" stroke={BELLY} strokeWidth="5" />
-          <path d="M745 628 L716 474" fill="none" stroke={PINK} strokeWidth="5" />
+          <path d="M759 700 L747 638" fill="none" stroke={BELLY} strokeWidth="5" />
+          <path d="M746 628 L716 474 L800 440 L808 428" fill="none" stroke={PINK} strokeWidth="5" />
           <path d="M990 370 C1024 392 1044 420 1050 452" fill="none" stroke={SHINE} strokeWidth="18" />
           <path d="M1120 514 C1160 524 1196 530 1220 536" fill="none" stroke={SHINE} strokeWidth="10" />
           {/* The mouth line, curling up into a smile at the corner. */}
