@@ -16,11 +16,22 @@ import { Stalk, stalkPoint, type StalkHandle } from './Stalk'
 const B = L.bamboo
 const TOTAL = 6
 type Phase = 'r1' | 'break1' | 'r2' | 'break2' | 'r3a' | 'r3b' | 'payoff'
+/** Where each round starts (for deep links): the bamboo heights, the prompt and the stars already earned. */
+const SEED: Record<Phase, { heights: number[]; prompt: 'grow3' | 'grow2' | 'tallestQ' | 'shortestQ' | null; stars: number }> = {
+  r1: { heights: [0], prompt: 'grow3', stars: 0 },
+  break1: { heights: [3], prompt: null, stars: 2 },
+  r2: { heights: [2, 0], prompt: 'grow2', stars: 2 },
+  break2: { heights: [2, 3], prompt: null, stars: 4 },
+  r3a: { heights: [3, 5, 2], prompt: 'tallestQ', stars: 4 },
+  r3b: { heights: [3, 5, 2], prompt: 'shortestQ', stars: 5 },
+  payoff: { heights: [3, 5, 2], prompt: null, stars: 5 },
+}
 const R3 = [3, 5, 2] // bamboo heights in round 3: the tallest is in the middle, the shortest on the right
 const tween = (from: number, to: number, duration: number, onUpdate: (v: number) => void, ease: 'linear' | 'easeIn' | 'easeInOut' | 'easeOut' = 'easeInOut') =>
   new Promise<void>((res) => void animate(from, to, { duration, ease, onUpdate, onComplete: res }))
 
-export function Forest({ onDone, setProgress }: ActivityProps) {
+export function Forest({ start, onSection, onDone, setProgress }: ActivityProps & { start?: Phase | null; onSection?: (id: Phase) => void }) {
+  const seed = SEED[start ?? 'r1']
   const landscape = useLandscape()
   const alive = useAlive()
   const field = useRef<HTMLDivElement>(null)
@@ -31,8 +42,8 @@ export function Forest({ onDone, setProgress }: ActivityProps) {
   const busy = useRef(false)
   const idleAt = useRef(Date.now())
 
-  const [phase, setPhase] = useState<Phase>('r1')
-  const [heights, setHeights] = useState<number[]>([0])
+  const [phase, setPhase] = useState<Phase>(start ?? 'r1')
+  const [heights, setHeights] = useState<number[]>(seed.heights)
   const [bamboo, setBamboo] = useState(false)
   const [bundle, setBundle] = useState(false)
   const [bend, setBend] = useState(0)
@@ -43,9 +54,9 @@ export function Forest({ onDone, setProgress }: ActivityProps) {
   const [wrongs, setWrongs] = useState(0)
   const [puffs, setPuffs] = useState<{ id: number; x: number; y: number }[]>([])
   const [hiddenCols, setHiddenCols] = useState<number[]>([])
-  const [prompt, setPrompt] = useState<typeof B.grow3 | (typeof B)['munch'][0] | null>(B.grow3)
+  const [prompt, setPrompt] = useState<typeof B.grow3 | (typeof B)['munch'][0] | null>(seed.prompt && B[seed.prompt])
 
-  useEffect(() => setProgress(0, TOTAL), [])
+  useEffect(() => setProgress(seed.stars, TOTAL), [])
 
   // --- layout, from the field's size ---------------------------------------------------------------------------
   const ready = fw > 0 && fh > 0
@@ -220,7 +231,10 @@ export function Forest({ onDone, setProgress }: ActivityProps) {
   }
 
   // --- phase changes -------------------------------------------------------------------------------------------------
+  useEffect(() => onSection?.(phase), [phase])
   useEffect(() => {
+    // The payoff measures the field, so a deep link straight into it waits until the field has a size.
+    if (!ready) return
     touch()
     if (phase === 'break1' || phase === 'break2') {
       void (async () => {
@@ -239,7 +253,7 @@ export function Forest({ onDone, setProgress }: ActivityProps) {
       })()
     }
     if (phase === 'payoff') void payoff()
-  }, [phase])
+  }, [phase, ready])
 
   // A gentle nudge if she pauses in a growing round.
   useEffect(() => {

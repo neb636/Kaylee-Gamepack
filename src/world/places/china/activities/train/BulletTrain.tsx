@@ -6,6 +6,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Buddy, burst, Piece, PlayArea, say, sounds, Target, useAlive, useElementSize, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { sfx } from '../../../../kit/sfx'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -19,6 +20,7 @@ import { ItemIcon, Scarf, wearFor, type ItemId } from './items'
 import { Lever, NOTCHES } from './Lever'
 import { RouteMap, type RouteMapHandle } from './RouteMap'
 import { Scenery, type SceneryHandle, type StopId } from './Scenery'
+import SECTIONS from './sections'
 
 const T = L.train
 type Wrongs = Record<string, Line>
@@ -48,6 +50,10 @@ const RIDE_SECS = [3.4, 2.8, 2.8, 2.8] // seconds at full speed to reach each st
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 type Phase = 'ride' | 'stop' | 'leave' | 'end'
+/** The section for each stop (sections.ts): it starts with the ride there. */
+const STOP_SECTION = { harbin: 'harbin', hainan: 'hainan', gobi: 'gobi', himalaya: 'himalayas' } as const
+/** Items given at the stops before stop `i` (the stars a deep link starts with). */
+const givenBefore = (i: number) => STOPS.slice(0, i).reduce((n, st) => n + st.steps.reduce((m, x) => m + x.right.length, 0), 0)
 
 export function BulletTrain({ onDone, setProgress }: ActivityProps) {
   const alive = useAlive()
@@ -59,9 +65,12 @@ export function BulletTrain({ onDone, setProgress }: ActivityProps) {
   const routeMap = useRef<RouteMapHandle>(null)
   const trainEl = useRef<HTMLDivElement>(null)
 
-  const [story, setStory] = useState(true)
+  const { start, enter } = useSections(SECTIONS)
+  // A deep link to a stop starts on the ride there, with the earlier stops done.
+  const linked = start && start !== 'story' ? STOPS.findIndex((st) => STOP_SECTION[st.id] === start) : -1
+  const [story, setStory] = useState(linked < 0)
   const [phase, setPhase] = useState<Phase>('ride')
-  const [si, setSi] = useState(0)
+  const [si, setSi] = useState(Math.max(0, linked))
   const [atStop, setAtStop] = useState(false)
   const [notch, setNotch] = useState(0)
   const [hint, setHint] = useState(false)
@@ -72,7 +81,7 @@ export function BulletTrain({ onDone, setProgress }: ActivityProps) {
   const [tigerScarf, setTigerScarf] = useState(false)
   const [night, setNight] = useState(false)
   const [prompt, setPrompt] = useState<Line | null>(null)
-  const [reached, setReached] = useState(0)
+  const [reached, setReached] = useState(Math.max(0, linked))
   const [targetHint, setTargetHint] = useState<'bao' | 'animal' | null>(null)
   const [shivering, setShivering] = useState(false)
 
@@ -81,7 +90,14 @@ export function BulletTrain({ onDone, setProgress }: ActivityProps) {
   const stop = STOPS[si]
 
   useEffect(() => {
-    setProgress(0, TOTAL)
+    if (linked >= 0) {
+      s.current.given_total = givenBefore(linked)
+      setProgress(s.current.given_total, TOTAL)
+      beginRide(linked)
+    } else {
+      setProgress(0, TOTAL)
+      enter('story')
+    }
     return () => stopWind()
   }, [])
 
@@ -133,6 +149,7 @@ export function BulletTrain({ onDone, setProgress }: ActivityProps) {
   }, [story, phase, notch, si])
 
   const beginRide = (next: number) => {
+    enter(STOP_SECTION[STOPS[next].id])
     const r = s.current
     r.si = next
     r.phase = 'ride'

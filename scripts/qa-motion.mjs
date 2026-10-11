@@ -249,10 +249,8 @@ const GAME_SCENARIOS = [
     name: 'bamboo-grow',
     seconds: 2.2,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/china/bamboo`)
-      await page.waitForTimeout(500)
-      await skip(page)
-      await page.waitForTimeout(900)
+      await page.goto(`${base}#/world/china/bamboo/r1`)
+      await page.waitForTimeout(1400)
     },
     act: async (page) => {
       // A real swipe up on the sprout, then a tap.
@@ -274,22 +272,8 @@ const GAME_SCENARIOS = [
     name: 'bamboo-payoff',
     seconds: 12,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/china/bamboo`)
-      await page.waitForTimeout(500)
-      await skip(page)
-      await page.waitForTimeout(900)
-      const shoot = () => page.getByRole('button', { name: 'bamboo shoot' })
-      for (let i = 0; i < 3; i++) {
-        await shoot().first().click({ force: true }).catch(() => {})
-        await page.waitForTimeout(500)
-      }
-      await page.waitForTimeout(6500) // she cheers, then munches
-      for (let i = 0; i < 3; i++) {
-        await shoot().nth(1).click({ force: true }).catch(() => {})
-        await page.waitForTimeout(500)
-      }
-      await page.waitForTimeout(8500)
-      await page.getByRole('button', { name: 'bamboo 2' }).click({ force: true }).catch(() => {})
+      // The last round (tap the shortest): bamboo 3 is the short one.
+      await page.goto(`${base}#/world/china/bamboo/r3b`)
       await page.waitForTimeout(3500)
     },
     act: (page) => page.getByRole('button', { name: 'bamboo 3' }).click({ force: true }),
@@ -298,10 +282,8 @@ const GAME_SCENARIOS = [
     name: 'wall-brick-snap',
     seconds: 1.6,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/china/wall`)
-      await page.waitForTimeout(500)
-      await skip(page)
-      await page.waitForTimeout(2500)
+      await page.goto(`${base}#/world/china/wall/brick`)
+      await page.waitForTimeout(3000)
     },
     act: async (page) => {
       // Drag the red brick into the first hole.
@@ -320,24 +302,7 @@ const GAME_SCENARIOS = [
     name: 'wall-beacon',
     seconds: 12,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/china/wall`)
-      await page.waitForTimeout(500)
-      await skip(page)
-      await page.waitForTimeout(2000)
-      // Fix every gap by tapping the right bricks (the arrow pans to each hole when needed).
-      for (const name of ['red', 'gold', 'gold', 'jade']) {
-        for (let i = 0; i < 20; i++) {
-          const hole = page.locator('[data-target="hole"]')
-          const b = (await hole.count()) ? await hole.boundingBox() : null
-          const vw = page.viewportSize().width
-          if (b && b.x > 20 && b.x + b.width < vw - 20) break
-          if (i % 4 === 3) await page.getByRole('button', { name: 'follow Hou Hou' }).click({ force: true }).catch(() => {})
-          await page.waitForTimeout(600)
-        }
-        await page.waitForTimeout(700)
-        await page.getByRole('button', { name: `${name} brick` }).first().click({ force: true }).catch(() => {})
-        await page.waitForTimeout(3200)
-      }
+      await page.goto(`${base}#/world/china/wall/beacon`)
       await page.waitForTimeout(4500)
     },
     act: (page) => page.getByRole('button', { name: 'beacon tower' }).click({ force: true }),

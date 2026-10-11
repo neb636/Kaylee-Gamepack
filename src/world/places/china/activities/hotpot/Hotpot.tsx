@@ -6,6 +6,7 @@
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
 import { Buddy, burst, say, sounds, useAlive, useElementSize, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { useSections } from '../../../../kit/sections'
 import { Stage } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
@@ -16,6 +17,7 @@ import { INK } from '../../puppets/ink'
 import type { ActivityProps } from '../../Place'
 import { WordCard, type WordId } from '../../WordCard'
 import { Bubbles, Chopsticks, FoodIcon, Twinkles, type FoodKind } from './Parts'
+import SECTIONS from './sections'
 
 const H = L.hotpot
 const COOK_MS = 3000
@@ -51,6 +53,11 @@ interface Item {
   ready: boolean
 }
 type Phase = 'story' | 'drop' | 'scoop' | 'spin' | 'serve' | 'finale'
+type SectionId = (typeof SECTIONS.sections)[number]['id']
+/** Section ids of each round, in play order (sections.ts). */
+const ROUND_IDS = ['noodles', 'bokchoy', 'dumplings'] as const
+const sectionOf = (round: number, p: Phase): SectionId | null =>
+  p === 'story' || p === 'finale' ? p : (`${ROUND_IDS[round]}-${p}` as SectionId)
 type DragState = { kind: 'food' | 'chop'; food?: FoodKind; x: number; y: number }
 
 export function Hotpot({ onDone, setProgress }: ActivityProps) {
@@ -58,6 +65,7 @@ export function Hotpot({ onDone, setProgress }: ActivityProps) {
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: Ht } = useElementSize(box)
   const alive = useAlive()
+  const { start, enter } = useSections(SECTIONS)
 
   const bao = useRef<PuppetHandle>(null)
   const hong = useRef<PuppetHandle>(null)
@@ -65,7 +73,7 @@ export function Hotpot({ onDone, setProgress }: ActivityProps) {
   const ringBox = useRef<HTMLDivElement>(null)
   const potBox = useRef<HTMLDivElement>(null)
 
-  const [story, setStory] = useState(true)
+  const [story, setStory] = useState(!start || start === 'story')
   const [round, setRound] = useState(0)
   const [phase, setPhaseState] = useState<Phase>('story')
   const phaseRef = useRef<Phase>('story')
@@ -99,6 +107,8 @@ export function Hotpot({ onDone, setProgress }: ActivityProps) {
   const setPhase = (p: Phase) => {
     phaseRef.current = p
     setPhaseState(p)
+    const id = sectionOf(roundRef.current, p)
+    if (id) enter(id)
   }
 
   // ---- layout -------------------------------------------------------------------------------------------------
@@ -153,6 +163,54 @@ export function Hotpot({ onDone, setProgress }: ActivityProps) {
   }
 
   useEffect(() => () => clearNudge(), [])
+
+  // A deep link sets up the round as if she had played to there (earlier friends have eaten, food is in the pot...).
+  const seeded = useRef(false)
+  useEffect(() => {
+    if (seeded.current) return // once (dev mode runs effects twice)
+    seeded.current = true
+    if (!start || start === 'story') return enter('story')
+    if (start === 'finale') {
+      setEaten([0, 1, 2])
+      setProgress(3, 3)
+      taught.current = true
+      void finale()
+      return
+    }
+    const [id, step] = start.split('-') as [(typeof ROUND_IDS)[number], 'drop' | 'scoop' | 'spin' | 'serve']
+    const r = ROUND_IDS.indexOf(id)
+    const R = ROUNDS[r]
+    setEaten(ROUNDS.slice(0, r).map((x) => x.friend))
+    setProgress(r, 3)
+    taught.current = r > 0
+    if (step === 'drop') return startRound(r)
+    roundRef.current = r
+    setRound(r)
+    setPrompt(H.ask[r])
+    if (step === 'scoop') {
+      const side = R.side ?? 'spicy'
+      placedRef.current = R.count
+      itemsRef.current = Array.from({ length: R.count }, (_, i) => ({ id: nextId.current++, kind: R.kind, side, slot: i, ready: true }))
+      setItems(itemsRef.current)
+      setPhase('scoop')
+      setPrompt(H.chopTip)
+      setGlow('chop')
+      armNudge(H.chopTip, 'chop')
+      return
+    }
+    placedRef.current = R.count
+    bowlRef.current = Array.from({ length: R.count }, () => R.kind)
+    setBowl(bowlRef.current)
+    if (step === 'spin') {
+      setPhase('spin')
+      setGlow('spin')
+      setPrompt(H.spin[R.friend])
+      armNudge(H.spin[R.friend], 'spin')
+      return
+    }
+    rot.set(QUARTERS[R.friend] * 90)
+    void serve()
+  }, [])
 
   // ---- 1. food into the pot -------------------------------------------------------------------------------------
   const wrongFood = (kind: FoodKind) => {

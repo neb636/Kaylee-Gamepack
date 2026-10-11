@@ -6,6 +6,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { burst, Buddy, say, sounds, useAlive, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { sfx } from '../../../../kit/sfx'
@@ -14,7 +15,8 @@ import { L } from '../../lines'
 import { BaoBao } from '../../puppets/BaoBao'
 import { INK } from '../../puppets/ink'
 import type { ActivityProps } from '../../Place'
-import { CHARS } from './chars'
+import { CHARS, type Char } from './chars'
+import SECTIONS from './sections'
 import { Slab } from './Slab'
 import { Moon, Seal, Sun, ZH_FONT } from './Things'
 
@@ -72,6 +74,12 @@ function slots(R: { w: number; h: number }, ground: number) {
   } satisfies Record<ThingId, { cx: number; foot: number; w: number; h: number }>
 }
 
+/** What the scene holds once the first `n` characters are painted (a deep link starts with these). */
+function paintedBefore(n: number) {
+  const things: ThingId[] = (['person', 'hills', 'sun', 'tree', 'bird', 'bao', 'moon'] as ThingId[]).filter((t) => ({ person: 1, hills: 2, sun: 3, tree: 4, bird: 4, bao: 5, moon: 6 })[t] <= n)
+  return { things, big: n >= 5, landed: n >= 4, evening: n >= 6 }
+}
+
 const Z: Record<ThingId, number> = { sun: 1, moon: 1, hills: 2, person: 3, bao: 3, tree: 3, bird: 4 }
 
 export function MagicBrush({ onDone, setProgress }: ActivityProps) {
@@ -82,26 +90,38 @@ export function MagicBrush({ onDone, setProgress }: ActivityProps) {
   const bao = useRef<PuppetHandle>(null)
   const person = useRef<PuppetHandle>(null)
   const finished = useRef(false)
+  const { start, enter } = useSections(SECTIONS)
+  // A deep link starts at a character (or the name) with everything before it already painted.
+  const startChar = CHARS.findIndex((c) => c.id === start)
+  const startAt = start === 'name' || start === 'stamp' ? CHARS.length : Math.max(0, startChar)
+  const [seed] = useState(() => paintedBefore(startAt))
 
-  const [story, setStory] = useState(true)
-  const [idx, setIdx] = useState(0)
-  const [phase, setPhase] = useState<Phase>('write')
-  const [prompt, setPrompt] = useState<Line>(B.intro[0])
+  const [story, setStory] = useState(!start || start === 'story')
+  const [idx, setIdx] = useState(Math.min(startAt, CHARS.length - 1))
+  const [phase, setPhase] = useState<Phase>(start === 'stamp' ? 'stamp' : start === 'name' ? 'name' : 'write')
+  const [prompt, setPrompt] = useState<Line>(start === 'stamp' ? B.stamp : B.intro[Math.min(startAt, CHARS.length - 1)])
   const [speakPrompt, setSpeakPrompt] = useState(true)
-  const [card, setCard] = useState<Card | null>(null)
-  const [things, setThings] = useState<ThingId[]>([])
-  const [big, setBig] = useState(false)
-  const [landed, setLanded] = useState(false)
-  const [evening, setEvening] = useState(false)
+  const [card, setCard] = useState<Card | null>(start === 'stamp' ? { zh: '凯莉', py: 'kǎilì', en: 'Kaylee' } : null)
+  const [things, setThings] = useState<ThingId[]>(seed.things)
+  const [big, setBig] = useState(seed.big)
+  const [landed, setLanded] = useState(seed.landed)
+  const [evening, setEvening] = useState(seed.evening)
   const [fading, setFading] = useState(false)
-  const [sparkles, setSparkles] = useState(0)
-  const [nameShown, setNameShown] = useState(false)
+  const [sparkles, setSparkles] = useState(startAt)
+  const [nameShown, setNameShown] = useState(start === 'stamp')
   const [stamped, setStamped] = useState(false)
   const [stamping, setStamping] = useState(false)
 
   useEffect(() => {
-    setProgress(0, TOTAL)
+    setProgress(startAt, TOTAL)
+    if (start === 'name') void nameFinale()
+    else if (start === 'stamp') enter('stamp')
+    else if (!start || start === 'story') enter('story')
   }, [])
+  // Each character is the start of its own section (after the story, so a bare link still lands on the story first).
+  useEffect(() => {
+    if (!story && phase === 'write') enter(CHARS[idx].id as Char['id'])
+  }, [story, idx, phase])
 
   const land = W > H
   const S = W > 0 ? (land ? Math.min(H * 0.98, W * 0.46) : Math.min(W * 0.9, H * 0.5)) : 0
@@ -198,6 +218,7 @@ export function MagicBrush({ onDone, setProgress }: ActivityProps) {
   const nameFinale = async () => {
     setFading(false)
     setPhase('name')
+    enter('name')
     setSpeakPrompt(true)
     setPrompt(B.nameIntro)
     setNameShown(true)
@@ -210,6 +231,7 @@ export function MagicBrush({ onDone, setProgress }: ActivityProps) {
     if (!alive()) return
     setPrompt(B.stamp)
     setPhase('stamp')
+    enter('stamp')
   }
 
   const stamp = async () => {

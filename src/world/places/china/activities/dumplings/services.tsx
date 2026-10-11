@@ -21,7 +21,16 @@ export interface ServiceProps {
   chef: RefObject<PuppetHandle | null>
   /** Cooked baskets, ready to carry to the dining room. */
   onDone: (baskets: Basket[]) => void
+  /** Deep links (sections.ts): start at this kitchen step, with the earlier ones done for her. */
+  start?: string
+  /** Reports each kitchen step as it begins, with the dumplings made so far (so the address bar can follow). */
+  onAt?: (at: string, made?: DoughColor[]) => void
 }
+
+/** The step a deep link starts at, if this service has it. */
+const startStep = <S extends string>(steps: readonly S[], start?: string): S => (steps.includes(start as S) ? (start as S) : steps[0])
+/** Whether `step` comes after `than` in this service. */
+const past = <S extends string>(steps: readonly S[], step: S, than: S) => steps.indexOf(step) > steps.indexOf(than)
 
 /** Prompts for the steaming stages. */
 function cookPrompt(stage: CookStage, fact: boolean): Line | undefined {
@@ -32,8 +41,8 @@ function cookPrompt(stage: CookStage, fact: boolean): Line | undefined {
 }
 
 /** Runs a CookStove and says the steam fact once, then "pop the steam puffs". */
-function useCook(onCooked: () => void) {
-  const [stage, setStage] = useState<CookStage>('idle')
+function useCook(onCooked: () => void, initial: CookStage = 'idle') {
+  const [stage, setStage] = useState<CookStage>(initial)
   const [fact, setFact] = useState(true)
   const alive = useAlive()
   useEffect(() => {
@@ -51,17 +60,19 @@ function useCook(onCooked: () => void) {
 
 // --- Service 1: Grandpa Turtle's four dumplings -------------------------------------------------------------------
 
-type S1 = 'knead' | 'snake' | 'chop' | 'roll' | 'fill' | 'pleat' | 'quick' | 'pleat3' | 'basket' | 'lid' | 'cook'
+const STEPS1 = ['knead', 'snake', 'chop', 'roll', 'fill', 'pleat', 'quick', 'pleat3', 'basket', 'lid', 'cook'] as const
+type S1 = (typeof STEPS1)[number]
 const PROMPT1: Partial<Record<S1, Line>> = { knead: D.knead, snake: D.snake, chop: D.chop, roll: D.roll, fill: D.fill, pleat: D.pleat, pleat3: D.pleatMore, basket: D.steamer, lid: D.lid }
 
-export function Service1({ chef, onDone }: ServiceProps) {
-  const [step, setStep] = useState<S1>('knead')
+export function Service1({ chef, onDone, start, onAt }: ServiceProps) {
+  const [step, setStep] = useState<S1>(() => startStep(STEPS1, start))
   const [folded, setFolded] = useState(1) // dumplings folded so far (in pleat3)
-  const [placed, setPlaced] = useState<DoughColor[]>([])
+  const basket: Basket = { id: 's1', colors: ['cream', 'cream', 'cream', 'cream'], ribbon: RIBBON.grandpa }
+  const [placed, setPlaced] = useState<DoughColor[]>(() => (past(STEPS1, step, 'basket') ? basket.colors : []))
   const [word, showWord] = useWord()
   const alive = useAlive()
-  const basket: Basket = { id: 's1', colors: ['cream', 'cream', 'cream', 'cream'], ribbon: RIBBON.grandpa }
-  const cook = useCook(() => onDone([basket]))
+  const cook = useCook(() => onDone([basket]), step === 'cook' ? 'fire' : 'idle')
+  useEffect(() => onAt?.(step), [step])
 
   useEffect(() => {
     if (step !== 'quick') return
@@ -178,27 +189,31 @@ function CloseLid({ colors, ribbon, onDone }: { colors: DoughColor[]; ribbon?: s
 
 // --- Service 2: the lunch rush -------------------------------------------------------------------------------------
 
-type S2 = 'order' | 'color' | 'fill' | 'pleat' | 'goose' | 'basket' | 'stack' | 'cook'
+const STEPS2 = ['order', 'color', 'fill', 'pleat', 'goose', 'basket', 'stack', 'cook'] as const
+type S2 = (typeof STEPS2)[number]
 const BUNNY: DoughColor[] = ['pink', 'pink', 'green', 'green']
 const GOOSE: DoughColor[] = ['yellow', 'yellow']
 const BOWLS: DoughColor[] = ['cream', 'pink', 'green', 'yellow']
 
-export function Service2({ chef, onDone }: ServiceProps) {
-  const [step, setStep] = useState<S2>('order')
-  const [wrappers, setWrappers] = useState<DoughColor[]>([])
-  const [filled, setFilled] = useState(false)
-  const [folded, setFolded] = useState(0)
-  const [placed, setPlaced] = useState<DoughColor[]>([])
-  const [stacked, setStacked] = useState<string[]>([])
+export function Service2({ chef, onDone, start, onAt }: ServiceProps) {
+  const [step, setStep] = useState<S2>(() => startStep(STEPS2, start))
+  const [first] = useState(step)
+  const [wrappers, setWrappers] = useState<DoughColor[]>(() => (past(STEPS2, first, 'color') ? BUNNY : []))
+  const [filled, setFilled] = useState(() => past(STEPS2, first, 'fill'))
+  const [folded, setFolded] = useState(() => (past(STEPS2, first, 'pleat') ? 4 : 0))
+  const [placed, setPlaced] = useState<DoughColor[]>(() => (past(STEPS2, first, 'basket') ? BUNNY : []))
+  const [stacked, setStacked] = useState<string[]>(() => (first === 'cook' ? ['goose', 'bunnies'] : []))
   const [wrong, setWrong] = useState<DoughColor | null>(null)
   const [hint, setHint] = useState(false)
   const alive = useAlive()
   const bunnies: Basket = { id: 'bunnies', colors: BUNNY, ribbon: RIBBON.bunnies }
   const goose: Basket = { id: 'goose', colors: GOOSE, ribbon: RIBBON.goose }
-  const cook = useCook(() => onDone([bunnies, goose]))
+  const cook = useCook(() => onDone([bunnies, goose]), first === 'cook' ? 'fire' : 'idle')
   const want = BUNNY[wrappers.length]
+  useEffect(() => onAt?.(step), [step])
 
   useEffect(() => {
+    if (first !== 'order') return // a deep link past the order
     void (async () => {
       await say(D.orderBunnies)
       await say(D.orderGoose)
@@ -389,19 +404,26 @@ function EmptySpot() {
 
 // --- Service 3: Bao Bao's big order ---------------------------------------------------------------------------------
 
-type S3 = 'order' | 'make' | 'lid' | 'cook'
+const STEPS3 = ['order', 'make', 'lid', 'cook'] as const
+type S3 = (typeof STEPS3)[number]
+/** Bao Bao's six when a deep link starts after she made them (and doesn't say which). */
+export const SAMPLE_SIX: DoughColor[] = ['pink', 'green', 'yellow', 'cream', 'pink', 'yellow']
 
-export function Service3({ chef, onDone }: ServiceProps) {
-  const [step, setStep] = useState<S3>('order')
-  const [made, setMade] = useState<DoughColor[]>([])
-  const [monkey, setMonkey] = useState<'no' | 'sneak' | 'sorry' | 'gone'>('no')
+export function Service3({ chef, onDone, start, onAt, made: seeded }: ServiceProps & { made?: DoughColor[] }) {
+  const [step, setStep] = useState<S3>(() => startStep(STEPS3, start))
+  const [first] = useState(step)
+  // A deep link into the making keeps what the link made (up to five); after it, all six (the link's, or a sample).
+  const [made, setMade] = useState<DoughColor[]>(() => (first === 'make' ? (seeded ?? []).slice(0, 5) : first === 'order' ? [] : seeded?.length === 6 ? seeded : SAMPLE_SIX))
+  const [monkey, setMonkey] = useState<'no' | 'sneak' | 'sorry' | 'gone'>(() => (made.length >= 3 ? 'gone' : 'no'))
   const bao = useRef<PuppetHandle>(null)
   const hou = useRef<PuppetHandle>(null)
   const alive = useAlive()
   const basket: Basket = { id: 'baobao', colors: made, ribbon: RIBBON.baobao }
-  const cook = useCook(() => onDone([basket]))
+  const cook = useCook(() => onDone([basket]), first === 'cook' ? 'fire' : 'idle')
+  useEffect(() => onAt?.(step, made), [step])
 
   useEffect(() => {
+    if (first !== 'order') return // a deep link past the order
     void (async () => {
       sounds.sparkle()
       await say(D.jingle)

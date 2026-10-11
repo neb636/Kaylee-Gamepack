@@ -168,56 +168,46 @@ const SCREENS = [
   { name: 'party', hash: '#/world/australia/party', stampAll: true, act: skip },
   { name: 'china-intro', hash: '#/world/china', reset: true, wait: 300 },
   { name: 'china-hub', hash: '#/world/china', act: skip },
-  { name: 'dumplings-arrive', hash: '#/world/china/dumplings', reset: true, wait: 400 },
-  { name: 'dumplings-oldtown', hash: '#/world/china/dumplings', reset: true, act: skip },
-  {
-    name: 'dumplings-kitchen',
-    hash: '#/world/china/dumplings',
-    reset: true,
-    act: async (p) => {
-      await skip(p)
-      await p.getByRole('button', { name: 'zig-zag bridge' }).click({ force: true }).catch(() => {})
-      await p.waitForTimeout(2600)
-      await p.getByRole('button', { name: 'dumpling house door' }).click({ force: true }).catch(() => {})
-      await p.waitForTimeout(2200)
-    },
-  },
-  { name: 'bamboo-story', hash: '#/world/china/bamboo', reset: true, wait: 400 },
-  { name: 'bamboo-round1', hash: '#/world/china/bamboo', reset: true, act: skip },
+  // China: open the exact section instead of replaying earlier rounds.
+  { name: 'dumplings-arrive', hash: '#/world/china/dumplings/arrive', reset: true, wait: 400 },
+  { name: 'dumplings-oldtown', hash: '#/world/china/dumplings/walk', reset: true },
+  { name: 'dumplings-kitchen', hash: '#/world/china/dumplings/k1', reset: true, wait: 2200 },
+  { name: 'dumplings-kitchen3', hash: '#/world/china/dumplings/k3?at=make&baskets=baobao:pink-green-yellow', reset: true, wait: 1500 },
+  { name: 'dumplings-dining2', hash: '#/world/china/dumplings/d2', reset: true, wait: 1500 },
+  { name: 'bamboo-story', hash: '#/world/china/bamboo/story', reset: true, wait: 400 },
+  { name: 'bamboo-round1', hash: '#/world/china/bamboo/r1', reset: true },
   {
     name: 'bamboo-grown',
-    hash: '#/world/china/bamboo',
+    hash: '#/world/china/bamboo/r1',
     reset: true,
     act: async (p) => {
-      await skip(p)
       await p.getByRole('button', { name: 'bamboo shoot' }).click({ force: true }).catch(() => {})
       await p.waitForTimeout(900)
       await p.getByRole('button', { name: 'bamboo shoot' }).click({ force: true }).catch(() => {})
       await p.waitForTimeout(900)
     },
   },
-  { name: 'wall-story', hash: '#/world/china/wall', reset: true, wait: 400 },
-  { name: 'wall-gap1', hash: '#/world/china/wall', reset: true, act: skip },
+  { name: 'wall-story', hash: '#/world/china/wall/story', reset: true, wait: 400 },
+  { name: 'wall-gap1', hash: '#/world/china/wall/brick', reset: true },
   {
     name: 'wall-gap1-wrong',
-    hash: '#/world/china/wall',
+    hash: '#/world/china/wall/brick',
     reset: true,
     act: async (p) => {
-      await skip(p)
       await p.waitForTimeout(1500)
       await p.getByRole('button', { name: 'gold brick' }).click({ force: true }).catch(() => {})
       await p.waitForTimeout(700)
     },
   },
-  { name: 'hotpot-story', hash: '#/world/china/hotpot', reset: true, wait: 400 },
-  { name: 'hotpot-play', hash: '#/world/china/hotpot', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
-  { name: 'brush-story', hash: '#/world/china/brush', reset: true, wait: 400 },
-  { name: 'brush-play', hash: '#/world/china/brush', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
-  { name: 'race-story', hash: '#/world/china/race', reset: true, wait: 400 },
-  { name: 'race-play', hash: '#/world/china/race', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
-  { name: 'train-story', hash: '#/world/china/train', reset: true, wait: 400 },
-  { name: 'train-play', hash: '#/world/china/train', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
-  { name: 'china-parade', hash: '#/world/china/party', stampAll: 'china', act: async (p) => { await skip(p); await p.waitForTimeout(2500) } },
+  { name: 'hotpot-story', hash: '#/world/china/hotpot/story', reset: true, wait: 400 },
+  { name: 'hotpot-play', hash: '#/world/china/hotpot/noodles-drop', reset: true, wait: 1800 },
+  { name: 'brush-story', hash: '#/world/china/brush/story', reset: true, wait: 400 },
+  { name: 'brush-play', hash: '#/world/china/brush/ren', reset: true, wait: 1800 },
+  { name: 'race-story', hash: '#/world/china/race/story', reset: true, wait: 400 },
+  { name: 'race-play', hash: '#/world/china/race/board', reset: true, wait: 1800 },
+  { name: 'train-story', hash: '#/world/china/train/story', reset: true, wait: 400 },
+  { name: 'train-play', hash: '#/world/china/train/harbin', reset: true, wait: 1800 },
+  { name: 'china-parade', hash: '#/world/china/party/drive?stamps=all', stampAll: 'china', wait: 2500 },
   { name: 'china-hub-done', hash: '#/world/china', stampAll: 'china', act: skip },
   { name: 'passport-full', hash: '#/world/passport', stampAll: true },
   {

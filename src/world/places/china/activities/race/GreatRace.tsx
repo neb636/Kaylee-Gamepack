@@ -7,6 +7,7 @@
 import { motion } from 'motion/react'
 import { forwardRef, useEffect, useRef, useState, type ReactNode } from 'react'
 import { burst, Buddy, Piece, PlayArea, say, shuffle, sounds, Target, useAlive, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { sfx } from '../../../../kit/sfx'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -15,6 +16,7 @@ import { INK } from '../../puppets/ink'
 import { Mouse } from '../../puppets/Mouse'
 import type { ActivityProps } from '../../Place'
 import { Flower, pic, Rain, Splash, Wheel } from './bits'
+import SECTIONS from './sections'
 
 const R = L.race
 const TOTAL = 6
@@ -78,6 +80,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(box)
   const alive = useAlive()
+  const { start, enter } = useSections(SECTIONS)
   const land = W > H
   const G = land ? GEO.land : GEO.tall
   const sc = (y: number) => scaleAt(y, G.FAR)
@@ -94,6 +97,8 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
   const setPhase = (p: Phase) => {
     phaseRef.current = p
     setPhaseState(p)
+    // Tiger, rain and steps begin a moment later (startTiger, startRain, startSteps report those).
+    if (p === 'board' || p === 'paddle' || p === 'stones' || p === 'wheel' || p === 'cat') enter(p)
   }
   const [prompt, setPrompt] = useState<Line>(R.mouseHelp)
   const speak = async (l: Line) => {
@@ -220,6 +225,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
 
   // ---- Tiger swims by himself ----
   const startTiger = async () => {
+    enter('tiger')
     mv('tiger', { show: true, ms: 0 })
     setSwimGroup('tiger')
     void speak(R.tigerSwim)
@@ -307,6 +313,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
   const [rainFx, setRainFx] = useState<number[]>([])
   const [rainSet, setRainSet] = useState(false)
   const startRain = async () => {
+    enter('rain')
     setRainSet(true)
     mv('dragon', { x: -0.2, y: 0.7, show: true, ms: 0 })
     await wait(60)
@@ -373,6 +380,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
   const wrongs = useRef(0)
   const stepsRef = useRef(false)
   const startSteps = async () => {
+    enter('steps')
     setStepsOn(true)
     setTrayIds(shuffle(['mouse', 'ox', 'tiger'] as Id[]))
     for (const id of ORDER) mv(id, { show: false, ms: 300 })
@@ -555,9 +563,63 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
   }
 
   // ---- Start ----
-  const [story, setStory] = useState(true)
+  const [story, setStory] = useState(!start || start === 'story')
+  useEffect(() => {
+    if (story) enter('story')
+  }, [])
+  /** A deep link sets the river up as if she had played to there: earlier animals wait on the far bank. */
+  const seed = (from: Exclude<Phase, 'story' | 'board'>) => {
+    const across = ORDER.slice(0, { paddle: 0, tiger: 2, stones: 3, rain: 4, steps: 5, wheel: 5, cat: 5 }[from])
+    for (const id of across) mv(id, { x: FAR_X[id], y: G.FAR, show: true, ms: 0 })
+    if (from === 'stones' || from === 'rain' || from === 'steps' || from === 'wheel' || from === 'cat') {
+      filledRef.current = [true, true, true]
+      setFilled(filledRef.current)
+    }
+    if (from === 'steps' || from === 'wheel' || from === 'cat') {
+      rainedRef.current = [true, true, true]
+      setRained(rainedRef.current)
+      setRainSet(true)
+      setCloudsIn(true)
+    }
+    const stars = { paddle: 0, tiger: 1, stones: 1, rain: 2, steps: 3, wheel: 5, cat: 6 }[from]
+    setProgress(stars, TOTAL)
+    if (from === 'paddle') {
+      mv('mouse', { show: true, ms: 0 })
+      mv('ox', { show: true, ms: 0 })
+      setBoarded(true)
+      const rp = ridePos(posRef.current.ox)
+      mv('mouse', { x: rp.x, y: rp.y, ms: 0 })
+      setPhase('paddle')
+      void speak(R.paddle)
+      armNudge(() => void speak(R.paddle))
+    } else if (from === 'tiger') {
+      setPhase('tiger')
+      void startTiger()
+    } else if (from === 'stones') void startStones()
+    else if (from === 'rain') {
+      setPhase('rain')
+      void startRain()
+    } else if (from === 'steps') {
+      setPhase('steps')
+      void startSteps()
+    } else {
+      for (const id of ORDER) mv(id, { show: false, ms: 0 })
+      setPlaced([...ORDER])
+      if (from === 'wheel') void startWheel()
+      else {
+        setWheelOn(true)
+        setCount(12)
+        setRevealed(true)
+        setPhase('cat')
+        setCatOn(true)
+        void speak(R.catAsk)
+        armNudge(() => void say(R.catAsk), 10000)
+      }
+    }
+  }
   useEffect(() => {
     if (story || W === 0) return
+    if (start && start !== 'story' && start !== 'board') return seed(start)
     setPhase('board')
     setProgress(0, TOTAL)
     mv('mouse', { show: true, ms: 0 })
