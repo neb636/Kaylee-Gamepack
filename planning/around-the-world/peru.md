@@ -295,6 +295,12 @@ a lift inside swirls). Riskiest piece to prototype: the sink-and-lift feel. Sink
 
 ### 4. Rosa's Rainy River 🌧️ (Amazon rainforest: rain, the flooding forest, pink river dolphins)
 
+> **Built 2026-10-10** in one pass at Dad's request (no greybox gate): `activities/river/`. Changes from this plan:
+> the sloth hangs from a liana low over the river (the tree branch was too high for the water to reach), and the
+> monkeys hop down into the floating canoe once the river is full (their branch was too high to splash from). Rosa
+> leaps over the bank into the lagoon while the camera pans. The lily friends are three of frog, monkey, baby capybara
+> and macaw (shuffled). A tap on the water (or on Rosa) sends the cloud over to rain there, for taps-only play.
+
 **One-line pitch:** it's the dry season and Rosa can't reach her friends in the forest; Kaylee makes it rain until the
 river floods the forest, and Rosa swims between the trees to visit everyone.
 
@@ -530,6 +536,8 @@ Same gates as every country (`ACTIVITY-TEMPLATE.md`), and Dad's staged visual ap
    alpaca, brush and clippers. **Stop: Dad plays it on the iPad.**
 2. Then one activity per PR, each starting with a greybox Dad plays before any art: Penguin Cliff (riskiest feel: the
    pull and splash), Canyon Glide, Rainy River, Mountain Terraces.
+   *Penguin Cliff was built in one go (no greybox gate, at Dad's request, 2026-10-10): code in
+   `activities/penguins/`, puppets `Penguin.tsx`, `Chick.tsx`, `Lobo.tsx`.*
 3. The finale in its own PR once all five exist. Until then the balloon says "Our expedition opens soon!" and the
    country doesn't award its trophy.
 

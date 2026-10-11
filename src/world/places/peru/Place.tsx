@@ -1,5 +1,5 @@
 // Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md). Built one activity per PR: Luna's
-// Fluffy Day is first. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
+// Fluffy Day, Coco's Canyon Glide and Rosa's Rainy River so far. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
 // (route `party`) waits until all five exist.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
@@ -8,7 +8,10 @@ import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
+import { CanyonGlide } from './activities/canyon/CanyonGlide'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
+import { PenguinCliff } from './activities/penguins/PenguinCliff'
+import { RainyRiver } from './activities/river/RainyRiver'
 import { Terraces } from './activities/terraces/Terraces'
 import { art } from './art'
 import { L } from './lines'
@@ -22,7 +25,7 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, 'machu-picchu': Terraces }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, penguins: PenguinCliff, 'machu-picchu': Terraces, condor: CanyonGlide, river: RainyRiver }
 
 /** The five places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
 export const SPOTS = [
@@ -58,7 +61,7 @@ export default function Place(props: PlaceProps) {
 }
 
 /** Pins that show their friend instead of an emoji. */
-const PIN_IMG: Record<string, string> = { alpaca: art.luna, 'machu-picchu': art.tika }
+const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, 'machu-picchu': art.tika, condor: art.coco, river: art.rosa }
 
 // Luna says hello once per visit to the app.
 let introSeen = false
@@ -194,8 +197,11 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
             onClick={() => {
               sounds.pop()
               if (done && spot.id === 'alpaca') void say(L.alpacaWindow)
+              else if (done && spot.id === 'penguins') void say(L.penguinWindow)
               else if (done && spot.id === 'machu-picchu') void say(L.terracesWindow)
-              else if (spot.id === 'alpaca' || spot.id === 'machu-picchu') open(spot.id)
+              else if (done && spot.id === 'condor') void say(L.condorWindow)
+              else if (done && spot.id === 'river') void say(L.riverWindow)
+              else if (PIN_IMG[spot.id]) open(spot.id)
               else void say(L.soon)
             }}
             style={{ minWidth: 0, minHeight: 0, borderRadius: 14, border: `3px ${done ? 'solid' : 'dashed'} ${INK}`, background: done ? '#FFE27A' : '#FFF7F0', display: 'grid', placeItems: 'center', padding: 2, overflow: 'hidden' }}
@@ -213,6 +219,25 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
               // Tika's photobomb at Machu Picchu.
               <div style={{ width: '100%', height: '100%', borderRadius: 10, overflow: 'hidden', background: 'linear-gradient(#A8DCFF 0 55%, #8FD86F 55%)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
                 <Tika height="94%" pose="grin" />
+              </div>
+            ) : done && spot.id === 'penguins' ? (
+              // Pepa and her three round chicks, porpoising home.
+              <img src={art.pepa} alt="" style={{ height: '88%', maxWidth: '90%', objectFit: 'contain' }} />
+            ) : done && spot.id === 'condor' ? (
+              // Coco and Pluma, wingtip to wingtip.
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', gap: '2%' }}>
+                <img src={art.coco} alt="" style={{ width: '58%', maxHeight: '90%', objectFit: 'contain' }} />
+                <img src={art.pluma} alt="" style={{ width: '32%', maxHeight: '70%', objectFit: 'contain' }} />
+              </div>
+            ) : done && spot.id === 'river' ? (
+              // Rosa leaping under the rainbow she made.
+              <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                <svg viewBox="-60 -60 120 66" style={{ position: 'absolute', inset: '4% 0 auto', width: '100%' }}>
+                  {['#FF6B6B', '#FFB347', '#FFE27A', '#8FE3C8', '#7FB2FF'].map((c, k) => (
+                    <path key={c} d={`M${-54 + k * 7} 0A${54 - k * 7} ${54 - k * 7} 0 0 1 ${54 - k * 7} 0`} fill="none" stroke={c} strokeWidth="7.5" />
+                  ))}
+                </svg>
+                <img src={art.rosa} alt="" style={{ position: 'absolute', left: '12%', bottom: '8%', width: '76%', objectFit: 'contain', rotate: '-12deg' }} />
               </div>
             ) : <span style={{ fontSize: 'min(30px, 7cqmin)', opacity: 0.35 }}>{spot.icon}</span>}
           </motion.button>
