@@ -223,6 +223,13 @@ export const L = {
   },
 
   sticker: 'Alpaca sticker! Alpacas have soft, warm fleece!',
+  videos: {
+    condor: 'Want to see real condors?',
+    machuPicchu: 'Want to see Machu Picchu?',
+    penguins: 'Want to see real penguins?',
+    alpacas: 'Want to see real alpacas?',
+    dolphin: 'Want to see river dolphins?',
+  },
   facts: {
     location: 'Peru is in South America!',
     worlds: 'Peru has a coast, mountains, and rainforest!',
