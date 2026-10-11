@@ -6,10 +6,14 @@ import { bigCelebration, burst, say, sounds, SparklePuppet, useAlive, wait, type
 import { sfx } from '../../../kit/sfx'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Party.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { Guest } from '../Place'
 import { Pip } from '../puppets/Pip'
+
+const DANCERS = ['mama', 'koko', 'shelly', 'kooky', 'chompy', 'pat'] as const
 
 const COLORS = ['#FF4F9A', '#FFC83D', '#B9A6F5', '#8FE3C8', '#A8DCFF']
 
@@ -127,9 +131,19 @@ function useSize() {
 }
 
 export function Party({ guests, onDone, setProgress }: { guests: Guest[]; onDone: () => void; setProgress: (done: number, total: number) => void }) {
-  const [story, setStory] = useState(true)
-  const [danced, setDanced] = useState<number[]>([])
-  const [fireworks, setFireworks] = useState(false)
+  const { start, param, enter } = useSections(SECTIONS)
+  const [story, setStory] = useState(!start || start === 'story')
+  const [danced, setDanced] = useState<number[]>(() => {
+    if (!start || start === 'story') return []
+    if (start === 'fireworks') return guests.map((_, i) => i)
+    if (param('danced') === 'auto') return Array.from({ length: DANCERS.indexOf(start) }, (_, i) => i)
+    return DANCERS.flatMap((id, i) => param('danced').split(',').includes(id) ? [i] : [])
+  })
+  const [danceAt, setDanceAt] = useState<(typeof DANCERS)[number]>(start && start !== 'story' && start !== 'fireworks' ? start : 'mama')
+  const [fireworks, setFireworks] = useState(start === 'fireworks')
+  useEffect(() => {
+    enter(story ? 'story' : fireworks ? 'fireworks' : danceAt, { danced: danced.map((i) => DANCERS[i]).join(',') || 'none' })
+  }, [story, danceAt, danced, fireworks, enter])
   const refs = useMemo(() => guests.map(() => createRef<PuppetHandle>()) as RefObject<PuppetHandle | null>[], [guests])
   const pip = useMemo(() => createRef<PuppetHandle>(), [])
   const sparkle = useMemo(() => createRef<PuppetHandle>(), [])
@@ -156,9 +170,14 @@ export function Party({ guests, onDone, setProgress }: { guests: Guest[]; onDone
     if (danced.includes(i)) return
     const next = [...danced, i]
     setDanced(next)
+    setDanceAt(DANCERS.find((_, j) => !next.includes(j)) ?? DANCERS[i])
     if (next.length < guests.length) return
     await wait(2400)
     if (!alive()) return
+    await finish()
+  }
+
+  const finish = async () => {
     setFireworks(true)
     sounds.fanfare()
     for (let k = 0; k < 6; k++) setTimeout(() => (burst(0.15 + Math.random() * 0.7, 0.15 + Math.random() * 0.25), sfx.pop()), k * 380)
@@ -169,6 +188,8 @@ export function Party({ guests, onDone, setProgress }: { guests: Guest[]; onDone
     await wait(600)
     if (alive()) onDone()
   }
+
+  useEffect(() => { if (start === 'fireworks') void finish() }, [start])
 
   const actors: Actor[] = [
     { key: 'sparkle', box: [0.87, 1], row: 'back', label: 'Sparkle', glow: false, node: (h) => <SparklePuppet ref={sparkle} height={h} />, onTap: () => (sounds.pop(), void sparkle.current?.play('dance')) },

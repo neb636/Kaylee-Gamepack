@@ -5,6 +5,8 @@ import { Buddy, burst, KID_NAME, say, sounds, useAlive, wait } from '../../../..
 import { ColoringPage } from '../../../kit/ColoringPage'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Postcard.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -12,7 +14,9 @@ import type { ActivityProps } from '../Place'
 const ENOUGH = 5 // fills before the send button shows up
 
 export function Postcard({ onDone, setProgress }: ActivityProps) {
-  const [phase, setPhase] = useState<'story' | 'color' | 'send'>('story')
+  const { start, enter } = useSections(SECTIONS)
+  const [phase, setPhase] = useState<'story' | 'color' | 'send'>(start ?? 'story')
+  useEffect(() => enter(phase), [phase, enter])
   const [fills, setFills] = useState(0)
   const [flying, setFlying] = useState(false)
   const alive = useAlive()
@@ -36,6 +40,8 @@ export function Postcard({ onDone, setProgress }: ActivityProps) {
     await wait(1500)
     if (alive()) onDone()
   }
+
+  useEffect(() => { if (start === 'send') void send() }, [start])
 
   if (phase === 'story') return <StoryBeat lines={[L.postcard.story]} img={art.pip} bg={art.bgBeach} onDone={() => setPhase('color')} />
 

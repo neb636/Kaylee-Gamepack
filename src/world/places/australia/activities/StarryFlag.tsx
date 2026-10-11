@@ -6,6 +6,8 @@ import { Buddy, burst, ChoiceCards, DragArea, Draggable, DropZone, numberWord, s
 import { COMMONWEALTH_STAR, Flag, SOUTHERN_CROSS, starPoints, type FlagId } from '../../../kit/Flag'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './StarryFlag.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -14,7 +16,9 @@ import type { ActivityProps } from '../Place'
 const SKY = SOUTHERN_CROSS.map((s) => ({ ...s, left: 22 + ((s.x - 6300) / 2380) * 56, top: 8 + ((s.y - 840) / 3360) * 80 }))
 
 export function StarryFlag({ onDone, setProgress }: ActivityProps) {
-  const [phase, setPhase] = useState<'story' | 'sky' | 'flag' | 'quiz'>('story')
+  const { start, enter } = useSections(SECTIONS)
+  const [phase, setPhase] = useState<'story' | 'sky' | 'flag' | 'quiz'>(start ?? 'story')
+  useEffect(() => enter(phase), [phase, enter])
   useEffect(() => setProgress({ story: 0, sky: 0, flag: 1, quiz: 2 }[phase], 3), [phase, setProgress])
   if (phase === 'story') return <StoryBeat lines={[L.stars.story]} img={art.kookaburra} bg={art.bgNight} onDone={() => setPhase('sky')} />
   if (phase === 'sky') return <Sky onDone={() => setPhase('flag')} />

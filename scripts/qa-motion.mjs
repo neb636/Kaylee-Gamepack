@@ -129,14 +129,8 @@ const GAME_SCENARIOS = [
     name: 'outback-hop',
     seconds: 1.3,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/australia/outback`)
-      await page.waitForTimeout(500)
-      await skip(page)
-      for (const item of ['hat', 'glasses', 'water']) {
-        await page.getByRole('button', { name: item }).first().click({ force: true, timeout: 2000 }).catch(() => {})
-        await page.waitForTimeout(300)
-      }
-      await page.waitForTimeout(1800)
+      await page.goto(`${base}#/world/australia/outback/water`)
+      await page.waitForTimeout(600)
     },
     act: async (page) => {
       const hop = page.getByRole('button', { name: /hop/i }).first()
@@ -148,9 +142,7 @@ const GAME_SCENARIOS = [
     name: 'forest-feed',
     seconds: 3,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/australia/forest`)
-      await page.waitForTimeout(500)
-      await skip(page)
+      await page.goto(`${base}#/world/australia/forest/feed-2`)
       await page.waitForTimeout(600)
     },
     act: async (page) => {
@@ -175,15 +167,8 @@ const GAME_SCENARIOS = [
     name: 'croc-ride',
     seconds: 3,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/australia/croc`)
-      await page.waitForTimeout(500)
-      await skip(page)
+      await page.goto(`${base}#/world/australia/croc/ride`)
       await page.waitForTimeout(600)
-      for (let i = 0; i < 3; i++) {
-        await page.getByRole('button', { name: 'egg' }).first().click({ force: true }).catch(() => {})
-        await page.waitForTimeout(i === 0 ? 3500 : 400) // Sparkle tells the chirp fact after the first egg
-      }
-      await page.waitForTimeout(9000) // the chirp fact and the carry line
     },
     act: async (page) => {
       const baby = page.getByRole('button', { name: 'baby crocodile' }).first()

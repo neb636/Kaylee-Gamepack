@@ -7,6 +7,8 @@ import { burst, DragArea, Draggable, DropZone, pick, say, shuffle, sounds, useAl
 import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Forest.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -32,8 +34,10 @@ function useLandscape() {
 type Food = { id: string; leaf: boolean; emoji?: string }
 
 export function Forest({ onDone, setProgress }: ActivityProps) {
-  const [phase, setPhase] = useState<'story' | 'feed' | 'sleep'>('story')
-  const [round, setRound] = useState(0)
+  const { start, enter } = useSections(SECTIONS)
+  const [phase, setPhase] = useState<'story' | 'feed' | 'sleep'>(start === 'feed-2' || start === 'feed-4' ? 'feed' : start ?? 'story')
+  const [round, setRound] = useState(start === 'feed-4' ? 1 : 0)
+  useEffect(() => enter(phase === 'feed' ? round === 0 ? 'feed-2' : 'feed-4' : phase), [phase, round, enter])
   useEffect(() => setProgress(phase === 'sleep' ? 2 : phase === 'feed' ? round : 0, 3), [phase, round, setProgress])
   if (phase === 'story') return <StoryBeat lines={[L.forest.story]} friend={<Koko height="100%" />} bg={art.bgForest} onDone={() => setPhase('feed')} />
   if (phase === 'feed') return <Feed round={round} setRound={setRound} onDone={() => setPhase('sleep')} />
@@ -157,7 +161,7 @@ function Feed({ round, setRound, onDone }: { round: number; setRound: (r: number
     [need, round],
   )
   const [eaten, setEaten] = useState<string[]>([])
-  const [total, setTotal] = useState(0)
+  const [total, setTotal] = useState(() => ROUNDS.slice(0, round).reduce((n, r) => n + r.need, 0))
   const [wiggle, setWiggle] = useState<string | null>(null)
   const [helped, setHelped] = useState(false)
   const [hearts, setHearts] = useState<number[]>([])
