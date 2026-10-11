@@ -377,4 +377,4 @@ QA (after `npm run build`; WebKit, because the iPad runs Safari: `npx playwright
 - Lip sync and sound can't be heard by automated browsers: listen on the iPad.
 
 
-After every task is completed. Commit your work and open a draft pr and assign me (neb636).
+After every task is completed, commit your work and open a pull request ready for review (not a draft: do not pass `--draft` to `gh pr create`), then assign me (neb636).
