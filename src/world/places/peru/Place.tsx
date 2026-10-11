@@ -119,7 +119,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   borderRadius: '50%',
                   padding: 0,
                   background: done ? '#FFE27A' : '#FFF7F0',
-                  border: `5px solid ${INK}`,
+                  border: done ? '5px dashed var(--hotpink)' : '5px solid var(--gold)',
                   boxShadow: '0 6px 0 rgba(43,35,48,.2)',
                   display: 'grid',
                   placeItems: 'center',
