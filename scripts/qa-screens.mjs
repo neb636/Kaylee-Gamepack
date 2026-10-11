@@ -229,48 +229,20 @@ const SCREENS = [
       await p.waitForTimeout(1500)
     },
   },
-  // Egypt
+  // Egypt: open the exact section instead of replaying earlier rounds.
   { name: 'egypt-intro', hash: '#/world/egypt', reset: true, wait: 300 },
   { name: 'egypt-hub', hash: '#/world/egypt', act: skip },
-  { name: 'pyramid-story', hash: '#/world/egypt/pyramid', wait: 250 },
-  {
-    name: 'pyramid-build',
-    hash: '#/world/egypt/pyramid',
-    act: async (p) => {
-      await skip(p)
-      await p.waitForTimeout(1200)
-      for (let i = 0; i < 4; i++) {
-        await p.getByRole('button', { name: /(mid|big) stone/ }).last().click({ force: true, timeout: 1500 }).catch(() => {})
-        await p.waitForTimeout(1600)
-      }
-    },
-  },
-  { name: 'passage-maze', hash: '#/world/egypt/passage', act: skip },
-  { name: 'sphinx-sand', hash: '#/world/egypt/sphinx', act: skip },
-  {
-    name: 'sphinx-rubbed',
-    hash: '#/world/egypt/sphinx',
-    act: async (p) => {
-      await skip(p)
-      const c = await p.getByLabel('Rub the sand away').boundingBox()
-      if (!c) return
-      for (let row = 0; row < 4; row++) {
-        const y = c.y + c.height * (0.2 + row * 0.1)
-        await p.mouse.move(c.x + c.width * 0.2, y)
-        await p.mouse.down()
-        for (let k = 1; k <= 8; k++) await p.mouse.move(c.x + c.width * (0.2 + k * 0.05), y)
-        await p.mouse.up()
-      }
-      await p.waitForTimeout(800)
-    },
-  },
-  { name: 'nile-sail', hash: '#/world/egypt/nile', act: async (p) => (await skip(p), await p.waitForTimeout(2500)) },
-  { name: 'scribe-stamps', hash: '#/world/egypt/scribe', act: skip },
+  { name: 'pyramid-story', hash: '#/world/egypt/pyramid/story', wait: 250 },
+  { name: 'pyramid-build', hash: '#/world/egypt/pyramid/row-2', wait: 1200 },
+  { name: 'passage-maze', hash: '#/world/egypt/passage/maze-1' },
+  { name: 'sphinx-sand', hash: '#/world/egypt/sphinx/face' },
+  { name: 'sphinx-rubbed', hash: '#/world/egypt/sphinx/paws' },
+  { name: 'nile-sail', hash: '#/world/egypt/nile/sail-1', wait: 2500 },
+  { name: 'scribe-stamps', hash: '#/world/egypt/scribe/k' },
   {
     name: 'market-koshari',
-    hash: '#/world/egypt/market',
+    hash: '#/world/egypt/market/koshari',
     act: async (p) => {
-      await skip(p)
       await p.waitForTimeout(3500)
       for (const f of ['rice', 'lentils']) {
         await p.getByRole('button', { name: f, exact: true }).click({ force: true, timeout: 1500 }).catch(() => {})
@@ -279,7 +251,7 @@ const SCREENS = [
     },
   },
   { name: 'egypt-hub-stamps', hash: '#/world/egypt', stampAll: 'egypt' },
-  { name: 'light-show', hash: '#/world/egypt/party', stampAll: 'egypt', act: skip },
+  { name: 'light-show', hash: '#/world/egypt/party/wake-1?stamps=all', stampAll: 'egypt' },
   { name: 'italy-intro', hash: '#/world/italy', reset: true, wait: 300 },
   { name: 'italy-hub', hash: '#/world/italy', act: skip },
   { name: 'pizzeria-story', hash: '#/world/italy/pizzeria', reset: true, wait: 400 },

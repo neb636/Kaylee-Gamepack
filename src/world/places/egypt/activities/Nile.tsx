@@ -8,6 +8,8 @@ import { Flag } from '../../../kit/Flag'
 import { sfx } from '../../../kit/sfx'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Nile.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -27,13 +29,15 @@ const SPEED = 16 // % of the width per second
 type Floater = { id: number; x: number; y: number; kind: 'lotus' | 'hippo'; done?: boolean }
 
 export function Nile({ onDone, setProgress }: ActivityProps) {
-  const [phase, setPhase] = useState<'story' | 'sail' | 'farm' | 'end'>('story')
-  const [leg, setLeg] = useState(0)
-  const [caught, setCaught] = useState(0)
+  const { start, enter } = useSections(SECTIONS)
+  const seedLeg = start === 'sail-2' || start === 'farm-2' || start === 'end' ? 1 : 0
+  const [phase, setPhase] = useState<'story' | 'sail' | 'farm' | 'end'>(start === 'end' ? 'end' : start?.startsWith('sail') ? 'sail' : start?.startsWith('farm') ? 'farm' : 'story')
+  const [leg, setLeg] = useState(seedLeg)
+  const [caught, setCaught] = useState(start?.startsWith('farm') || start === 'end' ? LOTUS_PER_LEG : 0)
   const [boatY, setBoatY] = useState(72)
   const [floaters, setFloaters] = useState<Floater[]>([])
-  const [pulls, setPulls] = useState(0)
-  const [greens, setGreens] = useState<number[]>([]) // farms already watered
+  const [pulls, setPulls] = useState(start === 'end' ? LEGS[1].pulls : 0)
+  const [greens, setGreens] = useState<number[]>(start === 'end' ? [0, 1] : seedLeg ? [0] : []) // farms already watered
   const [splash, setSplash] = useState(0)
   const [bump, setBump] = useState(0)
   const miu = useRef<PuppetHandle>(null)
@@ -44,10 +48,11 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
   const floatRef = useRef<Floater[]>([])
   const nextId = useRef(1)
   const hippoDone = useRef(false)
-  const caughtRef = useRef(0)
-  const busy = useRef(false)
+  const caughtRef = useRef(caught)
+  const busy = useRef(start === 'end')
   const alive = useAlive()
 
+  useEffect(() => { enter(phase === 'sail' ? leg === 0 ? 'sail-1' : 'sail-2' : phase === 'farm' ? leg === 0 ? 'farm-1' : 'farm-2' : phase) }, [phase, leg, enter])
   useEffect(() => setProgress(leg * 2 + (phase === 'farm' || phase === 'end' ? 1 : 0) + (phase === 'end' ? 1 : 0), 4), [leg, phase, setProgress])
 
   // Sailing: flowers (and once, the hippo) float in from the right; the boat scoops whatever it touches.
@@ -149,6 +154,10 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
       return
     }
     setPhase('end')
+    await finishEnd()
+  }
+
+  const finishEnd = async () => {
     void miu.current?.play('dance')
     await say(L.nile.desert)
     if (!alive()) return
@@ -156,6 +165,10 @@ export function Nile({ onDone, setProgress }: ActivityProps) {
     await wait(400)
     if (alive()) onDone()
   }
+
+  useEffect(() => {
+    if (start === 'end') void finishEnd()
+  }, [])
 
   if (phase === 'story') return <StoryBeat lines={[L.nile.story]} friend={<Miu height="100%" />} bg={art.bgNile} onDone={() => setPhase('sail')} />
 

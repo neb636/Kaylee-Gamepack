@@ -3,9 +3,6 @@ import { expect, test, type Page } from '@playwright/test'
 // Deep links (src/world/kit/sections.ts): every section listed on #/world/sections must open straight into that
 // section, and every activity must declare its sections, so PR links like #/world/italy/pizzeria/own always work.
 
-/** Countries not migrated to sections yet (each one's PR removes it from this list). */
-const PENDING = ['australia', 'china', 'egypt']
-
 async function start(page: Page, hash: string) {
   await page.goto(`./${hash}`)
   await page.getByRole('button', { name: /let's play/i }).click()
@@ -20,7 +17,7 @@ async function listedSections(page: Page) {
 
 test('every activity declares deep-linkable sections', async ({ page }) => {
   const { activities, sections } = await listedSections(page)
-  const missing = activities.filter((a) => !PENDING.includes(a.split('/')[0]) && !sections.some((s) => s.startsWith(`${a}/`)))
+  const missing = activities.filter((a) => !sections.some((s) => s.startsWith(`${a}/`)))
   expect(missing, 'add a sections.ts next to each of these activities (see src/world/kit/sections.ts)').toEqual([])
 })
 

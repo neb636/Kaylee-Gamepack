@@ -8,6 +8,8 @@ import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
 import { useLandscape } from '../../../kit/useLandscape'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Pyramid.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -43,9 +45,11 @@ function load(slot: number): Size[] {
 }
 
 export function Pyramid({ onDone, setProgress }: ActivityProps) {
-  const [story, setStory] = useState(true)
-  const [placed, setPlaced] = useState(0)
-  const [sled, setSled] = useState<{ id: number; sizes: Size[] }>({ id: 0, sizes: load(0) })
+  const { start, enter } = useSections(SECTIONS)
+  const seed = start === 'row-2' ? 3 : start === 'row-1' ? 5 : start === 'capstone' ? 6 : 0
+  const [story, setStory] = useState(!start || start === 'story')
+  const [placed, setPlaced] = useState(seed)
+  const [sled, setSled] = useState<{ id: number; sizes: Size[] }>({ id: seed, sizes: load(seed) })
   const [arriving, setArriving] = useState(true)
   const [wiggle, setWiggle] = useState<number | null>(null)
   const [help, setHelp] = useState(false)
@@ -57,6 +61,10 @@ export function Pyramid({ onDone, setProgress }: ActivityProps) {
   const alive = useAlive()
   const landscape = useLandscape()
   const want = SLOTS[Math.min(placed, SLOTS.length - 1)]?.size
+
+  useEffect(() => {
+    enter(story ? 'story' : placed < 3 ? 'row-3' : placed < 5 ? 'row-2' : placed < 6 ? 'row-1' : 'capstone')
+  }, [story, placed, enter])
 
   const rows = ROW_END.filter((end) => placed > end).length
   useEffect(() => setProgress(rows, ROW_END.length), [rows, setProgress])

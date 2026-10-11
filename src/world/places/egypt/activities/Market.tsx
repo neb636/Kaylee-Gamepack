@@ -9,6 +9,8 @@ import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
 import { useLandscape } from '../../../kit/useLandscape'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Market.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -35,8 +37,9 @@ type Order = 'koshari' | 'onions' | 'tea'
 const ORDERS: Order[] = ['koshari', 'onions', 'tea']
 
 export function Market({ onDone, setProgress }: ActivityProps) {
-  const [story, setStory] = useState(true)
-  const [order, setOrder] = useState(0)
+  const { start, enter } = useSections(SECTIONS)
+  const [story, setStory] = useState(!start || start === 'story')
+  const [order, setOrder] = useState(start === 'onions' ? 1 : start === 'tea' ? 2 : 0)
   const [arrived, setArrived] = useState(false)
   const customer = useRef<PuppetHandle>(null)
   const miu = useRef<PuppetHandle>(null)
@@ -44,6 +47,7 @@ export function Market({ onDone, setProgress }: ActivityProps) {
   const landscape = useLandscape()
   const kind = ORDERS[order]
 
+  useEffect(() => { enter(story ? 'story' : kind) }, [story, kind, enter])
   useEffect(() => setProgress(order, ORDERS.length), [order, setProgress])
 
   // Each customer walks up to the counter and orders.

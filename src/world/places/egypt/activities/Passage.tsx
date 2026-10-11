@@ -10,6 +10,8 @@ import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
 import { Torchlight } from '../../../kit/Torchlight'
 import { useLandscape } from '../../../kit/useLandscape'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Passage.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -20,8 +22,10 @@ import { follow, H, MAZES, near, pointAt, startPos, W, type Maze, type Pos, type
 const PROMPTS = [L.passage.drag, L.passage.two, L.passage.deeper]
 
 export function Passage({ onDone, setProgress }: ActivityProps) {
-  const [phase, setPhase] = useState<'story' | 'maze' | 'treasure'>('story')
-  const [level, setLevel] = useState(0)
+  const { start, enter } = useSections(SECTIONS)
+  const [phase, setPhase] = useState<'story' | 'maze' | 'treasure'>(start === 'treasure' ? 'treasure' : start && start !== 'story' ? 'maze' : 'story')
+  const [level, setLevel] = useState(start === 'maze-2' ? 1 : start === 'maze-3' ? 2 : 0)
+  useEffect(() => { enter(phase === 'maze' ? level === 0 ? 'maze-1' : level === 1 ? 'maze-2' : 'maze-3' : phase) }, [phase, level, enter])
   useEffect(() => setProgress(phase === 'treasure' ? 3 : level, 4), [phase, level, setProgress])
   if (phase === 'story') return <StoryBeat lines={[L.passage.story]} friend={<Miu height="100%" />} bg={art.bgTomb} onDone={() => setPhase('maze')} />
   if (phase === 'treasure') return <Treasure onDone={onDone} setProgress={setProgress} />
