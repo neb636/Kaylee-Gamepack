@@ -4,9 +4,11 @@ import type { PuppetEntry } from '../../../types'
 import { L } from '../lines'
 import { Alpaca, ALPACA_ACTIONS } from './Alpaca'
 import { Chick, CHICK_ACTIONS, Condor, CONDOR_ACTIONS } from './Condor'
+import { Rosa, ROSA_ACTIONS } from './Rosa'
 
 const F = L.fluffy
 const C = L.canyon
+const R = L.river
 const actions = Object.keys(ALPACA_ACTIONS)
 
 export const PUPPETS: PuppetEntry[] = [
@@ -23,4 +25,5 @@ export const PUPPETS: PuppetEntry[] = [
   { id: 'pluma', name: 'Pluma (in the nest)', render: (ref, height) => createElement(Chick, { ref, height, scared: true }), actions: Object.keys(CHICK_ACTIONS), lines: [C.scared, C.nestTap, C.pTry, C.wait, C.wheee, C.dizzy, C.falls, C.lookout, C.alone, C.lookMe] },
   { id: 'pluma-flying', name: 'Pluma (first flight)', render: (ref, height) => createElement(Chick, { ref, height, flying: true, confidence: 0 }), actions: Object.keys(CHICK_ACTIONS) },
   { id: 'pluma-gliding', name: 'Pluma (gliding)', render: (ref, height) => createElement(Chick, { ref, height, flying: true, confidence: 1 }), actions: Object.keys(CHICK_ACTIONS) },
+  { id: 'rosa', name: 'Rosa the pink river dolphin', render: (ref, height) => createElement(Rosa, { ref, height }), actions: Object.keys(ROSA_ACTIONS), lines: [...R.story, R.more, R.lagoonGo, R.rainbow, ...R.spout, R.rosaTap] },
 ]

@@ -368,6 +368,32 @@ const SCREENS = [
       await p.waitForTimeout(to === 'finale' ? 1200 : 3000)
     },
   })),
+  { name: 'river-story', hash: '#/world/peru/river', reset: true, wait: 400 },
+  { name: 'river-play', hash: '#/world/peru/river', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
+  // Rosa's Rainy River moments, reached through its QA hook (window.__peruRiverQA): raining on the river, the river
+  // view once it's filled, the lagoon, the lily pads with the friends, the rainbow.
+  {
+    name: 'river-rain',
+    hash: '#/world/peru/river',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.evaluate(() => window.__peruRiverQA?.rain(0.5, 12))
+      await p.waitForTimeout(3500)
+    },
+  },
+  ...['river', 'lagoon', 'pads', 'rainbow'].map((to) => ({
+    name: `river-${to === 'river' ? 'full' : to}`,
+    hash: '#/world/peru/river',
+    reset: true,
+    act: async (p) => {
+      await skip(p)
+      await p.waitForTimeout(500)
+      if (to === 'river') await p.evaluate(() => window.__peruRiverQA?.rain(0.5, 40))
+      else await p.evaluate((t) => window.__peruRiverQA?.jump(t), to)
+      await p.waitForTimeout(to === 'river' ? 30000 : to === 'rainbow' ? 2600 : 3200)
+    },
+  })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party', stampAll: 'peru', wait: 800 },
 ].filter((s) => !flag('routes') || flag('routes').split(',').includes(s.name))

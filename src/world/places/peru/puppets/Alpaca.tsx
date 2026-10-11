@@ -6,27 +6,37 @@
 // CSS transform (composited, no repaint).
 import { forwardRef, useMemo, useRef, type MutableRefObject } from 'react'
 import { bell, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../sdk'
-import { BODY_MID, HAT_SPOT, HEAD_BOX, makeFleece, NECK_PIVOT, SHORN_BODY, SHORN_NECK, VIEW, type Puff } from './fleece'
+import { BODY_MID, FAR_LEGS, HAT_SPOT, HEAD_BOX, makeFleece, makeHood, NEAR_LEGS, NECK_PIVOT, SHORN_BODY, shornLeg, SHORN_NECK, VIEW, type Puff } from './fleece'
 
 export const INK = '#2B2330'
 
 export type AlpacaKind = 'luna' | 'paco' | 'abuela'
 
 interface Look {
+  /** Brushed fleece, and the duller color of a tangled, unbrushed puff. */
   fleece: string
-  curl: string
+  dull: string
+  /** The shadow under each woolly clump, the thin lines between clumps, and the brushed shine. */
+  shade: string
+  line: string
   shine: string
-  skin: string
+  /** The short fleece left after a haircut. */
+  shorn: string
   face: string
   muzzle: string
-  feet: string
+  ear: string
+  legs: string
+  legsFar: string
+  hoof: string
   seed: number
 }
 
+// Colors picked from the reference pictures (assets/luna.webp, paco.webp, abuela.webp): a lighter face framed by a
+// fluffy hood, cream lower legs and dark split hooves.
 export const LOOKS: Record<AlpacaKind, Look> = {
-  luna: { fleece: '#FFC2A8', curl: '#E99A7D', shine: '#FFE6DA', skin: '#FFD6C4', face: '#FFC2A8', muzzle: '#FFF7F0', feet: '#6B4B4F', seed: 11 },
-  paco: { fleece: '#8B5A3C', curl: '#6A412A', shine: '#B98261', skin: '#A9714E', face: '#A9714E', muzzle: '#F2D6B8', feet: '#3E2A22', seed: 23 },
-  abuela: { fleece: '#4E4357', curl: '#352C3D', shine: '#7C6E86', skin: '#6E6178', face: '#5E5268', muzzle: '#FFF7F0', feet: '#2B2330', seed: 37 },
+  luna: { fleece: '#FFC4A6', dull: '#F2B497', shade: '#F2A483', line: '#D9876A', shine: '#FFE9DD', shorn: '#FFD3BD', face: '#FFDCC9', muzzle: '#FFF5EC', ear: '#FFCFB6', legs: '#FCE7D8', legsFar: '#EDCDB8', hoof: '#5B3F43', seed: 11 },
+  paco: { fleece: '#94603F', dull: '#82543A', shade: '#6F4329', line: '#563320', shine: '#BC8866', shorn: '#A6764F', face: '#C99572', muzzle: '#F7E1C8', ear: '#A8714E', legs: '#F3DDC4', legsFar: '#DCC2A6', hoof: '#3E2A22', seed: 23 },
+  abuela: { fleece: '#514659', dull: '#463C4E', shade: '#3B3244', line: '#2F2737', shine: '#83768E', shorn: '#675B71', face: '#F6DCCB', muzzle: '#FFF6EE', ear: '#5E5268', legs: '#F3DDCF', legsFar: '#DCC4B6', hoof: '#2B2330', seed: 37 },
 }
 
 export const ALPACA_ACTIONS = { hop: 0.9, giggle: 1.1, shiver: 1.4, nod: 0.7, lean: 1.2, look: 1.8, cheer: 1.3, yawn: 1.8, roll: 1.9, shake: 0.8, sneeze: 0.9 }
@@ -91,7 +101,8 @@ export const Alpaca = forwardRef<PuppetHandle, AlpacaProps>(function Alpaca(prop
   const { kind, height, hat, mustache, bangs = false, smooth: brushedStart = false, items = [], rig, onTap, label } = props
   const look = LOOKS[kind]
   const puffs = useMemo(() => makeFleece(look.seed, bangs), [look.seed, bangs])
-  const els = useRef(new Map<number, { ink: SVGElement | null; fill: SVGElement | null; tangle: SVGElement | null; shine: SVGElement | null }>())
+  const hood = useMemo(() => makeHood(look.seed), [look.seed])
+  const els = useRef(new Map<number, { ink: SVGElement | null; fill: SVGElement | null; main: SVGElement | null; tangle: SVGElement | null; shine: SVGElement | null }>())
   const itemEls = useRef<(SVGElement | null)[]>([])
   const bangEls = useRef<SVGGElement | null>(null)
   const state = useRef({ gone: new Set<number>(), brushed: new Set<number>(brushedStart ? puffs.map((p) => p.id) : []) })
@@ -117,6 +128,7 @@ export const Alpaca = forwardRef<PuppetHandle, AlpacaProps>(function Alpaca(prop
         const e = els.current.get(id)
         if (e?.tangle) e.tangle.style.display = 'none'
         if (e?.shine) e.shine.style.display = ''
+        e?.main?.setAttribute('fill', look.fleece)
       },
       bangsAside: () => {
         if (bangEls.current) bangEls.current.style.transform = 'translate(0px, -34px) scale(0.9)'
@@ -131,8 +143,8 @@ export const Alpaca = forwardRef<PuppetHandle, AlpacaProps>(function Alpaca(prop
   const { svg, part } = usePuppet<Part>(ref, {
     voice: kind,
     actions: ALPACA_ACTIONS,
-    eyes: [455, 146],
-    reach: [455, 190],
+    eyes: [455, 148],
+    reach: [455, 192],
     frame: (f, p) => {
       const { cold, asleep, happy, walking } = live.current
       const q = f.p
@@ -199,50 +211,81 @@ export const Alpaca = forwardRef<PuppetHandle, AlpacaProps>(function Alpaca(prop
       // Ears lag behind the head and flop on hops; droop while asleep.
       const flop = a === 'hop' || a === 'cheer' ? bell(span(q, 0.2, 0.75)) * 18 : 0
       const droop = asleep ? 22 : 0
-      put(p.earL, 'transform', `rotate(${springs.earL.step(-hr * 1.4 - flop - droop + shiver * 3, f.dt).toFixed(2)} 421 100)`)
-      put(p.earR, 'transform', `rotate(${springs.earR.step(-hr * 1.4 + flop + droop - shiver * 3, f.dt).toFixed(2)} 489 100)`)
+      put(p.earL, 'transform', `rotate(${springs.earL.step(-hr * 1.4 - flop - droop + shiver * 3, f.dt).toFixed(2)} 420 98)`)
+      put(p.earR, 'transform', `rotate(${springs.earR.step(-hr * 1.4 + flop + droop - shiver * 3, f.dt).toFixed(2)} 490 98)`)
       put(p.tail, 'transform', `rotate(${(a ? springs.tail.step(Math.sin(f.t * 8) * e * 14, f.dt) : springs.tail.step(0, f.dt)).toFixed(1)} 110 372)`)
 
       // Eyes: blink, follow her finger; shut while asleep, humming happily, giggling or yawning.
       const shut = asleep || happy || a === 'giggle' || a === 'roll' || a === 'lean' || a === 'yawn' || a === 'sneeze'
       put(p.eyesOpen, 'display', shut ? 'none' : 'inline')
       put(p.eyesShut, 'display', shut ? 'inline' : 'none')
-      put(p.eyesOpen, 'transform', `translate(0 ${(146 * (1 - f.blink)).toFixed(1)}) scale(1 ${f.blink.toFixed(3)})`)
+      put(p.eyesOpen, 'transform', `translate(0 ${(148 * (1 - f.blink)).toFixed(1)}) scale(1 ${f.blink.toFixed(3)})`)
       put(p.pupils, 'transform', `translate(${(f.look.x * 4).toFixed(1)} ${(f.look.y * 3).toFixed(1)})`)
       // Mouth: the voice opens it; giggles, cheers and yawns open it too.
       const open = Math.max(f.mouth, a === 'giggle' || a === 'roll' ? 0.55 : 0, a === 'cheer' ? e * 0.7 : 0, a === 'yawn' ? bell(span(q, 0.1, 0.8)) : 0, kind === 'paco' && !a ? 0.25 : 0, cold && !a ? Math.abs(Math.sin(f.t * 30)) * 0.3 : 0)
-      put(p.mouth, 'd', `M441 201Q455 ${(207 + open * 3).toFixed(1)} 469 201Q468 ${(206 + open * 22).toFixed(1)} 455 ${(208 + open * 24).toFixed(1)}Q442 ${(206 + open * 22).toFixed(1)} 441 201Z`)
+      put(p.mouth, 'd', mouthPath(open))
       put(p.zzz, 'display', asleep ? 'inline' : 'none')
       put(p.breath, 'display', cold ? 'inline' : 'none')
     },
   })
 
   const ids = useRef(`alp-${Math.random().toString(36).slice(2, 8)}`).current
-  const bodyPuffs = puffs.filter((q) => q.zone !== 'top' && q.zone !== 'bang')
-  const topPuffs = puffs.filter((q) => q.zone === 'top')
+  // Far legs first, near legs next, then the body and neck from top to bottom so each lower clump overlaps the one
+  // above it (that overlap draws the woolly scallops, like the reference picture).
+  const byY = (a: Puff, b: Puff) => a.y - b.y || a.x - b.x
+  const farLegs = puffs.filter((q) => q.zone === 'leg' && FAR_LEGS.some((x) => Math.abs(q.x - x) < 10))
+  const nearLegs = puffs.filter((q) => q.zone === 'leg' && !farLegs.includes(q))
+  const tail = puffs.filter((q) => q.zone === 'tail')
+  const bodyPuffs = puffs.filter((q) => q.zone === 'body' || q.zone === 'belly' || q.zone === 'neck').sort(byY)
+  const topPuffs = puffs.filter((q) => q.zone === 'top').sort(byY)
   const bangPuffs = puffs.filter((q) => q.zone === 'bang')
-  const register = (id: number, key: 'ink' | 'fill' | 'tangle' | 'shine') => (el: SVGElement | null) => {
+  const register = (id: number, key: 'ink' | 'fill' | 'main' | 'tangle' | 'shine') => (el: SVGElement | null) => {
+    if (id < 0) return
     let e = els.current.get(id)
-    if (!e) els.current.set(id, (e = { ink: null, fill: null, tangle: null, shine: null }))
+    if (!e) els.current.set(id, (e = { ink: null, fill: null, main: null, tangle: null, shine: null }))
     e[key] = el
   }
   const brushed0 = state.current.brushed
-  const puffInk = (list: Puff[]) =>
-    list.map((q) => <circle key={q.id} ref={register(q.id, 'ink')} cx={q.x} cy={q.y} r={q.r + 5} fill={INK} style={{ display: state.current.gone.has(q.id) ? 'none' : undefined }} />)
+  const gone0 = state.current.gone
+  const puffInk = (list: Puff[], w = 5) =>
+    list.map((q) => <circle key={q.id} ref={register(q.id, 'ink')} cx={q.x} cy={q.y} r={q.r + w} fill={INK} style={{ display: gone0.has(q.id) ? 'none' : undefined }} />)
   const puffFill = (list: Puff[]) =>
-    list.map((q) => (
-      <g key={q.id} ref={register(q.id, 'fill')} style={{ display: state.current.gone.has(q.id) ? 'none' : undefined }}>
-        <circle cx={q.x} cy={q.y} r={q.r} fill={look.fleece} />
-        {/* Unbrushed: a messy curl. Brushed: a soft shine. */}
-        <path ref={register(q.id, 'tangle')} d={`M${q.x - q.r * 0.45} ${q.y + 2}q${q.r * 0.2} ${-q.r * 0.6} ${q.r * 0.5} ${-q.r * 0.25}q${-q.r * 0.25} ${q.r * 0.5} ${q.r * 0.45} ${q.r * 0.3}`} transform={`rotate(${q.curl} ${q.x} ${q.y})`} fill="none" stroke={look.curl} strokeWidth="4" strokeLinecap="round" style={{ display: brushed0.has(q.id) ? 'none' : undefined }} />
-        <path ref={register(q.id, 'shine')} d={`M${q.x - q.r * 0.5} ${q.y - q.r * 0.15}a${q.r * 0.55} ${q.r * 0.55} 0 0 1 ${q.r * 0.6} ${-q.r * 0.45}`} fill="none" stroke={look.shine} strokeWidth="5" strokeLinecap="round" style={{ display: brushed0.has(q.id) ? undefined : 'none' }} />
-      </g>
-    ))
+    list.map((q) => {
+      const smooth = q.id < 0 || brushed0.has(q.id)
+      // Flat fill like the art; a thin line along the upper edge of each clump marks where it overlaps the one above.
+      const arc = (r: number, a0: number, a1: number, cx = q.x, cy = q.y) => {
+        const p0 = [cx + r * Math.cos((a0 * Math.PI) / 180), cy + r * Math.sin((a0 * Math.PI) / 180)]
+        const p1 = [cx + r * Math.cos((a1 * Math.PI) / 180), cy + r * Math.sin((a1 * Math.PI) / 180)]
+        return `M${p0[0].toFixed(1)} ${p0[1].toFixed(1)}A${r.toFixed(1)} ${r.toFixed(1)} 0 0 1 ${p1[0].toFixed(1)} ${p1[1].toFixed(1)}`
+      }
+      const c = (q.curl * Math.PI) / 180
+      const tx = q.x + Math.cos(c) * q.r * 0.3
+      const ty = q.y + Math.sin(c) * q.r * 0.25
+      // Only some clumps get a line or a shine, so the fleece reads as soft wool rather than scales.
+      const lineFrom = 150 + (q.curl % 40)
+      const lined = q.curl < 160 || q.zone === 'top' || q.zone === 'bang'
+      const shiny = q.curl % 90 < 50
+      return (
+        <g key={q.id} ref={register(q.id, 'fill')} style={{ display: gone0.has(q.id) ? 'none' : undefined }}>
+          <circle ref={register(q.id, 'main')} cx={q.x} cy={q.y} r={q.r} fill={smooth ? look.fleece : look.dull} />
+          {lined && <path d={arc(q.r - 1, lineFrom, lineFrom + 95)} fill="none" stroke={look.line} strokeWidth="3.5" strokeLinecap="round" opacity=".55" />}
+          {/* Unbrushed: tangly little curls. Brushed: a soft shine. */}
+          <g ref={register(q.id, 'tangle')} fill="none" stroke={look.line} strokeWidth="3" strokeLinecap="round" opacity=".75" style={{ display: smooth ? 'none' : undefined }}>
+            <path d={`M${(tx - 8).toFixed(1)} ${(ty + 5).toFixed(1)}q-1 -11 8 -10q8 2 3 9q-3 3 -5 0`} transform={`rotate(${q.curl.toFixed(0)} ${tx.toFixed(1)} ${ty.toFixed(1)})`} />
+            {q.curl > 240 && <path d={`M${(q.x - q.r * 0.55).toFixed(1)} ${(q.y + q.r * 0.38).toFixed(1)}q4 -7 8 0q4 7 8 0`} />}
+          </g>
+          <path ref={register(q.id, 'shine')} d={arc(q.r * 0.58, 205, 260)} fill="none" stroke={look.shine} strokeWidth="5" strokeLinecap="round" opacity={shiny ? 1 : 0} style={{ display: smooth ? undefined : 'none' }} />
+        </g>
+      )
+    })
 
   const leg = (x: number, far: boolean) => (
-    <g key={x}>
-      <path d={`M${x - 14} 450L${x - 13} 604Q${x} 612 ${x + 13} 604L${x + 14} 450Z`} fill={far ? look.curl : look.skin} stroke={INK} strokeWidth="5" strokeLinejoin="round" />
-      <path d={`M${x - 19} 602Q${x} 594 ${x + 19} 602L${x + 20} 616Q${x} 624 ${x - 20} 616Z`} fill={look.feet} stroke={INK} strokeWidth="4" strokeLinejoin="round" />
+    <g key={x} stroke={INK} strokeWidth="5" strokeLinejoin="round">
+      <path d={`M${x - 14} 448L${x - 11} 592Q${x} 598 ${x + 11} 592L${x + 14} 448Z`} fill={far ? look.legsFar : look.legs} />
+      <path d={shornLeg(x)} fill={far ? look.shade : look.shorn} />
+      {/* A small split hoof: two rounded toes. */}
+      <path d={`M${x - 1} 600Q${x - 1} 594 ${x - 8} 594Q${x - 16} 596 ${x - 18} 606Q${x - 19} 618 ${x - 10} 618H${x - 1}Z`} fill={look.hoof} />
+      <path d={`M${x + 1} 600Q${x + 1} 594 ${x + 8} 594Q${x + 16} 596 ${x + 18} 606Q${x + 19} 618 ${x + 10} 618H${x + 1}Z`} fill={look.hoof} />
     </g>
   )
 
@@ -256,17 +299,21 @@ export const Alpaca = forwardRef<PuppetHandle, AlpacaProps>(function Alpaca(prop
       <div ref={part('root')} style={{ position: 'absolute', inset: 0, transformOrigin: '47% 97%', willChange: 'transform' }}>
         {/* Body: legs, shorn body, fleece, stuck things. */}
         <svg viewBox={`0 0 ${VIEW.w} ${VIEW.h}`} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible' }}>
-          {leg(168, true)}
-          {leg(372, true)}
+          {FAR_LEGS.map((x) => leg(x, true))}
+          {puffInk(farLegs)}
+          {puffFill(farLegs)}
           <g ref={part('tail')}>
-            <path d="M118 360Q96 352 92 372Q96 392 118 388Z" fill={look.skin} stroke={INK} strokeWidth="5" strokeLinejoin="round" />
+            <path d="M118 356Q90 350 88 372Q92 394 118 390Z" fill={look.shorn} stroke={INK} strokeWidth="5" strokeLinejoin="round" />
+            {puffInk(tail)}
+            {puffFill(tail)}
           </g>
-          {/* Shorn body and neck: what shows as the fleece comes off. */}
-          <path d={SHORN_NECK} fill={look.skin} stroke={INK} strokeWidth="5" strokeLinejoin="round" />
-          <path d={SHORN_BODY} fill={look.skin} stroke={INK} strokeWidth="5" strokeLinejoin="round" />
-          <path d="M170 372q12 -10 24 0q12 10 24 0M300 360q12 -10 24 0q12 10 24 0M226 432q12 -10 24 0q12 10 24 0M392 300q10 -8 20 0q10 8 20 0" fill="none" stroke={look.curl} strokeWidth="4" strokeLinecap="round" opacity=".55" />
-          {leg(204, false)}
-          {leg(408, false)}
+          {/* Shorn body and neck: the short fleece that shows as the long fleece comes off. */}
+          <path d={SHORN_NECK} fill={look.shorn} stroke={INK} strokeWidth="5" strokeLinejoin="round" />
+          <path d={SHORN_BODY} fill={look.shorn} stroke={INK} strokeWidth="5" strokeLinejoin="round" />
+          <path d="M170 372q12 -10 24 0q12 10 24 0M300 360q12 -10 24 0q12 10 24 0M226 432q12 -10 24 0q12 10 24 0M392 300q10 -8 20 0q10 8 20 0M150 420q10 -8 20 0q10 8 20 0M330 420q10 -8 20 0q10 8 20 0M410 250q10 -8 20 0q10 8 20 0" fill="none" stroke={look.shade} strokeWidth="4" strokeLinecap="round" />
+          {NEAR_LEGS.map((x) => leg(x, false))}
+          {puffInk(nearLegs)}
+          {puffFill(nearLegs)}
           <g>{puffInk(bodyPuffs)}</g>
           <g>{puffFill(bodyPuffs)}</g>
           {items.map((it, i) => (
@@ -290,56 +337,72 @@ export const Alpaca = forwardRef<PuppetHandle, AlpacaProps>(function Alpaca(prop
           <svg ref={svg} viewBox={`${HEAD_BOX.x} ${HEAD_BOX.y} ${HEAD_BOX.w} ${HEAD_BOX.h}`} style={{ width: '100%', height: '100%', overflow: 'visible' }}>
             <defs>
               <clipPath id={`${ids}-face`}>
-                <ellipse cx="455" cy="152" rx="60" ry="68" />
+                <path d={FACE} />
               </clipPath>
             </defs>
             <g stroke={INK} strokeWidth="5" strokeLinejoin="round" strokeLinecap="round">
+              {/* Long leaf ears behind the hood. */}
               <g ref={part('earL')}>
-                <path d="M410 110Q380 60 396 14Q424 26 434 98Z" fill={look.face} />
-                <path d="M412 92Q398 62 404 34Q420 46 424 88Z" fill="#FF8FB8" stroke="none" />
+                <path d="M402 112Q370 52 390 4Q428 18 440 100Z" fill={look.ear} />
+                <path d="M408 94Q392 56 397 24Q421 38 428 90Z" fill="#FF9DBF" stroke="none" />
               </g>
               <g ref={part('earR')}>
-                <path d="M500 110Q530 60 514 14Q486 26 476 98Z" fill={look.face} />
-                <path d="M498 92Q512 62 506 34Q490 46 486 88Z" fill="#FF8FB8" stroke="none" />
+                <path d="M508 112Q540 52 520 4Q482 18 470 100Z" fill={look.ear} />
+                <path d="M502 94Q518 56 513 24Q489 38 482 90Z" fill="#FF9DBF" stroke="none" />
               </g>
-              <ellipse cx="455" cy="152" rx="60" ry="68" fill={look.face} />
-              <ellipse cx="455" cy="192" rx="36" ry="27" fill={look.muzzle} clipPath={`url(#${ids}-face)`} stroke="none" />
-              <ellipse cx="411" cy="176" rx="12" ry="8" fill="#FF8FB8" stroke="none" opacity=".85" />
-              <ellipse cx="499" cy="176" rx="12" ry="8" fill="#FF8FB8" stroke="none" opacity=".85" />
+            </g>
+            {/* The fluffy hood around the face. */}
+            <g>{puffInk(hood)}</g>
+            <g>{puffFill(hood)}</g>
+            <g stroke={INK} strokeWidth="5" strokeLinejoin="round" strokeLinecap="round">
+              <path d={FACE} fill={look.face} />
+              <ellipse cx="455" cy="194" rx="40" ry="28" fill={look.muzzle} clipPath={`url(#${ids}-face)`} stroke="none" />
+              <ellipse cx="406" cy="178" rx="13" ry="8.5" fill="#FF8FB8" stroke="none" opacity=".8" />
+              <ellipse cx="504" cy="178" rx="13" ry="8.5" fill="#FF8FB8" stroke="none" opacity=".8" />
               <g ref={part('eyesOpen')}>
-                <ellipse cx="431" cy="146" rx="13" ry="16" fill={INK} stroke="none" />
-                <ellipse cx="479" cy="146" rx="13" ry="16" fill={INK} stroke="none" />
+                {/* Lashes on the outer corners. */}
+                <path d="M417 140L408 134M420 135L414 126M493 140L502 134M490 135L496 126" fill="none" strokeWidth="3.5" />
+                <ellipse cx="429" cy="148" rx="14.5" ry="17.5" fill="#3A2630" stroke="none" />
+                <ellipse cx="481" cy="148" rx="14.5" ry="17.5" fill="#3A2630" stroke="none" />
+                <ellipse cx="429" cy="155" rx="9" ry="7" fill="#6B4650" stroke="none" />
+                <ellipse cx="481" cy="155" rx="9" ry="7" fill="#6B4650" stroke="none" />
                 <g ref={part('pupils')} fill="#fff" stroke="none">
-                  <circle cx="427" cy="140" r="5" />
-                  <circle cx="475" cy="140" r="5" />
-                  <circle cx="434" cy="152" r="2.4" />
-                  <circle cx="482" cy="152" r="2.4" />
+                  <circle cx="424" cy="141" r="6" />
+                  <circle cx="476" cy="141" r="6" />
+                  <circle cx="434" cy="155" r="2.6" />
+                  <circle cx="486" cy="155" r="2.6" />
                 </g>
               </g>
               <g ref={part('eyesShut')} fill="none" strokeWidth="4.5" display="none">
-                <path d="M419 148Q431 158 443 148" />
-                <path d="M467 148Q479 158 491 148" />
+                <path d="M416 148Q429 159 442 148M416 148L409 143" />
+                <path d="M468 148Q481 159 494 148M494 148L501 143" />
               </g>
               {kind === 'abuela' && (
-                <g fill="none" stroke="#FFC83D" strokeWidth="4">
-                  <circle cx="431" cy="147" r="20" />
-                  <circle cx="479" cy="147" r="20" />
-                  <path d="M451 145Q455 140 459 145" />
+                <g fill="none" stroke="#E9A92B" strokeWidth="4.5">
+                  <circle cx="429" cy="149" r="22" />
+                  <circle cx="481" cy="149" r="22" />
+                  <path d="M451 146Q455 141 459 146" />
                 </g>
               )}
-              <path d="M447 182Q455 176 463 182Q462 189 455 191Q448 189 447 182Z" fill={INK} stroke="none" />
-              <path d="M455 191V199" fill="none" strokeWidth="3.5" />
-              <path ref={part('mouth')} d="M441 201Q455 207 469 201Q468 206 455 208Q442 206 441 201Z" fill="#FF6F9F" strokeWidth="3.5" />
+              {/* A soft rounded nose and a little smile. */}
+              <path d="M446 180Q455 174 464 180Q464 187 455 191Q446 187 446 180Z" fill="#4A3038" stroke="none" />
+              <path d="M455 191V197" fill="none" strokeWidth="3.5" />
+              <path ref={part('mouth')} d={mouthPath(0)} fill="#FF6F9F" strokeWidth="3.5" />
               {mustache && (
                 <g>
-                  <circle cx="442" cy="199" r="14" fill={INK} stroke="none" />
-                  <circle cx="468" cy="199" r="14" fill={INK} stroke="none" />
-                  <circle cx="442" cy="199" r="10" fill={look.fleece} stroke="none" />
-                  <circle cx="468" cy="199" r="10" fill={look.fleece} stroke="none" />
+                  {[[440, 202, 14], [470, 202, 14], [455, 206, 11]].map(([x, y, r]) => (
+                    <circle key={x} cx={x} cy={y} r={r + 4} fill={INK} stroke="none" />
+                  ))}
+                  {[[440, 202, 14], [470, 202, 14], [455, 206, 11]].map(([x, y, r]) => (
+                    <g key={x} stroke="none">
+                      <circle cx={x} cy={y} r={r} fill={look.shade} />
+                      <circle cx={x - 1.5} cy={y - 2} r={r * 0.82} fill={look.fleece} />
+                    </g>
+                  ))}
                 </g>
               )}
             </g>
-            {/* Topknot (and bangs) over the forehead: same puff style as the body, with its own outline pass. */}
+            {/* Topknot (and bangs) over the forehead: the same woolly clumps as the body. */}
             <g>{puffInk(topPuffs)}</g>
             <g>{puffFill(topPuffs)}</g>
             {bangPuffs.length > 0 && (
@@ -349,27 +412,27 @@ export const Alpaca = forwardRef<PuppetHandle, AlpacaProps>(function Alpaca(prop
               </g>
             )}
             {kind === 'abuela' && (
-              <g transform="translate(500 84)" stroke={INK} strokeWidth="3">
+              <g transform="translate(506 86)" stroke={INK} strokeWidth="3">
                 {[0, 72, 144, 216, 288].map((r) => (
-                  <ellipse key={r} cx="0" cy="-9" rx="7" ry="10" fill="#FF8FB8" transform={`rotate(${r})`} />
+                  <ellipse key={r} cx="0" cy="-10" rx="8" ry="11" fill="#FF9DBF" transform={`rotate(${r})`} />
                 ))}
-                <circle r="6" fill="#FFC83D" />
+                <circle r="6.5" fill="#FFC83D" />
               </g>
             )}
             {hat && (
-              <g transform={`translate(${HAT_SPOT.x} ${HAT_SPOT.y - 14})`}>
+              <g transform={`translate(${HAT_SPOT.x} ${HAT_SPOT.y - 8}) scale(1.3)`}>
                 <HatShape color={hat} />
               </g>
             )}
             {/* Cold breath puffs drifting from her mouth. */}
             <g ref={part('breath')} display="none" className="peru-breath">
-              <circle cx="470" cy="214" r="9" fill="#FFF7F0" stroke={INK} strokeWidth="2.5" />
-              <circle cx="490" cy="206" r="12" fill="#FFF7F0" stroke={INK} strokeWidth="2.5" />
-              <circle cx="514" cy="196" r="15" fill="#FFF7F0" stroke={INK} strokeWidth="2.5" />
+              <circle cx="474" cy="216" r="9" fill="#FFF7F0" stroke={INK} strokeWidth="2.5" />
+              <circle cx="494" cy="208" r="12" fill="#FFF7F0" stroke={INK} strokeWidth="2.5" />
+              <circle cx="518" cy="198" r="15" fill="#FFF7F0" stroke={INK} strokeWidth="2.5" />
             </g>
             <g ref={part('zzz')} display="none" fill={INK} fontFamily="Fredoka, sans-serif" fontWeight="700">
-              <text x="515" y="40" fontSize="30">z</text>
-              <text x="535" y="14" fontSize="38">z</text>
+              <text x="525" y="40" fontSize="30">z</text>
+              <text x="545" y="14" fontSize="38">z</text>
             </g>
           </svg>
         </div>
@@ -377,6 +440,14 @@ export const Alpaca = forwardRef<PuppetHandle, AlpacaProps>(function Alpaca(prop
     </div>
   )
 })
+
+/** The face: rounded on top, a little wider at the cheeks. */
+const FACE = 'M455 88C499 88 520 118 520 156C520 198 492 220 455 220C418 220 390 198 390 156C390 118 411 88 455 88Z'
+
+/** The mouth opens downward from a small smile (open: 0 closed .. 1 wide). */
+function mouthPath(open: number) {
+  return `M442 198Q455 ${(204 + open * 3).toFixed(1)} 468 198Q467 ${(203 + open * 22).toFixed(1)} 455 ${(205 + open * 24).toFixed(1)}Q443 ${(203 + open * 22).toFixed(1)} 442 198Z`
+}
 
 /** Hat colors: pink wool dyed with the cochineal bug, and the alpacas' own natural colors. */
 export const HAT_COLORS: Record<string, { main: string; accent: string; pom: string }> = {
@@ -386,23 +457,26 @@ export const HAT_COLORS: Record<string, { main: string; accent: string; pom: str
   brown: { main: '#A9714E', accent: '#FFC2A8', pom: '#FF4F9A' },
 }
 
-/** A Peruvian chullo: a knitted dome with ear flaps, tassels and a pompom. Drawn around (0, 0); about 110 x 140. */
+/** A Peruvian chullo: a knitted dome with ear flaps, tassels and a pompom. Drawn around (0, 0); about 120 x 160. */
 export function HatShape({ color }: { color: string }) {
   const c = HAT_COLORS[color] ?? HAT_COLORS.pink
   return (
     <g stroke={INK} strokeWidth="5" strokeLinejoin="round" strokeLinecap="round">
-      <path d="M-40 14L-44 52Q-36 62 -26 52L-24 16Z" fill={c.main} />
-      <path d="M40 14L44 52Q36 62 26 52L24 16Z" fill={c.main} />
-      <path d="M-35 58V74M35 58V74" fill="none" strokeWidth="4" />
-      <circle cx="-35" cy="78" r="6" fill={c.pom} strokeWidth="3.5" />
-      <circle cx="35" cy="78" r="6" fill={c.pom} strokeWidth="3.5" />
-      <path d="M-46 18Q-48 -44 0 -48Q48 -44 46 18Q0 28 -46 18Z" fill={c.main} />
-      <path d="M-44 -2L-33 -12L-22 -2L-11 -12L0 -2L11 -12L22 -2L33 -12L44 -2" fill="none" stroke={c.accent} strokeWidth="6" />
-      <path d="M-46 18Q0 28 46 18" fill="none" />
-      <circle cx="-20" cy="-26" r="4" fill={c.accent} stroke="none" />
-      <circle cx="0" cy="-32" r="4" fill={c.accent} stroke="none" />
-      <circle cx="20" cy="-26" r="4" fill={c.accent} stroke="none" />
-      <circle cx="0" cy="-56" r="14" fill={c.pom} />
+      {/* Ear flaps hang beside the face, with braided ties and little pompoms. */}
+      <path d="M-54 8L-58 50Q-50 62 -38 52L-36 14Z" fill={c.main} />
+      <path d="M54 8L58 50Q50 62 38 52L36 14Z" fill={c.main} />
+      <path d="M-48 58V72M48 58V72" fill="none" strokeWidth="4" />
+      <circle cx="-48" cy="77" r="6.5" fill={c.pom} strokeWidth="3.5" />
+      <circle cx="48" cy="77" r="6.5" fill={c.pom} strokeWidth="3.5" />
+      <path d="M-55 16Q-58 -50 0 -54Q58 -50 55 16Q0 28 -55 16Z" fill={c.main} />
+      {/* Knitted pattern: a zigzag band, a row of dots and a striped brim. */}
+      <path d="M-52 -6L-39 -17L-26 -6L-13 -17L0 -6L13 -17L26 -6L39 -17L52 -6" fill="none" stroke={c.accent} strokeWidth="6" />
+      <path d="M-54 6Q0 16 54 6" fill="none" stroke={c.accent} strokeWidth="5" />
+      <circle cx="-22" cy="-32" r="4.5" fill={c.accent} stroke="none" />
+      <circle cx="0" cy="-38" r="4.5" fill={c.accent} stroke="none" />
+      <circle cx="22" cy="-32" r="4.5" fill={c.accent} stroke="none" />
+      <path d="M-55 16Q0 28 55 16" fill="none" />
+      <circle cx="0" cy="-62" r="14" fill={c.pom} />
     </g>
   )
 }

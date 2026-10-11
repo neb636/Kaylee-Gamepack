@@ -2,9 +2,9 @@ import type { PlaceMeta } from '../../types'
 import { art } from './art'
 import { L } from './lines'
 
-// Peru is built one activity at a time (plan: planning/around-the-world/peru.md). Luna's Fluffy Day and Coco's Canyon
-// Glide are built; the other three places on Luna's map say "coming soon", and the balloon finale comes once all five
-// exist.
+// Peru is built one activity at a time (plan: planning/around-the-world/peru.md). Luna's Fluffy Day, Coco's Canyon
+// Glide and Rosa's Rainy River are built; the other places on Luna's map say "coming soon", and the balloon finale
+// comes once all five exist.
 const meta: PlaceMeta = {
   id: 'peru',
   name: 'Peru',
@@ -16,6 +16,7 @@ const meta: PlaceMeta = {
   activities: [
     { id: 'alpaca', name: "Luna's Fluffy Day", icon: '✂️', pos: { x: 70, y: 74 }, sticker: { name: 'Alpaca', img: art.luna, fact: L.sticker } },
     { id: 'condor', name: "Coco's Canyon Glide", icon: '🦅', pos: { x: 57.5, y: 88 }, sticker: { name: 'Condor', img: art.canyonPerched, fact: L.condorSticker } },
+    { id: 'river', name: "Rosa's Rainy River", icon: '🌧️', pos: { x: 61, y: 28 }, sticker: { name: 'Pink dolphin', img: art.rosa, fact: L.river.sticker } },
   ],
   facts: [
     { icon: '🌎', label: 'South America', say: L.facts.location },
