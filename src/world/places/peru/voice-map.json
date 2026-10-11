@@ -812,11 +812,32 @@
     "file": "c85435da8d16.mp3"
   },
   {
-    "text": "Jump near the shiny fish!",
+    "text": "Catch fish for the chicks!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2013,
-    "file": "68e30223edb2.mp3"
+    "ms": 1754,
+    "file": "d0288810a88c.mp3"
+  },
+  {
+    "text": "Land in the gold circle!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1831,
+    "file": "5e844c09eb7a.mp3"
+  },
+  {
+    "text": "Got one!",
+    "voice": "pingo",
+    "sig": "59d0d06102",
+    "ms": 870,
+    "file": "5e0e0f018e34.mp3"
+  },
+  {
+    "text": "A fish!",
+    "voice": "pingo",
+    "sig": "59d0d06102",
+    "ms": 773,
+    "file": "2c75a8d516a7.mp3"
   },
   {
     "text": "One fish, please!",
@@ -978,6 +999,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2692,
     "file": "3d9bc79f59d2.mp3"
+  },
+  {
+    "text": "Jump onto the fish to catch one!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2654,
+    "file": "ddab6115a2ba.mp3"
   },
   {
     "text": "Tap a chick to feed it!",

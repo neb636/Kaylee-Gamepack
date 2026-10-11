@@ -46,6 +46,11 @@
 .peru-tool-glow img {
   animation: peru-tool-glow 1s ease-in-out infinite;
 }
+/* A hungry penguin chick (an SVG puppet) glows while fish wait for it. */
+.peru-chick-glow > svg {
+  animation: peru-tool-glow 1s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
 @keyframes peru-tool-glow {
   0%,
   100% {

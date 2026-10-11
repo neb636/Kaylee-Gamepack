@@ -340,7 +340,16 @@
     "text": "Hola, Kaylee!",
     "voice": "lobo"
   },
-  "Jump near the shiny fish!",
+  "Catch fish for the chicks!",
+  "Land in the gold circle!",
+  {
+    "text": "Got one!",
+    "voice": "pingo"
+  },
+  {
+    "text": "A fish!",
+    "voice": "pingo"
+  },
   {
     "text": "One fish, please!",
     "voice": "pepa"
@@ -400,6 +409,7 @@
   "Peru has penguins!",
   "The ocean here is cold and full of fish!",
   "Penguins fly underwater with their wings!",
+  "Jump onto the fish to catch one!",
   "Tap a chick to feed it!",
   "Pull a chick back, then let go!",
   "Penguin sticker! Penguins live in Peru too!",
