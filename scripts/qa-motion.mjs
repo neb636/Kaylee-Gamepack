@@ -574,7 +574,8 @@ const operaSwing = (name, seconds, size, ms) => ({
 })
 GAME_SCENARIOS.push(operaSwing('opera-forte', 3.4, 0.35, 280), operaSwing('opera-piano', 3.4, 0.05, 280))
 
-const all = [...PUPPET_SCENARIOS, ...GAME_SCENARIOS].filter((s) => !flag('only') || flag('only').split(',').includes(s.name))
+// --only=venice-drive,etna: exact scenario names, or a prefix for all of them (etna-*).
+const all = [...PUPPET_SCENARIOS, ...GAME_SCENARIOS].filter((s) => !flag('only') || flag('only').split(',').some((o) => s.name === o || s.name.startsWith(`${o}-`)))
 
 const ffmpeg = (a) => spawnSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...a], { encoding: 'utf8' })
 const hasFfmpeg = !ffmpeg(['-version']).error

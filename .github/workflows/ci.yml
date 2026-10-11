@@ -17,3 +17,29 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run check
+
+  # Every section of every activity, opened from its link and poked like a child would, in Safari's engine (like the
+  # iPad). Catches a shared change that works in one place but throws in another. Each country is one test; the shards
+  # run in parallel, so a new country is picked up without touching this file.
+  tap-around:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps webkit
+      - run: npm run build
+      - run: npm run tap-around -- --shard ${{ matrix.shard }}/3
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tap-around-${{ matrix.shard }}
+          path: test-results/

@@ -404,7 +404,8 @@ const SCREENS = [
   })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party/soon', stampAll: 'peru', wait: 800 },
-].filter((s) => !flag('routes') || flag('routes').split(',').includes(s.name))
+// --routes=venice,pizzeria-own: exact screen names, or an activity id for all of its screens (venice-*).
+].filter((s) => !flag('routes') || flag('routes').split(',').some((r) => s.name === r || s.name.startsWith(`${r}-`)))
 
 const { base, stop } = await serve(PORT)
 const errors = []
