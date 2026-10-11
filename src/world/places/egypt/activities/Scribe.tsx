@@ -9,6 +9,8 @@ import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
 import { useLandscape } from '../../../kit/useLandscape'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Scribe.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -25,21 +27,32 @@ function choicesFor(i: number): GlyphId[] {
 }
 
 export function Scribe({ onDone, setProgress }: ActivityProps) {
-  const [story, setStory] = useState(true)
-  const [done, setDone] = useState(0)
-  const [choices, setChoices] = useState<GlyphId[]>(() => choicesFor(0))
+  const { start, param, enter } = useSections(SECTIONS)
+  const steps = ['k', 'a', 'y', 'l', 'e-1', 'e-2'] as const
+  const seed = start === 'framed' ? 6 : Math.max(0, steps.indexOf(start as typeof steps[number]))
+  const [written, setWritten] = useState<GlyphId[]>(() => {
+    const letters = param('letters').split(',')
+    return NAME_GLYPHS.slice(0, seed).map((n, i) => ALL_GLYPHS.includes(letters[i] as GlyphId) ? letters[i] as GlyphId : n.glyph)
+  })
+  const [story, setStory] = useState(!start || start === 'story')
+  const [done, setDone] = useState(seed)
+  const [choices, setChoices] = useState<GlyphId[]>(() => choicesFor(Math.min(seed, 5)))
   const [holding, setHolding] = useState<GlyphId | null>(null)
   const [wiggle, setWiggle] = useState<GlyphId | null>(null)
   const [help, setHelp] = useState(false)
-  const [framed, setFramed] = useState(false)
+  const [framed, setFramed] = useState(start === 'framed')
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
   const early = useRef(0)
-  const busy = useRef(false)
+  const busy = useRef(start === 'framed')
   const ibis = useRef<PuppetHandle>(null)
   const miu = useRef<PuppetHandle>(null)
   const alive = useAlive()
   const landscape = useLandscape()
   const want = NAME_GLYPHS[Math.min(done, NAME_GLYPHS.length - 1)].glyph
+
+  useEffect(() => {
+    enter(story ? 'story' : framed ? 'framed' : steps[Math.min(done, 5)], { letters: [...written, ...NAME_GLYPHS.slice(written.length).map((n) => n.glyph)].join(',') })
+  }, [story, framed, done, written, enter])
 
   // Three stars (one per two letters): six would crowd the prompt on a phone.
   useEffect(() => setProgress(Math.floor(done / 2), NAME_GLYPHS.length / 2), [done, setProgress])
@@ -72,6 +85,7 @@ export function Scribe({ onDone, setProgress }: ActivityProps) {
     busy.current = true
     setHolding(null)
     const n = done + 1
+    setWritten((letters) => [...letters, want])
     setDone(n)
     setHelp(false)
     sfx.thump()
@@ -85,6 +99,10 @@ export function Scribe({ onDone, setProgress }: ActivityProps) {
       return
     }
     setFramed(true)
+    await finishFrame()
+  }
+
+  const finishFrame = async () => {
     sounds.correct()
     sounds.sparkle()
     burst(0.5, 0.4)
@@ -96,6 +114,10 @@ export function Scribe({ onDone, setProgress }: ActivityProps) {
     await wait(400)
     if (alive()) onDone()
   }
+
+  useEffect(() => {
+    if (start === 'framed') void finishFrame()
+  }, [])
 
   if (story) return <StoryBeat lines={[L.scribe.story]} friend={<Miu height="100%" />} bg={art.bgScribe} onDone={() => setStory(false)} />
 
@@ -121,7 +143,7 @@ export function Scribe({ onDone, setProgress }: ActivityProps) {
                 >
                   {i < done ? (
                     <motion.div initial={{ scale: 1.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', bounce: 0.5 }}>
-                      <Glyph id={n.glyph} size={`calc(${slot} * 0.86)`} />
+                      <Glyph id={written[i]} size={`calc(${slot} * 0.86)`} />
                     </motion.div>
                   ) : i === done && i < HINTED ? (
                     <Glyph id={n.glyph} size={`calc(${slot} * 0.86)`} faint />

@@ -9,6 +9,8 @@ import { sfx } from '../../../kit/sfx'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
 import { useLandscape } from '../../../kit/useLandscape'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './LightShow.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { Guest } from '../Place'
@@ -28,21 +30,35 @@ const BG_W = 1536
 const BG_H = 1024
 
 export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; onDone: () => void; setProgress: (done: number, total: number) => void }) {
-  const [story, setStory] = useState(true)
-  const [lit, setLit] = useState<Record<string, string>>({}) // monument → color
+  const { start, param, enter } = useSections(SECTIONS)
+  const seed = start === 'flag' || start === 'fireworks' ? guests.length : start?.startsWith('wake-') ? Number(start.slice(5)) - 1 : 0
+  const [lighting, setLighting] = useState(() => {
+    const entries = param('lights').split(',')
+    return Array.from({ length: seed }, (_, i) => {
+      const [id, index] = (entries[i] ?? '').split(':')
+      return { id: MONUMENTS.some((m) => m.id === id) ? id : MONUMENTS[i % 4].id, color: COLORS[Number(index)] ?? COLORS[i % COLORS.length] }
+    })
+  })
+  const [story, setStory] = useState(!start || start === 'story')
+  const [lit, setLit] = useState<Record<string, string>>(() => Object.fromEntries(lighting.map((l) => [l.id, l.color]))) // monument → color
   const [beams, setBeams] = useState<{ id: number; to: [number, number]; color: string }[]>([])
-  const [awake, setAwake] = useState(0) // how many guests are lit
-  const [flag, setFlag] = useState(0)
-  const [fireworks, setFireworks] = useState(false)
+  const [awake, setAwake] = useState(seed) // how many guests are lit
+  const [flag, setFlag] = useState(start === 'fireworks' ? ROPE_PULLS : 0)
+  const [fireworks, setFireworks] = useState(start === 'fireworks')
   const refs = useMemo(() => guests.map(() => createRef<PuppetHandle>()) as RefObject<PuppetHandle | null>[], [guests])
   const miu = useMemo(() => createRef<PuppetHandle>(), [])
   const sparkle = useMemo(() => createRef<PuppetHandle>(), [])
   const alive = useAlive()
   const landscape = useLandscape()
-  const [busy, setBusy] = useState(false)
-  const [used, setUsed] = useState<string[]>([])
+  const [busy, setBusy] = useState(start === 'fireworks')
+  const [used, setUsed] = useState<string[]>(lighting.map((l) => l.color))
   const lightsLeft = guests.length - awake
   const roping = lightsLeft === 0 && !fireworks
+
+  useEffect(() => {
+    const id = story ? 'story' : fireworks ? 'fireworks' : awake >= guests.length ? 'flag' : SECTIONS.sections[awake + 1].id
+    enter(id, { lights: lighting.map((l) => `${l.id}:${COLORS.indexOf(l.color)}`).join(',') })
+  }, [story, fireworks, awake, guests.length, lighting, enter])
 
   // Four stars (two friends each, then the flag): seven would crowd the prompt on a phone.
   useEffect(() => setProgress(Math.floor(awake / 2) + (flag >= ROPE_PULLS ? 1 : 0), Math.ceil(guests.length / 2) + 1), [awake, flag, guests.length, setProgress])
@@ -80,6 +96,7 @@ export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; on
     sfx.fwip()
     sounds.sparkle()
     setLit((l) => ({ ...l, [m.id]: color }))
+    setLighting((l) => [...l, { id: m.id, color }])
     setUsed((u) => [...u, color])
     const g = awake
     setAwake(g + 1)
@@ -107,6 +124,10 @@ export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; on
     await say(L.show.flag)
     if (!alive()) return
     setFireworks(true)
+    await finishFireworks()
+  }
+
+  const finishFireworks = async () => {
     sounds.fanfare()
     for (let k = 0; k < 6; k++) setTimeout(() => (burst(0.15 + Math.random() * 0.7, 0.15 + Math.random() * 0.25), sfx.pop()), k * 380)
     await wait(1600)
@@ -116,6 +137,10 @@ export function LightShow({ guests, onDone, setProgress }: { guests: Guest[]; on
     await wait(600)
     if (alive()) onDone()
   }
+
+  useEffect(() => {
+    if (start === 'fireworks') void finishFireworks()
+  }, [])
 
   if (story) return <StoryBeat lines={[L.show.story]} friend={<Miu height="100%" />} bg={art.bgGizaNight} onDone={() => setStory(false)} />
 

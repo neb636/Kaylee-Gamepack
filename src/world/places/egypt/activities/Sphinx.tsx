@@ -9,6 +9,8 @@ import { sfx } from '../../../kit/sfx'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
 import { useLandscape } from '../../../kit/useLandscape'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Sphinx.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -93,18 +95,38 @@ function paintSand(ctx: CanvasRenderingContext2D, w: number, h: number) {
 }
 
 export function Sphinx({ onDone, setProgress }: ActivityProps) {
-  const [phase, setPhase] = useState<'story' | Stage3 | 'pot' | 'end'>('story')
-  const [awake, setAwake] = useState(false)
+  const { start, enter } = useSections(SECTIONS)
+  const [phase, setPhase] = useState<'story' | Stage3 | 'pot' | 'end'>(start ?? 'story')
+  const [awake, setAwake] = useState(!!start && !['story', 'face'].includes(start))
   const [rubbed, setRubbed] = useState(false)
   const [grains, setGrains] = useState<{ id: number; x: number; y: number }[]>([])
-  const [placed, setPlaced] = useState<number[]>([])
+  const [placed, setPlaced] = useState<number[]>(start === 'end' ? [0, 1, 2] : [])
   const sand = useRef<ScratchRevealHandle>(null)
   const sphinx = useRef<PuppetHandle>(null)
   const miu = useRef<PuppetHandle>(null)
-  const busy = useRef(false)
+  const busy = useRef(start === 'end')
   const lastGrain = useRef(0)
   const alive = useAlive()
   const landscape = useLandscape()
+
+  useEffect(() => { enter(phase) }, [phase, enter])
+  // Seed the sand in its paint callback, so resize and first mount both reproduce the linked stage.
+  const seedSand = (ctx: CanvasRenderingContext2D, w: number, h: number) => {
+    paintSand(ctx, w, h)
+    if (!start || start === 'story' || start === 'face') return
+    ctx.save()
+    ctx.globalCompositeOperation = 'destination-out'
+    if (start === 'pot' || start === 'end') ctx.clearRect(0, 0, w, h)
+    else {
+      const cleared = start === 'back' ? 2 : 1
+      for (const r of REGIONS.slice(0, cleared)) {
+        ctx.beginPath()
+        ctx.ellipse((r.x + r.w / 2) * w / 100, (r.y + r.h / 2) * h / 100, r.w * w / 100 * 0.65, r.h * h / 100 * 0.65, 0, 0, Math.PI * 2)
+        ctx.fill()
+      }
+    }
+    ctx.restore()
+  }
 
   const stageIndex = STAGES.indexOf(phase as Stage3)
   useEffect(() => setProgress(phase === 'pot' ? 3 : phase === 'end' ? 4 : Math.max(0, stageIndex), 4), [phase, stageIndex, setProgress])
@@ -181,6 +203,11 @@ export function Sphinx({ onDone, setProgress }: ActivityProps) {
     await say(L.sphinx.potDone)
     if (!alive()) return true
     setPhase('end')
+    await finishEnd()
+    return true
+  }
+
+  const finishEnd = async () => {
     void sphinx.current?.play('smile')
     await say(L.sphinx.nose)
     if (!alive()) return true
@@ -190,8 +217,11 @@ export function Sphinx({ onDone, setProgress }: ActivityProps) {
     void sphinx.current?.play('cheer')
     await wait(700)
     if (alive()) onDone()
-    return true
   }
+
+  useEffect(() => {
+    if (start === 'end') void finishEnd()
+  }, [])
 
   if (phase === 'story') return <StoryBeat lines={[L.sphinx.story]} friend={<Miu height="100%" />} bg={art.bgSphinx} onDone={() => setPhase('face')} />
 
@@ -216,7 +246,7 @@ export function Sphinx({ onDone, setProgress }: ActivityProps) {
             PIECE_SPOTS.map((p, i) => (
               <img key={i} src={art.pot} alt="" style={{ position: 'absolute', left: `${p.x}%`, top: `${p.y}%`, width: '13%', aspectRatio: '1', translate: '-50% -50%', rotate: `${(i - 1) * 25}deg`, objectFit: 'contain', clipPath: `inset(${PIECES[i].top}% 0 ${PIECES[i].bottom}% 0)`, pointerEvents: 'none' }} />
             ))}
-          <ScratchReveal ref={sand} paint={paintSand} brush={5.5} regions={REGIONS} onProgress={progress} onRub={rub} disabled={stageIndex < 0} style={{ zIndex: 2 }} />
+          <ScratchReveal ref={sand} paint={seedSand} brush={5.5} regions={REGIONS} onProgress={progress} onRub={rub} disabled={stageIndex < 0} style={{ zIndex: 2 }} />
           {hintRegion && (
             <motion.div
               animate={{ x: ['-30%', '30%', '-30%'], y: ['0%', '12%', '0%'] }}

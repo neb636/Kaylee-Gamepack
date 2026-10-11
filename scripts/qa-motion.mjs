@@ -205,9 +205,8 @@ const GAME_SCENARIOS = [
     name: 'passage-walk',
     seconds: 2.5,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/egypt/passage`)
+      await page.goto(`${base}#/world/egypt/passage/maze-1`)
       await page.waitForTimeout(500)
-      await skip(page)
       await page.waitForTimeout(600)
     },
     act: async (page) => {
@@ -230,9 +229,8 @@ const GAME_SCENARIOS = [
     name: 'sphinx-rub',
     seconds: 2.5,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/egypt/sphinx`)
+      await page.goto(`${base}#/world/egypt/sphinx/face`)
       await page.waitForTimeout(500)
-      await skip(page)
       await page.waitForTimeout(600)
     },
     act: async (page) => {
