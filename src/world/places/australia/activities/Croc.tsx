@@ -8,6 +8,8 @@ import { Buddy, burst, DragArea, Draggable, DropZone, pick, say, sounds, Sparkle
 import { sfx } from '../../../kit/sfx'
 import { Stage } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Croc.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -31,9 +33,11 @@ function useLandscape() {
 type Phase = 'story' | 'hatch' | 'ride' | 'swim' | 'snap'
 
 export function Croc({ onDone, setProgress }: ActivityProps) {
-  const [phase, setPhase] = useState<Phase>('story')
-  const [hatched, setHatched] = useState<number[]>([])
-  const [carried, setCarried] = useState<number[]>([])
+  const { start, enter } = useSections(SECTIONS)
+  const [phase, setPhase] = useState<Phase>(start ?? 'story')
+  const [hatched, setHatched] = useState<number[]>(() => start === 'ride' || start === 'swim' || start === 'snap' ? [0, 1, 2] : [])
+  const [carried, setCarried] = useState<number[]>(() => start === 'swim' || start === 'snap' ? [0, 1, 2] : [])
+  useEffect(() => enter(phase), [phase, enter])
   const [snaps, setSnaps] = useState(0)
   const [hint, setHint] = useState(false)
   const busy = useRef(false)
@@ -42,6 +46,17 @@ export function Croc({ onDone, setProgress }: ActivityProps) {
   const babies = useRef<Record<number, PuppetHandle | null>>({})
   const alive = useAlive()
   const landscape = useLandscape()
+
+  useEffect(() => {
+    if (start !== 'swim') return
+    busy.current = true
+    sfx.splash()
+    void chompy.current?.play('swim')
+    void sparkle.current?.play('cheer')
+    void say(L.croc.gentle)
+    const id = setTimeout(() => { busy.current = false; setPhase('snap') }, 1700)
+    return () => clearTimeout(id)
+  }, [start])
 
   // One star per stage (hatch, carry, snap): nine little stars would crowd the prompt on a phone.
   const stages = Number(hatched.length === EGGS) + Number(carried.length === EGGS) + Number(snaps === SNAPS)

@@ -39,80 +39,35 @@ const SCREENS = [
   { name: 'puppet-lab', hash: '#/world/puppets', wait: 1200 },
   { name: 'australia-intro', hash: '#/world/australia', reset: true, wait: 300 },
   { name: 'australia-hub', hash: '#/world/australia', act: skip },
-  { name: 'outback-story', hash: '#/world/australia/outback', wait: 250 },
+  { name: 'outback-story', hash: '#/world/australia/outback/story', wait: 250 },
   {
-    name: 'outback-pack',
-    hash: '#/world/australia/outback',
-    act: async (p) => {
-      await skip(p)
-      await p.getByRole('button', { name: 'hat' }).click({ force: true })
-      await p.waitForTimeout(400)
-    },
+    name: 'outback-pack', hash: '#/world/australia/outback/pack',
+    act: async (p) => { await p.getByRole('button', { name: 'hat' }).click({ force: true }); await p.waitForTimeout(400) },
   },
   {
-    name: 'outback-hop',
-    hash: '#/world/australia/outback',
-    act: async (p) => {
-      await skip(p)
-      for (const item of ['hat', 'glasses', 'water']) {
-        await p.getByRole('button', { name: item }).click({ force: true })
-        await p.waitForTimeout(250)
-      }
-      await p.waitForTimeout(1500)
-      await p.getByRole('button', { name: 'Hop' }).click({ force: true })
-      await p.waitForTimeout(700)
-    },
+    name: 'outback-hop', hash: '#/world/australia/outback/water',
+    act: async (p) => { await p.getByRole('button', { name: 'Hop' }).click({ force: true }); await p.waitForTimeout(700) },
   },
-  { name: 'forest-feed', hash: '#/world/australia/forest', act: skip },
-  { name: 'reef-find', hash: '#/world/australia/reef', act: skip },
-  { name: 'stars-sky', hash: '#/world/australia/stars', act: skip },
+  { name: 'outback-mama', hash: '#/world/australia/outback/mama', wait: 2800 },
+  { name: 'forest-feed', hash: '#/world/australia/forest/feed-2' },
+  { name: 'forest-feed-four', hash: '#/world/australia/forest/feed-4' },
+  { name: 'forest-sleep', hash: '#/world/australia/forest/sleep' },
+  { name: 'reef-find', hash: '#/world/australia/reef/turtle' },
+  { name: 'reef-octopus', hash: '#/world/australia/reef/octopus' },
+  { name: 'stars-sky', hash: '#/world/australia/stars/sky' },
+  { name: 'stars-flag', hash: '#/world/australia/stars/flag', wait: 4500 },
+  { name: 'stars-quiz', hash: '#/world/australia/stars/quiz' },
+  { name: 'croc-story', hash: '#/world/australia/croc/story', wait: 250 },
+  { name: 'croc-hatch', hash: '#/world/australia/croc/hatch' },
   {
-    name: 'stars-flag',
-    hash: '#/world/australia/stars',
-    act: async (p) => {
-      await skip(p)
-      for (const star of await p.getByRole('button', { name: 'star' }).all()) await star.click({ force: true })
-      await p.waitForTimeout(4500)
-    },
+    name: 'croc-ride', hash: '#/world/australia/croc/ride',
+    act: async (p) => { await p.getByRole('button', { name: 'baby crocodile' }).first().click({ force: true }); await p.waitForTimeout(700) },
   },
-  { name: 'croc-story', hash: '#/world/australia/croc', wait: 250 },
-  { name: 'croc-hatch', hash: '#/world/australia/croc', act: skip },
+  { name: 'croc-swim', hash: '#/world/australia/croc/swim', wait: 700 },
+  { name: 'croc-snap', hash: '#/world/australia/croc/snap', wait: 1800 },
   {
-    name: 'croc-ride',
-    hash: '#/world/australia/croc',
+    name: 'postcard-color', hash: '#/world/australia/postcard/color',
     act: async (p) => {
-      await skip(p)
-      for (let i = 0; i < 3; i++) {
-        await p.getByRole('button', { name: 'egg' }).first().click({ force: true }).catch(() => {})
-        await p.waitForTimeout(i === 0 ? 3500 : 300) // Sparkle tells the chirp fact after the first egg
-      }
-      await p.waitForTimeout(9000)
-      await p.getByRole('button', { name: 'baby crocodile' }).first().click({ force: true }).catch(() => {})
-      await p.waitForTimeout(700)
-    },
-  },
-  {
-    name: 'croc-swim',
-    hash: '#/world/australia/croc',
-    act: async (p) => {
-      await skip(p)
-      for (let i = 0; i < 3; i++) {
-        await p.getByRole('button', { name: 'egg' }).first().click({ force: true }).catch(() => {})
-        await p.waitForTimeout(i === 0 ? 3500 : 300) // Sparkle tells the chirp fact after the first egg
-      }
-      await p.waitForTimeout(9000)
-      for (let i = 0; i < 3; i++) {
-        await p.getByRole('button', { name: 'baby crocodile' }).first().click({ force: true }).catch(() => {})
-        await p.waitForTimeout(500)
-      }
-      await p.waitForTimeout(7000)
-    },
-  },
-  {
-    name: 'postcard-color',
-    hash: '#/world/australia/postcard',
-    act: async (p) => {
-      await skip(p)
       await p.waitForTimeout(600)
       const c = p.getByLabel('coloring page')
       const box = await c.boundingBox()
@@ -120,16 +75,11 @@ const SCREENS = [
       await p.waitForTimeout(500)
     },
   },
+  { name: 'postcard-send', hash: '#/world/australia/postcard/send', wait: 250 },
   {
-    name: 'stamp-earned',
-    hash: '#/world/australia/stars',
+    name: 'stamp-earned', hash: '#/world/australia/stars/quiz',
     act: async (p) => {
-      await skip(p)
-      for (const star of await p.getByRole('button', { name: 'star' }).all()) await star.click({ force: true })
-      await p.waitForTimeout(4500)
-      await p.locator('svg.world-glow').first().click({ force: true }).catch(() => {}) // the big seven-point star
-      await p.waitForTimeout(1500)
-      await p.getByRole('button', { name: 'australia flag' }).click({ force: true }).catch(() => {})
+      await p.getByRole('button', { name: 'australia flag' }).click({ force: true })
       await p.waitForTimeout(2000)
     },
   },
@@ -156,16 +106,15 @@ const SCREENS = [
   { name: 'theater-australia', hash: '#/world/australia/theater', wait: 1200 },
   {
     name: 'video-break',
-    hash: '#/world/australia/forest',
+    hash: '#/world/australia/forest/feed-2',
     act: async (p) => {
-      await skip(p)
       await p.evaluate(() => window.__kayleeWorld?.finish?.())
       await p.waitForTimeout(1200)
       await p.getByRole('button', { name: 'Back to the map' }).first().click()
       await p.waitForTimeout(1400)
     },
   },
-  { name: 'party', hash: '#/world/australia/party', stampAll: true, act: skip },
+  { name: 'party', hash: '#/world/australia/party/pat?stamps=all&danced=mama,koko,shelly,kooky,chompy' },
   { name: 'china-intro', hash: '#/world/china', reset: true, wait: 300 },
   { name: 'china-hub', hash: '#/world/china', act: skip },
   // China: open the exact section instead of replaying earlier rounds.

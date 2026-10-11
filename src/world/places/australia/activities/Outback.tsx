@@ -7,6 +7,8 @@ import { burst, DragArea, Draggable, DropZone, pick, say, sounds, useAlive, wait
 import { sfx } from '../../../kit/sfx'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Outback.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -23,11 +25,13 @@ const ITEMS: Item[] = [
 ]
 
 export function Outback({ onDone, setProgress }: ActivityProps) {
-  const [phase, setPhase] = useState<'story' | 'pack' | 'hop'>('story')
-  useEffect(() => setProgress(phase === 'hop' ? 1 : 0, 3), [phase, setProgress])
+  const { start, enter } = useSections(SECTIONS)
+  const [phase, setPhase] = useState<'story' | 'pack' | 'hop'>(start === 'water' || start === 'mama' ? 'hop' : start ?? 'story')
+  useEffect(() => { if (phase !== 'hop') enter(phase) }, [phase, enter])
+  useEffect(() => { if (phase !== 'hop') setProgress(0, 3) }, [phase, setProgress])
   if (phase === 'story') return <StoryBeat lines={[L.outback.story]} friend={<Pip height="100%" />} bg={art.bgOutback} onDone={() => setPhase('pack')} />
   if (phase === 'pack') return <Pack onDone={() => setPhase('hop')} />
-  return <Hop onDone={onDone} setProgress={setProgress} />
+  return <Hop start={start === 'mama' ? 1 : 0} onSection={enter} onDone={onDone} setProgress={setProgress} />
 }
 
 /** Drifting clouds and a lizard scurrying by: the outback never stands still. */
@@ -138,12 +142,12 @@ const HOP_MS = 700 // matches ROO_ACTIONS.hop
 const WATER_X = 40
 const MAMA_X = 82
 
-function Hop({ onDone, setProgress }: ActivityProps) {
-  const [leg, setLeg] = useState(0)
+function Hop({ onDone, setProgress, start, onSection }: ActivityProps & { start: number; onSection: (id: 'water' | 'mama') => void }) {
+  const [leg, setLeg] = useState(start)
   const [hops, setHops] = useState(0)
   const [busy, setBusy] = useState(false)
-  const [x, setX] = useState(LEGS[0].from)
-  const [prints, setPrints] = useState<number[]>([])
+  const [x, setX] = useState(LEGS[start].from)
+  const [prints, setPrints] = useState<number[]>(() => start ? Array.from({ length: LEGS[0].hops }, (_, i) => LEGS[0].from + (LEGS[0].to - LEGS[0].from) * (i + 1) / LEGS[0].hops) : [])
   const [puffs, setPuffs] = useState<{ id: number; x: number }[]>([])
   const [splash, setSplash] = useState(0)
   const [mamaIn, setMamaIn] = useState(false)
@@ -153,6 +157,11 @@ function Hop({ onDone, setProgress }: ActivityProps) {
   const alive = useAlive()
   const { from, to, hops: need, prompt } = LEGS[leg]
   const last = leg === LEGS.length - 1
+
+  useEffect(() => {
+    onSection(leg === 0 ? 'water' : 'mama')
+    setProgress(leg + 1, 3)
+  }, [leg, onSection, setProgress])
 
   // Mama hops in from the right as the last leg starts.
   useEffect(() => {

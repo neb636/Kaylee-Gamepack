@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Buddy, burst, say, sounds, SparklePuppet, useAlive, wait, type PuppetHandle } from '../../../../sdk'
 import { Stage, WIGGLE } from '../../../kit/Stage'
 import { StoryBeat } from '../../../kit/StoryBeat'
+import { useSections } from '../../../kit/sections'
+import SECTIONS from './Reef.sections'
 import { art } from '../art'
 import { L } from '../lines'
 import type { ActivityProps } from '../Place'
@@ -23,9 +25,12 @@ const CRITTERS: Critter[] = [
 const ORDER = ['turtle', 'clownfish', 'starfish', 'octopus'] as const
 
 export function Reef({ onDone, setProgress }: ActivityProps) {
-  const [story, setStory] = useState(true)
-  const [round, setRound] = useState(0)
-  const [found, setFound] = useState<string[]>([])
+  const { start, enter } = useSections(SECTIONS)
+  const firstRound = start && start !== 'story' ? ORDER.indexOf(start) : 0
+  const [story, setStory] = useState(!start || start === 'story')
+  const [round, setRound] = useState(firstRound)
+  const [found, setFound] = useState<string[]>(() => ORDER.slice(0, firstRound))
+  useEffect(() => enter(story ? 'story' : ORDER[round]), [story, round, enter])
   const [hint, setHint] = useState(false)
   const [wiggle, setWiggle] = useState<string | null>(null)
   const [bubbles, setBubbles] = useState<{ id: number; x: number; y: number }[]>([])
