@@ -1,3 +1,6 @@
+import { useSections } from '../../../../kit/sections'
+import SECTIONS from './sections'
+import { numberParam } from '../../sectionState'
 // 🦅 Coco's Canyon Glide (Colca Canyon: Andean condors soar on warm air). Plan: planning/around-the-world/peru.md § 3.
 // The toy (one core verb): steer Coco through the canyon. He follows her finger with big slow turns, wings wide, and
 // hardly flaps: in plain air he slowly glides down; in warm air (swirls of shimmer rising off sunny rocks) he circles
@@ -61,7 +64,7 @@ interface Flyer {
 
 declare global {
   interface Window {
-    __canyonQA?: { jump: (to: 'follow' | 'ridge' | 'solo' | 'finale') => void; where: () => { coco: { x: number; y: number }; pluma: { x: number; y: number }; cam: { x: number; y: number }; s: number; phase: string } }
+    __canyonQA?: { where: () => { coco: { x: number; y: number }; pluma: { x: number; y: number }; cam: { x: number; y: number }; s: number; phase: string } }
   }
 }
 
@@ -76,6 +79,8 @@ const VISIBLE: Record<string, SwirlId[]> = {
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
 export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
+  const { start, param, enter } = useSections(SECTIONS)
+  const seeded = useRef(false)
   const alive = useAlive()
   const root = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ W: 0, H: 0 })
@@ -845,53 +850,55 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
     return null
   }
 
-  // ---- QA hook: jump to a later moment (motion and screen QA), and read where things are. ----
+  const seedSection = (to: string) => {
+    const G = g.current
+    if (to === 'start') return startPlay()
+    setSun({ left: 1, right: 0.25 })
+    if (to === 'morning') { setPhase('morning'); showSwirls('morning'); setPrompt(C.warm); return }
+    G.busy = false; G.rides = 2; G.plumaOut = true
+    setPlumaOut(true)
+    plumaDrive.current.flying = true; plumaDrive.current.scared = false
+    const later = to !== 'follow'
+    const solo = to === 'solo' || to === 'finale'
+    const visited = param('places') === 'auto' ? later ? ['falls', 'condors', 'lookout', ...(solo ? ['ridge'] : [])] : [] : param('places').split(',')
+    G.places = Object.fromEntries(Object.keys(PLACES).map((id) => [id, visited.includes(id)])) as Record<PlaceId, boolean>
+    setDone({ ...G.places })
+    setRainbow(G.places.falls)
+    G.confidence = numberParam(param('confidence'), solo ? 1 : later ? 0.75 : 0, 0, 1)
+    plumaDrive.current.confidence = G.confidence
+    G.coco.x = solo ? PLACES.ridge.x - 100 : later ? 2150 : COCO_START.x
+    G.coco.y = solo ? PLACES.ridge.y + 20 : later ? 820 : COCO_START.y
+    G.pluma.x = solo ? PLACES.ridge.x - 300 : later ? 1980 : G.coco.x - 180
+    G.pluma.y = solo ? PLACES.ridge.y + 60 : later ? 900 : G.coco.y + 80
+    G.cam = { x: G.coco.x - G.viewW / 2, y: G.coco.y - G.viewH / 2 }
+    star(solo ? 5 : later ? 4 : 2)
+    if (to === 'follow') { showSwirls('follow'); setRings(true); setPhase('follow'); setPrompt(C.lead) }
+    else {
+      setSun({ left: 0.15, right: 1 })
+      showSwirls(solo ? 'solo' : 'afternoon')
+      G.steer = solo ? 'pluma' : 'coco'
+      setFriendsUp(solo); G.friendsAt = G.t
+      setPhase(solo ? 'solo' : 'ridge'); setPrompt(solo ? C.solo : C.top)
+      if (to === 'finale') { G.pluma.x = SWIRLS[5].x; G.pluma.y = SWIRLS[5].top + 400; void finale() }
+    }
+    G.lastTouch = performance.now()
+  }
+
+  // Seed only once, after the logical stage and puppets exist. Ordinary play keeps its original transitions.
+  useEffect(() => {
+    if (seeded.current || !(size.W > 0)) return
+    seeded.current = true
+    if (start && start !== 'story') seedSection(start)
+  })
+  useEffect(() => {
+    if ((!seeded.current && phase !== 'story') || (phase === 'story' && start && start !== 'story')) return
+    if (phase === 'story' || phase === 'start' || phase === 'morning' || phase === 'follow' || phase === 'ridge' || phase === 'solo' || phase === 'finale')
+      enter(phase, { places: (Object.keys(done) as PlaceId[]).filter((id) => done[id]).join(','), confidence: String(g.current.confidence) })
+  }, [phase, done, size.W])
+  // ---- QA helper: read where things are ----
   useEffect(() => {
     window.__canyonQA = {
-      jump: (to) => {
-        const G = g.current
-        G.busy = false
-        G.rides = Math.max(G.rides, 2)
-        G.plumaOut = true
-        setPlumaOut(true)
-        plumaDrive.current.flying = true
-        plumaDrive.current.scared = false
-        if (to === 'follow') {
-          setSun({ left: 1, right: 0.25 })
-          showSwirls('follow')
-          setRings(true)
-          setPhase('follow')
-          setPrompt(C.lead)
-        } else {
-          G.places = { falls: true, condors: true, lookout: true, ridge: false }
-          setDone({ ...G.places })
-          G.confidence = 0.75
-          plumaDrive.current.confidence = 0.75
-          G.coco.x = 2150
-          G.coco.y = 820
-          G.pluma.x = 1980
-          G.pluma.y = 900
-          if (to === 'ridge') void toRidge()
-          else {
-            G.coco.x = PLACES.ridge.x - 100
-            G.coco.y = PLACES.ridge.y + 20
-            G.pluma.x = PLACES.ridge.x - 300
-            G.pluma.y = PLACES.ridge.y + 60
-            setPhase('ridge')
-            setSun({ left: 0.15, right: 1 })
-            showSwirls('afternoon')
-            void atRidge().then(() => {
-              if (to === 'finale') {
-                G.pluma.x = SWIRLS[5].x
-                G.pluma.y = SWIRLS[5].top + 400
-                G.soloTime = 3
-                void finale()
-              }
-            })
-          }
-        }
-        G.lastTouch = performance.now()
-      },
+
       where: () => {
         const G = g.current
         return { coco: { x: G.coco.x, y: G.coco.y }, pluma: { x: G.pluma.x, y: G.pluma.y }, cam: { ...G.cam }, s: G.s, phase: G.phase }
@@ -1018,7 +1025,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
 
       <AnimatePresence>{flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.9 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 26 }} />}</AnimatePresence>
 
-      {phase === 'story' && <StoryBeat lines={C.story} bg={art.bgCanyonFar} friend={<Condor height="100%" />} onDone={startPlay} />}
+      {phase === 'story' && (!start || start === 'story') && <StoryBeat lines={C.story} bg={art.bgCanyonFar} friend={<Condor height="100%" />} onDone={startPlay} />}
     </div>
   )
 }

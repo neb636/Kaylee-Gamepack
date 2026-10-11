@@ -1,3 +1,5 @@
+import { useSections } from '../../../../kit/sections'
+import SECTIONS from './sections'
 // ⛰️ Tika's Mountain Terraces (Machu Picchu: the Inca, stone walls, terraces, llamas). Plan:
 // planning/around-the-world/peru.md § 5.
 // The toy (one core verb): fit big stones into a wall. She drags a chunky Inca stone off the pile; near its own gap it
@@ -60,7 +62,7 @@ const CLOUDS = [
 
 declare global {
   interface Window {
-    __terracesQA?: { jump: (to: 1 | 2 | 3 | 'photo') => void; place: (n?: number) => void }
+    __terracesQA?: { place: (n?: number) => void }
   }
 }
 
@@ -71,6 +73,8 @@ interface Cam {
 }
 
 export function Terraces({ onDone, setProgress }: ActivityProps) {
+  const { start, param, enter } = useSections(SECTIONS)
+  const seeded = useRef(false)
   const alive = useAlive()
   const root = useRef<HTMLDivElement>(null)
   const stageEl = useRef<HTMLDivElement>(null)
@@ -659,7 +663,46 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
     return () => clearInterval(t)
   }, [walls])
 
-  // ---- QA hook: jump ahead, or place stones for her (motion, screen and pacing QA) ----
+  const seedSection = (to: string) => {
+    const G = g.current
+    const target = to === 'photo' ? N : Number(to.split('-')[1]) - 1
+    const planting = to.startsWith('seeds-')
+    const completed = target + (planting ? 1 : 0)
+    const all = new Set<string>()
+    for (let kk = 0; kk < completed; kk++) for (const st of gapsOf(kk)) all.add(keyOf(kk, st.id))
+    G.placed = all
+    setPlaced(all)
+    setGreen(WALLS.map((_, i) => i < completed))
+    const selected = param('crops').split(',')
+    setCrops(WALLS.map((_, i) => i < Math.min(target, N - 1) ? CROPS.find((c) => c.id === selected[i])?.id ?? null : null))
+    G.k = Math.min(target, N - 1)
+    setK(G.k)
+    setTikaLedge(completed - 1)
+    setFriendAt([0, 1, 2].map((i) => i < completed - 1 ? i : null))
+    if (to === 'photo') {
+      setRevealed(true)
+      if (W) moveCam({ y: W.camSummit, s: 1, dur: 0 })
+      setPhase('photo'); setPrompt(T.photo)
+    } else {
+      moveCam({ ...camFor(target), dur: 0 })
+      if (target === N - 1) { G.fogged = new Set(orders[target]); setFog(new Set(G.fogged)) }
+      setPhase(planting ? 'seeds' : 'build')
+      setPrompt(planting ? T.seeds : target === N - 1 ? T.top : T.next)
+    }
+  }
+
+  // Seed only once, after the logical stage and puppets exist. Ordinary play keeps its original transitions.
+  useEffect(() => {
+    if (seeded.current || !(S && W)) return
+    seeded.current = true
+    if (start && start !== 'story') seedSection(start)
+  })
+  useEffect(() => {
+    if ((!seeded.current && phase !== 'story') || (phase === 'story' && start && start !== 'story')) return
+    if (phase === 'story' || phase === 'photo') enter(phase, { crops: crops.map((c) => c ?? 'none').join(',') })
+    else if (phase === 'build' || phase === 'seeds') enter(`${phase === 'build' ? 'wall' : 'seeds'}-${k + 1}` as (typeof SECTIONS.sections)[number]['id'], { crops: crops.map((c) => c ?? 'none').join(',') })
+  }, [phase, k, crops, size.W])
+  // ---- QA helper: place stones for her ----
   useEffect(() => {
     window.__terracesQA = {
       place: (n = 1) => {
@@ -670,32 +713,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
           .slice(0, n)
           .forEach((id, i) => setTimeout(() => flyIn(id), i * 320))
       },
-      jump: (to) => {
-        const G = g.current
-        const target = to === 'photo' ? N : to
-        const all = new Set(G.placed)
-        for (let kk = 0; kk < target; kk++) for (const st of gapsOf(kk)) all.add(keyOf(kk, st.id))
-        G.placed = all
-        setPlaced(all)
-        setGreen(WALLS.map((_, i) => i < target))
-        setCrops(WALLS.map((_, i) => (i < Math.min(target, N - 1) ? CROPS[i % 3].id : null)))
-        setTikaLedge(target - 1)
-        setFriendAt([0, 1, 2].map((i) => (i < target - 1 ? i : null)))
-        setPhase('build')
-        if (to === 'photo') {
-          G.k = N - 1
-          setK(N - 1)
-          setRevealed(true)
-          if (W) moveCam({ y: W.camSummit, s: 1, dur: 0 })
-          setPhase('photo')
-          setPrompt(T.photo)
-        } else {
-          G.k = to
-          setK(to)
-          moveCam({ ...camFor(to), dur: 0 })
-          setPrompt(to === N - 1 ? T.top : T.next)
-        }
-      },
+
     }
     return () => {
       delete window.__terracesQA
@@ -1067,7 +1085,7 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
 
       <AnimatePresence>{flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.8 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 28 }} />}</AnimatePresence>
 
-      {phase === 'story' && <StoryBeat lines={T.story} bg={art.bgMp} friend={<Tika height="100%" />} onDone={startPlay} />}
+      {phase === 'story' && (!start || start === 'story') && <StoryBeat lines={T.story} bg={art.bgMp} friend={<Tika height="100%" />} onDone={startPlay} />}
     </div>
   )
 }

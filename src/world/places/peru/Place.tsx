@@ -1,3 +1,5 @@
+import { useSections } from '../../kit/sections'
+import BALLOON_SECTIONS from './activities/BalloonSoon.sections'
 // Peru: "Luna's Animal Explorer Journal" (plan: planning/around-the-world/peru.md). Built one activity per PR: Luna's
 // Fluffy Day, Coco's Canyon Glide and Rosa's Rainy River so far. The other places on Luna's map say "coming soon" until they're built, and the balloon finale
 // (route `party`) waits until all five exist.
@@ -266,6 +268,8 @@ function Balloon() {
 
 /** Route `party` before the finale exists: Luna's balloon trip is coming once all five places are built. */
 function BalloonSoon({ backToMap }: { backToMap: () => void }) {
+  const { enter } = useSections(BALLOON_SECTIONS)
+  useEffect(() => enter('soon'), [enter])
   const sparkle = useRef<PuppetHandle>(null)
   const luna = useRef<PuppetHandle>(null)
   useEffect(() => {

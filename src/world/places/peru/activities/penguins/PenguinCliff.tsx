@@ -1,3 +1,6 @@
+import { useSections } from '../../../../kit/sections'
+import SECTIONS from './sections'
+import { numberParam, listParam } from '../../sectionState'
 // 🐧 Pepa's Penguin Cliff (the desert coast at Paracas: Peru has penguins! a cold ocean full of fish). Plan:
 // planning/around-the-world/peru.md § 2.
 // The toy (one core verb): pull a penguin back on the launch rock and let go. It leaps in an arc (a dotted line shows
@@ -104,11 +107,6 @@ interface Flyer {
   to: Pt
 }
 
-declare global {
-  interface Window {
-    __penguinQA?: { jump: (to: 'fish' | 'feed' | 'twist' | 'swim' | 'parade') => void }
-  }
-}
 
 const cubic = (p: Pt[], t: number): Pt => {
   const u = 1 - t
@@ -135,6 +133,8 @@ const boxOf = (kind: Swimmer['kind'], h: number) =>
 const standY = (sw: Pick<Swimmer, 'kind' | 'h'>, ground: number) => ground - sw.h * (boxOf(sw.kind, sw.h).fy - 0.55)
 
 export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
+  const { start, param, enter } = useSections(SECTIONS)
+  const seeded = useRef(false)
   const alive = useAlive()
   const root = useRef<HTMLDivElement>(null)
   const stageEl = useRef<HTMLDivElement>(null)
@@ -1240,66 +1240,57 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     }
   })
 
-  // ---- QA hook: jump to a later moment (motion and screen QA) ----
-  useEffect(() => {
-    window.__penguinQA = {
-      jump: (to) => {
-        const G = g.current
-        if (G.phase === 'story') startPlay()
-        G.splashes = SPLASHES
-        star(1)
-        if (!G.schools.length) placeSchools()
-        setSchoolsOn(true)
-        setPhase('fish')
-        setPrompt(P.fishGo)
-        if (to === 'fish') {
-          G.order = 0
-          G.need = 1
-          G.filled = 0
-          setOrder({ need: 1, filled: 0 })
-        } else if (to === 'feed') {
-          G.order = 1
-          G.need = 2
-          G.filled = 2
-          setOrder({ need: 2, filled: 2 })
-          startFeeding()
-        } else if (to === 'twist') {
-          G.order = 3
-          G.fed = [2, 2, 0]
-          setFull([0.5, 0.5, 0])
-          G.chicks = 3
-          setChickCount(3)
-          setEggCrack(3)
-          G.twist = true
-          setRough(true)
-          G.pelican.next = G.time + 1
-          G.need = 2
-          G.filled = 0
-          setOrder({ need: 2, filled: 0 })
-        } else {
-          G.order = ORDERS.length
-          G.fed = [4, 4, 3]
-          setFull([1, 1, 0.75])
-          G.chicks = 3
-          setChickCount(3)
-          setEggCrack(3)
-          G.need = 0
-          setOrder(null)
-          void swimTime().then(() => {
-            if (to === 'parade') {
-              G.swimHome = 2
-              const s = G.sw.find((w) => w.kind === 'chick')
-              if (s) chickBack(s)
-            }
-          })
+  const seedSection = (to: string) => {
+    const G = g.current
+    if (to === 'splash') return startPlay()
+    const late = ['twist', 'swim', 'parade'].includes(to)
+    const payoff = to === 'swim' || to === 'parade'
+    G.splashes = SPLASHES
+    G.chicks = Math.round(numberParam(param('chicks'), late ? 3 : 2, 2, 3))
+    G.fed = listParam(param('fed'), payoff ? [4, 4, 4] : late ? [2, 2, 0] : [0, 0, 0], 0, 12)
+    setChickCount(G.chicks); setEggCrack(G.chicks === 3 ? 3 : 0)
+    setFull(G.fed.map((n) => Math.min(1, n / ROUND)))
+    G.order = Math.round(numberParam(param('order'), payoff ? ORDERS.length : late ? 3 : to === 'feed' ? 1 : 0, 0, ORDERS.length))
+    G.need = ORDERS[G.order] ?? 0
+    G.filled = Math.round(numberParam(param('filled'), to === 'feed' ? G.need : 0, 0, G.need))
+    setOrder(payoff ? null : { need: G.need, filled: G.filled })
+    placeSchools(); setSchoolsOn(!payoff)
+    G.twist = late && !payoff
+    setRough(G.twist)
+    if (G.twist) G.pelican.next = G.time + 1
+    star(payoff ? TOTAL - 1 : G.order + 1)
+    if (payoff) {
+      G.queue = []
+      G.sw.forEach((s) => { s.state = 'off'; s.shown = false })
+      setPhase('swim'); setQuiet(true)
+      if (to === 'parade') void parade()
+      else {
+        for (let i = 0; i < G.chicks; i++) {
+          const s = addSwimmer('chick', i, S!.chicks[i].h)
+          s.x = S!.slots[i]; s.y = standY(s, S!.ledge)
+          G.queue.push(s.id)
         }
-        G.lastTouch = performance.now()
-      },
+        setFrontId(G.queue[0]); setChickHome([false, false, false]); publish()
+        setPrompt(P.idle.swim)
+      }
+    } else {
+      setPhase('fish'); setPrompt(P.fishGo)
+      if (to === 'feed') startFeeding()
     }
-    return () => {
-      delete window.__penguinQA
-    }
+    G.lastTouch = performance.now()
+  }
+
+  // Seed only once, after the logical stage and puppets exist. Ordinary play keeps its original transitions.
+  useEffect(() => {
+    if (seeded.current || !(S && g.current.sw.length > 0)) return
+    seeded.current = true
+    if (start && start !== 'story') seedSection(start)
   })
+  useEffect(() => {
+    if ((!seeded.current && phase !== 'story') || (phase === 'story' && start && start !== 'story')) return
+    const id = phase === 'fish' ? feeding ? 'feed' : rough ? 'twist' : 'fish' : phase === 'hatch' ? 'twist' : phase
+    if (id !== 'done') enter(id, { chicks: String(g.current.chicks), fed: g.current.fed.join(','), order: String(g.current.order), filled: String(g.current.filled) })
+  }, [phase, feeding, rough, full, chickCount, order, size.W])
 
   const canPull = phase === 'splash' || phase === 'fish' || phase === 'swim'
 
@@ -1546,7 +1537,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
 
       <AnimatePresence>{flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.9 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 26 }} />}</AnimatePresence>
 
-      {phase === 'story' && <StoryBeat lines={P.story} bg={art.bgCoast} friend={<Penguin kind="pepa" height="100%" />} onDone={startPlay} />}
+      {phase === 'story' && (!start || start === 'story') && <StoryBeat lines={P.story} bg={art.bgCoast} friend={<Penguin kind="pepa" height="100%" />} onDone={startPlay} />}
     </div>
   )
 }
