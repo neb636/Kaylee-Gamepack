@@ -18,8 +18,8 @@ import { CART, CartArt, type Fruit } from './Cart'
 import { esfx } from './sfx'
 
 const E = LINES.etna
-const FRIENDS = ['lupa', 'marina', 'pina'] as const
-type FriendId = (typeof FRIENDS)[number]
+export const FRIENDS = ['lupa', 'marina', 'pina'] as const
+export type FriendId = (typeof FRIENDS)[number]
 const ORDER: Record<FriendId, number> = { lupa: 1, marina: 2, pina: 3 }
 const MAX_SCOOPS = 5
 const FLAVOR: Record<Fruit, string> = { lemon: '#FFE27A', orange: '#FFB25B' }
@@ -58,7 +58,17 @@ const mixHex = (a: string, b: string, k: number) => {
   return `rgb(${pa.map((v, i) => Math.round(v + (pb[i] - v) * k)).join(',')})`
 }
 
-export function Granita({ fruit: picked, onStar, onDone }: { fruit: Fruit[]; onStar: (n: number) => void; onDone: () => void }) {
+export function Granita({ fruit: picked, served: servedBefore = [], payoff: atPayoff = false, onSection, onStar, onDone }: {
+  fruit: Fruit[]
+  /** Friends who already got their granita (a deep link into the middle of the stand). */
+  served?: readonly FriendId[]
+  /** Start straight at the piano (a deep link to the payoff). */
+  payoff?: boolean
+  /** A section begins: the stand (again after each friend is served, with who's done) or the piano. */
+  onSection: (id: 'granita' | 'payoff', served: FriendId[]) => void
+  onStar: (n: number) => void
+  onDone: () => void
+}) {
   const box = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ W: 1180, H: 820 })
   useEffect(() => {
@@ -78,14 +88,18 @@ export function Granita({ fruit: picked, onStar, onDone }: { fruit: Fruit[]; onS
   const sandY = stageTop + (P.stand.bottom - 190) * s
   const seaY = sandY - 125 * s
 
-  const [cups, setCups] = useState<CupState[]>(() => FRIENDS.map(() => ({ scoops: 0, fruit: null, k: 0, served: false })))
+  // Never all three already served at the stand: that would be the payoff.
+  const [cups, setCups] = useState<CupState[]>(() => {
+    const done = atPayoff ? FRIENDS : servedBefore.length >= FRIENDS.length ? servedBefore.slice(0, FRIENDS.length - 1) : servedBefore
+    return FRIENDS.map((id) => (done.includes(id) ? { scoops: ORDER[id], fruit: 'lemon', k: 1, served: true } : { scoops: 0, fruit: null, k: 0, served: false }))
+  })
   const cupsRef = useRef(cups)
   cupsRef.current = cups
   const [sel, setSel] = useState<number | null>(null)
   const [squeezing, setSqueezing] = useState<Fruit | null>(null)
   const [eating, setEating] = useState<number | null>(null)
   const [scoopFly, setScoopFly] = useState<{ id: number; to: number }[]>([])
-  const [payoff, setPayoff] = useState(() => !!(window as unknown as { __etnaPayoff?: boolean }).__etnaPayoff)
+  const [payoff, setPayoff] = useState(atPayoff)
   const [keysPlayed, setKeysPlayed] = useState(0)
   const friendRefs = useRef<(PuppetHandle | null)[]>([])
   const ninoRef = useRef<PuppetHandle>(null)
@@ -104,6 +118,7 @@ export function Granita({ fruit: picked, onStar, onDone }: { fruit: Fruit[]; onS
 
   useEffect(() => {
     if (payoff) return startPayoff()
+    onSection('granita', FRIENDS.filter((_, i) => cupsRef.current[i].served))
     talk(E.granita)
     talk(E.tapCup)
   }, [])
@@ -209,7 +224,8 @@ export function Granita({ fruit: picked, onStar, onDone }: { fruit: Fruit[]; onS
       setSel(null)
       const n = cupsRef.current.filter((c) => c.served).length + 1
       onStar(n)
-      if (n >= FRIENDS.length) {
+      if (n < FRIENDS.length) onSection('granita', FRIENDS.filter((_, j) => j === i || cupsRef.current[j].served))
+      else {
         talk(E.history)
         setTimeout(startPayoff, 2600)
       }
@@ -218,6 +234,7 @@ export function Granita({ fruit: picked, onStar, onDone }: { fruit: Fruit[]; onS
 
   function startPayoff() {
     setPayoff(true)
+    onSection('payoff', [...FRIENDS])
     setTimeout(() => {
       void ninoRef.current?.play('bray')
       sounds.fanfare()

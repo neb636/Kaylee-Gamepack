@@ -103,6 +103,8 @@ jobs:
         run: |
           title="$(head -n1 .lesson-input/pr-title.txt 2>/dev/null || true)"
           echo "PR_TITLE=${title:-New game for lesson #$ISSUE_NUMBER}" >> "$GITHUB_ENV"
+          # The new game's folder, for the "Test this" link once the PR has a number.
+          echo "GAME_ID=$(git status --porcelain --untracked-files=all src/games | sed -n 's#.*src/games/\([^/]*\)/.*#\1#p' | head -n1)" >> "$GITHUB_ENV"
           {
             cat .lesson-input/pr-body.md 2>/dev/null || cat .lesson-input/codex-final.md
             cat .lesson-input/reverted.md 2>/dev/null || true
@@ -129,6 +131,13 @@ jobs:
         if: steps.pr.outputs.pull-request-url
         run: |
           gh issue comment "$ISSUE_NUMBER" --body "🎉 New game ready for review: ${{ steps.pr.outputs.pull-request-url }}"
+
+      - name: Link straight to the game on the preview
+        if: steps.pr.outputs.pull-request-number && env.GAME_ID
+        run: |
+          gh pr comment "${{ steps.pr.outputs.pull-request-number }}" --repo "${{ github.repository }}" --body "## 🔗 Test this
+          - 🎮 Play the new game: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/pr-${{ steps.pr.outputs.pull-request-number }}/#/game/$GAME_ID
+          (The preview is ready once the preview comment below appears.)"
 
       - name: Report failure
         if: failure()

@@ -9,6 +9,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { bigCelebration, BigButton, say, SparklePuppet, sounds, useAlive, useLandscape, useSaved, wait, type PuppetHandle } from '../../../../../sdk'
+import { useSections } from '../../../../kit/sections'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -18,7 +19,8 @@ import { INK } from '../../puppets/ink'
 import { Lupa } from '../../puppets/Lupa'
 import { useWord } from '../../WordCard'
 import { FrontRoom } from './FrontRoom'
-import { Job, type JobSpec } from './Job'
+import { Job, toppingKinds, type JobSpec } from './Job'
+import SECTIONS from './sections'
 
 const P = L.pizza
 const TOTAL = 4 // pizzas served
@@ -76,15 +78,30 @@ const SERVICES: { beats: Beat[]; served: number }[] = [
   { beats: [{ k: 'job', spec: OWN }, { k: 'payoff' }], served: 3 },
 ]
 
+type SectionId = (typeof SECTIONS.sections)[number]['id']
+/** Where each section (sections.ts) starts: [service, beat]. In play order. */
+const SECTION_AT: Record<SectionId, [number, number]> = { arrive: [0, 0], queen: [0, 3], 'break-1': [0, 5], bufala: [1, 0], gino: [1, 1], 'break-2': [1, 2], own: [2, 0], payoff: [2, 1] }
+const sectionAt = (service: number, beat: number) =>
+  (Object.keys(SECTION_AT) as SectionId[]).filter((id) => SECTION_AT[id][0] < service || (SECTION_AT[id][0] === service && SECTION_AT[id][1] <= beat)).at(-1)!
+
 export function Pizzeria({ onDone, setProgress }: ActivityProps) {
+  const { start, param, enter } = useSections(SECTIONS)
   const [saved, setSaved] = useSaved('italy-pizzeria', { service: 0 })
-  const service = Math.min(saved.service, SERVICES.length - 1)
-  const [beat, setBeat] = useState(0)
-  const [served, setServed] = useState(SERVICES[service].served)
+  // A deep link starts at its section; otherwise she carries on from the service she reached last time.
+  const [service, setService] = useState(() => (start ? SECTION_AT[start][0] : Math.min(saved.service, SERVICES.length - 1)))
+  const [beat, setBeat] = useState(() => (start ? SECTION_AT[start][1] : 0))
+  const [served, setServed] = useState(() => SERVICES[service].served + SERVICES[service].beats.slice(0, beat).filter((x) => x.k === 'job').length)
 
   useEffect(() => setProgress(served, TOTAL), [served])
 
   const b = SERVICES[service].beats[beat]
+  const section = sectionAt(service, beat)
+  // Pizzas report their own moments (which step, which sauce); everything else is the start of its section.
+  useEffect(() => {
+    if (b.k !== 'job') enter(section)
+  }, [service, beat])
+  // Only the pizza the link pointed at starts mid-way; the next ones start at their order.
+  const linked = start === section && b.k === 'job'
   const next = () => setBeat((i) => i + 1)
 
   // Each story beat needs its own playback and skip state, even when two are consecutive.
@@ -102,6 +119,8 @@ export function Pizzeria({ onDone, setProgress }: ActivityProps) {
         <Job
           key={b.spec.id}
           spec={b.spec}
+          start={linked ? { at: param('at'), sauce: param('sauce') as 'red' | 'pink', toppings: param('toppings').split(',').filter(Boolean) } : undefined}
+          onAt={(at, pizza, sauce) => enter(section, { at, sauce: b.spec.steps.includes('pickSauce') ? sauce : undefined, toppings: toppingKinds(pizza).join(',') })}
           onDone={() => {
             setServed((n) => n + 1)
             next()
@@ -113,6 +132,7 @@ export function Pizzeria({ onDone, setProgress }: ActivityProps) {
         <Break
           onNext={() => {
             setSaved({ service: service + 1 })
+            setService(service + 1)
             setBeat(0)
           }}
         />

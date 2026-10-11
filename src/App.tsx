@@ -20,7 +20,7 @@ export default function App() {
     case 'playground':
       return <Playground />
     case 'world':
-      return <World place={route.place} activity={route.activity} />
+      return <World place={route.place} activity={route.activity} section={route.section} params={route.params} />
     default:
       return <Home />
   }

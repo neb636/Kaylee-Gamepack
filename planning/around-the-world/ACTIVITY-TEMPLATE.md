@@ -41,13 +41,18 @@ Puppets: <who>. Anything she touches or follows is in the art, not drawn over it
 
 **Screens:** the logical stage for wide and tall, and what must stay inside the safe zone on every device.
 
+**Sections and carried state:** the sections in play order (each gets a deep link,
+`#/world/<place>/<activity>/<section>`), and every value a later section needs from an earlier one (a color she picked,
+the toppings, how many she caught) as a URL param with a default. See "Deep links" in AGENTS.md.
+
 **Tech:** DOM + `useGameLoop` / `PlayArea` / Phaser (say why), and the riskiest piece to prototype first.
 ```
 
 ## Build gates (one activity per PR)
 
 1. **Plan** with this template. Dad reads it.
-2. **Greybox toy:** the core verb with placeholder shapes, no generated art and no voices, on the PR preview.
+2. **Greybox toy:** the core verb with placeholder shapes, no generated art and no voices, on the PR preview, with its
+   `sections.ts` so the PR links to each section.
    **Stop: Dad plays it on the iPad.** If it isn't fun yet, change the toy, not the decoration.
 3. **Art and puppets:** layered scene and sprites in one camera, puppets next to their references.
 4. **Full loop:** story, voices, payoff, facts; run QA including the fun check; fix and repeat.

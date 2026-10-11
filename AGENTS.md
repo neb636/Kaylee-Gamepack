@@ -350,6 +350,25 @@ or follows is part of the art (paint the trail into the mountain), not lines dra
 objects in a scene (fine in UI chips), and code-drawn props use the same flat 5-unit-outline style. Two different things
 must not look alike (snow piles that look like clouds).
 
+**Deep links: every section has a URL.** Dad tests each PR on the preview, and nobody should have to replay three
+pizzas to check the fourth. Every activity (and finale) is split into named **sections** that open straight from a link,
+with any state they need carried in the URL: `#/world/<place>/<activity>/<section>?<state>`, e.g.
+`#/world/italy/pizzeria/own?at=oven&sauce=pink`. How (details in `src/world/kit/sections.ts`, reference: the Pizzeria):
+- Each activity folder has a `sections.ts`: `defineSections(place, activity, { params, sections })`, sections in play
+  order, one per line, from the story to the payoff. A flat-file activity uses `<Name>.sections.ts`.
+- **State passes from section to section through the URL.** Anything a later section reads from an earlier one (a
+  color she picked, a name, the toppings, how many she caught) is a param with a sensible default, so a bare section
+  link always works and a link with params reproduces an exact case. A param overrides the matching `useSaved` value.
+- The activity calls `useSections(SECTIONS)`. When `start` is set it skips the story and sets up state as if she had
+  played to there. It calls `enter(id, state)` whenever a section begins, which keeps the address bar on the current
+  moment.
+- Plan the sections and their state with the template, build them with the greybox, and never add a
+  `window.__xxxQA.jump` hook: QA scripts open section URLs instead.
+- `#/world/sections` lists every section link (for the iPad), and `tests/sections.spec.ts` fails if an activity has no
+  sections or a link doesn't land in its section.
+- Open PRs with the `open-pr` skill (`.agents/skills/open-pr/`): it puts links to the exact sections you changed, with
+  their state, into the PR.
+
 Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),
 generate backgrounds, props and character reference pictures with Codex (`codex exec -m gpt-6.1-sol -c
 model_reasoning_effort="medium" ...`, style rules from `art/STYLE.md`), build the friend's puppets, cast their voices,
@@ -377,4 +396,6 @@ QA (after `npm run build`; WebKit, because the iPad runs Safari: `npx playwright
 - Lip sync and sound can't be heard by automated browsers: listen on the iPad.
 
 
-After every task is completed, commit your work and open a pull request ready for review (not a draft: do not pass `--draft` to `gh pr create`), then assign me (neb636).
+After every task is completed, commit your work and open a pull request with the `open-pr` skill
+(`.agents/skills/open-pr/SKILL.md`): ready for review (never `--draft`), assigned to me (neb636), with "🔗 Test this"
+deep links on the PR preview to exactly what changed.

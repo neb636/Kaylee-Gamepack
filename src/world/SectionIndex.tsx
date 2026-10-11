@@ -1,0 +1,42 @@
+// #/world/sections: every country, activity and section as a link, for testing on the iPad (the home-screen app has
+// no address bar). Tests read the links from this page too (tests/sections.spec.ts).
+import { go, worldLink } from '../router'
+import { TopBar } from './kit/Chrome'
+import { places, sectionsFor } from './registry'
+
+const chip = { display: 'inline-block', padding: '10px 16px', borderRadius: 999, background: '#fff', boxShadow: 'var(--shadow)', fontWeight: 600, color: 'var(--ink)', textDecoration: 'none' } as const
+
+export function SectionIndex() {
+  return (
+    <div style={{ position: 'absolute', inset: 0, overflow: 'auto', background: 'var(--cream)', padding: 'calc(var(--safe-top) + 100px) 16px 40px' }}>
+      <TopBar icon="🌍" label="World map" onBack={() => go.world()} />
+      <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 24 }}>
+        {places.map(({ meta }) => (
+          <section key={meta.id}>
+            <h2 style={{ margin: '0 0 10px' }}>
+              {meta.emoji} {meta.name}
+            </h2>
+            {[...meta.activities, { id: 'party', name: 'Finale', icon: '🎉' }].map((a) => {
+              const def = sectionsFor(meta.id, a.id)
+              const stamps: Record<string, string> = a.id === 'party' ? { stamps: 'all' } : {}
+              return (
+                <div key={a.id} style={{ background: 'rgba(255,255,255,.6)', borderRadius: 20, padding: 12, marginBottom: 10 }}>
+                  <a data-activity={`${meta.id}/${a.id}`} href={worldLink(meta.id, a.id, undefined, stamps)} style={{ ...chip, background: 'var(--pink)', color: '#fff' }}>
+                    {a.icon} {a.name}
+                  </a>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
+                    {def?.sections.map((s, i) => (
+                      <a key={s.id} data-section={`${meta.id}/${a.id}/${s.id}`} href={worldLink(meta.id, a.id, s.id, stamps)} style={chip} title={s.params?.map((p) => `${p}: ${def.params[p].doc ?? ''}`).join('\n')}>
+                        {i + 1}. {s.name} <small style={{ opacity: 0.6 }}>/{s.id}</small>
+                      </a>
+                    )) ?? <small style={{ opacity: 0.6 }}>no sections yet</small>}
+                  </div>
+                </div>
+              )
+            })}
+          </section>
+        ))}
+      </div>
+    </div>
+  )
+}

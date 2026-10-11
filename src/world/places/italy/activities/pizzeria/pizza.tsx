@@ -195,8 +195,17 @@ export function Ticket({ order, face, done }: { order: Order; face?: string; don
   )
 }
 
-/** The pictures on a ticket, laid out neatly. */
-function demoItems(order: Order): Placed[] {
+/** Toppings by kind (from a deep link, e.g. basil,olive,olive), spread around the pizza. */
+export function itemsFromKinds(kinds: string[]): Placed[] {
+  return kinds.map((kind, i) => {
+    const a = (i / Math.max(kinds.length, 1)) * Math.PI * 2 - Math.PI / 2
+    const r = kinds.length > 1 ? 0.24 : 0
+    return { id: `${kind}-${i}`, kind, x: 0.5 + Math.cos(a) * r, y: 0.5 + Math.sin(a) * r, rot: 0 }
+  })
+}
+
+/** The pictures on a ticket, laid out neatly (also a finished pizza for deep links that start after the toppings). */
+export function demoItems(order: Order): Placed[] {
   const out: Placed[] = []
   const ringAt = (n: number, kind: string, cx: number, cy: number, r: number) => {
     for (let i = 0; i < n; i++) {

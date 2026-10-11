@@ -14,6 +14,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent, type ReactNode, type RefObject } from 'react'
 import { burst, say, sounds, SparklePuppet, useGameLoop, useSaved, type Line, type PuppetHandle } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
+import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art as italyArt } from '../../art'
@@ -29,6 +30,7 @@ import { BOAT_FEEL, BOAT_ORDER, BOATS, critters, houses, TRAFFIC, ui, type BoatK
 import { BOAT, CANAL, CLOUDS, doorX, DUCK_HOME, FACADES, FAR, FEEL, FORE, HOUSES, LANE, LANE_SPLIT, MASKSHOP, mod, PARALLAX, PINK, POSTS, STAGE, WATER_H, wrap, type Facade } from './canal'
 import { MaskShop, MaskView, type MaskData } from './MaskShop'
 import { Clouds, Foreground, House, Post, SideCanals, Skyline } from './Scenery'
+import SECTIONS from './sections'
 import { vsfx } from './sfx'
 import { setSwish, startSwish, stopSwish } from './swish'
 
@@ -93,12 +95,36 @@ function layoutFor(W: number, H: number): Layout {
 
 const shuffled = <T,>(a: readonly T[]) => [...a].sort(() => Math.random() - 0.5)
 
+type SectionId = (typeof SECTIONS.sections)[number]['id']
+/** The screen each section (sections.ts) is on. */
+const SECTION_STAGE: Record<SectionId, Stage> = { arrive: 'story', pick: 'pick', cruise: 'play', 'ride-1': 'play', 'two-friends': 'play', 'last-friend': 'play', trip: 'play', mask: 'mask', finale: 'finale' }
+/** Friends in ride order from a link (`lupa,cesare`): known ids first, the rest shuffled after them. */
+function rideOrder(list: string): number[] {
+  const ids: readonly string[] = FRIENDS.map((f) => f.id)
+  const named = [...new Set(list.split(',').map((x) => ids.indexOf(x.trim())))].filter((i) => i >= 0)
+  return [...named, ...shuffled([0, 1, 2, 3].filter((i) => !named.includes(i)))]
+}
+/** A mask for links that start after the mask shop (her own one is saved once she paints it). */
+const SAMPLE_MASK: MaskData = {
+  strokes: [
+    { c: '#FF8FB8', d: 'M60 120 L180 90 L280 110' },
+    { c: '#B9A6F5', d: 'M50 200 L170 220 L270 190' },
+    { c: '#F2B872', glitter: true, d: 'M90 70 L250 70' },
+  ],
+  gems: [
+    { kind: 'heart', x: 300, y: 92 },
+    { kind: 'diamond', x: 200, y: 214 },
+  ],
+}
+
 export function Venice({ onDone, setProgress }: ActivityProps) {
   const root = useRef<HTMLDivElement>(null)
   const [layout, setLayout] = useState<Layout | null>(null)
-  const [stage, setStage] = useState<Stage>('story')
-  const [boat, setBoat] = useState<BoatKind>('gondola')
-  const boatRef = useRef<BoatKind>('gondola')
+  const { start, param, enter } = useSections(SECTIONS)
+  // A deep link starts on its section's screen (no story); the rest of its state is seeded once below.
+  const [stage, setStage] = useState<Stage>(() => (start ? SECTION_STAGE[start] : 'story'))
+  const [boat, setBoat] = useState<BoatKind>(() => (start ? (param('boat') as BoatKind) : 'gondola'))
+  const boatRef = useRef<BoatKind>(boat)
   boatRef.current = boat
   const [kinds, setKinds] = useState<[number, number]>([0, 1])
   const [stars, setStars] = useState(0)
@@ -108,6 +134,9 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
   const [goFacade, setGoFacade] = useState<Facade>('butter')
   const [delivered, setDelivered] = useState<number[]>([])
   const [mask, setMask] = useSaved<MaskData | null>('italy:venice-mask', null)
+  // A link's mask param wins over the saved mask until she paints a new one.
+  const [maskOverride, setMaskOverride] = useState<MaskData | null>(() => (!start ? null : param('mask') === 'sample' ? SAMPLE_MASK : param('mask') === 'plain' ? { strokes: [], gems: [] } : null))
+  const finaleMask = maskOverride ?? mask ?? (start ? SAMPLE_MASK : null)
   const [trafficKind, setTrafficKind] = useState<TrafficKind>('vaporetto')
   const [spraying, setSpraying] = useState(false)
   useEffect(() => setProgress(Math.min(stars, TOTAL), TOTAL), [stars])
@@ -129,7 +158,10 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
   useEffect(() => stopSwish, [])
 
   // ---- Mutable game state (the loop reads and writes it every frame; React never sees it). ----
-  const order = useRef(shuffled([0, 1, 2, 3]))
+  /** Friends in ride order (when she picks who goes first, the order is swapped to match). */
+  const order = useRef(start ? rideOrder(param('friends')) : shuffled([0, 1, 2, 3]))
+  /** Marks the start of a section: the address bar then reproduces this moment. */
+  const mark = (id: SectionId) => enter(id, { boat: boatRef.current, friends: order.current.map((i) => FRIENDS[i].id).join(','), mask: id === 'finale' && maskOverride ? param('mask') : undefined })
   const g = useRef({
     t: 0,
     bx: 360,
@@ -159,7 +191,7 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
     spray: [] as Particle[],
     posts: POSTS.map(() => ({ a: 0, w: 0 })),
     // The director
-    stage: 'story' as Stage,
+    stage: stage as Stage,
     playT: 0,
     rides: 0,
     actors: [0, 1].map((): Actor => ({ kind: 0, phase: 'none', house: -1, outDoor: -1, t: 0, fromX: 0, fromY: 0, tap: -1 })),
@@ -358,6 +390,10 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
   const startRide = (slot: number) => {
     const s = g.current
     const a = s.actors[slot]
+    // She picked who goes first: keep `order` in ride order (links and the finale read it).
+    const o = order.current
+    if (s.rides === 1 && a.kind === o[2]) [o[1], o[2]] = [o[2], o[1]]
+    if (s.rides === 0) mark('ride-1')
     s.rider = slot
     s.target = chooseTarget(a.house)
     s.minDist = Math.abs(wrap(doorX(s.target) - s.bx, CANAL))
@@ -379,11 +415,13 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
     setLanterns((n) => n + 1)
     setDelivered((d) => [...d, a.kind])
     if (s.rides === 1) talk(V.lantern, true)
+    if (s.rides === RIDES - 1) mark('last-friend')
     s.spawnAt = s.playT + 2.2
   }
   const startMaskTrip = () => {
     const s = g.current
     s.maskTrip = true
+    mark('trip')
     s.target = MASKSHOP
     s.minDist = Math.abs(wrap(doorX(MASKSHOP) - s.bx, CANAL))
     s.otherWays = 0
@@ -402,34 +440,44 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
     talk(V.maskArrive)
   }
 
-  // QA hook: jump straight to a moment (screens), and read where the boat is.
+  // Story, boat picker, mask shop and night begin with their screen.
   useEffect(() => {
-    if (!navigator.webdriver) return
-    const w = window as unknown as { __veniceQA?: { jump: (to: string) => void } }
-    w.__veniceQA = {
-      jump: (to: string) => {
-        const s = g.current
-        if (to === 'pick') return void ((s.stage = 'pick'), setStage('pick'))
-        s.stage = 'play'
-        setStage('play')
-        if (to === 'ride') {
-          placeFriend(0, order.current[0], 100, 200, 1)
-          s.actors[0].phase = 'riding'
-          startRide(0)
-        } else if (to === 'trip') {
-          s.rides = RIDES
-          setLanterns(RIDES)
-          startMaskTrip()
-        } else if (to === 'mask') reachMaskShop()
-        else if (to === 'finale') {
-          setDelivered(order.current.slice(0, 3))
-          setLanterns(4)
-          s.stage = 'finale'
-          setStage('finale')
-        }
-      },
-    }
-    return () => void delete w.__veniceQA
+    if (stage === 'story') mark('arrive')
+    else if (stage === 'pick') mark('pick')
+    else if (stage === 'mask') mark('mask')
+    else if (stage === 'finale') mark('finale')
+  }, [stage])
+
+  // A deep link: set everything up as if she had played up to its section (once, even under StrictMode).
+  const seeded = useRef(false)
+  useEffect(() => {
+    if (!start || seeded.current) return
+    seeded.current = true
+    const s = g.current
+    const o = order.current
+    const done = ({ 'two-friends': 1, 'last-friend': 2, trip: RIDES, mask: RIDES, finale: RIDES } as Record<string, number>)[start] ?? 0
+    s.rides = done
+    // Reaching the mask shop is a star and a lantern; the finale has them all.
+    const extra = start === 'mask' ? 1 : 0
+    setStars(start === 'finale' ? TOTAL : done + extra)
+    setLanterns(start === 'finale' ? 4 : done + extra)
+    setDelivered(o.slice(0, done))
+    if (start === 'cruise') {
+      mark('cruise')
+      talk(V.grab)
+    } else if (start === 'ride-1') {
+      placeFriend(0, o[0], 100, 200, 1)
+      s.actors[0].phase = 'riding'
+      startRide(0)
+    } else if (start === 'two-friends') {
+      mark('two-friends')
+      s.spawnAt = 0 // the loop puts both friends out right away
+    } else if (start === 'last-friend') {
+      mark('last-friend')
+      placeFriend(0, o[2], 320, 700, 1)
+      talk(V.firstFriend)
+    } else if (start === 'trip') startMaskTrip()
+    else if (start === 'mask') talk(V.maskArrive)
   }, [])
 
   useGameLoop((dt) => {
@@ -609,6 +657,7 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
           talk(V.firstFriend)
         } else if (s.rides === 1) {
           // Two friends wave at once, one each way: she picks who goes first.
+          mark('two-friends')
           placeFriend(0, order.current[1], 380, 900, -1)
           placeFriend(1, order.current[2], 380, 900, 1)
           talk(V.twoFriends)
@@ -868,13 +917,16 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
 
   const pickBoat = (k: BoatKind) => {
     setBoat(k)
+    boatRef.current = k
     g.current.stage = 'play'
     setStage('play')
+    mark('cruise')
     talk(V.boat[k])
     talk(V.grab, true)
   }
   const maskDone = (m: MaskData) => {
     setMask(m)
+    setMaskOverride(null)
     setStars((n) => n + 1)
     g.current.stage = 'finale'
     // The night starts once "What a beautiful mask!" has been said in full.
@@ -951,7 +1003,7 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
               </div>
             )
           })}
-          <Boat kind={boat} boatRef={boatEl} hullRef={hullEl} ringRef={ringEl} ginoRef={ginoRef} sparkleRef={sparkleRef} rowRef={rowRef} gino={gino} mask={night ? mask : null} night={night} />
+          <Boat kind={boat} boatRef={boatEl} hullRef={hullEl} ringRef={ringEl} ginoRef={ginoRef} sparkleRef={sparkleRef} rowRef={rowRef} gino={gino} mask={night ? finaleMask : null} night={night} />
           <Layer refFn={layerRef('frontPosts')} period={CANAL} z={4} tiles={(tile) => POSTS.map((p, i) => (p.lane === 'front' ? <Post key={i} x={p.x} lane={p.lane} postRef={(el) => void (postEls.current[tile][i] = el)} /> : null))} />
           {/* The duck family, in front of the front lane. */}
           {[0, 1, 2].map((i) => {

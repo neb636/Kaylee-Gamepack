@@ -8,6 +8,7 @@ import { WinCeremony } from '../shell/WinCeremony'
 import theaterArt from './assets/theater.webp'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
+import { SectionLinkProvider, type SectionLink } from './kit/sections'
 import { Theater } from './kit/Theater'
 import { findPlace, type PlaceEntry } from './registry'
 import { addStamp, markVisited, resetPassport, setStamps, usePassport } from './stamps'
@@ -40,9 +41,13 @@ const trophyMeta = (meta: PlaceMeta): GameMeta => ({
   trophyTitle: meta.trophyTitle,
 })
 
-function RunningPlace({ entry, activity }: { entry: PlaceEntry; activity?: string }) {
+function RunningPlace({ entry, activity, section, params }: { entry: PlaceEntry; activity?: string; section?: string; params: Record<string, string> }) {
   const { meta } = entry
   const Place = useMemo(() => lazy(entry.load), [entry])
+  // A test link to a finale (#/world/<place>/party?stamps=all) collects every stamp first, before the passport is read.
+  useState(() => params.stamps === 'all' && setStamps(meta.id, meta.activities.map((a) => a.id)))
+  const query = new URLSearchParams(params).toString()
+  const link: SectionLink = useMemo(() => ({ place: meta.id, activity, section, params }), [meta.id, activity, section, query])
   const passport = usePassport()
   const stamps = passport.stamps[meta.id] ?? []
   const [won, setWon] = useState(false)
@@ -105,8 +110,11 @@ function RunningPlace({ entry, activity }: { entry: PlaceEntry; activity?: strin
             }
           />
         ) : (
-          // Leaving an activity must discard its pending stamp/video before another one opens.
-          <Place key={activity ?? 'map'} meta={meta} activity={activity} stamps={stamps} openActivity={openActivity} backToMap={backToMap} earnStamp={earnStamp} onWin={onWin} setProgress={setProgress} />
+          // Leaving an activity must discard its pending stamp/video before another one opens, and a new section link
+          // (#/world/<place>/<activity>/<section>?<state>) starts the activity again from there.
+          <SectionLinkProvider value={link}>
+            <Place key={`${activity ?? 'map'}/${section ?? ''}?${query}`} meta={meta} activity={activity} stamps={stamps} openActivity={openActivity} backToMap={backToMap} earnStamp={earnStamp} onWin={onWin} setProgress={setProgress} />
+          </SectionLinkProvider>
         )}
       </Suspense>
 
@@ -163,10 +171,10 @@ function RunningPlace({ entry, activity }: { entry: PlaceEntry; activity?: strin
   )
 }
 
-export function PlaceFrame({ id, activity }: { id: string; activity?: string }) {
+export function PlaceFrame({ id, activity, section, params }: { id: string; activity?: string; section?: string; params: Record<string, string> }) {
   const entry = findPlace(id)
   useEffect(() => {
     if (!entry) go.world()
   }, [entry])
-  return entry ? <RunningPlace key={id} entry={entry} activity={activity} /> : null
+  return entry ? <RunningPlace key={id} entry={entry} activity={activity} section={section} params={params} /> : null
 }

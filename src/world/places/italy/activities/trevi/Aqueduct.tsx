@@ -24,7 +24,23 @@ type Pt = { x: number; y: number }
 /** Where Rome is in the background pictures (fraction of the picture). */
 const ROME = { wide: { x: 0.925, y: 0.37 }, tall: { x: 0.85, y: 0.37 } }
 
-export function Aqueduct({ onStep, onDone, showWord }: { onStep: () => void; onDone: () => void; showWord: (w: WordId) => void }) {
+/** The valley's parts, in play order (sections.ts). */
+export type AqueductPart = 'spring' | 'arches-1' | 'arches-2' | 'water-on'
+
+export function Aqueduct({
+  start,
+  onSection,
+  onStep,
+  onDone,
+  showWord,
+}: {
+  /** Start mid-way (a deep link): earlier parts are done for her. */
+  start?: Exclude<AqueductPart, 'spring'>
+  onSection: (part: AqueductPart) => void
+  onStep: () => void
+  onDone: () => void
+  showWord: (w: WordId) => void
+}) {
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(box)
   const landscape = useLandscape()
@@ -35,13 +51,16 @@ export function Aqueduct({ onStep, onDone, showWord }: { onStep: () => void; onD
 
   const lupa = useRef<PuppetHandle>(null)
   const sparkle = useRef<PuppetHandle>(null)
-  const [phase, setPhase] = useState<Phase>('spring')
-  const [prompt, setPrompt] = useState<{ text: string; speak: boolean } | null>({ text: T.listen, speak: true })
+  const [phase, setPhase] = useState<Phase>(start === 'water-on' ? 'waterOn' : start ? 'build' : 'spring')
+  const [prompt, setPrompt] = useState<{ text: string; speak: boolean } | null>({
+    text: start === 'water-on' ? T.waterOn : start === 'arches-2' ? T.round2 : start ? T.drag : T.listen,
+    speak: true,
+  })
   const [taps, setTaps] = useState(0)
   const [rockHint, setRockHint] = useState(false)
   const [rings, setRings] = useState<{ id: number; x: number; y: number }[]>([])
-  const [round, setRound] = useState(0)
-  const [placed, setPlaced] = useState<number[]>([])
+  const [round, setRound] = useState(start === 'arches-2' || start === 'water-on' ? 1 : 0)
+  const [placed, setPlaced] = useState<number[]>(() => (start === 'water-on' ? ROUNDS.flatMap((r) => r.gaps) : start === 'arches-2' ? ROUNDS[0].gaps : []))
   const [trial, setTrial] = useState<{ bay: number; kind: Kind } | null>(null)
   const [hidden, setHidden] = useState<Kind[]>([]) // tray arches that are out of the tray (dragged away)
   const [back, setBack] = useState<{ kind: Kind; dx: number; dy: number; n: number } | null>(null)
@@ -65,6 +84,11 @@ export function Aqueduct({ onStep, onDone, showWord }: { onStep: () => void; onD
     if (!camSet.current || phase === 'spring' || phase === 'build' || phase === 'waterOn') cam.set(phase === 'build' && round === 1 ? g.cam2 : g.cam1)
     camSet.current = true
   }, [g?.A, g?.cam1, g?.cam2])
+  useEffect(() => {
+    if (phase === 'spring') onSection('spring')
+    else if (phase === 'build') onSection(round === 0 ? 'arches-1' : 'arches-2')
+    else if (phase === 'waterOn') onSection('water-on')
+  }, [phase, round])
   const camPx = useTransform(cam, (c) => -c * (G.current?.A ?? 0))
 
   useEffect(() => {

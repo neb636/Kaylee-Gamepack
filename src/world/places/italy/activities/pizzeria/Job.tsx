@@ -12,7 +12,7 @@ import { useWord, type WordId } from '../../WordCard'
 import { FrontRoom } from './FrontRoom'
 import { Kitchen, Raffaele, type StationId } from './layout'
 import { Oven } from './Oven'
-import { cheeseRain, PizzaBase, PizzaToppings, RAW, Ticket, type Order, type PizzaState, type Sauce, type Topping } from './pizza'
+import { cheeseRain, demoItems, itemsFromKinds, PizzaBase, PizzaToppings, RAW, Ticket, type Order, type PizzaState, type Sauce, type Topping } from './pizza'
 import { Cutter, Dough, PickSauce, SauceSwirl, Toppings, toppingPrompt } from './stations'
 
 const P = L.pizza
@@ -39,14 +39,48 @@ export interface JobSpec {
 }
 
 type Phase = 'order' | 'kitchen' | 'oven' | 'cut' | 'serve'
+/** A moment in one pizza: the order, a kitchen step, or a later phase (deep links start and report these). */
+export type JobAt = 'order' | Step | Exclude<Phase, 'order' | 'kitchen'>
+/** Where a deep link starts this pizza (sections.ts): everything before `at` is already done for her. */
+export interface JobStart {
+  at: string
+  sauce: Sauce
+  /** Topping kinds already on (empty: what the order asks for). */
+  toppings: string[]
+}
+
+/** The phase, step and pizza a deep link starts from, as if she had played up to there. */
+function seed(spec: JobSpec, start?: JobStart): { phase: Phase; step: number; pizza: PizzaState } {
+  if (!start || start.at === 'order') return { phase: 'order', step: 0, pizza: RAW }
+  const later = start.at === 'oven' || start.at === 'cut' || start.at === 'serve'
+  const phase: Phase = start.at === 'cut' && !spec.cut ? 'serve' : later ? (start.at as Phase) : 'kitchen'
+  const step = later ? spec.steps.length : Math.max(0, spec.steps.indexOf(start.at as Step))
+  let pizza: PizzaState = RAW
+  for (const s of spec.steps.slice(0, step)) {
+    if (s === 'sauce') pizza = { ...pizza, sauce: start.sauce }
+    else if (s === 'quick') pizza = { ...pizza, sauce: 'red', items: cheeseRain() }
+    else if (s === 'cheese') pizza = { ...pizza, items: [...pizza.items, ...cheeseRain()] }
+    else if (s === 'toppings') {
+      const kinds = start.toppings.length ? start.toppings : spec.order.free ? ['basil', 'olive', 'mushroom', 'tomato'] : []
+      pizza = { ...pizza, items: [...pizza.items, ...(kinds.length ? itemsFromKinds(kinds) : demoItems(spec.order))] }
+    }
+  }
+  if (phase === 'cut' || phase === 'serve') pizza = { ...pizza, bake: [1, 1, 1, 1] }
+  if (phase === 'serve') pizza = { ...pizza, cuts: spec.cut === 1 ? [90] : spec.cut === 2 ? [90, 0] : [] }
+  return { phase, step, pizza }
+}
+
+/** The toppings she put on (not Bruno's cheese rain), for the deep link to this moment. */
+export const toppingKinds = (pizza: PizzaState) => pizza.items.filter((it) => !it.id.startsWith('cheese-')).map((it) => it.kind)
 
 const STATION: Record<Step, StationId> = { dough: 'dough', pickSauce: 'sauce', sauce: 'sauce', cheese: 'toppings', quick: 'dough', toppings: 'toppings' }
 
-export function Job({ spec, onDone }: { spec: JobSpec; onDone: (pizza: PizzaState) => void }) {
-  const [phase, setPhase] = useState<Phase>('order')
-  const [step, setStep] = useState(0)
-  const [pizza, setPizza] = useState<PizzaState>(RAW)
-  const [sauce, setSauce] = useState<Sauce>('red')
+export function Job({ spec, start, onAt, onDone }: { spec: JobSpec; start?: JobStart; onAt?: (at: JobAt, pizza: PizzaState, sauce: Sauce) => void; onDone: (pizza: PizzaState) => void }) {
+  const [first] = useState(() => seed(spec, start))
+  const [phase, setPhase] = useState<Phase>(first.phase)
+  const [step, setStep] = useState(first.step)
+  const [pizza, setPizza] = useState<PizzaState>(first.pizza)
+  const [sauce, setSauce] = useState<Sauce>(start?.sauce ?? 'red')
   const chef = useRef<PuppetHandle>(null)
   const [word, showWord] = useWord()
   const alive = useAlive()
@@ -56,6 +90,9 @@ export function Job({ spec, onDone }: { spec: JobSpec; onDone: (pizza: PizzaStat
     if (step + 1 < spec.steps.length) setStep(step + 1)
     else setPhase('oven')
   }
+
+  // Each new step or phase is a moment a deep link can return to.
+  useEffect(() => onAt?.(phase === 'kitchen' ? spec.steps[step] : phase, pizza, sauce), [phase, step])
 
   if (phase === 'order') return <Order spec={spec} onStart={() => setPhase('kitchen')} showWord={showWord} word={word} />
 
