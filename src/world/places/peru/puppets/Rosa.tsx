@@ -1,42 +1,73 @@
-// Rosa the pink river dolphin (a boto): a layered SVG puppet in side view, facing right, traced from her reference
-// picture (art/source/world/peru/rosa.png, drawn in the same coordinates). She breathes, blinks and watches her finger;
-// her tail flukes beat on springs (faster while she swims), her flipper paddles, and her bendy neck turns her head (real
-// botos can turn their heads, unlike sea dolphins). Her long lower beak is hinged, so it opens with her voice.
-// Actions: spout (a puff out of her blowhole), jump, nod, giggle, cheer.
+// Rosa the pink river dolphin (a boto): a layered SVG puppet in side view, facing right, in the flat art style.
+// Her body is one outline drawn every frame along a bendy spine, so she swims like a real dolphin: a wave runs from her
+// shoulders down to her tail and the flukes whip up and down on a spring at the end of it. Her round melon head, long
+// beak and cream belly flow into each other under one ink line. She breathes, blinks and watches her finger; her
+// flipper paddles; her neck turns her head (real botos can turn their heads, unlike sea dolphins); her lower beak is
+// hinged, so it opens with her voice. Actions: spout (a puff out of her blowhole), jump, nod, giggle, cheer.
 import { forwardRef, useId, useRef, type CSSProperties } from 'react'
-import { bell, clamp, lerp, setT, show, smooth, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../sdk'
+import { bell, clamp, lerp, setA, setT, show, smooth, span, spring, usePuppet, wobble, type PuppetHandle } from '../../../../sdk'
 import { inkPass, useInk } from '../../../kit/ink'
 
 export const ROSA_ACTIONS = { spout: 1.3, jump: 1.5, nod: 0.7, giggle: 1.1, cheer: 1.3 }
 
 const INK = '#2B2330'
 const PINK = '#FF7FAE'
-const SHINE = '#FFB3CF'
-const BELLY = '#FFC6AE'
-const BLUSH = '#FF5C95'
-const MOUTH = '#C93F72'
+const SHINE = '#FFB8D2'
+const BELLY = '#FFD0BC'
+const BLUSH = '#FF4F8E'
+const MOUTH = '#B7356A'
+const TONGUE = '#FF8FA8'
 const W = 11
 
-// Key points (the reference's own pixels; viewBox 0 300 1260 640).
-const TAIL: [number, number] = [300, 616] // the flukes turn here
-const NECK: [number, number] = [800, 580] // the head turns here
-const HINGE: [number, number] = [1004, 597] // the lower beak opens here
-const FLIP: [number, number] = [780, 700] // the flipper paddles here
 export const ROSA_VIEW = { x: 0, y: 300, w: 1260, h: 640 }
 /** The blowhole, the beak tip and the middle of her body (for splashes and spouts, in viewBox units). */
-export const ROSA_POINTS = { blowhole: [905, 338], beak: [1240, 556], middle: [640, 590] } as const
+export const ROSA_POINTS = { blowhole: [902, 344], beak: [1244, 552], middle: [640, 590] } as const
 
-const BODY = 'M200 600 C300 552 420 500 520 470 C620 440 720 424 800 418 L846 704 C770 716 690 724 620 720 C500 714 380 690 300 664 C260 652 225 640 200 630Z'
-const BELLY_PATH = 'M200 622 C300 650 420 686 560 702 C660 712 760 706 850 690 L850 740 L200 740Z'
-const HEAD = 'M756 472 C790 380 860 326 940 328 C1020 332 1068 400 1068 470 C1068 488 1072 500 1086 508 C1130 525 1190 535 1226 542 C1248 547 1251 566 1232 572 C1170 574 1090 582 1006 594 C960 642 902 690 840 705 C790 714 760 700 748 680Z'
-const THROAT = 'M740 676 C800 690 860 680 910 655 C950 632 980 610 1006 594 L1006 760 L740 760Z'
-const JAW = 'M-6 -2 C70 -6 160 -18 222 -27 C240 -29 244 -13 229 -7 C180 12 92 32 20 42 C2 44 -16 24 -6 -2Z'
-const FLUKE_UP = 'M290 590 C220 540 130 490 38 478 C14 475 10 494 24 506 C64 548 96 604 150 632 C200 630 260 620 290 614Z'
-const FLUKE_DOWN = 'M160 620 C118 676 76 738 44 794 C36 808 50 818 64 811 C128 788 200 720 252 650 C230 640 190 628 160 620Z'
-const STOCK = 'M190 598 C230 588 280 572 330 556 L346 668 C300 660 240 646 190 632Z'
-const FLIPPER = 'M712 688 C690 760 628 842 590 882 C578 898 594 912 616 905 C700 878 790 800 846 690Z'
+// ---- The spine: s = 0 at the root of the tail, s = 1 at the neck. ----
+const N = 22
+const X0 = 330
+const X1 = 830
+const restY = (s: number) => 612 - 30 * s - 18 * Math.sin(Math.PI * s)
+/** Half-thickness above the spine: a slim tail stock swelling to a round back that rises into her forehead. */
+const top = (s: number) => 24 + 112 * smooth(s / 0.75) + 42 * Math.max(0, (s - 0.72) / 0.28) ** 2
+/** Half-thickness below the spine: a round tummy that tucks in a little at the throat. */
+const under = (s: number) => 24 + 128 * smooth(s / 0.55) - 26 * smooth((s - 0.6) / 0.4)
+/** How much of the underside is cream (countershading), fading out before the tail. */
+const cream = (s: number) => under(s) * 0.58 * smooth((s - 0.04) / 0.5)
+const NECK: [number, number] = [X1, restY(1)]
+const REST_TAIL = Math.atan2(restY(1 / N) - restY(0), (X1 - X0) / N)
+const REST_NECK = Math.atan2(restY(1) - restY(1 - 1 / N), (X1 - X0) / N)
 
-type Part = 'root' | 'tail' | 'head' | 'jaw' | 'flipper' | 'eyeOpen' | 'pupil' | 'eyeHappy' | 'spout' | 'blush'
+type Pt = [number, number]
+/** A smooth path through points (Catmull-Rom as cubic Béziers). `move` starts a new path, otherwise it continues. */
+function through(pts: Pt[], move: boolean) {
+  let d = move ? `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}` : `L${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)]
+    const p1 = pts[i]
+    const p2 = pts[i + 1]
+    const p3 = pts[Math.min(pts.length - 1, i + 2)]
+    d += `C${(p1[0] + (p2[0] - p0[0]) / 6).toFixed(1)} ${(p1[1] + (p2[1] - p0[1]) / 6).toFixed(1)} ${(p2[0] - (p3[0] - p1[0]) / 6).toFixed(1)} ${(p2[1] - (p3[1] - p1[1]) / 6).toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`
+  }
+  return d
+}
+
+// ---- Rigid parts, each drawn around the point where it joins the body. ----
+/** The flukes seen from the side: one little fork at the end of the tail stock, origin at the tail root. */
+const FLUKES = 'M34 -20 C0 -26 -40 -60 -86 -112 C-100 -128 -126 -126 -124 -100 C-120 -62 -100 -24 -78 0 C-100 24 -120 62 -124 100 C-126 126 -100 128 -86 112 C-40 60 0 26 34 20Z'
+/** The flipper, hanging down and back from its shoulder (origin), which hides inside the body. */
+const FLIPPER = 'M-40 -24 C-30 50 -60 130 -104 190 C-118 210 -100 226 -78 216 C10 176 64 100 60 -20Z'
+/** Head in her rest pose (absolute units): the back edge hides inside the body; a round melon; a soft scoop into the
+ *  beak; the upper beak back along the mouth line to the corner; then the round chin. The lower beak is the jaw. */
+const HEAD = 'M716 474 L800 440 L812 418 L830 404 C846 395 858 382 868 370 C890 348 912 334 940 334 C1018 332 1064 384 1072 440 C1078 478 1100 498 1142 510 C1184 520 1214 526 1234 532 C1256 538 1256 562 1232 564 C1160 570 1070 582 996 590 C1004 612 1034 638 1012 645 C990 652 950 668 920 686 C886 706 846 708 830 708 L760 704Z'
+const HEAD_CREAM = 'M740 634 C820 640 900 636 960 622 C985 615 998 606 1004 598 L1070 598 L1070 760 L740 760Z'
+/** The mouth corner, where the jaw hinges. */
+const HINGE: Pt = [1000, 592]
+/** The lower beak around the hinge: its top edge is the mouth line, its underside sweeps back into the chin. */
+const JAW = 'M-24 -4 C70 -8 140 -16 200 -23 C220 -25 226 -8 206 -3 C150 10 92 28 34 46 C4 58 -36 56 -52 34 C-60 18 -44 -2 -24 -4Z'
+const JAW_CREAM = 'M-70 22 C0 18 120 2 260 -14 L260 80 L-70 80Z'
+
+type Part = 'root' | 'body' | 'bodyInk' | 'belly' | 'shine' | 'shine2' | 'tail' | 'head' | 'jaw' | 'flipper' | 'eyeOpen' | 'pupil' | 'eyeHappy' | 'spout' | 'blush' | 'smile'
 
 export interface RosaProps {
   height: string
@@ -50,9 +81,10 @@ export interface RosaProps {
 export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, style, speed, label = 'Rosa' }, ref) {
   const id = useId().replace(/:/g, '')
   const ink = useInk<Part>()
-  const st = useRef({ tail: spring(90, 8), flip: spring(70, 7), head: spring(80, 10), jaw: 0, phase: 0 }).current
+  const st = useRef({ tail: spring(110, 9), flip: spring(70, 7), head: spring(80, 10), bend: spring(60, 9), jaw: 0, phase: 0, swim: 0 }).current
   const speedRef = useRef(speed)
   speedRef.current = speed
+  const pts = useRef({ spine: [] as Pt[], up: [] as Pt[] }).current
 
   const { svg, part } = usePuppet<Part>(ref, {
     voice: 'rosa',
@@ -64,35 +96,40 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
       const q = f.p
       const act = f.action
       const e = bell(q)
-      const v = clamp(speedRef.current?.() ?? 0)
+      st.swim += (clamp(speedRef.current?.() ?? 0) - st.swim) * Math.min(1, dt * 3)
+      const v = st.swim
 
-      // Swimming: her tail beats faster and wider the faster she goes; the body rocks a little against it.
-      st.phase += dt * (2.2 + v * 5)
-      const beat = Math.sin(st.phase)
+      // Swimming: a wave runs from her shoulders to her tail, bigger and quicker the faster she goes.
+      st.phase += dt * (2.3 + v * 4.5)
       const breath = Math.sin(t * 1.8)
+      let amp = 30 + v * 34
       let sx = 1 + breath * 0.008
       let sy = 1 - breath * 0.012
-      const x = 0
-      let y = beat * (6 + v * 6)
-      let rot = -beat * (1.5 + v * 1.5)
-      let tail = beat * (10 + v * 16)
-      let flip = Math.sin(st.phase - 0.8) * (6 + v * 8)
-      let head = Math.sin(t * 1.1) * 2 + look.y * 6 + beat * 1.5
-      let jaw = f.mouth * 16
+      let y = Math.sin(st.phase + 1.2) * (4 + v * 4)
+      let rot = Math.sin(st.phase + 0.6) * (0.8 + v)
+      let arch = 0 // + bows her back up (both ends dip), - curls her nose and tail up
+      let curl = 0 // + tail down, - tail up
+      let shimmy = 0
+      let flip = Math.sin(st.phase - 0.8) * (8 + v * 10)
+      let head = Math.sin(t * 1.1) * 2 + look.y * 6
+      let jaw = f.mouth * 18
       let happy = false
       let spout = 0
       let blush = 1
+      let kick = 0 // extra fluke flick
 
       if (act === 'spout') {
-        // Up for air: a small lift, the head tips up, then "pfff" out of the blowhole.
+        // Up for air: a small lift, the head tips up, the tail sinks, then "pfff" out of the blowhole.
         const up = bell(span(q, 0, 0.8))
         y -= up * 30
-        head -= up * 8
+        head -= up * 9
+        curl += up * 40
         spout = bell(span(q, 0.15, 0.9))
-        tail += Math.sin(q * Math.PI * 4) * 10 * e
+        kick = Math.sin(q * Math.PI * 4) * 14 * e
         if (q > 0.3) happy = true
       } else if (act === 'jump') {
-        // Anticipation (a dip and a coil of the tail), a big arc nose-up then nose-down, a stretch on the way out.
+        // Anticipation (a dip, the tail coils down), a big arc nose-up then nose-down with her back bowed, a stretch
+        // on the way out, and a wobble as she lands.
         const dip = bell(span(q, 0, 0.18))
         const air = span(q, 0.18, 0.88)
         const land = wobble(span(q, 0.88, 1), 2)
@@ -100,20 +137,26 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
         rot += air > 0 && air < 1 ? lerp(-38, 42, smooth(air)) : 0
         sx *= 1 + bell(air) * 0.06 - dip * 0.04 + land * 0.05
         sy *= 1 - bell(air) * 0.05 + dip * 0.06 - land * 0.06
-        tail += dip * -28 + bell(air) * 30 * Math.sin(q * Math.PI * 6)
-        flip -= bell(air) * 26
+        curl += dip * 70 - land * 40
+        arch += bell(air) * 70
+        amp *= 1 - bell(air) * 0.7
+        kick = air > 0 && air < 1 ? Math.sin(air * Math.PI * 3) * 26 : 0
+        flip -= bell(air) * 30
         happy = air > 0.1
         blush = 1 + bell(air) * 0.3
       } else if (act === 'nod') {
-        head += Math.sin(q * Math.PI * 2) * 9
+        head += Math.sin(q * Math.PI * 2) * 10
+        curl -= Math.sin(q * Math.PI * 2) * 12
       } else if (act === 'giggle') {
-        rot += Math.sin(q * Math.PI * 9) * 3 * e
+        // A wriggle from nose to tail.
+        rot += Math.sin(q * Math.PI * 9) * 2 * e
         y -= Math.abs(Math.sin(q * Math.PI * 9)) * 10 * e
-        jaw = Math.max(jaw, 10 * e)
-        tail += Math.sin(q * Math.PI * 9) * 18 * e
+        shimmy = 26 * e
+        jaw = Math.max(jaw, 12 * e)
         happy = true
         blush = 1 + e * 0.35
       } else if (act === 'cheer') {
+        // Crouch (tail curls under), pop up with her back bowed and her tail slapping, land with a wobble.
         const crouch = bell(span(q, 0, 0.2))
         const air = bell(span(q, 0.2, 0.75))
         const land = wobble(span(q, 0.75, 1), 2)
@@ -121,21 +164,82 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
         rot -= air * 10
         sx *= 1 + crouch * 0.05 - air * 0.03 + land * 0.04
         sy *= 1 - crouch * 0.06 + air * 0.05 - land * 0.05
-        tail += Math.sin(q * Math.PI * 8) * 30 * e
-        flip -= air * 30
-        jaw = Math.max(jaw, 14 * e)
+        curl += crouch * 50 - air * 30
+        arch += air * 40
+        kick = Math.sin(q * Math.PI * 8) * 30 * e
+        flip -= air * 34
+        jaw = Math.max(jaw, 16 * e)
         happy = true
       }
 
-      const cx = 640
-      const cy = 620
-      setT(p.root, `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(2)} ${cx} ${cy}) translate(${cx} ${cy}) scale(${sx.toFixed(4)} ${sy.toFixed(4)}) translate(${-cx} ${-cy})`)
-      setT(p.tail, `rotate(${st.tail.step(tail, dt).toFixed(2)} ${TAIL[0]} ${TAIL[1]})`)
-      setT(p.flipper, `rotate(${st.flip.step(flip, dt).toFixed(2)} ${FLIP[0]} ${FLIP[1]})`)
-      setT(p.head, `rotate(${st.head.step(head, dt).toFixed(2)} ${NECK[0]} ${NECK[1]})`)
+      // The spine for this frame: the swim wave (held still at the neck), plus arch, curl and shimmy on springs. Her
+      // nods and looks bend the front of the spine too, so the head and the body under it always turn together.
+      const bend = st.bend.step(arch, dt)
+      const nod = Math.tan((st.head.step(head, dt) * Math.PI) / 180) * ((X1 - X0) / 0.8)
+      const spine = pts.spine
+      const up = pts.up
+      for (let i = 0; i <= N; i++) {
+        const s = i / N
+        const r = 1 - s
+        let d = amp * r ** 1.7 * Math.sin(st.phase - 2.6 * r)
+        d += bend * (((s - 0.55) / 0.55) ** 2 - 0.3)
+        d += curl * r ** 2.2
+        d += nod * Math.max(0, s - 0.6) ** 2
+        d += shimmy * Math.sin(t * 26 - s * 7) * (0.3 + r * 0.7)
+        spine[i] = [X0 + (X1 - X0) * s, restY(s) + d]
+      }
+      const top0: Pt[] = []
+      const bot: Pt[] = []
+      const inner: Pt[] = []
+      const ridge: Pt[] = []
+      const ridge2: Pt[] = []
+      for (let i = 0; i <= N; i++) {
+        const s = i / N
+        const a = spine[Math.max(0, i - 1)]
+        const b = spine[Math.min(N, i + 1)]
+        const dx = b[0] - a[0]
+        const dy = b[1] - a[1]
+        const len = Math.hypot(dx, dy) || 1
+        const n: Pt = [dy / len, -dx / len] // points up, out of her back
+        up[i] = n
+        const [px, py] = spine[i]
+        top0.push([px + n[0] * top(s), py + n[1] * top(s)])
+        bot.push([px - n[0] * under(s), py - n[1] * under(s)])
+        if (s >= 0.08) inner.push([px - n[0] * (under(s) - cream(s)), py - n[1] * (under(s) - cream(s))])
+        if (s >= 0.36 && s <= 0.72) ridge.push([px + n[0] * top(s) * 0.66, py + n[1] * top(s) * 0.66])
+        if (s >= 0.14 && s <= 0.3) ridge2.push([px + n[0] * top(s) * 0.45, py + n[1] * top(s) * 0.45])
+      }
+      const outline = `${through(top0, true)}${through(bot.slice().reverse(), false)}Z`
+      setA(p.body, 'd', outline)
+      setA(p.bodyInk, 'd', outline)
+      const bellyBack = bot.slice(N + 1 - inner.length).reverse()
+      setA(p.belly, 'd', `${through(inner, true)}${through(bellyBack, false)}Z`)
+      setA(p.shine, 'd', through(ridge, true))
+      setA(p.shine2, 'd', through(ridge2, true))
+
+      // The flukes ride the end of the tail and lag behind it (follow-through), with an extra flick when she kicks.
+      const t0 = Math.atan2(spine[1][1] - spine[0][1], spine[1][0] - spine[0][0]) - REST_TAIL
+      const fluke = st.tail.step((t0 * 180) / Math.PI * 1.5 + kick, dt)
+      setT(p.tail, `translate(${spine[0][0].toFixed(1)} ${spine[0][1].toFixed(1)}) rotate(${fluke.toFixed(2)})`)
+      // The flipper hangs from her chest.
+      const fi = Math.round(N * 0.7)
+      const fa = (Math.atan2(spine[fi + 1][1] - spine[fi - 1][1], spine[fi + 1][0] - spine[fi - 1][0]) * 180) / Math.PI
+      const fs = under(0.7) * 0.5
+      const fx = spine[fi][0] - up[fi][0] * fs
+      const fy = spine[fi][1] - up[fi][1] * fs
+      const fl = st.flip.step(flip, dt)
+      setT(p.flipper, `translate(${fx.toFixed(1)} ${fy.toFixed(1)}) rotate(${(fa + fl).toFixed(2)})`)
+      // The head rides the neck, turned exactly as the front of the body is.
+      const tn = Math.atan2(spine[N][1] - spine[N - 1][1], spine[N][0] - spine[N - 1][0]) - REST_NECK
+      const hd = (tn * 180) / Math.PI
+      setT(p.head, `translate(${(spine[N][0] - NECK[0]).toFixed(1)} ${(spine[N][1] - NECK[1]).toFixed(1)}) rotate(${hd.toFixed(2)} ${NECK[0]} ${NECK[1]})`)
       st.jaw += (jaw - st.jaw) * Math.min(1, dt * 22)
       setT(p.jaw, `translate(${HINGE[0]} ${HINGE[1]}) rotate(${Math.max(0, st.jaw).toFixed(2)})`)
-      setT(p.blush, `translate(893 604) scale(${blush.toFixed(3)})`)
+
+      const cx = 640
+      const cy = 620
+      setT(p.root, `translate(0 ${y.toFixed(1)}) rotate(${rot.toFixed(2)} ${cx} ${cy}) translate(${cx} ${cy}) scale(${sx.toFixed(4)} ${sy.toFixed(4)}) translate(${-cx} ${-cy})`)
+      setT(p.blush, `translate(902 606) scale(${blush.toFixed(3)})`)
       setT(p.spout, `translate(${ROSA_POINTS.blowhole[0]} ${ROSA_POINTS.blowhole[1]}) scale(${(0.3 + spout * 0.7).toFixed(3)} ${spout.toFixed(3)})`)
       show(p.spout, spout > 0.02)
       ink.sync(p)
@@ -155,61 +259,70 @@ export const Rosa = forwardRef<PuppetHandle, RosaProps>(function Rosa({ height, 
       style={{ height, aspectRatio: `${ROSA_VIEW.w} / ${ROSA_VIEW.h}`, overflow: 'visible', display: 'block', ...style }}
     >
       <defs>
-        <clipPath id={`${id}-body`}>
-          <path d={BODY} />
-        </clipPath>
         <clipPath id={`${id}-head`}>
           <path d={HEAD} />
         </clipPath>
+        <clipPath id={`${id}-jaw`}>
+          <path d={JAW} />
+        </clipPath>
       </defs>
       <g ref={part('root')} strokeLinejoin="round" strokeLinecap="round">
-        {/* One outline around body, tail stock and head together (see kit/ink.ts), so she reads as one dolphin. */}
+        {/* One outline around tail, body, flipper and head together (see kit/ink.ts), so she reads as one dolphin. */}
         <g {...inkPass(W / 2, INK)}>
           <g ref={ink.twin('tail')}>
-            <path d={STOCK} />
+            <path d={FLUKES} />
           </g>
-          <path d={BODY} />
+          <g ref={ink.twin('flipper')}>
+            <path d={FLIPPER} />
+          </g>
+          <path ref={part('bodyInk')} />
           <g ref={ink.twin('head')}>
             <path d={HEAD} />
+            <g ref={ink.twin('jaw')} transform={`translate(${HINGE[0]} ${HINGE[1]})`}>
+              <path d={JAW} />
+            </g>
           </g>
         </g>
         <g ref={part('tail')}>
-          <path d={FLUKE_DOWN} fill={PINK} stroke={INK} strokeWidth={W} />
-          <path d={FLUKE_UP} fill={PINK} stroke={INK} strokeWidth={W} />
-          <path d={STOCK} fill={PINK} />
-          <path d="M60 500 C110 520 160 560 200 590" fill="none" stroke={SHINE} strokeWidth="14" />
-          <path d="M80 770 C110 730 140 690 170 660" fill="none" stroke={SHINE} strokeWidth="12" />
+          <path d={FLUKES} fill={PINK} />
+          <path d="M-20 -36 C-46 -60 -70 -86 -92 -108 M-20 36 C-46 60 -70 86 -92 108" fill="none" stroke={SHINE} strokeWidth="12" />
         </g>
-        {/* The flipper sits under the body's fill, so its root tucks into her belly and only the paddle shows. */}
+        {/* The flipper's fill sits under the body's, so its root tucks into her chest and only the paddle shows. */}
         <g ref={part('flipper')}>
-          <path d={FLIPPER} fill={PINK} stroke={INK} strokeWidth={W} />
-          <path d="M700 760 C680 800 650 840 625 870" fill="none" stroke={SHINE} strokeWidth="12" />
+          <path d={FLIPPER} fill={PINK} />
+          <path d="M-10 40 C-20 90 -44 140 -72 180" fill="none" stroke={SHINE} strokeWidth="12" />
         </g>
-        <path d={BODY} fill={PINK} />
-        <path d={BELLY_PATH} fill={BELLY} clipPath={`url(#${id}-body)`} />
-        <path d="M520 500 C580 476 650 458 720 450" fill="none" stroke={SHINE} strokeWidth="16" />
-        <path d="M330 588 C380 566 420 552 460 540" fill="none" stroke={SHINE} strokeWidth="12" />
+        <path ref={part('body')} fill={PINK} />
+        <path ref={part('belly')} fill={BELLY} />
+        <path ref={part('shine')} fill="none" stroke={SHINE} strokeWidth="18" />
+        <path ref={part('shine2')} fill="none" stroke={SHINE} strokeWidth="12" />
         <g ref={part('head')}>
-          <path d="M1004 595 L1228 568 L1004 642Z" fill={MOUTH} />
+          {/* Inside her mouth (shows when the jaw drops), then the jaw, then the head over its back end. */}
+          <path d="M984 590 L1226 564 C1150 600 1060 632 1004 640Z" fill={MOUTH} />
+          <ellipse cx="1050" cy="616" rx="50" ry="16" fill={TONGUE} transform="rotate(-8 1050 616)" />
           <g ref={part('jaw')} transform={`translate(${HINGE[0]} ${HINGE[1]})`}>
-            <path d={JAW} fill={BELLY} stroke={INK} strokeWidth={W} />
+            <path d={JAW} fill={PINK} />
+            <path d={JAW_CREAM} fill={BELLY} clipPath={`url(#${id}-jaw)`} />
           </g>
           <path d={HEAD} fill={PINK} />
-          <path d={THROAT} fill={BELLY} clipPath={`url(#${id}-head)`} />
-          <path d="M1002 370 C1030 390 1046 420 1050 452" fill="none" stroke={SHINE} strokeWidth="16" />
-          <path d="M1100 522 C1140 530 1180 536 1210 540" fill="none" stroke={SHINE} strokeWidth="10" />
-          {/* The mouth line: a gentle smile from the beak back to her cheek. */}
-          <path d="M1060 585 C1030 590 1000 592 982 584" fill="none" stroke={INK} strokeWidth={W * 0.75} />
-          <ellipse ref={part('blush')} rx="32" ry="19" fill={BLUSH} opacity="0.55" transform="translate(893 604)" />
-          <path d="M898 490 Q922 474 948 486" fill="none" stroke={INK} strokeWidth={W * 0.75} />
+          <path d={HEAD_CREAM} fill={BELLY} clipPath={`url(#${id}-head)`} />
+          {/* Paint over the head's back edge, where it lies on her body, so no hairline seam shows. */}
+          <path d="M759 700 L747 638" fill="none" stroke={BELLY} strokeWidth="5" />
+          <path d="M746 628 L716 474 L800 440 L808 428" fill="none" stroke={PINK} strokeWidth="5" />
+          <path d="M990 370 C1024 392 1044 420 1050 452" fill="none" stroke={SHINE} strokeWidth="18" />
+          <path d="M1120 514 C1160 524 1196 530 1220 536" fill="none" stroke={SHINE} strokeWidth="10" />
+          {/* The mouth line, curling up into a smile at the corner. */}
+          <path ref={part('smile')} d="M1222 565 C1150 572 1060 582 998 590 C986 592 980 586 980 578" fill="none" stroke={INK} strokeWidth={W * 0.75} />
+          <ellipse ref={part('blush')} rx="34" ry="20" fill={BLUSH} opacity="0.5" transform="translate(902 606)" />
+          <path d="M896 488 Q922 470 950 484" fill="none" stroke={INK} strokeWidth={W * 0.75} />
           <g ref={part('eyeOpen')}>
-            <circle cx="935" cy="548" r="40" fill={INK} />
+            <circle cx="935" cy="548" r="42" fill={INK} />
             <g ref={part('pupil')}>
-              <circle cx="950" cy="532" r="13" fill="#fff" />
-              <circle cx="922" cy="565" r="6" fill="#fff" />
+              <circle cx="951" cy="531" r="14" fill="#fff" />
+              <circle cx="921" cy="566" r="6.5" fill="#fff" />
             </g>
           </g>
-          <path ref={part('eyeHappy')} d="M902 556 Q935 520 968 556" fill="none" stroke={INK} strokeWidth={W * 1.1} style={{ display: 'none' }} />
+          <path ref={part('eyeHappy')} d="M900 556 Q935 518 970 556" fill="none" stroke={INK} strokeWidth={W * 1.1} style={{ display: 'none' }} />
           {/* The spout: a puff of spray out of the blowhole, drawn upward from (0,0). */}
           <g ref={part('spout')} style={{ display: 'none' }}>
             <path d="M0 0 C-30 -60 -90 -110 -110 -170 C-80 -150 -40 -170 -20 -210 C0 -170 30 -170 40 -215 C60 -170 100 -160 120 -175 C100 -110 40 -60 0 0Z" fill="#BFE6FF" stroke={INK} strokeWidth={W * 0.8} />
