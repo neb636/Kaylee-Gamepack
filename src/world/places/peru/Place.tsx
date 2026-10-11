@@ -10,6 +10,7 @@ import { StoryBeat } from '../../kit/StoryBeat'
 import type { PlaceProps } from '../../types'
 import { CanyonGlide } from './activities/canyon/CanyonGlide'
 import { FluffyDay, HATS_KEY } from './activities/fluffy/FluffyDay'
+import { PenguinCliff } from './activities/penguins/PenguinCliff'
 import { RainyRiver } from './activities/river/RainyRiver'
 import { art } from './art'
 import { L } from './lines'
@@ -22,9 +23,9 @@ export interface ActivityProps {
   setProgress: (done: number, total: number) => void
 }
 
-const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, condor: CanyonGlide, river: RainyRiver }
+const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = { alpaca: FluffyDay, penguins: PenguinCliff, condor: CanyonGlide, river: RainyRiver }
 /** The friend's picture on each built place's map pin. */
-const PIN_IMG: Record<string, string> = { alpaca: art.luna, condor: art.coco, river: art.rosa }
+const PIN_IMG: Record<string, string> = { alpaca: art.luna, penguins: art.pepa, condor: art.coco, river: art.rosa }
 
 /** The five places on Luna's map (in % of the map), on their real spots, nudged apart so the pins don't overlap. */
 export const SPOTS = [
@@ -193,6 +194,7 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
             onClick={() => {
               sounds.pop()
               if (done && spot.id === 'alpaca') void say(L.alpacaWindow)
+              else if (done && spot.id === 'penguins') void say(L.penguinWindow)
               else if (done && spot.id === 'condor') void say(L.condorWindow)
               else if (done && spot.id === 'river') void say(L.riverWindow)
               else if (PIN_IMG[spot.id]) open(spot.id)
@@ -209,6 +211,9 @@ function Journal({ stamps, hats, open }: { stamps: string[]; hats: Record<string
                   </g>
                 ))}
               </svg>
+            ) : done && spot.id === 'penguins' ? (
+              // Pepa and her three round chicks, porpoising home.
+              <img src={art.pepa} alt="" style={{ height: '88%', maxWidth: '90%', objectFit: 'contain' }} />
             ) : done && spot.id === 'condor' ? (
               // Coco and Pluma, wingtip to wingtip.
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', gap: '2%' }}>

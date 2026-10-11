@@ -291,9 +291,29 @@
     "hash": "fa4e2664a346",
     "note": "eye whites"
   },
+  "src/world/places/peru/assets/inca-tern.webp": {
+    "hash": "efe39d135d66",
+    "note": "eye highlight"
+  },
+  "src/world/places/peru/assets/jellyfish.webp": {
+    "hash": "19d839ebed0a",
+    "note": "eye highlights"
+  },
   "src/world/places/peru/assets/lizard.webp": {
     "hash": "dd192538d728",
     "note": "eye whites"
+  },
+  "src/world/places/peru/assets/pelican-float.webp": {
+    "hash": "df6f2cfc188d",
+    "note": "eye highlight"
+  },
+  "src/world/places/peru/assets/pelican-fly.webp": {
+    "hash": "7b98fb3e2108",
+    "note": "cream wing-tip feathers and crest (real colors), eye highlight"
+  },
+  "src/world/places/peru/assets/pepa.webp": {
+    "hash": "f38d4b4887e8",
+    "note": "cream belly and face (real colors)"
   },
   "src/world/places/peru/assets/monkey.webp": {
     "hash": "219a375d9c62",
@@ -302,6 +322,10 @@
   "src/world/places/peru/assets/pond.webp": {
     "hash": "e688e6a9c3d3",
     "note": "water highlights"
+  },
+  "src/world/places/peru/assets/seaweed-sock.webp": {
+    "hash": "cc54b8dddeed",
+    "note": "eye highlights"
   },
   "src/world/places/peru/assets/toucan.webp": {
     "hash": "95bc4b48b221",

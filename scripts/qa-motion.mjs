@@ -434,6 +434,36 @@ const fluffyRub = (name, seconds, jump) => ({
 })
 GAME_SCENARIOS.push(fluffyRub('fluffy-brush', 2.4), fluffyRub('fluffy-clip', 2.6, 'clip'))
 
+// Pepa's Penguin Cliff: grab the front penguin on the launch rock, pull it back (it crouches, the dotted arc shows the
+// splash spot), let go: the leap, the splash, the underwater swim. `jump` starts later (fish schools, the chicks' swim).
+const penguinLaunch = (name, seconds, jump, pull) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/peru/penguins`)
+    await page.waitForTimeout(600)
+    await skip(page)
+    await page.waitForSelector('[aria-label="penguin"]', { timeout: 20000 })
+    if (jump) await page.evaluate((j) => window.__penguinQA?.jump(j), jump)
+    await page.waitForTimeout(jump === 'swim' ? 3200 : 900)
+  },
+  act: async (page) => {
+    const boxes = await page.$$eval('[aria-label="penguin"], [aria-label="penguin chick"]', (els) =>
+      els.filter((e) => getComputedStyle(e).display !== 'none').map((e) => {
+        const r = e.getBoundingClientRect()
+        return { x: r.x + r.width / 2, y: r.y + r.height / 2 }
+      }),
+    )
+    const front = boxes.sort((a, b) => b.x - a.x)[0]
+    if (!front) throw new Error('no penguin found')
+    await page.mouse.move(front.x, front.y)
+    await page.mouse.down()
+    await page.mouse.move(front.x - pull * vp.width, front.y + pull * vp.height * 0.5, { steps: 12 })
+    await page.waitForTimeout(400)
+    await page.mouse.up()
+  },
+})
+GAME_SCENARIOS.push(penguinLaunch('penguin-launch', 8, null, 0.13), penguinLaunch('penguin-fish', 5, 'fish', 0.09), penguinLaunch('penguin-chick-swim', 4.5, 'swim', 0.08))
 // Coco's Canyon Glide: hold a finger in the sky and Coco banks after it, sinking slowly in plain air; steer him into a
 // swirl of warm air and he circles up (wings up, fingers spread); pull down for a dive (wings fold) and a swoop.
 const canyonFly = (name, seconds, jump, path) => ({

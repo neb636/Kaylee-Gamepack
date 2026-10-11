@@ -43,6 +43,20 @@ import treeMonkey from './assets/tree-monkey-hd.webp'
 import treeSloth from './assets/tree-sloth-hd.webp'
 import twig from './assets/twig.webp'
 
+import bgCoast from './assets/bg-coast.webp'
+import bgCoastTall from './assets/bg-coast-tall.webp'
+import boat from './assets/boat.webp'
+import cliff from './assets/cliff-hd.webp'
+import crab from './assets/crab.webp'
+import tern from './assets/inca-tern.webp'
+import jellyfish from './assets/jellyfish.webp'
+import kelp from './assets/kelp.webp'
+import pelicanFloat from './assets/pelican-float.webp'
+import pelicanFly from './assets/pelican-fly.webp'
+import pepa from './assets/pepa.webp'
+import seaRock from './assets/sea-rock.webp'
+import sock from './assets/seaweed-sock.webp'
+
 export const art = {
-  abuela, basket, beetle, bgAmazon, bgAndes, bgAndesTall, bgCanyonFar, bird, brush, burr, butterfly, cactus, canoe, canyonCactus, canyonCloud, canyonPerched, canyonSwallow, canyonTourists, canyonViscacha, capybara, capybaraBaby, clippers, coco, cover, dandelion, fish, frog, hummingbird, lizard, luna, macaw, map, monkey, paco, pluma, pond, post, rosa, sloth, stoneWall, toucan, treeMonkey, treeSloth, twig,
+  abuela, basket, beetle, bgAmazon, bgAndes, bgAndesTall, bgCanyonFar, bgCoast, bgCoastTall, bird, boat, brush, burr, butterfly, cactus, canoe, canyonCactus, canyonCloud, canyonPerched, canyonSwallow, canyonTourists, canyonViscacha, capybara, capybaraBaby, cliff, clippers, coco, cover, crab, dandelion, fish, frog, hummingbird, jellyfish, kelp, lizard, luna, macaw, map, monkey, paco, pelicanFloat, pelicanFly, pepa, pluma, pond, post, rosa, seaRock, sloth, sock, stoneWall, tern, toucan, treeMonkey, treeSloth, twig,
 }
