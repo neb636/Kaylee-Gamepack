@@ -55,7 +55,8 @@ for (const trip of trips) {
     await expect.poll(async () => (await next.boundingBox())?.width ?? 0).toBeGreaterThan(60)
     // Map pins bounce continuously, so they never satisfy Playwright's stability check.
     await next.click({ force: true })
-    await expect(page).toHaveURL(new RegExp(`#/world/${trip.country}/${trip.nextId}$`))
+    // The activity keeps the address bar on its current section (#/world/<place>/<activity>/<section>?<state>).
+    await expect(page).toHaveURL(new RegExp(`#/world/${trip.country}/${trip.nextId}(/[^/]*)?$`))
     await expect(page.getByRole('button', { name: 'Skip the video', exact: true })).toHaveCount(0)
     await expect(page.getByRole('button', { name: 'Play the video', exact: true })).toHaveCount(0)
     await expect(page.locator('[data-test-video]')).toHaveCount(0)

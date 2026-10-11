@@ -351,11 +351,8 @@ const veniceDrive = (name, seconds, moves) => ({
   name,
   seconds,
   setup: async (page, base) => {
-    await page.goto(`${base}#/world/italy/venice`)
-    await page.waitForTimeout(600)
-    await skip(page)
-    await page.evaluate(() => window.__veniceQA?.jump('play'))
-    await page.waitForTimeout(800)
+    await page.goto(`${base}#/world/italy/venice/cruise`)
+    await page.waitForTimeout(1400)
   },
   act: async (page) => {
     const b = await page.locator('[aria-label="gondola"]').boundingBox()
@@ -384,11 +381,8 @@ const etnaDrive = (name, seconds, jump, moves) => ({
   name,
   seconds,
   setup: async (page, base) => {
-    await page.goto(`${base}#/world/italy/etna`)
-    await page.waitForTimeout(600)
-    await skip(page)
-    await page.evaluate((j) => window.__etnaQA?.jump(j), jump)
-    await page.waitForTimeout(900)
+    await page.goto(`${base}#/world/italy/etna/${jump}`)
+    await page.waitForTimeout(1500)
   },
   act: async (page) => {
     const b = await page.locator('[aria-label="Nino"]').boundingBox()

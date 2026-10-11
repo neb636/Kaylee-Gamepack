@@ -14,6 +14,7 @@
 import { AnimatePresence } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
 import { Buddy, say, sounds, SparklePuppet, useGameLoop, type Line, type PuppetHandle } from '../../../../../sdk'
+import { useSections } from '../../../../kit/sections'
 import { sfx } from '../../../../kit/sfx'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art as italyArt } from '../../art'
@@ -24,9 +25,10 @@ import { Lupa } from '../../puppets/Lupa'
 import { Nino, type NinoMood } from '../../puppets/Nino'
 import { etnaArt, STAND_BANDS } from './art'
 import { CART, CartArt, Flyer, type Fruit } from './Cart'
-import { Granita } from './Granita'
+import { FRIENDS, Granita, type FriendId } from './Granita'
 import { BEACH_END, DRIFT_RAMS, DRIFTS, FEEL, ground, SCARF_X, SIZE, slope, snowfall, STAGE, STAND_X, START_X, STREAM, warmth, WORLD, X_MAX, X_MIN, zoneAt } from './mountain'
 import { Clouds, Drift, FarVolcano, Ground, Props, Scarf, Sea, Stand, Trees } from './Scenery'
+import SECTIONS from './sections'
 import { esfx } from './sfx'
 
 const E = LINES.etna
@@ -74,23 +76,63 @@ function layoutFor(W: number, H: number): Layout {
   return { W, H, s, viewW: W / s, viewH: H / s, gAt: H > W ? 0.76 : FEEL.groundAt }
 }
 
+type SectionId = (typeof SECTIONS.sections)[number]['id']
+const ORDER = SECTIONS.sections.map((x) => x.id)
+const past = (a: SectionId, b: SectionId) => ORDER.indexOf(a) > ORDER.indexOf(b)
+/** Where Nino stands when a link starts on the trail (a snow link stands him by the next drift). */
+const TRAIL_AT: Partial<Record<SectionId, number>> = { beach: START_X, grove: 1300, forest: 3000, cold: 4300, snow: DRIFTS[0] - 140, full: 5900 }
+/** Stars she has when a section starts (forest and snow give theirs as Nino arrives). */
+const STARS_AT: Record<SectionId, number> = { arrive: 0, beach: 0, grove: 0, forest: 0, cold: 1, snow: 1, full: 3, granita: 4, payoff: 7 }
+/** The director's one-time moments that are already behind her when a section starts (its own one still plays). */
+const DONE_BEFORE: [SectionId, string[]][] = [
+  ['forest', ['pick']],
+  ['cold', ['forest']],
+  ['snow', ['cold', 'scarfGlow', 'scarfHint']],
+  ['full', ['snow', 'bumpHint', 'again', 'full']],
+]
+/** Which trail section Nino is in (a cart with any snow in it is on the snow field's section until it's full). */
+const trailSection = (x: number, snow: number): SectionId =>
+  snow >= DRIFTS.length ? 'full' : snow > 0 || x >= 4850 ? 'snow' : x >= 4150 ? 'cold' : x >= 2450 ? 'forest' : x >= 950 ? 'grove' : 'beach'
+
 const mix = (a: number[], b: number[], k: number) => `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * k)).join(',')})`
 
 export function Etna({ onDone, setProgress }: ActivityProps) {
   const root = useRef<HTMLDivElement>(null)
+  const { start, param, enter } = useSections(SECTIONS)
+  // A deep link starts at its section, as if she had played up to there (params carry what she did on the way).
+  const [seed] = useState(() => {
+    const at = start ?? 'arrive'
+    const onTrail = TRAIL_AT[at] !== undefined
+    const snow = at === 'full' || at === 'granita' || at === 'payoff' ? DRIFTS.length : at === 'snow' ? Number(param('snow')) : 0
+    const once = new Set<string>(DONE_BEFORE.filter(([id]) => !past(id, at)).flatMap(([, keys]) => keys))
+    for (let i = 0; i < snow; i++) once.add(`drift${i}`)
+    if (at !== 'arrive' && at !== 'beach') once.add('pick')
+    if (snow > 0) once.add('bumpHint')
+    const x = at === 'snow' ? DRIFTS[snow] - 140 : (TRAIL_AT[at] ?? START_X)
+    return {
+      at,
+      stage: (at === 'arrive' ? 'story' : onTrail ? 'play' : 'granita') as Stage,
+      x,
+      snow,
+      once,
+      scarf: (at === 'snow' || at === 'full') && param('scarf') === 'yes',
+      fruit: param('fruit').split(',').filter((f): f is Fruit => f === 'lemon' || f === 'orange'),
+      served: param('served').split(',').filter((f): f is FriendId => (FRIENDS as readonly string[]).includes(f)),
+    }
+  })
   const [layout, setLayout] = useState<Layout | null>(null)
-  const [stage, setStage] = useState<Stage>('story')
-  const [stars, setStars] = useState(0)
-  const [fruit, setFruit] = useState<Fruit[]>([])
-  const [snow, setSnow] = useState(0)
-  const [scarf, setScarf] = useState(false)
+  const [stage, setStage] = useState<Stage>(seed.stage)
+  const [stars, setStars] = useState(STARS_AT[seed.at] + (seed.at === 'granita' ? Math.min(seed.served.length, FRIENDS.length - 1) : 0))
+  const [fruit, setFruit] = useState<Fruit[]>(seed.fruit)
+  const [snow, setSnow] = useState(seed.snow)
+  const [scarf, setScarf] = useState(seed.scarf)
   const [scarfGlow, setScarfGlow] = useState(false)
-  const [scooped, setScooped] = useState<boolean[]>(() => DRIFTS.map(() => false))
-  const [rams, setRams] = useState<number[]>(() => DRIFTS.map(() => 0))
+  const [scooped, setScooped] = useState<boolean[]>(() => DRIFTS.map((_, i) => i < seed.snow))
+  const [rams, setRams] = useState<number[]>(() => DRIFTS.map((_, i) => (i < seed.snow ? DRIFT_RAMS[i] : 0)))
   const [flyers, setFlyers] = useState<FlyerData[]>([])
   useEffect(() => setProgress(Math.min(stars, TOTAL), TOTAL), [stars])
   const star = (n: number) => setStars((s) => Math.max(s, n))
-  const fruitCount = useRef(0)
+  const fruitCount = useRef(seed.fruit.length)
 
   useEffect(() => {
     const el = root.current
@@ -105,32 +147,34 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
   // ---- Mutable game state (the loop reads and writes it every frame; React never sees it). ----
   const g = useRef({
     t: 0,
-    x: START_X,
+    x: seed.x,
     vx: 0,
-    facing: 1,
-    cartX: START_X - FEEL.cartGap,
-    camX: START_X - 200,
-    camY: 0,
+    facing: seed.at === 'full' ? -1 : 1,
+    cartX: seed.x - (seed.at === 'full' ? -1 : 1) * FEEL.cartGap,
+    camX: seed.at === 'arrive' || seed.at === 'beach' ? START_X - 200 : seed.x,
+    camY: seed.at === 'arrive' || seed.at === 'beach' ? 0 : ground(seed.x),
     drag: null as null | { id: number; fx: number; fy: number; gx: number; x0: number; y0: number; at: number },
     idle: 0,
-    travelled: 0,
-    stage: 'story' as Stage,
-    snow: 0,
-    scarf: false,
+    travelled: seed.at === 'arrive' || seed.at === 'beach' ? 0 : 1000,
+    stage: seed.stage,
+    snow: seed.snow,
+    scarf: seed.scarf,
     scarfWas: false,
     inStream: false,
     fastT: 0,
     lastTalk: -99,
     pending: 0,
     cool: {} as Record<string, number>,
-    once: new Set<string>(),
+    once: seed.once,
+    /** The section (and its state) last written to the address bar. */
+    entered: '',
     idleAct: 4,
     particles: [] as Particle[],
     flakes: Array.from({ length: FLAKES }, () => ({ x: Math.random(), y: Math.random(), v: 0.5 + Math.random() * 0.6, sway: Math.random() * 6, size: 8 + Math.random() * 10 })),
     nextFlyer: 1,
     arrived: false,
     pushT: 0,
-    rams: DRIFTS.map(() => 0),
+    rams: DRIFTS.map((_, i) => (i < seed.snow ? DRIFT_RAMS[i] : 0)),
   })
   const mood = useRef<NinoMood>({ walk: 0, phase: 0, hot: 1, cold: 0 })
   const layoutRef = useRef<Layout | null>(null)
@@ -347,44 +391,12 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
     if (cooled(`friend${i}`, 8)) react(g.current.snow >= DRIFTS.length ? E.yay : E.hotFriend[id])
   }
 
-  // QA hook: jump straight to a moment (screens), and read where Nino is.
+  // The story is the first section; the trail's sections are entered by the loop below as Nino walks; the granita
+  // stand reports its own (granita, payoff).
   useEffect(() => {
-    if (!navigator.webdriver) return
-    const w = window as unknown as { __etnaQA?: { jump: (to: string) => void } }
-    w.__etnaQA = {
-      jump: (to: string) => {
-        const s = g.current
-        s.stage = 'play'
-        setStage('play')
-        const put = (x: number, facing = 1) => {
-          s.x = x
-          s.facing = facing
-          s.cartX = x - facing * FEEL.cartGap
-          s.camX = x
-          s.camY = ground(x)
-          s.travelled = 1000
-        }
-        if (to === 'grove') put(1300)
-        else if (to === 'forest') put(3000)
-        else if (to === 'cold') put(4300)
-        else if (to === 'snow') put(5050)
-        else if (to === 'full') {
-          put(5900, -1)
-          s.snow = DRIFTS.length
-          setSnow(DRIFTS.length)
-          setScooped(DRIFTS.map(() => true))
-          DRIFTS.forEach((_, i) => s.once.add(`drift${i}`))
-          s.once.add('full')
-        } else if (to === 'granita' || to === 'payoff') {
-          s.snow = DRIFTS.length
-          setSnow(DRIFTS.length)
-          s.stage = 'granita'
-          setStage('granita')
-          ;(window as unknown as { __etnaPayoff?: boolean }).__etnaPayoff = to === 'payoff'
-        }
-      },
-    }
-    return () => void delete w.__etnaQA
+    if (seed.at === 'arrive') enter('arrive')
+    // A link straight onto the beach starts where the story ends.
+    else if (seed.at === 'beach') talk(E.pull)
   }, [])
 
   useGameLoop((dt) => {
@@ -536,6 +548,15 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
           g.current.stage = 'granita'
           setStage('granita')
         }, 1800)
+      }
+      // The address bar follows her up (and down) the mountain.
+      const sec = trailSection(x, s.snow)
+      const fr = fruit.join(',')
+      const state = sec === 'beach' ? {} : sec === 'snow' ? { fruit: fr, snow: String(s.snow), scarf: s.scarf ? 'yes' : 'no' } : sec === 'full' ? { fruit: fr, scarf: s.scarf ? 'yes' : 'no' } : { fruit: fr }
+      const key = sec + JSON.stringify(state)
+      if (key !== s.entered) {
+        s.entered = key
+        enter(sec, state)
       }
       // Idle life: he munches a bit of grass, or brays.
       if (!s.drag && speed < 20) {
@@ -766,7 +787,7 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
       </div>
 
       {stage === 'story' && <StoryBeat lines={E.arrive} friend={<Nino height="100%" hot={1} />} onDone={() => ((g.current.stage = 'play'), setStage('play'), talk(E.pull))} />}
-      {stage === 'granita' && <Granita fruit={fruit} onStar={(n) => star(4 + n)} onDone={onDone} />}
+      {stage === 'granita' && <Granita fruit={fruit} served={seed.served} payoff={seed.at === 'payoff'} onSection={(id, served) => enter(id, { fruit: fruit.join(','), served: id === 'granita' ? served.join(',') : undefined })} onStar={(n) => star(4 + n)} onDone={onDone} />}
     </div>
   )
 }

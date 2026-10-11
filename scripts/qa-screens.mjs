@@ -292,49 +292,39 @@ const SCREENS = [
   { name: 'colosseum-play', hash: '#/world/italy/colosseum', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
   { name: 'venice-story', hash: '#/world/italy/venice', reset: true, wait: 400 },
   { name: 'venice-pick', hash: '#/world/italy/venice', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(900) } },
-  // Venice moments, reached through its QA hook (window.__veniceQA.jump): driving, a friend riding with the LEFT/RIGHT
-  // "go this way" bubble, Gino's trip to the mask shop, the mirror mask, the night finale.
-  ...['play', 'ride', 'trip', 'mask', 'finale'].map((to) => ({
+  // Venice moments, opened by section link (#/world/sections): driving, a friend riding with the LEFT/RIGHT "go this
+  // way" bubble, Gino's trip to the mask shop, the mirror mask, the night finale.
+  ...['cruise', 'ride-1', 'trip', 'mask', 'finale'].map((to) => ({
     name: `venice-${to}`,
-    hash: '#/world/italy/venice',
+    hash: `#/world/italy/venice/${to}`,
     reset: true,
-    act: async (p) => {
-      await skip(p)
-      await p.waitForTimeout(500)
-      await p.evaluate((t) => window.__veniceQA?.jump(t), to)
-      await p.waitForTimeout(to === 'trip' ? 6000 : to === 'finale' ? 2500 : 1500)
-    },
+    wait: to === 'trip' ? 6000 : to === 'finale' ? 2500 : 1500,
   })),
   { name: 'etna-story', hash: '#/world/italy/etna', reset: true, wait: 400 },
   { name: 'etna-play', hash: '#/world/italy/etna', reset: true, act: async (p) => { await skip(p); await p.waitForTimeout(1800) } },
-  // Etna moments, reached through its QA hook (window.__etnaQA.jump): the lemon grove, the chestnut forest and stream,
-  // the cold (snow falling, the scarf on its trail post), the snow drifts, the full cart going down, the granita stand
-  // and the piano payoff.
+  // Etna moments, opened by section link: the lemon grove, the chestnut forest and stream, the cold (snow falling, the
+  // scarf on its trail post), the snow drifts, the full cart going down, the granita stand and the piano payoff.
   ...['grove', 'forest', 'cold', 'snow', 'full', 'granita', 'payoff'].map((to) => ({
     name: `etna-${to}`,
-    hash: '#/world/italy/etna',
+    hash: `#/world/italy/etna/${to}`,
     reset: true,
-    act: async (p) => {
-      await skip(p)
-      await p.waitForTimeout(500)
-      await p.evaluate((t) => window.__etnaQA?.jump(t), to)
-      await p.waitForTimeout(to === 'payoff' ? 2500 : 1500)
-    },
+    wait: to === 'payoff' ? 2500 : 1500,
   })),
   { name: 'italy-hub-stamps', hash: '#/world/italy', stampAll: 'italy' },
   { name: 'italy-opera', hash: '#/world/italy/party', stampAll: 'italy', act: async (p) => { await skip(p); await p.waitForTimeout(2500) } },
-  // Opera moments, reached through its QA hook (window.__operaQA.jump): the owl, the solos, the wishing star, Lupa's high
-  // note, the jets' sky and the picnic.
+  // Opera moments, opened by section link: the owl, the solos, the wishing star, Lupa's high note, the jets' sky and
+  // the picnic.
   ...['owl', 'solo', 'star', 'high', 'sky', 'picnic'].map((to) => ({
     name: `opera-${to}`,
-    hash: '#/world/italy/party',
-    stampAll: 'italy',
-    act: async (p) => {
-      await skip(p)
-      await p.waitForTimeout(500)
-      await p.evaluate((t) => window.__operaQA?.jump(t), to)
-      await p.waitForTimeout(to === 'star' ? 2600 : 1200)
-    },
+    hash: `#/world/italy/party/${to}?stamps=all`,
+    wait: to === 'star' ? 2600 : 1200,
+  })),
+  // The Pizzeria's later pizzas, straight from a link instead of three pizzas of play.
+  ...['bufala?at=toppings', 'gino?at=cut', 'own?at=sauce&sauce=pink', 'own?at=oven', 'payoff'].map((to) => ({
+    name: `pizzeria-${to.replace(/[?&=]+/g, '-')}`,
+    hash: `#/world/italy/pizzeria/${to}`,
+    reset: true,
+    wait: 1500,
   })),
   { name: 'peru-intro', hash: '#/world/peru', reset: true, wait: 300 },
   { name: 'peru-hub', hash: '#/world/peru', act: skip },

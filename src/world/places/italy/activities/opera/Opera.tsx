@@ -10,14 +10,21 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
 import { burst, sounds, useElementSize, useGameLoop } from '../../../../../sdk'
 import { Flag } from '../../../../kit/Flag'
+import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { sfx } from '../../../../kit/sfx'
 import type { ActivityProps } from '../../Place'
 import { INK } from '../../puppets/ink'
 import { endHighNote, playBeat, pluck, setHighNote, setLupa, setSolo, startBand, startHighNote, stopBand, type Part } from './band'
 import { createConductor, FEEL, type Beat } from './conduct'
+import SECTIONS from './sections'
 
-type Stage = 'candles' | 'owl' | 'dance' | 'solo' | 'star' | 'lupa' | 'high' | 'roses' | 'sky' | 'picnic'
+/** The steps in play order; each one is a section (sections.ts), so #/world/italy/party/<step> starts there. */
+type Stage = (typeof SECTIONS.sections)[number]['id']
+const STAGES = SECTIONS.sections.map((x) => x.id)
+const after = (a: Stage, b: Stage) => STAGES.indexOf(a) > STAGES.indexOf(b)
+/** Stars she has when each step starts. */
+const DONE_AT: Record<Stage, number> = { candles: 0, owl: 1, dance: 2, solo: 3, star: 4, lupa: 4, high: 4, roses: 5, sky: 5, picnic: 5 }
 
 /** Stars in the top bar: candles, owl, dance, solos, Lupa's note. */
 const TOTAL = 5
@@ -128,36 +135,46 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
   const geoRef = useRef<Geo | null>(null)
   geoRef.current = geo
 
-  const [stage, setStageState] = useState<Stage>('candles')
-  const [prompt, setPrompt] = useState(PROMPTS.candles)
-  const [lit, setLit] = useState(0)
-  const [owl, setOwl] = useState<'awake' | 'dozing' | 'startled' | 'asleep'>('awake')
-  const [owlSleep, setOwlSleep] = useState(0)
-  const [crowdUp, setCrowdUp] = useState(0)
+  const { start, param, enter } = useSections(SECTIONS)
+  // A deep link starts at its step, as if she had played up to there (the solos param says who had theirs).
+  const [seed] = useState(() => {
+    const at: Stage = start ?? 'candles'
+    const picked = [...new Set(param('solos').split(',').map((id) => BAND.findIndex((m) => m.id === id)).filter((i) => i >= 0))]
+    // Still choosing solos: fewer than three. Past them: three (the ones in the link first).
+    const solos = at === 'solo' ? picked.slice(0, SOLOS - 1) : after(at, 'solo') ? [...picked, ...BAND.map((_, i) => i).filter((i) => !picked.includes(i))].slice(0, SOLOS) : []
+    return { at, solos }
+  })
+  const seedPast = (s: Stage) => after(seed.at, s)
+  const [stage, setStageState] = useState<Stage>(seed.at)
+  const [prompt, setPrompt] = useState(PROMPTS[seed.at])
+  const [lit, setLit] = useState(seedPast('candles') ? CANDLES : 0)
+  const [owl, setOwl] = useState<'awake' | 'dozing' | 'startled' | 'asleep'>(seedPast('owl') ? 'asleep' : 'awake')
+  const [owlSleep, setOwlSleep] = useState(seedPast('owl') ? 1 : 0)
+  const [crowdUp, setCrowdUp] = useState(seedPast('dance') ? 1 : 0)
   const [wave, setWave] = useState(0)
   const [solo, setSoloState] = useState<number | null>(null)
-  const [solos, setSolos] = useState<number[]>([])
-  const [roses, setRoses] = useState<number[]>([])
-  const [flag, setFlag] = useState(false)
+  const [solos, setSolos] = useState<number[]>(seed.solos)
+  const [roses, setRoses] = useState<number[]>(seed.at === 'roses' ? Array.from({ length: ROSES }, (_, i) => i) : [])
+  const [flag, setFlag] = useState(seed.at === 'picnic')
   const [moonWink, setMoonWink] = useState(0)
   const [pigeon, setPigeon] = useState(0)
   const [cheer, setCheer] = useState<{ i: number; n: number } | null>(null)
   const [flare, setFlare] = useState(-1)
   const [frozen, setFrozen] = useState(false)
   const [nudge, setNudge] = useState(false)
-  useEffect(() => setProgress(0, TOTAL), [])
+  useEffect(() => setProgress(DONE_AT[seed.at], TOTAL), [])
 
   const conductor = useRef(createConductor()).current
   const g = useRef({
-    stage: 'candles' as Stage,
+    stage: seed.at,
     stageAt: 0,
     t: 0,
-    lit: 0,
+    lit: seedPast('candles') ? CANDLES : 0,
     saidForte: false,
     saidPiano: false,
-    softRun: 0,
-    loud: 0,
-    solos: new Set<number>(),
+    softRun: seedPast('owl') ? OWL_SOFT : 0,
+    loud: seedPast('dance') ? DANCE_LOUD : 0,
+    solos: new Set<number>(seed.solos),
     hover: -1,
     hoverT: 0,
     lupaBeats: 0,
@@ -173,7 +190,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
     playing: false,
     kick: BAND.map(() => ({ y: 0, v: 0, tilt: 0, tiltTo: 0 })).concat([{ y: 0, v: 0, tilt: 0, tiltTo: 0 }]),
     hinted: false,
-    flagged: false,
+    flagged: seed.at === 'picnic',
     done: false,
   })
   const timers = useRef<number[]>([])
@@ -193,8 +210,24 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
   const skyEls = useRef<(SVGPolylineElement | null)[]>([])
   const jetEls = useRef<(HTMLDivElement | null)[]>([])
 
+  /** Every step is a section: the address bar always says where she is (and who had a solo). */
+  const enterStage = (s: Stage) => enter(s, { solos: after(s, 'dance') ? [...g.current.solos].map((i) => BAND[i].id).join(',') : undefined })
+  useEffect(() => {
+    enterStage(seed.at)
+    if (seed.at === 'lupa') setLupa(true, 1)
+    if (seed.at === 'roses') later(9000, () => g.current.stage === 'roses' && setStage('sky'))
+  }, [])
+  // A picnic link: the jets' flag smoke is already across the sky (it needs the screen's size).
+  useEffect(() => {
+    if (seed.at !== 'picnic' || !geo || g.current.skyPath.length) return
+    const gap = Math.max(10, geo.memberW * 0.16)
+    g.current.skyPath = Array.from({ length: 40 }, (_, i) => [geo.W * (0.05 + i * 0.023), geo.top + 60 + Math.sin(i / 5) * 30])
+    skyEls.current.forEach((el, k) => el?.setAttribute('points', g.current.skyPath.map(([x, y]) => `${x},${y + (k - 1) * gap}`).join(' ')))
+  }, [!!geo])
+
   const setStage = (s: Stage) => {
     const st = g.current
+    enterStage(s)
     st.stage = s
     st.stageAt = st.t
     st.hinted = false
@@ -300,6 +333,7 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
     if (st.stage !== 'solo' || st.solos.has(i)) return
     st.solos.add(i)
     setSolos([...st.solos])
+    if (st.solos.size < SOLOS) enterStage('solo')
     if (st.solos.size >= SOLOS) {
       st.stage = 'star'
       later(2600, () => {
@@ -417,16 +451,10 @@ export function Opera({ onDone, setProgress }: ActivityProps) {
     if (beat) onBeat(beat)
   }
 
-  // QA hook: jump to a step, or play beats without a finger (qa-motion, qa-pacing).
+  // QA hook: play beats without a finger, and read where she is (qa-motion, qa-pacing). Deep links replace jumps.
   useEffect(() => {
-    const w = window as unknown as { __operaQA?: { jump: (s: Stage) => void; beat: (amp: number) => void; state: () => unknown } }
+    const w = window as unknown as { __operaQA?: { beat: (amp: number) => void; state: () => unknown } }
     w.__operaQA = {
-      jump: (s) => {
-        const st = g.current
-        if (s === 'owl' || s === 'dance' || s === 'solo') (st.lit = CANDLES), setLit(CANDLES)
-        if (s === 'dance' || s === 'solo') setOwl('asleep')
-        setStage(s)
-      },
       state: () => ({ stage: g.current.stage, drag: !!g.current.drag, sky: g.current.skyPath.length }),
       beat: (amp) => {
         startBand()

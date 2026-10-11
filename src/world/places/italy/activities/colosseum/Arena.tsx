@@ -41,7 +41,21 @@ const LAYOUT = {
 type Phase = 'shade' | 'doors' | 'finale' | 'payoff'
 type Sub = 'wait' | 'pick' | 'lever' | 'show'
 
-export function Arena({ onStep, onDone }: { onStep: () => void; onDone: () => void }) {
+/** The arena's parts, in play order (sections.ts). */
+export type ArenaPart = 'shade' | 'doors-1' | 'doors-2' | 'finale' | 'payoff'
+
+export function Arena({
+  start,
+  onSection,
+  onStep,
+  onDone,
+}: {
+  /** Start mid-way (a deep link): earlier parts are done for her. */
+  start: ArenaPart | null
+  onSection: (part: ArenaPart) => void
+  onStep: () => void
+  onDone: () => void
+}) {
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(box)
   const landscape = useLandscape()
@@ -58,15 +72,16 @@ export function Arena({ onStep, onDone }: { onStep: () => void; onDone: () => vo
   const sparkle = useRef<PuppetHandle>(null)
   const friends = useRef<Partial<Record<Friend, PuppetHandle | null>>>({})
 
-  const [phase, setPhase] = useState<Phase>('shade')
+  const later = !!start && start !== 'shade'
+  const [phase, setPhase] = useState<Phase>(start === 'payoff' ? 'payoff' : start === 'finale' ? 'finale' : later ? 'doors' : 'shade')
   const [prompt, setPrompt] = useState<{ text: Line; speak: boolean } | null>(null)
-  const [pulled, setPulled] = useState([false, false, false])
-  const [round, setRound] = useState(0)
+  const [pulled, setPulled] = useState([later, later, later])
+  const [round, setRound] = useState(later && start !== 'doors-1' ? 1 : 0)
   const [call, setCall] = useState<number | null>(null)
   const [sub, setSub] = useState<Sub>('wait')
   const [hint, setHint] = useState<number | null>(null)
   const [rattle, setRattle] = useState<{ n: number; k: number } | null>(null)
-  const [up, setUp] = useState<number[]>([])
+  const [up, setUp] = useState<number[]>(start === 'payoff' ? [1, 2, 3, 4, 5] : [])
   const [trick, setTrick] = useState<Friend | null>(null)
   const [banner, setBanner] = useState(false)
   const [waveN, setWaveN] = useState(0)
@@ -76,11 +91,17 @@ export function Arena({ onStep, onDone }: { onStep: () => void; onDone: () => vo
   const [blows, setBlows] = useState(0)
   const [finish, setFinish] = useState(false)
   const busy = useRef(false)
-  const pulledN = useRef(0)
-  const firstPick = useRef(true)
-  const firstLever = useRef(true)
-  const firstUp = useRef(true)
-  const waves = useRef(0)
+  const pulledN = useRef(later ? 3 : 0)
+  // Past round 1 she has heard the first-time explanations already.
+  const seen = later && start !== 'doors-1'
+  const firstPick = useRef(!seen)
+  const firstLever = useRef(!seen)
+  const firstUp = useRef(!seen)
+  const waves = useRef(start === 'payoff' ? 2 : 0)
+
+  useEffect(() => {
+    onSection(phase === 'doors' ? (round === 0 ? 'doors-1' : 'doors-2') : phase)
+  }, [phase, round])
 
   const hot = pulled.some((p) => !p)
   const doors = ROUNDS[round].doors
@@ -93,6 +114,11 @@ export function Arena({ onStep, onDone }: { onStep: () => void; onDone: () => vo
 
   // 1. It's hot! Cesare fans himself and the crowd sweats; the ropes are ready.
   useEffect(() => {
+    // A deep link to a later part starts it straight away.
+    if (start === 'doors-1') return void nextCall(0, 0)
+    if (start === 'doors-2') return void nextCall(1, 0)
+    if (start === 'finale') return void grandFinale()
+    if (start === 'payoff') return void payoff()
     void (async () => {
       await wait(400)
       if (!alive()) return

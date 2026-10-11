@@ -8,6 +8,7 @@
 // Every scene uses one camera: straight on, from the side, things standing on the ground.
 import { useEffect, useState } from 'react'
 import { useLandscape } from '../../../../../sdk'
+import { useSections } from '../../../../kit/sections'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -18,17 +19,22 @@ import { Mill } from './Mill'
 import { Payoff } from './Payoff'
 import { Pour } from './Pour'
 import { Ripen } from './Ripen'
+import SECTIONS from './sections'
 
 const O = L.olives
 /** Stars: two for the branches, sort, mill, bottle full, bottle half. */
 const TOTAL = 6
-type Step = 'story' | 'grove' | 'ripen' | 'mill' | 'pour' | 'payoff'
+type Step = (typeof SECTIONS.sections)[number]['id']
+/** Stars already earned when each step begins (a deep link starts with these). */
+const STARS_AT: Record<Step, number> = { story: 0, grove: 0, ripen: 2, mill: 3, pour: 4, payoff: 6 }
 
 export function OliveGrove({ onDone, setProgress }: ActivityProps) {
   const landscape = useLandscape()
-  const [step, setStep] = useState<Step>('story')
-  const [done, setDone] = useState(0)
+  const { start, enter } = useSections(SECTIONS)
+  const [step, setStep] = useState<Step>(start ?? 'story')
+  const [done, setDone] = useState(() => STARS_AT[start ?? 'story'])
   useEffect(() => setProgress(done, TOTAL), [done])
+  useEffect(() => enter(step), [step])
   const star = (n: number) => setDone((d) => Math.max(d, n))
 
   switch (step) {
