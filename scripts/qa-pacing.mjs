@@ -61,6 +61,8 @@ const SCENARIOS = [
   { name: "peru pepa's penguin cliff", id: 'penguins', hash: '#/world/peru/penguins', reset: true },
   { name: "peru coco's canyon glide", id: 'condor', hash: '#/world/peru/condor', reset: true },
   { name: "peru rosa's rainy river", id: 'river', hash: '#/world/peru/river', reset: true },
+  { name: 'thailand intro + map', id: 'thailand', hash: '#/world/thailand', reset: true, play: false },
+  { name: 'thailand baan chang cafe', id: 'baan-chang', hash: '#/world/thailand/baan-chang', reset: true },
 ].filter((s) => !flag('only') || flag('only').split(',').includes(s.id))
 
 // Is there something (other than the story overlay, the top bar or a "hear it again" button) she can touch?
@@ -87,7 +89,8 @@ function watchFirstTouch([target, source]) {
   window.__qaTouchAt = null
   const find = new Function(`return (${source})`)()
   const tick = () => {
-    if (location.hash === target && find().length) window.__qaTouchAt = performance.now()
+    // Activities rewrite the address to their current section (#/world/<place>/<activity>/<section>), so match the start.
+    if (location.hash.split('?')[0].startsWith(target) && find().length) window.__qaTouchAt = performance.now()
     else requestAnimationFrame(tick)
   }
   requestAnimationFrame(tick)

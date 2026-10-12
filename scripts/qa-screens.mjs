@@ -315,6 +315,17 @@ const SCREENS = [
   })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party/soon', stampAll: 'peru', wait: 800 },
+  // Thailand: the hub and every Baan Chang Cafe section, straight from its link.
+  { name: 'thailand-intro', hash: '#/world/thailand', reset: true, wait: 300 },
+  { name: 'thailand-hub', hash: '#/world/thailand', act: skip },
+  ...['arrive', 'coffee', 'cocoa', 'downstairs?straw=purple', 'bananas', 'favorites', 'watermelon', 'shower'].map((to) => ({
+    name: `baan-chang-${to.replace(/[?&=]+/g, '-')}`,
+    hash: `#/world/thailand/baan-chang/${to}`,
+    reset: true,
+    wait: to === 'arrive' ? 400 : 1600,
+  })),
+  { name: 'thailand-hub-stamps', hash: '#/world/thailand', stampAll: 'thailand' },
+  { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
 // --routes=venice,pizzeria-own: exact screen names, or an activity id for all of its screens (venice-*).
 ].filter((s) => !flag('routes') || flag('routes').split(',').some((r) => s.name === r || s.name.startsWith(`${r}-`)))
 
