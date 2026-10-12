@@ -522,6 +522,54 @@ const operaSwing = (name, seconds, size, ms) => ({
 })
 GAME_SCENARIOS.push(operaSwing('opera-forte', 3.4, 0.35, 280), operaSwing('opera-piano', 3.4, 0.05, 280))
 
+// Baan Chang Cafe greybox (Thailand). The pour: grab the coffee pot and hold it beside the glass's rim (it tips and
+// pours). The trunk: pull a banana off the tray and wave it in front of Mama; her trunk snakes after it, curls round it
+// and swings it up to her mouth.
+const center = async (page, label) => {
+  const b = await page.locator(`[aria-label="${label}"]`).first().boundingBox()
+  if (!b) throw new Error(`no ${label} found`)
+  return { x: b.x + b.width / 2, y: b.y + b.height / 2, w: b.width, h: b.height }
+}
+GAME_SCENARIOS.push(
+  {
+    name: 'baan-chang-pour',
+    seconds: 3.2,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/baan-chang/coffee`)
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      const pot = await center(page, 'coffee pot')
+      const glass = await center(page, 'glass')
+      await page.mouse.move(pot.x, pot.y)
+      await page.mouse.down()
+      await page.mouse.move(glass.x - glass.w * 0.55, glass.y - glass.h * 0.75, { steps: 12 })
+      await page.waitForTimeout(1600)
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'baan-chang-trunk',
+    seconds: 3.6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/baan-chang/bananas`)
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      const banana = await center(page, 'banana')
+      const mama = await center(page, 'Mama elephant')
+      const x = mama.x + mama.w * 0.55
+      const y = mama.y + mama.h * 1.3
+      await page.mouse.move(banana.x, banana.y)
+      await page.mouse.down()
+      await page.mouse.move(x - mama.w * 0.4, y + mama.h * 0.4, { steps: 10 })
+      for (let i = 0; i < 3; i++) await page.mouse.move(x + (i % 2 ? -1 : 1) * mama.w * 0.3, y, { steps: 6 })
+      await page.waitForTimeout(1200)
+      await page.mouse.up()
+    },
+  },
+)
+
 // --only=venice-drive,etna: exact scenario names, or a prefix for all of them (etna-*).
 const all = [...PUPPET_SCENARIOS, ...GAME_SCENARIOS].filter((s) => !flag('only') || flag('only').split(',').some((o) => s.name === o || s.name.startsWith(`${o}-`)))
 
