@@ -18,21 +18,20 @@ let lastSpot: Spot = 'street'
 
 export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
-  const [initial] = useState<Start>(() => ({ section: start ?? (arrivedThisVisit ? lastSpot : 'arrive'), at: param('at') || undefined }))
+  const [initial] = useState<Start>(() => ({ section: start ?? (arrivedThisVisit ? lastSpot : 'arrive'), at: param('at') || undefined, who: param('who') || undefined }))
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
   const [arriving, setArriving] = useState(initial.section === 'arrive')
-  const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' ? 'street' : initial.section)
+  const photo = initial.section === 'family'
+  const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' || initial.section === 'family' ? 'street' : initial.section)
   const houseRef = useRef<House | null>(null)
   // Read once: the address bar follows her spots and drops ?debug=1 as soon as she moves.
   const [debug] = useState(() => flag('debug') !== null)
 
   useEffect(() => {
-    enter(initial.section, initial.at ? { at: initial.at } : {})
-    if (initial.section !== 'arrive') {
-      arrivedThisVisit = true
-      lastSpot = initial.section
-    }
+    enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : {})
+    if (initial.section !== 'arrive') arrivedThisVisit = true
+    if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section
   }, [])
 
   const arrived = () => {
@@ -56,7 +55,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
       {mode === 'flat' ? (
-        <Flat spot={spot} onSpot={onSpot} />
+        <Flat spot={spot} onSpot={onSpot} photo={photo} />
       ) : (
         <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} events={{ onSpot, onArrived: arrived }} />
       )}

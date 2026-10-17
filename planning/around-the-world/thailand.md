@@ -14,26 +14,30 @@ follow her finger) comes back later as a 3D activity reached from the house.
 
 ## The family (from Dad)
 
-| Person | Who | Lives at Agong's |
-|---|---|---|
-| Kaylee | her (a unicorn, not like Sparkle) | visiting |
-| Ji | Mom | visiting |
-| Nick | Dad | visiting |
-| Agong (อากง) | Grandpa | yes |
-| Jum, Joy | aunts | yes |
-| Bert | uncle | yes |
-| Gun, Khane | Joy's sons, older | yes |
-| Bibi | Bert's daughter, older | yes |
-| Ja, Sri | aunts | no |
-| Pato | Ja's son, Kaylee's age | no |
-| Putter | Ja's son, younger, a little penguin | no |
+| Person | Who | Lives at Agong's | Animal (Dad approved, 2026-10-17) |
+|---|---|---|---|
+| Kaylee | her | visiting | lilac unicorn, rainbow mane, gold horn, pink dress (nothing like Sparkle) |
+| Ji | Mom | visiting | cream unicorn, long lavender-pink hair, peach sundress |
+| Nick | Dad | visiting | mint unicorn, short sky-lavender mane, yellow polo, big grin |
+| Agong (อากง) | Grandpa | yes | panda with round gold glasses, a moustache, a cream shirt and a cane |
+| Jum | aunt | yes | peach bunny with long floppy ears, mint blouse |
+| Joy | aunt | yes | fox, lavender blouse |
+| Bert | uncle | yes | water buffalo with curved horns, peach t-shirt |
+| Gun, Khane | Joy's sons, older | yes | fox cubs: Gun in a backwards cap and shorts, Khane in green round glasses |
+| Bibi | Bert's daughter, older | yes | buffalo calf with pigtails and pink bows, pink dress |
+| Ja | aunt | no | penguin with a pink scarf |
+| Sri | aunt | no | hornbill (a Thai bird), lavender blouse |
+| Pato | Ja's son, Kaylee's age | no | penguin chick with a tuft, mint t-shirt |
+| Putter | Ja's son, younger | no | tiny grey penguin with a blue bib |
 
-**Lineup (gate 1 → Dad picks):** `thailand/lineup.webp`. Two concepts per person, three for Kaylee, drawn by Sol as
-toon-shaded vinyl toys, so the pick matches what the 3D will look like. Column A has kids matching their parent's
-animal; column B has everyone different. Mix freely, or swap any animal.
+**Lineup:** `thailand/lineup.webp`. Dad approved my picks: column A everywhere (kids share their parent's animal, so
+Kaylee can see who belongs to whom) and Kaylee's option A. They are built in 3D from `characters/looks.ts` by
+`characters/animal.ts`, and the "family photo" spot (`#/world/thailand/hub/family`, `?who=<id>` for one alone on a
+turntable) shows them all.
 
 Open questions for Dad: "Khane" or "Kane"? Does Sparkle keep guiding here (2D, in the prompt bubble as everywhere
 else), or does a family member (Mom, Agong) give the instructions? What is each person like (for their voices)?
+Where do the stairs really go, and which end does the mattress row run to?
 
 ## Agong's house (the hub)
 
@@ -60,16 +64,18 @@ and they hop together. Sacred things (the altar, the shrines, the spirit house) 
 curl of incense rises, a soft bell rings, and she does a wai.
 
 **Sections** (`activities/hub/sections.ts`; the hub's own deep links, `#/world/thailand/hub/<section>?at=<thing>`):
-`arrive` (the tuk-tuk ride), `street`, `downstairs`, `upstairs`. `at` starts her already using a thing, e.g.
-`downstairs?at=table` or `upstairs?at=mattress`.
+`arrive` (the tuk-tuk ride), `street`, `downstairs`, `upstairs`, `family` (the family photo). `at` starts her already
+using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows one person alone, e.g.
+`family?who=agong`.
 
 ## Gates (one PR each; stop for Dad after each)
 
 1. **Greybox house + lineup.** The 3D engine, the house built from simple shapes in the final toon look, walking,
    using things, placeholder family with name pills, no voices. Dad checks the feel on the iPad and picks the animals.
    *Done 2026-10-17.*
-2. **The family, static.** One parametric toy-animal builder (`buildAnimal(spec)`) and the 14 characters from Dad's
-   picks, shown in a "family photo" hub section next to their concepts. Characters plug into `characters/types.ts`.
+2. **The family, static.** One toy-animal builder (`characters/animal.ts`) and the 14 characters from Dad's picks
+   (`characters/looks.ts`), in the house and in the "family photo" spot. Each is a chibi rig (body, head, arms and
+   tail on their own pivots) ready for gate 3. *Built 2026-10-17.*
 3. **Alive + voices.** Idle breathing, blinking and looking at her; walking; sitting; waving; a mouth that moves with
    `speechLevel(voice)`. A voice per person in `cast.json` (Dad describes them), greetings with Thai words
    (Sawasdee ka/krub).

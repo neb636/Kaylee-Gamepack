@@ -1,78 +1,22 @@
-// Gate 1 stand-ins: a chibi capsule body and a big round head with eyes and blush, in each person's color. Good
-// enough to judge scale, places and the feel of walking around; gate 2 swaps in the real animals (same Character).
+// A family member in Agong's house: their toy animal (animal.ts, looks.ts) standing, sitting or lying at their spot,
+// breathing, turning their head to look at Kaylee when she comes near, and hopping when she says hi.
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span } from '../../../../sdk'
 import type { Bag } from '../engine/dispose'
-import { blobShadow, merge, P, solid } from '../engine/geo'
-import { PAL } from '../engine/toon'
+import { buildAnimal, type Rig } from './animal'
 import type { FamilyMember } from './family'
+import { LOOKS } from './looks'
 import type { Character, Pose } from './types'
-
-export interface Chibi {
-  root: Group
-  body: Group
-  head: Group
-  height: number
-  /** Body radius (lying down lifts the body by this). */
-  radius: number
-}
-
-/** The body + head every placeholder shares. `extras` add parts to the head (a horn, ears) or body (a tail). */
-export function buildChibi(height: number, colorBody: string, bag: Bag, extras?: { head?: Parameters<typeof merge>[0]; body?: Parameters<typeof merge>[0] }): Chibi {
-  const H = height
-  const rb = 0.19 * H
-  const hb = 0.56 * H
-  const rh = 0.22 * H
-  const root = new Group()
-  const body = new Group()
-  const head = new Group()
-  root.add(blobShadow(rb * 1.6, bag), body)
-  body.add(
-    solid(
-      merge([
-        P.capsule(rb, hb - 2 * rb, colorBody, { at: [0, hb / 2, 0] }),
-        P.capsule(0.05 * H, 0.12 * H, colorBody, { at: [rb + 0.02 * H, 0.33 * H, 0], rot: [0, 0, 0.5] }),
-        P.capsule(0.05 * H, 0.12 * H, colorBody, { at: [-rb - 0.02 * H, 0.33 * H, 0], rot: [0, 0, -0.5] }),
-        P.sphere(0.075 * H, PAL.ink, { at: [0.08 * H, 0.04 * H, 0.03 * H], scale: [1, 0.55, 1.3] }),
-        P.sphere(0.075 * H, PAL.ink, { at: [-0.08 * H, 0.04 * H, 0.03 * H], scale: [1, 0.55, 1.3] }),
-        ...(extras?.body ?? []),
-      ]),
-      bag,
-      3,
-    ),
-  )
-  head.position.y = hb + rh * 0.72
-  body.add(head)
-  head.add(
-    solid(
-      merge([
-        P.sphere(rh, colorBody, {}, 24),
-        // Big shiny eyes and blush, on the front (+z).
-        ...[1, -1].flatMap((s) => [
-          P.sphere(0.042 * H, PAL.ink, { at: [s * 0.075 * H, 0.015 * H, rh * 0.9], scale: [0.85, 1.15, 0.5] }),
-          P.sphere(0.014 * H, '#ffffff', { at: [s * 0.075 * H + 0.012 * H, 0.04 * H, rh * 0.93] }),
-          P.sphere(0.03 * H, PAL.pink, { at: [s * 0.13 * H, -0.035 * H, rh * 0.8], scale: [1.2, 0.6, 0.4] }),
-        ]),
-        P.torus(0.025 * H, 0.006 * H, PAL.ink, { at: [0, -0.05 * H, rh * 0.95], rot: [0, 0, Math.PI] }, Math.PI),
-        ...(extras?.head ?? []),
-      ]),
-      bag,
-      3,
-    ),
-  )
-  return { root, body, head, height: H, radius: rb }
-}
 
 const deg = Math.PI / 180
 const tmp = new Vector3()
 
-/** A family member: idle breathing, turns to look at Kaylee, hops when greeted. */
-export class Placeholder implements Character {
+export class Member implements Character {
   readonly id: string
   readonly root: Group
   readonly height: number
   pose: Pose = 'stand'
-  private chibi: Chibi
+  private chibi: Rig
   private reaction: { kind: 'hop' | 'wiggle'; t: number } | null = null
   private look: Vector3 | null = null
   private headYaw = 0
@@ -81,17 +25,25 @@ export class Placeholder implements Character {
 
   constructor(readonly member: FamilyMember, bag: Bag) {
     this.id = member.id
-    this.chibi = buildChibi(member.height, member.color, bag)
+    this.chibi = buildAnimal(LOOKS[member.id], bag)
     this.root = this.chibi.root
-    this.height = member.height
+    this.height = this.chibi.height
     const s = member.spot
-    this.baseY = (s?.floor ? 3.6 : 0) + (s?.pose === 'sit' ? (s.seat ?? 0.45) - 0.1 * member.height : s?.pose === 'lie' ? 0.2 : 0)
+    this.baseY = (s?.floor ? 3.6 : 0) + (s?.pose === 'sit' ? (s.seat ?? 0.45) - 0.1 * this.height : s?.pose === 'lie' ? 0.2 : 0)
     if (s) {
       this.root.position.set(s.x, this.baseY, s.z)
       this.root.rotation.y = s.face * deg
       this.setPose(s.pose)
     }
     this.root.userData.pick = `family:${member.id}`
+  }
+
+  /** Puts them somewhere else (the family photo). */
+  place(x: number, y: number, z: number, faceDeg: number, pose: Pose = 'stand') {
+    this.baseY = y
+    this.root.position.set(x, y, z)
+    this.root.rotation.y = faceDeg * deg
+    this.setPose(pose)
   }
 
   setPose(pose: Pose) {

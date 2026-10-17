@@ -72,6 +72,26 @@ export function solid(geometry: BufferGeometry, bag: Bag, px = 2): Group {
   return g
 }
 
+/**
+ * A toy shape whose outline only goes around some of its parts: `outlined` parts each get an ink line where they show
+ * in front of the rest (a muzzle on a face, a sleeve on an arm), `plain` parts (blush, eye shines) get none.
+ */
+export function solidMix(outlined: BufferGeometry[], plain: BufferGeometry[], bag: Bag, px = 2): Group {
+  const g = new Group()
+  const all = mergeGeometries([...outlined, ...plain], false)
+  const lined = px > 0 && outlined.length ? mergeGeometries(outlined, false) : null
+  for (const p of [...outlined, ...plain]) p.dispose()
+  if (!all) throw new Error('solidMix: parts have different attributes')
+  g.add(new Mesh(bag.add(all), toon('#ffffff', true)))
+  if (lined) {
+    const hull = makeHull(lined, px)
+    lined.dispose()
+    bag.add(hull.geometry)
+    g.add(hull)
+  }
+  return g
+}
+
 /** Like `solid`, without merging: a single part. */
 export const one = (part: BufferGeometry, bag: Bag, px = 2) => solid(part, bag, px)
 

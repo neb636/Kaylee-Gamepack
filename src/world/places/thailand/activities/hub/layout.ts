@@ -165,6 +165,23 @@ export const STARTS = {
   street: { floor: 0 as const, x: 0.45, z: 1.55, face: 15 },
   downstairs: { floor: 0 as const, x: 0.35, z: -1.4, face: 140 },
   upstairs: { floor: 1 as const, x: 1.65, z: -13.2, face: 0 },
+  family: { floor: 0 as const, x: 1.05, z: 1.75, face: 0 },
+}
+
+/** The family photo on the sidewalk in front of Agong's house: grown-ups behind, each kid in front, beside a parent. */
+export const PHOTO: { back: string[]; front: [string, number][]; backZ: number; frontZ: number; spacing: number } = {
+  back: ['bert', 'joy', 'jum', 'agong', 'ji', 'nick', 'ja', 'sri'],
+  front: [
+    ['bibi', -4.45],
+    ['gun', -3.3],
+    ['khane', -2.15],
+    ['kaylee', 1.15],
+    ['pato', 2.3],
+    ['putter', 3.45],
+  ],
+  backZ: 0.75,
+  frontZ: 1.75,
+  spacing: 1.15,
 }
 
 /** Each stair, bottom to top: where she stands on it. */

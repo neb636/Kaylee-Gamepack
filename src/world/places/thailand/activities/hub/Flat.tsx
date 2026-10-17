@@ -13,12 +13,13 @@ const SPOTS: { id: Spot; icon: string; label: string }[] = [
   { id: 'upstairs', icon: '🛏️', label: 'Upstairs' },
 ]
 
-export function Flat({ spot, onSpot }: { spot: Spot; onSpot: (s: Spot) => void }) {
+export function Flat({ spot, onSpot, photo = false }: { spot: Spot; onSpot: (s: Spot) => void; photo?: boolean }) {
   const [poked, setPoked] = useState<string | null>(null)
   const floor = spot === 'upstairs' ? 1 : 0
   const area = spot === 'street' ? 'street' : 'inside'
   const things = PICKABLES.filter((p) => p.floor === floor && p.area === area && p.react !== 'stairs')
-  const people = FAMILY.filter((m) => m.spot && m.spot.floor === floor && (m.spot.z > 0) === (spot === 'street'))
+  // The family photo shows everyone; otherwise whoever is at this spot.
+  const people = photo ? FAMILY : FAMILY.filter((m) => m.spot && m.spot.floor === floor && (m.spot.z > 0) === (spot === 'street'))
   const poke = (id: string, sound: () => void) => {
     setPoked(id)
     sound()
@@ -46,7 +47,7 @@ export function Flat({ spot, onSpot }: { spot: Spot; onSpot: (s: Spot) => void }
             {m.name}
           </motion.button>
         ))}
-        {things.map((p) => (
+        {!photo && things.map((p) => (
           <motion.button key={p.id} aria-label={p.label} animate={poked === p.id ? { scale: [1, 1.15, 0.95, 1] } : { scale: 1 }} onClick={() => poke(p.id, p.gentle ? sfx.ding : sfx.pop)} style={{ minWidth: 88, minHeight: 72, borderRadius: 20, border: '4px solid #fff', background: '#fff', fontSize: 17, fontWeight: 600, boxShadow: 'var(--shadow)', padding: '0 14px' }}>
             {p.label}
           </motion.button>

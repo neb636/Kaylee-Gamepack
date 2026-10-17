@@ -10,7 +10,7 @@
 import { Color, Group, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { Avatar } from '../../characters/avatar'
 import { FAMILY } from '../../characters/family'
-import { Placeholder } from '../../characters/placeholder'
+import { Member } from '../../characters/member'
 import { CameraRig, type Shot } from '../../engine/camera'
 import { Bag } from '../../engine/dispose'
 import { NavGrid, type XZ } from '../../engine/nav'
@@ -25,7 +25,7 @@ import { Reactor, rememberRest } from './build/pokes'
 import { buildStairs } from './build/stairs'
 import { buildStreet } from './build/street'
 import { buildUpper } from './build/upper'
-import { DIM, NAV, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
+import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
 import type { HubSection } from './sections'
 
 export type Spot = 'street' | 'downstairs' | 'upstairs'
@@ -33,6 +33,8 @@ export interface Start {
   section: HubSection
   /** A use-spot (pickable id) to start in, e.g. 'table' or 'mattress'. */
   at?: string
+  /** The family photo: one person alone, turning slowly (an id from looks.ts), or everyone. */
+  who?: string
 }
 
 /** A DOM tap target over something in the scene. */
@@ -61,7 +63,8 @@ const tmp2 = new Vector3()
 
 export const ANCHORS: AnchorInfo[] = [
   ...PICKABLES.map((p) => ({ id: p.id, label: p.label, kind: 'thing' as const })),
-  ...FAMILY.filter((m) => m.spot).map((m) => ({ id: `family:${m.id}`, label: m.name, name: m.name, thai: m.thai, kind: 'family' as const })),
+  ...FAMILY.map((m) => ({ id: `family:${m.id}`, label: m.name, name: m.name, thai: m.thai, kind: 'family' as const })),
+  { id: 'family:kaylee', label: 'Kaylee', name: 'Kaylee', kind: 'family' },
 ]
 
 export class House {
@@ -72,11 +75,13 @@ export class House {
   private reactor: Reactor
   private lights = makeLights(this.scene)
   readonly kaylee: Avatar
-  private family = new Map<string, Placeholder>()
+  private family = new Map<string, Member>()
+  /** The family photo (section `family`): everyone lined up on the sidewalk, or one person turning slowly. */
+  private photo: { who: string | null } | null = null
   private nav: Record<0 | 1, NavGrid>
   private marker: TapMarker
   private raycaster = new Raycaster()
-  private groups: Record<'tall' | 'props' | 'roof' | 'upper' | 'upperRoom' | 'upperFront' | 'front' | 'groundRoom', Group>
+  private groups: Record<'tall' | 'props' | 'roof' | 'upper' | 'upperRoom' | 'upperFront' | 'front' | 'groundRoom' | 'stairs', Group>
   private cuts: { obj: Object3D; low: number; when: (m: Mode) => boolean; value: number }[] = []
   /** Where she is: outside, downstairs or upstairs (drives the cutaway and the camera). */
   private mode: Mode = 'street'
@@ -121,9 +126,9 @@ export class House {
     const upperFront = street.upperFront
     upperAll.add(upperRoom, street.balcony, upperFront)
     const groundRoom = new Group()
-    groundRoom.add(ground.room, ground.rightWall, stairs)
-    scene.add(street.ground, street.tall, street.props, street.front, street.frontRight, street.roof, groundRoom, upperAll)
-    this.groups = { tall: street.tall, props: street.props, roof: street.roof, upper: upperAll, upperRoom, upperFront, front: street.front, groundRoom }
+    groundRoom.add(ground.room, ground.rightWall)
+    scene.add(street.ground, street.tall, street.props, street.front, street.frontRight, street.roof, groundRoom, stairs, upperAll)
+    this.groups = { tall: street.tall, props: street.props, roof: street.roof, upper: upperAll, upperRoom, upperFront, front: street.front, groundRoom, stairs }
     // Walls that lower so the camera can see in: the right walls (to 1 m), the front pillar and the upper front.
     this.cuts.push(
       { obj: ground.rightWall, low: 1.0 / DIM.g0, when: (m) => m === 'inside0', value: 1 },
@@ -139,10 +144,9 @@ export class House {
     this.tuk = kit.pokes.get('tuk-tuk') ?? null
     rememberRest(kit)
 
-    // Family (placeholders until gate 2).
+    // The family: everyone at their spot (the ones who don't live here only come for the family photo).
     for (const m of FAMILY) {
-      if (!m.spot) continue
-      const p = new Placeholder(m, this.bag)
+      const p = new Member(m, this.bag)
       this.family.set(m.id, p)
       scene.add(p.root)
     }
@@ -170,6 +174,7 @@ export class House {
   // ---------------------------------------------------------------- start / sections
 
   private begin(start: Start) {
+    if (start.section === 'family') return this.beginPhoto(start.who)
     const s = STARTS[start.section]
     this.kaylee.floor = s.floor
     this.kaylee.place(s.x, s.floor * DIM.g0, s.z, s.face)
@@ -188,6 +193,35 @@ export class House {
     for (const c of this.cuts) c.value = c.when(this.mode) ? c.low : 1
     this.applyVisibility()
     this.rig.setShot(this.shot(), true)
+  }
+
+  /** Everyone lined up in front of Agong's house, smiling at the camera; or one of them alone, turning slowly. */
+  private beginPhoto(who?: string) {
+    const one = who && (who === 'kaylee' || this.family.has(who)) ? who : null
+    this.photo = { who: one }
+    this.mode = 'street'
+    this.spot = 'street'
+    this.reactor.setShutter(false, true)
+    this.applyShutterNav()
+    this.parkTuk()
+    this.layoutPhoto()
+    if (one === 'kaylee') this.kaylee.place(0, 0, 1.3, 0)
+    else if (one) this.family.get(one)?.place(0, 0, 1.3, 0)
+    this.kaylee.root.visible = !one || one === 'kaylee'
+    for (const c of this.cuts) c.value = 1
+    this.applyVisibility()
+    this.rig.setShot(this.shot(), true)
+  }
+
+  /** Everyone in their row; on a tall screen they squeeze together (a crowded family photo) so nobody is tiny. */
+  private layoutPhoto() {
+    if (!this.photo || this.photo.who) return
+    const squeeze = this.w < this.h ? 0.68 : 1
+    PHOTO.back.forEach((id, i) => this.family.get(id)?.place((i - (PHOTO.back.length - 1) / 2) * PHOTO.spacing * squeeze, 0, PHOTO.backZ, 0))
+    for (const [id, x] of PHOTO.front) {
+      if (id === 'kaylee') this.kaylee.place(x * squeeze, 0, PHOTO.frontZ, 0)
+      else this.family.get(id)?.place(x * squeeze, 0, PHOTO.frontZ, 0)
+    }
   }
 
   /** Skips the tuk-tuk arrival: she's on the sidewalk, the camera at the street. */
@@ -222,7 +256,7 @@ export class House {
       this.hover(x, y)
       return
     }
-    if (!this.lead || this.arriving || this.climbing) return
+    if (!this.lead || this.arriving || this.climbing || this.photo) return
     if (Math.hypot(x - downX, y - downY) < 12) return
     const now = performance.now()
     if (now - this.lead.last < 150) return
@@ -241,12 +275,14 @@ export class House {
       return
     }
     const target = id ?? this.pick(x, y)
-    if (target?.startsWith('family:')) return this.greet(target.slice(7))
-    if (target === 'kaylee') {
+    if (target === 'kaylee' || target === 'family:kaylee') {
       this.kaylee.react('hop')
       sfx.boing()
       return
     }
+    if (target?.startsWith('family:')) return this.photo ? this.cheer(target.slice(7)) : this.greet(target.slice(7))
+    // In the family photo only people react; nobody walks off.
+    if (this.photo) return
     const p = target ? PICKABLES.find((q) => q.id === target) : undefined
     if (p && this.allowed(p)) return this.usePickable(p)
     const hit = this.floorPoint(x, y)
@@ -314,6 +350,7 @@ export class House {
   }
   /** Can she see (and so greet) this family member from where she is? */
   private familyShown(m: (typeof FAMILY)[number]) {
+    if (this.photo) return !this.photo.who || this.photo.who === m.id
     const s = m.spot
     if (!s) return false
     if (s.floor === 1) return this.mode === 'inside1'
@@ -322,8 +359,9 @@ export class House {
   }
   /** Can she tap (and greet) them from here? From the street, the family inside is behind the shop front. */
   private familyVisible(id: string) {
-    if (id === 'kaylee') return true
+    if (id === 'kaylee' || id === 'family:kaylee') return !this.photo || !this.photo.who || this.photo.who === 'kaylee'
     const m = FAMILY.find((f) => `family:${f.id}` === id)
+    if (m && this.photo) return this.familyShown(m)
     if (!m?.spot || m.spot.floor !== this.kaylee.floor || !this.familyShown(m)) return false
     return !(this.mode === 'street' && m.spot.z < 0)
   }
@@ -421,6 +459,15 @@ export class House {
     })
   }
 
+  /** In the family photo: a happy hop and a hello, right where they stand. */
+  private cheer(id: string) {
+    const m = FAMILY.find((f) => f.id === id)
+    const who = this.family.get(id)
+    if (!m || !who || !this.familyShown(m)) return
+    who.react('hop')
+    sfx.babble(m.pitch)
+  }
+
   /** Up or down the stairs: walk to the foot (or the landing), then hop step by step. */
   private climb(up: boolean) {
     const k = this.kaylee
@@ -464,15 +511,18 @@ export class House {
   private applyVisibility() {
     const m = this.mode
     this.groups.tall.visible = m === 'street'
-    // Inside, the sidewalk things (and the people out there) would stand between the camera and the room.
-    this.groups.props.visible = m === 'street'
+    // Inside, the sidewalk things (and the people out there) would stand between the camera and the room; in the
+    // family photo they'd stand among the family.
+    this.groups.props.visible = m === 'street' && !this.photo
     this.groups.roof.visible = m === 'street'
     this.groups.upper.visible = m !== 'inside0'
     this.groups.upperRoom.visible = m === 'inside1'
     // Downstairs, the sign board and the rolled-up shutter would hide the room.
     this.groups.front.visible = m !== 'inside0'
-    // From the street, the room only shows once the shutter is up.
-    this.groups.groundRoom.visible = m !== 'street' || this.reactor.shutterOpen
+    // From the street, the room only shows once the shutter is up; from upstairs, only the stairs show (through the
+    // stairwell), so the rest of the ground floor isn't drawn.
+    this.groups.groundRoom.visible = m === 'inside0' || (m === 'street' && this.reactor.shutterOpen)
+    this.groups.stairs.visible = m !== 'street' || this.reactor.shutterOpen
     for (const [id, f] of this.family) f.root.visible = this.familyShown(FAMILY.find((x) => x.id === id)!)
   }
 
@@ -483,6 +533,7 @@ export class House {
     this.h = h
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
+    this.layoutPhoto()
     this.rig.setShot(this.shot(), true)
   }
 
@@ -495,6 +546,16 @@ export class House {
 
   /** The camera's goal for where she is. */
   private shot(): Shot {
+    if (this.photo) {
+      const who = this.photo.who
+      if (who) {
+        const h = who === 'kaylee' ? this.kaylee.height : (this.family.get(who)?.height ?? 1.5)
+        return { center: new Vector3(0, h * 0.58, 1.3), half: new Vector3(h * 0.5, h * 0.66, 0.45), yaw: 0, pitch: 8, minDist: 1.5 }
+      }
+      // On a tall screen the row fits the width with room to spare above and below: aim higher (more house, less road).
+      const tall = this.w < this.h
+      return { center: new Vector3(0, tall ? 1.7 : 0.95, 1.3), half: new Vector3(tall ? 3.5 : 5.0, 1.05, 0.7), yaw: 0, pitch: 17, minDist: 5 }
+    }
     const k = this.kaylee.position
     const aspect = this.w / Math.max(1, this.h)
     const wide = clamp01((aspect - 0.6) / (1.6 - 0.6))
@@ -539,7 +600,7 @@ export class House {
       this.lastPos.copy(k.position)
     }
     for (const f of this.family.values()) {
-      const near = f.root.position.distanceTo(k.position) < 3 && f.root.visible
+      const near = !this.photo && f.root.position.distanceTo(k.position) < 3 && f.root.visible
       if (near) f.lookAt(k.position.x, k.position.y + 0.6, k.position.z)
       else f.lookAway()
       f.update(dt, t)
@@ -547,7 +608,14 @@ export class House {
     this.reactor.update(dt, t)
     this.marker.update(dt)
     // Inside or outside? (with a little dead band so she doesn't flicker on the doorstep)
-    if (!this.arriving && k.floor === 0 && !this.climbing) {
+    if (this.photo?.who) {
+      // One of them alone, like on a turntable: the front for a few seconds, then a quarter turn at a time, pausing at
+      // each side and the back.
+      const yaw = turntable(t)
+      if (this.photo.who === 'kaylee') k.place(0, 0, 1.3, yaw)
+      else this.family.get(this.photo.who)?.place(0, 0, 1.3, yaw)
+    }
+    if (!this.arriving && k.floor === 0 && !this.climbing && !this.photo) {
       if (this.mode === 'street' && k.position.z < -0.3) {
         this.mode = 'inside0'
         this.applyVisibility()
@@ -586,12 +654,22 @@ export class House {
     const right = tmp2.set(1, 0, 0).applyQuaternion(cam.quaternion)
     for (const [id, el] of this.anchorEls) {
       let at: Vector3 | null = null
+      let top: Vector3 | null = null
       let r = 0.5
       let show = false
-      if (id.startsWith('family:')) {
+      if (id === 'family:kaylee') {
+        if (this.photo && this.familyVisible(id)) {
+          at = tmp.copy(this.kaylee.position)
+          top = at.clone().setY(at.y + this.kaylee.height * 1.12)
+          at.y += this.kaylee.height * 0.5
+          r = this.kaylee.height * 0.42
+          show = true
+        }
+      } else if (id.startsWith('family:')) {
         const f = this.family.get(id.slice(7))
         if (f && f.root.visible && this.familyVisible(id)) {
           at = tmp.copy(f.root.position)
+          top = at.clone().setY(at.y + f.height * (f.pose === 'lie' ? 0.45 : 1.12))
           at.y += f.height * (f.pose === 'lie' ? 0.2 : 0.5)
           r = f.height * 0.42
           show = true
@@ -615,6 +693,8 @@ export class House {
           el.style.transform = `translate3d(${(sx - size / 2).toFixed(1)}px, ${(sy - size / 2).toFixed(1)}px, 0)`
           el.style.width = el.style.height = `${size.toFixed(0)}px`
           el.style.zIndex = String(Math.round((1 - center.z) * 10000))
+          // Name pills sit on top of the head, wherever the button's own top is.
+          if (top) el.style.setProperty('--pill', `${(((1 - top.project(cam).y) / 2) * this.h - (sy - size / 2)).toFixed(1)}px`)
         }
       }
       const want = show ? '' : 'none'
@@ -707,6 +787,18 @@ export class House {
 type Mode = 'street' | 'inside0' | 'inside1'
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
+/** Degrees: hold a three-quarter view (like the concept pictures) for 3 s, then turn 90° in 1 s and hold 1.2 s, four
+ *  times (an 11.8 s loop). */
+function turntable(t: number) {
+  const front = 3
+  const quarter = 2.2
+  const loop = front + quarter * 4
+  const u = t % loop
+  if (u < front) return -25
+  const k = Math.floor((u - front) / quarter)
+  const p = Math.min(1, ((u - front) % quarter) / 1.0)
+  return -25 + (k + p * p * (3 - 2 * p)) * 90
+}
 const clamp01 = (v: number) => clamp(v, 0, 1)
 function visibleChain(o: Object3D | null): boolean {
   if (!o) return false
