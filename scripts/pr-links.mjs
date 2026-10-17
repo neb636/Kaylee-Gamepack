@@ -33,11 +33,12 @@ for (const f of sh('git status --porcelain').split('\n').filter(Boolean)) change
 /** Reads a sections.ts (one section per line: `{ id: 'own', name: '...', params: ['at', 'sauce'] }`). */
 function readSections(file) {
   const src = readFileSync(path.join(root, file), 'utf8')
-  const head = src.match(/defineSections\(\s*'([^']+)',\s*'([^']+)'/)
+  // The activity is a string, or HUB for a country's hub sections (activities/hub/sections.ts).
+  const head = src.match(/defineSections\(\s*'([^']+)',\s*(?:'([^']+)'|HUB)/)
   if (!head) return null
   const params = Object.fromEntries([...src.matchAll(/(\w+): \{\s*default: '([^']*)',(?:\s*values: \[([^\]]*)\],)?(?:\s*doc: (['"])(.*?)\4)?/g)].map((m) => [m[1], { default: m[2], values: m[3]?.replace(/'/g, '').replace(/\s+/g, ' ').trim(), doc: m[5] }]))
   const sections = [...src.matchAll(/\{ id: '([^']+)', name: (['"])(.*?)\2(?:, params: \[([^\]]*)\])? \}/g)].map((m) => ({ id: m[1], name: m[3], params: m[4] ? m[4].replace(/'/g, '').split(',').map((s) => s.trim()).filter(Boolean) : [] }))
-  return { place: head[1], activity: head[2], params, sections, file }
+  return { place: head[1], activity: head[2] ?? 'hub', params, sections, file }
 }
 
 /** The sections file for a changed file inside an activity: its folder's sections.ts, or <Name>.sections.ts beside it. */

@@ -24,7 +24,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const [arriving, setArriving] = useState(initial.section === 'arrive')
   const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' ? 'street' : initial.section)
   const houseRef = useRef<House | null>(null)
-  const debug = flag('debug') !== null
+  // Read once: the address bar follows her spots and drops ?debug=1 as soon as she moves.
+  const [debug] = useState(() => flag('debug') !== null)
 
   useEffect(() => {
     enter(initial.section, initial.at ? { at: initial.at } : {})
