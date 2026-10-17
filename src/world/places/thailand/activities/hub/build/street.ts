@@ -103,7 +103,7 @@ export function buildStreet(kit: Kit): Street {
   const curtain = part(
     kit,
     'shutter.curtain',
-    [P.box(DOOR_W, SHUT, 0.06, SHUTTER, { at: [0, -SHUT / 2, 0] }), ...Array.from({ length: 13 }, (_, i) => P.box(DOOR_W - 0.04, 0.03, 0.02, SLAT, { at: [0, -0.2 - i * 0.2, 0.04] })), P.box(0.6, 0.08, 0.06, PAL.ink, { at: [0, -SHUT + 0.15, 0.06] })],
+    [P.box(DOOR_W, SHUT, 0.06, SHUTTER, { at: [0, -SHUT / 2, 0] }), ...Array.from({ length: 13 }, (_, i) => P.box(DOOR_W - 0.04, 0.03, 0.02, SLAT, { at: [0, -0.2 - i * 0.2, 0.04] })), P.box(0.6, 0.08, 0.06, '#7FB8A8', { at: [0, -SHUT + 0.15, 0.06] })],
     [0, 0, 0],
     2,
   )

@@ -1,9 +1,10 @@
 // How each of Kaylee's family looks as a toy animal: Dad's picks from the lineup (2026-10-17: column A, so kids share
-// their parent's animal, and Kaylee's lilac unicorn); later Dad made Jum a chubby pink elephant and Mommy a bit rounder. The concepts are in planning/around-the-world/thailand/lineup.webp;
+// their parent's animal, and Kaylee's lilac unicorn); later Dad made Jum a chubby pink elephant and Mommy a bit rounder,
+// and gave the big cousins (Gun, Khane, Bibi) phones they never look up from. The concepts are in planning/around-the-world/thailand/lineup.webp;
 // characters/animal.ts builds them in 3D. Pure data (no three.js).
 export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill'
 export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
-export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft'
+export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone'
 
 export interface Look {
   species: Species
@@ -42,10 +43,10 @@ export const LOOKS: Record<string, Look> = {
   agong: { species: 'panda', height: 1.45, fur: '#FFF6EE', light: '#FFFDF8', dark: '#4A3F4F', ear: '#FFB3C7', outfit: { kind: 'shirt', color: '#FFF0DA' }, extras: ['glasses', 'moustache', 'cane'] },
   jum: { species: 'elephant', height: 1.5, chub: 1.25, fur: '#FFB3CF', light: '#FFE3EE', dark: '#F28CB3', ear: '#FF94BC', outfit: { kind: 'blouse', color: '#A7EBD0' }, lashes: true },
   joy: { ...FOX, height: 1.5, outfit: { kind: 'blouse', color: '#C9B5F7' }, lashes: true },
-  gun: { ...FOX, height: 1.32, outfit: { kind: 'tee', color: '#8FC9F5', shorts: '#5D7BB0' }, extras: ['cap'] },
-  khane: { ...FOX, height: 1.25, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['round-glasses'] },
+  gun: { ...FOX, height: 1.32, outfit: { kind: 'tee', color: '#8FC9F5', shorts: '#5D7BB0' }, extras: ['cap', 'phone'] },
+  khane: { ...FOX, height: 1.25, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['round-glasses', 'phone'] },
   bert: { ...BUFFALO, height: 1.65, outfit: { kind: 'tee', color: '#FFB896' } },
-  bibi: { ...BUFFALO, height: 1.2, outfit: { kind: 'dress', color: '#FF8FB8' }, extras: ['pigtails'], lashes: true },
+  bibi: { ...BUFFALO, height: 1.2, outfit: { kind: 'dress', color: '#FF8FB8' }, extras: ['pigtails', 'phone'], lashes: true },
   ja: { ...PENGUIN, height: 1.45, extras: ['scarf'], lashes: true, open: true },
   pato: { ...PENGUIN, height: 1.0, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['tuft'], open: true },
   putter: { ...PENGUIN, height: 0.78, fur: '#B9B4D6', extras: ['bib'] },

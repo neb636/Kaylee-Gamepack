@@ -23,8 +23,8 @@ follow her finger) comes back later as a 3D activity reached from the house.
 | Jum | aunt | yes | chubby pink elephant (Dad's change from the bunny), mint blouse |
 | Joy | aunt | yes | fox, lavender blouse |
 | Bert | uncle | yes | water buffalo with curved horns, peach t-shirt |
-| Gun, Khane | Joy's sons, older | yes | fox cubs: Gun in a backwards cap and shorts, Khane in green round glasses |
-| Bibi | Bert's daughter, older | yes | buffalo calf with pigtails and pink bows, pink dress |
+| Gun, Khane | Joy's sons, older | yes | fox cubs: Gun in a backwards cap and shorts, Khane in green round glasses; both glued to their phones (Dad) |
+| Bibi | Bert's daughter, older | yes | buffalo calf with pigtails and pink bows, pink dress; glued to her phone (Dad) |
 | Ja | aunt | no | penguin with a pink scarf |
 | Sri | aunt | no | hornbill (a Thai bird), lavender blouse |
 | Pato | Ja's son, Kaylee's age | no | penguin chick with a tuft, mint t-shirt |

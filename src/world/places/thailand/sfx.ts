@@ -25,6 +25,8 @@ export const sfx = {
   tick: () => [0, 0.25, 0.5, 0.75].forEach((d, i) => tone(i % 2 ? 1700 : 2100, 1600, 0.04, 0.08, 'square', d)),
   whir: () => noise(1.2, 0.07, 'bandpass', 500, 1400, 0, 1.2),
   puff: () => noise(0.25, 0.1, 'lowpass', 700, 250),
+  /** Thumbs tapping a phone screen (the big cousins' answer to everything). */
+  phone: () => [0, 0.1, 0.17, 0.31].forEach((d, i) => tone(i === 3 ? 1560 : 2200, i === 3 ? 2080 : 2150, 0.035, 0.05, 'sine', d)),
   /** Someone in the family says hi, until they have real voices (gate 3): a happy little babble at their pitch. */
   babble: (pitch: number) => {
     const n = 3 + Math.floor(Math.random() * 2)

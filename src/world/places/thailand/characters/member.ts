@@ -22,12 +22,20 @@ export class Member implements Character {
   private headYaw = 0
   private phase = Math.random() * 10
   private baseY: number
+  /** Glued to their phone (the big cousins): head down at the screen, both hands on it, never looking up for long. */
+  readonly onPhone: boolean
+  private glance = 1
 
   constructor(readonly member: FamilyMember, bag: Bag) {
     this.id = member.id
     this.chibi = buildAnimal(LOOKS[member.id], bag)
     this.root = this.chibi.root
     this.height = this.chibi.height
+    this.onPhone = !!LOOKS[member.id].extras?.includes('phone')
+    if (this.onPhone) {
+      this.chibi.armL.rotation.set(-1.2, 0, 0.75)
+      this.chibi.armR.rotation.set(-1.2, 0, -0.75)
+    }
     const s = member.spot
     this.baseY = (s?.floor ? 3.6 : 0) + (s?.pose === 'sit' ? (s.seat ?? 0.45) - 0.1 * this.height : s?.pose === 'lie' ? 0.2 : 0)
     if (s) {
@@ -54,7 +62,9 @@ export class Member implements Character {
   }
 
   react(kind: 'hop' | 'wiggle') {
-    this.reaction = { kind, t: 0 }
+    // Too busy with the phone to hop: a quick look up, then back to the screen.
+    if (this.onPhone) this.glance = 0
+    else this.reaction = { kind, t: 0 }
   }
   lookAt(x: number, y: number, z: number) {
     this.look = (this.look ?? new Vector3()).set(x, y, z)
@@ -69,14 +79,17 @@ export class Member implements Character {
     // Breathing.
     const breath = 1 + Math.sin(t * 2.6 + this.phase) * 0.018
     body.scale.set(1 / Math.sqrt(breath), breath, 1 / Math.sqrt(breath))
-    // Look at Kaylee (head only, within a comfortable turn).
+    // Look at Kaylee (head only, within a comfortable turn). Phone people only look up for a moment when she says hi.
     let want = 0
-    if (this.look && !lying) {
+    this.glance = Math.min(1, this.glance + dt / 1.1)
+    const up = this.onPhone ? bell(this.glance) : 1
+    if (this.look && !lying && up > 0.05) {
       this.root.worldToLocal(tmp.copy(this.look))
       want = clamp(Math.atan2(tmp.x, tmp.z), -1.0, 1.0)
     }
     this.headYaw += (want - this.headYaw) * (1 - Math.exp(-dt * 6))
-    head.rotation.y = this.headYaw
+    head.rotation.y = this.headYaw * up
+    if (this.onPhone) head.rotation.x = 0.45 * (1 - up) + Math.sin(t * 1.3 + this.phase) * 0.02
     // Reactions.
     let y = 0
     if (this.reaction) {

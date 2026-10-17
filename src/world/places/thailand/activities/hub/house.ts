@@ -449,7 +449,7 @@ export class House {
     const who = this.family.get(id)
     if (!m?.spot || !who || !this.familyVisible(`family:${id}`)) return
     who.react('hop')
-    sfx.babble(m.pitch)
+    this.hello(m, who)
     const face = m.spot.face * deg
     // Stand in front of them (or as close as there's room).
     const front: XZ = [m.spot.x + Math.sin(face) * 0.95, m.spot.z + Math.cos(face) * 0.95]
@@ -458,7 +458,7 @@ export class House {
       k.faceToward(m.spot!.x, m.spot!.z)
       k.react('hop')
       who.react('hop')
-      sfx.babble(m.pitch * 1.1)
+      this.hello(m, who, 1.1)
       setTimeout(() => sfx.babble(520), 380)
     })
   }
@@ -469,7 +469,13 @@ export class House {
     const who = this.family.get(id)
     if (!m || !who || !this.familyShown(m)) return
     who.react('hop')
-    sfx.babble(m.pitch)
+    this.hello(m, who)
+  }
+
+  /** Their hello: a babble, or from the big cousins just the tap-tap of their phone. */
+  private hello(m: (typeof FAMILY)[number], who: Member, lift = 1) {
+    if (who.onPhone) sfx.phone()
+    else sfx.babble(m.pitch * lift)
   }
 
   /** Up or down the stairs: walk to the foot (or the landing), then hop step by step. */

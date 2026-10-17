@@ -318,6 +318,17 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       torso.push(P.rbox(0.09 * H, 0.24 * H, 0.04 * H, 0.015 * H, '#FF8FB8', { at: [0.12 * H, 0.42 * H, 0.27 * H], rot: [0.25, 0, -0.15] }))
     }
     if (e === 'bib') torso.push(P.sphere(0.2 * H, '#A8DCFF', { at: [0, 0.48 * H, 0.2 * H], scale: [1.1, 0.55, 0.45] }))
+    if (e === 'phone') {
+      // Held in front of the tummy, screen tipped up toward their face (we see its back, and the glow along its edge).
+      const at: V3 = [0, 0.42 * H, 0.25 * H * round[2]]
+      const a = -2.3
+      const tilt: V3 = [a, 0, 0]
+      // The screen side faces (0, -sin a, cos a): up and back, toward their eyes.
+      const n: V3 = [0, -Math.sin(a), Math.cos(a)]
+      const off = (d: number): V3 => [at[0] + n[0] * d, at[1] + n[1] * d, at[2] + n[2] * d]
+      torso.push(P.rbox(0.13 * H, 0.21 * H, 0.022 * H, 0.016 * H, '#6B5BA8', { at, rot: tilt }))
+      torsoPlain.push(P.rbox(0.11 * H, 0.18 * H, 0.006 * H, 0.012 * H, '#BFE9FF', { at: off(0.012 * H), rot: tilt }))
+    }
     if (e === 'cane') {
       arm.L.push(P.cyl(0.018 * H, 0.018 * H, 0.42 * H, '#B07A4A', { at: [-0.09 * H, -0.32 * H, 0.04 * H] }))
       arm.L.push(P.torus(0.04 * H, 0.016 * H, '#B07A4A', { at: [-0.06 * H, -0.11 * H, 0.04 * H] }, Math.PI))
