@@ -50,15 +50,16 @@ straight-on.
   pots, a spirit house on its pillar, a sleepy cat, and the tuk-tuk that brought her.
 The plan (Dad, 2026-10-17, from a photo of the real stairs): the house is 5 m wide and 17 m deep.
 
-- **Downstairs:** Agong's desk at the front right, where he sits a lot (an abacus, a red telephone, his ledger, tea,
+- **Downstairs:** Agong's desk against the right wall at the front, where he sits a lot (an abacus, a red telephone, his ledger, tea,
   a little radio). The long table on the left with red plastic stools, old photos and a clock on the left wall, the
   cabinet of treasures (a lucky cat waving on top, little elephants, porcelain jars), the fridge, a fan, a shoe rack
-  and a doormat. The stairs open at the back left: U-turn stairs filling the left half, like the real ones (cream
-  terrazzo treads with brick-red edges, red railings, a brown handrail). Flight 1 climbs toward the back, a landing,
-  flight 2 climbs back toward the front along the left wall, closed in underneath. Past them: the family altar on the
-  back wall with ancestor photos, lanterns, candles and incense, more old photos, the little earth-god shrine, and the
+  and a doormat. The stairs are at the back left: U-turn stairs filling the left half, like the real ones (cream
+  terrazzo treads with brick-red edges, red railings, a brown handrail), opening across the width of the house.
+  Flight 1 climbs toward the left wall, a landing against it, flight 2 climbs back across, closed in underneath. The
+  fridge stands against the right wall in front of the back room. In the back room: the family altar on the back wall with ancestor photos, lanterns, candles and incense, more old photos, the little earth-god shrine, and the
   kitchen counter with the rice cooker. Joy is by the cabinet, Jum in the kitchen.
-- **Upstairs:** the stairs come out in a small hallway (Khane is there). The front room's door stays shut. Glass
+- **Upstairs:** the stairs come out in a small hallway (Khane is there). There's no front room: the front half of the
+  house is open two floors high, and the hallway looks down into the shop over a balcony railing. Glass
   sliding doors lead back into **Kaylee's room**, at the back of the house: mattresses on the floor along the left
   wall, all the way to the end of the room; the couch on the right (Bibi sits there); her suitcase, a wardrobe, a fan,
   a window and her drawings on the wall. Mommy and Gun (asleep on the mattress) are here.

@@ -1,7 +1,7 @@
-// Downstairs at Agong's: his desk at the front right (he sits there a lot), the long table on the left with red plastic
-// stools, a cabinet of treasures (a lucky cat, little elephants, porcelain jars), old photos on the walls, the fridge,
-// a fan, and past the stairs (stairs.ts, at the back left) the family altar, the little shrine and the kitchen counter
-// with the rice cooker.
+// Downstairs at Agong's: his desk against the right wall at the front (he sits there a lot), the long table on the
+// left with red plastic stools, a cabinet of treasures (a lucky cat, little elephants, porcelain jars), old photos on
+// the walls, a fan; the stairs (stairs.ts, at the back left); the fridge against the right wall in front of the back
+// room, and in the back room the family altar, the little shrine and the kitchen counter with the rice cooker.
 import { Group } from 'three'
 import { P } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
@@ -79,7 +79,7 @@ export function buildGround(kit: Kit): Ground {
   const stool = (x: number, z: number) => [P.cyl(0.17, 0.2, 0.06, STOOL, { at: [x, 0.42, z] }), P.cyl(0.13, 0.19, 0.4, STOOL, { at: [x, 0.2, z] })]
   room.add(scenery(kit, [...stool(-2.2, -4.0), ...stool(-2.2, -4.9), ...stool(-0.7, -4.0), ...stool(-0.7, -4.9), ...stool(-1.45, -3.1), ...stool(-1.45, -5.8)]))
 
-  // ---- Agong's desk at the front right: he sits behind it, facing the street ----
+  // ---- Agong's desk against the right wall at the front: he sits at it facing the wall ----
   const desk = poke(
     kit,
     'desk',
@@ -90,7 +90,8 @@ export function buildGround(kit: Kit): Ground {
       P.box(0.7, 0.45, 0.04, WOOD, { at: [0, 0.48, 0.3] }),
       ...[-0.5, 0.5].flatMap((x) => [0.2, 0.48].map((y) => P.box(0.12, 0.03, 0.02, PAL.gold, { at: [x, y, 0.32] }))),
     ],
-    [1.55, 0, -2.35],
+    [DIM.right - 0.36, 0, -2.6],
+    { rotY: Math.PI / 2 },
   )
   // On the desk (they hop when she taps it): the abacus, a red telephone, his ledger, a cup of tea, a little radio.
   desk.add(
@@ -114,7 +115,7 @@ export function buildGround(kit: Kit): Ground {
   )
   room.add(desk)
   // His chair (he sits here; the family list puts him on it).
-  room.add(scenery(kit, [P.rbox(0.5, 0.06, 0.48, 0.02, WOOD, { at: [1.55, 0.42, -2.95] }), P.rbox(0.5, 0.5, 0.06, 0.02, WOOD, { at: [1.55, 0.72, -3.2] }), ...[-0.2, 0.2].flatMap((x) => [-0.2, 0.2].map((z) => P.cyl(0.025, 0.025, 0.42, WOOD_DARK, { at: [1.55 + x, 0.21, -2.95 + z] })))]))
+  room.add(scenery(kit, [P.rbox(0.48, 0.06, 0.5, 0.02, WOOD, { at: [1.4, 0.42, -2.6] }), P.rbox(0.06, 0.5, 0.5, 0.02, WOOD, { at: [1.15, 0.72, -2.6] }), ...[-0.2, 0.2].flatMap((x) => [-0.2, 0.2].map((z) => P.cyl(0.025, 0.025, 0.42, WOOD_DARK, { at: [1.4 + x, 0.21, -2.6 + z] })))]))
 
   // ---- The family altar on the back wall, and the little shrine on the floor ----
   const altar = poke(
@@ -225,8 +226,9 @@ export function buildGround(kit: Kit): Ground {
   room.add(cal)
 
   // ---- Fan, fridge, the kitchen counter with the rice cooker, shoes ----
-  room.add(standingFan(kit, 'fan', [1.6, 0, -10.0], 0.4))
-  const fridge = poke(kit, 'fridge', [P.rbox(0.68, 1.7, 0.66, 0.06, '#C9EEF7', { at: [0, 0.85, 0] })], [2.15, 0, -6.0], { rotY: -Math.PI / 2 })
+  room.add(standingFan(kit, 'fan', [1.7, 0, -6.2], 0.4))
+  // The fridge against the right wall, just in front of the back room.
+  const fridge = poke(kit, 'fridge', [P.rbox(0.68, 1.7, 0.66, 0.06, '#C9EEF7', { at: [0, 0.85, 0] })], [2.15, 0, -11.75], { rotY: -Math.PI / 2 })
   const door = part(kit, 'fridge.hinge', [P.rbox(0.68, 1.1, 0.06, 0.03, '#D9F4FA', { at: [0.34, 0.55, 0] }), P.box(0.04, 0.3, 0.05, PAL.cream, { at: [0.62, 0.55, 0.05] })], [-0.34, 0.56, 0.36], 1.5)
   door.userData.swing = -1.4
   fridge.add(door)

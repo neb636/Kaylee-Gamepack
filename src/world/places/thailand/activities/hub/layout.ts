@@ -5,24 +5,25 @@
 // the back wall at z = -17.2. Ground floor y 0..3.6, upstairs y 3.6..6.6.
 // Facing is in degrees: 0 = toward the street (and the camera), 180 = toward the back, 90 = toward +x.
 //
-// The plan (Dad, 2026-10-17): downstairs, Agong's desk at the front right, the table on the left, and the stairs
-// opening at the back left. They're U-turn stairs like the real ones and fill the left half of the house. Upstairs
-// they come out in a small hallway; the front room's door stays shut, and glass doors lead back into Kaylee's room at
-// the back of the house.
+// The plan (Dad, 2026-10-17): downstairs, Agong's desk against the right wall at the front, the table on the left,
+// and the stairs at the back left. They're U-turn stairs like the real ones, filling the left half of the house and
+// opening across its width (she steps on walking toward the left wall). Upstairs they come out in a small hallway. There's no front room: the front half is open to the shop below,
+// and the hallway looks down into it over a balcony railing. Glass doors lead back into Kaylee's room at the back.
 //
 //   GROUND FLOOR (back)          UPSTAIRS (back)
 //  +-----------------+          +-----------------+
 //  | photos altar    |          |m  KAYLEE'S ROOM |
 //  |    shrine  cook |          |a          couch |
-//  |+-------+        |          |t     suitcase   |
-//  ||landing|        |          |==== glass doors =|
-//  || v   ^ |  fan   |          |+-------+        |
-//  ||(2)  (1)|       |          || well  | hallway|
-//  || top foot       |          ||  top  |        |
-//  |+-------+ fridge |          |+-------+ plant  |
-//  | cabinet         |          |  front room     |
-//  | table     DESK  |          |  (door shut)    |
-//  | table    Agong  |          |                 |
+//  |                 |          |t     suitcase   |
+//  |+-------+ fridge |          |==== glass doors =|
+//  ||L (2) >>> top   |          |+-------+  top   |
+//  ||L               |          || well  |        |
+//  ||L (1) <<< foot  |          |+-------+ hallway|
+//  |+-------+        |          |          plant  |
+//  | cabinet     fan |          |=== balcony rail=|
+//  | table    Agong D|          |  open: looks    |
+//  | table         E |          |  down into the  |
+//  |               K |          |  shop below     |
 //  +----shutter------+          +---balcony-------+
 import type { Pose } from '../../characters/types'
 
@@ -41,12 +42,14 @@ export const DIM = {
   row: [-10.8, -5.4, 0, 5.4, 10.8],
   houseW: 5.4,
   /**
-   * The U-turn stairs in the left half. Flight 1 climbs toward the back in the inner lane (x mid..x1) to a landing
-   * against the stairwell's back (zLanding..zBack); flight 2 climbs back toward the front along the left wall (x0..mid)
-   * and comes out upstairs at zFront. Each flight has `steps` treads; the space under flight 2 is closed in.
+   * The U-turn stairs in the left half, opening across the width of the house. Flight 1 (the front lane, zFront..mid)
+   * climbs from the foot at x1 toward the left wall, to a landing against it (x0..xLanding); flight 2 (the back lane,
+   * mid..zBack) climbs back across and comes out upstairs at x1. Each flight has `steps` treads; the space under
+   * flight 2 is closed in.
    */
-  stairs: { x0: -2.5, mid: -1.25, x1: 0, zFront: -8.6, zLanding: -11.0, zBack: -12.2, steps: 8 },
-  /** Upstairs: the front room's wall (its door stays shut) and the glass wall into Kaylee's room, with its doorway. */
+  stairs: { x0: -2.5, xLanding: -1.6, x1: 0.1, zFront: -9.6, mid: -10.75, zBack: -11.9, steps: 7 },
+  /** Upstairs: the balcony railing at the front edge of the floor (open to the shop below), and the glass wall into
+   *  Kaylee's room, with its doorway. */
   hall: { zFront: -7.4, zGlass: -12.4, door0: 1.3, door1: 2.4 },
 }
 
@@ -98,14 +101,14 @@ export const PICKABLES: Pickable[] = [
   { id: 'neighbor-right', label: "Neighbor's shop", floor: 0, area: 'street', at: [5.4, 2.7, 0.5], r: 1.1, react: 'jelly' },
 
   // ---- Downstairs ----
-  { id: 'desk', label: "Agong's desk", floor: 0, area: 'inside', at: [1.55, 0.9, -2.35], r: 0.7, react: 'hop', use: { x: 1.3, z: -1.45, face: 180, pose: 'peek' } },
+  { id: 'desk', label: "Agong's desk", floor: 0, area: 'inside', at: [2.14, 0.9, -2.6], r: 0.7, react: 'hop', use: { x: 1.6, z: -1.5, face: 150, pose: 'peek' } },
   { id: 'table', label: 'Table', floor: 0, area: 'inside', at: [-1.45, 0.75, -4.4], r: 0.9, react: 'jelly', use: { x: 0.05, z: -4.0, face: -90, pose: 'sit', snap: { x: -0.7, z: -4.0, y: 0.45 } } },
   { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [-2.45, 2.25, -4.0], r: 0.8, react: 'tilt', use: { x: -0.3, z: -3.0, face: -70, pose: 'lookup' } },
   { id: 'clock', label: 'Clock', floor: 0, area: 'inside', at: [-2.45, 2.85, -5.75], r: 0.32, react: 'tick', use: { x: -0.4, z: -5.95, face: -80, pose: 'lookup' } },
   { id: 'cabinet', label: 'Treasure cabinet', floor: 0, area: 'inside', at: [-2.28, 1.05, -7.2], r: 0.8, react: 'open', use: { x: -1.6, z: -7.2, face: -90, pose: 'peek' } },
   { id: 'lucky-cat', label: 'Lucky cat', floor: 0, area: 'inside', at: [-2.28, 2.12, -6.7], r: 0.3, react: 'wave', use: { x: -1.6, z: -6.6, face: -90, pose: 'lookup' } },
-  { id: 'fridge', label: 'Fridge', floor: 0, area: 'inside', at: [2.15, 0.9, -6.0], r: 0.65, react: 'open', use: { x: 1.4, z: -6.0, face: 90, pose: 'peek' } },
-  { id: 'fan', label: 'Fan', floor: 0, area: 'inside', at: [1.6, 0.75, -10.0], r: 0.45, react: 'spin', use: { x: 1.6, z: -9.25, face: 180, pose: 'peek' } },
+  { id: 'fan', label: 'Fan', floor: 0, area: 'inside', at: [1.7, 0.75, -6.2], r: 0.45, react: 'spin', use: { x: 1.7, z: -5.45, face: 180, pose: 'peek' } },
+  { id: 'fridge', label: 'Fridge', floor: 0, area: 'inside', at: [2.15, 0.9, -11.75], r: 0.65, react: 'open', use: { x: 1.4, z: -11.75, face: 90, pose: 'peek' } },
   { id: 'altar', label: 'Family altar', floor: 0, area: 'inside', at: [-0.3, 1.35, B + 0.3], r: 0.8, react: 'glow', gentle: true, use: { x: -0.3, z: B + 1.15, face: 180, pose: 'wai' } },
   { id: 'photos-back', label: 'More old photos', floor: 0, area: 'inside', at: [-1.85, 2.95, B + 0.03], r: 0.7, react: 'tilt', use: { x: -1.7, z: B + 1.0, face: 180, pose: 'lookup' } },
   { id: 'shrine', label: 'Little shrine', floor: 0, area: 'inside', at: [0.9, 0.3, B + 0.25], r: 0.4, react: 'glow', gentle: true, use: { x: 0.9, z: B + 1.0, face: 180, pose: 'wai' } },
@@ -113,10 +116,10 @@ export const PICKABLES: Pickable[] = [
   { id: 'rice-cooker', label: 'Rice cooker', floor: 0, area: 'inside', at: [2.15, 1.0, -14.4], r: 0.4, react: 'puff', use: { x: 1.45, z: -14.4, face: 90, pose: 'peek' } },
   { id: 'doormat', label: 'Go outside', floor: 0, area: 'inside', at: [0, 0.05, -0.6], r: 0.7, react: 'jelly', use: { x: 0.3, z: 1.35, face: 15, pose: 'stand' } },
   { id: 'shoes', label: 'Shoes', floor: 0, area: 'inside', at: [2.2, 0.2, -0.85], r: 0.42, react: 'hop', use: { x: 1.5, z: -0.85, face: 90, pose: 'peek' } },
-  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-0.6, 1.0, -9.6], r: 0.8, react: 'stairs' },
+  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-0.9, 0.9, -10.2], r: 0.8, react: 'stairs' },
 
   // ---- Upstairs: the hallway, then Kaylee's room at the back ----
-  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-1.9, U + 0.3, -9.0], r: 0.75, react: 'stairs' },
+  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-0.5, U + 0.3, -11.3], r: 0.75, react: 'stairs' },
   { id: 'plant', label: 'Plant', floor: 1, area: 'inside', at: [2.1, U + 0.4, -7.85], r: 0.35, react: 'jelly', use: { x: 1.4, z: -8.0, face: 90, pose: 'peek' } },
   { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [1.85, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: 1.85, z: -13.3, face: 180, pose: 'stand' } },
   { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-1.65, U + 0.25, -14.3], r: 1.0, react: 'jelly', use: { x: -0.45, z: -14.3, face: 25, pose: 'bounce', snap: { x: -1.65, z: -14.3, y: 0.22 } } },
@@ -141,11 +144,11 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [-2.4, 2.4, -1, 1],
     ],
     block: [
-      [0.85, 2.25, -2.7, -2.0], // Agong's desk
-      [1.25, 1.85, -3.3, -2.7], // his chair
+      [1.8, DIM.right, -3.3, -1.9], // Agong's desk
+      [1.1, 1.7, -2.9, -2.3], // his chair
       [-1.95, -0.95, -5.4, -3.4], // table
       [DIM.left, -2.05, -8.35, -6.05], // treasure cabinet
-      [1.8, DIM.right, -6.4, -5.6], // fridge
+      [1.8, DIM.right, -12.1, -11.4], // fridge
       [1.95, DIM.right, -1.25, -0.45], // shoes
       [S.x0, S.x1 + 0.05, S.zBack, S.zFront], // stairs
       [-1.0, 0.4, B, B + 0.55], // altar
@@ -159,7 +162,7 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [-0.7, -4.9, 0.17],
       [-1.45, -3.1, 0.17],
       [-1.45, -5.8, 0.17], // stools (the one at -0.7, -4.0 is hers)
-      [1.6, -10.0, 0.2], // fan
+      [1.7, -6.2, 0.2], // fan
       [4.3, 0.5, 0.28], // spirit house
       [-2.2, 0.4, 0.26],
       [2.2, 0.4, 0.26],
@@ -196,7 +199,7 @@ export const STARTS = {
   arrive: { floor: 0 as const, x: 0.45, z: 1.55, face: 15 },
   street: { floor: 0 as const, x: 0.45, z: 1.55, face: 15 },
   downstairs: { floor: 0 as const, x: 0.2, z: -1.3, face: 160 },
-  upstairs: { floor: 1 as const, x: -1.9, z: -8.1, face: 90 },
+  upstairs: { floor: 1 as const, x: 0.55, z: -11.3, face: 90 },
   family: { floor: 0 as const, x: 1.05, z: 1.75, face: 0 },
 }
 
@@ -217,20 +220,20 @@ export const PHOTO: { back: string[]; front: [string, number][]; backZ: number; 
 }
 
 /** Lane centers of the two flights. */
-export const LANES = { up1: (S.mid + S.x1) / 2 + 0.05, up2: (S.x0 + S.mid) / 2 - 0.05 }
+export const LANES = { up1: (S.zFront + S.mid) / 2, up2: (S.mid + S.zBack) / 2 }
 export const RISE = DIM.g0 / (2 * S.steps + 2)
-export const RUN = (S.zFront - S.zLanding) / S.steps
+export const RUN = (S.x1 - S.xLanding) / S.steps
 
 /** Where she stands on the way up, bottom to top: flight 1, across the landing, flight 2. */
 export function stairSteps(): [number, number, number][] {
   const steps: [number, number, number][] = []
-  for (let i = 1; i <= S.steps; i++) steps.push([LANES.up1, RISE * i, S.zFront - RUN * (i - 0.5)])
+  for (let i = 1; i <= S.steps; i++) steps.push([S.x1 - RUN * (i - 0.5), RISE * i, LANES.up1])
   const ly = RISE * (S.steps + 1)
-  const lz = (S.zLanding + S.zBack) / 2
-  steps.push([LANES.up1, ly, lz], [LANES.up2, ly, lz])
-  for (let j = 1; j <= S.steps; j++) steps.push([LANES.up2, ly + RISE * j, S.zLanding + RUN * (j - 0.5)])
+  const lx = (S.x0 + S.xLanding) / 2
+  steps.push([lx, ly, LANES.up1], [lx, ly, LANES.up2])
+  for (let j = 1; j <= S.steps; j++) steps.push([S.xLanding + RUN * (j - 0.5), ly + RISE * j, LANES.up2])
   return steps
 }
 /** The foot of the stairs downstairs, and where she steps off at the top. */
-export const STAIRS_FOOT = { x: LANES.up1, z: S.zFront + 0.4 }
-export const STAIRS_TOP = { x: LANES.up2, z: S.zFront + 0.5 }
+export const STAIRS_FOOT = { x: S.x1 + 0.4, z: LANES.up1 }
+export const STAIRS_TOP = { x: S.x1 + 0.45, z: LANES.up2 }

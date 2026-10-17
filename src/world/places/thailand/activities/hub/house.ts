@@ -131,17 +131,15 @@ export class House {
     this.groups = { tall: street.tall, props: street.props, roof: street.roof, upper: upperAll, upperRoom, upperFront, front: street.front, groundRoom, stairs }
     // Walls that lower so the camera can see in: the right walls (to 1 m), the front pillar and the upper front.
     this.cuts.push(
-      { obj: ground.rightWall, low: 1.0 / DIM.g0, when: (m) => m === 'inside0', value: 1 },
-      { obj: street.frontRight, low: 1.0 / DIM.g0, when: (m) => m === 'inside0', value: 1 },
+      { obj: ground.rightWall, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
+      { obj: street.frontRight, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
       { obj: upper.rightWall, low: 1.0 / DIM.g1, when: (m) => m === 'inside1', value: 1 },
       { obj: upperFront, low: 0.12, when: (m) => m === 'inside1', value: 1 },
-      // Upstairs the front room's wall stands between the camera and the hallway, and the glass wall between the
-      // camera and her room once she's in it.
-      { obj: upper.hallWall, low: 0.12, when: (m) => m === 'inside1', value: 1 },
+      // Upstairs the glass wall stands between the camera and her room once she's in it.
       { obj: upper.glassWall, low: 0.12, when: (m) => m === 'inside1' && this.kaylee.position.z < DIM.hall.zGlass - 0.1, value: 1 },
     )
     // The upper wall pieces scale from the upstairs floor, not from the street.
-    const upperCuts: Object3D[] = [upper.rightWall, upperFront, upper.hallWall, upper.glassWall]
+    const upperCuts: Object3D[] = [upper.rightWall, upperFront, upper.glassWall]
     for (const c of this.cuts) c.obj.userData.cutBase = upperCuts.includes(c.obj) ? DIM.g0 : 0
 
     this.reactor = new Reactor(kit, this.bag)
@@ -360,7 +358,8 @@ export class House {
     if (!s) return false
     if (s.floor === 1) return this.mode === 'inside1'
     if (s.z > 0) return this.mode === 'street'
-    return this.mode === 'inside0' || (this.mode === 'street' && this.reactor.shutterOpen)
+    // From upstairs she looks down into the shop over the balcony (they're there, but on the other floor).
+    return this.mode !== 'street' || this.reactor.shutterOpen
   }
   /** Can she tap (and greet) them from here? From the street, the family inside is behind the shop front. */
   private familyVisible(id: string) {
@@ -495,8 +494,8 @@ export class House {
       })
       k.hopTo(new Vector3(end.x, up ? DIM.g0 : 0, end.z), 0.25, 0.1, () => {
         this.climbing = false
-        // Up: out into the hallway (it's to her right). Down: she came down facing the front door.
-        k.face(up ? Math.PI / 2 : 0)
+        // The stairs open across the house: up or down, she steps off facing the right wall.
+        k.face(Math.PI / 2)
         this.setSpot(up ? 'upstairs' : 'downstairs')
       })
     })
@@ -523,11 +522,11 @@ export class House {
     this.groups.roof.visible = m === 'street'
     this.groups.upper.visible = m !== 'inside0'
     this.groups.upperRoom.visible = m === 'inside1'
-    // Downstairs, the sign board and the rolled-up shutter would hide the room.
-    this.groups.front.visible = m !== 'inside0'
-    // From the street, the room only shows once the shutter is up; from upstairs, only the stairs show (through the
-    // stairwell), so the rest of the ground floor isn't drawn.
-    this.groups.groundRoom.visible = m === 'inside0' || (m === 'street' && this.reactor.shutterOpen)
+    // Inside, the sign board and the rolled-up shutter would hide the room.
+    this.groups.front.visible = m === 'street'
+    // From the street, the room only shows once the shutter is up; from upstairs she looks down into it over the
+    // balcony.
+    this.groups.groundRoom.visible = m !== 'street' || this.reactor.shutterOpen
     this.groups.stairs.visible = m !== 'street' || this.reactor.shutterOpen
     for (const [id, f] of this.family) f.root.visible = this.familyShown(FAMILY.find((x) => x.id === id)!)
   }
