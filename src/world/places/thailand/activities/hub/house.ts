@@ -57,7 +57,7 @@ export interface HouseEvents {
 const deg = Math.PI / 180
 /** Where the tuk-tuk stops to let her out, and where it parks after (out of the way, past the spirit house). */
 const DROP_X = 0.9
-const PARK_X = 8.3
+const PARK_X = 9.8
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 
@@ -135,9 +135,14 @@ export class House {
       { obj: street.frontRight, low: 1.0 / DIM.g0, when: (m) => m === 'inside0', value: 1 },
       { obj: upper.rightWall, low: 1.0 / DIM.g1, when: (m) => m === 'inside1', value: 1 },
       { obj: upperFront, low: 0.12, when: (m) => m === 'inside1', value: 1 },
+      // Upstairs the front room's wall stands between the camera and the hallway, and the glass wall between the
+      // camera and her room once she's in it.
+      { obj: upper.hallWall, low: 0.12, when: (m) => m === 'inside1', value: 1 },
+      { obj: upper.glassWall, low: 0.12, when: (m) => m === 'inside1' && this.kaylee.position.z < DIM.hall.zGlass - 0.1, value: 1 },
     )
     // The upper wall pieces scale from the upstairs floor, not from the street.
-    for (const c of this.cuts) c.obj.userData.cutBase = c.obj === upper.rightWall || c.obj === upperFront ? DIM.g0 : 0
+    const upperCuts: Object3D[] = [upper.rightWall, upperFront, upper.hallWall, upper.glassWall]
+    for (const c of this.cuts) c.obj.userData.cutBase = upperCuts.includes(c.obj) ? DIM.g0 : 0
 
     this.reactor = new Reactor(kit, this.bag)
     scene.add(this.reactor.root)
@@ -490,7 +495,8 @@ export class House {
       })
       k.hopTo(new Vector3(end.x, up ? DIM.g0 : 0, end.z), 0.25, 0.1, () => {
         this.climbing = false
-        k.face(up ? 0 : Math.PI)
+        // Up: out into the hallway (it's to her right). Down: she came down facing the front door.
+        k.face(up ? Math.PI / 2 : 0)
         this.setSpot(up ? 'upstairs' : 'downstairs')
       })
     })
@@ -561,7 +567,7 @@ export class House {
     const wide = clamp01((aspect - 0.6) / (1.6 - 0.6))
     if (this.mode === 'street') {
       return {
-        center: new Vector3(clamp(k.x * 0.6, -4, 4), 2.3 - 0.6 * wide, 0.9),
+        center: new Vector3(clamp(k.x * 0.6, -5, 5), 2.3 - 0.6 * wide, 0.9),
         half: new Vector3(2.6 + 3.2 * wide, 2.0, 1.4),
         yaw: TUNE.streetYaw,
         pitch: TUNE.streetPitch,
@@ -573,7 +579,7 @@ export class House {
     const ahead = this.climbing ? 0 : 0.7
     const cz = clamp(k.z - 0.4 + this.vel.z * ahead, DIM.back + D / 2 - 0.4, -D / 2 + 0.6)
     return {
-      center: new Vector3(clamp(k.x * 0.25 + this.vel.x * ahead * 0.3, -0.5, 0.5), fy + 0.8, cz),
+      center: new Vector3(clamp(k.x * 0.3 + this.vel.x * ahead * 0.3, -0.7, 0.7), fy + 0.8, cz),
       half: new Vector3(TUNE.insideFitW / 2, 0.9, D / 2),
       yaw: TUNE.insideYawTall + (TUNE.insideYawWide - TUNE.insideYawTall) * wide,
       pitch: TUNE.insidePitch,

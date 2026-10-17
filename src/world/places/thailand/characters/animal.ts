@@ -6,7 +6,8 @@
 // a line around the features that sit on top (a muzzle, a sleeve, an ear), like the concept pictures. Blush and the
 // shine in the eyes have no outline.
 //
-// Sizes are fractions of the character's height H, so the same recipe makes Agong and little Putter.
+// Sizes are fractions of the character's height H, so the same recipe makes Agong and little Putter; `chub` makes the
+// body rounder (Mommy, and Jum the elephant).
 import { Group, type BufferGeometry } from 'three'
 import type { Bag } from '../engine/dispose'
 import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../engine/geo'
@@ -49,10 +50,13 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const tail: Parts = []
 
   // ---- Proportions ----
-  const R = (penguin ? 0.27 : look.species === 'panda' ? 0.26 : bird ? 0.22 : 0.24) * H
+  const R = (penguin ? 0.27 : look.species === 'panda' || look.species === 'elephant' ? 0.26 : bird ? 0.22 : 0.24) * H
+  const c = look.chub ?? 1
+  /** Round tummies: the torso and the clothes on it widen, and the legs and arms move out to match. */
+  const round: V3 = [c, 1, 1 + (c - 1) * 0.8]
   const neck = 0.52 * H
   const headY = penguin ? 0.2 * H : R * 0.92
-  const shoulder: V3 = penguin ? [0.3 * H, 0.5 * H, 0] : [0.155 * H, 0.47 * H, 0]
+  const shoulder: V3 = penguin ? [0.3 * H, 0.5 * H, 0] : [0.155 * H * c, 0.47 * H, 0]
   /** A point on the head's surface (head-local), `lift` pulls it out a little. */
   const on = (x: number, y: number, lift = 0): V3 => [x, headY + y, Math.sqrt(Math.max(0, R * R - x * x - y * y)) + lift]
   const turnTo = (x: number): V3 => [0, Math.asin(Math.max(-1, Math.min(1, x / R))), 0]
@@ -74,13 +78,15 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   } else {
     const legColor = look.species === 'panda' ? look.dark : look.fur
     const feetColor = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' ? look.dark : look.light
+    const legX = 0.085 * H * (1 + (c - 1) * 0.7)
+    const legR = 0.07 * H * (1 + (c - 1) * 0.6)
     for (const s of [-1, 1]) {
-      torso.push(P.capsule(0.07 * H, 0.06 * H, legColor, { at: [s * 0.085 * H, 0.1 * H, 0] }))
-      torso.push(P.sphere(0.075 * H, feetColor, { at: [s * 0.085 * H, 0.035 * H, 0.02 * H], scale: [1, 0.6, 1.3] }))
+      torso.push(P.capsule(legR, 0.06 * H, legColor, { at: [s * legX, 0.1 * H, 0] }))
+      torso.push(P.sphere(0.075 * H * (1 + (c - 1) * 0.6), feetColor, { at: [s * legX, 0.035 * H, 0.02 * H], scale: [1, 0.6, 1.3] }))
     }
-    torso.push(P.capsule(0.155 * H, 0.1 * H, look.fur, { at: [0, 0.34 * H, 0] }))
+    torso.push(P.capsule(0.155 * H, 0.1 * H, look.fur, { at: [0, 0.34 * H, 0], scale: round }))
     if (look.species === 'fox') torso.push(P.sphere(0.075 * H, look.light, { at: [0, 0.5 * H, 0.11 * H], scale: [1.1, 0.8, 0.7] }))
-    if ((look.species === 'bunny' || look.species === 'buffalo') && !look.outfit) torso.push(P.sphere(0.11 * H, look.light, { at: [0, 0.27 * H, 0.1 * H], scale: [1, 1.1, 0.55] }))
+    if (look.species === 'buffalo' && !look.outfit) torso.push(P.sphere(0.11 * H, look.light, { at: [0, 0.27 * H, 0.1 * H], scale: [1, 1.1, 0.55] }))
   }
 
   // ---- Clothes ----
@@ -89,19 +95,19 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     if (penguin) torso.push(frustum(0.3 * H, 0.335 * H, 0.18 * H, o.color, { at: [0, 0.43 * H, 0] }))
     else {
       const long = o.kind === 'shirt'
-      torso.push(P.capsule(0.163 * H, (long ? 0.1 : 0.06) * H, o.color, { at: [0, (long ? 0.35 : 0.37) * H, 0] }))
-      if (o.kind === 'dress') torso.push(frustum(0.15 * H, 0.235 * H, 0.17 * H, o.color, { at: [0, 0.235 * H, 0] }))
-      if (o.shorts) torso.push(frustum(0.16 * H, 0.168 * H, 0.09 * H, o.shorts, { at: [0, 0.205 * H, 0] }))
+      torso.push(P.capsule(0.163 * H, (long ? 0.1 : 0.06) * H, o.color, { at: [0, (long ? 0.35 : 0.37) * H, 0], scale: round }))
+      if (o.kind === 'dress') torso.push(frustum(0.15 * H, 0.235 * H, 0.17 * H, o.color, { at: [0, 0.235 * H, 0], scale: round }))
+      if (o.shorts) torso.push(frustum(0.16 * H, 0.168 * H, 0.09 * H, o.shorts, { at: [0, 0.205 * H, 0], scale: round }))
       if (o.kind === 'polo') {
         for (const s of [-1, 1]) torso.push(P.box(0.08 * H, 0.012 * H, 0.06 * H, o.color, { at: [s * 0.045 * H, 0.535 * H, 0.1 * H], rot: [0.5, 0, s * -0.4] }))
-        torsoPlain.push(...[0.47, 0.42].map((y) => P.sphere(0.009 * H, WHITE, { at: [0, y * H, 0.162 * H] })))
+        torsoPlain.push(...[0.47, 0.42].map((y) => P.sphere(0.009 * H, WHITE, { at: [0, y * H, 0.162 * H * round[2]] })))
       }
       if (o.kind === 'blouse') {
-        torso.push(P.torus(0.075 * H, 0.016 * H, '#FFFFFF', { at: [0, 0.525 * H, 0.04 * H], rot: [Math.PI / 2 - 0.35, 0, 0] }))
-        torsoPlain.push(...[0.46, 0.4].map((y) => P.sphere(0.009 * H, '#FFE7A8', { at: [0, y * H, 0.163 * H] })))
+        torso.push(P.torus(0.075 * H, 0.016 * H, '#FFFFFF', { at: [0, 0.525 * H, 0.04 * H * round[2]], rot: [Math.PI / 2 - 0.35, 0, 0] }))
+        torsoPlain.push(...[0.46, 0.4].map((y) => P.sphere(0.009 * H, '#FFE7A8', { at: [0, y * H, 0.163 * H * round[2]] })))
       }
       if (o.kind === 'shirt') {
-        torsoPlain.push(...[0.47, 0.4, 0.33, 0.26].map((y) => P.sphere(0.011 * H, '#E8B85C', { at: [0, y * H, 0.164 * H] })))
+        torsoPlain.push(...[0.47, 0.4, 0.33, 0.26].map((y) => P.sphere(0.011 * H, '#E8B85C', { at: [0, y * H, 0.164 * H * round[2]] })))
         torso.push(P.box(0.06 * H, 0.06 * H, 0.01 * H, o.color, { at: [0.07 * H, 0.44 * H, 0.15 * H], rot: [0, 0.45, 0] }))
       }
     }
@@ -195,18 +201,29 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       head.push(P.sphere(0.16 * R, look.fur, { at: [0.05 * R, headY + 0.96 * R, 0.1 * R], scale: [1.4, 0.7, 1] }))
       break
     }
-    case 'bunny': {
-      head.push(P.sphere(R, look.fur, { at: [0, headY, 0] }, 26))
+    case 'elephant': {
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.08, 1, 1] }, 26))
+      // Big round ears like fans, pink inside, facing a little forward.
       for (const s of [-1, 1]) {
-        head.push(P.sphere(0.24 * R, look.fur, { at: [s * 0.45 * R, headY + 0.78 * R, -0.05 * R] }))
-        head.push(P.capsule(0.19 * R, 1.05 * R, look.fur, { at: [s * 0.98 * R, headY + 0.05 * R, -0.08 * R], rot: [0, 0, s * 0.22], scale: [1, 1, 0.55] }))
-        headPlain.push(P.capsule(0.1 * R, 0.85 * R, look.ear ?? look.dark, { at: [s * 0.98 * R, headY + 0.02 * R, 0.0 * R], rot: [0, 0, s * 0.22], scale: [1, 1, 0.4] }))
-        head.push(P.sphere(0.17 * R, look.light, { at: on(s * 0.12 * R, -0.3 * R, -0.07 * R) }))
+        head.push(P.sphere(0.62 * R, look.fur, { at: [s * 1.02 * R, headY + 0.08 * R, -0.12 * R], rot: [0, s * 0.45, -s * 0.15], scale: [1, 1.12, 0.26] }))
+        headPlain.push(P.sphere(0.46 * R, look.ear ?? look.dark, { at: [s * 1.07 * R, headY + 0.06 * R, -0.03 * R], rot: [0, s * 0.45, -s * 0.15], scale: [1, 1.1, 0.2] }))
       }
-      headPlain.push(P.sphere(0.07 * R, look.dark, { at: on(0, -0.18 * R, 0.02 * R), scale: [1.3, 1, 1] }))
-      mouth(mouthAt(-0.42 * R))
-      head.push(P.sphere(0.2 * R, look.fur, { at: [0.1 * R, headY + 0.93 * R, 0.2 * R], scale: [1.3, 0.7, 1] }))
-      tail.push(P.sphere(0.07 * H, look.light, { at: [0, 0.22 * H, -0.16 * H] }))
+      // The trunk: down from the middle of the face, curling up at the tip, with a smile peeking out either side.
+      const trunk: [number, number, number][] = [
+        [-0.15, 0.88, 0.24],
+        [-0.32, 0.98, 0.21],
+        [-0.48, 1.05, 0.19],
+        [-0.62, 1.14, 0.17],
+        [-0.7, 1.27, 0.155],
+        [-0.7, 1.4, 0.145],
+        [-0.62, 1.5, 0.14],
+      ]
+      for (const [y, z, r] of trunk) head.push(P.sphere(r * R, look.fur, { at: [0, headY + y * R, z * R] }))
+      headPlain.push(P.torus(0.09 * R, 0.035 * R, look.dark, { at: [0, headY - 0.55 * R, 1.56 * R], rot: [-0.9, 0, 0] }))
+      headPlain.push(P.torus(0.24 * R, 0.022 * R, MOUTH, { at: on(0, -0.36 * R, 0.01 * R), rot: [0, 0, Math.PI] }, Math.PI))
+      head.push(...[-0.14, 0.04, 0.2].map((x, i) => P.sphere((0.15 - i * 0.02) * R, look.dark, { at: [x * R, headY + (0.95 - i * 0.04) * R, 0.15 * R], scale: [0.8, 1.2, 0.8] })))
+      tail.push(P.capsule(0.018 * H, 0.12 * H, look.fur, { at: [0, 0.2 * H, -0.2 * H * round[2]], rot: [-0.5, 0, 0] }))
+      tail.push(P.sphere(0.035 * H, look.dark, { at: [0, 0.13 * H, -0.24 * H * round[2]], scale: [1, 1.4, 1] }))
       break
     }
     case 'fox': {
@@ -316,7 +333,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const armR = new Group()
   armL.position.set(-shoulder[0], shoulder[1], shoulder[2])
   armR.position.set(shoulder[0], shoulder[1], shoulder[2])
-  root.add(blobShadow((penguin ? 0.3 : 0.2) * H * 1.3, bag), body)
+  root.add(blobShadow((penguin ? 0.3 : 0.2 * c) * H * 1.3, bag), body)
   body.add(solidMix(torso, torsoPlain, bag, px), headPivot, armL, armR)
   headPivot.add(solidMix(head, headPlain, bag, px))
   armL.add(solidMix(arm.L, [], bag, px))
@@ -327,5 +344,5 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     tailGroup.add(solidMix(tail, [], bag, px))
     body.add(tailGroup)
   }
-  return { root, body, head: headPivot, armL, armR, tail: tailGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H }
+  return { root, body, head: headPivot, armL, armR, tail: tailGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c }
 }

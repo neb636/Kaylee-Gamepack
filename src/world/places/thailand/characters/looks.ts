@@ -1,7 +1,7 @@
 // How each of Kaylee's family looks as a toy animal: Dad's picks from the lineup (2026-10-17: column A, so kids share
-// their parent's animal, and Kaylee's lilac unicorn). The concepts are in planning/around-the-world/thailand/lineup.webp;
+// their parent's animal, and Kaylee's lilac unicorn); later Dad made Jum a chubby pink elephant and Mommy a bit rounder. The concepts are in planning/around-the-world/thailand/lineup.webp;
 // characters/animal.ts builds them in 3D. Pure data (no three.js).
-export type Species = 'unicorn' | 'panda' | 'bunny' | 'fox' | 'buffalo' | 'penguin' | 'hornbill'
+export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill'
 export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
 export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft'
 
@@ -9,6 +9,8 @@ export interface Look {
   species: Species
   /** Meters, to the top of the head (ears and horns stick up past it). Kaylee is 1.0. */
   height: number
+  /** How round the body is (1 = the usual chibi build; Mommy 1.15, Jum 1.25). */
+  chub?: number
   /** Main fur or feathers. */
   fur: string
   /** Muzzle, face, belly, paws: the light color. */
@@ -35,10 +37,10 @@ const PENGUIN = { species: 'penguin' as const, fur: '#3F365F', light: '#FFF6EC',
 
 export const LOOKS: Record<string, Look> = {
   kaylee: { species: 'unicorn', height: 1.0, fur: '#CDB9F6', light: '#F4EDFF', dark: '#A88EE8', ear: '#FFB3D1', mane: ['#FF6FAE', '#FBE27A', '#8FE3C8', '#8EC9F5'], hair: 'medium', outfit: { kind: 'dress', color: '#FF5FA2' }, lashes: true },
-  ji: { species: 'unicorn', height: 1.55, fur: '#FFF5EF', light: '#FFE8E0', dark: '#BBA3F2', ear: '#FFC9D6', mane: ['#C7A6F2', '#FF9CC8', '#B494EE', '#FFB8D8'], hair: 'long', outfit: { kind: 'dress', color: '#FFB79E' }, lashes: true },
+  ji: { species: 'unicorn', height: 1.55, chub: 1.15, fur: '#FFF5EF', light: '#FFE8E0', dark: '#BBA3F2', ear: '#FFC9D6', mane: ['#C7A6F2', '#FF9CC8', '#B494EE', '#FFB8D8'], hair: 'long', outfit: { kind: 'dress', color: '#FFB79E' }, lashes: true },
   nick: { species: 'unicorn', height: 1.7, fur: '#A9EBD6', light: '#E2FAF1', dark: '#9C86DA', ear: '#FFB3C7', mane: ['#8EC9F5', '#B9A6F5'], hair: 'short', outfit: { kind: 'polo', color: '#FBE78A' }, open: true },
   agong: { species: 'panda', height: 1.45, fur: '#FFF6EE', light: '#FFFDF8', dark: '#4A3F4F', ear: '#FFB3C7', outfit: { kind: 'shirt', color: '#FFF0DA' }, extras: ['glasses', 'moustache', 'cane'] },
-  jum: { species: 'bunny', height: 1.5, fur: '#FFB7A8', light: '#FFE7DD', dark: '#FF8FA8', ear: '#FF9DB4', outfit: { kind: 'blouse', color: '#A7EBD0' }, lashes: true },
+  jum: { species: 'elephant', height: 1.5, chub: 1.25, fur: '#FFB3CF', light: '#FFE3EE', dark: '#F28CB3', ear: '#FF94BC', outfit: { kind: 'blouse', color: '#A7EBD0' }, lashes: true },
   joy: { ...FOX, height: 1.5, outfit: { kind: 'blouse', color: '#C9B5F7' }, lashes: true },
   gun: { ...FOX, height: 1.32, outfit: { kind: 'tee', color: '#8FC9F5', shorts: '#5D7BB0' }, extras: ['cap'] },
   khane: { ...FOX, height: 1.25, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['round-glasses'] },

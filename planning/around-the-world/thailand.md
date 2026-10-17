@@ -17,10 +17,10 @@ follow her finger) comes back later as a 3D activity reached from the house.
 | Person | Who | Lives at Agong's | Animal (Dad approved, 2026-10-17) |
 |---|---|---|---|
 | Kaylee | her | visiting | lilac unicorn, rainbow mane, gold horn, pink dress (nothing like Sparkle) |
-| Ji | Mom | visiting | cream unicorn, long lavender-pink hair, peach sundress |
+| Ji | Mom | visiting | cream unicorn, long lavender-pink hair, peach sundress, a little rounder (Dad) |
 | Nick | Dad | visiting | mint unicorn, short sky-lavender mane, yellow polo, big grin |
 | Agong (อากง) | Grandpa | yes | panda with round gold glasses, a moustache, a cream shirt and a cane |
-| Jum | aunt | yes | peach bunny with long floppy ears, mint blouse |
+| Jum | aunt | yes | chubby pink elephant (Dad's change from the bunny), mint blouse |
 | Joy | aunt | yes | fox, lavender blouse |
 | Bert | uncle | yes | water buffalo with curved horns, peach t-shirt |
 | Gun, Khane | Joy's sons, older | yes | fox cubs: Gun in a backwards cap and shorts, Khane in green round glasses |
@@ -37,7 +37,7 @@ turntable) shows them all.
 
 Open questions for Dad: "Khane" or "Kane"? Does Sparkle keep guiding here (2D, in the prompt bubble as everywhere
 else), or does a family member (Mom, Agong) give the instructions? What is each person like (for their voices)?
-Where do the stairs really go, and which end does the mattress row run to?
+
 
 ## Agong's house (the hub)
 
@@ -48,13 +48,20 @@ straight-on.
 - **Street:** a row of five pastel shophouses, Agong's in the middle with a roll-up shutter, a sign board, a balcony
   with an air-conditioner box, and wires with birds. On the sidewalk: Uncle Bert at his motorbike, Daddy, flower
   pots, a spirit house on its pillar, a sleepy cat, and the tuk-tuk that brought her.
-- **Downstairs:** the long table on the left with red plastic stools and Agong at the end. The family altar is at the
-  back with ancestor photos, lanterns, candles and incense, plus a little earth-god shrine. A cabinet of treasures (a
-  lucky cat waving on top, little elephants, porcelain jars, a toy tuk-tuk), old photos and a clock on the left wall,
-  a fan, the fridge, a shoe rack, a doormat, and the stairs up along the right wall. Jum and Joy are here.
-- **Upstairs (Kaylee's room):** mattresses on the floor along the left wall, all the way to the end of the room. The
-  couch is on the right (Bibi sits there), with Kaylee's suitcase, a wardrobe, a fan, her drawings on the wall, and
-  the balcony doors. Mommy, Gun (asleep on the mattress) and Khane are here.
+The plan (Dad, 2026-10-17, from a photo of the real stairs): the house is 5 m wide and 17 m deep.
+
+- **Downstairs:** Agong's desk at the front right, where he sits a lot (an abacus, a red telephone, his ledger, tea,
+  a little radio). The long table on the left with red plastic stools, old photos and a clock on the left wall, the
+  cabinet of treasures (a lucky cat waving on top, little elephants, porcelain jars), the fridge, a fan, a shoe rack
+  and a doormat. The stairs open at the back left: U-turn stairs filling the left half, like the real ones (cream
+  terrazzo treads with brick-red edges, red railings, a brown handrail). Flight 1 climbs toward the back, a landing,
+  flight 2 climbs back toward the front along the left wall, closed in underneath. Past them: the family altar on the
+  back wall with ancestor photos, lanterns, candles and incense, more old photos, the little earth-god shrine, and the
+  kitchen counter with the rice cooker. Joy is by the cabinet, Jum in the kitchen.
+- **Upstairs:** the stairs come out in a small hallway (Khane is there). The front room's door stays shut. Glass
+  sliding doors lead back into **Kaylee's room**, at the back of the house: mattresses on the floor along the left
+  wall, all the way to the end of the room; the couch on the right (Bibi sits there); her suitcase, a wardrobe, a fan,
+  a window and her drawings on the wall. Mommy and Gun (asleep on the mattress) are here.
 
 **The toy (core verb): walk Kaylee around.** Tap the floor and she hop-trots there around the furniture, running on
 long trips. Hold and drag and she follows your finger. Tap a thing and it reacts at once, then she walks over and uses

@@ -145,8 +145,9 @@ export class Reactor {
       const dur = (a.p.gentle ? 2.2 : DUR[a.p.react]) ?? 0.6
       const p = clamp(a.t / dur)
       const g = this.kit.pokes.get(id)
-      if (a.p.gentle) this.gentle(id, a, dt)
-      else if (g) this.react(id, a.p.react, g, p, t)
+      // Sacred things only smoke and glow; the rice cooker steams and wobbles.
+      if (a.p.gentle || this.kit.parts.has(`${id}.smoke`)) this.gentle(id, a, dt)
+      if (!a.p.gentle && g) this.react(id, a.p.react, g, p, t)
       if (p >= 1) {
         this.active.delete(id)
         if (g && !a.p.gentle) this.rest(id, a.p.react, g)
