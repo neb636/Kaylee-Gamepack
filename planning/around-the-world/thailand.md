@@ -52,7 +52,7 @@ The plan (Dad, 2026-10-17, from a photo of the real stairs): the house is 5 m wi
 
 - **Downstairs:** Agong's desk against the right wall at the front, where he sits a lot (an abacus, a red telephone, his ledger, tea,
   a little radio). The long table on the left with red plastic stools, old photos and a clock on the left wall, the
-  cabinet of treasures (a lucky cat waving on top, little elephants, porcelain jars), the fridge, a fan, a shoe rack
+  cabinet of treasures (a lucky cat waving on top, little elephants, porcelain jars), a fan, a shoe rack
   and a doormat. The stairs are at the back left: U-turn stairs filling the left half, like the real ones (cream
   terrazzo treads with brick-red edges, red railings, a brown handrail), opening across the width of the house.
   Flight 1 climbs toward the left wall, a landing against it, flight 2 climbs back across, closed in underneath. The
