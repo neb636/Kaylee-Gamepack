@@ -1,5 +1,5 @@
 // Kaylee's family (from Dad, 2026-10-17). Pure data (no three.js), shared by the 3D house and the flat fallback.
-// Gate 1: everyone is a colored placeholder with a name pill. Their animals come from the lineup Dad picks (gate 2).
+// Their animals are in looks.ts (Dad's picks from the lineup).
 // Spots are in meters (+x right as seen from the street, +z toward the street), facing in degrees (0 = toward the
 // street, 90 = toward +x).
 export type FamilyPose = 'stand' | 'sit' | 'lie'
@@ -11,7 +11,7 @@ export interface FamilyMember {
   thai?: string
   /** Who they are, for Dad. */
   who: string
-  /** Placeholder body color. */
+  /** Their button color in the flat house (no WebGL). */
   color: string
   /** Meters (Kaylee is 1.0). */
   height: number

@@ -1,5 +1,5 @@
-// Kaylee, the one she steers. Gate 1 body: a placeholder unicorn (cream, lavender mane, gold horn: on purpose nothing
-// like Sparkle) until Dad picks her design from the lineup.
+// Kaylee, the one she steers: her lilac unicorn with the rainbow mane and gold horn (looks.ts; on purpose nothing like
+// Sparkle).
 //
 // How she moves: a bouncy hop-trot along a path (a little hop every step, squash when she lands, stretch at the top,
 // leaning into the walk), turning with a spring so corners curve, a settle wobble when she arrives. Everything else
@@ -7,15 +7,13 @@
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span, wobble } from '../../../../sdk'
 import type { Bag } from '../engine/dispose'
-import { P } from '../engine/geo'
 import type { XZ } from '../engine/nav'
-import { PAL } from '../engine/toon'
 import { TUNE } from '../engine/tune'
-import { buildChibi, type Chibi } from './placeholder'
+import { buildAnimal, type Rig } from './animal'
+import { LOOKS } from './looks'
 import type { Character, Pose } from './types'
 
-const H = 1.0
-const MANE = PAL.lavenderDark
+const H = LOOKS.kaylee.height
 const BOUNCES = [0.28, 0.5, 0.78]
 
 interface Tween {
@@ -36,7 +34,7 @@ export class Avatar implements Character {
   floor: 0 | 1 = 0
   /** Where she steps back to when she gets up from a seat or the mattress. */
   standPoint: Vector3 | null = null
-  private chibi: Chibi
+  private chibi: Rig
   private path: XZ[] = []
   private onArrive: (() => void) | null = null
   private speed = 0
@@ -52,20 +50,7 @@ export class Avatar implements Character {
   private headYaw = 0
 
   constructor(bag: Bag) {
-    const rh = 0.22 * H
-    const headY = 0
-    this.chibi = buildChibi(H, PAL.cream, bag, {
-      head: [
-        // Gold horn, a mane down the back of her head, and little ears.
-        P.cone(0.045, 0.2, PAL.gold, { at: [0, headY + rh * 0.95, rh * 0.35], rot: [0.35, 0, 0] }),
-        P.sphere(0.09, MANE, { at: [0, headY + rh * 0.75, -rh * 0.35] }),
-        P.sphere(0.085, PAL.hotpink, { at: [0, headY + rh * 0.35, -rh * 0.85] }),
-        P.sphere(0.08, MANE, { at: [0, headY - rh * 0.1, -rh * 0.95] }),
-        P.cone(0.05, 0.11, PAL.cream, { at: [0.12, headY + rh * 0.85, -0.02], rot: [0, 0, -0.45] }),
-        P.cone(0.05, 0.11, PAL.cream, { at: [-0.12, headY + rh * 0.85, -0.02], rot: [0, 0, 0.45] }),
-      ],
-      body: [P.sphere(0.07, PAL.hotpink, { at: [0, 0.2, -0.19] }), P.sphere(0.06, MANE, { at: [0, 0.13, -0.24] })],
-    })
+    this.chibi = buildAnimal(LOOKS.kaylee, bag)
     this.root = this.chibi.root
     this.root.rotation.y = this.yaw
     this.root.userData.pick = 'kaylee'

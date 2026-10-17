@@ -324,6 +324,9 @@ const SCREENS = [
     reset: true,
     wait: 1800,
   })),
+  // The family photo (everyone, then a few alone on the turntable, in the three-quarter view it rests on first).
+  { name: 'thailand-family', hash: '#/world/thailand/hub/family', reset: true, wait: 1800 },
+  ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
   { name: 'thailand-flat', hash: '#/world/thailand/hub/downstairs?gl=off', reset: true, wait: 600 },
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
 // --routes=venice,pizzeria-own: exact screen names, or an activity id for all of its screens (venice-*).
