@@ -78,6 +78,12 @@ for (const place of PLACES) {
       await poke(page, i + 1)
       await page.waitForTimeout(400)
     }
+    // A 3D place says how it drew (WebGL, or its flat fallback when the browser has none), so CI shows which one ran.
+    const render = await page.evaluate(() => document.documentElement.dataset.render)
+    if (render) {
+      console.log(`${place}: drawn with ${render}`)
+      test.info().annotations.push({ type: 'render', description: render })
+    }
     expect(failures).toEqual([])
   })
 }

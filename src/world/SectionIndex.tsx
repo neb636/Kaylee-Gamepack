@@ -2,6 +2,7 @@
 // no address bar). Tests read the links from this page too (tests/sections.spec.ts).
 import { go, worldLink } from '../router'
 import { TopBar } from './kit/Chrome'
+import { HUB } from './kit/sections'
 import { places, sectionsFor } from './registry'
 
 const chip = { display: 'inline-block', padding: '10px 16px', borderRadius: 999, background: '#fff', boxShadow: 'var(--shadow)', fontWeight: 600, color: 'var(--ink)', textDecoration: 'none' } as const
@@ -16,7 +17,7 @@ export function SectionIndex() {
             <h2 style={{ margin: '0 0 10px' }}>
               {meta.emoji} {meta.name}
             </h2>
-            {[...meta.activities, { id: 'party', name: 'Finale', icon: '🎉' }].map((a) => {
+            {[...(sectionsFor(meta.id, HUB) ? [{ id: HUB, name: 'Home base', icon: '🏠' }] : []), ...meta.activities, { id: 'party', name: 'Finale', icon: '🎉' }].map((a) => {
               const def = sectionsFor(meta.id, a.id)
               const stamps: Record<string, string> = a.id === 'party' ? { stamps: 'all' } : {}
               return (

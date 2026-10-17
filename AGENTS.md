@@ -33,9 +33,13 @@ Installed and pre-approved for hands-on play that plain React can't do well (see
 - **phaser** (v4): real-time arcade or physics play (bouncing, stacking, many moving sprites). Canvas, so keep
   puppets, speech bubbles and buttons in React on top of it.
 - **perfect-freehand**: smooth finger strokes, for letter tracing and drawing.
+- **three** (0.180): 3D, for a country Dad wants in 3D (Thailand). Keep the flat look: toon bands, ink outlines, blob
+  shadows, no post-processing (see `src/world/places/thailand/engine/`). React draws the buttons and the tap targets
+  over the canvas; a browser without WebGL2 gets a flat fallback, never a console error.
 
-Import these **only from inside a game or country folder** (`src/games/<id>/`, `src/world/places/<id>/`, never a
-`meta.ts`), so only that game downloads them. `npm run check` enforces this.
+Import these **only from inside a game or country folder** (`src/games/<id>/`, `src/world/places/<id>/`), and never
+from a file that loads at startup: a `meta.ts`, a `*sections.ts` or a `puppets/index.ts`. Then only that game
+downloads them. `npm run check` enforces this.
 
 If you believe another package would greatly improve the experience for the task at hand, ask the user before
 installing it. Explain what it enables that the SDK can't, and what it costs (bundle size, and whether puppets,
@@ -356,6 +360,8 @@ with any state they need carried in the URL: `#/world/<place>/<activity>/<sectio
 `#/world/italy/pizzeria/own?at=oven&sauce=pink`. How (details in `src/world/kit/sections.ts`, reference: the Pizzeria):
 - Each activity folder has a `sections.ts`: `defineSections(place, activity, { params, sections })`, sections in play
   order, one per line, from the story to the payoff. A flat-file activity uses `<Name>.sections.ts`.
+  A hub that is a place to walk around (Thailand's house) declares sections too, as activity `HUB`
+  (`activities/hub/sections.ts`): `#/world/<place>/hub/<section>` opens the hub there.
 - **State passes from section to section through the URL.** Anything a later section reads from an earlier one (a
   color she picked, a name, the toppings, how many she caught) is a param with a sensible default, so a bare section
   link always works and a link with params reproduces an exact case. A param overrides the matching `useSaved` value.

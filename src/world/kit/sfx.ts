@@ -8,7 +8,8 @@ function audio() {
   return ctx
 }
 
-function tone(freq: number, to: number, dur: number, vol: number, type: OscillatorType = 'sine', delay = 0) {
+/** A pitched blip sliding from `freq` to `to` (Hz). Countries build their own sounds from this and `noise`. */
+export function tone(freq: number, to: number, dur: number, vol: number, type: OscillatorType = 'sine', delay = 0) {
   const a = audio()
   if (!a) return
   const t = a.currentTime + delay
@@ -26,7 +27,8 @@ function tone(freq: number, to: number, dur: number, vol: number, type: Oscillat
 }
 
 let noiseBuffer: AudioBuffer | undefined
-function noise(dur: number, vol: number, filter: BiquadFilterType, freq: number, toFreq = freq, delay = 0, q = 1) {
+/** Filtered noise (a rattle, a whoosh, a splash). */
+export function noise(dur: number, vol: number, filter: BiquadFilterType, freq: number, toFreq = freq, delay = 0, q = 1) {
   const a = audio()
   if (!a) return
   if (!noiseBuffer) {
