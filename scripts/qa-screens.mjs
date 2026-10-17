@@ -315,6 +315,17 @@ const SCREENS = [
   })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party/soon', stampAll: 'peru', wait: 800 },
+  // Thailand: Agong's house in 3D (the arrival mid-ride, each spot, a few things in use), the flat house without WebGL,
+  // and the party card.
+  { name: 'thailand-arrive', hash: '#/world/thailand/hub/arrive', reset: true, wait: 1400 },
+  ...['street', 'downstairs', 'downstairs?at=table', 'downstairs?at=altar', 'upstairs', 'upstairs?at=mattress', 'upstairs?at=couch'].map((to) => ({
+    name: `thailand-${to.replace('?at=', '-')}`,
+    hash: `#/world/thailand/hub/${to}`,
+    reset: true,
+    wait: 1800,
+  })),
+  { name: 'thailand-flat', hash: '#/world/thailand/hub/downstairs?gl=off', reset: true, wait: 600 },
+  { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
 // --routes=venice,pizzeria-own: exact screen names, or an activity id for all of its screens (venice-*).
 ].filter((s) => !flag('routes') || flag('routes').split(',').some((r) => s.name === r || s.name.startsWith(`${r}-`)))
 

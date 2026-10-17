@@ -436,6 +436,32 @@ const penguinLaunch = (name, seconds, jump, pull) => ({
 })
 GAME_SCENARIOS.push(penguinLaunch('penguin-launch', 8, null, 0.13), penguinLaunch('penguin-fish', 5, 'fish', 0.09), penguinLaunch('penguin-chick-swim', 4.5, 'swim', 0.08))
 
+// Agong's house (Thailand, 3D): Kaylee's hop-trot across the floor, hopping up the stairs (the camera follows her to
+// the other floor), and the mattress bounce getting higher until she flops down. Taps go through the house's tap
+// targets ([data-anchor]), like a finger.
+const thaiHouse = (name, seconds, section, taps) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/hub/${section}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiHouseQA?.().mode, null, { timeout: 20000 })
+    await page.waitForTimeout(800)
+  },
+  act: async (page) => {
+    for (const [what, wait] of taps) {
+      if (what === 'floor') await page.mouse.click(vp.width * 0.42, vp.height * 0.38)
+      else await page.locator(`[data-anchor="${what}"]`).click({ force: true })
+      await page.waitForTimeout(wait)
+    }
+  },
+})
+GAME_SCENARIOS.push(
+  thaiHouse('thai-walk', 2.6, 'downstairs', [['floor', 0]]),
+  thaiHouse('thai-stairs', 6, 'downstairs?at=fridge', [['stairs-up', 0]]),
+  thaiHouse('thai-bounce', 5, 'upstairs?at=mattress', [['mattress', 900], ['mattress', 1100], ['mattress', 1300]]),
+)
+
 // Coco's Canyon Glide: hold a finger in the sky and Coco banks after it, sinking slowly in plain air; steer him into a
 // swirl of warm air and he circles up (wings up, fingers spread); pull down for a dive (wings fold) and a swoop.
 const canyonFly = (name, seconds, jump, path) => ({

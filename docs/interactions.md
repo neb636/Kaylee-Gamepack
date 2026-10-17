@@ -138,5 +138,6 @@ export function Arcade({ onCaught }: { onCaught: (n: number) => void }) {
 
 ## Adding a library
 
-Pre-approved (already installed): **phaser**, **perfect-freehand**. Anything else: see "Dependencies" in
+Pre-approved (already installed): **phaser**, **perfect-freehand**, **three** (3D countries; Thailand's
+`engine/` folder shows the toon look, the follow camera, tap-to-walk and the WebGL-less fallback). Anything else: see "Dependencies" in
 `AGENTS.md`. Ask first, and explain what it enables and what it costs.
