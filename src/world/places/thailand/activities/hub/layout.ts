@@ -208,13 +208,13 @@ export const STARTS = {
 
 /** The family photo on the sidewalk in front of Agong's house: grown-ups behind, each kid in front, beside a parent. */
 export const PHOTO: { back: string[]; front: [string, number][]; backZ: number; frontZ: number; spacing: number } = {
-  back: ['bert', 'joy', 'jum', 'agong', 'ji', 'nick', 'ja', 'sri'],
+  back: ['bird', 'joy', 'jum', 'agong', 'ji', 'nick', 'ja', 'sri'],
   front: [
-    ['bibi', -4.45],
-    ['gun', -3.3],
-    ['khane', -2.15],
+    ['bb', -4.45],
+    ['gan', -3.3],
+    ['ken', -2.15],
     ['kaylee', 1.15],
-    ['pato', 2.3],
+    ['putto', 2.3],
     ['putter', 3.45],
   ],
   backZ: 0.75,

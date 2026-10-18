@@ -246,87 +246,87 @@
   },
   {
     "text": "Sawasdee krub, Kaylee!",
-    "voice": "bert",
-    "sig": "1e0c1376cc",
+    "voice": "bird",
+    "sig": "7d72cb4f5c",
     "ms": 2496,
-    "file": "f32cbfb9f908.mp3"
+    "file": "56b3655214b2.mp3"
   },
   {
     "text": "Want to sit on my motorbike?",
-    "voice": "bert",
-    "sig": "1e0c1376cc",
+    "voice": "bird",
+    "sig": "7d72cb4f5c",
     "ms": 1952,
-    "file": "444f0c3ac4c6.mp3"
+    "file": "459402cfb8e0.mp3"
   },
   {
     "text": "Beep beep!",
-    "voice": "bert",
-    "sig": "1e0c1376cc",
+    "voice": "bird",
+    "sig": "7d72cb4f5c",
     "ms": 1490,
-    "file": "ae04cd233aec.mp3"
+    "file": "9bd09d032869.mp3"
   },
   {
     "text": "Mm-hmm. Hi Kaylee.",
-    "voice": "gun",
-    "sig": "aafec83a92",
+    "voice": "gan",
+    "sig": "157be5e474",
     "ms": 2173,
-    "file": "a761ec41a132.mp3"
+    "file": "e9346ca089a2.mp3"
   },
   {
     "text": "One sec, I'm winning!",
-    "voice": "gun",
-    "sig": "aafec83a92",
+    "voice": "gan",
+    "sig": "157be5e474",
     "ms": 1967,
-    "file": "081605de9f2b.mp3"
+    "file": "1967f47b0595.mp3"
   },
   {
     "text": "Uh-huh...",
-    "voice": "gun",
-    "sig": "aafec83a92",
+    "voice": "gan",
+    "sig": "157be5e474",
     "ms": 2104,
-    "file": "f240223f4b29.mp3"
+    "file": "d17c3f654ed5.mp3"
   },
   {
     "text": "Oh. Hi, Kaylee.",
-    "voice": "khane",
-    "sig": "d4ab4133a0",
+    "voice": "ken",
+    "sig": "8506fed695",
     "ms": 2691,
-    "file": "81f81810d84d.mp3"
+    "file": "11f62f40b159.mp3"
   },
   {
     "text": "Look, a funny video!",
-    "voice": "khane",
-    "sig": "d4ab4133a0",
+    "voice": "ken",
+    "sig": "8506fed695",
     "ms": 1836,
-    "file": "3d7a63737ed0.mp3"
+    "file": "6ed6d857043b.mp3"
   },
   {
     "text": "Mm-hmm...",
-    "voice": "khane",
-    "sig": "d4ab4133a0",
+    "voice": "ken",
+    "sig": "8506fed695",
     "ms": 591,
-    "file": "141083e70169.mp3"
+    "file": "fae7c2ad6f33.mp3"
   },
   {
     "text": "Hi Kaylee... one second.",
-    "voice": "bibi",
-    "sig": "bab7e4d1c9",
+    "voice": "bb",
+    "sig": "16e7dc84f7",
     "ms": 2072,
-    "file": "75f7e4f4543e.mp3"
+    "file": "f5266fcb6462.mp3"
   },
   {
     "text": "So cute, Kaylee.",
-    "voice": "bibi",
-    "sig": "bab7e4d1c9",
+    "voice": "bb",
+    "sig": "16e7dc84f7",
     "ms": 2178,
-    "file": "b669d1c13d7f.mp3"
+    "file": "16ae009f5328.mp3"
   },
   {
     "text": "Uh-huh!",
-    "voice": "bibi",
-    "sig": "bab7e4d1c9",
+    "voice": "bb",
+    "sig": "16e7dc84f7",
     "ms": 526,
-    "file": "bbb894e6d39a.mp3"
+    "file": "0c958ffa116a.mp3"
   },
   {
     "text": "Sawasdee ka, Kaylee!",
@@ -358,17 +358,17 @@
   },
   {
     "text": "Kaylee! Sawasdee krub!",
-    "voice": "pato",
-    "sig": "51f4fe73ea",
+    "voice": "putto",
+    "sig": "c95377be59",
     "ms": 2500,
-    "file": "62eb2dd7f13f.mp3"
+    "file": "7a0b700eeca8.mp3"
   },
   {
     "text": "Let's play!",
-    "voice": "pato",
-    "sig": "51f4fe73ea",
+    "voice": "putto",
+    "sig": "c95377be59",
     "ms": 1066,
-    "file": "df511d7d92f0.mp3"
+    "file": "d5b13c9e3bda.mp3"
   },
   {
     "text": "Hi Kaylee! Hee hee!",

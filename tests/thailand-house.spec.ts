@@ -83,7 +83,7 @@ test('the family photo: everyone in front of Agong\'s house, and each of them al
   await open(page, 'hub/family')
   await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
   // Fourteen name pills: the whole family and Kaylee.
-  for (const id of ['kaylee', 'ji', 'nick', 'agong', 'jum', 'joy', 'bert', 'ja', 'sri', 'gun', 'khane', 'bibi', 'pato', 'putter']) await expect(page.locator(`[data-anchor="family:${id}"]`)).toBeVisible()
+  for (const id of ['kaylee', 'ji', 'nick', 'agong', 'jum', 'joy', 'bird', 'ja', 'sri', 'gan', 'ken', 'bb', 'putto', 'putter']) await expect(page.locator(`[data-anchor="family:${id}"]`)).toBeVisible()
   await tap(page, 'family:putter')
   await open(page, 'hub/family?who=ja')
   await expect(page.locator('[data-anchor="family:ja"]')).toBeVisible()
