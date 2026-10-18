@@ -1,4 +1,4 @@
-// What the house needs from any character, placeholder or (gate 2) the real animals, so they can be swapped in.
+// What the house needs from any character (Kaylee's avatar, a family member), whatever animal it is.
 import type { Group } from 'three'
 
 export type Pose = 'stand' | 'sit' | 'lie' | 'bounce' | 'wai' | 'peek' | 'lookup'
@@ -10,8 +10,8 @@ export interface Character {
   readonly height: number
   pose: Pose
   setPose(pose: Pose): void
-  /** A short reaction: a happy hop, a wiggle. */
-  react(kind: 'hop' | 'wiggle'): void
+  /** A short reaction: a happy hop, a wiggle, a wave. */
+  react(kind: 'hop' | 'wiggle' | 'wave'): void
   /** Turn the head toward a world point (null: look ahead). */
   lookAt(x: number, y: number, z: number): void
   lookAway(): void

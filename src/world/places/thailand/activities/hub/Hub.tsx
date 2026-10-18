@@ -1,13 +1,16 @@
 // Thailand's home base: Agong's house. Kaylee arrives by tuk-tuk, then walks around the street, downstairs and her
 // room upstairs (deep-linkable spots, sections.ts). The 3D house is HouseView; without WebGL it's the flat house.
+// Sparkle (Guide) says the few things there are to say; the family say hello themselves.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { sounds } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { flag } from '../../engine/flags'
+import { L } from '../../lines'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
+import { Guide, type GuideHandle } from './Guide'
 import type { House, Spot, Start } from './house'
 import { HouseView, type RenderMode } from './HouseView'
 import HUB_SECTIONS from './sections'
@@ -18,26 +21,28 @@ let lastSpot: Spot = 'street'
 
 export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
-  const [initial] = useState<Start>(() => ({ section: start ?? (arrivedThisVisit ? lastSpot : 'arrive'), at: param('at') || undefined }))
+  const [initial] = useState<Start>(() => ({ section: start ?? (arrivedThisVisit ? lastSpot : 'arrive'), at: param('at') || undefined, who: param('who') || undefined }))
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
   const [arriving, setArriving] = useState(initial.section === 'arrive')
-  const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' ? 'street' : initial.section)
+  const photo = initial.section === 'family'
+  const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' || initial.section === 'family' ? 'street' : initial.section)
   const houseRef = useRef<House | null>(null)
+  const guide = useRef<GuideHandle>(null)
   // Read once: the address bar follows her spots and drops ?debug=1 as soon as she moves.
   const [debug] = useState(() => flag('debug') !== null)
 
   useEffect(() => {
-    enter(initial.section, initial.at ? { at: initial.at } : {})
-    if (initial.section !== 'arrive') {
-      arrivedThisVisit = true
-      lastSpot = initial.section
-    }
+    enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : {})
+    if (initial.section !== 'arrive') arrivedThisVisit = true
+    if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section
   }, [])
 
   const arrived = () => {
     arrivedThisVisit = true
     setArriving(false)
+    guide.current?.speak(L.house.arrive)
+    guide.current?.speak(L.house.door, true)
   }
   // The flat house has no tuk-tuk ride: the arrival is a short card.
   useEffect(() => {
@@ -50,15 +55,16 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     lastSpot = s
     setSpot(s)
     enter(s, at ? { at } : {})
+    guide.current?.arrivedAt(s)
   }
   const allStamps = stamps.length >= meta.activities.length
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
       {mode === 'flat' ? (
-        <Flat spot={spot} onSpot={onSpot} />
+        <Flat spot={spot} onSpot={onSpot} photo={photo} />
       ) : (
-        <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} events={{ onSpot, onArrived: arrived }} />
+        <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id) }} />
       )}
       {mode === 'lost' && (
         <button
@@ -101,6 +107,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           🎉
         </motion.button>
       )}
+      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost'} />}
       {debug && <Debug houseRef={houseRef} />}
     </div>
   )

@@ -8,12 +8,17 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
       default: '',
       doc: 'start already using a thing on that floor: table, altar, cabinet, fridge, photos (downstairs); mattress, pillows, couch, suitcase, balcony (upstairs); motorbike, spirit-house, cat (street)',
     },
+    who: {
+      default: '',
+      doc: 'the family photo with one person alone, turning slowly: kaylee, agong, ji, nick, jum, joy, bird, ja, sri, gan, ken, bb, putto, putter',
+    },
   },
   sections: [
     { id: 'arrive', name: 'Arrive by tuk-tuk' },
     { id: 'street', name: "In front of Agong's house", params: ['at'] },
     { id: 'downstairs', name: 'Downstairs', params: ['at'] },
     { id: 'upstairs', name: "Kaylee's room upstairs", params: ['at'] },
+    { id: 'family', name: 'Family photo', params: ['who'] },
   ],
 })
 export default HUB_SECTIONS

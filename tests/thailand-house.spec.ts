@@ -16,6 +16,8 @@ function trackErrors(page: Page) {
 }
 
 async function open(page: Page, link: string, query = '') {
+  // A fresh page each time (a hash-only change wouldn't reload, and the "Let's play" splash wouldn't show).
+  await page.goto('about:blank')
   await page.goto(`./${query}#/world/thailand/${link}`)
   await page.getByRole('button', { name: /let's play/i }).click()
 }
@@ -64,13 +66,29 @@ test('a walk around the house with real taps', async ({ page }) => {
   await expect.poll(field(page, 'pose')).toBe('sit')
   await tap(page, 'cabinet')
   await expect.poll(field(page, 'using'), { timeout: 30_000 }).toBe('cabinet')
-  // Up the stairs to her room, and onto the mattress.
+  // Up the stairs, through the glass doors into her room, and onto the mattress.
   await tap(page, 'stairs-up')
   await expect.poll(field(page, 'spot'), { timeout: 40_000 }).toBe('upstairs')
+  await tap(page, 'glass-doors')
+  await expect.poll(field(page, 'using'), { timeout: 30_000 }).toBe('glass-doors')
   await tap(page, 'mattress')
   await expect.poll(field(page, 'pose'), { timeout: 30_000 }).toBe('bounce')
-  expect(await page.evaluate(() => window.__kayleeSectionLog?.map((s) => s.id))).toEqual(['street', 'downstairs', 'downstairs', 'downstairs', 'upstairs', 'upstairs'])
+  expect(await page.evaluate(() => window.__kayleeSectionLog?.map((s) => s.id))).toEqual(['street', 'downstairs', 'downstairs', 'downstairs', 'upstairs', 'upstairs', 'upstairs'])
   expect(await page.evaluate(() => location.hash)).toBe('#/world/thailand/hub/upstairs?at=mattress')
+  expect(errors).toEqual([])
+})
+
+test('the family photo: everyone in front of Agong\'s house, and each of them alone', async ({ page }) => {
+  const errors = trackErrors(page)
+  await open(page, 'hub/family')
+  await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
+  // Fourteen name pills: the whole family and Kaylee.
+  for (const id of ['kaylee', 'ji', 'nick', 'agong', 'jum', 'joy', 'bird', 'ja', 'sri', 'gan', 'ken', 'bb', 'putto', 'putter']) await expect(page.locator(`[data-anchor="family:${id}"]`)).toBeVisible()
+  await tap(page, 'family:putter')
+  await open(page, 'hub/family?who=ja')
+  await expect(page.locator('[data-anchor="family:ja"]')).toBeVisible()
+  await expect(page.locator('[data-anchor="family:agong"]')).toBeHidden()
+  expect(await page.evaluate(() => window.__kayleeSection)).toMatchObject({ id: 'family', params: { who: 'ja' } })
   expect(errors).toEqual([])
 })
 
