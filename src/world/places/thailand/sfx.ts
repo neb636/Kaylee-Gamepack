@@ -14,6 +14,11 @@ export const sfx = {
     for (let i = 0; i < 9; i++) noise(0.06, 0.12, 'bandpass', 1800 + i * 120, 2400, i * 0.11, 3)
     tone(160, 260, 1.0, 0.05, 'sawtooth')
   },
+  /** The aluminium bathroom door jiggling on its latch (it's locked). */
+  jiggle: () => {
+    for (let i = 0; i < 4; i++) noise(0.05, 0.1, 'bandpass', 2600 - i * 150, 3200, i * 0.09, 4)
+    tone(220, 180, 0.08, 0.06, 'square', 0.02)
+  },
   /** A soft temple bell: for the altar, the shrines and the spirit house. */
   ding: () => {
     tone(1318, 1310, 1.6, 0.07, 'sine')

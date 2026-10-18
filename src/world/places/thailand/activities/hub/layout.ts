@@ -12,9 +12,9 @@
 //
 //   GROUND FLOOR (back)          UPSTAIRS (back)
 //  +-----------------+          +-----------------+
-//  | photos altar    |          |m  KAYLEE'S ROOM |
-//  |    shrine  cook |          |a          couch |
-//  |                 |          |t     suitcase   |
+//  | photos altar    |          |m  suitcase bath |
+//  |    shrine  cook |          |a  KAYLEE'S ROOM |
+//  |                 |          |t          couch |
 //  |+-------+ fridge |          |==== glass doors =|
 //  ||L (2) >>> top   |          |+-------+  top   |
 //  ||L               |          || well  |        |
@@ -55,7 +55,7 @@ export const DIM = {
 }
 
 export type Area = 'street' | 'inside'
-export type React = 'jelly' | 'hop' | 'spin' | 'open' | 'tilt' | 'shutter' | 'birds' | 'cat' | 'glow' | 'stairs' | 'beep' | 'toot' | 'puff' | 'tick' | 'flip' | 'wave' | 'gecko'
+export type React = 'jelly' | 'hop' | 'spin' | 'open' | 'tilt' | 'shutter' | 'birds' | 'cat' | 'glow' | 'stairs' | 'beep' | 'toot' | 'puff' | 'tick' | 'flip' | 'wave' | 'gecko' | 'rattle'
 
 export interface UseSpot {
   /** Where she walks to. */
@@ -104,13 +104,13 @@ export const PICKABLES: Pickable[] = [
   { id: 'neighbor-right', label: "Neighbor's shop", floor: 0, area: 'street', at: [DIM.row[3], 2.7, 0.5], r: 1.1, react: 'jelly' },
 
   // ---- Downstairs ----
-  { id: 'desk', label: "Agong's desk", floor: 0, area: 'inside', at: [2.765, 0.9, -4.2], r: 0.7, react: 'hop', use: { x: 2.225, z: -3.1, face: 150, pose: 'peek' } },
+  { id: 'desk', label: "Agong's desk", floor: 0, area: 'inside', at: [2.765, 0.9, -4.45], r: 0.7, react: 'hop', use: { x: 2.225, z: -3.1, face: 150, pose: 'peek' } },
   { id: 'table', label: 'Table', floor: 0, area: 'inside', at: [-2.075, 0.75, -2.6], r: 0.9, react: 'jelly', use: { x: -0.575, z: -2.2, face: -90, pose: 'sit', snap: { x: -1.325, z: -2.2, y: 0.45 } } },
   { id: 'ground-couch', label: 'Grey couch', floor: 0, area: 'inside', at: [-2.7, 0.5, -6.9], r: 0.9, react: 'jelly', use: { x: -1.65, z: -6.9, face: 90, pose: 'sit', snap: { x: -2.6, z: -6.9, y: 0.44 } } },
-  { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.25, -4.0], r: 0.8, react: 'tilt', use: { x: -0.3, z: -3.0, face: -70, pose: 'lookup' } },
+  { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.45, -4.0], r: 0.95, react: 'tilt', use: { x: -0.3, z: -3.0, face: -70, pose: 'lookup' } },
   { id: 'gecko', label: 'Gecko', floor: 0, area: 'inside', at: [DIM.left + 0.04, 3.0, -3.0], r: 0.35, react: 'gecko', moves: true },
   { id: 'clock', label: 'Clock', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.85, -5.75], r: 0.32, react: 'tick', use: { x: -0.4, z: -5.95, face: -80, pose: 'lookup' } },
-  { id: 'fan', label: 'Fan', floor: 0, area: 'inside', at: [1.7, 0.75, -6.2], r: 0.45, react: 'spin', use: { x: 1.7, z: -5.45, face: 180, pose: 'peek' } },
+  { id: 'fan', label: 'Fan', floor: 0, area: 'inside', at: [2.5, 1.15, -5.75], r: 0.5, react: 'spin', use: { x: 1.75, z: -5.3, face: 120, pose: 'peek' } },
   { id: 'fridge', label: 'Fridge', floor: 0, area: 'inside', at: [2.775, 0.9, -11.75], r: 0.65, react: 'open', use: { x: 2.025, z: -11.75, face: 90, pose: 'peek' } },
   { id: 'altar', label: 'Family altar', floor: 0, area: 'inside', at: [-0.3, 1.35, B + 0.3], r: 0.8, react: 'glow', gentle: true, use: { x: -0.3, z: B + 1.15, face: 180, pose: 'wai' } },
   { id: 'photos-back', label: 'More old photos', floor: 0, area: 'inside', at: [-1.85, 2.95, B + 0.03], r: 0.7, react: 'tilt', use: { x: -1.7, z: B + 1.0, face: 180, pose: 'lookup' } },
@@ -129,7 +129,8 @@ export const PICKABLES: Pickable[] = [
   { id: 'pillows', label: 'Pillows', floor: 1, area: 'inside', at: [-2.275, U + 0.35, -20.348], r: 0.55, react: 'puff', use: { x: -1.075, z: -19.548, face: 0, pose: 'lie', snap: { x: -2.275, z: -19.498, y: 0.22 } } },
   { id: 'couch', label: 'Couch', floor: 1, area: 'inside', at: [2.795, U + 0.5, -18.598], r: 0.75, react: 'jelly', use: { x: 1.925, z: -18.098, face: -90, pose: 'sit', snap: { x: 2.725, z: -18.098, y: 0.44 } } },
   { id: 'room-fan', label: 'Fan', floor: 1, area: 'inside', at: [0.4, U + 0.75, -16.798], r: 0.42, react: 'spin', use: { x: 0.4, z: -17.548, face: 0, pose: 'peek' } },
-  { id: 'suitcase', label: 'Suitcase', floor: 1, area: 'inside', at: [1.4, U + 0.3, -20.448], r: 0.45, react: 'open', use: { x: 1.4, z: -19.748, face: 180, pose: 'peek' } },
+  { id: 'suitcase', label: 'Suitcase', floor: 1, area: 'inside', at: [-0.9, U + 0.3, -20.448], r: 0.45, react: 'open', use: { x: -0.9, z: -19.748, face: 180, pose: 'peek' } },
+  { id: 'bathroom-door', label: 'Bathroom door', floor: 1, area: 'inside', at: [2.2, U + 1.1, B + 0.06], r: 0.6, react: 'rattle', use: { x: 2.2, z: B + 0.95, face: 180, pose: 'stand' } },
   { id: 'wardrobe', label: 'Wardrobe', floor: 1, area: 'inside', at: [0.25, U + 1.0, B + 0.26], r: 0.7, react: 'open', use: { x: 0.25, z: B + 1.0, face: 180, pose: 'peek' } },
 ]
 
@@ -147,7 +148,7 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [DIM.left + 0.1, DIM.right - 0.1, -1, 1],
     ],
     block: [
-      [2.425, DIM.right, -4.9, -3.5], // Agong's desk
+      [2.425, DIM.right, -5.25, -3.65], // Agong's desk
       [1.725, 2.325, -4.5, -3.9], // his chair
       [-2.575, -1.575, -3.6, -1.6], // table
       [DIM.left, -2.25, -8.3, -5.5], // grey couch
@@ -165,7 +166,7 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [-1.325, -3.1, 0.17],
       [-2.075, -1.3, 0.17],
       [-2.075, -4.0, 0.17], // stools (the one at -1.325, -2.2 is hers)
-      [1.7, -6.2, 0.2], // fan
+      [2.5, -5.75, 0.28], // fan
       [4.3, 0.5, 0.28], // spirit house
       [-2.2, 0.4, 0.26],
       [2.2, 0.4, 0.26],
@@ -184,12 +185,13 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [HALL.door1, DIM.right, HALL.zGlass - 0.06, HALL.zGlass + 0.06],
       [DIM.left, -1.475, -20.748, -16.448], // mattress row + pillows
       [2.425, DIM.right, -19.798, -17.398], // couch
-      [1.05, 1.75, B, -20.198], // suitcase
+      [-1.25, -0.55, B, -20.198], // suitcase
       [-0.35, 0.85, B, B + 0.55], // wardrobe
     ],
     circles: [
       [0.4, -16.798, 0.2], // fan
       [2.1, -7.85, 0.2], // plant
+      [1.42, B + 0.32, 0.24], // laundry basket
     ],
   },
 }

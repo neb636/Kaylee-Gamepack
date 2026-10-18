@@ -14,7 +14,7 @@ interface Active {
   t: number
 }
 
-const DUR: Partial<Record<Pickable['react'], number>> = { jelly: 0.65, hop: 0.7, tilt: 0.9, shutter: 1.2, birds: 1.6, cat: 1.3, glow: 2.2, beep: 0.6, toot: 0.7, puff: 0.6, tick: 1.1, flip: 0.7, wave: 1.6, open: 2.2, spin: 2.6, stairs: 0.4 }
+const DUR: Partial<Record<Pickable['react'], number>> = { jelly: 0.65, hop: 0.7, tilt: 0.9, shutter: 1.2, birds: 1.6, cat: 1.3, glow: 2.2, beep: 0.6, toot: 0.7, puff: 0.6, tick: 1.1, flip: 0.7, rattle: 0.6, wave: 1.6, open: 2.2, spin: 2.6, stairs: 0.4 }
 
 export class Reactor {
   private active = new Map<string, Active>()
@@ -107,6 +107,9 @@ export class Reactor {
       case 'gecko':
         sfx.tukkae()
         break
+      case 'rattle':
+        sfx.jiggle()
+        break
     }
   }
 
@@ -119,6 +122,9 @@ export class Reactor {
       const a = this.active.get(id)
       if (blades) blades.rotation.z -= dt * (a ? 22 : 7)
     }
+    // Agong's big fan turns its head slowly from side to side.
+    const head = get('fan.head')
+    if (head) head.rotation.y = Math.sin(t * 0.45) * 0.55
     const paw = get('lucky-cat.paw')
     if (paw) paw.rotation.x = this.active.has('lucky-cat') ? -0.7 + Math.sin(t * 16) * 0.6 : -0.5 + Math.sin(t * 3) * 0.35
     const tail = get('cat.tail')
@@ -251,6 +257,10 @@ export class Reactor {
       case 'stairs':
         g.scale.y = 1 + bell(p) * 0.02
         break
+      case 'rattle':
+        // A locked door: it shakes in its frame but stays shut.
+        g.position.x = g.userData.baseX + Math.sin(p * Math.PI * 9) * 0.012 * (1 - p)
+        break
       case 'wave':
       case 'spin':
       case 'glow':
@@ -264,6 +274,7 @@ export class Reactor {
     g.scale.set(1, 1, 1)
     g.rotation.x = 0
     if (g.userData.baseY !== undefined) g.position.y = g.userData.baseY
+    if (kind === 'rattle') g.position.x = g.userData.baseX
     for (const [n, o] of this.kit.parts) {
       if (!n.startsWith(`${id}.`)) continue
       if (n.includes('.hop')) o.position.y = o.userData.baseY
@@ -278,7 +289,7 @@ export class Reactor {
 
 /** Records each poke's and part's resting height, so hops and bobs come back to it. */
 export function rememberRest(kit: Kit) {
-  for (const g of kit.pokes.values()) if (!g.userData.moves) g.userData.baseY = g.position.y
+  for (const g of kit.pokes.values()) if (!g.userData.moves) Object.assign(g.userData, { baseY: g.position.y, baseX: g.position.x })
   for (const o of kit.parts.values()) o.userData.baseY = o.position.y
 }
 

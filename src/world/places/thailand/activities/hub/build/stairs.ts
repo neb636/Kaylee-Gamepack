@@ -13,7 +13,7 @@ const TREAD = '#F7EBD6'
 const EDGE = '#E07A6A'
 const BAR = '#EE7B70'
 const RAIL = '#9B6A55'
-const WALL = '#FFE4D4'
+const WALL = '#F6EEDC'
 
 export function buildStairs(kit: Kit): Group {
   const { x0, xLanding, x1, zFront, mid, zBack, steps } = DIM.stairs

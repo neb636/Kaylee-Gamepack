@@ -31,6 +31,8 @@ export const L = {
     door: 'Tap the door to go inside!',
     inside: 'Tap your family to say hello!',
     upstairs: 'This is your room! Try the mattress!',
+    // Every time she taps the bathroom door upstairs (it's locked).
+    bathroom: "I don't need to go to the bathroom!",
     stuck: {
       street: 'Tap the door to go inside!',
       downstairs: 'Tap the stairs to go up to your room!',
