@@ -2,7 +2,7 @@
 // she goes to use it. Pure data (no three.js): the flat fallback and tests read it too.
 //
 // Axes: +x is right as seen from the street, +y up, +z toward the street. The house front (the shutter) is at z = 0 and
-// the back wall at z = -23.22. Ground floor y 0..3.6, upstairs y 3.6..6.6.
+// the back wall at z = -20.898. Ground floor y 0..3.6, upstairs y 3.6..6.6.
 // Facing is in degrees: 0 = toward the street (and the camera), 180 = toward the back, 90 = toward +x.
 //
 // The plan (Dad, 2026-10-17): downstairs, Agong's desk against the right wall at the front, the table on the left,
@@ -20,19 +20,19 @@
 //  ||L               |          || well  |        |
 //  ||L (1) <<< foot  |          |+-------+ hallway|
 //  |+-------+        |          |          plant  |
-//  |             fan |          |=== balcony rail=|
+//  | couch       fan |          |=== balcony rail=|
 //  | table    Agong D|          |  open: looks    |
 //  | table         E |          |  down into the  |
 //  |               K |          |  shop below     |
 //  +----shutter------+          +---balcony-------+
 import type { Pose } from '../../characters/types'
 
-// Inside footprint: 6.25 × 23.22 m (25% wider, 35% longer). Furniture stays at its original scale.
+// Inside footprint: 6.25 × 20.898 m (25% wider than the original; 10% shorter than the expanded house). Furniture stays at its original scale.
 export const DIM = {
   /** Inside face of the left and right walls. */
   left: -3.125,
   right: 3.125,
-  back: -23.22,
+  back: -20.898,
   /** Ground floor height, and the top of the upstairs floor. */
   g0: 3.6,
   g1: 3.0,
@@ -48,10 +48,10 @@ export const DIM = {
    * mid..zBack) climbs back across and comes out upstairs at x1. Each flight has `steps` treads; the space under
    * flight 2 is closed in.
    */
-  stairs: { x0: -3.125, xLanding: -2.225, x1: -0.525, zFront: -9.6, mid: -10.75, zBack: -11.9, steps: 7 },
+  stairs: { x0: -3.125, xLanding: -2.225, x1: 0, zFront: -10.6, mid: -11.75, zBack: -12.9, steps: 7 },
   /** Upstairs: the balcony railing at the front edge of the floor (open to the shop below), and the glass wall into
    *  Kaylee's room, with its doorway. */
-  hall: { zFront: -7.4, zGlass: -12.4, door0: 1.3, door1: 2.4 },
+  hall: { zFront: -7.4, zGlass: -13.4, door0: 1.3, door1: 2.4 },
 }
 
 export type Area = 'street' | 'inside'
@@ -106,6 +106,7 @@ export const PICKABLES: Pickable[] = [
   // ---- Downstairs ----
   { id: 'desk', label: "Agong's desk", floor: 0, area: 'inside', at: [2.765, 0.9, -4.2], r: 0.7, react: 'hop', use: { x: 2.225, z: -3.1, face: 150, pose: 'peek' } },
   { id: 'table', label: 'Table', floor: 0, area: 'inside', at: [-2.075, 0.75, -2.6], r: 0.9, react: 'jelly', use: { x: -0.575, z: -2.2, face: -90, pose: 'sit', snap: { x: -1.325, z: -2.2, y: 0.45 } } },
+  { id: 'ground-couch', label: 'Grey couch', floor: 0, area: 'inside', at: [-2.7, 0.5, -6.9], r: 0.9, react: 'jelly', use: { x: -1.65, z: -6.9, face: 90, pose: 'sit', snap: { x: -2.6, z: -6.9, y: 0.44 } } },
   { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.25, -4.0], r: 0.8, react: 'tilt', use: { x: -0.3, z: -3.0, face: -70, pose: 'lookup' } },
   { id: 'gecko', label: 'Gecko', floor: 0, area: 'inside', at: [DIM.left + 0.04, 3.0, -3.0], r: 0.35, react: 'gecko', moves: true },
   { id: 'clock', label: 'Clock', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.85, -5.75], r: 0.32, react: 'tick', use: { x: -0.4, z: -5.95, face: -80, pose: 'lookup' } },
@@ -115,20 +116,20 @@ export const PICKABLES: Pickable[] = [
   { id: 'photos-back', label: 'More old photos', floor: 0, area: 'inside', at: [-1.85, 2.95, B + 0.03], r: 0.7, react: 'tilt', use: { x: -1.7, z: B + 1.0, face: 180, pose: 'lookup' } },
   { id: 'shrine', label: 'Little shrine', floor: 0, area: 'inside', at: [0.9, 0.3, B + 0.25], r: 0.4, react: 'glow', gentle: true, use: { x: 0.9, z: B + 1.0, face: 180, pose: 'wai' } },
   { id: 'calendar', label: 'Calendar', floor: 0, area: 'inside', at: [1.95, 2.0, B + 0.03], r: 0.38, react: 'flip', use: { x: 1.5, z: B + 0.85, face: 180, pose: 'lookup' } },
-  { id: 'rice-cooker', label: 'Rice cooker', floor: 0, area: 'inside', at: [2.775, 1.0, -20.42], r: 0.4, react: 'puff', use: { x: 2.075, z: -20.42, face: 90, pose: 'peek' } },
+  { id: 'rice-cooker', label: 'Rice cooker', floor: 0, area: 'inside', at: [2.775, 1.0, -18.098], r: 0.4, react: 'puff', use: { x: 2.075, z: -18.098, face: 90, pose: 'peek' } },
   { id: 'doormat', label: 'Go outside', floor: 0, area: 'inside', at: [0, 0.05, -0.6], r: 0.7, react: 'jelly', use: { x: 0.3, z: 1.35, face: 15, pose: 'stand' } },
   { id: 'shoes', label: 'Shoes', floor: 0, area: 'inside', at: [2.825, 0.2, -0.85], r: 0.42, react: 'hop', use: { x: 2.125, z: -0.85, face: 90, pose: 'peek' } },
-  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-1.525, 0.9, -10.2], r: 0.8, react: 'stairs' },
+  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-1.0, 0.9, -11.2], r: 0.8, react: 'stairs' },
 
   // ---- Upstairs: the hallway, then Kaylee's room at the back ----
-  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-1.125, U + 0.3, -11.3], r: 0.75, react: 'stairs' },
+  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-0.6, U + 0.3, -12.3], r: 0.75, react: 'stairs' },
   { id: 'plant', label: 'Plant', floor: 1, area: 'inside', at: [2.1, U + 0.4, -7.85], r: 0.35, react: 'jelly', use: { x: 1.4, z: -8.0, face: 90, pose: 'peek' } },
-  { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [1.85, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: 1.85, z: -19.32, face: 180, pose: 'stand' } },
-  { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-2.275, U + 0.25, -20.32], r: 1.0, react: 'jelly', use: { x: -1.075, z: -20.32, face: 25, pose: 'bounce', snap: { x: -2.275, z: -20.32, y: 0.22 } } },
-  { id: 'pillows', label: 'Pillows', floor: 1, area: 'inside', at: [-2.275, U + 0.35, -22.67], r: 0.55, react: 'puff', use: { x: -1.075, z: -21.87, face: 0, pose: 'lie', snap: { x: -2.275, z: -21.82, y: 0.22 } } },
-  { id: 'couch', label: 'Couch', floor: 1, area: 'inside', at: [2.795, U + 0.5, -20.92], r: 0.75, react: 'jelly', use: { x: 1.925, z: -20.42, face: -90, pose: 'sit', snap: { x: 2.725, z: -20.42, y: 0.44 } } },
-  { id: 'room-fan', label: 'Fan', floor: 1, area: 'inside', at: [0.4, U + 0.75, -19.12], r: 0.42, react: 'spin', use: { x: 0.4, z: -19.87, face: 0, pose: 'peek' } },
-  { id: 'suitcase', label: 'Suitcase', floor: 1, area: 'inside', at: [1.4, U + 0.3, -22.77], r: 0.45, react: 'open', use: { x: 1.4, z: -22.07, face: 180, pose: 'peek' } },
+  { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [1.85, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: 1.85, z: -16.998, face: 180, pose: 'stand' } },
+  { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-2.275, U + 0.25, -17.998], r: 1.0, react: 'jelly', use: { x: -1.075, z: -17.998, face: 25, pose: 'bounce', snap: { x: -2.275, z: -17.998, y: 0.22 } } },
+  { id: 'pillows', label: 'Pillows', floor: 1, area: 'inside', at: [-2.275, U + 0.35, -20.348], r: 0.55, react: 'puff', use: { x: -1.075, z: -19.548, face: 0, pose: 'lie', snap: { x: -2.275, z: -19.498, y: 0.22 } } },
+  { id: 'couch', label: 'Couch', floor: 1, area: 'inside', at: [2.795, U + 0.5, -18.598], r: 0.75, react: 'jelly', use: { x: 1.925, z: -18.098, face: -90, pose: 'sit', snap: { x: 2.725, z: -18.098, y: 0.44 } } },
+  { id: 'room-fan', label: 'Fan', floor: 1, area: 'inside', at: [0.4, U + 0.75, -16.798], r: 0.42, react: 'spin', use: { x: 0.4, z: -17.548, face: 0, pose: 'peek' } },
+  { id: 'suitcase', label: 'Suitcase', floor: 1, area: 'inside', at: [1.4, U + 0.3, -20.448], r: 0.45, react: 'open', use: { x: 1.4, z: -19.748, face: 180, pose: 'peek' } },
   { id: 'wardrobe', label: 'Wardrobe', floor: 1, area: 'inside', at: [0.25, U + 1.0, B + 0.26], r: 0.7, react: 'open', use: { x: 0.25, z: B + 1.0, face: 180, pose: 'peek' } },
 ]
 
@@ -139,7 +140,7 @@ const S = DIM.stairs
 const HALL = DIM.hall
 export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; circles: Circle[] }> = {
   0: {
-    bounds: [-13, 13, -23.42, 2.8],
+    bounds: [-13, 13, -21.098, 2.8],
     carve: [
       [-12.6, 12.6, 0, DIM.curb - 0.05],
       [DIM.left, DIM.right, DIM.back, 0],
@@ -149,12 +150,13 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [2.425, DIM.right, -4.9, -3.5], // Agong's desk
       [1.725, 2.325, -4.5, -3.9], // his chair
       [-2.575, -1.575, -3.6, -1.6], // table
+      [DIM.left, -2.25, -8.3, -5.5], // grey couch
       [2.425, DIM.right, -12.1, -11.4], // fridge
       [2.575, DIM.right, -1.25, -0.45], // shoes
       [S.x0, S.x1 + 0.05, S.zBack, S.zFront], // stairs
       [-1.0, 0.4, B, B + 0.55], // altar
       [0.65, 1.15, B, B + 0.4], // little shrine
-      [2.475, DIM.right, -22.62, -19.62], // kitchen counter
+      [2.475, DIM.right, -20.298, -17.298], // kitchen counter
       [-5.4, -3.65, 1.45, 1.95], // motorbike
     ],
     circles: [
@@ -174,19 +176,19 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
     ],
   },
   1: {
-    bounds: [-3.325, 3.325, -23.42, -7.2],
+    bounds: [-3.325, 3.325, -21.098, -7.2],
     carve: [[DIM.left, DIM.right, DIM.back, HALL.zFront]],
     block: [
       [S.x0, S.x1 + 0.05, S.zBack, S.zFront], // stairwell (she comes out of it at the front, along the left wall)
       [DIM.left, HALL.door0, HALL.zGlass - 0.06, HALL.zGlass + 0.06], // the glass wall, left of the doorway
       [HALL.door1, DIM.right, HALL.zGlass - 0.06, HALL.zGlass + 0.06],
-      [DIM.left, -1.475, -23.07, -18.77], // mattress row + pillows
-      [2.425, DIM.right, -22.12, -19.72], // couch
-      [1.05, 1.75, B, -22.52], // suitcase
+      [DIM.left, -1.475, -20.748, -16.448], // mattress row + pillows
+      [2.425, DIM.right, -19.798, -17.398], // couch
+      [1.05, 1.75, B, -20.198], // suitcase
       [-0.35, 0.85, B, B + 0.55], // wardrobe
     ],
     circles: [
-      [0.4, -19.12, 0.2], // fan
+      [0.4, -16.798, 0.2], // fan
       [2.1, -7.85, 0.2], // plant
     ],
   },
@@ -200,7 +202,7 @@ export const STARTS = {
   arrive: { floor: 0 as const, x: 0.45, z: 1.55, face: 15 },
   street: { floor: 0 as const, x: 0.45, z: 1.55, face: 15 },
   downstairs: { floor: 0 as const, x: 0.2, z: -1.3, face: 160 },
-  upstairs: { floor: 1 as const, x: 0.55, z: -11.3, face: 90 },
+  upstairs: { floor: 1 as const, x: 0.55, z: -12.3, face: 90 },
   family: { floor: 0 as const, x: 1.05, z: 1.75, face: 0 },
 }
 

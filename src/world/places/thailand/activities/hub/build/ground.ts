@@ -77,6 +77,15 @@ export function buildGround(kit: Kit): Ground {
   const stool = (x: number, z: number) => [P.cyl(0.17, 0.2, 0.06, STOOL, { at: [x, 0.42, z] }), P.cyl(0.13, 0.19, 0.4, STOOL, { at: [x, 0.2, z] })]
   room.add(scenery(kit, [...stool(-2.825, -2.2), ...stool(-2.825, -3.1), ...stool(-1.325, -2.2), ...stool(-1.325, -3.1), ...stool(-2.075, -1.3), ...stool(-2.075, -4.0)]))
 
+  // ---- A grey couch against the left wall, facing into the room ----
+  room.add(poke(kit, 'ground-couch', [
+    P.rbox(0.85, 0.3, 2.8, 0.08, '#92949E', { at: [0, 0.2, 0] }),
+    ...[-0.66, 0.66].map((z) => P.rbox(0.7, 0.14, 1.26, 0.06, '#C5C7CF', { at: [0.05, 0.41, z] })),
+    P.rbox(0.2, 0.65, 2.8, 0.08, '#AFB2BC', { at: [-0.32, 0.61, 0] }),
+    ...[-1.3, 1.3].map((z) => P.rbox(0.82, 0.43, 0.18, 0.07, '#AFB2BC', { at: [0, 0.46, z] })),
+    P.rbox(0.13, 0.34, 0.38, 0.06, '#E2E3E8', { at: [-0.17, 0.67, -0.65], rot: [0, 0, -0.2] }),
+  ], [-2.7, 0, -6.9]))
+
   // ---- Agong's desk against the right wall at the front: he sits at it facing the wall ----
   const desk = poke(
     kit,
@@ -190,17 +199,17 @@ export function buildGround(kit: Kit): Ground {
   room.add(fridge)
   room.add(
     scenery(kit, [
-      P.box(0.62, 0.86, 3.0, '#BFE6DA', { at: [right - 0.31, 0.43, -21.12] }),
-      P.box(0.68, 0.05, 3.06, PAL.cream, { at: [right - 0.33, 0.885, -21.12] }),
-      ...[-20.37, -21.12, -21.87].map((z) => P.box(0.02, 0.6, 0.7, '#A8D8C8', { at: [right - 0.63, 0.42, z] })),
+      P.box(0.62, 0.86, 3.0, '#BFE6DA', { at: [right - 0.31, 0.43, -18.798] }),
+      P.box(0.68, 0.05, 3.06, PAL.cream, { at: [right - 0.33, 0.885, -18.798] }),
+      ...[-18.048, -18.798, -19.548].map((z) => P.box(0.02, 0.6, 0.7, '#A8D8C8', { at: [right - 0.63, 0.42, z] })),
       // A sink, a dish rack and a bowl of limes.
-      P.box(0.4, 0.04, 0.5, '#D8D2E6', { at: [right - 0.32, 0.9, -21.82] }),
-      P.rbox(0.3, 0.2, 0.36, 0.03, PAL.sky, { at: [right - 0.3, 1.01, -21.17] }),
-      P.cyl(0.13, 0.09, 0.07, PAL.cream, { at: [right - 0.3, 0.95, -19.97] }),
-      ...[-0.04, 0.04].map((dz) => P.sphere(0.045, '#9BD86F', { at: [right - 0.3, 1.0, -19.97 + dz] })),
+      P.box(0.4, 0.04, 0.5, '#D8D2E6', { at: [right - 0.32, 0.9, -19.498] }),
+      P.rbox(0.3, 0.2, 0.36, 0.03, PAL.sky, { at: [right - 0.3, 1.01, -18.848] }),
+      P.cyl(0.13, 0.09, 0.07, PAL.cream, { at: [right - 0.3, 0.95, -17.648] }),
+      ...[-0.04, 0.04].map((dz) => P.sphere(0.045, '#9BD86F', { at: [right - 0.3, 1.0, -17.648 + dz] })),
     ]),
   )
-  const cooker = poke(kit, 'rice-cooker', [P.cyl(0.17, 0.15, 0.24, PAL.cream, { at: [0, 0.12, 0] }), P.sphere(0.17, PAL.cream, { at: [0, 0.24, 0], scale: [1, 0.35, 1] }), P.box(0.1, 0.04, 0.02, PAL.hotpink, { at: [0, 0.1, 0.17] }), P.box(0.05, 0.05, 0.1, PAL.ink, { at: [0, 0.32, 0] })], [right - 0.32, 0.91, -20.42], { rotY: -Math.PI / 2 })
+  const cooker = poke(kit, 'rice-cooker', [P.cyl(0.17, 0.15, 0.24, PAL.cream, { at: [0, 0.12, 0] }), P.sphere(0.17, PAL.cream, { at: [0, 0.24, 0], scale: [1, 0.35, 1] }), P.box(0.1, 0.04, 0.02, PAL.hotpink, { at: [0, 0.1, 0.17] }), P.box(0.05, 0.05, 0.1, PAL.ink, { at: [0, 0.32, 0] })], [right - 0.32, 0.91, -18.098], { rotY: -Math.PI / 2 })
   cooker.add(part(kit, 'rice-cooker.smoke', [], [0, 0.35, 0], 0))
   room.add(cooker)
   // A striped doormat inside the door: tap it to go back out to the street.

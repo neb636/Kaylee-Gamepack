@@ -20,6 +20,8 @@ export interface GuideHandle {
 // Per visit to the app, like the arrival.
 const told = new Set<string>()
 const STUCK_S = 12
+const REMINDER_S = 60
+const MAX_REMINDERS = 5
 
 export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(function Guide({ spot, quiet }, ref) {
   const sparkle = useRef<PuppetHandle>(null)
@@ -27,6 +29,7 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
   const last = useRef<Line>(L.house.door)
   const lastTouch = useRef(performance.now())
   const lastTalk = useRef(0)
+  const reminders = useRef({ count: 0, last: 0 })
   const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
   const spotRef = useRef(spot)
   spotRef.current = spot
@@ -59,6 +62,14 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
     },
   }))
 
+  // A new floor visit gets two early hints, then at most one per minute (five total).
+  // Moving between objects on the same floor does not reset the allowance.
+  useEffect(() => {
+    const now = performance.now()
+    reminders.current = { count: 0, last: now }
+    lastTouch.current = now
+  }, [spot])
+
   // Any touch anywhere resets the "stuck" clock; after a while with nothing touched, a hint for where she is.
   useEffect(() => {
     const touch = () => (lastTouch.current = performance.now())
@@ -66,6 +77,10 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
     const timer = setInterval(() => {
       const now = performance.now()
       if (quiet || now - lastTouch.current < STUCK_S * 1000 || now - lastTalk.current < STUCK_S * 1000) return
+      const reminder = reminders.current
+      if (reminder.count >= MAX_REMINDERS || now - reminder.last < (reminder.count < 2 ? STUCK_S : REMINDER_S) * 1000) return
+      reminder.count++
+      reminder.last = now
       lastTouch.current = now
       speak(L.house.stuck[spotRef.current])
     }, 1000)

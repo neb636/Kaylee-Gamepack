@@ -56,10 +56,10 @@ export function buildUpper(kit: Kit): Upper {
       P.box(0.04, 1.0, 0.08, PAL.cream, { at: [1.75, U + 1.65, back + 0.04] }),
       // Kaylee's drawings taped above the mattresses.
       ...[
-        [-19.32, PAL.pink],
-        [-20.22, PAL.butter],
-        [-21.02, PAL.sky],
-        [-22.22, PAL.mint],
+        [-16.998, PAL.pink],
+        [-17.898, PAL.butter],
+        [-18.698, PAL.sky],
+        [-19.898, PAL.mint],
       ].map(([z, c], i) => P.box(0.02, 0.36, 0.3, c as string, { at: [left + 0.01, U + 1.45 + (i % 2) * 0.18, z as number], rot: [(i % 2 ? 0.08 : -0.06), 0, 0] })),
     ]),
   )
@@ -90,17 +90,17 @@ export function buildUpper(kit: Kit): Upper {
   glassWall.add(doors)
 
   // ---- The mattresses along the left wall, all the way to the end of the room ----
-  const mattress = poke(kit, 'mattress', [], [-2.275, U, -20.32])
+  const mattress = poke(kit, 'mattress', [], [-2.275, U, -17.998])
   const sheets = [PAL.pink, PAL.lavender, '#FFD3E6']
-  const len = (-18.77 - -23.07) / 3
+  const len = (-16.448 - -20.748) / 3
   sheets.forEach((c, i) => {
-    const z = -23.07 + len * (i + 0.5) - -20.32
+    const z = -20.748 + len * (i + 0.5) - -17.998
     mattress.add(scenery(kit, [P.rbox(1.58, 0.2, len - 0.04, 0.06, PAL.cream, { at: [0, 0.1, z] }), P.rbox(1.5, 0.03, len - 0.14, 0.02, c, { at: [0, 0.205, z] })], 2))
   })
   // A folded blanket in the middle of the row.
   mattress.add(scenery(kit, [P.rbox(1.2, 0.12, 0.5, 0.05, PAL.lavenderDark, { at: [0, 0.27, 0.9] })], 2))
   room.add(mattress)
-  room.add(poke(kit, 'pillows', [P.rbox(0.62, 0.16, 0.4, 0.07, PAL.cream, { at: [-0.38, 0.08, 0] }), P.rbox(0.62, 0.16, 0.4, 0.07, '#FFE3EF', { at: [0.38, 0.08, 0] }), P.box(0.62, 0.012, 0.06, PAL.hotpink, { at: [0.38, 0.165, 0] })], [-2.275, U + 0.2, -22.67]))
+  room.add(poke(kit, 'pillows', [P.rbox(0.62, 0.16, 0.4, 0.07, PAL.cream, { at: [-0.38, 0.08, 0] }), P.rbox(0.62, 0.16, 0.4, 0.07, '#FFE3EF', { at: [0.38, 0.08, 0] }), P.box(0.62, 0.012, 0.06, PAL.hotpink, { at: [0.38, 0.165, 0] })], [-2.275, U + 0.2, -20.348]))
 
   // ---- The couch on the right (faces left) ----
   room.add(
@@ -116,12 +116,12 @@ export function buildUpper(kit: Kit): Upper {
         P.rbox(0.72, 0.42, 0.18, 0.07, COUCH, { at: [0, 0.45, 1.15] }),
         P.rbox(0.12, 0.34, 0.34, 0.06, PAL.butter, { at: [0.12, 0.66, 0.65], rot: [0, 0, 0.2] }),
       ],
-      [2.795, U, -20.92],
+      [2.795, U, -18.598],
     ),
   )
 
   // ---- Her suitcase (the lid opens), the wardrobe (the doors open), a fan ----
-  const suitcase = poke(kit, 'suitcase', [P.rbox(0.62, 0.26, 0.42, 0.05, PAL.hotpink, { at: [0, 0.13, 0] }), P.box(0.64, 0.03, 0.06, PAL.gold, { at: [0, 0.13, 0.2] })], [1.4, U, -22.77], { rotY: Math.PI })
+  const suitcase = poke(kit, 'suitcase', [P.rbox(0.62, 0.26, 0.42, 0.05, PAL.hotpink, { at: [0, 0.13, 0] }), P.box(0.64, 0.03, 0.06, PAL.gold, { at: [0, 0.13, 0.2] })], [1.4, U, -20.448], { rotY: Math.PI })
   const lid = part(kit, 'suitcase.hinge', [P.rbox(0.62, 0.08, 0.42, 0.04, PAL.hotpink, { at: [0, 0.04, 0.21] }), P.torus(0.06, 0.015, PAL.gold, { at: [0, 0.08, 0.3], rot: [Math.PI / 2, 0, 0] })], [0, 0.26, -0.21], 2)
   lid.userData.swingX = -1.6
   suitcase.add(lid)
@@ -133,7 +133,7 @@ export function buildUpper(kit: Kit): Upper {
     wardrobe.add(h)
   }
   room.add(wardrobe)
-  room.add(standingFan(kit, 'room-fan', [0.4, U, -19.12], Math.PI))
+  room.add(standingFan(kit, 'room-fan', [0.4, U, -16.798], Math.PI))
 
   room.add(glassWall)
   return { room, rightWall, glassWall }
