@@ -1,0 +1,715 @@
+// Agong's house, running: builds the world, then each frame moves Kaylee and the family, keeps the camera on her,
+// cuts the walls away so the camera can see in, and places the DOM tap targets (Anchors.tsx) over what they mark.
+//
+// What a tap does:
+// - on a thing: it reacts at once (wobble, sound), then Kaylee walks over and uses it (sits, bounces, does a wai)
+// - on someone in the family: they hop and say hi, she walks up to them, and they hop together
+// - on the floor: she walks there (around the furniture)
+// - on the stairs: she walks to them and hops up (or down), and the camera follows her to the other floor
+// Holding a finger down and moving it leads her around like on a string.
+import { Color, Group, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
+import { Avatar } from '../../characters/avatar'
+import { FAMILY } from '../../characters/family'
+import { Placeholder } from '../../characters/placeholder'
+import { CameraRig, type Shot } from '../../engine/camera'
+import { Bag } from '../../engine/dispose'
+import { NavGrid, type XZ } from '../../engine/nav'
+import { TapMarker } from '../../engine/marker'
+import { setHullHighlight, setOutlineResolution } from '../../engine/outline'
+import { applyBands, makeLights, PAL } from '../../engine/toon'
+import { TUNE } from '../../engine/tune'
+import { sfx } from '../../sfx'
+import { buildGround } from './build/ground'
+import type { Kit } from './build/kit'
+import { Reactor, rememberRest } from './build/pokes'
+import { buildStairs } from './build/stairs'
+import { buildStreet } from './build/street'
+import { buildUpper } from './build/upper'
+import { DIM, NAV, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
+import type { HubSection } from './sections'
+
+export type Spot = 'street' | 'downstairs' | 'upstairs'
+export interface Start {
+  section: HubSection
+  /** A use-spot (pickable id) to start in, e.g. 'table' or 'mattress'. */
+  at?: string
+}
+
+/** A DOM tap target over something in the scene. */
+export interface AnchorInfo {
+  id: string
+  label: string
+  /** Family members show their name. */
+  name?: string
+  thai?: string
+  kind: 'thing' | 'family'
+}
+
+export interface HouseEvents {
+  /** Kaylee moved to another spot (the address bar and tests follow it). `at` = the thing she's using. */
+  onSpot(spot: Spot, at?: string): void
+  /** The arrival finished (or was skipped). */
+  onArrived(): void
+}
+
+const deg = Math.PI / 180
+/** Where the tuk-tuk stops to let her out, and where it parks after (out of the way, past the spirit house). */
+const DROP_X = 0.9
+const PARK_X = 8.3
+const tmp = new Vector3()
+const tmp2 = new Vector3()
+
+export const ANCHORS: AnchorInfo[] = [
+  ...PICKABLES.map((p) => ({ id: p.id, label: p.label, kind: 'thing' as const })),
+  ...FAMILY.filter((m) => m.spot).map((m) => ({ id: `family:${m.id}`, label: m.name, name: m.name, thai: m.thai, kind: 'family' as const })),
+]
+
+export class House {
+  readonly scene = new Scene()
+  readonly rig = new CameraRig()
+  private bag = new Bag()
+  private kit: Kit = { bag: this.bag, pokes: new Map(), parts: new Map() }
+  private reactor: Reactor
+  private lights = makeLights(this.scene)
+  readonly kaylee: Avatar
+  private family = new Map<string, Placeholder>()
+  private nav: Record<0 | 1, NavGrid>
+  private marker: TapMarker
+  private raycaster = new Raycaster()
+  private groups: Record<'tall' | 'props' | 'roof' | 'upper' | 'upperRoom' | 'upperFront' | 'front' | 'groundRoom', Group>
+  private cuts: { obj: Object3D; low: number; when: (m: Mode) => boolean; value: number }[] = []
+  /** Where she is: outside, downstairs or upstairs (drives the cutaway and the camera). */
+  private mode: Mode = 'street'
+  private spot: Spot = 'street'
+  private using: string | undefined
+  private climbing = false
+  private arrival: { t: number; done: boolean; hopped?: boolean } | null = null
+  private tuk: Group | null = null
+  /** After dropping her off, the tuk-tuk drives on to its parking spot. */
+  private tukDrive: { t: number } | null = null
+  private w = 1
+  private h = 1
+  private time = 0
+  /** Kaylee's smoothed velocity: the camera looks a little ahead of where she's going. */
+  private vel = new Vector3()
+  private lastPos = new Vector3()
+  private anchorEls = new Map<string, HTMLElement>()
+  private hovered: string | null = null
+  private lead: { x: number; y: number; last: number } | null = null
+  stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
+  /** While setting up a deep link: the Hub has already announced the section, so no events. */
+  private quiet = true
+
+  constructor(
+    private renderer: WebGLRenderer,
+    start: Start,
+    private events: HouseEvents,
+  ) {
+    const { scene, kit } = this
+    scene.background = new Color(PAL.sky)
+    applyBands()
+
+    const street = buildStreet(kit)
+    const ground = buildGround(kit)
+    const upper = buildUpper(kit)
+    const stairs = buildStairs(kit)
+    // Grouped by when they show (applyVisibility): the upstairs room only from upstairs, the downstairs room from the
+    // street only once the shutter is up, and so on.
+    const upperRoom = new Group()
+    upperRoom.add(upper.room, upper.rightWall)
+    const upperAll = new Group()
+    const upperFront = street.upperFront
+    upperAll.add(upperRoom, street.balcony, upperFront)
+    const groundRoom = new Group()
+    groundRoom.add(ground.room, ground.rightWall, stairs)
+    scene.add(street.ground, street.tall, street.props, street.front, street.frontRight, street.roof, groundRoom, upperAll)
+    this.groups = { tall: street.tall, props: street.props, roof: street.roof, upper: upperAll, upperRoom, upperFront, front: street.front, groundRoom }
+    // Walls that lower so the camera can see in: the right walls (to 1 m), the front pillar and the upper front.
+    this.cuts.push(
+      { obj: ground.rightWall, low: 1.0 / DIM.g0, when: (m) => m === 'inside0', value: 1 },
+      { obj: street.frontRight, low: 1.0 / DIM.g0, when: (m) => m === 'inside0', value: 1 },
+      { obj: upper.rightWall, low: 1.0 / DIM.g1, when: (m) => m === 'inside1', value: 1 },
+      { obj: upperFront, low: 0.12, when: (m) => m === 'inside1', value: 1 },
+    )
+    // The upper wall pieces scale from the upstairs floor, not from the street.
+    for (const c of this.cuts) c.obj.userData.cutBase = c.obj === upper.rightWall || c.obj === upperFront ? DIM.g0 : 0
+
+    this.reactor = new Reactor(kit, this.bag)
+    scene.add(this.reactor.root)
+    this.tuk = kit.pokes.get('tuk-tuk') ?? null
+    rememberRest(kit)
+
+    // Family (placeholders until gate 2).
+    for (const m of FAMILY) {
+      if (!m.spot) continue
+      const p = new Placeholder(m, this.bag)
+      this.family.set(m.id, p)
+      scene.add(p.root)
+    }
+    this.kaylee = new Avatar(this.bag)
+    scene.add(this.kaylee.root)
+    this.marker = new TapMarker(this.bag)
+    scene.add(this.marker.root)
+
+    this.nav = { 0: this.buildNav(0), 1: this.buildNav(1) }
+    this.begin(start)
+    this.quiet = false
+  }
+
+  private buildNav(floor: 0 | 1) {
+    const n = NAV[floor]
+    const grid = new NavGrid(n.bounds[0], n.bounds[2], n.bounds[1], n.bounds[3], 0.2, 0.22)
+    for (const r of n.carve) grid.carve(...r)
+    for (const r of n.block) grid.block(...r)
+    for (const [x, z, r] of n.circles) grid.blockCircle(x, z, r)
+    for (const m of FAMILY) if (m.spot && m.spot.floor === floor && m.spot.pose === 'stand') grid.blockCircle(m.spot.x, m.spot.z, 0.19 * m.height)
+    grid.commit()
+    return grid
+  }
+
+  // ---------------------------------------------------------------- start / sections
+
+  private begin(start: Start) {
+    const s = STARTS[start.section]
+    this.kaylee.floor = s.floor
+    this.kaylee.place(s.x, s.floor * DIM.g0, s.z, s.face)
+    this.reactor.setShutter(start.section === 'downstairs' || start.section === 'upstairs', true)
+    this.spot = start.section === 'arrive' ? 'street' : start.section
+    this.mode = start.section === 'upstairs' ? 'inside1' : start.section === 'downstairs' ? 'inside0' : 'street'
+    this.applyShutterNav()
+    if (start.section === 'arrive') this.arrival = { t: 0, done: false }
+    else if (this.tuk) this.parkTuk()
+    // A deep link to a use-spot: start already using it (sitting at the table, bouncing on the mattress).
+    const p = start.at ? PICKABLES.find((q) => q.id === start.at) : undefined
+    if (p?.use && p.floor === s.floor && (p.area === 'inside') === (start.section !== 'street' && start.section !== 'arrive')) {
+      this.kaylee.place(p.use.x, s.floor * DIM.g0, p.use.z, p.use.face)
+      this.useSpot(p, true)
+    }
+    for (const c of this.cuts) c.value = c.when(this.mode) ? c.low : 1
+    this.applyVisibility()
+    this.rig.setShot(this.shot(), true)
+  }
+
+  /** Skips the tuk-tuk arrival: she's on the sidewalk, the camera at the street. */
+  skipArrival() {
+    if (!this.arrival || this.arrival.done) return
+    this.arrival.t = 99
+  }
+  get arriving() {
+    return !!this.arrival && !this.arrival.done
+  }
+
+  private parkTuk() {
+    if (!this.tuk) return
+    this.tuk.position.set(PARK_X, 0, 3.95)
+    this.tuk.userData.baseY = 0
+    this.tukDrive = null
+  }
+
+  // ---------------------------------------------------------------- input
+
+  setAnchorElements(els: Map<string, HTMLElement>) {
+    this.anchorEls = els
+  }
+
+  /** A finger (or mouse) went down, on the canvas or on an anchor button. */
+  pointerDown(x: number, y: number) {
+    this.lead = { x, y, last: performance.now() }
+  }
+  /** While held: past 12 px she follows the finger (re-aimed every 150 ms). */
+  pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
+    if (!held) {
+      this.hover(x, y)
+      return
+    }
+    if (!this.lead || this.arriving || this.climbing) return
+    if (Math.hypot(x - downX, y - downY) < 12) return
+    const now = performance.now()
+    if (now - this.lead.last < 150) return
+    this.lead.last = now
+    const hit = this.floorPoint(x, y)
+    if (hit) this.walkTo([hit.x, hit.z], undefined, false)
+  }
+  pointerUp() {
+    this.lead = null
+  }
+
+  /** A tap: on an anchor (id given) or at a screen point (raycast). */
+  tap(x: number, y: number, id?: string) {
+    if (this.arriving) {
+      this.skipArrival()
+      return
+    }
+    const target = id ?? this.pick(x, y)
+    if (target?.startsWith('family:')) return this.greet(target.slice(7))
+    if (target === 'kaylee') {
+      this.kaylee.react('hop')
+      sfx.boing()
+      return
+    }
+    const p = target ? PICKABLES.find((q) => q.id === target) : undefined
+    if (p && this.allowed(p)) return this.usePickable(p)
+    const hit = this.floorPoint(x, y)
+    if (hit) this.walkTo([hit.x, hit.z], undefined, true)
+  }
+
+  private hover(x: number, y: number) {
+    if (!matchMedia('(hover: hover)').matches) return
+    const id = this.pick(x, y)
+    if (id === this.hovered) return
+    this.highlight(this.hovered, false)
+    this.hovered = id
+    this.highlight(id, true)
+    this.renderer.domElement.style.cursor = id ? 'pointer' : 'default'
+  }
+  /** Desktop: a hot-pink outline on whatever the mouse is over. */
+  hoverAnchor(id: string | null) {
+    if (id === this.hovered) return
+    this.highlight(this.hovered, false)
+    this.hovered = id
+    this.highlight(id, true)
+  }
+  private highlight(id: string | null, on: boolean) {
+    if (!id) return
+    const obj = id.startsWith('family:') ? this.family.get(id.slice(7))?.root : this.kit.pokes.get(id)
+    obj?.traverse((o) => {
+      if ((o as { isMesh?: boolean }).isMesh && o.userData.hull !== undefined) setHullHighlight(o as never, on)
+    })
+  }
+
+  private ndc(x: number, y: number) {
+    return new Vector2((x / this.w) * 2 - 1, -(y / this.h) * 2 + 1)
+  }
+
+  /** What's under a screen point: a pickable id, 'family:<id>', 'kaylee', or null. */
+  private pick(x: number, y: number): string | null {
+    this.raycaster.setFromCamera(this.ndc(x, y), this.rig.camera)
+    const targets: Object3D[] = [this.kaylee.root, ...[...this.family.values()].map((f) => f.root), ...[...this.kit.pokes.values()]]
+    for (const hit of this.raycaster.intersectObjects(targets, true)) {
+      if (!visibleChain(hit.object)) continue
+      let o: Object3D | null = hit.object
+      while (o && o.userData.pick === undefined) o = o.parent
+      const id = o?.userData.pick as string | undefined
+      if (!id) continue
+      if (id === 'kaylee' || id.startsWith('family:')) return this.familyVisible(id) ? id : null
+      const p = PICKABLES.find((q) => q.id === id)
+      if (p && this.allowed(p)) return id
+      // Something we can't use from here (behind a wall, another floor): keep looking.
+    }
+    return null
+  }
+
+  /** Where a screen point lands on the floor she's on. */
+  private floorPoint(x: number, y: number) {
+    this.raycaster.setFromCamera(this.ndc(x, y), this.rig.camera)
+    const plane = new Plane(new Vector3(0, 1, 0), -this.kaylee.floor * DIM.g0)
+    return this.raycaster.ray.intersectPlane(plane, new Vector3())
+  }
+
+  /** Can she use this from where she is (her floor, inside or outside)? */
+  private allowed(p: Pickable) {
+    if (p.floor !== this.kaylee.floor) return false
+    if (p.floor === 1) return true
+    return p.area === 'street' ? this.mode === 'street' : this.mode === 'inside0'
+  }
+  /** Can she see (and so greet) this family member from where she is? */
+  private familyShown(m: (typeof FAMILY)[number]) {
+    const s = m.spot
+    if (!s) return false
+    if (s.floor === 1) return this.mode === 'inside1'
+    if (s.z > 0) return this.mode === 'street'
+    return this.mode === 'inside0' || (this.mode === 'street' && this.reactor.shutterOpen)
+  }
+  /** Can she tap (and greet) them from here? From the street, the family inside is behind the shop front. */
+  private familyVisible(id: string) {
+    if (id === 'kaylee') return true
+    const m = FAMILY.find((f) => `family:${f.id}` === id)
+    if (!m?.spot || m.spot.floor !== this.kaylee.floor || !this.familyShown(m)) return false
+    return !(this.mode === 'street' && m.spot.z < 0)
+  }
+
+  // ---------------------------------------------------------------- doing things
+
+  private walkTo(to: XZ, then?: () => void, mark = true) {
+    if (this.climbing) return
+    const k = this.kaylee
+    const floor = k.floor
+    const path = this.nav[floor].path([k.position.x, k.position.z], to)
+    this.using = undefined
+    if (!path) return
+    if (mark) {
+      const end = path[path.length - 1]
+      this.marker.show(end[0], floor * DIM.g0, end[1])
+    }
+    k.walk(path, then)
+  }
+
+  private usePickable(p: Pickable) {
+    this.reactor.poke(p)
+    const k = this.kaylee
+    if (p.react === 'stairs') return this.climb(p.floor === 0)
+    if (p.id === 'shutter' && p.use) {
+      // The front door: roll it up and go in (or out).
+      this.applyShutterNav()
+      this.applyVisibility()
+      const inside = this.mode !== 'street'
+      if (inside) this.walkTo([0.2, 1.4])
+      else this.walkTo([p.use.x, p.use.z])
+      return
+    }
+    // Already doing it? Do it again (bounce higher, sit tighter), no walking.
+    if (this.using === p.id && p.use) {
+      if (p.use.pose === 'bounce') {
+        sfx.boingAt(k.bounceHigher())
+        // After the biggest bounce she flops down along the mattress, head on the pillows.
+        k.face(k.pose === 'lie' ? 0 : p.use.face * deg)
+      } else k.react('wiggle')
+      return
+    }
+    if (!p.use) {
+      k.lookAt(...p.at)
+      k.faceToward(p.at[0], p.at[2])
+      return
+    }
+    const use = p.use
+    this.walkTo([use.x, use.z], () => this.useSpot(p))
+    k.lookAt(...p.at)
+  }
+
+  /** At the spot: face it, hop onto the seat or the mattress if there is one, and do the pose. */
+  private useSpot(p: Pickable, instant = false) {
+    const use = p.use!
+    const k = this.kaylee
+    const fy = k.floor * DIM.g0
+    this.using = p.id
+    k.face(use.face * deg)
+    if (p.gentle) k.lookAt(...p.at)
+    const pose = () => {
+      if (use.pose === 'bounce') sfx.boingAt(k.bounceHigher())
+      else k.setPose(use.pose)
+      if (!this.quiet) this.events.onSpot(this.spot, p.id)
+    }
+    if (use.snap) {
+      k.standPoint = new Vector3(use.x, fy, use.z)
+      const to = new Vector3(use.snap.x, fy + use.snap.y, use.snap.z)
+      if (instant) {
+        k.position.copy(to)
+        pose()
+      } else k.hopTo(to, 0.32, 0.25, () => {
+        k.face(use.face * deg)
+        pose()
+      })
+    } else pose()
+  }
+
+  private greet(id: string) {
+    const m = FAMILY.find((f) => f.id === id)
+    const who = this.family.get(id)
+    if (!m?.spot || !who || !this.familyVisible(`family:${id}`)) return
+    who.react('hop')
+    sfx.babble(m.pitch)
+    const face = m.spot.face * deg
+    // Stand in front of them (or as close as there's room).
+    const front: XZ = [m.spot.x + Math.sin(face) * 0.95, m.spot.z + Math.cos(face) * 0.95]
+    this.walkTo(front, () => {
+      const k = this.kaylee
+      k.faceToward(m.spot!.x, m.spot!.z)
+      k.react('hop')
+      who.react('hop')
+      sfx.babble(m.pitch * 1.1)
+      setTimeout(() => sfx.babble(520), 380)
+    })
+  }
+
+  /** Up or down the stairs: walk to the foot (or the landing), then hop step by step. */
+  private climb(up: boolean) {
+    const k = this.kaylee
+    const steps = stairSteps()
+    const start = up ? STAIRS_FOOT : STAIRS_TOP
+    const end = up ? STAIRS_TOP : STAIRS_FOOT
+    const seq = up ? steps : [...steps].reverse()
+    this.walkTo([start.x, start.z], () => {
+      this.climbing = true
+      seq.forEach(([x, y, z], i) => {
+        k.hopTo(new Vector3(x, y, z), 0.13, 0.07, () => {
+          if (i % 2 === 0) sfx.pop()
+          // Halfway: the other floor appears and the camera starts following her there.
+          if (i === Math.floor(seq.length / 2)) {
+            k.floor = up ? 1 : 0
+            this.mode = up ? 'inside1' : 'inside0'
+            this.applyVisibility()
+          }
+        })
+      })
+      k.hopTo(new Vector3(end.x, up ? DIM.g0 : 0, end.z), 0.25, 0.1, () => {
+        this.climbing = false
+        k.face(up ? 0 : Math.PI)
+        this.setSpot(up ? 'upstairs' : 'downstairs')
+      })
+    })
+  }
+
+  private setSpot(spot: Spot) {
+    if (spot === this.spot) return
+    this.spot = spot
+    if (!this.quiet) this.events.onSpot(spot)
+  }
+
+  private applyShutterNav() {
+    this.nav[0].setDynamic(this.reactor.shutterOpen ? [] : [SHUTTER_RECT])
+  }
+
+  /** What's shown for where she is: outside everything; inside, the tall street things, the roof and the floor above
+   *  disappear (a dollhouse with its lid off). */
+  private applyVisibility() {
+    const m = this.mode
+    this.groups.tall.visible = m === 'street'
+    // Inside, the sidewalk things (and the people out there) would stand between the camera and the room.
+    this.groups.props.visible = m === 'street'
+    this.groups.roof.visible = m === 'street'
+    this.groups.upper.visible = m !== 'inside0'
+    this.groups.upperRoom.visible = m === 'inside1'
+    // Downstairs, the sign board and the rolled-up shutter would hide the room.
+    this.groups.front.visible = m !== 'inside0'
+    // From the street, the room only shows once the shutter is up.
+    this.groups.groundRoom.visible = m !== 'street' || this.reactor.shutterOpen
+    for (const [id, f] of this.family) f.root.visible = this.familyShown(FAMILY.find((x) => x.id === id)!)
+  }
+
+  // ---------------------------------------------------------------- per frame
+
+  setSize(w: number, h: number, top: number) {
+    this.w = w
+    this.h = h
+    this.rig.setSize(w, h, top)
+    setOutlineResolution(w, h)
+    this.rig.setShot(this.shot(), true)
+  }
+
+  /** The ?debug panel changed TUNE: re-apply the light bands, the outline width and the camera fit. */
+  retune() {
+    applyBands()
+    setOutlineResolution(this.w, this.h)
+    this.rig.refit()
+  }
+
+  /** The camera's goal for where she is. */
+  private shot(): Shot {
+    const k = this.kaylee.position
+    const aspect = this.w / Math.max(1, this.h)
+    const wide = clamp01((aspect - 0.6) / (1.6 - 0.6))
+    if (this.mode === 'street') {
+      return {
+        center: new Vector3(clamp(k.x * 0.6, -4, 4), 2.3 - 0.6 * wide, 0.9),
+        half: new Vector3(2.6 + 3.2 * wide, 2.0, 1.4),
+        yaw: TUNE.streetYaw,
+        pitch: TUNE.streetPitch,
+        minDist: 6,
+      }
+    }
+    const fy = this.kaylee.floor * DIM.g0
+    const D = TUNE.insideFitD
+    const ahead = this.climbing ? 0 : 0.7
+    const cz = clamp(k.z - 0.4 + this.vel.z * ahead, DIM.back + D / 2 - 0.4, -D / 2 + 0.6)
+    return {
+      center: new Vector3(clamp(k.x * 0.25 + this.vel.x * ahead * 0.3, -0.5, 0.5), fy + 0.8, cz),
+      half: new Vector3(TUNE.insideFitW / 2, 0.9, D / 2),
+      yaw: TUNE.insideYawTall + (TUNE.insideYawWide - TUNE.insideYawTall) * wide,
+      pitch: TUNE.insidePitch,
+      minDist: 6,
+    }
+  }
+
+  /** Nothing is moving: the frame loop may drop to 30 fps. */
+  get calm() {
+    return !this.kaylee.busy && !this.reactor.busy && !this.rig.moving && !this.arriving
+  }
+
+  update(dt: number) {
+    this.time += dt
+    const t = this.time
+    const k = this.kaylee
+    if (this.arrival && !this.arrival.done) this.updateArrival(dt)
+    this.driveTuk(dt)
+    k.update(dt, t)
+    if (dt > 0) {
+      tmp.copy(k.position).sub(this.lastPos).divideScalar(dt)
+      if (tmp.lengthSq() > 25) tmp.set(0, 0, 0) // a jump (deep link, stairs): not a walk
+      this.vel.lerp(tmp, 1 - Math.exp(-dt / 0.4))
+      this.lastPos.copy(k.position)
+    }
+    for (const f of this.family.values()) {
+      const near = f.root.position.distanceTo(k.position) < 3 && f.root.visible
+      if (near) f.lookAt(k.position.x, k.position.y + 0.6, k.position.z)
+      else f.lookAway()
+      f.update(dt, t)
+    }
+    this.reactor.update(dt, t)
+    this.marker.update(dt)
+    // Inside or outside? (with a little dead band so she doesn't flicker on the doorstep)
+    if (!this.arriving && k.floor === 0 && !this.climbing) {
+      if (this.mode === 'street' && k.position.z < -0.3) {
+        this.mode = 'inside0'
+        this.applyVisibility()
+        this.setSpot('downstairs')
+      } else if (this.mode === 'inside0' && k.position.z > 0.25) {
+        this.mode = 'street'
+        this.applyVisibility()
+        this.setSpot('street')
+      }
+    }
+    // Walls glide down and up.
+    for (const c of this.cuts) {
+      const target = c.when(this.mode) ? c.low : 1
+      c.value += clamp(target - c.value, -dt / 0.3, dt / 0.3)
+      const base = c.obj.userData.cutBase as number
+      c.obj.scale.y = c.value
+      c.obj.position.y = base * (1 - c.value)
+    }
+    if (!this.arriving) this.rig.setShot(this.shot())
+    this.rig.lag = this.climbing ? 0.25 : 0.35
+    this.rig.update(dt)
+    const c = this.rig.camera.position
+    this.lights.follow(c.x * 0.2, k.position.y, k.position.z)
+  }
+
+  render() {
+    const r = this.renderer
+    r.render(this.scene, this.rig.camera)
+    this.stats.calls = r.info.render.calls
+    this.stats.tris = r.info.render.triangles
+  }
+
+  /** Positions the DOM tap targets over their things (style writes only). */
+  placeAnchors() {
+    const cam = this.rig.camera
+    const right = tmp2.set(1, 0, 0).applyQuaternion(cam.quaternion)
+    for (const [id, el] of this.anchorEls) {
+      let at: Vector3 | null = null
+      let r = 0.5
+      let show = false
+      if (id.startsWith('family:')) {
+        const f = this.family.get(id.slice(7))
+        if (f && f.root.visible && this.familyVisible(id)) {
+          at = tmp.copy(f.root.position)
+          at.y += f.height * (f.pose === 'lie' ? 0.2 : 0.5)
+          r = f.height * 0.42
+          show = true
+        }
+      } else {
+        const p = PICKABLES.find((q) => q.id === id)
+        if (p && this.allowed(p) && visibleChain(this.kit.pokes.get(id) ?? null)) {
+          at = tmp.set(...p.at)
+          r = p.r
+          show = true
+        }
+      }
+      if (show && at) {
+        const center = at.clone().project(cam)
+        const edge = at.clone().addScaledVector(right, r).project(cam)
+        if (center.z > 1 || Math.abs(center.x) > 1.05 || Math.abs(center.y) > 1.05) show = false
+        else {
+          const sx = ((center.x + 1) / 2) * this.w
+          const sy = ((1 - center.y) / 2) * this.h
+          const size = clamp(Math.abs(edge.x - center.x) * this.w, 64, 170)
+          el.style.transform = `translate3d(${(sx - size / 2).toFixed(1)}px, ${(sy - size / 2).toFixed(1)}px, 0)`
+          el.style.width = el.style.height = `${size.toFixed(0)}px`
+          el.style.zIndex = String(Math.round((1 - center.z) * 10000))
+        }
+      }
+      const want = show ? '' : 'none'
+      if (el.style.display !== want) el.style.display = want
+    }
+  }
+
+  // ---------------------------------------------------------------- the arrival
+
+  /** The tuk-tuk rolls in from the right and stops at Agong's door; Kaylee hops out onto the sidewalk; it toots and
+   *  drives on to park. */
+  private updateArrival(dt: number) {
+    const a = this.arrival!
+    a.t += dt
+    const k = this.kaylee
+    const STOP = 2.8
+    if (a.t >= 99) {
+      // Skipped.
+      this.parkTuk()
+      k.place(STARTS.arrive.x, 0, STARTS.arrive.z, STARTS.arrive.face)
+      this.finishArrival(true)
+      return
+    }
+    if (a.t < STOP) {
+      const p = a.t / STOP
+      const x = DROP_X + (16 - DROP_X) * (1 - p) ** 3
+      this.tuk?.position.set(x, Math.abs(Math.sin(a.t * 18)) * 0.025 * (1 - p), 3.95)
+      k.place(x - 0.35, 0.55, 3.95, 90)
+    } else if (!a.hopped) {
+      a.hopped = true
+      k.hopTo(new Vector3(STARTS.arrive.x, 0, STARTS.arrive.z), 0.5, 0.65, () => {
+        k.face(STARTS.arrive.face * deg)
+        sfx.thump()
+      })
+    } else if (!k.walking) this.finishArrival(false)
+    const far: Shot = { center: new Vector3(2, 2.6, 2.2), half: new Vector3(7, 3.5, 3), yaw: -12, pitch: 30, minDist: 22 }
+    this.rig.lag = 0.9
+    this.rig.setShot(a.t < 1.0 ? far : this.shot(), a.t < dt * 1.5)
+  }
+  private finishArrival(snap: boolean) {
+    if (!this.arrival || this.arrival.done) return
+    this.arrival.done = true
+    if (!snap && this.tuk) {
+      this.tukDrive = { t: 0 }
+      sfx.toot()
+    }
+    this.rig.setShot(this.shot(), snap)
+    this.events.onArrived()
+    this.events.onSpot('street')
+  }
+  private driveTuk(dt: number) {
+    const d = this.tukDrive
+    if (!d || !this.tuk) return
+    d.t += dt / 1.8
+    const p = Math.min(1, d.t)
+    const ease = p * p * (3 - 2 * p)
+    this.tuk.position.set(DROP_X + (PARK_X - DROP_X) * ease, 0, 3.95)
+    if (p >= 1) this.parkTuk()
+  }
+
+  // ---------------------------------------------------------------- QA
+
+  qa() {
+    const k = this.kaylee
+    return {
+      floor: k.floor,
+      view: this.mode,
+      spot: this.spot,
+      pose: k.pose,
+      using: this.using ?? null,
+      walking: k.walking,
+      arriving: this.arriving,
+      shutterOpen: this.reactor.shutterOpen,
+      pos: [k.position.x, k.position.y, k.position.z].map((v) => Math.round(v * 100) / 100),
+    }
+  }
+  memory() {
+    return { ...this.renderer.info.memory }
+  }
+  navCells(floor: 0 | 1) {
+    return { grid: this.nav[floor], cells: this.nav[floor].cells() }
+  }
+
+  dispose() {
+    this.scene.clear()
+    this.bag.dispose()
+  }
+}
+
+type Mode = 'street' | 'inside0' | 'inside1'
+
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
+const clamp01 = (v: number) => clamp(v, 0, 1)
+function visibleChain(o: Object3D | null): boolean {
+  if (!o) return false
+  for (let x: Object3D | null = o; x; x = x.parent) if (!x.visible) return false
+  return true
+}

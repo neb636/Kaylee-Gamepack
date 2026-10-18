@@ -9,8 +9,13 @@
 //   - `enter(id, state?)` is called whenever a section begins. It rewrites the address bar (without reloading), so the
 //     URL always reproduces the moment on screen, and sets window.__kayleeSection for tests and QA scripts.
 // A section can be named or numbered (1-based): #/world/italy/pizzeria/7.
+// A country's hub can have sections too: defineSections(place, HUB, ...) in activities/hub/sections.ts gives
+// #/world/<place>/hub/<section> links (PlaceFrame still shows the hub there), e.g. the rooms of Thailand's house.
 import { createContext, createElement, useCallback, useContext, useMemo, type ReactNode } from 'react'
 import { worldLink } from '../../router'
+
+/** The activity id of a country's hub sections (`hub`, `party` and `theater` are never real activity ids). */
+export const HUB = 'hub'
 
 export interface ParamSpec {
   /** Used when the URL doesn't say. */
@@ -105,8 +110,11 @@ export function useSections<P extends string, S extends string>(def: ActivitySec
       for (const [k, v] of Object.entries(state) as [P, string | undefined][]) if (v !== undefined && v !== def.params[k]?.default) shown[k] = v
       window.__kayleeSection = { place: def.place, activity: def.activity, id, params: { ...shown } }
       ;(window.__kayleeSectionLog ??= []).push(window.__kayleeSection)
-      // Only while the activity is the page (not inside the theater or another screen).
-      if (location.hash.startsWith(worldLink(def.place, def.activity))) history.replaceState(history.state, '', worldLink(def.place, def.activity, id, shown))
+      // Only while the activity is the page (not inside the theater or another screen). A hub also owns the bare
+      // country link (#/world/<place>), where Kaylee normally arrives.
+      const page = location.hash.split('?')[0]
+      const here = location.hash.startsWith(worldLink(def.place, def.activity)) || (def.activity === HUB && page === `#/world/${def.place}`)
+      if (here) history.replaceState(history.state, '', worldLink(def.place, def.activity, id, shown))
     },
     [def],
   )

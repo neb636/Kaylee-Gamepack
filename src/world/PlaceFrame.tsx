@@ -8,7 +8,7 @@ import { WinCeremony } from '../shell/WinCeremony'
 import theaterArt from './assets/theater.webp'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
-import { SectionLinkProvider, type SectionLink } from './kit/sections'
+import { HUB, SectionLinkProvider, type SectionLink } from './kit/sections'
 import { Theater } from './kit/Theater'
 import { findPlace, type PlaceEntry } from './registry'
 import { addStamp, markVisited, resetPassport, setStamps, usePassport } from './stamps'
@@ -41,13 +41,16 @@ const trophyMeta = (meta: PlaceMeta): GameMeta => ({
   trophyTitle: meta.trophyTitle,
 })
 
-function RunningPlace({ entry, activity, section, params }: { entry: PlaceEntry; activity?: string; section?: string; params: Record<string, string> }) {
+function RunningPlace({ entry, activity: route, section, params }: { entry: PlaceEntry; activity?: string; section?: string; params: Record<string, string> }) {
   const { meta } = entry
+  // A country's hub can have sections too (#/world/<place>/hub/<section>, kit/sections.ts): it is still the hub, with
+  // the hub's top bar, but the section link keeps 'hub' so the hub's useSections finds it.
+  const activity = route === HUB ? undefined : route
   const Place = useMemo(() => lazy(entry.load), [entry])
   // A test link to a finale (#/world/<place>/party?stamps=all) collects every stamp first, before the passport is read.
   useState(() => params.stamps === 'all' && setStamps(meta.id, meta.activities.map((a) => a.id)))
   const query = new URLSearchParams(params).toString()
-  const link: SectionLink = useMemo(() => ({ place: meta.id, activity, section, params }), [meta.id, activity, section, query])
+  const link: SectionLink = useMemo(() => ({ place: meta.id, activity: route, section, params }), [meta.id, route, section, query])
   const passport = usePassport()
   const stamps = passport.stamps[meta.id] ?? []
   const [won, setWon] = useState(false)
@@ -113,7 +116,7 @@ function RunningPlace({ entry, activity, section, params }: { entry: PlaceEntry;
           // Leaving an activity must discard its pending stamp/video before another one opens, and a new section link
           // (#/world/<place>/<activity>/<section>?<state>) starts the activity again from there.
           <SectionLinkProvider value={link}>
-            <Place key={`${activity ?? 'map'}/${section ?? ''}?${query}`} meta={meta} activity={activity} stamps={stamps} openActivity={openActivity} backToMap={backToMap} earnStamp={earnStamp} onWin={onWin} setProgress={setProgress} />
+            <Place key={`${route ?? 'map'}/${section ?? ''}?${query}`} meta={meta} activity={activity} stamps={stamps} openActivity={openActivity} backToMap={backToMap} earnStamp={earnStamp} onWin={onWin} setProgress={setProgress} />
           </SectionLinkProvider>
         )}
       </Suspense>
@@ -129,9 +132,11 @@ function RunningPlace({ entry, activity, section, params }: { entry: PlaceEntry;
         </TopBar>
       ) : (
         <TopBar icon="🌍" label="World map" onBack={() => go.world()}>
-          <BarPill>
-            📕 {stamps.length}/{meta.activities.length}
-          </BarPill>
+          {meta.activities.length > 0 && (
+            <BarPill>
+              📕 {stamps.length}/{meta.activities.length}
+            </BarPill>
+          )}
           {!!meta.puzzles?.length && (
             <motion.button aria-label="Puzzle book" whileTap={{ scale: 0.85 }}
               onClick={() => { sounds.pop(); go.world('puzzles', meta.id) }}

@@ -4,7 +4,8 @@ import type { Line, PuppetHandle } from '../sdk'
 import type { FlagId } from './kit/Flag'
 
 export interface ActivityInfo {
-  /** Used in the URL: #/world/<place>/<activity>. */
+  /** Used in the URL: #/world/<place>/<activity>. `hub`, `party` and `theater` are reserved (the hub's sections, the
+   *  finale and the country's video shelf). */
   id: string
   /** Short name for Dad, e.g. "Red Outback". */
   name: string
