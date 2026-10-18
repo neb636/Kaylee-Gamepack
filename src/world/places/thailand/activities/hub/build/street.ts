@@ -68,18 +68,18 @@ export function buildStreet(kit: Kit): Street {
   ]
   for (const n of NEIGHBORS) {
     const h = DIM.g0 + (n.floors - 1) * DIM.g1
-    const parts = [P.box(DIM.houseW - 0.06, h + 0.6, -DIM.back, n.wall, { at: [n.x, (h + 0.6) / 2, DIM.back / 2] })]
+    const parts = [P.box(5.4 - 0.06, h + 0.6, -DIM.back, n.wall, { at: [n.x, (h + 0.6) / 2, DIM.back / 2] })]
     // Upper floors: two windows and a little balcony ledge each.
     for (let f = 1; f < n.floors; f++) {
       const y = DIM.g0 + (f - 1) * DIM.g1
       for (const dx of [-1.25, 1.25]) parts.push(P.rbox(1.3, 1.4, 0.1, 0.04, GLASS, { at: [n.x + dx, y + 1.5, 0.03] }))
-      parts.push(P.box(DIM.houseW - 0.8, 0.1, 0.5, PAL.cream, { at: [n.x, y + 0.6, 0.25] }))
+      parts.push(P.box(5.4 - 0.8, 0.1, 0.5, PAL.cream, { at: [n.x, y + 0.6, 0.25] }))
     }
-    parts.push(P.box(DIM.houseW - 1.0, 0.5, 0.1, n.sign, { at: [n.x, 3.25, 0.06] }))
+    parts.push(P.box(5.4 - 1.0, 0.5, 0.1, n.sign, { at: [n.x, 3.25, 0.06] }))
     tall.add(scenery(kit, parts, 2))
     // Their shutter (the left one is pokeable).
-    const slats = Array.from({ length: 9 }, (_, i) => P.box(DIM.houseW - 0.7, 0.025, 0.02, PAL.ink, { at: [0, 0.3 + i * 0.3, 0.06] }))
-    const shutter = [P.box(DIM.houseW - 0.6, 2.9, 0.08, n.shutter, { at: [0, 1.45, 0.02] }), ...slats]
+    const slats = Array.from({ length: 9 }, (_, i) => P.box(5.4 - 0.7, 0.025, 0.02, PAL.ink, { at: [0, 0.3 + i * 0.3, 0.06] }))
+    const shutter = [P.box(5.4 - 0.6, 2.9, 0.08, n.shutter, { at: [0, 1.45, 0.02] }), ...slats]
     if (n.x === DIM.row[1]) tall.add(poke(kit, 'neighbor-left', shutter, [n.x, 0, 0]))
     else tall.add(scenery(kit, shutter.map((g) => g.translate(n.x, 0, 0)), 1.5))
   }
