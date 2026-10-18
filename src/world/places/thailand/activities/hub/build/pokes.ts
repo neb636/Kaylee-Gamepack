@@ -104,6 +104,9 @@ export class Reactor {
       case 'glow':
         sfx.ding()
         break
+      case 'gecko':
+        sfx.tukkae()
+        break
     }
   }
 
@@ -251,6 +254,7 @@ export class Reactor {
       case 'wave':
       case 'spin':
       case 'glow':
+      case 'gecko':
         break
     }
   }
@@ -274,7 +278,7 @@ export class Reactor {
 
 /** Records each poke's and part's resting height, so hops and bobs come back to it. */
 export function rememberRest(kit: Kit) {
-  for (const g of kit.pokes.values()) g.userData.baseY = g.position.y
+  for (const g of kit.pokes.values()) if (!g.userData.moves) g.userData.baseY = g.position.y
   for (const o of kit.parts.values()) o.userData.baseY = o.position.y
 }
 

@@ -10,8 +10,8 @@ export interface Character {
   readonly height: number
   pose: Pose
   setPose(pose: Pose): void
-  /** A short reaction: a happy hop, a wiggle. */
-  react(kind: 'hop' | 'wiggle'): void
+  /** A short reaction: a happy hop, a wiggle, a wave. */
+  react(kind: 'hop' | 'wiggle' | 'wave'): void
   /** Turn the head toward a world point (null: look ahead). */
   lookAt(x: number, y: number, z: number): void
   lookAway(): void

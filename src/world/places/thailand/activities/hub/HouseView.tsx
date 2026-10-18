@@ -46,7 +46,7 @@ export function HouseView({ start, events, onMode, houseRef }: Props) {
     }
     let house: House
     try {
-      house = new House(renderer, start, { onSpot: (s, at) => ev.current.onSpot(s, at), onArrived: () => ev.current.onArrived() })
+      house = new House(renderer, start, { onSpot: (s, at) => ev.current.onSpot(s, at), onArrived: () => ev.current.onArrived(), onPoke: (id) => ev.current.onPoke?.(id) })
     } catch (e) {
       console.warn('Agong\'s house could not be built, showing the flat house instead.', e)
       releaseRenderer(renderer)

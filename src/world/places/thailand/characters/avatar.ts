@@ -10,6 +10,7 @@ import type { Bag } from '../engine/dispose'
 import type { XZ } from '../engine/nav'
 import { TUNE } from '../engine/tune'
 import { buildAnimal, type Rig } from './animal'
+import { FaceLife } from './face'
 import { LOOKS } from './looks'
 import type { Character, Pose } from './types'
 
@@ -48,9 +49,12 @@ export class Avatar implements Character {
   private flop = 1
   private look: Vector3 | null = null
   private headYaw = 0
+  private life: FaceLife
+  private waving = -1
 
   constructor(bag: Bag) {
     this.chibi = buildAnimal(LOOKS.kaylee, bag)
+    this.life = new FaceLife(this.chibi)
     this.root = this.chibi.root
     this.root.rotation.y = this.yaw
     this.root.userData.pick = 'kaylee'
@@ -133,8 +137,9 @@ export class Avatar implements Character {
     return this.bounce.level
   }
 
-  react(kind: 'hop' | 'wiggle') {
-    if (kind === 'hop' && this.pose === 'stand' && !this.tweens.length) this.hopTo(this.root.position, 0.45, 0.25)
+  react(kind: 'hop' | 'wiggle' | 'wave') {
+    if (kind === 'wave') this.waving = 0
+    else if (kind === 'hop' && this.pose === 'stand' && !this.tweens.length) this.hopTo(this.root.position, 0.45, 0.25)
     else this.settle = 0
   }
   lookAt(x: number, y: number, z: number) {
@@ -149,6 +154,14 @@ export class Avatar implements Character {
     const steps = Math.max(1, Math.ceil(dt / (1 / 90)))
     for (let i = 0; i < steps; i++) this.step(dt / steps)
     this.pose3d(t)
+    this.life.update(dt)
+    if (this.waving >= 0) {
+      this.waving += dt / 1.3
+      const p = Math.min(1, this.waving)
+      const up = span(p, 0, 0.15) * (1 - span(p, 0.8, 1))
+      this.chibi.armR.rotation.z = up * (2.5 + Math.sin(p * Math.PI * 6) * 0.35)
+      if (p >= 1) this.waving = -1
+    }
   }
 
   private step(dt: number) {
