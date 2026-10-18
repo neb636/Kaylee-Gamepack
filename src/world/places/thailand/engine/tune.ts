@@ -17,7 +17,7 @@ export const TUNE = {
   insideYawWide: 30,
   insideYawTall: 16,
   insidePitch: 50,
-  insideFitW: 4.4,
+  insideFitW: 5.65,
   insideFitD: 4.6,
   /** Camera in the street. */
   streetYaw: 8,

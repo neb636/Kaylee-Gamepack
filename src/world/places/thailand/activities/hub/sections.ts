@@ -6,7 +6,7 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
   params: {
     at: {
       default: '',
-      doc: 'start already using a thing on that floor: table, altar, cabinet, fridge, photos (downstairs); mattress, pillows, couch, suitcase, balcony (upstairs); motorbike, spirit-house, cat (street)',
+      doc: 'start already using a thing on that floor: table, altar, desk, fridge, photos (downstairs); mattress, pillows, couch, suitcase, balcony (upstairs); motorbike, spirit-house, cat (street)',
     },
     who: {
       default: '',

@@ -64,8 +64,9 @@ test('a walk around the house with real taps', async ({ page }) => {
   await tap(page, 'table')
   await expect.poll(field(page, 'using'), { timeout: 30_000 }).toBe('table')
   await expect.poll(field(page, 'pose')).toBe('sit')
-  await tap(page, 'cabinet')
-  await expect.poll(field(page, 'using'), { timeout: 30_000 }).toBe('cabinet')
+  await expect(page.locator('[data-anchor="cabinet"]')).toHaveCount(0)
+  await tap(page, 'fan')
+  await expect.poll(field(page, 'using'), { timeout: 30_000 }).toBe('fan')
   // Up the stairs, through the glass doors into her room, and onto the mattress.
   await tap(page, 'stairs-up')
   await expect.poll(field(page, 'spot'), { timeout: 40_000 }).toBe('upstairs')

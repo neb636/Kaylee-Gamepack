@@ -1,5 +1,5 @@
 // Downstairs at Agong's: his desk against the right wall at the front (he sits there a lot), the long table on the
-// left with red plastic stools, a cabinet of treasures (a lucky cat, little elephants, porcelain jars), old photos on
+// left with red plastic stools, old photos on
 // the walls, a fan; the stairs (stairs.ts, at the back left); the fridge against the right wall in front of the back
 // room, and in the back room the family altar, the little shrine and the kitchen counter with the rice cooker.
 import { Group } from 'three'
@@ -71,11 +71,11 @@ export function buildGround(kit: Kit): Ground {
           [-0.07, 0.05, '#7FCB8F'],
         ].map(([dx, dz, c]) => P.sphere(0.07, c as string, { at: [0.05 + (dx as number), 0.9, -0.5 + (dz as number)] })),
       ],
-      [-1.45, 0, -4.4],
+      [-2.075, 0, -2.6],
     ),
   )
   const stool = (x: number, z: number) => [P.cyl(0.17, 0.2, 0.06, STOOL, { at: [x, 0.42, z] }), P.cyl(0.13, 0.19, 0.4, STOOL, { at: [x, 0.2, z] })]
-  room.add(scenery(kit, [...stool(-2.2, -4.0), ...stool(-2.2, -4.9), ...stool(-0.7, -4.0), ...stool(-0.7, -4.9), ...stool(-1.45, -3.1), ...stool(-1.45, -5.8)]))
+  room.add(scenery(kit, [...stool(-2.825, -2.2), ...stool(-2.825, -3.1), ...stool(-1.325, -2.2), ...stool(-1.325, -3.1), ...stool(-2.075, -1.3), ...stool(-2.075, -4.0)]))
 
   // ---- Agong's desk against the right wall at the front: he sits at it facing the wall ----
   const desk = poke(
@@ -88,7 +88,7 @@ export function buildGround(kit: Kit): Ground {
       P.box(0.7, 0.45, 0.04, WOOD, { at: [0, 0.48, 0.3] }),
       ...[-0.5, 0.5].flatMap((x) => [0.2, 0.48].map((y) => P.box(0.12, 0.03, 0.02, PAL.gold, { at: [x, y, 0.32] }))),
     ],
-    [DIM.right - 0.36, 0, -2.6],
+    [DIM.right - 0.36, 0, -4.2],
     { rotY: Math.PI / 2 },
   )
   // On the desk (they hop when she taps it): the abacus, a red telephone, his ledger, a cup of tea, a little radio.
@@ -113,7 +113,7 @@ export function buildGround(kit: Kit): Ground {
   )
   room.add(desk)
   // His chair (he sits here; the family list puts him on it).
-  room.add(scenery(kit, [P.rbox(0.48, 0.06, 0.5, 0.02, WOOD, { at: [1.4, 0.42, -2.6] }), P.rbox(0.06, 0.5, 0.5, 0.02, WOOD, { at: [1.15, 0.72, -2.6] }), ...[-0.2, 0.2].flatMap((x) => [-0.2, 0.2].map((z) => P.cyl(0.025, 0.025, 0.42, WOOD_DARK, { at: [1.4 + x, 0.21, -2.6 + z] })))]))
+  room.add(scenery(kit, [P.rbox(0.48, 0.06, 0.5, 0.02, WOOD, { at: [2.025, 0.42, -4.2] }), P.rbox(0.06, 0.5, 0.5, 0.02, WOOD, { at: [1.775, 0.72, -4.2] }), ...[-0.2, 0.2].flatMap((x) => [-0.2, 0.2].map((z) => P.cyl(0.025, 0.025, 0.42, WOOD_DARK, { at: [2.025 + x, 0.21, -4.2 + z] })))]))
 
   // ---- The family altar on the back wall, and the little shrine on the floor ----
   const altar = poke(
@@ -156,49 +156,6 @@ export function buildGround(kit: Kit): Ground {
   shrine.add(part(kit, 'shrine.smoke', [], [0.12, 0.5, 0.1], 0))
   room.add(shrine)
 
-  // ---- The treasure cabinet (open shelves) with the lucky cat on top ----
-  const cab = poke(
-    kit,
-    'cabinet',
-    [
-      P.box(0.42, 1.9, 2.2, WOOD, { at: [0, 0.95, 0] }),
-      P.box(0.34, 1.78, 2.08, '#F7D9BC', { at: [0.05, 0.95, 0] }),
-      ...[0.55, 1.15].map((y) => P.box(0.4, 0.04, 2.12, WOOD_DARK, { at: [0.02, y, 0] })),
-    ],
-    [left + 0.22, 0, -7.2],
-  )
-  // Shelves at 0.06 (bottom), 0.57 and 1.17: [shelf height, place along the cabinet, parts].
-  const treasures: [number, number, ReturnType<typeof P.box>[]][] = [
-    [0.06, -0.7, [P.sphere(0.13, PAL.sky, { at: [0, 0.14, 0], scale: [1, 1.2, 1] }), P.cyl(0.06, 0.08, 0.08, PAL.sky, { at: [0, 0.32, 0] }), P.torus(0.1, 0.015, '#5A8FD8', { at: [0, 0.14, 0], rot: [Math.PI / 2, 0, 0] })]],
-    [0.06, 0.6, [P.rbox(0.28, 0.14, 0.16, 0.04, PAL.hotpink, { at: [0, 0.1, 0] }), P.rbox(0.14, 0.12, 0.16, 0.04, PAL.sky, { at: [0.12, 0.2, 0] }), ...[-0.08, 0.08].map((x) => P.torus(0.04, 0.015, PAL.ink, { at: [x, 0.04, 0.09] }))]],
-    [0.57, 0.05, elephant(PAL.lavenderDark)],
-    [0.57, -0.65, [P.cyl(0.1, 0.12, 0.26, '#7FCB8F', { at: [0, 0.13, 0] }), P.sphere(0.1, '#7FCB8F', { at: [0, 0.28, 0] })]],
-    [1.17, 0.65, elephant('#D8D2E6', 0.8)],
-    [1.17, -0.4, [P.sphere(0.12, PAL.cream, { at: [0, 0.12, 0] }), P.torus(0.12, 0.02, '#5A8FD8', { at: [0, 0.12, 0], rot: [Math.PI / 2, 0, 0] })]],
-  ]
-  // All the treasures hop together when she taps the cabinet (one moving part).
-  const shelf = part(kit, 'cabinet.hop0', treasures.flatMap(([y, z, parts]) => parts.map((g) => g.rotateY(Math.PI / 2).translate(0.05, y, z))), [0, 0, 0], 1.5)
-  cab.add(shelf)
-  room.add(cab)
-  // The lucky cat (maneki-neko), waving all day; a tap makes it wave fast.
-  const lucky = poke(
-    kit,
-    'lucky-cat',
-    [
-      P.sphere(0.13, PAL.cream, { at: [0, 0.13, 0], scale: [1, 1.05, 0.9] }),
-      P.sphere(0.11, PAL.cream, { at: [0, 0.33, 0] }),
-      P.cone(0.04, 0.07, PAL.cream, { at: [0.06, 0.45, 0] }),
-      P.cone(0.04, 0.07, PAL.cream, { at: [-0.06, 0.45, 0] }),
-      P.torus(0.07, 0.015, RED, { at: [0, 0.24, 0.02], rot: [Math.PI / 2, 0, 0] }),
-      P.cyl(0.04, 0.04, 0.012, PAL.gold, { at: [0, 0.14, 0.12], rot: [Math.PI / 2, 0, 0] }),
-      ...[-0.04, 0.04].map((x) => P.sphere(0.012, PAL.ink, { at: [x, 0.35, 0.1] })),
-    ],
-    [left + 0.22, 1.9, -6.7],
-    { rotY: Math.PI / 2, px: 1.5 },
-  )
-  lucky.add(part(kit, 'lucky-cat.paw', [P.capsule(0.035, 0.08, PAL.cream, { at: [0, 0.07, 0] })], [0.11, 0.3, 0.02], 1.5))
-  room.add(lucky)
-
   // ---- Old photos on the left wall (two groups) and the clock ----
   const photoWall = (id: string, at: [number, number, number], n: number, rotY = 0) =>
     poke(
@@ -226,44 +183,33 @@ export function buildGround(kit: Kit): Ground {
   // ---- Fan, fridge, the kitchen counter with the rice cooker, shoes ----
   room.add(standingFan(kit, 'fan', [1.7, 0, -6.2], 0.4))
   // The fridge against the right wall, just in front of the back room.
-  const fridge = poke(kit, 'fridge', [P.rbox(0.68, 1.7, 0.66, 0.06, '#C9EEF7', { at: [0, 0.85, 0] })], [2.15, 0, -11.75], { rotY: -Math.PI / 2 })
+  const fridge = poke(kit, 'fridge', [P.rbox(0.68, 1.7, 0.66, 0.06, '#C9EEF7', { at: [0, 0.85, 0] })], [right - 0.35, 0, -11.75], { rotY: -Math.PI / 2 })
   const door = part(kit, 'fridge.hinge', [P.rbox(0.68, 1.1, 0.06, 0.03, '#D9F4FA', { at: [0.34, 0.55, 0] }), P.box(0.04, 0.3, 0.05, PAL.cream, { at: [0.62, 0.55, 0.05] })], [-0.34, 0.56, 0.36], 1.5)
   door.userData.swing = -1.4
   fridge.add(door)
   room.add(fridge)
   room.add(
     scenery(kit, [
-      P.box(0.62, 0.86, 3.0, '#BFE6DA', { at: [right - 0.31, 0.43, -15.1] }),
-      P.box(0.68, 0.05, 3.06, PAL.cream, { at: [right - 0.33, 0.885, -15.1] }),
-      ...[-14.35, -15.1, -15.85].map((z) => P.box(0.02, 0.6, 0.7, '#A8D8C8', { at: [right - 0.63, 0.42, z] })),
+      P.box(0.62, 0.86, 3.0, '#BFE6DA', { at: [right - 0.31, 0.43, -21.12] }),
+      P.box(0.68, 0.05, 3.06, PAL.cream, { at: [right - 0.33, 0.885, -21.12] }),
+      ...[-20.37, -21.12, -21.87].map((z) => P.box(0.02, 0.6, 0.7, '#A8D8C8', { at: [right - 0.63, 0.42, z] })),
       // A sink, a dish rack and a bowl of limes.
-      P.box(0.4, 0.04, 0.5, '#D8D2E6', { at: [right - 0.32, 0.9, -15.8] }),
-      P.rbox(0.3, 0.2, 0.36, 0.03, PAL.sky, { at: [right - 0.3, 1.01, -15.15] }),
-      P.cyl(0.13, 0.09, 0.07, PAL.cream, { at: [right - 0.3, 0.95, -13.95] }),
-      ...[-0.04, 0.04].map((dz) => P.sphere(0.045, '#9BD86F', { at: [right - 0.3, 1.0, -13.95 + dz] })),
+      P.box(0.4, 0.04, 0.5, '#D8D2E6', { at: [right - 0.32, 0.9, -21.82] }),
+      P.rbox(0.3, 0.2, 0.36, 0.03, PAL.sky, { at: [right - 0.3, 1.01, -21.17] }),
+      P.cyl(0.13, 0.09, 0.07, PAL.cream, { at: [right - 0.3, 0.95, -19.97] }),
+      ...[-0.04, 0.04].map((dz) => P.sphere(0.045, '#9BD86F', { at: [right - 0.3, 1.0, -19.97 + dz] })),
     ]),
   )
-  const cooker = poke(kit, 'rice-cooker', [P.cyl(0.17, 0.15, 0.24, PAL.cream, { at: [0, 0.12, 0] }), P.sphere(0.17, PAL.cream, { at: [0, 0.24, 0], scale: [1, 0.35, 1] }), P.box(0.1, 0.04, 0.02, PAL.hotpink, { at: [0, 0.1, 0.17] }), P.box(0.05, 0.05, 0.1, PAL.ink, { at: [0, 0.32, 0] })], [right - 0.32, 0.91, -14.4], { rotY: -Math.PI / 2 })
+  const cooker = poke(kit, 'rice-cooker', [P.cyl(0.17, 0.15, 0.24, PAL.cream, { at: [0, 0.12, 0] }), P.sphere(0.17, PAL.cream, { at: [0, 0.24, 0], scale: [1, 0.35, 1] }), P.box(0.1, 0.04, 0.02, PAL.hotpink, { at: [0, 0.1, 0.17] }), P.box(0.05, 0.05, 0.1, PAL.ink, { at: [0, 0.32, 0] })], [right - 0.32, 0.91, -20.42], { rotY: -Math.PI / 2 })
   cooker.add(part(kit, 'rice-cooker.smoke', [], [0, 0.35, 0], 0))
   room.add(cooker)
   // A striped doormat inside the door: tap it to go back out to the street.
   room.add(poke(kit, 'doormat', [P.rbox(1.3, 0.03, 0.62, 0.015, PAL.butter, { at: [0, 0.015, 0] }), ...[-0.4, 0, 0.4].map((x) => P.box(0.16, 0.034, 0.56, PAL.hotpink, { at: [x, 0.016, 0] }))], [0, 0, -0.62], { px: 1.5 }))
-  const shoes = poke(kit, 'shoes', [P.box(0.4, 0.06, 0.75, WOOD, { at: [0, 0.03, 0] })], [2.2, 0, -0.85])
+  const shoes = poke(kit, 'shoes', [P.box(0.4, 0.06, 0.75, WOOD, { at: [0, 0.03, 0] })], [right - 0.3, 0, -0.85])
   shoes.add(part(kit, 'shoes.hop0', [PAL.hotpink, PAL.sky, PAL.butter, PAL.mint].map((c, i) => P.rbox(0.14, 0.04, 0.26, 0.02, c, { at: [i % 2 ? 0.08 : -0.08, 0.02, -0.28 + i * 0.18] })), [0, 0.06, 0], 1.5))
   room.add(shoes)
 
   return { room, rightWall }
-}
-
-/** A little elephant figurine (Thailand's animal). */
-function elephant(c: string, s = 1) {
-  return [
-    P.sphere(0.12 * s, c, { at: [0, 0.14 * s, 0], scale: [1.3, 1, 1] }),
-    P.sphere(0.08 * s, c, { at: [0.15 * s, 0.2 * s, 0] }),
-    P.capsule(0.025 * s, 0.08 * s, c, { at: [0.22 * s, 0.12 * s, 0] }),
-    ...[-0.07, 0.07].flatMap((x) => [-0.06, 0.06].map((z) => P.cyl(0.03 * s, 0.03 * s, 0.08 * s, c, { at: [x * s, 0.04 * s, z * s] }))),
-    P.sphere(0.06 * s, '#FFB3D6', { at: [0.13 * s, 0.22 * s, 0.06 * s], scale: [0.4, 1, 1] }),
-  ]
 }
 
 /** A standing fan whose blades turn all day (faster when poked). */
