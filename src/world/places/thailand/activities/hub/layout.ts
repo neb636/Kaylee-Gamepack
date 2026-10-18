@@ -54,7 +54,7 @@ export const DIM = {
 }
 
 export type Area = 'street' | 'inside'
-export type React = 'jelly' | 'hop' | 'spin' | 'open' | 'tilt' | 'shutter' | 'birds' | 'cat' | 'glow' | 'stairs' | 'beep' | 'toot' | 'puff' | 'tick' | 'flip' | 'wave'
+export type React = 'jelly' | 'hop' | 'spin' | 'open' | 'tilt' | 'shutter' | 'birds' | 'cat' | 'glow' | 'stairs' | 'beep' | 'toot' | 'puff' | 'tick' | 'flip' | 'wave' | 'gecko'
 
 export interface UseSpot {
   /** Where she walks to. */
@@ -79,6 +79,8 @@ export interface Pickable {
   react: React
   /** Sacred things (the altar, the shrines) only react gently: a glow, a curl of smoke, a soft bell. */
   gentle?: boolean
+  /** It moves about (the gecko): its tap target follows it, and `at` is only where it starts. */
+  moves?: boolean
   /** Walk there and do this. Things without a use spot just react (she looks at them). */
   use?: UseSpot
 }
@@ -104,6 +106,7 @@ export const PICKABLES: Pickable[] = [
   { id: 'desk', label: "Agong's desk", floor: 0, area: 'inside', at: [2.14, 0.9, -2.6], r: 0.7, react: 'hop', use: { x: 1.6, z: -1.5, face: 150, pose: 'peek' } },
   { id: 'table', label: 'Table', floor: 0, area: 'inside', at: [-1.45, 0.75, -4.4], r: 0.9, react: 'jelly', use: { x: 0.05, z: -4.0, face: -90, pose: 'sit', snap: { x: -0.7, z: -4.0, y: 0.45 } } },
   { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [-2.45, 2.25, -4.0], r: 0.8, react: 'tilt', use: { x: -0.3, z: -3.0, face: -70, pose: 'lookup' } },
+  { id: 'gecko', label: 'Gecko', floor: 0, area: 'inside', at: [-2.46, 3.0, -3.0], r: 0.35, react: 'gecko', moves: true },
   { id: 'clock', label: 'Clock', floor: 0, area: 'inside', at: [-2.45, 2.85, -5.75], r: 0.32, react: 'tick', use: { x: -0.4, z: -5.95, face: -80, pose: 'lookup' } },
   { id: 'cabinet', label: 'Treasure cabinet', floor: 0, area: 'inside', at: [-2.28, 1.05, -7.2], r: 0.8, react: 'open', use: { x: -1.6, z: -7.2, face: -90, pose: 'peek' } },
   { id: 'lucky-cat', label: 'Lucky cat', floor: 0, area: 'inside', at: [-2.28, 2.12, -6.7], r: 0.3, react: 'wave', use: { x: -1.6, z: -6.6, face: -90, pose: 'lookup' } },

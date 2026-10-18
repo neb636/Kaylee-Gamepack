@@ -18,12 +18,16 @@ import { TapMarker } from '../../engine/marker'
 import { setHullHighlight, setOutlineResolution } from '../../engine/outline'
 import { applyBands, makeLights, PAL } from '../../engine/toon'
 import { TUNE } from '../../engine/tune'
+import { say } from '../../../../../sdk'
+import { L } from '../../lines'
 import { sfx } from '../../sfx'
+import { Gecko } from './build/gecko'
 import { buildGround } from './build/ground'
 import type { Kit } from './build/kit'
 import { Reactor, rememberRest } from './build/pokes'
 import { buildStairs } from './build/stairs'
 import { buildStreet } from './build/street'
+import { Traffic } from './build/traffic'
 import { buildUpper } from './build/upper'
 import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
 import type { HubSection } from './sections'
@@ -52,6 +56,8 @@ export interface HouseEvents {
   onSpot(spot: Spot, at?: string): void
   /** The arrival finished (or was skipped). */
   onArrived(): void
+  /** She tapped a thing (Sparkle may tell her about it). */
+  onPoke?(id: string): void
 }
 
 const deg = Math.PI / 180
@@ -80,6 +86,8 @@ export class House {
   private photo: { who: string | null } | null = null
   private nav: Record<0 | 1, NavGrid>
   private marker: TapMarker
+  private gecko: Gecko
+  private traffic: Traffic
   private raycaster = new Raycaster()
   private groups: Record<'tall' | 'props' | 'roof' | 'upper' | 'upperRoom' | 'upperFront' | 'front' | 'groundRoom' | 'stairs', Group>
   private cuts: { obj: Object3D; low: number; when: (m: Mode) => boolean; value: number }[] = []
@@ -100,6 +108,8 @@ export class House {
   private lastPos = new Vector3()
   private anchorEls = new Map<string, HTMLElement>()
   private hovered: string | null = null
+  /** How many times she's said hi to each of them (their first hello is Sawasdee). */
+  private greeted = new Map<string, number>()
   private lead: { x: number; y: number; last: number } | null = null
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
   /** While setting up a deep link: the Hub has already announced the section, so no events. */
@@ -118,6 +128,10 @@ export class House {
     const ground = buildGround(kit)
     const upper = buildUpper(kit)
     const stairs = buildStairs(kit)
+    this.gecko = new Gecko(kit)
+    ground.room.add(this.gecko.root)
+    this.traffic = new Traffic(kit)
+    scene.add(this.traffic.root)
     // Grouped by when they show (applyVisibility): the upstairs room only from upstairs, the downstairs room from the
     // street only once the shutter is up, and so on.
     const upperRoom = new Group()
@@ -388,8 +402,10 @@ export class House {
 
   private usePickable(p: Pickable) {
     this.reactor.poke(p)
+    this.events.onPoke?.(p.id)
     const k = this.kaylee
     if (p.react === 'stairs') return this.climb(p.floor === 0)
+    if (p.id === 'gecko') this.gecko.scare()
     if (p.id === 'shutter' && p.use) {
       // The front door: roll it up and go in (or out).
       this.applyShutterNav()
@@ -409,8 +425,9 @@ export class House {
       return
     }
     if (!p.use) {
-      k.lookAt(...p.at)
-      k.faceToward(p.at[0], p.at[2])
+      const at = this.atOf(p)
+      k.lookAt(at.x, at.y, at.z)
+      k.faceToward(at.x, at.z)
       return
     }
     const use = p.use
@@ -448,18 +465,18 @@ export class House {
     const m = FAMILY.find((f) => f.id === id)
     const who = this.family.get(id)
     if (!m?.spot || !who || !this.familyVisible(`family:${id}`)) return
-    who.react('hop')
+    who.react('wave')
     this.hello(m, who)
     const face = m.spot.face * deg
-    // Stand in front of them (or as close as there's room).
+    // Stand in front of them (or as close as there's room), then they hop together.
     const front: XZ = [m.spot.x + Math.sin(face) * 0.95, m.spot.z + Math.cos(face) * 0.95]
     this.walkTo(front, () => {
       const k = this.kaylee
       k.faceToward(m.spot!.x, m.spot!.z)
       k.react('hop')
       who.react('hop')
-      this.hello(m, who, 1.1)
-      setTimeout(() => sfx.babble(520), 380)
+      sfx.boing()
+      setTimeout(() => k.react('wave'), 450)
     })
   }
 
@@ -469,13 +486,19 @@ export class House {
     const who = this.family.get(id)
     if (!m || !who || !this.familyShown(m)) return
     who.react('hop')
+    who.react('wave')
     this.hello(m, who)
   }
 
-  /** Their hello: a babble, or from the big cousins just the tap-tap of their phone. */
-  private hello(m: (typeof FAMILY)[number], who: Member, lift = 1) {
+  /** They say hi in their own voice: Sawasdee the first time, then something else each time (the big cousins mumble
+   *  it over the tap-tap of their phones). */
+  private hello(m: (typeof FAMILY)[number], who: Member) {
+    const n = this.greeted.get(m.id) ?? 0
+    this.greeted.set(m.id, n + 1)
+    const lines = L.family[m.id]
     if (who.onPhone) sfx.phone()
-    else sfx.babble(m.pitch * lift)
+    if (lines) void say(n === 0 ? lines.hi : lines.again[(n - 1) % lines.again.length])
+    else sfx.babble(m.pitch)
   }
 
   /** Up or down the stairs: walk to the foot (or the landing), then hop step by step. */
@@ -526,6 +549,8 @@ export class House {
     // family photo they'd stand among the family.
     this.groups.props.visible = m === 'street' && !this.photo
     this.groups.roof.visible = m === 'street'
+    // Cars go by on the road between the camera and the family photo: not then.
+    this.traffic.root.visible = m === 'street' && !this.photo
     this.groups.upper.visible = m !== 'inside0'
     this.groups.upperRoom.visible = m === 'inside1'
     // Inside, the sign board and the rolled-up shutter would hide the room.
@@ -617,6 +642,8 @@ export class House {
       f.update(dt, t)
     }
     this.reactor.update(dt, t)
+    if (this.gecko.update(dt, t) && this.mode === 'inside0') sfx.tukkae()
+    this.traffic.update(dt, this.mode === 'street' && !this.arriving && !this.photo)
     this.marker.update(dt)
     // Inside or outside? (with a little dead band so she doesn't flicker on the doorstep)
     if (this.photo?.who) {
@@ -688,7 +715,7 @@ export class House {
       } else {
         const p = PICKABLES.find((q) => q.id === id)
         if (p && this.allowed(p) && visibleChain(this.kit.pokes.get(id) ?? null)) {
-          at = tmp.set(...p.at)
+          at = this.atOf(p)
           r = p.r
           show = true
         }
@@ -711,6 +738,12 @@ export class House {
       const want = show ? '' : 'none'
       if (el.style.display !== want) el.style.display = want
     }
+  }
+
+  /** Where a thing is now: things that move (the gecko) are wherever they've got to. */
+  private atOf(p: Pickable) {
+    const g = p.moves ? this.kit.pokes.get(p.id) : undefined
+    return g ? g.getWorldPosition(new Vector3()) : new Vector3(...p.at)
   }
 
   // ---------------------------------------------------------------- the arrival

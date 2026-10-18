@@ -5,5 +5,158 @@
   "In Thailand, we say Sawasdee to say hello!",
   "The elephant is Thailand's special animal!",
   "In Thai, chang means elephant!",
-  "Thailand's flag is red, white and blue!"
+  "Thailand's flag is red, white and blue!",
+  "We're at Agong's house in Thailand, Kaylee!",
+  "Tap the door to go inside!",
+  "Tap your family to say hello!",
+  "This is your room! Try the mattress!",
+  "Tap the stairs to go up to your room!",
+  "Bounce on the mattress, Kaylee!",
+  "A spirit house! Thai families give it flowers and a drink.",
+  "Put your hands together and bow. In Thailand, that is a wai!",
+  "A tuk-tuk! It goes tuk tuk tuk!",
+  "Thai families eat rice every day!",
+  "The lucky cat waves for good luck!",
+  "A gecko! It sings took-geh, took-geh!",
+  "Lots of people in Thailand ride motorbikes!",
+  {
+    "text": "Sawasdee krub, Kaylee! Welcome home!",
+    "voice": "agong"
+  },
+  {
+    "text": "Come, sit with Agong.",
+    "voice": "agong"
+  },
+  {
+    "text": "Ho ho! My little unicorn!",
+    "voice": "agong"
+  },
+  {
+    "text": "Hi sweetie! This is our room!",
+    "voice": "ji"
+  },
+  {
+    "text": "Bounce on the mattress!",
+    "voice": "ji"
+  },
+  {
+    "text": "I love you, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Hi Kaylee! Welcome to Agong's house!",
+    "voice": "nick"
+  },
+  {
+    "text": "High five!",
+    "voice": "nick"
+  },
+  {
+    "text": "Let's go inside!",
+    "voice": "nick"
+  },
+  {
+    "text": "Sawasdee ka, Kaylee! Are you hungry?",
+    "voice": "jum"
+  },
+  {
+    "text": "The rice is almost ready!",
+    "voice": "jum"
+  },
+  {
+    "text": "So big now, Kaylee!",
+    "voice": "jum"
+  },
+  {
+    "text": "Sawasdee ka, Kaylee! Look at Agong's treasures!",
+    "voice": "joy"
+  },
+  {
+    "text": "The lucky cat says hi!",
+    "voice": "joy"
+  },
+  {
+    "text": "Hee hee! Hi again!",
+    "voice": "joy"
+  },
+  {
+    "text": "Sawasdee krub, Kaylee!",
+    "voice": "bert"
+  },
+  {
+    "text": "Want to sit on my motorbike?",
+    "voice": "bert"
+  },
+  {
+    "text": "Beep beep!",
+    "voice": "bert"
+  },
+  {
+    "text": "Mm-hmm. Hi Kaylee.",
+    "voice": "gun"
+  },
+  {
+    "text": "One sec, I'm winning!",
+    "voice": "gun"
+  },
+  {
+    "text": "Uh-huh...",
+    "voice": "gun"
+  },
+  {
+    "text": "Oh. Hi, Kaylee.",
+    "voice": "khane"
+  },
+  {
+    "text": "Look, a funny video!",
+    "voice": "khane"
+  },
+  {
+    "text": "Mm-hmm...",
+    "voice": "khane"
+  },
+  {
+    "text": "Hi Kaylee... one second.",
+    "voice": "bibi"
+  },
+  {
+    "text": "So cute, Kaylee.",
+    "voice": "bibi"
+  },
+  {
+    "text": "Uh-huh!",
+    "voice": "bibi"
+  },
+  {
+    "text": "Sawasdee ka, Kaylee!",
+    "voice": "ja"
+  },
+  {
+    "text": "Big smile for the photo!",
+    "voice": "ja"
+  },
+  {
+    "text": "Sawasdee ka, Kaylee!",
+    "voice": "sri"
+  },
+  {
+    "text": "Say cheese!",
+    "voice": "sri"
+  },
+  {
+    "text": "Kaylee! Sawasdee krub!",
+    "voice": "pato"
+  },
+  {
+    "text": "Let's play!",
+    "voice": "pato"
+  },
+  {
+    "text": "Hi Kaylee! Hee hee!",
+    "voice": "putter"
+  },
+  {
+    "text": "Peep peep!",
+    "voice": "putter"
+  }
 ]

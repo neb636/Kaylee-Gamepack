@@ -7,9 +7,9 @@ import { P } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
 import { DIM } from '../layout'
 import { part, poke, scenery, type Kit } from './kit'
+import { tileFloor } from './tiles'
 
 const FLOOR = '#FFF1E2'
-const TILE = '#FBE3CF'
 const WALL = '#FFE4D4'
 const WALL_BACK = '#FFEADF'
 const WOOD = '#E9B98E'
@@ -32,10 +32,8 @@ export function buildGround(kit: Kit): Ground {
   const depth = -back
   const { zFront, zBack } = DIM.stairs
 
-  // ---- Floor (cream tiles, a checker of two tones), walls ----
-  const tiles = []
-  for (let x = left + 0.4; x < right; x += 0.8) for (let z = -0.4; z > back; z -= 0.8) if ((Math.round((x - left) / 0.8) + Math.round(z / 0.8)) % 2) tiles.push(P.box(0.78, 0.01, 0.78, TILE, { at: [x, 0.005, z] }))
-  room.add(scenery(kit, [P.box(right - left, 0.2, depth, FLOOR, { at: [0, -0.1, back / 2] }), ...tiles], 2))
+  // ---- Floor (patterned cement tiles, tiles.ts), walls ----
+  room.add(scenery(kit, [P.box(right - left, 0.2, depth, FLOOR, { at: [0, -0.1, back / 2] })], 2), tileFloor(kit, right - left, depth, 0, back / 2))
   room.add(
     scenery(kit, [
       // The left wall in front of and behind the stairs (stairs.ts has the piece beside them, seen from upstairs too).

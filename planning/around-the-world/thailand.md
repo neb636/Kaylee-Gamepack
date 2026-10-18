@@ -84,13 +84,18 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
 2. **The family, static.** One toy-animal builder (`characters/animal.ts`) and the 14 characters from Dad's picks
    (`characters/looks.ts`), in the house and in the "family photo" spot. Each is a chibi rig (body, head, arms and
    tail on their own pivots) ready for gate 3. *Built 2026-10-17.*
-3. **Alive + voices.** Idle breathing, blinking and looking at her; walking; sitting; waving; a mouth that moves with
-   `speechLevel(voice)`. A voice per person in `cast.json` (Dad describes them), greetings with Thai words
-   (Sawasdee ka/krub).
-4. **House art + the hub loop.** Real props and textures: patterned cement tiles, old family photos made from the
-   characters, a gecko on the wall that chirps "tukkae". Ambient street life, the arrival story, a few prompts, the
-   doors to the activities, and the finale stub (the family feast at the table).
-5. **Activities,** one per PR, through `ACTIVITY-TEMPLATE.md` (Baan Chang Cafe first, in 3D).
+3. **Alive + voices** (the house, 2026-10-17). Everyone blinks, looks at her, waves and says hello in their own
+   voice (`cast.json`, cast by me at Dad's request): Sawasdee ka/krub the first time, something else after. Their
+   mouths open with their voice (`characters/face.ts`). The big cousins only mumble from their phones. Sparkle guides
+   from a corner (`activities/hub/Guide.tsx`): the welcome, what to do the first time she's somewhere, a fact the
+   first time she pokes the spirit house, the altar, the tuk-tuk, the rice cooker, the lucky cat, the gecko or the
+   motorbike, and a hint after 12 s with nothing touched.
+4. **House art** (2026-10-17): patterned cement tiles on the shop floor, a tokay gecko that crawls on the wall and calls
+   "tuk-kae", a scooter and a pink taxi driving past outside. Still to come with the activities: doors to them and the
+   family feast finale.
+5. **Activities,** one per PR, through `ACTIVITY-TEMPLATE.md`. Dad picked four (2026-10-17), on hold until he says go:
+   Baan Chang Cafe (in 3D, from #86's design), a Songkran water fight on the street, a longtail boat in Krabi, and night
+   market food.
 
 ## Tech notes
 

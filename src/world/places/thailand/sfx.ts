@@ -25,6 +25,20 @@ export const sfx = {
   tick: () => [0, 0.25, 0.5, 0.75].forEach((d, i) => tone(i % 2 ? 1700 : 2100, 1600, 0.04, 0.08, 'square', d)),
   whir: () => noise(1.2, 0.07, 'bandpass', 500, 1400, 0, 1.2),
   puff: () => noise(0.25, 0.1, 'lowpass', 700, 250),
+  /** A scooter or a taxi going by on the street. */
+  putt: () => {
+    for (let i = 0; i < 6; i++) tone(95 + i * 4, 90, 0.06, 0.05, 'sawtooth', i * 0.08)
+    noise(0.6, 0.03, 'lowpass', 600, 300)
+  },
+  /** The tokay gecko's call: a croaky "tuk" then a rising "kae", three times. */
+  tukkae: () => {
+    noise(0.12, 0.05, 'bandpass', 900, 600)
+    for (let i = 0; i < 3; i++) {
+      const d = 0.25 + i * 0.55
+      tone(260, 200, 0.07, 0.09, 'square', d)
+      tone(420, 560, 0.2, 0.08, 'sawtooth', d + 0.12)
+    }
+  },
   /** Thumbs tapping a phone screen (the big cousins' answer to everything). */
   phone: () => [0, 0.1, 0.17, 0.31].forEach((d, i) => tone(i === 3 ? 1560 : 2200, i === 3 ? 2080 : 2150, 0.035, 0.05, 'sine', d)),
   /** Someone in the family says hi, until they have real voices (gate 3): a happy little babble at their pitch. */
