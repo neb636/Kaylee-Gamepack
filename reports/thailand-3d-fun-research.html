@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Making Thailand Roblox-Level Fun</title>
+<style>
+:root{--bg:#fff7fb;--card:#fff;--ink:#3b2a4a;--mute:#7a6a88;--pink:#ff7eb6;--lav:#b9a2f5;--mint:#7fe0c0;--gold:#f5b942;--line:#f0dcea}
+@media (prefers-color-scheme:dark){:root{--bg:#1d1526;--card:#2a1f37;--ink:#f6ecfb;--mute:#b9a8c9;--line:#40304f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:40px 20px 24px;text-align:center;background:linear-gradient(135deg,#ffd1e8,#d9ccff);color:#3b2a4a}
+header h1{margin:0 0 8px;font-size:clamp(26px,5vw,42px)}
+header p{margin:0 auto;max-width:720px}
+nav{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;padding:10px 16px}
+nav a{white-space:nowrap;padding:6px 12px;border-radius:99px;background:var(--bg);color:var(--ink);text-decoration:none;font-size:14px;border:1px solid var(--line)}
+nav a:hover{background:var(--pink);color:#fff}
+main{max-width:1000px;margin:0 auto;padding:16px}
+section{margin:36px 0;scroll-margin-top:60px}
+h2{font-size:28px;margin:0 0 4px}
+h2+p.sub{margin:0 0 16px;color:var(--mute)}
+h3{margin:0 0 6px;font-size:19px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.card p{margin:6px 0}
+.tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:99px;margin:0 4px 4px 0;background:var(--lav);color:#2a1a45}
+.tag.p{background:var(--pink);color:#4a0f2c}.tag.m{background:var(--mint);color:#0d3a2c}.tag.g{background:var(--gold);color:#4a3200}
+a{color:#c0307f}@media (prefers-color-scheme:dark){a{color:#ff9fcf}}
+.links{font-size:14px;margin-top:8px}
+.links a{margin-right:10px}
+.callout{background:var(--card);border-left:6px solid var(--pink);border-radius:10px;padding:12px 16px;margin:14px 0}
+.warn{border-left-color:var(--gold)}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;font-size:15px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--lav);color:#2a1a45}
+.tablewrap{overflow-x:auto}
+ol.plan li{margin:6px 0}
+footer{text-align:center;color:var(--mute);padding:30px 16px;font-size:14px}
+code{background:var(--bg);padding:1px 5px;border-radius:5px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🐘 Making Thailand Roblox-Level Fun</h1>
+  <p>Research for Kaylee's 3D Thailand: what kids love in Roblox and other games, which ones to play yourself, the mechanics behind them, and how each could fit Agong's shophouse and the places the family loves. Written 2026-10-18.</p>
+</header>
+<nav>
+  <a href="#tldr">TL;DR</a><a href="#why">Why Roblox wins</a><a href="#play">Games to play</a><a href="#mechanics">Mechanics</a>
+  <a href="#thai">Thailand ideas</a><a href="#controls">Controls for a 5-year-old</a><a href="#plan">Next steps</a><a href="#sources">Sources</a>
+</nav>
+<main>
+
+<section id="tldr">
+  <h2>TL;DR</h2>
+  <p class="sub">The five things to take away.</p>
+  <div class="grid">
+    <div class="card"><h3>1. Be a place, not a quiz</h3><p>Roblox is a pile of tiny worlds you <em>live in</em>. Thailand's 3D hub should be somewhere she wants to run around, with things to poke everywhere, before any task appears.</p></div>
+    <div class="card"><h3>2. Make her avatar hers</h3><p>Avatar self-expression is a core Roblox pull. Let Kaylee dress her own character (and Sparkle) and see it in the 3D world.</p></div>
+    <div class="card"><h3>3. Collect and grow</h3><p>Grow a Garden, Adopt Me and Toca all run on tiny loops (plant, water, pet, collect) that pay off visibly. Great fit for markets, food stalls and elephants.</p></div>
+    <div class="card"><h3>4. Physics = silly = replay</h3><p>Wobbly ragdolls, splashes, bouncy things and slapstick turn failing into laughing. This matches your "no failing, ever" rule.</p></div>
+    <div class="card"><h3>5. Other people, even fake ones</h3><p>The social side is the biggest Roblox draw but you cannot add strangers. Use a living cast (family, animals) plus a way to share with Dad on the same iPad.</p></div>
+  </div>
+</section>
+
+<section id="why">
+  <h2>Why kids prefer Roblox</h2>
+  <p class="sub">What the sources say, and what is my inference. The research I could find is mostly blogs, so treat the claims as directional.</p>
+  <div class="grid">
+    <div class="card"><span class="tag p">self-expression</span><h3>Avatars</h3>
+      <p>A University of Washington study of kids 8–13 on Roblox, Minecraft and Fortnite looks at why kids customize avatars, and notes it likely matters most for younger users who are still forming identity.</p>
+      <div class="links"><a href="https://faculty.washington.edu/alexisr/avatars.pdf">UW avatar paper (PDF)</a></div></div>
+    <div class="card"><span class="tag p">progress</span><h3>Obbies and unlocks</h3>
+      <p>Finishing obstacle courses, earning currency, and unlocking accessories give a steady sense of progress. Short checkpoints mean nobody is stuck for long.</p>
+      <div class="links"><a href="https://playgama.com/blog/2025/07/10/why-do-children-enjoy-playing-roblox-so-much/">Playgama explainer</a><a href="https://vocal.media/gamers/why-kids-just-can-t-get-enough-of-roblox">Vocal explainer</a></div></div>
+    <div class="card"><span class="tag p">low pressure</span><h3>Short, simple loops</h3>
+      <p>Analysis of Grow a Garden says it set the template: short sessions, simple mechanics, daily return hooks. A child-media group noted its low-stress, non-violent style is where kids hang out.</p>
+      <div class="links"><a href="https://rowatcher.com/news/the-10-fastest-growing-roblox-games-in-march-2026">Fastest-growing, Mar 2026</a><a href="https://rowatcher.com/news/is-the-brainrot-trend-dying-what-ccu-data-from-three-top-games-reveals">Brainrot CCU data</a></div></div>
+    <div class="card"><span class="tag p">creation</span><h3>Make your own stuff</h3>
+      <p>Unlike fixed-story games, kids build and decorate their own worlds, then invite friends over to see them. Note that Toca Boca World works the same way: drag-and-drop, no goals, nothing locked.</p>
+      <div class="links"><a href="https://blogs.tuni.fi/playlab/game-reviews/toca-boca-world-a-whole-new-level-of-dollhouse/">Tampere Playlab on Toca</a></div></div>
+    <div class="card"><span class="tag p">social</span><h3>Together</h3>
+      <p>Kids love teaming up and showing off creations. That is also the main thing you cannot copy safely, so substitute: NPC family, shared-iPad co-play, or "show Dad" moments.</p></div>
+    <div class="card"><span class="tag g">caution</span><h3>What not to copy</h3>
+      <p>Blog sources flag monetization pressure, trading scams and event-driven FOMO. Take the joy, skip the hooks. Toca Boca's "no clear stopping point" is also a parent concern; your 3–6 minute stage structure is a feature.</p>
+      <div class="links"><a href="https://www.bitdefender.com/en-us/blog/hotforsecurity/is-your-child-playing-toca-boca-world-heres-what-you-should-know">Bitdefender parent guide</a></div></div>
+  </div>
+  <div class="callout warn"><strong>Honest caveat:</strong> Searches gave me solid sources for Roblox's general appeal but thin ones for exact age ranges and for Sago Mini World, Dress to Impress and Adopt Me details. Several results were low-quality or scraped blogs; I leaned on the ones I flagged above. The best "research" here is to sit next to your daughter for 30 minutes in Roblox (see below) and watch what she touches first.</div>
+</section>
+
+<section id="play">
+  <h2>Games to play and test</h2>
+  <p class="sub">Grouped by what to learn from each. First line is the Roblox ones, since that is what she loves. Roblox links go to the game page (log in to play). Ask her to show you.</p>
+
+  <h3 style="margin-top:20px">Roblox: ask Kaylee to show you</h3>
+  <div class="grid">
+    <div class="card"><span class="tag">pets</span><span class="tag m">age: young-friendly</span><h3>Adopt Me!</h3>
+      <p>Hatch eggs, raise pets, decorate a house, do small care chores. Lists name it as the best fit for 5-year-olds. <strong>Steal:</strong> care loop (feed, play, bath) with instant hearts and sounds; hatching reveal.</p>
+      <div class="links"><a href="https://www.roblox.com/games/920587237/Adopt-Me">Roblox page</a><a href="https://outsidergaming.com/best-roblox-games-5-year-olds/">Best Roblox for 5-year-olds</a></div></div>
+    <div class="card"><span class="tag">fashion</span><h3>Dress To Impress</h3>
+      <p>Multiplayer fashion contest: pick a theme, build an outfit under a timer, strut a runway, others vote. <strong>Steal:</strong> theme-based outfits, runway pose moment. <strong>Skip:</strong> timer and voting; keep applause from the family cast.</p>
+      <div class="links"><a href="https://www.roblox.com/games/5203828273/Dress-To-Impress">Roblox page</a><a href="https://genalpha.substack.com/p/how-robloxs-dress-to-impress-is-signaling">Why it's big</a></div></div>
+    <div class="card"><span class="tag">farming</span><h3>Grow a Garden</h3>
+      <p>Plant, water, sell crops, buy new seeds. 5-minute sessions. <strong>Steal:</strong> the plant-watch-harvest loop with visible growth stages; a market stall that buys your produce.</p>
+      <div class="links"><a href="https://rowatcher.com/news/the-10-fastest-growing-roblox-games-in-march-2026">Market analysis</a><a href="https://digital-release.newsnationnow.com/?p=3477696">News story</a></div></div>
+    <div class="card"><span class="tag">roleplay</span><h3>Brookhaven RP</h3>
+      <p>A town to wander with houses, cars and role-play. Lists say it skews older, but it is the clearest example of "a place with doors you can open". <strong>Steal:</strong> every building is enterable and every prop is usable.</p>
+      <div class="links"><a href="https://www.roblox.com/games/4924922222/Brookhaven-RP">Roblox page</a><a href="https://progameguides.com/roblox/best-roblox-games-for-girls/">Girls' picks list</a></div></div>
+    <div class="card"><span class="tag">obby</span><h3>Any easy "Obby" (obstacle course)</h3>
+      <p>Jump across platforms to a finish, with checkpoints. Find a kid-friendly one in her history. <strong>Steal:</strong> big jumps, checkpoints so falling just resets you a few steps, and a victory pad. Falling into water instead of lava keeps it gentle.</p>
+      <div class="links"><a href="https://www.roblox.com/discover">Roblox Discover</a></div></div>
+    <div class="card"><span class="tag">hype</span><h3>Steal a Brainrot</h3>
+      <p>Currently the biggest game by concurrent players. Collect meme characters that earn passive income, steal from others. <strong>Steal:</strong> collection-that-pays-you, characters walking a conveyor belt. <strong>Skip:</strong> the stealing.</p>
+      <div class="links"><a href="https://en.wikipedia.org/wiki/Steal_a_Brainrot">Wikipedia</a><a href="https://www.pocketgamer.biz/robloxs-steal-a-brainrot-becomes-first-game-to-surpass-25m-concurrent-players">Pocketgamer.biz</a></div></div>
+  </div>
+
+  <h3 style="margin-top:28px">Kid-first 3D and sandbox games</h3>
+  <div class="grid">
+    <div class="card"><span class="tag">no goals</span><h3>Toca Boca World</h3>
+      <p>The model for open-ended: drag-and-drop everywhere, no text chat, nothing to fail. Reviewed as playable by 4–5-year-olds without help. <strong>Steal:</strong> every object moves, rooms are toy boxes, characters can be placed anywhere.</p>
+      <div class="links"><a href="https://tocaboca.com/app/toca-boca-world/">Official</a><a href="https://blogs.tuni.fi/playlab/game-reviews/toca-boca-world-a-whole-new-level-of-dollhouse/">Review</a></div></div>
+    <div class="card"><span class="tag">toy worlds</span><h3>Sago Mini World / Sago Mini apps</h3>
+      <p>Gentle open-ended toys for ages 2–5ish. Common Sense praises the open-ended apps and warns thin ones feel repetitive. <strong>Steal:</strong> one big friendly verb per scene.</p>
+      <div class="links"><a href="https://www.commonsensemedia.org/app-reviews/sago-mini-boats">Boats review</a><a href="https://www.commonsensemedia.org/app-reviews/sago-mini-zoo">Zoo review</a></div></div>
+    <div class="card"><span class="tag">3D platformer</span><h3>Kirby and the Forgotten Land</h3>
+      <p>A parent reports a 6-year-old followed it because it ramps up gently, with no time pressure and a co-op mode for a parent. <strong>Steal:</strong> "Mouthful Mode" where she becomes a thing (a tuk-tuk, a ladle) and uses it.</p>
+      <div class="links"><a href="https://www.gamepressure.com/editorials/reviews/kirby-and-the-forgotten-land-review-childlike-wonder/ze563">Review</a><a href="https://screenwiseapp.com/guides/kirby-forgotten-land">Parent guide</a></div></div>
+    <div class="card"><span class="tag">3D platformer</span><h3>Super Mario Odyssey</h3>
+      <p>Capturing animals and objects to control them is the standout idea. One parent said their 6-year-old found its abstract sandbox harder than Kirby, so use only the capture idea, not the structure.</p>
+      <div class="links"><a href="https://en.wikipedia.org/wiki/Super_Mario_Odyssey">Wikipedia</a></div></div>
+    <div class="card"><span class="tag">physics fun</span><h3>Wobbly Life</h3>
+      <p>Jelly-bodied characters in a sandbox town, 20+ jobs (pizza delivery, firefighting) that are mini-games, 250 clothes, pets and a house. Rated 7+. <strong>Steal:</strong> jobs as bite-size mini-games and wobbly "oops is funny" physics.</p>
+      <div class="links"><a href="https://www.nintendolife.com/reviews/switch-eshop/wobbly-life">Nintendo Life</a><a href="https://www.xboxtavern.com/wobbly-life-review/">Review</a></div></div>
+    <div class="card"><span class="tag">cozy life</span><h3>Animal Crossing and Disney Dreamlight Valley</h3>
+      <p>Not verified by my searches, but both are standard references for decorating, collecting, villager friendships and daily small tasks. Worth a look for how characters greet you by name.</p>
+      <div class="links"><a href="https://en.wikipedia.org/wiki/Animal_Crossing:_New_Horizons">Animal Crossing</a><a href="https://en.wikipedia.org/wiki/Disney_Dreamlight_Valley">Dreamlight Valley</a></div></div>
+    <div class="card"><span class="tag">preschool</span><h3>Common Sense: best games for preschoolers</h3>
+      <p>A curated list to find more titles at her level, with age notes.</p>
+      <div class="links"><a href="https://www.commonsensemedia.org/lists/best-games-for-preschoolers">Common Sense list</a></div></div>
+  </div>
+</section>
+
+<section id="mechanics">
+  <h2>Mechanics catalog</h2>
+  <p class="sub">Each mechanic, where it comes from, why kids love it, and how hard it is to build in your three.js engine. "Fit" is my judgment for a 5-year-old.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Mechanic</th><th>Seen in</th><th>Why it's fun</th><th>Fit</th><th>Build cost</th></tr>
+    <tr><td><strong>Free run &amp; explore</strong> the place</td><td>Brookhaven, Toca</td><td>Agency; finding secrets</td><td>★★★</td><td>Low (you have the hub)</td></tr>
+    <tr><td><strong>Avatar dress-up</strong> shown in 3D</td><td>Dress to Impress, Roblox</td><td>Identity, showing off</td><td>★★★</td><td>Medium (<code>DressUpStudio</code> + 3D swap)</td></tr>
+    <tr><td><strong>Plant, water, grow, harvest</strong></td><td>Grow a Garden</td><td>Visible growth, small rewards</td><td>★★★</td><td>Low–Med</td></tr>
+    <tr><td><strong>Care for a pet / elephant</strong></td><td>Adopt Me</td><td>Nurture, hearts, reactions</td><td>★★★</td><td>Medium (puppet states)</td></tr>
+    <tr><td><strong>Hatch / reveal / collect</strong></td><td>Adopt Me, Brainrot</td><td>Surprise, completion</td><td>★★★</td><td>Low</td></tr>
+    <tr><td><strong>Jobs as mini-games</strong> (cook, deliver)</td><td>Wobbly Life</td><td>Variety, dress for the job</td><td>★★★</td><td>Medium each</td></tr>
+    <tr><td><strong>Obby with big forgiving jumps</strong></td><td>Roblox obbies</td><td>Mastery, checkpoints</td><td>★★</td><td>Medium (needs jump physics, safe respawn)</td></tr>
+    <tr><td><strong>Become the thing</strong> (capture/ride)</td><td>Odyssey, Kirby</td><td>Power fantasy, silly</td><td>★★</td><td>Medium</td></tr>
+    <tr><td><strong>Drive / steer a vehicle</strong> (tuk-tuk, boat)</td><td>Brookhaven, Sago Boats</td><td>Speed, control</td><td>★★★</td><td>Medium</td></tr>
+    <tr><td><strong>Physics play</strong> (splash, bounce, knock over)</td><td>Wobbly Life</td><td>Slapstick; oops is funny</td><td>★★★</td><td>Low with toon physics tricks</td></tr>
+    <tr><td><strong>Decorate &amp; place anywhere</strong></td><td>Toca, Adopt Me houses</td><td>Ownership, creativity</td><td>★★★</td><td>Medium (3D placement)</td></tr>
+    <tr><td><strong>Passive income / pays you</strong></td><td>Brainrot, tycoons</td><td>Things working while you play</td><td>★★</td><td>Low (coins to a jar)</td></tr>
+    <tr><td><strong>Emotes &amp; dance</strong></td><td>Roblox</td><td>Social expression</td><td>★★★</td><td>Low (puppet actions)</td></tr>
+    <tr><td><strong>Daily return hook</strong></td><td>Grow a Garden</td><td>Habit</td><td>✖ skip</td><td>Not needed; goes against a 3–6 min session</td></tr>
+    <tr><td><strong>Trading, stealing, leaderboards</strong></td><td>Adopt Me, Brainrot</td><td>Social stakes</td><td>✖ skip</td><td>Risky and not gentle</td></tr>
+  </table></div>
+</section>
+
+<section id="thai">
+  <h2>Ideas for Thailand</h2>
+  <p class="sub">Mapped onto what is already in the repo: Agong's shophouse hub, a family roster, <code>src/world/places/thailand/</code>, and Thai culture. Each is a candidate for the "one activity per PR, toy first" process.</p>
+  <div class="grid">
+    <div class="card"><span class="tag p">Roblox: Adopt Me</span><h3>🐘 Elephant care and ride</h3><p>Feed bananas, hose them down (Songkran-style splashing), brush, then climb up and ride along a jungle path. Core verb: care. Deepens: new foods, a baby elephant, then riding.</p></div>
+    <div class="card"><span class="tag p">Roblox: Grow a Garden</span><h3>🌺 Garden &amp; market stall</h3><p>Plant mango, jasmine, lotus. Harvest and set them on the shophouse stall; family members walk up to buy. Learning: counting, colors, Thai fruit names.</p></div>
+    <div class="card"><span class="tag p">Roblox: Dress to Impress</span><h3>👗 Festival dress-up</h3><p>Dress her avatar (and Sparkle) for Loy Krathong or Songkran. Strut a runway on the shophouse street; the family cheers. No timer, no voting.</p></div>
+    <div class="card"><span class="tag p">Wobbly Life jobs</span><h3>🍜 Street-food cook</h3><p>Orders from family: toss noodles, choose toppings, sizzle, serve. Count ingredients out loud. Sloppy physics are funny, never wrong.</p></div>
+    <div class="card"><span class="tag p">Brookhaven / Sago Boats</span><h3>🛶 Floating-market boat</h3><p>Steer a boat between stalls, catch fruit tossed from baskets, and deliver. Different places for a different camera (see Controls).</p></div>
+    <div class="card"><span class="tag p">Odyssey capture</span><h3>🛺 Tuk-tuk ride</h3><p>Hop into the tuk-tuk (or Kirby-style become it), zoom around town, honk at animals, pick up family and deliver them to the temple.</p></div>
+    <div class="card"><span class="tag p">Obby, gentle</span><h3>🏯 Temple stepping-stones</h3><p>Hop across lotus pads and stone steps to the golden pagoda. Falling = a splash and a "plop" back at the last pad, with a giggling fish.</p></div>
+    <div class="card"><span class="tag p">Toca / Adopt Me houses</span><h3>🏠 Decorate the shophouse</h3><p>Place lanterns, flowers, and shop signs anywhere in the 3D hub. Her decoration stays between visits (<code>useSaved</code>).</p></div>
+    <div class="card"><span class="tag p">Adopt Me hatch</span><h3>🥚 Hidden-creature hunt</h3><p>Find geckos, cats and fish hiding around the shophouse; collect them in a sticker book. Nobody can be missed; the hub always shows a sparkle hint after a while.</p></div>
+  </div>
+
+  <h3 style="margin-top:28px">Hub-level ideas (apply everywhere)</h3>
+  <div class="card">
+    <ul>
+      <li><strong>Everything is poke-able.</strong> Every prop reacts to a tap with a sound plus a squash/bounce; odd actions get silly responses.</li>
+      <li><strong>A collection that pays out.</strong> Coins (or jasmine petals) fill a jar on the shelf; when full the family throws a mini party.</li>
+      <li><strong>Emote wheel.</strong> Three big buttons (wave, dance, hop) that her avatar performs and the family copies.</li>
+      <li><strong>Living cast.</strong> NPC family wander and react to her by name. This is the safe replacement for multiplayer.</li>
+      <li><strong>Co-play with Dad.</strong> A "Dad button" that drops a second character he steers with the other thumb. Roblox kids love playing together; this is the closest safe substitute.</li>
+      <li><strong>Secrets.</strong> Tapping things in a pattern or visiting corners reveals surprise hidden spots, like Roblox easter eggs.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="controls">
+  <h2>Controls for a 5-year-old on an iPad</h2>
+  <p class="sub">My design judgment, not research: my searches found no usability study comparing joysticks and tap-to-move for this age.</p>
+  <div class="card">
+    <ul>
+      <li><strong>Tap-to-go first.</strong> Tap a spot or object and she walks there. A virtual joystick is what Roblox does, so offer it as an optional "grown-up" mode and watch how she does with it.</li>
+      <li><strong>Big, thumb-reachable targets</strong> (≥ 88 px per your rules), and auto-jump over small steps so she never needs a jump button.</li>
+      <li><strong>Camera does the work.</strong> Fixed or gently following camera; no two-finger orbiting. Keep one camera per scene as the AGENTS rules say.</li>
+      <li><strong>Edges are soft.</strong> Invisible bumpers, no falling off the world; if she goes somewhere odd she gets a silly reaction.</li>
+      <li><strong>Let her steer one thing.</strong> The fun verbs here (steer, pour, ride) work best when her finger touches the real thing.</li>
+      <li><strong>Test on the iPad in Safari.</strong> Keep a flat fallback without WebGL2 as the repo already does.</li>
+    </ul>
+  </div>
+  <div class="callout"><strong>Easy research win:</strong> next time she plays Roblox, record her screen. Count: what she touches in the first 30 seconds, whether she uses joystick or tap, how often she repeats something, and what makes her laugh. That tells you more than any article.</div>
+</section>
+
+<section id="plan">
+  <h2>Suggested next steps</h2>
+  <ol class="plan">
+    <li><strong>Play 20 minutes together</strong> of Adopt Me and Dress To Impress. Write down the 3 things she does first.</li>
+    <li><strong>Pick one core verb</strong> from the Thailand ideas (my vote: <em>elephant care</em> or <em>garden &amp; market</em>, as they combine nurturing, collecting and visible growth).</li>
+    <li><strong>Fill the activity template</strong> (<code>planning/around-the-world/ACTIVITY-TEMPLATE.md</code>) and build a <strong>greybox</strong> toy first; test it on the iPad before art.</li>
+    <li><strong>Add a hub layer:</strong> poke-able props, a coin jar, an emote wheel, and the family wandering. This is the Roblox "world" feel and benefits every later activity.</li>
+    <li><strong>Add her avatar</strong> in 3D with dress-up persisted via <code>useSaved</code>.</li>
+    <li>Only then add stamps, a finale and the trophy flow.</li>
+  </ol>
+</section>
+
+<section id="sources">
+  <h2>All sources</h2>
+  <p class="sub">Links come from my searches or are standard well-known pages. Quality varies; low-quality blogs are marked.</p>
+  <div class="card">
+    <ul>
+      <li><a href="https://faculty.washington.edu/alexisr/avatars.pdf">UW: avatar customization in social games</a> (academic)</li>
+      <li><a href="https://playgama.com/blog/2025/07/10/why-do-children-enjoy-playing-roblox-so-much/">Playgama: why children enjoy Roblox</a> (blog)</li>
+      <li><a href="https://vocal.media/gamers/why-kids-just-can-t-get-enough-of-roblox">Vocal: why kids can't get enough</a> (blog)</li>
+      <li><a href="https://outsidergaming.com/best-roblox-games-5-year-olds/">Outsider Gaming: Roblox for 5-year-olds</a> (list)</li>
+      <li><a href="https://progameguides.com/roblox/best-roblox-games-for-girls/">Pro Game Guides: Roblox for girls</a> (list)</li>
+      <li><a href="https://stealthygaming.com/top-best-games-in-roblox-for-girls/">Stealthy Gaming: Roblox for girls</a> (list)</li>
+      <li><a href="https://genalpha.substack.com/p/how-robloxs-dress-to-impress-is-signaling">Gen Alpha: Dress to Impress</a> (newsletter)</li>
+      <li><a href="https://rowatcher.com/news/the-10-fastest-growing-roblox-games-in-march-2026">RoWatcher: fastest-growing Roblox games</a> (tracker)</li>
+      <li><a href="https://rowatcher.com/news/is-the-brainrot-trend-dying-what-ccu-data-from-three-top-games-reveals">RoWatcher: brainrot CCU</a> (tracker)</li>
+      <li><a href="https://en.wikipedia.org/wiki/Steal_a_Brainrot">Wikipedia: Steal a Brainrot</a></li>
+      <li><a href="https://www.pocketgamer.biz/robloxs-steal-a-brainrot-becomes-first-game-to-surpass-25m-concurrent-players">PocketGamer.biz: 25m concurrent</a></li>
+      <li><a href="https://digital-release.newsnationnow.com/?p=3477696">News: Grow a Garden by a teenager</a></li>
+      <li><a href="https://blogs.tuni.fi/playlab/game-reviews/toca-boca-world-a-whole-new-level-of-dollhouse/">Tampere Playlab: Toca Boca World</a></li>
+      <li><a href="https://www.bitdefender.com/en-us/blog/hotforsecurity/is-your-child-playing-toca-boca-world-heres-what-you-should-know">Bitdefender: Toca Boca World parent guide</a></li>
+      <li><a href="https://www.commonsensemedia.org/lists/best-games-for-preschoolers">Common Sense: best games for preschoolers</a></li>
+      <li><a href="https://www.commonsensemedia.org/app-reviews/sago-mini-boats">Common Sense: Sago Mini Boats</a>, <a href="https://www.commonsensemedia.org/app-reviews/sago-mini-zoo">Zoo</a>, <a href="https://www.commonsensemedia.org/app-reviews/sago-mini-fairy-tales">Fairy Tales</a></li>
+      <li><a href="https://www.nintendolife.com/reviews/switch-eshop/wobbly-life">Nintendo Life: Wobbly Life</a>, <a href="https://www.xboxtavern.com/wobbly-life-review/">Xbox Tavern</a></li>
+      <li><a href="https://www.gamepressure.com/editorials/reviews/kirby-and-the-forgotten-land-review-childlike-wonder/ze563">Gamepressure: Kirby Forgotten Land</a>, <a href="https://screenwiseapp.com/guides/kirby-forgotten-land">Screenwise parent guide</a></li>
+      <li><a href="https://forum.quartertothree.com/t/kirby-and-the-forgotten-land/155221">Quarter to Three: parent of a 6-year-old on Kirby vs Odyssey</a> (forum)</li>
+      <li><a href="https://www.roblox.com/games/920587237/Adopt-Me">Roblox: Adopt Me</a>, <a href="https://www.roblox.com/games/5203828273/Dress-To-Impress">Dress To Impress</a>, <a href="https://www.roblox.com/games/4924922222/Brookhaven-RP">Brookhaven RP</a> (game ids from memory or tracker; confirm they open)</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer>Kaylee's Gamepack · Thailand research · 2026-10-18</footer>
+</body>
+</html>
