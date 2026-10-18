@@ -66,12 +66,14 @@ test('a walk around the house with real taps', async ({ page }) => {
   await expect.poll(field(page, 'pose')).toBe('sit')
   await tap(page, 'cabinet')
   await expect.poll(field(page, 'using'), { timeout: 30_000 }).toBe('cabinet')
-  // Up the stairs to her room, and onto the mattress.
+  // Up the stairs, through the glass doors into her room, and onto the mattress.
   await tap(page, 'stairs-up')
   await expect.poll(field(page, 'spot'), { timeout: 40_000 }).toBe('upstairs')
+  await tap(page, 'glass-doors')
+  await expect.poll(field(page, 'using'), { timeout: 30_000 }).toBe('glass-doors')
   await tap(page, 'mattress')
   await expect.poll(field(page, 'pose'), { timeout: 30_000 }).toBe('bounce')
-  expect(await page.evaluate(() => window.__kayleeSectionLog?.map((s) => s.id))).toEqual(['street', 'downstairs', 'downstairs', 'downstairs', 'upstairs', 'upstairs'])
+  expect(await page.evaluate(() => window.__kayleeSectionLog?.map((s) => s.id))).toEqual(['street', 'downstairs', 'downstairs', 'downstairs', 'upstairs', 'upstairs', 'upstairs'])
   expect(await page.evaluate(() => location.hash)).toBe('#/world/thailand/hub/upstairs?at=mattress')
   expect(errors).toEqual([])
 })

@@ -1,9 +1,11 @@
 // A family member in Agong's house: their toy animal (animal.ts, looks.ts) standing, sitting or lying at their spot,
-// breathing, turning their head to look at Kaylee when she comes near, and hopping when she says hi.
+// breathing and blinking, turning their head to look at Kaylee when she comes near, waving and hopping when she says
+// hi, and moving their mouth when their voice plays (face.ts).
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span } from '../../../../sdk'
 import type { Bag } from '../engine/dispose'
 import { buildAnimal, type Rig } from './animal'
+import { FaceLife } from './face'
 import type { FamilyMember } from './family'
 import { LOOKS } from './looks'
 import type { Character, Pose } from './types'
@@ -18,16 +20,28 @@ export class Member implements Character {
   pose: Pose = 'stand'
   private chibi: Rig
   private reaction: { kind: 'hop' | 'wiggle'; t: number } | null = null
+  private life: FaceLife
+  /** Time into a wave (-1: not waving). */
+  private waving = -1
   private look: Vector3 | null = null
   private headYaw = 0
   private phase = Math.random() * 10
   private baseY: number
+  /** Glued to their phone (the big cousins): head down at the screen, both hands on it, never looking up for long. */
+  readonly onPhone: boolean
+  private glance = 1
 
   constructor(readonly member: FamilyMember, bag: Bag) {
     this.id = member.id
     this.chibi = buildAnimal(LOOKS[member.id], bag)
     this.root = this.chibi.root
     this.height = this.chibi.height
+    this.life = new FaceLife(this.chibi, member.id)
+    this.onPhone = !!LOOKS[member.id].extras?.includes('phone')
+    if (this.onPhone) {
+      this.chibi.armL.rotation.set(-1.2, 0, 0.75)
+      this.chibi.armR.rotation.set(-1.2, 0, -0.75)
+    }
     const s = member.spot
     this.baseY = (s?.floor ? 3.6 : 0) + (s?.pose === 'sit' ? (s.seat ?? 0.45) - 0.1 * this.height : s?.pose === 'lie' ? 0.2 : 0)
     if (s) {
@@ -53,8 +67,11 @@ export class Member implements Character {
     body.position.set(0, pose === 'lie' ? this.chibi.radius : 0, 0)
   }
 
-  react(kind: 'hop' | 'wiggle') {
-    this.reaction = { kind, t: 0 }
+  react(kind: 'hop' | 'wiggle' | 'wave') {
+    // Too busy with the phone to hop or wave: a quick look up, then back to the screen.
+    if (this.onPhone) this.glance = 0
+    else if (kind === 'wave') this.waving = 0
+    else this.reaction = { kind, t: 0 }
   }
   lookAt(x: number, y: number, z: number) {
     this.look = (this.look ?? new Vector3()).set(x, y, z)
@@ -64,19 +81,34 @@ export class Member implements Character {
   }
 
   update(dt: number, t: number) {
-    const { body, head } = this.chibi
+    const { body, head, armR } = this.chibi
     const lying = this.pose === 'lie'
+    this.life.update(dt)
+    // A wave: the right arm swings up and waves side to side, then comes down.
+    if (this.waving >= 0) {
+      this.waving += dt / 1.5
+      const p = Math.min(1, this.waving)
+      const up = span(p, 0, 0.15) * (1 - span(p, 0.8, 1))
+      armR.rotation.z = up * (2.5 + Math.sin(p * Math.PI * 7) * 0.35)
+      if (p >= 1) {
+        armR.rotation.z = 0
+        this.waving = -1
+      }
+    }
     // Breathing.
     const breath = 1 + Math.sin(t * 2.6 + this.phase) * 0.018
     body.scale.set(1 / Math.sqrt(breath), breath, 1 / Math.sqrt(breath))
-    // Look at Kaylee (head only, within a comfortable turn).
+    // Look at Kaylee (head only, within a comfortable turn). Phone people only look up for a moment when she says hi.
     let want = 0
-    if (this.look && !lying) {
+    this.glance = Math.min(1, this.glance + dt / 1.1)
+    const up = this.onPhone ? bell(this.glance) : 1
+    if (this.look && !lying && up > 0.05) {
       this.root.worldToLocal(tmp.copy(this.look))
       want = clamp(Math.atan2(tmp.x, tmp.z), -1.0, 1.0)
     }
     this.headYaw += (want - this.headYaw) * (1 - Math.exp(-dt * 6))
-    head.rotation.y = this.headYaw
+    head.rotation.y = this.headYaw * up
+    if (this.onPhone) head.rotation.x = 0.45 * (1 - up) + Math.sin(t * 1.3 + this.phase) * 0.02
     // Reactions.
     let y = 0
     if (this.reaction) {
