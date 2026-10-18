@@ -22,12 +22,12 @@ follow her finger) comes back later as a 3D activity reached from the house.
 | Agong (อากง) | Grandpa | yes | panda with round gold glasses, a moustache, a cream shirt and a cane |
 | Jum | aunt | yes | chubby pink elephant (Dad's change from the bunny), mint blouse |
 | Joy | aunt | yes | fox, lavender blouse |
-| Bert | uncle | yes | water buffalo with curved horns, peach t-shirt |
-| Gun, Khane | Joy's sons, older | yes | fox cubs: Gun in a backwards cap and shorts, Khane in green round glasses; both glued to their phones (Dad) |
-| Bibi | Bert's daughter, older | yes | buffalo calf with pigtails and pink bows, pink dress; glued to her phone (Dad) |
+| Bird | uncle | yes | water buffalo with curved horns, peach t-shirt |
+| Gan, Ken | Joy's sons, older | yes | fox cubs: Gan in a backwards cap and shorts, Ken in green round glasses; both glued to their phones (Dad) |
+| BB | Bird's daughter, older | yes | buffalo calf with pigtails and pink bows, pink dress; glued to her phone (Dad) |
 | Ja | aunt | no | penguin with a pink scarf |
 | Sri | aunt | no | hornbill (a Thai bird), lavender blouse |
-| Pato | Ja's son, Kaylee's age | no | penguin chick with a tuft, mint t-shirt |
+| Putto | Ja's son, Kaylee's age | no | penguin chick with a tuft, mint t-shirt |
 | Putter | Ja's son, younger | no | tiny grey penguin with a blue bib |
 
 **Lineup:** `thailand/lineup.webp`. Dad approved my picks: column A everywhere (kids share their parent's animal, so
@@ -35,7 +35,7 @@ Kaylee can see who belongs to whom) and Kaylee's option A. They are built in 3D 
 `characters/animal.ts`, and the "family photo" spot (`#/world/thailand/hub/family`, `?who=<id>` for one alone on a
 turntable) shows them all.
 
-Open questions for Dad: "Khane" or "Kane"? Does Sparkle keep guiding here (2D, in the prompt bubble as everywhere
+Open questions for Dad: Does Sparkle keep guiding here (2D, in the prompt bubble as everywhere
 else), or does a family member (Mom, Agong) give the instructions? What is each person like (for their voices)?
 
 
@@ -46,7 +46,7 @@ and its ceiling cut away. Inside it frames a box around Kaylee (`engine/tune.ts`
 straight-on.
 
 - **Street:** a row of five pastel shophouses, Agong's in the middle with a roll-up shutter, a sign board, a balcony
-  with an air-conditioner box, and wires with birds. On the sidewalk: Uncle Bert at his motorbike, Daddy, flower
+  with an air-conditioner box, and wires with birds. On the sidewalk: Uncle Bird at his motorbike, Daddy, flower
   pots, a spirit house on its pillar, a sleepy cat, and the tuk-tuk that brought her.
 The plan (Dad, 2026-10-17, from a photo of the real stairs): the house is 5 m wide and 17 m deep.
 
@@ -58,11 +58,11 @@ The plan (Dad, 2026-10-17, from a photo of the real stairs): the house is 5 m wi
   Flight 1 climbs toward the left wall, a landing against it, flight 2 climbs back across, closed in underneath. The
   fridge stands against the right wall in front of the back room. In the back room: the family altar on the back wall with ancestor photos, lanterns, candles and incense, more old photos, the little earth-god shrine, and the
   kitchen counter with the rice cooker. Joy is by the cabinet, Jum in the kitchen.
-- **Upstairs:** the stairs come out in a small hallway (Khane is there). There's no front room: the front half of the
+- **Upstairs:** the stairs come out in a small hallway (Ken is there). There's no front room: the front half of the
   house is open two floors high, and the hallway looks down into the shop over a balcony railing. Glass
   sliding doors lead back into **Kaylee's room**, at the back of the house: mattresses on the floor along the left
-  wall, all the way to the end of the room; the couch on the right (Bibi sits there); her suitcase, a wardrobe, a fan,
-  a window and her drawings on the wall. Mommy and Gun (asleep on the mattress) are here.
+  wall, all the way to the end of the room; the couch on the right (BB sits there); her suitcase, a wardrobe, a fan,
+  a window and her drawings on the wall. Mommy and Gan (asleep on the mattress) are here.
 
 **The toy (core verb): walk Kaylee around.** Tap the floor and she hop-trots there around the furniture, running on
 long trips. Hold and drag and she follows your finger. Tap a thing and it reacts at once, then she walks over and uses

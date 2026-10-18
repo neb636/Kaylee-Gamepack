@@ -10,7 +10,7 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
     },
     who: {
       default: '',
-      doc: 'the family photo with one person alone, turning slowly: kaylee, agong, ji, nick, jum, joy, bert, ja, sri, gun, khane, bibi, pato, putter',
+      doc: 'the family photo with one person alone, turning slowly: kaylee, agong, ji, nick, jum, joy, bird, ja, sri, gan, ken, bb, putto, putter',
     },
   },
   sections: [

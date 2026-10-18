@@ -22,7 +22,7 @@ export interface Rig {
   /** The mouth at rest (a smile, or a big open grin), and the open talking mouth that grows with their voice. */
   mouth: Group
   talk: Group
-  /** Their resting mouth is already open (Daddy, Ja, Pato): it stretches when they talk instead. */
+  /** Their resting mouth is already open (Daddy, Ja, Putto): it stretches when they talk instead. */
   open: boolean
   armL: Group
   armR: Group
