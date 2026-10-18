@@ -29,6 +29,7 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
   const last = useRef<Line>(L.house.door)
   const lastTouch = useRef(performance.now())
   const lastTalk = useRef(0)
+  const lastPoke = useRef(0)
   const reminders = useRef({ count: 0, last: 0 })
   const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
   const spotRef = useRef(spot)
@@ -53,12 +54,17 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
   useImperativeHandle(ref, () => ({
     speak,
     arrivedAt(s) {
+      // Sparkle just answered a tap (a deep link straight to the bathroom door): don't talk over that.
+      if (performance.now() - lastPoke.current < 5000) return
       if (s === 'downstairs') once('inside', L.house.inside)
       else if (s === 'upstairs') once('upstairs', L.house.upstairs)
     },
     poked(id) {
       const fact = L.house.pokes[id]
-      if (fact) once(`poke:${id}`, fact)
+      if (id === 'bathroom-door') speak(L.house.bathroom)
+      else if (fact && !told.has(`poke:${id}`)) once(`poke:${id}`, fact)
+      else return
+      lastPoke.current = performance.now()
     },
   }))
 
