@@ -14,6 +14,7 @@ import { Guide, type GuideHandle } from './Guide'
 import type { House, Spot, Start } from './house'
 import { HouseView, type RenderMode } from './HouseView'
 import HUB_SECTIONS from './sections'
+import { useStreetSound } from './useStreetSound'
 
 // Per visit to the app: the tuk-tuk brings her the first time; after that she's back where she left off.
 let arrivedThisVisit = false
@@ -31,6 +32,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const guide = useRef<GuideHandle>(null)
   // Read once: the address bar follows her spots and drops ?debug=1 as soon as she moves.
   const [debug] = useState(() => flag('debug') !== null)
+  useStreetSound(spot === 'street' && !photo && mode !== 'lost')
 
   useEffect(() => {
     enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : {})

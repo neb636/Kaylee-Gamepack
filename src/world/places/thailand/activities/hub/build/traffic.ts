@@ -1,9 +1,8 @@
 // Life on the street: now and then a scooter or a pink taxi (Bangkok's taxis are pink!) drives past on the far lane,
-// with a little putt-putt as it goes by. Only while she's outside; not tappable (it doesn't stop).
+// Outdoor ambience is managed by the hub; these are not tappable (they don't stop).
 import { Group } from 'three'
 import { P } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
-import { sfx } from '../../../sfx'
 import { scenery, type Kit } from './kit'
 
 const LANE_Z = 6.7
@@ -14,7 +13,6 @@ interface Car {
   speed: number
   /** Seconds until it sets off again (while waiting off-screen). */
   wait: number
-  honked: boolean
 }
 
 export class Traffic {
@@ -52,8 +50,8 @@ export class Traffic {
       ]),
     )
     this.cars = [
-      { g: scooter, speed: 6.5, wait: 3, honked: false },
-      { g: taxi, speed: 4.6, wait: 11, honked: false },
+      { g: scooter, speed: 6.5, wait: 3 },
+      { g: taxi, speed: 4.6, wait: 11 },
     ]
     for (const c of this.cars) {
       c.g.position.set(FROM, 0, LANE_Z)
@@ -61,8 +59,7 @@ export class Traffic {
     }
   }
 
-  /** `audible`: she's outside to hear it go by. */
-  update(dt: number, audible: boolean) {
+  update(dt: number) {
     for (const c of this.cars) {
       if (c.wait > 0) {
         c.wait -= dt
@@ -71,13 +68,8 @@ export class Traffic {
       const p = c.g.position
       p.x -= c.speed * dt
       p.y = Math.abs(Math.sin(p.x * 3)) * 0.015
-      if (!c.honked && p.x < 4) {
-        c.honked = true
-        if (audible) sfx.putt()
-      }
       if (p.x < -FROM) {
         p.x = FROM
-        c.honked = false
         c.wait = 6 + Math.random() * 10
       }
     }

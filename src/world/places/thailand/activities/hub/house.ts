@@ -643,7 +643,7 @@ export class House {
     }
     this.reactor.update(dt, t)
     if (this.gecko.update(dt, t) && this.mode === 'inside0') sfx.tukkae()
-    this.traffic.update(dt, this.mode === 'street' && !this.arriving && !this.photo)
+    this.traffic.update(dt)
     this.marker.update(dt)
     // Inside or outside? (with a little dead band so she doesn't flicker on the doorstep)
     if (this.photo?.who) {
