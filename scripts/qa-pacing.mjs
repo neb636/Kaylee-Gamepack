@@ -62,7 +62,11 @@ const SCENARIOS = [
   { name: "peru coco's canyon glide", id: 'condor', hash: '#/world/peru/condor', reset: true },
   { name: "peru rosa's rainy river", id: 'river', hash: '#/world/peru/river', reset: true },
   { name: "thailand agong's house (arrival)", id: 'thailand', hash: '#/world/thailand', reset: true, play: false },
-  { name: 'thailand boat trip (greybox, from the pier)', id: 'boat-trip', hash: '#/world/thailand/boat-trip', reset: true },
+  { name: 'thailand trip kit: mommy asks, then packing', id: 'trip-pack', hash: '#/world/thailand/boat-trip/invite', reset: true },
+  { name: "thailand trip kit: goodbye and aunty sri's van", id: 'trip-goodbye', hash: '#/world/thailand/boat-trip/goodbye', reset: true },
+  { name: 'thailand trip kit: airport', id: 'trip-airport', hash: '#/world/thailand/boat-trip/airport', reset: true },
+  { name: 'thailand trip kit: window seat', id: 'trip-plane', hash: '#/world/thailand/boat-trip/takeoff', reset: true },
+  { name: 'thailand boat trip (greybox, from the pier)', id: 'boat-trip', hash: '#/world/thailand/boat-trip/pier', reset: true },
 ].filter((s) => !flag('only') || flag('only').split(',').includes(s.id))
 
 // Is there something (other than the story overlay, the top bar or a "hear it again" button) she can touch?

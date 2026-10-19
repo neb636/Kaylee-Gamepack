@@ -24,7 +24,7 @@ export function HouseView({ start, events, onMode, houseRef }: Props) {
       qaKey="__thaiHouseQA"
       worldRef={houseRef}
       onMode={onMode}
-      make={(renderer) => new House(renderer, start, { onSpot: (s, at) => ev.current.onSpot(s, at), onArrived: () => ev.current.onArrived(), onPoke: (id) => ev.current.onPoke?.(id) })}
+      make={(renderer) => new House(renderer, start, { onSpot: (s, at) => ev.current.onSpot(s, at), onArrived: () => ev.current.onArrived(), onPoke: (id) => ev.current.onPoke?.(id), onGreet: (id) => ev.current.onGreet?.(id) })}
       anchors={(input, els) => <Anchors list={ANCHORS} els={els} {...input} />}
     />
   )

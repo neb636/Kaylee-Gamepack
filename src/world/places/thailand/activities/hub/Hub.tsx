@@ -8,6 +8,7 @@ import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { flag } from '../../engine/flags'
 import { L } from '../../lines'
+import { Ask, saidYes } from '../../trip/legs/Ask'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
 import { Guide, type GuideHandle } from './Guide'
@@ -18,6 +19,8 @@ import HUB_SECTIONS from './sections'
 // Per visit to the app: the tuk-tuk brings her the first time; after that she's back where she left off.
 let arrivedThisVisit = false
 let lastSpot: Spot = 'street'
+// Mommy asks about the trip on her own the first time Kaylee comes upstairs each visit (after that, tap Mommy).
+let askedThisVisit = false
 
 export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
@@ -25,6 +28,9 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
   const [arriving, setArriving] = useState(initial.section === 'arrive')
+  const [asking, setAsking] = useState(false)
+  const askTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  useEffect(() => () => clearTimeout(askTimer.current), [])
   const photo = initial.section === 'family'
   const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' || initial.section === 'family' ? 'street' : initial.section)
   const houseRef = useRef<House | null>(null)
@@ -36,6 +42,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : {})
     if (initial.section !== 'arrive') arrivedThisVisit = true
     if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section
+    if (initial.section === 'upstairs' && !askedThisVisit) ask(4000)
   }, [])
 
   const arrived = () => {
@@ -56,6 +63,18 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     setSpot(s)
     enter(s, at ? { at } : {})
     guide.current?.arrivedAt(s)
+    if (s === 'upstairs' && !askedThisVisit && !photo) ask(4000)
+  }
+  /** Mommy asks if she's ready to go on a trip (her room is upstairs, by the suitcase). */
+  const ask = (after: number) => {
+    askedThisVisit = true
+    clearTimeout(askTimer.current)
+    askTimer.current = setTimeout(() => setAsking(true), after)
+  }
+  const yes = () => {
+    saidYes.at = performance.now()
+    setAsking(false)
+    openActivity('boat-trip')
   }
   const allStamps = stamps.length >= meta.activities.length
 
@@ -64,7 +83,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       {mode === 'flat' ? (
         <Flat spot={spot} onSpot={onSpot} photo={photo} />
       ) : (
-        <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id) }} />
+        <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet: (id) => id === 'ji' && !photo && ask(1200) }} />
       )}
       {mode === 'lost' && (
         <button
@@ -107,7 +126,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           🎉
         </motion.button>
       )}
-      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost'} />}
+      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking} />}
+      <Ask open={asking && !arriving && mode !== 'lost'} onYes={yes} onNotYet={() => setAsking(false)} />
       {debug && <Debug houseRef={houseRef} />}
     </div>
   )

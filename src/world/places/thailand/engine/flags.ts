@@ -2,7 +2,6 @@
 //   gl=off    draw the no-WebGL fallback (what a browser without WebGL2 sees)
 //   debug=1   tuning panel: camera, light bands, outlines, nav grid, frame time
 //   fps=N     frame-rate cap (0 = uncapped)
-//   drive=grab  the boat trip: only a finger that starts on the boat drives it (the default is a finger on the water)
 export function flag(name: string): string | null {
   const fromSearch = new URLSearchParams(location.search).get(name)
   if (fromSearch !== null) return fromSearch

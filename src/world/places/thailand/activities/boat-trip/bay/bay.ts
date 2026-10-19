@@ -4,7 +4,7 @@
 // The toy (core verb): drive the longtail with one finger.
 // - Finger on the water (or on the boat, then drag): the boat goes after it. Far ahead = fast, near = slow, held to one
 //   side it keeps turning (doughnuts), behind it = a U-turn. Let go and it coasts and bobs. A tap = go there.
-// - ?drive=grab (or the ?debug panel): only a finger that starts on the boat drives it. Dad picks which feels better.
+//   Both at once, Dad's pick (PR #99): a finger anywhere on the water, or one that grabs the boat and drags.
 // - Tap the boat: VROOM. Bump a rock: boing (it slides round, never stuck). Cross the tour boat's wake fast: a jump.
 // The verb deepens three ways, as planned: open water (rocks, the tour boat's wake), the cave (into the little yellow
 // canoe, through a tunnel whose roof comes so low the family must lie down, or Daddy's horn bonks it, out into the hong),
@@ -299,15 +299,15 @@ export class Bay implements World3D {
     const hit = id ?? this.pick(x, y)
     const onBoat = hit === 'boat' || !!hit?.startsWith('family:')
     // A finger drives at once, even on the family (in the canoe they fill the middle of the screen); on the boat itself
-    // only once it moves (a tap there is a VROOM). Grabbing: only a finger that starts on the boat, once it moves.
-    this.finger = { x, y, onBoat, steering: this.canDrive && BAY_TUNE.control === 'water' && hit !== 'boat' && !hit?.startsWith('glow:') && hit !== 'tour' }
+    // only once it moves (a tap there is a VROOM).
+    this.finger = { x, y, onBoat, steering: this.canDrive && hit !== 'boat' && !hit?.startsWith('glow:') && hit !== 'tour' }
   }
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
     const f = this.finger
     if (!held || !f) return
     f.x = x
     f.y = y
-    if (!f.steering && this.canDrive && Math.hypot(x - downX, y - downY) > 12 && (BAY_TUNE.control === 'water' || f.onBoat)) f.steering = true
+    if (!f.steering && this.canDrive && Math.hypot(x - downX, y - downY) > 12) f.steering = true
   }
   pointerUp() {
     if (this.finger?.steering) this.ride.d.release()
@@ -1184,7 +1184,7 @@ export class Bay implements World3D {
     let at: Vector3 | null = null
     if (idle && this.phase === 'beach') at = this.ride.v.root.getWorldPosition(new Vector3()).setY(0.6)
     else if (idle && this.phase === 'drive') {
-      const ahead = BAY_TUNE.control === 'grab' ? 0 : this.using === 'canoe' ? 4 : 10
+      const ahead = this.using === 'canoe' ? 4 : 10
       at = new Vector3(d.x + Math.sin(d.heading) * ahead, 0.3, d.z + Math.cos(d.heading) * ahead)
     }
     const s = at ? this.toScreen(at, 1, right) : null
@@ -1202,7 +1202,6 @@ export class Bay implements World3D {
       phase: this.phase,
       vehicle: this.using,
       where: this.where(),
-      control: BAY_TUNE.control,
       pos: [r2(d.x), r2(d.z)],
       heading: r2(wrap(d.heading)),
       speed: r2(d.speed),

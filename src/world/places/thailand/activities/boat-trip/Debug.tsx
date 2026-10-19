@@ -1,10 +1,10 @@
-// ?debug=1 on the boat trip: Dad's tuning panel for the greybox. Frame time and draw calls, where the boat is, the
-// "finger on the water" / "grab the boat" switch, sliders for how the longtail drives and for the chase camera, and a
-// button that copies the numbers (paste them into trip/vehicles/longtail.ts and bay/tune.ts).
+// ?debug=1 on the boat trip: Dad's tuning panel for the greybox. Frame time and draw calls, where the boat is, sliders
+// for how the longtail drives and for the chase camera, and a button that copies the numbers (paste them into
+// trip/vehicles/longtail.ts and bay/tune.ts).
 import { useEffect, useState, type RefObject } from 'react'
 import { LONGTAIL_FEEL } from '../../trip/vehicles/longtail'
 import type { Bay } from './bay/bay'
-import { BAY_TUNE, type Control } from './bay/tune'
+import { BAY_TUNE } from './bay/tune'
 
 type Feel = typeof LONGTAIL_FEEL
 const FEEL: [keyof Feel & string, string, number, number, number][] = [
@@ -38,11 +38,6 @@ export function Debug({ bayRef }: { bayRef: RefObject<Bay | null> }) {
   const qa = window.__thaiBoatQA?.() as { stats?: Record<string, number>; section?: string; vehicle?: string; where?: string; speed?: number; pos?: number[] } | undefined
   const s = qa?.stats
   const row = { display: 'grid', gridTemplateColumns: '92px 1fr 40px', gap: 6, alignItems: 'center' } as const
-  const control = (c: Control) => (
-    <button key={c} onClick={() => ((BAY_TUNE.control = c), tick((n) => n + 1))} style={{ borderRadius: 8, padding: '6px 10px', fontWeight: 700, background: BAY_TUNE.control === c ? '#FF4F9A' : '#fff', color: BAY_TUNE.control === c ? '#fff' : '#2B2330' }}>
-      {c === 'water' ? '👆 finger on water' : '✊ grab the boat'}
-    </button>
-  )
   return (
     <div style={{ position: 'absolute', right: 8, bottom: 8, zIndex: 50, background: 'rgba(43,35,48,.82)', color: '#fff', borderRadius: 12, padding: 10, font: '12px/1.4 ui-monospace, monospace', width: 'min(330px, 92vw)', maxHeight: '62vh', overflow: 'auto', pointerEvents: 'auto' }}>
       <div onClick={() => setOpen((o) => !o)} style={{ cursor: 'pointer' }}>
@@ -51,7 +46,6 @@ export function Debug({ bayRef }: { bayRef: RefObject<Bay | null> }) {
       {open && (
         <>
           <div style={{ opacity: 0.8, margin: '4px 0' }}>{qa ? `${qa.section} · ${qa.vehicle} · ${qa.where} · ${qa.speed} m/s · [${qa.pos?.join(', ')}]` : ''}</div>
-          <div style={{ display: 'flex', gap: 6, margin: '6px 0' }}>{(['water', 'grab'] as const).map(control)}</div>
           {FEEL.map(([key, label, min, max, step]) => (
             <label key={key} style={row}>
               <span>{label}</span>
