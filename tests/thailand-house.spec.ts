@@ -101,6 +101,8 @@ test('going to the party and back leaves no GPU memory behind', async ({ page })
   const errors = trackErrors(page)
   await open(page, 'hub/downstairs')
   await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
+  // The party button shows once every stamp is collected.
+  await page.evaluate(() => window.__kayleeWorld?.stampAll())
   const roundTrip = async () => {
     await page.getByRole('button', { name: 'Party' }).click({ force: true })
     await expect(page.getByRole('button', { name: 'Back to the map' })).toBeVisible()

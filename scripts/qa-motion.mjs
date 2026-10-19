@@ -462,6 +462,40 @@ GAME_SCENARIOS.push(
   thaiHouse('thai-bounce', 5, 'upstairs?at=mattress', [['mattress', 900], ['mattress', 1100], ['mattress', 1300]]),
 )
 
+// Thailand's boat trip (3D greybox): a finger held on the water ahead of the longtail (it surges after it, then turns
+// when the finger moves right, the wake and spray streaming), a VROOM tap, a finger held far to one side (doughnuts),
+// and the canoe paddling under the low cave roof (Daddy's horn bonks first, then Mommy's, then Kaylee's).
+const thaiBoat = (name, seconds, section, steps) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/boat-trip/${section}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiBoatQA?.().mode, null, { timeout: 20000 })
+    await page.waitForTimeout(800)
+  },
+  act: async (page) => {
+    for (const [what, dx, dy, ms] of steps) {
+      const b = await page.locator('[data-anchor="boat"]').boundingBox()
+      if (!b) throw new Error('no boat found')
+      if (what === 'vroom') await page.locator('[data-anchor="boat"]').click({ force: true })
+      else {
+        // The finger: dx across the screen from the middle, dy up from the boat (fractions of the screen).
+        await page.mouse.move(vp.width * (0.5 + dx), b.y + b.height / 2 - dy * vp.height, { steps: 4 })
+        if (what === 'down') await page.mouse.down()
+      }
+      await page.waitForTimeout(ms)
+    }
+    await page.mouse.up()
+  },
+})
+GAME_SCENARIOS.push(
+  thaiBoat('boat-drive', 5, 'bay', [['down', 0, 0.28, 2600], ['move', 0.3, 0.2, 2200]]),
+  thaiBoat('boat-vroom', 3, 'bay', [['vroom', 0, 0, 2800]]),
+  thaiBoat('boat-doughnut', 5, 'bay', [['down', 0.45, 0.05, 4800]]),
+  thaiBoat('boat-cave-roof', 8, 'cave', [['down', 0, 0.25, 7800]]),
+)
+
 // Coco's Canyon Glide: hold a finger in the sky and Coco banks after it, sinking slowly in plain air; steer him into a
 // swirl of warm air and he circles up (wings up, fingers spread); pull down for a dive (wings fold) and a swoop.
 const canyonFly = (name, seconds, jump, path) => ({

@@ -11,6 +11,7 @@ import { Color, Group, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D,
 import { Avatar } from '../../characters/avatar'
 import { FAMILY } from '../../characters/family'
 import { Member } from '../../characters/member'
+import type { AnchorInfo } from '../../engine/Anchors'
 import { CameraRig, type Shot } from '../../engine/camera'
 import { Bag } from '../../engine/dispose'
 import { NavGrid, type XZ } from '../../engine/nav'
@@ -18,6 +19,7 @@ import { TapMarker } from '../../engine/marker'
 import { setHullHighlight, setOutlineResolution } from '../../engine/outline'
 import { applyBands, makeLights, PAL } from '../../engine/toon'
 import { TUNE } from '../../engine/tune'
+import type { World3D } from '../../engine/View3D'
 import { say } from '../../../../../sdk'
 import { L } from '../../lines'
 import { sfx } from '../../sfx'
@@ -39,16 +41,6 @@ export interface Start {
   at?: string
   /** The family photo: one person alone, turning slowly (an id from looks.ts), or everyone. */
   who?: string
-}
-
-/** A DOM tap target over something in the scene. */
-export interface AnchorInfo {
-  id: string
-  label: string
-  /** Family members show their name. */
-  name?: string
-  thai?: string
-  kind: 'thing' | 'family'
 }
 
 export interface HouseEvents {
@@ -73,7 +65,7 @@ export const ANCHORS: AnchorInfo[] = [
   { id: 'family:kaylee', label: 'Kaylee', name: 'Kaylee', kind: 'family' },
 ]
 
-export class House {
+export class House implements World3D {
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   private bag = new Bag()

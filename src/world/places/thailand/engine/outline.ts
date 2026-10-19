@@ -1,24 +1,27 @@
 // Ink outlines like the 2D art: an "inverted hull", a copy of the shape drawn back-faces-only and pushed outward in
 // screen space, so the line is about the same number of pixels wide near and far (a little thinner far away). The hull
-// uses welded, smoothed normals, so boxes get a continuous line instead of cracks at their corners.
-import { BackSide, Color, Mesh, ShaderMaterial, type BufferGeometry } from 'three'
+// uses welded, smoothed normals, so boxes get a continuous line instead of cracks at their corners. Lines fade into the
+// scene's fog like the shapes they outline (the bay's far rock towers).
+import { BackSide, Color, Mesh, ShaderMaterial, UniformsLib, UniformsUtils, type BufferGeometry } from 'three'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { PAL } from './toon'
 import { TUNE } from './tune'
 
-/** Shared by every outline material: the canvas size in CSS pixels and the global width multiplier. */
-const shared = { uRes: { value: [1, 1] as [number, number] }, uScale: { value: 1 } }
+/** Shared by every outline material: the canvas size in CSS pixels, the global width multiplier and the fog. */
+const shared = { uRes: { value: [1, 1] as [number, number] }, uScale: { value: 1 }, ...UniformsUtils.clone(UniformsLib.fog) }
 export function setOutlineResolution(w: number, h: number) {
   shared.uRes.value = [Math.max(1, w), Math.max(1, h)]
   shared.uScale.value = TUNE.outline
 }
 
 const vertexShader = /* glsl */ `
+  #include <fog_pars_vertex>
   uniform vec2 uRes;
   uniform float uPx;
   uniform float uScale;
   void main() {
-    vec4 clip = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    vec4 clip = projectionMatrix * mvPosition;
     vec3 n = normalMatrix * normal;
     vec2 dir = (projectionMatrix * vec4(n, 0.0)).xy;
     float len = length(dir);
@@ -27,11 +30,16 @@ const vertexShader = /* glsl */ `
     float w = uPx * uScale * clamp(14.0 / max(clip.w, 1.0), 0.55, 1.0);
     clip.xy += dir * w * 2.0 / uRes * clip.w;
     gl_Position = clip;
+    #include <fog_vertex>
   }
 `
 const fragmentShader = /* glsl */ `
+  #include <fog_pars_fragment>
   uniform vec3 uColor;
-  void main() { gl_FragColor = vec4(uColor, 1.0); }
+  void main() {
+    gl_FragColor = vec4(uColor, 1.0);
+    #include <fog_fragment>
+  }
 `
 
 const materials = new Map<string, ShaderMaterial>()
@@ -45,6 +53,7 @@ export function outlineMaterial(px: number, color: string = PAL.ink) {
       vertexShader,
       fragmentShader,
       side: BackSide,
+      fog: true,
     })
     materials.set(key, m)
   }

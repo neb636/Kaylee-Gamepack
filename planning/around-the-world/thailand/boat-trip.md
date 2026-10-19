@@ -4,35 +4,36 @@ Written 2026-10-18. The first family trip and Thailand's first activity (it take
 Krabi" from Dad's list of four). Built in 3D in the house's look (toon bands, ink outlines, blob shadows), like the rest of Thailand.
 Read with `../thailand.md` (the family and the house), `../ACTIVITY-TEMPLATE.md` and `docs/play-design.md`.
 
-**One-line pitch:** Mommy, Daddy and Kaylee go on a trip, just the three of them. Kaylee packs her own suitcase,
-drives the pink taxi to the airport, flies the plane down Thailand's "elephant trunk", and then gets her own longtail
-boat to drive around Phang Nga Bay: a village on stilts with a floating football field, a cave so low the unicorns' horns
+**One-line pitch:** Mommy, Daddy and Kaylee go on a trip, just the three of them. Kaylee packs her own suitcase, rides
+to the airport in Aunty Sri's car, plays in her window seat while the plane flies down Thailand's "elephant trunk", and
+then gets her own longtail boat to drive around Phang Nga Bay: a village on stilts with a floating football field, a cave so low the unicorns' horns
 bonk the roof, a secret lagoon inside an island, and the Nail Island (James Bond Island), where the family takes the
 photo Agong asked for. Back home it goes on Agong's wall, and even the big cousins look up from their phones.
 
 ## The shape of it
 
 ```
- Agong's house          the trip kit (reusable)                       Phang Nga Bay (this trip)            home
- ┌─────────────┐   ┌───────────┐  ┌──────────┐  ┌──────────────┐   ┌──────────────────────────────────┐  ┌────────────┐
- │ elephant map│ → │ pink taxi │→ │ airport  │→ │ fly the plane│ → │ pier → bay → village / cave+hong │→ │ Agong's    │
- │ pack the    │   │ (drive)   │  │ (x-ray)  │  │ takeoff→land │   │ → Nail Island photo → sunset     │  │ photo wall │
- │ suitcase    │   └───────────┘  └──────────┘  └──────────────┘   └──────────────────────────────────┘  └────────────┘
- └─────────────┘     same finger controls every vehicle: road → sky → open water (more freedom each time)
+ Agong's house          the trip kit (reusable)                          Phang Nga Bay (this trip)            home
+ ┌─────────────┐   ┌──────────────┐  ┌──────────┐  ┌──────────────┐   ┌──────────────────────────────────┐  ┌────────────┐
+ │ elephant map│ → │ Aunty Sri's  │→ │ airport  │→ │ window seat  │ → │ pier → bay → village / hong      │→ │ Agong's    │
+ │ pack the    │   │ car (ride)   │  │ (x-ray)  │  │ takeoff→land │   │ → Nail Island photo → sunset     │  │ photo wall │
+ │ suitcase    │   └──────────────┘  └──────────┘  └──────────────┘   └──────────────────────────────────┘  └────────────┘
+ └─────────────┘     on the way there she rides and plays          in the bay she drives
 ```
 
-One idea holds it together: **one finger drives everything.** The house already works this way: tap a spot and Kaylee
-goes there, hold your finger down and she follows it. The taxi, the plane and the boat use the same control. Each
-vehicle gives her more freedom than the last: the taxi stays on a road (left and right), the plane flies in a wide sky
-corridor (up, down, left, right), and the boat goes anywhere on open water. She learns the control on the short legs
-and shows off with it in the bay, where the real play is.
+One idea holds it together: **on the way there the grown-ups drive, and every ride is a toy; in the bay she's the
+captain.** (Dad's picks, 2026-10-18: Aunty Sri drives them to the airport, and Kaylee rides in a window seat, Toca
+style.) In Aunty Sri's car and on the plane her hands play with what's around her (the seatbelt, the window, the tray,
+the snacks) while the ride moves on by itself, so those legs are short and can't stall. At the pier Daddy hands her the
+tiller: the longtail is the first thing she drives, with one finger, the way she walks Kaylee around the house (tap a
+spot and she goes there, hold your finger down and she follows it).
 
 ## What it borrows (and from where)
 
 | From | What she loves there | Here |
 |---|---|---|
 | Sago Mini Boats | grab the boat and go, stop to meet friends | her finger drives the longtail; stops she picks herself |
-| Toca Boca (Toca Life: Vacation and World) | a world of toys: pack a bag, go to the airport, nothing is wrong | the suitcase (pack anything, even a cousin), the x-ray belt, silly reactions everywhere |
+| Toca Boca (Toca Life: Vacation and World) | a world of toys: pack a bag, go to the airport, play in the plane, nothing is wrong | the suitcase (pack anything, even a cousin), the x-ray belt, the window seat's tray and snacks, silly reactions everywhere |
 | Roblox vehicle games and obbies | speed, jumps, doing it your own way | VROOM, wake jumps, doughnuts, soft bonks instead of crashes |
 | Roblox "find them all" games | collecting things hidden around a map | 9 animal stickers to spot in the bay |
 | Roblox avatars and emotes | her character looks the way she chose | what she packs, she wears; pose buttons for the photo, and Mommy and Daddy copy her |
@@ -52,26 +53,26 @@ boat), and a payoff that goes back home (the photo on Agong's wall). Everything 
 | Start: the elephant map | `invite` | ~10 s | 1-2 | 1 line | tap the map, tap the boat pin |
 | Pack the suitcase | `pack` | 45-75 s | 8-15 | 1 line | toss things in, sit on it to close it |
 | Goodbye | `goodbye` | 10-20 s | 1-4 | 1 line | hug whoever she wants (optional), walk out |
-| Pink taxi | `drive` | 40-60 s | 10-20 | 1 line + the control hint | steer, honk |
+| Aunty Sri's car | `car` | 30-45 s | 6-12 | 1 line | seatbelt, window, wave, beep, radio |
 | Airport | `airport` | 20-30 s | 3-6 | 0 | bag on the belt, see the x-ray, up the stairs |
-| Fly | `takeoff` `fly` `land` | 60-90 s | 12-25 | 1 line | pull up, fly through clouds, land |
+| Window seat | `takeoff` `fly` `land` | 60-80 s | 10-20 | 1 line | seatbelt, window shade, tray, snacks, the seat-back map |
 | **The bay** | `pier` ... `sunset` | **4-6 min** | **60-100** | 2 lines | drive the longtail |
 | Home | `home` | 20-40 s | 2-5 | 1 line | give Agong the photo |
-| **Total** | | **~8-11 min** | **~100-170** | | |
+| **Total** | | **~8-11 min** | **~95-165** | | |
 
 How it stays short and never boring:
-- **Every travel leg has a hard cap and an autopilot.** If she stops touching for ~6 s, the vehicle carries on by
-  itself (the taxi drives, the plane flies, the boat heads for the next stop), so a leg never waits on her and never
-  runs past its cap. Nothing here can be failed or got stuck in.
+- **Every travel leg has a hard cap.** Aunty Sri drives and the pilot flies whatever Kaylee does: the car reaches the
+  airport in about 40 s and the plane lands after about 70 s, so a ride never waits on her and never runs past its cap.
+  Her toys in the car and the cabin play along while it moves. Nothing here can be failed or got stuck in.
 - **Resume, don't restart.** The trip saves after each leg (`useSaved('thailand-boat-trip')`). If she stops after the
   flight, the map's pin starts her at the pier next time.
 - **Replays go straight to the fun.** After the first full trip, the boat pin on the map opens a boarding pass with two
-  big icons: 🧳 (the whole trip again) and 🚤 (straight to the pier, with what she packed last time). On a replay the taxi
-  and the flight start closer to their ends (about 25 s and 40 s).
+  big icons: 🧳 (the whole trip again) and 🚤 (straight to the pier, with what she packed last time). On a replay the car
+  ride and the flight are shorter (about 25 s and 40 s).
 - **Cut on purpose:** check-in desk, security line, waiting at the gate, choosing seats, the drive from the airport to
   the pier (a 3-second cut), a hotel, lunch, souvenir shopping, the flight home (a 4-second picture over a pink sunset, tap
   skips). Each would be one more thing to sit through.
-- **Playtest rule:** if on her second trip she asks to skip the taxi or the plane, shorten that leg again before
+- **Playtest rule:** if on her second trip she asks to skip the car or the plane, shorten that leg again before
   adding anything new.
 
 ## The trip kit (reusable for every future trip and mini-game)
@@ -87,32 +88,36 @@ export const BOAT_TRIP: TripDef = {
   pin: { x: 0.29, y: 0.71, icon: 'boat' },   // where the pin sits on the elephant map (Phang Nga Bay)
   pack: { hint: 'sun', fits: 5 },            // what Mommy hints at, how many things fit before it bulges
   legs: [
-    { kind: 'drive', vehicle: 'taxi', road: 'bangkok', to: 'airport' },
+    { kind: 'car', driver: 'sri', road: 'bangkok', to: 'airport' },   // Aunty Sri drives (Dad)
     { kind: 'airport' },
-    { kind: 'fly', from: 'BKK', to: 'KBV', route: 'down-the-trunk' },
+    { kind: 'fly', from: 'BKK', to: 'KBV', seat: 'window' },        // Krabi (Dad); Kaylee rides, the pilot flies
   ],
   arrive: 'pier',                            // the trip's own activity starts here
   souvenir: 'photo',                         // what goes home to Agong's wall
 }
 ```
 
-**The drive control** (`trip/drive.ts`, vehicle-agnostic, built in the boat greybox first):
+**The drive control** (`trip/drive.ts`, vehicle-agnostic; built in greybox 1 for the longtail and the canoe, and ready
+for later things she drives, like a drive around the block):
 - **Tap** a spot (the road ahead, the water, a thing) and the vehicle goes there by itself, the way she walks in the
   house. A ring marks the spot (the house's `TapMarker`, in water it's a splash ring).
 - **Hold and drag** and the vehicle chases her finger: her finger is where it wants to be. Hold far ahead to go fast,
   near to go slow. Hold to one side and it keeps turning that way (boat doughnuts are allowed and fun). Drag behind
   it and it does a happy U-turn.
 - **Let go** and it coasts, bobs and settles (no sudden stop).
-- **Tap the vehicle itself** for its special: the taxi honks, the plane waggles its wings, the boat goes VROOM.
-- Every vehicle has a feel profile (top speed, turn rate, lag, bounce, how it leans) and **rails**: the taxi is held to
-  the road's lanes, the plane to a wide corridor along its route, the boat only to the bay's soft edges.
+- **Grab the boat** and drag works too: Dad chose both at once (2026-10-18), which is greybox 1's default. The
+  grab-only switch (`?drive=grab`, the toggle in `?debug=1`) goes; the default speeds stay ("seems fine for now").
+- **Tap the vehicle itself** for its special: the longtail goes VROOM, the canoe gets a big paddle stroke.
+- Every vehicle has a feel profile (top speed, turn rate, lag, bounce, how it leans) and **rails**: the longtail is held
+  only by the bay's soft edges, the canoe to the tunnel's line.
 - Bumping anything is a soft *boing*: the vehicle squashes, bounces back and wobbles. No damage, no crash, ever.
 
 **Vehicles** (`trip/vehicles/*.ts`, toy models in the house's style, each with seats where the family sit in their
-existing `sit` pose): the pink taxi (from the house's traffic), the plane, the longtail boat, and the yellow sea canoe.
+existing `sit` pose): Aunty Sri's car, the plane (outside for the boarding stairs, inside a cabin with a window seat),
+the longtail boat and the yellow sea canoe (both built in greybox 1).
 Later trips add a tuk-tuk, a songthaew (the pickup-truck bus), a river boat, a train.
 
-**Legs** (`trip/legs/`, each a section that reads the `TripDef`): `invite`, `pack`, `goodbye`, `drive`, `airport`,
+**Legs** (`trip/legs/`, each a section that reads the `TripDef`): `invite`, `pack`, `goodbye`, `car`, `airport`,
 `fly` (`takeoff`, `fly`, `land`), `home`. Between legs a **boarding pass** card slides up, a hole is punched for
 the leg she just finished (*ka-chunk*), and it slides away. That's 1.5 s, and it hides loading the next scene.
 
@@ -173,24 +178,31 @@ monkey steals it, see the bay). The airport x-ray shows all of it. New avatar ex
 Kaylee walks down with the suitcase bumping on every stair (*bonk, bonk, bonk*). The family who live here gather at the
 shutter. She can hug anyone she taps (they hop together, as in the house); nobody has to be tapped. **Agong: "Bring Agong
 a photo of the Nail Island!"** (the trip's goal, ≤ 3 s). Jum gives her a little bag of snacks. Gan, Ken and BB wave
-without looking up from their phones, "Bye...", which pays off at home. The pink taxi pulls up; Daddy loads the
-bags; Kaylee hops in the driver's seat.
+without looking up from their phones, "Bye...", which pays off at home. **Aunty Sri's car** pulls up (she doesn't live
+here: she came to drive them); Daddy loads the bags; Kaylee hops into the back seat by the window.
 
-### The pink taxi 🚕 (Bangkok: pink taxis, driving on the left, a temple)
+### Aunty Sri's car 🚗 (Bangkok: driving on the left, pink taxis, a temple)
 
-**The toy:** drive the pink taxi. The camera is low behind the car. Her finger leads it across a two-lane road; the car
-bounces on its springs, leans into turns and squashes over bumps. Tap the car: *beep beep*, and Daddy beeps back.
-**Deepens:** (1) pull away from Agong's house past the row of shophouses (Bird toots on his motorbike, the cat
-watches); (2) the big road: weave around a tuk-tuk, a motorbike carrying a whole family and their dog, a mango sticky
-rice cart; the skytrain whooshes overhead; (3) up the airport ramp and park in the glowing drop-off spot.
-**Pokeables:** tuk-tuks (they answer "tuk tuk!"), the skytrain, a canal boat under a bridge, a golden temple roof (sacred:
-it never wobbles; a soft bell and Sparkle's fact "Wat means temple!"), flags on poles, a street-food stall with a smoky
-grill, the garland swinging on the mirror.
-**Silly:** bump a tuk-tuk and both bounce and the driver laughs. Drift into the other lane and the scooters coming
-toward her swerve and beep (Sparkle, once: "In Thailand, cars drive on the left!"). The first big bump pops the trunk:
-the floaties bounce out and roll after the car, and Daddy catches them.
-**Talk:** Daddy: "Beep beep! You drive, Kaylee!" Sparkle (once, the first time the trip kit is used): **"Put your
-finger on the road to steer!"**
+Aunty Sri (the hornbill aunt) drives; Daddy sits in front with her, Mommy and Kaylee in the back, Kaylee by the window.
+The camera looks into the car from the side with its roof off, like the house's dollhouse view, and Bangkok streams past
+outside in layers (the near street fast, the shophouses slower, the skyline slow). The car always drives on by itself.
+
+**The toy:** play in the back seat. Click the seatbelt (*click!*, Kaylee wiggles), tap the window and it slides down
+(the wind blows her mane back; tap again and it goes up), and **wave at what goes by**: tap something outside and Kaylee
+waves at it, and it answers.
+**Deepens:** (1) away from Agong's house past the row of shophouses (Bird toots from his motorbike, the cat watches);
+(2) the big road: tuk-tuks answer "tuk tuk!", a motorbike carrying a whole family and their dog waves back, a mango
+sticky rice cart, a pink taxi beeps, the skytrain whooshes overhead; (3) the airport ramp, and the car stops at the
+glowing drop-off.
+**Pokeables:** Aunty Sri (tap: she beeps the horn, *beep beep!*, and laughs), the radio (tap: Thai pop music, everyone
+bobs their heads; again: off), Jum's snack bag on the seat (Kaylee munches), Daddy (he turns round and makes a face),
+Mommy (a cuddle), the garland swinging on the mirror, a golden temple roof outside (sacred: it never wobbles; a soft bell
+and Sparkle's fact "Wat means temple!").
+**Silly:** window down at full speed and Kaylee's mane blows into Mommy's face. Radio on, then a bump, and the music skips.
+**What it teaches, by seeing:** in Thailand the steering wheel is on the right (Aunty Sri sits on the right) and cars
+drive on the left; Bangkok's taxis are pink.
+**Talk:** Aunty Sri: **"Seatbelts on! Let's go to the airport!"** At the drop-off she hugs them goodbye: "Have fun,
+Kaylee!"
 
 ### Airport 🛫 (one moment worth having)
 
@@ -199,26 +211,29 @@ glowing blue outlines: everything she packed, drawn as simple toy shapes. If she
 screen (a sleeping fox outline; a spinning fan). The officer laughs and stamps her boarding pass. Through the window the
 plane waits; she taps its door and the family hop up the stairs. No check-in, no gate.
 
-### Fly the plane ✈️ (Thailand is shaped like an elephant's head)
+### The window seat ✈️ (Thailand is shaped like an elephant's head)
 
-Kaylee is the pilot (a little captain's hat), Mommy and Daddy wave from the cabin windows. Chase camera behind and a
-little above the plane.
+Kaylee rides in the window seat, Mommy in the middle and Daddy on the aisle; the pilot flies (Dad's pick, 2026-10-18:
+play with the cabin like Toca's airport, not pilot Kaylee). The camera looks at their row from the aisle side, with the
+round window beside Kaylee; what's outside the window is its own little scene.
 
-**The toy:** fly. Her finger leads the plane up, down and side to side inside a wide corridor along the route; it
-banks into turns and its wings flex a little. Tap the plane: it waggles its wings.
-**Deepens:** (1) **takeoff:** the plane rolls down the runway faster and faster, and she pulls it up into the sky (any upward
-drag after the speed line; at the end of the runway it lifts by itself); (2) **the clouds:** fat toon clouds she flies
-*through* (they burst into cloudlets and close up again behind her), a V of storks, another plane that waggles back,
-**Sparkle's hot-air balloon** floating by with Sparkle waving (her cameo; it's the balloon from the world map), bumpy
-air that makes Daddy's juice slosh. Then the clouds part and all of Thailand is below: the elephant head, its ear, and
-the long trunk, with the plane flying down the trunk. Sparkle: **"Thailand looks like an elephant's head!"**
-(3) **landing:** the coast, the sea and the first rock islands come up; the runway lights pulse; she flies down to them.
-A wide funnel catches any rough approach and lines it up. Touchdown is *bounce, bounce, roll*, and the passengers cheer and
-clap.
-**Silly:** fly in loops and Daddy's face presses on the window, dizzy. Dive at the sea and the plane pulls up by itself
-with a "Wheee!" from Mommy.
-**Lands at:** Krabi (Dad's earlier pick; see open questions). A 3-second cut with a Thai-roofed arrivals arch
-and a songthaew drive is all that sits between the runway and the pier.
+**The toy:** the window seat. Click the seatbelt, slide the window shade up and down, fold the tray down, press the call
+button, and watch the screen on the seat in front.
+**Deepens:** (1) **takeoff:** seatbelt *click*, the plane rolls faster and faster (the window streaks), and everyone
+presses back into their seats and goes up: *wheee!* (2) **up in the sky:** fold the tray down and press the call button:
+*ding*, juice and a snack arrive; bumpy air makes the juice slosh. Shade up: fat toon clouds go by, a V of storks, and
+**Sparkle's hot-air balloon** floats past the window with Sparkle waving (her cameo; it's the balloon from the world
+map). The seat-back screen shows the map: the little plane goes down Thailand's elephant trunk. Then the clouds part, the
+camera leans out through the window, and all of Thailand is below: the elephant head, its ear and the long trunk.
+Sparkle: **"Thailand looks like an elephant's head!"** (3) **landing:** "Seatbelts on!", the sea and the first rock
+islands come up in the window, *bump, bump, roll*, and everyone cheers and claps.
+**Pokeables:** the shade, the tray, the call button, the reading light (on, off), the seat-back screen (tap: the map,
+then cartoons), Daddy (he's asleep, mouth open: tap and he snorts awake), Mommy (she shares her snack), the teddy if
+she packed it.
+**Silly:** call button again and again: more and more snacks pile up on the tray. Shade down and the reading light on:
+"Night night!", and Kaylee pretends to snore.
+**Lands at:** Krabi (Dad confirmed, 2026-10-18). A 3-second cut with a Thai-roofed arrivals arch and a songthaew drive
+is all that sits between the runway and the pier.
 
 ## The bay: Phang Nga Bay by longtail boat 🚤 (the main event)
 
@@ -274,7 +289,8 @@ the bay: the secret sighting). At the pier: the boarding pass gets its last punc
 boats wear colorful ribbons and a flower garland on the bow, for the boat's spirit (Mae Ya Nang) and good luck. Three
 ribbon colors from a basket (pink, butter, mint, sky, lavender, hotpink) and a jasmine garland: tap a color and it
 flutters onto the bow. Then Daddy steps in (the boat tips: *whoa-oa-oa!*), Mommy, and Kaylee hops to the tiller.
-Sparkle: **"Put your finger on the water to drive!"** (if she learned it in the taxi, she's already going).
+Sparkle: **"Put your finger on the water to drive!"** The first time she drives off, Daddy: **"Pai!"** (Thai for
+"let's go!", Dad's pick).
 
 **Her choices:** her ribbons; which stop first (village or cave), or skipping straight to the Nail Island; where to
 drive in between; which pose and how many photos; at home, which photo goes on Agong's wall.
@@ -295,7 +311,8 @@ straight at the stilt houses and the boat slows to a crawl by itself while a gra
 **The village (Koh Panyee).** About 200 years ago fishing families from Java built their homes on stilts over the
 sea, and the kids, who had no land to play football on, built a **floating football field**. A ball rolls off the field
 into the sea: she pushes it back with the boat (bumper-boat football), and the kids kick it into the goal: GOAL! The
-cheering kids are part of the scene (simple villagers, no new speaking cast). They give her a football to keep, and it rides in the boat from now on.
+kids shout **"Khob khun ka!"** (thank you, Dad's pick) and give her a football to keep, and it rides in the boat from
+now on. They're simple villagers with cheers and that one line, in one shared kid voice.
 The village's golden mosque dome is scenery and, like the house's sacred things, never wobbles. Photo spot: Daddy
 snaps one with the kids cheering behind (automatic, it drops into the album).
 
@@ -316,15 +333,16 @@ voices with short lines; most reactions are just sounds and animation.
 - Mangrove trees stand in the salty water on their roots; mudskippers are fish that walk on mud; fiddler crabs wave one
   big claw.
 - Thai boats wear ribbons for good luck (she ties them on).
-- Earlier legs: Thailand looks like an elephant's head and they fly down the trunk; hot, sunny weather means a sun hat
-  and sunscreen; in Thailand cars drive on the left; Bangkok's taxis are pink.
+- Earlier legs: Thailand looks like an elephant's head (she sees it from the plane window, and the little plane goes
+  down the trunk on the seat-back map); hot, sunny weather means a sun hat and sunscreen; in Thailand the steering wheel
+  is on the right and cars drive on the left; Bangkok's taxis are pink.
 
 **Tap-to-hear facts** (Sparkle; stamp screen and passport, never required): "Thailand looks like an elephant's head!",
 "Thai boats wear ribbons for good luck!", "A longtail boat has a car engine on a long stick!", "This village is built on
 stilts, over the sea!", "The kids here built a football field that floats!", "Hong means room!", "Mangrove trees stand
 on their roots!", "A mudskipper is a fish that walks on mud!", "This crab waves its big claw!", "Ko Tapu means Nail
 Island!", "Boats stay back so the Nail Island keeps standing!", "This porpoise has no fin on its back!", "In Thailand,
-cars drive on the left!", "Wat means temple!"
+cars drive on the left!", "Wat means temple!", "Khob khun means thank you!", "Pai means let's go!"
 
 **Payoff (builds while she plays):** the **trip album** (a small book icon in the corner that bounces when something lands in it)
 fills with up to three automatic photos (the village, the hong, the Nail Island) plus her own pose photos, and an
@@ -341,8 +359,8 @@ only "question" (where to?) she answers by driving. 2 lines before the first tou
 
 ### Home 🏠 (the payoff goes back to the house)
 
-The flight home is a 4-second picture (the plane over a pink sunset; tap skips). The pink taxi pulls up at Agong's
-house and the family come out. **She picks which photo is for Agong** (her photos fan out; tap one), then taps Agong:
+The flight home is a 4-second picture (the plane over a pink sunset; tap skips). Aunty Sri's car brings them back to
+Agong's house and the family come out. **She picks which photo is for Agong** (her photos fan out; tap one), then taps Agong:
 he holds it up, "Beautiful! Thank you, Kaylee!", and walks in and hangs it on the wall by the old photos. Everyone gathers,
 and **Gan, Ken and BB put their phones down for the first time**: "Whoa! Cool!" Then the stamp (`StampEarned`) and the sticker:
 a waving **fiddler crab**.
@@ -359,11 +377,11 @@ Activity `boat-trip`: `activities/boat-trip/sections.ts`. Every param has a defa
 | 1 | `invite` | The elephant map in her room | |
 | 2 | `pack` | Pack the suitcase | `packed` (pre-fills it) |
 | 3 | `goodbye` | Goodbye at Agong's house | `packed` |
-| 4 | `drive` | Drive the pink taxi | `packed` |
+| 4 | `car` | Aunty Sri drives to the airport | `packed` |
 | 5 | `airport` | The x-ray belt | `packed` |
-| 6 | `takeoff` | Take off | |
-| 7 | `fly` | Above the clouds, the elephant map below | |
-| 8 | `land` | Land by the sea | |
+| 6 | `takeoff` | Window seat: seatbelt and takeoff | `packed` |
+| 7 | `fly` | Window seat: tray, snacks, the elephant below | `packed` |
+| 8 | `land` | Landing in Krabi | |
 | 9 | `pier` | Tie ribbons on the longtail | `packed`, `ribbons` |
 | 10 | `bay` | Open water, where to? | `packed`, `ribbons`, `stops`, `found` |
 | 11 | `village` | Koh Panyee, the floating football field | `packed`, `ribbons`, `found` |
@@ -389,16 +407,17 @@ link for the result: `#/world/thailand/hub/downstairs?at=photos` shows the wall.
 One camera per leg, chosen before modeling, the same rules as the house (`engine/camera.ts` frames a box in any screen
 shape; the top bar's 104 px stay clear).
 - **Her room and the street:** the house's own cameras (the `pack` close-up frames the suitcase and the things around it).
-- **Taxi:** low chase camera behind the car, looking down the road (pitch ~14°).
-- **Plane:** chase camera behind and above (pitch ~10°); the elephant view pulls up high (pitch ~55°) for 3 seconds
-  and comes back.
+- **Car:** from the side with the roof off (the house's dollhouse look), framing the back seat and Kaylee's window;
+  the street streams past in layers.
+- **Plane:** from the aisle, framing the three seats and Kaylee's window; for the elephant view the camera leans out
+  through the window and looks down (pitch ~55°) for 3 seconds, then comes back.
 - **Bay:** chase camera behind and a little to the right of the boat (yaw lags the boat's heading by ~0.8 s so turns
   feel smooth, not dizzy), pitch ~24°, framing a box ahead of the boat so she sees where she's going. On a tall screen
   the same box leaves room above, and **that's where the rock towers soar**: portrait gets the most dramatic karsts. In
   the cave the box shrinks and the camera comes in close. At the Nail Island the photo uses a low, straight-on shot
   (pitch ~6°) with Ko Tapu centered behind the family.
-- The **safe zone** on every device: the boat (or car or plane), the water about 20 m ahead of it, and the next stop's
-  glow. The pose buttons and the album sit at the bottom edge, at least 88 px on iPad and 64 px on iPhone.
+- The **safe zone** on every device: in the bay, the boat, the water about 20 m ahead of it and the next stop's glow;
+  in the car and the plane, Kaylee, her window and the things she plays with. The pose buttons and the album sit at the bottom edge, at least 88 px on iPad and 64 px on iPhone.
 - iPhone landscape: the box shrinks a little (the boat is bigger on screen); nothing important sits in the top 104 px.
 
 ## The look in 3D (no generated pictures needed except the sticker)
@@ -420,11 +439,13 @@ shadows, the `PAL` palette), so it matches Agong's house exactly.
 - **Critters:** simple toon builds like the family animals (a crab, a mudskipper, a monitor lizard, a macaque, a sea
   eagle, a kingfisher, needlefish, the porpoise), all with blinking eyes.
 - **Sky:** a pastel gradient, toon clouds, and the pink-gold sunset for the ride back.
-- **Bangkok road:** the house's shophouse builder repeated along the road (varied colors and signs, no mirrored copies), the
-  skytrain on its pillars, a golden temple roof, then the airport.
-- **The plane and the elephant map below:** a chubby pastel plane with an elephant on the tail (no airline branding).
-  Thailand below is a flat toon terrain built from the real outline: green land, mountains in the north as bumps, the sea
-  around it.
+- **Aunty Sri's car:** a little rounded family car (lavender, like her blouse, until Dad says what she really drives),
+  steering wheel on the right. **The Bangkok road** outside: the house's shophouse builder repeated along the road
+  (varied colors and signs, no mirrored copies), pink taxis and tuk-tuks, the skytrain on its pillars, a golden temple
+  roof, then the airport.
+- **The plane and the elephant map below:** a chubby pastel plane with an elephant on the tail (no airline branding),
+  and inside it a short toy cabin: three seats, round windows, trays, a call button, seat-back screens. Thailand below
+  is a flat toon terrain built from the real outline: green land, mountains in the north as bumps, the sea around it.
 - **Only generated picture:** the fiddler crab sticker (`art/STYLE.md`, sprite on white), and later the passport facts'
   pictures if wanted.
 
@@ -432,11 +453,14 @@ shadows, the `PAL` palette), so it matches Agong's house exactly.
 
 The trip is **Mommy, Daddy and Kaylee**: their 3D characters and voices already exist (`ji`, `nick`; Kaylee doesn't
 speak, she giggles and squeals as sounds). Sparkle guides from the corner as in the house (`activities/hub/Guide.tsx`,
-a trip version of it). Agong, Jum, Gan, Ken and BB speak only at the goodbye and at home. No new speaking cast: the
-villagers, the officer and the kids are simple background figures with sounds and animation, not voices.
+a trip version of it). Agong, Jum, Gan, Ken and BB speak only at the goodbye and at home. **Aunty Sri** (cast already,
+`sri`) drives them to the airport and brings them home. One new speaker: the **village kids** (one shared kid voice for
+"Khob khun ka!" and cheers). The officer, the flight attendant and the other villagers are background figures with
+sounds and animation, not voices.
 
-New lines (in `lines.ts`, all short): about 6 for Mommy, 10 for Daddy, 3 for Agong, 1 each for Jum, Gan, Ken and BB, and
-about 25 for Sparkle (the hints and the 14 facts). That's roughly 50 clips. Talk before the first touch stays under 6 s
+New lines (in `lines.ts`, all short): about 6 for Mommy, 10 for Daddy (with "Pai!"), 3 for Agong, 3 for Aunty Sri, 1 each
+for Jum, Gan, Ken, BB and the village kids, and about 27 for Sparkle (the hints and the 16 facts). That's roughly 55
+clips. Talk before the first touch stays under 6 s
 in every section; talk per touch well under 1.5 s.
 
 ## Tech plan
@@ -445,16 +469,16 @@ in every section; talk per touch well under 1.5 s.
 ```
 trip/                     the reusable kit
   types.ts                TripDef, Leg (pure data, no three.js)
-  drive.ts                the finger-leads controller + feel profiles (pure math, unit-testable)
-  vehicles/               taxi.ts, plane.ts, longtail.ts, canoe.ts (toon models with seats)
-  legs/                   Pack, Goodbye, Drive, Airport, Fly, Home (+ their scenes), BoardingPass.tsx
+  drive.ts                the finger-leads controller + feel profiles (built, greybox 1)
+  vehicles/               longtail.ts, canoe.ts (built), car.ts, plane.ts (toon models with seats; the plane's cabin)
+  legs/                   Pack, Goodbye, Car, Airport, Fly, Home (+ their scenes), BoardingPass.tsx
   Flat.tsx                the no-WebGL storybook version
-engine/                   + water.ts, trail.ts (wake, contrail), spray.ts (pooled instanced particles), photo.ts
+engine/                   View3D.tsx, water.ts, particles.ts (built, greybox 1), photo.ts
 activities/boat-trip/
   sections.ts  trip.ts    the sections (loaded at startup, no three.js) and the TripDef
   BoatTrip.tsx            runs the legs in order, the album, resume
-  bay/                    bay.ts (the scene: islands, stops, critters), layout.ts (meters, pure data), village.ts,
-                          cave.ts, nail.ts, Album.tsx, Poses.tsx
+  bay/                    bay.ts (the scene and the driving), layout.ts (meters, pure data), scenery.ts, tour.ts,
+                          tune.ts (built, greybox 1); later village.ts, cave.ts, nail.ts, Album.tsx, Poses.tsx
 ```
 `Place.tsx` routes `boat-trip` to `BoatTrip`; `meta.ts` gets the activity (`id: 'boat-trip'`, icon 🚤, the crab
 sticker). The hub gets the map pickable, the photo frame on the wall, and Mommy's and Sparkle's new map lines.
@@ -493,17 +517,19 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
 
 **Tests and QA:**
 - `tests/sections.spec.ts` and `npm run tap-around` cover every section automatically once `sections.ts` exists.
-- `tests/thailand-trip.spec.ts`: a robot drives with real pointer drags (taxi to the drop-off, takeoff, landing, boat to
-  each stop), checks the photo is saved and appears in the house at `hub/downstairs?at=photos`.
-- `window.__thaiTripQA()`: read-only state (leg, vehicle position and speed, stops, album). No jump hooks; tests open
-  section links.
-- QA scripts: `qa-screens` routes for every section; `qa-motion` filmstrips for the boat (turn, doughnut, bonk,
-  VROOM, wake jump), the plane (takeoff, landing), the taxi (weave, bump), the suitcase sit; `qa-pacing` for each section.
+- `tests/thailand-boat.spec.ts` (greybox 1) drives the boat with real pointer input; the trip's spec plays every leg
+  with real taps (the seatbelts, the window, the tray, the boat to each stop), checks the photo is saved and appears in
+  the house at `hub/downstairs?at=photos`.
+- `window.__thaiBoatQA()` (built): read-only state; the trip adds the leg, the album and what's in the car and cabin.
+  No jump hooks; tests open section links.
+- QA scripts: `qa-screens` routes for every section; `qa-motion` filmstrips for the boat (built: drive, VROOM,
+  doughnut, the cave roof), the car (window down, wave), the cabin (takeoff press-back, the tray), the suitcase sit;
+  `qa-pacing` for each section.
 - Full QA (layout-qa, then playtest-qa) at the bay's art gate and at the full loop.
 
-**Riskiest pieces, prototyped first:** (1) the boat's drive feel with a chase camera on the iPad (is a finger on the
-water clear enough to a 5-year-old, or does she want to grab the boat? the greybox tries both); (2) the water and
-karsts at 60 fps in Safari; (3) memory on the iPad when swapping scenes between legs.
+**Riskiest pieces, prototyped first:** (1) the boat's drive feel with a chase camera on the iPad: done in greybox 1
+(Dad: both controls together, the default speed is fine); (2) the water and karsts at 60 fps in Safari (check
+`?debug=1` on the iPad); (3) memory on the iPad when swapping scenes between legs.
 
 ## Build plan (one PR each; stop for Dad after each)
 
@@ -511,15 +537,33 @@ karsts at 60 fps in Safari; (3) memory on the iPad when swapping scenes between 
    box longtail with the real Mommy, Daddy and Kaylee sitting in it, the drive control, wake, spray, bonks, VROOM, a
    tunnel, Ko Tapu with buoys. `?debug=1` gets sliders for the feel (speed, turn, lag) and a toggle between "finger on
    the water" and "grab the boat". **Dad plays it on the iPad.** If driving isn't fun yet, change the toy.
-2. **Greybox: the trip kit.** The same control in a box taxi on a box road and a box plane through blob clouds over a
-   flat Thailand outline; the map pin and the packing toy in her room with box props; the boarding pass; resume.
-   **Dad plays it.** Does each leg feel short and worth having?
+   *Built 2026-10-18* (`activities/boat-trip/`, `trip/drive.ts`, `trip/vehicles/`). What playing it with a robot
+   finger changed from the plan:
+   - The hong is part of the `cave` section (no `hong` link yet); the canoe goes in at the cave's raft and comes back
+     out the same way.
+   - In the canoe, **Kaylee steers from the back** (that's where a canoe's captain sits) and Daddy paddles in front,
+     so Daddy, the tallest, bonks first, then Mommy, then Kaylee. Whoever she lies down early stays down until the
+     roof is high again.
+   - The tunnel camera is **low behind the canoe**, as high as the roof over it allows, not from the side: from the
+     side, "finger up the screen" stopped meaning "forward". In the tunnel her finger counts by where it is on the
+     screen next to the canoe (above it = paddle on, below = back up).
+   - A held finger within about 11° of straight ahead goes straight (the camera sits 12° to the right of the boat, and
+     "up the screen" otherwise curved forever). Taps go exactly where she tapped, round Ko Tapu's buoys, the hong and
+     the towers on their own.
+   - The photo on the beach (the 📸 button) is a camera flash and a hop for now; the album and poses come in step 3.
+   - `?drive=grab` opens it in the "grab the boat" control. Dad played it (2026-10-18): keep both controls together
+     (the default), drop the grab-only switch; the default speed is fine.
+2. **Greybox: the trip kit.** The elephant map in her room and the packing toy with box props; the goodbye; Aunty Sri's
+   car as a ride-along toy (a box car with its roof off on a box Bangkok road: seatbelt, window, waving, the horn, the
+   radio); the airport belt and x-ray; the window seat (a box cabin: seatbelt, shade, tray and snacks, the seat-back
+   map, blob clouds and the flat Thailand outline outside); the boarding pass between legs; resume. **Dad plays it.**
+   Does each leg feel short and worth having?
 3. **The bay, built.** The longtail with its tiller, ribbons and long tail; karsts with notches; Koh Panyee and the
    football; the canoe, cave and hong; Khao Phing Kan and Ko Tapu; critters; poses and the album; voices for the bay.
    Full QA.
 4. **The trip, built.** The elephant map in her room, the packing props and her new hat, sunglasses and floaties, the
-   goodbye, the pink taxi and the Bangkok road, the x-ray, the plane, clouds, Sparkle's balloon and the elephant below,
-   the landing.
+   goodbye, Aunty Sri's car and the Bangkok road, the x-ray, the plane and its cabin, clouds, Sparkle's balloon and the
+   elephant below, the landing.
 5. **The full loop.** Home and the photo wall, the stamp and the sticker in `meta.ts`, replays (the 🚤 shortcut, shorter
    legs), the flat version, facts, QA with the fun check below. Dad plays the whole trip on the iPad.
 
@@ -533,25 +577,28 @@ karsts at 60 fps in Safari; (3) memory on the iPad when swapping scenes between 
 - **Pokeables:** at least five in every stop (listed above).
 - **Grows:** open water, then tight places, then the low cave; the album and the boat fill up; the photo goes home.
 - **Surprise:** Daddy's horn bonks the cave roof; Gan in the suitcase; the monkey takes Daddy's mango; the cousins look up.
-- **Learning by doing:** pack for the sun, fly down the elephant's trunk, keep back from Ko Tapu, duck to fit under the
-  cave roof, play on the floating football field.
+- **Learning by doing:** pack for the sun, see the elephant from the plane window, keep back from Ko Tapu, duck to fit
+  under the cave roof, play on the floating football field.
 - **Replay:** what she packs changes the trip; 9 stickers to find; new poses; the 🚤 shortcut.
 
-## Open questions for Dad
+## Dad's answers (2026-10-18)
 
-1. **To the airport:** did you take a pink taxi, a Grab, or did someone drive you (Uncle Bird)? My default: the pink
-   taxi, with Kaylee driving and Daddy in the passenger seat. Or should Daddy drive while she plays with the window and the
-   horn? (I'd let her drive: it teaches the control the boat uses.)
-2. **Which airport did you land at: Krabi or Phuket?** Default Krabi (your earlier "longtail boat in Krabi"). Only the
-   arrivals arch changes.
-3. **What did you really do in the bay?** Koh Panyee, a cave by canoe, a hong, James Bond Island? I'll keep what you
-   did and drop what you didn't. Real details (a lunch, a funny moment) make it better.
-4. **The map:** in Kaylee's room above her suitcase (my pick), or downstairs by Agong's desk?
-5. **Should she fly the plane** (pilot Kaylee, my pick), or ride in a window seat and play with the cabin (seatbelt,
-   tray, snacks) like Toca's airport?
-6. **Sticker:** the fiddler crab, or another animal (the mudskipper, the macaque)?
-7. **Thai words:** "Khob khun ka" (thank you) from the village kids, and "Pai!" (let's go!) from Daddy when they set off.
-   Do you want more Thai, or less?
+1. **To the airport:** Aunty Sri drove them. So Kaylee rides along (in the back by the window) and plays; she doesn't
+   drive the car. Assumed: Sri brings them home too.
+2. **Airport:** Krabi.
+3. **In the bay:** Koh Panyee, a hong, and James Bond Island.
+4. **The map:** in Kaylee's room above her suitcase.
+5. **The plane:** she rides in a window seat and plays with the cabin (seatbelt, tray, snacks), like Toca's airport.
+6. **Sticker:** the fiddler crab.
+7. **Thai words:** both, "Khob khun ka" from the village kids and "Pai!" from Daddy.
+8. **The controls (PR #99):** both together (finger on the water, and grab the boat); the default speed is fine.
+
+### Still open
+- **How did you get into the hong?** Your answer to 3 left out "a cave by canoe". Greybox 1 goes into the hong by
+  canoe through a low cave (how Phang Nga's hongs are usually visited, lying flat). Did you go in by canoe like that, or
+  another way (straight in by longtail, or by kayak through an opening)? Ask before building the bay (step 3); the
+  greybox 2 trip kit doesn't depend on it.
+- **Aunty Sri's car:** what kind and color? Until Dad says, a little lavender family car.
 
 ## Sources to check facts against
 
