@@ -1,19 +1,22 @@
-// Captain Kaylee's boat trip (plan: planning/around-the-world/thailand/boat-trip.md). Greybox: placeholder shapes, and
-// text bubbles instead of voices. It runs the trip's legs in order, each its own 3D world in the shared view:
+// Captain Kaylee's boat trip (plan: planning/around-the-world/thailand/boat-trip.md). It runs the trip's legs in order,
+// each its own 3D world in the shared view:
 //
 //   invite, pack, goodbye   Agong's own house (activities/hub/house.ts) with the trip's plugin (trip/legs/house-plugin.ts):
 //                           Mommy asks (Ask.tsx), packing (with the suitcase card and ✅ here), Aunty Sri's van
 //   airport                 the van pulls away and they're at the airport: the x-ray belt (trip/legs/airport.ts)
 //   takeoff, fly, land      the window seat (trip/legs/plane.ts)
-//   pier, bay, cave, nail   the boat toy in Phang Nga Bay (bay/bay.ts, greybox 1)
+//   pier ... sunset         Phang Nga Bay by longtail boat (bay/bay.ts and its parts): the ribbons, open water, the
+//                           village, the cave and the hong, the Nail Island photo, the sunset ride back
 //
-// Between legs the boarding pass slides up and hides the next world being built. What she packs (`packed`) rides along
-// the whole trip (the URL param, then what she saved). The trip saves after each leg (useSaved), and saying yes to Mommy
-// again offers to keep going from there.
+// The trip kit's legs still talk in text bubbles (greybox 2); the bay speaks in real voices (bay/BayGuide.tsx). Between
+// legs the boarding pass slides up and hides the next world being built. What she packs (`packed`) rides along the whole
+// trip (the URL param, then what she saved); in the bay her ribbons, the stops she visited, her photos and the stickers
+// she found ride along in the URL too. The trip saves after each leg (useSaved), and saying yes to Mommy again offers to
+// keep going from there.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { sounds, useSaved } from '../../../../../sdk'
+import { sounds, useSaved, type Line } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../engine/Anchors'
 import { flag } from '../../engine/flags'
@@ -29,7 +32,12 @@ import { PLANE_ANCHORS, PlaneRide, type FlySection } from '../../trip/legs/plane
 import type { LegEvents } from '../../trip/legs/stage'
 import { DEFAULT_PACKED, formatPacked, parsePacked } from '../../trip/packing'
 import type { Said } from '../../trip/talk'
-import { Bay, BAY_ANCHORS } from './bay/bay'
+import { Album, PhotoDrop, StickerFlight, type AlbumPhoto } from './bay/Album'
+import { ARROW_ICONS, Bay, BAY_ANCHORS, type BayStart } from './bay/bay'
+import { BayGuide, type BayGuideHandle } from './bay/BayGuide'
+import { CRITTERS, type CritterId } from './bay/critters'
+import type { PhotoKind, Stop } from './bay/part'
+import { PoseButtons } from './bay/PoseButtons'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
 import BOAT_SECTIONS, { type BoatSection } from './sections'
@@ -41,7 +49,13 @@ interface Progress {
   packed: string
 }
 const RESUME: BoatSection[] = ['goodbye', 'airport', 'takeoff', 'pier']
-const RESUME_AT: Partial<Record<BoatSection, BoatSection>> = { fly: 'takeoff', land: 'takeoff', bay: 'pier', cave: 'pier', nail: 'pier' }
+const RESUME_AT: Partial<Record<BoatSection, BoatSection>> = { fly: 'takeoff', land: 'takeoff', bay: 'pier', village: 'pier', cave: 'pier', hong: 'pier', nail: 'pier', sunset: 'pier' }
+const DEFAULT_RIBBONS = BOAT_SECTIONS.params.ribbons.default
+/** A comma list from the URL, kept to the values it may have. */
+const list = <T extends string>(s: string | null, ok: readonly T[]) => (s ?? '').split(',').filter((x): x is T => (ok as readonly string[]).includes(x))
+const STOPS: Stop[] = ['village', 'cave']
+const KINDS: PhotoKind[] = ['village', 'hong', 'nail']
+const GLOWS = Object.keys(ARROW_ICONS)
 
 /** The trip's flight (the plane leg flies its route). */
 const FLIGHT = BOAT_TRIP.legs.find((l) => l.kind === 'fly') as { from: [number, number]; to: [number, number] }
@@ -81,16 +95,48 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
   const [landed, setLanded] = useState(false)
   const [phase, setPhase] = useState<Phase | null>(null)
   const [flash, setFlash] = useState(0)
+  // The bay: her ribbons, the stops she's been to, the album's photos and stickers.
+  const [ribbons, setRibbons] = useState<string[]>(() => list(flag('ribbons'), ['pink', 'butter', 'mint', 'sky', 'lavender', 'hotpink']).slice(0, 3))
+  const tied = useRef(flag('ribbons') !== null)
+  const [stops, setStops] = useState<Stop[]>(() => list(flag('stops'), STOPS))
+  const [photos, setPhotos] = useState<AlbumPhoto[]>([])
+  const [found, setFound] = useState<CritterId[]>(() => list(flag('found'), CRITTERS))
+  const [albumOpen, setAlbumOpen] = useState(false)
+  const [bump, setBump] = useState(0)
+  const [flights, setFlights] = useState<{ key: number; id: CritterId; x: number; y: number }[]>([])
+  const [drops, setDrops] = useState<{ key: number; src: string }[]>([])
+  const guideRef = useRef<BayGuideHandle>(null)
+  const arrowEls = useRef(new Map<string, HTMLElement>())
+  // A link into the bay with photos: they're staged and taken when the bay is first built.
+  const linkPhotos = useRef(WORLD_OF[start ?? 'invite'] === 'bay' ? list(flag('photos'), KINDS) : [])
   const worldRef = useRef<World3D | null>(null)
   const tripRef = useRef<TripHouse | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
-  const state = useRef({ section, packed, mount, busy: false, saved })
-  state.current = { ...state.current, section, packed, mount, saved }
+  const state = useRef({ section, packed, mount, busy: false, saved, ribbons, stops, photos, found })
+  state.current = { ...state.current, section, packed, mount, saved, ribbons, stops, photos, found }
   // Read once: the address bar follows her and drops ?debug=1.
   const [debug] = useState(() => flag('debug') !== null)
 
-  const params = (ids: string[]) => ({ packed: formatPacked(ids) || DEFAULT_PACKED })
+  const params = (ids: string[]) => {
+    const st = state.current
+    return {
+      packed: formatPacked(ids) || DEFAULT_PACKED,
+      ribbons: st.ribbons.length ? st.ribbons.join(',') : DEFAULT_RIBBONS,
+      stops: st.stops.join(','),
+      photos: [...new Set(st.photos.map((p) => p.kind).filter((k) => k !== 'selfie'))].join(','),
+      found: st.found.join(','),
+    }
+  }
   useEffect(() => enter(first, first === 'invite' ? {} : params(packed)), [])
+  // The address bar keeps up with what she's done in the bay.
+  const ready = useRef(false)
+  useEffect(() => {
+    if (!ready.current) {
+      ready.current = true
+      return
+    }
+    if (WORLD_OF[state.current.section] === 'bay') enter(state.current.section, params(state.current.packed))
+  }, [ribbons, stops, photos, found])
 
   // A bubble for a few seconds (longer lines stay a little longer).
   const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
@@ -171,6 +217,17 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
     setTimeout(() => finish(at), 50)
   }
 
+  const t0 = useRef(performance.now())
+  /** Back at the pier at sunset: the boarding pass's last punch, then her album opens by itself. */
+  const docked = () => {
+    sounds.sparkle()
+    setPass({ punch: 'pier', done: PASS.map((p) => p.id).filter((id) => id !== 'pier') })
+    setTimeout(() => {
+      setPass(null)
+      setAlbumOpen(true)
+    }, 2400)
+  }
+
   const leg: LegEvents & { flash(): void } = {
     say,
     section: (s) => moveTo(s as BoatSection),
@@ -199,7 +256,53 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
       w = new House(renderer, { section: s === 'goodbye' ? 'street' : 'upstairs' }, { onSpot: () => {}, onArrived: () => {} }, trip)
     } else if (world === 'airport') w = new Airport(renderer, leg, items)
     else if (world === 'plane') w = new PlaneRide(renderer, leg, s as FlySection, items, FLIGHT, BOAT_TRIP.caps.fly)
-    else w = new Bay(renderer, s as 'pier', { onSection: (x) => moveTo(x), onLanded: setLanded, onFlash: () => setFlash((n) => n + 1) })
+    else {
+      const st = state.current
+      const staged = linkPhotos.current
+      linkPhotos.current = []
+      const start: BayStart = {
+        section: s,
+        packed: items,
+        ribbons: s === 'pier' && !tied.current ? null : st.ribbons.length ? st.ribbons : DEFAULT_RIBBONS.split(','),
+        stops: st.stops,
+        photos: staged,
+        album: st.photos.map((p) => p.kind),
+        found: st.found,
+      }
+      const bay = new Bay(renderer, start, {
+        onSection: (x) => moveTo(x),
+        say: (l: Line) => guideRef.current?.speak(l),
+        onFound: (id, x, y) => {
+          setFound((f) => (f.includes(id) ? f : [...f, id]))
+          setFlights((f) => [...f, { key: performance.now() + Math.random(), id, x, y }])
+        },
+        onPhoto: (kind, src) => {
+          setPhotos((ps) => {
+            const n = (ps[ps.length - 1]?.n ?? 0) + 1
+            let next = [...ps, { n, kind, src }]
+            // At most 12: the oldest selfie goes first, then the oldest photo.
+            while (next.length > 12) {
+              const i = next.findIndex((p) => p.kind === 'selfie')
+              next = next.filter((_, k) => k !== (i >= 0 && i < next.length - 1 ? i : 0))
+            }
+            return next
+          })
+          // A deep link's staged photos go straight in; new ones print out big first.
+          if (staged.includes(kind) && performance.now() - t0.current < 4000) setBump((b) => b + 1)
+          else setDrops((d) => [...d, { key: performance.now(), src }])
+        },
+        onStops: (x) => setStops(x),
+        onRibbons: (x) => {
+          tied.current = true
+          setRibbons(x)
+        },
+        onLanded: setLanded,
+        onFlash: () => setFlash((n) => n + 1),
+        onDocked: docked,
+      })
+      bay.setArrowElements(arrowEls.current)
+      w = bay
+    }
     w.setHintElement?.(hintRef.current)
     return w
   }
@@ -219,6 +322,32 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
           anchors={(input, els) => (
             <>
               <Anchors list={ANCHORS_OF[mount.world]} els={els} {...input} />
+              {/* The bay: arrows at the screen's edge toward glows that are off screen. */}
+              {mount.world === 'bay' &&
+                GLOWS.map((g) => (
+                  <div
+                    key={g}
+                    role="button"
+                    aria-label={`Go to: ${g}`}
+                    ref={(el) => {
+                      if (el) arrowEls.current.set(g, el)
+                      else arrowEls.current.delete(g)
+                    }}
+                    // Tap the badge: the boat sets off there.
+                    onPointerDown={(e) => {
+                      e.stopPropagation()
+                      sounds.pop()
+                      worldRef.current?.tap(0, 0, `glow:${g}`)
+                    }}
+                    style={{ position: 'absolute', left: 0, top: 0, display: 'none', zIndex: 19000, cursor: 'pointer' }}
+                  >
+                    {/* The pointer (bay.ts turns it toward the glow), then the glow's little badge. */}
+                    <div style={{ position: 'absolute', left: -34, top: -34, width: 68, height: 68 }}>
+                      <div style={{ position: 'absolute', left: 22, top: -18, width: 0, height: 0, borderLeft: '12px solid transparent', borderRight: '12px solid transparent', borderBottom: '18px solid #fff' }} />
+                    </div>
+                    <div style={{ position: 'absolute', left: -34, top: -34, width: 68, height: 68, display: 'grid', placeItems: 'center', borderRadius: '50%', background: 'rgba(255,200,61,.9)', border: '4px solid #fff', boxShadow: '0 0 16px 4px rgba(255,200,61,.6)', fontSize: 30 }}>{ARROW_ICONS[g]}</div>
+                  </div>
+                ))}
               {/* After a while with nothing touched: a finger pressing where to touch. */}
               <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
                 <motion.div
@@ -244,25 +373,43 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
           🚤 Tap to wake the trip
         </button>
       )}
-      <AnimatePresence>
-        {landed && mode === 'webgl' && mount.world === 'bay' && (
-          <motion.button
-            key="camera"
-            aria-label="Take a photo"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            whileTap={{ scale: 0.85 }}
-            onClick={() => {
-              sounds.pop()
-              ;(worldRef.current as Bay | null)?.snap()
-            }}
-            style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 18px)', bottom: 'calc(var(--safe-bottom) + 18px)', width: 104, height: 104, borderRadius: '50%', border: '5px solid #fff', background: 'var(--hotpink)', fontSize: 52, boxShadow: 'var(--shadow)', zIndex: 30 }}
-          >
-            📸
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {mount.world === 'bay' && mode === 'webgl' && (
+        <>
+          <PoseButtons show={landed && !pass && !albumOpen} onPose={(p) => (worldRef.current as Bay | null)?.pose(p)} />
+          <BayGuide ref={guideRef} hidden={!!pass} raised={landed} />
+          <Album
+            photos={photos}
+            found={found}
+            open={albumOpen}
+            bump={bump}
+            onOpen={() => setAlbumOpen(true)}
+            onClose={() => setAlbumOpen(false)}
+            onFact={(l) => guideRef.current?.speak(l)}
+          />
+          {flights.map((f) => (
+            <StickerFlight
+              key={f.key}
+              id={f.id}
+              x={f.x}
+              y={f.y}
+              onDone={() => {
+                setFlights((all) => all.filter((x) => x.key !== f.key))
+                setBump((b) => b + 1)
+              }}
+            />
+          ))}
+          {drops.map((d) => (
+            <PhotoDrop
+              key={d.key}
+              src={d.src}
+              onDone={() => {
+                setDrops((all) => all.filter((x) => x.key !== d.key))
+                setBump((b) => b + 1)
+              }}
+            />
+          ))}
+        </>
+      )}
       <Bubble said={pass ? null : said} />
       <Ask open={asking} onYes={yes} onNotYet={onExit} />
       <PackCard open={!pass && mount.world === 'house' && (phase === 'pack' || phase === 'sitting')} packed={packed} sitting={phase === 'sitting'} onClose={() => tripRef.current?.closeTap()} />

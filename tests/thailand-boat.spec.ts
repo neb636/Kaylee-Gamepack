@@ -14,6 +14,7 @@ type BoatQA = {
   pos?: [number, number]
   speed?: number
   boost?: boolean
+  looking?: boolean
   lying?: Record<string, boolean>
   roof?: Record<string, number>
   photos?: number
@@ -38,6 +39,8 @@ async function open(page: Page, section: string, query = '') {
 async function ready(page: Page) {
   await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
   await expect(page.locator('[data-anchor="boat"]')).toBeVisible()
+  // A bay link opens on Daddy's "where to?" look over the bay (the camera up high): let it come back down first.
+  await expect.poll(field(page, 'looking'), { timeout: 10_000 }).toBeFalsy()
 }
 
 /** Holds a finger on the water ahead of the boat (above it on the screen). */
@@ -66,6 +69,8 @@ test('a finger on the water drives the longtail; letting go coasts; tapping the 
   const start = (await qa(page))!.pos!
   await holdAhead(page)
   await expect.poll(field(page, 'speed'), { timeout: 15_000 }).toBeGreaterThan(5)
+  // Up to speed: keep going a moment (it covers ~3 m getting there), then let go.
+  await page.waitForTimeout(1200)
   await page.mouse.up()
   const moved = (await qa(page))!.pos!
   expect(Math.hypot(moved[0] - start[0], moved[1] - start[1])).toBeGreaterThan(8)
@@ -81,15 +86,10 @@ test('at the cave the family swaps into the canoe, ducks under the low roof and 
   test.setTimeout(150_000)
   const errors = trackErrors(page)
   await open(page, 'bay')
-  await ready(page)
-  // The cave is off to the right of where the boat starts: steer round until its glow is on screen, then tap it. The
-  // longtail drives there by itself and everyone hops into the canoe.
-  const b = (await page.locator('[data-anchor="boat"]').boundingBox())!
-  const { width, height } = page.viewportSize()!
-  await page.mouse.move(width * 0.94, b.y - height * 0.1)
-  await page.mouse.down()
-  await expect(page.locator('[data-anchor="glow:cave"]')).toBeVisible({ timeout: 30_000 })
-  await page.mouse.up()
+  await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
+  // "Where to, captain?": Daddy's look over the bay shows the cave's glow (it's off to the right of where the boat
+  // starts). Tap it: the longtail drives there by itself and everyone hops into the canoe.
+  await expect(page.locator('[data-anchor="glow:cave"]')).toBeVisible({ timeout: 10_000 })
   await page.locator('[data-anchor="glow:cave"]').click({ force: true })
   await expect.poll(field(page, 'vehicle'), { timeout: 60_000 }).toBe('canoe')
   await expect.poll(field(page, 'phase'), { timeout: 10_000 }).toBe('drive')
@@ -120,7 +120,7 @@ test('tapping someone in the canoe lies them down before the roof, so their horn
   expect(errors).toEqual([])
 })
 
-test('the Nail Island: land on the beach, take a photo, and set off again', async ({ page }) => {
+test('the Nail Island: land on the beach, pose for a photo, and set off again', async ({ page }) => {
   test.setTimeout(120_000)
   const errors = trackErrors(page)
   await open(page, 'nail')
@@ -128,11 +128,12 @@ test('the Nail Island: land on the beach, take a photo, and set off again', asyn
   // Ko Tapu's buoys stand between the start and the beach: a tap finds its way round them.
   await page.locator('[data-anchor="glow:beach"]').click({ force: true })
   await expect.poll(field(page, 'phase'), { timeout: 60_000 }).toBe('beach')
-  await page.getByRole('button', { name: 'Take a photo' }).click({ force: true })
-  await expect.poll(field(page, 'photos')).toBe(1)
+  // A pose button: everyone strikes it, then the photo drops into the album.
+  await page.getByRole('button', { name: 'Wave pose' }).click({ force: true })
+  await expect.poll(field(page, 'photos'), { timeout: 10_000 }).toBe(1)
   await page.locator('[data-anchor="boat"]').click({ force: true })
   await expect.poll(field(page, 'phase'), { timeout: 20_000 }).toBe('drive')
-  await expect(page.getByRole('button', { name: 'Take a photo' })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Wave pose' })).toHaveCount(0)
   expect(errors).toEqual([])
 })
 

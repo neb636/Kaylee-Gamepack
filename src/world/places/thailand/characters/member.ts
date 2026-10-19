@@ -52,6 +52,10 @@ export class Member implements Character {
     this.root.userData.pick = `family:${member.id}`
   }
 
+  /** The toy's pivots (arms, head, eyes), for a pose held on top of the usual life (the boat trip's photo poses). */
+  get rig(): Rig {
+    return this.chibi
+  }
   /** Puts them somewhere else (the family photo). */
   place(x: number, y: number, z: number, faceDeg: number, pose: Pose = 'stand') {
     this.baseY = y

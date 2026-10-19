@@ -333,7 +333,75 @@ const SCREENS = [
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.
   // (The house's shaders compile on the first one: it waits a little longer.)
-  ...['invite', 'pack', 'goodbye', 'airport', 'takeoff', 'fly', 'land', 'pier', 'bay', 'cave', 'nail'].map((to) => ({ name: `boat-trip-${to}`, hash: `#/world/thailand/boat-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : 2200 })),
+  ...['invite', 'pack', 'goodbye', 'airport', 'takeoff', 'fly', 'land', 'pier', 'bay', 'village', 'cave', 'hong', 'nail', 'sunset'].map((to) => ({ name: `boat-trip-${to}`, hash: `#/world/thailand/boat-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : to === 'bay' ? 4600 : to === 'hong' ? 4000 : 2200 })),
+  // The bay's moments: three ribbons tied at the pier (the garland glowing), the goal and the football in the boat,
+  // the Nail Island pose photo, a deep link's album open (photos and stickers), and the family on the pier at sunset.
+  {
+    name: 'boat-trip-ribbons',
+    hash: '#/world/thailand/boat-trip/pier',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1800)
+      for (const c of ['pink', 'sky', 'hotpink']) {
+        await p.locator(`[data-anchor="ribbon:${c}"]`).click({ force: true }).catch(() => {})
+        await p.waitForTimeout(900)
+      }
+      await p.waitForTimeout(600)
+    },
+  },
+  {
+    name: 'boat-trip-goal',
+    hash: '#/world/thailand/boat-trip/village',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      for (let i = 0; i < 12; i++) {
+        if (await p.evaluate(() => window.__thaiBoatQA?.().ball !== 'loose')) break
+        await p.locator('[data-anchor="ball"]').click({ force: true }).catch(() => {})
+        await p.waitForTimeout(1800)
+      }
+      await p.waitForFunction(() => window.__thaiBoatQA?.().ball === 'done', null, { timeout: 20000 }).catch(() => {})
+      await p.waitForTimeout(2500)
+    },
+  },
+  {
+    name: 'boat-trip-pose',
+    hash: '#/world/thailand/boat-trip/nail?packed=bucket,duck,mango',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      await p.locator('[data-anchor="glow:beach"]').click({ force: true }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiBoatQA?.().phase === 'beach', null, { timeout: 45000 }).catch(() => {})
+      await p.waitForTimeout(800)
+      await p.getByRole('button', { name: 'Cheer pose' }).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(2300)
+    },
+  },
+  {
+    name: 'boat-trip-album',
+    hash: '#/world/thailand/boat-trip/nail?stops=village,cave&photos=village,hong&found=crab,eagle,needlefish',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(3000)
+      await p.getByRole('button', { name: 'Trip album' }).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(1200)
+    },
+  },
+  {
+    name: 'boat-trip-docked',
+    hash: '#/world/thailand/boat-trip/sunset',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      for (let i = 0; i < 4; i++) {
+        if (await p.evaluate(() => window.__thaiBoatQA?.().phase === 'docked')) break
+        await p.locator('[data-anchor="glow:pier"]').click({ force: true }).catch(() => {})
+        await p.waitForTimeout(9000)
+      }
+      await p.getByRole('button', { name: 'Close album' }).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(1500)
+    },
+  },
   // Mommy asks on her own a few seconds after Kaylee comes upstairs; Aunty Sri's van once it has pulled up.
   { name: 'thailand-mommy-asks', hash: '#/world/thailand/hub/upstairs', reset: true, wait: 6500 },
   { name: 'boat-trip-van', hash: '#/world/thailand/boat-trip/goodbye', reset: true, wait: 5000 },

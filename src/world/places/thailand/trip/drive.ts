@@ -57,6 +57,8 @@ export class Driver {
   boostT = 0
   /** Heading locked to a line (a tunnel): it can only go forward or back along it. */
   lock: number | null = null
+  /** A speed limit as a share of its top speed (a village where boats go slowly): 1 = none. */
+  cap = 1
   private target: { x: number; z: number } | null = null
   private mode: 'hold' | 'goto' | null = null
   /** A waypoint on the way somewhere: no slowing down, and it doesn't stop there. */
@@ -179,6 +181,10 @@ export class Driver {
       this.boostT -= dt
       if (want === null || want >= 0) want = Math.max(want ?? 0, f.top * f.boost)
     }
+    // A speed limit (a village): never asks for more, and eases down to it after driving in fast.
+    const lim = f.top * (this.boostT > 0 ? f.boost : 1) * this.cap
+    if (want !== null) want = clamp(want, -lim, lim)
+    if (this.cap < 1 && Math.abs(fwd) > lim) fwd *= Math.exp(-2.5 * dt)
     if (want !== null) fwd += clamp(want - fwd, -f.accel * 1.4 * dt, f.accel * (this.boostT > 0 ? 2.5 : 1) * dt)
     else fwd *= Math.exp(-f.coast * dt)
     // Turning: limited, and better at speed (a boat barely turns standing still).

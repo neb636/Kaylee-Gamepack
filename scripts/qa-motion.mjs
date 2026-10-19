@@ -496,6 +496,76 @@ GAME_SCENARIOS.push(
   thaiBoat('boat-cave-roof', 8, 'cave', [['down', 0, 0.25, 7800]]),
 )
 
+// The bay's stops, one scenario per verb: ribbons fluttering through the air onto the prow (then the garland, and the
+// family stepping in), the bumper-boat football (the boat pushes the ball back to the floating field: the kick, GOAL),
+// lying the family down in the canoe before the low roof, and the Nail Island pose (Kaylee strikes it, Mommy and
+// Daddy copy her, the flash).
+const bayMoment = (name, seconds, section, setup, act) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/boat-trip/${section}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiBoatQA?.().mode, null, { timeout: 20000 })
+    await page.waitForTimeout(1200)
+    if (setup) await setup(page)
+  },
+  act,
+})
+const tapAnchor = (page, id) => page.locator(`[data-anchor="${id}"]`).click({ force: true }).catch(() => {})
+GAME_SCENARIOS.push(
+  bayMoment('bay-ribbons', 5.5, 'pier', null, async (page) => {
+    for (const id of ['ribbon:pink', 'ribbon:sky', 'ribbon:hotpink', 'garland']) {
+      await tapAnchor(page, id)
+      await page.waitForTimeout(800)
+    }
+  }),
+  bayMoment(
+    'bay-football',
+    6,
+    'village',
+    async (page) => {
+      // Push the ball until it's nearly back at the field.
+      for (let i = 0; i < 6; i++) {
+        await tapAnchor(page, 'ball')
+        await page.waitForTimeout(1500)
+      }
+    },
+    async (page) => {
+      for (let i = 0; i < 3; i++) {
+        await tapAnchor(page, 'ball')
+        await page.waitForTimeout(1800)
+      }
+    },
+  ),
+  bayMoment('bay-lie-down', 7, 'cave', null, async (page) => {
+    for (const who of ['nick', 'ji', 'kaylee']) {
+      await tapAnchor(page, `family:${who}`)
+      await page.waitForTimeout(300)
+    }
+    const b = await page.locator('[data-anchor="boat"]').boundingBox()
+    if (!b) return
+    await page.mouse.move(vp.width * 0.5, b.y + b.height / 2 - vp.height * 0.25)
+    await page.mouse.down()
+    await page.waitForTimeout(5800)
+    await page.mouse.up()
+  }),
+  bayMoment(
+    'bay-pose',
+    4,
+    'nail?packed=bucket',
+    async (page) => {
+      await tapAnchor(page, 'glow:beach')
+      await page.waitForFunction(() => window.__thaiBoatQA?.().phase === 'beach', null, { timeout: 45000 }).catch(() => {})
+      await page.waitForTimeout(600)
+    },
+    async (page) => {
+      await page.getByRole('button', { name: 'Cheer pose' }).click({ force: true }).catch(() => {})
+      await page.waitForTimeout(3600)
+    },
+  ),
+)
+
 // The boat trip's trip kit (3D greybox): things hopping into the suitcase in an arc, Kaylee sitting on the too-full
 // suitcase (squash, squash, squash, click), everyone hopping into Aunty Sri's van and it gliding off, the plane's takeoff
 // (everyone presses back, then up), and the tray and the call button (ding: snacks). Taps go through the tap targets.

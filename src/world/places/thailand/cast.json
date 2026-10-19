@@ -65,6 +65,11 @@
       "voice": "echo",
       "pitch": 5,
       "instructions": "You are Putter, a tiny three year old boy penguin. Giggly, shy and adorable, little toddler voice. Light Thai accent."
+    },
+    "kids": {
+      "voice": "coral",
+      "pitch": 4,
+      "instructions": "You are the kids of Koh Panyee, a fishing village on stilts in Thailand: three excited seven-year-olds cheering together after a goal on their floating football field. Bright, bouncy, shouting happily. Thai children speaking English with a Thai accent."
     }
   }
 }

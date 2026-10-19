@@ -626,6 +626,67 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
 3. **The bay, built.** The longtail with its tiller, ribbons and long tail; karsts with notches; Koh Panyee and the
    football; the canoe, cave and hong; Khao Phing Kan and Ko Tapu; critters; poses and the album; voices for the bay.
    Full QA.
+   *Built 2026-10-19* (`activities/boat-trip/bay/`: the core `bay.ts` and one file per part, `pier.ts`, `open.ts`,
+   `village.ts`, `cave.ts`, `nail.ts`, `sunset.ts`, in the style of `trip/legs/`; `critters.ts`, `sky.ts`, `poses.ts`;
+   `Album.tsx`, `Stickers.tsx`, `PoseButtons.tsx`, `BayGuide.tsx`; `engine/photo.ts`). Everything is modelled in code; the
+   bay speaks in real voices (Daddy, Mommy, Sparkle, the village kids); the trip legs keep their text bubbles. What
+   building it changed from the plan:
+   - **Sections:** `pier`, `bay`, `village`, `cave`, `hong` (its own link now), `nail`, `sunset`, with `ribbons`, `stops`,
+     `photos` and `found` in the URL as she plays. A `pier` link starts with a bare bow (with `ribbons` it has them
+     tied); later links have the ribbons and the garland on. `photos` in a link are staged and taken in the first frames,
+     so the album shows them. `stops=village` puts the football in the boat.
+   - **The pier:** a basket of six ribbon rolls by the bow (a fourth ribbon takes the oldest one's place) and the jasmine
+     garland on a banana leaf at the end of the pier. Three ribbons and the garland, then everyone steps in. A camera
+     from the water off the bow frames the basket, the prow and the family while she ties them.
+   - **"Where to, Captain Kaylee?"** The camera pulls up over the bay for about three seconds so both glows are on
+     screen, then comes back down (any touch ends it; leaving the pier, it waits until her finger lifts). A glow that's
+     off screen gets a badge at the screen's edge with what it is (🏘️ 🛶 🏝️ ⚓ 🚤); tap the badge and the boat sets off
+     there. The Nail Island glows all the time; the village and cave go out once visited, and Daddy asks again when she
+     leaves the beach with somewhere still to go.
+   - **The longtail:** Kaylee stands at the back with both hands on the tiller and sways as it swings; a rooster tail of
+     spray and an engine that roars flat out; the ribbons stream back and flutter faster the faster she goes. What rides
+     along: the duck on its string (tied at the stern's corner, so it bobs beside the wake), the teddy on Mommy's lap,
+     her bucket, Daddy's mango (his banana if she didn't pack one), then the coconut and the football. Mommy's sun hat
+     and Daddy's sunglasses are theirs (not packed things).
+   - **Open water:** needlefish skip across her path now and then; the sea eagle circles ahead and swoops for a fish;
+     the coconut is scooped by Mommy if she comes up slowly, bumped along if she's fast; the macaques' ledge is on a
+     rock by the way to the cave (drive within ~20 m and one steals the snack); the fisherman pulls up his net; bonk a
+     tower and a crab comes out of its notch. Big bonks send Daddy's sunglasses flying (back on upside down), a high
+     wake jump takes Mommy's hat, doughnuts make everyone's heads wobble ("So dizzy!").
+   - **The village:** two rows of five stilt houses with a lane between them, a slow zone round them (the boat eases
+     down to 42% speed), the floating field off the east row. The ball glows while it's loose and the kids call her
+     ("The ball, Kaylee!"), with a ⚽ badge at the screen's edge when it's off screen; she pushes it with the boat (tap it and the boat goes for it; close to the field it drifts
+     their way). At the field's edge it hops up, a kid kicks it in, GOAL, "Khob khun ka, Kaylee!", a football is tossed
+     into the boat and Daddy's photo is taken from the water past the boat, the kids cheering behind. While she stays,
+     the kids kick it back out to her twice more. Bump a house and the
+     grandma comes out with her broom. The dome rings a soft bell and Kaylee bows her head.
+   - **The way into the hong** stays the canoe through the low cave, lying down (Dad's brief for this step: the
+     lie-down taps and Daddy's horn on the roof). The bats hang along the walls (in the middle they flew
+     through the camera); in the canoe the family's tap targets come before the bats and drips; Mommy tucks her hat
+     away (it hid the tunnel). The tunnel camera looks a few meters ahead, past their heads, at the roof coming down. In
+     the hong the camera stands still up on the lagoon's north side and turns to watch the canoe (the whole room shows,
+     and it never spins); Daddy's photo is taken after Sparkle's fact, from the side so all three faces show, and then
+     a glow at the tunnel shows the way out ("Paddle back out to the boat!"; tap it and the canoe paddles all the way
+     back to the longtail). Tap a mangrove for its fact.
+   - **The photo:** the first one is "One, two, three, cheese!", later ones three beeps. Arms go up and out, not straight
+     up (a chibi's short arms hide behind its big head); the heart pose floats a heart over each of them. After a photo
+     the boat glows and the finger points at it ("Back in the boat, Kaylee!"); tapping it mid-pose goes straight back. The bucket comes off the boat and her sandcastle goes up in three pats.
+   - **The sunset** begins once she has been to both stops, has a Nail Island photo and drives 40 m from the beach (a
+     `sunset` link starts pink; going to the Nail Island first doesn't end the trip early). The porpoise surfaces beside the boat every 6-10 s. Into the pier's glow: the family hops onto the boards,
+     the boarding pass gets its last punch, and her album opens by itself. Tap the boat to go out again.
+   - **The album:** a book button that bounces; new photos print out big and drop in, stickers fly in from the animal.
+     Up to 12 photos (Mommy's selfies, tap her in the longtail, are the first to go). Tap a photo or a sticker: Sparkle's
+     fact. The photos live in memory for the trip; saving them for Agong's wall comes with home (step 5).
+   - **Sparkle** talks only for something new: a stop's first sight (the village, the hong, Ko Tapu, the notch, the
+     buoys), the first VROOM, "Pai means let's go!" after Daddy's "Pai!", "Khob khun means thank you!" after the kids,
+     the third ribbon; and a hint after 8 s with nothing done (never while a finger drives or the boat goes to a tapped
+     spot). The village kids' voice: OpenAI `coral` at +4 semitones (auditioned against nova, shimmer, sage, alloy,
+     fable and ballad; the brightest and most child-like).
+   - **Holding means driving:** a finger held still on something to poke (a bat, the boat) starts driving after 0.3 s.
+     The chase camera slides in when a rock tower would hide the boat (or swallow the camera). Facts never get cut
+     off: Sparkle waits for the family's lines. In the canoe the family's tap targets come first; in the longtail the
+     boat's bow and engine (VROOM) come before the family's.
+   - Not yet (later gates): home and the photo wall (step 5), the trip's art (step 4).
 4. **The trip, built.** The elephant map in her room, the packing props and her new hat, sunglasses and floaties, the
    goodbye, Aunty Sri's car and the Bangkok road, the x-ray, the plane and its cabin, clouds, Sparkle's balloon and the
    elephant below, the landing.
@@ -659,10 +720,8 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
 8. **The controls (PR #99):** both together (finger on the water, and grab the boat); the default speed is fine.
 
 ### Still open
-- **How did you get into the hong?** Your answer to 3 left out "a cave by canoe". Greybox 1 goes into the hong by
-  canoe through a low cave (how Phang Nga's hongs are usually visited, lying flat). Did you go in by canoe like that, or
-  another way (straight in by longtail, or by kayak through an opening)? Ask before building the bay (step 3); the
-  greybox 2 trip kit doesn't depend on it.
+- ~~**How did you get into the hong?**~~ Built in step 3 the greybox 1 way: by canoe through a low cave, lying flat
+  (Dad's step 3 brief asked for the lie-down taps and the horn bonking the roof).
 - ~~**Aunty Sri's car:** what kind and color?~~ A white electric van (Dad, 2026-10-19).
 
 ## Sources to check facts against

@@ -66,7 +66,15 @@ const SCENARIOS = [
   { name: "thailand trip kit: goodbye and aunty sri's van", id: 'trip-goodbye', hash: '#/world/thailand/boat-trip/goodbye', reset: true },
   { name: 'thailand trip kit: airport', id: 'trip-airport', hash: '#/world/thailand/boat-trip/airport', reset: true },
   { name: 'thailand trip kit: window seat', id: 'trip-plane', hash: '#/world/thailand/boat-trip/takeoff', reset: true },
-  { name: 'thailand boat trip (greybox, from the pier)', id: 'boat-trip', hash: '#/world/thailand/boat-trip/pier', reset: true },
+  // The bay, one run per section (links with the section's path: a bare /boat-trip gets rewritten). It never "finishes"
+  // (the trip goes on to the way home in a later gate), so talk per touch is total talk / taps by hand.
+  { name: 'thailand bay: the pier and its ribbons', id: 'bay-pier', hash: '#/world/thailand/boat-trip/pier', reset: true },
+  { name: 'thailand bay: open water, where to?', id: 'bay-open', hash: '#/world/thailand/boat-trip/bay', reset: true },
+  { name: 'thailand bay: the village and the football', id: 'bay-village', hash: '#/world/thailand/boat-trip/village', reset: true },
+  { name: 'thailand bay: the canoe under the low roof', id: 'bay-cave', hash: '#/world/thailand/boat-trip/cave', reset: true },
+  { name: 'thailand bay: the hong', id: 'bay-hong', hash: '#/world/thailand/boat-trip/hong', reset: true },
+  { name: 'thailand bay: the nail island and the photo', id: 'bay-nail', hash: '#/world/thailand/boat-trip/nail', reset: true },
+  { name: 'thailand bay: the sunset ride back', id: 'bay-sunset', hash: '#/world/thailand/boat-trip/sunset', reset: true },
 ].filter((s) => !flag('only') || flag('only').split(',').includes(s.id))
 
 // Is there something (other than the story overlay, the top bar or a "hear it again" button) she can touch?
