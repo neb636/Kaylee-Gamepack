@@ -511,6 +511,21 @@ karsts at 60 fps in Safari; (3) memory on the iPad when swapping scenes between 
    box longtail with the real Mommy, Daddy and Kaylee sitting in it, the drive control, wake, spray, bonks, VROOM, a
    tunnel, Ko Tapu with buoys. `?debug=1` gets sliders for the feel (speed, turn, lag) and a toggle between "finger on
    the water" and "grab the boat". **Dad plays it on the iPad.** If driving isn't fun yet, change the toy.
+   *Built 2026-10-18* (`activities/boat-trip/`, `trip/drive.ts`, `trip/vehicles/`). What playing it with a robot
+   finger changed from the plan:
+   - The hong is part of the `cave` section (no `hong` link yet); the canoe goes in at the cave's raft and comes back
+     out the same way.
+   - In the canoe, **Kaylee steers from the back** (that's where a canoe's captain sits) and Daddy paddles in front,
+     so Daddy, the tallest, bonks first, then Mommy, then Kaylee. Whoever she lies down early stays down until the
+     roof is high again.
+   - The tunnel camera is **low behind the canoe**, as high as the roof over it allows, not from the side: from the
+     side, "finger up the screen" stopped meaning "forward". In the tunnel her finger counts by where it is on the
+     screen next to the canoe (above it = paddle on, below = back up).
+   - A held finger within about 11° of straight ahead goes straight (the camera sits 12° to the right of the boat, and
+     "up the screen" otherwise curved forever). Taps go exactly where she tapped, round Ko Tapu's buoys, the hong and
+     the towers on their own.
+   - The photo on the beach (the 📸 button) is a camera flash and a hop for now; the album and poses come in step 3.
+   - `?drive=grab` opens it in the "grab the boat" control.
 2. **Greybox: the trip kit.** The same control in a box taxi on a box road and a box plane through blob clouds over a
    flat Thailand outline; the map pin and the packing toy in her room with box props; the boarding pass; resume.
    **Dad plays it.** Does each leg feel short and worth having?

@@ -329,6 +329,20 @@ const SCREENS = [
   ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
   { name: 'thailand-flat', hash: '#/world/thailand/hub/downstairs?gl=off', reset: true, wait: 600 },
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
+  // The boat trip (greybox 1): every section, the beach after landing (the photo), and the flat version.
+  ...['pier', 'bay', 'cave', 'nail'].map((to) => ({ name: `boat-trip-${to}`, hash: `#/world/thailand/boat-trip/${to}`, reset: true, wait: 2200 })),
+  {
+    name: 'boat-trip-beach',
+    hash: '#/world/thailand/boat-trip/nail',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      await p.locator('[data-anchor="glow:beach"]').click({ force: true }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiBoatQA?.().phase === 'beach', null, { timeout: 45000 }).catch(() => {})
+      await p.waitForTimeout(1200)
+    },
+  },
+  { name: 'boat-trip-flat', hash: '#/world/thailand/boat-trip/bay?gl=off', reset: true, wait: 600 },
 // --routes=venice,pizzeria-own: exact screen names, or an activity id for all of its screens (venice-*).
 ].filter((s) => !flag('routes') || flag('routes').split(',').some((r) => s.name === r || s.name.startsWith(`${r}-`)))
 

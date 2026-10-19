@@ -96,13 +96,17 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
 5. **Activities,** one per PR, through `ACTIVITY-TEMPLATE.md`. Dad picked four (2026-10-17), on hold until he says go:
    Baan Chang Cafe (in 3D, from #86's design), a Songkran water fight on the street, a longtail boat in Krabi, and night
    market food. The longtail boat became the first family trip (2026-10-18): `thailand/boat-trip.md`, with a reusable
-   trip kit (pack, taxi, airport, plane) for later trips.
+   trip kit (pack, taxi, airport, plane) for later trips. Its greybox 1, the boat toy in Phang Nga Bay, is built
+   (2026-10-18, `#/world/thailand/boat-trip/bay`); it isn't reached from the house yet (the elephant map comes in
+   greybox 2).
 
 ## Tech notes
 
 - `engine/` holds generic 3D: one shared renderer (we make the WebGL2 context ourselves, so no console error without
   one), the frame loop (60 fps cap; 30 when nothing moves; 30/4 in test browsers), toon materials, screen-space
-  ink outlines, a box-fitting follow camera, a walk grid with A*, and the tap marker.
+  ink outlines, a box-fitting follow camera, a walk grid with A*, and the tap marker. `View3D.tsx` mounts any 3D world
+  (the house, the bay) with its DOM tap targets (`Anchors.tsx`); `water.ts` and `particles.ts` (foam, spray) came with
+  the boat trip. Shader code: never name a variable `patch` or `sample` (reserved in WebGL2; the shader silently fails).
 - `activities/hub/layout.ts` is the one source of truth in meters (pure data): the build, the walk grids, the tap
   targets and the flat fallback all read it.
 - The tap targets are DOM buttons placed over the 3D things every frame (`Anchors.tsx`), at least 64 px. They give

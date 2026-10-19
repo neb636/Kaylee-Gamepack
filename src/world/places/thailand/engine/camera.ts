@@ -18,6 +18,9 @@ export interface Shot {
   pitch: number
   minDist?: number
   maxDist?: number
+  /** The box turns with the camera (a chase camera behind a boat): its x runs across the screen and its z away from the
+   *  camera, so the fit is the same whichever way the camera faces. */
+  follow?: boolean
 }
 
 const deg = Math.PI / 180
@@ -33,6 +36,9 @@ export class CameraRig {
   private probe = new PerspectiveCamera()
   /** Seconds to settle (shorter = snappier). */
   lag = 0.35
+  /** Degrees of view, top to bottom (default: TUNE.fov). A chase camera behind a boat wants a wider lens than the
+   *  dollhouse, so the horizon and the rock towers show. */
+  fov: number | null = null
 
   setSize(w: number, h: number, top: number) {
     this.w = Math.max(1, w)
@@ -40,7 +46,7 @@ export class CameraRig {
     this.top = Math.max(0, Math.min(top, h * 0.4))
     this.fits.clear()
     const c = this.camera
-    c.fov = TUNE.fov
+    c.fov = this.fov ?? TUNE.fov
     c.aspect = this.w / (this.h + this.top)
     c.setViewOffset(this.w, this.h + this.top, 0, 0, this.w, this.h)
     c.updateProjectionMatrix()
@@ -62,7 +68,7 @@ export class CameraRig {
   /** Forget cached fits (the ?debug panel changed the field of view). */
   refit() {
     this.fits.clear()
-    if (this.camera.fov !== TUNE.fov) this.setSize(this.w, this.h, this.top)
+    if (this.camera.fov !== (this.fov ?? TUNE.fov)) this.setSize(this.w, this.h, this.top)
   }
 
   update(dt: number) {
@@ -74,6 +80,11 @@ export class CameraRig {
     this.cur.pitch += (g.pitch - this.cur.pitch) * k
     this.cur.dist += (this.fit(g) - this.cur.dist) * k
     this.place()
+  }
+
+  /** Which way the camera faces now (degrees, never wrapped): a turning camera unwraps its next goal from this. */
+  get yaw() {
+    return this.cur.yaw
   }
 
   /** True while the camera is still noticeably moving toward its shot. */
@@ -91,7 +102,8 @@ export class CameraRig {
 
   /** The smallest distance at which the whole box shows below the top bar (with a small margin). */
   fit(shot: Shot): number {
-    const key = `${shot.half.x.toFixed(2)},${shot.half.y.toFixed(2)},${shot.half.z.toFixed(2)},${shot.yaw.toFixed(2)},${shot.pitch.toFixed(2)},${shot.minDist},${shot.maxDist}`
+    const yaw = shot.follow ? 0 : shot.yaw
+    const key = `${shot.half.x.toFixed(2)},${shot.half.y.toFixed(2)},${shot.half.z.toFixed(2)},${yaw.toFixed(2)},${shot.pitch.toFixed(2)},${shot.minDist},${shot.maxDist}`
     const cached = this.fits.get(key)
     if (cached !== undefined) return cached
     const p = this.probe
@@ -103,7 +115,7 @@ export class CameraRig {
     const xMax = 0.94
     const v = new Vector3()
     const fits = (d: number) => {
-      p.position.copy(offset(shot.yaw, shot.pitch, d))
+      p.position.copy(offset(yaw, shot.pitch, d))
       p.lookAt(0, 0, 0)
       p.updateMatrixWorld()
       for (const sx of [-1, 1])
