@@ -15,9 +15,11 @@ interface Chips {
 }
 
 interface Floor {
-  /** One repeat of the pattern, meters. */
+  /** One repeat of the pattern as drawn, meters. */
   w: number
   d: number
+  /** How much bigger it's laid on the floor than drawn (chips and all). */
+  scale: number
   /** Canvas pixels per meter. */
   ppm: number
   base: string
@@ -82,10 +84,12 @@ function draw(f: Floor) {
   return c
 }
 
-/** Downstairs: one panel of golden terrazzo with a green band through its middle each way (the bands meet the walls). */
+/** Downstairs: one panel of golden terrazzo with a green band through its middle each way (the bands meet the walls).
+ *  Laid a third bigger than drawn (Dad, 2026-10-19), so three panels span the house and the bands still meet the walls. */
 const SHOP: Floor = {
   w: 1.5625,
   d: 1.5625,
+  scale: 4 / 3,
   ppm: 512,
   base: '#E9D19C',
   chips: { colors: ['#F6E8C6', '#D6B677', '#C19A5E', '#FBF3DF', '#A07A4E', '#7E6347', '#B7AE9E', '#5B4A3C', '#B8794E'], perM2: 9000, size: [0.005, 0.03] },
@@ -123,10 +127,12 @@ const SHOP: Floor = {
   },
 }
 
-/** Upstairs: two by two big tiles of pale grey terrazzo, with thin dark seams between them. */
+/** Upstairs: two by two big tiles of pale grey terrazzo, with thin dark seams between them (laid 50% bigger than
+ *  drawn, Dad 2026-10-19: 0.9 m tiles). */
 const UPSTAIRS: Floor = {
   w: 1.2,
   d: 1.2,
+  scale: 1.5,
   ppm: 512,
   base: '#E7E5E1',
   chips: { colors: ['#B9BCC2', '#8F949C', '#F7F6F3', '#D3D4D6', '#5D626B', '#3F434B', '#A39684', '#C9C2B5'], perM2: 9500, size: [0.005, 0.026] },
@@ -145,7 +151,7 @@ function floorMesh(kit: Kit, f: Floor, w: number, d: number, x: number, z: numbe
   const tex = kit.bag.add(new CanvasTexture(draw(f)))
   tex.colorSpace = SRGBColorSpace
   tex.wrapS = tex.wrapT = RepeatWrapping
-  tex.repeat.set(w / f.w, d / f.d)
+  tex.repeat.set(w / (f.w * f.scale), d / (f.d * f.scale))
   tex.offset.set(...offset)
   tex.anisotropy = 8
   const mat = kit.bag.add(new MeshToonMaterial({ map: tex, gradientMap: toonGradient() }))
@@ -166,7 +172,7 @@ export function upstairsFloor(kit: Kit, rects: [number, number, number, number][
     const w = x1 - x0
     const d = z1 - z0
     // Offsets so every piece's tiles sit on one grid from (0, 0).
-    return floorMesh(kit, UPSTAIRS, w, d, (x0 + x1) / 2, (z0 + z1) / 2, y, [frac(x0 / UPSTAIRS.w), frac(-z1 / UPSTAIRS.d)])
+    return floorMesh(kit, UPSTAIRS, w, d, (x0 + x1) / 2, (z0 + z1) / 2, y, [frac(x0 / (UPSTAIRS.w * UPSTAIRS.scale)), frac(-z1 / (UPSTAIRS.d * UPSTAIRS.scale))])
   })
 }
 

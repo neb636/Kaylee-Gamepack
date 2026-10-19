@@ -35,7 +35,7 @@ import { buildStairs } from './build/stairs'
 import { buildStreet } from './build/street'
 import { Traffic } from './build/traffic'
 import { buildUpper } from './build/upper'
-import { DIM, MAP, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
+import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
 import type { HubSection } from './sections'
 
 export type Spot = 'street' | 'downstairs' | 'upstairs'
@@ -84,8 +84,6 @@ export interface HousePlugin {
 }
 
 const deg = Math.PI / 180
-/** Close up on the elephant map in her room, Kaylee looking up at it from the right. */
-export const MAP_SHOT: Shot = { center: new Vector3(MAP.x + 0.3, MAP.y - 0.5, MAP.z + 0.75), half: new Vector3(0.95, 1.05, 0.6), yaw: 12, pitch: 12, minDist: 1.5 }
 /** Where the tuk-tuk stops to let her out, and where it parks after (out of the way, past the spirit house). */
 const DROP_X = 0.9
 const PARK_X = 9.8
@@ -161,31 +159,32 @@ export class House implements World3D {
     const upper = buildUpper(kit)
     const stairs = buildStairs(kit)
     this.gecko = new Gecko(kit)
-    ground.room.add(this.gecko.root)
+    upper.room.add(this.gecko.root)
     this.traffic = new Traffic(kit)
     scene.add(this.traffic.root)
     // Grouped by when they show (applyVisibility): the upstairs room only from upstairs, the downstairs room from the
     // street only once the shutter is up, and so on.
     const upperRoom = new Group()
-    upperRoom.add(upper.room, upper.rightWall)
+    upperRoom.add(upper.room, upper.leftWall)
     const upperAll = new Group()
     const upperFront = street.upperFront
     upperAll.add(upperRoom, street.balcony, upperFront)
     const groundRoom = new Group()
-    groundRoom.add(ground.room, ground.rightWall)
-    scene.add(street.ground, street.tall, street.props, street.front, street.frontRight, street.roof, groundRoom, stairs, upperAll)
+    groundRoom.add(ground.room, ground.leftWall)
+    scene.add(street.ground, street.tall, street.props, street.front, street.frontLeft, street.roof, groundRoom, stairs, upperAll)
     this.groups = { tall: street.tall, props: street.props, roof: street.roof, upper: upperAll, upperRoom, upperFront, front: street.front, groundRoom, stairs }
-    // Walls that lower so the camera can see in: the right walls (to 1 m), the front pillar and the upper front.
+    // Walls that lower so the camera (on the left, looking at the right wall) can see in: the left walls (to 1 m), the
+    // front pillar and the upper front.
     this.cuts.push(
-      { obj: ground.rightWall, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
-      { obj: street.frontRight, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
-      { obj: upper.rightWall, low: 1.0 / DIM.g1, when: (m) => m === 'inside1', value: 1 },
+      { obj: ground.leftWall, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
+      { obj: street.frontLeft, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
+      { obj: upper.leftWall, low: 1.0 / DIM.g1, when: (m) => m === 'inside1', value: 1 },
       { obj: upperFront, low: 0.12, when: (m) => m === 'inside1', value: 1 },
       // Upstairs the glass wall stands between the camera and her room once she's in it.
       { obj: upper.glassWall, low: 0.12, when: (m) => m === 'inside1' && this.kaylee.position.z < DIM.hall.zGlass - 0.1, value: 1 },
     )
     // The upper wall pieces scale from the upstairs floor, not from the street.
-    const upperCuts: Object3D[] = [upper.rightWall, upperFront, upper.glassWall]
+    const upperCuts: Object3D[] = [upper.leftWall, upperFront, upper.glassWall]
     for (const c of this.cuts) c.obj.userData.cutBase = upperCuts.includes(c.obj) ? DIM.g0 : 0
 
     this.reactor = new Reactor(kit, this.bag)
@@ -692,8 +691,6 @@ export class House implements World3D {
   private shot(): Shot {
     const own = this.plugin?.shot?.()
     if (own) return own
-    // Looking at the elephant map in her room, close up.
-    if (this.using === 'map') return MAP_SHOT
     if (this.photo) {
       const who = this.photo.who
       if (who) {
@@ -754,7 +751,7 @@ export class House implements World3D {
       f.update(dt, t)
     }
     this.reactor.update(dt, t)
-    if (this.gecko.update(dt, t) && this.mode === 'inside0') sfx.tukkae()
+    if (this.gecko.update(dt, t) && this.mode === 'inside1') sfx.tukkae()
     this.traffic.update(dt, this.mode === 'street' && !this.arriving && !this.photo)
     this.marker.update(dt)
     // Inside or outside? (with a little dead band so she doesn't flicker on the doorstep)

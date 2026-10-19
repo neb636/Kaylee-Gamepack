@@ -14,8 +14,8 @@ export const TUNE = {
   /** Outline width multiplier (characters 3 px, props 2 px, trinkets 1.5 px at 1). */
   outline: 1,
   /** Camera inside the house: degrees, and the floor box (meters) that must fit on screen around Kaylee. */
-  insideYawWide: 30,
-  insideYawTall: 16,
+  insideYawWide: -30,
+  insideYawTall: -16,
   insidePitch: 50,
   insideFitW: 5.65,
   insideFitD: 4.6,

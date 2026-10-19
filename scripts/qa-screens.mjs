@@ -318,7 +318,7 @@ const SCREENS = [
   // Thailand: Agong's house in 3D (the arrival mid-ride, each spot, a few things in use), the flat house without WebGL,
   // and the party card.
   { name: 'thailand-arrive', hash: '#/world/thailand/hub/arrive', reset: true, wait: 1400 },
-  ...['street', 'downstairs', 'downstairs?at=table', 'downstairs?at=desk', 'downstairs?at=altar', 'upstairs', 'upstairs?at=mattress', 'upstairs?at=couch', 'upstairs?at=bathroom-door'].map((to) => ({
+  ...['street', 'downstairs', 'downstairs?at=table', 'downstairs?at=desk', 'downstairs?at=altar', 'downstairs?at=photos', 'upstairs', 'upstairs?at=mattress', 'upstairs?at=couch', 'upstairs?at=bathroom-door'].map((to) => ({
     name: `thailand-${to.replace('?at=', '-')}`,
     hash: `#/world/thailand/hub/${to}`,
     reset: true,

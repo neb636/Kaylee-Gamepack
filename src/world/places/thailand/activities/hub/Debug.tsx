@@ -6,8 +6,8 @@ import type { House } from './house'
 
 type NumKey = { [K in keyof Tune]: Tune[K] extends number ? K : never }[keyof Tune]
 const SLIDERS: [NumKey, number, number, number][] = [
-  ['insideYawWide', -10, 60, 1],
-  ['insideYawTall', -10, 60, 1],
+  ['insideYawWide', -60, 10, 1],
+  ['insideYawTall', -60, 10, 1],
   ['insidePitch', 20, 80, 1],
   ['insideFitW', 3, 9, 0.1],
   ['insideFitD', 3, 12, 0.1],

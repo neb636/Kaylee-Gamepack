@@ -1,7 +1,7 @@
 // Downstairs at Agong's: his desk against the right wall at the front (he sits there a lot), the long table on the
-// left with red plastic stools, old photos on
-// the walls, a fan; the stairs (stairs.ts, at the back left); the fridge against the right wall in front of the back
-// room, and in the back room the family altar, the little shrine and the kitchen counter with the rice cooker.
+// left with red plastic stools, old photos on the right wall over his desk and on the back wall, a fan; the stairs
+// (stairs.ts, at the back left); the fridge against the right wall in front of the back room, and in the back room
+// the family altar, the little shrine and the kitchen counter with the rice cooker.
 // The desk, his slatted wooden chair, the pictures and the big fan follow Dad's photos of the
 // real room (~/refs, 2026-10-18): glossy dark red-brown wood, cream walls, golden terrazzo with green bands.
 import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry } from 'three'
@@ -32,46 +32,42 @@ const SEPIA = ['#E6C9A8', '#D9BFA0', '#EBD5BC', '#CDB295']
 const deg = Math.PI / 180
 
 export interface Ground {
-  /** Floor, left and back walls, furniture: everything that stays. */
+  /** Floor, right and back walls, furniture: everything that stays. */
   room: Group
-  /** The right wall (the cutaway lowers it so the camera can see in). */
-  rightWall: Group
+  /** The left wall, all of it (the cutaway lowers it so the camera can see in). */
+  leftWall: Group
 }
 
 export function buildGround(kit: Kit): Ground {
   const room = new Group()
-  const rightWall = new Group()
+  const leftWall = new Group()
   const { left, right, back, g0 } = DIM
   const depth = -back
-  const { zFront, zBack } = DIM.stairs
 
   // ---- Floor (golden terrazzo with green bands, tiles.ts), walls ----
   room.add(scenery(kit, [P.box(right - left, 0.2, depth, FLOOR, { at: [0, -0.1, back / 2] })], 2), shopFloor(kit, right - left, depth, 0, back / 2))
   room.add(
     scenery(kit, [
-      // The left wall in front of and behind the stairs (stairs.ts has the piece beside them, seen from upstairs too).
-      ...[
-        [0, zFront],
-        [zBack, back],
-      ].flatMap(([z0, z1]) => [P.box(0.15, g0, z0 - z1, WALL, { at: [left - 0.075, g0 / 2, (z0 + z1) / 2] }), P.box(0.03, 0.12, z0 - z1, WOOD_DARK, { at: [left + 0.015, 0.06, (z0 + z1) / 2] })]),
+      P.box(0.15, g0, depth, WALL, { at: [right + 0.075, g0 / 2, back / 2] }),
+      P.box(0.03, 0.12, depth, WOOD_DARK, { at: [right - 0.015, 0.06, back / 2] }),
       P.box(right - left + 0.3, g0, 0.15, WALL_BACK, { at: [0, g0 / 2, back - 0.075] }),
       P.box(right - left, 0.12, 0.03, WOOD_DARK, { at: [0, 0.06, back + 0.015] }),
     ]),
   )
-  rightWall.add(scenery(kit, [P.box(0.15, g0, depth, WALL, { at: [right + 0.075, g0 / 2, back / 2] })]))
+  leftWall.add(scenery(kit, [P.box(0.15, g0, depth, WALL, { at: [left - 0.075, g0 / 2, back / 2] }), P.box(0.03, 0.12, depth, WOOD_DARK, { at: [left + 0.015, 0.06, back / 2] })]))
 
-  // ---- The table and the stools ----
+  // ---- The table (a big one: the whole family eats at it) and the stools ----
   room.add(
     poke(
       kit,
       'table',
       [
-        P.rbox(0.92, 0.07, 1.95, 0.03, WOOD, { at: [0, 0.74, 0] }),
+        P.rbox(1.1, 0.07, 2.34, 0.03, WOOD, { at: [0, 0.74, 0] }),
         ...[
-          [-0.38, -0.88],
-          [0.38, -0.88],
-          [-0.38, 0.88],
-          [0.38, 0.88],
+          [-0.46, -1.06],
+          [0.46, -1.06],
+          [-0.46, 1.06],
+          [0.46, 1.06],
         ].map(([x, z]) => P.cyl(0.04, 0.04, 0.72, WOOD_DARK, { at: [x, 0.36, z] })),
         // A teapot, cups and a bowl of fruit.
         P.sphere(0.11, PAL.sky, { at: [0.15, 0.88, 0.45], scale: [1, 0.85, 1] }),
@@ -88,7 +84,7 @@ export function buildGround(kit: Kit): Ground {
     ),
   )
   const stool = (x: number, z: number) => [P.cyl(0.17, 0.2, 0.06, STOOL, { at: [x, 0.42, z] }), P.cyl(0.13, 0.19, 0.4, STOOL, { at: [x, 0.2, z] })]
-  room.add(scenery(kit, [...stool(-2.825, -2.2), ...stool(-2.825, -3.1), ...stool(-1.325, -2.2), ...stool(-1.325, -3.1), ...stool(-2.075, -1.3), ...stool(-2.075, -4.0)]))
+  room.add(scenery(kit, [...stool(-2.85, -2.0), ...stool(-2.85, -3.2), ...stool(-1.3, -2.0), ...stool(-1.3, -3.2), ...stool(-2.075, -1.15), ...stool(-2.075, -4.05)]))
 
   // ---- A grey couch against the left wall, facing into the room ----
   room.add(poke(kit, 'ground-couch', [
@@ -97,7 +93,7 @@ export function buildGround(kit: Kit): Ground {
     P.rbox(0.2, 0.65, 2.8, 0.08, '#AFB2BC', { at: [-0.32, 0.61, 0] }),
     ...[-1.3, 1.3].map((z) => P.rbox(0.82, 0.43, 0.18, 0.07, '#AFB2BC', { at: [0, 0.46, z] })),
     P.rbox(0.13, 0.34, 0.38, 0.06, '#E2E3E8', { at: [-0.17, 0.67, -0.65], rot: [0, 0, -0.2] }),
-  ], [-2.7, 0, -6.9]))
+  ], [-2.7, 0, -6.5]))
 
   // ---- Agong's desk against the right wall at the front: he sits at it facing the wall ----
   // Like his real one: a long drawer across the top (a brass lock and a bar handle), a cupboard with a raised panel on
@@ -204,15 +200,15 @@ export function buildGround(kit: Kit): Ground {
   room.add(shrine)
 
   // ---- Old pictures hung high on the walls, tipped forward like his: portraits in big gold frames, old photos and a
-  // certificate in dark wood. Then the clock. ----
+  // certificate in dark wood, on the right wall over his desk. Then the clock. ----
   room.add(
-    photoWall(kit, 'photos', [left + 0.02, 2.45, -4.0], [
+    photoWall(kit, 'photos', [right - 0.02, 2.45, -4.45], [
       { kind: 'certificate', w: 0.4, h: 0.52, frame: 'wood' },
       { kind: 'uniform-white', w: 0.42, h: 0.56, frame: 'gold' },
       { kind: 'uniform-blue', w: 0.42, h: 0.56, frame: 'gold' },
       { kind: 'couple', w: 0.5, h: 0.4, frame: 'wood' },
       { kind: 'family', w: 0.46, h: 0.38, frame: 'wood' },
-    ]),
+    ], Math.PI),
     photoWall(
       kit,
       'photos-back',
@@ -225,7 +221,7 @@ export function buildGround(kit: Kit): Ground {
       -Math.PI / 2,
     ),
   )
-  const clock = poke(kit, 'clock', [P.cyl(0.24, 0.24, 0.06, WOOD_DARK, { rot: [0, 0, Math.PI / 2] }), P.cyl(0.2, 0.2, 0.07, PAL.cream, { rot: [0, 0, Math.PI / 2] })], [left + 0.05, 2.85, -5.75], { px: 1.5 })
+  const clock = poke(kit, 'clock', [P.cyl(0.24, 0.24, 0.06, WOOD_DARK, { rot: [0, 0, Math.PI / 2] }), P.cyl(0.2, 0.2, 0.07, PAL.cream, { rot: [0, 0, Math.PI / 2] })], [right - 0.05, 2.85, -7.0], { px: 1.5, rotY: Math.PI })
   clock.add(part(kit, 'clock.hands', [P.box(0.02, 0.15, 0.025, PAL.ink, { at: [0, 0.06, 0] }), P.box(0.02, 0.025, 0.11, PAL.ink, { at: [0, 0, 0.045] })], [0.05, 0, 0], 0))
   room.add(clock)
   // The tear-off calendar with today's big red date, on a backing board.
@@ -264,7 +260,7 @@ export function buildGround(kit: Kit): Ground {
   shoes.add(part(kit, 'shoes.hop0', [PAL.hotpink, PAL.sky, PAL.butter, PAL.mint].map((c, i) => P.rbox(0.14, 0.04, 0.26, 0.02, c, { at: [i % 2 ? 0.08 : -0.08, 0.02, -0.28 + i * 0.18] })), [0, 0.06, 0], 1.5))
   room.add(shoes)
 
-  return { room, rightWall }
+  return { room, leftWall }
 }
 
 /** A standing fan whose blades turn all day (faster when poked). */
