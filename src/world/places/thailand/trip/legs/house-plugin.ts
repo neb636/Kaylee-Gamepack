@@ -1,46 +1,47 @@
 // The start of a trip, in Agong's own house (activities/hub/house.ts, mounted with this plugin, not copied):
 //
-// - invite: close up on the elephant map in Kaylee's room. Mommy: "Let's go on a boat trip!" Tap the boat pin: it
-//   pops, the suitcase hops out into the room and springs open, and the camera drops to it.
+// - invite: in Kaylee's room, Mommy asks if she's ready to go on a trip (the screen shows the 👍 / ✋ card, Ask.tsx).
+//   Yes: the suitcase hops out into the room and springs open, and the camera drops to it.
 // - pack (the toy): tap anything in her room and it hops into the suitcase in a big arc (or drag it there); tap
 //   something inside and it hops back out. Nothing is wrong: the pillow, the fan, a mango, even Gan asleep on the
-//   mattress ("Five more minutes..."). After a little while Mommy's one hint makes the sun things glint. To close it,
-//   tap the suitcase: once it holds a few things Kaylee hops on top and sits on it (squash, click); past five things
-//   it's too full and takes three hops. Mommy tucks in sunscreen (and her spare sun hat) whatever she packed. Then
-//   Kaylee walks down the stairs with the suitcase bumping behind her.
+//   mattress ("Five more minutes..."). So she always knows what to do: the things she can pack hop now and then, a
+//   finger points at one (then, once a few are in, at the suitcase), the screen counts what's in it, and Mommy says when
+//   to close it. After a little while Mommy's one hint makes the sun things glint. To close it, tap the suitcase (or
+//   the screen's ✅ button): once it holds a few things Kaylee hops on top and sits on it (squash, click); past five
+//   things it's too full and takes three hops. Mommy tucks in sunscreen (and her spare sun hat) whatever she packed.
+//   Then Kaylee walks down the stairs with the suitcase bumping behind her.
 // - goodbye: on the sidewalk by the open shutter the family who live here wave her off (tap anyone for a hug; Jum
-//   gives her snacks; the big cousins say "Bye..." without looking up). Aunty Sri's car pulls up; tap it (or wait) and
-//   everyone hops in.
+//   gives her snacks; the big cousins say "Bye..." without looking up). Aunty Sri's white electric van hums up quickly;
+//   tap it (or wait a moment), the side door slides open, everyone hops in, and it glides off to the airport.
 import { Group, Vector3, type Object3D } from 'three'
 import { bell, clamp, wobble } from '../../../../../sdk'
 import type { AnchorInfo } from '../../engine/Anchors'
 import type { Shot } from '../../engine/camera'
 import { DIM } from '../../activities/hub/layout'
-import { MAP_SHOT, type House, type HousePlugin } from '../../activities/hub/house'
+import type { House, HousePlugin } from '../../activities/hub/house'
 import { sfx } from '../../sfx'
 import { ITEMS, mommyTucksIn } from '../packing'
 import { buildItem, buildSuitcase, type Suitcase } from '../props'
 import { TALK, type Said } from '../talk'
-import { buildCar, type Car } from '../vehicles/car'
+import { buildVan, type Van } from '../vehicles/van'
 import { Hopper, put } from './stage'
 
 export type HouseLeg = 'invite' | 'pack' | 'goodbye'
 
 export interface TripHouseEvents {
   say(s: Said): void
-  /** She tapped the boat pin (the screen decides: straight to packing, or "keep going" from where she stopped). */
-  pin(): void
   section(id: HouseLeg): void
+  /** Where the trip is in the house (the screen shows the packing helpers while she packs). */
+  phase?(p: Phase): void
   done(next: string): void
   packed(ids: string[]): void
 }
 
 /** The trip's own tap targets in the house (the house's own come from house.ts). */
 export const TRIP_HOUSE_ANCHORS: AnchorInfo[] = [
-  { id: 'trip:pin', label: 'Boat pin', kind: 'thing' },
   { id: 'trip:suitcase', label: 'Suitcase', kind: 'thing' },
   ...ITEMS.filter((i) => i.id !== 'gan').map((i) => ({ id: `trip:item:${i.id}`, label: i.label, kind: 'thing' as const })),
-  { id: 'trip:car', label: "Aunty Sri's car", kind: 'thing' },
+  { id: 'trip:van', label: "Aunty Sri's van", kind: 'thing' },
 ]
 
 const U = DIM.g0
@@ -67,6 +68,8 @@ const ROOM = {
     mango: [-0.2, 0, -17.65],
   } as Record<string, [number, number, number]>,
 }
+/** Where Kaylee stands while Mommy asks (between her and the suitcase by the wall). */
+const INVITE = { x: 0.55, z: -19.5 }
 /** The sidewalk at the goodbye (street floor, +z toward the road). */
 const STREET = {
   kaylee: { x: 0.25, z: 1.85, face: 0 },
@@ -77,7 +80,8 @@ const STREET = {
   row: [['bb', -2.75], ['gan', -2.05], ['ken', -1.35], ['joy', -0.6], ['agong', 0.95], ['jum', 1.95]] as [string, number][],
   rowZ: 0.8,
   carZ: 3.95,
-  carStop: 0.9,
+  // Past Daddy, so the van doesn't hide anyone on the sidewalk.
+  carStop: 3.4,
 }
 
 interface Thing {
@@ -93,7 +97,7 @@ interface Thing {
   dragged: boolean
 }
 
-type Phase = 'invite' | 'opening' | 'pack' | 'sitting' | 'closed' | 'leaving' | 'goodbye' | 'boarding' | 'gone'
+export type Phase = 'invite' | 'opening' | 'pack' | 'sitting' | 'closed' | 'leaving' | 'goodbye' | 'boarding' | 'gone'
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -102,7 +106,7 @@ export class TripHouse implements HousePlugin {
   private house!: House
   private root = new Group()
   private suitcase!: Suitcase
-  private car!: Car
+  private van!: Van
   private things = new Map<string, Thing>()
   private order: string[] = []
   private hopper!: Hopper
@@ -111,7 +115,10 @@ export class TripHouse implements HousePlugin {
   private phaseT = 0
   private lid = { angle: 0, goal: 0, flap: 1 }
   private squash = 1
-  private pinPop = 1
+  private door = { open: 0, goal: 0 }
+  private lastTouch = 0
+  /** The "do this" finger (the screen draws it after the house, so it's looked up each frame). */
+  private hintEl: () => HTMLElement | null = () => null
   private hinted = false
   private lastHungry = -9
   private hopsDone = 0
@@ -163,29 +170,29 @@ export class TripHouse implements HousePlugin {
       this.root.add(g)
       this.things.set(it.id, { id: it.id, g, home, packed: false, tween: null, land: 1, glint: 0, dragged: false })
     }
-    this.car = buildCar(bag)
-    this.car.root.userData.pick = 'trip:car'
-    this.car.root.visible = false
-    this.root.add(this.car.root)
+    this.van = buildVan(bag)
+    this.van.root.userData.pick = 'trip:van'
+    this.van.root.visible = false
+    this.root.add(this.van.root)
     this.goTo(this.start)
   }
 
   get roots(): Object3D[] {
-    return [this.suitcase.root, this.car.root, ...[...this.things.values()].map((t) => t.g)]
+    return [this.suitcase.root, this.van.root, ...[...this.things.values()].map((t) => t.g)]
   }
 
   /** Sets up a leg at once (a section link, or behind the boarding pass). */
   goTo(leg: HouseLeg) {
     const h = this.house
-    this.phase = leg
-    this.phaseT = 0
+    this.setPhase(leg)
+    this.lastTouch = this.t
     this.follow = false
     if (leg === 'goodbye') return this.setUpGoodbye()
     // Her room: Mommy beside the suitcase spot, Gan asleep at the near end of the mattress.
     h.placeFamily('ji', ROOM.ji)
     h.placeFamily('gan', ROOM.gan)
     this.ganPacked = false
-    this.car.root.visible = false
+    this.van.root.visible = false
     const packed = new Set(this.order)
     for (const th of this.things.values()) {
       th.g.visible = true
@@ -195,11 +202,12 @@ export class TripHouse implements HousePlugin {
     }
     if (packed.has('gan')) this.packGan(true)
     if (leg === 'invite') {
-      h.teleport('upstairs', -0.3, -19.8, 205)
-      h.kaylee.setPose('lookup')
+      // Kaylee by Mommy, who asks (the screen's card); her suitcase waits shut by the wall.
+      h.teleport('upstairs', INVITE.x, INVITE.z, 0)
+      h.kaylee.faceToward(ROOM.ji.x, ROOM.ji.z)
       this.placeSuitcase(ROOM.wall.x, ROOM.wall.z)
       this.lid.angle = this.lid.goal = 0
-      setTimeout(() => this.phase === 'invite' && this.events.say(TALK.invite), 600)
+      setTimeout(() => this.phase === 'invite' && h.family.get('ji')?.react('wave'), 500)
     } else {
       h.teleport('upstairs', ROOM.kaylee.x, ROOM.kaylee.z, ROOM.kaylee.face)
       this.placeSuitcase(ROOM.suitcase.x, ROOM.suitcase.z)
@@ -221,11 +229,11 @@ export class TripHouse implements HousePlugin {
     this.house.blockUpstairs(this.phase === 'goodbye' ? [] : [[p.x - w / 2 - 0.05, p.x + w / 2 + 0.05, p.z - d / 2 - 0.05, p.z + d / 2 + 0.05]])
   }
 
-  /** Tapped the boat pin (or the screen chose "a new trip"): the suitcase hops out and opens, the camera drops to it. */
+  /** She said yes (or the screen chose "a new trip"): the suitcase hops out and opens, the camera drops to it. */
   startPack() {
     if (this.phase !== 'invite') return
-    this.phase = 'opening'
-    this.phaseT = 0
+    this.setPhase('opening')
+    this.house.family.get('ji')?.react('hop')
     const s = this.suitcase.root
     const from = s.position.clone()
     const to = new Vector3(ROOM.suitcase.x, U, ROOM.suitcase.z)
@@ -239,8 +247,8 @@ export class TripHouse implements HousePlugin {
     this.house.walkTo([ROOM.kaylee.x, ROOM.kaylee.z], () => this.house.kaylee.face(ROOM.kaylee.face * deg), false)
     setTimeout(() => {
       if (this.phase !== 'opening') return
-      this.phase = 'pack'
-      this.phaseT = 0
+      this.setPhase('pack')
+      this.lastTouch = this.t
       this.events.section('pack')
       this.events.say(TALK.pack.start)
     }, 900)
@@ -249,10 +257,27 @@ export class TripHouse implements HousePlugin {
   // ---------------------------------------------------------------- touch
 
   hides(id: string) {
-    return id === 'suitcase' || (id === 'map' && this.phase !== 'invite')
+    return id === 'suitcase' || id === 'map'
+  }
+
+  private setPhase(p: Phase) {
+    this.phase = p
+    this.phaseT = 0
+    this.events.phase?.(p)
+  }
+
+  /** The screen's ✅ button: the same as tapping the suitcase. */
+  closeTap() {
+    this.lastTouch = this.t
+    if (this.phase === 'pack' || this.phase === 'sitting') this.sit()
+  }
+
+  setHintElement(el: () => HTMLElement | null) {
+    this.hintEl = el
   }
 
   pointerDown(x: number, y: number, id?: string) {
+    this.lastTouch = this.t
     if (this.phase === 'pack' && id?.startsWith('trip:item:')) {
       this.drag = { id: id.slice(10), x, y, on: false }
       return true
@@ -295,12 +320,9 @@ export class TripHouse implements HousePlugin {
   tap(_x: number, _y: number, id?: string) {
     const ph = this.phase
     if (ph === 'invite') {
-      if (id === 'trip:pin') {
-        this.pinPop = 0
-        sfx.pop()
-        this.events.pin()
-      } else this.house.pokeThing('map')
-      // Only the map here: she stays looking at it.
+      // Mommy's card is the thing to answer: a tap on her gets a wave, on Kaylee a hop, and she stays put.
+      if (id === 'family:ji') this.house.family.get('ji')?.react('wave')
+      else if (id === 'kaylee' || id === 'family:kaylee') this.house.kaylee.react('hop')
       return true
     }
     if (ph === 'leaving') {
@@ -330,7 +352,7 @@ export class TripHouse implements HousePlugin {
       return ph === 'sitting'
     }
     if (ph === 'goodbye') {
-      if (id === 'trip:car' && this.carT >= 1) {
+      if (id === 'trip:van' && this.carT >= 1) {
         this.board()
         return true
       }
@@ -344,7 +366,7 @@ export class TripHouse implements HousePlugin {
         sfx.beep()
         this.house.family.get('sri')?.react('hop')
         if (this.carT >= 1) this.board()
-        else this.events.say(TALK.car.horn)
+        else this.events.say(TALK.goodbye.horn)
         return true
       }
       if (id?.startsWith('family:')) {
@@ -416,8 +438,12 @@ export class TripHouse implements HousePlugin {
 
   private changed() {
     this.events.packed([...this.order])
-    // Mommy's one hint, once a couple of things are in.
+    // Mommy's one hint, once a couple of things are in; at three, how to close it.
     if (!this.hinted && this.count >= 2) this.hint()
+    if (this.count >= 3 && !this.told.has('close')) {
+      this.told.add('close')
+      setTimeout(() => this.phase === 'pack' && this.events.say(TALK.pack.close), 3200)
+    }
   }
 
   private hint() {
@@ -485,7 +511,7 @@ export class TripHouse implements HousePlugin {
     const s = this.suitcase.root.position
     const top = new Vector3(s.x, U + this.suitcase.h * (1 + 0.05 * Math.max(0, this.count - 3)) + 0.12, s.z)
     if (this.phase === 'pack') {
-      this.phase = 'sitting'
+      this.setPhase('sitting')
       this.hopsDone = 0
       this.hopsNeeded = this.count > this.fits ? 3 : 1
       this.lid.goal = -0.55
@@ -545,8 +571,7 @@ export class TripHouse implements HousePlugin {
     else if (added.includes('sunhat')) this.events.say(TALK.pack.hat)
     if (added.length) this.house.family.get('ji')?.react('wiggle')
     this.events.packed([...this.order])
-    this.phase = 'closed'
-    this.phaseT = 0
+    this.setPhase('closed')
     setTimeout(() => {
       sfx.latch()
       this.lid.goal = 0
@@ -559,8 +584,7 @@ export class TripHouse implements HousePlugin {
   /** Off the suitcase and down the stairs, the suitcase bumping behind her. */
   private walkDown() {
     const k = this.house.kaylee
-    this.phase = 'leaving'
-    this.phaseT = 0
+    this.setPhase('leaving')
     this.follow = true
     this.house.blockUpstairs([])
     k.setPose('stand')
@@ -577,7 +601,7 @@ export class TripHouse implements HousePlugin {
 
   private leave() {
     if (this.phase !== 'leaving') return
-    this.phase = 'gone'
+    this.setPhase('gone')
     this.events.done('goodbye')
   }
 
@@ -585,8 +609,7 @@ export class TripHouse implements HousePlugin {
 
   private setUpGoodbye() {
     const h = this.house
-    this.phase = 'goodbye'
-    this.phaseT = 0
+    this.setPhase('goodbye')
     this.carT = -1
     this.carX = -18
     this.carWait = 0
@@ -598,16 +621,17 @@ export class TripHouse implements HousePlugin {
     this.placeSuitcase(STREET.suitcase.x, STREET.suitcase.z)
     this.suitcase.root.position.y = 0
     this.lid.angle = this.lid.goal = 0
-    const car = this.car
-    car.root.visible = true
-    car.root.position.set(this.carX, 0, STREET.carZ)
-    car.root.rotation.set(0, Math.PI / 2, 0)
+    const van = this.van
+    van.root.visible = true
+    van.root.position.set(this.carX, 0, STREET.carZ)
+    van.root.rotation.set(0, Math.PI / 2, 0)
+    this.door.open = this.door.goal = 0
     // Aunty Sri at the wheel (on the right, the side the camera sees).
     const sri = h.family.get('sri')
     if (sri) {
-      // She counts as out on the street (so she shows and can be tapped), but sits in the car.
+      // She counts as out on the street (so she shows and can be tapped), but sits in the van.
       h.placeFamily('sri', { floor: 0, x: this.carX, z: STREET.carZ, face: 90, pose: 'sit' })
-      car.seats.sri.add(sri.root)
+      van.seats.sri.add(sri.root)
       put(sri, 0, 0, 0, 'sit', 0)
     }
     h.snapCamera()
@@ -621,34 +645,41 @@ export class TripHouse implements HousePlugin {
     jum?.react('hop')
   }
 
-  /** Daddy loads the suitcase, everyone hops in, and Aunty Sri drives off. */
+  /** The side door slides open, Daddy loads the suitcase, everyone hops in, the door shuts and off they go. */
   private board() {
     if (this.phase !== 'goodbye') return
-    this.phase = 'boarding'
-    this.phaseT = 0
+    this.setPhase('boarding')
     const h = this.house
-    const car = this.car
+    const van = this.van
+    this.door.goal = 1
+    sfx.whoosh(0.5)
     const s = this.suitcase.root
-    const trunk = car.body.localToWorld(new Vector3(...car.trunk))
-    this.tweenObject(s, s.position.clone(), trunk, 0.5, 0.8, () => {
+    const trunk = van.body.localToWorld(new Vector3(...van.trunk))
+    this.tweenObject(s, s.position.clone(), trunk, 0.45, 0.8, () => {
       s.visible = false
       sfx.thump()
     })
-    const riders: [string, Group][] = [['nick', car.seats.nick], ['ji', car.seats.ji], ['kaylee', car.seats.kaylee]]
+    const riders: [string, Group][] = [['nick', van.seats.nick], ['ji', van.seats.ji], ['kaylee', van.seats.kaylee]]
     riders.forEach(([id, seat], i) => {
       const c = id === 'kaylee' ? h.kaylee : h.family.get(id)
       if (!c) return
-      this.hopper.hop(c, seat, new Vector3(0, 0, 0), { pose: 'sit', face: 0, delay: 0.5 + i * 0.35, arc: 1.0, dur: 0.5, done: i === 2 ? () => this.driveOff() : undefined })
+      this.hopper.hop(c, seat, new Vector3(0, 0, 0), { pose: 'sit', face: 0, delay: 0.35 + i * 0.25, arc: 1.7, dur: 0.5, done: i === 2 ? () => this.driveOff() : undefined })
     })
     h.family.get('nick')?.react('wave')
   }
 
+  /** The door slides shut, a beep, and the van glides away (quietly: it's electric). Then the airport. */
   private driveOff() {
-    sfx.beep()
-    this.phaseT = 0
-    this.phase = 'gone'
-    for (const id of ['agong', 'jum', 'joy']) this.house.family.get(id)?.react('wave')
-    setTimeout(() => this.events.done('car'), 1500)
+    this.door.goal = 0
+    sfx.latch()
+    setTimeout(() => {
+      if (this.phase !== 'boarding') return
+      sfx.beep()
+      sfx.whir()
+      this.setPhase('gone')
+      for (const id of ['agong', 'jum', 'joy']) this.house.family.get(id)?.react('wave')
+      setTimeout(() => this.events.done('airport'), 1500)
+    }, 350)
   }
 
   // ---------------------------------------------------------------- per frame
@@ -672,17 +703,12 @@ export class TripHouse implements HousePlugin {
     const fan = this.things.get('fan')
     const blades = fan?.g.getObjectByName('blades')
     if (blades) blades.rotation.z -= dt * (fan!.packed ? 30 : 4)
-    // The boat pin pops when tapped.
-    const pin = this.house.kit.parts.get('map.pin')
-    if (pin) {
-      this.pinPop = Math.min(1, this.pinPop + dt / 0.5)
-      pin.scale.setScalar(1 + bell(this.pinPop) * 0.8 * (this.pinPop < 1 ? 1 : 0))
-    }
     // Mommy's hint after a while with nothing packed.
     if (this.phase === 'pack' && !this.hinted && this.phaseT > 9) this.hint()
     if (this.phase === 'closed' && this.phaseT > 1.6) this.walkDown()
     if (this.follow) this.followHer(dt, t)
-    if (this.phase === 'goodbye' || this.phase === 'boarding' || this.phase === 'gone') this.updateCar(dt)
+    if (this.phase === 'goodbye' || this.phase === 'boarding' || this.phase === 'gone') this.updateVan(dt)
+    this.placeHint()
     if (this.ganTween) {
       const g = this.ganTween
       g.t += dt / 0.55
@@ -714,6 +740,12 @@ export class TripHouse implements HousePlugin {
           tw.done?.()
         }
       } else if (th.packed && th.g.visible) th.g.position.copy(this.slotWorld(this.order.indexOf(th.id), this.count))
+      else if (!th.packed) {
+        // "Pick me!": while the suitcase still wants things, what's left hops now and then, one after another.
+        const want = this.phase === 'pack' && this.count < 3
+        const k = ((this.t + (ITEMS.findIndex((i) => i.id === th.id) % 6) * 0.45) % 2.7) / 0.45
+        th.g.position.y = th.home.y + (want && k < 1 ? bell(k) * 0.14 : 0)
+      }
       th.land = Math.min(1, th.land + dt / 0.4)
       th.glint = Math.max(0, th.glint - dt)
       const sq = 1 - wobble(th.land, 2) * 0.2 + (th.glint > 0 ? Math.abs(Math.sin(th.glint * 8)) * 0.18 : 0)
@@ -751,33 +783,71 @@ export class TripHouse implements HousePlugin {
     s.rotation.y += (yaw - s.rotation.y) * (1 - Math.exp(-dt * 5))
   }
 
-  private updateCar(dt: number) {
-    const car = this.car
+  private updateVan(dt: number) {
+    const van = this.van
     if (this.phase === 'goodbye') {
-      // It pulls up a few seconds in, beeps, and waits; after a while everyone gets in anyway.
-      if (this.carT < 0 && this.phaseT > 3.2) {
+      // It hums up quickly, beeps, and waits a moment; then everyone gets in anyway.
+      if (this.carT < 0 && this.phaseT > 1.2) {
         this.carT = 0
-        sfx.putt()
+        sfx.whir()
       }
       if (this.carT >= 0 && this.carT < 1) {
-        this.carT = Math.min(1, this.carT + dt / 2.6)
+        this.carT = Math.min(1, this.carT + dt / 2.0)
         const e = 1 - (1 - this.carT) ** 3
         this.carX = -18 + (STREET.carStop + 18) * e
         if (this.carT >= 1) {
           sfx.beep()
-          this.events.say(TALK.goodbye.car)
+          this.events.say(TALK.goodbye.van)
         }
       } else if (this.carT >= 1) {
         this.carWait += dt
-        if (this.carWait > 13) this.board()
+        if (this.carWait > 7) this.board()
       }
     } else if (this.phase === 'gone') {
-      this.carX += dt * Math.min(12, this.phaseT * 6)
+      this.carX += dt * Math.min(14, this.phaseT * 8)
     }
-    car.root.position.x = this.carX
+    van.root.position.x = this.carX
     const moving = this.phase === 'gone' || (this.carT >= 0 && this.carT < 1)
-    car.body.position.y = moving ? Math.abs(Math.sin(this.carX * 2.2)) * 0.02 : 0
-    for (const w of car.wheels) w.rotation.x = this.carX / 0.3
+    van.body.position.y = moving ? Math.abs(Math.sin(this.carX * 2.2)) * 0.012 : 0
+    for (const w of van.wheels) w.rotation.x = this.carX / 0.3
+    this.door.open += (this.door.goal - this.door.open) * (1 - Math.exp(-dt * 9))
+    // Out a little, then back along the van.
+    const [dx, , dz] = van.doorAt
+    van.door.position.set(dx + Math.min(1, this.door.open * 4) * 0.08, 0, dz - this.door.open * van.doorTravel)
+  }
+
+  /** The "do this" finger while she packs: at something to pack while it wants more, then at the suitcase. */
+  private placeHint() {
+    const el = this.hintEl()
+    if (!el) return
+    const idle = this.t - this.lastTouch
+    let at: Vector3 | null = null
+    if (this.phase === 'pack') {
+      if (this.count < 3 && idle > 2.5) {
+        // A sun thing once Mommy has hinted, else whatever is nearest the suitcase.
+        const left = [...this.things.values()].filter((th) => !th.packed && !th.tween)
+        const sun = this.hinted ? left.filter((th) => ITEMS.find((i) => i.id === th.id)?.sun) : []
+        const s = this.suitcase.root.position
+        const pickFrom = sun.length ? sun : left
+        const th = pickFrom.sort((a, b) => a.home.distanceTo(s) - b.home.distanceTo(s))[0]
+        if (th) at = tmp.copy(th.home).setY(th.home.y + 0.12)
+      } else if (this.count >= 3 && idle > 5) at = this.suitcase.root.localToWorld(tmp.set(0, this.suitcase.h * 0.45, this.suitcase.d * 0.5))
+    } else if (this.phase === 'sitting' && idle > 2.5 && this.house.kaylee.pose === 'sit') {
+      at = this.suitcase.root.localToWorld(tmp.set(0, this.suitcase.h * 0.45, this.suitcase.d * 0.5))
+    } else if (this.phase === 'goodbye' && this.carT >= 1 && this.carWait > 2.5) {
+      at = this.van.root.getWorldPosition(tmp).setY(1.0)
+    }
+    let shown = false
+    if (at) {
+      const c = at.project(this.house.rig.camera)
+      const { w, h } = this.house.size
+      if (c.z < 1 && Math.abs(c.x) < 1 && Math.abs(c.y) < 1) {
+        shown = true
+        el.style.transform = `translate3d(${(((c.x + 1) / 2) * w).toFixed(1)}px, ${(((1 - c.y) / 2) * h).toFixed(1)}px, 0)`
+      }
+    }
+    const want = shown ? '' : 'none'
+    if (el.style.display !== want) el.style.display = want
   }
 
   // ---------------------------------------------------------------- camera, anchors
@@ -787,31 +857,31 @@ export class TripHouse implements HousePlugin {
     if (!this.house) return null
     const ph = this.phase
     const tall = this.house.rig.camera.aspect < 0.9
-    if (ph === 'invite') return this.house.kaylee.walking ? null : MAP_SHOT
+    if (ph === 'invite') {
+      // Kaylee and Mommy up top, the card with the two buttons below them.
+      return { center: new Vector3(0.65, U + 0.35, -19.7), half: tall ? new Vector3(1.3, 1.6, 0.8) : new Vector3(1.6, 1.25, 0.8), yaw: 14, pitch: 14, minDist: 2.5 }
+    }
     if (ph === 'opening' || ph === 'pack' || ph === 'sitting' || ph === 'closed') {
       return { center: new Vector3(tall ? -0.45 : -0.2, U + 0.35, tall ? -19.05 : -18.95), half: tall ? new Vector3(2.0, 0.55, 1.35) : new Vector3(2.45, 0.55, 1.4), yaw: tall ? 6 : 16, pitch: tall ? 50 : 46, minDist: 3 }
     }
     if (ph === 'goodbye' || ph === 'boarding' || ph === 'gone') {
-      return { center: new Vector3(0.55, tall ? 1.6 : 1.2, 2.1), half: tall ? new Vector3(3.1, 1.3, 2.1) : new Vector3(4.6, 1.2, 2.1), yaw: 6, pitch: 18, minDist: 5 }
+      // A little from above, so the family on the sidewalk shows over the van.
+      return { center: new Vector3(tall ? 1.3 : 0.9, tall ? 1.6 : 1.2, 2.3), half: tall ? new Vector3(3.6, 1.3, 2.3) : new Vector3(4.9, 1.2, 2.3), yaw: 6, pitch: 30, minDist: 5 }
     }
     return null
   }
 
   anchor(id: string) {
     const ph = this.phase
-    if (id === 'trip:pin') {
-      const pin = this.house.kit.parts.get('map.pin')
-      return ph === 'invite' && pin ? { at: pin.getWorldPosition(new Vector3()), r: 0.12, glow: true } : null
-    }
     if (id === 'trip:suitcase') {
       // Its front, below the heap of things in it (each of those is its own target: tap one and it hops out).
       const on = ph === 'pack' || ph === 'sitting' || ph === 'goodbye'
       const at = this.suitcase.root.localToWorld(new Vector3(0, this.suitcase.h * 0.45, this.suitcase.d * 0.5))
-      return on ? { at, r: 0.42, glow: ph === 'pack' && this.count >= 3 } : null
+      return on ? { at, r: 0.42, glow: (ph === 'pack' && this.count >= 3) || ph === 'sitting' } : null
     }
-    if (id === 'trip:car') {
+    if (id === 'trip:van') {
       if (ph !== 'goodbye' || this.carT < 1) return null
-      return { at: this.car.root.getWorldPosition(new Vector3()).setY(1.0), r: 1.6, glow: this.carWait > 4 }
+      return { at: this.van.root.getWorldPosition(new Vector3()).setY(1.0), r: 1.6, glow: this.carWait > 2.5 }
     }
     if (id.startsWith('trip:item:') && ph === 'pack') {
       const th = this.things.get(id.slice(10))
@@ -833,7 +903,7 @@ export class TripHouse implements HousePlugin {
       closed: this.phase === 'closed' || this.phase === 'leaving' || this.phase === 'gone',
       hops: this.hopsDone,
       hopsNeeded: this.hopsNeeded,
-      carHere: this.carT >= 1,
+      vanHere: this.carT >= 1,
       ...this.counts,
     }
   }

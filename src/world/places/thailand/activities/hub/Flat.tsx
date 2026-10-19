@@ -13,7 +13,7 @@ const SPOTS: { id: Spot; icon: string; label: string }[] = [
   { id: 'upstairs', icon: '🛏️', label: 'Upstairs' },
 ]
 
-export function Flat({ spot, onSpot, photo = false, onMap }: { spot: Spot; onSpot: (s: Spot) => void; photo?: boolean; onMap?: () => void }) {
+export function Flat({ spot, onSpot, photo = false }: { spot: Spot; onSpot: (s: Spot) => void; photo?: boolean }) {
   const [poked, setPoked] = useState<string | null>(null)
   const floor = spot === 'upstairs' ? 1 : 0
   const area = spot === 'street' ? 'street' : 'inside'
@@ -48,7 +48,7 @@ export function Flat({ spot, onSpot, photo = false, onMap }: { spot: Spot; onSpo
           </motion.button>
         ))}
         {!photo && things.map((p) => (
-          <motion.button key={p.id} aria-label={p.label} animate={poked === p.id ? { scale: [1, 1.15, 0.95, 1] } : { scale: 1 }} onClick={() => (p.id === 'map' && onMap ? onMap() : poke(p.id, p.gentle ? sfx.ding : sfx.pop))} style={{ minWidth: 88, minHeight: 72, borderRadius: 20, border: '4px solid #fff', background: '#fff', fontSize: 17, fontWeight: 600, boxShadow: 'var(--shadow)', padding: '0 14px' }}>
+          <motion.button key={p.id} aria-label={p.label} animate={poked === p.id ? { scale: [1, 1.15, 0.95, 1] } : { scale: 1 }} onClick={() => poke(p.id, p.gentle ? sfx.ding : sfx.pop)} style={{ minWidth: 88, minHeight: 72, borderRadius: 20, border: '4px solid #fff', background: '#fff', fontSize: 17, fontWeight: 600, boxShadow: 'var(--shadow)', padding: '0 14px' }}>
             {p.label}
           </motion.button>
         ))}

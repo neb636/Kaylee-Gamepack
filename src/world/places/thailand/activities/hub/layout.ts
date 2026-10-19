@@ -132,7 +132,7 @@ export const PICKABLES: Pickable[] = [
   { id: 'suitcase', label: 'Suitcase', floor: 1, area: 'inside', at: [-0.9, U + 0.3, -20.448], r: 0.45, react: 'open', use: { x: -0.9, z: -19.748, face: 180, pose: 'peek' } },
   { id: 'bathroom-door', label: 'Bathroom door', floor: 1, area: 'inside', at: [2.2, U + 1.1, B + 0.06], r: 0.6, react: 'rattle', use: { x: 2.2, z: B + 0.95, face: 180, pose: 'stand' } },
   { id: 'wardrobe', label: 'Wardrobe', floor: 1, area: 'inside', at: [0.25, U + 1.0, B + 0.26], r: 0.7, react: 'open', use: { x: 0.25, z: B + 1.0, face: 180, pose: 'peek' } },
-  // The elephant map above her suitcase: the way into the family's trips (she walks up, looks up, and it opens).
+  // The elephant map above her suitcase (she walks up and looks up at it; Mommy is the way into a trip).
   { id: 'map', label: 'Elephant map', floor: 1, area: 'inside', at: [-0.9, U + 1.42, B + 0.06], r: 0.62, react: 'tilt', use: { x: -0.3, z: -19.8, face: 205, pose: 'lookup' } },
 ]
 

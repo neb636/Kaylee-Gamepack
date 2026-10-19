@@ -497,7 +497,7 @@ GAME_SCENARIOS.push(
 )
 
 // The boat trip's trip kit (3D greybox): things hopping into the suitcase in an arc, Kaylee sitting on the too-full
-// suitcase (squash, squash, squash, click), waving from Aunty Sri's car with the window down, the plane's takeoff
+// suitcase (squash, squash, squash, click), everyone hopping into Aunty Sri's van and it gliding off, the plane's takeoff
 // (everyone presses back, then up), and the tray and the call button (ding: snacks). Taps go through the tap targets.
 const thaiTrip = (name, seconds, section, taps, wait = 1400) => ({
   name,
@@ -518,7 +518,7 @@ const thaiTrip = (name, seconds, section, taps, wait = 1400) => ({
 GAME_SCENARIOS.push(
   thaiTrip('trip-toss', 3.4, 'pack', [['trip:item:sunhat', 500], ['trip:item:duck', 500], ['trip:item:floaties', 500], ['trip:item:duck', 900]]),
   thaiTrip('trip-sit', 6, 'pack?packed=sunhat,floaties,duck,teddy,camera,bucket', [['trip:suitcase', 2600], ['trip:suitcase', 800], ['trip:suitcase', 1500]]),
-  thaiTrip('trip-car-wave', 5, 'car', [['belt', 1500], ['window', 1200], ['out:bird', 1500], ['horn', 600]]),
+  thaiTrip('trip-van', 5, 'goodbye', [['trip:van', 4500]], 3800),
   thaiTrip('trip-takeoff', 10, 'takeoff', [['belt', 9500]]),
   thaiTrip('trip-tray', 4, 'fly', [['tray', 700], ['call', 1200], ['call', 1500]], 2000),
 )

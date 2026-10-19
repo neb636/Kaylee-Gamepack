@@ -1,10 +1,10 @@
 import { expect, test, type Page } from '@playwright/test'
 
 // The boat trip's trip kit, greybox 2 (src/world/places/thailand/trip/): every leg played with real taps on the tap
-// targets, the way a finger would. The elephant map in her room opens the trip; the boat pin opens the suitcase; she
-// packs (taps, a drag, a cousin), sits on it to close it and walks down to the goodbye; Aunty Sri's car pulls up; the
-// car ride and the flight move on by themselves whatever she does; the x-ray shows what she packed; and a half-done
-// trip offers to keep going. Read-only state comes from window.__thaiBoatQA (no jump hooks: section links).
+// targets, the way a finger would. Mommy asks in her room (👍 yes / ✋ not yet); yes opens the suitcase; she packs
+// (taps, a drag, a cousin), sits on it to close it (or the ✅ button) and walks down to the goodbye; Aunty Sri's van
+// pulls up, everyone hops in and it pulls away to the airport; the flight moves on by itself whatever she does; the
+// x-ray shows what she packed; and a half-done trip offers to keep going. Read-only state comes from window.__thaiBoatQA (no jump hooks: section links).
 // `?fps=30` keeps the frame rate up while a test waits without touching (test browsers drop to 4 fps after 30 s).
 
 type QA = Record<string, unknown> & { mode?: string; leg?: string; trip?: string; packed?: string[]; phase?: string; section?: string }
@@ -36,30 +36,56 @@ async function ready(page: Page, leg: string) {
   await expect.poll(field(page, 'leg'), { timeout: 20_000 }).toBe(leg)
 }
 
-test('the elephant map in her room opens the boat trip', async ({ page }) => {
+// Yes keeps bouncing ("pick me!"), so it's never still: the tap goes straight to it.
+const yes = (page: Page) => page.getByRole('button', { name: 'Yes', exact: true })
+const notYet = (page: Page) => page.getByRole('button', { name: 'Not yet' })
+async function sayYes(page: Page) {
+  await expect(yes(page)).toBeInViewport({ ratio: 1, timeout: 15_000 })
+  await yes(page).dispatchEvent('click')
+}
+
+test('upstairs, Mommy asks if she is ready for a trip: not yet, then tap Mommy and yes opens the packing', async ({ page }) => {
   test.setTimeout(60_000)
   const errors = trackErrors(page)
   await open(page, 'hub/upstairs')
   await expect.poll(() => page.evaluate(() => (window.__thaiHouseQA?.() as { mode?: string } | undefined)?.mode), { timeout: 20_000 }).toBe('webgl')
-  // Into her room through the glass doors, then up to the map above her suitcase.
+  // She asks on her own a few seconds after Kaylee comes upstairs.
+  await expect(notYet(page)).toBeVisible({ timeout: 15_000 })
+  await notYet(page).click()
+  await expect(notYet(page)).toBeHidden({ timeout: 5_000 })
+  expect(await page.evaluate(() => location.hash)).toContain('hub/upstairs')
+  // Into her room through the glass doors, then a tap on Mommy: she asks again.
   await tap(page, 'glass-doors')
   await expect.poll(() => page.evaluate(() => (window.__thaiHouseQA?.() as { using?: string } | undefined)?.using), { timeout: 30_000 }).toBe('glass-doors')
-  await tap(page, 'map')
+  await tap(page, 'family:ji')
+  await sayYes(page)
   await expect.poll(() => page.evaluate(() => location.hash), { timeout: 30_000 }).toContain('#/world/thailand/boat-trip')
   await ready(page, 'house')
-  expect(await page.evaluate(() => window.__kayleeSectionLog?.[0]?.id)).toBe('invite')
-  await expect(anchor(page, 'trip:pin')).toBeVisible()
+  // Yes was already said: straight on to packing.
+  await expect.poll(section(page), { timeout: 15_000 }).toBe('pack')
   expect(errors).toEqual([])
 })
 
-test('the boat pin opens the suitcase; she packs by tapping and dragging, packs Gan, and sits on it to close it', async ({ page }) => {
+test('the trip asks first: not yet goes back to the house', async ({ page }) => {
+  test.setTimeout(60_000)
+  const errors = trackErrors(page)
+  await open(page, 'boat-trip/invite')
+  await ready(page, 'house')
+  await notYet(page).click()
+  await expect.poll(() => page.evaluate(() => location.hash), { timeout: 10_000 }).not.toContain('boat-trip')
+  expect(errors).toEqual([])
+})
+
+test('yes opens the suitcase; she packs by tapping and dragging, packs Gan, and sits on it to close it', async ({ page }) => {
   test.setTimeout(120_000)
   const errors = trackErrors(page)
   await open(page, 'boat-trip/invite')
   await ready(page, 'house')
-  await tap(page, 'trip:pin')
+  await sayYes(page)
   await expect.poll(section(page), { timeout: 10_000 }).toBe('pack')
   await expect.poll(field(page, 'trip'), { timeout: 10_000 }).toBe('pack')
+  // Nothing in it yet: no close button, just the empty slots.
+  await expect(page.getByRole('button', { name: 'Close the suitcase' })).toBeHidden()
   // Too empty to close: the suitcase gulps for more.
   await tap(page, 'trip:suitcase')
   expect((await qa(page))!.trip).toBe('pack')
@@ -68,6 +94,7 @@ test('the boat pin opens the suitcase; she packs by tapping and dragging, packs 
     await page.waitForTimeout(250)
   }
   await expect.poll(async () => (await qa(page))!.packed!.length).toBe(5)
+  await expect(page.getByRole('button', { name: 'Close the suitcase' })).toBeVisible()
   // One out again, one in by dragging it across the room into the suitcase.
   await tap(page, 'trip:item:mango')
   await expect.poll(async () => (await qa(page))!.packed!.includes('mango')).toBe(false)
@@ -84,11 +111,13 @@ test('the boat pin opens the suitcase; she packs by tapping and dragging, packs 
   await tap(page, 'trip:suitcase')
   await expect.poll(field(page, 'trip'), { timeout: 10_000 }).toBe('sitting')
   await expect.poll(field(page, 'hops'), { timeout: 15_000 }).toBe(1)
-  for (const n of [2, 3]) {
-    await page.waitForTimeout(500)
-    await tap(page, 'trip:suitcase')
-    await expect.poll(field(page, 'hops'), { timeout: 5_000 }).toBe(n)
-  }
+  // Hop again on the suitcase, and once with the ✅ button.
+  await page.waitForTimeout(500)
+  await tap(page, 'trip:suitcase')
+  await expect.poll(field(page, 'hops'), { timeout: 5_000 }).toBe(2)
+  await page.waitForTimeout(500)
+  await page.getByRole('button', { name: 'Close the suitcase' }).click({ force: true })
+  await expect.poll(field(page, 'hops'), { timeout: 5_000 }).toBe(3)
   // Click! Mommy tucks in sunscreen and her spare sun hat; then down the stairs, and the boarding pass to the goodbye.
   await expect.poll(field(page, 'closed'), { timeout: 5_000 }).toBe(true)
   expect((await qa(page))!.packed).toEqual(expect.arrayContaining(['sunscreen', 'sunhat', 'gan', 'bucket']))
@@ -98,7 +127,7 @@ test('the boat pin opens the suitcase; she packs by tapping and dragging, packs 
   expect(errors).toEqual([])
 })
 
-test('the goodbye: a hug for Jum, the car pulls up, tap it and everyone hops in', async ({ page }) => {
+test("the goodbye: a hug for Jum, Aunty Sri's van pulls up, tap it, everyone hops in and it pulls away to the airport", async ({ page }) => {
   test.setTimeout(90_000)
   const errors = trackErrors(page)
   await open(page, 'boat-trip/goodbye?packed=gan,fan,mango')
@@ -108,35 +137,21 @@ test('the goodbye: a hug for Jum, the car pulls up, tap it and everyone hops in'
   await expect(anchor(page, 'family:gan')).toBeHidden()
   await tap(page, 'family:jum')
   await expect.poll(field(page, 'hugs')).toBe(1)
-  await expect(anchor(page, 'trip:car')).toBeVisible({ timeout: 15_000 })
-  await tap(page, 'trip:car')
-  await expect.poll(section(page), { timeout: 20_000 }).toBe('car')
-  await ready(page, 'car')
+  await expect(anchor(page, 'trip:van')).toBeVisible({ timeout: 15_000 })
+  await tap(page, 'trip:van')
+  await expect.poll(field(page, 'trip'), { timeout: 10_000 }).toBe('gone')
+  await expect.poll(section(page), { timeout: 20_000 }).toBe('airport')
+  await ready(page, 'airport')
   expect(errors).toEqual([])
 })
 
-test("Aunty Sri's car: seatbelt, window, radio, horn and waving, and it gets to the airport by itself", async ({ page }) => {
-  test.setTimeout(120_000)
+test('nobody taps the van: everyone gets in anyway', async ({ page }) => {
+  test.setTimeout(90_000)
   const errors = trackErrors(page)
-  await open(page, 'boat-trip/car')
-  await ready(page, 'car')
-  // Uncle Bird rides alongside on his motorbike as they set off: wave at him.
-  await tap(page, 'out:bird')
-  await expect.poll(field(page, 'waves')).toBe(1)
-  await tap(page, 'belt')
-  await expect.poll(field(page, 'belt')).toBe(true)
-  await tap(page, 'window')
-  await expect.poll(field(page, 'window')).toBe(true)
-  await tap(page, 'radio')
-  await expect.poll(field(page, 'radio')).toBe(true)
-  await tap(page, 'horn')
-  await expect.poll(field(page, 'horns')).toBe(1)
-  await expect(anchor(page, 'out:tuk')).toBeVisible({ timeout: 30_000 })
-  await tap(page, 'out:tuk')
-  await expect.poll(field(page, 'waves')).toBe(2)
-  // Nothing else to do: it drives on and stops at the airport.
-  await expect.poll(section(page), { timeout: 70_000 }).toBe('airport')
-  await ready(page, 'airport')
+  await open(page, 'boat-trip/goodbye')
+  await ready(page, 'house')
+  // (Test browsers draw slowly, so the van's few seconds run long here.)
+  await expect.poll(section(page), { timeout: 50_000 }).toBe('airport')
   expect(errors).toEqual([])
 })
 
@@ -189,25 +204,29 @@ test('landing in Krabi, then the boarding pass to the pier', async ({ page }) =>
   expect(errors).toEqual([])
 })
 
-test('a half-done trip: the boat pin offers to keep going from where she stopped', async ({ page }) => {
+test('a half-done trip: yes offers to keep going from where she stopped', async ({ page }) => {
   test.setTimeout(90_000)
   const errors = trackErrors(page)
-  // Finish the goodbye (the trip saves: next time it starts in the car).
+  // Finish the goodbye (the trip saves: next time it starts at the airport).
   await open(page, 'boat-trip/goodbye')
   await ready(page, 'house')
-  await expect(anchor(page, 'trip:car')).toBeVisible({ timeout: 15_000 })
-  await tap(page, 'trip:car')
-  await expect.poll(section(page), { timeout: 20_000 }).toBe('car')
+  await expect(anchor(page, 'trip:van')).toBeVisible({ timeout: 15_000 })
+  await tap(page, 'trip:van')
+  await expect.poll(section(page), { timeout: 20_000 }).toBe('airport')
   await open(page, 'boat-trip/invite')
   await ready(page, 'house')
-  await tap(page, 'trip:pin')
+  await sayYes(page)
+  // The boarding pass slides up from below first.
+  await expect(page.getByRole('button', { name: 'Keep going' })).toBeInViewport({ ratio: 1 })
   await page.getByRole('button', { name: 'Keep going' }).click()
-  await expect.poll(section(page), { timeout: 20_000 }).toBe('car')
-  await ready(page, 'car')
+  await expect.poll(section(page), { timeout: 20_000 }).toBe('airport')
+  await ready(page, 'airport')
   // And "a new trip" starts packing again.
   await open(page, 'boat-trip/invite')
   await ready(page, 'house')
-  await tap(page, 'trip:pin')
+  await sayYes(page)
+  // The boarding pass slides up from below first.
+  await expect(page.getByRole('button', { name: 'A new trip' })).toBeInViewport({ ratio: 1 })
   await page.getByRole('button', { name: 'A new trip' }).click()
   await expect.poll(section(page), { timeout: 10_000 }).toBe('pack')
   expect(errors).toEqual([])
@@ -215,7 +234,7 @@ test('a half-done trip: the boat pin offers to keep going from where she stopped
 
 test('without WebGL, every leg is a button', async ({ page }) => {
   const errors = trackErrors(page)
-  await open(page, 'boat-trip/car', '?gl=off')
+  await open(page, 'boat-trip/goodbye', '?gl=off')
   await page.getByRole('button', { name: 'Airport' }).click()
   await expect.poll(section(page)).toBe('airport')
   await page.getByRole('button', { name: 'Flying' }).click()

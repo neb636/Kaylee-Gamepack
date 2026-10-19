@@ -54,6 +54,8 @@ export interface HouseEvents {
   onArrived(): void
   /** She tapped a thing (Sparkle may tell her about it). */
   onPoke?(id: string): void
+  /** She tapped someone in the family, who waved and said hi. */
+  onGreet?(id: string): void
 }
 
 /** Where a family member is (a spot like the ones in family.ts), or hidden (packed in a suitcase!). */
@@ -82,8 +84,7 @@ export interface HousePlugin {
 }
 
 const deg = Math.PI / 180
-/** Close up on the elephant map in her room, Kaylee looking up at it from the right (the way into a trip, and the
- *  trip's first section). */
+/** Close up on the elephant map in her room, Kaylee looking up at it from the right. */
 export const MAP_SHOT: Shot = { center: new Vector3(MAP.x + 0.3, MAP.y - 0.5, MAP.z + 0.75), half: new Vector3(0.95, 1.05, 0.6), yaw: 12, pitch: 12, minDist: 1.5 }
 /** Where the tuk-tuk stops to let her out, and where it parks after (out of the way, past the spirit house). */
 const DROP_X = 0.9
@@ -128,6 +129,10 @@ export class House implements World3D {
   private tukDrive: { t: number } | null = null
   private w = 1
   private h = 1
+  /** The view's size in px (a plugin places its own overlays with it). */
+  get size() {
+    return { w: this.w, h: this.h }
+  }
   private time = 0
   /** Kaylee's smoothed velocity: the camera looks a little ahead of where she's going. */
   private vel = new Vector3()
@@ -508,6 +513,7 @@ export class House implements World3D {
     if (!m || !s || !who || !this.familyVisible(`family:${id}`)) return
     who.react('wave')
     this.hello(m, who)
+    this.events.onGreet?.(id)
     const face = s.face * deg
     // Stand in front of them (or as close as there's room), then they hop together.
     const front: XZ = [s.x + Math.sin(face) * 0.95, s.z + Math.cos(face) * 0.95]
@@ -686,7 +692,7 @@ export class House implements World3D {
   private shot(): Shot {
     const own = this.plugin?.shot?.()
     if (own) return own
-    // Looking at the elephant map in her room, close up (the way into a trip).
+    // Looking at the elephant map in her room, close up.
     if (this.using === 'map') return MAP_SHOT
     if (this.photo) {
       const who = this.photo.who

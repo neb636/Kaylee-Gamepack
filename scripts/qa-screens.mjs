@@ -333,7 +333,10 @@ const SCREENS = [
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.
   // (The house's shaders compile on the first one: it waits a little longer.)
-  ...['invite', 'pack', 'goodbye', 'car', 'airport', 'takeoff', 'fly', 'land', 'pier', 'bay', 'cave', 'nail'].map((to) => ({ name: `boat-trip-${to}`, hash: `#/world/thailand/boat-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : 2200 })),
+  ...['invite', 'pack', 'goodbye', 'airport', 'takeoff', 'fly', 'land', 'pier', 'bay', 'cave', 'nail'].map((to) => ({ name: `boat-trip-${to}`, hash: `#/world/thailand/boat-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : 2200 })),
+  // Mommy asks on her own a few seconds after Kaylee comes upstairs; Aunty Sri's van once it has pulled up.
+  { name: 'thailand-mommy-asks', hash: '#/world/thailand/hub/upstairs', reset: true, wait: 6500 },
+  { name: 'boat-trip-van', hash: '#/world/thailand/boat-trip/goodbye', reset: true, wait: 5000 },
   { name: 'boat-trip-pack-full', hash: '#/world/thailand/boat-trip/pack?packed=sunhat,sunglasses,floaties,duck,teddy,gan', reset: true, wait: 2200 },
   {
     name: 'boat-trip-xray',

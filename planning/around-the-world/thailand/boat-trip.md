@@ -10,6 +10,23 @@ then gets her own longtail boat to drive around Phang Nga Bay: a village on stil
 bonk the roof, a secret lagoon inside an island, and the Nail Island (James Bond Island), where the family takes the
 photo Agong asked for. Back home it goes on Agong's wall, and even the big cousins look up from their phones.
 
+> **Dad's changes after playing greybox 2 (2026-10-19), built on PR #100.** They replace what this plan says below
+> where the two disagree:
+> - **No elephant map as the way in** (interesting, but too hard for her). Mommy asks instead: "Kaylee, are you ready to
+>   go on a trip?" with two big picture buttons, 👍🧳 **Yes** and ✋⏳ **Not yet** (`trip/legs/Ask.tsx`). In the house
+>   she asks a few seconds after Kaylee first comes upstairs each visit, and whenever Kaylee taps Mommy; yes opens the
+>   trip straight on packing, not yet just closes the card. The trip's first section (`invite`) is the same question in
+>   her room; there, not yet goes back to the house. The map stays on her wall as a thing to tap (it swings).
+> - **Packing shows her what to do:** a suitcase card (top right) with three empty slots that fill with what she packs,
+>   the things she can pack hop now and then until three are in, a 👆 finger points at one when she's idle (at a sun
+>   thing after Mommy's hint), then at the suitcase, Mommy says "Tap your things to pack them!" and at three "All
+>   packed? Tap the suitcase to close it!", and a big ✅🧳 button (bottom right) closes it like tapping the suitcase.
+> - **Aunty Sri drives a white electric van** (`trip/vehicles/van.ts`): it hums up quickly at the goodbye, stops past
+>   the family so nobody is hidden, the side door slides open, everyone hops in (or after ~7 s by themselves), and it
+>   glides away.
+> - **No car ride:** the van leaving is the whole trip to the airport (the `car` section and `trip/legs/car.ts` are
+>   gone; the boarding pass goes from the goodbye straight to the airport).
+
 ## The shape of it
 
 ```
@@ -374,10 +391,10 @@ Activity `boat-trip`: `activities/boat-trip/sections.ts`. Every param has a defa
 
 | # | Section | Name for Dad | Reads |
 |---|---|---|---|
-| 1 | `invite` | The elephant map in her room | |
+| 1 | `invite` | Mommy asks: ready for a trip? | |
 | 2 | `pack` | Pack the suitcase | `packed` (pre-fills it) |
-| 3 | `goodbye` | Goodbye at Agong's house | `packed` |
-| 4 | `car` | Aunty Sri drives to the airport | `packed` |
+| 3 | `goodbye` | Goodbye at Agong's house, into Aunty Sri's van | `packed` |
+| 4 | ~~`car`~~ | (cut 2026-10-19: the van leaving is the way to the airport) | |
 | 5 | `airport` | The x-ray belt | `packed` |
 | 6 | `takeoff` | Window seat: seatbelt and takeoff | `packed` |
 | 7 | `fly` | Window seat: tray, snacks, the elephant below | `packed` |
@@ -598,8 +615,8 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
      climbing; `fly` 44 s; `land` 13 s with the first rock islands rising past the window. Snacks arc in from the aisle
      (no flight attendant yet).
    - **Krabi:** the 3-second cut is the boarding pass with a songthaew driving across it.
-   - **Resume:** the trip saves where the next leg starts (`goodbye`, `car`, `airport`, `takeoff`, `pier`). With a trip
-     half done, the boat pin shows the boarding pass with two big icons, 🧳 a new trip or the next leg's icon to keep
+   - **Resume:** the trip saves where the next leg starts (`goodbye`, `airport`, `takeoff`, `pier`). With a trip
+     half done, saying yes to Mommy shows the boarding pass with two big icons, 🧳 a new trip or the next leg's icon to keep
      going (the replay shortcut's simple form).
    - **Tap targets:** where they overlap, the small toys get the finger before big things, and things before people;
      the 3D view is its own stacking layer, so its targets never cover the boarding pass, the bubbles or the 📸 button.
@@ -646,7 +663,7 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
   canoe through a low cave (how Phang Nga's hongs are usually visited, lying flat). Did you go in by canoe like that, or
   another way (straight in by longtail, or by kayak through an opening)? Ask before building the bay (step 3); the
   greybox 2 trip kit doesn't depend on it.
-- **Aunty Sri's car:** what kind and color? Until Dad says, a little lavender family car.
+- ~~**Aunty Sri's car:** what kind and color?~~ A white electric van (Dad, 2026-10-19).
 
 ## Sources to check facts against
 

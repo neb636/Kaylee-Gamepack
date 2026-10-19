@@ -7,10 +7,9 @@ import { sfx } from '../../sfx'
 import type { BoatSection } from './sections'
 
 const STOPS: { id: BoatSection; icon: string; label: string }[] = [
-  { id: 'invite', icon: '🗺️', label: 'The map' },
+  { id: 'invite', icon: '🙋', label: 'Ready?' },
   { id: 'pack', icon: '🧳', label: 'Pack' },
-  { id: 'goodbye', icon: '👋', label: 'Goodbye' },
-  { id: 'car', icon: '🚗', label: "Aunty Sri's car" },
+  { id: 'goodbye', icon: '🚐', label: 'Goodbye' },
   { id: 'airport', icon: '🛄', label: 'Airport' },
   { id: 'takeoff', icon: '🛫', label: 'Takeoff' },
   { id: 'fly', icon: '✈️', label: 'Flying' },

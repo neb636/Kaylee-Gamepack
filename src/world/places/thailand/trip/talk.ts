@@ -12,9 +12,13 @@ const sri = by('sri')
 const sparkle = by('sparkle')
 
 export const TALK = {
-  invite: ji("Let's go on a boat trip! Just you, me and Daddy!"),
+  ask: {
+    question: ji('Kaylee, are you ready to go on a trip?'),
+    later: ji('OK! Tell me when!'),
+  },
   pack: {
-    start: ji('Pack your suitcase, Kaylee!'),
+    start: ji('Tap your things to pack them, Kaylee!'),
+    close: ji('All packed? Tap the suitcase to close it!'),
     hint: ji("It's hot and sunny at the sea!"),
     hungry: ji('Pack some more!'),
     full: ji("It's too full! Sit on it!"),
@@ -28,16 +32,8 @@ export const TALK = {
     agong: by('agong')('Bring Agong a photo of the Nail Island!'),
     jum: by('jum')('Snacks for the trip!'),
     cousins: by('ken')('Bye...'),
-    car: nick("Aunty Sri is here! Hop in!"),
-  },
-  car: {
-    start: sri("Seatbelts on! Let's go to the airport!"),
-    horn: sri('Beep beep! Ha ha!'),
-    temple: sparkle('Wat means temple!'),
-    left: sparkle('In Thailand, cars drive on the left!'),
-    tuk: by('sri')('Tuk tuk!'),
-    mane: ji('Pfft! Your hair!'),
-    end: sri('Have fun, Kaylee!'),
+    van: nick("Aunty Sri's van is here! Hop in!"),
+    horn: sri('Beep beep! To the airport!'),
   },
   airport: {
     start: nick('Put your suitcase on the belt!'),

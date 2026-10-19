@@ -5,7 +5,7 @@
 // bathroom door at the back on the right, aluminium like the real one (Dad's photo, 2026-10-18). It's locked: it only
 // rattles. The floor is pale grey terrazzo tiles like the real one (tiles.ts). Above her suitcase hangs the elephant map:
 // the real outline of Thailand on paper, doodled in crayon, with a house pin on Bangkok and a boat pin on Phang Nga Bay
-// (the way into the boat trip).
+// (tap it and it swings; Mommy, beside it, asks if she's ready for the trip).
 import { CanvasTexture, Group, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace, type BufferGeometry } from 'three'
 import { P } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
@@ -206,7 +206,7 @@ function bathroomDoor(kit: Kit, at: [number, number, number]) {
 /**
  * The paper map of Thailand taped on the wall (it swings from its top edge when tapped). The outline is drawn into a
  * canvas (trip/drawings.ts); the pins stand out of the paper: a little house on Bangkok, and a boat pin on Phang Nga
- * Bay that bobs, with a soft glow round the map while a trip is waiting.
+ * Bay that bobs.
  */
 function elephantMap(kit: Kit) {
   const { w, h } = MAP
@@ -221,11 +221,6 @@ function elephantMap(kit: Kit) {
   const paper = new Mesh(kit.bag.add(new PlaneGeometry(w * 0.985, h * 0.985)), kit.bag.add(new MeshBasicMaterial({ map: tex })))
   paper.position.set(0, -h / 2, 0.0135)
   g.add(paper)
-  const glowMat = kit.bag.add(new MeshBasicMaterial({ color: PAL.gold, transparent: true, opacity: 0.3, depthWrite: false }))
-  const glow = part(kit, 'map.glow', [], [0, -h / 2, 0.001])
-  glow.add(new Mesh(kit.bag.add(new PlaneGeometry(w + 0.18, h + 0.18)), glowMat))
-  glow.userData.mat = glowMat
-  g.add(glow)
   const local = (ll: [number, number]) => {
     const [u, v] = mapUV(ll)
     return [(u - 0.5) * w, -v * h] as const

@@ -9,6 +9,6 @@ import { PartySoon } from './PartySoon'
 
 export default function Place(props: PlaceProps) {
   if (props.activity === 'party') return <PartySoon backToMap={props.backToMap} />
-  if (props.activity === 'boat-trip') return <BoatTrip />
+  if (props.activity === 'boat-trip') return <BoatTrip onExit={props.backToMap} />
   return <Hub {...props} />
 }
