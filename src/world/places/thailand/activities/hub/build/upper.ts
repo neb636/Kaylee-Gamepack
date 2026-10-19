@@ -3,11 +3,15 @@
 // the back of the house. In her room: a row of mattresses on the floor along the
 // left wall, all the way to the end of the room; the couch on the right; her suitcase; a wardrobe; a fan; and the
 // bathroom door at the back on the right, aluminium like the real one (Dad's photo, 2026-10-18). It's locked: it only
-// rattles. The floor is pale grey terrazzo tiles like the real one (tiles.ts).
-import { Group, Mesh, MeshBasicMaterial, type BufferGeometry } from 'three'
+// rattles. The floor is pale grey terrazzo tiles like the real one (tiles.ts). Above her suitcase hangs the elephant map:
+// the real outline of Thailand on paper, doodled in crayon, with a house pin on Bangkok and a boat pin on Phang Nga Bay
+// (the way into the boat trip).
+import { CanvasTexture, Group, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace, type BufferGeometry } from 'three'
 import { P } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
-import { DIM } from '../layout'
+import { drawElephantMap, mapUV } from '../../../trip/drawings'
+import { PLACES } from '../../../trip/outline'
+import { DIM, MAP } from '../layout'
 import { standingFan } from './ground'
 import { part, poke, scenery, type Kit } from './kit'
 import { railing } from './stairs'
@@ -139,6 +143,7 @@ export function buildUpper(kit: Kit): Upper {
   }
   room.add(wardrobe)
   room.add(standingFan(kit, 'room-fan', [0.4, U, -16.798], Math.PI))
+  room.add(elephantMap(kit))
   room.add(bathroomDoor(kit, [2.2, U, back]))
   // A blue laundry basket by the bathroom door, like the real one.
   const BASKET = '#3D8FD6'
@@ -195,5 +200,52 @@ function bathroomDoor(kit: Kit, at: [number, number, number]) {
       { px: 1.5 },
     ),
   )
+  return g
+}
+
+/**
+ * The paper map of Thailand taped on the wall (it swings from its top edge when tapped). The outline is drawn into a
+ * canvas (trip/drawings.ts); the pins stand out of the paper: a little house on Bangkok, and a boat pin on Phang Nga
+ * Bay that bobs, with a soft glow round the map while a trip is waiting.
+ */
+function elephantMap(kit: Kit) {
+  const { w, h } = MAP
+  const g = poke(kit, 'map', [P.box(w, h, 0.012, '#FFF6E4', { at: [0, -h / 2, 0.006] })], [MAP.x, MAP.y + h / 2, MAP.z], { px: 1.5 })
+  const canvas = document.createElement('canvas')
+  canvas.width = 512
+  canvas.height = Math.round(512 * (h / w))
+  drawElephantMap(canvas)
+  const tex = kit.bag.add(new CanvasTexture(canvas))
+  tex.colorSpace = SRGBColorSpace
+  tex.anisotropy = 4
+  const paper = new Mesh(kit.bag.add(new PlaneGeometry(w * 0.985, h * 0.985)), kit.bag.add(new MeshBasicMaterial({ map: tex })))
+  paper.position.set(0, -h / 2, 0.0135)
+  g.add(paper)
+  const glowMat = kit.bag.add(new MeshBasicMaterial({ color: PAL.gold, transparent: true, opacity: 0.3, depthWrite: false }))
+  const glow = part(kit, 'map.glow', [], [0, -h / 2, 0.001])
+  glow.add(new Mesh(kit.bag.add(new PlaneGeometry(w + 0.18, h + 0.18)), glowMat))
+  glow.userData.mat = glowMat
+  g.add(glow)
+  const local = (ll: [number, number]) => {
+    const [u, v] = mapUV(ll)
+    return [(u - 0.5) * w, -v * h] as const
+  }
+  const [hx, hy] = local(PLACES.bangkok)
+  g.add(scenery(kit, [P.box(0.07, 0.055, 0.03, PAL.pink, { at: [hx, hy + 0.01, 0.03] }), P.cone(0.06, 0.05, PAL.hotpink, { at: [hx, hy + 0.06, 0.03], rot: [0, Math.PI / 4, 0] }, 4)], 1.5))
+  const [bx, by] = local(PLACES.phangNga)
+  const pin = part(
+    kit,
+    'map.pin',
+    [
+      P.cyl(0.008, 0.008, 0.06, PAL.ink, { at: [0, 0.0, 0.03], rot: [Math.PI / 2, 0, 0] }),
+      P.sphere(0.035, PAL.hotpink, { at: [0, 0, 0.065] }),
+      // A tiny longtail riding on the pin's head.
+      P.rbox(0.12, 0.035, 0.045, 0.015, '#E6A375', { at: [0, 0.045, 0.07] }),
+      P.cone(0.02, 0.05, PAL.cream, { at: [0.01, 0.085, 0.07] }),
+    ],
+    [bx, by, 0],
+    1.5,
+  )
+  g.add(pin)
   return g
 }

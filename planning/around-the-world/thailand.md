@@ -97,8 +97,9 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    Baan Chang Cafe (in 3D, from #86's design), a Songkran water fight on the street, a longtail boat in Krabi, and night
    market food. The longtail boat became the first family trip (2026-10-18): `thailand/boat-trip.md`, with a reusable
    trip kit (pack, Aunty Sri's car, airport, a window seat on the plane) for later trips. Its greybox 1, the boat toy in
-   Phang Nga Bay, is built (2026-10-18, PR #99, `#/world/thailand/boat-trip/bay`); it isn't reached from the house yet
-   (the elephant map comes in greybox 2).
+   Phang Nga Bay, is built (2026-10-18, PR #99, `#/world/thailand/boat-trip/bay`). Greybox 2, the trip kit, is built
+   too (2026-10-18): the elephant map in her room opens the trip (`hub/upstairs`, tap the map), then packing, the
+   goodbye, Aunty Sri's car, the airport and the window seat, each a section (`boat-trip/invite` ... `boat-trip/land`).
 
 ## Tech notes
 

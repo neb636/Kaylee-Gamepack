@@ -56,13 +56,15 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     setSpot(s)
     enter(s, at ? { at } : {})
     guide.current?.arrivedAt(s)
+    // She walked up to the elephant map and looked up at it (the camera moves in close): the boat trip opens there.
+    if (at === 'map') setTimeout(() => openActivity('boat-trip'), 900)
   }
   const allStamps = stamps.length >= meta.activities.length
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
       {mode === 'flat' ? (
-        <Flat spot={spot} onSpot={onSpot} photo={photo} />
+        <Flat spot={spot} onSpot={onSpot} photo={photo} onMap={() => openActivity('boat-trip')} />
       ) : (
         <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id) }} />
       )}

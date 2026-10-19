@@ -7,9 +7,13 @@
 // - on the floor: she walks there (around the furniture)
 // - on the stairs: she walks to them and hops up (or down), and the camera follows her to the other floor
 // Holding a finger down and moving it leads her around like on a string.
+//
+// A trip (thailand/trip/legs/house-plugin.ts) mounts the house with a plugin: it gets the scene, the pokes, the
+// avatar and the family, sees every touch first, can move the family, take the camera, and add tap targets of its own
+// (ids starting with "trip:"). The house stays the house.
 import { Color, Group, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { Avatar } from '../../characters/avatar'
-import { FAMILY } from '../../characters/family'
+import { FAMILY, type FamilyMember } from '../../characters/family'
 import { Member } from '../../characters/member'
 import type { AnchorInfo } from '../../engine/Anchors'
 import { CameraRig, type Shot } from '../../engine/camera'
@@ -31,7 +35,7 @@ import { buildStairs } from './build/stairs'
 import { buildStreet } from './build/street'
 import { Traffic } from './build/traffic'
 import { buildUpper } from './build/upper'
-import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
+import { DIM, MAP, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
 import type { HubSection } from './sections'
 
 export type Spot = 'street' | 'downstairs' | 'upstairs'
@@ -52,7 +56,35 @@ export interface HouseEvents {
   onPoke?(id: string): void
 }
 
+/** Where a family member is (a spot like the ones in family.ts), or hidden (packed in a suitcase!). */
+export type FamilySpot = NonNullable<FamilyMember['spot']> | 'hidden'
+
+/** A trip running in the house (see the top of this file). Every hook is optional except update. */
+export interface HousePlugin {
+  /** Called once, after the house is built and its start section set up. */
+  attach(house: House): void
+  update(dt: number, t: number): void
+  /** The camera's goal while the plugin wants it (null: the house's own follow camera). */
+  shot?(): Shot | null
+  /** First refusal on every touch: return true when the plugin used it. */
+  pointerDown?(x: number, y: number, id?: string): boolean
+  pointerMove?(x: number, y: number, downX: number, downY: number): boolean
+  pointerUp?(): boolean
+  tap?(x: number, y: number, id?: string): boolean
+  /** Where its own tap targets ("trip:..." ids) are now (null: hidden). */
+  anchor?(id: string): { at: Vector3; r: number; glow?: boolean } | null
+  /** The house's own tap target `id` is off while the plugin says so (e.g. the house's suitcase, replaced by the trip's). */
+  hides?(id: string): boolean
+  /** Its own pickable objects, for the tap raycast. */
+  readonly roots?: Object3D[]
+  readonly busy?: boolean
+  qa?(): Record<string, unknown>
+}
+
 const deg = Math.PI / 180
+/** Close up on the elephant map in her room, Kaylee looking up at it from the right (the way into a trip, and the
+ *  trip's first section). */
+export const MAP_SHOT: Shot = { center: new Vector3(MAP.x + 0.3, MAP.y - 0.5, MAP.z + 0.75), half: new Vector3(0.95, 1.05, 0.6), yaw: 12, pitch: 12, minDist: 1.5 }
 /** Where the tuk-tuk stops to let her out, and where it parks after (out of the way, past the spirit house). */
 const DROP_X = 0.9
 const PARK_X = 9.8
@@ -69,11 +101,13 @@ export class House implements World3D {
   readonly scene = new Scene()
   readonly rig = new CameraRig()
   private bag = new Bag()
-  private kit: Kit = { bag: this.bag, pokes: new Map(), parts: new Map() }
+  readonly kit: Kit = { bag: this.bag, pokes: new Map(), parts: new Map() }
   private reactor: Reactor
   private lights = makeLights(this.scene)
   readonly kaylee: Avatar
-  private family = new Map<string, Member>()
+  readonly family = new Map<string, Member>()
+  /** Where a plugin has moved someone (the goodbye at the shutter, Gan in the suitcase). */
+  private moved = new Map<string, FamilySpot>()
   /** The family photo (section `family`): everyone lined up on the sidewalk, or one person turning slowly. */
   private photo: { who: string | null } | null = null
   private nav: Record<0 | 1, NavGrid>
@@ -111,6 +145,7 @@ export class House implements World3D {
     private renderer: WebGLRenderer,
     start: Start,
     private events: HouseEvents,
+    private plugin: HousePlugin | null = null,
   ) {
     const { scene, kit } = this
     scene.background = new Color(PAL.sky)
@@ -166,6 +201,7 @@ export class House implements World3D {
 
     this.nav = { 0: this.buildNav(0), 1: this.buildNav(1) }
     this.begin(start)
+    this.plugin?.attach(this)
     this.quiet = false
   }
 
@@ -256,7 +292,8 @@ export class House implements World3D {
   }
 
   /** A finger (or mouse) went down, on the canvas or on an anchor button. */
-  pointerDown(x: number, y: number) {
+  pointerDown(x: number, y: number, id?: string) {
+    if (this.plugin?.pointerDown?.(x, y, id)) return
     this.lead = { x, y, last: performance.now() }
   }
   /** While held: past 12 px she follows the finger (re-aimed every 150 ms). */
@@ -265,6 +302,7 @@ export class House implements World3D {
       this.hover(x, y)
       return
     }
+    if (this.plugin?.pointerMove?.(x, y, downX, downY)) return
     if (!this.lead || this.arriving || this.climbing || this.photo) return
     if (Math.hypot(x - downX, y - downY) < 12) return
     const now = performance.now()
@@ -274,6 +312,7 @@ export class House implements World3D {
     if (hit) this.walkTo([hit.x, hit.z], undefined, false)
   }
   pointerUp() {
+    this.plugin?.pointerUp?.()
     this.lead = null
   }
 
@@ -284,6 +323,7 @@ export class House implements World3D {
       return
     }
     const target = id ?? this.pick(x, y)
+    if (this.plugin?.tap?.(x, y, target ?? undefined)) return
     if (target === 'kaylee' || target === 'family:kaylee') {
       this.kaylee.react('hop')
       sfx.boing()
@@ -329,7 +369,7 @@ export class House implements World3D {
   /** What's under a screen point: a pickable id, 'family:<id>', 'kaylee', or null. */
   private pick(x: number, y: number): string | null {
     this.raycaster.setFromCamera(this.ndc(x, y), this.rig.camera)
-    const targets: Object3D[] = [this.kaylee.root, ...[...this.family.values()].map((f) => f.root), ...[...this.kit.pokes.values()]]
+    const targets: Object3D[] = [this.kaylee.root, ...[...this.family.values()].map((f) => f.root), ...[...this.kit.pokes.values()], ...(this.plugin?.roots ?? [])]
     for (const hit of this.raycaster.intersectObjects(targets, true)) {
       if (!visibleChain(hit.object)) continue
       let o: Object3D | null = hit.object
@@ -337,6 +377,7 @@ export class House implements World3D {
       const id = o?.userData.pick as string | undefined
       if (!id) continue
       if (id === 'kaylee' || id.startsWith('family:')) return this.familyVisible(id) ? id : null
+      if (id.startsWith('trip:')) return this.plugin ? id : null
       const p = PICKABLES.find((q) => q.id === id)
       if (p && this.allowed(p)) return id
       // Something we can't use from here (behind a wall, another floor): keep looking.
@@ -353,14 +394,14 @@ export class House implements World3D {
 
   /** Can she use this from where she is (her floor, inside or outside)? */
   private allowed(p: Pickable) {
-    if (p.floor !== this.kaylee.floor) return false
+    if (p.floor !== this.kaylee.floor || this.plugin?.hides?.(p.id)) return false
     if (p.floor === 1) return true
     return p.area === 'street' ? this.mode === 'street' : this.mode === 'inside0'
   }
   /** Can she see (and so greet) this family member from where she is? */
   private familyShown(m: (typeof FAMILY)[number]) {
     if (this.photo) return !this.photo.who || this.photo.who === m.id
-    const s = m.spot
+    const s = this.spotOf(m)
     if (!s) return false
     if (s.floor === 1) return this.mode === 'inside1'
     if (s.z > 0) return this.mode === 'street'
@@ -372,13 +413,20 @@ export class House implements World3D {
     if (id === 'kaylee' || id === 'family:kaylee') return !this.photo || !this.photo.who || this.photo.who === 'kaylee'
     const m = FAMILY.find((f) => `family:${f.id}` === id)
     if (m && this.photo) return this.familyShown(m)
-    if (!m?.spot || m.spot.floor !== this.kaylee.floor || !this.familyShown(m)) return false
-    return !(this.mode === 'street' && m.spot.z < 0)
+    const s = m && this.spotOf(m)
+    if (!s || s.floor !== this.kaylee.floor || !this.familyShown(m)) return false
+    return !(this.mode === 'street' && s.z < 0)
+  }
+  /** Where they are now: moved by a plugin, or their usual spot. */
+  private spotOf(m: FamilyMember) {
+    const s = this.moved.get(m.id)
+    return s === 'hidden' ? null : (s ?? m.spot)
   }
 
   // ---------------------------------------------------------------- doing things
 
-  private walkTo(to: XZ, then?: () => void, mark = true) {
+  /** Walks her there around the furniture (then calls `then`). */
+  walkTo(to: XZ, then?: () => void, mark = true) {
     if (this.climbing) return
     const k = this.kaylee
     const floor = k.floor
@@ -456,15 +504,16 @@ export class House implements World3D {
   private greet(id: string) {
     const m = FAMILY.find((f) => f.id === id)
     const who = this.family.get(id)
-    if (!m?.spot || !who || !this.familyVisible(`family:${id}`)) return
+    const s = m && this.spotOf(m)
+    if (!m || !s || !who || !this.familyVisible(`family:${id}`)) return
     who.react('wave')
     this.hello(m, who)
-    const face = m.spot.face * deg
+    const face = s.face * deg
     // Stand in front of them (or as close as there's room), then they hop together.
-    const front: XZ = [m.spot.x + Math.sin(face) * 0.95, m.spot.z + Math.cos(face) * 0.95]
+    const front: XZ = [s.x + Math.sin(face) * 0.95, s.z + Math.cos(face) * 0.95]
     this.walkTo(front, () => {
       const k = this.kaylee
-      k.faceToward(m.spot!.x, m.spot!.z)
+      k.faceToward(s.x, s.z)
       k.react('hop')
       who.react('hop')
       sfx.boing()
@@ -493,8 +542,8 @@ export class House implements World3D {
     else sfx.babble(m.pitch)
   }
 
-  /** Up or down the stairs: walk to the foot (or the landing), then hop step by step. */
-  private climb(up: boolean) {
+  /** Up or down the stairs: walk to the foot (or the landing), then hop step by step (`onStep` after each). */
+  climb(up: boolean, done?: () => void, onStep?: (i: number, n: number) => void) {
     const k = this.kaylee
     const steps = stairSteps()
     const start = up ? STAIRS_FOOT : STAIRS_TOP
@@ -505,6 +554,7 @@ export class House implements World3D {
       seq.forEach(([x, y, z], i) => {
         k.hopTo(new Vector3(x, y, z), 0.13, 0.07, () => {
           if (i % 2 === 0) sfx.pop()
+          onStep?.(i, seq.length)
           // Halfway: the other floor appears and the camera starts following her there.
           if (i === Math.floor(seq.length / 2)) {
             k.floor = up ? 1 : 0
@@ -518,6 +568,7 @@ export class House implements World3D {
         // The stairs open across the house: up or down, she steps off facing the right wall.
         k.face(Math.PI / 2)
         this.setSpot(up ? 'upstairs' : 'downstairs')
+        done?.()
       })
     })
   }
@@ -526,6 +577,65 @@ export class House implements World3D {
     if (spot === this.spot) return
     this.spot = spot
     if (!this.quiet) this.events.onSpot(spot)
+  }
+
+  // ---------------------------------------------------------------- for plugins
+
+  /** Moves someone in the family (null: back to their usual spot). */
+  placeFamily(id: string, spot: FamilySpot | null) {
+    const m = FAMILY.find((f) => f.id === id)
+    const who = this.family.get(id)
+    if (!m || !who) return
+    if (spot) this.moved.set(id, spot)
+    else this.moved.delete(id)
+    const s = this.spotOf(m)
+    if (s) who.place(s.x, (s.floor ? DIM.g0 : 0) + (s.pose === 'sit' ? (s.seat ?? 0.45) - 0.1 * who.height : s.pose === 'lie' ? 0.2 : 0), s.z, s.face, s.pose)
+    this.applyVisibility()
+  }
+
+  /** Puts her somewhere at once and shows that part of the house (a trip's section link, a cut behind a card). */
+  teleport(spot: Spot, x: number, z: number, faceDeg: number) {
+    const floor = spot === 'upstairs' ? 1 : 0
+    this.kaylee.floor = floor
+    this.kaylee.place(x, floor * DIM.g0, z, faceDeg)
+    this.kaylee.setPose('stand')
+    this.using = undefined
+    this.climbing = false
+    this.mode = spot === 'upstairs' ? 'inside1' : spot === 'downstairs' ? 'inside0' : 'street'
+    this.spot = spot
+    if (spot !== 'upstairs') this.reactor.setShutter(true, true)
+    this.applyShutterNav()
+    for (const c of this.cuts) c.value = c.when(this.mode) ? c.low : 1
+    this.applyVisibility()
+    this.lastPos.copy(this.kaylee.position)
+    this.vel.set(0, 0, 0)
+    this.rig.setShot(this.shot(), true)
+  }
+
+  /** A pickable thing reacts as if tapped (sound and wobble), without her walking over. */
+  pokeThing(id: string) {
+    const p = PICKABLES.find((q) => q.id === id)
+    if (p) this.reactor.poke(p)
+  }
+
+  /** Where a screen point lands on a level plane at height `y` (a plugin dragging something across the room). */
+  pointAt(x: number, y: number, planeY: number) {
+    this.raycaster.setFromCamera(this.ndc(x, y), this.rig.camera)
+    return this.raycaster.ray.intersectPlane(new Plane(new Vector3(0, 1, 0), -planeY), new Vector3())
+  }
+
+  /** Things a plugin put on the upstairs floor that she walks round (rects [x0, x1, z0, z1]). */
+  blockUpstairs(rects: [number, number, number, number][]) {
+    this.nav[1].setDynamic(rects)
+  }
+
+  /** Point the camera at its goal at once (after the plugin changed its shot). */
+  snapCamera() {
+    this.rig.setShot(this.shot(), true)
+  }
+
+  get view(): Spot {
+    return this.spot
   }
 
   private applyShutterNav() {
@@ -574,6 +684,10 @@ export class House implements World3D {
 
   /** The camera's goal for where she is. */
   private shot(): Shot {
+    const own = this.plugin?.shot?.()
+    if (own) return own
+    // Looking at the elephant map in her room, close up (the way into a trip).
+    if (this.using === 'map') return MAP_SHOT
     if (this.photo) {
       const who = this.photo.who
       if (who) {
@@ -611,7 +725,7 @@ export class House implements World3D {
 
   /** Nothing is moving: the frame loop may drop to 30 fps. */
   get calm() {
-    return !this.kaylee.busy && !this.reactor.busy && !this.rig.moving && !this.arriving
+    return !this.kaylee.busy && !this.reactor.busy && !this.rig.moving && !this.arriving && !this.plugin?.busy
   }
 
   update(dt: number) {
@@ -664,6 +778,7 @@ export class House implements World3D {
       c.obj.scale.y = c.value
       c.obj.position.y = base * (1 - c.value)
     }
+    this.plugin?.update(dt, t)
     if (!this.arriving) this.rig.setShot(this.shot())
     this.rig.lag = this.climbing ? 0.25 : 0.35
     this.rig.update(dt)
@@ -687,7 +802,16 @@ export class House implements World3D {
       let top: Vector3 | null = null
       let r = 0.5
       let show = false
-      if (id === 'family:kaylee') {
+      let glow = false
+      if (id.startsWith('trip:')) {
+        const a = this.plugin?.anchor?.(id)
+        if (a) {
+          at = tmp.copy(a.at)
+          r = a.r
+          glow = !!a.glow
+          show = true
+        }
+      } else if (id === 'family:kaylee') {
         if (this.photo && this.familyVisible(id)) {
           at = tmp.copy(this.kaylee.position)
           top = at.clone().setY(at.y + this.kaylee.height * 1.12)
@@ -698,7 +822,8 @@ export class House implements World3D {
       } else if (id.startsWith('family:')) {
         const f = this.family.get(id.slice(7))
         if (f && f.root.visible && this.familyVisible(id)) {
-          at = tmp.copy(f.root.position)
+          // World position: a trip may have sat them in a car.
+          at = f.root.getWorldPosition(tmp)
           top = at.clone().setY(at.y + f.height * (f.pose === 'lie' ? 0.45 : 1.12))
           at.y += f.height * (f.pose === 'lie' ? 0.2 : 0.5)
           r = f.height * 0.42
@@ -722,9 +847,12 @@ export class House implements World3D {
           const size = clamp(Math.abs(edge.x - center.x) * this.w, 64, 170)
           el.style.transform = `translate3d(${(sx - size / 2).toFixed(1)}px, ${(sy - size / 2).toFixed(1)}px, 0)`
           el.style.width = el.style.height = `${size.toFixed(0)}px`
-          el.style.zIndex = String(Math.round((1 - center.z) * 10000))
+          // A trip's toys sit on top of the house's own targets and the family's (they're what she's playing with).
+          el.style.zIndex = String(Math.round((1 - center.z) * 10000) + (id.startsWith('trip:') ? 3000 : 0))
           // Name pills sit on top of the head, wherever the button's own top is.
           if (top) el.style.setProperty('--pill', `${(((1 - top.project(cam).y) / 2) * this.h - (sy - size / 2)).toFixed(1)}px`)
+          const shadow = glow ? '0 0 0 6px rgba(255,79,154,.55), 0 0 26px 10px rgba(255,200,61,.7)' : ''
+          if (el.style.boxShadow !== shadow) el.style.boxShadow = shadow
         }
       }
       const want = show ? '' : 'none'
@@ -805,6 +933,7 @@ export class House implements World3D {
       arriving: this.arriving,
       shutterOpen: this.reactor.shutterOpen,
       pos: [k.position.x, k.position.y, k.position.z].map((v) => Math.round(v * 100) / 100),
+      ...this.plugin?.qa?.(),
     }
   }
   memory() {

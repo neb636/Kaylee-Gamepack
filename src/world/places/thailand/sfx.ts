@@ -54,6 +54,41 @@ export const sfx = {
       tone(f, f * (i === n - 1 ? 1.35 : 0.9), 0.11, 0.09, 'triangle', i * 0.13)
     }
   },
+  // ---- The trip ----
+  /** The suitcase's latch: click! */
+  latch: () => {
+    tone(2600, 1900, 0.035, 0.1, 'square')
+    tone(1400, 1000, 0.05, 0.07, 'square', 0.05)
+  },
+  /** A whoosh going by (the skytrain, wind at the window). */
+  whoosh: (dur = 0.9) => noise(dur, 0.08, 'bandpass', 400, 1800, 0, 0.8),
+  /** Crunch crunch (Kaylee munching snacks). */
+  crunch: () => [0, 0.16, 0.32].forEach((d) => noise(0.08, 0.1, 'highpass', 2500, 1800, d, 1)),
+  /** The cabin's call button: ding. */
+  callDing: () => {
+    tone(1568, 1560, 0.5, 0.08, 'sine')
+    tone(1175, 1170, 0.7, 0.06, 'sine', 0.18)
+  },
+  /** The stamp coming down on the boarding pass: ka-chunk. */
+  stamp: () => {
+    noise(0.08, 0.14, 'lowpass', 900, 300)
+    tone(140, 70, 0.14, 0.12, 'square', 0.02)
+  },
+  /** A laugh with no words (the officer). */
+  haha: () => [0, 0.17, 0.34].forEach((d, i) => tone(330 - i * 20, 260 - i * 20, 0.12, 0.08, 'triangle', d)),
+  /** A dog's woof. */
+  woof: () => [0, 0.22].forEach((d) => tone(240, 140, 0.12, 0.1, 'sawtooth', d)),
+  /** A plane's engines (`level` 0..1): a hum, and a roar at takeoff. */
+  jet: (level: number) => {
+    noise(0.35, 0.02 + 0.07 * level, 'lowpass', 300 + 900 * level, 250 + 800 * level)
+    tone(90 + 60 * level, 85 + 60 * level, 0.3, 0.015 + 0.02 * level, 'sawtooth')
+  },
+  /** A daddy's snore, then a snort. */
+  snort: () => {
+    noise(0.25, 0.12, 'lowpass', 500, 200)
+    tone(160, 90, 0.2, 0.08, 'sawtooth', 0.05)
+  },
+
   // ---- The boat trip ----
   /** One beat of the longtail's engine: a low putt when slow, a rasp when fast (`level` 0..1). */
   engine: (level: number) => {

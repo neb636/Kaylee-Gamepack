@@ -329,8 +329,44 @@ const SCREENS = [
   ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
   { name: 'thailand-flat', hash: '#/world/thailand/hub/downstairs?gl=off', reset: true, wait: 600 },
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
-  // The boat trip (greybox 1): every section, the beach after landing (the photo), and the flat version.
-  ...['pier', 'bay', 'cave', 'nail'].map((to) => ({ name: `boat-trip-${to}`, hash: `#/world/thailand/boat-trip/${to}`, reset: true, wait: 2200 })),
+  // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
+  // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
+  // version.
+  // (The house's shaders compile on the first one: it waits a little longer.)
+  ...['invite', 'pack', 'goodbye', 'car', 'airport', 'takeoff', 'fly', 'land', 'pier', 'bay', 'cave', 'nail'].map((to) => ({ name: `boat-trip-${to}`, hash: `#/world/thailand/boat-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : 2200 })),
+  { name: 'boat-trip-pack-full', hash: '#/world/thailand/boat-trip/pack?packed=sunhat,sunglasses,floaties,duck,teddy,gan', reset: true, wait: 2200 },
+  {
+    name: 'boat-trip-xray',
+    hash: '#/world/thailand/boat-trip/airport?packed=gan,fan,mango,teddy',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      await p.locator('[data-anchor="suitcase"]').click({ force: true }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiBoatQA?.().shown === 4, null, { timeout: 20000 }).catch(() => {})
+      await p.waitForTimeout(600)
+    },
+  },
+  {
+    name: 'boat-trip-screen',
+    hash: '#/world/thailand/boat-trip/fly',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      await p.locator('[data-anchor="screen"]').click({ force: true }).catch(() => {})
+      await p.waitForTimeout(1500)
+    },
+  },
+  {
+    name: 'boat-trip-pass',
+    hash: '#/world/thailand/boat-trip/goodbye',
+    reset: true,
+    act: async (p) => {
+      await p.locator('[data-anchor="trip:car"]').waitFor({ state: 'visible', timeout: 20000 }).catch(() => {})
+      await p.locator('[data-anchor="trip:car"]').click({ force: true }).catch(() => {})
+      await p.waitForSelector('[aria-label="Boarding pass"]', { timeout: 20000 }).catch(() => {})
+      await p.waitForTimeout(700)
+    },
+  },
   {
     name: 'boat-trip-beach',
     hash: '#/world/thailand/boat-trip/nail',

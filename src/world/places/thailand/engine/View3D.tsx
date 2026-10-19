@@ -118,8 +118,9 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     let slow = 0
     let stop = () => {}
     let started = false
+    let gone = false
     const begin = () => {
-      if (started) return
+      if (started || gone) return
       started = true
       stop = frameLoop(
         (_now, dt) => {
@@ -143,8 +144,12 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
         () => world.calm,
       )
     }
-    // Compile the shaders before the first frame so the first seconds don't stutter.
-    renderer.compileAsync(world.scene, world.rig.camera).then(begin, begin)
+    // Compile the shaders before the first frame so the first seconds don't stutter. (three.js polls every material
+    // until its program is ready, and throws if one was disposed meanwhile: an unmount waits for it, below.)
+    let compiled = false
+    const ready = renderer.compileAsync(world.scene, world.rig.camera)
+    ready.then(() => (compiled = true), () => (compiled = true))
+    ready.then(begin, begin)
 
     // ---- Taps and drags (the anchors call the same tracker) ----
     const local = (e: PointerEvent) => {
@@ -209,7 +214,11 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       el.removeEventListener('dblclick', stopGesture)
       downFromAnchor.current = null
       if (window[qaKey]) delete window[qaKey]
-      world.dispose()
+      gone = true
+      // Left before the shaders finished compiling (a quick section link, a leg swap): free it once they have.
+      const dispose = () => world.dispose()
+      if (compiled) dispose()
+      else ready.then(dispose, dispose)
       worldRef.current = null
       canvas.remove()
       releaseRenderer(renderer)
@@ -217,7 +226,8 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
   }, [])
 
   return (
-    <div ref={host} style={{ position: 'absolute', inset: 0, touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none' }}>
+    // Its own stacking layer: the tap targets' z-indexes (by depth) never climb over the screen's overlays.
+    <div ref={host} style={{ position: 'absolute', inset: 0, isolation: 'isolate', touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none' }}>
       <div ref={topProbe} style={{ position: 'absolute', left: 0, top: 0, width: 0, height: 'var(--top-clear)', pointerEvents: 'none' }} />
       {anchors(
         {
