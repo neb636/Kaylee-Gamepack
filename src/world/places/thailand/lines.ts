@@ -9,6 +9,10 @@ const NAME = 'Kaylee'
 type Line = string | { text: string; voice: string }
 const by = (voice: string) => (text: string) => ({ text, voice })
 
+const nick = by('nick')
+const ji = by('ji')
+const kids = by('kids')
+
 /** Each person's first hello, then what they say each time after (in turn). */
 const hello = (voice: string, hi: string, again: string[]) => ({ hi: by(voice)(hi), again: again.map(by(voice)) })
 
@@ -66,4 +70,69 @@ export const L = {
     putto: hello('putto', `${NAME}! Sawasdee krub!`, ["Let's play!"]),
     putter: hello('putter', 'Hi Kaylee! Hee hee!', ['Peep peep!']),
   } as Record<string, { hi: Line; again: Line[] }>,
+
+  // The boat trip in Phang Nga Bay (activities/boat-trip/bay/). Daddy and Mommy react in their own voices, short; the
+  // village kids share one kid voice; Sparkle gives the few instructions and the facts (each fact also plays when she
+  // taps its photo or sticker in the trip album). Kaylee never talks: she giggles.
+  bay: {
+    // Daddy.
+    ribbons: nick('Our longtail boat! Tie on ribbons for good luck!'),
+    pai: nick('Pai!'),
+    whereTo: nick('Where to, Captain Kaylee?'),
+    horn: nick('My horn!'),
+    mango: nick('Hey! My mango!'),
+    banana: nick('Hey! My banana!'),
+    sunglasses: nick('My sunglasses!'),
+    pose: nick('Everybody, pose!'),
+    cheese: nick('One, two, three, cheese!'),
+    backIn: nick('Back in the boat, Kaylee!'),
+    // Mommy.
+    whoa: ji('Whoa!'),
+    hat: ji('My hat!'),
+    dizzy: ji('So dizzy!'),
+    coconut: ji('A coconut! Got it!'),
+    sunset: ji('Look! The sky is turning pink!'),
+    // The village kids.
+    goal: kids('Goal!'),
+    thanks: kids('Khob khun ka, Kaylee!'),
+    ball: kids('The ball, Kaylee!'),
+    // Sparkle: what to do (only when something is new, or after a while with nothing done).
+    hint: {
+      ribbon: 'Tap a ribbon to tie it on!',
+      garland: 'Now the flowers!',
+      drive: 'Put your finger on the water to drive!',
+      glow: 'Drive to a golden light!',
+      ball: 'Push the ball back with the boat!',
+      lie: 'Lie down! The roof is low!',
+      pose: 'Tap a pose!',
+      pier: 'Drive back to the pier!',
+      out: 'Paddle back out to the boat!',
+    },
+    // Sparkle's facts: the first time a stop comes into view, and again from the album.
+    facts: {
+      ribbons: 'Thai boats wear ribbons for good luck!',
+      longtail: 'A longtail boat has a car engine on a long stick!',
+      pai: "Pai means let's go!",
+      notch: 'The sea nibbled a notch around the bottom of the rock!',
+      village: 'This village is built on stilts, over the sea!',
+      football: 'The kids here built a football field that floats!',
+      khobkhun: 'Khob khun means thank you!',
+      hong: 'Hong means room! A secret room inside the island!',
+      mangrove: 'Mangrove trees stand on their roots!',
+      nail: 'Ko Tapu means Nail Island!',
+      buoys: 'Boats stay back so the Nail Island keeps standing!',
+    },
+    // The album's nine animal stickers, a fact each.
+    stickers: {
+      needlefish: 'A needlefish! It skips over the water!',
+      eagle: 'A sea eagle! It catches fish with its feet!',
+      macaque: 'A macaque! A cheeky monkey!',
+      cat: 'The village cat lives on a boat!',
+      crab: 'This crab waves its big claw!',
+      mudskipper: 'A mudskipper is a fish that walks on mud!',
+      lizard: 'A monitor lizard! It swims like a little crocodile!',
+      kingfisher: 'A kingfisher! A flash of blue!',
+      porpoise: 'This porpoise has no fin on its back!',
+    } as Record<string, string>,
+  },
 }

@@ -63,6 +63,10 @@ export class Avatar implements Character {
   get position() {
     return this.root.position
   }
+  /** The toy's pivots (arms, head, eyes), for a pose held on top of the usual life (the boat trip's photo poses). */
+  get rig(): Rig {
+    return this.chibi
+  }
   get walking() {
     return this.path.length > 0 || this.tweens.length > 0
   }

@@ -90,10 +90,12 @@ export const sfx = {
   },
 
   // ---- The boat trip ----
-  /** One beat of the longtail's engine: a low putt when slow, a rasp when fast (`level` 0..1). */
+  /** One beat of the longtail's engine: a low putt-putt when slow, RRRAAAH when fast (`level` 0..1). */
   engine: (level: number) => {
     tone(70 + 70 * level, 60 + 50 * level, 0.07, 0.025 + 0.035 * level, 'sawtooth')
     if (level > 0.55) noise(0.06, 0.02 * level, 'bandpass', 900 + 600 * level, 700, 0, 2)
+    // Flat out it roars: a buzzy rasp on top of the beat.
+    if (level > 0.8) tone(190 + 90 * level, 170 + 80 * level, 0.08, 0.02 * level, 'square')
   },
   /** VROOM: the engine revs up. */
   vroom: () => {
@@ -123,4 +125,57 @@ export const sfx = {
   },
   /** The tour boat's big horn. */
   horn: () => [0, 0.45].forEach((d) => tone(196, 190, 0.38, 0.1, 'sawtooth', d)),
+
+  // ---- The bay ----
+  /** Kaylee's giggle (she never talks): a run of little bright hee-hees. */
+  giggle: () => [0, 0.11, 0.22, 0.33].forEach((d, i) => tone(880 + i * 60, 1180 + i * 40, 0.08, 0.07, 'triangle', d)),
+  /** A drip falling from a stalactite, and the cave answering it twice, softer each time. */
+  plink: () => [0, 0.32, 0.64].forEach((d, i) => tone(1760, 1320, 0.16, 0.1 / (1 + i * 1.6), 'sine', d)),
+  /** Bats squeaking as they swirl. */
+  squeak: () => [0, 0.09, 0.2, 0.27].forEach((d, i) => tone(3200 + (i % 2) * 500, 4200, 0.05, 0.035, 'sine', d)),
+  /** A macaque's chatter. */
+  chatter: () => [0, 0.08, 0.16, 0.24, 0.36].forEach((d, i) => tone(900 + (i % 3) * 180, 650, 0.06, 0.06, 'square', d)),
+  /** A foot kicking the ball. */
+  kick: () => {
+    noise(0.06, 0.16, 'lowpass', 900, 300)
+    tone(180, 90, 0.08, 0.1, 'sine')
+  },
+  /** The village kids cheering. */
+  cheer: () => {
+    noise(1.1, 0.05, 'bandpass', 1600, 2200, 0, 0.7)
+    for (let i = 0; i < 6; i++) tone(520 + Math.random() * 260, 760 + Math.random() * 300, 0.18, 0.035, 'triangle', i * 0.12)
+  },
+  /** The referee's whistle (the goal). */
+  whistle: () => {
+    tone(2600, 2700, 0.18, 0.06, 'sine')
+    tone(2600, 2650, 0.5, 0.06, 'sine', 0.24)
+  },
+  /** Something scooped into the boat. */
+  scoop: () => {
+    noise(0.12, 0.06, 'bandpass', 1500, 900)
+    tone(520, 780, 0.12, 0.07, 'triangle', 0.08)
+  },
+  /** Laundry or a ribbon flapping in the wind. */
+  flap: () => [0, 0.12, 0.22].forEach((d) => noise(0.08, 0.06, 'bandpass', 1100, 1800, d, 1.5)),
+  /** A porpoise's breath as it surfaces: pfff. */
+  blow: () => noise(0.4, 0.09, 'bandpass', 1300, 700, 0, 0.9),
+  /** A sticker for the album: a little sparkly chime. */
+  chime: () => [0, 0.08, 0.16].forEach((d, i) => tone(1318 * [1, 1.25, 1.5][i], 1320 * [1, 1.25, 1.5][i], 0.25, 0.05, 'sine', d)),
+  /** The countdown before the photo: beep, beep, bip! */
+  countdown: () => [0, 0.32, 0.64].forEach((d, i) => tone(i === 2 ? 1400 : 980, i === 2 ? 1400 : 980, 0.09, 0.06, 'sine', d)),
+  /** The boat tipping as Daddy steps in: whoa-oa-oa (the wood creaks). */
+  creak: () => [0, 0.18].forEach((d) => tone(240, 170, 0.22, 0.05, 'sawtooth', d)),
+  /** A fish flipping out of a net or the water. */
+  flop: () => [0, 0.14].forEach((d) => noise(0.05, 0.08, 'bandpass', 2000, 1200, d, 2)),
+  /** A cat's purr-meow as it stretches. */
+  mrrp: () => {
+    tone(420, 560, 0.12, 0.07, 'triangle')
+    tone(560, 400, 0.3, 0.08, 'triangle', 0.1)
+  },
+  /** A swish of a broom (the grandma at her porch). */
+  swish: () => [0, 0.25].forEach((d) => noise(0.18, 0.08, 'highpass', 1800, 3600, d, 0.8)),
+  /** The kingfisher's sharp call. */
+  peep: () => [0, 0.1, 0.2].forEach((d) => tone(3400, 3000, 0.05, 0.05, 'sine', d)),
+  /** A plop into the water (a crab, a lizard, sunglasses). */
+  plop: () => tone(520, 160, 0.12, 0.08, 'sine'),
 }

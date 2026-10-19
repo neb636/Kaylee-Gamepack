@@ -390,5 +390,334 @@
     "sig": "6f3c0affb3",
     "ms": 754,
     "file": "9a8bb7438f72.mp3"
+  },
+  {
+    "text": "Our longtail boat! Tie on ribbons for good luck!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 3504,
+    "file": "3643c127f6b6.mp3"
+  },
+  {
+    "text": "Pai!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 611,
+    "file": "b541d1942c09.mp3"
+  },
+  {
+    "text": "Where to, Captain Kaylee?",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2533,
+    "file": "f6ff4cd2f897.mp3"
+  },
+  {
+    "text": "My horn!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 950,
+    "file": "317afeea1a4c.mp3"
+  },
+  {
+    "text": "Hey! My mango!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1854,
+    "file": "50bbfcb07b15.mp3"
+  },
+  {
+    "text": "Hey! My banana!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2170,
+    "file": "c21f0f2da565.mp3"
+  },
+  {
+    "text": "My sunglasses!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1532,
+    "file": "21d363b10415.mp3"
+  },
+  {
+    "text": "Everybody, pose!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1958,
+    "file": "7d345295367a.mp3"
+  },
+  {
+    "text": "One, two, three, cheese!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2579,
+    "file": "9193f5bf24ac.mp3"
+  },
+  {
+    "text": "Back in the boat, Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2529,
+    "file": "a454223488cc.mp3"
+  },
+  {
+    "text": "Whoa!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 700,
+    "file": "f69c5a84bf71.mp3"
+  },
+  {
+    "text": "My hat!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1170,
+    "file": "018f613f9d6c.mp3"
+  },
+  {
+    "text": "So dizzy!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1500,
+    "file": "c39ddfb81895.mp3"
+  },
+  {
+    "text": "A coconut! Got it!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1787,
+    "file": "aa3cd3f7a59c.mp3"
+  },
+  {
+    "text": "Look! The sky is turning pink!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2622,
+    "file": "9bf279460f31.mp3"
+  },
+  {
+    "text": "Goal!",
+    "voice": "kids",
+    "sig": "2c9a630e41",
+    "ms": 804,
+    "file": "de32939dd8b5.mp3"
+  },
+  {
+    "text": "Khob khun ka, Kaylee!",
+    "voice": "kids",
+    "sig": "2c9a630e41",
+    "ms": 2020,
+    "file": "040dad871beb.mp3"
+  },
+  {
+    "text": "The ball, Kaylee!",
+    "voice": "kids",
+    "sig": "2c9a630e41",
+    "ms": 3436,
+    "file": "17423de094b2.mp3"
+  },
+  {
+    "text": "Tap a ribbon to tie it on!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1859,
+    "file": "bed340c1cd51.mp3"
+  },
+  {
+    "text": "Now the flowers!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1953,
+    "file": "bf3faf0a7a20.mp3"
+  },
+  {
+    "text": "Put your finger on the water to drive!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3425,
+    "file": "34a6f417f88a.mp3"
+  },
+  {
+    "text": "Drive to a golden light!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2021,
+    "file": "16d7d8f600d8.mp3"
+  },
+  {
+    "text": "Push the ball back with the boat!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2433,
+    "file": "e878871bd1a9.mp3"
+  },
+  {
+    "text": "Lie down! The roof is low!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2827,
+    "file": "7a8f32e6ea0f.mp3"
+  },
+  {
+    "text": "Tap a pose!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1041,
+    "file": "cae6d63a47cb.mp3"
+  },
+  {
+    "text": "Drive back to the pier!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1960,
+    "file": "5a69bdd1c586.mp3"
+  },
+  {
+    "text": "Paddle back out to the boat!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2092,
+    "file": "6df4f0d3d618.mp3"
+  },
+  {
+    "text": "Thai boats wear ribbons for good luck!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2645,
+    "file": "2896acd332c3.mp3"
+  },
+  {
+    "text": "A longtail boat has a car engine on a long stick!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4555,
+    "file": "e662db5e690e.mp3"
+  },
+  {
+    "text": "Pai means let's go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2018,
+    "file": "ed769bec3b39.mp3"
+  },
+  {
+    "text": "The sea nibbled a notch around the bottom of the rock!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3914,
+    "file": "fc6102c701ce.mp3"
+  },
+  {
+    "text": "This village is built on stilts, over the sea!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4026,
+    "file": "f9f1f2716284.mp3"
+  },
+  {
+    "text": "The kids here built a football field that floats!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3261,
+    "file": "b1b618541170.mp3"
+  },
+  {
+    "text": "Khob khun means thank you!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2776,
+    "file": "69c5af1e962f.mp3"
+  },
+  {
+    "text": "Hong means room! A secret room inside the island!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4378,
+    "file": "7bc5c84c0aa9.mp3"
+  },
+  {
+    "text": "Mangrove trees stand on their roots!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3112,
+    "file": "a93428bdd26f.mp3"
+  },
+  {
+    "text": "Ko Tapu means Nail Island!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2745,
+    "file": "cb2f565adeb5.mp3"
+  },
+  {
+    "text": "Boats stay back so the Nail Island keeps standing!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3258,
+    "file": "6bac8b97608f.mp3"
+  },
+  {
+    "text": "A needlefish! It skips over the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3514,
+    "file": "3681cafa19d6.mp3"
+  },
+  {
+    "text": "A sea eagle! It catches fish with its feet!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4711,
+    "file": "452834f9350f.mp3"
+  },
+  {
+    "text": "A macaque! A cheeky monkey!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2210,
+    "file": "fcd4a93d400b.mp3"
+  },
+  {
+    "text": "The village cat lives on a boat!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2906,
+    "file": "9563a5edfe5c.mp3"
+  },
+  {
+    "text": "This crab waves its big claw!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3464,
+    "file": "6c9e80112b8f.mp3"
+  },
+  {
+    "text": "A mudskipper is a fish that walks on mud!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4050,
+    "file": "198a94ef9480.mp3"
+  },
+  {
+    "text": "A monitor lizard! It swims like a little crocodile!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5087,
+    "file": "f5237f32f55c.mp3"
+  },
+  {
+    "text": "A kingfisher! A flash of blue!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3578,
+    "file": "07c8422d3f86.mp3"
+  },
+  {
+    "text": "This porpoise has no fin on its back!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2646,
+    "file": "036ff3842084.mp3"
   }
 ]

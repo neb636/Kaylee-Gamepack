@@ -28,8 +28,11 @@ export const WORLD_OF: Record<BoatSection, TripWorld> = {
   land: 'plane',
   pier: 'bay',
   bay: 'bay',
+  village: 'bay',
   cave: 'bay',
+  hong: 'bay',
   nail: 'bay',
+  sunset: 'bay',
 }
 
 /** The legs on the boarding pass, each punched when she finishes it. */

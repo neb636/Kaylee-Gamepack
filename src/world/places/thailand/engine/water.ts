@@ -83,6 +83,14 @@ export class Water {
   update(t: number) {
     this.mat.uniforms.uTime.value = t
   }
+
+  /** New colors (the bay at sunset). */
+  setColors(deep: ColorRepresentation, shallow: ColorRepresentation, haze: ColorRepresentation) {
+    const u = this.mat.uniforms
+    ;(u.uDeep.value as Color).set(deep)
+    ;(u.uShallow.value as Color).set(shallow)
+    ;(u.uHaze.value as Color).set(haze)
+  }
 }
 
 /** The water's gentle rise and fall at a point (meters), so boats bob on it. */
