@@ -32,8 +32,8 @@ export interface Street {
   props: Group
   /** Agong's ground-floor front: pillars, the sign board and the shutter. */
   front: Group
-  /** Its left pillar (lowered with the left wall). */
-  frontLeft: Group
+  /** Its right pillar (lowered with the right wall). */
+  frontRight: Group
   /** The upper front wall with the balcony doors (lowered when she's upstairs). */
   upperFront: Group
   /** The balcony and its plant (stay). */
@@ -47,7 +47,7 @@ export function buildStreet(kit: Kit): Street {
   const tall = new Group()
   const props = new Group()
   const front = new Group()
-  const frontLeft = new Group()
+  const frontRight = new Group()
   const upperFront = new Group()
   const balcony = new Group()
   const roof = new Group()
@@ -91,13 +91,13 @@ export function buildStreet(kit: Kit): Street {
   // ---- Agong's house front: pillars, header, sign, shutter ----
   front.add(
     scenery(kit, [
-      P.box(0.22, DIM.g0, 0.4, AGONG_WALL, { at: [HALF, DIM.g0 / 2, 0.05] }),
+      P.box(0.22, DIM.g0, 0.4, AGONG_WALL, { at: [-HALF, DIM.g0 / 2, 0.05] }),
       P.box(DIM.houseW, DIM.g0 - SHUT, 0.4, AGONG_WALL, { at: [0, (DIM.g0 + SHUT) / 2, 0.05] }),
       // The roll-up shutter's housing.
       P.cyl(0.16, 0.16, DOOR_W, '#9FD3C4', { at: [0, SHUT, 0.12], rot: [0, 0, Math.PI / 2] }),
     ]),
   )
-  frontLeft.add(scenery(kit, [P.box(0.22, DIM.g0, 0.4, AGONG_WALL, { at: [-HALF, DIM.g0 / 2, 0.05] })]))
+  frontRight.add(scenery(kit, [P.box(0.22, DIM.g0, 0.4, AGONG_WALL, { at: [HALF, DIM.g0 / 2, 0.05] })]))
   front.add(poke(kit, 'sign', [P.rbox(3.6, 0.4, 0.1, 0.04, '#F0646E'), P.rbox(3.76, 0.52, 0.06, 0.03, PAL.gold, { at: [0, 0, -0.03] })], [0, SHUT + 0.38, 0.3]))
   // The shutter: pivots at its top, so rolling up = squashing it upward.
   const curtain = part(
@@ -173,7 +173,7 @@ export function buildStreet(kit: Kit): Street {
     poke(kit, 'basil', [P.cyl(0.2, 0.15, 0.3, POT, { at: [0, 0.15, 0] }), ...[0, 2.1, 4.2].map((a) => P.sphere(0.13, '#6FBF7F', { at: [Math.cos(a) * 0.1, 0.4, Math.sin(a) * 0.1] }))], [-7.0, 0, 0.45]),
   )
 
-  return { ground, tall, props, front, frontLeft, upperFront, balcony, roof }
+  return { ground, tall, props, front, frontRight, upperFront, balcony, roof }
 }
 
 /** A Thai spirit house on its pillar, with marigolds and a little red drink. It faces the street. */

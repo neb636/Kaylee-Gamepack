@@ -22,12 +22,10 @@
 //  ||L (1) <<< foot  |          || well  |  plant |
 //  |+-------+        |          |+-------+ hallway|
 //  | couch       fan |          |=== balcony rail=|
-//  | table   photos D|          |  open: looks    |
-//  | table   Agong  E|          |  down into the  |
+//  | table    Agong D|          |  open: looks    |
+//  | table         E |          |  down into the  |
 //  |               K |          |  shop below     |
 //  +----shutter------+          +---balcony-------+
-// (Dad, 2026-10-19) The camera stands on the left now and looks at the right wall: the left walls are the ones that
-// lower so it can see in, and what hangs on a wall (the old photos, the clock) is on the right one, over Agong's desk.
 import type { Pose } from '../../characters/types'
 
 // Inside footprint: 6.25 × 20.898 m (25% wider than the original; 10% shorter than the expanded house). Furniture stays at its original scale.
@@ -111,8 +109,8 @@ export const PICKABLES: Pickable[] = [
   { id: 'desk', label: "Agong's desk", floor: 0, area: 'inside', at: [2.765, 0.9, -4.45], r: 0.7, react: 'hop', use: { x: 2.225, z: -3.1, face: 150, pose: 'peek' } },
   { id: 'table', label: 'Table', floor: 0, area: 'inside', at: [-2.075, 0.75, -2.6], r: 1.05, react: 'jelly', use: { x: -0.55, z: -2.0, face: -90, pose: 'sit', snap: { x: -1.3, z: -2.0, y: 0.45 } } },
   { id: 'ground-couch', label: 'Grey couch', floor: 0, area: 'inside', at: [-2.7, 0.5, -6.5], r: 0.9, react: 'jelly', use: { x: -1.65, z: -6.5, face: 90, pose: 'sit', snap: { x: -2.6, z: -6.5, y: 0.44 } } },
-  { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [DIM.right - 0.05, 2.45, -4.45], r: 0.95, react: 'tilt', use: { x: 1.0, z: -2.9, face: 65, pose: 'lookup' } },
-  { id: 'clock', label: 'Clock', floor: 0, area: 'inside', at: [DIM.right - 0.05, 2.85, -7.0], r: 0.32, react: 'tick', use: { x: 1.5, z: -6.7, face: 80, pose: 'lookup' } },
+  { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.45, -4.0], r: 0.95, react: 'tilt', use: { x: -0.3, z: -3.0, face: -70, pose: 'lookup' } },
+  { id: 'clock', label: 'Clock', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.85, -5.75], r: 0.32, react: 'tick', use: { x: -1.3, z: -5.95, face: -80, pose: 'lookup' } },
   { id: 'fan', label: 'Fan', floor: 0, area: 'inside', at: [2.5, 1.15, -5.75], r: 0.5, react: 'spin', use: { x: 1.75, z: -5.3, face: 120, pose: 'peek' } },
   { id: 'fridge', label: 'Fridge', floor: 0, area: 'inside', at: [2.775, 0.9, -11.75], r: 0.65, react: 'open', use: { x: 2.025, z: -11.75, face: 90, pose: 'peek' } },
   { id: 'altar', label: 'Family altar', floor: 0, area: 'inside', at: [-0.3, 1.35, B + 0.3], r: 0.8, react: 'glow', gentle: true, use: { x: -0.3, z: B + 1.15, face: 180, pose: 'wai' } },

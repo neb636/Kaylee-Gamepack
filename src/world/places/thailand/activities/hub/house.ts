@@ -165,26 +165,25 @@ export class House implements World3D {
     // Grouped by when they show (applyVisibility): the upstairs room only from upstairs, the downstairs room from the
     // street only once the shutter is up, and so on.
     const upperRoom = new Group()
-    upperRoom.add(upper.room, upper.leftWall)
+    upperRoom.add(upper.room, upper.rightWall)
     const upperAll = new Group()
     const upperFront = street.upperFront
     upperAll.add(upperRoom, street.balcony, upperFront)
     const groundRoom = new Group()
-    groundRoom.add(ground.room, ground.leftWall)
-    scene.add(street.ground, street.tall, street.props, street.front, street.frontLeft, street.roof, groundRoom, stairs, upperAll)
+    groundRoom.add(ground.room, ground.rightWall)
+    scene.add(street.ground, street.tall, street.props, street.front, street.frontRight, street.roof, groundRoom, stairs, upperAll)
     this.groups = { tall: street.tall, props: street.props, roof: street.roof, upper: upperAll, upperRoom, upperFront, front: street.front, groundRoom, stairs }
-    // Walls that lower so the camera (on the left, looking at the right wall) can see in: the left walls (to 1 m), the
-    // front pillar and the upper front.
+    // Walls that lower so the camera can see in: the right walls (to 1 m), the front pillar and the upper front.
     this.cuts.push(
-      { obj: ground.leftWall, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
-      { obj: street.frontLeft, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
-      { obj: upper.leftWall, low: 1.0 / DIM.g1, when: (m) => m === 'inside1', value: 1 },
+      { obj: ground.rightWall, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
+      { obj: street.frontRight, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
+      { obj: upper.rightWall, low: 1.0 / DIM.g1, when: (m) => m === 'inside1', value: 1 },
       { obj: upperFront, low: 0.12, when: (m) => m === 'inside1', value: 1 },
       // Upstairs the glass wall stands between the camera and her room once she's in it.
       { obj: upper.glassWall, low: 0.12, when: (m) => m === 'inside1' && this.kaylee.position.z < DIM.hall.zGlass - 0.1, value: 1 },
     )
     // The upper wall pieces scale from the upstairs floor, not from the street.
-    const upperCuts: Object3D[] = [upper.leftWall, upperFront, upper.glassWall]
+    const upperCuts: Object3D[] = [upper.rightWall, upperFront, upper.glassWall]
     for (const c of this.cuts) c.obj.userData.cutBase = upperCuts.includes(c.obj) ? DIM.g0 : 0
 
     this.reactor = new Reactor(kit, this.bag)

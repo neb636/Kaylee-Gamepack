@@ -1,8 +1,8 @@
 // Upstairs: the stairs come out in a small hallway that looks down into the shop over a balcony railing (the front
 // half of the house is open, two floors high), and glass sliding doors lead back into the room Kaylee sleeps in, at
 // the back of the house. In her room (Dad, 2026-10-19): one big queen mattress on the floor against the left wall,
-// its long side along the room, with a mini-split air conditioner on the wall over its head; the grey couch on the
-// right just inside the glass doors, with her drawings above it; her suitcase; a fan; and the bathroom door at the
+// its long side along the room, her drawings taped above it and a mini-split air conditioner on the wall over its head;
+// the grey couch on the right just inside the glass doors; her suitcase; a fan; and the bathroom door at the
 // back on the right, aluminium like the real one (Dad's photo, 2026-10-18). It's locked: it only rattles. The floor is
 // pale grey terrazzo tiles like the real one (tiles.ts). The house gecko lives on the back wall (gecko.ts).
 import { Group, Mesh, MeshBasicMaterial, type BufferGeometry } from 'three'
@@ -24,15 +24,15 @@ const FRAME = '#D8D2E6'
 
 export interface Upper {
   room: Group
-  /** The left wall (lowered while she's upstairs, so the camera can see in). */
-  leftWall: Group
+  /** The right wall (lowered while she's upstairs, so the camera can see in). */
+  rightWall: Group
   /** The glass wall into her room (lowered while she's in the room). */
   glassWall: Group
 }
 
 export function buildUpper(kit: Kit): Upper {
   const room = new Group()
-  const leftWall = new Group()
+  const rightWall = new Group()
   const glassWall = new Group()
   const { left, right, back, g0: U, g1 } = DIM
   const { x1: sx1, zFront, zBack } = DIM.stairs
@@ -58,19 +58,19 @@ export function buildUpper(kit: Kit): Upper {
   )
   room.add(
     scenery(kit, [
-      P.box(0.15, g1, depth, WALL, { at: [right + 0.075, U + g1 / 2, back / 2] }),
+      P.box(0.15, g1, depth, WALL, { at: [left - 0.075, U + g1 / 2, back / 2] }),
       P.box(right - left + 0.3, g1, 0.15, WALL, { at: [0, U + g1 / 2, back - 0.075] }),
-      P.box(0.03, 0.12, depth, '#CFC8BE', { at: [right - 0.015, U + 0.06, back / 2] }),
-      // Kaylee's drawings taped above the couch.
+      P.box(0.03, 0.12, depth, '#CFC8BE', { at: [left + 0.015, U + 0.06, back / 2] }),
+      // Kaylee's drawings taped above the mattress.
       ...[
-        [-11.85, PAL.pink],
-        [-12.45, PAL.butter],
-        [-13.05, PAL.sky],
-        [-13.65, PAL.mint],
-      ].map(([z, c], i) => P.box(0.02, 0.36, 0.3, c as string, { at: [right - 0.01, U + 1.45 + (i % 2) * 0.18, z as number], rot: [(i % 2 ? 0.08 : -0.06), 0, 0] })),
+        [-18.0, PAL.pink],
+        [-18.6, PAL.butter],
+        [-19.2, PAL.sky],
+        [-19.8, PAL.mint],
+      ].map(([z, c], i) => P.box(0.02, 0.36, 0.3, c as string, { at: [left + 0.01, U + 1.25 + (i % 2) * 0.18, z as number], rot: [(i % 2 ? 0.08 : -0.06), 0, 0] })),
     ]),
   )
-  leftWall.add(scenery(kit, [P.box(0.15, g1, depth, WALL, { at: [left - 0.075, U + g1 / 2, back / 2] }), P.box(0.03, 0.12, depth, '#CFC8BE', { at: [left + 0.015, U + 0.06, back / 2] })]))
+  rightWall.add(scenery(kit, [P.box(0.15, g1, depth, WALL, { at: [right + 0.075, U + g1 / 2, back / 2] })]))
 
   // ---- The hallway: a plant, the balcony railing over the shop, the railing round the stairwell ----
   room.add(poke(kit, 'plant', [P.cyl(0.18, 0.13, 0.3, '#EBA27E', { at: [0, 0.15, 0] }), P.sphere(0.24, '#7FCB8F', { at: [0, 0.45, 0] }), ...[0, 2, 4].map((a) => P.sphere(0.06, PAL.hotpink, { at: [Math.cos(a) * 0.18, 0.55, Math.sin(a) * 0.18] }))], [2.1, U, -5.65]))
@@ -150,7 +150,7 @@ export function buildUpper(kit: Kit): Upper {
   )
 
   room.add(glassWall)
-  return { room, leftWall, glassWall }
+  return { room, rightWall, glassWall }
 }
 
 /**
