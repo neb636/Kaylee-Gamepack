@@ -96,9 +96,9 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
 5. **Activities,** one per PR, through `ACTIVITY-TEMPLATE.md`. Dad picked four (2026-10-17), on hold until he says go:
    Baan Chang Cafe (in 3D, from #86's design), a Songkran water fight on the street, a longtail boat in Krabi, and night
    market food. The longtail boat became the first family trip (2026-10-18): `thailand/boat-trip.md`, with a reusable
-   trip kit (pack, taxi, airport, plane) for later trips. Its greybox 1, the boat toy in Phang Nga Bay, is built
-   (2026-10-18, `#/world/thailand/boat-trip/bay`); it isn't reached from the house yet (the elephant map comes in
-   greybox 2).
+   trip kit (pack, Aunty Sri's car, airport, a window seat on the plane) for later trips. Its greybox 1, the boat toy in
+   Phang Nga Bay, is built (2026-10-18, PR #99, `#/world/thailand/boat-trip/bay`); it isn't reached from the house yet
+   (the elephant map comes in greybox 2).
 
 ## Tech notes
 
