@@ -18,7 +18,7 @@ export const BOAT_TRIP: TripDef = {
 }
 
 /** Which 3D world each section runs in (one mount each; switching worlds goes behind the boarding pass). */
-export type TripWorld = 'house' | 'airport' | 'plane' | 'bay'
+export type TripWorld = 'house' | 'airport' | 'plane' | 'bay' | 'race'
 export const WORLD_OF: Record<BoatSection, TripWorld> = {
   invite: 'house',
   pack: 'house',
@@ -32,6 +32,8 @@ export const WORLD_OF: Record<BoatSection, TripWorld> = {
   village: 'bay',
   cave: 'bay',
   hong: 'bay',
+  race: 'race',
+  podium: 'race',
   nail: 'bay',
   sunset: 'bay',
   home: 'house',

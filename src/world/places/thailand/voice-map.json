@@ -994,6 +994,181 @@
     "file": "036ff3842084.mp3"
   },
   {
+    "text": "A boat race! Drive through the rainbow gate!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3042,
+    "file": "324f561e9805.mp3"
+  },
+  {
+    "text": "Hold your finger on the water to go fast!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3485,
+    "file": "9fe76099a884.mp3"
+  },
+  {
+    "text": "Three!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 589,
+    "file": "b98340c9d88a.mp3"
+  },
+  {
+    "text": "Two!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 501,
+    "file": "e53b779eaf65.mp3"
+  },
+  {
+    "text": "One!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 701,
+    "file": "87ed107b16cf.mp3"
+  },
+  {
+    "text": "Go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 611,
+    "file": "1912e4cf347c.mp3"
+  },
+  {
+    "text": "Tap the button to use it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1985,
+    "file": "230ab0e6a125.mp3"
+  },
+  {
+    "text": "A ramp! Tap in the air for a trick!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3370,
+    "file": "cecdcffc81ee.mp3"
+  },
+  {
+    "text": "Lap two!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1311,
+    "file": "17f86141eaaf.mp3"
+  },
+  {
+    "text": "Last lap!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1646,
+    "file": "adf8aaedfe44.mp3"
+  },
+  {
+    "text": "Kaylee wins! First place!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2786,
+    "file": "ade1ef755875.mp3"
+  },
+  {
+    "text": "A trophy for Kaylee, the boat race champion!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3472,
+    "file": "c48c213fd67f.mp3"
+  },
+  {
+    "text": "Tap the boat to go back to the bay!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2654,
+    "file": "671810135bb9.mp3"
+  },
+  {
+    "text": "Kaylee, Boat Race Champion! From Thailand.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3977,
+    "file": "41db50d20173.mp3"
+  },
+  {
+    "text": "Go, Kaylee, go!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1661,
+    "file": "2980433f4561.mp3"
+  },
+  {
+    "text": "Whoa! A banana!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1821,
+    "file": "80ce6701495a.mp3"
+  },
+  {
+    "text": "Almost there!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1048,
+    "file": "f44a0141bad7.mp3"
+  },
+  {
+    "text": "We won!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1099,
+    "file": "2d6b56189ca4.mp3"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 984,
+    "file": "f448ac10c6f8.mp3"
+  },
+  {
+    "text": "So fast!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1469,
+    "file": "d0535b2b4541.mp3"
+  },
+  {
+    "text": "You did it, sweetie!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1422,
+    "file": "ac2ea138b854.mp3"
+  },
+  {
+    "text": "Race you, Kaylee!",
+    "voice": "kids",
+    "sig": "2c9a630e41",
+    "ms": 1274,
+    "file": "4b55002b6d51.mp3"
+  },
+  {
+    "text": "You can't catch us!",
+    "voice": "kids",
+    "sig": "2c9a630e41",
+    "ms": 1130,
+    "file": "53183f4f2e23.mp3"
+  },
+  {
+    "text": "Hey!",
+    "voice": "kids",
+    "sig": "2c9a630e41",
+    "ms": 767,
+    "file": "baad761dc363.mp3"
+  },
+  {
+    "text": "Good race, Kaylee!",
+    "voice": "kids",
+    "sig": "2c9a630e41",
+    "ms": 1971,
+    "file": "08ec6b0060b6.mp3"
+  },
+  {
     "text": "We're home, Kaylee!",
     "voice": "sri",
     "sig": "db1e0738fa",

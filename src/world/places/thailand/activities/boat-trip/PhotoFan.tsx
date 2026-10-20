@@ -8,7 +8,7 @@ import { sfx } from '../../sfx'
 import type { AlbumPhoto } from './bay/Album'
 
 const MAX = 6
-const ORDER = { village: 0, hong: 1, nail: 2, selfie: 3 }
+const ORDER = { village: 0, hong: 1, race: 2, nail: 3, selfie: 4 }
 
 /** Which photos to fan out: one of each place first, then the newest others. */
 export function fanOf(photos: AlbumPhoto[]): AlbumPhoto[] {

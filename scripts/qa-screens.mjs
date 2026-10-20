@@ -484,6 +484,33 @@ const SCREENS = [
       await p.waitForTimeout(700)
     },
   },
+  // The boat race (race/): the grid and the countdown, racing with a finger on the water (the HUD, an item in the
+  // slot), the last lap's finish, the podium and the trophy, and the bay's rainbow gate with the trophy in the bow after.
+  { name: 'boat-race-grid', hash: '#/world/thailand/boat-trip/race', reset: true, wait: 7000 },
+  {
+    name: 'boat-race-racing',
+    hash: '#/world/thailand/boat-trip/race',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiBoatQA?.().phase === 'race', null, { timeout: 40000 }).catch(() => {})
+      const vp = p.viewportSize()
+      await p.mouse.move(vp.width * 0.55, vp.height * 0.45)
+      await p.mouse.down()
+      await p.waitForTimeout(6000)
+      await p.mouse.up()
+    },
+  },
+  {
+    name: 'boat-race-finish',
+    hash: '#/world/thailand/boat-trip/race?lap=3',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiBoatQA?.().phase === 'finish', null, { timeout: 90000 }).catch(() => {})
+      await p.waitForTimeout(600)
+    },
+  },
+  { name: 'boat-race-podium', hash: '#/world/thailand/boat-trip/podium', reset: true, wait: 6500 },
+  { name: 'boat-race-gate', hash: '#/world/thailand/boat-trip/bay?stops=race', reset: true, wait: 4600 },
   {
     name: 'boat-trip-beach',
     hash: '#/world/thailand/boat-trip/nail',

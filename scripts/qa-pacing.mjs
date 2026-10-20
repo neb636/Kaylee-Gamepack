@@ -103,6 +103,8 @@ const SCENARIOS = [
   { name: 'thailand bay: the hong', id: 'bay-hong', hash: '#/world/thailand/boat-trip/hong', reset: true },
   { name: 'thailand bay: the nail island and the photo', id: 'bay-nail', hash: '#/world/thailand/boat-trip/nail', reset: true },
   { name: 'thailand bay: the sunset ride back', id: 'bay-sunset', hash: '#/world/thailand/boat-trip/sunset', reset: true },
+  { name: 'thailand bay: the boat race', id: 'bay-race', hash: '#/world/thailand/boat-trip/race', reset: true },
+  { name: 'thailand bay: the race podium', id: 'bay-podium', hash: '#/world/thailand/boat-trip/podium', reset: true },
   // Home (step 5): a home link builds the bay first for its photos, then the flight home, the van, the photo for Agong.
   { name: 'thailand trip: home, the photo for agong', id: 'trip-home', hash: '#/world/thailand/boat-trip/home?photos=village,hong,nail&found=crab,eagle', reset: true },
   { name: 'thailand trip: a replay (🧳 or 🚤)', id: 'trip-replay', hash: '#/world/thailand/boat-trip/invite?replay=1', reset: true },

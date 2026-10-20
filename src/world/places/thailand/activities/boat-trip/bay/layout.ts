@@ -105,6 +105,19 @@ export const COCONUT = { x: -14, z: 44 }
 export const PIER_GLOW = { x: MOORED.x + 1, z: MOORED.z - 8, r: 6 }
 export const SUNSET_START = { x: -50, z: -60, heading: Math.atan2(50, 150) }
 
+/** The rainbow gate into the race lagoon (race/), east of the pier between two rock towers: drive through it, heading
+ *  east, to race. Back from the race, the longtail comes out just in front of it, facing the bay. */
+export const RACE_GATE = { x: 60, z: 76, heading: Math.PI / 2, half: 7 }
+export const RACE_GLOW = { x: RACE_GATE.x - 1, z: RACE_GATE.z, r: 6 }
+export const RACE_EXIT = { x: RACE_GATE.x - 15, z: RACE_GATE.z, heading: -Math.PI / 2 }
+/** The towers either side of the gate and the lagoon's wall behind it. */
+export const RACE_ROCKS: Rock[] = [
+  { x: RACE_GATE.x + 6, z: RACE_GATE.z - 15, r: 7, h: 38 },
+  { x: RACE_GATE.x + 6, z: RACE_GATE.z + 15, r: 7, h: 33 },
+  { x: RACE_GATE.x + 24, z: RACE_GATE.z - 6, r: 11, h: 52 },
+  { x: RACE_GATE.x + 22, z: RACE_GATE.z + 10, r: 10, h: 46 },
+]
+
 /** The big white tour boat's loop around the middle of the bay (its wake makes ramps). */
 export const TOUR = { x: -6, z: -20, rx: 54, rz: 40, period: 56 }
 

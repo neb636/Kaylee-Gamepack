@@ -10,15 +10,16 @@ import type { Member } from '../../../characters/member'
 import type { Driver } from '../../../trip/drive'
 import type { Vehicle } from '../../../trip/vehicles/vehicle'
 import type { BoatSection } from '../sections'
+import type { Rock } from './layout'
 
 export type RiderId = 'kaylee' | 'ji' | 'nick'
 export type Pose3 = 'sit' | 'stand' | 'lie'
 /** What the core is doing: the family getting in at the pier, driving, swapping boats, on the beach, on the pier. */
 export type Phase = 'board' | 'drive' | 'swap' | 'beach' | 'docked'
-/** The stops she can visit (the `stops` param). */
-export type Stop = 'village' | 'cave'
+/** The stops she can visit (the `stops` param; `race` = she has won the boat race, the trophy rides in the boat). */
+export type Stop = 'village' | 'cave' | 'race'
 /** The photos that drop into the album by themselves (the `photos` param), and Mommy's selfies. */
-export type PhotoKind = 'village' | 'hong' | 'nail' | 'selfie'
+export type PhotoKind = 'village' | 'hong' | 'nail' | 'selfie' | 'race'
 /** Poses for the Nail Island photo (and Kaylee's tiller, Daddy pointing, Mommy's selfie arm). */
 export type PoseKind = 'wave' | 'cheer' | 'heart' | 'silly' | 'tiller' | 'point' | 'selfie' | 'broom'
 
@@ -81,4 +82,6 @@ export interface BayPart {
   shot?(): Shot | null
   /** It's the part in charge of the section (the core asks each in turn; first answer wins). */
   sectionNow?(): BoatSection | null
+  /** Its rock towers (the chase camera keeps out of them, a tap's way goes round them). */
+  towers?(): Rock[]
 }

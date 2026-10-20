@@ -13,7 +13,8 @@
 // This file is the core: the boats, the family in them, the driving, the camera, the tap targets, photos and the
 // section in the address bar. Each place builds and plays its own part (part.ts): pier.ts (the ribbons), open.ts (the
 // open water's critters and silly moments), village.ts, cave.ts (the canoe, the cave and the hong), nail.ts (the beach
-// and the photo) and sunset.ts (the ride home). The soft bumps are bumps.ts, the tap targets and arrows overlay.ts.
+// and the photo), sunset.ts (the ride home) and race-gate.ts (the rainbow gate into the boat race, race/). The soft bumps
+// are bumps.ts, the tap targets and arrows overlay.ts.
 import { Color, Fog, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type PerspectiveCamera, type WebGLRenderer } from 'three'
 import { bell, clamp, type Line } from '../../../../../../sdk'
 import { Avatar } from '../../../characters/avatar'
@@ -39,13 +40,14 @@ import type { Vehicle } from '../../../trip/vehicles/vehicle'
 import type { BoatSection } from '../sections'
 import { CAVE_ANCHORS, CaveStop } from './cave'
 import type { CritterId } from './critters'
-import { BAY_START, BEACH_GLOW, CAVE_GLOW, CLIFFS, HONG, HOUSES, MOORED, NAIL, PIER, PIER_GLOW, RING, ROCKS, TUNNEL, VILLAGE, VILLAGE_GLOW } from './layout'
+import { BAY_START, BEACH_GLOW, CAVE_GLOW, CLIFFS, HONG, HOUSES, MOORED, NAIL, PIER, PIER_GLOW, RACE_EXIT, RACE_GLOW, RACE_ROCKS, RING, ROCKS, TUNNEL, VILLAGE, VILLAGE_GLOW } from './layout'
 import { NAIL_ANCHORS, NailStop } from './nail'
 import { OPEN_ANCHORS, OpenWater } from './open'
 import { BayOverlay, HINT_S } from './overlay'
 import { collide } from './bumps'
 import type { BayPart, Box, Circle, Phase, PhotoKind, Pose3, PoseKind, Ride, Rider, RiderId, Stop } from './part'
 import { PIER_ANCHORS, PierStop } from './pier'
+import { RACE_GATE_ANCHORS, RaceGate } from './race-gate'
 import { applyPose, clearPose } from './poses'
 import { buildScenery, type GlowId, type Scenery } from './scenery'
 import { Sky } from './sky'
@@ -66,6 +68,8 @@ export interface BayStart {
   /** Photos already in the album (no new automatic one of these). */
   album: PhotoKind[]
   found: CritterId[]
+  /** Back from the boat race: the longtail starts just out of its gate (a `bay` section, no "where to?"). */
+  from?: 'race'
 }
 
 export interface BayEvents {
@@ -82,6 +86,8 @@ export interface BayEvents {
   onFlash(): void
   /** Back at the pier at sunset: the boarding pass's last punch. */
   onDocked(): void
+  /** Through the rainbow gate: the boat race. */
+  onRace(): void
 }
 
 const CORE_ANCHORS: AnchorInfo[] = [
@@ -95,12 +101,13 @@ const CORE_ANCHORS: AnchorInfo[] = [
   { id: 'glow:beach', label: 'The Nail Island beach', kind: 'thing' },
   { id: 'glow:pier', label: 'The pier', kind: 'thing' },
   { id: 'glow:out', label: 'The way out of the hong', kind: 'thing' },
+  { id: 'glow:race', label: 'The boat race', kind: 'thing' },
   { id: 'tour', label: 'Tour boat', kind: 'thing' },
 ]
-export const BAY_ANCHORS: AnchorInfo[] = [...CORE_ANCHORS, ...PIER_ANCHORS, ...OPEN_ANCHORS, ...VILLAGE_ANCHORS, ...CAVE_ANCHORS, ...NAIL_ANCHORS, ...SUNSET_ANCHORS]
+export const BAY_ANCHORS: AnchorInfo[] = [...CORE_ANCHORS, ...PIER_ANCHORS, ...OPEN_ANCHORS, ...VILLAGE_ANCHORS, ...CAVE_ANCHORS, ...NAIL_ANCHORS, ...SUNSET_ANCHORS, ...RACE_GATE_ANCHORS]
 
 /** The off-screen glows' arrows at the screen's edge: what each one is. */
-export const GLOW_ICONS: Record<GlowId, string> = { village: '🏘️', cave: '🛶', beach: '🏝️', pier: '⚓', out: '🚤' }
+export const GLOW_ICONS: Record<GlowId, string> = { village: '🏘️', cave: '🛶', beach: '🏝️', pier: '⚓', out: '🚤', race: '🏁' }
 /** The badges at the screen's edge: the glows, and the village's loose ball. */
 export const ARROW_ICONS: Record<string, string> = { ...GLOW_ICONS, ball: '⚽' }
 
@@ -167,6 +174,7 @@ export class Bay implements World3D {
   private cave: CaveStop
   private nail: NailStop
   private sunset: SunsetRide
+  private raceGate: RaceGate
   readonly parts: BayPart[]
   private finger: { x: number; y: number; onBoat: boolean; steering: boolean; t: number } | null = null
   /** A tap's way round big things (Ko Tapu's buoys, the hong, the towers, the houses): the waypoints still ahead. */
@@ -253,7 +261,8 @@ export class Bay implements World3D {
     this.cave = new CaveStop(this)
     this.nail = new NailStop(this)
     this.sunset = new SunsetRide(this, this.sky)
-    this.parts = [this.pier, this.cave, this.sunset, this.village, this.nail, this.open]
+    this.raceGate = new RaceGate(this, start.from === 'race')
+    this.parts = [this.pier, this.cave, this.sunset, this.village, this.nail, this.raceGate, this.open]
     this.begin(start)
     for (const kind of start.album) this.photoKinds.add(kind)
     for (const kind of start.photos) {
@@ -284,10 +293,11 @@ export class Bay implements World3D {
     if (s === 'pier') this.pier.begin()
     else if (s === 'cave' || s === 'hong') this.cave.begin(s)
     else {
-      const spot = s === 'nail' ? this.nail.start : s === 'village' ? this.village.start : s === 'sunset' ? this.sunset.start : BAY_START
+      const back = s === 'bay' && start.from === 'race'
+      const spot = s === 'nail' ? this.nail.start : s === 'village' ? this.village.start : s === 'sunset' ? this.sunset.start : back ? RACE_EXIT : BAY_START
       longtail.d.place(spot.x, spot.z, spot.heading)
       this.seatAll(longtail)
-      if (s === 'bay') this.whereTo()
+      if (s === 'bay' && !back) this.whereTo()
       if (s === 'sunset') this.sunset.begin(true)
     }
     for (const r of Object.values(this.rides)) this.poseRide(r, 0, 0)
@@ -393,6 +403,10 @@ export class Bay implements World3D {
   }
   setPhase(p: Phase) {
     this.phase = p
+  }
+  /** Into the boat race (the longtail glided through the gate). */
+  raceNow() {
+    this.events.onRace()
   }
   /** She has her Nail Island photo and is back in the boat (the sunset can begin). */
   isNailDone() {
@@ -526,6 +540,7 @@ export class Bay implements World3D {
     if (target === 'glow:cave') return this.driveTo(CAVE_GLOW.x, CAVE_GLOW.z)
     if (target === 'glow:beach') return this.driveTo(BEACH_GLOW.x, BEACH_GLOW.z)
     if (target === 'glow:pier') return this.driveTo(PIER_GLOW.x, PIER_GLOW.z)
+    if (target === 'glow:race') return this.driveTo(RACE_GLOW.x, RACE_GLOW.z)
     if (target === 'glow:ball') {
       const b = this.village.ballToFind()
       if (b) this.driveTo(b.x, b.z)
@@ -553,7 +568,7 @@ export class Bay implements World3D {
     // A tap on a rock's foot means "go to that rock": the spot just in front of it (not grinding against it).
     if (this.using === 'longtail') {
       const d0 = this.ride.d
-      for (const r of [...ROCKS, ...CLIFFS, VILLAGE.rock]) {
+      for (const r of [...ROCKS, ...CLIFFS, VILLAGE.rock, ...RACE_ROCKS]) {
         const dist = Math.hypot(x - r.x, z - r.z)
         if (dist < r.r + 2.5) {
           const ox = dist > 0.01 ? (x - r.x) / dist : (d0.x - r.x) / (Math.hypot(d0.x - r.x, d0.z - r.z) || 1)
@@ -580,6 +595,7 @@ export class Bay implements World3D {
       ...ROCKS.map((r): Circle => [r.x, r.z, r.r + 5]),
       ...CLIFFS.map((r): Circle => [r.x, r.z, r.r + 5]),
       ...HOUSES.map((h): Circle => [h.x, h.z, Math.hypot(h.hx, h.hz) + 1.5]),
+      ...RACE_ROCKS.map((r): Circle => [r.x, r.z, r.r + 5]),
     ]
     const out: { x: number; z: number }[] = []
     let cx = x
@@ -940,6 +956,7 @@ export class Bay implements World3D {
     this.village.arrive(bx, bz)
     if (this.cave.arrive(bx, bz)) return
     if (this.nail.arrive(bx, bz)) return
+    if (this.raceGate.arrive(bx, bz)) return
     this.sunset.arrive(bx, bz)
   }
 
@@ -952,6 +969,7 @@ export class Bay implements World3D {
     g.beach.visible = drive && !sunset && this.nail.armed
     g.pier.visible = drive && sunset
     g.out.visible = this.phase === 'drive' && this.cave.showExit
+    g.race.visible = drive && !sunset && !this.stops.has('race') && this.raceGate.armed
     for (const k of Object.keys(g) as GlowId[]) g[k].scale.setScalar(1 + Math.sin(t * 2.2 + k.length) * 0.04)
   }
 
@@ -1184,7 +1202,7 @@ export class Bay implements World3D {
   private unblockCamera() {
     const cam = this.rig.camera
     const p = cam.position
-    const towers = [...ROCKS, ...RING, ...CLIFFS, VILLAGE.rock, { x: NAIL.x, z: NAIL.z, r: NAIL.top, h: NAIL.h }]
+    const towers = [...ROCKS, ...RING, ...CLIFFS, VILLAGE.rock, { x: NAIL.x, z: NAIL.z, r: NAIL.top, h: NAIL.h }, ...this.parts.flatMap((p) => p.towers?.() ?? [])]
     if (this.using === 'canoe') return
     const fwd = cam.getWorldDirection(tmp2)
     const d = this.ride.d

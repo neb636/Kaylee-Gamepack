@@ -178,4 +178,36 @@ export const sfx = {
   peep: () => [0, 0.1, 0.2].forEach((d) => tone(3400, 3000, 0.05, 0.05, 'sine', d)),
   /** A plop into the water (a crab, a lizard, sunglasses). */
   plop: () => tone(520, 160, 0.12, 0.08, 'sine'),
+
+  // ---- The boat race ----
+  /** A countdown light: a low beep for three, two, one, a long high one for go. */
+  light: (go: boolean) => tone(go ? 1320 : 660, go ? 1320 : 660, go ? 0.55 : 0.22, 0.09, 'square'),
+  /** The item slot spinning round: tick. */
+  roll: () => tone(1400 + Math.random() * 600, 1300, 0.03, 0.04, 'square'),
+  /** An item lands in the slot. */
+  item: () => [1, 1.26, 1.5].forEach((k, i) => tone(880 * k, 900 * k, 0.14, 0.06, 'triangle', i * 0.07)),
+  /** A slide whistle going down: slipping on a banana peel. */
+  slip: () => {
+    tone(1400, 300, 0.6, 0.07, 'sine')
+    noise(0.3, 0.05, 'bandpass', 900, 400)
+  },
+  /** Splat: a thrown banana landing on someone. */
+  splat: () => {
+    noise(0.18, 0.12, 'lowpass', 1200, 300)
+    tone(300, 120, 0.15, 0.07, 'sine')
+  },
+  /** A trick in the air: a swirl up. */
+  trick: () => [0, 1, 2, 3].forEach((i) => tone(600 + i * 200, 900 + i * 240, 0.1, 0.05, 'triangle', i * 0.06)),
+  /** A boost pad or a mini-turbo: a rising whoosh. */
+  zoom: () => {
+    noise(0.5, 0.08, 'bandpass', 500, 2600, 0, 1.2)
+    tone(220, 660, 0.4, 0.05, 'sawtooth')
+  },
+  /** A new lap: ding-ding. */
+  lap: () => [0, 0.18].forEach((d) => tone(1568, 1568, 0.3, 0.07, 'sine', d)),
+  /** A firework going pop high up. */
+  bang: () => {
+    noise(0.35, 0.1, 'lowpass', 1600, 200)
+    for (let i = 0; i < 5; i++) tone(2400 + Math.random() * 1200, 1800, 0.08, 0.02, 'sine', 0.1 + i * 0.05)
+  },
 }

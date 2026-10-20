@@ -2,7 +2,8 @@
 // #/world/thailand/boat-trip/<section>?packed=<what's in the suitcase>&ribbons=...&stops=...&photos=...&found=...
 // The trip there (step 4): Mommy asks if she's ready, packing, the goodbye and Aunty Sri's van, the airport and the
 // window seat; then Phang Nga Bay (step 3): the pier and its ribbons, open water, the village, the cave and the hong, the
-// Nail Island's photo and the sunset ride back; then home (step 5): the flight home, Aunty Sri's van at Agong's door,
+// boat race through the rainbow gate (its own lagoon: three laps, then the podium and the trophy), the Nail Island's
+// photo and the sunset ride back; then home (step 5): the flight home, Aunty Sri's van at Agong's door,
 // the photo she picks for Agong's wall, and the stamp. `replay=1` plays it as a trip she has done before (Mommy's yes
 // offers 🧳 or 🚤, and the flight is shorter). Loaded at startup: keep three.js out of this file.
 import { defineSections } from '../../../../kit/sections'
@@ -12,9 +13,10 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
   params: {
     packed: { default: DEFAULT_PACKED, doc: `what's in her suitcase, a comma list of ${ITEMS.map((i) => i.id).join(', ')} (e.g. gan,fan,mango for the silly x-ray)` },
     ribbons: { default: 'pink,butter,mint', doc: 'the three ribbons on the longtail\'s bow: pink, butter, mint, sky, lavender, hotpink (a pier link with it has them tied already)' },
-    stops: { default: '', doc: 'stops already visited: village, cave (their glows are out; village = the football rides in the boat)' },
+    stops: { default: '', doc: 'stops already visited: village, cave, race (their glows are out; village = the football rides in the boat, race = she won the boat race and the trophy rides in the bow)' },
     photos: { default: '', doc: 'photos already in the trip album: village, hong, nail' },
     found: { default: '', doc: 'animal stickers found: needlefish, eagle, macaque, cat, crab, mudskipper, lizard, kingfisher, porpoise' },
+    lap: { default: '1', values: ['1', '2', '3'], doc: 'the boat race: the lap it starts on (3 = straight to the last lap and the finish)' },
     replay: { default: '', doc: "1 = she has done the whole trip before (as after her first trip): yes to Mommy offers 🧳 the whole trip or 🚤 straight to the pier, and the flight is shorter" },
   },
   sections: [
@@ -30,6 +32,8 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
     { id: 'village', name: 'Koh Panyee: the floating football field', params: ['packed', 'ribbons', 'found'] },
     { id: 'cave', name: 'Into the canoe, under the low roof', params: ['packed', 'found'] },
     { id: 'hong', name: 'The hong, a secret lagoon inside the island', params: ['packed', 'found'] },
+    { id: 'race', name: 'The boat race: three laps against the village kids and the macaque', params: ['packed', 'ribbons', 'lap'] },
+    { id: 'podium', name: 'The race podium and the trophy', params: ['packed', 'ribbons'] },
     { id: 'nail', name: 'The Nail Island and the photo', params: ['packed', 'ribbons', 'stops', 'photos', 'found'] },
     { id: 'sunset', name: 'The ride back at sunset, and the porpoise', params: ['packed', 'ribbons', 'photos', 'found'] },
     { id: 'home', name: "Home: the photo for Agong's wall, and the stamp", params: ['packed', 'photos', 'found'] },

@@ -9,6 +9,10 @@
 //   pier ... sunset         Phang Nga Bay by longtail boat (bay/bay.ts and its parts): the ribbons, open water, the
 //                           village, the cave and the hong, the Nail Island photo, the sunset ride back; at the pier her
 //                           album opens and a big 🏠 takes them home
+//   race, podium            through the bay's rainbow gate (bay/race-gate.ts), behind a checkered flag: the boat race
+//                           in its own lagoon (race/race.ts, its screen race/RaceLayer.tsx), three laps against the
+//                           village kids and the macaque; she always wins, lifts the trophy on the podium (it goes in
+//                           her Trophy Room and rides in the bow), and 🚤 takes her back out of the gate
 //   home                    Agong's house again (the plugin's `home` leg): the flight home, Aunty Sri's van at the door,
 //                           the photo she picks (PhotoFan.tsx) goes on Agong's wall (saved on the iPad, trip/wall-photos.ts),
 //                           the cousins look up from their phones, and the stamp (onDone)
@@ -26,6 +30,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { sounds, useSaved, type Line } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
+import { awardTrophy } from '../../../../../sdk/trophies'
 import { L } from '../../lines'
 import { Anchors } from '../../engine/Anchors'
 import { flag } from '../../engine/flags'
@@ -49,6 +54,8 @@ import { PoseButtons } from './bay/PoseButtons'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
 import { PhotoFan } from './PhotoFan'
+import { Race, RACE_ANCHORS, type RaceHud, type RaceSection } from './race/race'
+import { RACE_TROPHY, RaceFlag, RaceLayer } from './race/RaceLayer'
 import BOAT_SECTIONS, { type BoatSection } from './sections'
 import { BOAT_TRIP, PASS, PUNCH, WORLD_OF, type TripWorld } from './trip'
 
@@ -60,11 +67,11 @@ interface Progress {
   trips?: number
 }
 const RESUME: BoatSection[] = ['goodbye', 'airport', 'takeoff', 'pier']
-const RESUME_AT: Partial<Record<BoatSection, BoatSection>> = { fly: 'takeoff', land: 'takeoff', bay: 'pier', village: 'pier', cave: 'pier', hong: 'pier', nail: 'pier', sunset: 'pier' }
+const RESUME_AT: Partial<Record<BoatSection, BoatSection>> = { fly: 'takeoff', land: 'takeoff', bay: 'pier', village: 'pier', cave: 'pier', hong: 'pier', race: 'pier', podium: 'pier', nail: 'pier', sunset: 'pier' }
 const DEFAULT_RIBBONS = BOAT_SECTIONS.params.ribbons.default
 /** A comma list from the URL, kept to the values it may have. */
 const list = <T extends string>(s: string | null, ok: readonly T[]) => (s ?? '').split(',').filter((x): x is T => (ok as readonly string[]).includes(x))
-const STOPS: Stop[] = ['village', 'cave']
+const STOPS: Stop[] = ['village', 'cave', 'race']
 const KINDS: PhotoKind[] = ['village', 'hong', 'nail']
 const GLOWS = Object.keys(ARROW_ICONS)
 
@@ -86,6 +93,7 @@ const ANCHORS_OF: Record<TripWorld, typeof BAY_ANCHORS> = {
   airport: AIRPORT_ANCHORS,
   plane: PLANE_ANCHORS,
   bay: BAY_ANCHORS,
+  race: RACE_ANCHORS,
 }
 
 export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () => void }) {
@@ -108,7 +116,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const prep = useRef(first === 'home')
   const [mount, setMount] = useState<{ world: TripWorld; section: BoatSection; key: number }>(() => (prep.current ? { world: 'bay', section: 'nail', key: 0 } : { world: WORLD_OF[first], section: first, key: 0 }))
   const [mode, setMode] = useState<RenderMode>('webgl')
-  const [pass, setPass] = useState<{ punch: string | null; done: string[]; choices?: PassChoice[] } | null>(() => (prep.current ? { punch: null, done: PASS.map((p) => p.id).filter((id) => id !== 'home') } : null))
+  const [pass, setPass] = useState<{ punch: string | null; done: string[]; choices?: PassChoice[]; flag?: boolean } | null>(() => (prep.current ? { punch: null, done: PASS.map((p) => p.id).filter((id) => id !== 'home') } : null))
   /** Back at the pier at sunset: the way home is open. */
   const [atPier, setAtPier] = useState(false)
   const [landed, setLanded] = useState(false)
@@ -124,7 +132,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   // The bay: her ribbons, the stops she's been to, the album's photos and stickers.
   const [ribbons, setRibbons] = useState<string[]>(() => list(flag('ribbons'), ['pink', 'butter', 'mint', 'sky', 'lavender', 'hotpink']).slice(0, 3))
   const tied = useRef(flag('ribbons') !== null)
-  const [stops, setStops] = useState<Stop[]>(() => list(flag('stops'), STOPS))
+  // (A podium link: she has won the race.)
+  const [stops, setStops] = useState<Stop[]>(() => [...new Set([...list(flag('stops'), STOPS), ...(first === 'podium' ? (['race'] as Stop[]) : [])])])
   const [photos, setPhotos] = useState<AlbumPhoto[]>([])
   const [found, setFound] = useState<CritterId[]>(() => list(flag('found'), CRITTERS))
   const [albumOpen, setAlbumOpen] = useState(false)
@@ -132,6 +141,15 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const [flights, setFlights] = useState<{ key: number; id: CritterId; x: number; y: number }[]>([])
   const [drops, setDrops] = useState<{ key: number; src: string }[]>([])
   const guideRef = useRef<TripGuideHandle>(null)
+  // The boat race: what its screen shows, the minimap's dots, and whether the bay is being built for the way back out
+  // of its gate.
+  const [raceHud, setRaceHud] = useState<RaceHud | null>(null)
+  const mapEls = useRef(new Map<string, SVGElement>())
+  const fromRace = useRef(false)
+  /** Races won this visit (a rematch skips the kids' "race you!"). */
+  const raced = useRef(0)
+  // A race link's lap (read once: the address bar drops it as soon as the trip starts).
+  const [lapLink] = useState(() => Number(flag('lap') ?? 1))
   const arrowEls = useRef(new Map<string, HTMLElement>())
   // A link into the bay with photos: they're staged and taken when the bay is first built (a `home` link's and a
   // `sunset` link's too, with at least the Nail Island's, so there's always one to give Agong).
@@ -155,7 +173,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       packed: formatPacked(ids) || DEFAULT_PACKED,
       ribbons: st.ribbons.length ? st.ribbons.join(',') : DEFAULT_RIBBONS,
       stops: st.stops.join(','),
-      photos: [...new Set(st.photos.map((p) => p.kind).filter((k) => k !== 'selfie'))].join(','),
+      photos: [...new Set(st.photos.map((p) => p.kind).filter((k) => k !== 'selfie' && k !== 'race'))].join(','),
       found: st.found.join(','),
       replay: replay ? '1' : '',
     }
@@ -181,14 +199,18 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     enter(s, s === 'invite' ? {} : params(state.current.packed))
   }
 
-  /** A leg is over: the boarding pass slides up (punching that leg), the next world is built behind it, and it goes. */
-  const finish = (next: BoatSection, punchLeg?: string | null) => {
+  /** A leg is over: the boarding pass slides up (punching that leg), the next world is built behind it, and it goes.
+   *  In and out of the boat race, a checkered flag instead. */
+  const finish = (next: BoatSection, punchLeg?: string | null, flagCover = false) => {
     const st = state.current
     if (st.busy) return
     st.busy = true
     const from = st.section
     const punch = punchLeg !== undefined ? punchLeg : legOf(from)
-    setPass({ punch, done: doneBefore(next, punch) })
+    setPass({ punch, done: doneBefore(next, punch), flag: flagCover })
+    if (WORLD_OF[next] !== 'race') setRaceHud(null)
+    // (Kept until the next leg: React may build a world twice in development.)
+    if (next !== 'bay') fromRace.current = false
     const at = RESUME.includes(next) ? next : (RESUME_AT[next] ?? null)
     if (at) setSaved((p) => ({ ...p, at, packed: formatPacked(st.packed) }))
     const old = worldRef.current
@@ -360,7 +382,29 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       w = new House(renderer, { section: s === 'goodbye' || s === 'home' ? 'street' : 'upstairs' }, { onSpot: () => {}, onArrived: () => {} }, trip)
     } else if (world === 'airport') w = new Airport(renderer, leg, items)
     else if (world === 'plane') w = new PlaneRide(renderer, leg, s as FlySection, items, FLIGHT, replay ? (BOAT_TRIP.caps.replayFly ?? BOAT_TRIP.caps.fly) : BOAT_TRIP.caps.fly)
-    else {
+    else if (world === 'race') {
+      const st = state.current
+      // A link's `lap` counts for the first race only (a rematch starts at lap 1).
+      const lap = raced.current === 0 && start === 'race' ? lapLink : 1
+      const race = new Race(renderer, { section: s as RaceSection, packed: items, ribbons: st.ribbons.length ? st.ribbons : DEFAULT_RIBBONS.split(','), lap, again: raced.current > 0 }, {
+        onSection: (x) => moveTo(x),
+        say,
+        onHud: setRaceHud,
+        onWin: () => {
+          raced.current++
+          setStops((x) => (x.includes('race') ? x : [...x, 'race']))
+          // Her race trophy goes in the Trophy Room (the same as a game's: KAYLEE on it, ×2 after a rematch).
+          awardTrophy({ gameId: 'world-thailand-boat-race', gameTitle: 'Thailand', trophyTitle: RACE_TROPHY, emoji: '🚤' })
+        },
+        onPhoto: (src) => {
+          setPhotos((ps) => [...ps, { n: (ps[ps.length - 1]?.n ?? 0) + 1, kind: 'race' as const, src }].slice(-12))
+          setDrops((d) => [...d, { key: performance.now(), src }])
+        },
+        onFlash: () => setFlash((n) => n + 1),
+      })
+      race.setMapElements(mapEls.current)
+      w = race
+    } else {
       const st = state.current
       // (Kept until they're taken: a bay built twice, as React does in development, takes them in the second one.)
       const staged = linkPhotos.current
@@ -372,6 +416,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         photos: staged,
         album: st.photos.map((p) => p.kind),
         found: st.found,
+        from: fromRace.current ? 'race' : undefined,
       }
       const bay = new Bay(renderer, start, {
         onSection: (x) => moveTo(x),
@@ -405,6 +450,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         onLanded: setLanded,
         onFlash: () => setFlash((n) => n + 1),
         onDocked: docked,
+        onRace: () => finish('race', null, true),
       })
       bay.setArrowElements(arrowEls.current)
       w = bay
@@ -517,17 +563,35 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
               }}
             />
           ))}
-          {drops.map((d) => (
-            <PhotoDrop
-              key={d.key}
-              src={d.src}
-              onDone={() => {
-                setDrops((all) => all.filter((x) => x.key !== d.key))
-                setBump((b) => b + 1)
-              }}
-            />
-          ))}
         </>
+      )}
+      {(mount.world === 'bay' || mount.world === 'race') &&
+        mode === 'webgl' &&
+        drops.map((d) => (
+          <PhotoDrop
+            key={d.key}
+            src={d.src}
+            onDone={() => {
+              setDrops((all) => all.filter((x) => x.key !== d.key))
+              setBump((b) => b + 1)
+            }}
+          />
+        ))}
+      {mount.world === 'race' && mode === 'webgl' && raceHud && !pass && (
+        <RaceLayer
+          hud={raceHud}
+          mapEls={mapEls.current}
+          onItem={() => (worldRef.current as Race | null)?.useItem()}
+          onAgain={() => {
+            sounds.pop()
+            finish('race', null, true)
+          }}
+          onBay={() => {
+            sounds.pop()
+            fromRace.current = true
+            finish('bay', null, true)
+          }}
+        />
       )}
       {/* At the pier at sunset: home (also inside the album that opens there). */}
       <AnimatePresence>
@@ -571,7 +635,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           tripRef.current?.choose(p.src)
         }}
       />
-      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!pass || asking} raised={mount.world === 'bay' && landed} idle={mount.world === 'bay' ? L.bay.hint.drive : undefined} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!pass || asking} raised={(mount.world === 'bay' && landed) || (mount.world === 'race' && raceHud?.phase === 'podium')} idle={mount.world === 'bay' ? L.bay.hint.drive : mount.world === 'race' ? L.race.start : undefined} />}
       <Ask open={asking} onYes={yes} onNotYet={onExit} />
       <PackCard open={!pass && mount.world === 'house' && (phase === 'pack' || phase === 'sitting')} packed={packed} sitting={phase === 'sitting'} onClose={() => tripRef.current?.closeTap()} />
       <AnimatePresence>
@@ -580,14 +644,17 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {pass && (
-          <BoardingPass
-            legs={PASS}
-            done={pass.done}
-            punch={pass.punch}
-            choices={pass.choices}
-          />
-        )}
+        {pass &&
+          (pass.flag ? (
+            <RaceFlag key="flag" />
+          ) : (
+            <BoardingPass
+              legs={PASS}
+              done={pass.done}
+              punch={pass.punch}
+              choices={pass.choices}
+            />
+          ))}
       </AnimatePresence>
       {debug && mount.world === 'bay' && <Debug bayRef={worldRef as never} />}
     </div>

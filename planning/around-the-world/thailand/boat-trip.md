@@ -376,6 +376,54 @@ more next time; pose photos are new every time; what she packs changes what she 
 **Numbers:** about 60-100 touches in 4-6 minutes (each drive, VROOM, poke, pose), nearly all of them driving or poking; the
 only "question" (where to?) she answers by driving. 2 lines before the first touch.
 
+### The boat race 🏁 (Dad's ask, 2026-10-20: "similar to Mario Kart", she always wins, a trophy at the end)
+
+**One-line pitch:** a rainbow gate east of the pier opens on a secret lagoon walled in by rock towers; Captain Kaylee
+races the Koh Panyee kids and the cheeky macaque three laps round its island, and wins the trophy with her name on it.
+
+- **Where:** its own place, not the bay (sections `race` and `podium`, world `race`, `activities/boat-trip/race/`).
+  The bay keeps a rainbow inflatable arch between two towers with a 🏁 glow (`bay/race-gate.ts`); driving through it
+  swaps worlds behind a checkered flag, like the boarding pass. Back out of the gate afterwards, the trophy rides in
+  the bow, the glow is out and the gate stays open for a rematch. It's optional, like the village and the cave.
+- **The course** (`race/track.ts`): a 393 m loop (about 35 s a lap), 16 m wide, roped off with pink and white buoys
+  (soft boops back in, no walls to crash into), round an island of sand, jungle and palms; a ring of tall rock towers
+  walls the lagoon in. Landmarks: the start under an inflatable rainbow arch with three countdown lights, a checkered
+  line and flags, the floating grandstand of animal fans (they jump when she goes past), the waterfall rock in turn 1,
+  an S bend, a natural rock arch over the back straight, a chicane, the ramp, and hot-air balloons overhead.
+- **Same toy, raced:** her finger on the water steers the longtail (it can only go forward along the course; her finger
+  picks where across it) at full speed; let go and it races on by itself a little slower, so she can never stop, get
+  lost or go the wrong way. The camera chases close behind.
+- **Mario Kart things:** the countdown (three lights, "Three! Two! One! Go!") with a rocket start for a finger already
+  down at GO and revving before it; rainbow item boxes (five across, so she can't miss) whose slot spins up 🚀 a turbo,
+  🍌 a banana (thrown in an arc at whoever is just ahead, or dropped behind when she's first) or 🌈 the rainbow (6 s fast,
+  sparkly music, nothing can stop her, rivals she bumps spin); behind = better items, and her first is always a turbo;
+  gold coins (each a little faster, up to ten); golden arrow boost pads; the ramp (a finger held at takeoff, or a tap
+  just before or in the air, is a trick: a moment of slow motion, she twirls, the boat rolls right round, a burst of
+  speed on landing); a long hard turn builds sparks and lets them go as
+  a mini-turbo (a drift without a drift button); bumping boats; the place badge (1st, 2nd, 3rd) with the three faces in
+  order, the lap, the coins and a minimap; "Lap two!" and "Last lap!" banners, the music speeding up on the last lap.
+- **The rivals:** the village kids (the buffalo kid at the tiller, the fox kid cheering) in a sky-blue longtail, and
+  the macaque in a banana boat with an outboard, who tosses banana peels over his shoulder when she's coming up behind
+  (she spins round once if she hits one: "Whoa! A banana!"). They tease ("Catch us!"), wave and spin out.
+- **She always wins, and it feels close:** each rival follows a story of the race in meters ahead of her (rubber
+  banding): they lead off the line, she catches the macaque, swaps places with the kids, and on the last lap the kids
+  are right beside her until the end. Near the line they can't pass her and can't cross first. If she drives well
+  (boosts, items) she pulls away for real; if she does nothing, she still wins at the line.
+- **The finish:** slow motion as she crosses, the camera cuts to head-on just past the line (her bow, the kids beside her), fireworks, confetti, the fanfare, "Kaylee
+  wins! First place!" and Daddy's "We won!".
+- **The podium:** a floating stage under a balloon arch: she stands on 1, the kids on 2, the macaque on 3; the gold
+  trophy (KAYLEE on its plaque) floats down into her hands and she holds it up; confetti and fireworks; the SDK trophy
+  card (as in her Trophy Room) comes up big and tucks into the corner; a podium photo drops into the trip album (it
+  can go on Agong's wall). The trophy is saved to her **Trophy Room** ("Boat Race Champion", ×2 after a rematch).
+  🔁 races again, 🚤▶ back to the bay.
+- **Talk:** Sparkle's "Hold your finger on the water to go fast!" and the kids' "Race you, Kaylee!" before the
+  countdown (she can rev from the first second), then only when something new happens (her first item, the ramp, a
+  new lap) or after a while without touching. No new speakers: the kids' voice is the village's; the macaque chatters.
+- **Numbers:** about 2 min 20 s from the gate to the podium, 40-80 touches (a held finger, items, tricks, pokes).
+- **Links:** `race` (`lap=3` starts on the last lap), `podium`; `bay?stops=race` has the trophy in the bow.
+- **Not built (ideas for later):** the trophy on a shelf in Agong's house; more tracks; Gan, Ken and BB racing (Dad
+  would pick).
+
 ### Home 🏠 (the payoff goes back to the house)
 
 The flight home is a 4-second picture (the plane over a pink sunset; tap skips). Aunty Sri's white electric van brings
