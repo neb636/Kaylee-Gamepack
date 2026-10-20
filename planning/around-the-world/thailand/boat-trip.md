@@ -40,7 +40,7 @@ photo Agong asked for. Back home it goes on Agong's wall, and even the big cousi
 
 One idea holds it together: **on the way there the grown-ups drive, and every ride is a toy; in the bay she's the
 captain.** (Dad's picks, 2026-10-18: Aunty Sri drives them to the airport, and Kaylee rides in a window seat, Toca
-style.) In Aunty Sri's car and on the plane her hands play with what's around her (the seatbelt, the window, the tray,
+style.) In Aunty Sri's van and on the plane her hands play with what's around her (the seatbelt, the window, the tray,
 the snacks) while the ride moves on by itself, so those legs are short and can't stall. At the pier Daddy hands her the
 tiller: the longtail is the first thing she drives, with one finger, the way she walks Kaylee around the house (tap a
 spot and she goes there, hold your finger down and she follows it).
@@ -831,7 +831,7 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
 ## Dad's answers (2026-10-18)
 
 1. **To the airport:** Aunty Sri drove them. So Kaylee rides along (in the back by the window) and plays; she doesn't
-   drive the car. Assumed: Sri brings them home too.
+   drive the car. Assumed: Sri brings them home too (built in step 5: her white electric van).
 2. **Airport:** Krabi.
 3. **In the bay:** Koh Panyee, a hong, and James Bond Island.
 4. **The map:** in Kaylee's room above her suitcase. (Later dropped: Mommy asks, and PR #102 took the map down.)
