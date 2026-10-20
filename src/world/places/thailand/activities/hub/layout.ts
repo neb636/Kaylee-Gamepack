@@ -113,7 +113,7 @@ export const PICKABLES: Pickable[] = [
   { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.45, -4.0], r: 0.95, react: 'tilt', use: { x: -0.3, z: -3.0, face: -70, pose: 'lookup' } },
   { id: 'clock', label: 'Clock', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.85, -5.75], r: 0.32, react: 'tick', use: { x: -1.3, z: -5.95, face: -80, pose: 'lookup' } },
   { id: 'fan', label: 'Fan', floor: 0, area: 'inside', at: [2.5, 1.15, -5.75], r: 0.5, react: 'spin', use: { x: 1.75, z: -5.3, face: 120, pose: 'peek' } },
-  { id: 'fridge', label: 'Fridge', floor: 0, area: 'inside', at: [2.775, 0.9, -16.75], r: 0.65, react: 'open', use: { x: 2.025, z: -16.75, face: 90, pose: 'peek' } },
+  { id: 'fridge', label: 'Fridge', floor: 0, area: 'inside', at: [2.775, 0.9, -15.9], r: 0.65, react: 'open', use: { x: 2.025, z: -15.9, face: 90, pose: 'peek' } },
   { id: 'altar', label: 'Family altar', floor: 0, area: 'inside', at: [-0.3, 1.35, B + 0.3], r: 0.8, react: 'glow', gentle: true, use: { x: -0.3, z: B + 1.15, face: 180, pose: 'wai' } },
   { id: 'photos-back', label: 'More old photos', floor: 0, area: 'inside', at: [-1.85, 2.95, B + 0.03], r: 0.7, react: 'tilt', use: { x: -1.7, z: B + 1.0, face: 180, pose: 'lookup' } },
   { id: 'shrine', label: 'Little shrine', floor: 0, area: 'inside', at: [0.9, 0.3, B + 0.25], r: 0.4, react: 'glow', gentle: true, use: { x: 0.9, z: B + 1.0, face: 180, pose: 'wai' } },
@@ -156,7 +156,7 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [1.725, 2.325, -4.5, -3.9], // his chair
       [-2.625, -1.525, -3.77, -1.43], // table
       [DIM.left, -2.25, -7.9, -5.1], // grey couch
-      [2.425, DIM.right, -17.1, -16.4], // fridge
+      [2.425, DIM.right, -16.25, -15.55], // fridge
       [2.575, DIM.right, -1.25, -0.45], // shoes
       [S.x0, S.x1 + 0.05, S.zBack, S.zFront], // stairs
       [-1.0, 0.4, B, B + 0.55], // altar
