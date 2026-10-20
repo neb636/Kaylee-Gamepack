@@ -5,7 +5,7 @@
 // hallway. Shared by both floors: from upstairs you see them through the stairwell.
 import type { BufferGeometry, Group } from 'three'
 import { P } from '../../../engine/geo'
-import { DIM, LANES, RISE, RUN } from '../layout'
+import { DIM, LANES, RISE, RUN1, RUN2 } from '../layout'
 import { poke, scenery, type Kit } from './kit'
 
 const PLASTER = '#F3E6D2'
@@ -17,7 +17,7 @@ const RAIL = '#9B6A55'
 const SLAB = 0.3
 
 export function buildStairs(kit: Kit): Group {
-  const { x0, xLanding, xFoot, zTop, zLanding, zBack, steps } = DIM.stairs
+  const { x0, xLanding, xFoot, zTop, zLanding, zBack, steps1, steps2 } = DIM.stairs
   const { g0 } = DIM
   const body: BufferGeometry[] = []
   const tops: BufferGeometry[] = []
@@ -26,25 +26,25 @@ export function buildStairs(kit: Kit): Group {
   const z1 = LANES.flight1
   const x2 = LANES.flight2
   // Flight 1: each step solid to the floor. The red edge is on the side she steps up from.
-  for (let i = 1; i <= steps; i++) {
+  for (let i = 1; i <= steps1; i++) {
     const y = RISE * i
-    const x = xFoot - RUN * (i - 0.5)
-    body.push(P.box(RUN + 0.005, y, w1, PLASTER, { at: [x, y / 2, z1] }))
-    tops.push(P.box(RUN - 0.03, 0.02, w1 - 0.02, TREAD, { at: [x - 0.01, y + 0.01, z1] }), P.box(0.05, 0.035, w1, EDGE, { at: [x + RUN / 2 - 0.02, y - 0.005, z1] }))
+    const x = xFoot - RUN1 * (i - 0.5)
+    body.push(P.box(RUN1 + 0.005, y, w1, PLASTER, { at: [x, y / 2, z1] }))
+    tops.push(P.box(RUN1 - 0.03, 0.02, w1 - 0.02, TREAD, { at: [x - 0.01, y + 0.01, z1] }), P.box(0.05, 0.035, w1, EDGE, { at: [x + RUN1 / 2 - 0.02, y - 0.005, z1] }))
   }
   // The landing in the corner.
-  const ly = RISE * (steps + 1)
+  const ly = RISE * (steps1 + 1)
   body.push(P.box(w2, ly, w1, PLASTER, { at: [x2, ly / 2, z1] }))
   tops.push(P.box(w2 - 0.02, 0.02, w1 - 0.02, TREAD, { at: [x2, ly + 0.01, z1] }), P.box(0.05, 0.035, w1, EDGE, { at: [xLanding + 0.02, ly - 0.005, z1] }))
   // Flight 2: a block of concrete under each tread, on a sloping slab, so it's open underneath.
-  for (let j = 1; j <= steps; j++) {
+  for (let j = 1; j <= steps2; j++) {
     const y = ly + RISE * j
-    const z = zLanding + RUN * (j - 0.5)
-    body.push(P.box(w2, SLAB, RUN + 0.005, PLASTER, { at: [x2, y - SLAB / 2, z] }))
-    tops.push(P.box(w2 - 0.02, 0.02, RUN - 0.03, TREAD, { at: [x2, y + 0.01, z + 0.01] }), P.box(w2, 0.035, 0.05, EDGE, { at: [x2, y - 0.005, z - RUN / 2 + 0.02] }))
+    const z = zLanding + RUN2 * (j - 0.5)
+    body.push(P.box(w2, SLAB, RUN2 + 0.005, PLASTER, { at: [x2, y - SLAB / 2, z] }))
+    tops.push(P.box(w2 - 0.02, 0.02, RUN2 - 0.03, TREAD, { at: [x2, y + 0.01, z + 0.01] }), P.box(w2, 0.035, 0.05, EDGE, { at: [x2, y - 0.005, z - RUN2 / 2 + 0.02] }))
   }
   const dz = zTop - zLanding
-  const dy = RISE * steps
+  const dy = RISE * steps2
   body.push(P.box(w2, 0.2, Math.hypot(dz, dy), PLASTER, { at: [x2, ly - 0.25 + dy / 2, zLanding + dz / 2], rot: [Math.atan2(-dy, dz), 0, 0] }))
 
   const stairs = poke(kit, 'stairs-up', [], [0, 0, 0])
