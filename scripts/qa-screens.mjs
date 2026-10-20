@@ -1,6 +1,9 @@
 // Screenshots every Around the World screen (plus home and the puppet lab) at iPad and iPhone sizes for visual QA.
 //
 //   npm run build && node scripts/qa-screens.mjs [--chromium] [--only=iphone-landscape,ipad-portrait] [--routes=home,world-map]
+//                                                 [--parallel=3] [--max-minutes=20]
+// Viewports run side by side (--parallel, default 3) and the run stops starting new screens after --max-minutes
+// (default 20), listing what it skipped in errors.txt, so a sweep can never eat an hour. Then `npm run qa:sheets`.
 //
 // WebKit by default (the iPad runs Safari), touch + mobile emulation, rendered at 2x and saved at 1x (CSS pixels).
 // Writes qa-output/<browser>-<viewport>/<nn>-<screen>.png and qa-output/errors.txt (console errors, overflow, failed steps).
@@ -644,7 +647,8 @@ try {
   // Only clear this browser's screenshot folders (qa-output also holds motion/, pacing.md, voice samples...).
   for (const name of readdirSync(out)) if (name.startsWith(`${browserName}-`)) rmSync(path.join(out, name), { recursive: true, force: true })
   const browser = await launch()
-  for (const vp of VIEWPORTS) {
+  const deadline = Date.now() + Number(flag('max-minutes') ?? 20) * 60_000
+  const runViewport = async (vp) => {
     const dir = path.join(out, `${browserName}-${vp.name}`)
     mkdirSync(dir, { recursive: true })
     const context = await device(browser, vp)
@@ -655,6 +659,10 @@ try {
     await openApp(page, base)
     for (const [i, s] of SCREENS.entries()) {
       current = s.name
+      if (Date.now() > deadline) {
+        errors.push(`${vp.name} ${s.name}: skipped, --max-minutes reached (rerun with --routes/--only for the rest)`)
+        continue
+      }
       try {
         if (s.reset) await page.evaluate(() => localStorage.clear())
         if (s.seed) await page.evaluate(s.seed)
@@ -687,6 +695,10 @@ try {
     await context.close()
     console.log(`${browserName}-${vp.name}: ${SCREENS.length} screens`)
   }
+  const queue = [...VIEWPORTS]
+  await Promise.all(Array.from({ length: Math.min(Number(flag('parallel') ?? 3), queue.length) }, async () => {
+    for (let vp = queue.shift(); vp; vp = queue.shift()) await runViewport(vp)
+  }))
   await browser.close()
 } finally {
   stop()

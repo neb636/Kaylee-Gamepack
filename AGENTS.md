@@ -264,14 +264,29 @@ Follow `art/STYLE.md` exactly (style prompt, sprites on pure white, backgrounds 
 
 ## Checks before you finish
 
-1. `npm run typecheck` and `npm run build` must pass.
+1. `npm run verify` must pass (voice-clip check, heavy-import check, typecheck, build; about 2 minutes).
    The workflow runs `node scripts/generate-voice.mjs` before these checks and commits the generated clips
-   (locally it needs `OPENAI_API_KEY` in `.env` and ffmpeg).
-2. `npm run test` (Playwright smoke test: loads every game, checks for console errors, calls
-   `window.__kaylee.win()`). It needs a local web server; if your sandbox can't open ports,
-   skip it (CI runs it after you). CI also runs `npm run tap-around` (WebKit: every section poked like a child would).
-3. Re-read the design rules above. Is every instruction spoken? Is there no way to fail? Is it
+   (locally it needs `OPENAI_API_KEY` in `.env` and ffmpeg). Run voice generation once at the end, not after every line.
+2. **Do not run `npm run test`, `npm run tap-around` or `npm run check` locally.** CI runs the Playwright specs on the PR
+   (`tap-around` only for the countries you touched, everything when shared code changed). After opening the PR, report
+   and stop; don't wait for CI. If CI is red, read `gh run view --log-failed`, check whether the same spec fails on
+   `main`, then fix only that spec. To run just what your branch affects, `npm run test:changed` (opt-in).
+3. **New games and activities get no bespoke e2e spec.** `tests/sections.spec.ts` and `tests/tap-around.spec.ts` discover
+   every section by themselves and only fail on exceptions, so UI tweaks don't break them. A bespoke spec is for a
+   non-visual contract only (voice plays, WebGL fallback, GPU memory, a deep link lands). Step-by-step walkthroughs are
+   tagged `@behavior`: they run nightly (`npm run test:behavior`), not on PRs.
+4. Re-read the design rules above. Is every instruction spoken? Is there no way to fail? Is it
    different from the recent games? Does it work in landscape? Run the fun check in `docs/play-design.md`.
+
+## Time budget (a session should take about an hour, not ten)
+
+- Never poll with `until ! pgrep ...; sleep` loops. Start long jobs with `run_in_background` and wait for the completion notice.
+- Anything that may take over 5 minutes goes in the background; never run a foreground command near the 10-minute timeout.
+- One heavy job at a time: QA agents, timed robot play and builds fight for CPU, and a rebuild changes `dist/` under a QA agent.
+- Iterate with `npm run dev` and `npm run typecheck`; `npm run build` only before QA or the final `verify`.
+- The main thread looks at no more than ~3 images itself. Screenshots go to `layout-qa` / contact sheets (`npm run qa:sheets`).
+- Fix-up rounds re-screenshot only the changed screens (`--routes`, `--only`); never a second full QA pass.
+- Check whether a failing spec also fails on `main` before debugging it.
 
 ## Local commands
 
@@ -395,14 +410,15 @@ QA (after `npm run build`; WebKit, because the iPad runs Safari: `npx playwright
 - **When to run it (scope).** CI already opens and pokes every section of every activity on every PR
   (`tests/tap-around.spec.ts`, WebKit) and fails on any exception, so the agents are only for what a test can't judge:
   - **Full QA (both agents, below)** when an activity reaches its art gate or its full-loop gate, or a country is
-    added. Tell the agents which activities; they check only those.
+    added: once per gate, scoped to the new activity or sections, at `--only=ipad-portrait,ipad-landscape,iphone-landscape`.
+    All seven sizes only for shared code or a country's first QA. Tell the agents which activities; they check only those.
   - **Small changes** (a bug fix, text, a voice line, one moment): no QA agents. Run `npm run check`, screenshot the
     section you changed (`node scripts/qa-screens.mjs --only=ipad-portrait,ipad-landscape --routes=<activity id>`, or
     open its section link), and look at it.
   - **Shared code** (`src/world/kit`, `src/sdk`, `src/shell`): also `npm run tap-around` locally, and screenshot two or
     three screens that use what you changed.
 - QA runs in two steps, so the expensive model only does the judging:
-  1. The `layout-qa` agent (Haiku, cheap) runs all three scripts, opens every screenshot and filmstrip, and writes
+  1. The `layout-qa` agent (Haiku, cheap) runs all three scripts, opens the contact sheets (`npm run qa:sheets`) and filmstrips (single screenshots only for suspect tiles), and writes
      `qa-output/layout-report.md`: what's cut off, overlapping, too small, under the top bar or broken.
   2. The `playtest-qa` agent (Opus) reads that report, the play strips, filmstrips, pacing and the activity code, scores
      each activity on the fun check in `docs/play-design.md` (fun / OK / thin) and writes the ranked to-do list

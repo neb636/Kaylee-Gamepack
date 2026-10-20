@@ -3,9 +3,12 @@ name: CI
 on:
   pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: '0 9 * * *' # nightly: the @behavior walkthrough specs
 
 jobs:
   check:
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -22,6 +25,7 @@ jobs:
   # iPad). Catches a shared change that works in one place but throws in another. Each country is one test; the shards
   # run in parallel, so a new country is picked up without touching this file.
   tap-around:
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
@@ -30,16 +34,48 @@ jobs:
         shard: [1, 2, 3]
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+        with:
+          fetch-depth: 0
+      # Only the countries this PR touched, unless shared code (sdk, shell, kit, tests, config) changed: then all of them.
+      - id: scope
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_REF=origin/${{ github.base_ref }} node scripts/changed-specs.mjs --ci
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.scope.outputs.run == 'true'
+        uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
-      - run: npm ci
-      - run: npx playwright install --with-deps webkit
-      - run: npm run build
-      - run: npm run tap-around -- --shard ${{ matrix.shard }}/3
+      - if: steps.scope.outputs.run == 'true'
+        run: npm ci
+      - if: steps.scope.outputs.run == 'true'
+        run: npx playwright install --with-deps webkit
+      - if: steps.scope.outputs.run == 'true'
+        run: npm run build
+      - if: steps.scope.outputs.run == 'true'
+        run: npm run tap-around -- --shard ${{ matrix.shard }}/3 --pass-with-no-tests ${{ steps.scope.outputs.grep && format('-g "{0}"', steps.scope.outputs.grep) || '' }}
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: tap-around-${{ matrix.shard }}
           path: test-results/
+
+  # Step-by-step walkthrough specs (tagged @behavior) break whenever the UI is tweaked, so they run nightly and on demand
+  # instead of on every PR.
+  behavior:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run test:behavior

@@ -1,6 +1,6 @@
 ---
 name: layout-qa
-description: Layout QA for Kaylee's Gamepack (Haiku, cheap). Runs the WebKit QA scripts (screens at 7 iPad/iPhone sizes, motion filmstrips, pacing and play strips), opens every screenshot, and reports what is cut off, overlapping, too small, hidden under the top bar or broken. Writes qa-output/layout-report.md. QA only; never edits source. Run it first; playtest-qa (Opus) then judges fun from its report.
+description: Layout QA for Kaylee's Gamepack (Haiku, cheap). Runs the WebKit QA scripts (screens at 7 iPad/iPhone sizes, motion filmstrips, pacing and play strips), opens the contact sheets, and reports what is cut off, overlapping, too small, hidden under the top bar or broken. Writes qa-output/layout-report.md. QA only; never edits source. Run it first; playtest-qa (Opus) then judges fun from its report.
 model: haiku
 tools: Bash, Read
 ---
@@ -26,14 +26,19 @@ screenshots for nothing; CI already pokes every section of every activity for ex
   `venice-*` and `etna-*` screen.
 - `qa-motion --only=<prefixes>` (scenario names such as `venice-drive`; the activity's characters too),
   `qa-pacing --only=<activity ids>`, and `qa-art <place or game id>`.
+- **Default viewports: `--only=ipad-portrait,ipad-landscape,iphone-landscape`** (add to `qa-screens`). Use all sizes only
+  for shared-code changes, a country's first QA, or when asked. The sweep runs viewports in parallel and stops after
+  `--max-minutes` (default 20); run it in the background and wait for the completion notice, never poll with `sleep` loops.
 - Run everything (no filters) only when asked for a full sweep, or when the change is in shared code (`src/world/kit`,
   `src/sdk`, `src/shell`, `src/world/*.tsx`, theme/CSS) and you weren't told otherwise. Scripts keep going when a step fails and list it: a failed step is a finding only if the UI really broke;
 if the script's guess about the UI is out of date, say "script out of date" instead.
 
 ## 2. Look at every screenshot
 
-Open EVERY png the run produced in each `qa-output/webkit-*/` folder with Read, one by one. Don't sample, don't guess
-from file names.
+Run `node scripts/qa-sheets.mjs` and open EVERY sheet in `qa-output/sheets/` with Read (each tiles 6 captioned screens;
+`sheets/index.txt` lists them). Look at every tile; don't skip a sheet or guess from file names. Open the full-size PNG
+in `qa-output/webkit-*/` only for a tile that looks cut off, overlapped or broken, to confirm it. A fix-up round (the
+caller names the changed screens) re-runs and reads only those screens, not the whole sweep.
 
 For each screenshot, first write two short notes (in your scratch work, not the report):
 - **Subject:** what this screen is about. The main picture (a volcano with its crater and smoke, a gondola on a canal,
@@ -86,7 +91,7 @@ whoever fixes the findings can mark them.
 ## 3. Report
 
 Write `qa-output/layout-report.md` and reply with the same content:
-- One line: how many screenshots you opened per viewport (the playtest agent checks you opened them all).
+- One line: how many sheets and full-size screenshots you opened per viewport (the playtest agent checks you opened every sheet).
 - Numbered findings, most severe first, each one line:
   `severity (blocker/major/minor) | viewport(s) | screen | screenshot path | what is wrong (element, rough px) | suggested fix`.
   Blocker = she can't play or something is missing; major = clearly broken or cut off on an iPad size; minor = small

@@ -76,7 +76,7 @@ test('going to the party and back leaves no GPU memory behind', async ({ page })
 })
 
 
-test('floor reminders slow down after two hints and stop after five per visit', async ({ page }) => {
+test('@behavior floor reminders slow down after two hints and stop after five per visit', async ({ page }) => {
   await page.clock.install()
   await open(page, 'hub/downstairs', '?gl=off')
   await expect(page.getByRole('button', { name: 'Upstairs', exact: true })).toBeVisible()
