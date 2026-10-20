@@ -36,6 +36,8 @@ export interface Ground {
   room: Group
   /** The right wall (the cutaway lowers it so the camera can see in). */
   rightWall: Group
+  /** The wall behind the stairs that hides the kitchen (lowered while she's in the kitchen). */
+  stairWall: Group
 }
 
 export function buildGround(kit: Kit): Ground {
@@ -55,6 +57,16 @@ export function buildGround(kit: Kit): Ground {
     ]),
   )
   rightWall.add(scenery(kit, [P.box(0.15, g0, depth, WALL, { at: [right + 0.075, g0 / 2, back / 2] })]))
+  // The wall behind the stairs, from the left wall to a little past their foot, between them and the kitchen.
+  const stairWall = new Group()
+  const { x1: wx1, t } = DIM.stairWall
+  const wz = DIM.stairs.zBack - t / 2
+  stairWall.add(
+    scenery(kit, [
+      P.box(wx1 - left, g0, t, WALL, { at: [(left + wx1) / 2, g0 / 2, wz] }),
+      ...[-1, 1].map((s) => P.box(wx1 - left, 0.12, 0.03, WOOD_DARK, { at: [(left + wx1) / 2, 0.06, wz + s * (t / 2 + 0.015)] })),
+    ]),
+  )
 
   // ---- The table (a big one: the whole family eats at it) and the stools ----
   room.add(
@@ -260,7 +272,7 @@ export function buildGround(kit: Kit): Ground {
   shoes.add(part(kit, 'shoes.hop0', [PAL.hotpink, PAL.sky, PAL.butter, PAL.mint].map((c, i) => P.rbox(0.14, 0.04, 0.26, 0.02, c, { at: [i % 2 ? 0.08 : -0.08, 0.02, -0.28 + i * 0.18] })), [0, 0.06, 0], 1.5))
   room.add(shoes)
 
-  return { room, rightWall }
+  return { room, rightWall, stairWall }
 }
 
 /** A standing fan whose blades turn all day (faster when poked). */

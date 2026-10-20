@@ -1,6 +1,6 @@
 // The divider between Agong's front room and the stairs, like his real one (Dad's photo, 2026-10-20): a wall of glossy
-// rosewood cabinets, floor to ceiling. A doorway with carved corner brackets leads through to the stairs, a lucky charm
-// hanging by it; glass-doored cabinets full of little treasures run along the top; on the right, open shelves with
+// rosewood cabinets, floor to ceiling, butting against the stairs on the left (Dad's sketch). A doorway with carved
+// corner brackets leads through to them, a lucky charm hanging by it; glass-doored cabinets full of little treasures run along the top; on the right, open shelves with
 // the gold Garuda and the Buddhas, the TV, a picture and the red and gold boxes; cupboards along the bottom.
 // The part above the cupboards lowers (house.ts) when she walks behind it, so the camera still sees her.
 import { Group, Mesh, MeshBasicMaterial, type BufferGeometry } from 'three'
@@ -26,20 +26,20 @@ export interface Divider {
 }
 
 export function buildDivider(kit: Kit): Divider {
-  const { left, right, g0 } = DIM
+  const { right, g0 } = DIM
   const { z, d, open0, open1 } = DIM.divider
+  /** Its left end, against flight 2 of the stairs. */
+  const x0 = DIM.stairs.xLanding
   const zf = z + d / 2
   const zb = z - d / 2
-  const W = right - left
-  const sides: [number, number][] = [
-    [left, open0],
-    [open1, right],
-  ]
+  const W = right - x0
+  const cx = (x0 + right) / 2
+  const sides: [number, number][] = [[open1, right]]
   const low: BufferGeometry[] = []
   const high: BufferGeometry[] = []
   const things: BufferGeometry[] = []
 
-  // ---- Cupboards along the bottom, both sides of the doorway: a plinth, panelled doors with brass knobs, a top ----
+  // ---- Cupboards along the bottom, right of the doorway: a plinth, panelled doors with brass knobs, a top ----
   for (const [x0, x1] of sides) {
     const w = x1 - x0
     const cx = (x0 + x1) / 2
@@ -61,11 +61,10 @@ export function buildDivider(kit: Kit): Divider {
     }
   }
 
-  // ---- Posts: the doorway's two, and one against each wall ----
+  // ---- Posts: the doorway's two (the left one against the stairs), and one against the right wall ----
   for (const [x, w] of [
     [open0 - 0.06, 0.12],
     [open1 + 0.06, 0.12],
-    [left + 0.04, 0.08],
     [right - 0.04, 0.08],
   ]) {
     low.push(P.box(w, DIVIDER_BASE, d + 0.04, ROSE_DARK, { at: [x, DIVIDER_BASE / 2, z] }))
@@ -104,14 +103,12 @@ export function buildDivider(kit: Kit): Divider {
   const midH = BAND - 0.1 - DIVIDER_BASE
   for (const [x0, x1] of sides) high.push(P.box(x1 - x0, midH, 0.03, FRAME_DARK, { at: [(x0 + x1) / 2, mid, zb + 0.015] }))
   // Right: two bays (the TV and the Garuda on the left, the picture and the boxes on the right) with a shelf across.
-  const xm = open1 + 1.15
+  const xm = (open1 + right) / 2
   const shelfR = 1.72
   high.push(
     P.box(right - open1, 0.04, d - 0.03, ROSE_LIGHT, { at: [(open1 + right) / 2, shelfR, z] }),
     P.box(0.06, midH, d, ROSE, { at: [xm, mid, z] }),
   )
-  // Left: two shelves.
-  for (const y of [1.6, 2.1]) high.push(P.box(open0 - left, 0.04, d - 0.03, ROSE_LIGHT, { at: [(left + open0) / 2, y, z] }))
 
   // The TV on its stand, showing something bright.
   const tx = (open1 + xm) / 2
@@ -159,26 +156,13 @@ export function buildDivider(kit: Kit): Divider {
     P.rbox(0.54, 0.22, 0.27, 0.02, GILT, { at: [bx, shelfR + 0.26, z] }),
     P.box(0.3, 0.1, 0.01, RED, { at: [bx, shelfR + 0.26, z + 0.14] }),
   )
-  // Left shelves: the stack of plastic drawers, a green tub, books, a jar and a little gold figure.
-  const lx = (left + open0) / 2
-  things.push(
-    P.rbox(0.44, 0.52, 0.32, 0.02, '#F6F1EA', { at: [lx - 0.35, DIVIDER_BASE + 0.27, z] }),
-    ...[0, 1, 2].map((i) => P.box(0.38, 0.13, 0.01, '#FF9F6E', { at: [lx - 0.35, DIVIDER_BASE + 0.11 + i * 0.16, z + 0.16] })),
-    P.cyl(0.17, 0.14, 0.2, '#7FCB8F', { at: [lx + 0.3, DIVIDER_BASE + 0.1, z] }),
-    ...[PAL.sky, PAL.hotpink, PAL.butter, PAL.mint, '#B9A6F5'].map((c, i) => P.box(0.06, 0.3 - (i % 2) * 0.04, 0.24, c, { at: [lx - 0.5 + i * 0.07, 1.62 + 0.15 - (i % 2) * 0.02, z] })),
-    P.cyl(0.08, 0.08, 0.18, '#CFE6F2', { at: [lx + 0.25, 1.71, z] }),
-    P.cyl(0.085, 0.085, 0.03, RED, { at: [lx + 0.25, 1.815, z] }),
-    P.cone(0.06, 0.18, GILT, { at: [lx - 0.15, 2.21, z] }),
-    P.sphere(0.04, GILT, { at: [lx - 0.15, 2.33, z] }),
-    P.cyl(0.04, 0.07, 0.22, WHITE, { at: [lx + 0.3, 2.23, z] }),
-  )
 
   // ---- The band across the top of everything, the glass cabinets and the crown ----
   high.push(
-    P.box(W, 0.1, d + 0.06, ROSE_DARK, { at: [0, BAND - 0.05, z] }),
-    P.box(W, TOP - BAND, 0.03, FRAME_DARK, { at: [0, (BAND + TOP) / 2, zb + 0.015] }),
-    P.box(W, g0 - TOP, d + 0.08, ROSE_DARK, { at: [0, (TOP + g0) / 2, z] }),
-    P.box(W, 0.035, 0.02, ROSE_LIGHT, { at: [0, TOP + 0.04, zf + 0.05] }),
+    P.box(W, 0.1, d + 0.06, ROSE_DARK, { at: [cx, BAND - 0.05, z] }),
+    P.box(W, TOP - BAND, 0.03, FRAME_DARK, { at: [cx, (BAND + TOP) / 2, zb + 0.015] }),
+    P.box(W, g0 - TOP, d + 0.08, ROSE_DARK, { at: [cx, (TOP + g0) / 2, z] }),
+    P.box(W, 0.035, 0.02, ROSE_LIGHT, { at: [cx, TOP + 0.04, zf + 0.05] }),
   )
   const n = Math.round(W / 0.75)
   const dw = W / n
@@ -192,7 +176,7 @@ export function buildDivider(kit: Kit): Divider {
     (x: number) => [P.sphere(0.08, '#CFE6F2', { at: [x, BAND + 0.08, z], scale: [1, 0.8, 1] })],
   ]
   for (let i = 0; i < n; i++) {
-    const x = left + dw * (i + 0.5)
+    const x = x0 + dw * (i + 0.5)
     const cy = (BAND + TOP) / 2
     const zd = zf - 0.02
     high.push(

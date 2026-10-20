@@ -5,23 +5,25 @@
 // the back wall at z = -20.898. Ground floor y 0..3.6, upstairs y 3.6..6.6.
 // Facing is in degrees: 0 = toward the street (and the camera), 180 = toward the back, 90 = toward +x.
 //
-// The plan (Dad, 2026-10-17): downstairs, Agong's desk against the right wall at the front, the table on the left,
-// and the stairs at the back left. They're U-turn stairs like the real ones, filling the left half of the house and
-// opening across its width (she steps on walking toward the left wall). Upstairs they come out in a small hallway. There's no front room: the front half is open to the shop below,
-// and the hallway looks down into it over a balcony railing. Glass doors lead back into Kaylee's room at the back.
+// The plan (Dad, 2026-10-17; the stairs and the divider from his sketch, 2026-10-20): downstairs, Agong's desk against
+// the right wall at the front, the table and the couch on the left, then the cabinet divider with a doorway to the
+// stairs. The stairs are an L like the real ones: they start toward the back (the foot faces the right wall), climb
+// along the wall that hides the kitchen to a landing in the back left corner, then turn and climb forward along the
+// left wall, coming out upstairs against it in a small hallway. There's no front room upstairs: the front half is open
+// to the shop below, and the hallway looks down into it over a balcony railing. Glass doors lead back into Kaylee's
+// room at the back.
 //
 //   GROUND FLOOR (back)          UPSTAIRS (back)
 //  +-----------------+          +-----------------+
 //  | photos altar    |          |MATTRESS ac   bath|
 //  |    shrine  cook |          |    suitcase gecko|
-//  |          fridge |          |                 |
+//  |  kitchen fridge |          |                 |
 //  |                 |          |   KAYLEE'S ROOM |
-//  |+-------+        |          |           couch |
-//  ||L (2) >>> top   |          |==== glass doors =|
-//  ||L               |          |+-------+  top   |
-//  ||L (1) <<< foot  |          || well  |  plant |
-//  |+-------+        |          |+-------+ hallway|
-//  |=cab= door =cab==|          |                 |
+//  |=====wall====    |          |==== glass doors =|
+//  |LL <<(1)<<< foot |          |+-+       couch  |
+//  |2^               |          ||w|              |
+//  |2^ door  =cab====|          ||w| hallway plant|
+//  |2^ top           |          |+-+ top          |
 //  | couch       fan |          |=== balcony rail=|
 //  | table    Agong D|          |  open: looks    |
 //  | table         E |          |  down into the  |
@@ -45,19 +47,23 @@ export const DIM = {
   row: [-11.425, -6.025, 0, 6.025, 11.425],
   houseW: 6.65,
   /**
-   * The U-turn stairs in the left half, opening across the width of the house. Flight 1 (the front lane, zFront..mid)
-   * climbs from the foot at x1 toward the left wall, to a landing against it (x0..xLanding); flight 2 (the back lane,
-   * mid..zBack) climbs back across and comes out upstairs at x1. Each flight has `steps` treads; the space under
-   * flight 2 is closed in. (Dad, 2026-10-19: 45 cm further back, away from the grey couch; flight 2's back
-   * side now runs along the glass wall upstairs.)
+   * The L-shaped stairs at the back left (Dad's sketch, 2026-10-20). Flight 1 starts toward the back: from the foot at
+   * xFoot it climbs toward the left wall along the wall behind the stairs (zLanding..zBack), to a landing in the corner
+   * (x0..xLanding); flight 2 turns and climbs forward along the left wall (zLanding..zTop), coming out upstairs against
+   * it. Each flight has `steps` treads. Flight 1 and the landing are closed in; flight 2 is open underneath. Its back
+   * edge (zBack) lines up with the glass wall upstairs.
    */
-  stairs: { x0: -3.125, xLanding: -2.225, x1: 0, zFront: -8.85, mid: -10.0, zBack: -11.15, steps: 7 },
+  stairs: { x0: -3.125, xLanding: -2.225, xFoot: -0.125, zTop: -8.2, zLanding: -10.3, zBack: -11.15, steps: 7 },
+  /** The wall behind the stairs that hides the kitchen: from the left wall to x1, `t` thick, its front face on the
+   *  stairs' back edge. */
+  stairWall: { x1: 0.75, t: 0.15 },
   /**
    * The wooden divider between the front room and the stairs, like Agong's real one (Dad's photo, 2026-10-20): a wall
-   * of rosewood cabinets, floor to ceiling, centered at `z` and `d` deep, with a doorway (open0..open1) she walks
-   * through to the stairs and the back room.
+   * of rosewood cabinets, floor to ceiling, centered at `z` and `d` deep. It butts against flight 2 of the stairs on
+   * the left (at stairs.xLanding); the doorway (open0..open1) she walks through to the stairs and the back room is
+   * next to them, the cabinets to its right.
    */
-  divider: { z: -8.3, d: 0.42, open0: -1.4, open1: 0.95 },
+  divider: { z: -8.3, d: 0.42, open0: -2.105, open1: -0.1 },
   /** Upstairs: the balcony railing at the front edge of the floor (open to the shop below), and the glass wall into
    *  Kaylee's room, with its doorway. (Dad, 2026-10-19: stairs, railing and glass all 2.2 m further forward than at
    *  first, so the overlook is smaller and her room bigger.) */
@@ -128,10 +134,10 @@ export const PICKABLES: Pickable[] = [
   { id: 'rice-cooker', label: 'Rice cooker', floor: 0, area: 'inside', at: [2.775, 1.0, -18.098], r: 0.4, react: 'puff', use: { x: 2.075, z: -18.098, face: 90, pose: 'peek' } },
   { id: 'doormat', label: 'Go outside', floor: 0, area: 'inside', at: [0, 0.05, -0.6], r: 0.7, react: 'jelly', use: { x: 0.3, z: 1.35, face: 15, pose: 'stand' } },
   { id: 'shoes', label: 'Shoes', floor: 0, area: 'inside', at: [2.825, 0.2, -0.85], r: 0.42, react: 'hop', use: { x: 2.125, z: -0.85, face: 90, pose: 'peek' } },
-  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-1.0, 0.9, -9.5], r: 0.8, react: 'stairs' },
+  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-1.1, 0.8, -10.725], r: 0.8, react: 'stairs' },
 
   // ---- Upstairs: the hallway, then Kaylee's room at the back ----
-  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-0.6, U + 0.3, -10.6], r: 0.75, react: 'stairs' },
+  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-2.675, U + 0.2, -9.0], r: 0.6, react: 'stairs' },
   { id: 'plant', label: 'Plant', floor: 1, area: 'inside', at: [2.1, U + 0.4, -5.65], r: 0.35, react: 'jelly', use: { x: 1.4, z: -5.8, face: 90, pose: 'peek' } },
   { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [1.85, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: 1.85, z: -16.998, face: 180, pose: 'stand' } },
   { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-1.625, U + 0.25, -18.71], r: 1.4, react: 'jelly', use: { x: 0.35, z: -18.25, face: 25, pose: 'bounce', snap: { x: -1.4, z: -18.25, y: 0.22 } } },
@@ -165,9 +171,11 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [DIM.left, -2.25, -7.9, -5.1], // grey couch
       [2.425, DIM.right, -16.25, -15.55], // fridge
       [2.575, DIM.right, -1.25, -0.45], // shoes
-      [S.x0, S.x1 + 0.05, S.zBack, S.zFront], // stairs
-      [DIM.left, DIM.divider.open0, DIM.divider.z - DIM.divider.d / 2, DIM.divider.z + DIM.divider.d / 2], // the divider, left of the doorway
-      [DIM.divider.open1, DIM.right, DIM.divider.z - DIM.divider.d / 2, DIM.divider.z + DIM.divider.d / 2], // and right of it
+      [S.x0, S.xLanding + 0.05, S.zBack, S.zTop], // stairs: flight 2 and the landing
+      [S.xLanding, S.xFoot + 0.05, S.zBack, S.zLanding], // flight 1
+      [DIM.left, DIM.stairWall.x1, S.zBack - DIM.stairWall.t, S.zBack], // the wall behind them
+      [S.xLanding, DIM.divider.open0, DIM.divider.z - DIM.divider.d / 2, DIM.divider.z + DIM.divider.d / 2], // the divider's post by the stairs
+      [DIM.divider.open1, DIM.right, DIM.divider.z - DIM.divider.d / 2, DIM.divider.z + DIM.divider.d / 2], // and its cabinets
       [-1.0, 0.4, B, B + 0.55], // altar
       [0.65, 1.15, B, B + 0.4], // little shrine
       [2.475, DIM.right, -20.298, -17.298], // kitchen counter
@@ -193,7 +201,7 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
     bounds: [-3.325, 3.325, -21.098, -7.2],
     carve: [[DIM.left, DIM.right, DIM.back, HALL.zFront]],
     block: [
-      [S.x0, S.x1 + 0.05, S.zBack, S.zFront], // stairwell (she comes out of it at the front, along the left wall)
+      [S.x0, S.xLanding + 0.05, S.zBack, S.zTop], // stairwell (she comes out of it at the front, along the left wall)
       [DIM.left, HALL.door0, HALL.zGlass - 0.06, HALL.zGlass + 0.06], // the glass wall, left of the doorway
       [HALL.door1, DIM.right, HALL.zGlass - 0.06, HALL.zGlass + 0.06],
       [DIM.left, -0.075, B, -17.47], // the big mattress + pillows (and the gap behind it)
@@ -216,7 +224,7 @@ export const STARTS = {
   arrive: { floor: 0 as const, x: 0.45, z: 1.55, face: 15 },
   street: { floor: 0 as const, x: 0.45, z: 1.55, face: 15 },
   downstairs: { floor: 0 as const, x: 0.2, z: -1.3, face: 160 },
-  upstairs: { floor: 1 as const, x: 0.55, z: -10.6, face: 90 },
+  upstairs: { floor: 1 as const, x: -2.2, z: -7.6, face: 135 },
   family: { floor: 0 as const, x: 1.05, z: 1.75, face: 0 },
 }
 
@@ -236,21 +244,20 @@ export const PHOTO: { back: string[]; front: [string, number][]; backZ: number; 
   spacing: 1.15,
 }
 
-/** Lane centers of the two flights. */
-export const LANES = { up1: (S.zFront + S.mid) / 2, up2: (S.mid + S.zBack) / 2 }
+/** Lane centers of the two flights: flight 1 runs along x at z `flight1`, flight 2 along z at x `flight2`. */
+export const LANES = { flight1: (S.zLanding + S.zBack) / 2, flight2: (S.x0 + S.xLanding) / 2 }
 export const RISE = DIM.g0 / (2 * S.steps + 2)
-export const RUN = (S.x1 - S.xLanding) / S.steps
+export const RUN = (S.zTop - S.zLanding) / S.steps
 
-/** Where she stands on the way up, bottom to top: flight 1, across the landing, flight 2. */
+/** Where she stands on the way up, bottom to top: flight 1, the landing, flight 2. */
 export function stairSteps(): [number, number, number][] {
   const steps: [number, number, number][] = []
-  for (let i = 1; i <= S.steps; i++) steps.push([S.x1 - RUN * (i - 0.5), RISE * i, LANES.up1])
+  for (let i = 1; i <= S.steps; i++) steps.push([S.xFoot - RUN * (i - 0.5), RISE * i, LANES.flight1])
   const ly = RISE * (S.steps + 1)
-  const lx = (S.x0 + S.xLanding) / 2
-  steps.push([lx, ly, LANES.up1], [lx, ly, LANES.up2])
-  for (let j = 1; j <= S.steps; j++) steps.push([S.xLanding + RUN * (j - 0.5), ly + RISE * j, LANES.up2])
+  steps.push([LANES.flight2, ly, LANES.flight1])
+  for (let j = 1; j <= S.steps; j++) steps.push([LANES.flight2, ly + RISE * j, S.zLanding + RUN * (j - 0.5)])
   return steps
 }
 /** The foot of the stairs downstairs, and where she steps off at the top. */
-export const STAIRS_FOOT = { x: S.x1 + 0.4, z: LANES.up1 }
-export const STAIRS_TOP = { x: S.x1 + 0.45, z: LANES.up2 }
+export const STAIRS_FOOT = { x: S.xFoot + 0.4, z: LANES.flight1 }
+export const STAIRS_TOP = { x: LANES.flight2, z: S.zTop + 0.45 }
