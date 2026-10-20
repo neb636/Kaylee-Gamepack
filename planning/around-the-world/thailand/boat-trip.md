@@ -792,7 +792,7 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
      a test browser).
    - **Replays:** the trip counts whole trips (`trips` in `useSaved('thailand-boat-trip')`). After the first, yes to
      Mommy shows the boarding pass with 🧳 (a new trip) and 🚤 (straight to the pier with what she packed last time),
-     plus the next leg's icon when a trip is half done. A replay's flight is 40 s instead of 58, and its goodbye is
+     plus the next leg's icon when a trip is half done. A replay's flight is 24 s instead of 35, and its goodbye is
      quicker (Agong doesn't ask again; the van comes at once and waits 4 s, not 7). `replay=1` in a link plays it that
      way (`invite?replay=1` shows the choice); Sparkle asks "Pack again, or go straight to the boat?". The picture
      book's ending counts as a whole trip too.

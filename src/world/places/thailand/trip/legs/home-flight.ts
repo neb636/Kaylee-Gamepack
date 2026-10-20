@@ -97,7 +97,7 @@ export function buildHomeFlight(bag: Bag): HomeFlight {
   root.add(solid(merge(puffs), bag, 0))
   // Their plane (the one from the airport), wheels up: no stairs, a little smaller, nose toward +x.
   const plane = buildPlaneOutside(bag, { wheelsUp: true })
-  plane.root.children[2]?.removeFromParent()
+  plane.stairs.removeFromParent()
   const fly = new Group()
   plane.root.rotation.y = Math.PI
   plane.root.position.y = -2.2
