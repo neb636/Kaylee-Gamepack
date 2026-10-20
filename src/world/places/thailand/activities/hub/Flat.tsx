@@ -27,12 +27,12 @@ export function Flat({ spot, onSpot, photo = false }: { spot: Spot; onSpot: (s: 
   }
   return (
     <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(#A8DCFF 55%, #EEE7F8 55%)', padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 16px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, overflow: 'auto' }}>
-      {/* The shophouse front: shutter, sign, balcony. */}
-      <div aria-hidden style={{ width: 'min(300px, 60vw)', aspectRatio: '1 / 1.15', background: '#FFD9C4', border: '4px solid var(--ink)', borderRadius: 14, position: 'relative', flexShrink: 0 }}>
+      {/* The shophouse front: folding gates, sign, balcony, the turquoise step. */}
+      <div aria-hidden style={{ width: 'min(300px, 60vw)', aspectRatio: '1 / 1.15', background: '#F6E6CC', border: '4px solid var(--ink)', borderRadius: 14, position: 'relative', flexShrink: 0 }}>
         <div style={{ position: 'absolute', left: '12%', right: '12%', top: '8%', height: '30%', background: '#BFE0F5', border: '3px solid var(--ink)', borderRadius: 8 }} />
         <div style={{ position: 'absolute', left: '6%', right: '6%', top: '40%', height: '6%', background: 'var(--cream)', border: '3px solid var(--ink)' }} />
-        <div style={{ position: 'absolute', left: '14%', right: '14%', top: '50%', height: '8%', background: '#F0646E', border: '3px solid var(--gold)', borderRadius: 6 }} />
-        <div style={{ position: 'absolute', left: '8%', right: '8%', bottom: 0, height: '36%', background: spot === 'street' ? 'repeating-linear-gradient(#BFE6DA 0 10px, #9FD3C4 10px 13px)' : '#FFF1E2', borderTop: '3px solid var(--ink)' }} />
+        <div style={{ position: 'absolute', left: '8%', right: '8%', top: '50%', height: '9%', background: '#8E5C45', border: '3px solid #5E3B2C', borderRadius: 6 }} />
+        <div style={{ position: 'absolute', left: '8%', right: '8%', bottom: 0, height: '36%', background: spot === 'street' ? 'repeating-linear-gradient(90deg, #4F5772 0 8px, #8592B0 8px 11px)' : '#FFF1E2', borderTop: '3px solid var(--ink)', borderBottom: '8px solid #46C2B4' }} />
       </div>
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
         {SPOTS.map((s) => (
