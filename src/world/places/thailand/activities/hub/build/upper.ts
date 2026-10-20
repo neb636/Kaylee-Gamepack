@@ -63,10 +63,10 @@ export function buildUpper(kit: Kit): Upper {
       P.box(0.03, 0.12, depth, '#CFC8BE', { at: [left + 0.015, U + 0.06, back / 2] }),
       // Kaylee's drawings taped above the mattress.
       ...[
-        [-19.15, PAL.pink],
-        [-19.7, PAL.butter],
-        [-20.25, PAL.sky],
-        [-20.8, PAL.mint],
+        [-18.55, PAL.pink],
+        [-19.1, PAL.butter],
+        [-19.65, PAL.sky],
+        [-20.2, PAL.mint],
       ].map(([z, c], i) => P.box(0.02, 0.36, 0.3, c as string, { at: [left + 0.01, U + 1.25 + (i % 2) * 0.18, z as number], rot: [(i % 2 ? 0.08 : -0.06), 0, 0] })),
     ]),
   )
@@ -96,14 +96,15 @@ export function buildUpper(kit: Kit): Upper {
   doors.add(scenery(kit, [P.box(w, 0.06, 0.06, FRAME, { at: [0, 2.21, 0] }), P.box(w, 0.06, 0.06, FRAME, { at: [0, 0.03, 0] }), ...[-1, 1].map((s) => P.box(0.06, 2.24, 0.06, FRAME, { at: [(s * w) / 2, 1.12, 0] })), P.box(0.03, 0.3, 0.05, PAL.ink, { at: [w / 2 - 0.12, 1.1, -0.03] })], 1.5))
   glassWall.add(doors)
 
-  // ---- One big mattress in the back left corner, its long side across the room, its head at the left wall ----
-  const bed = { x: left + 1.2, z: back + 0.05 + 0.95, len: 2.4, w: 1.9 }
+  // ---- One big mattress in the back left corner (a little off the back wall), its long side across the room, its
+  // head at the left wall ----
+  const bed = { x: left + 1.5, z: back + 0.35 + 1.1875, len: 3.0, w: 2.375 }
   const mattress = poke(kit, 'mattress', [], [bed.x, U, bed.z])
   mattress.add(scenery(kit, [P.rbox(bed.len, 0.22, bed.w, 0.06, PAL.cream, { at: [0, 0.11, 0] }), P.rbox(bed.len - 0.1, 0.03, bed.w - 0.08, 0.02, PAL.pink, { at: [0, 0.225, 0] })], 2))
   // A folded blanket across its foot.
   mattress.add(scenery(kit, [P.rbox(0.45, 0.1, bed.w - 0.2, 0.05, PAL.lavenderDark, { at: [bed.len / 2 - 0.35, 0.27, 0] })], 2))
   room.add(mattress)
-  room.add(poke(kit, 'pillows', [P.rbox(0.4, 0.16, 0.62, 0.07, PAL.cream, { at: [0, 0.08, -0.47] }), P.rbox(0.4, 0.16, 0.62, 0.07, '#FFE3EF', { at: [0, 0.08, 0.47] }), P.box(0.06, 0.012, 0.62, PAL.hotpink, { at: [0, 0.165, 0.47] })], [left + 0.3, U + 0.2, bed.z]))
+  room.add(poke(kit, 'pillows', [P.rbox(0.5, 0.18, 0.78, 0.08, PAL.cream, { at: [0, 0.09, -0.59] }), P.rbox(0.5, 0.18, 0.78, 0.08, '#FFE3EF', { at: [0, 0.09, 0.59] }), P.box(0.07, 0.012, 0.78, PAL.hotpink, { at: [0, 0.185, 0.59] })], [left + 0.35, U + 0.2, bed.z]))
 
   // ---- The grey couch on the right, just inside the glass doors (faces left) ----
   room.add(

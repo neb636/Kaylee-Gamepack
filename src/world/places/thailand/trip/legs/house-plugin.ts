@@ -61,18 +61,18 @@ const deg = Math.PI / 180
 /** Where everything is in her room for packing (meters; y above her floor). */
 const ROOM = {
   wall: { x: 0.3, z: -20.45 },
-  suitcase: { x: -0.3, z: -19.45 },
-  kaylee: { x: 0.35, z: -19.3, face: -95 },
+  suitcase: { x: 0.4, z: -19.45 },
+  kaylee: { x: 1.0, z: -19.3, face: -95 },
   ji: { floor: 1 as const, x: 1.55, z: -20.1, face: -25, pose: 'stand' as const },
-  gan: { floor: 1 as const, x: -1.775, z: -20.37, face: 90, pose: 'lie' as const },
+  gan: { floor: 1 as const, x: -1.725, z: -19.95, face: 90, pose: 'lie' as const },
   items: {
-    sunhat: [-1.05, 0, -18.3],
-    sunglasses: [-0.45, 0, -18.0],
+    sunhat: [-0.75, 0.22, -18.55],
+    sunglasses: [-0.35, 0, -17.8],
     sunscreen: [0.1, 0, -18.3],
     floaties: [0.72, 0, -18.05],
     swimsuit: [1.2, 0, -18.4],
-    duck: [0.75, 0, -18.95],
-    camera: [0.85, 0, -19.75],
+    duck: [0.6, 0, -18.6],
+    camera: [-0.45, 0.22, -19.4],
     bucket: [1.45, 0, -19.2],
     pillow: [-1.0, 0.22, -19.55],
     teddy: [-1.55, 0.22, -19.2],
@@ -81,7 +81,7 @@ const ROOM = {
   } as Record<string, [number, number, number]>,
 }
 /** Where Kaylee stands while Mommy asks (between her and the suitcase by the wall). */
-const INVITE = { x: 0.55, z: -19.5 }
+const INVITE = { x: 0.9, z: -19.5 }
 /** The sidewalk at the goodbye (street floor, +z toward the road). */
 const STREET = {
   kaylee: { x: 0.25, z: 1.85, face: 0 },
