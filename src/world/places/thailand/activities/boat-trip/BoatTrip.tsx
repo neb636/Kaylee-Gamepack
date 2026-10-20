@@ -635,7 +635,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           tripRef.current?.choose(p.src)
         }}
       />
-      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!pass || asking} raised={mount.world === 'bay' && landed} idle={mount.world === 'bay' ? L.bay.hint.drive : mount.world === 'race' ? L.race.start : undefined} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!pass || asking} raised={(mount.world === 'bay' && landed) || (mount.world === 'race' && raceHud?.phase === 'podium')} idle={mount.world === 'bay' ? L.bay.hint.drive : mount.world === 'race' ? L.race.start : undefined} />}
       <Ask open={asking} onYes={yes} onNotYet={onExit} />
       <PackCard open={!pass && mount.world === 'house' && (phase === 'pack' || phase === 'sitting')} packed={packed} sitting={phase === 'sitting'} onClose={() => tripRef.current?.closeTap()} />
       <AnimatePresence>

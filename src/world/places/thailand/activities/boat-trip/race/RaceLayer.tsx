@@ -150,19 +150,25 @@ function ItemSlot({ item, rolling, onItem }: { item: ItemKind | null; rolling: b
     return () => clearTimeout(t)
   }, [item])
   const icon = rolling ? ITEM_ICONS[ROLL[spin % ROLL.length]] : item ? ITEM_ICONS[item] : null
+  // An empty slot tapped: a boop and a wiggle (it fills from the rainbow boxes).
+  const [poked, setPoked] = useState(0)
   const size = 'clamp(104px, 17vmin, 140px)'
   return (
     <div style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 18px)', bottom: 'calc(var(--safe-bottom) + 18px)', zIndex: 34 }}>
       <motion.button
         aria-label={item ? `Use the ${item}` : 'Item'}
-        disabled={!item}
-        whileTap={item ? { scale: 0.85 } : undefined}
-        animate={item ? { scale: [1, 1.1, 1], rotate: [0, -6, 6, 0] } : { scale: 1 }}
-        transition={item ? { repeat: Infinity, duration: 0.9 } : undefined}
+        key={item ? 'full' : `empty-${poked}`}
+        whileTap={{ scale: 0.85 }}
+        animate={item ? { scale: [1, 1.1, 1], rotate: [0, -6, 6, 0] } : poked ? { rotate: [0, -10, 10, -6, 0] } : { scale: 1 }}
+        transition={item ? { repeat: Infinity, duration: 0.9 } : { duration: 0.45 }}
         onPointerDown={(e) => {
           // At once, on the finger going down (she's racing: no waiting for it to lift).
           e.stopPropagation()
-          if (!item) return
+          if (!item) {
+            sfx.boop()
+            setPoked((n) => n + 1)
+            return
+          }
           sfx.pop()
           onItem()
         }}
@@ -236,16 +242,17 @@ function Banner({ banner }: { banner: RaceHud['banner'] }) {
 
 function Podium({ trophy, onAgain, onBay }: { trophy: boolean; onAgain: () => void; onBay: () => void }) {
   // The trophy card comes up big for a moment, then tucks into the corner so the podium shows.
+  // The buttons come up almost at once (something to touch while the trophy floats down).
   const [big, setBig] = useState(true)
   const [buttons, setButtons] = useState(false)
   useEffect(() => {
+    const b = setTimeout(() => setButtons(true), 900)
+    return () => clearTimeout(b)
+  }, [])
+  useEffect(() => {
     if (!trophy) return
-    const a = setTimeout(() => setBig(false), 4200)
-    const b = setTimeout(() => setButtons(true), 2600)
-    return () => {
-      clearTimeout(a)
-      clearTimeout(b)
-    }
+    const a = setTimeout(() => setBig(false), 2800)
+    return () => clearTimeout(a)
   }, [trophy])
   return (
     <>
@@ -258,9 +265,9 @@ function Podium({ trophy, onAgain, onBay }: { trophy: boolean; onAgain: () => vo
             initial={{ scale: 0, rotate: -30 }}
             animate={{ scale: 1, rotate: big ? 0 : -6 }}
             transition={{ type: 'spring', bounce: 0.45 }}
-            style={{ position: 'absolute', zIndex: 40, pointerEvents: 'none', ...(big ? { left: '50%', top: '12%', translate: '-50% 0' } : { left: 'calc(var(--safe-left, 0px) + 12px)', top: 'var(--top-clear)' }) }}
+            style={{ position: 'absolute', zIndex: 40, pointerEvents: 'none', ...(big ? { left: '50%', top: 'var(--bar-clear)', translate: '-50% 0' } : { left: 'calc(var(--safe-left, 0px) + 12px)', top: 'var(--top-clear)' }) }}
           >
-            <Trophy title={RACE_TROPHY} size={big ? Math.round(Math.min(260, window.innerHeight * 0.3, window.innerWidth * 0.4)) : 110} />
+            <Trophy title={RACE_TROPHY} size={big ? Math.round(Math.min(220, window.innerHeight * 0.24, window.innerWidth * 0.36)) : 110} />
           </motion.div>
         )}
       </AnimatePresence>

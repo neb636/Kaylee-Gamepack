@@ -109,8 +109,8 @@ export function buildPodium(bag: Bag): Podium {
     const a = (i / 22) * Math.PI
     parts.push(P.sphere(0.42, RAINBOW[i % RAINBOW.length], { at: [-0.4, 0.6 + Math.sin(a) * 5.2, Math.cos(a) * 4.6] }, 10))
   }
-  // Flower pots at the front corners.
-  for (const s of [-1, 1]) parts.push(P.cyl(0.4, 0.3, 0.6, '#FFC2A8', { at: [3, 0.85, s * 4.8] }, 10), ...[0, 1, 2].map((k) => P.sphere(0.26, [PAL.hotpink, PAL.butter, PAL.lavenderDark][k], { at: [3 + (k - 1) * 0.2, 1.3 + (k % 2) * 0.12, s * 4.8 + (k - 1) * 0.18] }, 8)))
+  // Flower pots at the back corners (Mommy and Daddy stand at the front ends).
+  for (const s of [-1, 1]) parts.push(P.cyl(0.4, 0.3, 0.6, '#FFC2A8', { at: [-4.6, 0.85, s * 5.2] }, 10), ...[0, 1, 2].map((k) => P.sphere(0.26, [PAL.hotpink, PAL.butter, PAL.lavenderDark][k], { at: [-4.6 + (k - 1) * 0.2, 1.3 + (k % 2) * 0.12, s * 5.2 + (k - 1) * 0.18] }, 8)))
   root.add(solid(merge(parts), bag, 2))
   // The numbers on the steps' fronts.
   heights.forEach((h, i) => {
@@ -119,10 +119,10 @@ export function buildPodium(bag: Bag): Podium {
     n.rotation.y = Math.PI / 2
     root.add(n)
   })
-  // Two big balloons tied at the corners, swaying.
+  // Two big balloons tied at the back corners, swaying.
   const balloons = [-1, 1].map((s) => {
     const b = new Group()
-    b.position.set(2.6, 0.6, s * 5.6)
+    b.position.set(-4.2, 0.6, s * 5.6)
     b.add(solid(merge([P.cyl(0.02, 0.02, 3.4, '#FFFFFF', { at: [0, 1.7, 0] }, 4), P.sphere(0.7, s < 0 ? PAL.hotpink : PAL.sky, { at: [0, 3.9, 0], scale: [1, 1.18, 1] }, 14)]), bag, 2))
     root.add(b)
     return b

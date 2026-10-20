@@ -24,11 +24,12 @@ export interface RaceScenery {
   root: Group
   /** Rock towers the chase camera must never end up inside. */
   towers: Rock[]
-  /** The countdown's lights: 0 = all off, 1-3 = that many red, 4 = all green (go!). */
+  /** The countdown's lights: 0 = all off, 1-3 = that many red, 4 = all green (go!), -1 = gone (after the start). */
   setLights(n: number): void
   /** The fans jump for a moment (she passed someone, a trick, the finish). */
   cheer(k?: number): void
-  update(dt: number, t: number): void
+  /** `cam`: the camera, so the start arch can step aside while the chase camera flies through it. */
+  update(dt: number, t: number, cam: Vector3): void
 }
 
 function rng(seed: number) {
@@ -40,6 +41,7 @@ function rng(seed: number) {
 const CX = -2
 const CZ = 8
 const SECTORS = 4
+const tmpV = new Vector3()
 function sectorOf(g: BufferGeometry) {
   g.computeBoundingBox()
   const c = g.boundingBox!.getCenter(new Vector3())
@@ -172,6 +174,8 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
       if (!insideLoop(jx, jz)) continue
       const d = fromCourse(jx, jz)
       if (d < HALF + 9) continue
+      // (The podium's stage floats clear of the sand and jungle.)
+      if (Math.hypot(jx - PODIUM.x, jz - PODIUM.z) < 11) continue
       island.push(P.cyl(7, 7.6, 0.8, SAND, { at: [jx, 0.1, jz] }, 10))
       if (d > HALF + 13) island.push(P.cyl(5.4, 6, 1.1, JUNGLE, { at: [jx, 0.5, jz] }, 9))
       if (d > HALF + 15 && r() < 0.3) island.push(P.sphere(3.2 + r() * 2, JUNGLE_DARK, { at: [jx, 1.2, jz], scale: [1, 0.7, 1] }, 8))
@@ -216,7 +220,11 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
   // The line on the water: two rows of squares across the course.
   for (let i = 0; i < 16; i++) for (let j = 0; j < 2; j++) archParts.push(P.box(HALF / 8, 0.04, 0.9, (i + j) % 2 ? PAL.ink : '#FFFFFF', { at: [-HALF + (i + 0.5) * (HALF / 8), 0.03, (j - 0.5) * 0.9] }))
   // The light gantry hanging from the top.
-  archParts.push(P.rbox(3.2, 1.1, 0.6, 0.15, PAL.ink, { at: [0, span - 2.3, -0.1] }), ...[-1, 1].map((s) => P.cyl(0.04, 0.04, 1.2, PAL.ink, { at: [s * 1.2, span - 1.4, 0] }, 4)))
+  // (Hung under the rainbow on two wires, clear of its bands.)
+  const gantry = span - 3.9
+  const lightBox = new Group()
+  lightBox.add(solid(merge([P.rbox(3.2, 1.1, 0.6, 0.15, PAL.ink, { at: [0, gantry, -0.1] }), ...[-1, 1].map((s) => P.cyl(0.03, 0.03, 3.2, PAL.ink, { at: [s * 1.2, gantry + 2.1, 0] }, 4))]), bag, 2))
+  arch.add(lightBox)
   arch.add(solid(merge(archParts), bag, 2))
   // Checkered flags waving on poles at its feet.
   const flagMat = bag.add(new MeshBasicMaterial({ map: checker(bag, 5, 4), side: DoubleSide }))
@@ -232,8 +240,8 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
   const bulbGeo = bag.add(new SphereGeometry(0.36, 14, 10))
   const lights = [-1, 0, 1].map((k) => {
     const m = new Mesh(bulbGeo, bag.add(new MeshBasicMaterial({ color: '#4A3F4F' })))
-    m.position.set(k * 1, span - 2.3, -0.45)
-    arch.add(m)
+    m.position.set(k * 1, gantry, -0.45)
+    lightBox.add(m)
     return m
   })
   root.add(arch)
@@ -385,6 +393,7 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
     root,
     towers,
     setLights(n) {
+      lightBox.visible = n >= 0
       lights.forEach((m, i) => {
         const mat = m.material as MeshBasicMaterial
         mat.color.set(n >= 4 ? '#5BE37A' : i < n ? '#FF4F5E' : '#4A3F4F')
@@ -393,7 +402,10 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
     cheer(k = 1) {
       jump = Math.max(jump, k)
     },
-    update(dt, t) {
+    update(dt, t, cam) {
+      // The chase camera passing under the rainbow: hide it for that moment (from inside, it would fill the screen).
+      const local = arch.worldToLocal(tmpV.copy(cam))
+      arch.visible = !(Math.abs(local.z) < 3.5 && Math.abs(local.x) < span + 4 && local.y < span + 1)
       startFlags.forEach((g, i) => (g.rotation.y = (i ? Math.PI : 0) + Math.sin(t * 4 + i * 1.7) * 0.4))
       flow += dt
       fallTex.offset.y = flow * 1.4

@@ -397,8 +397,9 @@ races the Koh Panyee kids and the cheeky macaque three laps round its island, an
   down at GO and revving before it; rainbow item boxes (five across, so she can't miss) whose slot spins up 🚀 a turbo,
   🍌 a banana (thrown in an arc at whoever is just ahead, or dropped behind when she's first) or 🌈 the rainbow (6 s fast,
   sparkly music, nothing can stop her, rivals she bumps spin); behind = better items, and her first is always a turbo;
-  gold coins (each a little faster, up to ten); golden arrow boost pads; the ramp (a tap in the air is a trick: she
-  twirls, the boat rolls right round, a burst of speed on landing); a long hard turn builds sparks and lets them go as
+  gold coins (each a little faster, up to ten); golden arrow boost pads; the ramp (a finger held at takeoff, or a tap
+  just before or in the air, is a trick: a moment of slow motion, she twirls, the boat rolls right round, a burst of
+  speed on landing); a long hard turn builds sparks and lets them go as
   a mini-turbo (a drift without a drift button); bumping boats; the place badge (1st, 2nd, 3rd) with the three faces in
   order, the lap, the coins and a minimap; "Lap two!" and "Last lap!" banners, the music speeding up on the last lap.
 - **The rivals:** the village kids (the buffalo kid at the tiller, the fox kid cheering) in a sky-blue longtail, and
@@ -408,7 +409,7 @@ races the Koh Panyee kids and the cheeky macaque three laps round its island, an
   banding): they lead off the line, she catches the macaque, swaps places with the kids, and on the last lap the kids
   are right beside her until the end. Near the line they can't pass her and can't cross first. If she drives well
   (boosts, items) she pulls away for real; if she does nothing, she still wins at the line.
-- **The finish:** slow motion as she crosses, the camera side-on at the arch, fireworks, confetti, the fanfare, "Kaylee
+- **The finish:** slow motion as she crosses, the camera cuts to head-on just past the line (her bow, the kids beside her), fireworks, confetti, the fanfare, "Kaylee
   wins! First place!" and Daddy's "We won!".
 - **The podium:** a floating stage under a balloon arch: she stands on 1, the kids on 2, the macaque on 3; the gold
   trophy (KAYLEE on its plaque) floats down into her hands and she holds it up; confetti and fireworks; the SDK trophy

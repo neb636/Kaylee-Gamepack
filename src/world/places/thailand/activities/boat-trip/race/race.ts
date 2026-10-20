@@ -234,6 +234,8 @@ export class Race implements World3D {
   private rocket = false
   private counts = { boxes: 0, items: 0, coinsTaken: 0, pads: 0, jumps: 0, tricks: 0, slips: 0, hits: 0, drifts: 0, bumps: 0 }
   private timers: number[] = []
+  /** The lap the race started on (a `lap=3` link). */
+  private lap0 = 1
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
   private mapEls = new Map<string, SVGElement>()
@@ -316,7 +318,7 @@ export class Race implements World3D {
 
   /** Everyone on the grid behind the line, Sparkle's line, then the countdown. */
   private toGrid() {
-    const lap0 = clamp(Math.round(this.start.lap) || 1, 1, LAPS)
+    const lap0 = (this.lap0 = clamp(Math.round(this.start.lap) || 1, 1, LAPS))
     for (const r of this.racers) {
       const g = GRID[r.id]
       const p = spotAt(g.s, g.lat)
@@ -555,7 +557,7 @@ export class Race implements World3D {
     for (const r of this.racers) r.crew?.update(dt, t, clamp(r.d.yawRate / r.feel.turn, -1, 1))
     this.updateTrophy(dt, t)
     this.course.update(dt)
-    this.scenery.update(dt, t)
+    this.scenery.update(dt, t, this.rig.camera.position)
     this.podium.update(t)
     this.water.update(t)
     for (const p of [this.foam, this.spray, this.sparkle, this.fireworks, this.confetti]) p.update(dt)
@@ -585,12 +587,12 @@ export class Race implements World3D {
         this.told.add('start')
         this.say(L.race.start)
       }
-      if (!this.start.again && t > 3.4 && !this.told.has('raceYou')) {
+      if (!this.start.again && t > 4 && !this.told.has('raceYou')) {
         this.told.add('raceYou')
         this.say(L.race.raceYou)
         this.racer('kids').crew?.react('tease', 1.6)
       }
-      if (t > (this.start.again ? 3.4 : 5)) {
+      if (t > (this.start.again ? 3.6 : 5.4)) {
         this.phase = 'count'
         this.phaseT = 0
       }
@@ -625,13 +627,13 @@ export class Race implements World3D {
       this.splash(k, k.v.stern, 24)
       this.later(() => this.line('wheee', L.race.wheee, 14), 300)
     }
-    this.later(() => this.scenery.setLights(0), 1500)
+    this.later(() => this.scenery.setLights(-1), 1500)
   }
 
   /** Before GO, a finger down revs the engine (the boat squats, the propeller throws spray). */
   private rev(dt: number) {
     const k = this.k
-    if (!this.finger || this.phase !== 'count') return
+    if (!this.finger || this.phaseT < 0.4) return
     k.pitch.v -= dt * 3
     if (Math.random() < dt * 30) this.spray.emit(k.d.x + Math.sin(k.d.heading) * k.v.stern, 0.2, k.d.z + Math.cos(k.d.heading) * k.v.stern, -Math.sin(k.d.heading) * 3, 4, -Math.cos(k.d.heading) * 3, 0.6, 0.22)
   }
@@ -725,7 +727,7 @@ export class Race implements World3D {
         vt = vRef + 0.32 * (want - gap)
         // The end: never past her near the line (they ease off alongside), and never over it first.
         const rem = TOTAL - r.progress
-        if (rem < 70 && r.progress > k.progress - 1.2) vt = Math.min(vt, this.herRate * 0.9)
+        if (rem < 150 && r.progress > k.progress - 1.2) vt = Math.min(vt, this.herRate * 0.85)
         if (rem < 3) vt = 0
       }
       // Behind the story (she's flying, all boosts and coins): they find more speed, up to half as fast again.
@@ -816,6 +818,9 @@ export class Race implements World3D {
       if (r === this.k) {
         this.counts.jumps++
         sfx.vroom()
+        // A finger held (as Sparkle said) or a touch just before takeoff is the trick; slow motion while she's up.
+        if (this.finger || this.time - this.lastTouch < 1) this.doTrick()
+        this.slow = Math.max(this.slow, 0.5)
       } else {
         // The rivals always do a trick.
         r.tricked = true
@@ -854,7 +859,7 @@ export class Race implements World3D {
       this.miniTurbo(r, dt)
       // The ramp coming up for the first time: "Tap in the air for a trick!"
       const toRamp = ahead(r.s, RAMP.s)
-      if (toRamp > 12 && toRamp < 45 && !this.told.has('ramp')) {
+      if (toRamp > 40 && toRamp < 70 && !this.told.has('ramp')) {
         this.told.add('ramp')
         this.say(L.race.ramp)
       }
@@ -912,6 +917,8 @@ export class Race implements World3D {
     this.phaseT = 0
     this.slow = SLOWMO
     this.banner = { kind: 'win', n: this.time }
+    // A cut to the head-on shot (gliding there would sweep the camera through the arch).
+    this.rig.setShot(this.shot(), true)
     this.music.stop()
     sounds.fanfare()
     this.scenery.cheer(1)
@@ -1083,7 +1090,8 @@ export class Race implements World3D {
       r.travelled -= 0.9
       for (const s of [-1, 1]) {
         const lat = 0.6 * s
-        this.foam.emit(d.x + sx * -2.6 + sz * lat, 0.03, d.z + sz * -2.6 - sx * lat, sz * s * speed * 0.12, 0, -sx * s * speed * 0.12, 2.2, 0.7 + speed * 0.04)
+        if (r !== this.k && Math.random() < 0.5) continue
+        this.foam.emit(d.x + sx * -2.6 + sz * lat, 0.03, d.z + sz * -2.6 - sx * lat, sz * s * speed * 0.12, 0, -sx * s * speed * 0.12, 1.4, 0.55 + speed * 0.03)
       }
     }
     const fast = Math.max(0, speed / v.feel.top - 0.4) + (d.boostT > 0 ? 0.7 : 0)
@@ -1135,7 +1143,7 @@ export class Race implements World3D {
   /** The engine: putt-putt slow, RRRAAAH fast (revving on the grid). */
   private engine(dt: number) {
     const d = this.k.d
-    const rev = this.finger && this.phase === 'count' ? 0.9 : 0
+    const rev = this.finger && (this.phase === 'count' || this.phase === 'intro') ? 0.9 : 0
     const sp = Math.max(rev, Math.min(1.4, Math.abs(d.speed) / d.feel.top))
     if (sp < 0.04 || this.phase === 'podium') return
     this.engineT += dt
@@ -1219,19 +1227,25 @@ export class Race implements World3D {
       r.pose = null
       clearPose(r.char.rig)
     }
-    stand(kaylee.char.root, P.steps[0].x, P.steps[0].y, P.steps[0].z)
-    if (kaylee.char instanceof Avatar) kaylee.char.setPose('stand')
+    // The winner is the biggest up there (1 > 2 > 3). The family are placed their own way (their life keeps the
+    // height and the way they face from it).
+    root.add(kaylee.char.root)
+    ;(kaylee.char as Avatar).place(P.steps[0].x, P.steps[0].y, P.steps[0].z, 90)
+    ;(kaylee.char as Avatar).setPose('stand')
+    kaylee.char.root.scale.setScalar(1.5)
     // Mommy and Daddy at the ends of the stage, cheering her on.
-    stand(ji.char.root, 0.4, 0.52, 3.9)
-    stand(nick.char.root, 0.4, 0.52, -3.9)
-    for (const r of [ji, nick]) (r.char as Member).setPose('stand')
+    for (const [r, z] of [[ji, 3.9], [nick, -3.9]] as const) {
+      root.add(r.char.root)
+      ;(r.char as Member).place(0.6, 0.53, z, 90, 'stand')
+    }
     const kids = this.racer('kids').crew!
     kids.onStage = true
-    kids.roots.forEach((o, i) => stand(o, P.steps[1].x, P.steps[1].y, P.steps[1].z + (i ? -0.45 : 0.45)))
+    kids.roots.forEach((o, i) => stand(o, P.steps[1].x, P.steps[1].y, P.steps[1].z + (i ? -0.5 : 0.5), 1.2))
     const monkey = this.racer('monkey').crew!
     monkey.onStage = true
-    stand(monkey.roots[0], P.steps[2].x, P.steps[2].y, P.steps[2].z, 1.6)
+    stand(monkey.roots[0], P.steps[2].x, P.steps[2].y, P.steps[2].z, 1.2)
     this.trophy.visible = true
+    this.trophy.scale.setScalar(1.3)
     this.trophyT = 0
     this.photoAt = this.phaseT + 4
     this.rig.lag = link ? 0.01 : 0.5
@@ -1248,7 +1262,7 @@ export class Race implements World3D {
     if (this.trophyT < 1) {
       this.trophyT = Math.min(1, this.trophyT + dt / 1.6)
       const e = 1 - (1 - this.trophyT) ** 3
-      this.trophy.position.set(head.x, head.y + 0.98 + (1 - e) * 6, head.z)
+      this.trophy.position.set(head.x, head.y + 0.98 * kay.char.root.scale.y + (1 - e) * 6, head.z)
       this.trophy.rotation.y = (1 - e) * Math.PI * 6
       if (Math.random() < dt * 30) this.sparkle.emit(this.trophy.position.x, this.trophy.position.y + 0.4, this.trophy.position.z, (Math.random() - 0.5) * 2, 1, (Math.random() - 0.5) * 2, 0.8, 0.14)
       if (this.trophyT >= 1) {
@@ -1264,7 +1278,7 @@ export class Race implements World3D {
       // Held up high, bobbing with her cheer.
       const lift = this.trophySpin >= 0 ? Math.sin(Math.min(1, this.trophySpin) * Math.PI) * 0.5 : 0
       if (this.trophySpin >= 0) this.trophySpin = this.trophySpin + dt / 0.8 >= 1 ? -1 : this.trophySpin + dt / 0.8
-      this.trophy.position.set(head.x, head.y + 0.98 + Math.abs(Math.sin(t * 9)) * 0.06 + lift, head.z)
+      this.trophy.position.set(head.x, head.y + 0.98 * kay.char.root.scale.y + Math.abs(Math.sin(t * 9)) * 0.06 + lift, head.z)
       this.trophy.rotation.y = this.podium.root.rotation.y + Math.PI / 2 + (this.trophySpin >= 0 ? this.trophySpin * Math.PI * 2 : Math.sin(t * 1.5) * 0.25)
     }
     // Confetti over the stage.
@@ -1310,12 +1324,14 @@ export class Race implements World3D {
       const P = this.podium.root
       const c = P.localToWorld(new Vector3(0.6, 1.9, 0))
       const yaw = P.rotation.y / deg + 90 + Math.sin(this.time * 0.3) * 8
-      return { center: c, half: new Vector3(4.4, 2.2, 2.4), yaw: this.unwrap(yaw), pitch: 9, minDist: 6, maxDist: 40 }
+      // (A tall screen frames it narrower: the stage bigger, less sand.)
+      const tall = this.h > this.w
+      return { center: tall ? P.localToWorld(new Vector3(0.6, 2.3, 0)) : c, half: tall ? new Vector3(3, 2.4, 1.8) : new Vector3(4.4, 2.2, 2.4), yaw: this.unwrap(yaw), pitch: 9, minDist: 6, maxDist: 40 }
     }
     if (this.phase === 'finish' && this.phaseT < 2.6) {
-      // Side on at the line as she crosses.
-      const p = spotAt(0, 0)
-      return { center: new Vector3(p.x + Math.sin(p.heading) * 2, 1.5, p.z + Math.cos(p.heading) * 2), half: new Vector3(9, 3, 6), yaw: this.unwrap(p.heading / deg - 90 + 20), pitch: 10, minDist: 8, maxDist: 60 }
+      // Head on as she crosses, from just past the line, a little to the side away from the kids.
+      const side = this.k.lat > this.racer('kids').lat ? 1 : -1
+      return { center: new Vector3(d.x, 1.4, d.z), half: new Vector3(3.6, 2, 3), yaw: this.unwrap(d.heading / deg + side * 14), pitch: 12, minDist: 7, maxDist: 40 }
     }
     const sp = clamp(Math.abs(d.speed) / d.feel.top, 0, 1.6)
     const tall = clamp((1 - this.w / this.h) / 0.4, 0, 1)
@@ -1470,7 +1486,7 @@ export class Race implements World3D {
     const hud: RaceHud = {
       phase: this.phase,
       count,
-      lap: clamp(this.k.laps + 1, 1, LAPS),
+      lap: clamp(this.k.laps + 1, this.lap0, LAPS),
       place: order.indexOf('kaylee') + 1,
       order,
       coins: this.k.coins,
@@ -1492,7 +1508,7 @@ export class Race implements World3D {
     return {
       section: this.section,
       phase: this.phase,
-      lap: clamp(this.k.laps + 1, 1, LAPS),
+      lap: clamp(this.k.laps + 1, this.lap0, LAPS),
       place: this.order().indexOf('kaylee') + 1,
       order: this.order(),
       item: this.item,

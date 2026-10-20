@@ -576,7 +576,11 @@ const thaiRace = (name, seconds, section, wait, act) => ({
     await page.goto(`${base}#/world/thailand/boat-trip/${section}`)
     await page.waitForTimeout(600)
     await page.waitForFunction(() => window.__thaiBoatQA?.().mode, null, { timeout: 20000 })
-    if (wait) await page.waitForFunction(wait, null, { timeout: 60000 }).catch(() => {})
+    // (Nudging the mouse while it waits: an automated tab with no input for 30 s drops to 4 fps.)
+    for (let i = 0; wait && i < 300 && !(await page.evaluate(wait)); i++) {
+      await page.mouse.move(5 + (i % 3), 5)
+      await page.waitForTimeout(200)
+    }
   },
   act,
 })
