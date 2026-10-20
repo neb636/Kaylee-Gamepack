@@ -14,7 +14,7 @@
 //   camera leans out: all of Thailand below, an elephant's head with a long trunk, Kaylee's crayon ear and eye on it.
 // - land: seatbelts on, the sea and the first rock islands come up, bump bump roll, and everyone claps. Then a white
 //   flash and Krabi: the Thai-roofed arrivals arch and the songthaew, which drives them off to the pier (3 seconds).
-// Every part moves on by itself (about 75 s in all), whatever she does.
+// Every part moves on by itself (about 35 s in all), whatever she does, and the ⏩ button skips ahead (`skip`).
 import { CanvasTexture, CatmullRomCurve3, Color, ConeGeometry, ExtrudeGeometry, Fog, Group, Matrix4, Mesh, MeshBasicMaterial, Path, PlaneGeometry, Shape, ShapeGeometry, Sprite, SpriteMaterial, SRGBColorSpace, TextureLoader, TubeGeometry, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds } from '../../../../../sdk'
 import type { Avatar } from '../../characters/avatar'
@@ -83,11 +83,13 @@ const PSU_Y = 2.02
 /** Thailand below: map units (flat degrees) to meters, and how far below the plane it is at cruising height. */
 const MAP_S = 3
 const CRUISE = 60
-const TAKEOFF_ROLL = 6.5
-const CLIMB_S = 7
-const FLY_S = 32
+const TAKEOFF_ROLL = 4.5
+const CLIMB_S = 4.5
+const FLY_S = 18
+/** Down from cruising height to the runway. */
+const DESCEND_S = 6
 /** The whole flight as built, takeoff to the cheer at Krabi (a trip can ask for a shorter or longer one). */
-const FLIGHT_S = 58
+const FLIGHT_S = 35
 /** Krabi: the arrival set, far from the cabin (shown behind a white flash), and how long the songthaew takes. */
 const ARRIVAL_AT = new Vector3(0, 0, 420)
 const SONGTHAEW_S = 3.1
@@ -719,7 +721,7 @@ export class PlaneRide extends Stage {
       if (this.roll < 0) {
         this.beltT += dt
         if (this.belt && this.beltT > 0.8) this.roll = 0
-        else if (!this.belt && this.beltT > 4.5) {
+        else if (!this.belt && this.beltT > 3) {
           this.riders.ji.react('wiggle')
           this.setBelt(true)
         }
@@ -745,12 +747,12 @@ export class PlaneRide extends Stage {
     } else if (sec === 'fly') {
       this.progress = clamp(this.secT / FLY_S)
       // Bumpy air, twice.
-      if (Math.abs(this.secT - 15) < fdt || Math.abs(this.secT - 27) < fdt) this.turb = 0
+      if (Math.abs(this.secT - 8) < fdt || Math.abs(this.secT - 14) < fdt) this.turb = 0
       // Sparkle's balloon floats past the window; then the storks.
-      this.passBalloon(this.secT - 5)
-      this.storks.visible = this.secT > 10 && this.secT < 23
+      this.passBalloon(this.secT - 2)
+      this.storks.visible = this.secT > 6 && this.secT < 17
       if (this.storks.visible) {
-        this.storks.position.x = -28 + (this.secT - 10) * 4.6
+        this.storks.position.x = -28 + (this.secT - 6) * 4.6
         for (const [i, s] of this.storks.children.entries()) {
           const flap = Math.sin(t * 7 + i * 0.8) * 0.6
           s.getObjectByName('wingL')!.rotation.x = flap
@@ -759,13 +761,13 @@ export class PlaneRide extends Stage {
         }
       }
       // A hint once, if she hasn't found the tray.
-      if (!this.trayOpen && this.time - this.lastTouch > 8 && this.secT > 6 && !this.told.has('hint')) {
+      if (!this.trayOpen && this.time - this.lastTouch > 8 && this.secT > 4 && !this.told.has('hint')) {
         this.told.add('hint')
         this.events.say(L.trip.hint.tray)
       }
       // The clouds part, and the camera leans out of the window: Thailand, an elephant's head with a long trunk.
       // (It doesn't wait for the seat-back screen: she'd miss it playing with the cartoons.)
-      if (!this.elephantDone && this.secT > 20) {
+      if (!this.elephantDone && this.secT > 10) {
         this.elephantDone = true
         this.events.flash?.()
         this.setView('elephant')
@@ -778,11 +780,11 @@ export class PlaneRide extends Stage {
       if (this.secT > FLY_S) this.enterSection('land')
     } else {
       // Seatbelts on, down to Krabi: the sea and the first rock islands, bump, bump, roll, and everyone claps.
-      if (!this.belt && this.secT > 3) {
+      if (!this.belt && this.secT > 1.5) {
         this.riders.ji.react('wiggle')
         this.setBelt(true)
       }
-      const c = clamp(this.secT / 9)
+      const c = clamp(this.secT / DESCEND_S)
       this.alt = CRUISE - (CRUISE - 2.2) * (1 - (1 - c) ** 2)
       tilt = 0.06 * bell(c)
       this.runwayDashes.position.x = 0
@@ -1001,6 +1003,22 @@ export class PlaneRide extends Stage {
     if (s === 'fly') setTimeout(() => this.sec === 'fly' && this.events.say(L.trip.plane.tray), 1500)
   }
 
+  /** The ⏩ button: from the takeoff or the cabin straight to the landing; from the landing to Krabi; then the pier. */
+  skip() {
+    if (this.drive >= 0) {
+      this.drive = SONGTHAEW_S + 1
+      this.events.done('pier')
+    } else if (this.sec !== 'land') {
+      if (!this.belt) this.setBelt(true)
+      this.storks.visible = false
+      if (this.balloon) this.balloon.visible = false
+      this.enterSection('land')
+    } else {
+      this.cheered = true
+      this.toKrabi()
+    }
+  }
+
   /** Off the plane: the family on the songthaew's bench at the arrivals arch, the suitcase across from them. */
   private toKrabi() {
     this.drive = 0
@@ -1086,7 +1104,7 @@ export class PlaneRide extends Stage {
       case 'window':
         return { at: this.cabin.localToWorld(new Vector3(WINDOW.x, WINDOW.y, WALL_Z + 0.05)), r: 0.34 }
       case 'tray':
-        return { at: this.cabin.localToWorld(new Vector3(FRONT_X + 0.2 * this.trayK, TRAY_Y - 0.15 * (1 - this.trayK), SEATS.kaylee)), r: 0.2, glow: this.sec === 'fly' && !this.trayOpen && this.secT > 2 && this.secT < 14, prio: 3 }
+        return { at: this.cabin.localToWorld(new Vector3(FRONT_X + 0.2 * this.trayK, TRAY_Y - 0.15 * (1 - this.trayK), SEATS.kaylee)), r: 0.2, glow: this.sec === 'fly' && !this.trayOpen && this.secT > 2 && this.secT < 10, prio: 3 }
       case 'call':
         return { at: at(this.parts.call), r: 0.08, glow: this.sec === 'fly' && this.trayOpen && this.snacks.length === 0, prio: 4 }
       case 'light':

@@ -474,6 +474,13 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       head.push(P.cyl(0.5 * R, 0.5 * R, 0.06 * R, '#6FB0E6', { at: [0, headY + 0.42 * R, -1.0 * R], rot: [0.35, 0, 0], scale: [1, 1, 1.3] }))
       head.push(P.box(0.5 * R, 0.08 * R, 0.06 * R, '#6FB0E6', { at: [0, headY + 0.5 * R, 0.86 * R], rot: [-0.55, 0, 0] }))
     }
+    if (e === 'officer-cap') {
+      // A small navy peaked cap high on the crown (the face stays clear): band, flat top, a short brim and a gold badge.
+      head.push(P.cyl(0.66 * R, 0.72 * R, 0.3 * R, '#3E4C8A', { at: [0, headY + 0.84 * R, -0.04 * R], rot: [-0.12, 0, 0] }, 24))
+      head.push(P.cyl(0.8 * R, 0.72 * R, 0.12 * R, '#4A5A9C', { at: [0, headY + 1.03 * R, -0.07 * R], rot: [-0.12, 0, 0] }, 24))
+      head.push(P.cyl(0.52 * R, 0.52 * R, 0.05 * R, '#2B3566', { at: [0, headY + 0.72 * R, 0.62 * R], rot: [0.3, 0, 0], scale: [1, 1, 0.55] }, 20))
+      head.push(P.sphere(0.11 * R, '#FFC83D', { at: [0, headY + 0.88 * R, 0.66 * R], scale: [1, 1, 0.5] }))
+    }
     if (e === 'scarf') {
       torso.push(P.torus(0.255 * H, 0.05 * H, '#FF8FB8', { at: [0, 0.54 * H, 0.02 * H], rot: [Math.PI / 2, 0, 0] }, Math.PI * 2))
       torso.push(P.rbox(0.09 * H, 0.24 * H, 0.04 * H, 0.015 * H, '#FF8FB8', { at: [0.12 * H, 0.42 * H, 0.27 * H], rot: [0.25, 0, -0.15] }))

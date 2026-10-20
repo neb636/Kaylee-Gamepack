@@ -13,7 +13,7 @@ export const BOAT_TRIP: TripDef = {
     { kind: 'fly', from: PLACES.bangkok, to: PLACES.krabi, seat: 'window' },
   ],
   // The window seat's whole ride in seconds; on a replay (she has done the trip before) it's shorter.
-  caps: { fly: 58, replayFly: 40 },
+  caps: { fly: 35, replayFly: 24 },
   arrive: 'pier',
 }
 
