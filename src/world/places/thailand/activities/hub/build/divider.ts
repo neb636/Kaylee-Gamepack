@@ -1,6 +1,6 @@
 // The divider between Agong's front room and the stairs, like his real one (Dad's photo, 2026-10-20): a wall of glossy
-// rosewood cabinets from the left wall to the right one; on the left it runs under the top of the stairs, so there it
-// stops just below them (Dad's sketch). A doorway with carved corner brackets leads through to the stairs, a lucky
+// rosewood cabinets, floor to ceiling, from the left wall to the right one; the stairs end against its back (Dad's
+// sketch). A doorway with carved corner brackets leads through to the stairs, a lucky
 // charm hanging by it; glass-doored cabinets full of little treasures run along the top; on the right, open shelves with
 // the gold Garuda and the Buddhas, the TV, a picture and the red and gold boxes; cupboards along the bottom.
 // The part above the cupboards lowers (house.ts) when she walks behind it, so the camera still sees her.
@@ -16,8 +16,6 @@ export const DIVIDER_BASE = 1.0
 const OPEN_TOP = 2.35
 const BAND = 2.6
 const TOP = 3.45
-/** Left of the doorway it runs under flight 2 of the stairs, so it stops below their slab. */
-const UNDER_STAIRS = 2.75
 const RED = '#D9434F'
 const WHITE = '#F4F1EA'
 
@@ -31,8 +29,7 @@ export interface Divider {
 export function buildDivider(kit: Kit): Divider {
   const { left, right, g0 } = DIM
   const { z, d, open0, open1 } = DIM.divider
-  /** Where the tall part (the glass cabinets up to the ceiling) starts: right of the stairs, at the doorway's left post. */
-  const x0 = open0 - 0.12
+  const x0 = left
   const zf = z + d / 2
   const zb = z - d / 2
   const W = right - x0
@@ -69,7 +66,7 @@ export function buildDivider(kit: Kit): Divider {
 
   // ---- Posts: the doorway's two (the left one just right of the stairs), and one against each wall ----
   for (const [x, w, top] of [
-    [left + 0.04, 0.08, UNDER_STAIRS],
+    [left + 0.04, 0.08, g0],
     [open0 - 0.06, 0.12, g0],
     [open1 + 0.06, 0.12, g0],
     [right - 0.04, 0.08, g0],
@@ -164,9 +161,9 @@ export function buildDivider(kit: Kit): Divider {
     P.box(0.3, 0.1, 0.01, RED, { at: [bx, shelfR + 0.26, z + 0.14] }),
   )
 
-  // Left, under the stairs: one shelf with Agong's books, a jar and a green tub.
-  const lw = x0 - left
-  const lc = (left + x0) / 2
+  // Left, in front of the stairs: one shelf with Agong's books, a jar and a green tub.
+  const lw = open0 - 0.12 - left
+  const lc = left + lw / 2
   const shelfL = 1.78
   high.push(P.box(lw, 0.04, d - 0.03, ROSE_LIGHT, { at: [lc, shelfL, z] }))
   const books = ['#B5453A', '#2F5E8C', '#E0B04A', '#3F7A55', '#7A4B8C', '#C9683A']
@@ -179,14 +176,7 @@ export function buildDivider(kit: Kit): Divider {
     P.cyl(0.085, 0.085, 0.03, RED, { at: [lc + 0.2, DIVIDER_BASE + 0.215, z] }),
     P.rbox(0.4, 0.22, 0.28, 0.03, '#5DBB7A', { at: [lc, shelfL + 0.13, z] }),
   )
-  // And above its band, a plain rosewood panel up to the underside of the stairs.
-  high.push(
-    P.box(lw, 0.1, d + 0.06, ROSE_DARK, { at: [lc, BAND - 0.05, z] }),
-    P.box(lw, UNDER_STAIRS - BAND, d, ROSE, { at: [lc, (BAND + UNDER_STAIRS) / 2, z] }),
-    P.box(lw - 0.16, UNDER_STAIRS - BAND - 0.08, 0.02, ROSE_LIGHT, { at: [lc, (BAND + UNDER_STAIRS) / 2, zf + 0.01] }),
-  )
-
-  // ---- The band across the top of the rest, the glass cabinets and the crown ----
+  // ---- The band across the top of everything, the glass cabinets and the crown ----
   high.push(
     P.box(W, 0.1, d + 0.06, ROSE_DARK, { at: [cx, BAND - 0.05, z] }),
     P.box(W, TOP - BAND, 0.03, FRAME_DARK, { at: [cx, (BAND + TOP) / 2, zb + 0.015] }),

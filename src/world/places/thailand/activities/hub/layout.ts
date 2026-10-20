@@ -53,24 +53,25 @@ export const DIM = {
    * it. Each flight has `steps` treads. Flight 1 and the landing are closed in; flight 2 is open underneath. Its back
    * edge (zBack) lines up with the glass wall upstairs. (Dad, 2026-10-20: both flights 40% wider, 1.26 and 1.19 m;
    * flight 1 widened toward the back, so the kitchen got smaller and the front room didn't. Then the room between the
-   * divider and the kitchen 25% deeper, 3.73 m: the kitchen wall went back again and both flights got longer, 9 steps.)
+   * divider and the kitchen 25% deeper, 3.73 m: the kitchen wall went back again and both flights got longer, 9 steps.
+   * Then the front room 0.5 m bigger, the middle room the same and the kitchen smaller; flight 2 now ends just behind
+   * the divider (zTop is its back face), so the divider can go up to the ceiling all the way across.)
    */
-  stairs: { x0: -3.125, xLanding: -1.865, xFoot: 0.985, zTop: -8.2, zLanding: -11.05, zBack: -12.24, steps: 9 },
+  stairs: { x0: -3.125, xLanding: -1.865, xFoot: 0.675, zTop: -9.01, zLanding: -11.55, zBack: -12.74, steps: 9 },
   /** The wall behind the stairs that hides the kitchen: from the left wall to x1, `t` thick, its front face on the
    *  stairs' back edge. */
   stairWall: { x1: 2.4, t: 0.15 },
   /**
    * The wooden divider between the front room and the stairs, like Agong's real one (Dad's photo, 2026-10-20): a wall
-   * of rosewood cabinets, centered at `z` and `d` deep, running all the way from the left wall to the right one. Left
-   * of the doorway it sits under the top of flight 2, so there it only goes up to the stairs; the doorway
-   * (open0..open1) she walks through to the stairs and the back room is just right of them, the rest of the cabinets
-   * to its right.
+   * of rosewood cabinets, floor to ceiling, centered at `z` and `d` deep, running all the way from the left wall to
+   * the right one. Flight 2 of the stairs ends against its back; the doorway (open0..open1) she walks through to the
+   * stairs and the back room is just right of them, the rest of the cabinets to its right.
    */
-  divider: { z: -8.3, d: 0.42, open0: -1.745, open1: 0.26 },
+  divider: { z: -8.8, d: 0.42, open0: -1.745, open1: 0.26 },
   /** Upstairs: the balcony railing at the front edge of the floor (open to the shop below), and the glass wall into
    *  Kaylee's room, with its doorway. (Dad, 2026-10-19: stairs, railing and glass all 2.2 m further forward than at
    *  first, so the overlook is smaller and her room bigger.) */
-  hall: { zFront: -5.2, zGlass: -12.29, door0: 1.3, door1: 2.4 },
+  hall: { zFront: -5.2, zGlass: -12.79, door0: 1.3, door1: 2.4 },
 }
 
 export type Area = 'street' | 'inside'
@@ -137,15 +138,15 @@ export const PICKABLES: Pickable[] = [
   { id: 'rice-cooker', label: 'Rice cooker', floor: 0, area: 'inside', at: [2.775, 1.0, -18.098], r: 0.4, react: 'puff', use: { x: 2.075, z: -18.098, face: 90, pose: 'peek' } },
   { id: 'doormat', label: 'Go outside', floor: 0, area: 'inside', at: [0, 0.05, -0.6], r: 0.7, react: 'jelly', use: { x: 0.3, z: 1.35, face: 15, pose: 'stand' } },
   { id: 'shoes', label: 'Shoes', floor: 0, area: 'inside', at: [2.825, 0.2, -0.85], r: 0.42, react: 'hop', use: { x: 2.125, z: -0.85, face: 90, pose: 'peek' } },
-  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-0.44, 0.8, -11.645], r: 0.9, react: 'stairs' },
+  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-0.595, 0.8, -12.145], r: 0.9, react: 'stairs' },
 
   // ---- Upstairs: the hallway, then Kaylee's room at the back ----
-  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-2.495, U + 0.2, -9.3], r: 0.7, react: 'stairs' },
+  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-2.495, U + 0.2, -9.8], r: 0.7, react: 'stairs' },
   { id: 'plant', label: 'Plant', floor: 1, area: 'inside', at: [2.1, U + 0.4, -5.65], r: 0.35, react: 'jelly', use: { x: 1.4, z: -5.8, face: 90, pose: 'peek' } },
   { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [1.85, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: 1.85, z: -16.998, face: 180, pose: 'stand' } },
   { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-1.625, U + 0.25, -18.71], r: 1.4, react: 'jelly', use: { x: 0.35, z: -18.25, face: 25, pose: 'bounce', snap: { x: -1.4, z: -18.25, y: 0.22 } } },
   { id: 'pillows', label: 'Pillows', floor: 1, area: 'inside', at: [-2.775, U + 0.35, -18.71], r: 0.7, react: 'puff', use: { x: 0.35, z: -18.15, face: 90, pose: 'lie', snap: { x: -1.925, z: -18.12, y: 0.22 } } },
-  { id: 'couch', label: 'Couch', floor: 1, area: 'inside', at: [2.795, U + 0.5, -13.55], r: 0.75, react: 'jelly', use: { x: 1.925, z: -13.05, face: -90, pose: 'sit', snap: { x: 2.725, z: -13.05, y: 0.44 } } },
+  { id: 'couch', label: 'Couch', floor: 1, area: 'inside', at: [2.795, U + 0.5, -14.05], r: 0.75, react: 'jelly', use: { x: 1.925, z: -13.55, face: -90, pose: 'sit', snap: { x: 2.725, z: -13.55, y: 0.44 } } },
   { id: 'room-fan', label: 'Fan', floor: 1, area: 'inside', at: [0.4, U + 0.75, -16.798], r: 0.42, react: 'spin', use: { x: 0.4, z: -17.548, face: 0, pose: 'peek' } },
   { id: 'suitcase', label: 'Suitcase', floor: 1, area: 'inside', at: [0.3, U + 0.3, -20.448], r: 0.45, react: 'open', use: { x: 0.3, z: -19.748, face: 180, pose: 'peek' } },
   { id: 'bathroom-door', label: 'Bathroom door', floor: 1, area: 'inside', at: [2.2, U + 1.1, B + 0.06], r: 0.6, react: 'rattle', use: { x: 2.2, z: B + 0.95, face: 180, pose: 'stand' } },
@@ -208,7 +209,7 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [DIM.left, HALL.door0, HALL.zGlass - 0.06, HALL.zGlass + 0.06], // the glass wall, left of the doorway
       [HALL.door1, DIM.right, HALL.zGlass - 0.06, HALL.zGlass + 0.06],
       [DIM.left, -0.075, B, -17.47], // the big mattress + pillows (and the gap behind it)
-      [2.425, DIM.right, -14.75, -12.35], // couch
+      [2.425, DIM.right, -15.25, -12.85], // couch
       [-0.05, 0.65, B, -20.198], // suitcase
     ],
     circles: [
