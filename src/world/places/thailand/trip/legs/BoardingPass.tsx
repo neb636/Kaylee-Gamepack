@@ -1,6 +1,7 @@
 // Between the legs of a trip a boarding pass slides up, a hole is punched for the leg she just finished (ka-chunk),
-// and it slides away: 1.5 s, and it hides the next scene being built. It also asks "a new trip, or keep going?" when she
-// taps the map's pin with a trip half done (two big icons, no words needed).
+// and it slides away: 1.5 s, and it hides the next scene being built. When she says yes to Mommy with a trip half done,
+// or after her first whole trip, it asks where to start with big icons (no words needed): 🧳 the whole trip again, the
+// next leg's icon to keep going, 🚤 straight to the boat.
 import { motion } from 'motion/react'
 import { useEffect } from 'react'
 import { KID_NAME } from '../../../../../sdk'
@@ -17,11 +18,17 @@ interface Props {
   /** Legs already punched, and the one being punched now. */
   done: string[]
   punch: string | null
-  /** "A new trip, or keep going?" */
-  choice?: { again: () => void; resume: () => void; resumeIcon: string }
+  /** Where to start: big icons (the first is 🧳, a new trip). */
+  choices?: PassChoice[]
 }
 
-export function BoardingPass({ legs, done, punch, choice }: Props) {
+export interface PassChoice {
+  label: string
+  icon: string
+  on: () => void
+}
+
+export function BoardingPass({ legs, done, punch, choices }: Props) {
   useEffect(() => {
     if (!punch) return
     const t = setTimeout(() => sfx.stamp(), 420)
@@ -72,13 +79,19 @@ export function BoardingPass({ legs, done, punch, choice }: Props) {
             )
           })}
         </div>
-        {choice && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 22, padding: '4px 16px 20px' }}>
-            {[
-              { label: 'A new trip', icon: '🧳', on: choice.again },
-              { label: 'Keep going', icon: choice.resumeIcon, on: choice.resume },
-            ].map((b) => (
-              <motion.button key={b.label} aria-label={b.label} whileTap={{ scale: 0.9 }} onClick={b.on} style={{ width: 110, height: 110, borderRadius: '50%', border: '5px solid #fff', background: b.icon === '🧳' ? 'var(--lavender)' : 'var(--butter)', fontSize: 54, boxShadow: 'var(--shadow)' }}>
+        {choices && (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(12px, 3vw, 22px)', padding: '4px 16px 20px' }}>
+            {choices.map((b, i) => (
+              <motion.button
+                key={b.label}
+                aria-label={b.label}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.25 + i * 0.12, type: 'spring', stiffness: 400, damping: 14 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={b.on}
+                style={{ width: 'clamp(88px, 18vw, 110px)', height: 'clamp(88px, 18vw, 110px)', borderRadius: '50%', border: '5px solid #fff', background: i === 0 ? 'var(--lavender)' : b.icon === '🚤' ? 'var(--mint)' : 'var(--butter)', fontSize: 'clamp(44px, 9vw, 54px)', boxShadow: 'var(--shadow)' }}
+              >
                 {b.icon}
               </motion.button>
             ))}

@@ -40,7 +40,7 @@ photo Agong asked for. Back home it goes on Agong's wall, and even the big cousi
 
 One idea holds it together: **on the way there the grown-ups drive, and every ride is a toy; in the bay she's the
 captain.** (Dad's picks, 2026-10-18: Aunty Sri drives them to the airport, and Kaylee rides in a window seat, Toca
-style.) In Aunty Sri's car and on the plane her hands play with what's around her (the seatbelt, the window, the tray,
+style.) In Aunty Sri's van and on the plane her hands play with what's around her (the seatbelt, the window, the tray,
 the snacks) while the ride moves on by itself, so those legs are short and can't stall. At the pier Daddy hands her the
 tiller: the longtail is the first thing she drives, with one finger, the way she walks Kaylee around the house (tap a
 spot and she goes there, hold your finger down and she follows it).
@@ -378,8 +378,8 @@ only "question" (where to?) she answers by driving. 2 lines before the first tou
 
 ### Home 🏠 (the payoff goes back to the house)
 
-The flight home is a 4-second picture (the plane over a pink sunset; tap skips). Aunty Sri's car brings them back to
-Agong's house and the family come out. **She picks which photo is for Agong** (her photos fan out; tap one), then taps Agong:
+The flight home is a 4-second picture (the plane over a pink sunset; tap skips). Aunty Sri's white electric van brings
+them back to Agong's house and the family come out. **She picks which photo is for Agong** (her photos fan out; tap one), then taps Agong:
 he holds it up, "Beautiful! Thank you, Kaylee!", and walks in and hangs it on the wall by the old photos. Everyone gathers,
 and **Gan, Ken and BB put their phones down for the first time**: "Whoa! Cool!" Then the stamp (`StampEarned`) and the sticker:
 a waving **fiddler crab**.
@@ -493,12 +493,14 @@ trip/                     the reusable kit
   drive.ts                the finger-leads controller + feel profiles (built, greybox 1)
   vehicles/               longtail.ts, canoe.ts, van.ts, songthaew.ts, plane.ts (toon models with seats)
   legs/                   house-plugin.ts (invite, pack, goodbye), airport.ts, plane.ts (the cabin), krabi.ts,
-                          Ask.tsx, PackCard.tsx, BoardingPass.tsx, Guide.tsx (built); later Home
-  Flat.tsx                the no-WebGL storybook version
+                          Ask.tsx, PackCard.tsx, BoardingPass.tsx, Guide.tsx (built); home-flight.ts and the `home`
+                          leg in house-plugin.ts (built, step 5)
+  wall.ts, wall-photos.ts the trip photos on Agong's wall (built, step 5)
 engine/                   View3D.tsx, water.ts, particles.ts (built, greybox 1), photo.ts
 activities/boat-trip/
   sections.ts  trip.ts    the sections (loaded at startup, no three.js) and the TripDef
-  BoatTrip.tsx            runs the legs in order, the album, resume
+  BoatTrip.tsx            runs the legs in order, the album, resume and replays, the way home
+  Flat.tsx, PhotoFan.tsx  the no-WebGL picture book; her photos fanned out for Agong (built, step 5)
   bay/                    bay.ts (the scene and the driving), layout.ts (meters, pure data), scenery.ts, tour.ts,
                           tune.ts (built, greybox 1); later village.ts, cave.ts, nail.ts, Album.tsx, Poses.tsx
 ```
@@ -755,6 +757,62 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
      is 190k); the goodbye's 290 calls and 450k triangles are the whole family at the shutter, the same as before.
 5. **The full loop.** Home and the photo wall, the stamp and the sticker in `meta.ts`, replays (the 🚤 shortcut, shorter
    legs), the flat version, facts, QA with the fun check below. Dad plays the whole trip on the iPad.
+   *Built 2026-10-20* (Dad's answer to step 4's gate: "fun and short enough", so the legs are as they were). The way
+   home is the house again (`home`, a leg in `trip/legs/house-plugin.ts`); her photo hangs on Agong's wall
+   (`trip/wall.ts`, `trip/wall-photos.ts`); the stamp and the fiddler crab sticker come from `Place.tsx`. The crab is the
+   trip's one generated picture (Sol; only its eye highlights are white). What building it changed from the plan:
+   - **The way home:** at the pier at sunset her album opens and a big ✈️🏠 button pulses under it (and stays once the
+     album is closed; tapping the boat still goes out again). No finger on the boat there; after ~8 s with nothing
+     done (a finger held down to drive counts as playing), Sparkle says "Tap the plane to fly home!", twice at most. A
+     `sunset` link with no `photos` starts with the Nail Island's, so there's always one for Agong. Tap ✈️🏠: the boarding pass (with a 🏠 leg now), then the flight
+     home, a 4-second picture built in the house's own world far under the street (`trip/legs/home-flight.ts`: their
+     plane, wheels up, over a pink and gold sunset, the sea and its rock towers, pink clouds, a trail of puffs; a tap skips it). A
+     white flash, and Aunty Sri's van hums up to Agong's door ("We're home, Kaylee!"). Everyone hops out, the family who
+     live here hop out of the shop, and Agong asks: "Did you bring my photo?"
+   - **Picking the photo:** once Agong has asked (2 s, so they don't cover his words), her photos fan out at the bottom
+     like a hand of cards (`PhotoFan.tsx`: one of each place first, then her newest pose photos, Mommy's selfies last,
+     six at most; on a narrow phone above Sparkle). The one she taps flies off and she holds it up in a pink frame;
+     Agong glows and a finger points at him. She taps him (or the photo in her hands): she walks over and gives it to him, he
+     holds it up ("Beautiful! Thank you, Kaylee!"), walks in with it and hangs it on the wall. Kaylee follows him in.
+     Everything else she taps there answers too (the van, the spirit house: the house's own pokes).
+   - **Everyone gathers** round the photo like for a family picture, turned toward the camera, and the big cousins put
+     their phones away for the first time (`Member.putPhoneDown`; the phone is its own part of their toy now). That's
+     hers to do: Gan, Ken and BB glow, and each tap gets one to look up ("Whoa! Cool!", "Whoa!", "So cool, Kaylee!");
+     if she waits ~5 s they look up by themselves. Aunty Sri stands at the back so she doesn't hide them, and on a tall
+     screen the shot widens so all three are in it. Tapping her photo on the wall swings it on its nail and Agong
+     hops. Then everyone hops, and the stamp. Its button shows 🏠 ▶ (the kit's `StampEarned` has an optional
+     `closeIcon`): closing it opens the house downstairs by her photo (`hub/downstairs?at=photos`), where the camera
+     starts on the left wall (the old photos and hers) until she taps anything else.
+   - **The photo wall:** a pink frame with a little heart, on the left wall downstairs in front of the old photos,
+     toward the door (the next trips' frames go beside it). The chosen photo is saved as a 640 × 480 JPEG (~50 KB) in
+     `useSaved('thailand-photo-wall')`, at most 8, on the iPad only. In the house, tap it: it swings on its nail and
+     comes close, and Mommy says "Our boat trip!". On a replay the old photo hangs there until Agong hangs the new one.
+   - **A `home` link** (no photos from the bay in memory) builds the bay behind the boarding pass, takes the photos the
+     link asks for (`photos`, at least the Nail Island's), then goes home. It takes a few seconds on the iPad (longer in
+     a test browser).
+   - **Replays:** the trip counts whole trips (`trips` in `useSaved('thailand-boat-trip')`). After the first, yes to
+     Mommy shows the boarding pass with 🧳 (a new trip) and 🚤 (straight to the pier with what she packed last time),
+     plus the next leg's icon when a trip is half done. A replay's flight is 40 s instead of 58, and its goodbye is
+     quicker (Agong doesn't ask again; the van comes at once and waits 4 s, not 7). `replay=1` in a link plays it that
+     way (`invite?replay=1` shows the choice); Sparkle asks "Pack again, or go straight to the boat?". The picture
+     book's ending counts as a whole trip too.
+   - **No name pills on the trip** (the goodbye and coming home crowd the whole family together; the guide's bubble says
+     who's talking). While Mommy asks, the rest of her room answers taps too.
+   - **The picture book** (no WebGL2, or `?gl=off`, `Flat.tsx`): Mommy's 👍, packing with big buttons into a suitcase
+     that fills up, a picture and a ▶ for each leg, the three stops as cards (the village, the hong, the Nail Island;
+     each says its fact; the ✅s stay from page to page), the photo as a drawn card with a 📸, the sunset, and home: tap the photo to give it to Agong,
+     the cousins look up, and the stamp. Sparkle (the live puppet) stands above every page but the packing one and
+     waves as it turns; the family and the legs are still emoji (known-issues.md). Every section link lands on its page.
+   - **Facts:** 10 tap-to-hear facts (`trip/facts.ts`) on the stamp screen (a row of round buttons that wraps to fit,
+     an optional `facts` on the kit's `StampEarned`) and the passport; the bay's other facts stay where she finds them.
+     The sticker's line is "Fiddler crabs wave hello!". One is new, "Thai cars drive on the left!" (Aunty Sri's van has its wheel on the right); the long ones were shortened (2.5–3.5 s in Sparkle's slow voice).
+   - **How long it takes** (scripted plays with quick real taps in headless Chromium at `?fps=30`, which runs the game
+     in slow motion, about 1.6–2× here): Mommy's question to the pier 3 min 8 s (step 4's 1 min 59 s at full speed); the
+     way home, flight to stamp, 60 s (about 35–40 s on the iPad: the 4 s flight, the van and the family coming out ~10 s,
+     picking and giving ~5 s, Agong walking in and hanging it ~6 s, everyone gathering and the cousins ~9 s); a replay's
+     🚤, Mommy's yes to the longtail at the pier, 6 s. The robot couldn't play the whole bay (in the village the glows sit
+     under the village's own tap targets, and the canoe crawls out of the hong in slow motion), so the bay is still
+     step 3's 4–6 minutes by design. Whole trip: about 7–9 minutes; a 🚤 replay about 5–7, nearly all of it driving.
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 
@@ -773,7 +831,7 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
 ## Dad's answers (2026-10-18)
 
 1. **To the airport:** Aunty Sri drove them. So Kaylee rides along (in the back by the window) and plays; she doesn't
-   drive the car. Assumed: Sri brings them home too.
+   drive the car. Assumed: Sri brings them home too (built in step 5: her white electric van).
 2. **Airport:** Krabi.
 3. **In the bay:** Koh Panyee, a hong, and James Bond Island.
 4. **The map:** in Kaylee's room above her suitcase. (Later dropped: Mommy asks, and PR #102 took the map down.)
@@ -804,3 +862,5 @@ Mostly travel and tour pages, so check anything new against a second source befo
   [Kiernan, University of Tasmania](https://figshare.utas.edu.au/articles/conference_contribution/The_coastal_tower_karst_of_Phang_Nga_Bay/23215307)
 - Ribbons on longtail bows for Mae Ya Nang: [Wikipedia: Mae Yanang](https://en.wikipedia.org/wiki/Mae_Yanang)
 - Thailand shaped like an elephant's head: [Britannica Kids](https://kids.britannica.com/kids/article/Thailand/345800)
+- Cars drive on the left (right-hand drive): [Thailand Starter Kit](https://www.thailandstarterkit.com/transportation/driving-in-thailand/),
+  [Expat Focus](https://www.expatfocus.com/thailand/guide/thailand-driving)

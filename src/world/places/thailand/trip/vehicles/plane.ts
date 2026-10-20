@@ -18,7 +18,7 @@ export interface PlaneOutside {
   steps: V3[]
 }
 
-export function buildPlaneOutside(bag: Bag): PlaneOutside {
+export function buildPlaneOutside(bag: Bag, { wheelsUp = false } = {}): PlaneOutside {
   const root = new Group()
   const R = 1.35
   const L = 10
@@ -43,8 +43,7 @@ export function buildPlaneOutside(bag: Bag): PlaneOutside {
     ]),
     // Round windows along the side the camera sees, and the wheels.
     ...Array.from({ length: 9 }, (_, i) => P.cyl(0.2, 0.2, 0.06, '#A8DCFF', { at: [-L / 2 + 2.6 + i * 0.95, 2.55, R * 0.97], rot: [Math.PI / 2, 0, 0] })),
-    ...[[-L / 2 + 0.6, 0], [1, -1.4], [1, 1.4]].map(([x, z]) => P.torus(0.32, 0.14, PAL.ink, { at: [x, 0.42, z] })),
-    ...[[-L / 2 + 0.6, 0], [1, -1.4], [1, 1.4]].map(([x, z]) => P.cyl(0.08, 0.08, 1.0, '#D8D2E6', { at: [x, 0.95, z] })),
+    ...(wheelsUp ? [] : [[-L / 2 + 0.6, 0], [1, -1.4], [1, 1.4]].flatMap(([x, z]) => [P.torus(0.32, 0.14, PAL.ink, { at: [x, 0.42, z] }), P.cyl(0.08, 0.08, 1.0, '#D8D2E6', { at: [x, 0.95, z] })])),
   ]
   root.add(solid(merge(parts), bag, 2))
   const doorAt: V3 = [-L / 2 + 1.5, 2.15, R + 0.02]

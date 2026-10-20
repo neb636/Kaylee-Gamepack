@@ -28,7 +28,9 @@ export class Member implements Character {
   private phase = Math.random() * 10
   private baseY: number
   /** Glued to their phone (the big cousins): head down at the screen, both hands on it, never looking up for long. */
-  readonly onPhone: boolean
+  onPhone: boolean
+  /** Time into putting the phone down (-1: not doing it). */
+  private phoneDown = -1
   private glance = 1
   /** Time into a wave with one hand off the phone, eyes still on the screen (-1: not waving). */
   private phoneWaving = -1
@@ -86,6 +88,13 @@ export class Member implements Character {
     if (this.onPhone) this.phoneWaving = 0
     else this.waving = 0
   }
+  /** For the first time ever: the phone goes down (into a pocket), the arms drop and the head comes up. */
+  putPhoneDown() {
+    if (!this.onPhone) return
+    this.onPhone = false
+    this.phoneDown = 0
+    this.glance = 1
+  }
   /** Wind in a unicorn's mane and tail: 0 still, 1 strong (it eases there). */
   setWind(k: number) {
     this.wind.goal = k
@@ -102,6 +111,21 @@ export class Member implements Character {
     const lying = this.pose === 'lie'
     this.life.update(dt)
     this.wind.update(this.chibi, dt, t)
+    if (this.phoneDown >= 0) {
+      // The phone shrinks away into a pocket while the arms come down from holding it.
+      this.phoneDown = Math.min(1, this.phoneDown + dt / 0.5)
+      const p = this.phoneDown
+      const e = 1 - (1 - p) ** 3
+      this.chibi.armL.rotation.set(-1.2 * (1 - e), 0, 0.75 * (1 - e))
+      armR.rotation.set(-1.2 * (1 - e), 0, -0.75 * (1 - e))
+      head.rotation.x = 0.45 * (1 - e)
+      const ph = this.chibi.phone
+      if (ph) {
+        ph.scale.setScalar(Math.max(0.001, 1 - e))
+        ph.visible = p < 1
+      }
+      if (p >= 1) this.phoneDown = -1
+    }
     if (this.phoneWaving >= 0) {
       // From holding the phone up to a wave beside the head and back, the other hand keeps the phone.
       this.phoneWaving += dt / 1.6

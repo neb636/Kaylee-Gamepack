@@ -26,6 +26,8 @@ export const L = {
     elephant: "The elephant is Thailand's special animal!",
     chang: 'In Thai, chang means elephant!',
     flag: "Thailand's flag is red, white and blue!",
+    // The boat trip's facts that aren't said anywhere in it (Aunty Sri's van has its steering wheel on the right).
+    left: 'Thai cars drive on the left!',
   },
 
   // Sparkle, at Agong's house: at most two lines before her hands are busy, then only when something is new or she
@@ -169,13 +171,13 @@ export const L = {
     // Sparkle's facts: the first time a stop comes into view, and again from the album.
     facts: {
       ribbons: 'Thai boats wear ribbons for good luck!',
-      longtail: 'A longtail boat has a car engine on a long stick!',
+      longtail: 'A longtail has a car engine on a stick!',
       pai: "Pai means let's go!",
-      notch: 'The sea nibbled a notch around the bottom of the rock!',
-      village: 'This village is built on stilts, over the sea!',
+      notch: 'The sea nibbled a notch in the rock!',
+      village: 'Houses on stilts, over the sea!',
       football: 'The kids here built a football field that floats!',
       khobkhun: 'Khob khun means thank you!',
-      hong: 'Hong means room! A secret room inside the island!',
+      hong: 'Hong means room, a secret room!',
       mangrove: 'Mangrove trees stand on their roots!',
       nail: 'Ko Tapu means Nail Island!',
       buoys: 'Boats stay back so the Nail Island keeps standing!',
@@ -183,14 +185,37 @@ export const L = {
     // The album's nine animal stickers, a fact each.
     stickers: {
       needlefish: 'A needlefish! It skips over the water!',
-      eagle: 'A sea eagle! It catches fish with its feet!',
+      eagle: 'A sea eagle! It fishes with its feet!',
       macaque: 'A macaque! A cheeky monkey!',
       cat: 'The village cat lives on a boat!',
       crab: 'This crab waves its big claw!',
-      mudskipper: 'A mudskipper is a fish that walks on mud!',
-      lizard: 'A monitor lizard! It swims like a little crocodile!',
+      mudskipper: 'A mudskipper walks on mud!',
+      lizard: 'A monitor lizard swims like a croc!',
       kingfisher: 'A kingfisher! A flash of blue!',
       porpoise: 'This porpoise has no fin on its back!',
     } as Record<string, string>,
+  },
+
+  // The way home (the boat trip's `home`): Aunty Sri's van brings them back to Agong's house, she picks the photo for
+  // Agong's wall, and even the big cousins look up from their phones. Then, in the house, the photo on the wall.
+  home: {
+    sri: by('sri')("We're home, Kaylee!"),
+    agong: by('agong')('Did you bring my photo?'),
+    thanks: by('agong')('Beautiful! Thank you, Kaylee!'),
+    gan: by('gan')('Whoa! Cool!'),
+    ken: by('ken')('Whoa!'),
+    bb: by('bb')('So cool, Kaylee!'),
+    jum: by('jum')('So pretty!'),
+    // The frame on the wall, tapped in the house.
+    wall: ji('Our boat trip!'),
+    // The stamp screen's sticker.
+    sticker: 'Fiddler crabs wave hello!',
+    // Sparkle, after a while with nothing done.
+    pick: 'Pick a photo for Agong!',
+    give: 'Tap Agong to give it to him!',
+    // At the pier at sunset, nothing done for a while.
+    fly: 'Tap the plane to fly home!',
+    // The boarding pass on a replay: the whole trip or straight to the boat.
+    again: 'Pack again, or go straight to the boat?',
   },
 }

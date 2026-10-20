@@ -1,5 +1,7 @@
 // Thailand's pictures. Agong's house is drawn in 3D (activities/hub/), so this is only what the 2D screens need: the
-// passport and the trophy borrow the balloon until the family characters exist (gate 4 makes a real cover).
+// boat trip's fiddler crab sticker (the trip's one generated picture), and the balloon that the passport's friend and
+// the trophy borrow until the family characters have a real cover.
 import balloon from '../../assets/balloon.webp'
+import crab from './assets/fiddler-crab.webp'
 
-export const art = { balloon }
+export const art = { balloon, crab }

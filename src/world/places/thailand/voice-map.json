@@ -49,6 +49,13 @@
     "file": "b4ba7cc39d1a.mp3"
   },
   {
+    "text": "Thai cars drive on the left!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2456,
+    "file": "8ce90a849b18.mp3"
+  },
+  {
     "text": "We're at Agong's house in Thailand, Kaylee!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -854,11 +861,11 @@
     "file": "2896acd332c3.mp3"
   },
   {
-    "text": "A longtail boat has a car engine on a long stick!",
+    "text": "A longtail has a car engine on a stick!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4555,
-    "file": "e662db5e690e.mp3"
+    "ms": 3321,
+    "file": "e494dab1b12b.mp3"
   },
   {
     "text": "Pai means let's go!",
@@ -868,18 +875,18 @@
     "file": "ed769bec3b39.mp3"
   },
   {
-    "text": "The sea nibbled a notch around the bottom of the rock!",
+    "text": "The sea nibbled a notch in the rock!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3914,
-    "file": "fc6102c701ce.mp3"
+    "ms": 3626,
+    "file": "349950db60e9.mp3"
   },
   {
-    "text": "This village is built on stilts, over the sea!",
+    "text": "Houses on stilts, over the sea!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4026,
-    "file": "f9f1f2716284.mp3"
+    "ms": 2819,
+    "file": "4b0e86d8c81b.mp3"
   },
   {
     "text": "The kids here built a football field that floats!",
@@ -896,11 +903,11 @@
     "file": "69c5af1e962f.mp3"
   },
   {
-    "text": "Hong means room! A secret room inside the island!",
+    "text": "Hong means room, a secret room!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4378,
-    "file": "7bc5c84c0aa9.mp3"
+    "ms": 3473,
+    "file": "b24912232b6d.mp3"
   },
   {
     "text": "Mangrove trees stand on their roots!",
@@ -931,11 +938,11 @@
     "file": "3681cafa19d6.mp3"
   },
   {
-    "text": "A sea eagle! It catches fish with its feet!",
+    "text": "A sea eagle! It fishes with its feet!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4711,
-    "file": "452834f9350f.mp3"
+    "ms": 3162,
+    "file": "20d4c6dfacdd.mp3"
   },
   {
     "text": "A macaque! A cheeky monkey!",
@@ -959,18 +966,18 @@
     "file": "6c9e80112b8f.mp3"
   },
   {
-    "text": "A mudskipper is a fish that walks on mud!",
+    "text": "A mudskipper walks on mud!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 4050,
-    "file": "198a94ef9480.mp3"
+    "ms": 3367,
+    "file": "082124ef6225.mp3"
   },
   {
-    "text": "A monitor lizard! It swims like a little crocodile!",
+    "text": "A monitor lizard swims like a croc!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 5087,
-    "file": "f5237f32f55c.mp3"
+    "ms": 3090,
+    "file": "3bda9ebc52c4.mp3"
   },
   {
     "text": "A kingfisher! A flash of blue!",
@@ -985,5 +992,96 @@
     "sig": "ed7dbdac3d",
     "ms": 2646,
     "file": "036ff3842084.mp3"
+  },
+  {
+    "text": "We're home, Kaylee!",
+    "voice": "sri",
+    "sig": "db1e0738fa",
+    "ms": 1480,
+    "file": "7044aec94690.mp3"
+  },
+  {
+    "text": "Did you bring my photo?",
+    "voice": "agong",
+    "sig": "0f90e139f5",
+    "ms": 1590,
+    "file": "de65bfc92a83.mp3"
+  },
+  {
+    "text": "Beautiful! Thank you, Kaylee!",
+    "voice": "agong",
+    "sig": "0f90e139f5",
+    "ms": 2824,
+    "file": "ef2c2ac904a8.mp3"
+  },
+  {
+    "text": "Whoa! Cool!",
+    "voice": "gan",
+    "sig": "157be5e474",
+    "ms": 1933,
+    "file": "a80935f5a6b7.mp3"
+  },
+  {
+    "text": "Whoa!",
+    "voice": "ken",
+    "sig": "8506fed695",
+    "ms": 560,
+    "file": "ed6531e19303.mp3"
+  },
+  {
+    "text": "So cool, Kaylee!",
+    "voice": "bb",
+    "sig": "16e7dc84f7",
+    "ms": 1547,
+    "file": "5352244d05cc.mp3"
+  },
+  {
+    "text": "So pretty!",
+    "voice": "jum",
+    "sig": "4e8ef39b9e",
+    "ms": 1396,
+    "file": "4c274688494e.mp3"
+  },
+  {
+    "text": "Our boat trip!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1385,
+    "file": "a786238a8b94.mp3"
+  },
+  {
+    "text": "Fiddler crabs wave hello!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2306,
+    "file": "8597807fb09a.mp3"
+  },
+  {
+    "text": "Pick a photo for Agong!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1796,
+    "file": "197e4aefff00.mp3"
+  },
+  {
+    "text": "Tap Agong to give it to him!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1954,
+    "file": "ab615401d6be.mp3"
+  },
+  {
+    "text": "Tap the plane to fly home!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2504,
+    "file": "6c585cf25b9f.mp3"
+  },
+  {
+    "text": "Pack again, or go straight to the boat?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2722,
+    "file": "84fa172ff8f5.mp3"
   }
 ]

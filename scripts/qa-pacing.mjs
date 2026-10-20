@@ -20,6 +20,30 @@ const TALK_PER_TOUCH = 1.5 // seconds of talk per touch during play
 const video = args.includes('--video')
 const vp = VIEWPORTS[0] // iPad portrait
 
+// Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
+// friends), for the photo wall's screens. Runs in the page.
+function seedWall() {
+  const c = document.createElement('canvas')
+  c.width = 320
+  c.height = 240
+  const g = c.getContext('2d')
+  const sky = g.createLinearGradient(0, 0, 0, 240)
+  sky.addColorStop(0, '#A98FE8')
+  sky.addColorStop(0.6, '#FF9DC0')
+  sky.addColorStop(1, '#5FC7B4')
+  g.fillStyle = sky
+  g.fillRect(0, 0, 320, 240)
+  g.fillStyle = '#8A7FA8'
+  g.fillRect(150, 60, 26, 130)
+  g.fillStyle = '#FF8FB8'
+  for (const x of [90, 220, 250]) {
+    g.beginPath()
+    g.arc(x, 180, 22, 0, 7)
+    g.fill()
+  }
+  localStorage.setItem('kaylee-gamepack:/:saved:thailand-photo-wall', JSON.stringify([{ trip: 'boat-trip', src: c.toDataURL('image/jpeg', 0.8), at: '2026-10-20' }]))
+}
+
 const SCENARIOS = [
   { name: 'world-map (first visit)', id: 'world', hash: '#/world', reset: true, play: false },
   { name: 'australia intro + map', id: 'intro', hash: '#/world/australia', reset: true, play: false },
@@ -79,6 +103,12 @@ const SCENARIOS = [
   { name: 'thailand bay: the hong', id: 'bay-hong', hash: '#/world/thailand/boat-trip/hong', reset: true },
   { name: 'thailand bay: the nail island and the photo', id: 'bay-nail', hash: '#/world/thailand/boat-trip/nail', reset: true },
   { name: 'thailand bay: the sunset ride back', id: 'bay-sunset', hash: '#/world/thailand/boat-trip/sunset', reset: true },
+  // Home (step 5): a home link builds the bay first for its photos, then the flight home, the van, the photo for Agong.
+  { name: 'thailand trip: home, the photo for agong', id: 'trip-home', hash: '#/world/thailand/boat-trip/home?photos=village,hong,nail&found=crab,eagle', reset: true },
+  { name: 'thailand trip: a replay (🧳 or 🚤)', id: 'trip-replay', hash: '#/world/thailand/boat-trip/invite?replay=1', reset: true },
+  { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
+  // (?gl=off goes before the hash: the section's address drops anything it doesn't know.)
+  { name: 'thailand trip: picture book without webgl', id: 'trip-book', search: '?gl=off', hash: '#/world/thailand/boat-trip/invite', reset: true },
 ].filter((s) => !flag('only') || flag('only').split(',').includes(s.id))
 
 // Is there something (other than the story overlay, the top bar or a "hear it again" button) she can touch?
@@ -130,6 +160,7 @@ try {
     try {
       await openApp(page, base)
       if (s.reset) await page.evaluate(() => localStorage.clear())
+      if (s.seed) await page.evaluate(s.seed)
       if (s.stampAll) {
         await page.goto(`${base}#/world/${s.stampAll === true ? 'australia' : s.stampAll}`)
         await page.waitForTimeout(500)
@@ -142,7 +173,7 @@ try {
       await page.evaluate(() => (window.__kayleeSpeech = []))
       const t0 = await page.evaluate(() => performance.now())
       await page.evaluate(watchFirstTouch, [s.hash, interactive.toString()])
-      await page.goto(`${base}${s.hash}`)
+      await page.goto(`${base}${s.search ?? ''}${s.hash}`)
       // Story lines play out on their own (instantly in an automated browser); wait for the first touchable thing.
       await page.waitForFunction(() => window.__qaTouchAt != null, null, { timeout: 9000 }).catch(() => {})
       const tTouch = await page.evaluate(() => window.__qaTouchAt)

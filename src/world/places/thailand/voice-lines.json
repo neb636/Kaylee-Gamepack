@@ -6,6 +6,7 @@
   "The elephant is Thailand's special animal!",
   "In Thai, chang means elephant!",
   "Thailand's flag is red, white and blue!",
+  "Thai cars drive on the left!",
   "We're at Agong's house in Thailand, Kaylee!",
   "Tap the door to go inside!",
   "Tap your family to say hello!",
@@ -382,23 +383,60 @@
   "Drive back to the pier!",
   "Paddle back out to the boat!",
   "Thai boats wear ribbons for good luck!",
-  "A longtail boat has a car engine on a long stick!",
+  "A longtail has a car engine on a stick!",
   "Pai means let's go!",
-  "The sea nibbled a notch around the bottom of the rock!",
-  "This village is built on stilts, over the sea!",
+  "The sea nibbled a notch in the rock!",
+  "Houses on stilts, over the sea!",
   "The kids here built a football field that floats!",
   "Khob khun means thank you!",
-  "Hong means room! A secret room inside the island!",
+  "Hong means room, a secret room!",
   "Mangrove trees stand on their roots!",
   "Ko Tapu means Nail Island!",
   "Boats stay back so the Nail Island keeps standing!",
   "A needlefish! It skips over the water!",
-  "A sea eagle! It catches fish with its feet!",
+  "A sea eagle! It fishes with its feet!",
   "A macaque! A cheeky monkey!",
   "The village cat lives on a boat!",
   "This crab waves its big claw!",
-  "A mudskipper is a fish that walks on mud!",
-  "A monitor lizard! It swims like a little crocodile!",
+  "A mudskipper walks on mud!",
+  "A monitor lizard swims like a croc!",
   "A kingfisher! A flash of blue!",
-  "This porpoise has no fin on its back!"
+  "This porpoise has no fin on its back!",
+  {
+    "text": "We're home, Kaylee!",
+    "voice": "sri"
+  },
+  {
+    "text": "Did you bring my photo?",
+    "voice": "agong"
+  },
+  {
+    "text": "Beautiful! Thank you, Kaylee!",
+    "voice": "agong"
+  },
+  {
+    "text": "Whoa! Cool!",
+    "voice": "gan"
+  },
+  {
+    "text": "Whoa!",
+    "voice": "ken"
+  },
+  {
+    "text": "So cool, Kaylee!",
+    "voice": "bb"
+  },
+  {
+    "text": "So pretty!",
+    "voice": "jum"
+  },
+  {
+    "text": "Our boat trip!",
+    "voice": "ji"
+  },
+  "Fiddler crabs wave hello!",
+  "Pick a photo for Agong!",
+  "Tap Agong to give it to him!",
+  "Tap the plane to fly home!",
+  "Pack again, or go straight to the boat?"
 ]

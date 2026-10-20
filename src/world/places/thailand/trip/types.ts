@@ -13,8 +13,8 @@ export interface TripDef {
   /** How she gets there: Aunty Sri's van picks them up at the goodbye (no ride: it pulls away and they're at the
    *  airport), the pilot flies (she rides and plays). */
   legs: ({ kind: 'van'; driver: 'sri' } | { kind: 'airport' } | { kind: 'fly'; from: LonLat; to: LonLat; seat: 'window' })[]
-  /** Seconds each ride takes, whatever she does (the hard caps). */
-  caps: { fly: number }
+  /** Seconds each ride takes, whatever she does (the hard caps), and the flight's on a replay. */
+  caps: { fly: number; replayFly?: number }
   /** The trip's own activity starts at this section. */
   arrive: string
 }

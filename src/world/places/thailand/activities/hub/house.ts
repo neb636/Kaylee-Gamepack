@@ -79,6 +79,8 @@ export interface HousePlugin {
   hides?(id: string): boolean
   /** Its own pickable objects, for the tap raycast. */
   readonly roots?: Object3D[]
+  /** Someone in the family glows ("tap me!"), e.g. Agong while she has his photo to give him. */
+  glows?(id: string): boolean
   readonly busy?: boolean
   qa?(): Record<string, unknown>
 }
@@ -831,6 +833,7 @@ export class House implements World3D {
           at.y += f.height * (f.pose === 'lie' ? 0.2 : 0.5)
           r = f.height * 0.42
           show = true
+          glow = !!this.plugin?.glows?.(id)
         }
       } else {
         const p = PICKABLES.find((q) => q.id === id)

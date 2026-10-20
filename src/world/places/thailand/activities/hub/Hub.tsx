@@ -1,14 +1,16 @@
 // Thailand's home base: Agong's house. Kaylee arrives by tuk-tuk, then walks around the street, downstairs and her
 // room upstairs (deep-linkable spots, sections.ts). The 3D house is HouseView; without WebGL it's the flat house.
 // Sparkle (Guide) says the few things there are to say; the family say hello themselves.
-import { motion } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
-import { sounds } from '../../../../../sdk'
+import { AnimatePresence, motion } from 'motion/react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { say, sounds } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { flag } from '../../engine/flags'
 import { L } from '../../lines'
 import { Ask, saidYes } from '../../trip/legs/Ask'
+import { WallPlugin, WALL_SLOTS, wallAnchorId } from '../../trip/wall'
+import { newestByTrip, useWallPhotos } from '../../trip/wall-photos'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
 import { Guide, type GuideHandle } from './Guide'
@@ -37,6 +39,15 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const guide = useRef<GuideHandle>(null)
   // Read once: the address bar follows her spots and drops ?debug=1 as soon as she moves.
   const [debug] = useState(() => flag('debug') !== null)
+  // Her trip photos on the wall downstairs (saved on the iPad): tap one and it comes close.
+  const [wallPhotos] = useWallPhotos()
+  const onWall = useMemo(() => newestByTrip(wallPhotos), [wallPhotos])
+  const wallAnchors = useMemo(() => [...onWall.keys()].filter((t) => t in WALL_SLOTS).map((t) => ({ id: wallAnchorId(t), label: 'Our trip photo', kind: 'thing' as const })), [onWall])
+  const [looking, setLooking] = useState<string | null>(null)
+  const look = (trip: string) => {
+    setLooking(trip)
+    void say(L.home.wall)
+  }
 
   useEffect(() => {
     enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : {})
@@ -83,7 +94,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       {mode === 'flat' ? (
         <Flat spot={spot} onSpot={onSpot} photo={photo} />
       ) : (
-        <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet: (id) => id === 'ji' && !photo && ask(1200) }} />
+        <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} plugin={onWall.size ? () => new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos') : undefined} extraAnchors={wallAnchors} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet: (id) => id === 'ji' && !photo && ask(1200) }} />
       )}
       {mode === 'lost' && (
         <button
@@ -126,6 +137,33 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           🎉
         </motion.button>
       )}
+      {/* A trip photo from the wall, close up. Tap anywhere to put it back. */}
+      <AnimatePresence>
+        {looking && onWall.get(looking) && (
+          <motion.button
+            key="wall-photo"
+            aria-label="Put the photo back"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => {
+              sounds.pop()
+              setLooking(null)
+            }}
+            style={{ position: 'absolute', inset: 0, zIndex: 45, border: 'none', background: 'rgba(43,35,48,.35)', display: 'grid', placeItems: 'center', padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 16px)' }}
+          >
+            <motion.span
+              initial={{ scale: 0.25, x: '-30vw', rotate: -8 }}
+              animate={{ scale: 1, x: 0, rotate: -2 }}
+              exit={{ scale: 0.25, x: '-30vw', rotate: -8 }}
+              transition={{ type: 'spring', stiffness: 220, damping: 20 }}
+              style={{ display: 'block', width: 'min(640px, 88vw, calc((100vh - 220px) * 4 / 3))', padding: 'clamp(12px, 2.4vmin, 22px)', background: 'var(--hotpink)', borderRadius: 18, boxShadow: 'var(--shadow)' }}
+            >
+              <img src={onWall.get(looking)!.src} alt="Our boat trip" style={{ display: 'block', width: '100%', borderRadius: 6, border: '6px solid var(--cream)' }} />
+            </motion.span>
+          </motion.button>
+        )}
+      </AnimatePresence>
       {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking} />}
       <Ask open={asking && !arriving && mode !== 'lost'} onYes={yes} onNotYet={() => setAsking(false)} />
       {debug && <Debug houseRef={houseRef} />}
