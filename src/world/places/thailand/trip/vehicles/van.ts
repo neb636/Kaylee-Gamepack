@@ -1,7 +1,8 @@
 // Aunty Sri's van: a quick white electric van (Dad, 2026-10-19), tall and rounded, with a mint stripe and a
 // light bar for a face (no grille: it's electric, and it hums instead of putting). The steering wheel is on the right, as
 // in every Thai car, so Aunty Sri sits on the right and Daddy beside her; Mommy and Kaylee sit in the middle row. The
-// sliding door is on the left, the curb side. Big windows all round, so whoever is inside shows. Faces +z.
+// sliding door is on the left, the curb side. Big windows all round, so whoever is inside shows. Faces +z. The roof is
+// high enough for Daddy's ears with everyone sitting up (seated, his head comes to about 2.45 m).
 import { Group, Mesh, MeshBasicMaterial } from 'three'
 import type { Bag } from '../../engine/dispose'
 import { merge, P, solid, type V3 } from '../../engine/geo'
@@ -34,6 +35,13 @@ export function buildVan(bag: Bag): Van {
   root.add(body)
   const L = 4.3
   const W = 1.82
+  // The roof's middle, and how much taller the windows and pillars are for it than for a 2 m roof.
+  const ROOF = 2.62
+  const up = ROOF - 2.0
+  // The windshield stands from the dashboard (y, z) up to the roof, leaning back a little.
+  const tilt = 0.25
+  const ws = (ROOF - 0.07 - 1.14) / Math.cos(tilt)
+  const wsAt = (dz = 0): V3 => [0, 1.14 + (ws / 2) * Math.cos(tilt), 1.7 - (ws / 2) * Math.sin(tilt) + dz]
   const parts = [
     // The tub, the mint stripe along it, a soft nose with a light bar, and the bumpers.
     P.rbox(W, 0.7, L, 0.26, BODY, { at: [0, 0.62, 0] }),
@@ -54,16 +62,17 @@ export function buildVan(bag: Bag): Van {
     P.rbox(W - 0.14, 0.24, 0.4, 0.08, TRIM, { at: [0, 1.06, 1.45] }),
     P.torus(0.16, 0.025, PAL.ink, { at: [-0.44, 1.2, 1.22], rot: [-0.5, 0, 0] }),
     // The roof, and the pillars that hold it up.
-    P.rbox(W - 0.02, 0.14, L - 0.75, 0.07, BODY, { at: [0, 2.0, -0.32] }),
-    ...[-1, 1].flatMap((s) => [-L / 2 + 0.12, -0.15, 0.95, 1.5].map((z, i) => P.box(0.09, i === 3 ? 0.78 : 0.98, 0.1, BODY, { at: [s * (W / 2 - 0.05), i === 3 ? 1.48 : 1.46, z], rot: i === 3 ? [-0.5, 0, 0] : [0, 0, 0] }))),
+    P.rbox(W - 0.02, 0.14, L - 0.75, 0.07, BODY, { at: [0, ROOF, -0.32] }),
+    ...[-1, 1].flatMap((s) => [-L / 2 + 0.12, -0.15, 0.95].map((z) => P.box(0.09, 0.98 + up, 0.1, BODY, { at: [s * (W / 2 - 0.05), 1.46 + up / 2, z] }))),
+    ...[-1, 1].map((s) => P.box(0.09, ws, 0.1, BODY, { at: [s * (W / 2 - 0.05), wsAt()[1], wsAt(-0.02)[2]], rot: [-tilt, 0, 0] })),
   ]
   body.add(solid(merge(parts), bag, 2))
   // Big windows all round (see-through, so the family shows inside).
   const glassMat = bag.add(new MeshBasicMaterial({ color: GLASS, transparent: true, opacity: 0.3, depthWrite: false }))
   const glass = [
-    ...[-1, 1].map((s) => P.box(0.02, 0.92, 2.95, '#FFFFFF', { at: [s * (W / 2 - 0.05), 1.46, -0.35] })),
-    P.box(W - 0.2, 0.86, 0.02, '#FFFFFF', { at: [0, 1.5, -L / 2 + 0.12] }),
-    P.box(W - 0.2, 0.8, 0.02, '#FFFFFF', { at: [0, 1.5, 1.52], rot: [-0.5, 0, 0] }),
+    ...[-1, 1].map((s) => P.box(0.02, 0.92 + up, 2.95, '#FFFFFF', { at: [s * (W / 2 - 0.05), 1.46 + up / 2, -0.35] })),
+    P.box(W - 0.2, 0.86 + up, 0.02, '#FFFFFF', { at: [0, 1.5 + up / 2, -L / 2 + 0.12] }),
+    P.box(W - 0.2, ws, 0.02, '#FFFFFF', { at: wsAt(), rot: [-tilt, 0, 0] }),
   ]
   for (const g of glass) body.add(new Mesh(bag.add(g), glassMat))
 
@@ -72,7 +81,7 @@ export function buildVan(bag: Bag): Van {
   const doorAt: V3 = [W / 2 + 0.035, 0, 0.35]
   door.position.set(...doorAt)
   door.add(solid(merge([P.rbox(0.05, 0.62, 1.0, 0.04, BODY, { at: [0, 0.66, 0] }), P.box(0.06, 0.07, 1.0, PAL.mint, { at: [0, 0.52, 0] }), P.box(0.07, 0.04, 0.16, TRIM, { at: [0.01, 0.82, -0.35] })]), bag, 2))
-  door.add(new Mesh(bag.add(P.box(0.02, 0.82, 0.96, '#FFFFFF', { at: [0, 1.44, 0] })), glassMat))
+  door.add(new Mesh(bag.add(P.box(0.02, 0.82 + up, 0.96, '#FFFFFF', { at: [0, 1.44 + up / 2, 0] })), glassMat))
   body.add(door)
 
   const wheels: Group[] = []

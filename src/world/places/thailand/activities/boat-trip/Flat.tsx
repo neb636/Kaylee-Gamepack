@@ -28,7 +28,7 @@ interface Props {
 
 /** The legs on the way there and back: a picture and what comes next. */
 const LEGS: Partial<Record<BoatSection, { scene: string; bg: string; next: BoatSection; line?: Line }>> = {
-  goodbye: { scene: '🏠 👋 🚐', bg: 'linear-gradient(#FFD9C4, #FFF1E2)', next: 'airport', line: L.trip.goodbye.agong },
+  goodbye: { scene: '🏠 👋 🚐', bg: 'linear-gradient(#FFD9C4, #FFF1E2)', next: 'airport', line: L.trip.goodbye.van },
   airport: { scene: '🧳 ➡️ 🛄', bg: 'linear-gradient(#E3DAFF, #FFF7F0)', next: 'takeoff', line: L.trip.airport.laugh },
   takeoff: { scene: '💺 🛫', bg: 'linear-gradient(#A8DCFF, #E4F3FC)', next: 'fly', line: L.trip.plane.wheee },
   fly: { scene: '☁️ ✈️ 🐘', bg: 'linear-gradient(#8FCBFF, #BDE3FF)', next: 'land', line: L.trip.elephant },
