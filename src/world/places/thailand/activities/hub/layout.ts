@@ -47,9 +47,10 @@ export const DIM = {
    * The U-turn stairs in the left half, opening across the width of the house. Flight 1 (the front lane, zFront..mid)
    * climbs from the foot at x1 toward the left wall, to a landing against it (x0..xLanding); flight 2 (the back lane,
    * mid..zBack) climbs back across and comes out upstairs at x1. Each flight has `steps` treads; the space under
-   * flight 2 is closed in.
+   * flight 2 is closed in. (Dad, 2026-10-19: 45 cm further back, away from the grey couch; flight 2's back
+   * side now runs along the glass wall upstairs.)
    */
-  stairs: { x0: -3.125, xLanding: -2.225, x1: 0, zFront: -8.4, mid: -9.55, zBack: -10.7, steps: 7 },
+  stairs: { x0: -3.125, xLanding: -2.225, x1: 0, zFront: -8.85, mid: -10.0, zBack: -11.15, steps: 7 },
   /** Upstairs: the balcony railing at the front edge of the floor (open to the shop below), and the glass wall into
    *  Kaylee's room, with its doorway. (Dad, 2026-10-19: stairs, railing and glass all 2.2 m further forward than at
    *  first, so the overlook is smaller and her room bigger.) */
@@ -120,10 +121,10 @@ export const PICKABLES: Pickable[] = [
   { id: 'rice-cooker', label: 'Rice cooker', floor: 0, area: 'inside', at: [2.775, 1.0, -18.098], r: 0.4, react: 'puff', use: { x: 2.075, z: -18.098, face: 90, pose: 'peek' } },
   { id: 'doormat', label: 'Go outside', floor: 0, area: 'inside', at: [0, 0.05, -0.6], r: 0.7, react: 'jelly', use: { x: 0.3, z: 1.35, face: 15, pose: 'stand' } },
   { id: 'shoes', label: 'Shoes', floor: 0, area: 'inside', at: [2.825, 0.2, -0.85], r: 0.42, react: 'hop', use: { x: 2.125, z: -0.85, face: 90, pose: 'peek' } },
-  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-1.0, 0.9, -9.0], r: 0.8, react: 'stairs' },
+  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-1.0, 0.9, -9.5], r: 0.8, react: 'stairs' },
 
   // ---- Upstairs: the hallway, then Kaylee's room at the back ----
-  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-0.6, U + 0.3, -10.1], r: 0.75, react: 'stairs' },
+  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-0.6, U + 0.3, -10.6], r: 0.75, react: 'stairs' },
   { id: 'plant', label: 'Plant', floor: 1, area: 'inside', at: [2.1, U + 0.4, -5.65], r: 0.35, react: 'jelly', use: { x: 1.4, z: -5.8, face: 90, pose: 'peek' } },
   { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [1.85, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: 1.85, z: -16.998, face: 180, pose: 'stand' } },
   { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-2.275, U + 0.25, -19.2], r: 1.0, react: 'jelly', use: { x: -1.0, z: -19.0, face: 25, pose: 'bounce', snap: { x: -1.95, z: -19.0, y: 0.22 } } },
@@ -206,7 +207,7 @@ export const STARTS = {
   arrive: { floor: 0 as const, x: 0.45, z: 1.55, face: 15 },
   street: { floor: 0 as const, x: 0.45, z: 1.55, face: 15 },
   downstairs: { floor: 0 as const, x: 0.2, z: -1.3, face: 160 },
-  upstairs: { floor: 1 as const, x: 0.55, z: -10.1, face: 90 },
+  upstairs: { floor: 1 as const, x: 0.55, z: -10.6, face: 90 },
   family: { floor: 0 as const, x: 1.05, z: 1.75, face: 0 },
 }
 

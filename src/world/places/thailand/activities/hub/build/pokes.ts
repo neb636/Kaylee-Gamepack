@@ -37,7 +37,7 @@ export class Reactor {
   get shutterOpen() {
     return this.shutter.open
   }
-  /** Rolls the shutter up (or puts it straight up/down for a deep link). */
+  /** Folds the front gates open (or opens/closes them at once for a deep link). The id stays 'shutter'. */
   setShutter(open: boolean, instant = false) {
     this.shutter.open = open
     if (instant) this.shutter.value = open ? 1 : 0
@@ -142,11 +142,13 @@ export class Reactor {
     if (hands) hands.rotation.x = -t * (this.active.has('clock') ? 9 : 0.6)
     // Incense: a slow curl of smoke all the time, more after a tap.
     if (Math.random() < dt * 0.9) for (const n of ['altar.smoke', 'shrine.smoke']) this.puff(get(n))
-    // The shutter rolls up (squashes toward its top).
+    // The front gates fold open, each leaf squashing toward its side.
     const target = this.shutter.open ? 1 : 0
     this.shutter.value += clamp(target - this.shutter.value, -dt / 1.1, dt / 1.1)
-    const curtain = get('shutter.curtain')
-    if (curtain) curtain.scale.y = 1 - 0.94 * this.shutter.value
+    for (const n of ['shutter.left', 'shutter.right']) {
+      const leaf = get(n)
+      if (leaf) leaf.scale.x = 1 - 0.9 * this.shutter.value
+    }
 
     // ---- Reactions to taps ----
     for (const [id, a] of this.active) {
