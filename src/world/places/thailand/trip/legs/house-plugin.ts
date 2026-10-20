@@ -52,7 +52,7 @@ const ROOM = {
   suitcase: { x: -0.5, z: -19.45 },
   kaylee: { x: 0.2, z: -19.3, face: -95 },
   ji: { floor: 1 as const, x: 1.55, z: -20.1, face: -25, pose: 'stand' as const },
-  gan: { floor: 1 as const, x: -2.275, z: -17.3, face: 0, pose: 'lie' as const },
+  gan: { floor: 1 as const, x: -2.65, z: -19.3, face: 0, pose: 'lie' as const },
   items: {
     sunhat: [-1.05, 0, -18.3],
     sunglasses: [-0.45, 0, -18.0],
@@ -257,7 +257,7 @@ export class TripHouse implements HousePlugin {
   // ---------------------------------------------------------------- touch
 
   hides(id: string) {
-    return id === 'suitcase' || id === 'map'
+    return id === 'suitcase'
   }
 
   private setPhase(p: Phase) {

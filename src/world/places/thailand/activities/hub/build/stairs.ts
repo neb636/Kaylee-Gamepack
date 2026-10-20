@@ -1,8 +1,7 @@
 // The U-turn stairs in the left half, like Agong's real ones (Dad's photo): concrete steps with cream terrazzo treads
 // and brick-red edges, red railings with a brown handrail. They open across the width of the house: flight 1 climbs
 // from the foot toward the left wall, a landing against it, then flight 2 climbs back across (closed in underneath)
-// and comes out in the upstairs hallway. Shared by both floors: from upstairs you see them through the stairwell, so
-// the bit of left wall beside them lives here too.
+// and comes out in the upstairs hallway. Shared by both floors: from upstairs you see them through the stairwell.
 import type { BufferGeometry, Group } from 'three'
 import { P } from '../../../engine/geo'
 import { DIM, LANES, RISE, RUN } from '../layout'
@@ -13,7 +12,6 @@ const TREAD = '#F7EBD6'
 const EDGE = '#E07A6A'
 const BAR = '#EE7B70'
 const RAIL = '#9B6A55'
-const WALL = '#F6EEDC'
 
 export function buildStairs(kit: Kit): Group {
   const { x0, xLanding, x1, zFront, mid, zBack, steps } = DIM.stairs
@@ -39,8 +37,6 @@ export function buildStairs(kit: Kit): Group {
     body.push(P.box(RUN + 0.005, y, w2, PLASTER, { at: [x, y / 2, LANES.up2] }))
     tops.push(P.box(RUN - 0.03, 0.02, w2 - 0.02, TREAD, { at: [x + 0.01, y + 0.01, LANES.up2] }), P.box(0.05, 0.035, w2, EDGE, { at: [x - RUN / 2 + 0.02, y - 0.005, LANES.up2] }))
   }
-  // The left wall beside the stairs.
-  body.push(P.box(0.15, g0, zFront - zBack, WALL, { at: [x0 - 0.075, g0 / 2, (zFront + zBack) / 2] }))
 
   const stairs = poke(kit, 'stairs-up', [], [0, 0, 0])
   stairs.add(scenery(kit, body, 2), scenery(kit, tops, 1))

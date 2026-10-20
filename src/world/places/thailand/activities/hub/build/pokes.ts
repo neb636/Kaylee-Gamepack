@@ -138,9 +138,6 @@ export class Reactor {
       const boost = this.active.has(name.split('.')[0]) ? 1.5 : 1
       if (f) f.scale.setScalar(boost * (1 + Math.sin(t * 13 + name.length) * 0.12))
     }
-    // The elephant map: the boat pin bobs.
-    const pin = get('map.pin')
-    if (pin) pin.position.y = pin.userData.baseY + Math.abs(Math.sin(t * 2.4)) * 0.025
     const hands = get('clock.hands')
     if (hands) hands.rotation.x = -t * (this.active.has('clock') ? 9 : 0.6)
     // Incense: a slow curl of smoke all the time, more after a tap.
