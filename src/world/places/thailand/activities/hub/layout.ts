@@ -21,6 +21,7 @@
 //  ||L               |          |+-------+  top   |
 //  ||L (1) <<< foot  |          || well  |  plant |
 //  |+-------+        |          |+-------+ hallway|
+//  |=cab= door =cab==|          |                 |
 //  | couch       fan |          |=== balcony rail=|
 //  | table    Agong D|          |  open: looks    |
 //  | table         E |          |  down into the  |
@@ -51,6 +52,12 @@ export const DIM = {
    * side now runs along the glass wall upstairs.)
    */
   stairs: { x0: -3.125, xLanding: -2.225, x1: 0, zFront: -8.85, mid: -10.0, zBack: -11.15, steps: 7 },
+  /**
+   * The wooden divider between the front room and the stairs, like Agong's real one (Dad's photo, 2026-10-20): a wall
+   * of rosewood cabinets, floor to ceiling, centered at `z` and `d` deep, with a doorway (open0..open1) she walks
+   * through to the stairs and the back room.
+   */
+  divider: { z: -8.3, d: 0.42, open0: -1.4, open1: 0.95 },
   /** Upstairs: the balcony railing at the front edge of the floor (open to the shop below), and the glass wall into
    *  Kaylee's room, with its doorway. (Dad, 2026-10-19: stairs, railing and glass all 2.2 m further forward than at
    *  first, so the overlook is smaller and her room bigger.) */
@@ -159,6 +166,8 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [2.425, DIM.right, -16.25, -15.55], // fridge
       [2.575, DIM.right, -1.25, -0.45], // shoes
       [S.x0, S.x1 + 0.05, S.zBack, S.zFront], // stairs
+      [DIM.left, DIM.divider.open0, DIM.divider.z - DIM.divider.d / 2, DIM.divider.z + DIM.divider.d / 2], // the divider, left of the doorway
+      [DIM.divider.open1, DIM.right, DIM.divider.z - DIM.divider.d / 2, DIM.divider.z + DIM.divider.d / 2], // and right of it
       [-1.0, 0.4, B, B + 0.55], // altar
       [0.65, 1.15, B, B + 0.4], // little shrine
       [2.475, DIM.right, -20.298, -17.298], // kitchen counter

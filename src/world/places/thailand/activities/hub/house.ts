@@ -28,6 +28,7 @@ import { say } from '../../../../../sdk'
 import { L } from '../../lines'
 import { sfx } from '../../sfx'
 import { Gecko } from './build/gecko'
+import { buildDivider, DIVIDER_BASE } from './build/divider'
 import { buildGround } from './build/ground'
 import type { Kit } from './build/kit'
 import { Reactor, rememberRest } from './build/pokes'
@@ -158,6 +159,7 @@ export class House implements World3D {
 
     const street = buildStreet(kit)
     const ground = buildGround(kit)
+    const divider = buildDivider(kit)
     const upper = buildUpper(kit)
     const stairs = buildStairs(kit)
     this.gecko = new Gecko(kit)
@@ -172,7 +174,7 @@ export class House implements World3D {
     const upperFront = street.upperFront
     upperAll.add(upperRoom, street.balcony, upperFront)
     const groundRoom = new Group()
-    groundRoom.add(ground.room, ground.rightWall)
+    groundRoom.add(ground.room, ground.rightWall, divider.low, divider.high)
     scene.add(street.ground, street.tall, street.props, street.front, street.frontRight, street.roof, groundRoom, stairs, upperAll)
     this.groups = { tall: street.tall, props: street.props, roof: street.roof, upper: upperAll, upperRoom, upperFront, front: street.front, groundRoom, stairs }
     // Walls that lower so the camera can see in: the right walls (to 1 m), the front pillar and the upper front.
@@ -183,10 +185,12 @@ export class House implements World3D {
       { obj: upperFront, low: 0.12, when: (m) => m === 'inside1', value: 1 },
       // Upstairs the glass wall stands between the camera and her room once she's in it.
       { obj: upper.glassWall, low: 0.12, when: (m) => m === 'inside1' && this.kaylee.position.z < DIM.hall.zGlass - 0.1, value: 1 },
+      // Downstairs the divider's cabinets would hide her once she walks through its doorway (the cupboards stay).
+      { obj: divider.high, low: 0.02, when: (m) => m === 'inside0' && this.kaylee.position.z < DIM.divider.z + DIM.divider.d / 2, value: 1 },
     )
     // The upper wall pieces scale from the upstairs floor, not from the street.
     const upperCuts: Object3D[] = [upper.rightWall, upperFront, upper.glassWall]
-    for (const c of this.cuts) c.obj.userData.cutBase = upperCuts.includes(c.obj) ? DIM.g0 : 0
+    for (const c of this.cuts) c.obj.userData.cutBase = upperCuts.includes(c.obj) ? DIM.g0 : c.obj === divider.high ? DIVIDER_BASE : 0
 
     this.reactor = new Reactor(kit, this.bag)
     scene.add(this.reactor.root)
