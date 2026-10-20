@@ -1,9 +1,6 @@
-// Flat pictures drawn in code onto canvases (the 3D scenes use them as textures): the paper elephant map in Kaylee's
-// room, the plane's seat-back screen, and the airport's x-ray screen. All from the real outline (outline.ts), never
-// generated. No three.js here: just the 2D canvas.
-import { ELEPHANT, flat, FLAT_SIZE, PHUKET, PLACES, THAILAND, type LonLat } from './outline'
-
-const INK = '#2B2330'
+// Flat pictures drawn in code onto canvases (the 3D scenes use them as textures): the plane's seat-back screen and the
+// airport's x-ray screen. All from the real outline (outline.ts), never generated. No three.js here: just the 2D canvas.
+import { flat, FLAT_SIZE, PHUKET, PLACES, THAILAND, type LonLat } from './outline'
 
 /** Where a place sits on a map drawn into a w × h box (`fit` = share of the box the country may fill). */
 function projector(w: number, h: number, fit = 0.9) {
@@ -14,15 +11,6 @@ function projector(w: number, h: number, fit = 0.9) {
   }
 }
 
-/** The elephant map's paper, as a share of its size: where a place is (u right, v down, 0..1). */
-export function mapUV(ll: LonLat): [number, number] {
-  const [x, y] = projector(1, MAP_ASPECT_H, MAP_FIT)(ll)
-  return [x, y / MAP_ASPECT_H]
-}
-/** The paper map is this much taller than wide; the country fills this share of it. */
-export const MAP_ASPECT_H = 1.42
-const MAP_FIT = 0.86
-
 function trace(ctx: CanvasRenderingContext2D, at: (ll: LonLat) => [number, number], ring: LonLat[], wobble = 0) {
   ctx.beginPath()
   ring.forEach((ll, i) => {
@@ -32,112 +20,6 @@ function trace(ctx: CanvasRenderingContext2D, at: (ll: LonLat) => [number, numbe
     else ctx.lineTo(x + j, y - j)
   })
   ctx.closePath()
-}
-
-/** A crayon line: a few passes, each a little off, a little see-through. */
-function crayon(ctx: CanvasRenderingContext2D, color: string, width: number, path: (k: number) => void) {
-  ctx.save()
-  ctx.strokeStyle = color
-  ctx.lineCap = ctx.lineJoin = 'round'
-  for (let k = 0; k < 3; k++) {
-    ctx.globalAlpha = 0.55
-    ctx.lineWidth = width * (1 - k * 0.18)
-    path(k)
-    ctx.stroke()
-  }
-  ctx.restore()
-}
-
-/** The paper map of Thailand taped on her wall: the real outline, sea round it, and Kaylee's crayon doodles that make it
- *  an elephant (an eye in the north, a big ear round the northeast). The pins are 3D, on top of it. Tapped, the crayon
- *  elephant comes alive for a moment: `flap` (0..1) swings its ear out and back, and it winks. */
-export function drawElephantMap(canvas: HTMLCanvasElement, flap = 0) {
-  const w = canvas.width
-  const h = canvas.height
-  const ctx = canvas.getContext('2d')!
-  const at = projector(w, h, MAP_FIT)
-  // Paper, and a pale sea.
-  ctx.fillStyle = '#FFF6E4'
-  ctx.fillRect(0, 0, w, h)
-  ctx.fillStyle = '#CFEBFF'
-  roundRect(ctx, w * 0.05, h * 0.035, w * 0.9, h * 0.93, w * 0.04)
-  ctx.fill()
-  // The land, with a thick ink edge.
-  ctx.fillStyle = '#B9E6A8'
-  trace(ctx, at, THAILAND)
-  ctx.fill()
-  trace(ctx, at, PHUKET)
-  ctx.fill()
-  ctx.strokeStyle = INK
-  ctx.lineJoin = 'round'
-  ctx.lineWidth = w * 0.012
-  trace(ctx, at, THAILAND)
-  ctx.stroke()
-  trace(ctx, at, PHUKET)
-  ctx.stroke()
-  // Kaylee's crayon: the ear round the northeast bulge, the eye in the north, and the trunk's curl at the bottom.
-  // The ear swings out from where it meets the head (its west side), and back.
-  const swing = Math.sin(flap * Math.PI * 2) * (1 - flap) * 0.55
-  const hinge = ELEPHANT.ear[0]
-  const ear = ELEPHANT.ear.map(([lon, lat]): LonLat => [lon + (lon - hinge[0]) * swing, lat + (lat - hinge[1]) * swing * 0.4])
-  crayon(ctx, '#FF5FA2', w * 0.016, (k) => {
-    // Through the midpoints, so the loop is round like a crayon line.
-    const j = (k - 1) * w * 0.004
-    const pts = ear.map((ll) => at(ll)).map(([x, y]) => [x + j, y + j] as const)
-    const mid = (a: readonly number[], b: readonly number[]) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]
-    ctx.beginPath()
-    const start = mid(pts[pts.length - 1], pts[0])
-    ctx.moveTo(start[0], start[1])
-    pts.forEach((p, i) => {
-      const m = mid(p, pts[(i + 1) % pts.length])
-      ctx.quadraticCurveTo(p[0], p[1], m[0], m[1])
-    })
-    ctx.closePath()
-  })
-  const [ex, ey] = at(ELEPHANT.eye)
-  const wink = flap > 0.15 && flap < 0.55
-  ctx.fillStyle = INK
-  if (wink) {
-    // A happy closed eye: a little upside-down smile.
-    crayon(ctx, INK, w * 0.014, () => {
-      ctx.beginPath()
-      ctx.arc(ex, ey + w * 0.012, w * 0.03, Math.PI * 1.1, Math.PI * 1.9)
-    })
-  } else {
-    ctx.beginPath()
-    ctx.arc(ex, ey, w * 0.032, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.fillStyle = '#FFFFFF'
-    ctx.beginPath()
-    ctx.arc(ex + w * 0.01, ey - w * 0.012, w * 0.011, 0, Math.PI * 2)
-    ctx.fill()
-  }
-  crayon(ctx, INK, w * 0.01, (k) => {
-    ctx.beginPath()
-    ctx.arc(ex, ey, w * 0.05 + k, Math.PI * 1.1, Math.PI * 1.9)
-  })
-  // A dotted trip from Bangkok to the bay.
-  ctx.save()
-  ctx.setLineDash([w * 0.02, w * 0.02])
-  ctx.strokeStyle = '#FF4F9A'
-  ctx.lineWidth = w * 0.01
-  ctx.lineCap = 'round'
-  const [bx, by] = at(PLACES.bangkok)
-  const [px, py] = at(PLACES.phangNga)
-  ctx.beginPath()
-  ctx.moveTo(bx, by)
-  ctx.quadraticCurveTo(bx - w * 0.22, (by + py) / 2, px, py)
-  ctx.stroke()
-  ctx.restore()
-  // Tape at the corners.
-  ctx.fillStyle = 'rgba(255,255,255,0.7)'
-  for (const [x, y, r] of [[0.02, 0.01, -0.5], [0.86, 0.01, 0.5], [0.02, 0.95, 0.5], [0.86, 0.95, -0.5]]) {
-    ctx.save()
-    ctx.translate(x * w + w * 0.06, y * h + h * 0.02)
-    ctx.rotate(r)
-    ctx.fillRect(-w * 0.07, -h * 0.012, w * 0.14, h * 0.024)
-    ctx.restore()
-  }
 }
 
 /** The plane's seat-back screen: the map with the little plane flying the route (`p` 0..1, Bangkok to Krabi on the

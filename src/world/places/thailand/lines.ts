@@ -78,8 +78,6 @@ export const L = {
     ask: {
       question: ji('Kaylee, are you ready to go on a trip?'),
       later: ji('OK! Tell me when!'),
-      // The first tap on the elephant map in her room.
-      map: ji("That's where we're going!"),
     },
     pack: {
       start: ji('Tap your things to pack them, Kaylee!'),

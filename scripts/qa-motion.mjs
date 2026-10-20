@@ -566,8 +566,7 @@ GAME_SCENARIOS.push(
   ),
 )
 
-// The boat trip's way there: the elephant map coming alive (it swings, the pins pop, the crayon ear flaps), things
-// hopping into the suitcase in an arc, Kaylee sitting on the too-full suitcase (squash, squash, squash, click) and her
+// The boat trip's way there: things hopping into the suitcase in an arc, Kaylee sitting on the too-full suitcase (squash, squash, squash, click) and her
 // things going on, everyone hopping into Aunty Sri's van and it gliding off, the suitcase through the x-ray and the
 // officer's stamp, the plane's takeoff (everyone presses back, then up), the tray and the call button (the flight
 // attendant's trolley, snacks piling up), the air vent in her mane, and the landing (bump, bump, claps) into Krabi's
@@ -589,7 +588,6 @@ const thaiTrip = (name, seconds, section, taps, wait = 1400) => ({
   },
 })
 GAME_SCENARIOS.push(
-  thaiTrip('trip-map', 2.6, 'invite', [['map', 2500]], 2500),
   thaiTrip('trip-toss', 3.4, 'pack', [['trip:item:sunhat', 500], ['trip:item:duck', 500], ['trip:item:floaties', 500], ['trip:item:duck', 900]]),
   thaiTrip('trip-sit', 7, 'pack?packed=sunhat,sunglasses,floaties,duck,teddy,camera', [['trip:suitcase', 2600], ['trip:suitcase', 800], ['trip:suitcase', 3000]]),
   thaiTrip('trip-van', 5, 'goodbye', [['trip:van', 4500]], 3800),

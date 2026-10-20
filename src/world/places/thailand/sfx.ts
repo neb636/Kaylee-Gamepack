@@ -127,12 +127,6 @@ export const sfx = {
   horn: () => [0, 0.45].forEach((d) => tone(196, 190, 0.38, 0.1, 'sawtooth', d)),
 
   // ---- The bay ----
-  /** The crayon elephant on her map trumpets: a wobbly brassy toot up and down. */
-  trumpet: () => {
-    tone(330, 620, 0.22, 0.09, 'sawtooth')
-    tone(620, 470, 0.36, 0.08, 'sawtooth', 0.2)
-    tone(660, 940, 0.2, 0.03, 'square', 0.02)
-  },
   /** Kaylee's giggle (she never talks): a run of little bright hee-hees. */
   giggle: () => [0, 0.11, 0.22, 0.33].forEach((d, i) => tone(880 + i * 60, 1180 + i * 40, 0.08, 0.07, 'triangle', d)),
   /** A drip falling from a stalactite, and the cave answering it twice, softer each time. */

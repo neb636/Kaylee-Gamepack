@@ -318,7 +318,7 @@ const SCREENS = [
   // Thailand: Agong's house in 3D (the arrival mid-ride, each spot, a few things in use), the flat house without WebGL,
   // and the party card.
   { name: 'thailand-arrive', hash: '#/world/thailand/hub/arrive', reset: true, wait: 1400 },
-  ...['street', 'downstairs', 'downstairs?at=table', 'downstairs?at=desk', 'downstairs?at=altar', 'upstairs', 'upstairs?at=mattress', 'upstairs?at=couch', 'upstairs?at=bathroom-door'].map((to) => ({
+  ...['street', 'downstairs', 'downstairs?at=table', 'downstairs?at=desk', 'downstairs?at=altar', 'downstairs?at=photos', 'upstairs', 'upstairs?at=mattress', 'upstairs?at=couch', 'upstairs?at=bathroom-door'].map((to) => ({
     name: `thailand-${to.replace('?at=', '-')}`,
     hash: `#/world/thailand/hub/${to}`,
     reset: true,
@@ -449,18 +449,8 @@ const SCREENS = [
       await p.waitForTimeout(1200)
     },
   },
-  // The trip's moments (step 4): the map toy, her things going on at the click, the doors onto the plane, the flight
+  // The trip's moments (step 4): her things going on at the click, the doors onto the plane, the flight
   // attendant's trolley, night night, the view of all of Thailand, and Krabi's songthaew.
-  {
-    name: 'boat-trip-map',
-    hash: '#/world/thailand/boat-trip/invite',
-    reset: true,
-    act: async (p) => {
-      await p.waitForTimeout(2500)
-      await p.locator('[data-anchor="map"]').click({ force: true }).catch(() => {})
-      await p.waitForTimeout(900)
-    },
-  },
   {
     name: 'boat-trip-put-on',
     hash: '#/world/thailand/boat-trip/pack?packed=sunhat,sunglasses,floaties',

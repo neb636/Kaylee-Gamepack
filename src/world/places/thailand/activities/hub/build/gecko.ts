@@ -1,5 +1,6 @@
-// The house gecko (a tokay, ตุ๊กแก "tuk-kae", named for its call): it crawls about on the shop's left wall above the
-// old photos, stops, looks around, and now and then calls. Tap it and it calls and scurries off somewhere else.
+// The house gecko (a tokay, ตุ๊กแก "tuk-kae", named for its call): it crawls about high on the back wall of Kaylee's
+// room upstairs (Dad, 2026-10-19), stops, looks around, and now and then calls. Tap it and it calls and scurries off
+// somewhere else.
 import { Group } from 'three'
 import { P } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
@@ -8,23 +9,25 @@ import { poke, scenery, type Kit } from './kit'
 
 const SKIN = '#9FB8E8'
 const SPOT = '#FFB27A'
-/** Where it roams on the left wall: z from..to, y from..to (above the photos, clear of the clock). */
-const ZONE = { z0: -1.3, z1: -5.0, y0: 2.75, y1: 3.35 }
+/** Where it roams on the back wall: x from..to, y from..to (between the air conditioner and the bathroom door). */
+const ZONE = { x0: -1.3, x1: 1.5, y0: DIM.g0 + 1.9, y1: DIM.g0 + 2.65 }
+const START = { x: 0.2, y: DIM.g0 + 2.3 }
 
 export class Gecko {
   readonly root: Group
   private heading = new Group()
   private body = new Group()
-  private target = { y: 3.0, z: -3.0 }
+  private target = { ...START }
   private speed = 0.18
   private rest = 2
   private callIn = 20 + Math.random() * 15
 
   constructor(kit: Kit) {
-    this.root = poke(kit, 'gecko', [], [DIM.left + 0.04, 3.0, -3.0])
+    this.root = poke(kit, 'gecko', [], [START.x, START.y, DIM.back + 0.04], { rotY: -Math.PI / 2 })
     // It goes where it likes: reactions mustn't snap it back to where it started.
     this.root.userData.moves = true
-    // Built lying belly-down with its head toward +x; turned so its belly is on the wall and its back faces the room.
+    // Built lying belly-down with its head toward +x; turned so its belly is on the wall and its back faces the room
+    // (the root's turn puts that wall at the back: its local +z is the room's -x).
     this.body.rotation.z = -Math.PI / 2
     this.body.add(
       scenery(
@@ -57,7 +60,7 @@ export class Gecko {
   /** Startled: off it goes, fast, to the far side of its patch. */
   scare() {
     const p = this.root.position
-    this.target = { y: ZONE.y0 + Math.random() * (ZONE.y1 - ZONE.y0), z: p.z < (ZONE.z0 + ZONE.z1) / 2 ? ZONE.z0 - Math.random() * 0.8 : ZONE.z1 + Math.random() * 0.8 }
+    this.target = { y: ZONE.y0 + Math.random() * (ZONE.y1 - ZONE.y0), x: p.x < (ZONE.x0 + ZONE.x1) / 2 ? ZONE.x1 - Math.random() * 0.8 : ZONE.x0 + Math.random() * 0.8 }
     this.speed = 1.1
     this.rest = 0
   }
@@ -66,23 +69,23 @@ export class Gecko {
   update(dt: number, t: number): boolean {
     const p = this.root.position
     const dy = this.target.y - p.y
-    const dz = this.target.z - p.z
-    const d = Math.hypot(dy, dz)
+    const dx = this.target.x - p.x
+    const d = Math.hypot(dy, dx)
     let moving = false
     if (d > 0.01) {
       moving = true
       const step = Math.min(d, this.speed * dt)
       p.y += (dy / d) * step
-      p.z += (dz / d) * step
-      // Its head (built along -y once on the wall) points along the way it goes.
-      const want = Math.atan2(-dz, -dy)
+      p.x += (dx / d) * step
+      // Its head (built along -y once on the wall) points along the way it goes (world x is its local -z).
+      const want = Math.atan2(dx, -dy)
       let diff = want - this.heading.rotation.x
       diff = Math.atan2(Math.sin(diff), Math.cos(diff))
       this.heading.rotation.x += diff * Math.min(1, dt * 10)
     } else {
       this.rest -= dt
       if (this.rest <= 0) {
-        this.target = { y: ZONE.y0 + Math.random() * (ZONE.y1 - ZONE.y0), z: ZONE.z1 + Math.random() * (ZONE.z0 - ZONE.z1) }
+        this.target = { y: ZONE.y0 + Math.random() * (ZONE.y1 - ZONE.y0), x: ZONE.x0 + Math.random() * (ZONE.x1 - ZONE.x0) }
         this.speed = 0.18
         this.rest = 2 + Math.random() * 4
       }

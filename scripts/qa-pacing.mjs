@@ -63,7 +63,7 @@ const SCENARIOS = [
   { name: "peru rosa's rainy river", id: 'river', hash: '#/world/peru/river', reset: true },
   { name: "thailand agong's house (arrival)", id: 'thailand', hash: '#/world/thailand', reset: true, play: false },
   // The trip there, one run per leg (each from its own section link).
-  { name: 'thailand trip: mommy asks (and the map)', id: 'trip-invite', hash: '#/world/thailand/boat-trip/invite', reset: true },
+  { name: 'thailand trip: mommy asks', id: 'trip-invite', hash: '#/world/thailand/boat-trip/invite', reset: true },
   { name: 'thailand trip: packing', id: 'trip-pack', hash: '#/world/thailand/boat-trip/pack', reset: true },
   { name: "thailand trip: goodbye and aunty sri's van", id: 'trip-goodbye', hash: '#/world/thailand/boat-trip/goodbye', reset: true },
   { name: 'thailand trip: airport', id: 'trip-airport', hash: '#/world/thailand/boat-trip/airport', reset: true },

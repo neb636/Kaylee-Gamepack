@@ -35,7 +35,7 @@ import { buildStairs } from './build/stairs'
 import { buildStreet } from './build/street'
 import { Traffic } from './build/traffic'
 import { buildUpper } from './build/upper'
-import { DIM, MAP, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
+import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
 import type { HubSection } from './sections'
 
 export type Spot = 'street' | 'downstairs' | 'upstairs'
@@ -84,8 +84,6 @@ export interface HousePlugin {
 }
 
 const deg = Math.PI / 180
-/** Close up on the elephant map in her room, Kaylee looking up at it from the right. */
-export const MAP_SHOT: Shot = { center: new Vector3(MAP.x + 0.3, MAP.y - 0.5, MAP.z + 0.75), half: new Vector3(0.95, 1.05, 0.6), yaw: 12, pitch: 12, minDist: 1.5 }
 /** Where the tuk-tuk stops to let her out, and where it parks after (out of the way, past the spirit house). */
 const DROP_X = 0.9
 const PARK_X = 9.8
@@ -161,7 +159,7 @@ export class House implements World3D {
     const upper = buildUpper(kit)
     const stairs = buildStairs(kit)
     this.gecko = new Gecko(kit)
-    ground.room.add(this.gecko.root)
+    upper.room.add(this.gecko.root)
     this.traffic = new Traffic(kit)
     scene.add(this.traffic.root)
     // Grouped by when they show (applyVisibility): the upstairs room only from upstairs, the downstairs room from the
@@ -692,8 +690,6 @@ export class House implements World3D {
   private shot(): Shot {
     const own = this.plugin?.shot?.()
     if (own) return own
-    // Looking at the elephant map in her room, close up.
-    if (this.using === 'map') return MAP_SHOT
     if (this.photo) {
       const who = this.photo.who
       if (who) {
@@ -754,7 +750,7 @@ export class House implements World3D {
       f.update(dt, t)
     }
     this.reactor.update(dt, t)
-    if (this.gecko.update(dt, t) && this.mode === 'inside0') sfx.tukkae()
+    if (this.gecko.update(dt, t) && this.mode === 'inside1') sfx.tukkae()
     this.traffic.update(dt, this.mode === 'street' && !this.arriving && !this.photo)
     this.marker.update(dt)
     // Inside or outside? (with a little dead band so she doesn't flicker on the doorstep)

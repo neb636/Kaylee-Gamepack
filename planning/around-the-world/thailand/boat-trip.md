@@ -16,7 +16,7 @@ photo Agong asked for. Back home it goes on Agong's wall, and even the big cousi
 >   go on a trip?" with two big picture buttons, 👍🧳 **Yes** and ✋⏳ **Not yet** (`trip/legs/Ask.tsx`). In the house
 >   she asks a few seconds after Kaylee first comes upstairs each visit, and whenever Kaylee taps Mommy; yes opens the
 >   trip straight on packing, not yet just closes the card. The trip's first section (`invite`) is the same question in
->   her room; there, not yet goes back to the house. The map stays on her wall as a thing to tap (it swings).
+>   her room; there, not yet goes back to the house. (The map came off her wall in PR #102; Dad, 2026-10-19.)
 > - **Packing shows her what to do:** a suitcase card (top right) with three empty slots that fill with what she packs,
 >   the things she can pack hop now and then until three are in, a 👆 finger points at one when she's idle (at a sun
 >   thing after Mommy's hint), then at the suitcase, Mommy says "Tap your things to pack them!" and at three "All
@@ -67,7 +67,7 @@ boat), and a payoff that goes back home (the photo on Agong's wall). Everything 
 
 | Leg | Sections | First play | Touches | Talk before 1st touch | Her hands do |
 |---|---|---|---|---|---|
-| Start: Mommy asks | `invite` | ~5 s | 1-2 | 1 line | 👍 yes (the map on the wall is a toy) |
+| Start: Mommy asks | `invite` | ~5 s | 1-2 | 1 line | 👍 yes |
 | Pack the suitcase | `pack` | 45-75 s | 8-15 | 1 line | toss things in, sit on it to close it |
 | Goodbye | `goodbye` | 10-20 s | 1-4 | 1 line | hug whoever she wants (optional), walk out |
 | Airport | `airport` | 20-30 s | 3-6 | 0 | bag on the belt, see the x-ray, up the stairs |
@@ -81,8 +81,8 @@ How it stays short and never boring:
   ride never waits on her and never runs past its cap (Aunty Sri's van leaving is the whole way to the airport).
   Her toys in the car and the cabin play along while it moves. Nothing here can be failed or got stuck in.
 - **Resume, don't restart.** The trip saves after each leg (`useSaved('thailand-boat-trip')`). If she stops after the
-  flight, the map's pin starts her at the pier next time.
-- **Replays go straight to the fun.** After the first full trip, the boat pin on the map opens a boarding pass with two
+  flight, saying yes to Mommy starts her at the pier next time.
+- **Replays go straight to the fun.** After the first full trip, saying yes to Mommy opens a boarding pass with two
   big icons: 🧳 (the whole trip again) and 🚤 (straight to the pier, with what she packed last time). On a replay the
   flight is shorter (about 40 s).
 - **Cut on purpose:** check-in desk, security line, waiting at the gate, choosing seats, the drive from the airport to
@@ -146,7 +146,8 @@ the leg she just finished (*ka-chunk*), and it slides away. That's 1.5 s, and it
 
 ## Starting the trip: the elephant map and the suitcase
 
-> Built differently (Dad, 2026-10-19): Mommy asks instead, and the map is a tap toy on her wall (step 4's built notes).
+> Built differently (Dad, 2026-10-19): Mommy asks instead, and there is no map on her wall any more (PR #102 took it
+> down for the air conditioner; step 4's built notes).
 
 **The elephant map** is a new thing in Kaylee's room: a big paper map of Thailand taped on the wall above her suitcase,
 next to her drawings. The outline is the real one (drawn from the Natural Earth outline into a canvas texture, never
@@ -502,7 +503,7 @@ activities/boat-trip/
                           tune.ts (built, greybox 1); later village.ts, cave.ts, nail.ts, Album.tsx, Poses.tsx
 ```
 `Place.tsx` routes `boat-trip` to `BoatTrip`; `meta.ts` gets the activity (`id: 'boat-trip'`, icon 🚤, the crab
-sticker). The hub gets the map pickable, the photo frame on the wall, and Mommy's and Sparkle's new map lines.
+sticker). The hub gets the photo frame on the wall.
 
 **The house in the trip:** `pack`, `goodbye` and `home` mount the existing `House` with a small plugin
 (`trip/legs/house-plugin.ts`) that gets the scene, the pokes and the avatar and adds the packing and the photo wall.
@@ -544,7 +545,7 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
 - `window.__thaiBoatQA()` (built): read-only state; the trip adds the leg, the album and what's in the car and cabin.
   No jump hooks; tests open section links.
 - QA scripts: `qa-screens` routes for every section; `qa-motion` filmstrips for the boat (built: drive, VROOM,
-  doughnut, the cave roof), the trip (built: the map toy, the toss, the suitcase sit and putting things on, the van,
+  doughnut, the cave roof), the trip (built: the toss, the suitcase sit and putting things on, the van,
   the x-ray, takeoff press-back, the tray and the attendant, the air vent, the landing into Krabi);
   `qa-pacing` for each section.
 - Full QA (layout-qa, then playtest-qa) at the bay's art gate and at the full loop.
@@ -693,7 +694,7 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
      boat's bow and engine (VROOM) come before the family's.
    - Not yet (later gates): home and the photo wall (step 5), the trip's art (step 4, built).
 4. **The trip, built.** (Dad's brief, 2026-10-19, after greybox 2: Mommy asks instead of the map, and Aunty Sri's van
-   pulling away is the whole way to the airport.) Mommy's question by the elephant map (a tap toy now), the real packing
+   pulling away is the whole way to the airport.) Mommy's question, the real packing
    props and her new hat, sunglasses and floaties, the goodbye and the van, the x-ray, the plane's cabin, clouds,
    storks, Sparkle's balloon and the elephant below, the landing and Krabi's songthaew; voices for every leg.
    *Built 2026-10-19* (`trip/legs/` again: `plane.ts` rebuilt round a whole cabin, `krabi.ts`, `Guide.tsx`;
@@ -710,9 +711,8 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
      against fable, sage and nova: the brightest, and the only one heard saying "Kaylee" right). Every trip line is under
      3 s except Agong's 3.1 s ask; Sparkle only gives the elephant fact and three hints (the suitcase, the plane's door,
      the tray), each once, after 8 s with nothing done.
-   - **The map** stays on her wall as a toy while Mommy asks and while she packs: tap it and it swings, both pins pop,
-     the crayon elephant trumpets, flaps its ear and winks (the paper is redrawn), the camera comes close for a
-     moment, and the first time Mommy says "That's where we're going!". Both pins bob all the time.
+   - **The map** was a tap toy on her wall at first (it swung, the crayon elephant trumpeted and winked). PR #102 took
+     the map down for the air conditioner, and Dad chose to drop the toy rather than hang it again (2026-10-19).
    - **What she wears:** `sunhat`, `spare-hat`, `sunglasses` and `floaties` are avatar extras (`characters/animal.ts`;
      `Avatar.wear`, `putOn`). At the click her hat drops onto her head, her heart sunglasses slide on and her floaties
      pop on, and she wears them on every leg and in the bay. **Mommy's spare hat goes straight on her head** (not in the
@@ -776,7 +776,7 @@ the photo as a drawn card. She can always finish and get the stamp, with no cons
    drive the car. Assumed: Sri brings them home too.
 2. **Airport:** Krabi.
 3. **In the bay:** Koh Panyee, a hong, and James Bond Island.
-4. **The map:** in Kaylee's room above her suitcase.
+4. **The map:** in Kaylee's room above her suitcase. (Later dropped: Mommy asks, and PR #102 took the map down.)
 5. **The plane:** she rides in a window seat and plays with the cabin (seatbelt, tray, snacks), like Toca's airport.
 6. **Sticker:** the fiddler crab.
 7. **Thai words:** both, "Khob khun ka" from the village kids and "Pai!" from Daddy.

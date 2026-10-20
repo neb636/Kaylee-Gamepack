@@ -1,9 +1,7 @@
 // The start of a trip, in Agong's own house (activities/hub/house.ts, mounted with this plugin, not copied):
 //
 // - invite: in Kaylee's room, Mommy asks if she's ready to go on a trip (the screen shows the 👍 / ✋ card, Ask.tsx).
-//   The elephant map on the wall is a tap toy (here and while she packs): it swings, both pins pop, the crayon elephant
-//   trumpets, flaps its ear and winks, and the first time Mommy says that's where they're going. Yes: the suitcase hops
-//   out into the room and springs open, and the camera drops to it.
+//   Yes: the suitcase hops out into the room and springs open, and the camera drops to it.
 // - pack (the toy): tap anything in her room and it hops into the suitcase in a big arc (or drag it there); tap
 //   something inside and it hops back out. Nothing is wrong: the pillow, the fan, a mango, even Gan asleep on the
 //   mattress ("Five more minutes..."). So she always knows what to do: the things she can pack hop now and then, a
@@ -17,14 +15,13 @@
 //   asks for a photo of the Nail Island; Jum gives her a little bag of snacks (tap her, or she brings it when the van
 //   comes); the big cousins wave and say "Bye..." without looking up from their phones. Aunty Sri's white electric van
 //   hums up quickly; tap it (or wait a moment), the side door slides open, everyone hops in, and it glides off.
-import { CanvasTexture, Group, Mesh, MeshBasicMaterial, Vector3, type Object3D } from 'three'
+import { Group, Vector3, type Object3D } from 'three'
 import { bell, clamp, wobble, type Line } from '../../../../../sdk'
 import type { AnchorInfo } from '../../engine/Anchors'
 import type { Shot } from '../../engine/camera'
-import { DIM, MAP } from '../../activities/hub/layout'
+import { DIM } from '../../activities/hub/layout'
 import type { House, HousePlugin } from '../../activities/hub/house'
 import { sfx } from '../../sfx'
-import { drawElephantMap } from '../drawings'
 import { ITEMS, mommyTucksIn, wearing } from '../packing'
 import { buildItem, buildSuitcase, type Suitcase } from '../props'
 import { L } from '../../lines'
@@ -57,7 +54,7 @@ const ROOM = {
   suitcase: { x: -0.5, z: -19.45 },
   kaylee: { x: 0.2, z: -19.3, face: -95 },
   ji: { floor: 1 as const, x: 1.55, z: -20.1, face: -25, pose: 'stand' as const },
-  gan: { floor: 1 as const, x: -2.275, z: -17.3, face: 0, pose: 'lie' as const },
+  gan: { floor: 1 as const, x: -2.65, z: -19.3, face: 0, pose: 'lie' as const },
   items: {
     sunhat: [-1.05, 0, -18.3],
     sunglasses: [-0.45, 0, -18.0],
@@ -139,13 +136,7 @@ export class TripHouse implements HousePlugin {
   private carWait = 0
   private carTotal = 0
   private told = new Set<string>()
-  private counts = { packs: 0, unpacks: 0, drags: 0, hugs: 0, maps: 0 }
-  /** The elephant map's paper (redrawn while the crayon elephant flaps its ear), and how far through the flap. */
-  private mapPaper: { canvas: HTMLCanvasElement; tex: CanvasTexture; drawn: number } | null = null
-  private mapFlap = 1
-  private pinPop = 1
-  /** Seconds the camera stays close on the map after a tap (0: not looking). */
-  private mapLook = 0
+  private counts = { packs: 0, unpacks: 0, drags: 0, hugs: 0 }
   /** Mommy's yawn (the pillow): her arms stretch up. */
   private yawn = 1
   /** Jum's little bag of snacks, in Kaylee's hand once Jum gives it to her. */
@@ -190,11 +181,6 @@ export class TripHouse implements HousePlugin {
     this.snackBag = buildItem('snacks', bag)
     this.snackBag.visible = false
     this.root.add(this.snackBag)
-    // The elephant map's paper canvas (the house drew it): the trip redraws it when the crayon elephant comes alive.
-    house.kit.pokes.get('map')?.traverse((o) => {
-      const map = o instanceof Mesh ? (o.material as MeshBasicMaterial).map : null
-      if (map instanceof CanvasTexture && map.image instanceof HTMLCanvasElement) this.mapPaper = { canvas: map.image, tex: map, drawn: 0 }
-    })
     this.van = buildVan(bag)
     this.van.root.userData.pick = 'trip:van'
     this.van.root.visible = false
@@ -283,8 +269,7 @@ export class TripHouse implements HousePlugin {
   // ---------------------------------------------------------------- touch
 
   hides(id: string) {
-    // The trip's own suitcase stands in for the house's; the map is the trip's toy while she's asked and packs.
-    return id === 'suitcase' || (id === 'map' && this.phase !== 'invite' && this.phase !== 'pack')
+    return id === 'suitcase'
   }
 
   private setPhase(p: Phase) {
@@ -346,10 +331,6 @@ export class TripHouse implements HousePlugin {
 
   tap(_x: number, _y: number, id?: string) {
     const ph = this.phase
-    if ((ph === 'invite' || ph === 'pack') && id === 'map') {
-      this.mapToy()
-      return true
-    }
     if (ph === 'invite') {
       // Mommy's card is the thing to answer: a tap on her gets a wave, on Kaylee a hop, and she stays put.
       if (id === 'family:ji') this.house.family.get('ji')?.react('wave')
@@ -736,30 +717,7 @@ export class TripHouse implements HousePlugin {
     }, 350)
   }
 
-  // ---------------------------------------------------------------- the map, Mommy's yawn
-
-  /** The elephant map on her wall: it swings, both pins pop, the crayon elephant trumpets, flaps its ear and winks. */
-  private mapToy() {
-    this.counts.maps++
-    this.house.pokeThing('map')
-    sfx.trumpet()
-    this.mapFlap = 0
-    this.pinPop = 0
-    this.mapLook = 2.4
-    const k = this.house.kaylee
-    const map = this.house.kit.pokes.get('map')
-    if (map) {
-      const p = map.getWorldPosition(new Vector3())
-      k.lookAt(p.x, p.y, p.z)
-    }
-    k.react('hop')
-    setTimeout(() => sfx.giggle(), 350)
-    if (!this.told.has('map')) {
-      this.told.add('map')
-      this.events.say(L.trip.ask.map)
-      this.house.family.get('ji')?.react('wave')
-    }
-  }
+  // ---------------------------------------------------------------- Mommy's yawn, Jum's snacks
 
   /** The pillow makes Mommy sleepy: a big yawn and a stretch. */
   private mommyYawns() {
@@ -768,23 +726,6 @@ export class TripHouse implements HousePlugin {
   }
 
   private updateToys(dt: number) {
-    // The crayon elephant comes alive for a moment (the paper is redrawn a few times a second while it does).
-    const paper = this.mapPaper
-    if (this.mapFlap < 1 && paper) {
-      this.mapFlap = Math.min(1, this.mapFlap + dt / 1.3)
-      paper.drawn += dt
-      if (paper.drawn > 0.07 || this.mapFlap >= 1) {
-        paper.drawn = 0
-        drawElephantMap(paper.canvas, this.mapFlap >= 1 ? 0 : this.mapFlap)
-        paper.tex.needsUpdate = true
-      }
-    }
-    this.pinPop = Math.min(1, this.pinPop + dt / 0.7)
-    this.mapLook = Math.max(0, this.mapLook - dt)
-    for (const [name, delay] of [['map.pin', 0], ['map.home', 0.15]] as const) {
-      const pin = this.house.kit.parts.get(name)
-      if (pin) pin.scale.setScalar(1 + bell(clamp((this.pinPop - delay) / 0.75)) * 0.7)
-    }
     // Mommy's yawn: both arms up in a big stretch, her head back.
     if (this.yawn < 1) {
       this.yawn = Math.min(1, this.yawn + dt / 1.6)
@@ -1003,11 +944,6 @@ export class TripHouse implements HousePlugin {
     if (!this.house) return null
     const ph = this.phase
     const tall = this.house.rig.camera.aspect < 0.9
-    if ((ph === 'invite' || ph === 'pack') && this.mapLook > 0) {
-      // Close on the map for a moment after a tap, the map high in the screen (Mommy's card covers the bottom).
-      const mid = MAP.y + MAP.h / 2
-      return { center: new Vector3(MAP.x + 0.1, mid - (ph === 'invite' ? 0.5 : 0.25), MAP.z + 0.5), half: new Vector3(0.55, ph === 'invite' ? 1.1 : 0.85, 0.3), yaw: 8, pitch: 6, minDist: 1.4 }
-    }
     if (ph === 'invite') {
       // Kaylee and Mommy up top, the card with the two buttons below them (on a short phone screen the card is most of
       // it, so the camera looks lower and they sit higher).

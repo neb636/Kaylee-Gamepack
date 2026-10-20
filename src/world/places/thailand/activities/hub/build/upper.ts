@@ -1,17 +1,14 @@
 // Upstairs: the stairs come out in a small hallway that looks down into the shop over a balcony railing (the front
 // half of the house is open, two floors high), and glass sliding doors lead back into the room Kaylee sleeps in, at
-// the back of the house. In her room: a row of mattresses on the floor along the
-// left wall, all the way to the end of the room; the couch on the right; her suitcase; a wardrobe; a fan; and the
-// bathroom door at the back on the right, aluminium like the real one (Dad's photo, 2026-10-18). It's locked: it only
-// rattles. The floor is pale grey terrazzo tiles like the real one (tiles.ts). Above her suitcase hangs the elephant map:
-// the real outline of Thailand on paper, doodled in crayon, with a house pin on Bangkok and a boat pin on Phang Nga Bay
-// (tap it and it swings; Mommy, beside it, asks if she's ready for the trip).
-import { CanvasTexture, Group, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace, type BufferGeometry } from 'three'
+// the back of the house. In her room (Dad, 2026-10-19): one big queen mattress on the floor against the left wall,
+// its long side along the room, her drawings taped above it and a mini-split air conditioner on the wall over its head;
+// the grey couch on the right just inside the glass doors; her suitcase; a fan; and the bathroom door at the
+// back on the right, aluminium like the real one (Dad's photo, 2026-10-18). It's locked: it only rattles. The floor is
+// pale grey terrazzo tiles like the real one (tiles.ts). The house gecko lives on the back wall (gecko.ts).
+import { Group, Mesh, MeshBasicMaterial, type BufferGeometry } from 'three'
 import { P } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
-import { drawElephantMap, mapUV } from '../../../trip/drawings'
-import { PLACES } from '../../../trip/outline'
-import { DIM, MAP } from '../layout'
+import { DIM } from '../layout'
 import { standingFan } from './ground'
 import { part, poke, scenery, type Kit } from './kit'
 import { railing } from './stairs'
@@ -20,13 +17,14 @@ import { upstairsFloor } from './tiles'
 const FLOOR = '#E2E0DC'
 const WALL = '#F4F1EC'
 const ALU = '#C3C7CD'
-const WOOD = '#E9B98E'
-const COUCH = '#C9B8FF'
-const COUCH_DARK = '#B4A0F2'
+const COUCH = '#AFB2BC'
+const COUCH_DARK = '#92949E'
+const COUCH_SEAT = '#C5C7CF'
 const FRAME = '#D8D2E6'
 
 export interface Upper {
   room: Group
+  /** The right wall (lowered while she's upstairs, so the camera can see in). */
   rightWall: Group
   /** The glass wall into her room (lowered while she's in the room). */
   glassWall: Group
@@ -63,19 +61,19 @@ export function buildUpper(kit: Kit): Upper {
       P.box(0.15, g1, depth, WALL, { at: [left - 0.075, U + g1 / 2, back / 2] }),
       P.box(right - left + 0.3, g1, 0.15, WALL, { at: [0, U + g1 / 2, back - 0.075] }),
       P.box(0.03, 0.12, depth, '#CFC8BE', { at: [left + 0.015, U + 0.06, back / 2] }),
-      // Kaylee's drawings taped above the mattresses.
+      // Kaylee's drawings taped above the mattress.
       ...[
-        [-16.998, PAL.pink],
-        [-17.898, PAL.butter],
-        [-18.698, PAL.sky],
-        [-19.898, PAL.mint],
-      ].map(([z, c], i) => P.box(0.02, 0.36, 0.3, c as string, { at: [left + 0.01, U + 1.45 + (i % 2) * 0.18, z as number], rot: [(i % 2 ? 0.08 : -0.06), 0, 0] })),
+        [-18.0, PAL.pink],
+        [-18.6, PAL.butter],
+        [-19.2, PAL.sky],
+        [-19.8, PAL.mint],
+      ].map(([z, c], i) => P.box(0.02, 0.36, 0.3, c as string, { at: [left + 0.01, U + 1.25 + (i % 2) * 0.18, z as number], rot: [(i % 2 ? 0.08 : -0.06), 0, 0] })),
     ]),
   )
   rightWall.add(scenery(kit, [P.box(0.15, g1, depth, WALL, { at: [right + 0.075, U + g1 / 2, back / 2] })]))
 
   // ---- The hallway: a plant, the balcony railing over the shop, the railing round the stairwell ----
-  room.add(poke(kit, 'plant', [P.cyl(0.18, 0.13, 0.3, '#EBA27E', { at: [0, 0.15, 0] }), P.sphere(0.24, '#7FCB8F', { at: [0, 0.45, 0] }), ...[0, 2, 4].map((a) => P.sphere(0.06, PAL.hotpink, { at: [Math.cos(a) * 0.18, 0.55, Math.sin(a) * 0.18] }))], [2.1, U, -7.85]))
+  room.add(poke(kit, 'plant', [P.cyl(0.18, 0.13, 0.3, '#EBA27E', { at: [0, 0.15, 0] }), P.sphere(0.24, '#7FCB8F', { at: [0, 0.45, 0] }), ...[0, 2, 4].map((a) => P.sphere(0.06, PAL.hotpink, { at: [Math.cos(a) * 0.18, 0.55, Math.sin(a) * 0.18] }))], [2.1, U, -5.65]))
   const rails: BufferGeometry[] = []
   railing(rails, [left, U, hz + 0.04], [right, U, hz + 0.04])
   // Round the stairwell: its front edge, the right edge beside flight 1 (flight 2 comes out next to it), the back.
@@ -98,52 +96,42 @@ export function buildUpper(kit: Kit): Upper {
   doors.add(scenery(kit, [P.box(w, 0.06, 0.06, FRAME, { at: [0, 2.21, 0] }), P.box(w, 0.06, 0.06, FRAME, { at: [0, 0.03, 0] }), ...[-1, 1].map((s) => P.box(0.06, 2.24, 0.06, FRAME, { at: [(s * w) / 2, 1.12, 0] })), P.box(0.03, 0.3, 0.05, PAL.ink, { at: [w / 2 - 0.12, 1.1, -0.03] })], 1.5))
   glassWall.add(doors)
 
-  // ---- The mattresses along the left wall, all the way to the end of the room ----
-  const mattress = poke(kit, 'mattress', [], [-2.275, U, -17.998])
-  const sheets = [PAL.pink, PAL.lavender, '#FFD3E6']
-  const len = (-16.448 - -20.748) / 3
-  sheets.forEach((c, i) => {
-    const z = -20.748 + len * (i + 0.5) - -17.998
-    mattress.add(scenery(kit, [P.rbox(1.58, 0.2, len - 0.04, 0.06, PAL.cream, { at: [0, 0.1, z] }), P.rbox(1.5, 0.03, len - 0.14, 0.02, c, { at: [0, 0.205, z] })], 2))
-  })
-  // A folded blanket in the middle of the row.
-  mattress.add(scenery(kit, [P.rbox(1.2, 0.12, 0.5, 0.05, PAL.lavenderDark, { at: [0, 0.27, 0.9] })], 2))
+  // ---- One big queen mattress against the left wall, its head at the back wall ----
+  const bed = { x: -2.275, z0: -20.748, len: 2.2, w: 1.65 }
+  const mattress = poke(kit, 'mattress', [], [bed.x, U, -19.2])
+  const mid = bed.z0 + bed.len / 2 - -19.2
+  mattress.add(scenery(kit, [P.rbox(bed.w, 0.22, bed.len, 0.06, PAL.cream, { at: [0, 0.11, mid] }), P.rbox(bed.w - 0.08, 0.03, bed.len - 0.1, 0.02, PAL.pink, { at: [0, 0.225, mid] })], 2))
+  // A folded blanket across its foot.
+  mattress.add(scenery(kit, [P.rbox(bed.w - 0.2, 0.1, 0.45, 0.05, PAL.lavenderDark, { at: [0, 0.27, mid + bed.len / 2 - 0.35] })], 2))
   room.add(mattress)
   room.add(poke(kit, 'pillows', [P.rbox(0.62, 0.16, 0.4, 0.07, PAL.cream, { at: [-0.38, 0.08, 0] }), P.rbox(0.62, 0.16, 0.4, 0.07, '#FFE3EF', { at: [0.38, 0.08, 0] }), P.box(0.62, 0.012, 0.06, PAL.hotpink, { at: [0.38, 0.165, 0] })], [-2.275, U + 0.2, -20.348]))
 
-  // ---- The couch on the right (faces left) ----
+  // ---- The grey couch on the right, just inside the glass doors (faces left) ----
   room.add(
     poke(
       kit,
       'couch',
       [
         P.rbox(0.75, 0.3, 2.4, 0.08, COUCH_DARK, { at: [0, 0.2, 0] }),
-        P.rbox(0.62, 0.14, 1.12, 0.06, COUCH, { at: [-0.04, 0.41, -0.58] }),
-        P.rbox(0.62, 0.14, 1.12, 0.06, COUCH, { at: [-0.04, 0.41, 0.58] }),
+        P.rbox(0.62, 0.14, 1.12, 0.06, COUCH_SEAT, { at: [-0.04, 0.41, -0.58] }),
+        P.rbox(0.62, 0.14, 1.12, 0.06, COUCH_SEAT, { at: [-0.04, 0.41, 0.58] }),
         P.rbox(0.2, 0.62, 2.4, 0.08, COUCH, { at: [0.28, 0.6, 0] }),
         P.rbox(0.72, 0.42, 0.18, 0.07, COUCH, { at: [0, 0.45, -1.15] }),
         P.rbox(0.72, 0.42, 0.18, 0.07, COUCH, { at: [0, 0.45, 1.15] }),
-        P.rbox(0.12, 0.34, 0.34, 0.06, PAL.butter, { at: [0.12, 0.66, 0.65], rot: [0, 0, 0.2] }),
+        P.rbox(0.12, 0.34, 0.34, 0.06, PAL.pink, { at: [0.12, 0.66, 0.65], rot: [0, 0, 0.2] }),
       ],
-      [2.795, U, -18.598],
+      [2.795, U, -12.8],
     ),
   )
 
-  // ---- Her suitcase (the lid opens), the wardrobe (the doors open), a fan ----
+  // ---- Her suitcase (the lid opens), a fan, the air conditioner ----
   const suitcase = poke(kit, 'suitcase', [P.rbox(0.62, 0.26, 0.42, 0.05, PAL.hotpink, { at: [0, 0.13, 0] }), P.box(0.64, 0.03, 0.06, PAL.gold, { at: [0, 0.13, 0.2] })], [-0.9, U, -20.448], { rotY: Math.PI })
   const lid = part(kit, 'suitcase.hinge', [P.rbox(0.62, 0.08, 0.42, 0.04, PAL.hotpink, { at: [0, 0.04, 0.21] }), P.torus(0.06, 0.015, PAL.gold, { at: [0, 0.08, 0.3], rot: [Math.PI / 2, 0, 0] })], [0, 0.26, -0.21], 2)
   lid.userData.swingX = -1.6
   suitcase.add(lid)
   room.add(suitcase)
-  const wardrobe = poke(kit, 'wardrobe', [P.box(1.2, 2.0, 0.5, WOOD, { at: [0, 1.0, 0] })], [0.25, U, back + 0.26])
-  for (const side of [-1, 1]) {
-    const h = part(kit, `wardrobe.hinge${side < 0 ? 'L' : 'R'}`, [P.box(0.58, 1.86, 0.04, '#F2CBA6', { at: [-side * 0.29, 0.93, 0] }), P.sphere(0.03, PAL.gold, { at: [-side * 0.5, 1.0, 0.04] })], [side * 0.59, 0.07, 0.27], 1.5)
-    h.userData.swing = -side * 1.3
-    wardrobe.add(h)
-  }
-  room.add(wardrobe)
   room.add(standingFan(kit, 'room-fan', [0.4, U, -16.798], Math.PI))
-  room.add(elephantMap(kit))
+  room.add(airCon(kit, [-2.2, U + 2.45, back]))
   room.add(bathroomDoor(kit, [2.2, U, back]))
   // A blue laundry basket by the bathroom door, like the real one.
   const BASKET = '#3D8FD6'
@@ -204,43 +192,26 @@ function bathroomDoor(kit: Kit, at: [number, number, number]) {
 }
 
 /**
- * The paper map of Thailand taped on the wall (it swings from its top edge when tapped). The outline is drawn into a
- * canvas (trip/drawings.ts); the pins stand out of the paper and bob: a little house on Bangkok, and a boat pin on
- * Phang Nga Bay.
+ * The wall-mounted mini-split air conditioner, like in every Thai bedroom: a long white rounded box with a curved
+ * front, the louver flap along its bottom, a little green light, and the pipe running down the wall beside it.
  */
-function elephantMap(kit: Kit) {
-  const { w, h } = MAP
-  const g = poke(kit, 'map', [P.box(w, h, 0.012, '#FFF6E4', { at: [0, -h / 2, 0.006] })], [MAP.x, MAP.y + h / 2, MAP.z], { px: 1.5 })
-  const canvas = document.createElement('canvas')
-  canvas.width = 512
-  canvas.height = Math.round(512 * (h / w))
-  drawElephantMap(canvas)
-  const tex = kit.bag.add(new CanvasTexture(canvas))
-  tex.colorSpace = SRGBColorSpace
-  tex.anisotropy = 4
-  const paper = new Mesh(kit.bag.add(new PlaneGeometry(w * 0.985, h * 0.985)), kit.bag.add(new MeshBasicMaterial({ map: tex })))
-  paper.position.set(0, -h / 2, 0.0135)
-  g.add(paper)
-  const local = (ll: [number, number]) => {
-    const [u, v] = mapUV(ll)
-    return [(u - 0.5) * w, -v * h] as const
-  }
-  const [hx, hy] = local(PLACES.bangkok)
-  g.add(part(kit, 'map.home', [P.box(0.07, 0.055, 0.03, PAL.pink, { at: [0, 0.01, 0.03] }), P.cone(0.06, 0.05, PAL.hotpink, { at: [0, 0.06, 0.03], rot: [0, Math.PI / 4, 0] }, 4)], [hx, hy, 0], 1.5))
-  const [bx, by] = local(PLACES.phangNga)
-  const pin = part(
+function airCon(kit: Kit, at: [number, number, number]) {
+  const W = 0.95
+  const g = poke(
     kit,
-    'map.pin',
+    'aircon',
     [
-      P.cyl(0.008, 0.008, 0.06, PAL.ink, { at: [0, 0.0, 0.03], rot: [Math.PI / 2, 0, 0] }),
-      P.sphere(0.035, PAL.hotpink, { at: [0, 0, 0.065] }),
-      // A tiny longtail riding on the pin's head.
-      P.rbox(0.12, 0.035, 0.045, 0.015, '#E6A375', { at: [0, 0.045, 0.07] }),
-      P.cone(0.02, 0.05, PAL.cream, { at: [0.01, 0.085, 0.07] }),
+      P.rbox(W, 0.3, 0.22, 0.07, '#FBFBF8', { at: [0, 0, 0.11] }),
+      P.rbox(W - 0.06, 0.14, 0.02, 0.01, '#EEEEEA', { at: [0, 0.05, 0.225] }),
+      // The louver flap, tipped down to blow cool air.
+      P.box(W - 0.12, 0.035, 0.08, '#E2E4E8', { at: [0, -0.12, 0.2], rot: [-0.5, 0, 0] }),
+      P.box(W - 0.1, 0.02, 0.06, '#9AA0A8', { at: [0, -0.135, 0.15] }),
+      // The pipe and its cover going down the wall.
+      P.box(0.08, 0.6, 0.06, '#F2F2EE', { at: [W / 2 - 0.08, -0.45, 0.03] }),
     ],
-    [bx, by, 0],
-    1.5,
+    [at[0], at[1], at[2] + 0.005],
+    { px: 1.5 },
   )
-  g.add(pin)
+  g.add(part(kit, 'aircon.light', [P.sphere(0.014, '#5BD67A')], [W / 2 - 0.1, -0.06, 0.225], 0))
   return g
 }
