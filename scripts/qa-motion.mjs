@@ -566,6 +566,51 @@ GAME_SCENARIOS.push(
   ),
 )
 
+// The boat race: the countdown with a finger down (revving, then a rocket start at GO), racing with the finger
+// sweeping across the course (leaning into the turns, the rooster tail, passing), the ramp's jump and a trick (a tap in
+// the air), and the podium (the trophy floating down into her hands, the kids and the macaque cheering, confetti).
+const thaiRace = (name, seconds, section, wait, act) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/boat-trip/${section}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiBoatQA?.().mode, null, { timeout: 20000 })
+    if (wait) await page.waitForFunction(wait, null, { timeout: 60000 }).catch(() => {})
+  },
+  act,
+})
+GAME_SCENARIOS.push(
+  thaiRace('race-start', 6, 'race', () => window.__thaiBoatQA?.().phase === 'count', async (page) => {
+    await page.mouse.move(vp.width * 0.5, vp.height * 0.45)
+    await page.mouse.down()
+    await page.waitForTimeout(5800)
+    await page.mouse.up()
+  }),
+  thaiRace('race-drive', 6, 'race', () => window.__thaiBoatQA?.().phase === 'race', async (page) => {
+    await page.mouse.move(vp.width * 0.3, vp.height * 0.45)
+    await page.mouse.down()
+    for (let i = 0; i < 6; i++) {
+      await page.mouse.move(vp.width * (i % 2 ? 0.75 : 0.3), vp.height * 0.45, { steps: 6 })
+      await page.waitForTimeout(950)
+    }
+    await page.mouse.up()
+  }),
+  thaiRace('race-ramp-trick', 5, 'race?lap=3', () => (window.__thaiBoatQA?.().racers?.kaylee?.s ?? 0) > 280, async (page) => {
+    for (let i = 0; i < 50; i++) {
+      if (await page.evaluate(() => window.__thaiBoatQA?.().airborne)) {
+        await page.mouse.click(vp.width * 0.5, vp.height * 0.5)
+        break
+      }
+      await page.waitForTimeout(100)
+    }
+    await page.waitForTimeout(3000)
+  }),
+  thaiRace('race-podium', 7, 'podium', null, async (page) => {
+    await page.waitForTimeout(6800)
+  }),
+)
+
 // The boat trip's way there: things hopping into the suitcase in an arc, Kaylee sitting on the too-full suitcase (squash, squash, squash, click) and her
 // things going on, everyone hopping into Aunty Sri's van and it gliding off, the suitcase through the x-ray and the
 // officer's stamp, the plane's takeoff (everyone presses back, then up), the tray and the call button (the flight

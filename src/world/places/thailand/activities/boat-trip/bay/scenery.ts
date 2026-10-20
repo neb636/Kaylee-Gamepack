@@ -7,7 +7,7 @@ import { CylinderGeometry, DoubleSide, Group, Mesh, MeshBasicMaterial, RingGeome
 import type { Bag } from '../../../engine/dispose'
 import { merge, P, solid } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
-import { BOUNDS, CAVE_GLOW, BEACH_GLOW, EXIT_GLOW, PIER, PIER_GLOW, RAFT, ROCKS, SHORE_Z, VILLAGE_GLOW, type Rock } from './layout'
+import { BOUNDS, CAVE_GLOW, BEACH_GLOW, EXIT_GLOW, PIER, PIER_GLOW, RACE_GLOW, RAFT, ROCKS, SHORE_Z, VILLAGE_GLOW, type Rock } from './layout'
 
 export const ROCK = '#C3B8D2'
 export const ROCK_DARK = '#8E829F'
@@ -70,7 +70,7 @@ export function buildGlow(bag: Bag, x: number, z: number, r: number) {
   return g
 }
 
-export type GlowId = 'village' | 'cave' | 'beach' | 'pier' | 'out'
+export type GlowId = 'village' | 'cave' | 'beach' | 'pier' | 'out' | 'race'
 export interface Scenery {
   root: Group
   glows: Record<GlowId, Group>
@@ -159,6 +159,7 @@ export function buildScenery(bag: Bag): Scenery {
     beach: buildGlow(bag, BEACH_GLOW.x, BEACH_GLOW.z, BEACH_GLOW.r * 0.7),
     pier: buildGlow(bag, PIER_GLOW.x, PIER_GLOW.z, PIER_GLOW.r * 0.7),
     out: buildGlow(bag, EXIT_GLOW.x, EXIT_GLOW.z, EXIT_GLOW.r * 0.7),
+    race: buildGlow(bag, RACE_GLOW.x, RACE_GLOW.z, RACE_GLOW.r * 0.7),
   }
   root.add(...Object.values(glows))
 

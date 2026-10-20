@@ -196,6 +196,37 @@ export const L = {
     } as Record<string, string>,
   },
 
+  // The boat race (activities/boat-trip/race/): through the rainbow gate in the bay, three laps round a lagoon against
+  // the village kids and a cheeky macaque. Sparkle gives the few instructions and the countdown; Mommy and Daddy cheer
+  // in their own voices; the kids tease and cheer; the macaque only chatters. She always wins, and the trophy says so.
+  race: {
+    gate: 'A boat race! Drive through the rainbow gate!',
+    start: 'Hold your finger on the water to go fast!',
+    count: ['Three!', 'Two!', 'One!', 'Go!'],
+    item: 'Tap the button to use it!',
+    ramp: 'A ramp! Tap in the air for a trick!',
+    lap2: 'Lap two!',
+    final: 'Last lap!',
+    win: `${NAME} wins! First place!`,
+    trophy: `A trophy for ${NAME}, the boat race champion!`,
+    back: 'Tap the boat to go back to the bay!',
+    // The trophy room speaks this when she taps her race trophy (it's saved there).
+    trophyRoom: `${NAME}, Boat Race Champion! From Thailand.`,
+    // Daddy and Mommy, in the boat with her.
+    go: nick('Go, Kaylee, go!'),
+    banana: nick('Whoa! A banana!'),
+    almost: nick('Almost there!'),
+    won: nick('We won!'),
+    wheee: ji('Wheee!'),
+    fast: ji('So fast!'),
+    proud: ji('You did it, sweetie!'),
+    // The village kids, racing her in their blue longtail.
+    raceYou: kids('Race you, Kaylee!'),
+    catchUs: kids("You can't catch us!"),
+    hey: kids('Hey!'),
+    goodRace: kids('Good race, Kaylee!'),
+  },
+
   // The way home (the boat trip's `home`): Aunty Sri's van brings them back to Agong's house, she picks the photo for
   // Agong's wall, and even the big cousins look up from their phones. Then, in the house, the photo on the wall.
   home: {

@@ -17,7 +17,7 @@ export interface AlbumPhoto {
   src: string
 }
 
-const FACT: Record<PhotoKind, Line | null> = { village: L.bay.facts.football, hong: L.bay.facts.hong, nail: L.bay.facts.nail, selfie: null }
+const FACT: Record<PhotoKind, Line | null> = { village: L.bay.facts.football, hong: L.bay.facts.hong, nail: L.bay.facts.nail, selfie: null, race: L.race.trophy }
 const BTN = 'min(96px, max(68px, 12vmin))'
 /** Where the album button's middle is (a flying sticker aims there). */
 const buttonCenter = () => ({ x: window.innerWidth - 18 - 48, y: window.innerHeight - 18 - 48 })

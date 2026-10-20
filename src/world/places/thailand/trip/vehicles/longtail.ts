@@ -33,13 +33,15 @@ export const RIBBON_COLORS: Record<string, string> = {
   hotpink: PAL.hotpink,
 }
 
-/** Where things ride in the boat (local to its body): the bow floor, beside Daddy, by Kaylee's feet, Mommy's lap. */
+/** Where things ride in the boat (local to its body): the bow floor, beside Daddy, by Kaylee's feet, Mommy's lap, and
+ *  the boat race's trophy up front. */
 export const CARGO = {
   football: [0.12, 0.62, 2.05],
   coconut: [-0.3, 0.6, 1.75],
   mango: [0.42, 0.62, 1.25],
   bucket: [0.38, 0.5, -1.45],
   teddy: [0, 0.78, -0.22],
+  trophy: [-0.28, 0.5, 2.3],
 } satisfies Record<string, [number, number, number]>
 
 const L = 6.4
@@ -56,25 +58,36 @@ export interface Longtail extends Vehicle {
   grip(out: Vector3): Vector3
 }
 
-export function buildLongtail(bag: Bag): Longtail {
+/** Another family's longtail (the village kids' in the boat race): its hull, the stripe along the top and the trim
+ *  under it. */
+export interface LongtailPaint {
+  hull: string
+  hullDark: string
+  inside: string
+  stripe: string
+  trim: string
+}
+const FAMILY_PAINT: LongtailPaint = { hull: WOOD, hullDark: WOOD_DARK, inside: WOOD_IN, stripe: PAL.hotpink, trim: PAL.butter }
+
+export function buildLongtail(bag: Bag, paint: LongtailPaint = FAMILY_PAINT): Longtail {
   const root = new Group()
   const body = new Group()
   root.add(body)
   const parts = [
     // The hull: a long rounded tub, a pink stripe along the top, the inside lighter, a darker keel line.
-    P.rbox(1.3, 0.55, L, 0.25, WOOD, { at: [0, 0.2, 0] }),
-    P.box(1.36, 0.1, L - 0.6, PAL.hotpink, { at: [0, 0.43, -0.1] }),
-    P.box(1.34, 0.05, L - 0.8, PAL.butter, { at: [0, 0.33, -0.1] }),
-    P.box(1.1, 0.06, L - 1.2, WOOD_IN, { at: [0, 0.46, -0.2] }),
+    P.rbox(1.3, 0.55, L, 0.25, paint.hull, { at: [0, 0.2, 0] }),
+    P.box(1.36, 0.1, L - 0.6, paint.stripe, { at: [0, 0.43, -0.1] }),
+    P.box(1.34, 0.05, L - 0.8, paint.trim, { at: [0, 0.33, -0.1] }),
+    P.box(1.1, 0.06, L - 1.2, paint.inside, { at: [0, 0.46, -0.2] }),
     // Planks along the inside floor.
-    ...[-0.32, 0, 0.32].map((x) => P.box(0.04, 0.02, L - 1.6, WOOD_DARK, { at: [x, 0.495, -0.2] })),
+    ...[-0.32, 0, 0.32].map((x) => P.box(0.04, 0.02, L - 1.6, paint.hullDark, { at: [x, 0.495, -0.2] })),
     // The bow sweeps up into a tall prow.
-    P.rbox(0.9, 0.4, 1.3, 0.18, WOOD, { at: [0, 0.48, L / 2 - 0.25], rot: [-0.45, 0, 0] }),
-    P.rbox(0.42, 0.34, 1.1, 0.15, WOOD, { at: [0, 0.92, L / 2 + 0.25], rot: [-0.9, 0, 0] }),
-    P.cyl(0.07, 0.09, 0.7, WOOD, { at: [0, 1.32, L / 2 + 0.55], rot: [-0.35, 0, 0] }),
+    P.rbox(0.9, 0.4, 1.3, 0.18, paint.hull, { at: [0, 0.48, L / 2 - 0.25], rot: [-0.45, 0, 0] }),
+    P.rbox(0.42, 0.34, 1.1, 0.15, paint.hull, { at: [0, 0.92, L / 2 + 0.25], rot: [-0.9, 0, 0] }),
+    P.cyl(0.07, 0.09, 0.7, paint.hull, { at: [0, 1.32, L / 2 + 0.55], rot: [-0.35, 0, 0] }),
     P.sphere(0.1, PAL.gold, { at: [PROW.x, PROW.y, PROW.z] }),
     // Two benches.
-    ...[0.9, -0.5].map((z) => P.box(1.2, 0.08, 0.36, WOOD_IN, { at: [0, 0.5, z] })),
+    ...[0.9, -0.5].map((z) => P.box(1.2, 0.08, 0.36, paint.inside, { at: [0, 0.5, z] })),
     // The engine's post at the stern.
     P.cyl(0.09, 0.12, 0.5, POLE, { at: [0, 0.62, -L / 2 + 0.35] }),
   ]

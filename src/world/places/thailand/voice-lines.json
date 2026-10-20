@@ -402,6 +402,64 @@
   "A monitor lizard swims like a croc!",
   "A kingfisher! A flash of blue!",
   "This porpoise has no fin on its back!",
+  "A boat race! Drive through the rainbow gate!",
+  "Hold your finger on the water to go fast!",
+  "Three!",
+  "Two!",
+  "One!",
+  "Go!",
+  "Tap the button to use it!",
+  "A ramp! Tap in the air for a trick!",
+  "Lap two!",
+  "Last lap!",
+  "Kaylee wins! First place!",
+  "A trophy for Kaylee, the boat race champion!",
+  "Tap the boat to go back to the bay!",
+  "Kaylee, Boat Race Champion! From Thailand.",
+  {
+    "text": "Go, Kaylee, go!",
+    "voice": "nick"
+  },
+  {
+    "text": "Whoa! A banana!",
+    "voice": "nick"
+  },
+  {
+    "text": "Almost there!",
+    "voice": "nick"
+  },
+  {
+    "text": "We won!",
+    "voice": "nick"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "ji"
+  },
+  {
+    "text": "So fast!",
+    "voice": "ji"
+  },
+  {
+    "text": "You did it, sweetie!",
+    "voice": "ji"
+  },
+  {
+    "text": "Race you, Kaylee!",
+    "voice": "kids"
+  },
+  {
+    "text": "You can't catch us!",
+    "voice": "kids"
+  },
+  {
+    "text": "Hey!",
+    "voice": "kids"
+  },
+  {
+    "text": "Good race, Kaylee!",
+    "voice": "kids"
+  },
   {
     "text": "We're home, Kaylee!",
     "voice": "sri"

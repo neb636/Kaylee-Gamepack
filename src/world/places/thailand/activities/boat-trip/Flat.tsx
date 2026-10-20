@@ -3,19 +3,21 @@
 //   invite   Mommy asks (👍)
 //   pack     her things as big buttons, the suitcase fills up; ✅ closes it
 //   goodbye, airport, takeoff, fly, land, sunset   one picture each, one tap on ▶ to go on
-//   pier ... hong   the three stops as cards (the village, the hong, the Nail Island): tap one to visit it and hear its
-//            fact; the Nail Island opens the photo
+//   pier ... hong   the stops as cards (the village, the hong, the boat race, the Nail Island): tap one to visit it and
+//            hear its fact; the race opens its page, the Nail Island the photo
+//   race     three boats race across the water when she taps ▶ (hers wins by a nose), then the podium: her trophy
 //   nail     the photo as a drawn card: tap 📸 (flash!), then ▶
 //   home     Agong: tap the photo and it's his ("Beautiful! Thank you, Kaylee!"), the cousins look up, then the stamp
 // Sparkle stands above each page (not the packing page, which needs the room) and waves as it turns; tap her to hop.
 // Every section link lands on its page. Voices are the trip's own clips (lines.ts).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { say, sounds, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
+import { bigCelebration, say, sounds, SparklePuppet, Trophy, type Line, type PuppetHandle } from '../../../../../sdk'
 import { art } from '../../art'
 import { L } from '../../lines'
 import { sfx } from '../../sfx'
 import { ITEMS } from '../../trip/packing'
+import { RACE_TROPHY } from './race/RaceLayer'
 import type { BoatSection } from './sections'
 
 interface Props {
@@ -59,6 +61,8 @@ export function Flat({ section, packed, onPacked, onSection, onDone }: Props) {
     if (section === 'pack') return <Pack packed={packed} onPacked={onPacked} onClose={() => go('goodbye')} />
     if (section === 'nail') return <Photo onNext={() => go('sunset')} />
     if (section === 'home') return <Home onDone={onDone} />
+    if (section === 'race') return <RaceDay onWin={() => onSection('podium')} />
+    if (section === 'podium') return <PodiumPage onNext={() => go('bay')} />
     const leg = LEGS[section]
     if (leg) return <Leg key={section} {...leg} onNext={() => go(leg.next)} />
     return (
@@ -66,6 +70,7 @@ export function Flat({ section, packed, onPacked, onSection, onDone }: Props) {
         key={section}
         seen={seen}
         onNail={() => go('nail')}
+        onRace={() => go('race')}
         onVisit={(id) => {
           setSeen((v) => (v.includes(id) ? v : [...v, id]))
           onSection(id === 'hong' ? 'hong' : 'village')
@@ -171,7 +176,7 @@ function Leg({ scene, bg, line, onNext }: { scene: string; bg: string; line?: Li
   )
 }
 
-function Stops({ seen, onVisit, onNail }: { seen: string[]; onVisit: (id: 'village' | 'hong') => void; onNail: () => void }) {
+function Stops({ seen, onVisit, onNail, onRace }: { seen: string[]; onVisit: (id: 'village' | 'hong') => void; onNail: () => void; onRace: () => void }) {
   useEffect(() => void say(L.bay.whereTo), [])
   return (
     <>
@@ -179,6 +184,17 @@ function Stops({ seen, onVisit, onNail }: { seen: string[]; onVisit: (id: 'villa
         🚤
       </div>
       <div style={{ display: 'flex', gap: 'clamp(10px, 2.5vw, 24px)', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <motion.button
+          aria-label="The boat race"
+          whileTap={{ scale: 0.92 }}
+          onClick={() => {
+            sounds.pop()
+            onRace()
+          }}
+          style={{ ...card, background: '#FFB3CF', width: 'max(110px, min(28vw, 30vh, 260px))', aspectRatio: '3 / 4', fontSize: 'clamp(44px, 8vmin, 72px)' }}
+        >
+          🏁🏆
+        </motion.button>
         {STOPS.map((s) => {
           const done = seen.includes(s.id)
           return (
@@ -278,6 +294,62 @@ function Home({ onDone }: { onDone: () => void }) {
       >
         <DrawnPhoto small />
       </motion.button>
+    </>
+  )
+}
+
+/** The boat race as a picture: three boats on the water; ▶ and off they go, hers just ahead at the line. */
+function RaceDay({ onWin }: { onWin: () => void }) {
+  const [racing, setRacing] = useState(false)
+  useEffect(() => void say(L.race.start), [])
+  const lane = (icon: string, color: string, to: string, delay: number) => (
+    <div style={{ position: 'relative', height: 'clamp(56px, 9vh, 80px)', borderBottom: '3px dashed rgba(255,255,255,.7)' }}>
+      <motion.div aria-hidden initial={{ left: '0%' }} animate={racing ? { left: to } : { left: '0%' }} transition={{ duration: 3, delay, ease: 'easeInOut' }} style={{ position: 'absolute', top: '8%', fontSize: 'clamp(40px, 7vh, 60px)', display: 'flex', alignItems: 'center' }}>
+        <span style={{ background: color, borderRadius: '50%', padding: 4, fontSize: '0.6em' }}>{icon}</span>🚤
+      </motion.div>
+    </div>
+  )
+  return (
+    <>
+      <div style={{ ...card, background: 'linear-gradient(#78D4C1, #5FC7B4)', width: 'min(720px, 100%)', padding: '12px 16px', position: 'relative' }}>
+        <div aria-hidden style={{ position: 'absolute', right: 18, top: 0, bottom: 0, width: 20, background: 'repeating-conic-gradient(#2B2330 0% 25%, #FFFFFF 0% 50%) 0 0 / 20px 20px' }} />
+        {lane('🐃', '#7FB2E8', '74%', 0)}
+        {lane('🦄', '#FF8FB8', '80%', 0)}
+        {lane('🐒', '#F2C24C', '66%', 0.1)}
+      </div>
+      <Big
+        label="Race!"
+        disabled={racing}
+        onClick={() => {
+          setRacing(true)
+          sfx.vroom()
+          void say(L.race.count[3])
+          setTimeout(() => {
+            sounds.fanfare()
+            bigCelebration()
+            void say(L.race.win)
+            setTimeout(onWin, 1600)
+          }, 3200)
+        }}
+      >
+        🏁 ▶
+      </Big>
+    </>
+  )
+}
+
+/** The podium page: her trophy with KAYLEE on it, then on to the other stops. */
+function PodiumPage({ onNext }: { onNext: () => void }) {
+  useEffect(() => void say(L.race.trophy), [])
+  return (
+    <>
+      <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', bounce: 0.5 }}>
+        <Trophy title={RACE_TROPHY} size={Math.min(240, window.innerHeight * 0.32)} />
+      </motion.div>
+      <div aria-hidden style={{ fontSize: 'clamp(40px, 8vmin, 64px)' }}>🐃🥈 🦄🥇 🐒🥉</div>
+      <Big label="Next" onClick={onNext}>
+        ▶
+      </Big>
     </>
   )
 }

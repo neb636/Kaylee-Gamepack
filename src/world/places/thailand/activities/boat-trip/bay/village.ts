@@ -41,7 +41,7 @@ export const VILLAGE_ANCHORS: AnchorInfo[] = [
 
 const WALLS = ['#FFC2A8', '#D9CCFF', '#BDE8D8', '#FFE7A6', '#FFD1E3', '#BFE0FF']
 const ROOFS = ['#E07A8F', '#7FB2E8', '#9AD6B0', '#B9A6F5', '#F2A65A']
-const KIDS: Look[] = [
+export const KIDS: Look[] = [
   { species: 'buffalo', height: 0.95, fur: '#C49A7A', light: '#F2E2D0', dark: '#6E5A4E', ear: '#FFB8CC', outfit: { kind: 'tee', color: '#FFD27A', shorts: '#7FB2E8' } },
   { species: 'fox', height: 0.9, fur: '#F2B36B', light: '#FFF1E2', dark: '#2B2330', ear: '#FFE6CC', outfit: { kind: 'tee', color: '#FF8FB8', shorts: '#8FE3C8' }, lashes: true },
   { species: 'elephant', height: 0.92, fur: '#B8C4E8', light: '#E3E8F8', dark: '#8E9BCB', ear: '#FFB8CC', outfit: { kind: 'tee', color: '#8FE3C8', shorts: '#B9A6F5' } },
