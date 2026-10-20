@@ -56,7 +56,9 @@ export function PackCard({ open, packed, sitting, onClose }: Props) {
           aria-label="Close the suitcase"
           initial={{ scale: 0 }}
           animate={{ scale: [1, 1.1, 1] }}
-          exit={{ scale: 0 }}
+          // The exit gets its own transition: the pulse's `repeat: Infinity` would otherwise shrink it forever and the
+          // button would never leave.
+          exit={{ scale: 0, transition: { duration: 0.2 } }}
           transition={{ repeat: Infinity, duration: 1.2, ease: 'easeInOut' }}
           whileTap={{ scale: 0.85 }}
           onClick={onClose}
