@@ -60,11 +60,11 @@ const U = DIM.g0
 const deg = Math.PI / 180
 /** Where everything is in her room for packing (meters; y above her floor). */
 const ROOM = {
-  wall: { x: -0.9, z: -20.45 },
-  suitcase: { x: -0.5, z: -19.45 },
-  kaylee: { x: 0.2, z: -19.3, face: -95 },
+  wall: { x: 0.3, z: -20.45 },
+  suitcase: { x: -0.3, z: -19.45 },
+  kaylee: { x: 0.35, z: -19.3, face: -95 },
   ji: { floor: 1 as const, x: 1.55, z: -20.1, face: -25, pose: 'stand' as const },
-  gan: { floor: 1 as const, x: -2.65, z: -19.3, face: 0, pose: 'lie' as const },
+  gan: { floor: 1 as const, x: -1.775, z: -20.37, face: 90, pose: 'lie' as const },
   items: {
     sunhat: [-1.05, 0, -18.3],
     sunglasses: [-0.45, 0, -18.0],
@@ -74,9 +74,9 @@ const ROOM = {
     duck: [0.75, 0, -18.95],
     camera: [0.85, 0, -19.75],
     bucket: [1.45, 0, -19.2],
-    pillow: [-2.25, 0.22, -19.75],
-    teddy: [-1.32, 0, -19.0],
-    fan: [-1.22, 0, -20.3],
+    pillow: [-1.0, 0.22, -19.55],
+    teddy: [-1.55, 0.22, -19.2],
+    fan: [-0.95, 0.22, -20.35],
     mango: [-0.2, 0, -17.65],
   } as Record<string, [number, number, number]>,
 }
@@ -263,7 +263,7 @@ export class TripHouse implements HousePlugin {
     this.follow = false
     if (leg === 'goodbye') return this.setUpGoodbye()
     if (leg === 'home') return this.setUpHome()
-    // Her room: Mommy beside the suitcase spot, Gan asleep at the near end of the mattress.
+    // Her room: Mommy beside the suitcase spot, Gan asleep on the far side of the mattress.
     h.placeFamily('ji', ROOM.ji)
     h.placeFamily('gan', ROOM.gan)
     this.ganPacked = false

@@ -32,7 +32,7 @@ import { buildGround } from './build/ground'
 import type { Kit } from './build/kit'
 import { Reactor, rememberRest } from './build/pokes'
 import { buildStairs } from './build/stairs'
-import { buildStreet } from './build/street'
+import { buildStreet, TUK_SEAT } from './build/street'
 import { Traffic } from './build/traffic'
 import { buildUpper } from './build/upper'
 import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
@@ -464,8 +464,8 @@ export class House implements World3D {
     if (this.using === p.id && p.use) {
       if (p.use.pose === 'bounce') {
         sfx.boingAt(k.bounceHigher())
-        // After the biggest bounce she flops down along the mattress, head on the pillows.
-        k.face(k.pose === 'lie' ? 0 : p.use.face * deg)
+        // After the biggest bounce she flops down along the mattress, head on the pillows at the left wall.
+        k.face(k.pose === 'lie' ? 90 : p.use.face * deg)
       } else k.react('wiggle')
       return
     }
@@ -884,6 +884,7 @@ export class House implements World3D {
     if (a.t >= 99) {
       // Skipped.
       this.parkTuk()
+      k.setPose('stand')
       k.place(STARTS.arrive.x, 0, STARTS.arrive.z, STARTS.arrive.face)
       this.finishArrival(true)
       return
@@ -891,10 +892,13 @@ export class House implements World3D {
     if (a.t < STOP) {
       const p = a.t / STOP
       const x = DROP_X + (16 - DROP_X) * (1 - p) ** 3
-      this.tuk?.position.set(x, Math.abs(Math.sin(a.t * 18)) * 0.025 * (1 - p), 3.95)
-      k.place(x - 0.35, 0.55, 3.95, 90)
+      const bump = Math.abs(Math.sin(a.t * 18)) * 0.025 * (1 - p)
+      this.tuk?.position.set(x, bump, 3.95)
+      k.place(x + TUK_SEAT.x, TUK_SEAT.y + bump, 3.95, 90)
+      k.setPose('sit')
     } else if (!a.hopped) {
       a.hopped = true
+      k.setPose('stand')
       k.hopTo(new Vector3(STARTS.arrive.x, 0, STARTS.arrive.z), 0.5, 0.65, () => {
         k.face(STARTS.arrive.face * deg)
         sfx.thump()

@@ -12,15 +12,15 @@
 //
 //   GROUND FLOOR (back)          UPSTAIRS (back)
 //  +-----------------+          +-----------------+
-//  | photos altar    |          | ac  suitcase bath|
-//  |    shrine  cook |          |MATT  gecko      |
-//  |                 |          |RESS             |
-//  |          fridge |          |   KAYLEE'S ROOM |
+//  | photos altar    |          |MATTRESS ac   bath|
+//  |    shrine  cook |          |    suitcase gecko|
+//  |                 |          |                 |
+//  |                 |          |   KAYLEE'S ROOM |
 //  |+-------+        |          |           couch |
 //  ||L (2) >>> top   |          |==== glass doors =|
 //  ||L               |          |+-------+  top   |
 //  ||L (1) <<< foot  |          || well  |  plant |
-//  |+-------+        |          |+-------+ hallway|
+//  |+-------+ fridge |          |+-------+ hallway|
 //  | couch       fan |          |=== balcony rail=|
 //  | table    Agong D|          |  open: looks    |
 //  | table         E |          |  down into the  |
@@ -113,7 +113,7 @@ export const PICKABLES: Pickable[] = [
   { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.45, -4.0], r: 0.95, react: 'tilt', use: { x: -0.3, z: -3.0, face: -70, pose: 'lookup' } },
   { id: 'clock', label: 'Clock', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.85, -5.75], r: 0.32, react: 'tick', use: { x: -1.3, z: -5.95, face: -80, pose: 'lookup' } },
   { id: 'fan', label: 'Fan', floor: 0, area: 'inside', at: [2.5, 1.15, -5.75], r: 0.5, react: 'spin', use: { x: 1.75, z: -5.3, face: 120, pose: 'peek' } },
-  { id: 'fridge', label: 'Fridge', floor: 0, area: 'inside', at: [2.775, 0.9, -11.75], r: 0.65, react: 'open', use: { x: 2.025, z: -11.75, face: 90, pose: 'peek' } },
+  { id: 'fridge', label: 'Fridge', floor: 0, area: 'inside', at: [2.775, 0.9, -6.9], r: 0.65, react: 'open', use: { x: 2.025, z: -6.9, face: 90, pose: 'peek' } },
   { id: 'altar', label: 'Family altar', floor: 0, area: 'inside', at: [-0.3, 1.35, B + 0.3], r: 0.8, react: 'glow', gentle: true, use: { x: -0.3, z: B + 1.15, face: 180, pose: 'wai' } },
   { id: 'photos-back', label: 'More old photos', floor: 0, area: 'inside', at: [-1.85, 2.95, B + 0.03], r: 0.7, react: 'tilt', use: { x: -1.7, z: B + 1.0, face: 180, pose: 'lookup' } },
   { id: 'shrine', label: 'Little shrine', floor: 0, area: 'inside', at: [0.9, 0.3, B + 0.25], r: 0.4, react: 'glow', gentle: true, use: { x: 0.9, z: B + 1.0, face: 180, pose: 'wai' } },
@@ -127,15 +127,15 @@ export const PICKABLES: Pickable[] = [
   { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-0.6, U + 0.3, -10.6], r: 0.75, react: 'stairs' },
   { id: 'plant', label: 'Plant', floor: 1, area: 'inside', at: [2.1, U + 0.4, -5.65], r: 0.35, react: 'jelly', use: { x: 1.4, z: -5.8, face: 90, pose: 'peek' } },
   { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [1.85, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: 1.85, z: -16.998, face: 180, pose: 'stand' } },
-  { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-2.275, U + 0.25, -19.2], r: 1.0, react: 'jelly', use: { x: -1.0, z: -19.0, face: 25, pose: 'bounce', snap: { x: -1.95, z: -19.0, y: 0.22 } } },
-  { id: 'pillows', label: 'Pillows', floor: 1, area: 'inside', at: [-2.275, U + 0.35, -20.348], r: 0.55, react: 'puff', use: { x: -1.0, z: -19.548, face: 0, pose: 'lie', snap: { x: -1.95, z: -19.498, y: 0.22 } } },
+  { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-1.925, U + 0.25, -19.898], r: 1.15, react: 'jelly', use: { x: -0.35, z: -19.45, face: 25, pose: 'bounce', snap: { x: -1.7, z: -19.45, y: 0.22 } } },
+  { id: 'pillows', label: 'Pillows', floor: 1, area: 'inside', at: [-2.825, U + 0.35, -19.898], r: 0.6, react: 'puff', use: { x: -0.35, z: -19.43, face: 90, pose: 'lie', snap: { x: -1.975, z: -19.43, y: 0.22 } } },
   { id: 'couch', label: 'Couch', floor: 1, area: 'inside', at: [2.795, U + 0.5, -12.8], r: 0.75, react: 'jelly', use: { x: 1.925, z: -12.3, face: -90, pose: 'sit', snap: { x: 2.725, z: -12.3, y: 0.44 } } },
   { id: 'room-fan', label: 'Fan', floor: 1, area: 'inside', at: [0.4, U + 0.75, -16.798], r: 0.42, react: 'spin', use: { x: 0.4, z: -17.548, face: 0, pose: 'peek' } },
-  { id: 'suitcase', label: 'Suitcase', floor: 1, area: 'inside', at: [-0.9, U + 0.3, -20.448], r: 0.45, react: 'open', use: { x: -0.9, z: -19.748, face: 180, pose: 'peek' } },
+  { id: 'suitcase', label: 'Suitcase', floor: 1, area: 'inside', at: [0.3, U + 0.3, -20.448], r: 0.45, react: 'open', use: { x: 0.3, z: -19.748, face: 180, pose: 'peek' } },
   { id: 'bathroom-door', label: 'Bathroom door', floor: 1, area: 'inside', at: [2.2, U + 1.1, B + 0.06], r: 0.6, react: 'rattle', use: { x: 2.2, z: B + 0.95, face: 180, pose: 'stand' } },
-  // The mini-split air conditioner high on the back wall, over the head of the bed: it beeps like the remote.
-  { id: 'aircon', label: 'Air conditioner', floor: 1, area: 'inside', at: [-2.2, U + 2.45, B + 0.14], r: 0.5, react: 'beep' },
-  { id: 'gecko', label: 'Gecko', floor: 1, area: 'inside', at: [0.2, U + 2.3, B + 0.04], r: 0.35, react: 'gecko', moves: true },
+  // The mini-split air conditioner high on the back wall, over the bed: it beeps like the remote.
+  { id: 'aircon', label: 'Air conditioner', floor: 1, area: 'inside', at: [-1.0, U + 2.45, B + 0.16], r: 0.6, react: 'beep' },
+  { id: 'gecko', label: 'Gecko', floor: 1, area: 'inside', at: [0.5, U + 2.3, B + 0.04], r: 0.35, react: 'gecko', moves: true },
 ]
 
 /** Where she walks on each floor (carved), and what's in the way (blocked). Rects are [x0, x1, z0, z1]. */
@@ -156,7 +156,7 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [1.725, 2.325, -4.5, -3.9], // his chair
       [-2.625, -1.525, -3.77, -1.43], // table
       [DIM.left, -2.25, -7.9, -5.1], // grey couch
-      [2.425, DIM.right, -12.1, -11.4], // fridge
+      [2.425, DIM.right, -7.25, -6.55], // fridge
       [2.575, DIM.right, -1.25, -0.45], // shoes
       [S.x0, S.x1 + 0.05, S.zBack, S.zFront], // stairs
       [-1.0, 0.4, B, B + 0.55], // altar
@@ -187,9 +187,9 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [S.x0, S.x1 + 0.05, S.zBack, S.zFront], // stairwell (she comes out of it at the front, along the left wall)
       [DIM.left, HALL.door0, HALL.zGlass - 0.06, HALL.zGlass + 0.06], // the glass wall, left of the doorway
       [HALL.door1, DIM.right, HALL.zGlass - 0.06, HALL.zGlass + 0.06],
-      [DIM.left, -1.4, -20.748, -18.548], // the big mattress + pillows
+      [DIM.left, -0.675, B, -18.9], // the big mattress + pillows
       [2.425, DIM.right, -14.0, -11.6], // couch
-      [-1.25, -0.55, B, -20.198], // suitcase
+      [-0.05, 0.65, B, -20.198], // suitcase
     ],
     circles: [
       [0.4, -16.798, 0.2], // fan
