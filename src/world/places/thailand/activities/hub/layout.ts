@@ -60,7 +60,7 @@ export const DIM = {
   stairs: { x0: -3.125, xLanding: -1.865, xFoot: 0.675, zTop: -9.01, zLanding: -11.55, zBack: -12.74, steps: 9 },
   /** The wall behind the stairs that hides the kitchen: from the left wall to x1, `t` thick, its front face on the
    *  stairs' back edge. */
-  stairWall: { x1: 2.4, t: 0.15 },
+  stairWall: { x1: 2.15, t: 0.15 },
   /**
    * The wooden divider between the front room and the stairs, like Agong's real one (Dad's photo, 2026-10-20): a wall
    * of rosewood cabinets, floor to ceiling, centered at `z` and `d` deep, running all the way from the left wall to
