@@ -1,6 +1,6 @@
 // Downstairs at Agong's: his desk against the right wall at the front (he sits there a lot), the long table on the
 // left with red plastic stools, old photos on the left wall and on the back wall, a fan; the stairs
-// (stairs.ts, at the back left); the fridge against the right wall just past the fan (near the table), and in the back room
+// (stairs.ts, at the back left); the fridge against the right wall in the back room, just in front of the kitchen counter; and in the back room
 // the family altar, the little shrine and the kitchen counter with the rice cooker.
 // The desk, his slatted wooden chair, the pictures and the big fan follow Dad's photos of the
 // real room (~/refs, 2026-10-18): glossy dark red-brown wood, cream walls, golden terrazzo with green bands.
@@ -233,8 +233,8 @@ export function buildGround(kit: Kit): Ground {
 
   // ---- Fan, fridge, the kitchen counter with the rice cooker, shoes ----
   room.add(pedestalFan(kit, 'fan', [2.5, 0, -5.75], -0.31))
-  // The fridge against the right wall just past the fan, handy for the table (Dad, 2026-10-20).
-  const fridge = poke(kit, 'fridge', [P.rbox(0.68, 1.7, 0.66, 0.06, '#C9EEF7', { at: [0, 0.85, 0] })], [right - 0.35, 0, -6.9], { rotY: -Math.PI / 2 })
+  // The fridge against the right wall in the back room, just in front of the kitchen counter (Dad, 2026-10-20).
+  const fridge = poke(kit, 'fridge', [P.rbox(0.68, 1.7, 0.66, 0.06, '#C9EEF7', { at: [0, 0.85, 0] })], [right - 0.35, 0, -16.75], { rotY: -Math.PI / 2 })
   const door = part(kit, 'fridge.hinge', [P.rbox(0.68, 1.1, 0.06, 0.03, '#D9F4FA', { at: [0.34, 0.55, 0] }), P.box(0.04, 0.3, 0.05, PAL.cream, { at: [0.62, 0.55, 0.05] })], [-0.34, 0.56, 0.36], 1.5)
   door.userData.swing = -1.4
   fridge.add(door)
