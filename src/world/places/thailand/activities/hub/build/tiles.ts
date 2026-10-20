@@ -128,11 +128,11 @@ const SHOP: Floor = {
 }
 
 /** Upstairs: two by two big tiles of pale grey terrazzo, with thin dark seams between them (laid 50% bigger than
- *  drawn, Dad 2026-10-19: 0.9 m tiles). */
+ *  drawn, Dad 2026-10-19, then 25% bigger again, 2026-10-20: 1.125 m tiles). */
 const UPSTAIRS: Floor = {
   w: 1.2,
   d: 1.2,
-  scale: 1.5,
+  scale: 1.875,
   ppm: 512,
   base: '#E7E5E1',
   chips: { colors: ['#B9BCC2', '#8F949C', '#F7F6F3', '#D3D4D6', '#5D626B', '#3F434B', '#A39684', '#C9C2B5'], perM2: 9500, size: [0.005, 0.026] },

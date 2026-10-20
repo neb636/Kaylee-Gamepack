@@ -23,6 +23,8 @@ const STEP = '#46C2B4'
 const SCUFF = '#E9F7F3'
 const STEP_YELLOW = '#E8DC6A'
 const SIGN = '#8E5C45'
+/** Where she sits in the tuk-tuk: on its back bench, from its center (the cushion's top is 0.98 m up). */
+export const TUK_SEAT = { x: -0.5, y: 0.94 }
 const SIGN_EDGE = '#5E3B2C'
 const GLASS = '#A99BE0'
 const POT = '#EBA27E'
@@ -355,7 +357,8 @@ function cat(kit: Kit) {
   return g
 }
 
-/** The tuk-tuk that brought her (parked on the road after the arrival). Faces +x. */
+/** The tuk-tuk that brought her (parked on the road after the arrival). Faces +x. Open sides: she rides on the back
+ *  bench (`TUK_SEAT`), under a roof high enough for her horn. */
 function tukTuk(kit: Kit) {
   const wheel = (at: V3) => P.torus(0.2, 0.08, PAL.ink, { at })
   return poke(
@@ -367,14 +370,16 @@ function tukTuk(kit: Kit) {
       wheel([-0.6, 0.28, 0.55]),
       P.rbox(2.1, 0.5, 1.2, 0.12, PAL.sky, { at: [0, 0.62, 0] }),
       P.rbox(0.7, 0.55, 0.9, 0.12, '#FF7FA8', { at: [0.75, 1.1, 0] }),
-      P.rbox(1.2, 0.5, 1.15, 0.1, PAL.lavender, { at: [-0.4, 1.1, 0] }),
-      P.rbox(2.3, 0.12, 1.4, 0.06, PAL.hotpink, { at: [-0.1, 1.95, 0] }),
+      // The passenger bench: a cushion and a backrest at the back.
+      P.rbox(0.75, 0.12, 1.15, 0.05, PAL.lavender, { at: [-0.5, 0.92, 0] }),
+      P.rbox(0.16, 0.6, 1.15, 0.06, PAL.lavender, { at: [-0.95, 1.2, 0] }),
+      P.rbox(2.3, 0.12, 1.4, 0.06, PAL.hotpink, { at: [-0.1, 2.15, 0] }),
       ...[
         [1.05, 0.62],
         [1.05, -0.62],
         [-1.1, 0.62],
         [-1.1, -0.62],
-      ].map(([x, z]) => P.cyl(0.035, 0.035, 0.95, PAL.cream, { at: [x, 1.45, z] })),
+      ].map(([x, z]) => P.cyl(0.035, 0.035, 1.15, PAL.cream, { at: [x, 1.55, z] })),
       P.sphere(0.1, PAL.butter, { at: [1.12, 0.75, 0], scale: [0.5, 1, 1] }),
     ],
     [9.8, 0, 3.95],

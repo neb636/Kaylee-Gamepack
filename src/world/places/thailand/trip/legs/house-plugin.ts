@@ -60,28 +60,28 @@ const U = DIM.g0
 const deg = Math.PI / 180
 /** Where everything is in her room for packing (meters; y above her floor). */
 const ROOM = {
-  wall: { x: -0.9, z: -20.45 },
-  suitcase: { x: -0.5, z: -19.45 },
-  kaylee: { x: 0.2, z: -19.3, face: -95 },
+  wall: { x: 0.3, z: -20.45 },
+  suitcase: { x: 0.4, z: -19.45 },
+  kaylee: { x: 1.0, z: -19.3, face: -95 },
   ji: { floor: 1 as const, x: 1.55, z: -20.1, face: -25, pose: 'stand' as const },
-  gan: { floor: 1 as const, x: -2.65, z: -19.3, face: 0, pose: 'lie' as const },
+  gan: { floor: 1 as const, x: -1.725, z: -19.3, face: 90, pose: 'lie' as const },
   items: {
-    sunhat: [-1.05, 0, -18.3],
-    sunglasses: [-0.45, 0, -18.0],
+    sunhat: [-0.75, 0.22, -17.9],
+    sunglasses: [-0.4, 0, -17.1],
     sunscreen: [0.1, 0, -18.3],
     floaties: [0.72, 0, -18.05],
     swimsuit: [1.2, 0, -18.4],
-    duck: [0.75, 0, -18.95],
-    camera: [0.85, 0, -19.75],
+    duck: [0.6, 0, -18.6],
+    camera: [-0.45, 0.22, -18.75],
     bucket: [1.45, 0, -19.2],
-    pillow: [-2.25, 0.22, -19.75],
-    teddy: [-1.32, 0, -19.0],
-    fan: [-1.22, 0, -20.3],
-    mango: [-0.2, 0, -17.65],
+    pillow: [-1.0, 0.22, -18.9],
+    teddy: [-1.55, 0.22, -18.55],
+    fan: [-0.95, 0.22, -19.7],
+    mango: [-1.1, 0, -17.05],
   } as Record<string, [number, number, number]>,
 }
 /** Where Kaylee stands while Mommy asks (between her and the suitcase by the wall). */
-const INVITE = { x: 0.55, z: -19.5 }
+const INVITE = { x: 0.9, z: -19.5 }
 /** The sidewalk at the goodbye (street floor, +z toward the road). */
 const STREET = {
   kaylee: { x: 0.25, z: 1.85, face: 0 },
@@ -263,7 +263,7 @@ export class TripHouse implements HousePlugin {
     this.follow = false
     if (leg === 'goodbye') return this.setUpGoodbye()
     if (leg === 'home') return this.setUpHome()
-    // Her room: Mommy beside the suitcase spot, Gan asleep at the near end of the mattress.
+    // Her room: Mommy beside the suitcase spot, Gan asleep on the far side of the mattress.
     h.placeFamily('ji', ROOM.ji)
     h.placeFamily('gan', ROOM.gan)
     this.ganPacked = false

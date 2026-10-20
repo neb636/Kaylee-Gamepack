@@ -10,8 +10,8 @@ import { poke, scenery, type Kit } from './kit'
 const SKIN = '#9FB8E8'
 const SPOT = '#FFB27A'
 /** Where it roams on the back wall: x from..to, y from..to (between the air conditioner and the bathroom door). */
-const ZONE = { x0: -1.3, x1: 1.5, y0: DIM.g0 + 1.9, y1: DIM.g0 + 2.65 }
-const START = { x: 0.2, y: DIM.g0 + 2.3 }
+const ZONE = { x0: -0.2, x1: 1.5, y0: DIM.g0 + 1.9, y1: DIM.g0 + 2.65 }
+const START = { x: 0.5, y: DIM.g0 + 2.3 }
 
 export class Gecko {
   readonly root: Group

@@ -1,7 +1,7 @@
 // Upstairs: the stairs come out in a small hallway that looks down into the shop over a balcony railing (the front
 // half of the house is open, two floors high), and glass sliding doors lead back into the room Kaylee sleeps in, at
-// the back of the house. In her room (Dad, 2026-10-19): one big queen mattress on the floor against the left wall,
-// its long side along the room, her drawings taped above it and a mini-split air conditioner on the wall over its head;
+// the back of the house. In her room (Dad, 2026-10-19): one big mattress on the floor in the back left corner, its long
+// side across the room (Dad, 2026-10-20), her drawings taped above its head and a mini-split air conditioner on the back wall;
 // the grey couch on the right just inside the glass doors; her suitcase; a fan; and the bathroom door at the
 // back on the right, aluminium like the real one (Dad's photo, 2026-10-18). It's locked: it only rattles. The floor is
 // pale grey terrazzo tiles like the real one (tiles.ts). The house gecko lives on the back wall (gecko.ts).
@@ -63,10 +63,10 @@ export function buildUpper(kit: Kit): Upper {
       P.box(0.03, 0.12, depth, '#CFC8BE', { at: [left + 0.015, U + 0.06, back / 2] }),
       // Kaylee's drawings taped above the mattress.
       ...[
-        [-18.0, PAL.pink],
-        [-18.6, PAL.butter],
-        [-19.2, PAL.sky],
-        [-19.8, PAL.mint],
+        [-17.9, PAL.pink],
+        [-18.45, PAL.butter],
+        [-19.0, PAL.sky],
+        [-19.55, PAL.mint],
       ].map(([z, c], i) => P.box(0.02, 0.36, 0.3, c as string, { at: [left + 0.01, U + 1.25 + (i % 2) * 0.18, z as number], rot: [(i % 2 ? 0.08 : -0.06), 0, 0] })),
     ]),
   )
@@ -96,15 +96,14 @@ export function buildUpper(kit: Kit): Upper {
   doors.add(scenery(kit, [P.box(w, 0.06, 0.06, FRAME, { at: [0, 2.21, 0] }), P.box(w, 0.06, 0.06, FRAME, { at: [0, 0.03, 0] }), ...[-1, 1].map((s) => P.box(0.06, 2.24, 0.06, FRAME, { at: [(s * w) / 2, 1.12, 0] })), P.box(0.03, 0.3, 0.05, PAL.ink, { at: [w / 2 - 0.12, 1.1, -0.03] })], 1.5))
   glassWall.add(doors)
 
-  // ---- One big queen mattress against the left wall, its head at the back wall ----
-  const bed = { x: -2.275, z0: -20.748, len: 2.2, w: 1.65 }
-  const mattress = poke(kit, 'mattress', [], [bed.x, U, -19.2])
-  const mid = bed.z0 + bed.len / 2 - -19.2
-  mattress.add(scenery(kit, [P.rbox(bed.w, 0.22, bed.len, 0.06, PAL.cream, { at: [0, 0.11, mid] }), P.rbox(bed.w - 0.08, 0.03, bed.len - 0.1, 0.02, PAL.pink, { at: [0, 0.225, mid] })], 2))
+  // ---- One big mattress against the left wall, a meter off the back wall, its long side across the room ----
+  const bed = { x: left + 1.5, z: back + 1.0 + 1.1875, len: 3.0, w: 2.375 }
+  const mattress = poke(kit, 'mattress', [], [bed.x, U, bed.z])
+  mattress.add(scenery(kit, [P.rbox(bed.len, 0.22, bed.w, 0.06, PAL.cream, { at: [0, 0.11, 0] }), P.rbox(bed.len - 0.1, 0.03, bed.w - 0.08, 0.02, PAL.pink, { at: [0, 0.225, 0] })], 2))
   // A folded blanket across its foot.
-  mattress.add(scenery(kit, [P.rbox(bed.w - 0.2, 0.1, 0.45, 0.05, PAL.lavenderDark, { at: [0, 0.27, mid + bed.len / 2 - 0.35] })], 2))
+  mattress.add(scenery(kit, [P.rbox(0.45, 0.1, bed.w - 0.2, 0.05, PAL.lavenderDark, { at: [bed.len / 2 - 0.35, 0.27, 0] })], 2))
   room.add(mattress)
-  room.add(poke(kit, 'pillows', [P.rbox(0.62, 0.16, 0.4, 0.07, PAL.cream, { at: [-0.38, 0.08, 0] }), P.rbox(0.62, 0.16, 0.4, 0.07, '#FFE3EF', { at: [0.38, 0.08, 0] }), P.box(0.62, 0.012, 0.06, PAL.hotpink, { at: [0.38, 0.165, 0] })], [-2.275, U + 0.2, -20.348]))
+  room.add(poke(kit, 'pillows', [P.rbox(0.5, 0.18, 0.78, 0.08, PAL.cream, { at: [0, 0.09, -0.59] }), P.rbox(0.5, 0.18, 0.78, 0.08, '#FFE3EF', { at: [0, 0.09, 0.59] }), P.box(0.07, 0.012, 0.78, PAL.hotpink, { at: [0, 0.185, 0.59] })], [left + 0.35, U + 0.2, bed.z]))
 
   // ---- The grey couch on the right, just inside the glass doors (faces left) ----
   room.add(
@@ -125,13 +124,13 @@ export function buildUpper(kit: Kit): Upper {
   )
 
   // ---- Her suitcase (the lid opens), a fan, the air conditioner ----
-  const suitcase = poke(kit, 'suitcase', [P.rbox(0.62, 0.26, 0.42, 0.05, PAL.hotpink, { at: [0, 0.13, 0] }), P.box(0.64, 0.03, 0.06, PAL.gold, { at: [0, 0.13, 0.2] })], [-0.9, U, -20.448], { rotY: Math.PI })
+  const suitcase = poke(kit, 'suitcase', [P.rbox(0.62, 0.26, 0.42, 0.05, PAL.hotpink, { at: [0, 0.13, 0] }), P.box(0.64, 0.03, 0.06, PAL.gold, { at: [0, 0.13, 0.2] })], [0.3, U, -20.448], { rotY: Math.PI })
   const lid = part(kit, 'suitcase.hinge', [P.rbox(0.62, 0.08, 0.42, 0.04, PAL.hotpink, { at: [0, 0.04, 0.21] }), P.torus(0.06, 0.015, PAL.gold, { at: [0, 0.08, 0.3], rot: [Math.PI / 2, 0, 0] })], [0, 0.26, -0.21], 2)
   lid.userData.swingX = -1.6
   suitcase.add(lid)
   room.add(suitcase)
   room.add(standingFan(kit, 'room-fan', [0.4, U, -16.798], Math.PI))
-  room.add(airCon(kit, [-2.2, U + 2.45, back]))
+  room.add(airCon(kit, [-1.0, U + 2.45, back]))
   room.add(bathroomDoor(kit, [2.2, U, back]))
   // A blue laundry basket by the bathroom door, like the real one.
   const BASKET = '#3D8FD6'
@@ -192,26 +191,39 @@ function bathroomDoor(kit: Kit, at: [number, number, number]) {
 }
 
 /**
- * The wall-mounted mini-split air conditioner, like in every Thai bedroom: a long white rounded box with a curved
- * front, the louver flap along its bottom, a little green light, and the pipe running down the wall beside it.
+ * The wall-mounted mini-split air conditioner, like in every Thai bedroom: a long white rounded box with a softly
+ * curved front panel, the intake grille on top, the louver flap along its bottom tipped down to blow cool air, a little
+ * display with a green light, a sky-blue snowflake, and the pipe cover going into the wall at its left end.
  */
 function airCon(kit: Kit, at: [number, number, number]) {
-  const W = 0.95
+  const W = 1.25
+  const WHITE = '#FBFBF8'
   const g = poke(
     kit,
     'aircon',
     [
-      P.rbox(W, 0.3, 0.22, 0.07, '#FBFBF8', { at: [0, 0, 0.11] }),
-      P.rbox(W - 0.06, 0.14, 0.02, 0.01, '#EEEEEA', { at: [0, 0.05, 0.225] }),
-      // The louver flap, tipped down to blow cool air.
-      P.box(W - 0.12, 0.035, 0.08, '#E2E4E8', { at: [0, -0.12, 0.2], rot: [-0.5, 0, 0] }),
-      P.box(W - 0.1, 0.02, 0.06, '#9AA0A8', { at: [0, -0.135, 0.15] }),
-      // The pipe and its cover going down the wall.
-      P.box(0.08, 0.6, 0.06, '#F2F2EE', { at: [W / 2 - 0.08, -0.45, 0.03] }),
+      P.rbox(W, 0.36, 0.25, 0.1, WHITE, { at: [0, 0, 0.125] }),
+      // Its end caps, a shade darker.
+      ...[-1, 1].map((s) => P.rbox(0.04, 0.34, 0.24, 0.015, '#ECECE8', { at: [s * (W / 2 - 0.015), 0, 0.125] })),
+      // The intake grille on top.
+      ...[0.06, 0.11, 0.16].map((z) => P.box(W - 0.16, 0.01, 0.022, '#D6D8DC', { at: [0, 0.18, z] })),
+      // The front panel and the seam under it.
+      P.rbox(W - 0.08, 0.2, 0.025, 0.012, '#F4F4F0', { at: [0, 0.05, 0.25] }),
+      P.box(W - 0.1, 0.012, 0.012, '#D3D5DA', { at: [0, -0.065, 0.257] }),
+      // The air slot and the louver flap.
+      P.box(W - 0.14, 0.03, 0.09, '#8E949C', { at: [0, -0.16, 0.16] }),
+      P.rbox(W - 0.16, 0.045, 0.11, 0.015, '#E8EAEE', { at: [0, -0.17, 0.22], rot: [-0.55, 0, 0] }),
+      // The display (where the remote's temperature shows).
+      P.rbox(0.17, 0.06, 0.012, 0.01, '#3C4250', { at: [W / 2 - 0.2, -0.02, 0.265] }),
+      P.box(0.09, 0.025, 0.004, '#8FDBFF', { at: [W / 2 - 0.215, -0.02, 0.272] }),
+      // A sky-blue snowflake on the panel.
+      ...[0, 1, 2].map((i) => P.box(0.1, 0.014, 0.004, PAL.sky, { at: [-W / 2 + 0.2, 0.05, 0.265], rot: [0, 0, (i * Math.PI) / 3] })),
+      // The pipe cover from its left end into the wall.
+      P.box(0.09, 0.32, 0.06, '#F2F2EE', { at: [-W / 2 + 0.14, -0.33, 0.03] }),
     ],
     [at[0], at[1], at[2] + 0.005],
     { px: 1.5 },
   )
-  g.add(part(kit, 'aircon.light', [P.sphere(0.014, '#5BD67A')], [W / 2 - 0.1, -0.06, 0.225], 0))
+  g.add(part(kit, 'aircon.light', [P.sphere(0.014, '#5BD67A')], [W / 2 - 0.08, -0.02, 0.268], 0))
   return g
 }
