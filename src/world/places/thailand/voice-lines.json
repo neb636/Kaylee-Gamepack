@@ -161,6 +161,146 @@
     "voice": "putter"
   },
   {
+    "text": "Kaylee, are you ready to go on a trip?",
+    "voice": "ji"
+  },
+  {
+    "text": "OK! Tell me when!",
+    "voice": "ji"
+  },
+  {
+    "text": "Tap your things to pack them, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "All packed? Tap the suitcase!",
+    "voice": "ji"
+  },
+  {
+    "text": "It's hot and sunny at the sea!",
+    "voice": "ji"
+  },
+  {
+    "text": "Pack some more!",
+    "voice": "ji"
+  },
+  {
+    "text": "It's too full! Sit on it!",
+    "voice": "ji"
+  },
+  {
+    "text": "Five more minutes...",
+    "voice": "gan"
+  },
+  {
+    "text": "Yawn... so sleepy!",
+    "voice": "ji"
+  },
+  {
+    "text": "The fan blew it open!",
+    "voice": "ji"
+  },
+  {
+    "text": "Mommy always packs sunscreen!",
+    "voice": "ji"
+  },
+  {
+    "text": "Here's Mommy's spare sun hat!",
+    "voice": "ji"
+  },
+  {
+    "text": "Bring Agong a photo of the Nail Island!",
+    "voice": "agong"
+  },
+  {
+    "text": "Snacks for the trip!",
+    "voice": "jum"
+  },
+  {
+    "text": "Bye...",
+    "voice": "gan"
+  },
+  {
+    "text": "Bye...",
+    "voice": "ken"
+  },
+  {
+    "text": "Bye...",
+    "voice": "bb"
+  },
+  {
+    "text": "Aunty Sri is here! Hop in!",
+    "voice": "nick"
+  },
+  {
+    "text": "Beep beep! To the airport!",
+    "voice": "sri"
+  },
+  {
+    "text": "Put your suitcase on the belt!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ha ha! What a suitcase!",
+    "voice": "officer"
+  },
+  {
+    "text": "A sleeping fox?!",
+    "voice": "officer"
+  },
+  {
+    "text": "A fan? Ha ha!",
+    "voice": "officer"
+  },
+  {
+    "text": "Our plane! Tap the door!",
+    "voice": "nick"
+  },
+  {
+    "text": "Seatbelt on, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Whee! Up we go!",
+    "voice": "ji"
+  },
+  {
+    "text": "Tray down, then press the button!",
+    "voice": "ji"
+  },
+  {
+    "text": "Snacks for Kaylee!",
+    "voice": "attendant"
+  },
+  {
+    "text": "More snacks?!",
+    "voice": "attendant"
+  },
+  {
+    "text": "Want some of mine?",
+    "voice": "ji"
+  },
+  {
+    "text": "Night night!",
+    "voice": "ji"
+  },
+  {
+    "text": "Huh? Are we there yet?",
+    "voice": "nick"
+  },
+  {
+    "text": "Seatbelts on! We are landing!",
+    "voice": "ji"
+  },
+  {
+    "text": "Yay! We're in Krabi!",
+    "voice": "nick"
+  },
+  "Thailand looks like an elephant's head!",
+  "Tap your suitcase!",
+  "Tap the plane's door!",
+  "Tap the tray!",
+  {
     "text": "Our longtail boat! Tie on ribbons for good luck!",
     "voice": "nick"
   },

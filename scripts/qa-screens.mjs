@@ -432,8 +432,8 @@ const SCREENS = [
     hash: '#/world/thailand/boat-trip/goodbye',
     reset: true,
     act: async (p) => {
-      await p.locator('[data-anchor="trip:car"]').waitFor({ state: 'visible', timeout: 20000 }).catch(() => {})
-      await p.locator('[data-anchor="trip:car"]').click({ force: true }).catch(() => {})
+      await p.locator('[data-anchor="trip:van"]').waitFor({ state: 'visible', timeout: 20000 }).catch(() => {})
+      await p.locator('[data-anchor="trip:van"]').click({ force: true }).catch(() => {})
       await p.waitForSelector('[aria-label="Boarding pass"]', { timeout: 20000 }).catch(() => {})
       await p.waitForTimeout(700)
     },
@@ -447,6 +447,70 @@ const SCREENS = [
       await p.locator('[data-anchor="glow:beach"]').click({ force: true }).catch(() => {})
       await p.waitForFunction(() => window.__thaiBoatQA?.().phase === 'beach', null, { timeout: 45000 }).catch(() => {})
       await p.waitForTimeout(1200)
+    },
+  },
+  // The trip's moments (step 4): her things going on at the click, the doors onto the plane, the flight
+  // attendant's trolley, night night, the view of all of Thailand, and Krabi's songthaew.
+  {
+    name: 'boat-trip-put-on',
+    hash: '#/world/thailand/boat-trip/pack?packed=sunhat,sunglasses,floaties',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      await p.locator('[data-anchor="trip:suitcase"]').click({ force: true }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiBoatQA?.().wearing?.length >= 3, null, { timeout: 15000 }).catch(() => {})
+      await p.waitForTimeout(600)
+    },
+  },
+  {
+    name: 'boat-trip-doors',
+    hash: '#/world/thailand/boat-trip/airport?packed=sunhat,sunglasses,floaties',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      await p.locator('[data-anchor="suitcase"]').click({ force: true }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiBoatQA?.().phase === 'doors', null, { timeout: 30000 }).catch(() => {})
+      await p.waitForTimeout(1200)
+    },
+  },
+  {
+    name: 'boat-trip-attendant',
+    hash: '#/world/thailand/boat-trip/fly',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      for (let i = 0; i < 3; i++) await p.locator('[data-anchor="call"]').click({ force: true }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiBoatQA?.().snacks >= 2, null, { timeout: 15000 }).catch(() => {})
+      await p.waitForTimeout(400)
+    },
+  },
+  {
+    name: 'boat-trip-night',
+    hash: '#/world/thailand/boat-trip/fly',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      await p.locator('[data-anchor="window"]').click({ force: true }).catch(() => {})
+      await p.locator('[data-anchor="light"]').click({ force: true }).catch(() => {})
+      await p.waitForTimeout(1600)
+    },
+  },
+  {
+    name: 'boat-trip-elephant',
+    hash: '#/world/thailand/boat-trip/fly',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiBoatQA?.().view === 'elephant', null, { timeout: 45000 }).catch(() => {})
+      await p.waitForTimeout(1500)
+    },
+  },
+  {
+    name: 'boat-trip-krabi',
+    hash: '#/world/thailand/boat-trip/land',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiBoatQA?.().krabi === true, null, { timeout: 45000 }).catch(() => {})
+      await p.waitForTimeout(1400)
     },
   },
   { name: 'boat-trip-flat', hash: '#/world/thailand/boat-trip/bay?gl=off', reset: true, wait: 600 },

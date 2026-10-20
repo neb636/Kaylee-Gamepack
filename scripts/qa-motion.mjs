@@ -566,9 +566,11 @@ GAME_SCENARIOS.push(
   ),
 )
 
-// The boat trip's trip kit (3D greybox): things hopping into the suitcase in an arc, Kaylee sitting on the too-full
-// suitcase (squash, squash, squash, click), everyone hopping into Aunty Sri's van and it gliding off, the plane's takeoff
-// (everyone presses back, then up), and the tray and the call button (ding: snacks). Taps go through the tap targets.
+// The boat trip's way there: things hopping into the suitcase in an arc, Kaylee sitting on the too-full suitcase (squash, squash, squash, click) and her
+// things going on, everyone hopping into Aunty Sri's van and it gliding off, the suitcase through the x-ray and the
+// officer's stamp, the plane's takeoff (everyone presses back, then up), the tray and the call button (the flight
+// attendant's trolley, snacks piling up), the air vent in her mane, and the landing (bump, bump, claps) into Krabi's
+// songthaew. Taps go through the tap targets.
 const thaiTrip = (name, seconds, section, taps, wait = 1400) => ({
   name,
   seconds,
@@ -587,10 +589,13 @@ const thaiTrip = (name, seconds, section, taps, wait = 1400) => ({
 })
 GAME_SCENARIOS.push(
   thaiTrip('trip-toss', 3.4, 'pack', [['trip:item:sunhat', 500], ['trip:item:duck', 500], ['trip:item:floaties', 500], ['trip:item:duck', 900]]),
-  thaiTrip('trip-sit', 6, 'pack?packed=sunhat,floaties,duck,teddy,camera,bucket', [['trip:suitcase', 2600], ['trip:suitcase', 800], ['trip:suitcase', 1500]]),
+  thaiTrip('trip-sit', 7, 'pack?packed=sunhat,sunglasses,floaties,duck,teddy,camera', [['trip:suitcase', 2600], ['trip:suitcase', 800], ['trip:suitcase', 3000]]),
   thaiTrip('trip-van', 5, 'goodbye', [['trip:van', 4500]], 3800),
+  thaiTrip('trip-xray', 8, 'airport?packed=gan,fan,mango', [['suitcase', 7800]]),
   thaiTrip('trip-takeoff', 10, 'takeoff', [['belt', 9500]]),
-  thaiTrip('trip-tray', 4, 'fly', [['tray', 700], ['call', 1200], ['call', 1500]], 2000),
+  thaiTrip('trip-tray', 5, 'fly', [['tray', 700], ['call', 400], ['call', 3500]], 2000),
+  thaiTrip('trip-vent', 3, 'fly?packed=sunhat', [['vent', 2800]], 2000),
+  thaiTrip('trip-land', 9, 'land', [], 8000),
 )
 
 // Coco's Canyon Glide: hold a finger in the sky and Coco banks after it, sinking slowly in plain air; steer him into a

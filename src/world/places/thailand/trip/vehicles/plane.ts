@@ -1,4 +1,4 @@
-// The plane, greybox: from outside (the airport), a chubby pastel plane with a pink elephant on its tail and no airline
+// The plane from outside (the airport): a chubby pastel plane with a pink elephant on its tail and no airline
 // name; its door opens onto the boarding stairs. Nose toward -x, the door on its +z side (the side the camera sees).
 import { Group } from 'three'
 import type { Bag } from '../../engine/dispose'

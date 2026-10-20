@@ -9,9 +9,9 @@ import { bell, clamp, span, wobble } from '../../../../sdk'
 import type { Bag } from '../engine/dispose'
 import type { XZ } from '../engine/nav'
 import { TUNE } from '../engine/tune'
-import { buildAnimal, type Rig } from './animal'
+import { buildAnimal, buildWorn, Wind, type Rig } from './animal'
 import { FaceLife } from './face'
-import { LOOKS } from './looks'
+import { LOOKS, type Wearable } from './looks'
 import type { Character, Pose } from './types'
 
 const H = LOOKS.kaylee.height
@@ -51,8 +51,13 @@ export class Avatar implements Character {
   private headYaw = 0
   private life: FaceLife
   private waving = -1
+  private wind = new Wind()
+  /** What she has on (her sun hat, sunglasses, floaties), built the first time she puts each on. */
+  private worn = new Map<Wearable, Group[]>()
+  /** Things she's just put on, and how far through their little show (0..1). */
+  private entering = new Map<Wearable, number>()
 
-  constructor(bag: Bag) {
+  constructor(private bag: Bag) {
     this.chibi = buildAnimal(LOOKS.kaylee, bag)
     this.life = new FaceLife(this.chibi)
     this.root = this.chibi.root
@@ -67,6 +72,50 @@ export class Avatar implements Character {
   get rig(): Rig {
     return this.chibi
   }
+  /** Puts on exactly these (and takes off the rest): they ride on her head and arms. */
+  wear(ids: readonly Wearable[]) {
+    for (const id of new Set([...ids, ...this.worn.keys()])) {
+      const on = ids.includes(id)
+      let groups = this.worn.get(id)
+      if (!groups && on) {
+        const w = buildWorn(LOOKS.kaylee, id, this.bag)
+        groups = []
+        for (const [g, pivot] of [[w.head, this.chibi.head], [w.armL, this.chibi.armL], [w.armR, this.chibi.armR]] as const) {
+          if (!g) continue
+          pivot.add(g)
+          groups.push(g)
+          g.userData.base = g.position.clone()
+          // Hats sit tipped back a little, so her face shows under the brim.
+          if (id === 'sunhat' || id === 'spare-hat') g.rotation.x = -0.16
+        }
+        this.worn.set(id, groups)
+      }
+      for (const g of groups ?? []) g.visible = on
+    }
+  }
+  /** Puts these on with a little show: the hat drops onto her head, the sunglasses slide down, the floaties pop on. */
+  putOn(ids: readonly Wearable[]) {
+    const before = new Set(this.wearing)
+    this.wear(ids)
+    for (const id of ids) if (!before.has(id)) this.entering.set(id, 0)
+  }
+  /** Indoors (the plane) she pushes her sunglasses up onto her hat's brim; outdoors they're back on her eyes. */
+  glassesUp(up: boolean) {
+    const R = 0.24 * H
+    for (const g of this.worn.get('sunglasses') ?? []) {
+      g.position.set(0, up ? 0.62 * R : 0, up ? 0.12 * R : 0)
+      g.userData.base = g.position.clone()
+      g.rotation.x = up ? -0.42 : 0
+    }
+  }
+  get wearing(): Wearable[] {
+    return [...this.worn].filter(([, gs]) => gs[0]?.visible).map(([id]) => id)
+  }
+  /** Wind in her mane and tail: 0 still, 1 strong (it eases there). */
+  setWind(k: number) {
+    this.wind.goal = k
+  }
+
   get walking() {
     return this.path.length > 0 || this.tweens.length > 0
   }
@@ -159,6 +208,22 @@ export class Avatar implements Character {
     for (let i = 0; i < steps; i++) this.step(dt / steps)
     this.pose3d(t)
     this.life.update(dt)
+    this.wind.update(this.chibi, dt, t)
+    for (const [id, e0] of this.entering) {
+      const e = Math.min(1, e0 + dt / 0.5)
+      if (e >= 1) this.entering.delete(id)
+      else this.entering.set(id, e)
+      for (const g of this.worn.get(id) ?? []) {
+        const base = (g.userData.base as Vector3 | undefined) ?? g.position
+        g.position.copy(base)
+        if (id === 'floaties') g.scale.setScalar(Math.max(0.01, e < 0.6 ? (e / 0.6) * 1.2 : 1.2 - (e - 0.6) * 0.5))
+        else if (id === 'sunglasses') g.position.y += (1 - e) * 0.12
+        else {
+          g.position.y += (1 - e) ** 2 * 0.55
+          g.scale.set(1, 1 - 0.22 * bell(span(e, 0.65, 1)), 1)
+        }
+      }
+    }
     if (this.waving >= 0) {
       this.waving += dt / 1.3
       const p = Math.min(1, this.waving)

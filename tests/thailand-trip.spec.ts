@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 
 // The boat trip's trip kit, greybox 2 (src/world/places/thailand/trip/): every leg played with real taps on the tap
 // targets, the way a finger would. Mommy asks in her room (👍 yes / ✋ not yet); yes opens the suitcase; she packs
-// (taps, a drag, a cousin), sits on it to close it (or the ✅ button) and walks down to the goodbye; Aunty Sri's van
+// (taps, a drag, a cousin), sits on it to close it (or the ✅ button), puts on her things and walks down to the goodbye; Aunty Sri's van
 // pulls up, everyone hops in and it pulls away to the airport; the flight moves on by itself whatever she does; the
 // x-ray shows what she packed; and a half-done trip offers to keep going. Read-only state comes from window.__thaiBoatQA (no jump hooks: section links).
 // `?fps=30` keeps the frame rate up while a test waits without touching (test browsers drop to 4 fps after 30 s).
@@ -118,9 +118,12 @@ test('yes opens the suitcase; she packs by tapping and dragging, packs Gan, and 
   await page.waitForTimeout(500)
   await page.getByRole('button', { name: 'Close the suitcase' }).click({ force: true })
   await expect.poll(field(page, 'hops'), { timeout: 5_000 }).toBe(3)
-  // Click! Mommy tucks in sunscreen and her spare sun hat; then down the stairs, and the boarding pass to the goodbye.
+  // Click! Mommy tucks in sunscreen, and (no hat packed) pops her spare sun hat on Kaylee's head; her sunglasses and
+  // floaties go on too. Then down the stairs, and the boarding pass to the goodbye.
   await expect.poll(field(page, 'closed'), { timeout: 5_000 }).toBe(true)
-  expect((await qa(page))!.packed).toEqual(expect.arrayContaining(['sunscreen', 'sunhat', 'gan', 'bucket']))
+  expect((await qa(page))!.packed).toEqual(expect.arrayContaining(['sunscreen', 'gan', 'bucket']))
+  expect((await qa(page))!.packed).not.toContain('sunhat')
+  await expect.poll(field(page, 'wearing'), { timeout: 5_000 }).toEqual(expect.arrayContaining(['spare-hat', 'sunglasses', 'floaties']))
   await expect.poll(section(page), { timeout: 30_000 }).toBe('goodbye')
   expect(await page.evaluate(() => location.hash)).toContain('packed=')
   expect(await page.evaluate(() => location.hash)).toContain('gan')

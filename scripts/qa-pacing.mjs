@@ -62,10 +62,14 @@ const SCENARIOS = [
   { name: "peru coco's canyon glide", id: 'condor', hash: '#/world/peru/condor', reset: true },
   { name: "peru rosa's rainy river", id: 'river', hash: '#/world/peru/river', reset: true },
   { name: "thailand agong's house (arrival)", id: 'thailand', hash: '#/world/thailand', reset: true, play: false },
-  { name: 'thailand trip kit: mommy asks, then packing', id: 'trip-pack', hash: '#/world/thailand/boat-trip/invite', reset: true },
-  { name: "thailand trip kit: goodbye and aunty sri's van", id: 'trip-goodbye', hash: '#/world/thailand/boat-trip/goodbye', reset: true },
-  { name: 'thailand trip kit: airport', id: 'trip-airport', hash: '#/world/thailand/boat-trip/airport', reset: true },
-  { name: 'thailand trip kit: window seat', id: 'trip-plane', hash: '#/world/thailand/boat-trip/takeoff', reset: true },
+  // The trip there, one run per leg (each from its own section link).
+  { name: 'thailand trip: mommy asks', id: 'trip-invite', hash: '#/world/thailand/boat-trip/invite', reset: true },
+  { name: 'thailand trip: packing', id: 'trip-pack', hash: '#/world/thailand/boat-trip/pack', reset: true },
+  { name: "thailand trip: goodbye and aunty sri's van", id: 'trip-goodbye', hash: '#/world/thailand/boat-trip/goodbye', reset: true },
+  { name: 'thailand trip: airport', id: 'trip-airport', hash: '#/world/thailand/boat-trip/airport', reset: true },
+  { name: 'thailand trip: window seat, takeoff', id: 'trip-plane', hash: '#/world/thailand/boat-trip/takeoff', reset: true },
+  { name: 'thailand trip: window seat, up in the sky', id: 'trip-fly', hash: '#/world/thailand/boat-trip/fly', reset: true },
+  { name: 'thailand trip: landing and krabi', id: 'trip-land', hash: '#/world/thailand/boat-trip/land', reset: true },
   // The bay, one run per section (links with the section's path: a bare /boat-trip gets rewritten). It never "finishes"
   // (the trip goes on to the way home in a later gate), so talk per touch is total talk / taps by hand.
   { name: 'thailand bay: the pier and its ribbons', id: 'bay-pier', hash: '#/world/thailand/boat-trip/pier', reset: true },

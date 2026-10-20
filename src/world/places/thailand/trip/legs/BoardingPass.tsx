@@ -17,13 +17,11 @@ interface Props {
   /** Legs already punched, and the one being punched now. */
   done: string[]
   punch: string | null
-  /** A little scene along the bottom (the songthaew to the pier in Krabi). */
-  footer?: string
   /** "A new trip, or keep going?" */
   choice?: { again: () => void; resume: () => void; resumeIcon: string }
 }
 
-export function BoardingPass({ legs, done, punch, footer, choice }: Props) {
+export function BoardingPass({ legs, done, punch, choice }: Props) {
   useEffect(() => {
     if (!punch) return
     const t = setTimeout(() => sfx.stamp(), 420)
@@ -74,14 +72,6 @@ export function BoardingPass({ legs, done, punch, footer, choice }: Props) {
             )
           })}
         </div>
-        {footer && (
-          <div style={{ position: 'relative', height: 54, background: 'var(--mint)', overflow: 'hidden', borderTop: '3px solid var(--ink)' }}>
-            <motion.div initial={{ x: '-15%' }} animate={{ x: '105%' }} transition={{ duration: 1.6, ease: 'easeInOut' }} style={{ position: 'absolute', top: 6, fontSize: 36 }}>
-              🛻
-            </motion.div>
-            <span style={{ position: 'absolute', right: 16, top: 12, fontWeight: 700, fontSize: 22, color: 'var(--ink)' }}>{footer}</span>
-          </div>
-        )}
         {choice && (
           <div style={{ display: 'flex', justifyContent: 'center', gap: 22, padding: '4px 16px 20px' }}>
             {[

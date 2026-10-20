@@ -70,6 +70,16 @@
       "voice": "coral",
       "pitch": 4,
       "instructions": "You are the kids of Koh Panyee, a fishing village on stilts in Thailand: three excited seven-year-olds cheering together after a goal on their floating football field. Bright, bouncy, shouting happily. Thai children speaking English with a Thai accent."
+    },
+    "officer": {
+      "voice": "cedar",
+      "pitch": -1,
+      "instructions": "You are the airport security officer in Bangkok, a big friendly elephant who laughs easily. Jolly, warm and amused, a big belly laugh, surprised and delighted by a funny suitcase. English with a warm Thai accent."
+    },
+    "attendant": {
+      "voice": "marin",
+      "pitch": 1,
+      "instructions": "You are a flight attendant on a little plane to Krabi, a sweet penguin in a neat scarf. Bright, kind and sing-song, smiling as you bring a little girl her snacks. English with a light Thai accent."
     }
   }
 }

@@ -4,7 +4,7 @@
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span } from '../../../../sdk'
 import type { Bag } from '../engine/dispose'
-import { buildAnimal, type Rig } from './animal'
+import { buildAnimal, Wind, type Rig } from './animal'
 import { FaceLife } from './face'
 import type { FamilyMember } from './family'
 import { LOOKS } from './looks'
@@ -30,6 +30,9 @@ export class Member implements Character {
   /** Glued to their phone (the big cousins): head down at the screen, both hands on it, never looking up for long. */
   readonly onPhone: boolean
   private glance = 1
+  /** Time into a wave with one hand off the phone, eyes still on the screen (-1: not waving). */
+  private phoneWaving = -1
+  private wind = new Wind()
 
   constructor(readonly member: FamilyMember, bag: Bag) {
     this.id = member.id
@@ -77,6 +80,16 @@ export class Member implements Character {
     else if (kind === 'wave') this.waving = 0
     else this.reaction = { kind, t: 0 }
   }
+  /** Bye without looking up: one hand leaves the phone and waves, the head stays down at the screen. (Anyone else
+   *  just waves.) */
+  phoneWave() {
+    if (this.onPhone) this.phoneWaving = 0
+    else this.waving = 0
+  }
+  /** Wind in a unicorn's mane and tail: 0 still, 1 strong (it eases there). */
+  setWind(k: number) {
+    this.wind.goal = k
+  }
   lookAt(x: number, y: number, z: number) {
     this.look = (this.look ?? new Vector3()).set(x, y, z)
   }
@@ -88,6 +101,15 @@ export class Member implements Character {
     const { body, head, armR } = this.chibi
     const lying = this.pose === 'lie'
     this.life.update(dt)
+    this.wind.update(this.chibi, dt, t)
+    if (this.phoneWaving >= 0) {
+      // From holding the phone up to a wave beside the head and back, the other hand keeps the phone.
+      this.phoneWaving += dt / 1.6
+      const p = Math.min(1, this.phoneWaving)
+      const up = span(p, 0, 0.18) * (1 - span(p, 0.82, 1))
+      armR.rotation.set(-1.2 * (1 - up), 0, -0.75 * (1 - up) + up * (2.3 + Math.sin(p * Math.PI * 7) * 0.35))
+      if (p >= 1) this.phoneWaving = -1
+    }
     // A wave: the right arm swings up and waves side to side, then comes down.
     if (this.waving >= 0) {
       this.waving += dt / 1.5

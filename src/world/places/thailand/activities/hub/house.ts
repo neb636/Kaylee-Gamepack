@@ -761,7 +761,8 @@ export class House implements World3D {
       if (this.photo.who === 'kaylee') k.place(0, 0, 1.3, yaw)
       else this.family.get(this.photo.who)?.place(0, 0, 1.3, yaw)
     }
-    if (!this.arriving && k.floor === 0 && !this.climbing && !this.photo) {
+    // (Not while she rides in something a trip put her in, like Aunty Sri's van: her position is the seat's then.)
+    if (!this.arriving && k.floor === 0 && !this.climbing && !this.photo && k.root.parent === this.scene) {
       if (this.mode === 'street' && k.position.z < -0.3) {
         this.mode = 'inside0'
         this.applyVisibility()
