@@ -127,8 +127,8 @@ export const PICKABLES: Pickable[] = [
   { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-0.6, U + 0.3, -10.6], r: 0.75, react: 'stairs' },
   { id: 'plant', label: 'Plant', floor: 1, area: 'inside', at: [2.1, U + 0.4, -5.65], r: 0.35, react: 'jelly', use: { x: 1.4, z: -5.8, face: 90, pose: 'peek' } },
   { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [1.85, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: 1.85, z: -16.998, face: 180, pose: 'stand' } },
-  { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-1.625, U + 0.25, -19.36], r: 1.4, react: 'jelly', use: { x: 0.35, z: -18.9, face: 25, pose: 'bounce', snap: { x: -1.4, z: -18.9, y: 0.22 } } },
-  { id: 'pillows', label: 'Pillows', floor: 1, area: 'inside', at: [-2.775, U + 0.35, -19.36], r: 0.7, react: 'puff', use: { x: 0.35, z: -18.8, face: 90, pose: 'lie', snap: { x: -1.925, z: -18.77, y: 0.22 } } },
+  { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-1.625, U + 0.25, -18.71], r: 1.4, react: 'jelly', use: { x: 0.35, z: -18.25, face: 25, pose: 'bounce', snap: { x: -1.4, z: -18.25, y: 0.22 } } },
+  { id: 'pillows', label: 'Pillows', floor: 1, area: 'inside', at: [-2.775, U + 0.35, -18.71], r: 0.7, react: 'puff', use: { x: 0.35, z: -18.15, face: 90, pose: 'lie', snap: { x: -1.925, z: -18.12, y: 0.22 } } },
   { id: 'couch', label: 'Couch', floor: 1, area: 'inside', at: [2.795, U + 0.5, -12.8], r: 0.75, react: 'jelly', use: { x: 1.925, z: -12.3, face: -90, pose: 'sit', snap: { x: 2.725, z: -12.3, y: 0.44 } } },
   { id: 'room-fan', label: 'Fan', floor: 1, area: 'inside', at: [0.4, U + 0.75, -16.798], r: 0.42, react: 'spin', use: { x: 0.4, z: -17.548, face: 0, pose: 'peek' } },
   { id: 'suitcase', label: 'Suitcase', floor: 1, area: 'inside', at: [0.3, U + 0.3, -20.448], r: 0.45, react: 'open', use: { x: 0.3, z: -19.748, face: 180, pose: 'peek' } },
@@ -187,7 +187,7 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [S.x0, S.x1 + 0.05, S.zBack, S.zFront], // stairwell (she comes out of it at the front, along the left wall)
       [DIM.left, HALL.door0, HALL.zGlass - 0.06, HALL.zGlass + 0.06], // the glass wall, left of the doorway
       [HALL.door1, DIM.right, HALL.zGlass - 0.06, HALL.zGlass + 0.06],
-      [DIM.left, -0.075, B, -18.12], // the big mattress + pillows
+      [DIM.left, -0.075, B, -17.47], // the big mattress + pillows (and the gap behind it)
       [2.425, DIM.right, -14.0, -11.6], // couch
       [-0.05, 0.65, B, -20.198], // suitcase
     ],

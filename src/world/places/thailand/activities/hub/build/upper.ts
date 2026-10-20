@@ -63,10 +63,10 @@ export function buildUpper(kit: Kit): Upper {
       P.box(0.03, 0.12, depth, '#CFC8BE', { at: [left + 0.015, U + 0.06, back / 2] }),
       // Kaylee's drawings taped above the mattress.
       ...[
-        [-18.55, PAL.pink],
-        [-19.1, PAL.butter],
-        [-19.65, PAL.sky],
-        [-20.2, PAL.mint],
+        [-17.9, PAL.pink],
+        [-18.45, PAL.butter],
+        [-19.0, PAL.sky],
+        [-19.55, PAL.mint],
       ].map(([z, c], i) => P.box(0.02, 0.36, 0.3, c as string, { at: [left + 0.01, U + 1.25 + (i % 2) * 0.18, z as number], rot: [(i % 2 ? 0.08 : -0.06), 0, 0] })),
     ]),
   )
@@ -96,9 +96,8 @@ export function buildUpper(kit: Kit): Upper {
   doors.add(scenery(kit, [P.box(w, 0.06, 0.06, FRAME, { at: [0, 2.21, 0] }), P.box(w, 0.06, 0.06, FRAME, { at: [0, 0.03, 0] }), ...[-1, 1].map((s) => P.box(0.06, 2.24, 0.06, FRAME, { at: [(s * w) / 2, 1.12, 0] })), P.box(0.03, 0.3, 0.05, PAL.ink, { at: [w / 2 - 0.12, 1.1, -0.03] })], 1.5))
   glassWall.add(doors)
 
-  // ---- One big mattress in the back left corner (a little off the back wall), its long side across the room, its
-  // head at the left wall ----
-  const bed = { x: left + 1.5, z: back + 0.35 + 1.1875, len: 3.0, w: 2.375 }
+  // ---- One big mattress against the left wall, a meter off the back wall, its long side across the room ----
+  const bed = { x: left + 1.5, z: back + 1.0 + 1.1875, len: 3.0, w: 2.375 }
   const mattress = poke(kit, 'mattress', [], [bed.x, U, bed.z])
   mattress.add(scenery(kit, [P.rbox(bed.len, 0.22, bed.w, 0.06, PAL.cream, { at: [0, 0.11, 0] }), P.rbox(bed.len - 0.1, 0.03, bed.w - 0.08, 0.02, PAL.pink, { at: [0, 0.225, 0] })], 2))
   // A folded blanket across its foot.

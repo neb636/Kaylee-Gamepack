@@ -29,7 +29,7 @@ export const FAMILY: FamilyMember[] = [
   { id: 'nick', name: 'Daddy', who: "Kaylee's dad (Nick)", color: '#7FD1B9', height: 1.7, pitch: 120, spot: { floor: 0, x: 2.9, z: 1.15, face: -30, pose: 'stand' } },
   { id: 'ji', name: 'Mommy', who: "Kaylee's mom (Ji)", color: '#FF8FB8', height: 1.55, pitch: 300, spot: { floor: 1, x: 0.55, z: -18.898, face: -15, pose: 'stand' } },
   { id: 'bb', name: 'BB', who: "Cousin, Bird's daughter", color: '#FFB3D6', height: 1.2, pitch: 380, spot: { floor: 1, x: 2.745, z: -13.4, face: -90, pose: 'sit', seat: 0.42 } },
-  { id: 'gan', name: 'Gan', who: "Cousin, Joy's son", color: '#7CC4F2', height: 1.3, pitch: 330, spot: { floor: 1, x: -1.725, z: -19.95, face: 90, pose: 'lie' } },
+  { id: 'gan', name: 'Gan', who: "Cousin, Joy's son", color: '#7CC4F2', height: 1.3, pitch: 330, spot: { floor: 1, x: -1.725, z: -19.3, face: 90, pose: 'lie' } },
   { id: 'ken', name: 'Ken', who: "Cousin, Joy's son", color: '#8FE3C8', height: 1.25, pitch: 350, spot: { floor: 1, x: 1.1, z: -6.3, face: -20, pose: 'stand' } },
   { id: 'ja', name: 'Ja', who: 'Aunt, mom of Putto and Putter', color: '#D9CCFF', height: 1.5, pitch: 270, spot: null },
   { id: 'sri', name: 'Sri', who: 'Aunt', color: '#FFC83D', height: 1.5, pitch: 290, spot: null },
