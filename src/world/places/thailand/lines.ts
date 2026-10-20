@@ -71,6 +71,66 @@ export const L = {
     putter: hello('putter', 'Hi Kaylee! Hee hee!', ['Peep peep!']),
   } as Record<string, { hi: Line; again: Line[] }>,
 
+  // The boat trip's way there (trip/legs/): Mommy asks, packing, the goodbye, the airport, the window seat. Each line
+  // is said once, for something new (or a hint after a while with nothing done). The officer and the flight attendant
+  // are background figures with a line or two each. Kaylee never talks: she giggles.
+  trip: {
+    ask: {
+      question: ji('Kaylee, are you ready to go on a trip?'),
+      later: ji('OK! Tell me when!'),
+      // The first tap on the elephant map in her room.
+      map: ji("That's where we're going!"),
+    },
+    pack: {
+      start: ji('Tap your things to pack them, Kaylee!'),
+      close: ji('All packed? Tap the suitcase!'),
+      hint: ji("It's hot and sunny at the sea!"),
+      hungry: ji('Pack some more!'),
+      full: ji("It's too full! Sit on it!"),
+      gan: by('gan')('Five more minutes...'),
+      pillow: ji('Yawn... so sleepy!'),
+      fan: ji('The fan blew it open!'),
+      sunscreen: ji('Mommy always packs sunscreen!'),
+      hat: ji("Here's Mommy's spare sun hat!"),
+    },
+    goodbye: {
+      agong: by('agong')('Bring Agong a photo of the Nail Island!'),
+      jum: by('jum')('Snacks for the trip!'),
+      // The big cousins, without looking up from their phones.
+      gan: by('gan')('Bye...'),
+      ken: by('ken')('Bye...'),
+      bb: by('bb')('Bye...'),
+      van: nick('Aunty Sri is here! Hop in!'),
+      horn: by('sri')('Beep beep! To the airport!'),
+    },
+    airport: {
+      start: nick('Put your suitcase on the belt!'),
+      laugh: by('officer')('Ha ha! What a suitcase!'),
+      gan: by('officer')('A sleeping fox?!'),
+      fan: by('officer')('A fan? Ha ha!'),
+      plane: nick('Our plane! Tap the door!'),
+    },
+    plane: {
+      belt: ji('Seatbelt on, Kaylee!'),
+      wheee: ji('Whee! Up we go!'),
+      tray: ji('Tray down, then press the button!'),
+      snack: by('attendant')('Snacks for Kaylee!'),
+      more: by('attendant')('More snacks?!'),
+      share: ji('Want some of mine?'),
+      snore: ji('Night night!'),
+      dad: nick('Huh? Are we there yet?'),
+      land: ji('Seatbelts on! We are landing!'),
+      krabi: nick("Yay! We're in Krabi!"),
+    },
+    // Sparkle: the one fact she sees for herself, and a hint after a while with nothing done.
+    elephant: "Thailand looks like an elephant's head!",
+    hint: {
+      belt: 'Tap your suitcase!',
+      door: "Tap the plane's door!",
+      tray: 'Tap the tray!',
+    },
+  },
+
   // The boat trip in Phang Nga Bay (activities/boat-trip/bay/). Daddy and Mommy react in their own voices, short; the
   // village kids share one kid voice; Sparkle gives the few instructions and the facts (each fact also plays when she
   // taps its photo or sticker in the trip album). Kaylee never talks: she giggles.

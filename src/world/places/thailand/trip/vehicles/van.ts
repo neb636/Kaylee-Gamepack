@@ -1,4 +1,4 @@
-// Aunty Sri's van, greybox: a quick white electric van (Dad, 2026-10-19), tall and rounded, with a mint stripe and a
+// Aunty Sri's van: a quick white electric van (Dad, 2026-10-19), tall and rounded, with a mint stripe and a
 // light bar for a face (no grille: it's electric, and it hums instead of putting). The steering wheel is on the right, as
 // in every Thai car, so Aunty Sri sits on the right and Daddy beside her; Mommy and Kaylee sit in the middle row. The
 // sliding door is on the left, the curb side. Big windows all round, so whoever is inside shows. Faces +z.

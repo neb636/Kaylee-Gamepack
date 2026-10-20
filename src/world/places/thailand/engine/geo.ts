@@ -6,7 +6,7 @@
 //     P.rbox(0.9, 0.06, 1.9, 0.02, PAL.peach, { at: [0, 0.72, 0] }),
 //     ...legs.map((at) => P.cyl(0.04, 0.04, 0.7, PAL.ink, { at })),
 //   ]), bag, 2)
-import { BoxGeometry, BufferAttribute, CanvasTexture, CapsuleGeometry, Color, ConeGeometry, CylinderGeometry, Euler, Group, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, SphereGeometry, TorusGeometry, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
+import { BoxGeometry, BufferAttribute, CanvasTexture, CapsuleGeometry, Color, ConeGeometry, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Shape, SphereGeometry, TorusGeometry, Vector2, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import type { Bag } from './dispose'
@@ -47,6 +47,11 @@ export const P = {
   /** Upright capsule: `len` is the straight middle part, total height len + 2r. */
   capsule: (r: number, len: number, c: ColorRepresentation, o?: PartOpts) => bake(new CapsuleGeometry(r, len, 5, 14), c, o),
   torus: (r: number, tube: number, c: ColorRepresentation, o?: PartOpts, arc = Math.PI * 2) => bake(new TorusGeometry(r, tube, 8, 24, arc), c, o),
+  /** A flat outline [x, y][] pushed `depth` along z (centered): a gable's triangle, a sign, a roof's end. */
+  prism: (pts: [number, number][], depth: number, c: ColorRepresentation, o?: PartOpts) => {
+    const shape = new Shape(pts.map(([x, y]) => new Vector2(x, y)))
+    return bake(new ExtrudeGeometry(shape, { depth, bevelEnabled: false }).translate(0, 0, -depth / 2), c, o)
+  },
 }
 
 export function merge(parts: BufferGeometry[]): BufferGeometry {

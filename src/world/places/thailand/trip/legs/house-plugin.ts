@@ -1,35 +1,40 @@
 // The start of a trip, in Agong's own house (activities/hub/house.ts, mounted with this plugin, not copied):
 //
 // - invite: in Kaylee's room, Mommy asks if she's ready to go on a trip (the screen shows the 👍 / ✋ card, Ask.tsx).
-//   Yes: the suitcase hops out into the room and springs open, and the camera drops to it.
+//   The elephant map on the wall is a tap toy (here and while she packs): it swings, both pins pop, the crayon elephant
+//   trumpets, flaps its ear and winks, and the first time Mommy says that's where they're going. Yes: the suitcase hops
+//   out into the room and springs open, and the camera drops to it.
 // - pack (the toy): tap anything in her room and it hops into the suitcase in a big arc (or drag it there); tap
 //   something inside and it hops back out. Nothing is wrong: the pillow, the fan, a mango, even Gan asleep on the
 //   mattress ("Five more minutes..."). So she always knows what to do: the things she can pack hop now and then, a
 //   finger points at one (then, once a few are in, at the suitcase), the screen counts what's in it, and Mommy says when
 //   to close it. After a little while Mommy's one hint makes the sun things glint. To close it, tap the suitcase (or
 //   the screen's ✅ button): once it holds a few things Kaylee hops on top and sits on it (squash, click); past five
-//   things it's too full and takes three hops. Mommy tucks in sunscreen (and her spare sun hat) whatever she packed.
-//   Then Kaylee walks down the stairs with the suitcase bumping behind her.
-// - goodbye: on the sidewalk by the open shutter the family who live here wave her off (tap anyone for a hug; Jum
-//   gives her snacks; the big cousins say "Bye..." without looking up). Aunty Sri's white electric van hums up quickly;
-//   tap it (or wait a moment), the side door slides open, everyone hops in, and it glides off to the airport.
-import { Group, Vector3, type Object3D } from 'three'
-import { bell, clamp, wobble } from '../../../../../sdk'
+//   things it's too full and takes three hops. Mommy tucks in sunscreen whatever she packed. Click! Her sun hat drops
+//   onto her head (or Mommy's spare one, if she packed none), her sunglasses slide on, her floaties pop on: she wears
+//   them for the rest of the trip. Then she walks down the stairs with the suitcase bonking on every step.
+// - goodbye: on the sidewalk by the open shutter the family who live here wave her off (tap anyone for a hug). Agong
+//   asks for a photo of the Nail Island; Jum gives her a little bag of snacks (tap her, or she brings it when the van
+//   comes); the big cousins wave and say "Bye..." without looking up from their phones. Aunty Sri's white electric van
+//   hums up quickly; tap it (or wait a moment), the side door slides open, everyone hops in, and it glides off.
+import { CanvasTexture, Group, Mesh, MeshBasicMaterial, Vector3, type Object3D } from 'three'
+import { bell, clamp, wobble, type Line } from '../../../../../sdk'
 import type { AnchorInfo } from '../../engine/Anchors'
 import type { Shot } from '../../engine/camera'
-import { DIM } from '../../activities/hub/layout'
+import { DIM, MAP } from '../../activities/hub/layout'
 import type { House, HousePlugin } from '../../activities/hub/house'
 import { sfx } from '../../sfx'
-import { ITEMS, mommyTucksIn } from '../packing'
+import { drawElephantMap } from '../drawings'
+import { ITEMS, mommyTucksIn, wearing } from '../packing'
 import { buildItem, buildSuitcase, type Suitcase } from '../props'
-import { TALK, type Said } from '../talk'
+import { L } from '../../lines'
 import { buildVan, type Van } from '../vehicles/van'
 import { Hopper, put } from './stage'
 
 export type HouseLeg = 'invite' | 'pack' | 'goodbye'
 
 export interface TripHouseEvents {
-  say(s: Said): void
+  say(l: Line): void
   section(id: HouseLeg): void
   /** Where the trip is in the house (the screen shows the packing helpers while she packs). */
   phase?(p: Phase): void
@@ -80,8 +85,8 @@ const STREET = {
   row: [['bb', -2.75], ['gan', -2.05], ['ken', -1.35], ['joy', -0.6], ['agong', 0.95], ['jum', 1.95]] as [string, number][],
   rowZ: 0.8,
   carZ: 3.95,
-  // Past Daddy, so the van doesn't hide anyone on the sidewalk.
-  carStop: 3.4,
+  // Beside the family, past Jum: in front of them the van would hide everyone on the sidewalk.
+  carStop: 5.1,
 }
 
 interface Thing {
@@ -132,8 +137,20 @@ export class TripHouse implements HousePlugin {
   private carT = -1
   private carX = -18
   private carWait = 0
+  private carTotal = 0
   private told = new Set<string>()
-  private counts = { packs: 0, unpacks: 0, drags: 0, hugs: 0 }
+  private counts = { packs: 0, unpacks: 0, drags: 0, hugs: 0, maps: 0 }
+  /** The elephant map's paper (redrawn while the crayon elephant flaps its ear), and how far through the flap. */
+  private mapPaper: { canvas: HTMLCanvasElement; tex: CanvasTexture; drawn: number } | null = null
+  private mapFlap = 1
+  private pinPop = 1
+  /** Seconds the camera stays close on the map after a tap (0: not looking). */
+  private mapLook = 0
+  /** Mommy's yawn (the pillow): her arms stretch up. */
+  private yawn = 1
+  /** Jum's little bag of snacks, in Kaylee's hand once Jum gives it to her. */
+  private snackBag!: Group
+  private snackFly: { from: Vector3; t: number } | null = null
 
   constructor(
     private start: HouseLeg,
@@ -170,6 +187,14 @@ export class TripHouse implements HousePlugin {
       this.root.add(g)
       this.things.set(it.id, { id: it.id, g, home, packed: false, tween: null, land: 1, glint: 0, dragged: false })
     }
+    this.snackBag = buildItem('snacks', bag)
+    this.snackBag.visible = false
+    this.root.add(this.snackBag)
+    // The elephant map's paper canvas (the house drew it): the trip redraws it when the crayon elephant comes alive.
+    house.kit.pokes.get('map')?.traverse((o) => {
+      const map = o instanceof Mesh ? (o.material as MeshBasicMaterial).map : null
+      if (map instanceof CanvasTexture && map.image instanceof HTMLCanvasElement) this.mapPaper = { canvas: map.image, tex: map, drawn: 0 }
+    })
     this.van = buildVan(bag)
     this.van.root.userData.pick = 'trip:van'
     this.van.root.visible = false
@@ -200,7 +225,6 @@ export class TripHouse implements HousePlugin {
       th.tween = null
       if (!th.packed) th.g.position.copy(th.home)
     }
-    if (packed.has('gan')) this.packGan(true)
     if (leg === 'invite') {
       // Kaylee by Mommy, who asks (the screen's card); her suitcase waits shut by the wall.
       h.teleport('upstairs', INVITE.x, INVITE.z, 0)
@@ -212,8 +236,10 @@ export class TripHouse implements HousePlugin {
       h.teleport('upstairs', ROOM.kaylee.x, ROOM.kaylee.z, ROOM.kaylee.face)
       this.placeSuitcase(ROOM.suitcase.x, ROOM.suitcase.z)
       this.lid.angle = this.lid.goal = -1.9
-      setTimeout(() => this.phase === 'pack' && this.events.say(TALK.pack.start), 500)
+      setTimeout(() => this.phase === 'pack' && this.events.say(L.trip.pack.start), 500)
     }
+    // (Gan goes in once the suitcase is where it'll be.)
+    if (packed.has('gan')) this.packGan(true)
     this.blockSuitcase()
     h.snapCamera()
   }
@@ -250,14 +276,15 @@ export class TripHouse implements HousePlugin {
       this.setPhase('pack')
       this.lastTouch = this.t
       this.events.section('pack')
-      this.events.say(TALK.pack.start)
+      this.events.say(L.trip.pack.start)
     }, 900)
   }
 
   // ---------------------------------------------------------------- touch
 
   hides(id: string) {
-    return id === 'suitcase' || id === 'map'
+    // The trip's own suitcase stands in for the house's; the map is the trip's toy while she's asked and packs.
+    return id === 'suitcase' || (id === 'map' && this.phase !== 'invite' && this.phase !== 'pack')
   }
 
   private setPhase(p: Phase) {
@@ -319,6 +346,10 @@ export class TripHouse implements HousePlugin {
 
   tap(_x: number, _y: number, id?: string) {
     const ph = this.phase
+    if ((ph === 'invite' || ph === 'pack') && id === 'map') {
+      this.mapToy()
+      return true
+    }
     if (ph === 'invite') {
       // Mommy's card is the thing to answer: a tap on her gets a wave, on Kaylee a hop, and she stays put.
       if (id === 'family:ji') this.house.family.get('ji')?.react('wave')
@@ -345,13 +376,11 @@ export class TripHouse implements HousePlugin {
         this.sit()
         return true
       }
-      if (id === 'family:ji' && this.order.includes('pillow')) {
-        this.house.family.get('ji')?.react('wiggle')
-        this.events.say(TALK.pack.pillow)
-      }
+      if (id === 'family:ji' && this.order.includes('pillow')) this.mommyYawns()
       return ph === 'sitting'
     }
     if (ph === 'goodbye') {
+      this.carWait = 0
       if (id === 'trip:van' && this.carT >= 1) {
         this.board()
         return true
@@ -366,17 +395,22 @@ export class TripHouse implements HousePlugin {
         sfx.beep()
         this.house.family.get('sri')?.react('hop')
         if (this.carT >= 1) this.board()
-        else this.events.say(TALK.goodbye.horn)
+        else this.events.say(L.trip.goodbye.horn)
         return true
       }
       if (id?.startsWith('family:')) {
         const who = id.slice(7)
         this.counts.hugs++
-        if (who === 'jum' && !this.told.has('jum')) this.snacks()
-        else if (who === 'agong') this.events.say(TALK.goodbye.agong)
-        else if ((who === 'gan' || who === 'ken' || who === 'bb') && !this.told.has(who)) {
-          this.told.add(who)
-          this.events.say({ ...TALK.goodbye.cousins, who })
+        if (who === 'jum' && !this.told.has('jum')) this.snacks(true)
+        else if (who === 'agong') this.events.say(L.trip.goodbye.agong)
+        else if (who === 'gan' || who === 'ken' || who === 'bb') {
+          // A wave without looking up from the phone (and "Bye...", once each).
+          this.house.family.get(who)?.phoneWave()
+          if (!this.told.has(who)) {
+            this.told.add(who)
+            this.events.say(L.trip.goodbye[who])
+          }
+          return true
         }
       }
       return false
@@ -403,10 +437,7 @@ export class TripHouse implements HousePlugin {
       this.squash = 0
       sfx.thump()
       if (th.id === 'fan') sfx.whir()
-      if (th.id === 'pillow') {
-        this.house.family.get('ji')?.react('wiggle')
-        this.events.say(TALK.pack.pillow)
-      }
+      if (th.id === 'pillow') this.mommyYawns()
     })
     this.changed()
   }
@@ -440,17 +471,14 @@ export class TripHouse implements HousePlugin {
     this.events.packed([...this.order])
     // Mommy's one hint, once a couple of things are in; at three, how to close it.
     if (!this.hinted && this.count >= 2) this.hint()
-    if (this.count >= 3 && !this.told.has('close')) {
-      this.told.add('close')
-      setTimeout(() => this.phase === 'pack' && this.events.say(TALK.pack.close), 3200)
-    }
+
   }
 
   private hint() {
     this.hinted = true
     setTimeout(() => {
       if (this.phase !== 'pack') return
-      this.events.say(TALK.pack.hint)
+      this.events.say(L.trip.pack.hint)
       for (const it of ITEMS) if (it.sun) {
         const th = this.things.get(it.id)
         if (th && !th.packed) th.glint = 2.6
@@ -478,7 +506,7 @@ export class TripHouse implements HousePlugin {
     this.ganTween = { from: gan.root.position.clone(), to, t: 0, done: () => {
       done()
       sfx.thump()
-      this.events.say(TALK.pack.gan)
+      this.events.say(L.trip.pack.gan)
     } }
     this.changed()
   }
@@ -503,7 +531,7 @@ export class TripHouse implements HousePlugin {
       sfx.boing()
       if (this.t - this.lastHungry > 4) {
         this.lastHungry = this.t
-        this.events.say(TALK.pack.hungry)
+        this.events.say(L.trip.pack.hungry)
       }
       return
     }
@@ -515,7 +543,7 @@ export class TripHouse implements HousePlugin {
       this.hopsDone = 0
       this.hopsNeeded = this.count > this.fits ? 3 : 1
       this.lid.goal = -0.55
-      if (this.count > this.fits) this.events.say(TALK.pack.full)
+      if (this.count > this.fits) this.events.say(L.trip.pack.full)
       // She walks up beside it, then hops on top.
       this.house.walkTo([s.x + 0.75, s.z + 0.2], () => {
         k.standPoint = new Vector3(s.x + 0.75, U, s.z + 0.2)
@@ -545,7 +573,7 @@ export class TripHouse implements HousePlugin {
       this.lid.goal = -0.7
       this.lid.flap = 0
       sfx.whir()
-      this.events.say(TALK.pack.fan)
+      this.events.say(L.trip.pack.fan)
       return
     }
     const left = this.hopsNeeded - this.hopsDone
@@ -553,23 +581,25 @@ export class TripHouse implements HousePlugin {
     if (left <= 0) this.close()
   }
 
-  /** Click! Mommy tucks in what a sunny trip needs, then it's shut. */
+  /** Click! Mommy tucks in what a sunny trip needs, then it's shut, and Kaylee puts on her hat, sunglasses and
+   *  floaties (or Mommy pops her spare sun hat on her head). */
   private close() {
     const before = [...this.order]
     const after = mommyTucksIn(before.filter((x) => x !== 'gan'))
     const added = after.filter((x) => !before.includes(x))
+    const ji = this.house.family.get('ji')
     for (const id of added) {
       const th = this.things.get(id)
       if (!th) continue
       th.packed = true
       this.order.push(id)
-      const ji = this.house.family.get('ji')
       if (ji) th.g.position.copy(ji.root.position).setY(U + 1.0)
       this.flyTo(th, this.slotWorld(this.order.length - 1, this.order.length), undefined, 0.4)
     }
-    if (added.includes('sunscreen')) this.events.say(TALK.pack.sunscreen)
-    else if (added.includes('sunhat')) this.events.say(TALK.pack.hat)
-    if (added.length) this.house.family.get('ji')?.react('wiggle')
+    const spare = !this.order.includes('sunhat')
+    if (spare) this.events.say(L.trip.pack.hat)
+    else if (added.includes('sunscreen')) this.events.say(L.trip.pack.sunscreen)
+    if (added.length || spare) ji?.react('wiggle')
     this.events.packed([...this.order])
     this.setPhase('closed')
     setTimeout(() => {
@@ -579,6 +609,14 @@ export class TripHouse implements HousePlugin {
       if (this.ganPacked) this.house.placeFamily('gan', 'hidden')
       this.house.kaylee.react('wave')
     }, added.length ? 650 : 150)
+    // Her things on: the hat drops onto her head, the sunglasses slide down, the floaties pop on.
+    setTimeout(() => {
+      if (this.phase !== 'closed') return
+      this.house.kaylee.putOn(wearing(this.order))
+      this.house.kaylee.glassesUp(false)
+      sfx.pop()
+      sfx.giggle()
+    }, added.length ? 1000 : 500)
   }
 
   /** Off the suitcase and down the stairs, the suitcase bumping behind her. */
@@ -590,11 +628,11 @@ export class TripHouse implements HousePlugin {
     k.setPose('stand')
     const s = this.suitcase.root.position
     k.hopTo(new Vector3(s.x + 0.7, U, s.z + 0.3), 0.35, 0.3, () => {
+      // Bonk, bonk, bonk: the suitcase on every stair.
       this.house.climb(false, () => this.leave(), (i) => {
-        if (i % 2 === 0) {
-          sfx.thump()
-          this.bump = 0
-        }
+        sfx.thump()
+        if (i % 2 === 0) sfx.boop()
+        this.bump = 0
       })
     })
   }
@@ -613,8 +651,13 @@ export class TripHouse implements HousePlugin {
     this.carT = -1
     this.carX = -18
     this.carWait = 0
+    this.carTotal = 0
     for (const th of this.things.values()) th.g.visible = false
     h.teleport('street', STREET.kaylee.x, STREET.kaylee.z, STREET.kaylee.face)
+    h.kaylee.wear(wearing(this.order))
+    h.kaylee.glassesUp(false)
+    this.snackBag.visible = false
+    this.snackFly = null
     h.placeFamily('ji', STREET.ji)
     h.placeFamily('nick', STREET.nick)
     for (const [id, x] of STREET.row) h.placeFamily(id, id === 'gan' && this.order.includes('gan') ? 'hidden' : { floor: 0, x, z: STREET.rowZ, face: 0, pose: 'stand' })
@@ -635,14 +678,21 @@ export class TripHouse implements HousePlugin {
       put(sri, 0, 0, 0, 'sit', 0)
     }
     h.snapCamera()
-    setTimeout(() => this.phase === 'goodbye' && this.events.say(TALK.goodbye.agong), 700)
+    setTimeout(() => this.phase === 'goodbye' && this.events.say(L.trip.goodbye.agong), 700)
   }
 
-  private snacks() {
+  /** Jum gives her a little bag of snacks for the trip: it hops from Jum's hands into Kaylee's. */
+  private snacks(say: boolean) {
+    if (this.told.has('jum')) return
     this.told.add('jum')
-    this.events.say(TALK.goodbye.jum)
+    if (say) this.events.say(L.trip.goodbye.jum)
     const jum = this.house.family.get('jum')
     jum?.react('hop')
+    if (!jum) return
+    this.snackBag.visible = true
+    this.snackBag.scale.setScalar(0.8)
+    this.snackFly = { from: jum.root.position.clone().setY(0.75), t: 0 }
+    sfx.boing()
   }
 
   /** The side door slides open, Daddy loads the suitcase, everyone hops in, the door shuts and off they go. */
@@ -666,6 +716,10 @@ export class TripHouse implements HousePlugin {
       this.hopper.hop(c, seat, new Vector3(0, 0, 0), { pose: 'sit', face: 0, delay: 0.35 + i * 0.25, arc: 1.7, dur: 0.5, done: i === 2 ? () => this.driveOff() : undefined })
     })
     h.family.get('nick')?.react('wave')
+    if (!['gan', 'ken', 'bb'].some((id) => this.told.has(id))) {
+      this.told.add('ken')
+      setTimeout(() => this.events.say(L.trip.goodbye.ken), 900)
+    }
   }
 
   /** The door slides shut, a beep, and the van glides away (quietly: it's electric). Then the airport. */
@@ -682,6 +736,85 @@ export class TripHouse implements HousePlugin {
     }, 350)
   }
 
+  // ---------------------------------------------------------------- the map, Mommy's yawn
+
+  /** The elephant map on her wall: it swings, both pins pop, the crayon elephant trumpets, flaps its ear and winks. */
+  private mapToy() {
+    this.counts.maps++
+    this.house.pokeThing('map')
+    sfx.trumpet()
+    this.mapFlap = 0
+    this.pinPop = 0
+    this.mapLook = 2.4
+    const k = this.house.kaylee
+    const map = this.house.kit.pokes.get('map')
+    if (map) {
+      const p = map.getWorldPosition(new Vector3())
+      k.lookAt(p.x, p.y, p.z)
+    }
+    k.react('hop')
+    setTimeout(() => sfx.giggle(), 350)
+    if (!this.told.has('map')) {
+      this.told.add('map')
+      this.events.say(L.trip.ask.map)
+      this.house.family.get('ji')?.react('wave')
+    }
+  }
+
+  /** The pillow makes Mommy sleepy: a big yawn and a stretch. */
+  private mommyYawns() {
+    this.yawn = 0
+    this.events.say(L.trip.pack.pillow)
+  }
+
+  private updateToys(dt: number) {
+    // The crayon elephant comes alive for a moment (the paper is redrawn a few times a second while it does).
+    const paper = this.mapPaper
+    if (this.mapFlap < 1 && paper) {
+      this.mapFlap = Math.min(1, this.mapFlap + dt / 1.3)
+      paper.drawn += dt
+      if (paper.drawn > 0.07 || this.mapFlap >= 1) {
+        paper.drawn = 0
+        drawElephantMap(paper.canvas, this.mapFlap >= 1 ? 0 : this.mapFlap)
+        paper.tex.needsUpdate = true
+      }
+    }
+    this.pinPop = Math.min(1, this.pinPop + dt / 0.7)
+    this.mapLook = Math.max(0, this.mapLook - dt)
+    for (const [name, delay] of [['map.pin', 0], ['map.home', 0.15]] as const) {
+      const pin = this.house.kit.parts.get(name)
+      if (pin) pin.scale.setScalar(1 + bell(clamp((this.pinPop - delay) / 0.75)) * 0.7)
+    }
+    // Mommy's yawn: both arms up in a big stretch, her head back.
+    if (this.yawn < 1) {
+      this.yawn = Math.min(1, this.yawn + dt / 1.6)
+      const ji = this.house.family.get('ji')
+      if (ji) {
+        const up = bell(this.yawn)
+        ji.rig.armL.rotation.z = -2.4 * up
+        ji.rig.armR.rotation.z = 2.4 * up
+        ji.rig.head.rotation.x = -0.3 * up
+      }
+    }
+    // Jum's snack bag hops into Kaylee's hand, and rides there.
+    if (this.snackBag.visible) {
+      const k = this.house.kaylee
+      const hand = k.rig.armR.localToWorld(tmp2.set(0.05, -0.17, 0.06))
+      const f = this.snackFly
+      if (f) {
+        f.t = Math.min(1, f.t + dt / 0.6)
+        this.snackBag.position.lerpVectors(f.from, hand, f.t)
+        this.snackBag.position.y += bell(f.t) * 0.6
+        if (f.t >= 1) {
+          this.snackFly = null
+          sfx.thump()
+          k.react('wiggle')
+        }
+      } else this.snackBag.position.copy(hand).setY(hand.y - 0.12)
+      this.snackBag.rotation.y = k.root.rotation.y
+    }
+  }
+
   // ---------------------------------------------------------------- per frame
 
   update(dt: number, t: number) {
@@ -690,6 +823,7 @@ export class TripHouse implements HousePlugin {
     const s = this.suitcase
     this.hopper.update(dt)
     this.updateObjects(dt)
+    this.updateToys(dt)
     // The lid eases to where it's going and flaps when something lands.
     this.lid.flap = Math.min(1, this.lid.flap + dt / 0.5)
     this.lid.angle += (this.lid.goal - this.lid.angle) * (1 - Math.exp(-dt * 10))
@@ -705,7 +839,12 @@ export class TripHouse implements HousePlugin {
     if (blades) blades.rotation.z -= dt * (fan!.packed ? 30 : 4)
     // Mommy's hint after a while with nothing packed.
     if (this.phase === 'pack' && !this.hinted && this.phaseT > 9) this.hint()
-    if (this.phase === 'closed' && this.phaseT > 1.6) this.walkDown()
+    // Once a few things are in and she's stopped packing for a while: how to close it (once).
+    if (this.phase === 'pack' && this.count >= 3 && this.t - this.lastTouch > 6 && !this.told.has('close')) {
+      this.told.add('close')
+      this.events.say(L.trip.pack.close)
+    }
+    if (this.phase === 'closed' && this.phaseT > 2.0) this.walkDown()
     if (this.follow) this.followHer(dt, t)
     if (this.phase === 'goodbye' || this.phase === 'boarding' || this.phase === 'gone') this.updateVan(dt)
     this.placeHint()
@@ -742,14 +881,15 @@ export class TripHouse implements HousePlugin {
       } else if (th.packed && th.g.visible) th.g.position.copy(this.slotWorld(this.order.indexOf(th.id), this.count))
       else if (!th.packed) {
         // "Pick me!": while the suitcase still wants things, what's left hops now and then, one after another.
-        const want = this.phase === 'pack' && this.count < 3
+        const want = this.phase === 'pack' && this.count < 5
         const k = ((this.t + (ITEMS.findIndex((i) => i.id === th.id) % 6) * 0.45) % 2.7) / 0.45
         th.g.position.y = th.home.y + (want && k < 1 ? bell(k) * 0.14 : 0)
       }
       th.land = Math.min(1, th.land + dt / 0.4)
       th.glint = Math.max(0, th.glint - dt)
       const sq = 1 - wobble(th.land, 2) * 0.2 + (th.glint > 0 ? Math.abs(Math.sin(th.glint * 8)) * 0.18 : 0)
-      const small = th.packed ? 0.82 : 1
+      // A little bigger on the floor than in the suitcase, so they're easy to tap.
+      const small = th.packed ? 0.82 : 1.15
       th.g.scale.set(small / Math.sqrt(sq), small * sq, small / Math.sqrt(sq))
     }
     if (this.objTween) {
@@ -787,7 +927,8 @@ export class TripHouse implements HousePlugin {
     const van = this.van
     if (this.phase === 'goodbye') {
       // It hums up quickly, beeps, and waits a moment; then everyone gets in anyway.
-      if (this.carT < 0 && this.phaseT > 1.2) {
+      // (After Agong's line, so Daddy's "Aunty Sri is here!" doesn't cut it off.)
+      if (this.carT < 0 && this.phaseT > 4.0) {
         this.carT = 0
         sfx.whir()
       }
@@ -797,11 +938,16 @@ export class TripHouse implements HousePlugin {
         this.carX = -18 + (STREET.carStop + 18) * e
         if (this.carT >= 1) {
           sfx.beep()
-          this.events.say(TALK.goodbye.van)
+          this.events.say(L.trip.goodbye.van)
+          this.house.family.get('sri')?.react('wave')
+          this.snacks(false)
+          for (const [i, id] of ['gan', 'ken', 'bb'].entries()) setTimeout(() => this.phase === 'goodbye' && this.house.family.get(id)?.phoneWave(), 300 + i * 350)
         }
       } else if (this.carT >= 1) {
+        // Everyone gets in by themselves after a while with nothing tapped (at most 15 s, even if she keeps playing).
         this.carWait += dt
-        if (this.carWait > 7) this.board()
+        this.carTotal += dt
+        if (this.carWait > 7 || this.carTotal > 15) this.board()
       }
     } else if (this.phase === 'gone') {
       this.carX += dt * Math.min(14, this.phaseT * 8)
@@ -831,11 +977,11 @@ export class TripHouse implements HousePlugin {
         const pickFrom = sun.length ? sun : left
         const th = pickFrom.sort((a, b) => a.home.distanceTo(s) - b.home.distanceTo(s))[0]
         if (th) at = tmp.copy(th.home).setY(th.home.y + 0.12)
-      } else if (this.count >= 3 && idle > 5) at = this.suitcase.root.localToWorld(tmp.set(0, this.suitcase.h * 0.45, this.suitcase.d * 0.5))
+      } else if (this.count >= 3 && idle > 8) at = this.suitcase.root.localToWorld(tmp.set(0, this.suitcase.h * 0.45, this.suitcase.d * 0.5))
     } else if (this.phase === 'sitting' && idle > 2.5 && this.house.kaylee.pose === 'sit') {
       at = this.suitcase.root.localToWorld(tmp.set(0, this.suitcase.h * 0.45, this.suitcase.d * 0.5))
     } else if (this.phase === 'goodbye' && this.carT >= 1 && this.carWait > 2.5) {
-      at = this.van.root.getWorldPosition(tmp).setY(1.0)
+      at = this.van.root.getWorldPosition(tmp).add(tmp2.set(-0.7, 1.0, -0.4))
     }
     let shown = false
     if (at) {
@@ -857,16 +1003,26 @@ export class TripHouse implements HousePlugin {
     if (!this.house) return null
     const ph = this.phase
     const tall = this.house.rig.camera.aspect < 0.9
+    if ((ph === 'invite' || ph === 'pack') && this.mapLook > 0) {
+      // Close on the map for a moment after a tap, the map high in the screen (Mommy's card covers the bottom).
+      const mid = MAP.y + MAP.h / 2
+      return { center: new Vector3(MAP.x + 0.1, mid - (ph === 'invite' ? 0.5 : 0.25), MAP.z + 0.5), half: new Vector3(0.55, ph === 'invite' ? 1.1 : 0.85, 0.3), yaw: 8, pitch: 6, minDist: 1.4 }
+    }
     if (ph === 'invite') {
-      // Kaylee and Mommy up top, the card with the two buttons below them.
-      return { center: new Vector3(0.65, U + 0.35, -19.7), half: tall ? new Vector3(1.3, 1.6, 0.8) : new Vector3(1.6, 1.25, 0.8), yaw: 14, pitch: 14, minDist: 2.5 }
+      // Kaylee and Mommy up top, the card with the two buttons below them (on a short phone screen the card is most of
+      // it, so the camera looks lower and they sit higher).
+      const short = this.house.size.h < 500
+      return { center: new Vector3(0.65, U + (short ? -0.05 : 0.35), -19.7), half: tall ? new Vector3(1.3, 1.6, 0.8) : new Vector3(1.6, short ? 1.65 : 1.25, 0.8), yaw: 14, pitch: 14, minDist: 2.5 }
     }
     if (ph === 'opening' || ph === 'pack' || ph === 'sitting' || ph === 'closed') {
       return { center: new Vector3(tall ? -0.45 : -0.2, U + 0.35, tall ? -19.05 : -18.95), half: tall ? new Vector3(2.0, 0.55, 1.35) : new Vector3(2.45, 0.55, 1.4), yaw: tall ? 6 : 16, pitch: tall ? 50 : 46, minDist: 3 }
     }
     if (ph === 'goodbye' || ph === 'boarding' || ph === 'gone') {
-      // A little from above, so the family on the sidewalk shows over the van.
-      return { center: new Vector3(tall ? 1.3 : 0.9, tall ? 1.6 : 1.2, 2.3), half: tall ? new Vector3(3.6, 1.3, 2.3) : new Vector3(4.9, 1.2, 2.3), yaw: 6, pitch: 30, minDist: 5 }
+      // A little from above: the family on the sidewalk, and once it's here the van parked beside them (its door at
+      // their end, so they can all hop in).
+      const van = this.carT >= 0.6 || ph !== 'goodbye'
+      if (tall) return { center: new Vector3(van ? 3.0 : 1.0, 1.6, 2.6), half: new Vector3(3.4, 1.3, 2.3), yaw: 6, pitch: 30, minDist: 5 }
+      return { center: new Vector3(van ? 2.0 : 0.9, 1.2, 2.4), half: new Vector3(van ? 5.6 : 4.9, 1.2, 2.3), yaw: 6, pitch: 30, minDist: 5 }
     }
     return null
   }
@@ -877,16 +1033,17 @@ export class TripHouse implements HousePlugin {
       // Its front, below the heap of things in it (each of those is its own target: tap one and it hops out).
       const on = ph === 'pack' || ph === 'sitting' || ph === 'goodbye'
       const at = this.suitcase.root.localToWorld(new Vector3(0, this.suitcase.h * 0.45, this.suitcase.d * 0.5))
-      return on ? { at, r: 0.42, glow: (ph === 'pack' && this.count >= 3) || ph === 'sitting' } : null
+      return on ? { at, r: 0.42, glow: (ph === 'pack' && this.count >= 3 && this.t - this.lastTouch > 6) || ph === 'sitting' } : null
     }
     if (id === 'trip:van') {
       if (ph !== 'goodbye' || this.carT < 1) return null
-      return { at: this.van.root.getWorldPosition(new Vector3()).setY(1.0), r: 1.6, glow: this.carWait > 2.5 }
+      // On its sliding door (the end nearer the family).
+      return { at: this.van.root.getWorldPosition(new Vector3()).add(new Vector3(-0.7, 1.0, -0.4)), r: 1.3, glow: this.carWait > 2.5 }
     }
     if (id.startsWith('trip:item:') && ph === 'pack') {
       const th = this.things.get(id.slice(10))
       if (!th || !th.g.visible) return null
-      return { at: th.g.position.clone().setY(th.g.position.y + 0.12), r: th.packed ? 0.15 : 0.24, glow: th.glint > 0 }
+      return { at: th.g.position.clone().setY(th.g.position.y + 0.12), r: th.packed ? 0.15 : 0.3, glow: th.glint > 0 }
     }
     return null
   }
@@ -904,6 +1061,8 @@ export class TripHouse implements HousePlugin {
       hops: this.hopsDone,
       hopsNeeded: this.hopsNeeded,
       vanHere: this.carT >= 1,
+      wearing: this.house.kaylee.wearing,
+      snacks: this.snackBag.visible,
       ...this.counts,
     }
   }

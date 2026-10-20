@@ -44,6 +44,13 @@ export const PLACES = {
   north: [[98.9, 18.8], [99.8, 19.4], [100.6, 18.6], [98.6, 17.2], [101.1, 17.9]] as LonLat[],
 }
 
+/** Kaylee's crayon on her map, which makes Thailand an elephant's head: the ear round the northeast bulge, and the eye in
+ *  the north (the long south is the trunk). The view from the plane draws them too. */
+export const ELEPHANT: { ear: LonLat[]; eye: LonLat } = {
+  ear: [[101.9, 17.4], [103.4, 17.75], [104.45, 16.9], [104.85, 15.6], [104.2, 14.75], [102.9, 14.6], [102.05, 15.4], [101.8, 16.5]],
+  eye: [99.7, 17.55],
+}
+
 /** The outline's box, with a little sea round it. */
 export const BOUNDS = { west: 97.0, east: 106.0, south: 5.3, north: 20.8 }
 /** Degrees of longitude are shorter than degrees of latitude this far north (cos 13°). */

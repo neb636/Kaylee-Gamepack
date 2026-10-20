@@ -17,6 +17,7 @@
 import { Color, Fog, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type PerspectiveCamera, type WebGLRenderer } from 'three'
 import { bell, clamp, type Line } from '../../../../../../sdk'
 import { Avatar } from '../../../characters/avatar'
+import { wearing } from '../../../trip/packing'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
@@ -238,7 +239,9 @@ export class Bay implements World3D {
       r.v.root.userData.pick = 'boat'
       scene.add(r.v.root)
     }
+    // She wears what she packed (her sun hat or Mommy's spare, her sunglasses, her floaties).
     const kaylee = new Avatar(bag)
+    kaylee.wear(wearing(start.packed))
     const member = (id: 'ji' | 'nick') => new Member(FAMILY.find((m) => m.id === id)!, bag)
     const rider = (id: RiderId, char: Avatar | Member): Rider => ({ id, char, height: char.height, lying: false, under: false, upT: 0, warn: false, pose: null })
     this.riders = [rider('kaylee', kaylee), rider('ji', member('ji')), rider('nick', member('nick'))]

@@ -2,14 +2,16 @@
 // each its own 3D world in the shared view:
 //
 //   invite, pack, goodbye   Agong's own house (activities/hub/house.ts) with the trip's plugin (trip/legs/house-plugin.ts):
-//                           Mommy asks (Ask.tsx), packing (with the suitcase card and ✅ here), Aunty Sri's van
+//                           Mommy asks (Ask.tsx) by the elephant map, packing (with the suitcase card and ✅ here),
+//                           the goodbye at the shutter and Aunty Sri's van
 //   airport                 the van pulls away and they're at the airport: the x-ray belt (trip/legs/airport.ts)
-//   takeoff, fly, land      the window seat (trip/legs/plane.ts)
+//   takeoff, fly, land      the window seat (trip/legs/plane.ts), then Krabi's arrivals arch and the songthaew
 //   pier ... sunset         Phang Nga Bay by longtail boat (bay/bay.ts and its parts): the ribbons, open water, the
 //                           village, the cave and the hong, the Nail Island photo, the sunset ride back
 //
-// The trip kit's legs still talk in text bubbles (greybox 2); the bay speaks in real voices (bay/BayGuide.tsx). Between
-// legs the boarding pass slides up and hides the next world being built. What she packs (`packed`) rides along the whole
+// Everyone speaks in their own recorded voice (lines.ts; trip/legs/Guide.tsx shows the words with who said them, and
+// Sparkle in the corner). Between legs the boarding pass slides up and hides the next world being built. From the
+// moment the suitcase clicks shut Kaylee wears what she packed, in every leg and in the bay. What she packs (`packed`) rides along the whole
 // trip (the URL param, then what she saved); in the bay her ribbons, the stops she visited, her photos and the stickers
 // she found ride along in the URL too. The trip saves after each leg (useSaved), and saying yes to Mommy again offers to
 // keep going from there.
@@ -18,6 +20,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { sounds, useSaved, type Line } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
+import { L } from '../../lines'
 import { Anchors } from '../../engine/Anchors'
 import { flag } from '../../engine/flags'
 import { View3D, type RenderMode, type World3D } from '../../engine/View3D'
@@ -25,16 +28,14 @@ import { ANCHORS as HOUSE_ANCHORS, House } from '../hub/house'
 import { AIRPORT_ANCHORS, Airport } from '../../trip/legs/airport'
 import { Ask, justSaidYes, saidYes } from '../../trip/legs/Ask'
 import { BoardingPass } from '../../trip/legs/BoardingPass'
-import { Bubble } from '../../trip/legs/Bubble'
+import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
 import { TRIP_HOUSE_ANCHORS, TripHouse, type HouseLeg, type Phase } from '../../trip/legs/house-plugin'
 import { PackCard } from '../../trip/legs/PackCard'
 import { PLANE_ANCHORS, PlaneRide, type FlySection } from '../../trip/legs/plane'
 import type { LegEvents } from '../../trip/legs/stage'
 import { DEFAULT_PACKED, formatPacked, parsePacked } from '../../trip/packing'
-import type { Said } from '../../trip/talk'
 import { Album, PhotoDrop, StickerFlight, type AlbumPhoto } from './bay/Album'
 import { ARROW_ICONS, Bay, BAY_ANCHORS, type BayStart } from './bay/bay'
-import { BayGuide, type BayGuideHandle } from './bay/BayGuide'
 import { CRITTERS, type CritterId } from './bay/critters'
 import type { PhotoKind, Stop } from './bay/part'
 import { PoseButtons } from './bay/PoseButtons'
@@ -90,8 +91,7 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
   const [section, setSection] = useState<BoatSection>(first)
   const [mount, setMount] = useState<{ world: TripWorld; section: BoatSection; key: number }>({ world: WORLD_OF[first], section: first, key: 0 })
   const [mode, setMode] = useState<RenderMode>('webgl')
-  const [pass, setPass] = useState<{ punch: string | null; done: string[]; footer?: string; choice?: boolean } | null>(null)
-  const [said, setSaid] = useState<(Said & { n: number }) | null>(null)
+  const [pass, setPass] = useState<{ punch: string | null; done: string[]; choice?: boolean } | null>(null)
   const [landed, setLanded] = useState(false)
   const [phase, setPhase] = useState<Phase | null>(null)
   const [flash, setFlash] = useState(0)
@@ -105,7 +105,7 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
   const [bump, setBump] = useState(0)
   const [flights, setFlights] = useState<{ key: number; id: CritterId; x: number; y: number }[]>([])
   const [drops, setDrops] = useState<{ key: number; src: string }[]>([])
-  const guideRef = useRef<BayGuideHandle>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   const arrowEls = useRef(new Map<string, HTMLElement>())
   // A link into the bay with photos: they're staged and taken when the bay is first built.
   const linkPhotos = useRef(WORLD_OF[start ?? 'invite'] === 'bay' ? list(flag('photos'), KINDS) : [])
@@ -138,14 +138,8 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
     if (WORLD_OF[state.current.section] === 'bay') enter(state.current.section, params(state.current.packed))
   }, [ribbons, stops, photos, found])
 
-  // A bubble for a few seconds (longer lines stay a little longer).
-  const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
-  const say = (s: Said) => {
-    clearTimeout(hide.current)
-    setSaid((cur) => ({ ...s, n: (cur?.n ?? 0) + 1 }))
-    hide.current = setTimeout(() => setSaid(null), 2200 + s.text.length * 45)
-  }
-  useEffect(() => () => clearTimeout(hide.current), [])
+  // Someone says something, out loud (Sparkle in the corner shows the words for Dad).
+  const say = (l: Line) => guideRef.current?.speak(l)
 
   const moveTo = (s: BoatSection) => {
     setSection(s)
@@ -159,8 +153,7 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
     st.busy = true
     const from = st.section
     const punch = legOf(from)
-    setSaid(null)
-    setPass({ punch, done: doneBefore(next, punch), footer: next === 'pier' ? 'Krabi' : undefined })
+    setPass({ punch, done: doneBefore(next, punch) })
     const at = RESUME.includes(next) ? next : (RESUME_AT[next] ?? null)
     if (at) setSaved({ at, packed: formatPacked(st.packed) })
     const old = worldRef.current
@@ -271,7 +264,7 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
       }
       const bay = new Bay(renderer, start, {
         onSection: (x) => moveTo(x),
-        say: (l: Line) => guideRef.current?.speak(l),
+        say,
         onFound: (id, x, y) => {
           setFound((f) => (f.includes(id) ? f : [...f, id]))
           setFlights((f) => [...f, { key: performance.now() + Math.random(), id, x, y }])
@@ -376,7 +369,6 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
       {mount.world === 'bay' && mode === 'webgl' && (
         <>
           <PoseButtons show={landed && !pass && !albumOpen} onPose={(p) => (worldRef.current as Bay | null)?.pose(p)} />
-          <BayGuide ref={guideRef} hidden={!!pass} raised={landed} />
           <Album
             photos={photos}
             found={found}
@@ -410,7 +402,7 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
           ))}
         </>
       )}
-      <Bubble said={pass ? null : said} />
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!pass || asking} raised={mount.world === 'bay' && landed} idle={mount.world === 'bay' ? L.bay.hint.drive : undefined} />}
       <Ask open={asking} onYes={yes} onNotYet={onExit} />
       <PackCard open={!pass && mount.world === 'house' && (phase === 'pack' || phase === 'sitting')} packed={packed} sitting={phase === 'sitting'} onClose={() => tripRef.current?.closeTap()} />
       <AnimatePresence>
@@ -424,7 +416,6 @@ export function BoatTrip({ onExit }: { onExit: () => void }) {
             legs={PASS}
             done={pass.done}
             punch={pass.punch}
-            footer={pass.footer}
             choice={pass.choice ? { again: () => choose(true), resume: () => choose(false), resumeIcon: PASS.find((p) => p.id === legOf(saved.at ?? 'pack'))?.icon ?? '🚤' } : undefined}
           />
         )}

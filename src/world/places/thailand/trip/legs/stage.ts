@@ -3,7 +3,7 @@
 // can poke, a "do this" finger after a while with nothing touched, and little hops for the family (into a seat, up
 // the plane's stairs). Each leg says what's where (anchorAt), where the camera looks (shot) and what a tap does (onTap).
 import { Color, Object3D, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { bell, clamp } from '../../../../../sdk'
+import { bell, clamp, type Line } from '../../../../../sdk'
 import { Avatar } from '../../characters/avatar'
 import { FAMILY } from '../../characters/family'
 import { Member } from '../../characters/member'
@@ -13,12 +13,11 @@ import { setOutlineResolution } from '../../engine/outline'
 import { applyBands, makeLights, PAL } from '../../engine/toon'
 import type { World3D } from '../../engine/View3D'
 import { sfx } from '../../sfx'
-import type { Said } from '../talk'
 
 /** What a leg tells the screen around it (BoatTrip.tsx). */
 export interface LegEvents {
-  /** Someone says something (a text bubble until the voices gate). */
-  say(s: Said): void
+  /** Someone says something, in their own voice (lines.ts). */
+  say(l: Line): void
   /** It moved on to another section in the same world (the address bar follows). */
   section(id: string): void
   /** The leg is over: the boarding pass, then this section. */

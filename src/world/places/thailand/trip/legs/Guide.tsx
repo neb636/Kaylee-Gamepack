@@ -1,25 +1,41 @@
-// Who's talking in the bay, out loud in their own recorded voices: Sparkle in the corner (the few instructions and the
-// facts; tap her to hear her last line again), and Mommy, Daddy and the village kids (their 3D mouths move with their
-// voice). A short bubble shows the words for Dad, with who said them.
+// Who's talking on the boat trip, out loud in their own recorded voices (lines.ts, cast.json): Sparkle in the corner
+// (the few instructions and the facts; tap her to hear her last line again), and the family, Aunty Sri, the officer,
+// the flight attendant and the village kids (their 3D mouths move with their voice). A short bubble shows the words
+// for Dad, with who said them.
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, lineVoice, say, speakingVoice, SparklePuppet, type Line, type PuppetHandle } from '../../../../../../sdk'
-import { L } from '../../../lines'
+import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
 
-export interface BayGuideHandle {
+export interface TripGuideHandle {
   speak(line: Line): void
 }
 
 const WHO: Record<string, { name: string; icon: string; color: string }> = {
   ji: { name: 'Mommy', icon: '🦄', color: '#FF8FB8' },
   nick: { name: 'Daddy', icon: '🦄', color: '#7FD1B9' },
+  agong: { name: 'Agong', icon: '🐼', color: '#B9A6F5' },
+  jum: { name: 'Jum', icon: '🐘', color: '#FFB3CF' },
+  gan: { name: 'Gan', icon: '🦊', color: '#7CC4F2' },
+  ken: { name: 'Ken', icon: '🦊', color: '#8FE3C8' },
+  bb: { name: 'BB', icon: '🐃', color: '#FFB3D6' },
+  sri: { name: 'Aunty Sri', icon: '🐦', color: '#FFC83D' },
+  officer: { name: 'Officer', icon: '🐘', color: '#A8B4E8' },
+  attendant: { name: 'Flight attendant', icon: '🐧', color: '#FFD3E6' },
   kids: { name: 'The village kids', icon: '⚽', color: '#FFD27A' },
 }
 
-export const BayGuide = forwardRef<BayGuideHandle, { hidden?: boolean; raised?: boolean }>(function BayGuide({ hidden, raised }, ref) {
+interface Props {
+  hidden?: boolean
+  /** Sit higher (over the bay's pose buttons). */
+  raised?: boolean
+  /** What tapping Sparkle says before she has said anything (the bay: how to drive); none: she just hops. */
+  idle?: Line
+}
+
+export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({ hidden, raised, idle }, ref) {
   const sparkle = useRef<PuppetHandle>(null)
   const [line, setLine] = useState<{ l: Line; n: number } | null>(null)
-  const last = useRef<Line>(L.bay.hint.drive)
+  const last = useRef<Line | null>(null)
   const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   useImperativeHandle(ref, () => ({
@@ -49,7 +65,8 @@ export const BayGuide = forwardRef<BayGuideHandle, { hidden?: boolean; raised?: 
         aria-label="Sparkle"
         onClick={() => {
           void sparkle.current?.play('hop')
-          const l = last.current
+          const l = last.current ?? idle
+          if (!l) return sounds.sparkle()
           setLine((cur) => ({ l, n: (cur?.n ?? 0) + 1 }))
           clearTimeout(hide.current)
           void say(l).then(() => {

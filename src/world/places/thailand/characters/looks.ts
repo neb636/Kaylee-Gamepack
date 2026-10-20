@@ -4,7 +4,10 @@
 // characters/animal.ts builds them in 3D. Pure data (no three.js).
 export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill'
 export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
-export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone'
+/** What Kaylee can wear on a trip, from her suitcase (or Mommy's spare sun hat if she packed none): Avatar.wear. */
+export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties'
+export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasses', 'floaties']
+export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Wearable
 
 export interface Look {
   species: Species

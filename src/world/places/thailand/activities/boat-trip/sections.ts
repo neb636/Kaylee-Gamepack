@@ -1,6 +1,6 @@
 // Captain Kaylee's boat trip (plan: planning/around-the-world/thailand/boat-trip.md), as deep-linkable sections:
 // #/world/thailand/boat-trip/<section>?packed=<what's in the suitcase>&ribbons=...&stops=...&photos=...&found=...
-// The trip kit (greybox 2): Mommy asks if she's ready, packing, the goodbye and Aunty Sri's van, the airport and the
+// The trip there (step 4): Mommy asks if she's ready, packing, the goodbye and Aunty Sri's van, the airport and the
 // window seat; then Phang Nga Bay (step 3): the pier and its ribbons, open water, the village, the cave and the hong, the
 // Nail Island's photo and the sunset ride back. The way home comes in a later gate. Loaded at startup: keep three.js
 // out of this file.

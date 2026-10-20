@@ -205,8 +205,8 @@ function bathroomDoor(kit: Kit, at: [number, number, number]) {
 
 /**
  * The paper map of Thailand taped on the wall (it swings from its top edge when tapped). The outline is drawn into a
- * canvas (trip/drawings.ts); the pins stand out of the paper: a little house on Bangkok, and a boat pin on Phang Nga
- * Bay that bobs.
+ * canvas (trip/drawings.ts); the pins stand out of the paper and bob: a little house on Bangkok, and a boat pin on
+ * Phang Nga Bay.
  */
 function elephantMap(kit: Kit) {
   const { w, h } = MAP
@@ -226,7 +226,7 @@ function elephantMap(kit: Kit) {
     return [(u - 0.5) * w, -v * h] as const
   }
   const [hx, hy] = local(PLACES.bangkok)
-  g.add(scenery(kit, [P.box(0.07, 0.055, 0.03, PAL.pink, { at: [hx, hy + 0.01, 0.03] }), P.cone(0.06, 0.05, PAL.hotpink, { at: [hx, hy + 0.06, 0.03], rot: [0, Math.PI / 4, 0] }, 4)], 1.5))
+  g.add(part(kit, 'map.home', [P.box(0.07, 0.055, 0.03, PAL.pink, { at: [0, 0.01, 0.03] }), P.cone(0.06, 0.05, PAL.hotpink, { at: [0, 0.06, 0.03], rot: [0, Math.PI / 4, 0] }, 4)], [hx, hy, 0], 1.5))
   const [bx, by] = local(PLACES.phangNga)
   const pin = part(
     kit,

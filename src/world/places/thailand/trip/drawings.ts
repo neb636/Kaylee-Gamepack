@@ -1,7 +1,7 @@
 // Flat pictures drawn in code onto canvases (the 3D scenes use them as textures): the paper elephant map in Kaylee's
 // room, the plane's seat-back screen, and the airport's x-ray screen. All from the real outline (outline.ts), never
 // generated. No three.js here: just the 2D canvas.
-import { flat, FLAT_SIZE, PHUKET, PLACES, THAILAND, type LonLat } from './outline'
+import { ELEPHANT, flat, FLAT_SIZE, PHUKET, PLACES, THAILAND, type LonLat } from './outline'
 
 const INK = '#2B2330'
 
@@ -49,8 +49,9 @@ function crayon(ctx: CanvasRenderingContext2D, color: string, width: number, pat
 }
 
 /** The paper map of Thailand taped on her wall: the real outline, sea round it, and Kaylee's crayon doodles that make it
- *  an elephant (an eye in the north, a big ear round the northeast). The pins are 3D, on top of it. */
-export function drawElephantMap(canvas: HTMLCanvasElement) {
+ *  an elephant (an eye in the north, a big ear round the northeast). The pins are 3D, on top of it. Tapped, the crayon
+ *  elephant comes alive for a moment: `flap` (0..1) swings its ear out and back, and it winks. */
+export function drawElephantMap(canvas: HTMLCanvasElement, flap = 0) {
   const w = canvas.width
   const h = canvas.height
   const ctx = canvas.getContext('2d')!
@@ -75,7 +76,10 @@ export function drawElephantMap(canvas: HTMLCanvasElement) {
   trace(ctx, at, PHUKET)
   ctx.stroke()
   // Kaylee's crayon: the ear round the northeast bulge, the eye in the north, and the trunk's curl at the bottom.
-  const ear: LonLat[] = [[101.9, 17.4], [103.4, 17.75], [104.45, 16.9], [104.85, 15.6], [104.2, 14.75], [102.9, 14.6], [102.05, 15.4], [101.8, 16.5]]
+  // The ear swings out from where it meets the head (its west side), and back.
+  const swing = Math.sin(flap * Math.PI * 2) * (1 - flap) * 0.55
+  const hinge = ELEPHANT.ear[0]
+  const ear = ELEPHANT.ear.map(([lon, lat]): LonLat => [lon + (lon - hinge[0]) * swing, lat + (lat - hinge[1]) * swing * 0.4])
   crayon(ctx, '#FF5FA2', w * 0.016, (k) => {
     // Through the midpoints, so the loop is round like a crayon line.
     const j = (k - 1) * w * 0.004
@@ -90,15 +94,24 @@ export function drawElephantMap(canvas: HTMLCanvasElement) {
     })
     ctx.closePath()
   })
-  const [ex, ey] = at([99.7, 17.55])
+  const [ex, ey] = at(ELEPHANT.eye)
+  const wink = flap > 0.15 && flap < 0.55
   ctx.fillStyle = INK
-  ctx.beginPath()
-  ctx.arc(ex, ey, w * 0.032, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.fillStyle = '#FFFFFF'
-  ctx.beginPath()
-  ctx.arc(ex + w * 0.01, ey - w * 0.012, w * 0.011, 0, Math.PI * 2)
-  ctx.fill()
+  if (wink) {
+    // A happy closed eye: a little upside-down smile.
+    crayon(ctx, INK, w * 0.014, () => {
+      ctx.beginPath()
+      ctx.arc(ex, ey + w * 0.012, w * 0.03, Math.PI * 1.1, Math.PI * 1.9)
+    })
+  } else {
+    ctx.beginPath()
+    ctx.arc(ex, ey, w * 0.032, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.fillStyle = '#FFFFFF'
+    ctx.beginPath()
+    ctx.arc(ex + w * 0.01, ey - w * 0.012, w * 0.011, 0, Math.PI * 2)
+    ctx.fill()
+  }
   crayon(ctx, INK, w * 0.01, (k) => {
     ctx.beginPath()
     ctx.arc(ex, ey, w * 0.05 + k, Math.PI * 1.1, Math.PI * 1.9)
@@ -255,11 +268,17 @@ function outline(ctx: CanvasRenderingContext2D, id: string, s: number, t: number
       ctx.stroke()
       break
     case 'sunglasses':
-      circle(-s * 0.45, 0, s * 0.38)
-      circle(s * 0.45, 0, s * 0.38)
+      // Her heart sunglasses.
+      for (const cx of [-0.45, 0.45]) {
+        ctx.beginPath()
+        ctx.moveTo(cx * s, s * 0.35)
+        ctx.bezierCurveTo((cx - 0.5) * s, -s * 0.05, (cx - 0.3) * s, -s * 0.45, cx * s, -s * 0.18)
+        ctx.bezierCurveTo((cx + 0.3) * s, -s * 0.45, (cx + 0.5) * s, -s * 0.05, cx * s, s * 0.35)
+        ctx.stroke()
+      }
       ctx.beginPath()
-      ctx.moveTo(-s * 0.1, -s * 0.05)
-      ctx.lineTo(s * 0.1, -s * 0.05)
+      ctx.moveTo(-s * 0.15, -s * 0.15)
+      ctx.lineTo(s * 0.15, -s * 0.15)
       ctx.stroke()
       break
     case 'sunscreen':
@@ -304,7 +323,9 @@ function outline(ctx: CanvasRenderingContext2D, id: string, s: number, t: number
       ctx.stroke()
       break
     case 'fan': {
+      // The desk fan's cage, its spinning blades, its stem and base.
       circle(0, -s * 0.15, s * 0.6)
+      circle(0, -s * 0.15, s * 0.1)
       for (let i = 0; i < 3; i++) {
         const a = t * 9 + (i * Math.PI * 2) / 3
         ctx.beginPath()

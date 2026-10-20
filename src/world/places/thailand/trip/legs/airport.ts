@@ -1,10 +1,14 @@
 // The airport, one moment worth having (plan: thailand/boat-trip.md, "Airport"): no check-in, no gate. Her suitcase goes
 // on the belt (tap it, or drag it there) and slides into the x-ray, and the screen beside it shows what's inside as
 // glowing blue outlines: everything she packed, even Gan asleep or the spinning fan. The officer laughs and stamps her
-// boarding pass. The glass doors slide open onto the plane; tap its door and the family hop up the stairs.
+// boarding pass on the counter (ka-chunk, a pink stamp on it). The glass doors slide open onto the plane; tap its door
+// and the family hop up the stairs, the wind on the apron blowing Kaylee's mane. The hall has a departure board, a row
+// of lounge chairs, orchids and the Thai flag; Kaylee wears what she packed (sunglasses up on her hat indoors).
 import { CanvasTexture, Color, Group, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, wobble } from '../../../../../sdk'
+import type { Avatar } from '../../characters/avatar'
 import { buildAnimal, type Rig } from '../../characters/animal'
+import { FaceLife } from '../../characters/face'
 import type { Look } from '../../characters/looks'
 import type { AnchorInfo } from '../../engine/Anchors'
 import type { Shot } from '../../engine/camera'
@@ -12,8 +16,9 @@ import { merge, P, solid } from '../../engine/geo'
 import { PAL } from '../../engine/toon'
 import { sfx } from '../../sfx'
 import { drawXray } from '../drawings'
+import { wearing } from '../packing'
 import { buildSuitcase, type Suitcase } from '../props'
-import { TALK } from '../talk'
+import { L } from '../../lines'
 import { buildPlaneOutside, type PlaneOutside } from '../vehicles/plane'
 import { Stage, type AnchorSpot, type LegEvents, type Rider } from './stage'
 
@@ -24,6 +29,8 @@ export const AIRPORT_ANCHORS: AnchorInfo[] = [
   { id: 'belt', label: 'Belt', kind: 'thing' },
   { id: 'plane-door', label: 'Plane door', kind: 'thing' },
   { id: 'plane', label: 'Plane', kind: 'thing' },
+  { id: 'pass', label: 'Boarding pass', kind: 'thing' },
+  { id: 'flag', label: 'Thai flag', kind: 'thing' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
@@ -48,7 +55,15 @@ export class Airport extends Stage {
   private suitcase: Suitcase
   private plane: PlaneOutside
   private officer: Rig
+  private officerLife: FaceLife
   private officerHop = 1
+  /** The boarding pass on the counter, the stamp in the officer's hand, and the flag that flutters. */
+  private pass: Group
+  private stampMark: Group
+  private stamp: Group
+  private flag: Group
+  private flagWave = 1
+  private hinted = new Set<string>()
   private screen: { canvas: HTMLCanvasElement; tex: CanvasTexture; mesh: Mesh; wiggle: number }
   private riders: Record<'kaylee' | 'ji' | 'nick', Rider>
   private dashes = new Group()
@@ -73,6 +88,24 @@ export class Airport extends Stage {
     scene.add(
       solid(merge([P.box(10.5, 0.1, 14, '#F4EEFF', { at: [-1.6, -0.05, 3.5] }), ...Array.from({ length: 10 }, (_, i) => P.box(0.03, 0.005, 13.9, '#E2DAF6', { at: [-6.6 + i * 1.05, 0.002, 3.5] }))]), bag, 0),
       solid(merge([P.box(10.5, 3.4, 0.2, '#FFF7F0', { at: [-1.6, 1.7, -3.45] }), P.box(10.5, 0.3, 0.22, PAL.lavender, { at: [-1.6, 3.2, -3.44] }), P.rbox(2.2, 0.6, 0.08, 0.06, PAL.sky, { at: [-3.6, 2.5, -3.34] }), P.rbox(2.2, 0.6, 0.08, 0.06, PAL.mint, { at: [0.8, 2.5, -3.34] })]), bag, 2),
+      solid(
+        merge([
+          // The departure board: a dark panel with bright rows and little planes on it (no words), a clock beside it.
+          P.rbox(2.6, 1.2, 0.1, 0.06, '#2E3566', { at: [-1.4, 2.35, -3.3] }),
+          ...[0, 1, 2, 3].flatMap((i) => [P.box(1.6, 0.14, 0.02, ['#8FE3C8', '#FBEA9A', '#FFB3D1', '#A8DCFF'][i], { at: [-1.2, 2.72 - i * 0.24, -3.24] }), P.box(0.2, 0.05, 0.02, '#FFFFFF', { at: [-2.35, 2.72 - i * 0.24, -3.23] }), P.box(0.06, 0.16, 0.02, '#FFFFFF', { at: [-2.37, 2.72 - i * 0.24, -3.225] })]),
+          P.cyl(0.32, 0.32, 0.06, PAL.cream, { at: [0.7, 2.45, -3.32], rot: [Math.PI / 2, 0, 0] }, 24),
+          P.torus(0.32, 0.03, PAL.hotpink, { at: [0.7, 2.45, -3.3] }),
+          P.box(0.03, 0.2, 0.02, PAL.ink, { at: [0.7, 2.53, -3.27] }),
+          P.box(0.14, 0.03, 0.02, PAL.ink, { at: [0.76, 2.45, -3.27] }),
+          // A Thai pattern along the top of the wall: gold diamonds.
+          ...Array.from({ length: 14 }, (_, i) => P.box(0.18, 0.18, 0.04, PAL.gold, { at: [-6.6 + i * 0.75, 3.02, -3.32], rot: [0, 0, Math.PI / 4] })),
+          // Lounge chairs along the back wall, and orchids in tall pots at the ends.
+          ...[-5.6, -5.0, -4.4, -3.8].flatMap((x) => [P.rbox(0.5, 0.12, 0.5, 0.05, PAL.lavenderDark, { at: [x, 0.45, -2.9] }), P.rbox(0.5, 0.5, 0.1, 0.05, PAL.lavenderDark, { at: [x, 0.75, -3.12] }), P.box(0.05, 0.4, 0.4, '#D8D2E6', { at: [x - 0.27, 0.2, -2.9] })]),
+          ...[-6.4, 2.6].flatMap((x) => [P.cyl(0.24, 0.18, 0.6, '#C9B5F7', { at: [x, 0.3, -2.95] }), P.cyl(0.02, 0.02, 0.7, '#7FCB8F', { at: [x, 0.95, -2.95] }), ...[0, 1, 2, 3, 4].map((i) => P.sphere(0.09, i % 2 ? PAL.hotpink : '#FF9CC8', { at: [x + Math.sin(i * 1.3) * 0.14, 1.0 + i * 0.12, -2.95 + Math.cos(i * 1.3) * 0.1], scale: [1, 0.7, 0.5] })), ...[-1, 1].map((sx) => P.sphere(0.16, '#7FCB8F', { at: [x + sx * 0.14, 0.66, -2.95], scale: [1, 0.3, 0.55], rot: [0, 0, sx * 0.4] }))]),
+        ]),
+        bag,
+        2,
+      ),
       // The apron outside: a lavender-grey tarmac with yellow lines.
       solid(merge([P.box(30, 0.1, 22, '#C9C4DE', { at: [GLASS_X + 15, -0.06, 1] }), ...Array.from({ length: 6 }, (_, i) => P.box(1.6, 0.01, 0.16, PAL.butter, { at: [GLASS_X + 2 + i * 3, 0.002, 2.4] }))]), bag, 0),
     )
@@ -84,6 +117,9 @@ export class Airport extends Stage {
           // The x-ray tunnel, with flaps at both ends.
           P.rbox(XRAY.x1 - XRAY.x0, 1.1, 1.25, 0.1, PAL.lavenderDark, { at: [(XRAY.x0 + XRAY.x1) / 2, BELT.y + 0.55, BELT.z], scale: [1, 1, 1] }),
           ...[XRAY.x0 - 0.01, XRAY.x1 + 0.01].flatMap((x) => Array.from({ length: 5 }, (_, i) => P.box(0.02, 0.62, 0.15, '#5A6FB0', { at: [x, BELT.y + 0.32, -0.36 + i * 0.18] }))),
+          // The officer's little counter at the end of the belt.
+          P.rbox(0.8, 0.86, 0.5, 0.05, '#D9D2EE', { at: [1.35, 0.43, -0.45] }),
+          P.box(0.84, 0.05, 0.54, PAL.lavenderDark, { at: [1.35, 0.88, -0.45] }),
           // The screen's stand.
           P.cyl(0.06, 0.08, 1.4, '#D8D2E6', { at: [-0.1, 0.7, -1.25] }),
           P.cyl(0.35, 0.4, 0.08, '#D8D2E6', { at: [-0.1, 0.04, -1.25] }),
@@ -133,6 +169,36 @@ export class Airport extends Stage {
     this.officer.root.rotation.y = -0.35
     this.officer.root.userData.pick = 'officer'
     scene.add(this.officer.root)
+    this.officerLife = new FaceLife(this.officer, 'officer')
+    // The stamp in his right hand, and her boarding pass waiting on the counter.
+    this.stamp = solid(merge([P.cyl(0.035, 0.03, 0.14, '#C99A6E', { at: [0, 0.08, 0] }), P.sphere(0.05, '#C99A6E', { at: [0, 0.16, 0] }), P.rbox(0.14, 0.05, 0.1, 0.015, PAL.hotpink, { at: [0, 0, 0] })]), bag, 1.5)
+    this.stamp.position.set(0.02, -0.26, 0.06)
+    this.stamp.rotation.x = Math.PI
+    this.officer.armR.add(this.stamp)
+    this.pass = new Group()
+    this.pass.position.set(1.32, 0.915, -0.4)
+    this.pass.rotation.y = -0.2
+    this.pass.add(solid(merge([P.box(0.42, 0.012, 0.2, '#FFFFFF'), P.box(0.42, 0.014, 0.05, PAL.hotpink, { at: [0, 0.001, -0.075] }), ...[0, 1, 2].map((i) => P.box(0.1, 0.014, 0.012, '#C9C1E6', { at: [-0.12 + i * 0.12, 0.001, 0.0] }))]), bag, 1.5))
+    this.pass.userData.pick = 'pass'
+    this.stampMark = solid(merge([P.cyl(0.06, 0.06, 0.016, PAL.hotpink, {}, 18), P.cyl(0.04, 0.04, 0.018, '#FFFFFF', {}, 18), P.sphere(0.022, PAL.hotpink, { scale: [1, 0.4, 1] })]), bag, 0)
+    this.stampMark.position.set(0.1, 0.002, 0.03)
+    this.stampMark.visible = false
+    this.pass.add(this.stampMark)
+    scene.add(this.pass)
+    // The Thai flag on its pole by the glass wall: red, white, blue (twice as wide), white, red.
+    this.flag = new Group()
+    this.flag.position.set(3.0, 0, -2.9)
+    this.flag.add(solid(merge([P.cyl(0.03, 0.04, 2.9, '#D8D2E6', { at: [0, 1.45, 0] }), P.sphere(0.06, PAL.gold, { at: [0, 2.93, 0] }), P.cyl(0.18, 0.22, 0.1, '#D8D2E6', { at: [0, 0.05, 0] })]), bag, 1.5))
+    const cloth = new Group()
+    cloth.position.set(0.03, 2.75, 0)
+    cloth.add(solid(merge([['#E8434F', 0.06], ['#FFFFFF', 0.06], ['#2D4A9C', 0.12], ['#FFFFFF', 0.06], ['#E8434F', 0.06]].map(([c, h], i, all) => {
+      const top = all.slice(0, i).reduce((a, [, hh]) => a + (hh as number), 0)
+      return P.box(0.54, h as number, 0.02, c as string, { at: [0.27, -top - (h as number) / 2, 0] })
+    })), bag, 1.5))
+    cloth.name = 'cloth'
+    this.flag.add(cloth)
+    this.flag.userData.pick = 'flag'
+    scene.add(this.flag)
     this.suitcase = buildSuitcase(bag)
     this.suitcase.root.position.set(START.suitcase[0], 0, START.suitcase[1])
     this.suitcase.root.rotation.y = -Math.PI / 2
@@ -140,6 +206,8 @@ export class Airport extends Stage {
     this.suitcase.root.userData.pick = 'suitcase'
     scene.add(this.suitcase.root)
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
+    kaylee.wear(wearing(this.packed))
+    kaylee.glassesUp(true)
     this.riders = { kaylee, ji: members.get('ji')!, nick: members.get('nick')! }
     for (const id of ['kaylee', 'ji', 'nick'] as const) {
       const c = this.riders[id]
@@ -147,13 +215,13 @@ export class Airport extends Stage {
       const [x, z] = START[id]
       this.put(c, x, 0, z, 'stand', 35)
     }
-    setTimeout(() => this.phase === 'belt' && this.events.say(TALK.airport.start), 500)
+    setTimeout(() => this.phase === 'belt' && this.events.say(L.trip.airport.start), 500)
   }
 
   // ---------------------------------------------------------------- touch
 
   protected pickRoots(): Object3D[] {
-    return [this.suitcase.root, this.screen.mesh, this.officer.root, this.plane.root, ...Object.values(this.riders).map((r) => r.root)]
+    return [this.suitcase.root, this.screen.mesh, this.officer.root, this.pass, this.flag, this.plane.root, ...Object.values(this.riders).map((r) => r.root)]
   }
 
   pointerDown(x?: number, y?: number) {
@@ -210,6 +278,17 @@ export class Airport extends Stage {
         this.officerHop = 0
         sfx.haha()
         return
+      case 'pass':
+        // A stamp for fun (her pass gets one anyway at the x-ray).
+        this.officerHop = 0
+        sfx.stamp()
+        this.stampMark.visible = true
+        this.pass.position.y = 0.95
+        return
+      case 'flag':
+        this.flagWave = 0
+        sfx.fwip()
+        return
       case 'plane-door':
         if (this.phase === 'doors') this.board()
         else this.bouncePlane()
@@ -249,6 +328,10 @@ export class Airport extends Stage {
   private board() {
     this.phase = 'board'
     this.phaseT = 0
+    // Outside on the apron: sunglasses back on, and the wind in her mane.
+    const k = this.riders.kaylee as Avatar
+    k.glassesUp(false)
+    k.setWind(0.8)
     const steps = this.plane.steps.map((p) => this.plane.root.localToWorld(new Vector3(...p)))
     const foot = steps[0].clone().setY(0).add(new Vector3(0, 0, 0.7))
     const top = steps[steps.length - 1]
@@ -295,12 +378,14 @@ export class Airport extends Stage {
         this.laughed = true
         this.officerHop = 0
         sfx.haha()
-        this.events.say(this.packed.includes('gan') ? TALK.airport.gan : TALK.airport.laugh)
+        this.events.say(this.packed.includes('gan') ? L.trip.airport.gan : this.packed.includes('fan') ? L.trip.airport.fan : L.trip.airport.laugh)
       }
       if (this.laughed && !this.stamped && inside > this.packed.length * 0.4 + 2.0) {
         this.stamped = true
         this.officerHop = 0
         sfx.stamp()
+        this.stampMark.visible = true
+        this.pass.position.y = 0.95
         this.phase = 'out'
         this.phaseT = 0
       }
@@ -311,10 +396,12 @@ export class Airport extends Stage {
         this.phase = 'doors'
         this.phaseT = 0
         sfx.fwip()
-        this.events.say(TALK.airport.plane)
-        // Daddy takes the suitcase.
+        this.events.say(L.trip.airport.plane)
+        // Daddy takes the suitcase, and they all hop over to the glass doors to look at the plane.
         s.visible = false
         this.riders.nick.react('wave')
+        const order: ('kaylee' | 'ji' | 'nick')[] = ['kaylee', 'ji', 'nick']
+        order.forEach((id, i) => this.hop(this.riders[id], this.scene, new Vector3(GLASS_X - 0.6 - i * 0.45, 0, 0.35 + i * 0.6), { delay: i * 0.2, dur: 0.7, arc: 0.4, face: 80 }))
       }
     }
     // The glass doors slide open.
@@ -335,6 +422,19 @@ export class Airport extends Stage {
     scr.mesh.scale.setScalar(1 + wobble(scr.wiggle, 3) * 0.04)
     // The officer breathes, leans in to look, hops when he laughs.
     this.officerHop = Math.min(1, this.officerHop + dt / 0.55)
+    this.officerLife.update(dt)
+    this.pass.position.y += (0.915 - this.pass.position.y) * (1 - Math.exp(-dt * 10))
+    // The flag flutters (more after a tap).
+    this.flagWave = Math.min(1, this.flagWave + dt / 1.5)
+    const cloth = this.flag.getObjectByName('cloth')!
+    cloth.rotation.y = Math.sin(t * 3.1) * 0.12 + Math.sin(t * 9) * 0.25 * bell(this.flagWave)
+    cloth.scale.x = 1 - Math.abs(Math.sin(t * 2.3)) * 0.06
+    // A hint once in each wait, after a while with nothing done.
+    const idle = this.time - this.lastTouch
+    if (idle > 8 && (ph === 'belt' || ph === 'doors') && !this.hinted.has(ph)) {
+      this.hinted.add(ph)
+      this.events.say(ph === 'belt' ? L.trip.hint.belt : L.trip.hint.door)
+    }
     const o = this.officer
     const b = 1 + Math.sin(t * 2.6) * 0.018
     o.body.scale.set(1 / Math.sqrt(b), b, 1 / Math.sqrt(b))
@@ -342,7 +442,8 @@ export class Airport extends Stage {
     o.armR.rotation.x = -bell(this.officerHop) * 1.6
     o.head.rotation.x = ph === 'scan' ? 0.25 : 0
     for (const c of Object.values(this.riders)) {
-      if (c.root.visible) c.lookAt(s.position.x, 0.8, s.position.z)
+      if (ph === 'doors' || ph === 'board') c.lookAt(PLANE_AT.x - 3.5, 2.2, PLANE_AT.z + 1.4)
+      else if (c.root.visible) c.lookAt(s.position.x, 0.8, s.position.z)
       c.update(dt, t)
     }
   }
@@ -352,10 +453,13 @@ export class Airport extends Stage {
   protected shot(): Shot {
     const tall = this.w < this.h
     const out = this.phase === 'doors' || this.phase === 'board' || this.phase === 'gone'
-    if (out) return { center: new Vector3(6.6, 1.5, -0.2), half: tall ? new Vector3(3.6, 1.8, 2.6) : new Vector3(5.6, 1.6, 2.4), yaw: 6, pitch: 15, minDist: 6 }
+    if (out) return { center: new Vector3(tall ? 5.5 : 6.6, 1.5, -0.2), half: tall ? new Vector3(3.6, 1.8, 2.6) : new Vector3(5.6, 1.6, 2.4), yaw: 6, pitch: 15, minDist: 6 }
     // At the belt with the family, then along with the suitcase to the x-ray, the screen and the officer.
     const scan = this.phase !== 'belt'
-    if (tall) return { center: new Vector3(scan ? -0.3 : -2.6, 1.1, -0.1), half: new Vector3(2.3, 1.15, 1.7), yaw: 6, pitch: 22, minDist: 5 }
+    // (Tall screens: a shallower box, so the family and the belt fill the screen instead of empty floor.)
+    // Tall screens: the belt and the family, then close on the x-ray and its screen so the joke shows.
+    if (tall && scan) return { center: new Vector3(0.05, 1.3, -0.55), half: new Vector3(1.45, 0.85, 0.75), yaw: 6, pitch: 14, minDist: 3 }
+    if (tall) return { center: new Vector3(-2.7, 1.0, 0.1), half: new Vector3(1.8, 1.1, 0.9), yaw: 6, pitch: 18, minDist: 4 }
     return { center: new Vector3(scan ? -1.0 : -1.9, 1.1, -0.1), half: new Vector3(3.6, 1.1, 1.6), yaw: 6, pitch: 22, minDist: 5 }
   }
 
@@ -374,6 +478,10 @@ export class Airport extends Stage {
         return ph === 'doors' || ph === 'board' ? { at: this.plane.root.localToWorld(new Vector3(...this.plane.doorAt)), r: 0.6, glow: ph === 'doors', prio: 3 } : null
       case 'plane':
         return { at: this.plane.root.localToWorld(new Vector3(1.5, 2.6, 1.3)), r: 1.5 }
+      case 'pass':
+        return ph === 'belt' || ph === 'scan' || ph === 'out' ? { at: this.pass.getWorldPosition(new Vector3()), r: 0.2 } : null
+      case 'flag':
+        return { at: this.flag.localToWorld(new Vector3(0.3, 2.6, 0)), r: 0.3 }
     }
     if (id.startsWith('family:')) {
       const c = this.riders[id.slice(7) as 'ji']

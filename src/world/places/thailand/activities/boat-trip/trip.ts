@@ -12,7 +12,7 @@ export const BOAT_TRIP: TripDef = {
     { kind: 'airport' },
     { kind: 'fly', from: PLACES.bangkok, to: PLACES.krabi, seat: 'window' },
   ],
-  caps: { fly: 70 },
+  caps: { fly: 58 },
   arrive: 'pier',
 }
 

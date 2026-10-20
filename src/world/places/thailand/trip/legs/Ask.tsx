@@ -1,10 +1,11 @@
 // Mommy asks if she's ready to go on a trip, with two big buttons that need no reading: 👍 yes (with the suitcase) and
 // ✋ not yet. It shows in the house (when Kaylee comes up to her room, or taps Mommy) and as the trip's first section.
-// "Not yet" gets a happy "OK! Tell me when!" and the card goes, nothing lost.
+// "Not yet" gets a happy "OK! Tell me when!" and the card goes, nothing lost. Mommy says it out loud in her own voice
+// (her 3D mouth moves with it); the card shows the words for Dad.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { sounds } from '../../../../../sdk'
-import { TALK } from '../talk'
+import { lineText, say, sounds } from '../../../../../sdk'
+import { L } from '../../lines'
 
 /** She said yes in the house: the trip opens straight on packing instead of asking again. */
 export const saidYes = { at: 0 }
@@ -24,7 +25,10 @@ export function Ask({ open, onYes, onNotYet }: Props) {
     if (open) setLater(false)
   }, [open])
   useEffect(() => () => clearTimeout(timer.current), [])
-  const line = later ? TALK.ask.later : TALK.ask.question
+  const line = later ? L.trip.ask.later : L.trip.ask.question
+  useEffect(() => {
+    if (open) void say(line)
+  }, [open, line])
   const buttons = [
     { id: 'yes', label: 'Yes', icon: '👍', extra: '🧳', color: 'var(--mint)', on: () => {
       sounds.correct()
@@ -47,7 +51,7 @@ export function Ask({ open, onYes, onNotYet }: Props) {
           style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom) + 16px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, padding: '0 16px', zIndex: 50, pointerEvents: 'none' }}
         >
           <motion.div
-            key={line.text}
+            key={lineText(line)}
             initial={{ scale: 0.85 }}
             animate={{ scale: 1 }}
             style={{ display: 'flex', alignItems: 'center', gap: 12, maxWidth: 'min(620px, 100%)', background: 'rgba(255,255,255,0.97)', borderRadius: 'var(--radius)', padding: '10px 20px 10px 10px', boxShadow: 'var(--shadow)' }}
@@ -62,7 +66,7 @@ export function Ask({ open, onYes, onNotYet }: Props) {
             </motion.span>
             <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
               <small style={{ fontWeight: 700, opacity: 0.6, fontSize: 14 }}>Mommy</small>
-              <span style={{ fontWeight: 700, fontSize: 'clamp(20px, min(3.4vw, 3.6vh), 30px)' }}>{line.text}</span>
+              <span style={{ fontWeight: 700, fontSize: 'clamp(20px, min(3.4vw, 3.6vh), 30px)' }}>{lineText(line)}</span>
             </span>
           </motion.div>
           {!later && (
