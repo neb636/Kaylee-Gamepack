@@ -7,7 +7,7 @@ export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
 /** What Kaylee can wear on a trip, from her suitcase (or Mommy's spare sun hat if she packed none): Avatar.wear. */
 export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties'
 export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasses', 'floaties']
-export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Wearable
+export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Wearable
 
 export interface Look {
   species: Species

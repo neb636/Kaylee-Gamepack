@@ -37,7 +37,7 @@ export const AIRPORT_ANCHORS: AnchorInfo[] = [
 ]
 
 /** A friendly officer (a background figure: sounds and animation, no voice): a lavender elephant in a navy shirt. */
-const OFFICER: Look = { species: 'elephant', height: 1.45, fur: '#C2BCE0', light: '#E8E4F6', dark: '#A39CCB', ear: '#FFB8CC', outfit: { kind: 'shirt', color: '#4A5A9C' }, extras: ['cap'] }
+const OFFICER: Look = { species: 'elephant', height: 1.6, fur: '#C2BCE0', light: '#E8E4F6', dark: '#A39CCB', ear: '#FFB8CC', outfit: { kind: 'shirt', color: '#4A5A9C' }, extras: ['officer-cap'] }
 
 // The hall (meters): the belt runs along +x into the x-ray; the glass wall with its sliding doors at GLASS_X; the plane
 // outside on the apron.
@@ -165,7 +165,8 @@ export class Airport extends Stage {
     scene.add(this.plane.root)
     // ---- The officer, the suitcase and the family ----
     this.officer = buildAnimal(OFFICER, bag)
-    this.officer.root.position.set(1.35, 0, -1.0)
+    // (Back from the counter and a little tall, so his trunk curls over it instead of into it.)
+    this.officer.root.position.set(1.35, 0, -1.2)
     this.officer.root.rotation.y = -0.35
     this.officer.root.userData.pick = 'officer'
     scene.add(this.officer.root)
@@ -440,7 +441,7 @@ export class Airport extends Stage {
     o.body.scale.set(1 / Math.sqrt(b), b, 1 / Math.sqrt(b))
     o.root.position.y = bell(this.officerHop) * 0.22
     o.armR.rotation.x = -bell(this.officerHop) * 1.6
-    o.head.rotation.x = ph === 'scan' ? 0.25 : 0
+    o.head.rotation.x = ph === 'scan' ? 0.08 : 0
     for (const c of Object.values(this.riders)) {
       if (ph === 'doors' || ph === 'board') c.lookAt(PLANE_AT.x - 3.5, 2.2, PLANE_AT.z + 1.4)
       else if (c.root.visible) c.lookAt(s.position.x, 0.8, s.position.z)
