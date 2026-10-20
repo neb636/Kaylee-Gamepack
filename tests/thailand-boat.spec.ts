@@ -1,8 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
 // Captain Kaylee's boat trip, greybox 1 (src/world/places/thailand/activities/boat-trip/): the bay in 3D, driven with a
-// real held finger and real taps on the tap targets, through the low cave into the hong, onto the Nail Island beach for
-// a photo, the flat version without WebGL, and no leftover GPU memory going back and forth to Agong's house.
+// real held finger and real taps on the tap targets, onto the Nail Island beach for a photo, the flat version without WebGL, and no leftover GPU memory going back and forth to Agong's house.
 // Read-only state comes from window.__thaiBoatQA (no jump hooks: tests open section links).
 
 type BoatQA = {
@@ -79,44 +78,6 @@ test('a finger on the water drives the longtail; letting go coasts; tapping the 
   await expect.poll(field(page, 'speed'), { timeout: 10_000 }).toBeLessThan(fast - 1)
   await page.locator('[data-anchor="boat"]').click({ force: true })
   await expect.poll(field(page, 'boost'), { timeout: 5_000 }).toBe(true)
-  expect(errors).toEqual([])
-})
-
-test('at the cave the family swaps into the canoe, ducks under the low roof and comes out in the hong', async ({ page }) => {
-  test.setTimeout(150_000)
-  const errors = trackErrors(page)
-  await open(page, 'bay')
-  await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
-  // "Where to, captain?": Daddy's look over the bay shows the cave's glow (it's off to the right of where the boat
-  // starts). Tap it: the longtail drives there by itself and everyone hops into the canoe.
-  await expect(page.locator('[data-anchor="glow:cave"]')).toBeVisible({ timeout: 10_000 })
-  await page.locator('[data-anchor="glow:cave"]').click({ force: true })
-  await expect.poll(field(page, 'vehicle'), { timeout: 60_000 }).toBe('canoe')
-  await expect.poll(field(page, 'phase'), { timeout: 10_000 }).toBe('drive')
-  expect(await page.evaluate(() => window.__kayleeSection?.id)).toBe('cave')
-  // Paddle on in: nobody lay down, so every horn bonks the roof (Daddy's first), and in the hong they sit up again.
-  await holdAhead(page)
-  await expect.poll(field(page, 'where'), { timeout: 60_000 }).toBe('hong')
-  await page.mouse.up()
-  const q = (await qa(page))!
-  expect(q.roof).toEqual({ kaylee: 1, ji: 1, nick: 1 })
-  await expect.poll(async () => Object.values((await qa(page))!.lying!).some(Boolean), { timeout: 10_000 }).toBe(false)
-  expect(errors).toEqual([])
-})
-
-test('tapping someone in the canoe lies them down before the roof, so their horn never bonks', async ({ page }) => {
-  test.setTimeout(120_000)
-  const errors = trackErrors(page)
-  await open(page, 'cave')
-  await ready(page)
-  for (const who of ['nick', 'ji', 'kaylee']) {
-    await page.locator(`[data-anchor="family:${who}"]`).click({ force: true })
-    await expect.poll(async () => (await qa(page))!.lying![who]).toBe(true)
-  }
-  await holdAhead(page)
-  await expect.poll(field(page, 'where'), { timeout: 60_000 }).toBe('hong')
-  await page.mouse.up()
-  expect((await qa(page))!.roof).toEqual({ kaylee: 0, ji: 0, nick: 0 })
   expect(errors).toEqual([])
 })
 

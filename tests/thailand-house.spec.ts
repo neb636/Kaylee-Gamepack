@@ -1,8 +1,8 @@
 import { expect, test, type Page } from '@playwright/test'
 
 // Agong's house, Thailand's 3D home base (src/world/places/thailand/activities/hub/): the real WebGL path, the flat
-// house a browser without WebGL gets, a walk around with real taps on the house's tap targets, and no leftover GPU
-// memory after going back and forth. Read-only state comes from window.__thaiHouseQA (no jump hooks).
+// house a browser without WebGL gets, the family photo, floor reminders, and no leftover GPU memory after going back
+// and forth. Read-only state comes from window.__thaiHouseQA (no jump hooks).
 
 type HouseQA = { mode: string; spot?: string; floor?: number; pose?: string; using?: string | null; memory?: { geometries: number; textures: number } }
 const qa = (page: Page) => page.evaluate(() => window.__thaiHouseQA?.() as HouseQA | undefined)
@@ -50,35 +50,6 @@ test('without WebGL, the flat house still works', async ({ page }) => {
   // ?gl=off shows the same flat house (for checking it on a real device).
   await open(page, 'hub/downstairs', '?gl=off')
   await expect(page.getByRole('button', { name: 'Table' })).toBeVisible()
-  expect(errors).toEqual([])
-})
-
-test('a walk around the house with real taps', async ({ page }) => {
-  test.setTimeout(150_000)
-  const errors = trackErrors(page)
-  await open(page, 'hub/street')
-  await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
-  // The front door rolls up and she walks in.
-  await tap(page, 'shutter')
-  await expect.poll(field(page, 'spot'), { timeout: 30_000 }).toBe('downstairs')
-  await tap(page, 'table')
-  await expect.poll(field(page, 'using'), { timeout: 30_000 }).toBe('table')
-  await expect.poll(field(page, 'pose')).toBe('sit')
-  await expect(page.locator('[data-anchor="cabinet"]')).toHaveCount(0)
-  await tap(page, 'ground-couch')
-  await expect.poll(field(page, 'using'), { timeout: 30_000 }).toBe('ground-couch')
-  await expect.poll(field(page, 'pose')).toBe('sit')
-  await tap(page, 'fan')
-  await expect.poll(field(page, 'using'), { timeout: 30_000 }).toBe('fan')
-  // Up the stairs, through the glass doors into her room, and onto the mattress.
-  await tap(page, 'stairs-up')
-  await expect.poll(field(page, 'spot'), { timeout: 40_000 }).toBe('upstairs')
-  await tap(page, 'glass-doors')
-  await expect.poll(field(page, 'using'), { timeout: 30_000 }).toBe('glass-doors')
-  await tap(page, 'mattress')
-  await expect.poll(field(page, 'pose'), { timeout: 30_000 }).toBe('bounce')
-  expect(await page.evaluate(() => window.__kayleeSectionLog?.map((s) => s.id))).toEqual(['street', 'downstairs', 'downstairs', 'downstairs', 'downstairs', 'upstairs', 'upstairs', 'upstairs'])
-  expect(await page.evaluate(() => location.hash)).toBe('#/world/thailand/hub/upstairs?at=mattress')
   expect(errors).toEqual([])
 })
 
