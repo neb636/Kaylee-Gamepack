@@ -11,6 +11,10 @@
     "test": "playwright test --project chromium",
     "tap-around": "playwright test --project webkit",
     "check": "node scripts/generate-voice.mjs --check && node scripts/check-heavy-imports.mjs && npm run typecheck && npm run build && npm run test",
+    "verify": "node scripts/generate-voice.mjs --check && node scripts/check-heavy-imports.mjs && npm run typecheck && npm run build",
+    "test:changed": "node scripts/changed-specs.mjs",
+    "test:behavior": "BEHAVIOR=1 playwright test --project chromium -g @behavior",
+    "qa:sheets": "node scripts/qa-sheets.mjs",
     "icons": "node scripts/build-icons.mjs",
     "art": "node scripts/optimize-art.mjs",
     "games": "node scripts/list-games.mjs"

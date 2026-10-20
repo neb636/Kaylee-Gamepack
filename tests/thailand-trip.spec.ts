@@ -17,7 +17,7 @@ async function open(page: Page, link: string, query = '?fps=30') {
   await page.goto(`./${query}#/world/thailand/${link}`)
   await page.getByRole('button', { name: /let's play/i }).click()
 }
-test('without WebGL, the trip is a picture book: one tap per leg, the stops as cards, home to Agong and the stamp', async ({ page }) => {
+test('@behavior without WebGL, the trip is a picture book: one tap per leg, the stops as cards, home to Agong and the stamp', async ({ page }) => {
   test.setTimeout(60_000)
   const errors = trackErrors(page)
   // (The big buttons pulse, so they're never still: taps go straight to them.)
