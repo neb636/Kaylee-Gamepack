@@ -13,6 +13,30 @@ export const VIEWPORTS = ALL_VIEWPORTS.filter((v) => !flag('only') || flag('only
 const PORT = 4179
 
 // Each screen: how to get there from a fresh start. `page.goto` keeps localStorage between screens.
+// Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
+// friends), for the photo wall's screens. Runs in the page.
+function seedWall() {
+  const c = document.createElement('canvas')
+  c.width = 320
+  c.height = 240
+  const g = c.getContext('2d')
+  const sky = g.createLinearGradient(0, 0, 0, 240)
+  sky.addColorStop(0, '#A98FE8')
+  sky.addColorStop(0.6, '#FF9DC0')
+  sky.addColorStop(1, '#5FC7B4')
+  g.fillStyle = sky
+  g.fillRect(0, 0, 320, 240)
+  g.fillStyle = '#8A7FA8'
+  g.fillRect(150, 60, 26, 130)
+  g.fillStyle = '#FF8FB8'
+  for (const x of [90, 220, 250]) {
+    g.beginPath()
+    g.arc(x, 180, 22, 0, 7)
+    g.fill()
+  }
+  localStorage.setItem('kaylee-gamepack:/:saved:thailand-photo-wall', JSON.stringify([{ trip: 'boat-trip', src: c.toDataURL('image/jpeg', 0.8), at: '2026-10-20' }]))
+}
+
 const SCREENS = [
   { name: 'home', hash: '#/' },
   { name: 'world-map', hash: '#/world' },
@@ -402,6 +426,25 @@ const SCREENS = [
       await p.waitForTimeout(1500)
     },
   },
+  {
+    // The real way home: dock at the pier, tap ✈️🏠, and on to Agong's door (the button must be gone by then).
+    name: 'boat-trip-home-route',
+    hash: '#/world/thailand/boat-trip/sunset',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      for (let i = 0; i < 4; i++) {
+        if (await p.evaluate(() => window.__thaiBoatQA?.().phase === 'docked')) break
+        await p.locator('[data-anchor="glow:pier"]').click({ force: true }).catch(() => {})
+        await p.waitForTimeout(9000)
+      }
+      await p.getByRole('button', { name: 'Fly home' }).click({ force: true }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'flight', null, { timeout: 60000 }).catch(() => {})
+      await p.mouse.click(200, 400)
+      await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'pick', null, { timeout: 60000 }).catch(() => {})
+      await p.waitForTimeout(3400)
+    },
+  },
   // Mommy asks on her own a few seconds after Kaylee comes upstairs; Aunty Sri's van once it has pulled up.
   { name: 'thailand-mommy-asks', hash: '#/world/thailand/hub/upstairs', reset: true, wait: 6500 },
   { name: 'boat-trip-van', hash: '#/world/thailand/boat-trip/goodbye', reset: true, wait: 5000 },
@@ -514,6 +557,83 @@ const SCREENS = [
     },
   },
   { name: 'boat-trip-flat', hash: '#/world/thailand/boat-trip/bay?gl=off', reset: true, wait: 600 },
+  // Home (step 5): the photos fanned out for Agong, everyone gathered round her photo on the wall, the stamp with the
+  // trip's facts, the photo wall in the house (and close up), a replay's boarding pass (🧳 or 🚤), and the picture book.
+  {
+    name: 'boat-trip-home-pick',
+    hash: '#/world/thailand/boat-trip/home?photos=village,hong,nail&found=crab,eagle',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'flight', null, { timeout: 90000 }).catch(() => {})
+      await p.waitForTimeout(800)
+      await p.mouse.click(200, 400)
+      await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'pick', null, { timeout: 60000 }).catch(() => {})
+      await p.waitForTimeout(3400)
+    },
+  },
+  {
+    name: 'boat-trip-home-wall',
+    hash: '#/world/thailand/boat-trip/home',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'flight', null, { timeout: 90000 }).catch(() => {})
+      await p.mouse.click(200, 400)
+      await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'pick', null, { timeout: 60000 }).catch(() => {})
+      await p.getByRole('button', { name: /^Photo: / }).first().click({ force: true }).catch(() => {})
+      await p.waitForTimeout(1500)
+      await p.locator('[data-anchor="family:agong"]').click({ force: true }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'home', null, { timeout: 60000 }).catch(() => {})
+    },
+  },
+  {
+    // While the big cousins glow on their phones (all three must be on screen to be tapped).
+    name: 'boat-trip-home-gather',
+    hash: '#/world/thailand/boat-trip/home',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'flight', null, { timeout: 90000 }).catch(() => {})
+      await p.mouse.click(200, 400)
+      await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'pick', null, { timeout: 60000 }).catch(() => {})
+      await p.getByRole('button', { name: /^Photo: / }).first().click({ force: true }).catch(() => {})
+      await p.waitForTimeout(1500)
+      await p.locator('[data-anchor="family:agong"]').click({ force: true }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiBoatQA?.().trip === 'gather', null, { timeout: 60000 }).catch(() => {})
+      await p.waitForTimeout(3000)
+    },
+  },
+  {
+    name: 'boat-trip-stamp',
+    hash: '#/world/thailand/boat-trip/invite',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(1500)
+      await p.evaluate(() => window.__kayleeWorld?.finish?.())
+      await p.waitForTimeout(1800)
+    },
+  },
+  { name: 'thailand-photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall, wait: 2500 },
+  {
+    name: 'thailand-photo-wall-close',
+    hash: '#/world/thailand/hub/downstairs?at=photos',
+    reset: true,
+    seed: seedWall,
+    act: async (p) => {
+      await p.waitForTimeout(2500)
+      await p.locator('[data-anchor="trip:wall:boat-trip"]').click({ force: true }).catch(() => {})
+      await p.waitForTimeout(1200)
+    },
+  },
+  {
+    name: 'boat-trip-replay',
+    hash: '#/world/thailand/boat-trip/invite?replay=1',
+    reset: true,
+    act: async (p) => {
+      await p.waitForTimeout(3800)
+      await p.getByRole('button', { name: 'Yes', exact: true }).dispatchEvent('click').catch(() => {})
+      await p.waitForTimeout(1500)
+    },
+  },
+  ...['pack', 'goodbye', 'bay', 'nail', 'home'].map((to) => ({ name: `boat-trip-book-${to}`, hash: `#/world/thailand/boat-trip/${to}?gl=off`, reset: true, wait: 900 })),
 // --routes=venice,pizzeria-own: exact screen names, or an activity id for all of its screens (venice-*).
 ].filter((s) => !flag('routes') || flag('routes').split(',').some((r) => s.name === r || s.name.startsWith(`${r}-`)))
 
@@ -537,6 +657,7 @@ try {
       current = s.name
       try {
         if (s.reset) await page.evaluate(() => localStorage.clear())
+        if (s.seed) await page.evaluate(s.seed)
         if (s.stampAll) {
           await page.goto(`${base}#/world/${s.stampAll === true ? 'australia' : s.stampAll}`)
           await page.waitForTimeout(400)

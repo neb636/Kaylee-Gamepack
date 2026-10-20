@@ -12,7 +12,8 @@ export const BOAT_TRIP: TripDef = {
     { kind: 'airport' },
     { kind: 'fly', from: PLACES.bangkok, to: PLACES.krabi, seat: 'window' },
   ],
-  caps: { fly: 58 },
+  // The window seat's whole ride in seconds; on a replay (she has done the trip before) it's shorter.
+  caps: { fly: 58, replayFly: 40 },
   arrive: 'pier',
 }
 
@@ -33,6 +34,7 @@ export const WORLD_OF: Record<BoatSection, TripWorld> = {
   hong: 'bay',
   nail: 'bay',
   sunset: 'bay',
+  home: 'house',
 }
 
 /** The legs on the boarding pass, each punched when she finishes it. */
@@ -42,6 +44,7 @@ export const PASS: { id: BoatSection; icon: string; label: string }[] = [
   { id: 'airport', icon: '🛄', label: 'Airport' },
   { id: 'fly', icon: '✈️', label: 'Fly' },
   { id: 'pier', icon: '🚤', label: 'Boat' },
+  { id: 'home', icon: '🏠', label: 'Home' },
 ]
 /** A punch on the boarding pass for the leg a section belongs to. */
 export const PUNCH: Partial<Record<BoatSection, BoatSection>> = { pack: 'pack', goodbye: 'goodbye', airport: 'airport', takeoff: 'fly', fly: 'fly', land: 'fly' }

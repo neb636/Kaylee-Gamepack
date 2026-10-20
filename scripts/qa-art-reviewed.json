@@ -315,6 +315,10 @@
     "hash": "dd192538d728",
     "note": "eye whites"
   },
+  "src/world/places/peru/assets/monkey.webp": {
+    "hash": "219a375d9c62",
+    "note": "cream face mask and eye white"
+  },
   "src/world/places/peru/assets/pelican-float.webp": {
     "hash": "df6f2cfc188d",
     "note": "eye highlight"
@@ -327,10 +331,6 @@
     "hash": "f38d4b4887e8",
     "note": "cream belly and face (real colors)"
   },
-  "src/world/places/peru/assets/monkey.webp": {
-    "hash": "219a375d9c62",
-    "note": "cream face mask and eye white"
-  },
   "src/world/places/peru/assets/pond.webp": {
     "hash": "e688e6a9c3d3",
     "note": "water highlights"
@@ -339,10 +339,6 @@
     "hash": "e40d38551f92",
     "note": "white potato flowers"
   },
-  "src/world/places/peru/assets/viscacha.webp": {
-    "hash": "45dfa2397075",
-    "note": "eye whites"
-  },
   "src/world/places/peru/assets/seaweed-sock.webp": {
     "hash": "cc54b8dddeed",
     "note": "eye highlights"
@@ -350,5 +346,13 @@
   "src/world/places/peru/assets/toucan.webp": {
     "hash": "95bc4b48b221",
     "note": "eye white"
+  },
+  "src/world/places/peru/assets/viscacha.webp": {
+    "hash": "45dfa2397075",
+    "note": "eye whites"
+  },
+  "src/world/places/thailand/assets/fiddler-crab.webp": {
+    "hash": "868ea0bd3b21",
+    "note": "eye highlights"
   }
 }

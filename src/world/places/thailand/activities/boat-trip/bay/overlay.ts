@@ -99,8 +99,8 @@ export class BayOverlay {
     let at: Vector3 | null = null
     if (idle) {
       for (const p of this.bay.parts) if ((at = p.hint?.() ?? null)) break
-      if (!at && this.bay.phase === 'beach') at = null
-      else if (!at && this.bay.phase === 'docked') at = this.bay.ride.v.root.getWorldPosition(new Vector3()).setY(0.6)
+      // Docked at sunset: no finger (the ✈️🏠 home is the cue there, not the boat back out).
+      if (!at && (this.bay.phase === 'beach' || this.bay.phase === 'docked')) at = null
       else if (!at && this.bay.phase === 'drive') {
         const ahead = this.bay.using === 'canoe' ? 8 : 10
         at = new Vector3(d.x + Math.sin(d.heading) * ahead, 0.3, d.z + Math.cos(d.heading) * ahead)

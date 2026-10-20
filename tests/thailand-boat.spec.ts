@@ -140,8 +140,9 @@ test('the Nail Island: land on the beach, pose for a photo, and set off again', 
 test('without WebGL, the flat stops still work', async ({ page }) => {
   const errors = trackErrors(page)
   await open(page, 'bay', '?gl=off')
-  await page.getByRole('button', { name: 'The cave' }).click()
-  await expect.poll(() => page.evaluate(() => window.__kayleeSection?.id)).toBe('cave')
+  // (The picture book's stops are cards: the village, the hong through the cave, the Nail Island.)
+  await page.getByRole('button', { name: 'The hong' }).click({ force: true })
+  await expect.poll(() => page.evaluate(() => window.__kayleeSection?.id)).toBe('hong')
   expect(errors).toEqual([])
 })
 

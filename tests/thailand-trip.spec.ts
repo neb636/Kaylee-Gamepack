@@ -4,7 +4,8 @@ import { expect, test, type Page } from '@playwright/test'
 // targets, the way a finger would. Mommy asks in her room (👍 yes / ✋ not yet); yes opens the suitcase; she packs
 // (taps, a drag, a cousin), sits on it to close it (or the ✅ button), puts on her things and walks down to the goodbye; Aunty Sri's van
 // pulls up, everyone hops in and it pulls away to the airport; the flight moves on by itself whatever she does; the
-// x-ray shows what she packed; and a half-done trip offers to keep going. Read-only state comes from window.__thaiBoatQA (no jump hooks: section links).
+// x-ray shows what she packed; a half-done trip offers to keep going; after a whole trip yes offers 🧳 or 🚤; home, she
+// picks a photo for Agong and finds it on the wall downstairs; and without WebGL the trip is a picture book. Read-only state comes from window.__thaiBoatQA (no jump hooks: section links).
 // `?fps=30` keeps the frame rate up while a test waits without touching (test browsers drop to 4 fps after 30 s).
 
 type QA = Record<string, unknown> & { mode?: string; leg?: string; trip?: string; packed?: string[]; phase?: string; section?: string }
@@ -235,12 +236,65 @@ test('a half-done trip: yes offers to keep going from where she stopped', async 
   expect(errors).toEqual([])
 })
 
-test('without WebGL, every leg is a button', async ({ page }) => {
+test('without WebGL, the trip is a picture book: one tap per leg, the stops as cards, home to Agong and the stamp', async ({ page }) => {
+  test.setTimeout(60_000)
   const errors = trackErrors(page)
+  // (The big buttons pulse, so they're never still: taps go straight to them.)
   await open(page, 'boat-trip/goodbye', '?gl=off')
-  await page.getByRole('button', { name: 'Airport' }).click()
+  await page.getByRole('button', { name: 'Next' }).click({ force: true })
   await expect.poll(section(page)).toBe('airport')
-  await page.getByRole('button', { name: 'Flying' }).click()
-  await expect.poll(section(page)).toBe('fly')
+  await page.waitForTimeout(800)
+  await page.getByRole('button', { name: 'Next' }).click({ force: true })
+  await expect.poll(section(page)).toBe('takeoff')
+  await open(page, 'boat-trip/bay', '?gl=off')
+  await page.getByRole('button', { name: 'The village' }).click({ force: true })
+  await page.getByRole('button', { name: 'The Nail Island' }).click({ force: true })
+  await expect.poll(section(page)).toBe('nail')
+  await page.waitForTimeout(800)
+  await page.getByRole('button', { name: 'Take the photo' }).click({ force: true })
+  await page.getByRole('button', { name: 'Next' }).click({ force: true })
+  await expect.poll(section(page)).toBe('sunset')
+  await page.waitForTimeout(800)
+  await page.getByRole('button', { name: 'Next' }).click({ force: true })
+  await expect.poll(section(page)).toBe('home')
+  await page.getByRole('button', { name: 'Give Agong the photo' }).click({ force: true })
+  // The stamp screen (its button back to the map is the second "Back to the map").
+  await expect.poll(() => page.getByRole('button', { name: 'Back to the map' }).count(), { timeout: 20_000 }).toBeGreaterThan(1)
+  expect(errors).toEqual([])
+})
+
+test('home: she picks a photo for Agong, he hangs it, and it is on the wall downstairs', async ({ page }) => {
+  test.setTimeout(240_000)
+  const errors = trackErrors(page)
+  // A bare home link takes a fresh Nail Island photo in the bay first (behind the boarding pass).
+  await open(page, 'boat-trip/home')
+  await expect.poll(field(page, 'trip'), { timeout: 90_000 }).toBe('flight')
+  // A tap skips the flight home; Aunty Sri's van pulls up and the family come out.
+  await page.mouse.click(600, 400)
+  await expect.poll(field(page, 'trip'), { timeout: 60_000 }).toBe('pick')
+  await page.getByRole('button', { name: /^Photo: / }).first().click({ force: true })
+  await expect.poll(field(page, 'trip'), { timeout: 10_000 }).toBe('give')
+  await tap(page, 'family:agong')
+  await expect.poll(field(page, 'trip'), { timeout: 60_000 }).toBe('home')
+  await expect.poll(() => page.getByRole('button', { name: 'Back to the map' }).count(), { timeout: 20_000 }).toBeGreaterThan(1)
+  // On the wall: tap the frame and it comes close.
+  await page.goto('./?fps=30#/world/thailand/hub/downstairs?at=photos')
+  await expect(anchor(page, 'trip:wall:boat-trip')).toBeVisible({ timeout: 30_000 })
+  await anchor(page, 'trip:wall:boat-trip').click({ force: true })
+  await expect(page.getByRole('img', { name: 'Our boat trip' })).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test('after a whole trip, yes to Mommy offers the whole trip again or straight to the boat', async ({ page }) => {
+  test.setTimeout(90_000)
+  const errors = trackErrors(page)
+  await open(page, 'boat-trip/invite?replay=1')
+  await ready(page, 'house')
+  await sayYes(page)
+  await expect(page.getByRole('button', { name: 'Straight to the boat' })).toBeInViewport({ ratio: 1 })
+  await expect(page.getByRole('button', { name: 'A new trip' })).toBeVisible()
+  await page.getByRole('button', { name: 'Straight to the boat' }).click()
+  await expect.poll(section(page), { timeout: 20_000 }).toBe('pier')
+  await expect.poll(field(page, 'vehicle'), { timeout: 20_000 }).toBe('longtail')
   expect(errors).toEqual([])
 })

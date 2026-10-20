@@ -3,7 +3,8 @@
 import { useRef, type MutableRefObject } from 'react'
 import { Anchors } from '../../engine/Anchors'
 import { View3D, type RenderMode } from '../../engine/View3D'
-import { ANCHORS, House, type HouseEvents, type Start } from './house'
+import type { AnchorInfo } from '../../engine/Anchors'
+import { ANCHORS, House, type HouseEvents, type HousePlugin, type Start } from './house'
 
 export type { RenderMode }
 
@@ -12,9 +13,12 @@ interface Props {
   events: HouseEvents
   onMode: (mode: RenderMode) => void
   houseRef: MutableRefObject<House | null>
+  /** Something the house hangs or adds (Kaylee's trip photos on the wall), with its own tap targets. */
+  plugin?: () => HousePlugin
+  extraAnchors?: AnchorInfo[]
 }
 
-export function HouseView({ start, events, onMode, houseRef }: Props) {
+export function HouseView({ start, events, onMode, houseRef, plugin, extraAnchors = [] }: Props) {
   // Callbacks change identity on every Hub render; the house keeps calling the latest ones.
   const ev = useRef(events)
   ev.current = events
@@ -24,8 +28,8 @@ export function HouseView({ start, events, onMode, houseRef }: Props) {
       qaKey="__thaiHouseQA"
       worldRef={houseRef}
       onMode={onMode}
-      make={(renderer) => new House(renderer, start, { onSpot: (s, at) => ev.current.onSpot(s, at), onArrived: () => ev.current.onArrived(), onPoke: (id) => ev.current.onPoke?.(id), onGreet: (id) => ev.current.onGreet?.(id) })}
-      anchors={(input, els) => <Anchors list={ANCHORS} els={els} {...input} />}
+      make={(renderer) => new House(renderer, start, { onSpot: (s, at) => ev.current.onSpot(s, at), onArrived: () => ev.current.onArrived(), onPoke: (id) => ev.current.onPoke?.(id), onGreet: (id) => ev.current.onGreet?.(id) }, plugin?.() ?? null)}
+      anchors={(input, els) => <Anchors list={extraAnchors.length ? [...ANCHORS, ...extraAnchors] : ANCHORS} els={els} {...input} />}
     />
   )
 }

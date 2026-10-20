@@ -1,10 +1,13 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { BigButton, Buddy, burst, lineText, say, SparklePuppet, sounds, type PuppetHandle } from '../../sdk'
-import type { ActivityInfo } from '../types'
+import type { ActivityInfo, PlaceFact } from '../types'
 
-/** Stamp slam + animal sticker + one spoken fun fact, then back to the country map. */
-export function StampEarned({ activity, onClose }: { activity: ActivityInfo; onClose: () => void }) {
+/** Stamp slam + animal sticker + one spoken fun fact, then back to the country map. `facts` (optional): a row of
+ *  tap-to-hear extras about what she just played (never required; keep it to about ten so they fit in one or two rows).
+ *  `closeIcon` (optional): what the way-on button shows, when it goes somewhere other than the map. */
+export function StampEarned({ activity, onClose, facts, closeIcon = '🗺️ ▶' }: { activity: ActivityInfo; onClose: () => void; facts?: PlaceFact[]; closeIcon?: string }) {
+  const [tapped, setTapped] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
   const buddy = useRef<PuppetHandle>(null)
   const sparkle = useRef<PuppetHandle>(null)
@@ -60,10 +63,36 @@ export function StampEarned({ activity, onClose }: { activity: ActivityInfo; onC
       <p style={{ fontSize: 'clamp(22px, min(4vw, 5vh), 36px)', fontWeight: 600, textAlign: 'center', maxWidth: 720, background: '#fff', borderRadius: 'var(--radius)', padding: '12px 24px', boxShadow: 'var(--shadow)' }}>
         {lineText(activity.sticker.fact)}
       </p>
+      {facts && facts.length > 0 && (
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.9 }}
+          style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'min(10px, 1.5vh)', maxWidth: 'min(100%, 1000px)', padding: '4px 8px', flexShrink: 0 }}
+        >
+          {facts.map((f) => (
+            <motion.button
+              key={f.label}
+              aria-label={f.label}
+              animate={tapped === f.label ? { y: [0, -12, 0], scale: [1, 1.1, 1] } : { y: 0 }}
+              transition={{ duration: 0.45 }}
+              onClick={() => {
+                sounds.pop()
+                setTapped(f.label)
+                setTimeout(() => setTapped((t) => (t === f.label ? null : t)), 460)
+                void say(f.say)
+              }}
+              style={{ flexShrink: 0, width: 'clamp(64px, 10vh, 88px)', height: 'clamp(64px, 10vh, 88px)', borderRadius: '50%', border: '4px solid #fff', background: 'var(--cream)', boxShadow: 'var(--shadow)', fontSize: 'clamp(30px, 5vh, 42px)', display: 'grid', placeItems: 'center', padding: 0 }}
+            >
+              {f.icon}
+            </motion.button>
+          ))}
+        </motion.div>
+      )}
       {ready && (
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
           <BigButton onClick={onClose} ariaLabel="Back to the map">
-            🗺️ ▶
+            {closeIcon}
           </BigButton>
         </motion.div>
       )}

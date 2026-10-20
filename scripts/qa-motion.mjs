@@ -598,6 +598,84 @@ GAME_SCENARIOS.push(
   thaiTrip('trip-land', 9, 'land', [], 8000),
 )
 
+// Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
+// friends), for the photo wall's screens. Runs in the page.
+function seedWallInPage() {
+  const c = document.createElement('canvas')
+  c.width = 320
+  c.height = 240
+  const g = c.getContext('2d')
+  const sky = g.createLinearGradient(0, 0, 0, 240)
+  sky.addColorStop(0, '#A98FE8')
+  sky.addColorStop(0.6, '#FF9DC0')
+  sky.addColorStop(1, '#5FC7B4')
+  g.fillStyle = sky
+  g.fillRect(0, 0, 320, 240)
+  g.fillStyle = '#8A7FA8'
+  g.fillRect(150, 60, 26, 130)
+  g.fillStyle = '#FF8FB8'
+  for (const x of [90, 220, 250]) {
+    g.beginPath()
+    g.arc(x, 180, 22, 0, 7)
+    g.fill()
+  }
+  localStorage.setItem('kaylee-gamepack:/:saved:thailand-photo-wall', JSON.stringify([{ trip: 'boat-trip', src: c.toDataURL('image/jpeg', 0.8), at: '2026-10-20' }]))
+}
+
+// Coming home (step 5): the flight home (the plane over the pink sunset), and Agong taking the photo, holding it up and
+// walking in to hang it on his wall; then everyone gathering and the cousins putting their phones down. A home link
+// first builds the bay to take its photo, so the setup waits for each moment.
+const thaiHome = (name, seconds, until, act) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/boat-trip/home`)
+    await page.waitForFunction(() => window.__thaiBoatQA?.().trip === 'flight', null, { timeout: 120000 })
+    if (until === 'flight') return
+    await page.mouse.click(200, 400)
+    await page.waitForFunction(() => window.__thaiBoatQA?.().trip === 'pick', null, { timeout: 60000 })
+    await page.getByRole('button', { name: /^Photo: / }).first().click({ force: true })
+    await page.waitForFunction(() => window.__thaiBoatQA?.().trip === 'give', null, { timeout: 20000 })
+    await page.waitForTimeout(1200)
+    if (until === 'give') return
+    await page.locator('[data-anchor="family:agong"]').click({ force: true })
+    await page.waitForFunction(() => window.__thaiBoatQA?.().trip === 'gather', null, { timeout: 60000 })
+  },
+  act,
+})
+GAME_SCENARIOS.push(
+  thaiHome('trip-flight-home', 4, 'flight', async (page) => page.waitForTimeout(3800)),
+  thaiHome('trip-give-agong', 9, 'give', async (page) => {
+    await page.locator('[data-anchor="family:agong"]').click({ force: true })
+    await page.waitForTimeout(8800)
+  }),
+  // Everyone hops in; once the cousins glow she taps Ken, and he puts his phone down ("Whoa! Cool!").
+  thaiHome('trip-cousins-look-up', 9, 'gather', async (page) => {
+    await page.waitForTimeout(3000)
+    await page.locator('[data-anchor="family:ken"]').click({ force: true }).catch(() => {})
+    await page.waitForTimeout(5800)
+  }),
+  { ...thaiTrip('trip-replay-pass', 2, 'invite?replay=1', [], 3800), act: async (page) => {
+    await page.getByRole('button', { name: 'Yes', exact: true }).dispatchEvent('click').catch(() => {})
+    await page.waitForTimeout(1900)
+  } },
+)
+// The photo wall in the house: tap Kaylee's trip photo and it swings on its nail and comes close.
+GAME_SCENARIOS.push({
+  name: 'photo-wall',
+  seconds: 2,
+  setup: async (page, base) => {
+    await page.evaluate(seedWallInPage)
+    await page.goto(`${base}#/world/thailand/hub/downstairs?at=photos`)
+    await page.waitForFunction(() => window.__thaiHouseQA?.().mode, null, { timeout: 20000 })
+    await page.waitForTimeout(2000)
+  },
+  act: async (page) => {
+    await page.locator('[data-anchor="trip:wall:boat-trip"]').click({ force: true }).catch(() => {})
+    await page.waitForTimeout(1900)
+  },
+})
+
 // Coco's Canyon Glide: hold a finger in the sky and Coco banks after it, sinking slowly in plain air; steer him into a
 // swirl of warm air and he circles up (wings up, fingers spread); pull down for a dive (wings fold) and a swoop.
 const canyonFly = (name, seconds, jump, path) => ({
