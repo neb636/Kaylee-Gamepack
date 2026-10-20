@@ -659,9 +659,9 @@ export class House implements World3D {
     this.traffic.root.visible = m === 'street' && !this.photo
     this.groups.upper.visible = m !== 'inside0'
     this.groups.upperRoom.visible = m === 'inside1'
-    // Inside, the sign board and the rolled-up shutter would hide the room.
+    // Inside, the sign board and the folded gates would hide the room.
     this.groups.front.visible = m === 'street'
-    // From the street, the room only shows once the shutter is up; from upstairs she looks down into it over the
+    // From the street, the room only shows once the gates are open; from upstairs she looks down into it over the
     // balcony.
     this.groups.groundRoom.visible = m !== 'street' || this.reactor.shutterOpen
     this.groups.stairs.visible = m !== 'street' || this.reactor.shutterOpen

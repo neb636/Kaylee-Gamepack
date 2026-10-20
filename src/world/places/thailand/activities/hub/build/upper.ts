@@ -76,10 +76,10 @@ export function buildUpper(kit: Kit): Upper {
   room.add(poke(kit, 'plant', [P.cyl(0.18, 0.13, 0.3, '#EBA27E', { at: [0, 0.15, 0] }), P.sphere(0.24, '#7FCB8F', { at: [0, 0.45, 0] }), ...[0, 2, 4].map((a) => P.sphere(0.06, PAL.hotpink, { at: [Math.cos(a) * 0.18, 0.55, Math.sin(a) * 0.18] }))], [2.1, U, -5.65]))
   const rails: BufferGeometry[] = []
   railing(rails, [left, U, hz + 0.04], [right, U, hz + 0.04])
-  // Round the stairwell: its front edge, the right edge beside flight 1 (flight 2 comes out next to it), the back.
+  // Round the stairwell: its front edge and the right edge beside flight 1 (flight 2 comes out next to it). Its back
+  // edge runs along the glass wall.
   railing(rails, [left, U, zFront + 0.04], [sx1 + 0.04, U, zFront + 0.04])
   railing(rails, [sx1 + 0.04, U, zFront], [sx1 + 0.04, U, DIM.stairs.mid])
-  railing(rails, [left, U, zBack - 0.04], [sx1 + 0.04, U, zBack - 0.04])
   room.add(poke(kit, 'stairs-down', [], [0, 0, 0]).add(scenery(kit, rails, 1.5)))
 
   // ---- The glass wall into her room: aluminium frames, glass, and the sliding door (slid open, so she can go in) ----

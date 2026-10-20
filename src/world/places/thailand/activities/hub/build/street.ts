@@ -1,22 +1,37 @@
 // The street: the road, the sidewalk, the row of five shophouses (ตึกแถว, "row building") with Agong's in the middle,
-// its roll-up shutter and balcony, electric wires with birds, and the things on the sidewalk to poke.
-import { CatmullRomCurve3, Group, Mesh, TubeGeometry, Vector3 } from 'three'
-import { P, type V3 } from '../../../engine/geo'
-import { PAL, toon } from '../../../engine/toon'
+// its folding gates and balcony, electric wires with birds, and the things on the sidewalk to poke.
+//
+// Agong's shop front is from Dad's photo of the real one (2026-10-19): a cream front, slate-blue folding scissor gates
+// (one leaf folds to each side), a brown sign board with the shop's name in white Thai letters, "สงวนโลหะภัณฑ์"
+// (Sa-nguan hardware), and its Chinese name 源成 between little red plaques, and a turquoise step along the row with
+// yellow steps up at the end.
+import { BufferGeometry, CanvasTexture, CatmullRomCurve3, Group, Mesh, MeshToonMaterial, PlaneGeometry, SRGBColorSpace, TubeGeometry, Vector3 } from 'three'
+import { P, solidMix, type V3 } from '../../../engine/geo'
+import { PAL, toon, toonGradient } from '../../../engine/toon'
 import { DIM } from '../layout'
 import { part, poke, scenery, type Kit } from './kit'
 
 const ROAD = '#CFC8E3'
 const WALK = '#EEE7F8'
 const CURB = '#D2C4F4'
-const AGONG_WALL = '#FFD9C4'
-const SHUTTER = '#BFE6DA'
-const SLAT = '#9FD3C4'
+const AGONG_WALL = '#F6E6CC'
+/** The folding gates: blue-grey bars over the dark shop behind them. */
+const GATE = '#8592B0'
+const GATE_BACK = '#4F5772'
+/** The step along the front of the row, turquoise with scuffed white paint on top, and the yellow steps up to it. */
+const STEP = '#46C2B4'
+const SCUFF = '#E9F7F3'
+const STEP_YELLOW = '#E8DC6A'
+const SIGN = '#8E5C45'
+const SIGN_EDGE = '#5E3B2C'
 const GLASS = '#A99BE0'
 const POT = '#EBA27E'
 const LEAF = '#7FCB8F'
-/** Height of the shutter opening (the sign board sits above it, below the balcony). */
+/** Height of the gate opening (the sign board sits above it, below the balcony). */
 const SHUT = 2.8
+/** The step along the row: height and depth (the pots and the spirit house stand on it). */
+export const STEP_H = 0.2
+const STEP_D = 0.6
 /** How far the balcony sticks out over the sidewalk (shallow, so the sign below it still shows). */
 const BALCONY = 0.66
 /** Half the house front (the pillars' centers), and the shutter's width. */
@@ -30,7 +45,7 @@ export interface Street {
   tall: Group
   /** Low things on the sidewalk (they stay while she's inside). */
   props: Group
-  /** Agong's ground-floor front: pillars, the sign board and the shutter. */
+  /** Agong's ground-floor front: pillars, the sign board and the gates. */
   front: Group
   /** Its right pillar (lowered with the right wall). */
   frontRight: Group
@@ -57,6 +72,21 @@ export function buildStreet(kit: Kit): Street {
   ground.add(
     scenery(kit, [P.box(60, 0.1, DIM.roadFar - DIM.curb + 14, ROAD, { at: [0, -0.06, (DIM.curb + DIM.roadFar) / 2 + 7] }), ...dashes], 0),
     scenery(kit, [P.box(36, 0.16, DIM.curb, WALK, { at: [0, -0.07, DIM.curb / 2] }), P.box(36, 0.16, 0.14, CURB, { at: [0, -0.07, DIM.curb - 0.07] })], 2),
+  )
+  // The turquoise step along the whole row. In Agong's doorway it's only a painted sill, so feet don't sink into it.
+  const rowHalf = (DIM.row[4] - DIM.row[0]) / 2 + 2.7
+  const stepTop = 0.01 + STEP_H
+  const side = rowHalf - DOOR_W / 2
+  const scuffs = [-12.6, -9.2, -7.4, -4.6, 3.9, 5.2, 8.3, 11.8].map((x, i) => P.box(0.5 + (i % 3) * 0.35, 0.012, 0.18 + (i % 2) * 0.2, SCUFF, { at: [x, stepTop + 0.006, 0.14 + (i % 2) * 0.22] }))
+  ground.add(
+    scenery(kit, [
+      ...[-1, 1].map((s) => P.box(side, STEP_H, STEP_D, STEP, { at: [s * (DOOR_W / 2 + side / 2), 0.01 + STEP_H / 2, STEP_D / 2] })),
+      P.box(DOOR_W, 0.025, STEP_D, STEP, { at: [0, 0.0225, STEP_D / 2] }),
+      ...scuffs,
+      // Yellow steps up at the right end of Agong's front, like the real ones.
+      P.box(0.75, STEP_H * 0.66, 0.26, STEP_YELLOW, { at: [DOOR_W / 2 + 0.55, 0.01 + STEP_H * 0.33, STEP_D + 0.13] }),
+      P.box(0.75, STEP_H * 0.33, 0.24, STEP_YELLOW, { at: [DOOR_W / 2 + 0.55, 0.01 + STEP_H * 0.165, STEP_D + 0.38] }),
+    ]),
   )
 
   // ---- The neighbors (3 or 4 floors, each its own pastel) ----
@@ -88,27 +118,28 @@ export function buildStreet(kit: Kit): Street {
     poke(kit, 'neighbor-right', [P.rbox(4.4, 0.12, 1.1, 0.05, PAL.hotpink, { at: [0, 0, 0.45], rot: [0.28, 0, 0] }), ...[-1.5, 0, 1.5].map((dx) => P.sphere(0.12, PAL.butter, { at: [dx, -0.16, 0.95] }))], [DIM.row[3], 2.75, 0], { px: 2 }),
   )
 
-  // ---- Agong's house front: pillars, header, sign, shutter ----
+  // ---- Agong's house front: pillars, header, sign board, tube lights, folding gates ----
   front.add(
     scenery(kit, [
       P.box(0.22, DIM.g0, 0.4, AGONG_WALL, { at: [-HALF, DIM.g0 / 2, 0.05] }),
       P.box(DIM.houseW, DIM.g0 - SHUT, 0.4, AGONG_WALL, { at: [0, (DIM.g0 + SHUT) / 2, 0.05] }),
-      // The roll-up shutter's housing.
-      P.cyl(0.16, 0.16, DOOR_W, '#9FD3C4', { at: [0, SHUT, 0.12], rot: [0, 0, Math.PI / 2] }),
+      // A yellow notice taped to the left pillar.
+      P.box(0.16, 0.22, 0.01, PAL.butter, { at: [-HALF, 1.55, 0.255] }),
+      // The gates' top track.
+      P.box(DOOR_W, 0.08, 0.12, GATE_BACK, { at: [0, SHUT - 0.02, 0.1] }),
     ]),
   )
-  frontRight.add(scenery(kit, [P.box(0.22, DIM.g0, 0.4, AGONG_WALL, { at: [HALF, DIM.g0 / 2, 0.05] })]))
-  front.add(poke(kit, 'sign', [P.rbox(3.6, 0.4, 0.1, 0.04, '#F0646E'), P.rbox(3.76, 0.52, 0.06, 0.03, PAL.gold, { at: [0, 0, -0.03] })], [0, SHUT + 0.38, 0.3]))
-  // The shutter: pivots at its top, so rolling up = squashing it upward.
-  const curtain = part(
-    kit,
-    'shutter.curtain',
-    [P.box(DOOR_W, SHUT, 0.06, SHUTTER, { at: [0, -SHUT / 2, 0] }), ...Array.from({ length: 13 }, (_, i) => P.box(DOOR_W - 0.04, 0.03, 0.02, SLAT, { at: [0, -0.2 - i * 0.2, 0.04] })), P.box(0.6, 0.08, 0.06, '#7FB8A8', { at: [0, -SHUT + 0.15, 0.06] })],
-    [0, 0, 0],
-    2,
-  )
-  const shutter = poke(kit, 'shutter', [], [0, SHUT, 0.1])
-  shutter.add(curtain)
+  frontRight.add(scenery(kit, [P.box(0.22, DIM.g0, 0.4, AGONG_WALL, { at: [HALF, DIM.g0 / 2, 0.05] }), P.box(0.16, 0.26, 0.01, '#E6F1FF', { at: [HALF, 1.7, 0.255] })]))
+  // The sign board, with the shop's name painted on (a texture on its face).
+  const signW = DIM.houseW - 0.5
+  const signH = 0.56
+  const sign = poke(kit, 'sign', [P.rbox(signW, signH, 0.1, 0.03, SIGN), P.rbox(signW + 0.12, signH + 0.1, 0.06, 0.03, SIGN_EDGE, { at: [0, 0, -0.03] })], [0, SHUT + 0.33, 0.3])
+  sign.add(signFace(kit, signW - 0.04, signH - 0.04, 0.051))
+  front.add(sign)
+  // The folding gates: one leaf each side, meeting in the middle. Each pivots at its outer edge, so folding it open is
+  // squashing it toward its side.
+  const shutter = poke(kit, 'shutter', [], [0, 0, 0.1])
+  for (const s of [-1, 1]) shutter.add(gateLeaf(kit, s))
   front.add(shutter)
 
   // ---- Upper front: wall around the balcony doors, the doors, the balcony ----
@@ -167,13 +198,94 @@ export function buildStreet(kit: Kit): Street {
 
   // ---- Sidewalk things ----
   props.add(spiritHouse(kit), motorbike(kit), cat(kit), tukTuk(kit))
+  // (The pots, the spirit house and the cat stand on the step.)
   props.add(
-    poke(kit, 'pot-left', [P.cyl(0.24, 0.17, 0.42, POT, { at: [0, 0.21, 0] }), P.sphere(0.3, LEAF, { at: [0, 0.62, 0] }), ...[0, 1.2, 2.4, 3.6, 4.8].map((a) => P.sphere(0.09, PAL.hotpink, { at: [Math.cos(a) * 0.24, 0.7 + (a % 2) * 0.1, Math.sin(a) * 0.24] }))], [-2.2, 0, 0.4]),
-    poke(kit, 'pot-right', [P.cyl(0.24, 0.17, 0.42, POT, { at: [0, 0.21, 0] }), P.cyl(0.04, 0.05, 0.4, '#B98A6A', { at: [0, 0.6, 0] }), P.sphere(0.34, LEAF, { at: [0, 0.95, 0] }), ...[0.5, 2.2, 4].map((a) => P.sphere(0.07, '#D4F07A', { at: [Math.cos(a) * 0.3, 0.95, Math.sin(a) * 0.3] }))], [2.2, 0, 0.4]),
-    poke(kit, 'basil', [P.cyl(0.2, 0.15, 0.3, POT, { at: [0, 0.15, 0] }), ...[0, 2.1, 4.2].map((a) => P.sphere(0.13, '#6FBF7F', { at: [Math.cos(a) * 0.1, 0.4, Math.sin(a) * 0.1] }))], [-7.0, 0, 0.45]),
+    poke(kit, 'pot-left', [P.cyl(0.24, 0.17, 0.42, POT, { at: [0, 0.21, 0] }), P.sphere(0.3, LEAF, { at: [0, 0.62, 0] }), ...[0, 1.2, 2.4, 3.6, 4.8].map((a) => P.sphere(0.09, PAL.hotpink, { at: [Math.cos(a) * 0.24, 0.7 + (a % 2) * 0.1, Math.sin(a) * 0.24] }))], [-2.2, STEP_H, 0.4]),
+    poke(kit, 'pot-right', [P.cyl(0.24, 0.17, 0.42, POT, { at: [0, 0.21, 0] }), P.cyl(0.04, 0.05, 0.4, '#B98A6A', { at: [0, 0.6, 0] }), P.sphere(0.34, LEAF, { at: [0, 0.95, 0] }), ...[0.5, 2.2, 4].map((a) => P.sphere(0.07, '#D4F07A', { at: [Math.cos(a) * 0.3, 0.95, Math.sin(a) * 0.3] }))], [2.2, STEP_H, 0.4]),
+    poke(kit, 'basil', [P.cyl(0.2, 0.15, 0.3, POT, { at: [0, 0.15, 0] }), ...[0, 2.1, 4.2].map((a) => P.sphere(0.13, '#6FBF7F', { at: [Math.cos(a) * 0.1, 0.4, Math.sin(a) * 0.1] }))], [-7.0, STEP_H, 0.45]),
   )
 
   return { ground, tall, props, front, frontRight, upperFront, balcony, roof }
+}
+
+/**
+ * One leaf of the folding gates (side -1 = left, 1 = right), pivoting at its outer edge: upright channels with the
+ * scissor lattice between them in three tiers, top and bottom rails, over a dark panel (the shop behind the gate).
+ */
+function gateLeaf(kit: Kit, side: number) {
+  const w = DOOR_W / 2
+  const h = SHUT - 0.06
+  const n = 18
+  const bay = w / n
+  const tier = h / 3
+  // u runs from the outer edge (0) to the middle (w).
+  const x = (u: number) => -side * u
+  const lined: BufferGeometry[] = [P.box(w, h, 0.02, GATE_BACK, { at: [x(w / 2), h / 2, -0.05] }), P.box(w, 0.06, 0.06, GATE, { at: [x(w / 2), h - 0.03, 0.01] }), P.box(w, 0.06, 0.06, GATE, { at: [x(w / 2), 0.03, 0.01] })]
+  for (let i = 0; i <= n; i++) lined.push(P.box(0.04, h, 0.045, GATE, { at: [x(i * bay), h / 2, 0] }))
+  // A little gold padlock where the leaves meet (on the left one).
+  if (side < 0) lined.push(P.rbox(0.09, 0.11, 0.05, 0.02, PAL.gold, { at: [x(w - 0.06), 1.05, 0.05] }))
+  const lattice: BufferGeometry[] = []
+  const len = Math.hypot(bay, tier)
+  const ang = Math.atan2(tier, bay)
+  for (let i = 0; i < n; i++)
+    for (let t = 0; t < 3; t++) for (const a of [ang, -ang]) lattice.push(P.box(len, 0.026, 0.02, GATE, { at: [x((i + 0.5) * bay), (t + 0.5) * tier, -0.005], rot: [0, 0, a] }))
+  const leaf = part(kit, `shutter.${side < 0 ? 'left' : 'right'}`, [], [side * w, 0, 0])
+  leaf.add(solidMix(lined, lattice, kit.bag, 1.5))
+  return leaf
+}
+
+/** The shop's name on its sign board: Thai in big white letters, then its Chinese name between red plaques. */
+function signFace(kit: Kit, w: number, h: number, z: number) {
+  const W = 2048
+  const H = Math.round((W * h) / w)
+  const c = document.createElement('canvas')
+  c.width = W
+  c.height = H
+  const g = c.getContext('2d')!
+  g.fillStyle = SIGN
+  g.fillRect(0, 0, W, H)
+  // Faint wood grain.
+  g.fillStyle = 'rgba(0,0,0,0.06)'
+  for (let i = 0; i < 5; i++) g.fillRect(0, H * (0.14 + i * 0.18), W, H * 0.03)
+  g.textBaseline = 'middle'
+  g.lineJoin = 'round'
+  const letters = (text: string, x: number, size: number, font: string) => {
+    g.font = `bold ${size}px ${font}`
+    g.lineWidth = size * 0.12
+    g.strokeStyle = SIGN_EDGE
+    g.strokeText(text, x, H * 0.54)
+    g.fillStyle = '#FFF3EF'
+    g.fillText(text, x, H * 0.54)
+    return g.measureText(text).width
+  }
+  g.textAlign = 'left'
+  const thai = 'สงวนโลหะภัณฑ์'
+  const thaiFont = 'Thonburi, "Sukhumvit Set", "Noto Sans Thai", Tahoma, sans-serif'
+  // Fit the Thai name into the left three quarters.
+  g.font = `bold 100px ${thaiFont}`
+  const size = Math.min(H * 0.8, (100 * W * 0.7) / g.measureText(thai).width)
+  letters(thai, W * 0.03, size, thaiFont)
+  // Right of it: plaque, 源, plaque, 成.
+  const plaque = (cx: number) => {
+    const s = H * 0.5
+    g.fillStyle = PAL.gold
+    g.fillRect(cx - s / 2 - 6, H * 0.52 - s / 2 - 6, s + 12, s + 12)
+    g.fillStyle = '#D9473B'
+    g.fillRect(cx - s / 2, H * 0.52 - s / 2, s, s)
+  }
+  const hanFont = '"PingFang TC", "Heiti TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif'
+  g.textAlign = 'center'
+  plaque(W * 0.765)
+  letters('源', W * 0.835, H * 0.7, hanFont)
+  plaque(W * 0.9)
+  letters('成', W * 0.962, H * 0.7, hanFont)
+
+  const tex = kit.bag.add(new CanvasTexture(c))
+  tex.colorSpace = SRGBColorSpace
+  tex.anisotropy = 4
+  const mesh = new Mesh(kit.bag.add(new PlaneGeometry(w, h)), kit.bag.add(new MeshToonMaterial({ map: tex, gradientMap: toonGradient() })))
+  mesh.position.z = z
+  return mesh
 }
 
 /** A Thai spirit house on its pillar, with marigolds and a little red drink. It faces the street. */
@@ -193,7 +305,7 @@ function spiritHouse(kit: Kit) {
       P.cyl(0.035, 0.035, 0.12, '#E2525C', { at: [0.22, 1.26, 0.2] }),
       P.cyl(0.006, 0.006, 0.2, '#B98A6A', { at: [0.05, 1.3, 0.24] }),
     ],
-    [4.3, 0, 0.5],
+    [4.3, STEP_H, 0.5],
   )
   return g
 }
@@ -221,7 +333,7 @@ function motorbike(kit: Kit) {
 
 /** A sleepy cat in a loaf on the step: she stretches when poked. */
 function cat(kit: Kit) {
-  const g = poke(kit, 'cat', [], [6.4, 0, 0.55], { rotY: -0.5 })
+  const g = poke(kit, 'cat', [], [6.4, STEP_H, 0.55], { rotY: -0.5 })
   g.add(
     part(
       kit,
