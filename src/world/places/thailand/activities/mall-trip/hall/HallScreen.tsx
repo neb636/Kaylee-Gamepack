@@ -16,6 +16,8 @@ const LABEL_COLORS: Record<string, string> = { little: '#3FAF8E', muay: '#E04848
 
 interface Props {
   socks: string
+  /** Daddy's hairdo from the barber. */
+  hair: string
   done: GameDoor[]
   from: DoorId | 'in'
   /** Daddy's tummy rumbles soon after she comes out. */
@@ -28,7 +30,7 @@ interface Props {
   onMorePlay(): void
 }
 
-export function HallScreen({ socks, done, from, hungry, asking, onEnter, onHungry, onPizza, onMorePlay }: Props) {
+export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, onHungry, onPizza, onMorePlay }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [going, setGoing] = useState(false)
@@ -50,7 +52,7 @@ export function HallScreen({ socks, done, from, hungry, asking, onEnter, onHungr
         enter: (d) => cb.current.onEnter(d),
         hungry: () => cb.current.onHungry(),
       },
-      { socks, done, from: from === 'in' ? '' : from, hungry },
+      { socks, done, from: from === 'in' ? '' : from, hungry, hair },
     )
     w.setHintElement(hintRef.current)
     w.setLabelBox(labelRef.current)

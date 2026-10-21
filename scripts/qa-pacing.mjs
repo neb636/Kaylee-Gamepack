@@ -114,6 +114,9 @@ const SCENARIOS = [
   { name: 'thailand mall: the big frame', id: 'mall-frame', hash: '#/world/thailand/mall-trip/frame', reset: true },
   // The Vet Clinic (greybox, no voices): tapping a tool does a short go with it, so the auto-player can heal all three.
   { name: 'thailand mall: vet clinic', id: 'mall-vet', hash: '#/world/thailand/mall-trip/vet', reset: true },
+  // The Barber Salon (greybox, no voices): a tap on a tool does a short go with it (a squirt, a trim, a comb, a bow), and
+  // the mirror glows after enough of them.
+  { name: 'thailand mall: barber salon', id: 'mall-barber', hash: '#/world/thailand/mall-trip/barber', reset: true },
   // Cafe & Cake (greybox, no voices): taps work too (a fruit hops in, the jar pours by itself, the straw serves).
   { name: 'thailand mall: cafe & cake', id: 'mall-cafe', hash: '#/world/thailand/mall-trip/cafe', reset: true },
   // The Racing Slide (greybox, no voices): taps climb the steps and scoot down (it never "finishes": round after round).

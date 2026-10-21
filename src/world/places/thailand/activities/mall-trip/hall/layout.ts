@@ -89,8 +89,8 @@ export const DOORS = {
   race: { at: [(STEPS.x0 + STEPS.x1) / 2, -0.2] as XZ, in: [(STEPS.x0 + STEPS.x1) / 2, -1.2] as XZ },
 }
 export type DoorId = keyof typeof DOORS
-/** The ways in that open a mini game (the barber's comes with its greybox). */
-export const OPEN_DOORS = ['vet', 'cafe', 'race', 'frame'] as const
+/** The ways in that open a mini game. */
+export const OPEN_DOORS = ['vet', 'cafe', 'race', 'frame', 'barber'] as const
 export type GameDoor = (typeof OPEN_DOORS)[number]
 
 /** Where she stands when she first comes in: in front of Mommy's bench, between the town and the frame. */

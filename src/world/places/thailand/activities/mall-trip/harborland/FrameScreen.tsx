@@ -14,13 +14,15 @@ import { HarborSign } from './sign'
 interface Props {
   at: At
   socks: string
+  /** Daddy's hairdo from the barber. */
+  hair: string
   /** She's been on a big ride already (the frame's sticker is on her sock band). */
   rode: boolean
   onAt(at: At): void
   onRide(id: RideId): void
 }
 
-export function FrameScreen({ at, socks, rode, onAt, onRide }: Props) {
+export function FrameScreen({ at, socks, hair, rode, onAt, onRide }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const worldRef = useRef<BigFrame | null>(null)
@@ -33,7 +35,7 @@ export function FrameScreen({ at, socks, rode, onAt, onRide }: Props) {
   cb.current = { onAt, onRide }
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new BigFrame(renderer, { say: () => {}, done: () => {}, section: (a) => cb.current.onAt(a as At), ride: (id) => cb.current.onRide(id) }, { at: state.current.at, socks })
+    const w = new BigFrame(renderer, { say: () => {}, done: () => {}, section: (a) => cb.current.onAt(a as At), ride: (id) => cb.current.onRide(id) }, { at: state.current.at, socks, hair })
     w.setHintElement(hintRef.current)
     w.setSign(signRef.current)
     return w

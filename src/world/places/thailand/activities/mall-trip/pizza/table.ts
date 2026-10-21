@@ -20,12 +20,14 @@ import { Color, Euler, IcosahedronGeometry, OctahedronGeometry, PlaneGeometry, Q
 import { bell, clamp, wobble } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { FaceLife } from '../../../characters/face'
+import { LOOKS } from '../../../characters/looks'
 import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { Shot } from '../../../engine/camera'
 import { merge, P, solid } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
+import { wearHair } from '../games/barber/mane'
 import { CheeseBand, CHEESE } from './cheese'
 import { Floaters } from './fx'
 import { BOX_HOLDS, EATER_NAMES, EATERS, PAN, PLATE_R, SEAT_Z, SEATS, SERVER_AT, SIGN, SLICES, SNAP, TABLE, TUG_SNAP, WINDOW, type EaterId, type PizzaId } from './layout'
@@ -163,7 +165,7 @@ export class PizzaTable extends Stage {
   private bracelets: Group[] = []
   private chins = new Set<EaterId>()
 
-  constructor(renderer: WebGLRenderer, private pev: PizzaEvents, start: { section: 'menu' | 'share'; pizza: PizzaId; shared: number }) {
+  constructor(renderer: WebGLRenderer, private pev: PizzaEvents, start: { section: 'menu' | 'share'; pizza: PizzaId; shared: number; hair?: string }) {
     super(renderer, pev)
     const { scene, bag } = this
     scene.background = new Color('#FFF1E4')
@@ -176,6 +178,8 @@ export class PizzaTable extends Stage {
     this.kaylee = kaylee
     this.ji = members.get('ji')!
     this.nick = members.get('nick')!
+    // Daddy keeps the hairdo she gave him at the barber's.
+    wearHair(this.nick.rig, LOOKS.nick, start.hair ?? '', bag)
     this.people = { ji: this.ji, kaylee, nick: this.nick }
     kaylee.root.userData.pick = 'family:kaylee'
     for (const e of EATERS) {

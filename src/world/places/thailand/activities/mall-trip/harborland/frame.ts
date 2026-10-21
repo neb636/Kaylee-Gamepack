@@ -16,6 +16,7 @@
 import { Color, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { clamp, sounds } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
+import { LOOKS } from '../../../characters/looks'
 import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { Shot } from '../../../engine/camera'
@@ -23,6 +24,7 @@ import { TapMarker } from '../../../engine/marker'
 import { NavGrid } from '../../../engine/nav'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { Walker, type Floor, type Link } from '../../../trip/walk'
+import { wearHair } from '../games/barber/mane'
 import { buildHall } from '../hall/build'
 import { Kid, KID_LOOK_LIST, type Move } from '../hall/kids'
 import { SOCK_COLORS, wearSocks } from '../socks'
@@ -42,6 +44,8 @@ export interface FrameStart {
   /** Where she starts (STARTS). */
   at: At
   socks: string
+  /** Daddy's hairdo from the barber ('' his own mane). */
+  hair?: string
 }
 
 export const FRAME_ANCHORS: AnchorInfo[] = [
@@ -157,6 +161,8 @@ export class BigFrame extends Stage {
     this.nick = members.get('nick')!
     scene.add(kaylee.root, this.ji.root)
     wearSocks(kaylee, SOCK_COLORS[start.socks] ?? SOCK_COLORS.pink, bag)
+    // Daddy keeps the hairdo she gave him at the barber's.
+    wearHair(this.nick.rig, LOOKS.nick, start.hair ?? '', bag)
     this.put(this.ji, MOMMY.at[0], 0.5, MOMMY.at[1], 'sit', MOMMY.face)
     this.toys = new FrameToys(this.f, this.pool, this.nick, scene, bag, { giggle: () => sfx.giggle() })
     this.marker = new TapMarker(bag)
