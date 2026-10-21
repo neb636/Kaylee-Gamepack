@@ -53,6 +53,10 @@ export interface PlaceMeta {
   /** Engraved under KAYLEE on the trophy she gets for collecting every stamp. */
   trophyTitle: string
   activities: ActivityInfo[]
+  /** Activities still being built. They open from their own links (#/world/sections, a PR's test links), and the tests
+   *  poke them, but they're nowhere in the game yet: no button, no passport slot, and the finale doesn't wait for their
+   *  stamps. Move one to `activities` when it's ready for Kaylee. */
+  inTheWorks?: ActivityInfo[]
   /** Passport page facts: weather, hello, food, fun fact... */
   facts: PlaceFact[]
   /** Line-art pages for the coloring book. */

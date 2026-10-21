@@ -572,6 +572,8 @@ small climbing toy, before Dad's photos.
 7. **Greybox: the trip loop:** Mommy's choice, the Veloz, arrive, hungry, home.
 8. **The look:** the hall, the shops, the Big Frame, ICONSIAM, The Pizza Company, the Veloz and the outfits, in toon.
 9. **Voices, the full loop and QA** (layout-qa, then playtest-qa, scoped to `mall-trip`).
+10. **Into the game:** move `mall-trip` from `inTheWorks` to `activities` in `meta.ts`. Until then it opens only from its
+    links (no way in from the house, no passport slot, and the 🎉 party doesn't wait for its stamp).
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 

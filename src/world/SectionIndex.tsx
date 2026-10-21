@@ -17,7 +17,7 @@ export function SectionIndex() {
             <h2 style={{ margin: '0 0 10px' }}>
               {meta.emoji} {meta.name}
             </h2>
-            {[...(sectionsFor(meta.id, HUB) ? [{ id: HUB, name: 'Home base', icon: '🏠' }] : []), ...meta.activities, { id: 'party', name: 'Finale', icon: '🎉' }].map((a) => {
+            {[...(sectionsFor(meta.id, HUB) ? [{ id: HUB, name: 'Home base', icon: '🏠' }] : []), ...meta.activities, ...(meta.inTheWorks ?? []).map((a) => ({ ...a, name: `🚧 ${a.name}` })), { id: 'party', name: 'Finale', icon: '🎉' }].map((a) => {
               const def = sectionsFor(meta.id, a.id)
               const stamps: Record<string, string> = a.id === 'party' ? { stamps: 'all' } : {}
               return (
