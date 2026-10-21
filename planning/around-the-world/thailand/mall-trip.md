@@ -14,6 +14,7 @@ over go home to Agong in the box, and the big cousins finally look up from their
 - **ICONSIAM's MEGA HarborLand** ("Little Thailand"), chosen from the options below.
 - **Just Mommy, Daddy and Kaylee.**
 - **Mommy drives a rental Toyota Veloz, in silver.**
+- Later the same day: the sticker is **a pizza slice**, the real names can be used, and there are no photos to work from.
 - At the pizza table, **pull and share** (not make-a-pizza: Italy's pizzeria already does that).
 
 ## Choosing the mall (research, 2026-10-20)
@@ -53,9 +54,9 @@ Pizza Company in ICONSIAM, so the game puts one next to HarborLand on the 6th fl
 - **The way in:** shoes go on free racks. **HarborLand grip socks are a must** for everyone (฿60), and kids are
   **measured at the counter** because the price depends on height. Play lasts 3 hours, and grown-ups come in on a parent ticket.
 
-Things nobody wrote down, so they're our design: the colors, the heights and the layout. Before greybox 1, look at the
-branch's photos and videos together (Facebook HarborLand ICONSIAM, Instagram @harborland.th). If Dad has family photos,
-they're the best reference, but only for looking: no real photos go into the public repo.
+Things nobody wrote down, so they're our design: the colors, the heights and the layout. Dad has no photos of it
+(2026-10-20), so the greybox builds the playground from the ride names and descriptions above, and his iPad test
+decides the rest.
 
 **ICONSIAM:**
 - It sits on the Chao Phraya river.
@@ -68,7 +69,8 @@ they're the best reference, but only for looking: no real photos go into the pub
 - Thailand's biggest pizza chain (Minor Food).
 - Its 2023 look is a fresh "Iconic Green" with a logo whose A is a pizza slice. Its delivery number is 1112.
 - Real menu: Hawaiian, Seafood Cocktail, Tom Yum Kung, Double Cheese, and the "Extreme" crust stuffed with sausage and cheese.
-- The drinks are Coca-Cola, so the game shows a plain soda: no other brands, and logos are only hinted at (green, a slice).
+- The drinks are Coca-Cola, so the game shows a plain soda (no other brands). The Pizza Company's name is shown and
+  spoken (Dad, 2026-10-20); its sign is our own toon drawing in its green, not a copy of the logo.
 
 **The car:** a Toyota Veloz (Thailand, 2022 on), a 7-seat MPV.
 - Hinged rear doors, roof rails, and a full-width LED light bar across the tailgate.
@@ -232,7 +234,7 @@ A 3-second cut: the Veloz pulls up at the shophouse. She carries the box in, the
 - **Gan, Ken and BB drop their phones** for the first time this trip: "Pizza?!"
 - The dragon-slide photo hangs in a new frame by the door (`WALL_SLOTS['mall-trip']`). Tap it and Mommy says "Our mall day!"
 
-Then the stamp (`StampEarned`) and a sticker. **Dad picks the sticker:** a twin dragon, a Lopburi monkey, or a pizza slice.
+Then the stamp (`StampEarned`) and the sticker: **a pizza slice** (Dad's pick), cheese stretching off it.
 
 ## Sections and carried state
 
@@ -372,12 +374,12 @@ activities/mall-trip/
   - the Thai things in the playground (Phi Ta Khon, Lopburi's monkeys, the Golden Mount)
 - **Replay:** other socks, a different pizza, the shortcuts straight to the slides or the table.
 
-## Open questions for Dad
+## Dad's answers (2026-10-20, on PR #117)
 
-1. **The sticker:** a twin dragon, a Lopburi monkey, or a pizza slice?
-2. **The real names:** can the game say and show "HarborLand" and "The Pizza Company" (the repo is public)? Or should it
-   use made-up names in the same spirit?
-3. **Family photos of HarborLand ICONSIAM**, if you have them, for me to look at (not to put in the repo).
+1. **The sticker:** a pizza slice.
+2. **The real names:** yes. The game says and shows "HarborLand", "ICONSIAM" and "The Pizza Company". The signs are
+   drawn in our own toon style, not copied logos.
+3. **Photos:** none. The playground's look comes from the ride names and descriptions above.
 
 ## Sources
 
