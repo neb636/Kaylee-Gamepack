@@ -80,7 +80,7 @@ export class Avatar implements Character {
       if (!groups && on) {
         const w = buildWorn(LOOKS.kaylee, id, this.bag)
         groups = []
-        for (const [g, pivot] of [[w.head, this.chibi.head], [w.armL, this.chibi.armL], [w.armR, this.chibi.armR]] as const) {
+        for (const [g, pivot] of [[w.head, this.chibi.head], [w.armL, this.chibi.armL], [w.armR, this.chibi.armR], [w.body, this.chibi.body]] as const) {
           if (!g) continue
           pivot.add(g)
           groups.push(g)

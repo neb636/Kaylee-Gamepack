@@ -1,12 +1,14 @@
 // How each of Kaylee's family looks as a toy animal: Dad's picks from the lineup (2026-10-17: column A, so kids share
 // their parent's animal, and Kaylee's lilac unicorn); later Dad made Jum a chubby pink elephant and Mommy a bit rounder,
 // and gave the big cousins (Gan, Ken, BB) phones they never look up from. The concepts are in planning/around-the-world/thailand/lineup.webp;
-// characters/animal.ts builds them in 3D. Pure data (no three.js).
-export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill'
+// characters/animal.ts builds them in 3D. The vet's patients at HarborLand (a puppy, a pony, a baby elephant) are toy
+// animals too (PATIENT_LOOKS). Pure data (no three.js).
+export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony'
 export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
-/** What Kaylee can wear on a trip, from her suitcase (or Mommy's spare sun hat if she packed none): Avatar.wear. */
-export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties'
-export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasses', 'floaties']
+/** What Kaylee can wear on a trip, from her suitcase (or Mommy's spare sun hat if she packed none), or at HarborLand
+ *  (the vet's blue scrubs and cap): Avatar.wear. */
+export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties' | 'scrubs' | 'scrub-cap'
+export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasses', 'floaties', 'scrubs', 'scrub-cap']
 export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Wearable
 
 export interface Look {
@@ -23,7 +25,7 @@ export interface Look {
   dark: string
   /** Inside the ears. */
   ear?: string
-  /** Unicorn mane and tail, in order. */
+  /** Unicorn (or pony) mane and tail, in order. */
   mane?: string[]
   /** Unicorn mane length: short (Daddy), to the shoulders, or long and flowing (Mommy). */
   hair?: 'short' | 'medium' | 'long'
@@ -55,3 +57,11 @@ export const LOOKS: Record<string, Look> = {
   putter: { ...PENGUIN, height: 0.78, fur: '#B9B4D6', extras: ['bib'] },
   sri: { species: 'hornbill', height: 1.5, fur: '#4A3F4F', light: '#FFF1DC', dark: '#FFB43C', outfit: { kind: 'blouse', color: '#C9B5F7' }, lashes: true },
 }
+
+/** The vet's patients (they don't talk: barks, whinnies, trumpets). A golden puppy with floppy ears, a caramel plush pony
+ *  with a chocolate mane, and a baby elephant (Thailand's animal), grey-lilac and round. */
+export const PATIENT_LOOKS = {
+  puppy: { species: 'puppy', height: 0.9, chub: 1.1, fur: '#F4C47E', light: '#FFF1DC', dark: '#4A3640', ear: '#D99A55', open: true },
+  pony: { species: 'pony', height: 0.98, fur: '#E9B486', light: '#FFF0E0', dark: '#8A5A4A', ear: '#FFC2C8', mane: ['#9A5E4E', '#B87A62'], hair: 'medium', lashes: true },
+  elephant: { species: 'elephant', height: 0.92, chub: 1.25, fur: '#B9B3D6', light: '#E4E0F2', dark: '#9C95C4', ear: '#FFB8CC', lashes: true },
+} as const satisfies Record<string, Look>

@@ -562,6 +562,19 @@ small climbing toy, before Dad's photos.
 
 1. **Greybox: the vet clinic** (`vet`), the toy Kaylee's photos say she loved. The question for the iPad: is healing
    the puppy fun with her finger?
+   *Built 2026-10-21 (`activities/mall-trip/games/vet/`, `#/world/thailand/mall-trip/vet?patient=puppy|pony|elephant`):*
+   - **The room:** the exam table straight on, the tray along the bottom (one row wide, two rows tall), Kaylee in blue
+     scrubs and a cap (new wearables), Daddy watching.
+   - **The patients:** a puppy and a pony are new toy animals (`characters/looks.ts` `PATIENT_LOOKS`). Each patient's
+     thought bubble shows the tool it needs next.
+   - **Where a tool lands:** the tool's tip sits 34 px above her finger. Zones pinned to the toy's pivots (head, mouth,
+     chest, paw, ears, trunk, tail) are projected to the screen every frame, and the nearest one under the tip wins;
+     the tool's own target pulls a little. A scripted drag of every tool onto its zone landed every time at iPhone
+     landscape and portrait and both iPad orientations.
+   - **Taps:** a tap on a tool does a short go with it, so all three patients can be healed with taps alone (about 22).
+   - **Sounds only:** no voices yet. Sparkle's opening line and Daddy's reactions come with the full loop.
+   - **`games`:** replaces PR #120's `rides` (old `rides` links still work). The vet sticker comes after the first
+     patient.
 2. **Greybox: the barber salon** (`barber`) and Daddy's `hair` carrying on through the trip.
 3. **Greybox: the racing slide** (`race`).
 4. **Greybox: the hall** (`hall`): walking between the zones, the shop doors, the sock band, life in the background.

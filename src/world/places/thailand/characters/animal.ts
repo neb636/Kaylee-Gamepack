@@ -35,6 +35,8 @@ export interface Rig {
   radius: number
   /** The big cousins' phone, held in front of the tummy (its own group, so they can put it down). */
   phone: Group | null
+  /** Where the face is (head-local): the head's radius, its center's height and the mouth (the vet aims at these). */
+  face: { R: number; headY: number; mouth: V3 }
 }
 
 const INK = '#2E2233'
@@ -70,7 +72,7 @@ function frameOf(look: Look): Frame {
   const H = look.height
   const penguin = look.species === 'penguin'
   const bird = look.species === 'hornbill'
-  const R = (penguin ? 0.27 : look.species === 'panda' || look.species === 'elephant' ? 0.26 : bird ? 0.22 : 0.24) * H
+  const R = (penguin ? 0.27 : look.species === 'panda' || look.species === 'elephant' ? 0.26 : bird ? 0.22 : look.species === 'puppy' ? 0.25 : 0.24) * H
   const c = look.chub ?? 1
   const headY = penguin ? 0.2 * H : R * 0.92
   return {
@@ -78,8 +80,8 @@ function frameOf(look: Look): Frame {
     R,
     headY,
     shoulder: penguin ? [0.3 * H, 0.5 * H, 0] : [0.155 * H * c, 0.47 * H, 0],
-    eyeX: look.species === 'unicorn' ? 0.37 * R : bird ? 0.46 * R : 0.36 * R,
-    eyeY: look.species === 'unicorn' ? 0.12 * R : penguin ? 0.02 * R : bird ? 0.14 * R : 0.05 * R,
+    eyeX: look.species === 'unicorn' || look.species === 'pony' ? 0.37 * R : bird ? 0.46 * R : 0.36 * R,
+    eyeY: look.species === 'unicorn' || look.species === 'pony' ? 0.12 * R : penguin ? 0.02 * R : bird ? 0.14 * R : 0.05 * R,
     eyeSize: 0.21 * R,
     lift: penguin ? 0.12 * R : 0,
     on: (x, y, lift = 0) => [x, headY + y, Math.sqrt(Math.max(0, R * R - x * x - y * y)) + lift],
@@ -94,12 +96,17 @@ interface WornParts {
   headPlain: Parts
   armL: Parts
   armR: Parts
+  body: Parts
+  bodyPlain: Parts
 }
 
-/** One worn thing's parts, on the head pivot or on each arm pivot (in their local space). */
+const SCRUBS = '#7FB2F0'
+const SCRUBS_DARK = '#5D8FD6'
+
+/** One worn thing's parts, on the head pivot, the body or each arm pivot (in their local space). */
 function wornParts(id: Wearable, f: Frame): WornParts {
   const { H, R, headY, eyeX, eyeY, on, turnTo } = f
-  const out: WornParts = { head: [], headPlain: [], armL: [], armR: [] }
+  const out: WornParts = { head: [], headPlain: [], armL: [], armR: [], body: [], bodyPlain: [] }
   if (id === 'sunhat' || id === 'spare-hat') {
     const mine = id === 'sunhat'
     const straw = mine ? '#FBEA9A' : '#FFC2A8'
@@ -146,6 +153,24 @@ function wornParts(id: Wearable, f: Frame): WornParts {
     }
     out.head.push(P.capsule(0.035 * R, eyeX * 2 - 0.5 * R, '#FF4F9A', { at: on(0, eyeY + 0.07 * R, lift + 0.02 * R), rot: [0, 0, Math.PI / 2] }))
   }
+  if (id === 'scrubs') {
+    // The vet's blue scrubs over her dress: a top with a white V at the neck and a pocket (a pink pen in it), a tunic
+    // hem over the skirt, trousers over the legs, and short sleeves.
+    out.body.push(P.capsule(0.172 * H, 0.06 * H, SCRUBS, { at: [0, 0.37 * H, 0] }))
+    out.body.push(P.cyl(0.168 * H, 0.248 * H, 0.18 * H, SCRUBS, { at: [0, 0.232 * H, 0] }, 20))
+    for (const s of [-1, 1]) out.body.push(P.capsule(0.078 * H, 0.05 * H, SCRUBS_DARK, { at: [s * 0.085 * H, 0.115 * H, 0] }))
+    out.body.push(P.rbox(0.07 * H, 0.06 * H, 0.012 * H, 0.008 * H, SCRUBS_DARK, { at: [0.075 * H, 0.42 * H, 0.165 * H], rot: [0, 0.4, 0] }))
+    out.body.push(P.cyl(0.008 * H, 0.008 * H, 0.06 * H, '#FF4F9A', { at: [0.06 * H, 0.46 * H, 0.168 * H], rot: [0, 0, 0.15] }))
+    for (const s of [-1, 1]) out.bodyPlain.push(P.box(0.012 * H, 0.08 * H, 0.01 * H, '#FFFFFF', { at: [s * 0.022 * H, 0.505 * H, 0.152 * H], rot: [-0.35, 0, s * 0.5] }))
+    for (const [side, s] of [['armL', -1], ['armR', 1]] as const) out[side].push(P.sphere(0.074 * H, SCRUBS, { at: [s * 0.006 * H, -0.02 * H, 0] }))
+  }
+  if (id === 'scrub-cap') {
+    // A round scrub cap with little pink dots, set back so her horn and ears poke out, and a band round its rim.
+    const cz = -0.12 * R
+    out.head.push(P.sphere(1.0 * R, SCRUBS, { at: [0, headY + 0.4 * R, cz], scale: [1.07, 0.7, 1.05] }, 24))
+    out.head.push(P.torus(0.98 * R, 0.07 * R, SCRUBS_DARK, { at: [0, headY + 0.42 * R, cz], rot: [Math.PI / 2 + 0.12, 0, 0], scale: [1.08, 1.05, 1] }))
+    for (const [x, y] of [[-0.5, 0.86], [0.1, 1.02], [0.6, 0.82], [-0.15, 0.7]]) out.headPlain.push(P.sphere(0.07 * R, '#FF8FB8', { at: on(x * R, (y - 0.45) * R + 0.4 * R, 0.08 * R), scale: [1, 1, 0.4] }))
+  }
   if (id === 'floaties') {
     // An armband round each upper arm (pink on one, orange on the other, like the ones she packed), a cream stripe
     // round its top and a little valve.
@@ -167,11 +192,11 @@ function wornParts(id: Wearable, f: Frame): WornParts {
 
 /** Builds a worn thing to add to a finished rig at runtime (Kaylee puts on her sun hat): a group for the head pivot
  *  and one for each arm pivot (null where there's nothing). */
-export function buildWorn(look: Look, id: Wearable, bag: Bag): { head: Group | null; armL: Group | null; armR: Group | null } {
+export function buildWorn(look: Look, id: Wearable, bag: Bag): { head: Group | null; armL: Group | null; armR: Group | null; body: Group | null } {
   const parts = wornParts(id, frameOf(look))
   const px = look.height >= 1 ? 3 : 2.5
   const group = (lined: Parts, plain: Parts) => (lined.length || plain.length ? solidMix(lined, plain, bag, px) : null)
-  return { head: group(parts.head, parts.headPlain), armL: group(parts.armL, []), armR: group(parts.armR, []) }
+  return { head: group(parts.head, parts.headPlain), armL: group(parts.armL, []), armR: group(parts.armR, []), body: group(parts.body, parts.bodyPlain) }
 }
 
 /** The wind in a unicorn's mane and tail: it eases toward `goal` (0 still, 1 strong), and they stream back and
@@ -212,6 +237,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   let mouthAt: V3 = [0, 0, 0]
   const arm: { L: Parts; R: Parts } = { L: [], R: [] }
   const tail: Parts = []
+  /** Where the tail pivots (body-local): it wags from its root. */
+  let tailRoot: V3 = [0, 0, 0]
   const phone: Parts = []
   const phonePlain: Parts = []
 
@@ -237,7 +264,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     }
   } else {
     const legColor = look.species === 'panda' ? look.dark : look.fur
-    const feetColor = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' ? look.dark : look.light
+    const feetColor = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' ? look.dark : look.light
     const legX = 0.085 * H * (1 + (c - 1) * 0.7)
     const legR = 0.07 * H * (1 + (c - 1) * 0.6)
     for (const s of [-1, 1]) {
@@ -245,7 +272,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       torso.push(P.sphere(0.075 * H * (1 + (c - 1) * 0.6), feetColor, { at: [s * legX, 0.035 * H, 0.02 * H], scale: [1, 0.6, 1.3] }))
     }
     torso.push(P.capsule(0.155 * H, 0.1 * H, look.fur, { at: [0, 0.34 * H, 0], scale: round }))
-    if (look.species === 'fox') torso.push(P.sphere(0.075 * H, look.light, { at: [0, 0.5 * H, 0.11 * H], scale: [1.1, 0.8, 0.7] }))
+    if (look.species === 'fox' || look.species === 'puppy') torso.push(P.sphere(0.075 * H, look.light, { at: [0, 0.5 * H, 0.11 * H * round[2]], scale: [1.1, 0.8, 0.7] }))
     if (look.species === 'buffalo' && !look.outfit) torso.push(P.sphere(0.11 * H, look.light, { at: [0, 0.27 * H, 0.1 * H], scale: [1, 1.1, 0.55] }))
   }
 
@@ -285,7 +312,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       if (o) parts.push(P.sphere(0.06 * H, o.color, { at: [0, -0.01 * H, 0] }))
     } else {
       const armColor = look.species === 'panda' ? look.dark : look.fur
-      const hand = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' ? look.dark : look.species === 'fox' ? look.light : look.fur
+      const hand = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' ? look.dark : look.species === 'fox' || look.species === 'puppy' ? look.light : look.fur
       parts.push(P.capsule(0.052 * H, 0.09 * H, armColor, { at: [s * 0.025 * H, -0.075 * H, 0], rot: [0, 0, s * 0.35] }))
       parts.push(P.sphere(0.054 * H, hand, { at: [s * 0.05 * H, -0.14 * H, 0.005 * H] }))
       if (o) parts.push(P.sphere(0.068 * H, o.color, { at: [s * 0.004 * H, -0.015 * H, 0] }))
@@ -299,7 +326,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     eyesPlain.push(P.sphere(eyeSize * 0.3, WHITE, { at: on(x + s * 0.05 * R, eyeY + 0.08 * R, lift + 0.035 * R) }))
     eyesPlain.push(P.sphere(eyeSize * 0.14, WHITE, { at: on(x - s * 0.05 * R, eyeY - 0.07 * R, lift + 0.035 * R) }))
     if (look.lashes) for (const k of [0, 1]) eyesPlain.push(P.capsule(0.012 * R, 0.07 * R, INK, { at: on(x + s * (0.16 + k * 0.05) * R, eyeY + (0.17 - k * 0.07) * R, lift + 0.01 * R), rot: [0, 0, s * (-0.9 - k * 0.5)] }))
-    const blushY = look.species === 'unicorn' ? -0.08 * R : -0.2 * R
+    const blushY = look.species === 'unicorn' || look.species === 'pony' ? -0.08 * R : -0.2 * R
     headPlain.push(P.sphere(0.12 * R, BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
   }
   const mouthPoint = (y: number, z?: number): V3 => (z === undefined ? on(0, y, 0.005 * R) : [0, headY + y, z])
@@ -382,6 +409,40 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       head.push(...[-0.14, 0.04, 0.2].map((x, i) => P.sphere((0.15 - i * 0.02) * R, look.dark, { at: [x * R, headY + (0.95 - i * 0.04) * R, 0.15 * R], scale: [0.8, 1.2, 0.8] })))
       tail.push(P.capsule(0.018 * H, 0.12 * H, look.fur, { at: [0, 0.2 * H, -0.2 * H * round[2]], rot: [-0.5, 0, 0] }))
       tail.push(P.sphere(0.035 * H, look.dark, { at: [0, 0.13 * H, -0.24 * H * round[2]], scale: [1, 1.4, 1] }))
+      tailRoot = [0, 0.26 * H, -0.17 * H * round[2]]
+      break
+    }
+    case 'puppy': {
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.08, 1, 1] }, 26))
+      head.push(P.sphere(0.44 * R, look.light, { at: [0, headY - 0.36 * R, 0.66 * R], scale: [1.15, 0.72, 0.75] }))
+      head.push(P.sphere(0.14 * R, look.dark, { at: [0, headY - 0.18 * R, 1.0 * R], scale: [1.35, 0.9, 0.8] }))
+      mouth(mouthPoint(-0.52 * R, 0.92 * R))
+      // Long floppy ears down the sides of the head, a shade darker, and a little tuft on top.
+      for (const s of [-1, 1]) head.push(P.sphere(0.38 * R, look.ear ?? look.fur, { at: [s * 0.94 * R, headY - 0.02 * R, -0.04 * R], rot: [0, 0, s * 0.22], scale: [0.58, 1.38, 0.55] }))
+      head.push(...[-0.12, 0.1].map((x, i) => P.sphere((0.2 - i * 0.03) * R, look.fur, { at: [x * R, headY + (0.94 - i * 0.04) * R, 0.2 * R], scale: [0.8, 1.2, 0.8] })))
+      // A feathery tail that curls up (it wags from its root).
+      tailRoot = [0, 0.24 * H, -0.15 * H * round[2]]
+      tail.push(P.sphere(0.05 * H, look.fur, { at: [0, 0.3 * H, -0.2 * H * round[2]], rot: [-0.7, 0, 0], scale: [0.8, 1.7, 0.8] }))
+      tail.push(P.sphere(0.04 * H, look.light, { at: [0, 0.38 * H, -0.24 * H * round[2]] }))
+      break
+    }
+    case 'pony': {
+      const mane = look.mane ?? [look.dark]
+      const m = (i: number) => mane[i % mane.length]
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0] }, 26))
+      // A long soft muzzle with nostrils, and pointy ears standing up.
+      head.push(P.sphere(0.56 * R, look.light, { at: [0, headY - 0.4 * R, 0.62 * R], scale: [1.05, 0.72, 0.76] }))
+      headPlain.push(...[-1, 1].map((s) => P.sphere(0.05 * R, INK, { at: [s * 0.2 * R, headY - 0.32 * R, 1.02 * R], scale: [1, 1.3, 0.6] })))
+      mouth(mouthPoint(-0.56 * R, 0.9 * R))
+      for (const s of [-1, 1]) {
+        head.push(P.cone(0.22 * R, 0.62 * R, look.fur, { at: [s * 0.5 * R, headY + 0.98 * R, -0.05 * R], rot: [-0.1, 0, -s * 0.28] }))
+        headPlain.push(P.cone(0.12 * R, 0.38 * R, look.ear ?? look.light, { at: [s * 0.49 * R, headY + 0.94 * R, 0.05 * R], rot: [-0.1, 0, -s * 0.28] }))
+      }
+      // The mane: a forelock, a crest from the forehead over the top and down the back (it fluffs when brushed).
+      locks.push(P.sphere(0.3 * R, m(0), { at: [0, headY + 0.74 * R, 0.62 * R], scale: [1, 0.9, 0.8] }))
+      for (let i = 0; i < 5; i++) locks.push(P.sphere((0.36 - i * 0.02) * R, m(i + 1), { at: [0, headY + (0.92 - i * 0.36) * R, (0.2 - i * 0.26) * R], scale: [0.85, 1, 1] }))
+      tailRoot = [0, 0.26 * H, -0.16 * H]
+      ;[[0.27, -0.2, 0.06], [0.22, -0.25, 0.065], [0.16, -0.28, 0.065], [0.1, -0.29, 0.058]].forEach(([y, z, r], i) => tail.push(P.sphere(r * H, m(i), { at: [0, y * H, z * H] })))
       break
     }
     case 'fox': {
@@ -427,6 +488,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         }
       }
       tail.push(P.capsule(0.02 * H, 0.14 * H, look.fur, { at: [0, 0.18 * H, -0.19 * H], rot: [-0.6, 0, 0] }))
+      tailRoot = [0, 0.26 * H, -0.15 * H]
       tail.push(P.sphere(0.04 * H, look.dark, { at: [0, 0.1 * H, -0.25 * H], scale: [1, 1.3, 1] }))
       break
     }
@@ -505,6 +567,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       const w = wornParts(e, f)
       head.push(...w.head)
       headPlain.push(...w.headPlain)
+      torso.push(...w.body)
+      torsoPlain.push(...w.bodyPlain)
       arm.L.push(...w.armL)
       arm.R.push(...w.armR)
     }
@@ -537,20 +601,21 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   talk.scale.setScalar(0.001)
   talk.visible = false
   headPivot.add(eyeGroup, mouthGroup, talk)
-  // A unicorn's locks swing from the top of the back of the head (the wind blows them back), its tail from its root.
+  // A unicorn's locks swing from the top of the back of the head (the wind blows them back), its tail from its root. A
+  // pony's mane grows from the top of its head (a brush fluffs it up).
   let maneGroup: Group | null = null
   if (locks.length) {
-    maneGroup = pivoted(locks, [0, headY + 0.5 * R, -0.6 * R], bag, px)
+    maneGroup = pivoted(locks, look.species === 'pony' ? [0, headY + 0.6 * R, 0] : [0, headY + 0.5 * R, -0.6 * R], bag, px)
     headPivot.add(maneGroup)
   }
   armL.add(solidMix(arm.L, [], bag, px))
   armR.add(solidMix(arm.R, [], bag, px))
   let tailGroup: Group | null = null
   if (tail.length) {
-    tailGroup = pivoted(tail, look.species === 'unicorn' ? [0, 0.29 * H, -0.15 * H] : [0, 0, 0], bag, px)
+    tailGroup = pivoted(tail, look.species === 'unicorn' ? [0, 0.29 * H, -0.15 * H] : tailRoot, bag, px)
     body.add(tailGroup)
   }
-  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, open: !!look.open && rest.length > 0, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup }
+  return { root, body, head: headPivot, eyes: eyeGroup, mouth: mouthGroup, talk, open: !!look.open && rest.length > 0, armL, armR, tail: tailGroup, mane: maneGroup, height: H, radius: penguin ? 0.3 * H : 0.16 * H * c, phone: phoneGroup, face: { R, headY, mouth: mouthAt } }
 }
 
 /** Parts in a group that pivots at `at` (the parts stay where they were). */
