@@ -31,6 +31,9 @@ Only the repo owner can trigger the AI workflows.
      (Needed because PRs opened with the default token don't trigger the CI/preview workflows.
      Leave *Workflows* off so the AI can never change the workflows.)
 2. **Variable** (same page → *Variables*): `CODEX_MODEL` = `gpt-6.1-sol` (optional; that's the default).
+   Set `VITE_POSTHOG_KEY` to the PostHog project token and `VITE_POSTHOG_HOST` to its ingestion URL
+   (for a US project, `https://us.i.posthog.com`). Both are required for the production and PR preview builds.
+   The project token is public and bundled into the website; do not use a PostHog personal API key here.
 3. After the first deploy to `main` creates the `gh-pages` branch:
    Settings → Pages → *Deploy from a branch* → `gh-pages` / `(root)`.
 
