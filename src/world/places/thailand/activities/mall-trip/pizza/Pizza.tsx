@@ -14,20 +14,22 @@ interface Props {
   section: 'menu' | 'share'
   pizza: PizzaId
   shared: number
+  /** Daddy's hairdo from the barber. */
+  hair: string
   onPizza: (id: PizzaId) => void
   onServed: () => void
   onShared: (n: number) => void
 }
 
-export function Pizza({ section, pizza, shared, onPizza, onServed, onShared }: Props) {
+export function Pizza({ section, pizza, shared, hair, onPizza, onServed, onShared }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [picked, setPicked] = useState(section === 'share')
   const worldRef = useRef<PizzaTable | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   // A rebuilt world (a lost GPU context) starts where she is now, not where the link was.
-  const now = useRef({ section, pizza, shared })
-  now.current = { section, pizza, shared }
+  const now = useRef({ section, pizza, shared, hair })
+  now.current = { section, pizza, shared, hair }
   const cb = useRef({ onServed, onShared })
   cb.current = { onServed, onShared }
 
