@@ -779,6 +779,39 @@ const thaiSlide = (name, seconds, round, every) => ({
 })
 GAME_SCENARIOS.push(thaiSlide('mall-race-scoot', 8, 1, 330), thaiSlide('mall-race-bump', 9, 2, 0), thaiSlide('mall-race-rings', 9, 3, 0))
 
+// The Pizza Company (mall trip, greybox): her finger pulls a slice out of the pan and the cheese stretches, wobbles as
+// she swings it, and snaps; she lets go over a plate. Hawaiian snaps early, Double Cheese stretches longest, and in the
+// tug (after one each) Daddy grabs the other end. Where things are comes from window.__thaiMallQA (screen pixels).
+const thaiPizza = (name, seconds, link, to, opts = {}) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/share?${link}`)
+    await page.waitForFunction(() => window.__thaiMallQA?.().pan?.length, null, { timeout: 20000 })
+    await page.waitForTimeout(400)
+  },
+  act: async (page) => {
+    const q = await page.evaluate(() => window.__thaiMallQA())
+    const [sx, sy] = q.pan[0]
+    const [px, py] = q.plates[to]
+    await page.mouse.move(sx, sy)
+    await page.mouse.down()
+    await page.mouse.move(sx, sy - 90, { steps: 10 })
+    if (opts.tug) await page.waitForTimeout(800)
+    // Swing it side to side on the way (the cheese wobbles), then over the plate.
+    for (let i = 0; i < 3; i++) await page.mouse.move(sx + (i % 2 ? -60 : 60), sy - 110, { steps: 6 })
+    await page.mouse.move(px, py + 40, { steps: 16 })
+    await page.waitForTimeout(250)
+    await page.mouse.up()
+    await page.waitForTimeout(900)
+  },
+})
+GAME_SCENARIOS.push(
+  thaiPizza('pizza-pull-cheese', 5, 'pizza=cheese', 'nick'),
+  thaiPizza('pizza-pull-hawaiian', 5, 'pizza=hawaiian', 'ji'),
+  thaiPizza('pizza-tug', 6, 'pizza=cheese&shared=3', 'ji', { tug: true }),
+)
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {

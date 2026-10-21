@@ -638,6 +638,33 @@ small climbing toy, before Dad's photos.
    - **Next for the cafe, after Dad plays it:** whether the tip-to-pour feels right on the iPad (the pull's size,
      the angle it pours at), whether two cups at once is clear, and whether round 1 should start with the lid on.
 6. **Greybox: the pizza toy** (`menu`, `share`).
+   *Built 2026-10-21 (`activities/mall-trip/pizza/`, `#/world/thailand/mall-trip/menu`,
+   `#/world/thailand/mall-trip/share?pizza=hawaiian|seafood|cheese&shared=0..8`):*
+   - **The table:** straight on, a little above eye level (24°, 28° on a tall screen) so the pizza reads as a disc.
+     Mommy, Kaylee (on a pink booster) and Daddy sit in the green booth with their plates; Agong's take-away box (a
+     panda on the front) stands open at the right end. Placeholder sign (a pizza slice, no words) and the waterfall
+     window behind them.
+   - **The menu:** three big picture buttons along the bottom. The server (a fox in a green shirt and cap, no voice yet)
+     walks round the end of the table with the pizza, sets it down on its stand and bows.
+   - **The pull:** the slice hangs from its crust above her finger. Two cheese strands (`cheese.ts`, tubes rebuilt
+     each frame) run from its tip to the pan. They thin and sag as they stretch, wobble when she swings it and snap
+     past their length, boing: Hawaiian 0.42 m, Seafood 0.5 m, Double Cheese 0.95 m.
+   - **Where it lands:** the plate under where her finger puts the slice, in screen space. Near a plate, that plate;
+     lifted above the pizza, the plate in its column. That plate rings pink before she lets go; anywhere else it springs
+     back to the pan. A scripted drag onto each plate and the box landed every time at iPhone landscape and portrait
+     and both iPad orientations, including quick flicks.
+   - **Sharing:** the plate that's behind glows gold. Daddy hams it up (points at Mommy's plate, ho ho) when he gets
+     more than anyone. With two each the box glows and wiggles; two slices in and the lid closes, flup, and everyone
+     cheers. Any plate is fine, the box takes a slice any time, and slices on plates can be dragged again.
+   - **The tug:** the first pull after one each. Daddy reaches over and takes the pan's end, it stretches across the
+     table (about 2 m), and it snaps onto his nose, where it stays and swings.
+   - **Taps:** a tap on a plate munches the top slice (three bites, cheese on the chin). A tap on the pizza serves a
+     slice to the plate that's behind, with its stretch, so taps alone share all eight (about 10 taps).
+   - **Pokeables:** the soda (slurp, bubbles), the onion rings (Mommy wears them as bracelets, three, then eats one),
+     the chili (Daddy's ah-ah-CHOO), the napkins (a flurry), the server (a bow), the sign (glows, its logo spins), the
+     waterfall (changes color), the family.
+   - **Sounds only:** no voices. Sparkle counting round the table, Daddy's "Kaylee, Mommy's hungry too!", "Those are
+     for Agong!" and the server's lines come with the full loop. The `hair` param waits for the barber.
 7. **Greybox: the trip loop:** Mommy's choice, the Veloz, arrive, hungry, home.
 8. **The look:** the hall, the shops, the Big Frame, ICONSIAM, The Pizza Company, the Veloz and the outfits, in toon.
 9. **Voices, the full loop and QA** (layout-qa, then playtest-qa, scoped to `mall-trip`).
