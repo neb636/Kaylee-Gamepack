@@ -15,6 +15,7 @@ const SPOTS: { id: string; icon: string; label: string; game?: GameDoor; bg: str
   { id: 'mountain', icon: '⛰️', label: 'The Golden Mountain', bg: '#FFF1C9', sound: () => sfx.giggle() },
   { id: 'blocks', icon: '🧱', label: 'Little Land', game: 'blocks', bg: '#E3F7EE' },
   { id: 'boxing', icon: '🥊', label: 'Muay Thai bags', bg: '#DCEBFF', sound: () => sfx.punch() },
+  { id: 'skypod', icon: '💡', label: 'The Sky Pod', game: 'skypod', bg: '#D9CCFF' },
 ]
 
 const big = { width: 'clamp(104px, 19vmin, 160px)', height: 'clamp(104px, 19vmin, 160px)', borderRadius: 32, border: '6px solid #fff', boxShadow: 'var(--shadow)', fontSize: 'clamp(50px, 10vmin, 78px)', padding: 0 } as const

@@ -89,10 +89,12 @@ export const DOORS = {
   race: { at: [(STEPS.x0 + STEPS.x1) / 2, -0.2] as XZ, in: [(STEPS.x0 + STEPS.x1) / 2, -1.2] as XZ },
   /** Little Land: beside the front stack (it tumbles as she goes in), in between the stack and the bags. */
   blocks: { at: [BLOCKS.x1 - 0.45, BLOCKS.front + 0.75] as XZ, in: [BLOCKS.x1 - 0.45, BLOCKS.front - 0.5] as XZ },
+  /** The Sky Pod: in front of its wall (its pods light up in a rainbow as she goes in). */
+  skypod: { at: [SKYPOD.x, SKYPOD.z + 1.7] as XZ, in: [SKYPOD.x, SKYPOD.z + 0.7] as XZ },
 }
 export type DoorId = keyof typeof DOORS
 /** The ways in that open a mini game. */
-export const OPEN_DOORS = ['vet', 'cafe', 'race', 'frame', 'barber', 'blocks'] as const
+export const OPEN_DOORS = ['vet', 'cafe', 'race', 'frame', 'barber', 'blocks', 'skypod'] as const
 export type GameDoor = (typeof OPEN_DOORS)[number]
 
 /** Where she stands when she first comes in: in front of Mommy's bench, between the town and the frame. */
