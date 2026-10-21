@@ -1,6 +1,6 @@
 # 🦄 Kaylee's Gamepack
 
-A pink, unicorn-filled learning app made just for Kaylee. In **Around the World** she flies Sparkle's hot-air balloon
+A pink,   unicorn-filled learning app made just for Kaylee. In **Around the World** she flies Sparkle's hot-air balloon
 from country to country, helps a friend in each one, collects passport stamps and stickers, and wins a gold trophy
 with **KAYLEE** engraved on it. **Thailand**, the family's country, is in 3D: she walks around Agong's house as a
 unicorn and goes on day trips with the family.
