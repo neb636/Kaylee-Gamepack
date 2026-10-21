@@ -382,10 +382,11 @@ const SCREENS = [
   } },
   { name: 'mall-hall-hungry', hash: '#/world/thailand/mall-trip/hungry?games=vet,cafe,race,pool', reset: true, wait: 4500 },
   { name: 'mall-hall-flat', hash: '#/world/thailand/mall-trip/hall?games=vet&gl=off', reset: true, wait: 900 },
-  // The mall trip, greybox 1: HarborLand's three levels, a sock band with stickers, and the flat version.
-  ...['play', 'mountain', 'dragon'].map((to) => ({ name: `mall-trip-${to}`, hash: `#/world/thailand/mall-trip/${to}`, reset: true, wait: 3000 })),
-  { name: 'mall-trip-stickers', hash: '#/world/thailand/mall-trip/play?socks=mint&games=vet,pool,mountain,donut', reset: true, wait: 3000 },
-  { name: 'mall-trip-flat', hash: '#/world/thailand/mall-trip/mountain?gl=off', reset: true, wait: 600 },
+  // HarborLand's Big Frame: each place she can start (through the tunnel, the ball pit, the three levels, the mats in
+  // front), a sock band with stickers, and the flat version.
+  ...['in', 'pit', 'l1', 'l2', 'top', 'out'].map((at) => ({ name: `mall-frame-${at}`, hash: `#/world/thailand/mall-trip/frame?at=${at}`, reset: true, wait: 3500 })),
+  { name: 'mall-frame-stickers', hash: '#/world/thailand/mall-trip/frame?socks=mint&games=vet,cafe,frame', reset: true, wait: 3500 },
+  { name: 'mall-frame-flat', hash: '#/world/thailand/mall-trip/frame?gl=off', reset: true, wait: 900 },
   // The Vet Clinic (greybox): each patient on the table (the earlier ones on the waiting room's bench), the 👇 hint
   // after a while, a tool at work (soap on the muddy pony), the end (all three on the bench, the 🛝) and the flat version.
   ...['puppy', 'pony', 'elephant'].map((p) => ({ name: `vet-${p}`, hash: `#/world/thailand/mall-trip/vet?patient=${p}`, reset: true, wait: 4200 })),

@@ -104,7 +104,7 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    The second family trip (Dad, 2026-10-20) is a mall day at ICONSIAM: Mommy drives the silver rental Veloz, Kaylee
    plays in HarborLand's "Little Thailand" and shares a pizza at The Pizza Company, and the leftovers go home to Agong
    (`thailand/mall-trip.md`). Its first greybox, a small climbing toy, is built
-   (PR #120, `#/world/thailand/mall-trip/play`). Dad's photos (2026-10-21) turned
+   (PR #120), and rebuilt as the Big Frame at real scale (`#/world/thailand/mall-trip/frame`). Dad's photos (2026-10-21) turned
    HarborLand into a hall of mini games: a vet clinic, a barber, a racing slide and more, each its own greybox.
 
 ## Tech notes

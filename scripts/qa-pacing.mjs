@@ -110,10 +110,8 @@ const SCENARIOS = [
   { name: 'thailand trip: a replay (🧳 or 🚤)', id: 'trip-replay', hash: '#/world/thailand/boat-trip/invite?replay=1', reset: true },
   // HarborLand's hall (greybox, no voices): walking between the ways in; a tap on one goes into that mini game.
   { name: 'thailand mall: the hall', id: 'mall-hall', hash: '#/world/thailand/mall-trip/hall', reset: true },
-  // The mall trip, greybox 1: HarborLand's playground (no voices yet, and no end: a toy with no goal).
-  { name: 'thailand mall: harborland ground floor', id: 'mall-play', hash: '#/world/thailand/mall-trip/play', reset: true },
-  { name: 'thailand mall: harborland golden mountain', id: 'mall-mountain', hash: '#/world/thailand/mall-trip/mountain', reset: true },
-  { name: 'thailand mall: harborland top', id: 'mall-dragon', hash: '#/world/thailand/mall-trip/dragon', reset: true },
+  // HarborLand's Big Frame (greybox, no voices, and no end: a toy with no goal): climb up, slide down, the cannon.
+  { name: 'thailand mall: the big frame', id: 'mall-frame', hash: '#/world/thailand/mall-trip/frame', reset: true },
   // The Vet Clinic (greybox, no voices): tapping a tool does a short go with it, so the auto-player can heal all three.
   { name: 'thailand mall: vet clinic', id: 'mall-vet', hash: '#/world/thailand/mall-trip/vet', reset: true },
   // Cafe & Cake (greybox, no voices): taps work too (a fruit hops in, the jar pours by itself, the straw serves).

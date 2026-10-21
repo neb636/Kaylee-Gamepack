@@ -4,7 +4,7 @@
 //
 // Seen from the front (the camera looks toward -z and scrolls left and right with her), left to right:
 //
-//          ┌ Harbor Town sign ┐              [ MEGA sign ]   ┌ the mask ┐
+//          ┌ Harbor Town sign ┐                ┌ the mask, the lit sign ┐
 //   │ 🩺 vet │ ☕ cafe │ 💈 barber │  bench   ║ the Big Frame ║ ╲ racing lanes ╲ pit   ⛰ Golden   ▦ foam    🥊 bags
 //   │  door  │  door   │  door    │  Mommy   ║  (way in)     ║   steps          balls  Mountain   blocks   Sky Pod
 //   └─────────────────────────────────────────────── flower mats ─────────────────────────────────────────────────┘
@@ -31,18 +31,16 @@ export const SHOP_W = 3.0
 /** A shop's doorway: its size, and how deep it goes in (she steps in there, out of sight). */
 export const DOOR = { w: 1.1, h: 2.05, recess: 0.7 }
 
-/** The lit MEGA HarborLand sign, hanging on two chains over the middle (its words are HTML: hall.ts). */
-export const MEGA = { x: -4.6, y: 4.1, z: -1.5, w: 2.3, h: 0.9 }
-
-/** The parents' bench between the town and the frame, under the MEGA sign, Mommy on it. */
+/** The parents' bench between the town and the frame (the dragon spiral behind it), Mommy on it. */
 export const BENCH = { at: [-4.7, -0.55] as XZ, face: 0 }
 
-/** The Big Frame: white padded pipes and black nets, four levels, the giant mask with its pink nose slide on top. */
+/** The Big Frame: white padded pipes and black nets, four levels, the giant mask with its pink nose slide on top, the
+ *  lit MEGA HarborLand sign on its front. Built by harborland/build.ts (its insides: harborland/layout.ts). */
 export const FRAME = { x0: -3.8, x1: 4.6, z0: -4.2, z1: -1.0, levels: [1.5, 3.0, 4.5], top: 5.3, cols: 7 }
 /** The way in: a net tunnel's mouth at the bottom of the front. */
-export const FRAME_DOOR = { x: 1.1, y: 0.6, z: -1.0 }
+export const FRAME_DOOR = { x: 1.1, y: 0.37, z: -1.0 }
 /** The mask on top, and its long pink nose: a tube slide down the front to a mat. */
-export const MASK = { x: -1.6, y: 6.2, z: -2.8 }
+export const MASK = { x: -1.6, y: 5.85, z: -2.75 }
 export const NOSE: [number, number, number][] = [
   [-1.6, 5.15, -1.75],
   [-1.6, 4.1, -0.6],
@@ -124,9 +122,9 @@ export const TAP_RECTS: Rect[] = [[HALL[0], HALL[1], -4.4, HALL[3]]]
 export const FRAME_LOOP: [number, number, number][] = [
   [-3.2, 0, -1.5],
   [-2.6, 1.5, -1.7],
-  [-0.4, 1.5, -1.7],
-  [0.3, 3.0, -1.9],
-  [2.2, 3.0, -1.9],
-  [2.6, 4.5, -2.2],
-  [-1.6, 4.5, -2.0],
+  [-3.1, 1.5, -3.4],
+  [-3.1, 3.0, -3.3],
+  [1.1, 3.0, -2.6],
+  [1.1, 4.5, -3.3],
+  [-0.62, 4.5, -1.72],
 ]

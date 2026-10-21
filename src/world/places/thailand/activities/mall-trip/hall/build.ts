@@ -8,8 +8,8 @@ import { CatmullRomCurve3, Group, Mesh, TubeGeometry, Vector3, type BufferGeomet
 import type { Bag } from '../../../engine/dispose'
 import { bake, merge, P, solid, type V3 } from '../../../engine/geo'
 import { PAL, toon } from '../../../engine/toon'
-import { HL, net, trough } from '../harborland/build'
-import { BACK_Z, BENCH, MEGA, SIGN_H, ZONE_SIGNS, BLOCKS, BOXING, CROC, DOOR, FRAME, FRAME_DOOR, HALL, LANES, MASK, MOUNTAIN, NOSE, NOSE_MAT, PIT, SHOP_W, SHOPS, SKYPOD, STEPS, TOWN, WALL, type ShopId } from './layout'
+import { buildBigFrame, HL, trough, type FrameBuilt } from '../harborland/build'
+import { BACK_Z, BENCH, SIGN_H, ZONE_SIGNS, BLOCKS, BOXING, CROC, DOOR, HALL, LANES, MOUNTAIN, PIT, SHOP_W, SHOPS, SKYPOD, STEPS, TOWN, WALL, type ShopId } from './layout'
 
 export interface HallBuilt {
   root: Group
@@ -27,6 +27,8 @@ export interface HallBuilt {
   bulbs: [Mesh[], Mesh[]]
   /** The rides the kids go down (top to bottom): the mask's nose, each racing lane, the mountain's steel slide. */
   curves: { nose: Curve<Vector3>; lanes: Curve<Vector3>[]; steel: Curve<Vector3> }
+  /** The Big Frame (the frame she plays in uses the hall round it: harborland/frame.ts). */
+  frame: FrameBuilt
   /** Everything with userData.pick, for taps on the canvas. */
   picks: Group[]
 }
@@ -34,7 +36,6 @@ export interface HallBuilt {
 const v = (x: number, y: number, z: number) => new Vector3(x, y, z)
 const SHOE = '#2B2330'
 const PIPE = '#FFFFFF'
-const NET = '#3F365F'
 export const LIT = '#FFE680'
 export const DIM = '#B59A7A'
 
@@ -43,7 +44,8 @@ export function laneY(u: number) {
   return LANES.y0 + (LANES.y1 - LANES.y0) * u - LANES.amp * Math.sin(2 * Math.PI * LANES.bumps * u)
 }
 
-export function buildHall(bag: Bag): HallBuilt {
+/** The hall. `playFrame`: the Big Frame keeps its moving parts and its own taps (harborland/frame.ts plays in it). */
+export function buildHall(bag: Bag, playFrame = false): HallBuilt {
   const root = new Group()
   const picks: Group[] = []
   const add = <T extends Group>(g: T, pick?: string) => {
@@ -153,7 +155,7 @@ export function buildHall(bag: Bag): HallBuilt {
   pole.add(solid(merge([P.cyl(0.11, 0.11, 0.9, '#FFFFFF', {}, 14), ...[0, 1, 2, 3, 4, 5].map((i) => P.torus(0.11, 0.035, i % 2 ? '#5D7BB0' : '#FF6F6F', { at: [0, -0.38 + i * 0.15, 0], rot: [Math.PI / 2 + 0.5, 0, 0] })), P.sphere(0.13, HL.gold, { at: [0, 0.5, 0] }), P.sphere(0.13, HL.gold, { at: [0, -0.5, 0] })]), bag, 2))
   add(pole, 'pole')
 
-  // ---- The signs' bulbs: round Harbor Town's sign and round the MEGA sign (two sets that take turns) ----
+  // ---- The signs' bulbs: round Harbor Town's sign (two sets that take turns) ----
   const bulbs: [Mesh[], Mesh[]] = [[], []]
   const bulbRow = (x0: number, x1: number, y0: number, y1: number, z: number) => {
     const pts: V3[] = []
@@ -161,85 +163,25 @@ export function buildHall(bag: Bag): HallBuilt {
     for (let y = y0 + 0.3; y < y1 - 0.1; y += 0.3) pts.push([x0, y, z], [x1, y, z])
     return pts
   }
-  const mega = MEGA
-  const allBulbs = [...bulbRow(tx0 + 0.75, tx1 - 0.75, TOWN.sign - 0.42, TOWN.sign + 0.42, D + 1.12), ...bulbRow(mega.x - mega.w / 2 + 0.1, mega.x + mega.w / 2 - 0.1, mega.y - mega.h / 2 + 0.08, mega.y + mega.h / 2 - 0.08, mega.z + 0.12)]
+  const allBulbs = bulbRow(tx0 + 0.75, tx1 - 0.75, TOWN.sign - 0.42, TOWN.sign + 0.42, D + 1.12)
   for (const k of [0, 1] as const) {
     const m = new Mesh(bag.add(merge(allBulbs.filter((_, i) => i % 2 === k).map((at) => P.sphere(0.065, '#FFFFFF', { at }, 8)))), toon(LIT))
     root.add(m)
     bulbs[k].push(m)
   }
-  // The MEGA HarborLand sign itself, hanging on two chains over the middle.
-  add(
-    solid(
-      merge([
-        P.rbox(mega.w, mega.h, 0.18, 0.14, HL.net, { at: [mega.x, mega.y, mega.z] }),
-        P.rbox(mega.w - 0.3, mega.h - 0.32, 0.04, 0.1, '#FFF7F0', { at: [mega.x, mega.y, mega.z + 0.1] }),
-        ...[-1, 1].map((k) => P.cyl(0.02, 0.02, WALL.h - mega.y, SHOE, { at: [mega.x + k * (mega.w / 2 - 0.3), (WALL.h + mega.y) / 2, mega.z] }, 6)),
-        // (Its words are HTML over it: hall.ts LABELS.)
-      ]),
-      bag,
-      2,
-    ),
-    'sign',
-  )
 
   // ---- Mommy's bench ----
   const [bx, bz] = BENCH.at
   add(solid(merge([P.rbox(1.5, 0.12, 0.5, 0.05, HL.pad5, { at: [bx, 0.42, bz] }), P.rbox(1.5, 0.5, 0.1, 0.05, HL.pad5, { at: [bx, 0.7, bz - 0.24] }), ...[-0.62, 0.62].map((x) => P.box(0.08, 0.4, 0.4, '#D8D2E6', { at: [bx + x, 0.2, bz] }))]), bag, 2))
 
-  // ---- The Big Frame: white padded pipes on a grid, a colored deck on each level, black nets, a red climbing wall ----
-  const { x0: fx0, x1: fx1, z0: fz0, z1: fz1, levels, top, cols } = FRAME
-  const xs = Array.from({ length: cols }, (_, i) => fx0 + ((fx1 - fx0) * i) / (cols - 1))
-  const cell = (fx1 - fx0) / (cols - 1)
-  const frame = []
-  for (const x of xs) for (const z of [fz0, fz1]) frame.push(P.cyl(0.1, 0.1, top, PIPE, { at: [x, top / 2, z] }, 10))
-  for (const y of [...levels, top])
-    for (const z of [fz0, fz1]) frame.push(P.cyl(0.08, 0.08, fx1 - fx0, PIPE, { at: [(fx0 + fx1) / 2, y, z], rot: [0, 0, Math.PI / 2] }, 8))
-  for (const y of [...levels, top]) for (const x of xs) frame.push(P.cyl(0.08, 0.08, fz1 - fz0, PIPE, { at: [x, y, (fz0 + fz1) / 2], rot: [Math.PI / 2, 0, 0] }, 8))
-  // Decks: the first level everywhere, then fewer going up (so she can see the kids through them).
-  const decks: [number, number, number, string][] = [
-    [0, cols - 1, levels[0], HL.pad1],
-    [1, cols - 1, levels[1], HL.pad2],
-    [0, 4, levels[2], HL.pad3],
-  ]
-  for (const [a, b, y, c] of decks) frame.push(P.rbox(cell * (b - a) - 0.08, 0.12, fz1 - fz0 - 0.1, 0.05, c, { at: [(xs[a] + xs[b]) / 2, y - 0.06, (fz0 + fz1) / 2] }))
-  // Spires on top, gold like a temple's.
-  for (const x of [xs[0], xs[cols - 1]]) frame.push(P.cyl(0.32, 0.36, 0.3, HL.gold, { at: [x, top + 0.15, fz1] }), P.cone(0.24, 0.9, HL.gold, { at: [x, top + 0.75, fz1] }), P.sphere(0.07, HL.goldDark, { at: [x, top + 1.25, fz1] }))
-  // The red climbing wall on the first bay, with holds.
-  frame.push(P.box(cell - 0.2, levels[0] - 0.1, 0.06, '#FF6F6F', { at: [xs[0] + cell / 2, levels[0] / 2, fz1 + 0.02] }))
-  for (let i = 0; i < 9; i++) frame.push(P.sphere(0.06, petals[i % 4], { at: [xs[0] + 0.25 + ((i * 0.37) % (cell - 0.5)), 0.2 + ((i * 0.53) % 1.1), fz1 + 0.07], scale: [1, 1, 0.6] }, 8))
-  // The way in: a padded tunnel mouth at the bottom.
-  frame.push(P.torus(0.55, 0.14, HL.pad1, { at: [FRAME_DOOR.x, FRAME_DOOR.y, fz1 + 0.05] }), P.cyl(0.55, 0.55, 0.04, '#5A4E6E', { at: [FRAME_DOOR.x, FRAME_DOOR.y, fz1 + 0.02], rot: [Math.PI / 2, 0, 0] }, 20))
-  add(solid(merge(frame), bag, 2), 'frame')
-  // Nets: rails along the front of each level, full nets in the bottom bays (not the way in or the climbing wall).
-  const nets = []
-  for (const y of levels) nets.push(...net(fx0 + 0.1, fx1 - 0.1, y, y + 0.8, fz1 + 0.04, 'x', NET))
-  for (let i = 1; i < cols - 1; i++) {
-    const x = xs[i]
-    if (Math.abs(x + cell / 2 - FRAME_DOOR.x) < cell / 2) continue
-    nets.push(...net(x + 0.1, x + cell - 0.1, 0.05, levels[0] - 0.05, fz1 + 0.04, 'x', NET))
+  // ---- The Big Frame (harborland/build.ts: the same model she plays in, merged into a few meshes when nothing on it
+  //      moves). A tap anywhere on it goes in ----
+  const frame = buildBigFrame(bag, !playFrame)
+  root.add(frame.root)
+  for (const g of frame.picks) {
+    if (!playFrame) g.userData.pick = 'frame'
+    picks.push(g)
   }
-  add(solid(merge(nets), bag, 1), 'frame')
-
-  // ---- The giant mask on top, its long pink nose a tube slide down the front ----
-  const nose = new CatmullRomCurve3(NOSE.map((p) => v(...p)))
-  add(trough(nose, 0.36, HL.pad1, PAL.ink, 60, bag), 'frame')
-  add(
-    solid(
-      merge([
-        P.sphere(1.0, '#FFFFFF', { at: [MASK.x, MASK.y, MASK.z], scale: [1, 1.2, 0.8] }),
-        // The gold crown, the painted eyes and brows, the cheeks.
-        P.cyl(0.62, 0.8, 0.4, HL.gold, { at: [MASK.x, MASK.y + 1.05, MASK.z] }, 18),
-        ...[-0.4, 0, 0.4].map((dx) => P.cone(0.16, 0.6, HL.gold, { at: [MASK.x + dx, MASK.y + 1.5, MASK.z] })),
-        ...[-1, 1].flatMap((k) => [P.sphere(0.2, '#FFFFFF', { at: [MASK.x + k * 0.36, MASK.y + 0.25, MASK.z + 0.72], scale: [1, 1, 0.4] }), P.sphere(0.11, PAL.ink, { at: [MASK.x + k * 0.36, MASK.y + 0.25, MASK.z + 0.8], scale: [1, 1, 0.4] }), P.box(0.4, 0.07, 0.05, HL.net, { at: [MASK.x + k * 0.38, MASK.y + 0.55, MASK.z + 0.76], rot: [0, 0, k * 0.25] }), P.sphere(0.13, HL.pad1, { at: [MASK.x + k * 0.6, MASK.y - 0.2, MASK.z + 0.6], scale: [1, 0.7, 0.3] })]),
-        P.cyl(0.38, 0.38, 0.5, HL.pad1, { at: [NOSE[0][0], NOSE[0][1] + 0.1, NOSE[0][2] - 0.25], rot: [Math.PI / 2 - 0.5, 0, 0] }, 16),
-        P.rbox(NOSE_MAT[1] - NOSE_MAT[0], 0.1, NOSE_MAT[3] - NOSE_MAT[2], 0.04, HL.mat, { at: [(NOSE_MAT[0] + NOSE_MAT[1]) / 2, 0.05, (NOSE_MAT[2] + NOSE_MAT[3]) / 2] }),
-      ]),
-      bag,
-      2,
-    ),
-    'frame',
-  )
 
   // ---- The steps up the frame's side, the four wavy racing lanes, the pit of pink and white balls ----
   const race = []
@@ -406,7 +348,7 @@ export function buildHall(bag: Bag): HallBuilt {
     ),
   )
 
-  return { root, doors, pole, bricks, bags, skypod, croc: { root: croc, jaw }, bulbs, curves: { nose, lanes, steel }, picks }
+  return { root, doors, pole, bricks, bags, skypod, croc: { root: croc, jaw }, bulbs, curves: { nose: frame.curves.nose, lanes, steel }, frame, picks }
 }
 
 const PAINT = { z: BACK_Z + 0.03, ink: PAL.ink }

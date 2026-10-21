@@ -1,61 +1,61 @@
-// HarborLand's first climbing toy on screen (greybox 1, PR #120: the Big Frame's stand-in until it's rebuilt at real
-// scale): the 3D playground (harborland.ts) with its tap targets and the 👆 after a while with nothing touched, and the
-// flat picture pages without WebGL (../Flat.tsx). Its sections (play, mountain, dragon) follow the floor she's on.
+// HarborLand's Big Frame on screen: the 3D frame in its hall (frame.ts) with its tap targets, the lit sign's letters laid
+// over it, the 👆 after a while with nothing touched, and the flat picture page without WebGL (Flat.tsx). The `at` in
+// the address follows the level she's on.
 import { motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
-import { Flat } from '../Flat'
-import { HARBOR_ANCHORS, HarborLand, type HarborSection } from './harborland'
-import type { RideId } from './layout'
+import { Flat } from './Flat'
+import { BigFrame, FRAME_ANCHORS } from './frame'
+import type { At, RideId } from './layout'
+import { HarborSign } from './sign'
 
 interface Props {
-  section: HarborSection
+  at: At
   socks: string
-  rides: RideId[]
-  onSection(s: HarborSection): void
+  /** She's been on a big ride already (the frame's sticker is on her sock band). */
+  rode: boolean
+  onAt(at: At): void
   onRide(id: RideId): void
 }
 
-export function Playground({ section, socks, rides, onSection, onRide }: Props) {
+export function FrameScreen({ at, socks, rode, onAt, onRide }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
-  const worldRef = useRef<HarborLand | null>(null)
+  const worldRef = useRef<BigFrame | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const signRef = useRef<HTMLDivElement>(null)
   // A rebuilt world (a lost GPU context) starts where she is now.
-  const state = useRef({ section, rides })
-  state.current = { section, rides }
-  const cb = useRef({ onSection, onRide })
-  cb.current = { onSection, onRide }
+  const state = useRef({ at })
+  state.current = { at }
+  const cb = useRef({ onAt, onRide })
+  cb.current = { onAt, onRide }
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new HarborLand(renderer, {
-      say: () => {},
-      done: () => {},
-      section: (s) => cb.current.onSection(s as HarborSection),
-      ride: (id) => cb.current.onRide(id),
-    }, { section: state.current.section, socks, rides: state.current.rides })
+    const w = new BigFrame(renderer, { say: () => {}, done: () => {}, section: (a) => cb.current.onAt(a as At), ride: (id) => cb.current.onRide(id) }, { at: state.current.at, socks })
     w.setHintElement(hintRef.current)
+    w.setSign(signRef.current)
     return w
   }
 
   return (
     <>
       {mode === 'flat' ? (
-        <Flat section={section} rides={rides} onSection={onSection} onRide={onRide} />
+        <Flat rode={rode} onRide={onRide} />
       ) : (
         <View3D
           key={key}
-          name="HarborLand"
+          name="the Big Frame"
           qaKey="__thaiMallQA"
           worldRef={worldRef}
           onMode={setMode}
           make={make}
           anchors={(input, els) => (
             <>
-              <Anchors list={HARBOR_ANCHORS} els={els} {...input} />
-              {/* After a while with nothing touched: a finger pressing the next ride. */}
+              <HarborSign ref={signRef} />
+              <Anchors list={FRAME_ANCHORS} els={els} {...input} />
+              {/* After a while with nothing touched: a finger pressing a big ride she hasn't had yet. */}
               <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
                 <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
                   👆
@@ -73,7 +73,7 @@ export function Playground({ section, socks, rides, onSection, onRide }: Props) 
           }}
           style={{ position: 'absolute', inset: 0, background: 'rgba(241,232,255,.85)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)', zIndex: 70 }}
         >
-          🛝 Tap to wake the playground
+          🛝 Tap to wake the Big Frame
         </button>
       )}
     </>
