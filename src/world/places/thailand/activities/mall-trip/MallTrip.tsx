@@ -2,8 +2,9 @@
 // voices: HarborLand's hall (hall/, sections hall and hungry), where she walks between the ways in; the mini games
 // behind them: the Vet Clinic (games/vet/, section vet), the Barber Salon (games/barber/, section barber: Daddy keeps
 // the hairdo she gives him, `hair`, in the hall and at the pizza table), Cafe & Cake (games/cafe/, section cafe), the
-// Racing Slide (games/race/, section race), Little Land (games/blocks/, section blocks), Muay Thai (games/boxing/,
-// section boxing) and the Big Frame (harborland/, section frame: `at` follows the level she's
+// Racing Slide (games/race/, section race), Little Land (games/blocks/, section blocks), the Golden Mountain
+// (games/mountain/, section mountain), Muay Thai (games/boxing/, section boxing) and the Big Frame (harborland/,
+// section frame: `at` follows the level she's
 // on); and the pizza toy at The Pizza Company (pizza/, sections menu and
 // share). Each mini game is a sticker on her sock band in the corner (`games`), and a big ↩️ takes her back out to the
 // hall. After four stickers (or five minutes) Daddy's tummy rumbles and Mommy asks about pizza. The trip around it
@@ -19,6 +20,8 @@ import type { Round as BoxingRound } from './games/boxing/layout'
 import type { CardId, Round as BlocksRound } from './games/blocks/layout'
 import { Cafe } from './games/cafe/Cafe'
 import type { Round } from './games/cafe/layout'
+import { Mountain } from './games/mountain/Mountain'
+import type { Round as MountainRound } from './games/mountain/layout'
 import { Race } from './games/race/Race'
 import { Vet } from './games/vet/Vet'
 import { HallScreen } from './hall/HallScreen'
@@ -31,7 +34,7 @@ import MALL_SECTIONS, { type MallSection, type PatientId } from './sections'
 import { SOCK_COLORS } from './socks'
 
 /** What she can play so far: the mini games (any big ride in the Big Frame is `frame`). */
-const GAMES = ['vet', 'cafe', 'race', 'barber', 'blocks', 'boxing', 'frame'] as const
+const GAMES = ['vet', 'cafe', 'race', 'barber', 'blocks', 'mountain', 'boxing', 'frame'] as const
 type GameId = (typeof GAMES)[number]
 /** The first climbing toy's big rides (PR #120's links): they count for the Big Frame. */
 const OLD_RIDES = ['pool', 'donut', 'zip', 'roller', 'dragon']
@@ -44,11 +47,12 @@ const BAND: { id: GameDoor; icon: string }[] = [
   { id: 'race', icon: '🏁' },
   { id: 'frame', icon: '🛝' },
   { id: 'blocks', icon: '🧱' },
+  { id: 'mountain', icon: '⛰️' },
   { id: 'boxing', icon: '🥊' },
 ]
 const bandOf = (games: GameId[]): GameDoor[] => BAND.map((b) => b.id).filter((id) => games.includes(id))
 /** The way in each section is behind (where she comes back out). */
-const DOOR_OF: Partial<Record<MallSection, DoorId>> = { vet: 'vet', cafe: 'cafe', race: 'race', barber: 'barber', frame: 'frame', blocks: 'blocks', boxing: 'boxing' }
+const DOOR_OF: Partial<Record<MallSection, DoorId>> = { vet: 'vet', cafe: 'cafe', race: 'race', barber: 'barber', frame: 'frame', blocks: 'blocks', mountain: 'mountain', boxing: 'boxing' }
 /** Daddy gets hungry after four stickers, or this long in HarborLand. */
 const HUNGRY_MS = 5 * 60_000
 
@@ -66,9 +70,11 @@ export function MallTrip() {
   const [card, setCard] = useState<CardId>(() => param('card') as CardId)
   // Muay Thai keeps its own round too.
   const [boxingRound, setBoxingRound] = useState<BoxingRound>(() => (first === 'boxing' ? Number(param('round')) : 1) as BoxingRound)
+  // The Golden Mountain keeps its own round too.
+  const [mountainRound, setMountainRound] = useState<MountainRound>(() => (first === 'mountain' ? Number(param('round')) : 1) as MountainRound)
   // (`rides` is the old name of `games`, from PR #120's links. A link past the puppy, or past a mini game's first round,
   // has that game's sticker already.)
-  const [games, setGames] = useState<GameId[]>(() => [...new Set([...list(param('games')), ...list(param('rides')), ...(first === 'vet' && patient !== 'puppy' ? ['vet' as const] : []), ...(first === 'cafe' && round > 1 ? ['cafe' as const] : []), ...(first === 'race' && round > 1 ? ['race' as const] : []), ...(first === 'barber' && round > 1 ? ['barber' as const] : []), ...(first === 'blocks' && blocksRound > 1 ? ['blocks' as const] : []), ...(first === 'boxing' && boxingRound > 1 ? ['boxing' as const] : [])])])
+  const [games, setGames] = useState<GameId[]>(() => [...new Set([...list(param('games')), ...list(param('rides')), ...(first === 'vet' && patient !== 'puppy' ? ['vet' as const] : []), ...(first === 'cafe' && round > 1 ? ['cafe' as const] : []), ...(first === 'race' && round > 1 ? ['race' as const] : []), ...(first === 'barber' && round > 1 ? ['barber' as const] : []), ...(first === 'blocks' && blocksRound > 1 ? ['blocks' as const] : []), ...(first === 'mountain' && mountainRound > 1 ? ['mountain' as const] : []), ...(first === 'boxing' && boxingRound > 1 ? ['boxing' as const] : [])])])
   const [section, setSection] = useState<MallSection>(first)
   const [from, setFrom] = useState<DoorId | 'in'>(() => param('from') as DoorId | 'in')
   const [pizza, setPizza] = useState(() => param('pizza') as PizzaId)
@@ -94,9 +100,10 @@ export function MallTrip() {
     ...(section === 'cafe' || section === 'race' || section === 'barber' ? { round: String(round) } : {}),
     ...(section === 'blocks' ? { round: String(blocksRound), ...(blocksRound === 2 ? { card } : {}) } : {}),
     ...(section === 'boxing' ? { round: String(boxingRound) } : {}),
+    ...(section === 'mountain' ? { round: String(mountainRound) } : {}),
     ...(section === 'frame' ? { at } : {}),
     ...(section === 'share' ? { pizza, shared: String(shared) } : {}),
-    ...(section === 'hall' || section === 'barber' || section === 'frame' || pizzaTime ? { hair } : {}),
+    ...(section === 'hall' || section === 'barber' || section === 'mountain' || section === 'frame' || pizzaTime ? { hair } : {}),
   })
   useEffect(() => enter(first, params()), [])
   const ready = useRef(false)
@@ -106,7 +113,7 @@ export function MallTrip() {
       return
     }
     enter(section, params())
-  }, [section, games, patient, round, blocksRound, boxingRound, card, pizza, shared, from, hair, at])
+  }, [section, games, patient, round, blocksRound, mountainRound, boxingRound, card, pizza, shared, from, hair, at])
 
   /** In through a way in. */
   const goIn = (door: GameDoor) => {
@@ -154,6 +161,8 @@ export function MallTrip() {
         <Blocks round={blocksRound} card={card} socks={socks} onRound={setBlocksRound} onCard={setCard} onKnocked={() => sticker('blocks')} onPlay={goOut} />
       ) : section === 'boxing' ? (
         <Boxing round={boxingRound} socks={socks} onRound={setBoxingRound} onWarmedUp={() => sticker('boxing')} onPlay={goOut} />
+      ) : section === 'mountain' ? (
+        <Mountain round={mountainRound} socks={socks} hair={hair} onRound={setMountainRound} onTop={() => sticker('mountain')} onPlay={goOut} />
       ) : pizzaTime ? (
         <Pizza section={section} pizza={pizza} shared={shared} hair={hair} onPizza={setPizza} onServed={() => setSection('share')} onShared={setShared} />
       ) : section === 'frame' ? (

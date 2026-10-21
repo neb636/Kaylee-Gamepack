@@ -378,6 +378,7 @@ const SCREENS = [
   { name: 'mall-hall-lanes', hash: '#/world/thailand/mall-trip/hall?from=race', reset: true, wait: 3500 },
   { name: 'mall-hall-little-land', hash: '#/world/thailand/mall-trip/hall?from=blocks&games=blocks', reset: true, wait: 3500 },
   { name: 'mall-hall-muay-thai', hash: '#/world/thailand/mall-trip/hall?from=boxing&games=boxing', reset: true, wait: 3500 },
+  { name: 'mall-hall-mountain', hash: '#/world/thailand/mall-trip/hall?from=mountain&games=mountain', reset: true, wait: 3500 },
   { name: 'mall-hall-going-in', hash: '#/world/thailand/mall-trip/hall?from=vet', reset: true, wait: 2500, act: async (p) => {
     await p.locator('[data-anchor="door:cafe"]').click({ force: true })
     await p.waitForTimeout(2600)
@@ -579,6 +580,44 @@ const SCREENS = [
     },
   },
   { name: 'boxing-flat', hash: '#/world/thailand/mall-trip/boxing?round=2&gl=off', reset: true, wait: 900 },
+  // The Golden Mountain (greybox): each round at the foot (round 2: the pinks glow among the silly ones; round 3: Daddy
+  // at his foot), the 👆 on the next hold after a while, a pull held halfway by her finger, the top (the bell and the
+  // slide's mouth glowing), the race halfway up, and the flat version. Where things are comes from window.__thaiMallQA.
+  ...[1, 2, 3].map((n) => ({ name: `mountain-${n}`, hash: `#/world/thailand/mall-trip/mountain?round=${n}`, reset: true, wait: 3000 })),
+  { name: 'mountain-hint', hash: '#/world/thailand/mall-trip/mountain', reset: true, wait: 9500 },
+  {
+    name: 'mountain-pull',
+    hash: '#/world/thailand/mall-trip/mountain?round=2',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'mountain', null, { timeout: 20000 }).catch(() => {})
+      await p.waitForTimeout(1500)
+      const q = await p.evaluate(() => window.__thaiMallQA())
+      const r = q.reach.find((h) => h[2] === 1 && h.length > 3)
+      if (!r) return
+      await p.mouse.move(r[3], r[4])
+      await p.mouse.down()
+      await p.mouse.move(r[3], r[4] + q.pullPx * 0.5, { steps: 6 })
+      await p.waitForTimeout(400)
+    },
+  },
+  ...[['mountain-top', 1, 6], ['mountain-race', 3, 4]].map(([name, round, taps]) => ({
+    name,
+    hash: `#/world/thailand/mall-trip/mountain?round=${round}`,
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'mountain', null, { timeout: 20000 }).catch(() => {})
+      await p.waitForTimeout(1200)
+      for (let i = 0; i < taps; i++) {
+        const q = await p.evaluate(() => window.__thaiMallQA())
+        const r = q.reach.find((h) => h[2] === 1)
+        if (r) await p.locator(`[data-anchor="hold:${r[0]}"]`).click({ force: true }).catch(() => {})
+        await p.waitForTimeout(800)
+      }
+      await p.waitForTimeout(900)
+    },
+  })),
+  { name: 'mountain-flat', hash: '#/world/thailand/mall-trip/mountain?round=2&gl=off', reset: true, wait: 900 },
   // The Pizza Company (greybox): the menu, the table at the start, a slice pulled out with the cheese stretching (held
   // over Daddy's plate), the last two for Agong's box, the box closed, and the flat version.
   { name: 'pizza-menu', hash: '#/world/thailand/mall-trip/menu', reset: true, wait: 3500 },

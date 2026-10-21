@@ -127,6 +127,9 @@ const SCENARIOS = [
   // Muay Thai (greybox, no voices): her glowing gloves for the wai kru, then a tap on the bag or the pad is a punch, so
   // the auto-player can play all three rounds (round 2 ends after 16 punches even off the beat).
   { name: 'thailand mall: muay thai', id: 'mall-boxing', hash: '#/world/thailand/mall-trip/boxing', reset: true },
+  // The Golden Mountain (greybox, no voices): only the holds in reach have tap targets, and the bell and the slide's
+  // mouth show at the top, so the auto-player climbs, rings and slides through all three rounds.
+  { name: 'thailand mall: golden mountain', id: 'mall-mountain', hash: '#/world/thailand/mall-trip/mountain', reset: true },
   // The Pizza Company (greybox, no voices): a tap on the pizza serves a slice (with its stretch) to the plate that's
   // behind, so the auto-player can share all eight and fill Agong's box.
   { name: 'thailand mall: pizza share', id: 'mall-pizza', hash: '#/world/thailand/mall-trip/share', reset: true },

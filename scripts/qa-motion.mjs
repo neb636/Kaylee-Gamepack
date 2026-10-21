@@ -909,6 +909,39 @@ const thaiBoxing = (name, seconds, round, mode) => ({
   },
 })
 GAME_SCENARIOS.push(thaiBoxing('boxing-punch', 5, 1, 'bag'), thaiBoxing('boxing-beat', 6, 2, 'beat'), thaiBoxing('boxing-pad-kick', 9, 3, 'pad'))
+// The Golden Mountain (mall trip, greybox): the core verb, pulling up hold by hold. Her finger goes down on a glowing
+// hold and pulls down (she reaches, rises, lands with a squash, the number pops); at the top the bell and the slide.
+// In round 3 Daddy climbs the other side, puffing, a hold behind. Where things are comes from window.__thaiMallQA.
+const thaiMountain = (name, seconds, round, steps) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/mountain?round=${round}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().game === 'mountain', null, { timeout: 20000 })
+    await page.waitForTimeout(400)
+  },
+  act: async (page) => {
+    for (let i = 0; i < steps; i++) {
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      const r = q.reach.find((h) => h[2] === 1 && h.length > 3)
+      if (r) {
+        await page.mouse.move(r[3], r[4])
+        await page.mouse.down()
+        await page.mouse.move(r[3], r[4] + q.pullPx + 10, { steps: 8 })
+        await page.mouse.up()
+        await page.waitForTimeout(500)
+      } else if (q.state === 'top' && !q.rung && q.bell) {
+        await page.mouse.click(...q.bell)
+        await page.waitForTimeout(1300)
+      } else if (q.state === 'top' && q.slide) {
+        await page.mouse.click(...q.slide)
+        await page.waitForTimeout(2600)
+      } else await page.waitForTimeout(300)
+    }
+  },
+})
+GAME_SCENARIOS.push(thaiMountain('mountain-climb', 9, 1, 9), thaiMountain('mountain-race', 9, 3, 9))
 
 // The Pizza Company (mall trip, greybox): her finger pulls a slice out of the pan and the cheese stretches, wobbles as
 // she swings it, and snaps; she lets go over a plate. Hawaiian snaps early, Double Cheese stretches longest, and in the
