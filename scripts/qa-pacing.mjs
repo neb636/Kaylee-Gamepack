@@ -114,6 +114,9 @@ const SCENARIOS = [
   { name: 'thailand mall: harborland top', id: 'mall-dragon', hash: '#/world/thailand/mall-trip/dragon', reset: true },
   // The Vet Clinic (greybox, no voices): tapping a tool does a short go with it, so the auto-player can heal all three.
   { name: 'thailand mall: vet clinic', id: 'mall-vet', hash: '#/world/thailand/mall-trip/vet', reset: true },
+  // The Pizza Company (greybox, no voices): a tap on the pizza serves a slice (with its stretch) to the plate that's
+  // behind, so the auto-player can share all eight and fill Agong's box.
+  { name: 'thailand mall: pizza share', id: 'mall-pizza', hash: '#/world/thailand/mall-trip/share', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
   // (?gl=off goes before the hash: the section's address drops anything it doesn't know.)
   { name: 'thailand trip: picture book without webgl', id: 'trip-book', search: '?gl=off', hash: '#/world/thailand/boat-trip/invite', reset: true },

@@ -398,6 +398,28 @@ const SCREENS = [
     },
   },
   { name: 'vet-flat', hash: '#/world/thailand/mall-trip/vet?patient=pony&gl=off', reset: true, wait: 900 },
+  // The Pizza Company (greybox): the menu, the table at the start, a slice pulled out with the cheese stretching (held
+  // over Daddy's plate), the last two for Agong's box, the box closed, and the flat version.
+  { name: 'pizza-menu', hash: '#/world/thailand/mall-trip/menu', reset: true, wait: 3500 },
+  { name: 'pizza-share', hash: '#/world/thailand/mall-trip/share?pizza=cheese', reset: true, wait: 3500 },
+  {
+    name: 'pizza-stretch',
+    hash: '#/world/thailand/mall-trip/share?pizza=cheese',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().pan?.length, null, { timeout: 20000 }).catch(() => {})
+      const q = await p.evaluate(() => window.__thaiMallQA())
+      const [sx, sy] = q.pan[0]
+      const [px, py] = q.plates.nick
+      await p.mouse.move(sx, sy)
+      await p.mouse.down()
+      await p.mouse.move(sx + (px - sx) * 0.6, sy + (py - sy) * 0.6 - 60, { steps: 16 })
+      await p.waitForTimeout(400)
+    },
+  },
+  { name: 'pizza-agong', hash: '#/world/thailand/mall-trip/share?pizza=hawaiian&shared=6', reset: true, wait: 3500 },
+  { name: 'pizza-done', hash: '#/world/thailand/mall-trip/share?pizza=seafood&shared=8', reset: true, wait: 3500 },
+  { name: 'pizza-flat', hash: '#/world/thailand/mall-trip/share?shared=4&gl=off', reset: true, wait: 900 },
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.

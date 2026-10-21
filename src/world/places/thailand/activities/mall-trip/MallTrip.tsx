@@ -1,8 +1,9 @@
 // The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md). So far, in shapes and without
 // voices: HarborLand's playground (harborland/harborland.ts, sections play, mountain, dragon: they follow the floor
-// she's on) and the first mini game, the Vet Clinic (games/vet/, section vet). Each big ride and each mini game puts a
-// sticker on her sock band in the corner (`games`). The hall between the mini games and the trip around it (Mommy's
-// question, the Veloz, the lift and the socks, the pizza, home) come in later gates.
+// she's on), the first mini game, the Vet Clinic (games/vet/, section vet), and the pizza toy at The Pizza Company
+// (pizza/, sections menu and share). Each big ride and each mini game puts a sticker on her sock band in the corner
+// (`games`). The hall between the mini games and the trip around it (Mommy's question, the Veloz, the lift and the
+// socks, home) come in later gates.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -13,6 +14,8 @@ import { Flat } from './Flat'
 import { Vet } from './games/vet/Vet'
 import { HARBOR_ANCHORS, HarborLand, SOCK_COLORS, type HarborSection } from './harborland/harborland'
 import { RIDE_ICONS, RIDES, type RideId } from './harborland/layout'
+import type { PizzaId } from './pizza/layout'
+import { Pizza } from './pizza/Pizza'
 import MALL_SECTIONS, { type MallSection, type PatientId } from './sections'
 
 /** Every sticker on the sock band: the mini games so far, then the playground's big rides. */
@@ -30,6 +33,9 @@ export function MallTrip() {
   // (`rides` is the old name of `games`, from PR #120's links. A link past the puppy has the vet sticker already.)
   const [games, setGames] = useState<GameId[]>(() => [...new Set([...list(param('games')), ...list(param('rides')), ...(first === 'vet' && patient !== 'puppy' ? ['vet' as const] : [])])])
   const [section, setSection] = useState<MallSection>(first)
+  const [pizza, setPizza] = useState(() => param('pizza') as PizzaId)
+  const [shared, setShared] = useState(() => Number(param('shared')))
+  const pizzaTime = section === 'menu' || section === 'share'
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const worldRef = useRef<HarborLand | null>(null)
@@ -39,7 +45,7 @@ export function MallTrip() {
   state.current = { section, rides }
   const sticker = (id: GameId) => setGames((g) => (g.includes(id) ? g : [...g, id]))
 
-  const params = () => ({ socks, games: games.join(','), ...(section === 'vet' ? { patient } : {}) })
+  const params = () => ({ socks, games: games.join(','), ...(section === 'vet' ? { patient } : {}), ...(section === 'share' ? { pizza, shared: String(shared) } : {}) })
   useEffect(() => enter(first, params()), [])
   const ready = useRef(false)
   useEffect(() => {
@@ -48,7 +54,7 @@ export function MallTrip() {
       return
     }
     enter(section, params())
-  }, [section, games, patient])
+  }, [section, games, patient, pizza, shared])
 
   const make = (renderer: WebGLRenderer) => {
     const w = new HarborLand(renderer, {
@@ -65,6 +71,8 @@ export function MallTrip() {
     <div style={{ position: 'absolute', inset: 0, background: '#F1E8FF', overflow: 'clip' }}>
       {section === 'vet' ? (
         <Vet patient={patient} onPatient={setPatient} onHealed={(id) => id === 'puppy' && sticker('vet')} onPlay={() => setSection('play')} />
+      ) : pizzaTime ? (
+        <Pizza section={section} pizza={pizza} shared={shared} onPizza={setPizza} onServed={() => setSection('share')} onShared={setShared} />
       ) : mode === 'flat' ? (
         <Flat section={section} rides={rides} onSection={setSection} onRide={sticker} />
       ) : (
@@ -88,7 +96,7 @@ export function MallTrip() {
           )}
         />
       )}
-      {section !== 'vet' && mode === 'lost' && (
+      {section !== 'vet' && !pizzaTime && mode === 'lost' && (
         <button
           onClick={() => {
             setMode('webgl')
