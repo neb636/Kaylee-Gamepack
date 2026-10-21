@@ -746,6 +746,39 @@ GAME_SCENARIOS.push({
   },
 })
 
+// The Racing Slide (mall trip, greybox): the core verb, scooting down a lane. Setup climbs the steps (taps on the
+// steps' tap target) and waits for the 3-2-1; the act taps Kaylee: steadily (`every` ms, round 1's scoots) or just as a
+// bump's ring closes on her (round 2's flights; round 3 in the spinning rings), until she's in the balls (Daddy head
+// first). Where she is comes from window.__thaiMallQA (screen pixels).
+const thaiSlide = (name, seconds, round, every) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/race?round=${round}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().phase === 'climb', null, { timeout: 20000 })
+    for (let i = 0; i < 60; i++) {
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      if (q.phase === 'race') break
+      if (q.phase === 'climb') await page.locator('[data-anchor="steps"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(400)
+    }
+  },
+  act: async (page) => {
+    const t0 = Date.now()
+    let last = 0
+    while (Date.now() - t0 < seconds * 1000) {
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      if (q.phase === 'race' && q.kaylee && (every ? Date.now() - last > every : q.window && Date.now() - last > 500)) {
+        await page.mouse.click(...q.kaylee)
+        last = Date.now()
+      }
+      await page.waitForTimeout(40)
+    }
+  },
+})
+GAME_SCENARIOS.push(thaiSlide('mall-race-scoot', 8, 1, 330), thaiSlide('mall-race-bump', 9, 2, 0), thaiSlide('mall-race-rings', 9, 3, 0))
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {
