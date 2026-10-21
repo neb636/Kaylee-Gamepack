@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
+    "@posthog/rollup-plugin": "^1.6.1",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^26.6.2",
     "@types/react": "^19.3.0",
