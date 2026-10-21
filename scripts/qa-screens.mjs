@@ -424,6 +424,31 @@ const SCREENS = [
     },
   },
   { name: 'vet-flat', hash: '#/world/thailand/mall-trip/vet?patient=pony&gl=off', reset: true, wait: 900 },
+  // The Barber Salon (greybox): each round (round 3: a kid with a picture card, Daddy on the bench with his new look), a
+  // long rainbow hairdo from a link, the grow tonic and the scissors at work, the 👆 after a while, and the flat version.
+  ...[1, 2, 3].map((n) => ({ name: `barber-${n}`, hash: `#/world/thailand/mall-trip/barber?round=${n}&hair=k.roygbvproygbvproygbvproyg.s.1p5Y`, reset: true, wait: n === 3 ? 5200 : 3200 })),
+  { name: 'barber-hint', hash: '#/world/thailand/mall-trip/barber', reset: true, wait: 9500 },
+  {
+    name: 'barber-grow-snip',
+    hash: '#/world/thailand/mall-trip/barber',
+    reset: true,
+    wait: 3000,
+    act: async (p) => {
+      const drag = async (tool, pts) => {
+        const q = await p.evaluate(() => window.__thaiMallQA())
+        await p.mouse.move(...q.tools[tool])
+        await p.mouse.down()
+        for (const [x, y] of pts) await p.mouse.move(x, y + q.liftPx, { steps: 4 })
+        await p.mouse.up()
+      }
+      const [hx, hy, r] = (await p.evaluate(() => window.__thaiMallQA())).head
+      await drag('tonic', Array.from({ length: 30 }, (_, i) => [hx + Math.cos(i * 0.5) * r * 0.9, hy - r * 0.6 + Math.sin(i * 0.5) * r * 0.4]))
+      await drag('scissors', [[hx - r * 1.8, hy], [hx + r * 1.8, hy]])
+      await p.waitForTimeout(250)
+    },
+  },
+  { name: 'barber-hall', hash: '#/world/thailand/mall-trip/hall?from=barber&hair=k.roygbvproygbvproygbvproyg.s', reset: true, wait: 3500 },
+  { name: 'barber-flat', hash: '#/world/thailand/mall-trip/barber?round=3&gl=off', reset: true, wait: 900 },
   // Cafe & Cake (greybox): each round (the earlier rounds' drinks on the shelf), the 👆 after a while, the splat (the
   // lid left off), the jar tipped over the cup and pouring, and the flat version.
   ...[1, 2, 3].map((n) => ({ name: `cafe-${n}`, hash: `#/world/thailand/mall-trip/cafe?round=${n}`, reset: true, wait: 3200 })),

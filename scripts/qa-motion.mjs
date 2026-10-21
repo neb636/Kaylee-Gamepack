@@ -668,10 +668,10 @@ const thaiMall = (name, seconds, section, steps) => ({
   },
 })
 GAME_SCENARIOS.push(
-  // The hall: walking to the cafe's door and going in (the door swings, the camera moves in), the barber's door
-  // puffing out hair, and Little Land's bricks tumbling and hopping home.
+  // The hall: walking to the cafe's door and going in (the door swings, the camera moves in), going in at the barber's
+  // (Daddy following with his new look), and Little Land's bricks tumbling and hopping home.
   thaiMall('hall-go-in', 5, 'hall?from=vet', [['door:cafe', 4800]]),
-  thaiMall('hall-barber', 3, 'hall?from=barber', [['door:barber', 2800]]),
+  thaiMall('hall-barber', 3, 'hall?from=barber&hair=k.roygbvproygbvproygbvproyg.s', [['door:barber', 2800]]),
   thaiMall('hall-bricks', 14, 'hall?from=race', [['point', 3500, 0.97, 0.88], ['point', 3500, 0.97, 0.88], ['blocks', 6500]]),
   thaiMall('mall-mountain', 4, 'play', [['climb:mountain', 3800]]),
   thaiMall('mall-donut', 7, 'mountain', [['ride:donut', 6800]]),
@@ -715,6 +715,43 @@ GAME_SCENARIOS.push(
   thaiVet('vet-thorn-bandage', 6, 'puppy', [['tweezers', 'paw', 'pull', 600], ['bandage-pink', 'paw', 'circle']]),
   thaiVet('vet-soap', 4, 'pony', [['soap', 'belly', 'rub']]),
   thaiVet('vet-sneeze', 7, 'elephant', [['soap', 'belly', 'rub'], ['soap', 'head', 'rub', 2600]]),
+)
+
+// The Barber Salon (mall trip, greybox): tools on Daddy's mane, the core verb. Her finger drags the grow tonic round
+// his head (the strands grow long and wild), the scissors across (the tufts fall), the comb up (spikes) and the color
+// spray across (rainbow stripes); then the mirror: the chair spins round to it, he poses, Mommy's flash. Where things
+// are comes from window.__thaiMallQA (his head and the tools, in screen pixels).
+const thaiBarber = (name, seconds, round, strokes, mirror = false) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/barber?round=${round}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().game === 'barber' && window.__thaiMallQA().head, null, { timeout: 20000 })
+    await page.waitForTimeout(400)
+  },
+  act: async (page) => {
+    for (const [tool, path] of strokes) {
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      const [hx, hy, r] = q.head
+      await page.mouse.move(...q.tools[tool])
+      await page.mouse.down()
+      for (const [fx, fy] of path) await page.mouse.move(hx + fx * r, hy + fy * r + q.liftPx, { steps: 5 })
+      await page.mouse.up()
+      await page.waitForTimeout(300)
+    }
+    if (mirror) {
+      await page.locator('[data-anchor="mirror"]').click({ force: true })
+      await page.waitForTimeout(3600)
+    }
+  },
+})
+const around = (n, y) => Array.from({ length: n }, (_, i) => [Math.cos(i * 0.5) * 0.9, y + Math.sin(i * 0.5) * 0.4])
+GAME_SCENARIOS.push(
+  thaiBarber('barber-grow-snip', 6, 1, [['tonic', around(26, -0.6)], ['scissors', [[-1.8, 0], [1.8, 0], [-1.8, -0.4]]]]),
+  thaiBarber('barber-comb-color', 6, 2, [['tonic', around(20, -0.6)], ['comb', [[-0.5, -0.2], [-0.3, -1.6], [0, -0.2], [0.2, -1.6], [0.5, -0.2], [0.6, -1.6]]], ['spray', Array.from({ length: 30 }, (_, i) => [-1.2 + i * 0.08, -0.8])]]),
+  // (The mirror glows after 8 strokes of hair work.)
+  thaiBarber('barber-mirror', 10, 1, [0, 1, 2, 3].flatMap((i) => [['tonic', around(8, -0.6)], ['scissors', [[-1.8, 0.4 - i * 0.2], [1.8, 0.4 - i * 0.2]]]]), true),
 )
 
 // Cafe & Cake (mall trip, greybox): the blender, its core verb. Her finger drags the strawberry and the banana into the

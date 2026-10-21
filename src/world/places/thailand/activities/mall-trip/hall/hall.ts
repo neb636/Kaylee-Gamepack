@@ -1,27 +1,29 @@
 // MEGA HarborLand's hall (plan: planning/around-the-world/thailand/mall-trip.md, "The hall"), greybox: the place she
 // walks around between the mini games. One long side view that scrolls with her:
 //   - She walks the way she does in Agong's house: tap the mats and she goes, hold a finger and she follows it.
-//   - Tap a way in (the vet's door, the cafe's door, the Big Frame's tunnel, the racing slide's steps) and she walks
-//     there, the door swings open, the camera moves in, and she goes in: that mini game opens (`enter`). Coming back
-//     out, she steps out of the same door and it shuts behind her.
-//   - The ways in that come later are toys for now: the barber's door puffs out hair, the Golden Mountain gets a climb
-//     up its first hold, Little Land's bricks tumble and hop home, the bags swing, the Sky Pod lights up.
+//   - Tap a way in (the vet's, the cafe's or the barber's door, the Big Frame's tunnel, the racing slide's steps) and
+//     she walks there, the door swings open, the camera moves in, and she goes in: that mini game opens (`enter`).
+//     Coming back out, she steps out of the same door and it shuts behind her.
+//   - The ways in that come later are toys for now: the Golden Mountain gets a climb up its first hold, Little Land's
+//     bricks tumble and hop home, the bags swing, the Sky Pod lights up.
 //   - Life everywhere: kids climb the frame and go down the mask's nose, race down the lanes and slide off the
-//     mountain; the staff wave; Mommy sits on the bench; Daddy follows her round; a plush crocodile snaps.
+//     mountain; the staff wave; Mommy sits on the bench; Daddy follows her round (with the hairdo she gave him at the
+//     barber's, `hair`); a plush crocodile snaps.
 //   - When she's played enough, Daddy's tummy rumbles (`hungry`): the screen around asks about pizza.
 // No voices yet: sounds only.
-import { Color, Group, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
+import { Color, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { clamp, sounds, wobble } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
+import { LOOKS } from '../../../characters/looks'
 import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { Shot } from '../../../engine/camera'
-import { merge, P, solid } from '../../../engine/geo'
 import { TapMarker } from '../../../engine/marker'
 import { NavGrid } from '../../../engine/nav'
 import { PAL, toon } from '../../../engine/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { Walker } from '../../../trip/walk'
+import { wearHair } from '../games/barber/mane'
 import { Racer } from '../games/race/racer'
 import { SOCK_COLORS, wearSocks } from '../socks'
 import { buildHall, DIM, laneY, LIT, type HallBuilt } from './build'
@@ -47,6 +49,8 @@ export interface HallStart {
   from: DoorId | ''
   /** Daddy's tummy rumbles soon after she comes out. */
   hungry: boolean
+  /** Daddy's hairdo from the barber ('' his own mane). */
+  hair?: string
 }
 
 /** The signs' words, drawn as HTML over them (crisp, and never in a generated picture): where, and how wide (m). */
@@ -116,7 +120,6 @@ export class Hall extends Stage {
   private bags = BOXING.bags.map(() => ({ a: 0, v: 0 }))
   private bricks: { t: number; dir: number; spin: number; from: Vector3; land: Vector3; back: number }[] = []
   private pod = { lit: [] as number[], t: 0, notes: 0 }
-  private tufts: { g: Group; v: Vector3; t: number }[] = []
   private hungry: 'no' | 'soon' | 'asked'
   private daddyGoal = new Vector3()
   private labelEls: HTMLElement[] = []
@@ -143,6 +146,7 @@ export class Hall extends Stage {
     wearSocks(kaylee, SOCK_COLORS[start.socks] ?? SOCK_COLORS.pink, bag)
     this.put(this.ji, BENCH.at[0] - 0.3, 0.5, BENCH.at[1], 'sit', BENCH.face)
     this.daddy = new Racer('nick', bag)
+    wearHair(this.daddy.rig, LOOKS.nick, start.hair ?? '', bag)
     this.daddy.root.userData.pick = 'family:nick'
     scene.add(this.daddy.root)
 
@@ -258,7 +262,6 @@ export class Hall extends Stage {
     this.walker.goTo('hall', d.at, () => {
       this.kaylee.faceToward(d.in[0], d.in[1])
       if (isGame(door)) this.goIn(door)
-      else this.barber()
     })
   }
 
@@ -278,31 +281,6 @@ export class Hall extends Stage {
       if (this.disposed) return
       if (!this.done.has(door)) sounds.sparkle()
       this.hev.enter(door)
-    })
-  }
-
-  /** The barber's door (its mini game comes later): it opens a crack, a puff of hair tufts, the pole spins, haha. */
-  private barber() {
-    const o = this.doorOpen.barber
-    o.goal = 0.35
-    sfx.shopBell()
-    this.poleSpin = 1
-    this.after(0.3, () => {
-      sfx.poof()
-      const s = SHOPS[2]
-      for (let i = 0; i < 14; i++) {
-        const g = solid(merge([P.sphere(0.15, ['#C9B5F7', '#FF8FB8', '#FBEA9A', '#8EC9F5'][i % 4], { scale: [1.3, 0.6, 1] }, 10), P.sphere(0.1, ['#FF8FB8', '#FBEA9A', '#8EC9F5', '#C9B5F7'][i % 4], { at: [0.12, 0.05, 0], scale: [1.2, 0.6, 1] }, 8)]), this.bag, 1.5)
-        g.position.set(s.x + (Math.random() - 0.5) * 0.6, 1.0 + Math.random() * 0.8, TOWN.front + 0.25)
-        g.rotation.z = Math.random() * 3
-        this.scene.add(g)
-        this.tufts.push({ g, v: V((Math.random() - 0.5) * 3.2, 1.6 + Math.random() * 1.8, 1.2 + Math.random() * 1.6), t: 0 })
-      }
-      this.kaylee.react('hop')
-    })
-    this.after(0.9, () => {
-      o.goal = 0
-      sfx.latch()
-      sfx.haha()
     })
   }
 
@@ -562,17 +540,6 @@ export class Hall extends Stage {
       this.built.bags[i].rotation.z = b.a * 0.5
     })
     this.updateBricks(dt)
-    for (const tf of [...this.tufts]) {
-      tf.t += dt
-      tf.v.y -= 4 * dt
-      tf.g.position.addScaledVector(tf.v, dt)
-      tf.g.rotation.z += dt * 4
-      tf.g.scale.setScalar(Math.max(0.01, Math.min(1, tf.t * 6) * (1 - Math.max(0, tf.t - 1.0) / 0.8)))
-      if (tf.t > 1.8) {
-        this.scene.remove(tf.g)
-        this.tufts.splice(this.tufts.indexOf(tf), 1)
-      }
-    }
     this.pod.t += dt
     if (this.pod.t > 6) this.pod.lit = []
     this.built.skypod.forEach((m, i) => {
@@ -747,10 +714,5 @@ export class Hall extends Stage {
       kids: this.kids.map((k) => ({ at: [k.r.pos.x, k.r.pos.y, k.r.pos.z].map((n) => Math.round(n * 10) / 10), sliding: k.sliding })),
       touches: this.touches,
     }
-  }
-
-  dispose() {
-    for (const tf of this.tufts) this.scene.remove(tf.g)
-    super.dispose()
   }
 }

@@ -180,6 +180,15 @@ function wornParts(id: Wearable, f: Frame): WornParts {
     for (const s of [-1, 1]) out.body.push(P.capsule(0.012 * H, 0.1 * H, '#FFFFFF', { at: [s * 0.075 * H, 0.5 * H, 0.1 * H], rot: [-0.6, 0, -s * 0.5] }))
     out.bodyPlain.push(P.rbox(0.09 * H, 0.06 * H, 0.012 * H, 0.012 * H, '#FFFFFF', { at: [0, 0.2 * H, 0.235 * H], rot: [-0.3, 0, 0] }))
   }
+  if (id === 'smock') {
+    // The barber's smock over her dress: lavender, buttoned up one side, a comb in the chest pocket.
+    out.body.push(P.capsule(0.175 * H, 0.06 * H, '#C9B5F7', { at: [0, 0.37 * H, 0] }))
+    out.body.push(P.cyl(0.17 * H, 0.25 * H, 0.2 * H, '#C9B5F7', { at: [0, 0.225 * H, 0] }, 20))
+    out.bodyPlain.push(...[0.44, 0.36, 0.28].map((y) => P.sphere(0.014 * H, '#FFFFFF', { at: [0.07 * H, y * H, 0.17 * H] })))
+    out.body.push(P.rbox(0.07 * H, 0.06 * H, 0.012 * H, 0.008 * H, '#B39CEB', { at: [-0.075 * H, 0.42 * H, 0.165 * H], rot: [0, -0.4, 0] }))
+    out.body.push(P.box(0.05 * H, 0.03 * H, 0.008 * H, '#FF8FB8', { at: [-0.075 * H, 0.465 * H, 0.168 * H], rot: [0, -0.4, 0] }))
+    for (const [side, s] of [['armL', -1], ['armR', 1]] as const) out[side].push(P.sphere(0.074 * H, '#C9B5F7', { at: [s * 0.006 * H, -0.02 * H, 0] }))
+  }
   if (id === 'chef-hat') {
     // A tall white chef's hat, puffy on top, set back so her horn pokes out in front and her ears at the sides.
     const cz = -0.32 * R
