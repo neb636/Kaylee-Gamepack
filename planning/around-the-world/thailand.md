@@ -103,7 +103,7 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    they're at the airport), the airport and the window seat, each a section (`boat-trip/invite` ... `boat-trip/land`).
    The second family trip (Dad, 2026-10-20) is a mall day at ICONSIAM: Mommy drives the silver rental Veloz, Kaylee
    plays in HarborLand's "Little Thailand" and shares a pizza at The Pizza Company, and the leftovers go home to Agong
-   (`thailand/mall-trip.md`, plan only so far).
+   (`thailand/mall-trip.md`). Its greybox 1, HarborLand's playground, is built (2026-10-21, `#/world/thailand/mall-trip/play`).
 
 ## Tech notes
 

@@ -342,6 +342,15 @@ activities/mall-trip/
 1. **Greybox: the HarborLand toy.** Only `play`, `mountain` and `dragon`, all as shapes: walking, climbing, the slides, the
    donut, the zip line, the ball pool and the cannon, with the real Mommy, Daddy and Kaylee. No voices.
    **Dad plays it on the iPad:** are climbing up and sliding down fun with no goal at all?
+   *Built 2026-10-21* (`activities/mall-trip/harborland/`, `#/world/thailand/mall-trip/play`). Walking on more than one
+   floor is `trip/walk.ts` (a tap on another floor plans the way through the climbs and slides, and a slide is cheap,
+   so she takes one down whenever there is one). In it: the Golden Mountain (three gold tiers, a chedi, three monkeys),
+   two decks joined by a rope bridge, the top deck and a skywalk to the dragon tower, two nets, the perch's little
+   slide, the Boomerang Donut, the zip line, the Ta-Khon roller slide, the twin-dragon spiral, the ball pool with
+   Daddy in it, the cannon, the Sky Pod, the bike race and three Phi Ta Khon figures. Mommy sits on the parents'
+   bench. The sock band in the corner gets a sticker for each big ride. Left for later: the other kids, the crawl
+   tube, head-first slides, Ball Attack, Mommy's photo at the dragon's end, arrows at the screen's edge toward rides
+   that are off screen.
 2. **Greybox: the pizza toy.** `menu` and `share` on a box table: does pulling the cheese feel good, and is sharing clear
    without reading?
 3. **Greybox: the trip loop.** Mommy's choice, the Veloz goodbye, arrive, the hungry question, and home with the box and

@@ -356,6 +356,10 @@ const SCREENS = [
   ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
   { name: 'thailand-flat', hash: '#/world/thailand/hub/downstairs?gl=off', reset: true, wait: 600 },
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
+  // The mall trip, greybox 1: HarborLand's three levels, a sock band with stickers, and the flat version.
+  ...['play', 'mountain', 'dragon'].map((to) => ({ name: `mall-trip-${to}`, hash: `#/world/thailand/mall-trip/${to}`, reset: true, wait: 3000 })),
+  { name: 'mall-trip-stickers', hash: '#/world/thailand/mall-trip/play?socks=mint&rides=pool,mountain,donut', reset: true, wait: 3000 },
+  { name: 'mall-trip-flat', hash: '#/world/thailand/mall-trip/mountain?gl=off', reset: true, wait: 600 },
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.
