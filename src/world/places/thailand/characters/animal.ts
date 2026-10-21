@@ -171,6 +171,22 @@ function wornParts(id: Wearable, f: Frame): WornParts {
     out.head.push(P.torus(0.98 * R, 0.07 * R, SCRUBS_DARK, { at: [0, headY + 0.42 * R, cz], rot: [Math.PI / 2 + 0.12, 0, 0], scale: [1.08, 1.05, 1] }))
     for (const [x, y] of [[-0.5, 0.86], [0.1, 1.02], [0.6, 0.82], [-0.15, 0.7]]) out.headPlain.push(P.sphere(0.07 * R, '#FF8FB8', { at: on(x * R, (y - 0.45) * R + 0.4 * R, 0.08 * R), scale: [1, 1, 0.4] }))
   }
+  if (id === 'apron') {
+    // The cafe's pink apron over her dress: a bib on the chest, a skirt panel to the knees with a white pocket, the
+    // neck strap and a white tie round the waist.
+    out.body.push(P.rbox(0.2 * H, 0.15 * H, 0.03 * H, 0.03 * H, '#FF8FB8', { at: [0, 0.4 * H, 0.15 * H], rot: [-0.12, 0, 0] }))
+    out.body.push(P.cyl(0.2 * H, 0.26 * H, 0.2 * H, '#FF8FB8', { at: [0, 0.22 * H, 0.012 * H], scale: [1, 1, 0.9] }, 20))
+    out.body.push(P.torus(0.19 * H, 0.016 * H, '#FFFFFF', { at: [0, 0.32 * H, 0], rot: [Math.PI / 2, 0, 0] }))
+    for (const s of [-1, 1]) out.body.push(P.capsule(0.012 * H, 0.1 * H, '#FFFFFF', { at: [s * 0.075 * H, 0.5 * H, 0.1 * H], rot: [-0.6, 0, -s * 0.5] }))
+    out.bodyPlain.push(P.rbox(0.09 * H, 0.06 * H, 0.012 * H, 0.012 * H, '#FFFFFF', { at: [0, 0.2 * H, 0.235 * H], rot: [-0.3, 0, 0] }))
+  }
+  if (id === 'chef-hat') {
+    // A tall white chef's hat, puffy on top, set back so her horn pokes out in front and her ears at the sides.
+    const cz = -0.32 * R
+    out.head.push(P.cyl(0.62 * R, 0.66 * R, 0.4 * R, '#FFFFFF', { at: [0, headY + 0.98 * R, cz], rot: [-0.25, 0, 0] }, 24))
+    for (const [x, z] of [[0, 0], [-0.32, -0.1], [0.32, -0.1], [0, -0.3], [-0.18, 0.2], [0.18, 0.2]]) out.head.push(P.sphere(0.4 * R, '#FFFFFF', { at: [x * R, headY + 1.32 * R, cz + (z - 0.12) * R] }, 16))
+    out.head.push(P.torus(0.65 * R, 0.06 * R, '#FFD6E6', { at: [0, headY + 0.8 * R, cz + 0.04 * R], rot: [Math.PI / 2 - 0.25, 0, 0] }))
+  }
   if (id === 'floaties') {
     // An armband round each upper arm (pink on one, orange on the other, like the ones she packed), a cream stripe
     // round its top and a little valve.

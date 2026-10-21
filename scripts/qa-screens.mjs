@@ -398,6 +398,42 @@ const SCREENS = [
     },
   },
   { name: 'vet-flat', hash: '#/world/thailand/mall-trip/vet?patient=pony&gl=off', reset: true, wait: 900 },
+  // Cafe & Cake (greybox): each round (the earlier rounds' drinks on the shelf), the 👆 after a while, the splat (the
+  // lid left off), the jar tipped over the cup and pouring, and the flat version.
+  ...[1, 2, 3].map((n) => ({ name: `cafe-${n}`, hash: `#/world/thailand/mall-trip/cafe?round=${n}`, reset: true, wait: 3200 })),
+  { name: 'cafe-hint', hash: '#/world/thailand/mall-trip/cafe', reset: true, wait: 9500 },
+  {
+    name: 'cafe-splat',
+    hash: '#/world/thailand/mall-trip/cafe',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'cafe', null, { timeout: 20000 }).catch(() => {})
+      for (const id of ['item:watermelon', 'item:mango', 'button']) {
+        await p.locator(`[data-anchor="${id}"]`).click({ force: true }).catch(() => {})
+        await p.waitForTimeout(700)
+      }
+      await p.waitForTimeout(300)
+    },
+  },
+  {
+    name: 'cafe-pour',
+    hash: '#/world/thailand/mall-trip/cafe?round=2',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'cafe', null, { timeout: 20000 }).catch(() => {})
+      for (const id of ['item:strawberry', 'item:banana', 'button']) {
+        await p.locator(`[data-anchor="${id}"]`).click({ force: true }).catch(() => {})
+        await p.waitForTimeout(700)
+      }
+      await p.waitForTimeout(1800)
+      const q = await p.evaluate(() => window.__thaiMallQA())
+      await p.mouse.move(...q.jarAt)
+      await p.mouse.down()
+      await p.mouse.move(...q.pourAt[0], { steps: 16 })
+      await p.waitForTimeout(800)
+    },
+  },
+  { name: 'cafe-flat', hash: '#/world/thailand/mall-trip/cafe?round=3&gl=off', reset: true, wait: 900 },
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.
