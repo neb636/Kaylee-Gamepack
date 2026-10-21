@@ -575,6 +575,8 @@ small climbing toy, before Dad's photos.
    - **Sounds only:** no voices yet. Sparkle's opening line and Daddy's reactions come with the full loop.
    - **`games`:** replaces PR #120's `rides` (old `rides` links still work). The vet sticker comes after the first
      patient.
+   *Next, in parallel (prompts in `mall-trip-prompts.md`):* the racing slide (step 3), the pizza toy (step 6) and the
+   cafe (step 5). The barber waits for Dad's verdict on the vet.
 2. **Greybox: the barber salon** (`barber`) and Daddy's `hair` carrying on through the trip.
 3. **Greybox: the racing slide** (`race`).
 4. **Greybox: the hall** (`hall`): walking between the zones, the shop doors, the sock band, life in the background.
