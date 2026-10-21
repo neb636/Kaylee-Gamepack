@@ -319,15 +319,81 @@ elephants behind.
 
 #### 6. Little Land: giant foam blocks 🧱 (`blocks`; shapes, balance)
 
-From Dad's photo: walls of big foam bricks.
+From Dad's photo: walls of big foam bricks. Filled in with `../ACTIVITY-TEMPLATE.md` on 2026-10-21, before the greybox.
 
-- **The toy:** drag a block and stack it; it wobbles and settles. Build higher than Daddy, then knock it all down
-  (crash, the blocks bounce).
-- **How it deepens:**
-  1. Free stacking.
-  2. A picture card to copy (a chedi, an elephant).
-  3. A tower taller than Daddy. He sneezes it down.
-- **Tech:** stacking on a grid with a wobble and a topple animation (no physics engine).
+**One-line pitch:** Daddy bets she can't build higher than him; Kaylee stacks giant foam bricks to build a tower, a
+chedi and an elephant, and knocks them down.
+
+**The toy (core verb):** grab a big foam brick and put it down where she wants it.
+- How it feels: the brick hangs just above her finger, and a soft outline shows where it will land. It's pulled to the
+  nearest spot, drops in with a whump, squashes and wobbles, and the whole tower sways a little and settles. A brick
+  half over the edge sways a lot ("whoa!") but stays. A swipe through the tower knocks it down: the bricks fly and
+  bounce on the mats, then hop back into the box one by one, up a scale.
+- Why it's fun with no goal: building tall and knocking it down is the oldest toy there is.
+- Greybox test: the hall's bricks (same size, `BLOCKS.brick`, same five foam colors) on a mat, the brick box, Kaylee,
+  Daddy. Does dragging a brick feel good on the iPad, and does it land where she meant, on an iPhone too?
+
+**How the verb deepens (3 steps, same verb):**
+1. **Free stacking:** anything goes. After six bricks the tower glows: push it over (tap it or swipe through it).
+2. **A picture card to copy:** the easel shows a chedi (a stepped tower with a gold spire), then an elephant. Outlines
+   on the mat show where, row by row, and a brick near the picture goes to the next outline. Done: the chedi's gold
+   spire hops on top with a temple bell; the elephant gets its face, trunk and ears, trumpets, then shakes itself
+   apart.
+3. **Taller than Daddy:** Daddy stands beside the stack with a ribbon at his horn's height. When the tower gets past
+   it he looks up, ah... ah... CHOO, and blows it down. He laughs; she can keep building, and he sneezes again.
+Side verb: none (pushing the tower over is the same brick in her hand, the other way).
+
+**Her choices:** where each brick goes and how tall, which color brick she takes (she can pick any loose one off the
+top), when to knock it down, and which way it falls.
+
+**Pokeables (5+ things that react and aren't the answer):**
+- the foam wall at the back (the brick she taps pops out and plays a note)
+- the big foam ball (it bounces and rolls)
+- the foam rocking elephant (it rocks and squeaks)
+- the easel (it spins and shows the card again)
+- the stars on top of the easel (they twinkle up a scale)
+- Daddy (a hop and a laugh) and Kaylee (a hop and a giggle)
+- a brick under the others (it boings and the tower wiggles)
+
+**Silly moments (instead of failure):**
+- let go over Daddy's head: he wears the brick as a hat, wobbles, and it slides off
+- let go over the box: it drops back in, fwip
+- let go over the ball: it bounces away
+- a brick half over the edge: a big wobble, "whoa!"
+- knock it down any time, in any round: crash, everything bounces, and it all comes home to the box
+
+**Story frame (at most 2 lines before her hands are busy):** Daddy: "Can you build higher than me, Kaylee?" / Sparkle:
+"Grab a brick!" (with the full loop; the greybox has no voices).
+When Sparkle talks during play: when the card first shows ("Copy the picture!"), when Daddy stands up ("Taller than
+Daddy!"), and after ~8 s with nothing touched (the 👆 shows the box or the next outline).
+
+**What it teaches, by doing:** balance (a brick on top of two holds; half over the edge wobbles), shapes from a picture
+(the chedi's steps get smaller as they go up; the elephant's legs, body and head), and taller and shorter (the
+ribbon at Daddy's height). Tap-to-hear facts (full loop): a chedi is a Thai temple tower, shaped like a bell with a
+gold spire; elephants are Thailand's animal.
+
+**Payoff (visible, builds up while she plays):** a gold star on the easel for each round (three), the chedi's spire,
+the elephant coming alive, Daddy's sneeze. The 🧱 sticker goes on her sock band after the first knock-down.
+
+**Replay:** free building is different every time; the cards; Daddy sneezes at every tall tower; after the third
+round it stays open as a toy (and the 🛝 takes her back to the hall).
+
+**Numbers:** about 30-40 touches: round 1 about 8-12 (six bricks or more, the push), round 2 about 13 (six bricks
+each card, the easel), round 3 about 5-10 (four rows or more), plus pokes. About 2-2.5 min. No lines before the first
+touch in the greybox; one or two with the full loop.
+
+**Sections and state:** one section, `blocks?round=1|2|3&card=chedi|elephant` (`round` 1 free stacking, 2 the picture
+cards, 3 taller than Daddy; `card` is round 2's picture, so the elephant has its own link). The stars already on the
+easel follow the round. Reads `socks` (her grip socks) and `games`; a link past round 1 has the 🧱 sticker.
+
+**Tech:** a 3D side view (like the vet and the cafe) in the house's toon look. Stacking on a grid with no physics
+engine (`grid.ts`, pure, shared with the flat version): the floor is cut into half-brick columns, a brick covers two,
+and it rests on whatever is highest under it. Every frame the spots she could put a brick on are projected to the
+screen; the one nearest the brick in her hand wins (`spotAt`), with a pull, so it lands where she meant on any screen.
+The tower's sway is one spring (each brick leans by its height), and the crash is per-brick arcs with bounces on the
+mats. Taps alone play it: a tap on the box hops the next brick to a good spot (the next outline, the top of the
+tower), and a tap on the glowing tower pushes it over. **Riskiest:** a brick landing where her finger meant, every
+time, on an iPhone too.
 
 #### 7. Muay Thai bags 🥊 (`boxing`; the wai, rhythm)
 
@@ -417,7 +483,7 @@ Activity `mall-trip`: `activities/mall-trip/sections.ts`. Every param has a defa
 | 7 | `race` | The racing slide (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 8 | `cafe` | Cafe & Cake: the blender (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 9 | `mountain` | The Golden Mountain and the steel slide | `socks`, `games` |
-| 10 | `blocks` | Little Land: the foam blocks | `socks`, `games` |
+| 10 | `blocks` | Little Land: the foam blocks (`?round=1\|2\|3&card=chedi\|elephant`) | `socks`, `games`, `round`, `card` |
 | 11 | `boxing` | Muay Thai: the wai kru and the bags | `socks`, `games` |
 | 12 | `skypod` | The Sky Pod lights | `socks`, `games` |
 | 13 | `frame` | The Big Frame: climb up, slide down, the cannon | `socks`, `games` |
@@ -723,6 +789,42 @@ small climbing toy, before Dad's photos.
      come with the full loop. The cafe sticker (🥤) goes on the sock band after the first drink.
    - **Next for the cafe, after Dad plays it:** whether the tip-to-pour feels right on the iPad (the pull's size,
      the angle it pours at), whether two cups at once is clear, and whether round 1 should start with the lid on.
+   *Little Land's foam blocks built 2026-10-21 (`activities/mall-trip/games/blocks/`,
+   `#/world/thailand/mall-trip/blocks?round=1|2|3&card=chedi|elephant`):*
+   - **The mat:** straight on, a little above. The build (eight half-brick columns, up to six rows) in the middle, the
+     brick box and Kaylee (in her grip socks) on the left, Daddy on the right, the easel at the back with the picture
+     card and three star slots, a low pale foam wall behind, the foam ball and a foam rocking elephant. The bricks are
+     the hall's (`BLOCKS.brick`, the same five colors).
+   - **The toy:** drag a brick out of the box (or a loose one off the top of the stack). It hangs 40 px above her
+     finger with an outline where it will land: the resting spot nearest it on screen, sideways counting more than up
+     and down, with a pull. It drops in, squashes, and the stack sways (one spring; each brick leans by its height).
+     Half over the edge it sways a lot ("whoa", Daddy wobbles). A sideways swipe through the stack knocks it over: the
+     bricks fly, bounce, roll onto a flat side, then hop back into the box up a scale.
+   - **Rounds:** (1) free stacking; from six bricks the stack glows and a tap makes Kaylee hop over and push it. (2) The
+     chedi, then the elephant: outlines on the mat for the next row, and a brick let go anywhere goes to the nearest
+     one. The chedi gets its gold spire and a temple bell, then its bricks hop home; the elephant gets an eye, ears,
+     a tusk and a trunk, trumpets and dances, then shakes itself apart. (3) Daddy steps up beside the stack and a
+     dashed ribbon runs across at his horn; at four rows he looks up (ooh), ah... ah... CHOO, and blows it over. A
+     star on the easel for each round, then the 🛝 back to the hall; she can keep building (he sneezes every time).
+   - **Where it lands:** worked out from where the finger is at the moment she lets go. Scripted drags (sloppy aim up
+     to 12 px, slow drags and quick flicks) landed on the intended spot 36 of 36 times at iPad portrait and landscape
+     and iPhone landscape and portrait. On a tall screen the camera comes closer and the box moves to the front, so
+     the columns stay wide enough for a finger.
+   - **Taps alone:** a tap on the box hops the next brick to a good spot (a little pyramid, the card's next outline,
+     straight up the middle, never half over an edge), and a tap on the glowing stack pushes it over: about 25 taps
+     for all three rounds.
+   - **Silly:** let go over Daddy's head and he wears it as a hat until it slides off; over the box it drops back in;
+     over the ball it bounces off.
+   - **Pokeables:** the wall (the brick she taps pops out with a note), the ball, the rocking elephant, the easel (it
+     spins), the stars (they twinkle up a scale), a brick low in the stack (boing, the stack wiggles), Kaylee, Daddy.
+   - **The hall:** Little Land's teaser is now a way in. Tap it and she walks up beside the front stack, it tumbles, and
+     in she goes; ↩️ brings her back out there (`hall?from=blocks`). The sock band has a 🧱 slot, filled by her first
+     knock-down.
+   - **Sounds only:** no voices. Daddy's "Can you build higher than me, Kaylee?" and Sparkle's lines come with the full
+     loop.
+   - **Flat version** (`?gl=off`): the stack as a picture, the box and the stack as big buttons, the same grid.
+   - **For Dad on the iPad:** does dragging a brick feel good, and does it land where she meant? Is the half-over-the-edge
+     wobble fun or worrying? Should the stack ever really fall by itself? Are the outlines in round 2 too much help?
 6. **Greybox: the pizza toy** (`menu`, `share`).
    *Built 2026-10-21 (`activities/mall-trip/pizza/`, `#/world/thailand/mall-trip/menu`,
    `#/world/thailand/mall-trip/share?pizza=hawaiian|seafood|cheese&shared=0..8`):*

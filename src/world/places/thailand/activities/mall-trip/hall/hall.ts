@@ -3,9 +3,10 @@
 //   - She walks the way she does in Agong's house: tap the mats and she goes, hold a finger and she follows it.
 //   - Tap a way in (the vet's, the cafe's or the barber's door, the Big Frame's tunnel, the racing slide's steps) and
 //     she walks there, the door swings open, the camera moves in, and she goes in: that mini game opens (`enter`).
-//     Coming back out, she steps out of the same door and it shuts behind her.
-//   - The ways in that come later are toys for now: the Golden Mountain gets a climb up its first hold, Little Land's
-//     bricks tumble and hop home, the bags swing, the Sky Pod lights up.
+//     Coming back out, she steps out of the same door and it shuts behind her. Little Land is a way in too: she walks
+//     up beside its front stack, it tumbles, and in she goes (the bricks hop home behind her).
+//   - The ways in that come later are toys for now: the Golden Mountain gets a climb up its first hold, the bags swing,
+//     the Sky Pod lights up.
 //   - Life everywhere: kids climb the frame and go down the mask's nose, race down the lanes and slide off the
 //     mountain; the staff wave; Mommy sits on the bench; Daddy follows her round (with the hairdo she gave him at the
 //     barber's, `hair`); a plush crocodile snaps.
@@ -82,7 +83,7 @@ export const HALL_ANCHORS: AnchorInfo[] = [
 ]
 
 /** The tap target of each way in. */
-const DOOR_OF: Record<string, DoorId> = { 'door:vet': 'vet', 'door:cafe': 'cafe', 'door:barber': 'barber', frame: 'frame', race: 'race' }
+const DOOR_OF: Record<string, DoorId> = { 'door:vet': 'vet', 'door:cafe': 'cafe', 'door:barber': 'barber', frame: 'frame', race: 'race', blocks: 'blocks' }
 const isGame = (d: DoorId): d is GameDoor => (OPEN_DOORS as readonly string[]).includes(d)
 const SHOP_IDS = SHOPS.map((s) => s.id) as ShopId[]
 const isShop = (d: DoorId): d is ShopId => (SHOP_IDS as string[]).includes(d)
@@ -273,7 +274,8 @@ export class Hall extends Stage {
     if (isShop(door)) {
       this.doorOpen[door].goal = 1
       sfx.shopBell()
-    } else sfx.whoosh()
+    } else if (door === 'blocks') this.tumble(false)
+    else sfx.whoosh()
     this.daddy.arms = 'cheer'
     this.daddy.lookAt(this.kaylee.position.clone().setY(0.6))
     this.after(0.45, () => this.kaylee.walk([d.in]))
@@ -303,7 +305,8 @@ export class Hall extends Stage {
     })
   }
 
-  private tumble() {
+  /** Little Land's front stack tumbles and the bricks hop home (as she goes in: `walk` false, she's there already). */
+  private tumble(walk = true) {
     if (this.bricks.length) return
     sfx.whoosh(0.5)
     this.bricks = this.built.bricks.map((b, i) => {
@@ -316,6 +319,7 @@ export class Hall extends Stage {
     this.after(2.4, () => {
       this.bricks.forEach((b, i) => (b.back = 2.4 + i * 0.22))
     })
+    if (!walk) return
     const k = this.kaylee
     const at: XZ = [(BLOCKS.x0 + BLOCKS.x1) / 2 - 1.4, BLOCKS.front + 1.6]
     this.walker.goTo('hall', at, () => {
@@ -427,8 +431,6 @@ export class Hall extends Stage {
         return
       case 'mountain':
         return this.mountain()
-      case 'blocks':
-        return this.tumble()
       case 'skypod':
         return this.skypod()
       case 'croc':
@@ -645,7 +647,7 @@ export class Hall extends Stage {
       case 'mountain':
         return { at: V(MOUNTAIN.x - 0.6, 1.4, MOUNTAIN.z + 1.2), r: 0.8, max: 160 }
       case 'blocks':
-        return { at: V((BLOCKS.x0 + BLOCKS.x1) / 2, 0.75, BLOCKS.front), r: 0.7, max: 150 }
+        return { at: V((BLOCKS.x0 + BLOCKS.x1) / 2, 0.75, BLOCKS.front), r: 0.7, glow, max: 150 }
       case 'skypod':
         return { at: V(SKYPOD.x, SKYPOD.y, SKYPOD.z + 0.1), r: 0.62, max: 140 }
       case 'croc':
