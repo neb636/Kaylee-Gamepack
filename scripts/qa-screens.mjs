@@ -40,6 +40,20 @@ function seedWall() {
   localStorage.setItem('kaylee-gamepack:/:saved:thailand-photo-wall', JSON.stringify([{ trip: 'boat-trip', src: c.toDataURL('image/jpeg', 0.8), at: '2026-10-20' }]))
 }
 
+// The racing slide: climb the steps (taps), then scoot (`taps` a second) until `until(window.__thaiMallQA())`, then
+// wait `after` ms. Stops on its own after 25 s.
+async function raceTo(page, until, taps = 0, after = 0) {
+  const t0 = Date.now()
+  while (Date.now() - t0 < 25000) {
+    const q = await page.evaluate(() => window.__thaiMallQA?.() ?? {})
+    if (until(q)) break
+    if (q.phase === 'climb') await page.locator('[data-anchor="steps"]').click({ force: true }).catch(() => {})
+    else if (q.phase === 'race' && taps && q.kaylee) await page.mouse.click(...q.kaylee)
+    await page.waitForTimeout(q.phase === 'race' && taps ? 1000 / taps : q.phase === 'climb' ? 420 : 60)
+  }
+  await page.waitForTimeout(after)
+}
+
 const SCREENS = [
   { name: 'home', hash: '#/' },
   { name: 'world-map', hash: '#/world' },
@@ -398,6 +412,16 @@ const SCREENS = [
     },
   },
   { name: 'vet-flat', hash: '#/world/thailand/mall-trip/vet?patient=pony&gl=off', reset: true, wait: 900 },
+  // The Racing Slide (greybox): each round at the bottom of the steps (the others sitting at the top), the 👆 on the
+  // steps after a while, the countdown, a race at a bump (round 2: the ring closing on her, gold), the spinning rings
+  // (round 3), the pit after a win (the ribbon, Daddy head first), and the flat version.
+  ...[1, 2, 3].map((n) => ({ name: `mall-race-${n}`, hash: `#/world/thailand/mall-trip/race?round=${n}`, reset: true, wait: 3000 })),
+  { name: 'mall-race-hint', hash: '#/world/thailand/mall-trip/race', reset: true, wait: 9500 },
+  { name: 'mall-race-count', hash: '#/world/thailand/mall-trip/race', reset: true, wait: 2500, act: (p) => raceTo(p, (q) => q.count === 2) },
+  { name: 'mall-race-bump', hash: '#/world/thailand/mall-trip/race?round=2', reset: true, wait: 2500, act: (p) => raceTo(p, (q) => q.phase === 'race' && q.window && q.crest >= 1) },
+  { name: 'mall-race-rings', hash: '#/world/thailand/mall-trip/race?round=3', reset: true, wait: 2500, act: (p) => raceTo(p, (q) => q.phase === 'race' && q.u > 0.45, 3) },
+  { name: 'mall-race-pit', hash: '#/world/thailand/mall-trip/race', reset: true, wait: 2500, act: (p) => raceTo(p, (q) => q.ribbons >= 1, 3, 1500) },
+  { name: 'mall-race-flat', hash: '#/world/thailand/mall-trip/race?round=2&gl=off', reset: true, wait: 900 },
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.
