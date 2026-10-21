@@ -1,7 +1,7 @@
 // The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md). So far, in shapes and without
 // voices: HarborLand's playground (harborland/harborland.ts, sections play, mountain, dragon: they follow the floor
-// she's on) and the mini games: the Vet Clinic (games/vet/, section vet) and the Racing Slide (games/race/, section
-// race). Each big ride and each mini game puts a sticker on her sock band in the corner (`games`). The hall between the
+// she's on) and the mini games: the Vet Clinic (games/vet/, section vet), Cafe & Cake (games/cafe/, section cafe) and
+// the Racing Slide (games/race/, section race). Each big ride and each mini game puts a sticker on her sock band in the corner (`games`). The hall between the
 // mini games and the trip around it (Mommy's question, the Veloz, the lift and the socks, the pizza, home) come in later
 // gates.
 import { AnimatePresence, motion } from 'motion/react'
@@ -11,6 +11,8 @@ import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../engine/Anchors'
 import { View3D, type RenderMode } from '../../engine/View3D'
 import { Flat } from './Flat'
+import { Cafe } from './games/cafe/Cafe'
+import type { Round } from './games/cafe/layout'
 import { Race } from './games/race/Race'
 import { Vet } from './games/vet/Vet'
 import { HARBOR_ANCHORS, HarborLand, SOCK_COLORS, type HarborSection } from './harborland/harborland'
@@ -18,23 +20,24 @@ import { RIDE_ICONS, RIDES, type RideId } from './harborland/layout'
 import MALL_SECTIONS, { type MallSection, type PatientId } from './sections'
 
 /** Every sticker on the sock band: the mini games so far, then the playground's big rides. */
-const GAMES = ['vet', 'race', ...RIDES] as const
+const GAMES = ['vet', 'cafe', 'race', ...RIDES] as const
 type GameId = (typeof GAMES)[number]
-const GAME_ICONS: Record<GameId, string> = { vet: '🩺', race: '🏁', ...RIDE_ICONS }
+const GAME_ICONS: Record<GameId, string> = { vet: '🩺', cafe: '🥤', race: '🏁', ...RIDE_ICONS }
 const list = (s: string) => s.split(',').filter((x): x is GameId => (GAMES as readonly string[]).includes(x))
 const isRide = (g: GameId): g is RideId => (RIDES as readonly string[]).includes(g)
 /** The mini games with their own screen (each one self-contained in games/<id>/). */
-const MINI = ['vet', 'race'] as const
+const MINI = ['vet', 'cafe', 'race'] as const
 
 export function MallTrip() {
   const { start, param, enter } = useSections(MALL_SECTIONS)
   const first: MallSection = start ?? 'play'
   const [socks] = useState(() => param('socks'))
   const [patient, setPatient] = useState<PatientId>(() => param('patient') as PatientId)
-  const [round, setRound] = useState(() => Number(param('round')))
-  // (`rides` is the old name of `games`, from PR #120's links. A link past the puppy, or past the first race, has that
-  // game's sticker already.)
-  const [games, setGames] = useState<GameId[]>(() => [...new Set([...list(param('games')), ...list(param('rides')), ...(first === 'vet' && patient !== 'puppy' ? ['vet' as const] : []), ...(first === 'race' && round > 1 ? ['race' as const] : [])])])
+  // The round of the mini game on screen (the cafe's, the racing slide's): one `round` in the address.
+  const [round, setRound] = useState<Round>(() => Number(param('round')) as Round)
+  // (`rides` is the old name of `games`, from PR #120's links. A link past the puppy, or past a mini game's first round,
+  // has that game's sticker already.)
+  const [games, setGames] = useState<GameId[]>(() => [...new Set([...list(param('games')), ...list(param('rides')), ...(first === 'vet' && patient !== 'puppy' ? ['vet' as const] : []), ...(first === 'cafe' && round > 1 ? ['cafe' as const] : []), ...(first === 'race' && round > 1 ? ['race' as const] : [])])])
   const [section, setSection] = useState<MallSection>(first)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
@@ -45,7 +48,7 @@ export function MallTrip() {
   state.current = { section, rides }
   const sticker = (id: GameId) => setGames((g) => (g.includes(id) ? g : [...g, id]))
 
-  const params = () => ({ socks, games: games.join(','), ...(section === 'vet' ? { patient } : {}), ...(section === 'race' ? { round: String(Math.min(3, round)) } : {}) })
+  const params = () => ({ socks, games: games.join(','), ...(section === 'vet' ? { patient } : {}), ...(section === 'cafe' || section === 'race' ? { round: String(round) } : {}) })
   useEffect(() => enter(first, params()), [])
   const ready = useRef(false)
   useEffect(() => {
@@ -71,8 +74,10 @@ export function MallTrip() {
     <div style={{ position: 'absolute', inset: 0, background: '#F1E8FF', overflow: 'clip' }}>
       {section === 'vet' ? (
         <Vet patient={patient} onPatient={setPatient} onHealed={(id) => id === 'puppy' && sticker('vet')} onPlay={() => setSection('play')} />
+      ) : section === 'cafe' ? (
+        <Cafe round={round} onRound={setRound} onDrink={() => sticker('cafe')} onPlay={() => setSection('play')} />
       ) : section === 'race' ? (
-        <Race round={round} onRound={setRound} onWon={() => sticker('race')} onPlay={() => setSection('play')} />
+        <Race round={round} onRound={(n) => setRound(Math.min(3, n) as Round)} onWon={() => sticker('race')} onPlay={() => setSection('play')} />
       ) : mode === 'flat' ? (
         <Flat section={section} rides={rides} onSection={setSection} onRide={sticker} />
       ) : (

@@ -414,8 +414,8 @@ Activity `mall-trip`: `activities/mall-trip/sections.ts`. Every param has a defa
 | 4 | `hall` | HarborLand: walk the hall, pick a mini game | `socks`, `games`, `hair` |
 | 5 | `vet` | The Vet Clinic (`?patient=puppy\|pony\|elephant`) | `socks`, `games`, `patient` |
 | 6 | `barber` | The Barber Salon: Daddy's new look | `socks`, `games`, `hair` |
-| 7 | `race` | The racing slide | `socks`, `games` |
-| 8 | `cafe` | Cafe & Cake: the blender | `socks`, `games` |
+| 7 | `race` | The racing slide (`?round=1\|2\|3`) | `socks`, `games`, `round` |
+| 8 | `cafe` | Cafe & Cake: the blender (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 9 | `mountain` | The Golden Mountain and the steel slide | `socks`, `games` |
 | 10 | `blocks` | Little Land: the foam blocks | `socks`, `games` |
 | 11 | `boxing` | Muay Thai: the wai kru and the bags | `socks`, `games` |
@@ -434,6 +434,9 @@ Params:
 - `games`: the mini games done so far (the sock band's stickers), a comma list. Default empty.
 - `hair`: Daddy's hairdo from the barber, e.g. `long,rainbow,spiky`. Default empty (his own mane).
 - `patient`: who's on the vet's table, `puppy|pony|elephant`. Default `puppy`.
+- `round`: the round of the mini game on screen, `1|2|3`. Default `1`.
+  - The cafe: blend anything, picture orders, Thai drinks two at once.
+  - The racing slide: the first race, tap at a bump to fly, spinning rubber rings.
 - `pizza`: `hawaiian|seafood|cheese`, default `cheese`.
 - `shared`: slices already handed out, 0-8. Default 0. `share?shared=6` starts at the last two, for Agong.
 - `photos`: which photos exist. Default for `home`: `dragon`.
@@ -606,6 +609,34 @@ small climbing toy, before Dad's photos.
    Then the Big Frame rebuilt at real scale (`frame`, replacing PR #120's three sections).
 5. **Greyboxes for the rest** (cafe, Golden Mountain, foam blocks, Muay Thai, Sky Pod), in the order Dad picks. Some
    may get cut.
+   *Cafe built 2026-10-21 (`activities/mall-trip/games/cafe/`, `#/world/thailand/mall-trip/cafe?round=1|2|3`):*
+   - **The kitchen:** the counter and the blender straight on, white tiles behind, the shelf where finished drinks line
+     up, a ceiling beam with two lamps. Kaylee wears a pink apron and a chef's hat (new wearables `apron`,
+     `chef-hat`). Daddy and Mommy are the customers at the counter's end, each with a thought bubble of their order.
+   - **The blender:** fruit drags (or a tap hops it) into the jar, whole and in its own color. The big pink button
+     whirrs, and the fruit's colors swirl round and melt into one: a paint-style mix of what went in (`liquid.ts`), so
+     strawberry and banana come out pink and mango and banana yellow. With the lid off it splats the ceiling beam and
+     the wall (they drip), and the lid hops on by itself. A tap on the lid puts it on or takes it off.
+   - **The pour (the risky part):** she lifts the jar by its middle, 34 px above her finger. Each open cup has a
+     pull round it (at least 96 px): as the jar gets near, it's drawn in and tips, more the nearer it gets, and past
+     about 55° it pours a stream that fills the cup. Pull away and it tips back. A full cup overflows, drips and
+     puddles. A scripted drag poured into the cup at iPad portrait, iPad landscape and iPhone landscape. A tap on the
+     jar pours by itself.
+   - **Toppings and serving:** whipped cream (drag over the cup, or tap) and a straw. The straw means done: the cup
+     goes to whoever ordered it, they drink it (slurp, hearts), and it flies to the shelf. An order she matched gets
+     an extra yum and sparkles; anything else gets a funny wiggle, then they drink it happily anyway. Ice in it gives
+     Daddy brain freeze (he shivers in frost, then laughs).
+   - **Rounds:** (1) two drinks, anything goes; (2) two picture orders (pink: strawberry and banana for Daddy;
+     yellow: mango and banana for Mommy); (3) both cups at once, cha yen for Daddy (orange Thai tea poured over the
+     ice, then milk from the milk jug, poured the same way, curls through it) and a coconut shake for Mommy. Then
+     the shelf's drinks hop in turn up a scale and a 🛝 goes back to the playground.
+   - **Pokeables:** the fridge (the door swings, the bottles clink), the coffee machine (it steams and Daddy's little
+     cup fills), the bread baskets (the pretzels bounce), the cake stand (it spins), the tea set (the pot pours Mommy a
+     cup), the family. Fruit dropped on Daddy or Mommy gets eaten; cream on them lands on their nose.
+   - **Taps alone** play all three rounds (about 32 taps). Sounds only: Sparkle's line and the customers' voices
+     come with the full loop. The cafe sticker (🥤) goes on the sock band after the first drink.
+   - **Next for the cafe, after Dad plays it:** whether the tip-to-pour feels right on the iPad (the pull's size,
+     the angle it pours at), whether two cups at once is clear, and whether round 1 should start with the lid on.
 6. **Greybox: the pizza toy** (`menu`, `share`).
 7. **Greybox: the trip loop:** Mommy's choice, the Veloz, arrive, hungry, home.
 8. **The look:** the hall, the shops, the Big Frame, ICONSIAM, The Pizza Company, the Veloz and the outfits, in toon.
