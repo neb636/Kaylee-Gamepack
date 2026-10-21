@@ -92,6 +92,8 @@ export class VillageStop implements BayPart {
   /** Goals scored, and how long they've played since the last one (then they kick it out to her again). */
   private goals = 0
   private playT = 0
+  /** She's bumped the loose ball at least once: from then on the kids' call pulls it all the way home. */
+  private bumped = false
   private hereT = 0
   private called = false
 
@@ -442,14 +444,14 @@ export class VillageStop implements BayPart {
       // Floating: it drifts and slows, the boat bumps it along, a gentle current brings it back if it gets far.
       b.x += b.vx * dt
       b.z += b.vz * dt
-      b.vx *= Math.exp(-dt * 0.7)
-      b.vz *= Math.exp(-dt * 0.7)
+      b.vx *= Math.exp(-dt * 0.35)
+      b.vz *= Math.exp(-dt * 0.35)
       b.spin *= Math.exp(-dt)
-      // Near the field the kids call for it, and it drifts their way (a push in roughly the right direction is enough).
+      // Once she's bumped it, the kids call for it and it rolls their way: one bump in any direction is enough.
       const toField = Math.hypot(FIELD.x - b.x, FIELD.z - b.z)
-      if (toField < 10) {
-        b.vx += ((FIELD.x - b.x) / toField) * dt * 0.9
-        b.vz += ((FIELD.z - b.z) / toField) * dt * 0.9
+      if (this.bumped && toField < 32) {
+        b.vx += ((FIELD.x - b.x) / toField) * dt * 1.6
+        b.vz += ((FIELD.z - b.z) / toField) * dt * 1.6
       }
       const far = Math.hypot(b.x - BALL_START.x, b.z - BALL_START.z)
       if (far > 30) {
@@ -469,9 +471,14 @@ export class VillageStop implements BayPart {
             const nz = dz / dist
             b.x = px + nx * min
             b.z = pz + nz * min
-            const push = Math.max(1.6, Math.abs(d.speed) * 1.15)
-            b.vx = nx * push + d.vx * 0.6
-            b.vz = nz * push + d.vz * 0.6
+            // Aimed for her: mostly toward the field, a little the way the hull hit it.
+            const ax = nx + ((FIELD.x - b.x) / toField) * 2
+            const az = nz + ((FIELD.z - b.z) / toField) * 2
+            const al = Math.hypot(ax, az) || 1
+            const push = Math.max(3.5, Math.abs(d.speed) * 1.3)
+            b.vx = (ax / al) * push
+            b.vz = (az / al) * push
+            this.bumped = true
             b.spin = 8
             sfx.boop()
             bay.spray.burst(b.x, 0.2, b.z, 5, 1.8, 2.2, 0.14)
@@ -498,8 +505,8 @@ export class VillageStop implements BayPart {
         }
       }
       // Back at the field's edge: it hops up onto the field.
-      const inX = Math.abs(b.x - F.x) < F.hx + 0.9
-      const inZ = Math.abs(b.z - F.z) < F.hz + 0.9
+      const inX = Math.abs(b.x - F.x) < F.hx + 2.5
+      const inZ = Math.abs(b.z - F.z) < F.hz + 2.5
       if (inX && inZ) {
         this.goal = 'hop'
         this.goalT = 0
@@ -596,6 +603,7 @@ export class VillageStop implements BayPart {
         b.x = this.hopTo.x
         b.z = this.hopTo.z
         b.vx = b.vz = 0
+        this.bumped = false
         this.goal = 'loose'
         sfx.splash(0.5)
         bay.foam.emit(b.x, 0.03, b.z, 0, 0, 0, 1.4, 1.2)
