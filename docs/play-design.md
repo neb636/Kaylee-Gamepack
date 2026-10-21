@@ -1,6 +1,6 @@
 # Play design: make a toy first, then the game
 
-Read this before planning or building any Around the World activity (and it helps for school-paper games too).
+Read this before planning or building any Around the World activity.
 `AGENTS.md` has the hard rules; this file says what makes an activity *fun*, with examples of what went wrong.
 
 The model is **Toca Boca** and **Sago Mini**: apps that 3-5 year olds play for ages without being able to read.
@@ -70,5 +70,5 @@ For each activity, answer honestly:
 - **Pokeables:** at least 5 things in each scene that react to a tap and aren't the answer.
 - **Grows:** does the verb get richer three times? Does something visibly build up (the payoff)?
 - **Surprise:** at least one funny or magical moment she'll want to show Dad.
-- **Learning by doing:** is the paper's (or country's) lesson something she *does*, not just hears?
+- **Learning by doing:** is the country's lesson something she *does*, not just hears?
 - **Replay:** would she want to play it again tomorrow? What's different the second time (random friends, a new boat)?

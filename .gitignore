@@ -1,6 +1,5 @@
 node_modules
 dist
-.lesson-input
 .DS_Store
 test-results
 playwright-report

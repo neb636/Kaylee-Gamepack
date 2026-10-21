@@ -19,7 +19,6 @@ This skill is shared by Claude Code and Codex. The one copy lives in `.agents/sk
    ```
    gh pr create --assignee neb636 --title "..." --body-file <file>
    ```
-   Codex in CI: if the workflow opens the PR for you, skip this step and only add the links (step 3).
 3. Get the PR number (`gh pr view --json number -q .number`). The preview lives at
    `https://neb636.github.io/Kaylee-Gamepack/pr-preview/pr-<N>/`. It is built a minute or two after each push.
 

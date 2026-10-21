@@ -6,7 +6,7 @@
 or through shared story/stamp components. The older `Mascot` API wraps it for the shell,
 passport, video controls, trophy ceremony and unicorn tea party. Its square `size` layout
 and `wave` / `cheer` / `think` expressions remain compatible with existing callers.
-New games should use `SparklePuppet` and its awaitable actions.
+New activities should use `SparklePuppet` and its awaitable actions.
 
 Keep her pink body, cream muzzle, striped horn, large dark eyes and pink/lavender hair.
 This is vector artwork: edit the shared SVG instead of generating another live character.
