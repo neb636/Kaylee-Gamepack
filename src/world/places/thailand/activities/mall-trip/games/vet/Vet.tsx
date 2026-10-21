@@ -9,6 +9,7 @@ import { View3D, type RenderMode } from '../../../../engine/View3D'
 import type { PatientId } from '../../sections'
 import { VET_ANCHORS, VetClinic } from './clinic'
 import { VetFlat } from './Flat'
+import { mallVoice } from '../../voice'
 
 interface Props {
   patient: PatientId
@@ -34,7 +35,7 @@ export function Vet({ patient, onPatient, onHealed, onPlay }: Props) {
     const w = new VetClinic(
       renderer,
       {
-        say: () => {},
+        say: (l) => mallVoice.say(l),
         section: () => {},
         done: () => {},
         patient: (id) => {

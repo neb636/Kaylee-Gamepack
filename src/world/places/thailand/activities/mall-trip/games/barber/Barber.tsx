@@ -10,6 +10,7 @@ import { CardPicture } from './Card'
 import { BarberFlat } from './Flat'
 import type { Card, Round } from './layout'
 import { BARBER_ANCHORS, Salon } from './salon'
+import { mallVoice } from '../../voice'
 
 interface Props {
   round: Round
@@ -39,7 +40,7 @@ export function Barber({ round, hair, onRound, onHair, onRevealed, onPlay }: Pro
     const w = new Salon(
       renderer,
       {
-        say: () => {},
+        say: (l) => mallVoice.say(l),
         section: () => {},
         done: () => {},
         round: (n) => cb.current.onRound(n),

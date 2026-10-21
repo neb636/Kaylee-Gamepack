@@ -13,6 +13,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { sounds } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
+import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
 import { Barber } from './games/barber/Barber'
 import { Blocks } from './games/blocks/Blocks'
 import { Boxing } from './games/boxing/Boxing'
@@ -34,6 +35,7 @@ import type { PizzaId } from './pizza/layout'
 import { Pizza } from './pizza/Pizza'
 import MALL_SECTIONS, { type MallSection, type PatientId } from './sections'
 import { SOCK_COLORS } from './socks'
+import { mallVoice } from './voice'
 
 /** What she can play so far: the mini games (any big ride in the Big Frame is `frame`). */
 const GAMES = ['vet', 'cafe', 'race', 'barber', 'blocks', 'mountain', 'boxing', 'skypod', 'frame'] as const
@@ -95,6 +97,15 @@ export function MallTrip() {
   const inHall = section === 'hall' || section === 'hungry'
   const band = bandOf(games)
   const hungry = (band.length >= 4 || performance.now() - since.current > HUNGRY_MS) && visits > notYet
+  // Everyone's lines play through Sparkle's corner guide (the words show with who said them).
+  const guide = useRef<TripGuideHandle>(null)
+  useEffect(() => {
+    const plain = mallVoice.say
+    mallVoice.say = (l) => (guide.current ? guide.current.speak(l) : plain(l))
+    return () => {
+      mallVoice.say = plain
+    }
+  }, [])
   const sticker = (id: GameId) => setGames((g) => (g.includes(id) ? g : [...g, id]))
 
   const params = () => ({
@@ -191,6 +202,7 @@ export function MallTrip() {
           ↩️
         </motion.button>
       )}
+      <TripGuide ref={guide} />
       {!pizzaTime && <SockBand done={band} color={SOCK_COLORS[socks] ?? SOCK_COLORS.pink} />}
     </div>
   )

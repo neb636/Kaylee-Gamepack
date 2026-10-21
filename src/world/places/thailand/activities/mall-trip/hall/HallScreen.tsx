@@ -10,6 +10,7 @@ import { HallFlat } from './Flat'
 import { Hall, HALL_ANCHORS, LABELS } from './hall'
 import { Hungry } from './Hungry'
 import type { DoorId, GameDoor } from './layout'
+import { mallVoice } from '../voice'
 
 /** Each sign's letters. */
 const LABEL_COLORS: Record<string, string> = { little: '#3FAF8E', muay: '#E04848' }
@@ -45,7 +46,7 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, o
     const w = new Hall(
       renderer,
       {
-        say: () => {},
+        say: (l) => mallVoice.say(l),
         section: () => {},
         done: () => {},
         going: () => setGoing(true),

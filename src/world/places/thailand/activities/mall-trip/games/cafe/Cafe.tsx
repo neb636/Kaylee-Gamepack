@@ -9,6 +9,7 @@ import { View3D, type RenderMode } from '../../../../engine/View3D'
 import { CAFE_ANCHORS, CafeStage, type Bubble } from './shop'
 import { CafeFlat } from './Flat'
 import type { Customer, Round } from './layout'
+import { mallVoice } from '../../voice'
 
 interface Props {
   round: Round
@@ -34,7 +35,7 @@ export function Cafe({ round, onRound, onDrink, onPlay }: Props) {
     const w = new CafeStage(
       renderer,
       {
-        say: () => {},
+        say: (l) => mallVoice.say(l),
         section: () => {},
         done: () => {},
         round: (n) => {

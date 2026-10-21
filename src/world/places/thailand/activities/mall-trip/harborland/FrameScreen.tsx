@@ -10,6 +10,7 @@ import { Flat } from './Flat'
 import { BigFrame, FRAME_ANCHORS } from './frame'
 import type { At, RideId } from './layout'
 import { HarborSign } from './sign'
+import { mallVoice } from '../voice'
 
 interface Props {
   at: At
@@ -35,7 +36,7 @@ export function FrameScreen({ at, socks, hair, rode, onAt, onRide }: Props) {
   cb.current = { onAt, onRide }
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new BigFrame(renderer, { say: () => {}, done: () => {}, section: (a) => cb.current.onAt(a as At), ride: (id) => cb.current.onRide(id) }, { at: state.current.at, socks, hair })
+    const w = new BigFrame(renderer, { say: (l) => mallVoice.say(l), done: () => {}, section: (a) => cb.current.onAt(a as At), ride: (id) => cb.current.onRide(id) }, { at: state.current.at, socks, hair })
     w.setHintElement(hintRef.current)
     w.setSign(signRef.current)
     return w

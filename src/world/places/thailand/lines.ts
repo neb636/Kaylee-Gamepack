@@ -249,4 +249,58 @@ export const L = {
     // The boarding pass on a replay: the whole trip or straight to the boat.
     again: 'Pack again, or go straight to the boat?',
   },
+
+  // The mall day at ICONSIAM (activities/mall-trip/, plan: thailand/mall-trip.md). Talk short, play long: Sparkle's one
+  // line when a mini game opens (and when something new starts, or after a while with nothing touched), the family's
+  // and the friends' short reactions in their own voices (the monkey coach, the HarborLand staff, the pizza server, the
+  // kids). Kaylee never talks: she giggles. One block per part, so each can be filled on its own.
+  mall: {
+    // HarborLand's hall (hall/).
+    hall: {
+    },
+
+    // The Vet Clinic (games/vet/).
+    vet: {
+    },
+
+    // The Barber Salon (games/barber/).
+    barber: {
+    },
+
+    // Cafe & Cake (games/cafe/).
+    cafe: {
+    },
+
+    // The Racing Slide (games/race/).
+    race: {
+    },
+
+    // Little Land's foam blocks (games/blocks/).
+    blocks: {
+    },
+
+    // The Golden Mountain (games/mountain/).
+    mountain: {
+    },
+
+    // Muay Thai (games/boxing/).
+    boxing: {
+    },
+
+    // The Sky Pod (games/skypod/).
+    skypod: {
+    },
+
+    // The Big Frame (harborland/).
+    frame: {
+    },
+
+    // The Pizza Company (pizza/).
+    pizza: {
+    },
+
+    // The trip around it: Mommy's question, the goodbye, the Veloz, ICONSIAM, the counter, home.
+    trip: {
+    },
+  },
 }

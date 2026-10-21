@@ -9,6 +9,7 @@ import { PizzaFlat } from './Flat'
 import type { PizzaId } from './layout'
 import { Menu } from './Menu'
 import { PIZZA_ANCHORS, PizzaTable } from './table'
+import { mallVoice } from '../voice'
 
 interface Props {
   section: 'menu' | 'share'
@@ -37,7 +38,7 @@ export function Pizza({ section, pizza, shared, hair, onPizza, onServed, onShare
     const w = new PizzaTable(
       renderer,
       {
-        say: () => {},
+        say: (l) => mallVoice.say(l),
         section: () => {},
         done: () => {},
         served: () => cb.current.onServed(),

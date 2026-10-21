@@ -12,6 +12,7 @@ import type { Phase } from './game'
 import { ScoreBoard } from './board'
 import { BLUE, PINK, type Round } from './layout'
 import { SKYPOD_ANCHORS, SkyPodWall } from './wall'
+import { mallVoice } from '../../voice'
 
 interface Props {
   round: Round
@@ -48,7 +49,7 @@ export function SkyPod({ round, socks, onRound, onSticker, onPlay }: Props) {
     const w = new SkyPodWall(
       renderer,
       {
-        say: () => {},
+        say: (l) => mallVoice.say(l),
         section: () => {},
         done: () => {},
         round: (n) => {
