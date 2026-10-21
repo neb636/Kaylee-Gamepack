@@ -210,4 +210,13 @@ export const sfx = {
     noise(0.35, 0.1, 'lowpass', 1600, 200)
     for (let i = 0; i < 5; i++) tone(2400 + Math.random() * 1200, 1800, 0.08, 0.02, 'sine', 0.1 + i * 0.05)
   },
+
+  // ---- The mall trip ----
+  /** HarborLand's ball cannon: a soft thoomp. */
+  thoomp: () => {
+    noise(0.25, 0.14, 'lowpass', 500, 120)
+    tone(110, 55, 0.25, 0.12, 'sine')
+  },
+  /** A Phi Ta Khon figure's cowbells: a jangle. */
+  jangle: () => [0, 0.07, 0.15, 0.24].forEach((d, i) => tone(1200 + (i % 2) * 340, 1150, 0.18, 0.05, 'square', d)),
 }

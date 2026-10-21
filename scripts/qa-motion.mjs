@@ -647,6 +647,34 @@ GAME_SCENARIOS.push(
   thaiTrip('trip-land', 9, 'land', [], 8000),
 )
 
+// HarborLand (the mall trip, greybox 1): climbing the Golden Mountain (three hops), the Boomerang Donut swinging, down
+// the twin-dragon spiral into the balls (from the tower's deck, after walking the skywalk), the zip line, and the cannon
+// at Daddy (bonk, topple, the ball on his horn). Taps go through the tap targets, or a point on the screen.
+const thaiMall = (name, seconds, section, steps) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/${section}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().mode, null, { timeout: 20000 })
+    await page.waitForTimeout(1200)
+  },
+  act: async (page) => {
+    for (const [what, ms, fx, fy] of steps) {
+      if (what === 'point') await page.mouse.click(vp.width * fx, vp.height * fy)
+      else await page.locator(`[data-anchor="${what}"]`).click({ force: true }).catch(() => {})
+      await page.waitForTimeout(ms)
+    }
+  },
+})
+GAME_SCENARIOS.push(
+  thaiMall('mall-mountain', 4, 'play', [['climb:mountain', 3800]]),
+  thaiMall('mall-donut', 7, 'mountain', [['ride:donut', 6800]]),
+  thaiMall('mall-dragon', 9, 'dragon', [['point', 4200, 0.15, 0.47], ['ride:dragon', 4600]]),
+  thaiMall('mall-zip', 6, 'mountain?rides=mountain', [['point', 3600, 0.9, 0.66], ['ride:zip', 2300]]),
+  thaiMall('mall-cannon', 6, 'play', [['cannon', 2700], ['cannon', 1400], ['cannon', 1700]]),
+)
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {

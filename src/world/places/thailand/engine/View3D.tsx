@@ -35,11 +35,12 @@ export interface World3D {
 }
 
 /** Read-only state for tests and QA scripts (no jump hooks: use section links). */
-export type QAKey = '__thaiHouseQA' | '__thaiBoatQA'
+export type QAKey = '__thaiHouseQA' | '__thaiBoatQA' | '__thaiMallQA'
 declare global {
   interface Window {
     __thaiHouseQA?: () => Record<string, unknown>
     __thaiBoatQA?: () => Record<string, unknown>
+    __thaiMallQA?: () => Record<string, unknown>
   }
 }
 

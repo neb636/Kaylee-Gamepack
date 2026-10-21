@@ -549,6 +549,17 @@ Revised 2026-10-21. Each mini game is its own small activity inside the trip. It
 greybox, Dad plays it, then art and voices. PR #120 (the small climbing toy) is the prototype for the walker and the
 slides.
 
+*Greybox 1, built 2026-10-21 (PR #120,* `activities/mall-trip/harborland/`, `#/world/thailand/mall-trip/play`*):* the
+small climbing toy, before Dad's photos.
+- **Walking on more than one floor** is `trip/walk.ts`. A tap on another floor plans the way through the climbs and
+  slides, and a slide is cheap, so she takes one down whenever there is one.
+- **The playground:** the Golden Mountain (three gold tiers, a chedi, three monkeys), two decks joined by a rope bridge,
+  the top deck and a skywalk to the dragon tower, two nets, the perch's little slide, the Boomerang Donut, the zip line,
+  the Ta-Khon roller slide, the twin-dragon spiral, the ball pool with Daddy in it, the cannon, the Sky Pod, the bike
+  race and three Phi Ta Khon figures.
+- **Around it:** Mommy sits on the parents' bench, and the sock band gets a sticker for each big ride.
+- **Its rides and walker** carry over into the Big Frame (step 4).
+
 1. **Greybox: the vet clinic** (`vet`), the toy Kaylee's photos say she loved. The question for the iPad: is healing
    the puppy fun with her finger?
 2. **Greybox: the barber salon** (`barber`) and Daddy's `hair` carrying on through the trip.
@@ -561,6 +572,8 @@ slides.
 7. **Greybox: the trip loop:** Mommy's choice, the Veloz, arrive, hungry, home.
 8. **The look:** the hall, the shops, the Big Frame, ICONSIAM, The Pizza Company, the Veloz and the outfits, in toon.
 9. **Voices, the full loop and QA** (layout-qa, then playtest-qa, scoped to `mall-trip`).
+10. **Into the game:** move `mall-trip` from `inTheWorks` to `activities` in `meta.ts`. Until then it opens only from its
+    links (no way in from the house, no passport slot, and the 🎉 party doesn't wait for its stamp).
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 

@@ -354,7 +354,9 @@ and suggestions behind its own screens, and goes full screen with a swipe up (or
 1. **Greybox toy:** only the core verb, with placeholder shapes (no generated art, no voices), on the PR preview.
    Dad plays it on the iPad. If it isn't fun yet, change the toy, not the decoration.
 2. **Art and puppets**, then 3. **the full loop** (story, voices, payoff) and QA.
-One activity per PR (the finale is its own PR). An OK to "build it in one go" covers that one activity, not the next ones.
+One activity per PR (the finale is its own PR).
+Until an activity is ready for Kaylee, list it in the country's `meta.ts` under `inTheWorks`, not `activities`. Its links
+and the tests still reach it, but she can't: no way in, no passport slot, and the finale doesn't wait for its stamp. An OK to "build it in one go" covers that one activity, not the next ones.
 A plan that reads well can still be thin to play: judge it by the verbs and the numbers, not the prose.
 
 **Screens.** The iPad is where she plays: every iPad size must look great. iPhones must work (nothing cut off,

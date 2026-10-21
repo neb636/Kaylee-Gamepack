@@ -22,7 +22,7 @@ export interface PartOpts {
 }
 
 const color = new Color()
-function bake(g: BufferGeometry, c: ColorRepresentation, o: PartOpts = {}): BufferGeometry {
+export function bake(g: BufferGeometry, c: ColorRepresentation, o: PartOpts = {}): BufferGeometry {
   const geo = g.index ? g.toNonIndexed() : g
   if (geo !== g) g.dispose()
   for (const name of Object.keys(geo.attributes)) if (name !== 'position' && name !== 'normal') geo.deleteAttribute(name)
