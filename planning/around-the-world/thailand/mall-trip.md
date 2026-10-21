@@ -413,7 +413,7 @@ Activity `mall-trip`: `activities/mall-trip/sections.ts`. Every param has a defa
 | 3 | `arrive` | ICONSIAM, the lift, socks and the height chart | `socks` |
 | 4 | `hall` | HarborLand: walk the hall, pick a mini game | `socks`, `games`, `from`, `hair` |
 | 5 | `vet` | The Vet Clinic (`?patient=puppy\|pony\|elephant`) | `socks`, `games`, `patient` |
-| 6 | `barber` | The Barber Salon: Daddy's new look | `socks`, `games`, `hair` |
+| 6 | `barber` | The Barber Salon: Daddy's new look (`?round=1\|2\|3`) | `socks`, `games`, `round`, `hair` |
 | 7 | `race` | The racing slide (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 8 | `cafe` | Cafe & Cake: the blender (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 9 | `mountain` | The Golden Mountain and the steel slide | `socks`, `games` |
@@ -436,11 +436,17 @@ Params:
   any of them fills the frame's 🛝 sticker.
 - `from`: the hall: the door she comes out of, `in|vet|cafe|barber|race|frame`. Default `in` (she's just come in, by
   Mommy's bench).
-- `hair`: Daddy's hairdo from the barber, e.g. `long,rainbow,spiky`. Default empty (his own mane).
+- `hair`: Daddy's hairdo from the barber (`games/barber/hair.ts`), which he keeps in the hall and at the pizza table.
+  Default empty (his own mane). Dot-separated: `<lengths>.<colors>.<styles>.<bows>.<brows>`, each one char for the
+  whole head or one per tuft (26 tufts), trailing defaults left out. Lengths `0-9a-z` (4 is his own), colors `n` (his
+  own) or `r o y g b v p w`, styles `n s f c` (as it falls, spiky, combed flat, poofed), bows as pairs (tuft, `p v y`
+  a bow or `P V Y` a clip), brows two lengths. E.g. `k.r` long and red, `k.n.s` long spikes,
+  `k.roygbvproygbvproygbvproyg.s.1p5Y.66` rainbow spikes with a bow, a clip and bushy brows.
 - `patient`: who's on the vet's table, `puppy|pony|elephant`. Default `puppy`.
 - `round`: the round of the mini game on screen, `1|2|3`. Default `1`.
   - The cafe: blend anything, picture orders, Thai drinks two at once.
   - The racing slide: the first race, tap at a bump to fly, spinning rubber rings.
+  - The barber: grow and snip, then colors, the dryer and bows, then kids with picture cards.
 - `pizza`: `hawaiian|seafood|cheese`, default `cheese`.
 - `shared`: slices already handed out, 0-8. Default 0. `share?shared=6` starts at the last two, for Agong.
 - `photos`: which photos exist. Default for `home`: `dragon`.
@@ -583,6 +589,33 @@ small climbing toy, before Dad's photos.
    - **`games`:** replaces PR #120's `rides` (old `rides` links still work). The vet sticker comes after the first
      patient.
 2. **Greybox: the barber salon** (`barber`) and Daddy's `hair` carrying on through the trip.
+   *Built 2026-10-21 (`activities/mall-trip/games/barber/`, `#/world/thailand/mall-trip/barber?round=1|2|3&hair=...`):*
+   - **The mane is strands** (`mane.ts`): 26 tufts of 4 strands over the top, sides and back of the head, plus two
+     eyebrows. Each strand is 5 tapered tube segments with a ball at each joint: one instanced mesh for the segments
+     and one for the balls, each with an instanced ink outline (4 draw calls per head). A strand has its own length,
+     color, stiffness (spiky to combed flat), curl and wildness; its shape (droop, curl, wind, never into the head) is
+     worked out on the CPU only when something changes. Short, it reads as his fuzzy mane; long, as cartoon locks.
+   - **The tools work on the strands under her finger on screen.** The scissors cut every strand the finger's sweep
+     crosses since the last move (not just where it is now), so a fast swipe on an iPhone still cuts. A scripted
+     tonic-then-scissors stroke grew and cut at iPad and iPhone landscape (his head is about 60 px across on an iPhone).
+   - **The room:** Daddy in the big chair (a cape round him) in front of the bulb mirror, Kaylee on a step stool in a
+     lavender smock (a new wearable), Mommy on the waiting bench with her phone, the striped pole (spins), the comb jar
+     (bubbles), the chair's pump (up, up, hiss down). The trolley along the bottom holds the tools.
+   - **Rounds:** (1) tonic, scissors, comb; (2) adds the color spray (the color goes round the rainbow as she sprays,
+     so a sweep paints stripes), the dryer (poof; held on hair for 1.4 s it goes to full and blows everyone's mane),
+     two bows and a clip; (3) Daddy hops to the bench with his new look and three kids (placeholders: a puppy, a pony,
+     a panda) come in one at a time with a picture card (spiky, pigtails, curly).
+   - **The mirror:** after 8 strokes on Daddy (5 per kid) it glows. A tap: the chair spins round to it, back, Daddy
+     poses (or the kid giggles, "close enough!"), Mommy's flash. Then the next round or kid; after the third kid, 🛝.
+   - **Silly:** snip his horn and it boings back; tonic on his eyebrows grows them bushy; the dryer on full.
+   - **Taps:** a tap on a tool does a short go with it (a squirt on top, a trim straight across, a comb up or down, a
+     bow in), so it can all be played with taps.
+   - **`hair`:** the screen saves Daddy's hairdo after each stroke. The hall's Daddy (who follows her) and the pizza
+     table's wear it (`wearHair`). The barber's door in the hall opens now (no more teaser puff), and the sock band has
+     a 💈 slot (its sticker after the first reveal).
+   - **Next:** Dad plays it on the iPad. Then the art gate (the kids' real looks, the mirror's reflection, a hair-pile
+     on the floor) and the full loop (Sparkle's line, Daddy's and the kids' reactions, "close enough!" in a voice).
+     Home reads `hair` when it's built (Agong laughs).
 3. **Greybox: the racing slide** (`race`).
    *Built 2026-10-21 (`activities/mall-trip/games/race/`, `#/world/thailand/mall-trip/race?round=1|2|3`):*
    - **The scene:** four wavy orange lanes (four bumps each) seen from the bottom, a little from her side so the

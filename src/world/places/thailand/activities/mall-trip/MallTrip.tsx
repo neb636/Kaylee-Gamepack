@@ -1,6 +1,8 @@
 // The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md). So far, in shapes and without
 // voices: HarborLand's hall (hall/, sections hall and hungry), where she walks between the ways in; the mini games
-// behind them: the Vet Clinic (games/vet/, section vet), Cafe & Cake (games/cafe/, section cafe), the Racing Slide
+// behind them: the Vet Clinic (games/vet/, section vet), the Barber Salon (games/barber/, section barber: Daddy keeps
+// the hairdo she gives him, `hair`, in the hall and at the pizza table),
+// Cafe & Cake (games/cafe/, section cafe), the Racing Slide
 // (games/race/, section race) and the first climbing toy standing in for the Big Frame (harborland/, sections play,
 // mountain, dragon: they follow the floor she's on); and the pizza toy at The Pizza Company (pizza/, sections menu and
 // share). Each mini game is a sticker on her sock band in the corner (`games`), and a big ↩️ takes her back out to the
@@ -10,6 +12,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { sounds } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
+import { Barber } from './games/barber/Barber'
 import { Cafe } from './games/cafe/Cafe'
 import type { Round } from './games/cafe/layout'
 import { Race } from './games/race/Race'
@@ -25,20 +28,21 @@ import MALL_SECTIONS, { type MallSection, type PatientId } from './sections'
 import { SOCK_COLORS } from './socks'
 
 /** What she can play so far: the mini games and the climbing toy's big rides (they count for the Big Frame). */
-const GAMES = ['vet', 'cafe', 'race', ...RIDES] as const
+const GAMES = ['vet', 'cafe', 'race', 'barber', ...RIDES] as const
 type GameId = (typeof GAMES)[number]
 const list = (s: string) => s.split(',').filter((x): x is GameId => (GAMES as readonly string[]).includes(x))
 const isRide = (g: GameId): g is RideId => (RIDES as readonly string[]).includes(g)
-/** Her sock band: a slot for each mini game she can play (the barber and the rest add theirs when they're built). */
+/** Her sock band: a slot for each mini game she can play (the rest add theirs when they're built). */
 const BAND: { id: GameDoor; icon: string }[] = [
   { id: 'vet', icon: '🩺' },
   { id: 'cafe', icon: '🥤' },
+  { id: 'barber', icon: '💈' },
   { id: 'race', icon: '🏁' },
   { id: 'frame', icon: '🛝' },
 ]
 const bandOf = (games: GameId[]): GameDoor[] => BAND.map((b) => b.id).filter((id) => (id === 'frame' ? games.some(isRide) : games.includes(id)))
 /** The way in each section is behind (where she comes back out). */
-const DOOR_OF: Partial<Record<MallSection, DoorId>> = { vet: 'vet', cafe: 'cafe', race: 'race', play: 'frame', mountain: 'frame', dragon: 'frame' }
+const DOOR_OF: Partial<Record<MallSection, DoorId>> = { vet: 'vet', cafe: 'cafe', race: 'race', barber: 'barber', play: 'frame', mountain: 'frame', dragon: 'frame' }
 /** Daddy gets hungry after four stickers, or this long in HarborLand. */
 const HUNGRY_MS = 5 * 60_000
 
@@ -51,11 +55,13 @@ export function MallTrip() {
   const [round, setRound] = useState<Round>(() => Number(param('round')) as Round)
   // (`rides` is the old name of `games`, from PR #120's links. A link past the puppy, or past a mini game's first round,
   // has that game's sticker already.)
-  const [games, setGames] = useState<GameId[]>(() => [...new Set([...list(param('games')), ...list(param('rides')), ...(first === 'vet' && patient !== 'puppy' ? ['vet' as const] : []), ...(first === 'cafe' && round > 1 ? ['cafe' as const] : []), ...(first === 'race' && round > 1 ? ['race' as const] : [])])])
+  const [games, setGames] = useState<GameId[]>(() => [...new Set([...list(param('games')), ...list(param('rides')), ...(first === 'vet' && patient !== 'puppy' ? ['vet' as const] : []), ...(first === 'cafe' && round > 1 ? ['cafe' as const] : []), ...(first === 'race' && round > 1 ? ['race' as const] : []), ...(first === 'barber' && round > 1 ? ['barber' as const] : [])])])
   const [section, setSection] = useState<MallSection>(first)
   const [from, setFrom] = useState<DoorId | 'in'>(() => param('from') as DoorId | 'in')
   const [pizza, setPizza] = useState(() => param('pizza') as PizzaId)
   const [shared, setShared] = useState(() => Number(param('shared')))
+  // Daddy's hairdo from the barber: he keeps it for the rest of the trip.
+  const [hair, setHair] = useState(() => param('hair'))
   // Daddy's tummy: how many times she's gone into a mini game, and when "More play" said not yet.
   const since = useRef(performance.now())
   const [visits, setVisits] = useState(0)
@@ -71,8 +77,9 @@ export function MallTrip() {
     games: games.join(','),
     ...(section === 'hall' ? { from } : {}),
     ...(section === 'vet' ? { patient } : {}),
-    ...(section === 'cafe' || section === 'race' ? { round: String(round) } : {}),
+    ...(section === 'cafe' || section === 'race' || section === 'barber' ? { round: String(round) } : {}),
     ...(section === 'share' ? { pizza, shared: String(shared) } : {}),
+    ...(section === 'hall' || section === 'barber' || pizzaTime ? { hair } : {}),
   })
   useEffect(() => enter(first, params()), [])
   const ready = useRef(false)
@@ -82,11 +89,13 @@ export function MallTrip() {
       return
     }
     enter(section, params())
-  }, [section, games, patient, round, pizza, shared, from])
+  }, [section, games, patient, round, pizza, shared, from, hair])
 
   /** In through a way in. */
   const goIn = (door: GameDoor) => {
     setVisits((v) => v + 1)
+    // (The barber starts with Daddy in the chair, whatever round another mini game was on.)
+    if (door === 'barber') setRound(1)
     setSection(door === 'frame' ? 'play' : door)
   }
   /** Back out to the hall, by the door she went in. */
@@ -101,6 +110,7 @@ export function MallTrip() {
         <HallScreen
           key={`hall-${visits}`}
           socks={socks}
+          hair={hair}
           done={band}
           from={from}
           hungry={hungry || section === 'hungry'}
@@ -116,12 +126,14 @@ export function MallTrip() {
         />
       ) : section === 'vet' ? (
         <Vet patient={patient} onPatient={setPatient} onHealed={(id) => id === 'puppy' && sticker('vet')} onPlay={goOut} />
+      ) : section === 'barber' ? (
+        <Barber round={round} hair={hair} onRound={setRound} onHair={setHair} onRevealed={(n) => n === 1 && sticker('barber')} onPlay={goOut} />
       ) : section === 'cafe' ? (
         <Cafe round={round} onRound={setRound} onDrink={() => sticker('cafe')} onPlay={goOut} />
       ) : section === 'race' ? (
         <Race round={round} onRound={(n) => setRound(Math.min(3, n) as Round)} onWon={() => sticker('race')} onPlay={goOut} />
       ) : pizzaTime ? (
-        <Pizza section={section} pizza={pizza} shared={shared} onPizza={setPizza} onServed={() => setSection('share')} onShared={setShared} />
+        <Pizza section={section} pizza={pizza} shared={shared} hair={hair} onPizza={setPizza} onServed={() => setSection('share')} onShared={setShared} />
       ) : (
         <Playground section={section as HarborSection} socks={socks} rides={games.filter(isRide)} onSection={setSection} onRide={sticker} />
       )}
