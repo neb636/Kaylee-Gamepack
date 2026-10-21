@@ -89,10 +89,17 @@ export const DOORS = {
   race: { at: [(STEPS.x0 + STEPS.x1) / 2, -0.2] as XZ, in: [(STEPS.x0 + STEPS.x1) / 2, -1.2] as XZ },
   /** Little Land: beside the front stack (it tumbles as she goes in), in between the stack and the bags. */
   blocks: { at: [BLOCKS.x1 - 0.45, BLOCKS.front + 0.75] as XZ, in: [BLOCKS.x1 - 0.45, BLOCKS.front - 0.5] as XZ },
+  /** The Golden Mountain: at the foot of its front-left (she climbs onto the first hold as she goes in), and just at
+   *  the cone's foot when she comes back out. */
+  mountain: { at: [MOUNTAIN.x - 0.4, MOUNTAIN.z + MOUNTAIN.r + 0.35] as XZ, in: [MOUNTAIN.x - 0.75, MOUNTAIN.z + MOUNTAIN.r - 0.05] as XZ },
+  /** Muay Thai: in front of the first bag (she punches it as she goes in), and in between the bags. */
+  boxing: { at: [BOXING.bags[0] - 0.7, BOXING.z + 1.1] as XZ, in: [(BOXING.bags[0] + BOXING.bags[1]) / 2, BOXING.z - 0.2] as XZ },
+  /** The Sky Pod: in front of its wall (its pods light up in a rainbow as she goes in). */
+  skypod: { at: [SKYPOD.x, SKYPOD.z + 1.7] as XZ, in: [SKYPOD.x, SKYPOD.z + 0.7] as XZ },
 }
 export type DoorId = keyof typeof DOORS
 /** The ways in that open a mini game. */
-export const OPEN_DOORS = ['vet', 'cafe', 'race', 'frame', 'barber', 'blocks'] as const
+export const OPEN_DOORS = ['vet', 'cafe', 'race', 'frame', 'barber', 'blocks', 'mountain', 'boxing', 'skypod'] as const
 export type GameDoor = (typeof OPEN_DOORS)[number]
 
 /** Where she stands when she first comes in: in front of Mommy's bench, between the town and the frame. */

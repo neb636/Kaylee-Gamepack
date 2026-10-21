@@ -83,7 +83,7 @@ function frameOf(look: Look): Frame {
     eyeX: look.species === 'unicorn' || look.species === 'pony' ? 0.37 * R : bird ? 0.46 * R : 0.36 * R,
     eyeY: look.species === 'unicorn' || look.species === 'pony' ? 0.12 * R : penguin ? 0.02 * R : bird ? 0.14 * R : 0.05 * R,
     eyeSize: 0.21 * R,
-    lift: penguin ? 0.12 * R : 0,
+    lift: penguin ? 0.12 * R : look.species === 'monkey' ? 0.07 * R : 0,
     on: (x, y, lift = 0) => [x, headY + y, Math.sqrt(Math.max(0, R * R - x * x - y * y)) + lift],
     turnTo: (x) => [0, Math.asin(Math.max(-1, Math.min(1, x / R))), 0],
   }
@@ -104,7 +104,7 @@ const SCRUBS = '#7FB2F0'
 const SCRUBS_DARK = '#5D8FD6'
 
 /** One worn thing's parts, on the head pivot, the body or each arm pivot (in their local space). */
-function wornParts(id: Wearable, f: Frame): WornParts {
+function wornParts(id: Wearable, f: Frame, look: Look): WornParts {
   const { H, R, headY, eyeX, eyeY, on, turnTo } = f
   const out: WornParts = { head: [], headPlain: [], armL: [], armR: [], body: [], bodyPlain: [] }
   if (id === 'sunhat' || id === 'spare-hat') {
@@ -196,6 +196,23 @@ function wornParts(id: Wearable, f: Frame): WornParts {
     for (const [x, z] of [[0, 0], [-0.32, -0.1], [0.32, -0.1], [0, -0.3], [-0.18, 0.2], [0.18, 0.2]]) out.head.push(P.sphere(0.4 * R, '#FFFFFF', { at: [x * R, headY + 1.32 * R, cz + (z - 0.12) * R] }, 16))
     out.head.push(P.torus(0.65 * R, 0.06 * R, '#FFD6E6', { at: [0, headY + 0.8 * R, cz + 0.04 * R], rot: [Math.PI / 2 - 0.25, 0, 0] }))
   }
+  if (id === 'gloves') {
+    // Muay Thai gloves over the hands (Kaylee's pink, the coach's red): a big round glove, a thumb along its side and a
+    // white cuff at the wrist. They follow the arm pivots, so a punch is the arm swinging forward.
+    const c = look.species === 'unicorn' ? '#FF4F9A' : '#E8403F'
+    for (const [side, s] of [['armL', -1], ['armR', 1]] as const) {
+      out[side].push(P.sphere(0.082 * H, c, { at: [s * 0.054 * H, -0.158 * H, 0.012 * H], scale: [1, 1.08, 1.12] }))
+      out[side].push(P.sphere(0.034 * H, c, { at: [s * 0.012 * H, -0.15 * H, 0.06 * H], scale: [0.9, 1.4, 0.9] }))
+      out[side].push(P.cyl(0.058 * H, 0.062 * H, 0.04 * H, '#FFFFFF', { at: [s * 0.036 * H, -0.098 * H, 0.004 * H], rot: [0, 0, s * 0.35] }))
+    }
+  }
+  if (id === 'mongkhon') {
+    // The red Muay Thai headband (the mongkhon), round the forehead under the ears (and the horn), with its tail at the
+    // back and a little gold bead in front.
+    out.head.push(P.torus(0.985 * R, 0.085 * R, '#E8403F', { at: [0, headY + 0.3 * R, -0.02 * R], rot: [Math.PI / 2 - 0.2, 0, 0], scale: [1.04, 1, 1] }))
+    out.head.push(P.capsule(0.07 * R, 0.4 * R, '#E8403F', { at: [0.08 * R, headY + 0.02 * R, -1.08 * R], rot: [-0.55, 0, 0.25] }))
+    out.headPlain.push(P.sphere(0.07 * R, '#FFC83D', { at: on(0, 0.48 * R, 0.07 * R) }))
+  }
   if (id === 'floaties') {
     // An armband round each upper arm (pink on one, orange on the other, like the ones she packed), a cream stripe
     // round its top and a little valve.
@@ -218,7 +235,7 @@ function wornParts(id: Wearable, f: Frame): WornParts {
 /** Builds a worn thing to add to a finished rig at runtime (Kaylee puts on her sun hat): a group for the head pivot
  *  and one for each arm pivot (null where there's nothing). */
 export function buildWorn(look: Look, id: Wearable, bag: Bag): { head: Group | null; armL: Group | null; armR: Group | null; body: Group | null } {
-  const parts = wornParts(id, frameOf(look))
+  const parts = wornParts(id, frameOf(look), look)
   const px = look.height >= 1 ? 3 : 2.5
   const group = (lined: Parts, plain: Parts) => (lined.length || plain.length ? solidMix(lined, plain, bag, px) : null)
   return { head: group(parts.head, parts.headPlain), armL: group(parts.armL, []), armR: group(parts.armR, []), body: group(parts.body, parts.bodyPlain) }
@@ -337,7 +354,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       if (o) parts.push(P.sphere(0.06 * H, o.color, { at: [0, -0.01 * H, 0] }))
     } else {
       const armColor = look.species === 'panda' ? look.dark : look.fur
-      const hand = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' ? look.dark : look.species === 'fox' || look.species === 'puppy' ? look.light : look.fur
+      const hand = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' ? look.light : look.fur
       parts.push(P.capsule(0.052 * H, 0.09 * H, armColor, { at: [s * 0.025 * H, -0.075 * H, 0], rot: [0, 0, s * 0.35] }))
       parts.push(P.sphere(0.054 * H, hand, { at: [s * 0.05 * H, -0.14 * H, 0.005 * H] }))
       if (o) parts.push(P.sphere(0.068 * H, o.color, { at: [s * 0.004 * H, -0.015 * H, 0] }))
@@ -470,6 +487,35 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       ;[[0.27, -0.2, 0.06], [0.22, -0.25, 0.065], [0.16, -0.28, 0.065], [0.1, -0.29, 0.058]].forEach(([y, z, r], i) => tail.push(P.sphere(r * H, m(i), { at: [0, y * H, z * H] })))
       break
     }
+    case 'monkey': {
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0] }, 26))
+      // A big cream heart-shaped face (the eyes sit on it, like a penguin's mask): two rounds over the eyes, meeting in
+      // a point on the forehead, and a wide round muzzle with nostrils.
+      for (const s of [-1, 1]) head.push(P.sphere(0.46 * R, look.light, { at: [s * 0.3 * R, headY + 0.07 * R, 0.6 * R], scale: [1, 1.08, 0.78] }))
+      head.push(P.sphere(0.52 * R, look.light, { at: [0, headY - 0.36 * R, 0.62 * R], scale: [1.25, 0.8, 0.8] }))
+      headPlain.push(...[-1, 1].map((s) => P.sphere(0.04 * R, INK, { at: [s * 0.1 * R, headY - 0.2 * R, 1.03 * R], scale: [1, 0.75, 0.6] })))
+      mouth(mouthPoint(-0.52 * R, 1.0 * R))
+      // Big round ears low on the sides (cream inside), and a little swirl of fur on top.
+      for (const s of [-1, 1]) {
+        head.push(P.sphere(0.36 * R, look.fur, { at: [s * 1.02 * R, headY - 0.02 * R, -0.02 * R], scale: [0.36, 1, 1] }))
+        headPlain.push(P.sphere(0.24 * R, look.ear ?? look.light, { at: [s * 1.09 * R, headY - 0.02 * R, 0.02 * R], scale: [0.3, 1, 1] }))
+      }
+      head.push(P.cone(0.13 * R, 0.36 * R, look.fur, { at: [0.05 * R, headY + 1.02 * R, 0.12 * R], rot: [0.2, 0, -0.5] }))
+      // A long tail that curls up behind (it wags from its root).
+      tailRoot = [0, 0.2 * H, -0.15 * H * round[2]]
+      const curl: [number, number, number][] = [
+        [0.17, -0.22, 0.032],
+        [0.16, -0.3, 0.03],
+        [0.2, -0.37, 0.029],
+        [0.28, -0.41, 0.028],
+        [0.37, -0.4, 0.027],
+        [0.43, -0.35, 0.026],
+        [0.44, -0.29, 0.026],
+        [0.4, -0.26, 0.026],
+      ]
+      for (const [y, z, r] of curl) tail.push(P.sphere(r * H, look.fur, { at: [0, y * H, z * H] }))
+      break
+    }
     case 'fox': {
       head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.1, 1, 1] }, 26))
       for (const s of [-1, 1]) {
@@ -589,7 +635,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       arm.L.push(P.torus(0.04 * H, 0.016 * H, '#B07A4A', { at: [-0.06 * H, -0.11 * H, 0.04 * H] }, Math.PI))
     }
     if (isWearable(e)) {
-      const w = wornParts(e, f)
+      const w = wornParts(e, f, look)
       head.push(...w.head)
       headPlain.push(...w.headPlain)
       torso.push(...w.body)
