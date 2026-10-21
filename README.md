@@ -35,6 +35,9 @@ Only the repo owner can trigger the AI workflows.
    (for a US project, `https://us.i.posthog.com`). Only the main Pages deployment enables PostHog;
    PR previews and local builds do not send events.
    The project token is public and bundled into the website; do not use a PostHog personal API key here.
+   Error tracking captures uncaught errors on its own. For readable stack traces, also add the secret
+   `POSTHOG_API_KEY` (a PostHog personal API key with *Error tracking: write*) and the variable
+   `POSTHOG_PROJECT_ID`: the main deploy then uploads source maps to PostHog and leaves them off the site.
 3. After the first deploy to `main` creates the `gh-pages` branch:
    Settings → Pages → *Deploy from a branch* → `gh-pages` / `(root)`.
 
