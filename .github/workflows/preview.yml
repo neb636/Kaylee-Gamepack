@@ -26,17 +26,9 @@ jobs:
           node-version: 24
           cache: npm
       - if: github.event.action != 'closed'
-        run: npm ci
-      - name: Build preview with PostHog
-        if: github.event.action != 'closed'
-        run: |
-          : "${VITE_POSTHOG_KEY:?Set the VITE_POSTHOG_KEY repository variable to the PostHog project token}"
-          : "${VITE_POSTHOG_HOST:?Set the VITE_POSTHOG_HOST repository variable to the PostHog ingestion URL}"
-          npm run build
+        run: npm ci && npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/pr-preview/pr-${{ github.event.number }}/
-          VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}
-          VITE_POSTHOG_HOST: ${{ vars.VITE_POSTHOG_HOST }}
       - uses: rossjrw/pr-preview-action@v1
         with:
           source-dir: dist
