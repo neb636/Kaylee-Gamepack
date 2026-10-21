@@ -305,17 +305,95 @@ From Dad's photos: a white-tiled kitchen, a coffee machine, a blender, breads in
 
 #### 5. The Golden Mountain ⛰️ (`mountain`; counting, colors)
 
-From Dad's photo: a yellow cone with climbing holds, a red rail at the top, a steel slide down the front, painted
-elephants behind.
+From Dad's photo: a big yellow cone with climbing holds and Thai patterns, a red rail round the top, a shiny steel slide
+straight down the front, and kids riding elephants painted on the wall behind it. Filled in with
+`../ACTIVITY-TEMPLATE.md` on 2026-10-21, before the greybox.
 
-- **The toy:** tap the next glowing hold and she reaches up and pulls herself to it. Count them to the top, ring the
-  bell, then zoom down the shiny steel slide.
-- **How it deepens:**
-  1. Holds in a line.
-  2. "Only the pink ones!"
-  3. Race Daddy up the other side.
-- **Fact:** the real Golden Mount in Bangkok is a temple on a hill (check the number of steps against a source before
-  it's spoken).
+**One-line pitch:** the Lopburi monkeys sit on top of the Golden Mountain ringing its bell; Kaylee climbs up hold by
+hold, counting, rings the bell herself and zooms down the steel slide, then beats Daddy to the top.
+
+**The toy (core verb):** grab the next hold and pull herself up to it.
+- How it feels: every hold she can reach from where she hangs glows. Her finger goes down on one and her hand reaches
+  for it at once; pull the finger down and she pulls herself up with it (a tap does the whole pull). She stretches, rises,
+  lands with a squash, her legs dangle and swing, and the hold's number pops up big over it with a note one step up the
+  scale (1, 2, 3...). Over the top she hops onto the platform, turns round and cheers.
+- Why it's fun with no goal: going up, and then the big slide down, is the playground's oldest loop; the slide is the
+  payoff she wants again.
+- Greybox test: the cone, round holds, the bell, the steel slide, Kaylee, Daddy and three monkeys in the toon look. Does
+  pulling up feel good on the iPad (tap and pull-down), and does the slide make her want to go again?
+
+**How the verb deepens (3 steps, same verb):**
+1. **Holds in a line:** five holds straight up her side; count them to the top, ring the bell, slide.
+2. **"Only the pink ones!":** six rows of mixed colors; the pink ones in reach glow, and she picks her own way (two or
+   three pinks a row, left or right). A non-pink hold is a silly toy, never an "oops": the yellow one honks like a
+   clown nose, the blue one giggles and wobbles, the mint one is a monkey's hiding place (a monkey leaps out beside it,
+   blows a raspberry and leaps back). She stays put and the pinks keep glowing.
+3. **Race Daddy up the other side:** seven rows on her side, seven on his. He climbs when she does, puffing (puff clouds,
+   huff huff), and waits for her, panting, if she stops. **She always wins, just:** he's always one hold behind, and he
+   flops over the rail as she rings the bell. Then he follows her down the slide and lands head first on the mat, legs
+   kicking.
+Side verb: none (the bell and the slide are the climb's payoff: one tap each).
+
+**Her choices:** which hold next (round 1 has one; rounds 2 and 3 have two or three in reach), left or right, ring the
+bell or go straight down the slide, poke the monkeys on the way up.
+
+**Pokeables (5+ things that react and aren't the answer):**
+- the monkey at the foot (a backflip and a chatter)
+- the monkey on its ledge halfway up (scratches its head, swings its tail)
+- the monkey on the top rail (swings right round the rail)
+- the bell (rings any time; from the floor the top monkey rings it for her)
+- the painted elephants on the wall (a trunk goes up and sprays a fan of water drops, a trumpet)
+- the steel slide (a shine runs down it, ting)
+- the Thai pattern bands on the cone (gold ripples round them)
+- Kaylee (a giggle and a wiggle, even on the wall) and Daddy (a hop and a laugh)
+
+**Silly moments (instead of failure):** the non-pink holds in round 2 (honk, giggle, monkey); the bell rung from the
+floor (the monkey rings it and covers its ears); Daddy's head-first landing; a tap on a hold out of reach makes it
+wiggle and the ones in reach pulse brighter.
+
+**Story frame (at most 2 lines before her hands are busy):** Sparkle: "Climb the Golden Mountain, Kaylee! Count the
+holds!" (with the full loop; the greybox has no voices).
+When Sparkle talks during play: when round 2 starts ("Only the pink ones!"), when Daddy steps up ("Race Daddy to the
+top!"), and after ~8 s with nothing touched (the 👆 shows the next hold, the bell or the slide).
+Counting (with the full loop): each hold's number spoken as it pops ("One!" ... "Seven!"), in Sparkle's voice.
+Daddy's lines (full loop): "I'm going to win!" (round 3 starts), "Huff... puff..." (while he climbs), "You beat me,
+Kaylee!" (at the top), "Whoa-oa-oa!" (his head-first landing).
+Kaylee at the top: "I did it!" Other lines: "Ding dong!" (Sparkle, the first bell), "Wheee!" (Kaylee on the slide).
+
+**What it teaches, by doing:** counting up as she climbs (one hold, one number, one note up the scale), picking out a
+color (only the pink ones), and that a temple sits on top of the Golden Mount. Tap-to-hear fact (full loop, on the bell
+the first time and the stamp): "The real Golden Mount in Bangkok is a temple on a hill. People climb over 300 steps to
+its golden top!" (Sources disagree on the exact count: 344 steps spiralling round the hill per
+[Thai Holiday Guide](https://www.thaiholidayguide.com/attraction/wat-saket-golden-mount/), 318 per
+[Penang Travel Tips](https://www.penang-traveltips.com/thailand/bangkok/golden-mount.htm); "over 300" is true for all of
+them.) Lopburi's monkeys are real too: a whole town in Thailand full of monkeys.
+
+**Payoff (visible, builds up while she plays):** a flag on the top rail for each round (pink, pink, then a gold one with a
+star for beating Daddy), the bell's sparkles, the slide. The ⛰️ sticker goes on her sock band the first time she
+reaches the top.
+
+**Replay:** she picks a different route each time in rounds 2 and 3; after the third round it stays open as a toy
+(race Daddy again, as often as she likes; the 🛝 takes her back to the hall).
+
+**Numbers:** about 30-35 touches: round 1 about 7 (5 pulls, bell, slide), round 2 about 9-11 (6 pulls, a silly hold or
+two, bell, slide), round 3 about 9 (7 pulls, bell, slide), plus pokes. About 2 min. No lines before the first touch in the
+greybox; one with the full loop.
+
+**Camera and art:** a 3D side view, straight on and a little above, in the house's toon look. The camera follows her up
+the mountain (she stays big on an iPhone) and pulls back for the slide.
+
+**Screens:** wide and tall framings; the holds she can reach (one row), the bell and the slide's mouth stay inside the
+safe zone, under the top bar.
+
+**Sections and state:** one section, `mountain?round=1|2|3` (the shared `round` param, with its own round state in
+MallTrip like `blocksRound`). The flags already on the rail follow the round. Reads `socks`, `games` and `hair` (Daddy
+keeps his barber hairdo); a link past round 1 has the ⛰️ sticker.
+
+**Tech:** `games/mountain/` like the other mini games: `layout.ts` (the cone and its holds in meters, pure data, shared
+with the flat version), `build.ts`, the world `golden.ts` (not `mountain.ts` next to `Mountain.tsx`: macOS's disk is
+case-insensitive), `Flat.tsx`, `sounds.ts`. The climb is its own (hold to hold, under her finger); the slide is the Big
+Frame's (`harborland/rides.ts` `slide`). Daddy is a `Racer` (the race's toy rig). **Riskiest:** the holds in reach being
+big enough to hit on an iPhone (only the next row gets tap targets, at least 64 px, and the camera follows her up).
 
 #### 6. Little Land: giant foam blocks 🧱 (`blocks`; shapes, balance)
 
@@ -482,7 +560,7 @@ Activity `mall-trip`: `activities/mall-trip/sections.ts`. Every param has a defa
 | 6 | `barber` | The Barber Salon: Daddy's new look (`?round=1\|2\|3`) | `socks`, `games`, `round`, `hair` |
 | 7 | `race` | The racing slide (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 8 | `cafe` | Cafe & Cake: the blender (`?round=1\|2\|3`) | `socks`, `games`, `round` |
-| 9 | `mountain` | The Golden Mountain and the steel slide | `socks`, `games` |
+| 9 | `mountain` | The Golden Mountain: climb, count, the bell, the steel slide (`?round=1\|2\|3`) | `socks`, `games`, `round`, `hair` |
 | 10 | `blocks` | Little Land: the foam blocks (`?round=1\|2\|3&card=chedi\|elephant`) | `socks`, `games`, `round`, `card` |
 | 11 | `boxing` | Muay Thai: the wai kru and the bags | `socks`, `games` |
 | 12 | `skypod` | The Sky Pod lights | `socks`, `games` |
@@ -499,8 +577,8 @@ Params:
 - `socks`: `pink|lavender|mint`, default `pink`.
 - `games`: the mini games done so far (the sock band's stickers), a comma list. Default empty. `frame` is any big ride
   in the Big Frame (the 🛝 sticker); old links' ride names (`pool`, `donut`, `zip`, `roller`, `dragon`) count as `frame`.
-- `from`: the hall: the door she comes out of, `in|vet|cafe|barber|race|frame`. Default `in` (she's just come in, by
-  Mommy's bench).
+- `from`: the hall: the door she comes out of, `in|vet|cafe|barber|race|frame|blocks|mountain`. Default `in` (she's
+  just come in, by Mommy's bench).
 - `at`: where she is in the Big Frame, `in|pit|l1|l2|top|out`: just through the tunnel, in the ball pit with Daddy,
   a level, or the mats in front. Default `in`. It follows the level she's on.
 - `hair`: Daddy's hairdo from the barber (`games/barber/hair.ts`), which he keeps in the hall and at the pizza table.
@@ -514,6 +592,8 @@ Params:
   - The cafe: blend anything, picture orders, Thai drinks two at once.
   - The racing slide: the first race, tap at a bump to fly, spinning rubber rings.
   - The barber: grow and snip, then colors, the dryer and bows, then kids with picture cards.
+  - Little Land: free stacking, the picture cards, taller than Daddy.
+  - The Golden Mountain: holds in a line, only the pink ones, race Daddy up the other side.
 - `pizza`: `hawaiian|seafood|cheese`, default `cheese`.
 - `shared`: slices already handed out, 0-8. Default 0. `share?shared=6` starts at the last two, for Agong.
 - `photos`: which photos exist. Default for `home`: `dragon`.
@@ -876,6 +956,51 @@ small climbing toy, before Dad's photos.
    - **Flat version** (`?gl=off`): the stack as a picture, the box and the stack as big buttons, the same grid.
    - **For Dad on the iPad:** does dragging a brick feel good, and does it land where she meant? Is the half-over-the-edge
      wobble fun or worrying? Should the stack ever really fall by itself? Are the outlines in round 2 too much help?
+   *Golden Mountain built 2026-10-21 (`activities/mall-trip/games/mountain/`,
+   `#/world/thailand/mall-trip/mountain?round=1|2|3`):*
+   - **The scene:** straight on, a little above. The yellow cone (5 m across, 3 m to its flat top) with three red Thai
+     pattern bands (little gold flames), the red rail round the top, the bell under a little red-and-gold sala, the
+     steel slide down the front a little right of the middle onto a pink mat, kids riding a pink and a blue elephant
+     painted on the wall behind, a green hill, a sun. Kaylee in her grip socks at the foot of the front-left, Daddy
+     (with his barber hairdo, `hair`) watching from the right. Three Lopburi monkeys: on a rock at the foot, on a ledge
+     halfway up the right, on the top rail.
+   - **The toy:** only the holds in reach glow (a gold ring, and a tap target of at least 64 px): the next row, not
+     more than 0.95 m sideways. Finger down on one: her hand reaches at once; pull the finger down (70 px) and she
+     pulls herself up with it; a tap does the whole pull. She rises, lands with a squash, her legs swing, and the
+     hold's number pops up over it (pink, HTML) with `sounds.note(step)` one step up the scale. Over the top she hops
+     onto the platform, turns round and cheers (the monkeys cheer too). A tap on the bell: she walks to the rope and
+     tugs it, DONG, the bell swings, the top monkey covers its ears. A tap on the slide's mouth: down the Big Frame's
+     slide (`harborland/rides.ts`, its constructor now takes just the ring and handle it moves), out onto the mat with
+     a spin. Then a flag on the rail for the round, and she walks back to the foot for the next.
+   - **Rounds:** (1) five holds in a line, a rainbow; (2) six rows of mixed colors, two or three pinks in reach each
+     row (left or right): the yellow holds honk like clown noses, the blue ones giggle and wobble, the mint ones hide a
+     monkey who leaps out beside it and blows a raspberry; she stays put and the pinks glow brighter; (3) seven rows on
+     her side, seven zigzag holds on Daddy's (the right flank). He climbs when she does, puffing (huff sounds, puff
+     clouds), always one hold behind her (he hurries when he's further behind, so he's never left at the bottom); he
+     flops over the rail just after her, bent over panting, then cheers. When she's gone down he follows, lands head
+     first on the mat with his legs kicking, pops up laughing and walks back. She always wins. After the third round
+     the 🛝 shows and she can race him again.
+   - **Pokeables:** the three monkeys (a backflip, a head scratch, a swing round the rail), the bell from the floor (the
+     monkey rings it), the painted elephants (trunk up, a fan of water drops, a trumpet), the steel slide (a shine runs
+     down it, ting), the pattern bands (a gold ripple), the rail, the mat, Kaylee and Daddy. The monkeys do something on
+     their own every 6-11 s.
+   - **The hall:** the mountain's teaser is now a way in. Tap it: she walks to its foot, climbs onto the first hold,
+     and in she goes; ↩️ brings her back out at the foot (`hall?from=mountain`). The sock band has a ⛰️ slot, filled
+     the first time she reaches the top.
+   - **Sounds only:** no voices. The lines for the voice pass are in section 5 above (Sparkle's opening line, the count,
+     Daddy's race lines, the Golden Mount fact: "over 300 steps", checked against two sources that disagree on the
+     exact count).
+   - **Flat version** (`?gl=off`): the cone as a picture with the same holds (unrolled so they spread out), the bell
+     and slide as buttons, Daddy one hold behind in round 3.
+   - **Numbers:** a scripted real-pointer play-through (taps and pull-down drags, two silly holds, six pokes, the bell
+     and the slide each round) reached the 🛝 at iPad landscape and iPhone landscape: 32 touches in 70 s at a quick
+     1.8 s a touch (round 2 started at 17 s, round 3 at 46 s). A faster run without pokes reached it at iPad portrait
+     too (26 touches). With a five-year-old's pauses and more poking that's about 1.5-2 min, at the short end of the
+     aim.
+   - **For Dad on the iPad:** does pulling up feel good, and does she pull with her finger or just tap? Are the holds
+     big enough to hit on the iPhone? Is the slide a payoff she wants again (should it be longer, or come with a ball
+     pit)? Is the race close enough to feel like a race? Should the rounds be taller (more holds), since it's a little
+     short? Are the round 2 silly holds fun, or do they slow her down?
 6. **Greybox: the pizza toy** (`menu`, `share`).
    *Built 2026-10-21 (`activities/mall-trip/pizza/`, `#/world/thailand/mall-trip/menu`,
    `#/world/thailand/mall-trip/share?pizza=hawaiian|seafood|cheese&shared=0..8`):*

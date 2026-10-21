@@ -124,6 +124,9 @@ const SCENARIOS = [
   // Little Land (greybox, no voices): a tap on the box hops the next brick to a good spot, a tap on the glowing stack
   // pushes it over, so the auto-player can play all three rounds.
   { name: 'thailand mall: little land', id: 'mall-blocks', hash: '#/world/thailand/mall-trip/blocks', reset: true },
+  // The Golden Mountain (greybox, no voices): only the holds in reach have tap targets, and the bell and the slide's
+  // mouth show at the top, so the auto-player climbs, rings and slides through all three rounds.
+  { name: 'thailand mall: golden mountain', id: 'mall-mountain', hash: '#/world/thailand/mall-trip/mountain', reset: true },
   // The Pizza Company (greybox, no voices): a tap on the pizza serves a slice (with its stretch) to the plate that's
   // behind, so the auto-player can share all eight and fill Agong's box.
   { name: 'thailand mall: pizza share', id: 'mall-pizza', hash: '#/world/thailand/mall-trip/share', reset: true },
