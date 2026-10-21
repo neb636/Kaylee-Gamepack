@@ -101,6 +101,9 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    too (2026-10-18): Mommy asks in her room if Kaylee is ready for a trip (👍 / ✋, Dad's change 2026-10-19 in place of
    the elephant map), then packing, the goodbye and Aunty Sri's white electric van (no car ride: it pulls away and
    they're at the airport), the airport and the window seat, each a section (`boat-trip/invite` ... `boat-trip/land`).
+   The second family trip (Dad, 2026-10-20) is a mall day at ICONSIAM: Mommy drives the silver rental Veloz, Kaylee
+   plays in HarborLand's "Little Thailand" and shares a pizza at The Pizza Company, and the leftovers go home to Agong
+   (`thailand/mall-trip.md`, plan only so far).
 
 ## Tech notes
 
