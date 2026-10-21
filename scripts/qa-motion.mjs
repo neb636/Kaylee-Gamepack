@@ -712,6 +712,40 @@ GAME_SCENARIOS.push(
   thaiVet('vet-sneeze', 7, 'elephant', [['soap', 'belly', 'rub'], ['soap', 'head', 'rub', 2600]]),
 )
 
+// Cafe & Cake (mall trip, greybox): the blender, its core verb. Her finger drags the strawberry and the banana into the
+// jar, presses the big button (the colors swirl into pink), then lifts the jar to the cup: it tips as it gets there
+// and pours. Where things are comes from window.__thaiMallQA (the tray, the jar's mouth, where to hold it to pour).
+GAME_SCENARIOS.push({
+  name: 'cafe-blend-pour',
+  seconds: 9,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/cafe?round=2`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().game === 'cafe', null, { timeout: 20000 })
+    await page.waitForTimeout(400)
+  },
+  act: async (page) => {
+    const q = () => page.evaluate(() => window.__thaiMallQA())
+    for (const fruit of ['strawberry', 'banana']) {
+      const s = await q()
+      await page.mouse.move(...s.items[fruit])
+      await page.mouse.down()
+      await page.mouse.move(s.mouth[0], s.mouth[1] + s.liftPx, { steps: 14 })
+      await page.mouse.up()
+      await page.waitForTimeout(350)
+    }
+    await page.locator('[data-anchor="button"]').click({ force: true })
+    await page.waitForTimeout(2100)
+    const s = await q()
+    await page.mouse.move(...s.jarAt)
+    await page.mouse.down()
+    await page.mouse.move(...s.pourAt[0], { steps: 18 })
+    for (let i = 0; i < 10; i++) await page.mouse.move(s.pourAt[0][0] + (i % 2) * 4, s.pourAt[0][1], { steps: 2 })
+    await page.waitForTimeout(1200)
+    await page.mouse.up()
+  },
+})
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {
