@@ -108,6 +108,8 @@ const SCENARIOS = [
   // Home (step 5): a home link builds the bay first for its photos, then the flight home, the van, the photo for Agong.
   { name: 'thailand trip: home, the photo for agong', id: 'trip-home', hash: '#/world/thailand/boat-trip/home?photos=village,hong,nail&found=crab,eagle', reset: true },
   { name: 'thailand trip: a replay (🧳 or 🚤)', id: 'trip-replay', hash: '#/world/thailand/boat-trip/invite?replay=1', reset: true },
+  // HarborLand's hall (greybox, no voices): walking between the ways in; a tap on one goes into that mini game.
+  { name: 'thailand mall: the hall', id: 'mall-hall', hash: '#/world/thailand/mall-trip/hall', reset: true },
   // The mall trip, greybox 1: HarborLand's playground (no voices yet, and no end: a toy with no goal).
   { name: 'thailand mall: harborland ground floor', id: 'mall-play', hash: '#/world/thailand/mall-trip/play', reset: true },
   { name: 'thailand mall: harborland golden mountain', id: 'mall-mountain', hash: '#/world/thailand/mall-trip/mountain', reset: true },

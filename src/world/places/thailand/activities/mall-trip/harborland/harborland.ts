@@ -17,12 +17,12 @@ import type { Avatar } from '../../../characters/avatar'
 import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { Shot } from '../../../engine/camera'
-import { merge, P, solid } from '../../../engine/geo'
 import { TapMarker } from '../../../engine/marker'
 import { NavGrid } from '../../../engine/nav'
 import { sfx } from '../../../sfx'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { Walker, type Floor, type Link } from '../../../trip/walk'
+import { SOCK_COLORS, wearSocks } from '../socks'
 import { buildHarborLand, type Built } from './build'
 import { BRIDGE, CANNON, DADDY, GROUND_BLOCKS, GROUND_CIRCLES, HALL, L1A, L1B, LINKS, LV, MOMMY, MOUNTAIN, PERCH, POOL, SKYPOD, SKYWALK, STARTS, TAP_RECTS, TOP, TOWER, TOWER_DECK, BIKE, type LinkId, type Rect, type RideId, type XZ } from './layout'
 import { BallPool } from './pool'
@@ -62,8 +62,6 @@ export const HARBOR_ANCHORS: AnchorInfo[] = [
   ...[0, 1, 2].map((i): AnchorInfo => ({ id: `monkey:${i}`, label: 'Monkey', kind: 'thing' })),
   ...[0, 1, 2].map((i): AnchorInfo => ({ id: `mask:${i}`, label: 'Phi Ta Khon', kind: 'thing' })),
 ]
-
-export const SOCK_COLORS: Record<string, string> = { pink: '#FF8FB8', lavender: '#C9B5F7', mint: '#8FE3C8' }
 
 /** Which section each floor is (the address bar follows her). */
 const SECTION_OF: Record<string, HarborSection> = { ground: 'play', pool: 'play', perch: 'play', l1: 'mountain', top: 'dragon' }
@@ -134,7 +132,7 @@ export class HarborLand extends Stage {
     this.ji = members.get('ji')!
     this.nick = members.get('nick')!
     scene.add(kaylee.root, this.ji.root)
-    this.wearSocks(SOCK_COLORS[start.socks] ?? SOCK_COLORS.pink)
+    wearSocks(kaylee, SOCK_COLORS[start.socks] ?? SOCK_COLORS.pink, bag)
     this.put(this.ji, MOMMY.bench[0], 0.5, MOMMY.bench[1], 'sit', MOMMY.face)
     this.toys = new Toys(this.built, this.pool, this.nick, scene, bag, { giggle: () => sfx.giggle() })
     this.marker = new TapMarker(bag)
@@ -175,13 +173,6 @@ export class HarborLand extends Stage {
     const s = STARTS[start.section]
     this.walker.place(s.floor, s.at[0], s.at[1], s.face)
     this.lastPos.copy(kaylee.position)
-  }
-
-  /** Her grip socks (HarborLand's must-have): a sock over each foot, a band round each ankle. */
-  private wearSocks(color: string) {
-    const H = this.kaylee.height
-    const socks = solid(merge([-1, 1].flatMap((s) => [P.sphere(0.083 * H, color, { at: [s * 0.085 * H, 0.036 * H, 0.022 * H], scale: [1, 0.66, 1.32] }), P.cyl(0.074 * H, 0.074 * H, 0.04 * H, '#FFFFFF', { at: [s * 0.085 * H, 0.085 * H, 0] })])), this.bag, 1.5)
-    this.kaylee.rig.body.add(socks)
   }
 
   /** Every climb and ride as a link for the walker, played by rides.ts. */

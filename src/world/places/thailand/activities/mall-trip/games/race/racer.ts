@@ -12,7 +12,7 @@ import { merge, P, solid } from '../../../../engine/geo'
 import type { RacerId } from './layout'
 
 /** The two kids racing beside her: plain placeholders (a puppy and a pony) until the art gate. */
-const KID_LOOKS: Record<'kidA' | 'kidB', Look> = {
+export const KID_LOOKS: Record<'kidA' | 'kidB', Look> = {
   kidA: { species: 'puppy', height: 1.05, fur: '#E9B486', light: '#FFF1DC', dark: '#5A4148', ear: '#C98A5A', outfit: { kind: 'tee', color: '#8EC9F5', shorts: '#5D7BB0' }, open: true },
   kidB: { species: 'pony', height: 1.1, fur: '#FFE0EC', light: '#FFF6FA', dark: '#B07A8A', ear: '#FFB8CC', mane: ['#B9A6F5', '#FF8FB8'], hair: 'medium', outfit: { kind: 'dress', color: '#FBEA9A' }, lashes: true },
 }
@@ -66,8 +66,9 @@ export class Racer {
   private headYaw = 0
   private phase = Math.random() * 10
 
-  constructor(readonly id: RacerId, bag: Bag) {
-    this.rig = buildAnimal(id === 'kidA' || id === 'kidB' ? KID_LOOKS[id] : LOOKS[id], bag)
+  /** `look` dresses it as someone else (HarborLand's hall: more kids, the staff). */
+  constructor(readonly id: RacerId, bag: Bag, look?: Look) {
+    this.rig = buildAnimal(look ?? (id === 'kidA' || id === 'kidB' ? KID_LOOKS[id] : LOOKS[id]), bag)
     this.height = this.rig.height
     this.life = new FaceLife(this.rig)
     this.flipper.position.y = 0.45 * this.height

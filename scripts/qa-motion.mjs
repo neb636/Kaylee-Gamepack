@@ -668,6 +668,11 @@ const thaiMall = (name, seconds, section, steps) => ({
   },
 })
 GAME_SCENARIOS.push(
+  // The hall: walking to the cafe's door and going in (the door swings, the camera moves in), the barber's door
+  // puffing out hair, and Little Land's bricks tumbling and hopping home.
+  thaiMall('hall-go-in', 5, 'hall?from=vet', [['door:cafe', 4800]]),
+  thaiMall('hall-barber', 3, 'hall?from=barber', [['door:barber', 2800]]),
+  thaiMall('hall-bricks', 14, 'hall?from=race', [['point', 3500, 0.97, 0.88], ['point', 3500, 0.97, 0.88], ['blocks', 6500]]),
   thaiMall('mall-mountain', 4, 'play', [['climb:mountain', 3800]]),
   thaiMall('mall-donut', 7, 'mountain', [['ride:donut', 6800]]),
   thaiMall('mall-dragon', 9, 'dragon', [['point', 4200, 0.15, 0.47], ['ride:dragon', 4600]]),

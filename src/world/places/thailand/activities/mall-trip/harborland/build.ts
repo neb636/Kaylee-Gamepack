@@ -51,7 +51,7 @@ export interface Built {
 const v = (x: number, y: number, z: number) => new Vector3(x, y, z)
 
 /** An open slide trough along a path: a half-pipe whose bottom is the path (where she sits), two outlined rims. */
-function trough(curve: Curve<Vector3>, r: number, color: string, rim: string, segs: number, bag: Bag) {
+export function trough(curve: Curve<Vector3>, r: number, color: string, rim: string, segs: number, bag: Bag) {
   const g = new Group()
   const P_ = 10
   const pos: number[] = []
@@ -105,8 +105,9 @@ function shellMaterial(bag: Bag) {
   return m
 }
 
-/** A climbing net on a vertical face: a lattice of ropes in a frame. `x` across, from y0 to y1, at depth z. */
-function net(x0: number, x1: number, y0: number, y1: number, z: number, along: 'x' | 'z' = 'x') {
+/** A climbing net on a vertical face: a lattice of ropes in a frame. `x` across, from y0 to y1, at depth z (pink here,
+ *  black in the hall's Big Frame). */
+export function net(x0: number, x1: number, y0: number, y1: number, z: number, along: 'x' | 'z' = 'x', color = HL.net) {
   const parts = []
   const w = x1 - x0
   const h = y1 - y0
@@ -114,13 +115,13 @@ function net(x0: number, x1: number, y0: number, y1: number, z: number, along: '
   const rows = Math.max(4, Math.round(h / 0.28))
   const at = (a: number, y: number): V3 => (along === 'x' ? [a, y, z] : [z, y, a])
   const box = (a: number, b: number, c: number) => (along === 'x' ? [a, b, c] : [c, b, a]) as [number, number, number]
-  for (let i = 0; i <= cols; i++) parts.push(P.box(...box(0.04, h, 0.04), HL.net, { at: at(x0 + (w * i) / cols, y0 + h / 2) }))
-  for (let j = 0; j <= rows; j++) parts.push(P.box(...box(w, 0.04, 0.04), HL.net, { at: at(x0 + w / 2, y0 + (h * j) / rows) }))
+  for (let i = 0; i <= cols; i++) parts.push(P.box(...box(0.04, h, 0.04), color, { at: at(x0 + (w * i) / cols, y0 + h / 2) }))
+  for (let j = 0; j <= rows; j++) parts.push(P.box(...box(w, 0.04, 0.04), color, { at: at(x0 + w / 2, y0 + (h * j) / rows) }))
   return parts
 }
 
 /** A soft-play block: a padded top in one color, white sides, a colored band round the top. */
-function block([x0, x1, z0, z1]: Rect, y0: number, y1: number, top: string) {
+export function block([x0, x1, z0, z1]: Rect, y0: number, y1: number, top: string) {
   const w = x1 - x0
   const d = z1 - z0
   const cx = (x0 + x1) / 2
