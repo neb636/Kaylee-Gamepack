@@ -411,7 +411,7 @@ Activity `mall-trip`: `activities/mall-trip/sections.ts`. Every param has a defa
 | 1 | `invite` | Mommy asks: where shall we go? | |
 | 2 | `goodbye` | Goodbye at Agong's house, into Mommy's Veloz | |
 | 3 | `arrive` | ICONSIAM, the lift, socks and the height chart | `socks` |
-| 4 | `hall` | HarborLand: walk the hall, pick a mini game | `socks`, `games`, `hair` |
+| 4 | `hall` | HarborLand: walk the hall, pick a mini game | `socks`, `games`, `from`, `hair` |
 | 5 | `vet` | The Vet Clinic (`?patient=puppy\|pony\|elephant`) | `socks`, `games`, `patient` |
 | 6 | `barber` | The Barber Salon: Daddy's new look | `socks`, `games`, `hair` |
 | 7 | `race` | The racing slide (`?round=1\|2\|3`) | `socks`, `games`, `round` |
@@ -421,7 +421,7 @@ Activity `mall-trip`: `activities/mall-trip/sections.ts`. Every param has a defa
 | 11 | `boxing` | Muay Thai: the wai kru and the bags | `socks`, `games` |
 | 12 | `skypod` | The Sky Pod lights | `socks`, `games` |
 | 13 | `frame` | The Big Frame: climb up, slide down, the cannon | `socks`, `games` |
-| 14 | `hungry` | Daddy's tummy rumbles | `games` |
+| 14 | `hungry` | Daddy's tummy rumbles, Mommy asks: pizza time? | `socks`, `games` |
 | 15 | `menu` | The Pizza Company: pick a pizza | `hair` |
 | 16 | `share` | Pull and share | `pizza`, `shared`, `hair` |
 | 17 | `home` | The box for Agong, the photo wall, the stamp | `pizza`, `photos`, `hair` |
@@ -431,7 +431,11 @@ the Big Frame is rebuilt.)
 
 Params:
 - `socks`: `pink|lavender|mint`, default `pink`.
-- `games`: the mini games done so far (the sock band's stickers), a comma list. Default empty.
+- `games`: the mini games done so far (the sock band's stickers), a comma list. Default empty. Until the Big Frame
+  is rebuilt, the first climbing toy's big rides (`pool`, `mountain`, `donut`, `zip`, `roller`, `dragon`) are in it too:
+  any of them fills the frame's 🛝 sticker.
+- `from`: the hall: the door she comes out of, `in|vet|cafe|barber|race|frame`. Default `in` (she's just come in, by
+  Mommy's bench).
 - `hair`: Daddy's hairdo from the barber, e.g. `long,rainbow,spiky`. Default empty (his own mane).
 - `patient`: who's on the vet's table, `puppy|pony|elephant`. Default `puppy`.
 - `round`: the round of the mini game on screen, `1|2|3`. Default `1`.
@@ -605,8 +609,57 @@ small climbing toy, before Dad's photos.
      about 4 to climb plus 6-12 scoots per race, about 35-45 over three races.
    - **For Dad on the iPad:** is the bump timing readable and fair? Is the walk back to the steps too long? Should
      the slide be longer?
-4. **Greybox: the hall** (`hall`): walking between the zones, the shop doors, the sock band, life in the background.
-   Then the Big Frame rebuilt at real scale (`frame`, replacing PR #120's three sections).
+4. **Greybox: the hall** (`hall`, `hungry`): walking between the zones, the shop doors, the sock band, life in the
+   background.
+   *Built 2026-10-21 (`activities/mall-trip/hall/`, `#/world/thailand/mall-trip/hall?from=in|vet|cafe|barber|race|frame`,
+   `#/world/thailand/mall-trip/hungry?games=vet,cafe,race,pool`):*
+   - **The hall:** one long side view that scrolls with her, left to right:
+     - Harbor Town: three shop fronts (the vet in mint, the cafe in cream and pink, the barber in blue) with arched
+       windows, black-and-white awnings, a balcony and a picture over each door (a cross, a cup, scissors). Over them is
+       the lit "Harbor Town" sign.
+     - Mommy's bench under the hanging "MEGA HarborLand" sign.
+     - The Big Frame: white pipes, black nets, four levels, a red climbing wall, gold spires, the giant mask on top
+       with its pink nose slide, and a padded tunnel to go in.
+     - The steps and the four wavy orange lanes into the pit of pink and white balls.
+     - The Golden Mountain cone, with holds, a red rail and a steel slide.
+     - Little Land's foam bricks, Muay Thai's two bags, and the Sky Pod's buttons.
+     - Above it all: the dark ceiling with strip lights, a painted wall (a sun, clouds, kids riding elephants behind
+       the mountain, palms) and festival bunting.
+     - The signs' words are HTML laid over the 3D boards (`LABELS` in `hall.ts`), never in a picture.
+   - **Walking:** like Agong's house. Tap the mats and she walks there; hold and she follows the finger (one floor,
+     `trip/walk.ts`). Daddy follows her round (beside her, a step back, so he faces us when he looks at her). The
+     hall is about 44 m long; long walks turn into a run.
+   - **Going in:** tap a way in (the vet's door, the cafe's door, the frame's tunnel, the racing slide). She walks
+     there, the door swings open (a shop bell), the camera moves in, she steps into the doorway, the screen fades,
+     and the mini game opens. A big ↩️ in every mini game (top left, under the 🏠) brings her back out of the same
+     door, which shuts behind her (`from`). The vet, cafe and race's own 🛝 at the end do the same.
+   - **The ones that come later are toys for now:**
+     - the barber's door opens a crack, a puff of colored hair tufts flies out, and the pole spins
+     - the Golden Mountain: she climbs onto its first hold and hops down
+     - Little Land's front stack tumbles and the bricks hop home up a scale
+     - the bags swing when she punches them
+     - the Sky Pod's buttons light up a note at a time, with a fanfare when all twelve are lit
+   - **Pokeables:** the crocodile (chomp chomp chomp), the MEGA sign (its bulbs chase), the barber's pole, Mommy
+     (waves), Daddy (hops), the staff (a buffalo and a penguin in red and yellow polos: they wave when she's near),
+     and the kids.
+   - **Life:** three kids play on their own loops. One climbs the red wall and the frame and slides down the mask's
+     nose. One climbs the steps and races down the front lanes. One climbs the mountain's holds and comes down the
+     steel slide. The sign bulbs blink.
+   - **The sock band** now has a slot for each mini game she can play: 🩺 🥤 🏁 🛝. The frame's slot fills on any big
+     ride in the first climbing toy. The barber and the rest add theirs when they're built.
+   - **Hungry:** after four stickers (or five minutes), when she comes back out, Daddy's tummy rumbles twice. Then
+     Mommy's card asks "Hungry, Kaylee? Pizza time?" (🍕 Let's eat → `menu`, 🛝 More play → she asks again after
+     another mini game). No voice yet.
+   - **The first climbing toy** (PR #120's `play`, `mountain`, `dragon`) is what the frame's tunnel opens, until the
+     Big Frame is rebuilt.
+   - **Flat version** (`?gl=off`): a row of big picture buttons, left to right as in the hall.
+   - **Numbers:** about 90-130 draw calls at iPad size. Walking from the vet to the Sky Pod is about 14 s.
+   - **For Dad on the iPad:**
+     - Is walking the hall fun, or a chore between the toys? Is it too long?
+     - Should a way in open at once instead of walking there first?
+     - Do the toys for the later mini games tease them well, or should they just glow?
+   - **Next:** the Big Frame rebuilt at real scale (`frame`, replacing PR #120's three sections), then the barber
+     (step 2) with Daddy's `hair`.
 5. **Greyboxes for the rest** (cafe, Golden Mountain, foam blocks, Muay Thai, Sky Pod), in the order Dad picks. Some
    may get cut.
    *Cafe built 2026-10-21 (`activities/mall-trip/games/cafe/`, `#/world/thailand/mall-trip/cafe?round=1|2|3`):*

@@ -370,6 +370,18 @@ const SCREENS = [
   ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
   { name: 'thailand-flat', hash: '#/world/thailand/hub/downstairs?gl=off', reset: true, wait: 600 },
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
+  // HarborLand's hall (greybox): just in by Mommy's bench, out of the vet's door (Harbor Town), out of the racing
+  // slide (the lanes, the crocodile), going in at the cafe (the door open, the camera in close), Mommy's "Pizza time?"
+  // card after four stickers, and the flat version.
+  { name: 'mall-hall', hash: '#/world/thailand/mall-trip/hall', reset: true, wait: 3500 },
+  { name: 'mall-hall-town', hash: '#/world/thailand/mall-trip/hall?from=vet&games=vet', reset: true, wait: 3500 },
+  { name: 'mall-hall-lanes', hash: '#/world/thailand/mall-trip/hall?from=race', reset: true, wait: 3500 },
+  { name: 'mall-hall-going-in', hash: '#/world/thailand/mall-trip/hall?from=vet', reset: true, wait: 2500, act: async (p) => {
+    await p.locator('[data-anchor="door:cafe"]').click({ force: true })
+    await p.waitForTimeout(2600)
+  } },
+  { name: 'mall-hall-hungry', hash: '#/world/thailand/mall-trip/hungry?games=vet,cafe,race,pool', reset: true, wait: 4500 },
+  { name: 'mall-hall-flat', hash: '#/world/thailand/mall-trip/hall?games=vet&gl=off', reset: true, wait: 900 },
   // The mall trip, greybox 1: HarborLand's three levels, a sock band with stickers, and the flat version.
   ...['play', 'mountain', 'dragon'].map((to) => ({ name: `mall-trip-${to}`, hash: `#/world/thailand/mall-trip/${to}`, reset: true, wait: 3000 })),
   { name: 'mall-trip-stickers', hash: '#/world/thailand/mall-trip/play?socks=mint&games=vet,pool,mountain,donut', reset: true, wait: 3000 },
