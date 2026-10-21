@@ -4,9 +4,10 @@
 //   - Tap a way in (the vet's, the cafe's or the barber's door, the Big Frame's tunnel, the racing slide's steps) and
 //     she walks there, the door swings open, the camera moves in, and she goes in: that mini game opens (`enter`).
 //     Coming back out, she steps out of the same door and it shuts behind her. Little Land is a way in too: she walks
-//     up beside its front stack, it tumbles, and in she goes (the bricks hop home behind her).
-//   - The ways in that come later are toys for now: the Golden Mountain gets a climb up its first hold, the bags swing,
-//     the Sky Pod lights up.
+//     up beside its front stack, it tumbles, and in she goes (the bricks hop home behind her). The Muay Thai bags too:
+//     she walks up, punches the first one (it swings), and in she goes.
+//   - The ways in that come later are toys for now: the Golden Mountain gets a climb up its first hold, the Sky Pod
+//     lights up.
 //   - Life everywhere: kids climb the frame and go down the mask's nose, race down the lanes and slide off the
 //     mountain; the staff wave; Mommy sits on the bench; Daddy follows her round (with the hairdo she gave him at the
 //     barber's, `hair`); a plush crocodile snaps.
@@ -84,7 +85,7 @@ export const HALL_ANCHORS: AnchorInfo[] = [
 ]
 
 /** The tap target of each way in. */
-const DOOR_OF: Record<string, DoorId> = { 'door:vet': 'vet', 'door:cafe': 'cafe', 'door:barber': 'barber', frame: 'frame', race: 'race', blocks: 'blocks' }
+const DOOR_OF: Record<string, DoorId> = { 'door:vet': 'vet', 'door:cafe': 'cafe', 'door:barber': 'barber', frame: 'frame', race: 'race', blocks: 'blocks', 'bag:0': 'boxing', 'bag:1': 'boxing' }
 const isGame = (d: DoorId): d is GameDoor => (OPEN_DOORS as readonly string[]).includes(d)
 const SHOP_IDS = SHOPS.map((s) => s.id) as ShopId[]
 const isShop = (d: DoorId): d is ShopId => (SHOP_IDS as string[]).includes(d)
@@ -278,6 +279,7 @@ export class Hall extends Stage {
       this.doorOpen[door].goal = 1
       sfx.shopBell()
     } else if (door === 'blocks') this.tumble(false)
+    else if (door === 'boxing') this.punch(0)
     else sfx.whoosh()
     this.daddy.arms = 'cheer'
     this.daddy.lookAt(this.kaylee.position.clone().setY(0.6))
@@ -416,7 +418,6 @@ export class Hall extends Stage {
       sfx.babble(240)
       return
     }
-    if (id?.startsWith('bag:')) return this.punch(Number(id.slice(4)))
     switch (id) {
       case 'kaylee':
       case 'family:kaylee':

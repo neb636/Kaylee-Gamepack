@@ -397,11 +397,109 @@ time, on an iPhone too.
 
 #### 7. Muay Thai bags 🥊 (`boxing`; the wai, rhythm)
 
-From Dad's photo: the cartoon boxer kid on top of a tower, and the punching bags.
+From Dad's photo: the cartoon boxer kid on top of a tower, and the punching bags. Filled in with
+`../ACTIVITY-TEMPLATE.md` on 2026-10-21, before the greybox.
 
-- **The toy:** the boxer comes alive as her coach. First the **wai kru**: copy his bow and little dance (tap the move he
-  shows). Then punch the bags to the beat of Thai boxing drums; Daddy holds the pad.
-- **Teaches:** the wai (Thailand's hello with pressed hands), and keeping a beat.
+**One-line pitch:** the boxer kid from the top of the Big Frame comes alive as her coach (a little monkey in a red
+headband, see "The coach" below); after a bow to say thank you, Kaylee punches the bag to the beat of his drum, then
+Daddy's pad, and her big unicorn kick sends Daddy bouncing into the ropes. She wins the gold belt.
+
+**The toy (core verb):** punch. Tap (or swipe) the bag or the pad and Kaylee punches it with her own pink glove, right
+where her finger is (high, low, left side, right side).
+- How it feels: the punch starts on the finger going down (no waiting for the lift), the gloves take turns, she lunges
+  in and bounces back on her toes. The bag swings on its chain, squashes where it was hit and wobbles, a burst of gold
+  stars and a POW pop out, and Daddy, holding the bag from behind, staggers back a step ("oof") and leans in again. A
+  swipe across the bag is a hook: a bigger swing, a bigger POW (a jab then a hook, a combo).
+- Why it's fun with no goal: hitting something big that swings and goes POW, with Daddy wobbling, is fun on its own.
+- Greybox test: a toon bag on a chain, Daddy, the coach and the drum. Does punching feel snappy on the iPad (the punch on
+  touch-down), and does the bag's swing read as her doing it?
+
+**The warm-up (a few touches, not a quiz): the wai kru.** The coach faces her and does a wai. She taps her own gloves
+(they glow) and Kaylee presses them together and bows; the coach bows back, a soft temple bell. Three bows, each a
+little lower (the real wai kru's three bows). Then the drum starts: each tap and she does a dance step (a hop to the
+side, arms out like a bird's wings, the ram muay) and the coach copies her; three steps and the coach cheers, ding
+ding: the bell starts round 1. About 6 taps, 15-20 s. A tap on the bag during the warm-up still punches (it's a toy).
+
+**How the verb deepens (3 steps, same verb):**
+1. **Free punching, the drum joins in.** Punch anything goes. After three punches the coach goes to his drum and
+   plays a slow beat (dum... ching... dum), so her punches have music under them. Eight punches fill the lamps on the
+   board: ding ding, a star.
+2. **On the beat.** The drum's beat is slow (60 a minute). Before each beat a ring closes in on the bag and turns gold
+   just before the drum hits: a punch then is a huge POW (a gold burst, a ding, the bag swings high, Daddy staggers two
+   steps). Off the beat it's still a normal fun punch. Six big POWs fill the lamps. Help, never failing: after three
+   off-beat punches in a row the gold window grows (twice), and the round ends after 16 punches anyway.
+3. **Daddy's pad.** Daddy lets go of the bag and holds up a big pink pad, then moves it: left side up high, left side
+   down low, then he hops round to her right, high, low, and the middle. She follows it with her punches (Kaylee turns
+   to whichever side it's on). The ring still closes on the pad: on the beat is a bigger POW (a bonus, not needed).
+   After six hits the pad glows at kick height: **the big kick**. She taps and Kaylee spins round and does a unicorn
+   kick with both back hooves: the pad flies off spinning, Daddy flies into the ropes, they boing him back, and he
+   plops onto his bottom laughing.
+Side verb: none (the wai kru warm-up is taps on her own gloves, the same hands).
+
+**Her choices:** where on the bag she punches (high, low; the punch goes where her finger is), tap or swipe (a jab or a
+hook), how fast, whether she's on the beat, which pokeable she tries.
+
+**Pokeables (5+ things that react and aren't the answer):**
+- the ring bell on the corner post (ding ding ding)
+- the drum (a boom; in round 1 before the coach is there, the coach hurries over)
+- the second, smaller bag (the coach does a kick on it, a demonstration: thwack)
+- the ropes (they twang and wobble)
+- the water bottle on its stool (it squirts a little arc of water; Kaylee shakes it off)
+- the star board (the stars twinkle up a scale)
+- the coach (a hop and a little ram muay pose, a laugh), Daddy (oof, a hop), Kaylee (bounce on her toes, a giggle)
+
+**Silly moments (instead of failure):**
+- punching the bag too hard sends it swinging into Daddy's face: he wobbles, stars round his head
+- the punch while the bag is swinging back meets it at the wrong time: it bonks her and she bounces back (no hurt)
+- tap Daddy's pad when it's moving: he still catches it (it's never "missed")
+- the kick: Daddy into the ropes and back
+
+**Story frame (at most 2 lines before her hands are busy):** the coach (with the full loop): "Sawasdee krap,
+Kaylee! First we say thank you." / Sparkle: "Tap your gloves to bow!" (the greybox has no voices).
+When Sparkle talks during play: when the drum first starts ("Punch to the drum!"), when round 2's ring first shows
+("Punch when it's gold!"), when the pad first goes up ("Follow Daddy's pad!"), when the pad glows for the kick ("Big
+kick!"), and after ~8 s with nothing touched (the 👆 shows her gloves, the bag or the pad).
+
+**Lines to record (the full loop), by speaker:**
+- the coach (a new speaker, a Thai boy's voice, bright and bouncy): "Sawasdee krap, Kaylee! First we say thank you.",
+  "Now dance with me!", "Yes! Again!", "Punch to the drum!", "Champion Kaylee!"
+- Daddy: "Ooh, strong!", "Oof! Good one, Kaylee!", "Hit the pad!", "Up high! Down low!", "Whoa-oa-oa!" (into the ropes)
+- Sparkle: "Tap your gloves to bow!", "Punch to the drum!", "Punch when it's gold!", "Follow Daddy's pad!", "Big kick!"
+- the tap-to-hear fact (`MALL_FACTS`, on the star board or the coach): "Before a Muay Thai fight, boxers do a dance
+  called the wai kru. It says thank you to their teacher."
+
+**What it teaches, by doing:** the wai (Thailand's hello and thank-you: hands pressed together, a bow), which she does
+herself three times and the coach answers; keeping a beat (the slow drum, the ring, the big POW on the beat); left and
+right, up and down (following the pad). Tap-to-hear facts: the wai kru (above); Muay Thai is Thailand's own sport.
+
+**Payoff (visible, builds up while she plays):** the lamps on the board fill each round, a star for each round (three),
+Daddy's wobble getting bigger, then the kick, and the coach puts **a gold champion's belt** round her waist and holds
+her glove up: ding ding ding. The 🥊 sticker goes on her sock band after the wai kru warm-up.
+
+**Replay:** punching is a toy (it never runs out); the drum keeps going after round 3, the pad stays up, and Daddy
+keeps getting bounced; the 🛝 takes her back to the hall.
+
+**Numbers:** about 30-35 touches: the wai kru 6, round 1 8, round 2 about 8-12 (six on the beat), round 3 7 (six pad
+hits and the kick), plus pokes. About 2 min. No lines before the first touch in the greybox; one or two with the
+full loop.
+
+**The coach:** the cartoon boxer kid on top of the Big Frame (`harborland/build.ts`, "boxer") come alive, built on the
+family's chibi rig as a **monkey** (not a family animal): a caramel monkey with a cream heart-shaped face, round ears
+and a long curly tail, the boxer's red headband (the *mongkhon*) and red gloves, blue Muay Thai shorts. A monkey
+because of the Lopburi monkeys in HarborLand's decor and Hanuman, the monkey hero whose moves Muay Thai is named after.
+(The Big Frame's statue is still the boy; it can become the monkey with the art gate.)
+
+**Sections and state:** one section, `boxing?round=1|2|3` (`round` 1 the wai kru then free punching, 2 on the beat,
+3 Daddy's pad and the kick), its own round in MallTrip (so another game's round doesn't leak in). Reads `socks` and
+`games`; a link past round 1 has the 🥊 sticker. The hall's bags are the way in (`hall?from=boxing` comes back out
+there).
+
+**Tech:** a 3D side view (like the other mini games) in the house's toon look. Kaylee faces the bag from the side, so
+a punch reads; she's driven by hand each frame (the guard, the lunge, the arm aimed at the height her finger hit, the
+bow, the dance step, the kick). The bag is a pendulum spring with a squash; the beat is a clock in the world
+(`beat.ts`, pure, shared with the flat version) and judged at touch-down, not on the punch's contact. **Riskiest:** that
+an on-beat punch feels on the beat on the iPad (the sound's lag, a five-year-old's timing): the window is generous and
+grows when she's off.
 
 #### 8. The Sky Pod 💡 (`skypod`; quick eyes, counting)
 
@@ -484,7 +582,7 @@ Activity `mall-trip`: `activities/mall-trip/sections.ts`. Every param has a defa
 | 8 | `cafe` | Cafe & Cake: the blender (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 9 | `mountain` | The Golden Mountain and the steel slide | `socks`, `games` |
 | 10 | `blocks` | Little Land: the foam blocks (`?round=1\|2\|3&card=chedi\|elephant`) | `socks`, `games`, `round`, `card` |
-| 11 | `boxing` | Muay Thai: the wai kru and the bags | `socks`, `games` |
+| 11 | `boxing` | Muay Thai: the wai kru, the bag to the drum's beat, Daddy's pad (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 12 | `skypod` | The Sky Pod lights | `socks`, `games` |
 | 13 | `frame` | The Big Frame: climb up, slide down, the cannon (`?at=in\|pit\|l1\|l2\|top\|out`) | `socks`, `games`, `at`, `hair` |
 | 14 | `hungry` | Daddy's tummy rumbles, Mommy asks: pizza time? | `socks`, `games` |
@@ -499,7 +597,7 @@ Params:
 - `socks`: `pink|lavender|mint`, default `pink`.
 - `games`: the mini games done so far (the sock band's stickers), a comma list. Default empty. `frame` is any big ride
   in the Big Frame (the 🛝 sticker); old links' ride names (`pool`, `donut`, `zip`, `roller`, `dragon`) count as `frame`.
-- `from`: the hall: the door she comes out of, `in|vet|cafe|barber|race|frame`. Default `in` (she's just come in, by
+- `from`: the hall: the door she comes out of, `in|vet|cafe|barber|race|frame|blocks|boxing`. Default `in` (she's just come in, by
   Mommy's bench).
 - `at`: where she is in the Big Frame, `in|pit|l1|l2|top|out`: just through the tunnel, in the ball pit with Daddy,
   a level, or the mats in front. Default `in`. It follows the level she's on.
@@ -513,6 +611,7 @@ Params:
 - `round`: the round of the mini game on screen, `1|2|3`. Default `1`.
   - The cafe: blend anything, picture orders, Thai drinks two at once.
   - The racing slide: the first race, tap at a bump to fly, spinning rubber rings.
+  - Muay Thai: the wai kru then free punching, punching on the drum's beat, Daddy's pad and the big kick.
   - The barber: grow and snip, then colors, the dryer and bows, then kids with picture cards.
 - `pizza`: `hawaiian|seafood|cheese`, default `cheese`.
 - `shared`: slices already handed out, 0-8. Default 0. `share?shared=6` starts at the last two, for Agong.
@@ -876,6 +975,45 @@ small climbing toy, before Dad's photos.
    - **Flat version** (`?gl=off`): the stack as a picture, the box and the stack as big buttons, the same grid.
    - **For Dad on the iPad:** does dragging a brick feel good, and does it land where she meant? Is the half-over-the-edge
      wobble fun or worrying? Should the stack ever really fall by itself? Are the outlines in round 2 too much help?
+   *Muay Thai built 2026-10-21 (`activities/mall-trip/games/boxing/`, `#/world/thailand/mall-trip/boxing?round=1|2|3`):*
+   - **The ring:** straight on, a little above. A blue ring mat on the flower mats, red-white-blue ropes along the back
+     and down the right side, the big red bag on an arm from the wall with Daddy holding it from behind, the small blue
+     bag at the back, the board on the wall (three stars, the round's lamps), the coach's drum (a red klong) at the back
+     left, the ring bell on the front right post, a water bottle on a stool. Kaylee wears pink boxing gloves, the red
+     headband (new wearables `gloves`, `mongkhon`) and her grip socks.
+   - **The coach:** the Big Frame's boxer kid come alive as a **monkey** (`COACH_LOOK`, a new `monkey` species on the
+     chibi rig: a cream heart-shaped face mask, round ears, a curly tail), in the red headband, red gloves and blue
+     shorts. `coach.ts` drives him: the wai, the drum on the beat, a guard, a bow, a dance step, a cheer, a spinning kick
+     on the small bag, the ram muay pose.
+   - **The toy:** a finger going down on the bag punches at once (not on the lift): the gloves take turns, she lunges and
+     bounces back on her toes, the arm aims at the height her finger hit. The bag swings (a pendulum, stiffer while
+     Daddy holds it), squashes and wobbles; gold stars and a comic POW (HTML) pop out; Daddy staggers back. A swipe is a
+     hook (a jab, then a hook). A big swing into Daddy gives him dizzy stars; a punch as the bag swings back bonks her.
+   - **The wai kru:** she and the coach face out side by side; her gloves glow. Three taps: three bows, lower each time,
+     a temple bell rising; the coach bows back. Three more: dance steps (a hop to the side, arms out like wings), a drum
+     beat each; the coach copies. Then he cheers, ding ding, and goes to his drum. The 🥊 sticker comes here.
+   - **Rounds:** (1) free punching; after three the drum joins in (0.8 s a beat, with the ching between); eight fill the
+     lamps. (2) A slow drum (1 s a beat, `beat.ts`), a ring closing on the bag, gold from 0.3 s before the beat to 0.2 s
+     after: on the beat is a huge gold POW and a ding. Six of those, or 16 punches anyway; three off in a row and the
+     window grows (twice). (3) Daddy swings the bag back onto its hook and holds up a pink pad: left high, left low, right
+     high, right low, left middle, right middle (he hops round, always facing her; the ring closes on the pad too). Then
+     the pad pulses at kick height: her unicorn kick (she turns her back and bucks with her back hooves), KA-POW, the pad
+     flies, Daddy flies into the side ropes, they boing him back onto his bottom. Ding ding ding, the coach holds his
+     gloves up beside her and the gold belt pops on round her waist: the third star, then the 🛝. After that it's a toy:
+     the drum keeps going, Daddy gets up with the pad, and every fourth hit it glows for another kick.
+   - **Pokeables:** the bell, the drum (a boom, the coach hops), the small bag (the coach's spin kick), the ropes
+     (twang), the water bottle (a squirt arc; she giggles), the star board, the coach (a ram muay pose), Daddy, Kaylee.
+   - **The hall:** the bags are a way in now: she walks up, punches the first one, and goes in between them; ↩️ brings
+     her back out there (`hall?from=boxing`). The sock band has a 🥊 slot.
+   - **Taps alone** play it: 28 taps for all three rounds in a scripted real-pointer play-through (6 wai kru, 8, 7 with
+     6 on the beat, 7 with the kick) at iPad landscape, iPad portrait and iPhone landscape (touch). The robot takes about
+     30 s; a child, waiting for the gold ring and watching the kick, about 2 min.
+   - **Sounds only:** no voices. The lines to record are in "7. Muay Thai bags" above.
+   - **Flat version** (`?gl=off`): 🙏 for the wai kru, the bag and the pad as big buttons, the same beat and ring.
+   - **For Dad on the iPad:** does a punch feel snappy and land where her finger is? Is the beat window right for her
+     (too easy, too hard), and does the gold POW feel worth chasing? Is the unicorn kick (a buck with her back hooves)
+     funny, or should she spin and kick? Does the coach read as a monkey, and should the Big Frame's statue become him?
+     Daddy hides the drum while he holds the pad on her left: OK?
 6. **Greybox: the pizza toy** (`menu`, `share`).
    *Built 2026-10-21 (`activities/mall-trip/pizza/`, `#/world/thailand/mall-trip/menu`,
    `#/world/thailand/mall-trip/share?pizza=hawaiian|seafood|cheese&shared=0..8`):*

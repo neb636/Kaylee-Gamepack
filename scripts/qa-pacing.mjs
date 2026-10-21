@@ -124,6 +124,9 @@ const SCENARIOS = [
   // Little Land (greybox, no voices): a tap on the box hops the next brick to a good spot, a tap on the glowing stack
   // pushes it over, so the auto-player can play all three rounds.
   { name: 'thailand mall: little land', id: 'mall-blocks', hash: '#/world/thailand/mall-trip/blocks', reset: true },
+  // Muay Thai (greybox, no voices): her glowing gloves for the wai kru, then a tap on the bag or the pad is a punch, so
+  // the auto-player can play all three rounds (round 2 ends after 16 punches even off the beat).
+  { name: 'thailand mall: muay thai', id: 'mall-boxing', hash: '#/world/thailand/mall-trip/boxing', reset: true },
   // The Pizza Company (greybox, no voices): a tap on the pizza serves a slice (with its stretch) to the plate that's
   // behind, so the auto-player can share all eight and fill Agong's box.
   { name: 'thailand mall: pizza share', id: 'mall-pizza', hash: '#/world/thailand/mall-trip/share', reset: true },

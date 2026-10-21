@@ -864,6 +864,52 @@ const thaiBlocks = (name, seconds, round, targets, end) => ({
 })
 GAME_SCENARIOS.push(thaiBlocks('blocks-stack-crash', 7, 1, [[3, 0], [4, 1], [1, 0], [2, 1]], 'swipe'), thaiBlocks('blocks-sneeze', 8, 3, [[3, 0], [3, 1], [3, 2], [3, 3]], 'wait'))
 
+// Muay Thai (mall trip, greybox): the core verb, a punch. Round 1: her finger goes down on the bag, high then low, and
+// a swipe across it (a hook): the glove goes out where she touched, the bag swings and squashes, Daddy staggers, POW.
+// Round 2: punches on the drum's beat (when the ring is gold): the big gold POW. Round 3: Daddy's pad as it moves, then
+// the big kick. Where things are comes from window.__thaiMallQA (screen pixels).
+const thaiBoxing = (name, seconds, round, mode) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/boxing?round=${round}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().game === 'boxing', null, { timeout: 20000 })
+    await page.waitForTimeout(400)
+    // Round 1 starts with the wai kru: six taps on her gloves.
+    for (let i = 0; i < 8 && (await page.evaluate(() => window.__thaiMallQA().phase)) !== 'play'; i++) {
+      await page.locator('[data-anchor="gloves"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(500)
+    }
+  },
+  act: async (page) => {
+    const t0 = Date.now()
+    let i = 0
+    while (Date.now() - t0 < seconds * 1000) {
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      if (mode === 'bag' && q.bag) {
+        const [x, y] = q.bag
+        if (i % 3 === 2) {
+          await page.mouse.move(x - 40, y)
+          await page.mouse.down()
+          await page.mouse.move(x + 60, y, { steps: 4 })
+          await page.mouse.up()
+        } else await page.mouse.click(x, y + (i % 2 ? -50 : 40))
+        i++
+        await page.waitForTimeout(550)
+      } else if (mode === 'beat' && q.bag && q.window && q.toNext < 0.3) {
+        await page.mouse.click(...q.bag)
+        await page.waitForTimeout(400)
+      } else if (mode === 'pad' && q.pad && !q.hopping && (q.phase === 'play' || q.phase === 'kick')) {
+        await page.mouse.click(...q.pad)
+        await page.waitForTimeout(500)
+      }
+      await page.waitForTimeout(30)
+    }
+  },
+})
+GAME_SCENARIOS.push(thaiBoxing('boxing-punch', 5, 1, 'bag'), thaiBoxing('boxing-beat', 6, 2, 'beat'), thaiBoxing('boxing-pad-kick', 9, 3, 'pad'))
+
 // The Pizza Company (mall trip, greybox): her finger pulls a slice out of the pan and the cheese stretches, wobbles as
 // she swings it, and snaps; she lets go over a plate. Hawaiian snaps early, Double Cheese stretches longest, and in the
 // tug (after one each) Daddy grabs the other end. Where things are comes from window.__thaiMallQA (screen pixels).

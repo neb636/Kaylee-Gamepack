@@ -13,7 +13,7 @@ import path from 'node:path'
 import { browserName, device, flag, launch, openApp, out, pad, serve, skip, VIEWPORTS as ALL_VIEWPORTS } from './qa-lib.mjs'
 
 export const VIEWPORTS = ALL_VIEWPORTS.filter((v) => !flag('only') || flag('only').split(',').includes(v.name))
-const PORT = 4179
+const PORT = Number(flag('port')) || 4179 // --port=N when another checkout's preview has 4179
 
 // Each screen: how to get there from a fresh start. `page.goto` keeps localStorage between screens.
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
@@ -377,6 +377,7 @@ const SCREENS = [
   { name: 'mall-hall-town', hash: '#/world/thailand/mall-trip/hall?from=vet&games=vet', reset: true, wait: 3500 },
   { name: 'mall-hall-lanes', hash: '#/world/thailand/mall-trip/hall?from=race', reset: true, wait: 3500 },
   { name: 'mall-hall-little-land', hash: '#/world/thailand/mall-trip/hall?from=blocks&games=blocks', reset: true, wait: 3500 },
+  { name: 'mall-hall-muay-thai', hash: '#/world/thailand/mall-trip/hall?from=boxing&games=boxing', reset: true, wait: 3500 },
   { name: 'mall-hall-going-in', hash: '#/world/thailand/mall-trip/hall?from=vet', reset: true, wait: 2500, act: async (p) => {
     await p.locator('[data-anchor="door:cafe"]').click({ force: true })
     await p.waitForTimeout(2600)
@@ -535,6 +536,49 @@ const SCREENS = [
     },
   })),
   { name: 'blocks-flat', hash: '#/world/thailand/mall-trip/blocks?round=2&gl=off', reset: true, wait: 900 },
+  // Muay Thai (greybox): each round at the start (1: the wai kru beside the coach; 2: the drum and the ring on the bag;
+  // 3: Daddy's pad, the bag hooked back), the 👆 on her gloves after a while, a bow, a punch on the beat (the gold POW),
+  // the big kick, and the flat version.
+  ...[1, 2, 3].map((n) => ({ name: `boxing-${n}`, hash: `#/world/thailand/mall-trip/boxing?round=${n}`, reset: true, wait: 3000 })),
+  { name: 'boxing-hint', hash: '#/world/thailand/mall-trip/boxing', reset: true, wait: 9500 },
+  {
+    name: 'boxing-bow',
+    hash: '#/world/thailand/mall-trip/boxing',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'boxing', null, { timeout: 20000 }).catch(() => {})
+      await p.locator('[data-anchor="gloves"]').click({ force: true }).catch(() => {})
+      await p.waitForTimeout(550)
+    },
+  },
+  {
+    name: 'boxing-pow',
+    hash: '#/world/thailand/mall-trip/boxing?round=2',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'boxing', null, { timeout: 20000 }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiMallQA().window && window.__thaiMallQA().toNext < 0.3, null, { timeout: 8000, polling: 20 }).catch(() => {})
+      const q = await p.evaluate(() => window.__thaiMallQA())
+      if (q.bag) await p.mouse.click(...q.bag)
+      await p.waitForTimeout(160)
+    },
+  },
+  {
+    name: 'boxing-kick',
+    hash: '#/world/thailand/mall-trip/boxing?round=3',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'boxing', null, { timeout: 20000 }).catch(() => {})
+      for (let i = 0; i < 40; i++) {
+        const q = await p.evaluate(() => window.__thaiMallQA())
+        if (q.phase === 'finale') break
+        if (q.pad && !q.hopping) await p.mouse.click(...q.pad)
+        await p.waitForTimeout(450)
+      }
+      await p.waitForTimeout(500)
+    },
+  },
+  { name: 'boxing-flat', hash: '#/world/thailand/mall-trip/boxing?round=2&gl=off', reset: true, wait: 900 },
   // The Pizza Company (greybox): the menu, the table at the start, a slice pulled out with the cheese stretching (held
   // over Daddy's plate), the last two for Agong's box, the box closed, and the flat version.
   { name: 'pizza-menu', hash: '#/world/thailand/mall-trip/menu', reset: true, wait: 3500 },

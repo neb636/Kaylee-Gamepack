@@ -89,10 +89,12 @@ export const DOORS = {
   race: { at: [(STEPS.x0 + STEPS.x1) / 2, -0.2] as XZ, in: [(STEPS.x0 + STEPS.x1) / 2, -1.2] as XZ },
   /** Little Land: beside the front stack (it tumbles as she goes in), in between the stack and the bags. */
   blocks: { at: [BLOCKS.x1 - 0.45, BLOCKS.front + 0.75] as XZ, in: [BLOCKS.x1 - 0.45, BLOCKS.front - 0.5] as XZ },
+  /** Muay Thai: in front of the first bag (she punches it as she goes in), and in between the bags. */
+  boxing: { at: [BOXING.bags[0] - 0.7, BOXING.z + 1.1] as XZ, in: [(BOXING.bags[0] + BOXING.bags[1]) / 2, BOXING.z - 0.2] as XZ },
 }
 export type DoorId = keyof typeof DOORS
 /** The ways in that open a mini game. */
-export const OPEN_DOORS = ['vet', 'cafe', 'race', 'frame', 'barber', 'blocks'] as const
+export const OPEN_DOORS = ['vet', 'cafe', 'race', 'frame', 'barber', 'blocks', 'boxing'] as const
 export type GameDoor = (typeof OPEN_DOORS)[number]
 
 /** Where she stands when she first comes in: in front of Mommy's bench, between the town and the frame. */
