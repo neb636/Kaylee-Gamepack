@@ -942,6 +942,38 @@ const thaiMountain = (name, seconds, round, steps) => ({
   },
 })
 GAME_SCENARIOS.push(thaiMountain('mountain-climb', 9, 1, 9), thaiMountain('mountain-race', 9, 3, 9))
+// The Sky Pod (mall trip, greybox): the core verb, slapping the pods. Each slap squashes the pod, flashes it, plays its
+// note and throws sparks, and Kaylee bounces over on the mat and jumps to slap it too (a big jump for the high ones).
+// The first run slaps low, high, across and back; the second slides a finger across the arch (a glissando). Where the
+// pods are comes from window.__thaiMallQA (screen pixels).
+const thaiSkyPod = (name, seconds, pods, glide) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/skypod`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().game === 'skypod', null, { timeout: 20000 })
+    await page.waitForTimeout(600)
+  },
+  act: async (page) => {
+    const q = await page.evaluate(() => window.__thaiMallQA())
+    if (glide) {
+      const [a, b] = [q.pods[0], q.pods[q.pods.length - 1]]
+      await page.mouse.move(a[0], a[1])
+      await page.mouse.down()
+      for (const p of q.pods) await page.mouse.move(p[0], p[1], { steps: 4 })
+      await page.mouse.move(b[0] + 30, b[1], { steps: 2 })
+      await page.mouse.up()
+      await page.waitForTimeout(1500)
+      return
+    }
+    for (const i of pods) {
+      await page.mouse.click(q.pods[i][0], q.pods[i][1])
+      await page.waitForTimeout(900)
+    }
+  },
+})
+GAME_SCENARIOS.push(thaiSkyPod('skypod-slap', 7, [0, 4, 8, 3, 1]), thaiSkyPod('skypod-glide', 4, [], true))
 
 // The Pizza Company (mall trip, greybox): her finger pulls a slice out of the pan and the cheese stretches, wobbles as
 // she swings it, and snaps; she lets go over a plate. Hawaiian snaps early, Double Cheese stretches longest, and in the

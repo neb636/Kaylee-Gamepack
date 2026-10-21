@@ -579,11 +579,98 @@ bow, the dance step, the kick). The bag is a pendulum spring with a squash; the 
 an on-beat punch feels on the beat on the iPad (the sound's lag, a five-year-old's timing): the window is generous and
 grows when she's off.
 
-#### 8. The Sky Pod 💡 (`skypod`; quick eyes, counting)
+#### 8. The Sky Pod 💡 (`skypod`; quick eyes, counting, music)
 
-- **The toy:** buttons light up; tap them (they wait for her). Then copy a short pattern of lights. The score counts up
-  in big numbers.
-- Small. It could stay a poke in the hall instead of a mini game.
+The real one is a wall of big round light-up pods with a scoreboard: a pod lights, you slap it, you score (the
+SkyPods sold to play centers have 5, 7 or 9 pods, a Speed and a Reaction game, and are often set high, so kids jump for
+them). Filled in with `../ACTIVITY-TEMPLATE.md` on 2026-10-21, before the greybox. The first sketch worried it was thin
+(a reaction test), so it's built as a toy: the wall is an instrument she plays by slapping it.
+
+**One-line pitch:** Daddy wants to see how fast she is; Kaylee slaps the glowing pods on the Sky Pod's wall (jumping
+for the high ones), plays a song on it, races Daddy, and the score rolls up to a hundred.
+
+**The toy (core verb):** slap a pod.
+- How it feels: it reacts the instant her finger lands. The pod squashes into the wall and bulges back, flashes
+  white, lights up in its own color, plays its own note, and sparks fly off it. Kaylee bounces over on the springy mat
+  and slaps it too: she stands beside it, turns to the wall and reaches up, with a big jump for the high ones. A finger
+  sliding across the pods plays every one it crosses.
+- Why it's fun with no goal: the wall is an instrument. Left to right (and up the rows) the nine pods climb a scale,
+  so she can play tunes, run a finger along it, or bang one over and over.
+- Greybox test: nine pods on a night-sky wall, the scoreboard, Kaylee on the mat, Daddy. Does slapping feel good on
+  the iPad, and does Kaylee's jump keep up with her finger?
+
+**How the verb deepens (3 steps, same verb):**
+1. **Pop the lights:** a pod lights up and waits (low ones first, so she just reaches). She slaps it, +1, and the next
+   one pops on somewhere else. From six, two at a time, and the high ones need a jump. Ten and the round is done.
+2. **Copy the tune:** the wall plays a little pattern, lights and notes (two pods, then three, then four: the start of
+   "Twinkle, Twinkle, Little Star"), then waits while she plays it back. A wrong pod is just its own note as a silly
+   kazoo; Daddy chuckles, the wall plays it again, and the next pod glows softly. After the third, the wall plays the
+   whole first line of the song, lighting up as it goes.
+3. **Race Daddy:** her lights are pink, his are blue, on the same wall. He walks over to his and slaps it; she can
+   slap his too (hers now: "hey!"). He's slow, he sometimes slaps the wall beside it (ow, ow), and whenever he's caught
+   up with her he dances, sits down for a rest or waves, so she always gets to ten first.
+Side verb: none (the finale and the pokes are the same slap).
+
+**Her choices:** which lights to go for first (two at a time), whether to steal Daddy's, what to play (any pod, any
+time, between the lights and after the finale), when to put the beat on.
+
+**Pokeables (5+ things that react and aren't the answer):**
+- every unlit pod (its note: the wall is an instrument)
+- the scoreboard (its numbers wobble, beep-boop)
+- the big speaker (a beat to play along to: the pods' rings and Daddy bob to it; tap again to stop)
+- the rocket on top of the wall (it rumbles, hops up on its flame and lands)
+- the moon on the wall (it rocks on its hook, the painted stars twinkle)
+- Kaylee (a big bounce on the mat), Daddy (a hop and a laugh), the mat (she bounces there)
+
+**Silly moments (instead of failure):**
+- a pod slapped five times fast pops out on its spring, boing, and spins
+- a wrong pod in round 2 plays its note as a kazoo
+- Daddy misses and slaps the wall (ow, ow), says "hey!" when she takes his light, and sits down for a rest mid-race
+
+**Story frame (at most 2 lines before her hands are busy):** Daddy: "How fast are you, Kaylee?" / Sparkle: "Slap the
+lights!" (with the full loop; the greybox has no voices).
+When Sparkle talks during play: when round 2 starts ("Listen... now you play it!"), when round 3 starts (Daddy: "Race
+you, Kaylee!"), and after ~8 s with nothing touched (the 👆 shows the lit pod, or the pattern's next one).
+
+**What it teaches, by doing:** counting (the score climbs one at a time, to ten each round), listening and remembering
+(copying the pattern), up and down a scale (the pods' notes), and a song she knows. Tap-to-hear fact (full loop): a
+tap on the scoreboard counts it in Thai: nueng, song, saam, sii, haa, hok, jet, paet, gao, sip.
+
+**Payoff (visible, builds up while she plays):** the score, a star on the board for each round, the song at the end of
+round 2, and the finale: every pod goes rainbow in a chasing wave, the score rolls up to 100 with a fanfare and
+confetti, and Daddy throws his arms up. The 💡 sticker goes on her sock band after round 1.
+
+**Replay:** the lights pop up in a different order every time; after the finale the wall stays open (one light at a
+time, the score keeps counting past 100) and she can just play music on it; the 🛝 takes her back to the hall.
+
+**Numbers:** about 30-40 touches: round 1 about 10-12 (ten lights and a few extra pods), round 2 about 9-12 (two,
+three and four pods, plus a wrong one or two), round 3 about 10-12, plus pokes. About 1.5-2 min at a five-year-old's
+pace. No lines before the first touch in the greybox; one or two with the full loop.
+
+**Camera and art:** straight on at the wall, a little above eye level. On a wide screen the pods make an arch (a
+rainbow) with the board under it; on a tall one a three-by-three with the board on top, so every pod is a big target:
+the tap targets are at least 88 px on iPad and 64 px on iPhone. The words and numbers on the board are HTML laid over
+it. Greybox: code-built shapes in the house's toon look; no generated art.
+
+**Sections and state:** one section, `skypod?round=1|2|3` (1 pop the lights, 2 copy the tune, 3 race Daddy, then the
+finale). A link past round 1 has the 💡 sticker and that many stars on the board. It keeps its own round in the trip
+(`skyRound`), so another mini game's round doesn't leak in. The hall's Sky Pod is its way in (`hall?from=skypod` comes
+back out there).
+
+**Tech:** a 3D side view (like Little Land) in the house's toon look. The rules are `game.ts`, pure (no three.js), shared
+with the flat version: which pods are lit, the score, the patterns, and Daddy's pacing (he only goes for his light while
+he's behind her). The pods are five instanced meshes (domes in flat unlit colors so lit ones glow, their shines, the
+rings, the rings' instanced ink outline, a halo), whatever their number. A slap lands on the finger going down (not on
+lift), straight through its DOM tap target. **Riskiest:** whether Kaylee's jump keeps up with a quick finger without
+feeling laggy (the pod reacts at once; she queues the latest one).
+
+**Spoken lines for the voice pass (none in the greybox):**
+- Daddy: "How fast are you, Kaylee?" (opening), "Race you, Kaylee!" (round 3), "Hey! That one's mine!" (she took his),
+  "Ow, ow!" (a miss), "Daddy needs a rest!" (sitting down), "You win, Kaylee!" (the race)
+- Sparkle: "Slap the lights!" (opening), "Listen... now you play it!" (round 2), "Slap the glowing one!" and "This one
+  next!" (after 8 s stuck), "A hundred! Super star, Kaylee!" (the finale)
+- Counting the score: "One!" ... "Ten!" (Sparkle, as it climbs in rounds 1 and 3), and the scoreboard's Thai count
+  (whose voice: Dad picks)
 
 #### The Big Frame (`frame`) and the cannon
 
@@ -661,7 +748,7 @@ Activity `mall-trip`: `activities/mall-trip/sections.ts`. Every param has a defa
 | 9 | `mountain` | The Golden Mountain: climb, count, the bell, the steel slide (`?round=1\|2\|3`) | `socks`, `games`, `round`, `hair` |
 | 10 | `blocks` | Little Land: the foam blocks (`?round=1\|2\|3&card=chedi\|elephant`) | `socks`, `games`, `round`, `card` |
 | 11 | `boxing` | Muay Thai: the wai kru, the bag to the drum's beat, Daddy's pad (`?round=1\|2\|3`) | `socks`, `games`, `round` |
-| 12 | `skypod` | The Sky Pod lights | `socks`, `games` |
+| 12 | `skypod` | The Sky Pod: slap the lights, copy the tune, race Daddy (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 13 | `frame` | The Big Frame: climb up, slide down, the cannon (`?at=in\|pit\|l1\|l2\|top\|out`) | `socks`, `games`, `at`, `hair` |
 | 14 | `hungry` | Daddy's tummy rumbles, Mommy asks: pizza time? | `socks`, `games` |
 | 15 | `menu` | The Pizza Company: pick a pizza | `hair` |
@@ -675,7 +762,7 @@ Params:
 - `socks`: `pink|lavender|mint`, default `pink`.
 - `games`: the mini games done so far (the sock band's stickers), a comma list. Default empty. `frame` is any big ride
   in the Big Frame (the 🛝 sticker); old links' ride names (`pool`, `donut`, `zip`, `roller`, `dragon`) count as `frame`.
-- `from`: the hall: the door she comes out of, `in|vet|cafe|barber|race|frame|blocks|mountain|boxing`. Default `in`
+- `from`: the hall: the door she comes out of, `in|vet|cafe|barber|race|frame|blocks|mountain|boxing|skypod`. Default `in`
   (she's just come in, by Mommy's bench).
 - `at`: where she is in the Big Frame, `in|pit|l1|l2|top|out`: just through the tunnel, in the ball pit with Daddy,
   a level, or the mats in front. Default `in`. It follows the level she's on.
@@ -693,6 +780,7 @@ Params:
   - The barber: grow and snip, then colors, the dryer and bows, then kids with picture cards.
   - Little Land: free stacking, the picture cards, taller than Daddy.
   - The Golden Mountain: holds in a line, only the pink ones, race Daddy up the other side.
+  - The Sky Pod: pop the lights, copy the tune, race Daddy (then the finale).
 - `pizza`: `hawaiian|seafood|cheese`, default `cheese`.
 - `shared`: slices already handed out, 0-8. Default 0. `share?shared=6` starts at the last two, for Agong.
 - `photos`: which photos exist. Default for `home`: `dragon`.
@@ -1139,6 +1227,44 @@ small climbing toy, before Dad's photos.
      big enough to hit on the iPhone? Is the slide a payoff she wants again (should it be longer, or come with a ball
      pit)? Is the race close enough to feel like a race? Should the rounds be taller (more holds), since it's a little
      short? Are the round 2 silly holds fun, or do they slow her down?
+   *The Sky Pod built 2026-10-21 (`activities/mall-trip/games/skypod/`, `#/world/thailand/mall-trip/skypod?round=1|2|3`):*
+   - **The wall:** a night-sky panel (painted stars, a crescent moon, a rocket on top) with nine round pods in white
+     rings, the scoreboard (its numbers HTML, never in a picture), the springy mat in front, the big speaker. On a wide
+     screen the pods make an arch over the board; on a tall one a three-by-three under it. Each pod has its own color
+     round the rainbow, dark until it's lit, and its own note: C D E F G A B C D, left to right and up the rows.
+   - **The slap:** it lands the moment her finger goes down. The pod squashes in and bulges back (a spring), flashes,
+     glows in its own color, plays its note, and throws a ring of sparks; a "+1" floats up from a light she gets.
+     Kaylee (in her grip socks) bounces along the mat to stand beside it and jumps to slap it, her arm on our side
+     reaching up (the jump is as high as the pod needs). A slap while she's in the air is next; only the latest waits.
+     A finger sliding across the wall plays every pod it crosses.
+   - **Rounds:** (1) ten lights, one at a time and low first, then two at a time; (2) the wall plays C-G, C-G-A,
+     C-C-G-G (the start of "Twinkle, Twinkle") and she plays each back; a wrong pod is a kazoo note and the pattern
+     plays again with the next pod glowing; then the wall plays the whole line; (3) the race to ten: pink lights hers,
+     blue ones Daddy's. Daddy walks over, reaches up and slaps his (a quarter of the time he misses, ow ow), then
+     walks back to his place at the side so he doesn't hide the pods. Caught up, he dances, sits for a rest or waves.
+     She can take his. Then the finale: the pods chase a rainbow, the score rolls up to 100, the fanfare and confetti,
+     and the 🛝. The wall stays open after it (a light at a time, the score keeps going).
+   - **Pokeables:** the unlit pods (notes), the scoreboard, the speaker (a beat: the rings and Daddy bob), the rocket
+     (rumble, hop, land), the moon (rocks, the stars twinkle), Kaylee (a big bounce), Daddy, the mat (she bounces
+     there). Five quick slaps on one pod pop it out on its spring.
+   - **Taps alone** play it all (it's a tap toy). A scripted real-pointer run of all three rounds reached the finale at
+     iPad landscape and portrait and iPhone landscape and portrait: 34 taps, 45 s at a fast robot's pace (a slap every
+     half second); at a five-year-old's pace that's about 1.5-2 min. Round 2 alone is about 25 s (the wall's patterns
+     take their time). Every pod's tap target owns its center (no overlap steals it): 88 px on iPad landscape, 110 on
+     iPad portrait, 64 on iPhones.
+   - **Numbers:** about 53 draw calls (the nine pods are five).
+   - **The hall:** its Sky Pod is now a way in. Tap it and she walks up, the buttons light up one after another up a
+     scale, and in she goes; ↩️ brings her back out there (`hall?from=skypod`). The sock band has a 💡 slot, filled after
+     round 1. (The hall's teaser wall is still four by three; the game's has nine pods. The art gate can match them.)
+   - **Sounds only:** no voices. The lines are listed in "8. The Sky Pod".
+   - **Flat version** (`?gl=off`): the nine pods as big round buttons, the same rules (`game.ts`), the board on top and
+     Daddy beside it.
+   - **For Dad on the iPad:**
+     - Does slapping feel good, and does Kaylee's jump keep up, or does she feel laggy when Kaylee slaps fast?
+     - Is copying the tune fun or a quiz? Are three patterns the right number, and is the soft glow too much help?
+     - Does Daddy score enough to make it feel like a race (he only goes while he's behind her)?
+     - Does Kaylee play tunes on it after the finale? Should the pods be one scale on the arch, or something else?
+     - Whose voice counts in Thai when she taps the scoreboard?
 6. **Greybox: the pizza toy** (`menu`, `share`).
    *Built 2026-10-21 (`activities/mall-trip/pizza/`, `#/world/thailand/mall-trip/menu`,
    `#/world/thailand/mall-trip/share?pizza=hawaiian|seafood|cheese&shared=0..8`):*

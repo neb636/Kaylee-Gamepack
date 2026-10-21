@@ -379,6 +379,7 @@ const SCREENS = [
   { name: 'mall-hall-little-land', hash: '#/world/thailand/mall-trip/hall?from=blocks&games=blocks', reset: true, wait: 3500 },
   { name: 'mall-hall-muay-thai', hash: '#/world/thailand/mall-trip/hall?from=boxing&games=boxing', reset: true, wait: 3500 },
   { name: 'mall-hall-mountain', hash: '#/world/thailand/mall-trip/hall?from=mountain&games=mountain', reset: true, wait: 3500 },
+  { name: 'mall-hall-sky-pod', hash: '#/world/thailand/mall-trip/hall?from=skypod', reset: true, wait: 3500 },
   { name: 'mall-hall-going-in', hash: '#/world/thailand/mall-trip/hall?from=vet', reset: true, wait: 2500, act: async (p) => {
     await p.locator('[data-anchor="door:cafe"]').click({ force: true })
     await p.waitForTimeout(2600)
@@ -618,6 +619,41 @@ const SCREENS = [
     },
   })),
   { name: 'mountain-flat', hash: '#/world/thailand/mall-trip/mountain?round=2&gl=off', reset: true, wait: 900 },
+  // The Sky Pod (greybox): each round at the start (round 2: the wall playing the pattern; round 3: Daddy's blue light
+  // beside hers), a slap on a high pod (Kaylee in the air, her arm up), the finale's rainbow and the 🛝, the 👆 after a
+  // while, and the flat version.
+  ...[1, 2, 3].map((n) => ({ name: `skypod-${n}`, hash: `#/world/thailand/mall-trip/skypod?round=${n}`, reset: true, wait: n === 2 ? 1400 : 3000 })),
+  {
+    name: 'skypod-slap',
+    hash: '#/world/thailand/mall-trip/skypod',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'skypod', null, { timeout: 20000 }).catch(() => {})
+      await p.waitForTimeout(1200)
+      const q = await p.evaluate(() => window.__thaiMallQA())
+      const top = q.pods.reduce((best, s, i) => (s && s[1] < q.pods[best][1] ? i : best), 0)
+      await p.locator(`[data-anchor="pod:${top}"]`).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(420)
+    },
+  },
+  {
+    name: 'skypod-finale',
+    hash: '#/world/thailand/mall-trip/skypod?round=3',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'skypod', null, { timeout: 20000 }).catch(() => {})
+      for (let n = 0; n < 60; n++) {
+        const q = await p.evaluate(() => window.__thaiMallQA())
+        if (q.phase === 'finale' || q.phase === 'free') break
+        const i = q.lights.indexOf('lit')
+        if (i >= 0) await p.locator(`[data-anchor="pod:${i}"]`).click({ force: true }).catch(() => {})
+        await p.waitForTimeout(450)
+      }
+      await p.waitForTimeout(1800)
+    },
+  },
+  { name: 'skypod-hint', hash: '#/world/thailand/mall-trip/skypod', reset: true, wait: 9500 },
+  { name: 'skypod-flat', hash: '#/world/thailand/mall-trip/skypod?round=3&gl=off', reset: true, wait: 2200 },
   // The Pizza Company (greybox): the menu, the table at the start, a slice pulled out with the cheese stretching (held
   // over Daddy's plate), the last two for Agong's box, the box closed, and the flat version.
   { name: 'pizza-menu', hash: '#/world/thailand/mall-trip/menu', reset: true, wait: 3500 },
