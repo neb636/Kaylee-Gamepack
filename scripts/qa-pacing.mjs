@@ -112,6 +112,8 @@ const SCENARIOS = [
   { name: 'thailand mall: harborland ground floor', id: 'mall-play', hash: '#/world/thailand/mall-trip/play', reset: true },
   { name: 'thailand mall: harborland golden mountain', id: 'mall-mountain', hash: '#/world/thailand/mall-trip/mountain', reset: true },
   { name: 'thailand mall: harborland top', id: 'mall-dragon', hash: '#/world/thailand/mall-trip/dragon', reset: true },
+  // The Vet Clinic (greybox, no voices): tapping a tool does a short go with it, so the auto-player can heal all three.
+  { name: 'thailand mall: vet clinic', id: 'mall-vet', hash: '#/world/thailand/mall-trip/vet', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
   // (?gl=off goes before the hash: the section's address drops anything it doesn't know.)
   { name: 'thailand trip: picture book without webgl', id: 'trip-book', search: '?gl=off', hash: '#/world/thailand/boat-trip/invite', reset: true },

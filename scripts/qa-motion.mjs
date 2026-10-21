@@ -675,6 +675,43 @@ GAME_SCENARIOS.push(
   thaiMall('mall-cannon', 6, 'play', [['cannon', 2700], ['cannon', 1400], ['cannon', 1700]]),
 )
 
+// The Vet Clinic (mall trip, greybox): her finger drags a tool from the tray onto the patient and works it there, the
+// core verb. The bandage wound round the puppy's sore paw, the thorn pulled out, the soap rubbed into the muddy pony,
+// and the elephant's sneeze. Where things are comes from window.__thaiMallQA (its zones and tools, in screen pixels).
+const thaiVet = (name, seconds, patient, strokes) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/vet?patient=${patient}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().phase === 'exam', null, { timeout: 20000 })
+    await page.waitForTimeout(400)
+  },
+  act: async (page) => {
+    for (const [tool, zone, how, after = 300] of strokes) {
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      const [zx, zy] = [q.zones[zone][0], q.zones[zone][1] + q.liftPx]
+      await page.mouse.move(...q.tools[tool])
+      await page.mouse.down()
+      await page.mouse.move(zx, zy, { steps: 14 })
+      if (how === 'pull') {
+        await page.waitForTimeout(300)
+        await page.mouse.move(zx + 130, zy - 110, { steps: 10 })
+      } else for (let i = 0; i < 36; i++) {
+        const a = i * (how === 'circle' ? 0.45 : 0.9)
+        await page.mouse.move(zx + Math.cos(a) * 26, zy + Math.sin(a) * (how === 'circle' ? 26 : 14), { steps: 3 })
+      }
+      await page.mouse.up()
+      await page.waitForTimeout(after)
+    }
+  },
+})
+GAME_SCENARIOS.push(
+  thaiVet('vet-thorn-bandage', 6, 'puppy', [['tweezers', 'paw', 'pull', 600], ['bandage-pink', 'paw', 'circle']]),
+  thaiVet('vet-soap', 4, 'pony', [['soap', 'belly', 'rub']]),
+  thaiVet('vet-sneeze', 7, 'elephant', [['soap', 'belly', 'rub'], ['soap', 'head', 'rub', 2600]]),
+)
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {

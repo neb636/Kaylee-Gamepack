@@ -1,8 +1,8 @@
-// The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md). Greybox 1: only HarborLand's
-// playground (harborland/harborland.ts), the toy with no goal, in shapes and without voices, so Dad can feel climbing
-// up and sliding down on the iPad first. Its sections (play, mountain, dragon) follow the floor she's on. Each big ride
-// puts a sticker on her sock band in the corner. The trip around it (Mommy's question, the Veloz, the lift and the
-// socks, the pizza, home) comes in later gates.
+// The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md). So far, in shapes and without
+// voices: HarborLand's playground (harborland/harborland.ts, sections play, mountain, dragon: they follow the floor
+// she's on) and the first mini game, the Vet Clinic (games/vet/, section vet). Each big ride and each mini game puts a
+// sticker on her sock band in the corner (`games`). The hall between the mini games and the trip around it (Mommy's
+// question, the Veloz, the lift and the socks, the pizza, home) come in later gates.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -10,26 +10,36 @@ import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../engine/Anchors'
 import { View3D, type RenderMode } from '../../engine/View3D'
 import { Flat } from './Flat'
+import { Vet } from './games/vet/Vet'
 import { HARBOR_ANCHORS, HarborLand, SOCK_COLORS, type HarborSection } from './harborland/harborland'
 import { RIDE_ICONS, RIDES, type RideId } from './harborland/layout'
-import MALL_SECTIONS from './sections'
+import MALL_SECTIONS, { type MallSection, type PatientId } from './sections'
 
-const list = (s: string) => s.split(',').filter((x): x is RideId => (RIDES as readonly string[]).includes(x))
+/** Every sticker on the sock band: the mini games so far, then the playground's big rides. */
+const GAMES = ['vet', ...RIDES] as const
+type GameId = (typeof GAMES)[number]
+const GAME_ICONS: Record<GameId, string> = { vet: '🩺', ...RIDE_ICONS }
+const list = (s: string) => s.split(',').filter((x): x is GameId => (GAMES as readonly string[]).includes(x))
+const isRide = (g: GameId): g is RideId => g !== 'vet'
 
 export function MallTrip() {
   const { start, param, enter } = useSections(MALL_SECTIONS)
-  const first: HarborSection = start ?? 'play'
+  const first: MallSection = start ?? 'play'
   const [socks] = useState(() => param('socks'))
-  const [rides, setRides] = useState<RideId[]>(() => list(param('rides')))
-  const [section, setSection] = useState<HarborSection>(first)
+  const [patient, setPatient] = useState<PatientId>(() => param('patient') as PatientId)
+  // (`rides` is the old name of `games`, from PR #120's links. A link past the puppy has the vet sticker already.)
+  const [games, setGames] = useState<GameId[]>(() => [...new Set([...list(param('games')), ...list(param('rides')), ...(first === 'vet' && patient !== 'puppy' ? ['vet' as const] : [])])])
+  const [section, setSection] = useState<MallSection>(first)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const worldRef = useRef<HarborLand | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const rides = games.filter(isRide)
   const state = useRef({ section, rides })
   state.current = { section, rides }
+  const sticker = (id: GameId) => setGames((g) => (g.includes(id) ? g : [...g, id]))
 
-  const params = () => ({ socks, rides: state.current.rides.join(',') })
+  const params = () => ({ socks, games: games.join(','), ...(section === 'vet' ? { patient } : {}) })
   useEffect(() => enter(first, params()), [])
   const ready = useRef(false)
   useEffect(() => {
@@ -38,23 +48,25 @@ export function MallTrip() {
       return
     }
     enter(section, params())
-  }, [section, rides])
+  }, [section, games, patient])
 
   const make = (renderer: WebGLRenderer) => {
     const w = new HarborLand(renderer, {
       say: () => {},
       done: () => {},
       section: (s) => setSection(s as HarborSection),
-      ride: (id) => setRides((r) => (r.includes(id) ? r : [...r, id])),
-    }, { section: state.current.section, socks, rides: state.current.rides })
+      ride: sticker,
+    }, { section: state.current.section as HarborSection, socks, rides: state.current.rides })
     w.setHintElement(hintRef.current)
     return w
   }
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#F1E8FF', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <Flat section={section} rides={rides} onSection={setSection} onRide={(id) => setRides((r) => (r.includes(id) ? r : [...r, id]))} />
+      {section === 'vet' ? (
+        <Vet patient={patient} onPatient={setPatient} onHealed={(id) => id === 'puppy' && sticker('vet')} onPlay={() => setSection('play')} />
+      ) : mode === 'flat' ? (
+        <Flat section={section} rides={rides} onSection={setSection} onRide={sticker} />
       ) : (
         <View3D
           key={key}
@@ -76,7 +88,7 @@ export function MallTrip() {
           )}
         />
       )}
-      {mode === 'lost' && (
+      {section !== 'vet' && mode === 'lost' && (
         <button
           onClick={() => {
             setMode('webgl')
@@ -87,24 +99,24 @@ export function MallTrip() {
           🛝 Tap to wake the playground
         </button>
       )}
-      <SockBand rides={rides} color={SOCK_COLORS[socks] ?? SOCK_COLORS.pink} />
+      <SockBand games={games} color={SOCK_COLORS[socks] ?? SOCK_COLORS.pink} />
     </div>
   )
 }
 
-/** Her sock band in the corner: a sticker for each big ride, popping in the first time. */
-export function SockBand({ rides, color }: { rides: RideId[]; color: string }) {
+/** Her sock band in the corner: a sticker for each mini game and big ride, popping in the first time. */
+export function SockBand({ games, color }: { games: GameId[]; color: string }) {
   return (
     <div
-      aria-label={`Stickers: ${rides.length} of ${RIDES.length}`}
+      aria-label={`Stickers: ${games.length} of ${GAMES.length}`}
       style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 12px)', top: 'calc(var(--safe-top) + 14px)', display: 'flex', gap: 'clamp(3px, 0.6vw, 6px)', padding: 'clamp(5px, 0.9vw, 8px) clamp(8px, 1.4vw, 12px)', borderRadius: 999, background: color, border: '4px solid #fff', boxShadow: 'var(--shadow)', zIndex: 30, pointerEvents: 'none' }}
     >
-      {RIDES.map((id) => (
+      {GAMES.map((id) => (
         <div key={id} style={{ width: 'clamp(30px, 4.6vmin, 44px)', height: 'clamp(30px, 4.6vmin, 44px)', borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,.55)', border: '2px dashed rgba(255,255,255,.9)', fontSize: 'clamp(18px, 3vmin, 28px)' }}>
           <AnimatePresence>
-            {rides.includes(id) && (
+            {games.includes(id) && (
               <motion.span key={id} initial={{ scale: 0, rotate: -40 }} animate={{ scale: [0, 1.5, 1], rotate: 0 }} transition={{ duration: 0.5 }}>
-                {RIDE_ICONS[id]}
+                {GAME_ICONS[id]}
               </motion.span>
             )}
           </AnimatePresence>

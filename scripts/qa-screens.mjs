@@ -358,8 +358,46 @@ const SCREENS = [
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
   // The mall trip, greybox 1: HarborLand's three levels, a sock band with stickers, and the flat version.
   ...['play', 'mountain', 'dragon'].map((to) => ({ name: `mall-trip-${to}`, hash: `#/world/thailand/mall-trip/${to}`, reset: true, wait: 3000 })),
-  { name: 'mall-trip-stickers', hash: '#/world/thailand/mall-trip/play?socks=mint&rides=pool,mountain,donut', reset: true, wait: 3000 },
+  { name: 'mall-trip-stickers', hash: '#/world/thailand/mall-trip/play?socks=mint&games=vet,pool,mountain,donut', reset: true, wait: 3000 },
   { name: 'mall-trip-flat', hash: '#/world/thailand/mall-trip/mountain?gl=off', reset: true, wait: 600 },
+  // The Vet Clinic (greybox): each patient on the table (the earlier ones on the waiting room's bench), the 👇 hint
+  // after a while, a tool at work (soap on the muddy pony), the end (all three on the bench, the 🛝) and the flat version.
+  ...['puppy', 'pony', 'elephant'].map((p) => ({ name: `vet-${p}`, hash: `#/world/thailand/mall-trip/vet?patient=${p}`, reset: true, wait: 4200 })),
+  { name: 'vet-hint', hash: '#/world/thailand/mall-trip/vet', reset: true, wait: 9500 },
+  {
+    name: 'vet-soap',
+    hash: '#/world/thailand/mall-trip/vet?patient=pony',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().phase === 'exam', null, { timeout: 20000 }).catch(() => {})
+      const q = await p.evaluate(() => window.__thaiMallQA())
+      const [zx, zy] = [q.zones.belly[0], q.zones.belly[1] + q.liftPx]
+      await p.mouse.move(...q.tools.soap)
+      await p.mouse.down()
+      await p.mouse.move(zx, zy, { steps: 10 })
+      for (let i = 0; i < 30; i++) await p.mouse.move(zx + Math.cos(i * 0.9) * 26, zy + Math.sin(i * 0.9) * 16 - (i % 10) * 4, { steps: 2 })
+      await p.mouse.up()
+      await p.waitForTimeout(700)
+    },
+  },
+  {
+    name: 'vet-done',
+    hash: '#/world/thailand/mall-trip/vet?patient=elephant',
+    reset: true,
+    act: async (p) => {
+      // Taps do a short go each: medicine, tissue, soap, (the sneeze), the shower.
+      await p.waitForFunction(() => window.__thaiMallQA?.().phase === 'exam', null, { timeout: 20000 }).catch(() => {})
+      const tool = { medicine: 'spoon', tissue: 'tissue', soap: 'soap', rinse: 'shower' }
+      for (let i = 0; i < 30; i++) {
+        const q = await p.evaluate(() => window.__thaiMallQA())
+        if (q.phase === 'done' || q.phase === 'leave') break
+        if (tool[q.need] && !q.held) await p.locator(`[data-anchor="tool:${tool[q.need]}"]`).click({ force: true }).catch(() => {})
+        await p.waitForTimeout(1900)
+      }
+      await p.waitForTimeout(4500)
+    },
+  },
+  { name: 'vet-flat', hash: '#/world/thailand/mall-trip/vet?patient=pony&gl=off', reset: true, wait: 900 },
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.
