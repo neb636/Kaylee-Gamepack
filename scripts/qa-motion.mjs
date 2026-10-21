@@ -712,6 +712,73 @@ GAME_SCENARIOS.push(
   thaiVet('vet-sneeze', 7, 'elephant', [['soap', 'belly', 'rub'], ['soap', 'head', 'rub', 2600]]),
 )
 
+// Cafe & Cake (mall trip, greybox): the blender, its core verb. Her finger drags the strawberry and the banana into the
+// jar, presses the big button (the colors swirl into pink), then lifts the jar to the cup: it tips as it gets there
+// and pours. Where things are comes from window.__thaiMallQA (the tray, the jar's mouth, where to hold it to pour).
+GAME_SCENARIOS.push({
+  name: 'cafe-blend-pour',
+  seconds: 9,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/cafe?round=2`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().game === 'cafe', null, { timeout: 20000 })
+    await page.waitForTimeout(400)
+  },
+  act: async (page) => {
+    const q = () => page.evaluate(() => window.__thaiMallQA())
+    for (const fruit of ['strawberry', 'banana']) {
+      const s = await q()
+      await page.mouse.move(...s.items[fruit])
+      await page.mouse.down()
+      await page.mouse.move(s.mouth[0], s.mouth[1] + s.liftPx, { steps: 14 })
+      await page.mouse.up()
+      await page.waitForTimeout(350)
+    }
+    await page.locator('[data-anchor="button"]').click({ force: true })
+    await page.waitForTimeout(2100)
+    const s = await q()
+    await page.mouse.move(...s.jarAt)
+    await page.mouse.down()
+    await page.mouse.move(...s.pourAt[0], { steps: 18 })
+    for (let i = 0; i < 10; i++) await page.mouse.move(s.pourAt[0][0] + (i % 2) * 4, s.pourAt[0][1], { steps: 2 })
+    await page.waitForTimeout(1200)
+    await page.mouse.up()
+  },
+})
+
+// The Racing Slide (mall trip, greybox): the core verb, scooting down a lane. Setup climbs the steps (taps on the
+// steps' tap target) and waits for the 3-2-1; the act taps Kaylee: steadily (`every` ms, round 1's scoots) or just as a
+// bump's ring closes on her (round 2's flights; round 3 in the spinning rings), until she's in the balls (Daddy head
+// first). Where she is comes from window.__thaiMallQA (screen pixels).
+const thaiSlide = (name, seconds, round, every) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/race?round=${round}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().phase === 'climb', null, { timeout: 20000 })
+    for (let i = 0; i < 60; i++) {
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      if (q.phase === 'race') break
+      if (q.phase === 'climb') await page.locator('[data-anchor="steps"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(400)
+    }
+  },
+  act: async (page) => {
+    const t0 = Date.now()
+    let last = 0
+    while (Date.now() - t0 < seconds * 1000) {
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      if (q.phase === 'race' && q.kaylee && (every ? Date.now() - last > every : q.window && Date.now() - last > 500)) {
+        await page.mouse.click(...q.kaylee)
+        last = Date.now()
+      }
+      await page.waitForTimeout(40)
+    }
+  },
+})
+GAME_SCENARIOS.push(thaiSlide('mall-race-scoot', 8, 1, 330), thaiSlide('mall-race-bump', 9, 2, 0), thaiSlide('mall-race-rings', 9, 3, 0))
+
 // The Pizza Company (mall trip, greybox): her finger pulls a slice out of the pan and the cheese stretches, wobbles as
 // she swings it, and snaps; she lets go over a plate. Hawaiian snaps early, Double Cheese stretches longest, and in the
 // tug (after one each) Daddy grabs the other end. Where things are comes from window.__thaiMallQA (screen pixels).

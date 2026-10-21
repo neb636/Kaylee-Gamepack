@@ -414,8 +414,8 @@ Activity `mall-trip`: `activities/mall-trip/sections.ts`. Every param has a defa
 | 4 | `hall` | HarborLand: walk the hall, pick a mini game | `socks`, `games`, `hair` |
 | 5 | `vet` | The Vet Clinic (`?patient=puppy\|pony\|elephant`) | `socks`, `games`, `patient` |
 | 6 | `barber` | The Barber Salon: Daddy's new look | `socks`, `games`, `hair` |
-| 7 | `race` | The racing slide | `socks`, `games` |
-| 8 | `cafe` | Cafe & Cake: the blender | `socks`, `games` |
+| 7 | `race` | The racing slide (`?round=1\|2\|3`) | `socks`, `games`, `round` |
+| 8 | `cafe` | Cafe & Cake: the blender (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 9 | `mountain` | The Golden Mountain and the steel slide | `socks`, `games` |
 | 10 | `blocks` | Little Land: the foam blocks | `socks`, `games` |
 | 11 | `boxing` | Muay Thai: the wai kru and the bags | `socks`, `games` |
@@ -434,6 +434,9 @@ Params:
 - `games`: the mini games done so far (the sock band's stickers), a comma list. Default empty.
 - `hair`: Daddy's hairdo from the barber, e.g. `long,rainbow,spiky`. Default empty (his own mane).
 - `patient`: who's on the vet's table, `puppy|pony|elephant`. Default `puppy`.
+- `round`: the round of the mini game on screen, `1|2|3`. Default `1`.
+  - The cafe: blend anything, picture orders, Thai drinks two at once.
+  - The racing slide: the first race, tap at a bump to fly, spinning rubber rings.
 - `pizza`: `hawaiian|seafood|cheese`, default `cheese`.
 - `shared`: slices already handed out, 0-8. Default 0. `share?shared=6` starts at the last two, for Agong.
 - `photos`: which photos exist. Default for `home`: `dragon`.
@@ -577,10 +580,63 @@ small climbing toy, before Dad's photos.
      patient.
 2. **Greybox: the barber salon** (`barber`) and Daddy's `hair` carrying on through the trip.
 3. **Greybox: the racing slide** (`race`).
+   *Built 2026-10-21 (`activities/mall-trip/games/race/`, `#/world/thailand/mall-trip/race?round=1|2|3`):*
+   - **The scene:** four wavy orange lanes (four bumps each) seen from the bottom, a little from her side so the
+     bumps show in the lanes' sides. The eight steps and a padded rail go up the left, and the lanes end in a pit of
+     pink and white balls. Kaylee is in lane 1, then Daddy, Mommy and a kid. The two kids (a puppy and a pony,
+     placeholders) **take turns**: one races and the other cheers by the pit, then they swap.
+   - **The toy:** tap to climb (two steps a tap, four taps), and she sits in her lane. The start lights count down
+     (three lit, two, one, then all green) with big 3-2-1 numbers. Then every tap is a scoot: her hands push and she
+     speeds up. Whee into the balls.
+   - **Deepening:** (1) just scoot; (2) a tap at a bump's crest makes her fly high with a twirl. Time slows near each
+     crest, a ring closes on her and turns gold, a stripe in her lane lights up, and the 👆 shows her the first
+     time. A missed bump is still a little bouncy hop. (3) Rubber rings that spin; each scoot spins hers faster.
+   - **Fair timing:** a tap counts from 0.38 s before the crest to 0.16 s after, in slowed time (about 0.8 s on the
+     clock in round 2). In a scripted run, taps at the gold ring made her fly at 3 of 4 bumps. Any tap anywhere
+     scoots (her own tap target is up to 200 px), so the iPhone needs no aim.
+   - **She always wins:** the others race her pace, a little ahead mid-race and just behind at the end (Daddy
+     closest). Daddy lands in the balls head first, legs kicking, then pops out.
+   - **Pokeables:** the balls, the rail (it plays a scale; while climbing, it climbs too), the four lane flags, the
+     start lights, the ribbon board, and every racer (Daddy in the balls dives again).
+   - **Payoff:** a winner's ribbon over her head that flies to the board, one per race. The 🏁 sticker goes on the
+     sock band after the first race, and the 🛝 shows after the third. She can keep racing in rings.
+   - **Numbers:** about 6 s on the slide per race, about 20 s per round with the climb and the walk back. That's
+     roughly 1-1.5 min for three races, so a little short of the 2-3 min aim; replays in rings are open. Touches:
+     about 4 to climb plus 6-12 scoots per race, about 35-45 over three races.
+   - **For Dad on the iPad:** is the bump timing readable and fair? Is the walk back to the steps too long? Should
+     the slide be longer?
 4. **Greybox: the hall** (`hall`): walking between the zones, the shop doors, the sock band, life in the background.
    Then the Big Frame rebuilt at real scale (`frame`, replacing PR #120's three sections).
 5. **Greyboxes for the rest** (cafe, Golden Mountain, foam blocks, Muay Thai, Sky Pod), in the order Dad picks. Some
    may get cut.
+   *Cafe built 2026-10-21 (`activities/mall-trip/games/cafe/`, `#/world/thailand/mall-trip/cafe?round=1|2|3`):*
+   - **The kitchen:** the counter and the blender straight on, white tiles behind, the shelf where finished drinks line
+     up, a ceiling beam with two lamps. Kaylee wears a pink apron and a chef's hat (new wearables `apron`,
+     `chef-hat`). Daddy and Mommy are the customers at the counter's end, each with a thought bubble of their order.
+   - **The blender:** fruit drags (or a tap hops it) into the jar, whole and in its own color. The big pink button
+     whirrs, and the fruit's colors swirl round and melt into one: a paint-style mix of what went in (`liquid.ts`), so
+     strawberry and banana come out pink and mango and banana yellow. With the lid off it splats the ceiling beam and
+     the wall (they drip), and the lid hops on by itself. A tap on the lid puts it on or takes it off.
+   - **The pour (the risky part):** she lifts the jar by its middle, 34 px above her finger. Each open cup has a
+     pull round it (at least 96 px): as the jar gets near, it's drawn in and tips, more the nearer it gets, and past
+     about 55° it pours a stream that fills the cup. Pull away and it tips back. A full cup overflows, drips and
+     puddles. A scripted drag poured into the cup at iPad portrait, iPad landscape and iPhone landscape. A tap on the
+     jar pours by itself.
+   - **Toppings and serving:** whipped cream (drag over the cup, or tap) and a straw. The straw means done: the cup
+     goes to whoever ordered it, they drink it (slurp, hearts), and it flies to the shelf. An order she matched gets
+     an extra yum and sparkles; anything else gets a funny wiggle, then they drink it happily anyway. Ice in it gives
+     Daddy brain freeze (he shivers in frost, then laughs).
+   - **Rounds:** (1) two drinks, anything goes; (2) two picture orders (pink: strawberry and banana for Daddy;
+     yellow: mango and banana for Mommy); (3) both cups at once, cha yen for Daddy (orange Thai tea poured over the
+     ice, then milk from the milk jug, poured the same way, curls through it) and a coconut shake for Mommy. Then
+     the shelf's drinks hop in turn up a scale and a 🛝 goes back to the playground.
+   - **Pokeables:** the fridge (the door swings, the bottles clink), the coffee machine (it steams and Daddy's little
+     cup fills), the bread baskets (the pretzels bounce), the cake stand (it spins), the tea set (the pot pours Mommy a
+     cup), the family. Fruit dropped on Daddy or Mommy gets eaten; cream on them lands on their nose.
+   - **Taps alone** play all three rounds (about 32 taps). Sounds only: Sparkle's line and the customers' voices
+     come with the full loop. The cafe sticker (🥤) goes on the sock band after the first drink.
+   - **Next for the cafe, after Dad plays it:** whether the tip-to-pour feels right on the iPad (the pull's size,
+     the angle it pours at), whether two cups at once is clear, and whether round 1 should start with the lid on.
 6. **Greybox: the pizza toy** (`menu`, `share`).
    *Built 2026-10-21 (`activities/mall-trip/pizza/`, `#/world/thailand/mall-trip/menu`,
    `#/world/thailand/mall-trip/share?pizza=hawaiian|seafood|cheese&shared=0..8`):*
