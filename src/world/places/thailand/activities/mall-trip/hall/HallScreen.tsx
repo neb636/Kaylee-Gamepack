@@ -5,13 +5,14 @@ import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
+import { HarborSign } from '../harborland/sign'
 import { HallFlat } from './Flat'
 import { Hall, HALL_ANCHORS, LABELS } from './hall'
 import { Hungry } from './Hungry'
 import type { DoorId, GameDoor } from './layout'
 
 /** Each sign's letters. */
-const LABEL_COLORS: Record<string, string> = { mega: 'var(--hotpink)', little: '#3FAF8E', muay: '#E04848' }
+const LABEL_COLORS: Record<string, string> = { little: '#3FAF8E', muay: '#E04848' }
 
 interface Props {
   socks: string
@@ -36,6 +37,7 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, o
   const worldRef = useRef<Hall | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const labelRef = useRef<HTMLDivElement>(null)
+  const signRef = useRef<HTMLDivElement>(null)
   const cb = useRef({ onEnter, onHungry })
   cb.current = { onEnter, onHungry }
 
@@ -54,6 +56,7 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, o
     )
     w.setHintElement(hintRef.current)
     w.setLabelBox(labelRef.current)
+    w.setSign(signRef.current)
     return w
   }
 
@@ -79,6 +82,7 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, o
                   </div>
                 ))}
               </div>
+              <HarborSign ref={signRef} />
               <Anchors list={HALL_ANCHORS} els={els} {...input} />
               {/* After a while with nothing touched: a finger on a way in she hasn't been through. */}
               <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>

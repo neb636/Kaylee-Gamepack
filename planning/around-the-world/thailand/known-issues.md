@@ -78,6 +78,18 @@ Code paths are under `src/world/places/thailand/`.
   toward the door or in a row above (`WALL_SLOTS`). Playtest QA suggested the wall should grow a little every replay
   (more photos, or the critters she found); not built.
 
+## The mall trip: HarborLand's Big Frame
+
+- [ ] **On an iPhone held sideways, the ↩️ (back to the hall) sits under the 🗺 button,** in every mini game (the top
+  bar's clearance is small there). The iPad is fine.
+  - Check: `#/world/thailand/mall-trip/frame` at iPhone landscape size.
+  - Code: `activities/mall-trip/MallTrip.tsx` (the ↩️'s `top`).
+- [ ] **The sign's letters draw over anything in front of them** (they're HTML over the 3D). Nothing passes in front
+  of them now; they fade for Kaylee climbing behind them, not for the kids.
+  - Code: `activities/mall-trip/harborland/sign.tsx`, `frame.ts` (`signDim`).
+- [ ] **The kids in the frame climb by hopping straight up the nets** (they follow their loops, not the walk grid).
+  - Code: `activities/mall-trip/harborland/frame.ts` (the kids' loops), `hall/hall.ts` (the hall's frame kid).
+
 ## Listen on the iPad (automated checks can't hear)
 
 - [ ] **The village kids say "Kaylee".** The transcription check heard "Haley" (and "เคลลี่" in the Thai line). It's

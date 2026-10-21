@@ -1,20 +1,22 @@
-// How Kaylee climbs and rides in HarborLand (the links of trip/walk.ts, played out):
-//   hops    a run of little jumps (the Golden Mountain's tiers, the perch's steps, over the pool's rim)
-//   net     hand over hand up (or down) a climbing net, facing it, then a hop over the edge
+// How Kaylee climbs and rides in HarborLand's Big Frame (the links of trip/walk.ts, played out):
+//   hops    a run of little jumps (over the ball pit's rim, up the step to the nose slide)
+//   net     hand over hand up (or down) a climbing net or the red wall, facing it, then a hop over the edge
+//   crawl   on hands and knees through the padded tunnel in from the hall
 //   slide   hop onto the mouth, sit, a squash of anticipation, then whoosh down the trough (speed from the slope),
 //           her mane in the wind, and shoot out into the balls (or onto a mat). The roller slide rattles her,
 //           the dragon's spiral turns the camera with her.
 //   donut   into the ring at the half-pipe's lip; it swings down, up the far wall, back, smaller each time, then
 //           she hops out at the bottom (and the ring glides back up to the lip)
-//   zip     she grabs the handle and whooshes down the sagging cable, swinging, then lets go onto the mat
+//   zip     she grabs the handle and whooshes down the sagging cable along the frame's front, swinging, then lets go
+//           onto the mat
 import { Vector3, type Curve } from 'three'
 import { clamp } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { sfx } from '../../../sfx'
-import type { Built } from './build'
+import type { FrameBuilt } from './build'
 import { DONUT, ZIP } from './layout'
 
-export type RideKind = 'hops' | 'net' | 'slide' | 'donut' | 'zip'
+export type RideKind = 'hops' | 'net' | 'crawl' | 'slide' | 'donut' | 'zip'
 
 export interface SlideOpts {
   /** Top speed (m/s) and how fast she gets there. */
@@ -44,10 +46,18 @@ interface Active {
   om?: number
   /** Climbing a net: which hand reaches next. */
   hand?: number
+  /** Crawling: the way through, and how far along it (m). */
+  path?: Vector3[]
 }
 
 const deg = 180 / Math.PI
 const tmp = new Vector3()
+const ZA = new Vector3(...ZIP.a)
+const ZB = new Vector3(...ZIP.b)
+/** Which way the zip runs along x (she leans back against it), and the way she faces on it: along the cable, turned a
+ *  little toward us so we see her face. */
+const ZIP_DIR = Math.sign(ZB.x - ZA.x) || 1
+const ZIP_FACE = Math.atan2(ZB.x - ZA.x, ZB.z - ZA.z) * deg - ZIP_DIR * 25
 
 export class Rides {
   active: Active | null = null
@@ -60,7 +70,7 @@ export class Rides {
 
   constructor(
     private k: Avatar,
-    private built: Built,
+    private built: FrameBuilt,
     private fx: {
       /** She's in the balls with a splash (`power` 1 a landing, 1.6 a big one). */
       splash(x: number, z: number, power: number): void
@@ -121,6 +131,11 @@ export class Rides {
       })
     }
     go(0)
+  }
+
+  /** On hands and knees along `path` (the tunnel), then up on her feet at the end. */
+  crawl(path: Vector3[], done: () => void) {
+    this.active = { kind: 'crawl', u: 0, v: 0, t: 0, phase: 'go', done, path }
   }
 
   /** Down a slide: hop onto its mouth, sit, whoosh down, shoot out. */
@@ -191,9 +206,36 @@ export class Rides {
       const up = (a.hand ?? 0) % 2
       k.rig.armL.rotation.z = -(up ? 2.7 : 2.0)
       k.rig.armR.rotation.z = up ? 2.0 : 2.7
-    } else if (a.kind === 'slide') this.stepSlide(a, dt, t)
+    } else if (a.kind === 'crawl') this.stepCrawl(a, dt, t)
+    else if (a.kind === 'slide') this.stepSlide(a, dt, t)
     else if (a.kind === 'donut') this.stepDonut(a, dt)
     else if (a.kind === 'zip') this.stepZip(a, dt, t)
+  }
+
+  private stepCrawl(a: Active, dt: number, t: number) {
+    const k = this.k
+    const path = a.path!
+    // Along the path at a toddler's crawl, low and tipped forward, hands and knees going.
+    a.u += dt * 1.15
+    let left = a.u
+    let i = 0
+    while (i < path.length - 2 && left > path[i].distanceTo(path[i + 1])) left -= path[i].distanceTo(path[i + 1]), i++
+    const seg = path[i].distanceTo(path[i + 1])
+    const f = Math.min(1, left / Math.max(seg, 1e-3))
+    tmp.lerpVectors(path[i], path[i + 1], f)
+    k.place(tmp.x, tmp.y, tmp.z, Math.atan2(path[i + 1].x - path[i].x, path[i + 1].z - path[i].z) * deg)
+    k.rig.body.rotation.x = 0.75
+    k.rig.body.position.y -= 0.26
+    k.rig.armL.rotation.x = -1.2 + Math.sin(t * 12) * 0.5
+    k.rig.armR.rotation.x = -1.2 - Math.sin(t * 12) * 0.5
+    if (Math.floor(a.t / 0.28) !== Math.floor((a.t - dt) / 0.28)) sfx.flop()
+    if (i >= path.length - 2 && f >= 1) {
+      k.rig.body.rotation.x = 0
+      k.rig.armL.rotation.x = 0
+      k.rig.armR.rotation.x = 0
+      sfx.boing()
+      this.finish()
+    }
   }
 
   private stepSlide(a: Active, dt: number, t: number) {
@@ -274,8 +316,8 @@ export class Rides {
         k.root.rotation.z = 0
         k.setPose('stand')
         this.ringBack = 0
-        const [x, z] = [DONUT.x, DONUT.z + 1.2]
-        k.hopTo(new Vector3(x, 0, z), 0.45, 0.35, () => {
+        const [x, z] = DONUT.out
+        k.hopTo(new Vector3(x, 0, z), 0.55, 0.45, () => {
           sfx.thump()
           this.finish()
         })
@@ -304,11 +346,10 @@ export class Rides {
         sfx.whoosh(1.4)
       }
     } else if (a.phase === 'go') {
-      const [ax, ay] = ZIP.a
-      const [bx, by] = ZIP.b
-      const slope = (ay - by) / (bx - ax)
+      const run = Math.hypot(ZB.x - ZA.x, ZB.z - ZA.z)
+      const slope = (ZA.y - ZB.y) / run
       a.v = Math.min(5.5, a.v + (1.6 + 7 * slope) * dt)
-      a.u = Math.min(1, a.u + (a.v * dt) / (bx - ax))
+      a.u = Math.min(1, a.u + (a.v * dt) / ZA.distanceTo(ZB))
       this.zipU = a.u
       this.placeHandle(a.u)
       if (a.u >= 1) {
@@ -324,9 +365,9 @@ export class Rides {
       }
     } else return
     const h = this.built.handle.position
-    k.place(h.x, h.y - ZIP.hang, h.z, 90)
+    k.place(h.x, h.y - ZIP.hang, h.z, ZIP_FACE)
     // She swings back as she speeds up, and her legs kick.
-    k.root.rotation.z = a.phase === 'go' ? 0.12 + Math.sin(t * 5) * 0.06 : 0
+    k.root.rotation.z = a.phase === 'go' ? ZIP_DIR * (0.12 + Math.sin(t * 5) * 0.06) : 0
     k.setWind(clamp(a.v / 5.5))
   }
 
@@ -354,8 +395,6 @@ export class Rides {
   }
 
   private placeHandle(u: number) {
-    const [ax, ay, az] = ZIP.a
-    const [bx, by, bz] = ZIP.b
-    this.built.handle.position.copy(tmp.set(ax + (bx - ax) * u, ay + (by - ay) * u - ZIP.sag * Math.sin(Math.PI * u), az + (bz - az) * u))
+    this.built.handle.position.copy(tmp.lerpVectors(ZA, ZB, u)).setY(tmp.y - ZIP.sag * Math.sin(Math.PI * u))
   }
 }

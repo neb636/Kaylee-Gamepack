@@ -647,9 +647,10 @@ GAME_SCENARIOS.push(
   thaiTrip('trip-land', 9, 'land', [], 8000),
 )
 
-// HarborLand (the mall trip, greybox 1): climbing the Golden Mountain (three hops), the Boomerang Donut swinging, down
-// the twin-dragon spiral into the balls (from the tower's deck, after walking the skywalk), the zip line, and the cannon
-// at Daddy (bonk, topple, the ball on his horn). Taps go through the tap targets, or a point on the screen.
+// HarborLand (the mall trip): the hall's ways in, and the Big Frame's climbs and rides: up the red wall, through the
+// tunnel, the Boomerang Donut swinging, down the twin-dragon spiral into the balls (after walking to the top's left
+// end), the Ta-Khon roller over the racing lanes, the zip line along the front, the mask's nose slide, and the cannon
+// at Daddy (bonk, the ball on his horn, his flop). Taps go through the tap targets, or a point on the screen.
 const thaiMall = (name, seconds, section, steps) => ({
   name,
   seconds,
@@ -673,11 +674,14 @@ GAME_SCENARIOS.push(
   thaiMall('hall-go-in', 5, 'hall?from=vet', [['door:cafe', 4800]]),
   thaiMall('hall-barber', 3, 'hall?from=barber&hair=k.roygbvproygbvproygbvproyg.s', [['door:barber', 2800]]),
   thaiMall('hall-bricks', 14, 'hall?from=race', [['point', 3500, 0.97, 0.88], ['point', 3500, 0.97, 0.88], ['blocks', 6500]]),
-  thaiMall('mall-mountain', 4, 'play', [['climb:mountain', 3800]]),
-  thaiMall('mall-donut', 7, 'mountain', [['ride:donut', 6800]]),
-  thaiMall('mall-dragon', 9, 'dragon', [['point', 4200, 0.15, 0.47], ['ride:dragon', 4600]]),
-  thaiMall('mall-zip', 6, 'mountain?rides=mountain', [['point', 3600, 0.9, 0.66], ['ride:zip', 2300]]),
-  thaiMall('mall-cannon', 6, 'play', [['cannon', 2700], ['cannon', 1400], ['cannon', 1700]]),
+  thaiMall('frame-wall', 6, 'frame?at=out', [['climb:wall', 5800]]),
+  thaiMall('frame-tunnel', 5, 'frame?at=out', [['tunnel', 4800]]),
+  thaiMall('frame-donut', 9, 'frame?at=l1', [['ride:donut', 8800]]),
+  thaiMall('frame-dragon', 12, 'frame?at=top', [['point', 4000, 0.12, 0.62], ['ride:dragon', 7800]]),
+  thaiMall('frame-roller', 12, 'frame?at=top', [['point', 4000, 0.85, 0.6], ['ride:roller', 7800]]),
+  thaiMall('frame-zip', 8, 'frame?at=l2', [['ride:zip', 7800]]),
+  thaiMall('frame-nose', 7, 'frame?at=top', [['ride:nose', 6800]]),
+  thaiMall('frame-cannon', 7, 'frame?at=in', [['cannon', 2700], ['cannon', 1400], ['cannon', 2700]]),
 )
 
 // The Vet Clinic (mall trip, greybox): her finger drags a tool from the tray onto the patient and works it there, the

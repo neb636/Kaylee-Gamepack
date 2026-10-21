@@ -26,10 +26,12 @@ import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage
 import { Walker } from '../../../trip/walk'
 import { wearHair } from '../games/barber/mane'
 import { Racer } from '../games/race/racer'
+import { FRAME_BLOCKED, SIGN } from '../harborland/layout'
+import { chaseSign, placeSign } from '../harborland/sign'
 import { SOCK_COLORS, wearSocks } from '../socks'
 import { buildHall, DIM, laneY, LIT, type HallBuilt } from './build'
 import { Kid, KID_LOOK_LIST, STAFF_LOOKS, type Move } from './kids'
-import { BACK_Z, BENCH, BLOCKED, MEGA, SIGN_H, ZONE_SIGNS, BLOCKS, BOXING, CIRCLES, CROC, DOOR, DOORS, FRAME, FRAME_DOOR, FRAME_LOOP, HALL, LANES, MOUNTAIN, NOSE, OPEN_DOORS, SHOPS, SKYPOD, STAFF, START, STEPS, TAP_RECTS, TOWN, type DoorId, type GameDoor, type ShopId, type XZ } from './layout'
+import { BACK_Z, BENCH, BLOCKED, SIGN_H, ZONE_SIGNS, BLOCKS, BOXING, CIRCLES, CROC, DOOR, DOORS, FRAME, FRAME_DOOR, FRAME_LOOP, HALL, LANES, MOUNTAIN, NOSE, OPEN_DOORS, SHOPS, SKYPOD, STAFF, START, STEPS, TAP_RECTS, TOWN, type DoorId, type GameDoor, type ShopId, type XZ } from './layout'
 import { hallSfx as sfx } from './sounds'
 
 const V = (x: number, y: number, z: number) => new Vector3(x, y, z)
@@ -57,7 +59,6 @@ export interface HallStart {
 /** The signs' words, drawn as HTML over them (crisp, and never in a generated picture): where, and how wide (m). */
 export const LABELS = [
   { id: 'town', text: 'Harbor Town', at: V((TOWN.x0 + TOWN.x1) / 2, TOWN.sign, BACK_Z + 1.12), w: 4.2, h: 0.62 },
-  { id: 'mega', text: 'MEGA HarborLand', at: V(MEGA.x, MEGA.y, MEGA.z + 0.12), w: MEGA.w - 0.45, h: MEGA.h - 0.4 },
   ...ZONE_SIGNS.map((z) => ({ id: z.id, text: z.text, at: V(z.x, z.y, z.z + 0.12), w: z.w - 0.4, h: SIGN_H - 0.3 })),
 ]
 
@@ -124,6 +125,7 @@ export class Hall extends Stage {
   private hungry: 'no' | 'soon' | 'asked'
   private daddyGoal = new Vector3()
   private labelEls: HTMLElement[] = []
+  private signEl: HTMLElement | null = null
 
   constructor(
     renderer: WebGLRenderer,
@@ -155,6 +157,7 @@ export class Hall extends Stage {
     const g = new NavGrid(HALL[0], HALL[2], HALL[1], HALL[3], 0.2, 0.22)
     g.carve(...HALL)
     for (const r of BLOCKED) g.block(...r)
+    for (const r of FRAME_BLOCKED) g.block(...r)
     for (const [x, z, r] of CIRCLES) g.blockCircle(x, z, r)
     g.commit()
     this.nav = g
@@ -445,6 +448,7 @@ export class Hall extends Stage {
         return
       case 'sign':
         this.chase = 2.2
+        chaseSign(this.signEl)
         sfx.jangle()
         sounds.sparkle()
         return
@@ -653,11 +657,16 @@ export class Hall extends Stage {
       case 'croc':
         return { at: V(CROC.at[0], 0.35, CROC.at[1]), r: 0.6, max: 140 }
       case 'sign':
-        return { at: V(-4.7, 4.5, -0.4), r: 0.6, max: 130 }
+        return { at: V(SIGN.at[0], SIGN.at[1], SIGN.at[2] + 0.1), r: 0.9, max: 150 }
       case 'pole':
         return { at: this.built.pole.position.clone(), r: 0.3, prio: 3 }
     }
     return null
+  }
+
+  /** The Big Frame's lit sign (its letters are HTML: harborland/sign.tsx). */
+  setSign(el: HTMLElement | null) {
+    this.signEl = el
   }
 
   /** The signs' words (one element per LABELS entry, in order, inside `box`). */
@@ -668,6 +677,7 @@ export class Hall extends Stage {
   placeAnchors() {
     super.placeAnchors()
     const cam = this.rig.camera
+    placeSign(this.signEl, cam, this.w, this.h)
     LABELS.forEach((l, i) => {
       const el = this.labelEls[i]
       if (!el) return

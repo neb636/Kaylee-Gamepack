@@ -486,22 +486,23 @@ Activity `mall-trip`: `activities/mall-trip/sections.ts`. Every param has a defa
 | 10 | `blocks` | Little Land: the foam blocks (`?round=1\|2\|3&card=chedi\|elephant`) | `socks`, `games`, `round`, `card` |
 | 11 | `boxing` | Muay Thai: the wai kru and the bags | `socks`, `games` |
 | 12 | `skypod` | The Sky Pod lights | `socks`, `games` |
-| 13 | `frame` | The Big Frame: climb up, slide down, the cannon | `socks`, `games` |
+| 13 | `frame` | The Big Frame: climb up, slide down, the cannon (`?at=in\|pit\|l1\|l2\|top\|out`) | `socks`, `games`, `at`, `hair` |
 | 14 | `hungry` | Daddy's tummy rumbles, Mommy asks: pizza time? | `socks`, `games` |
 | 15 | `menu` | The Pizza Company: pick a pizza | `hair` |
 | 16 | `share` | Pull and share | `pizza`, `shared`, `hair` |
 | 17 | `home` | The box for Agong, the photo wall, the stamp | `pizza`, `photos`, `hair` |
 
-(Greybox 1, PR #120, has `play`, `mountain` and `dragon` for the first small climbing toy. They become `frame` when
-the Big Frame is rebuilt.)
+(Greybox 1, PR #120, had `play`, `mountain` and `dragon` for the first small climbing toy. The rebuilt Big Frame is
+`frame`: old `play` and `dragon` links land there, and `mountain` is free for the Golden Mountain.)
 
 Params:
 - `socks`: `pink|lavender|mint`, default `pink`.
-- `games`: the mini games done so far (the sock band's stickers), a comma list. Default empty. Until the Big Frame
-  is rebuilt, the first climbing toy's big rides (`pool`, `mountain`, `donut`, `zip`, `roller`, `dragon`) are in it too:
-  any of them fills the frame's 🛝 sticker.
+- `games`: the mini games done so far (the sock band's stickers), a comma list. Default empty. `frame` is any big ride
+  in the Big Frame (the 🛝 sticker); old links' ride names (`pool`, `donut`, `zip`, `roller`, `dragon`) count as `frame`.
 - `from`: the hall: the door she comes out of, `in|vet|cafe|barber|race|frame`. Default `in` (she's just come in, by
   Mommy's bench).
+- `at`: where she is in the Big Frame, `in|pit|l1|l2|top|out`: just through the tunnel, in the ball pit with Daddy,
+  a level, or the mats in front. Default `in`. It follows the level she's on.
 - `hair`: Daddy's hairdo from the barber (`games/barber/hair.ts`), which he keeps in the hall and at the pizza table.
   Default empty (his own mane). Dot-separated: `<lengths>.<colors>.<styles>.<bows>.<brows>`, each one char for the
   whole head or one per tuft (26 tufts), trailing defaults left out. Lengths `0-9a-z` (4 is his own), colors `n` (his
@@ -759,6 +760,56 @@ small climbing toy, before Dad's photos.
      - Do the toys for the later mini games tease them well, or should they just glow?
    - **Next:** the Big Frame rebuilt at real scale (`frame`, replacing PR #120's three sections), then the barber
      (step 2) with Daddy's `hair`.
+
+   *The Big Frame, rebuilt at real scale 2026-10-21 (`activities/mall-trip/harborland/`,
+   `#/world/thailand/mall-trip/frame?at=in|pit|l1|l2|top|out`; it replaces PR #120's `play`, `mountain` and `dragon`):*
+   - **One model, two places:** `harborland/build.ts` builds the frame for the hall (merged into a few meshes; a tap
+     anywhere on it goes in) and for `frame`, which is the hall itself with the frame's moving parts and its own taps.
+     She plays in the very frame she walked up to, with Mommy on her bench and the racing slide next door.
+   - **The frame** (the hall's footprint: 8.4 m by 3.2 m, six bays, four levels 1.5 m apart):
+     - white padded pipes with round joints, golden padded beams where a deck meets the front or back (open bays keep
+       just the pipe), black nets round the sides and back, cream cargo nets up the back where she climbs, white
+       cut-outs on the back nets (a star, an elephant, a lotus, a kite)
+     - ground: the red climbing wall (B0, from the mats to L1), the ball pit (B1-B2) with Daddy sitting in it, the
+       tunnel in from the hall and the cannon (B3), the Boomerang Donut's bowl (B4-B5)
+     - L1: the net bridge (it sags under her and bounces), the donut's lip. L2: the net tunnel, the rope course (logs
+       on ropes that swing as she crosses) over the donut, the zip line's platform. L3: the top deck all across.
+   - **The slides:**
+     - the giant Phi Ta Khon mask on the roof (gold crown, painted eyes that follow her): its long pink nose is a
+       see-through tube slide down to a mat
+     - the twin-dragon spiral, in the gap behind Mommy's bench: two nagas are its rails, their heads rear up at its
+       mouth by L3's left end, and it ends behind the red wall, in the ball pit
+     - the Ta-Khon roller, from L3's right end out over the racing lanes into their pink and white balls; Phi Ta Khon
+       masks on its posts turn and stick their tongues out as she rattles by
+     - the Boomerang Donut (a frosted donut ring), from L1
+     - the zip line, from L2's front-right corner along the front to a mat
+   - **On top:** gold spires (a temple bell when tapped), the Muay Thai boy in his red headband on his little ring (he
+     watches her; tap him and he punches the air, ding ding), and the lit sign.
+   - **The sign** (`harborland/sign.tsx`), from Dad's photo of the entrance, on the frame's front over L3: "MEGA" on
+     top, "HARBORLAND" glowing ice blue (its A spouts like a whale, its L is a little ship, a whale's tail flicks up
+     after the D) and "LITTLE THAILAND" glowing warm (its I a little dancer, the A of LAND a chedi). The letters are
+     HTML laid over the 3D mount and its glow. They flicker on, a tap runs a wave of light along them, and they fade
+     while she climbs behind them. It replaces the hall's small hanging MEGA sign.
+   - **Walking and climbing:** `trip/walk.ts` and PR #120's rides (`harborland/rides.ts`, plus a crawl through the
+     tunnel). Tap anywhere on any level and she goes there, climbing the wall or the cargo nets, and taking a slide down
+     whenever there's one. `at` follows the level she's on.
+   - **The camera:** the dollhouse view from the front. Lower and level on the ground floor (to see her and Daddy in
+     the balls), flatter as she climbs (so it stays under the hall's dark ceiling), and it leans round to the right
+     while she plays behind the nose slide, which fades to a ghost meanwhile. On the spiral it turns with her.
+   - **The cannon at Daddy** (the side game): bonk, he tips back into the balls and pops up with the ball on his horn;
+     the third time he stands up and flops back in (the deck is over him, so no jump).
+   - **Life:** one kid climbs the red wall and all the way up and goes down the nose; another goes round from the
+     ball pit, up and across, and down the dragons back into it.
+   - **Sticker:** any big ride (the nose, the dragons, the roller, the donut, the zip line) fills the 🛝 on her sock
+     band (`games` says `frame`).
+   - **Flat version** (`?gl=off`): the lit sign and a big button for each ride.
+   - **Numbers:** about 155-190 draw calls in the frame at iPad size (the hall stays about 135). In scripted runs every
+     ride and climb ended where it should; the QA hook's `cutOff` lists any climb or ride she can't walk to (none).
+   - **For Dad on the iPad:**
+     - Is climbing up and sliding down fun with no goal? Which ride does Kaylee go back to?
+     - Is the frame big enough at the hall's size, or should the hall make room for a bigger one?
+     - Is the camera close enough? When she plays behind the nose slide, is its ghost clear?
+   - **Next:** the next greybox from step 5 (the Golden Mountain, `mountain`), once Dad has played the frame.
 5. **Greyboxes for the rest** (cafe, Golden Mountain, foam blocks, Muay Thai, Sky Pod), in the order Dad picks. Some
    may get cut.
    *Cafe built 2026-10-21 (`activities/mall-trip/games/cafe/`, `#/world/thailand/mall-trip/cafe?round=1|2|3`):*

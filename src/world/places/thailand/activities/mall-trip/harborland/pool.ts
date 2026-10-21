@@ -1,6 +1,7 @@
-// The ball pool's balls: a layer of hundreds of pastel balls (one instanced mesh) that parts round whoever wades in it
-// (Kaylee, Daddy), and a few dozen flying balls (another) for splashes: diving in, a slide landing, a toss, Daddy's
-// cannonball. Flying balls arc up and drop back into the layer. No physics engine: simple arcs and pushes.
+// The ball pit's balls: a layer of hundreds of pastel balls (one instanced mesh) that parts round whoever wades in it
+// (Kaylee, Daddy, a kid), and a few dozen flying balls (another) for splashes: hopping in, a slide landing, a toss,
+// Daddy's flop. Flying balls arc up and drop back into the layer (and bounce off a deck over the pit). No physics
+// engine: simple arcs and pushes. A pit that already has its balls (the racing slide's) can take just the splashes.
 import { Color, DynamicDrawUsage, Group, InstancedMesh, Matrix4, Quaternion, SphereGeometry, Vector3 } from 'three'
 import type { Bag } from '../../../engine/dispose'
 import { toon } from '../../../engine/toon'
@@ -34,13 +35,18 @@ export class BallPool {
   private nextFly = 0
   private settling = 0
 
+  /** How high flying balls go before they bounce off whatever is over the pit. */
+  private ceiling: number
+
   constructor(
     private inner: Rect,
     private surface: number,
-    /** Spots without balls (the dragon tower's post). */
+    /** Spots without balls. */
     avoid: (x: number, z: number) => boolean,
     bag: Bag,
+    opts: { layer?: boolean; ceiling?: number } = {},
   ) {
+    this.ceiling = opts.ceiling ?? Infinity
     const [x0, x1, z0, z1] = inner
     const spots: number[] = []
     // Two loose layers, jittered, so it looks heaped, not tiled.
@@ -65,6 +71,7 @@ export class BallPool {
       this.layer.setMatrixAt(i, m)
     }
     this.layer.userData.pick = 'pool'
+    this.layer.visible = opts.layer ?? true
     this.fly = bag.add(new InstancedMesh(geo, toon('#ffffff'), FLY))
     this.fly.instanceMatrix.setUsage(DynamicDrawUsage)
     this.fly.frustumCulled = false
@@ -145,6 +152,10 @@ export class BallPool {
       f.x += f.vx * dt
       f.y += f.vy * dt
       f.z += f.vz * dt
+      if (f.y > this.ceiling) {
+        f.y = this.ceiling
+        f.vy = -Math.abs(f.vy) * 0.3
+      }
       if (f.vy < 0 && f.y < this.surface) {
         f.live = false
         continue
