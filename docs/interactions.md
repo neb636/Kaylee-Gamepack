@@ -1,15 +1,15 @@
 # Interactions cookbook: what to reach for
 
-Most moments in a game are plain React + `motion`: tap a thing, it bounces, a puppet reacts. For harder
+Most moments in an activity are plain React + `motion`: tap a thing, it bounces, a puppet reacts. For harder
 hands-on play, use the kit in `src/sdk/interact/` (exported from `../../sdk`). You can try every piece at
-`#/playground` (source: `src/shell/InteractionDemos.tsx`). Nothing here replaces the older pieces; existing
-games keep working as they are.
+`#/playground` (source: `src/shell/InteractionDemos.tsx`). Nothing here replaces the older pieces; the tea
+party keeps working as it is.
 
 ## Pick the tool
 
 | She should... | Reach for | Notes |
 |---|---|---|
-| Tap the right answer | `ChoiceCards`, `motion.button` | Keep it a small part of the game. |
+| Tap the right answer | `ChoiceCards`, `motion.button` | Keep it a small part of the activity. |
 | Drag something to one of a few places | `PlayArea` + `Piece` + `Target` | Hover glow, magnetic snap, a hint pulse, and it's safe for many quick drags. Prefer it over `Draggable` in new code. |
 | Sort into baskets | `SortIntoBins` (simple) or `PlayArea` (custom look) | |
 | Put pieces into exact spots (jigsaw, shape puzzle, build a castle) | `JigsawPuzzle`, or `PlayArea` with `snapTo` | `JigsawPuzzle` cuts any scene picture into tab-and-blank pieces. |
@@ -19,6 +19,7 @@ games keep working as they are.
 | Scratch or paint to reveal | Canvas + `usePointerDrag` | See `ColoringPage` in `src/world/kit/` for canvas pixel mapping. |
 | Something moving by itself (catch falling stars, steer a boat) | `useGameLoop` + refs | A few moving things. Write to `el.style`, not state. |
 | Real-time arcade or physics (bouncing, stacking, many sprites, particles) | **Phaser 4** (pre-approved) | Only when the DOM really can't do it; see the recipe below. |
+| Walk, drive or play in a 3D world | **three** (pre-approved), Thailand's `engine/` | `View3D` + DOM tap targets (`Anchors.tsx`), a flat fallback without WebGL2. See "Thailand" in `AGENTS.md`. |
 
 ## The kit
 
@@ -103,7 +104,7 @@ Phaser draws to a canvas. Inside it you lose SVG puppets, lip-sync, `Buddy`, `mo
 real `<button>`s. So keep Phaser to the play field and put everything else in React on top of it.
 
 ```tsx
-// src/games/<id>/Arcade.tsx: only this folder imports phaser, so only this game downloads it (~360 KB gzipped).
+// src/world/places/<id>/activities/<activity>/Arcade.tsx: only this folder imports phaser, so only this country downloads it (~360 KB gzipped).
 import { useEffect, useRef } from 'react'
 import { sounds, say } from '../../sdk'
 
@@ -128,10 +129,10 @@ export function Arcade({ onCaught }: { onCaught: (n: number) => void }) {
   return <div ref={host} style={{ position: 'absolute', inset: 0 }} />
 }
 ```
-- Put the React overlay (prompt, `SayButton`, `SparklePuppet`, progress) above the canvas, and keep ~104px
-  clear at the top for the shell.
+- Put the React overlay (prompt, `SayButton`, `SparklePuppet`, progress) above the canvas, and keep the top
+  clear for the shell (`--top-clear`).
 - Load art with `this.load.image('star', starUrl)` using the imported `.webp` URLs.
-- Gentle speeds, nothing to lose, and spoken instructions, same as every game.
+- Gentle speeds, nothing to lose, and spoken instructions, same as every activity.
 - The smoke test still needs at least 2 real `<button>`s on screen (the overlay has them).
 - Never import `phaser` from `src/sdk`, the shell or a `meta.ts`. `npm run check` fails if you do
   (`scripts/check-heavy-imports.mjs`).

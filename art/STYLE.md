@@ -50,12 +50,12 @@ against a current production preview (see the command at the top of that script)
 Always attach `art/source/mascot/wave.png` when drawing Sparkle in a new pose or scene.
 
 ## Pipeline
-1. Save generated PNGs to `art/source/games/<game-id>/<name>.png` (scratch space, git-ignored; only the webp copies are committed).
-2. `npm run art -- <game-id>` cuts out white backgrounds and writes `src/games/<game-id>/assets/<name>.webp`.
-3. `node scripts/contact-sheet.mjs src/games/<game-id>/assets` makes `/tmp/contact-sheet.png`
+1. Save generated PNGs to `art/source/world/<place>/<name>.png` (shared world art: `art/source/world/_shared/`). Scratch space, git-ignored; only the webp copies are committed.
+2. `npm run art -- world` (or `-- <place>`) cuts out white backgrounds and writes `src/world/places/<place>/assets/<name>.webp`.
+3. `node scripts/contact-sheet.mjs src/world/places/<place>/assets` makes `/tmp/contact-sheet.png`
    (sprites on purple). Look at it: if a sprite lost part of its body (white areas leaking), regenerate
    that sprite with a stronger outline or a non-white color.
-4. `node scripts/qa-art.mjs <game-id>` finds the opposite problem: white the drawing encloses (between legs, inside a
+4. `node scripts/qa-art.mjs <place>` finds the opposite problem: white the drawing encloses (between legs, inside a
    handle or ring, between railings) can't be reached from the edge, so it stays white and shows as a blob over the
    scene. Open each sheet in `qa-output/art/`, clear every hole (see `AGENTS.md`), and mark sprites whose white is real
    (eye whites, clouds) with `--ok`.
