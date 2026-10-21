@@ -33,6 +33,7 @@ export const FAMILY: FamilyMember[] = [
   { id: 'ken', name: 'Ken', who: "Cousin, Joy's son", color: '#8FE3C8', height: 1.25, pitch: 350, spot: { floor: 1, x: 1.1, z: -6.3, face: -20, pose: 'stand' } },
   { id: 'ja', name: 'Ja', who: 'Aunt, mom of Putto and Putter', color: '#D9CCFF', height: 1.5, pitch: 270, spot: null },
   { id: 'sri', name: 'Sri', who: 'Aunt', color: '#FFC83D', height: 1.5, pitch: 290, spot: null },
-  { id: 'putto', name: 'Putto', who: "Cousin, Ja's son (Kaylee's age)", color: '#A8DCFF', height: 1.0, pitch: 420, spot: null },
+  // Putto came over to play: he sits on a stool at the big table, across from Kaylee's (tap him for tic-tac-toe).
+  { id: 'putto', name: 'Putto', who: "Cousin, Ja's son (Kaylee's age)", color: '#A8DCFF', height: 1.0, pitch: 420, spot: { floor: 0, x: -2.85, z: -2.0, face: 90, pose: 'sit', seat: 0.45 } },
   { id: 'putter', name: 'Putter', who: "Cousin, Ja's son (a little penguin)", color: '#B9A6F5', height: 0.8, pitch: 480, spot: null },
 ]

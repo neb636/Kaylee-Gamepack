@@ -13,6 +13,7 @@ import { WallPlugin, WALL_SLOTS, wallAnchorId } from '../../trip/wall'
 import { newestByTrip, useWallPhotos } from '../../trip/wall-photos'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
+import { HOSTS, isGame, MiniGame, type GameId } from './games/MiniGame'
 import { Guide, type GuideHandle } from './Guide'
 import type { House, Spot, Start } from './house'
 import { HouseView, type RenderMode } from './HouseView'
@@ -26,7 +27,12 @@ let askedThisVisit = false
 
 export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
-  const [initial] = useState<Start>(() => ({ section: start ?? (arrivedThisVisit ? lastSpot : 'arrive'), at: param('at') || undefined, who: param('who') || undefined }))
+  // A mini game's link opens the house downstairs with the game over it.
+  const [linkGame] = useState<GameId | null>(() => (start && isGame(start) ? start : null))
+  const [initial] = useState<Start>(() => ({ section: linkGame ? 'downstairs' : (start as Start['section'] | null) ?? (arrivedThisVisit ? lastSpot : 'arrive'), at: param('at') || undefined, who: param('who') || undefined }))
+  const [game, setGame] = useState<GameId | null>(linkGame)
+  const gameTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  useEffect(() => () => clearTimeout(gameTimer.current), [])
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
   const [arriving, setArriving] = useState(initial.section === 'arrive')
@@ -50,7 +56,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   }
 
   useEffect(() => {
-    enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : {})
+    if (linkGame) enter(linkGame, linkGame === 'salon' ? { look: param('look') } : linkGame === 'sticky-rice' ? { step: param('step') } : {})
+    else enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : {})
     if (initial.section !== 'arrive') arrivedThisVisit = true
     if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section
     if (initial.section === 'upstairs' && !askedThisVisit) ask(4000)
@@ -72,7 +79,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const onSpot = (s: Spot, at?: string) => {
     lastSpot = s
     setSpot(s)
-    enter(s, at ? { at } : {})
+    if (!gameRef.current) enter(s, at ? { at } : {})
     guide.current?.arrivedAt(s)
     if (s === 'upstairs' && !askedThisVisit && !photo) ask(4000)
   }
@@ -87,14 +94,33 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     setAsking(false)
     openActivity('boat-trip')
   }
+  // Tap Putto, Aunt Joy or Aunt Jum: they say hi and hop with her, then their game opens.
+  const gameRef = useRef(game)
+  gameRef.current = game
+  const openGame = (g: GameId, after: number) => {
+    clearTimeout(gameTimer.current)
+    gameTimer.current = setTimeout(() => {
+      setGame(g)
+      enter(g)
+    }, after)
+  }
+  const closeGame = () => {
+    setGame(null)
+    enter(spot)
+  }
+  const onGreet = (id: string) => {
+    if (photo) return
+    if (id === 'ji') ask(1200)
+    if (HOSTS[id]) openGame(HOSTS[id], 1500)
+  }
   const allStamps = stamps.length >= meta.activities.length
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
       {mode === 'flat' ? (
-        <Flat spot={spot} onSpot={onSpot} photo={photo} />
+        <Flat spot={spot} onSpot={onSpot} photo={photo} onPerson={onGreet} />
       ) : (
-        <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} plugin={onWall.size ? () => new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos') : undefined} extraAnchors={wallAnchors} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet: (id) => id === 'ji' && !photo && ask(1200) }} />
+        <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} plugin={onWall.size ? () => new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos') : undefined} extraAnchors={wallAnchors} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet }} />
       )}
       {mode === 'lost' && (
         <button
@@ -164,7 +190,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           </motion.button>
         )}
       </AnimatePresence>
-      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking} />}
+      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || !!game} />}
+      <MiniGame game={game} look={param('look')} step={param('step')} onClose={closeGame} onState={(st) => game && enter(game, st)} />
       <Ask open={asking && !arriving && mode !== 'lost'} onYes={yes} onNotYet={() => setAsking(false)} />
       {debug && <Debug houseRef={houseRef} />}
     </div>

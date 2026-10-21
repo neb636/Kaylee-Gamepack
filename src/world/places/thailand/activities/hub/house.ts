@@ -37,11 +37,11 @@ import { buildStreet, TUK_SEAT } from './build/street'
 import { Traffic } from './build/traffic'
 import { buildUpper } from './build/upper'
 import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
-import type { HubSection } from './sections'
+import type { HouseSection } from './sections'
 
 export type Spot = 'street' | 'downstairs' | 'upstairs'
 export interface Start {
-  section: HubSection
+  section: HouseSection
   /** A use-spot (pickable id) to start in, e.g. 'table' or 'mattress'. */
   at?: string
   /** The family photo: one person alone, turning slowly (an id from looks.ts), or everyone. */

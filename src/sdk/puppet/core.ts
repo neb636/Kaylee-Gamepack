@@ -109,7 +109,10 @@ export function usePuppet<P extends string>(ref: Ref<PuppetHandle> | undefined, 
 
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick)
-      const dt = Math.min(0.05, (now - last) / 1000)
+      // Never negative: a rAF timestamp can be older than the performance.now() taken when the loop started, by
+      // seconds when something heavy (a 3D scene starting up) blocked the page in between. Puppet time would run
+      // backwards and an action played then would stay stuck for that long.
+      const dt = Math.max(0, Math.min(0.05, (now - last) / 1000))
       last = now
       const s = state.current
       s.t += dt

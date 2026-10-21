@@ -13,7 +13,7 @@ const SPOTS: { id: Spot; icon: string; label: string }[] = [
   { id: 'upstairs', icon: '🛏️', label: 'Upstairs' },
 ]
 
-export function Flat({ spot, onSpot, photo = false }: { spot: Spot; onSpot: (s: Spot) => void; photo?: boolean }) {
+export function Flat({ spot, onSpot, photo = false, onPerson }: { spot: Spot; onSpot: (s: Spot) => void; photo?: boolean; onPerson?: (id: string) => void }) {
   const [poked, setPoked] = useState<string | null>(null)
   const floor = spot === 'upstairs' ? 1 : 0
   const area = spot === 'street' ? 'street' : 'inside'
@@ -43,7 +43,10 @@ export function Flat({ spot, onSpot, photo = false }: { spot: Spot; onSpot: (s: 
       </div>
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center', maxWidth: 900 }}>
         {people.map((m) => (
-          <motion.button key={m.id} aria-label={m.name} animate={poked === m.id ? { y: [0, -16, 0] } : { y: 0 }} onClick={() => poke(m.id, () => sfx.babble(m.pitch))} style={{ minWidth: 88, minHeight: 88, borderRadius: 999, border: '4px solid #fff', background: m.color, fontSize: 18, fontWeight: 700, boxShadow: 'var(--shadow)', padding: '0 16px' }}>
+          <motion.button key={m.id} aria-label={m.name} animate={poked === m.id ? { y: [0, -16, 0] } : { y: 0 }} onClick={() => {
+            poke(m.id, () => sfx.babble(m.pitch))
+            onPerson?.(m.id)
+          }} style={{ minWidth: 88, minHeight: 88, borderRadius: 999, border: '4px solid #fff', background: m.color, fontSize: 18, fontWeight: 700, boxShadow: 'var(--shadow)', padding: '0 16px' }}>
             {m.name}
           </motion.button>
         ))}
