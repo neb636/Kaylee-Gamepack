@@ -353,7 +353,9 @@ export class TripHouse implements HousePlugin {
       this.drag = { id: id.slice(10), x, y, on: false }
       return true
     }
-    return false
+    // From the moment she heads for the suitcase until she's down the stairs, a finger doesn't lead her off (she'd
+    // leave it half shut, standing beside it).
+    return this.phase === 'opening' || this.phase === 'sitting' || this.phase === 'closed' || this.phase === 'leaving'
   }
   pointerMove(x: number, y: number) {
     const d = this.drag
@@ -605,30 +607,45 @@ export class TripHouse implements HousePlugin {
       return
     }
     const k = this.house.kaylee
-    const s = this.suitcase.root.position
-    const top = new Vector3(s.x, U + this.suitcase.h * (1 + 0.05 * Math.max(0, this.count - 3)) + 0.12, s.z)
+    const top = this.suitcaseTop()
     if (this.phase === 'pack') {
       this.setPhase('sitting')
       this.hopsDone = 0
       this.hopsNeeded = this.count > this.fits ? 3 : 1
       this.lid.goal = -0.55
       if (this.count > this.fits) this.events.say(L.trip.pack.full)
-      // She walks up beside it, then hops on top.
-      this.house.walkTo([s.x + 0.75, s.z + 0.2], () => {
-        k.standPoint = new Vector3(s.x + 0.75, U, s.z + 0.2)
-        k.hopTo(top, 0.4, 0.4, () => {
-          k.setPose('sit')
-          k.face(0)
-          this.squashHop()
-        })
-      }, false)
+      this.climbOn()
       return
     }
-    if (k.walking || k.pose !== 'sit') return
+    if (k.walking) return
+    // Off it somehow (she should never be, but then she'd be stuck): back up on top, and that hop counts.
+    if (k.pose !== 'sit') return this.climbOn()
     k.hopTo(top, 0.36, 0.28, () => {
       k.setPose('sit')
       this.squashHop()
     })
+  }
+
+  private suitcaseTop() {
+    const s = this.suitcase.root.position
+    return new Vector3(s.x, U + this.suitcase.h * (1 + 0.05 * Math.max(0, this.count - 3)) + 0.12, s.z)
+  }
+
+  /** She walks up beside the suitcase, then hops on top and sits on it (a squash). */
+  private climbOn() {
+    const k = this.house.kaylee
+    const s = this.suitcase.root.position
+    const beside = new Vector3(s.x + 0.75, U, s.z + 0.2)
+    const hopOn = () => {
+      k.standPoint = beside
+      k.hopTo(this.suitcaseTop(), 0.4, 0.4, () => {
+        k.setPose('sit')
+        k.face(0)
+        this.squashHop()
+      })
+    }
+    // (If there's no path, she hops on from where she is.)
+    if (!this.house.walkTo([beside.x, beside.z], hopOn, false)) hopOn()
   }
 
   private squashHop() {

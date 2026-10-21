@@ -436,19 +436,20 @@ export class House implements World3D {
 
   // ---------------------------------------------------------------- doing things
 
-  /** Walks her there around the furniture (then calls `then`). */
+  /** Walks her there around the furniture (then calls `then`). False when she can't go there (`then` never runs). */
   walkTo(to: XZ, then?: () => void, mark = true) {
-    if (this.climbing) return
+    if (this.climbing) return false
     const k = this.kaylee
     const floor = k.floor
     const path = this.nav[floor].path([k.position.x, k.position.z], to)
     this.using = undefined
-    if (!path) return
+    if (!path) return false
     if (mark) {
       const end = path[path.length - 1]
       this.marker.show(end[0], floor * DIM.g0, end[1])
     }
     k.walk(path, then)
+    return true
   }
 
   private usePickable(p: Pickable) {

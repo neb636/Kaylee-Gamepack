@@ -24,9 +24,15 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - name: Build with PostHog
+        run: |
+          : "${VITE_POSTHOG_KEY:?Set the VITE_POSTHOG_KEY repository variable to the PostHog project token}"
+          : "${VITE_POSTHOG_HOST:?Set the VITE_POSTHOG_HOST repository variable to the PostHog ingestion URL}"
+          npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}
+          VITE_POSTHOG_HOST: ${{ vars.VITE_POSTHOG_HOST }}
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist
