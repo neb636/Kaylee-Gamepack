@@ -376,6 +376,7 @@ const SCREENS = [
   { name: 'mall-hall', hash: '#/world/thailand/mall-trip/hall', reset: true, wait: 3500 },
   { name: 'mall-hall-town', hash: '#/world/thailand/mall-trip/hall?from=vet&games=vet', reset: true, wait: 3500 },
   { name: 'mall-hall-lanes', hash: '#/world/thailand/mall-trip/hall?from=race', reset: true, wait: 3500 },
+  { name: 'mall-hall-little-land', hash: '#/world/thailand/mall-trip/hall?from=blocks&games=blocks', reset: true, wait: 3500 },
   { name: 'mall-hall-going-in', hash: '#/world/thailand/mall-trip/hall?from=vet', reset: true, wait: 2500, act: async (p) => {
     await p.locator('[data-anchor="door:cafe"]').click({ force: true })
     await p.waitForTimeout(2600)
@@ -470,6 +471,44 @@ const SCREENS = [
   { name: 'mall-race-rings', hash: '#/world/thailand/mall-trip/race?round=3', reset: true, wait: 2500, act: (p) => raceTo(p, (q) => q.phase === 'race' && q.u > 0.45, 3) },
   { name: 'mall-race-pit', hash: '#/world/thailand/mall-trip/race', reset: true, wait: 2500, act: (p) => raceTo(p, (q) => q.ribbons >= 1, 3, 1500) },
   { name: 'mall-race-flat', hash: '#/world/thailand/mall-trip/race?round=2&gl=off', reset: true, wait: 900 },
+  // Little Land (greybox): each round at the start (round 2: the chedi's outlines; the elephant's), the 👆 on the box
+  // after a while, a brick in her hand over the stack (the outline where it will land), the stack glowing after six,
+  // a tower past Daddy's ribbon (ah... ah...), and the flat version.
+  ...[1, 2, 3].map((n) => ({ name: `blocks-${n}`, hash: `#/world/thailand/mall-trip/blocks?round=${n}`, reset: true, wait: 3000 })),
+  { name: 'blocks-elephant', hash: '#/world/thailand/mall-trip/blocks?round=2&card=elephant', reset: true, wait: 3000 },
+  { name: 'blocks-hint', hash: '#/world/thailand/mall-trip/blocks', reset: true, wait: 9500 },
+  {
+    name: 'blocks-drag',
+    hash: '#/world/thailand/mall-trip/blocks',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'blocks', null, { timeout: 20000 }).catch(() => {})
+      for (let i = 0; i < 3; i++) {
+        await p.locator('[data-anchor="box"]').click({ force: true }).catch(() => {})
+        await p.waitForTimeout(550)
+      }
+      const q = await p.evaluate(() => window.__thaiMallQA())
+      const sp = q.spots.find((s) => s[1] > 0) ?? q.spots[0]
+      await p.mouse.move(...q.box)
+      await p.mouse.down()
+      await p.mouse.move(sp[2] + 20, sp[3] + q.liftPx - 30, { steps: 16 })
+      await p.waitForTimeout(400)
+    },
+  },
+  ...[['blocks-glow', 1, 6, 600], ['blocks-tall', 3, 4, 900]].map(([name, round, taps, after]) => ({
+    name,
+    hash: `#/world/thailand/mall-trip/blocks?round=${round}`,
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'blocks', null, { timeout: 20000 }).catch(() => {})
+      for (let i = 0; i < taps; i++) {
+        await p.locator('[data-anchor="box"]').click({ force: true }).catch(() => {})
+        await p.waitForTimeout(550)
+      }
+      await p.waitForTimeout(after)
+    },
+  })),
+  { name: 'blocks-flat', hash: '#/world/thailand/mall-trip/blocks?round=2&gl=off', reset: true, wait: 900 },
   // The Pizza Company (greybox): the menu, the table at the start, a slice pulled out with the cheese stretching (held
   // over Daddy's plate), the last two for Agong's box, the box closed, and the flat version.
   { name: 'pizza-menu', hash: '#/world/thailand/mall-trip/menu', reset: true, wait: 3500 },

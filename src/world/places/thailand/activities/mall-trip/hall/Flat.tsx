@@ -1,6 +1,6 @@
 // The hall without WebGL (an old browser, a test browser without a GPU, or ?gl=off): a picture row of the ways in,
 // left to right as in the hall. The open ones are big buttons that go in; the ones that come later (the barber, the
-// mountain, the blocks, the bags) wiggle and make their sound.
+// mountain, the bags) wiggle and make their sound.
 import { motion } from 'motion/react'
 import { sounds } from '../../../../../../sdk'
 import type { GameDoor } from './layout'
@@ -13,7 +13,7 @@ const SPOTS: { id: string; icon: string; label: string; game?: GameDoor; bg: str
   { id: 'frame', icon: '🛝', label: 'The Big Frame', game: 'frame', bg: '#FFD6E7' },
   { id: 'race', icon: '🏁', label: 'The Racing Slide', game: 'race', bg: '#FFE0C2' },
   { id: 'mountain', icon: '⛰️', label: 'The Golden Mountain', bg: '#FFF1C9', sound: () => sfx.giggle() },
-  { id: 'blocks', icon: '🧱', label: 'Little Land', bg: '#E3F7EE', sound: () => sfx.whump() },
+  { id: 'blocks', icon: '🧱', label: 'Little Land', game: 'blocks', bg: '#E3F7EE' },
   { id: 'boxing', icon: '🥊', label: 'Muay Thai bags', bg: '#DCEBFF', sound: () => sfx.punch() },
 ]
 
