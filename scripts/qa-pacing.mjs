@@ -121,6 +121,9 @@ const SCENARIOS = [
   { name: 'thailand mall: cafe & cake', id: 'mall-cafe', hash: '#/world/thailand/mall-trip/cafe', reset: true },
   // The Racing Slide (greybox, no voices): taps climb the steps and scoot down (it never "finishes": round after round).
   { name: 'thailand mall: racing slide', id: 'mall-race', hash: '#/world/thailand/mall-trip/race', reset: true },
+  // Little Land (greybox, no voices): a tap on the box hops the next brick to a good spot, a tap on the glowing stack
+  // pushes it over, so the auto-player can play all three rounds.
+  { name: 'thailand mall: little land', id: 'mall-blocks', hash: '#/world/thailand/mall-trip/blocks', reset: true },
   // The Pizza Company (greybox, no voices): a tap on the pizza serves a slice (with its stretch) to the plate that's
   // behind, so the auto-player can share all eight and fill Agong's box.
   { name: 'thailand mall: pizza share', id: 'mall-pizza', hash: '#/world/thailand/mall-trip/share', reset: true },

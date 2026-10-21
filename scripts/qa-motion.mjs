@@ -825,6 +825,45 @@ const thaiSlide = (name, seconds, round, every) => ({
 })
 GAME_SCENARIOS.push(thaiSlide('mall-race-scoot', 8, 1, 330), thaiSlide('mall-race-bump', 9, 2, 0), thaiSlide('mall-race-rings', 9, 3, 0))
 
+// Little Land (mall trip, greybox): the core verb, a brick from the box put on the stack. Her finger drags bricks onto
+// the spots (each drops in, squashes, and the stack sways; the second goes half over the edge: a big wobble), then a
+// swipe through the stack knocks it over and the bricks bounce. In round 3 the tower passes Daddy's ribbon and he
+// sneezes it down. Where things are comes from window.__thaiMallQA (the box and the spots, in screen pixels).
+const thaiBlocks = (name, seconds, round, targets, end) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/blocks?round=${round}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().game === 'blocks', null, { timeout: 20000 })
+    await page.waitForTimeout(400)
+  },
+  act: async (page) => {
+    for (const [s, r] of targets) {
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      const sp = q.spots.find((p) => p[0] === s && (r === undefined || p[1] === r)) ?? q.spots.find((p) => p[0] === s)
+      if (!sp) continue
+      await page.mouse.move(...q.box)
+      await page.mouse.down()
+      await page.mouse.move(sp[2], sp[3] + q.liftPx, { steps: 14 })
+      await page.mouse.up()
+      await page.waitForTimeout(700)
+    }
+    if (end === 'swipe') {
+      // From a brick at the bottom (it has bricks on top, so it doesn't lift off), sideways through the stack.
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      const low = q.stack.find((b) => b[1] === 0)
+      if (!low) return
+      await page.mouse.move(low[2], low[3])
+      await page.mouse.down()
+      await page.mouse.move(low[2] + 220, low[3] - 20, { steps: 8 })
+      await page.mouse.up()
+      await page.waitForTimeout(2200)
+    } else await page.waitForTimeout(3200)
+  },
+})
+GAME_SCENARIOS.push(thaiBlocks('blocks-stack-crash', 7, 1, [[3, 0], [4, 1], [1, 0], [2, 1]], 'swipe'), thaiBlocks('blocks-sneeze', 8, 3, [[3, 0], [3, 1], [3, 2], [3, 3]], 'wait'))
+
 // The Pizza Company (mall trip, greybox): her finger pulls a slice out of the pan and the cheese stretches, wobbles as
 // she swings it, and snaps; she lets go over a plate. Hawaiian snaps early, Double Cheese stretches longest, and in the
 // tug (after one each) Daddy grabs the other end. Where things are comes from window.__thaiMallQA (screen pixels).

@@ -87,10 +87,12 @@ export const DOORS = {
   barber: { at: [-7.4, -2.3] as XZ, in: [-7.4, -3.45] as XZ },
   frame: { at: [FRAME_DOOR.x, -0.3] as XZ, in: [FRAME_DOOR.x, -1.6] as XZ },
   race: { at: [(STEPS.x0 + STEPS.x1) / 2, -0.2] as XZ, in: [(STEPS.x0 + STEPS.x1) / 2, -1.2] as XZ },
+  /** Little Land: beside the front stack (it tumbles as she goes in), in between the stack and the bags. */
+  blocks: { at: [BLOCKS.x1 - 0.45, BLOCKS.front + 0.75] as XZ, in: [BLOCKS.x1 - 0.45, BLOCKS.front - 0.5] as XZ },
 }
 export type DoorId = keyof typeof DOORS
 /** The ways in that open a mini game. */
-export const OPEN_DOORS = ['vet', 'cafe', 'race', 'frame', 'barber'] as const
+export const OPEN_DOORS = ['vet', 'cafe', 'race', 'frame', 'barber', 'blocks'] as const
 export type GameDoor = (typeof OPEN_DOORS)[number]
 
 /** Where she stands when she first comes in: in front of Mommy's bench, between the town and the frame. */
