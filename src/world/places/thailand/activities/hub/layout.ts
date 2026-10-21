@@ -57,19 +57,20 @@ export const DIM = {
    * Then the front room 0.5 m bigger, the middle room the same and the kitchen smaller; flight 2 now ends just behind
    * the divider (zTop is its back face), so the divider can go up to the ceiling all the way across. Then both flights
    * 20% wider again, 1.5 and 1.43 m, and the foot in the middle of the room so they take up only its left half: flight 1
-   * is shorter than flight 2 now, 6 steps to 9.)
+   * is shorter than flight 2 now, 6 steps to 9. Then the divider 0.5 m further back, so the front room is bigger and
+   * flight 2 shorter, 8 steps.)
    */
-  stairs: { x0: -3.125, xLanding: -1.625, xFoot: 0, zTop: -9.01, zLanding: -11.31, zBack: -12.74, steps1: 6, steps2: 9 },
+  stairs: { x0: -3.125, xLanding: -1.625, xFoot: 0, zTop: -9.51, zLanding: -11.31, zBack: -12.74, steps1: 6, steps2: 8 },
   /** The wall behind the stairs that hides the kitchen: from the left wall to x1, `t` thick, its front face on the
-   *  stairs' back edge. */
-  stairWall: { x1: 1.85, t: 0.15 },
+   *  stairs' back edge. It stops a doorway's width (0.9 m) short of the right wall: the way into the kitchen. */
+  stairWall: { x1: 2.225, t: 0.15 },
   /**
    * The wooden divider between the front room and the stairs, like Agong's real one (Dad's photo, 2026-10-20): a wall
    * of rosewood cabinets, floor to ceiling, centered at `z` and `d` deep, running all the way from the left wall to
    * the right one. Flight 2 of the stairs ends against its back; the doorway (open0..open1) she walks through to the
    * stairs and the back room is just right of them, the rest of the cabinets to its right.
    */
-  divider: { z: -8.8, d: 0.42, open0: -1.505, open1: 0.5 },
+  divider: { z: -9.3, d: 0.42, open0: -1.505, open1: 0.5 },
   /** Upstairs: the balcony railing at the front edge of the floor (open to the shop below), and the glass wall into
    *  Kaylee's room, with its doorway. (Dad, 2026-10-19: stairs, railing and glass all 2.2 m further forward than at
    *  first, so the overlook is smaller and her room bigger.) */
@@ -143,7 +144,7 @@ export const PICKABLES: Pickable[] = [
   { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-0.8125, 0.7, -12.025], r: 0.9, react: 'stairs' },
 
   // ---- Upstairs: the hallway, then Kaylee's room at the back ----
-  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-2.375, U + 0.2, -9.8], r: 0.7, react: 'stairs' },
+  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-2.375, U + 0.2, -10.3], r: 0.7, react: 'stairs' },
   { id: 'plant', label: 'Plant', floor: 1, area: 'inside', at: [2.1, U + 0.4, -5.65], r: 0.35, react: 'jelly', use: { x: 1.4, z: -5.8, face: 90, pose: 'peek' } },
   { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [1.85, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: 1.85, z: -16.998, face: 180, pose: 'stand' } },
   { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-1.625, U + 0.25, -18.71], r: 1.4, react: 'jelly', use: { x: 0.35, z: -18.25, face: 25, pose: 'bounce', snap: { x: -1.4, z: -18.25, y: 0.22 } } },
