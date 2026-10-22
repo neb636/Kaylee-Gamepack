@@ -1,13 +1,15 @@
 // The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md), as deep-linkable sections:
-// #/world/thailand/mall-trip/<section>?socks=<color>&games=<stickers so far>. So far: HarborLand's hall
+// #/world/thailand/mall-trip/<section>?socks=<color>&games=<stickers so far>. The trip loop: Mommy asks where to
+// (invite: 🚤 or 🛝🍕), the goodbye at Agong's house and Mommy's silver Veloz (goodbye), ICONSIAM, the lift and the
+// HarborLand counter (arrive), and home (home?photos=<the photos from the day>: the pizza box for Agong, the photo on
+// his wall, the stamp); replay=1 plays it as a trip she has done before. In between: HarborLand's hall
 // (hall?from=<the door she comes out of>, and hungry: Mommy asks "Pizza time?"), the mini games: the Vet Clinic
 // (vet?patient=puppy|pony|elephant), the Barber Salon (barber?round=1|2|3&hair=<Daddy's hairdo>), Cafe & Cake
 // (cafe?round=1|2|3), the Racing Slide (race?round=1|2|3), Little Land's foam blocks
 // (blocks?round=1|2|3&card=chedi|elephant), the Golden Mountain (mountain?round=1|2|3), Muay Thai (boxing?round=1|2|3:
-// the wai kru and free punching, on the beat, Daddy's pad), the Sky Pod's lights (skypod?round=1|2|3), the Big Frame (frame?at=in|pit|l1|l2|top|out: the level
-// she's on), and the pizza toy (menu, then
-// share?pizza=hawaiian|seafood|cheese&shared=0..8). Mommy's question, the Veloz, the lift and socks, the other mini
-// games and home come in later gates (their sections are added then). Loaded at startup: keep three.js out of this
+// the wai kru and free punching, on the beat, Daddy's pad), the Sky Pod's lights (skypod?round=1|2|3), the Big Frame
+// (frame?at=in|pit|l1|l2|top|out: the level she's on), and the pizza toy (menu, then
+// share?pizza=hawaiian|seafood|cheese&shared=0..8). Loaded at startup: keep three.js out of this
 // file.
 import { defineSections } from '../../../../kit/sections'
 import { AT } from './harborland/layout'
@@ -29,8 +31,13 @@ const MALL_SECTIONS = defineSections('thailand', 'mall-trip', {
     pizza: { default: 'cheese', values: PIZZAS, doc: 'the pizza she picked at The Pizza Company: Hawaiian, Seafood or Double Cheese (the longest stretch)' },
     at: { default: 'in', values: AT, doc: "where she is in the Big Frame: in (just through the tunnel), pit (in the balls with Daddy), l1, l2, top (the levels) or out (on the mats in front)" },
     shared: { default: '0', values: ['0', '1', '2', '3', '4', '5', '6', '7', '8'], doc: "slices handed out so far, round the table (Mommy, Daddy, Kaylee) then into Agong's box: 6 starts at the last two, for Agong" },
+    photos: { default: 'dragon', doc: "the photos from the day, a comma list of dragon (on the dragon slide) and cheese (Daddy's cheese nose at the pizza table): the first one goes on Agong's wall" },
+    replay: { default: '', doc: '1 = she has done the whole mall day before: picking 🛝🍕 offers 🚗 the whole day, 🛝 straight to HarborLand (her socks from last time) or 🍕 straight to the table' },
   },
   sections: [
+    { id: 'invite', name: 'Mommy asks: where shall we go? (🚤 or 🛝🍕)', params: ['replay'] },
+    { id: 'goodbye', name: "Goodbye at Agong's house (hugs), into Mommy's silver Veloz", params: ['replay'] },
+    { id: 'arrive', name: 'ICONSIAM: pull up by the river, the lift to 6, shoes off, socks on, the height chart', params: ['socks', 'replay'] },
     { id: 'hall', name: 'HarborLand: walk the hall and pick a mini game', params: ['socks', 'games', 'from', 'hair'] },
     { id: 'vet', name: 'The Vet Clinic: heal the puppy, the pony and the baby elephant', params: ['socks', 'games', 'patient'] },
     { id: 'barber', name: "The Barber Salon: Daddy's new look (grow, snip, comb, colors), then kids with picture cards", params: ['socks', 'games', 'round', 'hair'] },
@@ -44,6 +51,7 @@ const MALL_SECTIONS = defineSections('thailand', 'mall-trip', {
     { id: 'hungry', name: "HarborLand: Daddy's tummy rumbles, Mommy asks: pizza time?", params: ['socks', 'games'] },
     { id: 'menu', name: 'The Pizza Company: pick a pizza', params: ['hair'] },
     { id: 'share', name: 'The Pizza Company: pull the cheesy slices and share them fairly', params: ['pizza', 'shared', 'hair'] },
+    { id: 'home', name: "Home: the pizza box for Agong, the cousins' phones down, the photo on his wall, the stamp", params: ['socks', 'pizza', 'photos', 'hair'] },
   ],
 })
 export default MALL_SECTIONS

@@ -20,9 +20,11 @@ interface Props {
   onPizza: (id: PizzaId) => void
   onServed: () => void
   onShared: (n: number) => void
+  /** The pan is empty and Agong's box is shut (the trip goes home). */
+  onAllDone?: () => void
 }
 
-export function Pizza({ section, pizza, shared, hair, onPizza, onServed, onShared }: Props) {
+export function Pizza({ section, pizza, shared, hair, onPizza, onServed, onShared, onAllDone }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [picked, setPicked] = useState(section === 'share')
@@ -31,8 +33,8 @@ export function Pizza({ section, pizza, shared, hair, onPizza, onServed, onShare
   // A rebuilt world (a lost GPU context) starts where she is now, not where the link was.
   const now = useRef({ section, pizza, shared, hair })
   now.current = { section, pizza, shared, hair }
-  const cb = useRef({ onServed, onShared })
-  cb.current = { onServed, onShared }
+  const cb = useRef({ onServed, onShared, onAllDone })
+  cb.current = { onServed, onShared, onAllDone }
 
   const make = (renderer: WebGLRenderer) => {
     const w = new PizzaTable(
@@ -43,7 +45,7 @@ export function Pizza({ section, pizza, shared, hair, onPizza, onServed, onShare
         done: () => {},
         served: () => cb.current.onServed(),
         shared: (n) => cb.current.onShared(n),
-        allDone: () => {},
+        allDone: () => cb.current.onAllDone?.(),
       },
       now.current,
     )
@@ -61,7 +63,18 @@ export function Pizza({ section, pizza, shared, hair, onPizza, onServed, onShare
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#FFF1E4', overflow: 'clip' }}>
       {mode === 'flat' ? (
-        <PizzaFlat section={section} pizza={pizza} shared={shared} onPizza={onPizza} onServed={onServed} onShared={onShared} />
+        <PizzaFlat
+          section={section}
+          pizza={pizza}
+          shared={shared}
+          onPizza={onPizza}
+          onServed={onServed}
+          onShared={(n) => {
+            onShared(n)
+            // (The picture book's box shuts with the eighth slice.)
+            if (n >= 8) onAllDone?.()
+          }}
+        />
       ) : (
         <View3D
           key={key}

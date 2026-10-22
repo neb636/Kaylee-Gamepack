@@ -5,8 +5,9 @@ import type { ActivityInfo, PlaceFact } from '../types'
 
 /** Stamp slam + animal sticker + one spoken fun fact, then back to the country map. `facts` (optional): a row of
  *  tap-to-hear extras about what she just played (never required; keep it to about ten so they fit in one or two rows).
- *  `closeIcon` (optional): what the way-on button shows, when it goes somewhere other than the map. */
-export function StampEarned({ activity, onClose, facts, closeIcon = '🗺️ ▶' }: { activity: ActivityInfo; onClose: () => void; facts?: PlaceFact[]; closeIcon?: string }) {
+ *  `closeIcon` (optional): what the way-on button shows, when it goes somewhere other than the map. `quiet`: shows the
+ *  sticker's line without saying it (an activity still in the works, whose voices aren't recorded yet). */
+export function StampEarned({ activity, onClose, facts, closeIcon = '🗺️ ▶', quiet = false }: { activity: ActivityInfo; onClose: () => void; facts?: PlaceFact[]; closeIcon?: string; quiet?: boolean }) {
   const [tapped, setTapped] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
   const buddy = useRef<PuppetHandle>(null)
@@ -23,7 +24,7 @@ export function StampEarned({ activity, onClose, facts, closeIcon = '🗺️ ▶
       void buddy.current?.play('cheer')
       void sparkle.current?.play('cheer')
     }, 850)
-    void say(activity.sticker.fact)
+    if (!quiet) void say(activity.sticker.fact)
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)

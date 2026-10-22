@@ -8,12 +8,19 @@
 // on); and the pizza toy at The Pizza Company (pizza/, sections menu and
 // share). Each mini game is a sticker on her sock band in the corner (`games`), and a big ↩️ takes her back out to the
 // hall. After four stickers (or five minutes) Daddy's tummy rumbles and Mommy asks about pizza. The trip around it
-// (Mommy's question, the Veloz, the lift and the socks, home) comes in a later gate.
+// (Loop.tsx): Mommy asks where to (invite), the goodbye and Mommy's silver Veloz (goodbye), ICONSIAM, the lift and
+// the counter where she picks her socks (arrive), and home once Agong's box is shut at the table (home: the box for
+// Agong, the photo on his wall, then the stamp, onDone). A day pass covers the change between legs. The trip saves
+// after each leg; saying yes to the mall again offers to keep going, and after a whole day 🛝 or 🍕 straight there.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { sounds } from '../../../../../sdk'
+import { sounds, useSaved } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
+import { BoardingPass, type PassChoice } from '../../trip/legs/BoardingPass'
+import { justSaidYes, saidYes } from '../../trip/legs/Ask'
+import { MallLoop, type LoopSection } from './Loop'
+import { DAY_PASS, legOf, RESUME } from './trip'
 import { Barber } from './games/barber/Barber'
 import { Blocks } from './games/blocks/Blocks'
 import { Boxing } from './games/boxing/Boxing'
@@ -60,13 +67,38 @@ const bandOf = (games: GameId[]): GameDoor[] => BAND.map((b) => b.id).filter((id
 const DOOR_OF: Partial<Record<MallSection, DoorId>> = { vet: 'vet', cafe: 'cafe', race: 'race', barber: 'barber', frame: 'frame', blocks: 'blocks', mountain: 'mountain', boxing: 'boxing', skypod: 'skypod' }
 /** Daddy gets hungry after four stickers, or this long in HarborLand. */
 const HUNGRY_MS = 5 * 60_000
+/** The trip's legs around HarborLand (Loop.tsx). */
+const LOOP: MallSection[] = ['invite', 'goodbye', 'arrive', 'home']
 
-export function MallTrip() {
+/** Where the day picks up next time (the start of a leg), and what she had then. */
+interface Progress {
+  at: MallSection | null
+  socks: string
+  games: string
+  hair: string
+  /** Whole days done, Mommy's question to the photo on Agong's wall (after the first: 🛝 or 🍕 straight there). */
+  trips?: number
+}
+
+interface Props {
+  /** ✋ Not yet on Mommy's card. */
+  onExit?: () => void
+  /** 🚤 on Mommy's card: the boat trip instead. */
+  onBoat?: () => void
+  /** Home, the photo on the wall: the stamp. */
+  onDone?: () => void
+}
+
+export function MallTrip({ onExit, onBoat, onDone }: Props = {}) {
   const { start, param, enter } = useSections(MALL_SECTIONS)
   // Old links into the first climbing toy (PR #120's play and dragon) land in the Big Frame.
   const [legacy] = useState(() => (start ? null : (/\/mall-trip\/(play|dragon)(?:[?/]|$)/.exec(location.hash)?.[1] ?? null)))
-  const first: MallSection = start ?? (legacy ? 'frame' : 'hall')
-  const [socks] = useState(() => param('socks'))
+  const first: MallSection = start ?? (legacy ? 'frame' : 'invite')
+  const [saved, setSaved] = useSaved<Progress>('thailand-mall-trip', { at: null, socks: 'pink', games: '', hair: '' })
+  // She has done the whole day before (or the link says so).
+  const [replay] = useState(() => param('replay') === '1' || (saved.trips ?? 0) > 0)
+  const [socks, setSocks] = useState(() => param('socks'))
+  const [photos] = useState(() => param('photos'))
   const [patient, setPatient] = useState<PatientId>(() => param('patient') as PatientId)
   // The round of the mini game on screen (the cafe's, the racing slide's): one `round` in the address.
   const [round, setRound] = useState<Round>(() => Number(param('round')) as Round)
@@ -95,6 +127,7 @@ export function MallTrip() {
   const [notYet, setNotYet] = useState(-1)
   const pizzaTime = section === 'menu' || section === 'share'
   const inHall = section === 'hall' || section === 'hungry'
+  const onLoop = LOOP.includes(section)
   const band = bandOf(games)
   const hungry = (band.length >= 4 || performance.now() - since.current > HUNGRY_MS) && visits > notYet
   // Everyone's lines play through Sparkle's corner guide (the words show with who said them).
@@ -109,6 +142,8 @@ export function MallTrip() {
   const sticker = (id: GameId) => setGames((g) => (g.includes(id) ? g : [...g, id]))
 
   const params = () => ({
+    ...(section === 'invite' || section === 'goodbye' || section === 'arrive' ? { replay: replay ? '1' : '' } : {}),
+    ...(section === 'home' ? { photos, pizza } : {}),
     socks,
     games: games.join(','),
     ...(section === 'hall' ? { from } : {}),
@@ -122,7 +157,11 @@ export function MallTrip() {
     ...(section === 'share' ? { pizza, shared: String(shared) } : {}),
     ...(section === 'hall' || section === 'barber' || section === 'mountain' || section === 'frame' || pizzaTime ? { hair } : {}),
   })
-  useEffect(() => enter(first, params()), [])
+  useEffect(() => {
+    enter(first, params())
+    // A link into a leg is where the day picks up next time.
+    if (RESUME.includes(first)) setSaved((p) => ({ ...p, at: first }))
+  }, [])
   const ready = useRef(false)
   useEffect(() => {
     if (!ready.current) {
@@ -130,7 +169,71 @@ export function MallTrip() {
       return
     }
     enter(section, params())
-  }, [section, games, patient, round, blocksRound, mountainRound, boxingRound, skyRound, card, pizza, shared, from, hair, at])
+  }, [section, games, patient, round, blocksRound, mountainRound, boxingRound, skyRound, card, pizza, shared, from, hair, at, socks])
+
+  // ---- The trip around HarborLand: the day pass between legs, resume and replays ----
+  const [pass, setPass] = useState<{ punch: string | null; done: string[]; choices?: PassChoice[] } | null>(null)
+  const moving = useRef(false)
+  const state = useRef({ section, socks, games, hair })
+  state.current = { section, socks, games, hair }
+  /** The legs punched before `next`'s (leaving out the one being punched now). */
+  const doneBefore = (next: MallSection, punch: string | null) => {
+    const upto = DAY_PASS.findIndex((p) => p.id === legOf(next))
+    return DAY_PASS.slice(0, Math.max(0, upto)).map((p) => p.id as string).filter((id) => id !== punch)
+  }
+  /** A leg is over: the day pass slides up (punching it), the next leg starts behind it, and it goes. */
+  const go = (next: MallSection) => {
+    if (moving.current) return
+    moving.current = true
+    const was = legOf(state.current.section)
+    const punch = was && was !== legOf(next) ? was : null
+    setPass({ punch, done: doneBefore(next, punch) })
+    const st = state.current
+    if (RESUME.includes(next)) setSaved((p) => ({ ...p, at: next, socks: st.socks, games: st.games.join(','), hair: st.hair }))
+    setTimeout(() => {
+      if (next === 'hall') setFrom('in')
+      setSection(next)
+    }, 900)
+    setTimeout(() => {
+      setPass(null)
+      moving.current = false
+    }, 2300)
+  }
+  /** 🛝🍕 on Mommy's card: straight to the goodbye; or, with a day half done or after her first whole day, where to
+   *  start (🚗 the whole day, the next leg's icon to keep going, 🛝 straight to HarborLand, 🍕 straight to the table). */
+  const yes = () => {
+    if (moving.current) return
+    const half = saved.at && saved.at !== 'goodbye' ? saved.at : null
+    if (!half && !replay) return go('goodbye')
+    const choices: PassChoice[] = [{ label: 'The whole day', icon: '🚗', on: () => choose('goodbye', false) }]
+    if (half && !(replay && (half === 'hall' || half === 'menu'))) choices.push({ label: 'Keep going', icon: DAY_PASS.find((p) => p.id === legOf(half))?.icon ?? '▶️', on: () => choose(half, true) })
+    if (replay) choices.push({ label: 'Straight to HarborLand', icon: '🛝', on: () => choose('hall', half === 'hall') }, { label: 'Straight to the pizza', icon: '🍕', on: () => choose('menu', half === 'menu') })
+    setPass({ punch: null, done: half ? doneBefore(half, null) : [], choices })
+  }
+  const choose = (next: MallSection, resume: boolean) => {
+    sounds.pop()
+    setPass(null)
+    // Her socks from last time; and, keeping going, her stickers and Daddy's hairdo too.
+    if (next !== 'goodbye') setSocks(saved.socks || 'pink')
+    if (resume) {
+      setGames(list(saved.games))
+      setHair(saved.hair)
+    }
+    setTimeout(() => go(next), 50)
+  }
+  // A yes in the house (Mommy's card there, 🛝🍕): no asking again.
+  useEffect(() => {
+    if (section !== 'invite' || !justSaidYes('mall-trip')) return
+    saidYes.at = 0
+    const t = setTimeout(yes, 600)
+    return () => clearTimeout(t)
+  }, [])
+  // The box is shut at the pizza table: home to Agong.
+  const allShared = () => setTimeout(() => state.current.section === 'share' && go('home'), 2200)
+  const finishedDay = () => {
+    setSaved((p) => ({ at: null, socks: state.current.socks, games: '', hair: '', trips: (p.trips ?? 0) + 1 }))
+    onDone?.()
+  }
 
   /** In through a way in. */
   const goIn = (door: GameDoor) => {
@@ -148,7 +251,23 @@ export function MallTrip() {
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#F1E8FF', overflow: 'clip' }}>
-      {inHall ? (
+      {onLoop ? (
+        <MallLoop
+          section={section as LoopSection}
+          socks={socks}
+          hair={hair}
+          pizza={pizza}
+          photos={photos}
+          replay={replay}
+          covered={!!pass}
+          onMall={yes}
+          onBoat={() => onBoat?.()}
+          onNotYet={() => onExit?.()}
+          onLeg={(next) => go(next as MallSection)}
+          onSocks={setSocks}
+          onDone={finishedDay}
+        />
+      ) : inHall ? (
         <HallScreen
           key={`hall-${visits}`}
           socks={socks}
@@ -183,11 +302,11 @@ export function MallTrip() {
       ) : section === 'skypod' ? (
         <SkyPod round={skyRound} socks={socks} onRound={setSkyRound} onSticker={() => sticker('skypod')} onPlay={goOut} />
       ) : pizzaTime ? (
-        <Pizza section={section} pizza={pizza} shared={shared} hair={hair} onPizza={setPizza} onServed={() => setSection('share')} onShared={setShared} />
+        <Pizza section={section} pizza={pizza} shared={shared} hair={hair} onPizza={setPizza} onServed={() => setSection('share')} onShared={setShared} onAllDone={allShared} />
       ) : section === 'frame' ? (
         <FrameScreen at={at} socks={socks} hair={hair} rode={games.includes('frame')} onAt={setAt} onRide={() => sticker('frame')} />
       ) : null}
-      {!inHall && !pizzaTime && (
+      {!inHall && !pizzaTime && !onLoop && (
         <motion.button
           aria-label="Back to the hall"
           initial={{ scale: 0 }}
@@ -202,8 +321,9 @@ export function MallTrip() {
           ↩️
         </motion.button>
       )}
-      <TripGuide ref={guide} />
-      {!pizzaTime && <SockBand done={band} color={SOCK_COLORS[socks] ?? SOCK_COLORS.pink} />}
+      {!onLoop && <TripGuide ref={guide} />}
+      {!pizzaTime && !onLoop && <SockBand done={band} color={SOCK_COLORS[socks] ?? SOCK_COLORS.pink} />}
+      <AnimatePresence>{pass && <BoardingPass key="pass" legs={DAY_PASS} done={pass.done} punch={pass.punch} choices={pass.choices} title="DAY PASS" badge="🚗 🛝" route="ICONSIAM · 6F" />}</AnimatePresence>
     </div>
   )
 }

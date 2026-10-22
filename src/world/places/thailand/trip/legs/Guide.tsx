@@ -7,7 +7,8 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 're
 import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
 
 export interface TripGuideHandle {
-  speak(line: Line): void
+  /** Says it (`mute`: a greybox's line that isn't recorded yet, so only its bubble shows, for a while). */
+  speak(line: Line, mute?: boolean): void
 }
 
 const WHO: Record<string, { name: string; icon: string; color: string }> = {
@@ -43,14 +44,19 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
   const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   useImperativeHandle(ref, () => ({
-    speak(l) {
+    speak(l, mute) {
       const voice = lineVoice(l)
       if (voice === 'sparkle') {
-        last.current = l
+        // (Tapping her says her last line again: only one she can say out loud.)
+        if (!mute) last.current = l
         void sparkle.current?.play('wave')
       }
       setLine((cur) => ({ l, n: (cur?.n ?? 0) + 1 }))
       clearTimeout(hide.current)
+      if (mute) {
+        hide.current = setTimeout(() => setLine((cur) => (cur?.l === l ? null : cur)), 1400 + lineText(l).length * 55)
+        return
+      }
       // The family's reactions cut in on each other ("My horn!" right away), but Sparkle's lines and anything said
       // while Sparkle talks wait their turn, so a fact is never cut off.
       const now = speakingVoice()
