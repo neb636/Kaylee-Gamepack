@@ -3,9 +3,9 @@
 //   - The jar's group is at its middle, so she holds it there and it tilts round her finger; the spout is on its
 //     right (the cups are to the right), the handle on its left.
 //   - A liquid is a unit-tall cylinder standing on the bottom, scaled up as it fills (liquid.ts draws it).
-import { Group, LatheGeometry, Mesh, MeshBasicMaterial, Vector2, type ShaderMaterial } from 'three'
+import { BufferGeometry, Color, Float32BufferAttribute, Group, LatheGeometry, Mesh, MeshBasicMaterial, Vector2, type ShaderMaterial } from 'three'
 import type { Bag } from '../../../../engine/dispose'
-import { bake, merge, P, solid, type PartOpts } from '../../../../engine/geo'
+import { bake, merge, P, solid } from '../../../../engine/geo'
 import { PAL } from '../../../../engine/toon'
 import { BASE_H, CUP, JAR, type ItemId } from './layout'
 import { liquidMaterial } from './liquid'
@@ -143,9 +143,81 @@ export function buildStraw(bag: Bag) {
   return g
 }
 
-/** A round-bodied part: `profile` is [radius, height] from the bottom up, spun round the vertical. */
-function lathe(profile: [number, number][], c: string, o?: PartOpts) {
-  return bake(new LatheGeometry(profile.map(([r, y]) => new Vector2(r, y)), 20), c, o)
+const lerpC = (a: string, b: string, k: number, out = new Color()) => out.set(a).lerp(new Color(b), Math.min(1, Math.max(0, k)))
+const smooth = (a: number, b: number, x: number) => {
+  const k = Math.min(1, Math.max(0, (x - a) / (b - a)))
+  return k * k * (3 - 2 * k)
+}
+
+/** Colors a baked part per vertex (a gradient or blush across a fruit's skin), from where each vertex is. */
+function paint(g: BufferGeometry, fn: (x: number, y: number, z: number, out: Color) => void) {
+  const pos = g.attributes.position
+  const col = g.attributes.color
+  const c = new Color()
+  for (let i = 0; i < pos.count; i++) {
+    fn(pos.getX(i), pos.getY(i), pos.getZ(i), c)
+    col.setXYZ(i, c.r, c.g, c.b)
+  }
+  return g
+}
+
+/**
+ * A smooth round fruit body spun round the vertical (y from 0 to `h`): `r(t)` is its radius at t = 0..1 up the body,
+ * `squashZ` flattens it front to back, `bend` curves its middle sideways. The seam is at the back.
+ */
+function body(h: number, r: (t: number) => number, squashZ = 1, bend = 0, rows = 28): BufferGeometry {
+  const pts = Array.from({ length: rows + 1 }, (_, i) => new Vector2(Math.max(0.0005, r(i / rows)), (i / rows) * h))
+  const g = new LatheGeometry(pts, 36, Math.PI, Math.PI * 2)
+  const pos = g.attributes.position
+  for (let i = 0; i < pos.count; i++) {
+    const t = pos.getY(i) / h
+    pos.setXYZ(i, pos.getX(i) + bend * Math.sin(Math.PI * t), pos.getY(i), pos.getZ(i) * squashZ)
+  }
+  g.computeVertexNormals()
+  return g
+}
+
+/** A smooth tube along a curve in the x-y plane with a rounded five-ridge cross section (a banana), closed at both ends. */
+function tube(path: (t: number) => [number, number], radius: (t: number) => number, rings: number, sides: number, flatZ: number): BufferGeometry {
+  const pos: number[] = []
+  const idx: number[] = []
+  for (let i = 0; i <= rings; i++) {
+    const t = i / rings
+    const [cx, cy] = path(t)
+    const [ax, ay] = path(Math.min(1, t + 0.002))
+    const [bx, by] = path(Math.max(0, t - 0.002))
+    const l = Math.hypot(ax - bx, ay - by) || 1
+    const nx = -(ay - by) / l
+    const ny = (ax - bx) / l
+    for (let j = 0; j < sides; j++) {
+      const th = (j / sides) * Math.PI * 2
+      const rr = radius(t) * (1 + 0.07 * Math.cos(5 * th))
+      pos.push(cx + nx * Math.cos(th) * rr, cy + ny * Math.cos(th) * rr, Math.sin(th) * rr * flatZ)
+    }
+  }
+  for (let i = 0; i < rings; i++) {
+    for (let j = 0; j < sides; j++) {
+      const a = i * sides + j
+      const b = i * sides + ((j + 1) % sides)
+      idx.push(a, b, a + sides, b, b + sides, a + sides)
+    }
+  }
+  // Caps: a centre point on each end.
+  for (const [i, flip] of [[0, true], [rings, false]] as const) {
+    const [cx, cy] = path(i / rings)
+    const c = pos.length / 3
+    pos.push(cx, cy, 0)
+    for (let j = 0; j < sides; j++) {
+      const a = i * sides + j
+      const b = i * sides + ((j + 1) % sides)
+      idx.push(c, ...(flip ? [a, b] : [b, a]))
+    }
+  }
+  const g = new BufferGeometry()
+  g.setAttribute('position', new Float32BufferAttribute(pos, 3))
+  g.setIndex(idx)
+  g.computeVertexNormals()
+  return g
 }
 
 /** A thing on the tray (or a chunk in the jar), standing on the origin, about `size` tall. */
@@ -153,28 +225,55 @@ export function buildItem(id: ItemId, bag: Bag): Group {
   const g = new Group()
   const one = (parts: Parameters<typeof merge>[0], px = 2) => g.add(solid(merge(parts), bag, px))
   switch (id) {
-    case 'mango':
-      // A plump kidney-shaped mango: orange-yellow with a red blush on one cheek, a stem and a leaf.
-      one([
-        P.sphere(0.11, '#FFB52E', { at: [0, 0.105, 0], scale: [1.25, 1, 0.9], rot: [0, 0, 0.3] }, 20),
-        P.sphere(0.055, '#FF7A45', { at: [0.05, 0.1, 0.085], scale: [1, 1.1, 0.38], rot: [0, 0, 0.3] }, 12),
-        P.cyl(0.012, 0.015, 0.035, '#7A5A2A', { at: [-0.1, 0.19, 0], rot: [0, 0, 0.6] }, 8),
-        P.sphere(0.04, '#6CC36A', { at: [-0.13, 0.22, 0], scale: [1.8, 0.45, 0.8], rot: [0, 0, 0.5] }),
-      ])
-      g.add(solid(merge([P.sphere(0.02, '#FFE9A8', { at: [0.1, 0.15, 0.07], scale: [1.6, 0.8, 0.3], rot: [0, 0, 0.5] })]), bag, 0))
+    case 'mango': {
+      // A plump, slightly curved mango lying on its side: golden with a red blush on the cheek facing her, green
+      // towards the stem, a little brown stem and a leaf. Built upright, then laid down.
+      const H = 0.27
+      const geo = bake(body(H, (t) => 0.175 * Math.pow(t, 0.55) * Math.pow(1 - Math.pow(t, 2.6), 0.5), 0.84, 0.03), '#FFC233')
+      paint(geo, (x, y, z, c) => {
+        const t = y / H
+        lerpC('#FFD24A', '#FF9A2E', smooth(0.1, 0.7, t), c)
+        lerpC('#' + c.getHexString(), '#FF5C3A', smooth(0.0, 0.085, z) * (0.3 + 0.7 * smooth(0.15, 0.75, t)) * (0.55 + 0.45 * smooth(-0.1, 0.05, x)), c)
+        lerpC('#' + c.getHexString(), '#9ED14E', smooth(0.82, 0.99, t) * 0.9, c)
+      })
+      const sub = new Group()
+      const inner = new Group()
+      sub.add(inner)
+      inner.position.y = -H / 2
+      inner.add(solid(merge([geo, P.cyl(0.011, 0.015, 0.04, '#7A5A2A', { at: [0.005, H + 0.012, 0], rot: [0, 0, -0.15] }, 8), P.sphere(0.04, '#5FB95F', { at: [0.045, H + 0.03, 0], scale: [1.9, 0.4, 0.8], rot: [0, 0, -0.45] }, 10)]), bag, 2))
+      inner.add(solid(merge([P.sphere(0.022, '#FFF3C0', { at: [0.07, 0.17, 0.085], scale: [0.8, 1.7, 0.3], rot: [0, 0, 0.3] }, 8)]), bag, 0))
+      sub.position.set(0.0, 0.11, 0)
+      sub.rotation.z = 1.3
+      g.add(sub)
       break
+    }
     case 'strawberry': {
-      // A plump heart-shaped strawberry: wide shoulders, a rounded point, little seeds all over, a leafy green cap.
-      one([
-        lathe([[0, 0], [0.025, 0.012], [0.06, 0.05], [0.095, 0.1], [0.11, 0.155], [0.1, 0.2], [0.06, 0.225], [0, 0.23]], '#FF3F5F', { at: [0, 0, 0] }),
-        ...[0, 1, 2, 3, 4, 5, 6].map((i) => {
-          const a = (i / 7) * Math.PI * 2
-          return P.sphere(0.045, '#4CBF7F', { at: [Math.cos(a) * 0.065, 0.225, Math.sin(a) * 0.065], scale: [1.6, 0.35, 0.8], rot: [0, -a, 0.35 + (i % 2) * 0.2] }, 8)
-        }),
-        P.cyl(0.012, 0.014, 0.05, '#4CBF7F', { at: [0, 0.255, 0], rot: [0, 0, 0.15] }, 8),
-      ])
-      const seeds: [number, number][] = [[-0.05, 0.19], [0.0, 0.2], [0.05, 0.19], [-0.07, 0.14], [-0.02, 0.15], [0.03, 0.14], [0.07, 0.13], [-0.04, 0.09], [0.01, 0.09], [0.05, 0.07], [-0.01, 0.045]]
-      g.add(solid(merge(seeds.map(([x, y]) => P.sphere(0.011, '#FFE58A', { at: [x, y, Math.sqrt(Math.max(0.0004, 0.115 * 0.115 - x * x)) * (y > 0.05 ? 0.95 : 0.6)], scale: [0.8, 1.2, 0.5] }, 6))), bag, 0))
+      // A plump strawberry: wide shoulders and a rounded point, deep red with a paler tip, yellow seeds set in all
+      // over the front, a star of green leaves on top.
+      const H = 0.235
+      const R = (t: number) => 0.165 * Math.pow(t, 0.6) * Math.sqrt(Math.max(0, 1 - Math.pow(t, 3.5)))
+      const geo = bake(body(H, R, 0.94), '#FF3B5C')
+      paint(geo, (_x, y, _z, c) => {
+        const t = y / H
+        lerpC('#FF6F86', '#EF2B4E', smooth(0.0, 0.45, t), c)
+        lerpC('#' + c.getHexString(), '#FFB3B0', smooth(0.9, 1.0, t) * 0.8, c)
+      })
+      const seeds: ReturnType<typeof P.sphere>[] = []
+      for (let row = 0; row < 7; row++) {
+        const t = 0.12 + row * 0.12
+        const r = R(t) * 0.94
+        const n = Math.max(3, Math.round(r * 62))
+        for (let k = 0; k < n; k++) {
+          const a = ((k + (row % 2) * 0.5) / n - 0.5) * 2.5
+          seeds.push(P.sphere(0.0105, '#FFE58A', { at: [Math.sin(a) * R(t), t * H, Math.cos(a) * r * 0.99], rot: [0, a, 0], scale: [0.8, 1.3, 0.5] }, 6))
+        }
+      }
+      const leaves = [0, 1, 2, 3, 4, 5, 6].map((i) => {
+        const a = (i / 7) * Math.PI * 2
+        return P.sphere(0.05, '#4CBF7F', { at: [Math.cos(a) * 0.065, H - 0.005, Math.sin(a) * 0.065], scale: [1.7, 0.3, 0.7], rot: [0, -a, 0.3 + (i % 2) * 0.25] }, 8)
+      })
+      one([geo, ...leaves, P.cyl(0.012, 0.014, 0.05, '#3FA36B', { at: [0, H + 0.02, 0], rot: [0, 0, 0.15] }, 8)])
+      g.add(solid(merge(seeds), bag, 0))
       break
     }
     case 'watermelon': {
@@ -189,30 +288,34 @@ export function buildItem(id: ItemId, bag: Bag): Group {
       break
     }
     case 'banana': {
-      // A real curve: fat in the middle, narrowing to a brown tip at one end and a green-brown stem at the other.
-      const parts = []
-      const N = 11
-      for (let i = 0; i < N; i++) {
-        const t = i / (N - 1)
-        const a = -0.95 + t * 1.9
-        const r = 0.19
-        const w = 0.04 * Math.sin(Math.PI * (0.1 + t * 0.8)) + 0.012
-        parts.push(P.sphere(w, '#FFE15C', { at: [Math.sin(a) * r, 0.19 - Math.cos(a) * r + 0.06, 0], scale: [1.25, 1.25, 1] }, 10))
+      // One smooth curved banana with five soft ridges: a green-brown stem on the left, golden yellow, a brown tip.
+      const arcR = 0.2
+      const span = 0.95
+      const path = (t: number): [number, number] => {
+        const a = -span + t * span * 2
+        return [Math.sin(a) * arcR, 0.25 - Math.cos(a) * arcR]
       }
-      parts.push(P.sphere(0.018, '#6B4A2A', { at: [Math.sin(0.95) * 0.19 + 0.01, 0.19 - Math.cos(0.95) * 0.19 + 0.075, 0] }, 8))
-      parts.push(P.cyl(0.014, 0.02, 0.05, '#8A8A3A', { at: [-Math.sin(0.95) * 0.19 - 0.015, 0.19 - Math.cos(0.95) * 0.19 + 0.08, 0], rot: [0, 0, 0.9] }, 8))
-      one(parts)
-      g.add(solid(merge([P.box(0.1, 0.008, 0.006, '#E5C23E', { at: [0, 0.055, 0.038] })]), bag, 0))
+      const radius = (t: number) => 0.012 + 0.034 * Math.pow(Math.sin(Math.PI * Math.min(1, Math.max(0, (t - 0.1) / 0.85))), 0.65)
+      const geo = bake(tube(path, radius, 40, 15, 0.9), '#FFD83D')
+      paint(geo, (x, y, z, c) => {
+        const t = (Math.atan2(x, 0.25 - y) + span) / (span * 2)
+        lerpC('#FFD83D', '#FFEE88', smooth(0.0, 0.03, z) * 0.55, c)
+        lerpC('#' + c.getHexString(), '#9AA23A', 1 - smooth(0.08, 0.22, t), c)
+        lerpC('#' + c.getHexString(), '#5A3B22', smooth(0.94, 0.985, t), c)
+      })
+      one([geo])
       break
     }
-    case 'coconut':
-      // A hairy brown coconut with its three dark "eyes" and a few lighter fibres.
-      one([
-        P.sphere(0.115, '#8A5A3A', { at: [0, 0.115, 0] }, 20),
-        P.sphere(0.06, '#A97A54', { at: [-0.04, 0.16, 0.07], scale: [1.2, 0.8, 0.6] }, 8),
-        ...[[-0.04, 0.17], [0.04, 0.17], [0, 0.125]].map(([x, y]) => P.sphere(0.017, '#3B2418', { at: [x, y, 0.105 - Math.abs(x) * 0.2], scale: [1, 1, 0.5] }, 8)),
-      ])
+    case 'coconut': {
+      // A hairy brown coconut with mottled husk and its three dark "eyes" looking at her.
+      const geo = P.sphere(0.115, '#8A5A3A', { at: [0, 0.115, 0] }, 30)
+      paint(geo, (x, y, z, c) => {
+        const n = Math.sin(x * 70 + y * 20) * Math.sin(y * 65 - z * 30) + Math.sin(z * 80 + x * 40) * 0.5
+        lerpC('#7A4A2C', '#A9764A', 0.5 + n * 0.35, c)
+      })
+      one([geo, ...[[-0.032, 0.15], [0.032, 0.15], [0, 0.108]].map(([x, y]) => P.sphere(0.022, '#2E1A10', { at: [x, y, Math.sqrt(0.115 * 0.115 - x * x - (y - 0.115) ** 2)], scale: [1, 1, 0.5] }, 10))])
       break
+    }
     case 'tea':
       // A bag of Thai tea: orange, folded over at the top, with a leaf on it.
       one([P.rbox(0.15, 0.2, 0.08, 0.02, '#F07F22', { at: [0, 0.1, 0] }), P.rbox(0.16, 0.035, 0.085, 0.012, '#C85A12', { at: [0, 0.2, 0] }), P.sphere(0.035, '#5FC98F', { at: [0, 0.1, 0.042], scale: [0.6, 1.2, 0.2], rot: [0, 0, 0.5] })])
