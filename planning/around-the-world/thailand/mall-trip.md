@@ -816,7 +816,8 @@ matches Agong's house.
   checkered floor, big chairs and mirrors.
 - **The outfits** (worn like the boat trip's sun hat): vet scrubs and a cap, a barber's smock, a barista apron, boxing
   gloves and a headband.
-- **ICONSIAM:** the zig-zag glass front as folded panels, the river, a palm or two.
+- **ICONSIAM:** the zig-zag glass front as folded panels, the river, a palm or two. *Built 2026-10-22* (`iconsiam.ts`:
+  the tiers, the wooden roof, the gold crown, the 3D sign, the drop-off road).
 - **The Pizza Company:** a green booth and sign, a pizza on a stand, soda glasses, the waterfall's colors through the window.
 - **The silver Veloz:** a toy MPV with roof rails and the tail light bar. Seats for Mommy (at the wheel, on the right),
   Daddy and Kaylee in their `sit` pose.
@@ -1454,6 +1455,14 @@ small climbing toy, before Dad's photos.
    stand-in. Still open from the greyboxes' notes: the barber's kids get their own looks (they're a puppy, a pony and a
    panda for now), the mirror's reflection and a pile of hair on the floor, the hall's 4-by-3 Sky Pod wall vs the game's
    nine pods, and the Big Frame's boxer statue becoming the monkey coach.
+   *2026-10-22, ICONSIAM rebuilt from Dad's photo* (`activities/mall-trip/iconsiam.ts`, built from code, no model file):
+   the glass hall with warm light and two trees inside under the big wooden roof, shops either side, three folded glass
+   tiers stepping back (white slabs with little points, gold horns at the ends), the gold pointed crown with its silver
+   folds and dark triangle, and the sign: ICONSIAM in 3D white letters on a dark band with a gold strip, which pop up
+   one by one with a rising note as the car pulls in. The drop-off: Thai painted kerbs (red and white, yellow and white
+   along the drop-off), lane lines, arrows, a zebra crossing, a turning circle with a palm island by the river, lamps,
+   hedges with pink bougainvillea, the far pavement; the tower next door and a skyline across the river. The glimpse's
+   camera frames the whole front, the car to the crown's tip. Glimpse: 96 draw calls (138 before), about 180k triangles.
 9. **Voices, the full loop and QA** (layout-qa, then playtest-qa, scoped to `mall-trip`).
    *Voices built 2026-10-21:* every line is in `lines.ts` `L.mall` (one block per part: `hall`, `vet`, `barber`, `cafe`,
    `race`, `blocks`, `mountain`, `boxing`, `skypod`, `frame`, `pizza`, `trip`) and recorded (about 245 new clips).

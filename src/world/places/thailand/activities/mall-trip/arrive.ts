@@ -12,7 +12,7 @@
 //    member (the hall's buffalo in a red polo) stands behind the counter. Once her socks are on, the gate into the hall
 //    glows: tap it and in they go (`hall?from=in`).
 // No voices yet: the lines (words.ts) show in the guide's bubble.
-import { Color, Group, Mesh, MeshBasicMaterial, Vector3, type Object3D, type WebGLRenderer } from 'three'
+import { Color, Group, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds, wobble } from '../../../../../sdk'
 import type { Avatar } from '../../characters/avatar'
 import { buildAnimal, type Rig } from '../../characters/animal'
@@ -27,6 +27,7 @@ import { sfx } from '../../sfx'
 import { Stage, type AnchorSpot, type LegEvents } from '../../trip/legs/stage'
 import { buildVeloz, type Veloz } from '../../trip/vehicles/veloz'
 import { STAFF_LOOKS } from './hall/kids'
+import { buildDropOff, buildIconsiam, ICON } from './iconsiam'
 import { SOCK_COLORS, wearSocks } from './socks'
 import { W } from './words'
 
@@ -63,10 +64,9 @@ type Who = 'kaylee' | 'ji' | 'nick'
 // The three sets (meters), far apart along x so a cut never shows the others.
 const LX = 100
 const CX = 200
-/** The drop-off: the car stops at STOP; the glass front runs along FRONT_Z. */
+/** The drop-off: the car stops at STOP in its lane (ROAD_Z); the glass front is at ICON.frontZ (iconsiam.ts). */
 const STOP = 0.6
 const ROAD_Z = 1.3
-const FRONT_Z = -5.2
 /** In the lift: where they stand, the button panel by the doors. */
 const LIFT = { w: 2.6, d: 2.0, h: 2.7, button: new Vector3(LX + 0.95, 1.15, -0.93) }
 const LIFT_AT: Record<Who, [number, number]> = { kaylee: [LX + 0.38, 0.3], ji: [LX - 0.8, 0.0], nick: [LX - 0.15, -0.35] }
@@ -93,6 +93,8 @@ export class Arrive extends Stage {
   private staffLife: FaceLife
   private staffHop = 1
   private mall: Group
+  /** The sign's letters, popping up one by one as the car pulls in. */
+  private letters: Group[] = []
   private liftBox: Group
   private liftDoors: Group[]
   private liftK = 0
@@ -128,58 +130,28 @@ export class Arrive extends Stage {
     scene.background = new Color('#BFE6FF')
     this.rig.fov = 34
     // ---------------------------------------------------------------- the glimpse
+    // The drop-off road, the plaza and the river walk (iconsiam.ts).
+    scene.add(buildDropOff(bag))
     scene.add(
       solid(merge([
-        // The drop-off road, the kerb and the plaza in front of the glass.
-        P.box(40, 0.1, 30, '#C9C4DE', { at: [-4, -0.05, 14.4] }),
-        ...Array.from({ length: 8 }, (_, i) => P.box(1.4, 0.01, 0.14, PAL.butter, { at: [-14 + i * 4, 0.002, 3.6] })),
-        P.box(34, 0.16, 0.4, '#E6E0F2', { at: [0, 0.08, -0.6] }),
-        P.box(34, 0.1, 4.6, '#FFF7F0', { at: [0, -0.04, -3.0] }),
-        // The canopy over the doors, on two white posts.
-        P.rbox(7, 0.22, 2.4, 0.08, '#FFFFFF', { at: [0, 3.4, -3.9] }),
-        ...[-3.2, 3.2].map((x) => P.cyl(0.09, 0.09, 3.4, '#FFFFFF', { at: [x, 1.7, -2.9] })),
         // The river on the right (the Chao Phraya), its far bank, and a little longtail on it.
-        P.box(30, 0.06, 34, '#7CC7F0', { at: [31, -0.08, 0] }),
+        P.box(30, 0.06, 50, '#7CC7F0', { at: [31, -0.08, 7] }),
         P.box(30, 0.6, 3, '#8FD49A', { at: [31, 0.2, -18] }),
         P.rbox(2.2, 0.35, 0.6, 0.15, '#E8434F', { at: [20.5, 0.12, 1.5] }),
         P.box(0.08, 0.7, 0.08, PAL.ink, { at: [19.6, 0.5, 1.5] }),
-        // A railing along the river walk.
-        ...Array.from({ length: 11 }, (_, i) => P.box(0.06, 0.8, 0.06, '#FFFFFF', { at: [16.2, 0.4, -9 + i * 1.6] })),
-        P.box(0.08, 0.06, 16.2, '#FFFFFF', { at: [16.2, 0.8, -1] }),
       ]), bag, 1.5),
     )
-    // Palms: a trunk and a fan of leaves.
-    for (const [x, z] of [[-11, -1.8], [11.5, -1.6], [15.5, 1.2]]) {
+    // Palms: a trunk and a fan of leaves (one on the turning circle's island).
+    for (const [x, z] of [[-14.6, -2.2], [12.8, -2.4], [11.6, 4.0], [15.4, 9]]) {
       const p = solid(merge([P.cyl(0.13, 0.18, 4.2, '#C99A6E', { at: [0, 2.1, 0], rot: [0, 0, 0.08] }), ...Array.from({ length: 7 }, (_, i) => P.capsule(0.16, 1.5, '#5FCB8F', { at: [0.17 + Math.cos((i * Math.PI * 2) / 7) * 0.7, 4.15, Math.sin((i * Math.PI * 2) / 7) * 0.7], rot: [Math.sin((i * Math.PI * 2) / 7) * 1.1, 0, -Math.cos((i * Math.PI * 2) / 7) * 1.1], scale: [1, 1, 0.5] }))]), bag, 1.5)
       p.position.set(x, 0, z)
       scene.add(p)
     }
-    // The glass front: tall panels folded in and out along it, like baisri (banana leaves folded into offerings),
-    // white edges, a gold band at the top; it steps back as it goes up.
-    this.mall = new Group()
+    // ICONSIAM itself (iconsiam.ts): the folded glass tiers, the wooden roof over the doors, the sign, the gold crown.
+    const mall = buildIconsiam(bag)
+    this.mall = mall.root
+    this.letters = mall.letters
     this.mall.userData.pick = 'mall'
-    const glassA = bag.add(new MeshBasicMaterial({ color: '#8FCDEE' }))
-    const glassB = bag.add(new MeshBasicMaterial({ color: '#E3F4FF' }))
-    const frames: ReturnType<typeof P.box>[] = []
-    const PW = 1.5
-    for (let row = 0; row < 3; row++) {
-      const h = 3.4
-      const y = 1.7 + row * h
-      const back = row * 0.9
-      for (let i = -9; i < 9; i++) {
-        const x = (i + 0.5) * PW
-        const out = i % 2 === 0 ? 1 : -1
-        const panel = new Mesh(bag.add(P.box(PW * 1.04, h, 0.04, '#FFFFFF')), (i + row) % 2 ? glassA : glassB)
-        panel.position.set(x, y, FRONT_Z - back)
-        panel.rotation.y = out * 0.42
-        this.mall.add(panel)
-        frames.push(P.box(0.06, h, 0.08, '#FFFFFF', { at: [i * PW, y, FRONT_Z - back + 0.3] }))
-      }
-      frames.push(P.box(27.5, 0.18, 0.4, row === 2 ? PAL.gold : '#FFFFFF', { at: [0, y + h / 2, FRONT_Z - back + 0.2] }))
-    }
-    // The folded tips along the top, like the points of a baisri, in gold.
-    for (let i = -9; i < 9; i++) frames.push(P.prism([[-PW / 2, 0], [PW / 2, 0], [0, 1.1]], 0.12, i % 2 ? PAL.gold : '#FFE08A', { at: [(i + 0.5) * PW, 10.25, FRONT_Z - 1.8 + 0.2] }))
-    this.mall.add(solid(merge(frames), bag, 1.5))
     scene.add(this.mall)
     this.car = buildVeloz(bag)
     this.car.root.position.set(this.carX, 0, ROAD_Z)
@@ -608,6 +580,14 @@ export class Arrive extends Stage {
       this.carX = -22 + (STOP + 22) * (1 - (1 - k) ** 3)
       if (k >= 1 && this.doorGoal === 0) this.hopOut()
     }
+    // The sign's letters pop up one by one as the car pulls in, a note each: I, C, O, N, S, I, A, M.
+    for (const [i, l] of this.letters.entries()) {
+      const at = 0.35 + i * 0.13
+      if (ph === 'glimpse' && this.phaseT >= at && this.phaseT - dt < at) sounds.note(i + 2)
+      const k = ph === 'glimpse' ? clamp((this.phaseT - at) / 0.5) : 1
+      l.visible = k > 0
+      l.scale.setScalar(Math.max(0.001, 1 - wobble(k, 1.25)))
+    }
     this.car.root.position.x = this.carX
     for (const w of this.car.wheels) w.rotation.x = this.carX / 0.3
     this.car.body.position.y = ph === 'glimpse' && this.phaseT < 1.8 ? Math.abs(Math.sin(this.carX * 2.2)) * 0.012 : 0
@@ -721,7 +701,7 @@ export class Arrive extends Stage {
     // (On a step behind the counter, so she shows over it.)
     this.staff.root.position.y = 0.22 + bell(this.staffHop) * 0.2
     this.staff.armR.rotation.z = 0.4 + bell(this.staffHop) * 1.6
-    const look = ph === 'counter' || ph === 'in' ? (this.chartBusy ? tmp.set(CHART.x, 1.2, CHART.z) : tmp.copy(this.kaylee.root.position).setY(0.8)) : ph === 'glimpse' ? tmp.set(0, 4, FRONT_Z) : tmp.set(LX, LIFT.h - 0.3, -LIFT.d / 2)
+    const look = ph === 'counter' || ph === 'in' ? (this.chartBusy ? tmp.set(CHART.x, 1.2, CHART.z) : tmp.copy(this.kaylee.root.position).setY(0.8)) : ph === 'glimpse' ? tmp.set(0, ICON.sign.y + 0.6, ICON.sign.z) : tmp.set(LX, LIFT.h - 0.3, -LIFT.d / 2)
     for (const [id, c] of Object.entries(this.riders)) {
       if (id !== 'kaylee' || ph !== 'counter') c.lookAt(look.x, look.y, look.z)
       else c.lookAt(this.staff.root.position.x, 1.2, this.staff.root.position.z)
@@ -741,7 +721,8 @@ export class Arrive extends Stage {
   protected shot(): Shot {
     const tall = this.w < this.h
     const ph = this.phase
-    if (ph === 'glimpse') return tall ? { center: new Vector3(1.5, 3.4, -1.5), half: new Vector3(5.5, 4.4, 3), yaw: 12, pitch: 8, minDist: 8 } : { center: new Vector3(4.5, 3.4, -1.5), half: new Vector3(12.5, 3.8, 3), yaw: 12, pitch: 8, minDist: 8 }
+    // The glimpse: the whole front, from the car at the kerb up to the crown's tip, the sign in the middle.
+    if (ph === 'glimpse') return tall ? { center: new Vector3(1.0, 7.4, -2.5), half: new Vector3(7.8, 8.8, 3), yaw: 10, pitch: 8, minDist: 8 } : { center: new Vector3(2.0, 7.6, -2.5), half: new Vector3(14, 8.2, 3), yaw: 12, pitch: 8, minDist: 8 }
     if (ph === 'lift' || ph === 'up' || ph === 'open') return { center: new Vector3(LX, 1.3, -0.1), half: tall ? new Vector3(1.4, 1.35, 1) : new Vector3(1.55, 1.25, 1), yaw: 0, pitch: 8, minDist: 3 }
     // The counter: the rack on the left, the counter and the socks, the chart, the gate on the right.
     if (tall) return { center: new Vector3(CX + 0.4, 1.2, -0.9), half: new Vector3(3.6, 1.3, 1.8), yaw: 0, pitch: 16, minDist: 4 }
@@ -755,7 +736,7 @@ export class Arrive extends Stage {
       case 'veloz':
         return ph === 'glimpse' ? { at: this.car.root.getWorldPosition(new Vector3()).setY(1.2), r: 1.4 } : null
       case 'mall':
-        return ph === 'glimpse' ? { at: new Vector3(-6, 4.5, FRONT_Z), r: 1.2 } : null
+        return ph === 'glimpse' ? { at: new Vector3(0, ICON.sign.y + ICON.sign.h / 2, ICON.sign.z), r: 1.6 } : null
       case 'lift-button':
         return ph === 'lift' || ph === 'up' || ph === 'open' ? { at: LIFT.button.clone(), r: 0.2, glow: ph === 'lift', prio: 3 } : null
       case 'rack':
