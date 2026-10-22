@@ -1,7 +1,7 @@
 // The salon, modeled in code in the house's toon look (engine/geo.ts parts): a checkered floor, pale blue walls, the
 // big mirror in its bulb frame, the big chair (it pumps up and down and spins round), Kaylee's step stool, the waiting
 // bench, and the things to poke: the striped pole (it spins) and the jar of comb water (it bubbles). Greybox: shapes only.
-import { Group, type BufferGeometry } from 'three'
+import { BufferGeometry, Color, Float32BufferAttribute, Group } from 'three'
 import type { Bag } from '../../../../engine/dispose'
 import { merge, P, solid } from '../../../../engine/geo'
 import { PAL } from '../../../../engine/toon'
@@ -19,6 +19,38 @@ export interface Room {
   mirror: { glass: Group; shine: Group; bulbs: Group }
   pole: { root: Group; stripes: Group }
   jar: { root: Group; combs: Group }
+}
+
+/** A ribbon winding up a pole of radius `r` (`pitch` higher each turn, `h` tall), as one smooth strip hugging it, from
+ *  y0 to y1 (the pole's caps hide the ends). `turn` starts it part-way round. */
+function helix(r: number, pitch: number, h: number, y0: number, y1: number, turn: number, c: string): BufferGeometry {
+  const SEG = 24
+  const rr = r + 0.003
+  const color = new Color(c)
+  const pos: number[] = []
+  const nor: number[] = []
+  const col: number[] = []
+  const at = (k: number) => {
+    const a = (k / SEG) * Math.PI * 2
+    return { s: Math.sin(a), c: Math.cos(a), y: y0 - h / 2 + (k / SEG + turn) * pitch }
+  }
+  const steps = Math.ceil(((y1 - y0 + h) / pitch) * SEG)
+  for (let k = 0; k < steps; k++) {
+    const A = at(k)
+    const B = at(k + 1)
+    // Bottom-left, bottom-right, top-right, then bottom-left, top-right, top-left: facing out.
+    for (const [q, dy] of [[A, -h / 2], [B, -h / 2], [B, h / 2], [A, -h / 2], [B, h / 2], [A, h / 2]] as const) {
+      // (Flattened at the ends, which the caps hide.)
+      pos.push(rr * q.s, Math.max(y0 + 0.04, Math.min(y1 - 0.04, q.y + dy)), rr * q.c)
+      nor.push(q.s, 0, q.c)
+      col.push(color.r, color.g, color.b)
+    }
+  }
+  const g = new BufferGeometry()
+  g.setAttribute('position', new Float32BufferAttribute(pos, 3))
+  g.setAttribute('normal', new Float32BufferAttribute(nor, 3))
+  g.setAttribute('color', new Float32BufferAttribute(col, 3))
+  return g
 }
 
 export function buildRoom(bag: Bag): Room {
@@ -108,24 +140,14 @@ export function buildRoom(bag: Bag): Room {
     P.cyl(0.12, 0.12, 0.08, CHROME, { at: [0, -0.48, 0] }),
     P.box(0.06, 0.06, 0.2, CHROME, { at: [0, 0, -0.12] }),
   ]), bag, 2))
-  // The stripes are real helixes (a red and a blue ribbon round a white core): turning the whole group makes them
-  // climb the pole, like the real thing, instead of tilted rings wobbling round.
+  // The stripes are real spirals (a red and a blue ribbon round a white core): turning the whole group makes them climb
+  // the pole, like the real thing, instead of tilted rings wobbling round.
   const stripes = new Group()
-  const R = 0.095
-  const PITCH = 0.32
-  const SEG = 14
-  const slope = Math.atan(PITCH / (2 * Math.PI * R))
-  const ribbon: BufferGeometry[] = [P.cyl(R, R, 0.96, '#FFFFFF', { at: [0, 0, 0] }, 20)]
-  for (const [c, off] of [['#FF6B6B', 0], ['#74C0FC', 0.5]] as const) {
-    for (let k = 0; ; k++) {
-      const turns = k / SEG
-      const y = -0.4 + (turns + off) * PITCH
-      if (y > 0.4) break
-      const a = turns * 2 * Math.PI
-      ribbon.push(P.box(0.052, 0.1, 0.02, c, { at: [(R + 0.004) * Math.sin(a), y, (R + 0.004) * Math.cos(a)], rot: [0, a, slope] }))
-    }
-  }
-  stripes.add(solid(merge(ribbon), bag, 2))
+  stripes.add(solid(merge([
+    P.cyl(0.095, 0.095, 0.96, '#FFFFFF', { at: [0, 0, 0] }, 24),
+    helix(0.095, 0.32, 0.08, -0.5, 0.5, 0, '#FF6B6B'),
+    helix(0.095, 0.32, 0.08, -0.5, 0.5, 0.5, '#74C0FC'),
+  ]), bag, 2))
   pole.add(stripes)
   root.add(pole)
 

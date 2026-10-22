@@ -113,6 +113,7 @@ export class Salon extends Stage {
   private sparkles: Floaters
   private mist: Floaters
   private horn: { g: Object3D; k: number }
+  private cape: Object3D
   private spinGoal = 0
   private spinFrom = 0
   private spinT = 1
@@ -152,11 +153,13 @@ export class Salon extends Stage {
     this.put(this.nick, 0, CHAIR.seat, 0, 'sit', 0)
     const nr = this.nick.rig
     const H = nr.height
-    nr.body.add(solid(merge([
+    // The barber's cape (it comes off when he leaves the chair, or it looks like a dress).
+    this.cape = solid(merge([
       P.cone(0.36 * H, 0.42 * H, '#FFFFFF', { at: [0, 0.27 * H, 0.02 * H] }, 24),
       P.torus(0.07 * H, 0.018 * H, PAL.hotpink, { at: [0, 0.47 * H, 0.02 * H], rot: [Math.PI / 2, 0, 0] }),
       ...[-1, 0, 1].map((s) => P.sphere(0.022 * H, PAL.pink, { at: [s * 0.12 * H, 0.28 * H, 0.26 * H], scale: [1, 1, 0.4] })),
-    ]), bag, 2.5))
+    ]), bag, 2.5)
+    nr.body.add(this.cape)
     // His horn, on its own (a snip makes it boing): a copy sitting just over the toy's own.
     const R = nr.face.R
     const horn = solid(P.cone(0.155 * R, 0.8 * R, '#FFC83D', { at: [0, 0.4 * R, 0] }), bag, 2.5)
@@ -202,11 +205,20 @@ export class Salon extends Stage {
   /** Daddy hops out of the chair onto the waiting bench (with his new look). */
   private benchDaddy(now = false) {
     this.dadOnBench = true
+    this.takeOffCape(!now)
     const to = new Vector3(BENCH.spots[0], BENCH.sit, BENCH.z)
     if (now) {
       this.scene.add(this.nick.root)
       this.put(this.nick, to.x, to.y, to.z, 'sit', 0)
     } else this.hop(this.nick, this.scene, to, { pose: 'sit', dur: 0.6, arc: 0.6 })
+  }
+
+  /** The cape comes off with a whisk and a puff of sparkles (`puff`: not when he's already on the bench). */
+  private takeOffCape(puff: boolean) {
+    this.cape.visible = false
+    if (!puff) return
+    this.play(sfx.whoosh)
+    this.sparkles.burst(this.nick.root.getWorldPosition(new Vector3()).add(new Vector3(0, 0.5 * this.nick.rig.height, 0.2)), 12, 1, 1, 0.7, 0.05)
   }
 
   /** The next kid comes in from the door and hops up into the chair, holding up a picture card. */
@@ -833,7 +845,7 @@ export class Salon extends Stage {
     this.snipK = Math.min(1, this.snipK + dt / 0.14)
     for (const tl of this.tools.values()) {
       if (!tl.blades) continue
-      const open = tl === tool ? 0.1 + 0.32 * bell(Math.min(1, 0.3 + this.snipK * 0.7)) : 0.25
+      const open = tl === tool ? 0.1 + 0.32 * bell(Math.min(1, 0.3 + this.snipK * 0.7)) : 0.28
       tl.blades[0].rotation.z = open
       tl.blades[1].rotation.z = -open
     }

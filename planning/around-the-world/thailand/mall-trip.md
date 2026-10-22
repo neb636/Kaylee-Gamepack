@@ -956,6 +956,12 @@ small climbing toy, before Dad's photos.
    - **`hair`:** the screen saves Daddy's hairdo after each stroke. The hall's Daddy (who follows her) and the pizza
      table's wear it (`wearHair`). The barber's door in the hall opens now (no more teaser puff), and the sock band has
      a 💈 slot (its sticker after the first reveal).
+   - **Look pass after Dad's first play (2026-10-22):** the scissors and comb are flat cut-outs (`tools.ts` `cutout()`:
+     an outline pushed along z with a rounded edge, so a ring has a real hole and the comb is one shape with tapering
+     teeth; thin gaps close up under the ink line, so keep teeth gaps wide). The scissors' two rings are bent outward
+     because turning a blade swings its ring back over the other. Mommy and Daddy sit on the bench top (`BENCH.sit`:
+     the seat plus the sit pose's sink), and Daddy's cape comes off when he hops out (`takeOffCape`, or it reads as a
+     dress). The pole's stripes are a smooth spiral (`room.ts` `helix()`), so turning it makes them climb.
    - **Next:** Dad plays it on the iPad. Then the art gate (the kids' real looks, the mirror's reflection, a hair-pile
      on the floor). Home reads `hair` when it's built (Agong laughs).
    - **Voices in** (`lines.ts` `L.mall.barber`, 26 lines; clips still to generate): Daddy's "I want a new look,
