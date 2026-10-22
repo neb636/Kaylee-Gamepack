@@ -41,27 +41,36 @@ export function buildTool(item: TrayItem, bag: Bag): Tool {
       tool.lift = 0.06
     },
     scissors: () => {
-      // Two blades crossing at the origin (each its own pivot, so they snip), pink finger rings above.
+      // Two chunky steel blades crossing at the origin (each its own pivot, so they snip): the blade points down, a short
+      // neck runs up past the pivot to a big pink finger ring, the rings spread apart like real scissors.
       const blade = (s: number) => {
         const g = solid(merge([
-          P.cone(0.022, 0.16, STEEL, { at: [0, -0.07, 0], rot: [Math.PI, 0, 0], scale: [1, 1, 0.4] }),
-          P.cyl(0.012, 0.012, 0.12, STEEL, { at: [s * 0.03, 0.06, 0], rot: [0, 0, s * 0.45] }),
-          P.torus(0.04, 0.014, PAL.hotpink, { at: [s * 0.065, 0.14, 0] }),
-        ]), bag, 2)
+          // The blade: a flat tapering wedge, wide at the pivot, pointing down, with a bright edge.
+          P.cone(0.07, 0.27, STEEL, { at: [s * 0.012, -0.12, 0], rot: [Math.PI, 0, 0], scale: [1, 1, 0.3] }, 4),
+          P.box(0.012, 0.2, 0.016, '#FFFFFF', { at: [-s * 0.012, -0.1, 0.012] }),
+          // The neck up to the ring.
+          P.box(0.032, 0.14, 0.03, STEEL, { at: [-s * 0.012, 0.07, 0], rot: [0, 0, -s * 0.2] }),
+          // The ring, a fat pink loop facing her.
+          P.torus(0.055, 0.02, PAL.hotpink, { at: [-s * 0.05, 0.19, 0] }, 14),
+        ]), bag, 1.5)
         return add(g)
       }
       tool.blades = [blade(-1), blade(1)]
-      add(solid(P.sphere(0.018, PAL.gold, { at: [0, 0, 0.01] }), bag, 1.5))
-      tool.lift = 0.12
+      add(solid(P.sphere(0.03, PAL.gold, { at: [0, 0, 0.025], scale: [1, 1, 0.6] }), bag, 1.5))
+      tool.lift = 0.2
       tool.lean = 0
     },
     comb: () => {
-      // A wide pink comb, teeth down.
+      // A chunky pink barber's comb, teeth down: a fat rounded spine with a white stripe and a heart, and a few thick
+      // teeth (thin ones just turn into outline), the end ones a little longer.
+      const n = 7
       add(solid(merge([
-        P.rbox(0.3, 0.06, 0.025, 0.015, '#FF8FB8', { at: [0, 0.07, 0] }),
-        ...Array.from({ length: 9 }, (_, i) => P.box(0.014, 0.07, 0.018, '#FF8FB8', { at: [-0.13 + i * 0.0325, 0.01, 0] })),
+        P.rbox(0.32, 0.09, 0.04, 0.04, '#FF8FB8', { at: [0, 0.1, 0] }),
+        P.rbox(0.28, 0.018, 0.045, 0.008, '#FFFFFF', { at: [0, 0.12, 0.004] }),
+        P.sphere(0.022, PAL.hotpink, { at: [0, 0.085, 0.022], scale: [1, 1, 0.4] }),
+        ...Array.from({ length: n }, (_, i) => P.rbox(0.032, 0.1, 0.034, 0.012, '#FF8FB8', { at: [-0.135 + i * (0.27 / (n - 1)), 0.015 - (i === 0 || i === n - 1 ? 0.02 : 0), 0] })),
       ]), bag, 2))
-      tool.lift = 0.04
+      tool.lift = 0.06
       tool.lean = 0
     },
     spray: () => {

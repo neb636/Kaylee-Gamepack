@@ -1,7 +1,7 @@
 // The salon, modeled in code in the house's toon look (engine/geo.ts parts): a checkered floor, pale blue walls, the
 // big mirror in its bulb frame, the big chair (it pumps up and down and spins round), Kaylee's step stool, the waiting
 // bench, and the things to poke: the striped pole (it spins) and the jar of comb water (it bubbles). Greybox: shapes only.
-import { Group } from 'three'
+import { Group, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../engine/dispose'
 import { merge, P, solid } from '../../../../engine/geo'
 import { PAL } from '../../../../engine/toon'
@@ -108,10 +108,24 @@ export function buildRoom(bag: Bag): Room {
     P.cyl(0.12, 0.12, 0.08, CHROME, { at: [0, -0.48, 0] }),
     P.box(0.06, 0.06, 0.2, CHROME, { at: [0, 0, -0.12] }),
   ]), bag, 2))
+  // The stripes are real helixes (a red and a blue ribbon round a white core): turning the whole group makes them
+  // climb the pole, like the real thing, instead of tilted rings wobbling round.
   const stripes = new Group()
-  const bands = []
-  for (let i = 0; i < 9; i++) bands.push(P.cyl(0.095, 0.095, 0.1, ['#FF6B6B', '#FFFFFF', '#74C0FC'][i % 3], { at: [0, -0.4 + i * 0.1, 0], rot: [0, 0, 0.35] }, 14))
-  stripes.add(solid(merge(bands), bag, 2))
+  const R = 0.095
+  const PITCH = 0.32
+  const SEG = 14
+  const slope = Math.atan(PITCH / (2 * Math.PI * R))
+  const ribbon: BufferGeometry[] = [P.cyl(R, R, 0.96, '#FFFFFF', { at: [0, 0, 0] }, 20)]
+  for (const [c, off] of [['#FF6B6B', 0], ['#74C0FC', 0.5]] as const) {
+    for (let k = 0; ; k++) {
+      const turns = k / SEG
+      const y = -0.4 + (turns + off) * PITCH
+      if (y > 0.4) break
+      const a = turns * 2 * Math.PI
+      ribbon.push(P.box(0.052, 0.1, 0.02, c, { at: [(R + 0.004) * Math.sin(a), y, (R + 0.004) * Math.cos(a)], rot: [0, a, slope] }))
+    }
+  }
+  stripes.add(solid(merge(ribbon), bag, 2))
   pole.add(stripes)
   root.add(pole)
 

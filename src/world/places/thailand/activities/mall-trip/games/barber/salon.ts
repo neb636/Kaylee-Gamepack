@@ -147,7 +147,7 @@ export class Salon extends Stage {
     kaylee.wear(['smock'])
     scene.add(kaylee.root, this.ji.root)
     this.put(kaylee, STOOL.x, STOOL.top, STOOL.z, 'stand', KAYLEE_FACE)
-    this.put(this.ji, MOMMY.x, BENCH.seat, MOMMY.z, 'sit', MOMMY.face)
+    this.put(this.ji, MOMMY.x, BENCH.sit, MOMMY.z, 'sit', MOMMY.face)
     this.room.chair.spin.add(this.nick.root)
     this.put(this.nick, 0, CHAIR.seat, 0, 'sit', 0)
     const nr = this.nick.rig
@@ -202,7 +202,7 @@ export class Salon extends Stage {
   /** Daddy hops out of the chair onto the waiting bench (with his new look). */
   private benchDaddy(now = false) {
     this.dadOnBench = true
-    const to = new Vector3(BENCH.spots[0], BENCH.seat, BENCH.z)
+    const to = new Vector3(BENCH.spots[0], BENCH.sit, BENCH.z)
     if (now) {
       this.scene.add(this.nick.root)
       this.put(this.nick, to.x, to.y, to.z, 'sit', 0)
@@ -902,7 +902,7 @@ export class Salon extends Stage {
     // ---- Pokeables ----
     const r = this.room
     this.pole = Math.max(0, this.pole - dt * 0.4)
-    r.pole.stripes.rotation.y += dt * (1.2 + 9 * this.pole)
+    r.pole.stripes.rotation.y -= dt * (1.0 + 5 * this.pole)
     this.jarK = Math.min(1, this.jarK + dt / 0.8)
     r.jar.combs.position.y = bell(this.jarK) * 0.12
     r.jar.combs.rotation.z = Math.sin(this.jarK * 18) * 0.2 * (1 - this.jarK)
