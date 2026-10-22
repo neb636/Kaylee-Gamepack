@@ -2,8 +2,9 @@
 // fx.ts) and given a color per particle, since a drink can be any color she blends:
 //   - Floaters fly free and fade: drops off the stream, steam, hearts, sparkles, frost round Daddy's head.
 //   - Splats stick where they land (the ceiling beam, the wall) and slowly shrink away.
-import { Color, DynamicDrawUsage, IcosahedronGeometry, InstancedMesh, Matrix4, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
+import { Color, DynamicDrawUsage, Euler, IcosahedronGeometry, InstancedMesh, Matrix4, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
 import type { Bag } from '../../../../engine/dispose'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { merge, P } from '../../../../engine/geo'
 import { toon } from '../../../../engine/toon'
 
@@ -90,6 +91,31 @@ export class Floaters {
   }
 }
 
+/** A splatter, about 1 unit across and flat on the wall: a lumpy middle, fat arms flung out, a few drips and dots. */
+export function splatGeometry(): BufferGeometry {
+  const blobs: [number, number, number, number, number][] = [] // x, y, rx, ry, rotation
+  blobs.push([0, 0, 0.55, 0.5, 0.3], [0.12, -0.08, 0.45, 0.5, 1], [-0.14, 0.1, 0.42, 0.4, 2])
+  const arms = 7
+  for (let i = 0; i < arms; i++) {
+    const a = (i / arms) * Math.PI * 2 + 0.4 + Math.sin(i * 2.3) * 0.25
+    const len = 0.55 + ((i * 37) % 10) / 10 * 0.4
+    blobs.push([Math.cos(a) * len * 0.6, Math.sin(a) * len * 0.6, len * 0.42, 0.17 + (i % 3) * 0.04, a])
+    // a round tip, then a dot beyond it
+    blobs.push([Math.cos(a) * len * 0.95, Math.sin(a) * len * 0.95, 0.15, 0.15, a])
+    if (i % 2 === 0) blobs.push([Math.cos(a + 0.12) * (len + 0.28), Math.sin(a + 0.12) * (len + 0.28), 0.07, 0.07, a])
+  }
+  // one long drip straight down
+  blobs.push([0.05, -0.75, 0.1, 0.3, Math.PI / 2], [0.05, -1.05, 0.12, 0.12, 0])
+  return mergeGeometries(
+    blobs.map(([x, y, rx, ry, r]) => {
+      const g = new IcosahedronGeometry(1, 1)
+      g.deleteAttribute('uv')
+      g.applyMatrix4(new Matrix4().compose(new Vector3(x, y, 0), new Quaternion().setFromEuler(new Euler(0, 0, r)), new Vector3(rx, ry, 0.35)))
+      return g
+    }),
+  )!
+}
+
 interface S {
   p: Vector3
   size: number
@@ -105,7 +131,7 @@ export class Splats {
   private list: S[] = []
 
   constructor(private max: number, bag: Bag, private life = 22) {
-    this.mesh = bag.add(new InstancedMesh(bag.add(new IcosahedronGeometry(1, 1)), toon('#ffffff'), max))
+    this.mesh = bag.add(new InstancedMesh(bag.add(splatGeometry()), toon('#ffffff'), max))
     this.mesh.instanceMatrix.setUsage(DynamicDrawUsage)
     this.mesh.frustumCulled = false
     for (let i = 0; i < max; i++) this.mesh.setColorAt(i, new Color('#ffffff'))
@@ -135,7 +161,7 @@ export class Splats {
       const fade = Math.min(1, (this.life - s.age) / 1.5)
       const r = s.size * s.k * fade * (1 + Math.sin(s.age * 9) * 0.06 * Math.exp(-s.age))
       q.setFromAxisAngle(Z, s.rot)
-      m.compose(s.p, q, scl.set(r, r * 0.85, r * 0.2))
+      m.compose(s.p, q, scl.set(r, r, r * 0.3))
       this.mesh.setMatrixAt(n, m)
       this.mesh.setColorAt(n++, s.c)
     }

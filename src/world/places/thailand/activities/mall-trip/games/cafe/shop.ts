@@ -829,7 +829,7 @@ export class CafeStage extends Stage {
       const x = BLENDER[0] + (Math.random() - 0.5) * (0.6 + amount * 1.6)
       const onBeam = Math.random() < 0.7
       const at = onBeam ? new Vector3(x, BEAM.y0 + 0.02 + Math.random() * (BEAM.y1 - BEAM.y0 - 0.04), BEAM.z + 0.155) : new Vector3(x * 1.2, 1.5 + Math.random() * 0.35, ROOM.back + 0.01)
-      this.after(0.08 + Math.random() * 0.12, () => this.splats.add(at, 0.035 + Math.random() * 0.07, cols[i % cols.length]))
+      this.after(0.08 + Math.random() * 0.12, () => this.splats.add(at, 0.07 + Math.random() * 0.1, cols[i % cols.length]))
     }
     for (let i = 0; i < 40; i++) this.drops.emit(mouth, new Vector3((Math.random() - 0.5) * 1.6, 5 + Math.random() * 2.5, (Math.random() - 0.5) * 0.4), 1.1, 0.03 + Math.random() * 0.03, cols[i % cols.length])
     this.play(sfx.splat)
