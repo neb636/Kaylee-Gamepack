@@ -1258,5 +1258,1244 @@
     "sig": "ed7dbdac3d",
     "ms": 2722,
     "file": "84fa172ff8f5.mp3"
+  },
+  {
+    "text": "Welcome to HarborLand, Kaylee! Tap a place to play!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4646,
+    "file": "bbc06dfbbf04.mp3"
+  },
+  {
+    "text": "Sawasdee ka, Kaylee!",
+    "voice": "staff",
+    "sig": "3efe47c973",
+    "ms": 2258,
+    "file": "3682641d68cf.mp3"
+  },
+  {
+    "text": "Have fun!",
+    "voice": "staff",
+    "sig": "3efe47c973",
+    "ms": 900,
+    "file": "0234f49f1ae0.mp3"
+  },
+  {
+    "text": "Hi, sweetie!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1219,
+    "file": "da5da158c5c0.mp3"
+  },
+  {
+    "text": "Have fun, Kaylee!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1820,
+    "file": "dc10d47f5bf8.mp3"
+  },
+  {
+    "text": "Mommy is right here!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1827,
+    "file": "2590d8f7a274.mp3"
+  },
+  {
+    "text": "Where to next, Kaylee?",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1666,
+    "file": "b679889a0896.mp3"
+  },
+  {
+    "text": "Daddy is coming too!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1803,
+    "file": "079701515f97.mp3"
+  },
+  {
+    "text": "Ho ho! Go play!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1507,
+    "file": "0178244de7b1.mp3"
+  },
+  {
+    "text": "My tummy is rumbling!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1819,
+    "file": "6c56a2945498.mp3"
+  },
+  {
+    "text": "Hungry, Kaylee? Pizza time?",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2486,
+    "file": "74c274c062cb.mp3"
+  },
+  {
+    "text": "OK! A little more!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2217,
+    "file": "025eb05682d2.mp3"
+  },
+  {
+    "text": "Tap a door to play!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1767,
+    "file": "98f64f783a8e.mp3"
+  },
+  {
+    "text": "Doctor Kaylee is here!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1676,
+    "file": "22e4e14a8f74.mp3"
+  },
+  {
+    "text": "A puppy with a sore paw! Grab a tool!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3318,
+    "file": "6e4187e4fe75.mp3"
+  },
+  {
+    "text": "A muddy pony! Bath time!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2914,
+    "file": "4e9353666165.mp3"
+  },
+  {
+    "text": "A baby elephant with a sniffly trunk!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3325,
+    "file": "b38e0184c6c5.mp3"
+  },
+  {
+    "text": "Bless you!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 998,
+    "file": "96a812dcc9c0.mp3"
+  },
+  {
+    "text": "Look! He's wagging!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1687,
+    "file": "7e22c77d63ff.mp3"
+  },
+  {
+    "text": "So shiny and pretty!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1535,
+    "file": "91569f4089d8.mp3"
+  },
+  {
+    "text": "Bye bye, little elephant!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2124,
+    "file": "293ba63ed2e4.mp3"
+  },
+  {
+    "text": "Everyone is better! Thank you, Doctor Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3458,
+    "file": "fb20b2e220ce.mp3"
+  },
+  {
+    "text": "Ba-boom! Ba-boom!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 3376,
+    "file": "67f2014f9d69.mp3"
+  },
+  {
+    "text": "My heart is so big!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1834,
+    "file": "09685a597b24.mp3"
+  },
+  {
+    "text": "Am I hot? Ha ha!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2231,
+    "file": "fbd5dfa9bbd9.mp3"
+  },
+  {
+    "text": "Hey! That tickles!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2111,
+    "file": "144a0a3bb615.mp3"
+  },
+  {
+    "text": "Do I look pretty?",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1268,
+    "file": "dbc62b242ea3.mp3"
+  },
+  {
+    "text": "Bleh! Yucky!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1741,
+    "file": "5900282e82b3.mp3"
+  },
+  {
+    "text": "Honk! Ha ha!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2154,
+    "file": "3966db4e7ef6.mp3"
+  },
+  {
+    "text": "Listen to its heart!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1517,
+    "file": "61a7a50d1a36.mp3"
+  },
+  {
+    "text": "The thermometer goes in its mouth!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2639,
+    "file": "cebde22c1518.mp3"
+  },
+  {
+    "text": "Pull out the thorn with the tweezers!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2508,
+    "file": "0e7947f27c66.mp3"
+  },
+  {
+    "text": "Rub cream on the sore paw!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1852,
+    "file": "152b55c27c0a.mp3"
+  },
+  {
+    "text": "Wrap a bandage round the paw!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2450,
+    "file": "aa10e69e9630.mp3"
+  },
+  {
+    "text": "Rub on lots of soap!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1672,
+    "file": "9375c32bd9f6.mp3"
+  },
+  {
+    "text": "Shower it with water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1836,
+    "file": "eb702d44c7ef.mp3"
+  },
+  {
+    "text": "Dry it with the towel!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1573,
+    "file": "11901c5443a0.mp3"
+  },
+  {
+    "text": "Brush the mane!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1508,
+    "file": "8d67e1b38efa.mp3"
+  },
+  {
+    "text": "Put a bow on top!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1604,
+    "file": "a8ef71af0e72.mp3"
+  },
+  {
+    "text": "Give it the medicine spoon!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2092,
+    "file": "f2b794db2e31.mp3"
+  },
+  {
+    "text": "A tissue for its trunk!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2266,
+    "file": "0fdae4128dd8.mp3"
+  },
+  {
+    "text": "The elephant is Thailand's animal!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3294,
+    "file": "8debcd91bdb6.mp3"
+  },
+  {
+    "text": "An x-ray shows the bones inside!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3319,
+    "file": "de75f7697b3f.mp3"
+  },
+  {
+    "text": "I want a new look, Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1316,
+    "file": "53ab5ecc7f6d.mp3"
+  },
+  {
+    "text": "Grab a tool and do his hair!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2341,
+    "file": "3a0c1da9447c.mp3"
+  },
+  {
+    "text": "Now colors and the hair dryer!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2758,
+    "file": "888c0175a4d5.mp3"
+  },
+  {
+    "text": "Copy the picture!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2001,
+    "file": "39dec9e60a62.mp3"
+  },
+  {
+    "text": "Spiky, please!",
+    "voice": "kid",
+    "sig": "c6e9fa2472",
+    "ms": 1939,
+    "file": "c146649b6944.mp3"
+  },
+  {
+    "text": "Pigtails, please!",
+    "voice": "kid",
+    "sig": "c6e9fa2472",
+    "ms": 1374,
+    "file": "b56b488fa832.mp3"
+  },
+  {
+    "text": "Curly, please!",
+    "voice": "kid",
+    "sig": "c6e9fa2472",
+    "ms": 1739,
+    "file": "49274da3320a.mp3"
+  },
+  {
+    "text": "Tap the mirror!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1383,
+    "file": "b7b022333646.mp3"
+  },
+  {
+    "text": "Whoa! I love it!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2345,
+    "file": "1d72e599ddd4.mp3"
+  },
+  {
+    "text": "So handsome! I love it!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1523,
+    "file": "cc7b5789f1d1.mp3"
+  },
+  {
+    "text": "Close enough!",
+    "voice": "kid",
+    "sig": "c6e9fa2472",
+    "ms": 1253,
+    "file": "443e536184c6.mp3"
+  },
+  {
+    "text": "Close enough! So pretty!",
+    "voice": "kid",
+    "sig": "c6e9fa2472",
+    "ms": 2110,
+    "file": "2be8deffd514.mp3"
+  },
+  {
+    "text": "Close enough! Yay!",
+    "voice": "kid",
+    "sig": "c6e9fa2472",
+    "ms": 2240,
+    "file": "74836e3f486b.mp3"
+  },
+  {
+    "text": "Say cheese!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1084,
+    "file": "2001bb73e7ee.mp3"
+  },
+  {
+    "text": "Great haircuts, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1746,
+    "file": "1076a6b1446a.mp3"
+  },
+  {
+    "text": "Hey! My horn!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1634,
+    "file": "3f64bde94609.mp3"
+  },
+  {
+    "text": "My eyebrows!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1462,
+    "file": "09255a93f928.mp3"
+  },
+  {
+    "text": "Whoa! My hair!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1905,
+    "file": "084d15aa40e5.mp3"
+  },
+  {
+    "text": "Squirt the grow tonic on his hair!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3021,
+    "file": "a07566db7f9a.mp3"
+  },
+  {
+    "text": "Snip, snip with the scissors!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2671,
+    "file": "3a27f5a25304.mp3"
+  },
+  {
+    "text": "Comb it up for spikes!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2231,
+    "file": "a35aa769ef05.mp3"
+  },
+  {
+    "text": "Spray on some colors!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2033,
+    "file": "49517484e095.mp3"
+  },
+  {
+    "text": "Try the hair dryer!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1392,
+    "file": "afe1702223ca.mp3"
+  },
+  {
+    "text": "Put in a bow!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1192,
+    "file": "a8772c232306.mp3"
+  },
+  {
+    "text": "Put in a clip!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1883,
+    "file": "3c0430f1a52c.mp3"
+  },
+  {
+    "text": "A spinning pole means haircuts here!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2883,
+    "file": "513f268c1512.mp3"
+  },
+  {
+    "text": "Drop fruit in the blender!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2036,
+    "file": "cc0f3c25b72f.mp3"
+  },
+  {
+    "text": "I'm thirsty, Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1654,
+    "file": "4ffced74a96a.mp3"
+  },
+  {
+    "text": "Press the pink button!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1940,
+    "file": "d8851cd7b82f.mp3"
+  },
+  {
+    "text": "Lift the jar and pour it in the cup!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2633,
+    "file": "16e2c6c08167.mp3"
+  },
+  {
+    "text": "Make the drink in the bubble!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2132,
+    "file": "054f7ee14512.mp3"
+  },
+  {
+    "text": "Pink, please!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1326,
+    "file": "2b31c5cf32ba.mp3"
+  },
+  {
+    "text": "Yellow, please!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1339,
+    "file": "ef4c917c2682.mp3"
+  },
+  {
+    "text": "Thai drinks! Two cups at once!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3355,
+    "file": "739f16c4f798.mp3"
+  },
+  {
+    "text": "Cha yen, please!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2003,
+    "file": "aea326e1a4af.mp3"
+  },
+  {
+    "text": "Yum! Thank you, Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2330,
+    "file": "bb731f3f80ff.mp3"
+  },
+  {
+    "text": "Mmm! Just right!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2324,
+    "file": "b181d9de5cb6.mp3"
+  },
+  {
+    "text": "Delicious, sweetie!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1767,
+    "file": "9b7870ec936b.mp3"
+  },
+  {
+    "text": "Mmm! Yummy!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1946,
+    "file": "c811b3c42020.mp3"
+  },
+  {
+    "text": "A funny color! But yum!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2090,
+    "file": "93c786af8d86.mp3"
+  },
+  {
+    "text": "Surprise! Yummy!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2109,
+    "file": "1a066a842d2e.mp3"
+  },
+  {
+    "text": "Brrr! Brain freeze!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2357,
+    "file": "7b5fe348e0d8.mp3"
+  },
+  {
+    "text": "Splat! Ha ha!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1874,
+    "file": "41a6a8c99955.mp3"
+  },
+  {
+    "text": "My coffee! Thank you!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1805,
+    "file": "c9d1158ef95f.mp3"
+  },
+  {
+    "text": "Khob khun ka, sweetie!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 3050,
+    "file": "24a49b91dd04.mp3"
+  },
+  {
+    "text": "Best cafe ever, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2522,
+    "file": "ea47987cfc35.mp3"
+  },
+  {
+    "text": "Put a straw in the cup!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1466,
+    "file": "9b91e0bd5cb6.mp3"
+  },
+  {
+    "text": "Pour the milk on top!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2870,
+    "file": "7c22657ffa18.mp3"
+  },
+  {
+    "text": "Lift the jar and pour!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2605,
+    "file": "8d1263aa45aa.mp3"
+  },
+  {
+    "text": "Drop some fruit in!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1731,
+    "file": "625bed210b5b.mp3"
+  },
+  {
+    "text": "Drop in the fruit from the bubble!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2746,
+    "file": "bc32e13278f0.mp3"
+  },
+  {
+    "text": "Put in the Thai tea!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2407,
+    "file": "d116a33cfc6f.mp3"
+  },
+  {
+    "text": "Cha yen is Thai iced tea! It's orange!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4447,
+    "file": "0fcba8f0015f.mp3"
+  },
+  {
+    "text": "A slide race, Kaylee! Tap the steps to climb!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3776,
+    "file": "29d95b701b28.mp3"
+  },
+  {
+    "text": "Race you, Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1507,
+    "file": "98dcb5380823.mp3"
+  },
+  {
+    "text": "Tap, tap, tap to go fast!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2692,
+    "file": "31baf8353bfa.mp3"
+  },
+  {
+    "text": "Now tap at each bump to fly!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3226,
+    "file": "d4b0de88c747.mp3"
+  },
+  {
+    "text": "Tap now!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1442,
+    "file": "f540cec9a35f.mp3"
+  },
+  {
+    "text": "Rubber rings! Tap to spin!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3367,
+    "file": "510f89864a0b.mp3"
+  },
+  {
+    "text": "Kaylee wins!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1375,
+    "file": "b693314ebac2.mp3"
+  },
+  {
+    "text": "Kaylee wins again!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1906,
+    "file": "5ba2bdbb9af4.mp3"
+  },
+  {
+    "text": "First place, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2007,
+    "file": "bd91fe66091d.mp3"
+  },
+  {
+    "text": "Head first! Whee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1898,
+    "file": "e39fffbf135f.mp3"
+  },
+  {
+    "text": "I'm OK! Ha ha!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1486,
+    "file": "820738787085.mp3"
+  },
+  {
+    "text": "Good race, Kaylee!",
+    "voice": "kid",
+    "sig": "c6e9fa2472",
+    "ms": 1418,
+    "file": "e68141ac454e.mp3"
+  },
+  {
+    "text": "Three ribbons for Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2259,
+    "file": "7fb7072ebff9.mp3"
+  },
+  {
+    "text": "Tap the steps to climb!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2854,
+    "file": "ba40bb525159.mp3"
+  },
+  {
+    "text": "Tap to scoot faster!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2681,
+    "file": "33a10aa2ee9c.mp3"
+  },
+  {
+    "text": "Climb up high, then slide down!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2943,
+    "file": "93b5e819dfd2.mp3"
+  },
+  {
+    "text": "Wheee! Down the nose!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 3224,
+    "file": "0e9fbe0791a8.mp3"
+  },
+  {
+    "text": "Whoa! Here come the dragons!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2692,
+    "file": "5304cbf08d36.mp3"
+  },
+  {
+    "text": "Rattle rattle! Wheee!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2663,
+    "file": "d43d89121094.mp3"
+  },
+  {
+    "text": "Round and round!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1353,
+    "file": "1b9a7ff3f987.mp3"
+  },
+  {
+    "text": "Zoom! Go, Kaylee!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2277,
+    "file": "535e336ecca9.mp3"
+  },
+  {
+    "text": "Bonk! Hey!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1290,
+    "file": "116d4f61bffd.mp3"
+  },
+  {
+    "text": "Hey! Not my horn!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1904,
+    "file": "97cda65ed4d0.mp3"
+  },
+  {
+    "text": "Whoa! Splash!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2038,
+    "file": "b122b0ad4272.mp3"
+  },
+  {
+    "text": "Ho ho! Hi, Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1974,
+    "file": "a13456831e9c.mp3"
+  },
+  {
+    "text": "Bonk me with the cannon!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1466,
+    "file": "a8e69fcad6b5.mp3"
+  },
+  {
+    "text": "Phi Ta Khon is a festival with big funny masks!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4994,
+    "file": "93eaaf5878b5.mp3"
+  },
+  {
+    "text": "Tap a slide to ride it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2322,
+    "file": "9dc58ffd8d7c.mp3"
+  },
+  {
+    "text": "Pick a pizza, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1217,
+    "file": "2d203973aa8b.mp3"
+  },
+  {
+    "text": "Pizza time!",
+    "voice": "server",
+    "sig": "aa234bc81e",
+    "ms": 898,
+    "file": "8cd4ec726d80.mp3"
+  },
+  {
+    "text": "Pull a slice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 995,
+    "file": "e685e6bc02c3.mp3"
+  },
+  {
+    "text": "One for Mommy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1354,
+    "file": "5b0111a2bcee.mp3"
+  },
+  {
+    "text": "Two for Mommy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1586,
+    "file": "dc559160a394.mp3"
+  },
+  {
+    "text": "One for Daddy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1595,
+    "file": "9d0ff69c5a60.mp3"
+  },
+  {
+    "text": "Two for Daddy!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1301,
+    "file": "d4f074e04342.mp3"
+  },
+  {
+    "text": "One for Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1455,
+    "file": "4d3e90e895a6.mp3"
+  },
+  {
+    "text": "Two for Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1385,
+    "file": "24aea7cee7f2.mp3"
+  },
+  {
+    "text": "Kaylee, Mommy's hungry too!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2144,
+    "file": "9b2f38fe09aa.mp3"
+  },
+  {
+    "text": "Ho ho! More for Daddy!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2194,
+    "file": "b198affd6bad.mp3"
+  },
+  {
+    "text": "My nose!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 931,
+    "file": "34e9346802c7.mp3"
+  },
+  {
+    "text": "Those are for Agong!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1775,
+    "file": "b0f201480dff.mp3"
+  },
+  {
+    "text": "Yay! Pizza for Agong!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2818,
+    "file": "1509854de2fa.mp3"
+  },
+  {
+    "text": "Sharing fairly means everyone gets the same!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3813,
+    "file": "0a4516c5f2e2.mp3"
+  },
+  {
+    "text": "Khob khun ka!",
+    "voice": "server",
+    "sig": "aa234bc81e",
+    "ms": 1433,
+    "file": "fac31e9ff4d6.mp3"
+  },
+  {
+    "text": "So spicy!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1503,
+    "file": "3b43a7d3712a.mp3"
+  },
+  {
+    "text": "Look! A bracelet!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1658,
+    "file": "a5a26d80971f.mp3"
+  },
+  {
+    "text": "So fancy!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1507,
+    "file": "184e191924ef.mp3"
+  },
+  {
+    "text": "Three bracelets!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1242,
+    "file": "88ef4ad95d89.mp3"
+  },
+  {
+    "text": "Mmm! Crunchy!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1951,
+    "file": "2a9a86235635.mp3"
+  },
+  {
+    "text": "Tap a pizza!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1516,
+    "file": "52a5a4b94922.mp3"
+  },
+  {
+    "text": "Pull a slice to a plate!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1860,
+    "file": "931758e4b13f.mp3"
+  },
+  {
+    "text": "Put one in Agong's box!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2600,
+    "file": "3cba839a81d9.mp3"
+  },
+  {
+    "text": "Kaylee, where shall we go?",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2020,
+    "file": "6a68297cac62.mp3"
+  },
+  {
+    "text": "Bring Agong something yummy!",
+    "voice": "agong",
+    "sig": "0f90e139f5",
+    "ms": 2379,
+    "file": "cf74f03c7e30.mp3"
+  },
+  {
+    "text": "Mommy is driving! Hop in, Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2918,
+    "file": "793d96018280.mp3"
+  },
+  {
+    "text": "We're home!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 979,
+    "file": "0c12000bb68c.mp3"
+  },
+  {
+    "text": "Ho ho! What is that, Kaylee?",
+    "voice": "agong",
+    "sig": "0f90e139f5",
+    "ms": 2676,
+    "file": "1d9befc7e7b2.mp3"
+  },
+  {
+    "text": "Pizza! Thank you, Kaylee!",
+    "voice": "agong",
+    "sig": "0f90e139f5",
+    "ms": 2168,
+    "file": "74fb9ac926ed.mp3"
+  },
+  {
+    "text": "Pizza?!",
+    "voice": "gan",
+    "sig": "157be5e474",
+    "ms": 772,
+    "file": "a851fca8811c.mp3"
+  },
+  {
+    "text": "Pizza?!",
+    "voice": "ken",
+    "sig": "8506fed695",
+    "ms": 595,
+    "file": "f7f180254bd0.mp3"
+  },
+  {
+    "text": "Pizza?!",
+    "voice": "bb",
+    "sig": "16e7dc84f7",
+    "ms": 655,
+    "file": "446184698469.mp3"
+  },
+  {
+    "text": "Ho ho ho! Look at Daddy's hair!",
+    "voice": "agong",
+    "sig": "0f90e139f5",
+    "ms": 3419,
+    "file": "34512a968180.mp3"
+  },
+  {
+    "text": "Tap Agong to give him the box!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2895,
+    "file": "e0ddf39c6b7e.mp3"
+  },
+  {
+    "text": "Our mall day!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1362,
+    "file": "6c3e843b5f74.mp3"
+  },
+  {
+    "text": "ICONSIAM! By the river!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2105,
+    "file": "91ad4fcb9c4c.mp3"
+  },
+  {
+    "text": "Press the big button!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1356,
+    "file": "73fae3b89ca4.mp3"
+  },
+  {
+    "text": "Floor six! HarborLand!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2416,
+    "file": "4f622536ee4d.mp3"
+  },
+  {
+    "text": "Welcome to HarborLand! Socks on, please!",
+    "voice": "staff",
+    "sig": "3efe47c973",
+    "ms": 3249,
+    "file": "71fd81385135.mp3"
+  },
+  {
+    "text": "My shoes are too big!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2032,
+    "file": "9d4a6fb43bf1.mp3"
+  },
+  {
+    "text": "Pick your socks!",
+    "voice": "staff",
+    "sig": "3efe47c973",
+    "ms": 1062,
+    "file": "73b0c43c8207.mp3"
+  },
+  {
+    "text": "My socks are too small!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1721,
+    "file": "9b9a740955a7.mp3"
+  },
+  {
+    "text": "Wow, so tall!",
+    "voice": "staff",
+    "sig": "3efe47c973",
+    "ms": 2499,
+    "file": "51d0bd7cfbbc.mp3"
+  },
+  {
+    "text": "Ha ha! Off the top!",
+    "voice": "staff",
+    "sig": "3efe47c973",
+    "ms": 1665,
+    "file": "41cad649cc60.mp3"
+  },
+  {
+    "text": "In you go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1253,
+    "file": "134c8c4d50d1.mp3"
+  },
+  {
+    "text": "Pizza slice sticker! Stretchy cheese!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2913,
+    "file": "834b82f7b3bf.mp3"
+  },
+  {
+    "text": "ICONSIAM is by the Chao Phraya river!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2810,
+    "file": "34f7a943a380.mp3"
+  },
+  {
+    "text": "At HarborLand, everyone wears grip socks!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3659,
+    "file": "828403155805.mp3"
+  },
+  {
+    "text": "Lopburi is a town full of monkeys!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3502,
+    "file": "0b6163824ef6.mp3"
+  },
+  {
+    "text": "The Golden Mount is a temple on a hill in Bangkok!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4822,
+    "file": "2ed9c566fc0c.mp3"
+  },
+  {
+    "text": "Muay Thai boxers dance the wai kru to thank their teacher!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4400,
+    "file": "b90b70f9ed05.mp3"
+  },
+  {
+    "text": "Cha yen is Thai iced tea. It's orange!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4130,
+    "file": "fb3eef26a847.mp3"
   }
 ]
