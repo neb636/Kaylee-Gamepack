@@ -1294,6 +1294,72 @@ small climbing toy, before Dad's photos.
    - **Sounds only:** no voices. Sparkle counting round the table, Daddy's "Kaylee, Mommy's hungry too!", "Those are
      for Agong!" and the server's lines come with the full loop. The `hair` param waits for the barber.
 7. **Greybox: the trip loop:** Mommy's choice, the Veloz, arrive, hungry, home.
+   *Trip loop built 2026-10-21 (`activities/mall-trip/Loop.tsx`, `arrive.ts`, `trip.ts`, the trip kit opened up;
+   `#/world/thailand/mall-trip/invite`, `goodbye`, `arrive`, `home?photos=dragon&hair=...`, `invite?replay=1`):*
+   - **The trip kit is shared, not forked.** `trip/types.ts` gained a `car` leg (`{ kind: 'car', driver: 'ji', car:
+     'veloz' }`), an optional `pack`, who sees them off (`goodbye: 'parents' | 'family'`), the gift (`'photo' | 'box'`)
+     and the trip's `lines`. `TripHouse` (`trip/legs/house-plugin.ts`) takes the whole TripDef: the vehicle, the section
+     after the goodbye (the airport, or the trip's `arrive`), the wall slot, packing or not, the way home (the flight
+     first, or straight up to the door by car) and the lines all come from it. The boat trip plays as before.
+   - **Mommy asks (`invite`):** Mommy's card (`trip/legs/Ask.tsx`) takes a list of trips: "Kaylee, where shall we go?"
+     with 🚤 (the boat trip), 🛝🍕 (the mall) and ✋⏳. 🚤 opens the boat trip straight on packing. **In the house** the
+     card offers 🛝🍕 only once `mall-trip` is in `meta.ts` `activities` (`Hub.tsx` offers each trip in `TRIP_CHOICES`
+     that's in the game; with one trip it's the old 👍 Yes 🧳 card). The `invite` section always shows both. The new
+     question isn't recorded, so the card shows it without saying it until the voice pass.
+   - **The goodbye (`goodbye`):** no packing (her own little suitcase stays in her room). The family who live here
+     (Agong, Jum, Joy, Gan, Ken, BB) stand at the shutter; Agong: "Bring Agong something yummy!"; the cousins wave
+     without looking up ("Bye...", their recorded lines). A tap on anyone is a hug (she runs over, they both wiggle, a
+     sparkle). **The silver Veloz** (`trip/vehicles/veloz.ts`: long sloping hood, raked windshield, roof rails, the
+     full-width tail light bar, black cladding, four hinged doors, right-hand drive) is parked at the curb. Tap it (or
+     wait: after 6 s without a touch Daddy says "Mommy is driving! Hop in, Kaylee!", and after 12 s, or 30 s in all,
+     they get in anyway): the doors swing open, Mommy hops round the front to the driver's door on the right, Daddy
+     gets in beside her, Kaylee in the back by the window, thunk, thunk, beep, vroom. That's the whole drive.
+   - **Between legs: the day pass** (the boarding pass, `title="DAY PASS"`): 🚗 🏬 🛝 🍕 🏠, punched as she goes.
+   - **ICONSIAM (`arrive`, a Stage like the airport):** a ~3 s glimpse (the Veloz pulls up at the drop-off in front of
+     the zig-zag glass front, folded panels with gold tips like a baisri, the river and its railing beside it; a tap
+     skips it), a flash, then the lift: she taps the big pink button and it dings up 1 to 6 (the floor number big in
+     HTML, a note up the scale each floor), the doors open onto HarborLand's colors. Then the counter (any order):
+     - the shoe rack: Kaylee's pink shoes hop into a cubby; Daddy's big blue ones stick out until he squashes them in
+     - three pairs of grip socks on the counter (pink, lavender, mint): her pick hops onto her feet (`socks`, she can
+       swap), and Daddy's pair, much too small, stretches up to his knees in two tugs
+     - the height chart: she hops against it and the marker comes down to her horn ("Wow, so tall!"); Daddy's turn and
+       the marker pops off the top
+     - the staff member (the hall's buffalo in a red polo) and the bell on the counter are pokes; the gate glows once
+       her socks are on, and in they go (`hall?from=in`). Before that, the gate gets the staff's "Pick your socks!".
+   - **Home (`home`):** after the share, once Agong's box shuts, the day pass and the Veloz pulls up at the shophouse.
+     Mommy: "We're home!"; out they hop, Kaylee with the pizza box (`box.ts`: the two slices of the pizza she picked
+     inside); the family come out. If Daddy kept a hairdo from the barber (`hair`), he wears it here and Agong laughs
+     first. Agong glows: tap him (or the box) and she gives it to him, he opens it, "Pizza! Thank you, Kaylee!". The
+     cousins glow: each tap puts a phone down ("Pizza?!", a hop closer), or they look up by themselves. Agong carries
+     the box in to his table, Kaylee follows, and the photo of the day (`photos`, the first one: `dragon` by default, the
+     dragon slide, drawn in code for now, `photo.ts`) flies from her onto the wall in its own frame, by the boat trip's
+     (`WALL_SLOTS['mall-trip']`, saved on the iPad like the boat trip's). Everyone gathers; a tap on the photo: Mommy's
+     "Our mall day!". Then the stamp (`StampEarned`, the pizza slice sticker) and back to the house by the wall.
+   - **Resume and replays:** `useSaved('thailand-mall-trip')` after each leg (goodbye, arrive, hall, menu, home: her
+     socks, stickers and Daddy's hairdo too). Picking 🛝🍕 with a day half done offers 🚗 the whole day or the next
+     leg's icon; after a whole day, 🚗, 🛝 (straight to HarborLand in her socks from last time) or 🍕 (straight to the
+     table). `invite?replay=1` plays it that way.
+   - **While it's in the works:** the stamp screen shows the sticker's line without saying it and leaves out the facts
+     (`MALL_FACTS` in `trip/facts.ts`, not in `meta.ts` yet); both speak once it's in `activities`. A mall stamp no
+     longer opens the 🎉 party by itself (the house counts only the activities in the game).
+   - **No voices:** the new lines live in `activities/mall-trip/words.ts` (tagged by speaker) and show in Sparkle's
+     corner bubble without a sound (`unvoiced`). For the voice pass, move them into `lines.ts` (`L.mall`), cast the
+     staff, and record: Mommy "Kaylee, where shall we go?" (in `Ask.tsx`), "ICONSIAM! By the river!", "We're home!",
+     "Our mall day!" (also `WALL_LINES['mall-trip']` in `trip/wall.ts`); Daddy "Mommy is driving! Hop in, Kaylee!",
+     "Floor six! HarborLand!", "My shoes are too big!", "My socks are too small!"; Agong "Bring Agong something yummy!",
+     "Ho ho! What is that, Kaylee?", "Ho ho ho! Look at Daddy's hair!", "Pizza! Thank you, Kaylee!"; Gan, Ken and BB
+     "Pizza?!"; the staff "Welcome to HarborLand! Socks on, please!", "Pick your socks!", "Wow, so tall!", "Ha ha! Off
+     the top!"; Sparkle "Press the big button!", "In you go!", "Tap Agong to give him the box!"; the sticker line and the
+     nine facts.
+   - **Flat version** (`?gl=off`, `LoopFlat.tsx`): Mommy's card; the family as hug buttons and the 🚗; the lift button
+     counting to 6, then the socks, the rack, the chart and the gate; the box for Agong, the three phones, the photo.
+   - **For Dad on the iPad:**
+     - Is the goodbye with everyone at the shutter fun (hugs), or should the car come sooner?
+     - Does the Veloz read as Mommy's rental MPV? (It's tall for Daddy's horn.)
+     - Is the lift's counting worth its tap, and are the counter's three toys the right length, or one too many?
+     - Should the gate wait for socks only (now), or for the shoes and the height chart too?
+     - At home: is the order right (the box, the cousins, then the photo)? Should Kaylee pick the photo of the day,
+       like the boat trip's (once the Big Frame takes real photos)?
 8. **The look:** the hall, the shops, the Big Frame, ICONSIAM, The Pizza Company, the Veloz and the outfits, in toon.
 9. **Voices, the full loop and QA** (layout-qa, then playtest-qa, scoped to `mall-trip`).
 10. **Into the game:** move `mall-trip` from `inTheWorks` to `activities` in `meta.ts`. Until then it opens only from its

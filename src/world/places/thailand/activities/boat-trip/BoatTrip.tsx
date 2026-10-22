@@ -374,7 +374,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           enter(state.current.section, params(ids))
         },
         flash: () => setFlash((n) => n + 1),
-      }, BOAT_TRIP.pack.fits, replay)
+      }, BOAT_TRIP, replay)
       tripRef.current = trip
       trip.setHintElement(() => hintRef.current)
       // Coming home: last trip's photo is still on the wall, until Agong hangs the new one.

@@ -20,6 +20,10 @@ interface Props {
   punch: string | null
   /** Where to start: big icons (the first is 🧳, a new trip). */
   choices?: PassChoice[]
+  /** Another trip's ticket (the mall day's day pass): its name, its icons and its route. */
+  title?: string
+  badge?: string
+  route?: string
 }
 
 export interface PassChoice {
@@ -28,7 +32,7 @@ export interface PassChoice {
   on: () => void
 }
 
-export function BoardingPass({ legs, done, punch, choices }: Props) {
+export function BoardingPass({ legs, done, punch, choices, title = 'BOARDING PASS', badge = '✈️ 🐘', route = 'BKK → KBV · 1A 🪟' }: Props) {
   useEffect(() => {
     if (!punch) return
     const t = setTimeout(() => sfx.stamp(), 420)
@@ -44,7 +48,7 @@ export function BoardingPass({ legs, done, punch, choices }: Props) {
     >
       <motion.div
         role="img"
-        aria-label="Boarding pass"
+        aria-label={title === 'BOARDING PASS' ? 'Boarding pass' : title.toLowerCase().replace(/^./, (c) => c.toUpperCase())}
         initial={{ y: '60vh', rotate: -4 }}
         animate={{ y: 0, rotate: -2 }}
         exit={{ y: '-60vh', rotate: 2 }}
@@ -52,12 +56,12 @@ export function BoardingPass({ legs, done, punch, choices }: Props) {
         style={{ width: 'min(620px, 92vw)', background: '#FFFFFF', borderRadius: 26, boxShadow: 'var(--shadow)', border: '4px solid var(--ink)', overflow: 'hidden' }}
       >
         <div style={{ background: 'var(--hotpink)', color: '#fff', padding: '10px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 700, fontSize: 'clamp(16px, 2.6vw, 22px)' }}>
-          <span>BOARDING PASS</span>
-          <span>✈️ 🐘</span>
+          <span>{title}</span>
+          <span>{badge}</span>
         </div>
         <div style={{ padding: '12px 20px 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, color: 'var(--ink)' }}>
           <span style={{ fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 700, letterSpacing: 1 }}>{KID_NAME.toUpperCase()}</span>
-          <span style={{ fontSize: 'clamp(16px, 3vw, 24px)', fontWeight: 600 }}>BKK → KBV · 1A 🪟</span>
+          <span style={{ fontSize: 'clamp(16px, 3vw, 24px)', fontWeight: 600 }}>{route}</span>
         </div>
         <div style={{ borderTop: '3px dashed var(--lavender-dark)', margin: '10px 0 0' }} />
         <div style={{ display: 'flex', justifyContent: 'space-around', padding: '14px 10px 16px', gap: 6 }}>

@@ -8,8 +8,8 @@ import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { flag } from '../../engine/flags'
 import { L } from '../../lines'
-import { Ask, saidYes } from '../../trip/legs/Ask'
-import { WallPlugin, WALL_SLOTS, wallAnchorId } from '../../trip/wall'
+import { Ask, saidYes, TRIP_CHOICES } from '../../trip/legs/Ask'
+import { WallPlugin, WALL_LINES, WALL_SLOTS, wallAnchorId } from '../../trip/wall'
 import { newestByTrip, useWallPhotos } from '../../trip/wall-photos'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
@@ -46,8 +46,11 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const [looking, setLooking] = useState<string | null>(null)
   const look = (trip: string) => {
     setLooking(trip)
-    void say(L.home.wall)
+    const line = WALL_LINES[trip]
+    if (line) void say(line)
   }
+  // Mommy offers each trip that's in the game: with more than one, a picture button for each (🚤, 🛝🍕).
+  const trips = TRIP_CHOICES.filter((t) => meta.activities.some((a) => a.id === t.id))
 
   useEffect(() => {
     enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : {})
@@ -82,12 +85,14 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     clearTimeout(askTimer.current)
     askTimer.current = setTimeout(() => setAsking(true), after)
   }
-  const yes = () => {
+  const yes = (trip = 'boat-trip') => {
     saidYes.at = performance.now()
+    saidYes.trip = trip
     setAsking(false)
-    openActivity('boat-trip')
+    openActivity(trip)
   }
-  const allStamps = stamps.length >= meta.activities.length
+  // (Only the activities in the game count: a stamp from one still in the works doesn't open the party.)
+  const allStamps = meta.activities.every((a) => stamps.includes(a.id))
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
@@ -165,7 +170,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
         )}
       </AnimatePresence>
       {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking} />}
-      <Ask open={asking && !arriving && mode !== 'lost'} onYes={yes} onNotYet={() => setAsking(false)} />
+      <Ask open={asking && !arriving && mode !== 'lost'} trips={trips.length > 1 ? trips : undefined} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />
       {debug && <Debug houseRef={houseRef} />}
     </div>
   )
