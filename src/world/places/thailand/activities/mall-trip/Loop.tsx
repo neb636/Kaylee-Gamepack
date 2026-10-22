@@ -3,7 +3,7 @@
 //
 //   invite, goodbye, home   Agong's own house (activities/hub/house.ts) with the trip kit's plugin
 //                           (trip/legs/house-plugin.ts, told by MALL_TRIP what the mall day is): Mommy asks where to
-//                           (Ask.tsx with 🚤 / 🛝🍕); the goodbye at the shutter and Mommy's silver Veloz; coming home,
+//                           (Ask.tsx with 🚤 / 🛝🍕); the goodbye at the shutter and Mommy's grey Veloz; coming home,
 //                           the pizza box for Agong, the cousins' phones down, the photo of the day on his wall
 //   arrive                  ICONSIAM (arrive.ts): the glimpse, the lift (its floor number big, here), the counter
 //

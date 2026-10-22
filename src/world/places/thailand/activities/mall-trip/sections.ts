@@ -1,6 +1,6 @@
 // The mall day at ICONSIAM (plan: planning/around-the-world/thailand/mall-trip.md), as deep-linkable sections:
 // #/world/thailand/mall-trip/<section>?socks=<color>&games=<stickers so far>. The trip loop: Mommy asks where to
-// (invite: 🚤 or 🛝🍕), the goodbye at Agong's house and Mommy's silver Veloz (goodbye), ICONSIAM, the lift and the
+// (invite: 🚤 or 🛝🍕), the goodbye at Agong's house and Mommy's grey Veloz (goodbye), ICONSIAM, the lift and the
 // HarborLand counter (arrive), and home (home?photos=<the photos from the day>: the pizza box for Agong, the photo on
 // his wall, the stamp); replay=1 plays it as a trip she has done before. In between: HarborLand's hall
 // (hall?from=<the door she comes out of>, and hungry: Mommy asks "Pizza time?"), the mini games: the Vet Clinic
@@ -36,7 +36,7 @@ const MALL_SECTIONS = defineSections('thailand', 'mall-trip', {
   },
   sections: [
     { id: 'invite', name: 'Mommy asks: where shall we go? (🚤 or 🛝🍕)', params: ['replay'] },
-    { id: 'goodbye', name: "Goodbye at Agong's house (hugs), into Mommy's silver Veloz", params: ['replay'] },
+    { id: 'goodbye', name: "Goodbye at Agong's house (hugs), into Mommy's grey Veloz", params: ['replay'] },
     { id: 'arrive', name: 'ICONSIAM: pull up by the river, the lift to 6, shoes off, socks on, the height chart', params: ['socks', 'replay'] },
     { id: 'hall', name: 'HarborLand: walk the hall and pick a mini game', params: ['socks', 'games', 'from', 'hair'] },
     { id: 'vet', name: 'The Vet Clinic: heal the puppy, the pony and the baby elephant', params: ['socks', 'games', 'patient'] },
