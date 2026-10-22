@@ -1,5 +1,6 @@
-// The Sky Pod at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "8. The Sky Pod"), greybox: shapes,
-// sounds, no voices. A wall of nine light-up pods painted as a night sky, a scoreboard, Kaylee in her grip socks on the
+// The Sky Pod at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "8. The Sky Pod"), greybox shapes
+// with voices (lines.ts `L.mall.skypod`: Daddy's race lines, Sparkle's count and few lines, said through
+// blocks/talk.ts). A wall of nine light-up pods painted as a night sky, a scoreboard, Kaylee in her grip socks on the
 // springy mat in front, Daddy watching from the side (and racing her in round 3).
 //
 // The toy: slap a pod. It reacts the moment her finger lands: it squashes into the wall, flashes, plays its own note
@@ -22,7 +23,9 @@ import { SOCK_COLORS } from '../../socks'
 import { Racer } from '../race/racer'
 import { buildSkyPod, MAT_Y, type Built, type Layer } from './build'
 import { Floaters } from './fx'
-import { SkyGame, type GameView, type Light, type Phase, type SlapResult } from './game'
+import { FINALE_SCORE, SkyGame, type GameView, type Light, type Phase, type SlapResult } from './game'
+import { Talk } from '../blocks/talk'
+import { L } from '../../../../lines'
 import { BESIDE, BLUE, boardSpot, DADDY_REACH, DADDY_Z, daddyHome, KAYLEE_Z, kayleeHome, matX, moonSpot, PINK, POD_COLORS, PODS, podSpots, REACH, rocketSpot, SHOW, speakerSpot, TAP_R, wallSize, type Round, type V3 } from './layout'
 import { Pods } from './pods'
 import { podSfx as sfx } from './sounds'
@@ -58,6 +61,7 @@ export const SKYPOD_ANCHORS: AnchorInfo[] = [
 
 const V = (x: number, y: number, z: number) => new Vector3(x, y, z)
 const tmp = new Vector3()
+const T = L.mall.skypod
 const WHITE = new Color('#FFFFFF')
 const GOLD = new Color(PAL.gold)
 const RING = new Color('#F4EEFF')
@@ -127,6 +131,8 @@ export class SkyPodWall extends Stage {
   private boardEl: HTMLElement | null = null
   private phaseNow: Phase = 'play'
   private starsShown = -1
+  private talk = new Talk((l) => this.sev.say(l))
+  private rounds = 0
 
   constructor(
     renderer: WebGLRenderer,
@@ -216,13 +222,19 @@ export class SkyPodWall extends Stage {
       },
       score: (k, d) => {
         if (this.phaseNow === 'finale') sfx.tick(k % 60)
+        if (this.phaseNow === 'finale' && k === FINALE_SCORE) this.later(0.3, () => this.talk.say(T.hundred))
         this.sev.score(k, d)
       },
       phase: (p) => {
         this.phaseNow = p
         this.sev.phase(p)
+        // Round 2: the wall has played its first tune, now it's her turn.
+        if (p === 'copy') this.talk.once('play', T.play)
       },
-      round: (n) => this.sev.round(n),
+      round: (n) => {
+        this.sev.round(n)
+        this.roundLine(n)
+      },
       stars: (n) => {
         // (Each round's start says the stars again: only a new one twinkles in.)
         const more = n > this.starsShown
@@ -254,22 +266,19 @@ export class SkyPodWall extends Stage {
         this.dAnim = { kind: kind % 4, t: 0 }
         this.nick.face(0)
         if (kind % 4 === 1) this.nick.sitting = true
-        sfx.haha()
+        // Sitting down for a rest, he says so (now and then); otherwise a laugh.
+        if (!(kind % 4 === 1 && this.talk.react(this.time, T.rest))) sfx.haha()
       },
       daddyHey: () => {
         // (Already reaching up, he finishes the jump: his hand finds nothing there.)
         if (!this.dj) this.nick.stop()
         this.dGoing = -1
-        sfx.hey()
         this.nick.wiggle()
         this.nick.lookAt(this.kaylee.pos.clone().setY(0.8))
+        if (this.talk.react(this.time, T.mine)) return this.backToSide()
+        sfx.hey()
         this.later(0.7, () => sfx.haha())
-        // Then back to his place at the side.
-        this.later(0.9, () => {
-          if (this.dGoing >= 0 || this.dj) return
-          const h = this.daddySpot()
-          this.nick.walkTo(V(h[0], MAT_Y, h[2]), 1.3, () => this.nick.face(-0.3))
-        })
+        this.backToSide()
       },
       copied: () => {
         sfx.copied()
@@ -291,7 +300,7 @@ export class SkyPodWall extends Stage {
         })
         this.nick.arms = 'cheer'
         this.dCheer = 2.0
-        this.later(0.3, () => sfx.haha())
+        this.later(0.3, () => this.talk.say(T.win))
       },
       finale: () => {
         this.finaleT = 0
@@ -308,8 +317,34 @@ export class SkyPodWall extends Stage {
     }
   }
 
+  /** After his "hey!": back to his place at the side. */
+  private backToSide() {
+    this.later(0.9, () => {
+      if (this.dGoing >= 0 || this.dj) return
+      const h = this.daddySpot()
+      this.nick.walkTo(V(h[0], MAT_Y, h[2]), 1.3, () => this.nick.face(-0.3))
+    })
+  }
+
+  /** What's said when a round starts: the opening (Daddy, then "Slap the lights!"), "Listen!" before the wall plays,
+   *  Daddy's "Race you!". The first one waits a moment for the screen to settle. */
+  private roundLine(n: Round) {
+    const first = this.rounds++ === 0
+    const go = () => {
+      if (n === 1) {
+        this.talk.say(T.fast)
+        this.later(2.0, () => this.talk.say(T.slap))
+      } else this.talk.say(n === 2 ? T.listen : T.race)
+    }
+    if (first) this.later(0.5, go)
+    else go()
+  }
+
   /** Someone got a light: the big sparks, the "+1", Daddy cheering her now and then. */
   private got(i: number, who: 'kaylee' | 'daddy') {
+    // Sparkle counts her score as it climbs in rounds 1 and 3 (not over anyone talking).
+    const g = this.game
+    if (who === 'kaylee' && g.phase === 'play' && g.round !== 2) this.talk.count(T.count[g.score - 1])
     const at = this.podAt3(i)
     this.sparks.ring(at, 16, 2.0, 0.6, 0.065, who === 'daddy' ? 6 : i)
     this.sparks.burst(at, 6, 0.6, 1.2, 0.7, 0.04)
@@ -499,6 +534,8 @@ export class SkyPodWall extends Stage {
     switch (id) {
       case 'board':
         sfx.board()
+        // The first poke: counting in Thai.
+        this.later(0.3, () => this.talk.once('thai', T.thai))
         this.boardEl?.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.12) rotate(-3deg)' }, { transform: 'scale(0.96) rotate(2deg)' }, { transform: 'scale(1)' }], { duration: 450, composite: 'add' })
         return
       case 'speaker':
@@ -605,6 +642,7 @@ export class SkyPodWall extends Stage {
         if (this.game.daddyTarget === j.i) {
           if (j.miss) {
             sfx.oops()
+            this.talk.react(this.time, T.ow)
             d.wiggle()
             const s = this.spots[j.i]
             this.puffs.burst(V(s[0] + j.side * -0.32, s[1], 0.1), 5, 0.5, 0.3, 0.4, 0.06)
@@ -623,6 +661,8 @@ export class SkyPodWall extends Stage {
     this.sparks.update(dt)
     this.puffs.update(dt)
     this.lights.follow(0, 1.2, 0)
+    // The 👆 after a while with nothing touched: Sparkle says what to slap, once each time it shows.
+    this.talk.hint(this.time, this.lastTouch, () => this.game.hint >= 0, () => (this.game.phase === 'copy' ? T.hint.next : T.hint.lit))
   }
 
   /** The arm on our side reaches up to the pod and slaps, then comes back down. */

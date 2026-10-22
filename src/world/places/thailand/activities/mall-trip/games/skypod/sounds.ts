@@ -1,6 +1,6 @@
 // The Sky Pod's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). The wall is an
-// instrument: each pod plays its own note of a major scale (layout.ts SCALE). No voices yet: Daddy's laugh and "hey!",
-// Kaylee's giggle.
+// instrument: each pod plays its own note of a major scale (layout.ts SCALE). Daddy's laugh and "hey!", Kaylee's
+// giggle; the words (the count, Daddy's race lines) are voices (lines.ts `L.mall.skypod`).
 import { noise, tone } from '../../../../../../kit/sfx'
 import { sfx } from '../../../../sfx'
 import { SCALE } from './layout'

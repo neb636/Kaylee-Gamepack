@@ -1,6 +1,6 @@
-// Little Land at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "6. Little Land"), greybox: shapes,
-// sounds, no voices. Giant foam bricks on the flower mats; Kaylee in her grip socks by the brick box, Daddy watching
-// from the other side.
+// Little Land at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "6. Little Land"), greybox shapes
+// with voices (lines.ts `L.mall.blocks`: Daddy's bet and his sneeze, Sparkle's few lines, said through talk.ts). Giant
+// foam bricks on the flower mats; Kaylee in her grip socks by the brick box, Daddy watching from the other side.
 //
 // The toy: grab a brick (out of the box, or off the top of the stack) and put it down. It hangs just above her finger;
 // every frame the spots it could go are projected to the screen and the nearest wins, with a pull and an outline where
@@ -29,6 +29,10 @@ import { Floaters } from './fx'
 import { CARDS, Grid, type Cell } from './grid'
 import { BALL, BD, BH, BOX, BOX_TALL, BRICK_COLORS, BW, DADDY_BACK, DADDY_BACK_TALL, DADDY_STAND, DADDY_STAND_TALL, EASEL, FLOOR, HOLD_Z, KAYLEE_AT, LIFT_PX, MARK_Y, ROCKER, STAR_Y, WALL, type CardId, type Round } from './layout'
 import { blocksSfx as sfx } from './sounds'
+import { Talk } from './talk'
+import { L } from '../../../../lines'
+
+const T = L.mall.blocks
 
 export interface BlocksEvents extends LegEvents {
   /** The round on now (the address bar follows). */
@@ -141,6 +145,8 @@ export class LittleLand extends Stage {
   private wallPops = new Map<string, Group>()
   private wallNotes = 0
   private homeNotes = 0
+  private talk = new Talk((l) => this.bev.say(l))
+  private sneezes = 0
   private ghosts: Mesh[] = []
   private preview: Mesh
   private mats: ReturnType<typeof ghostMaterials>
@@ -192,10 +198,22 @@ export class LittleLand extends Stage {
     this.stars = start.round - 1
     this.built.stars.forEach((s, i) => (s.visible = i < this.stars))
     this.setRound(start.round, start.card, true)
+    // What's said first: Daddy's bet, then "Grab a brick!" (a link to a later round: that round's line).
+    this.after(0.5, () => {
+      if (start.round > 1) return this.roundLine(start.round, start.card)
+      this.talk.say(T.higher)
+      this.after(2.2, () => this.talk.say(T.grab))
+    })
   }
 
   private after(s: number, f: () => void) {
     this.later.push({ t: this.time + s, f })
+  }
+
+  /** Sparkle, when a round's new thing shows: the picture card, the elephant, Daddy beside the stack. */
+  private roundLine(n: Round, card: CardId) {
+    if (n === 2) this.talk.say(card === 'chedi' ? T.copy : T.elephant)
+    if (n === 3) this.talk.say(T.taller)
   }
 
   // ---------------------------------------------------------------- rounds
@@ -207,6 +225,7 @@ export class LittleLand extends Stage {
     this.bev.round(n)
     if (n === 2) this.bev.card(card)
     this.showPicture(n === 1 ? 'free' : n === 2 ? card : 'tall', now)
+    if (!now) this.after(0.4, () => this.roundLine(n, card))
     this.built.ribbon.visible = n === 3
     // Daddy: a step back watching, then (round 3) right beside the stack, his horn at the ribbon.
     const near = n === 3
@@ -313,6 +332,7 @@ export class LittleLand extends Stage {
     if (sup.n === 1 && c.r > 0) {
       this.after(0.12, () => sfx.whoa())
       this.nick.react('wiggle')
+      this.after(0.5, () => this.talk.react(this.time, T.whoa))
     }
     // What a brick in place does in each round.
     if (this.round === 1 && this.grid.count >= GLOW_AT && !this.glowShown) {
@@ -320,6 +340,7 @@ export class LittleLand extends Stage {
       sounds.sparkle()
       this.sparkles.burst(this.topWorld(), 14, 1.2, 1.4, 0.9, 0.05)
       this.nick.react('wave')
+      this.talk.once('push', T.push)
     }
     if (this.round === 2 && this.phase === 'build' && this.grid.done(this.card)) this.cardDone()
     if (this.round === 3 && this.phase === 'build' && this.grid.top() * BH > MARK_Y && this.sneeze.t < 0) this.achoo()
@@ -355,7 +376,7 @@ export class LittleLand extends Stage {
     this.hatOn = b
     sfx.boing()
     this.nick.react('hop')
-    this.after(0.5, () => sfx.haha())
+    this.after(0.5, () => this.talk.react(this.time, T.hat) || sfx.haha())
     this.after(0.3, () => {
       this.kaylee.react('hop')
       sfx.giggle()
@@ -433,6 +454,8 @@ export class LittleLand extends Stage {
     this.after(0.5, () => {
       sfx.giggle()
       if (why !== 'sneeze') this.nick.react('hop')
+      // Daddy, now and then, when she knocks it over herself.
+      if (why === 'push' || why === 'swipe') this.talk.react(this.time, T.crash)
     })
     // What it finishes.
     if (this.round === 1 && n >= ROUND1_MIN) {
@@ -487,6 +510,7 @@ export class LittleLand extends Stage {
       this.spirePop = 0
       sfx.bell()
       sounds.sparkle()
+      this.after(0.6, () => this.talk.once('chedi', T.chedi))
       this.sparkles.burst(top.g.getWorldPosition(new Vector3()).add(V(0, 0.8, 0)), 20, 1.4, 1.2, 1.2, 0.05)
       this.after(0.35, () => {
         this.kaylee.react('hop')
@@ -503,6 +527,7 @@ export class LittleLand extends Stage {
     this.facePop = 0
     this.trumpet = 0
     sfx.trumpet()
+    this.after(0.7, () => this.talk.say(T.trunk))
     this.after(0.4, () => sfx.flap())
     this.after(1.1, () => sfx.flap())
     this.after(0.5, () => (this.sway.v += 0.35))
@@ -542,13 +567,16 @@ export class LittleLand extends Stage {
     if (this.sneeze.t < 0) return
     const st = (this.sneeze.t += dt)
     const r = this.nick.rig
-    if (st > 0.9 && st - dt <= 0.9) sfx.ahh()
+    // His own "ah... ah... choo!" (the CHOO's blast of air is still a sound, on the head's forward snap).
+    if (st > 0.45 && st - dt <= 0.45) this.talk.say(T.sneeze)
     if (st > 1.75 && st - dt <= 1.75) {
       sfx.choo()
       this.nick.react('hop')
       this.puffs.burst(r.head.localToWorld(V(0, r.face.headY, r.face.R)), 18, 1.6, 0.3, 0.8, 0.07)
       this.crash(-1, 'sneeze')
-      this.after(0.6, () => sfx.haha())
+      // The first time: he gives in (she built higher than him). After that he just laughs.
+      if (this.sneezes++ === 0) this.after(1.0, () => this.talk.say(T.beat))
+      else this.after(0.6, () => sfx.haha())
     }
     // Head: up at the tower, back for the ah... ah..., then forward on the CHOO.
     const up = span(st, 0, 0.4) * (1 - span(st, 0.9, 1.2))
@@ -659,6 +687,9 @@ export class LittleLand extends Stage {
       case 'easel':
         this.flip = { t: 0, to: this.picture }
         sfx.whoosh(0.4)
+        // The first poke on each card: what it is.
+        if (this.picture === 'chedi') this.talk.once('chedi', T.chedi)
+        if (this.picture === 'elephant') this.talk.once('elephant', L.facts.elephant)
         if (this.round === 2) for (const g of this.ghosts) if (g.visible) this.sparkles.burst(g.position, 3, 0.6, 0.6, 0.6, 0.04)
         return
       case 'stars':
@@ -1019,6 +1050,8 @@ export class LittleLand extends Stage {
     k.update(dt, t)
     nick.update(dt, t)
     this.sneezeFrame(dt)
+    // The 👆 shows after a while with nothing touched: Sparkle says what to do, once each time.
+    this.talk.hint(this.time, this.lastTouch, () => this.hintAt() !== null, () => (this.glowing ? T.hint.tower : this.round === 2 ? T.hint.card : T.hint.box))
     // Her arms: up toward the brick she's moving, forward for the push.
     this.reachK += ((held ? 1 : 0) - this.reachK) * (1 - Math.exp(-dt * 8))
     if (this.kayleePush >= 0) this.kayleePush = this.kayleePush + dt / 0.5 >= 1 ? -1 : this.kayleePush + dt / 0.5

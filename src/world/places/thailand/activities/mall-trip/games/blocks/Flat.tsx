@@ -2,8 +2,10 @@
 // the same stacking (grid.ts). Tap the box and the next brick hops to a good spot (the card's next place in round 2);
 // tap the stack to knock it over. Round 3: past Daddy's ribbon he sneezes it down. A star for each round.
 import { AnimatePresence, motion } from 'motion/react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { sounds } from '../../../../../../../sdk'
+import { L } from '../../../../lines'
+import { mallVoice } from '../../voice'
 import { CARDS, Grid } from './grid'
 import { BH, BRICK_COLORS, COLS, MARK_Y, ROWS, type CardId, type Round } from './layout'
 import { blocksSfx as sfx } from './sounds'
@@ -32,7 +34,11 @@ export function BlocksFlat({ round: startRound, card: startCard, onRound, onCard
   const next = useRef(0)
   const knocked = useRef(false)
   const g = grid.current
-  const nextRound = (n: Round, c: CardId = card) => {
+  // The 3D version's opening line: Daddy's bet.
+  useEffect(() => {
+    if (startRound === 1) mallVoice.say(L.mall.blocks.higher)
+  }, [])
+  const nextRound =(n: Round, c: CardId = card) => {
     setRound(n)
     setCard(c)
     onRound(n)
