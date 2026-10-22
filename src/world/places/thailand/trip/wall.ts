@@ -2,7 +2,8 @@
 // the old family photos, toward the door (the boat trip first; later trips hang beside it). The photo is the one she
 // picked for Agong at the end of the trip (trip/wall-photos.ts, saved on the iPad). The trip's `home` leg hangs it
 // (trip/legs/house-plugin.ts); in the house (the hub) WallPlugin hangs what's saved and makes the frames tappable: tap
-// one and it comes close (the screen shows it big) and Mommy says "Our boat trip!". A link with `at=photos` (where the
+// one and it comes close (the screen shows it big) and Mommy says "Our boat trip!" (each trip has its own line). The
+// mall day's frame hangs next to the boat trip's, toward the door. A link with `at=photos` (where the
 // trip's stamp lands) starts with the camera on the wall, the old photos and hers, until she taps anything else.
 import { Group, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace, TextureLoader, Vector3, type Object3D, type Texture } from 'three'
 import type { Shot } from '../engine/camera'
@@ -12,12 +13,20 @@ import type { Bag } from '../engine/dispose'
 import { merge, P, solid, type V3 } from '../engine/geo'
 import { PAL } from '../engine/toon'
 import { sfx } from '../sfx'
+import { L } from '../lines'
+import type { Line } from '../../../../sdk'
 import type { WallPhoto } from './wall-photos'
 
 /** Where each trip's frame hangs: the middle of the frame on the left wall (it faces +x, into the room). */
 export const WALL_SLOTS: Record<string, V3> = {
   'boat-trip': [DIM.left + 0.04, 2.3, -1.9],
-  // Room for the next trips, toward the door (or a row above, if the door end runs off a portrait screen).
+  'mall-trip': [DIM.left + 0.04, 2.3, -0.92],
+  // Room for the next trips in a row above (the door is next).
+}
+/** What Mommy says when Kaylee taps a trip's photo on the wall. (The mall day's "Our mall day!" isn't recorded yet:
+ *  its voice pass adds it here.) */
+export const WALL_LINES: Record<string, Line> = {
+  'boat-trip': L.home.wall,
 }
 /** The photo inside the frame (4:3, like the photos), and the frame around it. */
 const PW = 0.72

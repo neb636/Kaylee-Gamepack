@@ -1,4 +1,5 @@
 // The boat trip as a trip (trip/types.ts): Mommy, Daddy and Kaylee, Aunty Sri's van to the airport, a window seat to Krabi, then the longtail at the pier. Pure data.
+import { L } from '../../lines'
 import { PLACES } from '../../trip/outline'
 import type { TripDef } from '../../trip/types'
 import type { BoatSection } from './sections'
@@ -15,6 +16,19 @@ export const BOAT_TRIP: TripDef = {
   // The window seat's whole ride in seconds; on a replay (she has done the trip before) it's shorter.
   caps: { fly: 35, replayFly: 24 },
   arrive: 'pier',
+  // (Dad, 2026-10-20: the rest of the family stay in.)
+  goodbye: 'parents',
+  gift: 'photo',
+  lines: {
+    ready: L.trip.goodbye.van,
+    horn: L.trip.goodbye.horn,
+    home: L.home.sri,
+    agong: L.home.agong,
+    thanks: L.home.thanks,
+    cousins: { gan: L.home.gan, ken: L.home.ken, bb: L.home.bb },
+    pick: L.home.pick,
+    give: L.home.give,
+  },
 }
 
 /** Which 3D world each section runs in (one mount each; switching worlds goes behind the boarding pass). */

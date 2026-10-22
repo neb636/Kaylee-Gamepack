@@ -825,6 +825,31 @@ const thaiSlide = (name, seconds, round, every) => ({
 })
 GAME_SCENARIOS.push(thaiSlide('mall-race-scoot', 8, 1, 330), thaiSlide('mall-race-bump', 9, 2, 0), thaiSlide('mall-race-rings', 9, 3, 0))
 
+// The mall day's HarborLand counter (the trip loop, greybox): its tiny toys. Setup rides the lift up (the big button);
+// the act taps a pair of grip socks (they hop onto her feet, and Daddy's stretch up to his knees), the shoe rack (her
+// shoes hop into a cubby, Daddy squashes his big ones in) and the height chart (her horn counts, Daddy's goes off the
+// top).
+GAME_SCENARIOS.push({
+  name: 'mall-counter-toys',
+  seconds: 12,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/arrive`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().phase === 'lift', null, { timeout: 30000 })
+    await page.locator('[data-anchor="lift-button"]').click({ force: true })
+    await page.waitForFunction(() => window.__thaiMallQA?.().phase === 'counter', null, { timeout: 30000 })
+    await page.waitForTimeout(800)
+  },
+  act: async (page) => {
+    await page.locator('[data-anchor="socks:pink"]').click({ force: true })
+    await page.waitForTimeout(2600)
+    await page.locator('[data-anchor="rack"]').click({ force: true })
+    await page.waitForTimeout(3600)
+    await page.locator('[data-anchor="chart"]').click({ force: true })
+    await page.waitForTimeout(5000)
+  },
+})
+
 // Little Land (mall trip, greybox): the core verb, a brick from the box put on the stack. Her finger drags bricks onto
 // the spots (each drops in, squashes, and the stack sways; the second goes half over the edge: a big wobble), then a
 // swipe through the stack knocks it over and the bricks bounce. In round 3 the tower passes Daddy's ribbon and he

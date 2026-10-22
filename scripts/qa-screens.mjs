@@ -370,6 +370,43 @@ const SCREENS = [
   ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
   { name: 'thailand-flat', hash: '#/world/thailand/hub/downstairs?gl=off', reset: true, wait: 600 },
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
+  // The mall day's trip loop (greybox): Mommy's card (🚤 / 🛝🍕), the day pass's choices on a replay, the goodbye with
+  // the whole family and the Veloz (then everyone in it), ICONSIAM's glimpse, the lift going up, the counter with her
+  // socks on, home (the car at Agong's door; the box given, the photo on the wall), and the flat pages.
+  { name: 'mall-loop-invite', hash: '#/world/thailand/mall-trip/invite', reset: true, wait: 4000 },
+  { name: 'mall-loop-replay', hash: '#/world/thailand/mall-trip/invite?replay=1', reset: true, wait: 3500, act: async (p) => {
+    await p.locator('button[aria-label="The mall"]').click({ force: true })
+    await p.waitForTimeout(1200)
+  } },
+  { name: 'mall-loop-goodbye', hash: '#/world/thailand/mall-trip/goodbye', reset: true, wait: 4500 },
+  { name: 'mall-loop-goodbye-car', hash: '#/world/thailand/mall-trip/goodbye', reset: true, wait: 3000, act: async (p) => {
+    await p.locator('[data-anchor="trip:car"]').click({ force: true })
+    await p.waitForTimeout(3200)
+  } },
+  { name: 'mall-loop-arrive', hash: '#/world/thailand/mall-trip/arrive', reset: true, wait: 2200 },
+  { name: 'mall-loop-lift', hash: '#/world/thailand/mall-trip/arrive', reset: true, wait: 1500, act: async (p) => {
+    await p.waitForFunction(() => window.__thaiMallQA?.().phase === 'lift', null, { timeout: 30000 }).catch(() => {})
+    await p.locator('[data-anchor="lift-button"]').click({ force: true }).catch(() => {})
+    await p.waitForTimeout(2600)
+  } },
+  { name: 'mall-loop-counter', hash: '#/world/thailand/mall-trip/arrive', reset: true, wait: 1500, act: async (p) => {
+    await p.waitForFunction(() => window.__thaiMallQA?.().phase === 'lift', null, { timeout: 30000 }).catch(() => {})
+    await p.locator('[data-anchor="lift-button"]').click({ force: true }).catch(() => {})
+    await p.waitForFunction(() => window.__thaiMallQA?.().phase === 'counter', null, { timeout: 30000 }).catch(() => {})
+    await p.locator('[data-anchor="socks:mint"]').click({ force: true }).catch(() => {})
+    await p.waitForTimeout(2600)
+  } },
+  { name: 'mall-loop-home', hash: '#/world/thailand/mall-trip/home?hair=k.r', reset: true, wait: 1500, act: async (p) => {
+    await p.waitForFunction(() => window.__thaiMallQA?.().trip === 'give', null, { timeout: 40000 }).catch(() => {})
+    await p.waitForTimeout(600)
+  } },
+  { name: 'mall-loop-home-wall', hash: '#/world/thailand/mall-trip/home', reset: true, wait: 1500, act: async (p) => {
+    await p.waitForFunction(() => window.__thaiMallQA?.().trip === 'give', null, { timeout: 40000 }).catch(() => {})
+    await p.locator('[data-anchor="family:agong"]').click({ force: true }).catch(() => {})
+    await p.waitForFunction(() => window.__thaiMallQA?.().held === 'wall', null, { timeout: 60000 }).catch(() => {})
+    await p.waitForTimeout(1200)
+  } },
+  ...['invite', 'goodbye', 'arrive', 'home'].map((s) => ({ name: `mall-loop-flat-${s}`, hash: `#/world/thailand/mall-trip/${s}?gl=off`, reset: true, wait: 900 })),
   // HarborLand's hall (greybox): just in by Mommy's bench, out of the vet's door (Harbor Town), out of the racing
   // slide (the lanes, the crocodile), going in at the cafe (the door open, the camera in close), Mommy's "Pizza time?"
   // card after four stickers, and the flat version.

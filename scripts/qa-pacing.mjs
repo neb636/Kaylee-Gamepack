@@ -108,6 +108,12 @@ const SCENARIOS = [
   // Home (step 5): a home link builds the bay first for its photos, then the flight home, the van, the photo for Agong.
   { name: 'thailand trip: home, the photo for agong', id: 'trip-home', hash: '#/world/thailand/boat-trip/home?photos=village,hong,nail&found=crab,eagle', reset: true },
   { name: 'thailand trip: a replay (🧳 or 🚤)', id: 'trip-replay', hash: '#/world/thailand/boat-trip/invite?replay=1', reset: true },
+  // The mall day's trip loop (greybox, no voices yet: the words show in bubbles). Mommy's card, the goodbye (hugs, the
+  // Veloz), ICONSIAM (the lift, the counter's toys, the gate), and home (the box for Agong, the photo on the wall).
+  { name: 'thailand mall: mommy asks where to', id: 'mall-invite', hash: '#/world/thailand/mall-trip/invite', reset: true },
+  { name: 'thailand mall: goodbye and the veloz', id: 'mall-goodbye', hash: '#/world/thailand/mall-trip/goodbye', reset: true },
+  { name: 'thailand mall: iconsiam, the lift and the counter', id: 'mall-arrive', hash: '#/world/thailand/mall-trip/arrive', reset: true },
+  { name: 'thailand mall: home, the box for agong', id: 'mall-home', hash: '#/world/thailand/mall-trip/home', reset: true },
   // HarborLand's hall (greybox, no voices): walking between the ways in; a tap on one goes into that mini game.
   { name: 'thailand mall: the hall', id: 'mall-hall', hash: '#/world/thailand/mall-trip/hall', reset: true },
   // HarborLand's Big Frame (greybox, no voices, and no end: a toy with no goal): climb up, slide down, the cannon.
