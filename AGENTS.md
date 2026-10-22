@@ -249,6 +249,13 @@ with any state they need carried in the URL: `#/world/<place>/<activity>/<sectio
 - `#/world/sections` lists every section link (for the iPad), and `tests/sections.spec.ts` fails if an activity has no
   sections or a link doesn't land in its section.
 
+**README directory.** Whenever you add or change an activity or section (`sections.ts`, a section's name, its order or
+its params), update the README's **Jump to a game section** directory in the same change: add new sections, revise
+changed ones and remove obsolete entries, keeping each activity's links in play order. Links point to the published
+main build, `https://neb636.github.io/Kaylee-Gamepack/#/world/<place>/<activity>/<section>?<state>`, with the params the
+section needs. Label development-only tools and give their full `localhost` URLs. PR test links still target that PR's
+preview (see "Opening the PR").
+
 ## A country's folder
 
 ```
