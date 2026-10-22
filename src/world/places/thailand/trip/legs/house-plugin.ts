@@ -22,7 +22,7 @@
 //   their phones down for the first time: "Whoa! Cool!" Then the screen gives her the stamp.
 //
 // What it does comes from the trip (trip/types.ts, TripDef): packing or not, who waits at the shutter, the vehicle at
-// the curb (Aunty Sri's van, or Mommy's silver Veloz: she drives, Daddy beside her, Kaylee in the back), the section
+// the curb (Aunty Sri's van, or Mommy's grey Veloz: she drives, Daddy beside her, Kaylee in the back), the section
 // after the goodbye, how they come home (the flight home first, or straight up to the door by car), what she gives
 // Agong (a photo she picks, or a take-away box: he opens it, the cousins drop their phones, "Pizza?!", and a photo of
 // the day goes on the wall), the trip's frame on the wall and the lines. The mall day (activities/mall-trip/) has no

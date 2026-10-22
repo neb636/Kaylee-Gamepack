@@ -8,7 +8,7 @@
 // on); and the pizza toy at The Pizza Company (pizza/, sections menu and
 // share). Each mini game is a sticker on her sock band in the corner (`games`), and a big ↩️ takes her back out to the
 // hall. After four stickers (or five minutes) Daddy's tummy rumbles and Mommy asks about pizza. The trip around it
-// (Loop.tsx): Mommy asks where to (invite), the goodbye and Mommy's silver Veloz (goodbye), ICONSIAM, the lift and
+// (Loop.tsx): Mommy asks where to (invite), the goodbye and Mommy's grey Veloz (goodbye), ICONSIAM, the lift and
 // the counter where she picks her socks (arrive), and home once Agong's box is shut at the table (home: the box for
 // Agong, the photo on his wall, then the stamp, onDone). A day pass covers the change between legs. The trip saves
 // after each leg; saying yes to the mall again offers to keep going, and after a whole day 🛝 or 🍕 straight there.

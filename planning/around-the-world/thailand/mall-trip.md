@@ -5,7 +5,7 @@ spend a day at a Bangkok mall: they play at HarborLand and then eat at The Pizza
 shadows) and reuses the boat trip's trip kit. Read it with `../thailand.md`, `boat-trip.md` (the trip kit),
 `../ACTIVITY-TEMPLATE.md` and `docs/play-design.md`.
 
-**One-line pitch:** Mommy drives the silver rental car to ICONSIAM by the river. Kaylee puts on her HarborLand socks
+**One-line pitch:** Mommy drives the grey rental car to ICONSIAM by the river. Kaylee puts on her HarborLand socks
 and plays her way round a giant indoor playground: she's a vet in Harbor Town, gives Daddy a crazy haircut, wins the
 racing slide, climbs the Big Frame and slides down a dragon, until she's hungry. Then she shares a stretchy-cheese
 pizza fairly. The two slices left over go home to Agong in the box, and the big cousins finally look up from their
@@ -14,7 +14,7 @@ phones.
 **Dad's picks (2026-10-20):**
 - **ICONSIAM's MEGA HarborLand** ("Little Thailand"), chosen from the options below.
 - **Just Mommy, Daddy and Kaylee.**
-- **Mommy drives a rental Toyota Veloz, in silver.**
+- **Mommy drives a rental Toyota Veloz, in grey.**
 - Later the same day: the sticker is **a pizza slice**, the real names can be used, and there are no photos to work from.
 - At the pizza table, **pull and share** (not make-a-pizza: Italy's pizzeria already does that).
 
@@ -117,7 +117,7 @@ Pizza Company in ICONSIAM, so the game puts one next to HarborLand on the 6th fl
  Agong's house           the way there           ICONSIAM, 6th floor                                          home
  ┌──────────────┐   ┌──────────────────┐   ┌────────────┐   ┌──────────────────────┐   ┌──────────────┐   ┌──────────────┐
  │ Mommy asks:  │ → │ goodbye; Mommy's │ → │ lift dings │ → │ HarborLand: the hall │ → │ Pizza Co.:   │ → │ Agong gets   │
- │ where to?    │   │ silver Veloz     │   │ to 6, socks│   │ of mini games (vet,  │   │ pull a slice,│   │ the box; the │
+ │ where to?    │   │ grey Veloz     │   │ to 6, socks│   │ of mini games (vet,  │   │ pull a slice,│   │ the box; the │
  │ 🚤 or 🛝🍕     │   │ pulls away       │   │ on, measure│   │ barber, slides...)   │   │ share fairly │   │ photo on wall│
  └──────────────┘   └──────────────────┘   └────────────┘   └──────────────────────┘   └──────────────┘   └──────────────┘
 ```
@@ -164,12 +164,12 @@ becomes two picture buttons:
 It shows when it does now: a few seconds after she first comes upstairs each visit, and whenever she taps Mommy. The
 mall trip has no packing (it's a day out), so 🛝🍕 goes straight to the goodbye.
 
-## Goodbye 👋 and the silver Veloz 🚗
+## Goodbye 👋 and the grey Veloz 🚗
 
 - The family who live here gather at the shutter, and she can hug anyone she taps.
 - **Agong: "Bring Agong something yummy!"** That's the trip's goal, and the pizza box pays it off.
 - Gan, Ken and BB wave without looking up from their phones.
-- The silver Veloz is parked at the curb. Mommy gets in on the right (she drives), Daddy in front beside her, Kaylee in
+- The grey Veloz is parked at the curb. Mommy gets in on the right (she drives), Daddy in front beside her, Kaylee in
   the back by the window. The doors swing shut, *thunk, thunk*, and it pulls away. That's the whole drive.
 
 ## Arrive at ICONSIAM 🏬 (one quick glimpse, then the HarborLand counter)
@@ -819,7 +819,8 @@ matches Agong's house.
 - **ICONSIAM:** the zig-zag glass front as folded panels, the river, a palm or two. *Built 2026-10-22* (`iconsiam.ts`:
   the tiers, the wooden roof, the gold crown, the 3D sign, the drop-off road).
 - **The Pizza Company:** a green booth and sign, a pizza on a stand, soda glasses, the waterfall's colors through the window.
-- **The silver Veloz:** a toy MPV with roof rails and the tail light bar. Seats for Mommy (at the wheel, on the right),
+- **The grey Veloz:** a toy MPV that reads as the real car (its face, the floating roof with the kicked-up quarter
+  window, wheel arches over two-tone alloys, roof rails and the full-width tail light bar). Seats for Mommy (at the wheel, on the right),
   Daddy and Kaylee in their `sit` pose.
 - **Only generated picture:** the sticker (`art/STYLE.md`).
 
@@ -1398,8 +1399,11 @@ small climbing toy, before Dad's photos.
    - **The goodbye (`goodbye`):** no packing (her own little suitcase stays in her room). The family who live here
      (Agong, Jum, Joy, Gan, Ken, BB) stand at the shutter; Agong: "Bring Agong something yummy!"; the cousins wave
      without looking up ("Bye...", their recorded lines). A tap on anyone is a hug (she runs over, they both wiggle, a
-     sparkle). **The silver Veloz** (`trip/vehicles/veloz.ts`: long sloping hood, raked windshield, roof rails, the
-     full-width tail light bar, black cladding, four hinged doors, right-hand drive) is parked at the curb. Tap it (or
+     sparkle). **The grey Veloz** (`trip/vehicles/veloz.ts`, remodelled 2026-10-22 so it reads as the real car: grey
+     paint, the slim swept headlights on a piano-black bar with the Toyota badge, the big trapezoid lower grille, black
+     corner intakes, a floating roof on black pillars with the rear quarter window kicking up, round wheel arches over
+     big two-tone alloys, roof rails and a shark fin, the full-width tail light bar with lamps wrapping the corners,
+     four hinged doors, right-hand drive) is parked at the curb. Tap it (or
      wait: after 6 s without a touch Daddy says "Mommy is driving! Hop in, Kaylee!", and after 12 s, or 30 s in all,
      they get in anyway): the doors swing open, Mommy hops round the front to the driver's door on the right, Daddy
      gets in beside her, Kaylee in the back by the window, thunk, thunk, beep, vroom. That's the whole drive.

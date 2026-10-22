@@ -1,7 +1,7 @@
 // Arriving at ICONSIAM (plan: thailand/mall-trip.md, "Arrive at ICONSIAM"), a Stage like the airport (trip/legs/
 // airport.ts): one 3D world with three sets far apart, and the camera cuts between them behind a white flash.
 //
-// 1. The glimpse (about 3 s, a tap skips it): Mommy's silver Veloz pulls up at the drop-off in front of the zig-zag
+// 1. The glimpse (about 3 s, a tap skips it): Mommy's grey Veloz pulls up at the drop-off in front of the zig-zag
 //    glass front (folded panels, like baisri) with the river beside it; they hop out and head for the doors.
 // 2. The lift: she taps the big button and it dings up 1 to 6 (the screen shows the floor number big, in HTML), and the
 //    doors open onto HarborLand's colors.
@@ -589,7 +589,7 @@ export class Arrive extends Stage {
       l.scale.setScalar(Math.max(0.001, 1 - wobble(k, 1.25)))
     }
     this.car.root.position.x = this.carX
-    for (const w of this.car.wheels) w.rotation.x = this.carX / 0.3
+    for (const w of this.car.wheels) w.rotation.x = this.carX / 0.4
     this.car.body.position.y = ph === 'glimpse' && this.phaseT < 1.8 ? Math.abs(Math.sin(this.carX * 2.2)) * 0.012 : 0
     this.doorK += (this.doorGoal - this.doorK) * (1 - Math.exp(-dt * 8))
     this.car.setDoors(this.doorK)
