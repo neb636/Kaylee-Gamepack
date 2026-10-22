@@ -3,7 +3,9 @@
 // (grow, snip, spikes, a poof, rainbow stripes, a bow), with a sound. The 🪞 spins the chair for the reveal (and a
 // flash); then the next round, or the next kid.
 import { motion } from 'motion/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { L } from '../../../../lines'
+import { mallVoice } from '../../voice'
 import { BOW_COLORS, decodeHair, encodeHair, HAIR_COLORS, LEN_STEPS, RAINBOW, type ColorId } from './hair'
 import { CardPicture } from './Card'
 import { CUSTOMERS, ENOUGH, TOOL_ICONS, TRAYS, type Round, type ToolId } from './layout'
@@ -44,6 +46,10 @@ export function BarberFlat({ round: start, hair, onRound, onHair, onRevealed, on
   const [work, setWork] = useState(0)
   const [spin, setSpin] = useState(0)
   const [done, setDone] = useState(false)
+  // Daddy wants a new look (once, as it opens).
+  useEffect(() => {
+    if (start < 3) mallVoice.say(L.mall.barber.open)
+  }, []) // (not again when the round in the link moves on)
 
   const save = (l: Look) => {
     if (round === 3) return

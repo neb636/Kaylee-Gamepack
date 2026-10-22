@@ -2,7 +2,9 @@
 // Tap fruit to drop it in the jar, the pink button to blend (the colors mix into one), the jar to pour, then the
 // straw to serve. The same rounds and orders as the 3D cafe; any drink is drunk happily.
 import { AnimatePresence, motion } from 'motion/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { L } from '../../../../lines'
+import { mallVoice } from '../../voice'
 import { OrderBubble } from './Cafe'
 import { ICONS, isFruit, JUICE, ROUNDS, type Customer, type Fruit, type ItemId, type Order, type Round } from './layout'
 import { mix } from './liquid'
@@ -36,6 +38,10 @@ export function CafeFlat({ round: start, onRound, onDrink, onAllDone }: Props) {
   const [whirr, setWhirr] = useState(0)
   const [shelf, setShelf] = useState<string[]>([])
   const [done, setDone] = useState(false)
+  // Sparkle's opening line (once, as it opens).
+  useEffect(() => {
+    mallVoice.say(L.mall.cafe.open)
+  }, [])
   const open = cups
 
   const tap = (id: ItemId) => {

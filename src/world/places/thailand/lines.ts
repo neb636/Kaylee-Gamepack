@@ -259,20 +259,161 @@ export const L = {
     hall: {
     },
 
-    // The Vet Clinic (games/vet/).
+    // The Vet Clinic (games/vet/). Daddy welcomes Doctor Kaylee; Sparkle says who's coming in. The patients only bark,
+    // whinny and trumpet; Daddy hams it up when the tools land on him (at most one line every 12 s).
     vet: {
+      open: nick(`Doctor ${NAME} is here!`),
+      // Sparkle, as each patient hops in.
+      patient: {
+        puppy: 'A puppy with a sore paw! Grab a tool!',
+        pony: 'A muddy pony! Bath time!',
+        elephant: 'A baby elephant with a sniffly trunk!',
+      } as Record<string, string>,
+      // The elephant's big sneeze.
+      bless: nick('Bless you!'),
+      // Daddy, as each patient is all better.
+      healed: {
+        puppy: nick("Look! He's wagging!"),
+        pony: nick('So shiny and pretty!'),
+        elephant: nick('Bye bye, little elephant!'),
+      } as Record<string, Line>,
+      // Sparkle, when all three are better.
+      allDone: `Everyone is better! Thank you, Doctor ${NAME}!`,
+      // Daddy, when a tool lands on him.
+      daddy: {
+        heart: [nick('Ba-boom! Ba-boom!'), nick('My heart is so big!')],
+        hot: nick('Am I hot? Ha ha!'),
+        tickles: nick('Hey! That tickles!'),
+        bow: nick('Do I look pretty?'),
+        yucky: nick('Bleh! Yucky!'),
+        honk: nick('Honk! Ha ha!'),
+      },
+      // Sparkle, when the 👆 shows (nothing touched for a while): the next thing the patient needs.
+      hint: {
+        heart: 'Listen to its heart!',
+        temp: 'The thermometer goes in its mouth!',
+        thorn: 'Pull out the thorn with the tweezers!',
+        cream: 'Rub cream on the sore paw!',
+        bandage: 'Wrap a bandage round the paw!',
+        soap: 'Rub on lots of soap!',
+        rinse: 'Shower it with water!',
+        dry: 'Dry it with the towel!',
+        brush: 'Brush the mane!',
+        bow: 'Put a bow on top!',
+        medicine: 'Give it the medicine spoon!',
+        tissue: 'A tissue for its trunk!',
+      } as Record<string, string>,
+      // Sparkle's facts, the first time she pokes the thing.
+      facts: {
+        elephant: "The elephant is Thailand's animal!",
+        xray: 'An x-ray shows the bones inside!',
+      },
     },
 
-    // The Barber Salon (games/barber/).
+    // The Barber Salon (games/barber/). Daddy wants a new look; Sparkle says what's new each round; the kids in round 3
+    // ask for a picture and say "close enough!" whatever she makes; Mommy takes the photo at every reveal.
     barber: {
+      open: nick(`I want a new look, ${NAME}!`),
+      start: 'Grab a tool and do his hair!',
+      // Round 2's new tools, round 3's kids.
+      colors: 'Now colors and the hair dryer!',
+      copy: 'Copy the picture!',
+      // Each kid, as they sit down with their picture card.
+      ask: {
+        spiky: by('kid')('Spiky, please!'),
+        pigtails: by('kid')('Pigtails, please!'),
+        curly: by('kid')('Curly, please!'),
+      } as Record<string, Line>,
+      // The mirror glows: time for the reveal.
+      mirror: 'Tap the mirror!',
+      // The reveal: Daddy poses (in turn), the kids giggle, Mommy takes the photo.
+      love: [nick('Whoa! I love it!'), nick('So handsome! I love it!')],
+      enough: [by('kid')('Close enough!'), by('kid')('Close enough! So pretty!'), by('kid')('Close enough! Yay!')],
+      cheese: ji('Say cheese!'),
+      allDone: `Great haircuts, ${NAME}!`,
+      // The silly bits, in Daddy's and Mommy's voices.
+      horn: nick('Hey! My horn!'),
+      brows: nick('My eyebrows!'),
+      windy: ji('Whoa! My hair!'),
+      // Sparkle, when the 👆 shows: a tool she hasn't tried yet.
+      hint: {
+        tonic: 'Squirt the grow tonic on his hair!',
+        scissors: 'Snip, snip with the scissors!',
+        comb: 'Comb it up for spikes!',
+        spray: 'Spray on some colors!',
+        dryer: 'Try the hair dryer!',
+        bow: 'Put in a bow!',
+        clip: 'Put in a clip!',
+      } as Record<string, string>,
+      // Sparkle's fact, the first time she pokes the pole.
+      pole: 'A spinning pole means haircuts here!',
     },
 
-    // Cafe & Cake (games/cafe/).
+    // Cafe & Cake (games/cafe/). Sparkle says what to do when something new comes; Daddy and Mommy order and drink in
+    // their own voices (one line per drink); Daddy's brain freeze and the ceiling splat get a laugh.
     cafe: {
+      open: 'Drop fruit in the blender!',
+      thirsty: nick(`I'm thirsty, ${NAME}!`),
+      // The first time in a round: the button, then the pour.
+      button: 'Press the pink button!',
+      pour: 'Lift the jar and pour it in the cup!',
+      // Round 2's picture orders; round 3's Thai drinks.
+      orders: 'Make the drink in the bubble!',
+      pink: nick('Pink, please!'),
+      yellow: ji('Yellow, please!'),
+      thai: 'Thai drinks! Two cups at once!',
+      chaYen: nick('Cha yen, please!'),
+      // They drink it: a yum for a match (or for anything in round 1), a happy surprise for anything else.
+      yum: {
+        nick: [nick(`Yum! Thank you, ${NAME}!`), nick('Mmm! Just right!')],
+        ji: [ji('Delicious, sweetie!'), ji('Mmm! Yummy!')],
+      } as Record<string, Line[]>,
+      funny: {
+        nick: nick('A funny color! But yum!'),
+        ji: ji('Surprise! Yummy!'),
+      } as Record<string, Line>,
+      freeze: nick('Brrr! Brain freeze!'),
+      // The lid was off.
+      splat: nick('Splat! Ha ha!'),
+      // The pokeables, now and then.
+      coffee: nick('My coffee! Thank you!'),
+      teaCup: ji('Khob khun ka, sweetie!'),
+      allDone: `Best cafe ever, ${NAME}!`,
+      // Sparkle, when the 👆 shows: the next thing to do.
+      hint: {
+        straw: 'Put a straw in the cup!',
+        milk: 'Pour the milk on top!',
+        jar: 'Lift the jar and pour!',
+        button: 'Press the pink button!',
+        fruit: 'Drop some fruit in!',
+        want: 'Drop in the fruit from the bubble!',
+        tea: 'Put in the Thai tea!',
+      },
+      // Sparkle's fact, the first time she pokes the Thai tea.
+      chaYenFact: "Cha yen is Thai iced tea! It's orange!",
     },
 
-    // The Racing Slide (games/race/).
+    // The Racing Slide (games/race/). Sparkle says what's new each race and counts down; Daddy races her and dives
+    // into the balls head first; she always wins.
     race: {
+      open: `A slide race, ${NAME}! Tap the steps to climb!`,
+      raceYou: nick(`Race you, ${NAME}!`),
+      count: ['Three!', 'Two!', 'One!', 'Go!'],
+      // The first time something new comes: tap to scoot, tap at a bump, the rubber rings.
+      scoot: 'Tap, tap, tap to go fast!',
+      bumps: 'Now tap at each bump to fly!',
+      now: 'Tap now!',
+      rings: 'Rubber rings! Tap to spin!',
+      // She wins (in turn); Daddy lands head first; a kid cheers.
+      win: [`${NAME} wins!`, `${NAME} wins again!`, `First place, ${NAME}!`],
+      dive: [nick('Head first! Whee!'), nick("I'm OK! Ha ha!")],
+      goodRace: by('kid')(`Good race, ${NAME}!`),
+      allDone: `Three ribbons for ${NAME}!`,
+      // Sparkle, when the 👆 shows.
+      hint: {
+        climb: 'Tap the steps to climb!',
+        race: 'Tap to scoot faster!',
+      },
     },
 
     // Little Land's foam blocks (games/blocks/).

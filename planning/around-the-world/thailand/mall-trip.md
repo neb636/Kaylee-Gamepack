@@ -919,7 +919,16 @@ small climbing toy, before Dad's photos.
      the tool's own target pulls a little. A scripted drag of every tool onto its zone landed every time at iPhone
      landscape and portrait and both iPad orientations.
    - **Taps:** a tap on a tool does a short go with it, so all three patients can be healed with taps alone (about 22).
-   - **Sounds only:** no voices yet. Sparkle's opening line and Daddy's reactions come with the full loop.
+   - **Voices in** (`lines.ts` `L.mall.vet`, 30 lines; clips still to generate): Daddy's "Doctor Kaylee is here!" as
+     it opens; Sparkle as each patient hops in ("A puppy with a sore paw! Grab a tool!", "A muddy pony! Bath time!",
+     "A baby elephant with a sniffly trunk!"); Daddy as each is better ("Look! He's wagging!", "So shiny and
+     pretty!", "Bye bye, little elephant!") and "Bless you!" at the sneeze; Daddy hamming it up when a tool lands on
+     him, at most once every 12 s ("Ba-boom! Ba-boom!", "My heart is so big!", "Am I hot? Ha ha!", "Hey! That
+     tickles!", "Do I look pretty?", "Bleh! Yucky!", "Honk! Ha ha!"); Sparkle's hint for the next need each time the
+     👆 shows (twelve, one per need: "Listen to its heart!" ... "A tissue for its trunk!"); the facts the first time
+     she pokes the elephant ("The elephant is Thailand's animal!") and the x-ray box ("An x-ray shows the bones
+     inside!"); and "Everyone is better! Thank you, Doctor Kaylee!" at the end. The patients still only bark, whinny
+     and trumpet. The flat version says each patient's line.
    - **`games`:** replaces PR #120's `rides` (old `rides` links still work). The vet sticker comes after the first
      patient.
 2. **Greybox: the barber salon** (`barber`) and Daddy's `hair` carrying on through the trip.
@@ -948,8 +957,17 @@ small climbing toy, before Dad's photos.
      table's wear it (`wearHair`). The barber's door in the hall opens now (no more teaser puff), and the sock band has
      a 💈 slot (its sticker after the first reveal).
    - **Next:** Dad plays it on the iPad. Then the art gate (the kids' real looks, the mirror's reflection, a hair-pile
-     on the floor) and the full loop (Sparkle's line, Daddy's and the kids' reactions, "close enough!" in a voice).
-     Home reads `hair` when it's built (Agong laughs).
+     on the floor). Home reads `hair` when it's built (Agong laughs).
+   - **Voices in** (`lines.ts` `L.mall.barber`, 26 lines; clips still to generate): Daddy's "I want a new look,
+     Kaylee!" and Sparkle's "Grab a tool and do his hair!" as it opens; "Now colors and the hair dryer!" for round 2;
+     each kid asking as they sit down ("Spiky, please!", "Pigtails, please!", "Curly, please!", voice `kid`) and, for
+     the first, Sparkle's "Copy the picture!"; "Tap the mirror!" when it glows; at the reveal, Daddy's pose ("Whoa! I
+     love it!", "So handsome! I love it!") or the kid's "Close enough!" (three ways), then Mommy's "Say cheese!" just
+     before her flash (the flash moved to 3.2 s to fit it); the silly bits, at most one every 12 s ("Hey! My horn!",
+     "My eyebrows!", Mommy's "Whoa! My hair!" when the dryer blows); Sparkle's hint for a tool she hasn't tried each
+     time the 👆 shows ("Squirt the grow tonic on his hair!", "Snip, snip with the scissors!", ...); "A spinning pole
+     means haircuts here!" the first time she pokes the pole; "Great haircuts, Kaylee!" at the end. The flat version
+     says Daddy's opening line.
 3. **Greybox: the racing slide** (`race`).
    *Built 2026-10-21 (`activities/mall-trip/games/race/`, `#/world/thailand/mall-trip/race?round=1|2|3`):*
    - **The scene:** four wavy orange lanes (four bumps each) seen from the bottom, a little from her side so the
@@ -976,6 +994,15 @@ small climbing toy, before Dad's photos.
      about 4 to climb plus 6-12 scoots per race, about 35-45 over three races.
    - **For Dad on the iPad:** is the bump timing readable and fair? Is the walk back to the steps too long? Should
      the slide be longer?
+   - **Voices in** (`lines.ts` `L.mall.race`, 19 lines; clips still to generate): Sparkle's "A slide race, Kaylee! Tap
+     the steps to climb!" as it opens; Daddy's "Race you, Kaylee!" when she reaches the top of the first race;
+     Sparkle's countdown with the lights ("Three!", "Two!", "One!", "Go!"); the first time something is new: "Tap,
+     tap, tap to go fast!" (race 1, no scoot yet), "Now tap at each bump to fly!" on the way back for race 2 and "Tap
+     now!" at its first gold ring, "Rubber rings! Tap to spin!" for race 3; her win, in turn ("Kaylee wins!", "Kaylee
+     wins again!", "First place, Kaylee!"), a kid's "Good race, Kaylee!" after the second and "Three ribbons for
+     Kaylee!" after the third; Daddy popping out of the balls ("Head first! Whee!", "I'm OK! Ha ha!", at most one
+     every 12 s); and Sparkle's hint when the 👆 shows ("Tap the steps to climb!", "Tap to scoot faster!"). The flat
+     version says the opening line.
 4. **Greybox: the hall** (`hall`, `hungry`): walking between the zones, the shop doors, the sock band, life in the
    background.
    *Built 2026-10-21 (`activities/mall-trip/hall/`, `#/world/thailand/mall-trip/hall?from=in|vet|cafe|barber|race|frame`,
@@ -1103,8 +1130,19 @@ small climbing toy, before Dad's photos.
    - **Pokeables:** the fridge (the door swings, the bottles clink), the coffee machine (it steams and Daddy's little
      cup fills), the bread baskets (the pretzels bounce), the cake stand (it spins), the tea set (the pot pours Mommy a
      cup), the family. Fruit dropped on Daddy or Mommy gets eaten; cream on them lands on their nose.
-   - **Taps alone** play all three rounds (about 32 taps). Sounds only: Sparkle's line and the customers' voices
-     come with the full loop. The cafe sticker (🥤) goes on the sock band after the first drink.
+   - **Taps alone** play all three rounds (about 32 taps). The cafe sticker (🥤) goes on the sock band after the
+     first drink.
+   - **Voices in** (`lines.ts` `L.mall.cafe`, 27 lines; clips still to generate): Sparkle's "Drop fruit in the
+     blender!" and Daddy's "I'm thirsty, Kaylee!" as it opens; the first time, "Press the pink button!" (after the
+     first fruit) and "Lift the jar and pour it in the cup!" (after the first blend); round 2's "Make the drink in the
+     bubble!" with Daddy's "Pink, please!" and Mommy's "Yellow, please!" as each cup comes; round 3's "Thai drinks!
+     Two cups at once!" and Daddy's "Cha yen, please!"; one line per drink in their own voice (a yum, in turn: "Yum!
+     Thank you, Kaylee!", "Mmm! Just right!", "Delicious, sweetie!", "Mmm! Yummy!"; a surprise for a different
+     color: "A funny color! But yum!", "Surprise! Yummy!"; or "Brrr! Brain freeze!"); the silly bits at most one
+     every 12 s ("Splat! Ha ha!" at the ceiling, "My coffee! Thank you!", Mommy's "Khob khun ka, sweetie!" at the tea
+     set); Sparkle's hint each time the 👆 shows (the straw, the milk, the jar, the button, the fruit, the Thai tea);
+     "Cha yen is Thai iced tea! It's orange!" the first time she pokes the tea; and "Best cafe ever, Kaylee!" at the
+     end. The flat version says the opening line.
    - **Next for the cafe, after Dad plays it:** whether the tip-to-pour feels right on the iPad (the pull's size,
      the angle it pours at), whether two cups at once is clear, and whether round 1 should start with the lid on.
    *Little Land's foam blocks built 2026-10-21 (`activities/mall-trip/games/blocks/`,

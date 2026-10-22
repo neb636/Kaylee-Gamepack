@@ -1,6 +1,6 @@
 // The Barber Salon in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "★ 2. The Barber Salon"),
-// greybox: shapes, sounds, no voices. Daddy sits in the big chair facing her, a cape round him; Kaylee stands on her
-// step stool beside him; Mommy waits on the bench with her phone.
+// greybox: shapes and sounds, with the voices (lines.ts L.mall.barber). Daddy sits in the big chair facing her, a cape
+// round him; Kaylee stands on her step stool beside him; Mommy waits on the bench with her phone.
 //
 // The toy: grab a tool from the trolley and work it on his mane (mane.ts: strands, each with its own length and
 // color). The tool's working end sits just above her finger, and it works on the strands under it on screen:
@@ -16,9 +16,10 @@
 // the chair spins round to it, Daddy poses and Mommy takes a photo. Daddy keeps the hairdo (the `hair` param).
 // A tap on a tool does a short go with it, so dragging is never a must. Nothing fails.
 import { CapsuleGeometry, Color, IcosahedronGeometry, OctahedronGeometry, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, wobble } from '../../../../../../../sdk'
+import { bell, wobble, type Line } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
 import { LOOKS } from '../../../../characters/looks'
+import { L } from '../../../../lines'
 import type { Member } from '../../../../characters/member'
 import type { AnchorInfo } from '../../../../engine/Anchors'
 import type { Shot } from '../../../../engine/camera'
@@ -65,6 +66,10 @@ export const BARBER_ANCHORS: AnchorInfo[] = [
 /** Tools are toy-sized, bigger than life so they're easy to see and grab. */
 const TOOL_SCALE = 1.45
 type Phase = 'play' | 'reveal' | 'swap' | 'done'
+
+/** The family's silly reactions: at most one line this often (seconds), so talk stays short and play long. */
+const SILLY_GAP = 12
+const B = L.mall.barber
 
 const tmp = new Vector3()
 const right = new Vector3()
@@ -118,6 +123,13 @@ export class Salon extends Stage {
   private dadOnBench = false
   private headR = 60
   private cardEl: HTMLElement | null = null
+  // The voices: when someone last said something silly, which idle spell the hint was said for, whose mirror glow
+  // Sparkle has pointed out, Daddy's pose line next, the fact said.
+  private sillySaid = -99
+  private hintFor = -1
+  private glowSaid = ''
+  private loveN = 0
+  private told = false
 
   constructor(renderer: WebGLRenderer, private bev: BarberEvents, start: { round: Round; hair: string }) {
     super(renderer, bev)
@@ -162,6 +174,12 @@ export class Salon extends Stage {
     if (this.round === 3) {
       this.benchDaddy(true)
       this.after(0.3, () => this.nextKid())
+    } else {
+      // Daddy wants a new look; Sparkle says what to do (round 2's link: the new tools).
+      this.after(0.3, () => {
+        this.bev.say(B.open)
+        this.bev.say(this.round === 1 ? B.start : B.colors)
+      })
     }
     this.setTray()
   }
@@ -211,6 +229,9 @@ export class Salon extends Stage {
         this.work = 0
         this.play(sfx.giggle)
         this.bev.card(c.card)
+        // The kid asks for the picture; the first time, Sparkle says what to do.
+        this.bev.say(B.ask[c.card])
+        if (i === 0) this.bev.say(B.copy)
       }),
     )
   }
@@ -393,6 +414,10 @@ export class Salon extends Stage {
       case 'pole':
         this.pole = 1
         this.play(sfx.chime)
+        if (!this.told) {
+          this.told = true
+          this.bev.say(B.pole)
+        }
         return
       case 'jar':
         this.jarK = 0
@@ -544,6 +569,7 @@ export class Salon extends Stage {
           if (brows && daddy && this.ready('brows', 1.6)) {
             this.nick.react('wiggle')
             this.after(0.3, () => sfx.haha())
+            this.sillySays(B.brows)
           }
         } else if (this.ready('squirt', 0.5)) this.play(sfx.squirt)
         break
@@ -572,6 +598,7 @@ export class Salon extends Stage {
             this.horn.k = 0
             this.play(sfx.horn)
             this.after(0.35, () => sfx.haha())
+            this.sillySays(B.horn)
             this.sparkles.burst(this.horn.g.localToWorld(new Vector3(0, 0.5 * r.face.R, 0)), 8, 1, 1.4, 0.7, 0.04)
           }
         }
@@ -646,6 +673,7 @@ export class Salon extends Stage {
     this.play(sfx.whoosh)
     this.after(0.3, () => sfx.haha())
     this.ji.react('wiggle')
+    this.sillySays(B.windy)
     this.after(2.2, () => {
       this.kaylee.setWind(0)
       this.ji.setWind(0)
@@ -681,6 +709,9 @@ export class Salon extends Stage {
       sfx.ooh()
       this.sparkles.burst(new Vector3(MIRROR.x, (MIRROR.y0 + MIRROR.y1) / 2, MIRROR.z + 0.3), 18, 1.6, 1, 1, 0.06)
     })
+    // Daddy loves it (or the kid: close enough!), then Mommy: say cheese! (and the flash).
+    this.after(1.0, () => this.bev.say(kid ? B.enough[kid.i % B.enough.length] : B.love[this.loveN++ % B.love.length]))
+    this.after(2.5, () => this.bev.say(B.cheese))
     this.after(1.5, () => {
       this.spinTo(Math.PI * 2)
       sfx.spin()
@@ -696,7 +727,7 @@ export class Salon extends Stage {
       sfx.cheer()
       this.kaylee.react('hop')
     })
-    this.after(2.8, () => this.photo())
+    this.after(3.2, () => this.photo())
     this.after(3.8, () => {
       this.room.chair.spin.rotation.y = 0
       this.spinGoal = this.spinFrom = 0
@@ -708,6 +739,7 @@ export class Salon extends Stage {
         this.work = 0
         this.phase = 'play'
         this.setTray()
+        this.bev.say(B.colors)
       } else if (n === 2) {
         this.round = 3
         this.bev.round(3)
@@ -738,6 +770,7 @@ export class Salon extends Stage {
         sfx.cheer()
         this.nick.react('hop')
         this.kaylee.react('hop')
+        this.bev.say(B.allDone)
         this.bev.allDone()
       })
   }
@@ -760,6 +793,18 @@ export class Salon extends Stage {
 
   private play(f: () => void) {
     f()
+  }
+  /** A silly reaction in someone's own voice, unless one was said a moment ago. */
+  private sillySays(l: Line) {
+    if (this.time - this.sillySaid < SILLY_GAP) return
+    this.sillySaid = this.time
+    this.bev.say(l)
+  }
+  /** Sparkle's hint, once each time the 👆 shows. */
+  private hint(l: Line) {
+    if (this.hintFor === this.lastTouch) return
+    this.hintFor = this.lastTouch
+    this.bev.say(l)
   }
   private ready(key: string, every: number) {
     if (this.time - (this.cool.get(key) ?? -99) < every) return false
@@ -864,6 +909,12 @@ export class Salon extends Stage {
     if (this.jarK < 1 && Math.random() < dt * 20) this.mist.emit(r.jar.root.position.clone().add(new Vector3((Math.random() - 0.5) * 0.12, 0.3, 0.05)), new Vector3(0, 0.6, 0.1), 0.6, 0.025, 4)
     // The mirror glows when it's time for the reveal: its bulbs blink round.
     const glow = this.phase === 'play' && this.work >= this.enough
+    // The first time the mirror glows for whoever's in the chair, Sparkle says so.
+    const whose = `${this.round}:${this.kidsDone}`
+    if (glow && this.glowSaid !== whose) {
+      this.glowSaid = whose
+      this.bev.say(B.mirror)
+    }
     r.mirror.bulbs.scale.setScalar(glow ? 1 + 0.12 * Math.max(0, Math.sin(t * 8)) : 1)
     r.mirror.shine.position.x = glow ? Math.sin(t * 1.5) * 0.25 : 0
     for (const f of [this.falls, this.sparkles, this.mist]) f.update(dt)
@@ -940,10 +991,15 @@ export class Salon extends Stage {
   /** Nothing touched for a while: the mirror once it's time, or a tool she hasn't used yet (else the tonic). */
   protected hintAt() {
     if (this.phase !== 'play' || this.auto || this.held?.moved) return null
-    if (this.work >= this.enough) return new Vector3(MIRROR.x + MIRROR.w * 0.32, MIRROR.y1 - 0.45, MIRROR.z + 0.1)
+    if (this.work >= this.enough) {
+      this.hint(B.mirror)
+      return new Vector3(MIRROR.x + MIRROR.w * 0.32, MIRROR.y1 - 0.45, MIRROR.z + 0.1)
+    }
     const unused = [...this.tools.values()].find((tl) => tl.root.visible && !this.used.has(tl.item.tool))
     const t = unused ?? this.tools.get('tonic')
-    return t?.root.visible ? t.root.position.clone().add(new Vector3(0, 0.3, 0)) : null
+    if (!t?.root.visible) return null
+    this.hint(B.hint[t.item.tool])
+    return t.root.position.clone().add(new Vector3(0, 0.3, 0))
   }
 
   qa() {
