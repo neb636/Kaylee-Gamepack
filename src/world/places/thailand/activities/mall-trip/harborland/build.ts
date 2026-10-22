@@ -445,14 +445,25 @@ export function buildBigFrame(bag: Bag, still = false): FrameBuilt {
   {
     const w = WALL.x1 - WALL.x0
     const cx = (WALL.x0 + WALL.x1) / 2
-    const parts = [P.rbox(w, WALL.top - 0.04, 0.1, 0.04, C.red, { at: [cx, WALL.top / 2, WALL.z + 0.06] }), P.box(w + 0.04, 0.08, 0.12, C.white, { at: [cx, 0.04, WALL.z + 0.07] })]
-    for (let i = 0; i < 16; i++) {
-      const hx = WALL.x0 + 0.16 + ((i * 0.613) % (w - 0.32))
-      const hy = 0.18 + ((i * 0.37) % 1.15)
+    const z = WALL.z
+    // Padded panels (two columns, three rows) with white seams between them, so it reads as a real wall.
+    const parts = [P.rbox(w, WALL.top - 0.04, 0.1, 0.04, C.red, { at: [cx, WALL.top / 2, z + 0.06] }), P.box(w + 0.04, 0.08, 0.12, C.white, { at: [cx, 0.04, z + 0.07] })]
+    parts.push(P.box(0.03, WALL.top - 0.12, 0.02, C.white, { at: [cx, WALL.top / 2, z + 0.115] }))
+    for (const k of [1, 2]) parts.push(P.box(w - 0.1, 0.03, 0.02, C.white, { at: [cx, 0.12 + ((WALL.top - 0.24) * k) / 3, z + 0.115] }))
+    // Holds on a zig-zag route, one per rung, left and right turn about, each a different color; the rungs are a
+    // hand's reach apart so she can see the way up.
+    const rungs = 7
+    for (let i = 0; i < rungs; i++) {
+      const hy = 0.26 + (i * (WALL.top - 0.62)) / (rungs - 1)
+      const left = i % 2 === 0
+      const hx = cx + (left ? -1 : 1) * w * 0.22
       const c = HOLDS[i % HOLDS.length]
-      if (i % 3 === 0) parts.push(P.sphere(0.075, c, { at: [hx, hy, WALL.z + 0.13], scale: [1.3, 0.8, 0.55], rot: [0, 0, i] }, 8))
-      else if (i % 3 === 1) parts.push(P.sphere(0.06, c, { at: [hx, hy, WALL.z + 0.13], scale: [1, 1, 0.6] }, 8))
-      else parts.push(P.cone(0.07, 0.1, c, { at: [hx, hy, WALL.z + 0.14], rot: [Math.PI / 2, 0, 0] }, 5))
+      const at: V3 = [hx, hy, z + 0.14]
+      if (i % 3 === 0) parts.push(P.sphere(0.1, c, { at, scale: [1.35, 0.8, 0.6], rot: [0, 0, left ? 0.3 : -0.3] }, 10))
+      else if (i % 3 === 1) parts.push(P.sphere(0.085, c, { at, scale: [1, 1, 0.65] }, 10))
+      else parts.push(P.cone(0.09, 0.12, c, { at, rot: [Math.PI / 2, 0, 0] }, 6))
+      // A small foot hold off to the side of each.
+      parts.push(P.sphere(0.05, HOLDS[(i + 3) % HOLDS.length], { at: [cx + (left ? 1 : -1) * w * 0.3, hy + 0.12, z + 0.135], scale: [1, 0.8, 0.6] }, 8))
     }
     add(solid(merge(parts), bag, 2), 'climb:wall')
   }
