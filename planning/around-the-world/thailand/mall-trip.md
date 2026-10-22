@@ -1443,9 +1443,28 @@ small climbing toy, before Dad's photos.
      - At home: is the order right (the box, the cousins, then the photo)? Should Kaylee pick the photo of the day,
        like the boat trip's (once the Big Frame takes real photos)?
 8. **The look:** the hall, the shops, the Big Frame, ICONSIAM, The Pizza Company, the Veloz and the outfits, in toon.
+   *2026-10-21:* every greybox was built in the final toon look (no separate art pass ran). The trip's one generated
+   picture, the pizza slice sticker (`assets/pizza-slice.webp`, cheese dripping off its tip), replaces the balloon
+   stand-in. Still open from the greyboxes' notes: the barber's kids get their own looks (they're a puppy, a pony and a
+   panda for now), the mirror's reflection and a pile of hair on the floor, the hall's 4-by-3 Sky Pod wall vs the game's
+   nine pods, and the Big Frame's boxer statue becoming the monkey coach.
 9. **Voices, the full loop and QA** (layout-qa, then playtest-qa, scoped to `mall-trip`).
-10. **Into the game:** move `mall-trip` from `inTheWorks` to `activities` in `meta.ts`. Until then it opens only from its
-    links (no way in from the house, no passport slot, and the 🎉 party doesn't wait for its stamp).
+   *Voices built 2026-10-21:* every line is in `lines.ts` `L.mall` (one block per part: `hall`, `vet`, `barber`, `cafe`,
+   `race`, `blocks`, `mountain`, `boxing`, `skypod`, `frame`, `pizza`, `trip`) and recorded (about 245 new clips).
+   - **Who talks:** every screen's world says its lines through `activities/mall-trip/voice.ts`, which `MallTrip.tsx`
+     points at Sparkle's corner guide (`trip/legs/Guide.tsx`: the words show with who said them). The trip loop's legs
+     (`Loop.tsx`) keep their own guide.
+   - **New speakers** in `cast.json`: the monkey `coach`, the HarborLand `staff`, the pizza `server`, a playground `kid`.
+   - **The pattern in every mini game:** Sparkle's opening (with at most one character line) about 0.3-0.5 s in, under
+     ~5 s before the first touch; a Sparkle line when something new starts (a round, a patient, the card, the drum); one
+     short hint each time the 👆 shows (7 s with nothing touched); the big reactions always (Daddy's sneeze, the barber
+     reveal, "You win, Kaylee!"), small ones at most every 12 s; counting (the mountain's holds, the Sky Pod's score)
+     only while nobody's talking; each fact the first time she pokes its thing. The flat versions say their opening line.
+   - **QA:** Dad said to skip it (2026-10-21): no layout-qa or playtest-qa ran, and the transcription check flagged ~20
+     clips that are mostly fine (Thai words written in Thai script, "Kaley"). Listen on the iPad (`known-issues.md`).
+10. **Into the game:** move `mall-trip` from `inTheWorks` to `activities` in `meta.ts`.
+    *Done 2026-10-21:* Mommy's card in the house offers 🚤 and 🛝🍕 ("Kaylee, where shall we go?", now spoken), the
+    passport has the pizza slice's slot and the mall's facts, and the 🎉 party waits for both stamps.
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 
