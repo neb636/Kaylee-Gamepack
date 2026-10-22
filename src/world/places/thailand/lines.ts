@@ -257,6 +257,19 @@ export const L = {
   mall: {
     // HarborLand's hall (hall/).
     hall: {
+      // Sparkle, the first time she comes in (not coming back out of a mini game).
+      welcome: `Welcome to HarborLand, ${NAME}! Tap a place to play!`,
+      // The staff (a buffalo and a penguin), the first two times she comes near one, and when she taps them (in turn).
+      staff: [by('staff')(`Sawasdee ka, ${NAME}!`), by('staff')('Have fun!')],
+      // Mommy on her bench and Daddy following her round, when she taps them (in turn).
+      ji: [ji('Hi, sweetie!'), ji(`Have fun, ${NAME}!`), ji('Mommy is right here!')],
+      nick: [nick('Where to next, Kaylee?'), nick('Daddy is coming too!'), nick('Ho ho! Go play!')],
+      // Daddy's tummy rumbles (and again if she taps him while it does), then Mommy's card, and her answer to More play.
+      tummy: nick('My tummy is rumbling!'),
+      pizza: ji('Hungry, Kaylee? Pizza time?'),
+      more: ji('OK! A little more!'),
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: 'Tap a door to play!',
     },
 
     // The Vet Clinic (games/vet/).
@@ -293,10 +306,57 @@ export const L = {
 
     // The Big Frame (harborland/).
     frame: {
+      // Sparkle, as she comes in.
+      start: 'Climb up high, then slide down!',
+      // Mommy and Daddy, the first time she rides each big slide.
+      ride: {
+        nose: ji('Wheee! Down the nose!'),
+        dragon: nick('Whoa! Here come the dragons!'),
+        roller: ji('Rattle rattle! Wheee!'),
+        donut: nick('Round and round!'),
+        zip: ji('Zoom! Go, Kaylee!'),
+      },
+      // Daddy in the ball pit and the cannon: the first two bonks (in turn), then his big flop.
+      bonk: [nick('Bonk! Hey!'), nick('Hey! Not my horn!')],
+      flop: nick('Whoa! Splash!'),
+      // Daddy tapped in the balls (in turn); Mommy tapped says her hall lines.
+      nick: [nick('Ho ho! Hi, Kaylee!'), nick('Bonk me with the cannon!')],
+      // Sparkle's fact, the first time she pokes the giant mask or a Phi Ta Khon on the roller's posts.
+      phiTaKhon: 'Phi Ta Khon is a festival with big funny masks!',
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: 'Tap a slide to ride it!',
     },
 
     // The Pizza Company (pizza/).
     pizza: {
+      // Sparkle at the menu; the server sets the pizza down; Sparkle's one instruction.
+      menu: `Pick a pizza, ${NAME}!`,
+      served: by('server')('Pizza time!'),
+      start: 'Pull a slice!',
+      // Sparkle counting round the table, as each plate gets its first and second slice.
+      count: {
+        ji: ['One for Mommy!', 'Two for Mommy!'],
+        nick: ['One for Daddy!', 'Two for Daddy!'],
+        kaylee: [`One for ${NAME}!`, `Two for ${NAME}!`],
+      } as Record<string, string[]>,
+      // Daddy with more than anyone (in turn), the cheese tug on his nose.
+      ham: [nick("Kaylee, Mommy's hungry too!"), nick('Ho ho! More for Daddy!')],
+      nose: nick('My nose!'),
+      // Two each: the last two go in Agong's box; the lid closes; then Sparkle's fact once it's all shared.
+      agong: ji('Those are for Agong!'),
+      closed: nick('Yay! Pizza for Agong!'),
+      fair: 'Sharing fairly means everyone gets the same!',
+      // The pokes: the server's bow, Daddy's chili sneeze, Mommy's onion-ring bracelets (three in turn, then she eats one).
+      thanks: by('server')('Khob khun ka!'),
+      spicy: nick('So spicy!'),
+      rings: [ji('Look! A bracelet!'), ji('So fancy!'), ji('Three bracelets!')],
+      crunch: ji('Mmm! Crunchy!'),
+      // Sparkle, when the finger shows after a while with nothing touched (or the menu waits).
+      hint: {
+        menu: 'Tap a pizza!',
+        slice: 'Pull a slice to a plate!',
+        box: "Put one in Agong's box!",
+      },
     },
 
     // The trip around it: Mommy's question, the goodbye, the Veloz, ICONSIAM, the counter, home.
