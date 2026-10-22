@@ -31,6 +31,7 @@ import { ALL_ITEMS, BENCH, DADDY_AT, DADDY_TALL, DOOR, HOLD_Z, JAR, KAYLEE_AT, N
 import { PART_OF, Patient, type Zone, type ZoneId } from './patient'
 import { buildRoom, drawXray, type Room } from './room'
 import { vetSfx as sfx, voiceOf } from './sounds'
+import { Stethoscope } from './stethoscope'
 import { buildBowGeometry, buildTool, type Tool } from './tools'
 
 export interface VetEvents extends LegEvents {
@@ -127,6 +128,8 @@ export class VetClinic extends Stage {
   private spray = 0
   private daddy = { suds: null as Blobs | null, bow: null as Group | null, band: null as Group | null, fluff: 0, zones: [] as Zone[] }
   private kayleeHop = 0
+  /** The stethoscope's ear tips and tubes on Kaylee while she holds its chest piece. */
+  private steth: Stethoscope
   // The voices: when Daddy last spoke, which idle spell the hint was said for, the facts said, his heart line next.
   private daddySaid = -99
   private hintFor = -1
@@ -146,6 +149,7 @@ export class VetClinic extends Stage {
     this.nick = members.get('nick')!
     kaylee.wear(['scrubs', 'scrub-cap'])
     scene.add(kaylee.root, this.nick.root)
+    this.steth = new Stethoscope(scene, kaylee.rig, bag)
     this.put(kaylee, KAYLEE_AT.x, 0, KAYLEE_AT.z, 'stand', KAYLEE_AT.face)
     this.put(this.nick, DADDY_AT.x, 0, DADDY_AT.z, 'stand', DADDY_AT.face)
     const nr = this.nick.rig
@@ -1028,6 +1032,28 @@ export class VetClinic extends Stage {
     this.told.add(key)
     this.vev.say(l)
   }
+  /**
+   * The stethoscope's chest piece is all that goes to the patient: its ear tips and tubes pop onto Kaylee's own ears and
+   * chest while she holds it (or it's on its way back), and the tray's whole one is just the toy to grab.
+   */
+  private stethoscope(dt: number, using: Tool | null) {
+    const st = [...this.tools.values()].find((t) => t.item.tool === 'stethoscope' && t.root.visible)
+    const active = !!st && (using === st || this.going.some((g) => g.tool === st))
+    if (st?.rest) st.rest.visible = !active
+    let end: Vector3 | null = null
+    if (st && active) {
+      st.root.updateMatrixWorld(true)
+      end = st.model.localToWorld(new Vector3(0, st.stem ?? 0.1, 0))
+    }
+    const e = this.steth.update(dt, end)
+    // The chest piece turns its stem toward her chest, so the tube leaves it on her side and never crosses the patient.
+    if (st && active) {
+      const goal = Math.max(-2.4, Math.min(2.4, Math.atan2(-(this.steth.y.x - st.root.position.x), this.steth.y.y - st.root.position.y)))
+      st.lean += (goal - st.lean) * (1 - Math.exp(-dt * 14))
+    } else if (st) st.lean = 0
+    if (e > 0) this.play(sfx.boop)
+  }
+
   private ready(key: string, every: number) {
     if (this.time - (this.cool.get(key) ?? -99) < every) return false
     this.cool.set(key, this.time)
@@ -1104,6 +1130,7 @@ export class VetClinic extends Stage {
     this.kayleeHop += ((tool ? 1 : 0) - this.kayleeHop) * (1 - Math.exp(-dt * 8))
     this.kaylee.rig.armR.rotation.x = -1.1 * this.kayleeHop
     this.nick.update(dt, t)
+    this.stethoscope(dt, tool)
     this.daddy.suds?.update(dt, t)
     const dm = this.nick.rig.mane
     if (dm) dm.scale.setScalar(1 + 0.4 * this.daddy.fluff)
