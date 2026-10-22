@@ -1,5 +1,5 @@
 // The Racing Slide at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "★ 3. The Racing Slide"),
-// greybox: shapes, sounds, no voices. Four wavy orange lanes seen from the bottom, ending in a pit of pink and white
+// greybox: shapes and sounds, with the voices (lines.ts L.mall.race). Four wavy orange lanes seen from the bottom, ending in a pit of pink and white
 // balls; Kaylee in lane 1, Daddy, Mommy and a kid beside her (the other kid waits a turn by the pit).
 //
 // The toy: climb the steps (tap, tap: two steps a tap), sit at the top, 3-2-1, then every tap is a scoot: her hands
@@ -16,6 +16,7 @@ import { bell, clamp, wobble } from '../../../../../../../sdk'
 import type { AnchorInfo } from '../../../../engine/Anchors'
 import type { Shot } from '../../../../engine/camera'
 import { PAL } from '../../../../engine/toon'
+import { L } from '../../../../lines'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../../trip/legs/stage'
 import { BallPit, Floaters } from './fx'
 import { BACK_PATH, BACK_TOP, BOARD, CHEER_AT, CLIMB_HOPS, CRESTS, DECK, FLAG_COLORS, FLAG_H, HOP, KID_LANE, kidFor, LAMPS, LAND_Z, LANE_OF, LANES, laneSlope, laneY, laneZ, PIT, PIT_EXIT, RAIL_X, RING_COLORS, RIVALS, SINK, SLIDE, SLIDE_LEN, SPEED, stepAt, STEPS_FOOT, WINDOW, type RacerId } from './layout'
@@ -68,6 +69,7 @@ interface Run {
 
 /** The camera stands a little to her side of straight on (degrees): the bumps show in the lanes' sides, the steps and lane 1 stay in front. */
 const YAW = -14
+const R = L.mall.race
 const tmp = new Vector3()
 const v3 = (p: readonly number[]) => new Vector3(p[0], p[1], p[2])
 const seatOf = (lane: number) => new Vector3(LANES[lane], laneY(0), laneZ(0) + 0.08)
@@ -103,6 +105,11 @@ export class RaceSlide extends Stage {
   private ringEl: HTMLElement | null = null
   private teach: Vector3 | null = null
   private countN: 3 | 2 | 1 | 0 | null = null
+  // The voices: which idle spell the hint was said for, the first-time lines said, the next win line, Daddy's last.
+  private hintFor = -1
+  private told = new Set<string>()
+  private winN = 0
+  private diveSaid = -99
 
   constructor(renderer: WebGLRenderer, private rev: RaceEvents, start: { round: number }) {
     super(renderer, rev)
@@ -127,6 +134,22 @@ export class RaceSlide extends Stage {
     // The ribbons she has already won (a link to round 2 or 3).
     for (let i = 1; i < this.race; i++) this.pin(this.newRibbon(), true)
     this.setUp()
+    // Sparkle: climb up! (A link to a later race also says what's new in it.)
+    this.after(0.3, () => {
+      this.rev.say(R.open)
+      this.newRules()
+    })
+  }
+
+  /** What's new in this race (said once, on the way to the steps): the bumps in race 2, the rubber rings in race 3. */
+  private newRules() {
+    if (this.race === 2) this.once('bumps', R.bumps)
+    if (this.race === 3) this.once('rings', R.rings)
+  }
+  private once(key: string, l: string) {
+    if (this.told.has(key)) return
+    this.told.add(key)
+    this.rev.say(l)
   }
 
   setRingElement(el: HTMLElement | null) {
@@ -227,6 +250,7 @@ export class RaceSlide extends Stage {
     this.wantClimb = false
     sfx.chime()
     this.me.hop()
+    if (this.race === 1) this.rev.say(R.raceYou)
     this.after(0.35, () => this.sitDown(this.me, 0))
   }
 
@@ -237,6 +261,7 @@ export class RaceSlide extends Stage {
     const step = (n: 3 | 2 | 1 | 0) => {
       this.countN = n
       this.rev.count(n)
+      this.rev.say(R.count[3 - n])
       this.lamp(n)
       sfx.light(n === 0)
       if (n === 0) {
@@ -433,6 +458,11 @@ export class RaceSlide extends Stage {
           r.land()
           r.arms = 'cheer'
           r.hop()
+          // Out he pops (a line at most every 12 s, so it stays a treat).
+          if (this.time - this.diveSaid > 12) {
+            this.diveSaid = this.time
+            this.rev.say(R.dive[n % R.dive.length])
+          }
           this.daddyDive = null
           r.flip = 0
         })
@@ -451,6 +481,10 @@ export class RaceSlide extends Stage {
     g.position.copy(this.me.pos).add(tmp.set(0, 1.45, 0.1))
     g.scale.setScalar(0.01)
     this.after(0.35, () => sfx.ribbon())
+    this.rev.say(R.win[this.winN++ % R.win.length])
+    // A kid cheers her second win; three ribbons, Sparkle says so.
+    if (n === 2) this.after(1.6, () => this.rev.say(R.goodRace))
+    if (n === 3) this.after(2.0, () => this.rev.say(R.allDone))
     this.flying = { g, t: 0, from: g.position.clone(), to: this.built.slots[Math.min(this.ribbons.length, this.built.slots.length - 1)].clone() }
     this.after(2.0, () => {
       this.rev.won(n)
@@ -492,6 +526,7 @@ export class RaceSlide extends Stage {
     const was = this.race
     this.race++
     this.rev.round(this.race)
+    this.newRules()
     this.phase = 'walk'
     this.seated.clear()
     this.climbed = 0
@@ -777,12 +812,21 @@ export class RaceSlide extends Stage {
     switch (this.phase) {
       case 'climb': {
         const [x, y, z] = stepAt(CLIMB_HOPS[Math.min(this.climbed, CLIMB_HOPS.length - 1)])
+        this.hint(R.hint.climb)
         return new Vector3(x, y + 0.1, z)
       }
       case 'race':
-        return this.her.landed ? null : this.me.root.position.clone().add(tmp.set(0, 0.3, 0))
+        if (this.her.landed) return null
+        this.hint(R.hint.race)
+        return this.me.root.position.clone().add(tmp.set(0, 0.3, 0))
     }
     return null
+  }
+  /** Sparkle's hint, once each time the 👆 shows. */
+  private hint(l: string) {
+    if (this.hintFor === this.lastTouch) return
+    this.hintFor = this.lastTouch
+    this.rev.say(l)
   }
 
   placeAnchors() {
@@ -791,8 +835,14 @@ export class RaceSlide extends Stage {
     const run = this.runs.find((r) => r.r === this.me)
     this.teach = null
     if (this.phase === 'race' && run && !run.out) {
-      if (this.race === 1 && this.her.scoots === 0 && this.her.raceT > 0.7) this.teach = this.me.root.position.clone().add(tmp.set(0, 0.3, 0))
-      if (this.race === 2 && this.her.flights === 0 && this.glowHer()) this.teach = this.me.root.position.clone().add(tmp.set(0, 0.3, 0))
+      if (this.race === 1 && this.her.scoots === 0 && this.her.raceT > 0.7) {
+        this.teach = this.me.root.position.clone().add(tmp.set(0, 0.3, 0))
+        this.once('scoot', R.scoot)
+      }
+      if (this.race === 2 && this.her.flights === 0 && this.glowHer()) {
+        this.teach = this.me.root.position.clone().add(tmp.set(0, 0.3, 0))
+        this.once('now', R.now)
+      }
     }
     const hint = this.hintRef
     if (hint && this.teach) {

@@ -4,6 +4,8 @@
 // then Daddy's pad as it moves (six hits) and the big kick. A star for each round, and the belt.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
+import { L } from '../../../../lines'
+import { mallVoice } from '../../voice'
 import { Beat, PERIOD } from './beat'
 import { BOWS, DRUM_JOINS, NEED, PAD_STEPS, ROUND2_MAX, STEPS, type Round } from './layout'
 import { boxingSfx as sfx } from './sounds'
@@ -33,8 +35,9 @@ export function BoxingFlat({ round: startRound, onRound, onWarmedUp, onAllDone }
   const padStep = useRef(0)
   const b = beat.current
 
-  // The beat: the drum and the cymbal, and a redraw for the ring.
+  // The beat: the drum and the cymbal, and a redraw for the ring. (A link to round 1: the coach's hello first, as in 3D.)
   useEffect(() => {
+    if (startRound === 1) mallVoice.say(L.mall.boxing.hello)
     if (startRound >= 2) b.start(now(), PERIOD[startRound], 1.0)
     let raf = 0
     const loop = () => {

@@ -90,7 +90,28 @@ Code paths are under `src/world/places/thailand/`.
 - [ ] **The kids in the frame climb by hopping straight up the nets** (they follow their loops, not the walk grid).
   - Code: `activities/mall-trip/harborland/frame.ts` (the kids' loops), `hall/hall.ts` (the hall's frame kid).
 
+## The mall trip: found while building, not checked by QA (Dad skipped it, 2026-10-21)
+
+- [ ] **Nine slots on the sock band** cover the hall's "Muay Thai" sign on an iPhone, and on iPhone landscape a mini
+  game's 🛝 (back to the hall, at the end) sits over the sock band.
+  - Check: `#/world/thailand/mall-trip/hall?from=boxing` and `skypod?round=3` at iPhone landscape size.
+  - Code: `activities/mall-trip/MallTrip.tsx` (`SockBand`), each game's 🛝 button.
+- [ ] **Muay Thai, round 3:** when Daddy holds the pad on her left, he hides the coach and the drum.
+  - Check: `#/world/thailand/mall-trip/boxing?round=3`.
+- [ ] **The pizza box only closes with two slices in it.** If she hands out all eight onto plates, nothing tells her to
+  move two into the box, so the trip doesn't go home until she does. Make the box glow when the pan is empty.
+  - Check: `#/world/thailand/mall-trip/share`, give every slice to a plate.
+  - Code: `activities/mall-trip/pizza/table.ts` (`checkDone`, the box's glow).
+- [ ] **The pizza table to home, and home to the stamp,** were never played end to end by a script (the trip loop's
+  greybox ran out of time there).
+  - Check: `#/world/thailand/mall-trip/share?shared=6`, then on to `home`.
+- [ ] **The hall's Sky Pod wall is 4 by 3; the game's has nine pods.**
+
 ## Listen on the iPad (automated checks can't hear)
+- [ ] **The mall trip's new voices** (2026-10-21): the transcription check flagged Thai words written back in Thai
+  ("Sawasdee ka", "Khob khun ka"), "Kaylee" heard as "Kaley", Daddy's "Ooh, strong!" heard in Japanese, the coach's
+  "wai kru" heard as "Y crew", and "Phi Ta Khon" as "Fi ta'kan". Listen in the vet, the barber, the hall's staff, the
+  Muay Thai warm-up and the Big Frame's mask.
 
 - [ ] **The village kids say "Kaylee".** The transcription check heard "Haley" (and "เคลลี่" in the Thai line). It's
   likely the accent, but listen to "The ball, Kaylee!" and "Khob khun ka, Kaylee!". The kids' voice is OpenAI `coral`

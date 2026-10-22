@@ -8,6 +8,7 @@ import { Anchors } from '../../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../../engine/View3D'
 import { RaceFlat } from './Flat'
 import { RACE_ANCHORS, RaceSlide } from './track'
+import { mallVoice } from '../../voice'
 
 interface Props {
   /** The race to start with (1, 2 or 3). */
@@ -34,7 +35,7 @@ export function Race({ round, onRound, onWon, onPlay }: Props) {
     const w = new RaceSlide(
       renderer,
       {
-        say: () => {},
+        say: (l) => mallVoice.say(l),
         section: () => {},
         done: () => {},
         round: (n) => {

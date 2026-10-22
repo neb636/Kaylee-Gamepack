@@ -16,6 +16,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { sounds, useSaved } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
+import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
 import { BoardingPass, type PassChoice } from '../../trip/legs/BoardingPass'
 import { justSaidYes, saidYes } from '../../trip/legs/Ask'
 import { MallLoop, type LoopSection } from './Loop'
@@ -41,6 +42,7 @@ import type { PizzaId } from './pizza/layout'
 import { Pizza } from './pizza/Pizza'
 import MALL_SECTIONS, { type MallSection, type PatientId } from './sections'
 import { SOCK_COLORS } from './socks'
+import { mallVoice } from './voice'
 
 /** What she can play so far: the mini games (any big ride in the Big Frame is `frame`). */
 const GAMES = ['vet', 'cafe', 'race', 'barber', 'blocks', 'mountain', 'boxing', 'skypod', 'frame'] as const
@@ -128,6 +130,15 @@ export function MallTrip({ onExit, onBoat, onDone }: Props = {}) {
   const onLoop = LOOP.includes(section)
   const band = bandOf(games)
   const hungry = (band.length >= 4 || performance.now() - since.current > HUNGRY_MS) && visits > notYet
+  // Everyone's lines play through Sparkle's corner guide (the words show with who said them).
+  const guide = useRef<TripGuideHandle>(null)
+  useEffect(() => {
+    const plain = mallVoice.say
+    mallVoice.say = (l) => (guide.current ? guide.current.speak(l) : plain(l))
+    return () => {
+      mallVoice.say = plain
+    }
+  }, [])
   const sticker = (id: GameId) => setGames((g) => (g.includes(id) ? g : [...g, id]))
 
   const params = () => ({
@@ -310,6 +321,7 @@ export function MallTrip({ onExit, onBoat, onDone }: Props = {}) {
           ↩️
         </motion.button>
       )}
+      {!onLoop && <TripGuide ref={guide} />}
       {!pizzaTime && !onLoop && <SockBand done={band} color={SOCK_COLORS[socks] ?? SOCK_COLORS.pink} />}
       <AnimatePresence>{pass && <BoardingPass key="pass" legs={DAY_PASS} done={pass.done} punch={pass.punch} choices={pass.choices} title="DAY PASS" badge="🚗 🛝" route="ICONSIAM · 6F" />}</AnimatePresence>
     </div>

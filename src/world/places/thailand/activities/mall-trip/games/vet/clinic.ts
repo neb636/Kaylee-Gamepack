@@ -1,5 +1,6 @@
 // The Vet Clinic in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "★ 1. The Vet Clinic"),
-// greybox 1: shapes, sounds, no voices. Dr. Kaylee in blue scrubs and a cap stands by the exam table; Daddy watches.
+// greybox 1: shapes and sounds, with the voices (lines.ts L.mall.vet). Dr. Kaylee in blue scrubs and a cap stands by
+// the exam table; Daddy watches.
 //
 // The toy: grab a tool from the tray and use it on the patient, right where she holds it. The tool's tip sits just
 // above her finger; each frame the patient's zones (head, mouth, chest, paw, tail...) are projected onto the screen and
@@ -14,10 +15,11 @@
 // the window, onto the waiting room's bench. A tap on a tool uses it for her (a short go), so dragging is never a must.
 // Nothing fails: a tool anywhere does something (a giggle, a yip, Daddy hamming it up).
 import { BackSide, Color, Group, IcosahedronGeometry, OctahedronGeometry, Raycaster, Vector2, Vector3, type Mesh, type Object3D, type WebGLRenderer } from 'three'
-import { bell, wobble } from '../../../../../../../sdk'
+import { bell, wobble, type Line } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
 import type { Member } from '../../../../characters/member'
 import { PATIENT_LOOKS } from '../../../../characters/looks'
+import { L } from '../../../../lines'
 import type { AnchorInfo } from '../../../../engine/Anchors'
 import type { Shot } from '../../../../engine/camera'
 import { merge, P, solid } from '../../../../engine/geo'
@@ -70,6 +72,10 @@ interface Hit {
 }
 type Phase = 'enter' | 'exam' | 'healed' | 'leave' | 'done'
 
+/** Daddy's reactions: at most one line this often (seconds), so talk stays short and play long. */
+const DADDY_GAP = 12
+const V = L.mall.vet
+
 const tmp = new Vector3()
 const right = new Vector3()
 
@@ -121,6 +127,11 @@ export class VetClinic extends Stage {
   private spray = 0
   private daddy = { suds: null as Blobs | null, bow: null as Group | null, band: null as Group | null, fluff: 0, zones: [] as Zone[] }
   private kayleeHop = 0
+  // The voices: when Daddy last spoke, which idle spell the hint was said for, the facts said, his heart line next.
+  private daddySaid = -99
+  private hintFor = -1
+  private told = new Set<string>()
+  private heartN = 0
 
   constructor(renderer: WebGLRenderer, private vev: VetEvents, start: { patient: PatientId }) {
     super(renderer, vev)
@@ -164,6 +175,8 @@ export class VetClinic extends Stage {
       else p.root.visible = false
     })
     this.layout()
+    // Daddy welcomes her; Sparkle says who's coming in (begin).
+    this.after(0.3, () => this.vev.say(V.open))
     this.begin(start.patient)
   }
 
@@ -197,6 +210,7 @@ export class VetClinic extends Stage {
     this.grabbed = null
     this.setTray(id)
     this.vev.patient(id)
+    this.after(0.3, () => this.vev.say(V.patient[id]))
     p.root.visible = true
     p.root.position.set(...DOOR)
     p.root.scale.setScalar(1)
@@ -236,6 +250,7 @@ export class VetClinic extends Stage {
       this.sparkles.burst(this.patientCenter(p), 26, 2.2, 3, 1.1, 0.07)
       this.kaylee.react('hop')
       this.nick.react('wave')
+      this.vev.say(V.healed[p.id])
       this.vev.healed(p.id)
     })
     this.after(1.7, () => {
@@ -284,6 +299,7 @@ export class VetClinic extends Stage {
       sfx.cheer()
       this.kaylee.react('hop')
       this.nick.react('hop')
+      this.vev.say(V.allDone)
       this.vev.allDone()
     })
   }
@@ -429,6 +445,7 @@ export class VetClinic extends Stage {
         p.react('hop')
         p.wag = 1
         this.play(voiceOf(p.id))
+        if (p.id === 'elephant') this.tell('elephant', V.facts.elephant)
       }
       return
     }
@@ -439,12 +456,14 @@ export class VetClinic extends Stage {
         p.react('giggle')
         p.wag = 1
         this.play(voiceOf(p.id))
+        if (p.id === 'elephant') this.tell('elephant', V.facts.elephant)
         this.hearts.emit(p.zoneWorld(p.zones[0], tmp).clone().add(new Vector3(0, 0.15, 0.1)), new Vector3(0, 0.4, 0), 1.2, 0.09)
         return
       }
       case 'xray':
         this.xrayLit = 3
         this.play(sfx.boop)
+        this.tell('xray', V.facts.xray)
         if (this.cur) this.cur.wag = 1
         return
       case 'parrot': {
@@ -630,6 +649,7 @@ export class VetClinic extends Stage {
     const daddyHaha = () => silly('daddy', () => {
       this.nick.react('hop')
       this.play(sfx.haha)
+      this.daddySays(V.daddy.tickles)
     }, 1.3)
     switch (id) {
       case 'stethoscope': {
@@ -643,6 +663,7 @@ export class VetClinic extends Stage {
         this.acc.beat = 0
         if (dad) {
           this.play(sfx.baboom)
+          if (this.daddySays(V.daddy.heart[this.heartN % V.daddy.heart.length])) this.heartN++
           this.hearts.emit(this.tipWorld.clone().add(new Vector3(0, 0.1, 0.1)), new Vector3(0, 0.6, 0.2), 1.6, 0.32, 0)
           this.nick.react('hop')
           break
@@ -672,6 +693,7 @@ export class VetClinic extends Stage {
           }, 1.4)
         } else if (dad) {
           if (t.bar) t.bar.scale.y = 1
+          this.daddySays(V.daddy.hot)
           daddyHaha()
         } else if (on) giggle()
         break
@@ -860,6 +882,7 @@ export class VetClinic extends Stage {
           this.after(0.35, () => {
             this.nick.react('wiggle')
             sfx.bleh()
+            this.daddySays(V.daddy.yucky)
           })
         } else if (on && on !== 'mouth' && on !== 'head') giggle()
         break
@@ -877,6 +900,7 @@ export class VetClinic extends Stage {
           this.acc.done = true
           this.play(sfx.honk)
           this.nick.react('hop')
+          this.daddySays(V.daddy.honk)
         } else if (on && !nose) giggle()
         break
       }
@@ -918,6 +942,7 @@ export class VetClinic extends Stage {
         this.nick.react('hop')
         this.kaylee.react('hop')
         sfx.giggle()
+        this.vev.say(V.bless)
       })
       this.finish(p, 'sneeze')
     })
@@ -973,6 +998,7 @@ export class VetClinic extends Stage {
     this.play(sfx.chime)
     this.nick.react('hop')
     this.after(0.3, () => sfx.haha())
+    this.daddySays(V.daddy.bow)
   }
   private daddyBand(color: string) {
     if (this.daddy.band) return
@@ -988,6 +1014,19 @@ export class VetClinic extends Stage {
   private play(f: () => void) {
     this.last = f
     f()
+  }
+  /** Daddy says it, unless he spoke a moment ago. */
+  private daddySays(l: Line) {
+    if (this.time - this.daddySaid < DADDY_GAP) return false
+    this.daddySaid = this.time
+    this.vev.say(l)
+    return true
+  }
+  /** Sparkle's fact, the first time she pokes the thing. */
+  private tell(key: string, l: Line) {
+    if (this.told.has(key)) return
+    this.told.add(key)
+    this.vev.say(l)
   }
   private ready(key: string, every: number) {
     if (this.time - (this.cool.get(key) ?? -99) < every) return false
@@ -1157,7 +1196,12 @@ export class VetClinic extends Stage {
     if (!p || this.phase !== 'exam' || this.auto) return null
     const n = p.next
     const want = n ? NEED_TOOL[n] : null
-    if (!want) return null
+    if (!want || !n) return null
+    // Sparkle says what's next, once each time the 👆 shows.
+    if (this.hintFor !== this.lastTouch) {
+      this.hintFor = this.lastTouch
+      this.vev.say(V.hint[n])
+    }
     const held = this.held?.moved ? this.held.tool : null
     if (held?.item.tool === want) {
       let zone = AIM[want]

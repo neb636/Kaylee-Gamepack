@@ -24,9 +24,8 @@ export const TRIP_CHOICES: TripChoice[] = [
   { id: 'boat-trip', label: 'The boat trip', icon: '🚤', color: 'var(--sky)' },
   { id: 'mall-trip', label: 'The mall', icon: '🛝🍕', color: 'var(--butter)' },
 ]
-/** Mommy's question once there are two trips. Not recorded yet (the mall day's voice pass records it, moves it to
- *  lines.ts and lets the card say it), so the card only shows it. */
-const WHERE: Line = { text: 'Kaylee, where shall we go?', voice: 'ji' }
+/** Mommy's question once there are two trips. */
+const WHERE: Line = L.mall.trip.where
 
 interface Props {
   open: boolean
@@ -48,7 +47,7 @@ export function Ask({ open, onYes, onNotYet, trips }: Props) {
   const where = !!trips && trips.length > 1
   const line = later ? L.trip.ask.later : where ? WHERE : L.trip.ask.question
   useEffect(() => {
-    if (open && line !== WHERE) void say(line)
+    if (open) void say(line)
   }, [open, line])
   const yes = (trip?: string) => () => {
     sounds.correct()

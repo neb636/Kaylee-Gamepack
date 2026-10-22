@@ -1,5 +1,6 @@
-// The Golden Mountain's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet:
-// the count up the scale is the SDK's sounds.note(step); Daddy's huffing, the monkeys' chatter, the bell.
+// The Golden Mountain's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): the count up the
+// scale is the SDK's sounds.note(step); Daddy's huffing, the monkeys' chatter, the bell. The words (Sparkle's count,
+// Daddy's race lines) are voices (lines.ts `L.mall.mountain`).
 import { noise, tone } from '../../../../../../kit/sfx'
 import { sfx } from '../../../../sfx'
 

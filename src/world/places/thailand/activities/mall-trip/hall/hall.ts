@@ -12,9 +12,11 @@
 //     mountain; the staff wave; Mommy sits on the bench; Daddy follows her round (with the hairdo she gave him at the
 //     barber's, `hair`); a plush crocodile snaps.
 //   - When she's played enough, Daddy's tummy rumbles (`hungry`): the screen around asks about pizza.
-// No voices yet: sounds only.
+// Voices (lines.ts `L.mall.hall`): Sparkle's welcome the first time she comes in, the staff's hello the first two times
+// she comes near them, Mommy's and Daddy's lines when she taps them (in turn), Daddy's tummy, and Sparkle's hint when
+// the finger shows. Nothing when she walks up to a way in (the mini game's own first line comes right after).
 import { Color, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, sounds, wobble } from '../../../../../../sdk'
+import { clamp, sounds, wobble, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { LOOKS } from '../../../characters/looks'
 import type { Member } from '../../../characters/member'
@@ -25,6 +27,7 @@ import { NavGrid } from '../../../engine/nav'
 import { PAL, toon } from '../../../engine/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { Walker } from '../../../trip/walk'
+import { L } from '../../../lines'
 import { wearHair } from '../games/barber/mane'
 import { Racer } from '../games/race/racer'
 import { FRAME_BLOCKED, SIGN } from '../harborland/layout'
@@ -55,6 +58,8 @@ export interface HallStart {
   hungry: boolean
   /** Daddy's hairdo from the barber ('' his own mane). */
   hair?: string
+  /** Mommy's card is up already (a `hungry` link): Daddy's tummy rumbles without his line. */
+  asking?: boolean
 }
 
 /** The signs' words, drawn as HTML over them (crisp, and never in a generated picture): where, and how wide (m). */
@@ -89,6 +94,12 @@ const DOOR_OF: Record<string, DoorId> = { 'door:vet': 'vet', 'door:cafe': 'cafe'
 const isGame = (d: DoorId): d is GameDoor => (OPEN_DOORS as readonly string[]).includes(d)
 const SHOP_IDS = SHOPS.map((s) => s.id) as ShopId[]
 const isShop = (d: DoorId): d is ShopId => (SHOP_IDS as string[]).includes(d)
+
+/** What she's heard this visit to the mall (the hall is built again each time she comes back out): whose turn it is
+ *  in each list, and how many times the staff have said hello. */
+const heard = { ji: 0, nick: 0, staff: 0, staffNear: 0 }
+/** Nothing touched this long (the finger shows at 7 s): Sparkle's hint. */
+const STUCK_S = 8
 
 const tmp = new Vector3()
 /** How long going in takes: walk up, the door opens, she steps through. */
@@ -127,6 +138,14 @@ export class Hall extends Stage {
   private daddyGoal = new Vector3()
   private labelEls: HTMLElement[] = []
   private signEl: HTMLElement | null = null
+  /** When each speaker last talked (a quick run of taps gets one line). */
+  private spoke = new Map<string, number>()
+  /** The touch the last hint was for (one hint each time she's stuck). */
+  private hintedAt = -1
+  /** The staff have said hello this time round the hall. */
+  private staffHi = false
+  /** Mommy's card is up (no hint over her question). */
+  private asking = false
 
   constructor(
     renderer: WebGLRenderer,
@@ -139,6 +158,7 @@ export class Hall extends Stage {
     this.rig.fov = 32
     this.done = new Set(start.done)
     this.hungry = start.hungry ? 'soon' : 'no'
+    this.asking = !!start.asking
     this.built = buildHall(bag)
     scene.add(this.built.root)
 
@@ -236,6 +256,26 @@ export class Hall extends Stage {
     }
     this.lastPos.copy(kaylee.position)
     if (this.hungry === 'soon') this.after(from ? 2.2 : 1.4, () => this.tummy())
+    // Just in (not coming back out of a mini game): Sparkle's welcome.
+    else if (!from) this.after(0.6, () => this.hev.say(L.mall.hall.welcome))
+  }
+
+  /** Someone says a line, unless they spoke a moment ago. */
+  private talk(who: string, l: Line, every = 2.5) {
+    if (this.time - (this.spoke.get(who) ?? -99) < every) return
+    this.spoke.set(who, this.time)
+    this.hev.say(l)
+  }
+  /** The next line of a list, in turn (the turns carry on from visit to visit). */
+  private inTurn(who: 'ji' | 'nick' | 'staff', list: Line[]) {
+    if (this.time - (this.spoke.get(who) ?? -99) < 2.5) return
+    this.talk(who, list[heard[who]++ % list.length])
+  }
+
+  /** Mommy's card is up, or gone again (More play). */
+  setAsking(on: boolean) {
+    this.asking = on
+    if (!on) this.lastTouch = this.time
   }
 
   private after(s: number, run: () => void) {
@@ -250,12 +290,17 @@ export class Hall extends Stage {
     d.lookAt(this.kaylee.position.clone().setY(0.6))
     sfx.rumble()
     d.wiggle()
+    if (!this.asking) this.talk('nick', L.mall.hall.tummy)
     this.after(0.9, () => {
       sfx.rumble()
       d.wiggle()
       sfx.haha()
     })
-    this.after(1.7, () => this.hev.hungry())
+    // (After Daddy's line, so Mommy doesn't cut him off.)
+    this.after(2.1, () => {
+      this.asking = true
+      this.hev.hungry()
+    })
   }
 
   // ---------------------------------------------------------------- ways in
@@ -408,6 +453,7 @@ export class Hall extends Stage {
       s.arms = 'cheer'
       this.after(1.0, () => (s.arms = 'down'))
       sfx.babble(240)
+      this.inTurn('staff', L.mall.hall.staff)
       return
     }
     switch (id) {
@@ -418,12 +464,18 @@ export class Hall extends Stage {
         return
       case 'family:nick':
         this.daddy.hop()
-        if (this.hungry === 'asked') sfx.rumble()
-        else sfx.haha()
+        if (this.hungry === 'asked') {
+          sfx.rumble()
+          this.talk('nick', L.mall.hall.tummy, 5)
+        } else {
+          sfx.haha()
+          this.inTurn('nick', L.mall.hall.nick)
+        }
         return
       case 'family:ji':
         this.ji.react('wave')
         sfx.babble(300)
+        this.inTurn('ji', L.mall.hall.ji)
         return
       case 'croc':
         this.croc.t = 0
@@ -507,6 +559,13 @@ export class Hall extends Stage {
         s.arms = 'cheer'
         this.after(0.9, () => (s.arms = 'down'))
       }
+      // The first two times she comes near the staff (once each time round the hall), a wave and a hello.
+      if (near && !this.staffHi && !this.entering && heard.staffNear < L.mall.hall.staff.length) {
+        this.staffHi = true
+        s.arms = 'cheer'
+        this.after(1.0, () => (s.arms = 'down'))
+        this.talk('staff', L.mall.hall.staff[heard.staffNear++])
+      }
       s.update(dt, t)
     }
 
@@ -544,6 +603,12 @@ export class Hall extends Stage {
 
     this.marker.update(dt)
     this.lights.follow(kp.x, kp.y, kp.z)
+
+    // ---- Stuck: when the finger shows, Sparkle says what to do (once each time) ----
+    if (this.time - this.lastTouch > STUCK_S && this.hintedAt !== this.lastTouch && !this.asking && this.hintAt()) {
+      this.hintedAt = this.lastTouch
+      this.hev.say(L.mall.hall.hint)
+    }
   }
 
   private updateBricks(dt: number) {

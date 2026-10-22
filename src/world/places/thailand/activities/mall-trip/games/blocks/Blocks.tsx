@@ -8,6 +8,7 @@ import { View3D, type RenderMode } from '../../../../engine/View3D'
 import { BlocksFlat } from './Flat'
 import type { CardId, Round } from './layout'
 import { BLOCKS_ANCHORS, LittleLand } from './little'
+import { mallVoice } from '../../voice'
 
 interface Props {
   round: Round
@@ -34,7 +35,7 @@ export function Blocks({ round, card, socks, onRound, onCard, onKnocked, onPlay 
     const w = new LittleLand(
       renderer,
       {
-        say: () => {},
+        say: (l) => mallVoice.say(l),
         section: () => {},
         done: () => {},
         round: (n) => {

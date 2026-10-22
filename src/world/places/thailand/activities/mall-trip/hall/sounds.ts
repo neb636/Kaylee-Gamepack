@@ -1,5 +1,5 @@
-// The hall's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet: the family
-// babble, Kaylee giggles.
+// The hall's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise), under the voices
+// (lines.ts `L.mall.hall`): the family babble, Kaylee giggles.
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
 

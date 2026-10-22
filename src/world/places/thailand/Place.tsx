@@ -33,8 +33,8 @@ export default function Place(props: PlaceProps) {
       <div style={{ position: 'absolute', inset: 0, zIndex: 100 }}>
         <StampEarned
           activity={info}
-          // (The mall day's sticker line and facts aren't recorded yet: they speak once it's in the game.)
-          facts={info.id === 'boat-trip' ? TRIP_FACTS : live ? MALL_FACTS : undefined}
+          facts={info.id === 'boat-trip' ? TRIP_FACTS : MALL_FACTS}
+          // (An activity still in the works has no recorded sticker line.)
           quiet={!live}
           closeIcon="🏠 ▶"
           onClose={() => {

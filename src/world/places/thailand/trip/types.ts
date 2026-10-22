@@ -5,7 +5,7 @@ import type { LonLat } from './outline'
 
 export type LegKind = 'invite' | 'pack' | 'goodbye' | 'airport' | 'fly' | 'car' | 'arrive' | 'home'
 
-/** What the people at the house say at the goodbye and coming home (lines.ts, or a greybox's unvoiced words). */
+/** What the people at the house say at the goodbye and coming home (lines.ts). */
 export interface TripLines {
   /** The goodbye: the car is here, hop in; a tap on the driver at the wheel (Aunty Sri). */
   ready: Line

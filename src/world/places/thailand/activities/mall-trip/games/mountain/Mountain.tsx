@@ -9,6 +9,7 @@ import { View3D, type RenderMode } from '../../../../engine/View3D'
 import { MountainFlat } from './Flat'
 import { Golden, MOUNTAIN_ANCHORS } from './golden'
 import type { Round } from './layout'
+import { mallVoice } from '../../voice'
 
 interface Props {
   round: Round
@@ -35,7 +36,7 @@ export function Mountain({ round, socks, hair, onRound, onTop, onPlay }: Props) 
     const w = new Golden(
       renderer,
       {
-        say: () => {},
+        say: (l) => mallVoice.say(l),
         section: () => {},
         done: () => {},
         round: (n) => {

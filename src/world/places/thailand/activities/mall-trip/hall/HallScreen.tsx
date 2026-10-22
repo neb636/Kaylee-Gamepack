@@ -1,7 +1,7 @@
 // HarborLand's hall on screen: the 3D hall (hall.ts) with its tap targets, the 👆 after a while with nothing touched,
-// Mommy's "Pizza time?" card once Daddy's tummy rumbles, and the flat picture row without WebGL (Flat.tsx).
+// Mommy's "Pizza time?" card once Daddy's tummy rumbles (she says it), and the flat picture row without WebGL (Flat.tsx).
 import { AnimatePresence, motion } from 'motion/react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
@@ -10,6 +10,7 @@ import { HallFlat } from './Flat'
 import { Hall, HALL_ANCHORS, LABELS } from './hall'
 import { Hungry } from './Hungry'
 import type { DoorId, GameDoor } from './layout'
+import { mallVoice } from '../voice'
 
 /** Each sign's letters. */
 const LABEL_COLORS: Record<string, string> = { little: '#3FAF8E', muay: '#E04848' }
@@ -40,19 +41,21 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, o
   const signRef = useRef<HTMLDivElement>(null)
   const cb = useRef({ onEnter, onHungry })
   cb.current = { onEnter, onHungry }
+  // No hint from Sparkle over Mommy's question.
+  useEffect(() => worldRef.current?.setAsking(asking), [asking])
 
   const make = (renderer: WebGLRenderer) => {
     const w = new Hall(
       renderer,
       {
-        say: () => {},
+        say: (l) => mallVoice.say(l),
         section: () => {},
         done: () => {},
         going: () => setGoing(true),
         enter: (d) => cb.current.onEnter(d),
         hungry: () => cb.current.onHungry(),
       },
-      { socks, done, from: from === 'in' ? '' : from, hungry, hair },
+      { socks, done, from: from === 'in' ? '' : from, hungry, hair, asking },
     )
     w.setHintElement(hintRef.current)
     w.setLabelBox(labelRef.current)

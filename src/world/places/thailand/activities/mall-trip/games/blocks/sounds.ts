@@ -1,5 +1,5 @@
-// Little Land's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet: Daddy's
-// sneeze and laugh, Kaylee's giggle.
+// Little Land's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): Daddy's laugh, Kaylee's
+// giggle, the CHOO's blast of air. Daddy's words (his sneeze too) are voices (lines.ts `L.mall.blocks`).
 import { noise, tone } from '../../../../../../kit/sfx'
 import { sfx } from '../../../../sfx'
 

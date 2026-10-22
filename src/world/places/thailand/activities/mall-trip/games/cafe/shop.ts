@@ -1,5 +1,5 @@
 // Cafe & Cake in Harbor Town (plan: planning/around-the-world/thailand/mall-trip.md, "4. Cafe & Cake"), greybox:
-// shapes, sounds, no voices. Kaylee in her apron and chef's hat stands at the counter; Daddy and Mommy are the
+// shapes and sounds, with the voices (lines.ts L.mall.cafe). Kaylee in her apron and chef's hat stands at the counter; Daddy and Mommy are the
 // customers at its end.
 //
 // The toy is the blender:
@@ -16,7 +16,7 @@
 // milk jug, poured the same way) and a coconut shake. Each finished drink lines up on the shelf.
 // Things to poke: the fridge, the coffee machine, the bread baskets, the cake stand, the tea set, the family.
 import { Color, Group, IcosahedronGeometry, Mesh, MeshBasicMaterial, OctahedronGeometry, Quaternion, Vector2, Vector3, type BufferGeometry, type Object3D, type WebGLRenderer } from 'three'
-import { bell, wobble } from '../../../../../../../sdk'
+import { bell, wobble, type Line } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
 import type { Member } from '../../../../characters/member'
 import type { AnchorInfo } from '../../../../engine/Anchors'
@@ -24,6 +24,7 @@ import type { Shot } from '../../../../engine/camera'
 import type { Bag } from '../../../../engine/dispose'
 import { merge, P, solid } from '../../../../engine/geo'
 import { PAL } from '../../../../engine/toon'
+import { L } from '../../../../lines'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../../trip/legs/stage'
 import { Floaters, heartGeometry, Splats } from './fx'
 import { buildKitchen, type Kitchen } from './kitchen'
@@ -135,6 +136,10 @@ interface Guest {
   creamT: number
 }
 
+/** The family's silly reactions: at most one line this often (seconds), so talk stays short and play long. */
+const SILLY_GAP = 12
+const C = L.mall.cafe
+
 const tmp = new Vector3()
 const right = new Vector3()
 const qz = new Quaternion()
@@ -201,6 +206,12 @@ export class CafeStage extends Stage {
   private teaT = 1
   private lampSwing = 0
   private kayleeReach = 0
+  // The voices: when someone last said something silly, which idle spell the hint was said for, the first-time
+  // lines and facts said, each customer's yum line next.
+  private sillySaid = -99
+  private hintFor = -1
+  private told = new Set<string>()
+  private yumN: Record<Customer, number> = { nick: 0, ji: 0 }
 
   constructor(renderer: WebGLRenderer, private cev: CafeEvents, start: { round: Round }) {
     super(renderer, cev)
@@ -279,6 +290,17 @@ export class CafeStage extends Stage {
     if (announce) this.cev.round(r)
     this.setTray(ROUNDS[r].tray)
     const def = ROUNDS[r]
+    // Sparkle says what's new this round (and Daddy says what he'd like).
+    this.after(0.3, () => {
+      if (r === 1) {
+        this.cev.say(C.open)
+        this.cev.say(C.thirsty)
+      } else if (r === 2) this.cev.say(C.orders)
+      else {
+        this.cev.say(C.thai)
+        this.cev.say(C.chaYen)
+      }
+    })
     if (def.together) def.orders.forEach((o, i) => this.newCup(o, i))
     else this.newCup(def.orders[0], 0)
   }
@@ -293,6 +315,8 @@ export class CafeStage extends Stage {
     this.cups.push(c)
     this.play(sfx.pop)
     this.pushBubbles()
+    // Round 2's picture orders, in the customer's own voice.
+    if (this.round === 2 && order.want.length) this.after(0.35, () => this.cev.say(order.who === 'nick' ? C.pink : C.yellow))
   }
 
   /** What each customer waits for now: a cup (round 1), or their order's fruit and its color. */
@@ -336,6 +360,9 @@ export class CafeStage extends Stage {
     g.drinking = null
     const c = d.c
     const head = this.headOf(g)
+    // A yum in their own voice (a match, or anything in round 1), a happy surprise, or Daddy's brain freeze.
+    const yum = C.yum[g.id]
+    this.cev.say(d.ice && g.id === 'nick' ? C.freeze : d.match ? yum[this.yumN[g.id]++ % yum.length] : C.funny[g.id])
     if (d.match && c.order.want.length) {
       this.play(sfx.yum)
       this.sparkles.burst(head, 22, 1.8, 2.6, 1.1, 0.06, [PAL.gold, PAL.hotpink, '#FFFFFF', PAL.mint])
@@ -395,6 +422,7 @@ export class CafeStage extends Stage {
       this.play(sfx.cheer)
       this.kaylee.react('hop')
       for (const g of this.guests.values()) g.m.react('hop')
+      this.cev.say(C.allDone)
       this.cev.allDone()
     })
   }
@@ -538,6 +566,7 @@ export class CafeStage extends Stage {
       this.touches++
       this.play(sfx.fwip)
       const id = h.what.slice(5) as ItemId
+      if (h.what === 'item:tea') this.once('cha-yen', C.chaYenFact)
       // A fruit or a straw: a fresh one comes off the tray (the tray never runs out).
       if (h.what.startsWith('item:') && id !== 'milk' && id !== 'cream') {
         h.g = this.copyOf(id)
@@ -641,6 +670,7 @@ export class CafeStage extends Stage {
           const d = this.guests.get('nick')!
           d.m.react('hop')
           sfx.haha()
+          this.sillySays(C.coffee)
         })
         return
       case 'bread':
@@ -661,6 +691,7 @@ export class CafeStage extends Stage {
           const m = this.guests.get('ji')!
           m.m.react('wave')
           sfx.aah()
+          this.sillySays(C.teaCup)
           this.hearts.emit(this.headOf(m), new Vector3(0, 0.5, 0.1), 1.3, 0.09, PAL.hotpink)
         })
         return
@@ -683,6 +714,7 @@ export class CafeStage extends Stage {
   private tapItem(id: ItemId) {
     const g = this.items.get(id)
     if (!g || !g.visible || this.phase === 'done') return
+    if (id === 'tea') this.once('cha-yen', C.chaYenFact)
     if (id === 'milk') return this.autoPour('milk')
     if (id === 'cream') {
       const c = this.bestCup((x) => !x.cream && x.fill > 0.3) ?? this.bestCup((x) => !x.cream)
@@ -757,6 +789,8 @@ export class CafeStage extends Stage {
       scale: [Math.max(chunk.scale.x * 0.8, 0.3), 0.5],
       done: () => {
         this.play(sfx.plunk)
+        // The first fruit in: Sparkle shows her the button.
+        if (id !== 'cream') this.once('button', C.button)
         if (this.level > 0.05) this.drops.burst(this.jarMouth(), 6, 0.5, 1.2, 0.5, 0.025, ['#' + this.color.getHexString()])
         this.kaylee.react('wiggle')
       },
@@ -811,6 +845,7 @@ export class CafeStage extends Stage {
     this.after(0.35, () => {
       for (const g of this.guests.values()) g.m.react('hop')
       sfx.haha()
+      this.sillySays(C.splat)
     })
     this.after(0.6, () => sfx.giggle())
     this.after(1.1, () => this.putLid(true))
@@ -831,6 +866,8 @@ export class CafeStage extends Stage {
       this.sparkles.burst(this.jarMouth().add(new Vector3(0, 0.05, 0)), 12, 1.0, 1.6, 0.8, 0.04, ['#' + this.color.getHexString(), '#FFFFFF', PAL.gold])
       this.play(sfx.chime)
       this.kaylee.react('hop')
+      // The first blend: Sparkle shows her the pour.
+      this.once('pour', C.pour)
     }
   }
 
@@ -1131,6 +1168,26 @@ export class CafeStage extends Stage {
   private play(f: () => void) {
     f()
   }
+  /** A silly reaction in someone's own voice, unless one was said a moment ago. */
+  private sillySays(l: Line) {
+    if (this.time - this.sillySaid < SILLY_GAP) return
+    this.sillySaid = this.time
+    this.cev.say(l)
+  }
+  /** A first-time line (what's new, a fact): said once. */
+  private once(key: string, l: Line) {
+    if (this.told.has(key)) return
+    this.told.add(key)
+    this.cev.say(l)
+  }
+  /** Sparkle's hint, once each time the 👆 shows; passes `at` through. */
+  private hint(l: Line, at: Vector3 | null) {
+    if (at && this.hintFor !== this.lastTouch) {
+      this.hintFor = this.lastTouch
+      this.cev.say(l)
+    }
+    return at
+  }
   private ready(key: string, every: number) {
     if (this.time - (this.cool.get(key) ?? -99) < every) return false
     this.cool.set(key, this.time)
@@ -1398,13 +1455,13 @@ export class CafeStage extends Stage {
     const open = this.cups.filter((c) => !c.served)
     const item = (id: ItemId) => this.homes.get(id)?.clone().add(new Vector3(0, 0.3, 0)) ?? null
     const done = open.find((c) => c.fill >= 0.85 && !c.straw)
-    if (done) return item('straw')
+    if (done) return this.hint(C.hint.straw, item('straw'))
     const chaYen = open.find((c) => c.order.name === 'cha-yen' && c.fill >= 0.85 && c.milk < 0.05 && !c.straw)
-    if (chaYen) return item('milk')
-    if (this.level > 0.08 && this.onBase) return this.blender.jar.position.clone().add(new Vector3(0, 0.1, 0))
-    if (this.chunks.length >= 2 || (this.chunks.length && open.some((c) => c.order.want.every((f) => this.chunks.some((ch) => ch.id === f))))) return overButton(this.blender.base.position)
+    if (chaYen) return this.hint(C.hint.milk, item('milk'))
+    if (this.level > 0.08 && this.onBase) return this.hint(C.hint.jar, this.blender.jar.position.clone().add(new Vector3(0, 0.1, 0)))
+    if (this.chunks.length >= 2 || (this.chunks.length && open.some((c) => c.order.want.every((f) => this.chunks.some((ch) => ch.id === f))))) return this.hint(C.hint.button, overButton(this.blender.base.position))
     const want = open.flatMap((c) => c.order.want).find((f) => !this.chunks.some((ch) => ch.id === f) && !this.parts.has(f))
-    return item(want ?? 'strawberry')
+    return this.hint(want === 'tea' ? C.hint.tea : want ? C.hint.want : C.hint.fruit, item(want ?? 'strawberry'))
   }
 
   placeAnchors() {

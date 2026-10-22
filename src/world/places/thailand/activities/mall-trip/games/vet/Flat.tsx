@@ -2,10 +2,12 @@
 // its thought bubble, and the tray as big buttons. The right tool does the next thing (with a pop and a sound); any
 // other one makes it giggle. All better: it hops off to the waiting row at the top, and the next one comes in.
 import { AnimatePresence, motion } from 'motion/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { L } from '../../../../lines'
 import { PATIENTS, type PatientId } from '../../sections'
 import { NEED_TOOL, NEEDS, PATIENT_ICONS, TOOL_ICONS, TRAYS } from './layout'
 import { vetSfx as sfx, voiceOf } from './sounds'
+import { mallVoice } from '../../voice'
 
 interface Props {
   patient: PatientId
@@ -25,6 +27,10 @@ export function VetFlat({ patient, onPatient, onHealed, onAllDone }: Props) {
   // (The sneeze happens by itself.)
   const needs = NEEDS[who].filter((n) => NEED_TOOL[n])
   const want = done ? null : NEED_TOOL[needs[step]]
+  // Sparkle says who's coming in.
+  useEffect(() => {
+    mallVoice.say(L.mall.vet.patient[who])
+  }, [who])
 
   const tap = (tool: string) => {
     if (done) return

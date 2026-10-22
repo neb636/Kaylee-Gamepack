@@ -1,6 +1,7 @@
 // The Golden Mountain at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "5. The Golden Mountain"),
-// greybox: shapes, sounds, no voices. A big yellow cone with climbing holds and Thai pattern bands, a red rail and a
-// bell on top, a shiny steel slide down the front, kids riding elephants painted on the wall, and three Lopburi
+// greybox shapes with voices (lines.ts `L.mall.mountain`: Sparkle's opening and count, Daddy's race lines, the Golden
+// Mount fact, said through blocks/talk.ts). A big yellow cone with climbing holds and Thai pattern bands, a red rail
+// and a bell on top, a shiny steel slide down the front, kids riding elephants painted on the wall, and three Lopburi
 // monkeys.
 //
 // The toy: grab the next hold and pull herself up to it. Every hold she can reach from where she hangs (the next row,
@@ -31,6 +32,10 @@ import { buildGolden, haloMesh, holdShape, type Built } from './build'
 import { Monkey, type MonkeyTrick } from './monkey'
 import { BELL, CONE, DADDY_FOOT_A, DADDY_WATCH, daddyHolds, ELEPHANTS, FOOT_A, FOOT_Y, holdsFor, inReach, LAND, MAT, MONKEYS, onCone, PULL_PX, rAt, ROPE_AT, rowsIn, SLIDE_A, WALL_Z, type Hold, type Round } from './layout'
 import { mountainSfx as sfx } from './sounds'
+import { Talk } from '../blocks/talk'
+import { L } from '../../../../lines'
+
+const T = L.mall.mountain
 
 export interface MountainEvents extends LegEvents {
   /** The round on now (the address bar follows). */
@@ -134,6 +139,9 @@ export class Golden extends Stage {
   private sparkles: Floaters
   private puffs: Floaters
   private drops: Floaters
+  private talk = new Talk((l) => this.mev.say(l))
+  private races = 0
+  private huffed = false
 
   constructor(renderer: WebGLRenderer, private mev: MountainEvents, start: MountainStart) {
     super(renderer, mev)
@@ -189,6 +197,18 @@ export class Golden extends Stage {
     this.flagsUp = start.round - 1
     this.built.flags.forEach((f, i) => (f.visible = i < this.flagsUp))
     this.setRound(start.round, true)
+    // What's said first: Sparkle's "Climb the Golden Mountain!" (a link to a later round: that round's line).
+    this.after(0.5, () => (start.round > 1 ? this.roundLine(start.round) : this.talk.say(T.climb)))
+  }
+
+  /** When a round's new thing shows: the pink holds, Daddy at the foot of his side ready to race. */
+  private roundLine(n: Round) {
+    if (n === 2) this.talk.say(T.pink)
+    if (n !== 3) return
+    // The first race: Sparkle says what's on, then Daddy; after that, just Daddy.
+    if (this.races++) return this.talk.say(T.win)
+    this.talk.say(T.race)
+    this.after(2.0, () => this.talk.say(T.win))
   }
 
   private makeHold(h: Hold) {
@@ -224,7 +244,9 @@ export class Golden extends Stage {
     this.count = 0
     this.rung = false
     this.queued = null
+    this.huffed = false
     this.mev.round(n)
+    if (!now) this.after(0.6, () => this.roundLine(n))
     if (now) {
       this.k = { state: 'floor', a: FOOT_A[n], y: FOOT_Y, row: -1, t: 0 }
       this.placeOnWall(FOOT_A[n], FOOT_Y)
@@ -327,6 +349,8 @@ export class Golden extends Stage {
     k.t = 0
     this.count++
     sounds.note(this.count - 1)
+    // Sparkle counts the holds (not over anyone talking).
+    this.talk.count(T.count[this.count - 1])
     this.swing.v += (this.hand % 2 ? 1 : -1) * 1.6
     this.kaylee.react('wiggle')
     const at = V(...onCone(h.a, h.y, 0.1))
@@ -372,6 +396,7 @@ export class Golden extends Stage {
       this.after(1.6, () => (this.daddy.arms = 'down'))
     }
     this.mev.top()
+    this.after(0.5, () => this.talk.once('top', T.top))
   }
 
   // ---------------------------------------------------------------- on top: the bell and the slide
@@ -395,6 +420,8 @@ export class Golden extends Stage {
     this.after(0.12, () => sfx.bell(big ? 1 : 0.7))
     this.sparkles.burst(this.built.bell.getWorldPosition(new Vector3()).add(V(0, -0.3, 0.2)), big ? 18 : 8, 1.3, 1.0, 1.0, 0.045)
     this.after(0.15, () => this.monkeys[2].play('ears'))
+    // The first bell: the real Golden Mount's fact.
+    this.after(1.0, () => this.talk.once('mount', T.mount))
   }
 
   private toSlide() {
@@ -523,6 +550,11 @@ export class Golden extends Stage {
         r.land()
         sfx.huff()
         this.huffPuff()
+        // Halfway up, once a race: out of breath, out loud.
+        if (d.row === 2 && !this.huffed) {
+          this.huffed = true
+          this.talk.say(T.huff)
+        }
         this.after(d.row < this.daddyGoal() - 1 ? 0.05 : 0.25, () => this.daddyStep())
       }
     } else if (d.state === 'hang' || d.state === 'foot') {
@@ -545,7 +577,7 @@ export class Golden extends Stage {
         sfx.huff()
         this.after(0.5, () => sfx.huff())
         this.after(1.1, () => {
-          sfx.haha()
+          this.talk.say(T.beat)
           r.arms = 'cheer'
         })
         this.after(2.2, () => (r.arms = 'down'))
@@ -574,6 +606,7 @@ export class Golden extends Stage {
         r.sitting = false
         this.dFrom.copy(p)
         this.dTo.set(LAND[0] + 0.85, 0.12, LAND[2] - 0.2)
+        this.talk.say(T.whoa)
       }
     } else if (d.state === 'flop') {
       // Head first onto the mat, legs kicking, then pops up laughing.
@@ -692,6 +725,7 @@ export class Golden extends Stage {
       const trick: MonkeyTrick = (['flip', 'scratch', 'swing'] as MonkeyTrick[])[i] ?? 'flip'
       this.monkeys[i]?.play(trick)
       sfx.chatter()
+      this.after(0.6, () => this.talk.once('monkeys', T.monkeys))
       if (i === 2) this.after(0.4, () => sfx.giggle())
       return
     }
@@ -701,6 +735,7 @@ export class Golden extends Stage {
       this.trunkT[i] = 0
       sfx.trumpet()
       sfx.spray()
+      this.after(0.8, () => this.talk.once('elephant', L.facts.elephant))
       return
     }
     switch (id) {
@@ -825,6 +860,10 @@ export class Golden extends Stage {
       if (!this.monkeys[i].busy) this.monkeys[i].play((['flip', 'scratch', 'scratch'] as MonkeyTrick[])[i])
     }
     this.thingsFrame(dt, t)
+    // The 👆 shows after a while with nothing touched: Sparkle says what to do, once each time.
+    this.talk.hint(this.time, this.lastTouch, () => this.hintAt() !== null, () =>
+      k.state === 'top' ? (this.rung ? T.hint.slide : T.hint.bell) : this.round === 2 ? T.hint.pink : T.hint.hold,
+    )
     this.sparkles.update(dt)
     this.puffs.update(dt)
     this.drops.update(dt)

@@ -496,5 +496,616 @@
   "Pick a photo for Agong!",
   "Tap Agong to give it to him!",
   "Tap the plane to fly home!",
-  "Pack again, or go straight to the boat?"
+  "Pack again, or go straight to the boat?",
+  "Welcome to HarborLand, Kaylee! Tap a place to play!",
+  {
+    "text": "Sawasdee ka, Kaylee!",
+    "voice": "staff"
+  },
+  {
+    "text": "Have fun!",
+    "voice": "staff"
+  },
+  {
+    "text": "Hi, sweetie!",
+    "voice": "ji"
+  },
+  {
+    "text": "Have fun, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Mommy is right here!",
+    "voice": "ji"
+  },
+  {
+    "text": "Where to next, Kaylee?",
+    "voice": "nick"
+  },
+  {
+    "text": "Daddy is coming too!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ho ho! Go play!",
+    "voice": "nick"
+  },
+  {
+    "text": "My tummy is rumbling!",
+    "voice": "nick"
+  },
+  {
+    "text": "Hungry, Kaylee? Pizza time?",
+    "voice": "ji"
+  },
+  {
+    "text": "OK! A little more!",
+    "voice": "ji"
+  },
+  "Tap a door to play!",
+  {
+    "text": "Doctor Kaylee is here!",
+    "voice": "nick"
+  },
+  "A puppy with a sore paw! Grab a tool!",
+  "A muddy pony! Bath time!",
+  "A baby elephant with a sniffly trunk!",
+  {
+    "text": "Bless you!",
+    "voice": "nick"
+  },
+  {
+    "text": "Look! He's wagging!",
+    "voice": "nick"
+  },
+  {
+    "text": "So shiny and pretty!",
+    "voice": "nick"
+  },
+  {
+    "text": "Bye bye, little elephant!",
+    "voice": "nick"
+  },
+  "Everyone is better! Thank you, Doctor Kaylee!",
+  {
+    "text": "Ba-boom! Ba-boom!",
+    "voice": "nick"
+  },
+  {
+    "text": "My heart is so big!",
+    "voice": "nick"
+  },
+  {
+    "text": "Am I hot? Ha ha!",
+    "voice": "nick"
+  },
+  {
+    "text": "Hey! That tickles!",
+    "voice": "nick"
+  },
+  {
+    "text": "Do I look pretty?",
+    "voice": "nick"
+  },
+  {
+    "text": "Bleh! Yucky!",
+    "voice": "nick"
+  },
+  {
+    "text": "Honk! Ha ha!",
+    "voice": "nick"
+  },
+  "Listen to its heart!",
+  "The thermometer goes in its mouth!",
+  "Pull out the thorn with the tweezers!",
+  "Rub cream on the sore paw!",
+  "Wrap a bandage round the paw!",
+  "Rub on lots of soap!",
+  "Shower it with water!",
+  "Dry it with the towel!",
+  "Brush the mane!",
+  "Put a bow on top!",
+  "Give it the medicine spoon!",
+  "A tissue for its trunk!",
+  "The elephant is Thailand's animal!",
+  "An x-ray shows the bones inside!",
+  {
+    "text": "I want a new look, Kaylee!",
+    "voice": "nick"
+  },
+  "Grab a tool and do his hair!",
+  "Now colors and the hair dryer!",
+  "Copy the picture!",
+  {
+    "text": "Spiky, please!",
+    "voice": "kid"
+  },
+  {
+    "text": "Pigtails, please!",
+    "voice": "kid"
+  },
+  {
+    "text": "Curly, please!",
+    "voice": "kid"
+  },
+  "Tap the mirror!",
+  {
+    "text": "Whoa! I love it!",
+    "voice": "nick"
+  },
+  {
+    "text": "So handsome! I love it!",
+    "voice": "nick"
+  },
+  {
+    "text": "Close enough!",
+    "voice": "kid"
+  },
+  {
+    "text": "Close enough! So pretty!",
+    "voice": "kid"
+  },
+  {
+    "text": "Close enough! Yay!",
+    "voice": "kid"
+  },
+  {
+    "text": "Say cheese!",
+    "voice": "ji"
+  },
+  "Great haircuts, Kaylee!",
+  {
+    "text": "Hey! My horn!",
+    "voice": "nick"
+  },
+  {
+    "text": "My eyebrows!",
+    "voice": "nick"
+  },
+  {
+    "text": "Whoa! My hair!",
+    "voice": "ji"
+  },
+  "Squirt the grow tonic on his hair!",
+  "Snip, snip with the scissors!",
+  "Comb it up for spikes!",
+  "Spray on some colors!",
+  "Try the hair dryer!",
+  "Put in a bow!",
+  "Put in a clip!",
+  "A spinning pole means haircuts here!",
+  "Drop fruit in the blender!",
+  {
+    "text": "I'm thirsty, Kaylee!",
+    "voice": "nick"
+  },
+  "Press the pink button!",
+  "Lift the jar and pour it in the cup!",
+  "Make the drink in the bubble!",
+  {
+    "text": "Pink, please!",
+    "voice": "nick"
+  },
+  {
+    "text": "Yellow, please!",
+    "voice": "ji"
+  },
+  "Thai drinks! Two cups at once!",
+  {
+    "text": "Cha yen, please!",
+    "voice": "nick"
+  },
+  {
+    "text": "Yum! Thank you, Kaylee!",
+    "voice": "nick"
+  },
+  {
+    "text": "Mmm! Just right!",
+    "voice": "nick"
+  },
+  {
+    "text": "Delicious, sweetie!",
+    "voice": "ji"
+  },
+  {
+    "text": "Mmm! Yummy!",
+    "voice": "ji"
+  },
+  {
+    "text": "A funny color! But yum!",
+    "voice": "nick"
+  },
+  {
+    "text": "Surprise! Yummy!",
+    "voice": "ji"
+  },
+  {
+    "text": "Brrr! Brain freeze!",
+    "voice": "nick"
+  },
+  {
+    "text": "Splat! Ha ha!",
+    "voice": "nick"
+  },
+  {
+    "text": "My coffee! Thank you!",
+    "voice": "nick"
+  },
+  {
+    "text": "Khob khun ka, sweetie!",
+    "voice": "ji"
+  },
+  "Best cafe ever, Kaylee!",
+  "Put a straw in the cup!",
+  "Pour the milk on top!",
+  "Lift the jar and pour!",
+  "Drop some fruit in!",
+  "Drop in the fruit from the bubble!",
+  "Put in the Thai tea!",
+  "Cha yen is Thai iced tea! It's orange!",
+  "A slide race, Kaylee! Tap the steps to climb!",
+  {
+    "text": "Race you, Kaylee!",
+    "voice": "nick"
+  },
+  "Tap, tap, tap to go fast!",
+  "Now tap at each bump to fly!",
+  "Tap now!",
+  "Rubber rings! Tap to spin!",
+  "Kaylee wins!",
+  "Kaylee wins again!",
+  "First place, Kaylee!",
+  {
+    "text": "Head first! Whee!",
+    "voice": "nick"
+  },
+  {
+    "text": "I'm OK! Ha ha!",
+    "voice": "nick"
+  },
+  {
+    "text": "Good race, Kaylee!",
+    "voice": "kid"
+  },
+  "Three ribbons for Kaylee!",
+  "Tap the steps to climb!",
+  "Tap to scoot faster!",
+  {
+    "text": "Can you build higher than me, Kaylee?",
+    "voice": "nick"
+  },
+  "Grab a brick!",
+  "Push it over!",
+  "Now an elephant!",
+  "Taller than Daddy!",
+  {
+    "text": "Whoa! Careful!",
+    "voice": "nick"
+  },
+  {
+    "text": "A brick hat? Ha ha!",
+    "voice": "nick"
+  },
+  {
+    "text": "Crash!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ha ha! Again!",
+    "voice": "nick"
+  },
+  {
+    "text": "Boom!",
+    "voice": "nick"
+  },
+  {
+    "text": "Wow! An elephant!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ah... ah... choo!",
+    "voice": "nick"
+  },
+  {
+    "text": "Taller than me, Kaylee!",
+    "voice": "nick"
+  },
+  "Grab a brick from the box!",
+  "Put a brick on the picture!",
+  "Tap the tower to push it!",
+  "A chedi is a Thai temple tower!",
+  "Climb the Golden Mountain, Kaylee! Count the holds!",
+  "Four!",
+  "Five!",
+  "Six!",
+  "Seven!",
+  "You made it, Kaylee!",
+  "Only the pink ones!",
+  "Race Daddy to the top!",
+  {
+    "text": "I'm going to win!",
+    "voice": "nick"
+  },
+  {
+    "text": "Huff... puff...",
+    "voice": "nick"
+  },
+  {
+    "text": "You beat me, Kaylee!",
+    "voice": "nick"
+  },
+  {
+    "text": "Whoa-oa-oa!",
+    "voice": "nick"
+  },
+  "Grab a glowing hold!",
+  "Grab a pink one!",
+  "Ring the bell!",
+  "Down the slide!",
+  "In Bangkok, the Golden Mount has over 300 steps!",
+  "In Lopburi, monkeys live all over town!",
+  {
+    "text": "Sawasdee krap, Kaylee! First we say thank you.",
+    "voice": "coach"
+  },
+  "Tap your gloves to bow!",
+  {
+    "text": "Now dance with me!",
+    "voice": "coach"
+  },
+  {
+    "text": "Yes! Again!",
+    "voice": "coach"
+  },
+  {
+    "text": "Champion Kaylee!",
+    "voice": "coach"
+  },
+  "Punch to the drum!",
+  "Punch when it's gold!",
+  "Follow Daddy's pad!",
+  "Big kick!",
+  {
+    "text": "Ooh, strong!",
+    "voice": "nick"
+  },
+  {
+    "text": "Oof! Good one, Kaylee!",
+    "voice": "nick"
+  },
+  {
+    "text": "Up high! Down low!",
+    "voice": "nick"
+  },
+  {
+    "text": "Hit the pad!",
+    "voice": "nick"
+  },
+  "Tap your gloves!",
+  "Punch the bag!",
+  "Punch Daddy's pad!",
+  {
+    "text": "The wai kru dance says thank you to your teacher!",
+    "voice": "coach"
+  },
+  "Muay Thai is Thailand's own sport!",
+  {
+    "text": "How fast are you, Kaylee?",
+    "voice": "nick"
+  },
+  "Slap the lights!",
+  "Eight!",
+  "Nine!",
+  "Ten!",
+  "Listen!",
+  "Now you play it!",
+  {
+    "text": "Hey! That one's mine!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ow, ow!",
+    "voice": "nick"
+  },
+  {
+    "text": "Daddy needs a rest!",
+    "voice": "nick"
+  },
+  {
+    "text": "You win, Kaylee!",
+    "voice": "nick"
+  },
+  "A hundred! Super star, Kaylee!",
+  "Slap the glowing one!",
+  "This one next!",
+  "In Thai, one, two, three is nueng, song, saam!",
+  "Climb up high, then slide down!",
+  {
+    "text": "Wheee! Down the nose!",
+    "voice": "ji"
+  },
+  {
+    "text": "Whoa! Here come the dragons!",
+    "voice": "nick"
+  },
+  {
+    "text": "Rattle rattle! Wheee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Round and round!",
+    "voice": "nick"
+  },
+  {
+    "text": "Zoom! Go, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Bonk! Hey!",
+    "voice": "nick"
+  },
+  {
+    "text": "Hey! Not my horn!",
+    "voice": "nick"
+  },
+  {
+    "text": "Whoa! Splash!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ho ho! Hi, Kaylee!",
+    "voice": "nick"
+  },
+  {
+    "text": "Bonk me with the cannon!",
+    "voice": "nick"
+  },
+  "Phi Ta Khon is a festival with big funny masks!",
+  "Tap a slide to ride it!",
+  "Pick a pizza, Kaylee!",
+  {
+    "text": "Pizza time!",
+    "voice": "server"
+  },
+  "Pull a slice!",
+  "One for Mommy!",
+  "Two for Mommy!",
+  "One for Daddy!",
+  "Two for Daddy!",
+  "One for Kaylee!",
+  "Two for Kaylee!",
+  {
+    "text": "Kaylee, Mommy's hungry too!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ho ho! More for Daddy!",
+    "voice": "nick"
+  },
+  {
+    "text": "My nose!",
+    "voice": "nick"
+  },
+  {
+    "text": "Those are for Agong!",
+    "voice": "ji"
+  },
+  {
+    "text": "Yay! Pizza for Agong!",
+    "voice": "nick"
+  },
+  "Sharing fairly means everyone gets the same!",
+  {
+    "text": "Khob khun ka!",
+    "voice": "server"
+  },
+  {
+    "text": "So spicy!",
+    "voice": "nick"
+  },
+  {
+    "text": "Look! A bracelet!",
+    "voice": "ji"
+  },
+  {
+    "text": "So fancy!",
+    "voice": "ji"
+  },
+  {
+    "text": "Three bracelets!",
+    "voice": "ji"
+  },
+  {
+    "text": "Mmm! Crunchy!",
+    "voice": "ji"
+  },
+  "Tap a pizza!",
+  "Pull a slice to a plate!",
+  "Put one in Agong's box!",
+  {
+    "text": "Kaylee, where shall we go?",
+    "voice": "ji"
+  },
+  {
+    "text": "Bring Agong something yummy!",
+    "voice": "agong"
+  },
+  {
+    "text": "Mommy is driving! Hop in, Kaylee!",
+    "voice": "nick"
+  },
+  {
+    "text": "We're home!",
+    "voice": "ji"
+  },
+  {
+    "text": "Ho ho! What is that, Kaylee?",
+    "voice": "agong"
+  },
+  {
+    "text": "Pizza! Thank you, Kaylee!",
+    "voice": "agong"
+  },
+  {
+    "text": "Pizza?!",
+    "voice": "gan"
+  },
+  {
+    "text": "Pizza?!",
+    "voice": "ken"
+  },
+  {
+    "text": "Pizza?!",
+    "voice": "bb"
+  },
+  {
+    "text": "Ho ho ho! Look at Daddy's hair!",
+    "voice": "agong"
+  },
+  "Tap Agong to give him the box!",
+  {
+    "text": "Our mall day!",
+    "voice": "ji"
+  },
+  {
+    "text": "ICONSIAM! By the river!",
+    "voice": "ji"
+  },
+  "Press the big button!",
+  {
+    "text": "Floor six! HarborLand!",
+    "voice": "nick"
+  },
+  {
+    "text": "Welcome to HarborLand! Socks on, please!",
+    "voice": "staff"
+  },
+  {
+    "text": "My shoes are too big!",
+    "voice": "nick"
+  },
+  {
+    "text": "Pick your socks!",
+    "voice": "staff"
+  },
+  {
+    "text": "My socks are too small!",
+    "voice": "nick"
+  },
+  {
+    "text": "Wow, so tall!",
+    "voice": "staff"
+  },
+  {
+    "text": "Ha ha! Off the top!",
+    "voice": "staff"
+  },
+  "In you go!",
+  "Pizza slice sticker! Stretchy cheese!",
+  "ICONSIAM is by the Chao Phraya river!",
+  "At HarborLand, everyone wears grip socks!",
+  "Lopburi is a town full of monkeys!",
+  "The Golden Mount is a temple on a hill in Bangkok!",
+  "Muay Thai boxers dance the wai kru to thank their teacher!",
+  "Cha yen is Thai iced tea. It's orange!"
 ]

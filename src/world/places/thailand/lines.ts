@@ -249,4 +249,394 @@ export const L = {
     // The boarding pass on a replay: the whole trip or straight to the boat.
     again: 'Pack again, or go straight to the boat?',
   },
+
+  // The mall day at ICONSIAM (activities/mall-trip/, plan: thailand/mall-trip.md). Talk short, play long: Sparkle's one
+  // line when a mini game opens (and when something new starts, or after a while with nothing touched), the family's
+  // and the friends' short reactions in their own voices (the monkey coach, the HarborLand staff, the pizza server, the
+  // kids). Kaylee never talks: she giggles. One block per part, so each can be filled on its own.
+  mall: {
+    // HarborLand's hall (hall/).
+    hall: {
+      // Sparkle, the first time she comes in (not coming back out of a mini game).
+      welcome: `Welcome to HarborLand, ${NAME}! Tap a place to play!`,
+      // The staff (a buffalo and a penguin), the first two times she comes near one, and when she taps them (in turn).
+      staff: [by('staff')(`Sawasdee ka, ${NAME}!`), by('staff')('Have fun!')],
+      // Mommy on her bench and Daddy following her round, when she taps them (in turn).
+      ji: [ji('Hi, sweetie!'), ji(`Have fun, ${NAME}!`), ji('Mommy is right here!')],
+      nick: [nick('Where to next, Kaylee?'), nick('Daddy is coming too!'), nick('Ho ho! Go play!')],
+      // Daddy's tummy rumbles (and again if she taps him while it does), then Mommy's card, and her answer to More play.
+      tummy: nick('My tummy is rumbling!'),
+      pizza: ji('Hungry, Kaylee? Pizza time?'),
+      more: ji('OK! A little more!'),
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: 'Tap a door to play!',
+    },
+
+    // The Vet Clinic (games/vet/). Daddy welcomes Doctor Kaylee; Sparkle says who's coming in. The patients only bark,
+    // whinny and trumpet; Daddy hams it up when the tools land on him (at most one line every 12 s).
+    vet: {
+      open: nick(`Doctor ${NAME} is here!`),
+      // Sparkle, as each patient hops in.
+      patient: {
+        puppy: 'A puppy with a sore paw! Grab a tool!',
+        pony: 'A muddy pony! Bath time!',
+        elephant: 'A baby elephant with a sniffly trunk!',
+      } as Record<string, string>,
+      // The elephant's big sneeze.
+      bless: nick('Bless you!'),
+      // Daddy, as each patient is all better.
+      healed: {
+        puppy: nick("Look! He's wagging!"),
+        pony: nick('So shiny and pretty!'),
+        elephant: nick('Bye bye, little elephant!'),
+      } as Record<string, Line>,
+      // Sparkle, when all three are better.
+      allDone: `Everyone is better! Thank you, Doctor ${NAME}!`,
+      // Daddy, when a tool lands on him.
+      daddy: {
+        heart: [nick('Ba-boom! Ba-boom!'), nick('My heart is so big!')],
+        hot: nick('Am I hot? Ha ha!'),
+        tickles: nick('Hey! That tickles!'),
+        bow: nick('Do I look pretty?'),
+        yucky: nick('Bleh! Yucky!'),
+        honk: nick('Honk! Ha ha!'),
+      },
+      // Sparkle, when the 👆 shows (nothing touched for a while): the next thing the patient needs.
+      hint: {
+        heart: 'Listen to its heart!',
+        temp: 'The thermometer goes in its mouth!',
+        thorn: 'Pull out the thorn with the tweezers!',
+        cream: 'Rub cream on the sore paw!',
+        bandage: 'Wrap a bandage round the paw!',
+        soap: 'Rub on lots of soap!',
+        rinse: 'Shower it with water!',
+        dry: 'Dry it with the towel!',
+        brush: 'Brush the mane!',
+        bow: 'Put a bow on top!',
+        medicine: 'Give it the medicine spoon!',
+        tissue: 'A tissue for its trunk!',
+      } as Record<string, string>,
+      // Sparkle's facts, the first time she pokes the thing.
+      facts: {
+        elephant: "The elephant is Thailand's animal!",
+        xray: 'An x-ray shows the bones inside!',
+      },
+    },
+
+    // The Barber Salon (games/barber/). Daddy wants a new look; Sparkle says what's new each round; the kids in round 3
+    // ask for a picture and say "close enough!" whatever she makes; Mommy takes the photo at every reveal.
+    barber: {
+      open: nick(`I want a new look, ${NAME}!`),
+      start: 'Grab a tool and do his hair!',
+      // Round 2's new tools, round 3's kids.
+      colors: 'Now colors and the hair dryer!',
+      copy: 'Copy the picture!',
+      // Each kid, as they sit down with their picture card.
+      ask: {
+        spiky: by('kid')('Spiky, please!'),
+        pigtails: by('kid')('Pigtails, please!'),
+        curly: by('kid')('Curly, please!'),
+      } as Record<string, Line>,
+      // The mirror glows: time for the reveal.
+      mirror: 'Tap the mirror!',
+      // The reveal: Daddy poses (in turn), the kids giggle, Mommy takes the photo.
+      love: [nick('Whoa! I love it!'), nick('So handsome! I love it!')],
+      enough: [by('kid')('Close enough!'), by('kid')('Close enough! So pretty!'), by('kid')('Close enough! Yay!')],
+      cheese: ji('Say cheese!'),
+      allDone: `Great haircuts, ${NAME}!`,
+      // The silly bits, in Daddy's and Mommy's voices.
+      horn: nick('Hey! My horn!'),
+      brows: nick('My eyebrows!'),
+      windy: ji('Whoa! My hair!'),
+      // Sparkle, when the 👆 shows: a tool she hasn't tried yet.
+      hint: {
+        tonic: 'Squirt the grow tonic on his hair!',
+        scissors: 'Snip, snip with the scissors!',
+        comb: 'Comb it up for spikes!',
+        spray: 'Spray on some colors!',
+        dryer: 'Try the hair dryer!',
+        bow: 'Put in a bow!',
+        clip: 'Put in a clip!',
+      } as Record<string, string>,
+      // Sparkle's fact, the first time she pokes the pole.
+      pole: 'A spinning pole means haircuts here!',
+    },
+
+    // Cafe & Cake (games/cafe/). Sparkle says what to do when something new comes; Daddy and Mommy order and drink in
+    // their own voices (one line per drink); Daddy's brain freeze and the ceiling splat get a laugh.
+    cafe: {
+      open: 'Drop fruit in the blender!',
+      thirsty: nick(`I'm thirsty, ${NAME}!`),
+      // The first time in a round: the button, then the pour.
+      button: 'Press the pink button!',
+      pour: 'Lift the jar and pour it in the cup!',
+      // Round 2's picture orders; round 3's Thai drinks.
+      orders: 'Make the drink in the bubble!',
+      pink: nick('Pink, please!'),
+      yellow: ji('Yellow, please!'),
+      thai: 'Thai drinks! Two cups at once!',
+      chaYen: nick('Cha yen, please!'),
+      // They drink it: a yum for a match (or for anything in round 1), a happy surprise for anything else.
+      yum: {
+        nick: [nick(`Yum! Thank you, ${NAME}!`), nick('Mmm! Just right!')],
+        ji: [ji('Delicious, sweetie!'), ji('Mmm! Yummy!')],
+      } as Record<string, Line[]>,
+      funny: {
+        nick: nick('A funny color! But yum!'),
+        ji: ji('Surprise! Yummy!'),
+      } as Record<string, Line>,
+      freeze: nick('Brrr! Brain freeze!'),
+      // The lid was off.
+      splat: nick('Splat! Ha ha!'),
+      // The pokeables, now and then.
+      coffee: nick('My coffee! Thank you!'),
+      teaCup: ji('Khob khun ka, sweetie!'),
+      allDone: `Best cafe ever, ${NAME}!`,
+      // Sparkle, when the 👆 shows: the next thing to do.
+      hint: {
+        straw: 'Put a straw in the cup!',
+        milk: 'Pour the milk on top!',
+        jar: 'Lift the jar and pour!',
+        button: 'Press the pink button!',
+        fruit: 'Drop some fruit in!',
+        want: 'Drop in the fruit from the bubble!',
+        tea: 'Put in the Thai tea!',
+      },
+      // Sparkle's fact, the first time she pokes the Thai tea.
+      chaYenFact: "Cha yen is Thai iced tea! It's orange!",
+    },
+
+    // The Racing Slide (games/race/). Sparkle says what's new each race and counts down; Daddy races her and dives
+    // into the balls head first; she always wins.
+    race: {
+      open: `A slide race, ${NAME}! Tap the steps to climb!`,
+      raceYou: nick(`Race you, ${NAME}!`),
+      count: ['Three!', 'Two!', 'One!', 'Go!'],
+      // The first time something new comes: tap to scoot, tap at a bump, the rubber rings.
+      scoot: 'Tap, tap, tap to go fast!',
+      bumps: 'Now tap at each bump to fly!',
+      now: 'Tap now!',
+      rings: 'Rubber rings! Tap to spin!',
+      // She wins (in turn); Daddy lands head first; a kid cheers.
+      win: [`${NAME} wins!`, `${NAME} wins again!`, `First place, ${NAME}!`],
+      dive: [nick('Head first! Whee!'), nick("I'm OK! Ha ha!")],
+      goodRace: by('kid')(`Good race, ${NAME}!`),
+      allDone: `Three ribbons for ${NAME}!`,
+      // Sparkle, when the 👆 shows.
+      hint: {
+        climb: 'Tap the steps to climb!',
+        race: 'Tap to scoot faster!',
+      },
+    },
+
+    // Little Land's foam blocks (games/blocks/).
+    blocks: {
+      // The opening: Daddy's bet, then Sparkle.
+      higher: nick(`Can you build higher than me, ${NAME}?`),
+      grab: 'Grab a brick!',
+      // Something new: the stack glows (round 1), the picture cards (round 2), Daddy steps up (round 3).
+      push: 'Push it over!',
+      copy: 'Copy the picture!',
+      elephant: 'Now an elephant!',
+      taller: 'Taller than Daddy!',
+      // Daddy, now and then: a brick half over the edge, a brick hat, a knock-down, the elephant coming alive.
+      whoa: nick('Whoa! Careful!'),
+      hat: nick('A brick hat? Ha ha!'),
+      crash: [nick('Crash!'), nick('Ha ha! Again!'), nick('Boom!')],
+      trunk: nick('Wow! An elephant!'),
+      // Round 3: his sneeze at every tall tower, then (the first time) he gives in.
+      sneeze: nick('Ah... ah... choo!'),
+      beat: nick(`Taller than me, ${NAME}!`),
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: {
+        box: 'Grab a brick from the box!',
+        card: 'Put a brick on the picture!',
+        tower: 'Tap the tower to push it!',
+      },
+      // The fact: when the chedi gets its spire, or the first time she pokes its card.
+      chedi: 'A chedi is a Thai temple tower!',
+    },
+
+    // The Golden Mountain (games/mountain/).
+    mountain: {
+      // The opening (Sparkle).
+      climb: `Climb the Golden Mountain, ${NAME}! Count the holds!`,
+      // The count, one number as each hold pops (up to round 3's seven).
+      count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!'],
+      // Something new: on top the first time, round 2's pink holds, round 3's race.
+      top: `You made it, ${NAME}!`,
+      pink: 'Only the pink ones!',
+      race: 'Race Daddy to the top!',
+      // Daddy's race: the start, puffing up behind her, flopping over the rail, his head-first landing.
+      win: nick("I'm going to win!"),
+      huff: nick('Huff... puff...'),
+      beat: nick(`You beat me, ${NAME}!`),
+      whoa: nick('Whoa-oa-oa!'),
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: {
+        hold: 'Grab a glowing hold!',
+        pink: 'Grab a pink one!',
+        bell: 'Ring the bell!',
+        slide: 'Down the slide!',
+      },
+      // The facts: the first bell, the first monkey she pokes.
+      mount: 'In Bangkok, the Golden Mount has over 300 steps!',
+      monkeys: 'In Lopburi, monkeys live all over town!',
+    },
+
+    // Muay Thai (games/boxing/).
+    boxing: {
+      // The opening, the wai kru: the coach, then Sparkle.
+      hello: by('coach')(`Sawasdee krap, ${NAME}! First we say thank you.`),
+      bow: 'Tap your gloves to bow!',
+      // The coach: after the three bows, after rounds 1 and 2, with the gold belt.
+      dance: by('coach')('Now dance with me!'),
+      again: by('coach')('Yes! Again!'),
+      champion: by('coach')(`Champion ${NAME}!`),
+      // Sparkle: something new (the drum, round 2's gold ring, Daddy's pad, the kick).
+      drum: 'Punch to the drum!',
+      gold: "Punch when it's gold!",
+      pad: "Follow Daddy's pad!",
+      kick: 'Big kick!',
+      // Daddy, now and then: a hook or a big POW, the pad going low, into the ropes, up with the pad again.
+      strong: nick('Ooh, strong!'),
+      oof: nick(`Oof! Good one, ${NAME}!`),
+      upDown: nick('Up high! Down low!'),
+      ropes: nick('Whoa-oa-oa!'),
+      hit: nick('Hit the pad!'),
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: {
+        gloves: 'Tap your gloves!',
+        bag: 'Punch the bag!',
+        pad: "Punch Daddy's pad!",
+      },
+      // The facts: the first time she pokes the coach, and the star board.
+      waiKru: by('coach')('The wai kru dance says thank you to your teacher!'),
+      sport: "Muay Thai is Thailand's own sport!",
+    },
+
+    // The Sky Pod (games/skypod/).
+    skypod: {
+      // The opening: Daddy, then Sparkle.
+      fast: nick(`How fast are you, ${NAME}?`),
+      slap: 'Slap the lights!',
+      // The count as her score climbs (rounds 1 and 3).
+      count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!', 'Nine!', 'Ten!'],
+      // Round 2: before the wall plays, then her turn (the first time).
+      listen: 'Listen!',
+      play: 'Now you play it!',
+      // Round 3, Daddy: the race, she took his light, a miss, a rest, she wins.
+      race: nick(`Race you, ${NAME}!`),
+      mine: nick("Hey! That one's mine!"),
+      ow: nick('Ow, ow!'),
+      rest: nick('Daddy needs a rest!'),
+      win: nick(`You win, ${NAME}!`),
+      // The finale: the score at a hundred.
+      hundred: `A hundred! Super star, ${NAME}!`,
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: {
+        lit: 'Slap the glowing one!',
+        next: 'This one next!',
+      },
+      // The fact: the first time she pokes the scoreboard.
+      thai: 'In Thai, one, two, three is nueng, song, saam!',
+    },
+
+    // The Big Frame (harborland/).
+    frame: {
+      // Sparkle, as she comes in.
+      start: 'Climb up high, then slide down!',
+      // Mommy and Daddy, the first time she rides each big slide.
+      ride: {
+        nose: ji('Wheee! Down the nose!'),
+        dragon: nick('Whoa! Here come the dragons!'),
+        roller: ji('Rattle rattle! Wheee!'),
+        donut: nick('Round and round!'),
+        zip: ji('Zoom! Go, Kaylee!'),
+      },
+      // Daddy in the ball pit and the cannon: the first two bonks (in turn), then his big flop.
+      bonk: [nick('Bonk! Hey!'), nick('Hey! Not my horn!')],
+      flop: nick('Whoa! Splash!'),
+      // Daddy tapped in the balls (in turn); Mommy tapped says her hall lines.
+      nick: [nick('Ho ho! Hi, Kaylee!'), nick('Bonk me with the cannon!')],
+      // Sparkle's fact, the first time she pokes the giant mask or a Phi Ta Khon on the roller's posts.
+      phiTaKhon: 'Phi Ta Khon is a festival with big funny masks!',
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: 'Tap a slide to ride it!',
+    },
+
+    // The Pizza Company (pizza/).
+    pizza: {
+      // Sparkle at the menu; the server sets the pizza down; Sparkle's one instruction.
+      menu: `Pick a pizza, ${NAME}!`,
+      served: by('server')('Pizza time!'),
+      start: 'Pull a slice!',
+      // Sparkle counting round the table, as each plate gets its first and second slice.
+      count: {
+        ji: ['One for Mommy!', 'Two for Mommy!'],
+        nick: ['One for Daddy!', 'Two for Daddy!'],
+        kaylee: [`One for ${NAME}!`, `Two for ${NAME}!`],
+      } as Record<string, string[]>,
+      // Daddy with more than anyone (in turn), the cheese tug on his nose.
+      ham: [nick("Kaylee, Mommy's hungry too!"), nick('Ho ho! More for Daddy!')],
+      nose: nick('My nose!'),
+      // Two each: the last two go in Agong's box; the lid closes; then Sparkle's fact once it's all shared.
+      agong: ji('Those are for Agong!'),
+      closed: nick('Yay! Pizza for Agong!'),
+      fair: 'Sharing fairly means everyone gets the same!',
+      // The pokes: the server's bow, Daddy's chili sneeze, Mommy's onion-ring bracelets (three in turn, then she eats one).
+      thanks: by('server')('Khob khun ka!'),
+      spicy: nick('So spicy!'),
+      rings: [ji('Look! A bracelet!'), ji('So fancy!'), ji('Three bracelets!')],
+      crunch: ji('Mmm! Crunchy!'),
+      // Sparkle, when the finger shows after a while with nothing touched (or the menu waits).
+      hint: {
+        menu: 'Tap a pizza!',
+        slice: 'Pull a slice to a plate!',
+        box: "Put one in Agong's box!",
+      },
+    },
+
+    // The trip around it: Mommy's question, the goodbye, the Veloz, ICONSIAM, the counter, home.
+    trip: {
+      // Mommy's card in the house, once there are two trips (🚤 or 🛝🍕).
+      where: ji(`${NAME}, where shall we go?`),
+      // The goodbye and home, at Agong's house (TripHouse reads them from the TripDef: activities/mall-trip/words.ts).
+      wish: by('agong')('Bring Agong something yummy!'),
+      ready: nick(`Mommy is driving! Hop in, ${NAME}!`),
+      home: ji("We're home!"),
+      agong: by('agong')(`Ho ho! What is that, ${NAME}?`),
+      thanks: by('agong')(`Pizza! Thank you, ${NAME}!`),
+      pizza: { gan: by('gan')('Pizza?!'), ken: by('ken')('Pizza?!'), bb: by('bb')('Pizza?!') },
+      hair: by('agong')("Ho ho ho! Look at Daddy's hair!"),
+      give: 'Tap Agong to give him the box!',
+      wall: ji('Our mall day!'),
+      // ICONSIAM: the glimpse, the lift and the HarborLand counter (arrive.ts).
+      arrive: {
+        here: ji('ICONSIAM! By the river!'),
+        lift: 'Press the big button!',
+        six: nick('Floor six! HarborLand!'),
+        counter: by('staff')('Welcome to HarborLand! Socks on, please!'),
+        shoes: nick('My shoes are too big!'),
+        socks: by('staff')('Pick your socks!'),
+        stretch: nick('My socks are too small!'),
+        tall: by('staff')('Wow, so tall!'),
+        horn: by('staff')('Ha ha! Off the top!'),
+        gate: 'In you go!',
+      },
+      // The stamp screen's sticker, and the tap-to-hear facts there and on the passport (trip/facts.ts MALL_FACTS).
+      sticker: 'Pizza slice sticker! Stretchy cheese!',
+      facts: {
+        iconsiam: 'ICONSIAM is by the Chao Phraya river!',
+        socks: 'At HarborLand, everyone wears grip socks!',
+        phiTaKhon: 'Phi Ta Khon is a festival with big funny masks!',
+        lopburi: 'Lopburi is a town full of monkeys!',
+        goldenMount: 'The Golden Mount is a temple on a hill in Bangkok!',
+        sharing: 'Sharing fairly means everyone gets the same!',
+        waiKru: 'Muay Thai boxers dance the wai kru to thank their teacher!',
+        chaYen: "Cha yen is Thai iced tea. It's orange!",
+        elephant: "The elephant is Thailand's animal!",
+      },
+    },
+  },
 }

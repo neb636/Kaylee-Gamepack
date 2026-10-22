@@ -3,6 +3,8 @@
 // She always wins (the others keep pace, then finish just behind), a ribbon joins the row, and round again.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
+import { L } from '../../../../lines'
+import { mallVoice } from '../../voice'
 import { CLIMB_HOPS, RIVALS, kidFor } from './layout'
 import { Countdown } from './Race'
 import { raceSfx as sfx } from './sounds'
@@ -25,6 +27,10 @@ export function RaceFlat({ round, onRound, onWon, onAllDone }: Props) {
   const [count, setCount] = useState<number | null>(null)
   const [pos, setPos] = useState([0, 0, 0, 0])
   const [ribbons, setRibbons] = useState(round - 1)
+  // Sparkle's opening line (once, as it opens).
+  useEffect(() => {
+    mallVoice.say(L.mall.race.open)
+  }, [])
   const boost = useRef(0)
   const her = useRef(0)
   const kid = kidFor(race)

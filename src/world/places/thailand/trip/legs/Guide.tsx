@@ -22,8 +22,11 @@ const WHO: Record<string, { name: string; icon: string; color: string }> = {
   sri: { name: 'Aunty Sri', icon: '🐦', color: '#FFC83D' },
   officer: { name: 'Officer', icon: '🐘', color: '#A8B4E8' },
   attendant: { name: 'Flight attendant', icon: '🐧', color: '#FFD3E6' },
-  kids: { name: 'The village kids', icon: '⚽', color: '#FFD27A' },
-  staff: { name: 'HarborLand staff', icon: '🐃', color: '#FF8F8F' },
+  kids: { name: 'The kids', icon: '⚽', color: '#FFD27A' },
+  coach: { name: 'Coach', icon: '🐒', color: '#FF8A8A' },
+  staff: { name: 'HarborLand', icon: '🐃', color: '#FFD27A' },
+  server: { name: 'The Pizza Company', icon: '🦊', color: '#8FD9A8' },
+  kid: { name: 'A friend', icon: '🧒', color: '#A8DCFF' },
 }
 
 interface Props {

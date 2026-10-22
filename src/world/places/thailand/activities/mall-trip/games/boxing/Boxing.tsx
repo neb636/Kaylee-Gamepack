@@ -9,6 +9,7 @@ import { View3D, type RenderMode } from '../../../../engine/View3D'
 import { BoxingFlat } from './Flat'
 import type { Round } from './layout'
 import { BOXING_ANCHORS, MuayThai } from './ring'
+import { mallVoice } from '../../voice'
 
 interface Props {
   round: Round
@@ -38,7 +39,7 @@ export function Boxing({ round, socks, onRound, onWarmedUp, onPlay }: Props) {
     const w = new MuayThai(
       renderer,
       {
-        say: () => {},
+        say: (l) => mallVoice.say(l),
         section: () => {},
         done: () => {},
         round: (n) => {
