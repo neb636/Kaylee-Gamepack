@@ -1,19 +1,25 @@
 // The race lagoon (race.ts), from simple shapes in the bay's toon look (geo.ts parts merged into one mesh and one ink
-// outline per group, the bay's rock towers and palms): a secret lagoon walled in by a ring of tall rock towers, an
-// island of sand and jungle in the middle with the waterfall rock, and the course roped off with pink and white buoys.
+// outline per group, the bay's rock towers and palms): a secret lagoon walled in by tall rock towers that follow the
+// heart-shaped course round, a heart-shaped island of sand and jungle in the middle with the waterfall rock at its
+// point, and the course roped off with pink and white buoys.
 // - The start: a checkered line on the water under an inflatable rainbow arch, a checkered banner, and three lights
 //   hanging from it for the countdown (setLights).
 // - The grandstand floats beside the start straight: three rows of animal fans that bounce, more when she passes
 //   (cheer), under a striped awning, with flags and bunting along the ropes.
-// - A natural rock arch over the back straight, hung with vines; the waterfall pours off the big rock in turn 1.
+// - The Twin Rocks: two towers on a sandy islet in the middle of the course (it splits round them), bunting strung
+//   between their tops.
+// - The Glow Grotto: five rock arches one after another over the left lobe, hung with vines, glowing crystals on
+//   their feet and under their tops, fireflies drifting through.
+// - The Heart Gate at the dip: a pink and white inflatable arch with a big puffy pink heart floating over it.
+// - The waterfall pours off the big rock inside the hairpin at the heart's point.
 // - Hot-air balloons drift overhead; the far towers stand in the haze beyond the ring.
-import { CanvasTexture, DoubleSide, Group, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, RingGeometry, Shape, ShapeGeometry, SphereGeometry, Vector3, type BufferGeometry } from 'three'
+import { CanvasTexture, DoubleSide, ExtrudeGeometry, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, RingGeometry, Shape, ShapeGeometry, SphereGeometry, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid, solidMix } from '../../../engine/geo'
+import { bake, merge, P, solid, solidMix } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
 import type { Rock } from '../bay/layout'
 import { foamRing, JUNGLE, JUNGLE_DARK, ROCK, ROCK_DARK, SAND, tower } from '../bay/scenery'
-import { ARCH_S, FALLS, HALF, locate, PODIUM, SAMPLES, spotAt, STAND } from './track'
+import { DOLPHIN_RUN, ELEPHANTS, FALLS, FORK, GROTTO, halfAt, HALF, HEART_S, locate, PODIUM, SAMPLES, spotAt, STAND } from './track'
 
 /** The rainbow's bands, outside in. */
 export const RAINBOW = [PAL.hotpink, '#FFB07A', PAL.butter, PAL.mint, PAL.sky, PAL.lavenderDark]
@@ -38,8 +44,8 @@ function rng(seed: number) {
 }
 
 /** The lagoon's middle: things round it are merged in sectors, so the ones behind the camera aren't drawn. */
-const CX = -2
-const CZ = 8
+const CX = 0
+const CZ = 0
 const SECTORS = 4
 const tmpV = new Vector3()
 function sectorOf(g: BufferGeometry) {
@@ -58,11 +64,12 @@ function sectored(root: Group, outlined: BufferGeometry[], bag: Bag, px: number,
   }
 }
 
-/** Meters from (x, z) to the nearest bit of the course's middle. */
-function fromCourse(x: number, z: number) {
+const HALVES = SAMPLES.map((p) => halfAt(p.s))
+/** Meters from (x, z) to the nearest bit of the course's edge (its ropes; negative: on the course). */
+function fromRope(x: number, z: number) {
   let best = Infinity
-  for (let i = 0; i < SAMPLES.length; i += 2) best = Math.min(best, (SAMPLES[i].x - x) ** 2 + (SAMPLES[i].z - z) ** 2)
-  return Math.sqrt(best)
+  for (let i = 0; i < SAMPLES.length; i += 2) best = Math.min(best, Math.hypot(SAMPLES[i].x - x, SAMPLES[i].z - z) - HALVES[i])
+  return best
 }
 /** Inside the loop (the island's side)? */
 function insideLoop(x: number, z: number) {
@@ -128,51 +135,72 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
   const r = rng(20261020)
   const towers: Rock[] = []
 
-  // ---- The ring of rock towers walling the lagoon in, two rows deep, and a few nearer ones outside the ropes ----
+  // ---- The rock towers walling the lagoon in, two rows deep, and a few nearer ones outside the ropes ----
   const ring: Rock[] = []
   const cx = CX
   const cz = CZ
+  // Each one out from the middle until it's clear of the course and outside it, so the walls follow the heart round.
   // (The inner row low enough for its jungle caps and the sky to show over it; the row behind taller, a wall.)
   const back: Rock[] = []
-  for (const [rx, rz, n, h, row] of [[104, 94, 40, 30, ring], [126, 114, 34, 52, back]] as const)
+  for (const [gap, n, h, row, big] of [[16, 48, 30, ring, 0], [40, 42, 52, back, 1]] as const)
     for (let i = 0; i < n; i++) {
-      const a = (i / n) * Math.PI * 2 + (rx > 110 ? 0.06 : 0)
-      const x = cx + Math.sin(a) * rx * (0.95 + r() * 0.1)
-      const z = cz + Math.cos(a) * rz * (0.95 + r() * 0.1)
-      row.push({ x, z, r: (rx > 110 ? 13 : 10) + r() * 6, h: h * (0.7 + r() * 0.6) })
+      const a = (i / n) * Math.PI * 2 + (big ? 0.06 : 0)
+      const rad = (big ? 13 : 10) + r() * 6
+      let d = 20
+      while (d < 300) {
+        const x = cx + Math.sin(a) * d
+        const z = cz + Math.cos(a) * d
+        if (!insideLoop(x, z) && fromRope(x, z) > gap + rad) break
+        d += 2
+      }
+      d += r() * 8
+      row.push({ x: cx + Math.sin(a) * d, z: cz + Math.cos(a) * d, r: rad, h: h * (0.7 + r() * 0.6) })
     }
   const near: Rock[] = []
   for (let i = 0; i < SAMPLES.length; i += 13) {
     const p = SAMPLES[i]
     for (const side of [-1, 1]) {
-      const lat = side * (HALF + 15 + r() * 18)
+      const lat = side * (halfAt(p.s) + 15 + r() * 18)
       const x = p.x + p.lx * lat
       const z = p.z + p.lz * lat
       const rad = 4 + r() * 5
-      if (fromCourse(x, z) < HALF + 6 + rad) continue
+      // (Clear of the dolphins' water outside the rope on Dolphin Run, and the elephants' beaches.)
+      const run = side < 0 && p.s > DOLPHIN_RUN.from - 10 && p.s < DOLPHIN_RUN.to + 10
+      if (fromRope(x, z) < 6 + rad + (run ? 6 : 0)) continue
       if (Math.hypot(x - STAND.x, z - STAND.z) < 24 || Math.hypot(x - PODIUM.x, z - PODIUM.z) < 22 || Math.hypot(x - FALLS.x, z - FALLS.z) < FALLS.r + rad + 6) continue
+      if (ELEPHANTS.some((e) => {
+        const b = spotAt(e.s, e.lat)
+        return Math.hypot(x - b.x, z - b.z) < 12 + rad
+      })) continue
       if ([...near, ...ring].some((o) => Math.hypot(o.x - x, o.z - z) < o.r + rad + 3)) continue
       if (r() < 0.45) continue
       near.push({ x, z, r: rad, h: 18 + r() * 26 + rad })
     }
   }
   const falls: Rock = FALLS
-  towers.push(...ring, ...back, ...near, falls)
+  // The Twin Rocks, in the middle of the course where it splits.
+  const fork = spotAt(FORK.s)
+  const twins: Rock[] = [-1, 1].map((k) => {
+    const p = spotAt(FORK.s + k * 7)
+    return { x: p.x, z: p.z, r: 4.8, h: k > 0 ? 24 : 30 }
+  })
+  towers.push(...ring, ...back, ...near, falls, ...twins)
   // (Each tower's parts are kept together, so a tower is in one sector.)
   const towerGeo = (t: Rock, seg: number) => merge(tower(t, { seg }))
-  sectored(root, [...ring.map((t) => towerGeo(t, 8)), ...near.map((t) => towerGeo(t, 10)), towerGeo(falls, 12)], bag, 2.5)
+  sectored(root, [...ring.map((t) => towerGeo(t, 8)), ...near.map((t) => towerGeo(t, 10)), towerGeo(falls, 12), ...twins.map((t) => towerGeo(t, 12))], bag, 2.5)
   // The row behind is mostly hidden, far into the haze: no outline, fewer sides.
   sectored(root, back.map((t) => towerGeo(t, 7)), bag, 0)
-  root.add(new Mesh(bag.add(merge([...near, falls].map(foamRing))), bag.add(new MeshBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: 0.75, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }))))
+  root.add(new Mesh(bag.add(merge([...near, falls, ...twins].map(foamRing))), bag.add(new MeshBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: 0.75, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }))))
 
   // ---- The island in the middle: sand, jungle, palms (blobs on a grid, wherever the course is far enough away) ----
   const island: BufferGeometry[] = []
-  for (let x = -60; x <= 60; x += 8)
-    for (let z = -40; z <= 60; z += 8) {
+  for (let x = -96; x <= 96; x += 8)
+    for (let z = -100; z <= 100; z += 8) {
       const jx = x + (r() - 0.5) * 4
       const jz = z + (r() - 0.5) * 4
       if (!insideLoop(jx, jz)) continue
-      const d = fromCourse(jx, jz)
+      // (`d` as the first course measured it, from the middle of a course HALF wide.)
+      const d = fromRope(jx, jz) + HALF
       if (d < HALF + 9) continue
       // (The podium's stage floats clear of the sand and jungle.)
       if (Math.hypot(jx - PODIUM.x, jz - PODIUM.z) < 11) continue
@@ -186,9 +214,10 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
   // ---- The ropes: pink and white floats along both sides of the course, a yellow one every few, the rope between ----
   const floats: BufferGeometry[] = []
   const ropes: BufferGeometry[] = []
-  const rope = HALF + 0.6
+  const ropeAt = (i: number) => HALVES[i % SAMPLES.length] + 0.6
   for (let i = 0; i < SAMPLES.length; i += 3) {
     const p = SAMPLES[i]
+    const rope = ropeAt(i)
     for (const side of [-1, 1]) {
       const x = p.x + p.lx * rope * side
       const z = p.z + p.lz * rope * side
@@ -197,11 +226,12 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
     }
     // The rope itself: a thin line from this float to the next (rotated along the course).
     const q = SAMPLES[(i + 3) % SAMPLES.length]
+    const qr = ropeAt(i + 3)
     for (const side of [-1, 1]) {
       const ax = p.x + p.lx * rope * side
       const az = p.z + p.lz * rope * side
-      const bx = q.x + q.lx * rope * side
-      const bz = q.z + q.lz * rope * side
+      const bx = q.x + q.lx * qr * side
+      const bz = q.z + q.lz * qr * side
       const len = Math.hypot(bx - ax, bz - az)
       ropes.push(P.box(0.06, 0.06, len, '#FFF7F0', { at: [(ax + bx) / 2, 0.2, (az + bz) / 2], rot: [0, Math.atan2(bx - ax, bz - az), 0] }))
     }
@@ -246,30 +276,93 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
   })
   root.add(arch)
 
-  // ---- The rock arch over the back straight, hung with vines ----
-  const rockArch = new Group()
-  const ap = spotAt(ARCH_S)
-  rockArch.position.set(ap.x, 0, ap.z)
-  rockArch.rotation.y = ap.heading
-  const pillar = HALF + 4.5
-  const ra: BufferGeometry[] = []
-  for (const s of [-1, 1]) {
-    ra.push(P.cyl(1.9, 2.2, 1.4, '#6F6484', { at: [s * pillar, 0.5, 0] }, 12), P.cyl(2.6, 2.2, 14, ROCK, { at: [s * pillar, 7.4, 0] }, 12), P.cyl(1.2, 1.4, 9, ROCK_DARK, { at: [s * (pillar + 1.6), 6, 1.2] }, 8))
+  // ---- The Glow Grotto: rock arches one after another over the left lobe, vines, glowing crystals, fireflies ----
+  const glow: BufferGeometry[] = []
+  const crystal = [PAL.pink, '#E2D2FF', '#B8F5E4', '#FFF1B0']
+  GROTTO.forEach((as, n) => {
+    const rockArch = new Group()
+    const ap = spotAt(as)
+    rockArch.position.set(ap.x, 0, ap.z)
+    rockArch.rotation.y = ap.heading
+    const pillar = halfAt(as) + 4.5
+    const top = 14.4 + (n % 2) * 1.2
+    const ra: BufferGeometry[] = []
+    for (const s of [-1, 1]) {
+      ra.push(P.cyl(1.9, 2.2, 1.4, '#6F6484', { at: [s * pillar, 0.5, 0] }, 12), P.cyl(2.6, 2.2, top - 1.4, ROCK, { at: [s * pillar, top / 2, 0] }, 12), P.cyl(1.2, 1.4, 9, ROCK_DARK, { at: [s * (pillar + 1.6), 6, n % 2 ? -1.2 : 1.2] }, 8))
+      // Crystals at its feet, glowing (no shading: they shine).
+      for (let k = 0; k < 4; k++) {
+        const h = 1.6 + ((k * 7 + n * 3) % 5) * 0.45
+        glow.push(bake(new SphereGeometry(1, 5, 3), crystal[(k + n) % crystal.length], { at: [ap.x + Math.cos(ap.heading) * s * (pillar - 2.2) + Math.sin(ap.heading) * (k - 1.5) * 1.1, h / 2, ap.z - Math.sin(ap.heading) * s * (pillar - 2.2) + Math.cos(ap.heading) * (k - 1.5) * 1.1], scale: [0.45, h / 2, 0.45], rot: [0, k, s * (0.25 + k * 0.08)] }))
+      }
+    }
+    for (let i = -6; i <= 6; i++) {
+      const x = (i / 6) * (pillar + 1)
+      ra.push(P.sphere(3 - Math.abs(i) * 0.08, i % 2 ? ROCK : '#B5AAC6', { at: [x, top + 1 + Math.cos(i * 0.9) * 0.6, (i % 3) * 0.4] }, 10))
+    }
+    ra.push(P.sphere(pillar + 2, JUNGLE, { at: [0, top + 3.8, 0], scale: [1, 0.22, 0.4] }, 14), P.sphere(3, JUNGLE_DARK, { at: [pillar * (n % 2 ? -0.4 : 0.4), top + 4.6, 0.5], scale: [1, 0.6, 1] }, 10))
+    // Vines hanging under it, and crystals pointing down from its top (high above the boats).
+    for (let i = -5; i <= 5; i++) {
+      const x = (i / 5) * pillar * 0.85
+      if (i % 2) ra.push(P.cyl(0.07, 0.05, 2.4 + (i % 3) * 0.8, JUNGLE_DARK, { at: [x, top - 1.8 - (i % 3) * 0.4, 1.4] }, 4))
+      else glow.push(bake(new SphereGeometry(1, 5, 3), crystal[(i / 2 + n + 8) % crystal.length], { at: [ap.x + Math.cos(ap.heading) * x, top - 2.4, ap.z - Math.sin(ap.heading) * x], scale: [0.4, 1.4, 0.4] }))
+    }
+    rockArch.add(solid(merge(ra), bag, 2.5))
+    root.add(rockArch)
+    for (const s of [-1, 1]) towers.push({ x: ap.x + Math.cos(ap.heading) * s * pillar, z: ap.z - Math.sin(ap.heading) * s * pillar, r: 2.8, h: top })
+  })
+  root.add(new Mesh(bag.add(merge(glow)), bag.add(new MeshBasicMaterial({ vertexColors: true }))))
+  // Fireflies drifting through the grotto: little glowing dots.
+  const FLIES = 36
+  const flyMesh = bag.add(new InstancedMesh(bag.add(new SphereGeometry(0.13, 6, 4)), bag.add(new MeshBasicMaterial({ color: '#FFF6B8' })), FLIES))
+  flyMesh.frustumCulled = false
+  root.add(flyMesh)
+  const flies = Array.from({ length: FLIES }, (_, i) => ({ s: GROTTO[0] - 4 + r() * (GROTTO[GROTTO.length - 1] - GROTTO[0] + 8), lat: (r() - 0.5) * 2 * (HALF + 3), y: 2 + r() * 9, ph: i * 1.7 }))
+  const m4 = new Matrix4()
+
+  // ---- The Twin Rocks' islet: sand round their feet, palms between them, bunting strung from top to top ----
+  const islet = new Group()
+  islet.position.set(fork.x, 0, fork.z)
+  islet.rotation.y = fork.heading
+  const tw: BufferGeometry[] = [P.cyl(1, 1, 0.9, SAND, { at: [0, 0.1, 0], scale: [FORK.rock + 0.2, 1, FORK.half + 0.4] }, 24)]
+  tw.push(...palm(0.8, -0.6, 6, 0.7, 0.5), ...palm(-0.9, 1, 5.2, 3.6, 0.5))
+  for (let k = 0; k < 9; k++) {
+    const u = (k + 0.5) / 9
+    const z = -6 + u * 12
+    const y = 21 - Math.sin(u * Math.PI) * 2 - u * 2
+    tw.push(P.prism([[-0.45, 0], [0.45, 0], [0, -0.9]], 0.04, RAINBOW[k % RAINBOW.length], { at: [0, y, z] }))
   }
-  for (let i = -6; i <= 6; i++) {
-    const x = (i / 6) * (pillar + 1)
-    ra.push(P.sphere(3 - Math.abs(i) * 0.08, i % 2 ? ROCK : '#B5AAC6', { at: [x, 15.4 + Math.cos(i * 0.9) * 0.6, (i % 3) * 0.4] }, 10))
-  }
-  ra.push(P.sphere(pillar + 2, JUNGLE, { at: [0, 18.2, 0], scale: [1, 0.22, 0.4] }, 14), P.sphere(3, JUNGLE_DARK, { at: [pillar * 0.4, 19, 0.5], scale: [1, 0.6, 1] }, 10))
-  // Vines and little stalactites hanging under it (high above the boats).
-  for (let i = -5; i <= 5; i++) {
-    const x = (i / 5) * pillar * 0.85
-    if (i % 2) ra.push(P.cyl(0.07, 0.05, 2.4 + (i % 3) * 0.8, JUNGLE_DARK, { at: [x, 12.6 - (i % 3) * 0.4, 1.4] }, 4))
-    else ra.push(P.cone(0.45, 1.6, ROCK_DARK, { at: [x, 12.4, -0.6], rot: [Math.PI, 0, 0] }, 6))
-  }
-  rockArch.add(solid(merge(ra), bag, 2.5))
-  root.add(rockArch)
-  for (const s of [-1, 1]) towers.push({ x: ap.x + Math.cos(ap.heading) * s * pillar, z: ap.z - Math.sin(ap.heading) * s * pillar, r: 2.8, h: 15 })
+  tw.push(P.box(0.06, 0.06, 13, '#FFF7F0', { at: [0, 20, 0], rot: [0.13, 0, 0] }))
+  islet.add(solid(merge(tw), bag, 2))
+  root.add(islet)
+
+  // ---- The Heart Gate at the dip: a pink and white inflatable arch, a big puffy heart floating over it ----
+  const hp = spotAt(HEART_S)
+  const gate = new Group()
+  gate.position.set(hp.x, 0, hp.z)
+  gate.rotation.y = hp.heading
+  const gspan = halfAt(HEART_S) + 1.8
+  const gateParts: BufferGeometry[] = [PAL.hotpink, '#FFFFFF', PAL.pink, '#FFFFFF'].map((c, i) => P.torus(gspan - i * 0.6, 0.36, c, { at: [0, 0.4, 0] }, Math.PI))
+  for (const s of [-1, 1]) gateParts.push(P.cyl(1.5, 1.7, 1.1, '#FFFFFF', { at: [s * (gspan - 1.2), 0.2, 0] }, 16), P.sphere(0.4, PAL.gold, { at: [s * (gspan - 1.2), 1.1, 0.9] }, 8))
+  // Its strings up to the heart.
+  for (const s of [-1, 1]) gateParts.push(P.cyl(0.03, 0.03, 3.2, PAL.ink, { at: [s * 0.8, gspan + 2.2, 0], rot: [0, 0, s * 0.2] }, 4))
+  gate.add(solid(merge(gateParts), bag, 2))
+  const heart = new Group()
+  heart.position.set(0, gspan + 7.6, 0)
+  const hs = new Shape()
+  hs.moveTo(5, 5)
+  hs.bezierCurveTo(5, 5, 4, 0, 0, 0)
+  hs.bezierCurveTo(-6, 0, -6, 7, -6, 7)
+  hs.bezierCurveTo(-6, 11, -3, 15.4, 5, 19)
+  hs.bezierCurveTo(12, 15.4, 16, 11, 16, 7)
+  hs.bezierCurveTo(16, 7, 16, 0, 10, 0)
+  hs.bezierCurveTo(7, 0, 5, 5, 5, 5)
+  // (The shape is drawn point up: turned over, and puffed out with a round bevel.)
+  const hg = new ExtrudeGeometry(hs, { depth: 1.5, bevelEnabled: true, bevelSegments: 4, bevelSize: 1.6, bevelThickness: 1.8, curveSegments: 18 })
+  hg.translate(-5, -10, -0.75)
+  hg.rotateZ(Math.PI)
+  heart.add(solid(merge([bake(hg, PAL.hotpink, { scale: [0.36, 0.36, 0.36] }), P.sphere(0.9, '#FFFFFF', { at: [-1.6, 1.4, -1.25], scale: [1, 0.6, 0.3] }, 10)]), bag, 2.5))
+  gate.add(heart)
+  root.add(gate)
 
   // ---- The waterfall, pouring off the big rock in turn 1 toward the course ----
   const nearest = SAMPLES[locate(FALLS.x, FALLS.z).i]
@@ -346,9 +439,9 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
 
   // ---- Far towers in the haze beyond the ring (flat silhouettes, three layers) ----
   ;[
-    [190, '#B4AACB', 70],
-    [250, '#C6BEDB', 95],
-    [330, '#D6D1E8', 120],
+    [230, '#B4AACB', 75],
+    [295, '#C6BEDB', 100],
+    [375, '#D6D1E8', 125],
   ].forEach(([dist, color, tall], li) => {
     const shapes: BufferGeometry[] = []
     const n = 20 + li * 6
@@ -374,8 +467,8 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
 
   // ---- Hot-air balloons drifting over the lagoon ----
   const balloons = [
-    { c: [PAL.pink, '#FFFFFF'], rad: 40, y: 46, speed: 0.03, phase: 0 },
-    { c: [PAL.mint, PAL.butter], rad: 58, y: 58, speed: -0.022, phase: 2.4 },
+    { c: [PAL.pink, '#FFFFFF'], rad: 52, y: 50, speed: 0.03, phase: 0 },
+    { c: [PAL.mint, PAL.butter], rad: 80, y: 62, speed: -0.022, phase: 2.4 },
   ].map((b) => {
     const g = new Group()
     const parts: BufferGeometry[] = [P.sphere(4.2, b.c[0], { scale: [1, 1.15, 1] }, 18)]
@@ -406,6 +499,18 @@ export function buildRaceScenery(bag: Bag): RaceScenery {
       // The chase camera passing under the rainbow: hide it for that moment (from inside, it would fill the screen).
       const local = arch.worldToLocal(tmpV.copy(cam))
       arch.visible = !(Math.abs(local.z) < 3.5 && Math.abs(local.x) < span + 4 && local.y < span + 1)
+      const inGate = gate.worldToLocal(tmpV.copy(cam))
+      gate.visible = !(Math.abs(inGate.z) < 3.5 && Math.abs(inGate.x) < gspan + 4 && inGate.y < gspan + 1)
+      heart.rotation.y = Math.sin(t * 0.7) * 0.35
+      heart.position.y = gspan + 7.6 + Math.sin(t * 1.3) * 0.4
+      heart.scale.setScalar(1 + Math.max(0, Math.sin(t * 5.5)) ** 8 * 0.07)
+      flies.forEach((f, i) => {
+        const p = spotAt(f.s + Math.sin(t * 0.3 + f.ph) * 3, f.lat + Math.cos(t * 0.4 + f.ph) * 2)
+        const blink = 0.6 + 0.4 * Math.sin(t * 3 + f.ph * 2)
+        m4.makeScale(blink, blink, blink).setPosition(p.x, f.y + Math.sin(t * 0.8 + f.ph) * 0.8, p.z)
+        flyMesh.setMatrixAt(i, m4)
+      })
+      flyMesh.instanceMatrix.needsUpdate = true
       startFlags.forEach((g, i) => (g.rotation.y = (i ? Math.PI : 0) + Math.sin(t * 4 + i * 1.7) * 0.4))
       flow += dt
       fallTex.offset.y = flow * 1.4

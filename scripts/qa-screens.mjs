@@ -862,7 +862,7 @@ const SCREENS = [
     hash: '#/world/thailand/boat-trip/race?lap=3',
     reset: true,
     act: async (p) => {
-      await p.waitForFunction(() => window.__thaiBoatQA?.().phase === 'finish', null, { timeout: 90000 }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiBoatQA?.().phase === 'finish', null, { timeout: 150000 }).catch(() => {})
       await p.waitForTimeout(600)
     },
   },

@@ -3,7 +3,8 @@
 //   🍌 a banana to throw at whoever is ahead, or drop behind, 🌈 the rainbow: fast, sparkly and nothing can stop her).
 //   They pop back a moment later.
 // - Lines of gold coins along the course (each one makes her boat a little faster, up to ten), back again next lap.
-// - Golden arrow pads that give a burst of speed, and a striped ramp to jump off (a tap in the air is a trick).
+// - Golden arrow pads that give a burst of speed, and two striped ramps to jump off (a tap in the air is a trick): a
+//   small one, and the BIG JUMP right across the course, through a giant flower hoop, with a line of coins in the air.
 // - Banana peels on the water (the macaque drops them; she can drop one too): drive over one and spin round.
 // Each check takes a racer's place on the course (track.ts: `s` along it, `lat` across it).
 import { AdditiveBlending, BackSide, BoxGeometry, CanvasTexture, Color, DoubleSide, Euler, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, RepeatWrapping, TorusGeometry, Vector3, type BufferGeometry } from 'three'
@@ -12,7 +13,7 @@ import { merge, P, solid } from '../../../engine/geo'
 import { PAL, toon } from '../../../engine/toon'
 import { swell } from '../../../engine/water'
 import { RAINBOW } from './scenery'
-import { ahead, BOOST_HALF, BOOSTS, COIN_LINES, ITEM_LATS, ITEM_ROWS, RAMP, spotAt } from './track'
+import { ahead, BOOST_HALF, BOOSTS, COIN_LINES, HOOP, ITEM_LATS, ITEM_ROWS, RAMPS, spotAt, type Ramp } from './track'
 
 export type ItemKind = 'turbo' | 'banana' | 'rainbow'
 export const ITEM_ICONS: Record<ItemKind, string> = { turbo: '🚀', banana: '🍌', rainbow: '🌈' }
@@ -89,6 +90,8 @@ interface Coin {
   s: number
   lat: number
   x: number
+  /** How high it floats (the big jump's coins hang up along the way she flies). */
+  y: number
   z: number
   gone: number
 }
@@ -148,9 +151,11 @@ export class Course {
     ])
     for (const line of COIN_LINES)
       for (let i = 0; i < line.n; i++) {
-        const s = line.s + i * 2.4
+        const s = line.s + i * (line.air ? 3 : 2.4)
         const p = spotAt(s, line.lat)
-        this.coins.push({ s, lat: line.lat, x: p.x, z: p.z, gone: 0 })
+        // Up in the air: an arc like the one a boat flies off the big jump (1..5 m up and down again).
+        const y = line.air ? 1 + Math.sin(((i + 0.5) / line.n) * Math.PI) * 3.6 : 1
+        this.coins.push({ s, lat: line.lat, x: p.x, y, z: p.z, gone: 0 })
       }
     this.coinMesh = bag.add(new InstancedMesh(bag.add(coinGeo), toon('#ffffff', true), this.coins.length))
     this.coinMesh.frustumCulled = false
@@ -176,27 +181,9 @@ export class Course {
       this.pads.push({ mesh: plate, s: b.s, lat: b.lat })
     }
 
-    // ---- The ramp: a striped wedge on floats, its lip at the far end ----
-    const rp = spotAt(RAMP.s, RAMP.lat)
-    const ramp = new Group()
-    ramp.position.set(rp.x, 0, rp.z)
-    ramp.rotation.y = rp.heading
-    const parts: BufferGeometry[] = []
-    const slices = 6
-    const w = (RAMP.half * 2) / slices
-    for (let i = 0; i < slices; i++) {
-      // The wedge's side profile (x along the course, y up), pushed across the course; rotated so x runs forward.
-      parts.push(P.prism([[-RAMP.len / 2, 0.05], [RAMP.len / 2, 2.1], [RAMP.len / 2, 0.05]], w, i % 2 ? '#FFFFFF' : PAL.hotpink, { at: [-RAMP.half + (i + 0.5) * w, 0, 0], rot: [0, -Math.PI / 2, 0] }))
-    }
-    // Gold rails up its sides, darker side walls (so it reads as a slope from behind), a gold lip.
-    for (const s of [-1, 1]) {
-      parts.push(P.box(0.2, 0.2, Math.hypot(RAMP.len, 2.05) + 0.2, PAL.gold, { at: [s * (RAMP.half + 0.1), 1.15, 0], rot: [-Math.atan2(2.05, RAMP.len), 0, 0] }))
-      parts.push(P.prism([[-RAMP.len / 2, 0.05], [RAMP.len / 2, 2.1], [RAMP.len / 2, 0.05]], 0.1, '#C93E7A', { at: [s * (RAMP.half + 0.02), 0, 0], rot: [0, -Math.PI / 2, 0] }))
-    }
-    parts.push(P.box(RAMP.half * 2 + 0.4, 0.22, 0.3, PAL.gold, { at: [0, 2.12, RAMP.len / 2] }))
-    for (const s of [-1, 1]) for (const z of [-1.4, 1.4]) parts.push(P.cyl(0.45, 0.45, 1.1, '#5FA7E8', { at: [s * (RAMP.half - 0.6), 0, z], rot: [Math.PI / 2, 0, 0] }, 10))
-    ramp.add(solid(merge(parts), bag, 2))
-    this.root.add(ramp)
+    // ---- The ramps: striped wedges on floats, their lips at the far end; the flower hoop past the big jump ----
+    for (const r of RAMPS) this.root.add(this.ramp(r))
+    this.root.add(this.hoop())
 
     // ---- Banana peels (a few, reused) ----
     for (let i = 0; i < 8; i++) {
@@ -205,6 +192,58 @@ export class Course {
       this.root.add(g)
       this.peels.push({ g, x: 0, z: 0, age: 0, on: false })
     }
+  }
+
+  /** A striped wedge on floats (pink and white, gold rails and lip), across the course at `r.s`. */
+  private ramp(r: Ramp): Group {
+    const rp = spotAt(r.s, r.lat)
+    const ramp = new Group()
+    ramp.position.set(rp.x, 0, rp.z)
+    ramp.rotation.y = rp.heading
+    const parts: BufferGeometry[] = []
+    const slices = r.big ? 10 : 6
+    const w = (r.half * 2) / slices
+    const side: [number, number][] = [[-r.len / 2, 0.05], [r.len / 2, r.lip], [r.len / 2, 0.05]]
+    for (let i = 0; i < slices; i++) {
+      // The wedge's side profile (x along the course, y up), pushed across the course; rotated so x runs forward.
+      parts.push(P.prism(side, w, i % 2 ? '#FFFFFF' : r.big ? PAL.lavenderDark : PAL.hotpink, { at: [-r.half + (i + 0.5) * w, 0, 0], rot: [0, -Math.PI / 2, 0] }))
+    }
+    // Gold rails up its sides, darker side walls (so it reads as a slope from behind), a gold lip.
+    for (const s of [-1, 1]) {
+      parts.push(P.box(0.2, 0.2, Math.hypot(r.len, r.lip - 0.05) + 0.2, PAL.gold, { at: [s * (r.half + 0.1), r.lip / 2 + 0.1, 0], rot: [-Math.atan2(r.lip - 0.05, r.len), 0, 0] }))
+      parts.push(P.prism(side, 0.1, '#C93E7A', { at: [s * (r.half + 0.02), 0, 0], rot: [0, -Math.PI / 2, 0] }))
+    }
+    parts.push(P.box(r.half * 2 + 0.4, 0.22, 0.3, PAL.gold, { at: [0, r.lip + 0.02, r.len / 2] }))
+    const floats = r.big ? [-0.75, -0.25, 0.25, 0.75] : [-0.88, 0.88]
+    for (const f of floats) for (const z of [-r.len * 0.25, r.len * 0.25]) parts.push(P.cyl(0.45, 0.45, 1.1, '#5FA7E8', { at: [f * (r.half - 0.6), 0, z], rot: [Math.PI / 2, 0, 0] }, 10))
+    // The big one has gold stars on its sides.
+    if (r.big) for (const s of [-1, 1]) parts.push(P.prism(star(0.7), 0.12, PAL.gold, { at: [s * (r.half + 0.12), r.lip * 0.4, r.len * 0.2], rot: [0, Math.PI / 2, 0] }))
+    ramp.add(solid(merge(parts), this.bag, 2))
+    return ramp
+  }
+
+  /** The giant flower hoop over the course past the big jump: a pink ring half in the water, flowers all round it. */
+  private hoop(): Group {
+    const p = spotAt(HOOP.s)
+    const g = new Group()
+    g.position.set(p.x, HOOP.y, p.z)
+    g.rotation.y = p.heading
+    const parts: BufferGeometry[] = [P.torus(HOOP.r, 0.55, PAL.hotpink, {}), P.torus(HOOP.r, 0.25, '#FFFFFF', { at: [0, 0, -0.45] })]
+    const petals = [PAL.butter, '#FFFFFF', PAL.mint, PAL.sky, '#FFB07A']
+    for (let i = 0; i < 18; i++) {
+      const a = (i / 18) * Math.PI * 2
+      const x = Math.cos(a) * HOOP.r
+      const y = Math.sin(a) * HOOP.r
+      // (Only the ones above the water.)
+      if (y + HOOP.y < 0.4) continue
+      for (let k = 0; k < 5; k++) {
+        const b = (k / 5) * Math.PI * 2
+        parts.push(P.sphere(0.36, petals[i % petals.length], { at: [x + Math.cos(b) * 0.42, y + Math.sin(b) * 0.42, -0.55], scale: [1, 1, 0.5] }, 8))
+      }
+      parts.push(P.sphere(0.26, PAL.gold, { at: [x, y, -0.75] }, 8))
+    }
+    g.add(solid(merge(parts), this.bag, 2))
+    return g
   }
 
   /** A big comic banana peel: three yellow flaps splayed out round a brown stalk. */
@@ -231,13 +270,13 @@ export class Course {
     return null
   }
 
-  /** Coins she drove through (each comes back after a while). */
-  takeCoins(x: number, z: number): Vector3[] {
+  /** Coins she drove (or flew) through, `y` her height above the water (each comes back after a while). */
+  takeCoins(x: number, y: number, z: number): Vector3[] {
     const out: Vector3[] = []
     for (const c of this.coins) {
-      if (c.gone > 0 || (c.x - x) ** 2 + (c.z - z) ** 2 > 1.9 ** 2) continue
-      c.gone = 9
-      out.push(new Vector3(c.x, 1, c.z))
+      if (c.gone > 0 || (c.x - x) ** 2 + (c.z - z) ** 2 > 2.1 ** 2 || Math.abs(c.y - (y + 1)) > 2.2) continue
+      c.gone = 12
+      out.push(new Vector3(c.x, c.y, c.z))
     }
     return out
   }
@@ -247,11 +286,14 @@ export class Course {
     return this.pads.some((p) => Math.abs(ahead(p.s, s)) < BOOST_HALF.along && Math.abs(lat - p.lat) < BOOST_HALF.across + 0.6)
   }
 
-  /** Going up the ramp at (s, lat): how far up it (0 bottom .. 1 the lip), or null when not on it. */
-  onRamp(s: number, lat: number) {
-    const d = ahead(RAMP.s - RAMP.len / 2, s)
-    if (d < 0 || d > RAMP.len || Math.abs(lat - RAMP.lat) > RAMP.half) return null
-    return d / RAMP.len
+  /** Going up a ramp at (s, lat): which one, and how far up it (0 bottom .. 1 the lip), or null when not on one. */
+  onRamp(s: number, lat: number): { ramp: Ramp; up: number } | null {
+    for (const ramp of RAMPS) {
+      const d = ahead(ramp.s - ramp.len / 2, s)
+      if (d < 0 || d > ramp.len || Math.abs(lat - ramp.lat) > ramp.half) continue
+      return { ramp, up: d / ramp.len }
+    }
+    return null
   }
 
   /** A banana peel dropped on the water at (x, z). */
@@ -314,7 +356,7 @@ export class Course {
       if (c.gone > 0) c.gone -= dt
       const s = c.gone > 0 ? 0.0001 : 1
       q.setFromAxisAngle(tmp.set(0, 1, 0), t * 3 + i * 0.4)
-      m4.compose(tmp.set(c.x, 1 + Math.sin(t * 3 + i) * 0.12, c.z), q, scl.setScalar(s))
+      m4.compose(tmp.set(c.x, c.y + Math.sin(t * 3 + i) * 0.12, c.z), q, scl.setScalar(c.y > 1 ? s * 1.3 : s))
       this.coinMesh.setMatrixAt(i, m4)
     })
     this.coinMesh.instanceMatrix.needsUpdate = true
@@ -345,6 +387,17 @@ export class Course {
       }
     }
   }
+}
+
+/** A five-pointed star outline, `r` across. */
+function star(r: number): [number, number][] {
+  const pts: [number, number][] = []
+  for (let i = 0; i < 10; i++) {
+    const a = (i / 10) * Math.PI * 2 + Math.PI / 2
+    const k = i % 2 ? r * 0.45 : r
+    pts.push([Math.cos(a) * k, Math.sin(a) * k])
+  }
+  return pts
 }
 
 /** The rainbow round a racer while it lasts: a glowing ring on the water that cycles through the colors. */
