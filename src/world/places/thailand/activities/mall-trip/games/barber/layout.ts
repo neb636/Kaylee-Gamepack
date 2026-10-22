@@ -24,7 +24,7 @@ export const KAYLEE_FACE = 58
 /** Mommy waits on the bench, her phone ready for the photo. */
 export const MOMMY = { x: 2.25, z: -1.0, face: -20 }
 /** The waiting bench at the back on the right: Mommy waits here, and Daddy sits beside her in round 3. */
-export const BENCH = { x: 1.75, z: -1.0, seat: 0.45, spots: [1.65, 1.95, 2.25] }
+export const BENCH = { x: 1.75, z: -1.0, seat: 0.45, /** Root height of someone sitting: the seat's top, plus the sit pose's 0.1 sink, so they rest on it. */ sit: 0.58, spots: [1.65, 1.95, 2.25] }
 export const POLE = { x: -2.05, y: 1.6, z: -1.2 }
 /** The shelf beside the mirror with a jar of blue comb water (it bubbles) and a spray of flowers. */
 export const SHELF = { x: -1.45, y: 1.05, z: -1.25 }
