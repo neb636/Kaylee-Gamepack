@@ -1,5 +1,8 @@
-// The Pizza Company (plan: planning/around-the-world/thailand/mall-trip.md, "The Pizza Company"), greybox: shapes,
-// sounds, no voices. The camera looks across the table straight on; Mommy, Kaylee (on her booster) and Daddy sit in the
+// The Pizza Company (plan: planning/around-the-world/thailand/mall-trip.md, "The Pizza Company"), greybox: shapes and
+// sounds, with voices (lines.ts `L.mall.pizza`): Sparkle's "Pick a pizza!" and "Pull a slice!", the server's "Pizza
+// time!" and "Khob khun ka!", Sparkle counting each plate's first and second slice round the table, Daddy hamming it
+// up and his cheesy nose, Mommy's "Those are for Agong!", the cheer as the lid closes, the fact once it's all shared,
+// the pokes' reactions (the chili, the onion rings), and Sparkle's hint when the finger shows. The camera looks across the table straight on; Mommy, Kaylee (on her booster) and Daddy sit in the
 // green booth on the far side with their plates, and Agong's take-away box waits open at the right end.
 //
 // `menu`: she picks a pizza (the screen's three picture buttons); the server carries it over on its stand, sets it down
@@ -17,7 +20,7 @@
 //      and snaps onto his nose.
 // Nothing is wrong: any plate is fine, the box takes a slice any time, and slices on plates can be moved again.
 import { Color, Euler, IcosahedronGeometry, OctahedronGeometry, PlaneGeometry, Quaternion, Vector2, Vector3, type Group, type Mesh, type MeshBasicMaterial, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, wobble } from '../../../../../../sdk'
+import { bell, clamp, wobble, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { FaceLife } from '../../../characters/face'
 import { LOOKS } from '../../../characters/looks'
@@ -27,6 +30,7 @@ import type { Shot } from '../../../engine/camera'
 import { merge, P, solid } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
+import { L } from '../../../lines'
 import { wearHair } from '../games/barber/mane'
 import { CheeseBand, CHEESE } from './cheese'
 import { Floaters } from './fx'
@@ -71,6 +75,8 @@ const HANG = new Quaternion().setFromEuler(new Euler(-Math.PI / 2 * 0.82, Math.P
 /** The server walks over to here with the pizza. */
 const SERVE_SPOT = new Vector3(-0.78, 0, 0.62)
 const TINTS = ['#FFFFFF', '#FFC2E0', '#D9CCFF', '#BFF5DE', '#FFE9A8']
+/** Nothing touched this long (the finger shows at 7 s): Sparkle's hint. */
+const STUCK_S = 8
 
 interface Fly {
   s: Slice
@@ -164,6 +170,14 @@ export class PizzaTable extends Stage {
   private worn = 0
   private bracelets: Group[] = []
   private chins = new Set<EaterId>()
+  /** When each speaker last talked (a quick run of taps gets one line), and whose turn it is in Daddy's list. */
+  private spoke = new Map<string, number>()
+  private hams = 0
+  /** Mommy has said the last two are for Agong; Sparkle has said the fact. */
+  private agongSaid = false
+  private fairSaid = false
+  /** The touch the last hint was for (one hint each time she's stuck). */
+  private hintedAt = -1
 
   constructor(renderer: WebGLRenderer, private pev: PizzaEvents, start: { section: 'menu' | 'share'; pizza: PizzaId; shared: number; hair?: string }) {
     super(renderer, pev)
@@ -210,7 +224,15 @@ export class PizzaTable extends Stage {
     if (start.section === 'share') {
       this.bring(start.pizza, true)
       this.deal(start.shared)
-    }
+      if ((this.phase as Phase) === 'share') this.after(0.6, () => this.pev.say(L.mall.pizza.start))
+    } else this.after(0.6, () => this.phase === 'menu' && this.pev.say(L.mall.pizza.menu))
+  }
+
+  /** Someone says a line, unless they spoke a moment ago. */
+  private talk(who: string, l: Line, every = 2.5) {
+    if (this.time - (this.spoke.get(who) ?? -99) < every) return
+    this.spoke.set(who, this.time)
+    this.pev.say(l)
   }
 
   // ---------------------------------------------------------------- the menu, the server
@@ -278,6 +300,9 @@ export class PizzaTable extends Stage {
       if (this.phase === 'serve' && t > 2.1) {
         this.phase = 'share'
         this.pev.served()
+        // The server, then Sparkle's one instruction (it waits its turn).
+        this.talk('server', L.mall.pizza.served)
+        this.pev.say(L.mall.pizza.start)
         this.kaylee.react('wiggle')
         this.ji.react('wiggle')
         this.nick.react('wiggle')
@@ -423,6 +448,7 @@ export class PizzaTable extends Stage {
         return
       case 'server':
         this.serverBow()
+        this.talk('server', L.mall.pizza.thanks, 3)
         return
       case 'sign':
         this.signGlow = 1
@@ -584,17 +610,29 @@ export class PizzaTable extends Stage {
       this.after(0.1, () => sfx.count(c[t]))
       const who = this.people[t]
       const ahead = c[t] > Math.max(...EATERS.filter((e) => e !== t).map((e) => c[e]))
-      if (t === 'nick' && ahead && c[t] >= 2) this.hamItUp()
-      else if (c[t] >= min + 2) {
-        // That's a lot for one plate: a giggle and a wiggle.
-        who.react('wiggle')
-        this.after(0.2, () => sfx.giggle())
-      } else who.react('wiggle')
+      if (t === 'nick' && ahead && c[t] >= 2) {
+        this.hamItUp()
+        // "Kaylee, Mommy's hungry too!", in turn with his ho ho (the turn moves on only when he says one).
+        const ham = L.mall.pizza.ham
+        if (this.time - (this.spoke.get('nick') ?? -99) >= 2.5) this.talk('nick', ham[this.hams++ % ham.length])
+      } else {
+        // Sparkle counts round the table: each plate's first and second slice.
+        if (c[t] <= 2) this.talk('count', L.mall.pizza.count[t][c[t] - 1], 0.4)
+        if (c[t] >= min + 2) {
+          // That's a lot for one plate: a giggle and a wiggle.
+          who.react('wiggle')
+          this.after(0.2, () => sfx.giggle())
+        } else who.react('wiggle')
+      }
       // Two each and the box still open: the last two are for Agong (the box glows and wiggles).
       if (!this.boxShut && EATERS.every((e) => c[e] >= 2) && this.panLeft > 0) this.after(0.5, () => {
         this.boxBounce = 0
         this.lid = { k: 0, from: BOX_OPEN + 0.6, to: BOX_OPEN }
         sfx.chime()
+        if (!this.agongSaid && !this.boxShut) {
+          this.agongSaid = true
+          this.pev.say(L.mall.pizza.agong)
+        }
       })
     }
     if (this.shared !== this.sharedNow) {
@@ -615,6 +653,7 @@ export class PizzaTable extends Stage {
     this.lid = { k: 0, from: this.box.lid.rotation.x, to: 0 }
     this.after(0.3, () => {
       sfx.flup()
+      this.talk('nick', L.mall.pizza.closed, 0)
       this.sparkles.burst(this.box.at.clone().add(new Vector3(0, 0.15, 0)), 22, 1.6, 2.4, 1, 0.05)
       for (const e of EATERS) this.people[e].react('wiggle')
       this.checkDone()
@@ -628,6 +667,10 @@ export class PizzaTable extends Stage {
       sfx.cheer()
       EATERS.forEach((e, i) => this.after(i * 0.25, () => this.people[e].react(e === 'kaylee' ? 'wiggle' : 'hop')))
       this.sparkles.burst(new Vector3(0, 1.4, -0.6), 40, 2.2, 2.6, 1.3, 0.06)
+      if (!this.fairSaid) {
+        this.fairSaid = true
+        this.pev.say(L.mall.pizza.fair)
+      }
       this.pev.allDone()
     })
   }
@@ -719,6 +762,7 @@ export class PizzaTable extends Stage {
     this.after(0.15, () => {
       this.nick.react('hop')
       sfx.hoho()
+      this.talk('nick', L.mall.pizza.nose, 0)
       this.kaylee.react('wiggle')
       this.ji.react('wiggle')
     })
@@ -759,6 +803,7 @@ export class PizzaTable extends Stage {
       rings[this.worn].visible = true
       this.ji.react('wiggle')
       this.play(sfx.chomp)
+      this.talk('ji', L.mall.pizza.crunch, 1.5)
       return
     }
     const ring = rings[this.worn]
@@ -783,6 +828,7 @@ export class PizzaTable extends Stage {
         this.bracelets.push(b)
         this.ji.react('wave')
         this.play(sfx.chime)
+        this.talk('ji', L.mall.pizza.rings[k] ?? L.mall.pizza.rings[0], 1.5)
       },
     })
   }
@@ -885,6 +931,15 @@ export class PizzaTable extends Stage {
       p.update(dt, t)
     }
     this.daddyFrame(dt, t)
+    // ---- Stuck: Sparkle says what to do when the finger shows (or the menu waits), once each time ----
+    if (this.time - this.lastTouch > STUCK_S && this.hintedAt !== this.lastTouch) {
+      const box = !this.boxShut && EATERS.every((e) => c[e] >= 2)
+      const hint = this.phase === 'menu' ? L.mall.pizza.hint.menu : this.hintAt() ? (box ? L.mall.pizza.hint.box : L.mall.pizza.hint.slice) : null
+      if (hint) {
+        this.hintedAt = this.lastTouch
+        this.pev.say(hint)
+      }
+    }
     // ---- The server ----
     const sv = this.room.server
     this.serverLife.update(dt)
@@ -930,6 +985,7 @@ export class PizzaTable extends Stage {
       if (st > 1.35 && st - dt <= 1.35) {
         sfx.choo()
         this.nick.react('hop')
+        this.after(0.3, () => this.talk('nick', L.mall.pizza.spicy, 4))
         this.flakes.burst(r.head.localToWorld(new Vector3(0, r.face.headY, r.face.R)), 18, 1.2, 0.6, 1, 0.014)
         this.after(0.4, () => {
           this.kaylee.react('wiggle')

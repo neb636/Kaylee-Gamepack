@@ -1,5 +1,5 @@
-// The pizza table's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet: the
-// family's lines and the server's "Khob khun ka!" come with the full loop.
+// The pizza table's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise), under the
+// voices (lines.ts `L.mall.pizza`).
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
 

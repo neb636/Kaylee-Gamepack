@@ -1,8 +1,12 @@
 // Daddy's tummy rumbled: Mommy asks "Hungry? Pizza time?" with two big picture buttons that need no reading, 🍕 to go
 // and eat or 🛝 to play some more (nothing lost: she asks again after another mini game). Styled like Mommy's trip
-// card (trip/legs/Ask.tsx). No voice yet (the full loop records Mommy saying it); the card shows the words for Dad.
+// card (trip/legs/Ask.tsx). Mommy says it as the card comes up (lines.ts `L.mall.hall.pizza`), and "OK! A little more!"
+// to More play; the card shows the words for Dad.
 import { AnimatePresence, motion } from 'motion/react'
-import { sounds } from '../../../../../../sdk'
+import { useEffect } from 'react'
+import { lineText, sounds } from '../../../../../../sdk'
+import { L } from '../../../lines'
+import { mallVoice } from '../voice'
 
 interface Props {
   open: boolean
@@ -11,6 +15,9 @@ interface Props {
 }
 
 export function Hungry({ open, onPizza, onPlay }: Props) {
+  useEffect(() => {
+    if (open) mallVoice.say(L.mall.hall.pizza)
+  }, [open])
   const buttons = [
     { id: 'pizza', label: "Let's eat", icon: '🍕', color: 'var(--butter)', on: () => {
       sounds.correct()
@@ -18,6 +25,7 @@ export function Hungry({ open, onPizza, onPlay }: Props) {
     } },
     { id: 'play', label: 'More play', icon: '🛝', color: 'var(--lavender)', on: () => {
       sounds.pop()
+      mallVoice.say(L.mall.hall.more)
       onPlay()
     } },
   ]
@@ -37,7 +45,7 @@ export function Hungry({ open, onPizza, onPlay }: Props) {
             </motion.span>
             <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
               <small style={{ fontWeight: 700, opacity: 0.6, fontSize: 14 }}>Mommy</small>
-              <span style={{ fontWeight: 700, fontSize: 'clamp(20px, min(3.4vw, 3.6vh), 30px)' }}>Hungry, Kaylee? Pizza time?</span>
+              <span style={{ fontWeight: 700, fontSize: 'clamp(20px, min(3.4vw, 3.6vh), 30px)' }}>{lineText(L.mall.hall.pizza)}</span>
             </span>
           </motion.div>
           <div style={{ display: 'flex', gap: 'clamp(16px, 4vw, 40px)', pointerEvents: 'auto' }}>

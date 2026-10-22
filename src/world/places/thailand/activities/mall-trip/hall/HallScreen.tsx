@@ -1,7 +1,7 @@
 // HarborLand's hall on screen: the 3D hall (hall.ts) with its tap targets, the 👆 after a while with nothing touched,
-// Mommy's "Pizza time?" card once Daddy's tummy rumbles, and the flat picture row without WebGL (Flat.tsx).
+// Mommy's "Pizza time?" card once Daddy's tummy rumbles (she says it), and the flat picture row without WebGL (Flat.tsx).
 import { AnimatePresence, motion } from 'motion/react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
@@ -41,6 +41,8 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, o
   const signRef = useRef<HTMLDivElement>(null)
   const cb = useRef({ onEnter, onHungry })
   cb.current = { onEnter, onHungry }
+  // No hint from Sparkle over Mommy's question.
+  useEffect(() => worldRef.current?.setAsking(asking), [asking])
 
   const make = (renderer: WebGLRenderer) => {
     const w = new Hall(
@@ -53,7 +55,7 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, o
         enter: (d) => cb.current.onEnter(d),
         hungry: () => cb.current.onHungry(),
       },
-      { socks, done, from: from === 'in' ? '' : from, hungry, hair },
+      { socks, done, from: from === 'in' ? '' : from, hungry, hair, asking },
     )
     w.setHintElement(hintRef.current)
     w.setLabelBox(labelRef.current)

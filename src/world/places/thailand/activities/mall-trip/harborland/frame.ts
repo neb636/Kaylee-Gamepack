@@ -11,10 +11,12 @@
 //     Ta-Khon roller slide over the racing lanes into their balls, the Boomerang Donut, the zip line along the front.
 //   - On top: the gold spires and the boxer boy, who watch her; the lit sign on the front (it fades while she climbs
 //     behind it).
-// Any big ride fills the frame's sticker on her sock band. No voices yet: sounds only. The camera is a dollhouse view
+// Any big ride fills the frame's sticker on her sock band. Voices (lines.ts `L.mall.frame`): Sparkle's one line as she
+// comes in, Mommy's or Daddy's "Wheee!" the first time she rides each big slide, Daddy's bonks from the cannon, the
+// Phi Ta Khon fact the first time she pokes a mask, and Sparkle's hint when the finger shows. The camera is a dollhouse view
 // from the front, a little above, following her up and down; on a tall screen it shows more of the tower.
 import { Color, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, sounds } from '../../../../../../sdk'
+import { clamp, sounds, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { LOOKS } from '../../../characters/looks'
 import type { Member } from '../../../characters/member'
@@ -24,12 +26,13 @@ import { TapMarker } from '../../../engine/marker'
 import { NavGrid } from '../../../engine/nav'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { Walker, type Floor, type Link } from '../../../trip/walk'
+import { L } from '../../../lines'
 import { wearHair } from '../games/barber/mane'
 import { buildHall } from '../hall/build'
 import { Kid, KID_LOOK_LIST, type Move } from '../hall/kids'
 import { SOCK_COLORS, wearSocks } from '../socks'
 import type { FrameBuilt } from './build'
-import { AT_OF, BOXER, BRIDGE, bx, CANNON, DADDY, FLOORS, LINKS, LV, MASK, MASK_BASE, MOMMY, NET_FACE, NET_TUNNEL, NETS, NOSE, NOSE_LAND, NOSE_STEP, OUT_GRID, PIT, RACE_PIT, ROLLER, ROPE, SIGN, SPIRES, STARTS, TOWER, TUNNEL, WALL, ZB, ZF, ZIP_DECK, type At, type FloorId, type LinkId, type Rect, type RideId, type XZ } from './layout'
+import { AT_OF, BOXER, RIDES, BRIDGE, bx, CANNON, DADDY, FLOORS, LINKS, LV, MASK, MASK_BASE, MOMMY, NET_FACE, NET_TUNNEL, NETS, NOSE, NOSE_LAND, NOSE_STEP, OUT_GRID, PIT, RACE_PIT, ROLLER, ROPE, SIGN, SPIRES, STARTS, TOWER, TUNNEL, WALL, ZB, ZF, ZIP_DECK, type At, type FloorId, type LinkId, type Rect, type RideId, type XZ } from './layout'
 import { BallPool } from './pool'
 import { Rides } from './rides'
 import { chaseSign, placeSign } from './sign'
@@ -91,6 +94,12 @@ const LINK_OF: Record<string, LinkId> = {
 /** The big rides' tap targets (they glow until she's had a go). */
 const RIDE_OF: Partial<Record<string, RideId>> = { 'ride:nose': 'nose', 'ride:dragon': 'dragon', 'ride:roller': 'roller', 'ride:donut': 'donut', 'ride:zip': 'zip' }
 
+/** What she's heard this visit to the mall (the frame is built again each time she goes in): the slides someone
+ *  cheered, whose turn it is in each list, and whether she's heard the Phi Ta Khon fact. */
+const heard = { rides: new Set<RideId>(), ji: 0, nick: 0, bonk: 0, fact: false }
+/** Nothing touched this long (the finger shows at 7 s): Sparkle's hint. */
+const STUCK_S = 8
+
 /** Where the mask's nose slide comes down in front of the frame (x): playing inside behind it, the camera peeks round. */
 const NOSE_BAND = [-2.7, 0.6]
 const V = (x: number, y: number, z: number) => new Vector3(x, y, z)
@@ -135,6 +144,12 @@ export class BigFrame extends Stage {
   private low = 0
   private peek = 0
   private signOn = false
+  /** Sparkle's first line has played. */
+  private opened = false
+  /** When each speaker last talked (a quick run of taps gets one line). */
+  private spoke = new Map<string, number>()
+  /** The touch the last hint was for (one hint each time she's stuck). */
+  private hintedAt = -1
 
   constructor(
     renderer: WebGLRenderer,
@@ -164,7 +179,7 @@ export class BigFrame extends Stage {
     // Daddy keeps the hairdo she gave him at the barber's.
     wearHair(this.nick.rig, LOOKS.nick, start.hair ?? '', bag)
     this.put(this.ji, MOMMY.at[0], 0.5, MOMMY.at[1], 'sit', MOMMY.face)
-    this.toys = new FrameToys(this.f, this.pool, this.nick, scene, bag, { giggle: () => sfx.giggle() })
+    this.toys = new FrameToys(this.f, this.pool, this.nick, scene, bag, { giggle: () => sfx.giggle(), bonk: (big) => this.bonk(big) })
     this.marker = new TapMarker(bag)
     scene.add(this.marker.root)
 
@@ -280,7 +295,7 @@ export class BigFrame extends Stage {
       return { id, ...L[id], twoWay: true, cost: 3, run: (back, done) => r.net(xz(L[id].at, n.from), xz(L[id].end, n.to), NET_FACE, !back, done) }
     }
     const tunnel = [xz(L.tunnel.at, 0), V(TUNNEL.x, 0.04, TUNNEL.z0 - 0.15), V(TUNNEL.x, 0.04, TUNNEL.z1 + 0.05), xz(L.tunnel.end, 0)]
-    return {
+    const links: Record<LinkId, Link> = {
       wall: { id: 'wall', ...L.wall, twoWay: true, cost: 3, run: (back, done) => r.net(xz(L.wall.at, 0), xz(L.wall.end, LV.l1), WALL.z + 0.08, !back, done) },
       tunnel: {
         id: 'tunnel',
@@ -368,6 +383,46 @@ export class BigFrame extends Stage {
           }),
       },
     }
+    // Setting off down a big slide the first time, Mommy or Daddy cheers.
+    for (const id of RIDES) {
+      const run = links[id].run
+      links[id].run = (back, done) => {
+        this.wheee(id)
+        run(back, done)
+      }
+    }
+    return links
+  }
+
+  // ---------------------------------------------------------------- voices
+
+  /** Someone says a line, unless they spoke a moment ago. */
+  private talk(who: string, l: Line, every = 2.5) {
+    if (this.time - (this.spoke.get(who) ?? -99) < every) return
+    this.spoke.set(who, this.time)
+    this.fev.say(l)
+  }
+  /** The next line of a list, in turn (the turns carry on from visit to visit). */
+  private inTurn(who: 'ji' | 'nick' | 'bonk', list: Line[], every = 2.5) {
+    if (this.time - (this.spoke.get(who) ?? -99) < every) return
+    this.talk(who, list[heard[who]++ % list.length], every)
+  }
+  /** Setting off down a big slide the first time: Mommy's or Daddy's "Wheee!". */
+  private wheee(id: RideId) {
+    if (heard.rides.has(id)) return
+    heard.rides.add(id)
+    this.talk(`ride:${id}`, L.mall.frame.ride[id])
+  }
+  /** A ball from the cannon bonked Daddy: his reaction (not every bonk: he gets his breath back first). */
+  private bonk(big: boolean) {
+    if (big) this.talk('flop', L.mall.frame.flop, 1)
+    else this.inTurn('bonk', L.mall.frame.bonk, 3)
+  }
+  /** The first poke of a Phi Ta Khon mask: Sparkle's fact. */
+  private maskFact() {
+    if (heard.fact) return
+    heard.fact = true
+    this.fev.say(L.mall.frame.phiTaKhon)
   }
 
   /** A big ride for the first time this visit: a chime, and the sticker. */
@@ -435,7 +490,10 @@ export class BigFrame extends Stage {
     }
     if (id?.startsWith('naga:')) return this.toys.naga(Number(id.slice(5)))
     if (id?.startsWith('spire:')) return this.toys.spire(Number(id.slice(6)))
-    if (id?.startsWith('takhon:')) return this.toys.takhonTap(Number(id.slice(7)))
+    if (id?.startsWith('takhon:')) {
+      this.maskFact()
+      return this.toys.takhonTap(Number(id.slice(7)))
+    }
     switch (id) {
       case 'kaylee':
       case 'family:kaylee':
@@ -444,10 +502,12 @@ export class BigFrame extends Stage {
         if (this.walker.floor.id === 'pit') this.pool.splash(k.position.x, k.position.z, 8, 0.7)
         return
       case 'family:nick':
+        this.inTurn('nick', L.mall.frame.nick)
         return this.toys.daddyTap()
       case 'family:ji':
         this.ji.react('wave')
         sfx.babble(300)
+        this.inTurn('ji', L.mall.hall.ji)
         return
       case 'pool': {
         // Toss the balls where she tapped, and wade (or hop in) over there.
@@ -470,6 +530,7 @@ export class BigFrame extends Stage {
       case 'rope':
         return this.toys.rope()
       case 'mask':
+        this.maskFact()
         return this.toys.mask()
       case 'boxer':
         return this.toys.boxer()
@@ -527,6 +588,16 @@ export class BigFrame extends Stage {
     const inside = this.walker.riding?.id !== 'nose' && (fl === 'in' || fl === 'pit' || fl === 'l1' || fl === 'l2' || this.toys.daddyShow)
     this.noseGhost += ((inside ? 1 : 0) - this.noseGhost) * (1 - Math.exp(-dt * 5))
     this.f.noseFade(this.noseGhost)
+
+    // ---- Sparkle: her one line as she comes in, and a hint when the finger shows (once each time she's stuck) ----
+    if (!this.opened && this.time > 0.6) {
+      this.opened = true
+      this.fev.say(L.mall.frame.start)
+    }
+    if (this.time - this.lastTouch > STUCK_S && this.hintedAt !== this.lastTouch && this.hintAt()) {
+      this.hintedAt = this.lastTouch
+      this.fev.say(L.mall.frame.hint)
+    }
   }
 
   // ---------------------------------------------------------------- camera, anchors

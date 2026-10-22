@@ -1043,7 +1043,14 @@ small climbing toy, before Dad's photos.
      ride in the first climbing toy. The barber and the rest add theirs when they're built.
    - **Hungry:** after four stickers (or five minutes), when she comes back out, Daddy's tummy rumbles twice. Then
      Mommy's card asks "Hungry, Kaylee? Pizza time?" (🍕 Let's eat → `menu`, 🛝 More play → she asks again after
-     another mini game). No voice yet.
+     another mini game).
+   - **Voices (the full loop, `L.mall.hall`; clips still to generate):** Sparkle's "Welcome to HarborLand, Kaylee! Tap
+     a place to play!" when she first comes in (not coming back out of a mini game). Nothing as she walks up to a way
+     in: the mini game's own first line comes right after. The staff say "Sawasdee ka, Kaylee!" and then "Have fun!"
+     the first two times she comes near them (and in turn when tapped). Mommy and Daddy each have three lines when
+     tapped, in turn, a few seconds apart at most. Daddy's "My tummy is rumbling!" with the rumble, then Mommy says
+     her card, and "OK! A little more!" to More play. Stuck for 8 s (the 👆 is up): Sparkle's "Tap a door to play!",
+     once each time, never over Mommy's card. 13 lines.
    - **The first climbing toy** (PR #120's `play`, `mountain`, `dragon`) is what the frame's tunnel opens, until the
      Big Frame is rebuilt.
    - **Flat version** (`?gl=off`): a row of big picture buttons, left to right as in the hall.
@@ -1096,6 +1103,14 @@ small climbing toy, before Dad's photos.
      ball pit, up and across, and down the dragons back into it.
    - **Sticker:** any big ride (the nose, the dragons, the roller, the donut, the zip line) fills the 🛝 on her sock
      band (`games` says `frame`).
+   - **Voices (the full loop, `L.mall.frame`; clips still to generate):** Sparkle's "Climb up high, then slide down!"
+     as she comes in. Setting off down each big slide the first time, Mommy or Daddy cheers (one line per slide:
+     "Wheee! Down the nose!", "Whoa! Here come the dragons!", ...). The cannon: Daddy's "Bonk! Hey!" and "Hey! Not my
+     horn!" in turn (3 s apart at least), "Whoa! Splash!" on his big flop. Daddy tapped: two lines in turn ("Bonk me
+     with the cannon!" hints at the side game); Mommy says her hall lines. The first poke of the giant mask or a
+     Phi Ta Khon on the roller's posts: Sparkle's fact "Phi Ta Khon is a festival with big funny masks!". Stuck for
+     8 s: "Tap a slide to ride it!". There are no monkeys in the frame, so the Lopburi fact waits for the Golden
+     Mountain. 13 lines.
    - **Flat version** (`?gl=off`): the lit sign and a big button for each ride.
    - **Numbers:** about 155-190 draw calls in the frame at iPad size (the hall stays about 135). In scripted runs every
      ride and climb ended where it should; the QA hook's `cutOff` lists any climb or ride she can't walk to (none).
@@ -1310,7 +1325,7 @@ small climbing toy, before Dad's photos.
      Mommy, Kaylee (on a pink booster) and Daddy sit in the green booth with their plates; Agong's take-away box (a
      panda on the front) stands open at the right end. Placeholder sign (a pizza slice, no words) and the waterfall
      window behind them.
-   - **The menu:** three big picture buttons along the bottom. The server (a fox in a green shirt and cap, no voice yet)
+   - **The menu:** three big picture buttons along the bottom. The server (a fox in a green shirt and cap)
      walks round the end of the table with the pizza, sets it down on its stand and bows.
    - **The pull:** the slice hangs from its crust above her finger. Two cheese strands (`cheese.ts`, tubes rebuilt
      each frame) run from its tip to the pan. They thin and sag as they stretch, wobble when she swings it and snap
@@ -1329,8 +1344,15 @@ small climbing toy, before Dad's photos.
    - **Pokeables:** the soda (slurp, bubbles), the onion rings (Mommy wears them as bracelets, three, then eats one),
      the chili (Daddy's ah-ah-CHOO), the napkins (a flurry), the server (a bow), the sign (glows, its logo spins), the
      waterfall (changes color), the family.
-   - **Sounds only:** no voices. Sparkle counting round the table, Daddy's "Kaylee, Mommy's hungry too!", "Those are
-     for Agong!" and the server's lines come with the full loop. The `hair` param waits for the barber.
+   - **Voices (the full loop, `L.mall.pizza`; clips still to generate):** Sparkle's "Pick a pizza, Kaylee!" at the
+     menu (the only talk before her first touch), the server's "Pizza time!" as it's set down, then Sparkle's "Pull a
+     slice!". Sparkle counts each plate's first and second slice ("One for Mommy!" ... "Two for Kaylee!"). Daddy with
+     more than anyone: "Kaylee, Mommy's hungry too!" and "Ho ho! More for Daddy!" in turn. The tug: "My nose!". Two
+     each: Mommy's "Those are for Agong!"; the lid closes: Daddy's "Yay! Pizza for Agong!"; all shared: Sparkle's fact
+     "Sharing fairly means everyone gets the same!". Pokes: the server's "Khob khun ka!" as she bows, Daddy's "So
+     spicy!" after the sneeze, Mommy's three onion-ring bracelets ("Look! A bracelet!", "So fancy!", "Three
+     bracelets!") and "Mmm! Crunchy!" when she eats one. Stuck: "Tap a pizza!", "Pull a slice to a plate!" or "Put
+     one in Agong's box!". The flat version (`?gl=off`) stays sounds only. 24 lines.
 7. **Greybox: the trip loop:** Mommy's choice, the Veloz, arrive, hungry, home.
 8. **The look:** the hall, the shops, the Big Frame, ICONSIAM, The Pizza Company, the Veloz and the outfits, in toon.
 9. **Voices, the full loop and QA** (layout-qa, then playtest-qa, scoped to `mall-trip`).

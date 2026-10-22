@@ -57,7 +57,7 @@ export class FrameToys {
     private nick: Member,
     scene: Object3D,
     bag: Bag,
-    private fx: { giggle(): void },
+    private fx: { giggle(): void; /** A ball bonked Daddy (`big`: the third, his big flop). */ bonk(big: boolean): void },
   ) {
     // Daddy, sitting in the balls, turned toward the cannon a little.
     this.daddy.position.set(DADDY.at[0], SEAT, DADDY.at[1])
@@ -364,5 +364,6 @@ export class FrameToys {
       this.hornBall.visible = false
       this.fall = { t: 0, big: true }
     } else this.fall = { t: 0, big: false }
+    this.fx.bonk(this.fall.big)
   }
 }

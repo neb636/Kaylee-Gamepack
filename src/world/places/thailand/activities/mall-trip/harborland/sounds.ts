@@ -1,5 +1,5 @@
-// The Big Frame's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet: the
-// family babble, Kaylee giggles.
+// The Big Frame's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise), under the
+// voices (lines.ts `L.mall.frame`): the family babble, Kaylee giggles.
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
 
