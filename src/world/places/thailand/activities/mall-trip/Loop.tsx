@@ -18,7 +18,7 @@ import { LOOKS } from '../../characters/looks'
 import { Anchors } from '../../engine/Anchors'
 import { View3D, type RenderMode, type World3D } from '../../engine/View3D'
 import { ANCHORS as HOUSE_ANCHORS, House } from '../hub/house'
-import { Ask, TRIP_CHOICES } from '../../trip/legs/Ask'
+import { Ask, justSaidYes, TRIP_CHOICES } from '../../trip/legs/Ask'
 import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
 import { TRIP_HOUSE_ANCHORS, TripHouse, type HouseLeg, type Phase } from '../../trip/legs/house-plugin'
 import { addWallPhoto, newestByTrip, today, useWallPhotos } from '../../trip/wall-photos'
@@ -145,7 +145,12 @@ export function MallLoop({ section, socks, hair, pizza, photos, replay, covered,
     }
   }, [phase, section])
 
-  const asking = mode === 'webgl' && section === 'invite' && phase === 'invite' && !covered
+  // She already picked the mall on Mommy's card in the house: don't ask "where shall we go?" a second time.
+  const fromHouse = useRef(justSaidYes('mall-trip'))
+  useEffect(() => {
+    if (section !== 'invite') fromHouse.current = false
+  }, [section])
+  const asking = mode === 'webgl' && section === 'invite' && phase === 'invite' && !covered && !fromHouse.current
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
@@ -153,7 +158,7 @@ export function MallLoop({ section, socks, hair, pizza, photos, replay, covered,
         <LoopFlat
           section={section}
           socks={socks}
-          covered={covered}
+          covered={covered || fromHouse.current}
           onMall={onMall}
           onBoat={onBoat}
           onNotYet={onNotYet}
