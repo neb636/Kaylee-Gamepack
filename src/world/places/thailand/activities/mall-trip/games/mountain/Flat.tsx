@@ -4,6 +4,8 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { sounds } from '../../../../../../../sdk'
+import { L } from '../../../../lines'
+import { mallVoice } from '../../voice'
 import { CONE, DADDY_FOOT_A, daddyHolds, FOOT_A, FOOT_Y, HOLD_COLORS, holdsFor, inReach, rAt, rowsIn, type Hold, type Round } from './layout'
 import { mountainSfx as sfx } from './sounds'
 
@@ -32,6 +34,10 @@ export function MountainFlat({ round: startRound, onRound, onTop, onAllDone }: P
   const dh = daddyHolds()
   const last = rowsIn(round) - 1
   useEffect(() => onRound(round), [round])
+  // The 3D version's opening line.
+  useEffect(() => {
+    if (startRound === 1) mallVoice.say(L.mall.mountain.climb)
+  }, [])
 
   const tap = (h: Hold) => {
     if (stage !== 'climb') return

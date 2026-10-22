@@ -4,6 +4,8 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { sounds } from '../../../../../../../sdk'
+import { L } from '../../../../lines'
+import { mallVoice } from '../../voice'
 import { ScoreBoard } from './board'
 import { SkyGame, type Phase } from './game'
 import { BLUE, PINK, POD_COLORS, PODS, SHOW, type Round } from './layout'
@@ -72,6 +74,8 @@ export function SkyPodFlat({ round, onRound, onSticker, onAllDone }: Props) {
     )
     game.current = g
     g.begin()
+    // The 3D version's opening line (a link to round 1).
+    if (round === 1) mallVoice.say(L.mall.skypod.fast)
     let last = performance.now()
     let raf = 0
     let seen = ''

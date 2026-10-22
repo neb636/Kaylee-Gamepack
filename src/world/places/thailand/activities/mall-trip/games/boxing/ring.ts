@@ -1,5 +1,6 @@
-// Muay Thai at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "7. Muay Thai bags"), greybox:
-// shapes, sounds, no voices. A blue ring mat with its ropes, the big red bag on its bracket with Daddy holding it from
+// Muay Thai at HarborLand (plan: planning/around-the-world/thailand/mall-trip.md, "7. Muay Thai bags"), greybox
+// shapes with voices (lines.ts `L.mall.boxing`: the coach's wai kru, Sparkle's few lines, Daddy's oofs, said through
+// blocks/talk.ts). A blue ring mat with its ropes, the big red bag on its bracket with Daddy holding it from
 // behind, the coach (the boxer kid from the Big Frame, a little monkey) and his drum, Kaylee in her pink gloves, red
 // headband and grip socks.
 //
@@ -32,6 +33,10 @@ import { Coach, GUARD } from './coach'
 import { Floaters } from './fx'
 import { BAG, BAG2, BAG_HOOK, BELL, BOARD, BOTTLE, BOWS, COACH_DRUM, COACH_WAI, DADDY_BAG, DRUM, DRUM_JOINS, KAYLEE, NEED, PAD, PAD_OUT, PAD_SIDES, PAD_STEPS, PAD_Y, POSTS, ROUND2_MAX, STEPS, TALL_SHIFT, type Round } from './layout'
 import { boxingSfx as sfx } from './sounds'
+import { Talk } from '../blocks/talk'
+import { L } from '../../../../lines'
+
+const T = L.mall.boxing
 
 export interface BoxingEvents extends LegEvents {
   /** The round on now (the address bar follows). */
@@ -151,6 +156,7 @@ export class MuayThai extends Stage {
   private tall = false
   private allDoneSent = false
   private onBeats = 0
+  private talk = new Talk((l) => this.bev.say(l))
   private starsFx: Floaters
   private sparkles: Floaters
   private drops: Floaters
@@ -184,10 +190,23 @@ export class MuayThai extends Stage {
     this.stars = start.round - 1
     this.built.stars.forEach((s, i) => (s.visible = i < this.stars))
     this.startRound(start.round, true)
+    // What's said first: the coach's hello and thank you, then "Tap your gloves to bow!" (a link to a later round:
+    // that round's line).
+    this.after(0.5, () => {
+      if (start.round > 1) return this.roundLine(start.round)
+      this.talk.say(T.hello)
+      this.after(3.0, () => this.talk.say(T.bow))
+    })
   }
 
   private after(s: number, f: () => void) {
     this.later.push({ t: this.time + s, f })
+  }
+
+  /** Sparkle, when a round's new thing shows: the gold ring on the bag, Daddy's pad. */
+  private roundLine(n: Round) {
+    if (n === 2) this.talk.say(T.gold)
+    if (n === 3) this.talk.say(T.pad)
   }
 
   // ---------------------------------------------------------------- places (a tall screen brings the left side in)
@@ -235,6 +254,7 @@ export class MuayThai extends Stage {
       return
     }
     this.phase = 'play'
+    if (!now) this.after(0.5, () => this.roundLine(n))
     if (now) {
       this.coach.place(this.coachDrum.x, this.coachDrum.z, 0)
       this.coach.setMode('drum')
@@ -258,6 +278,7 @@ export class MuayThai extends Stage {
     this.after(0.6, () => {
       this.coach.play('cheer')
       this.nick.react('wave')
+      this.talk.say(T.again)
     })
     this.after(2.0, () => this.startRound((this.round + 1) as Round))
   }
@@ -304,6 +325,8 @@ export class MuayThai extends Stage {
       this.after(0.3, () => this.coach.play('bow', depth))
       if (w.bows === 0) this.after(0.5, () => this.nick.react('wiggle'))
       w.bows++
+      // Three bows done: the coach asks her to dance (the ram muay steps come next).
+      if (w.bows === BOWS) this.after(1.0, () => this.talk.say(T.dance))
       return
     }
     if (w.steps < STEPS) {
@@ -401,7 +424,10 @@ export class MuayThai extends Stage {
     }
     if (this.round === 1) {
       this.progress()
-      if (this.count === DRUM_JOINS && !this.beat.on) this.after(0.4, () => this.beat.start(this.time, PERIOD[1], 0.35))
+      if (this.count === DRUM_JOINS && !this.beat.on) {
+        this.after(0.4, () => this.beat.start(this.time, PERIOD[1], 0.35))
+        this.after(0.6, () => this.talk.once('drum', T.drum))
+      }
       if (this.count >= NEED[1]) this.after(0.35, () => this.finishRound())
     } else if (this.round === 2) {
       this.punches++
@@ -436,13 +462,13 @@ export class MuayThai extends Stage {
       sfx.thud(power)
       if (held) {
         this.stagger.v += 1.4 * power
-        if (power > 1.5) this.after(0.1, () => sfx.oof())
+        if (power > 1.5) this.after(0.1, () => this.oof(p.big))
       }
     } else {
       this.padHit = 0
       this.stagger.v += 1.5 * power
       sfx.pap()
-      if (power > 1.5) this.after(0.1, () => sfx.oof())
+      if (power > 1.5) this.after(0.1, () => this.oof(p.big))
     }
     if (p.big) {
       sfx.pow()
@@ -451,6 +477,11 @@ export class MuayThai extends Stage {
     const at = p.at.clone().add(tmp.copy(p.dir).multiplyScalar(-0.08))
     this.starsFx.burst(at, p.big ? 16 : 6, p.big ? 2.0 : 1.2, p.big ? 2.0 : 1.2, 0.6, p.big ? 0.09 : 0.06)
     this.popPow(at, p.big ? 'POW!' : p.kind === 'hook' ? 'WHAM!' : p.what === 'pad' ? 'PAP!' : JABS[this.touches % JABS.length], p.big || p.kind === 'hook')
+  }
+
+  /** Daddy takes a big one: now and then he says so (a big POW on the beat: "Oof! Good one!"), else just oof. */
+  private oof(big: boolean) {
+    if (!this.talk.react(this.time, big ? T.oof : T.strong)) sfx.oof()
   }
 
   // ---------------------------------------------------------------- Daddy's pad, the kick
@@ -485,6 +516,8 @@ export class MuayThai extends Stage {
   private padNext() {
     if (this.phase !== 'play' || this.round !== 3) return
     this.padStep++
+    // The pad's first move down low: Daddy calls it.
+    if (this.padStep === 1) this.talk.once('upDown', T.upDown)
     const s = this.padSpot()
     if (s.x === this.dSpot.x && s.z === this.dSpot.z) this.padYGoal = s.y
     else this.daddyHop(s.x, s.z, s.face, s.y)
@@ -510,6 +543,8 @@ export class MuayThai extends Stage {
     if (this.dSpot.x !== s.x || this.dSpot.z !== s.z) this.daddyHop(s.x, s.z, s.face, PAD_Y.mid)
     else this.padYGoal = PAD_Y.mid
     sounds.sparkle()
+    // The first glow at kick height is new: Sparkle says so. (The toy's later ones, now and then.)
+    if (!this.talk.once('kick', T.kick)) this.talk.react(this.time, T.kick)
   }
 
   /** Her unicorn kick: she turns her back to Daddy and bucks with both back hooves. */
@@ -535,7 +570,7 @@ export class MuayThai extends Stage {
     this.padFly = { p: at.clone(), v: V(1.4, 3.4, 0.5), r: V(0, 0, 0), spin: V(4, 2, 9), down: false }
     this.fly = { t: 0, from: this.nick.root.position.clone() }
     this.daddy = 'fly'
-    this.after(0.1, () => sfx.oof())
+    this.after(0.1, () => this.talk.say(T.ropes))
     const first = !this.allDoneSent
     // Then the champion: ding ding ding, the coach holds her glove up, the belt goes on.
     this.after(1.5, () => {
@@ -555,6 +590,7 @@ export class MuayThai extends Stage {
         sounds.sparkle()
         this.sparkles.burst(this.kaylee.root.position.clone().add(V(0, 0.5, 0.2)), 24, 1.6, 2.0, 1.2, 0.06)
         this.giveStar()
+        this.after(0.4, () => this.talk.say(T.champion))
       } else sfx.cheer()
     })
     this.after(4.2, () => {
@@ -578,7 +614,7 @@ export class MuayThai extends Stage {
     this.nick.react('hop')
     const s = this.side('right')
     this.daddyHop(s.x, s.z, s.face, PAD_Y.mid)
-    sfx.haha()
+    if (!this.talk.react(this.time, T.hit)) sfx.haha()
   }
 
   // ---------------------------------------------------------------- touch
@@ -676,6 +712,7 @@ export class MuayThai extends Stage {
         })
         return
       case 'board':
+        this.after(0.3, () => this.talk.once('sport', T.sport))
         if (!this.stars) {
           sfx.boing()
           this.built.board.rotation.z = 0.12
@@ -685,7 +722,8 @@ export class MuayThai extends Stage {
         return
       case 'coach':
         this.coach.play(this.coach.mode === 'drum' ? 'hop' : 'pose')
-        sfx.coach()
+        // The first poke: what the wai kru is, in his own voice (after that, his babble).
+        if (!this.talk.once('waiKru', T.waiKru)) sfx.coach()
         return
       case 'family:nick':
         if (this.daddy === 'fly') return
@@ -793,6 +831,11 @@ export class MuayThai extends Stage {
       for (let i = 0; i < this.stars; i++) if (before < i * 0.18 && this.starTwinkle >= i * 0.18) sfx.note(5 + i * 2)
       if (this.starTwinkle > 1.2) this.starTwinkle = -1
     }
+
+    // ---- The 👆 after a while with nothing touched: Sparkle says what to do, once each time it shows ----
+    this.talk.hint(this.time, this.lastTouch, () => this.hintAt() !== null, () =>
+      this.phase === 'wai' ? T.hint.gloves : this.phase === 'kick' ? T.kick : this.round === 3 ? T.hint.pad : T.hint.bag,
+    )
 
     // ---- The people ----
     const k = this.kaylee

@@ -431,18 +431,115 @@ export const L = {
 
     // Little Land's foam blocks (games/blocks/).
     blocks: {
+      // The opening: Daddy's bet, then Sparkle.
+      higher: nick(`Can you build higher than me, ${NAME}?`),
+      grab: 'Grab a brick!',
+      // Something new: the stack glows (round 1), the picture cards (round 2), Daddy steps up (round 3).
+      push: 'Push it over!',
+      copy: 'Copy the picture!',
+      elephant: 'Now an elephant!',
+      taller: 'Taller than Daddy!',
+      // Daddy, now and then: a brick half over the edge, a brick hat, a knock-down, the elephant coming alive.
+      whoa: nick('Whoa! Careful!'),
+      hat: nick('A brick hat? Ha ha!'),
+      crash: [nick('Crash!'), nick('Ha ha! Again!'), nick('Boom!')],
+      trunk: nick('Wow! An elephant!'),
+      // Round 3: his sneeze at every tall tower, then (the first time) he gives in.
+      sneeze: nick('Ah... ah... choo!'),
+      beat: nick(`Taller than me, ${NAME}!`),
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: {
+        box: 'Grab a brick from the box!',
+        card: 'Put a brick on the picture!',
+        tower: 'Tap the tower to push it!',
+      },
+      // The fact: when the chedi gets its spire, or the first time she pokes its card.
+      chedi: 'A chedi is a Thai temple tower!',
     },
 
     // The Golden Mountain (games/mountain/).
     mountain: {
+      // The opening (Sparkle).
+      climb: `Climb the Golden Mountain, ${NAME}! Count the holds!`,
+      // The count, one number as each hold pops (up to round 3's seven).
+      count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!'],
+      // Something new: on top the first time, round 2's pink holds, round 3's race.
+      top: `You made it, ${NAME}!`,
+      pink: 'Only the pink ones!',
+      race: 'Race Daddy to the top!',
+      // Daddy's race: the start, puffing up behind her, flopping over the rail, his head-first landing.
+      win: nick("I'm going to win!"),
+      huff: nick('Huff... puff...'),
+      beat: nick(`You beat me, ${NAME}!`),
+      whoa: nick('Whoa-oa-oa!'),
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: {
+        hold: 'Grab a glowing hold!',
+        pink: 'Grab a pink one!',
+        bell: 'Ring the bell!',
+        slide: 'Down the slide!',
+      },
+      // The facts: the first bell, the first monkey she pokes.
+      mount: 'In Bangkok, the Golden Mount has over 300 steps!',
+      monkeys: 'In Lopburi, monkeys live all over town!',
     },
 
     // Muay Thai (games/boxing/).
     boxing: {
+      // The opening, the wai kru: the coach, then Sparkle.
+      hello: by('coach')(`Sawasdee krap, ${NAME}! First we say thank you.`),
+      bow: 'Tap your gloves to bow!',
+      // The coach: after the three bows, after rounds 1 and 2, with the gold belt.
+      dance: by('coach')('Now dance with me!'),
+      again: by('coach')('Yes! Again!'),
+      champion: by('coach')(`Champion ${NAME}!`),
+      // Sparkle: something new (the drum, round 2's gold ring, Daddy's pad, the kick).
+      drum: 'Punch to the drum!',
+      gold: "Punch when it's gold!",
+      pad: "Follow Daddy's pad!",
+      kick: 'Big kick!',
+      // Daddy, now and then: a hook or a big POW, the pad going low, into the ropes, up with the pad again.
+      strong: nick('Ooh, strong!'),
+      oof: nick(`Oof! Good one, ${NAME}!`),
+      upDown: nick('Up high! Down low!'),
+      ropes: nick('Whoa-oa-oa!'),
+      hit: nick('Hit the pad!'),
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: {
+        gloves: 'Tap your gloves!',
+        bag: 'Punch the bag!',
+        pad: "Punch Daddy's pad!",
+      },
+      // The facts: the first time she pokes the coach, and the star board.
+      waiKru: by('coach')('The wai kru dance says thank you to your teacher!'),
+      sport: "Muay Thai is Thailand's own sport!",
     },
 
     // The Sky Pod (games/skypod/).
     skypod: {
+      // The opening: Daddy, then Sparkle.
+      fast: nick(`How fast are you, ${NAME}?`),
+      slap: 'Slap the lights!',
+      // The count as her score climbs (rounds 1 and 3).
+      count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!', 'Nine!', 'Ten!'],
+      // Round 2: before the wall plays, then her turn (the first time).
+      listen: 'Listen!',
+      play: 'Now you play it!',
+      // Round 3, Daddy: the race, she took his light, a miss, a rest, she wins.
+      race: nick(`Race you, ${NAME}!`),
+      mine: nick("Hey! That one's mine!"),
+      ow: nick('Ow, ow!'),
+      rest: nick('Daddy needs a rest!'),
+      win: nick(`You win, ${NAME}!`),
+      // The finale: the score at a hundred.
+      hundred: `A hundred! Super star, ${NAME}!`,
+      // Sparkle, when the finger shows after a while with nothing touched.
+      hint: {
+        lit: 'Slap the glowing one!',
+        next: 'This one next!',
+      },
+      // The fact: the first time she pokes the scoreboard.
+      thai: 'In Thai, one, two, three is nueng, song, saam!',
     },
 
     // The Big Frame (harborland/).

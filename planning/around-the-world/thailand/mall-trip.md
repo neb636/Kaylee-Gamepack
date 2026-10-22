@@ -1191,8 +1191,12 @@ small climbing toy, before Dad's photos.
    - **The hall:** Little Land's teaser is now a way in. Tap it and she walks up beside the front stack, it tumbles, and
      in she goes; ↩️ brings her back out there (`hall?from=blocks`). The sock band has a 🧱 slot, filled by her first
      knock-down.
-   - **Sounds only:** no voices. Daddy's "Can you build higher than me, Kaylee?" and Sparkle's lines come with the full
-     loop.
+   - **Voices are in** (`L.mall.blocks`, 18 lines, said through `games/blocks/talk.ts`): Daddy's "Can you build higher
+     than me, Kaylee?" then Sparkle's "Grab a brick!"; Sparkle when something is new ("Push it over!", "Copy the
+     picture!", "Now an elephant!", "Taller than Daddy!") and once each time the 👆 shows; Daddy's "Ah... ah... choo!"
+     at every tall tower and "Taller than me, Kaylee!" the first time; his other reactions (a wobble, the brick hat, a
+     knock-down) at most one every 12 s; the chedi fact (at the spire, or the first poke on its card) and the elephant
+     fact (the first poke on its card). The flat version says Daddy's opening line. Clips not generated yet.
    - **Flat version** (`?gl=off`): the stack as a picture, the box and the stack as big buttons, the same grid.
    - **For Dad on the iPad:** does dragging a brick feel good, and does it land where she meant? Is the half-over-the-edge
      wobble fun or worrying? Should the stack ever really fall by itself? Are the outlines in round 2 too much help?
@@ -1229,7 +1233,13 @@ small climbing toy, before Dad's photos.
    - **Taps alone** play it: 28 taps for all three rounds in a scripted real-pointer play-through (6 wai kru, 8, 7 with
      6 on the beat, 7 with the kick) at iPad landscape, iPad portrait and iPhone landscape (touch). The robot takes about
      30 s; a child, waiting for the gold ring and watching the kick, about 2 min.
-   - **Sounds only:** no voices. The lines to record are in "7. Muay Thai bags" above.
+   - **Voices are in** (`L.mall.boxing`, 19 lines): the coach's "Sawasdee krap, Kaylee! First we say thank you." then
+     Sparkle's "Tap your gloves to bow!"; the coach's "Now dance with me!" after the bows, "Yes! Again!" after rounds 1
+     and 2, "Champion Kaylee!" with the belt; Sparkle when something is new (the drum, the gold ring, Daddy's pad, the
+     kick) and once each time the 👆 shows; Daddy's "Whoa-oa-oa!" into the ropes, "Up high! Down low!" the first time
+     the pad goes low, and "Ooh, strong!" / "Oof! Good one, Kaylee!" / "Hit the pad!" at most one every 12 s (else his
+     synthesized oof). Facts: the wai kru (the coach, the first poke on him) and "Muay Thai is Thailand's own sport!"
+     (the star board). The flat version says the coach's hello. Clips not generated yet.
    - **Flat version** (`?gl=off`): 🙏 for the wai kru, the bag and the pad as big buttons, the same beat and ring.
    - **For Dad on the iPad:** does a punch feel snappy and land where her finger is? Is the beat window right for her
      (too easy, too hard), and does the gold POW feel worth chasing? Is the unicorn kick (a buck with her back hooves)
@@ -1266,9 +1276,14 @@ small climbing toy, before Dad's photos.
    - **The hall:** the mountain's teaser is now a way in. Tap it: she walks to its foot, climbs onto the first hold,
      and in she goes; ↩️ brings her back out at the foot (`hall?from=mountain`). The sock band has a ⛰️ slot, filled
      the first time she reaches the top.
-   - **Sounds only:** no voices. The lines for the voice pass are in section 5 above (Sparkle's opening line, the count,
-     Daddy's race lines, the Golden Mount fact: "over 300 steps", checked against two sources that disagree on the
-     exact count).
+   - **Voices are in** (`L.mall.mountain`, 21 lines): Sparkle's "Climb the Golden Mountain, Kaylee! Count the holds!";
+     her count as each hold pops ("One!" ... "Seven!", skipped while someone else is talking); "You made it, Kaylee!"
+     the first time at the top; "Only the pink ones!" (round 2), "Race Daddy to the top!" (the first race); a hint once
+     each time the 👆 shows (a glowing hold, a pink one, the bell, the slide). Daddy's race: "I'm going to win!", "Huff...
+     puff..." halfway up, "You beat me, Kaylee!" over the rail, "Whoa-oa-oa!" on his head-first landing. Facts: the
+     first bell ("In Bangkok, the Golden Mount has over 300 steps!", "over 300" because the sources disagree on the
+     exact count), the first monkey (Lopburi), the first painted elephant (`L.facts.elephant`). The flat version says
+     the opening line. Clips not generated yet.
    - **Flat version** (`?gl=off`): the cone as a picture with the same holds (unrolled so they spread out), the bell
      and slide as buttons, Daddy one hold behind in round 3.
    - **Numbers:** a scripted real-pointer play-through (taps and pull-down drags, two silly holds, six pokes, the bell
@@ -1309,7 +1324,14 @@ small climbing toy, before Dad's photos.
    - **The hall:** its Sky Pod is now a way in. Tap it and she walks up, the buttons light up one after another up a
      scale, and in she goes; ↩️ brings her back out there (`hall?from=skypod`). The sock band has a 💡 slot, filled after
      round 1. (The hall's teaser wall is still four by three; the game's has nine pods. The art gate can match them.)
-   - **Sounds only:** no voices. The lines are listed in "8. The Sky Pod".
+   - **Voices are in** (`L.mall.skypod`, 23 lines): Daddy's "How fast are you, Kaylee?" then Sparkle's "Slap the
+     lights!"; Sparkle's count as her score climbs in rounds 1 and 3 ("One!" ... "Ten!", skipped while someone else is
+     talking); round 2's "Listen!" before the wall plays and "Now you play it!" (the plan's one line, split so it
+     doesn't talk over the tune); Daddy's "Race you, Kaylee!", "You win, Kaylee!", and now and then "Hey! That one's
+     mine!", "Ow, ow!", "Daddy needs a rest!"; "A hundred! Super star, Kaylee!" at the finale; a hint once each time
+     the 👆 shows. The scoreboard's Thai count is Sparkle's, trimmed to "In Thai, one, two, three is nueng, song,
+     saam!" (the first poke; Dad can pick another voice). The flat version says Daddy's opening line. Clips not
+     generated yet.
    - **Flat version** (`?gl=off`): the nine pods as big round buttons, the same rules (`game.ts`), the board on top and
      Daddy beside it.
    - **For Dad on the iPad:**
