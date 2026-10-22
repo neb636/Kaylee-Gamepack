@@ -283,7 +283,7 @@ export class Race implements World3D {
       scene.add(v.root)
       return r
     }
-    this.racers = [racer('kaylee', kaylee, null, RACE_FEEL.top), racer('kids', kids.v, kids.crew, 13), racer('monkey', banana, monkey, 12.6)]
+    this.racers = [racer('kaylee', kaylee, null, RACE_FEEL.top), racer('kids', kids.v, kids.crew, 17.3), racer('monkey', banana, monkey, 16.8)]
     this.racers[0].v.root.userData.pick = 'boat'
     this.racers[1].v.root.userData.pick = 'rival:kids'
     this.racers[2].v.root.userData.pick = 'rival:monkey'
@@ -704,7 +704,7 @@ export class Race implements World3D {
   private driveRivals(dt: number) {
     const k = this.k
     const f = clamp(k.progress / TOTAL, 0, 1)
-    const vRef = Math.max(this.herRate, 7.5)
+    const vRef = Math.max(this.herRate, 10)
     for (const r of this.racers.slice(1)) {
       const d = r.d
       r.sway += dt * 0.35

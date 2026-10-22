@@ -17,7 +17,7 @@ import { KIDS } from '../bay/village'
 
 /** How every racing boat drives (trip/drive.ts): quicker and grippier than cruising the bay, and always full speed
  *  toward a finger held on the water (`near`/`far` are short: the target is always well ahead on the course). */
-export const RACE_FEEL: Feel = { top: 12, boost: 1.6, accel: 6.5, coast: 0.5, turn: 1.75, grip: 3.2, near: 2, far: 9, dead: 0.04, lean: 0.22 }
+export const RACE_FEEL: Feel = { top: 16, boost: 1.6, accel: 9, coast: 0.5, turn: 2.1, grip: 3.2, near: 2, far: 9, dead: 0.04, lean: 0.22 }
 
 export type CrewMood = 'race' | 'whoa' | 'cheer' | 'wave' | 'tease'
 
