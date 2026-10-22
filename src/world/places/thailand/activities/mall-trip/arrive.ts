@@ -178,6 +178,42 @@ export class Arrive extends Stage {
         P.rbox(0.38, 0.62, 0.05, 0.04, '#B9B2CC', { at: [0.95, 1.15, -d / 2 + 0.06] }),
       ]), bag, 1.5),
     )
+    // The mall's lobby round the lift, so it stands in a building and not in the sky on a wide screen: a cream wall
+    // with the lift's opening in it (a steel frame round it, a gold band, a skirting), the marble floor in front, and
+    // a potted palm either side.
+    const fz = d / 2 + 0.21
+    const ow = w / 2 + 0.05
+    const oh = h + 0.12
+    this.liftBox.add(
+      solid(merge([
+        ...[-1, 1].map((s) => P.box(12 - ow, 9, 0.12, '#FFF3E4', { at: [s * (ow + (12 - ow) / 2), 4.5, fz] })),
+        P.box(ow * 2, 9 - oh, 0.12, '#FFF3E4', { at: [0, oh + (9 - oh) / 2, fz] }),
+        ...[-1, 1].map((s) => P.box(12 - ow, 0.18, 0.06, '#E3D3EC', { at: [s * (ow + (12 - ow) / 2), 0.09, fz + 0.08] })),
+        P.box(24, 0.12, 0.06, PAL.gold, { at: [0, 3.5, fz + 0.08] }),
+        ...[-1, 1].map((s) => P.box(0.14, oh + 0.16, 0.1, '#C9C3D8', { at: [s * (ow + 0.07), (oh + 0.16) / 2, fz + 0.06] })),
+        P.box(ow * 2 + 0.28, 0.16, 0.1, '#C9C3D8', { at: [0, oh + 0.08, fz + 0.06] }),
+        // The call buttons outside, by the frame.
+        P.rbox(0.2, 0.36, 0.04, 0.03, '#C9C3D8', { at: [ow + 0.45, 1.15, fz + 0.08] }),
+        ...[1.22, 1.08].map((y) => P.sphere(0.045, '#FFFFFF', { at: [ow + 0.45, y, fz + 0.1], scale: [1, 1, 0.4] })),
+        // Potted palms either side of the lift.
+        ...[-1, 1].flatMap((s) => [
+          P.cyl(0.17, 0.13, 0.34, '#FFB5C9', { at: [s * (ow + 1.0), 0.17, fz + 0.3] }, 20),
+          ...Array.from({ length: 6 }, (_, i) => {
+            const a = (i * Math.PI * 2) / 6
+            return P.capsule(0.055, 0.42, '#5FCB8F', { at: [s * (ow + 1.0) + Math.cos(a) * 0.16, 0.6, fz + 0.3 + Math.sin(a) * 0.16], rot: [Math.sin(a) * 0.7, 0, -Math.cos(a) * 0.7] })
+          }),
+        ]),
+      ]), bag, 1.5),
+    )
+    // The marble floor (checks of two creams, no outlines so it stays calm).
+    this.liftBox.add(
+      solid(merge([
+        P.box(24, 0.1, 9, '#F4ECF6', { at: [0, -0.05, fz + 4.5] }),
+        ...Array.from({ length: 24 * 9 }, (_, i) => [(i % 24) - 11.5, Math.floor(i / 24) + 0.5] as const)
+          .filter(([x, z]) => (Math.floor(x) + Math.floor(z)) % 2 === 0)
+          .map(([x, z]) => P.box(0.98, 0.01, 0.98, '#E8DDF0', { at: [x, 0.005, fz + z] })),
+      ]), bag, 0),
+    )
     // What's waiting beyond the doors: HarborLand's colors.
     this.liftBox.add(solid(merge([P.box(3, h, 0.1, PAL.sky, { at: [0, h / 2, -d / 2 - 1.4] }), ...[PAL.hotpink, PAL.butter, PAL.mint, '#FF9A4D'].map((c, i) => P.box(3, 0.32, 0.12, c, { at: [0, 0.5 + i * 0.5, -d / 2 - 1.34] }))]), bag, 0))
     this.liftDoors = [-1, 1].map((s) => {
