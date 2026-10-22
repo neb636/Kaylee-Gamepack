@@ -20,6 +20,10 @@ export interface Tool {
   lift: number
   /** How much it leans when held. */
   lean: number
+  /** The parts that only show on the tray (the stethoscope's tube, ring and ear tips: in her hand they're on Kaylee). */
+  rest?: Group
+  /** Where a hose joins it (model-local y), for the stethoscope's chest piece. */
+  stem?: number
   /** The thermometer's red line (scale.y 0..1). */
   bar?: Group
   /** The medicine on the spoon. */
@@ -38,15 +42,25 @@ export function buildTool(item: TrayItem, bag: Bag): Tool {
   const c = item.color ?? PAL.pink
   const kinds: Record<ToolId, () => void> = {
     stethoscope: () => {
-      // The chest piece facing her, the pink tube up to a loop, and the two ear tips.
+      // The chest piece facing her, with a short stem up from it (where Kaylee's long tube joins it when she holds it).
       add(solid(merge([
-        P.cyl(0.06, 0.06, 0.035, STEEL, { rot: [Math.PI / 2, 0, 0] }, 20),
+        P.cyl(0.065, 0.065, 0.035, STEEL, { rot: [Math.PI / 2, 0, 0] }, 20),
         P.cyl(0.045, 0.045, 0.04, STEEL_DARK, { at: [0, 0, 0.004], rot: [Math.PI / 2, 0, 0] }, 20),
-        P.capsule(0.016, 0.09, PAL.hotpink, { at: [0, 0.1, 0] }),
-        P.torus(0.085, 0.017, PAL.hotpink, { at: [0, 0.24, 0], rot: [0, 0, 0] }, Math.PI * 1.15),
-        ...[-1, 1].map((s) => P.sphere(0.026, PAL.gold, { at: [s * 0.085, 0.235, 0] })),
+        P.capsule(0.017, 0.05, PAL.hotpink, { at: [0, 0.075, 0] }),
       ]), bag, 2))
+      // On the tray the rest of it stands up too: the tube to a ring that opens at the top, and the two gold ear tips.
+      // Held, those are on Kaylee's own ears instead (stethoscope.ts), never on the patient.
+      const R = 0.09
+      const cy = 0.27
+      tool.rest = add(solid(merge([
+        P.capsule(0.017, 0.04, PAL.hotpink, { at: [0, 0.15, 0] }),
+        P.torus(R, 0.017, PAL.hotpink, { at: [0, cy, 0], rot: [0, 0, Math.PI * 0.66] }, Math.PI * 1.68),
+        ...[-1, 1].map((s) => P.sphere(0.028, PAL.gold, { at: [s * R * Math.sin(0.16 * Math.PI), cy + R * Math.cos(0.16 * Math.PI), 0] })),
+      ]), bag, 2))
+      tool.stem = 0.11
       tool.lift = 0.07
+      // Held, the stem leans back toward her (she's at the left), not away.
+      tool.lean = 0.25
     },
     thermometer: () => {
       add(solid(merge([P.capsule(0.03, 0.24, '#FFFFFF', { at: [0, 0.15, 0] }), P.sphere(0.035, '#FF5A6E', { at: [0, 0.02, 0] }), P.rbox(0.05, 0.05, 0.05, 0.015, PAL.sky, { at: [0, 0.3, 0] })]), bag, 2))

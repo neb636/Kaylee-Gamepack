@@ -717,6 +717,8 @@ const thaiVet = (name, seconds, patient, strokes) => ({
 })
 GAME_SCENARIOS.push(
   thaiVet('vet-thorn-bandage', 6, 'puppy', [['tweezers', 'paw', 'pull', 600], ['bandage-pink', 'paw', 'circle']]),
+  // The stethoscope: only its chest piece goes to the puppy; the ear tips sit on Kaylee's own ears, with a tube between.
+  thaiVet('vet-heart', 4, 'puppy', [['stethoscope', 'chest', 'rub', 900]]),
   thaiVet('vet-soap', 4, 'pony', [['soap', 'belly', 'rub']]),
   thaiVet('vet-sneeze', 7, 'elephant', [['soap', 'belly', 'rub'], ['soap', 'head', 'rub', 2600]]),
 )

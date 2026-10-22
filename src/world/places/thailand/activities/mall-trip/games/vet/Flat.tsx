@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { L } from '../../../../lines'
 import { PATIENTS, type PatientId } from '../../sections'
-import { NEED_TOOL, NEEDS, PATIENT_ICONS, TOOL_ICONS, TRAYS } from './layout'
+import { NEED_ICONS, NEED_TOOL, NEEDS, PATIENT_ICONS, TOOL_ICONS, TRAYS } from './layout'
 import { vetSfx as sfx, voiceOf } from './sounds'
 import { mallVoice } from '../../voice'
 
@@ -82,7 +82,7 @@ export function VetFlat({ patient, onPatient, onHealed, onAllDone }: Props) {
         </AnimatePresence>
         {want && (
           <div aria-hidden style={{ position: 'absolute', right: '-12%', top: '-8%', width: 'clamp(64px, 10vmin, 90px)', height: 'clamp(64px, 10vmin, 90px)', borderRadius: '50%', background: '#fff', border: '4px solid var(--lavender-dark)', display: 'grid', placeItems: 'center', fontSize: 'clamp(34px, 5.5vmin, 50px)' }}>
-            {TOOL_ICONS[want]}
+            {NEED_ICONS[needs[step]]}
           </div>
         )}
       </div>

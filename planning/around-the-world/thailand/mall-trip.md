@@ -223,7 +223,7 @@ From Dad's photos: blue scrubs and cap, a plush pony and a golden retriever on t
 
 - **Pitch:** a puppy limps in with a sore paw. Dr. Kaylee (in her scrubs and cap) makes every patient better.
 - **The toy:** grab a tool from the tray and use it on the patient. It works right where she holds it:
-  - the stethoscope: thump-thump hearts float up, loudest over the chest
+  - the stethoscope: thump-thump hearts float up, loudest over the chest. Only the chest piece goes to the patient: the gold ear tips pop onto Kaylee's own ears, a tube runs down to a Y on her chest and on to the chest piece (`stethoscope.ts`, `cord.ts`). The patient never wears it, and its thought bubble shows how it feels (a heart), not the tool
   - the thermometer: the patient's cheeks glow red, then cool
   - tweezers, cream and bandages: she drags a bandage round and it wraps
   - the brush: the fur fluffs up
