@@ -27,7 +27,7 @@ import { PAL } from '../../../../engine/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../../trip/legs/stage'
 import { PATIENTS, type PatientId } from '../../sections'
 import { Blobs, Floaters, heartGeometry } from './fx'
-import { ALL_ITEMS, BENCH, DADDY_AT, DADDY_TALL, DOOR, HOLD_Z, JAR, KAYLEE_AT, NEED_TOOL, PARROT, PATIENT_AT, SCALE, TOOL_ICONS, TRAY, TRAYS, WINDOW, XRAY, type Need, type ToolId } from './layout'
+import { ALL_ITEMS, BENCH, DADDY_AT, DADDY_TALL, DOOR, HOLD_Z, JAR, KAYLEE_AT, NEED_ICONS, NEED_TOOL, PARROT, PATIENT_AT, SCALE, TRAY, TRAYS, WINDOW, XRAY, type Need, type ToolId } from './layout'
 import { PART_OF, Patient, type Zone, type ZoneId } from './patient'
 import { buildRoom, drawXray, type Room } from './room'
 import { vetSfx as sfx, voiceOf } from './sounds'
@@ -1092,7 +1092,7 @@ export class VetClinic extends Stage {
     }
     if (this.cur && this.phase === 'exam' && this.cur.healed) this.heal(this.cur)
     const nxt = this.cur && this.phase === 'exam' ? this.cur.next : null
-    const icon = nxt && NEED_TOOL[nxt] ? TOOL_ICONS[NEED_TOOL[nxt]!] : null
+    const icon = nxt ? NEED_ICONS[nxt] : null
     if (icon !== this.needIcon) {
       this.needIcon = icon
       this.vev.need(icon)

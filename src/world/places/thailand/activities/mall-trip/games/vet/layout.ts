@@ -99,3 +99,20 @@ export const TOOL_ICONS: Record<ToolId, string> = {
   tissue: '🤧',
 }
 export const PATIENT_ICONS: Record<PatientId, string> = { puppy: '🐶', pony: '🐴', elephant: '🐘' }
+
+/** The patient's thought bubble shows how it feels (what's wrong), never the tool, so it never looks like the patient is the doctor. */
+export const NEED_ICONS: Record<Need, string | null> = {
+  heart: '💓',
+  temp: '🥵',
+  thorn: '🌵',
+  cream: '🐾',
+  bandage: '🤕',
+  soap: '🪰',
+  rinse: '🫧',
+  dry: '💧',
+  brush: '🌀',
+  bow: '🎀',
+  medicine: '🤒',
+  tissue: '🤧',
+  sneeze: null,
+}

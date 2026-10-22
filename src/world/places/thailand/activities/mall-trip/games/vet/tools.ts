@@ -38,13 +38,15 @@ export function buildTool(item: TrayItem, bag: Bag): Tool {
   const c = item.color ?? PAL.pink
   const kinds: Record<ToolId, () => void> = {
     stethoscope: () => {
-      // The chest piece facing her, the pink tube up to a loop, and the two ear tips.
+      // The chest piece facing her, a pink tube up to a ring that opens at the top, and the two gold ear tips.
+      const R = 0.09
+      const cy = 0.27
       add(solid(merge([
-        P.cyl(0.06, 0.06, 0.035, STEEL, { rot: [Math.PI / 2, 0, 0] }, 20),
+        P.cyl(0.065, 0.065, 0.035, STEEL, { rot: [Math.PI / 2, 0, 0] }, 20),
         P.cyl(0.045, 0.045, 0.04, STEEL_DARK, { at: [0, 0, 0.004], rot: [Math.PI / 2, 0, 0] }, 20),
-        P.capsule(0.016, 0.09, PAL.hotpink, { at: [0, 0.1, 0] }),
-        P.torus(0.085, 0.017, PAL.hotpink, { at: [0, 0.24, 0], rot: [0, 0, 0] }, Math.PI * 1.15),
-        ...[-1, 1].map((s) => P.sphere(0.026, PAL.gold, { at: [s * 0.085, 0.235, 0] })),
+        P.capsule(0.017, 0.11, PAL.hotpink, { at: [0, 0.1, 0] }),
+        P.torus(R, 0.017, PAL.hotpink, { at: [0, cy, 0], rot: [0, 0, Math.PI * 0.66] }, Math.PI * 1.68),
+        ...[-1, 1].map((s) => P.sphere(0.028, PAL.gold, { at: [s * R * Math.sin(0.16 * Math.PI), cy + R * Math.cos(0.16 * Math.PI), 0] })),
       ]), bag, 2))
       tool.lift = 0.07
     },
