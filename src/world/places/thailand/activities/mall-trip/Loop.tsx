@@ -29,7 +29,6 @@ import { LoopFlat } from './LoopFlat'
 import { drawPhoto, PHOTO_IDS, type PhotoId } from './photo'
 import type { PizzaId } from './pizza/layout'
 import { MALL_TRIP } from './trip'
-import { unvoiced } from './words'
 
 export type LoopSection = 'invite' | 'goodbye' | 'arrive' | 'home'
 type LoopWorld = 'house' | 'arrive'
@@ -92,7 +91,7 @@ export function MallLoop({ section, socks, hair, pizza, photos, replay, covered,
   }, [section])
 
   // Someone says something: out loud if it's recorded, else just its bubble.
-  const say = (l: Line) => guideRef.current?.speak(l, unvoiced(l))
+  const say = (l: Line) => guideRef.current?.speak(l)
 
   const mountRef = useRef(mount)
   mountRef.current = mount

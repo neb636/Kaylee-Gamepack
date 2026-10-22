@@ -502,6 +502,44 @@ export const L = {
 
     // The trip around it: Mommy's question, the goodbye, the Veloz, ICONSIAM, the counter, home.
     trip: {
+      // Mommy's card in the house, once there are two trips (🚤 or 🛝🍕).
+      where: ji(`${NAME}, where shall we go?`),
+      // The goodbye and home, at Agong's house (TripHouse reads them from the TripDef: activities/mall-trip/words.ts).
+      wish: by('agong')('Bring Agong something yummy!'),
+      ready: nick(`Mommy is driving! Hop in, ${NAME}!`),
+      home: ji("We're home!"),
+      agong: by('agong')(`Ho ho! What is that, ${NAME}?`),
+      thanks: by('agong')(`Pizza! Thank you, ${NAME}!`),
+      pizza: { gan: by('gan')('Pizza?!'), ken: by('ken')('Pizza?!'), bb: by('bb')('Pizza?!') },
+      hair: by('agong')("Ho ho ho! Look at Daddy's hair!"),
+      give: 'Tap Agong to give him the box!',
+      wall: ji('Our mall day!'),
+      // ICONSIAM: the glimpse, the lift and the HarborLand counter (arrive.ts).
+      arrive: {
+        here: ji('ICONSIAM! By the river!'),
+        lift: 'Press the big button!',
+        six: nick('Floor six! HarborLand!'),
+        counter: by('staff')('Welcome to HarborLand! Socks on, please!'),
+        shoes: nick('My shoes are too big!'),
+        socks: by('staff')('Pick your socks!'),
+        stretch: nick('My socks are too small!'),
+        tall: by('staff')('Wow, so tall!'),
+        horn: by('staff')('Ha ha! Off the top!'),
+        gate: 'In you go!',
+      },
+      // The stamp screen's sticker, and the tap-to-hear facts there and on the passport (trip/facts.ts MALL_FACTS).
+      sticker: 'Pizza slice sticker! Stretchy cheese!',
+      facts: {
+        iconsiam: 'ICONSIAM is by the Chao Phraya river!',
+        socks: 'At HarborLand, everyone wears grip socks!',
+        phiTaKhon: 'Phi Ta Khon is a festival with big funny masks!',
+        lopburi: 'Lopburi is a town full of monkeys!',
+        goldenMount: 'The Golden Mount is a temple on a hill in Bangkok!',
+        sharing: 'Sharing fairly means everyone gets the same!',
+        waiKru: 'Muay Thai boxers dance the wai kru to thank their teacher!',
+        chaYen: "Cha yen is Thai iced tea. It's orange!",
+        elephant: "The elephant is Thailand's animal!",
+      },
     },
   },
 }
