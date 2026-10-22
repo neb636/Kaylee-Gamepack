@@ -203,6 +203,15 @@ export const sfx = {
     noise(0.5, 0.08, 'bandpass', 500, 2600, 0, 1.2)
     tone(220, 660, 0.4, 0.05, 'sawtooth')
   },
+  /** An elephant trumpeting: a brassy note that swoops up and wobbles. */
+  trumpet: () => {
+    tone(330, 620, 0.22, 0.07, 'sawtooth')
+    tone(620, 560, 0.4, 0.07, 'sawtooth', 0.2)
+    tone(660, 600, 0.4, 0.04, 'square', 0.22)
+    noise(0.3, 0.03, 'bandpass', 1200, 1800, 0.15)
+  },
+  /** A dolphin's chirp: quick whistles up and down. */
+  dolphin: () => [0, 0.1, 0.19, 0.3].forEach((d, i) => tone(i % 2 ? 2600 : 1700, i % 2 ? 1500 : 2900, 0.09, 0.045, 'sine', d)),
   /** A new lap: ding-ding. */
   lap: () => [0, 0.18].forEach((d) => tone(1568, 1568, 0.3, 0.07, 'sine', d)),
   /** A firework going pop high up. */

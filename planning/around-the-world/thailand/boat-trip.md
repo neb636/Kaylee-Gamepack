@@ -385,11 +385,26 @@ races the Koh Panyee kids and the cheeky macaque three laps round its island, an
   The bay keeps a rainbow inflatable arch between two towers with a 🏁 glow (`bay/race-gate.ts`); driving through it
   swaps worlds behind a checkered flag, like the boarding pass. Back out of the gate afterwards, the trophy rides in
   the bow, the glow is out and the gate stays open for a rematch. It's optional, like the village and the cave.
-- **The course** (`race/track.ts`): a 393 m loop (about 35 s a lap), 16 m wide, roped off with pink and white buoys
-  (soft boops back in, no walls to crash into), round an island of sand, jungle and palms; a ring of tall rock towers
-  walls the lagoon in. Landmarks: the start under an inflatable rainbow arch with three countdown lights, a checkered
-  line and flags, the floating grandstand of animal fans (they jump when she goes past), the waterfall rock in turn 1,
-  an S bend, a natural rock arch over the back straight, a chicane, the ramp, and hot-air balloons overhead.
+- **The course** (`race/track.ts`, Dad's ask 2026-10-22: "50% longer, unique, 25% wider, new things"): a **heart**
+  (the minimap shows it), a 591 m loop (about 40 s a lap, was 393 m and 35 s), 20 m wide (was 16), roped off with pink
+  and white buoys (soft boops back in, no walls to crash into), round a heart-shaped island of sand, jungle and palms;
+  rock towers that follow the heart round wall the lagoon in. In driving order:
+  - the start under an inflatable rainbow arch with three countdown lights, a checkered line and flags, and the
+    floating grandstand of animal fans (they jump when she goes past);
+  - **the Twin Rocks:** the course widens to 32 m and splits round two towers on a sandy islet (coins down the left, a
+    boost pad down the right). Her own line takes the open side; the rivals take the other one;
+  - **Elephant Beach** (the right lobe): two elephants in festival headdresses on the sand curl their trunks up as she
+    comes and spray a long arc of water over the course, with a rainbow in the mist. Driving under it is a shower: a
+    giggle, sparkles and a little burst of speed (`showers`). Tap one: it trumpets, hops and sprays;
+  - **the Heart Gate** (the dip): a pink and white inflatable arch with a big puffy heart floating over it, and five
+    giant beach balls to knock flying (boing; they pop up and off to the side, never slowing anyone; `balls`);
+  - **the Glow Grotto** (the left lobe): five rock arches in a row, glowing crystals at their feet and under their
+    tops, fireflies; then the small ramp;
+  - **Dolphin Run** (the long left side): three pink dolphins wait at its start and leap along beside her outside the
+    rope; Mommy waves to them (`dolphins`). Tap one: a big flip and a chirp;
+  - **the BIG JUMP:** a full-width ramp that throws her higher, through a giant flower hoop (sparkles and a chime,
+    `hoops`), past a line of coins up in the air; slow motion, two barrel rolls with a trick, Mommy's "Wheee!";
+  - **the waterfall hairpin** at the heart's point, then the run to the line. Hot-air balloons drift overhead.
 - **Same toy, raced:** her finger on the water steers the longtail (it can only go forward along the course; her finger
   picks where across it) at full speed; let go and it races on by itself a little slower, so she can never stop, get
   lost or go the wrong way. The camera chases close behind.
@@ -419,8 +434,15 @@ races the Koh Panyee kids and the cheeky macaque three laps round its island, an
 - **Talk:** Sparkle's "Hold your finger on the water to go fast!" and the kids' "Race you, Kaylee!" before the
   countdown (she can rev from the first second), then only when something new happens (her first item, the ramp, a
   new lap) or after a while without touching. No new speakers: the kids' voice is the village's; the macaque chatters.
-- **Numbers:** about 2 min 20 s from the gate to the podium, 40-80 touches (a held finger, items, tricks, pokes).
+- **Numbers:** about 2 min 30 s from the gate to the podium (was 2:20; three laps auto-played take about 2:05), 40-80 touches (a held finger, items, tricks,
+  pokes). Auto-played (no finger at all) one lap collects ~30 coins, 2 showers, 2 balls, the dolphins, both jumps and
+  the hoop: the good bits don't need aiming.
+- **Bumps:** boats bump by how fast they're closing, and hers is the heavy one (it barely gives and is never thrown
+  backwards); a rival close in front steers off her line.
 - **Links:** `race` (`lap=3` starts on the last lap), `podium`; `bay?stops=race` has the trophy in the bow.
+- **No new voice lines** for the heart course (no voice key in that session): the elephants trumpet, the dolphins
+  chirp, Mommy's "Wheee!" plays off the big jump. Lines worth recording later: Mommy "Pink dolphins!", Sparkle "Drive
+  under the water!" before Elephant Beach.
 - **Not built (ideas for later):** the trophy on a shelf in Agong's house; more tracks; Gan, Ken and BB racing (Dad
   would pick).
 

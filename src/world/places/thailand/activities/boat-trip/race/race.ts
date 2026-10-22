@@ -1,6 +1,10 @@
 // The boat race (sections `race` and `podium`): through the rainbow gate in Phang Nga Bay is a secret lagoon walled in
-// by rock towers, and a roped-off course round its island. Captain Kaylee races the village kids (their sky-blue
-// longtail) and the cheeky macaque (his banana boat) three laps, Mario Kart style, and she always wins.
+// by rock towers, and a roped-off course round its island, in the shape of a big heart. Captain Kaylee races the village
+// kids (their sky-blue longtail) and the cheeky macaque (his banana boat) three laps, Mario Kart style, and she always
+// wins. On the way round (track.ts): the Twin Rocks the course splits round, Elephant Beach (elephants spray water
+// over the course: drive under it for a sparkly shower and a burst of speed), the Heart Gate with giant beach balls to
+// knock flying, the Glow Grotto, Dolphin Run (pink dolphins leap along beside her), the BIG JUMP through a flower hoop
+// with coins up in the air, and the waterfall hairpin at the heart's point.
 //
 // The toy is the same as the bay's (drive the longtail with one finger), made into a race:
 // - Hold a finger on the water: the boat goes there at full speed (only forward along the course: her finger picks
@@ -8,8 +12,8 @@
 // - The start: three lights and Sparkle's "Three! Two! One! Go!"; a finger already down at GO is a rocket start.
 // - Rainbow item boxes give 🚀 a turbo, 🍌 a banana (thrown at whoever is ahead, or dropped behind) or 🌈 the
 //   rainbow (fast, sparkly, unstoppable); she uses it with the big button. Gold coins make her a little faster (up to
-//   ten), golden arrow pads give a burst of speed, the ramp throws her in the air (a tap there is a trick and a burst on
-//   landing), holding a long hard turn builds sparks and a little turbo when it straightens (a drift's mini-turbo).
+//   ten), golden arrow pads give a burst of speed, the ramps throw her in the air (a tap there is a trick and a burst on
+//   landing; off the big jump she rolls right round twice), holding a long hard turn builds sparks and a little turbo when it straightens (a drift's mini-turbo).
 // - The macaque drops banana peels behind him: drive over one and she spins round (never stopped for long). Bump into
 //   a rival and you both bounce; with the rainbow, they spin.
 // - The rivals keep it close the whole way (rubber banding round a story of the race: they lead at the start, she
@@ -42,12 +46,14 @@ import type { Vehicle } from '../../../trip/vehicles/vehicle'
 import { applyPose, clearPose } from '../bay/poses'
 import type { PoseKind } from '../bay/part'
 import { Sky } from '../bay/sky'
+import { BeachBalls } from './balls'
 import { buildBananaBoat, buildKidsBoat, buildMonkeyCrew, RACE_FEEL, type Crew } from './boats'
 import { buildAura, Course, type ItemKind } from './items'
 import { RaceMusic } from './music'
 import { buildRaceScenery, RAINBOW, type RaceScenery } from './scenery'
-import { ahead, bendAhead, GRID, HALF, ITEM_ROWS, LAPS, LENGTH, locate, mapXY, PODIUM, RAMP, spotAt, STAND } from './track'
+import { ahead, bendAhead, branchLat, ELEPHANTS, FORK, GRID, halfAt, HOOP, ITEM_ROWS, LAPS, LENGTH, locate, mapXY, PODIUM, RAMPS, rockAt, spotAt, STAND } from './track'
 import { buildPodium, buildTrophy, type Podium } from './trophy'
+import { Dolphins, Elephants, type Splasher } from './wildlife'
 
 export type RaceSection = 'race' | 'podium'
 export type RacerId = 'kaylee' | 'kids' | 'monkey'
@@ -102,6 +108,8 @@ export const RACE_ANCHORS: AnchorInfo[] = [
   { id: 'rival:kids', label: 'The village kids', kind: 'thing' },
   { id: 'rival:monkey', label: 'The macaque', kind: 'thing' },
   { id: 'stand', label: 'The fans', kind: 'thing' },
+  ...ELEPHANTS.map((_, i): AnchorInfo => ({ id: `elephant:${i}`, label: 'Elephant', kind: 'thing' })),
+  ...[0, 1, 2].map((i): AnchorInfo => ({ id: `dolphin:${i}`, label: 'Pink dolphin', kind: 'thing' })),
   { id: 'trophy', label: 'Trophy', kind: 'thing' },
 ]
 
@@ -133,9 +141,12 @@ interface Racer {
   star: number
   aura: ReturnType<typeof buildAura>
   coins: number
-  /** In the air off the ramp: a trick done (a burst of speed on landing). */
+  /** In the air off a ramp: a trick done (a burst of speed on landing), and how many times it rolls round. */
   trick: number
   tricked: boolean
+  spins: number
+  /** Seconds until an elephant's shower can splash it again. */
+  wet: number
   /** A hard turn held: the mini-turbo's charge (seconds). */
   drift: number
   /** Where across the course it likes to drive (the rivals), and a slow sway round it. */
@@ -158,6 +169,26 @@ const tmp = new Vector3()
 const tmp2 = new Vector3()
 const grip = new Vector3()
 const TOTAL = LAPS * LENGTH
+
+/** How far ahead to aim, driving by itself: nearer in a tight bend (the hairpin), so the line to it doesn't cut
+ *  across the rope on the inside. */
+function lookAhead(s: number, far: number) {
+  return far / (1 + Math.abs(bendAhead(s, 20)) * 1.4)
+}
+/** Easing off for the bend ahead, driving by itself (up to a third slower in the hairpin). */
+function bendSlow(s: number) {
+  return 1 - clamp((Math.abs(bendAhead(s, 20)) - 0.5) * 0.45, 0, 0.35)
+}
+
+/** A spot across the course at `s` that's on it (`m` meters in from the ropes) and not on the Twin Rocks' islet
+ *  (pushed off it to the side it's already on, the left if it's right in the middle). */
+function keepOn(s: number, lat: number, m: number, side = 1) {
+  const h = halfAt(s) - m
+  lat = clamp(lat, -h, h)
+  const rock = rockAt(s)
+  if (rock > 0 && Math.abs(lat) < rock + m) lat = (Math.sign(lat) || side) * Math.min(h, rock + m)
+  return lat
+}
 /** The countdown's beat (seconds per light). */
 const BEAT = 0.9
 /** Seconds of slow motion as she crosses the line. */
@@ -194,6 +225,11 @@ export class Race implements World3D {
   private sparkle: Particles
   private fireworks: Particles
   private confetti: Particles
+  private elephants: Elephants
+  private dolphins: Dolphins
+  private balls: BeachBalls
+  /** The animals' water, thrown with the race's particles. */
+  private water2: Splasher
   private music = new RaceMusic()
   readonly racers: Racer[]
   private riders: Rider[]
@@ -232,7 +268,11 @@ export class Race implements World3D {
   private photoAt = -1
   private shots: (() => void)[] = []
   private rocket = false
-  private counts = { boxes: 0, items: 0, coinsTaken: 0, pads: 0, jumps: 0, tricks: 0, slips: 0, hits: 0, drifts: 0, bumps: 0 }
+  private counts = { boxes: 0, items: 0, coinsTaken: 0, pads: 0, jumps: 0, bigJumps: 0, hoops: 0, tricks: 0, slips: 0, hits: 0, drifts: 0, bumps: 0, showers: 0, balls: 0, dolphins: 0, pokes: 0 }
+  /** The side of the Twin Rocks she's heading for (+1 left, -1 right): the rivals take the other one. */
+  private branch = 1
+  /** The lap she last met the dolphins on. */
+  private dolphinLap = -9
   private timers: number[] = []
   /** The lap the race started on (a `lap=3` link). */
   private lap0 = 1
@@ -258,7 +298,7 @@ export class Race implements World3D {
     this.scenery = buildRaceScenery(bag)
     this.course = new Course(bag)
     this.foam = new Particles({ kind: 'foam', count: 600, opacity: 0.88 }, bag)
-    this.spray = new Particles({ kind: 'spray', count: 420 }, bag)
+    this.spray = new Particles({ kind: 'spray', count: 900 }, bag)
     this.sparkle = new Particles({ kind: 'spray', count: 360, colors: RAINBOW, gravity: 1.5 }, bag)
     this.fireworks = new Particles({ kind: 'spray', count: 500, colors: [...RAINBOW, PAL.gold, '#FFFFFF'], gravity: 4 }, bag)
     this.confetti = new Particles({ kind: 'spray', count: 320, colors: [...RAINBOW, PAL.gold], gravity: 1.2 }, bag)
@@ -267,7 +307,19 @@ export class Race implements World3D {
     this.podium.root.rotation.y = PODIUM.heading + Math.PI
     this.trophy = buildTrophy(bag, 0.8)
     this.trophy.visible = false
-    scene.add(this.sky.root, this.water.mesh, this.scenery.root, this.course.root, this.podium.root, this.trophy, this.foam.mesh, this.spray.mesh, this.sparkle.mesh, this.fireworks.mesh, this.confetti.mesh)
+    this.elephants = new Elephants(bag)
+    this.dolphins = new Dolphins(bag)
+    this.balls = new BeachBalls(bag)
+    this.water2 = {
+      drop: (x, y, z, vx, vy, vz, life, size) => this.spray.emit(x, y, z, vx, vy, vz, life, size),
+      ring: (x, z, r) => {
+        for (let i = 0; i < 8; i++) {
+          const a = (i / 8) * Math.PI * 2
+          this.foam.emit(x + Math.sin(a) * r * 0.5, 0.03, z + Math.cos(a) * r * 0.5, Math.sin(a) * r, 0, Math.cos(a) * r, 1.4, 1.1)
+        }
+      },
+    }
+    scene.add(this.sky.root, this.water.mesh, this.scenery.root, this.course.root, this.elephants.root, this.dolphins.root, this.balls.root, this.podium.root, this.trophy, this.foam.mesh, this.spray.mesh, this.sparkle.mesh, this.fireworks.mesh, this.confetti.mesh)
 
     // ---- The boats ----
     const kaylee = buildLongtail(bag)
@@ -278,7 +330,7 @@ export class Race implements World3D {
     const monkey = buildMonkeyCrew(banana, bag)
     const racer = (id: RacerId, v: Vehicle, crew: Crew | null, top: number): Racer => {
       const feel = { ...RACE_FEEL, top }
-      const r: Racer = { id, v, d: new Driver(feel), feel, base: top, crew, roll: { x: 0, v: 0 }, pitch: { x: 0, v: 0 }, squash: 1, travelled: 0, i: 0, s: 0, lat: 0, laps: -1, half: true, progress: 0, done: -1, spin: 0, spinFor: 1, star: 0, aura: buildAura(bag), coins: 0, trick: -1, tricked: false, drift: 0, lane: 0, sway: Math.random() * 6, bumpCool: 0, padCool: 0 }
+      const r: Racer = { id, v, d: new Driver(feel), feel, base: top, crew, roll: { x: 0, v: 0 }, pitch: { x: 0, v: 0 }, squash: 1, travelled: 0, i: 0, s: 0, lat: 0, laps: -1, half: true, progress: 0, done: -1, spin: 0, spinFor: 1, star: 0, aura: buildAura(bag), coins: 0, trick: -1, tricked: false, spins: 1, wet: 0, drift: 0, lane: 0, sway: Math.random() * 6, bumpCool: 0, padCool: 0 }
       v.root.add(r.aura.mesh)
       scene.add(v.root)
       return r
@@ -287,8 +339,8 @@ export class Race implements World3D {
     this.racers[0].v.root.userData.pick = 'boat'
     this.racers[1].v.root.userData.pick = 'rival:kids'
     this.racers[2].v.root.userData.pick = 'rival:monkey'
-    this.racers[1].lane = 2.5
-    this.racers[2].lane = -2.5
+    this.racers[1].lane = 3.2
+    this.racers[2].lane = -3.2
 
     // ---- The family in her longtail: Kaylee at the tiller in what she packed, Mommy and Daddy on the benches ----
     const avatar = new Avatar(bag)
@@ -416,6 +468,15 @@ export class Race implements World3D {
       case 'stand':
         sfx.cheer()
         this.scenery.cheer(1)
+        return
+      default:
+        if (id?.startsWith('elephant:')) {
+          this.counts.pokes++
+          this.elephants.poke(Number(id.slice(9)))
+        } else if (id?.startsWith('dolphin:')) {
+          this.counts.pokes++
+          this.dolphins.poke(Number(id.slice(8)))
+        }
         return
       case 'trophy':
         if (this.trophyT >= 1) {
@@ -557,6 +618,10 @@ export class Race implements World3D {
     for (const r of this.racers) r.crew?.update(dt, t, clamp(r.d.yawRate / r.feel.turn, -1, 1))
     this.updateTrophy(dt, t)
     this.course.update(dt)
+    this.elephants.update(dt, t, this.k.s, this.water2)
+    this.dolphins.update(dt, t, this.k.s, Math.abs(this.k.d.speed), this.water2)
+    this.balls.update(dt, t)
+    this.meetDolphins()
     this.scenery.update(dt, t, this.rig.camera.position)
     this.podium.update(t)
     this.water.update(t)
@@ -653,17 +718,26 @@ export class Race implements World3D {
       if (p) {
         const loc = locate(p.x, p.z, k.i, 45)
         const ds = clamp(ahead(k.s, loc.s), 9, 30)
-        target = spotAt(k.s + ds, clamp(loc.lat, -(HALF - 1.4), HALF - 1.4))
+        target = spotAt(k.s + ds, keepOn(k.s + ds, loc.lat, 1.4, Math.sign(k.lat) || 1))
+        if (rockAt(k.s + ds) > 0 || rockAt(k.s + 30) > 0) this.branch = Math.sign(loc.lat) || this.branch
         cap = 1
       }
     }
     if (!target) {
       // By herself: along the inside of the next bend, but straight through the middle of the item boxes and over
       // the ramp (the good bits shouldn't need her to aim).
-      const toGood = Math.min(...[...ITEM_ROWS, RAMP.s].map((g) => ahead(k.s, g)).filter((a) => a > -2))
-      const lat = toGood < 30 ? 0 : clamp(bendAhead(k.s, 25) * 4, -4, 4)
-      target = spotAt(k.s + 12 + Math.abs(d.speed) * 0.4, lat)
-      cap *= 1 - clamp((Math.abs(bendAhead(k.s, 20)) - 0.5) * 0.3, 0, 0.3)
+      const toGood = Math.min(...[...ITEM_ROWS, ...RAMPS.map((r) => r.s)].map((g) => ahead(k.s, g)).filter((a) => a > -2))
+      let lat = toGood < 30 ? 0 : clamp(bendAhead(k.s, 25) * 4, -5, 5)
+      const look = k.s + lookAhead(k.s, 12 + Math.abs(d.speed) * 0.4)
+      // Round the Twin Rocks she takes the open side (away from a rival beside her; else the side she's on, or from
+      // the middle the left, the coins' side), lining up for it on the way in.
+      const toFork = ahead(k.s, FORK.s)
+      if (toFork > FORK.half + 40 || toFork < -FORK.half) {
+        const by = this.racers.slice(1).filter((r) => Math.abs(ahead(k.s, r.s)) < 15).sort((a, b) => Math.abs(ahead(k.s, a.s)) - Math.abs(ahead(k.s, b.s)))[0]
+        this.branch = by ? (by.lat > k.lat ? -1 : 1) : Math.sign(Math.round(k.lat / 3)) || 1
+      } else if (toGood >= 30) lat = rockAt(look) > 0 ? branchLat(look, this.branch) : this.branch * 4
+      target = spotAt(look, keepOn(look, lat, 1.6, this.branch))
+      cap *= bendSlow(k.s)
     }
     if (k.spin > 0) cap = Math.min(cap, 0.4)
     d.cap = cap
@@ -708,16 +782,21 @@ export class Race implements World3D {
     for (const r of this.racers.slice(1)) {
       const d = r.d
       r.sway += dt * 0.35
-      let lane = r.lane + Math.sin(r.sway) * 2.2
+      let lane = r.lane + Math.sin(r.sway) * 3
       // Round any banana peel lying ahead in their lane.
       for (const p of this.course.peelsOut) {
         const loc = locate(p.x, p.z, r.i, 30)
         const a = ahead(r.s, loc.s)
         if (a > 0 && a < 16 && Math.abs(loc.lat - lane) < 2) lane = loc.lat + (lane > loc.lat ? 2.6 : -2.6)
       }
-      lane = clamp(lane, -(HALF - 1.6), HALF - 1.6)
-      const look = 10 + Math.abs(d.speed) * 0.5
-      const target = spotAt(r.s + look, lane)
+      const look = lookAhead(r.s, 10 + Math.abs(d.speed) * 0.5)
+      // Out of her way: close in front of her or beside her, a rival steers clear of her line (she never rams one and
+      // stops dead), and round the Twin Rocks it takes the other side from hers.
+      const gap = ahead(k.s, r.s)
+      const toFork = ahead(r.s, FORK.s)
+      if (k.done < 0 && gap > -10 && gap < 25 && toFork > -FORK.half && toFork < FORK.half + 40) lane = -this.branch * 3
+      else if (k.done < 0 && gap > -6 && gap < 18 && Math.abs(lane - k.lat) < 4) lane = k.lat + (Math.sign(lane - k.lat) || Math.sign(r.lane)) * 4.2
+      const target = spotAt(r.s + look, keepOn(r.s + look, lane, 1.6, Math.sign(r.lane)))
       d.hold(target.x, target.z)
       let vt: number
       if (k.done >= 0) vt = r.done >= 0 ? r.feel.top * 0.45 : r.feel.top * 0.95
@@ -733,7 +812,7 @@ export class Race implements World3D {
       // Behind the story (she's flying, all boosts and coins): they find more speed, up to half as fast again.
       r.feel.top = clamp(vt, r.base, r.base * 1.5)
       let cap = clamp(vt / r.feel.top, 0, 1)
-      cap *= 1 - clamp((Math.abs(bendAhead(r.s, 20)) - 0.5) * 0.3, 0, 0.3)
+      cap *= bendSlow(r.s)
       if (r.spin > 0) cap = Math.min(cap, 0.35)
       d.cap = cap
       // The macaque drops a peel behind him now and then, when she's coming up behind.
@@ -811,21 +890,57 @@ export class Race implements World3D {
       }
       this.splash(r, r.v.stern, 12)
     }
-    const up = this.course.onRamp(r.s, r.lat)
-    if (up !== null && up > 0.55 && !d.airborne && d.speed > 5) {
-      d.jump(5.4 + d.speed * 0.12)
+    const on = this.course.onRamp(r.s, r.lat)
+    if (on && on.up > 0.55 && !d.airborne && d.speed > 5) {
+      d.jump((5.4 + d.speed * 0.12) * on.ramp.kick)
       r.tricked = false
+      r.spins = on.ramp.big ? 2 : 1
       if (r === this.k) {
         this.counts.jumps++
         sfx.vroom()
-        // A finger held (as Sparkle said) or a touch just before takeoff is the trick; slow motion while she's up.
+        // A finger held (as Sparkle said) or a touch just before takeoff is the trick; slow motion while she's up
+        // (longer off the big jump, with a cheer from the stands and Mommy).
         if (this.finger || this.time - this.lastTouch < 1) this.doTrick()
-        this.slow = Math.max(this.slow, 0.5)
+        this.slow = Math.max(this.slow, on.ramp.big ? 1.5 : 0.5)
+        if (on.ramp.big) {
+          this.counts.bigJumps++
+          this.boostKick = 1
+          this.line('wheee', L.race.wheee, 8)
+          this.strike(this.riders[1], 'cheer', 1.6)
+          this.strike(this.riders[2], 'cheer', 1.6)
+        }
       } else {
         // The rivals always do a trick.
         r.tricked = true
         r.trick = 0
         r.crew?.react('cheer', 1.2)
+      }
+    }
+    // Under an elephant's spray: a shower, a giggle and a sparkly little burst of speed (the rivals get one too).
+    r.wet -= dt
+    if (r.wet <= 0 && !d.airborne && this.elephants.showering(r.s, r.lat)) {
+      r.wet = 2.5
+      d.vroom(0.9)
+      for (let i = 0; i < 26; i++) this.spray.emit(d.x + (Math.random() - 0.5) * 3, 3 + Math.random() * 2, d.z + (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 1.5, -2, (Math.random() - 0.5) * 1.5, 0.6, 0.24)
+      if (r === this.k) {
+        this.counts.showers++
+        sfx.splash(0.7)
+        sfx.giggle()
+        this.sparkle.burst(d.x, 1.6, d.z, 22, 3, 3, 0.16)
+        this.strike(this.riders[0], 'cheer', 1.2)
+        this.strike(this.riders[1], 'cheer', 1.2)
+        this.boostKick = 0.6
+      } else r.crew?.react('whoa', 0.8)
+    }
+    // Beach balls in the way go flying (boing!), never slowing anyone down.
+    let knocked = 0
+    for (const at of r.v.hull.at) knocked += this.balls.kick(d.x + Math.sin(d.heading) * at, d.z + Math.cos(d.heading) * at, r.v.hull.r, d.vx, d.vz)
+    if (knocked) {
+      sfx.boing()
+      r.squash = Math.min(r.squash, 0.6)
+      if (r === this.k) {
+        this.counts.balls += knocked
+        sfx.giggle()
       }
     }
     const peel = this.course.slip(d.x, d.z)
@@ -849,7 +964,20 @@ export class Race implements World3D {
           this.sparkle.burst(d.x, 1.4, d.z, 20, 3, 3, 0.16)
         }
       }
-      for (const c of this.course.takeCoins(d.x, d.z)) {
+      // Through the flower hoop in the air off the big jump: a ring of sparkles and a chime.
+      if (d.airborne && ahead(prev, HOOP.s) > 0 && ahead(r.s, HOOP.s) <= 0) {
+        this.counts.hoops++
+        sfx.chime()
+        sounds.sparkle()
+        const hp = spotAt(HOOP.s, 0)
+        for (let i = 0; i < 28; i++) {
+          const a = (i / 28) * Math.PI * 2
+          const lx = Math.cos(hp.heading)
+          const lz = -Math.sin(hp.heading)
+          this.sparkle.emit(hp.x + lx * Math.cos(a) * HOOP.r, HOOP.y + Math.sin(a) * HOOP.r, hp.z + lz * Math.cos(a) * HOOP.r, lx * Math.cos(a) * 2, Math.sin(a) * 2 + 1, lz * Math.cos(a) * 2, 1, 0.3, i % 6)
+        }
+      }
+      for (const c of this.course.takeCoins(d.x, d.y, d.z)) {
         this.counts.coinsTaken++
         r.coins = Math.min(10, r.coins + 1)
         r.feel.top = r.base * (1 + 0.012 * r.coins)
@@ -857,8 +985,8 @@ export class Race implements World3D {
         this.sparkle.burst(c.x, c.y, c.z, 6, 1.5, 2, 0.12, 2)
       }
       this.miniTurbo(r, dt)
-      // The ramp coming up for the first time: "Tap in the air for a trick!"
-      const toRamp = ahead(r.s, RAMP.s)
+      // A ramp coming up for the first time: "Tap in the air for a trick!"
+      const toRamp = Math.min(...RAMPS.map((p) => ahead(r.s, p.s)).filter((a) => a > 0))
       if (toRamp > 40 && toRamp < 70 && !this.told.has('ramp')) {
         this.told.add('ramp')
         this.say(L.race.ramp)
@@ -868,6 +996,17 @@ export class Race implements World3D {
         this.say(L.race.almost)
       }
     }
+  }
+
+  /** The pink dolphins come alongside (once a lap): a chirp, and Mommy and Kaylee wave to them. */
+  private meetDolphins() {
+    const k = this.k
+    if (this.phase !== 'race' || k.done >= 0 || this.dolphinLap === k.laps || !this.dolphins.alongside(k.s)) return
+    this.dolphinLap = k.laps
+    this.counts.dolphins++
+    sfx.dolphin()
+    this.strike(this.riders[1], 'wave', 1.8)
+    this.strike(this.riders[0], 'cheer', 1.2)
   }
 
   /** Holding a long hard turn at speed builds sparks (blue, then pink); straightening out lets them go as a turbo. */
@@ -972,12 +1111,23 @@ export class Race implements World3D {
             if (dd >= min || dd < 1e-4) continue
             const nx = (ax - bx) / dd
             const nz = (az - bz) / dd
-            const push = (min - dd) / 2
-            A.d.x += nx * push
-            A.d.z += nz * push
-            B.d.x -= nx * push
-            B.d.z -= nz * push
-            const hit = A.d.bounce(nx, nz, 0.5) + B.d.bounce(-nx, -nz, 0.5)
+            // (Her boat is the heavy one: it barely gives, and a bump never throws it backwards.)
+            const share = A === this.k ? 0.2 : B === this.k ? 0.8 : 0.5
+            const push = min - dd
+            A.d.x += nx * push * share
+            A.d.z += nz * push * share
+            B.d.x -= nx * push * (1 - share)
+            B.d.z -= nz * push * (1 - share)
+            // How fast they're closing (not how fast they go: two boats racing side by side only nudge), shared out the
+            // same way.
+            const vn = (A.d.vx - B.d.vx) * nx + (A.d.vz - B.d.vz) * nz
+            if (vn >= 0) continue
+            const j = -1.5 * vn
+            A.d.vx += nx * j * share
+            A.d.vz += nz * j * share
+            B.d.vx -= nx * j * (1 - share)
+            B.d.vz -= nz * j * (1 - share)
+            const hit = -vn * 1.5
             if (hit > 1.5 && A.bumpCool <= 0) {
               A.bumpCool = B.bumpCool = 0.5
               if (A === this.k || B === this.k) this.counts.bumps++
@@ -1000,7 +1150,26 @@ export class Race implements World3D {
       const px = d.x + Math.sin(d.heading) * at
       const pz = d.z + Math.cos(d.heading) * at
       const loc = locate(px, pz, r.i, 12)
-      const lim = HALF - r.v.hull.r
+      const lim = halfAt(loc.s) - r.v.hull.r
+      // The Twin Rocks' islet in the middle: a soft boop off it, out to the side it's on.
+      const rock = rockAt(loc.s)
+      if (rock > 0 && Math.abs(loc.lat) < rock + r.v.hull.r) {
+        const p = spotAt(loc.s, 0)
+        const side = Math.sign(loc.lat) || 1
+        const lx = Math.cos(p.heading)
+        const lz = -Math.sin(p.heading)
+        const depth = rock + r.v.hull.r - Math.abs(loc.lat)
+        d.x += lx * side * depth
+        d.z += lz * side * depth
+        const hit = d.bounce(lx * side, lz * side, 0.3)
+        if (hit > 1.4 && r.bumpCool <= 0) {
+          r.bumpCool = 0.4
+          if (r === this.k) sfx.boop()
+          r.squash = 0.5
+          this.spray.burst(px, 0.3, pz, 6, 2, 2.5, 0.18)
+        }
+        continue
+      }
       if (Math.abs(loc.lat) <= lim) continue
       const p = spotAt(loc.s, 0)
       const side = Math.sign(loc.lat)
@@ -1067,8 +1236,8 @@ export class Race implements World3D {
     spring(r.pitch, -bowUp, 40, 7)
     r.squash = Math.min(1, r.squash + dt / 0.45)
     const spin = r.spin > 0 ? (1 - r.spin / r.spinFor) * Math.PI * 2 : 0
-    if (r.trick >= 0) r.trick = Math.min(1, r.trick + dt / 0.55)
-    const roll = r.trick >= 0 ? r.trick * Math.PI * 2 : 0
+    if (r.trick >= 0) r.trick = Math.min(1, r.trick + dt / (0.55 * (r.spins > 1 ? 1.6 : 1)))
+    const roll = r.trick >= 0 ? r.trick * Math.PI * 2 * r.spins : 0
     v.root.position.set(d.x, swell(d.x, d.z, t) + d.y, d.z)
     v.root.rotation.set(0, d.heading + spin, 0)
     v.body.rotation.set(r.pitch.x + Math.sin(t * 1.3 + d.x) * 0.012, 0, d.roll + r.roll.x * 0.12 + Math.sin(t * 1.1 + d.z) * 0.015 + roll)
@@ -1338,7 +1507,8 @@ export class Race implements World3D {
     const zoom = (1 + 0.2 * sp + 0.25 * this.boostKick) * (1 - 0.25 * tall)
     const ahead = 7 * Math.min(1, 0.4 + sp)
     return {
-      center: new Vector3(d.x + Math.sin(d.heading) * ahead, 1, d.z + Math.cos(d.heading) * ahead),
+      // (Up with her in the air, so the ramp doesn't fill the screen.)
+      center: new Vector3(d.x + Math.sin(d.heading) * ahead, 1 + d.y * 0.7, d.z + Math.cos(d.heading) * ahead),
       half: new Vector3(5.8 * zoom, 2.2, 6.4 * zoom),
       yaw: this.unwrap(this.camHeading / deg + 180 + 4),
       pitch: 15,
@@ -1440,6 +1610,19 @@ export class Race implements World3D {
     if (id === 'stand') {
       if (Math.hypot(k.d.x - STAND.x, k.d.z - STAND.z) > 60 && !stage) return null
       return { at: new Vector3(STAND.x, 3, STAND.z), r: 5, prio: 1, max: 160 }
+    }
+    if (id.startsWith('elephant:')) {
+      const i = Number(id.slice(9))
+      const at = this.elephants.head(i, new Vector3())
+      if (stage || Math.hypot(k.d.x - at.x, k.d.z - at.z) > 70) return null
+      return { at, r: 2, prio: 1, max: 130 }
+    }
+    if (id.startsWith('dolphin:')) {
+      // (Steady while it dives between leaps: on the water over it.)
+      const at = this.dolphins.at(Number(id.slice(8)), new Vector3())
+      at.y = Math.max(at.y, 0.4)
+      if (stage || Math.hypot(k.d.x - at.x, k.d.z - at.z) > 50) return null
+      return { at, r: 1.4, prio: 1, max: 110 }
     }
     if (id === 'trophy') return stage && this.trophyT >= 1 ? { at: this.trophy.getWorldPosition(new Vector3()).setY(this.trophy.position.y + 0.4), r: 0.5, prio: 4, max: 120 } : null
     return null
