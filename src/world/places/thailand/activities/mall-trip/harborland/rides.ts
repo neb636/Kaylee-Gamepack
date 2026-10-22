@@ -70,7 +70,8 @@ export class Rides {
 
   constructor(
     private k: Avatar,
-    private built: FrameBuilt,
+    /** The donut's ring and the zip's handle (the Golden Mountain's slide passes stand-ins). */
+    private built: Pick<FrameBuilt, 'ring' | 'handle'>,
     private fx: {
       /** She's in the balls with a splash (`power` 1 a landing, 1.6 a big one). */
       splash(x: number, z: number, power: number): void

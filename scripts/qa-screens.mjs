@@ -13,7 +13,7 @@ import path from 'node:path'
 import { browserName, device, flag, launch, openApp, out, pad, serve, skip, VIEWPORTS as ALL_VIEWPORTS } from './qa-lib.mjs'
 
 export const VIEWPORTS = ALL_VIEWPORTS.filter((v) => !flag('only') || flag('only').split(',').includes(v.name))
-const PORT = 4179
+const PORT = Number(flag('port')) || 4179 // --port=N when another checkout's preview has 4179
 
 // Each screen: how to get there from a fresh start. `page.goto` keeps localStorage between screens.
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
@@ -414,6 +414,9 @@ const SCREENS = [
   { name: 'mall-hall-town', hash: '#/world/thailand/mall-trip/hall?from=vet&games=vet', reset: true, wait: 3500 },
   { name: 'mall-hall-lanes', hash: '#/world/thailand/mall-trip/hall?from=race', reset: true, wait: 3500 },
   { name: 'mall-hall-little-land', hash: '#/world/thailand/mall-trip/hall?from=blocks&games=blocks', reset: true, wait: 3500 },
+  { name: 'mall-hall-muay-thai', hash: '#/world/thailand/mall-trip/hall?from=boxing&games=boxing', reset: true, wait: 3500 },
+  { name: 'mall-hall-mountain', hash: '#/world/thailand/mall-trip/hall?from=mountain&games=mountain', reset: true, wait: 3500 },
+  { name: 'mall-hall-sky-pod', hash: '#/world/thailand/mall-trip/hall?from=skypod', reset: true, wait: 3500 },
   { name: 'mall-hall-going-in', hash: '#/world/thailand/mall-trip/hall?from=vet', reset: true, wait: 2500, act: async (p) => {
     await p.locator('[data-anchor="door:cafe"]').click({ force: true })
     await p.waitForTimeout(2600)
@@ -572,6 +575,122 @@ const SCREENS = [
     },
   })),
   { name: 'blocks-flat', hash: '#/world/thailand/mall-trip/blocks?round=2&gl=off', reset: true, wait: 900 },
+  // Muay Thai (greybox): each round at the start (1: the wai kru beside the coach; 2: the drum and the ring on the bag;
+  // 3: Daddy's pad, the bag hooked back), the 👆 on her gloves after a while, a bow, a punch on the beat (the gold POW),
+  // the big kick, and the flat version.
+  ...[1, 2, 3].map((n) => ({ name: `boxing-${n}`, hash: `#/world/thailand/mall-trip/boxing?round=${n}`, reset: true, wait: 3000 })),
+  { name: 'boxing-hint', hash: '#/world/thailand/mall-trip/boxing', reset: true, wait: 9500 },
+  {
+    name: 'boxing-bow',
+    hash: '#/world/thailand/mall-trip/boxing',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'boxing', null, { timeout: 20000 }).catch(() => {})
+      await p.locator('[data-anchor="gloves"]').click({ force: true }).catch(() => {})
+      await p.waitForTimeout(550)
+    },
+  },
+  {
+    name: 'boxing-pow',
+    hash: '#/world/thailand/mall-trip/boxing?round=2',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'boxing', null, { timeout: 20000 }).catch(() => {})
+      await p.waitForFunction(() => window.__thaiMallQA().window && window.__thaiMallQA().toNext < 0.3, null, { timeout: 8000, polling: 20 }).catch(() => {})
+      const q = await p.evaluate(() => window.__thaiMallQA())
+      if (q.bag) await p.mouse.click(...q.bag)
+      await p.waitForTimeout(160)
+    },
+  },
+  {
+    name: 'boxing-kick',
+    hash: '#/world/thailand/mall-trip/boxing?round=3',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'boxing', null, { timeout: 20000 }).catch(() => {})
+      for (let i = 0; i < 40; i++) {
+        const q = await p.evaluate(() => window.__thaiMallQA())
+        if (q.phase === 'finale') break
+        if (q.pad && !q.hopping) await p.mouse.click(...q.pad)
+        await p.waitForTimeout(450)
+      }
+      await p.waitForTimeout(500)
+    },
+  },
+  { name: 'boxing-flat', hash: '#/world/thailand/mall-trip/boxing?round=2&gl=off', reset: true, wait: 900 },
+  // The Golden Mountain (greybox): each round at the foot (round 2: the pinks glow among the silly ones; round 3: Daddy
+  // at his foot), the 👆 on the next hold after a while, a pull held halfway by her finger, the top (the bell and the
+  // slide's mouth glowing), the race halfway up, and the flat version. Where things are comes from window.__thaiMallQA.
+  ...[1, 2, 3].map((n) => ({ name: `mountain-${n}`, hash: `#/world/thailand/mall-trip/mountain?round=${n}`, reset: true, wait: 3000 })),
+  { name: 'mountain-hint', hash: '#/world/thailand/mall-trip/mountain', reset: true, wait: 9500 },
+  {
+    name: 'mountain-pull',
+    hash: '#/world/thailand/mall-trip/mountain?round=2',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'mountain', null, { timeout: 20000 }).catch(() => {})
+      await p.waitForTimeout(1500)
+      const q = await p.evaluate(() => window.__thaiMallQA())
+      const r = q.reach.find((h) => h[2] === 1 && h.length > 3)
+      if (!r) return
+      await p.mouse.move(r[3], r[4])
+      await p.mouse.down()
+      await p.mouse.move(r[3], r[4] + q.pullPx * 0.5, { steps: 6 })
+      await p.waitForTimeout(400)
+    },
+  },
+  ...[['mountain-top', 1, 6], ['mountain-race', 3, 4]].map(([name, round, taps]) => ({
+    name,
+    hash: `#/world/thailand/mall-trip/mountain?round=${round}`,
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'mountain', null, { timeout: 20000 }).catch(() => {})
+      await p.waitForTimeout(1200)
+      for (let i = 0; i < taps; i++) {
+        const q = await p.evaluate(() => window.__thaiMallQA())
+        const r = q.reach.find((h) => h[2] === 1)
+        if (r) await p.locator(`[data-anchor="hold:${r[0]}"]`).click({ force: true }).catch(() => {})
+        await p.waitForTimeout(800)
+      }
+      await p.waitForTimeout(900)
+    },
+  })),
+  { name: 'mountain-flat', hash: '#/world/thailand/mall-trip/mountain?round=2&gl=off', reset: true, wait: 900 },
+  // The Sky Pod (greybox): each round at the start (round 2: the wall playing the pattern; round 3: Daddy's blue light
+  // beside hers), a slap on a high pod (Kaylee in the air, her arm up), the finale's rainbow and the 🛝, the 👆 after a
+  // while, and the flat version.
+  ...[1, 2, 3].map((n) => ({ name: `skypod-${n}`, hash: `#/world/thailand/mall-trip/skypod?round=${n}`, reset: true, wait: n === 2 ? 1400 : 3000 })),
+  {
+    name: 'skypod-slap',
+    hash: '#/world/thailand/mall-trip/skypod',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'skypod', null, { timeout: 20000 }).catch(() => {})
+      await p.waitForTimeout(1200)
+      const q = await p.evaluate(() => window.__thaiMallQA())
+      const top = q.pods.reduce((best, s, i) => (s && s[1] < q.pods[best][1] ? i : best), 0)
+      await p.locator(`[data-anchor="pod:${top}"]`).click({ force: true }).catch(() => {})
+      await p.waitForTimeout(420)
+    },
+  },
+  {
+    name: 'skypod-finale',
+    hash: '#/world/thailand/mall-trip/skypod?round=3',
+    reset: true,
+    act: async (p) => {
+      await p.waitForFunction(() => window.__thaiMallQA?.().game === 'skypod', null, { timeout: 20000 }).catch(() => {})
+      for (let n = 0; n < 60; n++) {
+        const q = await p.evaluate(() => window.__thaiMallQA())
+        if (q.phase === 'finale' || q.phase === 'free') break
+        const i = q.lights.indexOf('lit')
+        if (i >= 0) await p.locator(`[data-anchor="pod:${i}"]`).click({ force: true }).catch(() => {})
+        await p.waitForTimeout(450)
+      }
+      await p.waitForTimeout(1800)
+    },
+  },
+  { name: 'skypod-hint', hash: '#/world/thailand/mall-trip/skypod', reset: true, wait: 9500 },
+  { name: 'skypod-flat', hash: '#/world/thailand/mall-trip/skypod?round=3&gl=off', reset: true, wait: 2200 },
   // The Pizza Company (greybox): the menu, the table at the start, a slice pulled out with the cheese stretching (held
   // over Daddy's plate), the last two for Agong's box, the box closed, and the flat version.
   { name: 'pizza-menu', hash: '#/world/thailand/mall-trip/menu', reset: true, wait: 3500 },

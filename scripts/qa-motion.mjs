@@ -889,6 +889,117 @@ const thaiBlocks = (name, seconds, round, targets, end) => ({
 })
 GAME_SCENARIOS.push(thaiBlocks('blocks-stack-crash', 7, 1, [[3, 0], [4, 1], [1, 0], [2, 1]], 'swipe'), thaiBlocks('blocks-sneeze', 8, 3, [[3, 0], [3, 1], [3, 2], [3, 3]], 'wait'))
 
+// Muay Thai (mall trip, greybox): the core verb, a punch. Round 1: her finger goes down on the bag, high then low, and
+// a swipe across it (a hook): the glove goes out where she touched, the bag swings and squashes, Daddy staggers, POW.
+// Round 2: punches on the drum's beat (when the ring is gold): the big gold POW. Round 3: Daddy's pad as it moves, then
+// the big kick. Where things are comes from window.__thaiMallQA (screen pixels).
+const thaiBoxing = (name, seconds, round, mode) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/boxing?round=${round}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().game === 'boxing', null, { timeout: 20000 })
+    await page.waitForTimeout(400)
+    // Round 1 starts with the wai kru: six taps on her gloves.
+    for (let i = 0; i < 8 && (await page.evaluate(() => window.__thaiMallQA().phase)) !== 'play'; i++) {
+      await page.locator('[data-anchor="gloves"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(500)
+    }
+  },
+  act: async (page) => {
+    const t0 = Date.now()
+    let i = 0
+    while (Date.now() - t0 < seconds * 1000) {
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      if (mode === 'bag' && q.bag) {
+        const [x, y] = q.bag
+        if (i % 3 === 2) {
+          await page.mouse.move(x - 40, y)
+          await page.mouse.down()
+          await page.mouse.move(x + 60, y, { steps: 4 })
+          await page.mouse.up()
+        } else await page.mouse.click(x, y + (i % 2 ? -50 : 40))
+        i++
+        await page.waitForTimeout(550)
+      } else if (mode === 'beat' && q.bag && q.window && q.toNext < 0.3) {
+        await page.mouse.click(...q.bag)
+        await page.waitForTimeout(400)
+      } else if (mode === 'pad' && q.pad && !q.hopping && (q.phase === 'play' || q.phase === 'kick')) {
+        await page.mouse.click(...q.pad)
+        await page.waitForTimeout(500)
+      }
+      await page.waitForTimeout(30)
+    }
+  },
+})
+GAME_SCENARIOS.push(thaiBoxing('boxing-punch', 5, 1, 'bag'), thaiBoxing('boxing-beat', 6, 2, 'beat'), thaiBoxing('boxing-pad-kick', 9, 3, 'pad'))
+// The Golden Mountain (mall trip, greybox): the core verb, pulling up hold by hold. Her finger goes down on a glowing
+// hold and pulls down (she reaches, rises, lands with a squash, the number pops); at the top the bell and the slide.
+// In round 3 Daddy climbs the other side, puffing, a hold behind. Where things are comes from window.__thaiMallQA.
+const thaiMountain = (name, seconds, round, steps) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/mountain?round=${round}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().game === 'mountain', null, { timeout: 20000 })
+    await page.waitForTimeout(400)
+  },
+  act: async (page) => {
+    for (let i = 0; i < steps; i++) {
+      const q = await page.evaluate(() => window.__thaiMallQA())
+      const r = q.reach.find((h) => h[2] === 1 && h.length > 3)
+      if (r) {
+        await page.mouse.move(r[3], r[4])
+        await page.mouse.down()
+        await page.mouse.move(r[3], r[4] + q.pullPx + 10, { steps: 8 })
+        await page.mouse.up()
+        await page.waitForTimeout(500)
+      } else if (q.state === 'top' && !q.rung && q.bell) {
+        await page.mouse.click(...q.bell)
+        await page.waitForTimeout(1300)
+      } else if (q.state === 'top' && q.slide) {
+        await page.mouse.click(...q.slide)
+        await page.waitForTimeout(2600)
+      } else await page.waitForTimeout(300)
+    }
+  },
+})
+GAME_SCENARIOS.push(thaiMountain('mountain-climb', 9, 1, 9), thaiMountain('mountain-race', 9, 3, 9))
+// The Sky Pod (mall trip, greybox): the core verb, slapping the pods. Each slap squashes the pod, flashes it, plays its
+// note and throws sparks, and Kaylee bounces over on the mat and jumps to slap it too (a big jump for the high ones).
+// The first run slaps low, high, across and back; the second slides a finger across the arch (a glissando). Where the
+// pods are comes from window.__thaiMallQA (screen pixels).
+const thaiSkyPod = (name, seconds, pods, glide) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/mall-trip/skypod`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiMallQA?.().game === 'skypod', null, { timeout: 20000 })
+    await page.waitForTimeout(600)
+  },
+  act: async (page) => {
+    const q = await page.evaluate(() => window.__thaiMallQA())
+    if (glide) {
+      const [a, b] = [q.pods[0], q.pods[q.pods.length - 1]]
+      await page.mouse.move(a[0], a[1])
+      await page.mouse.down()
+      for (const p of q.pods) await page.mouse.move(p[0], p[1], { steps: 4 })
+      await page.mouse.move(b[0] + 30, b[1], { steps: 2 })
+      await page.mouse.up()
+      await page.waitForTimeout(1500)
+      return
+    }
+    for (const i of pods) {
+      await page.mouse.click(q.pods[i][0], q.pods[i][1])
+      await page.waitForTimeout(900)
+    }
+  },
+})
+GAME_SCENARIOS.push(thaiSkyPod('skypod-slap', 7, [0, 4, 8, 3, 1]), thaiSkyPod('skypod-glide', 4, [], true))
+
 // The Pizza Company (mall trip, greybox): her finger pulls a slice out of the pan and the cheese stretches, wobbles as
 // she swings it, and snaps; she lets go over a plate. Hawaiian snaps early, Double Cheese stretches longest, and in the
 // tug (after one each) Daddy grabs the other end. Where things are comes from window.__thaiMallQA (screen pixels).

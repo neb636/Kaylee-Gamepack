@@ -3,12 +3,13 @@
 // and gave the big cousins (Gan, Ken, BB) phones they never look up from. The concepts are in planning/around-the-world/thailand/lineup.webp;
 // characters/animal.ts builds them in 3D. The vet's patients at HarborLand (a puppy, a pony, a baby elephant) are toy
 // animals too (PATIENT_LOOKS). Pure data (no three.js).
-export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony'
+export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony' | 'monkey'
 export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
 /** What Kaylee can wear on a trip, from her suitcase (or Mommy's spare sun hat if she packed none), or at HarborLand
- *  (the vet's blue scrubs and cap, the cafe's apron and chef's hat, the barber's smock): Avatar.wear. */
-export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties' | 'scrubs' | 'scrub-cap' | 'apron' | 'chef-hat' | 'smock'
-export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasses', 'floaties', 'scrubs', 'scrub-cap', 'apron', 'chef-hat', 'smock']
+ *  (the vet's blue scrubs and cap, the cafe's apron and chef's hat, the barber's smock, Muay Thai's boxing gloves and red
+ *  headband, the mongkhon): Avatar.wear. */
+export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties' | 'scrubs' | 'scrub-cap' | 'apron' | 'chef-hat' | 'smock' | 'gloves' | 'mongkhon'
+export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasses', 'floaties', 'scrubs', 'scrub-cap', 'apron', 'chef-hat', 'smock', 'gloves', 'mongkhon']
 export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Wearable
 
 export interface Look {
@@ -65,3 +66,8 @@ export const PATIENT_LOOKS = {
   pony: { species: 'pony', height: 0.98, fur: '#E9B486', light: '#FFF0E0', dark: '#8A5A4A', ear: '#FFC2C8', mane: ['#9A5E4E', '#B87A62'], hair: 'medium', lashes: true },
   elephant: { species: 'elephant', height: 0.92, chub: 1.25, fur: '#B9B3D6', light: '#E4E0F2', dark: '#9C95C4', ear: '#FFB8CC', lashes: true },
 } as const satisfies Record<string, Look>
+
+/** Muay Thai's coach at HarborLand: the boxer kid from the top of the Big Frame come alive, as a monkey (not a family
+ *  animal: the Lopburi monkeys, and Hanuman, the monkey hero Muay Thai's moves are named after). Caramel fur, a cream
+ *  heart-shaped face, the boxer's red headband and red gloves, blue Muay Thai shorts. */
+export const COACH_LOOK: Look = { species: 'monkey', height: 1.15, fur: '#C08A5E', light: '#FFE6CC', dark: '#7A5340', ear: '#FFC2B0', outfit: { kind: 'tee', color: '#C08A5E', shorts: '#3E6FD8' }, extras: ['mongkhon', 'gloves'], open: true }

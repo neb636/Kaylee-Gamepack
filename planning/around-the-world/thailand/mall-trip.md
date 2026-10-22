@@ -305,17 +305,95 @@ From Dad's photos: a white-tiled kitchen, a coffee machine, a blender, breads in
 
 #### 5. The Golden Mountain ⛰️ (`mountain`; counting, colors)
 
-From Dad's photo: a yellow cone with climbing holds, a red rail at the top, a steel slide down the front, painted
-elephants behind.
+From Dad's photo: a big yellow cone with climbing holds and Thai patterns, a red rail round the top, a shiny steel slide
+straight down the front, and kids riding elephants painted on the wall behind it. Filled in with
+`../ACTIVITY-TEMPLATE.md` on 2026-10-21, before the greybox.
 
-- **The toy:** tap the next glowing hold and she reaches up and pulls herself to it. Count them to the top, ring the
-  bell, then zoom down the shiny steel slide.
-- **How it deepens:**
-  1. Holds in a line.
-  2. "Only the pink ones!"
-  3. Race Daddy up the other side.
-- **Fact:** the real Golden Mount in Bangkok is a temple on a hill (check the number of steps against a source before
-  it's spoken).
+**One-line pitch:** the Lopburi monkeys sit on top of the Golden Mountain ringing its bell; Kaylee climbs up hold by
+hold, counting, rings the bell herself and zooms down the steel slide, then beats Daddy to the top.
+
+**The toy (core verb):** grab the next hold and pull herself up to it.
+- How it feels: every hold she can reach from where she hangs glows. Her finger goes down on one and her hand reaches
+  for it at once; pull the finger down and she pulls herself up with it (a tap does the whole pull). She stretches, rises,
+  lands with a squash, her legs dangle and swing, and the hold's number pops up big over it with a note one step up the
+  scale (1, 2, 3...). Over the top she hops onto the platform, turns round and cheers.
+- Why it's fun with no goal: going up, and then the big slide down, is the playground's oldest loop; the slide is the
+  payoff she wants again.
+- Greybox test: the cone, round holds, the bell, the steel slide, Kaylee, Daddy and three monkeys in the toon look. Does
+  pulling up feel good on the iPad (tap and pull-down), and does the slide make her want to go again?
+
+**How the verb deepens (3 steps, same verb):**
+1. **Holds in a line:** five holds straight up her side; count them to the top, ring the bell, slide.
+2. **"Only the pink ones!":** six rows of mixed colors; the pink ones in reach glow, and she picks her own way (two or
+   three pinks a row, left or right). A non-pink hold is a silly toy, never an "oops": the yellow one honks like a
+   clown nose, the blue one giggles and wobbles, the mint one is a monkey's hiding place (a monkey leaps out beside it,
+   blows a raspberry and leaps back). She stays put and the pinks keep glowing.
+3. **Race Daddy up the other side:** seven rows on her side, seven on his. He climbs when she does, puffing (puff clouds,
+   huff huff), and waits for her, panting, if she stops. **She always wins, just:** he's always one hold behind, and he
+   flops over the rail as she rings the bell. Then he follows her down the slide and lands head first on the mat, legs
+   kicking.
+Side verb: none (the bell and the slide are the climb's payoff: one tap each).
+
+**Her choices:** which hold next (round 1 has one; rounds 2 and 3 have two or three in reach), left or right, ring the
+bell or go straight down the slide, poke the monkeys on the way up.
+
+**Pokeables (5+ things that react and aren't the answer):**
+- the monkey at the foot (a backflip and a chatter)
+- the monkey on its ledge halfway up (scratches its head, swings its tail)
+- the monkey on the top rail (swings right round the rail)
+- the bell (rings any time; from the floor the top monkey rings it for her)
+- the painted elephants on the wall (a trunk goes up and sprays a fan of water drops, a trumpet)
+- the steel slide (a shine runs down it, ting)
+- the Thai pattern bands on the cone (gold ripples round them)
+- Kaylee (a giggle and a wiggle, even on the wall) and Daddy (a hop and a laugh)
+
+**Silly moments (instead of failure):** the non-pink holds in round 2 (honk, giggle, monkey); the bell rung from the
+floor (the monkey rings it and covers its ears); Daddy's head-first landing; a tap on a hold out of reach makes it
+wiggle and the ones in reach pulse brighter.
+
+**Story frame (at most 2 lines before her hands are busy):** Sparkle: "Climb the Golden Mountain, Kaylee! Count the
+holds!" (with the full loop; the greybox has no voices).
+When Sparkle talks during play: when round 2 starts ("Only the pink ones!"), when Daddy steps up ("Race Daddy to the
+top!"), and after ~8 s with nothing touched (the 👆 shows the next hold, the bell or the slide).
+Counting (with the full loop): each hold's number spoken as it pops ("One!" ... "Seven!"), in Sparkle's voice.
+Daddy's lines (full loop): "I'm going to win!" (round 3 starts), "Huff... puff..." (while he climbs), "You beat me,
+Kaylee!" (at the top), "Whoa-oa-oa!" (his head-first landing).
+Kaylee at the top: "I did it!" Other lines: "Ding dong!" (Sparkle, the first bell), "Wheee!" (Kaylee on the slide).
+
+**What it teaches, by doing:** counting up as she climbs (one hold, one number, one note up the scale), picking out a
+color (only the pink ones), and that a temple sits on top of the Golden Mount. Tap-to-hear fact (full loop, on the bell
+the first time and the stamp): "The real Golden Mount in Bangkok is a temple on a hill. People climb over 300 steps to
+its golden top!" (Sources disagree on the exact count: 344 steps spiralling round the hill per
+[Thai Holiday Guide](https://www.thaiholidayguide.com/attraction/wat-saket-golden-mount/), 318 per
+[Penang Travel Tips](https://www.penang-traveltips.com/thailand/bangkok/golden-mount.htm); "over 300" is true for all of
+them.) Lopburi's monkeys are real too: a whole town in Thailand full of monkeys.
+
+**Payoff (visible, builds up while she plays):** a flag on the top rail for each round (pink, pink, then a gold one with a
+star for beating Daddy), the bell's sparkles, the slide. The ⛰️ sticker goes on her sock band the first time she
+reaches the top.
+
+**Replay:** she picks a different route each time in rounds 2 and 3; after the third round it stays open as a toy
+(race Daddy again, as often as she likes; the 🛝 takes her back to the hall).
+
+**Numbers:** about 30-35 touches: round 1 about 7 (5 pulls, bell, slide), round 2 about 9-11 (6 pulls, a silly hold or
+two, bell, slide), round 3 about 9 (7 pulls, bell, slide), plus pokes. About 2 min. No lines before the first touch in the
+greybox; one with the full loop.
+
+**Camera and art:** a 3D side view, straight on and a little above, in the house's toon look. The camera follows her up
+the mountain (she stays big on an iPhone) and pulls back for the slide.
+
+**Screens:** wide and tall framings; the holds she can reach (one row), the bell and the slide's mouth stay inside the
+safe zone, under the top bar.
+
+**Sections and state:** one section, `mountain?round=1|2|3` (the shared `round` param, with its own round state in
+MallTrip like `blocksRound`). The flags already on the rail follow the round. Reads `socks`, `games` and `hair` (Daddy
+keeps his barber hairdo); a link past round 1 has the ⛰️ sticker.
+
+**Tech:** `games/mountain/` like the other mini games: `layout.ts` (the cone and its holds in meters, pure data, shared
+with the flat version), `build.ts`, the world `golden.ts` (not `mountain.ts` next to `Mountain.tsx`: macOS's disk is
+case-insensitive), `Flat.tsx`, `sounds.ts`. The climb is its own (hold to hold, under her finger); the slide is the Big
+Frame's (`harborland/rides.ts` `slide`). Daddy is a `Racer` (the race's toy rig). **Riskiest:** the holds in reach being
+big enough to hit on an iPhone (only the next row gets tap targets, at least 64 px, and the camera follows her up).
 
 #### 6. Little Land: giant foam blocks 🧱 (`blocks`; shapes, balance)
 
@@ -397,17 +475,202 @@ time, on an iPhone too.
 
 #### 7. Muay Thai bags 🥊 (`boxing`; the wai, rhythm)
 
-From Dad's photo: the cartoon boxer kid on top of a tower, and the punching bags.
+From Dad's photo: the cartoon boxer kid on top of a tower, and the punching bags. Filled in with
+`../ACTIVITY-TEMPLATE.md` on 2026-10-21, before the greybox.
 
-- **The toy:** the boxer comes alive as her coach. First the **wai kru**: copy his bow and little dance (tap the move he
-  shows). Then punch the bags to the beat of Thai boxing drums; Daddy holds the pad.
-- **Teaches:** the wai (Thailand's hello with pressed hands), and keeping a beat.
+**One-line pitch:** the boxer kid from the top of the Big Frame comes alive as her coach (a little monkey in a red
+headband, see "The coach" below); after a bow to say thank you, Kaylee punches the bag to the beat of his drum, then
+Daddy's pad, and her big unicorn kick sends Daddy bouncing into the ropes. She wins the gold belt.
 
-#### 8. The Sky Pod 💡 (`skypod`; quick eyes, counting)
+**The toy (core verb):** punch. Tap (or swipe) the bag or the pad and Kaylee punches it with her own pink glove, right
+where her finger is (high, low, left side, right side).
+- How it feels: the punch starts on the finger going down (no waiting for the lift), the gloves take turns, she lunges
+  in and bounces back on her toes. The bag swings on its chain, squashes where it was hit and wobbles, a burst of gold
+  stars and a POW pop out, and Daddy, holding the bag from behind, staggers back a step ("oof") and leans in again. A
+  swipe across the bag is a hook: a bigger swing, a bigger POW (a jab then a hook, a combo).
+- Why it's fun with no goal: hitting something big that swings and goes POW, with Daddy wobbling, is fun on its own.
+- Greybox test: a toon bag on a chain, Daddy, the coach and the drum. Does punching feel snappy on the iPad (the punch on
+  touch-down), and does the bag's swing read as her doing it?
 
-- **The toy:** buttons light up; tap them (they wait for her). Then copy a short pattern of lights. The score counts up
-  in big numbers.
-- Small. It could stay a poke in the hall instead of a mini game.
+**The warm-up (a few touches, not a quiz): the wai kru.** The coach faces her and does a wai. She taps her own gloves
+(they glow) and Kaylee presses them together and bows; the coach bows back, a soft temple bell. Three bows, each a
+little lower (the real wai kru's three bows). Then the drum starts: each tap and she does a dance step (a hop to the
+side, arms out like a bird's wings, the ram muay) and the coach copies her; three steps and the coach cheers, ding
+ding: the bell starts round 1. About 6 taps, 15-20 s. A tap on the bag during the warm-up still punches (it's a toy).
+
+**How the verb deepens (3 steps, same verb):**
+1. **Free punching, the drum joins in.** Punch anything goes. After three punches the coach goes to his drum and
+   plays a slow beat (dum... ching... dum), so her punches have music under them. Eight punches fill the lamps on the
+   board: ding ding, a star.
+2. **On the beat.** The drum's beat is slow (60 a minute). Before each beat a ring closes in on the bag and turns gold
+   just before the drum hits: a punch then is a huge POW (a gold burst, a ding, the bag swings high, Daddy staggers two
+   steps). Off the beat it's still a normal fun punch. Six big POWs fill the lamps. Help, never failing: after three
+   off-beat punches in a row the gold window grows (twice), and the round ends after 16 punches anyway.
+3. **Daddy's pad.** Daddy lets go of the bag and holds up a big pink pad, then moves it: left side up high, left side
+   down low, then he hops round to her right, high, low, and the middle. She follows it with her punches (Kaylee turns
+   to whichever side it's on). The ring still closes on the pad: on the beat is a bigger POW (a bonus, not needed).
+   After six hits the pad glows at kick height: **the big kick**. She taps and Kaylee spins round and does a unicorn
+   kick with both back hooves: the pad flies off spinning, Daddy flies into the ropes, they boing him back, and he
+   plops onto his bottom laughing.
+Side verb: none (the wai kru warm-up is taps on her own gloves, the same hands).
+
+**Her choices:** where on the bag she punches (high, low; the punch goes where her finger is), tap or swipe (a jab or a
+hook), how fast, whether she's on the beat, which pokeable she tries.
+
+**Pokeables (5+ things that react and aren't the answer):**
+- the ring bell on the corner post (ding ding ding)
+- the drum (a boom; in round 1 before the coach is there, the coach hurries over)
+- the second, smaller bag (the coach does a kick on it, a demonstration: thwack)
+- the ropes (they twang and wobble)
+- the water bottle on its stool (it squirts a little arc of water; Kaylee shakes it off)
+- the star board (the stars twinkle up a scale)
+- the coach (a hop and a little ram muay pose, a laugh), Daddy (oof, a hop), Kaylee (bounce on her toes, a giggle)
+
+**Silly moments (instead of failure):**
+- punching the bag too hard sends it swinging into Daddy's face: he wobbles, stars round his head
+- the punch while the bag is swinging back meets it at the wrong time: it bonks her and she bounces back (no hurt)
+- tap Daddy's pad when it's moving: he still catches it (it's never "missed")
+- the kick: Daddy into the ropes and back
+
+**Story frame (at most 2 lines before her hands are busy):** the coach (with the full loop): "Sawasdee krap,
+Kaylee! First we say thank you." / Sparkle: "Tap your gloves to bow!" (the greybox has no voices).
+When Sparkle talks during play: when the drum first starts ("Punch to the drum!"), when round 2's ring first shows
+("Punch when it's gold!"), when the pad first goes up ("Follow Daddy's pad!"), when the pad glows for the kick ("Big
+kick!"), and after ~8 s with nothing touched (the 👆 shows her gloves, the bag or the pad).
+
+**Lines to record (the full loop), by speaker:**
+- the coach (a new speaker, a Thai boy's voice, bright and bouncy): "Sawasdee krap, Kaylee! First we say thank you.",
+  "Now dance with me!", "Yes! Again!", "Punch to the drum!", "Champion Kaylee!"
+- Daddy: "Ooh, strong!", "Oof! Good one, Kaylee!", "Hit the pad!", "Up high! Down low!", "Whoa-oa-oa!" (into the ropes)
+- Sparkle: "Tap your gloves to bow!", "Punch to the drum!", "Punch when it's gold!", "Follow Daddy's pad!", "Big kick!"
+- the tap-to-hear fact (`MALL_FACTS`, on the star board or the coach): "Before a Muay Thai fight, boxers do a dance
+  called the wai kru. It says thank you to their teacher."
+
+**What it teaches, by doing:** the wai (Thailand's hello and thank-you: hands pressed together, a bow), which she does
+herself three times and the coach answers; keeping a beat (the slow drum, the ring, the big POW on the beat); left and
+right, up and down (following the pad). Tap-to-hear facts: the wai kru (above); Muay Thai is Thailand's own sport.
+
+**Payoff (visible, builds up while she plays):** the lamps on the board fill each round, a star for each round (three),
+Daddy's wobble getting bigger, then the kick, and the coach puts **a gold champion's belt** round her waist and holds
+her glove up: ding ding ding. The 🥊 sticker goes on her sock band after the wai kru warm-up.
+
+**Replay:** punching is a toy (it never runs out); the drum keeps going after round 3, the pad stays up, and Daddy
+keeps getting bounced; the 🛝 takes her back to the hall.
+
+**Numbers:** about 30-35 touches: the wai kru 6, round 1 8, round 2 about 8-12 (six on the beat), round 3 7 (six pad
+hits and the kick), plus pokes. About 2 min. No lines before the first touch in the greybox; one or two with the
+full loop.
+
+**The coach:** the cartoon boxer kid on top of the Big Frame (`harborland/build.ts`, "boxer") come alive, built on the
+family's chibi rig as a **monkey** (not a family animal): a caramel monkey with a cream heart-shaped face, round ears
+and a long curly tail, the boxer's red headband (the *mongkhon*) and red gloves, blue Muay Thai shorts. A monkey
+because of the Lopburi monkeys in HarborLand's decor and Hanuman, the monkey hero whose moves Muay Thai is named after.
+(The Big Frame's statue is still the boy; it can become the monkey with the art gate.)
+
+**Sections and state:** one section, `boxing?round=1|2|3` (`round` 1 the wai kru then free punching, 2 on the beat,
+3 Daddy's pad and the kick), its own round in MallTrip (so another game's round doesn't leak in). Reads `socks` and
+`games`; a link past round 1 has the 🥊 sticker. The hall's bags are the way in (`hall?from=boxing` comes back out
+there).
+
+**Tech:** a 3D side view (like the other mini games) in the house's toon look. Kaylee faces the bag from the side, so
+a punch reads; she's driven by hand each frame (the guard, the lunge, the arm aimed at the height her finger hit, the
+bow, the dance step, the kick). The bag is a pendulum spring with a squash; the beat is a clock in the world
+(`beat.ts`, pure, shared with the flat version) and judged at touch-down, not on the punch's contact. **Riskiest:** that
+an on-beat punch feels on the beat on the iPad (the sound's lag, a five-year-old's timing): the window is generous and
+grows when she's off.
+
+#### 8. The Sky Pod 💡 (`skypod`; quick eyes, counting, music)
+
+The real one is a wall of big round light-up pods with a scoreboard: a pod lights, you slap it, you score (the
+SkyPods sold to play centers have 5, 7 or 9 pods, a Speed and a Reaction game, and are often set high, so kids jump for
+them). Filled in with `../ACTIVITY-TEMPLATE.md` on 2026-10-21, before the greybox. The first sketch worried it was thin
+(a reaction test), so it's built as a toy: the wall is an instrument she plays by slapping it.
+
+**One-line pitch:** Daddy wants to see how fast she is; Kaylee slaps the glowing pods on the Sky Pod's wall (jumping
+for the high ones), plays a song on it, races Daddy, and the score rolls up to a hundred.
+
+**The toy (core verb):** slap a pod.
+- How it feels: it reacts the instant her finger lands. The pod squashes into the wall and bulges back, flashes
+  white, lights up in its own color, plays its own note, and sparks fly off it. Kaylee bounces over on the springy mat
+  and slaps it too: she stands beside it, turns to the wall and reaches up, with a big jump for the high ones. A finger
+  sliding across the pods plays every one it crosses.
+- Why it's fun with no goal: the wall is an instrument. Left to right (and up the rows) the nine pods climb a scale,
+  so she can play tunes, run a finger along it, or bang one over and over.
+- Greybox test: nine pods on a night-sky wall, the scoreboard, Kaylee on the mat, Daddy. Does slapping feel good on
+  the iPad, and does Kaylee's jump keep up with her finger?
+
+**How the verb deepens (3 steps, same verb):**
+1. **Pop the lights:** a pod lights up and waits (low ones first, so she just reaches). She slaps it, +1, and the next
+   one pops on somewhere else. From six, two at a time, and the high ones need a jump. Ten and the round is done.
+2. **Copy the tune:** the wall plays a little pattern, lights and notes (two pods, then three, then four: the start of
+   "Twinkle, Twinkle, Little Star"), then waits while she plays it back. A wrong pod is just its own note as a silly
+   kazoo; Daddy chuckles, the wall plays it again, and the next pod glows softly. After the third, the wall plays the
+   whole first line of the song, lighting up as it goes.
+3. **Race Daddy:** her lights are pink, his are blue, on the same wall. He walks over to his and slaps it; she can
+   slap his too (hers now: "hey!"). He's slow, he sometimes slaps the wall beside it (ow, ow), and whenever he's caught
+   up with her he dances, sits down for a rest or waves, so she always gets to ten first.
+Side verb: none (the finale and the pokes are the same slap).
+
+**Her choices:** which lights to go for first (two at a time), whether to steal Daddy's, what to play (any pod, any
+time, between the lights and after the finale), when to put the beat on.
+
+**Pokeables (5+ things that react and aren't the answer):**
+- every unlit pod (its note: the wall is an instrument)
+- the scoreboard (its numbers wobble, beep-boop)
+- the big speaker (a beat to play along to: the pods' rings and Daddy bob to it; tap again to stop)
+- the rocket on top of the wall (it rumbles, hops up on its flame and lands)
+- the moon on the wall (it rocks on its hook, the painted stars twinkle)
+- Kaylee (a big bounce on the mat), Daddy (a hop and a laugh), the mat (she bounces there)
+
+**Silly moments (instead of failure):**
+- a pod slapped five times fast pops out on its spring, boing, and spins
+- a wrong pod in round 2 plays its note as a kazoo
+- Daddy misses and slaps the wall (ow, ow), says "hey!" when she takes his light, and sits down for a rest mid-race
+
+**Story frame (at most 2 lines before her hands are busy):** Daddy: "How fast are you, Kaylee?" / Sparkle: "Slap the
+lights!" (with the full loop; the greybox has no voices).
+When Sparkle talks during play: when round 2 starts ("Listen... now you play it!"), when round 3 starts (Daddy: "Race
+you, Kaylee!"), and after ~8 s with nothing touched (the 👆 shows the lit pod, or the pattern's next one).
+
+**What it teaches, by doing:** counting (the score climbs one at a time, to ten each round), listening and remembering
+(copying the pattern), up and down a scale (the pods' notes), and a song she knows. Tap-to-hear fact (full loop): a
+tap on the scoreboard counts it in Thai: nueng, song, saam, sii, haa, hok, jet, paet, gao, sip.
+
+**Payoff (visible, builds up while she plays):** the score, a star on the board for each round, the song at the end of
+round 2, and the finale: every pod goes rainbow in a chasing wave, the score rolls up to 100 with a fanfare and
+confetti, and Daddy throws his arms up. The 💡 sticker goes on her sock band after round 1.
+
+**Replay:** the lights pop up in a different order every time; after the finale the wall stays open (one light at a
+time, the score keeps counting past 100) and she can just play music on it; the 🛝 takes her back to the hall.
+
+**Numbers:** about 30-40 touches: round 1 about 10-12 (ten lights and a few extra pods), round 2 about 9-12 (two,
+three and four pods, plus a wrong one or two), round 3 about 10-12, plus pokes. About 1.5-2 min at a five-year-old's
+pace. No lines before the first touch in the greybox; one or two with the full loop.
+
+**Camera and art:** straight on at the wall, a little above eye level. On a wide screen the pods make an arch (a
+rainbow) with the board under it; on a tall one a three-by-three with the board on top, so every pod is a big target:
+the tap targets are at least 88 px on iPad and 64 px on iPhone. The words and numbers on the board are HTML laid over
+it. Greybox: code-built shapes in the house's toon look; no generated art.
+
+**Sections and state:** one section, `skypod?round=1|2|3` (1 pop the lights, 2 copy the tune, 3 race Daddy, then the
+finale). A link past round 1 has the 💡 sticker and that many stars on the board. It keeps its own round in the trip
+(`skyRound`), so another mini game's round doesn't leak in. The hall's Sky Pod is its way in (`hall?from=skypod` comes
+back out there).
+
+**Tech:** a 3D side view (like Little Land) in the house's toon look. The rules are `game.ts`, pure (no three.js), shared
+with the flat version: which pods are lit, the score, the patterns, and Daddy's pacing (he only goes for his light while
+he's behind her). The pods are five instanced meshes (domes in flat unlit colors so lit ones glow, their shines, the
+rings, the rings' instanced ink outline, a halo), whatever their number. A slap lands on the finger going down (not on
+lift), straight through its DOM tap target. **Riskiest:** whether Kaylee's jump keeps up with a quick finger without
+feeling laggy (the pod reacts at once; she queues the latest one).
+
+**Spoken lines for the voice pass (none in the greybox):**
+- Daddy: "How fast are you, Kaylee?" (opening), "Race you, Kaylee!" (round 3), "Hey! That one's mine!" (she took his),
+  "Ow, ow!" (a miss), "Daddy needs a rest!" (sitting down), "You win, Kaylee!" (the race)
+- Sparkle: "Slap the lights!" (opening), "Listen... now you play it!" (round 2), "Slap the glowing one!" and "This one
+  next!" (after 8 s stuck), "A hundred! Super star, Kaylee!" (the finale)
+- Counting the score: "One!" ... "Ten!" (Sparkle, as it climbs in rounds 1 and 3), and the scoreboard's Thai count
+  (whose voice: Dad picks)
 
 #### The Big Frame (`frame`) and the cannon
 
@@ -482,10 +745,10 @@ Activity `mall-trip`: `activities/mall-trip/sections.ts`. Every param has a defa
 | 6 | `barber` | The Barber Salon: Daddy's new look (`?round=1\|2\|3`) | `socks`, `games`, `round`, `hair` |
 | 7 | `race` | The racing slide (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 8 | `cafe` | Cafe & Cake: the blender (`?round=1\|2\|3`) | `socks`, `games`, `round` |
-| 9 | `mountain` | The Golden Mountain and the steel slide | `socks`, `games` |
+| 9 | `mountain` | The Golden Mountain: climb, count, the bell, the steel slide (`?round=1\|2\|3`) | `socks`, `games`, `round`, `hair` |
 | 10 | `blocks` | Little Land: the foam blocks (`?round=1\|2\|3&card=chedi\|elephant`) | `socks`, `games`, `round`, `card` |
-| 11 | `boxing` | Muay Thai: the wai kru and the bags | `socks`, `games` |
-| 12 | `skypod` | The Sky Pod lights | `socks`, `games` |
+| 11 | `boxing` | Muay Thai: the wai kru, the bag to the drum's beat, Daddy's pad (`?round=1\|2\|3`) | `socks`, `games`, `round` |
+| 12 | `skypod` | The Sky Pod: slap the lights, copy the tune, race Daddy (`?round=1\|2\|3`) | `socks`, `games`, `round` |
 | 13 | `frame` | The Big Frame: climb up, slide down, the cannon (`?at=in\|pit\|l1\|l2\|top\|out`) | `socks`, `games`, `at`, `hair` |
 | 14 | `hungry` | Daddy's tummy rumbles, Mommy asks: pizza time? | `socks`, `games` |
 | 15 | `menu` | The Pizza Company: pick a pizza | `hair` |
@@ -499,8 +762,8 @@ Params:
 - `socks`: `pink|lavender|mint`, default `pink`.
 - `games`: the mini games done so far (the sock band's stickers), a comma list. Default empty. `frame` is any big ride
   in the Big Frame (the 🛝 sticker); old links' ride names (`pool`, `donut`, `zip`, `roller`, `dragon`) count as `frame`.
-- `from`: the hall: the door she comes out of, `in|vet|cafe|barber|race|frame`. Default `in` (she's just come in, by
-  Mommy's bench).
+- `from`: the hall: the door she comes out of, `in|vet|cafe|barber|race|frame|blocks|mountain|boxing|skypod`. Default `in`
+  (she's just come in, by Mommy's bench).
 - `at`: where she is in the Big Frame, `in|pit|l1|l2|top|out`: just through the tunnel, in the ball pit with Daddy,
   a level, or the mats in front. Default `in`. It follows the level she's on.
 - `hair`: Daddy's hairdo from the barber (`games/barber/hair.ts`), which he keeps in the hall and at the pizza table.
@@ -513,7 +776,11 @@ Params:
 - `round`: the round of the mini game on screen, `1|2|3`. Default `1`.
   - The cafe: blend anything, picture orders, Thai drinks two at once.
   - The racing slide: the first race, tap at a bump to fly, spinning rubber rings.
+  - Muay Thai: the wai kru then free punching, punching on the drum's beat, Daddy's pad and the big kick.
   - The barber: grow and snip, then colors, the dryer and bows, then kids with picture cards.
+  - Little Land: free stacking, the picture cards, taller than Daddy.
+  - The Golden Mountain: holds in a line, only the pink ones, race Daddy up the other side.
+  - The Sky Pod: pop the lights, copy the tune, race Daddy (then the finale).
 - `pizza`: `hawaiian|seafood|cheese`, default `cheese`.
 - `shared`: slices already handed out, 0-8. Default 0. `share?shared=6` starts at the last two, for Agong.
 - `photos`: which photos exist. Default for `home`: `dragon`.
@@ -876,6 +1143,128 @@ small climbing toy, before Dad's photos.
    - **Flat version** (`?gl=off`): the stack as a picture, the box and the stack as big buttons, the same grid.
    - **For Dad on the iPad:** does dragging a brick feel good, and does it land where she meant? Is the half-over-the-edge
      wobble fun or worrying? Should the stack ever really fall by itself? Are the outlines in round 2 too much help?
+   *Muay Thai built 2026-10-21 (`activities/mall-trip/games/boxing/`, `#/world/thailand/mall-trip/boxing?round=1|2|3`):*
+   - **The ring:** straight on, a little above. A blue ring mat on the flower mats, red-white-blue ropes along the back
+     and down the right side, the big red bag on an arm from the wall with Daddy holding it from behind, the small blue
+     bag at the back, the board on the wall (three stars, the round's lamps), the coach's drum (a red klong) at the back
+     left, the ring bell on the front right post, a water bottle on a stool. Kaylee wears pink boxing gloves, the red
+     headband (new wearables `gloves`, `mongkhon`) and her grip socks.
+   - **The coach:** the Big Frame's boxer kid come alive as a **monkey** (`COACH_LOOK`, a new `monkey` species on the
+     chibi rig: a cream heart-shaped face mask, round ears, a curly tail), in the red headband, red gloves and blue
+     shorts. `coach.ts` drives him: the wai, the drum on the beat, a guard, a bow, a dance step, a cheer, a spinning kick
+     on the small bag, the ram muay pose.
+   - **The toy:** a finger going down on the bag punches at once (not on the lift): the gloves take turns, she lunges and
+     bounces back on her toes, the arm aims at the height her finger hit. The bag swings (a pendulum, stiffer while
+     Daddy holds it), squashes and wobbles; gold stars and a comic POW (HTML) pop out; Daddy staggers back. A swipe is a
+     hook (a jab, then a hook). A big swing into Daddy gives him dizzy stars; a punch as the bag swings back bonks her.
+   - **The wai kru:** she and the coach face out side by side; her gloves glow. Three taps: three bows, lower each time,
+     a temple bell rising; the coach bows back. Three more: dance steps (a hop to the side, arms out like wings), a drum
+     beat each; the coach copies. Then he cheers, ding ding, and goes to his drum. The 🥊 sticker comes here.
+   - **Rounds:** (1) free punching; after three the drum joins in (0.8 s a beat, with the ching between); eight fill the
+     lamps. (2) A slow drum (1 s a beat, `beat.ts`), a ring closing on the bag, gold from 0.3 s before the beat to 0.2 s
+     after: on the beat is a huge gold POW and a ding. Six of those, or 16 punches anyway; three off in a row and the
+     window grows (twice). (3) Daddy swings the bag back onto its hook and holds up a pink pad: left high, left low, right
+     high, right low, left middle, right middle (he hops round, always facing her; the ring closes on the pad too). Then
+     the pad pulses at kick height: her unicorn kick (she turns her back and bucks with her back hooves), KA-POW, the pad
+     flies, Daddy flies into the side ropes, they boing him back onto his bottom. Ding ding ding, the coach holds his
+     gloves up beside her and the gold belt pops on round her waist: the third star, then the 🛝. After that it's a toy:
+     the drum keeps going, Daddy gets up with the pad, and every fourth hit it glows for another kick.
+   - **Pokeables:** the bell, the drum (a boom, the coach hops), the small bag (the coach's spin kick), the ropes
+     (twang), the water bottle (a squirt arc; she giggles), the star board, the coach (a ram muay pose), Daddy, Kaylee.
+   - **The hall:** the bags are a way in now: she walks up, punches the first one, and goes in between them; ↩️ brings
+     her back out there (`hall?from=boxing`). The sock band has a 🥊 slot.
+   - **Taps alone** play it: 28 taps for all three rounds in a scripted real-pointer play-through (6 wai kru, 8, 7 with
+     6 on the beat, 7 with the kick) at iPad landscape, iPad portrait and iPhone landscape (touch). The robot takes about
+     30 s; a child, waiting for the gold ring and watching the kick, about 2 min.
+   - **Sounds only:** no voices. The lines to record are in "7. Muay Thai bags" above.
+   - **Flat version** (`?gl=off`): 🙏 for the wai kru, the bag and the pad as big buttons, the same beat and ring.
+   - **For Dad on the iPad:** does a punch feel snappy and land where her finger is? Is the beat window right for her
+     (too easy, too hard), and does the gold POW feel worth chasing? Is the unicorn kick (a buck with her back hooves)
+     funny, or should she spin and kick? Does the coach read as a monkey, and should the Big Frame's statue become him?
+     Daddy hides the drum while he holds the pad on her left: OK?
+   *Golden Mountain built 2026-10-21 (`activities/mall-trip/games/mountain/`,
+   `#/world/thailand/mall-trip/mountain?round=1|2|3`):*
+   - **The scene:** straight on, a little above. The yellow cone (5 m across, 3 m to its flat top) with three red Thai
+     pattern bands (little gold flames), the red rail round the top, the bell under a little red-and-gold sala, the
+     steel slide down the front a little right of the middle onto a pink mat, kids riding a pink and a blue elephant
+     painted on the wall behind, a green hill, a sun. Kaylee in her grip socks at the foot of the front-left, Daddy
+     (with his barber hairdo, `hair`) watching from the right. Three Lopburi monkeys: on a rock at the foot, on a ledge
+     halfway up the right, on the top rail.
+   - **The toy:** only the holds in reach glow (a gold ring, and a tap target of at least 64 px): the next row, not
+     more than 0.95 m sideways. Finger down on one: her hand reaches at once; pull the finger down (70 px) and she
+     pulls herself up with it; a tap does the whole pull. She rises, lands with a squash, her legs swing, and the
+     hold's number pops up over it (pink, HTML) with `sounds.note(step)` one step up the scale. Over the top she hops
+     onto the platform, turns round and cheers (the monkeys cheer too). A tap on the bell: she walks to the rope and
+     tugs it, DONG, the bell swings, the top monkey covers its ears. A tap on the slide's mouth: down the Big Frame's
+     slide (`harborland/rides.ts`, its constructor now takes just the ring and handle it moves), out onto the mat with
+     a spin. Then a flag on the rail for the round, and she walks back to the foot for the next.
+   - **Rounds:** (1) five holds in a line, a rainbow; (2) six rows of mixed colors, two or three pinks in reach each
+     row (left or right): the yellow holds honk like clown noses, the blue ones giggle and wobble, the mint ones hide a
+     monkey who leaps out beside it and blows a raspberry; she stays put and the pinks glow brighter; (3) seven rows on
+     her side, seven zigzag holds on Daddy's (the right flank). He climbs when she does, puffing (huff sounds, puff
+     clouds), always one hold behind her (he hurries when he's further behind, so he's never left at the bottom); he
+     flops over the rail just after her, bent over panting, then cheers. When she's gone down he follows, lands head
+     first on the mat with his legs kicking, pops up laughing and walks back. She always wins. After the third round
+     the 🛝 shows and she can race him again.
+   - **Pokeables:** the three monkeys (a backflip, a head scratch, a swing round the rail), the bell from the floor (the
+     monkey rings it), the painted elephants (trunk up, a fan of water drops, a trumpet), the steel slide (a shine runs
+     down it, ting), the pattern bands (a gold ripple), the rail, the mat, Kaylee and Daddy. The monkeys do something on
+     their own every 6-11 s.
+   - **The hall:** the mountain's teaser is now a way in. Tap it: she walks to its foot, climbs onto the first hold,
+     and in she goes; ↩️ brings her back out at the foot (`hall?from=mountain`). The sock band has a ⛰️ slot, filled
+     the first time she reaches the top.
+   - **Sounds only:** no voices. The lines for the voice pass are in section 5 above (Sparkle's opening line, the count,
+     Daddy's race lines, the Golden Mount fact: "over 300 steps", checked against two sources that disagree on the
+     exact count).
+   - **Flat version** (`?gl=off`): the cone as a picture with the same holds (unrolled so they spread out), the bell
+     and slide as buttons, Daddy one hold behind in round 3.
+   - **Numbers:** a scripted real-pointer play-through (taps and pull-down drags, two silly holds, six pokes, the bell
+     and the slide each round) reached the 🛝 at iPad landscape and iPhone landscape: 32 touches in 70 s at a quick
+     1.8 s a touch (round 2 started at 17 s, round 3 at 46 s). A faster run without pokes reached it at iPad portrait
+     too (26 touches). With a five-year-old's pauses and more poking that's about 1.5-2 min, at the short end of the
+     aim.
+   - **For Dad on the iPad:** does pulling up feel good, and does she pull with her finger or just tap? Are the holds
+     big enough to hit on the iPhone? Is the slide a payoff she wants again (should it be longer, or come with a ball
+     pit)? Is the race close enough to feel like a race? Should the rounds be taller (more holds), since it's a little
+     short? Are the round 2 silly holds fun, or do they slow her down?
+   *The Sky Pod built 2026-10-21 (`activities/mall-trip/games/skypod/`, `#/world/thailand/mall-trip/skypod?round=1|2|3`):*
+   - **The wall:** a night-sky panel (painted stars, a crescent moon, a rocket on top) with nine round pods in white
+     rings, the scoreboard (its numbers HTML, never in a picture), the springy mat in front, the big speaker. On a wide
+     screen the pods make an arch over the board; on a tall one a three-by-three under it. Each pod has its own color
+     round the rainbow, dark until it's lit, and its own note: C D E F G A B C D, left to right and up the rows.
+   - **The slap:** it lands the moment her finger goes down. The pod squashes in and bulges back (a spring), flashes,
+     glows in its own color, plays its note, and throws a ring of sparks; a "+1" floats up from a light she gets.
+     Kaylee (in her grip socks) bounces along the mat to stand beside it and jumps to slap it, her arm on our side
+     reaching up (the jump is as high as the pod needs). A slap while she's in the air is next; only the latest waits.
+     A finger sliding across the wall plays every pod it crosses.
+   - **Rounds:** (1) ten lights, one at a time and low first, then two at a time; (2) the wall plays C-G, C-G-A,
+     C-C-G-G (the start of "Twinkle, Twinkle") and she plays each back; a wrong pod is a kazoo note and the pattern
+     plays again with the next pod glowing; then the wall plays the whole line; (3) the race to ten: pink lights hers,
+     blue ones Daddy's. Daddy walks over, reaches up and slaps his (a quarter of the time he misses, ow ow), then
+     walks back to his place at the side so he doesn't hide the pods. Caught up, he dances, sits for a rest or waves.
+     She can take his. Then the finale: the pods chase a rainbow, the score rolls up to 100, the fanfare and confetti,
+     and the 🛝. The wall stays open after it (a light at a time, the score keeps going).
+   - **Pokeables:** the unlit pods (notes), the scoreboard, the speaker (a beat: the rings and Daddy bob), the rocket
+     (rumble, hop, land), the moon (rocks, the stars twinkle), Kaylee (a big bounce), Daddy, the mat (she bounces
+     there). Five quick slaps on one pod pop it out on its spring.
+   - **Taps alone** play it all (it's a tap toy). A scripted real-pointer run of all three rounds reached the finale at
+     iPad landscape and portrait and iPhone landscape and portrait: 34 taps, 45 s at a fast robot's pace (a slap every
+     half second); at a five-year-old's pace that's about 1.5-2 min. Round 2 alone is about 25 s (the wall's patterns
+     take their time). Every pod's tap target owns its center (no overlap steals it): 88 px on iPad landscape, 110 on
+     iPad portrait, 64 on iPhones.
+   - **Numbers:** about 53 draw calls (the nine pods are five).
+   - **The hall:** its Sky Pod is now a way in. Tap it and she walks up, the buttons light up one after another up a
+     scale, and in she goes; ↩️ brings her back out there (`hall?from=skypod`). The sock band has a 💡 slot, filled after
+     round 1. (The hall's teaser wall is still four by three; the game's has nine pods. The art gate can match them.)
+   - **Sounds only:** no voices. The lines are listed in "8. The Sky Pod".
+   - **Flat version** (`?gl=off`): the nine pods as big round buttons, the same rules (`game.ts`), the board on top and
+     Daddy beside it.
+   - **For Dad on the iPad:**
+     - Does slapping feel good, and does Kaylee's jump keep up, or does she feel laggy when Kaylee slaps fast?
+     - Is copying the tune fun or a quiz? Are three patterns the right number, and is the soft glow too much help?
+     - Does Daddy score enough to make it feel like a race (he only goes while he's behind her)?
+     - Does Kaylee play tunes on it after the finale? Should the pods be one scale on the arch, or something else?
+     - Whose voice counts in Thai when she taps the scoreboard?
 6. **Greybox: the pizza toy** (`menu`, `share`).
    *Built 2026-10-21 (`activities/mall-trip/pizza/`, `#/world/thailand/mall-trip/menu`,
    `#/world/thailand/mall-trip/share?pizza=hawaiian|seafood|cheese&shared=0..8`):*
