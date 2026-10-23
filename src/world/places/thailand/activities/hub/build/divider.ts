@@ -38,23 +38,36 @@ export function buildDivider(kit: Kit): Divider {
     [left, open0],
     [open1, right],
   ]
+  // How far each side's posts reach in from its ends (a wall post is 0.08 wide, a doorway post 0.12). Pieces that meet
+  // a post end halfway into it and stop short of its front face: a face lying in the same plane as the post's flickers
+  // (z-fighting) as the camera moves.
+  const insets: [number, number][] = [
+    [0.08, 0.12],
+    [0.12, 0.08],
+  ]
   const low: BufferGeometry[] = []
   const high: BufferGeometry[] = []
   const things: BufferGeometry[] = []
 
   // ---- Cupboards along the bottom, right of the doorway: a plinth, panelled doors with brass knobs, a top ----
-  for (const [x0, x1] of sides) {
-    const w = x1 - x0
-    const cx = (x0 + x1) / 2
+  sides.forEach(([s0, s1], k) => {
+    const [i0, i1] = insets[k]
+    // The body runs into the middle of each post; the doors fill only the visible span between the posts.
+    const b0 = s0 + i0 / 2
+    const b1 = s1 - i1 / 2
+    const w = b1 - b0
+    const cx = (b0 + b1) / 2
     low.push(
       P.box(w, 0.08, d - 0.04, ROSE_DARK, { at: [cx, 0.04, z - 0.02] }),
       P.box(w, DIVIDER_BASE - 0.12, d, ROSE, { at: [cx, 0.08 + (DIVIDER_BASE - 0.12) / 2, z] }),
-      P.rbox(w + 0.03, 0.04, d + 0.04, 0.012, ROSE_LIGHT, { at: [cx, DIVIDER_BASE - 0.02, z] }),
+      P.rbox(w, 0.04, d + 0.03, 0.012, ROSE_LIGHT, { at: [cx, DIVIDER_BASE - 0.02, z] }),
     )
-    const n = Math.max(1, Math.round(w / 0.55))
-    const dw = w / n
+    const v0 = s0 + i0
+    const vw = s1 - i1 - v0
+    const n = Math.max(1, Math.round(vw / 0.55))
+    const dw = vw / n
     for (let i = 0; i < n; i++) {
-      const x = x0 + dw * (i + 0.5)
+      const x = v0 + dw * (i + 0.5)
       const knob = x + (i % 2 ? -1 : 1) * (dw / 2 - 0.08)
       low.push(
         P.box(dw - 0.05, 0.74, 0.02, ROSE_LIGHT, { at: [x, 0.5, zf + 0.01] }),
@@ -62,7 +75,7 @@ export function buildDivider(kit: Kit): Divider {
         P.cyl(0.022, 0.022, 0.03, BRASS, { at: [knob, 0.6, zf + 0.04], rot: [Math.PI / 2, 0, 0] }),
       )
     }
-  }
+  })
 
   // ---- Posts: the doorway's two (the left one just right of the stairs), and one against each wall ----
   for (const [x, w, top] of [
@@ -105,12 +118,16 @@ export function buildDivider(kit: Kit): Divider {
   // ---- The open shelves above the cupboards: dark inside ----
   const mid = (BAND - 0.1 + DIVIDER_BASE) / 2
   const midH = BAND - 0.1 - DIVIDER_BASE
-  for (const [x0, x1] of sides) high.push(P.box(x1 - x0, midH, 0.03, FRAME_DARK, { at: [(x0 + x1) / 2, mid, zb + 0.015] }))
+  sides.forEach(([s0, s1], k) => {
+    const b0 = s0 + insets[k][0] / 2
+    const b1 = s1 - insets[k][1] / 2
+    high.push(P.box(b1 - b0, midH, 0.03, FRAME_DARK, { at: [(b0 + b1) / 2, mid, zb + 0.015] }))
+  })
   // Right: two bays (the TV and the Garuda on the left, the picture and the boxes on the right) with a shelf across.
   const xm = (open1 + right) / 2
   const shelfR = 1.72
   high.push(
-    P.box(right - open1, 0.04, d - 0.03, ROSE_LIGHT, { at: [(open1 + right) / 2, shelfR, z] }),
+    P.box(right - open1 - 0.1, 0.04, d - 0.03, ROSE_LIGHT, { at: [(open1 + 0.06 + right - 0.04) / 2, shelfR, z] }),
     P.box(0.06, midH, d, ROSE, { at: [xm, mid, z] }),
   )
 
