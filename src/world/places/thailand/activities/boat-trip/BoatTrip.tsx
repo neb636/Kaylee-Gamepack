@@ -364,8 +364,10 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
 
   const choose = (how: 'again' | 'resume' | 'boat' | 'chang') => {
     sounds.pop()
-    // A new trip (or straight to one place) starts with nothing done in Krabi; keeping going, what was.
-    const b = how === 'resume' ? (state.current.saved.been ?? []) : []
+    // A new trip (or straight to one place) starts with nothing done in Krabi; keeping going, what was (🚤 with a trip
+    // saved at the pier is keeping going too: the elephants she has fed stay done).
+    const keep = how === 'resume' || (how === 'boat' && state.current.saved.at === 'pier')
+    const b = keep ? (state.current.saved.been ?? []) : []
     setBeen(b)
     state.current.been = b
     if (how === 'again') {
@@ -763,40 +765,55 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           }}
         />
       )}
-      {/* At the pier at sunset: home (also inside the album that opens there). */}
-      <AnimatePresence>
-        {mount.world === 'bay' && atPier && !pass && mode === 'webgl' && (
-          <motion.button
-            key="home"
-            aria-label="Fly home"
-            initial={{ scale: 0, y: 40 }}
-            animate={{ scale: [1, 1.08, 1], y: 0 }}
-            exit={{ scale: 0, transition: { duration: 0.2 } }}
-            transition={{ scale: { repeat: Infinity, duration: 1.4, ease: 'easeInOut' }, y: { type: 'spring' } }}
-            whileTap={{ scale: 0.9 }}
-            onClick={goHome}
-            style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 18px)', translate: albumOpen ? '64px 0' : changNext ? 'calc(-100% - 10px) 0' : '-50% 0', minWidth: 'clamp(120px, 22vw, 170px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--butter)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', zIndex: albumOpen ? 61 : 33, padding: '0 20px' }}
-          >
-            ✈️🏠
-          </motion.button>
-        )}
-        {/* Baan Chang still to do: a big 🐘 beside it (the bigger pulse: the elephants are waiting). */}
-        {mount.world === 'bay' && atPier && changNext && !pass && mode === 'webgl' && (
-          <motion.button
-            key="chang"
-            aria-label="To the elephants"
-            initial={{ scale: 0, y: 40 }}
-            animate={{ scale: [1, 1.14, 1], y: 0 }}
-            exit={{ scale: 0, transition: { duration: 0.2 } }}
-            transition={{ scale: { repeat: Infinity, duration: 1.1, ease: 'easeInOut' }, y: { type: 'spring' } }}
-            whileTap={{ scale: 0.9 }}
-            onClick={goChang}
-            style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 18px)', translate: albumOpen ? 'calc(64px + 100% + 20px) 0' : '10px 0', minWidth: 'clamp(120px, 22vw, 170px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--pink)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,200,61,.6), var(--shadow)', zIndex: albumOpen ? 61 : 33, padding: '0 20px' }}
-          >
-            🐘
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {/* At the pier at sunset: home (also inside the album that opens there), and 🐘 beside it while Baan Chang is still
+          to do. Side by side in the middle; with the album open, to the right of its ✓ (both stacked at the right edge,
+          so they stay on a phone's narrow screen). */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 'calc(var(--safe-bottom) + 18px)',
+          display: 'flex',
+          flexDirection: albumOpen && changNext ? 'column' : 'row',
+          gap: albumOpen && changNext ? 12 : 20,
+          zIndex: albumOpen ? 61 : 33,
+          pointerEvents: 'none',
+          ...(albumOpen && changNext ? { right: 'calc(var(--safe-right, 0px) + 12px)' } : { left: '50%', translate: albumOpen ? '64px 0' : '-50% 0' }),
+        }}
+      >
+        <AnimatePresence>
+          {mount.world === 'bay' && atPier && !pass && mode === 'webgl' && (
+            <motion.button
+              key="home"
+              aria-label="Fly home"
+              initial={{ scale: 0, y: 40 }}
+              animate={{ scale: [1, 1.08, 1], y: 0 }}
+              exit={{ scale: 0, transition: { duration: 0.2 } }}
+              transition={{ scale: { repeat: Infinity, duration: 1.4, ease: 'easeInOut' }, y: { type: 'spring' } }}
+              whileTap={{ scale: 0.9 }}
+              onClick={goHome}
+              style={{ pointerEvents: 'auto', minWidth: 'clamp(120px, 22vw, 170px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--butter)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', padding: '0 20px' }}
+            >
+              ✈️🏠
+            </motion.button>
+          )}
+          {/* (The bigger pulse: the elephants are waiting.) */}
+          {mount.world === 'bay' && atPier && changNext && !pass && mode === 'webgl' && (
+            <motion.button
+              key="chang"
+              aria-label="To the elephants"
+              initial={{ scale: 0, y: 40 }}
+              animate={{ scale: [1, 1.14, 1], y: 0 }}
+              exit={{ scale: 0, transition: { duration: 0.2 } }}
+              transition={{ scale: { repeat: Infinity, duration: 1.1, ease: 'easeInOut' }, y: { type: 'spring' } }}
+              whileTap={{ scale: 0.9 }}
+              onClick={goChang}
+              style={{ pointerEvents: 'auto', minWidth: 'clamp(120px, 22vw, 170px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--pink)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,200,61,.6), var(--shadow)', padding: '0 20px' }}
+            >
+              🐘
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </div>
       {/* At Baan Chang: the way on (🥤 to the cafe, 🐘 to the elephants, 🚤 or ✈️🏠 after the splash). */}
       {mount.world === 'chang' && mode === 'webgl' && (
         <ChangLayer
