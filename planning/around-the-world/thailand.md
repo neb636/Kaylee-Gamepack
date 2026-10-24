@@ -106,6 +106,9 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    (`thailand/mall-trip.md`). Its first greybox, a small climbing toy, is built
    (PR #120), and rebuilt as the Big Frame at real scale (`#/world/thailand/mall-trip/frame`). Dad's photos (2026-10-21) turned
    HarborLand into a hall of mini games: a vet clinic, a barber, a racing slide and more, each its own greybox.
+   Baan Chang Cafe (Dad, 2026-10-24) comes back in 3D as a second Krabi place on the boat trip: after landing she
+   picks 🐘 the elephants or 🚤 the pier, feeds Mali, Khanom and Lamyai bananas and sugarcane, and they splash everyone
+   under a rainbow (`thailand/baan-chang.md`, from Dad's photos; PR #86's 2D greybox is the starting point).
 
 ## Tech notes
 
