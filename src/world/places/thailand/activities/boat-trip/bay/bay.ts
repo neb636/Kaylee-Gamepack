@@ -4,6 +4,9 @@
 // - Finger on the water (or on the boat, then drag): the boat goes after it. Far ahead = fast, near = slow, held to one
 //   side it keeps turning (doughnuts), behind it = a U-turn. Let go and it coasts and bobs. A tap = go there.
 //   Both at once, Dad's pick (PR #99): a finger anywhere on the water, or one that grabs the boat and drags.
+// - On an iPhone (race/tilt.ts, as in the boat race): she holds the phone sideways and turns it like a wheel to steer,
+//   and holds the gas pedal (race/GasPedal.tsx) to go. Off the pedal it coasts and settles (a tilt still turns the bow
+//   at a crawl); a finger on the water no longer drives, but taps still poke things and a glow still takes her there.
 // - Tap the boat: VROOM. Bump a rock: boing (it slides round, never stuck). Cross the tour boat's wake fast: a jump.
 // The verb deepens three ways: open water (rocks, wakes, critters to drive up to), tight places (the village's lane,
 // where boats go slowly; the canoe through the low cave, where the family must lie down or Daddy's horn bonks the
@@ -37,6 +40,7 @@ import { Driver } from '../../../trip/drive'
 import { buildCanoe } from '../../../trip/vehicles/canoe'
 import { buildLongtail, type Longtail } from '../../../trip/vehicles/longtail'
 import type { Vehicle } from '../../../trip/vehicles/vehicle'
+import type { SteerMode, Tilt } from '../race/tilt'
 import type { BoatSection } from '../sections'
 import { CAVE_ANCHORS, CaveStop } from './cave'
 import type { CritterId } from './critters'
@@ -88,6 +92,8 @@ export interface BayEvents {
   onDocked(): void
   /** Through the rainbow gate: the boat race. */
   onRace(): void
+  /** The bay's phase changed (driving, boarding, on the beach, docked): the gas pedal shows only while driving. */
+  onPhase?(p: Phase): void
 }
 
 const CORE_ANCHORS: AnchorInfo[] = [
@@ -177,6 +183,14 @@ export class Bay implements World3D {
   private raceGate: RaceGate
   readonly parts: BayPart[]
   private finger: { x: number; y: number; onBoat: boolean; steering: boolean; t: number } | null = null
+  /** How she drives (a finger on the water, or on a phone tilting it with the gas pedal), and the tilt. */
+  private steer: SteerMode = 'finger'
+  private tilt: Tilt | null = null
+  private gasDown = false
+  /** Tilting: the tilt or the gas is driving the boat this frame (so letting go of both lets it coast). */
+  private tiltDriving = false
+  /** The phone's setup is showing (turn it sideways, allow the tilt): taps wait. */
+  private waiting = false
   /** A tap's way round big things (Ko Tapu's buoys, the hong, the towers, the houses): the waypoints still ahead. */
   private route: { x: number; z: number }[] = []
   private raycaster = new Raycaster()
@@ -402,7 +416,10 @@ export class Bay implements World3D {
     this.events.onRibbons(colors)
   }
   setPhase(p: Phase) {
+    if (p === this.phase) return
     this.phase = p
+    if (p !== 'drive') this.gasDown = false
+    this.events.onPhase?.(p)
   }
   /** Into the boat race (the longtail glided through the gate). */
   raceNow() {
@@ -474,9 +491,35 @@ export class Bay implements World3D {
   get height() {
     return this.h
   }
-  /** A finger is down. */
+  /** A finger is down (or the gas pedal). */
   get touching() {
-    return this.finger !== null
+    return this.finger !== null || this.gasDown
+  }
+  /** Steering by tilting the phone (no "finger on the water" hints). */
+  get tilting() {
+    return this.steer === 'tilt'
+  }
+
+  /** A finger on the water, or (on a phone) tilting it with the gas pedal. */
+  setSteer(mode: SteerMode, tilt: Tilt | null) {
+    this.steer = mode
+    this.tilt = mode === 'tilt' ? tilt : null
+    if (mode === 'finger') this.gasDown = false
+    if (this.tiltDriving) {
+      this.tiltDriving = false
+      this.ride.d.release()
+    }
+  }
+  /** The gas pedal, down or up (tilting). */
+  gas(down: boolean) {
+    this.lastTouch = this.time
+    this.whereUntil = 0
+    this.gasDown = down && !this.waiting
+  }
+  /** The phone's setup is showing (turn it sideways, allow the tilt): taps on the water wait for it. */
+  setWaiting(on: boolean) {
+    this.waiting = on
+    if (on) this.gasDown = false
   }
 
   private get canDrive() {
@@ -484,6 +527,7 @@ export class Bay implements World3D {
   }
 
   pointerDown(x: number, y: number, id?: string) {
+    if (this.waiting) return
     this.lastTouch = this.time
     this.whereUntil = 0
     const hit = id ?? this.pick(x, y)
@@ -491,14 +535,15 @@ export class Bay implements World3D {
     // A finger drives at once, even on the family (in the canoe they fill the middle of the screen); on the boat itself
     // only once it moves (a tap there is a VROOM). Things to poke never drive.
     const poke = !!hit && hit !== 'boat' && hit !== 'engine' && !hit.startsWith('family:')
-    this.finger = { x, y, onBoat, steering: this.canDrive && !poke && hit !== 'boat' && hit !== 'engine', t: this.time }
+    // Tilting, a finger never drives (the tilt and the gas pedal do).
+    this.finger = { x, y, onBoat, steering: this.canDrive && !this.tilting && !poke && hit !== 'boat' && hit !== 'engine', t: this.time }
   }
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
     const f = this.finger
     if (!held || !f) return
     f.x = x
     f.y = y
-    if (!f.steering && this.canDrive && Math.hypot(x - downX, y - downY) > 12) f.steering = true
+    if (!f.steering && this.canDrive && !this.tilting && Math.hypot(x - downX, y - downY) > 12) f.steering = true
   }
   pointerUp() {
     if (this.finger?.steering) this.ride.d.release()
@@ -506,6 +551,7 @@ export class Bay implements World3D {
   }
 
   tap(x: number, y: number, id?: string) {
+    if (this.waiting) return
     this.lastTouch = this.time
     this.whereUntil = 0
     const target = id ?? this.pick(x, y)
@@ -556,7 +602,14 @@ export class Bay implements World3D {
       return
     }
     const p = this.aim(x, y)
-    if (p) this.driveTo(p.x, p.z)
+    if (!p) return
+    // Tilting, a tap on the water is a splash (the tilt and the gas pedal drive), not "go there".
+    if (this.tilting) {
+      this.spray.burst(p.x, 0.2, p.z, 8, 1.6, 2.6, 0.18)
+      sfx.splash(0.35)
+      return
+    }
+    this.driveTo(p.x, p.z)
   }
 
   /** Where a finger on the screen sends the boat: the spot on the water under it (the canoe in the tunnel: along it). */
@@ -809,6 +862,33 @@ export class Bay implements World3D {
     return Math.abs(d.speed) < 0.05 && !d.airborne && !this.hops.length && !this.glides.length && !this.finger && !this.foam.busy && !this.spray.busy && !this.rig.moving && !this.looking && this.phase !== 'board'
   }
 
+  /** Tilting the phone like a wheel turns the bow (right edge down = right), the gas pedal is full speed. Off the
+   *  pedal, a clear tilt still turns it round at a crawl; level and off the pedal, it coasts and settles (and a glow
+   *  she tapped drives her there as before). */
+  private driveTilt(dt: number) {
+    this.tilt?.update(dt)
+    const d = this.ride.d
+    const v = this.tilt?.value ?? 0
+    if (!this.canDrive || this.waiting || (!this.gasDown && Math.abs(v) < 0.15)) {
+      if (this.tiltDriving) {
+        this.tiltDriving = false
+        if (this.canDrive) d.release()
+      }
+      return
+    }
+    this.tiltDriving = true
+    this.route = []
+    this.lastTouch = this.time
+    // A point ahead, off to the side the phone is turned (heading grows to the left as seen from behind the boat): a
+    // small tilt just past the drive's own dead zone, full lock where it turns as fast as the boat can.
+    const f = d.feel
+    const off = v === 0 ? 0 : Math.sign(v) * (f.dead + Math.abs(v) * (f.turn / 3 + 0.15))
+    const a = (d.lock ?? d.heading) - off
+    const dist = this.gasDown ? f.far + 6 : f.near * 0.9
+    const [tx, tz] = this.cave.steerPoint(d.x + Math.sin(a) * dist, d.z + Math.cos(a) * dist)
+    d.hold(tx, tz)
+  }
+
   update(dt: number) {
     this.time += dt
     const t = this.time
@@ -817,7 +897,7 @@ export class Bay implements World3D {
 
     this.updateHops(dt)
     this.updateGlides(dt)
-    if (this.whereSoon && !this.finger && this.phase === 'drive') {
+    if (this.whereSoon && !this.touching && this.phase === 'drive') {
       this.whereSoon = false
       this.whereTo()
     }
@@ -827,8 +907,9 @@ export class Bay implements World3D {
     if (this.ride.d.driven || this.glides.length || this.hops.length) this.lastTouch = t
     if (this.finger) {
       this.lastTouch = t
-      if (!this.finger.steering && this.canDrive && t - this.finger.t > 0.3) this.finger.steering = true
+      if (!this.finger.steering && this.canDrive && !this.tilting && t - this.finger.t > 0.3) this.finger.steering = true
     }
+    if (this.gasDown) this.lastTouch = t
 
     // ---- Driving ----
     const goal = d.goal
@@ -844,6 +925,7 @@ export class Bay implements World3D {
         d.hold(tx, tz)
       }
     }
+    if (this.tilting) this.driveTilt(dt)
     // The village slows boats down by itself (real boats go slowly between the houses).
     d.cap = this.using === 'longtail' ? this.village.speedCap(d.x, d.z) : 1
     const before = { x: d.x, z: d.z }
@@ -980,7 +1062,8 @@ export class Bay implements World3D {
     if (Math.abs(this.ride.d.speed) > 0.8 || this.ride.d.driven) return
     let line: Line | null = null
     for (const p of this.parts) if ((line = p.stuckLine?.() ?? null)) break
-    if (!line && this.phase === 'drive') line = this.using === 'canoe' || this.stuckCount % 2 === 0 ? L.bay.hint.drive : L.bay.hint.glow
+    // (Tilting, "put your finger on the water" would be wrong: the gas pedal's finger shows how instead.)
+    if (!line && this.phase === 'drive') line = this.tilting ? (this.using === 'canoe' ? null : L.bay.hint.glow) : this.using === 'canoe' || this.stuckCount % 2 === 0 ? L.bay.hint.drive : L.bay.hint.glow
     if (!line) return
     this.lastStuck = this.time
     this.stuckCount++
@@ -1316,6 +1399,7 @@ export class Bay implements World3D {
       sunset: this.sunset.active,
       /** Daddy's "where to?" look over the bay is on (the camera is up high). */
       looking: this.looking,
+      steer: { mode: this.steer, gas: this.gasDown, tilt: r2(this.tilt?.value ?? 0), live: this.tilt?.live ?? false, waiting: this.waiting },
       ...this.pier.qa(),
       ...this.village.qa(),
       ...this.open.qa(),

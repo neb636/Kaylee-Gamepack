@@ -210,7 +210,8 @@ export class PierStop implements BayPart {
             this.tying = false
             this.boarding = -1
             bay.setPhase('drive')
-            bay.say(L.bay.hint.drive)
+            // (Tilting the phone, the gas pedal shows how instead of the finger line.)
+            if (!bay.tilting) bay.say(L.bay.hint.drive)
           }
         })
       })
