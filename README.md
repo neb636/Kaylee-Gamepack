@@ -8,6 +8,10 @@ unicorn and goes on day trips with the family.
 **Play:** https://neb636.github.io/Kaylee-Gamepack/ · [Jump to a game section](#jump-to-a-game-section)
 (iPad: open in Safari → Share → **Add to Home Screen**. It opens full-screen like a real app.)
 
+**Offline:** after it opens once on wifi it saves every game, picture and voice, so it plays in the car or on a plane.
+Online it always loads the latest version; offline the YouTube videos are hidden. After a new deploy, open it once on
+wifi before a trip so it saves the changed files.
+
 ## Jump to a game section
 
 Use these links to test what is built without playing through earlier stories. They open the published main build,

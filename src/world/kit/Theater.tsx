@@ -2,7 +2,7 @@
 // The world map's Theater shows every country; a country's Theater button (in its top bar) shows only its own videos.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { say, SparklePuppet, sounds, useSayOnMount, type PuppetHandle } from '../../sdk'
+import { say, SparklePuppet, sounds, useOnline, useSayOnMount, type PuppetHandle } from '../../sdk'
 import { WORLD_LINES } from '../lines'
 import type { PlaceMeta, PlaceVideo } from '../types'
 import { BarPill, TopBar } from './Chrome'
@@ -89,6 +89,7 @@ function exitFullscreen() {
 export function Theater({ places, onExit, exitIcon, exitLabel, title }: { places: PlaceMeta[]; onExit: () => void; exitIcon: string; exitLabel: string; title: ReactNode }) {
   const [playing, setPlaying] = useState<PlaceVideo | null>(null)
   const [full, setFull] = useFullMode()
+  const online = useOnline()
   const pick = (v: PlaceVideo) => {
     sounds.whoosh()
     void say(v.say)
@@ -107,7 +108,9 @@ export function Theater({ places, onExit, exitIcon, exitLabel, title }: { places
         </TopBar>
       }
     >
-      {playing ? (
+      {!online ? (
+        <Offline />
+      ) : playing ? (
         <Screening key={playing.id} video={playing} onDone={close} full={full} onFull={setFull}>
           <BarPill style={{ fontSize: 'clamp(20px, min(3vw, 4vh), 30px)', maxWidth: '100%', whiteSpace: 'normal', justifyContent: 'center' }}>
             <span style={{ fontSize: '1.5em' }}>{playing.icon}</span>
@@ -118,6 +121,18 @@ export function Theater({ places, onExit, exitIcon, exitLabel, title }: { places
         <Shelf places={places} onPick={pick} />
       )}
     </Stage>
+  )
+}
+
+/** Videos come from YouTube: offline (the theater link opened in the car, or the wifi dropped) there is nothing to show. */
+function Offline() {
+  return (
+    <div style={{ flex: 1, display: 'grid', placeItems: 'center', padding: 'var(--bar-clear) var(--theater-side) 24px' }}>
+      <BarPill style={{ flexDirection: 'column', gap: 8, padding: '24px 32px', fontSize: 'clamp(20px, min(3vw, 4vh), 30px)', whiteSpace: 'normal', textAlign: 'center' }}>
+        <span style={{ fontSize: '2.4em' }}>📶</span>
+        Videos need the internet
+      </BarPill>
+    </div>
   )
 }
 
@@ -211,11 +226,16 @@ function Screening({ video, onDone, full, onFull, children }: { video: PlaceVide
 /** After an activity's stamp: "Want to see real koalas?" with the video and a big Skip button. */
 export function VideoBreak({ video, onDone }: { video: PlaceVideo; onDone: () => void }) {
   const [full, setFull] = useFullMode()
-  useEffect(() => void say(video.say), [video])
+  const online = useOnline()
+  useEffect(() => void (online && say(video.say)), [video])
   const done = () => {
     setFull(false)
     onDone()
   }
+  useEffect(() => {
+    if (!online) done() // no internet, no video: straight back to the map
+  }, [online])
+  if (!online) return null
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ position: 'absolute', inset: 0, zIndex: 40, display: 'flex' }}>
       <Stage full={full}>

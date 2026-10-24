@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import posthog from '@posthog/rollup-plugin'
+import { offline } from './scripts/vite-offline'
 
 // BASE_PATH is set by the deploy workflows:
 //   main:     /Kaylee-Gamepack/
@@ -14,6 +15,7 @@ export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
   plugins: [
     react(),
+    offline(), // dist/sw.js: plays offline on the iPad (src/offline/sw.js)
     !!(POSTHOG_API_KEY && POSTHOG_PROJECT_ID) &&
       posthog({
         personalApiKey: POSTHOG_API_KEY!,
