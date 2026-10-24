@@ -51,7 +51,7 @@ export const BOULDERS: [number, number, number, number][] = [
 export const HOLD = { z: 0.9, y0: 0.8, y1: 3.4, x0: -3.2, x1: 3.4, ground: 0.07 }
 
 /** Daddy's basket on its tree stump (the middle of its rim), and the family's spots (x, z, facing in degrees). */
-export const BASKET = { x: 0.1, y: 0.78, z: 1.75, r: 0.42 }
+export const BASKET = { x: 0.1, y: 0.78, z: 1.75, r: 0.5 }
 export const FAMILY = {
   kaylee: [-0.95, 1.4, 175],
   nick: [2.55, 1.75, 205],

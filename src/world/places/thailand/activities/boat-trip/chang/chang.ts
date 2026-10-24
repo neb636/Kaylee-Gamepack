@@ -355,7 +355,11 @@ export class Chang extends Stage {
       return this.cafe.down(x, y, what)
     }
     if (!what?.startsWith('food:') || this.held || this.at === 'splash') return
-    const food = this.basket.next(what.slice(5) as FoodKind)
+    // The bananas are on the left of the basket and the cane on the right: which side her finger went down on decides,
+    // so a touch near the middle never grabs the other one.
+    const mid = this.toScreen(this.basket.middle(tmp), 0.1, 999)
+    const kind: FoodKind = mid ? (x < mid.x ? 'banana' : 'cane') : (what.slice(5) as FoodKind)
+    const food = this.basket.next(kind)
     if (!food) return this.basket.poke()
     food.state = 'held'
     food.t = 0
@@ -858,7 +862,8 @@ export class Chang extends Stage {
       const kind = id.slice(5) as FoodKind
       const wanted = this.eaters.some((x) => x.want?.kind === kind)
       // (Bigger in the wider shot with Lamyai, so they stay at least 88 px on an iPad.)
-      return { at: this.basket.spot(kind, new Vector3()), r: this.at === 'lamyai' ? 0.44 : 0.34, glow: (this.fed === 0 || wanted) && this.time - this.lastTouch > 4, prio: 3 }
+      const r = this.at === 'lamyai' ? 0.44 : 0.34
+      return { at: this.basket.target(kind, r, new Vector3()), r, glow: (this.fed === 0 || wanted) && this.time - this.lastTouch > 4, prio: 3 }
     }
     if (id === 'milk') return this.milk.root.visible ? { at: this.milk.root.getWorldPosition(new Vector3()).setY(this.milk.root.position.y + 0.15), r: 0.24, prio: 3 } : null
     if (id.startsWith('ele:')) {
