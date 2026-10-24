@@ -713,6 +713,11 @@ const SCREENS = [
   { name: 'pizza-agong', hash: '#/world/thailand/mall-trip/share?pizza=hawaiian&shared=6', reset: true, wait: 3500 },
   { name: 'pizza-done', hash: '#/world/thailand/mall-trip/share?pizza=seafood&shared=8', reset: true, wait: 3500 },
   { name: 'pizza-flat', hash: '#/world/thailand/mall-trip/share?shared=4&gl=off', reset: true, wait: 900 },
+  // The Nan road trip's mountain road (greybox): the Pajero setting off on each of the four roads, a few seconds in on
+  // the sky road (the switchbacks, the first mirror), and the flat version.
+  ...['city', 'valley', 'sky', 'three'].map((road) => ({ name: `nan-drive-${road}`, hash: `#/world/thailand/nan-trip/drive?road=${road}`, reset: true, wait: 3500 })),
+  { name: 'nan-drive-sky-climb', hash: '#/world/thailand/nan-trip/drive?road=sky', reset: true, wait: 14000 },
+  { name: 'nan-drive-flat', hash: '#/world/thailand/nan-trip/drive?road=three&gl=off', reset: true, wait: 900 },
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.

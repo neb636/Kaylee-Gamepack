@@ -1036,13 +1036,6 @@
     "file": "1912e4cf347c.mp3"
   },
   {
-    "text": "Tap the button to use it!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1985,
-    "file": "230ab0e6a125.mp3"
-  },
-  {
     "text": "A ramp! Tap in the air for a trick!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -1127,13 +1120,6 @@
     "file": "f448ac10c6f8.mp3"
   },
   {
-    "text": "So fast!",
-    "voice": "ji",
-    "sig": "ba2e98c34e",
-    "ms": 1469,
-    "file": "d0535b2b4541.mp3"
-  },
-  {
     "text": "You did it, sweetie!",
     "voice": "ji",
     "sig": "ba2e98c34e",
@@ -1153,13 +1139,6 @@
     "sig": "2c9a630e41",
     "ms": 1130,
     "file": "53183f4f2e23.mp3"
-  },
-  {
-    "text": "Hey!",
-    "voice": "kids",
-    "sig": "2c9a630e41",
-    "ms": 767,
-    "file": "baad761dc363.mp3"
   },
   {
     "text": "Good race, Kaylee!",

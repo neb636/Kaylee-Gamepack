@@ -219,9 +219,6 @@ export const GRID = {
   monkey: { s: LENGTH - 6, lat: -4.2 },
   kaylee: { s: LENGTH - 14, lat: 0 },
 }
-/** Rows of rainbow item boxes across the course. */
-export const ITEM_ROWS = [at(0.055), at(0.452), at(0.64)]
-export const ITEM_LATS = [-7, -3.5, 0, 3.5, 7]
 /** Golden arrow pads: drive over one for a burst of speed. */
 export const BOOSTS: { s: number; lat: number }[] = [
   { s: FORK.s, lat: branchLat(FORK.s, -1) },

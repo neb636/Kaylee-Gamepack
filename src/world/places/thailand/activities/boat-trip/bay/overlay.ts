@@ -101,7 +101,8 @@ export class BayOverlay {
       for (const p of this.bay.parts) if ((at = p.hint?.() ?? null)) break
       // Docked at sunset: no finger (the ✈️🏠 home is the cue there, not the boat back out).
       if (!at && (this.bay.phase === 'beach' || this.bay.phase === 'docked')) at = null
-      else if (!at && this.bay.phase === 'drive') {
+      // (Tilting the phone, the gas pedal shows its own finger instead of one on the water.)
+      else if (!at && this.bay.phase === 'drive' && !this.bay.tilting) {
         const ahead = this.bay.using === 'canoe' ? 8 : 10
         at = new Vector3(d.x + Math.sin(d.heading) * ahead, 0.3, d.z + Math.cos(d.heading) * ahead)
       }
