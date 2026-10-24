@@ -147,6 +147,10 @@ const SCENARIOS = [
   { name: 'thailand nan: the valley road', id: 'nan-valley', hash: '#/world/thailand/nan-trip/drive', reset: true },
   { name: 'thailand nan: the sky road', id: 'nan-sky', hash: '#/world/thailand/nan-trip/drive?road=sky', reset: true },
   { name: 'thailand nan: the 3 road', id: 'nan-three', hash: '#/world/thailand/nan-trip/drive?road=three', reset: true },
+  // The mushroom farm (greybox, no voices): a tap on a bag is a puff of mist, a tap on a grown one picks it, a tap on
+  // the basket or the pizza puts the next mushroom on, so the auto-player can play the rounds through to lunch.
+  { name: 'thailand nan: the mushroom farm', id: 'nan-mushrooms', hash: '#/world/thailand/nan-trip/mushrooms', reset: true },
+  { name: 'thailand nan: the mushroom pizza', id: 'nan-mushroom-pizza', hash: '#/world/thailand/nan-trip/mushrooms?round=pizza', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
   // (?gl=off goes before the hash: the section's address drops anything it doesn't know.)
   { name: 'thailand trip: picture book without webgl', id: 'trip-book', search: '?gl=off', hash: '#/world/thailand/boat-trip/invite', reset: true },

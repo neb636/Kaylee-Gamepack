@@ -718,6 +718,12 @@ const SCREENS = [
   ...['city', 'valley', 'sky', 'three'].map((road) => ({ name: `nan-drive-${road}`, hash: `#/world/thailand/nan-trip/drive?road=${road}`, reset: true, wait: 3500 })),
   { name: 'nan-drive-sky-climb', hash: '#/world/thailand/nan-trip/drive?road=sky', reset: true, wait: 14000 },
   { name: 'nan-drive-flat', hash: '#/world/thailand/nan-trip/drive?road=three&gl=off', reset: true, wait: 900 },
+  // Baan Huanam Mushroom Farm (greybox): the rack before any mist, every bag grown (round 2: pick them), round 3's pink
+  // and gold bags, and the pizza with a colorful basket.
+  { name: 'nan-mushrooms-1', hash: '#/world/thailand/nan-trip/mushrooms', reset: true, wait: 3500 },
+  { name: 'nan-mushrooms-2', hash: '#/world/thailand/nan-trip/mushrooms?round=2', reset: true, wait: 3500 },
+  { name: 'nan-mushrooms-3', hash: '#/world/thailand/nan-trip/mushrooms?round=3', reset: true, wait: 3500 },
+  { name: 'nan-mushrooms-pizza', hash: '#/world/thailand/nan-trip/mushrooms?round=pizza&basket=grey5,pink3,gold2', reset: true, wait: 3500 },
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.
