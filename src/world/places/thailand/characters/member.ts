@@ -7,7 +7,7 @@ import type { Bag } from '../engine/dispose'
 import { buildAnimal, Wind, type Rig } from './animal'
 import { FaceLife } from './face'
 import type { FamilyMember } from './family'
-import { LOOKS } from './looks'
+import { LOOKS, type Look } from './looks'
 import type { Character, Pose } from './types'
 
 const deg = Math.PI / 180
@@ -36,13 +36,14 @@ export class Member implements Character {
   private phoneWaving = -1
   private wind = new Wind()
 
-  constructor(readonly member: FamilyMember, bag: Bag) {
+  /** `look` and `voice` default to the family member's own; the character lab (lab/) gives a trip's extras theirs. */
+  constructor(readonly member: FamilyMember, bag: Bag, look: Look = LOOKS[member.id], voice: string | undefined = member.id) {
     this.id = member.id
-    this.chibi = buildAnimal(LOOKS[member.id], bag)
+    this.chibi = buildAnimal(look, bag)
     this.root = this.chibi.root
     this.height = this.chibi.height
-    this.life = new FaceLife(this.chibi, member.id)
-    this.onPhone = !!LOOKS[member.id].extras?.includes('phone')
+    this.life = new FaceLife(this.chibi, voice)
+    this.onPhone = !!look.extras?.includes('phone')
     if (this.onPhone) {
       this.chibi.armL.rotation.set(-1.2, 0, 0.75)
       this.chibi.armR.rotation.set(-1.2, 0, -0.75)

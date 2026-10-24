@@ -1,4 +1,6 @@
-// Around the World: the shell section with the world map, the passport, the coloring book, the theater and every country.
+// Around the World: the shell section with the world map, the passport, the coloring book, the theater and every country
+// (and the labs: 2D puppets, 3D characters).
+import { lazy, Suspense } from 'react'
 import { go } from '../router'
 import { PuzzleBook } from './PuzzleBook'
 import { ColoringBook } from './ColoringBook'
@@ -11,10 +13,19 @@ import { places } from './registry'
 import { WorldMap } from './WorldMap'
 import './world.css'
 
+// The 3D character lab (#/world/characters/<id>): loaded on demand, so only it downloads three.js.
+const CharacterLab = lazy(() => import('./places/thailand/lab/CharacterLab'))
+
 export function World({ place, activity, section, params = {} }: { place?: string; activity?: string; section?: string; params?: Record<string, string> }) {
   let screen
   if (place === 'passport') screen = <Passport />
   else if (place === 'puppets') screen = <PuppetLab only={activity} />
+  else if (place === 'characters')
+    screen = (
+      <Suspense fallback={null}>
+        <CharacterLab id={activity} params={params} />
+      </Suspense>
+    )
   else if (place === 'sections') screen = <SectionIndex />
   else if (place === 'puzzles') screen = <PuzzleBook page={activity} />
   else if (place === 'coloring') screen = <ColoringBook page={activity} />

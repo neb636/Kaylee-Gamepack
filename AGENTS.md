@@ -98,7 +98,10 @@ The reference pictures in `art/source/mascot/` are exported from that puppet. Se
 family member (Dad picked them from `planning/around-the-world/thailand/lineup.webp`), `characters/animal.ts` builds the
 chibi rig (body, head, arms, tail on their own pivots), and `characters/face.ts` blinks, looks at her and opens the
 mouth with the character's voice. They wave, hop, sit, lie down, do a wai: ease into each pose (lean, settle), never
-jump between poses in one frame. See them all at `#/world/thailand/hub/family` (`?who=<id>` for one on a turntable).
+jump between poses in one frame. See them all at `#/world/thailand/hub/family` (`?who=<id>` for one on a turntable), or inspect any of them in the
+**character lab** `#/world/characters/<id>` (`thailand/lab/`): poses, actions in slow motion with a filmstrip, every line
+in their voice, Kaylee's outfits, lineups, light, lens and a PNG export, all kept in the URL. A new 3D character or
+Look goes in `lab/catalog.ts` so it shows up there.
 
 **In 2D:** a character is a **puppet**: layered SVG whose parts (ears, eyes, mouth, arms, tail) are separate `<g>` groups
 that `usePuppet` moves every frame:
@@ -112,7 +115,7 @@ Build one: draw it in SVG in the same flat style as the art (5-unit dark outline
 highlights), matching a generated reference picture of the character. Then look at it: screenshot it next to the
 reference and fix what looks worse, and capture a filmstrip of each action (at least three rounds). Good examples:
 `src/sdk/puppet/Sparkle.tsx`, `src/world/places/australia/puppets/` (Pip, Mama with a real pouch, Koko). Shared
-kangaroo mechanics: `puppets/roo.ts`. Try puppets at `#/world/puppets` (buttons for every action and line).
+kangaroo mechanics: `puppets/roo.ts`. Try puppets at `#/world/puppets` (buttons for every action and line; the 3D ones are at `#/world/characters`).
 For secondary characters and critters, `<Buddy img=... voice=...>` gives a flat sprite breathing, squash-and-stretch
 jumps, dances and a bounce in time with its voice, with no drawing needed.
 

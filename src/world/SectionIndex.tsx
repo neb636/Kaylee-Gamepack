@@ -12,6 +12,14 @@ export function SectionIndex() {
     <div style={{ position: 'absolute', inset: 0, overflow: 'auto', background: 'var(--cream)', padding: 'calc(var(--safe-top) + 100px) 16px 40px' }}>
       <TopBar icon="🌍" label="World map" onBack={() => go.world()} />
       <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          <a href="#/world/characters" style={chip}>
+            🧸 3D characters
+          </a>
+          <a href="#/world/puppets" style={chip}>
+            🎭 2D puppets
+          </a>
+        </div>
         {places.map(({ meta }) => (
           <section key={meta.id}>
             <h2 style={{ margin: '0 0 10px' }}>

@@ -78,6 +78,8 @@ const SCREENS = [
     },
   },
   { name: 'puppet-lab', hash: '#/world/puppets', wait: 1200 },
+  { name: 'character-lab', hash: '#/world/characters/kaylee', wait: 2500 },
+  { name: 'character-lab-lineup', hash: '#/world/characters/agong?lineup=agong,jum,kaylee,putter', wait: 2500 },
   { name: 'australia-intro', hash: '#/world/australia', reset: true, wait: 300 },
   { name: 'australia-hub', hash: '#/world/australia', act: skip },
   { name: 'outback-story', hash: '#/world/australia/outback/story', wait: 250 },
