@@ -321,10 +321,26 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   // ---- Clothes ----
   const o = look.outfit
   if (o) {
-    if (penguin) torso.push(frustum(0.3 * H, 0.335 * H, 0.18 * H, o.color, { at: [0, 0.43 * H, 0] }))
-    else {
+    if (penguin) {
+      // (A shirt comes down a little lower.)
+      if (o.kind === 'shirt') torso.push(frustum(0.3 * H, 0.342 * H, 0.25 * H, o.color, { at: [0, 0.395 * H, 0] }))
+      else torso.push(frustum(0.3 * H, 0.335 * H, 0.18 * H, o.color, { at: [0, 0.43 * H, 0] }))
+      if (o.kind === 'shirt') {
+        // A shirt: a pointed collar lying on the chest under the chin, little white buttons down the front, and a pin
+        // on one side of the collar.
+        for (const s of [-1, 1]) torso.push(P.cone(0.05 * H, 0.11 * H, o.color, { at: [s * 0.065 * H, 0.475 * H, 0.3 * H], rot: [-0.3, 0, s * (Math.PI - 0.75)], scale: [1, 1, 0.3] }))
+        torsoPlain.push(...[0.43, 0.38].map((y) => P.sphere(0.009 * H, WHITE, { at: [0, y * H, 0.325 * H] })))
+        if (o.pin) torsoPlain.push(P.sphere(0.017 * H, o.pin, { at: [-0.085 * H, 0.462 * H, 0.312 * H], scale: [1, 1, 0.6] }))
+      }
+    } else {
       const long = o.kind === 'shirt'
-      torso.push(P.capsule(0.163 * H, (long ? 0.1 : 0.06) * H, o.color, { at: [0, (long ? 0.35 : 0.37) * H, 0], scale: round }))
+      // (A hornbill's top is a little bigger, or its feathers poke through.)
+      const sr = (bird ? 0.18 : 0.163) * H
+      const cy = (long ? 0.35 : 0.37) * H
+      const half = (long ? 0.05 : 0.03) * H
+      /** How far out the top's surface is at height y. */
+      const surface = (y: number) => Math.sqrt(sr * sr - Math.max(0, Math.abs(y - cy) - half) ** 2)
+      torso.push(P.capsule(sr, half * 2, o.color, { at: [0, cy, 0], scale: round }))
       if (o.kind === 'dress') torso.push(frustum(0.15 * H, 0.235 * H, 0.17 * H, o.color, { at: [0, 0.235 * H, 0], scale: round }))
       if (o.shorts) torso.push(frustum(0.16 * H, 0.168 * H, 0.09 * H, o.shorts, { at: [0, 0.205 * H, 0], scale: round }))
       if (o.kind === 'polo') {
@@ -342,14 +358,20 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         torso.push(P.torus(0.075 * H, 0.016 * H, '#FFFFFF', { at: [0, 0.525 * H, 0.04 * H * round[2]], rot: [Math.PI / 2 - 0.35, 0, 0] }))
         torsoPlain.push(...[0.46, 0.4].map((y) => P.sphere(0.009 * H, '#FFE7A8', { at: [0, y * H, 0.163 * H * round[2]] })))
       }
-      if (o.kind === 'shirt' && o.print) {
-        // A party shirt: an open camp collar, white buttons, and big flowers with leaves all round it.
-        for (const s of [-1, 1]) torso.push(P.box(0.085 * H, 0.012 * H, 0.07 * H, o.color, { at: [s * 0.05 * H, 0.53 * H, 0.1 * H], rot: [0.55, 0, s * -0.45] }))
-        torsoPlain.push(...[0.44, 0.37, 0.3].map((y) => P.sphere(0.009 * H, WHITE, { at: [0, y * H, 0.165 * H * round[2]] })))
-        const r = 0.165 * H
-        const spots = [[-0.6, 0.47], [0.62, 0.46], [-0.2, 0.38], [0.3, 0.33], [1.05, 0.38], [-1.1, 0.36], [-0.55, 0.28], [0.75, 0.26], [1.6, 0.46], [-1.7, 0.44], [2.3, 0.36], [-2.4, 0.33], [3.1, 0.42], [2.8, 0.27], [-2.9, 0.26]]
+      if (o.print) {
+        // Flowers with leaves all round it: big ones on a party shirt (with an open camp collar and white buttons),
+        // smaller and closer together on a blouse.
+        if (o.kind === 'shirt') {
+          for (const s of [-1, 1]) torso.push(P.box(0.085 * H, 0.012 * H, 0.07 * H, o.color, { at: [s * 0.05 * H, 0.53 * H, 0.1 * H], rot: [0.55, 0, s * -0.45] }))
+          torsoPlain.push(...[0.44, 0.37, 0.3].map((y) => P.sphere(0.009 * H, WHITE, { at: [0, y * H, 0.165 * H * round[2]] })))
+        }
+        const spots = o.kind === 'shirt'
+          ? [[-0.6, 0.47], [0.62, 0.46], [-0.2, 0.38], [0.3, 0.33], [1.05, 0.38], [-1.1, 0.36], [-0.55, 0.28], [0.75, 0.26], [1.6, 0.46], [-1.7, 0.44], [2.3, 0.36], [-2.4, 0.33], [3.1, 0.42], [2.8, 0.27], [-2.9, 0.26]]
+          : Array.from({ length: 50 }, (_, i) => [((i % 10) + (Math.floor(i / 10) % 2) * 0.5) * (Math.PI / 5), 0.23 + Math.floor(i / 10) * 0.075])
+        const size = (o.kind === 'shirt' ? 0.032 : 0.019) * H
         spots.forEach(([a, y], i) => {
-          flower(torsoPlain, [Math.sin(a) * r * round[0], y * H, Math.cos(a) * r * round[2]], [0, a, 0], 0.032 * H, o.print![i % o.print!.length], i)
+          const r = surface(y * H) + 0.002 * H
+          flower(torsoPlain, [Math.sin(a) * r * round[0], y * H, Math.cos(a) * r * round[2]], [0, a, 0], size, o.print![i % o.print!.length], i)
         })
       } else if (o.kind === 'shirt') {
         torsoPlain.push(...[0.47, 0.4, 0.33, 0.26].map((y) => P.sphere(0.011 * H, '#E8B85C', { at: [0, y * H, 0.164 * H * round[2]] })))
@@ -367,7 +389,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     } else if (bird) {
       parts.push(P.sphere(0.08 * H, look.fur, { at: [s * 0.02 * H, -0.09 * H, 0], rot: [0, 0, s * 0.3], scale: [0.5, 1.35, 0.95] }))
       parts.push(P.sphere(0.04 * H, look.light, { at: [s * 0.05 * H, -0.18 * H, 0.02 * H], scale: [0.6, 1, 0.9] }))
-      if (o) parts.push(P.sphere(0.06 * H, o.color, { at: [0, -0.01 * H, 0] }))
+      if (o) parts.push(P.sphere(0.075 * H, o.sleeves ?? o.color, { at: [s * 0.012 * H, -0.03 * H, 0], scale: [0.9, 1.1, 1] }))
     } else {
       const armColor = look.species === 'panda' ? look.dark : look.fur
       const hand = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' ? look.light : look.fur
@@ -610,7 +632,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         rest.push(P.sphere(0.11 * R, MOUTH, { scale: [1.5, 0.6, 0.5] }))
       } else head.push(P.cone(0.18 * R, 0.36 * R, look.dark, { at: [0, headY - 0.2 * R, 1.12 * R], rot: [Math.PI / 2, 0, 0], scale: [1.45, 1, 0.65] }))
       if (look.extras?.includes('tuft')) head.push(...[-0.15, 0.05, 0.24].map((x, i) => P.sphere(0.17 * R, look.fur, { at: [x * R, headY + (1.0 + (i % 2) * 0.1) * R, 0.0], rot: [0, 0, -x * 2.5], scale: [0.7, 1.5, 0.7] })))
-      if (!look.extras?.includes('tuft')) head.push(P.sphere(0.18 * R, look.fur, { at: [0.05 * R, headY + 0.93 * R, 0.1 * R], scale: [1.3, 0.6, 1] }))
+      if (!look.extras?.includes('tuft') && !look.hairdo) head.push(P.sphere(0.18 * R, look.fur, { at: [0.05 * R, headY + 0.93 * R, 0.1 * R], scale: [1.3, 0.6, 1] }))
       break
     }
     case 'hornbill': {
@@ -621,7 +643,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       head.push(P.cone(0.32 * R, 1.45 * R, look.dark, { at: [0, headY - 0.32 * R, 1.35 * R], rot: [2.05, 0, 0], scale: [0.62, 1, 1.25] }))
       head.push(P.capsule(0.2 * R, 0.55 * R, '#FFD45C', { at: [0, headY + 0.22 * R, 1.0 * R], rot: [Math.PI / 2 + 0.3, 0, 0], scale: [0.65, 1, 0.8] }))
       head.push(P.sphere(0.6 * R, look.light, { at: [0, headY - 0.75 * R, 0.1 * R], scale: [1.15, 0.55, 1] }))
-      head.push(...[-0.2, 0.15].map((x) => P.sphere(0.22 * R, look.fur, { at: [x * R, headY + 0.9 * R, -0.15 * R], scale: [1.2, 0.7, 1] })))
+      if (!look.hairdo) head.push(...[-0.2, 0.15].map((x) => P.sphere(0.22 * R, look.fur, { at: [x * R, headY + 0.9 * R, -0.15 * R], scale: [1.2, 0.7, 1] })))
       for (const [i, a] of [-0.9, -0.45, 0, 0.45, 0.9].entries()) tail.push(P.sphere(0.07 * H, i % 2 ? look.light : '#EADFCB', { at: [Math.sin(a) * 0.1 * H, 0.2 * H, -0.2 * H - Math.cos(a) * 0.05 * H], rot: [-0.9, a, 0], scale: [0.55, 1.6, 0.3] }))
       break
     }
@@ -655,6 +677,10 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     if (e === 'scarf') {
       torso.push(P.torus(0.255 * H, 0.05 * H, '#FF8FB8', { at: [0, 0.54 * H, 0.02 * H], rot: [Math.PI / 2, 0, 0] }, Math.PI * 2))
       torso.push(P.rbox(0.09 * H, 0.24 * H, 0.04 * H, 0.015 * H, '#FF8FB8', { at: [0.12 * H, 0.42 * H, 0.27 * H], rot: [0.25, 0, -0.15] }))
+    }
+    if (e === 'pearls') {
+      // A pearl stud low on each side of the head, where the ears would be.
+      for (const s of [-1, 1]) headPlain.push(P.sphere(0.065 * R, '#FFF8F0', { at: [s * 0.97 * R, headY - 0.22 * R, 0.2 * R] }))
     }
     if (e === 'bib') torso.push(P.sphere(0.2 * H, '#A8DCFF', { at: [0, 0.48 * H, 0.2 * H], scale: [1.1, 0.55, 0.45] }))
     if (e === 'phone') {
@@ -764,6 +790,35 @@ function hairdo(h: NonNullable<Look['hairdo']>, f: Frame, head: Parts) {
       head.push(P.sphere(0.24 * R, c, { at: [s * 1.03 * R, headY - 0.95 * R, 0.1 * R], scale: [0.72, 0.7, 1.25] }))
     }
     head.push(P.sphere(R, c, { at: [0, headY - 0.25 * R, -0.32 * R], scale: [1.2, 1.25, 0.92] }, 26))
+  } else if (h.style === 'side') {
+    // Straight hair a little past the chin, parted on her right: the cap over the top, a short piece tucked on the
+    // parting's side, and on the other side a big swoop from the parting across the forehead and down past the temple.
+    // Straight panels down both sides (their ends turn in a little) and the back.
+    const part = -0.36 * R
+    head.push(P.sphere(0.96 * R, c, { at: [0.04 * R, headY + 0.3 * R, -0.3 * R], scale: [1.12, 0.92, 1.15] }, 40))
+    head.push(P.sphere(0.3 * R, c, { at: [part - 0.16 * R, headY + 0.64 * R, 0.5 * R], rot: [0.35, 0, -0.6], scale: [1.3, 0.6, 0.8] }, 24))
+    head.push(P.sphere(0.44 * R, c, { at: [part + 0.5 * R, headY + 0.66 * R, 0.56 * R], rot: [0.4, 0, -0.22], scale: [1.6, 0.6, 0.8] }, 24))
+    head.push(P.sphere(0.36 * R, c, { at: [0.78 * R, headY + 0.36 * R, 0.42 * R], rot: [0.2, 0.5, -0.5], scale: [1.2, 0.7, 0.8] }, 24))
+    for (const s of [-1, 1]) {
+      head.push(P.sphere(0.4 * R, c, { at: [s * 0.85 * R, headY + 0.2 * R, 0.12 * R], scale: [0.7, 1.3, 1.1] }, 24))
+      head.push(P.capsule(0.26 * R, 0.6 * R, c, { at: [s * 0.95 * R, headY - 0.42 * R, -0.02 * R], rot: [0.08, 0, s * 0.04], scale: [0.66, 1, 1.3] }))
+      head.push(P.sphere(0.24 * R, c, { at: [s * 0.91 * R, headY - 0.84 * R, 0.08 * R], rot: [0, 0, -s * 0.5], scale: [0.72, 0.7, 1.3] }))
+    }
+    head.push(P.sphere(R, c, { at: [0, headY - 0.2 * R, -0.36 * R], scale: [1.12, 1.05, 0.9] }, 26))
+  } else if (h.style === 'ponytail') {
+    // Hair pulled back smooth over the top into a low ponytail down the back, under a long fringe swept from a parting
+    // on her left across the forehead to the other side, a loose lock down beside the face on the parting's side.
+    const part = 0.34 * R
+    head.push(P.sphere(0.98 * R, c, { at: [0, headY + 0.24 * R, -0.12 * R], scale: [1.08, 0.86, 1.1] }, 40))
+    head.push(P.sphere(R, c, { at: [0, headY - 0.05 * R, -0.3 * R], scale: [1.06, 0.9, 0.86] }, 26))
+    head.push(P.sphere(0.44 * R, c, { at: [part - 0.46 * R, headY + 0.56 * R, 0.66 * R], rot: [0.5, 0, 0.32], scale: [1.75, 0.62, 0.8] }, 24))
+    head.push(P.sphere(0.34 * R, c, { at: [-0.78 * R, headY + 0.3 * R, 0.48 * R], rot: [0.2, -0.5, 0.6], scale: [1.2, 0.7, 0.8] }, 24))
+    head.push(P.sphere(0.24 * R, c, { at: [part + 0.12 * R, headY + 0.72 * R, 0.5 * R], rot: [0.35, 0, 0.5], scale: [1.2, 0.6, 0.8] }, 24))
+    head.push(P.capsule(0.12 * R, 0.6 * R, c, { at: [0.93 * R, headY - 0.12 * R, 0.4 * R], rot: [0.1, 0, 0.12], scale: [0.8, 1, 1.1] }))
+    // The tie, and the ponytail hanging from it.
+    head.push(P.sphere(0.22 * R, c, { at: [0, headY - 0.02 * R, -1.08 * R] }, 20))
+    head.push(P.capsule(0.24 * R, 0.5 * R, c, { at: [0, headY - 0.48 * R, -1.22 * R], rot: [-0.22, 0, 0], scale: [1, 1, 0.8] }))
+    head.push(P.sphere(0.2 * R, c, { at: [0, headY - 0.86 * R, -1.27 * R], scale: [0.9, 1.25, 0.8] }, 20))
   } else {
     // Short thick hair sticking up in spikes on top (between the horns), short at the sides, a little fringe in front.
     head.push(P.sphere(0.92 * R, c, { at: [0, headY + 0.36 * R, -0.08 * R], scale: [1.05, 0.68, 1.06] }, 24))
