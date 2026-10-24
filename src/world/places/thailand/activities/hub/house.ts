@@ -35,6 +35,7 @@ import { Reactor, rememberRest } from './build/pokes'
 import { buildStairs } from './build/stairs'
 import { buildStreet, TUK_SEAT } from './build/street'
 import { Traffic } from './build/traffic'
+import type { Partition } from './build/room'
 import { buildUpper } from './build/upper'
 import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
 import type { HubSection } from './sections'
@@ -116,6 +117,7 @@ export class House implements World3D {
   private marker: TapMarker
   private gecko: Gecko
   private traffic: Traffic
+  private partition: Partition
   private raycaster = new Raycaster()
   private groups: Record<'tall' | 'props' | 'roof' | 'upper' | 'upperRoom' | 'upperFront' | 'front' | 'groundRoom' | 'stairs', Group>
   private cuts: { obj: Object3D; low: number; when: (m: Mode) => boolean; value: number }[] = []
@@ -161,6 +163,8 @@ export class House implements World3D {
     const ground = buildGround(kit)
     const divider = buildDivider(kit)
     const upper = buildUpper(kit)
+    this.partition = upper.partition
+    this.partition.set(0)
     const stairs = buildStairs(kit)
     this.gecko = new Gecko(kit)
     upper.room.add(this.gecko.root)
@@ -183,15 +187,19 @@ export class House implements World3D {
       { obj: street.frontRight, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
       { obj: upper.rightWall, low: 1.0 / DIM.g1, when: (m) => m === 'inside1', value: 1 },
       { obj: upperFront, low: 0.12, when: (m) => m === 'inside1', value: 1 },
-      // Upstairs the glass wall stands between the camera and her room once she's in it.
+      // Upstairs the glass wall stands between the camera and her room once she's in it, the walls round the stairwell
+      // between the camera and the stairs and the TV nook behind them (so they stay low, like the right wall), and the
+      // partition once she's behind it.
       { obj: upper.glassWall, low: 0.12, when: (m) => m === 'inside1' && this.kaylee.position.z < DIM.hall.zGlass - 0.1, value: 1 },
+      { obj: upper.stairBox, low: 1.0 / DIM.g1, when: (m) => m === 'inside1', value: 1 },
+      { obj: upper.partition.root, low: 0.12, when: (m) => m === 'inside1' && this.kaylee.position.z < DIM.partition.z + 0.05, value: 1 },
       // Downstairs the divider's cabinets would hide her once she walks through its doorway (the cupboards stay).
       { obj: divider.high, low: 0.02, when: (m) => m === 'inside0' && this.kaylee.position.z < DIM.divider.z + DIM.divider.d / 2, value: 1 },
       // And the wall behind the stairs, once she's in the kitchen.
       { obj: ground.stairWall, low: 1.0 / DIM.g0, when: (m) => m === 'inside0' && this.kaylee.position.z < DIM.stairs.zBack - DIM.stairWall.t, value: 1 },
     )
     // The upper wall pieces scale from the upstairs floor, not from the street.
-    const upperCuts: Object3D[] = [upper.rightWall, upperFront, upper.glassWall]
+    const upperCuts: Object3D[] = [upper.rightWall, upperFront, upper.glassWall, upper.stairBox, upper.partition.root]
     for (const c of this.cuts) c.obj.userData.cutBase = upperCuts.includes(c.obj) ? DIM.g0 : c.obj === divider.high ? DIVIDER_BASE : 0
 
     this.reactor = new Reactor(kit, this.bag)
@@ -444,6 +452,12 @@ export class House implements World3D {
     const path = this.nav[floor].path([k.position.x, k.position.z], to)
     this.using = undefined
     if (!path) return false
+    // Through the partition while it's shut: it folds open as she sets off (she never bumps into it).
+    if (floor === 1 && this.reactor.partitionClosed) {
+      const z = DIM.partition.z
+      const pts: XZ[] = [[k.position.x, k.position.z], ...path]
+      if (pts.some((p, i) => i > 0 && (pts[i - 1][1] - z) * (p[1] - z) < 0)) this.reactor.setPartition(false)
+    }
     if (mark) {
       const end = path[path.length - 1]
       this.marker.show(end[0], floor * DIM.g0, end[1])
@@ -473,6 +487,10 @@ export class House implements World3D {
         sfx.boingAt(k.bounceHigher())
         // After the biggest bounce she flops down along the mattress, head on the pillows at the left wall.
         k.face(k.pose === 'lie' ? 90 : p.use.face * deg)
+      } else if (p.id === 'unicorn') {
+        // Riding the bouncy unicorn: every tap, a bounce.
+        k.hopTo(k.position, 0.42, 0.2)
+        sfx.boing()
       } else k.react('wiggle')
       return
     }
@@ -759,6 +777,7 @@ export class House implements World3D {
       f.update(dt, t)
     }
     this.reactor.update(dt, t)
+    this.partition.set(this.reactor.partitionValue)
     if (this.gecko.update(dt, t) && this.mode === 'inside1') sfx.tukkae()
     this.traffic.update(dt, this.mode === 'street' && !this.arriving && !this.photo)
     this.marker.update(dt)
@@ -949,6 +968,7 @@ export class House implements World3D {
       walking: k.walking,
       arriving: this.arriving,
       shutterOpen: this.reactor.shutterOpen,
+      partitionClosed: this.reactor.partitionClosed,
       pos: [k.position.x, k.position.y, k.position.z].map((v) => Math.round(v * 100) / 100),
       ...this.plugin?.qa?.(),
     }

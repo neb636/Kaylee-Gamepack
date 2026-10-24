@@ -14,11 +14,16 @@ interface Active {
   t: number
 }
 
-const DUR: Partial<Record<Pickable['react'], number>> = { jelly: 0.65, hop: 0.7, tilt: 0.9, shutter: 1.2, birds: 1.6, cat: 1.3, glow: 2.2, beep: 0.6, toot: 0.7, puff: 0.6, tick: 1.1, flip: 0.7, rattle: 0.6, wave: 1.6, open: 2.2, spin: 2.6, stairs: 0.4 }
+const DUR: Partial<Record<Pickable['react'], number>> = { jelly: 0.65, hop: 0.7, tilt: 0.9, shutter: 1.2, birds: 1.6, cat: 1.3, glow: 2.2, beep: 0.6, toot: 0.7, puff: 0.6, tick: 1.1, flip: 0.7, rattle: 0.6, fold: 0.5, tv: 0.5, light: 0.4, wave: 1.6, open: 2.2, spin: 2.6, stairs: 0.4 }
 
 export class Reactor {
   private active = new Map<string, Active>()
   private shutter = { open: false, value: 0 }
+  /** Her room's accordion partition: folded open (0) or shut across the room (1). */
+  private partition = { closed: false, value: 0 }
+  /** The TV upstairs (off until she taps it) and the globe lamp (on). */
+  private tvOn = false
+  private lampOn = true
   private puffs: { mesh: Mesh; mat: MeshBasicMaterial; t: number; from: Vector3 }[] = []
   private puffGeo: SphereGeometry
   readonly root = new Group()
@@ -44,9 +49,27 @@ export class Reactor {
     else if (open) sfx.rattle()
   }
 
+  /** How far the partition is shut (0 folded open .. 1 across the room). */
+  get partitionValue() {
+    return this.partition.value
+  }
+  get partitionClosed() {
+    return this.partition.closed
+  }
+  /** Folds the partition open or shut, with a plasticky clatter (or at once, for a deep link). */
+  setPartition(closed: boolean, instant = false) {
+    if (closed === this.partition.closed && !instant) return
+    this.partition.closed = closed
+    if (instant) this.partition.value = closed ? 1 : 0
+    else {
+      sfx.rattle()
+      sfx.whoosh(0.5)
+    }
+  }
+
   /** True while something is still moving because of a tap (the frame loop stays at full speed). */
   get busy() {
-    return this.active.size > 0 || (this.shutter.open ? this.shutter.value < 1 : this.shutter.value > 0)
+    return this.active.size > 0 || (this.shutter.open ? this.shutter.value < 1 : this.shutter.value > 0) || this.partition.value !== (this.partition.closed ? 1 : 0)
   }
 
   poke(p: Pickable) {
@@ -110,6 +133,18 @@ export class Reactor {
       case 'rattle':
         sfx.jiggle()
         break
+      case 'fold':
+        this.setPartition(!this.partition.closed)
+        break
+      case 'tv':
+        this.tvOn = !this.tvOn
+        if (this.tvOn) sounds.sparkle()
+        else sfx.beep()
+        break
+      case 'light':
+        this.lampOn = !this.lampOn
+        sfx.latch()
+        break
     }
   }
 
@@ -149,6 +184,18 @@ export class Reactor {
       const leaf = get(n)
       if (leaf) leaf.scale.x = 1 - 0.9 * this.shutter.value
     }
+    // The partition slides along its track (the house lays its panels out from the value).
+    const pv = this.partition.closed ? 1 : 0
+    this.partition.value += clamp(pv - this.partition.value, -dt / 0.7, dt / 0.7)
+    // The TV plays candy colours; the lamp glows warm.
+    const screen = get('tv.screen') as Mesh | undefined
+    if (screen) {
+      const c = (screen.material as MeshBasicMaterial).color
+      if (this.tvOn) c.setHSL((0.92 + t * 0.12 + Math.sin(t * 2.3) * 0.04) % 1, 0.75, 0.72)
+      else c.set('#34303C')
+    }
+    const globe = get('lamp.globe') as Mesh | undefined
+    if (globe) (globe.material as MeshBasicMaterial).color.set(this.lampOn ? '#FFF3C4' : '#DAD7D2')
 
     // ---- Reactions to taps ----
     for (const [id, a] of this.active) {
@@ -263,6 +310,11 @@ export class Reactor {
         // A locked door: it shakes in its frame but stays shut.
         g.position.x = g.userData.baseX + Math.sin(p * Math.PI * 9) * 0.012 * (1 - p)
         break
+      case 'tv':
+      case 'light':
+        jelly(0.05)
+        break
+      case 'fold':
       case 'wave':
       case 'spin':
       case 'glow':
