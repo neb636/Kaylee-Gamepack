@@ -1130,6 +1130,30 @@ GAME_SCENARIOS.push(
   thaiPizza('pizza-tug', 6, 'pizza=cheese&shared=3', 'ji', { tug: true }),
 )
 
+// The Nan road trip's mountain road (greybox): her finger steering the Pajero, the core verb. On the valley road she
+// holds the road ahead on the left, then sweeps right across into the edge (the rail boings her back, the body leans
+// out), lets go (Mommy takes it back to the left lane), and beeps the horn.
+GAME_SCENARIOS.push({
+  name: 'nan-steer',
+  seconds: 9,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/nan-trip/drive`)
+    await page.waitForFunction(() => window.__thaiNanQA?.().mode, null, { timeout: 30000 })
+    await page.waitForTimeout(1500)
+  },
+  act: async (page) => {
+    await page.mouse.move(vp.width * 0.38, vp.height * 0.45)
+    await page.mouse.down()
+    await page.waitForTimeout(1800)
+    await page.mouse.move(vp.width * 0.85, vp.height * 0.45, { steps: 20 })
+    await page.waitForTimeout(2600)
+    await page.mouse.up()
+    await page.waitForTimeout(2200)
+    await page.getByRole('button', { name: 'Horn' }).dispatchEvent('pointerdown')
+    await page.waitForTimeout(1500)
+  },
+})
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {

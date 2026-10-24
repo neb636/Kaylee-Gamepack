@@ -4,7 +4,8 @@
 // Agong's wall and the stamp (the fiddler crab sticker, and the trip's facts to tap); the second is the mall day
 // (activities/mall-trip/, greyboxes so far, still in the works: Mommy's question, the Veloz, ICONSIAM, HarborLand's
 // hall of mini games, the pizza table, and home with the pizza box for Agong, then its stamp and the pizza slice
-// sticker). The finale (route `party`) is the family party, coming soon.
+// sticker); the third is the Nan road trip (activities/nan-trip/, in the works: the mountain road's greybox). The finale
+// (route `party`) is the family party, coming soon.
 import { useState } from 'react'
 import { StampEarned } from '../../kit/StampEarned'
 import { worldLink } from '../../../router'
@@ -12,6 +13,7 @@ import type { PlaceProps } from '../../types'
 import { BoatTrip } from './activities/boat-trip/BoatTrip'
 import { Hub } from './activities/hub/Hub'
 import { MallTrip } from './activities/mall-trip/MallTrip'
+import { NanTrip } from './activities/nan-trip/NanTrip'
 import { PartySoon } from './PartySoon'
 import { saidYes } from './trip/legs/Ask'
 import { MALL_FACTS, TRIP_FACTS } from './trip/facts'
@@ -61,6 +63,8 @@ export default function Place(props: PlaceProps) {
       </>
     )
   }
+  // The Nan road trip: greyboxes so far, in the works (only its links open it).
+  if (activity === 'nan-trip' && info) return <NanTrip />
   if (activity === 'boat-trip' && info) {
     if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
     return (
