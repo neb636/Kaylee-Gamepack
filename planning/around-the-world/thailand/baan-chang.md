@@ -401,14 +401,15 @@ instanced, and the elephants are a few thousand triangles each.
 ## Build plan (one PR each; stop for Dad after each)
 
 0. **This plan** (PR). Dad reads it.
-1. **Greybox 1, the feeding toy:**
+1. **Greybox 1, the feeding toy** (built 2026-10-24, see "Built so far"):
    - Only `feed`: the `'chang'` world, Mali and Khanom as toon shapes with the 3D trunk, the rail, the boulders,
      the gravel and the basket of bananas and sugarcane.
    - `?debug=1` gets sliders for the trunk (reach, chase, droop, grab distance).
    - The flag stays off. No voices, no generated art. The README gets the `feed` link.
    - **Dad plays it on the iPad:** is holding food out to a trunk fun? If not, change the toy.
-2. **Greybox 2, deeper and the payoff:** `favorites` (the bubbles, Mali's three sugarcanes, the pass-along),
-   `lamyai` (her walk over, three trunks, Khanom's sneaky sips with a placeholder glass), and `splash`.
+2. **Greybox 2, deeper and the payoff** (built 2026-10-24, see "Built so far"): `favorites` (the bubbles, Mali's
+   three sugarcanes, the pass-along), `lamyai` (her walk over, three trunks, Khanom's sneaky sips with a placeholder
+   glass), and `splash`.
 3. **Greybox 3, the drink:** `drinks`, the pour with the mall cafe's props; the glass rides to the yard, where Khanom
    sips it.
 4. **Greybox 4, the way in and out:**
@@ -425,6 +426,84 @@ instanced, and the elephants are a few thousand triangles each.
      facts on the stamp screen and the passport.
    - Pacing QA, then layout-qa and playtest-qa with the fun check.
    - Then `CHANG_OPEN = true`, and this plan and `boat-trip.md` updated. Dad plays the whole trip on the iPad.
+
+## Built so far
+
+**Greybox 1, the feeding toy (2026-10-24):** `#/world/thailand/boat-trip/feed` (`?fed=N` starts with rounder bellies,
+`?debug=1` shows the trunk sliders).
+- **The world:** `chang/` in the boat trip, as planned: `chang.ts` (the Stage), `layout.ts`, `yard.ts`, `elephant.ts`,
+  `trunk.ts`, `feel.ts`, `basket.ts` and `ChangDebug.tsx`. `TripWorld` and `WORLD_OF` have `'chang'`, `sections.ts`
+  has `feed` (after `land`) and the param `fed`.
+- **The yard:** gravel, the steel pipe rail, seven mossy boulders, cut grass, the blue bench, two salas on stilts and
+  a grid of oil palms, all toon shapes. Mommy, Daddy and Kaylee stand on the near side, Kaylee wearing what she packed.
+- **The elephants:** Mali (tusks) and Khanom (a tuft, about half her size) with blinking eyes, flapping ears, heads
+  that turn to her food, a lean toward it, breathing, and a belly that pokes out a little more with every meal.
+- **The trunk:** nine segments (ten at first, one fewer to stay near 200 draw calls), solved in meters (FABRIK, ported from PR #86) and kept above the rail and the boulders.
+  Each trunk in reach snakes after the held food; the first tip to touch it grabs it, curls it to the mouth, and the
+  elephant munches (crunch for cane, a rumble or a squeal). Held high, the trunks stretch up and strain.
+- **Holding food:** press 🍌 or 🎋 in the basket (two targets, about 95-105 px on iPad) and drag. The food rides the plane in
+  front of the boulders, 40 px above her finger. A tap floats it to the hungriest trunk (Khanom if it's a tie), and
+  food let go far from every trunk falls on the gravel: a trunk in reach snuffles it up, otherwise it pops back into
+  the basket. Eaten food comes back to the basket a moment later, so the basket never runs out (four bananas and four
+  sticks of cane since greybox 2, for the same reason).
+- **Pokes and silly bits:** a tap on an elephant trumpets (Khanom squeals); tapping the family makes them hop.
+  Kaylee hops and giggles at every other bite. Three bites in a row and Mali burps, then Daddy laughs.
+- **No WebGL:** a picture-book page where 🍌 and 🎋 fly to the emoji elephants.
+- **QA:** `__thaiBoatQA()` has `fed`, `holding` and `trunks`. The section is in `qa-screens.mjs` and `qa-pacing.mjs`,
+  and `qa-motion.mjs` has `chang-trunk`. About 150 draw calls and 170k triangles (the family characters are most of
+  the triangles).
+- **Changed from the plan:**
+  - Daddy's basket stands on a tree stump between the two elephants, with Daddy beside it, not in his arms. With
+    the basket in front of Khanom, every food passed his quick trunk first and Mali never got one. Holding it
+    comes with the look.
+  - `CHANG_OPEN` comes with the fork (greybox 4): until then nothing leads to Baan Chang except its links.
+  - The silly moments still to build: Khanom rearing up for food held over his head, and the trunks bonking
+    together and sneezing. The trunk sniffing Kaylee's mane on a tap is also still to come.
+- **Known small things:** the picture book's page doesn't read `fed`. On a portrait iPad there is a band of empty
+  sand under the family.
+
+Dad played greybox 1 on the iPad: "looks great", on to greybox 2.
+
+**Greybox 2, deeper and the payoff (2026-10-24):** `favorites`, `lamyai` and `splash`, in the same world, moving on
+by themselves (after 8 foods in `feed`, two rounds of favorites, and 12 foods in `lamyai`). A link into a later
+section starts as if she had fed them already (`fed` at least 8, 18 or 30, for the bellies).
+- **Favorites:** a picture bubble over each head (the food, and gold pips for how many, no words) that always faces
+  the camera. Round 1: Mali wants three of one food, Khanom two of the other (the kind is drawn fresh each time, so
+  sometimes it's Mali and the bananas). Round 2 swaps them and asks Khanom for three. The trunk that wants a food
+  reaches a little faster for it, and a tap floats food to whoever wants it.
+- **The pass:** a trunk that grabs the wrong snack sniffs it at its mouth, swings toward the one who wanted it and
+  tosses it over in an arc. The other trunk reaches out, catches it and eats it, with a rumble from both. If nobody
+  free wants it, it just gets eaten. Nothing fails.
+- **Lamyai:** she waits by the sala at the back from the start. In `lamyai` she wanders over (a heavy bob, a thump at
+  every step, and the basket hops) to the right end of the rail. Daddy hops onto the blue bench out of her way, and
+  the camera widens to take in all three. Every elephant gets a new wish (1-2 of a food) a moment after the last one
+  comes true.
+- **Khanom's sneaky sips:** a placeholder glass of chocolate milk stands on a flat rail-post cap. Once Lamyai is
+  there (and Kaylee has fed one, or 8 s have passed), Khanom's trunk creeps across to the straw whenever her hands
+  have been still for 3 s. A food held out turns him back at once. A sip lowers the milk, then he hiccups, hops, and
+  wears a chocolate moustache on his trunk tip for 5 s. Mommy hops and Kaylee giggles. He waits 6 s before the next
+  sneak, and stops when the milk is low. A tap on the glass: Kaylee has a sip herself.
+- **The splash:** food in hands and trunks goes back in the basket and the food targets hide. The three take turns,
+  round and round: dip in the trough, lift, spray a fountain of drops up and over the family, rest. A rainbow fades
+  in over the yard. Kaylee bounces and giggles and Mommy wiggles as the water comes down, and a tap on an elephant
+  sprays again at once. The camera pulls back and up. It doesn't end yet (the 🚤 or ✈️🏠 routing is greybox 4).
+- **Props:** the water trough behind the rail (the trunks dip into it, and the trunk floor knows about it), and the
+  rail-post cap for the glass.
+- **No WebGL:** the picture book's feeding page grows with it: wishes over the elephants (whoever wants a food gets
+  it), three elephants with Lamyai, and in the splash 🌈 and a 💦 when she taps one.
+- **QA:** `__thaiBoatQA()` adds `section`, `stepFed`, `round`, each trunk's `want`, `here` and `at`, plus `flying`,
+  `milk`, `sips` and `sprays`. The three sections are in `qa-screens.mjs` and `qa-pacing.mjs`, and `qa-motion.mjs`
+  has `chang-pass` and `chang-splash`. A robot tapping wanted foods as fast as it could went from `feed` to the
+  splash in about 65 s, with the address bar following each section. About 195-210 draw calls and 190k triangles
+  (`lamyai`, with three elephants, three bubbles and the milk, is the most).
+- **Still to build** (the plan's ideas, not in yet): Mommy's hat flying off in the splash, and Daddy's sunglasses
+  dripping. In greybox 1's list too: Khanom rearing up, the trunks bonking, the trunk sniffing Kaylee's mane.
+- **Known small things:** on a portrait iPad, `lamyai` and `splash` show the yard small, with empty sand below. The
+  wishes are drawn at random, so the deep links don't always show the same first wish.
+
+**Next:** Dad plays the four sections on the iPad (are favorites and the sneaky sips fun, is the splash a payoff?).
+Then greybox 3, the drink (`drinks`): pour the chocolate milk with the mall cafe's props, and the glass rides along to
+the yard.
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 

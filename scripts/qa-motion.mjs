@@ -496,6 +496,69 @@ GAME_SCENARIOS.push(
   thaiBoat('boat-cave-roof', 8, 'cave', [['down', 0, 0.25, 7800]]),
 )
 
+// Baan Chang's feeding yard (3D greybox): a banana pulled out of Daddy's basket and held up on Mali's side (her trunk
+// snakes after it, curls round it and swings it to her mouth), then a stick of sugarcane held high on the right (the
+// trunks stretch up after it) and brought down to Khanom.
+GAME_SCENARIOS.push({
+  name: 'chang-trunk',
+  seconds: 7,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/boat-trip/feed`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiBoatQA?.().mode, null, { timeout: 20000 })
+    await page.waitForTimeout(1200)
+  },
+  act: async (page) => {
+    for (const [food, path] of [
+      ['banana', [[0.34, 0.5, 2600]]],
+      ['cane', [[0.7, 0.12, 1600], [0.66, 0.55, 1800]]],
+    ]) {
+      const b = await page.locator(`[data-anchor="food:${food}"]`).boundingBox()
+      if (!b) throw new Error(`no ${food} in the basket`)
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+      await page.mouse.down()
+      for (const [fx, fy, ms] of path) {
+        await page.mouse.move(vp.width * fx, vp.height * fy, { steps: 10 })
+        await page.waitForTimeout(ms)
+      }
+      await page.mouse.up()
+    }
+  },
+})
+
+// Baan Chang deeper: in favorites a food held out to the elephant who doesn't want it (sniffed, then tossed through
+// the air to the one who does); in the splash, a tap on each elephant (dip, spray up over the family, the rainbow).
+const changMoment = (name, seconds, section, act) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/boat-trip/${section}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiBoatQA?.().mode, null, { timeout: 20000 })
+    await page.waitForTimeout(1500)
+  },
+  act,
+})
+GAME_SCENARIOS.push(
+  changMoment('chang-pass', 5, 'favorites', async (page) => {
+    // Whatever Khanom wants, held out on Mali's side: she takes it, sniffs it and passes it over.
+    const want = await page.evaluate(() => window.__thaiBoatQA().trunks.find((t) => t.id === 'khanom').want?.split(' ')[0] ?? 'banana')
+    const b = await page.locator(`[data-anchor="food:${want}"]`).boundingBox()
+    if (!b) throw new Error('no food in the basket')
+    await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+    await page.mouse.down()
+    await page.mouse.move(vp.width * 0.3, vp.height * 0.45, { steps: 10 })
+    await page.waitForTimeout(4200)
+    await page.mouse.up()
+  }),
+  changMoment('chang-splash', 6, 'splash', async (page) => {
+    for (const id of ['ele:mali', 'ele:khanom', 'ele:lamyai']) {
+      await page.locator(`[data-anchor="${id}"]`).click({ force: true }).catch(() => {})
+      await page.waitForTimeout(1900)
+    }
+  }),
+)
+
 // The bay's stops, one scenario per verb: ribbons fluttering through the air onto the prow (then the garland, and the
 // family stepping in), the bumper-boat football (the boat pushes the ball back to the floating field: the kick, GOAL),
 // lying the family down in the canoe before the low roof, and the Nail Island pose (Kaylee strikes it, Mommy and
