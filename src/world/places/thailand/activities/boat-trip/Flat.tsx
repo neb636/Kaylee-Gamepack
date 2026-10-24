@@ -7,9 +7,11 @@
 //            hear its fact; the race opens its page, the Nail Island the photo
 //   race     three boats race across the water when she taps ▶ (hers wins by a nose), then the podium: her trophy
 //   nail     the photo as a drawn card: tap 📸 (flash!), then ▶
+//   land     with Baan Chang open (`fork`): the signpost's two cards, 🐘 to Baan Chang or 🚤 to the pier
+//   chang, sign, boardwalk   Baan Chang's way in: the songthaew, the photo at the bamboo sign, the boardwalk (▶ each)
 //   drinks   Baan Chang's cafe: tap 🥛, 🍫 and 🥄, then a straw, and the glass fills up brown; 🐘 goes on to the yard
 //   feed ... splash   Baan Chang's elephants: tap 🍌 or 🎋 and an elephant munches it (with favorites, whoever
-//            wants it), three of them with Lamyai, and in the splash a tap on one sprays water (greybox)
+//            wants it), three of them with Lamyai, and in the splash a tap on one sprays water; 🚤 goes on to the pier
 //   home     Agong: tap the photo and it's his ("Beautiful! Thank you, Kaylee!"), the cousins look up, then the stamp
 // Sparkle stands above each page (not the packing page, which needs the room) and waves as it turns; tap her to hop.
 // Every section link lands on its page. Voices are the trip's own clips (lines.ts).
@@ -29,6 +31,8 @@ interface Props {
   onPacked: (ids: string[]) => void
   onSection: (s: BoatSection) => void
   onDone: () => void
+  /** Baan Chang is open: Krabi's signpost asks 🐘 or 🚤. */
+  fork?: boolean
 }
 
 /** The legs on the way there and back: a picture and what comes next. */
@@ -38,6 +42,9 @@ const LEGS: Partial<Record<BoatSection, { scene: string; bg: string; next: BoatS
   takeoff: { scene: '💺 🛫', bg: 'linear-gradient(#A8DCFF, #E4F3FC)', next: 'fly', line: L.trip.plane.wheee },
   fly: { scene: '☁️ ✈️ 🐘', bg: 'linear-gradient(#8FCBFF, #BDE3FF)', next: 'land', line: L.trip.elephant },
   land: { scene: '🛬 🌴 🛻', bg: 'linear-gradient(#BDE3FF, #8FE3C8)', next: 'pier', line: L.trip.plane.krabi },
+  chang: { scene: '🛻 🌴 🐘', bg: 'linear-gradient(#BFE6FF, #E6DCC6)', next: 'sign' },
+  sign: { scene: '🎋 🦄📸', bg: 'linear-gradient(#BFE6FF, #E8C987)', next: 'drinks', line: L.bay.cheese },
+  boardwalk: { scene: '🌴 🦄 🐘', bg: 'linear-gradient(#BFE6FF, #CFCAD8)', next: 'feed' },
   sunset: { scene: '🌅 🚤 🐬', bg: 'linear-gradient(#A98FE8, #FF9DC0 55%, #FFC98F)', next: 'home', line: L.bay.sunset },
 }
 const STOPS: { id: 'village' | 'hong' | 'nail'; icon: string; bg: string; fact: Line }[] = [
@@ -46,7 +53,7 @@ const STOPS: { id: 'village' | 'hong' | 'nail'; icon: string; bg: string; fact: 
   { id: 'nail', icon: '🏝️📸', bg: '#A8DCFF', fact: L.bay.facts.nail },
 ]
 
-export function Flat({ section, packed, onPacked, onSection, onDone }: Props) {
+export function Flat({ section, packed, onPacked, onSection, onDone, fork }: Props) {
   // (A quick second tap lands on the page that's leaving: it doesn't skip a leg.)
   const turned = useRef(0)
   const sparkle = useRef<PuppetHandle>(null)
@@ -65,7 +72,8 @@ export function Flat({ section, packed, onPacked, onSection, onDone }: Props) {
     if (section === 'nail') return <Photo onNext={() => go('sunset')} />
     if (section === 'home') return <Home onDone={onDone} />
     if (section === 'drinks') return <Drinks onNext={() => go('feed')} />
-    if (section === 'feed' || section === 'favorites' || section === 'lamyai' || section === 'splash') return <Feed key={section} section={section} />
+    if (section === 'land' && fork) return <Fork onPick={go} />
+    if (section === 'feed' || section === 'favorites' || section === 'lamyai' || section === 'splash') return <Feed key={section} section={section} onNext={() => go('pier')} />
     if (section === 'race') return <RaceDay onWin={() => onSection('podium')} />
     if (section === 'podium') return <PodiumPage onNext={() => go('bay')} />
     const leg = LEGS[section]
@@ -170,7 +178,7 @@ function Pack({ packed, onPacked, onClose }: { packed: string[]; onPacked: (ids:
  *  elephant and it sprays water under a rainbow. */
 const ELEPHANT_NAMES = ['Mali the elephant', 'Khanom the baby elephant', 'Lamyai the elephant']
 const SIZES = [1, 0.62, 0.8]
-function Feed({ section }: { section: BoatSection }) {
+function Feed({ section, onNext }: { section: BoatSection; onNext: () => void }) {
   const three = section === 'lamyai' || section === 'splash'
   const herd = three ? [0, 1, 2] : [0, 1]
   const [full, setFull] = useState([0, 0, 0])
@@ -242,6 +250,11 @@ function Feed({ section }: { section: BoatSection }) {
           )}
         </AnimatePresence>
       </div>
+      {section === 'splash' && (
+        <Big label="To the boat" onClick={onNext} color="var(--sky)">
+          🚤
+        </Big>
+      )}
       {section !== 'splash' && (
         <div style={{ display: 'flex', gap: 'clamp(12px, 3vw, 28px)' }}>
           {[
@@ -254,6 +267,26 @@ function Feed({ section }: { section: BoatSection }) {
           ))}
         </div>
       )}
+    </>
+  )
+}
+
+/** Krabi's signpost (Baan Chang open): 🐘 to the elephants or 🚤 to the pier, either first. */
+function Fork({ onPick }: { onPick: (s: BoatSection) => void }) {
+  useEffect(() => void say(L.bay.whereTo), [])
+  return (
+    <>
+      <div style={{ ...card, padding: 'clamp(16px, 3vmin, 28px)', fontSize: 'clamp(70px, 14vmin, 130px)', lineHeight: 1 }} aria-hidden>
+        🛬 🪧
+      </div>
+      <div style={{ display: 'flex', gap: 'clamp(12px, 3vw, 28px)' }}>
+        <Big label="To the elephants" onClick={() => onPick('chang')} color="var(--pink)">
+          🐘
+        </Big>
+        <Big label="To the boat" onClick={() => onPick('pier')} color="var(--sky)">
+          🚤
+        </Big>
+      </div>
     </>
   )
 }

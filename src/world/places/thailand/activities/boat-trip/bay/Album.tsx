@@ -1,13 +1,14 @@
 // The trip album (the payoff that builds while she plays): a book button in the bottom-right corner that bounces when
 // something lands in it. Photos drop in with a thwap (the village with the kids cheering, the hong, her Nail Island
-// poses, Mommy's selfies), and an animal sticker flies in for every critter she drives up to. Open it and the photos
-// fill one page and the nine stickers the other; tap any of them to hear Sparkle's fact. Nothing to read.
+// poses, Mommy's selfies; at Baan Chang, the sign wall and the splash), and an animal sticker flies in for every
+// critter she drives up to (and Khanom, the baby elephant, after the splash). Open it and the photos fill one page and
+// the ten stickers the other; tap any of them to hear Sparkle's fact. Nothing to read.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import type { Line } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { sfx } from '../../../sfx'
-import { CRITTERS, type CritterId } from './critters'
+import { STICKERS, type StickerId } from './critters'
 import type { PhotoKind } from './part'
 import { Sticker } from './Stickers'
 
@@ -17,12 +18,14 @@ export interface AlbumPhoto {
   src: string
 }
 
-const FACT: Record<PhotoKind, Line | null> = { village: L.bay.facts.football, hong: L.bay.facts.hong, nail: L.bay.facts.nail, selfie: null, race: L.race.trophy }
+const FACT: Record<PhotoKind, Line | null> = { village: L.bay.facts.football, hong: L.bay.facts.hong, nail: L.bay.facts.nail, selfie: null, race: L.race.trophy, sign: L.facts.chang, chang: L.facts.elephant }
+/** A sticker's fact (Khanom's has none of its own yet: the elephant's). */
+const stickerFact = (id: StickerId): Line => L.bay.stickers[id] ?? L.facts.elephant
 const BTN = 'min(96px, max(68px, 12vmin))'
 /** Where the album button's middle is (a flying sticker aims there). */
 const buttonCenter = () => ({ x: window.innerWidth - 18 - 48, y: window.innerHeight - 18 - 48 })
 
-export function Album(props: { photos: AlbumPhoto[]; found: CritterId[]; open: boolean; bump: number; onOpen: () => void; onClose: () => void; onFact: (line: Line) => void }) {
+export function Album(props: { photos: AlbumPhoto[]; found: StickerId[]; open: boolean; bump: number; onOpen: () => void; onClose: () => void; onFact: (line: Line) => void }) {
   const { photos, found, open, bump, onOpen, onClose, onFact } = props
   const [big, setBig] = useState<AlbumPhoto | null>(null)
   const [wiggle, setWiggle] = useState<string | null>(null)
@@ -96,7 +99,7 @@ export function Album(props: { photos: AlbumPhoto[]; found: CritterId[]; open: b
               </div>
               {/* The stickers page. */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, alignContent: 'start', background: 'rgba(217,204,255,.35)', borderRadius: 20, padding: 12 }}>
-                {CRITTERS.map((id) => {
+                {STICKERS.map((id) => {
                   const has = found.includes(id)
                   return (
                     <motion.button
@@ -108,7 +111,7 @@ export function Album(props: { photos: AlbumPhoto[]; found: CritterId[]; open: b
                       onClick={() => {
                         if (has) {
                           sfx.pop()
-                          onFact(L.bay.stickers[id])
+                          onFact(stickerFact(id))
                         } else sfx.boop()
                         setWiggle(id)
                         setTimeout(() => setWiggle(null), 520)
@@ -157,7 +160,7 @@ export function Album(props: { photos: AlbumPhoto[]; found: CritterId[]; open: b
 }
 
 /** A sticker flying from where she found the animal into the album. */
-export function StickerFlight({ id, x, y, onDone }: { id: CritterId; x: number; y: number; onDone: () => void }) {
+export function StickerFlight({ id, x, y, onDone }: { id: StickerId; x: number; y: number; onDone: () => void }) {
   const to = buttonCenter()
   return (
     <motion.div

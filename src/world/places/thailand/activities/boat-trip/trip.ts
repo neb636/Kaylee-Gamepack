@@ -41,7 +41,10 @@ export const WORLD_OF: Record<BoatSection, TripWorld> = {
   takeoff: 'plane',
   fly: 'plane',
   land: 'plane',
+  chang: 'chang',
+  sign: 'chang',
   drinks: 'chang',
+  boardwalk: 'chang',
   feed: 'chang',
   favorites: 'chang',
   lamyai: 'chang',
@@ -65,7 +68,12 @@ export const PASS: { id: BoatSection; icon: string; label: string }[] = [
   { id: 'airport', icon: '🛄', label: 'Airport' },
   { id: 'fly', icon: '✈️', label: 'Fly' },
   { id: 'pier', icon: '🚤', label: 'Boat' },
+  { id: 'chang', icon: '🐘', label: 'Elephants' },
   { id: 'home', icon: '🏠', label: 'Home' },
 ]
-/** A punch on the boarding pass for the leg a section belongs to. */
-export const PUNCH: Partial<Record<BoatSection, BoatSection>> = { pack: 'pack', goodbye: 'goodbye', airport: 'airport', takeoff: 'fly', fly: 'fly', land: 'fly' }
+/** Krabi's two places, done in either order (the `been` param): the boarding pass's leg for each. */
+export type Been = 'chang' | 'bay'
+export const BEEN: Been[] = ['chang', 'bay']
+export const LEG_OF_BEEN: Record<Been, BoatSection> = { chang: 'chang', bay: 'pier' }
+/** A punch on the boarding pass for the leg a section belongs to (home's is never punched: the stamp is its end). */
+export const PUNCH: Partial<Record<BoatSection, BoatSection>> = { pack: 'pack', goodbye: 'goodbye', airport: 'airport', takeoff: 'fly', fly: 'fly', land: 'fly', home: 'home' }

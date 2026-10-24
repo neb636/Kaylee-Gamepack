@@ -7,21 +7,21 @@ import type { Bag } from '../../../engine/dispose'
 import { merge, P, solid } from '../../../engine/geo'
 import { BENCH, BOULDERS, CAFE, COUNTER, LAMYAI_BACK, MILK, RAIL, TROUGH } from './layout'
 
-const GRAVEL = '#CFCAD8'
+export const GRAVEL = '#CFCAD8'
 const GRAVEL_DARK = '#B9B3C8'
-const STEEL = '#5E5872'
+export const STEEL = '#5E5872'
 const ROCK = '#B5B0C2'
 const MOSS = '#8CCB86'
 const PALM_TRUNK = '#A98A6E'
-const FROND = '#6FBF7F'
-const FROND_DARK = '#58A86C'
-const WOOD = '#C99A6E'
-const THATCH = '#E8C987'
+export const FROND = '#6FBF7F'
+export const FROND_DARK = '#58A86C'
+export const WOOD = '#C99A6E'
+export const THATCH = '#E8C987'
 const euler = new Euler()
 const quat = new Quaternion()
 
 /** An oil palm: a ringed trunk and a crown of long fronds that arch out and droop. */
-function oilPalm(x: number, z: number, h: number, k: number, y0 = 0) {
+export function oilPalm(x: number, z: number, h: number, k: number, y0 = 0) {
   const parts = [P.cyl(0.3, 0.38, h, PALM_TRUNK, { at: [x, y0 + h / 2, z] }, 8)]
   // Its rough, ringed bark (the old frond stubs).
   for (let i = 1; i < 5; i++) parts.push(P.cyl(0.4, 0.4, 0.18, '#977A60', { at: [x, y0 + (h / 5) * i, z] }, 8))

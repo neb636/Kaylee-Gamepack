@@ -128,3 +128,61 @@ export const CAFE_SHOT = {
   wide: { center: [0.12, 1.0, CAFE.z + 0.4], half: [1.95, 0.95, 0.5], yaw: 0, pitch: 9 },
   tall: { center: [0.05, 1.25, CAFE.z + 0.9], half: [1.38, 1.2, 0.75], yaw: 0, pitch: 12 },
 } as const
+
+// ---- The entrance (`chang`, `sign`) ----
+// Far off behind the cafe (the yard and the cafe hide while she's there). Seen straight on (the camera looks toward -z):
+// the road along the front, where the songthaew drives in (toward +x) and stops; the plank deck behind it, with
+// tree-stump stools, a black-and-white totem post either side, a driftwood tree and potted palms; and behind the deck
+// the curved wall of bamboo poles under a thick thatched band, "Baan Chang Café" in big white letters along it. The
+// arc bulges away from the camera, so the wall wraps round the family like a stage.
+
+export const ENTRY = { z: 80 }
+/** The bamboo wall: its circle's middle (x, z) and radius, its half-angle, the poles' height and the thatch on top. */
+export const WALL = { cx: 0, cz: ENTRY.z + 6.2, r: 7.6, a: 0.6, h: 2.85, band: 0.55 }
+/** The plank deck in front of it. */
+export const DECK = { x0: -3.0, x1: 3.0, z0: ENTRY.z - 0.5, z1: ENTRY.z + 2.1, y: 0.14 }
+/** The road along the front, and where the songthaew's middle stops (it drives in from x0). */
+export const ROAD = { z: ENTRY.z + 4.4, w: 3.4, x0: -17, stop: -0.6 }
+/** The family on the deck for the photo (x, z, facing in degrees: 0 faces the camera). */
+export const SIGN_FAMILY = {
+  kaylee: [0, ENTRY.z + 0.65, 0],
+  ji: [-1.2, ENTRY.z + 0.4, 12],
+  nick: [1.2, ENTRY.z + 0.4, -12],
+} as const
+/** The two totem posts beside the deck (a poke: tock). */
+export const TOTEMS: V3[] = [[-3.35, 0, ENTRY.z + 0.55], [3.35, 0, ENTRY.z + 0.55]]
+
+export const ENTRY_SHOT = {
+  // The songthaew driving in, the deck and the wall.
+  arriveWide: { center: [-1.0, 1.7, ENTRY.z + 1.8], half: [5.2, 1.9, 2.6], yaw: 0, pitch: 8 },
+  arriveTall: { center: [-0.6, 1.95, ENTRY.z + 1.8], half: [3.3, 2.2, 2.6], yaw: 0, pitch: 8 },
+  // The photo: straight on and low, the letters across the top.
+  wide: { center: [0, 1.75, ENTRY.z - 0.1], half: [3.6, 1.75, 1.1], yaw: 0, pitch: 6 },
+  tall: { center: [0, 1.95, ENTRY.z - 0.1], half: [3.0, 2.0, 1.1], yaw: 0, pitch: 6 },
+} as const
+
+// ---- The boardwalk (`boardwalk`) ----
+// The raised walkway from the cafe down to the yard: it runs along x at z = WALK.z on the family's side of the yard, from
+// x1 (the cafe's end) down to the top step at xs, then five steps down to the gravel at x0, by the blue bench. Seen from
+// the side and a little above, it runs across the screen and the yard shows below at its end.
+
+export const WALK = { z: 4.3, w: 1.5, y: 1.1, x0: 7.0, xs: 9.2, x1: 23.5, steps: 5 }
+/** The walkway's height under x (the deck, the steps, the gravel). */
+export function walkY(x: number) {
+  if (x >= WALK.xs) return WALK.y
+  if (x <= WALK.x0) return 0
+  return (WALK.y * Math.ceil(((x - WALK.x0) / (WALK.xs - WALK.x0)) * WALK.steps)) / WALK.steps
+}
+/** The gecko on a post of the near rail, and the palm beside the walkway she can shake. */
+export const GECKO: V3 = [15.3, WALK.y + 0.62, WALK.z + 0.78]
+export const SHAKE_PALM = { x: 12.4, z: WALK.z - 2.3, h: 5.4 }
+/** From the foot of the steps to each one's spot at the rail (round the basket and the bench). */
+export const TO_RAIL: Record<'kaylee' | 'ji' | 'nick', [number, number][]> = {
+  kaylee: [[1.4, 3.0], [-0.95, 2.6], [-0.95, 1.4]],
+  ji: [[-1.8, 3.1], [-2.55, 1.6]],
+  nick: [[4.0, 3.6], [2.55, 1.75]],
+}
+export const WALK_SHOT = {
+  wide: { half: [3.9, 1.45, 1.6], y: 1.65, ahead: -1.8, yaw: 8, pitch: 14 },
+  tall: { half: [2.3, 1.9, 1.6], y: 1.85, ahead: -0.9, yaw: 8, pitch: 14 },
+} as const

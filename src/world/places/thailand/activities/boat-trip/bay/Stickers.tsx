@@ -1,8 +1,8 @@
-// The trip album's nine animal stickers, drawn in code in the app's flat sticker style (a thick ink outline, flat
+// The trip album's ten animal stickers (the bay's nine and Baan Chang's Khanom), drawn in code in the app's flat sticker style (a thick ink outline, flat
 // fills, big shiny eyes, blush, a white sticker border). Not found yet: a soft lavender silhouette with a sparkle, so
 // she can see there's more to find (nothing is ever missed for good).
 import type { ReactNode } from 'react'
-import type { CritterId } from './critters'
+import type { StickerId } from './critters'
 
 const INK = '#2B2330'
 const S = { stroke: INK, strokeWidth: 4, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const }
@@ -16,7 +16,7 @@ const Eye = ({ x, y, r = 5 }: { x: number; y: number; r?: number }) => (
 )
 const Blush = ({ x, y }: { x: number; y: number }) => <ellipse cx={x} cy={y} rx={5} ry={3} fill="#FF9DB8" />
 
-const ART: Record<CritterId, ReactNode> = {
+const ART: Record<StickerId, ReactNode> = {
   needlefish: (
     <g>
       <path d="M12 56 Q40 40 72 50 L94 46 L74 56 Q42 66 12 56 Z" fill="#B8E6D8" {...S} />
@@ -131,10 +131,29 @@ const ART: Record<CritterId, ReactNode> = {
       <Blush x={80} y={58} />
     </g>
   ),
+  // Khanom, Baan Chang's baby elephant: a round grey body, a big pink-lined ear, his trunk curled up, a tuft of hair.
+  elephant: (
+    <g>
+      <path d="M22 66 Q14 70 12 62" fill="none" stroke={INK} strokeWidth={6} strokeLinecap="round" />
+      <path d="M22 66 Q14 70 12 62" fill="none" stroke="#A9A3B8" strokeWidth={2.5} strokeLinecap="round" />
+      <rect x={26} y={70} width={12} height={16} rx={5} fill="#A9A3B8" {...S} />
+      <rect x={46} y={72} width={12} height={14} rx={5} fill="#A9A3B8" {...S} />
+      <ellipse cx={40} cy={62} rx={22} ry={17} fill="#B5B0C2" {...S} />
+      <path d="M78 52 Q94 50 92 34 Q91 26 85 28" fill="none" stroke={INK} strokeWidth={13} strokeLinecap="round" />
+      <path d="M78 52 Q94 50 92 34 Q91 26 85 28" fill="none" stroke="#B5B0C2" strokeWidth={7} strokeLinecap="round" />
+      <circle cx={85} cy={28} r={3} fill="#FFB3D1" />
+      <circle cx={66} cy={44} r={20} fill="#B5B0C2" {...S} />
+      <ellipse cx={52} cy={44} rx={13} ry={16} fill="#B5B0C2" {...S} />
+      <ellipse cx={53} cy={45} rx={8} ry={11} fill="#FFB3D1" />
+      <path d="M64 24 Q66 16 70 22 Q72 15 75 23" fill="none" stroke={INK} strokeWidth={3} strokeLinecap="round" />
+      <Eye x={72} y={40} r={4.5} />
+      <Blush x={74} y={52} />
+    </g>
+  ),
 }
 
 /** One sticker (`found` = in color, otherwise a silhouette waiting to be found). */
-export function Sticker({ id, found, size = 88 }: { id: CritterId; found: boolean; size?: number }) {
+export function Sticker({ id, found, size = 88 }: { id: StickerId; found: boolean; size?: number }) {
   return (
     <svg viewBox="-6 -6 112 112" width={size} height={size} aria-hidden style={{ display: 'block', overflow: 'visible' }}>
       {found ? (
