@@ -30,7 +30,22 @@ export interface Look {
   mane?: string[]
   /** Unicorn mane length: short (Daddy), to the shoulders, or long and flowing (Mommy). */
   hair?: 'short' | 'medium' | 'long'
-  outfit?: { kind: Outfit; color: string; shorts?: string }
+  outfit?: {
+    kind: Outfit
+    color: string
+    shorts?: string
+    /** A scalloped lace collar in this color and a pleated front (Joy's white blouse). */
+    lace?: string
+    /** Flowers printed all over, in these colors, with green leaves and an open camp collar (Bird's party shirt). */
+    print?: string[]
+  }
+  /** The real person's hair on their animal (Dad's photos, 2026-10-24), so Kaylee knows who's who: a straight cut to the
+   *  shoulders parted in the middle (Joy), or short thick hair that sticks up in spikes (Bird). */
+  hairdo?: { style: 'bob' | 'spiky'; color: string }
+  /** A big smile showing the top teeth (Joy): it stretches when they talk. */
+  smile?: 'teeth'
+  /** A fox's cheeks as flatter, smaller mounds on the face, this big (Joy 0.8); without it, the usual round fluffy ones. */
+  cheeks?: number
   extras?: Extra[]
   /** Lashes on the eyes. */
   lashes?: boolean
@@ -48,10 +63,13 @@ export const LOOKS: Record<string, Look> = {
   nick: { species: 'unicorn', height: 1.7, fur: '#A9EBD6', light: '#E2FAF1', dark: '#9C86DA', ear: '#FFB3C7', mane: ['#8EC9F5', '#B9A6F5'], hair: 'short', outfit: { kind: 'polo', color: '#FBE78A' }, open: true },
   agong: { species: 'panda', height: 1.45, fur: '#FFF6EE', light: '#FFFDF8', dark: '#4A3F4F', ear: '#FFB3C7', outfit: { kind: 'shirt', color: '#FFF0DA' }, extras: ['glasses', 'moustache', 'cane'] },
   jum: { species: 'elephant', height: 1.5, chub: 1.25, fur: '#FFB3CF', light: '#FFE3EE', dark: '#F28CB3', ear: '#FF94BC', outfit: { kind: 'blouse', color: '#A7EBD0' }, lashes: true },
-  joy: { ...FOX, height: 1.5, outfit: { kind: 'blouse', color: '#C9B5F7' }, lashes: true },
+  // Joy and Bird look a little like themselves (Dad's photos, 2026-10-24): Joy's straight brown hair to her shoulders,
+  // parted in the middle, her big smile and her white blouse with a pink lace collar; Bird's short spiky black hair
+  // and his black shirt with orange and red flowers.
+  joy: { ...FOX, height: 1.5, outfit: { kind: 'blouse', color: '#FFF7F3', lace: '#FF9CC0' }, hairdo: { style: 'bob', color: '#7A4636' }, smile: 'teeth', cheeks: 0.8, lashes: true },
   gan: { ...FOX, height: 1.32, outfit: { kind: 'tee', color: '#8FC9F5', shorts: '#5D7BB0' }, extras: ['cap', 'phone'] },
   ken: { ...FOX, height: 1.25, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['round-glasses', 'phone'] },
-  bird: { ...BUFFALO, height: 1.65, outfit: { kind: 'tee', color: '#FFB896' } },
+  bird: { ...BUFFALO, height: 1.65, outfit: { kind: 'shirt', color: '#3A3346', print: ['#FF8A3D', '#FF5A6E', '#FFC845'] }, hairdo: { style: 'spiky', color: '#2F2A3A' } },
   bb: { ...BUFFALO, height: 1.2, outfit: { kind: 'dress', color: '#FF8FB8' }, extras: ['pigtails', 'phone'], lashes: true },
   ja: { ...PENGUIN, height: 1.45, extras: ['scarf'], lashes: true, open: true },
   putto: { ...PENGUIN, height: 1.0, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['tuft'], open: true },
