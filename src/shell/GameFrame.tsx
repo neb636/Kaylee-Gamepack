@@ -12,7 +12,9 @@ declare global {
   }
 }
 
-function RunningGame({ entry }: { entry: GameEntry }) {
+/** Runs a game (or an I Spy book): the 🏠 button, the stars, and the trophy ceremony when it calls onWin.
+ *  `onHome` is where 🏠 goes (home, or the I Spy shelf); `onRestart` runs before "Again" restarts it. */
+export function RunningGame({ entry, onHome = go.home, onRestart }: { entry: GameEntry; onHome?: () => void; onRestart?: () => void }) {
   const Game = useMemo(() => lazy(entry.load), [entry])
   const [round, setRound] = useState(0) // bump to restart the game
   const [progress, setProgressState] = useState({ done: 0, total: 0 })
@@ -62,7 +64,7 @@ function RunningGame({ entry }: { entry: GameEntry }) {
           whileTap={{ scale: 0.85 }}
           onClick={() => {
             sounds.pop()
-            go.home()
+            onHome()
           }}
           style={{ pointerEvents: 'auto', flex: '0 0 76px', width: 76, height: 76, borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 38, display: 'grid', placeItems: 'center' }}
         >
@@ -79,11 +81,12 @@ function RunningGame({ entry }: { entry: GameEntry }) {
         <WinCeremony
           meta={entry.meta}
           onPlayAgain={() => {
+            onRestart?.()
             setWon(false)
             setProgressState({ done: 0, total: 0 })
             setRound((r) => r + 1)
           }}
-          onHome={go.home}
+          onHome={onHome}
           onTrophies={go.trophies}
         />
       )}

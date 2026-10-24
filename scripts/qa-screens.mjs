@@ -1,4 +1,4 @@
-// Screenshots every Around the World screen (plus home and the puppet lab) at iPad and iPhone sizes for visual QA.
+// Screenshots every Around the World screen (plus home, I Spy and the puppet lab) at iPad and iPhone sizes for visual QA.
 //
 //   npm run build && node scripts/qa-screens.mjs [--chromium] [--only=iphone-landscape,ipad-portrait] [--routes=home,world-map]
 //                                                 [--parallel=3] [--max-minutes=20]
@@ -57,6 +57,13 @@ async function raceTo(page, until, taps = 0, after = 0) {
 const SCREENS = [
   { name: 'home', hash: '#/' },
   { name: 'world-map', hash: '#/world' },
+  // I Spy: the shelf and every page of the first book (a full page of 8 pictures, the reveal, the ending).
+  { name: 'ispy-shelf', hash: '#/ispy', wait: 1200 },
+  { name: 'ispy-cover', hash: '#/ispy/sparkly-abc', wait: 1500 },
+  { name: 'ispy-page-3', hash: '#/ispy/sparkly-abc/page?letter=B&n=1', wait: 1500 },
+  { name: 'ispy-page-8', hash: '#/ispy/sparkly-abc/page?letter=U&n=8', wait: 1800 },
+  { name: 'ispy-found', hash: '#/ispy/sparkly-abc/found?letter=U&n=8', wait: 1800 },
+  { name: 'ispy-end', hash: '#/ispy/sparkly-abc/end?found=A,B,F,H,K,R,U,Z', wait: 1500 },
   {
     name: 'world-map-continent',
     hash: '#/world',

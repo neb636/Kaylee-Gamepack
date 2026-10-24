@@ -17,6 +17,12 @@ PR's **🔗 Test this** block. The same list, generated from the app, is also at
 For local testing, run `npm run dev` and replace `https://neb636.github.io/Kaylee-Gamepack/` in any link with
 `http://localhost:5173/`, keeping the path. Sections in each activity are listed in play order.
 
+### I Spy
+
+**The shelf**: [All I Spy books](https://neb636.github.io/Kaylee-Gamepack/#/ispy)
+
+**Sparkly I Spy** (letters A to Z; `letter` is the letter Sparkle spies, `n` the page 1-8, later pages have more pictures): [The cover](https://neb636.github.io/Kaylee-Gamepack/#/ispy/sparkly-abc/cover) · [Find the thing (B, 3 pictures)](https://neb636.github.io/Kaylee-Gamepack/#/ispy/sparkly-abc/page?letter=B&n=1) · [Find the thing (U, 8 pictures)](https://neb636.github.io/Kaylee-Gamepack/#/ispy/sparkly-abc/page?letter=U&n=8) · ["B is for butterfly"](https://neb636.github.io/Kaylee-Gamepack/#/ispy/sparkly-abc/found?letter=B) · [Found them all](https://neb636.github.io/Kaylee-Gamepack/#/ispy/sparkly-abc/end?found=A,B,F,H,K,R,U,Z)
+
 ### Australia
 
 **Crocodile River**: [Meet Chompy](https://neb636.github.io/Kaylee-Gamepack/#/world/australia/croc/story) · [Hatch the eggs](https://neb636.github.io/Kaylee-Gamepack/#/world/australia/croc/hatch) · [Carry the babies](https://neb636.github.io/Kaylee-Gamepack/#/world/australia/croc/ride) · [Swim to the river](https://neb636.github.io/Kaylee-Gamepack/#/world/australia/croc/swim) · [Snap with Chompy](https://neb636.github.io/Kaylee-Gamepack/#/world/australia/croc/snap)

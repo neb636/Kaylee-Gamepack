@@ -6,6 +6,8 @@ import { Mascot, say, sounds, useTrophies, type GameMeta } from './sdk-internal'
 import { games } from './registry'
 import { subjectStyle } from './subjects'
 import worldCover from '../world/assets/cover-world.webp'
+import { books } from '../ispy/registry'
+import { SHELF_LINES } from '../ispy/lines'
 import { WORLD_LINES } from '../world/lines'
 import { totalStamps, usePassport } from '../world/stamps'
 
@@ -45,6 +47,43 @@ function WorldTile() {
         <div style={{ alignSelf: 'flex-start', background: 'var(--hotpink)', color: '#fff', borderRadius: 999, padding: '10px 26px', fontSize: 'clamp(22px, 3.4vw, 32px)', fontWeight: 700, boxShadow: 'var(--shadow)' }}>
           {stamps > 0 ? `📕 ${stamps} ▶` : 'Fly! 🎈'}
         </div>
+      </div>
+    </motion.button>
+  )
+}
+
+/** The door into I Spy: a shelf of I Spy books. */
+function ISpyTile() {
+  const cover = books[0]?.meta.cover
+  return (
+    <motion.button
+      aria-label="I Spy"
+      whileTap={{ scale: 0.96 }}
+      initial={{ y: 30, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      onClick={() => {
+        sounds.pop()
+        void say(SHELF_LINES.title)
+        go.ispy()
+      }}
+      style={{
+        position: 'relative',
+        background: 'linear-gradient(135deg, #FFF3C4, #FFD6E7)',
+        borderRadius: 'var(--radius)',
+        boxShadow: 'var(--shadow)',
+        border: '6px solid #fff',
+        padding: 16,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'clamp(12px, 3vw, 28px)',
+        width: '100%',
+        textAlign: 'left',
+      }}
+    >
+      {cover && <img src={cover} alt="" style={{ width: 'min(26vw, 220px)', aspectRatio: '1', borderRadius: 24, objectFit: 'cover' }} />}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
+        <div style={{ fontSize: 'clamp(30px, 5.5vw, 56px)', fontWeight: 700, lineHeight: 1.05, color: 'var(--hotpink)' }}>I Spy</div>
+        <div style={{ fontSize: 'clamp(32px, 5vw, 48px)' }}>🔍 🦋 🧁 🦄</div>
       </div>
     </motion.button>
   )
@@ -142,6 +181,8 @@ export function Home() {
       </header>
 
       <WorldTile />
+
+      <ISpyTile />
 
       {newest && <GameCard meta={newest.meta} hero won={won(newest.meta.id)} />}
 

@@ -45,6 +45,8 @@ function seedWall() {
 }
 
 const SCENARIOS = [
+  // I Spy: a whole sitting of Sparkly I Spy (8 pages, from the cover to the trophy).
+  { name: 'i spy: sparkly i spy', id: 'ispy', hash: '#/ispy/sparkly-abc', reset: true },
   { name: 'world-map (first visit)', id: 'world', hash: '#/world', reset: true, play: false },
   { name: 'australia intro + map', id: 'intro', hash: '#/world/australia', reset: true, play: false },
   { name: 'outback', id: 'outback', hash: '#/world/australia/outback' },

@@ -126,6 +126,21 @@ const PUPPET_SCENARIOS = [
 // In-activity moments, driven the way a child would (tolerant: the UI changes as activities get rebuilt).
 const GAME_SCENARIOS = [
   {
+    // I Spy: a wrong picture wiggles and shows its letter, then the right one hops and the page flips to the reveal.
+    name: 'ispy-find',
+    seconds: 3.2,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/ispy/sparkly-abc/page?letter=B&n=3`)
+      await page.waitForTimeout(1200)
+    },
+    act: async (page) => {
+      const other = page.locator('button[aria-label]:not([aria-label="Butterfly"]):not([aria-label="Home"]):not([aria-label="Sparkle"]):not([aria-label="Hear it again"])').first()
+      await other.click({ force: true }).catch(() => {})
+      await page.waitForTimeout(900)
+      await page.getByRole('button', { name: 'Butterfly' }).click({ force: true })
+    },
+  },
+  {
     name: 'outback-hop',
     seconds: 1.3,
     setup: async (page, base) => {

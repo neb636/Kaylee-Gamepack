@@ -16,12 +16,16 @@ const manifests = {
   ...import.meta.glob('../games/*/voice-map.json', { eager: true, import: 'default' }),
   ...import.meta.glob('../world/voice-map.json', { eager: true, import: 'default' }),
   ...import.meta.glob('../world/places/*/voice-map.json', { eager: true, import: 'default' }),
+  ...import.meta.glob('../ispy/voice-map.json', { eager: true, import: 'default' }),
+  ...import.meta.glob('../ispy/*/voice-map.json', { eager: true, import: 'default' }),
 } as Record<string, MapEntry[]>
 const files = {
   ...import.meta.glob('../shell/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
   ...import.meta.glob('../games/*/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
   ...import.meta.glob('../world/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
   ...import.meta.glob('../world/places/*/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
+  ...import.meta.glob('../ispy/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
+  ...import.meta.glob('../ispy/*/voice/*.mp3', { eager: true, query: '?url', import: 'default' }),
 } as Record<string, string>
 
 const keyOf = (voice: string, text: string) => `${voice}|${text}`
