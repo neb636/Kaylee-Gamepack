@@ -46,7 +46,7 @@ export const KIDS: Look[] = [
   { species: 'fox', height: 0.9, fur: '#F2B36B', light: '#FFF1E2', dark: '#2B2330', ear: '#FFE6CC', outfit: { kind: 'tee', color: '#FF8FB8', shorts: '#8FE3C8' }, lashes: true },
   { species: 'elephant', height: 0.92, fur: '#B8C4E8', light: '#E3E8F8', dark: '#8E9BCB', ear: '#FFB8CC', outfit: { kind: 'tee', color: '#8FE3C8', shorts: '#B9A6F5' } },
 ]
-const GRANDMA: Look = { species: 'elephant', height: 1.35, fur: '#C9C2DA', light: '#ECE8F4', dark: '#A79FC2', ear: '#FFC2D4', outfit: { kind: 'blouse', color: '#FFB3CF' }, extras: ['glasses'], lashes: true }
+export const GRANDMA: Look = { species: 'elephant', height: 1.35, fur: '#C9C2DA', light: '#ECE8F4', dark: '#A79FC2', ear: '#FFC2D4', outfit: { kind: 'blouse', color: '#FFB3CF' }, extras: ['glasses'], lashes: true }
 /** The laundry lines across the lane (z), and the squid rack on a porch. */
 const LINES = [-10, 6]
 const LINE_Y = 4.3

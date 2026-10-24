@@ -14,7 +14,7 @@ const GREEN = '#4DB57A'
 const GREEN_DARK = '#2F8F5B'
 const WALL = '#FFF1E4'
 /** The server (a background figure: a bow, and her lines in table.ts): a fox in The Pizza Company's green shirt and cap. */
-const SERVER: Look = { species: 'fox', height: 1.5, fur: '#FF9A4D', light: '#FFF1E2', dark: '#2B2330', ear: '#FFE6CC', outfit: { kind: 'shirt', color: GREEN }, extras: ['cap'], lashes: true }
+export const SERVER: Look = { species: 'fox', height: 1.5, fur: '#FF9A4D', light: '#FFF1E2', dark: '#2B2330', ear: '#FFE6CC', outfit: { kind: 'shirt', color: GREEN }, extras: ['cap'], lashes: true }
 
 export interface Room {
   root: Group

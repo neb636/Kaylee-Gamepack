@@ -99,6 +99,8 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 
 ### Thailand
 
+**3D character lab** (development tool, every 3D character on a turntable: poses, actions, lines, outfits, lighting): [Kaylee](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee) · [Kaylee's boat day outfit, wai](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee?pose=wai&wear=sunhat,sunglasses,floaties) · [The family lineup](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/agong?lineup=agong,jum,joy,bird,nick,ji,kaylee) · [A bay critter](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/crab) (local: `http://localhost:5173/#/world/characters`)
+
 **Home base (the house)**: [Arrive by tuk-tuk](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/arrive) · [Downstairs](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/downstairs) · [Family photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/family)
 
 **Boat Trip**: [Mommy asks: ready for a trip?](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/invite) · [Pack the suitcase](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/pack) · [The x-ray belt](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/airport) · [Window seat: seatbelt and takeoff](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/takeoff) · [Window seat: tray, snacks, the elephant below](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/fly) · [Landing in Krabi](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/land) · [Baan Chang: the cafe, her chocolate milk (and an iced coffee for Daddy)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/drinks) · [Baan Chang: bananas and sugarcane for Mali and Khanom](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/feed) · [Baan Chang: everyone's favorite food](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/favorites) · [Baan Chang: Lamyai wanders over; Khanom sneaks a sip](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/lamyai) · [Baan Chang: the rainbow splash](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/splash) · [Tie ribbons on the longtail at the pier](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/pier) · [Open water: where to, captain?](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/bay) ([iPhone tilt to steer](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/bay?steer=tilt)) · [Koh Panyee: the floating football field](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/village) · [Into the canoe, under the low roof](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/cave) · [The hong, a secret lagoon inside the island](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/hong) · [The boat race: three laps against the village kids and the macaque](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/race) ([iPhone tilt to steer](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/race?steer=tilt), [finger on any device](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/race?steer=finger)) · [The race podium and the trophy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/podium) · [The Nail Island and the photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/nail) · [The ride back at sunset, and the porpoise](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/sunset)
@@ -137,7 +139,7 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   `cast.json` per country). `node scripts/generate-voice.mjs` records the clips from each folder's `voice-lines.json`
   (put `OPENAI_API_KEY` in `.env`) and they're committed; the iPad plays bundled audio files.
 - Characters are live: SVG puppets in the 2D countries (`src/sdk/puppet/`, try them at `#/world/puppets`), and a toon
-  3D family in Thailand (`src/world/places/thailand/characters/`). They blink, watch her finger, talk with moving
+  3D family in Thailand (`src/world/places/thailand/characters/`, inspect them all at `#/world/characters`). They blink, watch her finger, talk with moving
   mouths, and act things out.
 - `src/world/`: **Around the World**, a map Kaylee explores in Sparkle's balloon, with a passport, a coloring book,
   and one folder per country in `src/world/places/<id>/`. Thailand is 3D (three.js); the others are 2D.
@@ -159,7 +161,7 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 
 ```bash
 npm install
-npm run dev                  # http://localhost:5173 (#/world, #/world/sections, #/playground)
+npm run dev                  # http://localhost:5173 (#/world, #/world/sections, #/world/characters, #/playground)
 npm run verify               # voice clips + heavy imports + typecheck + build
 npm run check                # verify + Playwright smoke tests
 node scripts/generate-voice.mjs --check  # verify that every listed line has audio

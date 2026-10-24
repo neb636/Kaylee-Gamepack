@@ -57,7 +57,7 @@ export const PLANE_ANCHORS: AnchorInfo[] = [
 ]
 
 /** The flight attendant (a background figure with a line or two): a navy penguin in a pink scarf. */
-const ATTENDANT: Look = { species: 'penguin', height: 1.32, fur: '#4F5F9E', light: '#FFF6EC', dark: '#FFA640', extras: ['scarf'], lashes: true }
+export const ATTENDANT: Look = { species: 'penguin', height: 1.32, fur: '#4F5F9E', light: '#FFF6EC', dark: '#FFA640', extras: ['scarf'], lashes: true }
 
 // The cabin (meters; the plane flies toward -x, the window wall is on Kaylee's side at -z, the aisle at +z).
 const WALL_Z = -1.25

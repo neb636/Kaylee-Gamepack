@@ -37,7 +37,7 @@ export const AIRPORT_ANCHORS: AnchorInfo[] = [
 ]
 
 /** A friendly officer (a background figure: sounds and animation, no voice): a lavender elephant in a navy shirt. */
-const OFFICER: Look = { species: 'elephant', height: 1.6, fur: '#C2BCE0', light: '#E8E4F6', dark: '#A39CCB', ear: '#FFB8CC', outfit: { kind: 'shirt', color: '#4A5A9C' }, extras: ['officer-cap'] }
+export const OFFICER: Look = { species: 'elephant', height: 1.6, fur: '#C2BCE0', light: '#E8E4F6', dark: '#A39CCB', ear: '#FFB8CC', outfit: { kind: 'shirt', color: '#4A5A9C' }, extras: ['officer-cap'] }
 
 // The hall (meters): the belt runs along +x into the x-ray; the glass wall with its sliding doors at GLASS_X; the plane
 // outside on the apron.

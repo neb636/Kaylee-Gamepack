@@ -33,7 +33,8 @@ follow her finger) comes back later as a 3D activity reached from the house.
 **Lineup:** `thailand/lineup.webp`. Dad approved my picks: column A everywhere (kids share their parent's animal, so
 Kaylee can see who belongs to whom) and Kaylee's option A. They are built in 3D from `characters/looks.ts` by
 `characters/animal.ts`, and the "family photo" spot (`#/world/thailand/hub/family`, `?who=<id>` for one alone on a
-turntable) shows them all.
+turntable) shows them all. The character lab (`#/world/characters/<id>`, `lab/`, 2026-10-24) shows every 3D character
+(the family, the trips' extras, the bay's critters) in a plain studio, to inspect poses, actions, lines and outfits.
 
 **Looking like themselves (2026-10-24).** Dad wants each animal to look a little like the real person (not realistic,
 just enough for Kaylee to spot who's who). From his photos (kept outside this repo): their hair, a face detail and the

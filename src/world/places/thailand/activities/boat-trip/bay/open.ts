@@ -38,7 +38,7 @@ export const OPEN_ANCHORS: AnchorInfo[] = [
 ]
 
 const tmp = new Vector3()
-const FISHER: Look = { species: 'buffalo', height: 1.5, fur: '#A79A8A', light: '#E8DFD2', dark: '#5E5468', ear: '#FFB8CC', outfit: { kind: 'shirt', color: '#8EC9F5' } }
+export const FISHER: Look = { species: 'buffalo', height: 1.5, fur: '#A79A8A', light: '#E8DFD2', dark: '#5E5468', ear: '#FFB8CC', outfit: { kind: 'shirt', color: '#8EC9F5' } }
 /** The macaques' ledge on their rock, facing the open water toward the pier. */
 const LEDGE_DIR = new Vector3(-0.85, 0, 0.53).normalize()
 const LEDGE = new Vector3(MACAQUE_ROCK.x + LEDGE_DIR.x * (MACAQUE_ROCK.r + 0.5), 3.2, MACAQUE_ROCK.z + LEDGE_DIR.z * (MACAQUE_ROCK.r + 0.5))
