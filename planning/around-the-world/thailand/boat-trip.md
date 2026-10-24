@@ -408,6 +408,20 @@ races the Koh Panyee kids and the cheeky macaque three laps round its island, an
 - **Same toy, raced:** her finger on the water steers the longtail (it can only go forward along the course; her finger
   picks where across it) at full speed; let go and it races on by itself a little slower, so she can never stop, get
   lost or go the wrong way. The camera chases close behind.
+- **On an iPhone: tilt to steer** (Dad's ask, 2026-10-23: "ask to use horizontal, then gyroscope to steer, a button
+  for gas"; `race/tilt.ts`, `race/TiltSetup.tsx`). Phones only (a touch screen under 600 px on its short side); the
+  iPad keeps the finger. Before the countdown the race waits for the phone: held upright, a phone picture turns onto
+  its side (a ▶ after 3 s plays upright anyway, for a rotation-locked phone); then iOS's one tap to allow the tilt (a
+  big pink button with a phone rocking like a wheel; the iPhone's own "allow motion" box the first time). A no, or a
+  phone that sends no tilt within 1.5 s, races with the finger instead. Turning the phone like a wheel slides her aim
+  across the course (about 25° is full lock; held level she keeps her lane round the bends); the **gas pedal** (bottom
+  left, beside Sparkle, for the left thumb; the item button stays bottom right) is full speed, and off it she cruises
+  at 60% (never stopped). The pedal revs before GO, still down at GO is the rocket start, held over a ramp is the trick;
+  a finger bounces on it at the countdown and after 4 s off it, and a rocking phone shows how to steer at the start.
+  Turned upright mid-race, the race pauses under the "turn it sideways" picture. `steer=tilt` / `steer=finger` in a
+  link tries either anywhere (a computer: ← → steer, space is the gas). Not recorded yet (no voice key): Sparkle's
+  "Turn the phone sideways!" and "Tilt to steer! Hold the green button to go fast!"; tilting, her finger line is
+  skipped.
 - **Mario Kart things:** the countdown (three lights, "Three! Two! One! Go!") with a rocket start for a finger already
   down at GO and revving before it; rainbow item boxes (five across, so she can't miss) whose slot spins up 🚀 a turbo,
   🍌 a banana (thrown in an arc at whoever is just ahead, or dropped behind when she's first) or 🌈 the rainbow (6 s fast,
