@@ -203,7 +203,6 @@ export const L = {
     gate: 'A boat race! Drive through the rainbow gate!',
     start: 'Hold your finger on the water to go fast!',
     count: ['Three!', 'Two!', 'One!', 'Go!'],
-    item: 'Tap the button to use it!',
     ramp: 'A ramp! Tap in the air for a trick!',
     lap2: 'Lap two!',
     final: 'Last lap!',
@@ -218,12 +217,10 @@ export const L = {
     almost: nick('Almost there!'),
     won: nick('We won!'),
     wheee: ji('Wheee!'),
-    fast: ji('So fast!'),
     proud: ji('You did it, sweetie!'),
     // The village kids, racing her in their blue longtail.
     raceYou: kids('Race you, Kaylee!'),
     catchUs: kids("You can't catch us!"),
-    hey: kids('Hey!'),
     goodRace: kids('Good race, Kaylee!'),
   },
 

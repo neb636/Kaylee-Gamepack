@@ -50,7 +50,7 @@ import { addWallPhoto, newestByTrip, shrinkPhoto, today, useWallPhotos } from '.
 import { Album, PhotoDrop, StickerFlight, type AlbumPhoto } from './bay/Album'
 import { ARROW_ICONS, Bay, BAY_ANCHORS, type BayStart } from './bay/bay'
 import { CRITTERS, type CritterId } from './bay/critters'
-import type { PhotoKind, Stop } from './bay/part'
+import type { Phase as BayPhase, PhotoKind, Stop } from './bay/part'
 import { PoseButtons } from './bay/PoseButtons'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
@@ -58,6 +58,7 @@ import { PhotoFan } from './PhotoFan'
 import { Race, RACE_ANCHORS, type RaceHud, type RaceSection } from './race/race'
 import { RACE_TROPHY, RaceFlag, RaceLayer } from './race/RaceLayer'
 import { askForTilt, needsAsking, steerFor, Tilt, type SteerMode } from './race/tilt'
+import { GasPedal } from './race/GasPedal'
 import { TiltSetup } from './race/TiltSetup'
 import BOAT_SECTIONS, { type BoatSection } from './sections'
 import { BOAT_TRIP, PASS, PUNCH, WORLD_OF, type TripWorld } from './trip'
@@ -169,10 +170,11 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   state.current = { ...state.current, section, packed, mount, saved, ribbons, stops, photos, found }
   // Read once: the address bar follows her and drops ?debug=1.
   const [debug] = useState(() => flag('debug') !== null)
-  // The race on a phone (race/tilt.ts): held sideways, tilt to steer, with a gas pedal. Before it starts, the phone
-  // turned sideways (or ▶ to play upright) and, on iOS, a tap to allow the tilt; a no there, or a phone that sends no
-  // tilt, races with the finger as on the iPad. A link's `steer=tilt` / `steer=finger` tries either anywhere (on a
-  // computer, ← → steer and the space bar is the gas).
+  // Driving the longtail on a phone (race/tilt.ts), in the bay and in the boat race alike: held sideways, tilt to
+  // steer, with a gas pedal. The first time she's at the wheel, the phone turned sideways (or ▶ to play upright) and,
+  // on iOS, a tap to allow the tilt; a no there, or a phone that sends no tilt, drives with the finger as on the iPad.
+  // A link's `steer=tilt` / `steer=finger` tries either anywhere (on a computer, ← → steer and the space bar is the
+  // gas).
   const [steerLink] = useState(() => flag('steer'))
   const [steer, setSteer] = useState<SteerMode>(() => steerFor(steerLink))
   const [tiltAllowed, setTiltAllowed] = useState(() => !needsAsking())
@@ -182,10 +184,14 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const tilting = steer === 'tilt' && tiltAllowed
   const steerRef = useRef(tilting)
   steerRef.current = tilting
-  const inRace = mount.world === 'race' && mode === 'webgl' && !pass && !!raceHud && raceHud.phase !== 'podium'
-  const tiltSetup: 'turn' | 'ask' | null = steer !== 'tilt' || !inRace ? null : !landscape && !upright ? 'turn' : !tiltAllowed ? 'ask' : null
+  // The bay's phase (the gas pedal shows while she's driving, not boarding, on the beach or docked).
+  const [bayPhase, setBayPhase] = useState<BayPhase>('drive')
+  const boating = mount.world === 'race' || mount.world === 'bay'
+  const atWheel =
+    mode === 'webgl' && !pass && ((mount.world === 'race' && !!raceHud && raceHud.phase !== 'podium') || (mount.world === 'bay' && bayPhase === 'drive'))
+  const tiltSetup: 'turn' | 'ask' | null = steer !== 'tilt' || !atWheel ? null : !landscape && !upright ? 'turn' : !tiltAllowed ? 'ask' : null
   useEffect(() => {
-    if (!tilting || mount.world !== 'race') return
+    if (!tilting || !boating) return
     const t = (tiltRef.current ??= new Tilt())
     t.start()
     const check = setTimeout(() => {
@@ -195,14 +201,14 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       clearTimeout(check)
       t.stop()
     }
-  }, [tilting, mount.world, mount.key])
+  }, [tilting, boating, mount.key])
   useEffect(() => {
-    const race = worldRef.current
-    if (race instanceof Race) race.setSteer(tilting ? 'tilt' : 'finger', tiltRef.current)
+    const w = worldRef.current
+    if (w instanceof Race || w instanceof Bay) w.setSteer(tilting ? 'tilt' : 'finger', tiltRef.current)
   }, [tilting, mount.key])
   useEffect(() => {
-    const race = worldRef.current
-    if (race instanceof Race) race.setWaiting(!!tiltSetup)
+    const w = worldRef.current
+    if (w instanceof Race || w instanceof Bay) w.setWaiting(!!tiltSetup)
   }, [tiltSetup, mount.key])
 
   const params = (ids: string[]) => {
@@ -490,8 +496,11 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         onFlash: () => setFlash((n) => n + 1),
         onDocked: docked,
         onRace: () => finish('race', null, true),
+        onPhase: setBayPhase,
       })
       bay.setArrowElements(arrowEls.current)
+      bay.setSteer(steerRef.current ? 'tilt' : 'finger', (tiltRef.current ??= new Tilt()))
+      setBayPhase(bay.phase)
       w = bay
     }
     w.setHintElement?.(hintRef.current)
@@ -581,6 +590,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       {mount.world === 'bay' && mode === 'webgl' && (
         <>
           <PoseButtons show={landed && !pass && !albumOpen} onPose={(p) => (worldRef.current as Bay | null)?.pose(p)} />
+          {tilting && bayPhase === 'drive' && !pass && !albumOpen && <GasPedal nudgeAfter={8} onGas={(down) => (worldRef.current as Bay | null)?.gas(down)} />}
           <Album
             photos={photos}
             found={found}
@@ -620,7 +630,6 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         <RaceLayer
           hud={raceHud}
           mapEls={mapEls.current}
-          onItem={() => (worldRef.current as Race | null)?.useItem()}
           onGas={tilting ? (down) => (worldRef.current as Race | null)?.gas(down) : undefined}
           onAgain={() => {
             sounds.pop()
@@ -675,7 +684,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           tripRef.current?.choose(p.src)
         }}
       />
-      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!pass || asking} raised={(mount.world === 'bay' && landed) || (mount.world === 'race' && raceHud?.phase === 'podium')} idle={mount.world === 'bay' ? L.bay.hint.drive : mount.world === 'race' && !tilting ? L.race.start : undefined} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!pass || asking} raised={(mount.world === 'bay' && landed) || (mount.world === 'race' && raceHud?.phase === 'podium')} idle={tilting ? undefined : mount.world === 'bay' ? L.bay.hint.drive : mount.world === 'race' ? L.race.start : undefined} />}
       <TiltSetup
         stage={tiltSetup}
         onSkip={() => {

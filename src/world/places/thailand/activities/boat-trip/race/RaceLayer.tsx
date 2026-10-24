@@ -3,12 +3,10 @@
 // - The countdown: three lights and a giant 3, 2, 1, GO!
 // - Her place (a medal with 1st / 2nd / 3rd) and everyone's faces in order, the lap (🏁 2/3) and her coins, and a
 //   minimap of the course with the three boats on it (race.ts moves the dots).
-// - The item slot, a big button bottom right: it spins when she drives through a box, then shows 🚀, 🍌 or 🌈 until she
-//   taps it (a finger points at it if she forgets).
-// - Tilting to steer (a phone, tilt.ts): the gas pedal, a big button bottom left beside Sparkle for her left thumb.
-//   Held down, the boat goes full speed (and revs before GO: still down at GO is a rocket start); a finger bounces on
-//   it at the countdown and whenever she hasn't pressed it for a while. A phone rocking like a wheel shows how to
-//   steer during the countdown. (The space bar is the pedal on a computer, with ← → to steer.)
+// - Tilting to steer (a phone, tilt.ts): the gas pedal (GasPedal.tsx), a big button bottom left beside Sparkle for her
+//   left thumb. Held down, the boat goes full speed (and revs before GO: still down at GO is a rocket start). A phone
+//   rocking like a wheel shows how to steer during the countdown. (The space bar is the pedal on a computer, with ← →
+//   to steer.)
 // - Banners sweeping across: lap 2, the last lap, 1st!
 // - The podium: the trophy with KAYLEE on it (the SDK's own, as in her Trophy Room), then 🔁 race again or 🚤 back to the
 //   bay.
@@ -16,7 +14,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { bigCelebration, Trophy } from '../../../../../../sdk'
 import { sfx } from '../../../sfx'
-import { ITEM_ICONS, type ItemKind } from './items'
+import { GasPedal } from './GasPedal'
 import type { RaceHud, RacerId } from './race'
 import { TiltingPhone } from './TiltSetup'
 import { MAP, MAP_PATH } from './track'
@@ -30,11 +28,9 @@ const FACES: Record<RacerId, { icon: string; color: string; label: string }> = {
 }
 const MEDALS = ['#FFC83D', '#D9DDEA', '#E8A87C']
 const SUFFIX = ['st', 'nd', 'rd']
-const ROLL: ItemKind[] = ['turbo', 'banana', 'rainbow']
 
 interface Props {
   hud: RaceHud
-  onItem: () => void
   onAgain: () => void
   onBay: () => void
   /** The minimap's dots, by racer id (race.ts moves them). */
@@ -45,7 +41,7 @@ interface Props {
 
 const pill = { display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.92)', borderRadius: 999, padding: '4px 14px', boxShadow: 'var(--shadow)', fontWeight: 700, color: 'var(--ink)', fontSize: 'clamp(22px, 4vmin, 34px)' } as const
 
-export function RaceLayer({ hud, onItem, onAgain, onBay, mapEls, onGas }: Props) {
+export function RaceLayer({ hud, onAgain, onBay, mapEls, onGas }: Props) {
   const racing = hud.phase === 'race' || hud.phase === 'count' || hud.phase === 'finish'
   // Confetti on the screen too, as she wins.
   const celebrated = useRef(false)
@@ -58,7 +54,6 @@ export function RaceLayer({ hud, onItem, onAgain, onBay, mapEls, onGas }: Props)
     <>
       {racing && <Standings hud={hud} />}
       {racing && <LapAndMap hud={hud} mapEls={mapEls} />}
-      {(hud.phase === 'race' || hud.phase === 'count') && <ItemSlot item={hud.item} rolling={hud.rolling} onItem={onItem} />}
       {onGas && hud.phase !== 'podium' && hud.phase !== 'finish' && <GasPedal onGas={onGas} eager={hud.phase !== 'race'} />}
       {onGas && (hud.phase === 'intro' || hud.phase === 'count') && (
         <div aria-hidden style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 14px)', translate: '-50% 0', zIndex: 32, pointerEvents: 'none', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.25))' }}>
@@ -143,170 +138,6 @@ function LapAndMap({ hud, mapEls }: { hud: RaceHud; mapEls: Map<string, SVGEleme
       </svg>
       {/* Short screens (an iPhone on its side) have no room for the map. */}
       <style>{'@media (max-height: 520px) { .race-map { display: none } }'}</style>
-    </div>
-  )
-}
-
-function ItemSlot({ item, rolling, onItem }: { item: ItemKind | null; rolling: boolean; onItem: () => void }) {
-  const [spin, setSpin] = useState(0)
-  useEffect(() => {
-    if (!rolling) return
-    const id = setInterval(() => setSpin((n) => n + 1), 80)
-    return () => clearInterval(id)
-  }, [rolling])
-  // Holding an item a while without using it: a finger shows her the button.
-  const [nudge, setNudge] = useState(false)
-  useEffect(() => {
-    setNudge(false)
-    if (!item) return
-    const t = setTimeout(() => setNudge(true), 5000)
-    return () => clearTimeout(t)
-  }, [item])
-  const icon = rolling ? ITEM_ICONS[ROLL[spin % ROLL.length]] : item ? ITEM_ICONS[item] : null
-  // An empty slot tapped: a boop and a wiggle (it fills from the rainbow boxes).
-  const [poked, setPoked] = useState(0)
-  const size = 'clamp(104px, 17vmin, 140px)'
-  return (
-    <div style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 18px)', bottom: 'calc(var(--safe-bottom) + 18px)', zIndex: 34 }}>
-      <motion.button
-        aria-label={item ? `Use the ${item}` : 'Item'}
-        key={item ? 'full' : `empty-${poked}`}
-        whileTap={{ scale: 0.85 }}
-        animate={item ? { scale: [1, 1.1, 1], rotate: [0, -6, 6, 0] } : poked ? { rotate: [0, -10, 10, -6, 0] } : { scale: 1 }}
-        transition={item ? { repeat: Infinity, duration: 0.9 } : { duration: 0.45 }}
-        onPointerDown={(e) => {
-          // At once, on the finger going down (she's racing: no waiting for it to lift).
-          e.stopPropagation()
-          if (!item) {
-            sfx.boop()
-            setPoked((n) => n + 1)
-            return
-          }
-          sfx.pop()
-          onItem()
-        }}
-        style={{
-          width: size,
-          height: size,
-          borderRadius: 28,
-          border: '6px solid #fff',
-          background: item ? 'conic-gradient(from 0deg, #FF4F9A, #FFB07A, #FBEA9A, #8FE3C8, #A8DCFF, #B9A6F5, #FF4F9A)' : 'rgba(255,255,255,.55)',
-          boxShadow: item ? '0 0 0 6px rgba(255,200,61,.6), 0 0 26px 8px rgba(255,79,154,.45)' : 'var(--shadow)',
-          fontSize: 'clamp(54px, 9vmin, 76px)',
-          display: 'grid',
-          placeItems: 'center',
-          padding: 0,
-          touchAction: 'none',
-        }}
-      >
-        {icon ?? <span style={{ opacity: 0.35, fontWeight: 700, color: 'var(--ink)' }}>?</span>}
-      </motion.button>
-      {nudge && (
-        <motion.div aria-hidden animate={{ x: [0, -12, 0], y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 0.9 }} style={{ position: 'absolute', left: -62, top: '20%', fontSize: 54, pointerEvents: 'none', rotate: '90deg' }}>
-          👆
-        </motion.div>
-      )}
-    </div>
-  )
-}
-
-/** The gas pedal (tilting to steer): held down, full speed. `eager`: before GO, the finger shows it at once. */
-function GasPedal({ onGas, eager }: { onGas: (down: boolean) => void; eager: boolean }) {
-  const [down, setDown] = useState(false)
-  const held = useRef(false)
-  const set = (d: boolean) => {
-    if (held.current === d) return
-    held.current = d
-    setDown(d)
-    onGas(d)
-  }
-  // Let go when it goes away (and if the app loses focus mid-press).
-  useEffect(() => {
-    const up = () => set(false)
-    // A computer: the space bar.
-    const key = (e: KeyboardEvent) => {
-      if (e.key !== ' ') return
-      e.preventDefault()
-      if (!e.repeat) set(e.type === 'keydown')
-    }
-    addEventListener('blur', up)
-    addEventListener('keydown', key)
-    addEventListener('keyup', key)
-    return () => {
-      removeEventListener('blur', up)
-      removeEventListener('keydown', key)
-      removeEventListener('keyup', key)
-      if (held.current) {
-        held.current = false
-        onGas(false)
-      }
-    }
-  }, [])
-  // Not pressed for a while (at once before GO): a finger bounces on it.
-  const [nudge, setNudge] = useState(false)
-  useEffect(() => {
-    setNudge(false)
-    if (down) return
-    const t = setTimeout(() => setNudge(true), eager ? 600 : 4000)
-    return () => clearTimeout(t)
-  }, [down, eager])
-  return (
-    <div style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + min(120px, 16vh, 24vw) + 18px)', bottom: 'calc(var(--safe-bottom) + 18px)', zIndex: 34 }}>
-      <motion.button
-        aria-label="Gas"
-        aria-pressed={down}
-        animate={{ scale: down ? 0.92 : 1, y: down ? 6 : 0 }}
-        transition={{ type: 'spring', stiffness: 600, damping: 22 }}
-        onPointerDown={(e) => {
-          e.stopPropagation()
-          e.preventDefault()
-          // Held even if her thumb slides off it, until it lifts.
-          e.currentTarget.setPointerCapture?.(e.pointerId)
-          set(true)
-        }}
-        onPointerUp={() => set(false)}
-        onPointerCancel={() => set(false)}
-        onLostPointerCapture={() => set(false)}
-        onContextMenu={(e) => e.preventDefault()}
-        style={{
-          width: 'clamp(104px, 17vmin, 140px)',
-          height: 'clamp(124px, 21vmin, 168px)',
-          borderRadius: 30,
-          border: '6px solid #fff',
-          background: down ? 'linear-gradient(180deg, #7DF09A, #3CC968)' : 'linear-gradient(180deg, #A8F2BC, #5BE37A)',
-          boxShadow: down ? '0 0 0 6px rgba(91,227,122,.55), 0 0 30px 10px rgba(91,227,122,.5)' : '0 8px 0 rgba(43,35,48,.22), var(--shadow)',
-          display: 'grid',
-          placeItems: 'center',
-          padding: 0,
-          touchAction: 'none',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          WebkitTouchCallout: 'none',
-        }}
-      >
-        {/* Three arrows pointing on ahead (they run up the pedal while it's down). */}
-        <svg viewBox="0 0 60 90" style={{ width: '58%', height: 'auto', overflow: 'visible' }} aria-hidden>
-          {[0, 1, 2].map((i) => (
-            <motion.path
-              key={i}
-              d={`M 8 ${66 - i * 24} L 30 ${46 - i * 24} L 52 ${66 - i * 24}`}
-              fill="none"
-              stroke="#fff"
-              strokeWidth={11}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              animate={down ? { opacity: [0.35, 1, 0.35] } : { opacity: 0.55 + i * 0.2 }}
-              transition={down ? { repeat: Infinity, duration: 0.5, delay: (2 - i) * 0.12 } : { duration: 0.2 }}
-              style={{ filter: 'drop-shadow(0 2px 0 rgba(43,35,48,.35))' }}
-            />
-          ))}
-        </svg>
-      </motion.button>
-      {nudge && (
-        <motion.div aria-hidden animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 0.9 }} style={{ position: 'absolute', right: -30, bottom: -18, fontSize: 'clamp(44px, 8vmin, 56px)', pointerEvents: 'none' }}>
-          👆
-        </motion.div>
-      )}
     </div>
   )
 }

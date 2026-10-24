@@ -13,18 +13,16 @@
 //   level, the boat follows the course round its bends in her lane), and a gas pedal on the screen is full speed (off
 //   it she cruises on, slower). The pedal does what a held finger does: revs, the rocket start, the trick off a ramp.
 // - The start: three lights and Sparkle's "Three! Two! One! Go!"; a finger already down at GO is a rocket start.
-// - Rainbow item boxes give 🚀 a turbo, 🍌 a banana (thrown at whoever is ahead, or dropped behind) or 🌈 the
-//   rainbow (fast, sparkly, unstoppable); she uses it with the big button. Gold coins make her a little faster (up to
-//   ten), golden arrow pads give a burst of speed, the ramps throw her in the air (a tap there is a trick and a burst on
+// - Gold coins make her a little faster (up to ten), golden arrow pads give a burst of speed, the ramps throw her in the air (a tap there is a trick and a burst on
 //   landing; off the big jump she rolls right round twice), holding a long hard turn builds sparks and a little turbo when it straightens (a drift's mini-turbo).
 // - The macaque drops banana peels behind him: drive over one and she spins round (never stopped for long). Bump into
-//   a rival and you both bounce; with the rainbow, they spin.
+//   a rival and you both bounce.
 // - The rivals keep it close the whole way (rubber banding round a story of the race: they lead at the start, she
 //   catches the macaque, the kids and she swap places, and on the last lap the kids are right beside her) and can't
 //   cross the line first: she wins by a nose at the end. Slow motion, fireworks, the crowd jumps.
 // - The podium: she stands on 1 and lifts the gold trophy with KAYLEE on it, the kids on 2, the macaque on 3; a photo
 //   for the trip album, and the trophy goes in her Trophy Room (RaceLayer.tsx) and rides home in the boat.
-// The race shows its state to the screen (onHud: the countdown, lap, place, coins, item); the minimap's dots and the
+// The race shows its state to the screen (onHud: the countdown, lap, place, coins); the minimap's dots and the
 // tap targets are written here every frame.
 import { Color, Fog, Group, Plane, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp, sounds, type Line } from '../../../../../../sdk'
@@ -51,10 +49,10 @@ import type { PoseKind } from '../bay/part'
 import { Sky } from '../bay/sky'
 import { BeachBalls } from './balls'
 import { buildBananaBoat, buildKidsBoat, buildMonkeyCrew, RACE_FEEL, type Crew } from './boats'
-import { buildAura, Course, type ItemKind } from './items'
+import { buildAura, Course } from './items'
 import { RaceMusic } from './music'
 import { buildRaceScenery, RAINBOW, type RaceScenery } from './scenery'
-import { ahead, bendAhead, branchLat, ELEPHANTS, FORK, GRID, halfAt, HOOP, ITEM_ROWS, LAPS, LENGTH, locate, mapXY, PODIUM, RAMPS, rockAt, spotAt, STAND } from './track'
+import { ahead, bendAhead, branchLat, ELEPHANTS, FORK, GRID, halfAt, HOOP, LAPS, LENGTH, locate, mapXY, PODIUM, RAMPS, rockAt, spotAt, STAND } from './track'
 import { buildPodium, buildTrophy, type Podium } from './trophy'
 import type { SteerMode, Tilt } from './tilt'
 import { Dolphins, Elephants, type Splasher } from './wildlife'
@@ -84,9 +82,6 @@ export interface RaceHud {
   place: number
   order: RacerId[]
   coins: number
-  item: ItemKind | null
-  /** The item slot is spinning. */
-  rolling: boolean
   /** A big word sweeping across: a new lap, the last lap, the win (`n` changes each time). */
   banner: { kind: 'lap2' | 'final' | 'win'; n: number } | null
   /** On the podium, the trophy is in her hands. */
@@ -254,10 +249,6 @@ export class Race implements World3D {
   private herRate = 0
   private lastProgress = 0
   private slow = 0
-  private item: ItemKind | null = null
-  private rolling = 0
-  private itemT = 0
-  private itemsGot = 0
   private boostKick = 0
   private vroomCool = 0
   private told = new Set<string>()
@@ -280,7 +271,7 @@ export class Race implements World3D {
   private aimLat = 0
   /** The phone's setup is showing (turn it sideways, allow the tilt): everything waits. */
   private waiting = false
-  private counts = { boxes: 0, items: 0, coinsTaken: 0, pads: 0, jumps: 0, bigJumps: 0, hoops: 0, tricks: 0, slips: 0, hits: 0, drifts: 0, bumps: 0, showers: 0, balls: 0, dolphins: 0, pokes: 0 }
+  private counts = { coinsTaken: 0, pads: 0, jumps: 0, bigJumps: 0, hoops: 0, tricks: 0, slips: 0, hits: 0, drifts: 0, bumps: 0, showers: 0, balls: 0, dolphins: 0, pokes: 0 }
   /** The side of the Twin Rocks she's heading for (+1 left, -1 right): the rivals take the other one. */
   private branch = 1
   /** The lap she last met the dolphins on. */
@@ -542,55 +533,6 @@ export class Race implements World3D {
     this.splash(this.k, this.k.v.stern, 20)
   }
 
-  /** The item button (RaceLayer.tsx). */
-  useItem() {
-    const k = this.k
-    const item = this.item
-    if (!item || this.phase !== 'race' || k.done >= 0) return
-    this.lastTouch = this.time
-    this.item = null
-    this.counts.items++
-    if (item === 'turbo') {
-      k.d.vroom(2.4)
-      sfx.zoom()
-      sfx.vroom()
-      this.boostKick = 1
-      k.pitch.v -= 3
-      this.splash(k, k.v.stern, 26)
-      this.line('wheee', L.race.wheee, 14)
-    } else if (item === 'rainbow') {
-      k.star = 6
-      k.d.vroom(6)
-      sounds.sparkle()
-      this.music.setStar(true)
-      this.line('fast', L.race.fast, 14)
-    } else {
-      // A banana: thrown at whoever is just ahead (the closest, within 60 m), or dropped behind if she's in front.
-      const target = this.racers.filter((r) => r !== k && r.done < 0 && r.progress > k.progress && r.progress - k.progress < 60).sort((a, b) => a.progress - b.progress)[0]
-      const from = k.v.root.position.clone().setY(1.6)
-      if (target) {
-        sfx.whoosh(0.5)
-        this.course.toss(from, () => target.v.root.position.clone().setY(0.6), () => this.hit(target))
-      } else {
-        const back = this.back(k, 2)
-        this.course.drop(back.x, back.z)
-        sfx.plop()
-      }
-    }
-    this.emitHud()
-  }
-
-  /** A thrown banana lands on a rival: splat, round and round they go. */
-  private hit(r: Racer) {
-    this.counts.hits++
-    sfx.splat()
-    this.spinOut(r, 1.4)
-    if (r.id === 'kids') this.line('hey', L.race.hey, 10)
-    else sfx.chatter()
-    this.scenery.cheer(0.6)
-    this.strike(this.riders[1], 'cheer', 1.2)
-  }
-
   private spinOut(r: Racer, seconds: number) {
     r.spin = seconds
     r.spinFor = seconds
@@ -779,9 +721,9 @@ export class Race implements World3D {
       }
     }
     if (!target) {
-      // By herself: along the inside of the next bend, but straight through the middle of the item boxes and over
-      // the ramp (the good bits shouldn't need her to aim).
-      const toGood = Math.min(...[...ITEM_ROWS, ...RAMPS.map((r) => r.s)].map((g) => ahead(k.s, g)).filter((a) => a > -2))
+      // By herself: along the inside of the next bend, but straight over the middle of the ramps (the good bits
+      // shouldn't need her to aim).
+      const toGood = Math.min(...RAMPS.map((r) => r.s).map((g) => ahead(k.s, g)).filter((a) => a > -2))
       let lat = toGood < 30 ? 0 : clamp(bendAhead(k.s, 25) * 4, -5, 5)
       const look = k.s + lookAhead(k.s, 12 + Math.abs(d.speed) * 0.4)
       // Round the Twin Rocks she takes the open side (away from a rival beside her; else the side she's on, or from
@@ -801,32 +743,6 @@ export class Race implements World3D {
     const rate = (k.progress - this.lastProgress) / Math.max(1e-3, dt)
     this.lastProgress = k.progress
     if (Math.abs(rate) < 60) this.herRate += (rate - this.herRate) * (1 - Math.exp(-dt / 1))
-    // The item slot.
-    if (this.rolling > 0) {
-      this.rolling -= dt
-      if (Math.random() < dt * 14) sfx.roll()
-      if (this.rolling <= 0) {
-        this.item = this.pickItem()
-        this.itemT = 0
-        sfx.item()
-        if (!this.told.has('item')) {
-          this.told.add('item')
-          this.say(L.race.item)
-        }
-      }
-    }
-    if (this.item) this.itemT += dt
-  }
-
-  /** What comes out of an item box: her first is a turbo; behind, better things (Mario Kart's way). */
-  private pickItem(): ItemKind {
-    this.itemsGot++
-    if (this.itemsGot === 1) return 'turbo'
-    const place = this.order().indexOf('kaylee') + 1
-    const roll = Math.random()
-    if (place === 1) return roll < 0.55 ? 'banana' : roll < 0.9 ? 'turbo' : 'rainbow'
-    if (place === 2) return roll < 0.35 ? 'banana' : roll < 0.75 ? 'turbo' : 'rainbow'
-    return roll < 0.1 ? 'banana' : roll < 0.55 ? 'turbo' : 'rainbow'
   }
 
   /** The rivals: along their lane, as fast as the race's story wants them (rubber banding), never over the line first. */
@@ -1011,14 +927,6 @@ export class Race implements World3D {
       }
     }
     if (r === this.k) {
-      if (!this.item && this.rolling <= 0) {
-        if (this.course.takeBox(d.x, d.z)) {
-          this.counts.boxes++
-          this.rolling = 1.2
-          sounds.sparkle()
-          this.sparkle.burst(d.x, 1.4, d.z, 20, 3, 3, 0.16)
-        }
-      }
       // Through the flower hoop in the air off the big jump: a ring of sparkles and a chime.
       if (d.airborne && ahead(prev, HOOP.s) > 0 && ahead(r.s, HOOP.s) <= 0) {
         this.counts.hoops++
@@ -1733,8 +1641,6 @@ export class Race implements World3D {
       place: order.indexOf('kaylee') + 1,
       order,
       coins: this.k.coins,
-      item: this.item,
-      rolling: this.rolling > 0,
       banner: this.banner,
       trophy: this.phase === 'podium' && this.trophyT >= 1,
     }
@@ -1754,7 +1660,6 @@ export class Race implements World3D {
       lap: clamp(this.k.laps + 1, this.lap0, LAPS),
       place: this.order().indexOf('kaylee') + 1,
       order: this.order(),
-      item: this.item,
       coins: this.k.coins,
       finished: this.k.done >= 0,
       trophy: this.phase === 'podium' && this.trophyT >= 1,
