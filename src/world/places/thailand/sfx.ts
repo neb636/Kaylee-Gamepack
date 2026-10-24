@@ -210,6 +210,23 @@ export const sfx = {
     tone(660, 600, 0.4, 0.04, 'square', 0.22)
     noise(0.3, 0.03, 'bandpass', 1200, 1800, 0.15)
   },
+  /** A baby elephant's trumpet: higher, shorter, a little squeaky. */
+  squeal: () => {
+    tone(620, 1050, 0.16, 0.06, 'sawtooth')
+    tone(1050, 920, 0.26, 0.05, 'square', 0.14)
+  },
+  /** A trunk snuffling after food. */
+  sniff: () => [0, 0.11, 0.2].forEach((d) => noise(0.08, 0.06, 'bandpass', 2600, 1500, d, 2.2)),
+  /** A big happy elephant rumble, deep in the belly. */
+  rumble: () => {
+    tone(62, 48, 0.7, 0.14, 'sawtooth')
+    tone(93, 70, 0.6, 0.06, 'triangle', 0.05)
+  },
+  /** A big rumbly burp. */
+  burp: () => {
+    tone(120, 58, 0.55, 0.16, 'sawtooth')
+    noise(0.45, 0.07, 'lowpass', 500, 160, 0.03)
+  },
   /** A dolphin's chirp: quick whistles up and down. */
   dolphin: () => [0, 0.1, 0.19, 0.3].forEach((d, i) => tone(i % 2 ? 2600 : 1700, i % 2 ? 1500 : 2900, 0.09, 0.045, 'sine', d)),
   /** A new lap: ding-ding. */

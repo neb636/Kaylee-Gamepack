@@ -401,7 +401,7 @@ instanced, and the elephants are a few thousand triangles each.
 ## Build plan (one PR each; stop for Dad after each)
 
 0. **This plan** (PR). Dad reads it.
-1. **Greybox 1, the feeding toy:**
+1. **Greybox 1, the feeding toy** (built 2026-10-24, see "Built so far"):
    - Only `feed`: the `'chang'` world, Mali and Khanom as toon shapes with the 3D trunk, the rail, the boulders,
      the gravel and the basket of bananas and sugarcane.
    - `?debug=1` gets sliders for the trunk (reach, chase, droop, grab distance).
@@ -425,6 +425,43 @@ instanced, and the elephants are a few thousand triangles each.
      facts on the stamp screen and the passport.
    - Pacing QA, then layout-qa and playtest-qa with the fun check.
    - Then `CHANG_OPEN = true`, and this plan and `boat-trip.md` updated. Dad plays the whole trip on the iPad.
+
+## Built so far
+
+**Greybox 1, the feeding toy (2026-10-24):** `#/world/thailand/boat-trip/feed` (`?fed=N` starts with rounder bellies,
+`?debug=1` shows the trunk sliders).
+- **The world:** `chang/` in the boat trip, as planned: `chang.ts` (the Stage), `layout.ts`, `yard.ts`, `elephant.ts`,
+  `trunk.ts`, `feel.ts`, `basket.ts` and `ChangDebug.tsx`. `TripWorld` and `WORLD_OF` have `'chang'`, `sections.ts`
+  has `feed` (after `land`) and the param `fed`.
+- **The yard:** gravel, the steel pipe rail, seven mossy boulders, cut grass, the blue bench, two salas on stilts and
+  a grid of oil palms, all toon shapes. Mommy, Daddy and Kaylee stand on the near side, Kaylee wearing what she packed.
+- **The elephants:** Mali (tusks) and Khanom (a tuft, about half her size) with blinking eyes, flapping ears, heads
+  that turn to her food, a lean toward it, breathing, and a belly that pokes out a little more with every meal.
+- **The trunk:** ten segments, solved in meters (FABRIK, ported from PR #86) and kept above the rail and the boulders.
+  Each trunk in reach snakes after the held food; the first tip to touch it grabs it, curls it to the mouth, and the
+  elephant munches (crunch for cane, a rumble or a squeal). Held high, the trunks stretch up and strain.
+- **Holding food:** press 🍌 or 🎋 in the basket (two targets, about 95-105 px on iPad) and drag. The food rides the plane in
+  front of the boulders, 40 px above her finger. A tap floats it to the hungriest trunk (Khanom if it's a tie), and
+  food let go far from every trunk falls on the gravel: a trunk in reach snuffles it up, otherwise it pops back into
+  the basket. Eaten food comes back to the basket a moment later, so the basket never runs out.
+- **Pokes and silly bits:** a tap on an elephant trumpets (Khanom squeals); tapping the family makes them hop.
+  Kaylee hops and giggles at every other bite. Three bites in a row and Mali burps, then Daddy laughs.
+- **No WebGL:** a picture-book page where 🍌 and 🎋 fly to the emoji elephants.
+- **QA:** `__thaiBoatQA()` has `fed`, `holding` and `trunks`. The section is in `qa-screens.mjs` and `qa-pacing.mjs`,
+  and `qa-motion.mjs` has `chang-trunk`. About 150 draw calls and 170k triangles (the family characters are most of
+  the triangles).
+- **Changed from the plan:**
+  - Daddy's basket stands on a tree stump between the two elephants, with Daddy beside it, not in his arms. With
+    the basket in front of Khanom, every food passed his quick trunk first and Mali never got one. Holding it
+    comes with the look.
+  - `CHANG_OPEN` comes with the fork (greybox 4): until then nothing leads to Baan Chang except its links.
+  - The silly moments still to build: Khanom rearing up for food held over his head, and the trunks bonking
+    together and sneezing. The trunk sniffing Kaylee's mane on a tap is also still to come.
+- **Known small things:** the picture book's page doesn't read `fed`. On a portrait iPad there is a band of empty
+  sand under the family.
+
+**Next:** Dad plays `feed` on the iPad. Is holding food out to a trunk fun? Tune it with `?debug=1` (reach, chase,
+droop, grab) and paste the copied numbers into `chang/feel.ts`. Then greybox 2: `favorites`, `lamyai` and `splash`.
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 
