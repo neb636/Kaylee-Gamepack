@@ -14,6 +14,9 @@ const BLUSH = '#FF9DB8'
 /** The nine stickers to find, in album order (the `found` param uses these ids). */
 export const CRITTERS = ['needlefish', 'eagle', 'macaque', 'cat', 'crab', 'mudskipper', 'lizard', 'kingfisher', 'porpoise'] as const
 export type CritterId = (typeof CRITTERS)[number]
+/** The trip album's stickers: the bay's nine, then Baan Chang's baby elephant (Khanom, chang/). */
+export const STICKERS = [...CRITTERS, 'elephant'] as const
+export type StickerId = (typeof STICKERS)[number]
 
 /** Two big shiny eyes (ink, with a white shine), as their own group so they can blink (squash scale.y). */
 function eyes(at: V3[], r: number, bag: Bag, px = 1.5): Group {

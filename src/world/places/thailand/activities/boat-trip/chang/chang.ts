@@ -7,9 +7,15 @@
 // snuffled up (or Daddy pops it back in the basket). Mali is big and slow and reaches further; Khanom is small, quick
 // and always hungry. Three bites in a row and Mali burps. Taps: an elephant trumpets, the family hop.
 //
-// First, at the top of the boardwalk, the cafe (`drinks`, cafe.ts, greybox 3): she pours her chocolate milk, squeezes
-// in the chocolate, stirs and picks a straw (and maybe makes Daddy an iced coffee); the 🐘 button takes them down to the
-// yard, and her glass stands on a rail post there. Then the same verb deepens, one section after another (greybox 2):
+// The way in (greybox 4): the songthaew drives up to the entrance (`chang`, entrance.ts) and the family hop down onto
+// the plank deck in front of the curved bamboo sign wall; "Everybody, pose!" (`sign`): the bay's four pose buttons,
+// Kaylee strikes one, Mommy and Daddy copy her, "One, two, three, cheese!", the flash, and the photo drops into the trip
+// album (as many as she likes; after the first a big 🥤 takes them up to the cafe). At the top of the boardwalk, the
+// cafe (`drinks`, cafe.ts, greybox 3): she pours her chocolate milk, squeezes in the chocolate, stirs and picks a straw
+// (and maybe makes Daddy an iced coffee); the 🐘 button takes them out onto the boardwalk (`boardwalk`, walkway.ts):
+// tap the planks or hold a finger and she walks there, Mommy and Daddy tagging along, a gecko on a post and a palm to
+// shake on the way, down the steps and over to the rail. Her glass stands on a rail post there. Then the same verb
+// deepens, one section after another (greybox 2):
 //   feed       any food to any elephant; after a few, they start asking
 //   favorites  a picture bubble over each head: what it wants and how many (Mali's three pips, "One! Two! Three!").
 //              The wrong snack gets sniffed and passed through the air to whoever wanted it. Two rounds.
@@ -18,29 +24,48 @@
 //              sneaks across to her chocolate milk on the rail post; a food held out turns him back, and a sip gives him
 //              the hiccups and a chocolate moustache. After a dozen more, they're full.
 //   splash     full and happy, they dip their trunks in the trough and spray it up over the family, under a rainbow.
-//              A tap on an elephant: another spray.
+//              A tap on an elephant: another spray. Daddy's photo of it drops into the album, then Khanom's sticker
+//              flies in, and the way on shows (BoatTrip: 🚤 to the pier if she hasn't been, else ✈️🏠).
 // No voices yet (greybox).
-import { Color, Vector3, type Object3D, type WebGLRenderer } from 'three'
+import { Color, Vector3, type Object3D, type PerspectiveCamera, type WebGLRenderer } from 'three'
 import { bell, clamp, pick, sounds } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
+import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { Shot } from '../../../engine/camera'
+import { photoCamera, snapPhoto } from '../../../engine/photo'
+import { L } from '../../../lines'
 import { sfx } from '../../../sfx'
 import { wearing } from '../../../trip/packing'
-import { Stage, type AnchorSpot, type LegEvents, type Rider } from '../../../trip/legs/stage'
+import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
+import type { PoseKind } from '../bay/part'
+import { applyPose, clearPose } from '../bay/poses'
 import { Basket, type Food } from './basket'
 import { Elephant } from './elephant'
 import { CHANG_FEEL } from './feel'
 import { Cafe } from './cafe'
-import { BENCH, ELEPHANTS, FAMILY, HOLD, LAMYAI_BACK, SHOT, STRAW_COLORS, TOOLS_WIDE, TROUGH, type ElephantId, type FoodKind, type StrawColor } from './layout'
+import { BENCH, ELEPHANTS, ENTRY, ENTRY_SHOT, FAMILY, GECKO, HOLD, LAMYAI_BACK, ROAD, SHAKE_PALM, SHOT, SIGN_FAMILY, STRAW_COLORS, TO_RAIL, TOOLS_WIDE, TOTEMS, TROUGH, WALK, WALK_SHOT, walkY, type ElephantId, type FoodKind, type StrawColor } from './layout'
+import { buildEntrance, type Entrance } from './entrance'
 import { Milk, Splash, WantBubble } from './props'
 import { tipOf } from './trunk'
+import { buildWalkway, Tagalong, type Walkway } from './walkway'
 import { buildYard } from './yard'
 
-export type ChangSection = 'drinks' | 'feed' | 'favorites' | 'lamyai' | 'splash'
+export type ChangSection = 'chang' | 'sign' | 'drinks' | 'boardwalk' | 'feed' | 'favorites' | 'lamyai' | 'splash'
+/** Where she is: the entrance (the songthaew and the sign), the cafe, or the yard (the boardwalk runs down into it). */
+type Area = 'entry' | 'cafe' | 'yard'
+const AREA_OF: Record<ChangSection, Area> = { chang: 'entry', sign: 'entry', drinks: 'cafe', boardwalk: 'yard', feed: 'yard', favorites: 'yard', lamyai: 'yard', splash: 'yard' }
+/** The photos taken here: the pose photo at the sign wall, and Daddy's photo of the splash. */
+export type ChangPhoto = 'sign' | 'chang'
 
 /** A link into a later section starts as if she had fed them this many already (rounder bellies). */
-const FED_BEFORE: Record<ChangSection, number> = { drinks: 0, feed: 0, favorites: 8, lamyai: 18, splash: 30 }
+const FED_BEFORE: Record<ChangSection, number> = { chang: 0, sign: 0, drinks: 0, boardwalk: 0, feed: 0, favorites: 8, lamyai: 18, splash: 30 }
+/** The songthaew's drive in to the entrance (s). */
+const ARRIVE_S = 3.0
+/** The splash's moments (s into it): Daddy's photo, Khanom's sticker, then the way on. */
+const SPLASH_PHOTO = 2.6
+const SPLASH_STICKER = 4.8
+const SPLASH_ONWARD = 6.6
 /** One spray in the splash: dip, lift, spray, rest (seconds into its cycle). */
 const DIP = 0.9
 const LIFT = 1.4
@@ -53,10 +78,15 @@ export interface ChangEvents extends LegEvents {
   fed(n: number): void
   /** She put a straw in her chocolate milk (it rides along to the yard). */
   straw(c: StrawColor): void
-  /** Her chocolate milk is ready: the 🐘 shows (and goes once they're on their way). */
+  /** The way on is open (the 🥤 after a sign photo, the 🐘 once her chocolate milk is ready, the 🚤 or ✈️🏠 after the
+   *  splash), or closed again. */
   ready(on: boolean): void
-  /** A white flash (the cut from the cafe down to the yard). */
+  /** A white flash (a camera's, or a cut from one place to the next). */
   flash(): void
+  /** A photo for the trip album. */
+  photo(kind: ChangPhoto, src: string): void
+  /** Khanom's sticker flies into the album from here (screen px). */
+  sticker(x: number, y: number): void
 }
 
 const TOOL_LABELS: Record<string, string> = { milk: 'Milk jug', choc: 'Chocolate', spoon: 'Spoon', ice: 'Ice', coffee: 'Coffee pot' }
@@ -71,6 +101,12 @@ export const CHANG_ANCHORS: AnchorInfo[] = [
   { id: 'ele:mali', label: 'Mali the elephant', kind: 'thing' },
   { id: 'ele:khanom', label: 'Khanom the baby elephant', kind: 'thing' },
   { id: 'ele:lamyai', label: 'Lamyai the elephant', kind: 'thing' },
+  { id: 'songthaew', label: 'Songthaew', kind: 'thing' },
+  { id: 'totem:0', label: 'Totem post', kind: 'thing' },
+  { id: 'totem:1', label: 'Totem post', kind: 'thing' },
+  { id: 'gecko', label: 'Gecko', kind: 'thing' },
+  { id: 'palm', label: 'Palm tree', kind: 'thing' },
+  { id: 'walk:end', label: 'Walk down to the elephants', kind: 'thing' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
@@ -138,7 +174,7 @@ export class Chang extends Stage {
   private yard: Object3D[] = []
   private straw: StrawColor
   private splash: Splash
-  private riders: Record<'kaylee' | 'ji' | 'nick', Rider>
+  private riders: { kaylee: Avatar; ji: Member; nick: Member }
   private held: Held | null = null
   private flights: Flight[] = []
   private at: ChangSection
@@ -159,6 +195,27 @@ export class Chang extends Stage {
   private seated = false
   /** When this section began (Khanom doesn't sneak in the first moments). */
   private since = 0
+  private area: Area = 'yard'
+  private entrance: Entrance
+  private walkway: Walkway
+  /** Mommy and Daddy tagging along on the boardwalk and over to the rail (null once they're there). */
+  private tags: { ji: Tagalong; nick: Tagalong } | null = null
+  /** Walking over from the foot of the boardwalk's steps to the rail (feed has begun). */
+  private walkIn = false
+  /** The songthaew: seconds into its drive in (-1: not driving in), and its drive away once they're off. */
+  private arriveT = -1
+  private leaveT = -1
+  /** Poses held on top of their usual life (the sign photo), the photos taken, and photos waiting for the next frame. */
+  private strikes = new Map<'kaylee' | 'ji' | 'nick', { kind: PoseKind; t: number }>()
+  private posing = false
+  private photos = 0
+  private shots: ChangPhoto[] = []
+  private frames = 0
+  /** Seconds into the splash, and the gecko's scurry and the palm's shake (-1: not now). */
+  private splashT = 0
+  private geckoT = -1
+  private shakeT = -1
+  private lastLead = 0
 
   constructor(
     renderer: WebGLRenderer,
@@ -205,6 +262,11 @@ export class Chang extends Stage {
     this.splash = new Splash(bag)
     scene.add(this.splash.root)
     this.yard.push(this.basket.root, this.milk.root, this.splash.root)
+    this.walkway = buildWalkway(bag)
+    scene.add(this.walkway.root)
+    this.yard.push(this.walkway.root)
+    this.entrance = buildEntrance(bag)
+    scene.add(this.entrance.root)
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
     kaylee.wear(wearing(packed))
     this.riders = { kaylee, ji: members.get('ji')!, nick: members.get('nick')! }
@@ -233,30 +295,37 @@ export class Chang extends Stage {
     }, null)
     scene.add(this.cafe.root)
     this.cafe.root.visible = false
+    this.area = AREA_OF[section] === 'yard' ? 'cafe' : 'yard'
     this.begin(section, true)
   }
 
-  /** The 🐘 at the cafe: down to the elephants (a white flash; the boardwalk walk comes in greybox 4). */
-  toYard() {
-    if (this.at !== 'drinks') return
+  /** The way on (ChangLayer's button): from the sign up to the cafe, from the cafe out onto the boardwalk. Each a cut
+   *  behind a white flash. */
+  onward() {
+    if (this.at !== 'sign' && this.at !== 'drinks') return
     this.events.ready(false)
     this.events.flash()
     sfx.whoosh()
-    this.begin('feed')
+    this.begin(this.at === 'sign' ? 'drinks' : 'boardwalk')
   }
 
-  /** At the cafe or in the yard: what shows, and where the family stand. */
-  private show(cafe: boolean) {
-    if (this.cafe.root.visible === cafe && this.yard[0].visible === !cafe) return
-    this.cafe.root.visible = cafe
-    for (const o of this.yard) o.visible = !cafe
-    if (cafe) this.cafe.enter()
-    else
-      for (const id of ['kaylee', 'ji', 'nick'] as const) {
-        const [x, z, face] = FAMILY[id]
-        this.put(this.riders[id], x, 0, z, 'stand', face)
-      }
+  /** The entrance, the cafe or the yard: what shows (a cut: the camera jumps there). */
+  private show(area: Area) {
+    if (this.area === area) return
+    this.area = area
+    this.entrance.root.visible = area === 'entry'
+    this.cafe.root.visible = area === 'cafe'
+    for (const o of this.yard) o.visible = area === 'yard'
+    if (area === 'cafe') this.cafe.enter()
     this.rig.setShot(this.shot(), true)
+  }
+
+  /** The family at their spots by the rail. */
+  private atRail() {
+    for (const id of ['kaylee', 'ji', 'nick'] as const) {
+      const [x, z, face] = FAMILY[id]
+      this.put(this.riders[id], x, 0, z, 'stand', face)
+    }
   }
 
   private eater(id: ElephantId) {
@@ -270,12 +339,20 @@ export class Chang extends Stage {
 
   /** A section begins (`first`: the one the link opened, already in the address bar). */
   private begin(s: ChangSection, first = false) {
+    const was = this.at
     this.at = s
     this.since = this.time
     this.stepFed = 0
     this.moving = false
     if (!first) this.events.section(s)
-    this.show(s === 'drinks')
+    this.show(AREA_OF[s])
+    if (s === 'chang') this.driveIn()
+    else if (s === 'sign') {
+      if (first) this.atSign()
+      this.later(first ? 900 : 300, () => this.at === 'sign' && this.events.say(L.bay.pose))
+    } else if (s === 'boardwalk') this.ontoBoardwalk()
+    else if (s === 'feed' && was === 'boardwalk' && !first) this.walkOver()
+    else if (AREA_OF[s] === 'yard' && !first && AREA_OF[was] !== 'yard') this.atRail()
     if (s === 'favorites') {
       this.round = 1
       this.drawRound()
@@ -301,11 +378,259 @@ export class Chang extends Stage {
         x.sprayT = -0.6 * i
       })
       this.splash.showRainbow()
+      this.splashT = 0
       if (!first) {
         sfx.trumpet()
         this.riders.kaylee.react('hop')
       }
     }
+  }
+
+  // ---------------------------------------------------------------- the way in: the songthaew, the sign, the boardwalk
+
+  /** `chang`: the family on the songthaew's bench, driving in along the road to the entrance. */
+  private driveIn() {
+    const st = this.entrance.songthaew
+    for (const id of ['kaylee', 'ji', 'nick'] as const) {
+      const c = this.riders[id]
+      st.seats[id].add(c.root)
+      this.put(c, 0, 0, 0, 'sit', 0)
+    }
+    st.root.position.set(ROAD.x0, 0, ROAD.z)
+    st.root.visible = true
+    this.arriveT = 0
+    this.leaveT = -1
+  }
+
+  /** Off the songthaew: one after another they hop down onto the deck, then it drives away and on to the photo. */
+  private hopOff() {
+    const order = ['kaylee', 'ji', 'nick'] as const
+    order.forEach((id, i) => {
+      const [x, z, face] = SIGN_FAMILY[id]
+      this.hop(this.riders[id], this.scene, new Vector3(x, 0.14, z), {
+        pose: 'stand',
+        face,
+        delay: 0.25 + i * 0.32,
+        dur: 0.55,
+        arc: 0.8,
+        done:
+          i < order.length - 1
+            ? undefined
+            : () => {
+                sfx.toot()
+                this.leaveT = 0
+                this.later(500, () => this.at === 'chang' && this.begin('sign'))
+              },
+      })
+    })
+  }
+
+  /** A `sign` link: the family on the deck already, the songthaew gone. */
+  private atSign() {
+    this.entrance.songthaew.root.visible = false
+    for (const id of ['kaylee', 'ji', 'nick'] as const) {
+      const [x, z, face] = SIGN_FAMILY[id]
+      this.put(this.riders[id], x, 0.14, z, 'stand', face)
+    }
+  }
+
+  /** The bay's pose buttons (BoatTrip shows them at the sign): Kaylee strikes the pose, Mommy and Daddy copy her, the
+   *  countdown and the flash, and the photo drops into the album. After the first, the way on (🥤) shows. */
+  pose(kind: PoseKind) {
+    if (this.at !== 'sign' || this.posing || this.hopping) return
+    this.posing = true
+    this.lastTouch = this.time
+    this.touches++
+    const order = ['kaylee', 'ji', 'nick'] as const
+    order.forEach((id, i) =>
+      this.later(i * 320, () => {
+        this.strikes.set(id, { kind, t: 0 })
+        this.riders[id].react('hop')
+      }),
+    )
+    sfx.pop()
+    const first = this.photos === 0
+    this.later(700, () => (first ? this.events.say(L.bay.cheese) : sfx.countdown()))
+    this.later(first ? 2900 : 1800, () => {
+      if (this.at !== 'sign') return
+      sfx.shutter()
+      this.events.flash()
+      this.shots.push('sign')
+      this.photos++
+      if (first) this.later(2400, () => this.at === 'sign' && this.events.ready(true))
+    })
+    this.later(first ? 4300 : 3200, () => {
+      for (const id of order) clearPose(this.riders[id].rig)
+      this.strikes.clear()
+      this.posing = false
+    })
+  }
+
+  /** `boardwalk`: out of the cafe at the top of the walkway, Mommy and Daddy just behind her. */
+  private ontoBoardwalk() {
+    const k = this.riders.kaylee
+    this.put(k, WALK.x1 - 0.4, WALK.y, WALK.z, 'stand', -90)
+    const ji = new Tagalong(this.riders.ji, walkY)
+    const nick = new Tagalong(this.riders.nick, walkY)
+    ji.from(WALK.x1 + 0.6, WALK.z + 0.3, -90)
+    nick.from(WALK.x1 + 1.5, WALK.z - 0.25, -90)
+    ji.rest = nick.rest = -60
+    this.tags = { ji, nick }
+    this.walkIn = false
+  }
+
+  /** Tap the planks (or hold a finger and she follows it): she walks along the boardwalk; near the steps, all the way
+   *  down them, and the yard begins. */
+  private walkTo(x: number) {
+    if (this.at !== 'boardwalk') return
+    const to = x < WALK.xs + 0.6 ? WALK.x0 - 0.3 : Math.min(WALK.x1 - 0.2, x)
+    this.riders.kaylee.walk([[to, WALK.z]])
+  }
+
+  /** Where a screen point lands on the boardwalk's planks (its x). */
+  private walkHit(x: number, y: number) {
+    const p = this.onPlaneY(x, y, WALK.y, tmp)
+    return p ? p.x : null
+  }
+
+  /** At the foot of the steps: feed begins, and they walk over to their spots at the rail (the camera glides along). */
+  private walkOver() {
+    const k = this.riders.kaylee
+    const [, , face] = FAMILY.kaylee
+    k.walk(TO_RAIL.kaylee, () => k.face((face * Math.PI) / 180))
+    if (this.tags) {
+      this.tags.ji.rest = FAMILY.ji[2]
+      this.tags.nick.rest = FAMILY.nick[2]
+      this.tags.ji.to(...TO_RAIL.ji)
+      this.tags.nick.to(...TO_RAIL.nick)
+    }
+    this.walkIn = true
+  }
+
+  /** The boardwalk's frame: Kaylee on the planks and the steps, Mommy and Daddy keeping up, the gecko, the palm. */
+  private stepWalk(dt: number) {
+    const k = this.riders.kaylee
+    const p = k.root.position
+    p.y += (walkY(p.x) - p.y) * Math.min(1, dt * 14)
+    const tags = this.tags
+    if (tags) {
+      if (this.at === 'boardwalk') {
+        const lead = (t: Tagalong, dx: number, dz: number) => {
+          const gx = Math.min(WALK.x1 + 1.6, p.x + dx)
+          if (Math.abs(t.pos.x - gx) > 0.35) t.to([gx, WALK.z + dz])
+        }
+        lead(tags.ji, 1.05, 0.3)
+        lead(tags.nick, 1.95, -0.25)
+        if (p.x < WALK.x0 + 0.15) this.begin('feed')
+      } else if (!tags.ji.walking && !tags.nick.walking && !k.walking) {
+        this.tags = null
+        this.walkIn = false
+      }
+      tags.ji.update(dt)
+      tags.nick.update(dt)
+    }
+    // The gecko scurries up its post and back down; the palm shakes and a frond floats down.
+    const w = this.walkway
+    if (this.geckoT >= 0) {
+      this.geckoT += dt
+      const g = this.geckoT
+      w.gecko.position.y = GECKO[1] + bell(Math.min(1, g / 1.2)) * 0.28
+      w.gecko.rotation.z = Math.sin(g * 30) * 0.15 * (1 - Math.min(1, g / 1.2))
+      if (g > 1.2) this.geckoT = -1
+    }
+    if (this.shakeT >= 0) {
+      this.shakeT += dt
+      const t = this.shakeT
+      w.crown.rotation.z = Math.sin(t * 16) * 0.13 * Math.max(0, 1 - t / 1.1)
+      const f = w.frond
+      f.visible = t < 3.2
+      const fall = Math.min(1, t / 2.6)
+      f.position.set(SHAKE_PALM.x + 0.8 + Math.sin(t * 3) * 0.5, SHAKE_PALM.h - (SHAKE_PALM.h - 0.05) * fall, SHAKE_PALM.z + 0.9 + fall * 0.8)
+      f.rotation.set(fall < 1 ? Math.sin(t * 3) * 0.4 : 0, t * 0.6, fall < 1 ? Math.cos(t * 3) * 0.3 : 0)
+      if (t > 3.2) this.shakeT = -1
+    }
+  }
+
+  /** The entrance's frame: the songthaew in and away, the totems' wobble, the poses for the photo. */
+  private stepEntry(dt: number, t: number) {
+    const st = this.entrance.songthaew
+    if (this.arriveT >= 0) {
+      this.arriveT += dt
+      const k = clamp(this.arriveT / ARRIVE_S)
+      const e = 1 - (1 - k) ** 2
+      st.root.position.x = ROAD.x0 + (ROAD.stop - ROAD.x0) * e
+      for (const w of st.wheels) w.rotation.z = -(st.root.position.x - ROAD.x0) / 0.3
+      st.body.position.y = k < 1 ? Math.abs(Math.sin(this.arriveT * 9)) * 0.03 : 0
+      const wind = 0.8 * (1 - k)
+      this.riders.kaylee.setWind(wind)
+      this.riders.ji.setWind(wind)
+      if (k >= 1) {
+        this.arriveT = -1
+        sfx.toot()
+        this.riders.nick.react('wave')
+        this.hopOff()
+      }
+    }
+    if (this.leaveT >= 0) {
+      this.leaveT += dt
+      st.root.position.x = ROAD.stop + this.leaveT * this.leaveT * 2.2
+      for (const w of st.wheels) w.rotation.z = -(st.root.position.x - ROAD.x0) / 0.3
+      st.body.position.y = Math.abs(Math.sin(this.leaveT * 9)) * 0.03
+      if (st.root.position.x > 22) {
+        st.root.visible = false
+        this.leaveT = -1
+      }
+    }
+    for (const tm of this.entrance.totems) {
+      const wob = tm.userData.wob as number | undefined
+      if (wob === undefined || wob < 0) continue
+      tm.userData.wob = wob + dt
+      tm.rotation.z = Math.sin(wob * 22) * 0.06 * Math.max(0, 1 - wob / 0.7)
+      if (wob > 0.7) tm.userData.wob = -1
+    }
+    // Everyone looks at the camera for the photo (at the road as they drive in).
+    const watch = this.at === 'sign' ? tmp.set(0, 1.4, ENTRY.z + 9) : tmp.set(st.root.position.x + 2, 1.2, ROAD.z + 2)
+    for (const id of ['kaylee', 'ji', 'nick'] as const) {
+      const c = this.riders[id]
+      c.lookAt(watch.x, watch.y, watch.z)
+      c.update(dt, t)
+      const s = this.strikes.get(id)
+      if (s) {
+        s.t += dt
+        applyPose(c.rig, s.kind, s.t, Math.min(1, s.t / 0.3))
+      }
+    }
+  }
+
+  /** The point on the plane y = `y` under a screen point. */
+  private onPlaneY(x: number, y: number, h: number, out: Vector3) {
+    const cam = this.rig.camera
+    const n = this.ndc(x, y)
+    const near = out.set(n.x, n.y, -1).unproject(cam)
+    const dir = tmp2.set(n.x, n.y, 1).unproject(cam).sub(near)
+    if (Math.abs(dir.y) < 1e-6) return null
+    const k = (h - near.y) / dir.y
+    return k > 0 ? near.addScaledVector(dir, k) : null
+  }
+
+  // ---------------------------------------------------------------- photos
+
+  render() {
+    this.frames++
+    // Photos first (each draws the scene once from its own camera), then the screen's frame over it.
+    if (this.shots.length && this.frames > 3) {
+      const kind = this.shots.shift()!
+      this.scene.updateMatrixWorld()
+      this.events.photo(kind, snapPhoto(this.renderer, this.scene, this.photoCam(kind)))
+    }
+    super.render()
+  }
+
+  private photoCam(kind: ChangPhoto): PerspectiveCamera {
+    // The sign: straight on and low, the letters across the top. The splash: from Daddy's bench, the family and the
+    // spray and the rainbow.
+    if (kind === 'sign') return photoCamera(30, 0, 1.6, ENTRY.z + 9.8, 0, 1.75, ENTRY.z - 0.2)
+    return photoCamera(46, 5.4, 2.2, 6.2, 0.4, 2.0, -1.4)
   }
 
   /** Moves on to the next section in a moment (once). */
@@ -343,7 +668,10 @@ export class Chang extends Stage {
   // ---------------------------------------------------------------- touch
 
   protected pickRoots(): Object3D[] {
-    if (this.at === 'drinks') return [...this.cafe.pickRoots(), ...Object.values(this.riders).map((r) => r.root)]
+    const family = Object.values(this.riders).map((r) => r.root)
+    if (this.area === 'entry') return [this.entrance.songthaew.root, ...this.entrance.totems, ...family]
+    if (this.at === 'drinks') return [...this.cafe.pickRoots(), ...family]
+    if (this.at === 'boardwalk') return [this.walkway.gecko, this.walkway.palm, ...this.eaters.map((x) => x.e.root), ...family]
     return [this.milk.root, ...this.basket.foods.map((f) => f.obj), ...this.eaters.map((x) => x.e.root), ...Object.values(this.riders).map((r) => r.root)]
   }
 
@@ -353,6 +681,17 @@ export class Chang extends Stage {
     if (this.at === 'drinks') {
       if (what?.startsWith('tool:')) this.touches++
       return this.cafe.down(x, y, what)
+    }
+    if (this.area === 'entry') return
+    if (this.at === 'boardwalk') {
+      // The planks (not a poke): she walks there.
+      if (what) return
+      const hx = this.walkHit(x, y)
+      if (hx !== null) {
+        this.touches++
+        this.walkTo(hx)
+      }
+      return
     }
     if (!what?.startsWith('food:') || this.held || this.at === 'splash') return
     // The bananas are on the left of the basket and the cane on the right: which side her finger went down on decides,
@@ -371,6 +710,15 @@ export class Chang extends Stage {
   pointerMove(x: number, y: number, _dx: number, _dy: number, down: boolean) {
     if (this.at === 'drinks') {
       if (down) this.cafe.move(x, y)
+      return
+    }
+    if (this.at === 'boardwalk') {
+      // A finger held down: she follows it.
+      if (down && this.time - this.lastLead > 0.08) {
+        this.lastLead = this.time
+        const hx = this.walkHit(x, y)
+        if (hx !== null) this.walkTo(hx)
+      }
       return
     }
     const h = this.held
@@ -400,6 +748,30 @@ export class Chang extends Stage {
   protected onTap(id: string | null) {
     if (!id || id.startsWith('food:') || id.startsWith('tool:')) return
     if (this.at === 'drinks' && this.cafe.tap(id)) return
+    if (id === 'songthaew') return sfx.toot()
+    if (id.startsWith('totem:')) {
+      // A woody tock, and it wobbles.
+      sfx.tick()
+      const tm = this.entrance.totems[Number(id.slice(6))]
+      if (tm) tm.userData.wob = 0
+      return
+    }
+    if (id === 'gecko') {
+      sfx.tukkae()
+      this.geckoT = 0
+      this.later(400, () => this.riders.kaylee.react('hop'))
+      return
+    }
+    if (id === 'palm') {
+      sfx.swish()
+      this.shakeT = 0
+      this.later(900, () => {
+        sfx.giggle()
+        this.riders.kaylee.react('wiggle')
+      })
+      return
+    }
+    if (id === 'walk:end') return this.walkTo(WALK.x0)
     if (id === 'milk') {
       // Kaylee has a sip herself.
       this.milk.poke()
@@ -446,6 +818,7 @@ export class Chang extends Stage {
   }
 
   protected step(dt: number, t: number) {
+    if (this.area === 'entry') return this.stepEntry(dt, t)
     if (this.at === 'drinks') {
       this.cafe.step(dt)
       const watch = this.cafe.watch(tmp)
@@ -528,6 +901,8 @@ export class Chang extends Stage {
     this.basket.update(dt)
     this.milk.update(dt)
     this.splash.update(dt)
+    if (this.at === 'boardwalk' || this.tags) this.stepWalk(dt)
+    if (this.at === 'splash') this.stepSplash(dt)
     // ---- The family watch the food, whoever is eating, or the spray ----
     const busy = this.eaters.find((x) => x.mode !== 'idle' && x.mode !== 'spray' && x.here)
     const watch = this.at === 'splash' ? tmp.set(0.8, 3.4, -0.6) : h ? h.food.obj.position : busy ? busy.e.headAt(tmp) : this.eater('mali').e.headAt(tmp)
@@ -535,6 +910,25 @@ export class Chang extends Stage {
       c.lookAt(watch.x, watch.y, watch.z)
       c.update(dt, t)
     }
+  }
+
+  /** The splash's moments: Daddy's photo of it, Khanom's sticker flying into the album, then the way on. */
+  private stepSplash(dt: number) {
+    const was = this.splashT
+    this.splashT += dt
+    const at = (s: number) => was < s && this.splashT >= s
+    if (at(SPLASH_PHOTO)) {
+      sfx.shutter()
+      this.events.flash()
+      this.shots.push('chang')
+      this.riders.nick.react('hop')
+    }
+    if (at(SPLASH_STICKER)) {
+      const s = this.toScreen(this.eater('khanom').e.headAt(tmp3), 0.3, 999)
+      this.events.sticker(s?.x ?? this.w / 2, s?.y ?? this.h / 2)
+      sfx.squeal()
+    }
+    if (at(SPLASH_ONWARD)) this.events.ready(true)
   }
 
   /** One elephant's frame: what its trunk goes after, then its body and trunk. */
@@ -849,6 +1243,16 @@ export class Chang extends Stage {
   protected shot(): Shot {
     if (this.at === 'drinks') return this.cafe.shot()
     const tall = this.w < this.h
+    if (this.area === 'entry') {
+      const s = this.at === 'chang' ? (tall ? ENTRY_SHOT.arriveTall : ENTRY_SHOT.arriveWide) : tall ? ENTRY_SHOT.tall : ENTRY_SHOT.wide
+      return { center: new Vector3(...s.center), half: new Vector3(...s.half), yaw: s.yaw, pitch: s.pitch, minDist: 5 }
+    }
+    if (this.at === 'boardwalk') {
+      // From the side and a little above, following her, the yard ahead of her at the end.
+      const s = tall ? WALK_SHOT.tall : WALK_SHOT.wide
+      const kx = this.riders.kaylee.root.position.x
+      return { center: new Vector3(clamp(kx + s.ahead, WALK.x0 - 0.5, WALK.x1 - s.half[0] + 1.5), s.y, WALK.z - 0.5), half: new Vector3(...s.half), yaw: s.yaw, pitch: s.pitch, minDist: 5 }
+    }
     const s = this.at === 'splash' ? (tall ? SHOT.splashTall : SHOT.splashWide) : this.at === 'lamyai' ? (tall ? SHOT.tall3 : SHOT.wide3) : tall ? SHOT.tall : SHOT.wide
     return { center: new Vector3(...s.center), half: new Vector3(...s.half), yaw: s.yaw, pitch: s.pitch, minDist: 5 }
   }
@@ -856,16 +1260,38 @@ export class Chang extends Stage {
   protected anchorAt(id: string): AnchorSpot | null {
     if (this.at === 'drinks') return id.startsWith('family:') ? this.familyAt(id) : this.cafe.anchorAt(id, this.time - this.lastTouch)
     if (id.startsWith('tool:') || id.startsWith('glass:') || id === 'bell') return null
+    if (this.area === 'entry') {
+      if (id === 'songthaew') {
+        const st = this.entrance.songthaew.root
+        return st.visible ? { at: st.getWorldPosition(new Vector3()).setY(1.4), r: 1.3, prio: 1 } : null
+      }
+      if (id.startsWith('totem:')) {
+        const [x, , z] = TOTEMS[Number(id.slice(6))]
+        return { at: new Vector3(x, 1.3, z), r: 0.32, max: 120 }
+      }
+      // (While they hop down, the family's targets would chase them.)
+      return id.startsWith('family:') && !this.hopping ? this.familyAt(id) : null
+    }
+    if (id === 'songthaew' || id.startsWith('totem:')) return null
+    if (id === 'gecko' || id === 'palm' || id === 'walk:end') {
+      if (this.at !== 'boardwalk') return null
+      if (id === 'gecko') return { at: this.walkway.gecko.getWorldPosition(new Vector3()), r: 0.2, prio: 3 }
+      if (id === 'palm') return { at: new Vector3(SHAKE_PALM.x, SHAKE_PALM.h - 0.6, SHAKE_PALM.z), r: 0.9, max: 130, prio: 1 }
+      // A glow on the planks a few steps ahead of her, after a moment with nothing done: tap and she walks all the way.
+      const kx = this.riders.kaylee.root.position.x
+      const idle = this.time - this.lastTouch > 4 && !this.riders.kaylee.walking
+      return idle ? { at: new Vector3(Math.max(WALK.x0, kx - 3.2), walkY(Math.max(WALK.x0, kx - 3.2)) + 0.25, WALK.z), r: 0.45, glow: true, prio: 2 } : null
+    }
     if (id === 'food:banana' || id === 'food:cane') {
-      // (Hidden while she's holding one, her finger is busy, and in the splash.)
-      if (this.held || this.at === 'splash') return null
+      // (Hidden while she's holding one, her finger is busy, on the way in, and in the splash.)
+      if (this.held || this.at === 'splash' || this.at === 'boardwalk' || this.walkIn) return null
       const kind = id.slice(5) as FoodKind
       const wanted = this.eaters.some((x) => x.want?.kind === kind)
       // (Bigger in the wider shot with Lamyai, so they stay at least 88 px on an iPad.)
       const r = this.at === 'lamyai' ? 0.44 : 0.34
       return { at: this.basket.target(kind, r, new Vector3()), r, glow: (this.fed === 0 || wanted) && this.time - this.lastTouch > 4, prio: 3 }
     }
-    if (id === 'milk') return this.milk.root.visible ? { at: this.milk.root.getWorldPosition(new Vector3()).setY(this.milk.root.position.y + 0.15), r: 0.24, prio: 3 } : null
+    if (id === 'milk') return this.milk.root.visible && this.at !== 'boardwalk' ? { at: this.milk.root.getWorldPosition(new Vector3()).setY(this.milk.root.position.y + 0.15), r: 0.24, prio: 3 } : null
     if (id.startsWith('ele:')) {
       const e = this.eater(id.slice(4) as ElephantId).e
       return { at: e.headAt(new Vector3()), r: 0.85 * e.spot.s, max: 220, prio: 1 }
@@ -881,6 +1307,12 @@ export class Chang extends Stage {
 
   protected hintAt() {
     if (this.at === 'drinks') return this.cafe.hintAt()
+    if (this.at === 'chang') return null
+    if (this.at === 'sign') return null
+    if (this.at === 'boardwalk') {
+      const kx = this.riders.kaylee.root.position.x
+      return this.riders.kaylee.walking ? null : new Vector3(Math.max(WALK.x0, kx - 3.2), walkY(Math.max(WALK.x0, kx - 3.2)), WALK.z)
+    }
     if (this.held) return null
     if (this.at === 'splash') return this.eater('mali').e.headAt(new Vector3())
     const want = this.eaters.find((x) => x.want)?.want
@@ -910,6 +1342,12 @@ export class Chang extends Stage {
       kaylee: (this.riders.kaylee as Avatar).wearing,
       straw: this.straw,
       strawColor: STRAW_COLORS[this.straw],
+      area: this.area,
+      songthaew: this.area === 'entry' ? { x: +this.entrance.songthaew.root.position.x.toFixed(2), visible: this.entrance.songthaew.root.visible } : undefined,
+      photos: this.photos,
+      posing: this.posing,
+      walk: this.at === 'boardwalk' || this.walkIn ? { x: +this.riders.kaylee.root.position.x.toFixed(2), y: +this.riders.kaylee.root.position.y.toFixed(2), walking: this.riders.kaylee.walking, walkIn: this.walkIn, tags: this.tags && Object.fromEntries(Object.entries(this.tags).map(([id, g]) => [id, [+g.pos.x.toFixed(2), +g.pos.z.toFixed(2), g.walking]])) } : undefined,
+      splashT: this.at === 'splash' ? +this.splashT.toFixed(1) : undefined,
       drink: this.at === 'drinks' ? this.cafe.qa() : undefined,
     }
   }

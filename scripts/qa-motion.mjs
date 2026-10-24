@@ -583,6 +583,21 @@ GAME_SCENARIOS.push(
     await page.waitForTimeout(4200)
     await page.mouse.up()
   }),
+  // The way in: the sign photo (Kaylee strikes the pose, Mommy and Daddy copy her, the flash), and the boardwalk (a
+  // finger held ahead of her: she walks after it, Mommy and Daddy tag along, down the steps toward the rail).
+  changMoment('chang-pose', 5, 'sign', async (page) => {
+    await page.getByRole('button', { name: 'Cheer pose' }).click({ force: true })
+    await page.waitForTimeout(4500)
+  }),
+  changMoment('chang-walk', 6, 'boardwalk', async (page) => {
+    await page.mouse.move(vp.width * 0.38, vp.height * 0.58)
+    await page.mouse.down()
+    for (let i = 0; i < 30; i++) {
+      await page.mouse.move(vp.width * Math.max(0.04, 0.38 - i * 0.02), vp.height * 0.6)
+      await page.waitForTimeout(180)
+    }
+    await page.mouse.up()
+  }),
   changMoment('chang-splash', 6, 'splash', async (page) => {
     for (const id of ['ele:mali', 'ele:khanom', 'ele:lamyai']) {
       await page.locator(`[data-anchor="${id}"]`).click({ force: true }).catch(() => {})

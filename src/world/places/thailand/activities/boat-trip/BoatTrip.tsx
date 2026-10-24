@@ -5,15 +5,18 @@
 //                           Mommy asks (Ask.tsx) by the elephant map, packing (with the suitcase card and ✅ here),
 //                           the goodbye at the shutter and Aunty Sri's van
 //   airport                 the van pulls away and they're at the airport: the x-ray belt (trip/legs/airport.ts)
-//   takeoff, fly, land      the window seat (trip/legs/plane.ts), then Krabi's arrivals arch and the songthaew
+//   takeoff, fly, land      the window seat (trip/legs/plane.ts), then Krabi's arrivals arch and the songthaew (with
+//                           Baan Chang open, chang/open.ts: it stops at the signpost, 🐘 or 🚤, either first)
 //   pier ... sunset         Phang Nga Bay by longtail boat (bay/bay.ts and its parts): the ribbons, open water, the
 //                           village, the cave and the hong, the Nail Island photo, the sunset ride back; at the pier her
 //                           album opens and a big 🏠 takes them home
-//   drinks ... splash       Baan Chang Cafe in Krabi (chang/chang.ts, plan: thailand/baan-chang.md), greybox: the
-//                           cafe, where she makes her chocolate milk (chang/cafe.ts; a big 🐘 when it's ready), then the
-//                           elephants' yard, where she holds bananas and sugarcane out to the trunks; then their
-//                           favorites, Lamyai and Khanom's sneaky sips, and the rainbow splash (reached only by their
-//                           links until the fork at Krabi is built)
+//   chang ... splash        Baan Chang Cafe in Krabi (chang/chang.ts, plan: thailand/baan-chang.md), greybox: the
+//                           songthaew to the entrance and a pose photo at the bamboo sign (🥤 after it), the cafe,
+//                           where she makes her chocolate milk (chang/cafe.ts; a big 🐘 when it's ready), down the
+//                           boardwalk to the elephants' yard, where she holds bananas and sugarcane out to the trunks;
+//                           then their favorites, Lamyai and Khanom's sneaky sips, and the rainbow splash (Daddy's photo
+//                           and Khanom's sticker, then 🚤 to the pier or, with the boat done, ✈️🏠). `been` says which of
+//                           Krabi's two places are done: the pier at sunset offers 🐘 until Baan Chang is
 //   race, podium            through the bay's rainbow gate (bay/race-gate.ts), behind a checkered flag: the boat race
 //                           in its own lagoon (race/race.ts, its screen race/RaceLayer.tsx), three laps against the
 //                           village kids and the macaque; she always wins, lifts the trophy on the podium (it goes in
@@ -48,17 +51,19 @@ import { BoardingPass, type PassChoice } from '../../trip/legs/BoardingPass'
 import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
 import { TRIP_HOUSE_ANCHORS, TripHouse, type HouseLeg, type Phase } from '../../trip/legs/house-plugin'
 import { PackCard } from '../../trip/legs/PackCard'
-import { PLANE_ANCHORS, PlaneRide, type FlySection } from '../../trip/legs/plane'
+import { PLANE_ANCHORS, PlaneRide, type FlySection, type KrabiFork } from '../../trip/legs/plane'
 import type { LegEvents } from '../../trip/legs/stage'
 import { DEFAULT_PACKED, formatPacked, parsePacked } from '../../trip/packing'
 import { addWallPhoto, newestByTrip, shrinkPhoto, today, useWallPhotos } from '../../trip/wall-photos'
 import { Album, PhotoDrop, StickerFlight, type AlbumPhoto } from './bay/Album'
 import { ARROW_ICONS, Bay, BAY_ANCHORS, type BayStart } from './bay/bay'
-import { CRITTERS, type CritterId } from './bay/critters'
+import { CRITTERS, STICKERS, type CritterId, type StickerId } from './bay/critters'
 import type { Phase as BayPhase, PhotoKind, Stop } from './bay/part'
 import { PoseButtons } from './bay/PoseButtons'
 import { Chang, CHANG_ANCHORS, type ChangSection } from './chang/chang'
 import { ChangDebug } from './chang/ChangDebug'
+import { ChangLayer } from './chang/ChangLayer'
+import { changOpen } from './chang/open'
 import { isStraw, type StrawColor } from './chang/layout'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
@@ -69,7 +74,7 @@ import { askForTilt, needsAsking, steerFor, Tilt, type SteerMode } from './race/
 import { GasPedal } from './race/GasPedal'
 import { TiltSetup } from './race/TiltSetup'
 import BOAT_SECTIONS, { type BoatSection } from './sections'
-import { BOAT_TRIP, PASS, PUNCH, WORLD_OF, type TripWorld } from './trip'
+import { BEEN, BOAT_TRIP, LEG_OF_BEEN, PASS, PUNCH, WORLD_OF, type Been, type TripWorld } from './trip'
 
 /** Where the trip picks up next time (the start of a leg), and what was in her suitcase. */
 interface Progress {
@@ -77,9 +82,29 @@ interface Progress {
   packed: string
   /** Whole trips done, Mommy's question to the photo on Agong's wall (after the first, replays are shorter). */
   trips?: number
+  /** Krabi's places done on this trip (the pier, then 🐘 still to come; cleared at home). */
+  been?: Been[]
 }
-const RESUME: BoatSection[] = ['goodbye', 'airport', 'takeoff', 'pier']
-const RESUME_AT: Partial<Record<BoatSection, BoatSection>> = { fly: 'takeoff', land: 'takeoff', bay: 'pier', village: 'pier', cave: 'pier', hong: 'pier', race: 'pier', podium: 'pier', nail: 'pier', sunset: 'pier' }
+const RESUME: BoatSection[] = ['goodbye', 'airport', 'takeoff', 'chang', 'pier']
+const RESUME_AT: Partial<Record<BoatSection, BoatSection>> = {
+  fly: 'takeoff',
+  land: 'takeoff',
+  sign: 'chang',
+  drinks: 'chang',
+  boardwalk: 'chang',
+  feed: 'chang',
+  favorites: 'chang',
+  lamyai: 'chang',
+  splash: 'chang',
+  bay: 'pier',
+  village: 'pier',
+  cave: 'pier',
+  hong: 'pier',
+  race: 'pier',
+  podium: 'pier',
+  nail: 'pier',
+  sunset: 'pier',
+}
 const DEFAULT_RIBBONS = BOAT_SECTIONS.params.ribbons.default
 /** A comma list from the URL, kept to the values it may have. */
 const list = <T extends string>(s: string | null, ok: readonly T[]) => (s ?? '').split(',').filter((x): x is T => (ok as readonly string[]).includes(x))
@@ -90,12 +115,15 @@ const GLOWS = Object.keys(ARROW_ICONS)
 /** The trip's flight (the plane leg flies its route). */
 const FLIGHT = BOAT_TRIP.legs.find((l) => l.kind === 'fly') as { from: [number, number]; to: [number, number] }
 
-/** The boarding pass's leg for a section (the bay's sections are all the boat). */
-const legOf = (s: BoatSection) => PUNCH[s] ?? (WORLD_OF[s] === 'bay' ? 'pier' : null)
-/** The legs already punched before `next` (leaving out the one being punched now). */
-function doneBefore(next: BoatSection, punch: string | null) {
-  const upto = PASS.findIndex((p) => p.id === legOf(next))
-  return PASS.slice(0, Math.max(0, upto)).map((p) => p.id).filter((id) => id !== punch)
+/** The boarding pass's leg for a section (the bay's sections are all the boat, Baan Chang's all the elephants). */
+const legOf = (s: BoatSection) => PUNCH[s] ?? (WORLD_OF[s] === 'bay' ? 'pier' : WORLD_OF[s] === 'chang' ? 'chang' : null)
+/** The legs already punched before `next` (leaving out the one being punched now). Krabi's two places go in either
+ *  order, so each counts only once `been` says it's done. */
+function doneBefore(legs: typeof PASS, next: BoatSection, punch: string | null, been: Been[]) {
+  const upto = legs.findIndex((p) => p.id === legOf(next))
+  const krabi = BEEN.map((b) => LEG_OF_BEEN[b])
+  const before = legs.slice(0, Math.max(0, upto)).map((p) => p.id).filter((id) => !krabi.includes(id))
+  return [...before, ...been.map((b) => LEG_OF_BEEN[b])].filter((id) => id !== punch && id !== legOf(next) && legs.some((p) => p.id === id))
 }
 
 const ANCHORS_OF: Record<TripWorld, typeof BAY_ANCHORS> = {
@@ -111,6 +139,10 @@ const ANCHORS_OF: Record<TripWorld, typeof BAY_ANCHORS> = {
 
 export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () => void }) {
   const { start, enter } = useSections(BOAT_SECTIONS)
+  // Baan Chang on the trip (chang/open.ts; read once: the address bar drops `chang=1`): the signpost at Krabi, 🐘 on
+  // the boarding pass, at the pier and on a replay.
+  const [open] = useState(changOpen)
+  const legs = open ? PASS : PASS.filter((p) => p.id !== 'chang')
   const [stored, setSaved] = useSaved<Progress>('thailand-boat-trip', { at: null, packed: DEFAULT_PACKED })
   // A trip saved before a leg was cut (Aunty Sri's car ride) starts over.
   const saved = stored.at && !(stored.at in WORLD_OF) ? { ...stored, at: null } : stored
@@ -129,7 +161,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const prep = useRef(first === 'home')
   const [mount, setMount] = useState<{ world: TripWorld; section: BoatSection; key: number }>(() => (prep.current ? { world: 'bay', section: 'nail', key: 0 } : { world: WORLD_OF[first], section: first, key: 0 }))
   const [mode, setMode] = useState<RenderMode>('webgl')
-  const [pass, setPass] = useState<{ punch: string | null; done: string[]; choices?: PassChoice[]; flag?: boolean } | null>(() => (prep.current ? { punch: null, done: PASS.map((p) => p.id).filter((id) => id !== 'home') } : null))
+  const [pass, setPass] = useState<{ punch: string | null; done: string[]; choices?: PassChoice[]; flag?: boolean } | null>(() => (prep.current ? { punch: null, done: legs.map((p) => p.id).filter((id) => id !== 'home') } : null))
   /** Back at the pier at sunset: the way home is open. */
   const [atPier, setAtPier] = useState(false)
   const [landed, setLanded] = useState(false)
@@ -148,7 +180,9 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   // (A podium link: she has won the race.)
   const [stops, setStops] = useState<Stop[]>(() => [...new Set([...list(flag('stops'), STOPS), ...(first === 'podium' ? (['race'] as Stop[]) : [])])])
   const [photos, setPhotos] = useState<AlbumPhoto[]>([])
-  const [found, setFound] = useState<CritterId[]>(() => list(flag('found'), CRITTERS))
+  const [found, setFound] = useState<StickerId[]>(() => list(flag('found'), STICKERS))
+  // Krabi's places done (a link's, else the trip she's picking up again).
+  const [been, setBeen] = useState<Been[]>(() => list(flag('been') ?? (start ? '' : (saved.been ?? []).join(',')), BEEN))
   // Baan Chang: how many foods the elephants have had (a link's bellies are that round).
   const [fed, setFed] = useState(() => Math.max(0, Math.floor(Number(flag('fed') ?? 0)) || 0))
   // Her straw from the cafe (it's in her glass in the yard), and whether her chocolate milk is ready (the 🐘 shows).
@@ -156,10 +190,11 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     const s = flag('straw')
     return isStraw(s) ? s : 'pink'
   })
-  const [drinkReady, setDrinkReady] = useState(false)
+  // Baan Chang's way on is open (ChangLayer's button).
+  const [onward, setOnward] = useState(false)
   const [albumOpen, setAlbumOpen] = useState(false)
   const [bump, setBump] = useState(0)
-  const [flights, setFlights] = useState<{ key: number; id: CritterId; x: number; y: number }[]>([])
+  const [flights, setFlights] = useState<{ key: number; id: StickerId; x: number; y: number }[]>([])
   const [drops, setDrops] = useState<{ key: number; src: string }[]>([])
   const guideRef = useRef<TripGuideHandle>(null)
   // The boat race: what its screen shows, the minimap's dots, and whether the bay is being built for the way back out
@@ -183,8 +218,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const worldRef = useRef<World3D | null>(null)
   const tripRef = useRef<TripHouse | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
-  const state = useRef({ section, packed, mount, busy: false, saved, ribbons, stops, photos, found, fed, straw })
-  state.current = { ...state.current, section, packed, mount, saved, ribbons, stops, photos, found, fed, straw }
+  const state = useRef({ section, packed, mount, busy: false, saved, ribbons, stops, photos, found, fed, straw, been })
+  state.current = { ...state.current, section, packed, mount, saved, ribbons, stops, photos, found, fed, straw, been }
   // Read once: the address bar follows her and drops ?debug=1.
   const [debug] = useState(() => flag('debug') !== null)
   // Driving the longtail on a phone (race/tilt.ts), in the bay and in the boat race alike: held sideways, tilt to
@@ -234,7 +269,9 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       packed: formatPacked(ids) || DEFAULT_PACKED,
       ribbons: st.ribbons.length ? st.ribbons.join(',') : DEFAULT_RIBBONS,
       stops: st.stops.join(','),
-      photos: [...new Set(st.photos.map((p) => p.kind).filter((k) => k !== 'selfie' && k !== 'race'))].join(','),
+      // (Only the bay's: Baan Chang's photos can't be taken again from a link.)
+      photos: [...new Set(st.photos.map((p) => p.kind).filter((k) => KINDS.includes(k)))].join(','),
+      been: WORLD_OF[st.section] === 'house' ? undefined : st.been.join(','),
       found: st.found.join(','),
       fed: WORLD_OF[st.section] === 'chang' ? String(st.fed) : undefined,
       straw: WORLD_OF[st.section] === 'chang' ? st.straw : undefined,
@@ -251,7 +288,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     }
     const world = WORLD_OF[state.current.section]
     if (world === 'bay' || world === 'chang') enter(state.current.section, params(state.current.packed))
-  }, [ribbons, stops, photos, found, fed, straw])
+  }, [ribbons, stops, photos, found, fed, straw, been])
 
   // Someone says something, out loud (Sparkle in the corner shows the words for Dad). Not while the bay is only
   // building behind the boarding pass for a `home` link.
@@ -271,12 +308,12 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     st.busy = true
     const from = st.section
     const punch = punchLeg !== undefined ? punchLeg : legOf(from)
-    setPass({ punch, done: doneBefore(next, punch), flag: flagCover })
+    setPass({ punch, done: doneBefore(legs, next, punch, st.been), flag: flagCover })
     if (WORLD_OF[next] !== 'race') setRaceHud(null)
     // (Kept until the next leg: React may build a world twice in development.)
     if (next !== 'bay') fromRace.current = false
     const at = RESUME.includes(next) ? next : (RESUME_AT[next] ?? null)
-    if (at) setSaved((p) => ({ ...p, at, packed: formatPacked(st.packed) }))
+    if (at) setSaved((p) => ({ ...p, at, packed: formatPacked(st.packed), been: st.been }))
     const old = worldRef.current
     setTimeout(() => {
       const world = WORLD_OF[next]
@@ -310,9 +347,10 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       return
     }
     const choices: PassChoice[] = [{ label: 'A new trip', icon: '🧳', on: () => choose('again') }]
-    if (half && half !== 'pier') choices.push({ label: 'Keep going', icon: PASS.find((p) => p.id === legOf(half))?.icon ?? '🧳', on: () => choose('resume') })
+    if (half && half !== 'pier') choices.push({ label: 'Keep going', icon: legs.find((p) => p.id === legOf(half))?.icon ?? '🧳', on: () => choose('resume') })
     if (replay || half === 'pier') choices.push({ label: 'Straight to the boat', icon: '🚤', on: () => choose('boat') })
-    setPass({ punch: null, done: half ? doneBefore(half, null) : [], choices })
+    if (open && replay && half !== 'chang') choices.push({ label: 'Straight to the elephants', icon: '🐘', on: () => choose('chang') })
+    setPass({ punch: null, done: half ? doneBefore(legs, half, null, state.current.saved.been ?? []) : [], choices })
     if (choices.length > 1 && choices.at(-1)!.icon === '🚤') setTimeout(() => say(L.home.again), 600)
   }
   // Mommy asks in her room (the trip's first section); a yes back in the house goes straight on to packing.
@@ -324,16 +362,20 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     return () => clearTimeout(t)
   }, [phase])
 
-  const choose = (how: 'again' | 'resume' | 'boat') => {
+  const choose = (how: 'again' | 'resume' | 'boat' | 'chang') => {
     sounds.pop()
+    // A new trip (or straight to one place) starts with nothing done in Krabi; keeping going, what was.
+    const b = how === 'resume' ? (state.current.saved.been ?? []) : []
+    setBeen(b)
+    state.current.been = b
     if (how === 'again') {
       setPass(null)
       setPacked([])
       tripRef.current?.startPack()
       return
     }
-    // Keep going from the leg she stopped at, or straight to the pier with what she packed last time.
-    const at = how === 'boat' ? 'pier' : state.current.saved.at!
+    // Keep going from the leg she stopped at, or straight to the pier (or the elephants) with what she packed last time.
+    const at = how === 'boat' ? 'pier' : how === 'chang' ? 'chang' : state.current.saved.at!
     setPacked(parsePacked(state.current.saved.packed))
     state.current.packed = parsePacked(state.current.saved.packed)
     setPass(null)
@@ -341,10 +383,18 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   }
 
   const t0 = useRef(performance.now())
-  /** Back at the pier at sunset: the boarding pass's last punch, then her album opens by itself. */
+  /** Krabi's places done: one more (the address bar and the next save keep it). */
+  const addBeen = (b: Been) => {
+    const next = state.current.been.includes(b) ? state.current.been : [...state.current.been, b]
+    state.current.been = next
+    setBeen(next)
+    return next
+  }
+
+  /** Back at the pier at sunset: the boarding pass's punch for the boat, then her album opens by itself. */
   const docked = () => {
     sounds.sparkle()
-    setPass({ punch: 'pier', done: PASS.map((p) => p.id).filter((id) => id !== 'pier') })
+    setPass({ punch: 'pier', done: doneBefore(legs, 'home', 'pier', addBeen('bay')) })
     setTimeout(() => {
       setPass(null)
       setAlbumOpen(true)
@@ -387,6 +437,34 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     setAlbumOpen(false)
     finish('home', null)
   }
+  /** The big 🐘 at the pier (Baan Chang still to do): the songthaew to the elephants. */
+  const goChang = () => {
+    if (!atPier) return
+    sounds.pop()
+    setAtPier(false)
+    setAlbumOpen(false)
+    finish('chang', null)
+  }
+  const changNext = open && !been.includes('chang')
+  /** After the splash: on to the pier (🚤) or, with the boat done, home (✈️🏠). The elephants are punched. */
+  const leaveChang = (to: 'pier' | 'home') => {
+    if (state.current.busy) return
+    setOnward(false)
+    setAlbumOpen(false)
+    addBeen('chang')
+    finish(to, 'chang')
+  }
+  /** A photo for the album (the bay's, the race's, Baan Chang's): at most 12, the oldest selfie goes first. */
+  const addPhoto = (kind: PhotoKind, src: string) =>
+    setPhotos((ps) => {
+      const n = (ps[ps.length - 1]?.n ?? 0) + 1
+      let next = [...ps, { n, kind, src }]
+      while (next.length > 12) {
+        const i = next.findIndex((p) => p.kind === 'selfie')
+        next = next.filter((_, k) => k !== (i >= 0 && i < next.length - 1 ? i : 0))
+      }
+      return next
+    })
 
   // Home: the photo she picked goes on Agong's wall (saved on the iPad), the trip counts as done, then the stamp.
   const chosen = useRef<string | null>(null)
@@ -445,10 +523,35 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       trip.setWall(newestByTrip(wallPhotos).get('boat-trip')?.src ?? null)
       w = new House(renderer, { section: s === 'goodbye' || s === 'home' ? 'street' : 'upstairs' }, { onSpot: () => {}, onArrived: () => {} }, trip)
     } else if (world === 'airport') w = new Airport(renderer, leg, items)
-    else if (world === 'plane') w = new PlaneRide(renderer, leg, s as FlySection, items, FLIGHT, replay ? (BOAT_TRIP.caps.replayFly ?? BOAT_TRIP.caps.fly) : BOAT_TRIP.caps.fly)
-    else if (world === 'chang') {
-      setDrinkReady(false)
-      w = new Chang(renderer, { ...leg, fed: setFed, straw: setStraw, ready: setDrinkReady, flash: () => setFlash((n) => n + 1) }, s as ChangSection, items, state.current.fed, state.current.straw)
+    else if (world === 'plane') {
+      // Krabi's signpost: she picks while neither place is done; otherwise the songthaew goes to the one left.
+      const b = state.current.been
+      const fork: KrabiFork = !open || b.includes('chang') ? 'pier' : b.includes('bay') ? 'chang' : 'ask'
+      w = new PlaneRide(renderer, leg, s as FlySection, items, FLIGHT, replay ? (BOAT_TRIP.caps.replayFly ?? BOAT_TRIP.caps.fly) : BOAT_TRIP.caps.fly, fork)
+    } else if (world === 'chang') {
+      setOnward(false)
+      w = new Chang(
+        renderer,
+        {
+          ...leg,
+          fed: setFed,
+          straw: setStraw,
+          ready: setOnward,
+          flash: () => setFlash((n) => n + 1),
+          photo: (kind, src) => {
+            addPhoto(kind, src)
+            setDrops((d) => [...d, { key: performance.now(), src }])
+          },
+          sticker: (x, y) => {
+            setFound((f) => (f.includes('elephant') ? f : [...f, 'elephant']))
+            setFlights((f) => [...f, { key: performance.now() + Math.random(), id: 'elephant', x, y }])
+          },
+        },
+        s as ChangSection,
+        items,
+        state.current.fed,
+        state.current.straw,
+      )
     }
     else if (world === 'race') {
       const st = state.current
@@ -484,7 +587,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         stops: st.stops,
         photos: staged,
         album: st.photos.map((p) => p.kind),
-        found: st.found,
+        found: st.found.filter((f): f is CritterId => (CRITTERS as readonly string[]).includes(f)),
         from: fromRace.current ? 'race' : undefined,
       }
       const bay = new Bay(renderer, start, {
@@ -496,16 +599,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         },
         onPhoto: (kind, src) => {
           linkPhotos.current = linkPhotos.current.filter((k) => k !== kind)
-          setPhotos((ps) => {
-            const n = (ps[ps.length - 1]?.n ?? 0) + 1
-            let next = [...ps, { n, kind, src }]
-            // At most 12: the oldest selfie goes first, then the oldest photo.
-            while (next.length > 12) {
-              const i = next.findIndex((p) => p.kind === 'selfie')
-              next = next.filter((_, k) => k !== (i >= 0 && i < next.length - 1 ? i : 0))
-            }
-            return next
-          })
+          addPhoto(kind, src)
           // A deep link's staged photos go straight in (a `home` link's quietly); new ones print out big first.
           if (prep.current) return
           if (staged.includes(kind) && performance.now() - t0.current < 4000) setBump((b) => b + 1)
@@ -543,6 +637,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
             enter(state.current.section, params(ids))
           }}
           onSection={(s) => moveTo(s)}
+          fork={open}
           onDone={() => {
             // The picture book's whole trip counts too (the next time, the 🚤 replay).
             setSaved((p) => ({ at: null, packed: formatPacked(state.current.packed) || p.packed, trips: (p.trips ?? 0) + 1 }))
@@ -611,10 +706,12 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           🚤 Tap to wake the trip
         </button>
       )}
-      {mount.world === 'bay' && mode === 'webgl' && (
+      {mount.world === 'chang' && mode === 'webgl' && <PoseButtons show={section === 'sign' && !pass && !albumOpen} onPose={(p) => (worldRef.current as Chang | null)?.pose(p)} />}
+      {/* (At Baan Chang the album shows where photos are taken: the sign and the splash.) */}
+      {(mount.world === 'bay' || (mount.world === 'chang' && (section === 'sign' || section === 'splash'))) && mode === 'webgl' && (
         <>
-          <PoseButtons show={landed && !pass && !albumOpen} onPose={(p) => (worldRef.current as Bay | null)?.pose(p)} />
-          {tilting && bayPhase === 'drive' && !pass && !albumOpen && <GasPedal nudgeAfter={8} onGas={(down) => (worldRef.current as Bay | null)?.gas(down)} />}
+          {mount.world === 'bay' && <PoseButtons show={landed && !pass && !albumOpen} onPose={(p) => (worldRef.current as Bay | null)?.pose(p)} />}
+          {mount.world === 'bay' && tilting && bayPhase === 'drive' && !pass && !albumOpen && <GasPedal nudgeAfter={8} onGas={(down) => (worldRef.current as Bay | null)?.gas(down)} />}
           <Album
             photos={photos}
             found={found}
@@ -638,7 +735,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           ))}
         </>
       )}
-      {(mount.world === 'bay' || mount.world === 'race') &&
+      {(mount.world === 'bay' || mount.world === 'race' || mount.world === 'chang') &&
         mode === 'webgl' &&
         drops.map((d) => (
           <PhotoDrop
@@ -678,33 +775,39 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
             transition={{ scale: { repeat: Infinity, duration: 1.4, ease: 'easeInOut' }, y: { type: 'spring' } }}
             whileTap={{ scale: 0.9 }}
             onClick={goHome}
-            style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 18px)', translate: albumOpen ? '64px 0' : '-50% 0', minWidth: 'clamp(120px, 22vw, 170px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--butter)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', zIndex: albumOpen ? 61 : 33, padding: '0 20px' }}
+            style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 18px)', translate: albumOpen ? '64px 0' : changNext ? 'calc(-100% - 10px) 0' : '-50% 0', minWidth: 'clamp(120px, 22vw, 170px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--butter)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', zIndex: albumOpen ? 61 : 33, padding: '0 20px' }}
           >
             ✈️🏠
           </motion.button>
         )}
-      </AnimatePresence>
-      {/* At Baan Chang's cafe: her chocolate milk is ready, down to the elephants. */}
-      <AnimatePresence>
-        {mount.world === 'chang' && section === 'drinks' && drinkReady && !pass && mode === 'webgl' && (
+        {/* Baan Chang still to do: a big 🐘 beside it (the bigger pulse: the elephants are waiting). */}
+        {mount.world === 'bay' && atPier && changNext && !pass && mode === 'webgl' && (
           <motion.button
-            key="elephants"
+            key="chang"
             aria-label="To the elephants"
             initial={{ scale: 0, y: 40 }}
-            animate={{ scale: [1, 1.08, 1], y: 0 }}
+            animate={{ scale: [1, 1.14, 1], y: 0 }}
             exit={{ scale: 0, transition: { duration: 0.2 } }}
-            transition={{ scale: { repeat: Infinity, duration: 1.4, ease: 'easeInOut' }, y: { type: 'spring' } }}
+            transition={{ scale: { repeat: Infinity, duration: 1.1, ease: 'easeInOut' }, y: { type: 'spring' } }}
             whileTap={{ scale: 0.9 }}
-            onClick={() => {
-              sounds.pop()
-              ;(worldRef.current as Chang | null)?.toYard()
-            }}
-            style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 18px)', top: 'calc(var(--top-clear) + 12px)', minWidth: 'clamp(110px, 18vw, 150px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--butter)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', zIndex: 33, padding: '0 20px' }}
+            onClick={goChang}
+            style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 18px)', translate: albumOpen ? 'calc(64px + 100% + 20px) 0' : '10px 0', minWidth: 'clamp(120px, 22vw, 170px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--pink)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,200,61,.6), var(--shadow)', zIndex: albumOpen ? 61 : 33, padding: '0 20px' }}
           >
             🐘
           </motion.button>
         )}
       </AnimatePresence>
+      {/* At Baan Chang: the way on (🥤 to the cafe, 🐘 to the elephants, 🚤 or ✈️🏠 after the splash). */}
+      {mount.world === 'chang' && mode === 'webgl' && (
+        <ChangLayer
+          section={section}
+          ready={onward && !pass}
+          bay={been.includes('bay')}
+          onOnward={() => (worldRef.current as Chang | null)?.onward()}
+          onPier={() => leaveChang('pier')}
+          onHome={() => leaveChang('home')}
+        />
+      )}
       {/* On the plane: skip ahead (the cabin to the landing, the landing to Krabi) if the ride gets long. */}
       {mount.world === 'plane' && !pass && mode === 'webgl' && (
         <motion.button
@@ -758,7 +861,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
             <RaceFlag key="flag" />
           ) : (
             <BoardingPass
-              legs={PASS}
+              legs={legs}
               done={pass.done}
               punch={pass.punch}
               choices={pass.choices}

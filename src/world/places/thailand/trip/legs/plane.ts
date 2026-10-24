@@ -14,6 +14,9 @@
 //   camera leans out: all of Thailand below, an elephant's head with a long trunk, Kaylee's crayon ear and eye on it.
 // - land: seatbelts on, the sea and the first rock islands come up, bump bump roll, and everyone claps. Then a white
 //   flash and Krabi: the Thai-roofed arrivals arch and the songthaew, which drives them off to the pier (3 seconds).
+//   On the boat trip with Baan Chang open (`fork`), it stops at the signpost down the road instead and Daddy asks
+//   "Where to?": a tap on the elephant board turns it up the side road (to Baan Chang), the longtail board drives on
+//   to the pier.
 // Every part moves on by itself (about 35 s in all), whatever she does, and the ⏩ button skips ahead (`skip`).
 import { CanvasTexture, CatmullRomCurve3, Color, ConeGeometry, ExtrudeGeometry, Fog, Group, Matrix4, Mesh, MeshBasicMaterial, Path, PlaneGeometry, Shape, ShapeGeometry, Sprite, SpriteMaterial, SRGBColorSpace, TextureLoader, TubeGeometry, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds } from '../../../../../sdk'
@@ -54,7 +57,12 @@ export const PLANE_ANCHORS: AnchorInfo[] = [
   { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
   { id: 'balloon', label: "Sparkle's balloon", kind: 'thing' },
   { id: 'songthaew', label: 'Songthaew', kind: 'thing' },
+  { id: 'sign-chang', label: 'To the elephants', kind: 'thing' },
+  { id: 'sign-pier', label: 'To the boat', kind: 'thing' },
 ]
+
+/** Where the songthaew goes at Krabi: straight to the pier or to Baan Chang, or it stops at the signpost and she picks. */
+export type KrabiFork = 'pier' | 'chang' | 'ask'
 
 /** The flight attendant (a background figure with a line or two): a navy penguin in a pink scarf. */
 export const ATTENDANT: Look = { species: 'penguin', height: 1.32, fur: '#4F5F9E', light: '#FFF6EC', dark: '#FFA640', extras: ['scarf'], lashes: true }
@@ -93,6 +101,9 @@ const FLIGHT_S = 35
 /** Krabi: the arrival set, far from the cabin (shown behind a white flash), and how long the songthaew takes. */
 const ARRIVAL_AT = new Vector3(0, 0, 420)
 const SONGTHAEW_S = 3.1
+/** Down the road to the signpost (s), and how long the turn up the side road or the drive on to the pier takes. */
+const TO_FORK_S = 2.1
+const FORK_AWAY_S = 1.9
 /** Snacks on the tray, at most (the pile wobbles after that). */
 const MAX_SNACKS = 14
 
@@ -152,12 +163,16 @@ export class PlaneRide extends Stage {
   private cheered = false
   /** Seconds into the songthaew ride at Krabi (-1: still on the plane). */
   private drive = -1
+  /** At the signpost: seconds waiting there (-1: not there yet), which way she picked, and seconds since it set off. */
+  private forkWait = -1
+  private forkGo: 'chang' | 'pier' | null = null
+  private forkT = 0
   private told = new Set<string>()
   private counts = { snacks: 0, shades: 0, lights: 0, screens: 0, belts: 0, vents: 0 }
   /** Flight seconds per real second (the trip's cap). */
   private pace = 1
 
-  constructor(renderer: WebGLRenderer, protected events: Ev, start: FlySection, private packed: string[], private route: { from: LonLat; to: LonLat } = { from: PLACES.bangkok, to: PLACES.krabi }, cap = FLIGHT_S) {
+  constructor(renderer: WebGLRenderer, protected events: Ev, start: FlySection, private packed: string[], private route: { from: LonLat; to: LonLat } = { from: PLACES.bangkok, to: PLACES.krabi }, cap = FLIGHT_S, private fork: KrabiFork = 'pier') {
     super(renderer, events)
     this.pace = FLIGHT_S / cap
     const { scene, bag } = this
@@ -618,6 +633,10 @@ export class PlaneRide extends Stage {
       case 'songthaew':
         sfx.toot()
         return
+      case 'sign-chang':
+      case 'sign-pier':
+        this.pickFork(id === 'sign-chang' ? 'chang' : 'pier')
+        return
     }
   }
 
@@ -1006,8 +1025,19 @@ export class PlaneRide extends Stage {
   /** The ⏩ button: from the takeoff or the cabin straight to the landing; from the landing to Krabi; then the pier. */
   skip() {
     if (this.drive >= 0) {
-      this.drive = SONGTHAEW_S + 1
-      this.events.done('pier')
+      if (this.fork === 'pier') {
+        this.drive = SONGTHAEW_S + 1
+        this.events.done('pier')
+        return
+      }
+      // (It waits at the signpost for her pick: ⏩ only gets it there, and the boards glow.)
+      const go = this.forkGo ?? (this.fork === 'chang' ? 'chang' : null)
+      if (go) {
+        this.forkGo = go
+        this.forkT = FORK_AWAY_S + 1
+        this.events.done(go)
+      } else if (this.forkWait < 0) this.drive = 0.7 + TO_FORK_S
+      else this.forkWait = Math.max(this.forkWait, 3)
     } else if (this.sec !== 'land') {
       if (!this.belt) this.setBelt(true)
       this.storks.visible = false
@@ -1050,6 +1080,7 @@ export class PlaneRide extends Stage {
     const st = this.arrival.songthaew
     // A moment at the curb, a toot, then off along the road toward the pier, everyone's mane in the wind.
     const go = Math.max(0, d - 0.7)
+    if (this.fork !== 'pier') return this.stepFork(dt, go)
     st.root.position.x = this.arrival.curbX + go * go * 1.6
     for (const w of st.wheels) w.rotation.z = (-go * go * 1.6) / 0.3
     st.body.position.y = go > 0 ? Math.abs(Math.sin(go * 9)) * 0.03 : 0
@@ -1063,6 +1094,67 @@ export class PlaneRide extends Stage {
     this.riders.kaylee.setWind(wind)
     this.riders.ji.setWind(wind)
     if (d > SONGTHAEW_S && d - dt <= SONGTHAEW_S) this.events.done('pier')
+  }
+
+  /** The boat trip with Baan Chang: down the road to the signpost, a stop ("Where to?"), then her pick. */
+  private stepFork(dt: number, go: number) {
+    const st = this.arrival.songthaew
+    const a = this.arrival
+    const d = this.drive
+    if (d > 0.7 && d - dt <= 0.7) {
+      sfx.toot()
+      sfx.putt()
+      this.riders.kaylee.react('wave')
+    }
+    // Down the road, slowing to a stop where the side road turns off.
+    const k = clamp(go / TO_FORK_S)
+    const x = a.curbX + (a.forkX - a.curbX) * k * k * (3 - 2 * k)
+    let rolled = x - a.curbX
+    if (k < 1) st.root.position.x = x
+    else if (this.forkWait < 0) {
+      this.forkWait = 0
+      if (this.fork === 'chang') this.forkGo = 'chang'
+      else if (!this.forkGo) {
+        this.events.say(L.bay.whereTo)
+        this.riders.nick.react('wave')
+      }
+    }
+    const moving = k > 0 && k < 1
+    if (this.forkWait >= 0) {
+      if (!this.forkGo) this.forkWait += dt
+      else {
+        this.forkT += dt
+        const t = this.forkT
+        if (this.forkGo === 'chang') {
+          // A turn up the side road, then away into the palms.
+          const turn = clamp(t / 0.55)
+          st.root.rotation.y = (Math.PI / 2) * turn * turn * (3 - 2 * turn)
+          const away = Math.max(0, t - 0.45)
+          st.root.position.z = a.roadZ - 0.6 - away * away * 2.2
+          rolled += away * away * 2.2 + turn * 0.8
+        } else {
+          st.root.position.x = a.forkX + t * t * 1.8
+          rolled += t * t * 1.8
+        }
+        if (t > FORK_AWAY_S && t - dt <= FORK_AWAY_S) this.events.done(this.forkGo)
+      }
+    }
+    for (const w of st.wheels) w.rotation.z = -rolled / 0.3
+    const going = moving || (this.forkGo !== null && this.forkT > 0)
+    st.body.position.y = going ? Math.abs(Math.sin(d * 9)) * 0.03 : 0
+    const wind = going ? 0.8 : 0
+    this.riders.kaylee.setWind(wind)
+    this.riders.ji.setWind(wind)
+  }
+
+  /** She tapped a board on the signpost (before it gets there: it turns that way when it does). */
+  private pickFork(go: 'chang' | 'pier') {
+    if (this.fork !== 'ask' || this.forkGo) return
+    this.forkGo = go
+    this.forkT = 0
+    sfx.toot()
+    this.riders.kaylee.react('hop')
+    this.riders.nick.react('wave')
   }
 
   // ---------------------------------------------------------------- camera, anchors
@@ -1081,6 +1173,11 @@ export class PlaneRide extends Stage {
       // (Outdoors again: sunglasses back on.)
       // From across the road: the arch, and the songthaew pulling away with them.
       const x = this.arrival.songthaew.root.position.x
+      // (At the fork: the songthaew and the signpost, the side road between them.)
+      if (this.fork !== 'pier') {
+        const cx = ARRIVAL_AT.x + (tall ? Math.min(x, this.arrival.forkX) + 1.3 : Math.min(x, this.arrival.forkX) * 0.75 + 1.0)
+        return { center: new Vector3(cx, tall ? 2.0 : 1.8, ARRIVAL_AT.z - 0.6), half: new Vector3(tall ? 2.9 : 4.6, tall ? 2.4 : 2.0, 1.8), yaw: 4, pitch: 9, minDist: 5 }
+      }
       // (Tall screens: centred on the songthaew, following it as it pulls away.)
       if (tall) return { center: new Vector3(ARRIVAL_AT.x + Math.min(x, 4) + 0.2, 2.0, ARRIVAL_AT.z - 0.6), half: new Vector3(2.8, 2.4, 1.8), yaw: 4, pitch: 9, minDist: 5 }
       return { center: new Vector3(ARRIVAL_AT.x + Math.min(x + 1.2, 2.5) * 0.6, 2.0, ARRIVAL_AT.z - 0.6), half: new Vector3(4.6, 2.0, 1.8), yaw: 4, pitch: 9, minDist: 5 }
@@ -1092,7 +1189,14 @@ export class PlaneRide extends Stage {
 
   protected anchorAt(id: string): AnchorSpot | null {
     if (this.view === 'elephant') return null
-    if (this.view === 'krabi') return id === 'songthaew' ? { at: this.arrival.songthaew.root.getWorldPosition(new Vector3()).setY(1.4), r: 1.4 } : null
+    if (this.view === 'krabi') {
+      if (id === 'songthaew') return { at: this.arrival.songthaew.root.getWorldPosition(new Vector3()).setY(1.4), r: 1.4 }
+      if ((id === 'sign-chang' || id === 'sign-pier') && this.fork === 'ask' && !this.forkGo) {
+        const b = this.arrival.boards[id === 'sign-chang' ? 'chang' : 'pier']
+        return { at: this.arrival.root.localToWorld(new Vector3(...b)), r: 0.62, glow: this.forkWait > 1.2, prio: 3 }
+      }
+      return null
+    }
     const at = (o: Object3D, dy = 0) => {
       const p = o.getWorldPosition(new Vector3())
       p.y += dy
@@ -1129,6 +1233,7 @@ export class PlaneRide extends Stage {
   }
 
   protected hintAt() {
+    if (this.view === 'krabi' && this.fork === 'ask' && !this.forkGo && this.forkWait >= 0) return this.arrival.root.localToWorld(new Vector3(...this.arrival.boards.chang))
     if (this.view !== 'cabin') return null
     if (!this.belt) return this.parts.buckle.getWorldPosition(new Vector3())
     if (this.sec === 'fly' && !this.trayOpen) return this.cabin.localToWorld(new Vector3(FRONT_X, TRAY_Y - 0.15, SEATS.kaylee))
@@ -1154,6 +1259,9 @@ export class PlaneRide extends Stage {
       napping: this.napping,
       attendant: Math.round(this.attendant.x * 10) / 10,
       krabi: this.drive >= 0,
+      fork: this.fork,
+      atFork: this.forkWait >= 0,
+      forkGo: this.forkGo,
       touches: this.touches,
       ...this.counts,
     }

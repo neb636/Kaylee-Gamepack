@@ -1,14 +1,14 @@
 // Home from the trip: her photos fan out at the bottom of the screen like a hand of cards, and she picks the one for
 // Agong's wall. The picked one lifts up and flies off into her hands (the house shows it there, in a pink frame); the
-// others slide away. Up to six: the three places first (the village, the hong, the Nail Island), then her newest pose
-// photos, Mommy's selfies last. Nothing to read.
+// others slide away. Up to six: the places first (the village, the hong, the race, the Nail Island, Baan Chang's splash
+// and its sign), then her newest pose photos, Mommy's selfies last. Nothing to read.
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo, useState } from 'react'
 import { sfx } from '../../sfx'
 import type { AlbumPhoto } from './bay/Album'
 
 const MAX = 6
-const ORDER = { village: 0, hong: 1, race: 2, nail: 3, selfie: 4 }
+const ORDER = { village: 0, hong: 1, race: 2, nail: 3, chang: 4, sign: 5, selfie: 6 }
 
 /** Which photos to fan out: one of each place first, then the newest others. */
 export function fanOf(photos: AlbumPhoto[]): AlbumPhoto[] {

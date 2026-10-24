@@ -412,7 +412,7 @@ instanced, and the elephants are a few thousand triangles each.
    glass), and `splash`.
 3. **Greybox 3, the drink** (built 2026-10-24, see "Built so far"): `drinks`, the pour with the mall cafe's props; the
    glass rides to the yard, where Khanom sips it.
-4. **Greybox 4, the way in and out:**
+4. **Greybox 4, the way in and out** (built 2026-10-24, see "Built so far"):
    - `chang`, `sign` and `boardwalk`.
    - The Krabi signpost fork, `been`, the boarding pass's 🐘, the routing from the pier and from the splash, and the
      replay's 🐘.
@@ -550,10 +550,82 @@ After greybox 2, Dad said to keep building.
 - **Known small things:** a `drinks` link always starts with an empty glass, even with `straw` in it. The picture book
   doesn't carry the straw to the URL. Daddy's served glass stays at the end of the counter.
 
-**Next:** Dad plays `drinks` on the iPad: is pouring and stirring her own chocolate milk fun, and is it short enough
-before the elephants? Then greybox 4, the way in and out: `chang`, `sign` and `boardwalk` (the walk from the cafe down
-to the yard replaces the 🐘 cut), the Krabi signpost fork, `been`, the boarding pass's 🐘, the routing from the pier and
-from the splash, and the photos and sticker in the album.
+**Greybox 4, the way in and out (2026-10-24):** `chang`, `sign` and `boardwalk`, the fork at Krabi and the way back
+out. Still behind `CHANG_OPEN` (`chang/open.ts`, false): add `?chang=1` to any boat-trip link to try the whole way
+round (`land?chang=1` for the signpost, `sunset?chang=1` for the 🐘 at the pier).
+- **The signpost at Krabi** (`trip/legs/krabi.ts`, `plane.ts`): down the road from the arrivals arch a side road turns
+  off into the palms, with a signpost on the corner: a pink board with an elephant pointing up the side road, a blue
+  one with a longtail pointing on along the road (painted shapes, no words). With Baan Chang open the songthaew stops
+  there and Daddy asks "Where to, Captain Kaylee?" (his bay clip). After a second the boards glow, and the finger
+  points at the elephant after 7 s. 🐘 turns the songthaew up the side road and away into the palms; 🚤 drives on to
+  the pier. A tap on the way there counts. ⏩ only gets the songthaew to the signpost and makes the boards glow. With
+  one place done, it goes straight to the other one (`PlaneRide`'s `fork`: `ask`, `chang` or `pier`).
+- **The entrance** (`chang`, `chang/entrance.ts`): far off in the same world at z = 80. The songthaew drives in along
+  the road (3 s) and stops; the family hop down one after another onto the plank deck, it toots and drives off, and
+  `sign` begins. The curved bamboo wall: 56 upright poles along an arc that wraps round the deck, with nodes, under a
+  thick thatched band with a ragged fringe. "Baan Chang Café" and "We hope to be the reason you smile today" are
+  canvas letters on a clear strip in front of the poles (white with a brown edge). On the deck: three tree-stump
+  stools, a black-and-white totem post either side (zigzag teeth, spiral eyes, a gold tip), a silver driftwood tree,
+  two potted palms, a fern and a green basket, and oil palms behind the wall. Pokes: the totems (tock, a wobble), the
+  songthaew (toot), the family (hop).
+- **The sign photo** (`sign`): Daddy says "Everybody, pose!" and the bay's four pose buttons come up. Kaylee strikes
+  the one she taps, Mommy and Daddy copy her ("One, two, three, cheese!" the first time, the countdown after), the
+  flash, and the photo (straight on, the letters across the top) prints out big and drops into the album. As many as
+  she likes; after the first a big 🥤 shows top right and takes them to the cafe (a cut behind the flash).
+- **The boardwalk** (`boardwalk`, `chang/walkway.ts`): the cafe's 🐘 now goes out onto it (a cut from the cafe). It
+  runs along x on the family's side of the yard, 1.1 m up on posts, from x = 23.5 down to five steps by the blue bench:
+  planks, dark steel posts and handrails both sides, a mesh panel along the far side, sand under it and rows of oil
+  palms behind it. Seen from the side and a little above, following her, with the elephants at its end. Tap the planks
+  and she walks there; hold a finger and she follows it; anywhere near the steps and she goes all the way down. Mommy
+  and Daddy tag along behind her (`Tagalong`: they glide with a bob in each step and a lean, and hurry when they're far
+  behind). After 4 s with nothing done, a glow on the planks a few steps ahead of her (tap: all the way), and the
+  finger after 7 s. Pokes: a little green gecko on a post of the near rail ("to-kay!", it scurries up and back down),
+  and a palm that shakes when she taps it, so a frond floats down (Kaylee wiggles and giggles). At the foot of the
+  steps `feed` begins: the camera glides round to the rail while the three walk over to their spots (round the basket
+  and the bench), and she can start feeding on the way.
+- **The splash's ending** (`splash`): 2.6 s in, Daddy's photo of it (from his bench: the family, the spray, the
+  rainbow) flashes into the album; at 4.8 s Khanom squeals and his sticker flies from his head into the album; at 6.6 s
+  the way on shows top right: 🚤 to the pier if she hasn't been on the boat, else ✈️🏠 home. The trip album shows in
+  `sign` and `splash` (where the photos are taken).
+- **`been`** (a new param, `chang` and/or `bay`): the splash adds `chang` on the way out, the pier at sunset adds `bay`
+  when they dock. It decides the splash's button, whether the pier offers 🐘, which way the songthaew goes, and the
+  boarding pass's punches. It's saved with the trip's progress (`Progress.been`), and the home leg clears it.
+- **The boarding pass:** 🐘 Elephants between 🚤 and 🏠 (only while Baan Chang is open). Krabi's two places are punched
+  only once `been` says so, whatever the order. Going home now punches every leg before it (it used to show none
+  punched, from before this change).
+- **At the pier at sunset:** while Baan Chang is still to do, a big pink 🐘 pulses beside the ✈️🏠 (in the album too):
+  the boarding pass, and the songthaew to the entrance.
+- **On a replay:** Mommy's yes offers 🐘 straight to the elephants next to 🧳 and 🚤. Every Baan Chang section resumes
+  at `chang` ("Keep going" shows 🐘).
+- **The album:** two new photo kinds, `sign` (Sparkle's fact: "In Thai, chang means elephant!") and `chang` (the
+  splash: "The elephant is Thailand's special animal!"). A tenth sticker, Khanom, drawn in code in the stickers' flat
+  style (grey, a big pink-lined ear, his trunk curled up, his tuft), on a fourth row of the stickers page. His fact is
+  the elephant one for now. On Agong's wall the photo fan puts the splash photo after the bay's places.
+- **No WebGL:** the picture book's `land` page asks 🐘 or 🚤 when Baan Chang is open; `chang`, `sign` and `boardwalk`
+  are a picture each with ▶; the splash page has 🚤 to the pier.
+- **QA:** `__thaiBoatQA()` adds `area`, `songthaew`, `photos`, `posing`, `walk` (her x and height, the tag-alongs) and
+  `splashT`; the plane's adds `fork`, `atFork` and `forkGo`. `qa-screens.mjs` has the three sections and
+  `boat-trip-fork`; `qa-pacing.mjs` has `trip-fork`, `chang-arrive`, `chang-sign` and `chang-boardwalk`; `qa-motion.mjs`
+  has `chang-pose` and `chang-walk`. A robot played every new path in WebKit on an iPad, landscape and portrait: the
+  signpost both ways, the arrival to the sign photo to the cafe, the boardwalk to `feed`, the splash to the pier and
+  (with `been=bay`) home, and the sunset's 🐘 to the entrance, with no errors.
+- **Changed from the plan:**
+  - No new voice lines (they come with the full loop): Daddy's "Where to, Captain Kaylee?", "Everybody, pose!" and
+    "One, two, three, cheese!" are his bay clips. Sparkle's idle line at the pier is still "Tap the plane to fly home!"
+    (the plan's "The elephants are waiting!" is a new line).
+  - The `photos` param keeps only the bay's photos: Baan Chang's can't be taken again from a link, so a link into the
+    bay or home starts without them.
+  - Khanom's sticker is drawn in code like the bay's nine for now; the generated one comes with the look.
+  - The cafe to the boardwalk is a cut, not a walk: the cafe stays at z = 40, and the boardwalk starts by the yard.
+  - Mommy and Daddy have no walk cycle (the family's characters only hop): they glide with a bob.
+- **Known small things:** on a portrait iPad the boardwalk's top half is mostly palm crowns. The songthaew drives off
+  in front of the family at the end of `chang`.
+
+**Next:** Dad plays the way in and out on the iPad with `?chang=1` (`land?chang=1`, then on round the trip): is the
+signpost clear without words, is the sign photo fun, and is the boardwalk short and worth walking? Then greybox 5, the
+look: a closer match to Dad's photos (the bamboo sign wall and its letters, the totems, the salas, the oil palms, the
+gravel and boulders, the mesh boardwalk), a pass on the elephants, the generated Khanom sticker, and full QA scoped to
+the Baan Chang sections.
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 
