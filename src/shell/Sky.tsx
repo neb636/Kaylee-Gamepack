@@ -29,6 +29,11 @@ export function Cloud({ width, style }: { width: string; style?: CSSProperties }
   )
 }
 
+/** An invisible tap target centered on a small drawing, at least 88px each way (AGENTS.md: big touch targets). */
+function HitArea() {
+  return <span aria-hidden style={{ position: 'absolute', left: '50%', top: '50%', width: 'max(100%, 88px)', height: 'max(100%, 88px)', translate: '-50% -50%' }} />
+}
+
 /** Tap it: it squishes and pops. */
 function TapCloud({ width }: { width: string }) {
   return (
@@ -38,9 +43,10 @@ function TapCloud({ width }: { width: string }) {
         unlockSounds()
         sounds.pop()
       }}
-      style={{ cursor: 'pointer' }}
+      style={{ position: 'relative', cursor: 'pointer' }}
     >
       <Cloud width={width} />
+      <HitArea />
     </motion.div>
   )
 }
@@ -95,6 +101,7 @@ export function Balloon({ width, style, delay = 0 }: { width: string; style?: CS
           <path d="M44 124 h12" stroke="#e0a92a" strokeWidth="3" strokeLinecap="round" />
         </svg>
       </div>
+      <HitArea />
     </motion.div>
   )
 }
