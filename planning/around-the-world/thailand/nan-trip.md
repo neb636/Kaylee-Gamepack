@@ -1,7 +1,7 @@
 # Thailand: the Nan Road Trip (plan)
 
 Written 2026-10-24. Thailand's third family trip, and the first that is mostly about **learning about a place**.
-Mommy, Daddy and Kaylee fly north to Nan, pick up a rental **Mitsubishi Pajero Sport** at the airport and drive the
+Mommy, Daddy and Kaylee fly north to Nan, pick up a silver rental **Mitsubishi Pajero Sport** at the airport and drive the
 swoopy mountain roads between four real places: an old temple, a mushroom farm, a café over the rice terraces and a
 village that makes salt from a well. It's built in 3D in the house's look (toon bands, ink outlines, blob shadows) and
 reuses the trip kit. Read it with `../thailand.md`, `boat-trip.md` (the trip kit), `mall-trip.md` (a trip with many
@@ -10,7 +10,7 @@ small toys), `../ACTIVITY-TEMPLATE.md` and `docs/play-design.md`.
 **One-line pitch:** Kaylee presses the key and the big Pajero beeps hello. Mommy drives and Kaylee steers it round the
 bends of the mountains into the clouds. At each stop she makes something the mountains make: she wakes up an old
 painting with a lantern, mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a
-well. On the way home the road draws a giant **3**, and Agong gets a bag of mountain salt she made herself.
+well. On the way home the road draws a giant **3**.
 
 **One idea holds it together: the mountains make things.** Clouds, rice steps, mushrooms and salt all come from Nan's
 mountains, and Kaylee makes each one with her own hands. The road between the stops is the toy that ties them together.
@@ -18,10 +18,13 @@ mountains, and Kaylee makes each one with her own hands. The road between the st
 **Dad's picks (2026-10-24):**
 - **Nan**, from the family's real trip (June 2024, the rainy season).
 - **Just Mommy, Daddy and Kaylee.**
-- **They fly** Bangkok → Nan with the trip kit and **rent a Pajero Sport at Nan airport.**
+- **They fly** Bangkok → Nan with the trip kit and **rent a silver Pajero Sport at Nan airport.**
 - **Mommy drives**, and Kaylee's finger steers (as in the boat race: she picks where across the road it goes).
 - **The stops:** Wat Phumin in Nan city, **Baan Huanam Mushroom Farm** (not in the photos, Dad's must-have), the
-  rice-terrace café deck, Bo Kluea's salt wells, and the S-curve "number 3" road.
+  rice-terrace café deck (**Stop Time Cafe**, above Sapan village), Bo Kluea's salt wells, and the S-curve "number 3"
+  road.
+- **They ate the mushroom pizza** at Baan Huanam.
+- **No gift for Agong** this time: they come home and the trip's photo goes on his wall.
 - **Somewhat educational**, not only a trip recreation: each stop teaches one real thing by doing it.
 
 **What Dad's photos show** (`KayleeGamepack-planning-assets/photos/nan/`, five photos, kept out of this repo). The
@@ -57,9 +60,10 @@ Tai Lue dress, on a rain-wet road.
   Oyster mushrooms in Thailand grow from **bags of sawdust** that hang or stand in rows in dark, damp, misted
   houses. They love the rainy season. **Pink oyster mushrooms** are a real kind (*Pleurotus djamor*). Whether
   Baan Huanam grows them is unconfirmed; if not, they're our one made-up touch, because Kaylee loves pink.
-- **The rice-terrace café** (photos 2-5): a wooden deck over terraced rice paddies. Several cafés like this stand along
-  Route 1081 near Sila Laeng, Pua (Ban Tai Lue Café is one, with thatched huts on stilts over the paddies). Which one
-  the family went to is still open. In June the paddies are flooded and freshly planted: rice grows standing in water,
+- **Stop Time Cafe** (photos 2-5): a café on a hill above **Sapan village** (สะปัน) in Bo Kluea district, with a
+  wooden balcony looking over the village's rice terraces and the mountains. In the rainy season the fields are green
+  and the clouds sit low; in the cool months it looks over a sea of fog. Sapan sits where two rivers meet, with a
+  three-tier waterfall nearby. In June the paddies are flooded and freshly planted: rice grows standing in water,
   and the steps hold the water on the hillside.
 - **Bo Kluea** (บ่อเกลือ, "salt well"): a mountain village near Laos where people have made salt for hundreds of years
   (local stories say about 800). They lower a bucket down the well, pull up very salty water, pour it into wide pans
@@ -78,8 +82,8 @@ Tai Lue dress, on a rain-wet road.
  Agong's house        the way there                  Nan                                                      home
  ┌─────────────┐   ┌──────────────────────┐   ┌────────────┐   ┌──────────────────────────────────┐   ┌─────────────┐
  │ Mommy asks: │ → │ pack, goodbye, van,  │ → │ rental     │ → │ the Nan map ⇄ drive ⇄ a stop      │ → │ fly home;   │
- │ where to?   │   │ airport, window seat │   │ desk: the  │   │ temple · mushrooms · rice · salt  │   │ Agong gets  │
- │ 🚤 🛝🍕 🏔️🚙  │   │ Bangkok → Nan        │   │ Pajero     │   │ then the "3" road to the airport  │   │ the salt    │
+ │ where to?   │   │ airport, window seat │   │ desk: the  │   │ temple · mushrooms · rice · salt  │   │ the photo   │
+ │ 🚤 🛝🍕 🏔️🚙  │   │ Bangkok → Nan        │   │ Pajero     │   │ then the "3" road to the airport  │   │ on the wall │
  └─────────────┘   └──────────────────────┘   └────────────┘   └──────────────────────────────────┘   └─────────────┘
 ```
 
@@ -95,7 +99,7 @@ Tai Lue dress, on a rain-wet road.
 | **Rice café** | `rice` | ~5 s | 25-40 | 1 line | water down the steps, plant, wipe the clouds |
 | **Bo Kluea** | `salt` | ~5 s | 25-40 | 1 line | dip, pour, stoke, scoop |
 | The "3" road | `three` | at once | 15-25 | 0 lines | steer down the hairpins, the 3 from above |
-| Home | `home` | 20-30 s | 2-4 | 1 line | give Agong the salt |
+| Home | `home` | 20-30 s | 2-4 | 1 line | pick the photo for Agong's wall |
 | **Total** | | **~12-20 min** (all four stops) | **~170-260** | | |
 
 Any order, as Kaylee asked. Every stop is open on the map from the start, and each one gets a stamp on the map. After
@@ -146,7 +150,7 @@ A **toy diorama of Nan** on a table, seen from above at a slant: green hills, th
 little clouds sitting on the peaks, a tiny town, and four landmarks standing up like toys:
 - the temple with its four doors (Wat Phumin),
 - a mushroom house with a big pink mushroom on the roof (Baan Huanam),
-- rice steps with a little wooden deck (the café),
+- rice steps with a little wooden café on the hill above them (Stop Time Cafe, at Sapan),
 - a salt hut with a steaming pan (Bo Kluea),
 - plus the airport, with a tiny plane.
 
@@ -171,10 +175,10 @@ in the lane by herself.
   Greybox test: a box car on a ribbon road over grey hills, three road shapes, the horn.
 
 **How the verb deepens (three roads, same verb):**
-1. **`valley`** (to the mushrooms and the rice café): a gentle road through rice fields. Buffalo graze, chickens
+1. **`valley`** (to the mushroom farm, in Pua): a gentle road through rice fields. Buffalo graze, chickens
    cross, a **songthaew passes on the other side**: steer onto the right side and Mommy says "Keep left!" and eases
    back. A buffalo steps onto the road and the Pajero slows by itself until it ambles across.
-2. **`sky`** (to Bo Kluea, over Doi Phu Kha): steep S-bends climbing into the cloud. The cloud gets thicker until
+2. **`sky`** (to Sapan and Bo Kluea, over Doi Phu Kha: the café and the salt wells): steep S-bends climbing into the cloud. The cloud gets thicker until
    it's white all round (the headlights come on), then the Pajero pops out above it into sunshine. At **blind bends**
    a round mirror shows a car coming: tap the horn (the steering-wheel boss, in the car) for a short beep before the
    bend, and the other car beeps back.
@@ -277,9 +281,9 @@ or two spoken lines before her hands are busy, no failing. Each stop ends with a
 - **Carried state:** `basket` (e.g. `pink2,grey5,gold1`) goes to the pizza.
 - **Camera:** inside the mushroom house, a low side view along the rows of bags; the pizza straight on at the table.
 
-### 3. The rice-terrace café ☕ (`rice`; rice grows in water, terraces hold water)
+### 3. Stop Time Cafe, Sapan ☕ (`rice`; rice grows in water, terraces hold water)
 
-- **Pitch:** the rice steps below the café are dry. Kaylee brings the water down, step by step, and the valley turns
+- **Pitch:** the rice steps below the café, down in Sapan village, are dry. Kaylee brings the water down, step by step, and the valley turns
   shiny and green.
 - **The toy:** a bamboo pipe brings water from the stream at the top. She drags its end; wherever it points, water
   pours. The top paddy fills, goes shiny like a mirror, then spills over a notch into the next step down, and the next.
@@ -295,13 +299,13 @@ or two spoken lines before her hands are busy, no failing. Each stop ends with a
 - **Teaches:** rice grows standing in water; the steps (terraces) keep the water on a hill; June is planting time.
 - **Payoff:** the whole valley green and shiny; then Kaylee and Daddy sit on the tall stools at the deck railing
   (recreating photo 5), she drinks a **pink milk** (นมเย็น, nom yen), and Mommy takes the photo.
-- **Camera:** from the café deck, looking down over the valley (the steps fill the safe zone); then the deck close-up
+- **Camera:** from the café's balcony on the hill, looking down over Sapan's valley (the steps fill the safe zone); then the deck close-up
   for the photo.
 
 ### 4. Bo Kluea salt wells 🧂 (`salt`; salt from the mountains, boiling)
 
 - **Pitch:** in a village high in the mountains, there's a well full of very salty water. Kaylee helps the salt aunty
-  turn it into white salt for Agong.
+  turn it into white salt.
 - **The toy:** a bucket on a long bamboo pole over the well. Drag it down into the well (splash, glug), lift it up full
   and swing it over the big pan, tip it and the brine pours in.
 - **How it deepens:**
@@ -309,7 +313,7 @@ or two spoken lines before her hands are busy, no failing. Each stop ends with a
   2. **Fire:** tap the logs under the pan (or blow, holding a finger on the fire) and the flames grow; steam rises in
      clouds; the water level drops.
   3. **Salt!:** white crystals appear at the edges and spread; she scrapes them with the wooden paddle into the
-     basket. Then she scoops some into a little cloth bag tied with a pink ribbon, **for Agong**.
+     basket. The basket fills up, heaped and sparkling, and the salt aunty pours it into bags on the shelf.
 - **Her choices:** when to pour, how big the fire.
 - **Pokeables:** the salt aunty (laughs), a cat sleeping warm by the fire, the drying baskets, a rooster, the mural of
   the Tai Lue couple on the house across the road (from Dad's video).
@@ -317,8 +321,7 @@ or two spoken lines before her hands are busy, no failing. Each stop ends with a
   foot and he hops.
 - **Teaches:** there's salt in the mountains, far from the sea, because a sea was here long, long ago; boiling the
   water away leaves the salt behind. Facts: people in Bo Kluea have made salt this way for hundreds of years.
-- **Payoff:** the salt bag for Agong (carried to `home`).
-- **Carried state:** `salt` (`1` once the bag is filled).
+- **Payoff:** a heaped basket of white salt she made, and a shelf of full bags.
 - **Camera:** inside the open-sided salt hut, side view: the well on the left, the pan and fire on the right.
 
 ### The "3" road (`three`; counting)
@@ -330,9 +333,9 @@ Then the road goes on to the airport and the plane home.
 
 ## Home 🏠
 
-The home flight (`trip/legs/home-flight.ts`), the van, Agong's door. Agong gets **the salt bag** (a new gift kind
-`'salt'`, or `'box'` reused with a bag). He tastes it, makes a salty face like hers, and laughs. The photo she picks
-(the deck, the 3, the mushroom pizza, the lovers) goes on his wall.
+The home flight (`trip/legs/home-flight.ts`), the van, Agong's door. No gift this time (Dad): the family hops in,
+Agong waves hello, and the photo she picks (the café balcony, the 3, the mushroom pizza, the lovers) goes on his wall.
+Tap it and Mommy says "Our trip to Nan!".
 
 ## Sections and carried state
 
@@ -352,10 +355,10 @@ Activity `nan-trip`: `activities/nan-trip/sections.ts`. Every param has a defaul
 | 10 | `drive` | The mountain road (`?road=city\|valley\|sky\|three`) | `road`, `stops` |
 | 11 | `temple` | Wat Phumin: the lantern and the whispering lovers (`?round=1\|2\|3`) | `stops`, `round` |
 | 12 | `mushrooms` | The mushroom farm: mist, pick, the pizza (`?round=1\|2\|3\|pizza`) | `stops`, `round`, `basket` |
-| 13 | `rice` | The rice-terrace café: water the steps (`?round=1\|2\|3\|deck`) | `stops`, `round` |
-| 14 | `salt` | Bo Kluea: salt from the well (`?round=1\|2\|3`) | `stops`, `round`, `salt` |
+| 13 | `rice` | Stop Time Cafe: water Sapan's rice steps (`?round=1\|2\|3\|deck`) | `stops`, `round` |
+| 14 | `salt` | Bo Kluea: salt from the well (`?round=1\|2\|3`) | `stops`, `round` |
 | 15 | `three` | The "3" road from above | `stops` |
-| 16 | `home` | Home: salt for Agong, the photo wall, the stamp | `salt`, `photos` |
+| 16 | `home` | Home: the photo on Agong's wall, the stamp | `photos` |
 
 Params:
 - `packed`: as the boat trip.
@@ -364,7 +367,6 @@ Params:
 - `round`: the step of the stop on screen, `1|2|3` (plus `pizza` at the mushroom farm and `deck` at the café).
   Default `1`.
 - `basket`: the mushrooms she picked, `<color><count>` pairs, e.g. `pink2,grey5,gold1`. Default `grey4,pink2`.
-- `salt`: `1` when the salt bag is filled. Default `1` for `home`, `0` before.
 - `photos`: which photos exist. Default for `home`: `deck,three`.
 - `replay`: as the other trips.
 
@@ -383,7 +385,7 @@ Params:
 
 The house's toon look, cooler and greener for the mountains: soft grey-lavender skies, low clouds, rain sometimes,
 deep greens with lavender shadows, wet roads that shine. Wood everywhere (the deck, the salt huts, the mushroom house).
-The Pajero: a big chunky toon SUV, color still open (Dad). Wat Phumin: white walls, golden roofs, two green-gold naga.
+The Pajero: a big chunky toon SUV in **silver** (Dad), a little shine on its bands. Wat Phumin: white walls, golden roofs, two green-gold naga.
 The mural walls are painted in our flat style (not copies of the real paintings), and the whispering couple is drawn by
 us in Tai Lue dress, the same couple as the mural in Dad's video.
 
@@ -392,7 +394,7 @@ us in Tai Lue dress, the same couple as the mural in Dad's video.
 - **Mommy, Daddy and Kaylee:** their characters and voices exist (`ji`, `nick`). Mommy drives and says the road
   lines; Daddy reacts (and gets the mushroom hat, the brine on his foot).
 - **Sparkle** guides from the corner (`trip/legs/Guide.tsx`).
-- **Agong** at home (the salt).
+- **Agong** at home (hello, and the photo).
 - **New speakers**, cast like the airport officer: the rental **clerk**, the mushroom **farmer** aunty, the **salt**
   aunty (a northern accent, kind and funny). The whispering lovers whisper (a soft murmur, no words). Animals don't
   talk: moos, clucks, croaks.
@@ -414,13 +416,14 @@ us in Tai Lue dress, the same couple as the mural in Dad's video.
 
 **Reuse, don't fork:**
 - `trip/types.ts`: a `{ kind: 'car'; driver: 'ji'; car: 'pajero' }` leg (or a separate rental leg), `carOf` widened,
-  `pack.hint: 'cool'`, and a `'salt'` gift (or `'box'` reused).
+  `pack.hint: 'cool'`, and `gift: 'none'` (no gift: the home leg goes straight to picking the wall photo).
 - `trip/outline.ts` `PLACES`: `nan: [100.78, 18.81]` for the crayon line.
 - `trip/legs/Ask.tsx` `TRIP_CHOICES`: a third choice (🏔️🚙). `activities/mall-trip/Loop.tsx` and `LoopFlat.tsx`
   hard-code a two-way choice (`t === 'boat-trip' ? … : …`): make them open whichever trip she picked.
 - `trip/wall.ts`: `WALL_SLOTS['nan-trip']` and a wall line. `trip/facts.ts`: `NAN_FACTS`.
 - `engine/View3D.tsx`: a `'__thaiNanQA'` QA key.
-- `meta.ts`: the activity in `inTheWorks` until step 10; a sticker (a mushroom 🍄, or Dad's pick).
+- `meta.ts`: the activity in `inTheWorks` until step 10. Its sticker: **a pink mushroom** 🍄 (Dad left it to me: the
+  mushroom farm was his must-have, and pink is Kaylee's color).
 
 **New** (all inside `src/world/places/thailand/`):
 ```
@@ -448,12 +451,12 @@ activities/nan-trip/
    chase camera, the roads `valley`, `sky` and `three` (and `city`), the horn, a buffalo, a songthaew, the cloud, the
    flat fallback. `#/world/thailand/nan-trip/drive?road=sky`. Listed under `inTheWorks`.
 2. **Greybox: the mushroom farm** (`mushrooms`), with the pizza.
-3. **Greybox: the rice-terrace café** (`rice`).
+3. **Greybox: Stop Time Cafe** (`rice`).
 4. **Greybox: Bo Kluea salt** (`salt`).
 5. **Greybox: Wat Phumin** (`temple`).
 6. **Greybox: the Nan map and the rental desk** (`map`, `rental`), and the `three` viewpoint.
-7. **The trip loop:** the `TripDef` (fly to Nan, the Pajero), the third invite choice, the photo wall, the salt for
-   Agong.
+7. **The trip loop:** the `TripDef` (fly to Nan, the silver Pajero), the third invite choice, the photo wall (no
+   gift).
 8. **The look:** the Pajero, the landmarks, the mural walls, rain and cloud.
 9. **Voices and QA.**
 10. **Into the game:** from `inTheWorks` to `activities`.
@@ -484,12 +487,14 @@ activities/nan-trip/
 3. **Getting there:** fly, and rent the Pajero at Nan airport.
 4. **Who drives:** Mommy drives; Kaylee's finger steers.
 
+5. **The Pajero is silver.**
+6. **The café is Stop Time Cafe** (above Sapan village, Bo Kluea district).
+7. **They ate the mushroom pizza** at Baan Huanam.
+8. **No gift for Agong:** the photo on his wall is enough.
+9. **The sticker:** my pick, a pink mushroom.
+
 **Still open:**
-- The Pajero's color.
-- The rice café's real name (Ban Tai Lue Café, or another on Route 1081?).
-- Did they eat the mushroom pizza at Baan Huanam? Do they grow pink mushrooms?
-- Agong's gift: the salt bag (my pick), or mushrooms?
-- The trip's sticker (a mushroom?).
+- Does Baan Huanam grow pink mushrooms? (If not, they stay as our one made-up touch.)
 - Which stop to greybox after the road.
 
 ## Sources
@@ -497,7 +502,7 @@ activities/nan-trip/
 Mostly travel and tourism pages. Check anything new against a second source before it becomes a spoken fact.
 - Baan Huanam Mushroom Farm: [Trip.com](https://uk.trip.com/travel-guide/foods/Pua-123362-restaurant/Baan%20Huanam%20Mushroom%20Farm-44546382),
   [Wanderlog](https://wanderlog.com/list/geoCategory/184211)
-- Rice-terrace cafés on Route 1081: [Tieland to Thailand, Ban Tai Lue Cafe](https://www.tielandtothailand.com/coffee-rice-fields-cafe-ban-tai-lue-cafe-nan/)
+- Stop Time Cafe, Sapan: [Trip.com, Bo Kluea](https://ae.trip.com/moments/bo-kluea-24543)
 - The "number 3" road: [nanprovince.com](https://www.nanprovince.com/?p=5498),
   [GT-Rider](https://www.gt-rider.com/se-asia-motorcycling/threads/iconic-roads-of-northern-thailand.15894)
 - Wat Phumin: [Thailex](https://thailex.info/THAILEX/THAILEXENG/LEXICON/Thailand%20Lexicon%20-%20Wat%20Phumin%20(วัดภูมินทร์).htm),
