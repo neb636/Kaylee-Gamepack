@@ -56,7 +56,10 @@ export function LeftPanel({ lab, onClose, onPicked, searchRef }: { lab: LabApi; 
   const query = q.trim().toLowerCase()
   const shown = CAST.filter((c) => !query || `${c.name} ${c.who} ${c.id} ${c.look?.species ?? ''}`.toLowerCase().includes(query))
   const current = useRef<HTMLButtonElement>(null)
-  useEffect(() => current.current?.scrollIntoView({ block: 'nearest' }), [lab.view.selected])
+  useEffect(() => {
+    // (Braces: Chrome's scrollIntoView returns a promise, and an effect may only return its cleanup.)
+    current.current?.scrollIntoView({ block: 'nearest' })
+  }, [lab.view.selected])
 
   return (
     <aside className="cl-card cl-panel left" aria-label="Cast">
@@ -612,7 +615,9 @@ export function LineBar({ lab }: { lab: LabApi }) {
   const { entry } = lab
   const lines = useMemo(() => linesFor(entry.voice), [entry.voice])
   const [text, setText] = useState('')
-  useEffect(() => setText(''), [entry.id])
+  useEffect(() => {
+    setText('')
+  }, [entry.id])
   const q = text.trim().toLowerCase()
   const matching = q ? lines.filter((l) => lineText(l).toLowerCase().includes(q)) : lines
   const chosen: Line | undefined = lines.find((l) => lineText(l) === text) ?? matching[0]
