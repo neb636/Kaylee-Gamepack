@@ -1,0 +1,61 @@
+/* The pastel sky behind the splash and the home header (Sky.tsx). */
+.sky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(180deg, #c6b2ff 0%, #dccfff 36%, #f6d6f4 66%, #ffd9e8 84%, #ffe6dc 100%);
+}
+
+.sky-drift {
+  position: absolute;
+  left: 0;
+  animation: sky-drift linear infinite;
+  will-change: transform;
+}
+
+@keyframes sky-drift {
+  from {
+    transform: translateX(-40vw);
+  }
+  to {
+    transform: translateX(110vw);
+  }
+}
+
+.sky-bob {
+  animation: sky-bob 3s ease-in-out infinite alternate;
+}
+
+@keyframes sky-bob {
+  from {
+    transform: translateY(-7px) rotate(-3deg);
+  }
+  to {
+    transform: translateY(7px) rotate(3deg);
+  }
+}
+
+.sky-twinkle {
+  display: block;
+  animation: sky-twinkle 2.6s ease-in-out infinite;
+}
+
+@keyframes sky-twinkle {
+  0%,
+  100% {
+    transform: scale(0.5) rotate(0deg);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1) rotate(25deg);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky-drift,
+  .sky-bob,
+  .sky-twinkle {
+    animation: none;
+  }
+}
