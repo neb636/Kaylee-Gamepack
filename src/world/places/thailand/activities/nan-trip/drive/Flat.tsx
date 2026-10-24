@@ -11,11 +11,12 @@ import { roadSfx as sfx } from './sounds'
 interface Props {
   road: RoadId
   onRoad: (r: RoadId) => void
+  onStop?: () => void
 }
 
 const LANDMARK = { temple: '🛕', mushrooms: '🍄', cafe: '☕', viewpoint: '⛰️' } as const
 
-export function DriveFlat({ road, onRoad }: Props) {
+export function DriveFlat({ road, onRoad, onStop }: Props) {
   const r = nanRoad(road)
   const R = r.road
   const view = useMemo(() => {
@@ -83,7 +84,7 @@ export function DriveFlat({ road, onRoad }: Props) {
         </g>
       </svg>
       {!done && <Wheel onHorn={() => sfx.horn()} />}
-      <AnimatePresence>{done && <EndCard road={road} onRoad={onRoad} />}</AnimatePresence>
+      <AnimatePresence>{done && <EndCard road={road} onRoad={onRoad} onStop={onStop} />}</AnimatePresence>
       {!done && (
         <motion.div aria-hidden animate={{ opacity: [0.5, 1, 0.5] }} transition={{ repeat: Infinity, duration: 1.6 }} style={{ position: 'absolute', left: 20, bottom: 24, fontSize: 'clamp(40px, 7vmin, 56px)', pointerEvents: 'none' }}>
           👆🚙

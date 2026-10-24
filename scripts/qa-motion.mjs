@@ -1059,6 +1059,52 @@ GAME_SCENARIOS.push({
   },
 })
 
+// The Nan road trip's mushroom farm (greybox): misting, the core verb. Her finger holds the hose on the rack and sweeps
+// along the middle row (mist, pins popping, swelling, the rainbow), then in round 2 pulls a grown clump off and carries
+// it to the basket.
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-mist',
+    seconds: 8,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/mushrooms`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().game === 'mushrooms', null, { timeout: 30000 })
+      await page.waitForTimeout(1200)
+    },
+    act: async (page) => {
+      const bags = (await page.evaluate(() => window.__thaiNanQA())).bags.map((b) => b.at)
+      await page.mouse.move(bags[4][0], bags[4][1])
+      await page.mouse.down()
+      for (const i of [4, 5, 6, 7, 3, 2, 1, 0]) {
+        await page.mouse.move(bags[i][0], bags[i][1], { steps: 10 })
+        await page.waitForTimeout(700)
+      }
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'nan-pick',
+    seconds: 6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/mushrooms?round=2`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().game === 'mushrooms', null, { timeout: 30000 })
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      const q = await page.evaluate(() => window.__thaiNanQA())
+      const [x, y] = q.bags[5].at
+      await page.mouse.move(x, y)
+      await page.mouse.down()
+      await page.mouse.move(x - 30, y + 70, { steps: 12 })
+      await page.mouse.move(q.points.basket[0], q.points.basket[1] - 50, { steps: 14 })
+      await page.mouse.up()
+      await page.waitForTimeout(1200)
+      await page.mouse.click(...q.bags[6].at)
+      await page.waitForTimeout(1500)
+    },
+  },
+)
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {
