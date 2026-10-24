@@ -366,7 +366,8 @@ Params:
 - `road`: which road `drive` plays, `city|valley|sky|three`. Default `valley`.
 - `round`: the step of the stop on screen, `1|2|3` (plus `pizza` at the mushroom farm and `deck` at the café).
   Default `1`.
-- `basket`: the mushrooms she picked, `<color><count>` pairs, e.g. `pink2,grey5,gold1`. Default `grey4,pink2`.
+- `basket`: the mushrooms in her basket, `<color><count>` pairs, e.g. `grey5,pink2,gold1`. Default empty, which means
+  what she'd have by then: nothing in rounds 1 and 2, `grey6` in round 3, `grey4,pink2` at the pizza.
 - `photos`: which photos exist. Default for `home`: `deck,three`.
 - `replay`: as the other trips.
 
@@ -451,7 +452,7 @@ activities/nan-trip/
    chase camera, the roads `valley`, `sky` and `three` (and `city`), the horn, a buffalo, a songthaew, the cloud, the
    flat fallback. `#/world/thailand/nan-trip/drive?road=sky`. Listed under `inTheWorks`. *Built 2026-10-24 (see
    "What's built" below).*
-2. **Greybox: the mushroom farm** (`mushrooms`), with the pizza.
+2. **Greybox: the mushroom farm** (`mushrooms`), with the pizza. *Built 2026-10-24 (see "What's built" below).*
 3. **Greybox: Stop Time Cafe** (`rice`).
 4. **Greybox: Bo Kluea salt** (`salt`).
 5. **Greybox: Wat Phumin** (`temple`).
@@ -503,11 +504,54 @@ activities/nan-trip/
   pulled over), the 3 road 65 s (all three bends counted, the 3 drawn), the sky road ~100 s before it was shortened and
   sped up (both blind-bend cars beeped back). 22-41 draw calls, 115-190k triangles.
 
+**Step 2, the mushroom farm greybox (2026-10-24).** `#/world/thailand/nan-trip/mushrooms?round=1|2|3|pizza&basket=…`
+(`activities/nan-trip/mushrooms/`, self-contained). Shapes in the toon look, no voices, no art. One 3D world with two
+places: the mushroom house and, 8 m along, the farm's table outside (the camera glides out for lunch).
+- **The house** (`farm.ts`): a dim plank shed with a roof, a rack of 12 sawdust bags lying down with their mouths to
+  the aisle (4 x 3, each a collar ring and dark sawdust in the mouth), the bright door, the sign (a pink mushroom with a
+  smiley face, no words), a gecko on the wall, a drip from the beam into a puddle, the sleepy dog, her basket, and the
+  farmer aunty (a buffalo in a sun hat and apron, `FARMER` look) by the door. Kaylee holds the hose (a green tube from
+  the side wall to her hand to the wand); Daddy watches. On a tall screen the aisle closes in (`TALL` in `layout.ts`):
+  Kaylee and the basket beside the rack, Daddy peeking from behind its far end.
+- **The toy, misting** (`farm3d.ts`): her finger held anywhere on the rack sprays there (the wand points at it, mist
+  puffs fly, a little rainbow shows, a soft hiss). Every bag within 0.3 m drinks; at a little water a pin pops out of the
+  mouth (bloop, a note higher each time, sparkles), and it swells into a clump of five oyster fans (`shroom.ts`) as it
+  drinks to full (a whoomp). Wet bags drip. A tap is a 0.9 s puff, so taps alone grow them too.
+  1. Mist the 12 bags until all are grown; the last thirsty ones glow once 8 are up. A run of bells, the aunty hops.
+  2. Grown clumps wiggle. Grab one and pull: it leans toward her finger and twists, creaking higher, and at 62 px pops
+     off into her hand; let go anywhere and it flies into the basket (a note that climbs with how full it is). A tap
+     picks one too. Picked bags grow again when misted. A finger held still on a grown one for 0.45 s turns into
+     misting: keep spraying and it swells giant (2.35x, a deep boing, Daddy laughs); a tap on the giant one boings it.
+     6 picks end the round.
+  3. The aunty swaps the bags: the clumps puff away and new collars pop on, 4 pink and 3 gold (`ROUND3_KINDS`); those
+     grow pink and golden oyster mushrooms. 6 more picks and they go to lunch: Kaylee and Daddy hop to their stools.
+  - Silly: mist Daddy's face and a grey mushroom grows on his head (bigger the more she sprays, he hops and laughs);
+    mist the dog and she wakes and shakes; mist the aunty and she laughs. Pokes: the aunty, the gecko (scurries,
+    tukkae), the dog (lifts her head, snores, wags), the drip, the sign (spins, ding), the basket, Kaylee, Daddy.
+- **The pizza** (`round=pizza`): a wooden deck over the rice steps and the hills (a painted far ridge with cloud on
+  the tops, a drifting cloud), the table with three stools and plates (Mommy, Kaylee, Daddy), the pizza board, the
+  clay oven with the aunty beside it, and her basket. Drag a mushroom from the basket onto the pizza and it stays where
+  she drops it (on the wedge under it); drop it off the pizza and it hops back; drag one on the pizza to move it. A tap
+  on the basket (or on the pizza, near where she tapped) puts the next one on. Basket empty: the oven's mouth glows;
+  tap it (or the pizza) and the pizza flies in, the fire crackles and roars (steam from the chimney), it comes out
+  golden, ding, the family cheers. Then each tap on the pizza sends a slice (with the mushrooms on it) to the next
+  plate, Kaylee, Mommy, Daddy, twice round; a tap on a plate or a face munches it (crumbs). All six shared: the end card
+  (🔁 the farm again, 🚙 back on the road: the sky road, up to the café).
+- **The road leads here:** the valley road's end card has a big 🍄 that opens the farm.
+- **Flat fallback** (`Flat.tsx`, `?gl=off`): the rack as 12 bag buttons (hold or drag to mist, tap a grown one to pick),
+  the basket, then the pizza: tap the basket or the pizza to put mushrooms on, 🔥 to bake, taps hand out the slices.
+- QA: `qa-screens` (`nan-mushrooms-1|2|3|pizza|flat|pizza-flat`), `qa-motion` (`nan-mist`, `nan-pick`), `qa-pacing`
+  (`nan-mushrooms`, `nan-mushroom-pizza`). Played in headless Chromium with software WebGL (WebKit couldn't be
+  downloaded in this session): misting the rack grew all 12, round 2 picked by drag and by tap, round 3 grew pink and
+  gold and went to the table, the pizza took 9 mushrooms, baked and shared all 6 slices, with no errors. 110-140 draw
+  calls, 150-215k triangles.
+
 **Not yet (later steps):** the family in the car (Daddy's "Whoa!", Mommy's lines, Sparkle's), the wipers, the
 dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero.
 
-**Next:** Dad drives the four roads on the iPad. If steering isn't fun yet, change the toy (the camera, how the finger
-maps, the speed) before step 2. Then step 2, the mushroom farm greybox.
+**Next:** Dad plays the mushroom farm on the iPad (`mushrooms`, then `?round=2`, `?round=3`, `?round=pizza`). If misting
+isn't fun yet, change the toy (the spray's reach and speed, how big the clumps get, the pull to pick) before step 3.
+Then step 3, the Stop Time Cafe greybox (`rice`).
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 
@@ -543,7 +587,7 @@ maps, the speed) before step 2. Then step 2, the mushroom farm greybox.
 
 **Still open:**
 - Does Baan Huanam grow pink mushrooms? (If not, they stay as our one made-up touch.)
-- Which stop to greybox after the road.
+- Is the farmer aunty a buffalo (my placeholder pick, like the airport officer's), or another animal?
 
 ## Sources
 

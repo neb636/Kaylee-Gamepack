@@ -15,9 +15,11 @@ interface Props {
   road: RoadId
   /** The end card picked a road. */
   onRoad: (road: RoadId) => void
+  /** The end card's stop at the end of this road (so far only the valley road's: the mushroom farm). */
+  onStop?: () => void
 }
 
-export function Drive({ road, onRoad }: Props) {
+export function Drive({ road, onRoad, onStop }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [run, setRun] = useState(0)
@@ -41,7 +43,7 @@ export function Drive({ road, onRoad }: Props) {
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#D5DCEA', overflow: 'clip' }}>
       {mode === 'flat' ? (
-        <DriveFlat key={`${road}:${run}`} road={road} onRoad={pick} />
+        <DriveFlat key={`${road}:${run}`} road={road} onRoad={pick} onStop={onStop} />
       ) : (
         <View3D
           key={`${road}:${run}:${key}`}
@@ -76,7 +78,7 @@ export function Drive({ road, onRoad }: Props) {
       )}
       {mode === 'webgl' && <Wheel ref={wheelRef} hidden={hud.phase === 'view' || hud.phase === 'end'} onHorn={() => worldRef.current?.honk()} />}
       <CountPop count={hud.count} />
-      <AnimatePresence>{hud.phase === 'end' && <EndCard road={road} onRoad={pick} />}</AnimatePresence>
+      <AnimatePresence>{hud.phase === 'end' && <EndCard road={road} onRoad={pick} onStop={onStop} />}</AnimatePresence>
     </div>
   )
 }
@@ -163,9 +165,11 @@ function CountPop({ count }: { count: DriveHud['count'] }) {
   )
 }
 
-/** The end of the road: drive it again, or take another road (big pictures, no reading). */
-export function EndCard({ road, onRoad }: { road: RoadId; onRoad: (r: RoadId) => void }) {
+/** The end of the road: drive it again, or take another road (big pictures, no reading). At the end of a road with a
+ *  stop built (the valley road's mushroom farm), its big 🍄 comes first. */
+export function EndCard({ road, onRoad, onStop }: { road: RoadId; onRoad: (r: RoadId) => void; onStop?: () => void }) {
   const size = 'clamp(92px, 15vmin, 128px)'
+  const stop = onStop && road === 'valley' ? onStop : undefined
   return (
     <motion.div
       key="end"
@@ -175,6 +179,11 @@ export function EndCard({ road, onRoad }: { road: RoadId; onRoad: (r: RoadId) =>
       transition={{ type: 'spring', stiffness: 240, damping: 18 }}
       style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom, 0px) + 18px)', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 'clamp(12px, 2.6vw, 26px)', padding: '0 16px', zIndex: 50 }}
     >
+      {stop && (
+        <motion.button aria-label="The mushroom farm" whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1.1 }} onClick={stop} style={{ width: size, height: size, borderRadius: '50%', border: '6px solid #fff', background: 'var(--hotpink)', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 }}>
+          🍄
+        </motion.button>
+      )}
       {[road, ...ROAD_IDS.filter((r) => r !== road)].map((r) => (
         <motion.button
           key={r}
