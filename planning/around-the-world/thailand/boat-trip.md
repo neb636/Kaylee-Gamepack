@@ -415,15 +415,38 @@ races the Koh Panyee kids and the cheeky macaque three laps round its island, an
 - **Same toy, raced:** her finger on the water steers the longtail (it can only go forward along the course; her finger
   picks where across it) at full speed; let go and it races on by itself a little slower, so she can never stop, get
   lost or go the wrong way. The camera chases close behind.
+- **On an iPhone: tilt to steer** (Dad's ask, 2026-10-23: "ask to use horizontal, then gyroscope to steer, a button
+  for gas"; `race/tilt.ts`, `race/TiltSetup.tsx`). Phones only (a touch screen under 600 px on its short side); the
+  iPad keeps the finger. Before the countdown the race waits for the phone: held upright, a phone picture turns onto
+  its side (a ▶ after 3 s plays upright anyway, for a rotation-locked phone); then iOS's one tap to allow the tilt (a
+  big pink button with a phone rocking like a wheel; the iPhone's own "allow motion" box the first time). A no, or a
+  phone that sends no tilt within 1.5 s, races with the finger instead. Turning the phone like a wheel slides her aim
+  across the course (about 25° is full lock; held level she keeps her lane round the bends); the **gas pedal** (bottom
+  left, beside Sparkle, for the left thumb; `race/GasPedal.tsx`) is full speed, and off it she cruises
+  at 60% (never stopped). The pedal revs before GO, still down at GO is the rocket start, held over a ramp is the trick;
+  a finger bounces on it at the countdown and after 4 s off it, and a rocking phone shows how to steer at the start.
+  Turned upright mid-race, the race pauses under the "turn it sideways" picture. `steer=tilt` / `steer=finger` in a
+  link tries either anywhere (a computer: ← → steer, space is the gas). Not recorded yet (no voice key): Sparkle's
+  "Turn the phone sideways!" and "Tilt to steer! Hold the green button to go fast!"; tilting, her finger line and
+  "A ramp! Tap in the air for a trick!" are skipped (the iPad still hears both).
+- **The whole bay drives the same way on an iPhone** (Dad's ask, 2026-10-24: "update all boat driving in Krabi to the
+  same mechanism on iPhone size"; `bay/bay.ts` `driveTilt`). The longtail on open water, the village lane, the canoe
+  in the cave and the hong, the Nail Island and the sunset ride: tilt the phone like a wheel to turn the bow (right
+  edge down = right; about 25° turns as hard as the boat can) and hold the same gas pedal to go. Off the pedal it
+  coasts and settles (the bay is for stopping to poke things, unlike the race); a clear tilt off the pedal still turns
+  the bow round at a crawl. A finger on the water no longer drives (a tap there splashes), but taps still poke
+  everything, tap the boat for VROOM, and a golden glow tapped still drives her there by itself. The setup (turn it
+  sideways, allow the tilt) shows the first time she's at the wheel, once she has boarded at the pier; the pedal
+  shows only while she's driving (not boarding, on the beach, docked or with the album open), and its finger nudges
+  after 8 s off it. Sparkle's "Put your finger on the water to drive!" is skipped when tilting (the glow line stays).
+  In the cave's tunnel the canoe only paddles forward (the finger's back-up has no tilt version).
 - **Mario Kart things:** the countdown (three lights, "Three! Two! One! Go!") with a rocket start for a finger already
-  down at GO and revving before it; rainbow item boxes (five across, so she can't miss) whose slot spins up 🚀 a turbo,
-  🍌 a banana (thrown in an arc at whoever is just ahead, or dropped behind when she's first) or 🌈 the rainbow (6 s fast,
-  sparkly music, nothing can stop her, rivals she bumps spin); behind = better items, and her first is always a turbo;
-  gold coins (each a little faster, up to ten); golden arrow boost pads; the ramp (a finger held at takeoff, or a tap
+  down at GO and revving before it; gold coins (each a little faster, up to ten); golden arrow boost pads; the ramp (a finger held at takeoff, or a tap
   just before or in the air, is a trick: a moment of slow motion, she twirls, the boat rolls right round, a burst of
   speed on landing); a long hard turn builds sparks and lets them go as
   a mini-turbo (a drift without a drift button); bumping boats; the place badge (1st, 2nd, 3rd) with the three faces in
-  order, the lap, the coins and a minimap; "Lap two!" and "Last lap!" banners, the music speeding up on the last lap.
+  order, the lap, the coins and a minimap (the rainbow ? item boxes and the item button came out on 2026-10-24, Dad:
+  "they don't do anything"); "Lap two!" and "Last lap!" banners, the music speeding up on the last lap.
 - **The rivals:** the village kids (the buffalo kid at the tiller, the fox kid cheering) in a sky-blue longtail, and
   the macaque in a banana boat with an outboard, who tosses banana peels over his shoulder when she's coming up behind
   (she spins round once if she hits one: "Whoa! A banana!"). They tease ("Catch us!"), wave and spin out.

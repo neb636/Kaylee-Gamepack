@@ -143,6 +143,11 @@ const SCENARIOS = [
   // The Pizza Company (greybox, no voices): a tap on the pizza serves a slice (with its stretch) to the plate that's
   // behind, so the auto-player can share all eight and fill Agong's box.
   { name: 'thailand mall: pizza share', id: 'mall-pizza', hash: '#/world/thailand/mall-trip/share', reset: true },
+  // The Nan road trip's mountain road (greybox, no voices): Mommy drives by herself to the end of the road, so the
+  // auto-player's taps are pokes and steering; one run per road that deepens the verb.
+  { name: 'thailand nan: the valley road', id: 'nan-valley', hash: '#/world/thailand/nan-trip/drive', reset: true },
+  { name: 'thailand nan: the sky road', id: 'nan-sky', hash: '#/world/thailand/nan-trip/drive?road=sky', reset: true },
+  { name: 'thailand nan: the 3 road', id: 'nan-three', hash: '#/world/thailand/nan-trip/drive?road=three', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
   // (?gl=off goes before the hash: the section's address drops anything it doesn't know.)
   { name: 'thailand trip: picture book without webgl', id: 'trip-book', search: '?gl=off', hash: '#/world/thailand/boat-trip/invite', reset: true },

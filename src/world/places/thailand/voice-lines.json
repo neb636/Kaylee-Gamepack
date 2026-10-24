@@ -408,7 +408,6 @@
   "Two!",
   "One!",
   "Go!",
-  "Tap the button to use it!",
   "A ramp! Tap in the air for a trick!",
   "Lap two!",
   "Last lap!",
@@ -437,10 +436,6 @@
     "voice": "ji"
   },
   {
-    "text": "So fast!",
-    "voice": "ji"
-  },
-  {
     "text": "You did it, sweetie!",
     "voice": "ji"
   },
@@ -450,10 +445,6 @@
   },
   {
     "text": "You can't catch us!",
-    "voice": "kids"
-  },
-  {
-    "text": "Hey!",
     "voice": "kids"
   },
   {

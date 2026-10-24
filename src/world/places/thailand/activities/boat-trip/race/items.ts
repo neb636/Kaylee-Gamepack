@@ -1,51 +1,20 @@
 // What lies on the race course (race.ts), Mario Kart style, in the toon look:
-// - Rainbow item boxes in rows across the course: drive through one and an item spins up in her slot (🚀 a turbo,
-//   🍌 a banana to throw at whoever is ahead, or drop behind, 🌈 the rainbow: fast, sparkly and nothing can stop her).
-//   They pop back a moment later.
 // - Lines of gold coins along the course (each one makes her boat a little faster, up to ten), back again next lap.
 // - Golden arrow pads that give a burst of speed, and two striped ramps to jump off (a tap in the air is a trick): a
 //   small one, and the BIG JUMP right across the course, through a giant flower hoop, with a line of coins in the air.
-// - Banana peels on the water (the macaque drops them; she can drop one too): drive over one and spin round.
+// - Banana peels on the water (the macaque drops them): drive over one and spin round.
 // Each check takes a racer's place on the course (track.ts: `s` along it, `lat` across it).
-import { AdditiveBlending, BackSide, BoxGeometry, CanvasTexture, Color, DoubleSide, Euler, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, RepeatWrapping, TorusGeometry, Vector3, type BufferGeometry } from 'three'
+import { AdditiveBlending, CanvasTexture, Color, DoubleSide, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, RepeatWrapping, TorusGeometry, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../engine/dispose'
 import { merge, P, solid } from '../../../engine/geo'
 import { PAL, toon } from '../../../engine/toon'
 import { swell } from '../../../engine/water'
-import { RAINBOW } from './scenery'
-import { ahead, BOOST_HALF, BOOSTS, COIN_LINES, HOOP, ITEM_LATS, ITEM_ROWS, RAMPS, spotAt, type Ramp } from './track'
-
-export type ItemKind = 'turbo' | 'banana' | 'rainbow'
-export const ITEM_ICONS: Record<ItemKind, string> = { turbo: '🚀', banana: '🍌', rainbow: '🌈' }
+import { ahead, BOOST_HALF, BOOSTS, COIN_LINES, HOOP, RAMPS, spotAt, type Ramp } from './track'
 
 const tmp = new Vector3()
 const m4 = new Matrix4()
 const q = new Quaternion()
 const scl = new Vector3()
-const euler = new Euler()
-
-/** A rainbow cube with a big white "?" on every face. */
-function boxTexture(bag: Bag) {
-  const c = document.createElement('canvas')
-  c.width = c.height = 128
-  const g = c.getContext('2d')!
-  const grad = g.createLinearGradient(0, 0, 128, 128)
-  RAINBOW.forEach((col, i) => grad.addColorStop(i / (RAINBOW.length - 1), col))
-  g.fillStyle = grad
-  g.fillRect(0, 0, 128, 128)
-  g.strokeStyle = 'rgba(255,255,255,0.9)'
-  g.lineWidth = 10
-  g.strokeRect(5, 5, 118, 118)
-  g.fillStyle = '#FFFFFF'
-  g.font = 'bold 92px Fredoka, sans-serif'
-  g.textAlign = 'center'
-  g.textBaseline = 'middle'
-  g.lineWidth = 8
-  g.strokeStyle = '#2B2330'
-  g.strokeText('?', 64, 70)
-  g.fillText('?', 64, 70)
-  return bag.add(new CanvasTexture(c))
-}
 
 /** Gold and pink arrows pointing along the course (they scroll forward). */
 function arrowTexture(bag: Bag) {
@@ -72,20 +41,6 @@ function arrowTexture(bag: Bag) {
   return t
 }
 
-interface Box {
-  /** Where it floats (the instanced boxes are drawn here), how big it is now. */
-  at: Vector3
-  scale: number
-  s: number
-  lat: number
-  x: number
-  z: number
-  /** Seconds until it's back (0 = here). */
-  gone: number
-  /** Growing back in, 0..1. */
-  grow: number
-}
-
 interface Coin {
   s: number
   lat: number
@@ -104,44 +59,16 @@ interface Peel {
   on: boolean
 }
 
-interface Throw {
-  g: Group
-  from: Vector3
-  to: () => Vector3
-  t: number
-  dur: number
-  hit: () => void
-}
-
 export class Course {
   readonly root = new Group()
-  private boxes: Box[] = []
-  private boxMesh: InstancedMesh
-  private boxInk: InstancedMesh
   private coins: Coin[] = []
   private coinMesh: InstancedMesh
   private pads: { mesh: Mesh; s: number; lat: number }[] = []
   private arrows: CanvasTexture
   private peels: Peel[] = []
-  private throws: Throw[] = []
   private time = 0
 
   constructor(private bag: Bag) {
-    // ---- Item boxes (one instanced mesh, and a slightly bigger ink one drawn inside out round it: the outline) ----
-    const tex = boxTexture(bag)
-    const boxGeo = bag.add(new BoxGeometry(1.5, 1.5, 1.5))
-    for (const s of ITEM_ROWS)
-      for (const lat of ITEM_LATS) {
-        const p = spotAt(s, lat)
-        this.boxes.push({ at: new Vector3(p.x, 1.2, p.z), scale: 1, s, lat, x: p.x, z: p.z, gone: 0, grow: 1 })
-      }
-    this.boxMesh = bag.add(new InstancedMesh(boxGeo, bag.add(new MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.92 })), this.boxes.length))
-    this.boxInk = bag.add(new InstancedMesh(boxGeo, bag.add(new MeshBasicMaterial({ color: PAL.ink, side: BackSide })), this.boxes.length))
-    for (const m of [this.boxMesh, this.boxInk]) {
-      m.frustumCulled = false
-      this.root.add(m)
-    }
-
     // ---- Coins (one instanced mesh) ----
     // A gold coin: a darker rim, the face, a lighter middle.
     const coinGeo = merge([
@@ -259,17 +186,6 @@ export class Course {
     return g
   }
 
-  /** A racer's middle at (x, z): the item box it drove through (it pops), if any. */
-  takeBox(x: number, z: number): Vector3 | null {
-    for (const b of this.boxes) {
-      if (b.gone > 0 || b.grow < 0.6) continue
-      if ((b.x - x) ** 2 + (b.z - z) ** 2 > 2.3 ** 2) continue
-      b.gone = 2.4
-      return b.at.clone()
-    }
-    return null
-  }
-
   /** Coins she drove (or flew) through, `y` her height above the water (each comes back after a while). */
   takeCoins(x: number, y: number, z: number): Vector3[] {
     const out: Vector3[] = []
@@ -323,35 +239,9 @@ export class Course {
     return this.peels.filter((p) => p.on)
   }
 
-  /** A banana thrown in an arc from `from` to wherever `to()` is by then; `hit` when it lands on them. */
-  toss(from: Vector3, to: () => Vector3, hit: () => void) {
-    const g = this.peel()
-    g.position.copy(from)
-    this.root.add(g)
-    this.throws.push({ g, from: from.clone(), to, t: 0, dur: 0.75, hit })
-  }
-
   update(dt: number) {
     this.time += dt
     const t = this.time
-    this.boxes.forEach((b, i) => {
-      let size = 0.0001
-      if (b.gone > 0) {
-        b.gone -= dt
-        if (b.gone <= 0) b.grow = 0
-      } else {
-        b.grow = Math.min(1, b.grow + dt / 0.35)
-        size = Math.max(0.01, b.grow < 1 ? Math.sin(b.grow * Math.PI * 0.5) * (1 + 0.25 * Math.sin(b.grow * Math.PI)) : 1)
-      }
-      b.at.y = 1.25 + Math.sin(t * 2.4 + b.lat) * 0.18
-      q.setFromEuler(euler.set(0.35, t * 1.3 + b.s, 0.2))
-      m4.compose(b.at, q, scl.setScalar(size))
-      this.boxMesh.setMatrixAt(i, m4)
-      m4.compose(b.at, q, scl.setScalar(size * 1.12))
-      this.boxInk.setMatrixAt(i, m4)
-    })
-    this.boxMesh.instanceMatrix.needsUpdate = true
-    this.boxInk.instanceMatrix.needsUpdate = true
     this.coins.forEach((c, i) => {
       if (c.gone > 0) c.gone -= dt
       const s = c.gone > 0 ? 0.0001 : 1
@@ -372,19 +262,6 @@ export class Course {
       p.g.position.y = swell(p.x, p.z, t) + 0.02
       p.g.rotation.y = t * 0.6 + p.x
       p.g.scale.setScalar(1.4 * Math.min(1, p.age / 0.25))
-    }
-    for (const th of [...this.throws]) {
-      th.t += dt / th.dur
-      const k = Math.min(1, th.t)
-      const to = th.to()
-      th.g.position.lerpVectors(th.from, to, k)
-      th.g.position.y += Math.sin(k * Math.PI) * 4
-      th.g.rotation.set(t * 9, t * 7, 0)
-      if (k >= 1) {
-        this.throws.splice(this.throws.indexOf(th), 1)
-        th.g.removeFromParent()
-        th.hit()
-      }
     }
   }
 }

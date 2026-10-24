@@ -35,7 +35,7 @@ docs/                    # play-design.md (what makes it fun), interactions.md (
 Installed and pre-approved for hands-on play that plain React can't do well (see `docs/interactions.md`):
 - **three** (0.180): 3D, for a country Dad wants in 3D (Thailand). Keep the flat look: toon bands, ink outlines, blob
   shadows, no post-processing (see `src/world/places/thailand/engine/`). React draws the buttons and the tap targets
-  over the canvas; a browser without WebGL2 gets a flat fallback, never a console error.
+  over the canvas.
 - **phaser** (v4): real-time arcade or physics play (bouncing, stacking, many moving sprites). Canvas, so keep
   puppets, speech bubbles and buttons in React on top of it.
 - **perfect-freehand**: smooth finger strokes, for tracing and drawing.
@@ -175,9 +175,10 @@ Fredoka. Animations: `motion` (`import { motion, AnimatePresence } from 'motion/
 ## Thailand: the 3D country (the reference for new work)
 
 Read `planning/around-the-world/thailand.md` (the family, the house, the gates so far), then the plan of the trip you're
-working on: `thailand/boat-trip.md` (the first trip, and the reusable trip kit) or `thailand/mall-trip.md` (the mall
-day, a hall of mini games). `thailand/known-issues.md` lists small things QA found, with links and code paths. Plans end
-with what's built and what's next; PR bodies end with the next prompt.
+working on: `thailand/boat-trip.md` (the first trip, and the reusable trip kit), `thailand/mall-trip.md` (the mall
+day, a hall of mini games) or `thailand/nan-trip.md` (a road trip in the mountains, the road kit).
+`thailand/known-issues.md` lists small things QA found, with links and code paths. Plans end with what's built and
+what's next; PR bodies end with the next prompt.
 
 - **The look:** flat pastel 3D. Toon shading in a few flat bands with lavender shadows, screen-space ink outlines like
   the 2D art, blob shadows, no post-processing (`engine/toon.ts`, `engine/outline.ts`).
@@ -186,8 +187,8 @@ with what's built and what's next; PR bodies end with the next prompt.
   camera, a walk grid with A*, the tap marker, water and particles. `View3D.tsx` mounts any 3D world with its DOM tap
   targets (`Anchors.tsx`): real buttons, at least 64 px, placed over the 3D things every frame, so VoiceOver,
   tap-around and QA can find them. Overlapping targets must not steal each other's taps.
-- **Layouts are data in meters** (`activities/hub/layout.ts`): the build, the walk grids, the tap targets and the flat
-  fallback all read the one source of truth. Every 3D activity has a flat fallback (`Flat.tsx`); `?gl=off` shows it.
+- **Layouts are data in meters** (`activities/hub/layout.ts`): the build, the walk grids and the tap targets all
+  read the one source of truth.
 - **The hub is a toy:** tap the floor and Kaylee walks there; tap a thing and it reacts at once, then she uses it; tap
   someone and they hop and say hello. Sacred things (the altar, the spirit house) never wobble: they glow, a bell rings,
   she does a wai. Trips start from the house (Mommy asks in her room) and end back home (a photo on Agong's wall).
@@ -351,7 +352,7 @@ the country's `known-issues.md` (Thailand has one) instead of growing the PR.
    `main`, then fix only that spec. To run just what your branch affects, `npm run test:changed` (opt-in).
 3. **New activities get no bespoke e2e spec.** `tests/sections.spec.ts` and `tests/tap-around.spec.ts` discover
    every section by themselves and only fail on exceptions, so UI tweaks don't break them. A bespoke spec is for a
-   non-visual contract only (voice plays, WebGL fallback, GPU memory, a deep link lands). Step-by-step walkthroughs are
+   non-visual contract only (voice plays, GPU memory, a deep link lands). Step-by-step walkthroughs are
    tagged `@behavior`: they run nightly (`npm run test:behavior`), not on PRs.
 4. Re-read "What Kaylee told us" and the design rules. Is every instruction spoken? Is there no way to fail? Are her
    hands busy? Does it work in portrait and landscape? Run the fun check in `docs/play-design.md`.
