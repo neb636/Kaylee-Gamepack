@@ -427,8 +427,8 @@ races the Koh Panyee kids and the cheeky macaque three laps round its island, an
   a finger bounces on it at the countdown and after 4 s off it, and a rocking phone shows how to steer at the start.
   Turned upright mid-race, the race pauses under the "turn it sideways" picture. `steer=tilt` / `steer=finger` in a
   link tries either anywhere (a computer: ← → steer, space is the gas). Not recorded yet (no voice key): Sparkle's
-  "Turn the phone sideways!" and "Tilt to steer! Hold the green button to go fast!"; tilting, her finger line is
-  skipped.
+  "Turn the phone sideways!" and "Tilt to steer! Hold the green button to go fast!"; tilting, her finger line and
+  "A ramp! Tap in the air for a trick!" are skipped (the iPad still hears both).
 - **The whole bay drives the same way on an iPhone** (Dad's ask, 2026-10-24: "update all boat driving in Krabi to the
   same mechanism on iPhone size"; `bay/bay.ts` `driveTilt`). The longtail on open water, the village lane, the canoe
   in the cave and the hong, the Nail Island and the sunset ride: tilt the phone like a wheel to turn the bow (right

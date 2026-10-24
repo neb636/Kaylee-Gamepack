@@ -948,9 +948,10 @@ export class Race implements World3D {
         this.sparkle.burst(c.x, c.y, c.z, 6, 1.5, 2, 0.12, 2)
       }
       this.miniTurbo(r, dt)
-      // A ramp coming up for the first time: "Tap in the air for a trick!"
+      // A ramp coming up for the first time: "Tap in the air for a trick!" (not tilting the phone: the gas pedal does
+      // the trick there, so the line would be wrong).
       const toRamp = Math.min(...RAMPS.map((p) => ahead(r.s, p.s)).filter((a) => a > 0))
-      if (toRamp > 40 && toRamp < 70 && !this.told.has('ramp')) {
+      if (this.steer === 'finger' && toRamp > 40 && toRamp < 70 && !this.told.has('ramp')) {
         this.told.add('ramp')
         this.say(L.race.ramp)
       }
