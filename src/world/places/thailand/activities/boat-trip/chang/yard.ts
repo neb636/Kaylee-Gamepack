@@ -5,7 +5,7 @@
 import { Euler, Group, Quaternion } from 'three'
 import type { Bag } from '../../../engine/dispose'
 import { merge, P, solid } from '../../../engine/geo'
-import { BENCH, BOULDERS, CAFE, COUNTER, MILK, RAIL, TROUGH } from './layout'
+import { BENCH, BOULDERS, CAFE, COUNTER, LAMYAI_BACK, MILK, RAIL, TROUGH } from './layout'
 
 const GRAVEL = '#CFCAD8'
 const GRAVEL_DARK = '#B9B3C8'
@@ -116,6 +116,8 @@ export function buildYard(bag: Bag) {
       const x = i * 4.2 + (j % 2) * 2.1
       const z = -6.5 - j * 4.5
       if (Math.abs(x + 6.5) < 2 && j === 0) continue
+      // (None where Lamyai waits at the back and on her way over: she'd stand inside its trunk.)
+      if (Math.hypot(x - LAMYAI_BACK.x, z - LAMYAI_BACK.z) < 2.5) continue
       palms.push(...oilPalm(x, z, 5.5 + ((i + j) % 3) * 0.8, i * 0.7 + j))
     }
   // Two closer palms at the sides frame the yard.

@@ -71,11 +71,11 @@ export class Basket {
     this.root.add(this.body)
     // Four bananas fanned on the left, four sticks of cane standing up on the right.
     for (let i = 0; i < 4; i++) {
-      const home = new Vector3(x - r * 0.45 + (i % 3) * 0.06 - 0.05, y + 0.04 + Math.floor(i / 3) * 0.06, z - 0.1 + (i % 3) * 0.1)
+      const home = new Vector3(x - r * 0.55 + (i % 3) * 0.06 - 0.06, y + 0.04 + Math.floor(i / 3) * 0.06, z - 0.1 + (i % 3) * 0.1)
       this.add('banana', banana(bag), home, -0.4 + i * 0.2, scene)
     }
     for (let i = 0; i < 4; i++) {
-      const home = new Vector3(x + r * 0.32 + (i % 2) * 0.12 - 0.04, y + 0.17, z - 0.14 + i * 0.07)
+      const home = new Vector3(x + r * 0.42 + (i % 2) * 0.12 - 0.04, y + 0.17, z - 0.14 + i * 0.07)
       this.add('cane', cane(bag), home, 0.15 - i * 0.07, scene)
     }
   }
@@ -96,6 +96,18 @@ export class Basket {
   spot(kind: FoodKind, out: Vector3) {
     const f = this.foods.find((x) => x.state === 'basket' && x.kind === kind) ?? this.foods.find((x) => x.kind === kind)!
     return out.copy(f.home).add(new Vector3(0, kind === 'cane' ? 0.05 : 0.04, 0.05))
+  }
+  /** A kind's tap target r wide: its side of the basket, pushed out so the bananas' (left) and the cane's (right)
+   *  meet in the middle instead of overlapping. */
+  target(kind: FoodKind, r: number, out: Vector3) {
+    this.spot(kind, out)
+    const side = kind === 'banana' ? -1 : 1
+    out.x = BASKET.x + side * Math.max(Math.abs(out.x - BASKET.x), r + 0.02)
+    return out
+  }
+  /** The middle of the basket (the line between the two piles). */
+  middle(out: Vector3) {
+    return out.set(BASKET.x, BASKET.y + 0.05, BASKET.z + 0.05)
   }
 
   /** Back in its place (Daddy pops it in), with a little wobble of the basket. */
