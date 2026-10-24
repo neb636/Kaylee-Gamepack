@@ -106,10 +106,13 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    (`thailand/mall-trip.md`). Its first greybox, a small climbing toy, is built
    (PR #120), and rebuilt as the Big Frame at real scale (`#/world/thailand/mall-trip/frame`). Dad's photos (2026-10-21) turned
    HarborLand into a hall of mini games: a vet clinic, a barber, a racing slide and more, each its own greybox.
+   Baan Chang Cafe (Dad, 2026-10-24) comes back in 3D as a second Krabi place on the boat trip: after landing she
+   picks 🐘 the elephants or 🚤 the pier, feeds Mali, Khanom and Lamyai bananas and sugarcane, and they splash everyone
+   under a rainbow (`thailand/baan-chang.md`, from Dad's photos; PR #86's 2D greybox is the starting point).
    The third family trip (Dad, 2026-10-24) is a road trip in Nan, from the family's real trip in June 2024: they fly
    north, Mommy drives a silver rental Pajero Sport over the mountain roads (Kaylee steers), and they stop at Wat
-   Phumin, Baan Huanam Mushroom Farm, Stop Time Cafe above Sapan's rice terraces and Bo Kluea's salt wells, coming home by the "number 3" road
-   (`thailand/nan-trip.md`, planned only).
+   Phumin, Baan Huanam Mushroom Farm, Stop Time Cafe above Sapan's rice terraces and Bo Kluea's salt wells,
+   coming home by the "number 3" road (`thailand/nan-trip.md`, planned only).
 
 ## Tech notes
 
