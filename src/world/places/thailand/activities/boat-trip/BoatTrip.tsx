@@ -9,6 +9,9 @@
 //   pier ... sunset         Phang Nga Bay by longtail boat (bay/bay.ts and its parts): the ribbons, open water, the
 //                           village, the cave and the hong, the Nail Island photo, the sunset ride back; at the pier her
 //                           album opens and a big 🏠 takes them home
+//   feed                    Baan Chang Cafe in Krabi (chang/chang.ts, plan: thailand/baan-chang.md), greybox: the
+//                           elephants' yard, where she holds bananas and sugarcane out to Mali's and Khanom's trunks
+//                           (reached only by its link until the fork at Krabi is built)
 //   race, podium            through the bay's rainbow gate (bay/race-gate.ts), behind a checkered flag: the boat race
 //                           in its own lagoon (race/race.ts, its screen race/RaceLayer.tsx), three laps against the
 //                           village kids and the macaque; she always wins, lifts the trophy on the podium (it goes in
@@ -51,6 +54,8 @@ import { ARROW_ICONS, Bay, BAY_ANCHORS, type BayStart } from './bay/bay'
 import { CRITTERS, type CritterId } from './bay/critters'
 import type { PhotoKind, Stop } from './bay/part'
 import { PoseButtons } from './bay/PoseButtons'
+import { Chang, CHANG_ANCHORS, type ChangSection } from './chang/chang'
+import { ChangDebug } from './chang/ChangDebug'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
 import { PhotoFan } from './PhotoFan'
@@ -94,6 +99,7 @@ const ANCHORS_OF: Record<TripWorld, typeof BAY_ANCHORS> = {
   plane: PLANE_ANCHORS,
   bay: BAY_ANCHORS,
   race: RACE_ANCHORS,
+  chang: CHANG_ANCHORS,
 }
 
 export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () => void }) {
@@ -136,6 +142,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const [stops, setStops] = useState<Stop[]>(() => [...new Set([...list(flag('stops'), STOPS), ...(first === 'podium' ? (['race'] as Stop[]) : [])])])
   const [photos, setPhotos] = useState<AlbumPhoto[]>([])
   const [found, setFound] = useState<CritterId[]>(() => list(flag('found'), CRITTERS))
+  // Baan Chang: how many foods the elephants have had (a link's bellies are that round).
+  const [fed, setFed] = useState(() => Math.max(0, Math.floor(Number(flag('fed') ?? 0)) || 0))
   const [albumOpen, setAlbumOpen] = useState(false)
   const [bump, setBump] = useState(0)
   const [flights, setFlights] = useState<{ key: number; id: CritterId; x: number; y: number }[]>([])
@@ -162,8 +170,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const worldRef = useRef<World3D | null>(null)
   const tripRef = useRef<TripHouse | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
-  const state = useRef({ section, packed, mount, busy: false, saved, ribbons, stops, photos, found })
-  state.current = { ...state.current, section, packed, mount, saved, ribbons, stops, photos, found }
+  const state = useRef({ section, packed, mount, busy: false, saved, ribbons, stops, photos, found, fed })
+  state.current = { ...state.current, section, packed, mount, saved, ribbons, stops, photos, found, fed }
   // Read once: the address bar follows her and drops ?debug=1.
   const [debug] = useState(() => flag('debug') !== null)
 
@@ -175,6 +183,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       stops: st.stops.join(','),
       photos: [...new Set(st.photos.map((p) => p.kind).filter((k) => k !== 'selfie' && k !== 'race'))].join(','),
       found: st.found.join(','),
+      fed: WORLD_OF[st.section] === 'chang' ? String(st.fed) : undefined,
       replay: replay ? '1' : '',
     }
   }
@@ -186,8 +195,9 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       ready.current = true
       return
     }
-    if (WORLD_OF[state.current.section] === 'bay') enter(state.current.section, params(state.current.packed))
-  }, [ribbons, stops, photos, found])
+    const world = WORLD_OF[state.current.section]
+    if (world === 'bay' || world === 'chang') enter(state.current.section, params(state.current.packed))
+  }, [ribbons, stops, photos, found, fed])
 
   // Someone says something, out loud (Sparkle in the corner shows the words for Dad). Not while the bay is only
   // building behind the boarding pass for a `home` link.
@@ -382,6 +392,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       w = new House(renderer, { section: s === 'goodbye' || s === 'home' ? 'street' : 'upstairs' }, { onSpot: () => {}, onArrived: () => {} }, trip)
     } else if (world === 'airport') w = new Airport(renderer, leg, items)
     else if (world === 'plane') w = new PlaneRide(renderer, leg, s as FlySection, items, FLIGHT, replay ? (BOAT_TRIP.caps.replayFly ?? BOAT_TRIP.caps.fly) : BOAT_TRIP.caps.fly)
+    else if (world === 'chang') w = new Chang(renderer, { ...leg, fed: setFed }, s as ChangSection, items, state.current.fed)
     else if (world === 'race') {
       const st = state.current
       // A link's `lap` counts for the first race only (a rematch starts at lap 1).
@@ -657,6 +668,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           ))}
       </AnimatePresence>
       {debug && mount.world === 'bay' && <Debug bayRef={worldRef as never} />}
+      {debug && mount.world === 'chang' && <ChangDebug changRef={worldRef as never} />}
     </div>
   )
 }

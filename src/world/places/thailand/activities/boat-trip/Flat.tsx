@@ -7,6 +7,7 @@
 //            hear its fact; the race opens its page, the Nail Island the photo
 //   race     three boats race across the water when she taps ▶ (hers wins by a nose), then the podium: her trophy
 //   nail     the photo as a drawn card: tap 📸 (flash!), then ▶
+//   feed     Baan Chang's elephants: tap 🍌 or 🎋 and an elephant munches it (greybox)
 //   home     Agong: tap the photo and it's his ("Beautiful! Thank you, Kaylee!"), the cousins look up, then the stamp
 // Sparkle stands above each page (not the packing page, which needs the room) and waves as it turns; tap her to hop.
 // Every section link lands on its page. Voices are the trip's own clips (lines.ts).
@@ -61,6 +62,7 @@ export function Flat({ section, packed, onPacked, onSection, onDone }: Props) {
     if (section === 'pack') return <Pack packed={packed} onPacked={onPacked} onClose={() => go('goodbye')} />
     if (section === 'nail') return <Photo onNext={() => go('sunset')} />
     if (section === 'home') return <Home onDone={onDone} />
+    if (section === 'feed') return <Feed />
     if (section === 'race') return <RaceDay onWin={() => onSection('podium')} />
     if (section === 'podium') return <PodiumPage onNext={() => go('bay')} />
     const leg = LEGS[section]
@@ -156,6 +158,62 @@ function Pack({ packed, onPacked, onClose }: { packed: string[]; onPacked: (ids:
       <Big label="Close the suitcase" onClick={onClose} disabled={packed.length < 3}>
         ✅🧳
       </Big>
+    </>
+  )
+}
+
+/** Baan Chang's yard: tap a food and it flies to an elephant, who munches it and gets a little rounder. */
+function Feed() {
+  const [full, setFull] = useState([0, 0])
+  const [bite, setBite] = useState<{ who: number; food: string; key: number } | null>(null)
+  const give = (food: string) => {
+    if (bite) return
+    // The one who has eaten less gets it (the little one, if it's a tie).
+    const who = full[1] <= full[0] ? 1 : 0
+    sounds.pop()
+    setBite({ who, food, key: performance.now() })
+    setTimeout(() => {
+      if (food === '🎋') sfx.crunch()
+      else sfx.munch()
+      if (who === 1) sfx.squeal()
+      else sfx.rumble()
+      setFull((f) => f.map((n, i) => (i === who ? n + 1 : n)))
+      setBite(null)
+    }, 600)
+  }
+  return (
+    <>
+      <div style={{ ...card, background: 'linear-gradient(#BFE6FF 55%, #CFCAD8 55%)', width: 'min(640px, 100%)', padding: 'clamp(16px, 4vmin, 40px) 16px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: 'clamp(16px, 5vw, 48px)', position: 'relative' }}>
+        {[0, 1].map((i) => (
+          <motion.button
+            key={i}
+            aria-label={i ? 'Khanom the baby elephant' : 'Mali the elephant'}
+            animate={{ scale: (i ? 0.62 : 1) * (1 + Math.min(full[i], 10) * 0.03), y: bite?.who === i ? [0, -10, 0] : 0 }}
+            transition={{ duration: 0.4 }}
+            onClick={() => (i ? sfx.squeal() : sfx.trumpet())}
+            style={{ background: 'none', border: 'none', padding: 0, fontSize: 'clamp(90px, 20vmin, 170px)', lineHeight: 1, transform: 'scaleX(-1)' }}
+          >
+            🐘
+          </motion.button>
+        ))}
+        <AnimatePresence>
+          {bite && (
+            <motion.div key={bite.key} aria-hidden initial={{ y: 120, x: 0, opacity: 1, scale: 1.2 }} animate={{ y: -40, x: bite.who ? 70 : -70, opacity: 0.2, scale: 0.6 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} style={{ position: 'absolute', bottom: 0, fontSize: 56 }}>
+              {bite.food}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+      <div style={{ display: 'flex', gap: 'clamp(12px, 3vw, 28px)' }}>
+        {[
+          ['🍌', 'Banana'],
+          ['🎋', 'Sugarcane'],
+        ].map(([food, label]) => (
+          <Big key={food} label={label} onClick={() => give(food)} color="var(--butter)">
+            {food}
+          </Big>
+        ))}
+      </div>
     </>
   )
 }
