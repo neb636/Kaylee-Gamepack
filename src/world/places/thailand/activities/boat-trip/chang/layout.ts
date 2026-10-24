@@ -80,3 +80,51 @@ export const SHOT = {
   splashWide: { center: [0.75, 2.3, -0.7], half: [4.2, 2.7, 2.1], yaw: 9, pitch: 10 },
   splashTall: { center: [0.75, 3.0, -0.7], half: [3.4, 3.1, 2.1], yaw: 9, pitch: 10 },
 } as const
+
+// ---- The cafe (`drinks`) ----
+// An open-sided sala at the top of the boardwalk, far up behind the family's side of the yard (the yard hides while
+// she's there). Seen straight on (the camera looks toward -z), left to right:
+//
+//   back:      the deck's rail, and the oil palms below it
+//   counter:   the bell  Kaylee  [her glass]   [Daddy's glass]  Daddy  Mommy
+//   front:     ═══ the tray: milk, chocolate, spoon, three straws, ice, coffee (two rows on a tall screen) ═══
+
+export type StrawColor = 'pink' | 'purple' | 'yellow'
+export const STRAW_COLORS: Record<StrawColor, string> = { pink: '#FF4F9A', purple: '#A77BE6', yellow: '#FFC83D' }
+export const isStraw = (s: string | null | undefined): s is StrawColor => !!s && s in STRAW_COLORS
+
+export const CAFE = { z: 40 }
+/** The counter she makes her drink at (its top at Kaylee's tummy). */
+export const COUNTER = { x0: -1.55, x1: 1.55, z: CAFE.z, d: 0.56, top: 0.55 }
+/** A tall glass (hers, and Daddy's for his iced coffee). */
+export const GLASS = { r0: 0.088, r1: 0.118, h: 0.36 }
+export const HER_GLASS: V3 = [0.02, COUNTER.top, CAFE.z + 0.05]
+export const DAD_GLASS: V3 = [0.85, COUNTER.top, CAFE.z + 0.05]
+/** Where Daddy's glass goes when he takes it (the end of the counter, in front of him). */
+export const DAD_SIP: V3 = [1.32, COUNTER.top, CAFE.z + 0.12]
+/** The little bell on the counter (a poke: ding!). */
+export const BELL: V3 = [-1.3, COUNTER.top, CAFE.z + 0.08]
+/** Kaylee behind the counter; Daddy and Mommy at its end (closer in on a tall screen). x, z, facing (degrees). */
+export const CAFE_FAMILY = {
+  kaylee: [-0.62, CAFE.z - 0.55, 14],
+  nick: [1.55, CAFE.z - 0.55, -18],
+  ji: [2.15, CAFE.z - 0.95, -22],
+} as const
+export const CAFE_FAMILY_TALL = {
+  kaylee: [-0.58, CAFE.z - 0.55, 14],
+  nick: [1.2, CAFE.z - 0.62, -14],
+  ji: [1.62, CAFE.z - 1.0, -18],
+} as const
+/** The tray along the bottom: one row on a wide screen, two on a tall one. Held things ride the plane z = HOLD_Z. */
+export const TRAY = { z: CAFE.z + 0.95, y: 0.3, zB: CAFE.z + 1.62, yB: 0.02 }
+export const CAFE_HOLD_Z = CAFE.z + 0.12
+
+export type V3 = [number, number, number]
+export type ToolId = 'milk' | 'choc' | 'spoon' | `straw-${StrawColor}` | 'ice' | 'coffee'
+export const TOOLS_WIDE: ToolId[] = ['milk', 'choc', 'spoon', 'straw-pink', 'straw-purple', 'straw-yellow', 'ice', 'coffee']
+export const TOOLS_TALL: ToolId[][] = [['milk', 'choc', 'spoon', 'coffee'], ['straw-pink', 'straw-purple', 'straw-yellow', 'ice']]
+
+export const CAFE_SHOT = {
+  wide: { center: [0.12, 1.0, CAFE.z + 0.4], half: [1.95, 0.95, 0.5], yaw: 0, pitch: 9 },
+  tall: { center: [0.05, 1.25, CAFE.z + 0.9], half: [1.38, 1.2, 0.75], yaw: 0, pitch: 12 },
+} as const

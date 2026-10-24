@@ -1,11 +1,11 @@
 // The feeding yard at Baan Chang, greybox in the final toon look (plan: "What's really there"): grey gravel in two
 // bands, the steel pipe rail on posts, mossy boulders in a row in front of it, cut grass and palm fronds on the ground,
 // the little blue bench, wooden sala huts on stilts at the back, and a grid of tall oil palms all round. Each layer is
-// merged into one mesh (two draw calls with its outline).
+// merged into one mesh (two draw calls with its outline). And the cafe at the top of the boardwalk (buildCafe).
 import { Euler, Group, Quaternion } from 'three'
 import type { Bag } from '../../../engine/dispose'
 import { merge, P, solid } from '../../../engine/geo'
-import { BENCH, BOULDERS, MILK, RAIL, TROUGH } from './layout'
+import { BENCH, BOULDERS, CAFE, COUNTER, MILK, RAIL, TROUGH } from './layout'
 
 const GRAVEL = '#CFCAD8'
 const GRAVEL_DARK = '#B9B3C8'
@@ -21,19 +21,19 @@ const euler = new Euler()
 const quat = new Quaternion()
 
 /** An oil palm: a ringed trunk and a crown of long fronds that arch out and droop. */
-function oilPalm(x: number, z: number, h: number, k: number) {
-  const parts = [P.cyl(0.3, 0.38, h, PALM_TRUNK, { at: [x, h / 2, z] }, 8)]
+function oilPalm(x: number, z: number, h: number, k: number, y0 = 0) {
+  const parts = [P.cyl(0.3, 0.38, h, PALM_TRUNK, { at: [x, y0 + h / 2, z] }, 8)]
   // Its rough, ringed bark (the old frond stubs).
-  for (let i = 1; i < 5; i++) parts.push(P.cyl(0.4, 0.4, 0.18, '#977A60', { at: [x, (h / 5) * i, z] }, 8))
+  for (let i = 1; i < 5; i++) parts.push(P.cyl(0.4, 0.4, 0.18, '#977A60', { at: [x, y0 + (h / 5) * i, z] }, 8))
   for (let l = 0; l < 9; l++) {
     const a = (l / 9) * Math.PI * 2 + k
     const droop = 0.45 + (l % 3) * 0.2
     // Each frond: a long thin leaf from the top, out and down (turned to its heading, then tipped down).
     const e = euler.setFromQuaternion(quat.setFromEuler(new Euler(droop, a, 0, 'YXZ')), 'XYZ')
     const out = [Math.sin(a) * Math.cos(droop), -Math.sin(droop), Math.cos(a) * Math.cos(droop)]
-    parts.push(P.box(0.5, 0.05, 3.2, l % 2 ? FROND : FROND_DARK, { at: [x + out[0] * 1.55, h + out[1] * 1.55, z + out[2] * 1.55], rot: [e.x, e.y, e.z] }))
+    parts.push(P.box(0.5, 0.05, 3.2, l % 2 ? FROND : FROND_DARK, { at: [x + out[0] * 1.55, y0 + h + out[1] * 1.55, z + out[2] * 1.55], rot: [e.x, e.y, e.z] }))
   }
-  parts.push(P.sphere(0.45, '#8B6A4E', { at: [x, h, z] }, 8))
+  parts.push(P.sphere(0.45, '#8B6A4E', { at: [x, y0 + h, z] }, 8))
   return parts
 }
 
@@ -120,6 +120,44 @@ export function buildYard(bag: Bag) {
     }
   // Two closer palms at the sides frame the yard.
   palms.push(...oilPalm(-5.6, 1.2, 6.5, 0.4), ...oilPalm(7.4, 0.4, 6.8, 1.1))
+  root.add(solid(merge(palms), bag, 2))
+  return root
+}
+
+/** The cafe at the top of the boardwalk (`drinks`): an open-sided sala on a plank deck, with a thatched roof, a rail
+ *  along its back, and the oil palms below it. The counter is woven bamboo with a pale wooden top; behind Kaylee a low
+ *  shelf of jars. The ground falls away behind, so the palms' crowns are about level with the deck. */
+export function buildCafe(bag: Bag) {
+  const root = new Group()
+  const z = CAFE.z
+  root.add(solid(merge([P.box(70, 0.1, 40, GRAVEL, { at: [0, -0.9, z - 18] }), P.box(70, 0.1, 6, '#E6DCC6', { at: [0, -0.85, z + 3] })]), bag, 0))
+  const sala = [
+    // The deck, its planks and its edge.
+    P.box(7.2, 0.14, 4.2, '#C99A6E', { at: [0, -0.07, z - 0.4] }),
+    ...Array.from({ length: 9 }, (_, i) => P.box(7.2, 0.006, 0.03, '#B7865C', { at: [0, 0.002, z - 2.3 + i * 0.47] })),
+    P.box(7.2, 0.8, 0.12, '#B7865C', { at: [0, -0.5, z + 1.7] }),
+    // Four posts and the thatched roof.
+    ...[-3.2, 3.2].flatMap((x) => [z - 2.3, z + 1.5].map((pz) => P.cyl(0.11, 0.12, 3.6, WOOD, { at: [x, 1.8, pz] }, 8))),
+    P.prism([[-2.9, 0], [2.9, 0], [0, 1.2]], 7.6, THATCH, { at: [0, 3.55, z - 0.4], rot: [0, Math.PI / 2, 0] }),
+    // The rail along the back (dark steel, like the boardwalk's) with a mesh panel.
+    ...[-3, -1.5, 0, 1.5, 3].map((x) => P.cyl(0.04, 0.04, 0.9, STEEL, { at: [x, 0.45, z - 2.35] }, 6)),
+    P.cyl(0.035, 0.035, 6.4, STEEL, { at: [0, 0.9, z - 2.35], rot: [0, 0, Math.PI / 2] }, 8),
+    P.box(6.2, 0.6, 0.015, '#7B7590', { at: [0, 0.45, z - 2.35] }),
+    // The counter: woven bamboo poles under a pale wooden top.
+    P.box(COUNTER.x1 - COUNTER.x0, COUNTER.top - 0.04, COUNTER.d - 0.06, '#D9B86A', { at: [(COUNTER.x0 + COUNTER.x1) / 2, (COUNTER.top - 0.04) / 2, COUNTER.z - 0.02] }),
+    ...Array.from({ length: 15 }, (_, i) => P.cyl(0.032, 0.032, COUNTER.top - 0.05, i % 2 ? '#E6C77E' : '#CDA95C', { at: [COUNTER.x0 + 0.1 + i * 0.207, (COUNTER.top - 0.05) / 2, COUNTER.z + COUNTER.d / 2 - 0.04] }, 8)),
+    P.rbox(COUNTER.x1 - COUNTER.x0 + 0.1, 0.05, COUNTER.d + 0.06, 0.02, '#F3E2C2', { at: [(COUNTER.x0 + COUNTER.x1) / 2, COUNTER.top - 0.025, COUNTER.z] }),
+    // The low shelf behind Kaylee, with jars of sweets and a potted fern.
+    P.box(2.4, 0.7, 0.4, '#B7865C', { at: [-0.6, 0.35, z - 1.3] }),
+    ...(['#FFB3D1', '#FBEA9A', '#8FE3C8', '#C9B6FF'] as const).map((c, i) => P.cyl(0.08, 0.08, 0.2, c, { at: [-1.5 + i * 0.32, 0.8, z - 1.3] }, 12)),
+    P.cyl(0.13, 0.1, 0.2, '#E58E6C', { at: [0.35, 0.8, z - 1.3] }, 12),
+    ...[0, 1, 2, 3, 4].map((i) => P.sphere(0.16, i % 2 ? FROND : FROND_DARK, { at: [0.35 + Math.sin(i * 1.3) * 0.12, 1.02 + (i % 2) * 0.06, z - 1.3 + Math.cos(i * 1.3) * 0.08], scale: [1.4, 0.5, 0.8], rot: [0, i, 0.3] }, 8)),
+  ]
+  root.add(solid(merge(sala), bag, 2))
+  // The oil palms below, beyond the rail.
+  const palms = []
+  for (let i = -3; i <= 3; i++)
+    for (let j = 0; j < 2; j++) palms.push(...oilPalm(i * 3.6 + (j % 2) * 1.8, z - 6.5 - j * 4.5, 4.6 + ((i + j) % 3) * 0.7, i * 0.9 + j, -0.9))
   root.add(solid(merge(palms), bag, 2))
   return root
 }

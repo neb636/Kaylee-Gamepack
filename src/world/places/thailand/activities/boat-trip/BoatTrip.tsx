@@ -9,7 +9,8 @@
 //   pier ... sunset         Phang Nga Bay by longtail boat (bay/bay.ts and its parts): the ribbons, open water, the
 //                           village, the cave and the hong, the Nail Island photo, the sunset ride back; at the pier her
 //                           album opens and a big 🏠 takes them home
-//   feed ... splash         Baan Chang Cafe in Krabi (chang/chang.ts, plan: thailand/baan-chang.md), greybox: the
+//   drinks ... splash       Baan Chang Cafe in Krabi (chang/chang.ts, plan: thailand/baan-chang.md), greybox: the
+//                           cafe, where she makes her chocolate milk (chang/cafe.ts; a big 🐘 when it's ready), then the
 //                           elephants' yard, where she holds bananas and sugarcane out to the trunks; then their
 //                           favorites, Lamyai and Khanom's sneaky sips, and the rainbow splash (reached only by their
 //                           links until the fork at Krabi is built)
@@ -58,6 +59,7 @@ import type { Phase as BayPhase, PhotoKind, Stop } from './bay/part'
 import { PoseButtons } from './bay/PoseButtons'
 import { Chang, CHANG_ANCHORS, type ChangSection } from './chang/chang'
 import { ChangDebug } from './chang/ChangDebug'
+import { isStraw, type StrawColor } from './chang/layout'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
 import { PhotoFan } from './PhotoFan'
@@ -149,6 +151,12 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const [found, setFound] = useState<CritterId[]>(() => list(flag('found'), CRITTERS))
   // Baan Chang: how many foods the elephants have had (a link's bellies are that round).
   const [fed, setFed] = useState(() => Math.max(0, Math.floor(Number(flag('fed') ?? 0)) || 0))
+  // Her straw from the cafe (it's in her glass in the yard), and whether her chocolate milk is ready (the 🐘 shows).
+  const [straw, setStraw] = useState<StrawColor>(() => {
+    const s = flag('straw')
+    return isStraw(s) ? s : 'pink'
+  })
+  const [drinkReady, setDrinkReady] = useState(false)
   const [albumOpen, setAlbumOpen] = useState(false)
   const [bump, setBump] = useState(0)
   const [flights, setFlights] = useState<{ key: number; id: CritterId; x: number; y: number }[]>([])
@@ -175,8 +183,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const worldRef = useRef<World3D | null>(null)
   const tripRef = useRef<TripHouse | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
-  const state = useRef({ section, packed, mount, busy: false, saved, ribbons, stops, photos, found, fed })
-  state.current = { ...state.current, section, packed, mount, saved, ribbons, stops, photos, found, fed }
+  const state = useRef({ section, packed, mount, busy: false, saved, ribbons, stops, photos, found, fed, straw })
+  state.current = { ...state.current, section, packed, mount, saved, ribbons, stops, photos, found, fed, straw }
   // Read once: the address bar follows her and drops ?debug=1.
   const [debug] = useState(() => flag('debug') !== null)
   // Driving the longtail on a phone (race/tilt.ts), in the bay and in the boat race alike: held sideways, tilt to
@@ -229,6 +237,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       photos: [...new Set(st.photos.map((p) => p.kind).filter((k) => k !== 'selfie' && k !== 'race'))].join(','),
       found: st.found.join(','),
       fed: WORLD_OF[st.section] === 'chang' ? String(st.fed) : undefined,
+      straw: WORLD_OF[st.section] === 'chang' ? st.straw : undefined,
       replay: replay ? '1' : '',
     }
   }
@@ -242,7 +251,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     }
     const world = WORLD_OF[state.current.section]
     if (world === 'bay' || world === 'chang') enter(state.current.section, params(state.current.packed))
-  }, [ribbons, stops, photos, found, fed])
+  }, [ribbons, stops, photos, found, fed, straw])
 
   // Someone says something, out loud (Sparkle in the corner shows the words for Dad). Not while the bay is only
   // building behind the boarding pass for a `home` link.
@@ -437,7 +446,10 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       w = new House(renderer, { section: s === 'goodbye' || s === 'home' ? 'street' : 'upstairs' }, { onSpot: () => {}, onArrived: () => {} }, trip)
     } else if (world === 'airport') w = new Airport(renderer, leg, items)
     else if (world === 'plane') w = new PlaneRide(renderer, leg, s as FlySection, items, FLIGHT, replay ? (BOAT_TRIP.caps.replayFly ?? BOAT_TRIP.caps.fly) : BOAT_TRIP.caps.fly)
-    else if (world === 'chang') w = new Chang(renderer, { ...leg, fed: setFed }, s as ChangSection, items, state.current.fed)
+    else if (world === 'chang') {
+      setDrinkReady(false)
+      w = new Chang(renderer, { ...leg, fed: setFed, straw: setStraw, ready: setDrinkReady, flash: () => setFlash((n) => n + 1) }, s as ChangSection, items, state.current.fed, state.current.straw)
+    }
     else if (world === 'race') {
       const st = state.current
       // A link's `lap` counts for the first race only (a rematch starts at lap 1).
@@ -669,6 +681,27 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
             style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 18px)', translate: albumOpen ? '64px 0' : '-50% 0', minWidth: 'clamp(120px, 22vw, 170px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--butter)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', zIndex: albumOpen ? 61 : 33, padding: '0 20px' }}
           >
             ✈️🏠
+          </motion.button>
+        )}
+      </AnimatePresence>
+      {/* At Baan Chang's cafe: her chocolate milk is ready, down to the elephants. */}
+      <AnimatePresence>
+        {mount.world === 'chang' && section === 'drinks' && drinkReady && !pass && mode === 'webgl' && (
+          <motion.button
+            key="elephants"
+            aria-label="To the elephants"
+            initial={{ scale: 0, y: 40 }}
+            animate={{ scale: [1, 1.08, 1], y: 0 }}
+            exit={{ scale: 0, transition: { duration: 0.2 } }}
+            transition={{ scale: { repeat: Infinity, duration: 1.4, ease: 'easeInOut' }, y: { type: 'spring' } }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => {
+              sounds.pop()
+              ;(worldRef.current as Chang | null)?.toYard()
+            }}
+            style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 18px)', top: 'calc(var(--top-clear) + 12px)', minWidth: 'clamp(110px, 18vw, 150px)', height: 'clamp(88px, 13vmin, 110px)', borderRadius: 999, border: '5px solid #fff', background: 'var(--butter)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', zIndex: 33, padding: '0 20px' }}
+          >
+            🐘
           </motion.button>
         )}
       </AnimatePresence>

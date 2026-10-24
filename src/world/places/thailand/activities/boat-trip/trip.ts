@@ -41,6 +41,7 @@ export const WORLD_OF: Record<BoatSection, TripWorld> = {
   takeoff: 'plane',
   fly: 'plane',
   land: 'plane',
+  drinks: 'chang',
   feed: 'chang',
   favorites: 'chang',
   lamyai: 'chang',

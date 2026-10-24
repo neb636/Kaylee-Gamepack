@@ -526,6 +526,38 @@ GAME_SCENARIOS.push({
   },
 })
 
+// Baan Chang's cafe: her chocolate milk, all by dragging. The milk jug to her glass (it tips and pours), the chocolate
+// held over it (upside down, brown ribbons), the spoon going round and round (the ribbons melt), a purple straw in.
+GAME_SCENARIOS.push({
+  name: 'chang-pour',
+  seconds: 9,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/boat-trip/drinks`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiBoatQA?.().drink, null, { timeout: 20000 })
+    await page.waitForTimeout(1200)
+  },
+  act: async (page) => {
+    const d = await page.evaluate(() => window.__thaiBoatQA().drink)
+    for (const [tool, to, ms, round] of [
+      ['milk', d.pourAt[0], 1700],
+      ['choc', d.squeezeAt[0], 1400],
+      ['spoon', d.stirAt[0], 0, true],
+      ['straw-purple', d.glassAt[0], 200],
+    ]) {
+      const b = await page.locator(`[data-anchor="tool:${tool}"]`).boundingBox()
+      if (!b) throw new Error(`no ${tool} on the tray`)
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+      await page.mouse.down()
+      await page.mouse.move(to[0], to[1], { steps: 10 })
+      if (round) for (let k = 0; k < 45; k++) await page.mouse.move(to[0] + Math.cos(k / 3) * 28, to[1] + Math.sin(k / 3) * 14), await page.waitForTimeout(35)
+      else await page.waitForTimeout(ms)
+      await page.mouse.up()
+      await page.waitForTimeout(250)
+    }
+  },
+})
+
 // Baan Chang deeper: in favorites a food held out to the elephant who doesn't want it (sniffed, then tossed through
 // the air to the one who does); in the splash, a tap on each elephant (dip, spray up over the family, the rainbow).
 const changMoment = (name, seconds, section, act) => ({

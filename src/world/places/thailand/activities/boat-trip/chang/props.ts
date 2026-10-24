@@ -1,8 +1,8 @@
 // The yard's greybox props beyond the basket:
 // - WantBubble: a picture bubble over an elephant's head (`favorites`): the food it wants, and up to three pips that
 //   fill in gold as she feeds it ("One! Two! Three!"). No words, so she can read it. It always faces the camera.
-// - Milk: her chocolate milk on the rail post (`lamyai`), a placeholder glass until the drink is built (greybox 3):
-//   the milk goes down a little with each of Khanom's sneaky sips.
+// - Milk: her chocolate milk from the cafe (`drinks`, drink.ts) on the rail post, with the straw she picked: the milk
+//   goes down a little with each of Khanom's sneaky sips (`lamyai`).
 // - Splash: the water the elephants spray up over the family (`splash`), and the rainbow that arcs over the yard.
 import { Camera, DoubleSide, Group, Mesh, MeshBasicMaterial, SphereGeometry, TorusGeometry, Vector3 } from 'three'
 import { bell } from '../../../../../../sdk'
@@ -12,7 +12,8 @@ import { Particles } from '../../../engine/particles'
 import { PAL, toon } from '../../../engine/toon'
 import { RAINBOW } from '../race/scenery'
 import { banana, cane } from './basket'
-import { MILK, type FoodKind } from './layout'
+import { buildGlass, buildStraw, pourInto, STRAW_TOP, type Drink, type Glass } from './drink'
+import { MILK, type FoodKind, type StrawColor } from './layout'
 
 const PIPS = 3
 
@@ -77,24 +78,29 @@ export class Milk {
   readonly root = new Group()
   /** 0..1: how full the glass is. */
   level = 0.85
-  private milk: Group
+  private glass: Glass
+  private drink: Drink = { milk: 0.5, choc: 0.4, coffee: 0, stir: 1, ice: 0 }
+  private straws = new Map<StrawColor, Group>()
   private wobble = 1
   /** The top of the straw (world), where a sneaky trunk goes. */
-  readonly straw = new Vector3(MILK.x + 0.05, MILK.y + 0.42, MILK.z)
+  readonly straw = new Vector3(MILK.x, MILK.y, MILK.z).add(STRAW_TOP)
 
-  constructor(bag: Bag) {
+  constructor(bag: Bag, straw: StrawColor) {
     this.root.position.set(MILK.x, MILK.y, MILK.z)
-    // The glass: see-through, with an inked rim and a pink straw.
-    const glass = new Mesh(bag.add(P.cyl(0.11, 0.085, 0.28, '#FFFFFF', { at: [0, 0.14, 0] }, 16)), bag.add(new MeshBasicMaterial({ color: '#E6F6FF', transparent: true, opacity: 0.35, depthWrite: false })))
-    glass.renderOrder = 2
-    this.milk = solid(P.cyl(0.098, 0.08, 1, '#9A6342', { at: [0, 0.5, 0] }, 16), bag, 0)
-    this.milk.position.y = 0.012
-    this.root.add(
-      this.milk,
-      solid(merge([P.torus(0.11, 0.012, PAL.ink, { at: [0, 0.28, 0], rot: [Math.PI / 2, 0, 0] }), P.cyl(0.085, 0.085, 0.012, '#D9EEF8', { at: [0, 0.006, 0] }, 16)]), bag, 0),
-      solid(P.cyl(0.016, 0.016, 0.46, PAL.hotpink, { at: [0.03, 0.26, 0], rot: [0, 0, -0.22] }, 8), bag, 1.5),
-      glass,
-    )
+    this.root.userData.pick = 'milk'
+    this.glass = buildGlass(bag)
+    this.root.add(this.glass.root)
+    for (const c of ['pink', 'purple', 'yellow'] as const) {
+      const g = buildStraw(bag, c)
+      this.glass.slot.add(g)
+      this.straws.set(c, g)
+    }
+    this.setStraw(straw)
+  }
+
+  /** Her straw, the one she picked at the cafe. */
+  setStraw(c: StrawColor) {
+    for (const [k, g] of this.straws) g.visible = k === c
   }
 
   sip(dt: number) {
@@ -109,7 +115,10 @@ export class Milk {
     this.wobble = Math.min(1, this.wobble + dt / 0.5)
     const w = this.wobble < 1 ? Math.sin(this.wobble * Math.PI * 4) * (1 - this.wobble) : 0
     this.root.rotation.z = w * 0.1
-    this.milk.scale.y = this.level * 0.26
+    // (Chocolate milk, all stirred: the level is how much of it is left.)
+    this.drink.milk = this.level * 0.8
+    this.drink.choc = this.level * 0.4
+    pourInto(this.glass, this.drink)
   }
 }
 

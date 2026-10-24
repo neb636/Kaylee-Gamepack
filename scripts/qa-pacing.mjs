@@ -94,6 +94,7 @@ const SCENARIOS = [
   { name: 'thailand trip: window seat, takeoff', id: 'trip-plane', hash: '#/world/thailand/boat-trip/takeoff', reset: true },
   { name: 'thailand trip: window seat, up in the sky', id: 'trip-fly', hash: '#/world/thailand/boat-trip/fly', reset: true },
   { name: 'thailand trip: landing and krabi', id: 'trip-land', hash: '#/world/thailand/boat-trip/land', reset: true },
+  { name: 'thailand baan chang: her chocolate milk at the cafe', id: 'chang-drinks', hash: '#/world/thailand/boat-trip/drinks', reset: true },
   { name: 'thailand baan chang: feeding mali and khanom', id: 'chang-feed', hash: '#/world/thailand/boat-trip/feed', reset: true },
   { name: 'thailand baan chang: favorites', id: 'chang-favorites', hash: '#/world/thailand/boat-trip/favorites', reset: true },
   { name: 'thailand baan chang: lamyai and the sneaky sips', id: 'chang-lamyai', hash: '#/world/thailand/boat-trip/lamyai', reset: true },
