@@ -53,6 +53,8 @@ export class Elephant {
   private yaw = 0
   private pitch = 0
   private phase: number
+  /** Where the ears are in their fan (advanced each frame, so a change of speed never jumps). */
+  private earPhase = 0
 
   constructor(
     bag: Bag,
@@ -214,9 +216,11 @@ export class Elephant {
     this.body.scale.set(1 + breathe - b * 0.05, 1 - breathe + b * 0.1, 1 + breathe)
     const round = 0.82 + Math.min(this.full, 10) * 0.035
     this.belly.scale.setScalar(round)
-    // The ears: a slow fan, faster and wider when happy.
-    this.flap = Math.max(0, this.flap - dt * 0.7)
-    const fan = Math.sin(t * (2 + this.flap * 9) + this.phase) * (0.14 + this.flap * 0.45)
+    // The ears: a slow, lazy fan, a little faster and wider when happy (and easing back down after).
+    this.flap = Math.max(0, this.flap - dt * 0.5)
+    const happy = this.flap * this.flap * (3 - 2 * this.flap)
+    this.earPhase += dt * (1.5 + happy * 3.5)
+    const fan = Math.sin(this.earPhase + this.phase) * (0.12 + happy * 0.28)
     this.ears.forEach((g, i) => (g.rotation.y = (i ? -1 : 1) * (0.2 + fan)))
     // A blink now and then.
     this.blink -= dt
