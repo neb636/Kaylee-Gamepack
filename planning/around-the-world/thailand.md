@@ -25,8 +25,8 @@ follow her finger) comes back later as a 3D activity reached from the house.
 | Bird | uncle | yes | water buffalo with curved horns, his own short spiky black hair, a black party shirt with orange and red flowers (from Dad's photo) |
 | Gan, Ken | Joy's sons, older | yes | fox cubs: Gan in a backwards cap and shorts, Ken in green round glasses; both glued to their phones (Dad) |
 | BB | Bird's daughter, older | yes | buffalo calf with pigtails and pink bows, pink dress; glued to her phone (Dad) |
-| Ja | aunt | no | penguin with a pink scarf |
-| Sri | aunt | no | hornbill (a Thai bird), lavender blouse |
+| Ja | aunt | no | penguin with her own caramel hair pulled back in a low ponytail under a long fringe swept to one side, pearl studs, a pale sage shirt with a gold pin on the collar (from Dad's photo) |
+| Sri | aunt | no | hornbill (a Thai bird) with her own brown hair to the shoulders, parted on one side and swept across, a cream blouse with little pink and yellow flowers and sheer white sleeves (from Dad's photo) |
 | Putto | Ja's son, Kaylee's age | no | penguin chick with a tuft, mint t-shirt |
 | Putter | Ja's son, younger | no | tiny grey penguin with a blue bib |
 
@@ -37,8 +37,9 @@ turntable) shows them all.
 
 **Looking like themselves (2026-10-24).** Dad wants each animal to look a little like the real person (not realistic,
 just enough for Kaylee to spot who's who). From his photos (kept outside this repo): their hair, a face detail and the
-clothes they really wear go on their animal (`Look.hairdo`, `smile`, `outfit.lace` / `outfit.print`, `cheeks`). Joy and Bird first (PR for Dad to check on the iPad); if he likes them, the rest of the family next, one look
-each, from the same photos.
+clothes they really wear go on their animal (`Look.hairdo`, `smile`, `outfit.lace` / `outfit.print` / `sleeves` /
+`pin`, `cheeks`, the `pearls` extra). Done: Joy and Bird (PR #152), Ja and Sri (a hornbill has no smile to give, so her
+hair and her flowery blouse carry it). Next, when Dad asks: Agong, Jum and Dad, one look each, from the same photos.
 
 Open questions for Dad: Does Sparkle keep guiding here (2D, in the prompt bubble as everywhere
 else), or does a family member (Mom, Agong) give the instructions? What is each person like (for their voices)?

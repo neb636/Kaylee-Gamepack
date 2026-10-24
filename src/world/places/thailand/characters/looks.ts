@@ -10,7 +10,7 @@ export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
  *  headband, the mongkhon): Avatar.wear. */
 export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties' | 'scrubs' | 'scrub-cap' | 'apron' | 'chef-hat' | 'smock' | 'gloves' | 'mongkhon'
 export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasses', 'floaties', 'scrubs', 'scrub-cap', 'apron', 'chef-hat', 'smock', 'gloves', 'mongkhon']
-export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Wearable
+export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | 'pearls' | Wearable
 
 export interface Look {
   species: Species
@@ -36,12 +36,18 @@ export interface Look {
     shorts?: string
     /** A scalloped lace collar in this color and a pleated front (Joy's white blouse). */
     lace?: string
-    /** Flowers printed all over, in these colors, with green leaves and an open camp collar (Bird's party shirt). */
+    /** Flowers printed all over, in these colors, with green leaves: on a shirt with an open camp collar (Bird's party
+     *  shirt), or on a blouse with a round neck (Sri's). */
     print?: string[]
+    /** Puffy sleeves in another color (Sri's sheer white ones). */
+    sleeves?: string
+    /** A little round pin in this color on the collar (Ja's gold one). */
+    pin?: string
   }
   /** The real person's hair on their animal (Dad's photos, 2026-10-24), so Kaylee knows who's who: a straight cut to the
-   *  shoulders parted in the middle (Joy), or short thick hair that sticks up in spikes (Bird). */
-  hairdo?: { style: 'bob' | 'spiky'; color: string }
+   *  shoulders parted in the middle (Joy) or on one side and swept across (Sri), short thick hair that sticks up in
+   *  spikes (Bird), or pulled back in a low ponytail under a long fringe swept to one side (Ja). */
+  hairdo?: { style: 'bob' | 'side' | 'spiky' | 'ponytail'; color: string }
   /** A big smile showing the top teeth (Joy): it stretches when they talk. */
   smile?: 'teeth'
   /** A fox's cheeks as flatter, smaller mounds on the face, this big (Joy 0.8); without it, the usual round fluffy ones. */
@@ -71,10 +77,13 @@ export const LOOKS: Record<string, Look> = {
   ken: { ...FOX, height: 1.25, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['round-glasses', 'phone'] },
   bird: { ...BUFFALO, height: 1.65, outfit: { kind: 'shirt', color: '#3A3346', print: ['#FF8A3D', '#FF5A6E', '#FFC845'] }, hairdo: { style: 'spiky', color: '#2F2A3A' } },
   bb: { ...BUFFALO, height: 1.2, outfit: { kind: 'dress', color: '#FF8FB8' }, extras: ['pigtails', 'phone'], lashes: true },
-  ja: { ...PENGUIN, height: 1.45, extras: ['scarf'], lashes: true, open: true },
+  // Ja and Sri too (the same day): Ja's caramel hair pulled back under a long fringe swept to one side, pearl studs and
+  // her pale sage satin shirt with a gold pin on the collar; Sri's brown hair to her shoulders, parted on one side and
+  // swept across her forehead, and her cream blouse with little pink and yellow flowers and sheer white sleeves.
+  ja: { ...PENGUIN, height: 1.45, outfit: { kind: 'shirt', color: '#D3E6D3', pin: '#F0B848' }, hairdo: { style: 'ponytail', color: '#B5703F' }, extras: ['pearls'], lashes: true, open: true },
   putto: { ...PENGUIN, height: 1.0, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['tuft'], open: true },
   putter: { ...PENGUIN, height: 0.78, fur: '#B9B4D6', extras: ['bib'] },
-  sri: { species: 'hornbill', height: 1.5, fur: '#4A3F4F', light: '#FFF1DC', dark: '#FFB43C', outfit: { kind: 'blouse', color: '#C9B5F7' }, lashes: true },
+  sri: { species: 'hornbill', height: 1.5, fur: '#4A3F4F', light: '#FFF1DC', dark: '#FFB43C', outfit: { kind: 'blouse', color: '#FFF3E6', print: ['#FF9CB8', '#FFD45C', '#FFB8D0'], sleeves: '#FFFFFF' }, hairdo: { style: 'side', color: '#8A5E45' }, lashes: true },
 }
 
 /** The vet's patients (they don't talk: barks, whinnies, trumpets). A golden puppy with floppy ears, a caramel plush pony
