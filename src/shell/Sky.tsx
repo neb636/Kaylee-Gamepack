@@ -169,29 +169,17 @@ export function Sky({ variant = 'full', children }: { variant?: 'full' | 'band';
   )
 }
 
-const OUTLINE = '#fff'
-/** A white outline and a lavender "3D" edge under bubbly letters (text-shadow, so Safari draws it everywhere). */
-export const bubbleText = (edge = '#c4b0ff'): string =>
-  [
-    `0 0.045em 0 ${OUTLINE}`,
-    `0.045em 0 0 ${OUTLINE}`,
-    `-0.045em 0 0 ${OUTLINE}`,
-    `0 -0.045em 0 ${OUTLINE}`,
-    `0.032em 0.032em 0 ${OUTLINE}`,
-    `-0.032em 0.032em 0 ${OUTLINE}`,
-    `0.032em -0.032em 0 ${OUTLINE}`,
-    `-0.032em -0.032em 0 ${OUTLINE}`,
-    `0 0.11em 0 ${edge}`,
-  ].join(', ')
+/** A soft white lift under the big pink titles. */
+export const TITLE_SHADOW = '0 0.05em 0 rgba(255, 255, 255, 0.8)'
 
-/** "Hi Kaylee!" in bubbly letters that drop in one by one, then bob like a wave. */
+/** "Hi Kaylee!" in big letters that drop in one by one, then bob like a wave. */
 export function HiKaylee({ fontSize, style }: { fontSize: string; style?: CSSProperties }) {
   const words = ['Hi', `${KID_NAME}!`]
   let n = 0
   return (
     <h1
       aria-label={`Hi ${KID_NAME}!`}
-      style={{ fontSize, fontWeight: 700, lineHeight: 1.05, color: 'var(--hotpink)', textShadow: bubbleText(), display: 'flex', flexWrap: 'wrap', columnGap: '0.28em', ...style }}
+      style={{ fontSize, fontWeight: 700, lineHeight: 1.05, color: 'var(--hotpink)', textShadow: TITLE_SHADOW, display: 'flex', flexWrap: 'wrap', columnGap: '0.28em', ...style }}
     >
       {words.map((w) => (
         <span key={w} aria-hidden style={{ display: 'inline-flex', whiteSpace: 'nowrap' }}>
@@ -220,17 +208,16 @@ export function HiKaylee({ fontSize, style }: { fontSize: string; style?: CSSPro
 }
 
 const PILLS = {
-  pink: { bg: 'linear-gradient(180deg, #ff8cc2 0%, #ff5aa2 55%, #f2408d 100%)', edge: '#d32f78', glow: 'rgba(211, 47, 120, 0.3)', fg: '#fff', arrow: '#ff4f9a' },
-  gold: { bg: 'linear-gradient(180deg, #fff3b4 0%, #ffdc5c 60%, #ffcb3a 100%)', edge: '#e0a227', glow: 'rgba(224, 162, 39, 0.3)', fg: 'var(--ink)', arrow: '#e0a227' },
+  pink: { bg: 'var(--hotpink)', fg: '#fff', arrow: 'var(--hotpink)' },
+  gold: { bg: 'var(--butter)', fg: 'var(--ink)', arrow: 'var(--ink)' },
 }
 
-/** The face of a glossy, chunky pill button (put it inside a button). `arrow` adds a white ▶ circle at the end. */
-export function Pill({ children, fontSize, color = 'pink', arrow = true, shine = false, style }: { children: ReactNode; fontSize: string; color?: keyof typeof PILLS; arrow?: boolean; shine?: boolean; style?: CSSProperties }) {
+/** The face of a chunky, flat pill button (put it inside a button). `arrow` adds a white ▶ circle at the end. */
+export function Pill({ children, fontSize, color = 'pink', arrow = true, style }: { children: ReactNode; fontSize: string; color?: keyof typeof PILLS; arrow?: boolean; style?: CSSProperties }) {
   const p = PILLS[color]
   return (
     <span
       style={{
-        position: 'relative',
         display: 'inline-flex',
         alignItems: 'center',
         gap: '0.45em',
@@ -242,15 +229,13 @@ export function Pill({ children, fontSize, color = 'pink', arrow = true, shine =
         fontWeight: 700,
         lineHeight: 1,
         whiteSpace: 'nowrap',
-        boxShadow: `0 0.16em 0 ${p.edge}, 0 0.32em 0.5em ${p.glow}`,
+        boxShadow: 'var(--shadow)',
         ...style,
       }}
     >
-      <span aria-hidden style={{ position: 'absolute', left: '0.7em', right: '0.7em', top: '0.12em', height: '0.42em', borderRadius: 999, background: 'linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0))' }} />
-      {shine && <span aria-hidden className="sky-shine" />}
-      <span style={{ position: 'relative', textShadow: color === 'pink' ? '0 0.05em 0 rgba(170, 20, 90, 0.25)' : undefined }}>{children}</span>
+      <span>{children}</span>
       {arrow && (
-        <span aria-hidden style={{ position: 'relative', width: '1.25em', height: '1.25em', borderRadius: '50%', background: '#fff', display: 'grid', placeItems: 'center', boxShadow: `0 0.06em 0 ${p.edge}` }}>
+        <span aria-hidden style={{ width: '1.25em', height: '1.25em', borderRadius: '50%', background: '#fff', display: 'grid', placeItems: 'center' }}>
           <svg viewBox="0 0 20 20" style={{ width: '0.55em', height: '0.55em', marginLeft: '0.08em' }}>
             <path d="M4 2.5 L17 10 L4 17.5Z" fill={p.arrow} stroke={p.arrow} strokeWidth="3" strokeLinejoin="round" />
           </svg>

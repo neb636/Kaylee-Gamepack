@@ -6,7 +6,7 @@ import { go } from '../router'
 import { Mascot, pick, say, SparklePuppet, sounds, useTrophies, type GameMeta, type PuppetHandle, type SparkleAction } from './sdk-internal'
 import { games } from './registry'
 import { subjectStyle } from './subjects'
-import { bubbleText, Cloud, HiKaylee, Pill, Sky, Star, Wave } from './Sky'
+import { Cloud, HiKaylee, Pill, Sky, Star, TITLE_SHADOW, Wave } from './Sky'
 import worldCover from '../world/assets/cover-world.webp'
 import { WORLD_LINES } from '../world/lines'
 import { totalStamps, usePassport } from '../world/stamps'
@@ -67,7 +67,7 @@ function WorldTile() {
       <Star size={18} delay={1.3} color="#fff" style={{ right: '30%', bottom: '14%' }} />
       <img src={worldCover} alt="" style={coverStyle('min(34vw, 300px, 46vh)', -3)} />
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 'clamp(10px, 1.8vw, 16px)', flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 'clamp(30px, 5.5vw, 58px)', fontWeight: 700, lineHeight: 1.05, color: 'var(--hotpink)', textShadow: bubbleText() }}>Around the World</div>
+        <div style={{ fontSize: 'clamp(30px, 5.5vw, 58px)', fontWeight: 700, lineHeight: 1.05, color: 'var(--hotpink)', textShadow: TITLE_SHADOW }}>Around the World</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(6px, 1.2vw, 12px)' }}>
           {['🦘', '🐪', '🐼', '🐘'].map((a) => (
             <span
@@ -78,7 +78,7 @@ function WorldTile() {
             </span>
           ))}
         </div>
-        <Pill fontSize="clamp(24px, 3.6vw, 34px)" style={{ alignSelf: 'flex-start', marginTop: 4 }} shine>
+        <Pill fontSize="clamp(24px, 3.6vw, 34px)" style={{ alignSelf: 'flex-start', marginTop: 4 }}>
           {stamps > 0 ? `📕 ${stamps}` : 'Fly!'}
         </Pill>
       </div>
@@ -130,7 +130,7 @@ function GameCard({ meta, hero, won }: { meta: GameMeta; hero?: boolean; won: bo
         <motion.div
           animate={{ rotate: [-8, 8, -8], scale: [1, 1.08, 1] }}
           transition={{ repeat: Infinity, duration: 1.6 }}
-          style={{ position: 'absolute', top: -16, right: -8, background: 'linear-gradient(180deg, #ff8cc2, #ff4f9a)', color: '#fff', fontWeight: 700, fontSize: 22, borderRadius: 999, padding: '6px 16px', border: '3px solid #fff', boxShadow: '0 4px 0 #d32f78' }}
+          style={{ position: 'absolute', top: -16, right: -8, background: 'var(--hotpink)', color: '#fff', fontWeight: 700, fontSize: 22, borderRadius: 999, padding: '6px 16px', border: '3px solid #fff', boxShadow: 'var(--shadow)' }}
         >
           NEW!
         </motion.div>

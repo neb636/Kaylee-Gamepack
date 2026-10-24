@@ -97,7 +97,7 @@ export function Splash({ onStart }: { onStart: () => void }) {
         >
           {/* The face breathes, not the button: tests and QA tap it and need it to hold still. */}
           <motion.span animate={{ scale: [1, 1.04, 1] }} transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut', delay: 1.4 }} style={{ display: 'inline-block' }}>
-            <Pill fontSize={landscape ? 'clamp(26px, 6.5vh, 46px)' : 'clamp(32px, 6vw, 52px)'} shine>
+            <Pill fontSize={landscape ? 'clamp(26px, 6.5vh, 46px)' : 'clamp(32px, 6vw, 52px)'}>
               Let's play!
             </Pill>
           </motion.span>
