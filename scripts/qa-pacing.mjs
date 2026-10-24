@@ -94,6 +94,7 @@ const SCENARIOS = [
   { name: 'thailand trip: window seat, takeoff', id: 'trip-plane', hash: '#/world/thailand/boat-trip/takeoff', reset: true },
   { name: 'thailand trip: window seat, up in the sky', id: 'trip-fly', hash: '#/world/thailand/boat-trip/fly', reset: true },
   { name: 'thailand trip: landing and krabi', id: 'trip-land', hash: '#/world/thailand/boat-trip/land', reset: true },
+  { name: 'thailand baan chang: feeding mali and khanom', id: 'chang-feed', hash: '#/world/thailand/boat-trip/feed', reset: true },
   // The bay, one run per section (links with the section's path: a bare /boat-trip gets rewritten). It never "finishes"
   // (the trip goes on to the way home in a later gate), so talk per touch is total talk / taps by hand.
   { name: 'thailand bay: the pier and its ribbons', id: 'bay-pier', hash: '#/world/thailand/boat-trip/pier', reset: true },

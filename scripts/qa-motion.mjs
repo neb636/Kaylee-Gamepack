@@ -496,6 +496,36 @@ GAME_SCENARIOS.push(
   thaiBoat('boat-cave-roof', 8, 'cave', [['down', 0, 0.25, 7800]]),
 )
 
+// Baan Chang's feeding yard (3D greybox): a banana pulled out of Daddy's basket and held up on Mali's side (her trunk
+// snakes after it, curls round it and swings it to her mouth), then a stick of sugarcane held high on the right (the
+// trunks stretch up after it) and brought down to Khanom.
+GAME_SCENARIOS.push({
+  name: 'chang-trunk',
+  seconds: 7,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/boat-trip/feed`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiBoatQA?.().mode, null, { timeout: 20000 })
+    await page.waitForTimeout(1200)
+  },
+  act: async (page) => {
+    for (const [food, path] of [
+      ['banana', [[0.34, 0.5, 2600]]],
+      ['cane', [[0.7, 0.12, 1600], [0.66, 0.55, 1800]]],
+    ]) {
+      const b = await page.locator(`[data-anchor="food:${food}"]`).boundingBox()
+      if (!b) throw new Error(`no ${food} in the basket`)
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+      await page.mouse.down()
+      for (const [fx, fy, ms] of path) {
+        await page.mouse.move(vp.width * fx, vp.height * fy, { steps: 10 })
+        await page.waitForTimeout(ms)
+      }
+      await page.mouse.up()
+    }
+  },
+})
+
 // The bay's stops, one scenario per verb: ribbons fluttering through the air onto the prow (then the garland, and the
 // family stepping in), the bumper-boat football (the boat pushes the ball back to the floating field: the kick, GOAL),
 // lying the family down in the canoe before the low roof, and the Nail Island pose (Kaylee strikes it, Mommy and
