@@ -7,7 +7,8 @@
 //            hear its fact; the race opens its page, the Nail Island the photo
 //   race     three boats race across the water when she taps ▶ (hers wins by a nose), then the podium: her trophy
 //   nail     the photo as a drawn card: tap 📸 (flash!), then ▶
-//   feed     Baan Chang's elephants: tap 🍌 or 🎋 and an elephant munches it (greybox)
+//   feed ... splash   Baan Chang's elephants: tap 🍌 or 🎋 and an elephant munches it (with favorites, whoever
+//            wants it), three of them with Lamyai, and in the splash a tap on one sprays water (greybox)
 //   home     Agong: tap the photo and it's his ("Beautiful! Thank you, Kaylee!"), the cousins look up, then the stamp
 // Sparkle stands above each page (not the packing page, which needs the room) and waves as it turns; tap her to hop.
 // Every section link lands on its page. Voices are the trip's own clips (lines.ts).
@@ -62,7 +63,7 @@ export function Flat({ section, packed, onPacked, onSection, onDone }: Props) {
     if (section === 'pack') return <Pack packed={packed} onPacked={onPacked} onClose={() => go('goodbye')} />
     if (section === 'nail') return <Photo onNext={() => go('sunset')} />
     if (section === 'home') return <Home onDone={onDone} />
-    if (section === 'feed') return <Feed />
+    if (section === 'feed' || section === 'favorites' || section === 'lamyai' || section === 'splash') return <Feed key={section} section={section} />
     if (section === 'race') return <RaceDay onWin={() => onSection('podium')} />
     if (section === 'podium') return <PodiumPage onNext={() => go('bay')} />
     const leg = LEGS[section]
@@ -162,14 +163,23 @@ function Pack({ packed, onPacked, onClose }: { packed: string[]; onPacked: (ids:
   )
 }
 
-/** Baan Chang's yard: tap a food and it flies to an elephant, who munches it and gets a little rounder. */
-function Feed() {
-  const [full, setFull] = useState([0, 0])
+/** Baan Chang's yard: tap a food and it flies to an elephant, who munches it and gets a little rounder. With
+ *  favorites, each wants one food (shown over its head) and gets it; with Lamyai there are three; in the splash, tap an
+ *  elephant and it sprays water under a rainbow. */
+const ELEPHANT_NAMES = ['Mali the elephant', 'Khanom the baby elephant', 'Lamyai the elephant']
+const SIZES = [1, 0.62, 0.8]
+function Feed({ section }: { section: BoatSection }) {
+  const three = section === 'lamyai' || section === 'splash'
+  const herd = three ? [0, 1, 2] : [0, 1]
+  const [full, setFull] = useState([0, 0, 0])
+  const [wants, setWants] = useState<(string | null)[]>(() => (section === 'favorites' ? ['🎋', '🍌', null] : section === 'lamyai' ? ['🍌', '🎋', '🍌'] : [null, null, null]))
   const [bite, setBite] = useState<{ who: number; food: string; key: number } | null>(null)
+  const [spray, setSpray] = useState<{ who: number; key: number } | null>(null)
   const give = (food: string) => {
     if (bite) return
-    // The one who has eaten less gets it (the little one, if it's a tie).
-    const who = full[1] <= full[0] ? 1 : 0
+    // Whoever wants it gets it; otherwise the one who has eaten least (the little one, if it's a tie).
+    const wanting = herd.find((i) => wants[i] === food)
+    const who = wanting ?? [...herd].sort((a, b) => full[a] - full[b] || (a === 1 ? -1 : 1))[0]
     sounds.pop()
     setBite({ who, food, key: performance.now() })
     setTimeout(() => {
@@ -178,42 +188,70 @@ function Feed() {
       if (who === 1) sfx.squeal()
       else sfx.rumble()
       setFull((f) => f.map((n, i) => (i === who ? n + 1 : n)))
+      // A wish come true: a new one (the other food) a moment later.
+      if (wants[who] === food) {
+        sounds.correct()
+        setWants((w) => w.map((x, i) => (i === who ? (food === '🍌' ? '🎋' : '🍌') : x)))
+      }
       setBite(null)
     }, 600)
   }
+  const squirt = (i: number) => {
+    if (section !== 'splash') return i === 1 ? sfx.squeal() : sfx.trumpet()
+    sfx.splash()
+    setSpray({ who: i, key: performance.now() })
+  }
   return (
     <>
-      <div style={{ ...card, background: 'linear-gradient(#BFE6FF 55%, #CFCAD8 55%)', width: 'min(640px, 100%)', padding: 'clamp(16px, 4vmin, 40px) 16px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: 'clamp(16px, 5vw, 48px)', position: 'relative' }}>
-        {[0, 1].map((i) => (
-          <motion.button
-            key={i}
-            aria-label={i ? 'Khanom the baby elephant' : 'Mali the elephant'}
-            animate={{ scale: (i ? 0.62 : 1) * (1 + Math.min(full[i], 10) * 0.03), y: bite?.who === i ? [0, -10, 0] : 0 }}
-            transition={{ duration: 0.4 }}
-            onClick={() => (i ? sfx.squeal() : sfx.trumpet())}
-            style={{ background: 'none', border: 'none', padding: 0, fontSize: 'clamp(90px, 20vmin, 170px)', lineHeight: 1, transform: 'scaleX(-1)' }}
-          >
-            🐘
-          </motion.button>
+      <div style={{ ...card, background: 'linear-gradient(#BFE6FF 55%, #CFCAD8 55%)', width: 'min(640px, 100%)', padding: 'clamp(16px, 4vmin, 40px) 16px', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: 'clamp(12px, 4vw, 40px)', position: 'relative' }}>
+        {section === 'splash' && (
+          <div aria-hidden style={{ position: 'absolute', top: 8, left: 0, right: 0, textAlign: 'center', fontSize: 'clamp(50px, 10vmin, 90px)', opacity: 0.85 }}>
+            🌈
+          </div>
+        )}
+        {herd.map((i) => (
+          <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div aria-hidden style={{ height: 'clamp(40px, 7vmin, 60px)', fontSize: 'clamp(30px, 5vmin, 44px)' }}>
+              {wants[i] && section !== 'splash' ? <span style={{ background: '#fff', borderRadius: 999, padding: '2px 10px', boxShadow: 'var(--shadow)' }}>{wants[i]}</span> : null}
+            </div>
+            <motion.button
+              aria-label={ELEPHANT_NAMES[i]}
+              animate={{ scale: SIZES[i] * (1 + Math.min(full[i], 10) * 0.03), y: bite?.who === i || spray?.who === i ? [0, -10, 0] : 0 }}
+              transition={{ duration: 0.4 }}
+              onClick={() => squirt(i)}
+              style={{ background: 'none', border: 'none', padding: 0, fontSize: three ? 'clamp(70px, 15vmin, 130px)' : 'clamp(90px, 20vmin, 170px)', lineHeight: 1, position: 'relative' }}
+            >
+              🐘
+              <AnimatePresence>
+                {spray?.who === i && (
+                  <motion.span key={spray.key} aria-hidden initial={{ y: 0, opacity: 1 }} animate={{ y: -80, opacity: 0 }} transition={{ duration: 0.9 }} style={{ position: 'absolute', left: '20%', top: 0, fontSize: '0.5em' }}>
+                    💦
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          </div>
         ))}
         <AnimatePresence>
           {bite && (
-            <motion.div key={bite.key} aria-hidden initial={{ y: 120, x: 0, opacity: 1, scale: 1.2 }} animate={{ y: -40, x: bite.who ? 70 : -70, opacity: 0.2, scale: 0.6 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} style={{ position: 'absolute', bottom: 0, fontSize: 56 }}>
+            <motion.div key={bite.key} aria-hidden initial={{ y: 120, x: 0, opacity: 1, scale: 1.2 }} animate={{ y: -40, x: (bite.who - (three ? 1 : 0.5)) * 140, opacity: 0.2, scale: 0.6 }} exit={{ opacity: 0 }} transition={{ duration: 0.6 }} style={{ position: 'absolute', bottom: 0, fontSize: 56 }}>
               {bite.food}
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-      <div style={{ display: 'flex', gap: 'clamp(12px, 3vw, 28px)' }}>
-        {[
-          ['🍌', 'Banana'],
-          ['🎋', 'Sugarcane'],
-        ].map(([food, label]) => (
-          <Big key={food} label={label} onClick={() => give(food)} color="var(--butter)">
-            {food}
-          </Big>
-        ))}
-      </div>
+      {section !== 'splash' && (
+        <div style={{ display: 'flex', gap: 'clamp(12px, 3vw, 28px)' }}>
+          {[
+            ['🍌', 'Banana'],
+            ['🎋', 'Sugarcane'],
+          ].map(([food, label]) => (
+            <Big key={food} label={label} onClick={() => give(food)} color="var(--butter)">
+              {food}
+            </Big>
+          ))}
+        </div>
+      )}
     </>
   )
 }

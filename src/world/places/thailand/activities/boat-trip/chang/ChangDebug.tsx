@@ -16,10 +16,15 @@ const SLIDERS: [keyof ChangFeel & string, string, number, number, number][] = [
   ['munch', 'munch (s)', 0.3, 2.5, 0.1],
   ['lift', 'lift (px)', 0, 90, 2],
   ['glide', 'tap glide', 1, 12, 0.5],
+  ['toFavorites', 'feed → favorites', 2, 20, 1],
+  ['toSplash', 'lamyai → splash', 3, 30, 1],
+  ['sneakAfter', 'sneak after (s)', 1, 10, 0.5],
+  ['sneakRest', 'sneak rest (s)', 1, 20, 0.5],
 ]
 
 interface QA {
   stats?: Record<string, number>
+  section?: string
   fed?: number
   holding?: string | null
   trunks?: { id: string; mode: string; full: number; chasing: boolean }[]
@@ -43,7 +48,7 @@ export function ChangDebug({ changRef }: { changRef: RefObject<Chang | null> }) 
       {open && (
         <>
           <div style={{ opacity: 0.8, margin: '4px 0' }}>
-            fed {qa?.fed ?? 0} · holding {qa?.holding ?? '-'} · {qa?.trunks?.map((t) => `${t.id} ${t.mode}${t.chasing ? '→' : ''} (${t.full})`).join(' · ')}
+            {qa?.section} · fed {qa?.fed ?? 0} · holding {qa?.holding ?? '-'} · {qa?.trunks?.map((t) => `${t.id} ${t.mode}${t.chasing ? '→' : ''} (${t.full})`).join(' · ')}
           </div>
           {SLIDERS.map(([key, label, min, max, step]) => (
             <label key={key} style={row}>

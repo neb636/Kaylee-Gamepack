@@ -1,7 +1,9 @@
 // Mali and Khanom, built from toon shapes in the house's look (greybox: the final look comes at the art gate). Chibi
 // but big: a soft grey body on four legs, a belly that rounds out as they eat, a double-domed head that turns to look
 // at her food, big pink-lined ears on their own pivots (they flap when happy), eyes that blink, and the trunk
-// (trunk.ts), whose root rides under the face. Small tusks on Mali only; a tuft of hair on Khanom. Faces +z, the family.
+// (trunk.ts), whose root rides under the face. Small tusks on Mali only; a tuft of hair on Khanom; Lamyai, in between
+// in size, has pinker ears. They can walk (a heavy, swaying bob: Lamyai wandering over) and Khanom can get a chocolate
+// moustache on the tip of his trunk. Faces +z, the family.
 import { Group, Vector3 } from 'three'
 import { clamp } from '../../../../../../sdk'
 import type { Bag } from '../../../engine/dispose'
@@ -14,9 +16,10 @@ import { drawTrunk, makeTrunk, stepTrunk, type Trunk } from './trunk'
 const LOOK: Record<ElephantSpot['id'], { hide: string; dark: string; ear: string }> = {
   mali: { hide: '#B4AECD', dark: '#A19ABF', ear: '#FFB8CC' },
   khanom: { hide: '#C3BEDA', dark: '#AFA9CB', ear: '#FFAFC8' },
+  lamyai: { hide: '#BDB6D4', dark: '#A9A2C7', ear: '#FF9DC0' },
 }
 const TIP = '#FFA3C2'
-const SEGMENTS = 10
+const SEGMENTS = 9
 /** Where the trunk's root and the mouth are on the head (head space, before the elephant's scale). */
 const TRUNK_ROOT = new Vector3(0, -0.3, 0.84)
 const MOUTH = new Vector3(0, -0.7, 0.62)
@@ -31,6 +34,12 @@ export class Elephant {
   private head = new Group()
   private eyes = new Group()
   private ears: Group[]
+  /** Where it stands now (Lamyai walks), which way it faces (radians, 0 = the family) and how hard it's walking. */
+  x: number
+  z: number
+  heading = 0
+  walking = 0
+  private stache: Group
   /** Meals so far (the belly rounds out with them). */
   full = 0
   /** 0..1, decaying: how hard the ears flap (a bite, a tap). */
@@ -51,7 +60,9 @@ export class Elephant {
   ) {
     this.id = spot.id
     const c = LOOK[spot.id]
-    this.phase = spot.id === 'mali' ? 0 : 2.3
+    this.phase = { mali: 0, khanom: 2.3, lamyai: 4.1 }[spot.id]
+    this.x = spot.x
+    this.z = spot.z
     this.root.position.set(spot.x, 0, spot.z)
     this.root.scale.setScalar(spot.s)
     this.root.add(this.body)
@@ -122,6 +133,20 @@ export class Elephant {
     // The trunk lives in the world (its chain is solved in meters), its root following the face.
     const r = spot.s
     this.trunk = makeTrunk(bag, this.trunkRoot(new Vector3()), spot.trunk, SEGMENTS, 0.31 * r + 0.04, 0.09 * r + 0.05, c.hide, c.dark, TIP)
+    // A chocolate moustache on the tip (Khanom, after a sneaky sip).
+    this.stache = solid(P.sphere((0.09 * r + 0.05) * 1.3, '#7A4A2E', { scale: [1.15, 0.8, 1.15] }, 10), bag, 0)
+    this.stache.position.y = this.trunk.geo
+    this.stache.visible = false
+    this.trunk.parts[SEGMENTS - 1].add(this.stache)
+  }
+
+  /** The chocolate moustache on (or wiped off). */
+  chocolate(on: boolean) {
+    this.stache.visible = on
+  }
+  /** A happy hop of the body (a hiccup, a big trumpet). */
+  hop() {
+    this.bounce = 0
   }
 
   /** The trunk's root, under the face (world). */
@@ -160,16 +185,19 @@ export class Elephant {
 
   /** One frame: the body and head (looking at `look`, leaning toward it), then the trunk toward `target`. */
   update(dt: number, t: number, target: Vector3, chase: number, look: Vector3 | null) {
-    const s = this.spot
     // Leans a little toward food she's holding, and turns its head to it.
-    const wantLean = look ? clamp((look.x - s.x) * 0.22, -0.32, 0.32) : 0
+    const wantLean = look && !this.walking ? clamp((look.x - this.x) * 0.22, -0.32, 0.32) : 0
     this.lean += (wantLean - this.lean) * (1 - Math.exp(-dt * 2.5))
-    this.root.position.x = s.x + this.lean
+    this.root.position.set(this.x + this.lean, 0, this.z)
+    this.root.rotation.y = this.heading
+    // Walking: a heavy bob from foot to foot.
+    this.body.position.y = Math.abs(Math.sin(t * 5)) * 0.07 * this.walking
+    this.body.rotation.z = Math.sin(t * 5) * 0.035 * this.walking
     let wantYaw = 0
     let wantPitch = Math.sin(t * 0.7 + this.phase) * 0.03
     if (look) {
       this.headAt(tmp)
-      wantYaw = clamp(Math.atan2(look.x - tmp.x, look.z - tmp.z) * 0.6, -0.4, 0.4)
+      wantYaw = clamp((Math.atan2(look.x - tmp.x, look.z - tmp.z) - this.heading) * 0.6, -0.4, 0.4)
       wantPitch = clamp(-Math.atan2(look.y - tmp.y, Math.hypot(look.x - tmp.x, look.z - tmp.z)) * 0.5, -0.3, 0.25)
     }
     this.trumpeting = Math.max(0, this.trumpeting - dt)

@@ -5,7 +5,7 @@
 import { Euler, Group, Quaternion } from 'three'
 import type { Bag } from '../../../engine/dispose'
 import { merge, P, solid } from '../../../engine/geo'
-import { BOULDERS, RAIL } from './layout'
+import { BENCH, BOULDERS, MILK, RAIL, TROUGH } from './layout'
 
 const GRAVEL = '#CFCAD8'
 const GRAVEL_DARK = '#B9B3C8'
@@ -65,7 +65,24 @@ export function buildYard(bag: Bag) {
   const rail = []
   for (let x = RAIL.x0; x <= RAIL.x1 + 0.01; x += RAIL.posts) rail.push(P.cyl(0.06, 0.07, RAIL.top + 0.05, STEEL, { at: [x, (RAIL.top + 0.05) / 2, RAIL.z] }, 8), P.sphere(0.075, STEEL, { at: [x, RAIL.top + 0.05, RAIL.z] }, 8))
   for (const y of [RAIL.top, RAIL.mid]) rail.push(P.cyl(RAIL.r, RAIL.r, RAIL.x1 - RAIL.x0, STEEL, { at: [(RAIL.x0 + RAIL.x1) / 2, y, RAIL.z], rot: [0, 0, Math.PI / 2] }, 8))
+  // A flat cap on one post, where her chocolate milk stands.
+  rail.push(P.cyl(0.13, 0.11, 0.05, STEEL, { at: [MILK.x, MILK.y - 0.04, MILK.z] }, 12))
   root.add(solid(merge(rail), bag, 1.5))
+  // ---- The water trough behind the rail (the splash) ----
+  const tw = TROUGH.x1 - TROUGH.x0
+  const tx = (TROUGH.x0 + TROUGH.x1) / 2
+  root.add(
+    solid(
+      merge([
+        P.box(tw, TROUGH.h, 0.08, '#A9A3B8', { at: [tx, TROUGH.h / 2, TROUGH.z + TROUGH.w / 2] }),
+        P.box(tw, TROUGH.h, 0.08, '#A9A3B8', { at: [tx, TROUGH.h / 2, TROUGH.z - TROUGH.w / 2] }),
+        ...[TROUGH.x0, TROUGH.x1].map((x) => P.box(0.08, TROUGH.h, TROUGH.w, '#A9A3B8', { at: [x, TROUGH.h / 2, TROUGH.z] })),
+        P.box(tw, 0.04, TROUGH.w - 0.06, '#7FC8F0', { at: [tx, TROUGH.h - 0.07, TROUGH.z] }),
+      ]),
+      bag,
+      1.5,
+    ),
+  )
   // ---- The boulders, mossy on top ----
   root.add(
     solid(
@@ -87,8 +104,8 @@ export function buildYard(bag: Bag) {
     litter.push(P.box(0.9, 0.06, 0.16, i % 2 ? '#9ED07E' : '#B8DA82', { at: [x, 0.04, z], rot: [0, i * 0.7, 0] }), P.box(0.7, 0.05, 0.12, '#8CC56E', { at: [x + 0.1, 0.07, z + 0.05], rot: [0, -i * 0.5, 0] }))
   }
   litter.push(
-    P.rbox(1.5, 0.08, 0.42, 0.03, '#6FA8E8', { at: [3.9, 0.46, 2.3] }),
-    ...[-0.6, 0.6].map((dx) => P.box(0.08, 0.44, 0.36, '#4F86C8', { at: [3.9 + dx, 0.22, 2.3] })),
+    P.rbox(1.5, 0.08, 0.42, 0.03, '#6FA8E8', { at: [BENCH.x, BENCH.y - 0.04, BENCH.z] }),
+    ...[-0.6, 0.6].map((dx) => P.box(0.08, 0.44, 0.36, '#4F86C8', { at: [BENCH.x + dx, 0.22, BENCH.z] })),
   )
   root.add(solid(merge(litter), bag, 1.5))
   // ---- Wooden salas on stilts at the back, and the oil palms in their grid ----
@@ -102,7 +119,7 @@ export function buildYard(bag: Bag) {
       palms.push(...oilPalm(x, z, 5.5 + ((i + j) % 3) * 0.8, i * 0.7 + j))
     }
   // Two closer palms at the sides frame the yard.
-  palms.push(...oilPalm(-5.6, 1.2, 6.5, 0.4), ...oilPalm(5.9, 0.4, 6.8, 1.1))
+  palms.push(...oilPalm(-5.6, 1.2, 6.5, 0.4), ...oilPalm(7.4, 0.4, 6.8, 1.1))
   root.add(solid(merge(palms), bag, 2))
   return root
 }
