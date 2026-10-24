@@ -126,15 +126,6 @@ function GameCard({ meta, hero, won }: { meta: GameMeta; hero?: boolean; won: bo
           </Pill>
         )}
       </div>
-      {!won && (
-        <motion.div
-          animate={{ rotate: [-8, 8, -8], scale: [1, 1.08, 1] }}
-          transition={{ repeat: Infinity, duration: 1.6 }}
-          style={{ position: 'absolute', top: -16, right: -8, background: 'var(--hotpink)', color: '#fff', fontWeight: 700, fontSize: 22, borderRadius: 999, padding: '6px 16px', border: '3px solid #fff', boxShadow: 'var(--shadow)' }}
-        >
-          NEW!
-        </motion.div>
-      )}
       {won && <div style={{ position: 'absolute', top: -14, right: -6, fontSize: 40 }}>🏆</div>}
     </motion.button>
   )
