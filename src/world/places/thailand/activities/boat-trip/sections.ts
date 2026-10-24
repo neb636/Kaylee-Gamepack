@@ -4,8 +4,8 @@
 // window seat; then Phang Nga Bay (step 3): the pier and its ribbons, open water, the village, the cave and the hong, the
 // boat race through the rainbow gate (its own lagoon: three laps, then the podium and the trophy), the Nail Island's
 // photo and the sunset ride back; Baan Chang Cafe in Krabi (thailand/baan-chang.md, greybox: the elephants' yard so
-// far, reached only by its link); then home (step 5): the flight home, Aunty Sri's van at Agong's door,
-// the photo she picks for Agong's wall, and the stamp. `replay=1` plays it as a trip she has done before (Mommy's yes
+// far, feeding, favorites, Lamyai and the splash, reached only by its links); then home (step 5): the flight home,
+// Aunty Sri's van at Agong's door, the photo she picks for Agong's wall, and the stamp. `replay=1` plays it as a trip she has done before (Mommy's yes
 // offers 🧳 or 🚤, and the flight is shorter). Loaded at startup: keep three.js out of this file.
 import { defineSections } from '../../../../kit/sections'
 import { DEFAULT_PACKED, ITEMS } from '../../trip/packing'
@@ -30,6 +30,9 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
     { id: 'fly', name: 'Window seat: tray, snacks, the elephant below', params: ['packed', 'replay'] },
     { id: 'land', name: 'Landing in Krabi', params: ['packed', 'replay'] },
     { id: 'feed', name: 'Baan Chang: bananas and sugarcane for Mali and Khanom', params: ['packed', 'fed'] },
+    { id: 'favorites', name: "Baan Chang: everyone's favorite food", params: ['packed', 'fed'] },
+    { id: 'lamyai', name: 'Baan Chang: Lamyai wanders over; Khanom sneaks a sip', params: ['packed', 'fed'] },
+    { id: 'splash', name: 'Baan Chang: the rainbow splash', params: ['packed', 'fed'] },
     { id: 'pier', name: 'Tie ribbons on the longtail at the pier', params: ['packed', 'ribbons'] },
     { id: 'bay', name: 'Open water: where to, captain?', params: ['packed', 'ribbons', 'stops', 'found'] },
     { id: 'village', name: 'Koh Panyee: the floating football field', params: ['packed', 'ribbons', 'found'] },

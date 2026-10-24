@@ -21,6 +21,12 @@ export const CHANG_FEEL = {
   glide: 5,
   /** Seconds food lies on the gravel out of reach before Daddy pops it back in the basket. */
   ground: 1.6,
+  /** Foods in `feed` before the elephants start asking for favorites, and in `lamyai` before they're full (the splash). */
+  toFavorites: 8,
+  toSplash: 12,
+  /** Seconds of still hands before Khanom sneaks a sip of her chocolate milk, and the rest between sneaks. */
+  sneakAfter: 3,
+  sneakRest: 6,
   /** Foods in a row (within `burpWindow` seconds) before Mali burps. */
   burp: 3,
   burpWindow: 9,

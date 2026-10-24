@@ -1,7 +1,7 @@
-// Daddy's woven bamboo basket on a tree stump, and the foods in it: five bananas on the left, five sticks of
-// sugarcane on the right. The same ten foods go round and round: she pulls one out, a trunk takes it, it's eaten, and a
+// Daddy's woven bamboo basket on a tree stump, and the foods in it: four bananas on the left, four sticks of
+// sugarcane on the right. The same eight foods go round and round: she pulls one out, a trunk takes it, it's eaten, and a
 // moment later it's back in the basket (Daddy brought plenty), so the toy never runs out.
-import { Group, Vector3 } from 'three'
+import { Group, Vector3, type Object3D } from 'three'
 import type { Bag } from '../../../engine/dispose'
 import { merge, P, solid } from '../../../engine/geo'
 import { BASKET, type FoodKind } from './layout'
@@ -11,7 +11,7 @@ const WEAVE_DARK = '#C99A5E'
 const STUMP = '#B08463'
 
 /** One banana: a curved yellow arc with a brown stalk and tip. */
-function banana(bag: Bag) {
+export function banana(bag: Bag) {
   return solid(
     merge([
       P.torus(0.17, 0.05, '#FFE16B', { rot: [0, 0, -0.35] }, 1.75),
@@ -23,7 +23,7 @@ function banana(bag: Bag) {
   )
 }
 /** One stick of sugarcane: a pale green stalk with darker rings at its joints. */
-function cane(bag: Bag) {
+export function cane(bag: Bag) {
   return solid(
     merge([P.cyl(0.04, 0.042, 0.56, '#CFE07A', {}, 8), ...[-0.18, 0, 0.18].map((y) => P.cyl(0.048, 0.048, 0.035, '#8FA64A', { at: [0, y, 0] }, 8)), P.cyl(0.03, 0.03, 0.01, '#F4F0C8', { at: [0, 0.28, 0] }, 8)]),
     bag,
@@ -37,8 +37,9 @@ export interface Food {
   /** Its place in the basket (world). */
   home: Vector3
   homeRot: number
-  /** in the basket, in her hand (or gliding to a trunk), falling, on the gravel, in a trunk, eaten. */
-  state: 'basket' | 'held' | 'falling' | 'ground' | 'carried' | 'eaten'
+  /** in the basket, in her hand (or gliding to a trunk), falling, on the gravel, in a trunk, flying from one trunk to
+   *  another, eaten. */
+  state: 'basket' | 'held' | 'falling' | 'ground' | 'carried' | 'flying' | 'eaten'
   /** Seconds in this state, and its fall speed. */
   t: number
   vy: number
@@ -50,7 +51,7 @@ export class Basket {
   private body: Group
   private wobble = 1
 
-  constructor(bag: Bag, scene: Group | { add(o: Group): unknown }) {
+  constructor(bag: Bag, scene: Object3D) {
     const { x, y, z, r } = BASKET
     // The stump, and the basket on it: a tapered weave with bands round it and a rim.
     this.root.add(solid(merge([P.cyl(0.36, 0.42, y - 0.28, STUMP, { at: [x, (y - 0.28) / 2, z] }, 14), P.cyl(0.34, 0.34, 0.02, '#E8C9A0', { at: [x, y - 0.27, z] }, 14)]), bag, 2))
@@ -68,18 +69,18 @@ export class Basket {
       ),
     )
     this.root.add(this.body)
-    // Five bananas fanned on the left, five sticks of cane standing up on the right.
-    for (let i = 0; i < 5; i++) {
+    // Four bananas fanned on the left, four sticks of cane standing up on the right.
+    for (let i = 0; i < 4; i++) {
       const home = new Vector3(x - r * 0.45 + (i % 3) * 0.06 - 0.05, y + 0.04 + Math.floor(i / 3) * 0.06, z - 0.1 + (i % 3) * 0.1)
       this.add('banana', banana(bag), home, -0.4 + i * 0.2, scene)
     }
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 4; i++) {
       const home = new Vector3(x + r * 0.32 + (i % 2) * 0.12 - 0.04, y + 0.17, z - 0.14 + i * 0.07)
       this.add('cane', cane(bag), home, 0.15 - i * 0.07, scene)
     }
   }
 
-  private add(kind: FoodKind, obj: Group, home: Vector3, rot: number, scene: { add(o: Group): unknown }) {
+  private add(kind: FoodKind, obj: Group, home: Vector3, rot: number, scene: Object3D) {
     obj.position.copy(home)
     obj.rotation.set(kind === 'banana' ? 0.5 : 0, rot, kind === 'banana' ? 0 : rot)
     obj.userData.pick = `food:${kind}`

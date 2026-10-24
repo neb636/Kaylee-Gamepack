@@ -9,9 +9,10 @@
 //   pier ... sunset         Phang Nga Bay by longtail boat (bay/bay.ts and its parts): the ribbons, open water, the
 //                           village, the cave and the hong, the Nail Island photo, the sunset ride back; at the pier her
 //                           album opens and a big 🏠 takes them home
-//   feed                    Baan Chang Cafe in Krabi (chang/chang.ts, plan: thailand/baan-chang.md), greybox: the
-//                           elephants' yard, where she holds bananas and sugarcane out to Mali's and Khanom's trunks
-//                           (reached only by its link until the fork at Krabi is built)
+//   feed ... splash         Baan Chang Cafe in Krabi (chang/chang.ts, plan: thailand/baan-chang.md), greybox: the
+//                           elephants' yard, where she holds bananas and sugarcane out to the trunks; then their
+//                           favorites, Lamyai and Khanom's sneaky sips, and the rainbow splash (reached only by their
+//                           links until the fork at Krabi is built)
 //   race, podium            through the bay's rainbow gate (bay/race-gate.ts), behind a checkered flag: the boat race
 //                           in its own lagoon (race/race.ts, its screen race/RaceLayer.tsx), three laps against the
 //                           village kids and the macaque; she always wins, lifts the trophy on the podium (it goes in
