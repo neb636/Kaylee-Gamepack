@@ -7,6 +7,7 @@
 //            hear its fact; the race opens its page, the Nail Island the photo
 //   race     three boats race across the water when she taps ▶ (hers wins by a nose), then the podium: her trophy
 //   nail     the photo as a drawn card: tap 📸 (flash!), then ▶
+//   drinks   Baan Chang's cafe: tap 🥛, 🍫 and 🥄, then a straw, and the glass fills up brown; 🐘 goes on to the yard
 //   feed ... splash   Baan Chang's elephants: tap 🍌 or 🎋 and an elephant munches it (with favorites, whoever
 //            wants it), three of them with Lamyai, and in the splash a tap on one sprays water (greybox)
 //   home     Agong: tap the photo and it's his ("Beautiful! Thank you, Kaylee!"), the cousins look up, then the stamp
@@ -63,6 +64,7 @@ export function Flat({ section, packed, onPacked, onSection, onDone }: Props) {
     if (section === 'pack') return <Pack packed={packed} onPacked={onPacked} onClose={() => go('goodbye')} />
     if (section === 'nail') return <Photo onNext={() => go('sunset')} />
     if (section === 'home') return <Home onDone={onDone} />
+    if (section === 'drinks') return <Drinks onNext={() => go('feed')} />
     if (section === 'feed' || section === 'favorites' || section === 'lamyai' || section === 'splash') return <Feed key={section} section={section} />
     if (section === 'race') return <RaceDay onWin={() => onSection('podium')} />
     if (section === 'podium') return <PodiumPage onNext={() => go('bay')} />
@@ -252,6 +254,61 @@ function Feed({ section }: { section: BoatSection }) {
           ))}
         </div>
       )}
+    </>
+  )
+}
+
+function Drinks({ onNext }: { onNext: () => void }) {
+  const [milk, setMilk] = useState(0)
+  const [choc, setChoc] = useState(false)
+  const [stirred, setStirred] = useState(false)
+  const [straw, setStraw] = useState<string | null>(null)
+  const ready = milk > 0 && choc && stirred && !!straw
+  const color = !milk ? 'transparent' : choc && stirred ? '#B07850' : choc ? 'repeating-linear-gradient(160deg, #fff 0 12px, #7A4326 12px 20px)' : '#fff'
+  const tap = (f: () => void) => () => {
+    sounds.pop()
+    f()
+  }
+  return (
+    <>
+      <div style={{ ...card, background: 'linear-gradient(#BFE6FF 55%, #E9C98F 55%)', width: 'min(520px, 100%)', padding: 'clamp(16px, 4vmin, 36px)', display: 'flex', justifyContent: 'center' }}>
+        <motion.div
+          aria-label="Her chocolate milk"
+          animate={{ scale: ready ? [1, 1.06, 1] : 1 }}
+          transition={{ repeat: ready ? Infinity : 0, duration: 1.4 }}
+          style={{ position: 'relative', width: 'clamp(90px, 18vmin, 140px)', height: 'clamp(140px, 28vmin, 220px)', border: '6px solid #B9A6F5', borderTop: 'none', borderRadius: '0 0 24px 24px', background: 'rgba(228,246,255,.6)', overflow: 'visible' }}
+        >
+          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: `${Math.min(1, milk) * 92}%`, background: color, borderRadius: '0 0 18px 18px', transition: 'height .5s' }} />
+          {straw && <div style={{ position: 'absolute', left: '55%', bottom: '10%', width: 12, height: '115%', background: straw, borderRadius: 6, rotate: '12deg', transformOrigin: 'bottom' }} />}
+        </motion.div>
+      </div>
+      <div style={{ display: 'flex', gap: 'clamp(10px, 2.4vw, 22px)', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <Big label="Pour the milk" color="var(--sky)" onClick={tap(() => (sfx.splash(0.3), setMilk((m) => Math.min(1, m + 0.5))))}>
+          🥛
+        </Big>
+        <Big label="Chocolate" color="var(--peach)" disabled={!milk} onClick={tap(() => setChoc(true))}>
+          🍫
+        </Big>
+        <Big label="Stir" color="var(--lavender)" disabled={!choc} onClick={tap(() => (sfx.ding(), setStirred(true)))}>
+          🥄
+        </Big>
+      </div>
+      <div style={{ display: 'flex', gap: 'clamp(10px, 2.4vw, 22px)', alignItems: 'center' }}>
+        {(
+          [
+            ['pink', '#FF4F9A'],
+            ['purple', '#A77BE6'],
+            ['yellow', '#FFC83D'],
+          ] as const
+        ).map(([id, c]) => (
+          <button key={id} aria-label={`${id} straw`} onClick={tap(() => setStraw(c))} style={{ width: 88, height: 88, borderRadius: '50%', border: straw === c ? '6px solid var(--ink)' : '6px solid #fff', background: c, boxShadow: 'var(--shadow)' }} />
+        ))}
+        {ready && (
+          <Big label="To the elephants" color="var(--butter)" onClick={onNext}>
+            🐘
+          </Big>
+        )}
+      </div>
     </>
   )
 }

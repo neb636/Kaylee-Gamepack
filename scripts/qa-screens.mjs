@@ -717,7 +717,7 @@ const SCREENS = [
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.
   // (The house's shaders compile on the first one: it waits a little longer.)
-  ...['invite', 'pack', 'goodbye', 'airport', 'takeoff', 'fly', 'land', 'feed', 'favorites', 'lamyai', 'splash', 'pier', 'bay', 'village', 'cave', 'hong', 'nail', 'sunset'].map((to) => ({ name: `boat-trip-${to}`, hash: `#/world/thailand/boat-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : to === 'bay' ? 4600 : to === 'hong' ? 4000 : 2200 })),
+  ...['invite', 'pack', 'goodbye', 'airport', 'takeoff', 'fly', 'land', 'drinks', 'feed', 'favorites', 'lamyai', 'splash', 'pier', 'bay', 'village', 'cave', 'hong', 'nail', 'sunset'].map((to) => ({ name: `boat-trip-${to}`, hash: `#/world/thailand/boat-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : to === 'bay' ? 4600 : to === 'hong' ? 4000 : 2200 })),
   // The bay's moments: three ribbons tied at the pier (the garland glowing), the goal and the football in the boat,
   // the Nail Island pose photo, a deep link's album open (photos and stickers), and the family on the pier at sunset.
   {

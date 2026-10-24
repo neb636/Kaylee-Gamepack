@@ -7,7 +7,9 @@
 // snuffled up (or Daddy pops it back in the basket). Mali is big and slow and reaches further; Khanom is small, quick
 // and always hungry. Three bites in a row and Mali burps. Taps: an elephant trumpets, the family hop.
 //
-// The same verb deepens, one section after another (greybox 2):
+// First, at the top of the boardwalk, the cafe (`drinks`, cafe.ts, greybox 3): she pours her chocolate milk, squeezes
+// in the chocolate, stirs and picks a straw (and maybe makes Daddy an iced coffee); the 🐘 button takes them down to the
+// yard, and her glass stands on a rail post there. Then the same verb deepens, one section after another (greybox 2):
 //   feed       any food to any elephant; after a few, they start asking
 //   favorites  a picture bubble over each head: what it wants and how many (Mali's three pips, "One! Two! Three!").
 //              The wrong snack gets sniffed and passed through the air to whoever wanted it. Two rounds.
@@ -29,15 +31,16 @@ import { Stage, type AnchorSpot, type LegEvents, type Rider } from '../../../tri
 import { Basket, type Food } from './basket'
 import { Elephant } from './elephant'
 import { CHANG_FEEL } from './feel'
-import { BENCH, ELEPHANTS, FAMILY, HOLD, LAMYAI_BACK, SHOT, TROUGH, type ElephantId, type FoodKind } from './layout'
+import { Cafe } from './cafe'
+import { BENCH, ELEPHANTS, FAMILY, HOLD, LAMYAI_BACK, SHOT, STRAW_COLORS, TOOLS_WIDE, TROUGH, type ElephantId, type FoodKind, type StrawColor } from './layout'
 import { Milk, Splash, WantBubble } from './props'
 import { tipOf } from './trunk'
 import { buildYard } from './yard'
 
-export type ChangSection = 'feed' | 'favorites' | 'lamyai' | 'splash'
+export type ChangSection = 'drinks' | 'feed' | 'favorites' | 'lamyai' | 'splash'
 
 /** A link into a later section starts as if she had fed them this many already (rounder bellies). */
-const FED_BEFORE: Record<ChangSection, number> = { feed: 0, favorites: 8, lamyai: 18, splash: 30 }
+const FED_BEFORE: Record<ChangSection, number> = { drinks: 0, feed: 0, favorites: 8, lamyai: 18, splash: 30 }
 /** One spray in the splash: dip, lift, spray, rest (seconds into its cycle). */
 const DIP = 0.9
 const LIFT = 1.4
@@ -48,9 +51,20 @@ const CYCLE = 3.6
 export interface ChangEvents extends LegEvents {
   /** Another food eaten: how many so far (the address bar keeps it, so a link reproduces the bellies). */
   fed(n: number): void
+  /** She put a straw in her chocolate milk (it rides along to the yard). */
+  straw(c: StrawColor): void
+  /** Her chocolate milk is ready: the 🐘 shows (and goes once they're on their way). */
+  ready(on: boolean): void
+  /** A white flash (the cut from the cafe down to the yard). */
+  flash(): void
 }
 
+const TOOL_LABELS: Record<string, string> = { milk: 'Milk jug', choc: 'Chocolate', spoon: 'Spoon', ice: 'Ice', coffee: 'Coffee pot' }
 export const CHANG_ANCHORS: AnchorInfo[] = [
+  ...TOOLS_WIDE.map((id): AnchorInfo => ({ id: `tool:${id}`, label: TOOL_LABELS[id] ?? `${id.slice(6)} straw`, kind: 'thing' })),
+  { id: 'glass:her', label: 'Her glass', kind: 'thing' },
+  { id: 'glass:dad', label: "Daddy's glass", kind: 'thing' },
+  { id: 'bell', label: 'Bell', kind: 'thing' },
   { id: 'food:banana', label: 'Banana', kind: 'thing' },
   { id: 'food:cane', label: 'Sugarcane', kind: 'thing' },
   { id: 'milk', label: 'Chocolate milk', kind: 'thing' },
@@ -119,6 +133,10 @@ export class Chang extends Stage {
   private eaters: Eater[]
   private basket: Basket
   private milk: Milk
+  private cafe: Cafe
+  /** Everything of the yard's (hidden while she's at the cafe). */
+  private yard: Object3D[] = []
+  private straw: StrawColor
   private splash: Splash
   private riders: Record<'kaylee' | 'ji' | 'nick', Rider>
   private held: Held | null = null
@@ -148,6 +166,7 @@ export class Chang extends Stage {
     section: ChangSection,
     packed: string[],
     fed: number,
+    straw: StrawColor,
   ) {
     super(renderer, events)
     const { scene, bag } = this
@@ -155,13 +174,17 @@ export class Chang extends Stage {
     this.rig.fov = 32
     this.at = section
     this.fed = Math.max(fed, FED_BEFORE[section])
-    scene.add(buildYard(bag))
+    this.straw = straw
+    const yard = buildYard(bag)
+    scene.add(yard)
+    this.yard.push(yard)
     this.eaters = ELEPHANTS.map((spot) => {
       const e = new Elephant(bag, spot)
       e.setReach(CHANG_FEEL.reach)
       e.root.userData.pick = `ele:${spot.id}`
       const bubble = new WantBubble(bag)
       scene.add(e.root, e.trunk.root, bubble.root)
+      this.yard.push(e.root, e.trunk.root, bubble.root)
       return { e, mode: 'idle' as Mode, t: 0, food: null, sniffed: -9, chasing: false, here: true, want: null, bubble, passTo: null, from: null, sprayT: -1 }
     })
     // Lamyai waits by the sala at the back until `lamyai` (a splash link: she's at the rail already).
@@ -177,10 +200,11 @@ export class Chang extends Stage {
     round.forEach((x, i) => (x.e.full = Math.floor(this.fed / round.length) + (x.e.id === 'khanom' && i < this.fed % round.length ? 1 : 0)))
     this.basket = new Basket(bag, scene)
     scene.add(this.basket.root)
-    this.milk = new Milk(bag)
+    this.milk = new Milk(bag, straw)
     scene.add(this.milk.root)
     this.splash = new Splash(bag)
     scene.add(this.splash.root)
+    this.yard.push(this.basket.root, this.milk.root, this.splash.root)
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
     kaylee.wear(wearing(packed))
     this.riders = { kaylee, ji: members.get('ji')!, nick: members.get('nick')! }
@@ -192,7 +216,47 @@ export class Chang extends Stage {
       this.put(c, x, 0, z, 'stand', face)
     }
     if (section === 'splash') this.sitDaddy(true)
+    // The cafe at the top of the boardwalk (a drinks link always starts with an empty glass).
+    this.cafe = new Cafe(bag, {
+      camera: () => this.rig.camera,
+      size: () => ({ w: this.w, h: this.h }),
+      ndc: (x, y) => this.ndc(x, y),
+      riders: this.riders,
+      put: (id, x, z, face) => this.put(this.riders[id], x, 0, z, 'stand', face),
+      later: (ms, fn) => this.later(ms, fn),
+      ready: () => this.events.ready(true),
+      straw: (c) => {
+        this.straw = c
+        this.milk.setStraw(c)
+        this.events.straw(c)
+      },
+    }, null)
+    scene.add(this.cafe.root)
+    this.cafe.root.visible = false
     this.begin(section, true)
+  }
+
+  /** The 🐘 at the cafe: down to the elephants (a white flash; the boardwalk walk comes in greybox 4). */
+  toYard() {
+    if (this.at !== 'drinks') return
+    this.events.ready(false)
+    this.events.flash()
+    sfx.whoosh()
+    this.begin('feed')
+  }
+
+  /** At the cafe or in the yard: what shows, and where the family stand. */
+  private show(cafe: boolean) {
+    if (this.cafe.root.visible === cafe && this.yard[0].visible === !cafe) return
+    this.cafe.root.visible = cafe
+    for (const o of this.yard) o.visible = !cafe
+    if (cafe) this.cafe.enter()
+    else
+      for (const id of ['kaylee', 'ji', 'nick'] as const) {
+        const [x, z, face] = FAMILY[id]
+        this.put(this.riders[id], x, 0, z, 'stand', face)
+      }
+    this.rig.setShot(this.shot(), true)
   }
 
   private eater(id: ElephantId) {
@@ -211,7 +275,7 @@ export class Chang extends Stage {
     this.stepFed = 0
     this.moving = false
     if (!first) this.events.section(s)
-    this.milk.root.visible = s === 'lamyai' || s === 'splash'
+    this.show(s === 'drinks')
     if (s === 'favorites') {
       this.round = 1
       this.drawRound()
@@ -279,12 +343,17 @@ export class Chang extends Stage {
   // ---------------------------------------------------------------- touch
 
   protected pickRoots(): Object3D[] {
-    return [...this.basket.foods.map((f) => f.obj), ...this.eaters.map((x) => x.e.root), ...Object.values(this.riders).map((r) => r.root)]
+    if (this.at === 'drinks') return [...this.cafe.pickRoots(), ...Object.values(this.riders).map((r) => r.root)]
+    return [this.milk.root, ...this.basket.foods.map((f) => f.obj), ...this.eaters.map((x) => x.e.root), ...Object.values(this.riders).map((r) => r.root)]
   }
 
   pointerDown(x = 0, y = 0, id?: string) {
     super.pointerDown()
     const what = id ?? this.pick(x, y)
+    if (this.at === 'drinks') {
+      if (what?.startsWith('tool:')) this.touches++
+      return this.cafe.down(x, y, what)
+    }
     if (!what?.startsWith('food:') || this.held || this.at === 'splash') return
     const food = this.basket.next(what.slice(5) as FoodKind)
     if (!food) return this.basket.poke()
@@ -296,6 +365,10 @@ export class Chang extends Stage {
   }
 
   pointerMove(x: number, y: number, _dx: number, _dy: number, down: boolean) {
+    if (this.at === 'drinks') {
+      if (down) this.cafe.move(x, y)
+      return
+    }
     const h = this.held
     if (!down || !h || h.auto) return
     h.x = x
@@ -304,6 +377,7 @@ export class Chang extends Stage {
   }
 
   pointerUp() {
+    if (this.at === 'drinks') return this.cafe.up()
     const h = this.held
     if (!h || h.auto) return
     if (!h.moved) {
@@ -320,7 +394,8 @@ export class Chang extends Stage {
   }
 
   protected onTap(id: string | null) {
-    if (!id || id.startsWith('food:')) return
+    if (!id || id.startsWith('food:') || id.startsWith('tool:')) return
+    if (this.at === 'drinks' && this.cafe.tap(id)) return
     if (id === 'milk') {
       // Kaylee has a sip herself.
       this.milk.poke()
@@ -367,6 +442,15 @@ export class Chang extends Stage {
   }
 
   protected step(dt: number, t: number) {
+    if (this.at === 'drinks') {
+      this.cafe.step(dt)
+      const watch = this.cafe.watch(tmp)
+      for (const c of Object.values(this.riders)) {
+        c.lookAt(watch.x, watch.y, watch.z)
+        c.update(dt, t)
+      }
+      return
+    }
     const F = CHANG_FEEL
     const h = this.held
     // ---- The food in her hand: on the plane in front of the boulders, a little above her finger ----
@@ -750,13 +834,24 @@ export class Chang extends Stage {
 
   // ---------------------------------------------------------------- camera, anchors
 
+  setSize(w: number, h: number, top: number) {
+    this.w = w
+    this.h = h
+    this.cafe.layout(w < h)
+    if (this.at === 'drinks') this.cafe.enter()
+    super.setSize(w, h, top)
+  }
+
   protected shot(): Shot {
+    if (this.at === 'drinks') return this.cafe.shot()
     const tall = this.w < this.h
     const s = this.at === 'splash' ? (tall ? SHOT.splashTall : SHOT.splashWide) : this.at === 'lamyai' ? (tall ? SHOT.tall3 : SHOT.wide3) : tall ? SHOT.tall : SHOT.wide
     return { center: new Vector3(...s.center), half: new Vector3(...s.half), yaw: s.yaw, pitch: s.pitch, minDist: 5 }
   }
 
   protected anchorAt(id: string): AnchorSpot | null {
+    if (this.at === 'drinks') return id.startsWith('family:') ? this.familyAt(id) : this.cafe.anchorAt(id, this.time - this.lastTouch)
+    if (id.startsWith('tool:') || id.startsWith('glass:') || id === 'bell') return null
     if (id === 'food:banana' || id === 'food:cane') {
       // (Hidden while she's holding one, her finger is busy, and in the splash.)
       if (this.held || this.at === 'splash') return null
@@ -770,15 +865,17 @@ export class Chang extends Stage {
       const e = this.eater(id.slice(4) as ElephantId).e
       return { at: e.headAt(new Vector3()), r: 0.85 * e.spot.s, max: 220, prio: 1 }
     }
-    if (id.startsWith('family:')) {
-      const c = this.riders[id.slice(7) as 'ji']
-      if (!c) return null
-      return { at: c.root.getWorldPosition(new Vector3()).setY(c.root.position.y + c.height * 0.55), r: c.height * 0.3, max: 120 }
-    }
+    if (id.startsWith('family:')) return this.familyAt(id)
     return null
+  }
+  private familyAt(id: string): AnchorSpot | null {
+    const c = this.riders[id.slice(7) as 'ji']
+    if (!c) return null
+    return { at: c.root.getWorldPosition(new Vector3()).setY(c.root.position.y + c.height * 0.55), r: c.height * 0.3, max: 120 }
   }
 
   protected hintAt() {
+    if (this.at === 'drinks') return this.cafe.hintAt()
     if (this.held) return null
     if (this.at === 'splash') return this.eater('mali').e.headAt(new Vector3())
     const want = this.eaters.find((x) => x.want)?.want
@@ -806,6 +903,9 @@ export class Chang extends Stage {
       sprays: this.sprays,
       touches: this.touches,
       kaylee: (this.riders.kaylee as Avatar).wearing,
+      straw: this.straw,
+      strawColor: STRAW_COLORS[this.straw],
+      drink: this.at === 'drinks' ? this.cafe.qa() : undefined,
     }
   }
 }

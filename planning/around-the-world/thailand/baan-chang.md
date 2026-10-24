@@ -410,8 +410,8 @@ instanced, and the elephants are a few thousand triangles each.
 2. **Greybox 2, deeper and the payoff** (built 2026-10-24, see "Built so far"): `favorites` (the bubbles, Mali's
    three sugarcanes, the pass-along), `lamyai` (her walk over, three trunks, Khanom's sneaky sips with a placeholder
    glass), and `splash`.
-3. **Greybox 3, the drink:** `drinks`, the pour with the mall cafe's props; the glass rides to the yard, where Khanom
-   sips it.
+3. **Greybox 3, the drink** (built 2026-10-24, see "Built so far"): `drinks`, the pour with the mall cafe's props; the
+   glass rides to the yard, where Khanom sips it.
 4. **Greybox 4, the way in and out:**
    - `chang`, `sign` and `boardwalk`.
    - The Krabi signpost fork, `been`, the boarding pass's 🐘, the routing from the pier and from the splash, and the
@@ -501,9 +501,59 @@ section starts as if she had fed them already (`fed` at least 8, 18 or 30, for t
 - **Known small things:** on a portrait iPad, `lamyai` and `splash` show the yard small, with empty sand below. The
   wishes are drawn at random, so the deep links don't always show the same first wish.
 
-**Next:** Dad plays the four sections on the iPad (are favorites and the sneaky sips fun, is the splash a payoff?).
-Then greybox 3, the drink (`drinks`): pour the chocolate milk with the mall cafe's props, and the glass rides along to
-the yard.
+After greybox 2, Dad said to keep building.
+
+**Greybox 3, the drink (2026-10-24):** `#/world/thailand/boat-trip/drinks` (the yard's links take `?straw=pink|purple|yellow`).
+- **Where:** the cafe is part of the same `chang` world, so the boardwalk (greybox 4) can walk from it down to the
+  yard. It's an open sala at z = 40, far up behind the family's side of the yard. While she's there the yard and the
+  elephants are hidden and the camera frames the counter; the 🐘 cuts to the yard with a white flash for now.
+  `chang/cafe.ts` (the toy), `chang/drink.ts` (the glass, the straws and the tray's things), `buildCafe()` in
+  `yard.ts`, and the layout in `layout.ts`.
+- **The cafe:** a plank deck under a thatched roof, a rail along the back, and the oil palms below it. Kaylee stands
+  behind a woven bamboo counter, with a shelf of sweet jars and a fern behind her. Daddy and Mommy are at the right
+  end of the counter.
+- **The toy (one verb, four ways):**
+  - The tray along the front holds the milk jug, the chocolate squeeze bottle, a long spoon, three straws (pink,
+    purple, yellow), a bowl of ice and Daddy's coffee pot. That's one row on a wide screen and two on a tall one.
+    The tap targets are about 116-120 px on iPad and 76 px on iPhone.
+  - **Pour:** drag the jug to her glass. Near the glass it's pulled in and tips (the nearer, the more), and pours in a
+    stream, the mall cafe's way.
+  - **Squeeze:** hold the chocolate over the glass. It turns upside down and squirts brown ribbons, which swirl round
+    the milk as stripes (the mall's liquid shader).
+  - **Stir:** put the spoon in by its knob and go round and round. The bowl circles inside the glass, the ribbons spin
+    and melt into chocolate milk, and the spoon clinks.
+  - **Straw:** drop one in; another color swaps it (the old one flies back). Her straw goes in the URL.
+  - A tap on any of them does it for her.
+- **Silly, never wrong:** pouring past full makes the drink fountain up out of the glass (boing, and Kaylee and Mommy
+  laugh). Anything can go in either glass, and Daddy drinks whatever he gets.
+- **Daddy's iced coffee (optional):** ice cubes (dragged or tapped) and the coffee pot into the second glass. Once it's
+  half full and nothing has poured for a moment, he takes it to the end of the counter, slurps and says "ahh", and with
+  ice he shivers, brrr.
+- **Pokes:** the glasses ring like a xylophone (the fuller, the lower), and the bell on the counter dings (Mommy hops).
+- **Done:** once her glass has milk, chocolate, a stir and a straw, she sips it with a sparkle and a big pulsing 🐘
+  appears top right. It's never forced, so she can keep playing (Daddy's coffee, another straw). The 🐘 takes them
+  to `feed` with her straw.
+- **Guided, not forced:** after 4 s idle the next thing glows (the milk, then the chocolate, the spoon, the straws),
+  and the trip's finger points at it after 7 s. Topping up the milk after stirring brings back a few ribbons.
+- **In the yard:** her glass (the same glass and drink, her straw) now stands on the rail post from `feed` on. A tap
+  gives Kaylee a sip, and in `lamyai` Khanom sneaks to its straw as before.
+- **No WebGL:** a picture-book page with 🥛, 🍫 and 🥄, three straw buttons and a glass that fills and turns brown,
+  then 🐘 to the feeding page.
+- **QA:** `__thaiBoatQA()` adds `straw`, and in `drinks` also `drink`: both glasses (milk, choc, coffee, stir, ice,
+  straw, fill, served), `ready`, `next`, `held`, `pouring`, `fountains`, and the screen points to drag to (`pourAt`,
+  `squeezeAt`, `stirAt`, `glassAt`). `drinks` is in `qa-screens.mjs` and `qa-pacing.mjs`, and `qa-motion.mjs` has
+  `chang-pour`. A robot dragging made the drink and reached `feed?straw=purple` on iPad landscape, iPad portrait and
+  iPhone landscape. About 110 draw calls and 148k triangles at the cafe; `lamyai` with the new glass is about 200.
+- **Changed from the plan:** the cafe is a counter in the yard's world rather than the mall cafe's own stage. Its pour
+  is a copy of `shop.ts`'s pour, tuned for one glass and no blender. The 🐘 button stands in for the boardwalk until
+  greybox 4.
+- **Known small things:** a `drinks` link always starts with an empty glass, even with `straw` in it. The picture book
+  doesn't carry the straw to the URL. Daddy's served glass stays at the end of the counter.
+
+**Next:** Dad plays `drinks` on the iPad: is pouring and stirring her own chocolate milk fun, and is it short enough
+before the elephants? Then greybox 4, the way in and out: `chang`, `sign` and `boardwalk` (the walk from the cafe down
+to the yard replaces the 🐘 cut), the Krabi signpost fork, `been`, the boarding pass's 🐘, the routing from the pier and
+from the splash, and the photos and sticker in the album.
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 
