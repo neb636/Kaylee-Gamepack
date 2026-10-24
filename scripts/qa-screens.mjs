@@ -726,6 +726,9 @@ const SCREENS = [
   { name: 'nan-mushrooms-2', hash: '#/world/thailand/nan-trip/mushrooms?round=2', reset: true, wait: 3500 },
   { name: 'nan-mushrooms-3', hash: '#/world/thailand/nan-trip/mushrooms?round=3', reset: true, wait: 3500 },
   { name: 'nan-mushrooms-pizza', hash: '#/world/thailand/nan-trip/mushrooms?round=pizza&basket=grey5,pink3,gold2', reset: true, wait: 3500 },
+  // Stop Time Cafe (greybox): Sapan's dry rice steps, every paddy full and shiny (round 2: plant), the clouds sitting on
+  // the planted steps, and the café's deck after the rain.
+  ...['1', '2', '3', 'deck'].map((round) => ({ name: `nan-rice-${round}`, hash: `#/world/thailand/nan-trip/rice?round=${round}`, reset: true, wait: round === '3' ? 4000 : 3500 })),
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.

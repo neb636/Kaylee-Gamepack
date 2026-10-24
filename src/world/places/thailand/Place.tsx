@@ -4,8 +4,8 @@
 // Agong's wall and the stamp (the fiddler crab sticker, and the trip's facts to tap); the second is the mall day
 // (activities/mall-trip/, greyboxes so far, still in the works: Mommy's question, the Veloz, ICONSIAM, HarborLand's
 // hall of mini games, the pizza table, and home with the pizza box for Agong, then its stamp and the pizza slice
-// sticker); the third is the Nan road trip (activities/nan-trip/, in the works: the greyboxes of the mountain road and
-// the mushroom farm). The finale (route `party`) is the family party, coming soon.
+// sticker); the third is the Nan road trip (activities/nan-trip/, in the works: the greyboxes of the mountain road,
+// the mushroom farm and Stop Time Cafe). The finale (route `party`) is the family party, coming soon.
 import { useState } from 'react'
 import { StampEarned } from '../../kit/StampEarned'
 import { worldLink } from '../../../router'

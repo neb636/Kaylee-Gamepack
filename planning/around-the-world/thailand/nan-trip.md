@@ -453,7 +453,7 @@ activities/nan-trip/
    flat fallback. `#/world/thailand/nan-trip/drive?road=sky`. Listed under `inTheWorks`. *Built 2026-10-24 (see
    "What's built" below).*
 2. **Greybox: the mushroom farm** (`mushrooms`), with the pizza. *Built 2026-10-24 (see "What's built" below).*
-3. **Greybox: Stop Time Cafe** (`rice`).
+3. **Greybox: Stop Time Cafe** (`rice`). *Built 2026-10-24 (see "What's built" below).*
 4. **Greybox: Bo Kluea salt** (`salt`).
 5. **Greybox: Wat Phumin** (`temple`).
 6. **Greybox: the Nan map and the rental desk** (`map`, `rental`), and the `three` viewpoint.
@@ -545,12 +545,56 @@ places: the mushroom house and, 8 m along, the farm's table outside (the camera 
   gold and went to the table, the pizza took 9 mushrooms, baked and shared all 6 slices, with no errors. 110-140 draw
   calls, 150-215k triangles.
 
+**Step 3, the Stop Time Cafe greybox (2026-10-24).** `#/world/thailand/nan-trip/rice?round=1|2|3|deck`
+(`activities/nan-trip/rice/`, self-contained; it borrows the mushroom farm's `Floaters` and end card). Shapes in the toon
+look, no voices, no art. One 3D world with two places: Sapan's valley and, up on the hill to the left, the café's deck
+(the camera glides up for the end).
+- **The valley** (`layout.ts`, `valley.ts`): a green spur facing us across the valley floor, terraced in five steps that
+  curve round it like real contour terraces (13 paddies: 3, 3, 3, 2, 2 from the bottom). Each paddy has a mud floor,
+  banks, and a notch in its front bank that spills into the paddy below (the notches zigzag, so the water wanders down;
+  one middle paddy gets nothing from above and needs pouring itself). The hilltop with trees, the stream down to a
+  little pool where the long bamboo pipe starts; the valley floor with the stream, Sapan's houses on stilts, the
+  farmer's hat on a post, a water buffalo; hills round about and far mountains with cloud on the tops.
+- **Changed from the plan (the toy):** the plan's three rounds were three different verbs (pour, plant, wipe the
+  clouds). In the greybox the verb is one thing all the way through: **her finger is where the water lands.**
+  1. Pour: held anywhere on the steps, the water lands under her finger (the pipe's end swings over there). A paddy
+     fills, turns from muddy to shiny sky with white glints, then a little waterfall runs over its notch into the next,
+     all the way down to the stream. Frogs hop in, ducks paddle on the bottom step. The last dry paddies glow once 9 are
+     full. All 13 full: bells, planting time. (A robot sweep filled them in 22 s.)
+  2. Plant (the side verb): her finger drawn across a shiny paddy pushes seedlings into the mud in neat rows wherever it
+     goes (plip, plip); a tap plants a patch. Over 55% planted, the rest fill in by themselves and it's green. About two
+     strokes a paddy (27 for all 13 in the robot run).
+  3. Clouds (the pour verb again, richer): four clouds roll in and sit on the steps. Her finger takes the nearest one and
+     it rides just above her finger, raining where her finger is: the rice under it grows tall and dark green, the
+     paddies overflow and cascade, and the cloud shrinks until it puffs away (about 3 s of rain each). A tap rains a
+     little. All rained out: the sky clears, a rainbow over the valley. (Clouds also teach the trip's idea: the
+     mountains' clouds bring the rain that grows the rice.)
+  - **The deck** (`round=deck`): the camera glides up to the deck (wet dark wood, crossed-branch railing, a peaked roof,
+    the wind chime, orchids). Kaylee and Daddy on the tall stools at the railing (Dad's photo 5), the green valley and
+    the rainbow behind. Tap her pink milk and she sips (four sips, a hiccup when it's empty, tap again to refill); tap
+    Daddy's coffee and he sips, "ahh". Mommy stands at the railing with her phone (she glows once Kaylee has sipped): tap
+    her and it's three beeps, the shutter, a flash, and the photo (a real snapshot of the scene, from in front of them)
+    drops in like a print. Then the end card: 🔁 the café again, 🚙 the 3 road home.
+  - Silly instead of wrong: pour or rain on the buffalo and it has a happy bath (a wiggle, a moo, sparkles); pour on Daddy
+    and he shakes like a dog, rain on him and a pink umbrella pops open; pour on Kaylee and she giggles. Pokes: frogs
+    (hop to another paddy, croak), ducks (quack, dash), the buffalo (moo, head up), the hat (spins up off its post),
+    Sapan's houses (a rooster, chimney smoke), the café on the hill (its chime), and on the deck the chime, the cup, the
+    view, Kaylee, Daddy and Mommy (their whole bodies are tappable, not just the faces).
+- **Changed from the plan (the staging):** Kaylee and Daddy stand down in the valley by the stream (so she's in the scene
+  with her toy), not on the deck looking down: a camera on the deck has the railing across the middle of the view.
+  The deck is the payoff instead.
+- **The road leads here:** the sky road's end card has a big 🌾 that opens the café (generalized from the valley road's
+  🍄), and the café's 🚙 takes the 3 road.
+- QA: `qa-screens` (`nan-rice-1|2|3|deck`), `qa-motion` (`nan-pour`, `nan-rain`), `qa-pacing` (`nan-rice`). A robot
+  play-through in WebKit (iPad landscape, real drags) went from dry steps to the photo in about 65 s with no errors.
+
 **Not yet (later steps):** the family in the car (Daddy's "Whoa!", Mommy's lines, Sparkle's), the wipers, the
 dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero.
 
-**Next:** Dad plays the mushroom farm on the iPad (`mushrooms`, then `?round=2`, `?round=3`, `?round=pizza`). If misting
-isn't fun yet, change the toy (the spray's reach and speed, how big the clumps get, the pull to pick) before step 3.
-Then step 3, the Stop Time Cafe greybox (`rice`).
+**Next:** Dad plays Stop Time Cafe on the iPad (`rice`, then `?round=2`, `?round=3`, `?round=deck`). If pouring isn't fun
+yet, change the toy (how fast a paddy fills, how far the water wanders down, the planting brush, how long a cloud rains)
+before step 4. Then step 4, the Bo Kluea salt greybox (`salt`). Open from the greybox: the farmer and buffalo ploughing a
+step (left out), Daddy's coffee overflowing (he's down in the valley, so the pour on him became the dog shake).
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 

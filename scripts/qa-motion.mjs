@@ -1200,6 +1200,46 @@ GAME_SCENARIOS.push(
   },
 )
 
+// Stop Time Cafe (greybox): pouring, the core verb. Her finger holds the water on the top paddy (it fills, shines and
+// spills down the notches), then drags along the next steps; then in round 3 she carries a cloud over the steps and it
+// rains them green.
+const riceReady = async (page, base, round) => {
+  await page.goto(`${base}#/world/thailand/nan-trip/rice?round=${round}`)
+  await page.waitForFunction(() => window.__thaiNanQA?.().game === 'rice', null, { timeout: 30000 })
+  await page.waitForTimeout(round === '3' ? 1800 : 1200)
+}
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-pour',
+    seconds: 8,
+    setup: (page, base) => riceReady(page, base, '1'),
+    act: async (page) => {
+      const p = (await page.evaluate(() => window.__thaiNanQA())).paddies.map((x) => x.at)
+      await page.mouse.move(...p[0])
+      await page.mouse.down()
+      await page.waitForTimeout(3200)
+      for (const i of [2, 5, 6]) {
+        await page.mouse.move(...p[i], { steps: 10 })
+        await page.waitForTimeout(1200)
+      }
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'nan-rain',
+    seconds: 6,
+    setup: (page, base) => riceReady(page, base, '3'),
+    act: async (page) => {
+      const q = await page.evaluate(() => window.__thaiNanQA())
+      await page.mouse.move(...q.clouds[3].at)
+      await page.mouse.down()
+      for (const i of [10, 11, 12, 9, 8]) await page.mouse.move(...q.paddies[i].at, { steps: 14 })
+      await page.waitForTimeout(800)
+      await page.mouse.up()
+    },
+  },
+)
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {
