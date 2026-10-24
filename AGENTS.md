@@ -25,6 +25,7 @@ src/world/kit/           # shared country pieces: Stage, StoryBeat, StampEarned,
 src/sdk/                 # shared building blocks: say, sounds, puppets, drag and drop, ... (see "SDK")
 src/shell/               # the app wrapper: splash, home, trophy ceremony, trophy room
 src/games/<id>/          # the original school-paper games (just the tea party), found automatically
+src/ispy/<book>/         # I Spy books on the Home screen's I Spy shelf, found automatically (planning/ispy.md)
 planning/around-the-world/  # country plans, ACTIVITY-TEMPLATE.md, Thailand's trip plans and known issues
 art/STYLE.md             # the art style prompt; art/source/ holds full-size originals
 docs/                    # play-design.md (what makes it fun), interactions.md (which tool), sparkle.md

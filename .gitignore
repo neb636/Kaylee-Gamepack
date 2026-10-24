@@ -9,5 +9,7 @@ art/source/games/
 .env
 # Full-size generated world art is scratch space too
 art/source/world/
+# and I Spy book art
+art/source/ispy/
 # QA screenshots and reports
 qa-output/

@@ -6,6 +6,7 @@ import { Playground } from './shell/Playground'
 import { Splash } from './shell/Splash'
 import { TrophyRoom } from './shell/TrophyRoom'
 import { World } from './world/World'
+import { ISpy } from './ispy/ISpy'
 
 export default function App() {
   const route = useRoute()
@@ -21,6 +22,8 @@ export default function App() {
       return <Playground />
     case 'world':
       return <World place={route.place} activity={route.activity} section={route.section} params={route.params} />
+    case 'ispy':
+      return <ISpy book={route.book} />
     default:
       return <Home />
   }

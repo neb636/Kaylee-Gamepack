@@ -1,5 +1,6 @@
-// Writes voice-lines.json for Around the World from each lines.ts (so the spoken lines can't drift from the code).
+// Writes voice-lines.json for Around the World and I Spy from each lines.ts (so the spoken lines can't drift from the code).
 //   node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs
+import { existsSync } from 'node:fs'
 import { readdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
@@ -8,6 +9,10 @@ const root = path.resolve(import.meta.dirname, '..')
 const folders = [path.join(root, 'src/world')]
 for (const entry of await readdir(path.join(root, 'src/world/places'), { withFileTypes: true })) {
   if (entry.isDirectory()) folders.push(path.join(root, 'src/world/places', entry.name))
+}
+folders.push(path.join(root, 'src/ispy'))
+for (const entry of await readdir(path.join(root, 'src/ispy'), { withFileTypes: true })) {
+  if (entry.isDirectory() && existsSync(path.join(root, 'src/ispy', entry.name, 'lines.ts'))) folders.push(path.join(root, 'src/ispy', entry.name))
 }
 
 // A line is a plain string (Sparkle says it) or { text, voice } for another speaker from cast.json.

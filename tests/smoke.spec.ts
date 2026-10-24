@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { existsSync, readdirSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 
 // Every folder in src/games with a meta.ts + Game.tsx is a game.
 const gameIds = readdirSync('src/games', { withFileTypes: true })
@@ -120,6 +120,29 @@ for (const id of gameIds) {
     await page.reload()
     await page.getByRole('button', { name: /let's play/i }).click()
     await expect(page.getByText('KAYLEE').first()).toBeVisible()
+    expect(errors).toEqual([])
+  })
+}
+
+// I Spy: every folder in src/ispy with a meta.ts + Book.tsx is a book on the shelf.
+const bookIds = readdirSync('src/ispy', { withFileTypes: true })
+  .filter((d) => d.isDirectory() && existsSync(`src/ispy/${d.name}/meta.ts`) && existsSync(`src/ispy/${d.name}/Book.tsx`))
+  .map((d) => d.name)
+
+for (const id of bookIds) {
+  test(`I Spy book "${id}": its links land, and it awards a trophy`, async ({ page }) => {
+    const errors = trackErrors(page)
+    await start(page, '#/ispy')
+    await expect(page.getByRole('heading', { name: /I Spy/ })).toBeVisible()
+    const sections = [...readFileSync(`src/ispy/${id}/sections.ts`, 'utf8').matchAll(/\{ id: '([\w-]+)'/g)].map((m) => m[1])
+    expect(sections.length).toBeGreaterThan(0)
+    for (const section of sections) {
+      await page.goto('about:blank')
+      await start(page, `#/ispy/${id}/${section}`)
+      await expect.poll(() => page.evaluate(() => window.__kayleeSectionLog?.[0]?.id), { message: `${id}/${section}` }).toBe(section)
+    }
+    await page.evaluate(() => window.__kaylee?.win())
+    await expect(page.getByRole('heading', { name: /you did it, kaylee/i })).toBeVisible()
     expect(errors).toEqual([])
   })
 }

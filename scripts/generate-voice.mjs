@@ -5,7 +5,7 @@
 //   node scripts/generate-voice.mjs --no-verify  skip the transcription check of new clips
 //   node scripts/generate-voice.mjs --verify-all transcribe every existing clip and list ones that may say the wrong words
 //
-// Each folder (shell, every game, the world map, every country) has a voice-lines.json: plain strings are spoken by the
+// Each folder (shell, every game, the world map, every country, the I Spy shelf and every I Spy book) has a voice-lines.json: plain strings are spoken by the
 // default speaker (Sparkle); `{ "text": "...", "voice": "pip" }` picks a speaker. Speakers live in src/sdk/cast.json,
 // plus an optional cast.json in the folder. voice-map.json records each line's clip (voice/<hash>.mp3), so only lines
 // whose text, speaker or speaker settings changed are regenerated. The iPad only plays the files; it never calls the API.
@@ -25,7 +25,7 @@ const PIPELINE = 2 // bump to regenerate everything after changing the audio pro
 
 // --- Find every folder with spoken lines ---------------------------------------------------------------------------
 const subfolders = async (dir) => (await readdir(path.join(root, dir), { withFileTypes: true })).filter((e) => e.isDirectory()).map((e) => path.join(root, dir, e.name))
-const folders = [path.join(root, 'src/shell'), ...(await subfolders('src/games')), path.join(root, 'src/world'), ...(await subfolders('src/world/places'))]
+const folders = [path.join(root, 'src/shell'), ...(await subfolders('src/games')), path.join(root, 'src/world'), ...(await subfolders('src/world/places')), path.join(root, 'src/ispy'), ...(await subfolders('src/ispy')).filter((f) => existsSync(path.join(f, 'voice-lines.json')))]
 
 const readJson = async (file, fallback) => {
   try {
