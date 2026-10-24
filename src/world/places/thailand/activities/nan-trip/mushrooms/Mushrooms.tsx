@@ -1,13 +1,12 @@
 // Baan Huanam Mushroom Farm's screen: the 3D farm (farm3d.ts) with its tap targets, the 👆 after a while with nothing
 // touched, and at the end (every slice shared) the end card: 🔁 the farm again, or 🚙 back on the road (up the sky road
-// to the café). Without WebGL: the flat picture version (Flat.tsx).
+// to the café). (No flat version: 3D activities don't need one any more.)
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
 import { FARM_ANCHORS, MushroomFarm } from './farm3d'
-import { MushroomsFlat } from './Flat'
 import type { Round } from './layout'
 
 interface Props {
@@ -62,9 +61,7 @@ export function Mushrooms({ round, basket, onRound, onBasket, onDrive }: Props) 
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#DCD6E8', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <MushroomsFlat key={key} round={now.current.round} basket={now.current.basket} onRound={onRound} onBasket={onBasket} onDone={() => setDone(true)} />
-      ) : (
+      {mode !== 'flat' && (
         <View3D
           key={key}
           name="The mushroom farm"

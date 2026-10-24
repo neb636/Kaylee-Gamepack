@@ -538,9 +538,8 @@ places: the mushroom house and, 8 m along, the farm's table outside (the camera 
   plate, Kaylee, Mommy, Daddy, twice round; a tap on a plate or a face munches it (crumbs). All six shared: the end card
   (🔁 the farm again, 🚙 back on the road: the sky road, up to the café).
 - **The road leads here:** the valley road's end card has a big 🍄 that opens the farm.
-- **Flat fallback** (`Flat.tsx`, `?gl=off`): the rack as 12 bag buttons (hold or drag to mist, tap a grown one to pick),
-  the basket, then the pizza: tap the basket or the pizza to put mushrooms on, 🔥 to bake, taps hand out the slices.
-- QA: `qa-screens` (`nan-mushrooms-1|2|3|pizza|flat|pizza-flat`), `qa-motion` (`nan-mist`, `nan-pick`), `qa-pacing`
+- No flat version (3D activities don't need one since #159).
+- QA: `qa-screens` (`nan-mushrooms-1|2|3|pizza`), `qa-motion` (`nan-mist`, `nan-pick`), `qa-pacing`
   (`nan-mushrooms`, `nan-mushroom-pizza`). Played in headless Chromium with software WebGL (WebKit couldn't be
   downloaded in this session): misting the rack grew all 12, round 2 picked by drag and by tap, round 3 grew pink and
   gold and went to the table, the pizza took 9 mushrooms, baked and shared all 6 slices, with no errors. 110-140 draw
