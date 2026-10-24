@@ -449,7 +449,8 @@ activities/nan-trip/
 0. **This plan.** *Written 2026-10-24.*
 1. **Greybox: the mountain road** (the headline, and the riskiest). The road kit, a box Pajero, finger steering, the
    chase camera, the roads `valley`, `sky` and `three` (and `city`), the horn, a buffalo, a songthaew, the cloud, the
-   flat fallback. `#/world/thailand/nan-trip/drive?road=sky`. Listed under `inTheWorks`.
+   flat fallback. `#/world/thailand/nan-trip/drive?road=sky`. Listed under `inTheWorks`. *Built 2026-10-24 (see
+   "What's built" below).*
 2. **Greybox: the mushroom farm** (`mushrooms`), with the pizza.
 3. **Greybox: Stop Time Cafe** (`rice`).
 4. **Greybox: Bo Kluea salt** (`salt`).
@@ -460,6 +461,53 @@ activities/nan-trip/
 8. **The look:** the Pajero, the landmarks, the mural walls, rain and cloud.
 9. **Voices and QA.**
 10. **Into the game:** from `inTheWorks` to `activities`.
+
+## What's built
+
+**Step 1, the mountain road greybox (2026-10-24).** `#/world/thailand/nan-trip/drive?road=city|valley|sky|three`
+(the only section so far; `nan-trip` is in `meta.ts` `inTheWorks`). Shapes in the toon look, no voices, no art.
+- **The road kit** (`trip/road/`, reusable for any later drive): `road.ts` (an open centripetal Catmull-Rom road
+  through `[x, z, y]` points, 1 m samples, `spotAt`/`locate`/`bendAhead`, pure), `build.ts` (one height field
+  for the hills: the road's own heights spread over the land plus noise hills that grow away from it, so the ground
+  always meets the road; the ribbon with white edges, a dashed yellow middle and dirt verges; guard rails wherever the
+  ground drops beside it; chevron signs on the outside of sharp bends; round convex mirrors; trees; far mountains; a
+  river and bridge), `traffic.ts` (oncoming songthaews, scooters, tuk-tuks and the blind bend's car, a buffalo that
+  ambles across, chickens that flap off, a monkey on the rail), `clouds.ts` (a cloud layer and puffs).
+- **The box Pajero** (`trip/vehicles/pajero.ts`): silver, tall, big wheels, headlights and soft beams for the cloud;
+  root > tilt (the slope) > body (leans out on bends, squats when it brakes, bounces, squashes on a boing).
+- **The drive** (`activities/nan-trip/drive/`): `roads.ts` (the four roads as data), `mountain.ts` (the world),
+  `Drive.tsx` (the screen), `Flat.tsx` (no WebGL: the road from above, Mommy drives, a held finger goes faster),
+  `landmarks.ts`, `sounds.ts`.
+  - Steering: her finger anywhere on the road ahead picks where across it the Pajero goes. It reads the road as it
+    looks on screen (the stretch of road under her finger, then how far across), not a flat plane, so it works while
+    the road climbs and turns. Let go and Mommy keeps the left lane. A little past the edge is allowed: the edge boings
+    the car back like a pinball bumper (sparkles, a wobble). It always rolls forward; it can't leave the road.
+  - Mommy's foot: slower into the bends, slower in the cloud, a stop for the buffalo, easing into the stop at the end.
+  - Keep left: an oncoming driver with her over the middle line pulls onto the verge, stops and toots a tune, and Mommy
+    eases her back to the left.
+  - The steering wheel (bottom right) turns with the car; the whole wheel is the horn (the Pajero is too). A beep gets
+    answers: the blind bend's car beeps back (its mirror flashes pink and the wheel pulses until she beeps; if she
+    doesn't, it beeps first), the buffalo moos and hurries, chickens scatter.
+  - `city` 272 m (tuk-tuks, the bridge over the Nan River, the market, Wat Phumin), `valley` 533 m (paddies, chickens,
+    a songthaew, a scooter, the buffalo crossing, the mushroom house), `sky` ~590 m (switchbacks climbing 92 m: rain,
+    blind bends with mirrors, a waterfall, a monkey, into the cloud at 38 m with the headlights on, out above it at
+    62 m into blue sky, Stop Time Cafe's deck at the top), `three` 471 m (downhill hairpins drawn as a 3: a giant 1, 2,
+    3 as she rounds each bend; at the lay-by the camera lifts over the hill and a pink crayon line draws the 3 along the
+    road, counting again).
+  - At the end of each road the Pajero pulls in by its stop, the camera turns to look (or lifts, for the 3), and the
+    end card offers 🔁 this road again or the other three (there's no map yet).
+  - 👆 on the road ahead if she hasn't steered by 2.5 s, or after 8 s without touching.
+- QA: `qa-screens` (`nan-drive-*`), `qa-motion` (`nan-steer`), `qa-pacing` (`nan-valley`, `nan-sky`, `nan-three`).
+  A robot drive in WebKit (iPad landscape, a finger swaying across the road ahead, letting go now and then) reached the
+  end card on every road with no errors: city 35 s, valley 73 s (the buffalo crossed, the songthaew and the scooter
+  pulled over), the 3 road 65 s (all three bends counted, the 3 drawn), the sky road ~100 s before it was shortened and
+  sped up (both blind-bend cars beeped back). 22-41 draw calls, 115-190k triangles.
+
+**Not yet (later steps):** the family in the car (Daddy's "Whoa!", Mommy's lines, Sparkle's), the wipers, the
+dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero.
+
+**Next:** Dad drives the four roads on the iPad. If steering isn't fun yet, change the toy (the camera, how the finger
+maps, the speed) before step 2. Then step 2, the mushroom farm greybox.
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 
