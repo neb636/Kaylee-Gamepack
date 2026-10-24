@@ -127,7 +127,7 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
   (the house, the bay) with its DOM tap targets (`Anchors.tsx`); `water.ts` and `particles.ts` (foam, spray) came with
   the boat trip. Shader code: never name a variable `patch` or `sample` (reserved in WebGL2; the shader silently fails).
 - `activities/hub/layout.ts` is the one source of truth in meters (pure data): the build, the walk grids, the tap
-  targets and the flat fallback all read it.
+  targets all read it.
 - The tap targets are DOM buttons placed over the 3D things every frame (`Anchors.tsx`), at least 64 px. They give
   VoiceOver, tap-around and QA real buttons to find.
 - `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?gl=off` the flat house, and `?fps=N`
