@@ -472,7 +472,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       mouthAt = on(0, -0.36 * R, 0.01 * R)
       rest.push(P.torus(0.24 * R, 0.022 * R, MOUTH, { rot: [0, 0, Math.PI] }, Math.PI))
       head.push(...[-0.14, 0.04, 0.2].map((x, i) => P.sphere((0.15 - i * 0.02) * R, look.dark, { at: [x * R, headY + (0.95 - i * 0.04) * R, 0.15 * R], scale: [0.8, 1.2, 0.8] })))
-      tail.push(P.capsule(0.018 * H, 0.12 * H, look.fur, { at: [0, 0.2 * H, -0.2 * H * round[2]], rot: [-0.5, 0, 0] }))
+      // (The tail leans down and back from its root on the bottom to the tuft, so the two meet.)
+      tail.push(P.capsule(0.018 * H, 0.12 * H, look.fur, { at: [0, 0.2 * H, -0.19 * H * round[2]], rot: [0.5, 0, 0] }))
       tail.push(P.sphere(0.035 * H, look.dark, { at: [0, 0.13 * H, -0.24 * H * round[2]], scale: [1, 1.4, 1] }))
       tailRoot = [0, 0.26 * H, -0.17 * H * round[2]]
       break
@@ -591,7 +592,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
           head.push(P.cone(0.13 * R, 0.26 * R, '#FF6FAE', { at: [s * 0.9 * R, headY - 0.2 * R, 0.04 * R], rot: [0, 0, -s * Math.PI / 2] }))
         }
       }
-      tail.push(P.capsule(0.02 * H, 0.14 * H, look.fur, { at: [0, 0.18 * H, -0.19 * H], rot: [-0.6, 0, 0] }))
+      // (The tail leans down and back from its root on the back to the tuft, so the two meet.)
+      tail.push(P.capsule(0.02 * H, 0.14 * H, look.fur, { at: [0, 0.18 * H, -0.19 * H], rot: [0.6, 0, 0] }))
       tailRoot = [0, 0.26 * H, -0.15 * H]
       tail.push(P.sphere(0.04 * H, look.dark, { at: [0, 0.1 * H, -0.25 * H], scale: [1, 1.3, 1] }))
       break
@@ -635,12 +637,6 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       const rr = (e === 'glasses' ? 0.2 : 0.26) * R
       for (const s of [-1, 1]) head.push(P.torus(rr, 0.03 * R, c, { at: on(s * eyeX, eyeY, 0.06 * R), rot: turnTo(s * eyeX) }))
       head.push(P.capsule(0.025 * R, eyeX * 2 - rr * 2, c, { at: on(0, eyeY + 0.03 * R, 0.08 * R), rot: [0, 0, Math.PI / 2] }))
-    }
-    if (e === 'goatee') {
-      // A thin moustache over the smile and a little tuft on the chin.
-      const c = look.hairdo?.color ?? INK
-      for (const s of [-1, 1]) head.push(P.capsule(0.024 * R, 0.2 * R, c, { at: [s * 0.15 * R, headY - 0.45 * R, 0.955 * R], rot: [0, s * 0.3, s * 1.2] }))
-      head.push(P.sphere(0.1 * R, c, { at: [0, headY - 0.67 * R, 0.86 * R], rot: [-0.5, 0, 0], scale: [1.1, 0.85, 0.5] }))
     }
     if (e === 'moustache') for (const s of [-1, 1]) head.push(P.capsule(0.08 * R, 0.24 * R, '#F4EFF4', { at: [s * 0.18 * R, headY - 0.33 * R, 0.95 * R], rot: [0, 0, s * 1.15] }))
     if (e === 'cap') {

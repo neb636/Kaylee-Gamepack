@@ -10,7 +10,7 @@ export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
  *  headband, the mongkhon): Avatar.wear. */
 export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties' | 'scrubs' | 'scrub-cap' | 'apron' | 'chef-hat' | 'smock' | 'gloves' | 'mongkhon'
 export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasses', 'floaties', 'scrubs', 'scrub-cap', 'apron', 'chef-hat', 'smock', 'gloves', 'mongkhon']
-export type Extra = 'cane' | 'glasses' | 'moustache' | 'goatee' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Wearable
+export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Wearable
 
 export interface Look {
   species: Species
@@ -64,12 +64,12 @@ export const LOOKS: Record<string, Look> = {
   agong: { species: 'panda', height: 1.45, fur: '#FFF6EE', light: '#FFFDF8', dark: '#4A3F4F', ear: '#FFB3C7', outfit: { kind: 'shirt', color: '#FFF0DA' }, extras: ['glasses', 'moustache', 'cane'] },
   jum: { species: 'elephant', height: 1.5, chub: 1.25, fur: '#FFB3CF', light: '#FFE3EE', dark: '#F28CB3', ear: '#FF94BC', outfit: { kind: 'blouse', color: '#A7EBD0' }, lashes: true },
   // Joy and Bird look a little like themselves (Dad's photos, 2026-10-24): Joy's straight brown hair to her shoulders,
-  // parted in the middle, her big smile and her white blouse with a pink lace collar; Bird's short spiky black hair,
-  // his little goatee and his black shirt with orange and red flowers.
+  // parted in the middle, her big smile and her white blouse with a pink lace collar; Bird's short spiky black hair
+  // and his black shirt with orange and red flowers.
   joy: { ...FOX, height: 1.5, outfit: { kind: 'blouse', color: '#FFF7F3', lace: '#FF9CC0' }, hairdo: { style: 'bob', color: '#7A4636' }, smile: 'teeth', cheeks: 0.8, lashes: true },
   gan: { ...FOX, height: 1.32, outfit: { kind: 'tee', color: '#8FC9F5', shorts: '#5D7BB0' }, extras: ['cap', 'phone'] },
   ken: { ...FOX, height: 1.25, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['round-glasses', 'phone'] },
-  bird: { ...BUFFALO, height: 1.65, outfit: { kind: 'shirt', color: '#3A3346', print: ['#FF8A3D', '#FF5A6E', '#FFC845'] }, hairdo: { style: 'spiky', color: '#2F2A3A' }, extras: ['goatee'] },
+  bird: { ...BUFFALO, height: 1.65, outfit: { kind: 'shirt', color: '#3A3346', print: ['#FF8A3D', '#FF5A6E', '#FFC845'] }, hairdo: { style: 'spiky', color: '#2F2A3A' } },
   bb: { ...BUFFALO, height: 1.2, outfit: { kind: 'dress', color: '#FF8FB8' }, extras: ['pigtails', 'phone'], lashes: true },
   ja: { ...PENGUIN, height: 1.45, extras: ['scarf'], lashes: true, open: true },
   putto: { ...PENGUIN, height: 1.0, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['tuft'], open: true },

@@ -22,7 +22,7 @@ follow her finger) comes back later as a 3D activity reached from the house.
 | Agong (อากง) | Grandpa | yes | panda with round gold glasses, a moustache, a cream shirt and a cane |
 | Jum | aunt | yes | chubby pink elephant (Dad's change from the bunny), mint blouse |
 | Joy | aunt | yes | fox with her own straight brown hair to the shoulders, parted in the middle, a big toothy smile, a white blouse with a pink lace collar (from Dad's photo) |
-| Bird | uncle | yes | water buffalo with curved horns, his own short spiky black hair, a thin moustache and goatee, a black party shirt with orange and red flowers (from Dad's photo) |
+| Bird | uncle | yes | water buffalo with curved horns, his own short spiky black hair, a black party shirt with orange and red flowers (from Dad's photo) |
 | Gan, Ken | Joy's sons, older | yes | fox cubs: Gan in a backwards cap and shorts, Ken in green round glasses; both glued to their phones (Dad) |
 | BB | Bird's daughter, older | yes | buffalo calf with pigtails and pink bows, pink dress; glued to her phone (Dad) |
 | Ja | aunt | no | penguin with a pink scarf |
@@ -37,8 +37,7 @@ turntable) shows them all.
 
 **Looking like themselves (2026-10-24).** Dad wants each animal to look a little like the real person (not realistic,
 just enough for Kaylee to spot who's who). From his photos (kept outside this repo): their hair, a face detail and the
-clothes they really wear go on their animal (`Look.hairdo`, `smile`, `outfit.lace` / `outfit.print`, the `goatee`
-extra). Joy and Bird first (PR for Dad to check on the iPad); if he likes them, the rest of the family next, one look
+clothes they really wear go on their animal (`Look.hairdo`, `smile`, `outfit.lace` / `outfit.print`, `cheeks`). Joy and Bird first (PR for Dad to check on the iPad); if he likes them, the rest of the family next, one look
 each, from the same photos.
 
 Open questions for Dad: Does Sparkle keep guiding here (2D, in the prompt bubble as everywhere
