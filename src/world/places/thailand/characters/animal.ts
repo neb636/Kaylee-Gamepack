@@ -544,8 +544,16 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       for (const s of [-1, 1]) {
         head.push(P.cone(0.36 * R, 0.98 * R, look.fur, { at: [s * 0.58 * R, headY + 0.95 * R, -0.08 * R], rot: [-0.1, 0, -s * 0.38] }))
         headPlain.push(P.cone(0.2 * R, 0.6 * R, look.ear ?? look.light, { at: [s * 0.56 * R, headY + 0.88 * R, 0.06 * R], rot: [-0.1, 0, -s * 0.38] }))
-        const k = look.cheeks ?? 1
-        head.push(P.sphere(0.34 * R * k, look.light, { at: [s * (0.52 + (1 - k) * 0.15) * R, headY - 0.42 * R, (0.55 + (1 - k) * 0.25) * R] }))
+        if (look.cheeks === undefined) head.push(P.sphere(0.34 * R, look.light, { at: [s * 0.52 * R, headY - 0.42 * R, 0.55 * R] }))
+        else {
+          // Flatter cheeks: a low round mound lying on the face (turned to face out where it sits), not a ball.
+          const k = look.cheeks
+          const n: V3 = [s * 0.465, -0.429, 0.774]
+          // (On the fox's head, which is a little wider than round.)
+          const at: V3 = [s * 0.55 * R, headY - 0.42 * R, Math.sqrt(1 - 0.25 - 0.42 ** 2) * R]
+          const r = 0.3 * R * k / 0.8
+          head.push(P.sphere(r, look.light, { at: [at[0] - n[0] * 0.27 * r, at[1] - n[1] * 0.27 * r, at[2] - n[2] * 0.27 * r], rot: [0.52, s * 0.54, 0], scale: [1.15, 1, 0.45] }, 24))
+        }
       }
       head.push(P.sphere(0.3 * R, look.light, { at: [0, headY - 0.36 * R, 0.8 * R], scale: [1.1, 0.8, 0.8] }))
       head.push(P.sphere(0.08 * R, look.dark, { at: [0, headY - 0.22 * R, 1.03 * R], scale: [1.3, 0.85, 0.9] }))
@@ -754,9 +762,10 @@ function hairdo(h: NonNullable<Look['hairdo']>, f: Frame, head: Parts) {
     for (const s of [-1, 1]) {
       head.push(P.sphere(0.95 * R, c, { at: [s * 0.13 * R, headY + 0.3 * R, -0.3 * R], scale: [1.1, 0.92, 1.15] }, 40))
       head.push(P.sphere(0.4 * R, c, { at: [s * 0.3 * R, headY + 0.68 * R, 0.58 * R], rot: [0.35, 0, s * 0.5], scale: [1.45, 0.6, 0.8] }, 24))
-      head.push(P.sphere(0.4 * R, c, { at: [s * 0.85 * R, headY + 0.3 * R, 0.15 * R], scale: [0.7, 1.1, 1.1] }, 24))
-      head.push(P.capsule(0.26 * R, 0.7 * R, c, { at: [s * 1.0 * R, headY - 0.48 * R, -0.14 * R], rot: [0.08, 0, s * 0.06], scale: [0.7, 1, 1.25] }))
-      head.push(P.sphere(0.24 * R, c, { at: [s * 1.03 * R, headY - 0.95 * R, 0.0], scale: [0.72, 0.7, 1.25] }))
+      // The temple and the panel down the side overlap, so the hair frames the face from the temple to the shoulder.
+      head.push(P.sphere(0.4 * R, c, { at: [s * 0.85 * R, headY + 0.2 * R, 0.15 * R], scale: [0.7, 1.3, 1.1] }, 24))
+      head.push(P.capsule(0.26 * R, 0.7 * R, c, { at: [s * 1.0 * R, headY - 0.48 * R, 0.0], rot: [0.08, 0, s * 0.06], scale: [0.7, 1, 1.25] }))
+      head.push(P.sphere(0.24 * R, c, { at: [s * 1.03 * R, headY - 0.95 * R, 0.1 * R], scale: [0.72, 0.7, 1.25] }))
     }
     head.push(P.sphere(R, c, { at: [0, headY - 0.25 * R, -0.32 * R], scale: [1.2, 1.25, 0.92] }, 26))
   } else {

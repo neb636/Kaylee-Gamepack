@@ -44,7 +44,7 @@ export interface Look {
   hairdo?: { style: 'bob' | 'spiky'; color: string }
   /** A big smile showing the top teeth (Joy): it stretches when they talk. */
   smile?: 'teeth'
-  /** How big a fox's fluffy cheeks are (1 = the usual; Joy's are a little smaller). */
+  /** A fox's cheeks as flatter, smaller mounds on the face, this big (Joy 0.8); without it, the usual round fluffy ones. */
   cheeks?: number
   extras?: Extra[]
   /** Lashes on the eyes. */
