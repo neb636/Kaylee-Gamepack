@@ -393,10 +393,11 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const mouth = (at: V3) => {
     mouthAt = at
     if (look.smile === 'teeth') {
-      // A wide smile: the top half flat with a row of teeth along it, the bottom round.
-      rest.push(P.sphere(0.23 * R, MOUTH, { at: [0, -0.02 * R, 0], scale: [1.35, 0.62, 0.35] }, 20))
-      rest.push(P.sphere(0.2 * R, WHITE, { at: [0, 0.045 * R, 0.04 * R], scale: [1.45, 0.3, 0.3] }, 20))
-      rest.push(P.sphere(0.085 * R, TONGUE, { at: [0, -0.11 * R, 0.045 * R], scale: [1.6, 0.45, 0.4] }))
+      // A wide smile with a row of top teeth: round shapes sunk into the muzzle, so only their fronts show and the
+      // smile hugs the face from every side.
+      rest.push(P.sphere(0.2 * R, MOUTH, { at: [0, -0.02 * R, -0.1 * R], scale: [1.2, 0.6, 0.7] }, 20))
+      rest.push(P.sphere(0.17 * R, WHITE, { at: [0, 0.035 * R, -0.07 * R], scale: [1.2, 0.3, 0.7] }, 20))
+      rest.push(P.sphere(0.08 * R, TONGUE, { at: [0, -0.08 * R, -0.03 * R], scale: [1.6, 0.5, 0.8] }))
     } else if (look.open) {
       rest.push(P.sphere(0.2 * R, MOUTH, { scale: [1.15, 0.72, 0.35] }))
       rest.push(P.sphere(0.1 * R, TONGUE, { at: [0, -0.07 * R, 0.03 * R], scale: [1.3, 0.6, 0.5] }))
@@ -543,11 +544,13 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       for (const s of [-1, 1]) {
         head.push(P.cone(0.36 * R, 0.98 * R, look.fur, { at: [s * 0.58 * R, headY + 0.95 * R, -0.08 * R], rot: [-0.1, 0, -s * 0.38] }))
         headPlain.push(P.cone(0.2 * R, 0.6 * R, look.ear ?? look.light, { at: [s * 0.56 * R, headY + 0.88 * R, 0.06 * R], rot: [-0.1, 0, -s * 0.38] }))
-        head.push(P.sphere(0.34 * R, look.light, { at: [s * 0.52 * R, headY - 0.42 * R, 0.55 * R] }))
+        const k = look.cheeks ?? 1
+        head.push(P.sphere(0.34 * R * k, look.light, { at: [s * (0.52 + (1 - k) * 0.15) * R, headY - 0.42 * R, (0.55 + (1 - k) * 0.25) * R] }))
       }
       head.push(P.sphere(0.3 * R, look.light, { at: [0, headY - 0.36 * R, 0.8 * R], scale: [1.1, 0.8, 0.8] }))
       head.push(P.sphere(0.08 * R, look.dark, { at: [0, headY - 0.22 * R, 1.03 * R], scale: [1.3, 0.85, 0.9] }))
-      mouth(mouthPoint(-0.48 * R, 1.0 * R))
+      // (A smile with teeth sits a little higher, on the front of the muzzle.)
+      mouth(look.smile === 'teeth' ? mouthPoint(-0.42 * R, 1.03 * R) : mouthPoint(-0.48 * R, 1.0 * R))
       if (!look.hairdo) head.push(...[-0.2, 0.05, 0.28].map((x, i) => P.sphere((0.24 - i * 0.03) * R, look.fur, { at: [x * R, headY + (0.82 - i * 0.06) * R, 0.48 * R] })))
       tail.push(P.sphere(0.13 * H, look.fur, { at: [0.05 * H, 0.27 * H, -0.2 * H], rot: [-0.6, 0, 0.25], scale: [0.78, 1.38, 0.78] }))
       tail.push(P.sphere(0.085 * H, look.light, { at: [0.09 * H, 0.42 * H, -0.29 * H] }))
@@ -744,16 +747,18 @@ function hairdo(h: NonNullable<Look['hairdo']>, f: Frame, head: Parts) {
   const { R, headY } = f
   const c = h.color
   if (h.style === 'bob') {
-    // Straight hair to the shoulders, parted in the middle: a cap in two halves over the top and back (the fur shows in
-    // the parting), the front swept to each side of it, a straight panel down each side past the cheeks, and the back.
+    // Straight hair to the shoulders, parted in the middle: a cap in two halves over the top (they meet in a groove
+    // above the head, the parting), the front swept to each side of it, a straight panel down each side past the
+    // cheeks, and the back. Every piece stands well off the head (never just on its surface, where the fur would
+    // flicker through).
     for (const s of [-1, 1]) {
-      head.push(P.sphere(0.9 * R, c, { at: [s * 0.16 * R, headY + 0.34 * R, -0.12 * R], scale: [1.12, 0.74, 1.12] }, 24))
-      head.push(P.sphere(0.36 * R, c, { at: [s * 0.4 * R, headY + 0.6 * R, 0.62 * R], rot: [0.3, 0, s * 0.55], scale: [1.5, 0.62, 0.8] }))
-      head.push(P.capsule(0.26 * R, 0.85 * R, c, { at: [s * 1.0 * R, headY - 0.42 * R, -0.08 * R], rot: [0.08, 0, s * 0.06], scale: [0.62, 1, 1.15] }))
-      head.push(P.sphere(0.22 * R, c, { at: [s * 1.02 * R, headY - 0.95 * R, 0.1 * R], scale: [0.65, 0.7, 1.2] }))
+      head.push(P.sphere(0.95 * R, c, { at: [s * 0.13 * R, headY + 0.3 * R, -0.3 * R], scale: [1.1, 0.92, 1.15] }, 40))
+      head.push(P.sphere(0.4 * R, c, { at: [s * 0.3 * R, headY + 0.68 * R, 0.58 * R], rot: [0.35, 0, s * 0.5], scale: [1.45, 0.6, 0.8] }, 24))
+      head.push(P.sphere(0.4 * R, c, { at: [s * 0.85 * R, headY + 0.3 * R, 0.15 * R], scale: [0.7, 1.1, 1.1] }, 24))
+      head.push(P.capsule(0.26 * R, 0.7 * R, c, { at: [s * 1.0 * R, headY - 0.48 * R, -0.14 * R], rot: [0.08, 0, s * 0.06], scale: [0.7, 1, 1.25] }))
+      head.push(P.sphere(0.24 * R, c, { at: [s * 1.03 * R, headY - 0.95 * R, 0.0], scale: [0.72, 0.7, 1.25] }))
     }
-    head.push(P.capsule(0.62 * R, 0.62 * R, c, { at: [0, headY - 0.36 * R, -0.42 * R], scale: [1.5, 1, 0.78] }))
-    head.push(P.sphere(0.9 * R, c, { at: [0, headY + 0.02 * R, -0.3 * R], scale: [1.12, 0.85, 0.8] }, 24))
+    head.push(P.sphere(R, c, { at: [0, headY - 0.25 * R, -0.32 * R], scale: [1.2, 1.25, 0.92] }, 26))
   } else {
     // Short thick hair sticking up in spikes on top (between the horns), short at the sides, a little fringe in front.
     head.push(P.sphere(0.92 * R, c, { at: [0, headY + 0.36 * R, -0.08 * R], scale: [1.05, 0.68, 1.06] }, 24))

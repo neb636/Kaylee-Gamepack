@@ -44,6 +44,8 @@ export interface Look {
   hairdo?: { style: 'bob' | 'spiky'; color: string }
   /** A big smile showing the top teeth (Joy): it stretches when they talk. */
   smile?: 'teeth'
+  /** How big a fox's fluffy cheeks are (1 = the usual; Joy's are a little smaller). */
+  cheeks?: number
   extras?: Extra[]
   /** Lashes on the eyes. */
   lashes?: boolean
@@ -64,7 +66,7 @@ export const LOOKS: Record<string, Look> = {
   // Joy and Bird look a little like themselves (Dad's photos, 2026-10-24): Joy's straight brown hair to her shoulders,
   // parted in the middle, her big smile and her white blouse with a pink lace collar; Bird's short spiky black hair,
   // his little goatee and his black shirt with orange and red flowers.
-  joy: { ...FOX, height: 1.5, outfit: { kind: 'blouse', color: '#FFF7F3', lace: '#FF9CC0' }, hairdo: { style: 'bob', color: '#7A4636' }, smile: 'teeth', lashes: true },
+  joy: { ...FOX, height: 1.5, outfit: { kind: 'blouse', color: '#FFF7F3', lace: '#FF9CC0' }, hairdo: { style: 'bob', color: '#7A4636' }, smile: 'teeth', cheeks: 0.8, lashes: true },
   gan: { ...FOX, height: 1.32, outfit: { kind: 'tee', color: '#8FC9F5', shorts: '#5D7BB0' }, extras: ['cap', 'phone'] },
   ken: { ...FOX, height: 1.25, outfit: { kind: 'tee', color: '#8FE3C8' }, extras: ['round-glasses', 'phone'] },
   bird: { ...BUFFALO, height: 1.65, outfit: { kind: 'shirt', color: '#3A3346', print: ['#FF8A3D', '#FF5A6E', '#FFC845'] }, hairdo: { style: 'spiky', color: '#2F2A3A' }, extras: ['goatee'] },
