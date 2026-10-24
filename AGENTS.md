@@ -368,6 +368,14 @@ the country's `known-issues.md` (Thailand has one) instead of growing the PR.
 - Fix-up rounds re-screenshot only the changed screens (`--routes`, `--only`); never a second full QA pass.
 - Check whether a failing spec also fails on `main` before debugging it.
 
+## Offline
+
+Deployed builds play offline: `src/offline/sw.js` (written to `dist/sw.js` with the list of every built file by
+`scripts/vite-offline.ts`) saves every file the first time the app opens online. It is **network first**: online she
+always gets the latest deploy, and the saved copies are used only when the network fails or takes over 4 s. Never make it
+cache-first. It doesn't run in `npm run dev` or test browsers (add `?sw=1` to try it on `npm run preview`). Anything
+that needs the internet (YouTube) checks `useOnline()` from the SDK and hides itself offline.
+
 ## Local commands
 
 ```

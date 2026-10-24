@@ -2,7 +2,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState, type ReactNode } from 'react'
 import { go } from '../router'
-import { Mascot, say, sounds } from '../sdk'
+import { Mascot, say, sounds, useOnline } from '../sdk'
 import balloon from './assets/balloon.webp'
 import crayons from './assets/crayon-box.webp'
 import mapArt from './assets/bg-world-map.webp'
@@ -67,6 +67,7 @@ function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number
 
 export function WorldMap() {
   const passport = usePassport()
+  const online = useOnline() // the Theater needs the internet
   const [label, setLabel] = useState<{ text: string; x: number; y: number } | null>(null)
   const [travelTo, setTravelTo] = useState<PlaceEntry | null>(null)
   const firstTime = passport.visited.length === 0
@@ -175,7 +176,7 @@ export function WorldMap() {
           <SideButton img={passportArt} label="My passport" color="var(--pink)" badge={totalStamps(passport)} onClick={() => go.world('passport')} />
           <SideButton img={crayons} label="Coloring book" color="var(--butter)" onClick={() => go.world('coloring')} />
           <SideButton icon="🧩" label="Puzzle book" color="var(--mint)" onClick={() => go.world('puzzles')} />
-          <SideButton img={theaterArt} label="Theater" color="var(--lavender)" onClick={() => go.world('theater')} />
+          {online && <SideButton img={theaterArt} label="Theater" color="var(--lavender)" onClick={() => go.world('theater')} />}
         </div>
       </div>
 

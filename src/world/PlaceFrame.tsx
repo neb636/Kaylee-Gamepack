@@ -3,7 +3,7 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react
 import posthog, { isPostHogEnabled } from '../posthog'
 import { go } from '../router'
 import { motion } from 'motion/react'
-import { Mascot, sounds, StarProgress, stopSpeaking, type GameMeta } from '../sdk'
+import { Mascot, sounds, StarProgress, stopSpeaking, useOnline, type GameMeta } from '../sdk'
 import { WinCeremony } from '../shell/WinCeremony'
 import theaterArt from './assets/theater.webp'
 import { BarPill, TopBar } from './kit/Chrome'
@@ -52,6 +52,7 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
   const query = new URLSearchParams(params).toString()
   const link: SectionLink = useMemo(() => ({ place: meta.id, activity: route, section, params }), [meta.id, route, section, query])
   const passport = usePassport()
+  const online = useOnline() // videos need the internet
   const stamps = passport.stamps[meta.id] ?? []
   const [won, setWon] = useState(false)
   const [progress, setProgressState] = useState({ done: 0, total: 0 })
@@ -142,7 +143,7 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
               onClick={() => { sounds.pop(); go.world('puzzles', meta.id) }}
               style={{ pointerEvents: 'auto', width: 'var(--btn)', height: 'var(--btn)', flexShrink: 0, borderRadius: '50%', background: 'var(--mint)', border: '4px solid #fff', fontSize: 'calc(var(--btn) * .5)', boxShadow: 'var(--shadow)' }}>🧩</motion.button>
           )}
-          {!!meta.videos?.length && (
+          {!!meta.videos?.length && online && (
             <motion.button
               aria-label="Theater"
               initial={{ scale: 0 }}
