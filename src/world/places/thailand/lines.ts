@@ -80,6 +80,12 @@ export const L = {
     ask: {
       question: ji('Kaylee, are you ready to go on a trip?'),
       later: ji('OK! Tell me when!'),
+      // Daddy on the street, when she taps him (the hub's quick way to a trip).
+      daddy: {
+        question: nick(`Ready for a trip, ${NAME}?`),
+        where: nick(`Where do you want to go, ${NAME}?`),
+        later: nick('OK! Just tap me!'),
+      },
     },
     pack: {
       start: ji('Tap your things to pack them, Kaylee!'),

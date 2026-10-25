@@ -8,7 +8,7 @@ import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { flag } from '../../engine/flags'
 import { L } from '../../lines'
-import { Ask, saidYes, TRIP_CHOICES } from '../../trip/legs/Ask'
+import { Ask, saidYes, TRIP_CHOICES, type Asker } from '../../trip/legs/Ask'
 import { WallPlugin, WALL_LINES, WALL_SLOTS, wallAnchorId } from '../../trip/wall'
 import { newestByTrip, useWallPhotos } from '../../trip/wall-photos'
 import { Debug } from './Debug'
@@ -21,7 +21,8 @@ import HUB_SECTIONS from './sections'
 // Per visit to the app: the tuk-tuk brings her the first time; after that she's back where she left off.
 let arrivedThisVisit = false
 let lastSpot: Spot = 'street'
-// Mommy asks about the trip on her own the first time Kaylee comes upstairs each visit (after that, tap Mommy).
+// Mommy asks about the trip on her own the first time Kaylee comes upstairs each visit (after that, tap Mommy). On the
+// street, tap Daddy and he asks right away: no need to go upstairs.
 let askedThisVisit = false
 
 export function Hub({ meta, stamps, openActivity }: PlaceProps) {
@@ -31,6 +32,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const [engine, setEngine] = useState(0)
   const [arriving, setArriving] = useState(initial.section === 'arrive')
   const [asking, setAsking] = useState(false)
+  const [asker, setAsker] = useState<Asker>('ji')
   const askTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   useEffect(() => () => clearTimeout(askTimer.current), [])
   const photo = initial.section === 'family'
@@ -79,10 +81,19 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     guide.current?.arrivedAt(s)
     if (s === 'upstairs' && !askedThisVisit && !photo) ask(4000)
   }
-  /** Mommy asks if she's ready to go on a trip (her room is upstairs, by the suitcase). */
-  const ask = (after: number) => {
+  // Tap Mommy and she asks after her hello; tap Daddy and he asks instead of saying hello.
+  const onGreet = (id: string) => {
+    if (photo || arriving) return false
+    if (id === 'ji') ask(1200)
+    if (id !== 'nick') return false
+    ask(250, 'nick')
+    return true
+  }
+  /** Mommy asks if she's ready to go on a trip (her room is upstairs, by the suitcase); Daddy asks on the street. */
+  const ask = (after: number, who: Asker = 'ji') => {
     askedThisVisit = true
     clearTimeout(askTimer.current)
+    setAsker(who)
     askTimer.current = setTimeout(() => setAsking(true), after)
   }
   const yes = (trip = 'boat-trip') => {
@@ -99,7 +110,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       {mode === 'flat' ? (
         <Flat spot={spot} onSpot={onSpot} photo={photo} />
       ) : (
-        <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} plugin={onWall.size ? () => new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos') : undefined} extraAnchors={wallAnchors} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet: (id) => id === 'ji' && !photo && ask(1200) }} />
+        <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} plugin={onWall.size ? () => new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos') : undefined} extraAnchors={wallAnchors} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet }} />
       )}
       {mode === 'lost' && (
         <button
@@ -170,7 +181,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
         )}
       </AnimatePresence>
       {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking} />}
-      <Ask open={asking && !arriving && mode !== 'lost'} trips={trips.length > 1 ? trips : undefined} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />
+      <Ask open={asking && !arriving && mode !== 'lost'} who={asker} trips={trips.length > 1 ? trips : undefined} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />
       {debug && <Debug houseRef={houseRef} />}
     </div>
   )

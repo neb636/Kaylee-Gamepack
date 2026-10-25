@@ -170,6 +170,18 @@
     "voice": "ji"
   },
   {
+    "text": "Ready for a trip, Kaylee?",
+    "voice": "nick"
+  },
+  {
+    "text": "Where do you want to go, Kaylee?",
+    "voice": "nick"
+  },
+  {
+    "text": "OK! Just tap me!",
+    "voice": "nick"
+  },
+  {
     "text": "Tap your things to pack them, Kaylee!",
     "voice": "ji"
   },
