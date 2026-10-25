@@ -138,10 +138,13 @@ function stick(a: V3, b: V3, r: number, c: string, seg = 6) {
   return P.cyl(r, r, len, c, { at: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2], rot: [e.x, e.y, e.z] }, seg)
 }
 
-/** The wide palm-leaf farmer's hat (a ngob): a shallow cone with woven rings, `r` across. Its middle is the crown. */
-export function ngobParts(r: number, at: V3 = [0, 0, 0]): BufferGeometry[] {
+/** The wide palm-leaf farmer's hat (a ngob): a shallow cone with woven rings, `r` across. Its middle is the crown.
+ *  Kaylee's has a pink band and a pink flower (`pink`), so she never looks like the scarecrow. */
+export function ngobParts(r: number, at: V3 = [0, 0, 0], pink = false): BufferGeometry[] {
   const h = r * 0.42
+  const band = pink ? [P.torus(r * 0.8, r * 0.05, PAL.hotpink, { at: [at[0], at[1] + h * 0.2, at[2]], rot: [Math.PI / 2, 0, 0] }), ...[0, 1, 2, 3, 4].map((k) => P.sphere(r * 0.09, k === 0 ? '#FFE27A' : PAL.pink, { at: [at[0] + (k ? Math.cos(k * 1.57) * r * 0.1 : 0) + r * 0.55, at[1] + h * 0.32, at[2] + (k ? Math.sin(k * 1.57) * r * 0.1 : 0) + r * 0.45] }, 8))] : []
   return [
+    ...band,
     P.cone(r, h, NGOB, { at: [at[0], at[1] + h / 2, at[2]] }, 28),
     P.torus(r * 0.98, r * 0.035, NGOB_DARK, { at: [at[0], at[1] + 0.01, at[2]], rot: [Math.PI / 2, 0, 0] }, Math.PI * 2),
     ...[0.38, 0.66].map((k) => P.torus(r * (1 - k) * 0.99, r * 0.02, NGOB_DARK, { at: [at[0], at[1] + h * k, at[2]], rot: [Math.PI / 2, 0, 0] })),
@@ -323,7 +326,7 @@ export function buildFarm(bag: Bag): Farm {
   }
   root.add(solid(merge(wood), bag, 2))
 
-  // ---- The scarecrow, in a pink shirt and a ngob ----
+  // ---- The scarecrow, in a blue shirt and a ngob ----
   const scare = new Group()
   scare.position.set(...SCARECROW)
   scare.userData.pick = 'scarecrow'
@@ -333,10 +336,10 @@ export function buildFarm(bag: Bag): Farm {
         P.cyl(0.045, 0.055, 1.5, WOOD_DARK, { at: [0, 0.75, 0] }, 8),
         P.cyl(0.035, 0.035, 1.15, WOOD_DARK, { at: [0, 1.14, 0], rot: [0, 0, Math.PI / 2] }, 8),
         P.cone(0.24, 0.36, STRAW, { at: [0, 0.74, 0], rot: [Math.PI, 0, 0] }, 12),
-        P.rbox(0.42, 0.42, 0.24, 0.09, PAL.pink, { at: [0, 1.05, 0] }),
-        ...[-0.1, 0.1].map((x) => P.box(0.03, 0.42, 0.245, PAL.hotpink, { at: [x, 1.05, 0] })),
-        P.box(0.425, 0.03, 0.245, PAL.hotpink, { at: [0, 1.0, 0] }),
-        ...[-1, 1].map((s) => P.cyl(0.075, 0.085, 0.42, PAL.pink, { at: [s * 0.36, 1.14, 0], rot: [0, 0, Math.PI / 2] }, 10)),
+        P.rbox(0.42, 0.42, 0.24, 0.09, '#9CC8F0', { at: [0, 1.05, 0] }),
+        ...[-0.1, 0.1].map((x) => P.box(0.03, 0.42, 0.245, '#6FA6DA', { at: [x, 1.05, 0] })),
+        P.box(0.425, 0.03, 0.245, '#6FA6DA', { at: [0, 1.0, 0] }),
+        ...[-1, 1].map((s) => P.cyl(0.075, 0.085, 0.42, '#9CC8F0', { at: [s * 0.36, 1.14, 0], rot: [0, 0, Math.PI / 2] }, 10)),
         ...[-1, 1].flatMap((s) => [0, 1, 2].map((k) => P.cone(0.035, 0.18, STRAW, { at: [s * 0.62, 1.14 + (k - 1) * 0.04, (k - 1) * 0.03], rot: [0, 0, -s * (Math.PI / 2 + (k - 1) * 0.35)] }, 5))),
         P.sphere(0.19, '#EAD5A6', { at: [0, 1.43, 0] }, 16),
         ...[-1, 1].map((s) => P.sphere(0.022, PAL.ink, { at: [s * 0.065, 1.46, 0.17] }, 6)),
@@ -817,7 +820,7 @@ export function buildKayleeKit(bag: Bag) {
   const seedlings = solid(merge([...Array.from({ length: 7 }, (_, k) => P.cone(0.02, 0.2 + (k % 3) * 0.04, k % 2 ? '#8EE374' : '#7EDB6A', { at: [Math.sin(k) * 0.03, 0.1, Math.cos(k) * 0.03], rot: [Math.cos(k * 2) * 0.35, 0, Math.sin(k * 2) * 0.35] }, 4)), P.torus(0.035, 0.012, '#B5823F', { at: [0, 0.0, 0], rot: [Math.PI / 2, 0, 0] }), P.sphere(0.04, '#8E7458', { at: [0, -0.05, 0], scale: [1, 0.7, 1] }, 8)]), bag, 1.5)
   const sickle = solid(merge([P.cyl(0.018, 0.02, 0.16, PAL.hotpink, { at: [0, 0, 0] }, 8), P.torus(0.09, 0.014, '#C9CCD8', { at: [0.07, 0.1, 0], rot: [0, 0, 0.3] }, Math.PI * 1.1)]), bag, 1.5)
   const armful = solid(merge(sheafParts([0, 0, 0], 0.8)), bag, 1.5)
-  const ngob = solid(merge(ngobParts(0.3)), bag, 2)
+  const ngob = solid(merge(ngobParts(0.3, [0, 0, 0], true)), bag, 2)
   return { seedlings, sickle, armful, ngob }
 }
 

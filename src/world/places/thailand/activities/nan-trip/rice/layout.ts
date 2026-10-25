@@ -190,6 +190,6 @@ export const HIGH_TABLE: V3 = [0, 0.84, -0.42]
 export const MOMMY_AT: V3 = [1.3, 0, -0.95]
 /** Where Mommy's photo is taken from (in front of them, the farm behind). */
 export const PHOTO_FROM: V3 = [0.25, 1.2, 1.5]
-export const CHIME: V3 = [-1.5, 2.0, -1.2]
+export const CHIME: V3 = [-1.5, 2.6, -1.2]
 /** Sips in a glass of pink milk. */
 export const SIPS = 4

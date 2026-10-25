@@ -341,6 +341,8 @@ export class RiceFarm extends Stage {
   // ---- Talk: lines said once, Sparkle's hints this round, Daddy's tap lines in turn ----
   private told = new Set<string>()
   private lastSay = -99
+  /** Sparkle's hints count quiet time from here (a round's start and its line), not from her last touch. */
+  private quietFrom = 0
   private sayN = 0
   private nickTap = 0
   private hintNow: { at: Vector3; id?: string } | null = null
@@ -374,8 +376,9 @@ export class RiceFarm extends Stage {
     // ---- Kaylee's things: her ngob, the seedlings (left hand), the sickle (right) and the armful of cut rice ----
     this.kit = buildKayleeKit(bag)
     const R = 0.24
-    this.kit.ngob.position.set(0, 0.22 + 0.62 * R, -0.04)
-    this.kit.ngob.rotation.x = -0.14
+    // Pushed back on her head, so her horn and fringe show in front of it.
+    this.kit.ngob.position.set(0, 0.2 + 0.62 * R, -0.13)
+    this.kit.ngob.rotation.x = -0.5
     kaylee.rig.head.add(this.kit.ngob)
     this.kit.seedlings.position.set(-0.06, -0.17, 0.05)
     kaylee.rig.armL.add(this.kit.seedlings)
@@ -524,6 +527,7 @@ export class RiceFarm extends Stage {
     this.ev.round(r)
     this.sayN = 0
     this.lastSay = -99
+    this.quietFrom = this.time + 3
     this.roundLine(r)
   }
 
@@ -641,7 +645,10 @@ export class RiceFarm extends Stage {
     this.bits.burst(at, 5, 0.8, 1, 0.5, 0.03)
     this.farm.basket.board.rotation.z = -0.3
     this.basketShake = 0.6
-    if (this.banged === 3) this.once('bang', R.bang, true)
+    if (this.banged === 3 && !this.told.has('bang') && speakingVoice() !== 'sparkle') {
+      this.once('bang', R.bang)
+      this.nick.react('hop')
+    }
     this.held.heads.scale.setScalar(Math.max(0.01, 1 - this.hits / BANGS_PER))
     this.kaylee.react('wiggle')
   }
@@ -682,7 +689,6 @@ export class RiceFarm extends Stage {
       this.kratip.root.visible = true
       sfx.boing()
       sfx.steam()
-      this.after(0.5, () => this.once('yum', R.yum, true))
     })
     this.after(5.0, () => this.toDeck())
   }
@@ -1394,6 +1400,8 @@ export class RiceFarm extends Stage {
       case 'family:nick':
         this.nick.react(this.round === 'harvest' ? 'wave' : 'hop')
         sfx.haha()
+        // (Not while Sparkle talks: it would come late.)
+        if (speakingVoice() === 'sparkle') return
         return this.talkTo('nick-tap', () => this.ev.say(R.tap[this.nickTap++ % R.tap.length]), 3)
     }
   }
@@ -1642,7 +1650,7 @@ export class RiceFarm extends Stage {
   /** After a while with nothing done, Sparkle says what to do (a few times a round at most). */
   private stuck() {
     if (this.finger.held || this.hopping || this.kaylee.walking || this.snapAt > 0) return
-    if (this.time - this.lastTouch < SAY_S || this.time - this.lastSay < SAY_EVERY || this.sayN >= SAY_MAX) return
+    if (this.time - Math.max(this.lastTouch, this.quietFrom) < SAY_S || this.time - this.lastSay < SAY_EVERY || this.sayN >= SAY_MAX) return
     const l = this.stuckLine()
     if (!l) return
     this.lastSay = this.time
@@ -1895,7 +1903,7 @@ export class RiceFarm extends Stage {
         case 'cup':
           return { at: this.deck.cup.getWorldPosition(new Vector3()).add(new Vector3(0, 0.05, 0)), r: 0.08, prio: 3, max: 100 }
         case 'chime':
-          return { at: this.deckAt(-1.5, 1.9, -1.2), r: 0.15, prio: 1, max: 100 }
+          return { at: this.deckAt(-1.5, 2.5, -1.2), r: 0.15, prio: 1, max: 100 }
         case 'view':
           return { at: new Vector3(0, 0.6, 0.5), r: 1.5, prio: 0, max: 160 }
       }

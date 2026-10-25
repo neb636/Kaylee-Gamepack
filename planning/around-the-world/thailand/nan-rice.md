@@ -389,6 +389,15 @@ Dad played greybox B (2026-10-25): threshing feels good (ten bangs, the swing he
   on the hill keep the water for the rice!"). Family reactions are dropped while Sparkle talks rather than heard late.
 - Sparkle sits in the corner (`trip/legs/Guide.tsx`) with the words for Dad; hidden under the video and the end card.
 
+- After full QA (layout-qa, then playtest-qa: plant, harvest and thresh fun, grow and the deck OK): Sparkle's stuck hints
+  count quiet time from 3 s after a round's line, not from her last touch, so they don't follow the round's own line
+  straight away; Daddy's "Sticky rice! Yum!" is gone (sticky rice was said four times in 10 s); Daddy's tap lines and
+  "Whack!" (now with a hop) are dropped while Sparkle talks; the deck's roof went up 0.6 m so the terraces show in
+  portrait too; Kaylee's ngob has a pink band and flower and sits back on her head, and the scarecrow wears blue, so
+  they don't look alike.
+- Left for later (`known-issues.md`): the terraces don't show on the farm cameras (only the deck and very wide
+  screens); grow has short stretches where only the clock moves; Daddy stands still while she threshes.
+
 **Next:** Dad listens on the iPad (lip sync, whether Daddy talks too much). Then the next stop: Bo Kluea salt (step 4).
 
 ## Fun check

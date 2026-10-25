@@ -338,7 +338,6 @@ export const L = {
       where: nick('Kaylee? Where did you go?'),
       lots: nick('Look at all that rice!'),
       bang: nick('Whack! Good one!'),
-      yum: nick('Sticky rice! Yum!'),
       coffee: nick('Mmm, coffee.'),
       // Tap Daddy on the farm (in turn).
       tap: [nick('Go, farmer Kaylee!'), nick('Splish, splash!'), nick('Daddy is watching!')],
