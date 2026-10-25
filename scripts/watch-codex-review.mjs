@@ -1,7 +1,7 @@
 // Waits for Codex's review of a PR's latest commit, prints what it found, and exits.
 // Meant to run under Claude Code's Monitor tool: silent while waiting, so it costs no context until it prints.
 //   node scripts/watch-codex-review.mjs --pr 182 [--timeout 420] [--interval 20]
-// Output lines (each one wakes the session): FINDINGS (then one block per inline comment), CLEAN, TIMEOUT.
+// Output lines (each one wakes the session): FINDINGS (then one block per inline comment), CLEAN, NOREVIEW, TIMEOUT.
 // Codex keeps one summary comment on the PR with a machine-readable state (status + commit_sha); inline findings
 // are ordinary PR review comments. Typical review time: 1-2 minutes after a push; the timeout is 3.5x that.
 import { execFileSync } from 'node:child_process'
@@ -35,6 +35,14 @@ while (true) {
     const summary = api(`repos/{owner}/{repo}/issues/${pr}/comments`).find(
       (c) => isCodex(c) && c.body.includes('codex-pull-request-review-summary'),
     )
+    const refused = api(`repos/{owner}/{repo}/issues/${pr}/comments`).find(
+      (c) => isCodex(c) && c.body.includes('To use Codex here'),
+    )
+    if (refused && !summary) {
+      // Codex answered with a setup notice instead of reviewing, so no review is coming
+      console.log(`NOREVIEW Codex declined to review PR #${pr}: "${refused.body.replace(/\s+/g, ' ').slice(0, 160)}"`)
+      break
+    }
     const state = summary && JSON.parse(summary.body.match(/codex-review-state:v1 (\{.*?\}) -->/s)?.[1] ?? 'null')
     const review = state?.code_review
     if (review?.status === 'completed' && review.commit_sha === head.headRefOid) {

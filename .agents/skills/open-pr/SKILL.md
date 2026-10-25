@@ -68,7 +68,8 @@ node scripts/watch-codex-review.mjs --pr <N>
 ```
 
 It prints one of: `CLEAN` (nothing to do; say so and stop), `FINDINGS` followed by one block per inline comment,
-`TIMEOUT` (say so and stop, don't poll further), or `CLOSED`. On `FINDINGS`, for each comment:
+`NOREVIEW` (Codex posted a setup notice instead of reviewing; tell Dad, don't retry), `TIMEOUT` (say so and stop,
+don't poll further), or `CLOSED`. On `FINDINGS`, for each comment:
 
 1. **Verify first.** Read the code it points at and try to reproduce the claim. Don't apply a suggestion you haven't
    confirmed.
