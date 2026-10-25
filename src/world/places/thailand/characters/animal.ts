@@ -37,6 +37,8 @@ export interface Rig {
   phone: Group | null
   /** Where the face is (head-local): the head's radius, its center's height and the mouth (the vet aims at these). */
   face: { R: number; headY: number; mouth: V3 }
+  /** How a blink shows when squashing `eyes` doesn't (the modelled Kaylee's lids, model.ts): 1 open .. 0.1 shut. */
+  blink?: (open: number) => void
 }
 
 const INK = '#2E2233'

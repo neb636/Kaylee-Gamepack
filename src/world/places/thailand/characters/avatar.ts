@@ -10,8 +10,10 @@ import type { Bag } from '../engine/dispose'
 import type { XZ } from '../engine/nav'
 import { TUNE } from '../engine/tune'
 import { buildAnimal, buildWorn, Wind, type Rig } from './animal'
+import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { FaceLife } from './face'
 import { LOOKS, type Wearable } from './looks'
+import { buildModelRig } from './model'
 import type { Character, Pose } from './types'
 
 const H = LOOKS.kaylee.height
@@ -57,8 +59,9 @@ export class Avatar implements Character {
   /** Things she's just put on, and how far through their little show (0..1). */
   private entering = new Map<Wearable, number>()
 
-  constructor(private bag: Bag) {
-    this.chibi = buildAnimal(LOOKS.kaylee, bag)
+  /** `model`: the modelled vinyl-toy Kaylee (model.ts) instead of the code-built one. */
+  constructor(private bag: Bag, model?: GLTF) {
+    this.chibi = model ? buildModelRig(model, bag) : buildAnimal(LOOKS.kaylee, bag)
     this.life = new FaceLife(this.chibi)
     this.root = this.chibi.root
     this.root.rotation.y = this.yaw

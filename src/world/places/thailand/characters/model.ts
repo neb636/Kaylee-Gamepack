@@ -1,0 +1,134 @@
+// Kaylee as a modelled vinyl toy (docs/3d-characters.md): a Tripo3D mesh split in Blender into the same pivots the
+// code-built toys have (body, head at the neck, arms at the shoulders, tail at its root, eyes), so every walk, wave,
+// pose and outfit in avatar.ts works on it unchanged. The model's own texture is lit with the shared toon bands and
+// every piece gets the usual ink outline.
+//
+// The GLB loads once (loadKayleeModel) and every Kaylee after that clones it. Until it has loaded, kayleeModel() is
+// null and callers build the code-built Kaylee instead.
+import { Group, Mesh, MeshToonMaterial, type Object3D, type Texture } from 'three'
+import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import type { Bag } from '../engine/dispose'
+import { blobShadow, P, solid } from '../engine/geo'
+import { makeHull } from '../engine/outline'
+import { toonGradient } from '../engine/toon'
+import type { Rig } from './animal'
+import url from './models/kaylee.glb?url'
+
+/** The cream around her painted eyes: the lids that sweep down over them when she blinks. */
+const LID = '#F6E2DF'
+const PX = 3
+/** How far each arm's swing plane turns forward (radians; see buildModelRig). */
+const ARM_TILT = 2.0
+
+let model: GLTF | null = null
+let loading: Promise<GLTF> | null = null
+
+/** The loaded model, or null while it's still on its way. */
+export const kayleeModel = () => model
+
+export function loadKayleeModel(): Promise<GLTF> {
+  loading ??= new GLTFLoader().loadAsync(url).then((g) => (model = g))
+  return loading
+}
+
+const materials = new Map<Texture, MeshToonMaterial>()
+/** One toon material per texture, shared by every Kaylee (like toon.ts's palette materials). */
+function toonFor(map: Texture) {
+  let m = materials.get(map)
+  if (!m) {
+    m = new MeshToonMaterial({ map, gradientMap: toonGradient() })
+    materials.set(map, m)
+  }
+  return m
+}
+
+/** A rig like buildAnimal's, from the model. */
+export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
+  const scene = gltf.scene.clone(true)
+  const node = (name: string): Group => {
+    const n = scene.getObjectByName(name)
+    if (!n) throw new Error(`kaylee.glb has no ${name}`)
+    return n as Group
+  }
+  const meshes: Mesh[] = []
+  scene.traverse((o: Object3D) => {
+    if (o instanceof Mesh) meshes.push(o)
+  })
+  for (const m of meshes) {
+    const map = (m.material as { map?: Texture | null }).map
+    if (map) m.material = toonFor(map)
+    // The eye domes are glossy pieces sitting in the face: no ink ring around them.
+    if (!m.name.startsWith('eye')) {
+      const hull = makeHull(m.geometry, PX)
+      bag.add(hull.geometry)
+      m.add(hull)
+    }
+  }
+
+  const root = new Group()
+  const [body, head, eyes, armL, armR, tail] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail'].map(node)
+  root.add(blobShadow(0.26, bag), body)
+  // Her hair is as wide as her reach, so an arm raised the code-built way (rotation.z, out to the side) ends up inside
+  // it. Each arm swings in a plane turned forward instead: a tilted frame around the pivot and the opposite turn inside
+  // it, so the rest pose is unchanged and a raised hoof comes up in front of her.
+  for (const [arm, s] of [[armL, -1], [armR, 1]] as const) {
+    const tilt = new Group()
+    tilt.position.copy(arm.position)
+    tilt.rotation.y = -s * ARM_TILT
+    arm.parent!.add(tilt)
+    arm.position.set(0, 0, 0)
+    tilt.add(arm)
+    const inner = new Group()
+    inner.rotation.y = s * ARM_TILT
+    inner.add(...arm.children)
+    arm.add(inner)
+  }
+
+  // FaceLife squashes `eyes.scale.y` to blink, which works for drawn eyes but not for domes over a painted eye (the
+  // painted one shows through). Here a cream lid grows down from above each eye instead, as far as the eyes "close".
+  const lids: Group[] = []
+  for (const s of [-1, 1]) {
+    const lid = new Group()
+    lid.position.set(s * 0.109, 0.047, 0.006)
+    lid.add(solid(P.sphere(0.058, LID, { at: [0, -0.05, 0], scale: [1, 0.95, 0.6] }), bag, PX))
+    lid.scale.y = 0.001
+    lid.visible = false
+    lids.push(lid)
+  }
+  // The lids ride on the head (not inside `eyes`, which the blink squashes).
+  const lidHolder = new Group()
+  lidHolder.position.copy(eyes.position)
+  lidHolder.add(...lids)
+  head.add(lidHolder)
+
+  const mouth = new Group()
+  const talk = new Group()
+  talk.visible = false
+  head.add(mouth, talk)
+
+  return {
+    root,
+    body,
+    head,
+    eyes,
+    mouth,
+    talk,
+    open: false,
+    armL,
+    armR,
+    tail,
+    mane: null,
+    height: 1,
+    radius: 0.16,
+    phone: null,
+    face: { R: 0.24, headY: 0.22, mouth: [0, 0.1, 0.23] },
+    blink(open: number) {
+      eyes.scale.y = 1
+      const shut = (1 - open) / 0.9
+      for (const lid of lids) {
+        lid.visible = shut > 0.02
+        lid.scale.y = Math.max(0.001, shut)
+      }
+    },
+  }
+}
