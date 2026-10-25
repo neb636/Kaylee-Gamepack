@@ -119,6 +119,16 @@ Code paths are under `src/world/places/thailand/`.
 - [ ] **Listen to the rice farm's voices** (32 clips): is Daddy too chatty (8-10 one-time lines a run)? The transcription
   check heard "Go, farmer Kaylee!" as "Cayley" (likely just spelling).
 
+## The Nan trip: the rental desk, the map and the 3 (greybox, step 6)
+- [ ] **The map is small on a tall iPad.** The board is wider than it is tall, so in portrait it fills the width with
+  empty table above and below. A taller board (or turning it for portrait) would help.
+  - Check: `#/world/thailand/nan-trip/map` in iPad portrait.
+- [ ] **In the belt beat we see the back of Kaylee's head** through the door (she faces forward in her seat). A camera a
+  little further forward, or her turning to look at the belt, would show her face.
+  - Check: `#/world/thailand/nan-trip/rental?round=belt`.
+- [ ] **The map's car always starts at the last stop** (or the airport): after the city road it's back at that stop, not
+  in Nan town.
+
 ## Listen on the iPad (automated checks can't hear)
 - [ ] **The mall trip's new voices** (2026-10-21): the transcription check flagged Thai words written back in Thai
   ("Sawasdee ka", "Khob khun ka"), "Kaylee" heard as "Kaley", Daddy's "Ooh, strong!" heard in Japanese, the coach's

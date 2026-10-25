@@ -17,15 +17,15 @@
   "icon": "🏔️",
   "kind": "Family trip",
   "updated": "2026-10-25",
-  "status": { "label": "In the works: 4 greyboxes built", "tone": "gold" },
+  "status": { "label": "In the works: the road, the 3 stops, the map and the rental desk built", "tone": "gold" },
   "pitch": "Kaylee presses the key and the big Pajero beeps hello. Mommy drives and Kaylee steers it round the bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.",
-  "next": "Dad plays the salt wells on the iPad ([`salt`](#/world/thailand/nan-trip/salt), then [`?round=2`](#/world/thailand/nan-trip/salt?round=2), [`?round=3`](#/world/thailand/nan-trip/salt?round=3)). If carrying the bucket isn't fun yet, change the toy (how it follows and swings, how low it has to go to tip, how many buckets) before its look and voices. Then **step 6, the Nan map and the rental desk**.",
+  "next": "Dad plays step 6 on the iPad: the rental desk ([`rental`](#/world/thailand/nan-trip/rental), then [`?round=boot`](#/world/thailand/nan-trip/rental?round=boot), [`?round=belt`](#/world/thailand/nan-trip/rental?round=belt)), the Nan map ([`map`](#/world/thailand/nan-trip/map), [after two stops](#/world/thailand/nan-trip/map?stops=mushrooms,rice)) and drawing the 3 ([`three`](#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)). Is pulling the little Pajero round the board fun, or does she only tap? Does the fob have enough answers? Then **step 7, the trip loop**: the third invite choice (🏔️🚙), the flight north into the rental desk, home from the 3 road and the photo on Agong's wall.",
   "facts": [
     { "icon": "⏱️", "value": "10-17 min", "label": "a full trip, all three stops" },
     { "icon": "👆", "value": "150-225", "label": "touches" },
     { "icon": "📍", "value": "3 stops", "label": "mushrooms · rice · salt" },
     { "icon": "🛣️", "value": "4 roads", "label": "city · valley · sky · three" },
-    { "icon": "🔗", "value": "15", "label": "sections planned, 4 built" }
+    { "icon": "🔗", "value": "15", "label": "sections planned, 7 built" }
   ],
   "related": [
     { "label": "← Thailand plan", "href": "../thailand.md" },
@@ -217,7 +217,7 @@
               "icon": "🔑",
               "title": "One short beat, not a full activity",
               "tag": "30-45 s, 6-10 touches",
-              "status": "todo",
+              "status": "done",
               "items": [
                 "A small arrivals hall, a rental counter with a smiling **clerk**. The clerk slides a big key across the counter.",
                 "**The toy:** the key fob is in her hand. Press it and the big Pajero outside beeps and flashes its lights. Press again and again: beep-beep, the lights wink, the mirrors fold out, Daddy jumps.",
@@ -246,7 +246,7 @@
             { "icon": "🛩️", "label": "The airport", "md": "with a tiny plane" }
           ]
         },
-        { "type": "text", "md": "The little Pajero sits on the roads. **Tap a landmark** and the Pajero zooms along the road to it on the diorama, then the camera dives into that road and she drives (`drive`). **Done stops** get a stamp on their landmark. The first time, Sparkle says one line (“Where shall we go first?”).\n\n**Pokeables:** clouds that rain a little, the river (a fish jumps), the tiny plane (it takes off and lands), a buffalo that moos.\n\n**Teaches:** Nan is in the north of Thailand, in the mountains, next to another country (Laos, at the diorama's edge)." }
+        { "type": "text", "md": "The little Pajero sits on the roads. **Tap a landmark** and the Pajero zooms along the road to it on the diorama, then the camera dives into that road and she drives (`drive`). Or she **grabs the little Pajero and pulls it** along the roads (it never cuts across the hills) and lets go at a stop (built in step 6). **Done stops** get a stamp on their landmark. The first time, Sparkle says one line (“Where shall we go first?”).\n\n**Pokeables:** clouds that rain a little, the river (a fish jumps), the tiny plane (it takes off and lands), a buffalo that moos.\n\n**Teaches:** Nan is in the north of Thailand, in the mountains, next to another country (Laos, at the diorama's edge)." }
       ]
     },
     {
@@ -428,13 +428,13 @@
             { "n": 5, "id": "takeoff", "name": "The window seat: take off", "status": "todo" },
             { "n": 6, "id": "fly", "name": "Fly north to Nan", "status": "todo" },
             { "n": 7, "id": "land", "name": "Land in Nan", "status": "todo" },
-            { "n": 8, "id": "rental", "name": "The rental desk: the Pajero's key", "status": "todo" },
-            { "n": 9, "id": "map", "name": "The Nan map: where next?", "reads": ["stops"], "status": "todo" },
-            { "n": 10, "id": "drive", "name": "The mountain road", "reads": ["road", "stops"] },
+            { "n": 8, "id": "rental", "name": "The rental desk: the Pajero's key", "reads": ["round"] },
+            { "n": 9, "id": "map", "name": "The Nan map: where next?", "reads": ["stops"] },
+            { "n": 10, "id": "drive", "name": "The mountain road", "reads": ["road", "to", "stops"] },
             { "n": 11, "id": "mushrooms", "name": "The mushroom farm: mist, pick, the pizza", "reads": ["stops", "round", "basket"] },
             { "n": 12, "id": "rice", "name": "Sapan's rice farm and Stop Time Cafe", "reads": ["stops", "round"] },
             { "n": 13, "id": "salt", "name": "Bo Kluea: salt from the well", "reads": ["stops", "round"] },
-            { "n": 14, "id": "three", "name": "The “3” road from above", "reads": ["stops"], "status": "todo" },
+            { "n": 14, "id": "three", "name": "The “3” road from above", "reads": ["stops"] },
             { "n": 15, "id": "home", "name": "Home: the photo on Agong's wall, the stamp", "reads": ["photos"], "status": "todo" }
           ]
         },
@@ -458,7 +458,14 @@
             { "n": "☕", "id": "rice", "query": "round=deck", "name": "Sticky rice, pink milk, Mommy's photo, the rice video" },
             { "n": "🪣", "id": "salt", "query": "round=1", "name": "Dip the bucket, pour the brine into the pan" },
             { "n": "🔥", "id": "salt", "query": "round=2", "name": "Feed the fire till the brine boils down" },
-            { "n": "🧂", "id": "salt", "query": "round=3", "name": "Scrape the salt into the basket" }
+            { "n": "🧂", "id": "salt", "query": "round=3", "name": "Scrape the salt into the basket" },
+            {"n": "🔑", "id": "rental", "query": "round=key", "name": "Press the key fob (the Pajero chirps; 3 presses pop the tailgate)"},
+            {"n": "🧳", "id": "rental", "query": "round=boot", "name": "The bags into the boot"},
+            {"n": "🔒", "id": "rental", "query": "round=belt", "name": "Click the seatbelt, and off to the map"},
+            {"n": "🗺️", "id": "map", "name": "The Nan map: tap a place, or drag the little Pajero there"},
+            {"n": "💗", "id": "map", "query": "stops=mushrooms,rice", "name": "After two stops: the stamps, the airport opens"},
+            {"n": "🍄", "id": "drive", "query": "road=valley&to=mushrooms", "name": "Picked on the map: the farm opens at the end of the road"},
+            {"n": "✏️", "id": "three", "query": "stops=mushrooms,rice,salt", "name": "Draw the 3 with the big pink crayon"}
           ]
         },
         {
@@ -469,6 +476,7 @@
             ["`packed`", "as the boat trip", ""],
             ["`stops`", "the stops done so far (stamps on the map), a comma list of `mushrooms|rice|salt`", "empty"],
             ["`road`", "which road `drive` plays, `city|valley|sky|three`", "`valley`"],
+            ["`to`", "where the drive is going, picked on the map: `mushrooms|rice|salt` (its stop opens by itself at the end of the road) or `map` (the city road comes back to the map)", "empty: the end card"],
             ["`round`", "the step of the stop on screen, `1|2|3` (plus `pizza` at the mushroom farm; the rice farm's are `plant|grow|harvest|thresh|deck`)", "`1`"],
             ["`basket`", "the mushrooms in her basket, `<color><count>` pairs, e.g. `grey5,pink2,gold1`", "empty: what she'd have by then (nothing in rounds 1 and 2, `grey6` in round 3, `grey4,pink2` at the pizza)"],
             ["`photos`", "which photos exist", "for `home`: `deck,three`"],
@@ -492,8 +500,8 @@
             { "n": 3, "title": "Greybox: Stop Time Cafe", "status": "done", "date": "2026-10-25", "pr": [179, 180, 181], "md": "`rice`. First try PR #168 (not merged); rebuilt per [`nan-rice.md`](nan-rice.md) in two greyboxes (A: the farm and the core verb; B: thresh, the deck and the video). Its look (step 8) and voices (step 9) done ahead of the rest." },
             { "n": 4, "title": "Greybox: Bo Kluea salt", "status": "done", "date": "2026-10-25", "pr": 186, "md": "`salt`. Dad plays it next." },
             { "n": 5, "title": "Greybox: Wat Phumin", "status": "dropped", "date": "2026-10-25", "pr": 187, "md": "`temple`: dropped (Dad: no temples or Buddhas in the game, AGENTS.md). Its greybox was closed unmerged, and the city road now ends at Nan's market." },
-            { "n": 6, "title": "Greybox: the Nan map and the rental desk", "status": "next", "md": "`map`, `rental`, and the `three` viewpoint." },
-            { "n": 7, "title": "The trip loop", "status": "todo", "md": "The `TripDef` (fly to Nan, the silver Pajero), the third invite choice, the photo wall (no gift)." },
+            { "n": 6, "title": "Greybox: the Nan map and the rental desk", "status": "done", "date": "2026-10-25", "pr": 190, "md": "`map`, `rental`, and the `three` viewpoint. The trip is joined up from the rental desk on." },
+            { "n": 7, "title": "The trip loop", "status": "next", "md": "The `TripDef` (fly to Nan, the silver Pajero), the third invite choice, the photo wall (no gift)." },
             { "n": 8, "title": "The look", "status": "todo", "md": "The Pajero, the landmarks, rain and cloud." },
             { "n": 9, "title": "Voices and QA", "status": "todo" },
             { "n": 10, "title": "Into the game", "status": "todo", "md": "From `inTheWorks` to `activities`." }
@@ -606,10 +614,63 @@
                   ]
                 }
               ]
+            },
+            {
+              "title": "Step 6, the rental desk, the Nan map and the 3 from above",
+              "date": "2026-10-25",
+              "status": "done",
+              "pr": 190,
+              "open": true,
+              "summary": "Press the key fob, the bags into the boot, click the seatbelt; the map where she drags the little Pajero to the next stop; her finger draws the 3.",
+              "blocks": [
+                {
+                  "type": "text",
+                  "md": "Shapes in the toon look, no voices, no art. The trip is joined up from the rental desk on: rental → map → a drive → its stop → back to the map (its stamp lands) → … → the airport → the 3 road → drawing the 3. New params: `stops` (the stops done, in order: the stamps, where the Pajero waits, whether the airport is open) on every section, and `to` on `drive` (picked on the map: its stop opens by itself at the end of the road, no end card; `map` for the city road). A bare `nan-trip` link now opens the rental desk."
+                },
+                {
+                  "type": "list",
+                  "items": [
+                    "**The Pajero** (`trip/vehicles/pajero.ts`) is hollow now: see-through windows, the seats (Mommy at the wheel on the right, Daddy beside her, Kaylee behind Mommy), Kaylee's back door that swings open, a tailgate that lifts, folding wing mirrors, slots for three bags in the boot and Kaylee's seatbelt anchor and buckle. Still a box (the look is step 8).",
+                    {
+                      "text": "**The rental desk** (`rental/`, [`rental?round=key|boot|belt`](#/world/thailand/nan-trip/rental)): the arrivals hall's counter under a lavender canopy, the car park beside it, Nan's green hills behind. The clerk (a puppy in a blue shirt and a scarf, a placeholder pick like the farm aunties) slides the key fob across the counter and it hops into Kaylee's hoof.",
+                      "items": [
+                        "**`key`:** every press (the fob, or the car) makes the Pajero chirp and wink its lights; press 1 folds its mirrors out, press 2 makes Daddy jump, press 3 pops the tailgate and everyone heads out.",
+                        "**`boot`:** her pink suitcase, Mommy's bag and Daddy's backpack: drag one to the boot (or tap it) and it thumps in, the car squats on its springs; let go elsewhere and it hops back. All in, the tailgate shuts.",
+                        "**`belt`:** her door swings open, she hops into her seat, Mommy and Daddy hop into theirs; the seatbelt glows: tap, click, the door shuts, vroom, and the Pajero drives out of the car park to the map.",
+                        "**Pokes:** the clerk, the bell, the orchids, the rack of maps (one flaps out), the mountain poster (it rains), the family."
+                      ]
+                    },
+                    {
+                      "text": "**The Nan map** (`map/`, [`map?stops=…`](#/world/thailand/nan-trip/map)): a diorama on a table, north up the screen, Laos past a row of border posts on the right (with its flag; Thailand's flies in Nan town). Doi Phu Kha in the middle with a cloud on it, the Nan River winding down with two bridges, cream roads in a loop (town → Pua's mushroom farm → over the mountain to Stop Time Cafe's rice steps → Bo Kluea's salt hut → down a little 3 of hairpins to Santi Suk → town) and the airport road.",
+                      "items": [
+                        "**The toy is the little Pajero** (the real one at 7%): tap a place and it drives there along the roads (`net.ts`: the roads as one network of points 5 cm apart, the shortest way along them); or grab it and it follows her finger along the roads, never across the hills. Let go at a place, or hold it still at a stop 0.8 s, and it goes (holding still in town or at the airport doesn't: the roads to the stops run through town). Let go while it's still catching up and it goes on to the place at the end of its path.",
+                        "**Getting there:** a hop, the camera dives down to it, and the drive opens (valley road to the mushrooms, sky road to the café or the salt, city road through town and back, the 3 road from the airport).",
+                        "**Stamps:** done stops wear a pink heart stamp; the newest one drops on with a ka-chunk when she comes back. After two stops the airport opens; after three it's the only place open, and it glows.",
+                        "**Pokes:** the clouds (a little rain), the river (a fish jumps), the tiny plane (a loop round the board and back down), the buffalo, both flags, the done stops (a jingle, the stamp spins), the car (beep)."
+                      ]
+                    },
+                    "**The 3 from above** ([`three`](#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt), the 3 road's world parked at the viewpoint, the same `Drive` so it doesn't rebuild when the road gets there): a big pink crayon waits at the top of the 3. Her finger near the line pulls it along the road (only forward, only the stretch just ahead of it, so it can't jump to the hairpin's other leg); the numbers pop as it rounds each bend; a tap draws on round the next bend; the last few meters finish by themselves. Then the fanfare and the end card (🔁 the 3 road again from the top, 🗺️ the map). The 👆 sweeps along the road ahead of the crayon.",
+                    "The stops' end cards now say 🗺️ (back to the map) instead of 🚙; the drives' end cards (only on a bare drive link now) offer 🔁 and 🗺️.",
+                    "**QA:** `qa-screens` (`nan-rental-key|boot|belt`, `nan-map`, `nan-map-stops`, `nan-three`), `qa-motion` (`nan-fob`, `nan-map-drag`, `nan-trace`), `qa-pacing` (`nan-rental`, `nan-map`, `nan-three-view`). A robot in WebKit (iPad landscape) pressed the fob, dragged the three bags into the boot, clicked the belt, landed on the map, tapped Nan town (the city road came back to the map by itself), dragged the car from the airport through town to the mushroom farm (the valley road opened with `to=mushrooms`), drew the 3 with a finger and went back to the map with all three stamps and only the airport open. No console errors. Screens checked on iPad landscape and portrait and iPhone landscape."
+                  ]
+                },
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "- The map's toy is **dragging the little Pajero** along the roads, as well as tapping a place (the plan only had the tap).\n- At the viewpoint her finger **draws** the 3 (the step 1 greybox drew it by itself).\n- The Nan town road is a little drive from the map and back, not part of the way in.\n- Not yet: the family photo with the 3 behind them (with the photo wall, step 7), Mommy's “Home, or one more?” after two stops (a voice line, step 9)."
+                },
+                {
+                  "type": "callout",
+                  "tone": "note",
+                  "title": "Known small things",
+                  "md": "In `known-issues.md`: the map is small on a tall iPad (the board is wider than it is tall); in the belt beat we see the back of Kaylee's head; the map's car always starts at the last stop (or the airport), not in town after the city road."
+                }
+              ]
             }
           ]
         },
-        { "type": "callout", "tone": "open", "icon": "⏳", "title": "Not yet (later steps)", "md": "The family in the car (Daddy's “Whoa!”, Mommy's lines, Sparkle's), the wipers, the dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero." }
+        { "type": "callout", "tone": "open", "icon": "⏳", "title": "Not yet (later steps)", "md": "The family in the car (Daddy's “Whoa!”, Mommy's lines, Sparkle's), the wipers, the dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero, the family photo at the viewpoint with the 3 behind them (step 7), Mommy's “Home, or one more?” on the map (a voice line, step 9)." }
       ]
     },
     {

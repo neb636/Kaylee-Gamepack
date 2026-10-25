@@ -8,8 +8,10 @@
 // their side; chickens that flap off the road; on the sky road, round mirrors on the blind bends (one shows a car
 // coming: beep the horn and it beeps back), a waterfall, a monkey on the rail, rain, then the cloud (white all round,
 // headlights on) and out above it into the sunshine; on the 3 road, the bends she counts, and from the viewpoint the
-// road below is a giant 3 (a pink crayon line draws it). Each road ends at its stop (the mushroom farm, the café, the
-// market, the viewpoint): the Pajero pulls in, the camera turns to look, and the end card offers the roads again.
+// road below is a giant 3 (section `three`): a big pink crayon waits at the top of it, and her finger pulls it along
+// the road (one, two, three as it rounds each bend; a tap on the road draws on to the next bend for her). Each road
+// ends at its stop (the mushroom farm, the café, the market, the viewpoint): the Pajero pulls in and the camera turns
+// to look.
 //
 // The screen (Drive.tsx) draws the steering wheel with its horn, the count's big numbers and the end card; the wheel's
 // turn, the hint finger and the tap targets are written here every frame.
@@ -18,6 +20,7 @@ import { clamp, sounds } from '../../../../../../sdk'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import { CameraRig, type Shot } from '../../../engine/camera'
 import { Bag } from '../../../engine/dispose'
+import { merge, P, solid } from '../../../engine/geo'
 import { setOutlineResolution } from '../../../engine/outline'
 import { Particles } from '../../../engine/particles'
 import { applyBands, makeLights, PAL } from '../../../engine/toon'
@@ -42,7 +45,12 @@ export interface DriveHud {
 
 export interface DriveEvents {
   onHud(hud: DriveHud): void
+  /** The 3 road's viewpoint: the camera has lifted over the hill, and her finger draws the 3 (section `three`). */
+  onView?(): void
 }
+
+/** Where a drive starts: rolling at the start of the road, or (the 3 road) parked at the viewpoint, the 3 below. */
+export type DriveStart = 'road' | 'view'
 
 /** The heavy, bouncy Pajero: slower than the longtail, slow to turn, leaning a lot. */
 const PAJERO_FEEL: Feel = { top: 9.5, boost: 1.2, accel: 4, coast: 0.6, turn: 1.15, grip: 7, near: 2, far: 7, dead: 0.02, lean: 0.12 }
@@ -97,6 +105,8 @@ export class NanDrive implements World3D {
   private landmark: Group
   private falls: Group | null = null
   private crayon: Mesh | null = null
+  /** The big pink crayon at the tip of the line she draws. */
+  private crayonTip: Group | null = null
   private dust: Particles
   private rain: Particles
   private sparkle: Particles
@@ -127,7 +137,9 @@ export class NanDrive implements World3D {
   private wasAbove = false
   private counted = 0
   private countN = 0
-  private crayonT = -1
+  /** Drawing the 3: how far along the road the crayon has got (m), where a tap sends it on to (-1: nowhere), how long
+   *  since the viewpoint began. */
+  private trace = { s: 0, auto: -1, t: 0, scratch: 0 }
   /** Bends the crayon line has passed (-1: it hasn't started). */
   private drawn = -1
   private lastHud = ''
@@ -141,6 +153,7 @@ export class NanDrive implements World3D {
     private renderer: WebGLRenderer,
     road: RoadId,
     private events: DriveEvents,
+    start: DriveStart = 'road',
   ) {
     const { scene, bag } = this
     const r = (this.r = nanRoad(road))
@@ -202,7 +215,8 @@ export class NanDrive implements World3D {
     }
     if (r.id === 'three') {
       this.crayon = this.buildCrayon()
-      scene.add(this.crayon)
+      this.crayonTip = this.buildCrayonTip()
+      scene.add(this.crayon, this.crayonTip)
     }
 
     // ---- The Pajero and the particles ----
@@ -226,14 +240,22 @@ export class NanDrive implements World3D {
       puff: (x, y, z) => this.dust.burst(x, y, z, 10, 1.6, 2.4, 0.18),
     }
 
-    // ---- Off she goes: in her lane at the start, already rolling ----
-    const p = r.road.spotAt(4, LANE_LAT)
+    // ---- Off she goes: in her lane at the start, already rolling (or, the 3 from above, parked at the viewpoint) ----
+    const atView = start === 'view' && r.id === 'three'
+    const p = atView ? r.road.spotAt(r.road.length - 14, half - 1.4) : r.road.spotAt(4, LANE_LAT)
     this.d.place(p.x, p.z, p.heading)
-    this.d.vx = Math.sin(p.heading) * 3
-    this.d.vz = Math.cos(p.heading) * 3
+    if (!atView) {
+      this.d.vx = Math.sin(p.heading) * 3
+      this.d.vz = Math.cos(p.heading) * 3
+    }
     this.camHeading = p.heading
     this.locate()
     this.poseCar(0)
+    if (atView) {
+      this.counted = r.count.length
+      this.setPhase('view', true)
+      this.trace.t = 99
+    }
     this.rig.lag = 0.5
     this.rig.setShot(this.shot(), true)
     this.emitHud()
@@ -272,6 +294,14 @@ export class NanDrive implements World3D {
 
   tap(_x: number, _y: number, id?: string) {
     this.lastTouch = this.time
+    if (!id && this.tracing) {
+      // A tap anywhere: the crayon draws on round the next bend for her.
+      const T = this.trace
+      const next = this.r.count.find((s) => s > T.s + 4) ?? this.r.road.length
+      T.auto = Math.min(next + 3, T.s + 90, this.r.road.length)
+      this.counts.pokes++
+      return
+    }
     if (!id) return
     this.counts.pokes++
     if (id === 'car') return this.honk()
@@ -318,7 +348,12 @@ export class NanDrive implements World3D {
   }
 
   get calm() {
-    return this.phase === 'end' && !this.rig.moving && this.crayonT < 0
+    return this.phase === 'end' && !this.rig.moving
+  }
+
+  /** At the viewpoint, drawing the 3. */
+  private get tracing() {
+    return this.phase === 'view' && this.r.id === 'three'
   }
 
   update(dt: number) {
@@ -339,7 +374,7 @@ export class NanDrive implements World3D {
     this.weather(dt)
     this.mirrorsFlash(t)
     this.countBends()
-    this.updateCrayon(dt)
+    this.updateTrace(dt)
     this.engine(dt)
     for (const p of [this.dust, this.rain, this.sparkle]) p.update(dt)
     if (this.falls && Math.abs(this.r.falls! - this.loc.s) < 90 && Math.random() < dt * 20) {
@@ -562,13 +597,16 @@ export class NanDrive implements World3D {
     }
   }
 
-  private setPhase(p: DrivePhase) {
+  private setPhase(p: DrivePhase, fromStart = false) {
     this.phase = p
     this.phaseT = 0
     if (p === 'view') {
       this.rig.lag = this.r.id === 'three' ? 1.4 : 0.9
-      if (this.r.id === 'three') this.crayonT = 0
-      else {
+      if (this.r.id === 'three') {
+        this.trace = { s: 0, auto: -1, t: 0, scratch: 0 }
+        this.drawn = 0
+        if (!fromStart) this.events.onView?.()
+      } else {
         sounds.correct()
         const l = this.landmark.position
         this.sparkle.burst(l.x, l.y + 5, l.z, 50, 5, 7, 0.28)
@@ -604,27 +642,100 @@ export class NanDrive implements World3D {
     return m
   }
 
-  private updateCrayon(dt: number) {
-    if (!this.crayon || this.crayonT < 0) return
+  /** The big pink crayon: a wax stick in its paper wrapper, its point down on the road (leaning back the way it came). */
+  private buildCrayonTip() {
+    const g = new Group()
+    const stick = solid(merge([
+      P.cone(1.5, 3.2, PAL.hotpink, { at: [0, 1.6, 0], rot: [Math.PI, 0, 0] }),
+      P.cyl(1.5, 1.5, 3, PAL.hotpink, { at: [0, 4.6, 0] }),
+      P.cyl(1.56, 1.56, 7, '#FFD3E6', { at: [0, 9.5, 0] }),
+      ...[6.4, 12.6].map((y) => P.cyl(1.6, 1.6, 0.5, PAL.hotpink, { at: [0, y, 0] })),
+      P.cyl(1.5, 1.5, 1, PAL.hotpink, { at: [0, 13.5, 0] }),
+    ]), this.bag, 3)
+    stick.rotation.x = -0.55
+    // (Big enough to see from up over the hill.)
+    stick.scale.setScalar(2.4)
+    g.add(stick)
+    g.visible = false
+    return g
+  }
+
+  /** Drawing the 3 from the viewpoint: her finger near the line pulls the crayon along the road (it only goes forward,
+   *  and only along the road just ahead of it, so it can't jump to the next leg of a hairpin); a tap sends it on round
+   *  the next bend. The numbers pop as it rounds each bend; at the end, the fanfare. */
+  private updateTrace(dt: number) {
+    const tip = this.crayonTip
+    if (!this.crayon || !tip) return
+    tip.visible = this.r.id === 'three' && (this.phase === 'view' || this.phase === 'end')
+    if (!this.tracing) return
+    const road = this.r.road
+    const T = this.trace
+    T.t += dt
     // (After the camera has lifted up over the hill.)
-    this.crayonT += dt
-    const k = clamp((this.crayonT - 1.6) / 4.2, 0, 1)
-    const S = this.r.road.samples
-    const n = Math.floor(k * (S.length - 1))
-    this.crayon.geometry.setDrawRange(0, n * 6)
-    // The numbers pop again as the line passes each bend (samples are a meter apart: n is meters along).
-    if (this.crayonT > 1.6 && this.drawn < 0) this.drawn = 0
-    const passed = this.r.count.filter((s) => s <= n).length
-    if (this.drawn >= 0 && passed > this.drawn) {
+    const ready = T.t > 1.8
+    let goal = T.s
+    const f = this.finger
+    if (ready && f) {
+      const s = this.traceAt(f.x, f.y)
+      if (s !== null && s > T.s) {
+        goal = s
+        T.auto = -1
+      }
+    }
+    if (ready && T.auto > T.s) goal = Math.max(goal, T.auto)
+    // Nearly there: the crayon finishes the last bit by itself.
+    if (T.s > road.length - 8 && T.auto < 0) T.auto = road.length
+    if (goal > T.s) {
+      T.s = Math.min(goal, T.s + dt * (T.auto > 0 ? 75 : 170), road.length)
+      T.scratch -= dt
+      if (T.scratch <= 0) {
+        T.scratch = 0.11
+        sfx.scribble()
+      }
+      if (T.auto > 0 && T.s >= T.auto - 0.01) T.auto = -1
+    }
+    // (Samples are a meter apart: the line is drawn up to the crayon.)
+    this.crayon.geometry.setDrawRange(0, Math.floor(T.s) * 6)
+    const sm = road.sampleAt(T.s)
+    tip.position.set(sm.x, sm.y + 0.6, sm.z)
+    tip.rotation.y = Math.atan2(sm.tx, sm.tz)
+    tip.scale.setScalar(1 + Math.sin(this.time * 5) * (goal > T.s ? 0 : 0.04))
+    const passed = this.r.count.filter((s) => s <= T.s).length
+    if (passed > this.drawn) {
       this.drawn = passed
       this.countN++
       sounds.note(passed * 2)
+      this.sparkle.burst(sm.x, sm.y + 3, sm.z, 26, 6, 7, 0.4)
     }
-    if (k >= 1 && this.phase === 'view') {
+    if (T.s >= road.length - 0.5) {
       sounds.fanfare()
-      this.crayonT = -1
+      const b = road.bounds()
+      for (const k of [0.2, 0.5, 0.8]) {
+        const q = road.sampleAt(road.length * k)
+        this.sparkle.burst(q.x, q.y + 4, q.z, 40, 9, 9, 0.5)
+      }
+      this.sparkle.burst((b.x0 + b.x1) / 2, b.y1 + 8, (b.z0 + b.z1) / 2, 60, 12, 10, 0.55)
       this.setPhase('end')
     }
+  }
+
+  /** The stretch of road just ahead of the crayon that's nearest her finger on screen (null: she's too far from it). */
+  private traceAt(fx: number, fy: number) {
+    const road = this.r.road
+    const from = this.trace.s
+    let best: number | null = null
+    let bd = 130
+    for (let s = Math.max(0, from - 4); s <= Math.min(road.length, from + 48); s += 1.5) {
+      const p = road.sampleAt(s)
+      const c = this.project(p.x, p.y + 0.5, p.z)
+      if (!c) continue
+      const d = Math.hypot(c.x - fx, c.y - fy)
+      if (d < bd) {
+        bd = d
+        best = s
+      }
+    }
+    return best
   }
 
   // ---------------------------------------------------------------- camera
@@ -779,7 +890,8 @@ export class NanDrive implements World3D {
   placeAnchors() {
     const overview = this.r.id === 'three' && (this.phase === 'view' || this.phase === 'end')
     for (const [id, el] of this.anchorEls) {
-      const a = overview && id !== 'landmark' ? null : this.anchorAt(id)
+      // (From above, only the viewpoint, once the 3 is drawn: a finger anywhere draws.)
+      const a = overview && (id !== 'landmark' || this.phase === 'view') ? null : this.anchorAt(id)
       const s = a ? this.toScreen(a.at, a.r, a.max) : null
       if (s && a) {
         el.style.transform = `translate3d(${(s.x - s.size / 2).toFixed(1)}px, ${(s.y - s.size / 2).toFixed(1)}px, 0)`
@@ -804,9 +916,12 @@ export class NanDrive implements World3D {
     const el = this.hintEl
     if (!el) return
     const idle = t - this.lastTouch
-    const show = this.phase === 'drive' && !this.finger && ((this.counts.steered < 1 && t > 2.5 && idle > 2.5) || idle > 8)
+    // Drawing the 3: the finger sweeps along the road ahead of the crayon, the way it goes.
+    const T = this.trace
+    const trace = this.tracing && !this.finger && T.t > 2.4 && T.auto < 0 && (T.s < 1 ? idle > 1.5 || T.t > 3.5 : idle > 5)
+    const show = trace || (this.phase === 'drive' && !this.finger && ((this.counts.steered < 1 && t > 2.5 && idle > 2.5) || idle > 8))
     if (show) {
-      const p = this.r.road.spotAt(this.loc.s + 16, Math.sin(t * 1.6) * 2.6)
+      const p = trace ? this.r.road.spotAt(Math.min(this.r.road.length, T.s + ((t * 18) % 30)), 0) : this.r.road.spotAt(this.loc.s + 16, Math.sin(t * 1.6) * 2.6)
       const c = this.project(p.x, p.y, p.z)
       if (c) el.style.transform = `translate3d(${c.x.toFixed(0)}px, ${c.y.toFixed(0)}px, 0)`
       else el.style.display = 'none'
@@ -839,6 +954,10 @@ export class NanDrive implements World3D {
       cloud: r2(this.cloudK),
       above: this.wasAbove,
       counted: this.counted,
+      traced: r2(this.trace.s),
+      drawn: this.drawn,
+      // Drawing the 3: where the road is on screen, every 6 m (a robot finger follows it).
+      path: this.tracing ? this.pathOnScreen() : null,
       warn: this.traffic.blindWarning(this.her()) !== null,
       ...this.counts,
       steered: r2(this.counts.steered),
@@ -846,6 +965,17 @@ export class NanDrive implements World3D {
       traffic: this.traffic.qa(),
     }
   }
+  private pathOnScreen() {
+    const road = this.r.road
+    const out: [number, number][] = []
+    for (let s = 0; s <= road.length; s += 6) {
+      const p = road.sampleAt(s)
+      const c = this.project(p.x, p.y + 0.5, p.z)
+      if (c) out.push([Math.round(c.x), Math.round(c.y)])
+    }
+    return out
+  }
+
   memory() {
     return { ...this.renderer.info.memory }
   }

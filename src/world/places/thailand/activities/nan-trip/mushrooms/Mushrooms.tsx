@@ -1,6 +1,6 @@
 // Baan Huanam Mushroom Farm's screen: the 3D farm (farm3d.ts) with its tap targets, the 👆 after a while with nothing
-// touched, and at the end (every slice shared) the end card: 🔁 the farm again, or 🚙 back on the road (up the sky road
-// to the café). (No flat version: 3D activities don't need one any more.)
+// touched, and at the end (every slice shared) the end card: 🔁 the farm again, or 🗺️ back to the Nan map (its stamp
+// lands there). (No flat version: 3D activities don't need one any more.)
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -14,11 +14,11 @@ interface Props {
   basket: string
   onRound: (r: Round, basket: string) => void
   onBasket: (basket: string) => void
-  /** The end card's 🚙: back on the road. */
-  onDrive: () => void
+  /** The end card's 🗺️: back to the Nan map (this stop's stamp lands on it). */
+  onMap: () => void
 }
 
-export function Mushrooms({ round, basket, onRound, onBasket, onDrive }: Props) {
+export function Mushrooms({ round, basket, onRound, onBasket, onMap }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [done, setDone] = useState(false)
@@ -93,13 +93,14 @@ export function Mushrooms({ round, basket, onRound, onBasket, onDrive }: Props) 
           🍄 Tap to wake the farm
         </button>
       )}
-      <AnimatePresence>{done && <FarmEnd onAgain={again} onDrive={onDrive} />}</AnimatePresence>
+      <AnimatePresence>{done && <FarmEnd onAgain={again} onMap={onMap} />}</AnimatePresence>
     </div>
   )
 }
 
-/** Lunch is over: the farm again, or back on the road (big pictures, no reading). Stop Time Cafe's end card too. */
-export function FarmEnd({ onAgain, onDrive, label = 'The mushroom farm again' }: { onAgain: () => void; onDrive: () => void; label?: string }) {
+/** Lunch is over: the farm again, or back to the Nan map (big pictures, no reading). Stop Time Cafe's and the salt
+ *  hut's end card too. */
+export function FarmEnd({ onAgain, onMap, label = 'The mushroom farm again' }: { onAgain: () => void; onMap: () => void; label?: string }) {
   const size = 'clamp(92px, 15vmin, 128px)'
   const btn = { width: size, height: size, borderRadius: '50%', border: '6px solid #fff', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 } as const
   return (
@@ -114,8 +115,8 @@ export function FarmEnd({ onAgain, onDrive, label = 'The mushroom farm again' }:
       <motion.button aria-label={label} whileTap={{ scale: 0.88 }} onClick={onAgain} style={{ ...btn, background: 'var(--lavender)' }}>
         🔁
       </motion.button>
-      <motion.button aria-label="Back on the road" whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.07, 1] }} transition={{ repeat: Infinity, duration: 1.4 }} onClick={onDrive} style={{ ...btn, background: 'var(--pink)' }}>
-        🚙
+      <motion.button aria-label="The Nan map" whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.07, 1] }} transition={{ repeat: Infinity, duration: 1.4 }} onClick={onMap} style={{ ...btn, background: 'var(--pink)' }}>
+        🗺️
       </motion.button>
     </motion.div>
   )

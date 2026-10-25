@@ -1329,6 +1329,68 @@ GAME_SCENARIOS.push(
   },
 )
 
+// The Nan trip's rental desk, map and the 3 (greybox, step 6): the key fob pressed again and again (the Pajero chirps,
+// its lights wink, the mirrors fold out, Daddy jumps, the tailgate pops up); on the map, the little Pajero grabbed at
+// the airport and pulled along the roads over the bridge, through town and up the valley to the mushroom farm (held
+// there, it goes: the camera dives into the road); at the viewpoint, a finger drawing the 3 along the road below.
+const nanReady = async (page, base, hash, ready) => {
+  await page.goto(`${base}#/world/thailand/nan-trip/${hash}`)
+  await page.waitForFunction(ready, null, { timeout: 30000 })
+  await page.waitForTimeout(1500)
+}
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-fob',
+    seconds: 7,
+    setup: (page, base) => nanReady(page, base, 'rental', () => window.__thaiNanQA?.().fob === 'hand'),
+    act: async (page) => {
+      for (let k = 0; k < 4; k++) {
+        const p = (await page.evaluate(() => window.__thaiNanQA())).points
+        if (p.fob) await page.mouse.click(...p.fob)
+        await page.waitForTimeout(1100)
+      }
+    },
+  },
+  {
+    name: 'nan-map-drag',
+    seconds: 9,
+    setup: (page, base) => nanReady(page, base, 'map', () => window.__thaiNanQA?.().game === 'map'),
+    act: async (page) => {
+      const q = await page.evaluate(() => window.__thaiNanQA())
+      const n = q.points.nodes
+      await page.mouse.move(...q.car)
+      await page.mouse.down()
+      for (const to of [n.town, n.mushrooms]) {
+        const from = (await page.evaluate(() => window.__thaiNanQA())).car ?? to
+        for (let k = 1; k <= 14; k++) {
+          await page.mouse.move(from[0] + ((to[0] - from[0]) * k) / 14, from[1] + ((to[1] - from[1]) * k) / 14)
+          await page.waitForTimeout(110)
+        }
+        await page.waitForTimeout(500)
+      }
+      await page.waitForTimeout(900)
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'nan-trace',
+    seconds: 9,
+    setup: (page, base) => nanReady(page, base, 'three', () => !!window.__thaiNanQA?.().path),
+    act: async (page) => {
+      await page.waitForTimeout(800)
+      const path = (await page.evaluate(() => window.__thaiNanQA())).path ?? []
+      if (!path.length) return
+      await page.mouse.move(...path[0])
+      await page.mouse.down()
+      for (const p of path.slice(1)) {
+        await page.mouse.move(...p, { steps: 2 })
+        await page.waitForTimeout(55)
+      }
+      await page.mouse.up()
+    },
+  },
+)
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {
