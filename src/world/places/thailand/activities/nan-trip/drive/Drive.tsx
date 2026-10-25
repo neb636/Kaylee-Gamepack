@@ -15,8 +15,8 @@ interface Props {
   road: RoadId
   /** The end card picked a road. */
   onRoad: (road: RoadId) => void
-  /** The end card's stop at the end of this road (so far only the valley road's: the mushroom farm). */
-  onStop?: () => void
+  /** The end card's stop at the end of this road (the valley road's mushroom farm, the sky road's Stop Time Cafe). */
+  onStop?: (road: RoadId) => void
 }
 
 export function Drive({ road, onRoad, onStop }: Props) {
@@ -165,11 +165,17 @@ function CountPop({ count }: { count: DriveHud['count'] }) {
   )
 }
 
+/** The stops built so far at the end of a road. */
+const STOP_AT: Partial<Record<RoadId, { icon: string; label: string }>> = {
+  valley: { icon: '🍄', label: 'The mushroom farm' },
+  sky: { icon: '🌾', label: 'Stop Time Cafe' },
+}
+
 /** The end of the road: drive it again, or take another road (big pictures, no reading). At the end of a road with a
- *  stop built (the valley road's mushroom farm), its big 🍄 comes first. */
-export function EndCard({ road, onRoad, onStop }: { road: RoadId; onRoad: (r: RoadId) => void; onStop?: () => void }) {
+ *  stop built (the valley road's mushroom farm, the sky road's Stop Time Cafe), its big picture comes first. */
+export function EndCard({ road, onRoad, onStop }: { road: RoadId; onRoad: (r: RoadId) => void; onStop?: (road: RoadId) => void }) {
   const size = 'clamp(92px, 15vmin, 128px)'
-  const stop = onStop && road === 'valley' ? onStop : undefined
+  const stop = onStop && STOP_AT[road]
   return (
     <motion.div
       key="end"
@@ -180,8 +186,8 @@ export function EndCard({ road, onRoad, onStop }: { road: RoadId; onRoad: (r: Ro
       style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom, 0px) + 18px)', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 'clamp(12px, 2.6vw, 26px)', padding: '0 16px', zIndex: 50 }}
     >
       {stop && (
-        <motion.button aria-label="The mushroom farm" whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1.1 }} onClick={stop} style={{ width: size, height: size, borderRadius: '50%', border: '6px solid #fff', background: 'var(--hotpink)', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 }}>
-          🍄
+        <motion.button aria-label={stop.label} whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1.1 }} onClick={() => onStop(road)} style={{ width: size, height: size, borderRadius: '50%', border: '6px solid #fff', background: 'var(--hotpink)', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 }}>
+          {stop.icon}
         </motion.button>
       )}
       {[road, ...ROAD_IDS.filter((r) => r !== road)].map((r) => (

@@ -160,6 +160,10 @@ const SCENARIOS = [
   // the basket or the pizza puts the next mushroom on, so the auto-player can play the rounds through to lunch.
   { name: 'thailand nan: the mushroom farm', id: 'nan-mushrooms', hash: '#/world/thailand/nan-trip/mushrooms', reset: true },
   { name: 'thailand nan: the mushroom pizza', id: 'nan-mushroom-pizza', hash: '#/world/thailand/nan-trip/mushrooms?round=pizza', reset: true },
+  // Stop Time Cafe (greybox, no voices): a tap on a paddy pours a second of water (it runs on down the steps), a tap
+  // while planting plants a patch, a tap on a cloud rains a little, and on the deck the glass and Mommy, so the
+  // auto-player can play the rounds through to the photo.
+  { name: 'thailand nan: stop time cafe', id: 'nan-rice', hash: '#/world/thailand/nan-trip/rice', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
   // (?gl=off goes before the hash: the section's address drops anything it doesn't know.)
   { name: 'thailand trip: picture book without webgl', id: 'trip-book', search: '?gl=off', hash: '#/world/thailand/boat-trip/invite', reset: true },
