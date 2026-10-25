@@ -186,8 +186,8 @@ Fredoka. Animations: `motion` (`import { motion, AnimatePresence } from 'motion/
 ## Thailand: the 3D country (the reference for new work)
 
 Read `planning/around-the-world/thailand.md` (the family, the house, the gates so far), then the plan of the trip you're
-working on: `thailand/boat-trip.md` (the first trip, and the reusable trip kit), `thailand/mall-trip.md` (the mall
-day, a hall of mini games) or `thailand/nan-trip.html` (a road trip in the mountains, the road kit).
+working on: `thailand/nan-trip.html` (a road trip in the mountains, the road kit). The finished boat and mall trips
+(and Baan Chang) have no plan left; read their code in `trip/` and `activities/`.
 `thailand/known-issues.md` lists small things QA found, with links and code paths. Plans end with what's built and
 what's next; PR bodies end with the next prompt.
 
