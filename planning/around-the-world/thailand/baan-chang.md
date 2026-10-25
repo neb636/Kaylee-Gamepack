@@ -736,6 +736,22 @@ changed. `?chang=1` still works but isn't needed.
 **Next:** Dad plays the whole trip on the iPad (Baan Chang is on: land in Krabi and pick 🐘), and listens to the new
 voices, the count and the lip sync. Then the known small things above, starting with the boardwalk.
 
+### Polish from Dad's first play (2026-10-25)
+
+- **Where to?** The fork's two glowing rings over the signpost's boards are gone (they overlapped the songthaew and
+  wouldn't fit a third place). When the songthaew stops, Daddy's card comes up (`trip/legs/WhereTo.tsx`): his line
+  in a bubble (tap to hear it again) and a row of polaroid postcards, one per place, drawn in code
+  (`activities/boat-trip/ForkCards.tsx`: the elephant under the palms with a banana, the longtail among the rock
+  towers). Past what fits on screen the row scrolls sideways a card at a time, so a new place is one more entry in
+  `FORK_CARDS`. While he asks, the camera takes in the road too, so the card doesn't cover the family. The signpost
+  stays as scenery. Mommy's trip card (`Ask.tsx`) could move onto the same postcards later.
+- **Bananas** look like bananas: five ridges, fat in the middle, a point at the tip, a green neck and a stalk.
+- **No cup on the rail while she feeds:** her chocolate milk is on the post only in `lamyai`, where Khanom sneaks
+  sips (it grows into place when Lamyai comes over).
+- **The grass doesn't flicker:** every ground layer has its own height (grass under the gravel and sand, the dirt
+  patches over them). Some grass patches sat exactly at the sand's height, and the camera moving made them fight.
+- **The songthaew's roof is higher** (`trip/vehicles/songthaew.ts`, `ROOF_Y`): Mommy's and Daddy's heads went through it.
+
 ## Fun check (filled in now, to be re-checked on the iPad)
 
 - **Core verb:** hold food out to a trunk. Fun with no goal? That's what greybox 1 tests.

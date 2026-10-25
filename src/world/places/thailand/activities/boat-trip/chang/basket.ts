@@ -1,7 +1,7 @@
 // Daddy's woven bamboo basket on a tree stump, and the foods in it: four bananas on the left, four sticks of
 // sugarcane on the right. The same eight foods go round and round: she pulls one out, a trunk takes it, it's eaten, and a
 // moment later it's back in the basket (Daddy brought plenty), so the toy never runs out.
-import { Group, Vector3, type Object3D } from 'three'
+import { BufferGeometry, Color, Float32BufferAttribute, Group, Vector3, type Object3D } from 'three'
 import type { Bag } from '../../../engine/dispose'
 import { merge, P, solid } from '../../../engine/geo'
 import { BASKET, type FoodKind } from './layout'
@@ -10,13 +10,64 @@ const WEAVE = '#E2B878'
 const WEAVE_DARK = '#C99A5E'
 const STUMP = '#B08463'
 
-/** One banana: a curved yellow arc with a brown stalk and tip. */
+/** A banana's arc: R round, θ from -A (the tip) to +A (the stalk); it smiles (both ends up), its middle at the origin. */
+const BAN_R = 0.3
+const BAN_A = 0.56
+const banAt = (th: number, out = new Vector3()) => out.set(BAN_R * Math.sin(th), BAN_R * (1 - Math.cos(th)) - 0.03, 0)
+
+/** The banana's skin: five ridges round it (a real banana isn't round), fat in the middle, narrowing to a point at the
+ *  tip and to a neck at the stalk, yellow going a little green near the stalk. */
+function bananaSkin() {
+  const rings = 16
+  const sides = 5
+  const pos: number[] = []
+  const rgb: number[] = []
+  const idx: number[] = []
+  const yellow = new Color('#FFD84A')
+  const green = new Color('#C9D45A')
+  const c = new Color()
+  const p = new Vector3()
+  for (let i = 0; i <= rings; i++) {
+    const t = i / rings
+    const th = -BAN_A + t * 2 * BAN_A
+    banAt(th, p)
+    // (Closing to a point at the tip, a slim neck at the stalk.)
+    const r = 0.046 * Math.pow(Math.sin(Math.PI * t * 0.92), 0.55)
+    c.copy(yellow).lerp(green, Math.max(0, (t - 0.7) / 0.3))
+    for (let j = 0; j < sides; j++) {
+      const ph = (j / sides) * Math.PI * 2
+      // Out from the arc: along its normal (-sin θ, cos θ) and across it (z), a touch flatter front to back.
+      const nx = -Math.sin(th) * Math.cos(ph)
+      const ny = Math.cos(th) * Math.cos(ph)
+      pos.push(p.x + nx * r, p.y + ny * r, Math.sin(ph) * r * 0.9)
+      rgb.push(c.r, c.g, c.b)
+    }
+  }
+  for (let i = 0; i < rings; i++)
+    for (let j = 0; j < sides; j++) {
+      const a = i * sides + j
+      const b = i * sides + ((j + 1) % sides)
+      idx.push(a, b, a + sides, b, b + sides, a + sides)
+    }
+  const g = new BufferGeometry()
+  g.setAttribute('position', new Float32BufferAttribute(pos, 3))
+  g.setAttribute('color', new Float32BufferAttribute(rgb, 3))
+  g.setIndex(idx)
+  g.computeVertexNormals()
+  return g.toNonIndexed()
+}
+
+/** One banana: the ridged, curved skin, a green-brown stalk carrying on from its neck, and a dark little tip. */
 export function banana(bag: Bag) {
+  const stalk = banAt(BAN_A)
+  const tip = banAt(-BAN_A)
   return solid(
     merge([
-      P.torus(0.17, 0.05, '#FFE16B', { rot: [0, 0, -0.35] }, 1.75),
-      P.cyl(0.022, 0.03, 0.08, '#8B6A4E', { at: [0.15, 0.1, 0], rot: [0, 0, -0.9] }, 6),
-      P.sphere(0.03, '#6E5340', { at: [-0.07, 0.165, 0] }, 6),
+      bananaSkin(),
+      P.sphere(0.021, '#C9D45A', { at: [stalk.x, stalk.y, 0] }, 8),
+      P.cyl(0.011, 0.014, 0.07, '#8A8A45', { at: [stalk.x + 0.026, stalk.y + 0.016, 0], rot: [0, 0, -(Math.PI / 2 - BAN_A)] }, 6),
+      P.cyl(0.016, 0.016, 0.012, '#6B5238', { at: [stalk.x + 0.055, stalk.y + 0.033, 0], rot: [0, 0, -(Math.PI / 2 - BAN_A)] }, 6),
+      P.sphere(0.013, '#4A3A2E', { at: [tip.x + 0.006, tip.y + 0.002, 0] }, 6),
     ]),
     bag,
     1.5,
@@ -71,7 +122,7 @@ export class Basket {
     this.root.add(this.body)
     // Four bananas fanned on the left, four sticks of cane standing up on the right.
     for (let i = 0; i < 4; i++) {
-      const home = new Vector3(x - r * 0.55 + (i % 3) * 0.06 - 0.06, y + 0.04 + Math.floor(i / 3) * 0.06, z - 0.1 + (i % 3) * 0.1)
+      const home = new Vector3(x - r * 0.55 + (i % 3) * 0.06 - 0.06, y + 0.11 + Math.floor(i / 3) * 0.05, z - 0.1 + (i % 3) * 0.1)
       this.add('banana', banana(bag), home, -0.4 + i * 0.2, scene)
     }
     for (let i = 0; i < 4; i++) {

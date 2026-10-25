@@ -1,8 +1,9 @@
 // The yard's greybox props beyond the basket:
 // - WantBubble: a picture bubble over an elephant's head (`favorites`): the food it wants, and up to three pips that
 //   fill in gold as she feeds it ("One! Two! Three!"). No words, so she can read it. It always faces the camera.
-// - Milk: her chocolate milk from the cafe (`drinks`, drink.ts) on the rail post, with the straw she picked: the milk
-//   goes down a little with each of Khanom's sneaky sips (`lamyai`).
+// - Milk: her chocolate milk from the cafe (`drinks`, drink.ts), with the straw she picked. Mommy holds it while she
+//   feeds (no cup on the rail); it's on the rail post only in `lamyai`, and goes down a little with each of Khanom's
+//   sneaky sips.
 // - Splash: the water the elephants spray up over the family (`splash`), and the rainbow that arcs over the yard.
 import { Camera, DoubleSide, Group, Mesh, MeshBasicMaterial, SphereGeometry, TorusGeometry, Vector3 } from 'three'
 import { bell } from '../../../../../../sdk'
@@ -103,6 +104,12 @@ export class Milk {
     for (const [k, g] of this.straws) g.visible = k === c
   }
 
+  /** On the rail post (it grows into place) or not. */
+  show(on: boolean) {
+    if (on && !this.root.visible) this.root.scale.setScalar(0.01)
+    this.root.visible = on
+  }
+
   sip(dt: number) {
     this.level = Math.max(0.2, this.level - dt * 0.09)
     this.wobble = 0
@@ -115,6 +122,7 @@ export class Milk {
     this.wobble = Math.min(1, this.wobble + dt / 0.5)
     const w = this.wobble < 1 ? Math.sin(this.wobble * Math.PI * 4) * (1 - this.wobble) : 0
     this.root.rotation.z = w * 0.1
+    if (this.root.scale.x < 1) this.root.scale.setScalar(Math.min(1, this.root.scale.x + dt * 4))
     // (Chocolate milk, all stirred: the level is how much of it is left.)
     this.drink.milk = this.level * 0.8
     this.drink.choc = this.level * 0.4

@@ -115,13 +115,15 @@ export function boulder(x: number, z: number, w: number, h: number, d: number, s
   return geo
 }
 
-/** The ground's texture: tan dirt patches in the gravel and a sprinkle of little pebbles, inside x0..x1, z0..z1. */
+/** The ground's texture: tan dirt patches in the gravel and a sprinkle of little pebbles, inside x0..x1, z0..z1. The
+ *  patches' tops are at 0.022 and 0.026, over gravel or sand (tops at most 0.014) and the grass. */
 export function groundScatter(x0: number, x1: number, z0: number, z1: number, seed: number, patches = 10, pebbles = 40) {
   const r = (i: number, j: number) => (bump(i, j, seed, seed) + 1) / 2
   const parts: BufferGeometry[] = []
   for (let i = 0; i < patches; i++) {
     const s = 0.8 + r(i, 1) * 1.6
-    parts.push(P.cyl(s, s, 0.01, i % 3 ? '#DDCDB3' : '#D3C2A6', { at: [x0 + r(i, 2) * (x1 - x0), 0.003 + i * 0.0004, z0 + r(i, 3) * (z1 - z0)], scale: [1.5, 1, 0.8], rot: [0, r(i, 4) * 3, 0] }, 12))
+    // (Each color on its own height, clear of the gravel and the sand under them: patches at the same height flicker.)
+    parts.push(P.cyl(s, s, 0.01, i % 3 ? '#DDCDB3' : '#D3C2A6', { at: [x0 + r(i, 2) * (x1 - x0), i % 3 ? 0.017 : 0.021, z0 + r(i, 3) * (z1 - z0)], scale: [1.5, 1, 0.8], rot: [0, r(i, 4) * 3, 0] }, 12))
   }
   for (let i = 0; i < pebbles; i++) {
     const s = 0.04 + r(i, 5) * 0.06
@@ -132,7 +134,8 @@ export function groundScatter(x0: number, x1: number, z0: number, z1: number, se
 
 /** The plantation floor round the yard (Dad's photos: brown earth under the palms, grass growing back in patches). */
 export const EARTH = '#D8CDB0'
-/** Green patches of grass and low ferns in the earth, inside x0..x1, z0..z1, skipping a box (`skip`: x0, x1, z0, z1). */
+/** Green patches of grass and low ferns in the earth, inside x0..x1, z0..z1, skipping a box (`skip`: x0, x1, z0, z1).
+ *  Their tops are at 0.003 and 0.006: gravel or sand laid over them (tops 0.01 and up) covers them cleanly. */
 export function grassPatches(x0: number, x1: number, z0: number, z1: number, seed: number, n: number, skip?: [number, number, number, number]) {
   const r = (i: number, j: number) => (bump(i, j, seed, seed) + 1) / 2
   const parts: BufferGeometry[] = []
@@ -141,7 +144,8 @@ export function grassPatches(x0: number, x1: number, z0: number, z1: number, see
     const z = z0 + r(i, 2) * (z1 - z0)
     if (skip && x > skip[0] && x < skip[1] && z > skip[2] && z < skip[3]) continue
     const s = 0.9 + r(i, 3) * 1.8
-    parts.push(P.cyl(s, s, 0.01, i % 3 ? '#B5D58E' : '#A3CB82', { at: [x, 0.006 + (i % 5) * 0.0005, z], scale: [1.5, 1, 0.8], rot: [0, r(i, 4) * 3, 0] }, 12))
+    // (Under the gravel and the sand, each green on its own height: the same height flickers where they overlap.)
+    parts.push(P.cyl(s, s, 0.004, i % 3 ? '#B5D58E' : '#A3CB82', { at: [x, i % 3 ? 0.001 : 0.004, z], scale: [1.5, 1, 0.8], rot: [0, r(i, 4) * 3, 0] }, 12))
   }
   return parts
 }

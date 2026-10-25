@@ -12,6 +12,8 @@ const STRIPE = PAL.cream
 const ROOF = PAL.butter
 const SEAT = '#C9B5F7'
 const GLASS = '#CDEBFF'
+/** The roof's middle (its underside 0.05 lower): Daddy, sitting on the bench, comes up to about 2.4 m. */
+const ROOF_Y = 2.85
 
 export interface Songthaew {
   root: Group
@@ -54,12 +56,12 @@ export function buildSongthaew(bag: Bag): Songthaew {
     // The far bench's back (the near one has none, so the family on the far bench shows from the curb).
     P.rbox(bedL - 0.2, 0.42, 0.08, 0.03, SEAT, { at: [bedX, 1.44, -(W / 2 - 0.08)] }),
     P.rbox(0.3, 0.08, 0.9, 0.03, '#D9D5E6', { at: [bedX - bedL / 2 - 0.12, 0.38, 0] }),
-    // The roof on its posts, striped, with a rail round it.
-    ...[-1, 1].flatMap((s) => [bedX - bedL / 2 + 0.06, bedX, bedX + bedL / 2 - 0.06].map((x) => P.cyl(0.04, 0.04, 1.5, '#F4EFF8', { at: [x, 1.6, s * (W / 2 - 0.05)] }))),
-    P.rbox(bedL + 0.1, 0.1, W + 0.1, 0.05, ROOF, { at: [bedX, 2.36, 0] }),
-    ...[-0.7, 0, 0.7].map((dz) => P.box(bedL + 0.12, 0.11, 0.2, BODY, { at: [bedX, 2.36, dz] })),
-    P.box(bedL + 0.1, 0.06, 0.06, '#F4EFF8', { at: [bedX, 2.5, W / 2] }),
-    P.box(bedL + 0.1, 0.06, 0.06, '#F4EFF8', { at: [bedX, 2.5, -W / 2] }),
+    // The roof on its posts, striped, with a rail round it: high enough for Daddy sitting up tall, horn and all.
+    ...[-1, 1].flatMap((s) => [bedX - bedL / 2 + 0.06, bedX, bedX + bedL / 2 - 0.06].map((x) => P.cyl(0.04, 0.04, ROOF_Y - 0.85, '#F4EFF8', { at: [x, (ROOF_Y + 0.85) / 2, s * (W / 2 - 0.05)] }))),
+    P.rbox(bedL + 0.1, 0.1, W + 0.1, 0.05, ROOF, { at: [bedX, ROOF_Y, 0] }),
+    ...[-0.7, 0, 0.7].map((dz) => P.box(bedL + 0.12, 0.11, 0.2, BODY, { at: [bedX, ROOF_Y, dz] })),
+    P.box(bedL + 0.1, 0.06, 0.06, '#F4EFF8', { at: [bedX, ROOF_Y + 0.14, W / 2] }),
+    P.box(bedL + 0.1, 0.06, 0.06, '#F4EFF8', { at: [bedX, ROOF_Y + 0.14, -W / 2] }),
     // A grab rail at the back.
     P.cyl(0.03, 0.03, W - 0.2, '#F4EFF8', { at: [bedX - bedL / 2 + 0.02, 1.25, 0], rot: [Math.PI / 2, 0, 0] }),
   ]
