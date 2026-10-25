@@ -740,8 +740,8 @@ voices, the count and the lip sync. Then the known small things above, starting 
 
 - **Where to?** The fork's two glowing rings over the signpost's boards are gone (they overlapped the songthaew and
   wouldn't fit a third place). When the songthaew stops, Daddy's card comes up (`trip/legs/WhereTo.tsx`): his line
-  in a bubble (tap to hear it again) and a row of polaroid postcards, one per place, drawn in code
-  (`activities/boat-trip/ForkCards.tsx`: the elephant under the palms with a banana, the longtail among the rock
+  in a bubble (tap to hear it again) and a row of polaroid postcards, one per place, generated pictures
+  (`cover-fork-*.png`, `activities/boat-trip/ForkCards.tsx`: the elephant under the palms with a banana, the longtail among the rock
   towers). Past what fits on screen the row scrolls sideways a card at a time, so a new place is one more entry in
   `FORK_CARDS`. While he asks, the camera takes in the road too, so the card doesn't cover the family. The signpost
   stays as scenery. Mommy's trip card (`Ask.tsx`) could move onto the same postcards later.

@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import type { ReactNode } from 'react'
 import { lineText, say, sounds, type Line } from '../../../../../sdk'
 
-/** A place on the card: its id, a name (for Dad and VoiceOver), its frame color and its picture (any 4:3 drawing). */
+/** A place on the card: its id, a name (for Dad and VoiceOver), its frame color and its picture (3:2, shown whole). */
 export interface Postcard {
   id: string
   label: string
@@ -68,7 +68,7 @@ export function WhereTo({ open, who, whoColor, line, cards, onPick }: Props) {
                   }}
                   style={{ scrollSnapAlign: 'center', flexShrink: 0, width: W, padding: 8, paddingBottom: 4, border: 'none', borderRadius: 18, background: '#fff', boxShadow: 'var(--shadow)', display: 'flex', flexDirection: 'column', gap: 4, color: 'var(--ink)', font: 'inherit' }}
                 >
-                  <span aria-hidden style={{ display: 'block', width: '100%', aspectRatio: '4 / 3', borderRadius: 12, overflow: 'hidden', background: c.color }}>
+                  <span aria-hidden style={{ display: 'block', width: '100%', aspectRatio: '3 / 2', borderRadius: 12, overflow: 'hidden', background: c.color }}>
                     {c.picture}
                   </span>
                   <span style={{ alignSelf: 'center', fontWeight: 700, fontSize: 'clamp(15px, min(2.4vw, 2.6vh), 20px)', padding: '2px 0' }}>{c.label}</span>
