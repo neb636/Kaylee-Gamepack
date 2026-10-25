@@ -2,6 +2,8 @@
 // WebKit is the default because Kaylee's iPad runs Safari; pass --chromium to compare.
 import { chromium, webkit } from '@playwright/test'
 import { spawn } from 'node:child_process'
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import path from 'node:path'
 import sharp from 'sharp'
 
@@ -24,19 +26,68 @@ export const VIEWPORTS = [
   { name: 'laptop', width: 1280, height: 720, desktop: true },
 ]
 
-/** Serves dist/ with vite preview; returns { base, stop }. */
+const LOCK = path.join(tmpdir(), 'kaylee-gamepack-qa.lock')
+const alive = (pid) => {
+  try {
+    process.kill(pid, 0)
+    return true
+  } catch (e) {
+    return e.code === 'EPERM'
+  }
+}
+
+/**
+ * One QA run at a time on this machine, across every worktree and agent: the scripts share fixed ports and
+ * WebKit is CPU-heavy, so parallel runs clash and time each other out. Waits for the holder to finish; a lock
+ * left by a dead process is taken over.
+ */
+async function acquireLock() {
+  let told = false
+  for (;;) {
+    try {
+      mkdirSync(LOCK)
+      writeFileSync(path.join(LOCK, 'info'), JSON.stringify({ pid: process.pid, cwd: root, script: path.basename(process.argv[1] ?? '') }))
+      const release = () => rmSync(LOCK, { recursive: true, force: true })
+      process.once('exit', release)
+      for (const sig of ['SIGINT', 'SIGTERM']) process.once(sig, () => process.exit(1))
+      return release
+    } catch (e) {
+      if (e.code !== 'EEXIST') throw e
+    }
+    let holder = null
+    try {
+      holder = JSON.parse(readFileSync(path.join(LOCK, 'info'), 'utf8'))
+    } catch {
+      /* holder is still writing its info */
+    }
+    if (holder && !alive(holder.pid)) {
+      rmSync(LOCK, { recursive: true, force: true })
+      continue
+    }
+    if (!told) console.log(`QA is busy (${holder ? `${holder.script} in ${holder.cwd}` : 'another run'}); waiting for it to finish...`)
+    told = true
+    await new Promise((r) => setTimeout(r, 2000))
+  }
+}
+
+/** Takes the machine-wide QA lock, then serves dist/ with vite preview; returns { base, stop } (stop also frees the lock). */
 export async function serve(port) {
+  const release = await acquireLock()
   const server = spawn('npx', ['vite', 'preview', '--port', String(port), '--strictPort'], { cwd: root, stdio: 'ignore' })
+  const stop = () => {
+    server.kill()
+    release()
+  }
   const base = `http://localhost:${port}/`
   for (let i = 0; i < 80; i++) {
     try {
-      if ((await fetch(base)).ok) return { base, stop: () => server.kill() }
+      if ((await fetch(base)).ok) return { base, stop }
     } catch {
       /* not up yet */
     }
     await new Promise((r) => setTimeout(r, 250))
   }
-  server.kill()
+  stop()
   throw new Error(`Server did not start at ${base}`)
 }
 
