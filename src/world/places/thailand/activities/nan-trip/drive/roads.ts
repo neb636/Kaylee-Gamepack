@@ -1,6 +1,6 @@
 // The Nan trip's four roads, as data in meters (plan: thailand/nan-trip.md, "The mountain road"). Same verb on each
 // (steer the Pajero), and each one deepens it:
-// - city: Nan town to Wat Phumin, short and flat, over the Nan River bridge, past the market; tuk-tuks and scooters.
+// - city: through Nan town to its market, short and flat, over the Nan River bridge; tuk-tuks and scooters.
 // - valley: through the rice fields of Pua to the mushroom farm; chickens on the road, a songthaew coming the other
 //   way (keep left!), a buffalo that ambles across (Mommy stops for it).
 // - sky: up Doi Phu Kha in steep S-bends, into the cloud (white all round, the headlights on) and out above it into the
@@ -17,7 +17,7 @@ import type { TrafficPlan } from '../../../trip/road/traffic'
 export const ROAD_IDS = ['city', 'valley', 'sky', 'three'] as const
 export type RoadId = (typeof ROAD_IDS)[number]
 export type Weather = 'grey' | 'rain' | 'sun'
-export type LandmarkKind = 'temple' | 'mushrooms' | 'cafe' | 'viewpoint'
+export type LandmarkKind = 'market' | 'mushrooms' | 'cafe' | 'viewpoint'
 
 export interface NanRoad {
   id: RoadId
@@ -53,8 +53,8 @@ function city(): NanRoad {
   const at = (i: number) => road.sOfPoint(i)
   return {
     id: 'city',
-    icon: '🛕',
-    name: 'Nan town to Wat Phumin',
+    icon: '🧺',
+    name: 'Nan town to the market',
     road,
     look: { hills: { near: 0.3, far: 6 }, wall: 30, river: { s: (at(3) + at(4)) / 2, width: 18 }, trees: 120, seed: 11 },
     weather: 'sun',
@@ -71,7 +71,7 @@ function city(): NanRoad {
     blind: [],
     count: [],
     market: [at(5) - 8, at(7)],
-    landmark: 'temple',
+    landmark: 'market',
   }
 }
 

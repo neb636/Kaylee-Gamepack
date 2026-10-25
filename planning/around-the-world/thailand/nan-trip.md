@@ -2,15 +2,14 @@
 
 Written 2026-10-24. Thailand's third family trip, and the first that is mostly about **learning about a place**.
 Mommy, Daddy and Kaylee fly north to Nan, pick up a silver rental **Mitsubishi Pajero Sport** at the airport and drive the
-swoopy mountain roads between four real places: an old temple, a mushroom farm, a café over the rice terraces and a
-village that makes salt from a well. It's built in 3D in the house's look (toon bands, ink outlines, blob shadows) and
+swoopy mountain roads between three real places: a mushroom farm, a café over the rice terraces and a village that
+makes salt from a well. It's built in 3D in the house's look (toon bands, ink outlines, blob shadows) and
 reuses the trip kit. Read it with `../thailand.md`, `boat-trip.md` (the trip kit), `mall-trip.md` (a trip with many
 small toys), `../ACTIVITY-TEMPLATE.md` and `docs/play-design.md`.
 
 **One-line pitch:** Kaylee presses the key and the big Pajero beeps hello. Mommy drives and Kaylee steers it round the
-bends of the mountains into the clouds. At each stop she makes something the mountains make: she wakes up an old
-painting with a lantern, mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a
-well. On the way home the road draws a giant **3**.
+bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms
+until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.
 
 **One idea holds it together: the mountains make things.** Clouds, rice steps, mushrooms and salt all come from Nan's
 mountains, and Kaylee makes each one with her own hands. The road between the stops is the toy that ties them together.
@@ -20,9 +19,9 @@ mountains, and Kaylee makes each one with her own hands. The road between the st
 - **Just Mommy, Daddy and Kaylee.**
 - **They fly** Bangkok → Nan with the trip kit and **rent a silver Pajero Sport at Nan airport.**
 - **Mommy drives**, and Kaylee's finger steers (as in the boat race: she picks where across the road it goes).
-- **The stops:** Wat Phumin in Nan city, **Baan Huanam Mushroom Farm** (not in the photos, Dad's must-have), the
+- **The stops:** **Baan Huanam Mushroom Farm** (not in the photos, Dad's must-have), the
   rice-terrace café deck (**Stop Time Cafe**, above Sapan village), Bo Kluea's salt wells, and the S-curve "number 3"
-  road.
+  road. (Wat Phumin was on this list and was dropped on 2026-10-25: no temples or Buddhas in the game, see AGENTS.md.)
 - **They ate the mushroom pizza** at Baan Huanam.
 - **No gift for Agong** this time: they come home and the trip's photo goes on his wall.
 - **Somewhat educational**, not only a trip recreation: each stop teaches one real thing by doing it.
@@ -50,11 +49,6 @@ Tai Lue dress, on a rain-wet road.
   Don Mueang, and rental desks at the terminal.
 - **The Pajero Sport** is a big seven-seat Mitsubishi SUV, and it's **made in Thailand** (Mitsubishi's Laem Chabang
   plant). Right-hand drive: in Thailand cars **drive on the left**.
-- **Wat Phumin** (Nan city): a cross-shaped temple from long ago. It sits on the backs of two giant **naga**
-  serpents, whose bodies run along the stairs, with a door on each of the four sides. Inside, **four golden Buddhas**
-  sit back to back, so whichever door you come in, a Buddha faces you. The walls are covered with old murals of
-  stories and of everyday life in Nan (from the 1860s-70s). The most famous one is **Pu Man Ya Man**, a man
-  **whispering** into a woman's ear: Nan's "whispering lovers". Statues of the couple stand in the garden.
 - **Baan Huanam Mushroom Farm** (บ้านหัวน้ำ, 129 Moo 5, Sila Laeng, Pua): a farm restaurant in the trees with a
   view of the countryside. It grows its own mushrooms, and its **mushroom pizza** is the dish everyone orders.
   Oyster mushrooms in Thailand grow from **bags of sawdust** that hang or stand in rows in dark, damp, misted
@@ -82,7 +76,7 @@ Tai Lue dress, on a rain-wet road.
  Agong's house        the way there                  Nan                                                      home
  ┌─────────────┐   ┌──────────────────────┐   ┌────────────┐   ┌──────────────────────────────────┐   ┌─────────────┐
  │ Mommy asks: │ → │ pack, goodbye, van,  │ → │ rental     │ → │ the Nan map ⇄ drive ⇄ a stop      │ → │ fly home;   │
- │ where to?   │   │ airport, window seat │   │ desk: the  │   │ temple · mushrooms · rice · salt  │   │ the photo   │
+ │ where to?   │   │ airport, window seat │   │ desk: the  │   │ mushrooms · rice · salt           │   │ the photo   │
  │ 🚤 🛝🍕 🏔️🚙  │   │ Bangkok → Nan        │   │ Pajero     │   │ then the "3" road to the airport  │   │ on the wall │
  └─────────────┘   └──────────────────────┘   └────────────┘   └──────────────────────────────────┘   └─────────────┘
 ```
@@ -94,16 +88,15 @@ Tai Lue dress, on a rain-wet road.
 | Rental desk | `rental` | ~5 s | 6-10 | 1 line | key fob, suitcase into the boot, seatbelt click |
 | The Nan map | `map` | ~3 s | 1-3 | 1 line (first time) | tap where to go next |
 | **The mountain road** | `drive` (`?road=…`) | **at once** | **15-30 per drive** | 0-1 line | steer, honk, wipers |
-| **Wat Phumin** | `temple` | ~5 s | 20-35 | 1 line | the lantern on the murals, the wai |
 | **Mushroom farm** | `mushrooms` | ~5 s | 25-40 | 1 line | mist, pick, top the pizza |
 | **Rice farm + café** | `rice` | ~3 s | 50-70 | 1 line | lead Kaylee: plant, shoo the birds, cut; bang the grains |
 | **Bo Kluea** | `salt` | ~5 s | 25-40 | 1 line | dip, pour, stoke, scoop |
 | The "3" road | `three` | at once | 15-25 | 0 lines | steer down the hairpins, the 3 from above |
 | Home | `home` | 20-30 s | 2-4 | 1 line | pick the photo for Agong's wall |
-| **Total** | | **~12-20 min** (all four stops) | **~170-260** | | |
+| **Total** | | **~10-17 min** (all three stops) | **~150-225** | | |
 
 Any order, as Kaylee asked. Every stop is open on the map from the start, and each one gets a stamp on the map. After
-two stops Mommy asks "Home, or one more?" (🏠 / 🚙) each time she's back at the map; after four the only road left is
+two stops Mommy asks "Home, or one more?" (🏠 / 🚙) each time she's back at the map; after three the only road left is
 home, by the "3" road. The trip's passport stamp comes at `home`, like the other trips.
 
 **Resume and replays,** as in the other trips: the trip saves after each stop (`useSaved('thailand-nan-trip')`). After
@@ -147,8 +140,7 @@ One short beat, not a full activity (about 30-45 s, 6-10 touches).
 ## The Nan map 🗺️ (`map`, the hub)
 
 A **toy diorama of Nan** on a table, seen from above at a slant: green hills, the Nan River winding down the middle,
-little clouds sitting on the peaks, a tiny town, and four landmarks standing up like toys:
-- the temple with its four doors (Wat Phumin),
+little clouds sitting on the peaks, a tiny town with its market, and three landmarks standing up like toys:
 - a mushroom house with a big pink mushroom on the roof (Baan Huanam),
 - rice steps with a little wooden café on the hill above them (Stop Time Cafe, at Sapan),
 - a salt hut with a steaming pan (Bo Kluea),
@@ -186,7 +178,7 @@ in the lane by herself.
    counts "one… two… three" bends aloud with Sparkle, then at the viewpoint the camera lifts up and the road below
    draws a giant **3** (the `three` section).
 
-To the temple is a short city road (`city`): tuk-tuks, a market, the river bridge, 20-30 s.
+Through Nan town is a short city road (`city`): tuk-tuks, the river bridge, ending at the market, 20-30 s.
 
 Side verb: **the horn** (one tap). The wipers come on by themselves in the rain, but tapping them makes them swish
 faster.
@@ -233,31 +225,10 @@ iPhone in portrait.
 Each follows the template: one core verb that deepens three times, about 20-40 touches and 1.5-3 minutes, at most one
 or two spoken lines before her hands are busy, no failing. Each stop ends with a family photo and a stamp on the map.
 
-### 1. Wat Phumin 🛕 (`temple`; the wai, a temple from long ago, four directions)
+Wat Phumin was planned here as a stop and dropped (Dad, 2026-10-25): temples are very sacred to many people in
+Thailand, and a game can easily get something wrong, so there are no temples or Buddhas in the game (AGENTS.md).
 
-- **Pitch:** the old temple's paintings are asleep in the dim hall. Kaylee's lantern wakes them up.
-- **Arriving:** shoes off at the steps (she taps each shoe and it pops onto the rack: the lesson by doing), up the naga
-  stairs between the two big serpents (tap a naga and it blinks and its tail wiggles; sacred things never wobble, but
-  the naga is a guardian, and it only blinks).
-- **The toy:** drag a lantern over the dark walls of the hall. Where its glow falls, the painting wakes up: painted
-  people wave, boats paddle, an elephant flaps its ears, birds fly from one picture to the next.
-- **How it deepens:**
-  1. Light anything: the walls are full of little scenes that come alive.
-  2. **Find the whispering lovers:** a soft whisper sound gets louder as the lantern gets near; when lit, the man
-     whispers into the woman's ear and little hearts float up. (Sparkle: "What's he whispering? Shh!")
-  3. **The four Buddhas:** the four doors open one by one with light; she walks round and at each golden Buddha her
-     unicorn does a **wai**, a candle glows and a bell rings. Four directions, four bells.
-- **Her choices:** which wall to light, which story to wake.
-- **Pokeables:** the painted elephant, a painted boat race (the boats race along the wall), the pigeons in the
-  courtyard, the bell, the lovers' statues in the garden (they whisper too).
-- **Silly:** shine the lantern on Daddy and a painted Daddy appears in the mural, waving; light the same scene three
-  times and its people dance.
-- **Teaches:** take shoes off and wai in a temple; Wat Phumin is very old; the four Buddhas face the four directions.
-  Facts: the temple sits on two giant naga serpents; the whispering lovers are Nan's most famous painting.
-- **Payoff:** the whole hall glows gold with every scene awake; the family photo under the lovers.
-- **Camera:** inside the hall, a slow orbit round the four Buddhas; the walls are the stage.
-
-### 2. Baan Huanam Mushroom Farm 🍄 (`mushrooms`; mushrooms aren't plants, they love dark and wet)
+### 1. Baan Huanam Mushroom Farm 🍄 (`mushrooms`; mushrooms aren't plants, they love dark and wet)
 
 - **Pitch:** the farmer's mushroom house is thirsty. Kaylee mists the bags and the mushrooms puff up, then she picks
   the best ones for lunch.
@@ -281,7 +252,7 @@ or two spoken lines before her hands are busy, no failing. Each stop ends with a
 - **Carried state:** `basket` (e.g. `pink2,grey5,gold1`) goes to the pizza.
 - **Camera:** inside the mushroom house, a low side view along the rows of bags; the pizza straight on at the table.
 
-### 3. Stop Time Cafe, Sapan ☕ (`rice`; rice grows in water, from seedling to sticky rice)
+### 2. Stop Time Cafe, Sapan ☕ (`rice`; rice grows in water, from seedling to sticky rice)
 
 **Rebuilt (2026-10-25): see `nan-rice.md`.** The first greybox (PR #168: pour water down curved terraces, draw the
 seedlings in, carry rain clouds) didn't work for Dad. The new toy is Kaylee's little rice farm below the café, in the
@@ -291,7 +262,7 @@ the golden rice is cut into bundles (`harvest`). Then she bangs the grains out (
 deck (kept from #168, with the pink milk and Mommy's photo), and a 60-second video shows real rice farming, the same
 steps her hands just did.
 
-### 4. Bo Kluea salt wells 🧂 (`salt`; salt from the mountains, boiling)
+### 3. Bo Kluea salt wells 🧂 (`salt`; salt from the mountains, boiling)
 
 - **Pitch:** in a village high in the mountains, there's a well full of very salty water. Kaylee helps the salt aunty
   turn it into white salt.
@@ -327,7 +298,7 @@ Then the road goes on to the airport and the plane home.
 ## Home 🏠
 
 The home flight (`trip/legs/home-flight.ts`), the van, Agong's door. No gift this time (Dad): the family hops in,
-Agong waves hello, and the photo she picks (the café balcony, the 3, the mushroom pizza, the lovers) goes on his wall.
+Agong waves hello, and the photo she picks (the café balcony, the 3, the mushroom pizza, the salt pan) goes on his wall.
 Tap it and Mommy says "Our trip to Nan!".
 
 ## Sections and carried state
@@ -346,16 +317,15 @@ Activity `nan-trip`: `activities/nan-trip/sections.ts`. Every param has a defaul
 | 8 | `rental` | The rental desk: the Pajero's key | |
 | 9 | `map` | The Nan map: where next? | `stops` |
 | 10 | `drive` | The mountain road (`?road=city\|valley\|sky\|three`) | `road`, `stops` |
-| 11 | `temple` | Wat Phumin: the lantern and the whispering lovers (`?round=1\|2\|3`) | `stops`, `round` |
-| 12 | `mushrooms` | The mushroom farm: mist, pick, the pizza (`?round=1\|2\|3\|pizza`) | `stops`, `round`, `basket` |
-| 13 | `rice` | Sapan's rice farm and Stop Time Cafe (`?round=plant\|grow\|harvest\|thresh\|deck`) | `stops`, `round` |
-| 14 | `salt` | Bo Kluea: salt from the well (`?round=1\|2\|3`) | `stops`, `round` |
-| 15 | `three` | The "3" road from above | `stops` |
-| 16 | `home` | Home: the photo on Agong's wall, the stamp | `photos` |
+| 11 | `mushrooms` | The mushroom farm: mist, pick, the pizza (`?round=1\|2\|3\|pizza`) | `stops`, `round`, `basket` |
+| 12 | `rice` | Sapan's rice farm and Stop Time Cafe (`?round=plant\|grow\|harvest\|thresh\|deck`) | `stops`, `round` |
+| 13 | `salt` | Bo Kluea: salt from the well (`?round=1\|2\|3`) | `stops`, `round` |
+| 14 | `three` | The "3" road from above | `stops` |
+| 15 | `home` | Home: the photo on Agong's wall, the stamp | `photos` |
 
 Params:
 - `packed`: as the boat trip.
-- `stops`: the stops done so far (stamps on the map), a comma list of `temple|mushrooms|rice|salt`. Default empty.
+- `stops`: the stops done so far (stamps on the map), a comma list of `mushrooms|rice|salt`. Default empty.
 - `road`: which road `drive` plays, `city|valley|sky|three`. Default `valley`.
 - `round`: the step of the stop on screen, `1|2|3` (plus `pizza` at the mushroom farm and `deck` at the café).
   Default `1`.
@@ -368,20 +338,18 @@ Params:
 
 - **The trip kit's legs:** their own cameras.
 - **The rental desk:** straight on at the counter; through the window the Pajero in the car park.
-- **The map:** from above at a slant over the diorama; all five landmarks inside the safe zone in portrait and
+- **The map:** from above at a slant over the diorama; all four landmarks (and the airport) inside the safe zone in portrait and
   landscape.
 - **The drive:** the chase camera (above). In portrait it rises higher and looks further ahead.
-- **Each stop:** its own close camera, chosen so the toy and what she touches fill the safe zone (the wall and the
-  lantern, the rows of bags, the steps from the deck, the well and the pan).
+- **Each stop:** its own close camera, chosen so the toy and what she touches fill the safe zone (the rows of bags, the steps from the deck, the well and the pan).
 - Keep clear of the 🏠 button and the top bar; 3D tap targets at least 64 px.
 
 ## The look in 3D
 
 The house's toon look, cooler and greener for the mountains: soft grey-lavender skies, low clouds, rain sometimes,
 deep greens with lavender shadows, wet roads that shine. Wood everywhere (the deck, the salt huts, the mushroom house).
-The Pajero: a big chunky toon SUV in **silver** (Dad), a little shine on its bands. Wat Phumin: white walls, golden roofs, two green-gold naga.
-The mural walls are painted in our flat style (not copies of the real paintings), and the whispering couple is drawn by
-us in Tai Lue dress, the same couple as the mural in Dad's video.
+The Pajero: a big chunky toon SUV in **silver** (Dad), a little shine on its bands.
+The Tai Lue couple on the house in Bo Kluea is drawn by us in our flat style, the same couple as the mural in Dad's video.
 
 ## Characters and voices
 
@@ -390,7 +358,7 @@ us in Tai Lue dress, the same couple as the mural in Dad's video.
 - **Sparkle** guides from the corner (`trip/legs/Guide.tsx`).
 - **Agong** at home (hello, and the photo).
 - **New speakers**, cast like the airport officer: the rental **clerk**, the mushroom **farmer** aunty, the **salt**
-  aunty (a northern accent, kind and funny). The whispering lovers whisper (a soft murmur, no words). Animals don't
+  aunty (a northern accent, kind and funny). Animals don't
   talk: moos, clucks, croaks.
 - **Lines:** 2-4 per stop, about 8 for the drives, plus the trip's own. Roughly 60-70 clips.
 
@@ -398,8 +366,6 @@ us in Tai Lue dress, the same couple as the mural in Dad's video.
 - Nan is in the north of Thailand, in the mountains, next to Laos.
 - The Pajero Sport is made in Thailand.
 - In Thailand, cars drive on the left.
-- Wat Phumin has four Buddhas facing the four doors.
-- The whispering lovers are Nan's most famous painting.
 - Mushrooms aren't plants. They grow in dark, wet places.
 - Rice grows standing in water.
 - The steps on the hill keep the water for the rice.
@@ -429,12 +395,11 @@ activities/nan-trip/
   sections.ts  trip.ts      the sections (no three.js) and the TripDef
   NanTrip.tsx  Flat.tsx     runs the legs and the stops; the no-WebGL picture book
   rental/  map/  drive/     the rental desk, the diorama hub, the drives (roads as data: valley.ts, sky.ts, three.ts, city.ts)
-  temple/  mushrooms/  rice/  salt/   one folder per stop, self-contained (X.ts, Flat.tsx, layout.ts, sounds.ts)
+  mushrooms/  rice/  salt/   one folder per stop, self-contained (X.ts, Flat.tsx, layout.ts, sounds.ts)
 ```
 - `lines.ts`: an `L.nan` block, with one sub-block per stop. `cast.json`: `clerk`, `farmer`, `saltaunty`.
 - Water filling the paddies and the pan: flat planes rising, with `engine/water.ts`'s look. Steam, mist and rain from
-  `engine/particles.ts`. The mural "waking up": painted canvases on the walls with simple sprite animation in the
-  toon style, lit by a lantern-shaped light.
+  `engine/particles.ts`.
 - **Performance:** under ~200 draw calls on the road (hills merged with `engine/geo.ts`, rails instanced, the road
   built in chunks and only the ones near the car shown).
 
@@ -450,11 +415,12 @@ activities/nan-trip/
    (A: the farm and the core verb; B: thresh, the deck and the video). Its look (step 8) and voices (step 9) done
    ahead of the rest, 2026-10-25 (see `nan-rice.md`, "What's built").
 4. **Greybox: Bo Kluea salt** (`salt`). *Built 2026-10-25 (see "What's built" below).*
-5. **Greybox: Wat Phumin** (`temple`).
+5. ~~Greybox: Wat Phumin~~ (`temple`): dropped 2026-10-25 (Dad: no temples or Buddhas in the game, AGENTS.md). Its
+   greybox (PR #187) was closed unmerged, and the city road now ends at Nan's market.
 6. **Greybox: the Nan map and the rental desk** (`map`, `rental`), and the `three` viewpoint.
 7. **The trip loop:** the `TripDef` (fly to Nan, the silver Pajero), the third invite choice, the photo wall (no
    gift).
-8. **The look:** the Pajero, the landmarks, the mural walls, rain and cloud.
+8. **The look:** the Pajero, the landmarks, rain and cloud.
 9. **Voices and QA.**
 10. **Into the game:** from `inTheWorks` to `activities`.
 
@@ -484,7 +450,8 @@ activities/nan-trip/
   - The steering wheel (bottom right) turns with the car; the whole wheel is the horn (the Pajero is too). A beep gets
     answers: the blind bend's car beeps back (its mirror flashes pink and the wheel pulses until she beeps; if she
     doesn't, it beeps first), the buffalo moos and hurries, chickens scatter.
-  - `city` 272 m (tuk-tuks, the bridge over the Nan River, the market, Wat Phumin), `valley` 533 m (paddies, chickens,
+  - `city` 272 m (tuk-tuks, the bridge over the Nan River, the market; it ended at Wat Phumin until 2026-10-25, now at
+    the market square), `valley` 533 m (paddies, chickens,
     a songthaew, a scooter, the buffalo crossing, the mushroom house), `sky` ~590 m (switchbacks climbing 92 m: rain,
     blind bends with mirrors, a waterfall, a monkey, into the cloud at 38 m with the headlights on, out above it at
     62 m into blue sky, Stop Time Cafe's deck at the top), `three` 471 m (downhill hairpins drawn as a 3: a giant 1, 2,
@@ -584,11 +551,11 @@ dashboard elephant, random weather and traffic per replay, a sea-of-clouds look 
 
 **Next:** Dad plays the salt wells on the iPad (`salt`, then `?round=2`, `?round=3`). If carrying the bucket isn't fun
 yet, change the toy (how it follows and swings, how low it has to go to tip, how many buckets) before its look and
-voices. Wat Phumin (step 5) is being built in another session; then step 6, the Nan map and the rental desk.
+voices. Then step 6, the Nan map and the rental desk (step 5, Wat Phumin, was dropped).
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 
-- **Core verbs:** steer (the road), light (the lantern), mist (the mushrooms), pour (the rice steps and the salt
+- **Core verbs:** steer (the road), mist (the mushrooms), pour (the rice steps and the salt
   well). Each deepens three times; the road is the verb that comes back between every stop.
 - **Hands busy:** one line at each stop, then playing. Driving starts at once. Sparkle speaks only for new things or
   after 8 s.
@@ -596,18 +563,17 @@ voices. Wat Phumin (step 5) is being built in another session; then step 6, the 
 - **Choices:** which trip, what to pack, which stop next, where on the road, when to beep, which mushrooms, where to
   plant, the photo for Agong's wall.
 - **Pokeables:** at least five at every stop and on every road.
-- **Grows:** the map's stamps; the basket fills; the valley turns from brown to shiny to green; the pan turns to salt;
-  the hall's murals wake up one by one.
-- **Surprise:** popping out above the cloud; the giant bouncy mushroom; Daddy in the mural and in a mushroom hat; the
+- **Grows:** the map's stamps; the basket fills; the valley turns from brown to shiny to green; the pan turns to salt.
+- **Surprise:** popping out above the cloud; the giant bouncy mushroom; Daddy in a mushroom hat; the
   salty face; the road drawing a 3.
 - **Learning by doing:** keep left, beep at blind bends, buckle up; mushrooms grow in dark and wet; rice grows in
-  water on steps; salt from a well and a fire; the wai and shoes off; counting three; Nan on the map of Thailand.
+  water on steps; salt from a well and a fire; counting three; Nan on the map of Thailand.
 - **Replay:** stops in any order, other mushrooms, other weather and traffic, other photos.
 
 ## Dad's answers (2026-10-24)
 
 1. **Stops:** Bo Kluea's salt wells, the S-curve "number 3" road, the rice-terrace café deck, Wat Phumin, and the
-   mushroom farm.
+   mushroom farm. (Wat Phumin dropped 2026-10-25, Dad: no temples or Buddhas in the game.)
 2. **Who comes:** just Mommy, Daddy and Kaylee.
 3. **Getting there:** fly, and rent the Pajero at Nan airport.
 4. **Who drives:** Mommy drives; Kaylee's finger steers.
@@ -630,8 +596,6 @@ Mostly travel and tourism pages. Check anything new against a second source befo
 - Stop Time Cafe, Sapan: [Trip.com, Bo Kluea](https://ae.trip.com/moments/bo-kluea-24543)
 - The "number 3" road: [nanprovince.com](https://www.nanprovince.com/?p=5498),
   [GT-Rider](https://www.gt-rider.com/se-asia-motorcycling/threads/iconic-roads-of-northern-thailand.15894)
-- Wat Phumin: [Thailex](https://thailex.info/THAILEX/THAILEXENG/LEXICON/Thailand%20Lexicon%20-%20Wat%20Phumin%20(วัดภูมินทร์).htm),
-  [DASTA](https://www.dasta.or.th/en/article/268), [Thai Holiday Guide](https://www.thaiholidayguide.com/attraction/wat-phumin/)
 - Bo Kluea salt: [Wikipedia](https://en.wikipedia.org/wiki/Bo_Kluea_district),
   [Thai PBS World](https://www.thaipbsworld.com/lifestyle/salt-of-the-earth:-salt-making-in-the-region),
   [Travelfish](https://www.travelfish.org/sight_profile/thailand/northern_thailand/nan/bo_kluea/1447)

@@ -14,7 +14,7 @@ interface Props {
   onStop?: (road: RoadId, stop?: string) => void
 }
 
-const LANDMARK = { temple: '🛕', mushrooms: '🍄', cafe: '☕', viewpoint: '⛰️' } as const
+const LANDMARK = { market: '🧺', mushrooms: '🍄', cafe: '☕', viewpoint: '⛰️' } as const
 
 export function DriveFlat({ road, onRoad, onStop }: Props) {
   const r = nanRoad(road)

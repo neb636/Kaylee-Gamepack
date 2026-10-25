@@ -87,6 +87,11 @@ smoke test still work). Don't add packages when the SDK or a pre-approved librar
 5. Kind, gentle, girly-cute tone. Pink/lavender/pastels. Unicorns welcome (Sparkle is the guide; in Thailand Kaylee
    herself is a lilac unicorn).
 6. **Characters feel alive** (next section). Never just slide or bob a flat picture around.
+7. **No temples or Buddhas.** Temples and Buddha images are very sacred to many people in Thailand, and it's easy for a
+   game to do something offensive by accident (where a character puts its feet, a Buddha as a toy you poke, playing
+   with offerings). Don't put a temple or a Buddha in a new game or country: not as a stop, an activity, a prop, a
+   landmark on a map or road, or a fact. If a plan or a real place the family visited calls for one, leave it out and
+   tell Dad instead of building it. (Wat Phumin was dropped from the Nan trip for this, 2026-10-25.)
 
 ## Characters that feel alive
 

@@ -9,7 +9,7 @@
 // coming: beep the horn and it beeps back), a waterfall, a monkey on the rail, rain, then the cloud (white all round,
 // headlights on) and out above it into the sunshine; on the 3 road, the bends she counts, and from the viewpoint the
 // road below is a giant 3 (a pink crayon line draws it). Each road ends at its stop (the mushroom farm, the café, the
-// temple, the viewpoint): the Pajero pulls in, the camera turns to look, and the end card offers the roads again.
+// market, the viewpoint): the Pajero pulls in, the camera turns to look, and the end card offers the roads again.
 //
 // The screen (Drive.tsx) draws the steering wheel with its horn, the count's big numbers and the end card; the wheel's
 // turn, the hint finger and the tap targets are written here every frame.
@@ -59,7 +59,7 @@ export function driveAnchors(id: RoadId): AnchorInfo[] {
     ...t.monkeys.map((_, i): AnchorInfo => ({ id: `monkey:${i}`, label: 'Monkey', kind: 'thing' })),
     ...r.blind.map((_, i): AnchorInfo => ({ id: `mirror:${i}`, label: 'Round mirror', kind: 'thing' })),
     ...(r.falls !== undefined ? [{ id: 'falls', label: 'Waterfall', kind: 'thing' } as AnchorInfo] : []),
-    { id: 'landmark', label: { temple: 'Wat Phumin', mushrooms: 'The mushroom farm', cafe: 'Stop Time Cafe', viewpoint: 'The viewpoint' }[r.landmark], kind: 'thing' },
+    { id: 'landmark', label: { market: 'The market', mushrooms: 'The mushroom farm', cafe: 'Stop Time Cafe', viewpoint: 'The viewpoint' }[r.landmark], kind: 'thing' },
   ]
 }
 
