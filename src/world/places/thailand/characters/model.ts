@@ -5,11 +5,11 @@
 //
 // The GLB loads once (loadKayleeModel) and every Kaylee after that clones it. Until it has loaded, kayleeModel() is
 // null and callers build the code-built Kaylee instead.
-import { Group, Mesh, MeshToonMaterial, type Object3D, type Texture } from 'three'
+import { Group, Mesh, MeshToonMaterial, type BufferGeometry, type Object3D, type Texture } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import type { Bag } from '../engine/dispose'
 import { blobShadow, P, solid } from '../engine/geo'
-import { makeHull } from '../engine/outline'
+import { hullGeometry, outlineMaterial } from '../engine/outline'
 import { toonGradient } from '../engine/toon'
 import type { Rig } from './animal'
 import url from './models/kaylee.glb?url'
@@ -19,6 +19,8 @@ const LID = '#F6E2DF'
 const PX = 3
 /** How far each arm's swing plane turns forward (radians; see buildModelRig). */
 const ARM_TILT = 2.0
+/** Meters the smoothed outline hull stands off the surface (smoothHull). */
+const HULL_LIFT = 0.004
 
 let model: GLTF | null = null
 let loading: Promise<GLTF> | null = null
@@ -42,6 +44,48 @@ function toonFor(map: Texture) {
   return m
 }
 
+/** The outline hull for a scanned-looking mesh: outline.ts's welded copy, smoothed (Taubin: a shrink step and a
+ *  slightly bigger grow step, so it keeps its size). The ink then follows the shape instead of every low-poly zigzag
+ *  on the hair tips and bangs, and its normals stop pointing every which way in tight creases. */
+function smoothHull(geometry: BufferGeometry, rounds = 6) {
+  const g = hullGeometry(geometry)
+  const pos = g.attributes.position.array as Float32Array
+  const idx = g.index!.array
+  const n = pos.length / 3
+  const near: Set<number>[] = Array.from({ length: n }, () => new Set())
+  for (let i = 0; i < idx.length; i += 3) {
+    const [a, b, c] = [idx[i], idx[i + 1], idx[i + 2]]
+    near[a].add(b).add(c)
+    near[b].add(a).add(c)
+    near[c].add(a).add(b)
+  }
+  const next = new Float32Array(pos.length)
+  for (let r = 0; r < rounds * 2; r++) {
+    const k = r % 2 ? -0.53 : 0.5
+    for (let v = 0; v < n; v++) {
+      let x = 0
+      let y = 0
+      let z = 0
+      for (const u of near[v]) {
+        x += pos[u * 3]
+        y += pos[u * 3 + 1]
+        z += pos[u * 3 + 2]
+      }
+      const m = near[v].size || 1
+      next[v * 3] = pos[v * 3] + k * (x / m - pos[v * 3])
+      next[v * 3 + 1] = pos[v * 3 + 1] + k * (y / m - pos[v * 3 + 1])
+      next[v * 3 + 2] = pos[v * 3 + 2] + k * (z / m - pos[v * 3 + 2])
+    }
+    pos.set(next)
+  }
+  // Smoothing still sinks the hull into the surface at bumps and tips (and the ink with it): stand it back off by a
+  // few millimeters.
+  g.computeVertexNormals()
+  const nor = g.attributes.normal.array as Float32Array
+  for (let i = 0; i < pos.length; i++) pos[i] += nor[i] * HULL_LIFT
+  return g
+}
+
 /** A rig like buildAnimal's, from the model. */
 export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
   const scene = gltf.scene.clone(true)
@@ -59,8 +103,9 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
     if (map) m.material = toonFor(map)
     // The eye domes are glossy pieces sitting in the face: no ink ring around them.
     if (!m.name.startsWith('eye')) {
-      const hull = makeHull(m.geometry, PX)
-      bag.add(hull.geometry)
+      // The face gets extra rounds: the sculpted mouth's dimples otherwise poke ink ticks through at its corners.
+      const hull = new Mesh(bag.add(smoothHull(m.geometry, m.name.startsWith('face') ? 18 : 6)), outlineMaterial(PX))
+      hull.userData.hull = PX
       m.add(hull)
     }
   }

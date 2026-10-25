@@ -87,8 +87,11 @@ mocap; a Tripo auto-rig gives canned clips. Both would replace the code-driven p
 Steps (Claude does them through the Blender MCP):
 1. Import the textured GLB, merge by distance, **separate by loose parts**. Tripo makes separate pieces for hair, face,
    body (dress + legs + arms), tail, ears, eyes and braid bits. Name them by size and position.
-2. **Cut the arms off the body** by face position: faces outside the dress edge and above the hip (`|x| > edge(z)`).
-   Separate the selection, then split it by loose parts into left and right.
+2. **Cut the arms off the body with a clean plane, then cap the holes.** Bisect the shoulder region at a plane
+   (`bmesh.ops.bisect_plane`, Kaylee: x = ±0.105 above the armpit), flood-fill the faces from the hoof without crossing
+   the cut, and separate them. Then fill the cut on both sides (`bmesh.ops.holes_fill`, UVs borrowed from a
+   neighbouring face, triangulated). A cut along face centers leaves a jagged, open edge: frayed sleeves, and black
+   holes from behind where you look into the inside of the outline hull.
 3. **Pivots as empties**, with the meshes parented under them (keep their world transforms):
 
 ```
@@ -114,7 +117,9 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588). Files: `kaylee-rig.gl
   from inside the Thailand folder, never from `meta.ts` / `sections.ts`). `buildModelRig` clones it and maps the named
   nodes onto a `Rig`, so `Avatar` (`new Avatar(bag, model)`) walks, poses, waves and wears outfits unchanged.
 - **Look:** each mesh's texture goes on a `MeshToonMaterial` with the shared `toonGradient()`, and each piece gets an
-  ink hull (`makeHull`), except the eye domes.
+  ink hull, except the eye domes. A scanned-looking mesh needs a **smoothed hull** (`smoothHull`: Taubin smoothing of
+  the welded copy, then stood 4 mm off the surface): the plain `makeHull` zigzags along low-poly hair tips and bangs and
+  blotches in tight creases.
 - **Blink:** Tripo paints the eye into the face texture and sculpts a glossy dome over it, so squashing `eyes` shows
   the painted eye through. `Rig.blink` (optional, used by `FaceLife`) lets the model draw its own blink: a cream lid
   grows down over each eye.
@@ -129,5 +134,6 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588). Files: `kaylee-rig.gl
 ## Open questions
 
 - A GLB of a family member is OK in this repo (Dad, 2026-10-25); photos never are.
-- The wai with tilted arms; the painted mouth (a little toothy close up).
+- The wai with tilted arms; the painted mouth (a little toothy close up, with dark ticks at its corners: paint them
+  out of the texture).
 - Legs as their own pivots for a proper walk cycle (none of the code-built characters has them yet).
