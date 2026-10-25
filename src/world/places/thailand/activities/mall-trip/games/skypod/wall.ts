@@ -15,11 +15,9 @@ import { Color, IcosahedronGeometry, OctahedronGeometry, Plane, Raycaster, Vecto
 import { bell, clamp, sounds, span, wobble } from '../../../../../../../sdk'
 import type { AnchorInfo } from '../../../../engine/Anchors'
 import type { Shot } from '../../../../engine/camera'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P, solid } from '../../../../engine/geo'
 import { PAL } from '../../../../engine/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../../trip/legs/stage'
-import { SOCK_COLORS } from '../../socks'
+import { SOCK_COLORS, wearSocks } from '../../socks'
 import { Racer } from '../race/racer'
 import { buildSkyPod, MAT_Y, type Built, type Layer } from './build'
 import { Floaters } from './fx'
@@ -73,12 +71,6 @@ const OWN = POD_COLORS.map((c) => new Color(c))
 /** Unlit: a dark version of the pod's own color, so the wall still shows the rainbow of notes. */
 const DIM = OWN.map((c) => c.clone().lerp(new Color('#2A2450'), 0.7))
 const SPIN_SIDE = Math.PI / 2 + 0.45
-
-/** Her grip socks, on the racer-style Kaylee (the same as socks.ts's, for this rig). */
-function wearSocks(r: Racer, color: string, bag: Bag) {
-  const H = r.height
-  r.rig.body.add(solid(merge([-1, 1].flatMap((s) => [P.sphere(0.083 * H, color, { at: [s * 0.085 * H, 0.036 * H, 0.022 * H], scale: [1, 0.66, 1.32] }), P.cyl(0.074 * H, 0.074 * H, 0.04 * H, '#FFFFFF', { at: [s * 0.085 * H, 0.085 * H, 0] })])), bag, 1.5))
-}
 
 /** A jump to slap a pod: who, which, how far through, and which arm reaches. */
 interface Reach {

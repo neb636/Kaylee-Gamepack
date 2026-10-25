@@ -41,6 +41,11 @@ just enough for Kaylee to spot who's who). From his photos (kept outside this re
 clothes they really wear go on their animal (`Look.hairdo`, `smile`, `outfit.lace` / `outfit.print`, `cheeks`). Joy and Bird first (PR for Dad to check on the iPad); if he likes them, the rest of the family next, one look
 each, from the same photos.
 
+**Kaylee as a vinyl toy (2026-10-25).** Kaylee's unicorn is now a modelled soft-vinyl toy (Tripo3D, split in Blender
+into the same rig: `characters/model.ts`, the recipe in `docs/3d-characters.md`), everywhere she appears: the house,
+every trip, the races and the mini games. The code-built one stays in the lab as `kaylee-code` to compare. Next: the
+rest of the family the same way, one at a time.
+
 Open questions for Dad: Does Sparkle keep guiding here (2D, in the prompt bubble as everywhere
 else), or does a family member (Mom, Agong) give the instructions? What is each person like (for their voices)?
 

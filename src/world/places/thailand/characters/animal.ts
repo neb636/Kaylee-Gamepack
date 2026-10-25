@@ -37,6 +37,40 @@ export interface Rig {
   phone: Group | null
   /** Where the face is (head-local): the head's radius, its center's height and the mouth (the vet aims at these). */
   face: { R: number; headY: number; mouth: V3 }
+  /** How a blink shows when squashing `eyes` doesn't (the modelled Kaylee's lids, model.ts): 1 open .. 0.1 shut. */
+  blink?: (open: number) => void
+  /** Legs on their own hip pivots (the modelled Kaylee): they stride as she walks and reach forward when she sits. */
+  legL?: Group
+  legR?: Group
+  /** Things to wear made for this rig's own shape, when it isn't the code-built one (the modelled Kaylee). */
+  wardrobe?: Wardrobe
+  /** Lying down when the head is much deeper than the body (the modelled Kaylee's hair): how high the feet stay off the
+   *  floor, and how far the body stays tipped up from flat so the head rests on the back of its hair. */
+  lie?: { lift: number; tilt: number }
+  /** Where a held thing goes when the arms aren't the code-built ones (the modelled Kaylee's hang out at 47° in a
+   *  forward-turned frame): a group at each hoof (left, right), turned like the body at rest. */
+  hands?: [Group, Group]
+  /** Her waist when the body isn't the code-built capsule (the modelled Kaylee's dress): its height, its center
+   *  front-to-back and the half-width and half-depth a belt goes round (body-local). */
+  waist?: { y: number; z: number; rx: number; rz: number }
+  /** How far forward the front of the body is at (x, y), body-local z, for things stuck on it (mud). */
+  front?: (x: number, y: number) => number
+}
+
+/** One worn thing, a group for each pivot it rides on (null where there's nothing). */
+export interface Worn {
+  head: Group | null
+  armL: Group | null
+  armR: Group | null
+  body: Group | null
+  legL?: Group | null
+  legR?: Group | null
+}
+
+export interface Wardrobe {
+  build(id: Wearable, bag: Bag): Worn
+  /** Where the sunglasses go when she pushes them up (head-local offset, and their tilt back). */
+  glassesUp: { y: number; z: number; tilt: number }
 }
 
 const INK = '#2E2233'
@@ -52,7 +86,7 @@ const frustum = (top: number, bottom: number, h: number, c: string, o?: PartOpts
 
 /** A rig's proportions (head-local for the face, body-local for the rest): shared by the body and by things worn
  *  later (a sun hat, sunglasses, floaties), so they fit any character. */
-interface Frame {
+export interface Frame {
   H: number
   R: number
   headY: number
@@ -100,8 +134,8 @@ interface WornParts {
   bodyPlain: Parts
 }
 
-const SCRUBS = '#7FB2F0'
-const SCRUBS_DARK = '#5D8FD6'
+export const SCRUBS = '#7FB2F0'
+export const SCRUBS_DARK = '#5D8FD6'
 
 /** One worn thing's parts, on the head pivot, the body or each arm pivot (in their local space). */
 function wornParts(id: Wearable, f: Frame, look: Look): WornParts {
@@ -233,10 +267,9 @@ function wornParts(id: Wearable, f: Frame, look: Look): WornParts {
 }
 
 /** Builds a worn thing to add to a finished rig at runtime (Kaylee puts on her sun hat): a group for the head pivot
- *  and one for each arm pivot (null where there's nothing). */
-export function buildWorn(look: Look, id: Wearable, bag: Bag): { head: Group | null; armL: Group | null; armR: Group | null; body: Group | null } {
-  const parts = wornParts(id, frameOf(look), look)
-  const px = look.height >= 1 ? 3 : 2.5
+ *  and one for each arm pivot (null where there's nothing). `f` fits it to another head (the modelled Kaylee's). */
+export function buildWorn(look: Look, id: Wearable, bag: Bag, f = frameOf(look), px = look.height >= 1 ? 3 : 2.5): Worn {
+  const parts = wornParts(id, f, look)
   const group = (lined: Parts, plain: Parts) => (lined.length || plain.length ? solidMix(lined, plain, bag, px) : null)
   return { head: group(parts.head, parts.headPlain), armL: group(parts.armL, []), armR: group(parts.armR, []), body: group(parts.body, parts.bodyPlain) }
 }

@@ -25,7 +25,8 @@ export class FaceLife {
       lid = 1 - 0.9 * bell(Math.min(1, this.blink))
       if (this.blink >= 1) this.blink = -1
     }
-    eyes.scale.y = lid
+    if (this.rig.blink) this.rig.blink(lid)
+    else eyes.scale.y = lid
 
     const target = this.voice ? speechLevel(this.voice) : 0
     // Opens fast, closes a little slower (reads as syllables, not flicker).

@@ -7,6 +7,7 @@ import { bell, clamp, span, wobble } from '../../../../../../../sdk'
 import { buildAnimal, Wind, type Rig } from '../../../../characters/animal'
 import { FaceLife } from '../../../../characters/face'
 import { LOOKS, type Look } from '../../../../characters/looks'
+import { buildModelRig, kayleeModel } from '../../../../characters/model'
 import type { Bag } from '../../../../engine/dispose'
 import { merge, P, solid } from '../../../../engine/geo'
 import type { RacerId } from './layout'
@@ -68,7 +69,9 @@ export class Racer {
 
   /** `look` dresses it as someone else (HarborLand's hall: more kids, the staff). */
   constructor(readonly id: RacerId, bag: Bag, look?: Look) {
-    this.rig = buildAnimal(look ?? (id === 'kidA' || id === 'kidB' ? KID_LOOKS[id] : LOOKS[id]), bag)
+    // Kaylee herself is the modelled vinyl toy (loaded before the mall builds).
+    const model = id === 'kaylee' && !look ? kayleeModel() : null
+    this.rig = model ? buildModelRig(model, bag) : buildAnimal(look ?? (id === 'kidA' || id === 'kidB' ? KID_LOOKS[id] : LOOKS[id]), bag)
     this.height = this.rig.height
     this.life = new FaceLife(this.rig)
     this.flipper.position.y = 0.45 * this.height
@@ -142,7 +145,8 @@ export class Racer {
 
   update(dt: number, t: number) {
     const { body, head, armL, armR } = this.rig
-    const H = this.height
+    // The body moves inside the rig's root: a scaled-up root (the vinyl Kaylee) already makes these moves bigger.
+    const H = this.height / this.rig.root.scale.y
     // ---- Moving: walking along, hopping up a step ----
     const mv = this.moves[0]
     let arc = 0
@@ -183,11 +187,19 @@ export class Racer {
       sy *= 1 + 0.06 * (s - 0.5)
       lean = 0.14
     } else this.gait = 0
+    const { legL, legR } = this.rig
     if (this.sitting) {
-      // Sitting back on the slide, legs out in front.
-      y -= 0.17 * H
-      sy *= 0.88
+      // Sitting back on the slide, legs out in front (a rig with legs of its own swings them forward instead of
+      // squashing down onto them).
+      y -= (legL ? 0.11 : 0.17) * H
+      if (!legL) sy *= 0.88
       lean = -0.34
+    }
+    if (legL && legR) {
+      const sit = this.sitting ? -1.35 - lean : 0
+      const step = this.walkSpeed > 0 ? Math.sin(this.gait) * 0.45 : 0
+      legL.rotation.x = sit + step + (this.kicking ? Math.sin(t * 15) * 0.5 : 0)
+      legR.rotation.x = sit - step - (this.kicking ? Math.sin(t * 15) * 0.5 : 0)
     }
     this.settle = Math.min(1, this.settle + dt / 0.4)
     if (this.settle < 1) sy *= 1 + wobble(this.settle, 2) * 0.14

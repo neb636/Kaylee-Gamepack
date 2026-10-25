@@ -10,6 +10,7 @@ import { clamp, say } from '../../../../sdk'
 import { applyPose, clearPose } from '../activities/boat-trip/bay/poses'
 import { buildBird, buildCat, buildCrab, buildLizard, buildMacaque, buildMudskipper, buildNeedlefish, buildPorpoise, type Blink, type CritterId } from '../activities/boat-trip/bay/critters'
 import { Avatar } from '../characters/avatar'
+import { kayleeModel, loadKayleeModel } from '../characters/model'
 import { Member } from '../characters/member'
 import type { Wearable } from '../characters/looks'
 import type { Pose } from '../characters/types'
@@ -157,7 +158,7 @@ export class Studio implements World3D {
       this.rig.setSize(this.w, this.h, 0)
     }
     // Who's on stage: build the new ones, drop the ones that left, keep the rest as they are.
-    const keyOf = (id: string) => `${id}|${v.phone ? 'phone' : ''}`
+    const keyOf = (id: string) => `${id}|${v.phone ? 'phone' : ''}|${castById(id)?.model && kayleeModel() ? 'model' : ''}`
     const keep = new Map(this.actors.map((a) => [a.key, a]))
     const next: Actor[] = []
     for (const id of v.ids) {
@@ -183,7 +184,10 @@ export class Studio implements World3D {
     let char: Member | Avatar | null = null
     let critter: CritterRig | null = null
     if (entry.kind === 'kaylee') {
-      const k = new Avatar(bag)
+      // The vinyl toy loads its model the first time; until then the code-built Kaylee stands in, then gets swapped.
+      const model = entry.model ? kayleeModel() : null
+      if (entry.model && !model) void loadKayleeModel().then(() => !this.disposed && this.view && this.apply(this.view))
+      const k = new Avatar(bag, model)
       k.place(0, 0, 0, 0)
       char = k
     } else if (entry.kind === 'member' && entry.look) {

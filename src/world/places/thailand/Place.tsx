@@ -6,11 +6,12 @@
 // hall of mini games, the pizza table, and home with the pizza box for Agong, then its stamp and the pizza slice
 // sticker); the third is the Nan road trip (activities/nan-trip/, in the works: the greyboxes of the mountain road,
 // the mushroom farm and Stop Time Cafe). The finale (route `party`) is the family party, coming soon.
-import { useState } from 'react'
+import { use, useState } from 'react'
 import { StampEarned } from '../../kit/StampEarned'
 import { worldLink } from '../../../router'
 import type { PlaceProps } from '../../types'
 import { BoatTrip } from './activities/boat-trip/BoatTrip'
+import { kayleeReady } from './characters/model'
 import { Hub } from './activities/hub/Hub'
 import { MallTrip } from './activities/mall-trip/MallTrip'
 import { NanTrip } from './activities/nan-trip/NanTrip'
@@ -20,6 +21,9 @@ import { MALL_FACTS, TRIP_FACTS } from './trip/facts'
 
 export default function Place(props: PlaceProps) {
   const { meta, activity, earnStamp, backToMap, openActivity } = props
+  // Kaylee is the modelled vinyl toy: her GLB loads before any scene builds (PlaceFrame's Suspense shows Sparkle
+  // thinking meanwhile), so every Avatar is her from the first frame.
+  use(kayleeReady())
   const [justEarned, setJustEarned] = useState<string | null>(null)
   if (activity === 'party') return <PartySoon backToMap={backToMap} />
   // A trip ends on Agong's wall: the stamp, then back in the house downstairs, by her photo.

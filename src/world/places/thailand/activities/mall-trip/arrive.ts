@@ -115,7 +115,7 @@ export class Arrive extends Stage {
   private gateK = 0
   private sockPairs: Record<SockId, Group>
   private sockHop: { id: SockId; t: number } | null = null
-  private worn: { id: SockId; kaylee: Group; nick: Group; stretch: number } | null = null
+  private worn: { id: SockId; kaylee: Group[]; nick: Group; stretch: number } | null = null
   /** Kaylee's shoes and Daddy's: at their feet, flying, or in the rack (Daddy's squashed in). */
   private shoes: { g: Group; owner: Who; from: Vector3; to: Vector3; t: number; state: 'feet' | 'fly' | 'in' | 'stuck' }[] = []
   private squash = 1
@@ -502,7 +502,7 @@ export class Arrive extends Stage {
     const k = this.kaylee
     const n = this.riders.nick
     if (this.worn) {
-      k.rig.body.remove(this.worn.kaylee)
+      for (const g of this.worn.kaylee) g.removeFromParent()
       n.rig.body.remove(this.worn.nick)
       this.sockPairs[this.worn.id].visible = true
     }

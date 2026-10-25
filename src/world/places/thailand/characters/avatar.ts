@@ -1,5 +1,5 @@
-// Kaylee, the one she steers: her lilac unicorn with the rainbow mane and gold horn (looks.ts; on purpose nothing like
-// Sparkle).
+// Kaylee, the one she steers: her lilac unicorn, a modelled vinyl toy with brown hair and a pink striped dress
+// (model.ts; on purpose nothing like Sparkle). The code-built one (looks.ts) stands in if the model can't load.
 //
 // How she moves: a bouncy hop-trot along a path (a little hop every step, squash when she lands, stretch at the top,
 // leaning into the walk), turning with a spring so corners curve, a settle wobble when she arrives. Everything else
@@ -10,12 +10,17 @@ import type { Bag } from '../engine/dispose'
 import type { XZ } from '../engine/nav'
 import { TUNE } from '../engine/tune'
 import { buildAnimal, buildWorn, Wind, type Rig } from './animal'
+import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { FaceLife } from './face'
 import { LOOKS, type Wearable } from './looks'
+import { buildModelRig, kayleeModel } from './model'
 import type { Character, Pose } from './types'
 
 const H = LOOKS.kaylee.height
 const BOUNCES = [0.28, 0.5, 0.78]
+/** A rig with legs (the modelled Kaylee) sitting: how far her body drops onto her hips, and the legs' swing forward. */
+const HIP_DROP = 0.11
+const SIT_LEGS = -1.35
 
 interface Tween {
   from: Vector3
@@ -29,7 +34,8 @@ interface Tween {
 export class Avatar implements Character {
   readonly id = 'kaylee'
   readonly root: Group
-  readonly height = H
+  /** How tall she stands (the vinyl toy is scaled up: model.ts's KAYLEE_SIZE). */
+  readonly height: number
   pose: Pose = 'stand'
   /** Which floor she's on (0 = street level, 1 = upstairs). */
   floor: 0 | 1 = 0
@@ -49,6 +55,8 @@ export class Avatar implements Character {
   private settle = 1
   private bounce = { level: -1, t: 0 }
   private flop = 1
+  /** How far she has sat down (0..1, eased): a rig with legs swings them forward as it lowers onto its hips. */
+  private sitK = 0
   private look: Vector3 | null = null
   private headYaw = 0
   private life: FaceLife
@@ -59,8 +67,11 @@ export class Avatar implements Character {
   /** Things she's just put on, and how far through their little show (0..1). */
   private entering = new Map<Wearable, number>()
 
-  constructor(private bag: Bag) {
-    this.chibi = buildAnimal(LOOKS.kaylee, bag)
+  /** `model`: the modelled vinyl-toy Kaylee (model.ts), the one the game uses (Place.tsx loads it before any scene
+   *  builds); `null` builds the code-built Kaylee instead (the lab's comparison, or if the model couldn't load). */
+  constructor(private bag: Bag, model: GLTF | null = kayleeModel()) {
+    this.chibi = model ? buildModelRig(model, bag) : buildAnimal(LOOKS.kaylee, bag)
+    this.height = this.chibi.height
     this.life = new FaceLife(this.chibi)
     this.root = this.chibi.root
     this.root.rotation.y = this.yaw
@@ -80,10 +91,11 @@ export class Avatar implements Character {
       const on = ids.includes(id)
       let groups = this.worn.get(id)
       if (!groups && on) {
-        const w = buildWorn(LOOKS.kaylee, id, this.bag)
+        const c = this.chibi
+        const w = c.wardrobe?.build(id, this.bag) ?? buildWorn(LOOKS.kaylee, id, this.bag)
         groups = []
-        for (const [g, pivot] of [[w.head, this.chibi.head], [w.armL, this.chibi.armL], [w.armR, this.chibi.armR], [w.body, this.chibi.body]] as const) {
-          if (!g) continue
+        for (const [g, pivot] of [[w.head, c.head], [w.armL, c.armL], [w.armR, c.armR], [w.body, c.body], [w.legL, c.legL], [w.legR, c.legR]] as const) {
+          if (!g || !pivot) continue
           pivot.add(g)
           groups.push(g)
           g.userData.base = g.position.clone()
@@ -104,10 +116,11 @@ export class Avatar implements Character {
   /** Indoors (the plane) she pushes her sunglasses up onto her hat's brim; outdoors they're back on her eyes. */
   glassesUp(up: boolean) {
     const R = 0.24 * H
+    const to = this.chibi.wardrobe?.glassesUp ?? { y: 0.62 * R, z: 0.12 * R, tilt: -0.42 }
     for (const g of this.worn.get('sunglasses') ?? []) {
-      g.position.set(0, up ? 0.62 * R : 0, up ? 0.12 * R : 0)
+      g.position.set(0, up ? to.y : 0, up ? to.z : 0)
       g.userData.base = g.position.clone()
-      g.rotation.x = up ? -0.42 : 0
+      g.rotation.x = up ? to.tilt : 0
     }
   }
   get wearing(): Wearable[] {
@@ -208,6 +221,7 @@ export class Avatar implements Character {
     // Small substeps keep the turning spring steady when a frame is slow (headless browsers run at 10-20 fps).
     const steps = Math.max(1, Math.ceil(dt / (1 / 90)))
     for (let i = 0; i < steps; i++) this.step(dt / steps)
+    this.sitK += ((this.pose === 'sit' ? 1 : 0) - this.sitK) * (1 - Math.exp(-dt * 14))
     this.pose3d(t)
     this.life.update(dt)
     this.wind.update(this.chibi, dt, t)
@@ -318,10 +332,16 @@ export class Avatar implements Character {
       sy *= 1 + 0.06 * (s - 0.5) * 2 * walkK
       lean = 0.14 * walkK
     }
-    if (pose === 'sit') {
+    const { legL, legR, tail } = this.chibi
+    if (legL) {
+      // Down onto her hips, legs reaching out in front over the seat, the tail lifted clear of it.
+      y -= HIP_DROP * this.sitK
+      if (tail) tail.rotation.x = 0.6 * this.sitK
+    } else if (pose === 'sit') {
       y -= 0.1
       sy *= 0.92
-    } else if (pose === 'wai') {
+    }
+    if (pose === 'wai') {
       lean = 0.32
       headPitch = 0.15
     } else if (pose === 'peek') {
@@ -340,10 +360,17 @@ export class Avatar implements Character {
     }
     // Settle wobble when she lands somewhere.
     if (this.settle < 1) sy *= 1 + wobble(this.settle, 2) * 0.12
-    body.position.y = pose === 'lie' ? this.chibi.radius * (1 - 0.5 * (1 - this.flop)) : y
-    body.rotation.x = pose === 'lie' ? -Math.PI / 2 * Math.min(1, this.flop * 1.2) : lean
+    const lie = this.chibi.lie ?? { lift: this.chibi.radius, tilt: 0 }
+    body.position.y = pose === 'lie' ? lie.lift * (1 - 0.5 * (1 - this.flop)) : y
+    body.rotation.x = pose === 'lie' ? -(Math.PI / 2 - lie.tilt) * Math.min(1, this.flop * 1.2) : lean
     body.rotation.z = roll
     body.scale.set(1 / Math.sqrt(sy), sy, 1 / Math.sqrt(sy))
+    if (legL && legR) {
+      // A stride with each hop (one leg forward, then the other), and both forward when she sits.
+      const stride = Math.sin(this.phase) * 0.5 * Math.min(1, walkK)
+      legL.rotation.x = SIT_LEGS * this.sitK + stride
+      legR.rotation.x = SIT_LEGS * this.sitK - stride
+    }
     // Head: look at something interesting, otherwise ahead.
     let want = 0
     if (this.look && pose !== 'lie') {
