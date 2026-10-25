@@ -166,6 +166,10 @@ const SCENARIOS = [
   { name: 'thailand nan: the rice farm', id: 'nan-rice', hash: '#/world/thailand/nan-trip/rice', reset: true },
   // Its threshing and the deck (greybox B): any tap bangs the next bundle, then the kratip on the deck and Mommy's photo.
   { name: 'thailand nan: threshing the rice', id: 'nan-rice-thresh', hash: '#/world/thailand/nan-trip/rice?round=thresh', reset: true },
+  // Wat Phumin (greybox, no voices): a tap on the shoes puts them on the rack; inside, a tap on a wall floats the lantern
+  // there and it stays, so taps wake the murals; the robot run that drags the lantern through every round is
+  // qa-motion's nan-lantern.
+  { name: 'thailand nan: wat phumin', id: 'nan-temple', hash: '#/world/thailand/nan-trip/temple', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
   // (?gl=off goes before the hash: the section's address drops anything it doesn't know.)
   { name: 'thailand trip: picture book without webgl', id: 'trip-book', search: '?gl=off', hash: '#/world/thailand/boat-trip/invite', reset: true },

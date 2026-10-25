@@ -728,6 +728,9 @@ const SCREENS = [
   // Kaylee's rice farm (greybox A): paddy A flooded and three dry, the planted rows growing (birds coming in), the golden
   // rice drained for the harvest, the bundles on the rack by the threshing basket, and the café's deck.
   ...['plant', 'grow', 'harvest', 'thresh', 'deck'].map((round) => ({ name: `nan-rice-${round}`, hash: `#/world/thailand/nan-trip/rice?round=${round}`, reset: true, wait: round === 'grow' ? 6000 : 3500 })),
+  // Wat Phumin (greybox): the naga stairs and the shoes (round 1), the dim hall with 8 murals awake and the lovers
+  // asleep (round 2), the east Buddha with its door open and the light on the floor (round 3).
+  ...['1', '2', '3'].map((round) => ({ name: `nan-temple-${round}`, hash: `#/world/thailand/nan-trip/temple?round=${round}`, reset: true, wait: 4000 })),
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.

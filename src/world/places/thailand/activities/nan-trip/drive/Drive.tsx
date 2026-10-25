@@ -167,6 +167,7 @@ function CountPop({ count }: { count: DriveHud['count'] }) {
 
 /** The stops built so far at the end of a road. */
 const STOP_AT: Partial<Record<RoadId, { icon: string; label: string }>> = {
+  city: { icon: '🛕', label: 'Wat Phumin' },
   valley: { icon: '🍄', label: 'The mushroom farm' },
   sky: { icon: '🌾', label: 'Stop Time Cafe' },
 }

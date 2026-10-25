@@ -16,8 +16,11 @@ import { Mushrooms } from './mushrooms/Mushrooms'
 import { ROUNDS as RICE_ROUNDS, type Round as RiceRound } from './rice/layout'
 import { Rice } from './rice/Rice'
 import NAN_SECTIONS from './sections'
+import { ROUNDS as TEMPLE_ROUNDS, type Round as TempleRound } from './temple/layout'
+import { Temple } from './temple/Temple'
 
 type At = { section: 'drive'; road: RoadId } | { section: 'mushrooms'; round: Round; basket: string } | { section: 'rice'; round: RiceRound }
+  | { section: 'temple'; round: TempleRound }
 
 
 export function NanTrip() {
@@ -29,12 +32,14 @@ export function NanTrip() {
       const round = ((FARM_ROUNDS as readonly string[]).includes(param('round')) ? param('round') : '1') as Round
       return { section: 'mushrooms', round, basket: param('basket') || BASKET_SEED[round] }
     }
+    if (start === 'temple') return { section: 'temple', round: ((TEMPLE_ROUNDS as readonly string[]).includes(param('round')) ? param('round') : '1') as TempleRound }
     if (start === 'rice') return { section: 'rice', round: ((RICE_ROUNDS as readonly string[]).includes(param('round')) ? param('round') : 'plant') as RiceRound }
     return { section: 'drive', road: param('road') as RoadId }
   })
   useEffect(() => {
     if (at.section === 'drive') enter('drive', { road: at.road })
     else if (at.section === 'rice') enter('rice', { round: at.round })
+    else if (at.section === 'temple') enter('temple', { round: at.round })
     else enter('mushrooms', { round: at.round, basket: at.basket })
   }, [at])
 
@@ -49,13 +54,14 @@ export function NanTrip() {
         onDrive={() => setAt({ section: 'drive', road: 'sky' })}
       />
     )
+  if (at.section === 'temple') return <Temple key="temple" round={at.round} onRound={(round) => setAt({ section: 'temple', round })} onDrive={() => setAt({ section: 'drive', road: 'valley' })} />
   if (at.section === 'rice') return <Rice key="rice" round={at.round} onRound={(round) => setAt({ section: 'rice', round })} onDrive={() => setAt({ section: 'drive', road: 'three' })} />
   return (
     <Drive
       key="drive"
       road={at.road}
       onRoad={(road) => setAt({ section: 'drive', road })}
-      onStop={(road) => setAt(road === 'sky' ? { section: 'rice', round: 'plant' } : { section: 'mushrooms', round: '1', basket: '' })}
+      onStop={(road) => setAt(road === 'city' ? { section: 'temple', round: '1' } : road === 'sky' ? { section: 'rice', round: 'plant' } : { section: 'mushrooms', round: '1', basket: '' })}
     />
   )
 }

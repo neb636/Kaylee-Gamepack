@@ -1284,6 +1284,32 @@ GAME_SCENARIOS.push(
   },
 )
 
+// Wat Phumin (greybox): the lantern, the core verb. A finger held on the wall sweeps the lantern across the sleeping
+// murals of the panel in view (each wakes as the glow lingers on it), then holds at the screen's side so the view turns
+// round the hall to the next panel.
+GAME_SCENARIOS.push({
+  name: 'nan-lantern',
+  seconds: 9,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/nan-trip/temple?round=2`)
+    await page.waitForFunction(() => window.__thaiNanQA?.().game === 'temple', null, { timeout: 30000 })
+    await page.waitForTimeout(1500)
+  },
+  act: async (page) => {
+    const q = await page.evaluate(() => window.__thaiNanQA())
+    const pts = q.scenes.filter((s) => s.at).map((s) => s.at)
+    const start = pts[0] ?? [q.edges.left[0] + 200, q.edges.left[1]]
+    await page.mouse.move(...start)
+    await page.mouse.down()
+    for (const p of [...pts.slice(1), q.edges.right]) {
+      await page.mouse.move(p[0], p[1], { steps: 14 })
+      await page.waitForTimeout(900)
+    }
+    await page.waitForTimeout(1600)
+    await page.mouse.up()
+  },
+})
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {

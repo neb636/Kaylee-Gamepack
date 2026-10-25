@@ -536,6 +536,37 @@ places: the mushroom house and, 8 m along, the farm's table outside (the camera 
   gold and went to the table, the pizza took 9 mushrooms, baked and shared all 6 slices, with no errors. 110-140 draw
   calls, 150-215k triangles.
 
+**Step 5, the Wat Phumin greybox (2026-10-25).** `#/world/thailand/nan-trip/temple?round=1|2|3`
+(`activities/nan-trip/temple/`, self-contained; its own plan with the hall in meters, the camera and the rounds:
+`nan-temple.md`). Shapes in the toon look, murals painted in code, no voices, no Sparkle lines.
+- **Arriving** (round 1): outside the east door at the foot of the naga stairs; a tap on each pair of shoes pops it onto
+  the rack; then the door opens, the family hops up between the nagas and walks in, the hall dims, the lantern lights.
+- **The toy:** her finger is the lantern's glow: held anywhere, the paper lantern floats there on its string (off a
+  wall, over the floor, before a Buddha) and Kaylee trots along under it. Its pool of light wakes the murals (8 panels,
+  13 scenes, each a canvas with its own darkness). Held at the screen's side, the view glides round to the next panel.
+  1. wake any 8 scenes; 2. find the whispering lovers by their whisper (three spots, they fly off as a heart, home on the
+  west wall: he whispers, hearts float up); 3. the four Buddhas (each door opens with light, lantern on the Buddha, a
+  wai, the candle, the bell), then every scene wakes, the hall turns gold, and Mommy's photo under the lovers hangs there.
+- Silly: light Daddy and a painted Daddy appears in that panel; light an awake scene three more times and it dances.
+  Pokes: shoes, rack, nagas (blink), pigeons (outside and in), bells, the lovers' statues, doors, Buddhas (glow, never
+  wobble), Daddy, Mommy, Kaylee, and each awake scene (the elephant trumpets, the boats race round the whole hall on the
+  painted river, the birds fly along the walls, the cat pops up).
+- **The roads lead here:** the city road's end card has a big 🛕; the temple's end card offers 🔁 and 🚙 (the valley
+  road, to the mushroom farm).
+- QA: `qa-screens` (`nan-temple-1|2|3`), `qa-motion` (`nan-lantern`), `qa-pacing` (`nan-temple`). A robot in WebKit
+  (dragging the lantern onto sleeping scenes, holding at the side to turn, onto the lovers and each Buddha, a tap for the
+  photo) played round 1 to the end card in ~95 s, and rounds 2 and 3 from their links, landscape and portrait, with no
+  errors. 80-130 draw calls inside, 115-210k triangles.
+- Deviations from the plan above: the camera stands at one panel at a time and glides between them (turned by holding
+  the lantern at the side) rather than orbiting by itself; the lantern hangs on a string like a balloon so it can reach
+  the high murals; the lovers hide in three spots instead of one; Mommy sits by the east Buddha and Daddy sits by
+  whichever panel she's at; the east door shuts behind them so all four doors open in round 3; the photo is Mommy's
+  selfie of all three, hung on the wall under the lovers.
+
+**Next (Wat Phumin):** Dad plays the temple on the iPad (`temple`, then `?round=2`, `?round=3`). If lighting isn't fun
+yet, change the toy (the lantern's reach and spring, how fast a scene wakes, how turning works) before the look. Then
+its look (the mural art, the hall and the nagas) and voices (step 8-9 for the temple, as the rice farm had).
+
 **Not yet (later steps):** the family in the car (Daddy's "Whoa!", Mommy's lines, Sparkle's), the wipers, the
 dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero.
 
