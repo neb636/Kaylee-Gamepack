@@ -418,9 +418,9 @@ instanced, and the elephants are a few thousand triangles each.
      replay's 🐘.
    - The splash photo, the sign photo and the elephant sticker (placeholder art) in the album.
    - The picture-book pages.
-5. **The look:** a closer match to Dad's photos (the bamboo sign wall and its letters, the totems, the salas, the oil
-   palms, the gravel and boulders, the mesh boardwalk), and a pass on the elephants' look. The Khanom sticker.
-   Full QA, scoped to the Baan Chang sections.
+5. **The look** (built 2026-10-24, see "Built so far"): a closer match to Dad's photos (the bamboo sign wall and its
+   letters, the salas, the oil palms, the gravel and boulders, the mesh boardwalk), and a pass on the elephants' look.
+   The Khanom sticker. Full QA, scoped to the Baan Chang sections.
 6. **The full loop:**
    - Voices (`lines.ts`, then `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`), hints, the
      facts on the stamp screen and the passport.
@@ -621,11 +621,64 @@ round (`land?chang=1` for the signpost, `sunset?chang=1` for the 🐘 at the pie
 - **Known small things:** on a portrait iPad the boardwalk's top half is mostly palm crowns. The songthaew drives off
   in front of the family at the end of `chang`.
 
-**Next:** Dad plays the way in and out on the iPad with `?chang=1` (`land?chang=1`, then on round the trip): is the
-signpost clear without words, is the sign photo fun, and is the boardwalk short and worth walking? Then greybox 5, the
-look: a closer match to Dad's photos (the bamboo sign wall and its letters, the totems, the salas, the oil palms, the
-gravel and boulders, the mesh boardwalk), a pass on the elephants, the generated Khanom sticker, and full QA scoped to
-the Baan Chang sections.
+**Greybox 5, the look (2026-10-24):** a pass over every Baan Chang place against Dad's photos, still behind
+`CHANG_OPEN` (add `?chang=1`). No sections or params changed.
+- **`chang/nature.ts`**, shared by the entrance, the cafe, the boardwalk and the yard:
+  - **The oil palms:** a shaggy trunk with the stubs of old fronds in a spiral up it, orange fruit bunches under the
+    crown, and long feathery fronds in three tiers (rising, arching out, drooping low). Each frond is three leaf pieces
+    that bend down one after another, each a V of two tapered halves (the leaflets hanging off the rib). Far rows use
+    `lite` palms (seven shorter fronds). The palm by the boardwalk still shakes its crown (`oilPalmParts`).
+  - **The boulders:** big lumps of khaki rock (a lumpy icosahedron, flat-shaded so the facets read in toon bands),
+    with moss on the faces that look up, flatter on top like the ones in the photos. They're wider now (0.9-1.2 m) but
+    still under the trunks' floor in front of the rail (`BOULDERS` is x, z, width, height, depth).
+  - **The ground:** tan dirt patches scuffed into the grey gravel and a sprinkle of pebbles (`groundScatter`), and on
+    the boardwalk's sand green patches where the grass grows back.
+  - **The steel mesh** (`meshPanel`): a see-through square grid of dark wire, along the boardwalk's far side and the
+    cafe's back rail. The near side stays open, so Kaylee shows through.
+- **The sign wall:** the thatched band is a swoop now, as in the photo: lowest in the middle and sweeping up at both
+  ends (higher on the left), with a wavy top and a ragged straw fringe along both edges. "Baan Chang Café" is painted
+  on its face in big white letters (with a soft shadow, no outline) with straw strokes round them, so the letters
+  follow the swoop. The poles reach up into the band wherever it is. "We hope to be the reason / you smile today" is
+  two small lines on the poles under the middle. The driftwood tree has more branches.
+- **The ground round the places:** brown earth with grass and low patches of green under the palms (`EARTH`,
+  `grassPatches`). Grey gravel is only in the feeding yard, so the plantation no longer looks like a car park and the
+  grey elephants stand out from it.
+- **New pokes in the yard** (the new scenery looked tappable, so it is): a tap on a boulder thumps and the elephant
+  nearest it flaps its ears; on a palm, it rustles and a frond floats down from where she tapped (then Kaylee giggles);
+  on a sala, the wood creaks and a bird in the roof peeps back; on the bench, it boinks and bounces. They're raycast
+  pokes, without DOM targets, so they never take a tap meant for the food or an elephant.
+- **The boardwalk:** the planks run on 2.6 m past the top, so Mommy and Daddy no longer start in mid-air behind her.
+  The gecko is twice the size and bright lime with a pink belly, so she can spot it against the mesh.
+- **The yard:** the rail is galvanized pipe (a thick one on top, a thinner one lower down), the salas are wooden huts
+  on dark stilts with a low rail, a ladder, corner posts and a steep roof with deep eaves and a ridge cap, and there
+  are a few small rocks round the big ones and two more far back. The trunks' floor over the boulders went up from
+  0.66 to 0.72 m, so a trunk tip held low never dips into the taller ones.
+- **The elephants:** a warm grey hide (lavender only in the toon shadows) and pink freckles on the face, round the
+  trunk's root and along the ears' lower edges, like real Asian elephants (Mali has the most, Khanom hardly any). The
+  ears are a little smaller, Asian-shaped: a rolled top edge and a lobe hanging lower at the front.
+- **Khanom's sticker:** redrawn in code to match him (his grey, the rolled ear, a pink-tipped trunk, freckles). **Changed from the plan:** not a generated picture. The other nine stickers are drawn in code in one
+  flat style, and a generated one would stand out among them.
+- **Budget:** about 200 draw calls and 206k triangles in `lamyai` (was about 200k), 201k in `feed`, 192k at the
+  entrance (WebKit, iPad landscape). The palms are most of the new triangles.
+- **QA:**
+  - layout-qa looked at all nine Baan Chang screens on iPad portrait and landscape and iPhone landscape, and at the
+    six chang filmstrips. The letters and the band's swoop fit on every size, and the boulders, palms and mesh hide
+    nothing she needs. The small motto was hard to read on the pale bamboo, so it got bigger, bolder letters with a
+    dark glow.
+  - playtest-qa: the look is clearer, not muddier, and the elephants are still cute and alive. Its fixes for this
+    pass are all in (the floating parents, the dead scenery, the grey far ground, the gecko, the freckles; the
+    freckles round the ears now vary in size, so they read as mottling, not rivets).
+- **Known small things** (from before this pass, for the full loop):
+  - On `sign`, Sparkle's "Everybody, pose!" bubble sits behind the first pose buttons. The buttons still take the tap,
+    and the bay's Nail Island photo does the same.
+  - On the boardwalk, Kaylee walks behind the near rail's bars.
+  - On a portrait iPad: the songthaew is cut off at the left in `chang`; Mommy and Daddy are cut at the edges in the
+    yard; the boardwalk's top half is palm crowns.
+  - On iPhone landscape, the wish bubbles touch the top of the screen.
+  - The pacing robot doesn't finish the Baan Chang runs, so `qa-pacing.mjs` has no numbers for them yet.
+
+**Next:** Dad plays it on the iPad with `?chang=1`. Then the full loop (step 6): the voices, the hints, the facts,
+pacing QA, layout-qa and playtest-qa with the fun check, then `CHANG_OPEN = true`.
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 

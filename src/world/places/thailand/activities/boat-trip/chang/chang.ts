@@ -215,6 +215,14 @@ export class Chang extends Stage {
   private splashT = 0
   private geckoT = -1
   private shakeT = -1
+  /** The yard's scenery (its boulders, palms, salas and bench are pokes), and the bench's bounce (-1: not now). */
+  private scenery!: Object3D
+  private bench!: Object3D
+  private benchT = -1
+  /** Where the falling frond starts (the boardwalk's palm, or whichever palm in the yard she tapped), and whether the
+   *  boardwalk palm's crown shakes. */
+  private frondFrom = new Vector3()
+  private shakeCrown = true
   private lastLead = 0
 
   constructor(
@@ -232,9 +240,11 @@ export class Chang extends Stage {
     this.at = section
     this.fed = Math.max(fed, FED_BEFORE[section])
     this.straw = straw
-    const yard = buildYard(bag)
+    const { root: yard, bench } = buildYard(bag)
     scene.add(yard)
     this.yard.push(yard)
+    this.scenery = yard
+    this.bench = bench
     this.eaters = ELEPHANTS.map((spot) => {
       const e = new Elephant(bag, spot)
       e.setReach(CHANG_FEEL.reach)
@@ -507,7 +517,7 @@ export class Chang extends Stage {
     this.walkIn = true
   }
 
-  /** The boardwalk's frame: Kaylee on the planks and the steps, Mommy and Daddy keeping up, the gecko, the palm. */
+  /** The boardwalk's frame: Kaylee on the planks and the steps, Mommy and Daddy keeping up. */
   private stepWalk(dt: number) {
     const k = this.riders.kaylee
     const p = k.root.position
@@ -529,7 +539,12 @@ export class Chang extends Stage {
       tags.ji.update(dt)
       tags.nick.update(dt)
     }
-    // The gecko scurries up its post and back down; the palm shakes and a frond floats down.
+  }
+
+  /** The yard's and the boardwalk's pokes, on every frame there. */
+  private stepPokes(dt: number) {
+    // The gecko scurries up its post and back down; the palm shakes (or a palm in the yard rustles) and a frond floats
+    // down; the bench bounces.
     const w = this.walkway
     if (this.geckoT >= 0) {
       this.geckoT += dt
@@ -541,13 +556,20 @@ export class Chang extends Stage {
     if (this.shakeT >= 0) {
       this.shakeT += dt
       const t = this.shakeT
-      w.crown.rotation.z = Math.sin(t * 16) * 0.13 * Math.max(0, 1 - t / 1.1)
+      if (this.shakeCrown) w.crown.rotation.z = Math.sin(t * 16) * 0.13 * Math.max(0, 1 - t / 1.1)
       const f = w.frond
       f.visible = t < 3.2
       const fall = Math.min(1, t / 2.6)
-      f.position.set(SHAKE_PALM.x + 0.8 + Math.sin(t * 3) * 0.5, SHAKE_PALM.h - (SHAKE_PALM.h - 0.05) * fall, SHAKE_PALM.z + 0.9 + fall * 0.8)
+      const o = this.frondFrom
+      f.position.set(o.x + Math.sin(t * 3) * 0.5, o.y - (o.y - 0.05) * fall, o.z + fall * 0.8)
       f.rotation.set(fall < 1 ? Math.sin(t * 3) * 0.4 : 0, t * 0.6, fall < 1 ? Math.cos(t * 3) * 0.3 : 0)
       if (t > 3.2) this.shakeT = -1
+    }
+    if (this.benchT >= 0) {
+      this.benchT += dt
+      const b = this.benchT
+      this.bench.scale.set(1 + Math.sin(b * 24) * 0.05 * Math.max(0, 1 - b / 0.5), 1 - Math.sin(b * 24) * 0.08 * Math.max(0, 1 - b / 0.5), 1)
+      if (b > 0.5) this.benchT = -1
     }
   }
 
@@ -672,7 +694,7 @@ export class Chang extends Stage {
     if (this.area === 'entry') return [this.entrance.songthaew.root, ...this.entrance.totems, ...family]
     if (this.at === 'drinks') return [...this.cafe.pickRoots(), ...family]
     if (this.at === 'boardwalk') return [this.walkway.gecko, this.walkway.palm, ...this.eaters.map((x) => x.e.root), ...family]
-    return [this.milk.root, ...this.basket.foods.map((f) => f.obj), ...this.eaters.map((x) => x.e.root), ...Object.values(this.riders).map((r) => r.root)]
+    return [this.milk.root, ...this.basket.foods.map((f) => f.obj), ...this.eaters.map((x) => x.e.root), ...Object.values(this.riders).map((r) => r.root), this.scenery]
   }
 
   pointerDown(x = 0, y = 0, id?: string) {
@@ -745,7 +767,7 @@ export class Chang extends Stage {
     h.food.t = 0
   }
 
-  protected onTap(id: string | null) {
+  protected onTap(id: string | null, x = 0, y = 0) {
     if (!id || id.startsWith('food:') || id.startsWith('tool:')) return
     if (this.at === 'drinks' && this.cafe.tap(id)) return
     if (id === 'songthaew') return sfx.toot()
@@ -762,8 +784,15 @@ export class Chang extends Stage {
       this.later(400, () => this.riders.kaylee.react('hop'))
       return
     }
-    if (id === 'palm') {
+    if (id === 'palm' || id === 'palms') {
+      // The boardwalk's palm shakes its crown; a palm in the yard rustles. Either way a frond floats down.
       sfx.swish()
+      this.shakeCrown = id === 'palm'
+      if (id === 'palm') this.frondFrom.set(SHAKE_PALM.x + 0.8, SHAKE_PALM.h, SHAKE_PALM.z + 0.9)
+      else {
+        const p = this.onPlaneY(x, y, 4.6, tmp)
+        this.frondFrom.set(p ? clamp(p.x, -9, 9) : 0, 4.6, p ? clamp(p.z, -12, 1.5) : -4)
+      }
       this.shakeT = 0
       this.later(900, () => {
         sfx.giggle()
@@ -772,6 +801,25 @@ export class Chang extends Stage {
       return
     }
     if (id === 'walk:end') return this.walkTo(WALK.x0)
+    if (id === 'rocks') {
+      // A thump on the boulder, and the elephant nearest it flaps its ears to see what that was.
+      sfx.flop()
+      const p = this.onPlaneY(x, y, 0.4, tmp)
+      const near = this.eaters.filter((e) => e.here).sort((a, b) => Math.abs(a.e.x - (p?.x ?? 0)) - Math.abs(b.e.x - (p?.x ?? 0)))[0]
+      if (near) near.e.flap = 1
+      return
+    }
+    if (id === 'sala') {
+      // A creak of old wood, and a bird in the roof peeps back.
+      sfx.creak()
+      this.later(350, () => sfx.peep())
+      return
+    }
+    if (id === 'bench') {
+      sfx.boink()
+      this.benchT = 0
+      return
+    }
     if (id === 'milk') {
       // Kaylee has a sip herself.
       this.milk.poke()
@@ -902,6 +950,7 @@ export class Chang extends Stage {
     this.milk.update(dt)
     this.splash.update(dt)
     if (this.at === 'boardwalk' || this.tags) this.stepWalk(dt)
+    this.stepPokes(dt)
     if (this.at === 'splash') this.stepSplash(dt)
     // ---- The family watch the food, whoever is eating, or the spray ----
     const busy = this.eaters.find((x) => x.mode !== 'idle' && x.mode !== 'spray' && x.here)
@@ -1275,7 +1324,7 @@ export class Chang extends Stage {
     if (id === 'songthaew' || id.startsWith('totem:')) return null
     if (id === 'gecko' || id === 'palm' || id === 'walk:end') {
       if (this.at !== 'boardwalk') return null
-      if (id === 'gecko') return { at: this.walkway.gecko.getWorldPosition(new Vector3()), r: 0.2, prio: 3 }
+      if (id === 'gecko') return { at: this.walkway.gecko.getWorldPosition(new Vector3()), r: 0.3, prio: 3 }
       if (id === 'palm') return { at: new Vector3(SHAKE_PALM.x, SHAKE_PALM.h - 0.6, SHAKE_PALM.z), r: 0.9, max: 130, prio: 1 }
       // A glow on the planks a few steps ahead of her, after a moment with nothing done: tap and she walks all the way.
       const kx = this.riders.kaylee.root.position.x

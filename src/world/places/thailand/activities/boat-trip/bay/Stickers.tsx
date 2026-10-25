@@ -131,21 +131,26 @@ const ART: Record<StickerId, ReactNode> = {
       <Blush x={80} y={58} />
     </g>
   ),
-  // Khanom, Baan Chang's baby elephant: a round grey body, a big pink-lined ear, his trunk curled up, a tuft of hair.
+  // Khanom, Baan Chang's baby elephant, like the one in the yard: a round warm-grey body, a pink-lined ear with its top
+  // rolled, his trunk curled up with a pink tip, pink freckles, and the tuft of hair on his head.
   elephant: (
     <g>
       <path d="M22 66 Q14 70 12 62" fill="none" stroke={INK} strokeWidth={6} strokeLinecap="round" />
-      <path d="M22 66 Q14 70 12 62" fill="none" stroke="#A9A3B8" strokeWidth={2.5} strokeLinecap="round" />
-      <rect x={26} y={70} width={12} height={16} rx={5} fill="#A9A3B8" {...S} />
-      <rect x={46} y={72} width={12} height={14} rx={5} fill="#A9A3B8" {...S} />
-      <ellipse cx={40} cy={62} rx={22} ry={17} fill="#B5B0C2" {...S} />
+      <path d="M22 66 Q14 70 12 62" fill="none" stroke="#B1A9B6" strokeWidth={2.5} strokeLinecap="round" />
+      <rect x={26} y={70} width={12} height={16} rx={5} fill="#B1A9B6" {...S} />
+      <rect x={46} y={72} width={12} height={14} rx={5} fill="#B1A9B6" {...S} />
+      <ellipse cx={40} cy={62} rx={22} ry={17} fill="#C7C0CA" {...S} />
       <path d="M78 52 Q94 50 92 34 Q91 26 85 28" fill="none" stroke={INK} strokeWidth={13} strokeLinecap="round" />
-      <path d="M78 52 Q94 50 92 34 Q91 26 85 28" fill="none" stroke="#B5B0C2" strokeWidth={7} strokeLinecap="round" />
-      <circle cx={85} cy={28} r={3} fill="#FFB3D1" />
-      <circle cx={66} cy={44} r={20} fill="#B5B0C2" {...S} />
-      <ellipse cx={52} cy={44} rx={13} ry={16} fill="#B5B0C2" {...S} />
-      <ellipse cx={53} cy={45} rx={8} ry={11} fill="#FFB3D1" />
+      <path d="M78 52 Q94 50 92 34 Q91 26 85 28" fill="none" stroke="#C7C0CA" strokeWidth={7} strokeLinecap="round" />
+      <circle cx={85} cy={28} r={3} fill="#FFA3C2" />
+      <circle cx={66} cy={44} r={20} fill="#C7C0CA" {...S} />
+      <path d="M44 36 Q44 26 54 28 Q64 30 62 42 Q62 56 54 60 Q48 62 46 54 Z" fill="#C7C0CA" {...S} />
+      <path d="M48 40 Q48 32 54 33 Q59 35 58 44 Q58 53 53 55 Q49 55 49 49 Z" fill="#FFAFC8" />
+      <path d="M45 33 Q52 25 61 31" fill="none" stroke="#B1A9B6" strokeWidth={4} strokeLinecap="round" />
       <path d="M64 24 Q66 16 70 22 Q72 15 75 23" fill="none" stroke={INK} strokeWidth={3} strokeLinecap="round" />
+      {[[80, 50], [83, 45], [77, 54], [89, 40]].map(([x, y]) => (
+        <circle key={`${x}-${y}`} cx={x} cy={y} r={1.6} fill="#F4BCCB" />
+      ))}
       <Eye x={72} y={40} r={4.5} />
       <Blush x={74} y={52} />
     </g>

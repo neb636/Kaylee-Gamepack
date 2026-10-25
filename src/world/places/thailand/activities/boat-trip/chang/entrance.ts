@@ -3,13 +3,13 @@
 // post either side (zigzags and a spiral), a twisted driftwood tree, potted palms and a fern, and behind it the curved
 // wall of upright bamboo poles under a thick thatched band. "Baan Chang Café" and the smaller line under it are canvas
 // text on the wall (the way the shop sign is in hub/build/street.ts), never generated. Oil palms stand behind.
-import { BackSide, CanvasTexture, CylinderGeometry, Group, Mesh, MeshToonMaterial, SRGBColorSpace } from 'three'
+import { BackSide, BufferGeometry, CanvasTexture, CylinderGeometry, DoubleSide, Float32BufferAttribute, Group, Mesh, MeshToonMaterial, SRGBColorSpace } from 'three'
 import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
+import { bake, merge, P, solid } from '../../../engine/geo'
 import { PAL, toonGradient } from '../../../engine/toon'
 import { buildSongthaew, type Songthaew } from '../../../trip/vehicles/songthaew'
 import { DECK, ENTRY, ROAD, TOTEMS, WALL } from './layout'
-import { FROND, FROND_DARK, GRAVEL, oilPalm, THATCH } from './yard'
+import { EARTH, FROND, FROND_DARK, grassPatches, groundScatter, oilPalm } from './nature'
 
 const BAMBOO = ['#D9B86A', '#CDA95C', '#E3C57C']
 const NODE = '#B08F4A'
@@ -28,10 +28,131 @@ export interface Entrance {
 /** A point on the wall's arc at angle `t` (0 = its middle, straight in front of the camera). */
 const onArc = (t: number, r = WALL.r): [number, number] => [WALL.cx + r * Math.sin(Math.PI + t), WALL.cz + r * Math.cos(Math.PI + t)]
 
-/** The letters on the wall: white with an ink edge on a clear strip, mirrored (it's seen from inside its cylinder). */
-function letters(bag: Bag, h: number, y: number) {
-  const W = 2048
-  const H = 400
+/** The thatched band's bottom and top at `u` along the wall (-1 its right end, 0 the middle, 1 its left end): a swoop,
+ *  lowest in the middle and sweeping up at both ends, higher on the left, with a ragged, wavy top (Dad's photo). */
+export function bandAt(u: number): [number, number] {
+  const y0 = WALL.h - 0.2 + 0.38 * u * u + 0.14 * u
+  return [y0, y0 + WALL.band - 0.12 * u * u + 0.05 * Math.sin(u * 9.5)]
+}
+
+/** The thatch's face, painted: straw strokes hanging down in three shades, and "Baan Chang Café" in big white letters
+ *  across it (left to right, so u = 0 is the left end). */
+function thatchTexture(bag: Bag) {
+  const W = 4096
+  const H = 448
+  const c = document.createElement('canvas')
+  c.width = W
+  c.height = H
+  const g = c.getContext('2d')!
+  g.fillStyle = '#CFA772'
+  g.fillRect(0, 0, W, H)
+  g.lineCap = 'round'
+  for (let i = 0; i < 2600; i++) {
+    const x = ((Math.sin(i * 91.7) + 1) / 2) * W
+    const y = ((Math.sin(i * 37.3) + 1) / 2) * H
+    g.strokeStyle = i % 3 === 0 ? '#E3C38C' : i % 3 === 1 ? '#B88F5C' : '#C69D66'
+    g.lineWidth = 5 + (i % 4)
+    g.beginPath()
+    g.moveTo(x, y)
+    g.lineTo(x + 10 + (i % 7) * 3, y + 60 + (i % 5) * 14)
+    g.stroke()
+  }
+  g.textAlign = 'center'
+  g.textBaseline = 'middle'
+  const font = '"Fredoka", "Arial Rounded MT Bold", "Avenir Next", sans-serif'
+  let size = H * 0.72
+  g.font = `600 ${size}px ${font}`
+  const fit = (W * 0.62) / g.measureText('Baan Chang Café').width
+  if (fit < 1) size *= fit
+  g.font = `600 ${size}px ${font}`
+  // White letters standing off the thatch: a soft brown shadow under them, no outline.
+  g.fillStyle = 'rgba(94, 66, 36, 0.55)'
+  g.fillText('Baan Chang Café', W / 2 + 8, H * 0.54 + 12)
+  g.fillStyle = '#FFFFFF'
+  g.fillText('Baan Chang Café', W / 2, H * 0.54)
+  const tex = bag.add(new CanvasTexture(c))
+  tex.colorSpace = SRGBColorSpace
+  tex.anisotropy = 8
+  return tex
+}
+
+/** The thatched band along the top of the wall: a thick ribbon following the arc and the swoop (outlined), its face
+ *  painted with straw and the letters (so they follow the swoop too), and a ragged fringe of straw along both edges. */
+function thatchBand(bag: Bag) {
+  const N = 48
+  const lo = -WALL.a - 0.03
+  const hi = WALL.a + 0.03
+  const rf = WALL.r - 0.3
+  const rb = WALL.r + 0.05
+  const pos: number[] = []
+  const nor: number[] = []
+  const face: number[] = []
+  const faceNor: number[] = []
+  const uv: number[] = []
+  const col = (i: number) => {
+    const t = lo + (i / N) * (hi - lo)
+    const [y0, y1] = bandAt(t / WALL.a)
+    const [fx, fz] = onArc(t, rf)
+    const [bx, bz] = onArc(t, rb)
+    // Toward the circle's middle (the camera's side) is the front.
+    const nx = WALL.cx - fx
+    const nz = WALL.cz - fz
+    const l = Math.hypot(nx, nz)
+    return { t, y0, y1, f: [fx, fz], b: [bx, bz], n: [nx / l, nz / l], u: (hi - t) / (hi - lo) }
+  }
+  const quad = (out: number[], norm: number[], v: number[][], n: number[][]) => {
+    for (const k of [0, 1, 2, 0, 2, 3]) {
+      out.push(...v[k])
+      norm.push(...n[k])
+    }
+  }
+  for (let i = 0; i < N; i++) {
+    const a = col(i)
+    const b = col(i + 1)
+    const na = [a.n[0], 0, a.n[1]]
+    const nb = [b.n[0], 0, b.n[1]]
+    const ba = [-a.n[0], 0, -a.n[1]]
+    const bb = [-b.n[0], 0, -b.n[1]]
+    // Front, back, top and bottom of the ribbon.
+    quad(pos, nor, [[a.f[0], a.y0, a.f[1]], [b.f[0], b.y0, b.f[1]], [b.f[0], b.y1, b.f[1]], [a.f[0], a.y1, a.f[1]]], [na, nb, nb, na])
+    quad(pos, nor, [[a.b[0], a.y0, a.b[1]], [a.b[0], a.y1, a.b[1]], [b.b[0], b.y1, b.b[1]], [b.b[0], b.y0, b.b[1]]], [ba, ba, bb, bb])
+    quad(pos, nor, [[a.f[0], a.y1, a.f[1]], [b.f[0], b.y1, b.f[1]], [b.b[0], b.y1, b.b[1]], [a.b[0], a.y1, a.b[1]]], [[0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0]])
+    quad(pos, nor, [[a.f[0], a.y0, a.f[1]], [a.b[0], a.y0, a.b[1]], [b.b[0], b.y0, b.b[1]], [b.f[0], b.y0, b.f[1]]], [[0, -1, 0], [0, -1, 0], [0, -1, 0], [0, -1, 0]])
+    // The painted face, just in front of the ribbon's.
+    const fa = onArc(a.t, rf - 0.012)
+    const fb = onArc(b.t, rf - 0.012)
+    quad(face, faceNor, [[fa[0], a.y0, fa[1]], [fb[0], b.y0, fb[1]], [fb[0], b.y1, fb[1]], [fa[0], a.y1, fa[1]]], [na, nb, nb, na])
+    for (const k of [0, 1, 2, 0, 2, 3]) uv.push(...[[a.u, 0], [b.u, 0], [b.u, 1], [a.u, 1]][k])
+  }
+  const body = new BufferGeometry()
+  body.setAttribute('position', new Float32BufferAttribute(pos, 3))
+  body.setAttribute('normal', new Float32BufferAttribute(nor, 3))
+  // The straw fringe: little tufts hanging under the band and sticking up along its top.
+  const fringe = []
+  for (let i = 0; i <= 90; i++) {
+    const t = lo + (i / 90) * (hi - lo)
+    const [y0, y1] = bandAt(t / WALL.a)
+    const [x, z] = onArc(t, WALL.r - 0.2)
+    const k = i % 3
+    fringe.push(P.cone(0.075, 0.2 + k * 0.05, k ? '#C49A62' : '#D9B47A', { at: [x, y0 - 0.08 - k * 0.02, z], rot: [Math.PI, 0, (i % 2 ? 1 : -1) * 0.15] }, 4))
+    if (i % 2) fringe.push(P.cone(0.06, 0.16 + k * 0.04, k ? '#D9B47A' : '#B88F5C', { at: [x, y1 + 0.06, z], rot: [0, 0, (k - 1) * 0.3] }, 4))
+  }
+  const root = new Group()
+  root.add(solid(merge([bake(body, '#C49A62'), ...fringe]), bag, 2))
+  const faceGeo = bag.add(new BufferGeometry())
+  faceGeo.setAttribute('position', new Float32BufferAttribute(face, 3))
+  faceGeo.setAttribute('normal', new Float32BufferAttribute(faceNor, 3))
+  faceGeo.setAttribute('uv', new Float32BufferAttribute(uv, 2))
+  root.add(new Mesh(faceGeo, bag.add(new MeshToonMaterial({ map: thatchTexture(bag), gradientMap: toonGradient(), side: DoubleSide }))))
+  return root
+}
+
+/** The small line on the poles under the band, white on a clear strip (it's seen from inside its cylinder, so the
+ *  canvas is mirrored). */
+function motto(bag: Bag, h: number, y: number) {
+  // (The canvas has the strip's own shape, 0.48 rad of the arc by 0.62 m, so the letters aren't stretched.)
+  const W = 1480
+  const H = 256
   const c = document.createElement('canvas')
   c.width = W
   c.height = H
@@ -40,24 +161,22 @@ function letters(bag: Bag, h: number, y: number) {
   g.scale(-1, 1)
   g.textAlign = 'center'
   g.textBaseline = 'middle'
-  g.lineJoin = 'round'
-  const font = '"Fredoka", "Arial Rounded MT Bold", "Avenir Next", sans-serif'
-  const write = (text: string, y: number, size: number) => {
-    g.font = `bold ${size}px ${font}`
-    g.lineWidth = size * 0.16
-    g.strokeStyle = '#5A4632'
-    g.strokeText(text, W / 2, y)
-    g.fillStyle = '#FFFFFF'
-    g.fillText(text, W / 2, y)
-  }
-  write('Baan Chang Café', H * 0.38, 230)
-  write('We hope to be the reason you smile today', H * 0.84, 84)
+  g.font = '600 92px "Fredoka", "Arial Rounded MT Bold", "Avenir Next", sans-serif'
+  // A soft dark glow behind the letters, so white reads on the pale bamboo.
+  g.shadowColor = 'rgba(74, 50, 26, 0.85)'
+  g.shadowBlur = 18
+  g.fillStyle = 'rgba(74, 50, 26, 0.7)'
+  g.fillText('We hope to be the reason', W / 2 + 4, H * 0.3 + 5)
+  g.fillText('you smile today', W / 2 + 4, H * 0.72 + 5)
+  g.shadowBlur = 0
+  g.fillStyle = '#FFFFFF'
+  g.fillText('We hope to be the reason', W / 2, H * 0.3)
+  g.fillText('you smile today', W / 2, H * 0.72)
   const tex = bag.add(new CanvasTexture(c))
   tex.colorSpace = SRGBColorSpace
   tex.anisotropy = 4
-  // The strip covers the middle of the arc, a little in front of the poles.
-  const a = WALL.a * 0.82
-  const geo = bag.add(new CylinderGeometry(WALL.r - 0.14, WALL.r - 0.14, h, 40, 1, true, Math.PI - a, a * 2))
+  const a = 0.24
+  const geo = bag.add(new CylinderGeometry(WALL.r - 0.14, WALL.r - 0.14, h, 12, 1, true, Math.PI - a, a * 2))
   const mesh = new Mesh(geo, bag.add(new MeshToonMaterial({ map: tex, gradientMap: toonGradient(), transparent: true, alphaTest: 0.35, side: BackSide })))
   mesh.position.set(WALL.cx, y, WALL.cz)
   return mesh
@@ -97,10 +216,12 @@ export function buildEntrance(bag: Bag): Entrance {
   root.add(
     solid(
       merge([
-        P.box(60, 0.1, 40, GRAVEL, { at: [0, -0.05, z - 6] }),
+        P.box(60, 0.1, 40, EARTH, { at: [0, -0.05, z - 6] }),
+        ...grassPatches(-28, 28, z - 24, z + 2.3, 6, 30, [-5.5, 5.5, z - 2, z + 2.6]),
         P.box(60, 0.012, ROAD.w, '#C9C4DE', { at: [0, 0.006, ROAD.z] }),
         ...Array.from({ length: 12 }, (_, i) => P.box(1.2, 0.01, 0.12, PAL.butter, { at: [-26 + i * 4.6, 0.014, ROAD.z] })),
         P.box(9, 0.01, 4.4, '#E6DCC6', { at: [0, 0.008, z + 0.4] }),
+        ...groundScatter(-14, 14, z - 12, z + 2.2, 9, 8, 30),
       ]),
       bag,
       0,
@@ -126,6 +247,9 @@ export function buildEntrance(bag: Bag): Entrance {
         P.capsule(0.08, 0.9, DRIFT, { at: [-4.35, 1.75, z + 0.1], rot: [0.3, 0, -0.7] }),
         P.capsule(0.07, 0.8, DRIFT, { at: [-5.05, 1.85, z + 0.05], rot: [-0.2, 0, 0.8] }),
         P.capsule(0.05, 0.5, DRIFT, { at: [-4.0, 2.25, z + 0.15], rot: [0, 0, -1.2] }),
+        P.capsule(0.045, 0.55, DRIFT, { at: [-5.45, 2.3, z + 0.1], rot: [0.3, 0, 1.3] }),
+        P.capsule(0.04, 0.4, DRIFT, { at: [-4.55, 2.45, z - 0.05], rot: [-0.4, 0, -0.2] }),
+        P.capsule(0.09, 0.3, '#A39383', { at: [-4.7, 0.12, z + 0.1], rot: [0, 0, 1.4] }),
         ...pottedPalm(4.75, z + 0.9),
         ...pottedPalm(-3.75, z + 1.9, 0.75),
         // A fern, and a green plastic basket.
@@ -142,24 +266,14 @@ export function buildEntrance(bag: Bag): Entrance {
   for (let i = 0; i <= n; i++) {
     const t = -WALL.a + (i / n) * WALL.a * 2
     const [x, pz] = onArc(t)
-    const h = WALL.h + Math.sin(i * 2.7) * 0.08
+    // (Up into the band, wherever its swoop is.)
+    const h = bandAt(t / WALL.a)[0] + 0.3 + Math.sin(i * 2.7) * 0.05
     poles.push(P.cyl(0.075, 0.08, h, BAMBOO[i % 3], { at: [x, h / 2, pz] }, 8))
     for (const y of [0.55, 1.3]) poles.push(P.cyl(0.085, 0.085, 0.04, NODE, { at: [x, y + (i % 2) * 0.12, pz] }, 8))
   }
   root.add(solid(merge(poles), bag, 1))
-  const band = []
-  const segs = 16
-  for (let i = 0; i < segs; i++) {
-    const t = -WALL.a - 0.02 + ((i + 0.5) / segs) * (WALL.a * 2 + 0.04)
-    const [x, pz] = onArc(t)
-    const w = ((WALL.a * 2 + 0.04) * WALL.r) / segs + 0.08
-    band.push(P.box(w, WALL.band, 0.5, THATCH, { at: [x, WALL.h + WALL.band / 2 - 0.05, pz], rot: [0, t, 0] }))
-    // The ragged fringe under it, and a darker tuft line along its top.
-    band.push(P.box(w, 0.16, 0.42, '#D9B470', { at: [x, WALL.h - 0.1, pz + Math.cos(Math.PI + t) * -0.02], rot: [0.12, t, 0] }))
-    band.push(P.box(w, 0.08, 0.46, '#C9A060', { at: [x, WALL.h + WALL.band - 0.02, pz], rot: [0, t, 0] }))
-  }
-  root.add(solid(merge(band), bag, 2))
-  root.add(letters(bag, 0.95, WALL.h - 0.55))
+  root.add(thatchBand(bag))
+  root.add(motto(bag, 0.62, bandAt(0)[0] - 0.42))
   // ---- The totem posts either side of the deck (one at a time, so each can wobble on its own) ----
   const totems = TOTEMS.map(([x, , tz], i) => {
     const g = totem(bag, 0, 0, i)
@@ -169,7 +283,7 @@ export function buildEntrance(bag: Bag): Entrance {
   })
   // ---- Oil palms behind the wall ----
   const palms = []
-  for (let i = -3; i <= 3; i++) for (let j = 0; j < 2; j++) palms.push(...oilPalm(i * 4 + (j % 2) * 2, z - 4.5 - j * 4.5, 5.6 + ((i + j) % 3) * 0.7, i * 0.8 + j))
+  for (let i = -3; i <= 3; i++) for (let j = 0; j < 2; j++) palms.push(...oilPalm(i * 4 + (j % 2) * 2, z - 4.5 - j * 4.5, 5.6 + ((i + j) % 3) * 0.7, i * 0.8 + j, 0, j > 0))
   palms.push(...oilPalm(-8.5, z + 1.2, 6.4, 0.5), ...oilPalm(8.8, z + 0.6, 6.0, 1.7))
   root.add(solid(merge(palms), bag, 2))
   // ---- The songthaew (it drives in along the road) ----
