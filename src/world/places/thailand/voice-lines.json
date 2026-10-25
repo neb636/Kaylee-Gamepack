@@ -555,6 +555,88 @@
   "Tap Agong to give it to him!",
   "Tap the plane to fly home!",
   "Pack again, or go straight to the boat?",
+  "Let's plant rice, Kaylee! Walk in the water.",
+  "Rice likes water! Open the gate.",
+  "The birds want the rice! Shoo, shoo!",
+  "It's golden! Time to cut the rice.",
+  "Bang the rice! The grains fall out.",
+  "In Nan, people eat sticky rice with their fingers!",
+  "The steps on the hill keep the water for the rice!",
+  "Walk through the water to plant!",
+  "Tap the gate to let the water in!",
+  "Walk to the birds!",
+  "Walk through the golden rice!",
+  "Tap to bang the rice!",
+  "Tap the sticky rice!",
+  "Tap Mommy for a photo!",
+  {
+    "text": "Look at those rows, Kaylee!",
+    "voice": "nick"
+  },
+  {
+    "text": "Our very own rice farm!",
+    "voice": "nick"
+  },
+  {
+    "text": "Hey! I'm all wet!",
+    "voice": "nick"
+  },
+  {
+    "text": "A straw hat! Thank you!",
+    "voice": "nick"
+  },
+  {
+    "text": "A muddy unicorn!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ha! Into the straw!",
+    "voice": "nick"
+  },
+  {
+    "text": "Rain! The rice loves it!",
+    "voice": "nick"
+  },
+  {
+    "text": "That bird ate too much!",
+    "voice": "nick"
+  },
+  {
+    "text": "Kaylee? Where did you go?",
+    "voice": "nick"
+  },
+  {
+    "text": "Look at all that rice!",
+    "voice": "nick"
+  },
+  {
+    "text": "Whack! Good one!",
+    "voice": "nick"
+  },
+  {
+    "text": "Mmm, coffee.",
+    "voice": "nick"
+  },
+  {
+    "text": "Go, farmer Kaylee!",
+    "voice": "nick"
+  },
+  {
+    "text": "Splish, splash!",
+    "voice": "nick"
+  },
+  {
+    "text": "Daddy is watching!",
+    "voice": "nick"
+  },
+  {
+    "text": "Sticky rice from your farm!",
+    "voice": "ji"
+  },
+  {
+    "text": "Smile, Kaylee!",
+    "voice": "ji"
+  },
   "Want to see real rice grow, Kaylee?",
   "Welcome to HarborLand, Kaylee! Tap a place to play!",
   {

@@ -107,6 +107,18 @@ Code paths are under `src/world/places/thailand/`.
   - Check: `#/world/thailand/mall-trip/share?shared=6`, then on to `home`.
 - [ ] **The hall's Sky Pod wall is 4 by 3; the game's has nine pods.**
 
+## The Nan trip: the rice farm (the look and voices)
+- [ ] **The terraces don't show on the farm.** Sapan's rice steps sit at the valley's sides: the deck looks out at them,
+  but the farm's camera only catches them on very wide screens. Frame one terrace hill on the farm camera.
+  - Check: `#/world/thailand/nan-trip/rice?round=plant` in iPad landscape.
+- [ ] **Grow has short stretches where only the clock moves.** Shorter rests for the first wave of birds would help.
+  - Check: `#/world/thailand/nan-trip/rice?round=grow`.
+- [ ] **Daddy stands still while she threshes,** apart from the hop on "Whack! Good one!".
+  - Check: `#/world/thailand/nan-trip/rice?round=thresh`.
+- [ ] **The 🏠 sits on the hut's roof corner** at the top left of the farm (the hut is scenery, not a target).
+- [ ] **Listen to the rice farm's voices** (32 clips): is Daddy too chatty (8-10 one-time lines a run)? The transcription
+  check heard "Go, farmer Kaylee!" as "Cayley" (likely just spelling).
+
 ## Listen on the iPad (automated checks can't hear)
 - [ ] **The mall trip's new voices** (2026-10-21): the transcription check flagged Thai words written back in Thai
   ("Sawasdee ka", "Khob khun ka"), "Kaylee" heard as "Kaley", Daddy's "Ooh, strong!" heard in Japanese, the coach's

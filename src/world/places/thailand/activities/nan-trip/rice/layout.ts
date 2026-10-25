@@ -159,6 +159,14 @@ export const STAIRS = [-3.1, 3.1]
 export const PIPE_FROM: V3 = [-0.3, 1.45, -5.6]
 export const PIPE_TO: V3 = [0, 0.78, CHANNEL.z0 + 0.15]
 
+/** Sapan's rice steps on the valley's sides, climbing round hills (centre, base radius, steps, which way is uphill):
+ *  the deck looks out over the big one, and wide screens see both past the farm's edges. */
+export const TERRACES = [
+  { x: 25, z: 15, r: 11, steps: 8, back: [0.84, 0.55] as const },
+  { x: -19, z: 10, r: 7.4, steps: 6, back: [-0.8, 0.6] as const },
+]
+export const inTerrace = (x: number, z: number, pad = 0) => TERRACES.some((t) => Math.hypot(x - t.x, (z - t.z) / 0.7) < t.r * 1.15 + pad || Math.hypot(x - t.x - t.back[0] * t.r, z - t.z - t.back[1] * t.r) < t.r * 1.2 + pad)
+
 /** Things she slides round (x, z, radius). */
 export const BLOCKERS: [number, number, number][] = [
   [SCARECROW[0], SCARECROW[2], 0.32],
@@ -182,6 +190,6 @@ export const HIGH_TABLE: V3 = [0, 0.84, -0.42]
 export const MOMMY_AT: V3 = [1.3, 0, -0.95]
 /** Where Mommy's photo is taken from (in front of them, the farm behind). */
 export const PHOTO_FROM: V3 = [0.25, 1.2, 1.5]
-export const CHIME: V3 = [-1.5, 2.0, -1.2]
+export const CHIME: V3 = [-1.5, 2.6, -1.2]
 /** Sips in a glass of pink milk. */
 export const SIPS = 4

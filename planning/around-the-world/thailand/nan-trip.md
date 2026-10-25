@@ -443,7 +443,8 @@ activities/nan-trip/
    "What's built" below).*
 2. **Greybox: the mushroom farm** (`mushrooms`), with the pizza. *Built 2026-10-24 (see "What's built" below).*
 3. **Greybox: Stop Time Cafe** (`rice`). First try PR #168 (not merged); rebuilt per `nan-rice.md` in two greyboxes
-   (A: the farm and the core verb; B: thresh, the deck and the video).
+   (A: the farm and the core verb; B: thresh, the deck and the video). Its look (step 8) and voices (step 9) done
+   ahead of the rest, 2026-10-25 (see `nan-rice.md`, "What's built").
 4. **Greybox: Bo Kluea salt** (`salt`).
 5. **Greybox: Wat Phumin** (`temple`).
 6. **Greybox: the Nan map and the rental desk** (`map`, `rental`), and the `three` viewpoint.

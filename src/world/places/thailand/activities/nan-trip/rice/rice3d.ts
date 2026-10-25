@@ -1,5 +1,5 @@
 // Kaylee's little rice farm at Sapan, under Stop Time Cafe (plan: planning/around-the-world/thailand/nan-rice.md),
-// greybox A: shapes and sounds, no voices yet. Two places in one world: the farm on the valley floor (the camera looks
+// in shapes and sounds, with voices. Two places in one world: the farm on the valley floor (the camera looks
 // down on it from high in front) and the café's deck up on the hill behind, where the camera glides at the end.
 //
 // The toy, one verb all the way through: lead Kaylee with a finger. Held anywhere on the farm, her finger is where she
@@ -27,10 +27,14 @@
 // into the buffalo's wallow and you both get muddy (the water washes it off); flop into the straw pile; round birds.
 // Things to poke: the gates, the scarecrow (it spins, its hat flies), the buffalo, the ducks, the frog, the nursery bed,
 // the straw pile, the hut's chime, the banana plant, the bamboo, the café up the hill, Daddy.
+// Talk (lines.ts L.nan.rice): Sparkle says each round's one line as it begins and, after ~8 s with nothing done, what to
+// do (stuckLine); Daddy reacts on the farm and Mommy on the deck, each thing once; a tap on the view or the kratip tells
+// a fact.
 import { Color, Group, IcosahedronGeometry, Matrix4, MeshBasicMaterial, OctahedronGeometry, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp } from '../../../../../../sdk'
+import { bell, clamp, speakingVoice, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import type { Member } from '../../../characters/member'
+import { L } from '../../../lines'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { Shot } from '../../../engine/camera'
 import { merge, P, solid } from '../../../engine/geo'
@@ -43,6 +47,7 @@ import { Birds, type BirdHost } from './birds'
 import { buildDeck, buildKratip, type Deck, type Kratip } from './deck'
 import { buildFarm, buildKayleeKit, sheaf, STRAW, type Farm } from './farm'
 import { bladesGeometry, headsGeometry, hillMatrix, Instanced, stubbleGeometry } from './hills'
+import { FarmLife } from './life'
 import {
   BANGS_PER,
   BASKET,
@@ -186,6 +191,11 @@ interface Sheaf {
 }
 
 const STUCK_S = 5
+/** Nothing done for this long: Sparkle says what to do (again after SAY_EVERY, at most SAY_MAX times a round). */
+const SAY_S = 8
+const SAY_EVERY = 20
+const SAY_MAX = 3
+const R = L.nan.rice
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 const m4 = new Matrix4()
@@ -295,6 +305,7 @@ export class RiceFarm extends Stage {
   private rain: Floaters
   private cloud: Group
   private cloudT = -1
+  private life: FarmLife
   private rainT = 0
   // ---- Pokes ----
   private scareSpin = 1
@@ -327,6 +338,13 @@ export class RiceFarm extends Stage {
   private photoWanted = false
   private phone: Group
   private doneSaid = false
+  // ---- Talk: lines said once, Sparkle's hints this round, Daddy's tap lines in turn ----
+  private told = new Set<string>()
+  private lastSay = -99
+  /** Sparkle's hints count quiet time from here (a round's start and its line), not from her last touch. */
+  private quietFrom = 0
+  private sayN = 0
+  private nickTap = 0
   private hintNow: { at: Vector3; id?: string } | null = null
 
   constructor(renderer: WebGLRenderer, private ev: RiceEvents, start: { round: Round }) {
@@ -358,8 +376,9 @@ export class RiceFarm extends Stage {
     // ---- Kaylee's things: her ngob, the seedlings (left hand), the sickle (right) and the armful of cut rice ----
     this.kit = buildKayleeKit(bag)
     const R = 0.24
-    this.kit.ngob.position.set(0, 0.22 + 0.62 * R, -0.04)
-    this.kit.ngob.rotation.x = -0.14
+    // Pushed back on her head, so her horn and fringe show in front of it.
+    this.kit.ngob.position.set(0, 0.2 + 0.62 * R, -0.13)
+    this.kit.ngob.rotation.x = -0.5
     kaylee.rig.head.add(this.kit.ngob)
     this.kit.seedlings.position.set(-0.06, -0.17, 0.05)
     kaylee.rig.armL.add(this.kit.seedlings)
@@ -398,7 +417,8 @@ export class RiceFarm extends Stage {
       scene.add(root)
       this.sheaves.push({ root, from: new Vector3(), to: new Vector3(), t: 1, on: false, toRack: false })
     }
-    this.cloud = solid(merge([P.sphere(0.6, '#FFFFFF', { scale: [1.6, 0.7, 1] }), P.sphere(0.45, '#FFFFFF', { at: [0.55, 0.22, 0.05] }), P.sphere(0.42, '#F4F2FA', { at: [-0.55, 0.12, 0] })]), bag, 2)
+    // The rain cloud: a plump little cloud with a grey-lavender belly and a sleepy, happy face.
+    this.cloud = solid(merge([P.sphere(0.6, '#FFFFFF', { scale: [1.6, 0.7, 1] }), P.sphere(0.45, '#FFFFFF', { at: [0.55, 0.22, 0.05] }), P.sphere(0.42, '#F4F2FA', { at: [-0.55, 0.12, 0] }), P.sphere(0.55, '#D9D3EA', { at: [0, -0.2, 0], scale: [1.75, 0.42, 0.95] }), ...[-1, 1].map((s) => P.sphere(0.055, PAL.ink, { at: [s * 0.22, 0.08, 0.6], scale: [1, 1.2, 0.5] }, 8)), ...[-1, 1].map((s) => P.sphere(0.07, '#FFB3CF', { at: [s * 0.4, -0.04, 0.55], scale: [1, 0.6, 0.4] }, 8)), P.torus(0.07, 0.016, PAL.ink, { at: [0, -0.04, 0.6], rot: [0, 0, Math.PI] }, Math.PI)]), bag, 2)
     this.cloud.visible = false
     scene.add(this.cloud)
     this.splash = new Floaters(new IcosahedronGeometry(0.5, 0), ['#CDEBFA', '#FFFFFF', '#A9D8F2'], 160, bag, 7, 0.4)
@@ -410,6 +430,8 @@ export class RiceFarm extends Stage {
     this.grains = new Floaters(new IcosahedronGeometry(0.5, 0), ['#F5C84A', '#FAD65A', '#E8B23C'], 160, bag, 6, 0.6)
     this.steam = new Floaters(new IcosahedronGeometry(0.5, 1), ['#FFFFFF', '#F4F2FA'], 60, bag, -0.3, 1.2, 0.65, 1.8)
     for (const f of [this.splash, this.sparkles, this.bits, this.feathers, this.mudBits, this.rain, this.grains, this.steam]) scene.add(f.mesh)
+    this.life = new FarmLife(bag)
+    scene.add(this.life.root)
 
     // ---- The threshing: the bundle she swings (its stalks at her hands, the heads at the far end), the straw she
     // tosses, the heap turned white, and the kratip that pops out of the basket ----
@@ -473,6 +495,20 @@ export class RiceFarm extends Stage {
     if (r === 'thresh') this.atThresh(true)
     if (r === 'deck') this.seatOnDeck(true)
     this.placeCritters(0)
+    this.after(r === 'plant' ? 0.4 : 0.8, () => this.roundLine(r))
+  }
+
+  /** Sparkle's line as a round begins (Mommy's hello on the deck). */
+  private roundLine(r: Round) {
+    if (r === 'deck') return this.after(0.6, () => this.once('hi', R.hi))
+    this.once(r, R[r])
+  }
+  /** Says it the first time only. A family reaction (`now`) is dropped while Sparkle talks, rather than heard late. */
+  private once(key: string, l: Line, now = false) {
+    if (this.told.has(key)) return
+    if (now && speakingVoice() === 'sparkle') return
+    this.told.add(key)
+    this.ev.say(l)
   }
 
   // ---------------------------------------------------------------- rounds
@@ -489,6 +525,10 @@ export class RiceFarm extends Stage {
     this.round = r
     this.kitFor(r)
     this.ev.round(r)
+    this.sayN = 0
+    this.lastSay = -99
+    this.quietFrom = this.time + 3
+    this.roundLine(r)
   }
 
   private checkPlanted() {
@@ -498,6 +538,7 @@ export class RiceFarm extends Stage {
     this.after(0.6, () => {
       sfx.allDone()
       this.cheer()
+      this.once('farm', R.farm)
       for (const s of this.paddies) this.sparkles.burst(tmp.set(...s.p.mid).setY(s.p.mid[1] + 0.3), 8, 1, 1.2, 0.9, 0.07)
     })
     // A short beat (the sun comes over the hill), then the rice starts to grow.
@@ -524,6 +565,7 @@ export class RiceFarm extends Stage {
     this.after(0.6, () => {
       sfx.allDone()
       this.cheer()
+      this.once('lots', R.lots)
     })
     // The bundles hop off the banks onto the drying rack, one by one.
     this.sheaves.forEach((s, k) =>
@@ -603,6 +645,10 @@ export class RiceFarm extends Stage {
     this.bits.burst(at, 5, 0.8, 1, 0.5, 0.03)
     this.farm.basket.board.rotation.z = -0.3
     this.basketShake = 0.6
+    if (this.banged === 3 && !this.told.has('bang') && speakingVoice() !== 'sparkle') {
+      this.once('bang', R.bang)
+      this.nick.react('hop')
+    }
     this.held.heads.scale.setScalar(Math.max(0.01, 1 - this.hits / BANGS_PER))
     this.kaylee.react('wiggle')
   }
@@ -792,6 +838,7 @@ export class RiceFarm extends Stage {
         // Planted dry: droopy and yellow. The gate wiggles: open me!
         s.wiggle = 0
         this.talkTo(`dry${s.p.i}`, () => sfx.gate(), 3)
+        this.after(0.5, () => !s.open && this.once('dry', R.dry))
       }
       if (s.planted >= PER_PADDY * PLANTED_AT && !s.done) {
         // Over 70%: the rest plip in by themselves, rippling out from her.
@@ -801,6 +848,7 @@ export class RiceFarm extends Stage {
           this.sparkles.burst(tmp.set(...s.p.mid).setY(s.p.mid[1] + 0.3), 12, 1.2, 1.2, 0.9, 0.07, 3)
           this.talkTo('kaylee-cheer', () => this.kaylee.react('hop'), 2)
           this.nick.react('hop')
+          if (this.paddies.some((x) => !x.done)) this.once('planted', R.planted, true)
           this.checkPlanted()
         })
       }
@@ -809,7 +857,10 @@ export class RiceFarm extends Stage {
       if (!s.entered) {
         s.entered = true
         // The extra-tall paddy: two birds hiding in it burst out.
-        if (s.tall > 1) this.birds.burst(tmp.set(k.x, s.p.top, k.z), 2, this.birdHost)
+        if (s.tall > 1) {
+          this.birds.burst(tmp.set(k.x, s.p.top, k.z), 2, this.birdHost)
+          this.after(0.8, () => this.once('where', R.where, true))
+        }
       }
       for (const h of this.hills) {
         if (h.paddy !== here.i || !h.planted || h.cut || Math.hypot(h.x - k.x, h.z - k.z) > BRUSH) continue
@@ -898,7 +949,10 @@ export class RiceFarm extends Stage {
       this.feathers.burst(at.clone().add(new Vector3(0, 0.15, 0)), 3, 0.5, 0.6, 1.6, 0.05)
       sfx.flutter()
       this.after(0.12, () => sfx.cheep())
-      if (fat) sfx.waddle()
+      if (fat) {
+        sfx.waddle()
+        this.after(0.4, () => this.once('fat', R.fat, true))
+      }
       if (this.round === 'grow') this.growth = Math.min(1, this.growth + SHOO_BOOST)
       this.talkTo('shoo', () => this.kaylee.react('wave'), 1.6)
     },
@@ -979,6 +1033,7 @@ export class RiceFarm extends Stage {
       this.cheekGrain.visible = true
       this.cheekUntil = this.time + 1.8
     })
+    this.after(0.9, () => this.once('sticky', R.sticky))
   }
 
   /** The kratips' steam, the ball on its way to her mouth, the rice going down as she eats. */
@@ -1009,7 +1064,8 @@ export class RiceFarm extends Stage {
 
   private smile() {
     if (this.snapAt > 0) return
-    this.snapAt = this.time + 1.1
+    this.ev.say(R.smile)
+    this.snapAt = this.time + 1.4
     this.phone.visible = true
     sfx.countdown()
     this.ji.react('wiggle')
@@ -1207,6 +1263,7 @@ export class RiceFarm extends Stage {
         this.nickHatUntil = this.time + 4
         sfx.rustle()
         this.after(0.3, () => sfx.haha())
+        this.after(0.8, () => this.once('hat', R.hat, true))
         this.bits.burst(this.nick.rig.head.getWorldPosition(new Vector3()).add(new Vector3(0, 0.4, 0)), 10, 0.8, 1.2, 0.7, 0.04)
       } else if (this.time < this.wetUntil) {
         // Dripping wet unicorn: splash! Daddy shakes like a dog.
@@ -1214,6 +1271,7 @@ export class RiceFarm extends Stage {
         sfx.wet()
         this.splash.burst(this.nick.root.position.clone().add(new Vector3(0, 0.7, 0)), 14, 1.2, 1.6, 0.6, 0.05)
         this.after(0.35, () => sfx.haha())
+        this.after(0.9, () => this.once('wet', R.wet, true))
       } else {
         this.nick.react('hop')
         sfx.haha()
@@ -1233,6 +1291,7 @@ export class RiceFarm extends Stage {
       this.mudBits.burst(tmp.set(WALLOW.x, RISE + 0.1, WALLOW.z), 18, 1.4, 2, 0.6, 0.05)
       this.kaylee.react('wiggle')
       this.after(0.5, () => sfx.giggle())
+      this.after(1.0, () => this.once('muddy', R.muddy, true))
     }, 4)
   }
 
@@ -1257,6 +1316,7 @@ export class RiceFarm extends Stage {
       this.after(1.1, () => {
         this.kaylee.setPose('stand')
         sfx.giggle()
+        this.once('flop', R.flop, true)
       })
     }, 4)
   }
@@ -1339,7 +1399,10 @@ export class RiceFarm extends Stage {
         return sfx.windChime()
       case 'family:nick':
         this.nick.react(this.round === 'harvest' ? 'wave' : 'hop')
-        return sfx.haha()
+        sfx.haha()
+        // (Not while Sparkle talks: it would come late.)
+        if (speakingVoice() === 'sparkle') return
+        return this.talkTo('nick-tap', () => this.ev.say(R.tap[this.nickTap++ % R.tap.length]), 3)
     }
   }
 
@@ -1353,7 +1416,8 @@ export class RiceFarm extends Stage {
       case 'cup':
         this.nick.react('wiggle')
         sfx.slurp()
-        return this.after(0.45, () => sfx.ahh())
+        this.after(0.45, () => sfx.ahh())
+        return this.after(1.0, () => this.once('coffee', R.coffee, true))
       case 'family:nick':
         this.nick.react('hop')
         return sfx.haha()
@@ -1364,6 +1428,7 @@ export class RiceFarm extends Stage {
         return sfx.windChime()
       case 'view':
         sfx.chime()
+        this.talkTo('steps', () => this.ev.say(R.steps), 5)
         return this.sparkles.burst(new Vector3(0, 1.2, 0), 16, 1.6, 1.2, 1.1, 0.12)
     }
   }
@@ -1573,9 +1638,37 @@ export class RiceFarm extends Stage {
     this.stepSticky(dt)
     for (const f of [this.splash, this.sparkles, this.bits, this.feathers, this.mudBits, this.rain, this.grains, this.steam]) f.update(dt)
     this.farm.water.update(t)
+    this.life.update(dt, t, this.kaylee.root.getWorldPosition(tmp))
+    // The low clouds drift slowly along the valley and back.
+    for (const [i, m] of this.farm.mist.entries()) m.position.x = (m.userData.home as number) + Math.sin(t * 0.05 + i * 1.7) * 2.5
     this.hintNow = this.time - this.lastTouch > STUCK_S - 0.1 ? this.hint() : null
+    this.stuck()
     const map = (this.farm.fall.material as MeshBasicMaterial).map
     if (map) map.offset.y = t * 1.6
+  }
+
+  /** After a while with nothing done, Sparkle says what to do (a few times a round at most). */
+  private stuck() {
+    if (this.finger.held || this.hopping || this.kaylee.walking || this.snapAt > 0) return
+    if (this.time - Math.max(this.lastTouch, this.quietFrom) < SAY_S || this.time - this.lastSay < SAY_EVERY || this.sayN >= SAY_MAX) return
+    const l = this.stuckLine()
+    if (!l) return
+    this.lastSay = this.time
+    this.sayN++
+    this.ev.say(l)
+  }
+  private stuckLine(): Line | null {
+    if (this.phase === 'deck') return this.photos ? null : !this.eaten && !this.sips ? R.hint.eat : R.hint.photo
+    if (this.phase === 'thresh') return this.threshed < THRESHED ? R.hint.thresh : null
+    switch (this.round) {
+      case 'plant':
+        return this.paddies.some((s) => !s.open && (s.planted > 0 || this.paddies.every((x) => x.done || !x.open))) ? R.hint.gate : R.hint.plant
+      case 'grow':
+        return this.birds.pecking ? R.hint.grow : null
+      case 'harvest':
+        return R.hint.harvest
+    }
+    return null
   }
 
   private deckChime = 1
@@ -1596,6 +1689,7 @@ export class RiceFarm extends Stage {
     this.cloud.position.set(x, 3.4, -0.6)
     this.cloud.scale.setScalar(1 + Math.sin(this.time * 2) * 0.03)
     if (Math.abs(x) < 5.5) {
+      this.once('rain', R.rain, true)
       for (let k = 0; k < 4; k++) this.rain.emit(tmp.set(x + (Math.random() - 0.5) * 1.8, 3.0, -0.6 + (Math.random() - 0.5) * 1.0), tmp2.set(0, -7, 0), 0.46, 0.035)
       this.rainT -= dt
       if (this.rainT <= 0) {
@@ -1809,7 +1903,7 @@ export class RiceFarm extends Stage {
         case 'cup':
           return { at: this.deck.cup.getWorldPosition(new Vector3()).add(new Vector3(0, 0.05, 0)), r: 0.08, prio: 3, max: 100 }
         case 'chime':
-          return { at: this.deckAt(-1.5, 1.9, -1.2), r: 0.15, prio: 1, max: 100 }
+          return { at: this.deckAt(-1.5, 2.5, -1.2), r: 0.15, prio: 1, max: 100 }
         case 'view':
           return { at: new Vector3(0, 0.6, 0.5), r: 1.5, prio: 0, max: 160 }
       }

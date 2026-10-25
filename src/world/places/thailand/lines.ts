@@ -301,9 +301,49 @@ export const L = {
     again: 'Pack again, or go straight to the boat?',
   },
 
-  // The Nan road trip (planning/around-the-world/thailand/nan-trip.md). Greyboxes, so only what a kit piece must speak.
+  // The Nan road trip (planning/around-the-world/thailand/nan-trip.md). The stops fill in as each one gets its voices.
   nan: {
+    // Kaylee's rice farm under Stop Time Cafe (activities/nan-trip/rice/, plan: thailand/nan-rice.md). Sparkle says what's
+    // new at each round and, after a while with nothing done, what to do; Daddy (on the farm) and Mommy (on the deck)
+    // react in their own voices. Kaylee never talks: she giggles.
     rice: {
+      // Sparkle: each round as it begins (the first one before her first touch).
+      plant: `Let's plant rice, ${NAME}! Walk in the water.`,
+      dry: 'Rice likes water! Open the gate.',
+      grow: 'The birds want the rice! Shoo, shoo!',
+      harvest: "It's golden! Time to cut the rice.",
+      thresh: 'Bang the rice! The grains fall out.',
+      // The first time she pokes the kratip, and the view from the deck (tap-to-hear facts).
+      sticky: 'In Nan, people eat sticky rice with their fingers!',
+      steps: 'The steps on the hill keep the water for the rice!',
+      // Sparkle, after a while with nothing done.
+      hint: {
+        plant: 'Walk through the water to plant!',
+        gate: 'Tap the gate to let the water in!',
+        grow: 'Walk to the birds!',
+        harvest: 'Walk through the golden rice!',
+        thresh: 'Tap to bang the rice!',
+        eat: 'Tap the sticky rice!',
+        photo: 'Tap Mommy for a photo!',
+      },
+      // Daddy on the farm.
+      planted: nick('Look at those rows, Kaylee!'),
+      farm: nick('Our very own rice farm!'),
+      wet: nick("Hey! I'm all wet!"),
+      hat: nick('A straw hat! Thank you!'),
+      muddy: nick('A muddy unicorn!'),
+      flop: nick('Ha! Into the straw!'),
+      rain: nick('Rain! The rice loves it!'),
+      fat: nick('That bird ate too much!'),
+      where: nick('Kaylee? Where did you go?'),
+      lots: nick('Look at all that rice!'),
+      bang: nick('Whack! Good one!'),
+      coffee: nick('Mmm, coffee.'),
+      // Tap Daddy on the farm (in turn).
+      tap: [nick('Go, farmer Kaylee!'), nick('Splish, splash!'), nick('Daddy is watching!')],
+      // Mommy on the deck.
+      hi: ji('Sticky rice from your farm!'),
+      smile: ji(`Smile, ${NAME}!`),
       // The rice farm's video, after Mommy's photo on the deck (rice/video.ts).
       video: `Want to see real rice grow, ${NAME}?`,
     },
