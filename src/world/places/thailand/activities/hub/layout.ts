@@ -11,25 +11,29 @@
 // along the wall that hides the kitchen to a landing in the back left corner, then turn and climb forward along the
 // left wall, coming out upstairs against it in a small hallway. There's no front room upstairs: the front half is open
 // to the shop below, and the hallway looks down into it over a balcony railing. Glass doors lead back into Kaylee's
-// room at the back.
+// room, which wraps round the walled-in stairwell. Like the real one (Dad's photos, 2026-10-24) a plastic accordion
+// partition splits it: the TV room in front, where she sleeps behind.
 //
 //   GROUND FLOOR (back)          UPSTAIRS (back)
 //  +-----------------+          +-----------------+
 //  | photos altar    |          |MATTRESS ac   bath|
-//  |    shrine  cook |          |    suitcase gecko|
-//  |  kitchen fridge |          |                 |
-//  |                 |          |   KAYLEE'S ROOM |
-//  |=====wall====    |          |==== glass doors =|
-//  |LL <<(1)<<< foot |          |+-+       couch  |
-//  |2^               |          ||w|              |
-//  |=2^=door=cab=====|          ||w| hallway plant|
-//  |2^ top           |          |+-+ top          |
+//  |    shrine  cook |          |    suitcase  rack|
+//  |  kitchen fridge |          |      lamp drawers|
+//  |                 |          |=accordion== open|
+//  |=====wall====    |          |TV  unicorn  sofa|
+//  |LL <<(1)<<< foot |          |---+         sofa|
+//  |2^               |          ||w|  mats  cabinet|
+//  |=2^=door=cab=====|          ||w|=door==glass===|
+//  |2^ top           |          |+-+ top     plant|
 //  | couch       fan |          |=== balcony rail=|
 //  | table    Agong D|          |  open: looks    |
 //  | table         E |          |  down into the  |
 //  |               K |          |  shop below     |
 //  +----shutter------+          +---balcony-------+
 import type { Pose } from '../../characters/types'
+
+type Rect = [number, number, number, number]
+type Circle = [number, number, number]
 
 // Inside footprint: 6.25 × 20.898 m (25% wider than the original; 10% shorter than the expanded house). Furniture stays at its original scale.
 export const DIM = {
@@ -71,13 +75,41 @@ export const DIM = {
    */
   divider: { z: -8.8, d: 0.42, open0: -1.505, open1: 0.5 },
   /** Upstairs: the balcony railing at the front edge of the floor (open to the shop below), and the glass wall into
-   *  Kaylee's room, with its doorway. (Dad, 2026-10-19: stairs, railing and glass all 2.2 m further forward than at
-   *  first, so the overlook is smaller and her room bigger.) */
-  hall: { zFront: -5.2, zGlass: -12.79, door0: 1.3, door1: 2.4 },
+   *  Kaylee's room, from the walled-in stairwell (x0) to the right wall, with its doorway. (Dad, 2026-10-19: stairs,
+   *  railing and glass all 2.2 m further forward than at first. Then, 2026-10-24, the glass in line with the top of the
+   *  stairs, so her room is as long as the real one and wraps round the stairwell.) */
+  hall: { zFront: -5.2, zGlass: -9.05, x0: -1.625, door0: -1.55, door1: -0.4 },
+  /** The walls round the stairwell upstairs (its right side and its back), `t` thick, on the room's side. */
+  stairBox: { t: 0.12 },
+  /** The plastic accordion partition across her room (Dad's photos, 2026-10-24): `n` cream panels on a track at `z`;
+   *  folded open they stack against the right wall from `open0`. */
+  partition: { z: -15.0, open0: 2.55, n: 16, t: 0.1 },
+}
+
+/**
+ * Kaylee's room, where everything stands (meters; [x0, x1, z0, z1] footprints, or a center). The TV room in front of
+ * the partition: the grey L sofa along the right wall, the dark wood cabinet in the corner by the glass, the TV on the
+ * left wall in the nook behind the stairwell with its stand, the wooden chair and a fan, the bouncy unicorn, a little
+ * table and play mats. Behind it: the mattress and the bathroom door (as before), the clothes rack and the plastic
+ * drawers along the right wall, the globe lamp on the drawers.
+ */
+export const ROOM = {
+  sofa: [2.275, 3.125, -12.6, -9.95] as Rect,
+  chaise: [1.55, 3.125, -13.4, -12.6] as Rect,
+  cabinet: [2.675, 3.125, -9.85, -9.1] as Rect,
+  tvStand: [-3.125, -2.675, -14.55, -13.45] as Rect,
+  tv: { z: -14.0, y: 1.4, w: 1.25, h: 0.72 },
+  chair: { x: -2.85, z: -13.13 },
+  fan: { x: -2.2, z: -14.62 },
+  unicorn: { x: -0.55, z: -13.55 },
+  table: { x: 0.9, z: -10.35 },
+  mats: [-1.0, 0.8, -12.5, -11.3] as Rect,
+  rack: [2.55, 3.125, -17.35, -15.75] as Rect,
+  drawers: [2.65, 3.125, -18.6, -17.7] as Rect,
 }
 
 export type Area = 'street' | 'inside'
-export type React = 'jelly' | 'hop' | 'spin' | 'open' | 'tilt' | 'shutter' | 'birds' | 'cat' | 'glow' | 'stairs' | 'beep' | 'toot' | 'puff' | 'tick' | 'flip' | 'wave' | 'gecko' | 'rattle'
+export type React = 'jelly' | 'hop' | 'spin' | 'open' | 'tilt' | 'shutter' | 'birds' | 'cat' | 'glow' | 'stairs' | 'beep' | 'toot' | 'puff' | 'tick' | 'flip' | 'wave' | 'gecko' | 'rattle' | 'fold' | 'tv' | 'light'
 
 export interface UseSpot {
   /** Where she walks to. */
@@ -142,14 +174,21 @@ export const PICKABLES: Pickable[] = [
   { id: 'shoes', label: 'Shoes', floor: 0, area: 'inside', at: [2.825, 0.2, -0.85], r: 0.42, react: 'hop', use: { x: 2.125, z: -0.85, face: 90, pose: 'peek' } },
   { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-0.8125, 0.7, -12.025], r: 0.9, react: 'stairs' },
 
-  // ---- Upstairs: the hallway, then Kaylee's room at the back ----
+  // ---- Upstairs: the hallway, then Kaylee's room at the back: the TV room, the partition, where she sleeps ----
   { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-2.375, U + 0.2, -9.8], r: 0.7, react: 'stairs' },
   { id: 'plant', label: 'Plant', floor: 1, area: 'inside', at: [2.1, U + 0.4, -5.65], r: 0.35, react: 'jelly', use: { x: 1.4, z: -5.8, face: 90, pose: 'peek' } },
-  { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [1.85, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: 1.85, z: -16.998, face: 180, pose: 'stand' } },
+  { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [(DIM.hall.door0 + DIM.hall.door1) / 2, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: -0.95, z: -10.2, face: 180, pose: 'stand' } },
+  { id: 'cabinet', label: 'Glass cabinet', floor: 1, area: 'inside', at: [2.9, U + 1.0, -9.475], r: 0.5, react: 'open', use: { x: 2.0, z: -9.6, face: 90, pose: 'peek' } },
+  { id: 'couch', label: 'Sofa', floor: 1, area: 'inside', at: [2.7, U + 0.5, -11.2], r: 0.8, react: 'jelly', use: { x: 1.75, z: -11.0, face: -90, pose: 'sit', snap: { x: 2.6, z: -11.0, y: 0.44 } } },
+  { id: 'tv', label: 'TV', floor: 1, area: 'inside', at: [DIM.left + 0.06, U + 1.4, -14.0], r: 0.6, react: 'tv', use: { x: -1.4, z: -14.0, face: -90, pose: 'lookup' } },
+  { id: 'chair', label: 'Wooden chair', floor: 1, area: 'inside', at: [-2.85, U + 0.6, -13.13], r: 0.4, react: 'jelly', use: { x: -2.15, z: -13.13, face: 90, pose: 'sit', snap: { x: -2.8, z: -13.13, y: 0.45 } } },
+  { id: 'room-fan', label: 'Fan', floor: 1, area: 'inside', at: [-2.2, U + 0.75, -14.62], r: 0.42, react: 'spin', use: { x: -1.5, z: -14.3, face: -110, pose: 'peek' } },
+  { id: 'unicorn', label: 'Bouncy unicorn', floor: 1, area: 'inside', at: [-0.55, U + 0.4, -13.55], r: 0.5, react: 'hop', use: { x: -0.55, z: -12.85, face: 90, pose: 'sit', snap: { x: -0.6, z: -13.55, y: 0.4 } } },
+  { id: 'partition', label: 'Folding door', floor: 1, area: 'inside', at: [2.85, U + 1.1, DIM.partition.z], r: 0.55, react: 'fold' },
+  { id: 'clothes-rack', label: 'Clothes rack', floor: 1, area: 'inside', at: [2.85, U + 1.0, -16.55], r: 0.7, react: 'hop', use: { x: 1.95, z: -16.55, face: 90, pose: 'peek' } },
+  { id: 'lamp', label: 'Lamp', floor: 1, area: 'inside', at: [2.89, U + 1.12, -18.15], r: 0.35, react: 'light', use: { x: 2.0, z: -18.15, face: 90, pose: 'lookup' } },
   { id: 'mattress', label: 'Mattress', floor: 1, area: 'inside', at: [-1.625, U + 0.25, -18.71], r: 1.4, react: 'jelly', use: { x: 0.35, z: -18.25, face: 25, pose: 'bounce', snap: { x: -1.4, z: -18.25, y: 0.22 } } },
   { id: 'pillows', label: 'Pillows', floor: 1, area: 'inside', at: [-2.775, U + 0.35, -18.71], r: 0.7, react: 'puff', use: { x: 0.35, z: -18.15, face: 90, pose: 'lie', snap: { x: -1.925, z: -18.12, y: 0.22 } } },
-  { id: 'couch', label: 'Couch', floor: 1, area: 'inside', at: [2.795, U + 0.5, -14.05], r: 0.75, react: 'jelly', use: { x: 1.925, z: -13.55, face: -90, pose: 'sit', snap: { x: 2.725, z: -13.55, y: 0.44 } } },
-  { id: 'room-fan', label: 'Fan', floor: 1, area: 'inside', at: [0.4, U + 0.75, -16.798], r: 0.42, react: 'spin', use: { x: 0.4, z: -17.548, face: 0, pose: 'peek' } },
   { id: 'suitcase', label: 'Suitcase', floor: 1, area: 'inside', at: [0.3, U + 0.3, -20.448], r: 0.45, react: 'open', use: { x: 0.3, z: -19.748, face: 180, pose: 'peek' } },
   { id: 'bathroom-door', label: 'Bathroom door', floor: 1, area: 'inside', at: [2.2, U + 1.1, B + 0.06], r: 0.6, react: 'rattle', use: { x: 2.2, z: B + 0.95, face: 180, pose: 'stand' } },
   // The mini-split air conditioner high on the back wall, over the bed: it beeps like the remote.
@@ -158,10 +197,9 @@ export const PICKABLES: Pickable[] = [
 ]
 
 /** Where she walks on each floor (carved), and what's in the way (blocked). Rects are [x0, x1, z0, z1]. */
-type Rect = [number, number, number, number]
-type Circle = [number, number, number]
 const S = DIM.stairs
 const HALL = DIM.hall
+const BOX = DIM.stairBox
 export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; circles: Circle[] }> = {
   0: {
     bounds: [-13, 13, -21.098, 2.8],
@@ -208,14 +246,24 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
     carve: [[DIM.left, DIM.right, DIM.back, HALL.zFront]],
     block: [
       [S.x0, S.xLanding + 0.05, S.zBack, S.zTop], // stairwell (she comes out of it at the front, along the left wall)
-      [DIM.left, HALL.door0, HALL.zGlass - 0.06, HALL.zGlass + 0.06], // the glass wall, left of the doorway
+      [S.xLanding, S.xLanding + BOX.t, S.zBack - BOX.t, HALL.zGlass], // its walls: the right side
+      [DIM.left, S.xLanding + BOX.t, S.zBack - BOX.t, S.zBack], // and the back
+      [HALL.x0, HALL.door0, HALL.zGlass - 0.06, HALL.zGlass + 0.06], // the glass wall, left of the doorway
       [HALL.door1, DIM.right, HALL.zGlass - 0.06, HALL.zGlass + 0.06],
+      ROOM.sofa,
+      ROOM.chaise,
+      ROOM.cabinet,
+      ROOM.tvStand,
+      [DIM.left, ROOM.chair.x + 0.25, ROOM.chair.z - 0.22, ROOM.chair.z + 0.22], // wooden chair
+      [ROOM.table.x - 0.3, ROOM.table.x + 0.3, ROOM.table.z - 0.22, ROOM.table.z + 0.22], // little table
+      ROOM.rack,
+      ROOM.drawers,
       [DIM.left, -0.075, B, -17.47], // the big mattress + pillows (and the gap behind it)
-      [2.425, DIM.right, -15.25, -12.85], // couch
       [-0.05, 0.65, B, -20.198], // suitcase
     ],
     circles: [
-      [0.4, -16.798, 0.2], // fan
+      [ROOM.fan.x, ROOM.fan.z, 0.2], // fan
+      [ROOM.unicorn.x, ROOM.unicorn.z, 0.3], // bouncy unicorn
       [2.1, -5.65, 0.2], // plant
       [1.42, B + 0.32, 0.24], // laundry basket
     ],

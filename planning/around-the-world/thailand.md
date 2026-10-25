@@ -65,10 +65,16 @@ The plan (Dad, 2026-10-17, from a photo of the real stairs): the house is 5 m wi
   fridge stands against the right wall in front of the back room. In the back room: the family altar on the back wall with ancestor photos, lanterns, candles and incense, more old photos, the little earth-god shrine, and the
   kitchen counter with the rice cooker. Joy is by the cabinet, Jum in the kitchen.
 - **Upstairs:** the stairs come out in a small hallway (Ken is there). There's no front room: the front half of the
-  house is open two floors high, and the hallway looks down into the shop over a balcony railing. Glass
-  sliding doors lead back into **Kaylee's room**, at the back of the house: mattresses on the floor along the left
-  wall, all the way to the end of the room; the couch on the right (BB sits there); her suitcase, a wardrobe, a fan,
-  a window and her drawings on the wall. Mommy and Gan (asleep on the mattress) are here.
+  house is open two floors high, and the hallway looks down into the shop over a balcony railing. Glass sliding doors in
+  dark wood frames, in line with the top of the stairs, lead into **Kaylee's room**. Like the real one (Dad's photos,
+  2026-10-24, kept outside the repo) it's long: it wraps round the walled-in stairwell, and a cream plastic accordion
+  partition splits it in two. Tap the partition and it folds shut; if she's sent to the other side it folds back open
+  by itself. In front of it is the TV room: the grey leather L sofa along the right wall (BB sits there), a dark wood
+  glass cabinet in the corner by the doors, the TV on the left wall in the nook behind the stairwell (tap it: candy
+  colours), its light wood stand of toys, the wooden chair, a fan, the pink bouncy unicorn she rides, a little table
+  and foam play mats. Behind the partition is where she sleeps: the big mattress along the left wall (Gan asleep on it,
+  Mommy beside it), the chrome clothes rack full of her dresses and the clear plastic drawers along the right wall with the
+  globe lamp on top (tap: off, on), her suitcase, the air conditioner, the blue basket and the locked bathroom door.
 
 **The toy (core verb): walk Kaylee around.** Tap the floor and she hop-trots there around the furniture, running on
 long trips. Hold and drag and she follows your finger. Tap a thing and it reacts at once, then she walks over and uses
