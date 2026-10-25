@@ -46,16 +46,23 @@ while (true) {
     const state = summary && JSON.parse(summary.body.match(/codex-review-state:v1 (\{.*?\}) -->/s)?.[1] ?? 'null')
     const review = state?.code_review
     if (review?.status === 'completed' && review.commit_sha === head.headRefOid) {
-      const inline = api(`repos/{owner}/{repo}/pulls/${pr}/comments`).filter(
-        (c) => isCodex(c) && c.commit_id === head.headRefOid && !c.in_reply_to_id,
+      const short = head.headRefOid.slice(0, 7)
+      if (!review.has_any_findings) {
+        console.log(`CLEAN Codex reviewed ${short} on PR #${pr}: no findings.`)
+        break
+      }
+      // Findings can sit on an earlier commit's thread after a follow-up push, so look at every Codex thread
+      // that nobody has replied to yet, not only the ones on the current commit.
+      const all = api(`repos/{owner}/{repo}/pulls/${pr}/comments`)
+      const answered = new Set(all.filter((c) => !isCodex(c) && c.in_reply_to_id).map((c) => c.in_reply_to_id))
+      const open = all.filter((c) => isCodex(c) && !c.in_reply_to_id && !answered.has(c.id))
+      console.log(
+        `FINDINGS Codex reviewed ${short} on PR #${pr} and reports findings: ${open.length} unanswered comment(s).` +
+          (open.length ? '' : ' None found as inline threads; read the Codex summary comment on the PR.'),
       )
-      if (!review.has_any_findings || inline.length === 0) {
-        console.log(`CLEAN Codex reviewed ${head.headRefOid.slice(0, 7)} on PR #${pr}: no findings.`)
-      } else {
-        console.log(`FINDINGS Codex reviewed ${head.headRefOid.slice(0, 7)} on PR #${pr}: ${inline.length} comment(s).`)
-        for (const c of inline) {
-          console.log(`--- ${c.path}:${c.line ?? c.original_line} (comment id ${c.id})\n${c.body.replace(/<[^>]+>/g, '').trim()}`)
-        }
+      for (const c of open) {
+        const where = c.commit_id === head.headRefOid ? '' : ` [earlier commit ${c.commit_id.slice(0, 7)}]`
+        console.log(`--- ${c.path}:${c.line ?? c.original_line}${where} (comment id ${c.id})\n${c.body.replace(/<[^>]+>/g, '').trim()}`)
       }
       break
     }
