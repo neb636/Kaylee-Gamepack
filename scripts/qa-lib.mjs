@@ -2,6 +2,8 @@
 // WebKit is the default because Kaylee's iPad runs Safari; pass --chromium to compare.
 import { chromium, webkit } from '@playwright/test'
 import { spawn } from 'node:child_process'
+import { mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import path from 'node:path'
 import sharp from 'sharp'
 
@@ -24,19 +26,107 @@ export const VIEWPORTS = [
   { name: 'laptop', width: 1280, height: 720, desktop: true },
 ]
 
-/** Serves dist/ with vite preview; returns { base, stop }. */
-export async function serve(port) {
+const SLOTS = 2
+const lockDir = (slot) => path.join(tmpdir(), `kaylee-gamepack-qa-${slot}.lock`)
+const alive = (pid) => {
+  try {
+    process.kill(pid, 0)
+    return true
+  } catch (e) {
+    return e.code === 'EPERM'
+  }
+}
+
+const readInfo = (dir) => {
+  try {
+    return JSON.parse(readFileSync(path.join(dir, 'info'), 'utf8'))
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Takes over a slot whose owner (deadPid) is gone. Renaming is atomic, so of several waiters only one wins; the
+ * winner checks what it moved really was the dead lock (a delayed waiter may have grabbed a fresh one) and puts it back if not.
+ */
+function reclaim(dir, deadPid) {
+  const moved = `${dir}.${process.pid}.stale`
+  try {
+    renameSync(dir, moved)
+  } catch {
+    return // someone else reclaimed it first
+  }
+  if (readInfo(moved)?.pid !== deadPid) {
+    try {
+      renameSync(moved, dir)
+      return
+    } catch {
+      /* the slot was re-taken meanwhile; fall through and drop our copy */
+    }
+  }
+  rmSync(moved, { recursive: true, force: true })
+}
+
+/**
+ * At most SLOTS QA runs at a time on this machine, across every worktree and agent: WebKit is CPU-heavy, so more
+ * parallel runs time each other out. Waits for a free slot; a slot left by a dead process is taken over.
+ * Returns { slot, release }; the slot number offsets the port so two runs of the same script don't clash.
+ */
+async function acquireSlot() {
+  let told = false
+  for (;;) {
+    let holder = null
+    for (let slot = 0; slot < SLOTS; slot++) {
+      const dir = lockDir(slot)
+      try {
+        mkdirSync(dir)
+        writeFileSync(path.join(dir, 'info'), JSON.stringify({ pid: process.pid, cwd: root, script: path.basename(process.argv[1] ?? '') }))
+        let released = false
+        const release = () => {
+          if (released) return
+          released = true
+          process.removeListener('exit', release)
+          // Only remove our own lock: a successor may already hold this slot.
+          if (readInfo(dir)?.pid === process.pid) rmSync(dir, { recursive: true, force: true })
+        }
+        process.on('exit', release)
+        for (const sig of ['SIGINT', 'SIGTERM']) process.once(sig, () => process.exit(1))
+        return { slot, release }
+      } catch (e) {
+        if (e.code !== 'EEXIST') throw e
+      }
+      holder = readInfo(dir)
+      if (!holder) continue // its owner is still writing the info
+      if (!alive(holder.pid)) {
+        reclaim(dir, holder.pid)
+        slot-- // try this slot again
+      }
+    }
+    if (!told) console.log(`QA is busy (${SLOTS} runs at once${holder ? `, e.g. ${holder.script} in ${holder.cwd}` : ''}); waiting for a free slot...`)
+    told = true
+    await new Promise((r) => setTimeout(r, 2000))
+  }
+}
+
+/** Takes a QA slot, then serves dist/ with vite preview; returns { base, stop } (stop also frees the slot). */
+export async function serve(basePort) {
+  const { slot, release } = await acquireSlot()
+  const port = basePort + slot * 100
   const server = spawn('npx', ['vite', 'preview', '--port', String(port), '--strictPort'], { cwd: root, stdio: 'ignore' })
+  const stop = () => {
+    server.kill()
+    release()
+  }
   const base = `http://localhost:${port}/`
   for (let i = 0; i < 80; i++) {
     try {
-      if ((await fetch(base)).ok) return { base, stop: () => server.kill() }
+      if ((await fetch(base)).ok) return { base, stop }
     } catch {
       /* not up yet */
     }
     await new Promise((r) => setTimeout(r, 250))
   }
-  server.kill()
+  stop()
   throw new Error(`Server did not start at ${base}`)
 }
 
