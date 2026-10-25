@@ -582,7 +582,7 @@ rental desk.
   rebuild when the road gets there): a big pink crayon waits at the top of the 3. Her finger near the line pulls it along
   the road (only forward, only the stretch just ahead of it, so it can't jump to the hairpin's other leg); the numbers
   pop as it rounds each bend; a tap draws on round the next bend; the last few meters finish by themselves. Then the
-  fanfare and the end card (🔁 draw it again, 🗺️ the map). The 👆 sweeps along the road ahead of the crayon.
+  fanfare and the end card (🔁 the 3 road again from the top, 🗺️ the map). The 👆 sweeps along the road ahead of the crayon.
 - The stops' end cards now say 🗺️ (back to the map) instead of 🚙; the drives' end cards (only on a bare drive link
   now) offer 🔁 and 🗺️.
 - QA: `qa-screens` (`nan-rental-key|boot|belt`, `nan-map`, `nan-map-stops`, `nan-three`), `qa-motion` (`nan-fob`,

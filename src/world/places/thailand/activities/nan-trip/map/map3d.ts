@@ -454,9 +454,13 @@ export class NanMap extends Stage {
   pointerUp() {
     if (!this.held) return
     this.held = false
-    // Let go at a place she can go to: off it goes.
+    // Let go at a place she can go to: off it goes. Let go while the car is still catching up with her finger: it goes
+    // where she let go, once it gets there.
     const here = this.placeHere()
-    if (here && !this.arrived) this.arrive(here)
+    if (here && !this.arrived) return this.arrive(here)
+    const end = this.car.path[this.car.path.length - 1]
+    const to = PLACE_IDS.find((p) => this.net.place[p] === end && this.open(p))
+    if (to && this.car.path.length > 1) this.going = to
   }
 
   protected onTap(id: string | null, x: number, y: number): void {

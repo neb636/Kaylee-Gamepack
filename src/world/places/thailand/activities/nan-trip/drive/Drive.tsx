@@ -57,6 +57,8 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
   }
   const pick = (r: RoadId) => {
     setHud({ phase: 'drive', count: { k: 0, n: 0 } })
+    // (Again from the 3's viewpoint drives the 3 road again from the top: the parent leaves section `three` first.)
+    if (r === road && view) onRoad(r)
     if (r === road) setRun((n) => n + 1)
     else onRoad(r)
   }
