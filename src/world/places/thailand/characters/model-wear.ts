@@ -22,7 +22,7 @@ const PX = 1.8
 const ZC = 0.045
 /** Her arm's angle out from straight down, and how far along it the hoof is. */
 const ARM = 0.818
-const HOOF = 0.184
+export const HOOF = 0.184
 const SMOCK = '#C9B5F7'
 type Parts = BufferGeometry[]
 const APRON = '#FF8FB8'
@@ -79,7 +79,7 @@ const TUNIC: [number, number, number][] = [
 const tunic = (hem: number, color: string) => shell([[hem, 0, 0], [hem, 0.176, 0.157], ...TUNIC, [0.472, 0, 0]], color)
 
 /** Where the tunic's front is at height `y`, `x` out from the middle (body-local z), for things sewn on it. */
-function onTunic(x: number, y: number): number {
+export function onTunic(x: number, y: number): number {
   const i = Math.max(0, TUNIC.findIndex((r) => r[0] >= y) - 1)
   const [a, b] = [TUNIC[i], TUNIC[Math.min(i + 1, TUNIC.length - 1)]]
   const k = b[0] > a[0] ? Math.min(1, Math.max(0, (y - a[0]) / (b[0] - a[0]))) : 0
@@ -89,7 +89,7 @@ function onTunic(x: number, y: number): number {
 }
 
 /** A point `d` along her arm from the shoulder (arm-local, `s` -1 left, 1 right). */
-const along = (s: number, d: number): V3 => [s * Math.sin(ARM) * d, -Math.cos(ARM) * d, 0]
+export const along = (s: number, d: number): V3 => [s * Math.sin(ARM) * d, -Math.cos(ARM) * d, 0]
 
 /** A short sleeve over the top of her arm, from over the shoulder cap (which rises 0.04 above the pivot) to past her
  *  dress's own sleeve. */

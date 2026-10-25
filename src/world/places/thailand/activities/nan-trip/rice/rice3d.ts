@@ -361,16 +361,24 @@ export class RiceFarm extends Stage {
     this.kit.ngob.position.set(0, 0.22 + 0.62 * R, -0.04)
     this.kit.ngob.rotation.x = -0.14
     kaylee.rig.head.add(this.kit.ngob)
-    this.kit.seedlings.position.set(-0.06, -0.17, 0.05)
-    kaylee.rig.armL.add(this.kit.seedlings)
-    this.kit.sickle.position.set(0.06, -0.17, 0.04)
+    // In her hooves: `at` is from the code-built arm's pivot; a rig with its own hands (the vinyl toy) holds them there,
+    // `held` from the hoof.
+    const hold = (g: Group, s: -1 | 1, at: V3, held: V3) => {
+      const hand = kaylee.rig.hands?.[s < 0 ? 0 : 1]
+      g.position.set(...(hand ? held : at))
+      ;(hand ?? (s < 0 ? kaylee.rig.armL : kaylee.rig.armR)).add(g)
+    }
+    hold(this.kit.seedlings, -1, [-0.06, -0.17, 0.05], [0, 0.01, 0.05])
     this.kit.sickle.rotation.set(1.2, 0, 0)
-    kaylee.rig.armR.add(this.kit.sickle)
-    this.kit.armful.position.set(-0.04, -0.12, 0.14)
+    hold(this.kit.sickle, 1, [0.06, -0.17, 0.04], [0, 0.01, 0.04])
     this.kit.armful.rotation.set(0, Math.PI / 2 + 0.3, 0.3)
-    kaylee.rig.armL.add(this.kit.armful)
-    // Mud spots for the wallow.
-    this.mud = solid(merge([[0.12, 0.3, 0.17], [-0.15, 0.22, 0.12], [0.02, 0.15, 0.2], [0.17, 0.42, 0.05], [-0.1, 0.4, 0.15]].map(([x, y, z], k) => P.sphere(0.04 + (k % 2) * 0.015, '#8A6A4F', { at: [x, y, z], scale: [1, 0.8, 0.5] }, 8))), bag, 0)
+    hold(this.kit.armful, -1, [-0.04, -0.12, 0.14], [0.03, 0.05, 0.12])
+    // Mud spots for the wallow (stuck on her front when her body isn't the code-built one).
+    const front = kaylee.rig.front
+    const spots: V3[] = front
+      ? [[0.08, 0.3], [-0.1, 0.23], [0.02, 0.21], [0.06, 0.41], [-0.06, 0.38]].map(([x, y]) => [x, y, front(x, y)])
+      : [[0.12, 0.3, 0.17], [-0.15, 0.22, 0.12], [0.02, 0.15, 0.2], [0.17, 0.42, 0.05], [-0.1, 0.4, 0.15]]
+    this.mud = solid(merge(spots.map(([x, y, z], k) => P.sphere(0.04 + (k % 2) * 0.015, '#8A6A4F', { at: [x, y, z], scale: [1, 0.8, 0.5] }, 8))), bag, 0)
     this.mud.visible = false
     kaylee.rig.body.add(this.mud)
     // Straw on Daddy's head (the harvest's silly moment).

@@ -3,8 +3,8 @@
 // so every walk, wave and pose in avatar.ts works on it. What she wears is fitted to her shape (model-wear.ts). The model's own texture is lit with the shared toon bands and
 // every piece gets the usual ink outline.
 //
-// The GLB loads once (loadKayleeModel) and every Kaylee after that clones it. Until it has loaded, kayleeModel() is
-// null and callers build the code-built Kaylee instead.
+// She is the game's Kaylee: Place.tsx waits for the GLB (kayleeReady) before any Thailand scene builds, and every
+// Kaylee after that clones it. If it can't load, kayleeModel() stays null and the code-built Kaylee stands in.
 import { Group, Mesh, MeshToonMaterial, type BufferGeometry, type Object3D, type Texture } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import type { Bag } from '../engine/dispose'
@@ -12,7 +12,7 @@ import { blobShadow, P, solid } from '../engine/geo'
 import { hullGeometry, outlineMaterial } from '../engine/outline'
 import { toonGradient } from '../engine/toon'
 import type { Rig } from './animal'
-import { modelWardrobe } from './model-wear'
+import { along, HOOF, modelWardrobe, onTunic } from './model-wear'
 import url from './models/kaylee.glb?url'
 
 /** The cream around her painted eyes: the lids that sweep down over them when she blinks. */
@@ -41,6 +41,16 @@ export const kayleeModel = () => model
 export function loadKayleeModel(): Promise<GLTF> {
   loading ??= new GLTFLoader().loadAsync(url).then((g) => (model = g))
   return loading
+}
+
+let ready: Promise<GLTF | null> | null = null
+/** Resolves once she's loaded, or with null if she couldn't be (never rejects: the code-built Kaylee stands in). */
+export function kayleeReady(): Promise<GLTF | null> {
+  ready ??= loadKayleeModel().catch((e) => {
+    console.warn('kaylee.glb could not be loaded, using the code-built Kaylee.', e)
+    return null
+  })
+  return ready
 }
 
 const materials = new Map<Texture, MeshToonMaterial>()
@@ -149,6 +159,8 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
   // Her hair is as wide as her reach, so an arm raised the code-built way (rotation.z, out to the side) ends up inside
   // it. Each arm swings in a plane turned forward instead: a tilted frame around the pivot and the opposite turn inside
   // it, so the rest pose is unchanged and a raised hoof comes up in front of her.
+  // A held thing goes in a group at each hoof, inside that turn back (so it's turned like her body at rest).
+  const hands: Group[] = []
   for (const [arm, s] of [[armL, -1], [armR, 1]] as const) {
     const tilt = new Group()
     tilt.position.copy(arm.position)
@@ -160,6 +172,10 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
     inner.rotation.y = s * ARM_TILT
     inner.add(...arm.children)
     arm.add(inner)
+    const hand = new Group()
+    hand.position.set(...along(s, HOOF))
+    inner.add(hand)
+    hands.push(hand)
   }
 
   // FaceLife squashes `eyes.scale.y` to blink, which works for drawn eyes but not for domes over a painted eye (the
@@ -207,6 +223,10 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
     // Her face (model-wear.ts measures it): a sphere of 0.24 around her eyes, the painted smile under them.
     face: { R: 0.24, headY: 0.148, mouth: [0, 0.06, 0.21] },
     wardrobe: modelWardrobe(ARM_TILT),
+    hands: [hands[0], hands[1]],
+    // Round the dress at 0.29 m, where it narrows above the skirt (model-wear.ts's tunic, less its few mm).
+    waist: { y: 0.29, z: 0.045, rx: 0.155, rz: 0.14 },
+    front: (x, y) => onTunic(x, y) - 0.006,
     blink(open: number) {
       eyes.scale.y = 1
       const shut = (1 - open) / 0.9

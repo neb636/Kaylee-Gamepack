@@ -187,7 +187,7 @@ export class Studio implements World3D {
       // The vinyl toy loads its model the first time; until then the code-built Kaylee stands in, then gets swapped.
       const model = entry.model ? kayleeModel() : null
       if (entry.model && !model) void loadKayleeModel().then(() => !this.disposed && this.view && this.apply(this.view))
-      const k = new Avatar(bag, model ?? undefined)
+      const k = new Avatar(bag, model)
       k.place(0, 0, 0, 0)
       char = k
     } else if (entry.kind === 'member' && entry.look) {

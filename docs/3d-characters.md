@@ -156,8 +156,15 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   unchanged and waves and cheers come up in front of her. The wai's hands don't meet yet.
 - **Mouth:** Kaylee never talks, so the painted smile stays. A talking character needs the mouth painted out of the
   texture and the code mouth (`talk`) placed on the face.
-- **Try it:** the lab entry `kaylee-toy` (`#/world/characters/kaylee-toy?lineup=kaylee,kaylee-toy`) shows it next
-  to the code-built Kaylee. It isn't used in the game yet: Dad decides after trying it.
+- **In the game (2026-10-25):** she is the game's Kaylee. Thailand's `Place.tsx` waits for the GLB (`kayleeReady()`,
+  under PlaceFrame's Suspense: Sparkle thinking for a moment) before any scene builds, so every `new Avatar(bag)` and
+  the mall's `Racer('kaylee')` get her from the first frame. If the GLB fails to load, the code-built Kaylee stands in.
+- **What the scenes hang on her** goes through the rig, not code-built numbers: `Rig.hands` (a group at each hoof,
+  turned like her body at rest: the rice farm's seedlings and sickle), `Rig.waist` (the boxing belt) and `Rig.front`
+  (the dress's surface: the rice farm's mud). The grip socks (`mall-trip/socks.ts`) go on her leg pivots. A new
+  modelled character fills these in the same way.
+- **Try it:** the lab entry `kaylee` (`#/world/characters/kaylee?lineup=kaylee,kaylee-code`) shows her next to the
+  code-built Kaylee (`kaylee-code`, kept to compare).
 
 ## Open questions
 

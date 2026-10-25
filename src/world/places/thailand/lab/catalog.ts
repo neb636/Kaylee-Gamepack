@@ -49,13 +49,13 @@ export interface CastEntry {
   color: string
   /** Entries that are variations of each other share this. */
   set?: string
-  /** Kaylee as the modelled vinyl toy (characters/model.ts) instead of the code-built one. */
+  /** Kaylee as the modelled vinyl toy (characters/model.ts, the game's Kaylee) instead of the code-built one. */
   model?: boolean
 }
 
 const family: CastEntry[] = [
-  { id: 'kaylee', name: 'Kaylee', who: 'Her, a lilac unicorn', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/looks.ts', color: LOOKS.kaylee.fur },
-  { id: 'kaylee-toy', name: 'Kaylee (vinyl toy)', who: 'Her, modelled in Tripo3D (try-out)', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/model.ts', color: '#C9B6F0', model: true },
+  { id: 'kaylee', name: 'Kaylee', who: 'Her, a lilac unicorn (the vinyl toy, modelled in Tripo3D)', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/model.ts', color: '#C9B6F0', model: true },
+  { id: 'kaylee-code', name: 'Kaylee (code-built)', who: 'The code-built unicorn she used to be (kept to compare)', group: 'family', kind: 'kaylee', look: LOOKS.kaylee, src: 'characters/looks.ts', color: LOOKS.kaylee.fur },
   ...FAMILY.map((m): CastEntry => ({ id: m.id, name: m.name, who: m.who, group: 'family', kind: 'member', look: LOOKS[m.id], voice: m.id, src: 'characters/looks.ts', color: LOOKS[m.id].fur })),
 ]
 

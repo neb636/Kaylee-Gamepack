@@ -47,6 +47,14 @@ export interface Rig {
   /** Lying down when the head is much deeper than the body (the modelled Kaylee's hair): how high the feet stay off the
    *  floor, and how far the body stays tipped up from flat so the head rests on the back of its hair. */
   lie?: { lift: number; tilt: number }
+  /** Where a held thing goes when the arms aren't the code-built ones (the modelled Kaylee's hang out at 47° in a
+   *  forward-turned frame): a group at each hoof (left, right), turned like the body at rest. */
+  hands?: [Group, Group]
+  /** Her waist when the body isn't the code-built capsule (the modelled Kaylee's dress): its height, its center
+   *  front-to-back and the half-width and half-depth a belt goes round (body-local). */
+  waist?: { y: number; z: number; rx: number; rz: number }
+  /** How far forward the front of the body is at (x, y), body-local z, for things stuck on it (mud). */
+  front?: (x: number, y: number) => number
 }
 
 /** One worn thing, a group for each pivot it rides on (null where there's nothing). */

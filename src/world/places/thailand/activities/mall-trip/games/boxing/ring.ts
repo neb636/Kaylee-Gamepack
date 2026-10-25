@@ -18,7 +18,7 @@
 //      onto his bottom. The coach holds her glove up and the gold belt goes round her waist. A star.
 // Then it stays a toy: the drum keeps going, Daddy gets up with the pad, and every few hits it glows for another kick.
 // Nothing fails: every punch is a fun punch, the window grows, round 2 ends anyway, a hit while Daddy hops still lands.
-import { Color, IcosahedronGeometry, OctahedronGeometry, Plane, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
+import { Color, Group, IcosahedronGeometry, OctahedronGeometry, Plane, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds, span, wobble } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
 import type { Member } from '../../../../characters/member'
@@ -176,8 +176,14 @@ export class MuayThai extends Stage {
     this.nick = members.get('nick')!
     kaylee.wear(['gloves', 'mongkhon'])
     wearSocks(kaylee, SOCK_COLORS[start.socks] ?? SOCK_COLORS.pink, bag)
-    kaylee.rig.body.add(this.built.belt)
-    this.built.belt.position.set(0, 0.31, 0)
+    // Round her waist (the vinyl toy's dress is narrower than the code-built capsule the belt was made for: 0.172),
+    // in a group of its own so the belt's pop can scale it.
+    const waist = kaylee.rig.waist
+    const fit = new Group()
+    fit.position.set(0, waist?.y ?? 0.31, waist?.z ?? 0)
+    if (waist) fit.scale.set(waist.rx / 0.172, 1, waist.rz / 0.172)
+    fit.add(this.built.belt)
+    kaylee.rig.body.add(fit)
     this.coach = new Coach(bag)
     scene.add(kaylee.root, this.nick.root, this.coach.root)
     this.put(kaylee, KAYLEE.x, 0, KAYLEE.z, 'stand', 0)

@@ -1,5 +1,5 @@
-// Kaylee, the one she steers: her lilac unicorn with the rainbow mane and gold horn (looks.ts; on purpose nothing like
-// Sparkle).
+// Kaylee, the one she steers: her lilac unicorn, a modelled vinyl toy with brown hair and a pink striped dress
+// (model.ts; on purpose nothing like Sparkle). The code-built one (looks.ts) stands in if the model can't load.
 //
 // How she moves: a bouncy hop-trot along a path (a little hop every step, squash when she lands, stretch at the top,
 // leaning into the walk), turning with a spring so corners curve, a settle wobble when she arrives. Everything else
@@ -13,7 +13,7 @@ import { buildAnimal, buildWorn, Wind, type Rig } from './animal'
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { FaceLife } from './face'
 import { LOOKS, type Wearable } from './looks'
-import { buildModelRig } from './model'
+import { buildModelRig, kayleeModel } from './model'
 import type { Character, Pose } from './types'
 
 const H = LOOKS.kaylee.height
@@ -66,8 +66,9 @@ export class Avatar implements Character {
   /** Things she's just put on, and how far through their little show (0..1). */
   private entering = new Map<Wearable, number>()
 
-  /** `model`: the modelled vinyl-toy Kaylee (model.ts) instead of the code-built one. */
-  constructor(private bag: Bag, model?: GLTF) {
+  /** `model`: the modelled vinyl-toy Kaylee (model.ts), the one the game uses (Place.tsx loads it before any scene
+   *  builds); `null` builds the code-built Kaylee instead (the lab's comparison, or if the model couldn't load). */
+  constructor(private bag: Bag, model: GLTF | null = kayleeModel()) {
     this.chibi = model ? buildModelRig(model, bag) : buildAnimal(LOOKS.kaylee, bag)
     this.life = new FaceLife(this.chibi)
     this.root = this.chibi.root

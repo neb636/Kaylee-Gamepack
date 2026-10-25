@@ -94,8 +94,9 @@ smoke test still work). Don't add packages when the SDK or a pre-approved librar
 `Mascot` adapter) in countries, games and menus; never copy her SVG or import an old pose image as a live character.
 The reference pictures in `art/source/mascot/` are exported from that puppet. See `docs/sparkle.md`.
 
-**In 3D (Thailand):** every character is built from code, not generated pictures (a modelled character made with
-Tripo3D and split in Blender into the same rig is in progress: follow `docs/3d-characters.md`). `characters/looks.ts` describes each
+**In 3D (Thailand):** the characters are built from code, not generated pictures, except Kaylee herself: she is a
+modelled vinyl toy made with Tripo3D and split in Blender into the same rig (`characters/model.ts`; the next family
+members follow `docs/3d-characters.md`). `characters/looks.ts` describes each
 family member (Dad picked them from `planning/around-the-world/thailand/lineup.webp`), `characters/animal.ts` builds the
 chibi rig (body, head, arms, tail on their own pivots), and `characters/face.ts` blinks, looks at her and opens the
 mouth with the character's voice. They wave, hop, sit, lie down, do a wai: ease into each pose (lean, settle), never
