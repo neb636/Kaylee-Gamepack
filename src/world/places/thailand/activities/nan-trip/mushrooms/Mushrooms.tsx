@@ -98,8 +98,8 @@ export function Mushrooms({ round, basket, onRound, onBasket, onDrive }: Props) 
   )
 }
 
-/** Lunch is over: the farm again, or back on the road (big pictures, no reading). */
-export function FarmEnd({ onAgain, onDrive }: { onAgain: () => void; onDrive: () => void }) {
+/** Lunch is over: the farm again, or back on the road (big pictures, no reading). Stop Time Cafe's end card too. */
+export function FarmEnd({ onAgain, onDrive, label = 'The mushroom farm again' }: { onAgain: () => void; onDrive: () => void; label?: string }) {
   const size = 'clamp(92px, 15vmin, 128px)'
   const btn = { width: size, height: size, borderRadius: '50%', border: '6px solid #fff', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 } as const
   return (
@@ -111,7 +111,7 @@ export function FarmEnd({ onAgain, onDrive }: { onAgain: () => void; onDrive: ()
       transition={{ type: 'spring', stiffness: 240, damping: 18 }}
       style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom, 0px) + 18px)', display: 'flex', justifyContent: 'center', gap: 'clamp(16px, 3vw, 30px)', padding: '0 16px', zIndex: 50 }}
     >
-      <motion.button aria-label="The mushroom farm again" whileTap={{ scale: 0.88 }} onClick={onAgain} style={{ ...btn, background: 'var(--lavender)' }}>
+      <motion.button aria-label={label} whileTap={{ scale: 0.88 }} onClick={onAgain} style={{ ...btn, background: 'var(--lavender)' }}>
         🔁
       </motion.button>
       <motion.button aria-label="Back on the road" whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.07, 1] }} transition={{ repeat: Infinity, duration: 1.4 }} onClick={onDrive} style={{ ...btn, background: 'var(--pink)' }}>
