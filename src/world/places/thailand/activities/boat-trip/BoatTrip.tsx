@@ -51,6 +51,7 @@ import { BoardingPass, type PassChoice } from '../../trip/legs/BoardingPass'
 import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
 import { TRIP_HOUSE_ANCHORS, TripHouse, type HouseLeg, type Phase } from '../../trip/legs/house-plugin'
 import { PackCard } from '../../trip/legs/PackCard'
+import { WhereTo } from '../../trip/legs/WhereTo'
 import { PLANE_ANCHORS, PlaneRide, type FlySection, type KrabiFork } from '../../trip/legs/plane'
 import type { LegEvents } from '../../trip/legs/stage'
 import { DEFAULT_PACKED, formatPacked, parsePacked } from '../../trip/packing'
@@ -67,6 +68,7 @@ import { changOpen } from './chang/open'
 import { isStraw, type StrawColor } from './chang/layout'
 import { Debug } from './Debug'
 import { Flat } from './Flat'
+import { FORK_CARDS } from './ForkCards'
 import { PhotoFan } from './PhotoFan'
 import { Race, RACE_ANCHORS, type RaceHud, type RaceSection } from './race/race'
 import { RACE_TROPHY, RaceFlag, RaceLayer } from './race/RaceLayer'
@@ -174,6 +176,9 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     return () => clearTimeout(t)
   }, [phase])
   const [flash, setFlash] = useState(0)
+  /** Krabi's fork: Daddy is asking "Where to?" (his card of postcards is up). */
+  const [whereTo, setWhereTo] = useState(false)
+  useEffect(() => setWhereTo(false), [mount.key])
   // The bay: her ribbons, the stops she's been to, the album's photos and stickers.
   const [ribbons, setRibbons] = useState<string[]>(() => list(flag('ribbons'), ['pink', 'butter', 'mint', 'sky', 'lavender', 'hotpink']).slice(0, 3))
   const tied = useRef(flag('ribbons') !== null)
@@ -497,11 +502,12 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     if (prep.current && prepWant.current && photos.length >= prepWant.current) finish('home', null)
   }, [photos])
 
-  const leg: LegEvents & { flash(): void } = {
+  const leg: LegEvents & { flash(): void; asking(on: boolean): void } = {
     say,
     section: (s) => moveTo(s as BoatSection),
     done: (next) => finish(next as BoatSection),
     flash: () => setFlash((n) => n + 1),
+    asking: setWhereTo,
   }
 
   const make = (renderer: WebGLRenderer): World3D => {
@@ -710,6 +716,9 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         >
           🚤 Tap to wake the trip
         </button>
+      )}
+      {mount.world === 'plane' && mode === 'webgl' && (
+        <WhereTo open={whereTo && !pass} who="Daddy" whoColor="#A9EBD6" line={L.bay.whereTo} cards={FORK_CARDS} onPick={(id) => (worldRef.current as PlaneRide | null)?.choose(id as 'chang' | 'pier')} />
       )}
       {mount.world === 'chang' && mode === 'webgl' && <PoseButtons show={section === 'sign' && !pass && !albumOpen} onPose={(p) => (worldRef.current as Chang | null)?.pose(p)} />}
       {/* (At Baan Chang the album shows where photos are taken: the sign and the splash.) */}

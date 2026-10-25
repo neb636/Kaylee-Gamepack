@@ -286,7 +286,7 @@ export class Chang extends Stage {
     scene.add(this.milk.root)
     this.splash = new Splash(bag)
     scene.add(this.splash.root)
-    this.yard.push(this.basket.root, this.milk.root, this.splash.root)
+    this.yard.push(this.basket.root, this.splash.root)
     this.walkway = buildWalkway(bag)
     scene.add(this.walkway.root)
     this.yard.push(this.walkway.root)
@@ -381,6 +381,8 @@ export class Chang extends Stage {
     this.lastStuck = -99
     if (!first) this.events.section(s)
     this.show(AREA_OF[s])
+    // Her chocolate milk is on the rail post only for Khanom's sneaky sips.
+    this.milk.show(s === 'lamyai')
     if (s === 'chang') {
       this.driveIn()
       this.later(1200, () => this.at === 'chang' && this.once('arrive', L.chang.arrive))

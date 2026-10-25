@@ -4,7 +4,8 @@
 // takes the family to the pier. Built for the plane's world (plane.ts cuts here behind a white flash). Faces +z (the
 // camera stands on the road side). Down the road, where a side road turns off into the palms, a signpost with two
 // painted boards (pictures, no words): an elephant pointing up the side road to Baan Chang, a longtail pointing on along
-// the road to the pier (the boat trip's fork, plan: thailand/baan-chang.md).
+// the road to the pier (the boat trip's fork, plan: thailand/baan-chang.md). It's scenery: she picks on Daddy's card
+// of postcards (WhereTo.tsx), which has room for more places than a signpost has for boards.
 import { Group } from 'three'
 import type { Bag } from '../../engine/dispose'
 import { merge, P, solid, type V3 } from '../../engine/geo'
@@ -24,10 +25,8 @@ export interface Arrival {
   /** Where the songthaew waits at the curb (local x), and the road's z. */
   curbX: number
   roadZ: number
-  /** The fork: the side road's middle (local x, where the songthaew stops to turn into it), and the signpost's two
-   *  boards (their middles, local). */
+  /** The fork: the side road's middle (local x, where the songthaew stops to turn into it). */
   forkX: number
-  boards: { chang: V3; pier: V3 }
 }
 
 /** A painted board on the signpost: a cream plank with an arrow tip on one end (`dir` -1 points left, 1 right). */
@@ -197,5 +196,5 @@ export function buildArrival(bag: Bag): Arrival {
   const curbX = -2.4
   songthaew.root.position.set(curbX, 0, roadZ - 0.6)
   root.add(songthaew.root)
-  return { root, songthaew, curbX, roadZ, forkX: FORK_X, boards }
+  return { root, songthaew, curbX, roadZ, forkX: FORK_X }
 }
