@@ -1,13 +1,15 @@
 // The rice farm's screen: the 3D farm and Stop Time Cafe's deck (rice3d.ts) with its tap targets, the 👆 after a while
 // with nothing touched, the photo Mommy takes on the deck (a flash, then it pops up like a print), the video of real rice
 // growing (skippable: ⏭ ☕ back to the deck; the 3D world holds still under it), and the end card: 🔁 the farm again, or
-// 🚙 back on the road (the 3 road, the way home). (No flat version: 3D activities don't need one.)
+// 🚙 back on the road (the 3 road, the way home). Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks
+// out loud in their own voice. (No flat version: 3D activities don't need one.)
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { VideoBreak } from '../../../../../kit/Theater'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { FarmEnd } from '../mushrooms/Mushrooms'
 import type { Round } from './layout'
 import { RICE_ANCHORS, RiceFarm } from './rice3d'
@@ -28,6 +30,7 @@ export function Rice({ round, onRound, onDrive }: Props) {
   const [photo, setPhoto] = useState<{ src: string; n: number } | null>(null)
   const worldRef = useRef<RiceFarm | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   // A rebuilt world (a lost GPU context, 🔁) starts where she is now, not where the link was.
   const now = useRef(round)
   const cb = useRef(onRound)
@@ -37,7 +40,7 @@ export function Rice({ round, onRound, onDrive }: Props) {
     const w = new RiceFarm(
       renderer,
       {
-        say: () => {},
+        say: (l) => guideRef.current?.speak(l),
         section: () => {},
         done: () => {},
         round: (r) => {
@@ -98,6 +101,7 @@ export function Rice({ round, onRound, onDrive }: Props) {
           🌾 Tap to wake the rice farm
         </button>
       )}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={video || done} />}
       <AnimatePresence>{photo && !video && <Snapshot key={photo.n} src={photo.src} />}</AnimatePresence>
       {video && (
         <VideoBreak

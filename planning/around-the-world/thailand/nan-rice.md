@@ -365,8 +365,31 @@ version (3D activities don't need one).
   goes straight to the end card. One Sparkle clip, `L.nan.rice.video`.
 - qa: `qa-motion` `nan-thresh` (a tap every 0.7 s on the basket), `qa-pacing` `nan-rice-thresh`.
 
-**Next:** Dad plays greybox B (is ten bangs the right number? does the swing feel heavy enough?). Then the trip plan's
-step 8 (the look) and step 9 (voices: Sparkle's round lines, the family's reactions; QA).
+Dad played greybox B (2026-10-25): threshing feels good (ten bangs, the swing heavy enough). On to the look and voices.
+
+**The look and the voices (2026-10-25, the trip plan's steps 8 and 9 for this stop):**
+- Sapan's rice steps (`farm.ts` `terraces`, `TERRACES` in `layout.ts`): two round hills on the valley's sides with
+  stepped terraces climbing their fronts, each step a sandy riser under a grass lip, the lower ones flooded and freshly
+  planted (blue water, rings of green rows, white glints), the upper ones grown green, trees on the crown. Pushed out of
+  round so the steps follow the hill's lumps. The big one fills the deck's view behind the family; wide screens see
+  both past the farm's edges. The deck's view is now what the tap-to-hear fact talks about.
+- Low clouds lying along the valley round the terraces (`lowClouds`), drifting slowly; the rain cloud got a
+  grey-lavender belly and a sleepy, happy face.
+- Ambient life (`life.ts`): three dragonflies that hover over the paddies, dart to a new spot and zip away when Kaylee
+  wades near; three butterflies fluttering round the flowers at the edges.
+- Soft patches of lighter and darker grass round the farm, so the flat ground isn't one green.
+- The café's roof is warm light wood with its rafters showing, and a row of little pastel lights along the front eave.
+- Voices (`lines.ts` `L.nan.rice`, 32 new clips): Sparkle's line as each round begins (the first one before her first
+  touch: "Let's plant rice, Kaylee! Walk in the water."), "Rice likes water! Open the gate." the first time she plants
+  dry, and after ~8 s with nothing done what to do now (at most 3 a round, 20 s apart). Daddy reacts once to each thing
+  on the farm (a planted paddy, the whole farm, splashed, the straw hat, the muddy unicorn, the straw pile, the rain, a
+  fat bird, "Kaylee? Where did you go?" in the tall rice, all the rice, a good bang, the sticky rice, his coffee) and
+  says one of three lines when tapped. Mommy says hello on the deck and "Smile, Kaylee!" before the photo. Facts:
+  the first ball of sticky rice ("In Nan, people eat sticky rice with their fingers!") and a tap on the view ("The steps
+  on the hill keep the water for the rice!"). Family reactions are dropped while Sparkle talks rather than heard late.
+- Sparkle sits in the corner (`trip/legs/Guide.tsx`) with the words for Dad; hidden under the video and the end card.
+
+**Next:** Dad listens on the iPad (lip sync, whether Daddy talks too much). Then the next stop: Bo Kluea salt (step 4).
 
 ## Fun check
 

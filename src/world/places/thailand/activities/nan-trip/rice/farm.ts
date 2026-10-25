@@ -4,8 +4,9 @@
 // step and under the boardwalk, a wooden gate for each paddy, the plank boardwalk and bridge, the stairs, the scarecrow
 // in its ngob, the farm hut under its thatch, a banana plant, bamboo, the nursery bed of seedlings, the drying rack, the
 // threshing basket and the straw pile, the buffalo in its wallow, ducks and a frog, the hill behind with its trees and
-// Stop Time Cafe up on it, and the far mountains all the way round.
-import { BackSide, BufferAttribute, CanvasTexture, Color, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, Path, PlaneGeometry, Quaternion, RepeatWrapping, Shape, SRGBColorSpace, Vector2, Vector3, type BufferGeometry } from 'three'
+// Stop Time Cafe up on it, Sapan's rice steps on the valley's sides (what the deck looks out at), low clouds drifting
+// round them, and the far mountains all the way round.
+import { BackSide, BufferAttribute, CanvasTexture, Color, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, Path, PlaneGeometry, Quaternion, RepeatWrapping, RingGeometry, Shape, SRGBColorSpace, Vector2, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../engine/dispose'
 import { bake, blobShadow, merge, P, solid } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
@@ -20,6 +21,7 @@ import {
   CHANNEL_HALF,
   FARM,
   HUT,
+  inTerrace,
   MUD_DOWN,
   NURSERY,
   PADDIES,
@@ -30,6 +32,7 @@ import {
   SCARECROW,
   STAIRS,
   STRAW_PILE,
+  TERRACES,
   WALLOW,
   WATER_DOWN,
   type Paddy,
@@ -99,6 +102,8 @@ export interface Farm {
   bamboo: Group
   /** The café's middle (for its tap target). */
   cafeAt: V3
+  /** Low clouds along the valley (rice3d.ts drifts them). */
+  mist: Group[]
 }
 
 // ---------------------------------------------------------------- shapes
@@ -208,7 +213,7 @@ export function buildFarm(bag: Bag): Farm {
   ground.push(P.rbox(40, 0.02, 0.9, 0.01, DIRT, { at: [0, 0.006, 6.1] }))
   for (let i = 0; i < 22; i++) {
     const x = -13 + i * 1.25 + (rnd(i, 31) - 0.5) * 0.5
-    if (Math.abs(x) < 0.8) continue
+    if (Math.abs(x) < 0.8 || inTerrace(x, 7.5, 0.5)) continue
     const r = 0.38 + rnd(i, 32) * 0.22
     ground.push(P.sphere(r, TREES[i % 4], { at: [x, r * 0.55, 7.3 + rnd(i, 33) * 0.4], scale: [1.3, 0.9, 1] }, 12))
     if (i % 4 === 1) for (let k = 0; k < 3; k++) ground.push(P.sphere(0.06, ['#FF8FB8', '#FFFFFF', '#FFE27A'][(i + k) % 3], { at: [x - 0.25 + k * 0.25, r * 1.05, 7.3 + r * 0.6] }, 6))
@@ -221,6 +226,7 @@ export function buildFarm(bag: Bag): Farm {
       // On the farm itself only along the banks' outer edges, never in a paddy.
       if (PADDIES.some((p) => x > p.x0 - 0.3 && x < p.x1 + 0.3 && z > p.z0 - 0.3 && z < p.z1 + 0.3) || Math.abs(x) < 0.7 || (z > -0.5 && z < 0.5) || z > BOARDWALK.z0 - 0.1) continue
     }
+    if (inTerrace(x, z, 0.2)) continue
     const top = z < RISER_Z ? RISE : 0
     if (i % 3 === 0) {
       const c = ['#FF8FB8', '#FFFFFF', '#FFE27A', '#E2B6FF'][i % 4]
@@ -233,6 +239,17 @@ export function buildFarm(bag: Bag): Farm {
     } else for (let k = 0; k < 3; k++) ground.push(P.cone(0.035, 0.14 + k * 0.03, k ? '#6FBF6A' : '#5FAE60', { at: [x + (k - 1) * 0.04, top + 0.06, z + (k % 2) * 0.03], rot: [(k - 1) * 0.25, 0, (k - 1) * 0.3] }, 4))
   }
   root.add(solid(merge(ground), bag, 2))
+  // Soft patches of lighter and darker grass round the farm, so the flat ground isn't all one green (paint: no outline).
+  const patches: BufferGeometry[] = []
+  for (let i = 0; i < 46; i++) {
+    const x = -13 + rnd(i, 41) * 26
+    const z = HILL_Z + 0.5 + rnd(i, 42) * (8.5 - HILL_Z)
+    const r = 0.45 + rnd(i, 43) * 0.8
+    if (inTerrace(x, z, r) || (Math.abs(x) < FARM.x + r * 1.4 && z > FARM.back - r && z < BOARDWALK.z1 + r) || Math.hypot(x - WALLOW.x, z - WALLOW.z) < WALLOW.r + r * 1.4) continue
+    const top = z < RISER_Z ? RISE : 0
+    patches.push(P.cyl(r, r, 0.01, ['#93D586', '#7CC470', '#8FD27F', '#80C977'][i % 4], { at: [x, top + 0.004, z], rot: [0, rnd(i, 44) * 3, 0], scale: [1.5, 1, 0.8] }, 16))
+  }
+  root.add(solid(merge(patches), bag, 0))
 
   // ---- The water: each paddy's, the channel's, the fall down the step, the stream out of the pipe ----
   const water = new FarmWater(bag)
@@ -518,8 +535,11 @@ export function buildFarm(bag: Bag): Farm {
   // ---- The hill behind, its trees, and the far mountains all round ----
   root.add(buildHill(bag))
   root.add(panorama(bag))
+  root.add(terraces(bag))
+  const mist = lowClouds(bag)
+  for (const m of mist) root.add(m)
   const cafeAt: V3 = [DECK.x, DECK.y + 1.4, DECK.z]
-  return { root, water, paddyWater, channel, fall, stream, gates, scarecrow: { root: scare, hat, perches: [[-0.5, 1.22, 0], [0.5, 1.22, 0], [0, 1.72, 0]] }, hut: { root: hut, chime, perch: [0, 2.32, 0] }, banana, nursery, rack: { root: rack, bundles, perch: [0, RACK.y + 0.06, 0] }, basket: { root: basketRoot, heap, board }, straw, buffalo, ducks, frog, bamboo, cafeAt }
+  return { root, water, paddyWater, channel, fall, stream, gates, scarecrow: { root: scare, hat, perches: [[-0.5, 1.22, 0], [0.5, 1.22, 0], [0, 1.72, 0]] }, hut: { root: hut, chime, perch: [0, 2.32, 0] }, banana, nursery, rack: { root: rack, bundles, perch: [0, RACK.y + 0.06, 0] }, basket: { root: basketRoot, heap, board }, straw, buffalo, ducks, frog, bamboo, cafeAt, mist }
 }
 
 // ---------------------------------------------------------------- the hill and the far mountains
@@ -563,6 +583,87 @@ function buildHill(bag: Bag) {
     parts.push(P.sphere(0.4 * s, TREES[(i + 2) % 4], { at: [x - 0.25 * s, y + 1.35 * s, z - 0.1 * s] }, 10))
   }
   return solid(merge(parts), bag, 2)
+}
+
+/** Sapan's rice steps (TERRACES), climbing the front of a round green hill: sandy risers under grass lips, each step
+ *  set a little further up the hill than the one below (wide fields in front, crowded together at the back). The lower
+ *  steps are flooded and freshly planted (blue water, rings of green rows, white glints), the upper ones grown thick and
+ *  green, and a few trees on the crown. */
+function terraces(bag: Bag) {
+  const allSides: BufferGeometry[] = []
+  const allFlat: BufferGeometry[] = []
+  for (const [n, t] of TERRACES.entries()) {
+    const sides: BufferGeometry[] = []
+    const flat: BufferGeometry[] = []
+    const ring = (x: number, y: number, z: number, a: number, b: number, c: string) => flat.push(bake(new RingGeometry(a, b, 64, 1), c, { at: [x, y, z], rot: [-Math.PI / 2, 0, 0] }))
+    const crown = 1.5
+    const dr = (t.r - crown) / t.steps
+    const [bx, bz] = t.back
+    // The hill the steps climb, rising behind them.
+    sides.push(P.sphere(t.r * 1.15, '#7FC774', { at: [t.x + bx * t.r * 0.95, -0.3, t.z + bz * t.r * 0.95], scale: [1, 0.45, 1] }, 40))
+    for (let k = 0; k < t.steps; k++) {
+      const r = t.r - k * dr
+      const y = 0.32 + k * 0.42
+      const cx = t.x + bx * dr * 0.7 * k
+      const cz = t.z + bz * dr * 0.7 * k
+      sides.push(P.cyl(r, r + 0.06, y + 0.3 - 0.07, SAND, { at: [cx, (y - 0.07 - 0.3) / 2, cz] }, 64))
+      sides.push(P.cyl(r + 0.04, r + 0.04, 0.08, GRASS_LIP, { at: [cx, y - 0.04, cz] }, 64))
+      if (k === t.steps - 1) break
+      // The step's field, between this lip and the next riser.
+      const a = r - dr + 0.2
+      const b = r - 0.16
+      const wet = k < t.steps - 3
+      ring(cx, y + 0.004, cz, a, b, wet ? '#BFE4F7' : '#6DBB63')
+      for (let rr = a + 0.13; rr < b - 0.08; rr += 0.21) ring(cx, y + 0.008, cz, rr, rr + (wet ? 0.045 : 0.06), wet ? '#7FCB6A' : '#86CF73')
+      if (wet)
+        for (let g = 0; g < 9; g++) {
+          const ang = rnd(n * 40 + k * 9 + g, 51) * Math.PI * 2
+          const rr = a + rnd(n * 40 + k * 9 + g, 52) * (b - a)
+          flat.push(P.box(0.3, 0.004, 0.035, '#FFFFFF', { at: [cx + Math.cos(ang) * rr, y + 0.012, cz + Math.sin(ang) * rr], rot: [0, -ang + Math.PI / 2, 0] }))
+        }
+    }
+    // Trees on the crown.
+    const top = 0.32 + (t.steps - 1) * 0.42
+    const shift = dr * 0.7 * (t.steps - 1)
+    for (let i = 0; i < 4; i++) {
+      const a = (i / 4) * Math.PI * 2 + n
+      const x = t.x + bx * shift + Math.cos(a) * crown * 0.45
+      const z = t.z + bz * shift + Math.sin(a) * crown * 0.45
+      const s = 0.8 + rnd(i, 60 + n) * 0.5
+      sides.push(P.cyl(0.08 * s, 0.11 * s, 0.7 * s, WOOD_DARK, { at: [x, top + 0.3 * s, z] }, 6))
+      sides.push(P.sphere(0.6 * s, TREES[(i + n) % 4], { at: [x, top + 1.0 * s, z] }, 12))
+      sides.push(P.sphere(0.42 * s, TREES[(i + n + 1) % 4], { at: [x + 0.3 * s, top + 0.85 * s, z + 0.15 * s] }, 10))
+    }
+    // Built round, then pushed out of round so the steps follow the hill's lumps like real contour terraces.
+    for (const [list, into] of [[sides, allSides], [flat, allFlat]] as const) {
+      const g = merge(list)
+      const pos = g.attributes.position
+      for (let i = 0; i < pos.count; i++) {
+        const dx = pos.getX(i) - t.x
+        const dz = pos.getZ(i) - t.z
+        const a = Math.atan2(dz, dx)
+        const f = 1 + 0.1 * Math.sin(3 * a + n * 2) + 0.05 * Math.sin(5 * a + 1 + n)
+        pos.setXYZ(i, t.x + dx * f, pos.getY(i), t.z + dz * f * 0.7)
+      }
+      g.computeVertexNormals()
+      into.push(g)
+    }
+  }
+  const g = new Group()
+  g.add(solid(merge(allSides), bag, 2), solid(merge(allFlat), bag, 0))
+  return g
+}
+
+/** Low clouds lying along the valley, round the rice steps' crowns where the deck looks out (soft: no outline). */
+function lowClouds(bag: Bag) {
+  const spots: V3[] = [[16, 2.6, 9], [25, 3.6, 17], [10, 3.0, 15], [30, 2.8, 8], [-15, 2.6, 12]]
+  return spots.map(([x, y, z], i) => {
+    const w = 1.6 + rnd(i, 70) * 1.2
+    const g = solid(merge([P.sphere(0.7, '#FFFFFF', { scale: [w, 0.42, 1] }, 14), P.sphere(0.55, '#FFFFFF', { at: [w * 0.45, 0.16, 0.1], scale: [1.3, 0.6, 1] }, 12), P.sphere(0.5, '#F4F2FA', { at: [-w * 0.5, 0.06, -0.05], scale: [1.3, 0.55, 1] }, 12)]), bag, 0)
+    g.position.set(x, y, z)
+    g.userData.home = x
+    return g
+  })
 }
 
 /** Far mountains with cloud on their tops all the way round, painted on the inside of a big open cylinder. */

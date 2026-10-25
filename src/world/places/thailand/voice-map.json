@@ -1477,6 +1477,230 @@
     "file": "84fa172ff8f5.mp3"
   },
   {
+    "text": "Let's plant rice, Kaylee! Walk in the water.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3610,
+    "file": "206fede16731.mp3"
+  },
+  {
+    "text": "Rice likes water! Open the gate.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3405,
+    "file": "d5a697b5e261.mp3"
+  },
+  {
+    "text": "The birds want the rice! Shoo, shoo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3040,
+    "file": "86acdcc6d840.mp3"
+  },
+  {
+    "text": "It's golden! Time to cut the rice.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3446,
+    "file": "6bf21e5c6c95.mp3"
+  },
+  {
+    "text": "Bang the rice! The grains fall out.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3346,
+    "file": "14296a37c6eb.mp3"
+  },
+  {
+    "text": "In Nan, people eat sticky rice with their fingers!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4829,
+    "file": "1afd22a181e0.mp3"
+  },
+  {
+    "text": "The steps on the hill keep the water for the rice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3704,
+    "file": "a0c0d7533194.mp3"
+  },
+  {
+    "text": "Walk through the water to plant!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2705,
+    "file": "008f0d3e2f38.mp3"
+  },
+  {
+    "text": "Tap the gate to let the water in!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2912,
+    "file": "68e8c9fcaa22.mp3"
+  },
+  {
+    "text": "Walk to the birds!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1459,
+    "file": "7e85d86e8861.mp3"
+  },
+  {
+    "text": "Walk through the golden rice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3746,
+    "file": "ec82d03a5d47.mp3"
+  },
+  {
+    "text": "Tap to bang the rice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2224,
+    "file": "8ece81e39462.mp3"
+  },
+  {
+    "text": "Tap the sticky rice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2055,
+    "file": "9b9895a39343.mp3"
+  },
+  {
+    "text": "Tap Mommy for a photo!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2104,
+    "file": "198ba781861c.mp3"
+  },
+  {
+    "text": "Look at those rows, Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2210,
+    "file": "3b9659feb2ed.mp3"
+  },
+  {
+    "text": "Our very own rice farm!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2056,
+    "file": "41944577cb8a.mp3"
+  },
+  {
+    "text": "Hey! I'm all wet!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2145,
+    "file": "a3e300d26e65.mp3"
+  },
+  {
+    "text": "A straw hat! Thank you!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1907,
+    "file": "8c2af33932a5.mp3"
+  },
+  {
+    "text": "A muddy unicorn!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1567,
+    "file": "458cb04a291d.mp3"
+  },
+  {
+    "text": "Ha! Into the straw!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2567,
+    "file": "ffc40a7a6f1f.mp3"
+  },
+  {
+    "text": "Rain! The rice loves it!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2345,
+    "file": "a8ed5ddd3894.mp3"
+  },
+  {
+    "text": "That bird ate too much!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2221,
+    "file": "6da5f8fc1027.mp3"
+  },
+  {
+    "text": "Kaylee? Where did you go?",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1817,
+    "file": "c42857ed6a7d.mp3"
+  },
+  {
+    "text": "Look at all that rice!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1307,
+    "file": "03bb4bcbc4f4.mp3"
+  },
+  {
+    "text": "Whack! Good one!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1530,
+    "file": "01a16154248b.mp3"
+  },
+  {
+    "text": "Sticky rice! Yum!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1867,
+    "file": "ee64c2f01178.mp3"
+  },
+  {
+    "text": "Mmm, coffee.",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1726,
+    "file": "865a5311e975.mp3"
+  },
+  {
+    "text": "Go, farmer Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1992,
+    "file": "58c8ca8057d6.mp3"
+  },
+  {
+    "text": "Splish, splash!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1706,
+    "file": "9c00dba49838.mp3"
+  },
+  {
+    "text": "Daddy is watching!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1305,
+    "file": "b3bf77d14bbf.mp3"
+  },
+  {
+    "text": "Sticky rice from your farm!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1581,
+    "file": "9a6a5aa93d5f.mp3"
+  },
+  {
+    "text": "Smile, Kaylee!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1365,
+    "file": "8acd13c669db.mp3"
+  },
+  {
     "text": "Want to see real rice grow, Kaylee?",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",

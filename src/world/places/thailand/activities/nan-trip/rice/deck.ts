@@ -79,10 +79,17 @@ export function buildDeck(bag: Bag): Deck {
     // The side railing, on the valley side.
     P.cyl(0.035, 0.035, 2.9, WOOD_DARK, { at: [1.85, 0.98, 0.1], rot: [Math.PI / 2, 0, 0] }, 8),
     ...[-0.6, 0.4, 1.4].map((z) => P.cyl(0.04, 0.045, 1.0, WOOD_DARK, { at: [1.85, 0.5, z] }, 8)),
-    // The roof: four posts and a peaked roof of dark wood.
+    // The roof: four posts and a peaked roof of warm light wood, its rafters showing underneath.
     ...[-1.8, 1.8].flatMap((x) => [-1.5, 1.5].map((z) => P.cyl(0.06, 0.06, 2.4, WOOD_DARK, { at: [x, 1.2, z] }, 8))),
-    ...[1, -1].map((s) => P.box(4.2, 0.07, 2.0, '#7E5E48', { at: [0, 2.72, s * 0.85], rot: [s * 0.42, 0, 0] })),
+    ...[1, -1].map((s) => P.box(4.2, 0.07, 2.0, '#B98A62', { at: [0, 2.72, s * 0.85], rot: [s * 0.42, 0, 0] })),
+    ...[1, -1].flatMap((s) => [-1.6, -0.8, 0, 0.8, 1.6].map((x) => P.box(0.07, 0.07, 1.95, WOOD_DARK, { at: [x, 2.66, s * 0.84], rot: [s * 0.42, 0, 0] }))),
     P.box(4.3, 0.12, 0.12, WOOD_DARK, { at: [0, 3.1, 0] }),
+    // The roof's front edge: a wooden fascia with a row of little pastel lights hanging along it.
+    P.box(4.3, 0.1, 0.05, WOOD_DARK, { at: [0, 2.32, -1.78] }),
+    ...Array.from({ length: 11 }, (_, i) => {
+      const x = -1.9 + i * 0.38
+      return P.sphere(0.045, ['#FFE27A', '#FFB3CF', '#BFE6FA', '#C9F0DC'][i % 4], { at: [x, 2.2 - Math.sin((i / 10) * Math.PI) * 0.1, -1.8] }, 8)
+    }),
     // The high table and the two tall stools.
     P.cyl(0.3, 0.3, 0.05, WOOD, { at: [HIGH_TABLE[0], HIGH_TABLE[1] - 0.025, HIGH_TABLE[2]] }, 18),
     P.cyl(0.04, 0.06, HIGH_TABLE[1] - 0.05, WOOD_DARK, { at: [HIGH_TABLE[0], (HIGH_TABLE[1] - 0.05) / 2, HIGH_TABLE[2]] }, 8),
