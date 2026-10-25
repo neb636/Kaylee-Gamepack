@@ -11,7 +11,7 @@ import { roadSfx as sfx } from './sounds'
 interface Props {
   road: RoadId
   onRoad: (r: RoadId) => void
-  onStop?: (road: RoadId) => void
+  onStop?: (road: RoadId, stop?: string) => void
 }
 
 const LANDMARK = { temple: '🛕', mushrooms: '🍄', cafe: '☕', viewpoint: '⛰️' } as const

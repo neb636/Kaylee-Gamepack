@@ -4,7 +4,9 @@
 // (mushrooms?round=1|2|3|pizza&basket=<what she picked>, step 2): mist the sawdust bags, pick into the basket (pink
 // and gold in round 3), then top the mushroom pizza with her basket; and Kaylee's rice farm under Stop Time Cafe
 // (rice?round=plant|grow|harvest|thresh|deck, step 3): lead Kaylee through the paddies to plant them, shoo the birds
-// while it grows, cut the golden rice, bang out the grains, then the pink milk and Mommy's photo on the deck. The rental desk, the Nan map, the other two stops, the 3 from
+// while it grows, cut the golden rice, bang out the grains, then the pink milk and Mommy's photo on the deck; and Bo Kluea's salt wells (salt?round=1|2|3,
+// step 4): dip the bucket in the well and pour the brine into the big pan, feed the fire till it boils down, scrape
+// the salt into her basket. The rental desk, the Nan map, the temple, the 3 from
 // above and home come with their own greyboxes, each adding its section here. Loaded at startup: keep three.js out
 // of this file.
 import { defineSections } from '../../../../kit/sections'
@@ -22,6 +24,7 @@ const NAN_SECTIONS = defineSections('thailand', 'nan-trip', {
     { id: 'drive', name: 'The mountain road: steer the silver Pajero', params: ['road'] },
     { id: 'mushrooms', name: 'Baan Huanam Mushroom Farm: mist the bags, pick the mushrooms, top the pizza', params: ['round', 'basket'] },
     { id: 'rice', name: "Kaylee's rice farm: plant the paddies, shoo the birds, cut the rice, the café's deck", params: ['round'] },
+    { id: 'salt', name: 'Bo Kluea salt wells: dip and pour the brine (round 1), feed the fire (2), scrape the salt into the basket (3)', params: ['round'] },
   ],
 })
 export default NAN_SECTIONS

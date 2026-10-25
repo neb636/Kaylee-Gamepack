@@ -312,6 +312,10 @@ steps her hands just did.
   water away leaves the salt behind. Facts: people in Bo Kluea have made salt this way for hundreds of years.
 - **Payoff:** a heaped basket of white salt she made, and a shelf of full bags.
 - **Camera:** inside the open-sided salt hut, side view: the well on the left, the pan and fire on the right.
+- **As built (greybox, 2026-10-25):** the bucket hangs on a rope from a ring that slides along a bamboo beam over the
+  well and the pan, so her finger can take it anywhere in the hut (a pole that only tips couldn't reach the pan). The
+  fire is a drag too (a log from the woodpile into the fire's mouth), and round 3 looks down into the pan. One verb in
+  her hands all the way: grab a thing and move it (the bucket, a log, the paddle).
 
 ### The "3" road (`three`; counting)
 
@@ -445,7 +449,7 @@ activities/nan-trip/
 3. **Greybox: Stop Time Cafe** (`rice`). First try PR #168 (not merged); rebuilt per `nan-rice.md` in two greyboxes
    (A: the farm and the core verb; B: thresh, the deck and the video). Its look (step 8) and voices (step 9) done
    ahead of the rest, 2026-10-25 (see `nan-rice.md`, "What's built").
-4. **Greybox: Bo Kluea salt** (`salt`).
+4. **Greybox: Bo Kluea salt** (`salt`). *Built 2026-10-25 (see "What's built" below).*
 5. **Greybox: Wat Phumin** (`temple`).
 6. **Greybox: the Nan map and the rental desk** (`map`, `rental`), and the `three` viewpoint.
 7. **The trip loop:** the `TripDef` (fly to Nan, the silver Pajero), the third invite choice, the photo wall (no
@@ -536,12 +540,51 @@ places: the mushroom house and, 8 m along, the farm's table outside (the camera 
   gold and went to the table, the pizza took 9 mushrooms, baked and shared all 6 slices, with no errors. 110-140 draw
   calls, 150-215k triangles.
 
+**Step 4, Bo Kluea's salt wells greybox (2026-10-25).** `#/world/thailand/nan-trip/salt?round=1|2|3`, in `salt/`
+(`layout.ts` the hut in meters, `hut.ts` the shapes, `salt3d.ts` the world, `Salt.tsx` the screen, `sounds.ts`). Shapes
+in the toon look, no voices, no art. The sky road's end card now has a 🧂 beside the 🌾 (the sky road comes down
+between the café and the salt wells; `STOP_AT` takes a list and `onStop` gets the stop's id); the salt's end card takes
+the 3 road, which starts at Bo Kluea.
+- **The hut:** an open-sided hut on an earth floor; the well's round wall of stones on the left; the big shallow pan
+  on its mud stove on the right, with the fire's mouth in front and a chimney behind; a bamboo beam on two posts over
+  both, with the bucket on a rope from a little ring that slides along it; the shelf for the salt bags at the back,
+  Kaylee's pink-rimmed salt basket, the woodpile, a stack of drying baskets, the cat by the fire, the rooster behind;
+  across the wet road a wooden house with the Tai Lue couple painted on it (drawn on a canvas in our flat style, he
+  whispering in her ear), trees and hills, and a scooter that putters past now and then. Mommy and Daddy watch; the
+  salt aunty (a pony in a sun hat and an apron, my placeholder pick like the mushroom farm's buffalo) stands by the pan.
+- **The toy, the bucket:** a held finger anywhere pulls the bucket there (it follows a little behind, heavier when
+  full, and swings on its rope). Down into the well: a deep splash, glug glug, full, a creak. Lowered over the pan it
+  tips and pours (a stream, sloshes climbing as the pan fills); lowered anywhere else it pours there (a splash on the
+  floor, Daddy's foot: he hops and laughs; the cat: she jumps and shakes). It can't go through the well's rim or the
+  pan's side. Kaylee trots along the front a little to the left of it, her arm up. A tap on the well dips it for
+  her, a tap on the pan or the bucket fetches a bucketful and pours it.
+  1. Six buckets fill the pan (a run of bells, the aunty hops and lights the fire).
+  2. The fire: drag a log from the woodpile (or tap the pile) and it flies into the fire's mouth (flames up, sparks,
+     crackles, smoke from the chimney); a finger held on the fire blows on it. It dies down slowly. The bigger it is,
+     the more the brine bubbles and steams and the faster it boils down; the brine turns white and salt grows in from
+     the pan's edges (a shimmer when the first shows). Brine poured in now raises it again. No log for 9 s with a low
+     fire and the aunty throws one on. Kaylee stands beside the fire's mouth. Tap a puff of steam: pop.
+  3. Salt: the camera looks down into the pan (the roof and the beam hide), full of 66 little heaps of salt. Kaylee
+     holds the long paddle (its handle runs from the blade to her hands); the blade jumps to her finger and scrapes up
+     the salt it passes over, heaping it on the blade; let go and it finishes its stroke and tips into her basket (it
+     tips by itself when it holds 8). A tap on the pan sweeps a stripe there. At 85% the aunty sweeps up the rest, the
+     basket heaps up and sparkles, four bags hop onto the shelf one by one, everyone cheers, the end card.
+- **Silly and pokes:** tap Kaylee once she has touched the brine and she licks her finger (eyes squeeze, mouth
+  puckers, head shakes, "blehh", Daddy laughs); the aunty laughs, the cat stretches (mrrp), the rooster crows, the
+  baskets wobble, the painted couple sparkles (a chime), the well echoes, the woodpile clunks, Mommy waves.
+- **Hints:** the 👆 points at the well (or the pan with a full bucket), the woodpile (or the fire when it's big), and
+  the thickest salt left; that tap target glows after 5 s.
+- QA: `qa-screens` (`nan-salt-1|2|3`), `qa-motion` (`nan-bucket`, `nan-scrape`), `qa-pacing` (`nan-salt`, taps only:
+  it doesn't get through, a bucket takes 3 s). A robot in WebKit (iPad landscape and portrait) dragged six buckets,
+  fed the fire and scraped the pan through to the bags and the end card with no errors, about 35 touches (a child
+  will take more), about a minute of robot play.
+
 **Not yet (later steps):** the family in the car (Daddy's "Whoa!", Mommy's lines, Sparkle's), the wipers, the
 dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero.
 
-**Next:** Dad plays the mushroom farm on the iPad (`mushrooms`, then `?round=2`, `?round=3`, `?round=pizza`). If misting
-isn't fun yet, change the toy (the spray's reach and speed, how big the clumps get, the pull to pick) before step 3.
-Then step 3, the Stop Time Cafe greybox (`rice`).
+**Next:** Dad plays the salt wells on the iPad (`salt`, then `?round=2`, `?round=3`). If carrying the bucket isn't fun
+yet, change the toy (how it follows and swings, how low it has to go to tip, how many buckets) before its look and
+voices. Wat Phumin (step 5) is being built in another session; then step 6, the Nan map and the rental desk.
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 

@@ -1284,6 +1284,51 @@ GAME_SCENARIOS.push(
   },
 )
 
+// Bo Kluea's salt wells (greybox): the bucket, the core verb. A held finger takes the bucket down into the well (splash,
+// glug), lifts it full (it swings on its rope), carries it over the pan and lowers it so it tips and pours; then in
+// round 3 the finger drags the paddle's blade through the salt toward her and lets go over the basket.
+const saltReady = async (page, base, round) => {
+  await page.goto(`${base}#/world/thailand/nan-trip/salt?round=${round}`)
+  await page.waitForFunction(() => window.__thaiNanQA?.().game === 'salt', null, { timeout: 30000 })
+  await page.waitForTimeout(1200)
+}
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-bucket',
+    seconds: 9,
+    setup: (page, base) => saltReady(page, base, '1'),
+    act: async (page) => {
+      const p = (await page.evaluate(() => window.__thaiNanQA())).points
+      await page.mouse.move(...p.well)
+      await page.mouse.down()
+      await page.mouse.move(p.wellDeep[0], p.wellDeep[1] + 40, { steps: 12 })
+      await page.waitForTimeout(1100)
+      await page.mouse.move(p.well[0], p.well[1] - 160, { steps: 14 })
+      await page.waitForTimeout(400)
+      await page.mouse.move(p.panLow[0], p.pan[1] - 160, { steps: 18 })
+      await page.waitForTimeout(300)
+      await page.mouse.move(p.panLow[0], p.panLow[1] + 20, { steps: 10 })
+      await page.waitForTimeout(1500)
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'nan-scrape',
+    seconds: 7,
+    setup: (page, base) => saltReady(page, base, '3'),
+    act: async (page) => {
+      const p = (await page.evaluate(() => window.__thaiNanQA())).points
+      for (const dx of [-120, 0, 120]) {
+        await page.mouse.move(p.saltBack[0] + dx, p.saltBack[1])
+        await page.mouse.down()
+        await page.mouse.move(p.saltFront[0] + dx, p.saltFront[1], { steps: 16 })
+        await page.mouse.up()
+        await page.waitForTimeout(900)
+      }
+    },
+  },
+)
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {
