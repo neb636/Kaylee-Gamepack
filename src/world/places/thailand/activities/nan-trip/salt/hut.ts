@@ -7,7 +7,7 @@ import { CanvasTexture, CylinderGeometry, Group, IcosahedronGeometry, InstancedM
 import { buildAnimal, type Rig } from '../../../characters/animal'
 import type { Look } from '../../../characters/looks'
 import type { Bag } from '../../../engine/dispose'
-import { blobShadow, merge, P, solid } from '../../../engine/geo'
+import { bake, blobShadow, merge, P, solid } from '../../../engine/geo'
 import { PAL, toon } from '../../../engine/toon'
 import {
   AUNTY_AT,
@@ -205,21 +205,26 @@ export function buildHut(bag: Bag): Hut {
   // ---- The bucket: a wooden bucket with two bands and a handle; brine inside it (it rises as it fills) ----
   const bucket = new Group()
   bucket.userData.pick = 'bucket'
+  // Open at the top, so the brine shows rising inside it (the outer wall, its bands and handle, outlined).
   bucket.add(
     solid(
       merge([
-        P.cyl(BUCKET.r, BUCKET.r * 0.86, BUCKET.h, '#C9965E', {}, 16),
+        bake(new CylinderGeometry(BUCKET.r, BUCKET.r * 0.86, BUCKET.h, 16, 1, true), '#C9965E'),
         ...[-0.08, 0.09].map((y) => P.torus(BUCKET.r * (y > 0 ? 1.0 : 0.93), 0.012, '#7E6A86', { at: [0, y, 0], rot: [Math.PI / 2, 0, 0] })),
+        P.torus(BUCKET.r - 0.006, 0.012, '#B8874F', { at: [0, BUCKET.h / 2, 0], rot: [Math.PI / 2, 0, 0] }),
         P.torus(BUCKET.r * 0.95, 0.012, '#7E6A86', { at: [0, BUCKET.h / 2, 0] }, Math.PI),
       ]),
       bag,
       2,
     ),
   )
-  const inside = new Mesh(bag.add(new CylinderGeometry(BUCKET.r - 0.02, BUCKET.r - 0.02, 0.012, 16)), bag.add(new MeshBasicMaterial({ color: '#5B4A5E' })))
-  inside.position.y = BUCKET.h / 2 - 0.004
-  bucket.add(inside)
-  const bBrine = new Mesh(bag.add(new CylinderGeometry(BUCKET.r - 0.025, BUCKET.r - 0.03, 0.012, 16)), bag.add(new MeshBasicMaterial({ color: BRINE })))
+  // The inside: a darker wall facing in (mirrored, so its faces point inward) and the bottom, both without outlines.
+  const inner = new Mesh(
+    bag.add(merge([bake(new CylinderGeometry(BUCKET.r - 0.012, BUCKET.r * 0.86 - 0.012, BUCKET.h - 0.004, 16, 1, true), '#9C6E45', { scale: [-1, 1, 1] }), P.cyl(BUCKET.r * 0.86 - 0.012, BUCKET.r * 0.86 - 0.012, 0.01, '#6E4E46', { at: [0, -BUCKET.h / 2 + 0.02, 0] }, 16)])),
+    toon('#ffffff', true),
+  )
+  bucket.add(inner)
+  const bBrine = new Mesh(bag.add(new CylinderGeometry(BUCKET.r - 0.035, BUCKET.r - 0.035, 0.012, 16)), bag.add(new MeshBasicMaterial({ color: BRINE })))
   bBrine.visible = false
   bucket.add(bBrine)
   root.add(bucket)
