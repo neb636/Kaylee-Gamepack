@@ -117,9 +117,13 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588). Files: `kaylee-rig.gl
   from inside the Thailand folder, never from `meta.ts` / `sections.ts`). `buildModelRig` clones it and maps the named
   nodes onto a `Rig`, so `Avatar` (`new Avatar(bag, model)`) walks, poses, waves and wears outfits unchanged.
 - **Look:** each mesh's texture goes on a `MeshToonMaterial` with the shared `toonGradient()`, and each piece gets an
-  ink hull, except the eye domes. A scanned-looking mesh needs a **smoothed hull** (`smoothHull`: Taubin smoothing of
-  the welded copy, then stood 4 mm off the surface): the plain `makeHull` zigzags along low-poly hair tips and bangs and
-  blotches in tight creases.
+  ink hull, except the eye domes. A scanned-looking mesh needs a **smoothed hull** (`smoothHull`): the plain `makeHull`
+  zigzags along low-poly hair tips and bangs and blotches in tight creases. It takes the normals from a Taubin-smoothed
+  copy but keeps the real surface, so the line hugs the shape (a smoothed hull sags below the bangs and leaves a gap
+  between hair and line). Only the face stays smoothed and stood 4 mm off, which keeps ink out of its dimples and eye
+  sockets. The hair's ink is drawn 7 mm nearer the camera (`outlineMaterial`'s `bias`), so the bangs keep their line
+  where they rest on the forehead; more than that brings ink up through the inside of the hair from the side. The flat
+  caps at the shoulder cut get no ink, so the sleeve reads as one piece.
 - **Blink:** Tripo paints the eye into the face texture and sculpts a glossy dome over it, so squashing `eyes` shows
   the painted eye through. `Rig.blink` (optional, used by `FaceLife`) lets the model draw its own blink: a cream lid
   grows down over each eye.

@@ -19,8 +19,12 @@ const vertexShader = /* glsl */ `
   uniform vec2 uRes;
   uniform float uPx;
   uniform float uScale;
+  uniform float uBias;
   void main() {
     vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    // Slid toward the camera along its own view ray (same spot on screen, only nearer), so a line where one piece
+    // rests on another (bangs on the forehead) isn't hidden by the surface it rests on.
+    mvPosition.xyz -= normalize(mvPosition.xyz) * uBias;
     vec4 clip = projectionMatrix * mvPosition;
     vec3 n = normalMatrix * normal;
     vec2 dir = (projectionMatrix * vec4(n, 0.0)).xy;
@@ -43,13 +47,14 @@ const fragmentShader = /* glsl */ `
 `
 
 const materials = new Map<string, ShaderMaterial>()
-/** One outline material per width and color, shared by every hull that uses it. */
-export function outlineMaterial(px: number, color: string = PAL.ink) {
-  const key = `${px}|${color}`
+/** One outline material per width, color and bias (meters the line is drawn nearer the camera), shared by every hull
+ *  that uses it. */
+export function outlineMaterial(px: number, color: string = PAL.ink, bias = 0) {
+  const key = `${px}|${color}|${bias}`
   let m = materials.get(key)
   if (!m) {
     m = new ShaderMaterial({
-      uniforms: { ...shared, uPx: { value: px }, uColor: { value: new Color(color) } },
+      uniforms: { ...shared, uPx: { value: px }, uColor: { value: new Color(color) }, uBias: { value: bias } },
       vertexShader,
       fragmentShader,
       side: BackSide,
@@ -80,5 +85,5 @@ export function makeHull(geometry: BufferGeometry, px: number) {
 /** Hot-pink outline while the mouse hovers something tappable (desktop), back to ink after. */
 export function setHullHighlight(hull: Mesh, on: boolean) {
   const px = hull.userData.hull as number | undefined
-  if (px !== undefined) hull.material = outlineMaterial(px, on ? PAL.hotpink : PAL.ink)
+  if (px !== undefined) hull.material = outlineMaterial(px, on ? PAL.hotpink : PAL.ink, hull.userData.hullBias ?? 0)
 }
