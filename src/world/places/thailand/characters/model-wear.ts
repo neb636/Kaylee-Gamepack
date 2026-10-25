@@ -10,7 +10,7 @@
 // eyes (head-local y 0.148, center z -0.02), the hair a dome of 0.30 (y 0.18, z -0.04); the dress centered at z 0.045,
 // shoulders at y 0.46, hem at 0.19; arms from (±0.11, 0.40, 0.04), hoof 0.184 out at 0.818 rad from straight down;
 // legs from hips at (±0.072, 0.16, 0.03), hooves below y 0.07.
-import { Group, LatheGeometry, SphereGeometry, Vector2, type BufferGeometry } from 'three'
+import { CatmullRomCurve3, Group, LatheGeometry, SphereGeometry, TubeGeometry, Vector2, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../engine/dispose'
 import { bake, P, solidMix, type V3 } from '../engine/geo'
 import { buildWorn, SCRUBS, SCRUBS_DARK, type Frame, type Wardrobe, type Worn } from './animal'
@@ -91,8 +91,9 @@ function onTunic(x: number, y: number): number {
 /** A point `d` along her arm from the shoulder (arm-local, `s` -1 left, 1 right). */
 const along = (s: number, d: number): V3 => [s * Math.sin(ARM) * d, -Math.cos(ARM) * d, 0]
 
-/** A short sleeve over the top of her arm. */
-const sleeve = (s: number, color: string) => P.sphere(0.047, color, { at: along(s, 0.04), rot: [0, 0, s * ARM], scale: [1, 1.25, 1] })
+/** A short sleeve over the top of her arm, from over the shoulder cap (which rises 0.04 above the pivot) to past her
+ *  dress's own sleeve. */
+const sleeve = (s: number, color: string) => P.capsule(0.049, 0.07, color, { at: along(s, 0.015), rot: [0, 0, s * ARM] })
 
 /** Groups for whatever has parts, with her line. */
 const group = (lined: Parts, plain: Parts, bag: Bag) => (lined.length || plain.length ? solidMix(lined, plain, bag, PX) : null)
@@ -127,6 +128,36 @@ function scrubCap(bag: Bag) {
   return solidMix([dome, rim], dots, bag, PX)
 }
 
+/** How far her hair reaches out from the headband's center, every 15° round from the front toward her left (+x), in
+ *  the band's tipped plane (measured on kaylee.glb, the braid and streaks included). Not round: furthest at the front
+ *  where her bangs and the pink lock stand out, small at the back. */
+const BAND_R = [0.306, 0.307, 0.302, 0.286, 0.273, 0.267, 0.26, 0.247, 0.244, 0.241, 0.22, 0.209, 0.205, 0.21, 0.22, 0.241, 0.244, 0.248, 0.26, 0.268, 0.29, 0.306, 0.302, 0.308]
+
+/** The red Muay Thai headband (mongkhon), made for her: a band that follows her hair all the way round over the top
+ *  of her bangs (a round one sinks into her hair at the sides and goes under the pink lock), its two tails hanging
+ *  down at the back, and a gold bead in front. */
+function mongkhon(bag: Bag) {
+  // Up on the round part of her hair, across the top of her bangs (lower down, her bob flares out and it reads as a
+  // hoop).
+  const center = new Vector3(0, 0.33, -0.04)
+  const tilt = 0.12
+  const tube = 0.022
+  const n = BAND_R.length
+  const at = (i: number, out: number) => {
+    // Never dip between two measured spokes: each takes the bigger of itself and its neighbours' average.
+    const r = Math.max(BAND_R[i % n], (BAND_R[(i + n - 1) % n] + BAND_R[(i + 1) % n]) / 2) + out
+    const th = (i / n) * Math.PI * 2
+    return new Vector3(Math.sin(th), -Math.cos(th) * Math.sin(tilt), Math.cos(th) * Math.cos(tilt)).multiplyScalar(r).add(center)
+  }
+  const ring = Array.from({ length: n }, (_, i) => at(i, tube + 0.004))
+  const band = bake(new TubeGeometry(new CatmullRomCurve3(ring, true), 96, tube, 10, true), '#E8403F')
+  const back = at(n / 2, tube + 0.01)
+  const tails = [-1, 1].map((s) => P.capsule(0.016, 0.09, '#E8403F', { at: [s * 0.03, back.y - 0.06, back.z - 0.012], rot: [-0.35, 0, s * 0.3], scale: [1.4, 1, 0.6] }))
+  const front = at(0, tube * 2 + 0.006)
+  const bead = P.sphere(0.018, '#FFC83D', { at: [front.x, front.y, front.z] })
+  return solidMix([band, ...tails], [bead], bag, PX)
+}
+
 export function modelWardrobe(armTilt: number): Wardrobe {
   return {
     // Up on her hair, above the bangs, tipped back.
@@ -135,11 +166,10 @@ export function modelWardrobe(armTilt: number): Wardrobe {
       const look = LOOKS.kaylee
       if (id === 'sunglasses') return buildWorn(look, id, bag, FACE, PX)
       if (id === 'scrub-cap') return { head: scrubCap(bag), body: null, armL: null, armR: null }
-      if (id === 'sunhat' || id === 'spare-hat' || id === 'chef-hat' || id === 'mongkhon') {
+      if (id === 'mongkhon') return { head: mongkhon(bag), body: null, armL: null, armR: null }
+      if (id === 'sunhat' || id === 'spare-hat' || id === 'chef-hat') {
         const w = buildWorn(look, id, bag, HAIR, PX)
         w.head!.position.z = HAIR_Z
-        // Her hair is narrower side to side than front to back where the headband goes round it.
-        if (id === 'mongkhon') w.head!.scale.x = 0.88
         return w
       }
       const body: Parts = []

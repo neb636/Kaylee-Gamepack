@@ -142,7 +142,9 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
   torso, so on her they land wrong (sunglasses on the bangs, floaties on her tummy, a headband through her hair).
   Hats and sunglasses reuse `animal.ts`'s recipes with a `Frame` measured on her (the hair dome for hats, the face for
   the glasses); the scrub cap is her own dome (the code-built one is a whole squashed ball that bulges over her
-  forehead). Clothes are turned on a lathe around her dress (`shell`), and arm and leg things sit along her own arm
+  forehead), and the mongkhon is a tube through her hair's measured outline (`BAND_R`: not round, the bangs and the pink
+  lock stand out in front), so it neither sinks into her hair nor goes under a lock. Sleeves start above the arm pivot:
+  the shoulder cap rises 4 cm above it and the dress's own sleeve shows there otherwise. Clothes are turned on a lathe around her dress (`shell`), and arm and leg things sit along her own arm
   (47° out, in the forward-tilted arm frame) and on the leg pivots, so the trousers follow her legs when she sits.
   Measure a new model the same way (read the GLB's vertices: cross-sections of the body, the hair and the arm) before
   fitting its clothes.
