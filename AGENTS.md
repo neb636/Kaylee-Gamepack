@@ -350,8 +350,8 @@ the country's `known-issues.md` (Thailand has one) instead of growing the PR.
 1. `npm run verify` must pass (voice-clip check, heavy-import check, typecheck, build; about 2 minutes). If you changed
    spoken lines, run `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs` first and commit the clips.
 2. **Do not run `npm run test`, `npm run tap-around` or `npm run check` locally.** CI runs the Playwright specs on the PR
-   (`tap-around` only for the countries you touched, everything when shared code changed). After opening the PR, report
-   and stop; don't wait for CI. If CI is red, read `gh run view --log-failed`, check whether the same spec fails on
+   (`tap-around` only for the countries you touched, everything when shared code changed). After opening the PR, start the
+   Codex review watcher (`open-pr` skill, step 4), then report and stop; don't wait for CI. If CI is red, read `gh run view --log-failed`, check whether the same spec fails on
    `main`, then fix only that spec. To run just what your branch affects, `npm run test:changed` (opt-in).
 3. **New activities get no bespoke e2e spec.** `tests/sections.spec.ts` and `tests/tap-around.spec.ts` discover
    every section by themselves and only fail on exceptions, so UI tweaks don't break them. A bespoke spec is for a
