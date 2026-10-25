@@ -2,7 +2,7 @@
 // WebKit is the default because Kaylee's iPad runs Safari; pass --chromium to compare.
 import { chromium, webkit } from '@playwright/test'
 import { spawn } from 'node:child_process'
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import sharp from 'sharp'
@@ -37,6 +37,36 @@ const alive = (pid) => {
   }
 }
 
+const readInfo = (dir) => {
+  try {
+    return JSON.parse(readFileSync(path.join(dir, 'info'), 'utf8'))
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Takes over a slot whose owner (deadPid) is gone. Renaming is atomic, so of several waiters only one wins; the
+ * winner checks what it moved really was the dead lock (a delayed waiter may have grabbed a fresh one) and puts it back if not.
+ */
+function reclaim(dir, deadPid) {
+  const moved = `${dir}.${process.pid}.stale`
+  try {
+    renameSync(dir, moved)
+  } catch {
+    return // someone else reclaimed it first
+  }
+  if (readInfo(moved)?.pid !== deadPid) {
+    try {
+      renameSync(moved, dir)
+      return
+    } catch {
+      /* the slot was re-taken meanwhile; fall through and drop our copy */
+    }
+  }
+  rmSync(moved, { recursive: true, force: true })
+}
+
 /**
  * At most SLOTS QA runs at a time on this machine, across every worktree and agent: WebKit is CPU-heavy, so more
  * parallel runs time each other out. Waits for a free slot; a slot left by a dead process is taken over.
@@ -51,20 +81,24 @@ async function acquireSlot() {
       try {
         mkdirSync(dir)
         writeFileSync(path.join(dir, 'info'), JSON.stringify({ pid: process.pid, cwd: root, script: path.basename(process.argv[1] ?? '') }))
-        const release = () => rmSync(dir, { recursive: true, force: true })
-        process.once('exit', release)
+        let released = false
+        const release = () => {
+          if (released) return
+          released = true
+          process.removeListener('exit', release)
+          // Only remove our own lock: a successor may already hold this slot.
+          if (readInfo(dir)?.pid === process.pid) rmSync(dir, { recursive: true, force: true })
+        }
+        process.on('exit', release)
         for (const sig of ['SIGINT', 'SIGTERM']) process.once(sig, () => process.exit(1))
         return { slot, release }
       } catch (e) {
         if (e.code !== 'EEXIST') throw e
       }
-      try {
-        holder = JSON.parse(readFileSync(path.join(dir, 'info'), 'utf8'))
-      } catch {
-        continue // its owner is still writing the info
-      }
+      holder = readInfo(dir)
+      if (!holder) continue // its owner is still writing the info
       if (!alive(holder.pid)) {
-        rmSync(dir, { recursive: true, force: true })
+        reclaim(dir, holder.pid)
         slot-- // try this slot again
       }
     }
