@@ -1,10 +1,10 @@
-// Is Baan Chang on the trip yet (plan: thailand/baan-chang.md, "Hidden until it's ready")? While it's off, Krabi has no
-// signpost (the songthaew goes straight to the pier), the pier and the replay offer no 🐘 and the boarding pass has no
-// 🐘, but every Baan Chang section link still works. `?chang=1` in a link turns it on to try the whole way round. The
-// full-loop PR sets it to true. Loaded at startup: no three.js here.
+// Is Baan Chang on the trip (plan: thailand/baan-chang.md, "Hidden until it's ready")? On since the full loop: Krabi has
+// the signpost (🐘 or 🚤, either first), the pier and the replay offer 🐘 and the boarding pass has 🐘. Set it to false
+// to hide it again (every Baan Chang section link still works, and `?chang=1` turns it back on to try). Loaded at
+// startup: no three.js here.
 import { flag } from '../../../engine/flags'
 
-export const CHANG_OPEN = false
+export const CHANG_OPEN = true
 
 /** Read once when the trip mounts (the address bar drops `chang=1` as she plays). */
 export const changOpen = () => CHANG_OPEN || flag('chang') === '1'

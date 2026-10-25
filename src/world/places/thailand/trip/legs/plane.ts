@@ -1110,8 +1110,9 @@ export class PlaneRide extends Stage {
     const k = clamp(go / TO_FORK_S)
     const x = a.curbX + (a.forkX - a.curbX) * k * k * (3 - 2 * k)
     let rolled = x - a.curbX
-    if (k < 1) st.root.position.x = x
-    else if (this.forkWait < 0) {
+    // (Also on the frame it gets there: ⏩ jumps the drive straight to its end.)
+    if (k < 1 || this.forkWait < 0) st.root.position.x = x
+    if (k >= 1 && this.forkWait < 0) {
       this.forkWait = 0
       if (this.fork === 'chang') this.forkGo = 'chang'
       else if (!this.forkGo) {
@@ -1121,8 +1122,11 @@ export class PlaneRide extends Stage {
     }
     const moving = k > 0 && k < 1
     if (this.forkWait >= 0) {
-      if (!this.forkGo) this.forkWait += dt
-      else {
+      if (!this.forkGo) {
+        this.forkWait += dt
+        // Still deciding a while later: Sparkle says it's her pick (once).
+        if (this.forkWait > 9 && this.forkWait - dt <= 9 && this.time - this.lastTouch > 6) this.events.say(L.chang.hint.fork)
+      } else {
         this.forkT += dt
         const t = this.forkT
         if (this.forkGo === 'chang') {
@@ -1155,6 +1159,7 @@ export class PlaneRide extends Stage {
     sfx.toot()
     this.riders.kaylee.react('hop')
     this.riders.nick.react('wave')
+    this.events.say(L.bay.pai)
   }
 
   // ---------------------------------------------------------------- camera, anchors

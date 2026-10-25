@@ -26,9 +26,11 @@
 //   splash     full and happy, they dip their trunks in the trough and spray it up over the family, under a rainbow.
 //              A tap on an elephant: another spray. Daddy's photo of it drops into the album, then Khanom's sticker
 //              flies in, and the way on shows (BoatTrip: 🚤 to the pier if she hasn't been, else ✈️🏠).
-// No voices yet (greybox).
+// Talk (lines.ts L.chang): Daddy and Mommy react in their own voices, Sparkle says each elephant's name and nickname
+// the first time it eats, what's new (the wishes, Lamyai, the splash), counts a wish of three, and after ~8 s with
+// nothing done says what to do next (stuckLine).
 import { Color, Vector3, type Object3D, type PerspectiveCamera, type WebGLRenderer } from 'three'
-import { bell, clamp, pick, sounds } from '../../../../../../sdk'
+import { bell, clamp, pick, sounds, speakingVoice, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
@@ -66,6 +68,12 @@ const ARRIVE_S = 3.0
 const SPLASH_PHOTO = 2.6
 const SPLASH_STICKER = 4.8
 const SPLASH_ONWARD = 6.6
+/** Nothing done for this long: Sparkle says what to do (again after STUCK_EVERY, at most STUCK_MAX times a section). */
+const STUCK_S = 8
+const STUCK_EVERY = 20
+const STUCK_MAX = 3
+/** Sparkle counts a wish of three: "One! Two! Three!" (the race's countdown clips). */
+const COUNT = [L.race.count[2], L.race.count[1], L.race.count[0]]
 /** One spray in the splash: dip, lift, spray, rest (seconds into its cycle). */
 const DIP = 0.9
 const LIFT = 1.4
@@ -224,6 +232,11 @@ export class Chang extends Stage {
   private frondFrom = new Vector3()
   private shakeCrown = true
   private lastLead = 0
+  /** Lines said once (the names, what's new), a finger on the screen, and Sparkle's hints this section. */
+  private told = new Set<string>()
+  private down = false
+  private lastStuck = -99
+  private stuckN = 0
 
   constructor(
     renderer: WebGLRenderer,
@@ -232,6 +245,8 @@ export class Chang extends Stage {
     packed: string[],
     fed: number,
     straw: StrawColor,
+    /** Where the splash's way on goes (🚤 if she hasn't been on the boat yet), for Sparkle's hint there. */
+    private after: 'pier' | 'home' = 'pier',
   ) {
     super(renderer, events)
     const { scene, bag } = this
@@ -297,6 +312,7 @@ export class Chang extends Stage {
       put: (id, x, z, face) => this.put(this.riders[id], x, 0, z, 'stand', face),
       later: (ms, fn) => this.later(ms, fn),
       ready: () => this.events.ready(true),
+      say: (l) => this.events.say(l),
       straw: (c) => {
         this.straw = c
         this.milk.setStraw(c)
@@ -344,6 +360,13 @@ export class Chang extends Stage {
   private later(ms: number, fn: () => void) {
     setTimeout(() => !this.disposed && fn(), ms)
   }
+  /** Says it the first time only. A family reaction (`now`) is dropped while Sparkle talks, rather than heard late. */
+  private once(key: string, l: Line, now = false) {
+    if (this.told.has(key)) return
+    if (now && speakingVoice() === 'sparkle') return
+    this.told.add(key)
+    this.events.say(l)
+  }
 
   // ---------------------------------------------------------------- the sections
 
@@ -354,18 +377,27 @@ export class Chang extends Stage {
     this.since = this.time
     this.stepFed = 0
     this.moving = false
+    this.stuckN = 0
+    this.lastStuck = -99
     if (!first) this.events.section(s)
     this.show(AREA_OF[s])
-    if (s === 'chang') this.driveIn()
+    if (s === 'chang') {
+      this.driveIn()
+      this.later(1200, () => this.at === 'chang' && this.once('arrive', L.chang.arrive))
+    } else if (s === 'drinks') this.later(700, () => this.at === 'drinks' && this.once('drink', L.chang.drink))
     else if (s === 'sign') {
       if (first) this.atSign()
       this.later(first ? 900 : 300, () => this.at === 'sign' && this.events.say(L.bay.pose))
     } else if (s === 'boardwalk') this.ontoBoardwalk()
     else if (s === 'feed' && was === 'boardwalk' && !first) this.walkOver()
     else if (AREA_OF[s] === 'yard' && !first && AREA_OF[was] !== 'yard') this.atRail()
-    if (s === 'favorites') {
+    if (s === 'feed') {
+      // Daddy holds out the basket (Sparkle's "Hold it up to a trunk!" comes only if nothing is touched: stuckLine).
+      this.later(was === 'boardwalk' && !first ? 1400 : 700, () => this.at === 'feed' && this.once('bananas', L.chang.bananas))
+    } else if (s === 'favorites') {
       this.round = 1
       this.drawRound()
+      this.later(700, () => this.at === 'favorites' && this.once('wants', L.chang.wants))
     } else if (s === 'lamyai') {
       // Lamyai sets off from the sala; the other two get new wishes.
       const lam = this.eater('lamyai')
@@ -373,6 +405,7 @@ export class Chang extends Stage {
       lam.t = 0
       for (const id of ['mali', 'khanom'] as const) this.newWant(this.eater(id))
       this.later(900, () => this.sitDaddy(false))
+      this.later(600, () => this.at === 'lamyai' && this.once('lamyai', L.chang.lamyai))
     } else if (s === 'splash') {
       // Full: whatever is in hands and trunks goes back in the basket, and they start spraying, one after another.
       if (this.held) this.basket.putBack(this.held.food)
@@ -393,6 +426,7 @@ export class Chang extends Stage {
         sfx.trumpet()
         this.riders.kaylee.react('hop')
       }
+      this.later(first ? 600 : 900, () => this.at === 'splash' && this.once('splash', L.chang.splash))
     }
   }
 
@@ -531,6 +565,8 @@ export class Chang extends Stage {
         }
         lead(tags.ji, 1.05, 0.3)
         lead(tags.nick, 1.95, -0.25)
+        // Near the steps, the elephants come into view (on every screen shape).
+        if (p.x < WALK.x0 + (WALK.x1 - WALK.x0) * 0.3) this.once('look', L.chang.look)
         if (p.x < WALK.x0 + 0.15) this.begin('feed')
       } else if (!tags.ji.walking && !tags.nick.walking && !k.walking) {
         this.tags = null
@@ -699,6 +735,7 @@ export class Chang extends Stage {
 
   pointerDown(x = 0, y = 0, id?: string) {
     super.pointerDown()
+    this.down = true
     const what = id ?? this.pick(x, y)
     if (this.at === 'drinks') {
       if (what?.startsWith('tool:')) this.touches++
@@ -751,6 +788,8 @@ export class Chang extends Stage {
   }
 
   pointerUp() {
+    this.down = false
+    this.lastTouch = this.time
     if (this.at === 'drinks') return this.cafe.up()
     const h = this.held
     if (!h || h.auto) return
@@ -866,6 +905,7 @@ export class Chang extends Stage {
   }
 
   protected step(dt: number, t: number) {
+    this.stuck()
     if (this.area === 'entry') return this.stepEntry(dt, t)
     if (this.at === 'drinks') {
       this.cafe.step(dt)
@@ -1016,6 +1056,7 @@ export class Chang extends Stage {
           x.here = true
           e.trumpet()
           sfx.trumpet()
+          this.once('hi', L.chang.hiLamyai, true)
           if (this.at === 'lamyai') this.newWant(x)
         }
         break
@@ -1083,6 +1124,7 @@ export class Chang extends Stage {
             x.mode = 'sip'
             x.t = 0
             sfx.slurp()
+            this.once('milk', L.chang.milk)
           }
         } else {
           this.milk.sip(dt)
@@ -1176,6 +1218,7 @@ export class Chang extends Stage {
           sfx.giggle()
           this.riders.kaylee.react('hop')
           this.riders.ji.react('wiggle')
+          if (this.sprays >= 2) this.once('wet', L.chang.wet, true)
         })
       }
       if (tipOf(x.e.trunk).y > base.y) this.splash.spray(tipOf(x.e.trunk), dt)
@@ -1241,6 +1284,11 @@ export class Chang extends Stage {
     this.fed++
     this.stepFed++
     this.events.fed(this.fed)
+    // Each one's name and nickname the first time it eats (Lamyai's comes as she walks over); Daddy on Khanom's second.
+    const firstBite = !this.told.has(`bite:${x.e.id}`)
+    this.told.add(`bite:${x.e.id}`)
+    if (firstBite && x.e.id !== 'lamyai') this.later(700, () => this.once(x.e.id, L.chang[x.e.id as 'mali' | 'khanom']))
+    else if (x.e.id === 'khanom' && this.told.has('khanom')) this.later(500, () => this.once('likes', L.chang.likes, true))
     // Kaylee bounces and giggles at every other bite.
     if (this.fed % 2 === 1) {
       this.riders.kaylee.react('hop')
@@ -1251,6 +1299,7 @@ export class Chang extends Stage {
     if (w && w.kind === f.kind && (this.at === 'favorites' || this.at === 'lamyai')) {
       w.left--
       sounds.note(Math.min(10, w.total - w.left + 2))
+      if (w.total === 3) this.events.say(COUNT[w.total - w.left - 1])
       x.bubble.set(w.kind, w.total, w.left)
       if (w.left <= 0) {
         x.want = null
@@ -1352,6 +1401,37 @@ export class Chang extends Stage {
     const c = this.riders[id.slice(7) as 'ji']
     if (!c) return null
     return { at: c.root.getWorldPosition(new Vector3()).setY(c.root.position.y + c.height * 0.55), r: c.height * 0.3, max: 120 }
+  }
+
+  /** After a while with nothing done, Sparkle says what to do here (a few times a section at most). */
+  private stuck() {
+    if (this.down || this.held || this.hopping || this.posing || this.riders.kaylee.walking || this.walkIn) return
+    // (In the splash, from when the way on shows: it's a show to watch until then.)
+    const from = this.at === 'splash' ? this.since + SPLASH_ONWARD : this.since
+    if (this.time - Math.max(this.lastTouch, from) < STUCK_S || this.time - this.lastStuck < STUCK_EVERY || this.stuckN >= STUCK_MAX) return
+    const l = this.stuckLine()
+    if (!l) return
+    this.lastStuck = this.time
+    this.stuckN++
+    this.events.say(l)
+  }
+  private stuckLine(): Line | null {
+    switch (this.at) {
+      case 'chang':
+        return null
+      case 'sign':
+        return this.photos === 0 ? L.bay.hint.pose : L.chang.hint.cup
+      case 'drinks':
+        return this.cafe.stuckLine()
+      case 'boardwalk':
+        return L.chang.hint.walk
+      case 'feed':
+        return L.chang.hint.hold
+      case 'splash':
+        return this.stuckN === 0 ? L.chang.hint.spray : this.after === 'pier' ? L.chang.hint.boat : L.home.fly
+      default:
+        return this.eaters.some((x) => x.want) ? L.chang.hint.want : L.chang.hint.hold
+    }
   }
 
   protected hintAt() {

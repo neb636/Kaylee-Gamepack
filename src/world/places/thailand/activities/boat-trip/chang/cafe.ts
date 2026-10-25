@@ -8,17 +8,18 @@
 //   - Stir: put the spoon in and go round and round; the ribbons swirl and melt into chocolate milk (clink, clink).
 //   - A straw: pink, purple or yellow, dropped in (another one swaps it). It rides along to the yard (`straw`).
 // A tap on any of them does it for her. Daddy's iced coffee is the optional second glass: ice cubes and the coffee pot,
-// then he takes it ("ahh", and brrr with ice). Anything goes in either glass. Once hers has milk, chocolate, a stir and
+// then he takes it ("Ahh! Thank you, Kaylee!", and brrr with ice). Anything goes in either glass. Once hers has milk, chocolate, a stir and
 // a straw, she has a sip and the 🐘 button (BoatTrip.tsx) takes them down to the elephants. Pokes: the glasses ring
 // like a xylophone, the bell on the counter dings.
 // The Chang world owns it: this is its scene, touch and frame while the section is `drinks`.
 import { Group, Mesh, MeshBasicMaterial, OctahedronGeometry, IcosahedronGeometry, Vector2, Vector3, type Object3D, type PerspectiveCamera } from 'three'
-import { bell, clamp, sounds } from '../../../../../../sdk'
+import { bell, clamp, sounds, type Line } from '../../../../../../sdk'
 import type { AnchorSpot } from '../../../trip/legs/stage'
 import type { Shot } from '../../../engine/camera'
 import type { Bag } from '../../../engine/dispose'
 import { merge, P, solid } from '../../../engine/geo'
 import { PAL } from '../../../engine/toon'
+import { L } from '../../../lines'
 import { Floaters } from '../../mall-trip/games/cafe/fx'
 import { cafeSfx as sfx } from '../../mall-trip/games/cafe/sounds'
 import { buildGlass, buildStraw, CHOC, chocBottle, coffeePot, COFFEE, counterBell, fillOf, iceBowl, iceCube, MILK_WHITE, milkJug, NOZZLE, pourInto, spoon, SPOON_KNOB, SPOUT, type Drink, type Glass } from './drink'
@@ -83,6 +84,8 @@ export interface CafeHost {
   /** Her drink is ready (the 🐘 shows), and she picked a straw. */
   ready(): void
   straw(c: StrawColor): void
+  /** Someone says something (Mommy's "Whoa! Too full!", Daddy's thank you). */
+  say(l: Line): void
 }
 
 const tmp = new Vector3()
@@ -381,6 +384,7 @@ export class Cafe {
     for (let i = 0; i < 40; i++) this.drops.emit(top, tmp.set((Math.random() - 0.5) * 0.9, 1.6 + Math.random() * 1.6, (Math.random() - 0.3) * 0.5), 0.9 + Math.random() * 0.4, 0.022 + Math.random() * 0.02, c)
     sfx.boing()
     sfx.splash(0.4)
+    if (this.fountains === 1) this.host.later(200, () => this.host.say(L.chang.full))
     this.host.later(250, () => {
       sfx.giggle()
       this.host.riders.kaylee.react('hop')
@@ -467,13 +471,13 @@ export class Cafe {
       this.host.riders.nick.react('hop')
       sfx.slurp()
       this.host.later(600, () => {
-        sfx.aah()
+        this.host.say(L.chang.coffee)
         if (dad.ice > 0)
-          this.host.later(500, () => {
+          this.host.later(1900, () => {
             sfx.brrr()
             this.host.riders.nick.react('wiggle')
           })
-        else this.host.later(400, () => sfx.haha())
+        else this.host.later(1900, () => sfx.haha())
       })
     })
   }
@@ -725,6 +729,13 @@ export class Cafe {
   shot(): Shot {
     const s = this.tall ? CAFE_SHOT.tall : CAFE_SHOT.wide
     return { center: new Vector3(...s.center), half: new Vector3(...s.half), yaw: s.yaw, pitch: s.pitch, minDist: 4 }
+  }
+
+  /** What Sparkle says after a while with nothing done: the next thing her drink needs, or off to the elephants. */
+  stuckLine(): Line {
+    const t = this.next()[0]
+    if (!t) return this.done ? L.chang.hint.go : L.chang.drink
+    return t === 'milk' ? L.chang.hint.milk : t === 'choc' ? L.chang.hint.choc : t === 'spoon' ? L.chang.hint.stir : L.chang.hint.straw
   }
 
   /** The next thing her drink needs (it glows after a while, and the finger points at it). */

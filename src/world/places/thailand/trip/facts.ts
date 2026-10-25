@@ -1,5 +1,6 @@
 // The boat trip's tap-to-hear facts (plan: "Tap-to-hear facts"), for the stamp screen and the passport: never
-// required, each a short line in Sparkle's voice (lines.ts). Ten, so they fit on the stamp screen. Pure data (meta.ts loads it at startup).
+// required, each a short line in Sparkle's voice (lines.ts). Ten, so they fit on the stamp screen (the fiddler crab is the
+// stamp's own sticker line, and the mudskipper's is in the album). Pure data (meta.ts loads it at startup).
 import { L } from '../lines'
 
 export const TRIP_FACTS = [
@@ -9,8 +10,8 @@ export const TRIP_FACTS = [
   { icon: '🏘️', label: 'Stilt village', say: L.bay.facts.village },
   { icon: '⚽', label: 'Floating field', say: L.bay.facts.football },
   { icon: '🛶', label: 'Hong', say: L.bay.facts.hong },
-  { icon: '🐟', label: 'Mudskipper', say: L.bay.stickers.mudskipper },
-  { icon: '🦀', label: 'Fiddler crab', say: L.bay.stickers.crab },
+  { icon: '🍌', label: 'Hungry elephants', say: L.chang.facts.eat },
+  { icon: '🌼', label: 'Nicknames', say: L.chang.facts.nickname },
   { icon: '🏝️', label: 'Ko Tapu', say: L.bay.facts.nail },
   { icon: '🚐', label: 'Drive on the left', say: L.facts.left },
 ]
