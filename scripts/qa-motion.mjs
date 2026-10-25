@@ -1215,7 +1215,7 @@ GAME_SCENARIOS.push(
   },
 )
 
-// Kaylee's rice farm (greybox A): leading Kaylee, the core verb. A finger held on paddy A zigzags across it at about
+// Kaylee's rice farm (greyboxes A and B): leading Kaylee, the core verb. A finger held on paddy A zigzags across it at about
 // her trotting speed (she splashes after it, ripples behind her, seedlings plip in where she wades); then in the
 // growing round the finger chases the pecking birds off the rice.
 const riceReady = async (page, base, round) => {
@@ -1265,6 +1265,20 @@ GAME_SCENARIOS.push(
         await page.mouse.down()
         await page.waitForTimeout(900)
         await page.mouse.up()
+      }
+    },
+  },
+  // Greybox B's threshing: a tap every 0.7 s on the basket, so she takes bundles, swings and bangs them and tosses the
+  // straw onto the pile; the filmstrip should show the anticipation up, the fast down and the grains spraying.
+  {
+    name: 'nan-thresh',
+    seconds: 8,
+    setup: (page, base) => riceReady(page, base, 'thresh'),
+    act: async (page) => {
+      for (let k = 0; k < 10; k++) {
+        const p = (await page.evaluate(() => window.__thaiNanQA())).points.basket
+        if (p) await page.mouse.click(...p)
+        await page.waitForTimeout(700)
       }
     },
   },

@@ -1,7 +1,7 @@
 // The rice farm's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet (the
 // greybox): Kaylee's sploosh in the water and her thud on the banks, the seedlings' plips (climbing a happy scale), a
 // gate's creak and the water gushing in, the birds' cheeps and flutters, the sickle's swish, a bundle tied and thunked
-// onto the rack, the frogs, ducks and the buffalo, the chimes, and the pink milk on the deck.
+// onto the rack, the thwack of the threshing and the grains, the steam off the sticky rice, the frogs, ducks and the buffalo, the chimes, and the pink milk on the deck.
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
 
@@ -101,6 +101,20 @@ export const riceSfx = {
   pourMilk: () => noise(0.6, 0.04, 'lowpass', 1200, 700, 0, 0.8),
   /** A happy "ahh" after Daddy's coffee. */
   ahh: () => tone(330, 260, 0.45, 0.06, 'triangle'),
+  /** A bundle banged down on the threshing board: THWACK, and the grains rattling into the basket. */
+  thwack: (k = 0) => {
+    noise(0.07, 0.16, 'lowpass', 1600, 500, 0, 1.6)
+    tone(170 + k * 6, 80, 0.14, 0.14, 'sine')
+    for (let i = 0; i < 7; i++) noise(0.03, 0.025, 'highpass', 3500 + Math.random() * 2500, 3000, 0.05 + i * 0.035 + Math.random() * 0.02, 1)
+  },
+  /** The bundle swung up over her head. */
+  swingUp: () => noise(0.2, 0.04, 'bandpass', 700, 1600, 0, 1.2),
+  /** The threshed straw tossed onto the pile. */
+  toss: () => noise(0.3, 0.05, 'bandpass', 1200, 2600, 0, 1.1),
+  /** The steaming sticky rice: a soft hiss of steam. */
+  steam: () => noise(0.9, 0.035, 'highpass', 3800, 2600, 0, 0.6),
+  /** A ball of sticky rice: nom nom. */
+  nom: () => [0, 0.16].forEach((d) => tone(300, 220, 0.09, 0.08, 'triangle', d)),
   /** Splash! Daddy got wet. */
   wet: () => {
     noise(0.3, 0.07, 'bandpass', 1400, 600, 0, 1)

@@ -1,6 +1,6 @@
-// Stop Time Cafe's deck up on the hill behind the farm (#168's, unchanged): a wooden deck on stilts, its railing of
-// crossed branches, the peaked roof, two tall stools, a high table with the pink milk and Daddy's coffee, and the wind
-// chime. Built deck-local (its railing toward -z), placed and turned on the hill by DECK.
+// Stop Time Cafe's deck up on the hill behind the farm (#168's): a wooden deck on stilts, its railing of crossed
+// branches, the peaked roof, two tall stools, a high table with the pink milk, Daddy's coffee and the kratip of sticky
+// rice she threshed, and the wind chime. Built deck-local (its railing toward -z), placed and turned on the hill by DECK.
 import { Group, Mesh, type BufferGeometry } from 'three'
 import type { Bag } from '../../../engine/dispose'
 import { merge, P, solid } from '../../../engine/geo'
@@ -15,6 +15,51 @@ export interface Deck {
   chime: Group
   glass: { root: Group; milk: Mesh }
   cup: Group
+  kratip: Kratip
+}
+
+export interface Kratip {
+  root: Group
+  /** The white sticky rice inside (scaled down as she eats it), and the lid. */
+  rice: Group
+  lid: Group
+}
+
+const BAMBOO = '#E3C27E'
+const WEAVE = '#C49A55'
+const STICKY = '#FFFCF2'
+
+/** A kratip: the little woven bamboo basket sticky rice comes in, on its foot, with its domed lid (lifted off with
+ *  `open`, set down beside it). About 0.26 m tall at `s` = 1. */
+export function buildKratip(bag: Bag, s = 1, open = false): Kratip {
+  const root = new Group()
+  const r = 0.09 * s
+  const h = 0.13 * s
+  root.add(
+    solid(
+      merge([
+        // The foot (a short flared ring), the body, its woven bands and the rim.
+        P.cyl(r * 0.75, r * 0.9, 0.04 * s, WEAVE, { at: [0, 0.02 * s, 0] }, 14),
+        P.cyl(r, r * 0.82, h, BAMBOO, { at: [0, 0.04 * s + h / 2, 0] }, 16),
+        ...[0.3, 0.55, 0.8].map((k) => P.torus(r * (0.84 + 0.16 * k) + 0.002, 0.006 * s, WEAVE, { at: [0, 0.04 * s + h * k, 0], rot: [Math.PI / 2, 0, 0] })),
+        P.torus(r, 0.01 * s, WEAVE, { at: [0, 0.04 * s + h, 0], rot: [Math.PI / 2, 0, 0] }),
+        // The carrying string.
+        P.torus(0.06 * s, 0.005 * s, '#8C6248', { at: [r * 0.98, 0.04 * s + h * 0.7, 0], rot: [0, Math.PI / 2, 0] }, Math.PI),
+      ]),
+      bag,
+      2,
+    ),
+  )
+  const rice = solid(merge([P.sphere(r * 0.9, STICKY, { scale: [1, 0.5, 1] }, 14), ...[0, 1, 2, 3, 4].map((k) => P.sphere(0.012 * s, '#FFFFFF', { at: [Math.cos(k * 1.3) * r * 0.5, r * 0.36, Math.sin(k * 1.3) * r * 0.5] }, 6))]), bag, 1)
+  rice.position.y = 0.04 * s + h
+  root.add(rice)
+  const lid = solid(merge([P.sphere(r * 1.05, BAMBOO, { scale: [1, 0.55, 1] }, 16), P.torus(r * 0.98, 0.009 * s, WEAVE, { rot: [Math.PI / 2, 0, 0] }), P.sphere(0.018 * s, WEAVE, { at: [0, r * 0.6, 0] }, 8)]), bag, 2)
+  if (open) {
+    lid.position.set(r * 2.3, 0.02 * s, 0)
+    lid.rotation.z = 0.35
+  } else lid.position.y = 0.04 * s + h
+  root.add(lid)
+  return { root, rice, lid }
 }
 
 /** Stop Time Cafe's deck, built deck-local (its railing toward -z), placed and turned on the hill by DECK. */
@@ -71,5 +116,11 @@ export function buildDeck(bag: Bag): Deck {
   cup.position.set(HIGH_TABLE[0] + 0.16, HIGH_TABLE[1], HIGH_TABLE[2] - 0.04)
   cup.userData.pick = 'cup'
   root.add(cup)
-  return { root, chime, glass: { root: glassRoot, milk }, cup }
+  // The kratip she threshed, open, in front of the milk.
+  const kratip = buildKratip(bag, 0.9, true)
+  kratip.root.position.set(HIGH_TABLE[0] - 0.02, HIGH_TABLE[1], HIGH_TABLE[2] + 0.17)
+  kratip.root.rotation.y = -0.5
+  kratip.root.userData.pick = 'kratip'
+  root.add(kratip.root)
+  return { root, chime, glass: { root: glassRoot, milk }, cup, kratip }
 }

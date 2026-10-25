@@ -1,14 +1,17 @@
 // The rice farm's screen: the 3D farm and Stop Time Cafe's deck (rice3d.ts) with its tap targets, the 👆 after a while
-// with nothing touched, the photo Mommy takes on the deck (a flash, then it pops up like a print), and the end card: 🔁
-// the farm again, or 🚙 back on the road (the 3 road, the way home). (No flat version: 3D activities don't need one.)
+// with nothing touched, the photo Mommy takes on the deck (a flash, then it pops up like a print), the video of real rice
+// growing (skippable: ⏭ ☕ back to the deck; the 3D world holds still under it), and the end card: 🔁 the farm again, or
+// 🚙 back on the road (the 3 road, the way home). (No flat version: 3D activities don't need one.)
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
+import { VideoBreak } from '../../../../../kit/Theater'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
 import { FarmEnd } from '../mushrooms/Mushrooms'
 import type { Round } from './layout'
 import { RICE_ANCHORS, RiceFarm } from './rice3d'
+import { RICE_VIDEO } from './video'
 
 interface Props {
   round: Round
@@ -21,6 +24,7 @@ export function Rice({ round, onRound, onDrive }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [done, setDone] = useState(false)
+  const [video, setVideo] = useState(false)
   const [photo, setPhoto] = useState<{ src: string; n: number } | null>(null)
   const worldRef = useRef<RiceFarm | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
@@ -41,7 +45,8 @@ export function Rice({ round, onRound, onDrive }: Props) {
           cb.current(r)
         },
         photo: (src) => setPhoto((p) => ({ src, n: (p?.n ?? 0) + 1 })),
-        allDone: () => setDone(true),
+        // The photo's had its moment: the video, then the end card.
+        allDone: () => setVideo(true),
       },
       { round: now.current },
     )
@@ -51,6 +56,7 @@ export function Rice({ round, onRound, onDrive }: Props) {
 
   const again = () => {
     setDone(false)
+    setVideo(false)
     setPhoto(null)
     now.current = 'plant'
     onRound('plant')
@@ -65,6 +71,7 @@ export function Rice({ round, onRound, onDrive }: Props) {
           name="Rice farm"
           qaKey="__thaiNanQA"
           worldRef={worldRef}
+          paused={video}
           onMode={setMode}
           make={make}
           anchors={(input, els) => (
@@ -91,7 +98,17 @@ export function Rice({ round, onRound, onDrive }: Props) {
           🌾 Tap to wake the rice farm
         </button>
       )}
-      <AnimatePresence>{photo && <Snapshot key={photo.n} src={photo.src} />}</AnimatePresence>
+      <AnimatePresence>{photo && !video && <Snapshot key={photo.n} src={photo.src} />}</AnimatePresence>
+      {video && (
+        <VideoBreak
+          video={RICE_VIDEO}
+          next="☕"
+          onDone={() => {
+            setVideo(false)
+            setDone(true)
+          }}
+        />
+      )}
       <AnimatePresence>{done && <FarmEnd label="The rice farm again" onAgain={again} onDrive={onDrive} />}</AnimatePresence>
     </div>
   )
