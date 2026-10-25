@@ -8,6 +8,10 @@ unicorn and goes on day trips with the family.
 **Play:** https://neb636.github.io/Kaylee-Gamepack/ · [Jump to a game section](#jump-to-a-game-section)
 (iPad: open in Safari → Share → **Add to Home Screen**. It opens full-screen like a real app.)
 
+**3D character lab** (development tool, every 3D character on a turntable: poses, actions, lines, outfits, lighting): 
+- [Kaylee](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee)
+
+
 **Offline:** after it opens once on wifi it saves every game, picture and voice, so it plays in the car or on a plane.
 Online it always loads the latest version; offline the YouTube videos are hidden. After a new deploy, open it once on
 wifi before a trip so it saves the changed files.
@@ -102,8 +106,6 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 **Finale**: [Balloon preview](https://neb636.github.io/Kaylee-Gamepack/#/world/peru/party/soon)
 
 ### Thailand
-
-**3D character lab** (development tool, every 3D character on a turntable: poses, actions, lines, outfits, lighting): [Kaylee](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee) · [Kaylee's boat day outfit, wai](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee?pose=wai&wear=sunhat,sunglasses,floaties) · [The family lineup](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/agong?lineup=agong,jum,joy,bird,nick,ji,kaylee) · [A bay critter](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/crab) (local: `http://localhost:5173/#/world/characters`)
 
 **Home base (the house)**: [Arrive by tuk-tuk](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/arrive) · [Downstairs](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/downstairs) · [Family photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/family)
 
