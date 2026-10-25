@@ -2,6 +2,7 @@
 //   gl=off    draw the no-WebGL fallback (what a browser without WebGL2 sees)
 //   debug=1   tuning panel: camera, light bands, outlines, nav grid, frame time
 //   fps=N     frame-rate cap (0 = uncapped)
+//   ink=1     draw the black ink outlines (off while we try the look without them, engine/outline.ts)
 export function flag(name: string): string | null {
   const fromSearch = new URLSearchParams(location.search).get(name)
   if (fromSearch !== null) return fromSearch

@@ -184,7 +184,8 @@ day, a hall of mini games) or `thailand/nan-trip.md` (a road trip in the mountai
 what's next; PR bodies end with the next prompt.
 
 - **The look:** flat pastel 3D. Toon shading in a few flat bands with lavender shadows, screen-space ink outlines like
-  the 2D art, blob shadows, no post-processing (`engine/toon.ts`, `engine/outline.ts`).
+  the 2D art, blob shadows, no post-processing (`engine/toon.ts`, `engine/outline.ts`). The ink is off for now while
+  Dad tries the look without it (`?ink=1` in the page query brings it back); keep building hulls as usual.
 - **The engine** (`engine/`) is generic: one shared renderer (we make the WebGL2 context ourselves, so no console error
   without one), the frame loop (60 fps cap; 30 when nothing moves; slower in test browsers), a box-fitting follow
   camera, a walk grid with A*, the tap marker, water and particles. `View3D.tsx` mounts any 3D world with its DOM tap

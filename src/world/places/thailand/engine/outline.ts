@@ -2,8 +2,13 @@
 // screen space, so the line is about the same number of pixels wide near and far (a little thinner far away). The hull
 // uses welded, smoothed normals, so boxes get a continuous line instead of cracks at their corners. Lines fade into the
 // scene's fog like the shapes they outline (the bay's far rock towers).
+//
+// Try-out: the ink is off (the shapes and toon bands carry the look on their own). `?ink=1` in the page query
+// (./?ink=1#/world/thailand) brings it back everywhere, to compare. Colored lines that aren't ink (the cheese's gold)
+// stay on.
 import { BackSide, Color, Mesh, ShaderMaterial, UniformsLib, UniformsUtils, type BufferGeometry } from 'three'
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import { flag } from './flags'
 import { PAL } from './toon'
 import { TUNE } from './tune'
 
@@ -42,6 +47,9 @@ const fragmentShader = /* glsl */ `
   }
 `
 
+/** Draw the ink outlines (and their hot-pink hover highlight)? */
+const INK = flag('ink') === '1'
+
 const materials = new Map<string, ShaderMaterial>()
 /** One outline material per width and color, shared by every hull that uses it. */
 export function outlineMaterial(px: number, color: string = PAL.ink) {
@@ -55,6 +63,8 @@ export function outlineMaterial(px: number, color: string = PAL.ink) {
       side: BackSide,
       fog: true,
     })
+    // An invisible material is skipped when drawing, so a hull without ink costs no draw call.
+    m.visible = INK || (color !== PAL.ink && color !== PAL.hotpink)
     materials.set(key, m)
   }
   return m
