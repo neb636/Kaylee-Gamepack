@@ -3,9 +3,9 @@
 // silver Pajero along one of the four roads and the end card takes her down another; and Baan Huanam Mushroom Farm
 // (mushrooms/, section mushrooms), where she mists the sawdust bags, picks the mushrooms and tops the pizza. The valley
 // road ends at the farm (its end card's 🍄), and the farm's end card puts her back on the road (the sky road, up to
-// the café). And Stop Time Cafe (rice/, section rice), where she pours the stream down Sapan's rice steps, plants them
-// and rains the clouds out, then has her pink milk on the deck: the sky road ends there (its end card's 🌾), and the
-// café's end card takes the 3 road. The trip around them (the plane, the rental desk, the Nan map, the other stops and
+// the café). And Kaylee's rice farm under Stop Time Cafe (rice/, section rice), where she leads Kaylee through the
+// paddies to plant them, shoos the birds while the rice grows and cuts it, then has her pink milk on the deck: the sky
+// road ends there (its end card's 🌾), and the farm's end card takes the 3 road. The trip around them (the plane, the rental desk, the Nan map, the other stops and
 // home) comes in the next steps of the plan.
 import { useEffect, useState } from 'react'
 import { useSections } from '../../../../kit/sections'
@@ -29,7 +29,7 @@ export function NanTrip() {
       const round = ((FARM_ROUNDS as readonly string[]).includes(param('round')) ? param('round') : '1') as Round
       return { section: 'mushrooms', round, basket: param('basket') || BASKET_SEED[round] }
     }
-    if (start === 'rice') return { section: 'rice', round: ((RICE_ROUNDS as readonly string[]).includes(param('round')) ? param('round') : '1') as RiceRound }
+    if (start === 'rice') return { section: 'rice', round: ((RICE_ROUNDS as readonly string[]).includes(param('round')) ? param('round') : 'plant') as RiceRound }
     return { section: 'drive', road: param('road') as RoadId }
   })
   useEffect(() => {
@@ -55,7 +55,7 @@ export function NanTrip() {
       key="drive"
       road={at.road}
       onRoad={(road) => setAt({ section: 'drive', road })}
-      onStop={(road) => setAt(road === 'sky' ? { section: 'rice', round: '1' } : { section: 'mushrooms', round: '1', basket: '' })}
+      onStop={(road) => setAt(road === 'sky' ? { section: 'rice', round: 'plant' } : { section: 'mushrooms', round: '1', basket: '' })}
     />
   )
 }

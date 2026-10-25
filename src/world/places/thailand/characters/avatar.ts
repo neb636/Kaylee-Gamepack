@@ -35,6 +35,8 @@ export class Avatar implements Character {
   floor: 0 | 1 = 0
   /** Where she steps back to when she gets up from a seat or the mattress. */
   standPoint: Vector3 | null = null
+  /** How much faster than her usual walk she goes (the rice farm's trot behind a finger). */
+  pace = 1
   private chibi: Rig
   private path: XZ[] = []
   private onArrive: (() => void) | null = null
@@ -260,8 +262,8 @@ export class Avatar implements Character {
       const left = d + this.pathLength()
       // Long trips (across the house to the stairs) turn into a happy run, up to 1.6x.
       const run = 1 + clamp((left - 4) / 6, 0, 0.6)
-      const max = TUNE.walkSpeed * run * clamp(left / 0.45, 0.35, 1)
-      this.speed = this.speed > max ? max : Math.min(max, this.speed + (TUNE.walkSpeed / 0.15) * dt)
+      const max = TUNE.walkSpeed * this.pace * run * clamp(left / 0.45, 0.35, 1)
+      this.speed = this.speed > max ? max : Math.min(max, this.speed + ((TUNE.walkSpeed * this.pace) / 0.15) * dt)
       const move = this.speed * dt
       if (d <= Math.max(move, 0.02)) {
         p.x = tx

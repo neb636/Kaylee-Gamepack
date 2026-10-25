@@ -1,173 +1,182 @@
-// Stop Time Cafe and Sapan's rice steps (plan: planning/around-the-world/thailand/nan-trip.md, "3. Stop Time Cafe,
-// Sapan"), in meters: the terraces, where everyone stands, the clouds and the café's deck. Pure data (no three.js):
-// sections.ts reads it at startup.
+// Kaylee's little rice farm at Sapan (plan: planning/around-the-world/thailand/nan-rice.md), in meters: the four
+// paddies, their rice hills, the channel and its gates, the step up to the back pair, where everyone stands, the props,
+// and Stop Time Cafe's deck up on the hill behind. Pure data (no three.js): sections.ts reads it at startup.
 //
-// The rice steps climb a green spur that faces us across the valley floor (the camera looks toward -z). Each step is
-// a band of a circle round the spur's middle (SPUR), so the steps curve round the hill the way real terraces follow
-// the contour; the top step is the smallest and farthest, the bottom one the widest and nearest.
+// The camera looks toward -z from high in front. x runs left to right, the front of the farm is +z.
 //
-//                       the hilltop, the stream's pool and the bamboo pipe
-//                [   top step: 2 paddies   ]
-//             [     step 4: 2 paddies        ]
-//          [       step 3: 3 paddies            ]
-//       [         step 2: 3 paddies                ]
-//    [           bottom step: 3 paddies                ]
-//    the stream, Sapan's houses   Kaylee         Daddy    the buffalo
-//
-// Each paddy spills over a notch in its front bank into the paddy below it, so water poured at the top runs all the
-// way down, step by step. Stop Time Cafe's deck stands up on the hill to the left, looking over it all.
+//      the hill, Stop Time Cafe's deck up on it (back left), the bamboo pipe down to the channel
+//   hut   ┌──────────┐  ║  ┌──────────┐   bamboo, the buffalo's wallow
+//         │ paddy C  ├G ║ G┤ paddy D  │          (the back pair: one step up, 0.45 m)
+//         └──────────┘  ║  └──────────┘
+//   ════ stair ════════ path ═║═ scarecrow ═══ stair ════   the riser: a sandy step with a grass lip
+//   banana┌──────────┐  ║  ┌──────────┐   the straw pile
+// nursery │ paddy A  ├G ║ G┤ paddy B  │   the drying rack
+//         └──────────┘  ║  └──────────┘
+//   ══════════ the plank boardwalk (Kaylee and Daddy start here), its bridge over the channel ══════   the basket
 
 export type V3 = [number, number, number]
 
 // ---------------------------------------------------------------- the rounds
 
-export const ROUNDS = ['1', '2', '3', 'deck'] as const
+export const ROUNDS = ['plant', 'grow', 'harvest', 'thresh', 'deck'] as const
 export type Round = (typeof ROUNDS)[number]
 
-// ---------------------------------------------------------------- the rice steps
+// ---------------------------------------------------------------- the ground
 
-/** The middle of the circle the steps curve round (x, z). */
-export const SPUR = { x: 0, z: -15 }
-/** How far round the spur the paddies reach either side of straight at us (radians). */
-export const SPAN = 0.36
-/** The grassy edge either side of the paddies (radians). */
-export const SIDE = 0.12
+/** The back pair's bank tops are this much higher than the front pair's (the front's are at 0). */
+export const RISE = 0.45
+/** The step between them runs along here (z). */
+export const RISER_Z = -0.5
+/** Below a bank's top: the water when full, where Kaylee stands in a paddy (in the water, so she splashes), the mud. */
+export const WATER_DOWN = 0.15
+export const WADE_DOWN = 0.27
+export const MUD_DOWN = 0.34
+/** The boardwalk's planks along the front, and its top. */
+export const BOARDWALK = { z0: 3.55, z1: 4.45, x0: -5.2, x1: 5.6, y: 0.07 }
 
-export interface Level {
-  /** The paddies' floor (the mud). */
-  y: number
-  /** Inner (back) and outer (front) radius. */
-  rIn: number
-  rOut: number
-  /** How many paddies across. */
-  n: number
-}
-const DEPTH = 1.35
-/** How much higher each step is than the one below. */
-export const RISE = 0.5
-/** Bottom step first. */
-export const LEVELS: Level[] = [3, 3, 3, 2, 2].map((n, i) => ({ y: 0.6 + i * RISE, rOut: 11 - i * DEPTH, rIn: 11 - (i + 1) * DEPTH, n }))
-export const TOP = LEVELS.length - 1
+/** The ground's top at a point, without the paddies or the channel cut into it. */
+export const levelAt = (z: number) => (z < RISER_Z ? RISE : 0)
+
+// ---------------------------------------------------------------- the paddies
 
 export interface Paddy {
   i: number
-  level: number
-  /** Its angles round the spur. */
-  a0: number
-  a1: number
-  /** The notch in its front bank, where it spills into `down` (-1: into the stream). */
-  notch: number
-  down: number
-  /** Its middle (world). */
+  /** 'A' front left, 'B' front right, 'C' back left, 'D' back right. */
+  name: string
+  /** The water inside its banks. */
+  x0: number
+  x1: number
+  z0: number
+  z1: number
+  /** Its banks' top. */
+  top: number
+  /** Its middle, on the water when full. */
   mid: V3
+  /** Its gate, in the bank between it and the channel (the side it opens toward: -1 left, +1 right). */
+  gate: V3
+  side: number
 }
 
-/** Where a point round the spur is: radius `r`, angle `a` (0 = straight at us, + to the right). */
-export const spurXZ = (r: number, a: number): [number, number] => [SPUR.x + r * Math.sin(a), SPUR.z + r * Math.cos(a)]
+const W = 3.6
+/** Half the channel's width, and the paddies' inside edge (the bank between them and the channel). */
+export const CHANNEL_HALF = 0.25
+const INNER = 0.6
+const FRONT_Z = [0.5, 3.1] as const
+const BACK_Z = [-3.55, -0.95] as const
 
-function buildPaddies(): Paddy[] {
-  const out: Paddy[] = []
-  // The top step first, so a paddy's `down` is always one built after it.
-  const byLevel: number[][] = LEVELS.map(() => [])
-  for (let l = TOP; l >= 0; l--) {
-    const L = LEVELS[l]
-    const w = (2 * SPAN) / L.n
-    for (let k = 0; k < L.n; k++) {
-      const a0 = -SPAN + k * w
-      const a1 = a0 + w
-      // Notches zigzag, a little left of the middle on one step and right on the next, so the water wanders down.
-      const notch = (a0 + a1) / 2 + (l % 2 ? 0.25 : -0.25) * w
-      const [x, z] = spurXZ((L.rIn + L.rOut) / 2, (a0 + a1) / 2)
-      byLevel[l].push(out.length)
-      out.push({ i: out.length, level: l, a0, a1, notch, down: -1, mid: [x, L.y, z] })
-    }
-  }
-  for (const p of out) {
-    if (p.level === 0) continue
-    const below = byLevel[p.level - 1].map((i) => out[i])
-    p.down = (below.find((q) => p.notch >= q.a0 && p.notch < q.a1) ?? below[0]).i
-  }
-  return out
-}
-export const PADDIES = buildPaddies()
-
-/** Which paddy a point round the spur is in (or null: the grassy edges, off the steps). */
-export function paddyAt(level: number, a: number): Paddy | null {
-  if (Math.abs(a) > SPAN) return null
-  return PADDIES.find((p) => p.level === level && a >= p.a0 && a <= p.a1) ?? null
+function paddy(i: number, name: string, left: boolean, back: boolean): Paddy {
+  const x0 = left ? -INNER - W : INNER
+  const x1 = x0 + W
+  const [z0, z1] = back ? BACK_Z : FRONT_Z
+  const top = back ? RISE : 0
+  const mz = (z0 + z1) / 2
+  return { i, name, x0, x1, z0, z1, top, mid: [(x0 + x1) / 2, top - WATER_DOWN, mz], gate: [left ? -(INNER + CHANNEL_HALF) / 2 : (INNER + CHANNEL_HALF) / 2, top, mz], side: left ? 1 : -1 }
 }
 
-// ---------------------------------------------------------------- the water
+export const PADDIES: Paddy[] = [paddy(0, 'A', true, false), paddy(1, 'B', false, false), paddy(2, 'C', true, true), paddy(3, 'D', false, true)]
+/** The banks around the paddies reach this far out (x), front (z) and back. */
+export const FARM = { x: INNER + W + 0.4, front: FRONT_Z[1] + 0.4, back: BACK_Z[0] - 0.4 }
 
-/** Water poured into a paddy per second (1 = full: shiny like a mirror). */
-export const POUR_RATE = 0.62
-/** A tap (no hold) pours for this long. */
-export const BURST_S = 1.0
-/** Above the mud when full. */
-export const WATER_Y = 0.05
+export function paddyAt(x: number, z: number, pad = 0): Paddy | null {
+  return PADDIES.find((p) => x > p.x0 - pad && x < p.x1 + pad && z > p.z0 - pad && z < p.z1 + pad) ?? null
+}
 
-/** The stream's little pool at the top, where the bamboo pipe starts. */
-export const SPRING: V3 = [0.15, LEVELS[TOP].y + 0.62, SPUR.z + LEVELS[TOP].rIn - 0.15]
-/** Where the pipe's end hangs when she isn't pouring. */
-export const PIPE_REST: V3 = [0.7, LEVELS[TOP].y + 0.75, SPUR.z + LEVELS[TOP].rOut - 0.2]
-/** The spout rides this far above (and behind) where the water lands. */
-export const SPOUT_UP = 0.85
-export const SPOUT_BACK = 0.5
+/** The channel runs from the bamboo pipe at the back, down the step, under the boardwalk and away. */
+export const CHANNEL = { z0: FARM.back - 0.35, z1: 16 }
+/** The plank bridges over the channel: the path's and the boardwalk's (z ranges). */
+export const BRIDGES: [number, number][] = [[-0.42, 0.42], [BOARDWALK.z0, BOARDWALK.z1]]
+export const inChannel = (x: number, z: number) => Math.abs(x) < CHANNEL_HALF && z > CHANNEL.z0 && z < CHANNEL.z1 && !BRIDGES.some(([a, b]) => z > a && z < b)
 
-// ---------------------------------------------------------------- planting (round 2)
+// ---------------------------------------------------------------- the rice hills
 
-/** The seedlings' rows: this far apart along the contour and across. */
-export const ROW_GAP = 0.36
-export const ROWS_PER_STEP = 3
-/** Her finger plants every free spot this near it (m); a tap, this near. */
-export const BRUSH = 0.48
-export const TAP_BRUSH = 0.6
-/** A paddy this full of seedlings plants the rest by itself. */
-export const PLANTED_AT = 0.55
+/** The hills in each paddy: this many across and deep, this far apart. */
+export const HILLS_X = 7
+export const HILLS_Z = 5
+export const HILL_GAP = 0.46
+export const HILLS = PADDIES.flatMap((p) =>
+  Array.from({ length: HILLS_X * HILLS_Z }, (_, k) => {
+    const cx = k % HILLS_X
+    const cz = Math.floor(k / HILLS_X)
+    return { paddy: p.i, x: p.mid[0] + (cx - (HILLS_X - 1) / 2) * HILL_GAP, z: p.mid[2] + (cz - (HILLS_Z - 1) / 2) * HILL_GAP, floor: p.top - MUD_DOWN }
+  }),
+)
+export const PER_PADDY = HILLS_X * HILLS_Z
 
-// ---------------------------------------------------------------- the clouds (round 3)
+/** Whatever Kaylee walks through: hills this near her (m) get the round's action. */
+export const BRUSH = 0.5
+/** Rice this near her leans away as she wades. */
+export const LEAN_R = 0.62
+/** A paddy this planted plants the rest by itself; this cut, the rest falls by itself. */
+export const PLANTED_AT = 0.7
+export const CUT_AT = 0.75
+/** Bundles she ties in all (one every PER_PADDY * 4 / BUNDLES hills cut). */
+export const BUNDLES = 8
 
-/** Where each cloud settles over the steps, covering them. */
-export const CLOUDS: V3[] = [
-  [-0.2, 4.6, -10.2],
-  [-2.3, 3.6, -7.6],
-  [2.2, 3.6, -7.4],
-  [0.1, 2.6, -5.0],
+// ---------------------------------------------------------------- growing (round 2) and the birds
+
+/** Seconds for the rice to grow from young green to golden on its own; each bird shooed speeds it up a little. */
+export const GROW_S = 40
+export const SHOO_BOOST = 0.02
+/** Birds that come down at these growths (how many, from how many sides). */
+export const WAVES = [
+  { at: 0, n: 2, sides: 1 },
+  { at: 0.3, n: 3, sides: 1 },
+  { at: 0.6, n: 5, sides: 2 },
+] as const
+export const BIRDS = 6
+/** A bird flies up when Kaylee comes this near; left this long, it gets round. */
+export const SHOO_R = 1.3
+export const FAT_S = 6
+
+// ---------------------------------------------------------------- Kaylee's walk
+
+/** She trots this fast on the banks and in the water (m/s). */
+export const SPEED_BANK = 2.6
+export const SPEED_WADE = 2.2
+/** Where she can walk, and the things she slides round. */
+export const WALK = { x0: -6.0, x1: 6.1, z0: -3.85, z1: 4.3 }
+
+// ---------------------------------------------------------------- where everyone and everything is
+
+export const KAYLEE_AT: V3 = [-1.3, BOARDWALK.y, 4.0]
+export const NICK_AT: V3 = [-4.35, BOARDWALK.y, 4.05]
+export const SCARECROW: V3 = [1.75, 0, -0.02]
+export const NURSERY = { x: -5.35, z: 2.3, w: 1.0, d: 1.7 }
+export const BANANA: V3 = [-5.55, 0, 0.0]
+export const HUT: V3 = [-5.45, RISE, -2.35]
+export const BAMBOO: V3 = [5.75, RISE, -3.35]
+export const WALLOW = { x: 5.35, z: -2.15, r: 0.95 }
+export const RACK = { x: 5.45, z: 1.75, len: 1.7, y: 1.12 }
+export const BASKET: V3 = [5.25, 0, 3.75]
+export const STRAW_PILE: V3 = [5.65, 0, -0.05]
+/** The stairs up the step, either side of the middle. */
+export const STAIRS = [-3.1, 3.1]
+/** The bamboo pipe brings the hill's water to the head of the channel. */
+export const PIPE_FROM: V3 = [-0.3, 1.45, -5.6]
+export const PIPE_TO: V3 = [0, 0.78, CHANNEL.z0 + 0.15]
+
+/** Things she slides round (x, z, radius). */
+export const BLOCKERS: [number, number, number][] = [
+  [SCARECROW[0], SCARECROW[2], 0.32],
+  [HUT[0], HUT[2], 0.95],
+  [BANANA[0], BANANA[2], 0.4],
+  [BAMBOO[0], BAMBOO[2], 0.5],
+  [RACK.x - RACK.len / 2, RACK.z, 0.3],
+  [RACK.x + RACK.len / 2, RACK.z, 0.3],
+  [BASKET[0], BASKET[2], 0.5],
 ]
-/** A carried cloud rides this far above where the rain lands. */
-export const CLOUD_UP = 1.35
-/** Rain grows the rice in every paddy this near (m), this fast (1 = tall). */
-export const RAIN_R = 1.25
-export const RAIN_GROW = 0.75
-/** A cloud rains itself out in this many seconds of raining. */
-export const CLOUD_S = 3.2
-/** A tap on a cloud rains for this long. */
-export const CLOUD_TAP_S = 0.9
-
-// ---------------------------------------------------------------- the valley floor
-
-export const KAYLEE_AT: V3 = [-2.0, 0, -1.6]
-export const NICK_AT: V3 = [1.7, 0, -1.4]
-export const BUFFALO_AT: V3 = [4.4, 0, -2.9]
-export const STREAM_Z = -3.75
-export const HAT_POST: V3 = [-3.75, 0, -4.1]
-export const VILLAGE: V3 = [-5.6, 0, -5.4]
-/** On a tall screen the valley floor closes in, so everyone fits. */
-export const TALL = { kaylee: [-1.15, 0, -1.2] as V3, nick: [0.95, 0, -1.0] as V3, buffalo: [2.55, 0, -2.75] as V3 }
-/** Frogs and ducks: how many there can be (they come when the paddies fill). */
-export const FROGS = 4
-export const DUCKS = 3
 
 // ---------------------------------------------------------------- Stop Time Cafe's deck
 
-/** The deck, up on the hill to the left: its middle, and which way it looks (its railing toward the valley). */
-export const DECK = { x: -8.0, y: 3.4, z: -1.0, yaw: -Math.PI / 4 }
+/** The deck, on the hill's spur at the back left: its middle, and which way it looks (its railing toward the farm, so
+ *  the camera behind it is over open hillside). */
+export const DECK = { x: -7.3, y: 2.0, z: -5.7, yaw: -2.15 }
 /** Deck-local (x across, z toward the railing at -z). */
 export const RAIL_Z = -1.35
 export const STOOLS = { kaylee: [-0.36, 0.74, -0.95] as V3, nick: [0.38, 0.62, -0.95] as V3 }
 export const HIGH_TABLE: V3 = [0, 0.84, -0.42]
 export const MOMMY_AT: V3 = [1.3, 0, -0.95]
-/** Where Mommy's photo is taken from (in front of them, the valley behind). */
+/** Where Mommy's photo is taken from (in front of them, the farm behind). */
 export const PHOTO_FROM: V3 = [0.25, 1.2, 1.5]
 export const CHIME: V3 = [-1.5, 2.0, -1.2]
 /** Sips in a glass of pink milk. */

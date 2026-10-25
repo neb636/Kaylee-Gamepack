@@ -1215,42 +1215,57 @@ GAME_SCENARIOS.push(
   },
 )
 
-// Stop Time Cafe (greybox): pouring, the core verb. Her finger holds the water on the top paddy (it fills, shines and
-// spills down the notches), then drags along the next steps; then in round 3 she carries a cloud over the steps and it
-// rains them green.
+// Kaylee's rice farm (greybox A): leading Kaylee, the core verb. A finger held on paddy A zigzags across it at about
+// her trotting speed (she splashes after it, ripples behind her, seedlings plip in where she wades); then in the
+// growing round the finger chases the pecking birds off the rice.
 const riceReady = async (page, base, round) => {
   await page.goto(`${base}#/world/thailand/nan-trip/rice?round=${round}`)
   await page.waitForFunction(() => window.__thaiNanQA?.().game === 'rice', null, { timeout: 30000 })
-  await page.waitForTimeout(round === '3' ? 1800 : 1200)
+  await page.waitForTimeout(1200)
+}
+const slowDrag = async (page, to, ms = 900) => {
+  const from = await page.evaluate(() => window.__qaMouse ?? null)
+  for (let k = 1; k <= 12; k++) {
+    const x = (from?.[0] ?? to[0]) + ((to[0] - (from?.[0] ?? to[0])) * k) / 12
+    const y = (from?.[1] ?? to[1]) + ((to[1] - (from?.[1] ?? to[1])) * k) / 12
+    await page.mouse.move(x, y)
+    await page.waitForTimeout(ms / 12)
+  }
+  await page.evaluate((p) => (window.__qaMouse = p), to)
 }
 GAME_SCENARIOS.push(
   {
-    name: 'nan-pour',
-    seconds: 8,
-    setup: (page, base) => riceReady(page, base, '1'),
+    name: 'nan-plant',
+    seconds: 9,
+    setup: (page, base) => riceReady(page, base, 'plant'),
     act: async (page) => {
-      const p = (await page.evaluate(() => window.__thaiNanQA())).paddies.map((x) => x.at)
-      await page.mouse.move(...p[0])
+      const [x0, y0, x1, y1] = (await page.evaluate(() => window.__thaiNanQA())).paddies[0]
+      await page.mouse.move(x0 + 12, y1 - 12)
+      await page.evaluate((p) => (window.__qaMouse = p), [x0 + 12, y1 - 12])
       await page.mouse.down()
-      await page.waitForTimeout(3200)
-      for (const i of [2, 5, 6]) {
-        await page.mouse.move(...p[i], { steps: 10 })
-        await page.waitForTimeout(1200)
-      }
+      for (let r = 0; r < 4; r++) await slowDrag(page, [r % 2 ? x0 + 12 : x1 - 12, y1 - 14 - ((y1 - y0 - 28) * r) / 3], 1500)
       await page.mouse.up()
     },
   },
   {
-    name: 'nan-rain',
-    seconds: 6,
-    setup: (page, base) => riceReady(page, base, '3'),
+    name: 'nan-shoo',
+    seconds: 8,
+    setup: async (page, base) => {
+      await riceReady(page, base, 'grow')
+      await page.waitForTimeout(2500)
+    },
     act: async (page) => {
-      const q = await page.evaluate(() => window.__thaiNanQA())
-      await page.mouse.move(...q.clouds[3].at)
-      await page.mouse.down()
-      for (const i of [10, 11, 12, 9, 8]) await page.mouse.move(...q.paddies[i].at, { steps: 14 })
-      await page.waitForTimeout(800)
-      await page.mouse.up()
+      for (let k = 0; k < 4; k++) {
+        const b = (await page.evaluate(() => window.__thaiNanQA())).birds.at[0]
+        if (!b) {
+          await page.waitForTimeout(800)
+          continue
+        }
+        await page.mouse.move(...b)
+        await page.mouse.down()
+        await page.waitForTimeout(900)
+        await page.mouse.up()
+      }
     },
   },
 )

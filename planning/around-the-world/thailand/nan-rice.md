@@ -314,6 +314,42 @@ Out of scope (keep it small): no farmer character (the scarecrow and the buffalo
 day/night, no selling or counting money, no tools to pick, no saving her planting pattern between visits, no flat
 version (3D activities don't need one).
 
+## What's built
+
+**Greybox A (2026-10-25, branch `neb636/nan-rice-farm-a`, #168's branch merged in for its deck and wiring):**
+`rice?round=plant|grow|harvest|thresh|deck` all open; the robot plays plant (~35 s), grow (~25-30 s) and harvest
+(~40 s) through to the photo with no errors.
+- The farm in shapes (`rice/farm.ts`): two levels of ground with grass lips over sandy cut sides, four sunken paddies
+  (cracked mud floors), the channel from the bamboo pipe down the step and under the boardwalk, four gates, the plank
+  boardwalk and bridge, two stairs, the scarecrow in a ngob, the thatched hut with a chime, banana, bamboo, the nursery
+  bed, the drying rack, the threshing basket and board, the straw pile, the buffalo's wallow, two ducks, a frog, a
+  bamboo fence and bushes along the back, the hill with trees, a lane and hedge in front, far mountains all round.
+- The water (`rice/water.ts`): one small shader for every paddy and the channel: muddy while it fills, then shiny with
+  a light rim, twinkling glints, and Kaylee's ripple rings.
+- The rice (`rice/hills.ts`): 140 hills (7 x 5 a paddy, 0.46 m apart: 6 x 4 looked sparse) as three instanced shapes,
+  blades, grain heads and stubble, each with an instanced ink outline. Each hill stands in the mud, its bottom under the
+  water, so seedlings show above it and drained rice has stalks.
+- Leading Kaylee (`rice/rice3d.ts`): held finger = where she trots (`Avatar.pace`, 2.6 m/s on banks, 2.2 wading), a
+  tap walks her there, she keeps going to where the finger was let go. She rides a carrier that sinks her into the
+  water, lifts her up the stairs and hops her up and down the step anywhere; sploosh, ripple and splash every 0.3 m,
+  squelch in drained mud. The rice leans away from her and springs back.
+- plant: paddy A flooded, the others dry; droopy yellow seedlings in a dry paddy, its gate wiggles and glows; a tap
+  on the gate (or walking into it) floods it and they spring up from the gate outward. 70% plants the rest.
+- grow: 40 s base, birds (`rice/birds.ts`) in three waves, peck, get round after 6 s, waddle-hop before flying, perch
+  on the scarecrow's arms, the hut roof and the rack, come back. A little rain cloud at ~50%. Gold: drain, harvest.
+- harvest: sickle and armful; a bundle every 17 hills cut (8 in all) pops onto the nearest bank; 75% cuts the rest;
+  one random back paddy grows 1.45x tall and two birds burst out of it; all cut: the bundles hop onto the rack.
+- Silly: wet Kaylee into Daddy (he shakes), her armful on his head in the harvest, the wallow (mud spots, washed off in
+  the water), flopping in the straw pile, the scarecrow's spin and hat flip, the buffalo's roll.
+- thresh is a placeholder (each tap on the basket bangs a bundle's grains in; 5 bangs, then the deck); the deck is
+  #168's. No voices, no Sparkle lines yet (greybox).
+- Changed from the plan: the café's deck sits on a low spur at the back left (`DECK`), so the deck camera behind it is
+  over open hillside, not inside the hill; the rack runs across the screen (from the front, a rack running away from
+  the camera read as one broken X); the paddies are 0.34 m deep (the cut sides didn't show at 0.2).
+
+**Next: greybox B** (thresh for real, the kratip on the deck, `VideoBreak` with `next`, the video line's clip). Dad plays
+greybox A first: if leading Kaylee isn't fun, change speed, brush and following before B.
+
 ## Fun check
 
 - **Core verb:** lead Kaylee; it deepens: plant behind her, shoo birds, cut the gold. One side verb: bang the bundles.
