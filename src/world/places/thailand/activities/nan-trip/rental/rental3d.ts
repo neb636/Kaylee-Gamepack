@@ -1,4 +1,4 @@
-// The rental desk at Nan airport (section `rental`, plan: thailand/nan-trip.md, "The rental desk", build step 6: the
+// The rental desk at Nan airport (section `rental`, plan: thailand/nan-trip.html, "The rental desk", build step 6: the
 // greybox): one short beat, not a full activity. Shapes and sounds, no voices yet.
 //
 // key: the clerk slides the key fob across the counter and it hops into Kaylee's hoof. The toy: press it (a tap on the

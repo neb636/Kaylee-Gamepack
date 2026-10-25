@@ -1,4 +1,4 @@
-// The rental desk at Nan airport (plan: planning/around-the-world/thailand/nan-trip.md, "The rental desk"), in meters:
+// The rental desk at Nan airport (plan: planning/around-the-world/thailand/nan-trip.html, "The rental desk"), in meters:
 // where everything stands and the beats. Pure data (no three.js): sections.ts can read it at startup.
 //
 // Seen from the front (the camera looks toward -z), under the arrivals hall's canopy, with the car park behind:

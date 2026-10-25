@@ -1,4 +1,4 @@
-// The Nan map (plan: planning/around-the-world/thailand/nan-trip.md, "The Nan map"), in meters: a toy diorama of Nan on
+// The Nan map (plan: planning/around-the-world/thailand/nan-trip.html, "The Nan map"), in meters: a toy diorama of Nan on
 // a table, where everything stands, the roads between the places and which drive each one plays. Pure data (no
 // three.js): sections.ts can read it at startup.
 //

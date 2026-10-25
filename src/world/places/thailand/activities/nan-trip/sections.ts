@@ -1,4 +1,4 @@
-// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.md), as deep-linkable sections:
+// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.html), as deep-linkable sections:
 // #/world/thailand/nan-trip/<section>?stops=<done so far>&... Built so far (greyboxes): the rental desk at Nan airport
 // (rental?round=key|boot|belt, step 6): press the key fob, the bags into the boot, click the seatbelt; the Nan map
 // (map?stops=..., step 6), the trip's hub: a toy diorama where she picks the next stop (or drags the little Pajero

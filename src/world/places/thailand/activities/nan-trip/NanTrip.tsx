@@ -1,4 +1,4 @@
-// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.md). Still in the works (meta.ts `inTheWorks`):
+// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.html). Still in the works (meta.ts `inTheWorks`):
 // only its links open it. Built so far, as greyboxes, and joined up from the rental desk on:
 //   the rental desk (rental/, section rental): the key fob, the bags into the boot, the seatbelt, and off they drive to
 //   the Nan map (map/, section map), the trip's hub: tap a place (or drag the little Pajero there) and it drives there

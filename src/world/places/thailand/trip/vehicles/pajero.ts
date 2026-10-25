@@ -1,5 +1,5 @@
 // The family's rental for the Nan road trip (Dad, 2026-10-24): a silver Mitsubishi Pajero Sport, the big seven-seat
-// SUV that's made in Thailand. GREYBOX (plan: thailand/nan-trip.md, steps 1 and 6): a chunky toy box in the house's toon
+// SUV that's made in Thailand. GREYBOX (plan: thailand/nan-trip.html, steps 1 and 6): a chunky toy box in the house's toon
 // look, tall and square with big wheels, roof rails and a black face, enough to steer and to read as "the big car". Since
 // the rental desk (step 6) it's hollow, so the family shows inside through see-through windows: seats (Mommy at the wheel
 // on the right, Daddy beside her, Kaylee behind Mommy), the back door on Kaylee's side that swings open, the tailgate

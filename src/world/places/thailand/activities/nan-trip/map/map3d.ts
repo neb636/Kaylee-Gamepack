@@ -1,4 +1,4 @@
-// The Nan map (section `map`, plan: thailand/nan-trip.md, "The Nan map", build step 6: the greybox): the trip's hub, a
+// The Nan map (section `map`, plan: thailand/nan-trip.html, "The Nan map", build step 6: the greybox): the trip's hub, a
 // toy diorama of Nan on a table (diorama.ts), seen from above at a slant. The little silver Pajero sits on its roads.
 //
 // The toy: the Pajero is a toy car on the board. Tap a place and it drives there along the roads (beep, putter), and

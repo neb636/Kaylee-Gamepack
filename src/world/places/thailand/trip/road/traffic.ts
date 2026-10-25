@@ -1,4 +1,4 @@
-// Who else is on the road (the road kit, plan: thailand/nan-trip.md): oncoming songthaews, scooters, tuk-tuks and the
+// Who else is on the road (the road kit, plan: thailand/nan-trip.html): oncoming songthaews, scooters, tuk-tuks and the
 // little car that comes round a blind bend, and the animals that share the road (a water buffalo that ambles across,
 // chickens that flap off it, a monkey on the guard rail). They keep to THEIR left (her right, lat < 0), and they never
 // crash into her: if she drifts onto their side, they pull onto the verge, stop and toot a tune until she's past.
