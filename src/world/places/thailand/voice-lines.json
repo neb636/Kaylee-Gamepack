@@ -170,6 +170,18 @@
     "voice": "ji"
   },
   {
+    "text": "Ready for a trip, Kaylee?",
+    "voice": "nick"
+  },
+  {
+    "text": "Where do you want to go, Kaylee?",
+    "voice": "nick"
+  },
+  {
+    "text": "OK! Just tap me!",
+    "voice": "nick"
+  },
+  {
     "text": "Tap your things to pack them, Kaylee!",
     "voice": "ji"
   },
@@ -543,6 +555,7 @@
   "Tap Agong to give it to him!",
   "Tap the plane to fly home!",
   "Pack again, or go straight to the boat?",
+  "Want to see real rice grow, Kaylee?",
   "Welcome to HarborLand, Kaylee! Tap a place to play!",
   {
     "text": "Sawasdee ka, Kaylee!",

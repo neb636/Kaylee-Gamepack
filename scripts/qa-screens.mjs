@@ -1,6 +1,6 @@
-// Screenshots every Around the World screen (plus home and the puppet lab) at iPad and iPhone sizes for visual QA.
+// Screenshots every Around the World screen (plus the puppet lab) at iPad and iPhone sizes for visual QA.
 //
-//   npm run build && node scripts/qa-screens.mjs [--chromium] [--only=iphone-landscape,ipad-portrait] [--routes=home,world-map]
+//   npm run build && node scripts/qa-screens.mjs [--chromium] [--only=iphone-landscape,ipad-portrait] [--routes=world-map,passport]
 //                                                 [--parallel=3] [--max-minutes=20]
 // Viewports run side by side (--parallel, default 3) and the run stops starting new screens after --max-minutes
 // (default 20), listing what it skipped in errors.txt, so a sweep can never eat an hour. Then `npm run qa:sheets`.
@@ -55,7 +55,6 @@ async function raceTo(page, until, taps = 0, after = 0) {
 }
 
 const SCREENS = [
-  { name: 'home', hash: '#/' },
   { name: 'world-map', hash: '#/world' },
   {
     name: 'world-map-continent',
@@ -726,6 +725,9 @@ const SCREENS = [
   { name: 'nan-mushrooms-2', hash: '#/world/thailand/nan-trip/mushrooms?round=2', reset: true, wait: 3500 },
   { name: 'nan-mushrooms-3', hash: '#/world/thailand/nan-trip/mushrooms?round=3', reset: true, wait: 3500 },
   { name: 'nan-mushrooms-pizza', hash: '#/world/thailand/nan-trip/mushrooms?round=pizza&basket=grey5,pink3,gold2', reset: true, wait: 3500 },
+  // Kaylee's rice farm (greybox A): paddy A flooded and three dry, the planted rows growing (birds coming in), the golden
+  // rice drained for the harvest, the bundles on the rack by the threshing basket, and the café's deck.
+  ...['plant', 'grow', 'harvest', 'thresh', 'deck'].map((round) => ({ name: `nan-rice-${round}`, hash: `#/world/thailand/nan-trip/rice?round=${round}`, reset: true, wait: round === 'grow' ? 6000 : 3500 })),
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
   // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
   // version.

@@ -1215,6 +1215,75 @@ GAME_SCENARIOS.push(
   },
 )
 
+// Kaylee's rice farm (greyboxes A and B): leading Kaylee, the core verb. A finger held on paddy A zigzags across it at about
+// her trotting speed (she splashes after it, ripples behind her, seedlings plip in where she wades); then in the
+// growing round the finger chases the pecking birds off the rice.
+const riceReady = async (page, base, round) => {
+  await page.goto(`${base}#/world/thailand/nan-trip/rice?round=${round}`)
+  await page.waitForFunction(() => window.__thaiNanQA?.().game === 'rice', null, { timeout: 30000 })
+  await page.waitForTimeout(1200)
+}
+const slowDrag = async (page, to, ms = 900) => {
+  const from = await page.evaluate(() => window.__qaMouse ?? null)
+  for (let k = 1; k <= 12; k++) {
+    const x = (from?.[0] ?? to[0]) + ((to[0] - (from?.[0] ?? to[0])) * k) / 12
+    const y = (from?.[1] ?? to[1]) + ((to[1] - (from?.[1] ?? to[1])) * k) / 12
+    await page.mouse.move(x, y)
+    await page.waitForTimeout(ms / 12)
+  }
+  await page.evaluate((p) => (window.__qaMouse = p), to)
+}
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-plant',
+    seconds: 9,
+    setup: (page, base) => riceReady(page, base, 'plant'),
+    act: async (page) => {
+      const [x0, y0, x1, y1] = (await page.evaluate(() => window.__thaiNanQA())).paddies[0]
+      await page.mouse.move(x0 + 12, y1 - 12)
+      await page.evaluate((p) => (window.__qaMouse = p), [x0 + 12, y1 - 12])
+      await page.mouse.down()
+      for (let r = 0; r < 4; r++) await slowDrag(page, [r % 2 ? x0 + 12 : x1 - 12, y1 - 14 - ((y1 - y0 - 28) * r) / 3], 1500)
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'nan-shoo',
+    seconds: 8,
+    setup: async (page, base) => {
+      await riceReady(page, base, 'grow')
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      for (let k = 0; k < 4; k++) {
+        const b = (await page.evaluate(() => window.__thaiNanQA())).birds.at[0]
+        if (!b) {
+          await page.waitForTimeout(800)
+          continue
+        }
+        await page.mouse.move(...b)
+        await page.mouse.down()
+        await page.waitForTimeout(900)
+        await page.mouse.up()
+      }
+    },
+  },
+  // Greybox B's threshing: a tap every 0.7 s on the basket, so she takes bundles, swings and bangs them and tosses the
+  // straw onto the pile; the filmstrip should show the anticipation up, the fast down and the grains spraying.
+  {
+    name: 'nan-thresh',
+    seconds: 8,
+    setup: (page, base) => riceReady(page, base, 'thresh'),
+    act: async (page) => {
+      for (let k = 0; k < 10; k++) {
+        const p = (await page.evaluate(() => window.__thaiNanQA())).points.basket
+        if (p) await page.mouse.click(...p)
+        await page.waitForTimeout(700)
+      }
+    },
+  },
+)
+
 // Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
 // friends), for the photo wall's screens. Runs in the page.
 function seedWallInPage() {

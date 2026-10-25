@@ -221,7 +221,7 @@ export function buildEntrance(bag: Bag): Entrance {
         P.box(60, 0.012, ROAD.w, '#C9C4DE', { at: [0, 0.006, ROAD.z] }),
         ...Array.from({ length: 12 }, (_, i) => P.box(1.2, 0.01, 0.12, PAL.butter, { at: [-26 + i * 4.6, 0.014, ROAD.z] })),
         P.box(9, 0.01, 4.4, '#E6DCC6', { at: [0, 0.008, z + 0.4] }),
-        ...groundScatter(-14, 14, z - 12, z + 2.2, 9, 8, 30),
+        ...groundScatter(-14, 14, z - 12, z + 0.4, 9, 8, 30),
       ]),
       bag,
       0,

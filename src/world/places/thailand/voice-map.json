@@ -413,6 +413,27 @@
     "file": "a0bc3ee70699.mp3"
   },
   {
+    "text": "Ready for a trip, Kaylee?",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2120,
+    "file": "e81962d9b11d.mp3"
+  },
+  {
+    "text": "Where do you want to go, Kaylee?",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1774,
+    "file": "a79f0c3184ad.mp3"
+  },
+  {
+    "text": "OK! Just tap me!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1654,
+    "file": "70094ee39d0a.mp3"
+  },
+  {
     "text": "Tap your things to pack them, Kaylee!",
     "voice": "ji",
     "sig": "ba2e98c34e",
@@ -1454,6 +1475,13 @@
     "sig": "ed7dbdac3d",
     "ms": 2722,
     "file": "84fa172ff8f5.mp3"
+  },
+  {
+    "text": "Want to see real rice grow, Kaylee?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2946,
+    "file": "beda945df11d.mp3"
   },
   {
     "text": "Welcome to HarborLand, Kaylee! Tap a place to play!",

@@ -80,6 +80,12 @@ export const L = {
     ask: {
       question: ji('Kaylee, are you ready to go on a trip?'),
       later: ji('OK! Tell me when!'),
+      // Daddy on the street, when she taps him (the hub's quick way to a trip).
+      daddy: {
+        question: nick(`Ready for a trip, ${NAME}?`),
+        where: nick(`Where do you want to go, ${NAME}?`),
+        later: nick('OK! Just tap me!'),
+      },
     },
     pack: {
       start: ji('Tap your things to pack them, Kaylee!'),
@@ -293,6 +299,14 @@ export const L = {
     fly: 'Tap the plane to fly home!',
     // The boarding pass on a replay: the whole trip or straight to the boat.
     again: 'Pack again, or go straight to the boat?',
+  },
+
+  // The Nan road trip (planning/around-the-world/thailand/nan-trip.md). Greyboxes, so only what a kit piece must speak.
+  nan: {
+    rice: {
+      // The rice farm's video, after Mommy's photo on the deck (rice/video.ts).
+      video: `Want to see real rice grow, ${NAME}?`,
+    },
   },
 
   // The mall day at ICONSIAM (activities/mall-trip/, plan: thailand/mall-trip.md). Talk short, play long: Sparkle's one

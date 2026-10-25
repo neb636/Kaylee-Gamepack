@@ -63,9 +63,13 @@ interface Props<W extends World3D> {
   worldRef: MutableRefObject<W | null>
   /** The DOM tap targets laid over the canvas. */
   anchors: (input: AnchorInput, els: Map<string, HTMLElement>) => ReactNode
+  /** Hold the world still and stop drawing it (a video over it). */
+  paused?: boolean
 }
 
-export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef, anchors }: Props<W>) {
+export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef, anchors, paused = false }: Props<W>) {
+  const pausedRef = useRef(paused)
+  pausedRef.current = paused
   const host = useRef<HTMLDivElement>(null)
   const topProbe = useRef<HTMLDivElement>(null)
   const anchorEls = useRef(new Map<string, HTMLElement>())
@@ -127,6 +131,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       started = true
       stop = frameLoop(
         (_now, dt) => {
+          if (pausedRef.current) return
           world.update(dt)
           world.render()
           world.placeAnchors()
@@ -144,7 +149,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
             }
           }
         },
-        () => world.calm,
+        () => pausedRef.current || world.calm,
       )
     }
     // Compile the shaders before the first frame so the first seconds don't stutter. (three.js polls every material

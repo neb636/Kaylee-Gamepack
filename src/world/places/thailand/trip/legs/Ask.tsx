@@ -2,7 +2,8 @@
 // ✋ not yet. Once there are two trips (`trips`), she asks where to, and 👍 becomes a picture button for each: 🚤 the
 // boat trip, 🛝🍕 the mall day. It shows in the house (when Kaylee comes up to her room, or taps Mommy) and as each
 // trip's first section. "Not yet" gets a happy "OK! Tell me when!" and the card goes, nothing lost. Mommy says it out
-// loud in her own voice (her 3D mouth moves with it); the card shows the words for Dad.
+// loud in her own voice (her 3D mouth moves with it); the card shows the words for Dad. On the street Daddy asks
+// instead (`who="nick"`, tap him), so a trip can start right where the tuk-tuk drops her off.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { lineText, say, sounds, type Line } from '../../../../../sdk'
@@ -24,20 +25,28 @@ export const TRIP_CHOICES: TripChoice[] = [
   { id: 'boat-trip', label: 'The boat trip', icon: '🚤', color: 'var(--sky)' },
   { id: 'mall-trip', label: 'The mall', icon: '🛝🍕', color: 'var(--butter)' },
 ]
-/** Mommy's question once there are two trips. */
-const WHERE: Line = L.mall.trip.where
+/** Who asks: Mommy upstairs and in the trips, Daddy on the street. Their lines (one trip / two or more / not yet), their
+ *  name and the color of their unicorn. */
+const ASKERS = {
+  ji: { name: 'Mommy', color: '#FF8FB8', question: L.trip.ask.question, where: L.mall.trip.where, later: L.trip.ask.later },
+  nick: { name: 'Daddy', color: '#7FD1B9', ...L.trip.ask.daddy },
+} satisfies Record<string, { name: string; color: string; question: Line; where: Line; later: Line }>
+export type Asker = keyof typeof ASKERS
 
 interface Props {
   open: boolean
   /** She picked a trip (its id; with no `trips`, the one trip there is). */
   onYes(trip?: string): void
-  /** After Mommy's "OK! Tell me when!". */
+  /** After their "OK! Tell me when!". */
   onNotYet(): void
   /** Two or more trips: a picture button for each instead of 👍. */
   trips?: TripChoice[]
+  /** Who asks (Mommy unless set). */
+  who?: Asker
 }
 
-export function Ask({ open, onYes, onNotYet, trips }: Props) {
+export function Ask({ open, onYes, onNotYet, trips, who = 'ji' }: Props) {
+  const asker = ASKERS[who]
   const [later, setLater] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
   useEffect(() => {
@@ -45,7 +54,7 @@ export function Ask({ open, onYes, onNotYet, trips }: Props) {
   }, [open])
   useEffect(() => () => clearTimeout(timer.current), [])
   const where = !!trips && trips.length > 1
-  const line = later ? L.trip.ask.later : where ? WHERE : L.trip.ask.question
+  const line = later ? asker.later : where ? asker.where : asker.question
   useEffect(() => {
     if (open) void say(line)
   }, [open, line])
@@ -81,13 +90,13 @@ export function Ask({ open, onYes, onNotYet, trips }: Props) {
             <motion.span
               animate={{ rotate: [0, -12, 10, 0] }}
               transition={{ repeat: Infinity, duration: 1.8, repeatDelay: 1 }}
-              style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 64, height: 64, borderRadius: 32, background: '#FF8FB8', fontSize: 34, border: '3px solid #fff' }}
-              title="Mommy"
+              style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 64, height: 64, borderRadius: 32, background: asker.color, fontSize: 34, border: '3px solid #fff' }}
+              title={asker.name}
             >
               🦄
             </motion.span>
             <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
-              <small style={{ fontWeight: 700, opacity: 0.6, fontSize: 14 }}>Mommy</small>
+              <small style={{ fontWeight: 700, opacity: 0.6, fontSize: 14 }}>{asker.name}</small>
               <span style={{ fontWeight: 700, fontSize: 'clamp(20px, min(3.4vw, 3.6vh), 30px)' }}>{lineText(line)}</span>
             </span>
           </motion.div>

@@ -55,8 +55,8 @@ export interface HouseEvents {
   onArrived(): void
   /** She tapped a thing (Sparkle may tell her about it). */
   onPoke?(id: string): void
-  /** She tapped someone in the family, who waved and said hi. */
-  onGreet?(id: string): void
+  /** She tapped someone in the family, who waved (and said hi, unless this returns true: they speak up instead). */
+  onGreet?(id: string): boolean | void
 }
 
 /** Where a family member is (a spot like the ones in family.ts), or hidden (packed in a suitcase!). */
@@ -519,8 +519,7 @@ export class House implements World3D {
     const s = m && this.spotOf(m)
     if (!m || !s || !who || !this.familyVisible(`family:${id}`)) return
     who.react('wave')
-    this.hello(m, who)
-    this.events.onGreet?.(id)
+    if (!this.events.onGreet?.(id)) this.hello(m, who)
     const face = s.face * deg
     // Stand in front of them (or as close as there's room), then they hop together.
     const front: XZ = [s.x + Math.sin(face) * 0.95, s.z + Math.cos(face) * 0.95]

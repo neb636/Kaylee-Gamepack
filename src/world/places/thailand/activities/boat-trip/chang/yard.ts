@@ -47,16 +47,18 @@ function sala(x: number, z: number, rot: number) {
 export function buildYard(bag: Bag) {
   const root = new Group()
   // ---- The ground: gravel all round, with darker patches; sandy where the family stand ----
+  // (Each layer on its own height, from the grass (tops 0.003, 0.006) up through the gravel (0.01), the sand (0.014) and
+  // the dirt patches (0.022, 0.026): two at the same height flicker as the camera moves.)
   // Brown earth and grass under the palms all round; the gravel only where the elephants are fed.
-  const ground = [P.box(80, 0.1, 80, EARTH, { at: [0, -0.05, -20] }), P.box(22, 0.012, 15, GRAVEL, { at: [0, 0, -6.5] }), ...grassPatches(-30, 30, -40, 10, 2, 46, [-11.5, 11.5, -14.5, 1.5])]
+  const ground = [P.box(80, 0.1, 80, EARTH, { at: [0, -0.05, -20] }), P.box(22, 0.02, 15, GRAVEL, { at: [0, 0, -6.5] }), ...grassPatches(-30, 30, -40, 10, 2, 46, [-11.5, 11.5, -14.5, 1.5])]
   for (let i = 0; i < 24; i++) {
     const x = Math.sin(i * 12.9898) * 9
     const z = -1 - ((i * 7.31) % 14)
-    ground.push(P.cyl(0.5 + (i % 4) * 0.25, 0.5 + (i % 4) * 0.25, 0.01, GRAVEL_DARK, { at: [x, 0.004, z], scale: [1.4, 1, 0.8] }, 10))
+    ground.push(P.cyl(0.5 + (i % 4) * 0.25, 0.5 + (i % 4) * 0.25, 0.01, GRAVEL_DARK, { at: [x, 0.013, z], scale: [1.4, 1, 0.8] }, 10))
   }
   // Tan dirt where the elephants have scuffed the gravel, and pebbles; the family's side is sandier.
   ground.push(...groundScatter(-9, 9, -12, -0.4, 3, 14, 30), ...groundScatter(-7, 8, 0.9, 6, 7, 4, 26))
-  ground.push(P.box(16, 0.012, 4.5, '#E6DCC6', { at: [0, 0.006, 2.6] }))
+  ground.push(P.box(16, 0.028, 4.5, '#E6DCC6', { at: [0, 0, 2.6] }))
   root.add(solid(merge(ground), bag, 0))
   // ---- The rail: galvanized pipes on posts, a thick one on top, a thinner one lower down ----
   const rail = []

@@ -1,8 +1,12 @@
-// The world map: tap continents to hear their names, tap a country pin to fly there.
+// The world map, and the app's home screen: tap continents to hear their names, tap a country pin to fly there,
+// tap home for Sparkle's tea party.
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
+import posthog, { isPostHogEnabled } from '../posthog'
+import { gameLogger } from '../posthog-logger'
 import { go } from '../router'
 import { Mascot, say, sounds, useOnline } from '../sdk'
+import { useTrophies } from '../sdk/trophies'
 import balloon from './assets/balloon.webp'
 import crayons from './assets/crayon-box.webp'
 import mapArt from './assets/bg-world-map.webp'
@@ -30,6 +34,8 @@ const COMING_SOON: { id: keyof typeof WORLD_LINES.soon; emoji: string; x: number
   { id: 'thailand', emoji: '🐘', x: 74, y: 49 },
 ]
 const HOME = { x: 19, y: 33 }
+// Sparkle's house on the map is where her tea party is (the one game from before Around the World).
+const TEA_PARTY = 'unicorn-tea-party'
 
 function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number; children: ReactNode; label: string; onTap: () => void; glow?: boolean; dim?: boolean }) {
   return (
@@ -67,6 +73,7 @@ function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number
 
 export function WorldMap() {
   const passport = usePassport()
+  const trophies = useTrophies()
   const online = useOnline() // the Theater needs the internet
   const [label, setLabel] = useState<{ text: string; x: number; y: number } | null>(null)
   const [travelTo, setTravelTo] = useState<PlaceEntry | null>(null)
@@ -85,7 +92,16 @@ export function WorldMap() {
 
   return (
     <div className="screen decorated" style={{ padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 12px)', overflow: 'hidden' }}>
-      <TopBar icon="🏠" label="Home" onBack={go.home}>
+      <TopBar
+        icon={
+          <>
+            🏆
+            {trophies.length > 0 && <span style={BADGE}>{trophies.length}</span>}
+          </>
+        }
+        label="My trophies"
+        onBack={go.trophies}
+      >
         <BarPill>🌍 Around the World</BarPill>
       </TopBar>
 
@@ -105,9 +121,22 @@ export function WorldMap() {
             ))}
           </div>
 
-          {/* Home + Sparkle's balloon */}
-          <Pin x={HOME.x} y={HOME.y} label="home" onTap={() => show(WORLD_LINES.home, HOME.x, HOME.y)}>
+          {/* Home (Sparkle's tea party) + Sparkle's balloon */}
+          <Pin
+            x={HOME.x}
+            y={HOME.y}
+            label="Tea party"
+            onTap={() => {
+              const won = trophies.some((t) => t.gameId === TEA_PARTY)
+              if (isPostHogEnabled) posthog.capture('game_session_started', { game_id: TEA_PARTY, previously_completed: won })
+              gameLogger.sessionStarted(TEA_PARTY, won)
+              sounds.sparkle()
+              void say(WORLD_LINES.teaParty)
+              go.game(TEA_PARTY)
+            }}
+          >
             🏡
+            <span style={{ position: 'absolute', right: '-22%', bottom: '-18%', width: '58%', aspectRatio: '1', borderRadius: '50%', background: 'var(--pink)', border: '3px solid #fff', boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center', fontSize: '75%' }}>🫖</span>
           </Pin>
           <motion.img
             src={balloon}
@@ -184,6 +213,8 @@ export function WorldMap() {
     </div>
   )
 }
+
+const BADGE: CSSProperties = { position: 'absolute', top: -8, right: -8, background: 'var(--hotpink)', color: '#fff', borderRadius: 999, minWidth: 34, height: 34, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 20, boxShadow: 'var(--shadow)', padding: '0 6px' }
 
 function SideButton({ img, icon, label, color, onClick, badge }: { img?: string; icon?: string; label: string; color: string; onClick: () => void; badge?: number }) {
   return (

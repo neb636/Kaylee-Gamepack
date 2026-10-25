@@ -160,6 +160,12 @@ const SCENARIOS = [
   // the basket or the pizza puts the next mushroom on, so the auto-player can play the rounds through to lunch.
   { name: 'thailand nan: the mushroom farm', id: 'nan-mushrooms', hash: '#/world/thailand/nan-trip/mushrooms', reset: true },
   { name: 'thailand nan: the mushroom pizza', id: 'nan-mushroom-pizza', hash: '#/world/thailand/nan-trip/mushrooms?round=pizza', reset: true },
+  // Kaylee's rice farm (greybox A, no voices): a tap on the farm walks Kaylee there (planting, shooing or cutting what
+  // she walks through), a tap on a gate floods its paddy. The auto-player can't hold a finger down, so it only gets
+  // partway; the robot run that drags through every round is qa-motion's nan-plant and nan-shoo.
+  { name: 'thailand nan: the rice farm', id: 'nan-rice', hash: '#/world/thailand/nan-trip/rice', reset: true },
+  // Its threshing and the deck (greybox B): any tap bangs the next bundle, then the kratip on the deck and Mommy's photo.
+  { name: 'thailand nan: threshing the rice', id: 'nan-rice-thresh', hash: '#/world/thailand/nan-trip/rice?round=thresh', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
   // (?gl=off goes before the hash: the section's address drops anything it doesn't know.)
   { name: 'thailand trip: picture book without webgl', id: 'trip-book', search: '?gl=off', hash: '#/world/thailand/boat-trip/invite', reset: true },
