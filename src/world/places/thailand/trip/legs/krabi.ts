@@ -4,7 +4,7 @@
 // takes the family to the pier. Built for the plane's world (plane.ts cuts here behind a white flash). Faces +z (the
 // camera stands on the road side). Down the road, where a side road turns off into the palms, a signpost with two
 // painted boards (pictures, no words): an elephant pointing up the side road to Baan Chang, a longtail pointing on along
-// the road to the pier (the boat trip's fork, plan: thailand/baan-chang.md). It's scenery: she picks on Daddy's card
+// the road to the pier (the boat trip's fork, plan: thailand/baan-chang.html). It's scenery: she picks on Daddy's card
 // of postcards (WhereTo.tsx), which has room for more places than a signpost has for boards.
 import { Group } from 'three'
 import type { Bag } from '../../engine/dispose'

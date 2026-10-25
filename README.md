@@ -153,7 +153,9 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   Try them at `#/playground`.
 - `src/shell/`: the app wrapper (splash, trophy ceremony, trophy room); the world map is the home screen.
 - `src/games/<id>/`: the original school-paper games (the unicorn tea party, opened from the 🏡 pin on the world map).
-- `planning/around-the-world/`: country and activity plans (`ACTIVITY-TEMPLATE.md`, `thailand.md`, ...).
+- `planning/around-the-world/`: country and activity plans (`ACTIVITY-TEMPLATE.md`, `thailand.md`, ...). Newer plans
+  are pages (`thailand/baan-chang.html`, `thailand/nan-trip.html`), also published with the app at
+  [`planning/around-the-world/thailand/nan-trip.html`](https://neb636.github.io/Kaylee-Gamepack/planning/around-the-world/thailand/nan-trip.html).
 - `AGENTS.md`: the rules AI agents follow when building (read this to change how activities are designed).
   `docs/play-design.md` says what makes an activity fun.
 - `art/STYLE.md`: the art style prompt. `art/source/`: full-size art (per-country originals are git-ignored scratch;

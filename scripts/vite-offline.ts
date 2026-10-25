@@ -15,7 +15,7 @@ export function offline(): Plugin {
       const out = resolve(config.root, config.build.outDir)
       const files = walk(out)
         .map((f) => relative(out, f).split('\\').join('/'))
-        .filter((f) => f !== 'sw.js' && !f.endsWith('.map') && !f.startsWith('.'))
+        .filter((f) => f !== 'sw.js' && !f.endsWith('.map') && !f.startsWith('.') && !f.startsWith('planning/'))
         .sort()
       const template = readFileSync(resolve(config.root, 'src/offline/sw.js'), 'utf8')
       const sw = template
