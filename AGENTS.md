@@ -365,9 +365,9 @@ the country's `known-issues.md` (Thailand has one) instead of growing the PR.
 
 - Never poll with `until ! pgrep ...; sleep` loops. Start long jobs with `run_in_background` and wait for the completion notice.
 - Anything that may take over 5 minutes goes in the background; never run a foreground command near the 10-minute timeout.
-- The QA scripts take a machine-wide lock (`scripts/qa-lib.mjs`, `kaylee-gamepack-qa.lock` in the temp dir) when they
-  start their preview server, so agents in different worktrees queue instead of clashing on ports and CPU. A script
-  that prints "QA is busy" is waiting its turn: let it wait.
+- The QA scripts take one of 2 machine-wide slots (`scripts/qa-lib.mjs`, `kaylee-gamepack-qa-<n>.lock` in the temp
+  dir) when they start their preview server, so agents in different worktrees queue instead of piling on CPU. The
+  second slot serves on port +100. A script that prints "QA is busy" is waiting its turn: let it wait.
 - One heavy job at a time: QA agents, timed robot play and builds fight for CPU, and a rebuild changes `dist/` under a QA agent.
 - Iterate with `npm run dev` and `npm run typecheck`; `npm run build` only before QA or the final `verify`.
 - The main thread looks at no more than ~3 images itself. Screenshots go to `layout-qa` / contact sheets (`npm run qa:sheets`).

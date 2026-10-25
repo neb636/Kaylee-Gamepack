@@ -26,7 +26,8 @@ export const VIEWPORTS = [
   { name: 'laptop', width: 1280, height: 720, desktop: true },
 ]
 
-const LOCK = path.join(tmpdir(), 'kaylee-gamepack-qa.lock')
+const SLOTS = 2
+const lockDir = (slot) => path.join(tmpdir(), `kaylee-gamepack-qa-${slot}.lock`)
 const alive = (pid) => {
   try {
     process.kill(pid, 0)
@@ -37,42 +38,46 @@ const alive = (pid) => {
 }
 
 /**
- * One QA run at a time on this machine, across every worktree and agent: the scripts share fixed ports and
- * WebKit is CPU-heavy, so parallel runs clash and time each other out. Waits for the holder to finish; a lock
- * left by a dead process is taken over.
+ * At most SLOTS QA runs at a time on this machine, across every worktree and agent: WebKit is CPU-heavy, so more
+ * parallel runs time each other out. Waits for a free slot; a slot left by a dead process is taken over.
+ * Returns { slot, release }; the slot number offsets the port so two runs of the same script don't clash.
  */
-async function acquireLock() {
+async function acquireSlot() {
   let told = false
   for (;;) {
-    try {
-      mkdirSync(LOCK)
-      writeFileSync(path.join(LOCK, 'info'), JSON.stringify({ pid: process.pid, cwd: root, script: path.basename(process.argv[1] ?? '') }))
-      const release = () => rmSync(LOCK, { recursive: true, force: true })
-      process.once('exit', release)
-      for (const sig of ['SIGINT', 'SIGTERM']) process.once(sig, () => process.exit(1))
-      return release
-    } catch (e) {
-      if (e.code !== 'EEXIST') throw e
-    }
     let holder = null
-    try {
-      holder = JSON.parse(readFileSync(path.join(LOCK, 'info'), 'utf8'))
-    } catch {
-      /* holder is still writing its info */
+    for (let slot = 0; slot < SLOTS; slot++) {
+      const dir = lockDir(slot)
+      try {
+        mkdirSync(dir)
+        writeFileSync(path.join(dir, 'info'), JSON.stringify({ pid: process.pid, cwd: root, script: path.basename(process.argv[1] ?? '') }))
+        const release = () => rmSync(dir, { recursive: true, force: true })
+        process.once('exit', release)
+        for (const sig of ['SIGINT', 'SIGTERM']) process.once(sig, () => process.exit(1))
+        return { slot, release }
+      } catch (e) {
+        if (e.code !== 'EEXIST') throw e
+      }
+      try {
+        holder = JSON.parse(readFileSync(path.join(dir, 'info'), 'utf8'))
+      } catch {
+        continue // its owner is still writing the info
+      }
+      if (!alive(holder.pid)) {
+        rmSync(dir, { recursive: true, force: true })
+        slot-- // try this slot again
+      }
     }
-    if (holder && !alive(holder.pid)) {
-      rmSync(LOCK, { recursive: true, force: true })
-      continue
-    }
-    if (!told) console.log(`QA is busy (${holder ? `${holder.script} in ${holder.cwd}` : 'another run'}); waiting for it to finish...`)
+    if (!told) console.log(`QA is busy (${SLOTS} runs at once${holder ? `, e.g. ${holder.script} in ${holder.cwd}` : ''}); waiting for a free slot...`)
     told = true
     await new Promise((r) => setTimeout(r, 2000))
   }
 }
 
-/** Takes the machine-wide QA lock, then serves dist/ with vite preview; returns { base, stop } (stop also frees the lock). */
-export async function serve(port) {
-  const release = await acquireLock()
+/** Takes a QA slot, then serves dist/ with vite preview; returns { base, stop } (stop also frees the slot). */
+export async function serve(basePort) {
+  const { slot, release } = await acquireSlot()
+  const port = basePort + slot * 100
   const server = spawn('npx', ['vite', 'preview', '--port', String(port), '--strictPort'], { cwd: root, stdio: 'ignore' })
   const stop = () => {
     server.kill()
