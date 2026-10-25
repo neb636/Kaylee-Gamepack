@@ -1,4 +1,4 @@
-// Baan Chang's feeding yard in meters, pure data (plan: thailand/baan-chang.md). The steel pipe rail runs along x at
+// Baan Chang's feeding yard in meters, pure data (plan: thailand/baan-chang.html). The steel pipe rail runs along x at
 // z = 0; the elephants stand behind it (z < 0) facing the family (+z), a row of mossy boulders sits just in front of it,
 // and the family stand on the near side with Daddy's basket. Food she holds rides the plane z = HOLD.z, in front of the
 // boulders. The build (yard.ts), the elephants, the trunks' floor and the camera all read this.

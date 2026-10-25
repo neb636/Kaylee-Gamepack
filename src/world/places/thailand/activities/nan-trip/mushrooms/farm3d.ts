@@ -1,4 +1,4 @@
-// Baan Huanam Mushroom Farm (plan: planning/around-the-world/thailand/nan-trip.md, "2. Baan Huanam Mushroom Farm"),
+// Baan Huanam Mushroom Farm (plan: planning/around-the-world/thailand/nan-trip.html, "2. Baan Huanam Mushroom Farm"),
 // greybox: shapes and sounds, no voices yet. Two places in one world: the dim mushroom house (the camera low in the
 // aisle, looking at the rack of sawdust bags) and the farm's table outside, 8 m along, where the camera glides for lunch.
 //
