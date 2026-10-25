@@ -145,7 +145,8 @@ export class Racer {
 
   update(dt: number, t: number) {
     const { body, head, armL, armR } = this.rig
-    const H = this.height
+    // The body moves inside the rig's root: a scaled-up root (the vinyl Kaylee) already makes these moves bigger.
+    const H = this.height / this.rig.root.scale.y
     // ---- Moving: walking along, hopping up a step ----
     const mv = this.moves[0]
     let arc = 0

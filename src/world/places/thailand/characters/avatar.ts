@@ -34,7 +34,8 @@ interface Tween {
 export class Avatar implements Character {
   readonly id = 'kaylee'
   readonly root: Group
-  readonly height = H
+  /** How tall she stands (the vinyl toy is scaled up: model.ts's KAYLEE_SIZE). */
+  readonly height: number
   pose: Pose = 'stand'
   /** Which floor she's on (0 = street level, 1 = upstairs). */
   floor: 0 | 1 = 0
@@ -70,6 +71,7 @@ export class Avatar implements Character {
    *  builds); `null` builds the code-built Kaylee instead (the lab's comparison, or if the model couldn't load). */
   constructor(private bag: Bag, model: GLTF | null = kayleeModel()) {
     this.chibi = model ? buildModelRig(model, bag) : buildAnimal(LOOKS.kaylee, bag)
+    this.height = this.chibi.height
     this.life = new FaceLife(this.chibi)
     this.root = this.chibi.root
     this.root.rotation.y = this.yaw

@@ -25,6 +25,9 @@ const PX = 1.8
 const ARM_TILT = 2.0
 /** Meters the face's smoothed hull stands off the surface (smoothHull). */
 const HULL_LIFT = 0.004
+/** How much bigger she stands than the 1 m model (Dad, 2026-10-25: she looked small next to the family). Everything
+ *  on her (outfits, socks, what she holds) is inside the scaled root, so it grows with her. */
+export const KAYLEE_SIZE = 1.25
 /** Where the arms were cut off the body in Blender (|x|, meters; docs/3d-characters.md step 2). */
 const SHOULDER_CUT = 0.105
 /** And the legs, under the skirt (y). */
@@ -156,6 +159,7 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
   const root = new Group()
   const [body, head, eyes, armL, armR, tail, legL, legR] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail', 'legL', 'legR'].map(node)
   root.add(blobShadow(0.26, bag), body)
+  root.scale.setScalar(KAYLEE_SIZE)
   // Her hair is as wide as her reach, so an arm raised the code-built way (rotation.z, out to the side) ends up inside
   // it. Each arm swings in a plane turned forward instead: a tilted frame around the pivot and the opposite turn inside
   // it, so the rest pose is unchanged and a raised hoof comes up in front of her.
@@ -214,8 +218,8 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
     legL,
     legR,
     mane: null,
-    height: 1,
-    radius: 0.16,
+    height: KAYLEE_SIZE,
+    radius: 0.16 * KAYLEE_SIZE,
     // Her hair reaches 0.34 m behind her neck and her heels 0.03 m behind her feet: lying, she tips up ~27° so both
     // touch, her head on the hair like a pillow.
     lie: { lift: 0.06, tilt: 0.46 },
