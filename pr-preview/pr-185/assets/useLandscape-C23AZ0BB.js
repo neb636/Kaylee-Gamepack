@@ -1,0 +1,1 @@
+import{Dt as e,wt as t}from"./sdk-CH6Ns1S_.js";var n=e(t(),1),r=typeof matchMedia>`u`?void 0:matchMedia(`(orientation: landscape)`);function i(){return(0,n.useSyncExternalStore)(e=>(r?.addEventListener(`change`,e),()=>r?.removeEventListener(`change`,e)),()=>!!r?.matches)}export{i as t};
