@@ -117,8 +117,8 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588). Files: `kaylee-rig.gl
   from inside the Thailand folder, never from `meta.ts` / `sections.ts`). `buildModelRig` clones it and maps the named
   nodes onto a `Rig`, so `Avatar` (`new Avatar(bag, model)`) walks, poses, waves and wears outfits unchanged.
 - **Look:** each mesh's texture goes on a `MeshToonMaterial` with the shared `toonGradient()`, and each piece gets an
-  ink hull, except the eye domes, at 1.35 px (0.45 of the code-built toys' 3: Dad's pick, it hides most of what
-  goes wrong at the bangs and shoulders). A scanned-looking mesh needs a **smoothed hull** (`smoothHull`): the plain `makeHull`
+  ink hull, except the eye domes, 1.35 px on screen (`PX` 1.8 × the game-wide `TUNE.outline` 0.75; 0.45 of the
+  code-built toys' 3 px: Dad's pick, it hides most of what goes wrong at the bangs and shoulders). A scanned-looking mesh needs a **smoothed hull** (`smoothHull`): the plain `makeHull`
   zigzags along low-poly hair tips and bangs and blotches in tight creases. It takes the normals from a Taubin-smoothed
   copy but keeps the real surface, so the line hugs the shape (a smoothed hull sags below the bangs and leaves a gap
   between hair and line). Only the face stays smoothed and stood 4 mm off, which keeps ink out of its dimples and eye

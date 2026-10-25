@@ -11,8 +11,9 @@ export const TUNE = {
     [0.8, 0.77, 0.93],
     [1, 1, 1],
   ] as [number, number, number][],
-  /** Outline width multiplier (characters 3 px, props 2 px, trinkets 1.5 px at 1). */
-  outline: 1,
+  /** Outline width multiplier (characters 3 px, props 2 px, trinkets 1.5 px at 1). 0.75: Dad found the full width
+   *  heavy (2026-10-25). */
+  outline: 0.75,
   /** Camera inside the house: degrees, and the floor box (meters) that must fit on screen around Kaylee. */
   insideYawWide: 30,
   insideYawTall: 16,
