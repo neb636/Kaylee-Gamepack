@@ -417,7 +417,8 @@ activities/nan-trip/
 4. **Greybox: Bo Kluea salt** (`salt`). *Built 2026-10-25 (see "What's built" below).*
 5. ~~Greybox: Wat Phumin~~ (`temple`): dropped 2026-10-25 (Dad: no temples or Buddhas in the game, AGENTS.md). Its
    greybox (PR #187) was closed unmerged, and the city road now ends at Nan's market.
-6. **Greybox: the Nan map and the rental desk** (`map`, `rental`), and the `three` viewpoint.
+6. **Greybox: the Nan map and the rental desk** (`map`, `rental`), and the `three` viewpoint. *Built 2026-10-25 (see
+   "What's built" below).*
 7. **The trip loop:** the `TripDef` (fly to Nan, the silver Pajero), the third invite choice, the photo wall (no
    gift).
 8. **The look:** the Pajero, the landmarks, rain and cloud.
@@ -546,12 +547,60 @@ the 3 road, which starts at Bo Kluea.
   fed the fire and scraped the pan through to the bags and the end card with no errors, about 35 touches (a child
   will take more), about a minute of robot play.
 
-**Not yet (later steps):** the family in the car (Daddy's "Whoa!", Mommy's lines, Sparkle's), the wipers, the
-dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero.
+**Step 6, the rental desk, the Nan map and the 3 from above (2026-10-25).** Shapes in the toon look, no voices, no
+art. The trip is joined up from the rental desk on: rental → map → a drive → its stop → back to the map (its stamp
+lands) → … → the airport → the 3 road → drawing the 3. New params: `stops` (the stops done, in order: the stamps, where
+the Pajero waits, whether the airport is open) on every section, and `to` on `drive` (picked on the map: its stop
+opens by itself at the end of the road, no end card; `map` for the city road). A bare `nan-trip` link now opens the
+rental desk.
+- **The Pajero** (`trip/vehicles/pajero.ts`) is hollow now: see-through windows, the seats (Mommy at the wheel on the
+  right, Daddy beside her, Kaylee behind Mommy), Kaylee's back door that swings open, a tailgate that lifts, folding
+  wing mirrors, slots for three bags in the boot and Kaylee's seatbelt anchor and buckle. Still a box (the look is step 8).
+- **The rental desk** (`rental/`, `#/world/thailand/nan-trip/rental?round=key|boot|belt`): the arrivals hall's counter
+  under a lavender canopy, the car park beside it, Nan's green hills behind. The clerk (a puppy in a blue shirt and a
+  scarf, my placeholder pick like the farm aunties) slides the key fob across the counter and it hops into Kaylee's
+  hoof. `key`: every press (the fob, or the car) makes the Pajero chirp and wink its lights; press 1 folds its mirrors
+  out, press 2 makes Daddy jump, press 3 pops the tailgate and everyone heads out. `boot`: her pink suitcase, Mommy's bag
+  and Daddy's backpack: drag one to the boot (or tap it) and it thumps in, the car squats on its springs; let go
+  elsewhere and it hops back. All in, the tailgate shuts. `belt`: her door swings open, she hops into her seat, Mommy
+  and Daddy hop into theirs; the seatbelt glows: tap, click, the door shuts, vroom, and the Pajero drives out of the car
+  park to the map. Pokes: the clerk, the bell, the orchids, the rack of maps (one flaps out), the mountain poster (it
+  rains), the family.
+- **The Nan map** (`map/`, `#/world/thailand/nan-trip/map?stops=…`): a diorama on a table, north up the screen, Laos past
+  a row of border posts on the right (with its flag; Thailand's flies in Nan town). Doi Phu Kha in the middle with a cloud
+  on it, the Nan River winding down with two bridges, cream roads in a loop (town → Pua's mushroom farm → over the
+  mountain to Stop Time Cafe's rice steps → Bo Kluea's salt hut → down a little 3 of hairpins to Santi Suk → town) and
+  the airport road. The toy is the little Pajero (the real one at 7%): tap a place and it drives there along the roads
+  (`net.ts`: the roads as one network of points 5 cm apart, shortest way along them); or grab it and it follows her
+  finger along the roads, never across the hills. Let go at a place, or hold it still at a stop 0.8 s, and it goes.
+  Getting there: a hop, the camera dives down to it, and the drive opens (valley road to the mushrooms, sky road to the
+  café or the salt, city road through town and back, the 3 road from the airport). Done stops wear a pink heart stamp;
+  the newest one drops on with a ka-chunk when she comes back. After two stops the airport opens; after three it's the
+  only place open, and it glows. Pokes: the clouds (a little rain), the river (a fish jumps), the tiny plane (a loop
+  round the board and back down), the buffalo, both flags, the done stops (a jingle, the stamp spins), the car (beep).
+- **The 3 from above** (section `three`, the 3 road's world parked at the viewpoint, the same `Drive` so it doesn't
+  rebuild when the road gets there): a big pink crayon waits at the top of the 3. Her finger near the line pulls it along
+  the road (only forward, only the stretch just ahead of it, so it can't jump to the hairpin's other leg); the numbers
+  pop as it rounds each bend; a tap draws on round the next bend; the last few meters finish by themselves. Then the
+  fanfare and the end card (🔁 draw it again, 🗺️ the map). The 👆 sweeps along the road ahead of the crayon.
+- The stops' end cards now say 🗺️ (back to the map) instead of 🚙; the drives' end cards (only on a bare drive link
+  now) offer 🔁 and 🗺️.
+- QA: `qa-screens` (`nan-rental-key|boot|belt`, `nan-map`, `nan-map-stops`, `nan-three`), `qa-motion` (`nan-fob`,
+  `nan-map-drag`, `nan-trace`), `qa-pacing` (`nan-rental`, `nan-map`, `nan-three-view`). A robot in WebKit (iPad
+  landscape) pressed the fob, dragged the three bags into the boot, clicked the belt, landed on the map, tapped Nan town
+  (the city road came back to the map by itself), dragged the car from the airport through town to the mushroom farm
+  (the valley road opened with `to=mushrooms`), drew the 3 with a finger and went back to the map with all three stamps
+  and only the airport open. No console errors. Screens checked on iPad landscape and portrait and iPhone landscape.
 
-**Next:** Dad plays the salt wells on the iPad (`salt`, then `?round=2`, `?round=3`). If carrying the bucket isn't fun
-yet, change the toy (how it follows and swings, how low it has to go to tip, how many buckets) before its look and
-voices. Then step 6, the Nan map and the rental desk (step 5, Wat Phumin, was dropped).
+**Not yet (later steps):** the family in the car on the road (Daddy's "Whoa!", Mommy's lines, Sparkle's), the wipers,
+the dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero, the
+family photo at the viewpoint with the 3 behind them (it goes with the photo wall, step 7), Mommy's "Home, or one
+more?" on the map after two stops (a voice line, step 9).
+
+**Next:** Dad plays step 6 on the iPad: the rental desk (`rental`, then `?round=boot`, `?round=belt`), the map
+(`map`, `map?stops=mushrooms,rice`) and drawing the 3 (`three`). Is pulling the little Pajero round the board fun, or
+does she only tap? Does the fob have enough answers? Then step 7, the trip loop: the third invite choice (🏔️🚙), the
+flight north to Nan into the rental desk, home from the 3 road, and the photo on Agong's wall (no gift).
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 

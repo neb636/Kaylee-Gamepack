@@ -1,5 +1,5 @@
 // The mountain road's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet (the
-// greybox): the Pajero's horn, the beeps back, the animals, the guard rail's boing.
+// greybox): the Pajero's horn, the beeps back, the animals, the guard rail's boing, the crayon drawing the 3.
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
 
@@ -35,4 +35,6 @@ export const roadSfx = {
   /** Into the cloud: a soft whoosh down; out above it: a sparkle up. */
   cloudIn: () => noise(1.4, 0.06, 'lowpass', 1400, 300, 0, 0.7),
   cloudOut: () => [0, 1, 2, 3, 4].forEach((i) => tone(880 * (1 + i * 0.25), 900 * (1 + i * 0.25), 0.3, 0.04, 'sine', i * 0.09)),
+  /** The crayon drawing the 3: a waxy scratch (over and over while it moves). */
+  scribble: () => noise(0.09, 0.04, 'bandpass', 2600 + Math.random() * 900, 1800, 0, 1.4),
 }

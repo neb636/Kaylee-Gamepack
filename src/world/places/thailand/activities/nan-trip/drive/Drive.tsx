@@ -1,7 +1,9 @@
 // The mountain road's screen: the 3D road (mountain.ts) with its tap targets, the steering wheel in the corner (the whole
 // wheel is the horn, and it turns as the Pajero turns; it pulses when a car is coming round a blind bend), the 3 road's
-// big numbers as she counts the bends, the 👆 when she hasn't steered for a while, and at the end of the road the end
-// card: 🔁 this road again, or one of the other three. Without WebGL: the flat picture version (Flat.tsx).
+// big numbers as she counts the bends, the 👆 when she hasn't steered for a while, and at the end of the road its stop
+// (when she picked one on the Nan map, it opens by itself) or the end card: the stop, 🔁 this road again, 🗺️ back to
+// the map. The 3 road ends at the viewpoint (section `three`), where she draws the 3. Without WebGL: the flat picture
+// version (Flat.tsx).
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -13,14 +15,23 @@ import { nanRoad, ROAD_IDS, type RoadId } from './roads'
 
 interface Props {
   road: RoadId
+  /** Start parked at the 3 road's viewpoint, the 3 below waiting to be drawn (section `three`). */
+  view?: boolean
+  /** Where she's driving to (picked on the Nan map: a stop's id, or `map` to go back to it): it opens by itself at the
+   *  end of the road. Empty: the end card. */
+  to?: string
   /** The end card picked a road. */
   onRoad: (road: RoadId) => void
-  /** The end card's stop at the end of this road (the valley road's mushroom farm, the sky road's Stop Time Cafe or, by
-   *  its `stop` id, the salt wells). */
+  /** The stop at the end of this road (the valley road's mushroom farm, the sky road's Stop Time Cafe or, by its `stop`
+   *  id, the salt wells). */
   onStop?: (road: RoadId, stop?: string) => void
+  /** Back to the Nan map. */
+  onMap?: () => void
+  /** The 3 road reached its viewpoint: drawing the 3 begins (section `three`). */
+  onView?: () => void
 }
 
-export function Drive({ road, onRoad, onStop }: Props) {
+export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onView }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [run, setRun] = useState(0)
@@ -28,9 +39,18 @@ export function Drive({ road, onRoad, onStop }: Props) {
   const worldRef = useRef<NanDrive | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const wheelRef = useRef<HTMLButtonElement>(null)
+  const viewCb = useRef(onView)
+  viewCb.current = onView
+  // Driving to a stop picked on the map: at the end of the road, it opens.
+  const going = road !== 'three' && !!to && !!(to === 'map' ? onMap : onStop)
+  useEffect(() => {
+    if (!going || hud.phase !== 'end') return
+    if (to === 'map') onMap?.()
+    else onStop?.(road, to)
+  }, [going, hud.phase])
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new NanDrive(renderer, road, { onHud: setHud })
+    const w = new NanDrive(renderer, road, { onHud: setHud, onView: () => viewCb.current?.() }, view ? 'view' : 'road')
     w.setHintElement(hintRef.current)
     w.setWheelElement(wheelRef.current)
     return w
@@ -44,7 +64,7 @@ export function Drive({ road, onRoad, onStop }: Props) {
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#D5DCEA', overflow: 'clip' }}>
       {mode === 'flat' ? (
-        <DriveFlat key={`${road}:${run}`} road={road} onRoad={pick} onStop={onStop} />
+        <DriveFlat key={`${road}:${run}`} road={road} onRoad={pick} onStop={onStop} onMap={onMap} />
       ) : (
         <View3D
           key={`${road}:${run}:${key}`}
@@ -79,7 +99,7 @@ export function Drive({ road, onRoad, onStop }: Props) {
       )}
       {mode === 'webgl' && <Wheel ref={wheelRef} hidden={hud.phase === 'view' || hud.phase === 'end'} onHorn={() => worldRef.current?.honk()} />}
       <CountPop count={hud.count} />
-      <AnimatePresence>{hud.phase === 'end' && <EndCard road={road} onRoad={pick} onStop={onStop} />}</AnimatePresence>
+      <AnimatePresence>{hud.phase === 'end' && !going && <EndCard road={road} onRoad={pick} onStop={onStop} onMap={onMap} />}</AnimatePresence>
     </div>
   )
 }
@@ -173,10 +193,10 @@ const STOP_AT: Partial<Record<RoadId, Stop | Stop[]>> = {
   sky: [{ icon: '🌾', label: 'Stop Time Cafe' }, { icon: '🧂', label: 'Bo Kluea salt wells', id: 'salt' }],
 }
 
-/** The end of the road: drive it again, or take another road (big pictures, no reading). At the end of a road with a
- *  stop built (the valley road's mushroom farm, the sky road's Stop Time Cafe and Bo Kluea's salt wells), its big
- *  pictures come first. */
-export function EndCard({ road, onRoad, onStop }: { road: RoadId; onRoad: (r: RoadId) => void; onStop?: (road: RoadId, stop?: string) => void }) {
+/** The end of the road: drive it again, or back to the map (without one, take another road), in big pictures, no
+ *  reading. At the end of a road with a stop (the valley road's mushroom farm, the sky road's Stop Time Cafe and Bo
+ *  Kluea's salt wells), its big pictures come first. */
+export function EndCard({ road, onRoad, onStop, onMap }: { road: RoadId; onRoad: (r: RoadId) => void; onStop?: (road: RoadId, stop?: string) => void; onMap?: () => void }) {
   const size = 'clamp(92px, 15vmin, 128px)'
   const stops = onStop ? [STOP_AT[road] ?? []].flat() : []
   return (
@@ -193,7 +213,7 @@ export function EndCard({ road, onRoad, onStop }: { road: RoadId; onRoad: (r: Ro
           {stop.icon}
         </motion.button>
       ))}
-      {[road, ...ROAD_IDS.filter((r) => r !== road)].map((r) => (
+      {[road, ...(onMap ? [] : ROAD_IDS.filter((r) => r !== road))].map((r) => (
         <motion.button
           key={r}
           aria-label={r === road ? 'Drive it again' : nanRoad(r).name}
@@ -206,6 +226,11 @@ export function EndCard({ road, onRoad, onStop }: { road: RoadId; onRoad: (r: Ro
           {r === road ? '🔁' : nanRoad(r).icon}
         </motion.button>
       ))}
+      {onMap && (
+        <motion.button aria-label="The Nan map" whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.07, 1] }} transition={{ repeat: Infinity, duration: 1.4 }} onClick={onMap} style={{ width: size, height: size, borderRadius: '50%', border: '6px solid #fff', background: 'var(--pink)', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 }}>
+          🗺️
+        </motion.button>
+      )}
     </motion.div>
   )
 }

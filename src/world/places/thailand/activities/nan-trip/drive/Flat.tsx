@@ -12,11 +12,12 @@ interface Props {
   road: RoadId
   onRoad: (r: RoadId) => void
   onStop?: (road: RoadId, stop?: string) => void
+  onMap?: () => void
 }
 
 const LANDMARK = { market: '🧺', mushrooms: '🍄', cafe: '☕', viewpoint: '⛰️' } as const
 
-export function DriveFlat({ road, onRoad, onStop }: Props) {
+export function DriveFlat({ road, onRoad, onStop, onMap }: Props) {
   const r = nanRoad(road)
   const R = r.road
   const view = useMemo(() => {
@@ -84,7 +85,7 @@ export function DriveFlat({ road, onRoad, onStop }: Props) {
         </g>
       </svg>
       {!done && <Wheel onHorn={() => sfx.horn()} />}
-      <AnimatePresence>{done && <EndCard road={road} onRoad={onRoad} onStop={onStop} />}</AnimatePresence>
+      <AnimatePresence>{done && <EndCard road={road} onRoad={onRoad} onStop={onStop} onMap={onMap} />}</AnimatePresence>
       {!done && (
         <motion.div aria-hidden animate={{ opacity: [0.5, 1, 0.5] }} transition={{ repeat: Infinity, duration: 1.6 }} style={{ position: 'absolute', left: 20, bottom: 24, fontSize: 'clamp(40px, 7vmin, 56px)', pointerEvents: 'none' }}>
           👆🚙

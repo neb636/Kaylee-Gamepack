@@ -1,6 +1,6 @@
 // Bo Kluea's salt hut's screen: the 3D hut (salt3d.ts) with its tap targets, the 👆 after a while with nothing touched,
-// and at the end (the bags on the shelf) the end card: 🔁 the salt hut again, or 🚙 back on the road (down the "number
-// 3" road, which starts at Bo Kluea). (No flat version: 3D activities don't need one any more.)
+// and at the end (the bags on the shelf) the end card: 🔁 the salt hut again, or 🗺️ back to the Nan map (its stamp
+// lands there). (No flat version: 3D activities don't need one any more.)
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -13,11 +13,11 @@ import { SALT_ANCHORS, SaltHut } from './salt3d'
 interface Props {
   round: Round
   onRound: (r: Round) => void
-  /** The end card's 🚙: back on the road. */
-  onDrive: () => void
+  /** The end card's 🗺️: back to the Nan map (this stop's stamp lands on it). */
+  onMap: () => void
 }
 
-export function Salt({ round, onRound, onDrive }: Props) {
+export function Salt({ round, onRound, onMap }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [done, setDone] = useState(false)
@@ -88,7 +88,7 @@ export function Salt({ round, onRound, onDrive }: Props) {
           🧂 Tap to wake the salt hut
         </button>
       )}
-      <AnimatePresence>{done && <FarmEnd onAgain={again} onDrive={onDrive} label="The salt hut again" />}</AnimatePresence>
+      <AnimatePresence>{done && <FarmEnd onAgain={again} onMap={onMap} label="The salt hut again" />}</AnimatePresence>
     </div>
   )
 }

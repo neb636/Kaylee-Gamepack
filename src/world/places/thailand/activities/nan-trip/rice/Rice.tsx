@@ -1,7 +1,7 @@
 // The rice farm's screen: the 3D farm and Stop Time Cafe's deck (rice3d.ts) with its tap targets, the 👆 after a while
 // with nothing touched, the photo Mommy takes on the deck (a flash, then it pops up like a print), the video of real rice
 // growing (skippable: ⏭ ☕ back to the deck; the 3D world holds still under it), and the end card: 🔁 the farm again, or
-// 🚙 back on the road (the 3 road, the way home). Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks
+// 🗺️ back to the Nan map (its stamp lands there). Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks
 // out loud in their own voice. (No flat version: 3D activities don't need one.)
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
@@ -18,11 +18,11 @@ import { RICE_VIDEO } from './video'
 interface Props {
   round: Round
   onRound: (r: Round) => void
-  /** The end card's 🚙: back on the road. */
-  onDrive: () => void
+  /** The end card's 🗺️: back to the Nan map (this stop's stamp lands on it). */
+  onMap: () => void
 }
 
-export function Rice({ round, onRound, onDrive }: Props) {
+export function Rice({ round, onRound, onMap }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [done, setDone] = useState(false)
@@ -113,7 +113,7 @@ export function Rice({ round, onRound, onDrive }: Props) {
           }}
         />
       )}
-      <AnimatePresence>{done && <FarmEnd label="The rice farm again" onAgain={again} onDrive={onDrive} />}</AnimatePresence>
+      <AnimatePresence>{done && <FarmEnd label="The rice farm again" onAgain={again} onMap={onMap} />}</AnimatePresence>
     </div>
   )
 }

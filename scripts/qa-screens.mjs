@@ -728,6 +728,11 @@ const SCREENS = [
   { name: 'nan-salt-1', hash: '#/world/thailand/nan-trip/salt', reset: true, wait: 3500 },
   { name: 'nan-salt-2', hash: '#/world/thailand/nan-trip/salt?round=2', reset: true, wait: 3500 },
   { name: 'nan-salt-3', hash: '#/world/thailand/nan-trip/salt?round=3', reset: true, wait: 3500 },
+  // The rental desk, the Nan map (none done, then two stops done: the airport opens) and the 3 from above.
+  ...['key', 'boot', 'belt'].map((round) => ({ name: `nan-rental-${round}`, hash: `#/world/thailand/nan-trip/rental?round=${round}`, reset: true, wait: round === 'belt' ? 4500 : 3500 })),
+  { name: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true, wait: 3500 },
+  { name: 'nan-map-stops', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,rice', reset: true, wait: 3500 },
+  { name: 'nan-three', hash: '#/world/thailand/nan-trip/three', reset: true, wait: 4000 },
   // Kaylee's rice farm (greybox A): paddy A flooded and three dry, the planted rows growing (birds coming in), the golden
   // rice drained for the harvest, the bundles on the rack by the threshing basket, and the café's deck.
   ...['plant', 'grow', 'harvest', 'thresh', 'deck'].map((round) => ({ name: `nan-rice-${round}`, hash: `#/world/thailand/nan-trip/rice?round=${round}`, reset: true, wait: round === 'grow' ? 6000 : 3500 })),
