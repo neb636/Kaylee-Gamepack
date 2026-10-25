@@ -23,8 +23,8 @@ gone: don't add school-paper games unless Dad asks for one.
 src/world/places/<id>/   # one country per folder, found automatically (Thailand, Australia, Italy, ...)
 src/world/kit/           # shared country pieces: Stage, StoryBeat, StampEarned, sections, sfx, Flag, ...
 src/sdk/                 # shared building blocks: say, sounds, puppets, drag and drop, ... (see "SDK")
-src/shell/               # the app wrapper: splash, home, trophy ceremony, trophy room
-src/games/<id>/          # the original school-paper games (just the tea party), found automatically
+src/shell/               # the app wrapper: splash, trophy ceremony, trophy room ("Let's play!" lands on the world map)
+src/games/<id>/          # the original school-paper games (just the tea party, the 🏡 pin on the map), found automatically
 planning/around-the-world/  # country plans, ACTIVITY-TEMPLATE.md, Thailand's trip plans and known issues
 art/STYLE.md             # the art style prompt; art/source/ holds full-size originals
 docs/                    # play-design.md (what makes it fun), interactions.md (which tool), sparkle.md

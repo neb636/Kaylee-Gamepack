@@ -151,8 +151,8 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   and one folder per country in `src/world/places/<id>/`. Thailand is 3D (three.js); the others are 2D.
 - `src/sdk/`: shared building blocks: speech (`say`), sounds, confetti, puppets, drag and drop, puzzles and more.
   Try them at `#/playground`.
-- `src/shell/`: the app wrapper (splash, home, trophy ceremony, trophy room).
-- `src/games/<id>/`: the original school-paper games (the unicorn tea party).
+- `src/shell/`: the app wrapper (splash, trophy ceremony, trophy room); the world map is the home screen.
+- `src/games/<id>/`: the original school-paper games (the unicorn tea party, opened from the 🏡 pin on the world map).
 - `planning/around-the-world/`: country and activity plans (`ACTIVITY-TEMPLATE.md`, `thailand.md`, ...).
 - `AGENTS.md`: the rules AI agents follow when building (read this to change how activities are designed).
   `docs/play-design.md` says what makes an activity fun.

@@ -1,6 +1,6 @@
-// Screenshots every Around the World screen (plus home and the puppet lab) at iPad and iPhone sizes for visual QA.
+// Screenshots every Around the World screen (plus the puppet lab) at iPad and iPhone sizes for visual QA.
 //
-//   npm run build && node scripts/qa-screens.mjs [--chromium] [--only=iphone-landscape,ipad-portrait] [--routes=home,world-map]
+//   npm run build && node scripts/qa-screens.mjs [--chromium] [--only=iphone-landscape,ipad-portrait] [--routes=world-map,passport]
 //                                                 [--parallel=3] [--max-minutes=20]
 // Viewports run side by side (--parallel, default 3) and the run stops starting new screens after --max-minutes
 // (default 20), listing what it skipped in errors.txt, so a sweep can never eat an hour. Then `npm run qa:sheets`.
@@ -55,7 +55,6 @@ async function raceTo(page, until, taps = 0, after = 0) {
 }
 
 const SCREENS = [
-  { name: 'home', hash: '#/' },
   { name: 'world-map', hash: '#/world' },
   {
     name: 'world-map-continent',
