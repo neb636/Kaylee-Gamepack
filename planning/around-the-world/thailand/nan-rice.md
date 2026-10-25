@@ -57,7 +57,7 @@ falls into her arms.
    only her horn shows above it.
 
 Side verb (the one): **thresh** (`round=thresh`): tap and Kaylee bangs a bundle on the threshing board, the grains
-spray into the big basket.
+spray into the big basket. (Built in greybox B, see "What's built".)
 
 **Her choices:** which paddy first, which gate to open, where to walk and what shape the rows make, which birds to
 chase, where to cut first.
@@ -347,8 +347,26 @@ version (3D activities don't need one).
   over open hillside, not inside the hill; the rack runs across the screen (from the front, a rack running away from
   the camera read as one broken X); the paddies are 0.34 m deep (the cut sides didn't show at 0.2).
 
-**Next: greybox B** (thresh for real, the kratip on the deck, `VideoBreak` with `next`, the video line's clip). Dad plays
-greybox A first: if leading Kaylee isn't fun, change speed, brush and following before B.
+**Greybox B (2026-10-25, branch `neb636/capricorn`):** the threshing, the kratip and the video.
+- thresh (`rice3d.ts` `thresh()`/`stepThresh()`): each tap and Kaylee takes the next bundle off the rack (it hops into
+  her hands) and swings it: up over her head (0.28 s, her arms follow), a fast down onto the board (THWACK, ~30 grains
+  spray into the basket, the basket bumps, the heap rises), a settle. Taps during a swing queue the next one. Two bangs
+  shrink the bundle's heads away and she tosses the straw onto the pile, which grows. Five bundles (3 stay on the rack):
+  the basket shakes, the chaff blows off, the heap turns white and an open, steaming kratip pops up out of it, then
+  the deck. The 👆 points at the rack (hands empty) or the basket.
+- Moved for the thresh camera: the straw pile now sits beside the basket (`STRAW_PILE`), so the tossed straw lands in
+  view; Daddy watches from the far side of the basket (he stood between her and the camera); the board stands up out
+  of the basket's rim (it was hidden inside).
+- deck (`deck.ts` `buildKratip`): the kratip on the high table, open, steaming; tap it and a ball of sticky rice goes to
+  her mouth (nom, a grain on her cheek for a moment); 4 balls, then a tap fills it again. Mommy glows after she has
+  eaten or sipped; the 👆 starts on the kratip.
+- The video (`rice/video.ts`, `Rice.tsx`): 1.6 s after Mommy's photo, the kit's `VideoBreak` with the new `next` prop
+  (⏭ ☕); the 3D world holds still under it (View3D's new `paused` prop). Skip or its end: the end card. Offline it
+  goes straight to the end card. One Sparkle clip, `L.nan.rice.video`.
+- qa: `qa-motion` `nan-thresh` (a tap every 0.7 s on the basket), `qa-pacing` `nan-rice-thresh`.
+
+**Next:** Dad plays greybox B (is ten bangs the right number? does the swing feel heavy enough?). Then the trip plan's
+step 8 (the look) and step 9 (voices: Sparkle's round lines, the family's reactions; QA).
 
 ## Fun check
 

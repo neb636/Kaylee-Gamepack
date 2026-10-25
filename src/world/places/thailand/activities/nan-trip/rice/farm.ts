@@ -471,8 +471,9 @@ export function buildFarm(bag: Bag): Farm {
   heap.scale.set(1, 0.001, 1)
   basketRoot.add(heap)
   const board = new Group()
-  board.position.set(0.1, 0.3, -0.1)
-  board.rotation.set(0, 0.4, -0.55)
+  // Standing in the basket, leaning, its high end toward where she stands to bang the bundles on it.
+  board.position.set(0.02, 0.5, -0.02)
+  board.rotation.set(0, 0, -0.55)
   board.add(solid(merge([...[-0.12, 0, 0.12].map((z) => P.box(0.7, 0.03, 0.09, WOOD_LIGHT, { at: [0, 0, z] })), ...[-0.25, 0.25].map((x) => P.box(0.05, 0.04, 0.36, WOOD_DARK, { at: [x, -0.03, 0] }))]), bag, 2))
   basketRoot.add(board)
   basketRoot.add(blobShadow(0.65, bag))

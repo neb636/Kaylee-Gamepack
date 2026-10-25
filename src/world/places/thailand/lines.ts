@@ -301,6 +301,14 @@ export const L = {
     again: 'Pack again, or go straight to the boat?',
   },
 
+  // The Nan road trip (planning/around-the-world/thailand/nan-trip.md). Greyboxes, so only what a kit piece must speak.
+  nan: {
+    rice: {
+      // The rice farm's video, after Mommy's photo on the deck (rice/video.ts).
+      video: `Want to see real rice grow, ${NAME}?`,
+    },
+  },
+
   // The mall day at ICONSIAM (activities/mall-trip/, plan: thailand/mall-trip.md). Talk short, play long: Sparkle's one
   // line when a mini game opens (and when something new starts, or after a while with nothing touched), the family's
   // and the friends' short reactions in their own voices (the monkey coach, the HarborLand staff, the pizza server, the

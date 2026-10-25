@@ -224,7 +224,8 @@ function Screening({ video, onDone, full, onFull, children }: { video: PlaceVide
 }
 
 /** After an activity's stamp: "Want to see real koalas?" with the video and a big Skip button. */
-export function VideoBreak({ video, onDone }: { video: PlaceVideo; onDone: () => void }) {
+/** A video offered between two things (after a stamp, at the end of a stop). `next` is where skip goes (default 🗺️). */
+export function VideoBreak({ video, onDone, next = '🗺️' }: { video: PlaceVideo; onDone: () => void; next?: string }) {
   const [full, setFull] = useFullMode()
   const online = useOnline()
   useEffect(() => void (online && say(video.say)), [video])
@@ -250,7 +251,7 @@ export function VideoBreak({ video, onDone }: { video: PlaceVideo; onDone: () =>
             }}
           >
             <span>⏭</span>
-            <span>🗺️</span>
+            <span>{next}</span>
           </motion.button>
         </Screening>
       </Stage>

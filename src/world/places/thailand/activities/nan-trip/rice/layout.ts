@@ -148,7 +148,11 @@ export const BAMBOO: V3 = [5.75, RISE, -3.35]
 export const WALLOW = { x: 5.35, z: -2.15, r: 0.95 }
 export const RACK = { x: 5.45, z: 1.75, len: 1.7, y: 1.12 }
 export const BASKET: V3 = [5.25, 0, 3.75]
-export const STRAW_PILE: V3 = [5.65, 0, -0.05]
+/** Beside the basket, so the threshing's straw lands on it. */
+export const STRAW_PILE: V3 = [5.95, 0, 2.95]
+/** Bangs on the board a bundle takes, and bundles threshed before the basket is heaped (the rest stay on the rack). */
+export const BANGS_PER = 2
+export const THRESHED = 5
 /** The stairs up the step, either side of the middle. */
 export const STAIRS = [-3.1, 3.1]
 /** The bamboo pipe brings the hill's water to the head of the channel. */

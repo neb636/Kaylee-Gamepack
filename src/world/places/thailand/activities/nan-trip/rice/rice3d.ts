@@ -16,9 +16,13 @@
 //   harvest: she holds a sickle, and the rice she walks through is cut into her arms; every armful is tied into a
 //            bundle that pops onto the bank. One paddy grew extra tall: only her horn and ears show above it, and two
 //            birds burst out when she wades in. All cut: the bundles hop onto the drying rack.
-//   thresh:  (a placeholder until greybox B) the camera comes close on the threshing basket; each tap bangs a bundle's
-//            grains into it. Then the deck.
-//   deck:    #168's: Kaylee and Daddy on the tall stools, her pink milk (tap to sip), Mommy's photo, the end card.
+//   thresh:  the side verb. The camera comes close on the threshing corner; each tap and Kaylee takes the next bundle
+//            off the rack (if her hands are empty), swings it up over her head and bangs it down on the board: THWACK,
+//            the grains spray into the big basket and its heap rises. Two bangs empty a bundle and she tosses the straw
+//            onto the pile (it grows). Five bundles heap the basket: it shakes, the chaff blows away, the grains turn
+//            white, and a steaming kratip of sticky rice pops up out of it. Then the deck.
+//   deck:    #168's: Kaylee and Daddy on the tall stools, her pink milk (tap to sip), the kratip (tap: she eats a ball of
+//            sticky rice, a grain stuck on her cheek), Mommy's photo, then the video and the end card (Rice.tsx).
 // Silly instead of wrong: wade into Daddy and he shakes like a dog (in the harvest she drops straw on his head); walk
 // into the buffalo's wallow and you both get muddy (the water washes it off); flop into the straw pile; round birds.
 // Things to poke: the gates, the scarecrow (it spins, its hat flies), the buffalo, the ducks, the frog, the nursery bed,
@@ -36,10 +40,11 @@ import { TUNE } from '../../../engine/tune'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { Floaters } from '../mushrooms/fx'
 import { Birds, type BirdHost } from './birds'
-import { buildDeck, type Deck } from './deck'
+import { buildDeck, buildKratip, type Deck, type Kratip } from './deck'
 import { buildFarm, buildKayleeKit, sheaf, STRAW, type Farm } from './farm'
 import { bladesGeometry, headsGeometry, hillMatrix, Instanced, stubbleGeometry } from './hills'
 import {
+  BANGS_PER,
   BASKET,
   BIRDS,
   BLOCKERS,
@@ -75,6 +80,7 @@ import {
   STAIRS,
   STOOLS,
   STRAW_PILE,
+  THRESHED,
   WADE_DOWN,
   WALK,
   WALLOW,
@@ -110,6 +116,8 @@ export const RICE_ANCHORS: AnchorInfo[] = [
   { id: 'bamboo', label: 'Bamboo', kind: 'thing' },
   { id: 'cafe', label: 'Stop Time Cafe', kind: 'thing' },
   { id: 'basket', label: 'Threshing basket', kind: 'thing' },
+  { id: 'rack', label: 'Rice bundles', kind: 'thing' },
+  { id: 'kratip', label: 'Sticky rice', kind: 'thing' },
   { id: 'glass', label: 'Pink milk', kind: 'thing' },
   { id: 'cup', label: "Daddy's coffee", kind: 'thing' },
   { id: 'chime', label: 'Wind chime', kind: 'thing' },
@@ -202,8 +210,17 @@ const riceH = (g: number) => 0.26 + 0.38 * smooth(0, 0.5, g) + 0.14 * smooth(0.4
 const SUNK = MUD_DOWN - WATER_DOWN
 const riceW = (g: number) => 0.9 + 0.45 * smooth(0, 0.6, g)
 const PER_BUNDLE = Math.floor((PER_PADDY * PADDIES.length) / BUNDLES)
-const THRESH_AT = new Vector3(BASKET[0] - 0.85, 0, BASKET[2] - 0.15)
-const BANGS = 5
+const THRESH_AT = new Vector3(BASKET[0] - 0.75, 0, BASKET[2] - 0.1)
+const BANGS = THRESHED * BANGS_PER
+/** Balls of sticky rice in the kratip on the deck. */
+const BALLS = 4
+/** The bundle's swing (radians up from level, in the plane she faces): resting, over her head, down on the board. */
+const SWING_REST = 0.35
+const SWING_UP = 1.95
+const SWING_DOWN = -0.1
+/** One bang, seconds: up (anticipation), the fast down, the settle. The board is hit at HIT_AT. */
+const SWING_S = 0.62
+const HIT_AT = 0.58
 
 export class RiceFarm extends Stage {
   private farm: Farm
@@ -249,7 +266,26 @@ export class RiceFarm extends Stage {
   private tied = 0
   private sheaves: Sheaf[] = []
   private racked = 0
+  // ---- Threshing: the bundle in her hands, its swing, the straw tossed onto the pile, the kratip ----
   private banged = 0
+  private threshed = 0
+  private hits = 0
+  private holding = false
+  private held: { root: Group; pitch: Group; heads: Group }
+  /** The bundle flying from the rack into her hands (0..1), and the straw flying onto the pile. */
+  private take = 1
+  private takeFrom = new Vector3()
+  private swing = -1
+  private queued = false
+  private straw: { root: Group; from: Vector3; t: number }
+  private strawSize = 1
+  private basketShake = 1
+  private whiteHeap: Group
+  private kratip: Kratip
+  private kratipK = -1
+  private steam: Floaters
+  private steamT = 0
+  private grains: Floaters
   // ---- Effects ----
   private splash: Floaters
   private sparkles: Floaters
@@ -279,6 +315,13 @@ export class RiceFarm extends Stage {
   private sips = 0
   private milk = 1
   private milkShown = 1
+  private eaten = 0
+  private riceLeft = 1
+  private riceShown = 1
+  private ball: Group
+  private ballK = 1
+  private cheekGrain: Group
+  private cheekUntil = -1
   private photos = 0
   private snapAt = -1
   private photoWanted = false
@@ -295,6 +338,7 @@ export class RiceFarm extends Stage {
     this.farm = buildFarm(bag)
     scene.add(this.farm.root)
     this.deck = buildDeck(bag)
+    this.deck.kratip.root.visible = false // until she's threshed it
     scene.add(this.deck.root)
     // ---- The family: Kaylee and Daddy on the boardwalk, Mommy waiting up on the café's deck ----
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
@@ -363,7 +407,41 @@ export class RiceFarm extends Stage {
     this.feathers = new Floaters(new IcosahedronGeometry(0.5, 0), ['#9A6340', '#FFF6EC', '#7E4E32'], 60, bag, 0.6, 2.2)
     this.mudBits = new Floaters(new IcosahedronGeometry(0.5, 0), ['#8A6A4F', '#A8876A'], 60, bag, 7, 0.4)
     this.rain = new Floaters(new IcosahedronGeometry(0.5, 0), ['#A9D8F2', '#CDEBFA'], 200, bag, 0, 0)
-    for (const f of [this.splash, this.sparkles, this.bits, this.feathers, this.mudBits, this.rain]) scene.add(f.mesh)
+    this.grains = new Floaters(new IcosahedronGeometry(0.5, 0), ['#F5C84A', '#FAD65A', '#E8B23C'], 160, bag, 6, 0.6)
+    this.steam = new Floaters(new IcosahedronGeometry(0.5, 1), ['#FFFFFF', '#F4F2FA'], 60, bag, -0.3, 1.2, 0.65, 1.8)
+    for (const f of [this.splash, this.sparkles, this.bits, this.feathers, this.mudBits, this.rain, this.grains, this.steam]) scene.add(f.mesh)
+
+    // ---- The threshing: the bundle she swings (its stalks at her hands, the heads at the far end), the straw she
+    // tosses, the heap turned white, and the kratip that pops out of the basket ----
+    const pitch = new Group()
+    const heads = solid(merge([P.sphere(0.12, '#F5C84A', { at: [0.5, -0.02, 0], scale: [1, 0.8, 1.1] }, 10)]), bag, 2)
+    pitch.add(solid(merge([P.cyl(0.07, 0.1, 0.5, STRAW, { at: [0.25, 0, 0], rot: [0, 0, Math.PI / 2] }, 10), P.torus(0.078, 0.018, '#B5823F', { at: [0.2, 0, 0], rot: [0, Math.PI / 2, 0] })]), bag, 2), heads)
+    const heldRoot = new Group()
+    heldRoot.add(pitch)
+    heldRoot.visible = false
+    scene.add(heldRoot)
+    this.held = { root: heldRoot, pitch, heads }
+    const tossed = solid(merge([P.cyl(0.07, 0.1, 0.5, STRAW, { rot: [0, 0, Math.PI / 2] }, 10), ...Array.from({ length: 6 }, (_, k) => P.cone(0.02, 0.2, k % 2 ? '#D9AE52' : STRAW, { at: [0.25, Math.sin(k) * 0.05, Math.cos(k) * 0.05], rot: [0, 0, -Math.PI / 2 + Math.sin(k * 2) * 0.5] }, 4))]), bag, 2)
+    tossed.visible = false
+    scene.add(tossed)
+    this.straw = { root: tossed, from: new Vector3(), t: 1 }
+    this.whiteHeap = solid(merge([P.sphere(0.45, '#FFFCF2', { scale: [1, 0.55, 1] }, 20), ...Array.from({ length: 7 }, (_, k) => P.sphere(0.03, '#FFFFFF', { at: [Math.cos(k * 0.9) * 0.28, 0.2, Math.sin(k * 0.9) * 0.28] }, 6))]), bag, 0)
+    this.whiteHeap.position.y = 0.33
+    this.whiteHeap.visible = false
+    this.farm.basket.root.add(this.whiteHeap)
+    this.kratip = buildKratip(bag, 1.7, true)
+    this.kratip.root.position.set(0, 0.4, 0)
+    this.kratip.root.visible = false
+    this.farm.basket.root.add(this.kratip.root)
+    // ---- On the deck: a ball of sticky rice on its way to her mouth, and the grain stuck on her cheek ----
+    this.ball = solid(merge([P.sphere(0.035, '#FFFCF2', {}, 10)]), bag, 1)
+    this.ball.visible = false
+    scene.add(this.ball)
+    const fr = kaylee.rig.face
+    this.cheekGrain = solid(merge([P.sphere(0.018, '#FFFFFF', { scale: [1.3, 0.8, 0.8] }, 8)]), bag, 1)
+    this.cheekGrain.position.set(fr.R * 0.5, fr.headY - fr.R * 0.22, fr.R * 0.86)
+    this.cheekGrain.visible = false
+    kaylee.rig.head.add(this.cheekGrain)
 
     // ---- Where the link starts ----
     this.round = start.round
@@ -467,7 +545,7 @@ export class RiceFarm extends Stage {
     this.atThresh(false)
   }
 
-  /** The threshing corner (greybox B makes it the real thing). */
+  /** The threshing corner: Kaylee beside the basket, facing it, the rack of bundles behind her. */
   private atThresh(now: boolean) {
     this.finger.target = null
     this.kaylee.stop()
@@ -481,31 +559,175 @@ export class RiceFarm extends Stage {
       this.carrier.position.y = this.lift.y = 0
       this.hop(this.kaylee, this.carrier, to, { face: 90, dur: 0.6, arc: 0.5 })
     }
-    this.nick.root.position.set(BASKET[0] - 1.8, BOARDWALK.y, BASKET[2] + 0.35)
-    this.nick.root.rotation.y = 0.9
+    // Daddy watches from the far side of the basket (not between her and the camera).
+    this.nick.root.position.set(BASKET[0] + 1.35, 0, BASKET[2] + 0.15)
+    this.nick.root.rotation.y = Math.atan2(to.x - BASKET[0] - 1.35, to.z - BASKET[2] - 0.15)
   }
 
-  /** One bang: a bundle's grains into the basket. */
-  private bang() {
-    if (this.banged >= BANGS || this.phase !== 'thresh') return
+  /** A tap while threshing: take the next bundle if her hands are empty, then swing it and bang it on the board. */
+  private thresh() {
+    if (this.phase !== 'thresh' || this.threshed >= THRESHED || this.hopping) return
+    // Mid-swing (or the bundle still flying to her): the tap waits for the next swing, so quick taps all count.
+    if (this.swing >= 0 || this.take < 1) return void (this.queued = true)
+    if (!this.holding) {
+      const b = this.farm.rack.bundles[BUNDLES - 1 - this.threshed]
+      b.visible = false
+      b.getWorldPosition(this.takeFrom)
+      this.holding = true
+      this.hits = 0
+      this.take = 0
+      this.held.root.visible = true
+      this.held.heads.scale.setScalar(1)
+      this.queued = true // she swings it as soon as it's in her hands
+      return sfx.boing()
+    }
+    this.swing = 0
+    sfx.swingUp()
+  }
+
+  /** Her hands, where the bundle's stalks are held (higher as she lifts it). */
+  private handsAt(raise: number, out: Vector3) {
+    const k = this.kaylee.root.getWorldPosition(out)
+    const yaw = this.kaylee.root.rotation.y
+    return k.set(k.x + Math.sin(yaw) * 0.18, k.y + 0.36 + raise * 0.32, k.z + Math.cos(yaw) * 0.18)
+  }
+
+  /** The bundle hits the board: THWACK, the grains spray into the basket, the heap rises. */
+  private hit() {
+    this.hits++
     this.banged++
-    this.kaylee.react('hop')
-    const b = this.farm.rack.bundles[BUNDLES - this.banged]
-    if (b) b.visible = false
-    this.after(0.3, () => {
-      sfx.thump()
-      sfx.rustle()
-      const at = new Vector3(BASKET[0], 0.55, BASKET[2])
-      this.bits.burst(at, 30, 1.4, 2.2, 0.8, 0.045, 1)
-      this.sparkles.burst(at, 6, 0.8, 1.2, 0.6, 0.05, 0)
-      this.farm.basket.board.rotation.z = -0.4
+    sfx.thwack(this.banged)
+    const at = this.held.heads.getWorldPosition(new Vector3())
+    const mid = new Vector3(BASKET[0], 0.5, BASKET[2])
+    for (let i = 0; i < 30; i++) this.grains.emit(at, tmp.subVectors(mid, at).multiplyScalar(1.6 + Math.random()).add(tmp2.set((Math.random() - 0.5) * 1.6, 1 + Math.random() * 1.4, (Math.random() - 0.5) * 1.6)), 0.7 + Math.random() * 0.4, 0.03 + Math.random() * 0.02)
+    this.bits.burst(at, 5, 0.8, 1, 0.5, 0.03)
+    this.farm.basket.board.rotation.z = -0.3
+    this.basketShake = 0.6
+    this.held.heads.scale.setScalar(Math.max(0.01, 1 - this.hits / BANGS_PER))
+    this.kaylee.react('wiggle')
+  }
+
+  /** Empty: she tosses the straw onto the pile. */
+  private tossStraw() {
+    this.holding = false
+    this.held.root.visible = false
+    this.held.pitch.getWorldPosition(this.straw.from)
+    this.straw.root.position.copy(this.straw.from)
+    this.straw.root.visible = true
+    this.straw.t = 0
+    this.threshed++
+    sfx.toss()
+    if (this.threshed >= THRESHED) this.after(0.8, () => this.heaped())
+  }
+
+  /** The basket's heaped: it shakes, the chaff blows away, the grains turn white, and out pops the kratip. */
+  private heaped() {
+    this.queued = false
+    sfx.allDone()
+    this.cheer()
+    const mid = new Vector3(BASKET[0], 0.6, BASKET[2])
+    this.sparkles.burst(mid, 12, 1, 1.4, 1, 0.06)
+    this.after(1.0, () => {
+      this.basketShake = -1.2
+      sfx.blow()
+      for (let i = 0; i < 24; i++) this.bits.emit(mid, tmp.set(1.2 + Math.random() * 1.6, 0.8 + Math.random() * 1.2, (Math.random() - 0.5) * 1.2), 1.1, 0.025)
     })
-    if (this.banged >= BANGS)
-      this.after(1.4, () => {
-        sfx.allDone()
-        this.cheer()
-        this.after(1.6, () => this.toDeck())
-      })
+    this.after(2.2, () => {
+      this.farm.basket.heap.visible = false
+      this.whiteHeap.visible = true
+      this.sparkles.burst(mid, 14, 1.2, 1.2, 0.9, 0.05)
+      sfx.chime()
+    })
+    this.after(3.0, () => {
+      this.kratipK = 0
+      this.kratip.root.visible = true
+      sfx.boing()
+      sfx.steam()
+    })
+    this.after(5.0, () => this.toDeck())
+  }
+
+  private stepThresh(dt: number) {
+    const f = this.farm
+    f.basket.board.rotation.z += (-0.55 - f.basket.board.rotation.z) * Math.min(1, dt * 6)
+    f.basket.heap.scale.y += (Math.max(0.001, this.banged / BANGS) - f.basket.heap.scale.y) * Math.min(1, dt * 4)
+    // A bump on each bang; a long shake (the winnowing) when it's heaped.
+    if (this.basketShake < 1) {
+      this.basketShake = Math.min(1, this.basketShake + dt / (this.basketShake < 0 ? 1 : 0.25))
+      const k = this.basketShake < 0 ? 1 : 1 - this.basketShake
+      f.basket.root.rotation.z = Math.sin(this.time * (this.basketShake < 0 ? 22 : 40)) * 0.05 * k
+    } else f.basket.root.rotation.z = 0
+    if (this.queued && this.swing < 0 && this.take >= 1 && !this.hopping) {
+      this.queued = false
+      this.thresh()
+    }
+    // ---- The bundle: flying into her hands, then the swing ----
+    let a = SWING_REST
+    let raise = 0.3
+    if (this.take < 1) {
+      this.take = Math.min(1, this.take + dt / 0.35)
+      a = SWING_REST * this.take
+    } else if (this.swing >= 0) {
+      const before = this.swing
+      this.swing += dt / SWING_S
+      const t = this.swing
+      if (t < 0.45) {
+        const e = smooth(0, 0.45, t)
+        a = SWING_REST + (SWING_UP - SWING_REST) * e
+        raise = 0.3 + 0.7 * e
+      } else if (t < HIT_AT) {
+        const e = ((t - 0.45) / (HIT_AT - 0.45)) ** 2
+        a = SWING_UP + (SWING_DOWN - SWING_UP) * e
+        raise = 1 - 0.45 * e
+      } else {
+        const e = smooth(HIT_AT, 1, t)
+        a = SWING_DOWN + (SWING_REST - SWING_DOWN) * e
+        raise = 0.55 - 0.25 * e
+      }
+      if (before < HIT_AT && t >= HIT_AT) this.hit()
+      if (t >= 1) {
+        this.swing = -1
+        if (this.hits >= BANGS_PER) this.tossStraw()
+      }
+    }
+    const h = this.held
+    if (h.root.visible) {
+      const hands = this.handsAt(raise, tmp)
+      if (this.take < 1) h.root.position.lerpVectors(this.takeFrom, hands, smooth(0, 1, this.take)).y += bell(this.take) * 0.6
+      else h.root.position.copy(hands)
+      h.root.rotation.y = this.kaylee.root.rotation.y - Math.PI / 2
+      h.pitch.rotation.z = a
+    }
+    // ---- The straw flying onto the pile, which grows ----
+    const st = this.straw
+    if (st.t < 1) {
+      st.t = Math.min(1, st.t + dt / 0.55)
+      st.root.position.lerpVectors(st.from, tmp2.set(STRAW_PILE[0], 0.45 * this.strawSize, STRAW_PILE[2]), st.t).y += bell(st.t) * 0.9
+      st.root.rotation.z = st.t * 5
+      if (st.t >= 1) {
+        st.root.visible = false
+        this.strawSize += 0.09
+        this.strawPuff = 0
+        sfx.rustle()
+        this.bits.burst(tmp2, 10, 0.9, 1.2, 0.6, 0.04)
+      }
+    }
+    // ---- The kratip popping out of the basket, steaming ----
+    if (this.kratipK >= 0 && this.kratipK < 1) {
+      this.kratipK = Math.min(1, this.kratipK + dt / 0.5)
+      const k = this.kratipK
+      this.kratip.root.scale.setScalar(Math.max(0.01, k < 0.7 ? (k / 0.7) * 1.2 : 1.2 - ((k - 0.7) / 0.3) * 0.2))
+      this.kratip.root.position.y = 0.3 + 0.2 * smooth(0, 0.7, k) + bell(k) * 0.25
+    }
+  }
+
+  /** Her arms follow the bundle (forward and up), over whatever the pose did this frame. */
+  private threshArms() {
+    const r = this.kaylee.rig
+    if (!this.held.root.visible || this.phase !== 'thresh') return
+    const up = 1.2 + (this.held.pitch.rotation.z - SWING_DOWN) * 0.75
+    r.armL.rotation.set(-up, 0, 0.35)
+    r.armR.rotation.set(-up, 0, -0.35)
   }
 
   // ---------------------------------------------------------------- the water
@@ -706,6 +928,7 @@ export class RiceFarm extends Stage {
     d.add(this.nick.root)
     this.kitFor('deck')
     this.mud.visible = false
+    this.deck.kratip.root.visible = true
     this.put(this.kaylee, STOOLS.kaylee[0], STOOLS.kaylee[1], STOOLS.kaylee[2], 'sit', 0)
     this.put(this.nick, STOOLS.nick[0], STOOLS.nick[1], STOOLS.nick[2], 'sit', 0)
     const face = (Math.atan2(-MOMMY_AT[0], -0.95 - MOMMY_AT[2]) * 180) / Math.PI
@@ -733,6 +956,55 @@ export class RiceFarm extends Stage {
         sfx.hiccup()
         this.kaylee.react('hop')
       })
+  }
+
+  /** A ball of sticky rice from the kratip, with her fingers: nom. (Empty: tap again and Mommy fills it up.) */
+  private eat() {
+    if (this.ballK < 1) return
+    const kr = this.deck.kratip
+    if (this.riceLeft <= 0.01) {
+      this.riceLeft = 1
+      sfx.steam()
+      this.ji.react('hop')
+      return this.sparkles.burst(kr.root.getWorldPosition(new Vector3()).add(new Vector3(0, 0.2, 0)), 6, 0.5, 0.8, 0.6, 0.03, 1)
+    }
+    this.eaten++
+    this.riceLeft = Math.max(0, this.riceLeft - 1 / BALLS)
+    this.ballK = 0
+    this.ball.visible = true
+    sfx.pop()
+    this.after(0.4, () => {
+      sfx.nom()
+      this.kaylee.react('wiggle')
+      this.cheekGrain.visible = true
+      this.cheekUntil = this.time + 1.8
+    })
+  }
+
+  /** The kratips' steam, the ball on its way to her mouth, the rice going down as she eats. */
+  private stepSticky(dt: number) {
+    const kr = this.deck.kratip
+    this.riceShown += (this.riceLeft - this.riceShown) * Math.min(1, dt * 5)
+    kr.rice.scale.set(0.5 + 0.5 * this.riceShown, Math.max(0.01, this.riceShown), 0.5 + 0.5 * this.riceShown)
+    this.steamT -= dt
+    if (this.steamT <= 0) {
+      this.steamT = 0.14
+      const src = this.phase === 'deck' ? (this.riceLeft > 0.01 ? kr.rice : null) : this.kratipK >= 0 ? this.kratip.rice : null
+      if (src) {
+        const at = src.getWorldPosition(tmp).add(tmp2.set((Math.random() - 0.5) * 0.08, 0.04, (Math.random() - 0.5) * 0.08))
+        const big = this.phase === 'deck' ? 0.6 : 1
+        this.steam.emit(at, tmp2.set((Math.random() - 0.5) * 0.1, 0.25 * big, (Math.random() - 0.5) * 0.1), 1.4, 0.05 * big)
+      }
+    }
+    if (this.ballK < 1) {
+      this.ballK = Math.min(1, this.ballK + dt / 0.4)
+      const r = this.kaylee.rig
+      const from = kr.rice.getWorldPosition(tmp)
+      const mouth = r.head.localToWorld(tmp2.set(...r.face.mouth))
+      this.ball.position.lerpVectors(from, mouth, smooth(0, 1, this.ballK)).y += bell(this.ballK) * 0.12
+      if (this.ballK >= 1) this.ball.visible = false
+    }
+    if (this.cheekGrain.visible && this.time > this.cheekUntil) this.cheekGrain.visible = false
   }
 
   private smile() {
@@ -992,7 +1264,7 @@ export class RiceFarm extends Stage {
   // ---------------------------------------------------------------- touch
 
   protected pickRoots(): Object3D[] {
-    if (this.phase === 'deck') return [this.kaylee.root, this.nick.root, this.ji.root, this.deck.glass.root, this.deck.cup, this.deck.chime]
+    if (this.phase === 'deck') return [this.kaylee.root, this.nick.root, this.ji.root, this.deck.glass.root, this.deck.cup, this.deck.kratip.root, this.deck.chime]
     return []
   }
 
@@ -1016,7 +1288,7 @@ export class RiceFarm extends Stage {
 
   protected onTap(id: string | null) {
     if (this.phase === 'deck') return this.tapDeck(id)
-    if (this.phase === 'thresh') return this.bang()
+    if (this.phase === 'thresh') return this.thresh()
     if (!id) return
     if (id.startsWith('gate:')) {
       const s = this.paddies[Number(id.slice(5))]
@@ -1076,6 +1348,8 @@ export class RiceFarm extends Stage {
       case 'glass':
       case 'family:kaylee':
         return this.sip()
+      case 'kratip':
+        return this.eat()
       case 'cup':
         this.nick.react('wiggle')
         sfx.slurp()
@@ -1178,7 +1452,7 @@ export class RiceFarm extends Stage {
     this.nurseryWob = Math.min(1, this.nurseryWob + dt / 0.8)
     f.nursery.scale.set(1, 1 + Math.sin(this.nurseryWob * Math.PI * 4) * 0.12 * (1 - this.nurseryWob), 1)
     this.strawPuff = Math.min(1, this.strawPuff + dt / 0.7)
-    f.straw.scale.set(1 + bell(this.strawPuff) * 0.15, 1 - bell(this.strawPuff) * 0.25, 1 + bell(this.strawPuff) * 0.15)
+    f.straw.scale.set(1 + bell(this.strawPuff) * 0.15, 1 - bell(this.strawPuff) * 0.25, 1 + bell(this.strawPuff) * 0.15).multiplyScalar(this.strawSize)
     // ---- Daddy: a shake like a dog; the straw on his head comes off after a while ----
     this.nickShake = Math.min(1, this.nickShake + dt / 0.8)
     this.nick.root.rotation.z = Math.sin(t * 30) * 0.08 * bell(this.nickShake)
@@ -1203,11 +1477,7 @@ export class RiceFarm extends Stage {
     if (this.phase === 'farm') {
       this.stepKaylee(dt)
       this.brush()
-    } else if (this.phase === 'thresh') {
-      this.farm.basket.board.rotation.z += (-0.55 - this.farm.basket.board.rotation.z) * Math.min(1, dt * 6)
-      const heap = this.farm.basket.heap
-      heap.scale.y += (Math.max(0.001, this.banged / BANGS) - heap.scale.y) * Math.min(1, dt * 4)
-    }
+    } else if (this.phase === 'thresh') this.stepThresh(dt)
     // ---- The growing round: the rice grows, the birds come, a little rain ----
     if (this.round === 'grow') {
       const rate = Math.max(0.55, 1 - 0.1 * this.birds.pecking) / GROW_S
@@ -1299,7 +1569,9 @@ export class RiceFarm extends Stage {
     }
     this.chimeDeck(dt, t)
     for (const c of [this.kaylee, this.nick, this.ji]) c.update(dt, t)
-    for (const f of [this.splash, this.sparkles, this.bits, this.feathers, this.mudBits, this.rain]) f.update(dt)
+    this.threshArms()
+    this.stepSticky(dt)
+    for (const f of [this.splash, this.sparkles, this.bits, this.feathers, this.mudBits, this.rain, this.grains, this.steam]) f.update(dt)
     this.farm.water.update(t)
     this.hintNow = this.time - this.lastTouch > STUCK_S - 0.1 ? this.hint() : null
     const map = (this.farm.fall.material as MeshBasicMaterial).map
@@ -1502,9 +1774,13 @@ export class RiceFarm extends Stage {
       }
       return null
     }
-    if (this.phase === 'thresh') return this.banged < BANGS ? { at: new Vector3(BASKET[0], 0.6, BASKET[2]), id: 'basket' } : null
+    if (this.phase === 'thresh') {
+      if (this.threshed >= THRESHED) return null
+      if (this.holding) return { at: new Vector3(BASKET[0], 0.6, BASKET[2]), id: 'basket' }
+      return { at: this.farm.rack.bundles[BUNDLES - 1 - this.threshed].getWorldPosition(new Vector3()), id: 'rack' }
+    }
     if (this.snapAt > 0) return null
-    if (!this.sips) return { at: this.deck.glass.root.getWorldPosition(new Vector3()).add(new Vector3(0, 0.1, 0)), id: 'glass' }
+    if (!this.eaten && !this.sips) return { at: this.deck.kratip.root.getWorldPosition(new Vector3()).add(new Vector3(0, 0.12, 0)), id: 'kratip' }
     return this.photos ? null : { at: this.ji.rig.head.localToWorld(new Vector3(0, this.ji.rig.face.headY, 0)), id: 'family:ji' }
   }
 
@@ -1522,12 +1798,14 @@ export class RiceFarm extends Stage {
       if (e === 'kaylee' && this.phase !== 'deck') return null
       const c = e === 'kaylee' ? this.kaylee : e === 'ji' ? this.ji : this.nick
       const r = c.rig
-      return { at: r.head.localToWorld(new Vector3(0, r.face.headY, 0)), r: r.face.R * 1.1, prio: e === 'ji' ? 2 : 0, max: 120, glow: e === 'ji' && (hinted || (this.sips > 0 && !this.photos && this.snapAt < 0)) }
+      return { at: r.head.localToWorld(new Vector3(0, r.face.headY, 0)), r: r.face.R * 1.1, prio: e === 'ji' ? 2 : 0, max: 120, glow: e === 'ji' && (hinted || (this.sips + this.eaten > 0 && !this.photos && this.snapAt < 0)) }
     }
     if (this.phase === 'deck') {
       switch (id) {
         case 'glass':
           return { at: this.deck.glass.root.getWorldPosition(new Vector3()).add(new Vector3(0, 0.12, 0)), r: 0.1, prio: 3, max: 110, glow: hinted }
+        case 'kratip':
+          return { at: this.deck.kratip.root.getWorldPosition(new Vector3()).add(new Vector3(0, 0.1, 0)), r: 0.1, prio: 3, max: 110, glow: hinted }
         case 'cup':
           return { at: this.deck.cup.getWorldPosition(new Vector3()).add(new Vector3(0, 0.05, 0)), r: 0.08, prio: 3, max: 100 }
         case 'chime':
@@ -1537,7 +1815,12 @@ export class RiceFarm extends Stage {
       }
       return null
     }
-    if (this.phase === 'thresh') return id === 'basket' ? { at: new Vector3(BASKET[0], 0.45, BASKET[2]), r: 0.55, prio: 3, max: 220, glow: this.banged < BANGS && (hinted || this.banged === 0) } : null
+    if (this.phase === 'thresh') {
+      const left = this.threshed < THRESHED
+      if (id === 'basket') return { at: new Vector3(BASKET[0], 0.45, BASKET[2]), r: 0.55, prio: 3, max: 220, glow: left && this.holding && hinted }
+      if (id === 'rack') return { at: new Vector3(RACK.x, RACK.y - 0.2, RACK.z), r: 0.8, prio: 2, max: 200, glow: left && !this.holding && (hinted || this.banged === 0) }
+      return null
+    }
     if (id.startsWith('gate:')) {
       const s = this.paddies[Number(id.slice(5))]
       const dry = this.round === 'plant' && !s.open && s.planted > 0
@@ -1585,6 +1868,10 @@ export class RiceFarm extends Stage {
       bundles: this.tied,
       racked: this.racked,
       banged: this.banged,
+      threshed: this.threshed,
+      holding: this.holding,
+      heaped: this.kratipK >= 0,
+      eaten: this.eaten,
       tall: this.paddies.findIndex((s) => s.tall > 1),
       kaylee: { at: [Math.round(k.x * 100) / 100, Math.round(k.z * 100) / 100], screen: pt(k), ground: this.ground, muddy: this.muddy > 0 },
       // Screen rectangles of each paddy's water (x0, y0, x1, y1), so a robot can drag zigzags across them.
@@ -1605,6 +1892,7 @@ export class RiceFarm extends Stage {
         basket: pt(new Vector3(BASKET[0], 0.45, BASKET[2])),
         rack: pt(new Vector3(RACK.x, RACK.y, RACK.z)),
         glass: this.phase === 'deck' ? pt(this.deck.glass.root.getWorldPosition(new Vector3())) : null,
+        kratip: this.phase === 'deck' ? pt(this.deck.kratip.root.getWorldPosition(new Vector3())) : null,
         mommy: this.phase === 'deck' ? pt(this.ji.rig.head.localToWorld(new Vector3(0, this.ji.rig.face.headY, 0))) : null,
       },
     }
