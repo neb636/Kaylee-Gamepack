@@ -404,7 +404,10 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     }, 2400)
   }
 
-  // At the pier, nothing done for ~8 s: Sparkle points her home (the ✈️🏠 is the only cue there, no finger on the boat).
+  /** Baan Chang is still to do (the pier offers 🐘). */
+  const changNext = open && !been.includes('chang')
+  // At the pier, nothing done for ~8 s: Sparkle points her home (the ✈️🏠 is the only cue there, no finger on the boat),
+  // or to the elephants while Baan Chang is still to do.
   // Twice at most; a finger held down (driving back out for more sunset) counts as playing.
   useEffect(() => {
     if (!atPier || mount.world !== 'bay') return
@@ -421,7 +424,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       if (said >= 2 || performance.now() - last < 8000) return
       last = performance.now() + 12000
       said++
-      say(L.home.fly)
+      say(changNext ? L.chang.waiting : L.home.fly)
     }, 1000)
     return () => {
       window.removeEventListener('pointerdown', press)
@@ -429,7 +432,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       window.removeEventListener('pointercancel', lift)
       clearInterval(id)
     }
-  }, [atPier, mount.world])
+  }, [atPier, mount.world, changNext])
 
   /** The big 🏠 at the pier: the boarding pass, then the flight home and Aunty Sri's van at Agong's door. */
   const goHome = () => {
@@ -447,7 +450,6 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     setAlbumOpen(false)
     finish('chang', null)
   }
-  const changNext = open && !been.includes('chang')
   /** After the splash: on to the pier (🚤) or, with the boat done, home (✈️🏠). The elephants are punched. */
   const leaveChang = (to: 'pier' | 'home') => {
     if (state.current.busy) return
@@ -553,6 +555,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         items,
         state.current.fed,
         state.current.straw,
+        state.current.been.includes('bay') ? 'home' : 'pier',
       )
     }
     else if (world === 'race') {
@@ -849,7 +852,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           tripRef.current?.choose(p.src)
         }}
       />
-      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!pass || asking} raised={(mount.world === 'bay' && landed) || (mount.world === 'race' && raceHud?.phase === 'podium')} idle={tilting ? undefined : mount.world === 'bay' ? L.bay.hint.drive : mount.world === 'race' ? L.race.start : undefined} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!pass || asking} raised={(mount.world === 'bay' && landed) || (mount.world === 'race' && raceHud?.phase === 'podium') || (mount.world === 'chang' && section === 'sign')} idle={tilting ? undefined : mount.world === 'bay' ? L.bay.hint.drive : mount.world === 'race' ? L.race.start : undefined} />}
       <TiltSetup
         stage={tiltSetup}
         onSkip={() => {

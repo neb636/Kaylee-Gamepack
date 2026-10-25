@@ -94,15 +94,15 @@ const SCENARIOS = [
   { name: 'thailand trip: window seat, takeoff', id: 'trip-plane', hash: '#/world/thailand/boat-trip/takeoff', reset: true },
   { name: 'thailand trip: window seat, up in the sky', id: 'trip-fly', hash: '#/world/thailand/boat-trip/fly', reset: true },
   { name: 'thailand trip: landing and krabi', id: 'trip-land', hash: '#/world/thailand/boat-trip/land', reset: true },
-  { name: 'thailand trip: landing and the signpost (baan chang open)', id: 'trip-fork', hash: '#/world/thailand/boat-trip/land?chang=1', reset: true },
-  { name: 'thailand baan chang: the songthaew to the entrance', id: 'chang-arrive', hash: '#/world/thailand/boat-trip/chang', reset: true },
-  { name: 'thailand baan chang: the photo at the bamboo sign', id: 'chang-sign', hash: '#/world/thailand/boat-trip/sign', reset: true },
-  { name: 'thailand baan chang: her chocolate milk at the cafe', id: 'chang-drinks', hash: '#/world/thailand/boat-trip/drinks', reset: true },
-  { name: 'thailand baan chang: down the boardwalk', id: 'chang-boardwalk', hash: '#/world/thailand/boat-trip/boardwalk', reset: true },
-  { name: 'thailand baan chang: feeding mali and khanom', id: 'chang-feed', hash: '#/world/thailand/boat-trip/feed', reset: true },
-  { name: 'thailand baan chang: favorites', id: 'chang-favorites', hash: '#/world/thailand/boat-trip/favorites', reset: true },
-  { name: 'thailand baan chang: lamyai and the sneaky sips', id: 'chang-lamyai', hash: '#/world/thailand/boat-trip/lamyai', reset: true },
-  { name: 'thailand baan chang: the splash', id: 'chang-splash', hash: '#/world/thailand/boat-trip/splash', reset: true },
+  { name: 'thailand trip: landing and the signpost (baan chang open)', id: 'trip-fork', hash: '#/world/thailand/boat-trip/land', reset: true },
+  { name: 'thailand baan chang: the songthaew to the entrance', id: 'chang-arrive', hash: '#/world/thailand/boat-trip/chang', reset: true, next: 'sign' },
+  { name: 'thailand baan chang: the photo at the bamboo sign', id: 'chang-sign', hash: '#/world/thailand/boat-trip/sign', reset: true, next: 'drinks' },
+  { name: 'thailand baan chang: her chocolate milk at the cafe', id: 'chang-drinks', hash: '#/world/thailand/boat-trip/drinks', reset: true, next: 'boardwalk' },
+  { name: 'thailand baan chang: down the boardwalk', id: 'chang-boardwalk', hash: '#/world/thailand/boat-trip/boardwalk', reset: true, next: 'feed' },
+  { name: 'thailand baan chang: feeding mali and khanom', id: 'chang-feed', hash: '#/world/thailand/boat-trip/feed', reset: true, next: 'favorites' },
+  { name: 'thailand baan chang: favorites', id: 'chang-favorites', hash: '#/world/thailand/boat-trip/favorites', reset: true, next: 'lamyai' },
+  { name: 'thailand baan chang: lamyai and the sneaky sips', id: 'chang-lamyai', hash: '#/world/thailand/boat-trip/lamyai', reset: true, next: 'splash' },
+  { name: 'thailand baan chang: the splash', id: 'chang-splash', hash: '#/world/thailand/boat-trip/splash', reset: true, next: 'pier' },
   // The bay, one run per section (links with the section's path: a bare /boat-trip gets rewritten). It never "finishes"
   // (the trip goes on to the way home in a later gate), so talk per touch is total talk / taps by hand.
   { name: 'thailand bay: the pier and its ribbons', id: 'bay-pier', hash: '#/world/thailand/boat-trip/pier', reset: true },
@@ -243,8 +243,9 @@ try {
       // Auto-play: tap like a child, preferring glowing hints, until the stamp screen shows (or give up).
       if (s.play !== false && tTouch !== null) {
         for (let tap = 0; tap < 45; tap++) {
-          // Done when the stamp screen (activities) or the trophy ceremony (party) shows up.
-          if (await page.evaluate(finishedScreen)) {
+          // Done when the stamp screen (activities) or the trophy ceremony (party) shows up, or (a section inside a
+          // longer activity, `next`) when the address bar has moved on to the next section.
+          if ((await page.evaluate(finishedScreen)) || (s.next && (await page.evaluate((n) => location.hash.includes(`/${n}`), s.next)))) {
             r.finished = true
             break
           }

@@ -30,7 +30,8 @@ photo Agong asked for. Back home it goes on Agong's wall, and even the big cousi
 > **Baan Chang Cafe (Dad, 2026-10-24), planned in `baan-chang.md`.** Krabi gets a second place: after landing, the
 > songthaew stops at a signpost and she picks 🐘 Baan Chang (the elephants) or 🚤 the pier, in any order, and does
 > both before flying home. It's new sections inside this activity (`chang` ... `splash`, after `land`), a `'chang'`
-> world, a `been` param, and 🐘 on the boarding pass and the replay choice. Hidden behind a flag until its full loop.
+> world, a `been` param, and 🐘 on the boarding pass and the replay choice. Hidden behind a flag until its full loop,
+> and on since the full loop (2026-10-24, `chang/open.ts` `CHANG_OPEN = true`).
 
 ## The shape of it
 
@@ -145,8 +146,8 @@ the leg she just finished (*ka-chunk*), and it slides away. That's 1.5 s, and it
 **Future trips and mini-games this unlocks** (ideas only; each is its own plan and PR):
 - More pins on the elephant map: Chiang Mai (fly *up* to the elephant's forehead; the mountains are cooler), Ayutthaya
   (drive, then a river boat past old temples), a Krabi beach day, Songkran in Chiang Mai.
-- **Baan Chang Cafe** in Krabi, the elephants (Dad, 2026-10-24): planned as a second Krabi place on this trip,
-  `baan-chang.md`.
+- **Baan Chang Cafe** in Krabi, the elephants (Dad, 2026-10-24): a second Krabi place on this trip, built and on
+  (`baan-chang.md`).
 - **Drive around the block** from the house: the pink taxi parked on the street becomes a little free-drive toy.
 - **Free flight:** later the plane can be Thailand's travel map itself: fly over the 3D elephant-shaped country and land
   at any pin.

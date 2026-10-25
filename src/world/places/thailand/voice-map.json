@@ -1148,6 +1148,223 @@
     "file": "08ec6b0060b6.mp3"
   },
   {
+    "text": "Bananas for the elephants, Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2050,
+    "file": "db0927135a0b.mp3"
+  },
+  {
+    "text": "He likes you!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1263,
+    "file": "91f200064b32.mp3"
+  },
+  {
+    "text": "Ahh! Thank you, Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2532,
+    "file": "dc932ff6ede3.mp3"
+  },
+  {
+    "text": "Look, Kaylee! Elephants!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 3038,
+    "file": "6c2ba23e0990.mp3"
+  },
+  {
+    "text": "Hi, Lamyai!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1831,
+    "file": "c547de879a28.mp3"
+  },
+  {
+    "text": "Hey! That's your chocolate milk!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2446,
+    "file": "fe6596a3812d.mp3"
+  },
+  {
+    "text": "Whoa! Too full!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2149,
+    "file": "3648a5e974be.mp3"
+  },
+  {
+    "text": "We're all wet!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1394,
+    "file": "ef60387c699e.mp3"
+  },
+  {
+    "text": "Baan Chang means elephant house!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2752,
+    "file": "83fefae93c27.mp3"
+  },
+  {
+    "text": "Let's make a chocolate milk!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2183,
+    "file": "1bccbec8b7ab.mp3"
+  },
+  {
+    "text": "Mali means jasmine!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2546,
+    "file": "48150dd397ee.mp3"
+  },
+  {
+    "text": "Khanom means snack!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1835,
+    "file": "43666adba9f9.mp3"
+  },
+  {
+    "text": "Lamyai means a sweet fruit!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2527,
+    "file": "5ec2213ab8ba.mp3"
+  },
+  {
+    "text": "Look! They each want a snack!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2696,
+    "file": "87503bfc0a4a.mp3"
+  },
+  {
+    "text": "They're full! Splash!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2452,
+    "file": "1ddc11c43947.mp3"
+  },
+  {
+    "text": "The elephants are waiting!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2381,
+    "file": "1bf0f8f1bbb9.mp3"
+  },
+  {
+    "text": "Elephants or the boat? You pick!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2605,
+    "file": "ef4e550681cb.mp3"
+  },
+  {
+    "text": "Tap the cup to make a drink!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3382,
+    "file": "67c4f08e609b.mp3"
+  },
+  {
+    "text": "Pour in the milk!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1486,
+    "file": "cc6960f39dea.mp3"
+  },
+  {
+    "text": "Squeeze in the chocolate!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2240,
+    "file": "2fabe94b3d6d.mp3"
+  },
+  {
+    "text": "Stir it round and round!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2160,
+    "file": "dadb467b55d9.mp3"
+  },
+  {
+    "text": "Pick a straw!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1178,
+    "file": "de49850b5b9f.mp3"
+  },
+  {
+    "text": "Tap the elephant to go see them!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2656,
+    "file": "b3fcb261b16d.mp3"
+  },
+  {
+    "text": "Tap the path to walk!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2086,
+    "file": "cb7a4a7c0ba5.mp3"
+  },
+  {
+    "text": "Grab a banana!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1193,
+    "file": "852dc1082ca6.mp3"
+  },
+  {
+    "text": "Give them what they want!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1327,
+    "file": "38707c51e243.mp3"
+  },
+  {
+    "text": "Tap an elephant for a splash!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2813,
+    "file": "2dec490247b4.mp3"
+  },
+  {
+    "text": "Tap the boat to go to the sea!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2415,
+    "file": "a17b07b1fc03.mp3"
+  },
+  {
+    "text": "An elephant's trunk is its nose and its hand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4075,
+    "file": "642ce57da74a.mp3"
+  },
+  {
+    "text": "Elephants eat almost all day long!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2549,
+    "file": "54226fc8f0be.mp3"
+  },
+  {
+    "text": "In Thailand, everyone has a fun nickname!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3920,
+    "file": "1fe9b3f6c40c.mp3"
+  },
+  {
     "text": "We're home, Kaylee!",
     "voice": "sri",
     "sig": "db1e0738fa",

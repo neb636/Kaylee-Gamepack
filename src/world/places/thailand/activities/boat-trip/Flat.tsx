@@ -42,9 +42,9 @@ const LEGS: Partial<Record<BoatSection, { scene: string; bg: string; next: BoatS
   takeoff: { scene: '💺 🛫', bg: 'linear-gradient(#A8DCFF, #E4F3FC)', next: 'fly', line: L.trip.plane.wheee },
   fly: { scene: '☁️ ✈️ 🐘', bg: 'linear-gradient(#8FCBFF, #BDE3FF)', next: 'land', line: L.trip.elephant },
   land: { scene: '🛬 🌴 🛻', bg: 'linear-gradient(#BDE3FF, #8FE3C8)', next: 'pier', line: L.trip.plane.krabi },
-  chang: { scene: '🛻 🌴 🐘', bg: 'linear-gradient(#BFE6FF, #E6DCC6)', next: 'sign' },
+  chang: { scene: '🛻 🌴 🐘', bg: 'linear-gradient(#BFE6FF, #E6DCC6)', next: 'sign', line: L.chang.arrive },
   sign: { scene: '🎋 🦄📸', bg: 'linear-gradient(#BFE6FF, #E8C987)', next: 'drinks', line: L.bay.cheese },
-  boardwalk: { scene: '🌴 🦄 🐘', bg: 'linear-gradient(#BFE6FF, #CFCAD8)', next: 'feed' },
+  boardwalk: { scene: '🌴 🦄 🐘', bg: 'linear-gradient(#BFE6FF, #CFCAD8)', next: 'feed', line: L.chang.look },
   sunset: { scene: '🌅 🚤 🐬', bg: 'linear-gradient(#A98FE8, #FF9DC0 55%, #FFC98F)', next: 'home', line: L.bay.sunset },
 }
 const STOPS: { id: 'village' | 'hong' | 'nail'; icon: string; bg: string; fact: Line }[] = [
@@ -178,6 +178,7 @@ function Pack({ packed, onPacked, onClose }: { packed: string[]; onPacked: (ids:
  *  elephant and it sprays water under a rainbow. */
 const ELEPHANT_NAMES = ['Mali the elephant', 'Khanom the baby elephant', 'Lamyai the elephant']
 const SIZES = [1, 0.62, 0.8]
+const FEED_LINE: Partial<Record<BoatSection, Line>> = { feed: L.chang.bananas, favorites: L.chang.wants, lamyai: L.chang.lamyai, splash: L.chang.splash }
 function Feed({ section, onNext }: { section: BoatSection; onNext: () => void }) {
   const three = section === 'lamyai' || section === 'splash'
   const herd = three ? [0, 1, 2] : [0, 1]
@@ -185,6 +186,7 @@ function Feed({ section, onNext }: { section: BoatSection; onNext: () => void })
   const [wants, setWants] = useState<(string | null)[]>(() => (section === 'favorites' ? ['🎋', '🍌', null] : section === 'lamyai' ? ['🍌', '🎋', '🍌'] : [null, null, null]))
   const [bite, setBite] = useState<{ who: number; food: string; key: number } | null>(null)
   const [spray, setSpray] = useState<{ who: number; key: number } | null>(null)
+  useEffect(() => void say(FEED_LINE[section] ?? L.chang.bananas), [section])
   const give = (food: string) => {
     if (bite) return
     // Whoever wants it gets it; otherwise the one who has eaten least (the little one, if it's a tie).
@@ -296,6 +298,7 @@ function Drinks({ onNext }: { onNext: () => void }) {
   const [choc, setChoc] = useState(false)
   const [stirred, setStirred] = useState(false)
   const [straw, setStraw] = useState<string | null>(null)
+  useEffect(() => void say(L.chang.drink), [])
   const ready = milk > 0 && choc && stirred && !!straw
   const color = !milk ? 'transparent' : choc && stirred ? '#B07850' : choc ? 'repeating-linear-gradient(160deg, #fff 0 12px, #7A4326 12px 20px)' : '#fff'
   const tap = (f: () => void) => () => {

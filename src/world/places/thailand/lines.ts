@@ -224,6 +224,54 @@ export const L = {
     goodRace: kids('Good race, Kaylee!'),
   },
 
+  // Baan Chang Cafe in Krabi (activities/boat-trip/chang/, plan: thailand/baan-chang.md): the sign, the chocolate milk,
+  // the boardwalk and the elephants. The elephants don't talk (rumbles, trumpets, squeals); Daddy and Mommy react in
+  // their own voices, and Sparkle says the names, what's new, and what to do after a while with nothing done. Daddy's
+  // "Where to, Captain Kaylee?", "Everybody, pose!", "One, two, three, cheese!" and "Pai!" are the bay's.
+  chang: {
+    // Daddy.
+    bananas: nick('Bananas for the elephants, Kaylee!'),
+    likes: nick('He likes you!'),
+    coffee: nick('Ahh! Thank you, Kaylee!'),
+    // Mommy.
+    look: ji('Look, Kaylee! Elephants!'),
+    hiLamyai: ji('Hi, Lamyai!'),
+    milk: ji("Hey! That's your chocolate milk!"),
+    full: ji('Whoa! Too full!'),
+    wet: ji("We're all wet!"),
+    // Sparkle: something new.
+    arrive: 'Baan Chang means elephant house!',
+    drink: "Let's make a chocolate milk!",
+    mali: 'Mali means jasmine!',
+    khanom: 'Khanom means snack!',
+    lamyai: 'Lamyai means a sweet fruit!',
+    wants: 'Look! They each want a snack!',
+    splash: "They're full! Splash!",
+    // At the pier at sunset, Baan Chang still to do.
+    waiting: 'The elephants are waiting!',
+    // Sparkle, after a while with nothing done.
+    hint: {
+      fork: 'Elephants or the boat? You pick!',
+      cup: 'Tap the cup to make a drink!',
+      milk: 'Pour in the milk!',
+      choc: 'Squeeze in the chocolate!',
+      stir: 'Stir it round and round!',
+      straw: 'Pick a straw!',
+      go: 'Tap the elephant to go see them!',
+      walk: 'Tap the path to walk!',
+      hold: 'Grab a banana!',
+      want: 'Give them what they want!',
+      spray: 'Tap an elephant for a splash!',
+      boat: 'Tap the boat to go to the sea!',
+    },
+    // The tap-to-hear facts: the album's sticker, the stamp screen and the passport.
+    facts: {
+      trunk: "An elephant's trunk is its nose and its hand!",
+      eat: 'Elephants eat almost all day long!',
+      nickname: 'In Thailand, everyone has a fun nickname!',
+    },
+  },
+
   // The way home (the boat trip's `home`): Aunty Sri's van brings them back to Agong's house, she picks the photo for
   // Agong's wall, and even the big cousins look up from their phones. Then, in the house, the photo on the wall.
   home: {

@@ -421,7 +421,7 @@ instanced, and the elephants are a few thousand triangles each.
 5. **The look** (built 2026-10-24, see "Built so far"): a closer match to Dad's photos (the bamboo sign wall and its
    letters, the salas, the oil palms, the gravel and boulders, the mesh boardwalk), and a pass on the elephants' look.
    The Khanom sticker. Full QA, scoped to the Baan Chang sections.
-6. **The full loop:**
+6. **The full loop** (built 2026-10-24, see "Built so far"):
    - Voices (`lines.ts`, then `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`), hints, the
      facts on the stamp screen and the passport.
    - Pacing QA, then layout-qa and playtest-qa with the fun check.
@@ -677,8 +677,64 @@ round (`land?chang=1` for the signpost, `sunset?chang=1` for the 🐘 at the pie
   - On iPhone landscape, the wish bubbles touch the top of the screen.
   - The pacing robot doesn't finish the Baan Chang runs, so `qa-pacing.mjs` has no numbers for them yet.
 
-**Next:** Dad plays it on the iPad with `?chang=1`. Then the full loop (step 6): the voices, the hints, the facts,
-pacing QA, layout-qa and playtest-qa with the fun check, then `CHANG_OPEN = true`.
+**Step 6, the full loop (2026-10-24):** the voices, the hints and the facts, and **Baan Chang is on**
+(`chang/open.ts` `CHANG_OPEN = true`): after landing in Krabi the songthaew stops at the signpost for everyone, the
+boarding pass has 🐘, the pier at sunset offers 🐘 until she has been, and the replay offers 🐘. No sections or params
+changed. `?chang=1` still works but isn't needed.
+- **The lines** (`lines.ts` `L.chang`, 31 new clips, all under 3 s; the family's reactions are dropped, not queued,
+  while Sparkle is talking, so they never land late):
+  - Daddy: "Bananas for the elephants, Kaylee!" as the yard begins, "He likes you!" on Khanom's second bite, "Ahh!
+    Thank you, Kaylee!" for his iced coffee, and the bay's "Pai!" when she picks a board at the signpost.
+  - Mommy: "Look, Kaylee! Elephants!" near the boardwalk's steps (where they're on screen), "Hi, Lamyai!" when Lamyai gets to the rail, "Hey! That's
+    your chocolate milk!" at Khanom's first sip, "Whoa! Too full!" at the first overflow in the cafe, "We're all wet!"
+    in the splash.
+  - Sparkle, once each, for something new: "Baan Chang means elephant house!" (driving in), "Let's make a chocolate
+    milk!" (the cafe), "Mali means jasmine!" and "Khanom means snack!" (each one's first bite), "Lamyai means a sweet
+    fruit!" (as she sets off), "Look! They each want a snack!" (the first wishes), "They're full! Splash!". A wish of three
+    gets counted, "One! Two! Three!" (the race's clips).
+  - At the pier at sunset, while Baan Chang is still to do, Sparkle's idle line is "The elephants are waiting!".
+- **Sparkle's hints** (`stuckLine()` in `chang.ts`, like the bay's): after 8 s with nothing done (counted from when the
+  section began, never while a finger is down, she's walking, or they're posing), at most 3 times a section, 20 s
+  apart. The sign: "Tap a pose!", then "Tap the cup to make a drink!". The cafe: the next thing her drink needs (milk,
+  chocolate, stir, straw), then "Tap the elephant to go see them!". The boardwalk: "Tap the path to walk!". The yard:
+  "Grab a banana!", or with wishes up "Give them what they want!". The splash (counted from when the way on shows):
+  "Tap an elephant for a splash!", then "Tap the boat to go to the sea!" (or "Tap the plane to fly home!"). The signpost: "Elephants or the boat? You pick!" after 9 s.
+- **The facts:** Khanom's sticker in the album says "An elephant's trunk is its nose and its hand!". The stamp screen
+  and the passport get "Elephants eat almost all day long!" (🍌) and "In Thailand, everyone has a fun nickname!" (🌼),
+  in place of the mudskipper (it's in the album) and the fiddler crab (it's the stamp's own sticker line), so the row
+  stays at ten. The sign photo keeps "In Thai, chang means elephant!" and the splash photo "The elephant is
+  Thailand's special animal!".
+- **No WebGL:** the picture book's Baan Chang pages speak too (the arrival, the cafe, the boardwalk, each yard page).
+- **Fixed:** on `sign`, Sparkle's bubble now sits above the pose buttons (a known small thing). And at the Krabi
+  signpost, ⏩ during the drive left the songthaew parked at the arrivals arch with the boards off screen and nothing
+  to tap (playtest-qa found it; `plane.ts` `stepFork` now puts it at the signpost on the frame it gets there).
+- **Pacing** (`qa-pacing.mjs`, WebKit iPad portrait; a Baan Chang run now finishes when the address bar moves on to
+  its next section): no talk before the first touch anywhere. Talk per tap: the drive in 1.2 s (4 taps, it's a ride),
+  the sign 0.2 s, the boardwalk 0.3 s, `feed` 0.4 s, the splash 0.4 s. The random-tapping robot doesn't finish the
+  cafe, `favorites` or `lamyai` in 45 taps (they need the right tool or food; greybox 2's and 3's robots that tapped
+  the right things did).
+
+- **QA** (layout-qa, then playtest-qa, iPad portrait and landscape and iPhone landscape):
+  - No errors, and all six Baan Chang filmstrips ran. The signpost checked by hand on iPad landscape and portrait
+    (with ⏩ too): it arrives about 16 s after a `land` link, so the screen sweep now waits 22 s for it.
+  - Playtest-qa's fun check: `drinks`, `feed`, `favorites` and `lamyai` fun (the chocolate moustache is the moment);
+    the fork, `chang`, `sign` and `splash` OK; the boardwalk thin (one straight walk, two pokes). Its must-fixes are
+    in (the ⏩ soft-lock, the splash hint that pointed her away from the spraying, late family lines, "Grab a banana!"
+    instead of "Hold it up" with empty hands, "So big!" about Lamyai, who isn't the biggest).
+- **Known small things** (for later, none blocks play):
+  - The boardwalk is thin as play: one or two more surprises along it, or a shorter walk.
+  - On the boardwalk, Kaylee walks behind the near rail's bars.
+  - On a portrait iPad, Mommy and Daddy are cut at the edges in `favorites` and `lamyai`, and the boardwalk's top half
+    is palm crowns. On iPhone landscape the wish bubbles touch the top of the screen.
+  - The trip's speech bubble shows a line's words as soon as it's queued, before the voice gets to it
+    (`trip/legs/Guide.tsx`, shared by every trip).
+  - Nobody has looked at the pier's 🐘 at sunset in a screenshot this round (the sweep's shot is still out on the
+    water); it hasn't changed since greybox 4, when a robot played through it.
+  - Still from the plan's ideas: Mommy's hat in the splash, Daddy's sunglasses dripping, Khanom rearing up, the trunks
+    bonking, a trunk sniffing Kaylee's mane.
+
+**Next:** Dad plays the whole trip on the iPad (Baan Chang is on: land in Krabi and pick 🐘), and listens to the new
+voices, the count and the lip sync. Then the known small things above, starting with the boardwalk.
 
 ## Fun check (filled in now, to be re-checked on the iPad)
 

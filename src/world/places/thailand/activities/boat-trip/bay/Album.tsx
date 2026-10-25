@@ -19,8 +19,8 @@ export interface AlbumPhoto {
 }
 
 const FACT: Record<PhotoKind, Line | null> = { village: L.bay.facts.football, hong: L.bay.facts.hong, nail: L.bay.facts.nail, selfie: null, race: L.race.trophy, sign: L.facts.chang, chang: L.facts.elephant }
-/** A sticker's fact (Khanom's has none of its own yet: the elephant's). */
-const stickerFact = (id: StickerId): Line => L.bay.stickers[id] ?? L.facts.elephant
+/** A sticker's fact (Khanom's: the trunk). */
+const stickerFact = (id: StickerId): Line => L.bay.stickers[id] ?? L.chang.facts.trunk
 const BTN = 'min(96px, max(68px, 12vmin))'
 /** Where the album button's middle is (a flying sticker aims there). */
 const buttonCenter = () => ({ x: window.innerWidth - 18 - 48, y: window.innerHeight - 18 - 48 })
