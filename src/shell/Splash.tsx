@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, type CSSProperties } from 'react'
-import { pick, say, SparklePuppet, sounds, useLandscape, type PuppetHandle, type SparkleAction } from '../sdk'
+import { pick, SparklePuppet, sounds, useLandscape, type PuppetHandle, type SparkleAction } from '../sdk'
 import { unlockSpeech } from '../sdk/speech'
 import { unlockSounds } from '../sdk/sounds'
 import { Balloon, Cloud, HiKaylee, Pill, Rainbow, Sky, Wave } from './Sky'
@@ -90,7 +90,6 @@ export function Splash({ onStart }: { onStart: () => void }) {
             unlockSounds()
             unlockSpeech()
             sounds.pop()
-            void say("Hi Kaylee! Let's play!")
             onStart()
           }}
           style={{ minHeight: 88, paddingBottom: 10 }}

@@ -6,7 +6,7 @@ const NAME = 'Kaylee'
 export const WORLD_LINES = {
   title: 'Around the World!',
   firstHello: `Let's fly around the world, ${NAME}! Tap the sparkly pin.`,
-  hello: `Where should we fly, ${NAME}?`,
+  hello: 'Where should we fly?',
   takeoff: 'Up, up and away!',
   continents: {
     northAmerica: "That's North America!",
