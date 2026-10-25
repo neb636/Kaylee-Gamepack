@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useRoute } from './router'
 import { GameFrame } from './shell/GameFrame'
-import { Home } from './shell/Home'
 import { Playground } from './shell/Playground'
 import { Splash } from './shell/Splash'
 import { TrophyRoom } from './shell/TrophyRoom'
@@ -22,6 +21,7 @@ export default function App() {
     case 'world':
       return <World place={route.place} activity={route.activity} section={route.section} params={route.params} />
     default:
-      return <Home />
+      // Around the World is the home screen: "Let's play!" lands on the world map.
+      return <World />
   }
 }

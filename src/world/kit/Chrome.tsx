@@ -3,7 +3,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import { sounds } from '../../sdk'
 
 /** Round back button + optional extras, floating over the top-left like the game shell's 🏠 bar. */
-export function TopBar({ icon, label, onBack, children }: { icon: string; label: string; onBack: () => void; children?: ReactNode }) {
+export function TopBar({ icon, label, onBack, children }: { icon: ReactNode; label: string; onBack: () => void; children?: ReactNode }) {
   return (
     <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', left: 16, right: 16, display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 16px)', pointerEvents: 'none', zIndex: 50 }}>
       <motion.button
@@ -13,7 +13,7 @@ export function TopBar({ icon, label, onBack, children }: { icon: string; label:
           sounds.pop()
           onBack()
         }}
-        style={{ pointerEvents: 'auto', flex: '0 0 var(--btn)', width: 'var(--btn)', height: 'var(--btn)', borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 'calc(var(--btn) * 0.5)', display: 'grid', placeItems: 'center' }}
+        style={{ pointerEvents: 'auto', position: 'relative', flex: '0 0 var(--btn)', width: 'var(--btn)', height: 'var(--btn)', borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 'calc(var(--btn) * 0.5)', display: 'grid', placeItems: 'center' }}
       >
         {icon}
       </motion.button>

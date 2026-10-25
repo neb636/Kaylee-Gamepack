@@ -23,12 +23,16 @@ async function start(page: Page, hash = '') {
   await page.getByRole('button', { name: /let's play/i }).click()
 }
 
-test('home screen lists every game', async ({ page }) => {
+test("Let's play lands on the world map, with trophies and the tea party", async ({ page }) => {
   const errors = trackErrors(page)
   await start(page)
-  await expect(page.getByRole('heading', { name: 'Hi Kaylee!' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'My passport' })).toBeVisible()
   await expect(page.getByRole('button', { name: /my trophies/i })).toBeVisible()
   expect(gameIds.length).toBeGreaterThan(0)
+  await page.getByRole('button', { name: 'Tea party' }).click({ force: true })
+  await expect(page).toHaveURL(/#\/game\/unicorn-tea-party/)
+  await page.getByRole('button', { name: 'Home' }).click()
+  await expect(page.getByRole('button', { name: 'My passport' })).toBeVisible()
   expect(errors).toEqual([])
 })
 
@@ -132,7 +136,6 @@ const placeIds = readdirSync('src/world/places', { withFileTypes: true })
 test('Around the World: map, passport and coloring book open', async ({ page }) => {
   const errors = trackErrors(page)
   await start(page)
-  await page.getByRole('button', { name: 'Around the World' }).click()
   await expect(page.getByRole('button', { name: 'My passport' })).toBeVisible()
   await page.getByRole('button', { name: 'africa' }).click({ force: true })
   await page.getByRole('button', { name: 'My passport' }).click({ force: true })
