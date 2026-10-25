@@ -13,11 +13,14 @@ import { CHANG_FEEL } from './feel'
 import { floorAt, type ElephantSpot } from './layout'
 import { drawTrunk, makeTrunk, stepTrunk, type Trunk } from './trunk'
 
-const LOOK: Record<ElephantSpot['id'], { hide: string; dark: string; ear: string }> = {
-  mali: { hide: '#B4AECD', dark: '#A19ABF', ear: '#FFB8CC' },
-  khanom: { hide: '#C3BEDA', dark: '#AFA9CB', ear: '#FFAFC8' },
-  lamyai: { hide: '#BDB6D4', dark: '#A9A2C7', ear: '#FF9DC0' },
+// A warm elephant grey (lavender only in the toon shadows), and the pink freckles Asian elephants get on the face,
+// the trunk's root and the ears' edges as they grow up (Mali has the most, Khanom hardly any yet).
+const LOOK: Record<ElephantSpot['id'], { hide: string; dark: string; ear: string; freckles: number }> = {
+  mali: { hide: '#B9B2BD', dark: '#A39BA9', ear: '#FFB8CC', freckles: 14 },
+  khanom: { hide: '#C7C0CA', dark: '#B1A9B6', ear: '#FFAFC8', freckles: 4 },
+  lamyai: { hide: '#C0B8C3', dark: '#AAA2B0', ear: '#FF9DC0', freckles: 9 },
 }
+const FRECKLE = '#F4BCCB'
 const TIP = '#FFA3C2'
 const SEGMENTS = 9
 /** Where the trunk's root and the mouth are on the head (head space, before the elephant's scale). */
@@ -99,7 +102,17 @@ export class Elephant {
           ...(spot.id === 'mali' ? [-1, 1].map((s) => P.cone(0.075, 0.42, '#FFF7F0', { at: [s * 0.36, -0.58, 0.76], rot: [1.9, 0, -s * 0.25] }, 8)) : []),
           ...(spot.id === 'khanom' ? [0, 1, 2].map((i) => P.sphere(0.12, c.dark, { at: [-0.12 + i * 0.12, 0.98, 0.28], scale: [0.8, 1.5, 0.8] }, 6)) : []),
         ],
-        [...[-1, 1].map((s) => P.sphere(0.17, '#FF9DB8', { at: [s * 0.62, -0.18, 0.66], scale: [1, 0.6, 0.4] }, 8))],
+        [
+          ...[-1, 1].map((s) => P.sphere(0.17, '#FF9DB8', { at: [s * 0.62, -0.18, 0.66], scale: [1, 0.6, 0.4] }, 8)),
+          // Freckles on the face: either side of the trunk's root and up between the eyes (on the head's surface).
+          ...Array.from({ length: c.freckles }, (_, i) => {
+            const up = i % 4 === 3
+            const x = up ? Math.sin(i * 1.7) * 0.14 : (i % 2 ? 1 : -1) * (0.32 + ((i * 0.29) % 1) * 0.2)
+            const y = up ? 0.34 + ((i * 0.41) % 1) * 0.12 : -0.5 + ((i * 0.37) % 1) * 0.36
+            const z = 0.9 * Math.sqrt(Math.max(0, 1 - x * x - (y / 0.95) ** 2)) + 0.01
+            return P.sphere(0.045 + (i % 3) * 0.015, FRECKLE, { at: [x, y, z], scale: [1, 1, 0.35] }, 6)
+          }),
+        ],
         bag,
         2.5,
       ),
@@ -123,8 +136,18 @@ export class Elephant {
       g.position.set(s * 0.82, 0.1, -0.1)
       g.add(
         solidMix(
-          [P.sphere(1, c.hide, { at: [s * 0.6, -0.1, 0], scale: [0.95, 1.15, 0.16] }, 14)],
-          [P.sphere(0.74, c.ear, { at: [s * 0.62, -0.13, 0.11], scale: [0.9, 1.05, 0.1] }, 12), ...[0.5, 1.1, 1.7, 2.3].map((a) => P.sphere(0.06, '#FFD3E1', { at: [s * (0.6 + Math.sin(a) * 0.82), -0.1 - Math.cos(a) * 0.98, 0.15] }, 5))],
+          // An Asian elephant's ear: a little smaller, its top edge rolled, a lobe hanging lower at the front, and pale pink
+          // freckles round its lower edge.
+          [
+            P.sphere(0.9, c.hide, { at: [s * 0.56, -0.05, 0], scale: [0.95, 1.08, 0.16] }, 14),
+            P.sphere(0.45, c.hide, { at: [s * 0.4, -0.78, 0.03], scale: [0.95, 1.1, 0.16] }, 10),
+            P.sphere(0.46, c.hide, { at: [s * 0.62, 0.7, 0.03], scale: [1.3, 0.26, 0.2] }, 10),
+          ],
+          [
+            P.sphere(0.66, c.ear, { at: [s * 0.58, -0.12, 0.11], scale: [0.88, 1.0, 0.1] }, 12),
+            P.sphere(0.3, c.ear, { at: [s * 0.42, -0.74, 0.1], scale: [0.9, 1.05, 0.1] }, 8),
+            ...[0.3, 0.55, 0.95, 1.2, 1.55].map((a, i) => P.sphere(0.035 + (i % 3) * 0.018, FRECKLE, { at: [s * (0.56 + Math.sin(a) * (0.66 + (i % 2) * 0.07)), -0.08 - Math.cos(a) * (0.82 + (i % 2) * 0.06), 0.13] }, 5)),
+          ],
           bag,
           2.5,
         ),

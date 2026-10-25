@@ -36,15 +36,15 @@ export const MILK = { x: -0.6, y: RAIL.top + 0.09, z: 0 }
  *  high and w wide. */
 export const TROUGH = { x0: -2.7, x1: 4.6, z: -0.8, h: 0.42, w: 0.5 }
 
-/** The boulders in front of the rail: x, z, radius, height squash. */
-export const BOULDERS: [number, number, number, number][] = [
-  [-3.4, 0.42, 0.42, 0.75],
-  [-2.3, 0.38, 0.36, 0.85],
-  [-1.25, 0.44, 0.4, 0.7],
-  [-0.15, 0.36, 0.34, 0.8],
-  [0.95, 0.42, 0.4, 0.72],
-  [2.05, 0.38, 0.36, 0.82],
-  [3.15, 0.44, 0.42, 0.7],
+/** The big mossy boulders in front of the rail: x, z, width, height (kept under the trunks' floor there), depth. */
+export const BOULDERS: [number, number, number, number, number][] = [
+  [-3.45, 0.42, 1.15, 0.5, 0.74],
+  [-2.3, 0.4, 0.95, 0.57, 0.7],
+  [-1.2, 0.44, 1.1, 0.46, 0.76],
+  [-0.12, 0.38, 0.9, 0.54, 0.68],
+  [0.98, 0.43, 1.15, 0.48, 0.74],
+  [2.08, 0.39, 0.95, 0.56, 0.7],
+  [3.2, 0.44, 1.2, 0.47, 0.76],
 ]
 
 /** Where held food rides (its z), how low and high it may go and how far to the sides. */
@@ -63,7 +63,7 @@ export const BENCH = { x: 4.7, y: 0.5, z: 2.7 }
 /** How high a trunk must stay over the rail and the boulders (so it reaches over them, never through). */
 export function floorAt(x: number, z: number) {
   if (z > RAIL.z - 0.16 && z < RAIL.z + 0.16) return RAIL.top + 0.12
-  if (z >= RAIL.z + 0.16 && z < 0.78) return 0.66
+  if (z >= RAIL.z + 0.16 && z < 0.78) return 0.72
   // (Into the trough's water a little: that's where they dip.)
   if (x > TROUGH.x0 && x < TROUGH.x1 && Math.abs(z - TROUGH.z) < TROUGH.w / 2 + 0.08) return TROUGH.h - 0.1
   return 0.08

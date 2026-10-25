@@ -8,7 +8,8 @@ import type { Member } from '../../../characters/member'
 import type { Bag } from '../../../engine/dispose'
 import { merge, P, solid } from '../../../engine/geo'
 import { GECKO, SHAKE_PALM, WALK } from './layout'
-import { FROND, FROND_DARK, oilPalm, STEEL } from './yard'
+import { FROND, FROND_DARK, groundScatter, meshPanel, oilPalm, oilPalmParts } from './nature'
+import { STEEL } from './yard'
 
 const PLANK = '#B7865C'
 const PLANK_LIGHT = '#C99A6E'
@@ -25,12 +26,16 @@ export interface Walkway {
 export function buildWalkway(bag: Bag): Walkway {
   const root = new Group()
   const { z, w, y, x0, xs, x1 } = WALK
-  const len = x1 - xs
-  const mid = (x1 + xs) / 2
+  // (The planks run on past x1, toward the cafe, so Mommy and Daddy behind her have planks under them.)
+  const xe = x1 + 2.6
+  const len = xe - xs
+  const mid = (xe + xs) / 2
   const near = z + w / 2
   const far = z - w / 2
   // ---- Sand under it ----
-  root.add(solid(merge([P.box(len + 6, 0.012, 7, '#E6DCC6', { at: [mid, 0.007, z] })]), bag, 0))
+  root.add(solid(merge([P.box(len + 6, 0.012, 7, '#E6DCC6', { at: [mid, 0.007, z] }), ...groundScatter(xs, xe, z - 3.2, z + 3, 5, 0, 36)]), bag, 0))
+  // (Green patches in the sand, where the grass grows back.)
+  root.add(solid(merge(Array.from({ length: 7 }, (_, i) => P.cyl(0.7 + (i % 3) * 0.3, 0.7 + (i % 3) * 0.3, 0.01, i % 2 ? '#B9D98F' : '#A9CF84', { at: [xs + 1 + i * 2.1, 0.015, z - 2.2 - (i % 2) * 1.6 + (i % 3 ? 0 : 4.4)], scale: [1.6, 1, 0.8] }, 12))), bag, 0))
   // ---- The planks, the posts under them, and the steps down ----
   const deck = [
     P.box(len, 0.1, w, PLANK_LIGHT, { at: [mid, y - 0.05, z] }),
@@ -45,7 +50,7 @@ export function buildWalkway(bag: Bag): Walkway {
   root.add(solid(merge(deck), bag, 1.5))
   // ---- The rails: dark steel posts and handrails both sides, mesh panels along the far side ----
   const rail = []
-  for (let x = xs; x <= x1 + 0.01; x += 1.6)
+  for (let x = xs; x <= xe + 0.01; x += 1.6)
     for (const pz of [near, far]) rail.push(P.cyl(0.035, 0.035, 0.95, STEEL, { at: [x, y + 0.47, pz] }, 6))
   for (const pz of [near, far]) {
     rail.push(P.cyl(0.035, 0.035, len, STEEL, { at: [mid, y + 0.95, pz], rot: [0, 0, Math.PI / 2] }, 8))
@@ -55,23 +60,22 @@ export function buildWalkway(bag: Bag): Walkway {
     rail.push(P.cyl(0.035, 0.035, sl, STEEL, { at: [(x0 + xs) / 2, y / 2 + 0.95, pz], rot: [0, 0, Math.PI / 2 + Math.atan2(y, xs - x0)] }, 8))
     rail.push(P.cyl(0.035, 0.035, 0.95, STEEL, { at: [x0, 0.47, pz] }, 6))
   }
-  rail.push(P.box(len, 0.8, 0.012, '#7B7590', { at: [mid, y + 0.5, far] }))
   root.add(solid(merge(rail), bag, 1))
+  // The see-through steel mesh along the far side, between the handrail and the planks.
+  root.add(meshPanel(bag, len, 0.86, [mid, y + 0.48, far]))
   // ---- Oil palms either side (the one she can shake has its own crown) ----
   const palms = []
   for (let i = 0; i < 5; i++) {
     const px = xs + 1.6 + i * 3.2
     if (Math.abs(px - SHAKE_PALM.x) > 1.5) palms.push(...oilPalm(px, z - 2.4 - (i % 2) * 0.6, 5 + (i % 3) * 0.6, i))
     // (A second row further back: none on the camera's side, where they'd stand in front of her.)
-    palms.push(...oilPalm(px + 1.4, z - 6.5 - (i % 2) * 0.8, 5.4 + ((i + 1) % 3) * 0.5, i + 2))
+    palms.push(...oilPalm(px + 1.4, z - 6.5 - (i % 2) * 0.8, 5.4 + ((i + 1) % 3) * 0.5, i + 2, 0, true))
   }
   root.add(solid(merge(palms), bag, 2))
   const palm = new Group()
   palm.position.set(SHAKE_PALM.x, 0, SHAKE_PALM.z)
   palm.userData.pick = 'palm'
-  const trunk = oilPalm(0, 0, SHAKE_PALM.h, 0.6)
-  // (Its crown is the trunk's last ten parts: nine fronds and the heart.)
-  const crownParts = trunk.splice(trunk.length - 10, 10)
+  const { trunk, crown: crownParts } = oilPalmParts(0, 0, SHAKE_PALM.h, 0.6)
   palm.add(solid(merge(trunk), bag, 2))
   const crown = new Group()
   crown.position.y = SHAKE_PALM.h
@@ -82,17 +86,19 @@ export function buildWalkway(bag: Bag): Walkway {
   const frond = solid(merge([P.box(0.4, 0.04, 1.8, FROND_DARK, {}), P.box(0.06, 0.05, 1.8, FROND, { at: [0, 0.02, 0] })]), bag, 1.5)
   frond.visible = false
   root.add(frond)
-  // ---- The gecko on a post of the near rail: a little green lizard with big eyes ----
+  // ---- The gecko on a post of the near rail: a bright lime lizard with a pink belly and big eyes (big enough to spot) ----
   const gecko = new Group()
   gecko.position.set(...GECKO)
+  gecko.scale.setScalar(1.9)
   gecko.userData.pick = 'gecko'
   gecko.add(
     solid(
       merge([
-        P.capsule(0.035, 0.12, '#8FD07F', { at: [0, 0, 0.04] }),
-        P.sphere(0.045, '#8FD07F', { at: [0, 0.11, 0.05] }, 10),
-        P.capsule(0.015, 0.12, '#8FD07F', { at: [0, -0.14, 0.04], rot: [0, 0, 0.3] }),
-        ...[-1, 1].flatMap((s) => [P.capsule(0.012, 0.05, '#7CC06C', { at: [s * 0.05, 0.05, 0.05], rot: [0, 0, s * 1.2] }), P.capsule(0.012, 0.05, '#7CC06C', { at: [s * 0.05, -0.05, 0.05], rot: [0, 0, s * 1.9] })]),
+        P.capsule(0.035, 0.12, '#A6E34F', { at: [0, 0, 0.04] }),
+        P.capsule(0.022, 0.09, '#FFB3D1', { at: [0, 0, 0.065], scale: [1, 1, 0.5] }),
+        P.sphere(0.045, '#A6E34F', { at: [0, 0.11, 0.05] }, 10),
+        P.capsule(0.015, 0.12, '#A6E34F', { at: [0, -0.14, 0.04], rot: [0, 0, 0.3] }),
+        ...[-1, 1].flatMap((s) => [P.capsule(0.012, 0.05, '#8ED13F', { at: [s * 0.05, 0.05, 0.05], rot: [0, 0, s * 1.2] }), P.capsule(0.012, 0.05, '#8ED13F', { at: [s * 0.05, -0.05, 0.05], rot: [0, 0, s * 1.9] })]),
         ...[-1, 1].map((s) => P.sphere(0.018, '#2E2233', { at: [s * 0.025, 0.13, 0.085] }, 6)),
         ...[-1, 1].map((s) => P.sphere(0.012, '#FFB3D1', { at: [s * 0.032, 0.095, 0.09] }, 6)),
       ]),
