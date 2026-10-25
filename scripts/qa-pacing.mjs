@@ -166,6 +166,9 @@ const SCENARIOS = [
   { name: 'thailand nan: the rice farm', id: 'nan-rice', hash: '#/world/thailand/nan-trip/rice', reset: true },
   // Its threshing and the deck (greybox B): any tap bangs the next bundle, then the kratip on the deck and Mommy's photo.
   { name: 'thailand nan: threshing the rice', id: 'nan-rice-thresh', hash: '#/world/thailand/nan-trip/rice?round=thresh', reset: true },
+  // Bo Kluea's salt wells: a tap on the pan (or the bucket) dips a bucketful and pours it, a tap on the woodpile throws a
+  // log on, a tap on the pan in round 3 scrapes a stripe, so the auto-player can play it through to the bags.
+  { name: 'thailand nan: the salt wells', id: 'nan-salt', hash: '#/world/thailand/nan-trip/salt', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
   // (?gl=off goes before the hash: the section's address drops anything it doesn't know.)
   { name: 'thailand trip: picture book without webgl', id: 'trip-book', search: '?gl=off', hash: '#/world/thailand/boat-trip/invite', reset: true },

@@ -15,8 +15,9 @@ interface Props {
   road: RoadId
   /** The end card picked a road. */
   onRoad: (road: RoadId) => void
-  /** The end card's stop at the end of this road (the valley road's mushroom farm, the sky road's Stop Time Cafe). */
-  onStop?: (road: RoadId) => void
+  /** The end card's stop at the end of this road (the valley road's mushroom farm, the sky road's Stop Time Cafe or, by
+   *  its `stop` id, the salt wells). */
+  onStop?: (road: RoadId, stop?: string) => void
 }
 
 export function Drive({ road, onRoad, onStop }: Props) {
@@ -165,17 +166,19 @@ function CountPop({ count }: { count: DriveHud['count'] }) {
   )
 }
 
-/** The stops built so far at the end of a road. */
-const STOP_AT: Partial<Record<RoadId, { icon: string; label: string }>> = {
+type Stop = { icon: string; label: string; id?: string }
+/** The stops built so far at the end of a road (the sky road comes down between two: the café and the salt wells). */
+const STOP_AT: Partial<Record<RoadId, Stop | Stop[]>> = {
   valley: { icon: '🍄', label: 'The mushroom farm' },
-  sky: { icon: '🌾', label: 'Stop Time Cafe' },
+  sky: [{ icon: '🌾', label: 'Stop Time Cafe' }, { icon: '🧂', label: 'Bo Kluea salt wells', id: 'salt' }],
 }
 
 /** The end of the road: drive it again, or take another road (big pictures, no reading). At the end of a road with a
- *  stop built (the valley road's mushroom farm, the sky road's Stop Time Cafe), its big picture comes first. */
-export function EndCard({ road, onRoad, onStop }: { road: RoadId; onRoad: (r: RoadId) => void; onStop?: (road: RoadId) => void }) {
+ *  stop built (the valley road's mushroom farm, the sky road's Stop Time Cafe and Bo Kluea's salt wells), its big
+ *  pictures come first. */
+export function EndCard({ road, onRoad, onStop }: { road: RoadId; onRoad: (r: RoadId) => void; onStop?: (road: RoadId, stop?: string) => void }) {
   const size = 'clamp(92px, 15vmin, 128px)'
-  const stop = onStop && STOP_AT[road]
+  const stops = onStop ? [STOP_AT[road] ?? []].flat() : []
   return (
     <motion.div
       key="end"
@@ -185,11 +188,11 @@ export function EndCard({ road, onRoad, onStop }: { road: RoadId; onRoad: (r: Ro
       transition={{ type: 'spring', stiffness: 240, damping: 18 }}
       style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom, 0px) + 18px)', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 'clamp(12px, 2.6vw, 26px)', padding: '0 16px', zIndex: 50 }}
     >
-      {stop && (
-        <motion.button aria-label={stop.label} whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1.1 }} onClick={() => onStop(road)} style={{ width: size, height: size, borderRadius: '50%', border: '6px solid #fff', background: 'var(--hotpink)', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 }}>
+      {stops.map((stop) => (
+        <motion.button key={stop.icon} aria-label={stop.label} whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1.1 }} onClick={() => onStop?.(road, stop.id)} style={{ width: size, height: size, borderRadius: '50%', border: '6px solid #fff', background: 'var(--hotpink)', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 }}>
           {stop.icon}
         </motion.button>
-      )}
+      ))}
       {[road, ...ROAD_IDS.filter((r) => r !== road)].map((r) => (
         <motion.button
           key={r}
