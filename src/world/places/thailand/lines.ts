@@ -230,7 +230,7 @@ export const L = {
     goodRace: kids('Good race, Kaylee!'),
   },
 
-  // Baan Chang Cafe in Krabi (activities/boat-trip/chang/, plan: thailand/baan-chang.md): the sign, the chocolate milk,
+  // Baan Chang Cafe in Krabi (activities/boat-trip/chang/, plan: thailand/baan-chang.html): the sign, the chocolate milk,
   // the boardwalk and the elephants. The elephants don't talk (rumbles, trumpets, squeals); Daddy and Mommy react in
   // their own voices, and Sparkle says the names, what's new, and what to do after a while with nothing done. Daddy's
   // "Where to, Captain Kaylee?", "Everybody, pose!", "One, two, three, cheese!" and "Pai!" are the bay's.
@@ -301,7 +301,7 @@ export const L = {
     again: 'Pack again, or go straight to the boat?',
   },
 
-  // The Nan road trip (planning/around-the-world/thailand/nan-trip.md). The stops fill in as each one gets its voices.
+  // The Nan road trip (planning/around-the-world/thailand/nan-trip.html). The stops fill in as each one gets its voices.
   nan: {
     // Kaylee's rice farm under Stop Time Cafe (activities/nan-trip/rice/, plan: thailand/nan-rice.md). Sparkle says what's
     // new at each round and, after a while with nothing done, what to do; Daddy (on the farm) and Mommy (on the deck)

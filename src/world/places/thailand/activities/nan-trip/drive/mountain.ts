@@ -1,4 +1,4 @@
-// The mountain road (section `drive`, plan: thailand/nan-trip.md, build step 1: the greybox). Mommy drives the big
+// The mountain road (section `drive`, plan: thailand/nan-trip.html, build step 1: the greybox). Mommy drives the big
 // silver Pajero and Kaylee steers it: it always rolls forward (Mommy's foot), and her finger, anywhere on the road
 // ahead, picks where across the road it goes. Let go and Mommy keeps it in the left lane by herself (Thailand keeps
 // left). Mommy slows for the bends (the body leans out), stops for a buffalo crossing (the body squats), and the road

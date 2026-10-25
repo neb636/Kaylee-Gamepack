@@ -10,7 +10,7 @@
 //   pier ... sunset         Phang Nga Bay by longtail boat (bay/bay.ts and its parts): the ribbons, open water, the
 //                           village, the cave and the hong, the Nail Island photo, the sunset ride back; at the pier her
 //                           album opens and a big 🏠 takes them home
-//   chang ... splash        Baan Chang Cafe in Krabi (chang/chang.ts, plan: thailand/baan-chang.md), greybox: the
+//   chang ... splash        Baan Chang Cafe in Krabi (chang/chang.ts, plan: thailand/baan-chang.html), greybox: the
 //                           songthaew to the entrance and a pose photo at the bamboo sign (🥤 after it), the cafe,
 //                           where she makes her chocolate milk (chang/cafe.ts; a big 🐘 when it's ready), down the
 //                           boardwalk to the elephants' yard, where she holds bananas and sugarcane out to the trunks;

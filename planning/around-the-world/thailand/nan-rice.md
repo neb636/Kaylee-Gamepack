@@ -1,7 +1,7 @@
 # Thailand, Nan trip, stop 3 rebuilt: Kaylee's little rice farm at Sapan (plan)
 
-Written 2026-10-25. This replaces the toy of **Stop Time Cafe** (`rice`) in `nan-trip.md`, step 3. Read it with
-`nan-trip.md` (the trip, the road, the other stops), `../ACTIVITY-TEMPLATE.md` and `docs/play-design.md`.
+Written 2026-10-25. This replaces the toy of **Stop Time Cafe** (`rice`) in `nan-trip.html`, step 3. Read it with
+`nan-trip.html` (the trip, the road, the other stops), `../ACTIVITY-TEMPLATE.md` and `docs/play-design.md`.
 
 ## Why a new toy
 
@@ -96,7 +96,7 @@ Sparkle speaks during play only when:
 - **Cut, dry, bang the grains out** (threshing, `fad khao`, banging bundles on a board, as northern Thai farmers do).
 - In Nan, people eat **sticky rice** (ข้าวเหนียว, khao niao) from a little bamboo basket (a **kratip**), with
   their fingers.
-Tap-to-hear facts (`NAN_FACTS`, on the deck and the stamp screen), already in `nan-trip.md`'s list: "Rice grows standing
+Tap-to-hear facts (`NAN_FACTS`, on the deck and the stamp screen), already in `nan-trip.html`'s list: "Rice grows standing
 in water." "The steps on the hill keep the water for the rice." New: "In Nan, people eat sticky rice with their
 fingers."
 
@@ -270,7 +270,7 @@ to her head pivot; she takes it off on the deck. The scarecrow wears one too.
 
 Start from #168's branch (`neb636/nan-rice-greybox`) merged up to `main`, so the 🌾 on the sky road's end card, the
 `NanTrip` wiring, the deck and the QA entries come along; this plan's PR merges first, so take `main`'s
-`nan-trip.md` if it conflicts. Close #168 when the new greybox PR opens (link it).
+`nan-trip.html` if it conflicts. Close #168 when the new greybox PR opens (link it).
 
 ```
 activities/nan-trip/rice/
@@ -414,4 +414,4 @@ Dad played greybox B (2026-10-25): threshing feels good (ten bangs, the swing he
 - **Replay:** her patterns, random birds, the tall paddy moves.
 
 Sources: [the video](https://www.youtube.com/watch?v=qwAxh1ii-No); threshing by beating sheaves and sticky rice as the
-north's everyday rice: check against a second source before they become spoken facts (as `nan-trip.md` asks).
+north's everyday rice: check against a second source before they become spoken facts (as `nan-trip.html` asks).

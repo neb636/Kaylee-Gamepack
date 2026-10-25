@@ -1,4 +1,4 @@
-// Bo Kluea's salt wells (plan: planning/around-the-world/thailand/nan-trip.md, "4. Bo Kluea salt wells"), greybox:
+// Bo Kluea's salt wells (plan: planning/around-the-world/thailand/nan-trip.html, "4. Bo Kluea salt wells"), greybox:
 // shapes and sounds, no voices yet. One open-sided salt hut seen from the front: the well on the left, the big pan on
 // its mud stove on the right, a bamboo beam over both with the bucket hanging from it on a rope.
 //

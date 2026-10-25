@@ -1,4 +1,4 @@
-// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.md). Still in the works (meta.ts `inTheWorks`):
+// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.html). Still in the works (meta.ts `inTheWorks`):
 // only its links open it. So far, two greyboxes: the mountain road (drive/, section drive), where Kaylee steers Mommy's
 // silver Pajero along one of the four roads and the end card takes her down another; and Baan Huanam Mushroom Farm
 // (mushrooms/, section mushrooms), where she mists the sawdust bags, picks the mushrooms and tops the pizza. The valley

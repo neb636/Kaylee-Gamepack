@@ -1,4 +1,4 @@
-// The Nan trip's four roads, as data in meters (plan: thailand/nan-trip.md, "The mountain road"). Same verb on each
+// The Nan trip's four roads, as data in meters (plan: thailand/nan-trip.html, "The mountain road"). Same verb on each
 // (steer the Pajero), and each one deepens it:
 // - city: through Nan town to its market, short and flat, over the Nan River bridge; tuk-tuks and scooters.
 // - valley: through the rice fields of Pua to the mushroom farm; chickens on the road, a songthaew coming the other

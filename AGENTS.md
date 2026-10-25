@@ -26,6 +26,7 @@ src/sdk/                 # shared building blocks: say, sounds, puppets, drag an
 src/shell/               # the app wrapper: splash, trophy ceremony, trophy room ("Let's play!" lands on the world map)
 src/games/<id>/          # the original school-paper games (just the tea party, the 🏡 pin on the map), found automatically
 planning/around-the-world/  # country plans, ACTIVITY-TEMPLATE.md, Thailand's trip plans and known issues
+planning/viewer/            # draws the plan pages (*.html: the plan as JSON inside, see the plan-page skill)
 art/STYLE.md             # the art style prompt; art/source/ holds full-size originals
 docs/                    # play-design.md (what makes it fun), interactions.md (which tool), sparkle.md
 ```
@@ -185,7 +186,7 @@ Fredoka. Animations: `motion` (`import { motion, AnimatePresence } from 'motion/
 ## Thailand: the 3D country (the reference for new work)
 
 Read `planning/around-the-world/thailand.md` (the family, the house, the gates so far), then the plan of the trip you're
-working on: `thailand/nan-trip.md` (a road trip in the mountains, the road kit). The finished boat and mall trips
+working on: `thailand/nan-trip.html` (a road trip in the mountains, the road kit). The finished boat and mall trips
 (and Baan Chang) have no plan left; read their code in `trip/` and `activities/`.
 `thailand/known-issues.md` lists small things QA found, with links and code paths. Plans end with what's built and
 what's next; PR bodies end with the next prompt.
@@ -214,7 +215,8 @@ what's next; PR bodies end with the next prompt.
 ## Building activities: one per PR, toy first
 
 Plan each activity with `planning/around-the-world/ACTIVITY-TEMPLATE.md` (core verb, how it deepens, her choices, things
-to poke, touch count). Then build in gates, and stop at each one for Dad:
+to poke, touch count). New plans are **plan pages** (`.agents/skills/plan-page/SKILL.md`): Dad is a visual reader and
+skims long Markdown, so a plan is an HTML page drawn from JSON (read one with `node scripts/plan.mjs md <file>`). Then build in gates, and stop at each one for Dad:
 1. **Greybox toy:** only the core verb, with placeholder shapes (in 3D: simple shapes already in the final toon look),
    no generated art, no voices, on the PR preview. Dad plays it on the iPad. If it isn't fun yet, change the toy, not
    the decoration.
@@ -366,7 +368,8 @@ the country's `known-issues.md` (Thailand has one) instead of growing the PR.
    tagged `@behavior`: they run nightly (`npm run test:behavior`), not on PRs.
 4. Re-read "What Kaylee told us" and the design rules. Is every instruction spoken? Is there no way to fail? Are her
    hands busy? Does it work in portrait and landscape? Run the fun check in `docs/play-design.md`.
-5. Update the plan (what's built, what's next) so the next session can pick it up.
+5. Update the plan (what's built, what's next) so the next session can pick it up. For a plan page: the build step,
+   a `log` entry, the hero's `next`, then `node scripts/plan.mjs check` (the `plan-page` skill).
 
 ## Time budget (a session should take about an hour, not ten)
 
@@ -404,5 +407,6 @@ node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs   # lines.
 
 After every task is completed, commit your work and open a pull request with the `open-pr` skill
 (`.agents/skills/open-pr/SKILL.md`): ready for review (never `--draft`), assigned to me (neb636), with "🔗 Test this"
-deep links on the PR preview to exactly the sections and state that changed. End the PR body with the next step (the
+deep links on the PR preview to exactly the sections and state that changed (and a 📋 link to any plan page it changed,
+`.../pr-preview/pr-<N>/planning/...`). End the PR body with the next step (the
 prompt for the next gate) when there is one.

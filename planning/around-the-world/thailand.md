@@ -128,7 +128,7 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    The third family trip (Dad, 2026-10-24) is a road trip in Nan, from the family's real trip in June 2024: they fly
    north, Mommy drives a silver rental Pajero Sport over the mountain roads (Kaylee steers), and they stop at
    Baan Huanam Mushroom Farm, Stop Time Cafe above Sapan's rice terraces and Bo Kluea's salt wells,
-   coming home by the "number 3" road (`thailand/nan-trip.md`, planned only).
+   coming home by the "number 3" road (`thailand/nan-trip.html`, planned only).
 
 ## Tech notes
 

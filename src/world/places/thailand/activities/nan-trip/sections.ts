@@ -1,4 +1,4 @@
-// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.md), as deep-linkable sections:
+// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.html), as deep-linkable sections:
 // #/world/thailand/nan-trip/<section>?road=<which road>. Built so far (greyboxes): the mountain road, the Pajero
 // steered along any of the four roads (drive?road=city|valley|sky|three, step 1), and Baan Huanam Mushroom Farm
 // (mushrooms?round=1|2|3|pizza&basket=<what she picked>, step 2): mist the sawdust bags, pick into the basket (pink

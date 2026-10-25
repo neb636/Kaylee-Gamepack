@@ -1,4 +1,4 @@
-// The cafe at Baan Chang (`drinks`, plan: thailand/baan-chang.md, "Side verb"): her chocolate milk, poured the mall
+// The cafe at Baan Chang (`drinks`, plan: thailand/baan-chang.html, "Side verb"): her chocolate milk, poured the mall
 // cafe's way (mall-trip/games/cafe/shop.ts). Kaylee stands behind the counter of the open sala at the top of the
 // boardwalk; the tray along the front holds the milk jug, the chocolate, a long spoon, three straws, a bowl of ice and
 // Daddy's coffee pot.

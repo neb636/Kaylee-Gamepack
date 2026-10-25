@@ -1,4 +1,4 @@
-// Baan Chang Cafe, the elephants in Krabi (plan: thailand/baan-chang.md), a world of its own inside the boat trip.
+// Baan Chang Cafe, the elephants in Krabi (plan: thailand/baan-chang.html), a world of its own inside the boat trip.
 // The yard's toy: she pulls a banana or a stick of sugarcane out of Daddy's basket and holds it up over the rail. Every
 // trunk in reach snakes after her finger, lagging and bending along its length; the first tip to touch the food curls
 // round it (her finger lets go by itself), swings it up to the mouth, and the elephant munches, its ears flap and its
