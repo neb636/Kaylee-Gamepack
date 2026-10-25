@@ -1,5 +1,5 @@
 // What stands at the end of each Nan road, and along the way, as greybox toys in the toon look (the real models are the
-// look step): Wat Phumin (white walls, gold roofs, two green naga along the stairs), the mushroom farm's dark wooden
+// look step): Nan's market square (stalls round a big umbrella), the mushroom farm's dark wooden
 // house with a big pink mushroom on the roof, Stop Time Cafe's deck on stilts over the valley, the viewpoint's little
 // sala, Nan town's market stalls, and a waterfall down the mountain beside the sky road. Each faces +z (the road).
 import { Group, type BufferGeometry } from 'three'
@@ -16,21 +16,26 @@ const GOLD = PAL.gold
 
 export function buildLandmark(kind: LandmarkKind, bag: Bag): Group {
   const g = new Group()
-  if (kind === 'temple') {
-    // Cross-shaped: two long halls crossing, a door on each side, stacked gold roofs, naga down the front stairs.
+  if (kind === 'market') {
+    // The market square: stalls under striped awnings in a horseshoe round a big pink umbrella and its tables.
+    const stripes = [PAL.hotpink, PAL.sky, PAL.mint, PAL.butter, PAL.lavenderDark]
     g.add(solid(merge([
-      P.box(9, 0.8, 9, PAL.cream, { at: [0, 0.4, 0] }),
-      P.box(4.4, 3.4, 8.4, '#FFFFFF', { at: [0, 2.5, 0] }),
-      P.box(8.4, 3.4, 4.4, '#FFFFFF', { at: [0, 2.5, 0] }),
-      ...[0, Math.PI / 2].flatMap((r) => [
-        P.prism([[-4.6, 0], [4.6, 0], [2.2, 2.2], [-2.2, 2.2]], 2.4, GOLD, { at: [0, 4.2, 0], rot: [0, r, 0] }),
-        P.prism([[-3.2, 0], [3.2, 0], [1.4, 1.6], [-1.4, 1.6]], 1.6, '#E8A93C', { at: [0, 6.3, 0], rot: [0, r, 0] }),
-      ]),
-      P.cone(0.5, 2.6, GOLD, { at: [0, 8.8, 0] }),
-      ...[0, 1, 2, 3].map((i) => P.box(1.4, 2.2, 0.1, '#C2872F', { at: [Math.sin((i * Math.PI) / 2) * 4.25, 1.9, Math.cos((i * Math.PI) / 2) * 4.25], rot: [0, (i * Math.PI) / 2, 0] })),
-      // The front stairs and the two naga lying along them, heads up at the bottom.
-      P.box(2.6, 0.4, 2.4, PAL.cream, { at: [0, 0.2, 5.6] }),
-      ...[-1, 1].flatMap((s) => [P.capsule(0.32, 2.6, PAL.mint, { at: [s * 1.6, 0.6, 5.6], rot: [Math.PI / 2 - 0.15, 0, 0] }), P.sphere(0.55, '#5FC7A0', { at: [s * 1.6, 1.4, 7.2] }), P.cone(0.3, 0.9, GOLD, { at: [s * 1.6, 2.0, 7.0] })]),
+      P.box(10, 0.15, 9, PAL.cream, { at: [0, 0.075, 0] }),
+      ...[-2, -1, 0, 1, 2].flatMap((k) => {
+        const a = (k / 2) * 1.25
+        const x = Math.sin(a) * 3.8
+        const z = -Math.cos(a) * 3.2
+        return [
+          P.box(2.4, 0.9, 1.2, WOOD, { at: [x, 0.6, z], rot: [0, -a, 0] }),
+          P.box(2.8, 0.12, 1.8, stripes[k + 2], { at: [x, 2.5, z], rot: [0, -a, 0] }),
+          ...[-1, 1].map((s) => P.cyl(0.06, 0.06, 2.3, '#F4EFF8', { at: [x + Math.cos(a) * s * 1.3, 1.3, z + Math.sin(a) * s * 1.3] })),
+          ...[-1, 0, 1].map((j) => P.sphere(0.22, [GOLD, '#FF7A5C', '#9FE07A'][(j + k + 3) % 3], { at: [x + Math.cos(a) * j * 0.7, 1.2, z + Math.sin(a) * j * 0.7] })),
+        ]
+      }),
+      P.cyl(0.08, 0.08, 2.8, DARK, { at: [0, 1.5, 0.6] }),
+      P.cone(2.4, 0.9, PAL.pink, { at: [0, 3.1, 0.6] }, 12),
+      ...[-1, 1].map((s) => P.cyl(0.6, 0.6, 0.1, WOOD, { at: [s * 1.3, 0.8, 0.9] })),
+      ...[-1, 1].map((s) => P.cyl(0.08, 0.1, 0.7, DARK, { at: [s * 1.3, 0.45, 0.9] })),
     ]), bag, 2))
   } else if (kind === 'mushrooms') {
     // The farm's dark wooden mushroom house, a big pink mushroom on its roof, and a table out front.
