@@ -111,7 +111,7 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    family feast finale.
 5. **Activities,** one per PR, through `ACTIVITY-TEMPLATE.md`. Dad picked four (2026-10-17), on hold until he says go:
    Baan Chang Cafe (in 3D, from #86's design), a Songkran water fight on the street, a longtail boat in Krabi, and night
-   market food. The longtail boat became the first family trip (2026-10-18): `thailand/boat-trip.md`, with a reusable
+   market food. The longtail boat became the first family trip (2026-10-18): (plan since removed), with a reusable
    trip kit (pack, Aunty Sri's car, airport, a window seat on the plane) for later trips. Its greybox 1, the boat toy in
    Phang Nga Bay, is built (2026-10-18, PR #99, `#/world/thailand/boat-trip/bay`). Greybox 2, the trip kit, is built
    too (2026-10-18): Mommy asks in her room if Kaylee is ready for a trip (👍 / ✋, Dad's change 2026-10-19 in place of
@@ -119,12 +119,12 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    they're at the airport), the airport and the window seat, each a section (`boat-trip/invite` ... `boat-trip/land`).
    The second family trip (Dad, 2026-10-20) is a mall day at ICONSIAM: Mommy drives the grey rental Veloz, Kaylee
    plays in HarborLand's "Little Thailand" and shares a pizza at The Pizza Company, and the leftovers go home to Agong
-   (`thailand/mall-trip.md`). Its first greybox, a small climbing toy, is built
+   (plan since removed). Its first greybox, a small climbing toy, is built
    (PR #120), and rebuilt as the Big Frame at real scale (`#/world/thailand/mall-trip/frame`). Dad's photos (2026-10-21) turned
    HarborLand into a hall of mini games: a vet clinic, a barber, a racing slide and more, each its own greybox.
    Baan Chang Cafe (Dad, 2026-10-24) comes back in 3D as a second Krabi place on the boat trip: after landing she
    picks 🐘 the elephants or 🚤 the pier, feeds Mali, Khanom and Lamyai bananas and sugarcane, and they splash everyone
-   under a rainbow (`thailand/baan-chang.md`, from Dad's photos; PR #86's 2D greybox is the starting point).
+   under a rainbow (plan since removed, from Dad's photos; PR #86's 2D greybox is the starting point).
    The third family trip (Dad, 2026-10-24) is a road trip in Nan, from the family's real trip in June 2024: they fly
    north, Mommy drives a silver rental Pajero Sport over the mountain roads (Kaylee steers), and they stop at
    Baan Huanam Mushroom Farm, Stop Time Cafe above Sapan's rice terraces and Bo Kluea's salt wells,

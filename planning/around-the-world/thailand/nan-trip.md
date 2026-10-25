@@ -4,7 +4,7 @@ Written 2026-10-24. Thailand's third family trip, and the first that is mostly a
 Mommy, Daddy and Kaylee fly north to Nan, pick up a silver rental **Mitsubishi Pajero Sport** at the airport and drive the
 swoopy mountain roads between three real places: a mushroom farm, a café over the rice terraces and a village that
 makes salt from a well. It's built in 3D in the house's look (toon bands, ink outlines, blob shadows) and
-reuses the trip kit. Read it with `../thailand.md`, `boat-trip.md` (the trip kit), `mall-trip.md` (a trip with many
+reuses the trip kit. Read it with `../thailand.md`, the code in `trip/` (the trip kit) and `activities/mall-trip/` (a trip with many
 small toys), `../ACTIVITY-TEMPLATE.md` and `docs/play-design.md`.
 
 **One-line pitch:** Kaylee presses the key and the big Pajero beeps hello. Mommy drives and Kaylee steers it round the
