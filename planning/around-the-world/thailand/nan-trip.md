@@ -96,7 +96,7 @@ Tai Lue dress, on a rain-wet road.
 | **The mountain road** | `drive` (`?road=…`) | **at once** | **15-30 per drive** | 0-1 line | steer, honk, wipers |
 | **Wat Phumin** | `temple` | ~5 s | 20-35 | 1 line | the lantern on the murals, the wai |
 | **Mushroom farm** | `mushrooms` | ~5 s | 25-40 | 1 line | mist, pick, top the pizza |
-| **Rice café** | `rice` | ~5 s | 25-40 | 1 line | water down the steps, plant, wipe the clouds |
+| **Rice farm + café** | `rice` | ~3 s | 50-70 | 1 line | lead Kaylee: plant, shoo the birds, cut; bang the grains |
 | **Bo Kluea** | `salt` | ~5 s | 25-40 | 1 line | dip, pour, stoke, scoop |
 | The "3" road | `three` | at once | 15-25 | 0 lines | steer down the hairpins, the 3 from above |
 | Home | `home` | 20-30 s | 2-4 | 1 line | pick the photo for Agong's wall |
@@ -281,26 +281,15 @@ or two spoken lines before her hands are busy, no failing. Each stop ends with a
 - **Carried state:** `basket` (e.g. `pink2,grey5,gold1`) goes to the pizza.
 - **Camera:** inside the mushroom house, a low side view along the rows of bags; the pizza straight on at the table.
 
-### 3. Stop Time Cafe, Sapan ☕ (`rice`; rice grows in water, terraces hold water)
+### 3. Stop Time Cafe, Sapan ☕ (`rice`; rice grows in water, from seedling to sticky rice)
 
-- **Pitch:** the rice steps below the café, down in Sapan village, are dry. Kaylee brings the water down, step by step, and the valley turns
-  shiny and green.
-- **The toy:** a bamboo pipe brings water from the stream at the top. She drags its end; wherever it points, water
-  pours. The top paddy fills, goes shiny like a mirror, then spills over a notch into the next step down, and the next.
-- **How it deepens:**
-  1. **Fill the steps:** each filled paddy shines and reflects the sky; frogs jump in, ducks paddle in.
-  2. **Plant:** a bundle of green seedlings floats by each shiny step; push them into the mud one by one (plip!), and
-     they grow green in a few seconds. A farmer and his buffalo plough the next step.
-  3. **Clouds roll in:** big soft clouds cover the valley; she wipes them away with her finger to see the village and
-     the green steps again (like the plane's clouds), and a rainbow comes out.
-- **Her choices:** which step to fill first, where to plant.
-- **Pokeables:** frogs, ducks, the buffalo, a farmer's hat on a post, the café's wind chime, rain dripping off the roof.
-- **Silly:** pour the water on the café deck and Daddy's coffee overflows; pour on the buffalo and it has a happy bath.
-- **Teaches:** rice grows standing in water; the steps (terraces) keep the water on a hill; June is planting time.
-- **Payoff:** the whole valley green and shiny; then Kaylee and Daddy sit on the tall stools at the deck railing
-  (recreating photo 5), she drinks a **pink milk** (นมเย็น, nom yen), and Mommy takes the photo.
-- **Camera:** from the café's balcony on the hill, looking down over Sapan's valley (the steps fill the safe zone); then the deck close-up
-  for the photo.
+**Rebuilt (2026-10-25): see `nan-rice.md`.** The first greybox (PR #168: pour water down curved terraces, draw the
+seedlings in, carry rain clouds) didn't work for Dad. The new toy is Kaylee's little rice farm below the café, in the
+cozy look of Dad's Animal Crossing references: four square paddies she **walks around in, led by her finger**, and
+whatever she walks through changes behind her: seedlings plip in (`plant`), the birds fly up while it grows (`grow`),
+the golden rice is cut into bundles (`harvest`). Then she bangs the grains out (`thresh`), eats sticky rice on the café
+deck (kept from #168, with the pink milk and Mommy's photo), and a 60-second video shows real rice farming, the same
+steps her hands just did.
 
 ### 4. Bo Kluea salt wells 🧂 (`salt`; salt from the mountains, boiling)
 
@@ -355,7 +344,7 @@ Activity `nan-trip`: `activities/nan-trip/sections.ts`. Every param has a defaul
 | 10 | `drive` | The mountain road (`?road=city\|valley\|sky\|three`) | `road`, `stops` |
 | 11 | `temple` | Wat Phumin: the lantern and the whispering lovers (`?round=1\|2\|3`) | `stops`, `round` |
 | 12 | `mushrooms` | The mushroom farm: mist, pick, the pizza (`?round=1\|2\|3\|pizza`) | `stops`, `round`, `basket` |
-| 13 | `rice` | Stop Time Cafe: water Sapan's rice steps (`?round=1\|2\|3\|deck`) | `stops`, `round` |
+| 13 | `rice` | Sapan's rice farm and Stop Time Cafe (`?round=plant\|grow\|harvest\|thresh\|deck`) | `stops`, `round` |
 | 14 | `salt` | Bo Kluea: salt from the well (`?round=1\|2\|3`) | `stops`, `round` |
 | 15 | `three` | The "3" road from above | `stops` |
 | 16 | `home` | Home: the photo on Agong's wall, the stamp | `photos` |
@@ -453,7 +442,8 @@ activities/nan-trip/
    flat fallback. `#/world/thailand/nan-trip/drive?road=sky`. Listed under `inTheWorks`. *Built 2026-10-24 (see
    "What's built" below).*
 2. **Greybox: the mushroom farm** (`mushrooms`), with the pizza. *Built 2026-10-24 (see "What's built" below).*
-3. **Greybox: Stop Time Cafe** (`rice`).
+3. **Greybox: Stop Time Cafe** (`rice`). First try PR #168 (not merged); rebuilt per `nan-rice.md` in two greyboxes
+   (A: the farm and the core verb; B: thresh, the deck and the video).
 4. **Greybox: Bo Kluea salt** (`salt`).
 5. **Greybox: Wat Phumin** (`temple`).
 6. **Greybox: the Nan map and the rental desk** (`map`, `rental`), and the `three` viewpoint.
