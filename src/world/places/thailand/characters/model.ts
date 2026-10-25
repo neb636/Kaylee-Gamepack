@@ -16,7 +16,9 @@ import url from './models/kaylee.glb?url'
 
 /** The cream around her painted eyes: the lids that sweep down over them when she blinks. */
 const LID = '#F6E2DF'
-const PX = 3
+/** Her ink width in pixels: under half the code-built toys' 3 (Dad's pick in the lab, 0.45), so the line stays a
+ *  fine edge on the scanned shape instead of tracing every crease where her hair and sleeves meet. */
+const PX = 1.35
 /** How far each arm's swing plane turns forward (radians; see buildModelRig). */
 const ARM_TILT = 2.0
 /** Meters the face's smoothed hull stands off the surface (smoothHull). */
