@@ -92,24 +92,33 @@ Steps (Claude does them through the Blender MCP):
    the cut, and separate them. Then fill the cut on both sides (`bmesh.ops.holes_fill`, UVs borrowed from a
    neighbouring face, triangulated). A cut along face centers leaves a jagged, open edge: frayed sleeves, and black
    holes from behind where you look into the inside of the outline hull.
+   **Cut the legs off the same way**, with a level plane just under the skirt's hem (Kaylee: z = 0.17, the hem is at
+   0.19-0.2), so the cut hides inside the skirt and the leg can swing forward to sit. A long-legged toy needs this:
+   squashing the whole body to "sit" (what the code-built chibis do) looks like a squished picture. Kaylee's script:
+   `split-legs.py` next to her `.blend` (Blender in the background: `Blender -b kaylee-rig.blend --python
+   split-legs.py -- <out dir>`).
 3. **Pivots as empties**, with the meshes parented under them (keep their world transforms):
 
 ```
 kaylee (root, at the feet, facing glTF +Z)
 └─ body
-   ├─ body_mesh            (dress + legs)
+   ├─ body_mesh            (dress)
    ├─ head  @ neck         hair_mesh, face_mesh, ear_L, ear_R, braid*
    │  └─ eyes @ eye center eye_L, eye_R
    ├─ armL  @ left shoulder  (three.js -x, like animal.ts)
    ├─ armR  @ right shoulder (+x)
+   ├─ legL  @ left hip      legL_mesh
+   ├─ legR  @ right hip     legR_mesh
    └─ tail  @ tail root
 ```
 
 4. Test a pose (raise an arm, tilt the head, swing the tail) and render it to check the pivots.
-5. Export the GLB (`+Y up`, selection only, no animations) and save the `.blend` next to it.
+5. Export the GLB (`+Y up`, selection only, no animations, `export_image_format='JPEG'`, quality 92: the default
+   re-encodes the texture as PNG and the file grows from ~0.8 to 1.9 MB) and save the `.blend` next to it.
 
 Kaylee's numbers (Blender meters, Z up, front −Y, 1.0 tall): neck (0, −0.04, 0.44), shoulders (±0.11, −0.04, 0.40),
-tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588). Files: `kaylee-rig.glb` and `kaylee-rig.blend`.
+tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.03, 0.16). Files: `kaylee-rig.glb` and
+`kaylee-rig.blend`.
 
 ## 5. Into the game (`characters/model.ts`)
 
@@ -124,7 +133,19 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588). Files: `kaylee-rig.gl
   between hair and line). Only the face stays smoothed and stood 4 mm off, which keeps ink out of its dimples and eye
   sockets. The hair's ink is drawn 7 mm nearer the camera (`outlineMaterial`'s `bias`), so the bangs keep their line
   where they rest on the forehead; more than that brings ink up through the inside of the hair from the side. The flat
-  caps at the shoulder cut get no ink, so the sleeve reads as one piece.
+  caps at the shoulder and hip cuts get no ink, so the sleeve reads as one piece.
+- **Sitting, walking, lying** (`avatar.ts`): with `Rig.legL`/`legR`, sitting drops the body onto its hips (0.11 m) and
+  eases the legs forward over the seat (-1.35 rad), the tail lifts clear of the seat, and each hop of the walk swings
+  one leg forward. Her hair is deeper than her body, so lying flat would sink her head into the floor: `Rig.lie` tips
+  her up 0.46 rad so the heels and the back of her hair both touch.
+- **What she wears** (`model-wear.ts`, `Rig.wardrobe`): the code-built outfits are sized for a round head and a capsule
+  torso, so on her they land wrong (sunglasses on the bangs, floaties on her tummy, a headband through her hair).
+  Hats and sunglasses reuse `animal.ts`'s recipes with a `Frame` measured on her (the hair dome for hats, the face for
+  the glasses); the scrub cap is her own dome (the code-built one is a whole squashed ball that bulges over her
+  forehead). Clothes are turned on a lathe around her dress (`shell`), and arm and leg things sit along her own arm
+  (47° out, in the forward-tilted arm frame) and on the leg pivots, so the trousers follow her legs when she sits.
+  Measure a new model the same way (read the GLB's vertices: cross-sections of the body, the hair and the arm) before
+  fitting its clothes.
 - **Blink:** Tripo paints the eye into the face texture and sculpts a glossy dome over it, so squashing `eyes` shows
   the painted eye through. `Rig.blink` (optional, used by `FaceLife`) lets the model draw its own blink: a cream lid
   grows down over each eye.
@@ -141,4 +162,4 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588). Files: `kaylee-rig.gl
 - A GLB of a family member is OK in this repo (Dad, 2026-10-25); photos never are.
 - The wai with tilted arms; the painted mouth (a little toothy close up, with dark ticks at its corners: paint them
   out of the texture).
-- Legs as their own pivots for a proper walk cycle (none of the code-built characters has them yet).
+- The code-built characters still have no legs of their own (only the modelled Kaylee does).

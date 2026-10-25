@@ -1,6 +1,6 @@
 // Kaylee as a modelled vinyl toy (docs/3d-characters.md): a Tripo3D mesh split in Blender into the same pivots the
-// code-built toys have (body, head at the neck, arms at the shoulders, tail at its root, eyes), so every walk, wave,
-// pose and outfit in avatar.ts works on it unchanged. The model's own texture is lit with the shared toon bands and
+// code-built toys have (body, head at the neck, arms at the shoulders, tail at its root, eyes), plus a leg at each hip,
+// so every walk, wave and pose in avatar.ts works on it. What she wears is fitted to her shape (model-wear.ts). The model's own texture is lit with the shared toon bands and
 // every piece gets the usual ink outline.
 //
 // The GLB loads once (loadKayleeModel) and every Kaylee after that clones it. Until it has loaded, kayleeModel() is
@@ -12,6 +12,7 @@ import { blobShadow, P, solid } from '../engine/geo'
 import { hullGeometry, outlineMaterial } from '../engine/outline'
 import { toonGradient } from '../engine/toon'
 import type { Rig } from './animal'
+import { modelWardrobe } from './model-wear'
 import url from './models/kaylee.glb?url'
 
 /** The cream around her painted eyes: the lids that sweep down over them when she blinks. */
@@ -26,6 +27,8 @@ const ARM_TILT = 2.0
 const HULL_LIFT = 0.004
 /** Where the arms were cut off the body in Blender (|x|, meters; docs/3d-characters.md step 2). */
 const SHOULDER_CUT = 0.105
+/** And the legs, under the skirt (y). */
+const HIP_CUT = 0.17
 /** Meters the ink is drawn nearer the camera than the hull really is (outlineMaterial's bias). */
 const HULL_BIAS = 0.007
 
@@ -97,11 +100,11 @@ function smoothHull(geometry: BufferGeometry, rounds = 6, lift = 0) {
     // under the bangs, where a smoothed hull sags below them) and is pushed out along directions that don't zigzag.
     pos.set(original)
   }
-  // No ink on the flat caps where the arms were cut off: at rest the sleeve reads as one piece, and a raised arm shows
-  // the shoulder without a line across it.
+  // No ink on the flat caps where the arms and legs were cut off: at rest the sleeve reads as one piece, and a raised
+  // arm shows the shoulder (a leg out in front, the hip) without a line across it.
   const onCut = (v: number) => {
     const [x, y] = [original[v * 3], original[v * 3 + 1]]
-    return Math.abs(Math.abs(x) - SHOULDER_CUT) < 0.002 && y > 0.34 && y < 0.46
+    return (Math.abs(Math.abs(x) - SHOULDER_CUT) < 0.002 && y > 0.34 && y < 0.46) || Math.abs(y - HIP_CUT) < 0.001
   }
   const kept: number[] = []
   for (let i = 0; i < idx.length; i += 3) {
@@ -141,7 +144,7 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
   }
 
   const root = new Group()
-  const [body, head, eyes, armL, armR, tail] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail'].map(node)
+  const [body, head, eyes, armL, armR, tail, legL, legR] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail', 'legL', 'legR'].map(node)
   root.add(blobShadow(0.26, bag), body)
   // Her hair is as wide as her reach, so an arm raised the code-built way (rotation.z, out to the side) ends up inside
   // it. Each arm swings in a plane turned forward instead: a tilted frame around the pivot and the opposite turn inside
@@ -192,11 +195,18 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
     armL,
     armR,
     tail,
+    legL,
+    legR,
     mane: null,
     height: 1,
     radius: 0.16,
+    // Her hair reaches 0.34 m behind her neck and her heels 0.03 m behind her feet: lying, she tips up ~27° so both
+    // touch, her head on the hair like a pillow.
+    lie: { lift: 0.06, tilt: 0.46 },
     phone: null,
-    face: { R: 0.24, headY: 0.22, mouth: [0, 0.1, 0.23] },
+    // Her face (model-wear.ts measures it): a sphere of 0.24 around her eyes, the painted smile under them.
+    face: { R: 0.24, headY: 0.148, mouth: [0, 0.06, 0.21] },
+    wardrobe: modelWardrobe(ARM_TILT),
     blink(open: number) {
       eyes.scale.y = 1
       const shut = (1 - open) / 0.9
