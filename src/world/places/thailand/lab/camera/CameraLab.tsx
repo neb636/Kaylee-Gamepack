@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom'
 import { camLab } from '../../engine/camLab'
 import { IconButton } from '../ui'
 import { Guides } from './Guides'
-import { frameById, fromParams, toOverride, writeHash, type CamView, type Frame } from './link'
+import { frameById, freshCamera, STATE_KEYS, fromParams, toOverride, untouched, writeHash, type CamView, type Frame } from './link'
 import { CamPanel } from './Panel'
 import '../lab.css'
 
@@ -76,6 +76,41 @@ export default function CameraLab({ place, params, host }: { place: string; para
     setToast(text)
     clearTimeout(toastTimer.current)
     toastTimer.current = window.setTimeout(() => setToast(null), 1800)
+  }, [])
+
+  // The game moving on by itself (the next section or round, as she plays) is a new scene too: back to the game's own
+  // camera, so a change made for one scene never carries into the next. A link opened by hand keeps its camera: when
+  // it restarts the activity (useSections starts a fresh section log), the section it lands on is adopted as it is.
+  useEffect(() => {
+    const key = (log: typeof window.__kayleeSectionLog) => {
+      const s = log?.[log.length - 1]
+      return s ? JSON.stringify([s.place, s.activity, s.id, ...STATE_KEYS.map((k) => s.params[k] ?? null)]) : null
+    }
+    let log = window.__kayleeSectionLog
+    let scene = key(log)
+    let linked = false
+    const onHash = () => void (linked = true)
+    const id = setInterval(() => {
+      const now = window.__kayleeSectionLog
+      if (now !== log) {
+        log = now
+        if (linked) scene = null
+        linked = false
+      }
+      const k = key(now)
+      if (!k || k === scene) return
+      const moved = scene !== null
+      scene = k
+      if (moved && !untouched(viewRef.current)) {
+        setView(freshCamera(viewRef.current))
+        showToast('New scene: the game’s camera')
+      }
+    }, 250)
+    window.addEventListener('hashchange', onHash)
+    return () => {
+      clearInterval(id)
+      window.removeEventListener('hashchange', onHash)
+    }
   }, [])
 
   // How much room the frame has (measured before the first paint, so the game never lays out at zero size).
