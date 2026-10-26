@@ -17,11 +17,11 @@
   "kind": "Toy in Agong's house",
   "updated": "2026-10-26",
   "status": {
-    "label": "Greybox 2 built",
+    "label": "The look built",
     "tone": "gold"
   },
   "pitch": "Kaylee loves the avatar maker in Roblox, so she gets one in Thailand. In her room at Agong's she opens her wardrobe and dresses her unicorn herself: she drags a crown, heart sunglasses, fairy wings or light-up shoes onto herself and they pop on, and she drops paint on her dress, her hair or her fur to change its color. What she picks is saved on the iPad, and she wears it **everywhere in Thailand**: the house, every trip, every mini game and the photos on Agong's wall. When a game needs its own hat (the chef's hat, the vet's cap), the game's hat wins for that game and hers comes back afterwards.",
-  "next": "Dad plays **greybox 2** on the iPad: [the vet in heart sunglasses and wings](#/world/thailand/mall-trip/vet?look=crown,hearts,fairy) (the crown goes in her pocket), [shoes onto the rack](#/world/thailand/hub/street?look=sneakers,crown) (walk her in at the door), [hat off for a wai](#/world/thailand/hub/downstairs?at=altar&look=crown,fairy), [the race slide in her look](#/world/thailand/mall-trip/race?look=crown,fairy,boots,fur-mint) and the rest of the clash links below. Does she always look like herself, and is it clear where her things went? Then **gate 3**: every thing made for her.",
+  "next": "Dad plays **the look** on the iPad: [every hat on the shelves](#/world/thailand/hub/wardrobe?drawer=head) (drag one on: she shows it off), [the wings drawer](#/world/thailand/hub/wardrobe?drawer=back), [the outfits](#/world/thailand/hub/wardrobe?drawer=outfit), [tap the 🪞 on the street](#/world/thailand/hub/street?look=cowboy,wings,sneakers) and she's at her wardrobe, and [her pocket sparkle at the vet](#/world/thailand/mall-trip/vet?look=crown,hearts,fairy). Does each thing look made for her, and is each pose fun to watch? Then **gate 4**: voices, looks on the door, the family notices.",
   "facts": [
     {
       "icon": "🗄️",
@@ -30,8 +30,8 @@
     },
     {
       "icon": "🎀",
-      "value": "~30",
-      "label": "things to wear, plus 3 colors to paint"
+      "value": "25",
+      "label": "things to wear (10 hats), plus 3 colors to paint"
     },
     {
       "icon": "⏱️",
@@ -369,7 +369,7 @@
               "icon": "👗",
               "title": "Outfits",
               "items": [
-                "Her striped dress (the paint changes its color)",
+                "Her striped dress: always under everything (not a thing on the shelf; the paint changes its color)",
                 "Tutu",
                 "Princess gown",
                 "Overalls",
@@ -394,9 +394,16 @@
                 "Hair: brown (hers), pink, lavender, gold, rainbow tips",
                 "Fur: lilac (hers), pink, mint, sky, cream, peach"
               ],
-              "md": "Only if Dad says yes to hair and fur (see **For Dad to decide**)."
+              "md": "Dad said yes to hair and fur (greybox 1)."
             }
           ]
+        },
+        {
+          "type": "callout",
+          "tone": "done",
+          "icon": "💃",
+          "title": "Each thing's pose",
+          "md": "When a thing pops on she shows it off: **curtsy** (crown, gown), **princess wave** (tiara, chut thai), **twirl** (orchids, cape, tutu, party shoes), **cute** (bow, sun hat: hooves under her chin), **bunny hops** (bunny ears, backpack, sandals), **kitty paw** (cat ears), **cheer** (cap, overalls), **yee-haw** (cowboy hat), **peek** (bucket hat, round glasses), **cool lean** (sunglasses), **flutter hop** (wings), **tap dance** (sneakers, boots). Tap the mirror inside the door and she strikes one of her poses. Try them all in the [character lab](#/world/characters/kaylee?look=crown,fairy,tutu,sneakers): Animation → Show off."
         },
         {
           "type": "callout",
@@ -745,7 +752,31 @@
             {
               "n": 2,
               "id": "wardrobe",
-              "name": "The paint drawer open",
+              "name": "The hats drawer: 10 hats on three shelves",
+              "query": "drawer=head"
+            },
+            {
+              "n": 3,
+              "id": "wardrobe",
+              "name": "The wings drawer",
+              "query": "drawer=back"
+            },
+            {
+              "n": 4,
+              "id": "wardrobe",
+              "name": "The outfits drawer",
+              "query": "drawer=outfit"
+            },
+            {
+              "n": 5,
+              "id": "wardrobe",
+              "name": "The shoes drawer",
+              "query": "drawer=feet"
+            },
+            {
+              "n": 6,
+              "id": "wardrobe",
+              "name": "The paint drawer",
               "query": "drawer=paint"
             },
             {
@@ -754,7 +785,13 @@
               "query": "drawer=head&look=bow,stars,fairy,tutu,sneakers,hair-pink,fur-sky"
             },
             {
-              "n": 3,
+              "n": 7,
+              "id": "street",
+              "name": "The 🪞 mirror button (top right): straight to her wardrobe",
+              "query": "look=cowboy,wings,sneakers"
+            },
+            {
+              "n": 8,
               "id": "upstairs",
               "name": "Her room in a look (any section takes `look`)",
               "query": "look=crown,hearts,fairy,dress-mint"
@@ -904,13 +941,15 @@
             {
               "n": 3,
               "title": "The look: every thing made for her",
-              "status": "next",
-              "md": "All ~30 things fitted to her shape (like the scrubs and the mongkhon), the wardrobe made pretty, each thing's pose, the mirror button."
+              "status": "done",
+              "md": "All ~30 things fitted to her shape (like the scrubs and the mongkhon), the wardrobe made pretty, each thing's pose, the mirror button.",
+              "date": "2026-10-26",
+              "pr": 210
             },
             {
               "n": 4,
               "title": "Full loop: voices, looks on the door, the family notices",
-              "status": "todo",
+              "status": "next",
               "md": "Sparkle's lines, each thing's name the first time she touches it, the family's “Ooh, a crown!”, Mommy's “Good hat, Kaylee!”, the mirror photos (4 looks), the wand surprise, full QA."
             },
             {
@@ -993,6 +1032,52 @@
                   "type": "details",
                   "summary": "Known small things",
                   "md": "- No new voices (greybox): Mommy's “Good hat, Kaylee!” and the family noticing her look are gate 4. With her cap on, Mommy now just says nothing at the suitcase.\n- The pocket is a shrink toward her hip with no sparkle particles yet (gate 3).\n- Her shoes sit on top of the family's slippers on the rack (greybox placement).\n- The shoes don't hop off when she's carried in (the tuk-tuk, a trip's van): only when she walks through the door.\n- Hat-off for a wai shows only for the house's wai pose; Muay Thai's wai kru keeps the mongkhon on (as it should) and her own hat is already in her pocket."
+                }
+              ]
+            },
+            {
+              "title": "The look: every thing made for her",
+              "date": "2026-10-26",
+              "status": "done",
+              "pr": 210,
+              "open": true,
+              "summary": "All 25 things in the plan's list built and fitted to her shape, each with its own show-off pose; the wardrobe made pretty with three rows of shelves and a mirror inside the door; the mirror button in the house's top bar; the pocket sparkle; light-up sneakers that blink when she walks.",
+              "blocks": [
+                {
+                  "type": "list",
+                  "items": [
+                    "**The things** (`characters/closet/`, one file per drawer, `closet/fit.ts` for the shared fitting helpers): hats: crown, tiara, orchid crown, big bow, bunny ears, cat ears, cap, cowboy hat, bucket hat, sun hat; glasses: heart, star, round; wings: fairy wings, feathered unicorn wings, princess cape, bunny backpack; outfits: tutu, princess gown (puffy sleeves), overalls (shorts cuffs on her legs), chut thai (pha sin skirt, sabai sash); shoes: light-up sneakers, party shoes, rain boots, sandals.",
+                    "**Fitted to her:** hats follow her measured hair (the mongkhon's `BAND_R`, `onHair()`), the cap, bucket and cowboy hats are domes over her hair like the scrub cap (her horn and ears poke out), outfits are lathed shells over her dress with parts on her arms and legs, the cat ears sit right over her own. Every hat tops out under her horn (the cowboy hat's dome is the tallest, ~0.545 < 0.56).",
+                    "**Each thing's pose:** `style.ts` `Item.pose`; `Avatar.showOff(pose)` eases her arms, head and legs into it on top of her usual life (12 poses, 0.9-1.4 s). The wardrobe calls it when a thing goes on. On the modelled rig an arm's `z` raises it in front and `x` swings it out.",
+                    "**The wardrobe made pretty** (`wardrobe/furniture.ts`): a crown-shaped top with a heart and gold balls, hearts on the doors, a long mirror inside the right door (tap it: she strikes a pose), a polka-dot back, scalloped shelf edges, gold heart knobs, a rug with a ring of hearts. Three rows of shelves (`shelfRoom`/`shelfSlot`: up to 4 a row, filled top first, set a little right so the open left door doesn't hide them); the doors open wider (2.95 rad). The tiara and orchid crown stand tipped up on the shelf so she sees the ring.",
+                    "**The mirror button:** a round 🪞 at the right of the house's top bar on every floor and the street (hidden during the tuk-tuk, the family photo, Mommy's question and while dressing). Tap: a sparkle flash and she's on the rug with the doors open (`WardrobePlugin.openHere()`: `house.teleport` + open).",
+                    "**The pocket sparkle:** a thing going into her pocket leaves a trail of sparkles and bursts at her hip; coming back out it pops out of a burst (particles riding on her root, `Dress`).",
+                    "**Light-up sneakers** blink while she walks (`userData.blink` lights, `DressPose.walk`), steady when she stands.",
+                    "**Sun smarts:** the closet's sun hat is shady, like the cap, cowboy and bucket hats.",
+                    "**Lab:** a **Show off** row in the Animation tab plays each pose (with the slow motion and the filmstrip)."
+                  ]
+                },
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "items": [
+                    "Her striped dress isn't a thing on the shelf: it's always under everything, and the paint changes its color.",
+                    "Cat ears go over her own ears (between them and her horn they hid behind her horn and ears).",
+                    "The bunny ears stick out to the sides (one flopped over): standing straight up they'd be taller than her horn.",
+                    "Shared `tunic()` (model-wear.ts) now starts at its own hem for a short top (the chut thai's): before, the rings below the hem folded it inside out."
+                  ]
+                },
+                {
+                  "type": "list",
+                  "title": "Known small things",
+                  "items": [
+                    "No silly moments yet (a shoe on her head, glasses on her tail, paint on the mirror): gate 4.",
+                    "The tiara's band shows a little past her pink lock at the side.",
+                    "On the shelf the outfits drawer's leftmost thing (the tutu) is partly behind the open left door on wide screens.",
+                    "The code-built Kaylee (if the model can't load) still can't wear anything.",
+                    "Full QA waits for gate 4 (the plan's full loop): this gate was checked with lab sheets of every thing, pose filmstrips and the wardrobe and mirror button on iPad and iPhone."
+                  ]
                 }
               ]
             }
