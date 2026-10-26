@@ -47,6 +47,10 @@ export interface CamView {
 
 export const DEFAULTS: CamView = { mode: 'nudge', yaw: 0, pitch: 0, zoom: 1, fov: 0, px: 0, py: 0, frame: 'fill', guides: ['bar', 'targets'] }
 
+/** The state that usually picks a world's shot (the round, the phase...), in its qa() and its section params. Other
+ *  state (a haircut, a color) changes as she plays without making a new scene. */
+export const STATE_KEYS = ['round', 'phase', 'step', 'stage', 'leg', 'view', 'mode', 'room', 'spot', 'at']
+
 /** The view with the game's own camera again (the screen and the guides stay): every new scene starts here. */
 export const freshCamera = (v: CamView): CamView => ({ ...DEFAULTS, frame: v.frame, guides: v.guides })
 

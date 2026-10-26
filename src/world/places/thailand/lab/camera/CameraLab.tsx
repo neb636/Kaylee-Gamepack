@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom'
 import { camLab } from '../../engine/camLab'
 import { IconButton } from '../ui'
 import { Guides } from './Guides'
-import { frameById, freshCamera, fromParams, toOverride, untouched, writeHash, type CamView, type Frame } from './link'
+import { frameById, freshCamera, STATE_KEYS, fromParams, toOverride, untouched, writeHash, type CamView, type Frame } from './link'
 import { CamPanel } from './Panel'
 import '../lab.css'
 
@@ -85,7 +85,7 @@ export default function CameraLab({ place, params, host }: { place: string; para
   useEffect(() => {
     const key = () => {
       const s = window.__kayleeSection
-      return s ? JSON.stringify([s.place, s.activity, s.id, s.params]) : null
+      return s ? JSON.stringify([s.place, s.activity, s.id, ...STATE_KEYS.map((k) => s.params[k] ?? null)]) : null
     }
     scene.current = key()
     const onHash = () => {

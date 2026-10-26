@@ -8,7 +8,7 @@ import { findPlace, sectionsFor } from '../../../../registry'
 import { camLab } from '../../engine/camLab'
 import { TUNE } from '../../engine/tune'
 import { IconButton, Section, Segmented, Select, Slider, Toggle, Field } from '../ui'
-import { camParams, FRAMES, frameById, freshCamera, GUIDES, untouched, withoutCam, type CamView } from './link'
+import { camParams, FRAMES, STATE_KEYS, frameById, freshCamera, GUIDES, untouched, withoutCam, type CamView } from './link'
 
 export interface PanelProps {
   place: string
@@ -25,9 +25,6 @@ export interface PanelProps {
   /** The real screen size the game is laid out at now. */
   screen: { w: number; h: number }
 }
-
-/** The state a world reports that usually picks its shot (the round, the phase...), from its qa(). */
-const STATE_KEYS = ['round', 'phase', 'step', 'stage', 'leg', 'view', 'mode', 'room', 'spot', 'at']
 
 const f = (n: number, d = 2) => String(+n.toFixed(d))
 const v3 = (v: Vector3) => `(${f(v.x)}, ${f(v.y)}, ${f(v.z)})`
