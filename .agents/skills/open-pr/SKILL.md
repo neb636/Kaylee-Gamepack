@@ -78,8 +78,26 @@ don't poll further), or `CLOSED`. On `FINDINGS`, for each comment:
    - **Real:** fix it, run `npm run verify`, commit, push, then reply `Fixed in <short sha>: <one line on what changed>`.
    - **Not real:** reply `Not an issue: <the evidence, e.g. the line or the reason the case can't happen>`. No code change.
    - **Needs Dad:** reply `Left for Dad: <why>`.
-3. If you pushed anything, post a separate PR comment `gh pr comment <N> --body "@codex review"` listing in a line or
-   two what changed, then start the watcher again. At most **3 rounds**; after that, stop and tell Dad what is left.
+   - **Too nitpicky:** it is true, but not worth the change. Don't fix it. React 👎 on the comment
+     (`gh api repos/{owner}/{repo}/pulls/comments/<comment id>/reactions -f content=-1`) and reply
+     `Not worth it: <why>`, in one or two sentences with the reason (see the list below). Codex asks "Useful? 👍 / 👎", so
+     the 👎 is how it learns. A finding you fixed because it was real gets a 👍 the same way (`-f content=+1`).
+
+   A finding is **too nitpicky** when any of these is true:
+   - It only matters when someone copies a link from an unusual state or edits one by hand, and the link still opens
+     something sensible. (A section that can't be reached by a link at all, or loses what a normal link carries, is
+     not nitpicky: every section needs its deep link.)
+   - The cost of the problem is tiny and bounded (a few small textures, one wasted tap), and the fix adds code, state or
+     a new rule to carry.
+   - Its severity label overstates it (a P1 for an edge case, an undo that only a plain default state loses).
+   - It is a style or naming preference, or asks for handling of a case the design says can't happen.
+
+   When in doubt, ask: would Kaylee (age 5, on the iPad) or Dad (playing the PR preview) ever notice? If not, it's
+   nitpicky. A finding where a feature doesn't work as built (a line that can never play, a crash, a lost save, a leak
+   that grows with play) is never nitpicky, however small the fix.
+3. If you pushed a fix (a 👎 reply alone is not a push), post a separate PR comment `gh pr comment <N> --body "@codex review"` listing in a line or
+   two what changed, then start the watcher again. At most **3 rounds**; after that, stop and tell Dad what is left. Nitpicky findings don't earn another round: 👎 them and
+   stop.
 4. A finding that needs a decision from Dad (art, family facts, changing what a toy does) is reported, not fixed.
 
 ## If the link you need doesn't exist
