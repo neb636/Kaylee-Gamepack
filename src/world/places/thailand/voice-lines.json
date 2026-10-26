@@ -638,6 +638,248 @@
     "voice": "ji"
   },
   "Want to see real rice grow, Kaylee?",
+  "Press the key!",
+  "Put the bags in the car!",
+  "Click your seatbelt, Kaylee!",
+  {
+    "text": "Sawasdee ka! Here is your key!",
+    "voice": "clerk"
+  },
+  {
+    "text": "Have a happy trip!",
+    "voice": "clerk"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "clerk"
+  },
+  {
+    "text": "Welcome to Nan!",
+    "voice": "clerk"
+  },
+  {
+    "text": "What a big car!",
+    "voice": "clerk"
+  },
+  {
+    "text": "Ding! Yes please?",
+    "voice": "clerk"
+  },
+  {
+    "text": "Whoa! Beep beep!",
+    "voice": "nick"
+  },
+  {
+    "text": "In they go!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ready? Let's go!",
+    "voice": "ji"
+  },
+  "Where shall we go first, Kaylee?",
+  "Tap a place to drive there!",
+  {
+    "text": "Home, or one more?",
+    "voice": "ji"
+  },
+  {
+    "text": "Time to fly home!",
+    "voice": "ji"
+  },
+  "Over there is Laos, another country!",
+  "Steer the car with your finger, Kaylee!",
+  "Beep before the bend!",
+  "We're driving into a cloud!",
+  "Let's count the bends!",
+  "Draw the three with your finger!",
+  "Three! Kaylee drove the three!",
+  {
+    "text": "Steer for me, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Keep left!",
+    "voice": "ji"
+  },
+  {
+    "text": "A buffalo! Let's wait.",
+    "voice": "ji"
+  },
+  {
+    "text": "Slow round the bend.",
+    "voice": "ji"
+  },
+  {
+    "text": "The mushroom farm!",
+    "voice": "ji"
+  },
+  {
+    "text": "Stop Time Cafe!",
+    "voice": "ji"
+  },
+  {
+    "text": "Bo Kluea! The salt village!",
+    "voice": "ji"
+  },
+  {
+    "text": "The market!",
+    "voice": "ji"
+  },
+  {
+    "text": "Look how high we are!",
+    "voice": "ji"
+  },
+  {
+    "text": "Whoa!",
+    "voice": "nick"
+  },
+  {
+    "text": "I can't see a thing!",
+    "voice": "nick"
+  },
+  {
+    "text": "Sunshine! Above the clouds!",
+    "voice": "nick"
+  },
+  {
+    "text": "A monkey on the rail!",
+    "voice": "nick"
+  },
+  {
+    "text": "Look! A waterfall!",
+    "voice": "nick"
+  },
+  {
+    "text": "Swish, swish, go the wipers!",
+    "voice": "nick"
+  },
+  {
+    "text": "Great driving, Kaylee!",
+    "voice": "nick"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "nick"
+  },
+  {
+    "text": "Are we there yet?",
+    "voice": "nick"
+  },
+  "Spray the bags, Kaylee! Mushrooms love water.",
+  "Pull the mushrooms off!",
+  "Pink and golden mushrooms!",
+  "Put your mushrooms on the pizza!",
+  "Hold your finger on the bags!",
+  "Pull a mushroom into the basket!",
+  "Drag a mushroom to the pizza!",
+  "Tap the oven!",
+  "Tap the pizza to share it!",
+  "Mushrooms grow from sawdust, not seeds!",
+  {
+    "text": "Sawasdee ka! My mushrooms are thirsty!",
+    "voice": "farmer"
+  },
+  {
+    "text": "Look at them grow!",
+    "voice": "farmer"
+  },
+  {
+    "text": "Pink ones and gold ones!",
+    "voice": "farmer"
+  },
+  {
+    "text": "Into the oven!",
+    "voice": "farmer"
+  },
+  {
+    "text": "Ha ha ha!",
+    "voice": "farmer"
+  },
+  {
+    "text": "Good spraying!",
+    "voice": "farmer"
+  },
+  {
+    "text": "Yummy mushrooms!",
+    "voice": "farmer"
+  },
+  {
+    "text": "A mushroom hat?!",
+    "voice": "nick"
+  },
+  {
+    "text": "A giant mushroom!",
+    "voice": "nick"
+  },
+  {
+    "text": "Mmm! Mushroom pizza!",
+    "voice": "nick"
+  },
+  {
+    "text": "Spray me again!",
+    "voice": "nick"
+  },
+  {
+    "text": "So many mushrooms!",
+    "voice": "nick"
+  },
+  {
+    "text": "A slice for everyone!",
+    "voice": "ji"
+  },
+  "Dip the bucket in the well, Kaylee!",
+  "Put a log on the fire!",
+  "Scrape up the salt!",
+  "Pull the bucket down into the well!",
+  "Carry it over the big pan!",
+  "Throw a log in the fire!",
+  "Move the paddle through the salt!",
+  "The water boils away, and the salt stays!",
+  {
+    "text": "Sawasdee ka! This well is very salty!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Now we light the fire!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Look! White salt!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Salt for everyone!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Hee hee! Taste it!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Strong girl!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Hot, hot fire!",
+    "voice": "saltaunty"
+  },
+  {
+    "text": "Ow! A salty foot!",
+    "voice": "nick"
+  },
+  {
+    "text": "Too salty? Ha ha!",
+    "voice": "nick"
+  },
+  {
+    "text": "Look at that steam!",
+    "voice": "nick"
+  },
+  {
+    "text": "Salt from a well!",
+    "voice": "nick"
+  },
   {
     "text": "It's cool and rainy in the mountains!",
     "voice": "ji"
