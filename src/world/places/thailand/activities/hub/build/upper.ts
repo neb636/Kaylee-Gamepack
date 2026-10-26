@@ -13,6 +13,7 @@ import { standingFan } from './ground'
 import { part, poke, scenery, type Kit } from './kit'
 import { railing } from './stairs'
 import { upstairsFloor } from './tiles'
+import { buildWardrobe } from '../wardrobe/furniture'
 
 const FLOOR = '#E2E0DC'
 const WALL = '#F4F1EC'
@@ -148,6 +149,9 @@ export function buildUpper(kit: Kit): Upper {
   )
 
   room.add(glassWall)
+  // ---- Her wardrobe against the left wall, and the rug in front of it (wardrobe/furniture.ts) ----
+  room.add(buildWardrobe(kit))
+
   return { room, rightWall, glassWall }
 }
 

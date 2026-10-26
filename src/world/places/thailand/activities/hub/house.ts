@@ -13,6 +13,7 @@
 // (ids starting with "trip:"). The house stays the house.
 import { Color, Group, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { Avatar } from '../../characters/avatar'
+import { currentLook, formatLook } from '../../characters/style'
 import { FAMILY, type FamilyMember } from '../../characters/family'
 import { Member } from '../../characters/member'
 import type { AnchorInfo } from '../../engine/Anchors'
@@ -84,6 +85,31 @@ export interface HousePlugin {
   glows?(id: string): boolean
   readonly busy?: boolean
   qa?(): Record<string, unknown>
+}
+
+/** Several plugins in one house (the wardrobe and the trip photos on the wall): each hook asks them in order, and the
+ *  first that takes a touch (or a camera, or an anchor) has it. */
+export function bothPlugins(...list: HousePlugin[]): HousePlugin {
+  return {
+    attach: (h) => list.forEach((p) => p.attach(h)),
+    update: (dt, t) => list.forEach((p) => p.update(dt, t)),
+    shot: () => list.reduce<Shot | null>((s, p) => s ?? p.shot?.() ?? null, null),
+    pointerDown: (x, y, id) => list.some((p) => p.pointerDown?.(x, y, id)),
+    pointerMove: (x, y, dx, dy) => list.some((p) => p.pointerMove?.(x, y, dx, dy)),
+    // Every plugin hears the finger lift (one may be mid-drag); the first that used it says so.
+    pointerUp: () => list.map((p) => p.pointerUp?.() ?? false).some(Boolean),
+    tap: (x, y, id) => list.some((p) => p.tap?.(x, y, id)),
+    anchor: (id) => list.reduce<ReturnType<NonNullable<HousePlugin['anchor']>>>((a, p) => a ?? p.anchor?.(id) ?? null, null),
+    hides: (id) => list.some((p) => p.hides?.(id)),
+    get roots() {
+      return list.flatMap((p) => p.roots ?? [])
+    },
+    glows: (id) => list.some((p) => p.glows?.(id)),
+    get busy() {
+      return list.some((p) => p.busy)
+    },
+    qa: () => Object.assign({}, ...list.map((p) => p.qa?.() ?? {})),
+  }
 }
 
 const deg = Math.PI / 180
@@ -206,6 +232,8 @@ export class House implements World3D {
       scene.add(p.root)
     }
     this.kaylee = new Avatar(this.bag)
+    // In her own look from the wardrobe (saved on the iPad, or the link's ?look=).
+    this.kaylee.setLook(currentLook())
     scene.add(this.kaylee.root)
     this.marker = new TapMarker(this.bag)
     scene.add(this.marker.root)
@@ -232,17 +260,19 @@ export class House implements World3D {
   private begin(start: Start) {
     if (start.section === 'family') return this.beginPhoto(start.who)
     const s = STARTS[start.section]
+    // The wardrobe is in her room upstairs (its plugin opens it).
+    const section = start.section === 'wardrobe' ? 'upstairs' : start.section
     this.kaylee.floor = s.floor
     this.kaylee.place(s.x, s.floor * DIM.g0, s.z, s.face)
-    this.reactor.setShutter(start.section === 'downstairs' || start.section === 'upstairs', true)
-    this.spot = start.section === 'arrive' ? 'street' : start.section
-    this.mode = start.section === 'upstairs' ? 'inside1' : start.section === 'downstairs' ? 'inside0' : 'street'
+    this.reactor.setShutter(section === 'downstairs' || section === 'upstairs', true)
+    this.spot = section === 'arrive' ? 'street' : section
+    this.mode = section === 'upstairs' ? 'inside1' : section === 'downstairs' ? 'inside0' : 'street'
     this.applyShutterNav()
-    if (start.section === 'arrive') this.arrival = { t: 0, done: false }
+    if (section === 'arrive') this.arrival = { t: 0, done: false }
     else if (this.tuk) this.parkTuk()
     // A deep link to a use-spot: start already using it (sitting at the table, bouncing on the mattress).
     const p = start.at ? PICKABLES.find((q) => q.id === start.at) : undefined
-    if (p?.use && p.floor === s.floor && (p.area === 'inside') === (start.section !== 'street' && start.section !== 'arrive')) {
+    if (p?.use && p.floor === s.floor && (p.area === 'inside') === (section !== 'street' && section !== 'arrive')) {
       this.kaylee.place(p.use.x, s.floor * DIM.g0, p.use.z, p.use.face)
       this.useSpot(p, true)
     }
@@ -953,6 +983,7 @@ export class House implements World3D {
       arriving: this.arriving,
       shutterOpen: this.reactor.shutterOpen,
       pos: [k.position.x, k.position.y, k.position.z].map((v) => Math.round(v * 100) / 100),
+      look: formatLook(k.myLook),
       ...this.plugin?.qa?.(),
     }
   }

@@ -366,6 +366,13 @@ const SCREENS = [
     reset: true,
     wait: 1800,
   })),
+  // Her wardrobe (wardrobe.html, greybox 1): the doors open, the hats drawer, the paint drawer, and her room in a look.
+  ...['wardrobe', 'wardrobe?drawer=head', 'wardrobe?drawer=paint&look=crown,hearts,fairy,tutu,sneakers,hair-pink', 'upstairs?look=cap,stars,cape,gown,fur-mint'].map((to) => ({
+    name: `thailand-${to.replace(/[?=&,]/g, '-')}`.slice(0, 60),
+    hash: `#/world/thailand/hub/${to}`,
+    reset: true,
+    wait: 1800,
+  })),
   // The family photo (everyone, then a few alone on the turntable, in the three-quarter view it rests on first).
   { name: 'thailand-family', hash: '#/world/thailand/hub/family', reset: true, wait: 1800 },
   ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),

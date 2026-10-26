@@ -10,6 +10,7 @@ unicorn and goes on day trips with the family.
 
 **3D character lab** (development tool, every 3D character on a turntable: poses, actions, lines, outfits, lighting): 
 - [Kaylee](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee)
+- [Kaylee in a look from her wardrobe](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee?look=crown,stars,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky) (the Look panel: her things and the paint)
 
 **Camera lab** (development tool, add `?cam=1` to any 3D section: the game in an iPad-sized frame with camera controls,
 guides and a "Copy for agent" note to bake the camera into the game):
@@ -111,7 +112,18 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 
 ### Thailand
 
-**Home base (the house)**: [Arrive by tuk-tuk](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/arrive) · [In front of Agong's house](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/street) · [Downstairs](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/downstairs) · [Kaylee's room upstairs](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/upstairs) · [Family photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/family)
+**Home base (the house)**
+
+- [Arrive by tuk-tuk](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/arrive)
+- [In front of Agong's house](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/street)
+- [Downstairs](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/downstairs)
+- [Kaylee's room upstairs](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/upstairs)
+- **Her wardrobe** (dress up her unicorn; any link takes `?look=crown,hearts,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky`)
+  - [Doors open](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/wardrobe)
+  - [Hats drawer out](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/wardrobe?drawer=head) (`drawer=face`, `back`, `outfit`, `feet`)
+  - [Paint drawer out](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/wardrobe?drawer=paint)
+  - [Her room in a look](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/upstairs?look=crown,hearts,fairy,dress-mint)
+- [Family photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/family)
 
 **Boat Trip**
 

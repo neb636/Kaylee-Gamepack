@@ -5,14 +5,16 @@
 //
 // She is the game's Kaylee: Place.tsx waits for the GLB (kayleeReady) before any Thailand scene builds, and every
 // Kaylee after that clones it. If it can't load, kayleeModel() stays null and the code-built Kaylee stands in.
-import { Group, Mesh, MeshToonMaterial, type BufferGeometry, type Object3D, type Texture } from 'three'
+import { Group, Mesh, MeshToonMaterial, Vector3, Vector4, type BufferGeometry, type Object3D, type Texture } from 'three'
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import type { Bag } from '../engine/dispose'
 import { blobShadow, P, solid } from '../engine/geo'
 import { hullGeometry, outlineMaterial } from '../engine/outline'
 import { toonGradient } from '../engine/toon'
 import type { Rig } from './animal'
+import { buildClosetItem } from './closet'
 import { along, HOOF, modelWardrobe, onTunic } from './model-wear'
+import { DEFAULT_PAINT, PAINTS, type PaintColor, type PaintPart } from './style'
 import url from './models/kaylee.glb?url'
 
 /** The cream around her painted eyes: the lids that sweep down over them when she blinks. */
@@ -63,6 +65,119 @@ function toonFor(map: Texture) {
   if (!m) {
     m = new MeshToonMaterial({ map, gradientMap: toonGradient() })
     materials.set(map, m)
+  }
+  return m
+}
+
+// ---------------------------------------------------------------- painting her (the wardrobe's paint pots)
+//
+// Her colors are painted into the model's one texture (a 1k JPEG atlas), so a pot of paint can't just set a material
+// color. Instead each texel is recolored in the toon shader, per mesh group and per hue band (measured on kaylee.glb):
+// the dress is the pink band (~322°) on the body and the sleeves only, so the pink streaks in her hair and the insides of
+// her ears stay pink; the hair is the brown band (~22°, darker than 0.55, so her gold horn stays gold) on the hair, the
+// braids and the tail; the fur is the lilac band (~272°) on the face, arms, legs, ears and the body (her neck). Each
+// texel keeps its own lightness and saturation relative to the band's, so the shading painted into the texture stays,
+// and the band's edge is soft (the JPEG blends colors where they meet).
+
+interface Band {
+  /** Hue center and half-width (degrees). */
+  hue: number
+  width: number
+  /** The band's typical saturation and lightness (the texel's own are kept relative to these). */
+  s: number
+  l: number
+  /** Only texels this light (0..1): keeps the gold horn out of the brown hair. */
+  lmin: number
+  lmax: number
+}
+export const BANDS: Record<PaintPart, Band> = {
+  fur: { hue: 272, width: 30, s: 0.61, l: 0.71, lmin: 0.25, lmax: 0.93 },
+  dress: { hue: 322, width: 24, s: 0.84, l: 0.74, lmin: 0.4, lmax: 0.95 },
+  hair: { hue: 22, width: 30, s: 0.53, l: 0.28, lmin: 0, lmax: 0.55 },
+}
+/** Which bands each of her meshes takes (by name). The eyes take none. */
+export function bandsOf(mesh: string): PaintPart[] {
+  if (/^(hair|tail|braid)/.test(mesh)) return ['hair']
+  if (/^(body|arm)/.test(mesh)) return ['fur', 'dress']
+  if (/^(face|leg|ear)/.test(mesh)) return ['fur']
+  return []
+}
+
+const RECOLOR_GLSL = /* glsl */ `
+uniform vec3 kBand[3];
+uniform vec4 kRef[3];
+uniform vec3 kTo[3];
+vec3 kRgb2Hsl(vec3 c) {
+  float mx = max(c.r, max(c.g, c.b));
+  float mn = min(c.r, min(c.g, c.b));
+  float l = (mx + mn) * 0.5;
+  float d = mx - mn;
+  if (d < 1e-5) return vec3(0.0, 0.0, l);
+  float s = l > 0.5 ? d / (2.0 - mx - mn) : d / (mx + mn);
+  float h = mx == c.r ? (c.g - c.b) / d + (c.g < c.b ? 6.0 : 0.0) : mx == c.g ? (c.b - c.r) / d + 2.0 : (c.r - c.g) / d + 4.0;
+  return vec3(h / 6.0, s, l);
+}
+float kHue(float p, float q, float t) {
+  t = fract(t);
+  if (t < 1.0 / 6.0) return p + (q - p) * 6.0 * t;
+  if (t < 0.5) return q;
+  if (t < 2.0 / 3.0) return p + (q - p) * (2.0 / 3.0 - t) * 6.0;
+  return p;
+}
+vec3 kHsl2Rgb(vec3 h) {
+  if (h.y < 1e-5) return vec3(h.z);
+  float q = h.z < 0.5 ? h.z * (1.0 + h.y) : h.z + h.y - h.z * h.y;
+  float p = 2.0 * h.z - q;
+  return vec3(kHue(p, q, h.x + 1.0 / 3.0), kHue(p, q, h.x), kHue(p, q, h.x - 1.0 / 3.0));
+}
+vec3 kRecolor(vec3 lin) {
+  vec3 c = pow(max(lin, vec3(0.0)), vec3(1.0 / 2.2));
+  vec3 hsl = kRgb2Hsl(c);
+  vec3 outc = c;
+  for (int i = 0; i < 3; i++) {
+    if (kBand[i].x < 0.5) continue;
+    float d = abs(hsl.x - kBand[i].y);
+    d = min(d, 1.0 - d);
+    float w = (1.0 - smoothstep(kBand[i].z * 0.55, kBand[i].z, d)) * smoothstep(0.12, 0.24, hsl.y);
+    w *= smoothstep(kRef[i].z - 0.06, kRef[i].z, hsl.z) * (1.0 - smoothstep(kRef[i].w, kRef[i].w + 0.06, hsl.z));
+    vec3 to = vec3(kTo[i].x, clamp(kTo[i].y * hsl.y / kRef[i].x, 0.0, 1.0), clamp(kTo[i].z + (hsl.z - kRef[i].y), 0.03, 0.97));
+    outc = mix(outc, kHsl2Rgb(to), w);
+  }
+  return pow(outc, vec3(2.2));
+}
+`
+
+const painted = new Map<string, MeshToonMaterial>()
+/** The toon material for a mesh taking `parts` in these colors: the shared plain one while they're all her own, else a
+ *  recoloring one (shared by every Kaylee painted the same; one shader program for all of them). */
+export function paintedToon(map: Texture, parts: PaintPart[], colors: Record<PaintPart, PaintColor>): MeshToonMaterial {
+  const on = parts.filter((p) => colors[p] !== DEFAULT_PAINT[p])
+  if (!on.length) return toonFor(map)
+  const key = `${map.uuid}|${on.map((p) => `${p}:${colors[p]}`).join(',')}`
+  let m = painted.get(key)
+  if (!m) {
+    const band: Vector3[] = []
+    const ref: Vector4[] = []
+    const to: Vector3[] = []
+    for (let i = 0; i < 3; i++) {
+      const p = on[i]
+      const b = p ? BANDS[p] : null
+      const [h, s, l] = p ? PAINTS[colors[p]].hsl : [0, 0, 0]
+      band.push(new Vector3(b ? 1 : 0, (b?.hue ?? 0) / 360, (b?.width ?? 0) / 360))
+      ref.push(new Vector4(b?.s ?? 1, b?.l ?? 0, b?.lmin ?? 0, b?.lmax ?? 1))
+      to.push(new Vector3(h / 360, s, l))
+    }
+    m = new MeshToonMaterial({ map, gradientMap: toonGradient() })
+    m.onBeforeCompile = (shader) => {
+      shader.uniforms.kBand = { value: band }
+      shader.uniforms.kRef = { value: ref }
+      shader.uniforms.kTo = { value: to }
+      shader.fragmentShader = shader.fragmentShader
+        .replace('#include <common>', `#include <common>\n${RECOLOR_GLSL}`)
+        .replace('#include <map_fragment>', '#include <map_fragment>\n\tdiffuseColor.rgb = kRecolor(diffuseColor.rgb);')
+    }
+    m.customProgramCacheKey = () => 'kaylee-recolor'
+    painted.set(key, m)
   }
   return m
 }
@@ -141,7 +256,10 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
   })
   for (const m of meshes) {
     const map = (m.material as { map?: Texture | null }).map
-    if (map) m.material = toonFor(map)
+    if (map) {
+      m.material = toonFor(map)
+      m.userData.map = map
+    }
     // The eye domes are glossy pieces sitting in the face: no ink ring around them.
     if (!m.name.startsWith('eye')) {
       // The hair's line is drawn a little nearer, so the bangs keep their line where they rest on the forehead (only
@@ -227,6 +345,13 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
     // Her face (model-wear.ts measures it): a sphere of 0.24 around her eyes, the painted smile under them.
     face: { R: 0.24, headY: 0.148, mouth: [0, 0.06, 0.21] },
     wardrobe: modelWardrobe(ARM_TILT),
+    closet: (id, b) => buildClosetItem(id, b, ARM_TILT),
+    paint(colors) {
+      for (const m of meshes) {
+        const map = m.userData.map as Texture | undefined
+        if (map) m.material = paintedToon(map, bandsOf(m.name), colors)
+      }
+    },
     hands: [hands[0], hands[1]],
     // Round the dress at 0.29 m, where it narrows above the skirt (model-wear.ts's tunic, less its few mm).
     waist: { y: 0.29, z: 0.045, rx: 0.155, rz: 0.14 },

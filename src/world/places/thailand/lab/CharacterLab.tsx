@@ -20,6 +20,7 @@ const DEFAULTS: StudioView = {
   selected: 'kaylee',
   pose: 'stand',
   wear: [],
+  look: '',
   phone: true,
   wind: 0,
   spin: false,
@@ -49,6 +50,7 @@ function fromLink(id: string | undefined, p: Record<string, string>): StudioView
     selected,
     pose: (p.pose as Pose) ?? DEFAULTS.pose,
     wear: list(p.wear) as Wearable[],
+    look: p.look ?? '',
     phone: p.phone !== '0',
     wind: num(p.wind, DEFAULTS.wind),
     spin: p.spin === '1',
@@ -72,6 +74,7 @@ function toLink(v: StudioView) {
   if (v.ids.length > 1) p.lineup = v.ids.join(',')
   if (v.pose !== DEFAULTS.pose) p.pose = v.pose
   if (v.wear.length) p.wear = v.wear.join(',')
+  if (v.look) p.look = v.look
   if (!v.phone) p.phone = '0'
   if (v.wind) p.wind = String(v.wind)
   if (v.spin) p.spin = '1'

@@ -3,8 +3,8 @@
 // Sparkle (Guide) says the few things there are to say; the family say hello themselves.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { say, sounds } from '../../../../../sdk'
-import { useSections } from '../../../../kit/sections'
+import { say, sounds, useSaved } from '../../../../../sdk'
+import { updateStickyParam, useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { flag } from '../../engine/flags'
 import { L } from '../../lines'
@@ -13,9 +13,12 @@ import { WallPlugin, WALL_LINES, WALL_SLOTS, wallAnchorId } from '../../trip/wal
 import { newestByTrip, useWallPhotos } from '../../trip/wall-photos'
 import { Debug } from './Debug'
 import { Guide, type GuideHandle } from './Guide'
-import type { House, Spot, Start } from './house'
+import { BARE, formatLook, LOOK_KEY, type Style } from '../../characters/style'
+import { bothPlugins, type House, type HousePlugin, type Spot, type Start } from './house'
 import { HouseView, type RenderMode } from './HouseView'
 import HUB_SECTIONS from './sections'
+import type { DrawerId } from './wardrobe/furniture'
+import { WARDROBE_ANCHORS, WardrobePlugin } from './wardrobe/plugin'
 
 // Per visit to the app: the tuk-tuk brings her the first time; after that she's back where she left off.
 let arrivedThisVisit = false
@@ -35,7 +38,12 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const askTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   useEffect(() => () => clearTimeout(askTimer.current), [])
   const photo = initial.section === 'family'
-  const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' || initial.section === 'family' ? 'street' : initial.section)
+  const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' || initial.section === 'family' ? 'street' : initial.section === 'wardrobe' ? 'upstairs' : initial.section)
+  // Her wardrobe (wardrobe/): her look is saved on the iPad as she changes it, and a link's ?look= follows along.
+  const [, saveLook] = useSaved<Style>(LOOK_KEY, BARE)
+  const [dressing, setDressing] = useState(initial.section === 'wardrobe')
+  const wardrobe = useRef<WardrobePlugin | null>(null)
+  const [startDrawer] = useState(() => (initial.section === 'wardrobe' ? ((param('drawer') || null) as DrawerId | null) : null))
   const houseRef = useRef<House | null>(null)
   const guide = useRef<GuideHandle>(null)
   // Read once, when the house opens.
@@ -54,9 +62,9 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const trips = TRIP_CHOICES.filter((t) => meta.activities.some((a) => a.id === t.id))
 
   useEffect(() => {
-    enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : {})
+    enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : startDrawer ? { drawer: startDrawer } : {})
     if (initial.section !== 'arrive') arrivedThisVisit = true
-    if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section
+    if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section === 'wardrobe' ? 'upstairs' : initial.section
     if (initial.section === 'upstairs' && !askedThisVisit) ask(4000)
   }, [])
 
@@ -73,6 +81,30 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     enter(s, at ? { at } : {})
     guide.current?.arrivedAt(s)
     if (s === 'upstairs' && !askedThisVisit && !photo) ask(4000)
+  }
+  /** The wardrobe opened or closed, or she pulled out another drawer. */
+  const onWardrobe = (open: boolean, drawer: DrawerId | null) => {
+    setDressing(open)
+    if (open) {
+      // Mommy waits to ask about a trip until she's done dressing up.
+      clearTimeout(askTimer.current)
+      setAsking(false)
+      enter('wardrobe', drawer ? { drawer } : {})
+    } else enter('upstairs')
+  }
+  const onLook = (style: Style) => {
+    saveLook(style)
+    updateStickyParam('look', formatLook(style))
+  }
+  const wardrobeEvents = useRef({ onWardrobe, onLook })
+  wardrobeEvents.current = { onWardrobe, onLook }
+  const makePlugin = (): HousePlugin => {
+    const w = new WardrobePlugin(
+      { onState: (open, drawer) => wardrobeEvents.current.onWardrobe(open, drawer), onLook: (style) => wardrobeEvents.current.onLook(style) },
+      { open: initial.section === 'wardrobe', drawer: startDrawer },
+    )
+    wardrobe.current = w
+    return onWall.size ? bothPlugins(w, new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos')) : w
   }
   // Tap Mommy and she asks after her hello; tap Daddy and he asks instead of saying hello.
   const onGreet = (id: string) => {
@@ -100,7 +132,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
-      <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} plugin={onWall.size ? () => new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos') : undefined} extraAnchors={wallAnchors} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet }} />
+      <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} plugin={makePlugin} extraAnchors={[...WARDROBE_ANCHORS, ...wallAnchors]} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet }} />
       {mode === 'lost' && (
         <button
           onClick={() => {
@@ -168,7 +200,27 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           </motion.button>
         )}
       </AnimatePresence>
-      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking} />}
+      {/* Done dressing up: the doors close (tapping the doors or the room does too). */}
+      <AnimatePresence>
+        {dressing && mode !== 'lost' && (
+          <motion.button
+            key="wardrobe-done"
+            aria-label="Done dressing up"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            whileTap={{ scale: 0.88 }}
+            onClick={() => {
+              sounds.pop()
+              wardrobe.current?.close()
+            }}
+            style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 14px)', bottom: 'calc(var(--safe-bottom) + 14px)', width: 88, height: 88, borderRadius: '50%', border: '4px solid #fff', background: 'var(--mint)', color: 'var(--ink)', fontSize: 44, fontWeight: 700, boxShadow: 'var(--shadow)', zIndex: 21 }}
+          >
+            ✓
+          </motion.button>
+        )}
+      </AnimatePresence>
+      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing} />}
       <Ask open={asking && !arriving && mode !== 'lost'} who={asker} trips={trips.length > 1 ? trips : undefined} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />
       {debug && <Debug houseRef={houseRef} />}
     </div>
