@@ -1,5 +1,8 @@
 // The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.html), as deep-linkable sections:
-// #/world/thailand/nan-trip/<section>?stops=<done so far>&... Built so far (greyboxes): the rental desk at Nan airport
+// #/world/thailand/nan-trip/<section>?stops=<done so far>&... The trip loop (step 7): Mommy asks where to (invite:
+// 🚤, 🛝🍕 or 🏔️🚙), packing for the mountains (pack?packed=...), the goodbye and Aunty Sri's van (goodbye), the x-ray
+// belt (airport), the window seat north to Nan (takeoff, fly, land), and home (home?photos=...: the flight home, Agong
+// asks for his photo, she picks one for his wall, the stamp). Built so far (greyboxes): the rental desk at Nan airport
 // (rental?round=key|boot|belt, step 6): press the key fob, the bags into the boot, click the seatbelt; the Nan map
 // (map?stops=..., step 6), the trip's hub: a toy diorama where she picks the next stop (or drags the little Pajero
 // there); the mountain road (drive?road=city|valley|sky|three&to=<stop>, step 1); Baan Huanam Mushroom Farm
@@ -9,9 +12,10 @@
 // while it grows, cut the golden rice, bang out the grains, then the pink milk and Mommy's photo on the deck; Bo Kluea's
 // salt wells (salt?round=1|2|3, step 4): dip the bucket in the well and pour the brine into the big pan, feed the fire
 // till it boils down, scrape the salt into her basket; and the 3 from above (three, step 6): her finger draws the
-// "number 3" road with a big pink crayon. The way there and home come with their own steps, each adding its section
-// here. Loaded at startup: keep three.js out of this file.
+// "number 3" road with a big pink crayon, then Mommy's photo with the 3 behind them and ✈️🏠. Loaded at startup: keep
+// three.js out of this file.
 import { defineSections } from '../../../../kit/sections'
+import { ITEMS } from '../../trip/packing'
 import { ROAD_IDS } from './drive/roads'
 import { STOPS } from './map/layout'
 import { ROUNDS as FARM_ROUNDS } from './mushrooms/layout'
@@ -20,6 +24,9 @@ import { ROUNDS as RICE_ROUNDS } from './rice/layout'
 
 const NAN_SECTIONS = defineSections('thailand', 'nan-trip', {
   params: {
+    packed: { default: 'raincoat,boots,teddy,umbrella', doc: `what's in her suitcase, a comma list of ${ITEMS.map((i) => i.id).join(', ')} (Mommy always tucks in the umbrella)` },
+    photos: { default: '', doc: "the trip's photos to pick from at home, a comma list of deck (Stop Time Cafe), three (the 3 from the viewpoint), pizza (the mushroom farm) and salt (Bo Kluea). Empty: one for each stop done and the 3 (deck,three with none)" },
+    replay: { default: '', doc: '1 = she has done the whole trip before: picking 🏔️🚙 offers 🧳 a new trip or 🗺️ straight to the Nan map, and the flight is shorter' },
     stops: { default: '', doc: `the stops done so far, in the order she did them: a comma list of ${STOPS.join(', ')}. They wear a stamp on the Nan map (the newest one lands when she comes back to it), the Pajero waits at the last one, and after two the airport opens (home, down the 3 road)` },
     road: { default: 'valley', values: ROAD_IDS, doc: 'which road the drive plays: city (through Nan town to its market, over the river), valley (the rice fields to the mushroom farm: chickens, a songthaew, a buffalo crossing), sky (up Doi Phu Kha: blind bends with round mirrors, into the cloud and out above it) or three (down the hairpins, counting the bends, then the 3 from the viewpoint)' },
     to: { default: '', doc: `where the drive is going (picked on the Nan map): ${STOPS.join(', ')} (its stop opens by itself at the end of the road) or map (back to the map: the city road). Empty: the end card` },
@@ -27,13 +34,21 @@ const NAN_SECTIONS = defineSections('thailand', 'nan-trip', {
     basket: { default: '', doc: "the mushrooms in her basket, <color><count> pairs of grey, pink and gold, e.g. grey5,pink2,gold1. Empty: what she'd have by then (nothing in rounds 1 and 2, grey6 in round 3, grey4,pink2 at the pizza)" },
   },
   sections: [
-    { id: 'rental', name: 'The rental desk: press the key fob, the bags into the boot (round boot), click the seatbelt (round belt)', params: ['round'] },
-    { id: 'map', name: 'The Nan map: pick the next stop, or drag the little Pajero there', params: ['stops'] },
-    { id: 'drive', name: 'The mountain road: steer the silver Pajero', params: ['road', 'to', 'stops'] },
-    { id: 'mushrooms', name: 'Baan Huanam Mushroom Farm: mist the bags, pick the mushrooms, top the pizza', params: ['round', 'basket', 'stops'] },
-    { id: 'rice', name: "Kaylee's rice farm: plant the paddies, shoo the birds, cut the rice, the café's deck", params: ['round', 'stops'] },
-    { id: 'salt', name: 'Bo Kluea salt wells: dip and pour the brine (round 1), feed the fire (2), scrape the salt into the basket (3)', params: ['round', 'stops'] },
-    { id: 'three', name: 'The "number 3" from the viewpoint: draw it with the big pink crayon', params: ['stops'] },
+    { id: 'invite', name: 'Mommy asks: where shall we go? (🚤, 🛝🍕 or 🏔️🚙)', params: ['replay'] },
+    { id: 'pack', name: 'Pack for the mountains: the raincoat, the rain boots, the umbrella', params: ['packed'] },
+    { id: 'goodbye', name: "Goodbye at Agong's house, into Aunty Sri's van", params: ['packed', 'replay'] },
+    { id: 'airport', name: 'The airport: the suitcase on the x-ray belt', params: ['packed'] },
+    { id: 'takeoff', name: 'The window seat: seatbelt on, take off', params: ['packed', 'replay'] },
+    { id: 'fly', name: 'The window seat: the tray, snacks, Thailand below, north to Nan', params: ['packed', 'replay'] },
+    { id: 'land', name: 'Landing in the green valley at Nan', params: ['packed'] },
+    { id: 'rental', name: 'The rental desk: press the key fob, the bags into the boot (round boot), click the seatbelt (round belt)', params: ['round', 'packed'] },
+    { id: 'map', name: 'The Nan map: pick the next stop, or drag the little Pajero there', params: ['stops', 'packed'] },
+    { id: 'drive', name: 'The mountain road: steer the silver Pajero', params: ['road', 'to', 'stops', 'packed'] },
+    { id: 'mushrooms', name: 'Baan Huanam Mushroom Farm: mist the bags, pick the mushrooms, top the pizza', params: ['round', 'basket', 'stops', 'packed'] },
+    { id: 'rice', name: "Kaylee's rice farm: plant the paddies, shoo the birds, cut the rice, the café's deck", params: ['round', 'stops', 'packed'] },
+    { id: 'salt', name: 'Bo Kluea salt wells: dip and pour the brine (round 1), feed the fire (2), scrape the salt into the basket (3)', params: ['round', 'stops', 'packed'] },
+    { id: 'three', name: 'The "number 3" from the viewpoint: draw it with the big pink crayon, the photo, then home', params: ['stops', 'packed'] },
+    { id: 'home', name: "Home: the flight, Agong's photo, the frame on his wall, the stamp", params: ['packed', 'photos'] },
   ],
 })
 export default NAN_SECTIONS

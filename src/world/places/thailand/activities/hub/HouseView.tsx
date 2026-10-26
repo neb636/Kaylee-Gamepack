@@ -1,5 +1,4 @@
-// Mounts Agong's house in the shared 3D view (engine/View3D.tsx): the renderer, the frame loop, taps and drags, the
-// flat fallback without WebGL2. This file only builds the house and lays its tap targets over it.
+// Mounts Agong's house in the shared 3D view (engine/View3D.tsx): the renderer, the frame loop, taps and drags. This file only builds the house and lays its tap targets over it.
 import { useRef, type MutableRefObject } from 'react'
 import { Anchors } from '../../engine/Anchors'
 import { View3D, type RenderMode } from '../../engine/View3D'

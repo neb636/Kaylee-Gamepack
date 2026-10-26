@@ -1,7 +1,7 @@
 // The road kit's one source of truth (plan: planning/around-the-world/thailand/nan-trip.html, "The mountain road"): a
 // road is an OPEN curve through control points with heights, in meters, pure math (no three.js). The boat race's course
 // (activities/boat-trip/race/track.ts) is the same idea closed into a loop on flat water; this one climbs and dips.
-// The scene (build.ts), the traffic (traffic.ts), the drive and the flat fallback all read it.
+// The scene (build.ts), the traffic (traffic.ts) and the drive all read it.
 //
 // Heading 0 faces +z and turns toward +x (like the house's characters: atan2(dx, dz)). `s` is meters along the road from
 // its start, `lat` meters to the left of the middle (looking along the road). Cars in Thailand keep LEFT: Kaylee's lane

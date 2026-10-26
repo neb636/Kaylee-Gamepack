@@ -38,6 +38,8 @@ export const PLACES = {
   bangkok: [100.5, 13.75] as LonLat,
   /** Krabi airport (KBV), where the plane lands. */
   krabi: [98.99, 8.1] as LonLat,
+  /** Nan Nakhon airport (NNT), in the mountains of the far north (the Nan road trip lands there). */
+  nan: [100.78, 18.81] as LonLat,
   /** Phang Nga Bay, where the boat pin sits. */
   phangNga: [98.52, 8.22] as LonLat,
   /** The mountains in the north (bumps on the map below the plane). */

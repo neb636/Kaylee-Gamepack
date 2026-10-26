@@ -357,7 +357,7 @@ const SCREENS = [
   })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party/soon', stampAll: 'peru', wait: 800 },
-  // Thailand: Agong's house in 3D (the arrival mid-ride, each spot, a few things in use), the flat house without WebGL,
+  // Thailand: Agong's house in 3D (the arrival mid-ride, each spot, a few things in use),
   // and the party card.
   { name: 'thailand-arrive', hash: '#/world/thailand/hub/arrive', reset: true, wait: 1400 },
   ...['street', 'downstairs', 'downstairs?at=table', 'downstairs?at=desk', 'downstairs?at=altar', 'downstairs?at=photos', 'upstairs', 'upstairs?at=mattress', 'upstairs?at=couch', 'upstairs?at=bathroom-door'].map((to) => ({
@@ -369,11 +369,10 @@ const SCREENS = [
   // The family photo (everyone, then a few alone on the turntable, in the three-quarter view it rests on first).
   { name: 'thailand-family', hash: '#/world/thailand/hub/family', reset: true, wait: 1800 },
   ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
-  { name: 'thailand-flat', hash: '#/world/thailand/hub/downstairs?gl=off', reset: true, wait: 600 },
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
   // The mall day's trip loop (greybox): Mommy's card (🚤 / 🛝🍕), the day pass's choices on a replay, the goodbye with
   // the whole family and the Veloz (then everyone in it), ICONSIAM's glimpse, the lift going up, the counter with her
-  // socks on, home (the car at Agong's door; the box given, the photo on the wall), and the flat pages.
+  // socks on, home (the car at Agong's door; the box given, the photo on the wall).
   { name: 'mall-loop-invite', hash: '#/world/thailand/mall-trip/invite', reset: true, wait: 4000 },
   { name: 'mall-loop-replay', hash: '#/world/thailand/mall-trip/invite?replay=1', reset: true, wait: 3500, act: async (p) => {
     await p.locator('button[aria-label="The mall"]').click({ force: true })
@@ -407,10 +406,9 @@ const SCREENS = [
     await p.waitForFunction(() => window.__thaiMallQA?.().held === 'wall', null, { timeout: 60000 }).catch(() => {})
     await p.waitForTimeout(1200)
   } },
-  ...['invite', 'goodbye', 'arrive', 'home'].map((s) => ({ name: `mall-loop-flat-${s}`, hash: `#/world/thailand/mall-trip/${s}?gl=off`, reset: true, wait: 900 })),
   // HarborLand's hall (greybox): just in by Mommy's bench, out of the vet's door (Harbor Town), out of the racing
   // slide (the lanes, the crocodile), going in at the cafe (the door open, the camera in close), Mommy's "Pizza time?"
-  // card after four stickers, and the flat version.
+  // card after four stickers.
   { name: 'mall-hall', hash: '#/world/thailand/mall-trip/hall', reset: true, wait: 3500 },
   { name: 'mall-hall-town', hash: '#/world/thailand/mall-trip/hall?from=vet&games=vet', reset: true, wait: 3500 },
   { name: 'mall-hall-lanes', hash: '#/world/thailand/mall-trip/hall?from=race', reset: true, wait: 3500 },
@@ -423,14 +421,12 @@ const SCREENS = [
     await p.waitForTimeout(2600)
   } },
   { name: 'mall-hall-hungry', hash: '#/world/thailand/mall-trip/hungry?games=vet,cafe,race,pool', reset: true, wait: 4500 },
-  { name: 'mall-hall-flat', hash: '#/world/thailand/mall-trip/hall?games=vet&gl=off', reset: true, wait: 900 },
   // HarborLand's Big Frame: each place she can start (through the tunnel, the ball pit, the three levels, the mats in
-  // front), a sock band with stickers, and the flat version.
+  // front), a sock band with stickers.
   ...['in', 'pit', 'l1', 'l2', 'top', 'out'].map((at) => ({ name: `mall-frame-${at}`, hash: `#/world/thailand/mall-trip/frame?at=${at}`, reset: true, wait: 3500 })),
   { name: 'mall-frame-stickers', hash: '#/world/thailand/mall-trip/frame?socks=mint&games=vet,cafe,frame', reset: true, wait: 3500 },
-  { name: 'mall-frame-flat', hash: '#/world/thailand/mall-trip/frame?gl=off', reset: true, wait: 900 },
   // The Vet Clinic (greybox): each patient on the table (the earlier ones on the waiting room's bench), the 👇 hint
-  // after a while, a tool at work (soap on the muddy pony), the end (all three on the bench, the 🛝) and the flat version.
+  // after a while, a tool at work (soap on the muddy pony), the end (all three on the bench, the 🛝).
   ...['puppy', 'pony', 'elephant'].map((p) => ({ name: `vet-${p}`, hash: `#/world/thailand/mall-trip/vet?patient=${p}`, reset: true, wait: 4200 })),
   { name: 'vet-hint', hash: '#/world/thailand/mall-trip/vet', reset: true, wait: 9500 },
   {
@@ -466,9 +462,8 @@ const SCREENS = [
       await p.waitForTimeout(4500)
     },
   },
-  { name: 'vet-flat', hash: '#/world/thailand/mall-trip/vet?patient=pony&gl=off', reset: true, wait: 900 },
   // The Barber Salon (greybox): each round (round 3: a kid with a picture card, Daddy on the bench with his new look), a
-  // long rainbow hairdo from a link, the grow tonic and the scissors at work, the 👆 after a while, and the flat version.
+  // long rainbow hairdo from a link, the grow tonic and the scissors at work, the 👆 after a while.
   ...[1, 2, 3].map((n) => ({ name: `barber-${n}`, hash: `#/world/thailand/mall-trip/barber?round=${n}&hair=k.roygbvproygbvproygbvproyg.s.1p5Y`, reset: true, wait: n === 3 ? 5200 : 3200 })),
   { name: 'barber-hint', hash: '#/world/thailand/mall-trip/barber', reset: true, wait: 9500 },
   {
@@ -491,9 +486,8 @@ const SCREENS = [
     },
   },
   { name: 'barber-hall', hash: '#/world/thailand/mall-trip/hall?from=barber&hair=k.roygbvproygbvproygbvproyg.s', reset: true, wait: 3500 },
-  { name: 'barber-flat', hash: '#/world/thailand/mall-trip/barber?round=3&gl=off', reset: true, wait: 900 },
   // Cafe & Cake (greybox): each round (the earlier rounds' drinks on the shelf), the 👆 after a while, the splat (the
-  // lid left off), the jar tipped over the cup and pouring, and the flat version.
+  // lid left off), the jar tipped over the cup and pouring.
   ...[1, 2, 3].map((n) => ({ name: `cafe-${n}`, hash: `#/world/thailand/mall-trip/cafe?round=${n}`, reset: true, wait: 3200 })),
   { name: 'cafe-hint', hash: '#/world/thailand/mall-trip/cafe', reset: true, wait: 9500 },
   {
@@ -527,20 +521,18 @@ const SCREENS = [
       await p.waitForTimeout(800)
     },
   },
-  { name: 'cafe-flat', hash: '#/world/thailand/mall-trip/cafe?round=3&gl=off', reset: true, wait: 900 },
   // The Racing Slide (greybox): each round at the bottom of the steps (the others sitting at the top), the 👆 on the
   // steps after a while, the countdown, a race at a bump (round 2: the ring closing on her, gold), the spinning rings
-  // (round 3), the pit after a win (the ribbon, Daddy head first), and the flat version.
+  // (round 3), the pit after a win (the ribbon, Daddy head first).
   ...[1, 2, 3].map((n) => ({ name: `mall-race-${n}`, hash: `#/world/thailand/mall-trip/race?round=${n}`, reset: true, wait: 3000 })),
   { name: 'mall-race-hint', hash: '#/world/thailand/mall-trip/race', reset: true, wait: 9500 },
   { name: 'mall-race-count', hash: '#/world/thailand/mall-trip/race', reset: true, wait: 2500, act: (p) => raceTo(p, (q) => q.count === 2) },
   { name: 'mall-race-bump', hash: '#/world/thailand/mall-trip/race?round=2', reset: true, wait: 2500, act: (p) => raceTo(p, (q) => q.phase === 'race' && q.window && q.crest >= 1) },
   { name: 'mall-race-rings', hash: '#/world/thailand/mall-trip/race?round=3', reset: true, wait: 2500, act: (p) => raceTo(p, (q) => q.phase === 'race' && q.u > 0.45, 3) },
   { name: 'mall-race-pit', hash: '#/world/thailand/mall-trip/race', reset: true, wait: 2500, act: (p) => raceTo(p, (q) => q.ribbons >= 1, 3, 1500) },
-  { name: 'mall-race-flat', hash: '#/world/thailand/mall-trip/race?round=2&gl=off', reset: true, wait: 900 },
   // Little Land (greybox): each round at the start (round 2: the chedi's outlines; the elephant's), the 👆 on the box
   // after a while, a brick in her hand over the stack (the outline where it will land), the stack glowing after six,
-  // a tower past Daddy's ribbon (ah... ah...), and the flat version.
+  // a tower past Daddy's ribbon (ah... ah...).
   ...[1, 2, 3].map((n) => ({ name: `blocks-${n}`, hash: `#/world/thailand/mall-trip/blocks?round=${n}`, reset: true, wait: 3000 })),
   { name: 'blocks-elephant', hash: '#/world/thailand/mall-trip/blocks?round=2&card=elephant', reset: true, wait: 3000 },
   { name: 'blocks-hint', hash: '#/world/thailand/mall-trip/blocks', reset: true, wait: 9500 },
@@ -575,10 +567,9 @@ const SCREENS = [
       await p.waitForTimeout(after)
     },
   })),
-  { name: 'blocks-flat', hash: '#/world/thailand/mall-trip/blocks?round=2&gl=off', reset: true, wait: 900 },
   // Muay Thai (greybox): each round at the start (1: the wai kru beside the coach; 2: the drum and the ring on the bag;
   // 3: Daddy's pad, the bag hooked back), the 👆 on her gloves after a while, a bow, a punch on the beat (the gold POW),
-  // the big kick, and the flat version.
+  // the big kick.
   ...[1, 2, 3].map((n) => ({ name: `boxing-${n}`, hash: `#/world/thailand/mall-trip/boxing?round=${n}`, reset: true, wait: 3000 })),
   { name: 'boxing-hint', hash: '#/world/thailand/mall-trip/boxing', reset: true, wait: 9500 },
   {
@@ -618,10 +609,9 @@ const SCREENS = [
       await p.waitForTimeout(500)
     },
   },
-  { name: 'boxing-flat', hash: '#/world/thailand/mall-trip/boxing?round=2&gl=off', reset: true, wait: 900 },
   // The Golden Mountain (greybox): each round at the foot (round 2: the pinks glow among the silly ones; round 3: Daddy
   // at his foot), the 👆 on the next hold after a while, a pull held halfway by her finger, the top (the bell and the
-  // slide's mouth glowing), the race halfway up, and the flat version. Where things are comes from window.__thaiMallQA.
+  // slide's mouth glowing), the race halfway up. Where things are comes from window.__thaiMallQA.
   ...[1, 2, 3].map((n) => ({ name: `mountain-${n}`, hash: `#/world/thailand/mall-trip/mountain?round=${n}`, reset: true, wait: 3000 })),
   { name: 'mountain-hint', hash: '#/world/thailand/mall-trip/mountain', reset: true, wait: 9500 },
   {
@@ -656,10 +646,9 @@ const SCREENS = [
       await p.waitForTimeout(900)
     },
   })),
-  { name: 'mountain-flat', hash: '#/world/thailand/mall-trip/mountain?round=2&gl=off', reset: true, wait: 900 },
   // The Sky Pod (greybox): each round at the start (round 2: the wall playing the pattern; round 3: Daddy's blue light
   // beside hers), a slap on a high pod (Kaylee in the air, her arm up), the finale's rainbow and the 🛝, the 👆 after a
-  // while, and the flat version.
+  // while.
   ...[1, 2, 3].map((n) => ({ name: `skypod-${n}`, hash: `#/world/thailand/mall-trip/skypod?round=${n}`, reset: true, wait: n === 2 ? 1400 : 3000 })),
   {
     name: 'skypod-slap',
@@ -691,9 +680,8 @@ const SCREENS = [
     },
   },
   { name: 'skypod-hint', hash: '#/world/thailand/mall-trip/skypod', reset: true, wait: 9500 },
-  { name: 'skypod-flat', hash: '#/world/thailand/mall-trip/skypod?round=3&gl=off', reset: true, wait: 2200 },
   // The Pizza Company (greybox): the menu, the table at the start, a slice pulled out with the cheese stretching (held
-  // over Daddy's plate), the last two for Agong's box, the box closed, and the flat version.
+  // over Daddy's plate), the last two for Agong's box, the box closed.
   { name: 'pizza-menu', hash: '#/world/thailand/mall-trip/menu', reset: true, wait: 3500 },
   { name: 'pizza-share', hash: '#/world/thailand/mall-trip/share?pizza=cheese', reset: true, wait: 3500 },
   {
@@ -713,12 +701,10 @@ const SCREENS = [
   },
   { name: 'pizza-agong', hash: '#/world/thailand/mall-trip/share?pizza=hawaiian&shared=6', reset: true, wait: 3500 },
   { name: 'pizza-done', hash: '#/world/thailand/mall-trip/share?pizza=seafood&shared=8', reset: true, wait: 3500 },
-  { name: 'pizza-flat', hash: '#/world/thailand/mall-trip/share?shared=4&gl=off', reset: true, wait: 900 },
   // The Nan road trip's mountain road (greybox): the Pajero setting off on each of the four roads, a few seconds in on
-  // the sky road (the switchbacks, the first mirror), and the flat version.
+  // the sky road (the switchbacks, the first mirror).
   ...['city', 'valley', 'sky', 'three'].map((road) => ({ name: `nan-drive-${road}`, hash: `#/world/thailand/nan-trip/drive?road=${road}`, reset: true, wait: 3500 })),
   { name: 'nan-drive-sky-climb', hash: '#/world/thailand/nan-trip/drive?road=sky', reset: true, wait: 14000 },
-  { name: 'nan-drive-flat', hash: '#/world/thailand/nan-trip/drive?road=three&gl=off', reset: true, wait: 900 },
   // Baan Huanam Mushroom Farm (greybox): the rack before any mist, every bag grown (round 2: pick them), round 3's pink
   // and gold bags, and the pizza with a colorful basket.
   { name: 'nan-mushrooms-1', hash: '#/world/thailand/nan-trip/mushrooms', reset: true, wait: 3500 },
@@ -733,12 +719,17 @@ const SCREENS = [
   { name: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true, wait: 3500 },
   { name: 'nan-map-stops', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,rice', reset: true, wait: 3500 },
   { name: 'nan-three', hash: '#/world/thailand/nan-trip/three', reset: true, wait: 4000 },
+  // The Nan trip's loop (the trip kit's legs): Mommy's card with 🏔️🚙, packing with the mountain things, the goodbye,
+  // the x-ray, the window seat, landing in Nan's green valley (it plays out to the rental desk), and coming home (the
+  // flight, then Agong asks for his photo and the Nan photos fan out).
+  ...['invite', 'pack', 'goodbye', 'airport', 'fly'].map((to) => ({ name: `nan-${to}`, hash: `#/world/thailand/nan-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : 2600 })),
+  { name: 'nan-land', hash: '#/world/thailand/nan-trip/land', reset: true, wait: 5500 },
+  { name: 'nan-home', hash: '#/world/thailand/nan-trip/home?photos=deck,three,pizza,salt', reset: true, wait: 16000 },
   // Kaylee's rice farm (greybox A): paddy A flooded and three dry, the planted rows growing (birds coming in), the golden
   // rice drained for the harvest, the bundles on the rack by the threshing basket, and the café's deck.
   ...['plant', 'grow', 'harvest', 'thresh', 'deck'].map((round) => ({ name: `nan-rice-${round}`, hash: `#/world/thailand/nan-trip/rice?round=${round}`, reset: true, wait: round === 'grow' ? 6000 : 3500 })),
   // The boat trip: every section (the trip kit's legs, then the bay), a full suitcase, the x-ray showing what she
-  // packed, the seat-back screen, the boarding pass between legs, the beach after landing (the photo), and the flat
-  // version.
+  // packed, the seat-back screen, the boarding pass between legs, and the beach after landing (the photo).
   // (The house's shaders compile on the first one: it waits a little longer.)
   ...['invite', 'pack', 'goodbye', 'airport', 'takeoff', 'fly', 'land', 'chang', 'sign', 'drinks', 'boardwalk', 'feed', 'favorites', 'lamyai', 'splash', 'pier', 'bay', 'village', 'cave', 'hong', 'nail', 'sunset'].map((to) => ({ name: `boat-trip-${to}`, hash: `#/world/thailand/boat-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : to === 'bay' ? 4600 : to === 'hong' ? 4000 : 2200 })),
   // Krabi's signpost with Baan Chang open (the landing plays out first): the songthaew waits, the 🐘 and 🚤 boards glow.
@@ -968,9 +959,8 @@ const SCREENS = [
       await p.waitForTimeout(1400)
     },
   },
-  { name: 'boat-trip-flat', hash: '#/world/thailand/boat-trip/bay?gl=off', reset: true, wait: 600 },
   // Home (step 5): the photos fanned out for Agong, everyone gathered round her photo on the wall, the stamp with the
-  // trip's facts, the photo wall in the house (and close up), a replay's boarding pass (🧳 or 🚤), and the picture book.
+  // trip's facts, the photo wall in the house (and close up), a replay's boarding pass (🧳 or 🚤).
   {
     name: 'boat-trip-home-pick',
     hash: '#/world/thailand/boat-trip/home?photos=village,hong,nail&found=crab,eagle',
@@ -1045,7 +1035,6 @@ const SCREENS = [
       await p.waitForTimeout(1500)
     },
   },
-  ...['pack', 'goodbye', 'bay', 'nail', 'home'].map((to) => ({ name: `boat-trip-book-${to}`, hash: `#/world/thailand/boat-trip/${to}?gl=off`, reset: true, wait: 900 })),
 // --routes=venice,pizzeria-own: exact screen names, or an activity id for all of its screens (venice-*).
 ].filter((s) => !flag('routes') || flag('routes').split(',').some((r) => s.name === r || s.name.startsWith(`${r}-`)))
 

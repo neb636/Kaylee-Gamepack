@@ -8,7 +8,7 @@
 //   arrive                  ICONSIAM (arrive.ts): the glimpse, the lift (its floor number big, here), the counter
 //
 // Sparkle sits in the corner (trip/legs/Guide.tsx); the greybox's words aren't recorded yet, so they show in its
-// bubble without a sound (words.ts). Without WebGL it's a picture book (LoopFlat.tsx). The trip around it (the day pass
+// bubble without a sound (words.ts). The trip around it (the day pass
 // between legs, resume and replays) is MallTrip.tsx.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
@@ -18,14 +18,13 @@ import { LOOKS } from '../../characters/looks'
 import { Anchors } from '../../engine/Anchors'
 import { View3D, type RenderMode, type World3D } from '../../engine/View3D'
 import { ANCHORS as HOUSE_ANCHORS, House } from '../hub/house'
-import { Ask, justSaidYes, TRIP_CHOICES } from '../../trip/legs/Ask'
+import { Ask, justSaidYes, tripChoices } from '../../trip/legs/Ask'
 import { TripGuide, type TripGuideHandle } from '../../trip/legs/Guide'
 import { TRIP_HOUSE_ANCHORS, TripHouse, type HouseLeg, type Phase } from '../../trip/legs/house-plugin'
 import { addWallPhoto, newestByTrip, today, useWallPhotos } from '../../trip/wall-photos'
 import { Arrive, ARRIVE_ANCHORS } from './arrive'
 import { buildPizzaBox } from './box'
 import { wearHair } from './games/barber/mane'
-import { LoopFlat } from './LoopFlat'
 import { drawPhoto, PHOTO_IDS, type PhotoId } from './photo'
 import type { PizzaId } from './pizza/layout'
 import { MALL_TRIP } from './trip'
@@ -50,9 +49,10 @@ interface Props {
   replay: boolean
   /** The day pass is over the screen (between legs): the cards and the guide wait. */
   covered: boolean
-  /** Mommy's card: the mall (🛝🍕), the boat trip (🚤), not yet (✋). */
+  /** Mommy's card: the mall (🛝🍕), not yet (✋). */
   onMall(): void
-  onBoat(): void
+  /** Another trip on the card (its activity id). */
+  onTrip(id: string): void
   onNotYet(): void
   /** A leg is over: on to this section (the day pass covers the change). */
   onLeg(next: string): void
@@ -61,7 +61,7 @@ interface Props {
   onDone(): void
 }
 
-export function MallLoop({ section, socks, hair, pizza, photos, replay, covered, onMall, onBoat, onNotYet, onLeg, onSocks, onDone }: Props) {
+export function MallLoop({ section, socks, hair, pizza, photos, replay, covered, onMall, onTrip, onNotYet, onLeg, onSocks, onDone }: Props) {
   const world = WORLD_OF[section]
   const [mount, setMount] = useState(() => ({ world, section, key: 0 }))
   const [mode, setMode] = useState<RenderMode>('webgl')
@@ -154,42 +154,25 @@ export function MallLoop({ section, socks, hair, pizza, photos, replay, covered,
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <LoopFlat
-          section={section}
-          socks={socks}
-          covered={covered || fromHouse.current}
-          onMall={onMall}
-          onBoat={onBoat}
-          onNotYet={onNotYet}
-          onLeg={onLeg}
-          onSocks={onSocks}
-          onDone={() => {
-            setWallPhotos((list) => addWallPhoto(list, { trip: MALL_TRIP.id, src: drawPhoto(photoId), at: today() }))
-            onDone()
-          }}
-        />
-      ) : (
-        <View3D
-          key={mount.key}
-          name={`The mall day (${mount.world})`}
-          qaKey="__thaiMallQA"
-          worldRef={worldRef}
-          onMode={setMode}
-          make={make}
-          anchors={(input, els) => (
-            <>
-              <Anchors list={ANCHORS_OF[mount.world]} els={els} {...input} />
-              {/* After a while with nothing touched: a finger pressing where to touch. */}
-              <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-                <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                  👆
-                </motion.div>
-              </div>
-            </>
-          )}
-        />
-      )}
+      <View3D
+        key={mount.key}
+        name={`The mall day (${mount.world})`}
+        qaKey="__thaiMallQA"
+        worldRef={worldRef}
+        onMode={setMode}
+        make={make}
+        anchors={(input, els) => (
+          <>
+            <Anchors list={ANCHORS_OF[mount.world]} els={els} {...input} />
+            {/* After a while with nothing touched: a finger pressing where to touch. */}
+            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
+              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
+                👆
+              </motion.div>
+            </div>
+          </>
+        )}
+      />
       {mode === 'lost' && (
         <button
           onClick={() => {
@@ -217,7 +200,7 @@ export function MallLoop({ section, socks, hair, pizza, photos, replay, covered,
         )}
       </AnimatePresence>
       {mode === 'webgl' && <TripGuide ref={guideRef} hidden={covered || asking} />}
-      <Ask open={asking} trips={TRIP_CHOICES} onYes={(t) => (t === 'boat-trip' ? onBoat() : onMall())} onNotYet={onNotYet} />
+      <Ask open={asking} trips={tripChoices()} onYes={(t) => (t && t !== 'mall-trip' ? onTrip(t) : onMall())} onNotYet={onNotYet} />
       <AnimatePresence>
         {flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.6 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 40 }} />}
       </AnimatePresence>

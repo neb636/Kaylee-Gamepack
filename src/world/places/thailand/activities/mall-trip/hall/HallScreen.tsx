@@ -1,12 +1,11 @@
-// HarborLand's hall on screen: the 3D hall (hall.ts) with its tap targets, the 👆 after a while with nothing touched,
-// Mommy's "Pizza time?" card once Daddy's tummy rumbles (she says it), and the flat picture row without WebGL (Flat.tsx).
+// HarborLand's hall on screen: the 3D hall (hall.ts) with its tap targets, the 👆 after a while with nothing touched
+// and Mommy's "Pizza time?" card once Daddy's tummy rumbles (she says it).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
 import { HarborSign } from '../harborland/sign'
-import { HallFlat } from './Flat'
 import { Hall, HALL_ANCHORS, LABELS } from './hall'
 import { Hungry } from './Hungry'
 import type { DoorId, GameDoor } from './layout'
@@ -65,38 +64,34 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, o
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#2E2748', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <HallFlat done={done} onEnter={onEnter} />
-      ) : (
-        <View3D
-          key={key}
-          name="HarborLand"
-          qaKey="__thaiMallQA"
-          worldRef={worldRef}
-          onMode={setMode}
-          make={make}
-          anchors={(input, els) => (
-            <>
-              {/* The signs' words, laid over the 3D signs (hall.ts moves and sizes them every frame). */}
-              <div ref={labelRef} aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }}>
-                {LABELS.map((l) => (
-                  <div key={l.id} style={{ position: 'absolute', left: 0, top: 0, display: 'none', whiteSpace: 'nowrap', fontWeight: 700, lineHeight: 1, letterSpacing: '0.02em', color: LABEL_COLORS[l.id] ?? 'var(--lavender-dark)', textShadow: '0 2px 0 #fff, 0 0 6px rgba(255,255,255,.8)' }}>
-                    {l.text}
-                  </div>
-                ))}
-              </div>
-              <HarborSign ref={signRef} />
-              <Anchors list={HALL_ANCHORS} els={els} {...input} />
-              {/* After a while with nothing touched: a finger on a way in she hasn't been through. */}
-              <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-                <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                  👆
-                </motion.div>
-              </div>
-            </>
-          )}
-        />
-      )}
+      <View3D
+        key={key}
+        name="HarborLand"
+        qaKey="__thaiMallQA"
+        worldRef={worldRef}
+        onMode={setMode}
+        make={make}
+        anchors={(input, els) => (
+          <>
+            {/* The signs' words, laid over the 3D signs (hall.ts moves and sizes them every frame). */}
+            <div ref={labelRef} aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1 }}>
+              {LABELS.map((l) => (
+                <div key={l.id} style={{ position: 'absolute', left: 0, top: 0, display: 'none', whiteSpace: 'nowrap', fontWeight: 700, lineHeight: 1, letterSpacing: '0.02em', color: LABEL_COLORS[l.id] ?? 'var(--lavender-dark)', textShadow: '0 2px 0 #fff, 0 0 6px rgba(255,255,255,.8)' }}>
+                  {l.text}
+                </div>
+              ))}
+            </div>
+            <HarborSign ref={signRef} />
+            <Anchors list={HALL_ANCHORS} els={els} {...input} />
+            {/* After a while with nothing touched: a finger on a way in she hasn't been through. */}
+            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
+              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
+                👆
+              </motion.div>
+            </div>
+          </>
+        )}
+      />
       {mode === 'lost' && (
         <button
           onClick={() => {

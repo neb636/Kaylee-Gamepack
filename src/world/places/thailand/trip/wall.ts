@@ -21,12 +21,14 @@ import type { WallPhoto } from './wall-photos'
 export const WALL_SLOTS: Record<string, V3> = {
   'boat-trip': [DIM.left + 0.04, 2.3, -1.9],
   'mall-trip': [DIM.left + 0.04, 2.3, -0.92],
-  // Room for the next trips in a row above (the door is next).
+  // The next trips in a row above (the door is next): the Nan road trip over the first two.
+  'nan-trip': [DIM.left + 0.04, 3.05, -1.41],
 }
 /** What Mommy says when Kaylee taps a trip's photo on the wall. (The mall day's "Our mall day!" isn't recorded yet:
  *  its voice pass adds it here.) */
 export const WALL_LINES: Record<string, Line> = {
   'boat-trip': L.home.wall,
+  'nan-trip': L.nan.trip.wall,
 }
 /** The photo inside the frame (4:3, like the photos), and the frame around it. */
 const PW = 0.72

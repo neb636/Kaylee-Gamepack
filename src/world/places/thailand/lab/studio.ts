@@ -191,7 +191,7 @@ export class Studio implements World3D {
       k.place(0, 0, 0, 0)
       char = k
     } else if (entry.kind === 'member' && entry.look) {
-      char = new Member({ id: entry.id, name: entry.name, who: entry.who, color: entry.color, height: entry.look.height, spot: null, pitch: 300 }, bag, entry.look, entry.voice)
+      char = new Member({ id: entry.id, name: entry.name, who: entry.who, height: entry.look.height, spot: null, pitch: 300 }, bag, entry.look, entry.voice)
       char.place(0, 0, 0, 0)
     } else if (entry.critter) critter = buildCritter(entry.critter, bag)
     const root = char?.root ?? critter!.root

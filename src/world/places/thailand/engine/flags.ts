@@ -1,5 +1,4 @@
 // Dev and QA switches, read from the page query (./?debug=1#/world/...) or the hash query (#/world/...?debug=1):
-//   gl=off    draw the no-WebGL fallback (what a browser without WebGL2 sees)
 //   debug=1   tuning panel: camera, light bands, outlines, nav grid, frame time
 //   fps=N     frame-rate cap (0 = uncapped)
 export function flag(name: string): string | null {

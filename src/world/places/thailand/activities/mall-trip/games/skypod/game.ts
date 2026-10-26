@@ -1,7 +1,7 @@
 // The Sky Pod's rules (plan: planning/around-the-world/thailand/mall-trip.md, "8. The Sky Pod"), with no three.js and
-// no drawing: which pods are lit, the score, the pattern she copies, Daddy's race. The 3D wall (wall.ts) and the flat
-// version (Flat.tsx) both play it: they pass every slap in (`slap`), tell it when Daddy's hand lands (`daddySlap`),
-// and show what it says (GameView).
+// no drawing: which pods are lit, the score, the pattern she copies, Daddy's race. The 3D wall (wall.ts) plays it: it
+// passes every slap in (`slap`), tells it when Daddy's hand lands (`daddySlap`),
+// and shows what it says (GameView).
 //
 //   1. Pop the lights: a pod lights up (low ones first), she slaps it, the score climbs, the next one pops on
 //      somewhere else; from six, two at a time. Ten and the round is done (a star, the sticker).

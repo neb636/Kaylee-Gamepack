@@ -1,24 +1,31 @@
 // Home from the trip: her photos fan out at the bottom of the screen like a hand of cards, and she picks the one for
 // Agong's wall. The picked one lifts up and flies off into her hands (the house shows it there, in a pink frame); the
 // others slide away. Up to six: the places first (the village, the hong, the race, the Nail Island, Baan Chang's splash
-// and its sign), then her newest pose photos, Mommy's selfies last. Nothing to read.
+// and its sign), then her newest pose photos, Mommy's selfies last. Nothing to read. (The Nan road trip fans out its
+// own: the places she went, in the order she did them.)
 import { AnimatePresence, motion } from 'motion/react'
 import { useMemo, useState } from 'react'
 import { sfx } from '../../sfx'
-import type { AlbumPhoto } from './bay/Album'
 
-const MAX = 6
-const ORDER = { village: 0, hong: 1, race: 2, nail: 3, chang: 4, sign: 5, selfie: 6 }
-
-/** Which photos to fan out: one of each place first, then the newest others. */
-export function fanOf(photos: AlbumPhoto[]): AlbumPhoto[] {
-  const firsts = new Map<string, AlbumPhoto>()
-  for (const p of photos) if (p.kind !== 'selfie' && !firsts.has(p.kind)) firsts.set(p.kind, p)
-  const rest = [...photos].reverse().filter((p) => ![...firsts.values()].includes(p)).sort((a, b) => (a.kind === 'selfie' ? 1 : 0) - (b.kind === 'selfie' ? 1 : 0))
-  return [...[...firsts.values()].sort((a, b) => ORDER[a.kind] - ORDER[b.kind]), ...rest].slice(0, MAX)
+/** A photo to pick: the album's (bay/Album.tsx), or another trip's. */
+export interface FanPhoto {
+  n: number
+  kind: string
+  src: string
 }
 
-export function PhotoFan({ photos, open, onPick }: { photos: AlbumPhoto[]; open: boolean; onPick: (p: AlbumPhoto) => void }) {
+const MAX = 6
+const ORDER: Record<string, number> = { village: 0, hong: 1, race: 2, nail: 3, chang: 4, sign: 5, selfie: 6 }
+
+/** Which photos to fan out: one of each place first, then the newest others. */
+export function fanOf<P extends FanPhoto>(photos: P[]): P[] {
+  const firsts = new Map<string, P>()
+  for (const p of photos) if (p.kind !== 'selfie' && !firsts.has(p.kind)) firsts.set(p.kind, p)
+  const rest = [...photos].reverse().filter((p) => ![...firsts.values()].includes(p)).sort((a, b) => (a.kind === 'selfie' ? 1 : 0) - (b.kind === 'selfie' ? 1 : 0))
+  return [...[...firsts.values()].sort((a, b) => (ORDER[a.kind] ?? 0) - (ORDER[b.kind] ?? 0)), ...rest].slice(0, MAX)
+}
+
+export function PhotoFan<P extends FanPhoto>({ photos, open, onPick }: { photos: P[]; open: boolean; onPick: (p: P) => void }) {
   const fan = useMemo(() => fanOf(photos), [photos])
   const [picked, setPicked] = useState<number | null>(null)
   const n = fan.length

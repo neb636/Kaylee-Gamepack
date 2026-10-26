@@ -2,15 +2,18 @@
 // wheel is the horn, and it turns as the Pajero turns; it pulses when a car is coming round a blind bend), the 3 road's
 // big numbers as she counts the bends, the 👆 when she hasn't steered for a while, and at the end of the road its stop
 // (when she picked one on the Nan map, it opens by itself) or the end card: the stop, 🔁 this road again, 🗺️ back to
-// the map. The 3 road ends at the viewpoint (section `three`), where she draws the 3. Without WebGL: the flat picture
-// version (Flat.tsx).
+// the map. The 3 road ends at the viewpoint (section `three`), where she draws the 3; on the trip, Mommy takes the
+// family's photo with the 3 behind them and the end card offers ✈️🏠 home.
 import { AnimatePresence, motion } from 'motion/react'
-import { forwardRef, useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
+import { say } from '../../../../../../sdk'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
 import { driveAnchors, NanDrive, type DriveHud } from './mountain'
-import { DriveFlat } from './Flat'
+import { L } from '../../../lines'
+import { drawPhoto } from '../photo'
+import { Snapshot } from '../Snapshot'
 import { nanRoad, ROAD_IDS, type RoadId } from './roads'
 
 interface Props {
@@ -29,9 +32,12 @@ interface Props {
   onMap?: () => void
   /** The 3 road reached its viewpoint: drawing the 3 begins (section `three`). */
   onView?: () => void
+  /** On the trip: the 3 is drawn and Mommy took the photo (it's one to pick for Agong's wall), and ✈️🏠 goes home. */
+  onDrawn?: () => void
+  onHome?: () => void
 }
 
-export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onView }: Props) {
+export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onView, onDrawn, onHome }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [run, setRun] = useState(0)
@@ -49,6 +55,15 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
     else onStop?.(road, to)
   }, [going, hud.phase])
 
+  // The 3 drawn on the trip: Mommy's photo of them with the 3 behind.
+  const photo = view && hud.phase === 'end' && !!onHome
+  const threePhoto = useMemo(() => (photo ? drawPhoto('three') : ''), [photo])
+  useEffect(() => {
+    if (!photo) return
+    void say(L.nan.trip.three)
+    onDrawn?.()
+  }, [photo])
+
   const make = (renderer: WebGLRenderer) => {
     const w = new NanDrive(renderer, road, { onHud: setHud, onView: () => viewCb.current?.() }, view ? 'view' : 'road')
     w.setHintElement(hintRef.current)
@@ -65,29 +80,25 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#D5DCEA', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <DriveFlat key={`${road}:${run}`} road={road} onRoad={pick} onStop={onStop} onMap={onMap} />
-      ) : (
-        <View3D
-          key={`${road}:${run}:${key}`}
-          name="The mountain road"
-          qaKey="__thaiNanQA"
-          worldRef={worldRef}
-          onMode={setMode}
-          make={make}
-          anchors={(input, els) => (
-            <>
-              <Anchors list={driveAnchors(road)} els={els} {...input} />
-              {/* Not steering for a while: a finger on the road ahead. */}
-              <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-                <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 0.9, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                  👆
-                </motion.div>
-              </div>
-            </>
-          )}
-        />
-      )}
+      <View3D
+        key={`${road}:${run}:${key}`}
+        name="The mountain road"
+        qaKey="__thaiNanQA"
+        worldRef={worldRef}
+        onMode={setMode}
+        make={make}
+        anchors={(input, els) => (
+          <>
+            <Anchors list={driveAnchors(road)} els={els} {...input} />
+            {/* Not steering for a while: a finger on the road ahead. */}
+            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
+              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 0.9, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
+                👆
+              </motion.div>
+            </div>
+          </>
+        )}
+      />
       {mode === 'lost' && (
         <button
           onClick={() => {
@@ -101,14 +112,15 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
       )}
       {mode === 'webgl' && <Wheel ref={wheelRef} hidden={hud.phase === 'view' || hud.phase === 'end'} onHorn={() => worldRef.current?.honk()} />}
       <CountPop count={hud.count} />
-      <AnimatePresence>{hud.phase === 'end' && !going && <EndCard road={road} onRoad={pick} onStop={onStop} onMap={onMap} />}</AnimatePresence>
+      <AnimatePresence>{photo && mode === 'webgl' && <Snapshot key="three" src={threePhoto} />}</AnimatePresence>
+      <AnimatePresence>{hud.phase === 'end' && !going && <EndCard road={road} onRoad={pick} onStop={onStop} onMap={onMap} onHome={view ? onHome : undefined} />}</AnimatePresence>
     </div>
   )
 }
 
 /** The steering wheel in the corner: the whole wheel is the horn (beep beep!). mountain.ts turns it (--turn) and makes it
  *  pulse (data-pulse) when a car is coming round a blind bend. */
-export const Wheel = forwardRef<HTMLButtonElement, { hidden?: boolean; onHorn: () => void }>(function Wheel({ hidden, onHorn }, ref) {
+const Wheel = forwardRef<HTMLButtonElement, { hidden?: boolean; onHorn: () => void }>(function Wheel({ hidden, onHorn }, ref) {
   return (
     <>
       <button
@@ -198,7 +210,7 @@ const STOP_AT: Partial<Record<RoadId, Stop | Stop[]>> = {
 /** The end of the road: drive it again, or back to the map (without one, take another road), in big pictures, no
  *  reading. At the end of a road with a stop (the valley road's mushroom farm, the sky road's Stop Time Cafe and Bo
  *  Kluea's salt wells), its big pictures come first. */
-export function EndCard({ road, onRoad, onStop, onMap }: { road: RoadId; onRoad: (r: RoadId) => void; onStop?: (road: RoadId, stop?: string) => void; onMap?: () => void }) {
+function EndCard({ road, onRoad, onStop, onMap, onHome }: { road: RoadId; onRoad: (r: RoadId) => void; onStop?: (road: RoadId, stop?: string) => void; onMap?: () => void; onHome?: () => void }) {
   const size = 'clamp(92px, 15vmin, 128px)'
   const stops = onStop ? [STOP_AT[road] ?? []].flat() : []
   return (
@@ -231,6 +243,12 @@ export function EndCard({ road, onRoad, onStop, onMap }: { road: RoadId; onRoad:
       {onMap && (
         <motion.button aria-label="The Nan map" whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.07, 1] }} transition={{ repeat: Infinity, duration: 1.4 }} onClick={onMap} style={{ width: size, height: size, borderRadius: '50%', border: '6px solid #fff', background: 'var(--pink)', fontSize: 'clamp(42px, 7vmin, 60px)', boxShadow: 'var(--shadow)', padding: 0 }}>
           🗺️
+        </motion.button>
+      )}
+      {/* On the trip, from the 3: the plane home (the bigger pulse: it's the way on). */}
+      {onHome && (
+        <motion.button aria-label="Fly home" whileTap={{ scale: 0.88 }} animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1.1 }} onClick={onHome} style={{ minWidth: 'clamp(120px, 22vw, 170px)', height: size, borderRadius: 999, border: '6px solid #fff', background: 'var(--butter)', fontSize: 'clamp(40px, 7vmin, 56px)', boxShadow: '0 0 0 6px rgba(255,79,154,.45), var(--shadow)', padding: '0 20px' }}>
+          ✈️🏠
         </motion.button>
       )}
     </motion.div>

@@ -1,13 +1,11 @@
 // The Barber Salon's screen: the 3D salon (salon.ts) and its tap targets, the kid's picture card in round 3, Mommy's
-// camera flash, the 👆 after a while with nothing touched, and the flat picture version without WebGL (Flat.tsx).
-// When all three kids are done, a big 🛝 takes her back to the hall (the playground).
+// camera flash and the 👆 after a while with nothing touched. When all three kids are done, a big 🛝 takes her back to the hall (the playground).
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../../engine/View3D'
 import { CardPicture } from './Card'
-import { BarberFlat } from './Flat'
 import type { Card, Round } from './layout'
 import { BARBER_ANCHORS, Salon } from './salon'
 import { mallVoice } from '../../voice'
@@ -59,46 +57,42 @@ export function Barber({ round, hair, onRound, onHair, onRevealed, onPlay }: Pro
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#DCEBFF', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <BarberFlat round={round} hair={hair} onRound={onRound} onHair={onHair} onRevealed={onRevealed} onAllDone={() => setAllDone(true)} />
-      ) : (
-        <View3D
-          key={key}
-          name="The Barber Salon"
-          qaKey="__thaiMallQA"
-          worldRef={worldRef}
-          onMode={setMode}
-          make={make}
-          anchors={(input, els) => (
-            <>
-              <Anchors list={BARBER_ANCHORS} els={els} {...input} />
-              {/* The kid's picture card: the hair they'd like. */}
-              <div ref={cardRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 15000 }}>
-                <AnimatePresence mode="popLayout">
-                  {card && (
-                    <motion.div
-                      key={card}
-                      initial={{ scale: 0, rotate: -20 }}
-                      animate={{ scale: 1, rotate: [-4, 4, -4] }}
-                      exit={{ scale: 0 }}
-                      transition={{ rotate: { repeat: Infinity, duration: 2.2 }, scale: { type: 'spring', stiffness: 400, damping: 14 } }}
-                      style={{ translate: '0 -100%', padding: 6, borderRadius: 18, background: '#fff', border: '4px solid var(--lavender-dark)', boxShadow: '0 4px 10px rgba(43,35,48,.18)', width: 'clamp(70px, 12vmin, 104px)', height: 'clamp(70px, 12vmin, 104px)', display: 'grid', placeItems: 'center' }}
-                    >
-                      <CardPicture card={card} size="100%" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-              {/* After a while with nothing touched: a finger on a tool she hasn't tried, or on the mirror. */}
-              <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-                <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                  👆
-                </motion.div>
-              </div>
-            </>
-          )}
-        />
-      )}
+      <View3D
+        key={key}
+        name="The Barber Salon"
+        qaKey="__thaiMallQA"
+        worldRef={worldRef}
+        onMode={setMode}
+        make={make}
+        anchors={(input, els) => (
+          <>
+            <Anchors list={BARBER_ANCHORS} els={els} {...input} />
+            {/* The kid's picture card: the hair they'd like. */}
+            <div ref={cardRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 15000 }}>
+              <AnimatePresence mode="popLayout">
+                {card && (
+                  <motion.div
+                    key={card}
+                    initial={{ scale: 0, rotate: -20 }}
+                    animate={{ scale: 1, rotate: [-4, 4, -4] }}
+                    exit={{ scale: 0 }}
+                    transition={{ rotate: { repeat: Infinity, duration: 2.2 }, scale: { type: 'spring', stiffness: 400, damping: 14 } }}
+                    style={{ translate: '0 -100%', padding: 6, borderRadius: 18, background: '#fff', border: '4px solid var(--lavender-dark)', boxShadow: '0 4px 10px rgba(43,35,48,.18)', width: 'clamp(70px, 12vmin, 104px)', height: 'clamp(70px, 12vmin, 104px)', display: 'grid', placeItems: 'center' }}
+                  >
+                    <CardPicture card={card} size="100%" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            {/* After a while with nothing touched: a finger on a tool she hasn't tried, or on the mirror. */}
+            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
+              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
+                👆
+              </motion.div>
+            </div>
+          </>
+        )}
+      />
       {mode === 'lost' && (
         <button
           onClick={() => {

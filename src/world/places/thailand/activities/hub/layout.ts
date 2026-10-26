@@ -1,5 +1,5 @@
 // Agong's shophouse in meters: one source of truth for the 3D build, where Kaylee can walk, what she can tap and where
-// she goes to use it. Pure data (no three.js): the flat fallback and tests read it too.
+// she goes to use it. Pure data (no three.js): tests read it too.
 //
 // Axes: +x is right as seen from the street, +y up, +z toward the street. The house front (the shutter) is at z = 0 and
 // the back wall at z = -20.898. Ground floor y 0..3.6, upstairs y 3.6..6.6.

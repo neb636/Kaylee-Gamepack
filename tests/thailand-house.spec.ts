@@ -1,8 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// Agong's house, Thailand's 3D home base (src/world/places/thailand/activities/hub/): the real WebGL path, the flat
-// house a browser without WebGL gets, floor reminders, and no leftover GPU memory after going back
-// and forth. Read-only state comes from window.__thaiHouseQA (no jump hooks).
+// Agong's house, Thailand's 3D home base (src/world/places/thailand/activities/hub/): it renders in WebGL, floor
+// reminders, and no leftover GPU memory after going back and forth. Read-only state comes from window.__thaiHouseQA (no jump hooks).
 
 type HouseQA = { mode: string; spot?: string; floor?: number; pose?: string; using?: string | null; memory?: { geometries: number; textures: number } }
 const qa = (page: Page) => page.evaluate(() => window.__thaiHouseQA?.() as HouseQA | undefined)
@@ -27,26 +26,6 @@ test('Agong\'s house renders in 3D', async ({ page }) => {
   await open(page, 'hub/downstairs')
   await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
   await expect(page.locator('[data-anchor="family:agong"]')).toBeVisible()
-  expect(errors).toEqual([])
-})
-
-test('without WebGL, the flat house still works', async ({ page }) => {
-  const errors = trackErrors(page)
-  await page.addInitScript(() => {
-    const get = HTMLCanvasElement.prototype.getContext
-    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, type: string, ...rest: unknown[]) {
-      return /webgl/i.test(type) ? null : (get as (...a: unknown[]) => RenderingContext | null).call(this, type, ...rest)
-    } as typeof get
-  })
-  await open(page, 'hub/street')
-  await expect(page.getByRole('button', { name: 'Upstairs' })).toBeVisible()
-  expect(await page.evaluate(() => window.__kayleeSectionLog?.[0]?.id)).toBe('street')
-  await page.getByRole('button', { name: 'Upstairs' }).click()
-  await expect.poll(() => page.evaluate(() => window.__kayleeSection?.id)).toBe('upstairs')
-  await page.getByRole('button', { name: 'Mommy' }).click()
-  // ?gl=off shows the same flat house (for checking it on a real device).
-  await open(page, 'hub/downstairs', '?gl=off')
-  await expect(page.getByRole('button', { name: 'Table' })).toBeVisible()
   expect(errors).toEqual([])
 })
 
@@ -77,9 +56,10 @@ test('going to the party and back leaves no GPU memory behind', async ({ page })
 
 
 test('@behavior floor reminders slow down after two hints and stop after five per visit', async ({ page }) => {
+  test.setTimeout(180_000)
   await page.clock.install()
-  await open(page, 'hub/downstairs', '?gl=off')
-  await expect(page.getByRole('button', { name: 'Upstairs', exact: true })).toBeVisible()
+  await open(page, 'hub/downstairs')
+  await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
   const hints = () => page.evaluate(() => (window.__kayleeSpeech ?? []).filter((s) => s.text === 'Tap the stairs to go up to your room!').length)
   await page.clock.fastForward(13_000)
   expect(await hints()).toBe(1)
@@ -93,11 +73,20 @@ test('@behavior floor reminders slow down after two hints and stop after five pe
   expect(await hints()).toBe(4)
   await page.clock.fastForward(60_000)
   expect(await hints()).toBe(5)
-  await page.getByRole('button', { name: 'Table', exact: true }).click()
+  await page.locator('[data-anchor="table"]').click({ force: true })
   await page.clock.fastForward(180_000)
   expect(await hints()).toBe(5)
-  await page.getByRole('button', { name: 'Upstairs', exact: true }).click()
-  await page.getByRole('button', { name: 'Downstairs', exact: true }).click()
+  // Up the stairs and back down: a new visit downstairs. (runFor plays every frame of the walk.)
+  await page.locator('[data-anchor="stairs-up"]').click({ force: true })
+  await page.clock.runFor(8_000)
+  await expect.poll(field(page, 'floor')).toBe(1)
+  // (Upstairs Mommy asks about a trip: not yet, and the card goes.)
+  await page.clock.runFor(5_000)
+  await page.getByRole('button', { name: 'Not yet' }).click({ force: true })
+  await page.clock.runFor(2_000)
+  await page.locator('[data-anchor="stairs-down"]').click({ force: true })
+  await page.clock.runFor(8_000)
+  await expect.poll(field(page, 'floor')).toBe(0)
   await page.clock.fastForward(13_000)
   expect(await hints()).toBe(6)
 })

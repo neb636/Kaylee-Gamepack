@@ -1,4 +1,4 @@
-// The drum's beat in the Muay Thai game: a clock the world (ring.ts) and the flat version (Flat.tsx) both run. The
+// The drum's beat in the Muay Thai game: a clock the world (ring.ts) runs. The
 // coach's drum booms on each beat and a little cymbal (the ching) ticks halfway between. A punch is "on the beat" when
 // her finger goes down a little before the beat or just after it: a generous window for a five-year-old, and it grows
 // when she's off a few times in a row. Pure (no three.js, no sound).

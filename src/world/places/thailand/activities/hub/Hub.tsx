@@ -1,5 +1,5 @@
 // Thailand's home base: Agong's house. Kaylee arrives by tuk-tuk, then walks around the street, downstairs and her
-// room upstairs (deep-linkable spots, sections.ts). The 3D house is HouseView; without WebGL it's the flat house.
+// room upstairs (deep-linkable spots, sections.ts). The 3D house is HouseView.
 // Sparkle (Guide) says the few things there are to say; the family say hello themselves.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -12,7 +12,6 @@ import { Ask, saidYes, TRIP_CHOICES, type Asker } from '../../trip/legs/Ask'
 import { WallPlugin, WALL_LINES, WALL_SLOTS, wallAnchorId } from '../../trip/wall'
 import { newestByTrip, useWallPhotos } from '../../trip/wall-photos'
 import { Debug } from './Debug'
-import { Flat } from './Flat'
 import { Guide, type GuideHandle } from './Guide'
 import type { House, Spot, Start } from './house'
 import { HouseView, type RenderMode } from './HouseView'
@@ -67,12 +66,6 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     guide.current?.speak(L.house.arrive)
     guide.current?.speak(L.house.door, true)
   }
-  // The flat house has no tuk-tuk ride: the arrival is a short card.
-  useEffect(() => {
-    if (mode !== 'flat' || !arriving) return
-    const t = setTimeout(arrived, 2500)
-    return () => clearTimeout(t)
-  }, [mode, arriving])
 
   const onSpot = (s: Spot, at?: string) => {
     lastSpot = s
@@ -107,11 +100,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <Flat spot={spot} onSpot={onSpot} photo={photo} />
-      ) : (
-        <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} plugin={onWall.size ? () => new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos') : undefined} extraAnchors={wallAnchors} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet }} />
-      )}
+      <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} plugin={onWall.size ? () => new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos') : undefined} extraAnchors={wallAnchors} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet }} />
       {mode === 'lost' && (
         <button
           onClick={() => {
@@ -131,7 +120,6 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           onClick={() => {
             sounds.pop()
             houseRef.current?.skipArrival()
-            if (mode === 'flat') arrived()
           }}
           style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 18px)', translate: '-50% 0', minHeight: 64, padding: '0 28px', borderRadius: 999, border: '4px solid #fff', background: 'var(--lavender)', color: 'var(--ink)', fontSize: 22, fontWeight: 700, boxShadow: 'var(--shadow)', zIndex: 20 }}
         >

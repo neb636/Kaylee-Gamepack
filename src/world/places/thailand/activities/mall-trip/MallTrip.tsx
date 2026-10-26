@@ -83,13 +83,13 @@ interface Progress {
 interface Props {
   /** ✋ Not yet on Mommy's card. */
   onExit?: () => void
-  /** 🚤 on Mommy's card: the boat trip instead. */
-  onBoat?: () => void
+  /** Another trip on Mommy's card (🚤 the boat trip): that one instead. */
+  onTrip?: (id: string) => void
   /** Home, the photo on the wall: the stamp. */
   onDone?: () => void
 }
 
-export function MallTrip({ onExit, onBoat, onDone }: Props = {}) {
+export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
   const { start, param, enter } = useSections(MALL_SECTIONS)
   // Old links into the first climbing toy (PR #120's play and dragon) land in the Big Frame.
   const [legacy] = useState(() => (start ? null : (/\/mall-trip\/(play|dragon)(?:[?/]|$)/.exec(location.hash)?.[1] ?? null)))
@@ -261,7 +261,7 @@ export function MallTrip({ onExit, onBoat, onDone }: Props = {}) {
           replay={replay}
           covered={!!pass}
           onMall={yes}
-          onBoat={() => onBoat?.()}
+          onTrip={(id) => onTrip?.(id)}
           onNotYet={() => onExit?.()}
           onLeg={(next) => go(next as MallSection)}
           onSocks={setSocks}
@@ -304,7 +304,7 @@ export function MallTrip({ onExit, onBoat, onDone }: Props = {}) {
       ) : pizzaTime ? (
         <Pizza section={section} pizza={pizza} shared={shared} hair={hair} onPizza={setPizza} onServed={() => setSection('share')} onShared={setShared} onAllDone={allShared} />
       ) : section === 'frame' ? (
-        <FrameScreen at={at} socks={socks} hair={hair} rode={games.includes('frame')} onAt={setAt} onRide={() => sticker('frame')} />
+        <FrameScreen at={at} socks={socks} hair={hair} onAt={setAt} onRide={() => sticker('frame')} />
       ) : null}
       {!inHall && !pizzaTime && !onLoop && (
         <motion.button

@@ -141,6 +141,6 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
   targets all read it.
 - The tap targets are DOM buttons placed over the 3D things every frame (`Anchors.tsx`), at least 64 px. They give
   VoiceOver, tap-around and QA real buttons to find.
-- `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?gl=off` the flat house, and `?fps=N`
-  overrides the frame-rate cap.
+- `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), and `?fps=N` overrides the frame-rate cap.
+  Every screen is WebGL2 only: there are no flat fallbacks.
 - `window.__thaiHouseQA()` is read-only state for tests. There are no jump hooks: tests open section links.

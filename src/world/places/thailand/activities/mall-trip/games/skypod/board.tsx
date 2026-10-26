@@ -1,5 +1,4 @@
-// The Sky Pod's scoreboard numbers (HTML, never in a picture): shared by the 3D wall's board (SkyPod.tsx lays it over
-// the dark screen) and the flat version.
+// The Sky Pod's scoreboard numbers (HTML, never in a picture): SkyPod.tsx lays it over the 3D board's dark screen.
 import { motion } from 'motion/react'
 import { BLUE, PINK } from './layout'
 
