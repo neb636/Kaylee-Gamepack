@@ -212,6 +212,14 @@ what's next; PR bodies end with the next prompt.
   changes), freeze, orbit by hand, guides (the fit box, the top bar, tap-target sizes). When Dad sends a lab link or a
   "Copy for agent" note, bake it into that world's `shot()` for that round and screen shape (tall or wide) and its
   `rig.fov`. Leave the other branches alone unless he says otherwise, and check the targets stay at 64 px or more.
+- **The feel lab:** `?feel=1` on any section link (2D or 3D, `lab/feel/`) puts sliders over the real, playable game
+  for every number the scene declares with `knobs()` (`src/world/kit/knobs.ts`), and a live graph of whatever it
+  `watch()`es (her finger against what the car does). Playwright can check that a mechanic *works*; only Dad's finger
+  can say it *feels* right, and we got steering wrong twice in a row by guessing. So whenever a core verb has numbers
+  that decide its feel (steering, dragging, throwing, a hop, a swing, smoothing, dead zones), declare them as knobs
+  in the greybox (the code's `value`s are the defaults; read them every frame, never copy them into a const), watch
+  the input and the result, and put a `?feel=1` link in the PR. When Dad sends a "Copy for agent" note, bake the
+  changed numbers into the knobs' `value`s and leave the knobs in.
 - **Gotchas:** never name a shader variable `patch` or `sample` (reserved in WebGL2; the shader silently fails). Dispose
   what you create (`engine/dispose.ts`). Keep three.js out of `meta.ts` and `sections.ts`.
 - **Dad decides the family:** who each person is, which animal, who comes on a trip. Ask, don't invent family facts.
@@ -224,7 +232,7 @@ to poke, touch count). New plans are **plan pages** (`.agents/skills/plan-page/S
 skims long Markdown, so a plan is an HTML page drawn from JSON (read one with `node scripts/plan.mjs md <file>`). Then build in gates, and stop at each one for Dad:
 1. **Greybox toy:** only the core verb, with placeholder shapes (in 3D: simple shapes already in the final toon look),
    no generated art, no voices, on the PR preview. Dad plays it on the iPad. If it isn't fun yet, change the toy, not
-   the decoration.
+   the decoration. Its feel numbers are knobs, with a `?feel=1` link in the PR (see "The feel lab").
 2. **Art and characters**, then 3. **the full loop** (story, voices, payoff) and QA.
 
 One activity per PR (the finale is its own PR); a big activity (a trip, a hall of mini games) gets a plan PR and one

@@ -13,6 +13,7 @@
 // #/world/<place>/hub/<section> links (PlaceFrame still shows the hub there), e.g. the rooms of Thailand's house.
 import { createContext, createElement, useCallback, useContext, useMemo, type ReactNode } from 'react'
 import { worldLink } from '../../router'
+import { isFeelParam } from './knobs'
 
 /** The activity id of a country's hub sections (`hub`, `party` and `theater` are never real activity ids). */
 export const HUB = 'hub'
@@ -50,9 +51,9 @@ export function defineSections<const P extends string, const S extends string>(
 }
 
 /** Switches that stay in the address bar while she plays: ?debug=1, ?fps=N, the camera lab's ?cam=1 with its cam.*
- *  settings (engine/flags.ts, places/thailand/lab/camera/), and Thailand's ?look= (Kaylee's look from her wardrobe,
+ *  settings (engine/flags.ts, places/thailand/lab/camera/), the feel lab's ?feel=1 with its feel.* knobs (kit/knobs.ts), and Thailand's ?look= (Kaylee's look from her wardrobe,
  *  places/thailand/characters/style.ts), so a link opens every scene in that look. */
-const sticky = (key: string) => key === 'debug' || key === 'fps' || key === 'cam' || key.startsWith('cam.') || key === 'look'
+const sticky = (key: string) => key === 'debug' || key === 'fps' || key === 'cam' || key.startsWith('cam.') || isFeelParam(key) || key === 'look'
 
 /** Changes a sticky param that's already in the address bar (the wardrobe keeps `look` in step with what she wears);
  *  does nothing if the link doesn't have it. */

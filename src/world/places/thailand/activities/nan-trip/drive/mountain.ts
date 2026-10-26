@@ -33,6 +33,7 @@
 // and turn, the hint finger and the tap targets are written here every frame.
 import { Color, Fog, Group, Scene, Vector3, type WebGLRenderer } from 'three'
 import { clamp, sounds, speakingVoice, type Line } from '../../../../../../sdk'
+import { knobs, watch } from '../../../../../kit/knobs'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
@@ -75,24 +76,31 @@ export interface DriveEvents {
 export type DriveStart = 'road' | 'view'
 
 /** The heavy, bouncy Pajero, leaning a lot. 60% quicker than it first was (top 9.5, accel 4, turn 1.15): the turn rate
- *  rises with it so it still holds the same line round the hairpins. */
+ *  rises with it so it still holds the same line round the hairpins. (Its top speed, turn and grip are `STEER`'s.) */
 const ZOOM = 1.6
 const PAJERO_FEEL: Feel = { top: 9.5 * ZOOM, boost: 1.2, accel: 4 * ZOOM, coast: 0.6, turn: 1.15 * ZOOM, grip: 7, near: 2, far: 7, dead: 0.02, lean: 0.12 }
-/** The steering wheel (sled style): how far across the road pushing it all the way slides it (m/s), the middle that
- *  counts as straight (share of the wheel), how gently a small push steers (a curve: 1 = straight line, higher = a
- *  small push barely moves it), how long a quick flick of the finger takes to count in full (s: jitters and
- *  back-and-forth twitches average out), and how quickly Mommy eases it back into her lane after she lets go (s).
- *  Dad found 7.5 m/s with no smoothing far too twitchy on a phone and a trackpad (2026-10-26). */
-const SLIDE = 4.2
-const STICK_DEAD = 0.12
-const STICK_CURVE = 1.6
-const STICK_EASE = 0.3
-/** A quick, hard flick of the wheel (its push changing this fast, per s, with the push at least this far over): the
- *  tyres squeal, a puff of smoke off the back wheels, and the body rocks. No more than one squeal in this long (s). */
-const SCREECH_FLICK = 5
+/** The steering's feel, live in the feel lab (?feel=1 on the drive's link). The wheel is sled style: a push slides her
+ *  across the road for as long as she holds it. Dad found 7.5 m/s with no smoothing far too twitchy on a phone and a
+ *  trackpad, then 4.2 m/s with 0.3 s smoothing too sluggish (2026-10-26): these sit between, for him to tune. */
+const STEER = knobs('steer', 'Steering', 'src/world/places/thailand/activities/nan-trip/drive/mountain.ts', {
+  slide: { value: 5.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides the car across the road' },
+  reach: { value: 1, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)' },
+  dead: { value: 0.12, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
+  curve: { value: 1.3, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
+  ease: { value: 0.15, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
+  aim: { value: 10, min: 4, max: 24, step: 0.5, label: 'Aim ahead', unit: 'm', note: 'the nearest point it steers toward: closer = sharper, but it swings back and forth' },
+  pull: { value: 1.2, min: 0, max: 4, step: 0.1, label: 'Aim closer when far off', note: 'per meter she is from where she steers: a full push swerves more' },
+  turn: { value: 1.15 * ZOOM, min: 0.5, max: 4, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast the Pajero can swing its nose' },
+  grip: { value: 7, min: 1, max: 15, step: 0.5, label: 'Grip', note: 'how quickly a sideways slide dies out (low = drifty)' },
+  top: { value: 9.5 * ZOOM, min: 5, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Mommy\'s foot on the straights' },
+  back: { value: 1.4, min: 0.3, max: 4, step: 0.1, label: 'Back to her lane', unit: 's', note: 'how slowly Mommy eases back after she lets go' },
+  camera: { value: 0.3, min: 0, max: 1, step: 0.05, label: 'Camera follows the nose', note: '0 = the camera looks down the road; 1 = it turns with the car' },
+  screech: { value: 5, min: 2, max: 15, step: 0.5, label: 'Squeal at a flick of', unit: '/s', note: 'how fast a yank must be to squeal the tyres' },
+})
+/** A quick, hard flick of the wheel (faster than `STEER.screech`, with the push at least this far over): the tyres
+ *  squeal, a puff of smoke off the back wheels, and the body rocks. No more than one squeal in this long (s). */
 const SCREECH_PUSH = 0.45
 const SCREECH_COOL = 0.7
-const BACK_S = 1.4
 /** How far past the edge of the road she can bump along the grass (m; the trees start a little further out), and how
  *  much slower it goes there. */
 const GRASS = 4.6
@@ -174,7 +182,7 @@ export class NanDrive implements World3D {
   private world: RoadScene
   private traffic: Traffic
   private car: Pajero
-  private d = new Driver(PAJERO_FEEL)
+  private d = new Driver({ ...PAJERO_FEEL })
   private mirrors: Mirror[] = []
   private landmark: Group
   private falls: Group | null = null
@@ -208,6 +216,7 @@ export class NanDrive implements World3D {
   private steerLat = LANE_LAT
   /** The wheel's push, -1..1 across the road (+ toward +lat), for QA. */
   private stick = 0
+  private unwatch: () => void
   /** The push that steers: past the dead middle, curved and smoothed (-1..1). */
   private steerK = 0
   /** How fast her push is changing (per s, smoothed), and when the tyres last squealed. */
@@ -416,6 +425,15 @@ export class NanDrive implements World3D {
     this.rig.lag = 0.5
     this.rig.setShot(this.shot(), true)
     this.emitHud()
+    // The feel lab's graph: her push, the steer it makes, where across the road she's steering to and where the car is.
+    const across = half + GRASS
+    this.unwatch = watch('steer', () => ({
+      'her push': [this.stick, 1],
+      steer: [this.steerK, 1],
+      'steering to (m)': [this.steerLat, across],
+      'the car (m)': [this.loc.lat, across],
+      'nose turning': [this.d.yawRate, 2],
+    }))
   }
 
   // ---------------------------------------------------------------- input
@@ -577,7 +595,7 @@ export class NanDrive implements World3D {
 
     // ---- The camera: behind, looking ahead along the road (higher on hairpins) ----
     const head = Math.atan2(this.r.road.sampleAt(this.loc.s + 8).tx, this.r.road.sampleAt(this.loc.s + 8).tz)
-    const want = this.phase === 'drive' ? head + wrap(this.d.heading - head) * 0.3 : this.d.heading
+    const want = this.phase === 'drive' ? head + wrap(this.d.heading - head) * STEER.camera : this.d.heading
     this.camHeading += wrap(want - this.camHeading) * (1 - Math.exp(-dt / 0.5))
     this.rig.setShot(this.shot())
     this.rig.update(dt)
@@ -603,6 +621,9 @@ export class NanDrive implements World3D {
     const s = this.loc.s
     let ds = 10 + Math.abs(d.speed) * 0.9
     const f = this.finger
+    d.feel.top = STEER.top
+    d.feel.turn = STEER.turn
+    d.feel.grip = STEER.grip
     // Dropping back onto the road: it waits till it lands.
     if (this.drop > 0) return d.stop()
     if (this.phase === 'drive' && f?.steering) {
@@ -610,11 +631,11 @@ export class NanDrive implements World3D {
       const was = this.stick
       this.stick = this.stickAcross(f)
       this.screech(was, dt)
-      const u = Math.max(0, (Math.abs(this.stick) - STICK_DEAD) / (1 - STICK_DEAD))
-      this.steerK += (Math.sign(this.stick) * u ** STICK_CURVE - this.steerK) * (1 - Math.exp(-dt / STICK_EASE))
+      const u = Math.max(0, (Math.abs(this.stick) - STEER.dead) / (1 - STEER.dead))
+      this.steerK += (Math.sign(this.stick) * u ** STEER.curve - this.steerK) * (1 - Math.exp(-dt / STEER.ease))
       const k = this.steerK
       // (Past the edge is allowed: onto the grass, or over the rail.)
-      this.steerLat = clamp(this.steerLat + k * SLIDE * dt, -(half + GRASS + 3), half + GRASS + 3)
+      this.steerLat = clamp(this.steerLat + k * STEER.slide * dt, -(half + GRASS + 3), half + GRASS + 3)
       if (Math.abs(k) > 0.05) {
         this.counts.steered += dt
         this.lastSteer = this.time
@@ -623,12 +644,12 @@ export class NanDrive implements World3D {
     } else {
       // Let go: Mommy eases it back into the left lane.
       this.steerK = 0
-      this.steerLat += (LANE_LAT - this.steerLat) * (1 - Math.exp(-dt / BACK_S))
+      this.steerLat += (LANE_LAT - this.steerLat) * (1 - Math.exp(-dt / STEER.back))
     }
     let lat = this.steerLat
     // Steering hard (far from where the car is now): it aims a little closer ahead, so it gets there, but never so
     // close that the nose swings round and has to swing back.
-    ds = Math.max(13, ds - Math.abs(lat - this.loc.lat) * 1.2)
+    ds = Math.max(STEER.aim, ds - Math.abs(lat - this.loc.lat) * STEER.pull)
     // Keep left: someone coming the other way and she's over the middle: Mommy eases her back toward her lane.
     const her = this.her()
     const oncoming = this.traffic.movers.some((m) => m.state === 'go' && m.s - s > -2 && m.s - s < 34)
@@ -828,11 +849,11 @@ export class NanDrive implements World3D {
   private screech(was: number, dt: number) {
     const rate = (this.stick - was) / Math.max(dt, 1 / 120)
     this.flick += (rate - this.flick) * (1 - Math.exp(-dt / 0.06))
-    if (Math.abs(this.flick) < SCREECH_FLICK || Math.abs(this.stick) < SCREECH_PUSH || this.d.speed < 3) return
+    if (Math.abs(this.flick) < STEER.screech || Math.abs(this.stick) < SCREECH_PUSH || this.d.speed < 3) return
     if (this.time - this.screechT < SCREECH_COOL) return
     this.screechT = this.time
     this.counts.screeches++
-    sfx.screech(clamp((Math.abs(this.flick) - SCREECH_FLICK) / 8, 0, 1))
+    sfx.screech(clamp((Math.abs(this.flick) - STEER.screech) / 8, 0, 1))
     this.roll.v -= Math.sign(this.flick) * 1.2
     const c = this.car.root.position
     const fx = Math.sin(this.d.heading)
@@ -1346,7 +1367,7 @@ export class NanDrive implements World3D {
 
   /** The steering wheel's radius on screen (px): a good thumb's reach on an iPad, smaller on a phone. */
   private get stickR() {
-    return clamp(Math.min(this.w, this.h) * 0.12, 56, 92)
+    return clamp(Math.min(this.w, this.h) * 0.12, 56, 92) * STEER.reach
   }
 
   /** How far the wheel is pushed across the road (-1..1, + toward +lat): her push, read along the way the road
@@ -1511,6 +1532,7 @@ export class NanDrive implements World3D {
   }
 
   dispose() {
+    this.unwatch()
     this.scene.clear()
     this.bag.dispose()
   }
