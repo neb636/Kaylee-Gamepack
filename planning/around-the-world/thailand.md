@@ -46,6 +46,10 @@ into the same rig: `characters/model.ts`, the recipe in `docs/3d-characters.md`)
 every trip, the races and the mini games. The code-built one stays in the lab as `kaylee-code` to compare. Next: the
 rest of the family the same way, one at a time.
 
+**Her own look (planned 2026-10-26).** Kaylee dresses her unicorn at a wardrobe in her room, like the Roblox avatar
+maker she loves, and the look is saved and worn everywhere in Thailand; a game's costume (the chef's hat, the vet's cap)
+goes on top for that game only. Plan, with every clash and its fix: `thailand/wardrobe.html`.
+
 Open questions for Dad: Does Sparkle keep guiding here (2D, in the prompt bubble as everywhere
 else), or does a family member (Mom, Agong) give the instructions? What is each person like (for their voices)?
 
