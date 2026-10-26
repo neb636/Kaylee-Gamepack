@@ -1784,11 +1784,11 @@ export class TripHouse implements HousePlugin {
     }
     if (ph === 'flight' && this.flight) return this.flight.shot(tall)
     if (ph === 'arrive' || ph === 'pick' || ph === 'give' || ph === 'pizza' || (ph === 'hang' && this.held === 'agong' && !this.stroll)) {
-      // The sidewalk from a little above: the van pulling up, the family coming out; while she picks, everyone a bit
+      // The sidewalk from just above eye level: the van pulling up, the family coming out; while she picks, everyone a bit
       // higher on the screen (her photos fan out below them).
       const pick = ph === 'pick'
-      if (tall) return { center: new Vector3(pick ? 0.6 : 1.6, pick ? 0.6 : 1.4, 2.0), half: new Vector3(3.4, 1.3, 2.0), yaw: 6, pitch: 26, minDist: 5 }
-      return { center: new Vector3(pick ? 0.6 : 2.0, pick ? 0.3 : 1.2, 2.2), half: new Vector3(pick ? 4.2 : 5.6, 1.3, 2.0), yaw: 6, pitch: 26, minDist: 5 }
+      if (tall) return { center: new Vector3(pick ? 0.6 : 1.6, pick ? 0.6 : 1.4, 2.0), half: new Vector3(3.4, 1.3, 2.0), yaw: 6, pitch: 9, minDist: 5 }
+      return { center: new Vector3(pick ? 0.6 : 2.0, pick ? 0.3 : 1.2, 2.2), half: new Vector3(pick ? 4.2 : 5.6, 1.3, 2.0), yaw: 6, pitch: 9, minDist: 5 }
     }
     if (ph === 'hang' || ph === 'gather' || ph === 'home') {
       // Inside: the left wall with Agong's old photos and her new one, and everyone gathered round.
@@ -1797,13 +1797,13 @@ export class TripHouse implements HousePlugin {
       return { center: new Vector3(all ? -0.9 : -1.2, 1.35, -1.5), half: new Vector3(all ? 2.7 : 2.4, 1.25, 1.7), yaw: 38, pitch: 18, minDist: 3, maxDist: 12 }
     }
     if (ph === 'goodbye' || ph === 'boarding' || ph === 'gone') {
-      // A little from above: the family on the sidewalk, and once it's here the van parked beside them (its door at
+      // From just above eye level: the family on the sidewalk, and once it's here the van parked beside them (its door at
       // their end, so they can all hop in).
       const van = this.carT >= 0.6 || ph !== 'goodbye'
       // (The whole family at the shutter: wide enough for all of them and the car.)
-      if (tall && this.trip.goodbye === 'family') return { center: new Vector3(1.9, 1.6, 2.6), half: new Vector3(4.9, 1.3, 2.3), yaw: 6, pitch: 30, minDist: 5 }
-      if (tall) return { center: new Vector3(van ? 3.0 : 1.0, 1.6, 2.6), half: new Vector3(3.4, 1.3, 2.3), yaw: 6, pitch: 30, minDist: 5 }
-      return { center: new Vector3(van ? 2.0 : 0.9, 1.2, 2.4), half: new Vector3(van ? 5.6 : 4.9, 1.2, 2.3), yaw: 6, pitch: 30, minDist: 5 }
+      if (tall && this.trip.goodbye === 'family') return { center: new Vector3(1.9, 1.6, 2.6), half: new Vector3(4.9, 1.3, 2.3), yaw: 6, pitch: 13, minDist: 5 }
+      if (tall) return { center: new Vector3(van ? 3.0 : 1.0, 1.6, 2.6), half: new Vector3(3.4, 1.3, 2.3), yaw: 6, pitch: 13, minDist: 5 }
+      return { center: new Vector3(van ? 2.0 : 0.9, 1.2, 2.4), half: new Vector3(van ? 5.6 : 4.9, 1.2, 2.3), yaw: 6, pitch: 13, minDist: 5 }
     }
     return null
   }

@@ -702,11 +702,11 @@ export class House implements World3D {
       const who = this.photo.who
       if (who) {
         const h = who === 'kaylee' ? this.kaylee.height : (this.family.get(who)?.height ?? 1.5)
-        return { center: new Vector3(0, h * 0.58, 1.3), half: new Vector3(h * 0.5, h * 0.66, 0.45), yaw: 0, pitch: 8, minDist: 1.5 }
+        return { center: new Vector3(0, h * 0.58, 1.3), half: new Vector3(h * 0.5, h * 0.66, 0.45), yaw: 0, pitch: -9, minDist: 1.5 }
       }
       // On a tall screen the row fits the width with room to spare above and below: aim higher (more house, less road).
       const tall = this.w < this.h
-      return { center: new Vector3(0, tall ? 1.7 : 0.95, 1.3), half: new Vector3(tall ? 3.5 : 5.0, 1.05, 0.7), yaw: 0, pitch: 17, minDist: 5 }
+      return { center: new Vector3(0, tall ? 1.7 : 0.95, 1.3), half: new Vector3(tall ? 3.5 : 5.0, 1.05, 0.7), yaw: 0, pitch: 0, minDist: 5 }
     }
     const k = this.kaylee.position
     const aspect = this.w / Math.max(1, this.h)
@@ -910,7 +910,7 @@ export class House implements World3D {
         sfx.thump()
       })
     } else if (!k.walking) this.finishArrival(false)
-    const far: Shot = { center: new Vector3(2, 2.6, 2.2), half: new Vector3(7, 3.5, 3), yaw: -12, pitch: 30, minDist: 22 }
+    const far: Shot = { center: new Vector3(2, 2.6, 2.2), half: new Vector3(7, 3.5, 3), yaw: -12, pitch: 13, minDist: 22 }
     this.rig.lag = 0.9
     this.rig.setShot(a.t < 1.0 ? far : this.shot(), a.t < dt * 1.5)
   }

@@ -12,7 +12,7 @@ const SLIDERS: [NumKey, number, number, number][] = [
   ['insideFitW', 3, 9, 0.1],
   ['insideFitD', 3, 12, 0.1],
   ['streetYaw', -30, 30, 1],
-  ['streetPitch', 0, 50, 1],
+  ['streetPitch', -10, 50, 1],
   ['fov', 15, 60, 1],
   ['ambient', 0, 1, 0.01],
   ['sun', 0, 1, 0.01],
