@@ -702,7 +702,11 @@ export class House implements World3D {
       const who = this.photo.who
       if (who) {
         const h = who === 'kaylee' ? this.kaylee.height : (this.family.get(who)?.height ?? 1.5)
-        return { center: new Vector3(0, h * 0.58, 1.3), half: new Vector3(h * 0.5, h * 0.66, 0.45), yaw: 0, pitch: -9, minDist: 1.5 }
+        const s: Shot = { center: new Vector3(0, h * 0.58, 1.3), half: new Vector3(h * 0.5, h * 0.66, 0.45), yaw: 0, pitch: -9, minDist: 1.5 }
+        // Looking up from below, but never from under the road: a narrow screen backs the camera off further.
+        const d = this.rig.fit(s)
+        s.pitch = Math.max(s.pitch, -Math.asin(Math.min(1, Math.max(0, s.center.y - 0.3) / d)) / deg + 1)
+        return s
       }
       // On a tall screen the row fits the width with room to spare above and below: aim higher (more house, less road).
       const tall = this.w < this.h
