@@ -1,6 +1,6 @@
 // Mommy asks if she's ready to go on a trip, with two big buttons that need no reading: 👍 yes (with the suitcase) and
 // ✋ not yet. Once there are two trips (`trips`), she asks where to, and 👍 becomes a picture button for each: 🚤 the
-// boat trip, 🛝🍕 the mall day. It shows in the house (when Kaylee comes up to her room, or taps Mommy) and as each
+// boat trip, 🛝🍕 the mall day, 🏔️🚙 the Nan road trip. It shows in the house (when Kaylee comes up to her room, or taps Mommy) and as each
 // trip's first section. "Not yet" gets a happy "OK! Tell me when!" and the card goes, nothing lost. Mommy says it out
 // loud in her own voice (her 3D mouth moves with it); the card shows the words for Dad. On the street Daddy asks
 // instead (`who="nick"`, tap him), so a trip can start right where the tuk-tuk drops her off.
@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { lineText, say, sounds, type Line } from '../../../../../sdk'
 import { L } from '../../lines'
+import meta from '../../meta'
 
 /** She said yes in the house: the trip she picked opens straight on its first leg instead of asking again. */
 export const saidYes = { at: 0, trip: 'boat-trip' }
@@ -24,7 +25,11 @@ export interface TripChoice {
 export const TRIP_CHOICES: TripChoice[] = [
   { id: 'boat-trip', label: 'The boat trip', icon: '🚤', color: 'var(--sky)' },
   { id: 'mall-trip', label: 'The mall', icon: '🛝🍕', color: 'var(--butter)' },
+  { id: 'nan-trip', label: 'The mountains', icon: '🏔️🚙', color: 'var(--mint)' },
 ]
+/** The trips on Mommy's card: the ones in the game (meta.ts `activities`), and `also` (a trip still in the works, on
+ *  its own card: only its links reach it). */
+export const tripChoices = (also?: string) => TRIP_CHOICES.filter((t) => t.id === also || meta.activities.some((a) => a.id === t.id))
 /** Who asks: Mommy upstairs and in the trips, Daddy on the street. Their lines (one trip / two or more / not yet), their
  *  name and the color of their unicorn. */
 const ASKERS = {

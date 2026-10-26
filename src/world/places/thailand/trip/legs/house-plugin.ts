@@ -10,7 +10,9 @@
 //   the screen's ✅ button): once it holds a few things Kaylee hops on top and sits on it (squash, click); past five
 //   things it's too full and takes three hops. Mommy tucks in sunscreen whatever she packed. Click! Her sun hat drops
 //   onto her head (or Mommy's spare one, if she packed none), her sunglasses slide on, her floaties pop on: she wears
-//   them for the rest of the trip. Then she walks down the stairs with the suitcase bonking on every step.
+//   them for the rest of the trip. Then she walks down the stairs with the suitcase bonking on every step. A trip to
+//   the mountains (`pack.hint: 'cool'`, the Nan road trip) puts her raincoat, rain boots and Mommy's umbrella in the
+//   room too: Mommy's hint makes those glint, she tucks in the umbrella, and there's no spare sun hat.
 // - goodbye: just Mommy, Daddy and Kaylee wait on the sidewalk by the open shutter (Dad, 2026-10-20: the rest of the
 //   family stay in). Aunty Sri's white electric van hums up quickly; tap it (or wait a moment), the side door slides
 //   open, they hop in, and it glides off.
@@ -35,7 +37,7 @@ import type { Shot } from '../../engine/camera'
 import { DIM } from '../../activities/hub/layout'
 import type { House, HousePlugin } from '../../activities/hub/house'
 import { sfx } from '../../sfx'
-import { ITEMS, mommyTucksIn, wearing } from '../packing'
+import { ITEMS, itemsFor, mommyTucksIn, wearing } from '../packing'
 import { buildItem, buildSuitcase, type Suitcase } from '../props'
 import { L } from '../../lines'
 import { afterGoodbye, carOf, type TripDef } from '../types'
@@ -124,6 +126,10 @@ const ROOM = {
     teddy: [-1.55, 0.22, -18.55],
     fan: [-0.95, 0.22, -19.7],
     mango: [-1.1, 0, -17.05],
+    // The mountain things (a cool trip only).
+    raincoat: [1.45, 0, -17.55],
+    boots: [0.45, 0, -17.35],
+    umbrella: [-0.25, 0, -17.75],
   } as Record<string, [number, number, number]>,
 }
 /** Where Kaylee stands while Mommy asks (between her and the suitcase by the wall). */
@@ -276,6 +282,10 @@ export class TripHouse implements HousePlugin {
   private get outfit() {
     return this.trip.pack ? wearing(this.order) : []
   }
+  /** Where the trip goes: hot and sunny (the sea), or cool and rainy (the mountains). */
+  private get weather() {
+    return this.trip.pack?.hint ?? 'sun'
+  }
   /** Aunty Sri drives the van (she waits at the wheel); in Mommy's car, Mommy does. */
   private get sriDrives() {
     return this.car.kind === 'van'
@@ -294,7 +304,7 @@ export class TripHouse implements HousePlugin {
     this.suitcase = buildSuitcase(bag)
     this.suitcase.root.userData.pick = 'trip:suitcase'
     this.root.add(this.suitcase.root)
-    for (const it of ITEMS) {
+    for (const it of itemsFor(this.weather)) {
       if (it.id === 'gan') continue
       const g = buildItem(it.id, bag)
       g.userData.pick = `trip:item:${it.id}`
@@ -655,8 +665,9 @@ export class TripHouse implements HousePlugin {
     this.hinted = true
     setTimeout(() => {
       if (this.phase !== 'pack') return
-      this.events.say(L.trip.pack.hint)
-      for (const it of ITEMS) if (it.sun) {
+      const cool = this.weather === 'cool'
+      this.events.say(cool ? L.nan.trip.cool : L.trip.pack.hint)
+      for (const it of ITEMS) if (cool ? it.cool : it.sun) {
         const th = this.things.get(it.id)
         if (th && !th.packed) th.glint = 2.6
       }
@@ -773,11 +784,11 @@ export class TripHouse implements HousePlugin {
     if (left <= 0) this.close()
   }
 
-  /** Click! Mommy tucks in what a sunny trip needs, then it's shut, and Kaylee puts on her hat, sunglasses and
+  /** Click! Mommy tucks in what the trip needs (sunscreen, or the umbrella for the mountains), then it's shut, and Kaylee puts on her hat, sunglasses and
    *  floaties (or Mommy pops her spare sun hat on her head). */
   private close() {
     const before = [...this.order]
-    const after = mommyTucksIn(before.filter((x) => x !== 'gan'))
+    const after = mommyTucksIn(before.filter((x) => x !== 'gan'), this.weather)
     const added = after.filter((x) => !before.includes(x))
     const ji = this.house.family.get('ji')
     for (const id of added) {
@@ -788,9 +799,10 @@ export class TripHouse implements HousePlugin {
       if (ji) th.g.position.copy(ji.root.position).setY(U + 1.0)
       this.flyTo(th, this.slotWorld(this.order.length - 1, this.order.length), undefined, 0.4)
     }
-    const spare = !this.order.includes('sunhat')
+    const spare = !this.order.includes('sunhat') && this.weather === 'sun'
     if (spare) this.events.say(L.trip.pack.hat)
     else if (added.includes('sunscreen')) this.events.say(L.trip.pack.sunscreen)
+    else if (added.includes('umbrella')) this.events.say(L.nan.trip.umbrella)
     if (added.length || spare) ji?.react('wiggle')
     this.events.packed([...this.order])
     this.setPhase('closed')
@@ -1725,7 +1737,7 @@ export class TripHouse implements HousePlugin {
       if (this.count < 3 && idle > 2.5) {
         // A sun thing once Mommy has hinted, else whatever is nearest the suitcase.
         const left = [...this.things.values()].filter((th) => !th.packed && !th.tween)
-        const sun = this.hinted ? left.filter((th) => ITEMS.find((i) => i.id === th.id)?.sun) : []
+        const sun = this.hinted ? left.filter((th) => ITEMS.find((i) => i.id === th.id)?.[this.weather === 'cool' ? 'cool' : 'sun']) : []
         const s = this.suitcase.root.position
         const pickFrom = sun.length ? sun : left
         const th = pickFrom.sort((a, b) => a.home.distanceTo(s) - b.home.distanceTo(s))[0]

@@ -232,6 +232,45 @@ export function buildItem(id: string, bag: Bag): Group {
       dot(P.sphere(0.085, '#FF8466', { at: [0.05, 0.115, 0.035], rot: [0, 0, 0.3], scale: [1, 0.72, 0.68] }, 14), P.sphere(0.022, SHINE, { at: [-0.03, 0.155, 0.06], scale: [1.4, 0.5, 0.6] }, 8))
       break
     }
+    case 'raincoat': {
+      // Her pink raincoat, folded flat on the floor: the coat with its hood up at the back, two sleeves folded across
+      // the front, big butter buttons and a pocket.
+      const coat = PAL.hotpink
+      add(
+        P.rbox(0.3, 0.06, 0.26, 0.03, coat, { at: [0, 0.03, 0] }),
+        P.sphere(0.09, coat, { at: [0, 0.05, -0.15], scale: [1.2, 0.45, 0.8] }, 16),
+        ...[-1, 1].map((s) => P.capsule(0.03, 0.17, coat, { at: [s * 0.04, 0.075, 0.03], rot: [0, s * 0.5, Math.PI / 2] })),
+        P.rbox(0.09, 0.012, 0.07, 0.01, '#FF8FB8', { at: [0.08, 0.065, 0.08] }),
+      )
+      dot(...[-0.06, 0.03, 0.11].map((z) => P.cyl(0.018, 0.018, 0.012, PAL.butter, { at: [-0.1, 0.066, z] }, 10)), P.sphere(0.03, SHINE, { at: [-0.05, 0.062, -0.08], scale: [1.6, 0.2, 0.6] }, 8))
+      break
+    }
+    case 'boots': {
+      // Her rain boots, a pair standing side by side: lavender with a pink sole, a pull loop and a white dot.
+      for (const s of [-1, 1]) {
+        add(
+          P.cyl(0.05, 0.055, 0.2, PAL.lavender, { at: [s * 0.07, 0.12, -0.02] }, 14),
+          P.sphere(0.06, PAL.lavender, { at: [s * 0.07, 0.045, 0.04], scale: [0.95, 0.75, 1.4] }, 14),
+          P.rbox(0.12, 0.025, 0.2, 0.01, PAL.hotpink, { at: [s * 0.07, 0.0125, 0.015] }),
+          P.torus(0.02, 0.006, PAL.hotpink, { at: [s * 0.07, 0.225, -0.07], rot: [0, Math.PI / 2, 0] }),
+        )
+        dot(P.sphere(0.012, SHINE, { at: [s * 0.07, 0.14, 0.04], scale: [1, 1, 0.3] }, 8))
+      }
+      break
+    }
+    case 'umbrella': {
+      // Mommy's mint umbrella, rolled up and lying down: the furled canopy with a pink strap, the pointy tip and a
+      // curly butter handle.
+      add(
+        P.cone(0.05, 0.36, PAL.mint, { at: [0.03, 0.05, 0], rot: [0, 0, -Math.PI / 2], scale: [1, 1, 0.9] }, 14),
+        P.cyl(0.006, 0.006, 0.08, PAL.ink, { at: [0.25, 0.05, 0], rot: [0, 0, Math.PI / 2] }, 6),
+        P.cyl(0.012, 0.012, 0.14, PAL.butter, { at: [-0.21, 0.05, 0], rot: [0, 0, Math.PI / 2] }, 8),
+        P.torus(0.04, 0.013, PAL.butter, { at: [-0.28, 0.09, 0] }, Math.PI),
+        P.cyl(0.04, 0.04, 0.025, PAL.hotpink, { at: [0.0, 0.05, 0], rot: [0, 0, Math.PI / 2] }, 12),
+      )
+      dot(P.sphere(0.013, PAL.hotpink, { at: [0.0, 0.092, 0] }, 8))
+      break
+    }
     case 'snacks': {
       // Jum's snacks for the trip: a crinkly mint bag gathered at the top with a pink bow (a mango on the front), and a
       // little box of mango sticky rice in a banana-leaf lid.

@@ -733,6 +733,13 @@ const SCREENS = [
   { name: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true, wait: 3500 },
   { name: 'nan-map-stops', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,rice', reset: true, wait: 3500 },
   { name: 'nan-three', hash: '#/world/thailand/nan-trip/three', reset: true, wait: 4000 },
+  // The Nan trip's loop (the trip kit's legs): Mommy's card with 🏔️🚙, packing with the mountain things, the goodbye,
+  // the x-ray, the window seat, landing in Nan's green valley (it plays out to the rental desk), and coming home (the
+  // flight, then Agong asks for his photo and the Nan photos fan out).
+  ...['invite', 'pack', 'goodbye', 'airport', 'fly'].map((to) => ({ name: `nan-${to}`, hash: `#/world/thailand/nan-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : 2600 })),
+  { name: 'nan-land', hash: '#/world/thailand/nan-trip/land', reset: true, wait: 5500 },
+  { name: 'nan-home', hash: '#/world/thailand/nan-trip/home?photos=deck,three,pizza,salt', reset: true, wait: 16000 },
+  { name: 'nan-loop-flat', hash: '#/world/thailand/nan-trip/home?photos=deck,three&gl=off', reset: true, wait: 900 },
   // Kaylee's rice farm (greybox A): paddy A flooded and three dry, the planted rows growing (birds coming in), the golden
   // rice drained for the harvest, the bundles on the rack by the threshing basket, and the café's deck.
   ...['plant', 'grow', 'harvest', 'thresh', 'deck'].map((round) => ({ name: `nan-rice-${round}`, hash: `#/world/thailand/nan-trip/rice?round=${round}`, reset: true, wait: round === 'grow' ? 6000 : 3500 })),

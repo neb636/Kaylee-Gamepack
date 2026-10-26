@@ -2,6 +2,7 @@
 // are generic and read it. Pure data, no three.js.
 import type { Line } from '../../../../sdk'
 import type { LonLat } from './outline'
+import type { Weather } from './packing'
 
 export type LegKind = 'invite' | 'pack' | 'goodbye' | 'airport' | 'fly' | 'car' | 'arrive' | 'home'
 
@@ -32,8 +33,9 @@ export interface TripDef {
   id: string
   /** Who comes along with Kaylee (cast ids). */
   who: ('ji' | 'nick')[]
-  /** What Mommy hints at, and how many things fit before she has to sit on the suitcase. No packing on a day out. */
-  pack?: { hint: 'sun'; fits: number }
+  /** What Mommy hints at (the sea's sun, or the mountains' cool and rain), and how many things fit before she has to
+   *  sit on the suitcase. No packing on a day out. */
+  pack?: { hint: Weather; fits: number }
   /** How she gets there: Aunty Sri's van picks them up at the goodbye (no ride: it pulls away and they're at the
    *  airport), the pilot flies (she rides and plays); or Mommy drives the family's rental car (it pulls away and
    *  they're there). */

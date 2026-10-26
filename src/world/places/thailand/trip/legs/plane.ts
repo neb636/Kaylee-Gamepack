@@ -17,6 +17,8 @@
 //   On the boat trip with Baan Chang open (`fork`), it stops at the signpost down the road instead and Daddy asks
 //   "Where to?" (`events.asking`: the trip shows his card of postcards, WhereTo.tsx): the elephants turn it up the
 //   side road (to Baan Chang), the longtail drives on to the pier (`choose`).
+//   The Nan road trip lands in the mountains instead (`landing: 'nan'`): a green valley with rice fields and a ring of
+//   round mountains comes up under the plane, and after the claps the trip goes on to the rental desk (`events.done`).
 // Every part moves on by itself (about 35 s in all), whatever she does, and the ⏩ button skips ahead (`skip`).
 import { CanvasTexture, CatmullRomCurve3, Color, ConeGeometry, ExtrudeGeometry, Fog, Group, Matrix4, Mesh, MeshBasicMaterial, Path, PlaneGeometry, Shape, ShapeGeometry, Sprite, SpriteMaterial, SRGBColorSpace, TextureLoader, TubeGeometry, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds } from '../../../../../sdk'
@@ -58,6 +60,9 @@ export const PLANE_ANCHORS: AnchorInfo[] = [
   { id: 'balloon', label: "Sparkle's balloon", kind: 'thing' },
   { id: 'songthaew', label: 'Songthaew', kind: 'thing' },
 ]
+
+/** Where the plane comes down: Krabi by the sea (then the songthaew), or Nan's green valley in the mountains. */
+export type Landing = 'krabi' | 'nan'
 
 /** Where the songthaew goes at Krabi: straight to the pier or to Baan Chang, or it stops at the signpost and she picks. */
 export type KrabiFork = 'pier' | 'chang' | 'ask'
@@ -173,8 +178,10 @@ export class PlaneRide extends Stage {
   private counts = { snacks: 0, shades: 0, lights: 0, screens: 0, belts: 0, vents: 0 }
   /** Flight seconds per real second (the trip's cap). */
   private pace = 1
+  /** Landed in Nan and off to the rental desk. */
+  private off = false
 
-  constructor(renderer: WebGLRenderer, protected events: Ev, start: FlySection, private packed: string[], private route: { from: LonLat; to: LonLat } = { from: PLACES.bangkok, to: PLACES.krabi }, cap = FLIGHT_S, private fork: KrabiFork = 'pier') {
+  constructor(renderer: WebGLRenderer, protected events: Ev, start: FlySection, private packed: string[], private route: { from: LonLat; to: LonLat } = { from: PLACES.bangkok, to: PLACES.krabi }, cap = FLIGHT_S, private fork: KrabiFork = 'pier', private landing: Landing = 'krabi') {
     super(renderer, events)
     this.pace = FLIGHT_S / cap
     const { scene, bag } = this
@@ -436,6 +443,15 @@ export class PlaneRide extends Stage {
     for (let x = -60; x <= 60; x += 6) this.runwayDashes.add(solid(merge([P.box(3, 0.02, 0.3, PAL.cream, { at: [x, 0.07, -2] })]), bag, 0))
     this.runway.add(this.runwayDashes)
     outside.add(this.runway)
+    if (this.landing === 'nan') this.buildNan()
+    else this.buildKrabi()
+    this.krabi.visible = false
+    outside.add(this.krabi)
+    this.buildRest()
+  }
+
+  private buildKrabi() {
+    const { bag } = this
     // Krabi: the sea, the first rock islands standing straight out of it, a strip of beach and the runway.
     this.krabi.add(solid(merge([P.box(800, 0.1, 500, '#5FC7B4', { at: [0, -0.06, -260] }), P.box(800, 0.12, 30, '#A9E3B8', { at: [0, 0, 12] }), P.box(800, 0.14, 14, '#B9B4CC', { at: [0, 0.02, 2] }), P.box(800, 0.13, 3, '#FBE3B8', { at: [0, 0.01, -4.5] })]), bag, 0))
     const karsts = []
@@ -454,8 +470,30 @@ export class PlaneRide extends Stage {
       )
     }
     this.krabi.add(solid(merge(karsts), bag, 2))
-    this.krabi.visible = false
-    outside.add(this.krabi)
+  }
+
+  /** Nan: a small airport in a green valley, rice fields shining with rain water, and a ring of round green mountains
+   *  with cloud sitting on some of their tops. */
+  private buildNan() {
+    const { bag } = this
+    const fields = []
+    for (let i = 0; i < 18; i++) fields.push(P.box(8.6, 0.05, 7, i % 3 ? '#8FD6B0' : '#A8DCEB', { at: [-80 + i * 9.5, 0.02, -16 - (i % 2) * 8] }))
+    this.krabi.add(solid(merge([P.box(800, 0.1, 500, '#9ED9A6', { at: [0, -0.06, -260] }), P.box(800, 0.12, 30, '#A9E3B8', { at: [0, 0, 12] }), P.box(800, 0.14, 14, '#B9B4CC', { at: [0, 0.02, 2] }), ...fields]), bag, 0))
+    const hills = []
+    for (let i = 0; i < 16; i++) {
+      // The near ones low, so they rise past the window as the plane comes down; the far ones big.
+      const x = -90 + i * 12 + (i % 3) * 5
+      const z = -34 - (i % 4) * 14 - (i > 9 ? 30 : 0)
+      const r = 10 + (i % 5) * 3
+      const h = r * (0.7 + (i % 3) * 0.2)
+      hills.push(P.sphere(r, i % 2 ? '#6FBF7F' : '#7FCB8F', { at: [x, 0, z], scale: [1, h / r, 0.8] }, 16))
+      if (i % 3 === 0) hills.push(P.sphere(r * 0.45, '#FFFFFF', { at: [x + r * 0.2, h * 0.92, z], scale: [1.6, 0.45, 0.8] }, 10))
+    }
+    this.krabi.add(solid(merge(hills), bag, 2))
+  }
+
+  private buildRest() {
+    const { bag, outside } = this
     // Thailand far below: the real outline, flat and green, with the mountains of the north as bumps, and Kaylee's
     // crayon ear and eye drawn on it, like on her map.
     this.buildThailand()
@@ -819,7 +857,7 @@ export class PlaneRide extends Stage {
           sounds.sparkle()
           this.clap = 0
           for (const id of WHO) this.riders[id].react('hop')
-          this.events.say(L.trip.plane.krabi)
+          this.events.say(this.landing === 'nan' ? L.nan.trip.landed : L.trip.plane.krabi)
         }
         // Krabi: a white flash, the arrivals arch, and off they go in the songthaew.
         if (b > 3.8 && this.drive < 0) this.toKrabi()
@@ -1047,8 +1085,14 @@ export class PlaneRide extends Stage {
     }
   }
 
-  /** Off the plane: the family on the songthaew's bench at the arrivals arch, the suitcase across from them. */
+  /** Off the plane: the family on the songthaew's bench at the arrivals arch, the suitcase across from them. (In Nan
+   *  the trip goes on to the rental desk.) */
   private toKrabi() {
+    if (this.landing === 'nan') {
+      if (!this.off) this.events.done('rental')
+      this.off = true
+      return
+    }
     this.drive = 0
     this.events.flash?.()
     const st = this.arrival.songthaew

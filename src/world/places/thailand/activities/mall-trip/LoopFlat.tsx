@@ -10,7 +10,7 @@ import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { lineText, sounds, type Line } from '../../../../../sdk'
 import { sfx } from '../../sfx'
-import { Ask, TRIP_CHOICES } from '../../trip/legs/Ask'
+import { Ask, tripChoices } from '../../trip/legs/Ask'
 import type { LoopSection } from './Loop'
 import { SOCK_COLORS } from './socks'
 import { W } from './words'
@@ -20,7 +20,8 @@ interface Props {
   socks: string
   covered: boolean
   onMall(): void
-  onBoat(): void
+  /** Another trip on the card (its activity id). */
+  onTrip(id: string): void
   onNotYet(): void
   onLeg(next: string): void
   onSocks(id: string): void
@@ -50,7 +51,7 @@ const Page = ({ bg, children }: { bg: string; children: ReactNode }) => (
   <div style={{ position: 'absolute', inset: 0, background: bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 'clamp(12px, 3vmin, 26px)', padding: 'calc(var(--top-clear) + 8px) 16px calc(var(--safe-bottom) + 16px)' }}>{children}</div>
 )
 
-export function LoopFlat({ section, covered, onMall, onBoat, onNotYet, onLeg, onSocks, onDone }: Props) {
+export function LoopFlat({ section, covered, onMall, onTrip, onNotYet, onLeg, onSocks, onDone }: Props) {
   const [line, setLine] = useState<Line | null>(null)
   const [hugged, setHugged] = useState<string | null>(null)
   const [step, setStep] = useState(0)
@@ -73,7 +74,7 @@ export function LoopFlat({ section, covered, onMall, onBoat, onNotYet, onLeg, on
   if (section === 'invite') return (
     <Page bg="linear-gradient(#FFE3EF, #FFF7F0)">
       <div style={{ fontSize: 'clamp(70px, 16vmin, 130px)' }} aria-hidden>🦄🏠</div>
-      <Ask open={!covered} trips={TRIP_CHOICES} onYes={(t) => (t === 'boat-trip' ? onBoat() : onMall())} onNotYet={onNotYet} />
+      <Ask open={!covered} trips={tripChoices()} onYes={(t) => (t && t !== 'mall-trip' ? onTrip(t) : onMall())} onNotYet={onNotYet} />
     </Page>
   )
 

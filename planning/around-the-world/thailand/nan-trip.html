@@ -10,28 +10,62 @@
 </head>
 <body>
 <div id="app"><noscript>This plan is drawn by planning/viewer/plan.js. Read it as Markdown with: node scripts/plan.mjs md planning/around-the-world/thailand/nan-trip.html</noscript></div>
-<script type="application/json" id="plan">
-{
+<script type="application/json" id="plan">{
   "schema": 1,
   "title": "The Nan Road Trip",
   "icon": "🏔️",
   "kind": "Family trip",
   "updated": "2026-10-25",
-  "status": { "label": "In the works: the road, the 3 stops, the map and the rental desk built", "tone": "gold" },
+  "status": {
+    "label": "In the works: the whole trip joined up, from Mommy's card to Agong's wall",
+    "tone": "gold"
+  },
   "pitch": "Kaylee presses the key and the big Pajero beeps hello. Mommy drives and Kaylee steers it round the bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.",
-  "next": "Dad plays step 6 on the iPad: the rental desk ([`rental`](#/world/thailand/nan-trip/rental), then [`?round=boot`](#/world/thailand/nan-trip/rental?round=boot), [`?round=belt`](#/world/thailand/nan-trip/rental?round=belt)), the Nan map ([`map`](#/world/thailand/nan-trip/map), [after two stops](#/world/thailand/nan-trip/map?stops=mushrooms,rice)) and drawing the 3 ([`three`](#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)). Is pulling the little Pajero round the board fun, or does she only tap? Does the fob have enough answers? Then **step 7, the trip loop**: the third invite choice (🏔️🚙), the flight north into the rental desk, home from the 3 road and the photo on Agong's wall.",
+  "next": "Dad plays **step 7, the whole trip** on the iPad, from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙): packing for the mountains, the goodbye, the plane north into [the green valley](#/world/thailand/nan-trip/land), the rental desk, the stops, the 3 road from the airport (after two stops) and its [photo with ✈️🏠](#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt), then [home](#/world/thailand/nan-trip/home?photos=deck,three,pizza,salt) to pick the photo for Agong's wall. Does the trip hang together, and is the way there short enough before the fun starts? Then **step 8, the look**: the real Pajero, the landmarks, rain and cloud.",
   "facts": [
-    { "icon": "⏱️", "value": "10-17 min", "label": "a full trip, all three stops" },
-    { "icon": "👆", "value": "150-225", "label": "touches" },
-    { "icon": "📍", "value": "3 stops", "label": "mushrooms · rice · salt" },
-    { "icon": "🛣️", "value": "4 roads", "label": "city · valley · sky · three" },
-    { "icon": "🔗", "value": "15", "label": "sections planned, 7 built" }
+    {
+      "icon": "⏱️",
+      "value": "10-17 min",
+      "label": "a full trip, all three stops"
+    },
+    {
+      "icon": "👆",
+      "value": "150-225",
+      "label": "touches"
+    },
+    {
+      "icon": "📍",
+      "value": "3 stops",
+      "label": "mushrooms · rice · salt"
+    },
+    {
+      "icon": "🛣️",
+      "value": "4 roads",
+      "label": "city · valley · sky · three"
+    },
+    {
+      "icon": "🔗",
+      "value": "15",
+      "label": "sections, all built"
+    }
   ],
   "related": [
-    { "label": "← Thailand plan", "href": "../thailand.md" },
-    { "label": "The rice farm (its own plan)", "href": "nan-rice.md" },
-    { "label": "Activity template", "href": "../ACTIVITY-TEMPLATE.md" },
-    { "label": "Play design", "href": "../../../docs/play-design.md" }
+    {
+      "label": "← Thailand plan",
+      "href": "../thailand.md"
+    },
+    {
+      "label": "The rice farm (its own plan)",
+      "href": "nan-rice.md"
+    },
+    {
+      "label": "Activity template",
+      "href": "../ACTIVITY-TEMPLATE.md"
+    },
+    {
+      "label": "Play design",
+      "href": "../../../docs/play-design.md"
+    }
   ],
   "sections": [
     {
@@ -40,16 +74,48 @@
       "icon": "💡",
       "group": "The trip",
       "blocks": [
-        { "type": "text", "md": "Written 2026-10-24. Thailand's third family trip, and the first that is mostly about **learning about a place**. Mommy, Daddy and Kaylee fly north to Nan, pick up a silver rental **Mitsubishi Pajero Sport** at the airport and drive the swoopy mountain roads between three real places: a mushroom farm, a café over the rice terraces and a village that makes salt from a well. It's built in 3D in the house's look (toon bands, ink outlines, blob shadows) and reuses the trip kit." },
-        { "type": "callout", "tone": "dad", "icon": "⛰️", "title": "One idea holds it together: the mountains make things", "md": "Clouds, rice steps, mushrooms and salt all come from Nan's mountains, and Kaylee makes each one with her own hands. The road between the stops is the toy that ties them together." },
+        {
+          "type": "text",
+          "md": "Written 2026-10-24. Thailand's third family trip, and the first that is mostly about **learning about a place**. Mommy, Daddy and Kaylee fly north to Nan, pick up a silver rental **Mitsubishi Pajero Sport** at the airport and drive the swoopy mountain roads between three real places: a mushroom farm, a café over the rice terraces and a village that makes salt from a well. It's built in 3D in the house's look (toon bands, ink outlines, blob shadows) and reuses the trip kit."
+        },
+        {
+          "type": "callout",
+          "tone": "dad",
+          "icon": "⛰️",
+          "title": "One idea holds it together: the mountains make things",
+          "md": "Clouds, rice steps, mushrooms and salt all come from Nan's mountains, and Kaylee makes each one with her own hands. The road between the stops is the toy that ties them together."
+        },
         {
           "type": "cards",
           "title": "The stops",
           "items": [
-            { "icon": "🍄", "title": "Baan Huanam Mushroom Farm", "tag": "`mushrooms`", "status": "done", "md": "Mist the sawdust bags until mushrooms pop, pick them, top the mushroom pizza." },
-            { "icon": "🌾", "title": "Stop Time Cafe, Sapan", "tag": "`rice`", "status": "done", "md": "Her little rice farm below the café: plant, shoo the birds, cut, thresh, sticky rice on the deck." },
-            { "icon": "🧂", "title": "Bo Kluea salt wells", "tag": "`salt`", "status": "done", "md": "Dip the bucket, pour the brine, feed the fire, scrape the salt." },
-            { "icon": "3️⃣", "title": "The “number 3” road", "tag": "`three`", "md": "Down the hairpins, then the road draws a giant 3 from above." }
+            {
+              "icon": "🍄",
+              "title": "Baan Huanam Mushroom Farm",
+              "tag": "`mushrooms`",
+              "status": "done",
+              "md": "Mist the sawdust bags until mushrooms pop, pick them, top the mushroom pizza."
+            },
+            {
+              "icon": "🌾",
+              "title": "Stop Time Cafe, Sapan",
+              "tag": "`rice`",
+              "status": "done",
+              "md": "Her little rice farm below the café: plant, shoo the birds, cut, thresh, sticky rice on the deck."
+            },
+            {
+              "icon": "🧂",
+              "title": "Bo Kluea salt wells",
+              "tag": "`salt`",
+              "status": "done",
+              "md": "Dip the bucket, pour the brine, feed the fire, scrape the salt."
+            },
+            {
+              "icon": "3️⃣",
+              "title": "The “number 3” road",
+              "tag": "`three`",
+              "md": "Down the hairpins, then the road draws a giant 3 from above."
+            }
           ]
         }
       ]
@@ -63,16 +129,46 @@
         {
           "type": "qa",
           "items": [
-            { "q": "Where?", "a": "**Nan**, from the family's real trip (June 2024, the rainy season)." },
-            { "q": "Who comes?", "a": "Just Mommy, Daddy and Kaylee." },
-            { "q": "Getting there?", "a": "They fly Bangkok → Nan with the trip kit and rent a **silver Pajero Sport** at Nan airport." },
-            { "q": "Who drives?", "a": "Mommy drives, and Kaylee's finger steers (as in the boat race: she picks where across the road it goes)." },
-            { "q": "The stops?", "a": "Baan Huanam Mushroom Farm (not in the photos, Dad's must-have), the rice-terrace café deck (Stop Time Cafe, above Sapan village), Bo Kluea's salt wells, and the S-curve “number 3” road. Wat Phumin was on this list and was dropped on 2026-10-25: no temples or Buddhas in the game (AGENTS.md)." },
-            { "q": "What did they eat?", "a": "The mushroom pizza at Baan Huanam." },
-            { "q": "A gift for Agong?", "a": "No gift this time: they come home and the trip's photo goes on his wall." },
-            { "q": "How educational?", "a": "Somewhat, not only a trip recreation: each stop teaches one real thing by doing it." },
-            { "q": "The Pajero's color?", "a": "Silver." },
-            { "q": "The sticker?", "a": "Left to the builder: a pink mushroom." }
+            {
+              "q": "Where?",
+              "a": "**Nan**, from the family's real trip (June 2024, the rainy season)."
+            },
+            {
+              "q": "Who comes?",
+              "a": "Just Mommy, Daddy and Kaylee."
+            },
+            {
+              "q": "Getting there?",
+              "a": "They fly Bangkok → Nan with the trip kit and rent a **silver Pajero Sport** at Nan airport."
+            },
+            {
+              "q": "Who drives?",
+              "a": "Mommy drives, and Kaylee's finger steers (as in the boat race: she picks where across the road it goes)."
+            },
+            {
+              "q": "The stops?",
+              "a": "Baan Huanam Mushroom Farm (not in the photos, Dad's must-have), the rice-terrace café deck (Stop Time Cafe, above Sapan village), Bo Kluea's salt wells, and the S-curve “number 3” road. Wat Phumin was on this list and was dropped on 2026-10-25: no temples or Buddhas in the game (AGENTS.md)."
+            },
+            {
+              "q": "What did they eat?",
+              "a": "The mushroom pizza at Baan Huanam."
+            },
+            {
+              "q": "A gift for Agong?",
+              "a": "No gift this time: they come home and the trip's photo goes on his wall."
+            },
+            {
+              "q": "How educational?",
+              "a": "Somewhat, not only a trip recreation: each stop teaches one real thing by doing it."
+            },
+            {
+              "q": "The Pajero's color?",
+              "a": "Silver."
+            },
+            {
+              "q": "The sticker?",
+              "a": "Left to the builder: a pink mushroom."
+            }
           ]
         }
       ]
@@ -86,14 +182,40 @@
         {
           "type": "cards",
           "items": [
-            { "icon": "🛣️", "title": "1. The swoopy road", "md": "Daddy on the swoopy mountain road: an S-bend going up a green hill, white-and-black chevron signs on the bends, steel guard rails, an orange cone, low grey sky." },
-            { "icon": "🌾", "title": "2. The rice valley", "md": "A valley of terraced rice fields, flooded and shiny, freshly planted, with green mountains and cloud sitting on the tops." },
-            { "icon": "🪵", "title": "3. The café deck", "md": "A wooden café deck on stilts over that valley: wet dark-wood floor, rustic railings of crossed branches, long benches and stools, a peaked wooden roof. Mommy at the railing taking a picture, cloud rolling over the ridge." },
-            { "icon": "☁️", "title": "4. The corner", "md": "The same deck from the corner, cloud filling the far valley." },
-            { "icon": "🪑", "title": "5. Daddy and Kaylee", "md": "Side by side on tall stools at the deck railing, Kaylee in a blue top, white leggings and sandals, the terraced valley and a little village behind them." }
+            {
+              "icon": "🛣️",
+              "title": "1. The swoopy road",
+              "md": "Daddy on the swoopy mountain road: an S-bend going up a green hill, white-and-black chevron signs on the bends, steel guard rails, an orange cone, low grey sky."
+            },
+            {
+              "icon": "🌾",
+              "title": "2. The rice valley",
+              "md": "A valley of terraced rice fields, flooded and shiny, freshly planted, with green mountains and cloud sitting on the tops."
+            },
+            {
+              "icon": "🪵",
+              "title": "3. The café deck",
+              "md": "A wooden café deck on stilts over that valley: wet dark-wood floor, rustic railings of crossed branches, long benches and stools, a peaked wooden roof. Mommy at the railing taking a picture, cloud rolling over the ridge."
+            },
+            {
+              "icon": "☁️",
+              "title": "4. The corner",
+              "md": "The same deck from the corner, cloud filling the far valley."
+            },
+            {
+              "icon": "🪑",
+              "title": "5. Daddy and Kaylee",
+              "md": "Side by side on tall stools at the deck railing, Kaylee in a blue top, white leggings and sandals, the terraced valley and a little village behind them."
+            }
           ]
         },
-        { "type": "callout", "tone": "note", "icon": "📍", "title": "One video still has its GPS", "md": "`videos/IMG_2603.mov`: **19.1515 N, 101.1554 E, 664 m up, 24 June 2024**. That is **Bo Kluea**, the salt-well village. The clip shows a wooden roadside house with a big mural of a couple in Tai Lue dress, on a rain-wet road." }
+        {
+          "type": "callout",
+          "tone": "note",
+          "icon": "📍",
+          "title": "One video still has its GPS",
+          "md": "`videos/IMG_2603.mov`: **19.1515 N, 101.1554 E, 664 m up, 24 June 2024**. That is **Bo Kluea**, the salt-well village. The clip shows a wooden roadside house with a big mural of a couple in Tai Lue dress, on a rain-wet road."
+        }
       ]
     },
     {
@@ -106,13 +228,41 @@
           "type": "cards",
           "wide": true,
           "items": [
-            { "icon": "🗺️", "title": "Nan", "md": "A quiet province in the far north-east of northern Thailand, along the border with Laos. All mountains and valleys, with the Nan River running down the middle. Nan Nakhon Airport (NNT) has flights from Bangkok Don Mueang, and rental desks at the terminal." },
-            { "icon": "🚙", "title": "The Pajero Sport", "md": "A big seven-seat Mitsubishi SUV, **made in Thailand** (Mitsubishi's Laem Chabang plant). Right-hand drive: in Thailand cars **drive on the left**." },
-            { "icon": "🍄", "title": "Baan Huanam Mushroom Farm", "md": "บ้านหัวน้ำ, 129 Moo 5, Sila Laeng, Pua: a farm restaurant in the trees with a view of the countryside. It grows its own mushrooms, and its **mushroom pizza** is the dish everyone orders. Oyster mushrooms in Thailand grow from **bags of sawdust** that hang or stand in rows in dark, damp, misted houses. They love the rainy season. **Pink oyster mushrooms** are a real kind (*Pleurotus djamor*). Whether Baan Huanam grows them is unconfirmed; if not, they're our one made-up touch, because Kaylee loves pink." },
-            { "icon": "☕", "title": "Stop Time Cafe", "md": "Photos 2-5: a café on a hill above **Sapan village** (สะปัน) in Bo Kluea district, with a wooden balcony looking over the village's rice terraces and the mountains. In the rainy season the fields are green and the clouds sit low; in the cool months it looks over a sea of fog. Sapan sits where two rivers meet, with a three-tier waterfall nearby. In June the paddies are flooded and freshly planted: rice grows standing in water, and the steps hold the water on the hillside." },
-            { "icon": "🧂", "title": "Bo Kluea", "md": "บ่อเกลือ, “salt well”: a mountain village near Laos where people have made salt for hundreds of years (local stories say about 800). They lower a bucket down the well, pull up very salty water, pour it into wide pans over wood fires and boil it for hours until only white salt is left, then scrape it into baskets. The salt comes from a layer of rock salt left by **a sea that was here long, long ago**. (The salt huts close in the full rainy season, from Buddhist Lent in July; the family was there just before, in June.)" },
-            { "icon": "3️⃣", "title": "The “number 3” road", "md": "ถนนเลข 3: Route 1081 between Santi Suk and Bo Kluea. From the viewpoint, its hairpin bends look like a giant number 3 drawn on the hill. Route 1256 over **Doi Phu Kha** (the “sky road”) climbs into the cloud between Pua and Bo Kluea." },
-            { "icon": "🪞", "title": "The roads", "md": "Chevron signs on the bends, steel guard rails, round **convex mirrors** on blind bends, and drivers give a short **beep** before a blind bend. Water buffalo, chickens, scooters and songthaews share them." }
+            {
+              "icon": "🗺️",
+              "title": "Nan",
+              "md": "A quiet province in the far north-east of northern Thailand, along the border with Laos. All mountains and valleys, with the Nan River running down the middle. Nan Nakhon Airport (NNT) has flights from Bangkok Don Mueang, and rental desks at the terminal."
+            },
+            {
+              "icon": "🚙",
+              "title": "The Pajero Sport",
+              "md": "A big seven-seat Mitsubishi SUV, **made in Thailand** (Mitsubishi's Laem Chabang plant). Right-hand drive: in Thailand cars **drive on the left**."
+            },
+            {
+              "icon": "🍄",
+              "title": "Baan Huanam Mushroom Farm",
+              "md": "บ้านหัวน้ำ, 129 Moo 5, Sila Laeng, Pua: a farm restaurant in the trees with a view of the countryside. It grows its own mushrooms, and its **mushroom pizza** is the dish everyone orders. Oyster mushrooms in Thailand grow from **bags of sawdust** that hang or stand in rows in dark, damp, misted houses. They love the rainy season. **Pink oyster mushrooms** are a real kind (*Pleurotus djamor*). Whether Baan Huanam grows them is unconfirmed; if not, they're our one made-up touch, because Kaylee loves pink."
+            },
+            {
+              "icon": "☕",
+              "title": "Stop Time Cafe",
+              "md": "Photos 2-5: a café on a hill above **Sapan village** (สะปัน) in Bo Kluea district, with a wooden balcony looking over the village's rice terraces and the mountains. In the rainy season the fields are green and the clouds sit low; in the cool months it looks over a sea of fog. Sapan sits where two rivers meet, with a three-tier waterfall nearby. In June the paddies are flooded and freshly planted: rice grows standing in water, and the steps hold the water on the hillside."
+            },
+            {
+              "icon": "🧂",
+              "title": "Bo Kluea",
+              "md": "บ่อเกลือ, “salt well”: a mountain village near Laos where people have made salt for hundreds of years (local stories say about 800). They lower a bucket down the well, pull up very salty water, pour it into wide pans over wood fires and boil it for hours until only white salt is left, then scrape it into baskets. The salt comes from a layer of rock salt left by **a sea that was here long, long ago**. (The salt huts close in the full rainy season, from Buddhist Lent in July; the family was there just before, in June.)"
+            },
+            {
+              "icon": "3️⃣",
+              "title": "The “number 3” road",
+              "md": "ถนนเลข 3: Route 1081 between Santi Suk and Bo Kluea. From the viewpoint, its hairpin bends look like a giant number 3 drawn on the hill. Route 1256 over **Doi Phu Kha** (the “sky road”) climbs into the cloud between Pua and Bo Kluea."
+            },
+            {
+              "icon": "🪞",
+              "title": "The roads",
+              "md": "Chevron signs on the bends, steel guard rails, round **convex mirrors** on blind bends, and drivers give a short **beep** before a blind bend. Water buffalo, chickens, scooters and songthaews share them."
+            }
           ]
         }
       ]
@@ -127,12 +277,37 @@
           "rows": [
             {
               "steps": [
-                { "icon": "🏠", "label": "Mommy asks", "note": "where to? 🚤 🛝🍕 🏔️🚙" },
-                { "icon": "✈️", "label": "The way there", "note": "pack, goodbye, van, airport, window seat: Bangkok → Nan" },
-                { "icon": "🔑", "label": "Rental desk", "note": "the Pajero" },
-                { "icon": "🗺️", "label": "The Nan map ⇄ drive ⇄ a stop", "note": "mushrooms · rice · salt, any order", "hl": true },
-                { "icon": "3️⃣", "label": "The “3” road", "note": "to the airport" },
-                { "icon": "🖼️", "label": "Fly home", "note": "the photo on Agong's wall" }
+                {
+                  "icon": "🏠",
+                  "label": "Mommy asks",
+                  "note": "where to? 🚤 🛝🍕 🏔️🚙"
+                },
+                {
+                  "icon": "✈️",
+                  "label": "The way there",
+                  "note": "pack, goodbye, van, airport, window seat: Bangkok → Nan"
+                },
+                {
+                  "icon": "🔑",
+                  "label": "Rental desk",
+                  "note": "the Pajero"
+                },
+                {
+                  "icon": "🗺️",
+                  "label": "The Nan map ⇄ drive ⇄ a stop",
+                  "note": "mushrooms · rice · salt, any order",
+                  "hl": true
+                },
+                {
+                  "icon": "3️⃣",
+                  "label": "The “3” road",
+                  "note": "to the airport"
+                },
+                {
+                  "icon": "🖼️",
+                  "label": "Fly home",
+                  "note": "the photo on Agong's wall"
+                }
               ]
             }
           ]
@@ -141,18 +316,81 @@
           "type": "bars",
           "title": "Each leg",
           "series": [
-            { "key": "touches", "label": "Touches" }
+            {
+              "key": "touches",
+              "label": "Touches"
+            }
           ],
           "items": [
-            { "label": "Mommy asks", "note": "`invite` · ~5 s · picks 🏔️🚙", "touches": 1 },
-            { "label": "Rental desk", "note": "`rental` · ~5 s to first touch · key fob, suitcase, seatbelt", "touches": [6, 10] },
-            { "label": "The Nan map", "note": "`map` · ~3 s · tap where to go next", "touches": [1, 3] },
-            { "label": "**The mountain road**", "note": "`drive` · at once · steer, honk, wipers (per drive)", "touches": [15, 30] },
-            { "label": "**Mushroom farm**", "note": "`mushrooms` · ~5 s · mist, pick, top the pizza", "touches": [25, 40] },
-            { "label": "**Rice farm + café**", "note": "`rice` · ~3 s · lead Kaylee: plant, shoo, cut; bang the grains", "touches": [50, 70] },
-            { "label": "**Bo Kluea**", "note": "`salt` · ~5 s · dip, pour, stoke, scoop", "touches": [25, 40] },
-            { "label": "The “3” road", "note": "`three` · at once · steer down the hairpins, the 3 from above", "touches": [15, 25] },
-            { "label": "Home", "note": "`home` · 20-30 s · pick the photo for Agong's wall", "touches": [2, 4] }
+            {
+              "label": "Mommy asks",
+              "note": "`invite` · ~5 s · picks 🏔️🚙",
+              "touches": 1
+            },
+            {
+              "label": "Rental desk",
+              "note": "`rental` · ~5 s to first touch · key fob, suitcase, seatbelt",
+              "touches": [
+                6,
+                10
+              ]
+            },
+            {
+              "label": "The Nan map",
+              "note": "`map` · ~3 s · tap where to go next",
+              "touches": [
+                1,
+                3
+              ]
+            },
+            {
+              "label": "**The mountain road**",
+              "note": "`drive` · at once · steer, honk, wipers (per drive)",
+              "touches": [
+                15,
+                30
+              ]
+            },
+            {
+              "label": "**Mushroom farm**",
+              "note": "`mushrooms` · ~5 s · mist, pick, top the pizza",
+              "touches": [
+                25,
+                40
+              ]
+            },
+            {
+              "label": "**Rice farm + café**",
+              "note": "`rice` · ~3 s · lead Kaylee: plant, shoo, cut; bang the grains",
+              "touches": [
+                50,
+                70
+              ]
+            },
+            {
+              "label": "**Bo Kluea**",
+              "note": "`salt` · ~5 s · dip, pour, stoke, scoop",
+              "touches": [
+                25,
+                40
+              ]
+            },
+            {
+              "label": "The “3” road",
+              "note": "`three` · at once · steer down the hairpins, the 3 from above",
+              "touches": [
+                15,
+                25
+              ]
+            },
+            {
+              "label": "Home",
+              "note": "`home` · 20-30 s · pick the photo for Agong's wall",
+              "touches": [
+                2,
+                4
+              ]
+            }
           ]
         },
         {
@@ -162,25 +400,118 @@
             {
               "type": "table",
               "total": true,
-              "head": ["Leg", "Sections", "First play", "Touches", "Talk before 1st touch", "Her hands do"],
+              "head": [
+                "Leg",
+                "Sections",
+                "First play",
+                "Touches",
+                "Talk before 1st touch",
+                "Her hands do"
+              ],
               "rows": [
-                ["Mommy asks", "`invite`", "~5 s", "1", "1 line", "picks 🏔️🚙"],
-                ["Pack, goodbye, airport, plane", "`pack` … `land`", "as the boat trip", "as the boat trip", "1 line each", "the trip kit"],
-                ["Rental desk", "`rental`", "~5 s", "6-10", "1 line", "key fob, suitcase into the boot, seatbelt click"],
-                ["The Nan map", "`map`", "~3 s", "1-3", "1 line (first time)", "tap where to go next"],
-                ["**The mountain road**", "`drive` (`?road=…`)", "**at once**", "**15-30 per drive**", "0-1 line", "steer, honk, wipers"],
-                ["**Mushroom farm**", "`mushrooms`", "~5 s", "25-40", "1 line", "mist, pick, top the pizza"],
-                ["**Rice farm + café**", "`rice`", "~3 s", "50-70", "1 line", "lead Kaylee: plant, shoo the birds, cut; bang the grains"],
-                ["**Bo Kluea**", "`salt`", "~5 s", "25-40", "1 line", "dip, pour, stoke, scoop"],
-                ["The “3” road", "`three`", "at once", "15-25", "0 lines", "steer down the hairpins, the 3 from above"],
-                ["Home", "`home`", "20-30 s", "2-4", "1 line", "pick the photo for Agong's wall"],
-                ["**Total**", "", "**~10-17 min** (all three stops)", "**~150-225**", "", ""]
+                [
+                  "Mommy asks",
+                  "`invite`",
+                  "~5 s",
+                  "1",
+                  "1 line",
+                  "picks 🏔️🚙"
+                ],
+                [
+                  "Pack, goodbye, airport, plane",
+                  "`pack` … `land`",
+                  "as the boat trip",
+                  "as the boat trip",
+                  "1 line each",
+                  "the trip kit"
+                ],
+                [
+                  "Rental desk",
+                  "`rental`",
+                  "~5 s",
+                  "6-10",
+                  "1 line",
+                  "key fob, suitcase into the boot, seatbelt click"
+                ],
+                [
+                  "The Nan map",
+                  "`map`",
+                  "~3 s",
+                  "1-3",
+                  "1 line (first time)",
+                  "tap where to go next"
+                ],
+                [
+                  "**The mountain road**",
+                  "`drive` (`?road=…`)",
+                  "**at once**",
+                  "**15-30 per drive**",
+                  "0-1 line",
+                  "steer, honk, wipers"
+                ],
+                [
+                  "**Mushroom farm**",
+                  "`mushrooms`",
+                  "~5 s",
+                  "25-40",
+                  "1 line",
+                  "mist, pick, top the pizza"
+                ],
+                [
+                  "**Rice farm + café**",
+                  "`rice`",
+                  "~3 s",
+                  "50-70",
+                  "1 line",
+                  "lead Kaylee: plant, shoo the birds, cut; bang the grains"
+                ],
+                [
+                  "**Bo Kluea**",
+                  "`salt`",
+                  "~5 s",
+                  "25-40",
+                  "1 line",
+                  "dip, pour, stoke, scoop"
+                ],
+                [
+                  "The “3” road",
+                  "`three`",
+                  "at once",
+                  "15-25",
+                  "0 lines",
+                  "steer down the hairpins, the 3 from above"
+                ],
+                [
+                  "Home",
+                  "`home`",
+                  "20-30 s",
+                  "2-4",
+                  "1 line",
+                  "pick the photo for Agong's wall"
+                ],
+                [
+                  "**Total**",
+                  "",
+                  "**~10-17 min** (all three stops)",
+                  "**~150-225**",
+                  "",
+                  ""
+                ]
               ]
             }
           ]
         },
-        { "type": "callout", "tone": "note", "icon": "🔀", "title": "Any order, as Kaylee asked", "md": "Every stop is open on the map from the start, and each one gets a stamp on the map. After two stops Mommy asks “Home, or one more?” (🏠 / 🚙) each time she's back at the map; after three the only road left is home, by the “3” road. The trip's passport stamp comes at `home`, like the other trips." },
-        { "type": "text", "md": "**Resume and replays,** as in the other trips: the trip saves after each stop (`useSaved('thailand-nan-trip')`). After the first full trip the card offers 🗺️ (straight to the map, the Pajero ready, stops cleared) for replays." },
+        {
+          "type": "callout",
+          "tone": "note",
+          "icon": "🔀",
+          "title": "Any order, as Kaylee asked",
+          "md": "Every stop is open on the map from the start, and each one gets a stamp on the map. After two stops Mommy asks “Home, or one more?” (🏠 / 🚙) each time she's back at the map; after three the only road left is home, by the “3” road. The trip's passport stamp comes at `home`, like the other trips."
+        },
+        {
+          "type": "text",
+          "md": "**Resume and replays,** as in the other trips: the trip saves after each stop (`useSaved('thailand-nan-trip')`). After the first full trip the card offers 🗺️ (straight to the map, the Pajero ready, stops cleared) for replays."
+        },
         {
           "type": "list",
           "title": "What it borrows",
@@ -202,8 +533,20 @@
         {
           "type": "cards",
           "items": [
-            { "icon": "🏔️", "title": "Mommy asks where to", "tag": "`invite`", "md": "The invite card gets a third picture button: 🏔️🚙 “the mountains”. Mommy's line stays the same (“Where shall we go?”). Packing is on (`pack: { hint: 'cool' }`): her raincoat, a jumper and her boots fit; Mommy tucks in the umbrella. The goodbye is the boat trip's (Mommy, Daddy and Kaylee at the shutter) and Aunty Sri's van takes them to the airport." },
-            { "icon": "✈️", "title": "The window seat, Bangkok → Nan", "tag": "`takeoff` `fly` `land`", "md": "The same toy (clouds to wipe, the seatback screen), but the crayon line on the map goes up and right to the elephant's ear, and green bumps (mountains) pass under the plane. Landing at a small airport in a green valley, with mountains all around." }
+            {
+              "icon": "🏔️",
+              "title": "Mommy asks where to",
+              "tag": "`invite`",
+              "md": "The invite card gets a third picture button: 🏔️🚙 “the mountains”. Mommy's line stays the same (“Where shall we go?”). Packing is on (`pack: { hint: 'cool' }`): her raincoat, a jumper and her boots fit; Mommy tucks in the umbrella. The goodbye is the boat trip's (Mommy, Daddy and Kaylee at the shutter) and Aunty Sri's van takes them to the airport.",
+              "status": "done"
+            },
+            {
+              "icon": "✈️",
+              "title": "The window seat, Bangkok → Nan",
+              "tag": "`takeoff` `fly` `land`",
+              "md": "The same toy (clouds to wipe, the seatback screen), but the crayon line on the map goes up and right to the elephant's ear, and green bumps (mountains) pass under the plane. Landing at a small airport in a green valley, with mountains all around.",
+              "status": "done"
+            }
           ]
         },
         {
@@ -234,17 +577,39 @@
       "icon": "🗺️",
       "lede": "`map`. Not built yet (step 6).",
       "blocks": [
-        { "type": "text", "md": "A **toy diorama of Nan** on a table, seen from above at a slant: green hills, the Nan River winding down the middle, little clouds sitting on the peaks, a tiny town with its market, and three landmarks standing up like toys:" },
+        {
+          "type": "text",
+          "md": "A **toy diorama of Nan** on a table, seen from above at a slant: green hills, the Nan River winding down the middle, little clouds sitting on the peaks, a tiny town with its market, and three landmarks standing up like toys:"
+        },
         {
           "type": "chips",
           "items": [
-            { "icon": "🍄", "label": "Baan Huanam", "md": "a mushroom house with a big pink mushroom on the roof" },
-            { "icon": "🌾", "label": "Stop Time Cafe, at Sapan", "md": "rice steps with a little wooden café on the hill above them" },
-            { "icon": "🧂", "label": "Bo Kluea", "md": "a salt hut with a steaming pan" },
-            { "icon": "🛩️", "label": "The airport", "md": "with a tiny plane" }
+            {
+              "icon": "🍄",
+              "label": "Baan Huanam",
+              "md": "a mushroom house with a big pink mushroom on the roof"
+            },
+            {
+              "icon": "🌾",
+              "label": "Stop Time Cafe, at Sapan",
+              "md": "rice steps with a little wooden café on the hill above them"
+            },
+            {
+              "icon": "🧂",
+              "label": "Bo Kluea",
+              "md": "a salt hut with a steaming pan"
+            },
+            {
+              "icon": "🛩️",
+              "label": "The airport",
+              "md": "with a tiny plane"
+            }
           ]
         },
-        { "type": "text", "md": "The little Pajero sits on the roads. **Tap a landmark** and the Pajero zooms along the road to it on the diorama, then the camera dives into that road and she drives (`drive`). Or she **grabs the little Pajero and pulls it** along the roads (it never cuts across the hills) and lets go at a stop (built in step 6). **Done stops** get a stamp on their landmark. The first time, Sparkle says one line (“Where shall we go first?”).\n\n**Pokeables:** clouds that rain a little, the river (a fish jumps), the tiny plane (it takes off and lands), a buffalo that moos.\n\n**Teaches:** Nan is in the north of Thailand, in the mountains, next to another country (Laos, at the diorama's edge)." }
+        {
+          "type": "text",
+          "md": "The little Pajero sits on the roads. **Tap a landmark** and the Pajero zooms along the road to it on the diorama, then the camera dives into that road and she drives (`drive`). Or she **grabs the little Pajero and pulls it** along the roads (it never cuts across the hills) and lets go at a stop (built in step 6). **Done stops** get a stamp on their landmark. The first time, Sparkle says one line (“Where shall we go first?”).\n\n**Pokeables:** clouds that rain a little, the river (a fish jumps), the tiny plane (it takes off and lands), a buffalo that moos.\n\n**Teaches:** Nan is in the north of Thailand, in the mountains, next to another country (Laos, at the diorama's edge)."
+        }
       ]
     },
     {
@@ -253,62 +618,157 @@
       "icon": "🚙",
       "lede": "`drive`; keep left, slow on bends, clouds, counting. Mommy drives the big Pajero through the mountains; Kaylee steers it round the bends, beeps at the blind corners and drives right up into the clouds.",
       "blocks": [
-        { "type": "callout", "tone": "dad", "icon": "👆", "title": "Core verb: steer the Pajero with her finger", "md": "It always rolls forward (Mommy's foot); her finger, anywhere on the road ahead, picks where across the road it goes. Let go and Mommy keeps it in the lane by herself." },
+        {
+          "type": "callout",
+          "tone": "dad",
+          "icon": "👆",
+          "title": "Core verb: steer the Pajero with her finger",
+          "md": "It always rolls forward (Mommy's foot); her finger, anywhere on the road ahead, picks where across the road it goes. Let go and Mommy keeps it in the lane by herself."
+        },
         {
           "type": "cards",
           "wide": true,
           "items": [
-            { "icon": "🪨", "title": "How it feels", "md": "Heavy and bouncy. The big body leans out on the bends and squats when it brakes. The wipers swish, the tyres hiss in puddles, and the road climbs and dips so the view swings." },
-            { "icon": "✨", "title": "Why it's fun with no goal", "md": "Driving a big car round curves is fun on its own, and every bend reveals something new. Greybox test: a box car on a ribbon road over grey hills, three road shapes, the horn." }
+            {
+              "icon": "🪨",
+              "title": "How it feels",
+              "md": "Heavy and bouncy. The big body leans out on the bends and squats when it brakes. The wipers swish, the tyres hiss in puddles, and the road climbs and dips so the view swings."
+            },
+            {
+              "icon": "✨",
+              "title": "Why it's fun with no goal",
+              "md": "Driving a big car round curves is fun on its own, and every bend reveals something new. Greybox test: a box car on a ribbon road over grey hills, three road shapes, the horn."
+            }
           ]
         },
         {
           "type": "ladder",
           "title": "How it deepens (three roads, same verb)",
           "items": [
-            { "icon": "🌾", "title": "The valley road", "tag": "`?road=valley`", "md": "To the mushroom farm, in Pua: a gentle road through rice fields. Buffalo graze, chickens cross, a **songthaew passes on the other side**: steer onto the right side and Mommy says “Keep left!” and eases back. A buffalo steps onto the road and the Pajero slows by itself until it ambles across." },
-            { "icon": "☁️", "title": "The sky road", "tag": "`?road=sky`", "md": "To Sapan and Bo Kluea, over Doi Phu Kha (the café and the salt wells): steep S-bends climbing into the cloud. The cloud gets thicker until it's white all round (the headlights come on), then the Pajero pops out above it into sunshine. At **blind bends** a round mirror shows a car coming: tap the horn (the steering-wheel boss, in the car) for a short beep before the bend, and the other car beeps back." },
-            { "icon": "3️⃣", "title": "The “3” road", "tag": "`?road=three`", "md": "The way home, from the last stop: the hairpins down to Santi Suk. A chevron sign on each bend. Kaylee counts “one… two… three” bends aloud with Sparkle, then at the viewpoint the camera lifts up and the road below draws a giant **3** (the `three` section)." }
+            {
+              "icon": "🌾",
+              "title": "The valley road",
+              "tag": "`?road=valley`",
+              "md": "To the mushroom farm, in Pua: a gentle road through rice fields. Buffalo graze, chickens cross, a **songthaew passes on the other side**: steer onto the right side and Mommy says “Keep left!” and eases back. A buffalo steps onto the road and the Pajero slows by itself until it ambles across."
+            },
+            {
+              "icon": "☁️",
+              "title": "The sky road",
+              "tag": "`?road=sky`",
+              "md": "To Sapan and Bo Kluea, over Doi Phu Kha (the café and the salt wells): steep S-bends climbing into the cloud. The cloud gets thicker until it's white all round (the headlights come on), then the Pajero pops out above it into sunshine. At **blind bends** a round mirror shows a car coming: tap the horn (the steering-wheel boss, in the car) for a short beep before the bend, and the other car beeps back."
+            },
+            {
+              "icon": "3️⃣",
+              "title": "The “3” road",
+              "tag": "`?road=three`",
+              "md": "The way home, from the last stop: the hairpins down to Santi Suk. A chevron sign on each bend. Kaylee counts “one… two… three” bends aloud with Sparkle, then at the viewpoint the camera lifts up and the road below draws a giant **3** (the `three` section)."
+            }
           ]
         },
-        { "type": "text", "md": "Through Nan town is a short city road (`?road=city`): tuk-tuks, the river bridge, ending at the market, 20-30 s.\n\n**Side verb: the horn** (one tap). The wipers come on by themselves in the rain, but tapping them makes them swish faster.\n\n**Her choices:** where on the road (hug the mountain side or the valley side), when to beep, which stop next (the map)." },
+        {
+          "type": "text",
+          "md": "Through Nan town is a short city road (`?road=city`): tuk-tuks, the river bridge, ending at the market, 20-30 s.\n\n**Side verb: the horn** (one tap). The wipers come on by themselves in the rain, but tapping them makes them swish faster.\n\n**Her choices:** where on the road (hug the mountain side or the valley side), when to beep, which stop next (the map)."
+        },
         {
           "type": "chips",
           "title": "Things to poke",
           "items": [
-            { "icon": "🐃", "label": "The buffalo", "md": "moo" },
-            { "icon": "🐔", "label": "The chickens", "md": "flap off the road" },
-            { "icon": "🛵", "label": "Scooters", "md": "with families waving" },
-            { "icon": "🐒", "label": "A monkey", "md": "on the guard rail" },
-            { "icon": "💧", "label": "A waterfall", "md": "by the road" },
-            { "icon": "🪞", "label": "The mirror", "md": "" },
-            { "icon": "🐘", "label": "The dashboard toy", "md": "a nodding elephant" }
+            {
+              "icon": "🐃",
+              "label": "The buffalo",
+              "md": "moo"
+            },
+            {
+              "icon": "🐔",
+              "label": "The chickens",
+              "md": "flap off the road"
+            },
+            {
+              "icon": "🛵",
+              "label": "Scooters",
+              "md": "with families waving"
+            },
+            {
+              "icon": "🐒",
+              "label": "A monkey",
+              "md": "on the guard rail"
+            },
+            {
+              "icon": "💧",
+              "label": "A waterfall",
+              "md": "by the road"
+            },
+            {
+              "icon": "🪞",
+              "label": "The mirror",
+              "md": ""
+            },
+            {
+              "icon": "🐘",
+              "label": "The dashboard toy",
+              "md": "a nodding elephant"
+            }
           ]
         },
         {
           "type": "chips",
           "title": "Silly moments (instead of failure)",
           "items": [
-            { "icon": "🎯", "label": "Steer at the guard rail", "md": "It boings the Pajero back like a pinball bumper (Daddy's “Whoa!”)." },
-            { "icon": "📯", "label": "Keep beeping", "md": "A buffalo moos back." },
-            { "icon": "🎶", "label": "Drive onto the right side", "md": "The songthaew driver waves and honks a tune." },
-            { "icon": "🛡️", "label": "No crash, ever", "md": "The car can't leave the road." }
+            {
+              "icon": "🎯",
+              "label": "Steer at the guard rail",
+              "md": "It boings the Pajero back like a pinball bumper (Daddy's “Whoa!”)."
+            },
+            {
+              "icon": "📯",
+              "label": "Keep beeping",
+              "md": "A buffalo moos back."
+            },
+            {
+              "icon": "🎶",
+              "label": "Drive onto the right side",
+              "md": "The songthaew driver waves and honks a tune."
+            },
+            {
+              "icon": "🛡️",
+              "label": "No crash, ever",
+              "md": "The car can't leave the road."
+            }
           ]
         },
         {
           "type": "cards",
           "items": [
-            { "icon": "💬", "title": "Story frame", "md": "Mommy: “Let's drive to the mushroom farm! Steer for me, Kaylee!” (first drive only). Sparkle speaks when something new appears: the first blind bend and mirror (“Beep before the bend!”), the first cloud (“We're driving into a cloud!”), the hairpins (“Let's count the bends!”), or after 8 s with the finger off and nothing touched (“Steer the car with your finger!”)." },
-            { "icon": "🎓", "title": "What it teaches, by doing", "md": "Keep left (the songthaew on the other side), go slow on bends (the Pajero slows itself before each chevron sign and leans), beep at blind bends, clouds sit on mountains (she drives into one), count to three (the hairpins). Tap-to-hear facts: the Pajero is made in Thailand; in Thailand cars drive on the left; the big round mirrors show cars coming round the bend." },
-            { "icon": "🎉", "title": "Payoff and replay", "md": "The stop at the end of the road (the Pajero pulls in and everyone hops out), and on the way home, the 3. On a replay the roads are the same, the traffic and animals are random; the weather (rain, sun, cloud) changes." },
-            { "icon": "🔢", "title": "Numbers", "md": "Each drive about 45-75 s with 15-30 touches (holding and steering counts as continuous play, plus the horn and pokeables). About 4-5 drives in a full trip." }
+            {
+              "icon": "💬",
+              "title": "Story frame",
+              "md": "Mommy: “Let's drive to the mushroom farm! Steer for me, Kaylee!” (first drive only). Sparkle speaks when something new appears: the first blind bend and mirror (“Beep before the bend!”), the first cloud (“We're driving into a cloud!”), the hairpins (“Let's count the bends!”), or after 8 s with the finger off and nothing touched (“Steer the car with your finger!”)."
+            },
+            {
+              "icon": "🎓",
+              "title": "What it teaches, by doing",
+              "md": "Keep left (the songthaew on the other side), go slow on bends (the Pajero slows itself before each chevron sign and leans), beep at blind bends, clouds sit on mountains (she drives into one), count to three (the hairpins). Tap-to-hear facts: the Pajero is made in Thailand; in Thailand cars drive on the left; the big round mirrors show cars coming round the bend."
+            },
+            {
+              "icon": "🎉",
+              "title": "Payoff and replay",
+              "md": "The stop at the end of the road (the Pajero pulls in and everyone hops out), and on the way home, the 3. On a replay the roads are the same, the traffic and animals are random; the weather (rain, sun, cloud) changes."
+            },
+            {
+              "icon": "🔢",
+              "title": "Numbers",
+              "md": "Each drive about 45-75 s with 15-30 touches (holding and steering counts as continuous play, plus the horn and pokeables). About 4-5 drives in a full trip."
+            }
           ]
         },
         {
           "type": "details",
           "summary": "Camera and tech for the drive",
           "blocks": [
-            { "type": "text", "md": "**Camera:** a chase camera behind and above the Pajero, looking ahead along the road (the race's `Shot` with look-ahead), lifting higher on hairpins so she can see the bend coming. In portrait it sits higher to show more road. `three` ends with a slow crane up and over to the viewpoint, framing the whole 3.\n\n**Tech:** a road kit in `trip/road/` (reusable for any later drive): the road is a list of points with heights in meters (pure data), turned into an open spline; the ribbon road, the verges, the hills either side and the guard rails are built from it. The race's `spotAt`/`locate` maths, extended to height. Clouds are a few big soft toon blobs and the particle pool (mist). The Pajero runs on `Driver` with a heavy `Feel` (low top speed, strong lean).\n\n**Riskiest:** steering on a road that climbs and turns at the same time, with a camera that never loses the next bend, on an iPhone in portrait." }
+            {
+              "type": "text",
+              "md": "**Camera:** a chase camera behind and above the Pajero, looking ahead along the road (the race's `Shot` with look-ahead), lifting higher on hairpins so she can see the bend coming. In portrait it sits higher to show more road. `three` ends with a slow crane up and over to the viewpoint, framing the whole 3.\n\n**Tech:** a road kit in `trip/road/` (reusable for any later drive): the road is a list of points with heights in meters (pure data), turned into an open spline; the ribbon road, the verges, the hills either side and the guard rails are built from it. The race's `spotAt`/`locate` maths, extended to height. Clouds are a few big soft toon blobs and the particle pool (mist). The Pajero runs on `Driver` with a heavy `Feel` (low top speed, strong lean).\n\n**Riskiest:** steering on a road that climbs and turns at the same time, with a camera that never loses the next bend, on an iPhone in portrait."
+            }
           ]
         }
       ]
@@ -320,25 +780,72 @@
       "group": "The stops",
       "lede": "`mushrooms`; mushrooms aren't plants, they love dark and wet. Each stop follows the activity template: one core verb that deepens three times, about 20-40 touches and 1.5-3 minutes, at most one or two spoken lines before her hands are busy, no failing, and it ends with a family photo and a stamp on the map.",
       "blocks": [
-        { "type": "callout", "tone": "dad", "icon": "💦", "title": "The farmer's mushroom house is thirsty", "md": "**The toy:** hold the misting hose over the rows of sawdust bags. A soft spray hisses out where her finger is; a rainbow shows in the mist. Under the spray, tiny mushrooms pop out of the bags' mouths and swell into frilly fans." },
+        {
+          "type": "callout",
+          "tone": "dad",
+          "icon": "💦",
+          "title": "The farmer's mushroom house is thirsty",
+          "md": "**The toy:** hold the misting hose over the rows of sawdust bags. A soft spray hisses out where her finger is; a rainbow shows in the mist. Under the spray, tiny mushrooms pop out of the bags' mouths and swell into frilly fans."
+        },
         {
           "type": "ladder",
           "items": [
-            { "title": "Mist", "tag": "`?round=1`", "md": "Grey oyster mushrooms pop and grow wherever she sprays. The dark house drips and glistens." },
-            { "title": "Pick", "tag": "`?round=2`", "md": "Ready mushrooms wiggle; drag one and twist and it comes off into the basket with a pop. Keep spraying one and it grows enormous, bouncy and silly (she can boing on it)." },
-            { "title": "Pink and gold", "tag": "`?round=3`", "md": "New bags sprout **pink oyster mushrooms** and golden ones; she picks a basket of colors." },
-            { "n": "🍕", "title": "Side verb: the mushroom pizza", "tag": "`?round=pizza`", "md": "At the farm's table, put her basket on the **mushroom pizza** (place-anywhere toppings, like a sticker board on the pizza), then it comes out of the oven and the family shares it with a view." }
+            {
+              "title": "Mist",
+              "tag": "`?round=1`",
+              "md": "Grey oyster mushrooms pop and grow wherever she sprays. The dark house drips and glistens."
+            },
+            {
+              "title": "Pick",
+              "tag": "`?round=2`",
+              "md": "Ready mushrooms wiggle; drag one and twist and it comes off into the basket with a pop. Keep spraying one and it grows enormous, bouncy and silly (she can boing on it)."
+            },
+            {
+              "title": "Pink and gold",
+              "tag": "`?round=3`",
+              "md": "New bags sprout **pink oyster mushrooms** and golden ones; she picks a basket of colors."
+            },
+            {
+              "n": "🍕",
+              "title": "Side verb: the mushroom pizza",
+              "tag": "`?round=pizza`",
+              "md": "At the farm's table, put her basket on the **mushroom pizza** (place-anywhere toppings, like a sticker board on the pizza), then it comes out of the oven and the family shares it with a view."
+            }
           ]
         },
         {
           "type": "cards",
           "items": [
-            { "icon": "🤔", "title": "Her choices", "md": "Which bags to mist, which mushrooms (and colors) to pick, where they go on the pizza." },
-            { "icon": "👉", "title": "Pokeables", "md": "The farmer (cast: a farmer aunty) who laughs, a gecko on the wall, a sleepy dog, the drip from the roof, the little sign of a mushroom drawing (a mushroom with a smiley face)." },
-            { "icon": "🤪", "title": "Silly", "md": "Spray Daddy and he gets a mushroom hat; the giant mushroom she bounces on." },
-            { "icon": "🎓", "title": "Teaches", "md": "Mushrooms don't grow from seeds in soil like plants: they grow from sawdust in a dark, damp house, and they love the rainy season. Facts: mushrooms aren't plants; Baan Huanam grows its own mushrooms; pink oyster mushrooms are real." },
-            { "icon": "🎉", "title": "Payoff", "md": "The full basket, then the pizza with her mushrooms on it." },
-            { "icon": "🎥", "title": "Camera and state", "md": "Inside the mushroom house, a low side view along the rows of bags; the pizza straight on at the table. `basket` (e.g. `pink2,grey5,gold1`) goes to the pizza." }
+            {
+              "icon": "🤔",
+              "title": "Her choices",
+              "md": "Which bags to mist, which mushrooms (and colors) to pick, where they go on the pizza."
+            },
+            {
+              "icon": "👉",
+              "title": "Pokeables",
+              "md": "The farmer (cast: a farmer aunty) who laughs, a gecko on the wall, a sleepy dog, the drip from the roof, the little sign of a mushroom drawing (a mushroom with a smiley face)."
+            },
+            {
+              "icon": "🤪",
+              "title": "Silly",
+              "md": "Spray Daddy and he gets a mushroom hat; the giant mushroom she bounces on."
+            },
+            {
+              "icon": "🎓",
+              "title": "Teaches",
+              "md": "Mushrooms don't grow from seeds in soil like plants: they grow from sawdust in a dark, damp house, and they love the rainy season. Facts: mushrooms aren't plants; Baan Huanam grows its own mushrooms; pink oyster mushrooms are real."
+            },
+            {
+              "icon": "🎉",
+              "title": "Payoff",
+              "md": "The full basket, then the pizza with her mushrooms on it."
+            },
+            {
+              "icon": "🎥",
+              "title": "Camera and state",
+              "md": "Inside the mushroom house, a low side view along the rows of bags; the pizza straight on at the table. `basket` (e.g. `pink2,grey5,gold1`) goes to the pizza."
+            }
           ]
         }
       ]
@@ -349,16 +856,50 @@
       "icon": "🌾",
       "lede": "`rice`; rice grows in water, from seedling to sticky rice.",
       "blocks": [
-        { "type": "callout", "tone": "warn", "icon": "🔁", "title": "Rebuilt (2026-10-25): see the rice plan", "md": "The first greybox (PR #168: pour water down curved terraces, draw the seedlings in, carry rain clouds) didn't work for Dad. The new toy is planned in [`nan-rice.md`](nan-rice.md)." },
-        { "type": "text", "md": "Kaylee's little rice farm below the café, in the cozy look of Dad's Animal Crossing references: four square paddies she **walks around in, led by her finger**, and whatever she walks through changes behind her." },
+        {
+          "type": "callout",
+          "tone": "warn",
+          "icon": "🔁",
+          "title": "Rebuilt (2026-10-25): see the rice plan",
+          "md": "The first greybox (PR #168: pour water down curved terraces, draw the seedlings in, carry rain clouds) didn't work for Dad. The new toy is planned in [`nan-rice.md`](nan-rice.md)."
+        },
+        {
+          "type": "text",
+          "md": "Kaylee's little rice farm below the café, in the cozy look of Dad's Animal Crossing references: four square paddies she **walks around in, led by her finger**, and whatever she walks through changes behind her."
+        },
         {
           "type": "ladder",
           "items": [
-            { "icon": "🌱", "title": "Plant", "tag": "`?round=plant`", "md": "Seedlings plip in behind her." },
-            { "icon": "🐦", "title": "Grow", "tag": "`?round=grow`", "md": "The birds fly up while it grows." },
-            { "icon": "🌾", "title": "Harvest", "tag": "`?round=harvest`", "md": "The golden rice is cut into bundles." },
-            { "icon": "🪵", "title": "Thresh", "tag": "`?round=thresh`", "md": "She bangs the grains out." },
-            { "icon": "☕", "title": "The deck", "tag": "`?round=deck`", "md": "Sticky rice on the café deck (kept from #168, with the pink milk and Mommy's photo), and a 60-second video shows real rice farming, the same steps her hands just did." }
+            {
+              "icon": "🌱",
+              "title": "Plant",
+              "tag": "`?round=plant`",
+              "md": "Seedlings plip in behind her."
+            },
+            {
+              "icon": "🐦",
+              "title": "Grow",
+              "tag": "`?round=grow`",
+              "md": "The birds fly up while it grows."
+            },
+            {
+              "icon": "🌾",
+              "title": "Harvest",
+              "tag": "`?round=harvest`",
+              "md": "The golden rice is cut into bundles."
+            },
+            {
+              "icon": "🪵",
+              "title": "Thresh",
+              "tag": "`?round=thresh`",
+              "md": "She bangs the grains out."
+            },
+            {
+              "icon": "☕",
+              "title": "The deck",
+              "tag": "`?round=deck`",
+              "md": "Sticky rice on the café deck (kept from #168, with the pink milk and Mommy's photo), and a 60-second video shows real rice farming, the same steps her hands just did."
+            }
           ]
         }
       ]
@@ -369,25 +910,73 @@
       "icon": "🧂",
       "lede": "`salt`; salt from the mountains, boiling.",
       "blocks": [
-        { "type": "callout", "tone": "dad", "icon": "🪣", "title": "A well full of very salty water", "md": "In a village high in the mountains, Kaylee helps the salt aunty turn it into white salt. **The toy:** a bucket on a long bamboo pole over the well. Drag it down into the well (splash, glug), lift it up full and swing it over the big pan, tip it and the brine pours in." },
+        {
+          "type": "callout",
+          "tone": "dad",
+          "icon": "🪣",
+          "title": "A well full of very salty water",
+          "md": "In a village high in the mountains, Kaylee helps the salt aunty turn it into white salt. **The toy:** a bucket on a long bamboo pole over the well. Drag it down into the well (splash, glug), lift it up full and swing it over the big pan, tip it and the brine pours in."
+        },
         {
           "type": "ladder",
           "items": [
-            { "title": "Dip and pour", "tag": "`?round=1`", "md": "Fill the big pan bucket by bucket (it fills up visibly)." },
-            { "title": "Fire", "tag": "`?round=2`", "md": "Tap the logs under the pan (or blow, holding a finger on the fire) and the flames grow; steam rises in clouds; the water level drops." },
-            { "title": "Salt!", "tag": "`?round=3`", "md": "White crystals appear at the edges and spread; she scrapes them with the wooden paddle into the basket. The basket fills up, heaped and sparkling, and the salt aunty pours it into bags on the shelf." }
+            {
+              "title": "Dip and pour",
+              "tag": "`?round=1`",
+              "md": "Fill the big pan bucket by bucket (it fills up visibly)."
+            },
+            {
+              "title": "Fire",
+              "tag": "`?round=2`",
+              "md": "Tap the logs under the pan (or blow, holding a finger on the fire) and the flames grow; steam rises in clouds; the water level drops."
+            },
+            {
+              "title": "Salt!",
+              "tag": "`?round=3`",
+              "md": "White crystals appear at the edges and spread; she scrapes them with the wooden paddle into the basket. The basket fills up, heaped and sparkling, and the salt aunty pours it into bags on the shelf."
+            }
           ]
         },
-        { "type": "callout", "tone": "done", "icon": "🧱", "title": "As built (greybox, 2026-10-25)", "md": "The bucket hangs on a rope from a ring that slides along a bamboo beam over the well and the pan, so her finger can take it anywhere in the hut (a pole that only tips couldn't reach the pan). The fire is a drag too (a log from the woodpile into the fire's mouth), and round 3 looks down into the pan. One verb in her hands all the way: grab a thing and move it (the bucket, a log, the paddle)." },
+        {
+          "type": "callout",
+          "tone": "done",
+          "icon": "🧱",
+          "title": "As built (greybox, 2026-10-25)",
+          "md": "The bucket hangs on a rope from a ring that slides along a bamboo beam over the well and the pan, so her finger can take it anywhere in the hut (a pole that only tips couldn't reach the pan). The fire is a drag too (a log from the woodpile into the fire's mouth), and round 3 looks down into the pan. One verb in her hands all the way: grab a thing and move it (the bucket, a log, the paddle)."
+        },
         {
           "type": "cards",
           "items": [
-            { "icon": "🤔", "title": "Her choices", "md": "When to pour, how big the fire." },
-            { "icon": "👉", "title": "Pokeables", "md": "The salt aunty (laughs), a cat sleeping warm by the fire, the drying baskets, a rooster, the mural of the Tai Lue couple on the house across the road (from Dad's video)." },
-            { "icon": "😝", "title": "Silly", "md": "She licks a finger: a big salty face (her unicorn's mouth puckers, eyes squeeze); pour brine on Daddy's foot and he hops." },
-            { "icon": "🎓", "title": "Teaches", "md": "There's salt in the mountains, far from the sea, because a sea was here long, long ago; boiling the water away leaves the salt behind. Facts: people in Bo Kluea have made salt this way for hundreds of years." },
-            { "icon": "🎉", "title": "Payoff", "md": "A heaped basket of white salt she made, and a shelf of full bags." },
-            { "icon": "🎥", "title": "Camera", "md": "Inside the open-sided salt hut, side view: the well on the left, the pan and fire on the right." }
+            {
+              "icon": "🤔",
+              "title": "Her choices",
+              "md": "When to pour, how big the fire."
+            },
+            {
+              "icon": "👉",
+              "title": "Pokeables",
+              "md": "The salt aunty (laughs), a cat sleeping warm by the fire, the drying baskets, a rooster, the mural of the Tai Lue couple on the house across the road (from Dad's video)."
+            },
+            {
+              "icon": "😝",
+              "title": "Silly",
+              "md": "She licks a finger: a big salty face (her unicorn's mouth puckers, eyes squeeze); pour brine on Daddy's foot and he hops."
+            },
+            {
+              "icon": "🎓",
+              "title": "Teaches",
+              "md": "There's salt in the mountains, far from the sea, because a sea was here long, long ago; boiling the water away leaves the salt behind. Facts: people in Bo Kluea have made salt this way for hundreds of years."
+            },
+            {
+              "icon": "🎉",
+              "title": "Payoff",
+              "md": "A heaped basket of white salt she made, and a shelf of full bags."
+            },
+            {
+              "icon": "🎥",
+              "title": "Camera",
+              "md": "Inside the open-sided salt hut, side view: the well on the left, the pan and fire on the right."
+            }
           ]
         }
       ]
@@ -401,11 +990,29 @@
           "type": "cards",
           "wide": true,
           "items": [
-            { "icon": "3️⃣", "title": "The “3” road", "tag": "`three`; counting", "status": "todo", "md": "The last drive (`drive?road=three`), and then the viewpoint: the Pajero stops at a lay-by, the camera lifts up and over the hill, and the road below is a big swoopy **3**. Kaylee traces it with her finger and a crayon line follows (one, two, three), the family photo is taken with the 3 behind them, and Sparkle says “Three! Kaylee drove the 3!”. Then the road goes on to the airport and the plane home." },
-            { "icon": "🏠", "title": "Home", "tag": "`home`", "status": "todo", "md": "The home flight (`trip/legs/home-flight.ts`), the van, Agong's door. No gift this time (Dad): the family hops in, Agong waves hello, and the photo she picks (the café balcony, the 3, the mushroom pizza, the salt pan) goes on his wall. Tap it and Mommy says “Our trip to Nan!”." }
+            {
+              "icon": "3️⃣",
+              "title": "The “3” road",
+              "tag": "`three`; counting",
+              "status": "done",
+              "md": "The last drive (`drive?road=three`), and then the viewpoint: the Pajero stops at a lay-by, the camera lifts up and over the hill, and the road below is a big swoopy **3**. Kaylee traces it with her finger and a crayon line follows (one, two, three), the family photo is taken with the 3 behind them, and Sparkle says “Three! Kaylee drove the 3!”. Then the road goes on to the airport and the plane home."
+            },
+            {
+              "icon": "🏠",
+              "title": "Home",
+              "tag": "`home`",
+              "status": "done",
+              "md": "The home flight (`trip/legs/home-flight.ts`), the van, Agong's door. No gift this time (Dad): the family hops in, Agong waves hello, and the photo she picks (the café balcony, the 3, the mushroom pizza, the salt pan) goes on his wall. Tap it and Mommy says “Our trip to Nan!”."
+            }
           ]
         },
-        { "type": "callout", "tone": "warn", "icon": "🚫", "title": "Wat Phumin was dropped", "md": "It was planned as a stop (Dad, 2026-10-25): temples are very sacred to many people in Thailand, and a game can easily get something wrong, so there are no temples or Buddhas in the game (AGENTS.md). Its greybox (PR #187) was closed unmerged, and the city road now ends at Nan's market." }
+        {
+          "type": "callout",
+          "tone": "warn",
+          "icon": "🚫",
+          "title": "Wat Phumin was dropped",
+          "md": "It was planned as a stop (Dad, 2026-10-25): temples are very sacred to many people in Thailand, and a game can easily get something wrong, so there are no temples or Buddhas in the game (AGENTS.md). Its greybox (PR #187) was closed unmerged, and the city road now ends at Nan's market."
+        }
       ]
     },
     {
@@ -419,21 +1026,121 @@
           "type": "sections",
           "base": "#/world/thailand/nan-trip/",
           "items": [
-            { "n": 1, "id": "invite", "name": "Mommy asks: where shall we go?", "status": "todo" },
-            { "n": 2, "id": "pack", "name": "Pack for the mountains", "reads": ["packed"], "status": "todo" },
-            { "n": 3, "id": "goodbye", "name": "Goodbye at Agong's house", "reads": ["packed"], "status": "todo" },
-            { "n": 4, "id": "airport", "name": "The airport", "reads": ["packed"], "status": "todo" },
-            { "n": 5, "id": "takeoff", "name": "The window seat: take off", "status": "todo" },
-            { "n": 6, "id": "fly", "name": "Fly north to Nan", "status": "todo" },
-            { "n": 7, "id": "land", "name": "Land in Nan", "status": "todo" },
-            { "n": 8, "id": "rental", "name": "The rental desk: the Pajero's key", "reads": ["round"] },
-            { "n": 9, "id": "map", "name": "The Nan map: where next?", "reads": ["stops"] },
-            { "n": 10, "id": "drive", "name": "The mountain road", "reads": ["road", "to", "stops"] },
-            { "n": 11, "id": "mushrooms", "name": "The mushroom farm: mist, pick, the pizza", "reads": ["stops", "round", "basket"] },
-            { "n": 12, "id": "rice", "name": "Sapan's rice farm and Stop Time Cafe", "reads": ["stops", "round"] },
-            { "n": 13, "id": "salt", "name": "Bo Kluea: salt from the well", "reads": ["stops", "round"] },
-            { "n": 14, "id": "three", "name": "The “3” road from above", "reads": ["stops"] },
-            { "n": 15, "id": "home", "name": "Home: the photo on Agong's wall, the stamp", "reads": ["photos"], "status": "todo" }
+            {
+              "n": 1,
+              "id": "invite",
+              "name": "Mommy asks: where shall we go?"
+            },
+            {
+              "n": 2,
+              "id": "pack",
+              "name": "Pack for the mountains",
+              "reads": [
+                "packed"
+              ]
+            },
+            {
+              "n": 3,
+              "id": "goodbye",
+              "name": "Goodbye at Agong's house",
+              "reads": [
+                "packed"
+              ]
+            },
+            {
+              "n": 4,
+              "id": "airport",
+              "name": "The airport",
+              "reads": [
+                "packed"
+              ]
+            },
+            {
+              "n": 5,
+              "id": "takeoff",
+              "name": "The window seat: take off"
+            },
+            {
+              "n": 6,
+              "id": "fly",
+              "name": "Fly north to Nan"
+            },
+            {
+              "n": 7,
+              "id": "land",
+              "name": "Land in Nan"
+            },
+            {
+              "n": 8,
+              "id": "rental",
+              "name": "The rental desk: the Pajero's key",
+              "reads": [
+                "round"
+              ]
+            },
+            {
+              "n": 9,
+              "id": "map",
+              "name": "The Nan map: where next?",
+              "reads": [
+                "stops"
+              ]
+            },
+            {
+              "n": 10,
+              "id": "drive",
+              "name": "The mountain road",
+              "reads": [
+                "road",
+                "to",
+                "stops"
+              ]
+            },
+            {
+              "n": 11,
+              "id": "mushrooms",
+              "name": "The mushroom farm: mist, pick, the pizza",
+              "reads": [
+                "stops",
+                "round",
+                "basket"
+              ]
+            },
+            {
+              "n": 12,
+              "id": "rice",
+              "name": "Sapan's rice farm and Stop Time Cafe",
+              "reads": [
+                "stops",
+                "round"
+              ]
+            },
+            {
+              "n": 13,
+              "id": "salt",
+              "name": "Bo Kluea: salt from the well",
+              "reads": [
+                "stops",
+                "round"
+              ]
+            },
+            {
+              "n": 14,
+              "id": "three",
+              "name": "The “3” road from above",
+              "reads": [
+                "stops"
+              ]
+            },
+            {
+              "n": 15,
+              "id": "home",
+              "name": "Home: the photo on Agong's wall, the stamp",
+              "reads": [
+                "packed",
+                "photos"
+              ]
+            }
           ]
         },
         {
@@ -441,44 +1148,214 @@
           "title": "Every round that's built",
           "base": "#/world/thailand/nan-trip/",
           "items": [
-            { "n": "🏙️", "id": "drive", "query": "road=city", "name": "Through Nan town to the market" },
-            { "n": "🌾", "id": "drive", "query": "road=valley", "name": "The rice fields to the mushroom farm" },
-            { "n": "☁️", "id": "drive", "query": "road=sky", "name": "Up Doi Phu Kha into the clouds" },
-            { "n": "3️⃣", "id": "drive", "query": "road=three", "name": "Down the “number 3” road" },
-            { "n": "💦", "id": "mushrooms", "query": "round=1", "name": "Mist the bags until the mushrooms pop" },
-            { "n": "🧺", "id": "mushrooms", "query": "round=2", "name": "Pick them into the basket (keep misting one: giant!)" },
-            { "n": "💗", "id": "mushrooms", "query": "round=3&basket=grey6", "name": "Pink and golden mushrooms" },
-            { "n": "🍕", "id": "mushrooms", "query": "round=pizza&basket=grey6,pink4,gold2", "name": "Top the pizza, bake it, share it" },
-            { "n": "🌱", "id": "rice", "query": "round=plant", "name": "Plant the seedlings (open the gates)" },
-            { "n": "🐦", "id": "rice", "query": "round=grow", "name": "Shoo the birds while the rice grows golden" },
-            { "n": "🌾", "id": "rice", "query": "round=harvest", "name": "Cut the golden rice into bundles" },
-            { "n": "🪵", "id": "rice", "query": "round=thresh", "name": "Bang the grains into the basket, then the sticky rice" },
-            { "n": "☕", "id": "rice", "query": "round=deck", "name": "Sticky rice, pink milk, Mommy's photo, the rice video" },
-            { "n": "🪣", "id": "salt", "query": "round=1", "name": "Dip the bucket, pour the brine into the pan" },
-            { "n": "🔥", "id": "salt", "query": "round=2", "name": "Feed the fire till the brine boils down" },
-            { "n": "🧂", "id": "salt", "query": "round=3", "name": "Scrape the salt into the basket" },
-            {"n": "🔑", "id": "rental", "query": "round=key", "name": "Press the key fob (the Pajero chirps; 3 presses pop the tailgate)"},
-            {"n": "🧳", "id": "rental", "query": "round=boot", "name": "The bags into the boot"},
-            {"n": "🔒", "id": "rental", "query": "round=belt", "name": "Click the seatbelt, and off to the map"},
-            {"n": "🗺️", "id": "map", "name": "The Nan map: tap a place, or drag the little Pajero there"},
-            {"n": "💗", "id": "map", "query": "stops=mushrooms,rice", "name": "After two stops: the stamps, the airport opens"},
-            {"n": "🍄", "id": "drive", "query": "road=valley&to=mushrooms", "name": "Picked on the map: the farm opens at the end of the road"},
-            {"n": "✏️", "id": "three", "query": "stops=mushrooms,rice,salt", "name": "Draw the 3 with the big pink crayon"}
+            {
+              "n": "🏔️",
+              "id": "invite",
+              "name": "Mommy's card with 🏔️🚙 the mountains"
+            },
+            {
+              "n": "🧥",
+              "id": "pack",
+              "name": "Pack the raincoat and rain boots (Mommy tucks in the umbrella)"
+            },
+            {
+              "n": "🛬",
+              "id": "land",
+              "name": "Land in Nan's green valley, then the rental desk"
+            },
+            {
+              "n": "🏙️",
+              "id": "drive",
+              "query": "road=city",
+              "name": "Through Nan town to the market"
+            },
+            {
+              "n": "🌾",
+              "id": "drive",
+              "query": "road=valley",
+              "name": "The rice fields to the mushroom farm"
+            },
+            {
+              "n": "☁️",
+              "id": "drive",
+              "query": "road=sky",
+              "name": "Up Doi Phu Kha into the clouds"
+            },
+            {
+              "n": "3️⃣",
+              "id": "drive",
+              "query": "road=three",
+              "name": "Down the “number 3” road"
+            },
+            {
+              "n": "💦",
+              "id": "mushrooms",
+              "query": "round=1",
+              "name": "Mist the bags until the mushrooms pop"
+            },
+            {
+              "n": "🧺",
+              "id": "mushrooms",
+              "query": "round=2",
+              "name": "Pick them into the basket (keep misting one: giant!)"
+            },
+            {
+              "n": "💗",
+              "id": "mushrooms",
+              "query": "round=3&basket=grey6",
+              "name": "Pink and golden mushrooms"
+            },
+            {
+              "n": "🍕",
+              "id": "mushrooms",
+              "query": "round=pizza&basket=grey6,pink4,gold2",
+              "name": "Top the pizza, bake it, share it"
+            },
+            {
+              "n": "🌱",
+              "id": "rice",
+              "query": "round=plant",
+              "name": "Plant the seedlings (open the gates)"
+            },
+            {
+              "n": "🐦",
+              "id": "rice",
+              "query": "round=grow",
+              "name": "Shoo the birds while the rice grows golden"
+            },
+            {
+              "n": "🌾",
+              "id": "rice",
+              "query": "round=harvest",
+              "name": "Cut the golden rice into bundles"
+            },
+            {
+              "n": "🪵",
+              "id": "rice",
+              "query": "round=thresh",
+              "name": "Bang the grains into the basket, then the sticky rice"
+            },
+            {
+              "n": "☕",
+              "id": "rice",
+              "query": "round=deck",
+              "name": "Sticky rice, pink milk, Mommy's photo, the rice video"
+            },
+            {
+              "n": "🪣",
+              "id": "salt",
+              "query": "round=1",
+              "name": "Dip the bucket, pour the brine into the pan"
+            },
+            {
+              "n": "🔥",
+              "id": "salt",
+              "query": "round=2",
+              "name": "Feed the fire till the brine boils down"
+            },
+            {
+              "n": "🧂",
+              "id": "salt",
+              "query": "round=3",
+              "name": "Scrape the salt into the basket"
+            },
+            {
+              "n": "🔑",
+              "id": "rental",
+              "query": "round=key",
+              "name": "Press the key fob (the Pajero chirps; 3 presses pop the tailgate)"
+            },
+            {
+              "n": "🧳",
+              "id": "rental",
+              "query": "round=boot",
+              "name": "The bags into the boot"
+            },
+            {
+              "n": "🔒",
+              "id": "rental",
+              "query": "round=belt",
+              "name": "Click the seatbelt, and off to the map"
+            },
+            {
+              "n": "🗺️",
+              "id": "map",
+              "name": "The Nan map: tap a place, or drag the little Pajero there"
+            },
+            {
+              "n": "💗",
+              "id": "map",
+              "query": "stops=mushrooms,rice",
+              "name": "After two stops: the stamps, the airport opens"
+            },
+            {
+              "n": "🍄",
+              "id": "drive",
+              "query": "road=valley&to=mushrooms",
+              "name": "Picked on the map: the farm opens at the end of the road"
+            },
+            {
+              "n": "✏️",
+              "id": "three",
+              "query": "stops=mushrooms,rice,salt",
+              "name": "Draw the 3 with the big pink crayon"
+            },
+            {
+              "n": "🏠",
+              "id": "home?photos=deck,three,pizza,salt",
+              "name": "Home: pick one of the four Nan photos for Agong's wall"
+            }
           ]
         },
         {
           "type": "table",
           "title": "Params",
-          "head": ["Param", "Values", "Default"],
+          "head": [
+            "Param",
+            "Values",
+            "Default"
+          ],
           "rows": [
-            ["`packed`", "as the boat trip", ""],
-            ["`stops`", "the stops done so far (stamps on the map), a comma list of `mushrooms|rice|salt`", "empty"],
-            ["`road`", "which road `drive` plays, `city|valley|sky|three`", "`valley`"],
-            ["`to`", "where the drive is going, picked on the map: `mushrooms|rice|salt` (its stop opens by itself at the end of the road) or `map` (the city road comes back to the map)", "empty: the end card"],
-            ["`round`", "the step of the stop on screen, `1|2|3` (plus `pizza` at the mushroom farm; the rice farm's are `plant|grow|harvest|thresh|deck`)", "`1`"],
-            ["`basket`", "the mushrooms in her basket, `<color><count>` pairs, e.g. `grey5,pink2,gold1`", "empty: what she'd have by then (nothing in rounds 1 and 2, `grey6` in round 3, `grey4,pink2` at the pizza)"],
-            ["`photos`", "which photos exist", "for `home`: `deck,three`"],
-            ["`replay`", "as the other trips", ""]
+            [
+              "`packed`",
+              "as the boat trip",
+              ""
+            ],
+            [
+              "`stops`",
+              "the stops done so far (stamps on the map), a comma list of `mushrooms|rice|salt`",
+              "empty"
+            ],
+            [
+              "`road`",
+              "which road `drive` plays, `city|valley|sky|three`",
+              "`valley`"
+            ],
+            [
+              "`to`",
+              "where the drive is going, picked on the map: `mushrooms|rice|salt` (its stop opens by itself at the end of the road) or `map` (the city road comes back to the map)",
+              "empty: the end card"
+            ],
+            [
+              "`round`",
+              "the step of the stop on screen, `1|2|3` (plus `pizza` at the mushroom farm; the rice farm's are `plant|grow|harvest|thresh|deck`)",
+              "`1`"
+            ],
+            [
+              "`basket`",
+              "the mushrooms in her basket, `<color><count>` pairs, e.g. `grey5,pink2,gold1`",
+              "empty: what she'd have by then (nothing in rounds 1 and 2, `grey6` in round 3, `grey4,pink2` at the pizza)"
+            ],
+            [
+              "`photos`",
+              "which photos exist",
+              "for `home`: `deck,three`"
+            ],
+            [
+              "`replay`",
+              "as the other trips",
+              ""
+            ]
           ]
         }
       ]
@@ -492,17 +1369,89 @@
         {
           "type": "build",
           "items": [
-            { "n": 0, "title": "This plan", "status": "done", "date": "2026-10-24", "pr": 154 },
-            { "n": 1, "title": "Greybox: the mountain road", "status": "done", "date": "2026-10-24", "pr": 158, "md": "The headline, and the riskiest. The road kit, a box Pajero, finger steering, the chase camera, the roads `valley`, `sky` and `three` (and `city`), the horn, a buffalo, a songthaew, the cloud, the flat fallback. Listed under `inTheWorks`." },
-            { "n": 2, "title": "Greybox: the mushroom farm", "status": "done", "date": "2026-10-24", "pr": 160, "md": "`mushrooms`, with the pizza." },
-            { "n": 3, "title": "Greybox: Stop Time Cafe", "status": "done", "date": "2026-10-25", "pr": [179, 180, 181], "md": "`rice`. First try PR #168 (not merged); rebuilt per [`nan-rice.md`](nan-rice.md) in two greyboxes (A: the farm and the core verb; B: thresh, the deck and the video). Its look (step 8) and voices (step 9) done ahead of the rest." },
-            { "n": 4, "title": "Greybox: Bo Kluea salt", "status": "done", "date": "2026-10-25", "pr": 186, "md": "`salt`. Dad plays it next." },
-            { "n": 5, "title": "Greybox: Wat Phumin", "status": "dropped", "date": "2026-10-25", "pr": 187, "md": "`temple`: dropped (Dad: no temples or Buddhas in the game, AGENTS.md). Its greybox was closed unmerged, and the city road now ends at Nan's market." },
-            { "n": 6, "title": "Greybox: the Nan map and the rental desk", "status": "done", "date": "2026-10-25", "pr": 190, "md": "`map`, `rental`, and the `three` viewpoint. The trip is joined up from the rental desk on." },
-            { "n": 7, "title": "The trip loop", "status": "next", "md": "The `TripDef` (fly to Nan, the silver Pajero), the third invite choice, the photo wall (no gift)." },
-            { "n": 8, "title": "The look", "status": "todo", "md": "The Pajero, the landmarks, rain and cloud." },
-            { "n": 9, "title": "Voices and QA", "status": "todo" },
-            { "n": 10, "title": "Into the game", "status": "todo", "md": "From `inTheWorks` to `activities`." }
+            {
+              "n": 0,
+              "title": "This plan",
+              "status": "done",
+              "date": "2026-10-24",
+              "pr": 154
+            },
+            {
+              "n": 1,
+              "title": "Greybox: the mountain road",
+              "status": "done",
+              "date": "2026-10-24",
+              "pr": 158,
+              "md": "The headline, and the riskiest. The road kit, a box Pajero, finger steering, the chase camera, the roads `valley`, `sky` and `three` (and `city`), the horn, a buffalo, a songthaew, the cloud, the flat fallback. Listed under `inTheWorks`."
+            },
+            {
+              "n": 2,
+              "title": "Greybox: the mushroom farm",
+              "status": "done",
+              "date": "2026-10-24",
+              "pr": 160,
+              "md": "`mushrooms`, with the pizza."
+            },
+            {
+              "n": 3,
+              "title": "Greybox: Stop Time Cafe",
+              "status": "done",
+              "date": "2026-10-25",
+              "pr": [
+                179,
+                180,
+                181
+              ],
+              "md": "`rice`. First try PR #168 (not merged); rebuilt per [`nan-rice.md`](nan-rice.md) in two greyboxes (A: the farm and the core verb; B: thresh, the deck and the video). Its look (step 8) and voices (step 9) done ahead of the rest."
+            },
+            {
+              "n": 4,
+              "title": "Greybox: Bo Kluea salt",
+              "status": "done",
+              "date": "2026-10-25",
+              "pr": 186,
+              "md": "`salt`. Dad plays it next."
+            },
+            {
+              "n": 5,
+              "title": "Greybox: Wat Phumin",
+              "status": "dropped",
+              "date": "2026-10-25",
+              "pr": 187,
+              "md": "`temple`: dropped (Dad: no temples or Buddhas in the game, AGENTS.md). Its greybox was closed unmerged, and the city road now ends at Nan's market."
+            },
+            {
+              "n": 6,
+              "title": "Greybox: the Nan map and the rental desk",
+              "status": "done",
+              "date": "2026-10-25",
+              "pr": 190,
+              "md": "`map`, `rental`, and the `three` viewpoint. The trip is joined up from the rental desk on."
+            },
+            {
+              "n": 7,
+              "title": "The trip loop",
+              "status": "done",
+              "md": "The `TripDef` (fly to Nan, the silver Pajero), the third invite choice, the photo wall (no gift).",
+              "date": "2026-10-25"
+            },
+            {
+              "n": 8,
+              "title": "The look",
+              "status": "next",
+              "md": "The Pajero, the landmarks, rain and cloud."
+            },
+            {
+              "n": 9,
+              "title": "Voices and QA",
+              "status": "todo"
+            },
+            {
+              "n": 10,
+              "title": "Into the game",
+              "status": "todo",
+              "md": "From `inTheWorks` to `activities`."
+            }
           ]
         }
       ]
@@ -523,7 +1472,10 @@
               "pr": 158,
               "summary": "The road kit, the box Pajero, finger steering, four roads with traffic, blind bends, the cloud and the 3.",
               "blocks": [
-                { "type": "text", "md": "[`#/world/thailand/nan-trip/drive?road=city|valley|sky|three`](#/world/thailand/nan-trip/drive?road=sky) (the only section at the time; `nan-trip` is in `meta.ts` `inTheWorks`). Shapes in the toon look, no voices, no art." },
+                {
+                  "type": "text",
+                  "md": "[`#/world/thailand/nan-trip/drive?road=city|valley|sky|three`](#/world/thailand/nan-trip/drive?road=sky) (the only section at the time; `nan-trip` is in `meta.ts` `inTheWorks`). Shapes in the toon look, no voices, no art."
+                },
                 {
                   "type": "list",
                   "items": [
@@ -553,7 +1505,10 @@
               "pr": 160,
               "summary": "Mist 12 sawdust bags, pick by drag or tap, pink and gold in round 3, then top, bake and share the pizza.",
               "blocks": [
-                { "type": "text", "md": "[`#/world/thailand/nan-trip/mushrooms?round=1|2|3|pizza&basket=…`](#/world/thailand/nan-trip/mushrooms) (`activities/nan-trip/mushrooms/`, self-contained). Shapes in the toon look, no voices, no art. One 3D world with two places: the mushroom house and, 8 m along, the farm's table outside (the camera glides out for lunch)." },
+                {
+                  "type": "text",
+                  "md": "[`#/world/thailand/nan-trip/mushrooms?round=1|2|3|pizza&basket=…`](#/world/thailand/nan-trip/mushrooms) (`activities/nan-trip/mushrooms/`, self-contained). Shapes in the toon look, no voices, no art. One 3D world with two places: the mushroom house and, 8 m along, the farm's table outside (the camera glides out for lunch)."
+                },
                 {
                   "type": "list",
                   "items": [
@@ -579,10 +1534,17 @@
               "title": "Step 3, Stop Time Cafe (the rice farm)",
               "date": "2026-10-25",
               "status": "done",
-              "pr": [179, 180, 181],
+              "pr": [
+                179,
+                180,
+                181
+              ],
               "summary": "Rebuilt after PR #168: greybox A (plant, grow, harvest), greybox B (thresh, the deck, the video), then its look and voices. Details in nan-rice.md.",
               "blocks": [
-                { "type": "text", "md": "See [`nan-rice.md`](nan-rice.md), “What's built”." }
+                {
+                  "type": "text",
+                  "md": "See [`nan-rice.md`](nan-rice.md), “What's built”."
+                }
               ]
             },
             {
@@ -593,7 +1555,10 @@
               "open": true,
               "summary": "The bucket on a rope along a beam, six buckets into the pan, logs on the fire, then scrape the salt into her basket.",
               "blocks": [
-                { "type": "text", "md": "[`#/world/thailand/nan-trip/salt?round=1|2|3`](#/world/thailand/nan-trip/salt), in `salt/` (`layout.ts` the hut in meters, `hut.ts` the shapes, `salt3d.ts` the world, `Salt.tsx` the screen, `sounds.ts`). Shapes in the toon look, no voices, no art. The sky road's end card now has a 🧂 beside the 🌾 (the sky road comes down between the café and the salt wells; `STOP_AT` takes a list and `onStop` gets the stop's id); the salt's end card takes the 3 road, which starts at Bo Kluea." },
+                {
+                  "type": "text",
+                  "md": "[`#/world/thailand/nan-trip/salt?round=1|2|3`](#/world/thailand/nan-trip/salt), in `salt/` (`layout.ts` the hut in meters, `hut.ts` the shapes, `salt3d.ts` the world, `Salt.tsx` the screen, `sounds.ts`). Shapes in the toon look, no voices, no art. The sky road's end card now has a 🧂 beside the 🌾 (the sky road comes down between the café and the salt wells; `STOP_AT` takes a list and `onStop` gets the stop's id); the salt's end card takes the 3 road, which starts at Bo Kluea."
+                },
                 {
                   "type": "list",
                   "items": [
@@ -656,7 +1621,7 @@
                   "type": "callout",
                   "tone": "warn",
                   "title": "Changed from the plan",
-                  "md": "- The map's toy is **dragging the little Pajero** along the roads, as well as tapping a place (the plan only had the tap).\n- At the viewpoint her finger **draws** the 3 (the step 1 greybox drew it by itself).\n- The Nan town road is a little drive from the map and back, not part of the way in.\n- Not yet: the family photo with the 3 behind them (with the photo wall, step 7), Mommy's “Home, or one more?” after two stops (a voice line, step 9)."
+                  "md": "- The map's toy is **dragging the little Pajero** along the roads, as well as tapping a place (the plan only had the tap).\n- At the viewpoint her finger **draws** the 3 (the step 1 greybox drew it by itself).\n- The Nan town road is a little drive from the map and back, not part of the way in.\n- Not yet: Mommy's “Home, or one more?” after two stops (a voice line, step 9)."
                 },
                 {
                   "type": "callout",
@@ -665,10 +1630,39 @@
                   "md": "In `known-issues.md`: the map is small on a tall iPad (the board is wider than it is tall); in the belt beat we see the back of Kaylee's head; the map's car always starts at the last stop (or the airport), not in town after the city road."
                 }
               ]
+            },
+            {
+              "title": "Step 7, the trip loop",
+              "status": "done",
+              "date": "2026-10-25",
+              "summary": "The whole trip joined up: Mommy's card, packing for the mountains, the plane north, the stops, the 3's photo, home to Agong's wall and the stamp.",
+              "items": [
+                "**Mommy's card** (`trip/legs/Ask.tsx`) has a third picture button, 🏔️🚙 the mountains. It shows only on Nan's own card (`tripChoices`): the house and the mall day still offer only the trips in the game, so Kaylee can't get in until step 10. The mall day's card now opens whichever trip she picks (`onTrip`), not only the boat.",
+                "**`NAN_TRIP`** (`activities/nan-trip/trip.ts`): packing with `pack.hint: 'cool'`, Aunty Sri's van, the x-ray belt, the window seat Bangkok → Nan (`PLACES.nan`, the seat-back map flies north), the goodbye with just the three of them, and coming home with the photo she picks (`gift: 'photo'`, the boat trip's way: Agong asks for his photo).",
+                "**Packing for the mountains** (`trip/packing.ts`, `trip/props.ts`): three new toy things only in her room on a cool trip, a pink raincoat, lavender rain boots and Mommy's mint umbrella; Mommy's hint (“It's cool and rainy in the mountains!”) makes them glint, and she tucks in the umbrella (“Mommy always packs an umbrella!”). No spare sun hat on this trip.",
+                "**Landing in Nan** (`trip/legs/plane.ts`, `landing: 'nan'`): rice fields and round green mountains with cloud on their tops rise past the window, Daddy cheers “Yay! We're in Nan!”, and the trip goes on to the rental desk (⏩ skips there).",
+                "**The 3's photo:** once she has drawn the 3 on the trip, Mommy says “Everybody say three!”, a flash and the print drops in, and the end card adds a big ✈️🏠.",
+                "**Home** (`activities/nan-trip/Loop.tsx`): the flight home, Aunty Sri's van at Agong's door, and her photos fan out: one per stop she did (`deck`, `pizza`, `salt`) and the 3, drawn in code for now (`photo.ts`, helpers shared with the mall day in `trip/postcard.ts`). The one she gives Agong hangs in the Nan trip's own frame, above the boat and mall photos, and tapping it says “Our trip to Nan!”. Then the stamp, with the trip's facts (`NAN_FACTS`).",
+                "**The boarding pass** between the kit's legs (🧳 ✈️ 🔑 🍄 🌾 🧂 🏠, the stops punched as she does them), and **resume and replays** (`useSaved('thailand-nan-trip')`): saying yes again offers 🧳 a new trip, keep going, or after a whole trip 🗺️ straight to the Nan map. A bare `nan-trip` link now opens Mommy's card. Without WebGL the trip's legs are a picture book (`LoopFlat.tsx`).",
+                "**Voices:** 11 new clips (`L.nan.trip`: the cool hint, the umbrella, landing, the 3's photo, the wall, six facts).",
+                "**QA:** `qa-screens` (`nan-invite`, `nan-pack`, `nan-goodbye`, `nan-airport`, `nan-fly`, `nan-land`, `nan-home`, `nan-loop-flat`). A robot in WebKit (iPad landscape) picked 🏔️🚙, packed the raincoat, boots and teddy, closed the suitcase (the umbrella went in) and reached the goodbye; watched the landing play out to the rental desk; and at home picked the 3's photo, gave it to Agong and saw everyone gather at the wall. No console errors."
+              ]
             }
           ]
         },
-        { "type": "callout", "tone": "open", "icon": "⏳", "title": "Not yet (later steps)", "md": "The family in the car (Daddy's “Whoa!”, Mommy's lines, Sparkle's), the wipers, the dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero, the family photo at the viewpoint with the 3 behind them (step 7), Mommy's “Home, or one more?” on the map (a voice line, step 9)." }
+        {
+          "type": "callout",
+          "tone": "open",
+          "icon": "⏳",
+          "title": "Not yet (later steps)",
+          "md": "The family in the car (Daddy's “Whoa!”, Mommy's lines, Sparkle's), the wipers, the dashboard elephant, random weather and traffic per replay, a sea-of-clouds look from above, the real Pajero, Mommy's “Home, or one more?” on the map (a voice line, step 9)."
+        },
+        {
+          "type": "callout",
+          "tone": "warn",
+          "title": "Step 7: changed from the plan",
+          "md": "- Agong asks for his photo as on the boat trip (`gift: 'photo'`) instead of a new “no gift” kind: it's the same moment (she picks the photo, he hangs it), with no new code.\n- No jumper: the room got a raincoat, rain boots and the umbrella (three toys, not four).\n- The photos are drawn in code for now; the look step can take real snapshots at each stop.\n- The rental desk still has no flat version (as in step 6)."
+        }
       ]
     },
     {
@@ -680,15 +1674,51 @@
         {
           "type": "cards",
           "items": [
-            { "icon": "👆", "title": "Core verbs", "md": "Steer (the road), mist (the mushrooms), pour (the rice steps and the salt well). Each deepens three times; the road is the verb that comes back between every stop." },
-            { "icon": "🙌", "title": "Hands busy", "md": "One line at each stop, then playing. Driving starts at once. Sparkle speaks only for new things or after 8 s." },
-            { "icon": "🔢", "title": "Touches", "md": "15-30 per drive, 20-40 per stop." },
-            { "icon": "🤔", "title": "Choices", "md": "Which trip, what to pack, which stop next, where on the road, when to beep, which mushrooms, where to plant, the photo for Agong's wall." },
-            { "icon": "👉", "title": "Pokeables", "md": "At least five at every stop and on every road." },
-            { "icon": "🌱", "title": "Grows", "md": "The map's stamps; the basket fills; the valley turns from brown to shiny to green; the pan turns to salt." },
-            { "icon": "🎉", "title": "Surprise", "md": "Popping out above the cloud; the giant bouncy mushroom; Daddy in a mushroom hat; the salty face; the road drawing a 3." },
-            { "icon": "🎓", "title": "Learning by doing", "md": "Keep left, beep at blind bends, buckle up; mushrooms grow in dark and wet; rice grows in water on steps; salt from a well and a fire; counting three; Nan on the map of Thailand." },
-            { "icon": "🔁", "title": "Replay", "md": "Stops in any order, other mushrooms, other weather and traffic, other photos." }
+            {
+              "icon": "👆",
+              "title": "Core verbs",
+              "md": "Steer (the road), mist (the mushrooms), pour (the rice steps and the salt well). Each deepens three times; the road is the verb that comes back between every stop."
+            },
+            {
+              "icon": "🙌",
+              "title": "Hands busy",
+              "md": "One line at each stop, then playing. Driving starts at once. Sparkle speaks only for new things or after 8 s."
+            },
+            {
+              "icon": "🔢",
+              "title": "Touches",
+              "md": "15-30 per drive, 20-40 per stop."
+            },
+            {
+              "icon": "🤔",
+              "title": "Choices",
+              "md": "Which trip, what to pack, which stop next, where on the road, when to beep, which mushrooms, where to plant, the photo for Agong's wall."
+            },
+            {
+              "icon": "👉",
+              "title": "Pokeables",
+              "md": "At least five at every stop and on every road."
+            },
+            {
+              "icon": "🌱",
+              "title": "Grows",
+              "md": "The map's stamps; the basket fills; the valley turns from brown to shiny to green; the pan turns to salt."
+            },
+            {
+              "icon": "🎉",
+              "title": "Surprise",
+              "md": "Popping out above the cloud; the giant bouncy mushroom; Daddy in a mushroom hat; the salty face; the road drawing a 3."
+            },
+            {
+              "icon": "🎓",
+              "title": "Learning by doing",
+              "md": "Keep left, beep at blind bends, buckle up; mushrooms grow in dark and wet; rice grows in water on steps; salt from a well and a fire; counting three; Nan on the map of Thailand."
+            },
+            {
+              "icon": "🔁",
+              "title": "Replay",
+              "md": "Stops in any order, other mushrooms, other weather and traffic, other photos."
+            }
           ]
         }
       ]
@@ -702,8 +1732,14 @@
         {
           "type": "qa",
           "items": [
-            { "q": "Does Baan Huanam grow pink mushrooms?", "why": "If not, they stay as our one made-up touch." },
-            { "q": "Is the farmer aunty a buffalo, or another animal?", "why": "A buffalo is the placeholder pick, like the airport officer's. (The salt aunty is a placeholder pony.)" }
+            {
+              "q": "Does Baan Huanam grow pink mushrooms?",
+              "why": "If not, they stay as our one made-up touch."
+            },
+            {
+              "q": "Is the farmer aunty a buffalo, or another animal?",
+              "why": "A buffalo is the placeholder pick, like the airport officer's. (The salt aunty is a placeholder pony.)"
+            }
           ]
         }
       ]
@@ -735,7 +1771,10 @@
       "for": "build",
       "group": "For the builder",
       "blocks": [
-        { "type": "text", "md": "The house's toon look, cooler and greener for the mountains: soft grey-lavender skies, low clouds, rain sometimes, deep greens with lavender shadows, wet roads that shine. Wood everywhere (the deck, the salt huts, the mushroom house). The Pajero: a big chunky toon SUV in **silver** (Dad), a little shine on its bands. The Tai Lue couple on the house in Bo Kluea is drawn by us in our flat style, the same couple as the mural in Dad's video." }
+        {
+          "type": "text",
+          "md": "The house's toon look, cooler and greener for the mountains: soft grey-lavender skies, low clouds, rain sometimes, deep greens with lavender shadows, wet roads that shine. Wood everywhere (the deck, the salt huts, the mushroom house). The Pajero: a big chunky toon SUV in **silver** (Dad), a little shine on its bands. The Tai Lue couple on the house in Bo Kluea is drawn by us in our flat style, the same couple as the mural in Dad's video."
+        }
       ]
     },
     {
@@ -792,7 +1831,10 @@
             "`meta.ts`: the activity in `inTheWorks` until step 10. Its sticker: **a pink mushroom** 🍄 (Dad left it to the builder: the mushroom farm was his must-have, and pink is Kaylee's color)."
           ]
         },
-        { "type": "text", "md": "**New** (all inside `src/world/places/thailand/`):" },
+        {
+          "type": "text",
+          "md": "**New** (all inside `src/world/places/thailand/`):"
+        },
         {
           "type": "code",
           "text": "trip/road/                  the road kit (reusable for any later drive): road.ts (open spline with height, spotAt,\n                            locate, bendAhead), build.ts (ribbon, verges, hills, rails, chevrons, mirrors),\n                            traffic.ts (songthaew, scooters, buffalo), clouds.ts\ntrip/vehicles/pajero.ts     the Pajero, modelled on veloz.ts\nactivities/nan-trip/\n  sections.ts  trip.ts      the sections (no three.js) and the TripDef\n  NanTrip.tsx  Flat.tsx     runs the legs and the stops; the no-WebGL picture book\n  rental/  map/  drive/     the rental desk, the diorama hub, the drives (roads as data: valley.ts, sky.ts, three.ts, city.ts)\n  mushrooms/  rice/  salt/  one folder per stop, self-contained (X.ts, Flat.tsx, layout.ts, sounds.ts)"
@@ -831,8 +1873,7 @@
       ]
     }
   ]
-}
-</script>
+}</script>
 <script src="../../viewer/plan.js"></script>
 </body>
 </html>

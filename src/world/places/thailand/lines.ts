@@ -347,6 +347,26 @@ export const L = {
       // The rice farm's video, after Mommy's photo on the deck (rice/video.ts).
       video: `Want to see real rice grow, ${NAME}?`,
     },
+    // The trip around the stops (activities/nan-trip/Loop.tsx, the trip kit): packing for the mountains, landing in Nan,
+    // the photo at the 3's viewpoint, and the photo on Agong's wall. The rest of the way there and home is the boat
+    // trip's (L.trip, L.home).
+    trip: {
+      cool: ji("It's cool and rainy in the mountains!"),
+      umbrella: ji('Mommy always packs an umbrella!'),
+      landed: nick("Yay! We're in Nan!"),
+      three: ji('Everybody say three!'),
+      // The frame on the wall, tapped in the house.
+      wall: ji('Our trip to Nan!'),
+      // The stamp screen's tap-to-hear facts (trip/facts.ts NAN_FACTS), in Sparkle's voice.
+      facts: {
+        nan: 'Nan is in the mountains, next to Laos!',
+        pajero: 'This big car was made in Thailand!',
+        mushrooms: "Mushrooms aren't plants! They love dark, wet places.",
+        rice: 'Rice grows standing in water!',
+        salt: 'Bo Kluea makes salt from a well!',
+        sea: 'Long ago the sea was here, and it left its salt!',
+      },
+    },
   },
 
   // The mall day at ICONSIAM (activities/mall-trip/, plan: thailand/mall-trip.md). Talk short, play long: Sparkle's one

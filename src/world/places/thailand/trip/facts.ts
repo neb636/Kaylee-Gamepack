@@ -28,3 +28,15 @@ export const MALL_FACTS = [
   { icon: '🧡', label: 'Cha yen', say: L.mall.trip.facts.chaYen },
   { icon: '🐘', label: 'Elephants', say: L.mall.trip.facts.elephant },
 ]
+
+// The Nan road trip's tap-to-hear facts (plan: thailand/nan-trip.html, "Facts"), for its stamp screen.
+export const NAN_FACTS = [
+  { icon: '🏔️', label: 'Nan', say: L.nan.trip.facts.nan },
+  { icon: '🚙', label: 'Made in Thailand', say: L.nan.trip.facts.pajero },
+  { icon: '🚗', label: 'Drive on the left', say: L.facts.left },
+  { icon: '🍄', label: 'Mushrooms', say: L.nan.trip.facts.mushrooms },
+  { icon: '🌾', label: 'Rice in water', say: L.nan.trip.facts.rice },
+  { icon: '⛰️', label: 'Rice steps', say: L.nan.rice.steps },
+  { icon: '🧂', label: 'Salt well', say: L.nan.trip.facts.salt },
+  { icon: '🌊', label: 'An old sea', say: L.nan.trip.facts.sea },
+]
