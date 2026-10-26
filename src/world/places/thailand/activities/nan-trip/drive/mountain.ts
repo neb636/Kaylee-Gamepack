@@ -1,22 +1,37 @@
-// The mountain road (section `drive`, plan: thailand/nan-trip.html, build step 1: the greybox). Mommy drives the big
-// silver Pajero and Kaylee steers it: it always rolls forward (Mommy's foot), and her finger, anywhere on the road
-// ahead, picks where across the road it goes. Let go and Mommy keeps it in the left lane by herself (Thailand keeps
-// left). Mommy slows for the bends (the body leans out), stops for a buffalo crossing (the body squats), and the road
-// boings the car back like a pinball bumper if she steers into the edge. No crashes, no leaving the road.
+// The mountain road (section `drive`, plan: thailand/nan-trip.html, "The mountain road"; built: steps 1, 8 and 9, the
+// road, its look and its voices). Mommy drives the big silver Pajero and Kaylee steers it: it always rolls forward
+// (Mommy's foot), and her finger, anywhere on the road ahead, picks where across the road it goes. Let go and Mommy
+// keeps it in the left lane by herself (Thailand keeps left). Mommy slows for the bends (the body leans out), stops for
+// a buffalo crossing (the body squats), and the road boings the car back like a pinball bumper if she steers into the
+// edge (Daddy: "Whoa!"). No crashes, no leaving the road.
 //
-// On the way (roads.ts): oncoming songthaews, scooters and tuk-tuks that pull over and toot a tune if she drifts onto
-// their side; chickens that flap off the road; on the sky road, round mirrors on the blind bends (one shows a car
-// coming: beep the horn and it beeps back), a waterfall, a monkey on the rail, rain, then the cloud (white all round,
-// headlights on) and out above it into the sunshine; on the 3 road, the bends she counts, and from the viewpoint the
-// road below is a giant 3 (section `three`): a big pink crayon waits at the top of it, and her finger pulls it along
-// the road (one, two, three as it rounds each bend; a tap on the road draws on to the next bend for her). Each road
-// ends at its stop (the mushroom farm, the café, the market, the viewpoint): the Pajero pulls in and the camera turns
-// to look.
+// The family rides inside, seen through the windows: Mommy at the wheel on the right, Daddy beside her (tap him: he
+// hops and says something, in turn), Kaylee behind Mommy, and the pink elephant toy nodding on the back seat (tap it:
+// it nods like mad and squeaks). The wipers swish by themselves in the rain; tap them and they go faster.
 //
-// The screen (Drive.tsx) draws the steering wheel with its horn, the count's big numbers and the end card; the wheel's
-// turn, the hint finger and the tap targets are written here every frame.
+// Every drive rolls its weather (rain, sun or cloud; a link can say which) and who's on the road (roads.ts rollDrive).
+// The mountains' look: soft grey-lavender skies and low cloud on the hills when it's grey, a wet road that shines with
+// puddles that splash when it rains, sunshine when it's sunny. On the way: oncoming songthaews, scooters and tuk-tuks
+// that pull over and toot a tune if she drifts onto their side (Mommy: "Keep left!"); chickens that flap off the road;
+// on the sky road, round mirrors on the blind bends (one shows a car coming: beep the horn and it beeps back), a
+// waterfall, a monkey on the rail, then the cloud (white all round, headlights on) and out above it into the sunshine
+// over a sea of clouds; on the 3 road, the bends she counts with Sparkle, and from the viewpoint the road below is a
+// giant 3 (section `three`): a big pink crayon waits at the top of it, and her finger pulls it along the road (one,
+// two, three as it rounds each bend; a tap on the road draws on to the next bend for her). Each road ends at its stop
+// (the mushroom farm, the café, the market, the viewpoint): the Pajero pulls in and the camera turns to look.
+//
+// Talk (lines.ts L.nan.drive): at most one line before her hands are busy (Mommy's "Steer for me!" on the first drive,
+// Sparkle's "Let's count the bends!" on the 3 road); Sparkle says what's new (the first mirror, the first cloud, the
+// numbers) and, after ~8 s with nothing touched, how to steer; the family react (each thing once, nothing stacked:
+// a reaction is dropped while someone's talking).
+//
+// The screen (Drive.tsx) draws the steering wheel with its horn, the count's big numbers, Sparkle and the end card; the
+// wheel's turn, the hint finger and the tap targets are written here every frame.
 import { Color, Fog, Group, Mesh, MeshBasicMaterial, Scene, Vector3, type WebGLRenderer, BufferGeometry, BufferAttribute } from 'three'
-import { clamp, sounds } from '../../../../../../sdk'
+import { clamp, sounds, speakingVoice, type Line } from '../../../../../../sdk'
+import { Avatar } from '../../../characters/avatar'
+import { FAMILY } from '../../../characters/family'
+import { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import { CameraRig, type Shot } from '../../../engine/camera'
 import { Bag } from '../../../engine/dispose'
@@ -26,12 +41,14 @@ import { Particles } from '../../../engine/particles'
 import { applyBands, makeLights, PAL } from '../../../engine/toon'
 import type { World3D } from '../../../engine/View3D'
 import { Driver, type Feel } from '../../../trip/drive'
-import { buildMirror, buildRoadScene, type Mirror, type RoadScene } from '../../../trip/road/build'
-import { buildCloudLayer, buildPuffs } from '../../../trip/road/clouds'
-import { Traffic, type Her, type TrafficEvents } from '../../../trip/road/traffic'
+import { put } from '../../../trip/legs/stage'
+import { buildMirror, buildRoadScene, buildWet, rng, type Mirror, type Puddle, type RoadScene } from '../../../trip/road/build'
+import { buildCloudLayer, buildCloudSea, buildPuffs } from '../../../trip/road/clouds'
+import { Traffic, type Her, type TrafficEvents, type TrafficPlan } from '../../../trip/road/traffic'
 import { buildPajero, type Pajero } from '../../../trip/vehicles/pajero'
+import { L } from '../../../lines'
 import { buildFalls, buildLandmark, buildMarket } from './landmarks'
-import { LANE_LAT, nanRoad, type NanRoad, type RoadId } from './roads'
+import { LANE_LAT, nanRoad, rollDrive, type DriveRoll, type NanRoad, type RoadId, type Weather } from './roads'
 import { roadSfx as sfx } from './sounds'
 
 export type DrivePhase = 'drive' | 'arrive' | 'view' | 'end'
@@ -45,6 +62,8 @@ export interface DriveHud {
 
 export interface DriveEvents {
   onHud(hud: DriveHud): void
+  /** Someone says something, in their own voice (Sparkle in the corner, the family in the car). */
+  say?(l: Line): void
   /** The 3 road's viewpoint: the camera has lifted over the hill, and her finger draws the 3 (section `three`). */
   onView?(): void
 }
@@ -55,12 +74,16 @@ export type DriveStart = 'road' | 'view'
 /** The heavy, bouncy Pajero: slower than the longtail, slow to turn, leaning a lot. */
 const PAJERO_FEEL: Feel = { top: 9.5, boost: 1.2, accel: 4, coast: 0.6, turn: 1.15, grip: 7, near: 2, far: 7, dead: 0.02, lean: 0.12 }
 
-/** The road's tap targets: the Pajero, then whoever is on this road. */
-export function driveAnchors(id: RoadId): AnchorInfo[] {
+/** The road's tap targets: the Pajero (Daddy in it, the elephant toy, the wipers), then whoever is on the road this
+ *  drive (`traffic`: its roll). */
+export function driveAnchors(id: RoadId, traffic?: TrafficPlan): AnchorInfo[] {
   const r = nanRoad(id)
-  const t = r.traffic
+  const t = traffic ?? r.traffic
   return [
     { id: 'car', label: 'The Pajero (beep beep!)', kind: 'thing' },
+    { id: 'family:nick', label: 'Daddy', kind: 'family' },
+    { id: 'elephant', label: 'The elephant toy', kind: 'thing' },
+    { id: 'wipers', label: 'The wipers', kind: 'thing' },
     ...t.movers.map((m, i): AnchorInfo => ({ id: `mover:${i}`, label: m.kind === 'car' ? 'Car' : m.kind === 'tuktuk' ? 'Tuk-tuk' : m.kind === 'scooter' ? 'Scooter' : 'Songthaew', kind: 'thing' })),
     ...t.buffalo.map((_, i): AnchorInfo => ({ id: `buffalo:${i}`, label: 'Water buffalo', kind: 'thing' })),
     ...t.chickens.map((_, i): AnchorInfo => ({ id: `chickens:${i}`, label: 'Chickens', kind: 'thing' })),
@@ -81,14 +104,28 @@ const smooth = (a: number, b: number, x: number) => {
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 
-/** Sky and haze for the weather (and above the cloud, the sunshine). */
+/** Sky and haze for the weather (and above the cloud, the sunshine): soft grey-lavender when it's grey, deeper when it
+ *  rains. */
 const AIR = {
-  grey: { bg: '#D5DCEA', fog: '#DCE3EE', near: 110, far: 520 },
-  rain: { bg: '#C8CFDF', fog: '#CDD4E3', near: 70, far: 380 },
+  cloud: { bg: '#D8D6E8', fog: '#DDDBEB', near: 100, far: 480 },
+  rain: { bg: '#C6C4D9', fog: '#CBC9DD', near: 60, far: 340 },
   sun: { bg: '#BFE3FF', fog: '#E4F3FC', near: 160, far: 620 },
   above: { bg: '#9FD6FF', fog: '#E6F5FF', near: 220, far: 760 },
-  cloud: { bg: '#F7F6FC', fog: '#F7F6FC', near: 3, far: 30 },
+  inside: { bg: '#F7F6FC', fog: '#F7F6FC', near: 3, far: 30 },
 }
+/** How bright the sun is in each weather (the toon bands stay; the light just softens). */
+const SUNNY: Record<Weather, number> = { sun: 1, cloud: 0.86, rain: 0.74 }
+
+/** Talk: Sparkle's stuck hints after this long with nothing touched (counted from 3 s after a line), every so often, a
+ *  few times a drive at most; and no new family reaction within 8 s of the last line (the sky road was chatty). */
+const STUCK_S = 8
+const HINT_EVERY = 14
+const HINT_MAX = 2
+const GAP_S = 8
+/** What Sparkle has already shown her this visit (the first mirror, the first cloud): said once, not every drive. */
+const heard = new Set<string>()
+/** Mommy's "Steer for me!" is for the first drive only. */
+let drives = 0
 
 export class NanDrive implements World3D {
   readonly scene = new Scene()
@@ -146,21 +183,49 @@ export class NanDrive implements World3D {
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
   private wheelEl: HTMLElement | null = null
-  private counts = { honks: 0, boings: 0, pokes: 0, steered: 0, keptLeft: 0 }
+  private counts = { honks: 0, boings: 0, pokes: 0, steered: 0, keptLeft: 0, wipes: 0, splashes: 0 }
   private ev: TrafficEvents
+  /** This drive's weather (rolled, or the link's). */
+  readonly weather: Weather
+  private kaylee: Avatar
+  private nick: Member
+  private ji: Member
+  // ---- The wipers (their sweep 0..1 and how fast they go), the elephant's nod, the wet road ----
+  private wipe = { a: 0, fast: 0, dry: 0, lastK: 0, up: false }
+  private nod = { x: 0, v: 0, crazy: 0 }
+  private puddles: Puddle[] = []
+  private nextPuddle = 0
+  private hissT = 0
+  private sea: Group | null = null
+  private lowCloud: Group | null = null
+  // ---- Talk: lines said once, Sparkle's hints, Daddy's tap lines in turn, cool-downs ----
+  private told = new Set<string>()
+  private cool = new Map<string, number>()
+  private lastLine = -99
+  private quietFrom = 0
+  private hintSaid = -99
+  private hintN = 0
+  private nickTap = 0
+  private inCloudT = 0
+  private yieldsSeen = 0
+  private lastSteer = -99
 
   constructor(
     private renderer: WebGLRenderer,
     road: RoadId,
     private events: DriveEvents,
     start: DriveStart = 'road',
+    roll: DriveRoll = rollDrive(road),
+    /** Where she's going (picked on the map): the sky road's end is the café or the salt wells. */
+    private to = '',
   ) {
     const { scene, bag } = this
     const r = (this.r = nanRoad(road))
+    this.weather = roll.weather
     applyBands()
     this.rig.fov = 55
-    this.rig.camera.far = 900
-    const air = this.r.cloud ? AIR.rain : AIR[r.weather]
+    this.rig.camera.far = 1500
+    const air = AIR[this.weather]
     scene.background = this.air.set(air.bg)
     this.fog = scene.fog = new Fog(air.fog, air.near, air.far)
 
@@ -170,7 +235,7 @@ export class NanDrive implements World3D {
     const field = this.world.field
     const half = r.road.half
     // A monkey with side 0 sits on whichever side has the rail.
-    const traffic = { ...r.traffic, monkeys: r.traffic.monkeys.map((m) => ({ ...m, side: m.side || (this.world.railed(m.s, -1) ? -1 : 1) })) }
+    const traffic = { ...roll.traffic, monkeys: roll.traffic.monkeys.map((m) => ({ ...m, side: m.side || (this.world.railed(m.s, -1) ? -1 : 1) })) }
     this.traffic = new Traffic(r.road, field, traffic, bag)
     scene.add(this.traffic.root)
     for (const s of r.blind) {
@@ -204,14 +269,41 @@ export class NanDrive implements World3D {
     scene.add(this.landmark)
     // Clouds: the layer the sky road drives into, or puffs resting on the far hills.
     const b = r.road.bounds(220)
-    if (r.cloud) scene.add(buildCloudLayer(b, r.cloud.y0, r.cloud.y1, 300, r.look.seed, bag))
-    else {
+    if (r.cloud) {
+      scene.add(buildCloudLayer(b, r.cloud.y0, r.cloud.y1, 300, r.look.seed, bag))
+      // From above it: a sea of clouds out to the horizon (only once she's up there).
+      this.sea = buildCloudSea(b, r.cloud.y0 + (r.cloud.y1 - r.cloud.y0) * 0.62, r.look.seed, bag)
+      this.sea.visible = false
+      scene.add(this.sea)
+    } else {
       const top = r.road.bounds().y1
       const puffs: [number, number, number][] = [0, 1, 2, 3, 4, 5].map((i) => {
         const a = i * 1.1 + r.look.seed
         return [(b.x0 + b.x1) / 2 + Math.cos(a) * 240, top + 55 + (i % 3) * 12, (b.z0 + b.z1) / 2 + Math.sin(a) * 260]
       })
       scene.add(buildPuffs(puffs, 14, r.look.seed, bag))
+    }
+    // Grey or rainy: low cloud hanging on the hills either side of the road (drifting slowly).
+    if (this.weather !== 'sun') {
+      const rand = rng(r.look.seed * 5 + 11 + (this.weather === 'rain' ? 1 : 0))
+      const low: [number, number, number][] = []
+      for (let i = 0; i < 40 && low.length < 9; i++) {
+        const s = rand() * r.road.length
+        const side = rand() < 0.5 ? -1 : 1
+        const p = r.road.spotAt(s, side * (45 + rand() * 90))
+        const y = this.world.field.at(p.x, p.z)
+        // (Not in the 3's view from above, nor inside the sky road's own cloud.)
+        if (r.cloud && y + 10 > r.cloud.y0 - 8) continue
+        if (r.road.locate(p.x, p.z).d < 42) continue
+        low.push([p.x, y + 7 + rand() * 8, p.z])
+      }
+      if (low.length) scene.add((this.lowCloud = buildPuffs(low, 8, r.look.seed + 2, bag)))
+    }
+    // Rain: the road shines, with puddles.
+    if (this.weather === 'rain') {
+      const wet = buildWet(r.road, r.look.seed, bag)
+      scene.add(wet.root)
+      this.puddles = wet.puddles
     }
     if (r.id === 'three') {
       this.crayon = this.buildCrayon()
@@ -223,6 +315,15 @@ export class NanDrive implements World3D {
     this.car = buildPajero(bag)
     this.car.root.userData.pick = 'car'
     scene.add(this.car.root)
+    // The family inside: Mommy at the wheel, Daddy beside her, Kaylee behind Mommy.
+    this.kaylee = new Avatar(bag)
+    const member = (id: string) => new Member({ ...FAMILY.find((f) => f.id === id)!, spot: null }, bag)
+    this.nick = member('nick')
+    this.ji = member('ji')
+    for (const [c, seat] of [[this.ji, this.car.seats.driver], [this.nick, this.car.seats.nick], [this.kaylee, this.car.seats.kaylee]] as const) {
+      seat.add(c.root)
+      put(c, 0, 0, 0, 'sit', 0)
+    }
     this.dust = new Particles({ kind: 'spray', count: 260, colors: ['#FFFFFF', '#F1E4D6', '#EDE7F7'], gravity: 3 }, bag)
     this.rain = new Particles({ kind: 'spray', count: 700, color: '#E7EEFF', gravity: 0 }, bag)
     this.sparkle = new Particles({ kind: 'spray', count: 320, colors: ['#FF4F9A', '#FFC83D', '#8FE3C8', '#A8DCFF', '#B9A6F5'], gravity: 4 }, bag)
@@ -305,6 +406,30 @@ export class NanDrive implements World3D {
     if (!id) return
     this.counts.pokes++
     if (id === 'car') return this.honk()
+    if (id === 'family:nick') {
+      // Daddy hops in his seat and says something (in turn); not over Sparkle.
+      this.nick.react('hop')
+      if (speakingVoice() === 'sparkle') return
+      return this.every('nick-tap', 2.5, () => this.speak(L.nan.drive.tap[this.nickTap++ % L.nan.drive.tap.length]))
+    }
+    if (id === 'elephant') {
+      // It nods like mad and squeaks; Kaylee wiggles.
+      this.nod.crazy = 1.6
+      this.nod.v += 14
+      sfx.squeak()
+      this.kaylee.react('wiggle')
+      const p = this.car.elephant.root.getWorldPosition(new Vector3())
+      this.sparkle.burst(p.x, p.y + 0.3, p.z, 10, 1.2, 1.6, 0.12)
+      return
+    }
+    if (id === 'wipers') {
+      // Faster for a while (in the dry, a few squeaky swishes).
+      this.counts.wipes++
+      if (this.wiping) this.wipe.fast = 4
+      else this.wipe.dry = 2.6
+      if (this.weather === 'rain') this.once('rain', L.nan.drive.rain, true)
+      return
+    }
     if (id.startsWith('mirror:')) {
       const m = this.mirrors[Number(id.slice(7))]
       sfx.chime()
@@ -371,12 +496,18 @@ export class NanDrive implements World3D {
     this.locate()
     this.poseCar(dt)
     this.traffic.update(dt, t, this.her(), this.ev)
-    this.weather(dt)
+    this.updateAir(dt)
     this.mirrorsFlash(t)
     this.countBends()
     this.updateTrace(dt)
     this.engine(dt)
+    this.wipers(dt)
+    this.wet(dt)
+    this.nodding(dt)
+    for (const c of [this.kaylee, this.nick, this.ji]) c.update(dt, t)
+    this.talk(t)
     for (const p of [this.dust, this.rain, this.sparkle]) p.update(dt)
+    if (this.lowCloud) this.lowCloud.position.x = Math.sin(t * 0.04) * 6
     if (this.falls && Math.abs(this.r.falls! - this.loc.s) < 90 && Math.random() < dt * 20) {
       const p = this.falls.position
       this.dust.emit(p.x + (Math.random() - 0.5) * 3, p.y + 0.5, p.z + (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 2 + Math.random() * 2, (Math.random() - 0.5) * 2, 0.8, 0.3)
@@ -391,6 +522,10 @@ export class NanDrive implements World3D {
     this.clearTerrain()
     const cam = this.rig.camera
     this.lights.follow(this.d.x, this.carY(), this.d.z)
+    // (Softer light when it's grey or raining; full sun above the cloud.)
+    const sunK = this.wasAbove ? 1 : SUNNY[this.weather]
+    this.lights.sun.intensity *= sunK
+    this.lights.ambient.intensity *= 0.94 + 0.06 * sunK
     const back = tmp.set(cam.position.x - this.d.x, 0, cam.position.z - this.d.z).normalize()
     this.lights.sun.position.set(this.d.x + back.x * 7 - back.z * 4, this.carY() + 10, this.d.z + back.z * 7 + back.x * 4)
     this.writeWheel()
@@ -414,6 +549,7 @@ export class NanDrive implements World3D {
         lat = clamp(on.lat, -(half + 1.5), half + 1.5)
         ds = clamp(on.s - s, 8, 22)
         this.counts.steered += dt
+        this.lastSteer = this.time
       }
     }
     // Keep left: someone coming the other way and she's over the middle: Mommy eases her back toward her lane.
@@ -432,6 +568,11 @@ export class NanDrive implements World3D {
     if (this.phase === 'drive' && s > stopAt - 34) {
       this.setPhase('arrive')
       sounds.sparkle()
+      const T = L.nan.drive.to
+      const line = { city: T.market, valley: T.mushrooms, sky: this.to === 'salt' ? T.salt : T.rice, three: T.view }[this.r.id]
+      this.told.add('arrive')
+      this.speak(line)
+      this.ji.react('wave')
     }
     if (this.phase !== 'drive') {
       // Into the side of the road by the stop, and stopped.
@@ -469,6 +610,9 @@ export class NanDrive implements World3D {
       this.roll.v += side * 3
       this.squash = 1
       sfx.rail()
+      this.kaylee.react('wiggle')
+      // (Daddy's "Whoa!" when she steered into it.)
+      if (this.finger?.steering) this.every('whoa', 7, () => this.family(L.nan.drive.whoa))
       const at = road.spotAt(loc.s, side * (road.half + 0.4))
       this.sparkle.burst(at.x, at.y + 0.7, at.z, 12, 2.5, 3, 0.18)
     }
@@ -517,25 +661,25 @@ export class NanDrive implements World3D {
     const sq = Math.sin(this.squash * Math.PI) * 0.12
     c.body.scale.set(1 + sq * 0.5, 1 - sq, 1 + sq * 0.3)
     for (const w of c.wheels) w.rotation.x += (d.speed * dt) / 0.45
-    const lit = this.cloudK > 0.15 || this.r.weather === 'rain'
+    const lit = this.cloudK > 0.15 || this.weather === 'rain'
     c.beams.visible = this.cloudK > 0.15
     c.lamps.color.set(this.flash > 0 && Math.sin(this.flash * 30) > 0 ? '#FFFFFF' : lit ? '#FFF8D8' : '#E6E2EE')
   }
 
   /** The cloud on the sky road: the haze closes in to white as she climbs into it, then she pops out above into the
    *  sunshine. Rain below it. */
-  private weather(dt: number) {
+  private updateAir(dt: number) {
     const r = this.r
     const y = this.carY()
-    const base = r.cloud ? (y > r.cloud.y1 ? AIR.above : AIR.rain) : AIR[r.weather]
+    const base = r.cloud && y > r.cloud.y1 ? AIR.above : AIR[this.weather]
     const k = r.cloud ? smooth(r.cloud.y0 - 3, r.cloud.y0 + 6, y) * (1 - smooth(r.cloud.y1 - 5, r.cloud.y1 + 3, y)) : 0
     this.cloudK += (k - this.cloudK) * (1 - Math.exp(-dt * 2))
     const c = this.cloudK
-    this.air.set(base.bg).lerp(tmpColor.set(AIR.cloud.bg), c)
-    this.fogColor.set(base.fog).lerp(tmpColor.set(AIR.cloud.fog), c)
+    this.air.set(base.bg).lerp(tmpColor.set(AIR.inside.bg), c)
+    this.fogColor.set(base.fog).lerp(tmpColor.set(AIR.inside.fog), c)
     this.fog.color.copy(this.fogColor)
-    this.fog.near = base.near + (AIR.cloud.near - base.near) * c
-    this.fog.far = base.far + (AIR.cloud.far - base.far) * c
+    this.fog.near = base.near + (AIR.inside.near - base.near) * c
+    this.fog.far = base.far + (AIR.inside.far - base.far) * c
     // From high over the 3, no haze: the whole road shows crisp.
     if (r.id === 'three' && (this.phase === 'view' || this.phase === 'end')) {
       this.fog.near = 1500
@@ -544,15 +688,28 @@ export class NanDrive implements World3D {
     const inside = c > 0.6
     const above = !!r.cloud && y > r.cloud.y1 + 1
     if (inside && !this.wasIn) sfx.cloudIn()
+    // Into the cloud: Sparkle says so the first time (as it begins to close in), Daddy can't see a thing; out above it,
+    // the sea of clouds and the sunshine.
+    if (r.cloud && c > 0.25 && !heard.has('cloud')) {
+      heard.add('cloud')
+      this.told.add('cloud')
+      this.speak(L.nan.drive.cloud)
+    }
+    this.inCloudT = inside ? this.inCloudT + dt : 0
+    if (this.inCloudT > 3.5) this.once('foggy', L.nan.drive.foggy, true)
+    if (this.sea) this.sea.visible = y > r.cloud!.y1 - 4
     if (above && !this.wasAbove) {
       sfx.cloudOut()
       const p = this.car.root.position
       this.sparkle.burst(p.x, p.y + 3, p.z, 40, 5, 6, 0.26)
+      this.told.delete('sun')
+      window.setTimeout(() => this.once('sun', L.nan.drive.sun), 700)
+      this.nick.react('hop')
     }
     this.wasIn = inside
     this.wasAbove = above
     // Rain under the cloud, round the camera.
-    if (r.weather === 'rain' && !above) {
+    if (this.weather === 'rain' && !above && c < 0.5 && !(r.id === 'three' && (this.phase === 'view' || this.phase === 'end'))) {
       const cam = this.rig.camera.position
       const n = Math.floor((this.rainT += dt * 260))
       this.rainT -= n
@@ -583,6 +740,7 @@ export class NanDrive implements World3D {
     this.counted++
     this.countN++
     sounds.note(this.counted * 2)
+    this.number(this.counted)
     const p = this.car.root.position
     this.sparkle.burst(p.x, p.y + 2.5, p.z, 18, 3, 4, 0.22)
   }
@@ -605,6 +763,8 @@ export class NanDrive implements World3D {
       if (this.r.id === 'three') {
         this.trace = { s: 0, auto: -1, t: 0, scratch: 0 }
         this.drawn = 0
+        // (Once the camera has lifted over the hill.)
+        window.setTimeout(() => this.tracing && this.trace.s < 1 && this.speak(L.nan.drive.draw), fromStart ? 1200 : 2000)
         if (!fromStart) this.events.onView?.()
       } else {
         sounds.correct()
@@ -613,6 +773,153 @@ export class NanDrive implements World3D {
         window.setTimeout(() => this.phase === 'view' && this.setPhase('end'), 2600)
       }
     }
+  }
+
+  // ---------------------------------------------------------------- the car's life
+
+  /** The wipers swish by themselves in the rain (and inside the cloud); faster for a while when she taps them. */
+  private get wiping() {
+    return (this.weather === 'rain' && !this.wasAbove) || this.cloudK > 0.4
+  }
+  private wipers(dt: number) {
+    const W = this.wipe
+    W.fast = Math.max(0, W.fast - dt)
+    W.dry = Math.max(0, W.dry - dt)
+    const on = this.wiping || W.dry > 0
+    // Sweeps a second: about one a second and a half in the rain, three when tapped.
+    const rate = W.fast > 0 || W.dry > 0 ? 2.2 : this.wiping ? 0.75 : 0
+    if (on || W.a % 1 > 0.02) W.a += dt * Math.max(rate, on ? 0 : 1.2)
+    if (!on && W.a % 1 > 0.97) W.a = Math.ceil(W.a)
+    const k = (1 - Math.cos(W.a * Math.PI * 2)) / 2
+    this.car.setWipers(k)
+    // A swish at each end of the sweep.
+    const up = k > W.lastK
+    if (up !== W.up && (k > 0.9 || k < 0.1)) sfx.wiper(W.dry > 0 && !this.wiping)
+    W.up = up
+    W.lastK = k
+  }
+
+  /** The nodding elephant: its head nods on a spring with every bump, brake and bend (like mad when tapped). */
+  private nodding(dt: number) {
+    const n = this.nod
+    n.crazy = Math.max(0, n.crazy - dt)
+    // (Pushed near its own bounce, so the road's bumps rock it, harder when tapped; braking tips it forward.)
+    const sp = clamp(Math.abs(this.d.speed) / 6, 0, 1)
+    const kick = Math.sin(this.time * 7.7) * (3 * sp + (n.crazy > 0 ? 25 : 0)) + this.pitch.v * 8
+    n.v += (kick - n.x * 60) * dt
+    n.v *= Math.exp(-3 * dt)
+    n.x += n.v * dt
+    const e = this.car.elephant
+    e.head.rotation.x = clamp(n.x, -0.5, 0.6)
+    e.head.rotation.z = Math.sin(this.time * 2.2) * 0.06 + (n.crazy > 0 ? Math.sin(this.time * 9) * 0.15 : 0)
+  }
+
+  /** Rain: the tyres hiss, and the puddles splash as she drives through them. */
+  private wet(dt: number) {
+    if (this.weather !== 'rain' || this.wasAbove) return
+    const sp = Math.abs(this.d.speed)
+    this.hissT -= dt
+    if (sp > 2 && this.hissT <= 0) {
+      this.hissT = 0.45
+      sfx.hiss(clamp(sp / 8, 0.3, 1))
+    }
+    while (this.nextPuddle < this.puddles.length && this.puddles[this.nextPuddle].s < this.loc.s - 3) this.nextPuddle++
+    const p = this.puddles[this.nextPuddle]
+    if (!p || Math.abs(p.s - this.loc.s) > p.r * 1.6 + 1 || Math.abs(p.lat - this.loc.lat) > p.r + 1) return
+    this.nextPuddle++
+    this.counts.splashes++
+    sfx.puddle()
+    this.squash = Math.max(this.squash, 0.4)
+    const c = this.car.root
+    const sm = this.r.road.sampleAt(this.loc.s)
+    for (const side of [-1, 1]) {
+      const x = c.position.x + sm.lx * side * 1.1
+      const z = c.position.z + sm.lz * side * 1.1
+      for (let i = 0; i < 14; i++) this.dust.emit(x, c.position.y + 0.2, z, sm.lx * side * (1 + Math.random() * 2) + (Math.random() - 0.5), 2 + Math.random() * 2.5, sm.lz * side * (1 + Math.random() * 2) + (Math.random() - 0.5), 0.7, 0.16)
+    }
+  }
+
+  // ---------------------------------------------------------------- talk
+
+  /** Says it (Sparkle in the corner, or whoever's line it is). */
+  private speak(l: Line) {
+    this.lastLine = this.time
+    this.quietFrom = this.time + 3
+    this.events.say?.(l)
+    const v = typeof l === 'string' ? 'sparkle' : l.voice
+    if (v === 'nick') {
+      this.nick.react('hop')
+      this.nick.lookAt(this.d.x + Math.sin(this.d.heading) * 12, this.carY() + 1.5, this.d.z + Math.cos(this.d.heading) * 12)
+    } else if (v === 'ji') this.ji.react('wave')
+  }
+  /** A family reaction: dropped while someone's talking or just after a line (nothing stacks up, nothing comes late). */
+  private family(l: Line) {
+    if (speakingVoice() || this.time - this.lastLine < GAP_S) return false
+    this.speak(l)
+    return true
+  }
+  /** Says it the first time only (a family line waits for a quiet moment: call it again while it still fits). */
+  private once(key: string, l: Line, family = false) {
+    if (this.told.has(key)) return
+    if (family ? !this.family(l) : (this.speak(l), false)) return
+    this.told.add(key)
+  }
+  /** Once every few seconds at most. */
+  private every(key: string, s: number, f: () => void) {
+    if (this.time - (this.cool.get(key) ?? -99) < s) return
+    this.cool.set(key, this.time)
+    f()
+  }
+  /** One, two, three! (Sparkle, as the big number pops.) */
+  private number(k: number) {
+    const D = L.nan.drive
+    const l = [D.one, D.two, D.three][k - 1]
+    if (l) this.speak(l)
+  }
+
+  /** What's said when, every frame: the opening line, the things seen on the way, Sparkle's stuck hints. */
+  private talk(t: number) {
+    const D = L.nan.drive
+    const r = this.r
+    const her = this.her()
+    // ---- The opening: at most one line before her hands are busy ----
+    if (!this.told.has('open') && t > 0.6 && this.phase === 'drive') {
+      this.told.add('open')
+      if (r.id === 'three') this.speak(D.count)
+      else if (drives === 0) this.speak(D.go)
+      else this.quietFrom = t + 1
+      drives++
+    }
+    if (this.phase === 'drive') {
+      // The first mirror showing a car (once a visit), then beep!
+      const warn = this.traffic.blindWarning(her)
+      if (warn !== null && warn - her.s < 60 && !heard.has('mirror')) {
+        heard.add('mirror')
+        this.speak(D.mirror)
+      }
+      // Someone pulled over for her (she steered onto their side): keep left!
+      if (this.traffic.counts.yields > this.yieldsSeen) {
+        this.yieldsSeen = this.traffic.counts.yields
+        if (t - this.lastSteer < 3) this.every('left', 12, () => this.family(D.left))
+      }
+      // A buffalo crossing: Mommy stops for it.
+      if (this.traffic.blockAhead(her) < 40) this.once('buffalo', D.buffalo, true)
+      // The first sharp bend (not on the 3 road, where Sparkle counts them).
+      if (r.id !== 'three' && t > 6 && Math.abs(r.road.bendAhead(her.s, 22)) > 0.8 && this.d.speed > 3) this.once('bend', D.bend, true)
+      // Things to see: the monkey on the rail, the waterfall.
+      if (this.traffic.monkeys.some((m) => m.s - her.s < 24 && m.s - her.s > 2)) this.once('monkey', D.monkey, true)
+      if (r.falls !== undefined && r.falls - her.s < 40 && r.falls - her.s > 0) this.once('waterfall', D.waterfall, true)
+      // The rain: Daddy loves the wipers.
+      if (this.weather === 'rain' && !this.wasAbove && t > 7) this.once('rain', D.rain, true)
+    }
+    // ---- Stuck: after ~8 s with nothing touched, Sparkle says what to do (twice a drive at most) ----
+    const quiet = t - Math.max(this.lastTouch, this.quietFrom)
+    if (quiet < STUCK_S || t - this.hintSaid < HINT_EVERY || this.hintN >= HINT_MAX || speakingVoice()) return
+    const l = this.phase === 'drive' ? D.steer : this.tracing && this.trace.t > 3 ? D.draw : null
+    if (!l) return
+    this.hintSaid = t
+    this.hintN++
+    this.speak(l)
   }
 
   // ---------------------------------------------------------------- the 3, drawn
@@ -705,10 +1012,13 @@ export class NanDrive implements World3D {
       this.drawn = passed
       this.countN++
       sounds.note(passed * 2)
+      this.number(passed)
       this.sparkle.burst(sm.x, sm.y + 3, sm.z, 26, 6, 7, 0.4)
     }
     if (T.s >= road.length - 0.5) {
       sounds.fanfare()
+      this.speak(L.nan.drive.drew)
+      for (const [k, c] of [this.kaylee, this.nick, this.ji].entries()) window.setTimeout(() => c.react('hop'), k * 120)
       const b = road.bounds()
       for (const k of [0.2, 0.5, 0.8]) {
         const q = road.sampleAt(road.length * k)
@@ -871,6 +1181,14 @@ export class NanDrive implements World3D {
       at.y += 1.3
       return { at, r: 1.6, prio: 2, max: 150 }
     }
+    // In the car (while it's on the road, and parked by the stop): Daddy, the elephant toy, the tailgate's wiper.
+    if (id === 'family:nick' || id === 'elephant' || id === 'wipers') {
+      if (this.r.id === 'three' && this.phase !== 'drive' && this.phase !== 'arrive') return null
+      // (Kept apart on screen: Daddy up by the roof's front, the elephant's head, the wiper low on the tailgate.)
+      if (id === 'family:nick') return { at: this.nick.root.getWorldPosition(new Vector3()).add(tmp2.set(0, this.nick.height * 0.85, 0)), r: 0.3, prio: 3, max: 80 }
+      if (id === 'elephant') return { at: this.car.elephant.root.getWorldPosition(new Vector3()).add(tmp2.set(0, 0.32, 0)), r: 0.2, prio: 4, max: 72 }
+      return { at: this.car.body.localToWorld(new Vector3(...this.car.rearWiper).add(tmp2.set(0, -0.22, 0))), r: 0.28, prio: 4, max: 72 }
+    }
     if (id.startsWith('mirror:')) {
       const m = this.mirrors[Number(id.slice(7))]
       return m && m.s - her.s > -10 && m.s - her.s < 80 ? { at: m.at, r: 0.7, prio: 1 } : null
@@ -944,6 +1262,7 @@ export class NanDrive implements World3D {
     const r2 = (v: number) => Math.round(v * 100) / 100
     return {
       road: this.r.id,
+      weather: this.weather,
       phase: this.phase,
       s: r2(this.loc.s),
       lat: r2(this.loc.lat),

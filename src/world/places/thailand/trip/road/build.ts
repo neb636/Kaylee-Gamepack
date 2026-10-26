@@ -1,8 +1,8 @@
 // The road kit's scenery, built from a Road (road.ts): the hills it's cut into (one height field, so the ground always
 // meets the road), the ribbon of the road itself (two lanes, white edge lines, a dashed yellow middle, dirt verges),
 // steel guard rails wherever the ground drops away beside it, black-and-white chevron signs round the sharp bends,
-// round convex mirrors on blind bends, trees, a ring of far mountains, and a river with a bridge where one crosses.
-// Few draw calls: each kind of thing is merged into one mesh (plus its outline).
+// round convex mirrors on blind bends, trees, a ring of far mountains, and a river with a bridge where one crosses; and
+// after rain, the wet road's shine and its puddles (buildWet). Few draw calls: each kind of thing is merged into one mesh (plus its outline).
 import { BoxGeometry, BufferAttribute, BufferGeometry, Color, Group, Matrix4, Mesh, MeshBasicMaterial, Quaternion, Vector3 } from 'three'
 import type { Bag } from '../../engine/dispose'
 import { bake, merge, P, solid, type V3 } from '../../engine/geo'
@@ -410,4 +410,98 @@ function ribbon(road: Road, bag: Bag) {
   const m = new Mesh(bag.add(g), toon('#ffffff', true))
   m.renderOrder = 1
   return m
+}
+
+/** A puddle on a wet road: where along it (s), how far across (lat) and how big (meters). */
+export interface Puddle {
+  s: number
+  lat: number
+  r: number
+}
+
+/** The road after rain: the asphalt a shade darker, long pale shine streaks along both lanes (the sky in the wet road),
+ *  and puddles here and there that she can drive through (splash!). Two meshes, laid just over the ribbon. */
+export function buildWet(road: Road, seed: number, bag: Bag): { root: Group; puddles: Puddle[] } {
+  const rand = rng(seed * 7 + 3)
+  const root = new Group()
+  const h = road.half
+  const S = road.samples
+  // The darker wet film over both lanes.
+  const film: number[] = []
+  for (let i = 0; i < S.length - 1; i++) {
+    const a = S[i]
+    const b = S[i + 1]
+    const q: V3[] = [
+      [a.x - a.lx * h, a.y + 0.045, a.z - a.lz * h],
+      [b.x - b.lx * h, b.y + 0.045, b.z - b.lz * h],
+      [a.x + a.lx * h, a.y + 0.045, a.z + a.lz * h],
+      [b.x + b.lx * h, b.y + 0.045, b.z + b.lz * h],
+    ]
+    for (const k of [0, 1, 2, 1, 3, 2]) film.push(...q[k])
+  }
+  const fg = new BufferGeometry()
+  fg.setAttribute('position', new BufferAttribute(new Float32Array(film), 3))
+  const filmMesh = new Mesh(bag.add(fg), bag.add(new MeshBasicMaterial({ color: '#5E5878', transparent: true, opacity: 0.16, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 })))
+  filmMesh.renderOrder = 2
+  root.add(filmMesh)
+
+  // Shine streaks along the lanes and the puddles, one mesh with vertex colors.
+  const pos: number[] = []
+  const col: number[] = []
+  const c = new Color()
+  const quad = (q: V3[], color: string) => {
+    c.set(color)
+    for (const k of [0, 1, 2, 1, 3, 2]) {
+      pos.push(...q[k])
+      col.push(c.r, c.g, c.b)
+    }
+  }
+  for (const lane of [-h / 2, h / 2])
+    for (let s = 2 + rand() * 6; s < road.length - 6; ) {
+      const len = 1.5 + rand() * 3.5
+      const lat = lane + (rand() - 0.5) * 2.2
+      const w = 0.06 + rand() * 0.14
+      for (let u = s; u < s + len && u < road.length - 1; u += 1) {
+        const a = road.sampleAt(u)
+        const b = road.sampleAt(Math.min(u + 1, s + len))
+        quad([
+          [a.x + a.lx * (lat - w), a.y + 0.06, a.z + a.lz * (lat - w)],
+          [b.x + b.lx * (lat - w), b.y + 0.06, b.z + b.lz * (lat - w)],
+          [a.x + a.lx * (lat + w), a.y + 0.06, a.z + a.lz * (lat + w)],
+          [b.x + b.lx * (lat + w), b.y + 0.06, b.z + b.lz * (lat + w)],
+        ], rand() < 0.3 ? '#E9E6F6' : '#C9C6E0')
+      }
+      s += len + 3 + rand() * 9
+    }
+  const puddles: Puddle[] = []
+  for (let s = 18 + rand() * 20; s < road.length - 30; s += 22 + rand() * 30) {
+    const p: Puddle = { s, lat: (rand() < 0.6 ? 1 : -1) * (0.8 + rand() * 2), r: 0.7 + rand() * 0.7 }
+    puddles.push(p)
+    // An ellipse, longer along the road, a paler rim round a sky-blue middle.
+    const t = road.sampleAt(s)
+    const N = 14
+    for (const [k, color, y] of [[1, '#F4F8FF', 0.065], [0.78, '#B3CDEE', 0.07]] as const)
+      for (let i = 0; i < N; i++) {
+        const a0 = (i / N) * Math.PI * 2
+        const a1 = ((i + 1) / N) * Math.PI * 2
+        const at = (a: number): V3 => {
+          const along = Math.cos(a) * p.r * 1.6 * k
+          const across = p.lat + Math.sin(a) * p.r * k
+          return [t.x + t.tx * along + t.lx * across, t.y + y, t.z + t.tz * along + t.lz * across]
+        }
+        const m: V3 = [t.x + t.lx * p.lat, t.y + y, t.z + t.lz * p.lat]
+        c.set(color)
+        for (const v of [m, at(a0), at(a1)]) {
+          pos.push(...v)
+          col.push(c.r, c.g, c.b)
+        }
+      }
+  }
+  const g = new BufferGeometry()
+  g.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3))
+  g.setAttribute('color', new BufferAttribute(new Float32Array(col), 3))
+  const shine = new Mesh(bag.add(g), bag.add(new MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.55, depthWrite: false, side: 2, polygonOffset: true, polygonOffsetFactor: -3 })))
+  shine.renderOrder = 3
+  root.add(shine)
+  return { root, puddles }
 }
