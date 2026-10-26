@@ -1,6 +1,6 @@
 // The mountain road's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): the other drivers'
 // toots, the animals, the guard rail's boing, the wipers, the tyres in the wet and the puddles, the nodding
-// elephant's squeak, the crayon drawing the 3. (The voices are lines.ts L.nan.drive.)
+// elephant's squeak, the tyres squealing round a sharp swerve. (The voices are lines.ts L.nan.drive.)
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
 
@@ -29,8 +29,14 @@ export const roadSfx = {
   /** Into the cloud: a soft whoosh down; out above it: a sparkle up. */
   cloudIn: () => noise(1.4, 0.06, 'lowpass', 1400, 300, 0, 0.7),
   cloudOut: () => [0, 1, 2, 3, 4].forEach((i) => tone(880 * (1 + i * 0.25), 900 * (1 + i * 0.25), 0.3, 0.04, 'sine', i * 0.09)),
-  /** The crayon drawing the 3: a waxy scratch (over and over while it moves). */
-  scribble: () => noise(0.09, 0.04, 'bandpass', 2600 + Math.random() * 900, 1800, 0, 1.4),
+  /** The tyres squealing round a sharp swerve (k: how hard, 0..1): a cartoon "eeeee" sliding down, and a scrubby hiss. */
+  screech: (k = 1) => {
+    const d = 0.3 + 0.3 * k
+    const f = 1150 + Math.random() * 300
+    tone(f, f * 0.8, d, 0.04 + 0.03 * k, 'triangle')
+    tone(f * 1.48, f * 1.25, d * 0.85, 0.012 + 0.012 * k, 'square', 0.02)
+    noise(d, 0.05 + 0.05 * k, 'bandpass', 2700, 1600, 0, 5)
+  },
   /** A wiper's sweep across the glass (a dry one squeaks). */
   wiper: (dry = false) => {
     noise(0.22, 0.035, 'bandpass', 1800, 900, 0, 0.8)

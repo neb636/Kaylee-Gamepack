@@ -377,7 +377,6 @@ export const L = {
       one: 'One!',
       two: 'Two!',
       three: 'Three!',
-      draw: 'Draw the three with your finger!',
       drew: `Three! ${NAME} drove the three!`,
       go: ji(`Steer for me, ${NAME}!`),
       left: ji('Keep left!'),

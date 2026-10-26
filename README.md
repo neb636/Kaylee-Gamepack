@@ -223,7 +223,7 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   - [Feed the fire till the brine boils down](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/salt?round=2)
   - [Scrape the salt into the basket, the bags on the shelf, then the real salt video](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/salt?round=3)
 - **Viewpoint and home**
-  - [The "number 3" from the viewpoint: draw it, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
+  - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
   - [Home: pick the photo for Agong's wall, the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/home?photos=deck,three,pizza,salt)
 
 **Finale**: [Family party (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/party/soon)

@@ -3,7 +3,7 @@
 // big numbers as she counts the bends, the 👆 when she hasn't steered for a while, Sparkle in the other corner
 // (trip/legs/Guide.tsx: she and the family talk out loud in their own voices), and at the end of the road its stop
 // (when she picked one on the Nan map, it opens by itself) or the end card: the stop, 🔁 this road again, 🗺️ back to
-// the map. The 3 road ends at the viewpoint (section `three`), where she draws the 3; on the trip, Mommy takes the
+// the map. The 3 road ends at the viewpoint (section `three`), where the bends pop one, two, three; on the trip, Mommy takes the
 // family's photo with the 3 behind them and the end card offers ✈️🏠 home. Every drive (and every 🔁) rolls its own
 // weather and traffic (roads.ts rollDrive); a link's `weather` holds for the drive it opens.
 import { AnimatePresence, motion } from 'motion/react'
@@ -27,7 +27,7 @@ function linkWeather(): Weather | '' {
 
 interface Props {
   road: RoadId
-  /** Start parked at the 3 road's viewpoint, the 3 below waiting to be drawn (section `three`). */
+  /** Start parked at the 3 road's viewpoint, the 3 below (section `three`). */
   view?: boolean
   /** Where she's driving to (picked on the Nan map: a stop's id, or `map` to go back to it): it opens by itself at the
    *  end of the road. Empty: the end card. */
@@ -39,14 +39,14 @@ interface Props {
   onStop?: (road: RoadId, stop?: string) => void
   /** Back to the Nan map. */
   onMap?: () => void
-  /** The 3 road reached its viewpoint: drawing the 3 begins (section `three`). */
+  /** The 3 road reached its viewpoint (section `three`). */
   onView?: () => void
-  /** On the trip: the 3 is drawn and Mommy took the photo (it's one to pick for Agong's wall), and ✈️🏠 goes home. */
-  onDrawn?: () => void
+  /** On the trip: the bends have popped and Mommy took the photo (it's one to pick for Agong's wall), and ✈️🏠 goes home. */
+  onPhoto?: () => void
   onHome?: () => void
 }
 
-export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onView, onDrawn, onHome }: Props) {
+export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onView, onPhoto, onHome }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [run, setRun] = useState(0)
@@ -72,13 +72,13 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
     else onStop?.(road, to)
   }, [going, hud.phase])
 
-  // The 3 drawn on the trip: Mommy's photo of them with the 3 behind.
+  // The 3 from above on the trip: Mommy's photo of them with the 3 behind.
   const photo = view && hud.phase === 'end' && !!onHome
   const threePhoto = useMemo(() => (photo ? drawPhoto('three') : ''), [photo])
   useEffect(() => {
     if (!photo) return
     guideRef.current?.speak(L.nan.trip.three)
-    onDrawn?.()
+    onPhoto?.()
   }, [photo])
 
   const make = (renderer: WebGLRenderer) => {
@@ -171,7 +171,7 @@ const Stick = forwardRef<HTMLDivElement>(function Stick(_, ref) {
   )
 })
 
-/** The 3 road's count: a giant 1, 2, 3 as she rounds each bend (and again as the crayon draws the 3). */
+/** The 3 road's count: a giant 1, 2, 3 as she rounds each bend (and again from the viewpoint, as each bend pops). */
 function CountPop({ count }: { count: DriveHud['count'] }) {
   const [shown, setShown] = useState<{ k: number; n: number } | null>(null)
   useEffect(() => {

@@ -20,8 +20,8 @@
 // on the sky road, round mirrors on the blind bends (one flashes when a car is coming round, and it beeps hello), a
 // waterfall, a monkey on the rail, then the cloud (white all round, headlights on) and out above it into the sunshine
 // over a sea of clouds; on the 3 road, the bends she counts with Sparkle, and from the viewpoint the road below is a
-// giant 3 (section `three`): a big pink crayon waits at the top of it, and her finger pulls it along the road (one,
-// two, three as it rounds each bend; a tap on the road draws on to the next bend for her). Each road ends at its stop
+// giant 3 (section `three`): the camera lifts over the hill and the bends pop one, two, three by themselves (nothing
+// to draw: Dad took the crayon out, 2026-10-26), then the fanfare. Each road ends at its stop
 // (the mushroom farm, the café, the market, the viewpoint): the Pajero pulls in and the camera turns to look.
 //
 // Talk (lines.ts L.nan.drive): at most one line before her hands are busy (Mommy's "Steer for me!" on the first drive,
@@ -31,7 +31,7 @@
 //
 // The screen (Drive.tsx) draws the steering wheel, the count's big numbers, Sparkle and the end card; the wheel's place
 // and turn, the hint finger and the tap targets are written here every frame.
-import { Color, Fog, Group, Mesh, MeshBasicMaterial, Scene, Vector3, type WebGLRenderer, BufferGeometry, BufferAttribute } from 'three'
+import { Color, Fog, Group, Scene, Vector3, type WebGLRenderer } from 'three'
 import { clamp, sounds, speakingVoice, type Line } from '../../../../../../sdk'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
@@ -39,10 +39,9 @@ import { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import { CameraRig, type Shot } from '../../../engine/camera'
 import { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
 import { setOutlineResolution } from '../../../engine/outline'
 import { Particles } from '../../../engine/particles'
-import { applyBands, makeLights, PAL } from '../../../engine/toon'
+import { applyBands, makeLights } from '../../../engine/toon'
 import type { World3D } from '../../../engine/View3D'
 import { Driver, type Feel } from '../../../trip/drive'
 import { put } from '../../../trip/legs/stage'
@@ -80,9 +79,19 @@ export type DriveStart = 'road' | 'view'
 const ZOOM = 1.6
 const PAJERO_FEEL: Feel = { top: 9.5 * ZOOM, boost: 1.2, accel: 4 * ZOOM, coast: 0.6, turn: 1.15 * ZOOM, grip: 7, near: 2, far: 7, dead: 0.02, lean: 0.12 }
 /** The steering wheel (sled style): how far across the road pushing it all the way slides it (m/s), the middle that
- *  counts as straight (share of the wheel), and how quickly Mommy eases it back into her lane after she lets go (s). */
-const SLIDE = 7.5
+ *  counts as straight (share of the wheel), how gently a small push steers (a curve: 1 = straight line, higher = a
+ *  small push barely moves it), how long a quick flick of the finger takes to count in full (s: jitters and
+ *  back-and-forth twitches average out), and how quickly Mommy eases it back into her lane after she lets go (s).
+ *  Dad found 7.5 m/s with no smoothing far too twitchy on a phone and a trackpad (2026-10-26). */
+const SLIDE = 4.2
 const STICK_DEAD = 0.12
+const STICK_CURVE = 1.6
+const STICK_EASE = 0.3
+/** A quick, hard flick of the wheel (its push changing this fast, per s, with the push at least this far over): the
+ *  tyres squeal, a puff of smoke off the back wheels, and the body rocks. No more than one squeal in this long (s). */
+const SCREECH_FLICK = 5
+const SCREECH_PUSH = 0.45
+const SCREECH_COOL = 0.7
 const BACK_S = 1.4
 /** How far past the edge of the road she can bump along the grass (m; the trees start a little further out), and how
  *  much slower it goes there. */
@@ -97,6 +106,9 @@ const FALL_MAX = 2.2
 const POOF_S = 0.7
 const DROP_S = 0.65
 const DROP_H = 9
+/** The 3 from above: when the first bend pops (s after the camera starts lifting), and the gap to the next (s). */
+const VIEW_POP = 1.8
+const VIEW_GAP = 0.75
 
 /** The road's tap targets: the Pajero (Daddy in it, the elephant toy, the wipers), then whoever is on the road this
  *  drive (`traffic`: its roll). */
@@ -166,9 +178,6 @@ export class NanDrive implements World3D {
   private mirrors: Mirror[] = []
   private landmark: Group
   private falls: Group | null = null
-  private crayon: Mesh | null = null
-  /** The big pink crayon at the tip of the line she draws. */
-  private crayonTip: Group | null = null
   private dust: Particles
   private grass: Particles
   private rain: Particles
@@ -199,6 +208,11 @@ export class NanDrive implements World3D {
   private steerLat = LANE_LAT
   /** The wheel's push, -1..1 across the road (+ toward +lat), for QA. */
   private stick = 0
+  /** The push that steers: past the dead middle, curved and smoothed (-1..1). */
+  private steerK = 0
+  /** How fast her push is changing (per s, smoothed), and when the tyres last squealed. */
+  private flick = 0
+  private screechT = -9
   private w = 1
   private h = 1
   private camHeading = 0
@@ -217,16 +231,15 @@ export class NanDrive implements World3D {
   private wasAbove = false
   private counted = 0
   private countN = 0
-  /** Drawing the 3: how far along the road the crayon has got (m), where a tap sends it on to (-1: nowhere), how long
-   *  since the viewpoint began. */
-  private trace = { s: 0, auto: -1, t: 0, scratch: 0 }
-  /** Bends the crayon line has passed (-1: it hasn't started). */
-  private drawn = -1
+  /** The 3 from above: seconds since the camera began lifting over the hill, and how many of its bends have popped
+   *  (-1: not there yet). */
+  private viewT = 0
+  private popped = -1
   private lastHud = ''
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
   private stickEl: HTMLElement | null = null
-  private counts = { hops: 0, boings: 0, pokes: 0, steered: 0, keptLeft: 0, wipes: 0, splashes: 0, overs: 0, grass: 0, wiggles: 0 }
+  private counts = { hops: 0, boings: 0, pokes: 0, steered: 0, keptLeft: 0, wipes: 0, splashes: 0, overs: 0, grass: 0, wiggles: 0, screeches: 0 }
   private ev: TrafficEvents
   /** This drive's weather (rolled, or the link's). */
   readonly weather: Weather
@@ -353,11 +366,6 @@ export class NanDrive implements World3D {
       scene.add(wet.root)
       this.puddles = wet.puddles
     }
-    if (r.id === 'three') {
-      this.crayon = this.buildCrayon()
-      this.crayonTip = this.buildCrayonTip()
-      scene.add(this.crayon, this.crayonTip)
-    }
 
     // ---- The Pajero and the particles ----
     this.car = buildPajero(bag)
@@ -402,7 +410,8 @@ export class NanDrive implements World3D {
     if (atView) {
       this.counted = r.count.length
       this.setPhase('view', true)
-      this.trace.t = 99
+      // (Already up over the hill: the numbers start popping sooner.)
+      this.viewT = VIEW_POP - 0.6
     }
     this.rig.lag = 0.5
     this.rig.setShot(this.shot(), true)
@@ -440,18 +449,11 @@ export class NanDrive implements World3D {
     if (this.finger?.steering) this.d.release()
     this.finger = null
     this.stick = 0
+    this.steerK = 0
   }
 
   tap(_x: number, _y: number, id?: string) {
     this.lastTouch = this.time
-    if (!id && this.tracing) {
-      // A tap anywhere: the crayon draws on round the next bend for her.
-      const T = this.trace
-      const next = this.r.count.find((s) => s > T.s + 4) ?? this.r.road.length
-      T.auto = Math.min(next + 3, T.s + 90, this.r.road.length)
-      this.counts.pokes++
-      return
-    }
     if (!id) return
     this.counts.pokes++
     if (id === 'car') return this.bounce()
@@ -526,8 +528,8 @@ export class NanDrive implements World3D {
     return this.phase === 'end' && !this.rig.moving
   }
 
-  /** At the viewpoint, drawing the 3. */
-  private get tracing() {
+  /** At the viewpoint, looking down on the 3. */
+  private get overThree() {
     return this.phase === 'view' && this.r.id === 'three'
   }
 
@@ -553,7 +555,7 @@ export class NanDrive implements World3D {
     this.updateAir(dt)
     this.mirrorsFlash(t)
     this.countBends()
-    this.updateTrace(dt)
+    this.updateView(dt)
     this.engine(dt)
     this.wipers(dt)
     this.wet(dt)
@@ -575,7 +577,7 @@ export class NanDrive implements World3D {
 
     // ---- The camera: behind, looking ahead along the road (higher on hairpins) ----
     const head = Math.atan2(this.r.road.sampleAt(this.loc.s + 8).tx, this.r.road.sampleAt(this.loc.s + 8).tz)
-    const want = this.phase === 'drive' ? head + wrap(this.d.heading - head) * 0.5 : this.d.heading
+    const want = this.phase === 'drive' ? head + wrap(this.d.heading - head) * 0.3 : this.d.heading
     this.camHeading += wrap(want - this.camHeading) * (1 - Math.exp(-dt / 0.5))
     this.rig.setShot(this.shot())
     this.rig.update(dt)
@@ -605,23 +607,28 @@ export class NanDrive implements World3D {
     if (this.drop > 0) return d.stop()
     if (this.phase === 'drive' && f?.steering) {
       // Sled style: the wheel's push across the road slides her that way, as long as she holds it there.
+      const was = this.stick
       this.stick = this.stickAcross(f)
-      const k = Math.abs(this.stick) < STICK_DEAD ? 0 : Math.sign(this.stick) * ((Math.abs(this.stick) - STICK_DEAD) / (1 - STICK_DEAD))
+      this.screech(was, dt)
+      const u = Math.max(0, (Math.abs(this.stick) - STICK_DEAD) / (1 - STICK_DEAD))
+      this.steerK += (Math.sign(this.stick) * u ** STICK_CURVE - this.steerK) * (1 - Math.exp(-dt / STICK_EASE))
+      const k = this.steerK
       // (Past the edge is allowed: onto the grass, or over the rail.)
-      this.steerLat = clamp(this.steerLat + k * SLIDE * dt, -(half + GRASS + 1.5), half + GRASS + 1.5)
-      if (k !== 0) {
+      this.steerLat = clamp(this.steerLat + k * SLIDE * dt, -(half + GRASS + 3), half + GRASS + 3)
+      if (Math.abs(k) > 0.05) {
         this.counts.steered += dt
         this.lastSteer = this.time
       }
       this.wiggling()
     } else {
       // Let go: Mommy eases it back into the left lane.
+      this.steerK = 0
       this.steerLat += (LANE_LAT - this.steerLat) * (1 - Math.exp(-dt / BACK_S))
     }
     let lat = this.steerLat
-    // Steering hard (far from where the car is now): it aims closer ahead, so it turns sharply that way instead of
-    // drifting over.
-    ds = Math.max(6, ds - Math.abs(lat - this.loc.lat) * 3)
+    // Steering hard (far from where the car is now): it aims a little closer ahead, so it gets there, but never so
+    // close that the nose swings round and has to swing back.
+    ds = Math.max(13, ds - Math.abs(lat - this.loc.lat) * 1.2)
     // Keep left: someone coming the other way and she's over the middle: Mommy eases her back toward her lane.
     const her = this.her()
     const oncoming = this.traffic.movers.some((m) => m.state === 'go' && m.s - s > -2 && m.s - s < 34)
@@ -781,6 +788,7 @@ export class NanDrive implements World3D {
     this.d.place(p.x, p.z, p.heading)
     this.steerLat = LANE_LAT
     this.stick = 0
+    this.steerK = 0
     // (Her finger still down: the wheel starts again under it.)
     if (this.finger) {
       this.finger.ox = this.finger.x
@@ -813,6 +821,27 @@ export class NanDrive implements World3D {
     this.d.vz = Math.cos(this.d.heading) * 3
     this.silly('back', L.nan.drive.back, 0, 1.2)
     return 0
+  }
+
+  /** A quick, hard flick of the wheel: the tyres squeal ("eeeee"), smoke puffs off the back wheels, and the body rocks
+   *  the way she yanked it. Just for fun: it doesn't make the car turn any sharper. */
+  private screech(was: number, dt: number) {
+    const rate = (this.stick - was) / Math.max(dt, 1 / 120)
+    this.flick += (rate - this.flick) * (1 - Math.exp(-dt / 0.06))
+    if (Math.abs(this.flick) < SCREECH_FLICK || Math.abs(this.stick) < SCREECH_PUSH || this.d.speed < 3) return
+    if (this.time - this.screechT < SCREECH_COOL) return
+    this.screechT = this.time
+    this.counts.screeches++
+    sfx.screech(clamp((Math.abs(this.flick) - SCREECH_FLICK) / 8, 0, 1))
+    this.roll.v -= Math.sign(this.flick) * 1.2
+    const c = this.car.root.position
+    const fx = Math.sin(this.d.heading)
+    const fz = Math.cos(this.d.heading)
+    for (const side of [-1, 1]) {
+      const x = c.x - fx * 1.4 + fz * side * 0.9
+      const z = c.z - fz * 1.4 - fx * side * 0.9
+      for (let i = 0; i < 4; i++) this.dust.emit(x, c.y + 0.3, z, (Math.random() - 0.5) * 2 - fx * 2, 1 + Math.random() * 1.5, (Math.random() - 0.5) * 2 - fz * 2, 0.9, 0.35)
+    }
   }
 
   /** Wiggling all over the road (her push swapping sides four times in three seconds): the car rocks, and "Wibbly
@@ -1014,10 +1043,8 @@ export class NanDrive implements World3D {
     if (p === 'view') {
       this.rig.lag = this.r.id === 'three' ? 1.4 : 0.9
       if (this.r.id === 'three') {
-        this.trace = { s: 0, auto: -1, t: 0, scratch: 0 }
-        this.drawn = 0
-        // (Once the camera has lifted over the hill.)
-        window.setTimeout(() => this.tracing && this.trace.s < 1 && this.speak(L.nan.drive.draw), fromStart ? 1200 : 2000)
+        this.viewT = 0
+        this.popped = 0
         if (!fromStart) this.events.onView?.()
       } else {
         sounds.correct()
@@ -1188,137 +1215,41 @@ export class NanDrive implements World3D {
     // ---- Stuck: after ~8 s with nothing touched, Sparkle says what to do (twice a drive at most) ----
     const quiet = t - Math.max(this.lastTouch, this.quietFrom)
     if (this.fall || quiet < STUCK_S || t - this.hintSaid < HINT_EVERY || this.hintN >= HINT_MAX || !this.quiet()) return
-    const l = this.phase === 'drive' ? D.steer : this.tracing && this.trace.t > 3 ? D.draw : null
-    if (!l) return
+    if (this.phase !== 'drive') return
     this.hintSaid = t
     this.hintN++
-    this.speak(l)
+    this.speak(D.steer)
   }
 
-  // ---------------------------------------------------------------- the 3, drawn
+  // ---------------------------------------------------------------- the 3 from above
 
-  /** A pink crayon line along the middle of the road, drawn from the start to the end once she's at the viewpoint. */
-  private buildCrayon() {
-    const S = this.r.road.samples
-    const pos: number[] = []
-    for (let i = 0; i < S.length - 1; i++) {
-      const a = S[i]
-      const b = S[i + 1]
-      const w = 1.3
-      const q = [
-        [a.x - a.lx * w, a.y + 0.5, a.z - a.lz * w],
-        [b.x - b.lx * w, b.y + 0.5, b.z - b.lz * w],
-        [a.x + a.lx * w, a.y + 0.5, a.z + a.lz * w],
-        [b.x + b.lx * w, b.y + 0.5, b.z + b.lz * w],
-      ]
-      for (const k of [0, 1, 2, 1, 3, 2]) pos.push(...q[k])
-    }
-    const g = this.bag.add(new BufferGeometry())
-    g.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3))
-    g.setDrawRange(0, 0)
-    const m = new Mesh(g, this.bag.add(new MeshBasicMaterial({ color: PAL.hotpink, depthTest: false })))
-    m.renderOrder = 5
-    m.frustumCulled = false
-    return m
-  }
-
-  /** The big pink crayon: a wax stick in its paper wrapper, its point down on the road (leaning back the way it came). */
-  private buildCrayonTip() {
-    const g = new Group()
-    const stick = solid(merge([
-      P.cone(1.5, 3.2, PAL.hotpink, { at: [0, 1.6, 0], rot: [Math.PI, 0, 0] }),
-      P.cyl(1.5, 1.5, 3, PAL.hotpink, { at: [0, 4.6, 0] }),
-      P.cyl(1.56, 1.56, 7, '#FFD3E6', { at: [0, 9.5, 0] }),
-      ...[6.4, 12.6].map((y) => P.cyl(1.6, 1.6, 0.5, PAL.hotpink, { at: [0, y, 0] })),
-      P.cyl(1.5, 1.5, 1, PAL.hotpink, { at: [0, 13.5, 0] }),
-    ]), this.bag, 3)
-    stick.rotation.x = -0.55
-    // (Big enough to see from up over the hill.)
-    stick.scale.setScalar(2.4)
-    g.add(stick)
-    g.visible = false
-    return g
-  }
-
-  /** Drawing the 3 from the viewpoint: her finger near the line pulls the crayon along the road (it only goes forward,
-   *  and only along the road just ahead of it, so it can't jump to the next leg of a hairpin); a tap sends it on round
-   *  the next bend. The numbers pop as it rounds each bend; at the end, the fanfare. */
-  private updateTrace(dt: number) {
-    const tip = this.crayonTip
-    if (!this.crayon || !tip) return
-    tip.visible = this.r.id === 'three' && (this.phase === 'view' || this.phase === 'end')
-    if (!this.tracing) return
+  /** From the viewpoint, the whole road below is a giant 3: once the camera has lifted over the hill, its bends pop one
+   *  by one, sparkling on the road (one, two, three), then the fanfare. Nothing to do but look. */
+  private updateView(dt: number) {
+    if (!this.overThree) return
     const road = this.r.road
-    const T = this.trace
-    T.t += dt
-    // (After the camera has lifted up over the hill.)
-    const ready = T.t > 1.8
-    let goal = T.s
-    const f = this.finger
-    if (ready && f) {
-      const s = this.traceAt(f.x, f.y)
-      if (s !== null && s > T.s) {
-        goal = s
-        T.auto = -1
-      }
-    }
-    if (ready && T.auto > T.s) goal = Math.max(goal, T.auto)
-    // Nearly there: the crayon finishes the last bit by itself.
-    if (T.s > road.length - 8 && T.auto < 0) T.auto = road.length
-    if (goal > T.s) {
-      T.s = Math.min(goal, T.s + dt * (T.auto > 0 ? 75 : 170), road.length)
-      T.scratch -= dt
-      if (T.scratch <= 0) {
-        T.scratch = 0.11
-        sfx.scribble()
-      }
-      if (T.auto > 0 && T.s >= T.auto - 0.01) T.auto = -1
-    }
-    // (Samples are a meter apart: the line is drawn up to the crayon.)
-    this.crayon.geometry.setDrawRange(0, Math.floor(T.s) * 6)
-    const sm = road.sampleAt(T.s)
-    tip.position.set(sm.x, sm.y + 0.6, sm.z)
-    tip.rotation.y = Math.atan2(sm.tx, sm.tz)
-    tip.scale.setScalar(1 + Math.sin(this.time * 5) * (goal > T.s ? 0 : 0.04))
-    const passed = this.r.count.filter((s) => s <= T.s).length
-    if (passed > this.drawn) {
-      this.drawn = passed
+    const bends = this.r.count
+    this.viewT += dt
+    const n = clamp(Math.floor((this.viewT - VIEW_POP) / VIEW_GAP) + 1, 0, bends.length)
+    if (n > this.popped) {
+      this.popped = n
       this.countN++
-      sounds.note(passed * 2)
-      this.number(passed)
-      this.sparkle.burst(sm.x, sm.y + 3, sm.z, 26, 6, 7, 0.4)
+      sounds.note(n * 2)
+      this.number(n)
+      const sm = road.sampleAt(bends[n - 1])
+      this.sparkle.burst(sm.x, sm.y + 3, sm.z, 40, 8, 8, 0.45)
     }
-    if (T.s >= road.length - 0.5) {
-      sounds.fanfare()
-      this.speak(L.nan.drive.drew)
-      for (const [k, c] of [this.kaylee, this.nick, this.ji].entries()) window.setTimeout(() => c.react('hop'), k * 120)
-      const b = road.bounds()
-      for (const k of [0.2, 0.5, 0.8]) {
-        const q = road.sampleAt(road.length * k)
-        this.sparkle.burst(q.x, q.y + 4, q.z, 40, 9, 9, 0.5)
-      }
-      this.sparkle.burst((b.x0 + b.x1) / 2, b.y1 + 8, (b.z0 + b.z1) / 2, 60, 12, 10, 0.55)
-      this.setPhase('end')
+    if (this.viewT < VIEW_POP + VIEW_GAP * bends.length) return
+    sounds.fanfare()
+    this.speak(L.nan.drive.drew)
+    for (const [k, c] of [this.kaylee, this.nick, this.ji].entries()) window.setTimeout(() => c.react('hop'), k * 120)
+    const b = road.bounds()
+    for (const k of [0.2, 0.5, 0.8]) {
+      const q = road.sampleAt(road.length * k)
+      this.sparkle.burst(q.x, q.y + 4, q.z, 40, 9, 9, 0.5)
     }
-  }
-
-  /** The stretch of road just ahead of the crayon that's nearest her finger on screen (null: she's too far from it). */
-  private traceAt(fx: number, fy: number) {
-    const road = this.r.road
-    const from = this.trace.s
-    let best: number | null = null
-    let bd = 130
-    for (let s = Math.max(0, from - 4); s <= Math.min(road.length, from + 48); s += 1.5) {
-      const p = road.sampleAt(s)
-      const c = this.project(p.x, p.y + 0.5, p.z)
-      if (!c) continue
-      const d = Math.hypot(c.x - fx, c.y - fy)
-      if (d < bd) {
-        bd = d
-        best = s
-      }
-    }
-    return best
+    this.sparkle.burst((b.x0 + b.x1) / 2, b.y1 + 8, (b.z0 + b.z1) / 2, 60, 12, 10, 0.55)
+    this.setPhase('end')
   }
 
   // ---------------------------------------------------------------- camera
@@ -1493,7 +1424,7 @@ export class NanDrive implements World3D {
   placeAnchors() {
     const overview = this.r.id === 'three' && (this.phase === 'view' || this.phase === 'end')
     for (const [id, el] of this.anchorEls) {
-      // (From above, only the viewpoint, once the 3 is drawn: a finger anywhere draws.)
+      // (From above, only the viewpoint, once the bends have popped.)
       const a = overview && (id !== 'landmark' || this.phase === 'view') ? null : this.anchorAt(id)
       const s = a ? this.toScreen(a.at, a.r, a.max) : null
       if (s && a) {
@@ -1523,28 +1454,20 @@ export class NanDrive implements World3D {
     el.style.transform = `translate3d(${f.ox.toFixed(0)}px, ${f.oy.toFixed(0)}px, 0)`
   }
 
-  /** Not steering for a while (or never yet): a finger sliding side to side low on the screen (the steering wheel), or, drawing the 3, along the road. */
+  /** Not steering for a while (or never yet): a finger sliding side to side low on the screen (the steering wheel). */
   private hint(t: number) {
     const el = this.hintEl
     if (!el) return
     const idle = t - this.lastTouch
-    // Drawing the 3: the finger sweeps along the road ahead of the crayon, the way it goes.
-    const T = this.trace
-    const trace = this.tracing && !this.finger && T.t > 2.4 && T.auto < 0 && (T.s < 1 ? idle > 1.5 || T.t > 3.5 : idle > 5)
-    const show = trace || (this.phase === 'drive' && !this.finger && !this.fall && ((this.counts.steered < 1 && t > 2.5 && idle > 2.5) || idle > 8))
-    if (show) {
-      // (Driving: low on the screen, sliding side to side the way the steering wheel works.)
-      const p = trace ? this.r.road.spotAt(Math.min(this.r.road.length, T.s + ((t * 18) % 30)), 0) : null
-      const c = p ? this.project(p.x, p.y, p.z) : { x: this.w / 2 + Math.sin(t * 1.6) * this.stickR * 0.9, y: this.h * 0.72 }
-      if (c) el.style.transform = `translate3d(${c.x.toFixed(0)}px, ${c.y.toFixed(0)}px, 0)`
-      else el.style.display = 'none'
-    }
+    const show = this.phase === 'drive' && !this.finger && !this.fall && ((this.counts.steered < 1 && t > 2.5 && idle > 2.5) || idle > 8)
+    // (Low on the screen, sliding side to side the way the steering wheel works.)
+    if (show) el.style.transform = `translate3d(${(this.w / 2 + Math.sin(t * 1.6) * this.stickR * 0.9).toFixed(0)}px, ${(this.h * 0.72).toFixed(0)}px, 0)`
     const want = show ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
   }
 
   private emitHud() {
-    const hud: DriveHud = { phase: this.phase, count: { k: this.drawn >= 0 ? this.drawn : this.counted, n: this.countN } }
+    const hud: DriveHud = { phase: this.phase, count: { k: this.popped >= 0 ? this.popped : this.counted, n: this.countN } }
     const key = JSON.stringify(hud)
     if (key === this.lastHud) return
     this.lastHud = key
@@ -1568,10 +1491,7 @@ export class NanDrive implements World3D {
       cloud: r2(this.cloudK),
       above: this.wasAbove,
       counted: this.counted,
-      traced: r2(this.trace.s),
-      drawn: this.drawn,
-      // Drawing the 3: where the road is on screen, every 6 m (a robot finger follows it).
-      path: this.tracing ? this.pathOnScreen() : null,
+      popped: this.popped,
       warn: this.traffic.blindWarning(this.her()) !== null,
       ...this.counts,
       steered: r2(this.counts.steered),
@@ -1580,22 +1500,12 @@ export class NanDrive implements World3D {
       // Is there a guard rail beside her here, on the left (+lat) and on the right?
       rail: [this.world.railed(this.loc.s, 1), this.world.railed(this.loc.s, -1)],
       stick: r2(this.stick),
+      yaw: r2(this.d.yawRate),
       steerLat: r2(this.steerLat),
       keptLeft: r2(this.counts.keptLeft),
       traffic: this.traffic.qa(),
     }
   }
-  private pathOnScreen() {
-    const road = this.r.road
-    const out: [number, number][] = []
-    for (let s = 0; s <= road.length; s += 6) {
-      const p = road.sampleAt(s)
-      const c = this.project(p.x, p.y + 0.5, p.z)
-      if (c) out.push([Math.round(c.x), Math.round(c.y)])
-    }
-    return out
-  }
-
   memory() {
     return { ...this.renderer.info.memory }
   }

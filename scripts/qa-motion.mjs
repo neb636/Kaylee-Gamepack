@@ -1375,21 +1375,13 @@ GAME_SCENARIOS.push(
     },
   },
   {
-    name: 'nan-trace',
-    seconds: 9,
-    setup: (page, base) => nanReady(page, base, 'three', () => !!window.__thaiNanQA?.().path),
-    act: async (page) => {
-      await page.waitForTimeout(800)
-      const path = (await page.evaluate(() => window.__thaiNanQA())).path ?? []
-      if (!path.length) return
-      await page.mouse.move(...path[0])
-      await page.mouse.down()
-      for (const p of path.slice(1)) {
-        await page.mouse.move(...p, { steps: 2 })
-        await page.waitForTimeout(55)
-      }
-      await page.mouse.up()
+    // The 3 from above: the bends pop one, two, three by themselves, then the fanfare (nothing to draw).
+    name: 'nan-three-view',
+    seconds: 5,
+    setup: (page, base) => {
+      return page.goto(`${base}#/world/thailand/nan-trip/three`).then(() => page.waitForFunction(() => window.__thaiNanQA?.().phase === 'view', null, { timeout: 30000 }))
     },
+    act: async () => {},
   },
 )
 
