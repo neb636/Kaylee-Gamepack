@@ -7,6 +7,7 @@
 import { Box3, Euler, Group, Vector3, type Object3D } from 'three'
 import { bell, clamp, span, wobble } from '../../../../sdk'
 import type { Bag } from '../engine/dispose'
+import { Particles } from '../engine/particles'
 import type { XZ } from '../engine/nav'
 import { TUNE } from '../engine/tune'
 import { buildAnimal, buildWorn, Wind, type Rig } from './animal'
@@ -14,10 +15,12 @@ import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { FaceLife } from './face'
 import { HATS, LOOKS, SPOTS_OF, type Spot, type Wearable } from './looks'
 import { buildModelRig, kayleeModel } from './model'
-import { BARE, currentLook, itemById, paintOf, PAINT_PARTS, SLOTS, type PaintColor, type PaintPart, type Slot, type Style } from './style'
+import { BARE, currentLook, itemById, paintOf, PAINT_PARTS, SLOTS, type PaintColor, type PaintPart, type ShowPose, type Slot, type Style } from './style'
 import type { Character, Pose } from './types'
 
 const BOUNCES = [0.28, 0.5, 0.78]
+/** How long each show-off pose lasts (seconds). */
+export const SHOW_SECS: Record<ShowPose, number> = { curtsy: 1.2, wave: 1.4, twirl: 0.9, cute: 1.3, bunny: 0.9, paw: 1.2, cheer: 1.1, yeehaw: 1.4, peek: 1.2, cool: 1.4, flutter: 1.0, stomp: 1.1 }
 /** A rig with legs (the modelled Kaylee) sitting: how far her body drops onto her hips, and the legs' swing forward. */
 const HIP_DROP = 0.11
 const SIT_LEGS = -1.35
@@ -36,7 +39,8 @@ interface Tween {
 // Two layers on her (wardrobe plan, "When her look clashes with a game"): her own look (style.ts, what she picked in
 // her wardrobe) and a game's costume (`wear`: the vet's scrubs, the packed sun hat). Each costume takes only the spots
 // it needs (looks.ts SPOTS_OF); she keeps her own things on every other spot. A thing of hers that loses its spot
-// doesn't vanish: it shrinks into a sparkle at her hip (her pocket) and pops back out when the spot is free again.
+// doesn't vanish: it shrinks into a trail of sparkles at her hip (her pocket) and pops back out of a burst of them when
+// the spot is free again.
 // Sun smarts: on a sunny trip a shady hat of hers counts (no spare hat), and tinted glasses count as sunglasses.
 // Her wings fold when she sits, lies, walks or climbs (inside her walking circle), and flap when she hops; every hat
 // comes off into her hooves for a wai. The Avatar and the race's Racer both dress through this, so her look shows up
@@ -47,6 +51,8 @@ const POCKET = new Vector3(0.17, 0.27, 0.07)
 /** Where a hat goes for a wai: body-local, held in front of her chest. */
 const HAT_HELD = new Vector3(0, 0.36, 0.2)
 const v1 = new Vector3()
+const box = new Box3()
+const POCKET_SPARKLE = ['#FFFFFF', '#FFE36E', '#FF8FD0', '#B9A6F5', '#8FE3C8']
 
 interface Home {
   pos: Vector3
@@ -76,6 +82,8 @@ export interface DressPose {
   flap: boolean
   /** Doing a wai: her hat comes off into her hooves. */
   wai: boolean
+  /** Walking: the light-up sneakers blink. */
+  walk: boolean
 }
 
 export class Dress {
@@ -100,11 +108,18 @@ export class Dress {
   private waiK = 0
   private flapT = 0
   private flapping = 0
+  /** The lights in her shoes (the light-up sneakers'), by thing. */
+  private lights = new Map<string, Object3D[]>()
+  /** The sparkles of her pocket, riding on her (root-local). */
+  private sparkle: Particles
 
   constructor(
     private rig: Rig,
     private bag: Bag,
-  ) {}
+  ) {
+    this.sparkle = new Particles({ kind: 'spray', count: 60, colors: POCKET_SPARKLE, gravity: 1.2 }, bag)
+    rig.root.add(this.sparkle.mesh)
+  }
 
   /** Can she wear her own things (the modelled Kaylee)? The code-built one has no closet and no paint. */
   get dressable() {
@@ -185,7 +200,7 @@ export class Dress {
     return id && this.shown.has(id) ? (this.closet.get(id) ?? []) : []
   }
   get busy() {
-    return this.popping.size > 0 || this.pocketing.size > 0 || this.entering.size > 0 || this.flapping > 0 || Math.abs(this.waiK - Math.round(this.waiK)) > 0.01
+    return this.popping.size > 0 || this.pocketing.size > 0 || this.entering.size > 0 || this.flapping > 0 || this.sparkle.busy || Math.abs(this.waiK - Math.round(this.waiK)) > 0.01
   }
 
   /** Works out what shows: sun smarts, the costume, then her things on every spot left free. */
@@ -217,8 +232,12 @@ export class Dress {
         this.shown.add(id)
         this.pocketing.delete(id)
         for (const g of groups) this.rest(g, true)
-        // Back out of her pocket (or new on her from the wardrobe): pop!
+        // Back out of her pocket (out of a burst of sparkles), or new on her from the wardrobe: pop!
         if ((how === 'pocket' && had.has(id)) || (how === 'pop' && !had.has(id))) this.popping.set(id, 0)
+        if (how === 'pocket' && had.has(id)) {
+          this.burst(this.bodyLocal(POCKET), 10)
+          this.burst(this.centerOf(groups), 14)
+        }
       } else if (!want && was) {
         this.shown.delete(id)
         this.popping.delete(id)
@@ -256,6 +275,7 @@ export class Dress {
         if (!g || !pivot) continue
         pivot.add(g)
         g.userData.closet = id
+        g.traverse((o) => o.userData.blink && (this.lights.get(id) ?? this.lights.set(id, []).get(id)!).push(o))
         homeOf(g)
         if (pivot === c.head) midOf(g)
         g.visible = false
@@ -272,6 +292,22 @@ export class Dress {
     g.rotation.copy(h.rot)
     g.scale.setScalar(1)
     g.visible = visible
+  }
+
+  /** A body-local point, in her root's frame (where the pocket's sparkles fly). */
+  private bodyLocal(p: Vector3) {
+    this.rig.root.updateMatrixWorld(true)
+    return this.rig.root.worldToLocal(this.rig.body.localToWorld(p.clone()))
+  }
+  /** The middle of a thing on her now, in her root's frame. */
+  private centerOf(gs: Group[]) {
+    this.rig.root.updateMatrixWorld(true)
+    box.makeEmpty()
+    for (const g of gs) box.expandByObject(g)
+    return box.isEmpty() ? this.bodyLocal(POCKET) : this.rig.root.worldToLocal(box.getCenter(new Vector3()))
+  }
+  private burst(at: Vector3, n: number) {
+    this.sparkle.burst(at.x, at.y, at.z, n, 0.55, 0.7, 0.035)
   }
 
   /** A body-local point, in the frame of `g`'s pivot. */
@@ -351,7 +387,7 @@ export class Dress {
             sx = (1 - 0.6 * fold) * (1 + flap)
             sz = 1 - 0.3 * fold
             g.rotation.x = h.rot.x - 0.25 * fold
-          } else {
+          } else if (g.userData.cape) {
             // The cape drapes: shorter and closer in when she sits.
             sy = 1 - 0.18 * fold
             sz = 1 - 0.25 * fold
@@ -376,13 +412,24 @@ export class Dress {
         g.scale.set(sx * k, sy * k, sz * k)
       }
       if (out !== undefined) {
+        // A trail of sparkles behind it, and a burst when it's in.
+        if (out === 0) this.burst(this.centerOf(gs), 10)
+        else {
+          const at = this.centerOf(gs)
+          this.sparkle.emit(at.x, at.y, at.z, (Math.random() - 0.5) * 0.3, 0.25, (Math.random() - 0.5) * 0.3, 0.45, 0.03)
+        }
         const e = Math.min(1, out + dt / 0.45)
         if (e >= 1) {
           this.pocketing.delete(id)
           for (const g of gs) this.rest(g, false)
+          this.burst(this.bodyLocal(POCKET), 14)
         } else this.pocketing.set(id, e)
       }
     }
+    // The light-up sneakers blink as she walks (steady when she stands).
+    const blink = !pose.walk || Math.floor(this.flapT * 7) % 2 === 0
+    for (const ls of this.lights.values()) for (const l of ls) l.visible = blink
+    this.sparkle.update(dt)
   }
 }
 
@@ -423,6 +470,8 @@ export class Avatar implements Character {
   tuck = false
   /** A twirl on the spot (0..1), -1 when not twirling. */
   private twirling = -1
+  /** Showing off something new she put on (showOff). */
+  private showing: { kind: ShowPose; t: number } | null = null
 
   /** `model`: the modelled vinyl-toy Kaylee (model.ts), the one the game uses (Place.tsx loads it before any scene
    *  builds); `null` builds the code-built Kaylee instead (the lab's comparison, or if the model couldn't load). */
@@ -485,6 +534,25 @@ export class Avatar implements Character {
     this.react('hop')
   }
 
+  /** Shows off something she just put on (style.ts's `pose` for each thing): a curtsy for the crown, a flutter hop for
+   *  wings, a cool lean for sunglasses, a tap dance for new shoes... */
+  showOff(kind: ShowPose) {
+    this.endShow()
+    this.showing = { kind, t: 0 }
+    const here = this.root.position
+    if (this.pose !== 'stand' || this.tweens.length) return
+    if (kind === 'twirl') this.twirling = 0
+    if (kind === 'flutter') this.hopTo(here, 0.6, 0.3)
+    if (kind === 'cheer' || kind === 'yeehaw') this.hopTo(here, 0.45, 0.22)
+    if (kind === 'bunny') {
+      this.hopTo(here, 0.34, 0.16)
+      this.hopTo(here, 0.34, 0.16)
+    }
+  }
+  get showingOff(): ShowPose | null {
+    return this.showing?.kind ?? null
+  }
+
   /** Puts these on with a little show: the hat drops onto her head, the sunglasses slide down, the floaties pop on. */
   putOn(ids: readonly Wearable[]) {
     this.dress.putOn(ids)
@@ -508,7 +576,7 @@ export class Avatar implements Character {
   }
   /** Something is moving (the frame loop may slow down when nothing is). */
   get busy() {
-    return this.walking || this.speed > 0.01 || this.pose === 'bounce' || this.settle < 1 || this.flop < 1 || this.dress.busy || this.twirling >= 0
+    return this.walking || this.speed > 0.01 || this.pose === 'bounce' || this.settle < 1 || this.flop < 1 || this.dress.busy || this.twirling >= 0 || !!this.showing
   }
 
   /** Puts her somewhere at once (a deep link, the end of the arrival). */
@@ -600,7 +668,8 @@ export class Avatar implements Character {
     // Wings fold when she sits, lies, walks or climbs, spread when she stands still, flap when she hops.
     const walkK = Math.min(1, this.speed / TUNE.walkSpeed)
     const fold = Math.max(this.sitK, this.pose === 'lie' ? 1 : 0, walkK, this.tuck ? 1 : 0)
-    this.dress.update(dt, { fold, flap: this.tweens.length > 0 || this.pose === 'bounce', wai: this.pose === 'wai' })
+    if (this.showing) this.show(dt)
+    this.dress.update(dt, { fold, flap: this.tweens.length > 0 || this.pose === 'bounce' || this.showing?.kind === 'flutter', wai: this.pose === 'wai', walk: walkK > 0.1 })
     if (this.twirling >= 0) {
       this.twirling = Math.min(1, this.twirling + dt / 0.75)
       if (this.twirling >= 1) this.twirling = -1
@@ -678,6 +747,102 @@ export class Avatar implements Character {
     let sum = 0
     for (let i = 1; i < this.path.length; i++) sum += Math.hypot(this.path[i][0] - this.path[i - 1][0], this.path[i][1] - this.path[i - 1][1])
     return sum
+  }
+
+  /** The show-off pose this frame, on top of pose3d's: arms, head and legs eased in and out of it. */
+  private show(dt: number) {
+    const sh = this.showing!
+    const dur = SHOW_SECS[sh.kind]
+    sh.t += dt
+    const k = Math.min(1, sh.t / dur)
+    const e = ease(span(k, 0, 0.18)) * (1 - ease(span(k, 0.78, 1)))
+    const t = sh.t
+    const { armL, armR, head, body, legL, legR } = this.chibi
+    /** Arms to these, weighted by the ease: z raises an arm up in front of her (the left's is negative), x swings it
+     *  out to the side (negative for both), the way the bay's photo poses do (her arms swing in a frame turned forward,
+     *  model.ts). */
+    const arms = (xL: number, zL: number, xR: number, zR: number) => {
+      armL.rotation.x = xL * e
+      armL.rotation.z = zL * e
+      armR.rotation.x = xR * e
+      armR.rotation.z = zR * e
+    }
+    switch (sh.kind) {
+      case 'curtsy':
+        // Hooves out holding her skirt, one leg back, a dip and a tilt of the head.
+        arms(-0.5, -0.45, -0.5, 0.45)
+        body.position.y -= 0.05 * e * bell(span(k, 0.15, 0.85))
+        body.rotation.x += 0.12 * e
+        head.rotation.z += 0.22 * e
+        if (legL) legL.rotation.x += -0.45 * e
+        break
+      case 'wave':
+        // A princess wave, the other hoof on her tummy.
+        arms(0, -1.0, 0, 2.4 + Math.sin(t * 12) * 0.3)
+        head.rotation.z += 0.12 * e
+        break
+      case 'twirl':
+        arms(-0.9, -0.3, -0.9, 0.3)
+        break
+      case 'cute':
+        // Both hooves under her chin, head tipping side to side.
+        arms(0.25, -1.65, 0.25, 1.65)
+        head.rotation.z += Math.sin(t * 7) * 0.22 * e
+        body.position.y += Math.abs(Math.sin(t * 7)) * 0.02 * e
+        break
+      case 'bunny':
+        // Bunny paws in front of her chest while she hops.
+        arms(0.2, -1.3, 0.2, 1.3)
+        head.rotation.x += Math.sin(t * 18) * 0.08 * e
+        break
+      case 'paw':
+        // A kitty paw up by her face, batting.
+        arms(0, -0.2, 0.2, 2.0 + Math.sin(t * 11) * 0.2)
+        head.rotation.z -= 0.25 * e
+        break
+      case 'cheer':
+        arms(-0.15, -2.15 + Math.sin(t * 9) * 0.15, -0.15, 2.15 - Math.sin(t * 9) * 0.15)
+        break
+      case 'yeehaw':
+        // One hoof up swinging a lasso round, the other on her hip.
+        arms(-0.5, -0.2, Math.sin(t * 10) * 0.5, 2.7)
+        head.rotation.z += 0.1 * e
+        break
+      case 'peek':
+        // Leans in and pushes her glasses (or her brim) up with a hoof, looking at you.
+        arms(0, -0.15, 0.15, 2.1)
+        body.rotation.x += 0.18 * e
+        head.rotation.x -= 0.12 * e
+        break
+      case 'cool':
+        // A cool lean to one side, a hoof at her shades, the other on her hip.
+        arms(-0.6, -0.1, 0.2, 2.0)
+        body.rotation.z -= 0.13 * e
+        head.rotation.z += 0.18 * e
+        break
+      case 'flutter':
+        // Arms flapping with her wings while she hops.
+        arms(-(0.7 + Math.sin(t * 22) * 0.45), -0.2, -(0.7 + Math.sin(t * 22) * 0.45), 0.2)
+        break
+      case 'stomp':
+        // Tap, tap, tap: showing off new shoes, one foot then the other, arms out for balance.
+        arms(-0.45, 0, -0.45, 0)
+        if (legL && legR) {
+          legL.rotation.x -= 0.5 * Math.max(0, Math.sin(t * 13)) * e
+          legR.rotation.x -= 0.5 * Math.max(0, -Math.sin(t * 13)) * e
+        }
+        body.position.y += Math.abs(Math.sin(t * 13)) * 0.025 * e
+        break
+    }
+    if (k >= 1) this.endShow()
+  }
+  private endShow() {
+    if (!this.showing) return
+    this.showing = null
+    for (const a of [this.chibi.armL, this.chibi.armR]) {
+      a.rotation.x = 0
+      a.rotation.z = 0
+    }
   }
 
   /** Writes the body's pose for this frame: gait, squash and stretch, sitting, lying, bouncing, bowing. */

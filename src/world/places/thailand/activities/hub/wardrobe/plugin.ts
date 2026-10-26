@@ -1,13 +1,16 @@
-// The wardrobe toy in Kaylee's room (planning/around-the-world/thailand/wardrobe.html, greybox 1). One verb: put it on
-// her. Tap the wardrobe and she hops onto the rug in front of it, facing you, and its doors swing open. Tap a drawer
+// The wardrobe toy in Kaylee's room (planning/around-the-world/thailand/wardrobe.html). One verb: put it on her. Tap the
+// wardrobe (or the mirror button in the house's top bar, anywhere in the house: openHere) and she's on the rug beside
+// it, facing you, and its doors swing open. Tap a drawer
 // and it slides out, its things popping up on the shelves. Drag a thing onto her (or just tap it: it flies over) and it
-// pops on; drop a thing on a spot that's taken and the old one boings back to its shelf. Tap something she's wearing
+// pops on and she shows it off (a curtsy for the crown, a flutter hop for wings: style.ts's `pose`); drop a thing on a
+// spot that's taken and the old one boings back to its shelf. Tap something she's wearing
 // and it hops back to its shelf. The paint drawer holds pots: where she drops one decides what changes (her hair, her
 // dress, her fur). Drag across her to spin her round (see the wings!); let go and she springs back to face you. Tap her
-// and she twirls. Tap the doors (or anything else in the room, or the ✓) and she's done: the doors close.
+// and she twirls; tap the mirror inside the door and she strikes a pose. Tap the doors (or anything else in the room, or
+// the ✓) and she's done: the doors close.
 //
-// Every change is her look (characters/style.ts): the Hub saves it on the iPad (useSaved('thailand-look')) and the
-// house dresses her in it (Avatar.setLook). Greybox: simple shapes (characters/closet/), no voices.
+// Every change is her look (characters/style.ts): the Hub saves it on the iPad (useSaved('thailand-look')) and every
+// scene dresses her in it (Avatar). Her things are built in characters/closet/.
 import { Box3, Group, Plane, Raycaster, Vector2, Vector3, type Object3D } from 'three'
 import { buildClosetItem } from '../../../characters/closet'
 import { ITEMS, itemById, PAINT_COLORS, PAINTS, withItem, withPaint, type PaintColor, type PaintPart, type Slot, type Style } from '../../../characters/style'
@@ -17,16 +20,13 @@ import { Particles } from '../../../engine/particles'
 import { sfx } from '../../../sfx'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { House, HousePlugin } from '../house'
-import { DIM, WARDROBE_YAW } from '../layout'
-import { DOOR_OPEN, DRAWER_OUT, DRAWERS, shelfSlot, type DrawerId } from './furniture'
+import { DIM, STARTS, WARDROBE_YAW } from '../layout'
+import { DOOR_OPEN, DRAWER_OUT, DRAWERS, shelfRoom, shelfSlot, type DrawerId } from './furniture'
 
 const deg = Math.PI / 180
 /** Kaylee's size over the 1 m model (model.ts's KAYLEE_SIZE): small things (the crown) stand on the shelf a bit
  *  bigger than on her, so they're easy to see and grab. */
 const SIZE = 1.25
-/** The biggest a thing stands on the shelf (meters across and up). */
-const SHELF_W = 0.44
-const SHELF_H = 0.4
 /** Where each of her pivots is in her body (model meters), so a thing on the shelf is put together like on her. */
 const PIVOTS: Record<string, [number, number, number]> = { head: [0, 0.44, 0.04], body: [0, 0, 0], legL: [-0.072, 0.16, 0.03], legR: [0.072, 0.16, 0.03], armL: [-0.11, 0.4, 0.04], armR: [0.11, 0.4, 0.04] }
 
@@ -45,6 +45,7 @@ export const WARDROBE_ANCHORS: AnchorInfo[] = [
   ...DRAWERS.map((d) => ({ id: `trip:ward:drawer:${d.id}`, label: `${d.name} drawer`, kind: 'thing' as const })),
   ...DRAWERS.flatMap((d) => drawerThings(d.id).map((id) => ({ id: `trip:ward:thing:${id}`, label: id.startsWith('pot-') ? `${PAINTS[potColor(id)].name} paint` : itemById(id)!.name, kind: 'thing' as const }))),
   ...(['head', 'face', 'back', 'outfit', 'feet'] as Slot[]).map((s) => ({ id: `trip:ward:on:${s}`, label: `Take off (${s})`, kind: 'thing' as const })),
+  { id: 'trip:ward:mirror', label: 'Mirror', kind: 'thing' as const },
 ]
 
 interface Thing {
@@ -77,6 +78,7 @@ export class WardrobePlugin implements HousePlugin {
   private root!: Object3D
   private inside!: Group
   private doors: Object3D[] = []
+  private mirror!: Object3D
   private drawers = new Map<DrawerId, Object3D>()
   private open = false
   private doorK = 0
@@ -101,6 +103,7 @@ export class WardrobePlugin implements HousePlugin {
     this.root = house.kit.pokes.get('wardrobe')!
     this.inside = parts.get('wardrobe.inside') as Group
     this.doors = ['wardrobe.doorL', 'wardrobe.doorR'].map((n) => parts.get(n)!)
+    this.mirror = parts.get('wardrobe.mirror')!
     for (const d of DRAWERS) this.drawers.set(d.id, parts.get(`wardrobe.drawer.${d.id}`)!)
     this.sparkle = new Particles({ kind: 'spray', count: 160, colors: SPARKLE, gravity: 2.5 }, house.kit.bag)
     this.paint = new Particles({ kind: 'spray', count: 120, colors: PAINT_HEX, gravity: 6 }, house.kit.bag)
@@ -131,6 +134,18 @@ export class WardrobePlugin implements HousePlugin {
     this.kaylee.lookAway()
     if (now) this.house.snapCamera()
     this.events.onState(true, this.drawer)
+  }
+
+  /** The mirror button (the house's top bar): a sparkle, and she's on the rug beside her wardrobe with its doors open,
+   *  from anywhere in the house. */
+  openHere() {
+    if (this.open) return
+    const { rug } = DIM.wardrobe
+    this.house.teleport('upstairs', rug.x, rug.z, STARTS.wardrobe.face)
+    this.openUp(true)
+    const k = this.kaylee.position
+    this.sparkle.burst(k.x, k.y + this.kaylee.height * 0.5, k.z, 40, 1.6, 1.6, 0.05)
+    this.kaylee.twirl()
   }
 
   /** The doors close, the drawers slide shut, and the camera goes back to following her. */
@@ -190,6 +205,7 @@ export class WardrobePlugin implements HousePlugin {
       holder.add(solid(merge([P.cyl(0.1, 0.088, 0.15, c, { at: [0, 0.075, 0] }, 20), P.cyl(0.102, 0.098, 0.04, '#FFF7F0', { at: [0, 0.07, 0] }, 20), P.sphere(0.092, c, { at: [0, 0.15, 0], scale: [1, 0.45, 1] }, 18), P.capsule(0.014, 0.035, c, { at: [0.03, 0.115, 0.093] })]), bag, 1.5))
     } else {
       const w = buildClosetItem(id, bag, 0)
+      const room = shelfRoom(drawerThings(thingDrawer(id)!).length)
       const model = new Group()
       if (w) {
         for (const [key, g] of Object.entries(w) as [string, Group | null | undefined][]) {
@@ -201,11 +217,12 @@ export class WardrobePlugin implements HousePlugin {
         }
       }
       model.traverse((o) => o.userData.upright && o.rotation.set(0, 0, 0))
+      model.traverse((o) => typeof o.userData.shelfTilt === 'number' && (o.rotation.x = o.userData.shelfTilt))
       // Stand it on its base, centered, no bigger than the shelf has room for.
       model.updateMatrixWorld(true)
       const box = new Box3().setFromObject(model)
       const size = box.getSize(new Vector3())
-      const k = Math.min(SIZE * 1.6, SHELF_W / Math.max(size.x, size.z * 0.8, 1e-3), SHELF_H / Math.max(size.y, 1e-3))
+      const k = Math.min(SIZE * 1.6, room.w / Math.max(size.x, size.z * 0.8, 1e-3), room.h / Math.max(size.y, 1e-3))
       const center = box.getCenter(new Vector3())
       model.position.set(-center.x * k, -box.min.y * k, -center.z * k)
       model.scale.setScalar(k)
@@ -229,7 +246,8 @@ export class WardrobePlugin implements HousePlugin {
     this.setStyle(withItem(this.style, id, true), true)
     sfx.pop()
     this.sparkle.burst(at.x, at.y, at.z, 22, 1.4, 1.8, 0.05)
-    this.kaylee.react('hop')
+    // She shows it off: a curtsy for the crown, a flutter hop for wings, a cool lean for sunglasses.
+    this.kaylee.showOff(item.pose)
     if (old && old !== id) {
       sfx.boing()
       this.backToShelf(old, at)
@@ -307,6 +325,7 @@ export class WardrobePlugin implements HousePlugin {
       if (!chainVisible(hit.object)) continue
       for (let o: Object3D | null = hit.object; o; o = o.parent) {
         if (typeof o.userData.pick === 'string' && o.userData.pick.startsWith('trip:ward:thing:')) return o.userData.pick
+        if (o === this.mirror) return 'trip:ward:mirror'
         const item = this.kaylee.itemOf(o)
         if (item) return `trip:ward:on:${itemById(item)!.slot}`
         for (const [id, d] of this.drawers) if (d === o) return `trip:ward:drawer:${id}`
@@ -511,6 +530,15 @@ export class WardrobePlugin implements HousePlugin {
       sfx.giggle()
       return true
     }
+    if (what === 'trip:ward:mirror') {
+      // She sees herself and strikes a pose: one of her things' (or a cool one).
+      const mine = Object.values(this.style.on).map((tid) => itemById(tid!)?.pose).filter((p) => !!p)
+      this.kaylee.showOff(mine.length ? mine[Math.floor(Math.random() * mine.length)]! : 'cool')
+      const at = this.mirror.getWorldPosition(new Vector3())
+      this.sparkle.burst(at.x, at.y + 1.3, at.z, 14, 0.9, 1, 0.04)
+      sfx.plink()
+      return true
+    }
     if (what === 'trip:ward:doors' || what === 'wardrobe') {
       this.close()
       return true
@@ -585,6 +613,11 @@ export class WardrobePlugin implements HousePlugin {
       const t = this.things.get(id.slice(16))
       if (!t || !t.holder.visible || this.flights.some((f) => f.thing === t)) return null
       return { at: t.holder.getWorldPosition(new Vector3()).add(new Vector3(0, 0.12, 0)), r: 0.16 }
+    }
+    if (id === 'trip:ward:mirror') {
+      // (The mirror's middle: the part's origin is the door's hinge.)
+      const box = new Box3().setFromObject(this.mirror)
+      return box.isEmpty() || this.doorK < 0.9 ? null : { at: box.getCenter(new Vector3()), r: 0.2 }
     }
     if (id.startsWith('trip:ward:on:')) {
       const slot = id.slice(13) as Slot

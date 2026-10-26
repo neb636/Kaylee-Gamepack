@@ -1,5 +1,5 @@
 // Her own things from the wardrobe (style.ts), fitted to the modelled Kaylee's measured shape like model-wear.ts's
-// costumes: one file per drawer. Greybox 1: 2-3 simple things per drawer in the house's toon look; gate 3 makes all ~30.
+// costumes (the scrubs, the mongkhon): one file per drawer, in the house's toon look with her fine ink line.
 //
 // Every hat stays under the tip of her horn (head-local y 0.56: kaylee.glb's horn tops out at 1.0 m, her head pivot is
 // at 0.44), so every roof in the game that clears her horn clears her hats (the plan's horn rule; closetCheck below).
@@ -22,7 +22,6 @@ export const none = (): Worn => ({ head: null, body: null, armL: null, armR: nul
 export function buildClosetItem(id: string, bag: Bag, armTilt: number): Worn | null {
   const item = itemById(id)
   if (!item) return null
-  void armTilt // nothing in greybox 1 rides on her arms
   if (item.slot === 'head') {
     const hat = buildHat(id, bag)
     // The horn rule, checked while building (npm run dev): a hat taller than her horn would poke through the roofs.
@@ -31,7 +30,7 @@ export function buildClosetItem(id: string, bag: Bag, armTilt: number): Worn | n
   }
   if (item.slot === 'face') return { ...none(), head: buildFace(id, bag) }
   if (item.slot === 'back') return { ...none(), body: buildBack(id, bag) }
-  if (item.slot === 'outfit') return { ...none(), body: buildOutfit(id, bag) }
+  if (item.slot === 'outfit') return { ...none(), ...buildOutfit(id, bag, armTilt) }
   const [legL, legR] = buildShoes(id, bag)
   return { ...none(), legL, legR }
 }

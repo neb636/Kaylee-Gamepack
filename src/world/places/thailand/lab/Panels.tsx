@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { go } from '../../../../router'
 import { lineText, stopSpeaking, type Line } from '../../../../sdk'
 import { WEARABLES, type Look } from '../characters/looks'
-import { formatLook, ITEMS, PAINT_COLORS, PAINT_PARTS, PAINTS, paintOf, parseLook, SLOTS, withItem, withPaint } from '../characters/style'
+import { formatLook, ITEMS, PAINT_COLORS, PAINT_PARTS, PAINTS, paintOf, parseLook, SLOTS, withItem, withPaint, type ShowPose } from '../characters/style'
 import type { Pose } from '../characters/types'
 import { TUNE } from '../engine/tune'
 import { CAST, GROUPS, linesFor, variantsFor, voiceLabel, type CastEntry, type Variant } from './catalog'
@@ -34,6 +34,8 @@ export const BACKDROPS = [
 
 const POSE_LABEL: Record<Pose, string> = { stand: 'Stand', sit: 'Sit', lie: 'Lie', wai: 'Wai', peek: 'Peek', lookup: 'Look up', bounce: 'Bounce' }
 const ALL_POSES: Pose[] = ['stand', 'sit', 'lie', 'wai', 'peek', 'lookup', 'bounce']
+/** The wardrobe's show-off poses (each thing's in style.ts), in the order they first come up there. */
+const SHOW_POSES = [...new Set(ITEMS.map((i) => i.pose))] as ShowPose[]
 const ACTIONS: { id: Action; label: string }[] = [
   { id: 'hop', label: 'Hop' },
   { id: 'wave', label: 'Wave' },
@@ -404,6 +406,17 @@ function AnimationTab({ lab, film, loop, setLoop }: { lab: LabApi; film: string[
           ))}
         </div>
       </Section>
+      {entry.kind === 'kaylee' && (
+        <Section title="Show off" aside={<span className="cl-sub">Her pose when a thing goes on</span>}>
+          <div className="cl-chips">
+            {SHOW_POSES.map((p) => (
+              <button key={p} className="cl-chip" data-show={p} title={ITEMS.filter((i) => i.pose === p).map((i) => i.name).join(', ')} onClick={() => lab.studio.current?.showOff(p)}>
+                {p[0].toUpperCase() + p.slice(1)}
+              </button>
+            ))}
+          </div>
+        </Section>
+      )}
       <Section
         title="Loop"
         aside={

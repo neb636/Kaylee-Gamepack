@@ -44,6 +44,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const [dressing, setDressing] = useState(initial.section === 'wardrobe')
   const wardrobe = useRef<WardrobePlugin | null>(null)
   const [startDrawer] = useState(() => (initial.section === 'wardrobe' ? ((param('drawer') || null) as DrawerId | null) : null))
+  // The mirror button's sparkle across the screen as she pops over to her wardrobe.
+  const [flash, setFlash] = useState(0)
   const houseRef = useRef<House | null>(null)
   const guide = useRef<GuideHandle>(null)
   // Read once, when the house opens.
@@ -91,6 +93,15 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       setAsking(false)
       enter('wardrobe', drawer ? { drawer } : {})
     } else enter('upstairs')
+  }
+  /** The mirror button: from anywhere in the house, straight to her wardrobe with its doors open. */
+  const toWardrobe = () => {
+    sounds.sparkle()
+    setFlash((n) => n + 1)
+    setAsking(false)
+    lastSpot = 'upstairs'
+    setSpot('upstairs')
+    wardrobe.current?.openHere()
   }
   const onLook = (style: Style) => {
     saveLook(style)
@@ -218,6 +229,44 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           >
             ✓
           </motion.button>
+        )}
+      </AnimatePresence>
+      {/* The mirror button, in the house's top bar on every floor and the street: tap it and she's at her wardrobe. */}
+      <AnimatePresence>
+        {!photo && !arriving && !dressing && !asking && mode !== 'lost' && (
+          <motion.button
+            key="mirror"
+            aria-label="Dress up"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            transition={{ type: 'spring', delay: 0.2 }}
+            whileTap={{ scale: 0.85 }}
+            onClick={toWardrobe}
+            // A big target (--target: 96px on iPad, 72px in iPhone landscape) round a circle the size of the top bar's
+            // buttons, lined up with them.
+            style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px - (var(--target) - var(--btn)) / 2)', right: 'calc(var(--safe-right, 0px) + 16px - (var(--target) - var(--btn)) / 2)', width: 'var(--target)', height: 'var(--target)', padding: 0, border: 'none', background: 'none', display: 'grid', placeItems: 'center', zIndex: 50 }}
+          >
+            <motion.span
+              animate={{ rotate: [-6, 6, -6] }}
+              transition={{ repeat: Infinity, duration: 2.8, ease: 'easeInOut' }}
+              style={{ width: 'var(--btn)', height: 'var(--btn)', borderRadius: '50%', border: '4px solid #fff', background: 'var(--pink)', fontSize: 'calc(var(--btn) * .5)', boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center', boxSizing: 'border-box' }}
+            >
+              🪞
+            </motion.span>
+          </motion.button>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {flash > 0 && (
+          <motion.div
+            key={`flash-${flash}`}
+            initial={{ opacity: 0.85 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            onAnimationComplete={() => setFlash(0)}
+            style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 40, background: 'radial-gradient(circle at 50% 50%, #fff 0%, #FFE3EF 45%, rgba(233,222,255,.7) 100%)' }}
+          />
         )}
       </AnimatePresence>
       {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing} />}
