@@ -1,5 +1,6 @@
-// The mountain road's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet (the
-// greybox): the Pajero's horn, the beeps back, the animals, the guard rail's boing, the crayon drawing the 3.
+// The mountain road's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): the Pajero's horn,
+// the beeps back, the animals, the guard rail's boing, the wipers, the tyres in the wet and the puddles, the nodding
+// elephant's squeak, the crayon drawing the 3. (The voices are lines.ts L.nan.drive.)
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
 
@@ -37,4 +38,21 @@ export const roadSfx = {
   cloudOut: () => [0, 1, 2, 3, 4].forEach((i) => tone(880 * (1 + i * 0.25), 900 * (1 + i * 0.25), 0.3, 0.04, 'sine', i * 0.09)),
   /** The crayon drawing the 3: a waxy scratch (over and over while it moves). */
   scribble: () => noise(0.09, 0.04, 'bandpass', 2600 + Math.random() * 900, 1800, 0, 1.4),
+  /** A wiper's sweep across the glass (a dry one squeaks). */
+  wiper: (dry = false) => {
+    noise(0.22, 0.035, 'bandpass', 1800, 900, 0, 0.8)
+    if (dry) tone(1250, 1500, 0.12, 0.02, 'sine', 0.05)
+  },
+  /** Tyres hissing on the wet road. */
+  hiss: (k = 1) => noise(0.5, 0.018 * k, 'highpass', 2500, 2000, 0, 1),
+  /** Through a puddle: splosh. */
+  puddle: () => {
+    noise(0.35, 0.09, 'lowpass', 1600, 400, 0, 0.6)
+    tone(320, 160, 0.18, 0.04, 'sine', 0.02)
+  },
+  /** The little elephant toy: a squeaky trumpet. */
+  squeak: () => {
+    tone(740, 1180, 0.14, 0.06, 'triangle')
+    tone(1180, 880, 0.16, 0.05, 'triangle', 0.13)
+  },
 }

@@ -1,9 +1,12 @@
-// Bo Kluea's salt hut, modeled in code in the house's toon look (engine/geo.ts parts). Greybox: shapes only. The open
-// hut on its earth floor, the well with its stone rim, the bamboo beam and the bucket on its rope, the big pan on its mud
-// stove with the fire's mouth and the chimney, the woodpile, Kaylee's salt basket and the paddle, the shelf for the salt
-// bags, the salt aunty, the cat by the fire, the stack of baskets, the rooster outside, and across the wet road the
-// wooden house with the Tai Lue couple painted on its wall (from Dad's video).
-import { CanvasTexture, CylinderGeometry, Group, IcosahedronGeometry, InstancedMesh, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace } from 'three'
+// Bo Kluea's salt hut, modeled in code in the house's toon look (engine/geo.ts parts), cooler and greener for the
+// mountains. The open-sided hut on its earth floor (wet and darker where the brine splashes): wooden posts on stone feet,
+// a tin roof cut away like a doll's house (the back slope's rusty tin and the rafters), the stone well with moss at its
+// foot, the bamboo beam and the bucket on its rope, the big pan with its rolled rim on its mud stove (soot round the
+// fire's mouth, the glow, the flames, the clay chimney), the woodpile she takes logs from and the big one stacked
+// against the back wall, Kaylee's pink salt basket and the paddle, the shelf for the salt bags, the woven drying trays,
+// the water jar, the salt aunty, the cat by the fire, the stack of baskets and the rooster outside. The street and the
+// house with the painted couple across it are village.ts.
+import { CanvasTexture, CylinderGeometry, Group, InstancedMesh, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace } from 'three'
 import { buildAnimal, type Rig } from '../../../characters/animal'
 import type { Look } from '../../../characters/looks'
 import type { Bag } from '../../../engine/dispose'
@@ -20,10 +23,8 @@ import {
   BUCKET,
   CAT,
   MOUTH,
-  MURAL,
   PAN,
   PAN_X,
-  ROAD_Z,
   ROOSTER,
   SALT,
   SALT_BASKET,
@@ -32,6 +33,7 @@ import {
   WELL,
   WOODPILE,
 } from './layout'
+import { buildVillage, type Village } from './village'
 
 const WOOD = '#9A7462'
 const WOOD_DARK = '#6E5049'
@@ -42,11 +44,13 @@ const MUD = '#C99A7A'
 const STONE = '#B7B0C6'
 const METAL = '#8C8FA6'
 const WICKER = '#D2A56C'
+const TIN = '#B7B9C9'
+const TIN_RUST = '#C99A86'
 export const BRINE = '#9ED3EC'
 export const SALT_WHITE = '#FFFFFF'
 
-/** The salt aunty: a pony in a sun hat and an apron (not family: the village's salt maker, a placeholder animal like
- *  the mushroom farm's buffalo aunty, for Dad to pick). */
+/** The salt aunty: a pony in a sun hat and an apron (not family: the village's salt maker, who talks in her own voice,
+ *  cast.json's `saltaunty`). */
 export const SALT_AUNTY: Look = { species: 'pony', height: 1.4, chub: 1.12, fur: '#F2C9A0', light: '#FFF1E2', dark: '#7A5A50', ear: '#FFC2C8', mane: ['#6E4E46', '#8A6458'], hair: 'medium', outfit: { kind: 'blouse', color: '#9FD3F7' }, extras: ['sunhat', 'apron'], lashes: true, open: true }
 
 export interface Hut {
@@ -57,6 +61,7 @@ export interface Hut {
   trolley: Group
   brine: Mesh
   salt: InstancedMesh
+  crust: Mesh
   fire: { flames: Group; glow: Mesh; embers: Mesh }
   wood: Group
   basket: { root: Group; heap: Mesh }
@@ -68,6 +73,7 @@ export interface Hut {
   rooster: { root: Group; head: Group }
   mural: Group
   scooter: Group
+  village: Village
   aunty: Rig
 }
 
@@ -78,14 +84,22 @@ export function logGeo() {
 
 export function buildHut(bag: Bag): Hut {
   const root = new Group()
-  // ---- The hut: the earth floor, the posts, the roof, the beam over the well and the pan ----
+  // ---- The hut: the earth floor (darker and wet round the well and the stove), the posts on their stone feet, the
+  // well, the stove and the pan, the shelf, the big woodpile against a low plank wall, the water jar ----
+  const POSTS: [number, number][] = [-2.75, 2.85].flatMap((x) => [-1.2, 1.15].map((z): [number, number] => [x, z]))
   const hut = [
     P.box(7.6, 0.06, 4.0, EARTH, { at: [0, -0.03, -0.1] }),
-    // A worn, darker patch round the well, where the brine splashes.
-    P.cyl(0.85, 0.85, 0.004, '#AC9A8E', { at: [WELL.x, 0.002, 0.1] }, 28),
-    ...[-2.75, 2.85].flatMap((x) => [-1.2, 1.15].map((z) => P.cyl(0.07, 0.08, 2.75, WOOD_DARK, { at: [x, 1.375, z] }, 8))),
-    // ---- The well: a round stone rim, dark inside ----
-    // ---- The well: a round wall of stones, two rows offset like bricks, a stone lip on top ----
+    // Worn, darker, wet patches where the brine splashes, and a few flat stones to step on.
+    P.cyl(0.85, 0.85, 0.004, '#A99689', { at: [WELL.x, 0.002, 0.1] }, 28),
+    P.cyl(0.5, 0.5, 0.004, '#A99689', { at: [-0.5, 0.002, 0.35], scale: [1.6, 1, 0.7] }, 20),
+    P.cyl(0.6, 0.6, 0.004, '#AE9888', { at: [PAN_X, 0.002, 0.55], scale: [1.4, 1, 0.5] }, 20),
+    ...([[-0.2, 1.35], [0.5, 1.55], [-3.1, -0.2], [3.3, 0.2]] as [number, number][]).map(([x, z], i) => P.cyl(0.16 + (i % 2) * 0.04, 0.18, 0.03, i % 2 ? '#C9C3D6' : STONE, { at: [x, 0.01, z], scale: [1.3, 1, 1] }, 10)),
+    // (The front posts run up out of the picture: the roof over the front is cut away.)
+    ...POSTS.flatMap(([x, z]) => {
+      const h = z > 0 ? 3.6 : 2.9
+      return [P.cyl(0.075, 0.085, h, WOOD_DARK, { at: [x, h / 2, z] }, 8), P.rbox(0.26, 0.14, 0.26, 0.04, STONE, { at: [x, 0.07, z] })]
+    }),
+    // ---- The well: a round wall of stones, two rows offset like bricks, a stone lip on top, moss at its foot ----
     P.cyl(WELL.r - 0.02, WELL.r + 0.02, WELL.rim - 0.04, '#9C95AE', { at: [WELL.x, (WELL.rim - 0.04) / 2, WELL.z] }, 24),
     ...[0, 1, 2].flatMap((row) =>
       Array.from({ length: 10 }, (_, i) => {
@@ -94,24 +108,62 @@ export function buildHut(bag: Bag): Hut {
       }),
     ),
     P.torus(WELL.r - 0.01, 0.055, '#D9D4E4', { at: [WELL.x, WELL.rim, WELL.z], rot: [Math.PI / 2, 0, 0] }),
-    // ---- The stove: a mud block under the pan, a chimney at the back ----
-    P.rbox(PAN.x1 - PAN.x0 + 0.14, PAN.top - PAN.depth, STOVE_FRONT - PAN.z0 + 0.06, 0.04, MUD, { at: [PAN_X, (PAN.top - PAN.depth) / 2, (STOVE_FRONT + PAN.z0 - 0.06) / 2] }),
-    P.cyl(0.11, 0.13, 2.0, '#B98A6E', { at: [PAN.x1 - 0.12, 1.0, PAN.z0 - 0.16] }, 10),
-    // ---- The pan: a wide, shallow tray ----
-    P.box(PAN.x1 - PAN.x0, 0.02, PAN.z1 - PAN.z0, METAL, { at: [PAN_X, PAN.top - PAN.depth, (PAN.z0 + PAN.z1) / 2] }),
-    ...[PAN.z0, PAN.z1].map((z) => P.box(PAN.x1 - PAN.x0 + 0.03, PAN.depth, 0.03, '#A3A6B8', { at: [PAN_X, PAN.top - PAN.depth / 2, z] })),
-    ...[PAN.x0, PAN.x1].map((x) => P.box(0.03, PAN.depth, PAN.z1 - PAN.z0 + 0.03, '#A3A6B8', { at: [x, PAN.top - PAN.depth / 2, (PAN.z0 + PAN.z1) / 2] })),
-    // ---- The shelf for the salt bags, between two posts at the back ----
+    ...Array.from({ length: 6 }, (_, i) => {
+      const a = (i / 6) * Math.PI * 2 + 0.3
+      return P.sphere(0.07, '#8CBF86', { at: [WELL.x + Math.sin(a) * (WELL.r + 0.06), 0.03, WELL.z + Math.cos(a) * (WELL.r + 0.06)], scale: [1.4, 0.5, 1] }, 8)
+    }),
+    // ---- The stove: a mud block under the pan, rounded and built up round it, soot round the fire's mouth, a clay
+    // chimney at the back ----
+    P.rbox(PAN.x1 - PAN.x0 + 0.22, PAN.top - PAN.depth, STOVE_FRONT - PAN.z0 + 0.1, 0.08, MUD, { at: [PAN_X, (PAN.top - PAN.depth) / 2, (STOVE_FRONT + PAN.z0 - 0.1) / 2] }),
+    P.rbox(MOUTH.w + 0.2, MOUTH.h + 0.16, 0.012, 0.005, '#8E6656', { at: [MOUTH.x, MOUTH.y + 0.04, STOVE_FRONT + 0.004] }),
+    P.cyl(0.11, 0.14, 2.0, '#C99A7A', { at: [PAN.x1 - 0.12, 1.0, PAN.z0 - 0.2] }, 10),
+    ...[0.6, 1.3].map((y) => P.cyl(0.125, 0.125, 0.05, '#B5856A', { at: [PAN.x1 - 0.12, y, PAN.z0 - 0.2] }, 10)),
+    // ---- The pan: a wide, shallow metal tray with a rolled rim ----
+    P.box(PAN.x1 - PAN.x0, 0.02, PAN.z1 - PAN.z0, '#7E8198', { at: [PAN_X, PAN.top - PAN.depth, (PAN.z0 + PAN.z1) / 2] }),
+    ...[PAN.z0, PAN.z1].map((z) => P.box(PAN.x1 - PAN.x0 + 0.03, PAN.depth, 0.03, METAL, { at: [PAN_X, PAN.top - PAN.depth / 2, z] })),
+    ...[PAN.x0, PAN.x1].map((x) => P.box(0.03, PAN.depth, PAN.z1 - PAN.z0 + 0.03, METAL, { at: [x, PAN.top - PAN.depth / 2, (PAN.z0 + PAN.z1) / 2] })),
+    ...[PAN.z0, PAN.z1].map((z) => P.cyl(0.026, 0.026, PAN.x1 - PAN.x0 + 0.05, '#C9CCDA', { at: [PAN_X, PAN.top, z], rot: [0, 0, Math.PI / 2] }, 8)),
+    ...[PAN.x0, PAN.x1].map((x) => P.cyl(0.026, 0.026, PAN.z1 - PAN.z0 + 0.05, '#C9CCDA', { at: [x, PAN.top, (PAN.z0 + PAN.z1) / 2], rot: [Math.PI / 2, 0, 0] }, 8)),
+    // ---- The shelf for the salt bags, between two posts at the back, folded empty sacks waiting at the bottom ----
     ...[SHELF.x0, SHELF.x1].map((x) => P.box(0.06, 1.65, 0.06, WOOD_DARK, { at: [x, 0.825, SHELF.z] })),
-    ...SHELF.ys.map((y) => P.box(SHELF.x1 - SHELF.x0 + 0.12, 0.04, 0.32, WOOD, { at: [(SHELF.x0 + SHELF.x1) / 2, y, SHELF.z] })),
+    ...[0.38, ...SHELF.ys].map((y) => P.box(SHELF.x1 - SHELF.x0 + 0.12, 0.04, 0.32, WOOD, { at: [(SHELF.x0 + SHELF.x1) / 2, y, SHELF.z] })),
+    ...[0, 1, 2].map((k) => P.rbox(0.5, 0.035, 0.24, 0.015, k % 2 ? '#F4F0E8' : '#E8E2D6', { at: [(SHELF.x0 + SHELF.x1) / 2 + (k - 1) * 0.03, 0.42 + k * 0.035, SHELF.z] })),
+    // ---- A low plank wall at the back on the right, and the big woodpile stacked against it ----
+    P.box(1.9, 0.75, 0.06, WOOD, { at: [2.0, 0.375, -1.42] }),
+    ...Array.from({ length: 6 }, (_, i) => P.box(0.02, 0.73, 0.012, WOOD_DARK, { at: [1.2 + i * 0.32, 0.375, -1.385] })),
+    ...[0, 1, 2, 3].flatMap((row) => Array.from({ length: 11 - row }, (_, k) => logGeo().rotateY(Math.PI / 2 + Math.sin(k * 3 + row) * 0.05).translate(1.25 + (k + row * 0.5) * 0.115, 0.06 + row * 0.1, -1.2))),
+    // ---- A big clay water jar by the left posts ----
+    P.sphere(0.3, '#B5715C', { at: [-3.25, 0.32, 0.75], scale: [1, 1.1, 1] }, 16),
+    P.cyl(0.17, 0.2, 0.1, '#9E5E4C', { at: [-3.25, 0.66, 0.75] }, 14),
+    P.torus(0.17, 0.03, '#C98670', { at: [-3.25, 0.71, 0.75], rot: [Math.PI / 2, 0, 0] }),
   ]
   root.add(solid(merge(hut), bag, 2))
+  // The round woven drying trays hung on the back posts.
+  const trays = ([[-2.75, 1.95, -1.27, 0.34], [-2.45, 1.45, -1.29, 0.3], [2.85, 2.0, -1.27, 0.32]] as [number, number, number, number][]).flatMap(([x, y, z, r], i) => [
+    P.cyl(r, r, 0.04, i % 2 ? '#C99A5E' : WICKER, { at: [x, y, z], rot: [Math.PI / 2 - 0.12, 0, 0] }, 20),
+    P.torus(r, 0.025, '#B5854E', { at: [x, y, z + 0.02], rot: [-0.12, 0, 0] }),
+    ...[0.35, 0.65].map((k) => P.torus(r * k, 0.008, '#B5854E', { at: [x, y, z + 0.025], rot: [-0.12, 0, 0] })),
+  ])
+  root.add(solid(merge(trays), bag, 2))
   // The roof and the bamboo beam on its two posts (with rings where the bamboo's joints are): their own group, hidden
-  // while the camera looks down into the pan from above them.
+  // while the camera looks down into the pan from above them. The roof is cut away like a doll's house: the back slope
+  // is rusty tin on its rafters (seen from below), and over the front there's nothing, so the camera sees in and the
+  // street and the painted couple show behind.
+  const RIDGE = { y: 3.45, z: -0.05 }
+  const EAVE_B = { y: 2.72, z: -1.65 }
+  const slope = (a: { y: number; z: number }, b: { y: number; z: number }) => ({ len: Math.hypot(a.z - b.z, a.y - b.y), rot: Math.atan2(b.y - a.y, b.z - a.z), y: (a.y + b.y) / 2, z: (a.z + b.z) / 2 })
+  const back = slope(EAVE_B, RIDGE)
+  const rafterXs = Array.from({ length: 7 }, (_, i) => -2.85 + i * 0.95)
   const overhead = solid(
     merge([
-      P.box(6.0, 0.07, 3.0, '#8E6A5C', { at: [0, 2.82, 0], rot: [0.08, 0, 0] }),
-      ...[-1.2, 0, 1.15].map((z) => P.box(5.9, 0.1, 0.1, WOOD_DARK, { at: [0, 2.72, z] })),
+      // The back slope's tin, rust stripes, a ridge cap.
+      P.box(6.4, 0.05, back.len + 0.1, TIN, { at: [0, back.y + 0.05, back.z], rot: [-back.rot, 0, 0] }),
+      ...Array.from({ length: 5 }, (_, i) => P.box(0.22, 0.052, back.len + 0.08, TIN_RUST, { at: [-2.6 + i * 1.3 + Math.sin(i * 7) * 0.25, back.y + 0.052, back.z], rot: [-back.rot, 0, 0] })),
+      P.box(6.4, 0.09, 0.2, '#9A9CB0', { at: [0, RIDGE.y + 0.07, RIDGE.z] }),
+      // The back plate on the posts, the ridge beam, the rafters under the tin.
+      P.box(5.9, 0.12, 0.12, WOOD_DARK, { at: [0, 2.84, -1.2] }),
+      P.box(6.3, 0.12, 0.12, WOOD_DARK, { at: [0, RIDGE.y, RIDGE.z] }),
+      ...rafterXs.map((x) => P.box(0.07, 0.07, back.len, WOOD, { at: [x, back.y - 0.03, back.z], rot: [-back.rot, 0, 0] })),
       P.cyl(0.05, 0.05, BEAM.x1 - BEAM.x0 + 0.3, BAMBOO, { at: [(BEAM.x0 + BEAM.x1) / 2, BEAM.y, 0], rot: [0, 0, Math.PI / 2] }, 10),
       ...Array.from({ length: 9 }, (_, i) => P.cyl(0.056, 0.056, 0.03, BAMBOO_DARK, { at: [BEAM.x0 - 0.1 + i * 0.52, BEAM.y, 0], rot: [0, 0, Math.PI / 2] }, 10)),
       ...[BEAM.x0 - 0.08, BEAM.x1 + 0.08].map((x) => P.cyl(0.06, 0.07, BEAM.y + 0.1, BAMBOO_DARK, { at: [x, (BEAM.y + 0.1) / 2, -0.06] }, 8)),
@@ -130,12 +182,23 @@ export function buildHut(bag: Bag): Hut {
   brine.position.set(PAN_X, PAN.top - PAN.depth + 0.015, (PAN.z0 + PAN.z1) / 2)
   brine.renderOrder = 1
   root.add(brine)
-  // A heap of salt: a faceted little mound of crystals.
-  const heap = new IcosahedronGeometry(0.058, 0)
-  heap.scale(1, 0.75, 1)
-  const salt = new InstancedMesh(bag.add(heap), toon(SALT_WHITE), SALT.length)
+  // A heap of salt: a lumpy little pile of three faceted crystal mounds, white with pale grey-lavender facets (one
+  // instanced mesh for all of them; each one's size and turn are jittered in salt3d.ts, so they merge into a crust).
+  const heap = merge([
+    P.sphere(0.055, SALT_WHITE, { scale: [1.15, 0.6, 1] }, 6),
+    P.sphere(0.04, '#F1EEF6', { at: [0.04, 0.012, 0.02], scale: [1, 0.75, 1] }, 5),
+    P.sphere(0.036, SALT_WHITE, { at: [-0.03, 0.008, -0.03], scale: [1, 0.7, 1] }, 5),
+  ])
+  const salt = new InstancedMesh(bag.add(heap), toon('#ffffff', true), SALT.length)
   salt.renderOrder = 2
   root.add(salt)
+  // The crust under the heaps: a white, grainy layer of crystals over the pan's bottom (it shows as the brine boils
+  // away, and thins as she scrapes).
+  const crust = new Mesh(bag.add(new PlaneGeometry(PAN.x1 - PAN.x0 - 0.03, PAN.z1 - PAN.z0 - 0.03)), bag.add(new MeshBasicMaterial({ map: crustTexture(bag), transparent: true, opacity: 0, depthWrite: false })))
+  crust.rotation.x = -Math.PI / 2
+  crust.position.set(PAN_X, PAN.top - PAN.depth + 0.013, (PAN.z0 + PAN.z1) / 2)
+  crust.renderOrder = 1
+  root.add(crust)
   // ---- The fire's mouth in the stove's front: dark, the glow, the flames and the embers ----
   const mouth = new Mesh(bag.add(new PlaneGeometry(MOUTH.w, MOUTH.h)), bag.add(new MeshBasicMaterial({ color: '#3A2B33' })))
   mouth.position.set(MOUTH.x, MOUTH.y, STOVE_FRONT + 0.012)
@@ -314,44 +377,9 @@ export function buildHut(bag: Bag): Hut {
   rRoot.add(rHead)
   rRoot.add(blobShadow(0.2, bag))
   root.add(rRoot)
-  // ---- Outside: the wet road, the wooden house across it with the painted couple, hills and trees ----
-  const outside = [
-    // The ground all round (grass, and the packed earth in front of the hut), so no screen sees past its edge.
-    P.box(40, 0.05, 24, '#9FCB8F', { at: [0, -0.09, 2] }),
-    P.box(12, 0.02, 4, '#C9B8A6', { at: [0, -0.05, 3.2] }),
-    P.box(30, 0.04, 2.0, '#A6A0B8', { at: [0, -0.04, ROAD_Z] }),
-    ...Array.from({ length: 12 }, (_, i) => P.box(0.7, 0.006, 0.07, '#F4F0E8', { at: [-12 + i * 2.2, -0.015, ROAD_Z] })),
-    P.box(30, 0.05, 6, '#8FCB8F', { at: [0, -0.06, ROAD_Z - 4] }),
-    // The house: wooden walls, a dark gap under its roof, the roof.
-    P.box(4.2, 2.6, 1.6, '#B98A6E', { at: [MURAL.x + 0.2, 1.3, MURAL.z - 0.82] }),
-    P.prism([[-2.5, 0], [2.5, 0], [0, 0.9]], 2.0, '#C9785A', { at: [MURAL.x + 0.2, 2.6, MURAL.z - 0.82] }),
-    ...[-1.7, 2.1].map((x) => P.box(0.6, 1.1, 0.02, '#7E5A4C', { at: [MURAL.x + x, 0.55, MURAL.z - 0.01] })),
-    // Trees and the mountains behind.
-    ...[[-4.6, -5.5, 1.1], [-3.4, -6.2, 0.9], [4.0, -5.8, 1.2], [5.3, -5.0, 0.9]].flatMap(([x, z, r]) => [P.cyl(0.08, 0.1, 1.6, '#8E6A5C', { at: [x, 0.8, z] }, 6), P.sphere(r, '#6CC08A', { at: [x, 1.6 + r * 0.6, z], scale: [1, 0.85, 1] }, 12)]),
-    P.sphere(6, '#7FB99A', { at: [-7, -2.2, -14], scale: [1.4, 0.75, 0.6] }, 18),
-    P.sphere(7, '#6FAE90', { at: [6, -2.6, -16], scale: [1.4, 0.75, 0.6] }, 18),
-    P.sphere(5, '#9BCFA9', { at: [0, -2.5, -12], scale: [1.6, 0.6, 0.6] }, 18),
-  ]
-  root.add(solid(merge(outside), bag, 2))
-  const mural = new Group()
-  mural.userData.pick = 'mural'
-  const muralMesh = new Mesh(bag.add(new PlaneGeometry(MURAL.w, MURAL.h)), bag.add(new MeshBasicMaterial({ map: muralTexture(bag) })))
-  mural.position.set(MURAL.x, MURAL.y, MURAL.z)
-  mural.add(muralMesh)
-  root.add(mural)
-  // A scooter that putters past on the road now and then.
-  const scooter = solid(
-    merge([
-      P.rbox(0.6, 0.22, 0.2, 0.06, PAL.pink, { at: [0, 0.35, 0] }),
-      ...[0.26, -0.26].map((x) => P.cyl(0.13, 0.13, 0.07, PAL.ink, { at: [x, 0.13, 0], rot: [Math.PI / 2, 0, 0] }, 12)),
-      P.box(0.05, 0.4, 0.05, '#7E7A8E', { at: [0.27, 0.55, 0] }),
-      P.sphere(0.13, '#FFE27A', { at: [-0.05, 0.75, 0] }, 10),
-    ]),
-    bag,
-    2,
-  )
-  scooter.position.set(-20, 0, ROAD_Z + 0.3)
-  root.add(scooter)
+  // ---- Outside: the street, the house with the painted couple, the mountains (village.ts) ----
+  const village = buildVillage(bag)
+  root.add(village.root)
   // ---- The salt aunty, by the pan ----
   const aunty = buildAnimal(SALT_AUNTY, bag)
   aunty.root.position.set(...AUNTY_AT)
@@ -366,6 +394,7 @@ export function buildHut(bag: Bag): Hut {
     trolley,
     brine,
     salt,
+    crust,
     fire: { flames, glow, embers },
     wood,
     basket: { root: bRoot, heap: bHeap },
@@ -375,82 +404,27 @@ export function buildHut(bag: Bag): Hut {
     cat: { root: catRoot, head: catHead, tail: catTail },
     baskets,
     rooster: { root: rRoot, head: rHead },
-    mural,
-    scooter,
+    mural: village.mural,
+    scooter: village.scooter,
+    village,
     aunty,
   }
 }
 
-/** The Tai Lue couple painted on the house across the road, in our flat style (not a copy of the real one): she in a
- *  pink striped pha sin with her hair in a bun, he in an indigo shirt, leaning in to whisper. */
-function muralTexture(bag: Bag) {
+/** The salt crust's grain: white, speckled with pale grey-lavender and little bright glints. */
+function crustTexture(bag: Bag) {
   const c = document.createElement('canvas')
-  c.width = 768
-  c.height = 512
+  c.width = 256
+  c.height = 160
   const g = c.getContext('2d')!
-  g.fillStyle = '#F6E7CF'
-  g.fillRect(0, 0, 768, 512)
-  g.strokeStyle = '#C9785A'
-  g.lineWidth = 14
-  g.strokeRect(10, 10, 748, 492)
-  const ink = '#3A2B33'
-  const blob = (x: number, y: number, rx: number, ry: number, fill: string, rot = 0) => {
-    g.beginPath()
-    g.ellipse(x, y, rx, ry, rot, 0, Math.PI * 2)
-    g.fillStyle = fill
-    g.fill()
-    g.lineWidth = 5
-    g.strokeStyle = ink
-    g.stroke()
-  }
-  const body = (pts: [number, number][], fill: string) => {
-    g.beginPath()
-    g.moveTo(...pts[0])
-    for (const p of pts.slice(1)) g.lineTo(...p)
-    g.closePath()
-    g.fillStyle = fill
-    g.fill()
-    g.lineWidth = 5
-    g.strokeStyle = ink
-    g.stroke()
-  }
-  // Hills and a little tree behind them.
-  g.fillStyle = '#BFE0C4'
-  g.beginPath()
-  g.moveTo(20, 420)
-  g.quadraticCurveTo(200, 300, 380, 400)
-  g.quadraticCurveTo(560, 290, 748, 410)
-  g.lineTo(748, 492)
-  g.lineTo(20, 492)
-  g.fill()
-  // She: the pha sin with its stripes, a blouse, her face and her bun with a flower.
-  body([[430, 250], [520, 250], [545, 470], [405, 470]], '#FF8FB8')
-  for (const y of [300, 350, 400, 440]) {
-    g.fillStyle = '#FF4F9A'
-    g.fillRect(412 + (y - 250) * -0.1, y, 126 + (y - 250) * 0.2, 12)
-  }
-  body([[435, 170], [515, 170], [525, 255], [425, 255]], '#FFF7F0')
-  blob(475, 130, 42, 46, '#F2C9A0')
-  blob(478, 78, 26, 20, '#3A2B33')
-  blob(500, 70, 10, 10, '#FF5A6E')
-  blob(462, 132, 5, 3, ink)
-  blob(492, 132, 5, 3, ink)
-  blob(458, 150, 8, 5, '#FF9DB8')
-  blob(496, 150, 8, 5, '#FF9DB8')
-  // He: indigo shirt and trousers, leaning in toward her ear.
-  body([[250, 200], [340, 185], [360, 330], [255, 335]], '#4A4F8C')
-  body([[258, 330], [355, 325], [350, 470], [300, 470], [300, 380], [270, 470], [240, 470]], '#3A3F6E')
-  blob(345, 150, 40, 44, '#E5B488')
-  blob(345, 112, 34, 16, '#3A2B33')
-  blob(362, 150, 5, 3, ink)
-  // His hand cupped by his mouth, and the little whisper marks.
-  blob(392, 170, 14, 18, '#E5B488')
-  g.strokeStyle = '#FF4F9A'
-  g.lineWidth = 6
-  for (const r of [16, 30]) {
-    g.beginPath()
-    g.arc(410, 160, r, -0.7, 0.4)
-    g.stroke()
+  g.fillStyle = '#F7F6FA'
+  g.fillRect(0, 0, 256, 160)
+  let r = 7
+  const rand = () => ((r = (r * 16807) % 2147483647) / 2147483647)
+  for (let i = 0; i < 900; i++) {
+    g.fillStyle = i % 5 === 0 ? '#FFFFFF' : i % 3 ? '#E6E2EE' : '#D9D4E4'
+    const s = 1 + rand() * 3
+    g.fillRect(rand() * 256, rand() * 160, s, s)
   }
   const tex = bag.add(new CanvasTexture(c))
   tex.colorSpace = SRGBColorSpace

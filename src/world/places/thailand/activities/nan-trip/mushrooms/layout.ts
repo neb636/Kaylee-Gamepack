@@ -82,6 +82,9 @@ export const GECKO: V3 = [-2.05, 1.95, BACK_Z + 0.04]
 export const BEAM_Y = 2.2
 export const DRIP: V3 = [0.12, BEAM_Y - 0.06, 0.62]
 export const DOG: V3 = [0.95, 0, 0.9]
+/** The bulb hanging from the roof (moths visit it), and where else the roof drips (just to watch). */
+export const BULB: V3 = [-0.42, 2.48, 0.3]
+export const DRIPS: V3[] = [[-2.3, BEAM_Y - 0.06, 0.62], [1.05, BEAM_Y - 0.06, -0.1], [2.6, BEAM_Y - 0.06, 0.62]]
 export const HOUSE_BASKET: V3 = [-1.0, 0, 0.72]
 export const BASKET_R = 0.2
 export const KAYLEE_AT: V3 = [-1.5, 0, 0.42]
@@ -89,7 +92,7 @@ export const NICK_AT: V3 = [1.38, 0, 0.3]
 export const FARMER_AT: V3 = [2.3, 0, -0.18]
 /** On a tall screen the aisle closes in round the rack, so everyone fits: Kaylee and her basket beside it, Daddy peeking
  *  out from behind its far end. */
-export const TALL = { kaylee: [-1.1, 0, 0.78] as V3, basket: [-0.6, 0, 0.98] as V3, nick: [1.28, 0, -0.22] as V3, dog: [0.45, 0, 1.12] as V3, farmer: [1.8, 0, -0.32] as V3 }
+export const TALL = { kaylee: [-1.1, 0, 0.78] as V3, basket: [-0.6, 0, 0.98] as V3, nick: [1.22, 0, 0.12] as V3, dog: [0.45, 0, 1.12] as V3, farmer: [1.72, 0, -0.3] as V3 }
 
 // ---------------------------------------------------------------- the farm's table
 
@@ -113,4 +116,6 @@ export const EATER_NAMES: Record<EaterId, string> = { kaylee: 'Kaylee', ji: 'Mom
 export const OVEN: V3 = [TX - 1.6, 0, -0.35]
 export const OVEN_MOUTH: V3 = [TX - 1.6, 0.78, -0.03]
 export const FARMER_TABLE: V3 = [TX - 2.25, 0, -0.85]
+/** On a tall screen the aunty waits at the table between the oven and Mommy, so she's in the picture. */
+export const FARMER_TABLE_TALL: V3 = [TX - 1.2, 0, -1.3]
 export const RAIL_Z = -1.7

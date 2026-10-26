@@ -1,5 +1,5 @@
-// The salt hut's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet (the
-// greybox): the bucket in the well, the brine pouring, the fire, the boiling, the paddle's scrape, the basket, and the
+// The salt hut's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise); the voices are lines.ts
+// L.nan.salt. The bucket in the well, the brine pouring, the fire, the boiling, the paddle's scrape, the basket, and the
 // pokes' answers.
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
@@ -77,6 +77,8 @@ export const saltSfx = {
     tone(1000, 1200, 0.18, 0.07, 'sawtooth', 0.28)
     tone(1200, 760, 0.45, 0.07, 'sawtooth', 0.48)
   },
+  /** The hen: buk-buk-bukaawk. */
+  cluck: () => [0, 0.11, 0.22].forEach((d, i) => tone(i === 2 ? 760 : 520, i === 2 ? 980 : 470, i === 2 ? 0.2 : 0.07, 0.06, 'square', d)),
   /** The baskets wobbling on their stack. */
   wobble: () => [0, 0.1, 0.2].forEach((d) => noise(0.06, 0.05, 'bandpass', 900, 600, d, 1.5)),
   /** A plunk down the well: an echo. */

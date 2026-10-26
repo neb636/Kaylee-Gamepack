@@ -1,5 +1,5 @@
-// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.html). Still in the works (meta.ts `inTheWorks`):
-// only its links open it. Greyboxes, joined up into the whole trip (step 7):
+// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.html), Thailand's third trip (meta.ts
+// `activities`), with its look and voices. The whole trip:
 //   the way there and home (Loop.tsx, the trip kit's legs): Mommy asks where to (invite, 🏔️🚙), packing for the
 //   mountains (pack), the goodbye and Aunty Sri's van (goodbye), the x-ray belt (airport), the window seat north to Nan
 //   (takeoff, fly, land), then
@@ -96,6 +96,8 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   // The photos from the trip: a link's, or one for each stop done and the 3 once it's drawn.
   const [linkPhotos] = useState(() => parsePhotos(param('photos')))
   const [drew3, setDrew3] = useState(false)
+  // Where she last drove to from the map: the little Pajero waits there when she's back (Nan town after the city road).
+  const [from, setFrom] = useState<PlaceId | null>(null)
   const photos: PhotoId[] = linkPhotos.length ? linkPhotos : [...stops.map((s) => PHOTO_OF[s]), ...(drew3 ? (['three'] as const) : [])]
   const homePhotos: PhotoId[] = photos.length ? photos : ['deck', 'three']
   const [at, setAt] = useState<At>(() => {
@@ -227,8 +229,31 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
           onDone={finished}
         />
       )
-    if (at.section === 'rental') return <Rental key="rental" round={at.round} onRound={(round) => setAt({ section: 'rental', round })} onDone={() => setAt({ section: 'map' })} />
-    if (at.section === 'map') return <NanMap key={`map:${stops.join(',')}`} stops={stops} onGo={(place) => setAt(driveTo(place))} />
+    if (at.section === 'rental')
+      return (
+        <Rental
+          key="rental"
+          round={at.round}
+          onRound={(round) => setAt({ section: 'rental', round })}
+          onDone={() => {
+            // Saved, so "Keep going" opens the map instead of the key, the bags and the belt again.
+            save('map')
+            setAt({ section: 'map' })
+          }}
+        />
+      )
+    if (at.section === 'map')
+      return (
+        <NanMap
+          key={`map:${stops.join(',')}`}
+          stops={stops}
+          from={from}
+          onGo={(place) => {
+            setFrom(place)
+            setAt(driveTo(place))
+          }}
+        />
+      )
     if (at.section === 'mushrooms')
       return (
         <Mushrooms

@@ -347,6 +347,105 @@ export const L = {
       // The rice farm's video, after Mommy's photo on the deck (rice/video.ts).
       video: `Want to see real rice grow, ${NAME}?`,
     },
+    // The rental desk at Nan airport (rental/): the clerk (a puppy) hands over the key, the bags go in, the seatbelt.
+    rental: {
+      key: 'Press the key!',
+      boot: 'Put the bags in the car!',
+      belt: `Click your seatbelt, ${NAME}!`,
+      hi: by('clerk')('Sawasdee ka! Here is your key!'),
+      bye: by('clerk')('Have a happy trip!'),
+      // Tap the clerk (in turn), and the bell on the counter.
+      tap: [by('clerk')('Hee hee!'), by('clerk')('Welcome to Nan!'), by('clerk')('What a big car!')],
+      bell: by('clerk')('Ding! Yes please?'),
+      jump: nick('Whoa! Beep beep!'),
+      bags: nick('In they go!'),
+      go: ji("Ready? Let's go!"),
+    },
+    // The Nan map (map/): Sparkle's first line, her hint, and Mommy after two stops and after all three.
+    map: {
+      first: `Where shall we go first, ${NAME}?`,
+      hint: 'Tap a place to drive there!',
+      more: ji('Home, or one more?'),
+      home: ji('Time to fly home!'),
+      laos: 'Over there is Laos, another country!',
+    },
+    // The mountain roads (drive/): Mommy drives and says the road lines, Daddy reacts, Sparkle says what's new.
+    drive: {
+      steer: `Steer the car with your finger, ${NAME}!`,
+      mirror: 'Beep before the bend!',
+      cloud: "We're driving into a cloud!",
+      count: "Let's count the bends!",
+      one: 'One!',
+      two: 'Two!',
+      three: 'Three!',
+      draw: 'Draw the three with your finger!',
+      drew: `Three! ${NAME} drove the three!`,
+      go: ji(`Steer for me, ${NAME}!`),
+      left: ji('Keep left!'),
+      buffalo: ji("A buffalo! Let's wait."),
+      bend: ji('Slow round the bend.'),
+      to: {
+        mushrooms: ji('The mushroom farm!'),
+        rice: ji('Stop Time Cafe!'),
+        salt: ji('Bo Kluea! The salt village!'),
+        market: ji('The market!'),
+        view: ji('Look how high we are!'),
+      },
+      whoa: nick('Whoa!'),
+      foggy: nick("I can't see a thing!"),
+      sun: nick('Sunshine! Above the clouds!'),
+      monkey: nick('A monkey on the rail!'),
+      waterfall: nick('Look! A waterfall!'),
+      rain: nick('Swish, swish, go the wipers!'),
+      // Tap Daddy in the car (in turn).
+      tap: [nick('Great driving, Kaylee!'), nick('Wheee! Bumpy!'), nick('Are we there yet?')],
+    },
+    // Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.
+    mushrooms: {
+      mist: `Spray the bags, ${NAME}!`,
+      pick: 'Pull the mushrooms off!',
+      colors: 'More bags to spray!',
+      pizza: 'Put your mushrooms on the pizza!',
+      hint: {
+        mist: 'Hold your finger on the bags!',
+        pick: 'Pull a mushroom into the basket!',
+        pizza: 'Drag a mushroom to the pizza!',
+        oven: 'Tap the oven!',
+        share: 'Tap the pizza to share it!',
+      },
+      sawdust: 'Mushrooms grow from sawdust, not seeds!',
+      hi: by('farmer')('My mushrooms are thirsty!'),
+      grown: by('farmer')('Look at them grow!'),
+      colors2: by('farmer')('Pink ones and gold ones!'),
+      oven: by('farmer')('Into the oven!'),
+      tap: [by('farmer')('Ha ha ha!'), by('farmer')('Good spraying!'), by('farmer')('Yummy mushrooms!')],
+      hat: nick('A mushroom hat?!'),
+      giant: nick('A giant mushroom!'),
+      yum: nick('Mmm! Mushroom pizza!'),
+      dad: [nick('Spray me again!'), nick('So many mushrooms!')],
+      share: ji('A slice for everyone!'),
+    },
+    // Bo Kluea's salt wells (salt/): the salt aunty (a pony) and Daddy react, Sparkle says what's new.
+    salt: {
+      dip: `Dip the bucket in the well, ${NAME}!`,
+      fire: 'Put a log on the fire!',
+      scrape: 'Scrape up the salt!',
+      hint: {
+        dip: 'Pull the bucket down into the well!',
+        pour: 'Carry it over the big pan!',
+        fire: 'Throw a log in the fire!',
+        scrape: 'Move the paddle through the salt!',
+      },
+      boil: 'The water boils away, and the salt stays!',
+      hi: by('saltaunty')('This well is very salty!'),
+      lit: by('saltaunty')('Now we light the fire!'),
+      white: by('saltaunty')('Look! White salt!'),
+      bags: by('saltaunty')('Salt for everyone!'),
+      tap: [by('saltaunty')('Hee hee! Taste it!'), by('saltaunty')('Strong girl!'), by('saltaunty')('Hot, hot fire!')],
+      foot: nick('Ow! A salty foot!'),
+      salty: nick('Too salty? Ha ha!'),
+      dad: [nick('Look at that steam!'), nick('Salt from a well!')],
+    },
     // The trip around the stops (activities/nan-trip/Loop.tsx, the trip kit): packing for the mountains, landing in Nan,
     // the photo at the 3's viewpoint, and the photo on Agong's wall. The rest of the way there and home is the boat
     // trip's (L.trip, L.home).
@@ -357,6 +456,8 @@ export const L = {
       three: ji('Everybody say three!'),
       // The frame on the wall, tapped in the house.
       wall: ji('Our trip to Nan!'),
+      // The stamp screen's sticker.
+      sticker: 'Pink mushroom sticker! Mushrooms love the rain.',
       // The stamp screen's tap-to-hear facts (trip/facts.ts NAN_FACTS), in Sparkle's voice.
       facts: {
         nan: 'Nan is in the mountains, next to Laos!',

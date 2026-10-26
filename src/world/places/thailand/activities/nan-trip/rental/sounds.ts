@@ -1,5 +1,5 @@
-// The rental desk's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet (the
-// greybox): the key fob's beep-beep, the Pajero's answer, the bags thumping into the boot, the seatbelt's click, the
+// The rental desk's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise; the voices are
+// lines.ts L.nan.rental): the key fob's beep-beep, the Pajero's answer, the bags thumping into the boot, the seatbelt's click, the
 // engine, and the pokes' answers.
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'

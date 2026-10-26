@@ -1,5 +1,6 @@
 // Bo Kluea's salt hut (plan: planning/around-the-world/thailand/nan-trip.html, "4. Bo Kluea salt wells"), in meters:
 // where everything stands, the rounds and their numbers. Pure data (no three.js): sections.ts can read it at startup.
+// The hut is built in hut.ts, the street and the house with the mural behind it in village.ts.
 //
 // The open-sided salt hut, seen from the front (the camera looks toward -z, a little from above, straight on):
 //
@@ -68,8 +69,8 @@ export const SALT = Array.from({ length: SALT_COLS * SALT_ROWS }, (_, i): V3 => 
   const c = i % SALT_COLS
   const r = Math.floor(i / SALT_COLS)
   // A little jitter, so it reads as heaps of salt, not tiles.
-  const jx = Math.sin(i * 12.9898) * 0.022
-  const jz = Math.cos(i * 78.233) * 0.02
+  const jx = Math.sin(i * 12.9898) * 0.045
+  const jz = Math.cos(i * 78.233) * 0.035
   return [PAN.x0 + 0.1 + (c * (PAN.x1 - PAN.x0 - 0.2)) / (SALT_COLS - 1) + jx, PAN.top - PAN.depth + 0.03, PAN.z0 + 0.09 + (r * (PAN.z1 - PAN.z0 - 0.18)) / (SALT_ROWS - 1) + jz]
 })
 /** The paddle's blade (across the scraping direction) and how much it holds before it wants emptying. */
@@ -92,8 +93,10 @@ export const KAYLEE_Z = 0.82
 export const KAYLEE_X: [number, number] = [-1.95, 2.0]
 /** She walks along a little to the left of the bucket (so she doesn't hide what's under it). */
 export const KAYLEE_LEAD = -0.42
-/** In round 2 she stands back from the fire's mouth, beside it. */
-export const KAYLEE_FIRE: V3 = [MOUTH.x - 0.78, 0, 0.82]
+/** In round 2 she stands back from the fire's mouth, to the left of the pan (never in front of it or the fire). */
+export const KAYLEE_FIRE: V3 = [PAN.x0 - 0.58, 0, 0.82]
+/** In round 3 she stands at the pan's left end, behind her basket, and reaches the paddle in (so the pan stays clear). */
+export const KAYLEE_SCRAPE: V3 = [PAN.x0 - 0.52, 0, 0.12]
 export const NICK_AT: V3 = [0.08, 0, -0.68]
 export const JI_AT: V3 = [-2.2, 0, -0.55]
 export const AUNTY_AT: V3 = [2.3, 0, -0.3]
@@ -102,6 +105,6 @@ export const BASKETS: V3 = [-2.25, 0, 0.55]
 export const ROOSTER: V3 = [-2.45, 0, -1.65]
 /** The house across the road, with the painted couple on its wall. */
 export const ROAD_Z = -2.6
-export const MURAL = { x: 0.7, y: 1.02, z: -4.15, w: 2.1, h: 1.4 }
+export const MURAL = { x: 0.7, y: 1.12, z: -4.15, w: 2.6, h: 1.55 }
 /** On a tall screen the edges come in a little, so everyone fits. */
-export const TALL = { ji: [-1.55, 0, -0.85] as V3, aunty: [1.9, 0, -0.62] as V3, wood: [1.95, 0, 0.75] as V3, baskets: [-1.95, 0, 0.62] as V3 }
+export const TALL = { ji: [-1.55, 0, -0.85] as V3, aunty: [1.7, 0, -0.75] as V3, wood: [1.95, 0, 0.75] as V3, baskets: [-1.95, 0, 0.62] as V3 }

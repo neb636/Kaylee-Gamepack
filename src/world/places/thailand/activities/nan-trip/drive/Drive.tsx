@@ -1,20 +1,29 @@
 // The mountain road's screen: the 3D road (mountain.ts) with its tap targets, the steering wheel in the corner (the whole
 // wheel is the horn, and it turns as the Pajero turns; it pulses when a car is coming round a blind bend), the 3 road's
-// big numbers as she counts the bends, the 👆 when she hasn't steered for a while, and at the end of the road its stop
+// big numbers as she counts the bends, the 👆 when she hasn't steered for a while, Sparkle in the other corner
+// (trip/legs/Guide.tsx: she and the family talk out loud in their own voices), and at the end of the road its stop
 // (when she picked one on the Nan map, it opens by itself) or the end card: the stop, 🔁 this road again, 🗺️ back to
 // the map. The 3 road ends at the viewpoint (section `three`), where she draws the 3; on the trip, Mommy takes the
-// family's photo with the 3 behind them and the end card offers ✈️🏠 home.
+// family's photo with the 3 behind them and the end card offers ✈️🏠 home. Every drive (and every 🔁) rolls its own
+// weather and traffic (roads.ts rollDrive); a link's `weather` holds for the drive it opens.
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { say } from '../../../../../../sdk'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
 import { driveAnchors, NanDrive, type DriveHud } from './mountain'
 import { L } from '../../../lines'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { drawPhoto } from '../photo'
 import { Snapshot } from '../Snapshot'
-import { nanRoad, ROAD_IDS, type RoadId } from './roads'
+import { nanRoad, ROAD_IDS, rollDrive, WEATHERS, type RoadId, type Weather } from './roads'
+
+const hashParam = (k: string) => new URLSearchParams(location.hash.split('?')[1] ?? '').get(k) ?? ''
+/** The weather a link states (`?weather=rain`), read when the drive first opens. */
+function linkWeather(): Weather | '' {
+  const w = hashParam('weather')
+  return (WEATHERS as readonly string[]).includes(w) ? (w as Weather) : ''
+}
 
 interface Props {
   road: RoadId
@@ -45,6 +54,14 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
   const worldRef = useRef<NanDrive | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const wheelRef = useRef<HTMLButtonElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
+  // This drive's weather and traffic: rolled for every road and every 🔁 (the link's weather for the first one).
+  const [stated] = useState(linkWeather)
+  const [firstRoad] = useState(road)
+  // (The stops done so far ride along in the address bar: the sky road's second trip up starts above the cloud.)
+  const roll = useMemo(() => rollDrive(road, road === firstRoad && run === 0 && key === 0 ? stated : '', Math.random, { to, stops: hashParam('stops').split(',') }), [road, run, key])
+  const toRef = useRef(to)
+  toRef.current = to
   const viewCb = useRef(onView)
   viewCb.current = onView
   // Driving to a stop picked on the map: at the end of the road, it opens.
@@ -60,12 +77,12 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
   const threePhoto = useMemo(() => (photo ? drawPhoto('three') : ''), [photo])
   useEffect(() => {
     if (!photo) return
-    void say(L.nan.trip.three)
+    guideRef.current?.speak(L.nan.trip.three)
     onDrawn?.()
   }, [photo])
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new NanDrive(renderer, road, { onHud: setHud, onView: () => viewCb.current?.() }, view ? 'view' : 'road')
+    const w = new NanDrive(renderer, road, { onHud: setHud, onView: () => viewCb.current?.(), say: (l) => guideRef.current?.speak(l) }, view ? 'view' : 'road', roll, toRef.current, roll.from)
     w.setHintElement(hintRef.current)
     w.setWheelElement(wheelRef.current)
     return w
@@ -89,7 +106,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
         make={make}
         anchors={(input, els) => (
           <>
-            <Anchors list={driveAnchors(road)} els={els} {...input} />
+            <Anchors list={driveAnchors(road, roll.traffic, to)} els={els} {...input} />
             {/* Not steering for a while: a finger on the road ahead. */}
             <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
               <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 0.9, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
@@ -110,6 +127,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
           🚙 Tap to wake the road
         </button>
       )}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={hud.phase === 'end'} />}
       {mode === 'webgl' && <Wheel ref={wheelRef} hidden={hud.phase === 'view' || hud.phase === 'end'} onHorn={() => worldRef.current?.honk()} />}
       <CountPop count={hud.count} />
       <AnimatePresence>{photo && mode === 'webgl' && <Snapshot key="three" src={threePhoto} />}</AnimatePresence>

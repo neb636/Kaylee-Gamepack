@@ -4,7 +4,9 @@
 // top, the salt hut with its steaming pan, Nan town with its market umbrellas and the Thai flag, and the airport with
 // its runway and a tiny plane. Along the right edge, Laos: a row of little border posts and its flag. Clouds sit on the
 // peaks, buffalo graze the paddies by the river, a fish waits in it, and the little silver Pajero (the drive's, scaled
-// down) sits on the roads. GREYBOX (step 6): shapes, no painted art.
+// down) sits on the roads. The look (step 8): the board sits in a raised wooden frame on a lavender table with a pink
+// cloth, crayons and a cup of pink milk beside it; the landmarks are big chunky toys (PLACE_SCALE); round trees mixed
+// with the pointy ones, rice paddies in the valleys, little pink mushrooms round the farm.
 import { BufferAttribute, BufferGeometry, Color, Group, PlaneGeometry } from 'three'
 import type { Bag } from '../../../engine/dispose'
 import { bake, merge, P, solid } from '../../../engine/geo'
@@ -58,6 +60,8 @@ export interface Diorama {
 }
 
 const y = (x: number, z: number) => heightAt(x, z)
+/** The landmarks stand this much bigger than the board's scale, like toys (map3d.ts keeps it when they bounce). */
+export const PLACE_SCALE = 1.3
 
 /** A flat ribbon laid on the ground along a line (a road, the river), `lift` above it. */
 function ribbon(line: XZ[], w: number, lift: number, color: string) {
@@ -146,7 +150,28 @@ export function buildDiorama(bag: Bag, net: Net): Diorama {
   // ---- The table, the board's wooden frame and the ground ----
   const W = BOARD.x1 - BOARD.x0
   const D = BOARD.z1 - BOARD.z0
-  root.add(solid(merge([P.rbox(W + 3.2, 0.3, D + 2.6, 0.12, '#EADFFB', { at: [0, -0.32, 0.2] }), P.rbox(W + 0.2, 0.2, D + 0.2, 0.05, WOOD, { at: [0, -0.115, 0] })]), bag, 2))
+  const lip = 0.07
+  root.add(solid(merge([
+    P.rbox(W + 3.2, 0.3, D + 2.6, 0.12, '#EADFFB', { at: [0, -0.32, 0.2] }),
+    // The pink cloth under the board, its scalloped edge.
+    P.rbox(W + 1.0, 0.02, D + 1.0, 0.01, '#FFD3E6', { at: [0, -0.16, 0] }),
+    ...Array.from({ length: 16 }, (_, i) => P.cyl(0.18, 0.18, 0.02, '#FFD3E6', { at: [-(W + 1.0) / 2 + 0.18 + (i * (W + 0.64)) / 15, -0.16, (D + 1.0) / 2] }, 14)),
+    P.rbox(W + 0.2, 0.2, D + 0.2, 0.05, WOOD, { at: [0, -0.115, 0] }),
+    // The frame's raised lip all round.
+    P.rbox(W + 0.3, lip, 0.12, 0.03, WOOD_DARK, { at: [0, lip / 2 - 0.02, BOARD.z1 + 0.09] }),
+    P.rbox(W + 0.3, lip, 0.12, 0.03, WOOD_DARK, { at: [0, lip / 2 - 0.02, BOARD.z0 - 0.09] }),
+    P.rbox(0.12, lip, D + 0.06, 0.03, WOOD_DARK, { at: [BOARD.x0 - 0.09, lip / 2 - 0.02, 0] }),
+    P.rbox(0.12, lip, D + 0.06, 0.03, WOOD_DARK, { at: [BOARD.x1 + 0.09, lip / 2 - 0.02, 0] }),
+    // Crayons beside the board, and a cup of pink milk.
+    ...[PAL.hotpink, '#B9A6F5', PAL.mint].flatMap((c, i) => [
+      P.cyl(0.035, 0.035, 0.42, c, { at: [BOARD.x1 + 0.45 + i * 0.1, -0.13, 1.4 + i * 0.12], rot: [Math.PI / 2, 0.3 - i * 0.15, Math.PI / 2] }, 10),
+      P.cone(0.035, 0.07, c, { at: [BOARD.x1 + 0.45 + i * 0.1 - Math.cos(0.3 - i * 0.15) * 0.245, -0.13, 1.4 + i * 0.12 + Math.sin(0.3 - i * 0.15) * 0.245], rot: [0, 0.3 - i * 0.15, Math.PI / 2] }, 10),
+    ]),
+    P.cyl(0.16, 0.13, 0.3, '#FFFFFF', { at: [BOARD.x0 - 0.6, -0.02, -1.2] }, 18),
+    P.cyl(0.145, 0.145, 0.02, '#FFB3CF', { at: [BOARD.x0 - 0.6, 0.12, -1.2] }, 18),
+    P.torus(0.07, 0.02, '#FFFFFF', { at: [BOARD.x0 - 0.78, -0.02, -1.2], rot: [0, 0, Math.PI / 2] }),
+    P.cyl(0.24, 0.24, 0.02, '#FFFFFF', { at: [BOARD.x0 - 0.6, -0.17, -1.2] }, 20),
+  ]), bag, 2))
   root.add(solid(terrain(), bag, 0))
 
   // ---- The river and the paddies by it, the roads and the bridges ----
@@ -158,6 +183,13 @@ export function buildDiorama(bag: Bag, net: Net): Diorama {
     const pz = PADDIES[1] + Math.floor(i / 3) * 0.17 - 0.08
     flat.push(P.box(0.15, 0.012, 0.15, i % 2 ? '#BCE7A3' : '#C9EDB6', { at: [px, y(px, pz) + 0.008, pz] }))
   }
+  // More paddies down the valley: green, a few golden, one shiny with water.
+  for (const [cx, cz, n] of [[-0.25, 1.62, 3], [-1.9, -0.25, 2], [0.2, -0.45, 2]] as const)
+    for (let i = 0; i < n * 2; i++) {
+      const px = cx + (i % n) * 0.15 - ((n - 1) * 0.15) / 2
+      const pz = cz + Math.floor(i / n) * 0.15 - 0.075
+      flat.push(P.box(0.13, 0.012, 0.13, ['#BCE7A3', '#F3E3A0', '#C9EDB6', '#C3E9F7'][(i + n) % 4], { at: [px, y(px, pz) + 0.008, pz] }))
+    }
   root.add(solid(merge(flat), bag, 0))
   // A bridge wherever a road crosses the river.
   const bridges: ReturnType<typeof P.box>[] = []
@@ -188,7 +220,8 @@ export function buildDiorama(bag: Bag, net: Net): Diorama {
     if (h < 0.05 || !away(x, z)) continue
     n++
     const s = 0.8 + (i % 5) * 0.1
-    trees.push(P.cyl(0.012, 0.012, 0.05, WOOD_DARK, { at: [x, h + 0.025, z] }), P.cone(0.055 * s, 0.15 * s, i % 3 ? '#4FA36E' : '#5DB27A', { at: [x, h + 0.04 + 0.075 * s, z] }, 7))
+    if (i % 4 === 0) trees.push(P.cyl(0.012, 0.012, 0.06, WOOD_DARK, { at: [x, h + 0.03, z] }), P.sphere(0.06 * s, i % 3 ? '#74C08A' : '#88CC8E', { at: [x, h + 0.08 + 0.03 * s, z] }, 8))
+    else trees.push(P.cyl(0.012, 0.012, 0.05, WOOD_DARK, { at: [x, h + 0.025, z] }), P.cone(0.055 * s, 0.15 * s, i % 3 ? '#4FA36E' : '#5DB27A', { at: [x, h + 0.04 + 0.075 * s, z] }, 7))
   }
   root.add(solid(merge(trees), bag, 1.5))
 
@@ -197,6 +230,7 @@ export function buildDiorama(bag: Bag, net: Net): Diorama {
     const g = new Group()
     const [x, z] = modelAt(id)
     g.position.set(x, y(x, z), z)
+    g.scale.setScalar(PLACE_SCALE)
     // (The parts are built in board coordinates: move them under the group's origin.)
     for (const p of parts) p.translate(-x, -y(x, z), -z)
     g.add(solid(merge(parts), bag, px))
@@ -213,14 +247,27 @@ export function buildDiorama(bag: Bag, net: Net): Diorama {
     ...[[-0.06, 0.04], [0.05, 0.06], [0.02, -0.05], [-0.07, -0.04], [0.08, -0.01]].map(([dx, dz]) => P.sphere(0.022, '#FFFFFF', { at: [mx + dx, mg + 0.37, mz + dz], scale: [1, 0.5, 1] }, 8)),
     // Rows of sawdust bags by the house.
     ...[0, 1, 2].map((k) => P.capsule(0.022, 0.04, '#E9E1D2', { at: [mx + 0.2, mg + 0.035, mz - 0.06 + k * 0.06], rot: [0, 0, Math.PI / 2] })),
+    ...[[-0.19, 0.1], [-0.15, 0.15], [0.12, 0.14], [-0.2, -0.06]].flatMap(([dx, dz], k) => [
+      P.cyl(0.008, 0.01, 0.03, '#FFF1E2', { at: [mx + dx, mg + 0.015, mz + dz] }, 6),
+      P.sphere(0.025, k % 2 ? PAL.pink : PAL.hotpink, { at: [mx + dx, mg + 0.032, mz + dz], scale: [1, 0.55, 1] }, 8),
+    ]),
   ]
-  const [rx, rz] = at('rice')
+  const [rx, rz0] = at('rice')
+  let rz = rz0
   const rg = y(rx, rz)
   const steps: ReturnType<typeof P.box>[] = []
+  // The steps climb the hillside toward the back (north), each one a curved paddy with water shining on it and a row of
+  // young rice along its lip.
   for (let k = 0; k < 5; k++) {
-    const r = 0.34 - k * 0.055
-    steps.push(P.cyl(r, r + 0.01, 0.05, k % 2 ? '#8FD67C' : '#A2E08A', { at: [rx, rg + 0.025 + k * 0.05, rz] }, 20), P.cyl(r - 0.02, r - 0.02, 0.006, '#C3E9F7', { at: [rx, rg + 0.051 + k * 0.05, rz] }, 20))
+    const r = 0.3 - k * 0.045
+    const cz = rz - k * 0.035
+    steps.push(
+      P.cyl(r, r + 0.012, 0.05, k % 2 ? '#8FD67C' : '#A2E08A', { at: [rx, rg + 0.025 + k * 0.05, cz], scale: [1.15, 1, 0.8] }, 22),
+      P.cyl(r - 0.025, r - 0.025, 0.006, k === 2 ? '#F3E3A0' : '#C3E9F7', { at: [rx, rg + 0.051 + k * 0.05, cz], scale: [1.15, 1, 0.8] }, 22),
+      ...[-0.6, -0.2, 0.2, 0.6].map((a) => P.cone(0.012, 0.03, '#6FBF7F', { at: [rx + Math.sin(a) * (r - 0.012) * 1.15, rg + 0.065 + k * 0.05, cz + Math.cos(a) * (r - 0.012) * 0.8] }, 5)),
+    )
   }
+  rz -= 0.14
   const top = rg + 0.25
   const rice = [
     ...steps,

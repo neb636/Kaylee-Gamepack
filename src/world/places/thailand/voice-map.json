@@ -1701,6 +1701,587 @@
     "file": "beda945df11d.mp3"
   },
   {
+    "text": "Press the key!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1350,
+    "file": "90dc5a60e126.mp3"
+  },
+  {
+    "text": "Put the bags in the car!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1608,
+    "file": "3c868126b5fc.mp3"
+  },
+  {
+    "text": "Click your seatbelt, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2388,
+    "file": "ce744a2fb134.mp3"
+  },
+  {
+    "text": "Sawasdee ka! Here is your key!",
+    "voice": "clerk",
+    "sig": "8ecbc394e7",
+    "ms": 3150,
+    "file": "85dbcd7fe81f.mp3"
+  },
+  {
+    "text": "Have a happy trip!",
+    "voice": "clerk",
+    "sig": "8ecbc394e7",
+    "ms": 1502,
+    "file": "427d5ef7f609.mp3"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "clerk",
+    "sig": "8ecbc394e7",
+    "ms": 583,
+    "file": "e5cabbe295a3.mp3"
+  },
+  {
+    "text": "Welcome to Nan!",
+    "voice": "clerk",
+    "sig": "8ecbc394e7",
+    "ms": 1639,
+    "file": "909320501c50.mp3"
+  },
+  {
+    "text": "What a big car!",
+    "voice": "clerk",
+    "sig": "8ecbc394e7",
+    "ms": 1601,
+    "file": "b644b463db44.mp3"
+  },
+  {
+    "text": "Ding! Yes please?",
+    "voice": "clerk",
+    "sig": "8ecbc394e7",
+    "ms": 2190,
+    "file": "fe5494d61388.mp3"
+  },
+  {
+    "text": "Whoa! Beep beep!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1706,
+    "file": "e009a624fb40.mp3"
+  },
+  {
+    "text": "In they go!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1004,
+    "file": "0af5f6e3b681.mp3"
+  },
+  {
+    "text": "Ready? Let's go!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2576,
+    "file": "511996bced0f.mp3"
+  },
+  {
+    "text": "Where shall we go first, Kaylee?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2796,
+    "file": "4480dd4c28f3.mp3"
+  },
+  {
+    "text": "Tap a place to drive there!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2333,
+    "file": "55ed00da0213.mp3"
+  },
+  {
+    "text": "Home, or one more?",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1916,
+    "file": "3f066201ab9a.mp3"
+  },
+  {
+    "text": "Time to fly home!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1586,
+    "file": "c6803f83d443.mp3"
+  },
+  {
+    "text": "Over there is Laos, another country!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3043,
+    "file": "a6dfffd05758.mp3"
+  },
+  {
+    "text": "Steer the car with your finger, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3318,
+    "file": "f3c6c523d6b6.mp3"
+  },
+  {
+    "text": "Beep before the bend!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1682,
+    "file": "21610959d319.mp3"
+  },
+  {
+    "text": "We're driving into a cloud!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2165,
+    "file": "ad6116dcd72e.mp3"
+  },
+  {
+    "text": "Let's count the bends!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1673,
+    "file": "dd7390d12e14.mp3"
+  },
+  {
+    "text": "Draw the three with your finger!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1830,
+    "file": "7969afa31278.mp3"
+  },
+  {
+    "text": "Three! Kaylee drove the three!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2610,
+    "file": "85d9e94d1bb3.mp3"
+  },
+  {
+    "text": "Steer for me, Kaylee!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1473,
+    "file": "560661fa97da.mp3"
+  },
+  {
+    "text": "Keep left!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1375,
+    "file": "68c1177bc99f.mp3"
+  },
+  {
+    "text": "A buffalo! Let's wait.",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2259,
+    "file": "70de019e0ddc.mp3"
+  },
+  {
+    "text": "Slow round the bend.",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1701,
+    "file": "34bba919de36.mp3"
+  },
+  {
+    "text": "The mushroom farm!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1706,
+    "file": "6bb7ad20b1d0.mp3"
+  },
+  {
+    "text": "Stop Time Cafe!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1743,
+    "file": "dec2222db20c.mp3"
+  },
+  {
+    "text": "Bo Kluea! The salt village!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2501,
+    "file": "632b48d57ce6.mp3"
+  },
+  {
+    "text": "The market!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 922,
+    "file": "13ac76c658a1.mp3"
+  },
+  {
+    "text": "Look how high we are!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1912,
+    "file": "881c58498127.mp3"
+  },
+  {
+    "text": "Whoa!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 898,
+    "file": "cf36a805956c.mp3"
+  },
+  {
+    "text": "I can't see a thing!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1559,
+    "file": "d5293c938031.mp3"
+  },
+  {
+    "text": "Sunshine! Above the clouds!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2872,
+    "file": "a8811655fb9f.mp3"
+  },
+  {
+    "text": "A monkey on the rail!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1888,
+    "file": "acb432dedf38.mp3"
+  },
+  {
+    "text": "Look! A waterfall!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1625,
+    "file": "f24ee9cdda29.mp3"
+  },
+  {
+    "text": "Swish, swish, go the wipers!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2230,
+    "file": "c561ea00bfb5.mp3"
+  },
+  {
+    "text": "Great driving, Kaylee!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1372,
+    "file": "00c54d3d3dd4.mp3"
+  },
+  {
+    "text": "Wheee! Bumpy!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1946,
+    "file": "70e1f4713375.mp3"
+  },
+  {
+    "text": "Are we there yet?",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 979,
+    "file": "c0f49a77f665.mp3"
+  },
+  {
+    "text": "Spray the bags, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2144,
+    "file": "f32d91ec8f14.mp3"
+  },
+  {
+    "text": "Pull the mushrooms off!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1994,
+    "file": "77fd814a3a6f.mp3"
+  },
+  {
+    "text": "More bags to spray!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1676,
+    "file": "4a60f9a122c1.mp3"
+  },
+  {
+    "text": "Put your mushrooms on the pizza!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1997,
+    "file": "ae8e2dddfb8b.mp3"
+  },
+  {
+    "text": "Hold your finger on the bags!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2121,
+    "file": "b8b87516af2b.mp3"
+  },
+  {
+    "text": "Pull a mushroom into the basket!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2555,
+    "file": "8582f56b5465.mp3"
+  },
+  {
+    "text": "Drag a mushroom to the pizza!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2144,
+    "file": "091e7037d867.mp3"
+  },
+  {
+    "text": "Tap the oven!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1786,
+    "file": "50ebf4757f85.mp3"
+  },
+  {
+    "text": "Tap the pizza to share it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2371,
+    "file": "934fbd982c55.mp3"
+  },
+  {
+    "text": "Mushrooms grow from sawdust, not seeds!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4002,
+    "file": "c85be58b8e1a.mp3"
+  },
+  {
+    "text": "My mushrooms are thirsty!",
+    "voice": "farmer",
+    "sig": "b380f72617",
+    "ms": 2426,
+    "file": "4aecf410fb41.mp3"
+  },
+  {
+    "text": "Look at them grow!",
+    "voice": "farmer",
+    "sig": "b380f72617",
+    "ms": 1731,
+    "file": "23881248100e.mp3"
+  },
+  {
+    "text": "Pink ones and gold ones!",
+    "voice": "farmer",
+    "sig": "b380f72617",
+    "ms": 2546,
+    "file": "47b5270650b7.mp3"
+  },
+  {
+    "text": "Into the oven!",
+    "voice": "farmer",
+    "sig": "b380f72617",
+    "ms": 1320,
+    "file": "581af0fd097e.mp3"
+  },
+  {
+    "text": "Ha ha ha!",
+    "voice": "farmer",
+    "sig": "b380f72617",
+    "ms": 1202,
+    "file": "d8c308aec07e.mp3"
+  },
+  {
+    "text": "Good spraying!",
+    "voice": "farmer",
+    "sig": "b380f72617",
+    "ms": 1316,
+    "file": "afbf6cf4c08c.mp3"
+  },
+  {
+    "text": "Yummy mushrooms!",
+    "voice": "farmer",
+    "sig": "b380f72617",
+    "ms": 1702,
+    "file": "586891a1dd3e.mp3"
+  },
+  {
+    "text": "A mushroom hat?!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1215,
+    "file": "318670b17637.mp3"
+  },
+  {
+    "text": "A giant mushroom!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2167,
+    "file": "07091fb803ad.mp3"
+  },
+  {
+    "text": "Mmm! Mushroom pizza!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2140,
+    "file": "49d2032f39b6.mp3"
+  },
+  {
+    "text": "Spray me again!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1315,
+    "file": "ccb4d707f4dc.mp3"
+  },
+  {
+    "text": "So many mushrooms!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1952,
+    "file": "36cc85ad9b92.mp3"
+  },
+  {
+    "text": "A slice for everyone!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1658,
+    "file": "d3460b7fb361.mp3"
+  },
+  {
+    "text": "Dip the bucket in the well, Kaylee!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3141,
+    "file": "21941d34b701.mp3"
+  },
+  {
+    "text": "Put a log on the fire!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1370,
+    "file": "a49895b9ba23.mp3"
+  },
+  {
+    "text": "Scrape up the salt!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2975,
+    "file": "9c5d3ec179bd.mp3"
+  },
+  {
+    "text": "Pull the bucket down into the well!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2771,
+    "file": "297c1c6a0a34.mp3"
+  },
+  {
+    "text": "Carry it over the big pan!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2221,
+    "file": "44cc75dac751.mp3"
+  },
+  {
+    "text": "Throw a log in the fire!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2396,
+    "file": "c2c0507b055a.mp3"
+  },
+  {
+    "text": "Move the paddle through the salt!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2644,
+    "file": "2170dd28051b.mp3"
+  },
+  {
+    "text": "The water boils away, and the salt stays!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4227,
+    "file": "8bbbb92f90e0.mp3"
+  },
+  {
+    "text": "This well is very salty!",
+    "voice": "saltaunty",
+    "sig": "501a2e7836",
+    "ms": 2654,
+    "file": "f95642bf89ac.mp3"
+  },
+  {
+    "text": "Now we light the fire!",
+    "voice": "saltaunty",
+    "sig": "501a2e7836",
+    "ms": 1917,
+    "file": "5fb22ec2f40e.mp3"
+  },
+  {
+    "text": "Look! White salt!",
+    "voice": "saltaunty",
+    "sig": "501a2e7836",
+    "ms": 1758,
+    "file": "c0b01d7c978c.mp3"
+  },
+  {
+    "text": "Salt for everyone!",
+    "voice": "saltaunty",
+    "sig": "501a2e7836",
+    "ms": 1766,
+    "file": "0af5b231af8e.mp3"
+  },
+  {
+    "text": "Hee hee! Taste it!",
+    "voice": "saltaunty",
+    "sig": "501a2e7836",
+    "ms": 1985,
+    "file": "fad7518c23a7.mp3"
+  },
+  {
+    "text": "Strong girl!",
+    "voice": "saltaunty",
+    "sig": "501a2e7836",
+    "ms": 1210,
+    "file": "878184d775c6.mp3"
+  },
+  {
+    "text": "Hot, hot fire!",
+    "voice": "saltaunty",
+    "sig": "501a2e7836",
+    "ms": 2207,
+    "file": "edfb511e641c.mp3"
+  },
+  {
+    "text": "Ow! A salty foot!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2044,
+    "file": "24e08010245f.mp3"
+  },
+  {
+    "text": "Too salty? Ha ha!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1836,
+    "file": "031b3ec931eb.mp3"
+  },
+  {
+    "text": "Look at that steam!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1392,
+    "file": "f671e837fc96.mp3"
+  },
+  {
+    "text": "Salt from a well!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1255,
+    "file": "cc8fbdc17405.mp3"
+  },
+  {
     "text": "It's cool and rainy in the mountains!",
     "voice": "ji",
     "sig": "ba2e98c34e",
@@ -1734,6 +2315,13 @@
     "sig": "ba2e98c34e",
     "ms": 1682,
     "file": "7fa7330cd98f.mp3"
+  },
+  {
+    "text": "Pink mushroom sticker! Mushrooms love the rain.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4765,
+    "file": "ffba4b223b64.mp3"
   },
   {
     "text": "Nan is in the mountains, next to Laos!",

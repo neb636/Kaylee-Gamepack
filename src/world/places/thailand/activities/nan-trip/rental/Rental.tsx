@@ -1,10 +1,12 @@
 // The rental desk's screen: the 3D hall and car park (rental3d.ts) with their tap targets and the 👆 after a while with
-// nothing touched. Buckled up and driven off: `onDone` (the Nan map).
+// nothing touched. Sparkle sits in the corner (trip/legs/Guide.tsx) and the clerk, Mommy and Daddy talk out loud in
+// their own voices. Buckled up and driven off: `onDone` (the Nan map).
 import { motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import type { Round } from './layout'
 import { RENTAL_ANCHORS, RentalDesk } from './rental3d'
 
@@ -19,6 +21,7 @@ export function Rental({ round, onRound, onDone }: Props) {
   const [key, setKey] = useState(0)
   const worldRef = useRef<RentalDesk | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   // A rebuilt world (a lost GPU context) starts where she is now, not where the link was.
   const now = useRef(round)
   const cb = useRef({ onRound, onDone })
@@ -28,7 +31,7 @@ export function Rental({ round, onRound, onDone }: Props) {
     const w = new RentalDesk(
       renderer,
       {
-        say: () => {},
+        say: (l) => guideRef.current?.speak(l),
         section: () => {},
         done: () => {},
         round: (r) => {
@@ -75,6 +78,7 @@ export function Rental({ round, onRound, onDone }: Props) {
           🔑 Tap to wake the rental desk
         </button>
       )}
+      {mode === 'webgl' && <TripGuide ref={guideRef} />}
     </div>
   )
 }
