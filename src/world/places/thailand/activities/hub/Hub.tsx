@@ -46,6 +46,9 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   // The pictures on its door (the mirror takes them): saved on the iPad; a link's ?door= puts its own there.
   const [savedDoor, saveDoor] = useSaved<DoorPhoto[]>(DOOR_KEY, [])
   const [startDoor] = useState(() => (param('door') ? parseDoor(param('door')) : cleanDoor(savedDoor)))
+  // The pictures and the drawer as the address bar shows them (so a copied link reproduces the door).
+  const doorNow = useRef<{ photos: DoorPhoto[]; drawer: DrawerId | null }>({ photos: startDoor, drawer: null })
+  const wardrobeState = () => ({ ...(doorNow.current.drawer ? { drawer: doorNow.current.drawer } : {}), ...(doorNow.current.photos.length ? { door: doorNow.current.photos.map((p) => p.look).join(';') } : {}) })
   const wardrobe = useRef<WardrobePlugin | null>(null)
   const [startDrawer] = useState(() => (initial.section === 'wardrobe' ? ((param('drawer') || null) as DrawerId | null) : null))
   // The mirror button's sparkle across the screen as she pops over to her wardrobe.
@@ -68,7 +71,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const trips = TRIP_CHOICES.filter((t) => meta.activities.some((a) => a.id === t.id))
 
   useEffect(() => {
-    enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : startDrawer ? { drawer: startDrawer } : {})
+    doorNow.current.drawer = startDrawer
+    enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : initial.section === 'wardrobe' ? wardrobeState() : {})
     if (initial.section !== 'arrive') arrivedThisVisit = true
     if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section === 'wardrobe' ? 'upstairs' : initial.section
     if (initial.section === 'upstairs' && !askedThisVisit) ask(4000)
@@ -95,7 +99,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       // Mommy waits to ask about a trip until she's done dressing up.
       clearTimeout(askTimer.current)
       setAsking(false)
-      enter('wardrobe', drawer ? { drawer } : {})
+      doorNow.current.drawer = drawer
+      enter('wardrobe', wardrobeState())
     } else {
       enter('upstairs')
       // Mommy sees her new look from across the room, once the doors are shut.
@@ -124,7 +129,11 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
         onState: (open, drawer) => wardrobeEvents.current.onWardrobe(open, drawer),
         onLook: (style) => wardrobeEvents.current.onLook(style),
         say: (line) => sayRef.current(line),
-        onPhotos: (list) => saveDoor(list),
+        onPhotos: (list) => {
+          saveDoor(list)
+          doorNow.current.photos = list
+          if (wardrobe.current?.isOpen) enter('wardrobe', wardrobeState())
+        },
       },
       { open: initial.section === 'wardrobe', drawer: startDrawer, door: startDoor },
     )
@@ -132,11 +141,12 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     return onWall.size ? bothPlugins(w, new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos')) : w
   }
   // Tap Mommy and she asks after her hello; tap Daddy and he asks instead of saying hello.
-  const onGreet = (id: string) => {
+  const onGreet = (id: string, noticed = false) => {
     if (photo || arriving) return false
     if (id === 'ji') ask(1200)
     if (id !== 'nick') return false
-    ask(250, 'nick')
+    // (Daddy first says what he thinks of her look, then asks.)
+    ask(noticed ? 2800 : 250, 'nick')
     return true
   }
   /** Mommy asks if she's ready to go on a trip (her room is upstairs, by the suitcase); Daddy asks on the street. */

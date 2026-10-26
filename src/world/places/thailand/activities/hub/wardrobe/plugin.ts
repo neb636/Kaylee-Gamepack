@@ -185,6 +185,11 @@ export class WardrobePlugin implements HousePlugin {
     this.later.push({ t: sec, f })
   }
 
+  /** Are the doors open (the Hub keeps the address bar on it)? */
+  get isOpen() {
+    return this.open
+  }
+
   private get kaylee() {
     return this.house.kaylee
   }
@@ -353,6 +358,7 @@ export class WardrobePlugin implements HousePlugin {
       const tex = new TextureLoader().load(ph.img)
       tex.colorSpace = SRGBColorSpace
       mat.map = tex
+      bag.add(tex)
       holder.userData.tex = tex
     }
     const pic = new Mesh(new PlaneGeometry(iw, (iw * 4) / 3), mat)

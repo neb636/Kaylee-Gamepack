@@ -60,7 +60,7 @@ export interface HouseEvents {
   /** She tapped a thing (Sparkle may tell her about it). */
   onPoke?(id: string): void
   /** She tapped someone in the family, who waved (and said hi, unless this returns true: they speak up instead). */
-  onGreet?(id: string): boolean | void
+  onGreet?(id: string, noticed?: boolean): boolean | void
 }
 
 /** Where a family member is (a spot like the ones in family.ts), or hidden (packed in a suitcase!). */
@@ -557,7 +557,14 @@ export class House implements World3D {
     const s = m && this.spotOf(m)
     if (!m || !s || !who || !this.familyVisible(`family:${id}`)) return
     who.react('wave')
-    if (!this.events.onGreet?.(id)) this.hello(m, who, true)
+    // A new look first (notice.ts): "Ooh, a crown, Kaylee!" instead of the hello, which waits for the next tap. Daddy
+    // notices before he asks about a trip (the Hub holds his question back while he talks).
+    const note = noticeLine(m.id, this.kaylee.myLook)
+    const handled = this.events.onGreet?.(id, !!note)
+    if (note) {
+      if (who.onPhone) sfx.phone()
+      void say(note)
+    } else if (!handled) this.hello(m, who)
     const face = s.face * deg
     // Stand in front of them (or as close as there's room), then they hop together.
     const front: XZ = [s.x + Math.sin(face) * 0.95, s.z + Math.cos(face) * 0.95]
@@ -597,14 +604,7 @@ export class House implements World3D {
 
   /** They say hi in their own voice: Sawasdee the first time, then something else each time (the big cousins mumble
    *  it over the tap-tap of their phones). */
-  private hello(m: (typeof FAMILY)[number], who: Member, tapped = false) {
-    // A new look first (notice.ts): "Ooh, a crown, Kaylee!" instead of the hello, which waits for the next tap.
-    const note = tapped ? noticeLine(m.id, this.kaylee.myLook) : null
-    if (note) {
-      if (who.onPhone) sfx.phone()
-      void say(note)
-      return
-    }
+  private hello(m: (typeof FAMILY)[number], who: Member) {
     const n = this.greeted.get(m.id) ?? 0
     this.greeted.set(m.id, n + 1)
     const lines = L.family[m.id]
