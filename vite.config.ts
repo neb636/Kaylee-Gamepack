@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import posthog from '@posthog/rollup-plugin'
 import { offline } from './scripts/vite-offline'
 import { plans } from './scripts/vite-plans'
+import { lockPlace } from './scripts/vite-lock'
 
 // BASE_PATH is set by the deploy workflows:
 //   main:     /Kaylee-Gamepack/
@@ -10,6 +11,7 @@ import { plans } from './scripts/vite-plans'
 // Only the main deploy sets POSTHOG_API_KEY and POSTHOG_PROJECT_ID: the build then uploads source
 // maps to PostHog error tracking (and deletes them, so they aren't published) and tags exceptions
 // with the commit.
+// LOCK_CODE (the THAILAND_CODE secret) locks Thailand behind the family code: see scripts/vite-lock.ts.
 const { POSTHOG_API_KEY, POSTHOG_PROJECT_ID, VITE_POSTHOG_HOST, GITHUB_SHA } = process.env
 
 export default defineConfig({
@@ -29,6 +31,9 @@ export default defineConfig({
           deleteAfterUpload: true,
         },
       }),
+    // Last, so it encrypts the finished files: with LOCK_CODE set, Thailand's code needs the family code to load
+    // (its 3D house is the family's real home). Unset (dev, tests) nothing is locked. scripts/vite-lock.ts
+    lockPlace('thailand'),
   ],
   server: { host: true },
   preview: { host: true },

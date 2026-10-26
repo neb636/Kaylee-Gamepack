@@ -5,6 +5,7 @@ import { say, sounds } from '../sdk'
 import balloon from './assets/balloon.webp'
 import globe from './assets/globe.webp'
 import { WORLD_LINES } from './lines'
+import { needsCode } from './lock'
 import type { PlaceEntry } from './registry'
 
 export function Travel({ entry, onDone }: { entry: PlaceEntry; onDone: () => void }) {
@@ -17,7 +18,7 @@ export function Travel({ entry, onDone }: { entry: PlaceEntry; onDone: () => voi
   useEffect(() => {
     sounds.whoosh()
     void say(WORLD_LINES.takeoff)
-    void entry.load() // start downloading the country while we fly
+    if (!needsCode(entry.meta.id)) void entry.load() // start downloading the country while we fly (a locked one can't yet)
     const t = setTimeout(finish, 2800)
     return () => clearTimeout(t)
   }, [entry])
