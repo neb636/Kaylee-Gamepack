@@ -1,7 +1,8 @@
 // The mountain road (section `drive`, plan: thailand/nan-trip.html, "The mountain road"; built: steps 1, 8 and 9, the
 // road, its look and its voices). Mommy drives the big silver Pajero and Kaylee steers it: it always rolls forward
-// (Mommy's foot), and her finger, anywhere on the road ahead, picks where across the road it goes. Let go and Mommy
-// keeps it in the left lane by herself (Thailand keeps left). Mommy slows for the bends (the body leans out), stops for
+// (Mommy's foot), and she steers it like a sled: her finger goes down anywhere, a ring appears under it, and pushing
+// the knob left or right slides the Pajero that way across the road (further from the middle = faster). Let go and Mommy
+// eases it back into the left lane by herself (Thailand keeps left). Mommy slows for the bends (the body leans out), stops for
 // a buffalo crossing (the body squats), and the road boings the car back like a pinball bumper if she steers into the
 // edge (Daddy: "Whoa!"). No crashes, no leaving the road.
 //
@@ -25,8 +26,8 @@
 // numbers) and, after ~8 s with nothing touched, how to steer; the family react (each thing once, nothing stacked:
 // a reaction is dropped while someone's talking).
 //
-// The screen (Drive.tsx) draws the steering wheel with its horn, the count's big numbers, Sparkle and the end card; the
-// wheel's turn, the hint finger and the tap targets are written here every frame.
+// The screen (Drive.tsx) draws the steering wheel with its horn, the steering ring, the count's big numbers, Sparkle and
+// the end card; the wheel's turn, the ring and its knob, the hint finger and the tap targets are written here every frame.
 import { Color, Fog, Group, Mesh, MeshBasicMaterial, Scene, Vector3, type WebGLRenderer, BufferGeometry, BufferAttribute } from 'three'
 import { clamp, sounds, speakingVoice, type Line } from '../../../../../../sdk'
 import { Avatar } from '../../../characters/avatar'
@@ -71,8 +72,15 @@ export interface DriveEvents {
 /** Where a drive starts: rolling at the start of the road, or (the 3 road) parked at the viewpoint, the 3 below. */
 export type DriveStart = 'road' | 'view'
 
-/** The heavy, bouncy Pajero: slower than the longtail, slow to turn, leaning a lot. */
-const PAJERO_FEEL: Feel = { top: 9.5, boost: 1.2, accel: 4, coast: 0.6, turn: 1.15, grip: 7, near: 2, far: 7, dead: 0.02, lean: 0.12 }
+/** The heavy, bouncy Pajero, leaning a lot. 60% quicker than it first was (top 9.5, accel 4, turn 1.15): the turn rate
+ *  rises with it so it still holds the same line round the hairpins. */
+const ZOOM = 1.6
+const PAJERO_FEEL: Feel = { top: 9.5 * ZOOM, boost: 1.2, accel: 4 * ZOOM, coast: 0.6, turn: 1.15 * ZOOM, grip: 7, near: 2, far: 7, dead: 0.02, lean: 0.12 }
+/** The steering ring (sled style): how far across the road the knob pushed all the way slides it (m/s), the middle
+ *  that counts as straight (share of the ring), and how quickly Mommy eases it back into her lane after she lets go (s). */
+const SLIDE = 7.5
+const STICK_DEAD = 0.12
+const BACK_S = 1.4
 
 /** The road's tap targets: the Pajero (Daddy in it, the elephant toy, the wipers), then whoever is on the road this
  *  drive (`traffic`: its roll). */
@@ -155,7 +163,12 @@ export class NanDrive implements World3D {
   time = 0
   /** Where the car is on the road. */
   private loc = { i: 0, s: 0, lat: 0 }
-  private finger: { x: number; y: number; steering: boolean; t: number; id?: string } | null = null
+  /** Her finger: where it is now, and where it went down (the steering ring's middle). */
+  private finger: { x: number; y: number; ox: number; oy: number; steering: boolean; t: number; id?: string } | null = null
+  /** Where across the road she's steering to (m): the ring's knob slides it; let go and it eases back into her lane. */
+  private steerLat = LANE_LAT
+  /** The ring's knob, -1..1 across the road (+ toward +lat), for the wheel and QA. */
+  private stick = 0
   private w = 1
   private h = 1
   private camHeading = 0
@@ -183,6 +196,7 @@ export class NanDrive implements World3D {
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
   private wheelEl: HTMLElement | null = null
+  private stickEl: HTMLElement | null = null
   private counts = { honks: 0, boings: 0, pokes: 0, steered: 0, keptLeft: 0, wipes: 0, splashes: 0 }
   private ev: TrafficEvents
   /** This drive's weather (rolled, or the link's). */
@@ -379,12 +393,17 @@ export class NanDrive implements World3D {
   setWheelElement(el: HTMLElement | null) {
     this.wheelEl = el
   }
+  /** The steering ring: it appears where her finger went down, the knob following it. */
+  setStickElement(el: HTMLElement | null) {
+    this.stickEl = el
+  }
 
   pointerDown(x: number, y: number, id?: string) {
     this.lastTouch = this.time
-    // A finger on the road steers at once; one on a tap target steers too once it moves or is held a moment (a quick
-    // tap there pokes it).
-    this.finger = { x, y, steering: !id, t: this.time, id }
+    // A finger on the road steers at once (the ring appears under it); one on a tap target steers too once it moves or
+    // is held a moment (a quick tap there pokes it).
+    this.finger = { x, y, ox: x, oy: y, steering: !id, t: this.time, id }
+    this.steerLat = this.loc.lat
   }
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
     const f = this.finger
@@ -396,6 +415,7 @@ export class NanDrive implements World3D {
   pointerUp() {
     if (this.finger?.steering) this.d.release()
     this.finger = null
+    this.stick = 0
   }
 
   tap(_x: number, _y: number, id?: string) {
@@ -540,6 +560,7 @@ export class NanDrive implements World3D {
     const back = tmp.set(cam.position.x - this.d.x, 0, cam.position.z - this.d.z).normalize()
     this.lights.sun.position.set(this.d.x + back.x * 7 - back.z * 4, this.carY() + 10, this.d.z + back.z * 7 + back.x * 4)
     this.writeWheel()
+    this.writeStick()
     this.hint(t)
     this.emitHud()
   }
@@ -550,19 +571,23 @@ export class NanDrive implements World3D {
     const d = this.d
     const half = road.half
     const s = this.loc.s
-    let lat = LANE_LAT
     let ds = 10 + Math.abs(d.speed) * 0.9
     const f = this.finger
     if (this.phase === 'drive' && f?.steering) {
-      const on = this.fingerOnRoad(f.x, f.y)
-      if (on) {
-        // (A little past the edge is allowed: that's how she finds the rail's boing.)
-        lat = clamp(on.lat, -(half + 1.5), half + 1.5)
-        ds = clamp(on.s - s, 8, 22)
+      // Sled style: the knob's push across the road slides her that way, as long as she holds it there.
+      this.stick = this.stickAcross(f)
+      const k = Math.abs(this.stick) < STICK_DEAD ? 0 : Math.sign(this.stick) * ((Math.abs(this.stick) - STICK_DEAD) / (1 - STICK_DEAD))
+      // (A little past the edge is allowed: that's how she finds the rail's boing.)
+      this.steerLat = clamp(this.steerLat + k * SLIDE * dt, -(half + 1.5), half + 1.5)
+      if (k !== 0) {
         this.counts.steered += dt
         this.lastSteer = this.time
       }
+    } else {
+      // Let go: Mommy eases it back into the left lane.
+      this.steerLat += (LANE_LAT - this.steerLat) * (1 - Math.exp(-dt / BACK_S))
     }
+    let lat = this.steerLat
     // Keep left: someone coming the other way and she's over the middle: Mommy eases her back toward her lane.
     const her = this.her()
     const oncoming = this.traffic.movers.some((m) => m.state === 'go' && m.s - s > -2 && m.s - s < 34)
@@ -574,7 +599,8 @@ export class NanDrive implements World3D {
     let cap = 0.9 * (1 - clamp((Math.abs(road.bendAhead(s, 22)) - 0.35) * 0.4, 0, 0.45))
     if (this.cloudK > 0.3) cap *= 0.8
     const block = this.traffic.blockAhead(her)
-    cap *= clamp((block - 13) / 13, 0, 1)
+    // (Quicker now, so she starts braking a little further back.)
+    cap *= clamp((block - 14) / 17, 0, 1)
     const stopAt = road.length - 14
     if (this.phase === 'drive' && s > stopAt - 34) {
       this.setPhase('arrive')
@@ -588,6 +614,7 @@ export class NanDrive implements World3D {
     if (this.phase !== 'drive') {
       // Into the side of the road by the stop, and stopped.
       lat = half - 1.4
+      this.steerLat = lat
       ds = clamp(stopAt - s, 3, 14)
       cap = Math.min(cap, clamp((stopAt - s) / 12, 0, 0.7))
       if (this.phase === 'arrive' && Math.abs(d.speed) < 0.6 && this.phaseT > 1) this.setPhase('view')
@@ -1143,42 +1170,37 @@ export class NanDrive implements World3D {
     return { x: ((v.x + 1) / 2) * this.w, y: ((1 - v.y) / 2) * this.h }
   }
 
-  /** Where her finger points on the road ahead: the stretch of road under it on screen, and how far across. (The road
-   *  climbs and turns, so this reads the road as it looks, not a flat plane.) */
-  private fingerOnRoad(fx: number, fy: number) {
-    const road = this.r.road
-    const s0 = this.loc.s
-    let prev: { s: number; c: { x: number; y: number } } | null = null
-    let best: { s: number; d: number } | null = null
-    let hit: number | null = null
-    for (let ds = 3; ds <= 70; ds += 1.5) {
-      const s = s0 + ds
-      if (s > road.length) break
-      const p = road.spotAt(s, 0)
-      const c = this.project(p.x, p.y, p.z)
-      if (!c) continue
-      if (prev && (prev.c.y - fy) * (c.y - fy) <= 0) {
-        const w = (fy - prev.c.y) / (c.y - prev.c.y || 1)
-        hit = prev.s + (s - prev.s) * w
-        break
-      }
-      const dd = Math.abs(c.y - fy)
-      if (!best || dd < best.d) best = { s, d: dd }
-      prev = { s, c }
+  /** The steering ring's radius on screen (px): a good thumb's reach on an iPad, smaller on a phone. */
+  private get stickR() {
+    return clamp(Math.min(this.w, this.h) * 0.12, 56, 92)
+  }
+
+  /** How far the knob is pushed across the road (-1..1, + toward +lat): the ring's push, read along the way the road
+   *  runs across the screen just ahead (so "right" on screen is right on the road, even round a hairpin). */
+  private stickAcross(f: { x: number; y: number; ox: number; oy: number }) {
+    const R = this.stickR
+    let dx = (f.x - f.ox) / R
+    let dy = (f.y - f.oy) / R
+    const len = Math.hypot(dx, dy)
+    if (len > 1) {
+      dx /= len
+      dy /= len
     }
-    const s = hit ?? best?.s
-    if (s === undefined) return null
+    const road = this.r.road
+    const s = Math.min(road.length, this.loc.s + 10)
     const m = road.spotAt(s, 0)
     const e = road.spotAt(s, road.half)
     const c = this.project(m.x, m.y, m.z)
     const l = this.project(e.x, e.y, e.z)
-    if (!c || !l) return null
+    if (!c || !l) return clamp(dx, -1, 1)
     const vx = l.x - c.x
     const vy = l.y - c.y
-    const len2 = vx * vx + vy * vy
-    if (len2 < 1) return null
-    return { s, lat: (((fx - c.x) * vx + (fy - c.y) * vy) / len2) * road.half }
+    const vl = Math.hypot(vx, vy)
+    if (vl < 1) return clamp(dx, -1, 1)
+    // (Mostly sideways on screen: only the left-right part of the push steers.)
+    return clamp(dx * Math.sign(vx || 1) + dy * (vy / vl) * 0.3, -1, 1)
   }
+
 
   private toScreen(at: Vector3, r: number, max = 140) {
     const cam = this.rig.camera
@@ -1249,7 +1271,30 @@ export class NanDrive implements World3D {
     el.style.setProperty('--turn', `${turn.toFixed(1)}deg`)
   }
 
-  /** Not steering for a while (or never yet): a finger on the road ahead, sweeping across it. */
+  /** The steering ring: under her finger while she steers, the knob following it (held inside the ring). */
+  private writeStick() {
+    const el = this.stickEl
+    if (!el) return
+    const f = this.finger
+    const show = this.phase === 'drive' && !!f?.steering
+    const want = show ? '' : 'none'
+    if (el.style.display !== want) el.style.display = want
+    if (!show || !f) return
+    const R = this.stickR
+    let dx = f.x - f.ox
+    let dy = f.y - f.oy
+    const len = Math.hypot(dx, dy)
+    if (len > R) {
+      dx *= R / len
+      dy *= R / len
+    }
+    el.style.setProperty('--r', `${R.toFixed(0)}px`)
+    el.style.transform = `translate3d(${f.ox.toFixed(0)}px, ${f.oy.toFixed(0)}px, 0)`
+    const knob = el.firstElementChild?.nextElementSibling as HTMLElement | null
+    if (knob) knob.style.transform = `translate3d(${dx.toFixed(0)}px, ${dy.toFixed(0)}px, 0)`
+  }
+
+  /** Not steering for a while (or never yet): a finger sliding side to side low on the screen (the steering ring), or, drawing the 3, along the road. */
   private hint(t: number) {
     const el = this.hintEl
     if (!el) return
@@ -1259,8 +1304,9 @@ export class NanDrive implements World3D {
     const trace = this.tracing && !this.finger && T.t > 2.4 && T.auto < 0 && (T.s < 1 ? idle > 1.5 || T.t > 3.5 : idle > 5)
     const show = trace || (this.phase === 'drive' && !this.finger && ((this.counts.steered < 1 && t > 2.5 && idle > 2.5) || idle > 8))
     if (show) {
-      const p = trace ? this.r.road.spotAt(Math.min(this.r.road.length, T.s + ((t * 18) % 30)), 0) : this.r.road.spotAt(this.loc.s + 16, Math.sin(t * 1.6) * 2.6)
-      const c = this.project(p.x, p.y, p.z)
+      // (Driving: low on the screen, sliding side to side the way the steering ring works.)
+      const p = trace ? this.r.road.spotAt(Math.min(this.r.road.length, T.s + ((t * 18) % 30)), 0) : null
+      const c = p ? this.project(p.x, p.y, p.z) : { x: this.w / 2 + Math.sin(t * 1.6) * this.stickR * 0.9, y: this.h * 0.72 }
       if (c) el.style.transform = `translate3d(${c.x.toFixed(0)}px, ${c.y.toFixed(0)}px, 0)`
       else el.style.display = 'none'
     }
@@ -1300,6 +1346,8 @@ export class NanDrive implements World3D {
       warn: this.traffic.blindWarning(this.her()) !== null,
       ...this.counts,
       steered: r2(this.counts.steered),
+      stick: r2(this.stick),
+      steerLat: r2(this.steerLat),
       keptLeft: r2(this.counts.keptLeft),
       traffic: this.traffic.qa(),
     }

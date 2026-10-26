@@ -1,4 +1,5 @@
-// The mountain road's screen: the 3D road (mountain.ts) with its tap targets, the steering wheel in the corner (the whole
+// The mountain road's screen: the 3D road (mountain.ts) with its tap targets, the steering ring (sled style: it appears
+// under her finger and the knob follows it; mountain.ts places both every frame), the steering wheel in the corner (the whole
 // wheel is the horn, and it turns as the Pajero turns; it pulses when a car is coming round a blind bend), the 3 road's
 // big numbers as she counts the bends, the 👆 when she hasn't steered for a while, Sparkle in the other corner
 // (trip/legs/Guide.tsx: she and the family talk out loud in their own voices), and at the end of the road its stop
@@ -54,6 +55,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
   const worldRef = useRef<NanDrive | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const wheelRef = useRef<HTMLButtonElement>(null)
+  const stickRef = useRef<HTMLDivElement>(null)
   const guideRef = useRef<TripGuideHandle>(null)
   // This drive's weather and traffic: rolled for every road and every 🔁 (the link's weather for the first one).
   const [stated] = useState(linkWeather)
@@ -85,6 +87,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
     const w = new NanDrive(renderer, road, { onHud: setHud, onView: () => viewCb.current?.(), say: (l) => guideRef.current?.speak(l) }, view ? 'view' : 'road', roll, toRef.current, roll.from)
     w.setHintElement(hintRef.current)
     w.setWheelElement(wheelRef.current)
+    w.setStickElement(stickRef.current)
     return w
   }
   const pick = (r: RoadId) => {
@@ -107,7 +110,8 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
         anchors={(input, els) => (
           <>
             <Anchors list={driveAnchors(road, roll.traffic, to)} els={els} {...input} />
-            {/* Not steering for a while: a finger on the road ahead. */}
+            <Stick ref={stickRef} />
+            {/* Not steering for a while: a finger sliding side to side, the way the ring steers. */}
             <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
               <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 0.9, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
                 👆
@@ -186,6 +190,42 @@ const Wheel = forwardRef<HTMLButtonElement, { hidden?: boolean; onHorn: () => vo
         @keyframes nan-boss { 50% { transform: scale(1.18); fill: #FFC83D; } }
       `}</style>
     </>
+  )
+})
+
+/** The steering ring, sled style: a soft sky-blue ring centred where her finger went down, and a knob that follows her
+ *  finger (held inside the ring). mountain.ts shows it, places it (transform), sizes it (--r) and moves the knob. */
+const Stick = forwardRef<HTMLDivElement>(function Stick(_, ref) {
+  return (
+    <div ref={ref} aria-hidden style={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0, display: 'none', pointerEvents: 'none', zIndex: 19000 }}>
+      <div
+        style={{
+          position: 'absolute',
+          left: 'calc(var(--r, 72px) * -1)',
+          top: 'calc(var(--r, 72px) * -1)',
+          width: 'calc(var(--r, 72px) * 2)',
+          height: 'calc(var(--r, 72px) * 2)',
+          boxSizing: 'border-box',
+          borderRadius: '50%',
+          border: '7px solid rgba(110, 196, 240, .85)',
+          background: 'rgba(110, 196, 240, .14)',
+          boxShadow: '0 0 0 2px rgba(255,255,255,.55), inset 0 0 0 2px rgba(255,255,255,.55)',
+        }}
+      />
+      <div style={{ position: 'absolute', left: 0, top: 0, willChange: 'transform' }}>
+        <div
+          style={{
+            width: 'calc(var(--r, 72px) * 0.62)',
+            height: 'calc(var(--r, 72px) * 0.62)',
+            translate: '-50% -50%',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle at 35% 30%, #A9E2FF, #4FB4EA 70%)',
+            border: '4px solid #fff',
+            boxShadow: '0 4px 10px rgba(43,35,48,.3)',
+          }}
+        />
+      </div>
+    </div>
   )
 })
 
