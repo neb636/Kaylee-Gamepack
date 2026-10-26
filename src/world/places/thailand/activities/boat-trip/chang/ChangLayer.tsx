@@ -1,6 +1,7 @@
 // Baan Chang's way on (plan: thailand/baan-chang.html): one big pulsing button top right once the place she's at is done,
 // never forced (she can keep playing): 🥤 after a photo at the sign wall (up to the cafe), 🐘 once her chocolate milk is
-// ready (out onto the boardwalk), and after the splash 🚤 to the pier if she hasn't been on the boat yet, else ✈️🏠.
+// ready (out onto the boardwalk), and after the splash 🚤 to the pier if she hasn't been on the boat yet, else ✈️🏠 (the
+// real elephants' video plays first, chang/video.ts).
 import { AnimatePresence, motion } from 'motion/react'
 import { sounds } from '../../../../../../sdk'
 import type { BoatSection } from '../sections'

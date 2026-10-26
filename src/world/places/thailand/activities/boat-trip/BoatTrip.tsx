@@ -15,7 +15,8 @@
 //                           where she makes her chocolate milk (chang/cafe.ts; a big 🐘 when it's ready), down the
 //                           boardwalk to the elephants' yard, where she holds bananas and sugarcane out to the trunks;
 //                           then their favorites, Lamyai and Khanom's sneaky sips, and the rainbow splash (Daddy's photo
-//                           and Khanom's sticker, then 🚤 to the pier or, with the boat done, ✈️🏠). `been` says which of
+//                           and Khanom's sticker, then 🚤 to the pier or, with the boat done, ✈️🏠, after a video of
+//                           real elephants, chang/video.ts). `been` says which of
 //                           Krabi's two places are done: the pier at sunset offers 🐘 until Baan Chang is
 //   race, podium            through the bay's rainbow gate (bay/race-gate.ts), behind a checkered flag: the boat race
 //                           in its own lagoon (race/race.ts, its screen race/RaceLayer.tsx), three laps against the
@@ -39,6 +40,7 @@ import type { WebGLRenderer } from 'three'
 import { sounds, useSaved, type Line } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { useLandscape } from '../../../../kit/useLandscape'
+import { VideoBreak } from '../../../../kit/Theater'
 import { awardTrophy } from '../../../../../sdk/trophies'
 import { L } from '../../lines'
 import { Anchors } from '../../engine/Anchors'
@@ -65,6 +67,7 @@ import { Chang, CHANG_ANCHORS, type ChangSection } from './chang/chang'
 import { ChangDebug } from './chang/ChangDebug'
 import { ChangLayer } from './chang/ChangLayer'
 import { changOpen } from './chang/open'
+import { CHANG_VIDEO } from './chang/video'
 import { isStraw, type StrawColor } from './chang/layout'
 import { Debug } from './Debug'
 import { FORK_CARDS } from './ForkCards'
@@ -196,6 +199,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   })
   // Baan Chang's way on is open (ChangLayer's button).
   const [onward, setOnward] = useState(false)
+  // After the splash, the way on plays the real elephants' video first (chang/video.ts), then leaves for here.
+  const [changVideo, setChangVideo] = useState<'pier' | 'home' | null>(null)
   const [albumOpen, setAlbumOpen] = useState(false)
   const [bump, setBump] = useState(0)
   const [flights, setFlights] = useState<{ key: number; id: StickerId; x: number; y: number }[]>([])
@@ -637,6 +642,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         qaKey="__thaiBoatQA"
         worldRef={worldRef}
         onMode={setMode}
+        // Baan Chang holds still under the elephants' video (no splashes, trumpets or hints over it), like the rice farm.
+        paused={!!changVideo}
         make={make}
         anchors={(input, els) => (
           <>
@@ -804,11 +811,23 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       {mount.world === 'chang' && mode === 'webgl' && (
         <ChangLayer
           section={section}
-          ready={onward && !pass}
+          ready={onward && !pass && !changVideo}
           bay={been.includes('bay')}
           onOnward={() => (worldRef.current as Chang | null)?.onward()}
-          onPier={() => leaveChang('pier')}
-          onHome={() => leaveChang('home')}
+          onPier={() => setChangVideo('pier')}
+          onHome={() => setChangVideo('home')}
+        />
+      )}
+      {/* The end of Baan Chang: real elephants on video (skippable: ⏭ then the way she picked), then the way on. */}
+      {changVideo && (
+        <VideoBreak
+          video={CHANG_VIDEO}
+          next={changVideo === 'home' ? '✈️🏠' : '🚤'}
+          onDone={() => {
+            const to = changVideo
+            setChangVideo(null)
+            leaveChang(to)
+          }}
         />
       )}
       {/* On the plane: skip ahead (the cabin to the landing, the landing to Krabi) if the ride gets long. */}
@@ -835,7 +854,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
           tripRef.current?.choose(p.src)
         }}
       />
-      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!pass || asking} raised={(mount.world === 'bay' && landed) || (mount.world === 'race' && raceHud?.phase === 'podium') || (mount.world === 'chang' && section === 'sign')} idle={tilting ? undefined : mount.world === 'bay' ? L.bay.hint.drive : mount.world === 'race' ? L.race.start : undefined} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={!!pass || asking || !!changVideo} raised={(mount.world === 'bay' && landed) || (mount.world === 'race' && raceHud?.phase === 'podium') || (mount.world === 'chang' && section === 'sign')} idle={tilting ? undefined : mount.world === 'bay' ? L.bay.hint.drive : mount.world === 'race' ? L.race.start : undefined} />}
       <TiltSetup
         stage={tiltSetup}
         onSkip={() => {
