@@ -17,9 +17,9 @@ import { buildWorn, SCRUBS, SCRUBS_DARK, type Frame, type Wardrobe, type Worn } 
 import { LOOKS, type Wearable } from './looks'
 
 /** The model's ink width (model.ts's PX), so what she wears is drawn with the same line as she is. */
-const PX = 1.8
+export const PX = 1.8
 /** The dress's center front-to-back (body-local z). */
-const ZC = 0.045
+export const ZC = 0.045
 /** Her arm's angle out from straight down, and how far along it the hoof is. */
 const ARM = 0.818
 export const HOOF = 0.184
@@ -45,14 +45,14 @@ function frame(R: number, y: number, z: number): Frame {
   }
 }
 /** The sunglasses sit on her face. */
-const FACE = frame(0.24, 0.148, -0.02)
+export const FACE = frame(0.24, 0.148, -0.02)
 /** Hats sit on her hair (built around z 0, then the group moves back to the dome's center). */
-const HAIR = frame(0.3, 0.18, 0)
-const HAIR_Z = -0.04
+export const HAIR = frame(0.3, 0.18, 0)
+export const HAIR_Z = -0.04
 
 /** A garment over her dress, turned on a lathe: `[y, half-width, half-depth]` rings from the hem up, closed at both
  *  ends, centered on the dress. */
-function shell(rings: [number, number, number][], color: string) {
+export function shell(rings: [number, number, number][], color: string) {
   const g = new LatheGeometry(rings.map(([y, rx]) => new Vector2(rx, y)), 28)
   const pos = g.attributes.position
   for (let i = 0; i < pos.count; i++) {
@@ -96,10 +96,10 @@ export const along = (s: number, d: number): V3 => [s * Math.sin(ARM) * d, -Math
 const sleeve = (s: number, color: string) => P.capsule(0.049, 0.07, color, { at: along(s, 0.015), rot: [0, 0, s * ARM] })
 
 /** Groups for whatever has parts, with her line. */
-const group = (lined: Parts, plain: Parts, bag: Bag) => (lined.length || plain.length ? solidMix(lined, plain, bag, PX) : null)
+export const group = (lined: Parts, plain: Parts, bag: Bag) => (lined.length || plain.length ? solidMix(lined, plain, bag, PX) : null)
 
 /** The arms swing in a frame turned forward (model.ts's ARM_TILT): what rides on them turns back into the arm's own. */
-function onArm(g: Group | null, s: number, tilt: number) {
+export function onArm(g: Group | null, s: number, tilt: number) {
   if (!g) return null
   const holder = new Group()
   holder.rotation.y = s * tilt

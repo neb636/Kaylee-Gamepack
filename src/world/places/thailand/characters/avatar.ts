@@ -4,7 +4,7 @@
 // How she moves: a bouncy hop-trot along a path (a little hop every step, squash when she lands, stretch at the top,
 // leaning into the walk), turning with a spring so corners curve, a settle wobble when she arrives. Everything else
 // (sitting down, hopping onto the mattress, each stair) is a short tween with an arc.
-import { Group, Vector3 } from 'three'
+import { Group, Vector3, type Object3D } from 'three'
 import { bell, clamp, span, wobble } from '../../../../sdk'
 import type { Bag } from '../engine/dispose'
 import type { XZ } from '../engine/nav'
@@ -14,6 +14,7 @@ import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { FaceLife } from './face'
 import { LOOKS, type Wearable } from './looks'
 import { buildModelRig, kayleeModel } from './model'
+import { BARE, itemById, paintOf, PAINT_PARTS, type PaintColor, type PaintPart, type Slot, type Style } from './style'
 import type { Character, Pose } from './types'
 
 const H = LOOKS.kaylee.height
@@ -66,6 +67,14 @@ export class Avatar implements Character {
   private worn = new Map<Wearable, Group[]>()
   /** Things she's just put on, and how far through their little show (0..1). */
   private entering = new Map<Wearable, number>()
+  /** Her own look (style.ts): what's on each spot and her colors. Bare until the scene dresses her (setLook). */
+  private style: Style = BARE
+  /** Her own things (closet/), built the first time she puts each on. */
+  private closet = new Map<string, Group[]>()
+  /** Her own things just put on (pop!), and how far through it (0..1). */
+  private popping = new Map<string, number>()
+  /** A twirl on the spot (0..1), -1 when not twirling. */
+  private twirling = -1
 
   /** `model`: the modelled vinyl-toy Kaylee (model.ts), the one the game uses (Place.tsx loads it before any scene
    *  builds); `null` builds the code-built Kaylee instead (the lab's comparison, or if the model couldn't load). */
@@ -107,6 +116,59 @@ export class Avatar implements Character {
       for (const g of groups ?? []) g.visible = on
     }
   }
+  /** Dresses her in her own look (style.ts): her things on their spots, her colors. `show`: what's new pops on. Things
+   *  she can't wear (the code-built Kaylee has no closet and no paint) are just left off. */
+  setLook(style: Style, show = false) {
+    const before = this.style
+    this.style = style
+    const on = new Set(Object.values(style.on))
+    for (const id of new Set([...on, ...this.closet.keys()])) {
+      const wanted = on.has(id)
+      let groups = this.closet.get(id)
+      if (!groups && wanted) {
+        const c = this.chibi
+        const w = c.closet?.(id, this.bag)
+        groups = []
+        if (w) {
+          for (const [g, pivot] of [[w.head, c.head], [w.armL, c.armL], [w.armR, c.armR], [w.body, c.body], [w.legL, c.legL], [w.legR, c.legR]] as const) {
+            if (!g || !pivot) continue
+            pivot.add(g)
+            g.userData.closet = id
+            groups.push(g)
+          }
+        }
+        this.closet.set(id, groups)
+      }
+      for (const g of groups ?? []) g.visible = wanted
+      if (show && wanted && !Object.values(before.on).includes(id)) this.popping.set(id, 0)
+    }
+    const colors = {} as Record<PaintPart, PaintColor>
+    for (const p of PAINT_PARTS) colors[p] = paintOf(style, p)
+    if (PAINT_PARTS.some((p) => paintOf(before, p) !== colors[p]) || before === BARE) this.chibi.paint?.(colors)
+  }
+  get myLook(): Style {
+    return this.style
+  }
+  /** Can she wear her own things and paint (the modelled Kaylee)? */
+  get dressable() {
+    return !!this.chibi.closet
+  }
+  /** The groups of what's on a spot now (empty if nothing is): the wardrobe aims at them and takes them off. */
+  onSpot(slot: Slot): Group[] {
+    const id = this.style.on[slot]
+    return id ? (this.closet.get(id) ?? []).filter((g) => g.visible) : []
+  }
+  /** Which of her own things this is (a mesh inside one of them), if any. */
+  itemOf(o: Object3D | null): string | null {
+    for (let p = o; p; p = p.parent) if (typeof p.userData.closet === 'string') return itemById(p.userData.closet) ? (p.userData.closet as string) : null
+    return null
+  }
+  /** A happy twirl right round on the spot. */
+  twirl() {
+    if (this.twirling < 0) this.twirling = 0
+    this.react('hop')
+  }
+
   /** Puts these on with a little show: the hat drops onto her head, the sunglasses slide down, the floaties pop on. */
   putOn(ids: readonly Wearable[]) {
     const before = new Set(this.wearing)
@@ -136,7 +198,7 @@ export class Avatar implements Character {
   }
   /** Something is moving (the frame loop may slow down when nothing is). */
   get busy() {
-    return this.walking || this.speed > 0.01 || this.pose === 'bounce' || this.settle < 1 || this.flop < 1
+    return this.walking || this.speed > 0.01 || this.pose === 'bounce' || this.settle < 1 || this.flop < 1 || this.popping.size > 0 || this.twirling >= 0
   }
 
   /** Puts her somewhere at once (a deep link, the end of the arrival). */
@@ -240,6 +302,18 @@ export class Avatar implements Character {
         }
       }
     }
+    for (const [id, e0] of this.popping) {
+      const e = Math.min(1, e0 + dt / 0.45)
+      if (e >= 1) this.popping.delete(id)
+      else this.popping.set(id, e)
+      // From nothing, past full size, back: pop!
+      const k = e < 0.6 ? (e / 0.6) * 1.18 : 1.18 - 0.18 * span(e, 0.6, 1)
+      for (const g of this.closet.get(id) ?? []) g.scale.setScalar(Math.max(0.01, k))
+    }
+    if (this.twirling >= 0) {
+      this.twirling = Math.min(1, this.twirling + dt / 0.75)
+      if (this.twirling >= 1) this.twirling = -1
+    }
     if (this.waving >= 0) {
       this.waving += dt / 1.3
       const p = Math.min(1, this.waving)
@@ -318,7 +392,9 @@ export class Avatar implements Character {
   /** Writes the body's pose for this frame: gait, squash and stretch, sitting, lying, bouncing, bowing. */
   private pose3d(t: number) {
     const { body, head } = this.chibi
-    this.root.rotation.y = this.yaw
+    // A twirl goes right round once (eased), on top of where she faces.
+    const tw = this.twirling < 0 ? 0 : this.twirling
+    this.root.rotation.y = this.yaw + (tw * tw * (3 - 2 * tw)) * Math.PI * 2
     const pose = this.pose
     let y = 0
     let sy = 1 + Math.sin(t * 2.4) * 0.015

@@ -49,9 +49,20 @@ export function defineSections<const P extends string, const S extends string>(
   return { place, activity, params: def.params ?? ({} as Record<P, ParamSpec>), sections: def.sections }
 }
 
-/** Dev switches that stay in the address bar while she plays: ?debug=1, ?fps=N, and the camera lab's ?cam=1 with its
- *  cam.* settings (engine/flags.ts, places/thailand/lab/camera/). */
-const sticky = (key: string) => key === 'debug' || key === 'fps' || key === 'cam' || key.startsWith('cam.')
+/** Switches that stay in the address bar while she plays: ?debug=1, ?fps=N, the camera lab's ?cam=1 with its cam.*
+ *  settings (engine/flags.ts, places/thailand/lab/camera/), and Thailand's ?look= (Kaylee's look from her wardrobe,
+ *  places/thailand/characters/style.ts), so a link opens every scene in that look. */
+const sticky = (key: string) => key === 'debug' || key === 'fps' || key === 'cam' || key.startsWith('cam.') || key === 'look'
+
+/** Changes a sticky param that's already in the address bar (the wardrobe keeps `look` in step with what she wears);
+ *  does nothing if the link doesn't have it. */
+export function updateStickyParam(key: string, value: string) {
+  const [page, query = ''] = location.hash.split('?')
+  const q = new URLSearchParams(query)
+  if (!sticky(key) || !q.has(key)) return
+  q.set(key, value)
+  history.replaceState(history.state, '', `${page}?${q.toString().replace(/%2C/g, ',')}`)
+}
 
 /** Where the URL points: set by PlaceFrame from the route. */
 export interface SectionLink {

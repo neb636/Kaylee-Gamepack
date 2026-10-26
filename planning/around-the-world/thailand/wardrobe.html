@@ -10,28 +10,62 @@
 </head>
 <body>
 <div id="app"><noscript>This plan is drawn by planning/viewer/plan.js. Read it as Markdown with: node scripts/plan.mjs md planning/around-the-world/thailand/wardrobe.html</noscript></div>
-<script type="application/json" id="plan">
-{
+<script type="application/json" id="plan">{
   "schema": 1,
   "title": "Kaylee's Wardrobe: dress up her unicorn",
   "icon": "👗",
   "kind": "Toy in Agong's house",
   "updated": "2026-10-26",
-  "status": { "label": "Planned", "tone": "lav" },
+  "status": {
+    "label": "Greybox 1 built",
+    "tone": "gold"
+  },
   "pitch": "Kaylee loves the avatar maker in Roblox, so she gets one in Thailand. In her room at Agong's she opens her wardrobe and dresses her unicorn herself: she drags a crown, heart sunglasses, fairy wings or light-up shoes onto herself and they pop on, and she drops paint on her dress, her hair or her fur to change its color. What she picks is saved on the iPad, and she wears it **everywhere in Thailand**: the house, every trip, every mini game and the photos on Agong's wall. When a game needs its own hat (the chef's hat, the vet's cap), the game's hat wins for that game and hers comes back afterwards.",
-  "next": "Dad reads the plan and answers **For Dad to decide** (fur and hair colors? shoes off in the house? hat off for a wai?). Then **greybox 1**: the wardrobe toy in her room with simple shapes for the clothes, saved on the iPad, worn in the house.",
+  "next": "Dad plays **greybox 1** on the iPad: [the wardrobe](#/world/thailand/hub/wardrobe), [the paint drawer](#/world/thailand/hub/wardrobe?drawer=paint), then walk her round [her room in a look](#/world/thailand/hub/upstairs?look=crown,hearts,fairy,dress-mint). Is dressing her up fun? Then **greybox 2**: her look in every scene and every clash solved.",
   "facts": [
-    { "icon": "🗄️", "value": "6", "label": "drawers: hats, glasses, wings, outfits, shoes, paint" },
-    { "icon": "🎀", "value": "~30", "label": "things to wear, plus 3 colors to paint" },
-    { "icon": "⏱️", "value": "1-3 min", "label": "a visit" },
-    { "icon": "👆", "value": "15-40", "label": "touches a visit" },
-    { "icon": "🚪", "value": "2", "label": "ways in: her wardrobe, or the mirror button anywhere in the house" }
+    {
+      "icon": "🗄️",
+      "value": "6",
+      "label": "drawers: hats, glasses, wings, outfits, shoes, paint"
+    },
+    {
+      "icon": "🎀",
+      "value": "~30",
+      "label": "things to wear, plus 3 colors to paint"
+    },
+    {
+      "icon": "⏱️",
+      "value": "1-3 min",
+      "label": "a visit"
+    },
+    {
+      "icon": "👆",
+      "value": "15-40",
+      "label": "touches a visit"
+    },
+    {
+      "icon": "🚪",
+      "value": "2",
+      "label": "ways in: her wardrobe, or the mirror button anywhere in the house"
+    }
   ],
   "related": [
-    { "label": "← Thailand plan", "href": "../thailand.md" },
-    { "label": "3D characters", "href": "../../../docs/3d-characters.md" },
-    { "label": "Activity template", "href": "../ACTIVITY-TEMPLATE.md" },
-    { "label": "Play design", "href": "../../../docs/play-design.md" }
+    {
+      "label": "← Thailand plan",
+      "href": "../thailand.md"
+    },
+    {
+      "label": "3D characters",
+      "href": "../../../docs/3d-characters.md"
+    },
+    {
+      "label": "Activity template",
+      "href": "../ACTIVITY-TEMPLATE.md"
+    },
+    {
+      "label": "Play design",
+      "href": "../../../docs/play-design.md"
+    }
   ],
   "sections": [
     {
@@ -39,9 +73,24 @@
       "title": "The idea",
       "icon": "💡",
       "blocks": [
-        { "type": "text", "md": "Written 2026-10-26, from Dad: “In Roblox Kaylee really likes the avatar customizer. Can we make something similar for the 3D Thailand game, easy to go back to, saved on the iPad, so her avatar shows up everywhere?” Plus: work out every place where her own hat (or anything else) would clash with a game's costume, and solve all of them." },
-        { "type": "callout", "tone": "note", "icon": "🧸", "title": "A toy, not a menu", "md": "Roblox's avatar screen is a grid of buttons; Kaylee can't read the labels, and tapping squares isn't play. Here she **touches the real things**: the wardrobe's drawers slide out, the clothes sit on its shelves, and she grabs one and puts it on her unicorn. Whatever she does gets a reaction, and nothing is wrong (a shoe dropped on her head sits on her horn until she shakes it down to her feet)." },
-        { "type": "callout", "tone": "dad", "icon": "🏠", "title": "Not an activity", "md": "It's a toy in Agong's house, like the mattress or the fan: no passport stamp, no finale, no trophy. Its payoff is seeing herself in her own look everywhere, and the family noticing it (“Ooh, a crown, Kaylee!”)." }
+        {
+          "type": "text",
+          "md": "Written 2026-10-26, from Dad: “In Roblox Kaylee really likes the avatar customizer. Can we make something similar for the 3D Thailand game, easy to go back to, saved on the iPad, so her avatar shows up everywhere?” Plus: work out every place where her own hat (or anything else) would clash with a game's costume, and solve all of them."
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "icon": "🧸",
+          "title": "A toy, not a menu",
+          "md": "Roblox's avatar screen is a grid of buttons; Kaylee can't read the labels, and tapping squares isn't play. Here she **touches the real things**: the wardrobe's drawers slide out, the clothes sit on its shelves, and she grabs one and puts it on her unicorn. Whatever she does gets a reaction, and nothing is wrong (a shoe dropped on her head sits on her horn until she shakes it down to her feet)."
+        },
+        {
+          "type": "callout",
+          "tone": "dad",
+          "icon": "🏠",
+          "title": "Not an activity",
+          "md": "It's a toy in Agong's house, like the mattress or the fan: no passport stamp, no finale, no trophy. Its payoff is seeing herself in her own look everywhere, and the family noticing it (“Ooh, a crown, Kaylee!”)."
+        }
       ]
     },
     {
@@ -50,19 +99,54 @@
       "icon": "👆",
       "lede": "One verb: put it on her.",
       "blocks": [
-        { "type": "callout", "tone": "dad", "title": "Core verb: put it on her", "md": "Her finger picks up a real thing from the wardrobe (a crown, wings, a pot of paint) and drops it on her unicorn. It pops on with a sparkle and she shows it off with a little pose. A quick tap on a thing works too: it flies onto her. Tap something she's wearing and it hops back to its shelf." },
+        {
+          "type": "callout",
+          "tone": "dad",
+          "title": "Core verb: put it on her",
+          "md": "Her finger picks up a real thing from the wardrobe (a crown, wings, a pot of paint) and drops it on her unicorn. It pops on with a sparkle and she shows it off with a little pose. A quick tap on a thing works too: it flies onto her. Tap something she's wearing and it hops back to its shelf."
+        },
         {
           "type": "flow",
           "rows": [
             {
               "steps": [
-                { "icon": "🛏️", "label": "Her room", "note": "tap the wardrobe" },
-                { "icon": "🚪", "label": "Doors swing open", "note": "she hops onto the rug, facing you" },
-                { "icon": "🗄️", "label": "Pull a drawer", "note": "its things pop up on the shelf", "hl": true },
-                { "icon": "👑", "label": "Drag it onto her", "note": "pop! she poses", "hl": true },
-                { "icon": "🎨", "label": "Paint", "note": "drop it on hair, dress or fur" },
-                { "icon": "📸", "label": "Mirror photo", "note": "the look is kept on the door" },
-                { "icon": "✨", "label": "Off she goes", "note": "and wears it everywhere" }
+                {
+                  "icon": "🛏️",
+                  "label": "Her room",
+                  "note": "tap the wardrobe"
+                },
+                {
+                  "icon": "🚪",
+                  "label": "Doors swing open",
+                  "note": "she hops onto the rug, facing you"
+                },
+                {
+                  "icon": "🗄️",
+                  "label": "Pull a drawer",
+                  "note": "its things pop up on the shelf",
+                  "hl": true
+                },
+                {
+                  "icon": "👑",
+                  "label": "Drag it onto her",
+                  "note": "pop! she poses",
+                  "hl": true
+                },
+                {
+                  "icon": "🎨",
+                  "label": "Paint",
+                  "note": "drop it on hair, dress or fur"
+                },
+                {
+                  "icon": "📸",
+                  "label": "Mirror photo",
+                  "note": "the look is kept on the door"
+                },
+                {
+                  "icon": "✨",
+                  "label": "Off she goes",
+                  "note": "and wears it everywhere"
+                }
               ]
             }
           ]
@@ -71,46 +155,133 @@
           "type": "ladder",
           "title": "How the verb gets richer",
           "items": [
-            { "n": 1, "icon": "👑", "title": "Things on and off", "md": "Hats, glasses, wings, outfits, shoes. One per spot: put a second hat on and the first hops back to its shelf with a boing. Each thing gets its own pose (the crown: a curtsy; the wings: a flutter hop; the sunglasses: a cool lean)." },
-            { "n": 2, "icon": "🎨", "title": "Paint where you drop it", "md": "The paint drawer holds pots of color. **Where she drops the pot decides what changes**: on her hair, her hair; on her dress, her dress; on her fur, her fur. Splash, a shimmer, done. Same verb, and now it matters where her finger lets go." },
-            { "n": 3, "icon": "📸", "title": "Whole looks", "md": "The mirror takes a photo of her look and pins it to the wardrobe door (up to 4). Drop a photo on her and she wears that whole look at once. Making a look, keeping it, swapping between them: the Roblox outfits, done by hand." },
-            { "n": "🔄", "icon": "🔄", "title": "Side verb: spin her round", "md": "Drag across her and she turns on the rug to see the back (wings! the cape!). Let go and she springs back to face you." }
+            {
+              "n": 1,
+              "icon": "👑",
+              "title": "Things on and off",
+              "md": "Hats, glasses, wings, outfits, shoes. One per spot: put a second hat on and the first hops back to its shelf with a boing. Each thing gets its own pose (the crown: a curtsy; the wings: a flutter hop; the sunglasses: a cool lean)."
+            },
+            {
+              "n": 2,
+              "icon": "🎨",
+              "title": "Paint where you drop it",
+              "md": "The paint drawer holds pots of color. **Where she drops the pot decides what changes**: on her hair, her hair; on her dress, her dress; on her fur, her fur. Splash, a shimmer, done. Same verb, and now it matters where her finger lets go."
+            },
+            {
+              "n": 3,
+              "icon": "📸",
+              "title": "Whole looks",
+              "md": "The mirror takes a photo of her look and pins it to the wardrobe door (up to 4). Drop a photo on her and she wears that whole look at once. Making a look, keeping it, swapping between them: the Roblox outfits, done by hand."
+            },
+            {
+              "n": "🔄",
+              "icon": "🔄",
+              "title": "Side verb: spin her round",
+              "md": "Drag across her and she turns on the rug to see the back (wings! the cape!). Let go and she springs back to face you."
+            }
           ]
         },
         {
           "type": "chips",
           "title": "Things to poke (they all react)",
           "items": [
-            { "icon": "🚪", "label": "Wardrobe doors", "md": "creak open and shut" },
-            { "icon": "🗄️", "label": "Drawers", "md": "slide out, rattle, shut with a thunk" },
-            { "icon": "🪞", "label": "The mirror", "md": "she strikes a pose" },
-            { "icon": "🧥", "label": "Hangers", "md": "jingle and swing" },
-            { "icon": "🦄", "label": "Kaylee", "md": "giggles and does a twirl" },
-            { "icon": "🪄", "label": "Sparkle's wand", "md": "a surprise look (tap again for another)" },
-            { "icon": "🌀", "label": "The fan", "md": "blows her hair, her cape and her wings" },
-            { "icon": "😴", "label": "Gan on the mattress", "md": "peeks at her new look and goes back to sleep" }
+            {
+              "icon": "🚪",
+              "label": "Wardrobe doors",
+              "md": "creak open and shut"
+            },
+            {
+              "icon": "🗄️",
+              "label": "Drawers",
+              "md": "slide out, rattle, shut with a thunk"
+            },
+            {
+              "icon": "🪞",
+              "label": "The mirror",
+              "md": "she strikes a pose"
+            },
+            {
+              "icon": "🧥",
+              "label": "Hangers",
+              "md": "jingle and swing"
+            },
+            {
+              "icon": "🦄",
+              "label": "Kaylee",
+              "md": "giggles and does a twirl"
+            },
+            {
+              "icon": "🪄",
+              "label": "Sparkle's wand",
+              "md": "a surprise look (tap again for another)"
+            },
+            {
+              "icon": "🌀",
+              "label": "The fan",
+              "md": "blows her hair, her cape and her wings"
+            },
+            {
+              "icon": "😴",
+              "label": "Gan on the mattress",
+              "md": "peeks at her new look and goes back to sleep"
+            }
           ]
         },
         {
           "type": "chips",
           "title": "Silly moments, never wrong",
           "items": [
-            { "icon": "👟", "label": "A shoe on her head", "md": "sits on her horn; she wobbles, shakes it down to her foot" },
-            { "icon": "🕶️", "label": "Glasses on her tail", "md": "the tail wiggles them up to her face" },
-            { "icon": "🎨", "label": "Paint on the mirror", "md": "splat, it drips off, she giggles" },
-            { "icon": "👑", "label": "Two hats at once", "md": "the old one boings back to its shelf" },
-            { "icon": "🛏️", "label": "Top bounce on the mattress", "md": "her hat flips up and lands back on" }
+            {
+              "icon": "👟",
+              "label": "A shoe on her head",
+              "md": "sits on her horn; she wobbles, shakes it down to her foot"
+            },
+            {
+              "icon": "🕶️",
+              "label": "Glasses on her tail",
+              "md": "the tail wiggles them up to her face"
+            },
+            {
+              "icon": "🎨",
+              "label": "Paint on the mirror",
+              "md": "splat, it drips off, she giggles"
+            },
+            {
+              "icon": "👑",
+              "label": "Two hats at once",
+              "md": "the old one boings back to its shelf"
+            },
+            {
+              "icon": "🛏️",
+              "label": "Top bounce on the mattress",
+              "md": "her hat flips up and lands back on"
+            }
           ]
         },
         {
           "type": "table",
           "title": "Numbers",
-          "head": ["", "A visit"],
+          "head": [
+            "",
+            "A visit"
+          ],
           "rows": [
-            ["Talk before her first touch", "1 line (Sparkle, the first time only: “Your wardrobe! Dress up, Kaylee!”)"],
-            ["Touches", "15-40, nearly all putting things on, painting and spinning"],
-            ["Time", "1-3 min (she leaves whenever she likes: the ✓ or the doors)"],
-            ["Sparkle talks", "the first time she opens a drawer, and after ~8 s with nothing touched (a thing on the shelf glints)"]
+            [
+              "Talk before her first touch",
+              "1 line (Sparkle, the first time only: “Your wardrobe! Dress up, Kaylee!”)"
+            ],
+            [
+              "Touches",
+              "15-40, nearly all putting things on, painting and spinning"
+            ],
+            [
+              "Time",
+              "1-3 min (she leaves whenever she likes: the ✓ or the doors)"
+            ],
+            [
+              "Sparkle talks",
+              "the first time she opens a drawer, and after ~8 s with nothing touched (a thing on the shelf glints)"
+            ]
           ]
         }
       ]
@@ -123,12 +294,30 @@
         {
           "type": "cards",
           "items": [
-            { "icon": "🗄️", "title": "The wardrobe in her room", "md": "A real wardrobe (pastel wood, a long mirror on one door) next to her suitcase upstairs. Tap it and the doors open. There's no wardrobe in the house yet; Dad's plan of her room had one." },
-            { "icon": "🪞", "title": "The mirror button", "md": "A round hand-mirror button in the house's top bar, on every floor and the street. Tap it: a sparkle, and she's standing at her wardrobe. No walking up the stairs to change a hat." },
-            { "icon": "🧳", "title": "Before a trip", "md": "Mommy asks about a trip in her room, right next to the wardrobe, so dressing up for the trip is a natural first stop. The suitcase stays the suitcase (the packing lesson doesn't change)." }
+            {
+              "icon": "🗄️",
+              "title": "The wardrobe in her room",
+              "md": "A real wardrobe (pastel wood, a long mirror on one door) next to her suitcase upstairs. Tap it and the doors open. There's no wardrobe in the house yet; Dad's plan of her room had one."
+            },
+            {
+              "icon": "🪞",
+              "title": "The mirror button",
+              "md": "A round hand-mirror button in the house's top bar, on every floor and the street. Tap it: a sparkle, and she's standing at her wardrobe. No walking up the stairs to change a hat."
+            },
+            {
+              "icon": "🧳",
+              "title": "Before a trip",
+              "md": "Mommy asks about a trip in her room, right next to the wardrobe, so dressing up for the trip is a natural first stop. The suitcase stays the suitcase (the packing lesson doesn't change)."
+            }
           ]
         },
-        { "type": "callout", "tone": "note", "icon": "💾", "title": "Saved on the iPad", "md": "Every change is saved straight away (no save button), and the same look is there the next time she opens the app. The look also fits in a link (`?look=crown,hearts,wings,dress-mint`) so Dad and the tests can open any scene in any look." }
+        {
+          "type": "callout",
+          "tone": "note",
+          "icon": "💾",
+          "title": "Saved on the iPad",
+          "md": "Every change is saved straight away (no save button), and the same look is there the next time she opens the app. The look also fits in a link (`?look=crown,hearts,wings,dress-mint`) so Dad and the tests can open any scene in any look."
+        }
       ]
     },
     {
@@ -140,15 +329,82 @@
         {
           "type": "cards",
           "items": [
-            { "icon": "👑", "title": "Hats", "items": ["Crown (gold, pink gems, round her horn)", "Tiara", "Orchid crown (Thailand's flower)", "Big bow", "Bunny ears (a unicorn with bunny ears: silly)", "Cat ears", "Cap ☀️", "Cowboy hat ☀️", "Bucket hat ☀️", "Her sun hat ☀️"], "md": "☀️ = shady: it counts as a sun hat on a sunny trip." },
-            { "icon": "🕶️", "title": "Glasses", "items": ["Heart sunglasses ☀️ (the ones from packing)", "Star sunglasses ☀️", "Round glasses (like Agong's)"] },
-            { "icon": "🦋", "title": "Wings and capes", "items": ["Fairy wings (they flutter)", "Feathery pink unicorn wings", "Princess cape", "Bunny backpack"] },
-            { "icon": "👗", "title": "Outfits", "items": ["Her striped dress (the paint changes its color)", "Tutu", "Princess gown", "Overalls", "Chut thai: Thai dress for special days (a fact to tap: kids in Thailand wear it at school festivals)"] },
-            { "icon": "👟", "title": "Shoes", "items": ["Light-up sneakers (they blink when she walks)", "Sparkly party shoes", "Pink rain boots", "Sandals"] },
-            { "icon": "🎨", "title": "Paint", "items": ["Dress: pink (hers), lavender, mint, sky, butter, peach", "Hair: brown (hers), pink, lavender, gold, rainbow tips", "Fur: lilac (hers), pink, mint, sky, cream, peach"], "md": "Only if Dad says yes to hair and fur (see **For Dad to decide**)." }
+            {
+              "icon": "👑",
+              "title": "Hats",
+              "items": [
+                "Crown (gold, pink gems, round her horn)",
+                "Tiara",
+                "Orchid crown (Thailand's flower)",
+                "Big bow",
+                "Bunny ears (a unicorn with bunny ears: silly)",
+                "Cat ears",
+                "Cap ☀️",
+                "Cowboy hat ☀️",
+                "Bucket hat ☀️",
+                "Her sun hat ☀️"
+              ],
+              "md": "☀️ = shady: it counts as a sun hat on a sunny trip."
+            },
+            {
+              "icon": "🕶️",
+              "title": "Glasses",
+              "items": [
+                "Heart sunglasses ☀️ (the ones from packing)",
+                "Star sunglasses ☀️",
+                "Round glasses (like Agong's)"
+              ]
+            },
+            {
+              "icon": "🦋",
+              "title": "Wings and capes",
+              "items": [
+                "Fairy wings (they flutter)",
+                "Feathery pink unicorn wings",
+                "Princess cape",
+                "Bunny backpack"
+              ]
+            },
+            {
+              "icon": "👗",
+              "title": "Outfits",
+              "items": [
+                "Her striped dress (the paint changes its color)",
+                "Tutu",
+                "Princess gown",
+                "Overalls",
+                "Chut thai: Thai dress for special days (a fact to tap: kids in Thailand wear it at school festivals)"
+              ]
+            },
+            {
+              "icon": "👟",
+              "title": "Shoes",
+              "items": [
+                "Light-up sneakers (they blink when she walks)",
+                "Sparkly party shoes",
+                "Pink rain boots",
+                "Sandals"
+              ]
+            },
+            {
+              "icon": "🎨",
+              "title": "Paint",
+              "items": [
+                "Dress: pink (hers), lavender, mint, sky, butter, peach",
+                "Hair: brown (hers), pink, lavender, gold, rainbow tips",
+                "Fur: lilac (hers), pink, mint, sky, cream, peach"
+              ],
+              "md": "Only if Dad says yes to hair and fur (see **For Dad to decide**)."
+            }
           ]
         },
-        { "type": "callout", "tone": "warn", "icon": "🙏", "title": "Nothing sacred in the wardrobe", "md": "No mongkhon (the Muay Thai headband is blessed by the teacher: it stays in the boxing ring), no jasmine garlands (they're offerings), no saffron robes (monks' color), no amulets. Chut thai is fine: it's what Thai kids wear on festival days." }
+        {
+          "type": "callout",
+          "tone": "warn",
+          "icon": "🙏",
+          "title": "Nothing sacred in the wardrobe",
+          "md": "No mongkhon (the Muay Thai headband is blessed by the teacher: it stays in the boxing ring), no jasmine garlands (they're offerings), no saffron robes (monks' color), no amulets. Chut thai is fine: it's what Thai kids wear on festival days."
+        }
       ]
     },
     {
@@ -156,20 +412,57 @@
       "title": "Her look, everywhere",
       "icon": "🌏",
       "blocks": [
-        { "type": "text", "md": "Every scene in Thailand builds Kaylee the same way, so her saved look goes on in **one place** and shows up in all of them with no change in each game:" },
+        {
+          "type": "text",
+          "md": "Every scene in Thailand builds Kaylee the same way, so her saved look goes on in **one place** and shows up in all of them with no change in each game:"
+        },
         {
           "type": "chips",
           "items": [
-            { "icon": "🏠", "label": "Agong's house", "md": "every floor, the tuk-tuk, the family photo" },
-            { "icon": "✈️", "label": "The trip kit", "md": "goodbye, van, airport, window seat, songthaew" },
-            { "icon": "🚤", "label": "Boat trip", "md": "the bay, the race, Baan Chang" },
-            { "icon": "🛝", "label": "Mall day", "md": "HarborLand, the frame, every mini game, the race slide, Sky Pod, Pizza Co." },
-            { "icon": "🏔️", "label": "Nan", "md": "the Pajero, mushrooms, rice, salt" },
-            { "icon": "🖼️", "label": "Agong's wall", "md": "new photos show her in that day's look" },
-            { "icon": "🔬", "label": "The character lab", "md": "for Dad: any look, any pose" }
+            {
+              "icon": "🏠",
+              "label": "Agong's house",
+              "md": "every floor, the tuk-tuk, the family photo"
+            },
+            {
+              "icon": "✈️",
+              "label": "The trip kit",
+              "md": "goodbye, van, airport, window seat, songthaew"
+            },
+            {
+              "icon": "🚤",
+              "label": "Boat trip",
+              "md": "the bay, the race, Baan Chang"
+            },
+            {
+              "icon": "🛝",
+              "label": "Mall day",
+              "md": "HarborLand, the frame, every mini game, the race slide, Sky Pod, Pizza Co."
+            },
+            {
+              "icon": "🏔️",
+              "label": "Nan",
+              "md": "the Pajero, mushrooms, rice, salt"
+            },
+            {
+              "icon": "🖼️",
+              "label": "Agong's wall",
+              "md": "new photos show her in that day's look"
+            },
+            {
+              "icon": "🔬",
+              "label": "The character lab",
+              "md": "for Dad: any look, any pose"
+            }
           ]
         },
-        { "type": "callout", "tone": "dad", "icon": "👀", "title": "The payoff: being seen", "md": "The first time she walks up to someone in a new look, they notice: Mommy “Ooh, a crown, Kaylee!”, Daddy “Cool wings!”, Agong “So pretty!”. One line per kind of thing, said once per change, never a lecture." }
+        {
+          "type": "callout",
+          "tone": "dad",
+          "icon": "👀",
+          "title": "The payoff: being seen",
+          "md": "The first time she walks up to someone in a new look, they notice: Mommy “Ooh, a crown, Kaylee!”, Daddy “Cool wings!”, Agong “So pretty!”. One line per kind of thing, said once per change, never a lecture."
+        }
       ]
     },
     {
@@ -178,34 +471,118 @@
       "icon": "⚖️",
       "lede": "Every clash in the code today, and the one rule (plus a few small ones) that solves them all.",
       "blocks": [
-        { "type": "callout", "tone": "dad", "icon": "🧩", "title": "The rule: the game's costume goes on top of her look", "md": "Her look is one layer and a game's costume is a layer on top. Each costume says which **spots** on her it needs: head, face, body, back, hands or feet. On those spots the costume wins for that game. She keeps everything else, and when she leaves the game her own things come back.\n\nSo the vet in **heart sunglasses and fairy wings** is fine (the vet only needs her head and body), but the chef's hat goes on *instead of* her crown." },
-        { "type": "callout", "tone": "note", "icon": "✨", "title": "Never lost", "md": "When a costume takes a spot, her own thing doesn't vanish: it shrinks into a sparkle that pops into her pocket, and pops back out when she leaves (the same little show both ways, no words needed). A five-year-old should always see where her crown went." },
+        {
+          "type": "callout",
+          "tone": "dad",
+          "icon": "🧩",
+          "title": "The rule: the game's costume goes on top of her look",
+          "md": "Her look is one layer and a game's costume is a layer on top. Each costume says which **spots** on her it needs: head, face, body, back, hands or feet. On those spots the costume wins for that game. She keeps everything else, and when she leaves the game her own things come back.\n\nSo the vet in **heart sunglasses and fairy wings** is fine (the vet only needs her head and body), but the chef's hat goes on *instead of* her crown."
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "icon": "✨",
+          "title": "Never lost",
+          "md": "When a costume takes a spot, her own thing doesn't vanish: it shrinks into a sparkle that pops into her pocket, and pops back out when she leaves (the same little show both ways, no words needed). A five-year-old should always see where her crown went."
+        },
         {
           "type": "table",
           "title": "Costumes: what each game needs",
-          "head": ["Game", "Costume", "Spots it needs", "What she keeps"],
+          "head": [
+            "Game",
+            "Costume",
+            "Spots it needs",
+            "What she keeps"
+          ],
           "rows": [
-            ["🩺 Vet", "scrubs and scrub cap", "head, body (+ the stethoscope on her ears)", "glasses, wings, shoes, colors"],
-            ["🍰 Cafe", "apron and chef's hat", "head, body", "glasses, wings, shoes, colors"],
-            ["✂️ Barber", "smock", "body, back (wings would poke through it)", "hat, glasses, shoes, colors"],
-            ["🥊 Muay Thai", "mongkhon, gloves, the gold belt", "head (nothing goes on top of a mongkhon), face, hands, body", "wings, colors (and her grip socks)"],
-            ["🌾 Rice farm", "her ngob (farmer's straw hat), mud spots", "head", "everything else"],
-            ["🧦 HarborLand", "grip socks", "feet: her shoes hop into the cubby at the counter (that moment is already in the game)", "everything else"],
-            ["☀️ Sunny trips", "what she packed (sun hat, sunglasses, floaties)", "head and face, *unless her own are sun-smart* (next card)", "the rest"]
+            [
+              "🩺 Vet",
+              "scrubs and scrub cap",
+              "head, body (+ the stethoscope on her ears)",
+              "glasses, wings, shoes, colors"
+            ],
+            [
+              "🍰 Cafe",
+              "apron and chef's hat",
+              "head, body",
+              "glasses, wings, shoes, colors"
+            ],
+            [
+              "✂️ Barber",
+              "smock",
+              "body, back (wings would poke through it)",
+              "hat, glasses, shoes, colors"
+            ],
+            [
+              "🥊 Muay Thai",
+              "mongkhon, gloves, the gold belt",
+              "head (nothing goes on top of a mongkhon), face, hands, body",
+              "wings, colors (and her grip socks)"
+            ],
+            [
+              "🌾 Rice farm",
+              "her ngob (farmer's straw hat), mud spots",
+              "head",
+              "everything else"
+            ],
+            [
+              "🧦 HarborLand",
+              "grip socks",
+              "feet: her shoes hop into the cubby at the counter (that moment is already in the game)",
+              "everything else"
+            ],
+            [
+              "☀️ Sunny trips",
+              "what she packed (sun hat, sunglasses, floaties)",
+              "head and face, *unless her own are sun-smart* (next card)",
+              "the rest"
+            ]
           ]
         },
         {
           "type": "cards",
           "title": "The small rules",
           "items": [
-            { "icon": "☀️", "title": "1. Sun smarts", "md": "On a sunny trip her own hat **counts if it's shady** (cap, cowboy hat, bucket hat, sun hat): she keeps it, no spare hat, and Mommy says “Good hat, Kaylee!”. A crown isn't shady, so the packed sun hat (or Mommy's spare) goes on and the crown waits in her pocket. Heart and star sunglasses count as sunglasses. The packing lesson stays exactly the same, and now her own choice can be the right one." },
-            { "icon": "🦄", "title": "2. Nothing taller than her horn", "md": "Every roof in the game was made to clear her horn: the tuk-tuk, the van, the Veloz, the Pajero, the plane's bins, the sea cave's tunnel. So every hat stays under the tip of her horn, and none of those need changing. Her tap targets and the cameras, which use her height, don't change either." },
-            { "icon": "🪑", "title": "3. Wings fold when she sits", "md": "In a car seat, on a stool, a couch, a booster seat, a slide or the donut ring, wings fold flat and the cape drapes; lying down (pillows, the canoe in the cave, the straw pile) they tuck away. Folded, they stay inside the circle she walks in, so she never snags on furniture. They spread when she stands still, and flap when she hops." },
-            { "icon": "👟", "title": "4. Shoes off in the house", "md": "Like a real Thai home: at Agong's door her shoes hop onto the shoe rack (it's already by the door) and back on when she goes out to the street. A real culture fact she does with her feet. In the wardrobe she can still try them on, on the rug." },
-            { "icon": "✋", "title": "5. Her hands stay free", "md": "No things to hold in the wardrobe (for now). Every game puts things in her hands (the stethoscope, the sickle, the key fob, the boxing gloves, the photo for Agong, the trophy), and none of them will ever fight with her look." },
-            { "icon": "🖼️", "title": "6. Photos remember", "md": "A photo on Agong's wall shows what she wore that day. Changing her look later doesn't change old photos." },
-            { "icon": "🙏", "title": "7. Respect", "md": "For a wai (the spirit house, the altar, the little shrine, the village's mosque dome, the wai kru in Muay Thai) her hat comes off into her hooves and goes back on after. Dad's call (see below). Sacred things still never wobble." },
-            { "icon": "👨‍👩‍👧", "title": "8. Everyone still knows her", "md": "She's always a unicorn and her face never changes, so the family (and Kaylee) always know who she is. A bare start (no saved look) is exactly today's Kaylee." }
+            {
+              "icon": "☀️",
+              "title": "1. Sun smarts",
+              "md": "On a sunny trip her own hat **counts if it's shady** (cap, cowboy hat, bucket hat, sun hat): she keeps it, no spare hat, and Mommy says “Good hat, Kaylee!”. A crown isn't shady, so the packed sun hat (or Mommy's spare) goes on and the crown waits in her pocket. Heart and star sunglasses count as sunglasses. The packing lesson stays exactly the same, and now her own choice can be the right one."
+            },
+            {
+              "icon": "🦄",
+              "title": "2. Nothing taller than her horn",
+              "md": "Every roof in the game was made to clear her horn: the tuk-tuk, the van, the Veloz, the Pajero, the plane's bins, the sea cave's tunnel. So every hat stays under the tip of her horn, and none of those need changing. Her tap targets and the cameras, which use her height, don't change either."
+            },
+            {
+              "icon": "🪑",
+              "title": "3. Wings fold when she sits",
+              "md": "In a car seat, on a stool, a couch, a booster seat, a slide or the donut ring, wings fold flat and the cape drapes; lying down (pillows, the canoe in the cave, the straw pile) they tuck away. Folded, they stay inside the circle she walks in, so she never snags on furniture. They spread when she stands still, and flap when she hops."
+            },
+            {
+              "icon": "👟",
+              "title": "4. Shoes off in the house",
+              "md": "Like a real Thai home: at Agong's door her shoes hop onto the shoe rack (it's already by the door) and back on when she goes out to the street. A real culture fact she does with her feet. In the wardrobe she can still try them on, on the rug."
+            },
+            {
+              "icon": "✋",
+              "title": "5. Her hands stay free",
+              "md": "No things to hold in the wardrobe (for now). Every game puts things in her hands (the stethoscope, the sickle, the key fob, the boxing gloves, the photo for Agong, the trophy), and none of them will ever fight with her look."
+            },
+            {
+              "icon": "🖼️",
+              "title": "6. Photos remember",
+              "md": "A photo on Agong's wall shows what she wore that day. Changing her look later doesn't change old photos."
+            },
+            {
+              "icon": "🙏",
+              "title": "7. Respect",
+              "md": "For a wai (the spirit house, the altar, the little shrine, the village's mosque dome, the wai kru in Muay Thai) her hat comes off into her hooves and goes back on after. Dad's call (see below). Sacred things still never wobble."
+            },
+            {
+              "icon": "👨‍👩‍👧",
+              "title": "8. Everyone still knows her",
+              "md": "She's always a unicorn and her face never changes, so the family (and Kaylee) always know who she is. A bare start (no saved look) is exactly today's Kaylee."
+            }
           ]
         },
         {
@@ -214,25 +591,97 @@
           "blocks": [
             {
               "type": "table",
-              "head": ["Where", "What could clash", "Solved by"],
+              "head": [
+                "Where",
+                "What could clash",
+                "Solved by"
+              ],
               "rows": [
-                ["Vet, cafe, barber, Muay Thai", "`kaylee.wear([...])` puts the job's clothes on and **takes everything else off**", "the costume layer (it only takes its spots)"],
-                ["Rice farm", "the ngob is stuck straight onto her head, on top of whatever hat she has", "the ngob becomes a costume (head)"],
-                ["Vet stethoscope", "ear tips on her head, Y-piece on her chest", "the vet costume takes head and body"],
-                ["Muay Thai belt", "the gold belt fitted round her dress at the waist; a tutu or gown is wider", "Muay Thai takes body"],
-                ["Sunny trips (airport, plane, bay, race, Baan Chang, home)", "`wearing(packed)` puts on the sun hat or Mommy's spare and takes the rest off", "sun smarts + the costume layer"],
-                ["Plane and airport", "her sunglasses go up onto her hair indoors", "works for whatever glasses are on her face"],
-                ["HarborLand", "grip socks on her feet; her shoes go in the cubby", "socks take feet; the shoes she's really wearing go in the cubby"],
-                ["Tuk-tuk, van, Veloz, Pajero (with booster), plane (bins at 2.02 m), songthaew", "a tall hat through the roof; wings into the seat back and the seatbelt", "no taller than her horn; wings fold when she sits"],
-                ["Sea cave", "riders lie back to pass under the roof (checked against her horn)", "horn rule; lying tucks wings"],
-                ["Hub mattress (bounces up to 0.78 m), pillows, couches, table, motorbike", "hat and wings while bouncing, lying, sitting", "the hat flips and lands back; wings fold"],
-                ["HarborLand tunnels (the padded one is 0.33 m round), slides, donut ring, zip line", "wings and hats in tight places", "wings fold when she sits or crawls; horn rule"],
-                ["Golden Mountain, Sky Pod, climbing nets", "the camera looks at her back", "wings fold flat while she climbs (they'd hide her hooves)"],
-                ["Race slide and Sky Pod", "a second Kaylee builder (`Racer`) that can't wear anything", "it gets her look too, from the same one place"],
-                ["Plane screen view, family-photo turntable, rice threshing close-up", "cameras very close to her head", "horn rule keeps hats inside the frame"],
-                ["Mall and Nan wall photos", "drawn with her fixed colors (lilac and pink)", "drawn with her colors that day"],
-                ["Walking", "wide wings past her 0.22 m walking circle", "folded wings stay inside it"],
-                ["Spirit house, altar, shrine, mosque dome, wai kru", "a hat during a wai", "hat off for the wai (Dad's call)"]
+                [
+                  "Vet, cafe, barber, Muay Thai",
+                  "`kaylee.wear([...])` puts the job's clothes on and **takes everything else off**",
+                  "the costume layer (it only takes its spots)"
+                ],
+                [
+                  "Rice farm",
+                  "the ngob is stuck straight onto her head, on top of whatever hat she has",
+                  "the ngob becomes a costume (head)"
+                ],
+                [
+                  "Vet stethoscope",
+                  "ear tips on her head, Y-piece on her chest",
+                  "the vet costume takes head and body"
+                ],
+                [
+                  "Muay Thai belt",
+                  "the gold belt fitted round her dress at the waist; a tutu or gown is wider",
+                  "Muay Thai takes body"
+                ],
+                [
+                  "Sunny trips (airport, plane, bay, race, Baan Chang, home)",
+                  "`wearing(packed)` puts on the sun hat or Mommy's spare and takes the rest off",
+                  "sun smarts + the costume layer"
+                ],
+                [
+                  "Plane and airport",
+                  "her sunglasses go up onto her hair indoors",
+                  "works for whatever glasses are on her face"
+                ],
+                [
+                  "HarborLand",
+                  "grip socks on her feet; her shoes go in the cubby",
+                  "socks take feet; the shoes she's really wearing go in the cubby"
+                ],
+                [
+                  "Tuk-tuk, van, Veloz, Pajero (with booster), plane (bins at 2.02 m), songthaew",
+                  "a tall hat through the roof; wings into the seat back and the seatbelt",
+                  "no taller than her horn; wings fold when she sits"
+                ],
+                [
+                  "Sea cave",
+                  "riders lie back to pass under the roof (checked against her horn)",
+                  "horn rule; lying tucks wings"
+                ],
+                [
+                  "Hub mattress (bounces up to 0.78 m), pillows, couches, table, motorbike",
+                  "hat and wings while bouncing, lying, sitting",
+                  "the hat flips and lands back; wings fold"
+                ],
+                [
+                  "HarborLand tunnels (the padded one is 0.33 m round), slides, donut ring, zip line",
+                  "wings and hats in tight places",
+                  "wings fold when she sits or crawls; horn rule"
+                ],
+                [
+                  "Golden Mountain, Sky Pod, climbing nets",
+                  "the camera looks at her back",
+                  "wings fold flat while she climbs (they'd hide her hooves)"
+                ],
+                [
+                  "Race slide and Sky Pod",
+                  "a second Kaylee builder (`Racer`) that can't wear anything",
+                  "it gets her look too, from the same one place"
+                ],
+                [
+                  "Plane screen view, family-photo turntable, rice threshing close-up",
+                  "cameras very close to her head",
+                  "horn rule keeps hats inside the frame"
+                ],
+                [
+                  "Mall and Nan wall photos",
+                  "drawn with her fixed colors (lilac and pink)",
+                  "drawn with her colors that day"
+                ],
+                [
+                  "Walking",
+                  "wide wings past her 0.22 m walking circle",
+                  "folded wings stay inside it"
+                ],
+                [
+                  "Spirit house, altar, shrine, mosque dome, wai kru",
+                  "a hat during a wai",
+                  "hat off for the wai (Dad's call)"
+                ]
               ]
             }
           ]
@@ -247,13 +696,34 @@
         {
           "type": "qa",
           "items": [
-            { "q": "Can she paint her **fur** another color?", "why": "Recommended: yes, six pastels, lilac by default. She stays a unicorn, so the family still knows her." },
-            { "q": "Can she paint her **hair**? (Her real hair is brown, and her toy looks a bit like her.)", "why": "Recommended: yes; brown stays the default and comes back with one drop of the brown pot." },
-            { "q": "Shoes off in Agong's house, onto the shoe rack?", "why": "Recommended: yes. It's a real Thai custom, the rack is already by the door, and HarborLand already does it with the cubby." },
-            { "q": "Hat off for a wai (spirit house, altar, wai kru)?", "why": "Recommended: yes, a quick hat-off and back on. A small sign of respect that teaches by doing." },
-            { "q": "Both ways in: the wardrobe in her room **and** the mirror button in the house's top bar?", "why": "Recommended: both. The wardrobe is the fun place; the button is for “I want my crown now”." },
-            { "q": "Anything Kaylee especially wants? (her favorite Roblox things)", "why": "The list in **What she can wear** is a first guess." },
-            { "q": "Later: show her look outside Thailand too (a picture of her in Sparkle's balloon on the world map, on the trophy screen)?", "why": "Possible as a saved picture of her (no 3D on those screens). A later step, if Dad wants it." }
+            {
+              "q": "Can she paint her **fur** another color?",
+              "a": "**Yes** (Dad, 2026-10-26): every pot works on her fur, lilac by default. Built in greybox 1."
+            },
+            {
+              "q": "Can she paint her **hair**? (Her real hair is brown, and her toy looks a bit like her.)",
+              "a": "**Yes** (Dad, 2026-10-26): brown stays the default; the brown pot brings it back. Built in greybox 1."
+            },
+            {
+              "q": "Shoes off in Agong's house, onto the shoe rack?",
+              "a": "**Yes** (Dad, 2026-10-26): shoes hop onto the rack at Agong's door. Greybox 2."
+            },
+            {
+              "q": "Hat off for a wai (spirit house, altar, wai kru)?",
+              "a": "**Yes** (Dad, 2026-10-26): a quick hat-off for the wai and back on. Greybox 2."
+            },
+            {
+              "q": "Both ways in: the wardrobe in her room **and** the mirror button in the house's top bar?",
+              "a": "**Both** (Dad, 2026-10-26): the wardrobe in her room (greybox 1) and the mirror button in the top bar (gate 3)."
+            },
+            {
+              "q": "Anything Kaylee especially wants? (her favorite Roblox things)",
+              "a": "**The plan's list** (Dad, 2026-10-26). Greybox 1 has 2-3 of them per drawer."
+            },
+            {
+              "q": "Later: show her look outside Thailand too (a picture of her in Sparkle's balloon on the world map, on the trophy screen)?",
+              "why": "Possible as a saved picture of her (no 3D on those screens). A later step, if Dad wants it."
+            }
           ]
         }
       ]
@@ -267,9 +737,28 @@
           "type": "sections",
           "base": "#/world/thailand/hub/",
           "items": [
-            { "n": 1, "id": "wardrobe", "name": "The wardrobe, doors open", "status": "todo" },
-            { "n": 2, "id": "wardrobe", "name": "The paint drawer open", "query": "drawer=paint", "status": "todo" },
-            { "n": 3, "id": "upstairs", "name": "Her room in a look (any section takes `look`)", "query": "look=crown,hearts,wings,dress-mint", "status": "todo" }
+            {
+              "n": 1,
+              "id": "wardrobe",
+              "name": "The wardrobe, doors open"
+            },
+            {
+              "n": 2,
+              "id": "wardrobe",
+              "name": "The paint drawer open",
+              "query": "drawer=paint"
+            },
+            {
+              "id": "wardrobe",
+              "name": "The hats drawer, in a look",
+              "query": "drawer=head&look=bow,stars,fairy,tutu,sneakers,hair-pink,fur-sky"
+            },
+            {
+              "n": 3,
+              "id": "upstairs",
+              "name": "Her room in a look (any section takes `look`)",
+              "query": "look=crown,hearts,fairy,dress-mint"
+            }
           ]
         },
         {
@@ -277,9 +766,24 @@
           "title": "Clashes to check (once greybox 2 is in)",
           "base": "#/world/thailand/",
           "items": [
-            { "id": "mall-trip/vet", "name": "Vet in heart sunglasses and wings, crown in her pocket", "query": "look=crown,hearts,wings", "status": "todo" },
-            { "id": "boat-trip/fly", "name": "Window seat with a cowboy hat and wings (folded)", "query": "look=cowboy,wings&packed=sunglasses", "status": "todo" },
-            { "id": "hub/street", "name": "Shoes back on outside", "query": "look=sneakers", "status": "todo" }
+            {
+              "id": "mall-trip/vet",
+              "name": "Vet in heart sunglasses and wings, crown in her pocket",
+              "query": "look=crown,hearts,fairy",
+              "status": "todo"
+            },
+            {
+              "id": "boat-trip/fly",
+              "name": "Window seat with her cap and wings (folded)",
+              "query": "look=cap,fairy&packed=sunglasses",
+              "status": "todo"
+            },
+            {
+              "id": "hub/street",
+              "name": "Shoes back on outside",
+              "query": "look=sneakers",
+              "status": "todo"
+            }
           ]
         }
       ]
@@ -293,12 +797,85 @@
         {
           "type": "build",
           "items": [
-            { "n": 0, "title": "This plan", "status": "doing", "date": "2026-10-26" },
-            { "n": 1, "title": "Greybox 1: the wardrobe toy", "status": "next", "md": "In her room: the wardrobe (simple shapes in the toon look), the rug, drawers, drag on, tap on, tap off, spin her, the paint pots (fur, hair, dress), 2-3 simple things per drawer. Saved on the iPad and worn in the house. The `wardrobe` section and the `look` link. The paint is the riskiest bit (her colors are painted into the model's picture), so it's prototyped first. No voices.\n\n**Stop: Dad plays it on the iPad. Is dressing her up fun?**" },
-            { "n": 2, "title": "Greybox 2: everywhere, and every clash solved", "status": "todo", "md": "Her look in every scene (one place), the costume layer, sun smarts, wings folding, shoes at the door, hat off for a wai, the ngob, the race slide's Kaylee, wall photos in her colors. Clash links in the PR for Dad to check." },
-            { "n": 3, "title": "The look: every thing made for her", "status": "todo", "md": "All ~30 things fitted to her shape (like the scrubs and the mongkhon), the wardrobe made pretty, each thing's pose, the mirror button." },
-            { "n": 4, "title": "Full loop: voices, looks on the door, the family notices", "status": "todo", "md": "Sparkle's lines, each thing's name the first time she touches it, the family's “Ooh, a crown!”, Mommy's “Good hat, Kaylee!”, the mirror photos (4 looks), the wand surprise, full QA." },
-            { "n": 5, "title": "Later, if Dad wants: her look outside Thailand", "status": "plan", "md": "A saved picture of her, on the world map's balloon and the trophy screen." }
+            {
+              "n": 0,
+              "title": "This plan",
+              "status": "done",
+              "date": "2026-10-26",
+              "pr": 203
+            },
+            {
+              "n": 1,
+              "title": "Greybox 1: the wardrobe toy",
+              "status": "done",
+              "md": "In her room: the wardrobe (simple shapes in the toon look), the rug, drawers, drag on, tap on, tap off, spin her, the paint pots (fur, hair, dress), 2-3 simple things per drawer. Saved on the iPad and worn in the house. The `wardrobe` section and the `look` link. The paint is the riskiest bit (her colors are painted into the model's picture), so it's prototyped first. No voices.\n\n**Stop: Dad plays it on the iPad. Is dressing her up fun?**",
+              "date": "2026-10-26"
+            },
+            {
+              "n": 2,
+              "title": "Greybox 2: everywhere, and every clash solved",
+              "status": "next",
+              "md": "Her look in every scene (one place), the costume layer, sun smarts, wings folding, shoes at the door, hat off for a wai, the ngob, the race slide's Kaylee, wall photos in her colors. Clash links in the PR for Dad to check."
+            },
+            {
+              "n": 3,
+              "title": "The look: every thing made for her",
+              "status": "todo",
+              "md": "All ~30 things fitted to her shape (like the scrubs and the mongkhon), the wardrobe made pretty, each thing's pose, the mirror button."
+            },
+            {
+              "n": 4,
+              "title": "Full loop: voices, looks on the door, the family notices",
+              "status": "todo",
+              "md": "Sparkle's lines, each thing's name the first time she touches it, the family's “Ooh, a crown!”, Mommy's “Good hat, Kaylee!”, the mirror photos (4 looks), the wand surprise, full QA."
+            },
+            {
+              "n": 5,
+              "title": "Later, if Dad wants: her look outside Thailand",
+              "status": "plan",
+              "md": "A saved picture of her, on the world map's balloon and the trophy screen."
+            }
+          ]
+        },
+        {
+          "type": "log",
+          "items": [
+            {
+              "title": "Greybox 1: the wardrobe toy",
+              "date": "2026-10-26",
+              "status": "done",
+              "open": true,
+              "summary": "The wardrobe in her room: doors, six drawers, 12 things and 8 pots of paint; drag on, tap on, tap off, spin, paint. Saved on the iPad and worn in the house.",
+              "blocks": [
+                {
+                  "type": "list",
+                  "items": [
+                    "**Paint first, in the lab:** `characters/model.ts` recolors her texture in the toon shader per mesh group and hue band (fur ~272° on face, arms, legs, ears and neck; dress ~322° on body and sleeves; hair ~22° and darker than 0.55 on hair, braids and tail, so the gold horn and the pink and mint streaks stay). Each texel keeps its shading. One shader program, one cached material per look. Try it in the character lab’s **Look** panel or `?look=`.",
+                    "**The look:** `characters/style.ts` (slots, items, colors, `parseLook`/`formatLook`, `currentLook()`: the link’s `look`, else the saved one). The Hub saves it with `useSaved('thailand-look')`; `look` is a sticky param and the wardrobe keeps it in step with what she wears.",
+                    "**The things:** `characters/closet/` (one file per drawer): crown, big bow, cap (backwards, shady); heart, star and round glasses; fairy wings, princess cape; tutu, princess gown; light-up sneakers, rain boots. Every hat tops out under her horn (crown 0.552 < 0.56; a dev warning if not).",
+                    "**The wardrobe:** `activities/hub/wardrobe/` (furniture + a house plugin): against the left wall of her room, a round rug beside it. Tap it: she walks onto the rug, faces you, the doors swing open. Drawers are colored with a little picture of what’s inside. The ✓ (or the doors, or tapping another thing in the house) closes it; a stray tap on the floor doesn’t.",
+                    "**Worn in the house:** the house dresses her in `currentLook()` on every floor. Other scenes don’t yet (greybox 2).",
+                    "**Dad’s answers** applied: fur and hair paint are in; shoes off at the door, hat off for a wai and the mirror button are recorded for greybox 2 and gate 3."
+                  ]
+                },
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "- The rug is **beside** the wardrobe (toward the mattress), not in front: standing in front she hid the drawers.\n- A quick tap on a pot paints her **dress** (dragging it is how she picks hair or fur).\n- Things on the shelf stand a bit bigger than on her (up to 1.6x), so the crown is easy to grab.\n- Ids are `fairy` (fairy wings) and `cap`; the plan’s `wings`/`cowboy` aren’t built yet."
+                },
+                {
+                  "type": "list",
+                  "title": "Known small things",
+                  "items": [
+                    "No silly moments yet (a shoe on her head, paint on the mirror): gate 3.",
+                    "The doors and drawers don’t say what’s inside (no voices): gate 4.",
+                    "The code-built Kaylee (if the model can’t load) can’t wear or paint anything.",
+                    "On an iPad in portrait the wardrobe’s far door goes off the left edge; the shelves and drawers stay."
+                  ]
+                }
+              ]
+            }
           ]
         }
       ]
@@ -359,7 +936,13 @@
       "for": "build",
       "group": "For the builder",
       "blocks": [
-        { "type": "callout", "tone": "warn", "icon": "🎨", "title": "Riskiest: painting a modelled toy", "md": "Her colors are painted into the GLB's one texture (a 1k JPEG atlas, one material; meshes `body_mesh`, `armL/R_mesh_new`, `legL/R_mesh`, `hair_mesh`, `face_mesh`, `ear_L/R`, `tail_mesh`, `braid*`). Colors in it, roughly: lilac fur (hue ~265°), pink dress stripes and ear insides (~330°), brown hair (~25°), cream, mint and pink streaks, gold horn.\n\nPlan: a recolor in the toon material's shader (`onBeforeCompile`), **per mesh group** and **per hue band**: the dress recolor runs only on the body and arm meshes and only on the pink band (so the pink streaks in her hair and her pink ear insides stay); hair only on `hair_mesh` and the brown band (streaks stay); fur on face, arms, legs, ears and tail on the lilac band. Keep each texel's lightness, so the shading painted into the texture stays. One cloned material per group (about 3 more materials, shared by every Kaylee with the same look). Watch the JPEG's soft edges between bands (a soft band edge, not a hard cutoff) and the stripes. Prototype this first in greybox 1, in the lab, before building the wardrobe." },
+        {
+          "type": "callout",
+          "tone": "warn",
+          "icon": "🎨",
+          "title": "Riskiest: painting a modelled toy",
+          "md": "Her colors are painted into the GLB's one texture (a 1k JPEG atlas, one material; meshes `body_mesh`, `armL/R_mesh_new`, `legL/R_mesh`, `hair_mesh`, `face_mesh`, `ear_L/R`, `tail_mesh`, `braid*`). Colors in it, roughly: lilac fur (hue ~265°), pink dress stripes and ear insides (~330°), brown hair (~25°), cream, mint and pink streaks, gold horn.\n\nPlan: a recolor in the toon material's shader (`onBeforeCompile`), **per mesh group** and **per hue band**: the dress recolor runs only on the body and arm meshes and only on the pink band (so the pink streaks in her hair and her pink ear insides stay); hair only on `hair_mesh` and the brown band (streaks stay); fur on face, arms, legs, ears and tail on the lilac band. Keep each texel's lightness, so the shading painted into the texture stays. One cloned material per group (about 3 more materials, shared by every Kaylee with the same look). Watch the JPEG's soft edges between bands (a soft band edge, not a hard cutoff) and the stripes. Prototype this first in greybox 1, in the lab, before building the wardrobe."
+        },
         {
           "type": "list",
           "title": "Other risks",
@@ -382,8 +965,7 @@
       ]
     }
   ]
-}
-</script>
+}</script>
 <script src="../../viewer/plan.js"></script>
 </body>
 </html>

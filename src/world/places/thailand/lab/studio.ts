@@ -13,6 +13,7 @@ import { Avatar } from '../characters/avatar'
 import { kayleeModel, loadKayleeModel } from '../characters/model'
 import { Member } from '../characters/member'
 import type { Wearable } from '../characters/looks'
+import { parseLook } from '../characters/style'
 import type { Pose } from '../characters/types'
 import { CameraRig, type Shot } from '../engine/camera'
 import { Bag } from '../engine/dispose'
@@ -46,6 +47,8 @@ export interface StudioView {
   selected: string
   pose: Pose
   wear: Wearable[]
+  /** Kaylee's own look from the wardrobe (style.ts's `crown,hearts,dress-mint`; empty: today's Kaylee). */
+  look: string
   /** The big cousins hold their phones (off: they put them away). */
   phone: boolean
   wind: number
@@ -265,6 +268,7 @@ export class Studio implements World3D {
         c.setPose(pose)
       }
       c.wear(v.wear)
+      c.setLook(parseLook(v.look))
     } else {
       if (fresh) c.place(0, sit ? seat - 0.1 * c.height : 0, 0, 0, pose)
       if (!v.phone && c.onPhone) c.putPhoneDown()
@@ -594,7 +598,7 @@ export class Studio implements World3D {
 
   qa() {
     const v = this.view
-    return { selected: v?.selected, lineup: this.actors.map((a) => a.entry.id), pose: v?.pose, wear: v?.wear, tool: v?.tool, shot: v?.shot, hide: v?.hide, yaw: this.yaw, pitch: this.pitch, zoom: this.zoom }
+    return { selected: v?.selected, lineup: this.actors.map((a) => a.entry.id), pose: v?.pose, wear: v?.wear, look: v?.look, tool: v?.tool, shot: v?.shot, hide: v?.hide, yaw: this.yaw, pitch: this.pitch, zoom: this.zoom }
   }
   memory() {
     return { ...this.renderer.info.memory }

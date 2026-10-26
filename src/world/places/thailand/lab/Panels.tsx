@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { go } from '../../../../router'
 import { lineText, stopSpeaking, type Line } from '../../../../sdk'
 import { WEARABLES, type Look } from '../characters/looks'
+import { formatLook, ITEMS, PAINT_COLORS, PAINT_PARTS, PAINTS, paintOf, parseLook, SLOTS, withItem, withPaint } from '../characters/style'
 import type { Pose } from '../characters/types'
 import { TUNE } from '../engine/tune'
 import { CAST, GROUPS, linesFor, variantsFor, voiceLabel, type CastEntry, type Variant } from './catalog'
@@ -526,6 +527,7 @@ function DesignTab({ lab }: { lab: LabApi }) {
           </div>
         </Section>
       )}
+      {entry.kind === 'kaylee' && <LookPanel look={view.look} set={(look) => set({ look })} />}
       <Section title="Light" aside={<button className="cl-sub" onClick={() => copy(JSON.stringify({ ambient: TUNE.ambient, sun: TUNE.sun, outline: TUNE.outline }), 'Values')}>Copy values</button>}>
         <Slider label="Ambient" value={TUNE.ambient} min={0} max={1} step={0.01} onChange={(v) => tune('ambient', v)} />
         <Slider label="Sun" value={TUNE.sun} min={0} max={1} step={0.01} onChange={(v) => tune('sun', v)} />
@@ -656,5 +658,38 @@ export function LineBar({ lab }: { lab: LabApi }) {
         </button>
       </div>
     </div>
+  )
+}
+
+/** Kaylee's own look (the wardrobe's things and paint, characters/style.ts): one chip row per drawer, one swatch row
+ *  per part she can paint. The modelled Kaylee only (the code-built one has no closet). */
+function LookPanel({ look, set }: { look: string; set: (look: string) => void }) {
+  const style = parseLook(look)
+  return (
+    <Section title="Look" aside={look ? <button className="cl-sub" onClick={() => set('')}>Clear</button> : undefined}>
+      {SLOTS.map((slot) => (
+        <div key={slot} className="cl-chips" style={{ marginBottom: 6 }}>
+          <span className="cl-sub" style={{ width: 48, textTransform: 'capitalize' }}>{slot}</span>
+          {ITEMS.filter((i) => i.slot === slot).map((i) => {
+            const on = style.on[slot] === i.id
+            return (
+              <button key={i.id} className="cl-chip" aria-pressed={on} onClick={() => set(formatLook(withItem(style, i.id, !on)))}>
+                {i.id}
+              </button>
+            )
+          })}
+        </div>
+      ))}
+      {PAINT_PARTS.map((part) => (
+        <div key={part} className="cl-chips" style={{ marginBottom: 6 }}>
+          <span className="cl-sub" style={{ width: 48, textTransform: 'capitalize' }}>{part}</span>
+          {PAINT_COLORS.map((c) => (
+            <button key={c} className="cl-chip" aria-pressed={paintOf(style, part) === c} aria-label={`${part} ${c}`} title={PAINTS[c].name} onClick={() => set(formatLook(withPaint(style, part, c)))} style={{ background: PAINTS[c].hex, minWidth: 28, color: 'transparent' }}>
+              {c}
+            </button>
+          ))}
+        </div>
+      ))}
+    </Section>
   )
 }

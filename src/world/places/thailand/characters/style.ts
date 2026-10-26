@@ -1,0 +1,159 @@
+// Kaylee's own look (planning/around-the-world/thailand/wardrobe.html): what she picked in her wardrobe at Agong's, one
+// thing per spot on her (a hat, glasses, wings or a cape, an outfit, shoes) and the color of her dress, her hair and her
+// fur. Saved on the iPad (the wardrobe writes it with useSaved('thailand-look')), and any link can set it with
+// `?look=crown,hearts,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky` (a sticky param, kit/sections.ts).
+//
+// Her look is a layer of its own: the game's costumes (Avatar.wear: the vet's scrubs, the packed sun hat) are another.
+// Greybox 1 wears it in the house; greybox 2 puts it on in every scene and lets a costume take only the spots it needs.
+//
+// Pure data (no three.js): the closet (closet/) builds the things, model.ts paints the colors.
+import { savedKey } from '../../../../sdk/hooks'
+import { flag } from '../engine/flags'
+
+/** The spots on her a thing can take (one thing each). */
+export type Slot = 'head' | 'face' | 'back' | 'outfit' | 'feet'
+export const SLOTS: readonly Slot[] = ['head', 'face', 'back', 'outfit', 'feet']
+/** What a pot of paint can change: where it's dropped decides which. */
+export type PaintPart = 'dress' | 'hair' | 'fur'
+export const PAINT_PARTS: readonly PaintPart[] = ['dress', 'hair', 'fur']
+export type PaintColor = 'pink' | 'lilac' | 'mint' | 'sky' | 'butter' | 'peach' | 'brown' | 'cream'
+
+export interface Item {
+  id: string
+  slot: Slot
+  /** What it's called (button label, for Dad and for tests). */
+  name: string
+  /** Its main color (the drawer's swatch, the shelf). */
+  color: string
+  /** A shady hat: it counts as a sun hat on a sunny trip (greybox 2's sun smarts). */
+  shade?: boolean
+  /** Tinted glasses: they count as sunglasses. */
+  tinted?: boolean
+}
+
+/** Greybox 1's things: 2-3 per drawer, simple shapes (closet/). The plan's full list (~30) comes in gate 3. Ids are
+ *  unique across slots, so a look is just a list of ids. */
+export const ITEMS: readonly Item[] = [
+  { id: 'crown', slot: 'head', name: 'Crown', color: '#FFC83D' },
+  { id: 'bow', slot: 'head', name: 'Big bow', color: '#FF4F9A' },
+  { id: 'cap', slot: 'head', name: 'Cap', color: '#8EC9F5', shade: true },
+  { id: 'hearts', slot: 'face', name: 'Heart sunglasses', color: '#FF4F9A', tinted: true },
+  { id: 'stars', slot: 'face', name: 'Star sunglasses', color: '#FFC83D', tinted: true },
+  { id: 'round', slot: 'face', name: 'Round glasses', color: '#B9A6F5' },
+  { id: 'fairy', slot: 'back', name: 'Fairy wings', color: '#C9F2E4' },
+  { id: 'cape', slot: 'back', name: 'Princess cape', color: '#B48CF0' },
+  { id: 'tutu', slot: 'outfit', name: 'Tutu', color: '#D9CCFF' },
+  { id: 'gown', slot: 'outfit', name: 'Princess gown', color: '#FBEA9A' },
+  { id: 'sneakers', slot: 'feet', name: 'Light-up sneakers', color: '#FFFFFF' },
+  { id: 'boots', slot: 'feet', name: 'Rain boots', color: '#FF8FB8' },
+]
+export const itemById = (id: string) => ITEMS.find((i) => i.id === id)
+
+/** The pots of paint, in the order they stand in the paint drawer. Any pot works anywhere (brown fur is silly, and
+ *  fine). `hsl` is what the recolor aims for: hue in degrees, saturation and lightness 0..1. */
+export const PAINTS: Record<PaintColor, { name: string; hex: string; hsl: [number, number, number] }> = {
+  pink: { name: 'Pink', hex: '#FF6FAE', hsl: [328, 0.84, 0.74] },
+  lilac: { name: 'Lilac', hex: '#B79AF0', hsl: [268, 0.61, 0.71] },
+  mint: { name: 'Mint', hex: '#8FE3C8', hsl: [160, 0.6, 0.7] },
+  sky: { name: 'Sky', hex: '#8EC9F5', hsl: [206, 0.8, 0.74] },
+  butter: { name: 'Butter', hex: '#FBE27A', hsl: [48, 0.92, 0.72] },
+  peach: { name: 'Peach', hex: '#FFB08A', hsl: [20, 0.95, 0.77] },
+  brown: { name: 'Brown', hex: '#7A4A2E', hsl: [22, 0.53, 0.3] },
+  cream: { name: 'Cream', hex: '#FFF1DC', hsl: [36, 0.85, 0.9] },
+}
+export const PAINT_COLORS = Object.keys(PAINTS) as PaintColor[]
+
+/** How she's modelled (kaylee.glb): a pink dress, brown hair, lilac fur. A drop of that pot brings it back. */
+export const DEFAULT_PAINT: Record<PaintPart, PaintColor> = { dress: 'pink', hair: 'brown', fur: 'lilac' }
+
+/** Her look: what's on each spot, and each color that isn't her own (missing = as modelled). */
+export interface Style {
+  v: 1
+  on: Partial<Record<Slot, string>>
+  paint: Partial<Record<PaintPart, PaintColor>>
+}
+/** Today's Kaylee: nothing on, her own colors. */
+export const BARE: Style = { v: 1, on: {}, paint: {} }
+
+/** The saved look's key (useSaved('thailand-look') writes it). */
+export const LOOK_KEY = 'thailand-look'
+
+/** The color of a part, her own if it isn't painted. */
+export const paintOf = (s: Style, part: PaintPart): PaintColor => s.paint[part] ?? DEFAULT_PAINT[part]
+
+/** Cleans up anything (a saved look from an older build, a hand-written link): unknown things and colors are dropped,
+ *  so old saves keep working when the closet changes. */
+export function normalize(raw: unknown): Style {
+  const out: Style = { v: 1, on: {}, paint: {} }
+  if (!raw || typeof raw !== 'object') return out
+  const r = raw as { on?: Record<string, unknown>; paint?: Record<string, unknown> }
+  for (const slot of SLOTS) {
+    const id = r.on?.[slot]
+    const item = typeof id === 'string' ? itemById(id) : undefined
+    if (item && item.slot === slot) out.on[slot] = item.id
+  }
+  for (const part of PAINT_PARTS) {
+    const c = r.paint?.[part]
+    if (typeof c === 'string' && c in PAINTS && c !== DEFAULT_PAINT[part]) out.paint[part] = c as PaintColor
+  }
+  return out
+}
+
+/** `crown,hearts,dress-mint` → a look. */
+export function parseLook(text: string): Style {
+  const out: Style = { v: 1, on: {}, paint: {} }
+  for (const word of text.split(',').map((w) => w.trim()).filter(Boolean)) {
+    const item = itemById(word)
+    if (item) {
+      out.on[item.slot] = item.id
+      continue
+    }
+    const [part, color] = word.split('-') as [PaintPart, PaintColor]
+    if (PAINT_PARTS.includes(part) && color in PAINTS && color !== DEFAULT_PAINT[part]) out.paint[part] = color
+  }
+  return out
+}
+
+/** A look → `crown,hearts,dress-mint` (empty for today's Kaylee). */
+export function formatLook(s: Style): string {
+  const words: string[] = []
+  for (const slot of SLOTS) if (s.on[slot]) words.push(s.on[slot]!)
+  for (const part of PAINT_PARTS) if (s.paint[part]) words.push(`${part}-${s.paint[part]}`)
+  return words.join(',')
+}
+
+export const sameLook = (a: Style, b: Style) => formatLook(a) === formatLook(b)
+
+/** Puts a thing on (taking off whatever was on its spot), or takes it off. */
+export function withItem(s: Style, id: string, on: boolean): Style {
+  const item = itemById(id)
+  if (!item) return s
+  const next: Style = { v: 1, on: { ...s.on }, paint: { ...s.paint } }
+  if (on) next.on[item.slot] = id
+  else if (next.on[item.slot] === id) delete next.on[item.slot]
+  return next
+}
+
+export function withPaint(s: Style, part: PaintPart, color: PaintColor): Style {
+  const next: Style = { v: 1, on: { ...s.on }, paint: { ...s.paint } }
+  if (color === DEFAULT_PAINT[part]) delete next.paint[part]
+  else next.paint[part] = color
+  return next
+}
+
+/** The saved look on this iPad (BARE if none, or if it can't be read). */
+export function savedLook(): Style {
+  try {
+    const raw = localStorage.getItem(savedKey(LOOK_KEY))
+    return raw === null ? BARE : normalize(JSON.parse(raw))
+  } catch {
+    return BARE
+  }
+}
+
+/** The look a scene dresses her in: the link's `look` (a bare `look=` is today's Kaylee), else the saved one. Test
+ *  browsers start with nothing saved, so they get today's Kaylee. */
+export function currentLook(): Style {
+  const link = flag('look')
+  return link !== null ? parseLook(link) : savedLook()
+}

@@ -77,7 +77,7 @@ export function useGameLoop(tick: (dt: number, time: number) => void, running = 
 }
 
 // Previews live on the same website as the real app, so keep their saves separate (like trophies).
-const savedKey = (key: string) => `kaylee-gamepack:${import.meta.env.BASE_URL}:saved:${key}`
+export const savedKey = (key: string) => `kaylee-gamepack:${import.meta.env.BASE_URL}:saved:${key}`
 
 /**
  * Like useState, but remembered on this iPad (her avatar, her favorite pizza...).

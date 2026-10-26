@@ -74,6 +74,10 @@ export const DIM = {
    *  Kaylee's room, with its doorway. (Dad, 2026-10-19: stairs, railing and glass all 2.2 m further forward than at
    *  first, so the overlook is smaller and her room bigger.) */
   hall: { zFront: -5.2, zGlass: -12.79, door0: 1.3, door1: 2.4 },
+  /** Kaylee's wardrobe (wardrobe.html, greybox 1): against the left wall of her room between the glass doors and the
+   *  mattress, its front facing into the room (+x). `z` is its middle, `w` its width along the wall, `d` its depth,
+   *  `h` its height. The round rug beside it (toward the mattress, clear of the open door) is where she stands to dress up (`rug`, `r`), facing the camera. */
+  wardrobe: { z: -15.15, w: 1.5, d: 0.6, h: 2.05, rug: { x: -1.45, z: -16.3, r: 0.55 } },
 }
 
 export type Area = 'street' | 'inside'
@@ -154,6 +158,8 @@ export const PICKABLES: Pickable[] = [
   { id: 'bathroom-door', label: 'Bathroom door', floor: 1, area: 'inside', at: [2.2, U + 1.1, B + 0.06], r: 0.6, react: 'rattle', use: { x: 2.2, z: B + 0.95, face: 180, pose: 'stand' } },
   // The mini-split air conditioner high on the back wall, over the bed: it beeps like the remote.
   { id: 'aircon', label: 'Air conditioner', floor: 1, area: 'inside', at: [-1.0, U + 2.45, B + 0.16], r: 0.6, react: 'beep' },
+  // Her wardrobe: the toy (activities/hub/wardrobe/) walks her onto the rug in front of it and opens its doors.
+  { id: 'wardrobe', label: 'Wardrobe', floor: 1, area: 'inside', at: [DIM.left + DIM.wardrobe.d / 2, U + 1.05, DIM.wardrobe.z], r: 0.75, react: 'jelly' },
   { id: 'gecko', label: 'Gecko', floor: 1, area: 'inside', at: [0.5, U + 2.3, B + 0.04], r: 0.35, react: 'gecko', moves: true },
 ]
 
@@ -213,6 +219,7 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [DIM.left, -0.075, B, -17.47], // the big mattress + pillows (and the gap behind it)
       [2.425, DIM.right, -15.25, -12.85], // couch
       [-0.05, 0.65, B, -20.198], // suitcase
+      [DIM.left, DIM.left + DIM.wardrobe.d + 0.05, DIM.wardrobe.z - DIM.wardrobe.w / 2, DIM.wardrobe.z + DIM.wardrobe.w / 2], // her wardrobe
     ],
     circles: [
       [0.4, -16.798, 0.2], // fan
@@ -232,7 +239,12 @@ export const STARTS = {
   downstairs: { floor: 0 as const, x: 0.2, z: -1.3, face: 160 },
   upstairs: { floor: 1 as const, x: -2.2, z: -7.6, face: 135 },
   family: { floor: 0 as const, x: 1.05, z: 1.75, face: 0 },
+  /** On the rug in front of her wardrobe, facing the wardrobe's camera (WARDROBE_YAW). */
+  wardrobe: { floor: 1 as const, x: DIM.wardrobe.rug.x, z: DIM.wardrobe.rug.z, face: 52 },
 }
+/** Degrees: where the wardrobe's camera looks from (camera.ts's yaw: from the right, across her room toward the left
+ *  wall), and so the way she faces to show off. */
+export const WARDROBE_YAW = 52
 
 /** The family photo on the sidewalk in front of Agong's house: grown-ups behind, each kid in front, beside a parent. */
 export const PHOTO: { back: string[]; front: [string, number][]; backZ: number; frontZ: number; spacing: number } = {

@@ -12,6 +12,7 @@ import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry } from 
 import type { Bag } from '../engine/dispose'
 import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../engine/geo'
 import { WEARABLES, type Look, type Wearable } from './looks'
+import type { PaintColor, PaintPart } from './style'
 
 export interface Rig {
   root: Group
@@ -44,6 +45,10 @@ export interface Rig {
   legR?: Group
   /** Things to wear made for this rig's own shape, when it isn't the code-built one (the modelled Kaylee). */
   wardrobe?: Wardrobe
+  /** Her own things from the wardrobe (style.ts, closet/), fitted to her: only the modelled Kaylee has them. */
+  closet?: (id: string, bag: Bag) => Worn | null
+  /** Recolors her dress, hair and fur (the wardrobe's paint pots): only the modelled Kaylee. */
+  paint?: (colors: Record<PaintPart, PaintColor>) => void
   /** Lying down when the head is much deeper than the body (the modelled Kaylee's hair): how high the feet stay off the
    *  floor, and how far the body stays tipped up from flat so the head rests on the back of its hair. */
   lie?: { lift: number; tilt: number }

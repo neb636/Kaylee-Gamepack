@@ -8,6 +8,11 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
       default: '',
       doc: 'start already using a thing on that floor: table, ground-couch, altar, desk, fridge, photos (downstairs); mattress, pillows, couch, suitcase, balcony (upstairs); motorbike, spirit-house, cat (street)',
     },
+    drawer: {
+      default: '',
+      values: ['', 'head', 'face', 'back', 'outfit', 'feet', 'paint'],
+      doc: "the wardrobe with this drawer open: head (hats), face (glasses), back (wings), outfit, feet (shoes), paint",
+    },
     who: {
       default: '',
       doc: 'the family photo with one person alone, turning slowly: kaylee, agong, ji, nick, jum, joy, bird, ja, sri, gan, ken, bb, putto, putter',
@@ -18,6 +23,7 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
     { id: 'street', name: "In front of Agong's house", params: ['at'] },
     { id: 'downstairs', name: 'Downstairs', params: ['at'] },
     { id: 'upstairs', name: "Kaylee's room upstairs", params: ['at'] },
+    { id: 'wardrobe', name: "Kaylee's wardrobe", params: ['drawer'] },
     { id: 'family', name: 'Family photo', params: ['who'] },
   ],
 })
