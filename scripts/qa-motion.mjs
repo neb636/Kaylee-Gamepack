@@ -1145,12 +1145,13 @@ GAME_SCENARIOS.push(
   thaiPizza('pizza-tug', 6, 'pizza=cheese&shared=3', 'ji', { tug: true }),
 )
 
-// The Nan road trip's mountain road (greybox): her finger steering the Pajero, the core verb. On the valley road she
-// puts her finger down (the steering ring appears), pushes the knob right and holds it till the Pajero slides into the
-// edge (the rail boings her back, the body leans out), lets go (Mommy takes it back to the left lane), and beeps the horn.
+// The Nan road trip's mountain road: her finger steering the Pajero, the core verb. On the valley road she puts her
+// finger down (the steering wheel appears), turns it right and holds it: the Pajero swerves off onto the grass (bumping,
+// tufts flying, "Oh no, the grass!"), on past it (it hops off and tumbles, "Oh no!", poof), and drops back onto the road
+// ("We're back!"); she lets go and Mommy takes it back to the left lane, then she taps the Pajero (it hops, boing).
 GAME_SCENARIOS.push({
   name: 'nan-steer',
-  seconds: 9,
+  seconds: 11,
   setup: async (page, base) => {
     await page.goto(`${base}#/world/thailand/nan-trip/drive`)
     await page.waitForFunction(() => window.__thaiNanQA?.().mode, null, { timeout: 30000 })
@@ -1161,10 +1162,11 @@ GAME_SCENARIOS.push({
     await page.mouse.down()
     await page.waitForTimeout(1800)
     await page.mouse.move(vp.width * 0.85, vp.height * 0.45, { steps: 20 })
-    await page.waitForTimeout(2600)
+    await page.waitForFunction(() => window.__thaiNanQA().overs > 0, null, { timeout: 12000 }).catch(() => {})
+    await page.waitForTimeout(3000)
     await page.mouse.up()
     await page.waitForTimeout(2200)
-    await page.getByRole('button', { name: 'Horn' }).dispatchEvent('pointerdown')
+    await page.getByRole('button', { name: 'The Pajero' }).click({ force: true }).catch(() => {})
     await page.waitForTimeout(1500)
   },
 })

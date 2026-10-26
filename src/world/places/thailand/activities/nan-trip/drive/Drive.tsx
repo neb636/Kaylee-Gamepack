@@ -1,6 +1,5 @@
-// The mountain road's screen: the 3D road (mountain.ts) with its tap targets, the steering ring (sled style: it appears
-// under her finger and the knob follows it; mountain.ts places both every frame), the steering wheel in the corner (the whole
-// wheel is the horn, and it turns as the Pajero turns; it pulses when a car is coming round a blind bend), the 3 road's
+// The mountain road's screen: the 3D road (mountain.ts) with its tap targets, the steering wheel (sled style: it appears
+// under her finger and turns as she pushes it left or right; mountain.ts places and turns it every frame), the 3 road's
 // big numbers as she counts the bends, the 👆 when she hasn't steered for a while, Sparkle in the other corner
 // (trip/legs/Guide.tsx: she and the family talk out loud in their own voices), and at the end of the road its stop
 // (when she picked one on the Nan map, it opens by itself) or the end card: the stop, 🔁 this road again, 🗺️ back to
@@ -54,7 +53,6 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
   const [hud, setHud] = useState<DriveHud>({ phase: 'drive', count: { k: 0, n: 0 } })
   const worldRef = useRef<NanDrive | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
-  const wheelRef = useRef<HTMLButtonElement>(null)
   const stickRef = useRef<HTMLDivElement>(null)
   const guideRef = useRef<TripGuideHandle>(null)
   // This drive's weather and traffic: rolled for every road and every 🔁 (the link's weather for the first one).
@@ -86,7 +84,6 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
   const make = (renderer: WebGLRenderer) => {
     const w = new NanDrive(renderer, road, { onHud: setHud, onView: () => viewCb.current?.(), say: (l) => guideRef.current?.speak(l) }, view ? 'view' : 'road', roll, toRef.current, roll.from)
     w.setHintElement(hintRef.current)
-    w.setWheelElement(wheelRef.current)
     w.setStickElement(stickRef.current)
     return w
   }
@@ -132,7 +129,6 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
         </button>
       )}
       {mode === 'webgl' && <TripGuide ref={guideRef} hidden={hud.phase === 'end'} />}
-      {mode === 'webgl' && <Wheel ref={wheelRef} hidden={hud.phase === 'view' || hud.phase === 'end'} onHorn={() => worldRef.current?.honk()} />}
       <CountPop count={hud.count} />
       <AnimatePresence>{photo && mode === 'webgl' && <Snapshot key="three" src={threePhoto} />}</AnimatePresence>
       <AnimatePresence>{hud.phase === 'end' && !going && <EndCard road={road} onRoad={pick} onStop={onStop} onMap={onMap} onHome={view ? onHome : undefined} />}</AnimatePresence>
@@ -140,91 +136,37 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
   )
 }
 
-/** The steering wheel in the corner: the whole wheel is the horn (beep beep!). mountain.ts turns it (--turn) and makes it
- *  pulse (data-pulse) when a car is coming round a blind bend. */
-const Wheel = forwardRef<HTMLButtonElement, { hidden?: boolean; onHorn: () => void }>(function Wheel({ hidden, onHorn }, ref) {
-  return (
-    <>
-      <button
-        ref={ref}
-        aria-label="Horn"
-        className="nan-wheel"
-        onPointerDown={(e) => {
-          // At once, on the finger going down (no waiting for it to lift).
-          e.stopPropagation()
-          e.preventDefault()
-          onHorn()
-        }}
-        style={{
-          position: 'absolute',
-          right: 'calc(var(--safe-right, 0px) + 16px)',
-          bottom: 'calc(var(--safe-bottom, 0px) + 16px)',
-          width: 'clamp(112px, 19vmin, 160px)',
-          height: 'clamp(112px, 19vmin, 160px)',
-          padding: 0,
-          border: 'none',
-          borderRadius: '50%',
-          background: 'transparent',
-          zIndex: 34,
-          touchAction: 'none',
-          display: hidden ? 'none' : 'block',
-          transform: 'rotate(var(--turn, 0deg))',
-          transition: 'transform 80ms linear',
-        }}
-      >
-        <svg viewBox="-50 -50 100 100" width="100%" height="100%" style={{ display: 'block', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.3))' }}>
-          <circle r={44} fill="none" stroke="#3E3849" strokeWidth={11} />
-          <circle r={44} fill="none" stroke="#5A5266" strokeWidth={3} strokeDasharray="6 9" />
-          {[90, 210, 330].map((a) => (
-            <rect key={a} x={-5} y={0} width={10} height={40} rx={4} fill="#3E3849" transform={`rotate(${a})`} />
-          ))}
-          <circle className="nan-boss" r={21} fill="#FF4F9A" stroke="#FFFFFF" strokeWidth={4} />
-          <text y={9} textAnchor="middle" fontSize={24}>
-            📯
-          </text>
-        </svg>
-      </button>
-      <style>{`
-        .nan-wheel[data-pulse="1"] .nan-boss { animation: nan-boss 0.6s ease-in-out infinite; transform-origin: center; }
-        .nan-wheel[data-pulse="1"] { box-shadow: 0 0 0 8px rgba(255, 200, 61, .65), 0 0 28px 10px rgba(255, 79, 154, .45); }
-        @keyframes nan-boss { 50% { transform: scale(1.18); fill: #FFC83D; } }
-      `}</style>
-    </>
-  )
-})
-
-/** The steering ring, sled style: a soft sky-blue ring centred where her finger went down, and a knob that follows her
- *  finger (held inside the ring). mountain.ts shows it, places it (transform), sizes it (--r) and moves the knob. */
+/** The steering wheel, sled style: it appears centred where her finger went down and turns as she pushes left or right
+ *  (her finger is on its rim). mountain.ts shows it, places it (transform), sizes it (--r) and turns it (--turn). */
 const Stick = forwardRef<HTMLDivElement>(function Stick(_, ref) {
   return (
     <div ref={ref} aria-hidden style={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0, display: 'none', pointerEvents: 'none', zIndex: 19000 }}>
-      <div
+      <svg
+        viewBox="-50 -50 100 100"
         style={{
           position: 'absolute',
           left: 'calc(var(--r, 72px) * -1)',
           top: 'calc(var(--r, 72px) * -1)',
           width: 'calc(var(--r, 72px) * 2)',
           height: 'calc(var(--r, 72px) * 2)',
-          boxSizing: 'border-box',
-          borderRadius: '50%',
-          border: '7px solid rgba(110, 196, 240, .85)',
-          background: 'rgba(110, 196, 240, .14)',
-          boxShadow: '0 0 0 2px rgba(255,255,255,.55), inset 0 0 0 2px rgba(255,255,255,.55)',
+          overflow: 'visible',
+          rotate: 'var(--turn, 0deg)',
+          opacity: 0.92,
+          filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.3))',
         }}
-      />
-      <div style={{ position: 'absolute', left: 0, top: 0, willChange: 'transform' }}>
-        <div
-          style={{
-            width: 'calc(var(--r, 72px) * 0.62)',
-            height: 'calc(var(--r, 72px) * 0.62)',
-            translate: '-50% -50%',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle at 35% 30%, #A9E2FF, #4FB4EA 70%)',
-            border: '4px solid #fff',
-            boxShadow: '0 4px 10px rgba(43,35,48,.3)',
-          }}
-        />
-      </div>
+      >
+        {/* The rim (white edged so it reads on the road and the grass), three spokes, the pink middle with a heart. */}
+        <circle r={44} fill="none" stroke="#FFFFFF" strokeWidth={15} />
+        <circle r={44} fill="none" stroke="#6E5C8A" strokeWidth={10} />
+        <circle r={44} fill="none" stroke="#8A78A6" strokeWidth={3} strokeDasharray="5 8" />
+        {[90, 210, 330].map((a) => (
+          <rect key={a} x={-5} y={10} width={10} height={32} rx={4} fill="#6E5C8A" stroke="#FFFFFF" strokeWidth={2} transform={`rotate(${a})`} />
+        ))}
+        <circle r={17} fill="#FF4F9A" stroke="#FFFFFF" strokeWidth={4} />
+        <path d="M0 8 C -11 0, -9 -9, -3.5 -8 C -1.5 -7.6, -0.5 -6, 0 -4.5 C 0.5 -6, 1.5 -7.6, 3.5 -8 C 9 -9, 11 0, 0 8 Z" fill="#FFFFFF" />
+        {/* Where her hands hold it, on top: it swings round as the wheel turns. */}
+        <circle cy={-44} r={8} fill="#FFC83D" stroke="#FFFFFF" strokeWidth={3} />
+      </svg>
     </div>
   )
 })

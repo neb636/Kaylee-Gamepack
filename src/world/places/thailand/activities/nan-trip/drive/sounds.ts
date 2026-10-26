@@ -1,18 +1,11 @@
-// The mountain road's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): the Pajero's horn,
-// the beeps back, the animals, the guard rail's boing, the wipers, the tyres in the wet and the puddles, the nodding
+// The mountain road's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): the other drivers'
+// toots, the animals, the guard rail's boing, the wipers, the tyres in the wet and the puddles, the nodding
 // elephant's squeak, the crayon drawing the 3. (The voices are lines.ts L.nan.drive.)
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
 
 export const roadSfx = {
   ...sfx,
-  /** The Pajero's horn: a short friendly double beep. */
-  horn: () => [0, 0.16].forEach((d) => {
-    tone(415, 410, 0.12, 0.09, 'square', d)
-    tone(523, 520, 0.12, 0.05, 'square', d)
-  }),
-  /** The car round the blind bend beeps back: higher, quicker. */
-  beepBack: () => [0, 0.12].forEach((d) => tone(880, 870, 0.09, 0.07, 'square', d)),
   /** An oncoming driver's horn: one honk, or a happy little tune (she's on their side of the road). */
   toot: (tune: boolean, low = false) => {
     const f = low ? 262 : 392

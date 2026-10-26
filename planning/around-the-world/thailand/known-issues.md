@@ -124,6 +124,9 @@ stop after the city road) are fixed.
   - Check: `#/world/thailand/nan-trip/drive?road=sky`, past the cloud. Code: `drive/mountain.ts`, `trip/road/clouds.ts`.
 - [ ] **Daddy, the elephant toy and the wipers' tap targets overlap a little** on the small car (each keeps an area of
   its own). Code: `drive/mountain.ts` (the anchors).
+- [ ] **On the grass the Pajero drives straight through the chevron signs** and the round mirrors (they stand 1.7 m
+  past the edge; it can go 4.6 m out). A wobble or a boing off them would be sillier.
+  - Check: `#/world/thailand/nan-trip/drive?road=sky`, steer onto the grass on a bend. Code: `drive/mountain.ts` (`edges`).
 - [ ] **The `weather` param drops out of the address bar** once a drive starts (`NanTrip.tsx` doesn't pass it to
   `enter`). The drive the link opened still uses it.
 - [ ] **The salt wells' three verbs** (bucket, logs, paddle) are one grab-and-move verb but feel like three; round 2 has

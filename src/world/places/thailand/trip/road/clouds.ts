@@ -2,14 +2,15 @@
 // into it and pops out on top), the sea of clouds she sees from above it (a white floor out to the horizon with lumps
 // rolling on it), and puffs resting on peaks or hanging low on the hills. Toon white with lavender shade bands; one or
 // two meshes each.
-import { CircleGeometry, Group, Mesh, type BufferGeometry } from 'three'
+import { CircleGeometry, Group, Mesh, type BufferGeometry, type Material } from 'three'
 import type { Bag } from '../../engine/dispose'
 import { merge, P, solid } from '../../engine/geo'
 import { toon } from '../../engine/toon'
 import { rng } from './build'
 
-/** A layer of cloud between heights y0 and y1 over the box (meters), `n` blobs. */
-export function buildCloudLayer(box: { x0: number; x1: number; z0: number; z1: number }, y0: number, y1: number, n: number, seed: number, bag: Bag) {
+/** A layer of cloud between heights y0 and y1 over the box (meters), `n` blobs. Below 1, `opacity` lets the road and the
+ *  hills show through the blobs as she drives in among them. */
+export function buildCloudLayer(box: { x0: number; x1: number; z0: number; z1: number }, y0: number, y1: number, n: number, seed: number, bag: Bag, opacity = 1) {
   const rand = rng(seed)
   const parts: BufferGeometry[] = []
   for (let i = 0; i < n; i++) {
@@ -19,7 +20,18 @@ export function buildCloudLayer(box: { x0: number; x1: number; z0: number; z1: n
     const y = y0 + (y1 - y0) * (0.35 + rand() * 0.5)
     parts.push(P.sphere(r, rand() < 0.2 ? '#F4F1FF' : '#FFFFFF', { at: [x, y, z], scale: [1.4, 0.55, 1.2] }, 10))
   }
-  return solid(merge(parts), bag, 0)
+  const g = solid(merge(parts), bag, 0)
+  if (opacity < 1) {
+    // (Its own copy of the shared toon material, see-through and drawn after everything solid.)
+    const mesh = g.children[0] as Mesh
+    const m = bag.add((mesh.material as Material).clone())
+    m.transparent = true
+    m.opacity = opacity
+    m.depthWrite = false
+    mesh.material = m
+    mesh.renderOrder = 2
+  }
+  return g
 }
 
 /** Puffy clouds resting on peaks (or anywhere): each a few blobs huddled together. */

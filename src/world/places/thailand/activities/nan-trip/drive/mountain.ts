@@ -1,10 +1,13 @@
 // The mountain road (section `drive`, plan: thailand/nan-trip.html, "The mountain road"; built: steps 1, 8 and 9, the
 // road, its look and its voices). Mommy drives the big silver Pajero and Kaylee steers it: it always rolls forward
-// (Mommy's foot), and she steers it like a sled: her finger goes down anywhere, a ring appears under it, and pushing
-// the knob left or right slides the Pajero that way across the road (further from the middle = faster). Let go and Mommy
-// eases it back into the left lane by herself (Thailand keeps left). Mommy slows for the bends (the body leans out), stops for
-// a buffalo crossing (the body squats), and the road boings the car back like a pinball bumper if she steers into the
-// edge (Daddy: "Whoa!"). No crashes, no leaving the road.
+// (Mommy's foot), and she steers it like a sled: her finger goes down anywhere, a steering wheel appears under it, and
+// pushing it left or right turns the wheel and slides the Pajero that way across the road (further = faster). Let go and
+// Mommy eases it back into the left lane by herself (Thailand keeps left). Mommy slows for the bends (the body leans out)
+// and stops for a buffalo crossing (the body squats). Silly driving is a toy too, never a crash: off the side of the road
+// she bumps along the grass (slower, shaking, Mommy: "Oh no, the grass!") until the hillside boings her back; steered
+// over the guard rail (or off the bridge), the Pajero hops it and tumbles down the cliff, cartoon style ("Oh no!"),
+// vanishes in a poof, and drops back onto the road where it left ("We're back!"). Wiggling all over the road gets a
+// "Wibbly wobbly!". Mommy never drives off by herself: only her finger takes it over the edge.
 //
 // The family rides inside, seen through the windows: Mommy at the wheel on the right, Daddy beside her (tap him: he
 // hops and says something, in turn), Kaylee behind Mommy, and the pink elephant toy nodding on the back seat (tap it:
@@ -14,7 +17,7 @@
 // The mountains' look: soft grey-lavender skies and low cloud on the hills when it's grey, a wet road that shines with
 // puddles that splash when it rains, sunshine when it's sunny. On the way: oncoming songthaews, scooters and tuk-tuks
 // that pull over and toot a tune if she drifts onto their side (Mommy: "Keep left!"); chickens that flap off the road;
-// on the sky road, round mirrors on the blind bends (one shows a car coming: beep the horn and it beeps back), a
+// on the sky road, round mirrors on the blind bends (one flashes when a car is coming round, and it beeps hello), a
 // waterfall, a monkey on the rail, then the cloud (white all round, headlights on) and out above it into the sunshine
 // over a sea of clouds; on the 3 road, the bends she counts with Sparkle, and from the viewpoint the road below is a
 // giant 3 (section `three`): a big pink crayon waits at the top of it, and her finger pulls it along the road (one,
@@ -22,12 +25,12 @@
 // (the mushroom farm, the café, the market, the viewpoint): the Pajero pulls in and the camera turns to look.
 //
 // Talk (lines.ts L.nan.drive): at most one line before her hands are busy (Mommy's "Steer for me!" on the first drive,
-// Sparkle's "Let's count the bends!" on the 3 road); Sparkle says what's new (the first mirror, the first cloud, the
-// numbers) and, after ~8 s with nothing touched, how to steer; the family react (each thing once, nothing stacked:
-// a reaction is dropped while someone's talking).
+// Sparkle's "Let's count the bends!" on the 3 road); Sparkle says what's new (the first cloud, the numbers) and, after
+// ~8 s with nothing touched, how to steer; the family react (each thing once, nothing stacked: a reaction is dropped
+// while someone's talking), and to silly driving every time, in turn.
 //
-// The screen (Drive.tsx) draws the steering wheel with its horn, the steering ring, the count's big numbers, Sparkle and
-// the end card; the wheel's turn, the ring and its knob, the hint finger and the tap targets are written here every frame.
+// The screen (Drive.tsx) draws the steering wheel, the count's big numbers, Sparkle and the end card; the wheel's place
+// and turn, the hint finger and the tap targets are written here every frame.
 import { Color, Fog, Group, Mesh, MeshBasicMaterial, Scene, Vector3, type WebGLRenderer, BufferGeometry, BufferAttribute } from 'three'
 import { clamp, sounds, speakingVoice, type Line } from '../../../../../../sdk'
 import { Avatar } from '../../../characters/avatar'
@@ -76,11 +79,24 @@ export type DriveStart = 'road' | 'view'
  *  rises with it so it still holds the same line round the hairpins. */
 const ZOOM = 1.6
 const PAJERO_FEEL: Feel = { top: 9.5 * ZOOM, boost: 1.2, accel: 4 * ZOOM, coast: 0.6, turn: 1.15 * ZOOM, grip: 7, near: 2, far: 7, dead: 0.02, lean: 0.12 }
-/** The steering ring (sled style): how far across the road the knob pushed all the way slides it (m/s), the middle
- *  that counts as straight (share of the ring), and how quickly Mommy eases it back into her lane after she lets go (s). */
+/** The steering wheel (sled style): how far across the road pushing it all the way slides it (m/s), the middle that
+ *  counts as straight (share of the wheel), and how quickly Mommy eases it back into her lane after she lets go (s). */
 const SLIDE = 7.5
 const STICK_DEAD = 0.12
 const BACK_S = 1.4
+/** How far past the edge of the road she can bump along the grass (m; the trees start a little further out), and how
+ *  much slower it goes there. */
+const GRASS = 4.6
+const GRASS_CAP = 0.6
+/** Over the edge: the hop over the rail (m/s up, m/s out), gravity, the longest tumble (s), the poof before she's back
+ *  (s), and the drop back onto the road (s, from this high in m). */
+const HOP_UP = 6.5
+const HOP_OUT = 4
+const FALL_G = 16
+const FALL_MAX = 2.2
+const POOF_S = 0.7
+const DROP_S = 0.65
+const DROP_H = 9
 
 /** The road's tap targets: the Pajero (Daddy in it, the elephant toy, the wipers), then whoever is on the road this
  *  drive (`traffic`: its roll). */
@@ -88,7 +104,7 @@ export function driveAnchors(id: RoadId, traffic?: TrafficPlan, to = ''): Anchor
   const r = nanRoad(id)
   const t = traffic ?? r.traffic
   return [
-    { id: 'car', label: 'The Pajero (beep beep!)', kind: 'thing' },
+    { id: 'car', label: 'The Pajero', kind: 'thing' },
     { id: 'family:nick', label: 'Daddy', kind: 'family' },
     { id: 'elephant', label: 'The elephant toy', kind: 'thing' },
     { id: 'wipers', label: 'The wipers', kind: 'thing' },
@@ -119,7 +135,8 @@ const AIR = {
   rain: { bg: '#C6C4D9', fog: '#CBC9DD', near: 60, far: 340 },
   sun: { bg: '#BFE3FF', fog: '#E4F3FC', near: 160, far: 620 },
   above: { bg: '#9FD6FF', fog: '#E6F5FF', near: 220, far: 760 },
-  inside: { bg: '#F7F6FC', fog: '#F7F6FC', near: 3, far: 30 },
+  // (Misty, not a white wall: the road shows for a good way ahead.)
+  inside: { bg: '#F2F0FA', fog: '#F2F0FA', near: 10, far: 85 },
 }
 /** How bright the sun is in each weather (the toon bands stay; the light just softens). */
 const SUNNY: Record<Weather, number> = { sun: 1, cloud: 0.86, rain: 0.74 }
@@ -153,6 +170,7 @@ export class NanDrive implements World3D {
   /** The big pink crayon at the tip of the line she draws. */
   private crayonTip: Group | null = null
   private dust: Particles
+  private grass: Particles
   private rain: Particles
   private sparkle: Particles
   private fog: Fog
@@ -161,13 +179,25 @@ export class NanDrive implements World3D {
   private phase: DrivePhase = 'drive'
   private phaseT = 0
   time = 0
-  /** Where the car is on the road. */
+  /** Where the car is on the road, and how high the ground under it is (the road, or the grass beside it). */
   private loc = { i: 0, s: 0, lat: 0 }
-  /** Her finger: where it is now, and where it went down (the steering ring's middle). */
+  private y = 0
+  /** Over the edge: the Pajero tumbling down the hillside (where it left the road, which side, where it is now and how
+   *  it's spinning; `gone`: when it vanished in a poof, -1 while it's still tumbling). Null: on the road. */
+  private fall: { t: number; s: number; side: number; x: number; y: number; z: number; vx: number; vy: number; vz: number; spin: number; gone: number } | null = null
+  /** Dropping back onto the road after a tumble (1 → 0). */
+  private drop = 0
+  /** Off the road on the grass (0..1, eased), and when it last thumped. */
+  private offK = 0
+  private thumpT = 0
+  /** Wiggling: when her push last swapped sides (the last few). */
+  private flips: number[] = []
+  private lastSide = 0
+  /** Her finger: where it is now, and where it went down (the steering wheel's middle). */
   private finger: { x: number; y: number; ox: number; oy: number; steering: boolean; t: number; id?: string } | null = null
-  /** Where across the road she's steering to (m): the ring's knob slides it; let go and it eases back into her lane. */
+  /** Where across the road she's steering to (m): the wheel slides it; let go and it eases back into her lane. */
   private steerLat = LANE_LAT
-  /** The ring's knob, -1..1 across the road (+ toward +lat), for the wheel and QA. */
+  /** The wheel's push, -1..1 across the road (+ toward +lat), for QA. */
   private stick = 0
   private w = 1
   private h = 1
@@ -195,9 +225,8 @@ export class NanDrive implements World3D {
   private lastHud = ''
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
-  private wheelEl: HTMLElement | null = null
   private stickEl: HTMLElement | null = null
-  private counts = { honks: 0, boings: 0, pokes: 0, steered: 0, keptLeft: 0, wipes: 0, splashes: 0 }
+  private counts = { hops: 0, boings: 0, pokes: 0, steered: 0, keptLeft: 0, wipes: 0, splashes: 0, overs: 0, grass: 0, wiggles: 0 }
   private ev: TrafficEvents
   /** This drive's weather (rolled, or the link's). */
   readonly weather: Weather
@@ -220,6 +249,8 @@ export class NanDrive implements World3D {
   private hintSaid = -99
   private hintN = 0
   private nickTap = 0
+  /** Each silly-driving list's turn. */
+  private turns = new Map<string, number>()
   private inCloudT = 0
   private yieldsSeen = 0
   private lastSteer = -99
@@ -287,7 +318,7 @@ export class NanDrive implements World3D {
     // Clouds: the layer the sky road drives into, or puffs resting on the far hills.
     const b = r.road.bounds(220)
     if (r.cloud) {
-      scene.add(buildCloudLayer(b, r.cloud.y0, r.cloud.y1, 300, r.look.seed, bag))
+      scene.add(buildCloudLayer(b, r.cloud.y0, r.cloud.y1, 300, r.look.seed, bag, 0.45))
       // From above it: a sea of clouds out to the horizon (only once she's up there).
       this.sea = buildCloudSea(b, r.cloud.y0 + (r.cloud.y1 - r.cloud.y0) * 0.62, r.look.seed, bag)
       this.sea.visible = false
@@ -342,16 +373,13 @@ export class NanDrive implements World3D {
       put(c, 0, 0, 0, 'sit', 0)
     }
     this.dust = new Particles({ kind: 'spray', count: 260, colors: ['#FFFFFF', '#F1E4D6', '#EDE7F7'], gravity: 3 }, bag)
+    this.grass = new Particles({ kind: 'spray', count: 160, colors: ['#9BD37E', '#7CC46A', '#C9A77C', '#B8E39A'], gravity: 9 }, bag)
     this.rain = new Particles({ kind: 'spray', count: 700, color: '#E7EEFF', gravity: 0 }, bag)
     this.sparkle = new Particles({ kind: 'spray', count: 320, colors: ['#FF4F9A', '#FFC83D', '#8FE3C8', '#A8DCFF', '#B9A6F5'], gravity: 4 }, bag)
-    scene.add(this.dust.mesh, this.rain.mesh, this.sparkle.mesh)
+    scene.add(this.dust.mesh, this.grass.mesh, this.rain.mesh, this.sparkle.mesh)
     this.ev = {
       toot: (kind, tune) => sfx.toot(tune, kind === 'songthaew' || kind === 'tuktuk'),
-      beepBack: () => {
-        sfx.beepBack()
-        const m = this.mirrors.find((x) => Math.abs(x.s - this.loc.s) < 80)
-        if (m) this.sparkle.burst(m.at.x, m.at.y, m.at.z, 24, 3, 4, 0.22)
-      },
+      beepBack: () => {},
       moo: () => sfx.moo(),
       cluck: () => sfx.cluck(),
       chatter: () => sfx.chatter(),
@@ -389,18 +417,14 @@ export class NanDrive implements World3D {
   setHintElement(el: HTMLElement | null) {
     this.hintEl = el
   }
-  /** The steering wheel on the screen: it turns with the car, and pulses when a beep would be heard. */
-  setWheelElement(el: HTMLElement | null) {
-    this.wheelEl = el
-  }
-  /** The steering ring: it appears where her finger went down, the knob following it. */
+  /** The steering wheel: it appears where her finger went down, and turns as she pushes. */
   setStickElement(el: HTMLElement | null) {
     this.stickEl = el
   }
 
   pointerDown(x: number, y: number, id?: string) {
     this.lastTouch = this.time
-    // A finger on the road steers at once (the ring appears under it); one on a tap target steers too once it moves or
+    // A finger on the road steers at once (the wheel appears under it); one on a tap target steers too once it moves or
     // is held a moment (a quick tap there pokes it).
     this.finger = { x, y, ox: x, oy: y, steering: !id, t: this.time, id }
     this.steerLat = this.loc.lat
@@ -430,7 +454,7 @@ export class NanDrive implements World3D {
     }
     if (!id) return
     this.counts.pokes++
-    if (id === 'car') return this.honk()
+    if (id === 'car') return this.bounce()
     if (id === 'family:nick') {
       // Daddy hops in his seat and says something (in turn); not over Sparkle.
       this.nick.react('hop')
@@ -476,15 +500,16 @@ export class NanDrive implements World3D {
     this.traffic.poke(id, this.ev)
   }
 
-  /** The horn (the steering wheel's middle, or a tap on the Pajero): beep beep, the lights wink, the car hops, and
-   *  whoever hears it answers. */
-  honk() {
-    this.lastTouch = this.time
-    this.counts.honks++
-    sfx.horn()
+  /** A tap on the Pajero: it hops on its springs, boing, the lights wink, and Kaylee wiggles inside. */
+  private bounce() {
+    if (this.fall) return
+    this.counts.hops++
+    sfx.boing()
     this.flash = 0.6
     this.hop = 1
-    this.traffic.honk(this.her(), this.ev)
+    this.kaylee.react('wiggle')
+    const p = this.car.root.position
+    this.dust.burst(p.x, p.y + 0.2, p.z, 10, 1.6, 2, 0.16)
   }
 
   // ---------------------------------------------------------------- per frame
@@ -515,11 +540,15 @@ export class NanDrive implements World3D {
       this.lastTouch = t
       if (!this.finger.steering && t - this.finger.t > 0.25) this.finger.steering = true
     }
-    this.drive(dt)
-    this.d.step(dt)
-    this.keepOnRoad()
-    this.locate()
-    this.poseCar(dt)
+    if (this.fall) this.lastTouch = t
+    else {
+      this.drive(dt)
+      this.d.step(dt)
+      this.edges()
+      this.locate()
+    }
+    if (this.fall) this.tumble(dt)
+    else this.poseCar(dt)
     this.traffic.update(dt, t, this.her(), this.ev)
     this.updateAir(dt)
     this.mirrorsFlash(t)
@@ -531,7 +560,7 @@ export class NanDrive implements World3D {
     this.nodding(dt)
     for (const c of [this.kaylee, this.nick, this.ji]) c.update(dt, t)
     this.talk(t)
-    for (const p of [this.dust, this.rain, this.sparkle]) p.update(dt)
+    for (const p of [this.dust, this.grass, this.rain, this.sparkle]) p.update(dt)
     if (this.lowCloud) this.lowCloud.position.x = Math.sin(t * 0.04) * 6
     // The salt pan steams.
     const steam = this.landmark.userData.steam as [number, number, number] | undefined
@@ -559,7 +588,6 @@ export class NanDrive implements World3D {
     this.lights.ambient.intensity *= 0.94 + 0.06 * sunK
     const back = tmp.set(cam.position.x - this.d.x, 0, cam.position.z - this.d.z).normalize()
     this.lights.sun.position.set(this.d.x + back.x * 7 - back.z * 4, this.carY() + 10, this.d.z + back.z * 7 + back.x * 4)
-    this.writeWheel()
     this.writeStick()
     this.hint(t)
     this.emitHud()
@@ -573,21 +601,27 @@ export class NanDrive implements World3D {
     const s = this.loc.s
     let ds = 10 + Math.abs(d.speed) * 0.9
     const f = this.finger
+    // Dropping back onto the road: it waits till it lands.
+    if (this.drop > 0) return d.stop()
     if (this.phase === 'drive' && f?.steering) {
-      // Sled style: the knob's push across the road slides her that way, as long as she holds it there.
+      // Sled style: the wheel's push across the road slides her that way, as long as she holds it there.
       this.stick = this.stickAcross(f)
       const k = Math.abs(this.stick) < STICK_DEAD ? 0 : Math.sign(this.stick) * ((Math.abs(this.stick) - STICK_DEAD) / (1 - STICK_DEAD))
-      // (A little past the edge is allowed: that's how she finds the rail's boing.)
-      this.steerLat = clamp(this.steerLat + k * SLIDE * dt, -(half + 1.5), half + 1.5)
+      // (Past the edge is allowed: onto the grass, or over the rail.)
+      this.steerLat = clamp(this.steerLat + k * SLIDE * dt, -(half + GRASS + 1.5), half + GRASS + 1.5)
       if (k !== 0) {
         this.counts.steered += dt
         this.lastSteer = this.time
       }
+      this.wiggling()
     } else {
       // Let go: Mommy eases it back into the left lane.
       this.steerLat += (LANE_LAT - this.steerLat) * (1 - Math.exp(-dt / BACK_S))
     }
     let lat = this.steerLat
+    // Steering hard (far from where the car is now): it aims closer ahead, so it turns sharply that way instead of
+    // drifting over.
+    ds = Math.max(6, ds - Math.abs(lat - this.loc.lat) * 3)
     // Keep left: someone coming the other way and she's over the middle: Mommy eases her back toward her lane.
     const her = this.her()
     const oncoming = this.traffic.movers.some((m) => m.state === 'go' && m.s - s > -2 && m.s - s < 34)
@@ -598,6 +632,7 @@ export class NanDrive implements World3D {
     // How fast: slower round the bends and in the cloud, stopped for a buffalo, easing in at the end of the road.
     let cap = 0.9 * (1 - clamp((Math.abs(road.bendAhead(s, 22)) - 0.35) * 0.4, 0, 0.45))
     if (this.cloudK > 0.3) cap *= 0.8
+    if (this.offK > 0.3) cap *= GRASS_CAP
     const block = this.traffic.blockAhead(her)
     // (Quicker now, so she starts braking a little further back.)
     cap *= clamp((block - 14) / 17, 0, 1)
@@ -624,17 +659,42 @@ export class NanDrive implements World3D {
     d.hold(p.x, p.z)
   }
 
-  /** The edges of the road boing her back like a pinball bumper (there's no leaving it). */
-  private keepOnRoad() {
+  /** The edges of the road. At a guard rail (or the bridge), her finger steering out sends the Pajero hopping over it
+   *  and tumbling down (`goOver`); without her finger the rail just boings it back like a pinball bumper. Elsewhere she
+   *  bumps along the grass a little way, and pushing on past it (or where it drops away) over she goes too. */
+  private edges() {
     const { road } = this.r
     const d = this.d
     const loc = road.locate(d.x, d.z, this.loc.i, 30)
-    const lim = road.half - 0.95
-    if (Math.abs(loc.lat) <= lim) return
-    const side = Math.sign(loc.lat)
+    const side = Math.sign(loc.lat) || 1
+    const a = Math.abs(loc.lat)
+    const half = road.half
+    if (a < half - 0.4) return
+    // (Only her finger takes it over: pushing out that way, past the edge.)
+    const out = this.phase === 'drive' && !!this.finger?.steering && this.steerLat * side > half - 0.6
+    const river = this.r.look.river
+    const onBridge = !!river && Math.abs(loc.s - river.s) < river.width / 2 + 4
+    if (this.world.railed(loc.s, side) || onBridge) {
+      // Already out on the grass when the drop begins: over it goes.
+      if (out || a > half + 0.6) return this.goOver(loc.s, side)
+      return this.boing(loc, side, half - 0.4)
+    }
+    if (a <= half) return
+    // The grass falling away under her (the 3 road's drops), or still pushing out at its far side: over she goes (down
+    // the drop, or bonk against the hillside). Not pushing, the far side boings her back.
+    const g = this.world.field.at(d.x, d.z)
+    if (out && (g < road.sampleAt(loc.s).y - 2.4 || a > half + GRASS)) return this.goOver(loc.s, side)
+    if (a > half + GRASS) this.boing(loc, side, half + GRASS - 0.15)
+  }
+
+  /** Boings her back toward the road from `lim` meters out (the rail, the hillside, the trees). */
+  private boing(loc: { s: number; lat: number }, side: number, lim: number) {
+    const { road } = this.r
+    const d = this.d
     const p = road.spotAt(loc.s, side * lim)
     d.x = p.x
     d.z = p.z
+    if (this.steerLat * side > lim + 0.5) this.steerLat = side * (lim + 0.5)
     const sm = road.sampleAt(loc.s)
     const nx = -side * sm.lx
     const nz = -side * sm.lz
@@ -650,10 +710,125 @@ export class NanDrive implements World3D {
       sfx.rail()
       this.kaylee.react('wiggle')
       // (Daddy's "Whoa!" when she steered into it.)
-      if (this.finger?.steering) this.every('whoa', 7, () => this.family(L.nan.drive.whoa))
-      const at = road.spotAt(loc.s, side * (road.half + 0.4))
-      this.sparkle.burst(at.x, at.y + 0.7, at.z, 12, 2.5, 3, 0.18)
+      if (this.finger?.steering) this.silly('whoa', [L.nan.drive.whoa], 7)
+      const at = road.spotAt(loc.s, side * (lim + 0.9))
+      this.sparkle.burst(at.x, this.y + 0.7, at.z, 12, 2.5, 3, 0.18)
     }
+  }
+
+  /** Over the edge: the Pajero hops the rail (boing!) and sails out, tumbling, and the family shout "Oh no!". */
+  private goOver(s: number, side: number) {
+    const d = this.d
+    const sm = this.r.road.sampleAt(s)
+    const ox = side * sm.lx
+    const oz = side * sm.lz
+    this.fall = { t: 0, s, side, x: d.x, y: this.y, z: d.z, vx: d.vx * 0.6 + ox * HOP_OUT, vy: HOP_UP, vz: d.vz * 0.6 + oz * HOP_OUT, spin: 0, gone: -1 }
+    d.stop()
+    d.vx = d.vz = 0
+    this.counts.overs++
+    sfx.rail()
+    sounds.whoosh()
+    this.sparkle.burst(d.x + ox, this.y + 1, d.z + oz, 20, 3, 4, 0.2)
+    this.nick.react('hop')
+    this.kaylee.react('wiggle')
+    // (Always: it's the funniest moment of the drive. Not over Sparkle.)
+    if (speakingVoice() !== 'sparkle') this.speak(this.next('over', L.nan.drive.over))
+  }
+
+  /** Tumbling down the hillside, then a poof, then back on the road. */
+  private tumble(dt: number) {
+    const F = this.fall!
+    const c = this.car
+    F.t += dt
+    if (F.gone < 0) {
+      F.vy -= FALL_G * dt
+      F.x += F.vx * dt
+      F.y += F.vy * dt
+      F.z += F.vz * dt
+      F.spin += dt * (4 + F.t * 3)
+      c.root.position.set(F.x, F.y, F.z)
+      // Rolling out over its side, nose bobbing, wheels spinning in the air.
+      c.tilt.rotation.set(0, 0, 0)
+      c.body.rotation.set(Math.sin(F.t * 9) * 0.35, F.spin * 0.3, -F.side * F.spin)
+      c.body.position.y = 0
+      c.body.scale.setScalar(1)
+      for (const w of c.wheels) w.rotation.x += dt * 25
+      const ground = this.world.field.at(F.x, F.z)
+      if ((F.t > 0.35 && F.y < ground + 0.8) || F.t > FALL_MAX) {
+        // Poof! (A splash in the river.)
+        F.gone = F.t
+        c.root.visible = false
+        const wet = ground < -1
+        if (wet) sfx.splash(1.4)
+        else sfx.thump()
+        sounds.pop()
+        const y = Math.max(F.y, ground + 0.5)
+        // (Big enough to see from up on the road.)
+        this.dust.burst(F.x, y + 1, F.z, 80, 6, 7, 0.75)
+        this.sparkle.burst(F.x, y + 1.5, F.z, 70, 7, 9, 0.7)
+      }
+      return
+    }
+    if (F.t - F.gone > POOF_S) this.respawn()
+  }
+
+  /** Back on the road where it went over, in her lane, dropped in from the sky (it lands with a boing). */
+  private respawn() {
+    const F = this.fall!
+    const road = this.r.road
+    const p = road.spotAt(clamp(F.s, 4, road.length - 50), LANE_LAT)
+    this.fall = null
+    this.d.place(p.x, p.z, p.heading)
+    this.steerLat = LANE_LAT
+    this.stick = 0
+    // (Her finger still down: the wheel starts again under it.)
+    if (this.finger) {
+      this.finger.ox = this.finger.x
+      this.finger.oy = this.finger.y
+    }
+    this.locate()
+    this.y = p.y
+    const c = this.car
+    c.root.visible = true
+    c.body.rotation.set(0, 0, 0)
+    this.pitch.x = this.pitch.v = this.roll.x = this.roll.v = 0
+    this.drop = 1
+  }
+
+  /** The drop back onto the road: when it lands, a boing, sparkles, and "We're back!". */
+  private dropping(dt: number) {
+    if (this.drop <= 0) return 0
+    this.drop = Math.max(0, this.drop - dt / DROP_S)
+    if (this.drop > 0) return DROP_H * this.drop * this.drop
+    this.squash = 1
+    sfx.boing()
+    sounds.sparkle()
+    const p = this.car.root.position
+    this.sparkle.burst(p.x, p.y + 1, p.z, 30, 4, 5, 0.24)
+    this.dust.burst(p.x, p.y + 0.2, p.z, 16, 2.4, 2, 0.2)
+    this.kaylee.react('wiggle')
+    this.ji.react('wave')
+    // Rolling on again.
+    this.d.vx = Math.sin(this.d.heading) * 3
+    this.d.vz = Math.cos(this.d.heading) * 3
+    this.silly('back', L.nan.drive.back, 0, 1.2)
+    return 0
+  }
+
+  /** Wiggling all over the road (her push swapping sides four times in three seconds): the car rocks, and "Wibbly
+   *  wobbly!". */
+  private wiggling() {
+    const side = Math.abs(this.stick) > 0.5 ? Math.sign(this.stick) : 0
+    if (!side || side === this.lastSide) return
+    if (this.lastSide) this.flips.push(this.time)
+    this.lastSide = side
+    while (this.flips.length && this.time - this.flips[0] > 3) this.flips.shift()
+    if (this.flips.length < 4) return
+    this.flips.length = 0
+    this.counts.wiggles++
+    this.roll.v += side * 2.5
+    this.kaylee.react('wiggle')
+    this.silly('wiggle', L.nan.drive.wiggle, 6)
   }
 
   private locate() {
@@ -664,7 +839,7 @@ export class NanDrive implements World3D {
     return { s: this.loc.s, lat: this.loc.lat, speed: this.d.speed }
   }
   private carY() {
-    return this.r.road.sampleAt(this.loc.s).y
+    return this.y
   }
 
   /** The Pajero on the road: its slope, leaning out on bends, squatting when it brakes, bouncing. */
@@ -676,9 +851,30 @@ export class NanDrive implements World3D {
     this.hop = Math.max(0, this.hop - dt * 3)
     this.squash = Math.max(0, this.squash - dt * 2.5)
     this.flash = Math.max(0, this.flash - dt)
-    c.root.position.set(d.x, sm.y, d.z)
+    // On the grass: the ground's own height and slope under it (eased in from the road's).
+    const half = this.r.road.half
+    const off = smooth(half - 0.2, half + 1.2, Math.abs(this.loc.lat))
+    this.offK += (off - this.offK) * (dt > 0 ? 1 - Math.exp(-dt * 8) : 1)
+    const field = this.world.field
+    const fx = Math.sin(d.heading)
+    const fz = Math.cos(d.heading)
+    let groundY = sm.y
+    let tiltX = -Math.atan(sm.grade)
+    let tiltZ = 0
+    if (off > 0) {
+      const g = field.at(d.x, d.z)
+      const front = field.at(d.x + fx * 1.4, d.z + fz * 1.4) - field.at(d.x - fx * 1.4, d.z - fz * 1.4)
+      const left = field.at(d.x + fz * 0.9, d.z - fx * 0.9) - field.at(d.x - fz * 0.9, d.z + fx * 0.9)
+      groundY += (Math.max(g, sm.y - 2.4) - sm.y) * off
+      tiltX += (-Math.atan(front / 2.8) - tiltX) * off
+      tiltZ = Math.atan(left / 1.8) * off
+    }
+    this.y = dt > 0 ? this.y + (groundY - this.y) * (1 - Math.exp(-dt * 14)) : groundY
+    c.root.position.set(d.x, this.y + this.dropping(dt), d.z)
     c.root.rotation.y = d.heading
-    c.tilt.rotation.x = -Math.atan(sm.grade)
+    c.tilt.rotation.x = tiltX
+    c.tilt.rotation.z = tiltZ
+    this.grassy(dt)
     if (dt > 0) {
       const sp = d.speed
       const acc = clamp((sp - this.lastSpeed) / dt, -12, 12)
@@ -692,7 +888,8 @@ export class NanDrive implements World3D {
       spring(this.pitch, -acc * 0.014, 90, 7)
       spring(this.roll, clamp(d.yawRate * sp * 0.013, -0.14, 0.14), 70, 6)
     }
-    const bounce = Math.abs(Math.sin(this.time * 11)) * 0.025 * clamp(Math.abs(d.speed) / 6, 0, 1)
+    // (Much bumpier on the grass.)
+    const bounce = Math.abs(Math.sin(this.time * (11 + 6 * this.offK))) * (0.025 + 0.09 * this.offK) * clamp(Math.abs(d.speed) / 6, 0, 1)
     c.body.position.y = bounce + Math.sin(this.hop * Math.PI) * 0.3
     c.body.rotation.x = this.pitch.x
     c.body.rotation.z = this.roll.x
@@ -702,6 +899,31 @@ export class NanDrive implements World3D {
     const lit = this.cloudK > 0.15 || this.weather === 'rain'
     c.beams.visible = this.cloudK > 0.15
     c.lamps.color.set(this.flash > 0 && Math.sin(this.flash * 30) > 0 ? '#FFFFFF' : lit ? '#FFF8D8' : '#E6E2EE')
+  }
+
+  /** Bumping along the grass: tufts flying from the wheels, a thump now and then, the car shaking, and the family's
+   *  "Oh no, the grass!" (each time she goes off, in turn). */
+  private grassy(dt: number) {
+    if (this.offK < 0.5 || this.drop > 0 || Math.abs(this.d.speed) < 1) return
+    if (this.offK > 0.9) this.every('off', 4, () => {
+      this.counts.grass++
+      this.silly('grass', L.nan.drive.grass, 5)
+    })
+    this.thumpT -= dt
+    if (this.thumpT <= 0) {
+      this.thumpT = 0.35 + Math.random() * 0.35
+      sfx.thump()
+      this.roll.v += (Math.random() - 0.5) * 2
+      this.pitch.v += (Math.random() - 0.5) * 1.5
+    }
+    if (Math.random() < dt * 30) {
+      const c = this.car.root.position
+      const bx = -Math.sin(this.d.heading) * 1.4
+      const bz = -Math.cos(this.d.heading) * 1.4
+      const sx = Math.cos(this.d.heading) * (Math.random() < 0.5 ? -0.9 : 0.9)
+      const sz = -Math.sin(this.d.heading) * (Math.random() < 0.5 ? -0.9 : 0.9)
+      this.grass.emit(c.x + bx + sx, c.y + 0.2, c.z + bz + sz, (Math.random() - 0.5) * 2 + bx, 2.5 + Math.random() * 2.5, (Math.random() - 0.5) * 2 + bz, 0.7, 0.14)
+    }
   }
 
   /** The cloud on the sky road: the haze closes in to white as she climbs into it, then she pops out above into the
@@ -755,15 +977,13 @@ export class NanDrive implements World3D {
     }
   }
 
-  /** A mirror shows the car coming round its blind bend: it flashes (and the wheel pulses) until she beeps. */
+  /** A mirror shows the car coming round its blind bend: it flashes till the car has beeped hello. */
   private mirrorsFlash(t: number) {
     const warn = this.traffic.blindWarning(this.her())
     for (const m of this.mirrors) {
       const on = warn !== null && Math.abs(m.s - warn) < 1 && m.s - this.loc.s < 70
       m.face.color.set(on && Math.sin(t * 9) > 0 ? '#FF8FB8' : '#CFE8FF')
     }
-    const pulse = warn !== null && warn - this.loc.s < 70 ? '1' : ''
-    if (this.wheelEl && this.wheelEl.dataset.pulse !== pulse) this.wheelEl.dataset.pulse = pulse
   }
 
   /** The 3 road: one, two, three, as she rounds each bend. */
@@ -913,6 +1133,18 @@ export class NanDrive implements World3D {
     this.cool.set(key, this.time)
     f()
   }
+  /** The next line of a list, in turn. */
+  private next(key: string, list: Line[]) {
+    const n = this.turns.get(key) ?? 0
+    this.turns.set(key, n + 1)
+    return list[n % list.length]
+  }
+  /** Silly driving: the family's next line from the list, once every `cool` seconds at most; dropped while Sparkle
+   *  talks or within `gap` seconds of the last line (so it's quicker than the other reactions, but never stacks up). */
+  private silly(key: string, list: Line[], cool: number, gap = 2.5) {
+    if (speakingVoice() === 'sparkle' || this.time - this.lastLine < gap) return
+    this.every(key, cool, () => this.speak(this.next(key, list)))
+  }
   /** One, two, three! (Sparkle, as the big number pops.) */
   private number(k: number) {
     const D = L.nan.drive
@@ -934,10 +1166,7 @@ export class NanDrive implements World3D {
       drives++
     }
     if (this.phase === 'drive') {
-      // Sparkle's first-time lines (once a visit, in a quiet moment while they still fit): a mirror showing a car, then
-      // beep!; driving into the cloud.
-      const warn = this.traffic.blindWarning(her)
-      if (warn !== null && warn - her.s < 60) this.teach('mirror', D.mirror)
+      // Sparkle's first-time line (once a visit, in a quiet moment while it still fits): driving into the cloud.
       if (r.cloud && this.cloudK > 0.25 && !this.wasAbove) this.teach('cloud', D.cloud)
       // Out above the cloud: Daddy's sunshine (within a few seconds of popping out).
       if (this.wasAbove && this.time - this.aboveAt < 8) this.once('sun', D.sun, true)
@@ -958,7 +1187,7 @@ export class NanDrive implements World3D {
     }
     // ---- Stuck: after ~8 s with nothing touched, Sparkle says what to do (twice a drive at most) ----
     const quiet = t - Math.max(this.lastTouch, this.quietFrom)
-    if (quiet < STUCK_S || t - this.hintSaid < HINT_EVERY || this.hintN >= HINT_MAX || !this.quiet()) return
+    if (this.fall || quiet < STUCK_S || t - this.hintSaid < HINT_EVERY || this.hintN >= HINT_MAX || !this.quiet()) return
     const l = this.phase === 'drive' ? D.steer : this.tracing && this.trace.t > 3 ? D.draw : null
     if (!l) return
     this.hintSaid = t
@@ -1115,8 +1344,22 @@ export class NanDrive implements World3D {
       const yaw = Math.atan2(d.x - l.x, d.z - l.z) / deg + 25
       return { center: c, half: down ? new Vector3(11, 4, 11) : new Vector3(9, 5, 9), yaw: this.unwrap(yaw + Math.sin(this.time * 0.25) * 6), pitch: down ? 34 : 16, minDist: 10, maxDist: 70 }
     }
-    const sp = clamp(Math.abs(d.speed) / d.feel.top, 0, 1)
     const tall = clamp((1 - this.w / this.h) / 0.4, 0, 1)
+    const F = this.fall
+    if (F) {
+      // Over the edge: between the edge and the tumbling Pajero, a little wider, so she sees it go.
+      const k = F.gone < 0 ? 0.5 : 0.35
+      return {
+        center: new Vector3(d.x + (F.x - d.x) * k, y + (F.y - y) * k + 1, d.z + (F.z - d.z) * k),
+        half: new Vector3(7, 3, 9 + 2 * tall),
+        yaw: this.unwrap(this.camHeading / deg + 180),
+        pitch: 24 + 8 * tall,
+        minDist: 9,
+        maxDist: 50,
+        follow: true,
+      }
+    }
+    const sp = clamp(Math.abs(d.speed) / d.feel.top, 0, 1)
     // A hairpin coming: higher, to see round it.
     const bend = clamp(Math.abs(road.bendAhead(this.loc.s, 30)) / 2, 0, 1)
     const ahead = road.spotAt(this.loc.s + 7 + 3 * sp, 0)
@@ -1170,12 +1413,12 @@ export class NanDrive implements World3D {
     return { x: ((v.x + 1) / 2) * this.w, y: ((1 - v.y) / 2) * this.h }
   }
 
-  /** The steering ring's radius on screen (px): a good thumb's reach on an iPad, smaller on a phone. */
+  /** The steering wheel's radius on screen (px): a good thumb's reach on an iPad, smaller on a phone. */
   private get stickR() {
     return clamp(Math.min(this.w, this.h) * 0.12, 56, 92)
   }
 
-  /** How far the knob is pushed across the road (-1..1, + toward +lat): the ring's push, read along the way the road
+  /** How far the wheel is pushed across the road (-1..1, + toward +lat): her push, read along the way the road
    *  runs across the screen just ahead (so "right" on screen is right on the road, even round a hairpin). */
   private stickAcross(f: { x: number; y: number; ox: number; oy: number }) {
     const R = this.stickR
@@ -1263,38 +1506,24 @@ export class NanDrive implements World3D {
     }
   }
 
-  /** The wheel on the screen turns the way the car is turning. */
-  private writeWheel() {
-    const el = this.wheelEl
-    if (!el) return
-    const turn = clamp(-this.d.yawRate / this.d.feel.turn, -1, 1) * 80
-    el.style.setProperty('--turn', `${turn.toFixed(1)}deg`)
-  }
-
-  /** The steering ring: under her finger while she steers, the knob following it (held inside the ring). */
+  /** The steering wheel: under her finger while she steers, turned as far as she's pushed it sideways (up to a
+   *  quarter turn and a bit). */
   private writeStick() {
     const el = this.stickEl
     if (!el) return
     const f = this.finger
-    const show = this.phase === 'drive' && !!f?.steering
+    const show = this.phase === 'drive' && !!f?.steering && !this.fall
     const want = show ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
     if (!show || !f) return
     const R = this.stickR
-    let dx = f.x - f.ox
-    let dy = f.y - f.oy
-    const len = Math.hypot(dx, dy)
-    if (len > R) {
-      dx *= R / len
-      dy *= R / len
-    }
+    const turn = clamp((f.x - f.ox) / R, -1, 1) * 110
     el.style.setProperty('--r', `${R.toFixed(0)}px`)
+    el.style.setProperty('--turn', `${turn.toFixed(1)}deg`)
     el.style.transform = `translate3d(${f.ox.toFixed(0)}px, ${f.oy.toFixed(0)}px, 0)`
-    const knob = el.firstElementChild?.nextElementSibling as HTMLElement | null
-    if (knob) knob.style.transform = `translate3d(${dx.toFixed(0)}px, ${dy.toFixed(0)}px, 0)`
   }
 
-  /** Not steering for a while (or never yet): a finger sliding side to side low on the screen (the steering ring), or, drawing the 3, along the road. */
+  /** Not steering for a while (or never yet): a finger sliding side to side low on the screen (the steering wheel), or, drawing the 3, along the road. */
   private hint(t: number) {
     const el = this.hintEl
     if (!el) return
@@ -1302,9 +1531,9 @@ export class NanDrive implements World3D {
     // Drawing the 3: the finger sweeps along the road ahead of the crayon, the way it goes.
     const T = this.trace
     const trace = this.tracing && !this.finger && T.t > 2.4 && T.auto < 0 && (T.s < 1 ? idle > 1.5 || T.t > 3.5 : idle > 5)
-    const show = trace || (this.phase === 'drive' && !this.finger && ((this.counts.steered < 1 && t > 2.5 && idle > 2.5) || idle > 8))
+    const show = trace || (this.phase === 'drive' && !this.finger && !this.fall && ((this.counts.steered < 1 && t > 2.5 && idle > 2.5) || idle > 8))
     if (show) {
-      // (Driving: low on the screen, sliding side to side the way the steering ring works.)
+      // (Driving: low on the screen, sliding side to side the way the steering wheel works.)
       const p = trace ? this.r.road.spotAt(Math.min(this.r.road.length, T.s + ((t * 18) % 30)), 0) : null
       const c = p ? this.project(p.x, p.y, p.z) : { x: this.w / 2 + Math.sin(t * 1.6) * this.stickR * 0.9, y: this.h * 0.72 }
       if (c) el.style.transform = `translate3d(${c.x.toFixed(0)}px, ${c.y.toFixed(0)}px, 0)`
@@ -1346,6 +1575,10 @@ export class NanDrive implements World3D {
       warn: this.traffic.blindWarning(this.her()) !== null,
       ...this.counts,
       steered: r2(this.counts.steered),
+      off: r2(this.offK),
+      falling: !!this.fall,
+      // Is there a guard rail beside her here, on the left (+lat) and on the right?
+      rail: [this.world.railed(this.loc.s, 1), this.world.railed(this.loc.s, -1)],
       stick: r2(this.stick),
       steerLat: r2(this.steerLat),
       keptLeft: r2(this.counts.keptLeft),
