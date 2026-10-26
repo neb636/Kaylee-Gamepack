@@ -83,7 +83,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#D5DCEA', overflow: 'clip' }}>
       {mode === 'flat' ? (
-        <DriveFlat key={`${road}:${run}`} road={road} onRoad={pick} onStop={onStop} onMap={onMap} onHome={view ? onHome : undefined} />
+        <DriveFlat key={`${road}:${run}`} road={road} onRoad={pick} onStop={onStop} onMap={onMap} onHome={road === 'three' ? onHome : undefined} />
       ) : (
         <View3D
           key={`${road}:${run}:${key}`}
@@ -119,7 +119,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
       {mode === 'webgl' && <Wheel ref={wheelRef} hidden={hud.phase === 'view' || hud.phase === 'end'} onHorn={() => worldRef.current?.honk()} />}
       <CountPop count={hud.count} />
       <AnimatePresence>{photo && mode === 'webgl' && <Snapshot key="three" src={threePhoto} />}</AnimatePresence>
-      <AnimatePresence>{hud.phase === 'end' && !going && <EndCard road={road} onRoad={pick} onStop={onStop} onMap={onMap} onHome={view ? onHome : undefined} />}</AnimatePresence>
+      <AnimatePresence>{hud.phase === 'end' && !going && <EndCard road={road} onRoad={pick} onStop={onStop} onMap={onMap} onHome={road === 'three' ? onHome : undefined} />}</AnimatePresence>
     </div>
   )
 }
