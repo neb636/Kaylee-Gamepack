@@ -7,17 +7,10 @@ import { P, type V3 } from '../../engine/geo'
 import { buildWorn } from '../animal'
 import { LOOKS } from '../looks'
 import { FACE, group, PX } from '../model-wear'
+import { star } from './fit'
 
 const R = FACE.R
 const EYE = FACE.eyeX
-
-/** A five-pointed star outline, `r` to its points. */
-const star = (r: number): [number, number][] =>
-  Array.from({ length: 10 }, (_, i) => {
-    const a = (i / 10) * Math.PI * 2
-    const k = i % 2 ? 0.48 : 1
-    return [Math.sin(a) * r * k, Math.cos(a) * r * k]
-  })
 
 export function buildFace(id: string, bag: Bag): Group {
   if (id === 'hearts') return buildWorn(LOOKS.kaylee, 'sunglasses', bag, FACE, PX).head!
