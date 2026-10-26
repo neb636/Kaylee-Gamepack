@@ -46,6 +46,7 @@ import { buildVeloz, type Veloz } from '../vehicles/veloz'
 import { buildTripFrame, hang, WALL_SLOTS, type TripFrame } from '../wall'
 import { buildHomeFlight, FLIGHT_S, type HomeFlight } from './home-flight'
 import { Hopper, put } from './stage'
+import { itemById } from '../../characters/style'
 
 export type HouseLeg = 'invite' | 'pack' | 'goodbye' | 'home'
 
@@ -799,7 +800,10 @@ export class TripHouse implements HousePlugin {
       if (ji) th.g.position.copy(ji.root.position).setY(U + 1.0)
       this.flyTo(th, this.slotWorld(this.order.length - 1, this.order.length), undefined, 0.4)
     }
-    const spare = !this.order.includes('sunhat') && this.weather === 'sun'
+    // Sun smarts: a shady hat of her own (the cap) counts, so Mommy's spare stays in her bag (Avatar's costume layer
+    // leaves it off; gate 4 gives Mommy her "Good hat, Kaylee!").
+    const shady = !!itemById(this.house.kaylee.myLook.on.head ?? '')?.shade
+    const spare = !this.order.includes('sunhat') && this.weather === 'sun' && !shady
     if (spare) this.events.say(L.trip.pack.hat)
     else if (added.includes('sunscreen')) this.events.say(L.trip.pack.sunscreen)
     else if (added.includes('umbrella')) this.events.say(L.nan.trip.umbrella)

@@ -4,6 +4,7 @@
 // the family at the viewpoint with the giant 3 of the road behind them; `pizza`: the mushroom pizza with her pink
 // mushrooms; `salt`: the big pan in Bo Kluea, steaming, with her heap of white salt. (The look step may take real
 // snapshots instead.) No three.js.
+import { photoColors } from '../../characters/style'
 import { blob, INK, unicorn } from '../../trip/postcard'
 import type { Stop } from './map/layout'
 
@@ -14,12 +15,15 @@ export const PHOTO_OF: Record<Stop, PhotoId> = { rice: 'deck', mushrooms: 'pizza
 
 const W = 480
 const H = 360
-const KAYLEE = ['#E5DBFF', '#FF8FB8'] as const
+/** Kaylee's fur and mane: her look's when the photo is drawn (so a photo on Agong's wall keeps that day's). */
+let KAYLEE: [string, string] = ['#E5DBFF', '#FF8FB8']
 const MOMMY = ['#FFF0F6', '#FF8FB8'] as const
 const DADDY = ['#F4F1FF', '#7FD1B9'] as const
 
 /** A JPEG data URL of the photo (the same picture every time). */
 export function drawPhoto(id: PhotoId): string {
+  const me = photoColors()
+  KAYLEE = [me.fur, me.mane]
   const c = document.createElement('canvas')
   c.width = W
   c.height = H

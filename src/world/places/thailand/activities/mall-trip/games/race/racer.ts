@@ -5,9 +5,11 @@
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span, wobble } from '../../../../../../../sdk'
 import { buildAnimal, Wind, type Rig } from '../../../../characters/animal'
+import { Dress } from '../../../../characters/avatar'
 import { FaceLife } from '../../../../characters/face'
 import { LOOKS, type Look } from '../../../../characters/looks'
 import { buildModelRig, kayleeModel } from '../../../../characters/model'
+import { currentLook } from '../../../../characters/style'
 import type { Bag } from '../../../../engine/dispose'
 import { merge, P, solid } from '../../../../engine/geo'
 import type { RacerId } from './layout'
@@ -52,6 +54,11 @@ export class Racer {
   /** Legs kicking in the air (upside down in the balls). */
   kicking = false
   ring: Group | null = null
+  /** Kaylee's own look on her (the same costume layer as the Avatar: characters/avatar.ts Dress), so she's in it on the
+   *  race slide and in Sky Pod too. Everyone else stays bare. */
+  readonly dress: Dress
+  /** Climbing (Sky Pod's wall): her wings fold flat so they don't hide her hooves. */
+  tuck = false
   private yawGoal = 0
   private moves: Move[] = []
   private life: FaceLife
@@ -79,6 +86,8 @@ export class Racer {
     this.flipper.add(this.rig.root)
     this.root.add(this.flipper)
     this.root.userData.pick = id === 'kaylee' ? 'kaylee' : `racer:${id}`
+    this.dress = new Dress(this.rig, bag)
+    if (model) this.dress.setLook(currentLook())
   }
 
   /** A rubber ring round its middle (round 3), popping on with a squeaky boing. */
@@ -254,5 +263,7 @@ export class Racer {
     this.root.position.set(this.pos.x, this.pos.y + arc + this.lift + (inRing ? 0.09 : 0), this.pos.z)
     this.root.rotation.y = this.yaw + this.spin
     this.flipper.rotation.x = this.flip
+    // Her wings fold on the slide (she sits), in the ring, walking and climbing; they flutter on a hop.
+    this.dress.update(dt, { fold: this.sitting || inRing || this.walkSpeed > 0 || this.tuck ? 1 : 0, flap: this.hopK < 1 || arc > 0, wai: false })
   }
 }

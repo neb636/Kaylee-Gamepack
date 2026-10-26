@@ -124,6 +124,7 @@ export class WardrobePlugin implements HousePlugin {
   private openUp(now = false) {
     if (this.open) return
     this.open = true
+    this.house.trying = true
     if (now) this.doorK = 1
     else sfx.latch()
     this.kaylee.face(WARDROBE_YAW * deg)
@@ -136,6 +137,7 @@ export class WardrobePlugin implements HousePlugin {
   close() {
     if (!this.open) return
     this.open = false
+    this.house.trying = false
     this.drawer = null
     this.flights = []
     this.drag = null

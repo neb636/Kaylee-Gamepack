@@ -379,7 +379,8 @@ export class RiceFarm extends Stage {
     // Pushed back on her head, so her horn and fringe show in front of it.
     this.kit.ngob.position.set(0, 0.2 + 0.62 * R, -0.13)
     this.kit.ngob.rotation.x = -0.5
-    kaylee.rig.head.add(this.kit.ngob)
+    // A costume (looks.ts SPOTS_OF: her head): it goes on instead of her own hat, which waits in her pocket.
+    kaylee.attach('ngob', [[this.kit.ngob, kaylee.rig.head]])
     // In her hooves: `at` is from the code-built arm's pivot; a rig with its own hands (the vinyl toy) holds them there,
     // `held` from the hoof.
     const hold = (g: Group, s: -1 | 1, at: V3, held: V3) => {
@@ -526,7 +527,7 @@ export class RiceFarm extends Stage {
     this.kit.seedlings.visible = r === 'plant'
     this.kit.sickle.visible = r === 'harvest'
     this.kit.armful.visible = false
-    this.kit.ngob.visible = r !== 'deck'
+    this.kaylee.wear(r !== 'deck' ? ['ngob'] : [])
   }
 
   private setRound(r: Round) {

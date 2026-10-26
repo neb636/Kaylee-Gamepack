@@ -16,6 +16,7 @@ import { Color, Group, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds, wobble } from '../../../../../sdk'
 import type { Avatar } from '../../characters/avatar'
 import { buildAnimal, type Rig } from '../../characters/animal'
+import { buildShoes } from '../../characters/closet/shoes'
 import { FaceLife } from '../../characters/face'
 import type { Member } from '../../characters/member'
 import type { AnchorInfo } from '../../engine/Anchors'
@@ -306,16 +307,28 @@ export class Arrive extends Stage {
     this.kaylee = kaylee
     this.riders = { kaylee, ji: members.get('ji')!, nick: members.get('nick')! }
     for (const id of ['kaylee', 'ji', 'nick'] as const) scene.add(this.riders[id].root)
-    // Their shoes (Kaylee's pink, Daddy's big blue ones), on their feet until the rack.
-    for (const owner of ['kaylee', 'nick'] as const) {
-      const c = this.riders[owner]
-      const k = c.height
-      for (const s of [-1, 1]) {
-        const g = solid(merge([P.rbox(0.15 * k, 0.08 * k, 0.24 * k, 0.04 * k, owner === 'kaylee' ? PAL.hotpink : '#5D7BB0', { at: [0, 0.04 * k, 0.03 * k] }), P.box(0.1 * k, 0.02 * k, 0.04 * k, '#FFFFFF', { at: [0, 0.085 * k, 0.07 * k] })]), bag, 1.5)
+    // Their shoes, on their feet until the rack: the ones Kaylee is really wearing (her look's: the sneakers, the rain
+    // boots; with none on, she's in her hooves and only Daddy's big blue ones hop), and Daddy's.
+    const mine = kaylee.dressable ? kaylee.myLook.on.feet : undefined
+    if (mine) {
+      // Hers ride with the scene from here (so they can hop into the cubby), not on her legs.
+      kaylee.claim('cubby', ['feet'], true)
+      buildShoes(mine, bag).forEach((shoe, i) => {
+        const s = i ? 1 : -1
+        const g = new Group()
+        shoe.position.set(-s * 0.015, 0.16, 0)
+        g.add(shoe)
         g.userData.side = s
         scene.add(g)
-        this.shoes.push({ g, owner, from: new Vector3(), to: new Vector3(), t: 1, state: 'feet' })
-      }
+        this.shoes.push({ g, owner: 'kaylee', from: new Vector3(), to: new Vector3(), t: 1, state: 'feet' })
+      })
+    }
+    const k = this.riders.nick.height
+    for (const s of [-1, 1]) {
+      const g = solid(merge([P.rbox(0.15 * k, 0.08 * k, 0.24 * k, 0.04 * k, '#5D7BB0', { at: [0, 0.04 * k, 0.03 * k] }), P.box(0.1 * k, 0.02 * k, 0.04 * k, '#FFFFFF', { at: [0, 0.085 * k, 0.07 * k] })]), bag, 1.5)
+      g.userData.side = s
+      scene.add(g)
+      this.shoes.push({ g, owner: 'nick', from: new Vector3(), to: new Vector3(), t: 1, state: 'feet' })
     }
     if (start.socks && (SOCK_IDS as readonly string[]).includes(start.socks) && start.skipGlimpse) this.wear(start.socks as SockId, true)
     this.toGlimpse()

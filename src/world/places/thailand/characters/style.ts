@@ -157,3 +157,19 @@ export function currentLook(): Style {
   const link = flag('look')
   return link !== null ? parseLook(link) : savedLook()
 }
+
+/** Her colors in a drawn photo (the mall day's, the Nan trip's: trip/postcard.ts unicorn()), from her look when the
+ *  photo is taken, so a photo on Agong's wall shows her as she was that day (it's saved as a picture, so changing her
+ *  look later doesn't change it). Pastel like the rest of the drawing: her own lilac and pink unless she painted them. */
+export function photoColors(s: Style = currentLook()): { fur: string; mane: string; dress: string } {
+  const soft = (hex: string, k: number) => {
+    const n = parseInt(hex.slice(1), 16)
+    const mix = (c: number) => Math.round(c + (255 - c) * k)
+    return `#${[(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => mix(c).toString(16).padStart(2, '0')).join('')}`.toUpperCase()
+  }
+  return {
+    fur: s.paint.fur ? soft(PAINTS[s.paint.fur].hex, 0.55) : '#E5DBFF',
+    mane: s.paint.hair ? PAINTS[s.paint.hair].hex : '#FF8FB8',
+    dress: s.paint.dress ? soft(PAINTS[s.paint.dress].hex, 0.3) : '#D9CCFF',
+  }
+}

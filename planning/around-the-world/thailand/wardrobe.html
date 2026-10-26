@@ -17,11 +17,11 @@
   "kind": "Toy in Agong's house",
   "updated": "2026-10-26",
   "status": {
-    "label": "Greybox 1 built",
+    "label": "Greybox 2 built",
     "tone": "gold"
   },
   "pitch": "Kaylee loves the avatar maker in Roblox, so she gets one in Thailand. In her room at Agong's she opens her wardrobe and dresses her unicorn herself: she drags a crown, heart sunglasses, fairy wings or light-up shoes onto herself and they pop on, and she drops paint on her dress, her hair or her fur to change its color. What she picks is saved on the iPad, and she wears it **everywhere in Thailand**: the house, every trip, every mini game and the photos on Agong's wall. When a game needs its own hat (the chef's hat, the vet's cap), the game's hat wins for that game and hers comes back afterwards.",
-  "next": "Dad plays **greybox 1** on the iPad: [the wardrobe](#/world/thailand/hub/wardrobe), [the paint drawer](#/world/thailand/hub/wardrobe?drawer=paint), then walk her round [her room in a look](#/world/thailand/hub/upstairs?look=crown,hearts,fairy,dress-mint). Is dressing her up fun? Then **greybox 2**: her look in every scene and every clash solved.",
+  "next": "Dad plays **greybox 2** on the iPad: [the vet in heart sunglasses and wings](#/world/thailand/mall-trip/vet?look=crown,hearts,fairy) (the crown goes in her pocket), [shoes onto the rack](#/world/thailand/hub/street?look=sneakers,crown) (walk her in at the door), [hat off for a wai](#/world/thailand/hub/downstairs?at=altar&look=crown,fairy), [the race slide in her look](#/world/thailand/mall-trip/race?look=crown,fairy,boots,fur-mint) and the rest of the clash links below. Does she always look like herself, and is it clear where her things went? Then **gate 3**: every thing made for her.",
   "facts": [
     {
       "icon": "🗄️",
@@ -763,26 +763,108 @@
         },
         {
           "type": "sections",
-          "title": "Clashes to check (once greybox 2 is in)",
+          "title": "Clashes to check (greybox 2)",
           "base": "#/world/thailand/",
           "items": [
             {
               "id": "mall-trip/vet",
               "name": "Vet in heart sunglasses and wings, crown in her pocket",
-              "query": "look=crown,hearts,fairy",
-              "status": "todo"
+              "query": "look=crown,hearts,fairy"
+            },
+            {
+              "id": "mall-trip/cafe",
+              "name": "Cafe: the chef's hat instead of her crown, her star sunglasses stay",
+              "query": "look=crown,stars,cape"
+            },
+            {
+              "id": "mall-trip/barber",
+              "name": "Barber: the smock takes her outfit and wings (they wait in her pocket)",
+              "query": "look=fairy,gown,bow"
+            },
+            {
+              "id": "mall-trip/boxing",
+              "name": "Muay Thai: mongkhon and gloves; crown, glasses and tutu in her pocket, wings stay",
+              "query": "look=crown,hearts,fairy,tutu"
+            },
+            {
+              "id": "mall-trip/arrive",
+              "name": "HarborLand counter: her own rain boots hop into the cubby",
+              "query": "look=boots,crown"
+            },
+            {
+              "id": "mall-trip/race",
+              "name": "Race slide: her look on the Racer, wings folded on the slide",
+              "query": "look=crown,fairy,boots,fur-mint"
+            },
+            {
+              "id": "mall-trip/skypod",
+              "name": "Sky Pod: her look on the climbing wall, wings folded",
+              "query": "look=bow,fairy,hair-pink"
+            },
+            {
+              "id": "mall-trip/mountain",
+              "name": "Golden Mountain: wings folded flat while she climbs",
+              "query": "look=cape,crown"
             },
             {
               "id": "boat-trip/fly",
-              "name": "Window seat with her cap and wings (folded)",
-              "query": "look=cap,fairy&packed=sunglasses",
-              "status": "todo"
+              "name": "Window seat: her cap counts (no spare hat), wings folded in the seat",
+              "query": "look=cap,fairy&packed=sunglasses"
+            },
+            {
+              "id": "boat-trip/bay",
+              "name": "Sunny boat trip in a crown: Mommy's spare hat on, the crown in her pocket",
+              "query": "look=crown,stars&packed=floaties"
+            },
+            {
+              "id": "boat-trip/airport",
+              "name": "Airport: her own star sunglasses count, pushed up indoors",
+              "query": "look=stars&packed=sunhat,sunglasses"
+            },
+            {
+              "id": "boat-trip/pack",
+              "name": "Packing with her cap on: no spare hat when the suitcase shuts",
+              "query": "look=cap"
             },
             {
               "id": "hub/street",
-              "name": "Shoes back on outside",
-              "query": "look=sneakers",
-              "status": "todo"
+              "name": "Shoes on outside; walk in and they hop onto the rack",
+              "query": "look=sneakers,crown"
+            },
+            {
+              "id": "hub/downstairs",
+              "name": "Inside: her shoes on the rack by the door",
+              "query": "look=boots"
+            },
+            {
+              "id": "hub/downstairs",
+              "name": "Hat off for a wai at the altar",
+              "query": "at=altar&look=crown,fairy"
+            },
+            {
+              "id": "hub/street",
+              "name": "Hat off for a wai at the spirit house",
+              "query": "at=spirit-house&look=cap"
+            },
+            {
+              "id": "hub/upstairs",
+              "name": "Wings fold on the mattress and pillows",
+              "query": "at=pillows&look=fairy,crown"
+            },
+            {
+              "id": "nan-trip/rice",
+              "name": "Rice farm: the ngob instead of her crown",
+              "query": "look=crown,hearts,fairy"
+            },
+            {
+              "id": "mall-trip/home",
+              "name": "Mall photo for Agong's wall, in mint fur and pink hair",
+              "query": "look=fur-mint,hair-pink"
+            },
+            {
+              "id": "nan-trip/home",
+              "name": "Nan photos, in sky fur",
+              "query": "look=fur-sky&photos=deck,three,pizza,salt"
             }
           ]
         }
@@ -814,13 +896,15 @@
             {
               "n": 2,
               "title": "Greybox 2: everywhere, and every clash solved",
-              "status": "next",
-              "md": "Her look in every scene (one place), the costume layer, sun smarts, wings folding, shoes at the door, hat off for a wai, the ngob, the race slide's Kaylee, wall photos in her colors. Clash links in the PR for Dad to check."
+              "status": "done",
+              "md": "Her look in every scene (one place), the costume layer, sun smarts, wings folding, shoes at the door, hat off for a wai, the ngob, the race slide's Kaylee, wall photos in her colors. Clash links in the PR for Dad to check.",
+              "date": "2026-10-26",
+              "pr": 205
             },
             {
               "n": 3,
               "title": "The look: every thing made for her",
-              "status": "todo",
+              "status": "next",
               "md": "All ~30 things fitted to her shape (like the scrubs and the mongkhon), the wardrobe made pretty, each thing's pose, the mirror button."
             },
             {
@@ -873,6 +957,42 @@
                     "The code-built Kaylee (if the model can’t load) can’t wear or paint anything.",
                     "On an iPad in portrait the wardrobe’s far door goes off the left edge; the shelves and drawers stay."
                   ]
+                }
+              ]
+            },
+            {
+              "title": "Greybox 2: everywhere, and every clash solved",
+              "date": "2026-10-26",
+              "status": "done",
+              "pr": 205,
+              "open": true,
+              "summary": "Her look in every scene from one place, a costume layer that takes only the spots it needs (the rest goes in her pocket), sun smarts, folding wings, shoes onto the rack at Agong's door, hat off for a wai, the ngob as a costume, and the drawn photos in her colors.",
+              "blocks": [
+                {
+                  "type": "list",
+                  "items": [
+                    "**One place:** `characters/avatar.ts` has a `Dress` (her look + the game's costume on one rig). `Avatar` and the race's `Racer` both dress through it, and both constructors read `currentLook()`, so the 6 `new Avatar(...)` (house, trip-kit stage, bay, race, mountain road, lab) and the race slide and Sky Pod show her look with no scene changes. The house no longer dresses her itself.",
+                    "**The costume layer:** `wear(ids)` keeps its meaning (the game's costume, exactly these) but no longer takes everything off. `looks.ts` `SPOTS_OF` says which spots each costume takes (scrubs outfit, scrub cap head, apron outfit, chef's hat head, smock outfit + back, gloves hands, mongkhon head + face, sun hats head, sunglasses face, floaties arms, ngob head). `claim(key, spots)` is for things a game puts on her itself: the grip socks (`socks.ts`: feet), the shoe rack (feet), Muay Thai's belt (outfit).",
+                    "**Her pocket:** a thing of hers that loses its spot shrinks toward her right hip and disappears, and pops back (the wardrobe's pop) when the spot is free. QA: `__thaiHouseQA()` has `costume`, `pocket` and `shoesOnRack` next to `look`.",
+                    "**Sun smarts:** a shady hat of hers (the cap) drops Mommy's spare hat, and the packing leg skips Mommy's spare-hat line; tinted glasses (heart, star) drop the packed sunglasses. `glassesUp` pushes up whatever is on her face.",
+                    "**Wings fold** when she sits, lies, walks or climbs (`tuck` on Golden Mountain and Sky Pod's wall), inside her walking circle, spread when she stands still and flutter on a hop or a mattress bounce; the cape drapes shorter when she sits.",
+                    "**Hat off for a wai:** in the `wai` pose (the altar, the little shrine, the spirit house) her hat, or a costume hat (sun hat, spare hat, scrub cap, chef's hat, ngob), comes down into her hooves in front of her chest and goes back on after. The mongkhon never does.",
+                    "**Shoes at the door:** `activities/hub/shoes.ts`: stepping in from the street her shoes hop onto the shoe rack (one, two), and back onto her feet when she goes out. On the rack while she's inside on either floor; with the wardrobe open they're on her (she can try them on). A deep link inside starts with them on the rack. No shoes on (her hooves): nothing hops.",
+                    "**HarborLand's cubby:** the shoes that hop in are her real ones (the sneakers, the rain boots), not pink placeholders; in her hooves only Daddy's hop.",
+                    "**The ngob:** the rice farm builds it and hands it to `Avatar.attach('ngob', ...)`, then puts it on with `wear(['ngob'])` (off on the café's deck), so her own hat waits in her pocket.",
+                    "**Photos in her colors:** `style.ts` `photoColors()`; the mall and Nan photos are drawn with her fur, hair and dress colors when they're taken (saved as a picture, so old wall photos keep that day's colors)."
+                  ]
+                },
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "- Wings also fold while she **walks** (the plan: spread when she stands still), so they stay inside her walking circle; standing still they spread again.\n- The shared builder is a `Dress` class in `avatar.ts` instead of a `dressRig()` function: the Racer needs the same updates every frame (fold, pocket), not only the build.\n- Muay Thai takes her outfit through `claim('belt')` (the belt isn't a `Wearable`)."
+                },
+                {
+                  "type": "details",
+                  "summary": "Known small things",
+                  "md": "- No new voices (greybox): Mommy's “Good hat, Kaylee!” and the family noticing her look are gate 4. With her cap on, Mommy now just says nothing at the suitcase.\n- The pocket is a shrink toward her hip with no sparkle particles yet (gate 3).\n- Her shoes sit on top of the family's slippers on the rack (greybox placement).\n- The shoes don't hop off when she's carried in (the tuk-tuk, a trip's van): only when she walks through the door.\n- Hat-off for a wai shows only for the house's wai pose; Muay Thai's wai kru keeps the mongkhon on (as it should) and her own hat is already in her pocket."
                 }
               ]
             }

@@ -3,6 +3,7 @@
 // spiral in the Big Frame with her arms up, Mommy and Daddy cheering at the bottom; `cheese`: Daddy at the pizza table
 // with the cheese stretched to his nose. (The art gate may take a real snapshot in the frame instead.) No three.js.
 
+import { BARE, photoColors } from '../../characters/style'
 import { blob, INK, unicorn } from '../../trip/postcard'
 
 export type PhotoId = 'dragon' | 'cheese'
@@ -10,9 +11,12 @@ export const PHOTO_IDS: PhotoId[] = ['dragon', 'cheese']
 
 const W = 480
 const H = 360
+/** Kaylee's colors in the photo: her look's when it's drawn (so a photo on Agong's wall keeps that day's). */
+let me = photoColors(BARE)
 
 /** A JPEG data URL of the photo (the same picture every time). */
 export function drawPhoto(id: PhotoId): string {
+  me = photoColors()
   const c = document.createElement('canvas')
   c.width = W
   c.height = H
@@ -71,7 +75,7 @@ function dragon(g: CanvasRenderingContext2D) {
     g.stroke()
   }
   // Kaylee sliding down it, arms up, mane flying, in her grip socks.
-  blob(g, 205, 186, 30, 26, '#D9CCFF')
+  blob(g, 205, 186, 30, 26, me.dress)
   for (const s of [-1, 1]) {
     g.beginPath()
     g.moveTo(205 + s * 18, 170)
@@ -80,12 +84,12 @@ function dragon(g: CanvasRenderingContext2D) {
     g.strokeStyle = INK
     g.stroke()
     g.lineWidth = 8
-    g.strokeStyle = '#D9CCFF'
+    g.strokeStyle = me.dress
     g.stroke()
   }
   blob(g, 186, 212, 13, 9, '#FF8FB8')
   blob(g, 224, 212, 13, 9, '#FF8FB8')
-  unicorn(g, 205, 140, 34, '#E5DBFF', '#FF8FB8')
+  unicorn(g, 205, 140, 34, me.fur, me.mane)
   // Mommy and Daddy at the bottom, cheering.
   unicorn(g, 80, 262, 30, '#FFF0F6', '#FF8FB8')
   unicorn(g, 140, 270, 34, '#F4F1FF', '#7FD1B9')
@@ -109,7 +113,7 @@ function cheese(g: CanvasRenderingContext2D) {
   g.fillRect(0, 0, W, H)
   g.fillStyle = '#7FD6A3'
   g.fillRect(0, 40, W, 150)
-  unicorn(g, 140, 170, 46, '#E5DBFF', '#FF8FB8')
+  unicorn(g, 140, 170, 46, me.fur, me.mane)
   unicorn(g, 330, 160, 52, '#F4F1FF', '#7FD1B9')
   g.fillStyle = '#FFF7F0'
   g.fillRect(0, 240, W, 120)
