@@ -423,7 +423,7 @@ export class MushroomFarm extends Stage {
     this.ev.say(l)
   }
   private stuckLine(): Line | null {
-    if (this.phase === 'house') return this.round !== '1' && this.bags.some((b) => b.stage === 'grown' && !b.giant) ? M.hint.pick : M.hint.mist
+    if (this.phase === 'house') return this.round !== '1' && this.bags.some((b) => b.stage === 'grown') ? M.hint.pick : M.hint.mist
     if (this.phase !== 'table') return null
     if (!this.baked) return this.inBasket().length ? M.hint.pizza : this.ovenReady ? M.hint.oven : null
     return this.served < SLICES ? M.hint.share : null
@@ -603,6 +603,7 @@ export class MushroomFarm extends Stage {
         b.water = 0
         b.stage = 'none'
         b.giant = false
+        b.bounces = 0
         b.size = 0
         b.clump.visible = false
         b.kind = ROUND3_KINDS[k]
@@ -638,6 +639,7 @@ export class MushroomFarm extends Stage {
       b.water = 0
       b.stage = 'none'
       b.giant = false
+      b.bounces = 0
       b.size = 0
       b.pull = 0
       b.clump = this.newClump(i, b.color)
@@ -1133,8 +1135,8 @@ export class MushroomFarm extends Stage {
     if (id?.startsWith('bag:') || id === null) {
       const b = id ? this.bags[Number(id.slice(4))] : this.grownNear(x, y, 40)
       if (b && b.stage === 'grown' && this.round !== '1') {
-        if (b.giant) {
-          // The giant one is bouncy.
+        if (b.giant && b.bounces < 2) {
+          // The giant one is bouncy (twice; the third tap picks it).
           b.boing = 0
           sfx.giant(Math.min(6, ++b.bounces))
           this.sparkles.burst(tmp.copy(b.at).add(new Vector3(0, 0.25, 0.2)), 6, 0.8, 1, 0.6, 0.04)
@@ -1570,7 +1572,8 @@ export class MushroomFarm extends Stage {
     if (this.phase === 'house') {
       if (this.grab || this.carried || this.spray.on) return null
       if (this.round !== '1') {
-        const g = this.bags.find((b) => b.stage === 'grown' && !b.giant)
+        // A normal one first; with only giants left, a giant (pulling or a third tap picks it).
+        const g = this.bags.find((b) => b.stage === 'grown' && !b.giant) ?? this.bags.find((b) => b.stage === 'grown')
         if (g) return `bag:${g.i}`
       }
       const dry = this.bags.filter((b) => b.stage !== 'grown').sort((a, b) => a.water - b.water)[0]

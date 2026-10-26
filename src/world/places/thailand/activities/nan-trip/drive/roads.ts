@@ -20,7 +20,7 @@ export const ROAD_IDS = ['city', 'valley', 'sky', 'three'] as const
 export type RoadId = (typeof ROAD_IDS)[number]
 export const WEATHERS = ['rain', 'sun', 'cloud'] as const
 export type Weather = (typeof WEATHERS)[number]
-export type LandmarkKind = 'market' | 'mushrooms' | 'cafe' | 'viewpoint'
+export type LandmarkKind = 'market' | 'mushrooms' | 'cafe' | 'salt' | 'viewpoint'
 
 export interface NanRoad {
   id: RoadId
@@ -202,14 +202,24 @@ export function nanRoad(id: RoadId): NanRoad {
 export interface DriveRoll {
   weather: Weather
   traffic: TrafficPlan
+  /** Where along the road she starts (m). */
+  from: number
 }
 
 /** The weather and the traffic for one drive: the road's own plan, moved about and changed a little each time (the blind
  *  bends' cars stay, they're the mirrors' lesson; the valley's buffalo always crosses), with an extra on the road now and
  *  then, flocks of chickens here or there. */
-export function rollDrive(id: RoadId, weather?: Weather | '', rand: () => number = Math.random): DriveRoll {
+export function rollDrive(id: RoadId, weather?: Weather | '', rand: () => number = Math.random, trip: { to?: string; stops?: readonly string[] } = {}): DriveRoll {
   const r = nanRoad(id)
   const len = r.road.length
+  // The sky road a second time (to the café after the salt village, or the other way round): the family already
+  // climbed through the cloud, so this time the drive starts up above it, on the sunny top of the road.
+  const other = trip.to === 'salt' ? 'rice' : trip.to === 'rice' ? 'salt' : ''
+  let from = 4
+  if (id === 'sky' && r.cloud && other && trip.stops?.includes(other)) {
+    const y = r.cloud.y1 + 3
+    while (from < len - 160 && r.road.sampleAt(from).y < y) from += 2
+  }
   const pick = <T,>(xs: readonly T[]) => xs[Math.floor(rand() * xs.length) % xs.length]
   // (The road's usual weather a bit more often than the others.)
   const w = weather && (WEATHERS as readonly string[]).includes(weather) ? weather : rand() < 0.45 ? r.weather[0] : pick(r.weather)
@@ -224,16 +234,19 @@ export function rollDrive(id: RoadId, weather?: Weather | '', rand: () => number
     const when = 30 + rand() * (len - 140)
     if (!r.blind.some((b) => Math.abs(b - when - 45) < 50)) movers.push({ kind: pick(r.extras), when, from: when + 45 + rand() * 20, speed: 5 + rand() * 1.5 })
   }
-  movers.sort((a, b) => a.when - b.when)
+  // (Only what's still ahead of where she starts.)
+  const ahead = movers.filter((m) => m.when > from + 15)
+  ahead.sort((a, b) => a.when - b.when)
   const chickens = t.chickens.filter(() => rand() < 0.75).map((s) => clampS(s + (rand() - 0.5) * 24, len))
   if (rand() < 0.5) chickens.push(clampS(25 + rand() * (len - 90), len))
   return {
     weather: w,
+    from,
     traffic: {
-      movers,
-      buffalo: t.buffalo.map((s) => clampS(s + (rand() - 0.5) * 30, len)),
-      chickens: chickens.sort((a, b) => a - b),
-      monkeys: t.monkeys.filter((_, i) => i === 0 || rand() < 0.6).map((m) => ({ ...m, s: clampS(m.s + (rand() - 0.5) * 16, len) })),
+      movers: ahead,
+      buffalo: t.buffalo.map((s) => clampS(s + (rand() - 0.5) * 30, len)).filter((s) => s > from + 40),
+      chickens: chickens.filter((s) => s > from + 20).sort((a, b) => a - b),
+      monkeys: t.monkeys.filter((_, i) => i === 0 || rand() < 0.6).map((m) => ({ ...m, s: clampS(m.s + (rand() - 0.5) * 16, len) })).filter((m) => m.s > from + 20),
     },
   }
 }

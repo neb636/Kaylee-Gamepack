@@ -229,7 +229,19 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
           onDone={finished}
         />
       )
-    if (at.section === 'rental') return <Rental key="rental" round={at.round} onRound={(round) => setAt({ section: 'rental', round })} onDone={() => setAt({ section: 'map' })} />
+    if (at.section === 'rental')
+      return (
+        <Rental
+          key="rental"
+          round={at.round}
+          onRound={(round) => setAt({ section: 'rental', round })}
+          onDone={() => {
+            // Saved, so "Keep going" opens the map instead of the key, the bags and the belt again.
+            save('map')
+            setAt({ section: 'map' })
+          }}
+        />
+      )
     if (at.section === 'map')
       return (
         <NanMap

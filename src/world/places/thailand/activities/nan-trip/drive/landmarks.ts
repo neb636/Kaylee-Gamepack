@@ -3,7 +3,9 @@
 // fruit, a string of paper lanterns), Baan Huanam's mushroom farm (a dark plank house in the trees with a tin roof, the
 // big pink mushroom on top, rows of sawdust bags through its open door, a table out front under an umbrella, mushroom
 // stools), Stop Time Cafe's wooden deck on stilts (plank floor, railings of crossed branches, a peaked roof with string
-// lights, benches and stools, the steps up), the 3 road's viewpoint (a little open pavilion with a pink roof, a fence
+// lights, benches and stools, the steps up), Bo Kluea's salt village at the turn-off off the sky road (a wet street
+// down to the open salt huts: the big pan steaming over its fire, baskets heaped with white salt, the well with its
+// bamboo pole, and the wooden house with its mural of a Tai Lue couple), the 3 road's viewpoint (a little open pavilion with a pink roof, a fence
 // at the edge, a bench, a coin telescope, pots of pink bougainvillea), Nan town's market stalls, and the three-step
 // waterfall down the mountain beside the sky road. Each faces +z (the road).
 import { Group, type BufferGeometry } from 'three'
@@ -129,6 +131,48 @@ export function buildLandmark(kind: LandmarkKind, bag: Bag): Group {
       beads.push(P.sphere(0.09, i % 3 ? '#FFE9A8' : '#FFC2D9', { at: [x, 4.75 - Math.sin((i / 12) * Math.PI) * 0.35, z] }, 6))
     }
     g.add(solidMix(parts.splice(0), beads, bag, 2))
+  } else if (kind === 'salt') {
+    // Bo Kluea at the turn-off: a wet street running down off the road into the village, a sign with a heap of salt on it.
+    const TIN = '#B8BFD0'
+    parts.push(
+      P.box(3.2, 0.1, 13, '#7D7893', { at: [-4.6, 0.02, 1.5], rot: [-0.04, 0, 0] }),
+      ...[[-4.2, 4.5, 0.6], [-5.1, -0.5, 0.45], [-4.4, -3.2, 0.5]].map(([x, z, r]) => P.cyl(r, r, 0.04, '#B3CDEE', { at: [x, 0.09, z], scale: [1, 1, 1.6] }, 14)),
+      P.cyl(0.06, 0.06, 2.4, '#D9DCE8', { at: [-2.6, 1.2, 7.4] }),
+      P.rbox(1.0, 0.8, 0.08, 0.06, PAL.sky, { at: [-2.6, 2.4, 7.45] }),
+      P.cone(0.28, 0.4, '#FFFFFF', { at: [-2.6, 2.4, 7.52] }, 10),
+      // The salt hut: open sides on wooden posts, a tin roof, the big square pan on its mud-brick fire box.
+      P.box(6.4, 0.2, 4.6, '#C9B9A8', { at: [1.6, 0.1, -0.6] }),
+      ...[-1, 1].flatMap((sx) => [-1, 1].map((sz) => P.cyl(0.13, 0.15, 3, WOOD, { at: [1.6 + sx * 3, 1.5, -0.6 + sz * 2.1] }))),
+      ...[-1, 1].map((side) => P.box(7.2, 0.08, 2.9, TIN, { at: [1.6, 3.5, -0.6 + side * 1.25], rot: [side * -0.45, 0, 0] })),
+      ...[-1, 1].flatMap((side) => [-2, -1, 0, 1, 2, 3, 4, 5].map((x) => P.box(0.05, 0.05, 2.9, '#9EA6BA', { at: [x, 3.55, -0.6 + side * 1.25], rot: [side * -0.45, 0, 0] }))),
+      P.rbox(3.2, 0.9, 2.2, 0.15, '#B07A5E', { at: [0.8, 0.55, -0.8] }),
+      P.box(3.0, 0.2, 2.0, '#4A4458', { at: [0.8, 1.05, -0.8] }),
+      P.box(2.8, 0.06, 1.8, '#F4F1FF', { at: [0.8, 1.14, -0.8] }),
+      // The fire's mouth, glowing, a pile of logs beside it.
+      P.rbox(0.8, 0.45, 0.1, 0.08, '#FF8A3C', { at: [0.8, 0.4, 0.31] }),
+      P.cone(0.25, 0.4, PAL.gold, { at: [0.8, 0.45, 0.36] }, 8),
+      ...[0, 1, 2].map((i) => P.cyl(0.12, 0.12, 1.2, '#8E6C58', { at: [2.6 + (i % 2) * 0.25, 0.25 + Math.floor(i / 2) * 0.22, 0.3 + i * 0.05], rot: [0, 0, Math.PI / 2] }, 8)),
+      // Baskets heaped with white salt by the pan, and on a rack.
+      ...[[3.4, -1.4], [3.9, -0.4], [-1.0, 0.6]].flatMap(([x, z]) => [P.cyl(0.38, 0.3, 0.45, '#C9A27E', { at: [x, 0.42, z] }, 12), P.cone(0.36, 0.42, '#FFFFFF', { at: [x, 0.85, z] }, 12)]),
+      // The well: a round wall with a bamboo pole over it.
+      P.cyl(0.8, 0.85, 0.8, '#D9D4E2', { at: [-2.6, 0.5, -3.4] }, 16),
+      P.cyl(0.62, 0.62, 0.05, '#5E6E9A', { at: [-2.6, 0.88, -3.4] }, 16),
+      ...[-1, 1].map((sx) => P.cyl(0.07, 0.07, 2, '#C9B46E', { at: [-2.6 + sx * 0.95, 1.2, -3.4] }, 8)),
+      P.cyl(0.06, 0.06, 2.4, '#C9B46E', { at: [-2.6, 2.15, -3.4], rot: [0, 0, Math.PI / 2] }, 8),
+      P.cyl(0.25, 0.2, 0.35, '#8E6C58', { at: [-2.6, 1.6, -3.4] }, 10),
+      // The wooden house across the street with its mural: a Tai Lue couple in their colorful clothes.
+      P.box(5, 3.4, 3.2, '#9C7864', { at: [-9.4, 1.8, 0] }),
+      P.prism([[-2.9, 0], [2.9, 0], [0, 1.6]], 3.6, '#7E5E4C', { at: [-9.4, 3.5, 0], rot: [0, Math.PI / 2, 0] }),
+      P.box(0.06, 2.4, 2.6, '#FFF3E2', { at: [-6.88, 1.8, 0] }),
+      ...[-0.6, 0.6].flatMap((z, i) => [
+        P.capsule(0.28, 0.9, i ? '#E8404E' : '#3E3849', { at: [-6.82, 1.45, z] }),
+        P.box(0.04, 0.5, 0.62, i ? '#3E3849' : '#4FA3D9', { at: [-6.8, 1.0, z] }),
+        P.sphere(0.24, '#F2D3C0', { at: [-6.82, 2.32, z] }, 10),
+        P.sphere(0.2, i ? '#3E3849' : '#E8404E', { at: [-6.8, 2.52, z], scale: [1, 0.6, 1] }, 10),
+      ]),
+      ...[-1.1, 1.1].map((z) => P.sphere(0.16, PAL.hotpink, { at: [-6.8, 2.75, z] }, 8)),
+    )
+    g.userData.steam = [0.8, 1.3, -0.8]
   } else {
     // The viewpoint: a little open pavilion with a pink roof, a fence along the edge, a bench, the coin telescope, pots
     // of pink bougainvillea.

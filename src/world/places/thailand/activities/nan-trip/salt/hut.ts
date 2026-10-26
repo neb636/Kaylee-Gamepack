@@ -6,7 +6,7 @@
 // against the back wall, Kaylee's pink salt basket and the paddle, the shelf for the salt bags, the woven drying trays,
 // the water jar, the salt aunty, the cat by the fire, the stack of baskets and the rooster outside. The street and the
 // house with the painted couple across it are village.ts.
-import { CylinderGeometry, Group, IcosahedronGeometry, InstancedMesh, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
+import { CanvasTexture, CylinderGeometry, Group, InstancedMesh, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace } from 'three'
 import { buildAnimal, type Rig } from '../../../characters/animal'
 import type { Look } from '../../../characters/looks'
 import type { Bag } from '../../../engine/dispose'
@@ -61,6 +61,7 @@ export interface Hut {
   trolley: Group
   brine: Mesh
   salt: InstancedMesh
+  crust: Mesh
   fire: { flames: Group; glow: Mesh; embers: Mesh }
   wood: Group
   basket: { root: Group; heap: Mesh }
@@ -181,12 +182,23 @@ export function buildHut(bag: Bag): Hut {
   brine.position.set(PAN_X, PAN.top - PAN.depth + 0.015, (PAN.z0 + PAN.z1) / 2)
   brine.renderOrder = 1
   root.add(brine)
-  // A heap of salt: a faceted little mound of crystals.
-  const heap = new IcosahedronGeometry(0.058, 0)
-  heap.scale(1, 0.75, 1)
-  const salt = new InstancedMesh(bag.add(heap), toon(SALT_WHITE), SALT.length)
+  // A heap of salt: a lumpy little pile of three faceted crystal mounds, white with pale grey-lavender facets (one
+  // instanced mesh for all of them; each one's size and turn are jittered in salt3d.ts, so they merge into a crust).
+  const heap = merge([
+    P.sphere(0.055, SALT_WHITE, { scale: [1.15, 0.6, 1] }, 6),
+    P.sphere(0.04, '#F1EEF6', { at: [0.04, 0.012, 0.02], scale: [1, 0.75, 1] }, 5),
+    P.sphere(0.036, SALT_WHITE, { at: [-0.03, 0.008, -0.03], scale: [1, 0.7, 1] }, 5),
+  ])
+  const salt = new InstancedMesh(bag.add(heap), toon('#ffffff', true), SALT.length)
   salt.renderOrder = 2
   root.add(salt)
+  // The crust under the heaps: a white, grainy layer of crystals over the pan's bottom (it shows as the brine boils
+  // away, and thins as she scrapes).
+  const crust = new Mesh(bag.add(new PlaneGeometry(PAN.x1 - PAN.x0 - 0.03, PAN.z1 - PAN.z0 - 0.03)), bag.add(new MeshBasicMaterial({ map: crustTexture(bag), transparent: true, opacity: 0, depthWrite: false })))
+  crust.rotation.x = -Math.PI / 2
+  crust.position.set(PAN_X, PAN.top - PAN.depth + 0.013, (PAN.z0 + PAN.z1) / 2)
+  crust.renderOrder = 1
+  root.add(crust)
   // ---- The fire's mouth in the stove's front: dark, the glow, the flames and the embers ----
   const mouth = new Mesh(bag.add(new PlaneGeometry(MOUTH.w, MOUTH.h)), bag.add(new MeshBasicMaterial({ color: '#3A2B33' })))
   mouth.position.set(MOUTH.x, MOUTH.y, STOVE_FRONT + 0.012)
@@ -382,6 +394,7 @@ export function buildHut(bag: Bag): Hut {
     trolley,
     brine,
     salt,
+    crust,
     fire: { flames, glow, embers },
     wood,
     basket: { root: bRoot, heap: bHeap },
@@ -396,4 +409,24 @@ export function buildHut(bag: Bag): Hut {
     village,
     aunty,
   }
+}
+
+/** The salt crust's grain: white, speckled with pale grey-lavender and little bright glints. */
+function crustTexture(bag: Bag) {
+  const c = document.createElement('canvas')
+  c.width = 256
+  c.height = 160
+  const g = c.getContext('2d')!
+  g.fillStyle = '#F7F6FA'
+  g.fillRect(0, 0, 256, 160)
+  let r = 7
+  const rand = () => ((r = (r * 16807) % 2147483647) / 2147483647)
+  for (let i = 0; i < 900; i++) {
+    g.fillStyle = i % 5 === 0 ? '#FFFFFF' : i % 3 ? '#E6E2EE' : '#D9D4E4'
+    const s = 1 + rand() * 3
+    g.fillRect(rand() * 256, rand() * 160, s, s)
+  }
+  const tex = bag.add(new CanvasTexture(c))
+  tex.colorSpace = SRGBColorSpace
+  return tex
 }

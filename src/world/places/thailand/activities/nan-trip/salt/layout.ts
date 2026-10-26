@@ -69,8 +69,8 @@ export const SALT = Array.from({ length: SALT_COLS * SALT_ROWS }, (_, i): V3 => 
   const c = i % SALT_COLS
   const r = Math.floor(i / SALT_COLS)
   // A little jitter, so it reads as heaps of salt, not tiles.
-  const jx = Math.sin(i * 12.9898) * 0.022
-  const jz = Math.cos(i * 78.233) * 0.02
+  const jx = Math.sin(i * 12.9898) * 0.045
+  const jz = Math.cos(i * 78.233) * 0.035
   return [PAN.x0 + 0.1 + (c * (PAN.x1 - PAN.x0 - 0.2)) / (SALT_COLS - 1) + jx, PAN.top - PAN.depth + 0.03, PAN.z0 + 0.09 + (r * (PAN.z1 - PAN.z0 - 0.18)) / (SALT_ROWS - 1) + jz]
 })
 /** The paddle's blade (across the scraping direction) and how much it holds before it wants emptying. */

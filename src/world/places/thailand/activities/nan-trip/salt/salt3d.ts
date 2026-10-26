@@ -198,6 +198,7 @@ export class SaltHut extends Stage {
   private auntyHop = 1
   private roosterCrow = 1
   private henFlap = 1
+  private glanceUntil = -1
   private basketsWobble = 1
   private basketBounce = 1
   private muralGlow = 1
@@ -435,6 +436,7 @@ export class SaltHut extends Stage {
     if (b.wet) return
     b.wet = true
     this.after(0.3, () => (b.wet = false))
+    this.glanceUntil = this.time + 1.1
     if (this.round === '1' && this.level >= 0.999) this.fullPan()
   }
 
@@ -645,6 +647,7 @@ export class SaltHut extends Stage {
         const n = p.load
         p.load = 0
         this.inBasket += n
+        this.glanceUntil = this.time + 1.1
         this.basketBounce = 0
         sfx.pourSalt(Math.min(14, Math.round(this.inBasket / 3)))
         this.grains.burst(rim.clone().add(new Vector3(0, -0.05, 0)), 12, 0.5, 0.4, 0.6, 0.022)
@@ -1075,11 +1078,22 @@ export class SaltHut extends Stage {
       const edge = Math.min(s[0] - PAN.x0, PAN.x1 - s[0], (s[2] - PAN.z0) * 1.5, (PAN.z1 - s[2]) * 1.5) / 0.6
       const goal = this.round === '3' ? this.salt[i] : this.round === '2' ? clamp((crust - clamp(edge, 0, 1) * 0.75) * 4, 0, 1) : 0
       this.shown[i] += (goal - this.shown[i]) * Math.min(1, dt * (goal > this.shown[i] ? 3 : 12))
-      const sc = Math.max(0.001, this.shown[i])
-      m4.compose(tmp.set(s[0], s[1] + (this.round === '3' ? 0 : Math.max(0, this.brineY - s[1] - 0.025)), s[2]), q.setFromAxisAngle(up, i * 1.7), tmp2.set(sc, sc * (0.8 + 0.2 * Math.sin(i)), sc))
+      // Each heap its own size and turn (so they run together into a crust, not a grid).
+      const k = 0.85 + 0.55 * (0.5 + 0.5 * Math.sin(i * 91.7))
+      const sc = Math.max(0.001, this.shown[i] * k)
+      m4.compose(tmp.set(s[0], s[1] + (this.round === '3' ? 0 : Math.max(0, this.brineY - s[1] - 0.025)), s[2]), q.setFromAxisAngle(up, i * 2.39), tmp2.set(sc, sc * (0.7 + 0.35 * (0.5 + 0.5 * Math.sin(i * 7.3))), sc))
       salt.setMatrixAt(i, m4)
     }
     salt.instanceMatrix.needsUpdate = true
+    // The crust under the heaps, and glints on the salt now and then.
+    const left = this.round === '3' ? this.saltLeft / SALT.length : this.round === '2' ? crust : 0
+    const cm = this.hut.crust.material as MeshBasicMaterial
+    cm.opacity += (left * 0.95 - cm.opacity) * Math.min(1, dt * 4)
+    this.hut.crust.visible = cm.opacity > 0.01
+    if (left > 0.1 && !this.swept && Math.random() < dt * 4 * left) {
+      const s = SALT[Math.floor(Math.random() * SALT.length)]
+      this.sparkles.emit(tmp.set(s[0], s[1] + 0.06, s[2]), tmp2.set(0, 0.15, 0), 0.5, 0.025, 2)
+    }
     // ---- Her basket ----
     this.basketBounce = Math.min(1, this.basketBounce + dt / 0.4)
     const bb = bell(this.basketBounce)
@@ -1160,7 +1174,11 @@ export class SaltHut extends Stage {
     // round 3, toward the blade.
     const kp = this.kaylee.root.position
     if (!this.kaylee.walking) this.kaylee.faceToward(look.x, this.round === '3' ? look.z : kp.z + 0.55)
-    this.kaylee.lookAt(look.x, look.y, look.z)
+    // After each pour she glances back at us, proud.
+    if (this.time < this.glanceUntil) {
+      const cam = this.rig.camera.position
+      this.kaylee.lookAt(cam.x, cam.y, cam.z)
+    } else this.kaylee.lookAt(look.x, look.y, look.z)
     this.nick.lookAt(look.x, look.y, look.z)
     this.ji.lookAt(look.x, look.y, look.z)
     this.poseArms()

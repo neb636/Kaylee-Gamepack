@@ -27,6 +27,7 @@ import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { Shot } from '../../../engine/camera'
 import { L } from '../../../lines'
+import { merge, P, solid } from '../../../engine/geo'
 import { PAL, toon } from '../../../engine/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { buildPajero, type Pajero } from '../../../trip/vehicles/pajero'
@@ -57,6 +58,8 @@ export const RENTAL_ANCHORS: AnchorInfo[] = [
 
 /** Nothing touched for this long: what to do next glows. */
 const STUCK_S = 4
+/** Her booster seat lifts her head up into the open window (the car's waistline is high). */
+const BOOST = 0.32
 /** Nothing done for this long: Sparkle says what to do (again after SAY_EVERY, at most SAY_MAX times a beat). */
 const SAY_S = 8
 const SAY_EVERY = 20
@@ -146,6 +149,8 @@ export class RentalDesk extends Stage {
     // until she clicks it.
     this.belt = new Mesh(bag.add(new CylinderGeometry(0.025, 0.025, 1, 6).translate(0, 0.5, 0)), toon('#4A4458'))
     this.car.body.add(this.belt)
+    // Her pink booster seat, on her seat behind Mommy.
+    this.car.seats.kaylee.add(solid(merge([P.rbox(0.42, BOOST, 0.42, 0.06, PAL.hotpink, { at: [0, BOOST / 2, 0] }), P.rbox(0.36, 0.03, 0.36, 0.04, '#FFD3E6', { at: [0, BOOST, 0] })]), bag, 1.5))
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
     this.kaylee = kaylee
     this.nick = members.get('nick')!
@@ -354,7 +359,7 @@ export class RentalDesk extends Stage {
     this.doorGoal = 1
     sfx.latch()
     this.after(0.6, () => {
-      this.hop(this.kaylee, this.car.seats.kaylee, new Vector3(0, 0, 0), {
+      this.hop(this.kaylee, this.car.seats.kaylee, new Vector3(0, BOOST, 0), {
         pose: 'sit',
         face: 0,
         dur: 0.55,
@@ -660,7 +665,7 @@ export class RentalDesk extends Stage {
     if (this.speed > 0) return { center: c.clone().setY(1.1), half: new Vector3(3.2, 1.3, 1.6), yaw: 0, pitch: 12, minDist: 6 }
     if (this.round === 'belt')
       // At Kaylee's open door: her in her seat, the belt, Mommy at the wheel in front.
-      return tall ? { center: new Vector3(4.0, 1.1, -1.0), half: new Vector3(1.4, 0.9, 0.9), yaw: -12, pitch: 24, minDist: 3 } : { center: new Vector3(4.05, 1.25, -0.95), half: new Vector3(1.35, 0.8, 0.9), yaw: 0, pitch: 10, minDist: 3 }
+      return tall ? { center: new Vector3(4.0, 1.2, -1.0), half: new Vector3(1.4, 0.9, 0.9), yaw: -12, pitch: 26, minDist: 3 } : { center: new Vector3(4.0, 1.25, -1.0), half: new Vector3(1.35, 0.75, 0.9), yaw: -12, pitch: 24, minDist: 3 }
     if (this.round === 'boot')
       // From behind and beside the car: the open boot and the bags waiting.
       return tall ? { center: new Vector3(2.3, 0.9, -1.4), half: new Vector3(2.6, 1.0, 1.3), yaw: -55, pitch: 22, minDist: 3 } : { center: new Vector3(1.3, 0.85, -1.4), half: new Vector3(1.6, 0.85, 1.4), yaw: -62, pitch: 20, minDist: 3 }
@@ -668,6 +673,12 @@ export class RentalDesk extends Stage {
     // (Tall: Kaylee and the end of the counter, the Pajero's back with its winking tail lamps.)
     if (tall) return { center: new Vector3(2.15, 1.0, -1.5), half: new Vector3(4.1, 0.9, 1.1), yaw: -42, pitch: 16, minDist: 4 }
     return { center: new Vector3(1.65, 1.0, -1.35), half: new Vector3(4.55, 0.95, 1.25), yaw: 0, pitch: 12, minDist: 4 }
+  }
+
+  /** The seatbelt's tap target: on the strap where it hangs by the door, at her side by the door (clear of her face). */
+  private beltSpot() {
+    const f = this.car.belt.from
+    return this.car.body.localToWorld(new Vector3(f[0] - 0.08, f[1] - 0.5, f[2] + 0.12))
   }
 
   /** What the hint finger (and the glow) points at now. */
@@ -700,7 +711,7 @@ export class RentalDesk extends Stage {
       case 'car':
         return this.round === 'key' ? { at: this.car.root.position.clone().setY(1.4), r: 1.6, prio: 1, max: 220 } : null
       case 'belt':
-        return this.seated && !this.buckled ? { at: this.car.body.localToWorld(new Vector3(this.car.belt.from[0] + 0.15, 1.35, this.car.belt.from[2] + 0.1)), r: 0.18, prio: 5, max: 130, glow: glow || this.time - this.lastTouch > 1.5 } : null
+        return this.seated && !this.buckled ? { at: this.beltSpot(), r: 0.18, prio: 5, max: 130, glow: glow || this.time - this.lastTouch > 1.5 } : null
       case 'clerk':
         return this.round === 'key' ? { at: d.clerk.root.position.clone().setY(1.0), r: 0.3, prio: 1, max: 130 } : null
       case 'bell':
@@ -740,7 +751,7 @@ export class RentalDesk extends Stage {
         fob: pt(this.desk.fob.getWorldPosition(new Vector3())),
         bags: this.desk.bags.map((b, i) => (this.bagIn[i] ? null : pt(b.position.clone().setY(b.position.y + 0.22)))),
         boot: pt(this.bootMouth().clone()),
-        belt: pt(this.car.body.localToWorld(new Vector3(this.car.belt.from[0] + 0.15, 1.35, this.car.belt.from[2] + 0.1))),
+        belt: pt(this.beltSpot()),
       },
     }
   }

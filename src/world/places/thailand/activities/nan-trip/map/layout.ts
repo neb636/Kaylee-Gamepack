@@ -97,7 +97,7 @@ export const FISH: XZ = [-0.62, 0.15]
 export const BUFFALO: XZ = [-1.05, 0.25]
 export const PADDIES: XZ = [-1.15, 0.3]
 export const THAI_FLAG: XZ = [0.15, 1.3]
-export const LAOS_FLAG: XZ = [2.68, 1.85]
+export const LAOS_FLAG: XZ = [2.66, -0.62]
 
 /** The little Pajero, scaled down to the board. */
 export const CAR_SCALE = 0.07

@@ -115,15 +115,26 @@ Code paths are under `src/world/places/thailand/`.
 - [ ] **Listen to the rice farm's voices** (32 clips): is Daddy too chatty (8-10 one-time lines a run)? The transcription
   check heard "Go, farmer Kaylee!" as "Cayley" (likely just spelling).
 
-## The Nan trip: the rental desk, the map and the 3 (greybox, step 6)
-- [ ] **The map is small on a tall iPad.** The board is wider than it is tall, so in portrait it fills the width with
-  empty table above and below. A taller board (or turning it for portrait) would help.
-  - Check: `#/world/thailand/nan-trip/map` in iPad portrait.
-- [ ] **In the belt beat we see the back of Kaylee's head** through the door (she faces forward in her seat). A camera a
-  little further forward, or her turning to look at the belt, would show her face.
-  - Check: `#/world/thailand/nan-trip/rental?round=belt`.
-- [ ] **The map's car always starts at the last stop** (or the airport): after the city road it's back at that stop, not
-  in Nan town.
+## The Nan trip: the look and the voices (steps 8-10)
+The step 6 issues (the small map on a tall iPad, the back of Kaylee's head at the belt, the car starting at the last
+stop after the city road) are fixed.
+- [ ] **The Pajero from behind still reads boxy** on the chase camera (the new grille and lights are at the front).
+  - Check: `#/world/thailand/nan-trip/drive?road=valley`. Code: `trip/vehicles/pajero.ts` (the tailgate and rear lamps).
+- [ ] **The sea of clouds is hard to see** from the chase camera, which mostly looks at the hillside.
+  - Check: `#/world/thailand/nan-trip/drive?road=sky`, past the cloud. Code: `drive/mountain.ts`, `trip/road/clouds.ts`.
+- [ ] **Daddy, the elephant toy and the wipers' tap targets overlap a little** on the small car (each keeps an area of
+  its own). Code: `drive/mountain.ts` (the anchors).
+- [ ] **The `weather` param drops out of the address bar** once a drive starts (`NanTrip.tsx` doesn't pass it to
+  `enter`). The drive the link opened still uses it.
+- [ ] **The salt wells' three verbs** (bucket, logs, paddle) are one grab-and-move verb but feel like three; round 2 has
+  ~20-30 s of waiting for the boil. Playtest QA scored it OK, not fun.
+  - Check: `#/world/thailand/nan-trip/salt?round=2`. Code: `activities/nan-trip/salt/salt3d.ts`.
+- [ ] **A first trip is long** (~15-20 min with packing, the plane and the rental desk before two stops). Watch where she
+  drifts; ideas: ✈️🏠 after one stop on a first trip, a shorter rental desk.
+- [ ] **Kaylee is mostly seen from behind** at the mushroom rack (she faces the bags).
+- [ ] **The map's crayons and cloth are clipped** at the board's edge in some sizes (nothing she plays with).
+- [ ] **Listen:** the clerk, the mushroom aunty, the salt aunty (new voices, northern Thai accent), Daddy's "Whoa! Beep
+  beep!" (heard as Chinese by the transcription check), "Wheee! Bumpy!", and whether the sky road talks too much.
 
 ## Listen on the iPad (automated checks can't hear)
 - [ ] **The mall trip's new voices** (2026-10-21): the transcription check flagged Thai words written back in Thai

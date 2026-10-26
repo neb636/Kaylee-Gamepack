@@ -76,7 +76,7 @@ const PAJERO_FEEL: Feel = { top: 9.5, boost: 1.2, accel: 4, coast: 0.6, turn: 1.
 
 /** The road's tap targets: the Pajero (Daddy in it, the elephant toy, the wipers), then whoever is on the road this
  *  drive (`traffic`: its roll). */
-export function driveAnchors(id: RoadId, traffic?: TrafficPlan): AnchorInfo[] {
+export function driveAnchors(id: RoadId, traffic?: TrafficPlan, to = ''): AnchorInfo[] {
   const r = nanRoad(id)
   const t = traffic ?? r.traffic
   return [
@@ -90,7 +90,7 @@ export function driveAnchors(id: RoadId, traffic?: TrafficPlan): AnchorInfo[] {
     ...t.monkeys.map((_, i): AnchorInfo => ({ id: `monkey:${i}`, label: 'Monkey', kind: 'thing' })),
     ...r.blind.map((_, i): AnchorInfo => ({ id: `mirror:${i}`, label: 'Round mirror', kind: 'thing' })),
     ...(r.falls !== undefined ? [{ id: 'falls', label: 'Waterfall', kind: 'thing' } as AnchorInfo] : []),
-    { id: 'landmark', label: { market: 'The market', mushrooms: 'The mushroom farm', cafe: 'Stop Time Cafe', viewpoint: 'The viewpoint' }[r.landmark], kind: 'thing' },
+    { id: 'landmark', label: id === 'sky' && to === 'salt' ? 'Bo Kluea salt village' : { market: 'The market', mushrooms: 'The mushroom farm', cafe: 'Stop Time Cafe', salt: 'Bo Kluea salt village', viewpoint: 'The viewpoint' }[r.landmark], kind: 'thing' },
   ]
 }
 
@@ -209,6 +209,7 @@ export class NanDrive implements World3D {
   private inCloudT = 0
   private yieldsSeen = 0
   private lastSteer = -99
+  private aboveAt = -99
 
   constructor(
     private renderer: WebGLRenderer,
@@ -216,8 +217,10 @@ export class NanDrive implements World3D {
     private events: DriveEvents,
     start: DriveStart = 'road',
     roll: DriveRoll = rollDrive(road),
-    /** Where she's going (picked on the map): the sky road's end is the café or the salt wells. */
+    /** Where she's going (picked on the map): the sky road's end is the café or the salt village. */
     private to = '',
+    /** Where along the road she starts (m): the sky road's second trip up starts above the cloud. */
+    fromS = 4,
   ) {
     const { scene, bag } = this
     const r = (this.r = nanRoad(road))
@@ -263,7 +266,7 @@ export class NanDrive implements World3D {
     // The stop at the end, on the left, facing the road.
     const end = r.road.spotAt(r.road.length - 16, half + 9)
     const et = r.road.sampleAt(r.road.length - 16)
-    this.landmark = buildLandmark(r.landmark, bag)
+    this.landmark = buildLandmark(r.id === 'sky' && to === 'salt' ? 'salt' : r.landmark, bag)
     this.landmark.position.set(end.x, field.at(end.x, end.z), end.z)
     this.landmark.rotation.y = Math.atan2(-et.lx, -et.lz)
     scene.add(this.landmark)
@@ -343,7 +346,7 @@ export class NanDrive implements World3D {
 
     // ---- Off she goes: in her lane at the start, already rolling (or, the 3 from above, parked at the viewpoint) ----
     const atView = start === 'view' && r.id === 'three'
-    const p = atView ? r.road.spotAt(r.road.length - 14, half - 1.4) : r.road.spotAt(4, LANE_LAT)
+    const p = atView ? r.road.spotAt(r.road.length - 14, half - 1.4) : r.road.spotAt(fromS, LANE_LAT)
     this.d.place(p.x, p.z, p.heading)
     if (!atView) {
       this.d.vx = Math.sin(p.heading) * 3
@@ -352,6 +355,8 @@ export class NanDrive implements World3D {
     this.camHeading = p.heading
     this.locate()
     this.poseCar(0)
+    // (Starting up above the cloud: no "out of the cloud" moment, it's sunny from the start.)
+    if (r.cloud && this.carY() > r.cloud.y1 + 1) this.wasAbove = true
     if (atView) {
       this.counted = r.count.length
       this.setPhase('view', true)
@@ -508,6 +513,12 @@ export class NanDrive implements World3D {
     this.talk(t)
     for (const p of [this.dust, this.rain, this.sparkle]) p.update(dt)
     if (this.lowCloud) this.lowCloud.position.x = Math.sin(t * 0.04) * 6
+    // The salt pan steams.
+    const steam = this.landmark.userData.steam as [number, number, number] | undefined
+    if (steam && this.r.road.length - this.loc.s < 120 && Math.random() < dt * 14) {
+      const p = this.landmark.localToWorld(tmp.set(...steam))
+      this.dust.emit(p.x + (Math.random() - 0.5) * 2.4, p.y, p.z + (Math.random() - 0.5) * 1.6, (Math.random() - 0.5) * 0.4, 2.5 + Math.random() * 1.5, (Math.random() - 0.5) * 0.4, 1.6, 0.35)
+    }
     if (this.falls && Math.abs(this.r.falls! - this.loc.s) < 90 && Math.random() < dt * 20) {
       const p = this.falls.position
       this.dust.emit(p.x + (Math.random() - 0.5) * 3, p.y + 0.5, p.z + (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 2 + Math.random() * 2, (Math.random() - 0.5) * 2, 0.8, 0.3)
@@ -690,20 +701,15 @@ export class NanDrive implements World3D {
     if (inside && !this.wasIn) sfx.cloudIn()
     // Into the cloud: Sparkle says so the first time (as it begins to close in), Daddy can't see a thing; out above it,
     // the sea of clouds and the sunshine.
-    if (r.cloud && c > 0.25 && !heard.has('cloud')) {
-      heard.add('cloud')
-      this.told.add('cloud')
-      this.speak(L.nan.drive.cloud)
-    }
     this.inCloudT = inside ? this.inCloudT + dt : 0
-    if (this.inCloudT > 3.5) this.once('foggy', L.nan.drive.foggy, true)
+    // (Daddy only after Sparkle has said they're driving into a cloud.)
+    if (this.inCloudT > 3.5 && heard.has('cloud')) this.once('foggy', L.nan.drive.foggy, true)
     if (this.sea) this.sea.visible = y > r.cloud!.y1 - 4
     if (above && !this.wasAbove) {
       sfx.cloudOut()
       const p = this.car.root.position
       this.sparkle.burst(p.x, p.y + 3, p.z, 40, 5, 6, 0.26)
-      this.told.delete('sun')
-      window.setTimeout(() => this.once('sun', L.nan.drive.sun), 700)
+      this.aboveAt = this.time
       this.nick.react('hop')
     }
     this.wasIn = inside
@@ -854,9 +860,19 @@ export class NanDrive implements World3D {
   }
   /** A family reaction: dropped while someone's talking or just after a line (nothing stacks up, nothing comes late). */
   private family(l: Line) {
-    if (speakingVoice() || this.time - this.lastLine < GAP_S) return false
+    if (!this.quiet()) return false
     this.speak(l)
     return true
+  }
+  /** Nobody talking, and a good gap since the last line. */
+  private quiet() {
+    return !speakingVoice() && this.time - this.lastLine >= GAP_S
+  }
+  /** Sparkle's first-time teaching line (once a visit): it waits for a quiet moment while it still fits. */
+  private teach(key: string, l: Line) {
+    if (heard.has(key) || !this.quiet()) return
+    heard.add(key)
+    this.speak(l)
   }
   /** Says it the first time only (a family line waits for a quiet moment: call it again while it still fits). */
   private once(key: string, l: Line, family = false) {
@@ -891,12 +907,13 @@ export class NanDrive implements World3D {
       drives++
     }
     if (this.phase === 'drive') {
-      // The first mirror showing a car (once a visit), then beep!
+      // Sparkle's first-time lines (once a visit, in a quiet moment while they still fit): a mirror showing a car, then
+      // beep!; driving into the cloud.
       const warn = this.traffic.blindWarning(her)
-      if (warn !== null && warn - her.s < 60 && !heard.has('mirror')) {
-        heard.add('mirror')
-        this.speak(D.mirror)
-      }
+      if (warn !== null && warn - her.s < 60) this.teach('mirror', D.mirror)
+      if (r.cloud && this.cloudK > 0.25 && !this.wasAbove) this.teach('cloud', D.cloud)
+      // Out above the cloud: Daddy's sunshine (within a few seconds of popping out).
+      if (this.wasAbove && this.time - this.aboveAt < 8) this.once('sun', D.sun, true)
       // Someone pulled over for her (she steered onto their side): keep left!
       if (this.traffic.counts.yields > this.yieldsSeen) {
         this.yieldsSeen = this.traffic.counts.yields
@@ -914,7 +931,7 @@ export class NanDrive implements World3D {
     }
     // ---- Stuck: after ~8 s with nothing touched, Sparkle says what to do (twice a drive at most) ----
     const quiet = t - Math.max(this.lastTouch, this.quietFrom)
-    if (quiet < STUCK_S || t - this.hintSaid < HINT_EVERY || this.hintN >= HINT_MAX || speakingVoice()) return
+    if (quiet < STUCK_S || t - this.hintSaid < HINT_EVERY || this.hintN >= HINT_MAX || !this.quiet()) return
     const l = this.phase === 'drive' ? D.steer : this.tracing && this.trace.t > 3 ? D.draw : null
     if (!l) return
     this.hintSaid = t
@@ -1064,9 +1081,12 @@ export class NanDrive implements World3D {
       }
       // Round to look at the stop, the Pajero parked in front of it.
       const l = this.landmark.position
-      const c = new Vector3((l.x + d.x) / 2, l.y + 3, (l.z + d.z) / 2)
-      const yaw = Math.atan2(c.x - l.x, c.z - l.z) / deg + 25
-      return { center: c, half: new Vector3(9, 5, 9), yaw: this.unwrap(yaw + Math.sin(this.time * 0.25) * 6), pitch: 16, minDist: 10, maxDist: 70 }
+      // (The salt village sits down the slope below the road: look down into it from higher up, over the car.)
+      const down = !!this.landmark.userData.steam
+      const k = down ? 0.72 : 0.5
+      const c = new Vector3(d.x + (l.x - d.x) * k, l.y + 3, d.z + (l.z - d.z) * k)
+      const yaw = Math.atan2(d.x - l.x, d.z - l.z) / deg + 25
+      return { center: c, half: down ? new Vector3(11, 4, 11) : new Vector3(9, 5, 9), yaw: this.unwrap(yaw + Math.sin(this.time * 0.25) * 6), pitch: down ? 34 : 16, minDist: 10, maxDist: 70 }
     }
     const sp = clamp(Math.abs(d.speed) / d.feel.top, 0, 1)
     const tall = clamp((1 - this.w / this.h) / 0.4, 0, 1)

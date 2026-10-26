@@ -18,9 +18,10 @@ import { drawPhoto } from '../photo'
 import { Snapshot } from '../Snapshot'
 import { nanRoad, ROAD_IDS, rollDrive, WEATHERS, type RoadId, type Weather } from './roads'
 
+const hashParam = (k: string) => new URLSearchParams(location.hash.split('?')[1] ?? '').get(k) ?? ''
 /** The weather a link states (`?weather=rain`), read when the drive first opens. */
 function linkWeather(): Weather | '' {
-  const w = new URLSearchParams(location.hash.split('?')[1] ?? '').get('weather') ?? ''
+  const w = hashParam('weather')
   return (WEATHERS as readonly string[]).includes(w) ? (w as Weather) : ''
 }
 
@@ -57,7 +58,8 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
   // This drive's weather and traffic: rolled for every road and every 🔁 (the link's weather for the first one).
   const [stated] = useState(linkWeather)
   const [firstRoad] = useState(road)
-  const roll = useMemo(() => rollDrive(road, road === firstRoad && run === 0 && key === 0 ? stated : ''), [road, run, key])
+  // (The stops done so far ride along in the address bar: the sky road's second trip up starts above the cloud.)
+  const roll = useMemo(() => rollDrive(road, road === firstRoad && run === 0 && key === 0 ? stated : '', Math.random, { to, stops: hashParam('stops').split(',') }), [road, run, key])
   const toRef = useRef(to)
   toRef.current = to
   const viewCb = useRef(onView)
@@ -80,7 +82,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
   }, [photo])
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new NanDrive(renderer, road, { onHud: setHud, onView: () => viewCb.current?.(), say: (l) => guideRef.current?.speak(l) }, view ? 'view' : 'road', roll, toRef.current)
+    const w = new NanDrive(renderer, road, { onHud: setHud, onView: () => viewCb.current?.(), say: (l) => guideRef.current?.speak(l) }, view ? 'view' : 'road', roll, toRef.current, roll.from)
     w.setHintElement(hintRef.current)
     w.setWheelElement(wheelRef.current)
     return w
@@ -104,7 +106,7 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
         make={make}
         anchors={(input, els) => (
           <>
-            <Anchors list={driveAnchors(road, roll.traffic)} els={els} {...input} />
+            <Anchors list={driveAnchors(road, roll.traffic, to)} els={els} {...input} />
             {/* Not steering for a while: a finger on the road ahead. */}
             <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
               <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 0.9, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
