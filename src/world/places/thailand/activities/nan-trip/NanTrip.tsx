@@ -88,9 +88,9 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   const [saved, setSaved] = useSaved<Progress>('thailand-nan-trip', { at: null, packed: DEFAULT_PACKED, stops: '' })
   // She has done the whole trip before (or the link says so).
   const [replay] = useState(() => param('replay') === '1' || (saved.trips ?? 0) > 0)
-  // A `packed` link sets what's in the suitcase; otherwise a new packing starts empty and later legs use what she
-  // packed last time.
-  const [packed, setPacked] = useState<string[]>(() => parsePacked(flag('packed') ?? (first === 'invite' || first === 'pack' ? '' : saved.packed || DEFAULT_PACKED)))
+  // What's in the suitcase comes from the link (its default when it has none), so a link opens the same trip on any
+  // iPad; a new packing starts empty. (Keeping going from Mommy's card reads what she saved: `choose`.)
+  const [packed, setPacked] = useState<string[]>(() => parsePacked(flag('packed') ?? (first === 'invite' || first === 'pack' ? '' : DEFAULT_PACKED)))
   // (Read once: the address changes as she plays.)
   const [stops, setStops] = useState<Stop[]>(() => parseStops(param('stops')))
   // The photos from the trip: a link's, or one for each stop done and the 3 once it's drawn.
