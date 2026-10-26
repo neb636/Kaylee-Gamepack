@@ -114,8 +114,9 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     return { section: 'rental', round: ((RENTAL_ROUNDS as readonly string[]).includes(round) ? round : 'key') as RentalRound }
   })
   useEffect(() => {
-    const s = { stops: stops.join(',') }
     const p = formatPacked(packed)
+    // (What's in her suitcase rides along in every link: home reads it.)
+    const s = { stops: stops.join(','), packed: p }
     if (at.section === 'invite') enter('invite', replay ? { replay: '1' } : {})
     else if (at.section === 'home') enter('home', { packed: p, photos: homePhotos.join(',') })
     else if (isLoop(at.section)) enter(at.section, { packed: p, ...(at.section === 'goodbye' || at.section === 'takeoff' || at.section === 'fly' ? { replay: replay ? '1' : '' } : {}) })

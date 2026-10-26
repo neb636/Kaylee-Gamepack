@@ -85,7 +85,10 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
   /** The last section a world moved on to by itself (no rebuild for that one). */
   const told = useRef<string | null>(null)
 
-  useImperativeHandle(ref, () => ({ startPack: () => tripRef.current?.startPack() }))
+  // (Without WebGL there's no house: the picture book turns to its packing page.)
+  const modeRef = useRef(mode)
+  modeRef.current = mode
+  useImperativeHandle(ref, () => ({ startPack: () => (modeRef.current === 'flat' ? cb.current.onSection('pack') : tripRef.current?.startPack()) }))
 
   // A new section: one the world moved on to by itself just follows; in the same house, the plugin sets it up; another
   // world mounts behind the boarding pass.
