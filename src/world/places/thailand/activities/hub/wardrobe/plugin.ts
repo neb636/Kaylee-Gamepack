@@ -500,10 +500,11 @@ export class WardrobePlugin implements HousePlugin {
     return this.style
   }
 
-  /** Her own look goes on the door as a picture before the wand changes it, so it's one tap away. */
+  /** Her own look (even today's plain Kaylee) goes on the door as a picture before the wand changes it, so it's one tap
+   *  away. */
   private pinLook() {
     const look = formatLook(this.style)
-    if (this.wandLook || !look || this.door.some((p) => p?.look === look)) return
+    if (this.wandLook || this.door.some((p) => p?.look === look)) return
     this.addPhoto({ look, img: this.house.snap(this.photoCam(), DOOR_SIZE) }, true)
     this.pictured = true
   }
