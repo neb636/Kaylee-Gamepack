@@ -5,7 +5,7 @@
 // link that reproduces the feel, and a note listing the changed numbers for an agent to bake in. What changed stays in
 // the address bar (feel.<group>.<knob>=n). Not something Kaylee plays: World.tsx loads it lazily, only when the link
 // asks for it.
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { feelLab, isFeelParam, type KnobGroup } from '../../../../kit/knobs'
 import { IconButton, Section } from '../ui'
 import '../lab.css'
@@ -40,6 +40,9 @@ export default function FeelLab() {
     toastTimer.current = window.setTimeout(() => setToast(null), 1800)
   }
 
+  // Opened by a link over a game that's already running (its knobs were read when it loaded): the link's numbers first,
+  // before the address bar is written from the knobs below. (Layout effects run before effects.)
+  useLayoutEffect(() => feelLab.applyLink(), [])
   // The address bar follows the knobs (replaceState: no hashchange, so the game doesn't restart).
   useEffect(() => {
     const hash = withFeel(location.hash, { feel: '1', ...feelLab.params() })
