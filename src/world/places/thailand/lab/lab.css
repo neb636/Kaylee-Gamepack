@@ -1,6 +1,9 @@
 /* The character lab (#/world/characters): a plain studio for Dad, not a screen for Kaylee. Light grey canvas, white
-   floating cards, small neutral type, grey segmented tabs with a white pill, dark toggles. Everything is scoped here. */
-.cast-lab {
+   floating cards, small neutral type, grey segmented tabs with a white pill, dark toggles. Everything is scoped here.
+   The camera lab (?cam=1, camera/) uses the same cards and controls in its panel (.cam-panel): its tokens stay off the
+   game it frames, which has its own --radius and --shadow. */
+.cast-lab,
+.cam-panel {
   --studio: #f2f2f3;
   --card: #ffffff;
   --line: #ececee;
@@ -19,6 +22,14 @@
   --right: 280px;
   --gutter: 10px;
 
+  color: var(--text);
+  font: 500 13px/1.35 -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.cast-lab {
   position: absolute;
   inset: 0;
   display: grid;
@@ -26,12 +37,6 @@
   gap: var(--gutter);
   padding: calc(var(--safe-top) + var(--gutter)) var(--gutter) calc(var(--safe-bottom) + var(--gutter));
   background: var(--studio);
-  color: var(--text);
-  font: 500 13px/1.35 -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', system-ui, sans-serif;
-  letter-spacing: -0.005em;
-  -webkit-font-smoothing: antialiased;
-  user-select: none;
-  -webkit-user-select: none;
   overflow: hidden;
   /* Never scrolls sideways to a closed slide-over panel. */
   overflow: clip;
@@ -66,11 +71,13 @@
     margin-right: calc(-1 * var(--gutter));
   }
 }
-.cast-lab button {
+.cast-lab button,
+.cam-panel button {
   font: inherit;
   color: inherit;
 }
-.cast-lab input {
+.cast-lab input,
+.cam-panel input {
   font: inherit;
   color: inherit;
   border: none;
@@ -802,4 +809,134 @@
   .cl-hint {
     display: none;
   }
+}
+
+/* ---------------------------------------------------------------- the camera lab (?cam=1, camera/) */
+.cam-lab {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  background: #e6e6ea;
+}
+.cam-lab.no-panel {
+  grid-template-columns: minmax(0, 1fr);
+}
+.cm-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+/* The game's own element sits on top of the stage (z-index 1, styled by CameraLab.tsx); the panel and the buttons over
+   the stage sit above it. */
+.cm-guides {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  pointer-events: none;
+  overflow: visible;
+}
+.cm-orbit {
+  position: absolute;
+  inset: 0;
+  z-index: 10001;
+  cursor: grab;
+  touch-action: none;
+}
+.cm-orbit:active {
+  cursor: grabbing;
+}
+.cm-badge {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 10002;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #1f1f23;
+  color: #fff;
+  font: 600 12px/1.4 -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  pointer-events: none;
+}
+.cm-badge.right {
+  left: auto;
+  right: 12px;
+}
+.cm-open {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  padding: 4px;
+}
+.cm-toast {
+  top: 16px;
+  z-index: 3;
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+.cm-panel {
+  position: relative;
+  z-index: 2;
+  margin: 10px 10px 10px 0;
+}
+.cm-frames {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cm-ab {
+  min-height: 26px;
+  padding: 2px 9px;
+}
+.cm-mono {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 11px;
+}
+.cm-mono.cl-kv {
+  grid-template-columns: 58px 1fr;
+}
+.cm-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+}
+.cm-actions .cl-btn {
+  flex: 1;
+  justify-content: center;
+  padding: 6px 10px;
+}
+.cm-actions .cl-btn:disabled {
+  opacity: 0.4;
+}
+@media (max-width: 760px) {
+  .cam-lab {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cm-panel {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: min(320px, calc(100% - 20px));
+    margin: 0;
+    z-index: 20;
+    box-shadow: 0 20px 60px rgba(20, 20, 30, 0.22);
+  }
+}
+.cm-panel .cl-select {
+  min-width: 0;
+}
+.cm-panel .cl-select > button {
+  max-width: 200px;
+}
+.cm-ellipsis {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

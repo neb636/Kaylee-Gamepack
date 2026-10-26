@@ -49,6 +49,10 @@ export function defineSections<const P extends string, const S extends string>(
   return { place, activity, params: def.params ?? ({} as Record<P, ParamSpec>), sections: def.sections }
 }
 
+/** Dev switches that stay in the address bar while she plays: ?debug=1, ?fps=N, and the camera lab's ?cam=1 with its
+ *  cam.* settings (engine/flags.ts, places/thailand/lab/camera/). */
+const sticky = (key: string) => key === 'debug' || key === 'fps' || key === 'cam' || key.startsWith('cam.')
+
 /** Where the URL points: set by PlaceFrame from the route. */
 export interface SectionLink {
   place: string
@@ -114,7 +118,8 @@ export function useSections<P extends string, S extends string>(def: ActivitySec
       // country link (#/world/<place>), where Kaylee normally arrives.
       const page = location.hash.split('?')[0]
       const here = location.hash.startsWith(worldLink(def.place, def.activity)) || (def.activity === HUB && page === `#/world/${def.place}`)
-      if (here) history.replaceState(history.state, '', worldLink(def.place, def.activity, id, shown))
+      const kept = [...new URLSearchParams(location.hash.split('?')[1] ?? '')].filter(([k]) => sticky(k))
+      if (here) history.replaceState(history.state, '', worldLink(def.place, def.activity, id, { ...shown, ...Object.fromEntries(kept) }))
     },
     [def],
   )

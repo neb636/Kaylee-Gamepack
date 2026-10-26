@@ -2,7 +2,9 @@
 // routes taps and drags (from the canvas and from the DOM tap targets over it) and cleans everything up when it
 // unmounts. If the iPad takes the GPU back (a lost context), it tells the screen, which offers to wake it.
 import { useEffect, useRef, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
-import type { Camera, Scene, WebGLRenderer } from 'three'
+import type { Scene, WebGLRenderer } from 'three'
+import type { CameraRig } from './camera'
+import { camLab, type LabWorld } from './camLab'
 import { automated } from './flags'
 import { frameLoop } from './loop'
 import { acquireRenderer, dropRenderer, releaseRenderer } from './renderer'
@@ -12,7 +14,7 @@ export type RenderMode = 'webgl' | 'lost'
 /** What View3D needs from a world. */
 export interface World3D {
   readonly scene: Scene
-  readonly rig: { camera: Camera }
+  readonly rig: CameraRig
   stats: { fps: number; p95: number; calls: number; tris: number }
   /** Nothing is moving: the frame loop may drop to 30 fps. */
   readonly calm: boolean
@@ -92,14 +94,30 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     world.setAnchorElements(anchorEls.current)
     const canvas = renderer.domElement
     el.prepend(canvas)
+    // The camera lab (?cam=1) talks to whichever world is on screen.
+    const lab: LabWorld = {
+      rig: world.rig,
+      qa: () => world.qa(),
+      host: el,
+      renderer,
+      snapshot: () => {
+        world.render()
+        return canvas.toDataURL('image/png')
+      },
+    }
+    camLab.attach(lab)
 
     // ---- Size: the canvas fills the screen; the camera keeps the framing below the top bar ----
     let dpr = Math.min(window.devicePixelRatio || 1, 2)
     const measure = () => {
+      // Unscaled (the camera lab shows an iPad's screen scaled down; the world still lays out at the iPad's size).
       const r = el.getBoundingClientRect()
+      const k = el.offsetWidth ? r.width / el.offsetWidth : 1
+      const w = r.width / k
+      const h = r.height / k
       renderer.setPixelRatio(dpr)
-      renderer.setSize(r.width, r.height, false)
-      world.setSize(r.width, r.height, topProbe.current?.offsetHeight ?? 104)
+      renderer.setSize(w, h, false)
+      world.setSize(w, h, topProbe.current?.offsetHeight ?? 104)
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -124,7 +142,9 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       stop = frameLoop(
         (_now, dt) => {
           if (pausedRef.current) return
-          world.update(dt)
+          // Frozen in the camera lab: the moment holds, only the camera moves.
+          if (camLab.frozen) world.rig.update(dt)
+          else world.update(dt)
           world.render()
           world.placeAnchors()
           times.push(dt * 1000)
@@ -152,9 +172,11 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     ready.then(begin, begin)
 
     // ---- Taps and drags (the anchors call the same tracker) ----
+    // In screen pixels of the world (the camera lab can show it scaled down, as an iPad inside a desktop window).
     const local = (e: PointerEvent) => {
       const r = el.getBoundingClientRect()
-      return { x: e.clientX - r.left, y: e.clientY - r.top }
+      const k = el.offsetWidth ? r.width / el.offsetWidth : 1
+      return { x: (e.clientX - r.left) / k, y: (e.clientY - r.top) / k }
     }
     const onMove = (e: PointerEvent) => {
       const p = local(e)
@@ -200,6 +222,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
 
     return () => {
       stop()
+      camLab.detach(lab)
       ro.disconnect()
       clearTimeout(orientTimer)
       window.removeEventListener('orientationchange', onOrient)

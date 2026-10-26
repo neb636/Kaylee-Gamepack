@@ -11,6 +11,10 @@ unicorn and goes on day trips with the family.
 **3D character lab** (development tool, every 3D character on a turntable: poses, actions, lines, outfits, lighting): 
 - [Kaylee](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee)
 
+**Camera lab** (development tool, add `?cam=1` to any 3D section: the game in an iPad-sized frame with camera controls,
+guides and a "Copy for agent" note to bake the camera into the game):
+- [The Barber Salon in iPad landscape](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/barber?cam=1&cam.frame=ipad-wide)
+
 
 **Offline:** after it opens once on wifi it saves every game, picture and voice, so it plays in the car or on a plane.
 Online it always loads the latest version; offline the YouTube videos are hidden. After a new deploy, open it once on

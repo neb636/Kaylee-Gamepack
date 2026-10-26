@@ -38,7 +38,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' || initial.section === 'family' ? 'street' : initial.section)
   const houseRef = useRef<House | null>(null)
   const guide = useRef<GuideHandle>(null)
-  // Read once: the address bar follows her spots and drops ?debug=1 as soon as she moves.
+  // Read once, when the house opens.
   const [debug] = useState(() => flag('debug') !== null)
   // Her trip photos on the wall downstairs (saved on the iPad): tap one and it comes close.
   const [wallPhotos] = useWallPhotos()
