@@ -22,7 +22,7 @@
     "tone": "mint"
   },
   "pitch": "Kaylee presses the key and the big Pajero beeps hello. Mommy drives and Kaylee steers it round the bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.",
-  "next": "Dad steers the [valley road](#/world/thailand/nan-trip/drive) and the [3 road](#/world/thailand/nan-trip/drive?road=three) again on the iPhone and the iPad: is the wheel calm enough now (no back-and-forth)? Too slow? Yank it hard for the tyre squeal. Then [the 3 from above](#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt) (no crayon now). Then **the whole trip** from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?",
+  "next": "Dad tunes the steering in the **feel lab**: the [valley road with sliders](#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1) on the iPhone, the trackpad and the iPad, then sends the “For agent” note to bake in. Then **the whole trip** from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?",
   "facts": [
     {
       "icon": "⏱️",
@@ -1705,6 +1705,17 @@
                 "**Still goes off on purpose:** a held full push reaches the grass in ~2.7 s and goes over in ~4-5 s (the steer target can run 3 m past the grass now, was 1.5 m). A jittery finger moves it about 1 m.",
                 "**Tyre squeal** (`screech`, `roadSfx.screech`): a quick, hard flick of the wheel (`SCREECH_FLICK` 5/s, at least 0.45 over, moving) squeals “eeeee”, puffs smoke off the back wheels and rocks the body; at most one every 0.7 s. A slow push never squeals. QA key `screeches`.",
                 "**No crayon** (`updateView`): from the viewpoint the camera lifts over the hill and the bends pop 1, 2, 3 by themselves (from 1.8 s, 0.75 s apart, sparkles on each), then the fanfare and “Three! Kaylee drove the three!”. The crayon, its line, tracing, the tap-to-draw-on, the 👆 along the road and “Draw the three with your finger!” are gone; Mommy's photo shows a grey road for the 3. `qa-motion` `nan-trace` is now `nan-three-view` (it just watches)."
+              ]
+            },
+            {
+              "title": "The feel lab: Dad tunes the steering by hand",
+              "date": "2026-10-26",
+              "status": "done",
+              "summary": "Round 2 overshot: the steering felt sluggish. Instead of guessing a third time, the steering's numbers are now knobs that Dad slides himself while he drives (`?feel=1`), with a live graph of his finger against the car.",
+              "items": [
+                "**Defaults moved to the middle** (`mountain.ts` `STEER`): slide 5.5 m/s (round 1: 7.5, round 2: 4.2), push curve 1.3 (1.6), smoothing 0.15 s (0.3), aim at least 10 m ahead (13). Also knobs: wheel size, dead middle, how much it aims closer when far off, turn rate, grip, top speed, back to her lane, how much the camera turns with the car, and the squeal's flick speed.",
+                "**The feel lab** (`lab/feel/FeelLab.tsx`, shared registry `kit/knobs.ts`): sliders with − and + steps over the real game, which stays full size and playable; changed knobs turn pink with ↺ back to the default; a graph of the last 6 s (her push, the steer, where she's steering to, the car, the nose turning); Reset, Link and “For agent”, which lists the changed numbers and the file to bake them into. What changed stays in the address bar (`feel.steer.slide=7`).",
+                "For the next games: AGENTS.md (“The feel lab”, and the greybox gate) and `docs/interactions.md` (“Tuning the feel”, with the steering lessons) say to declare feel numbers as knobs and link `?feel=1` in the PR."
               ]
             }
           ]
