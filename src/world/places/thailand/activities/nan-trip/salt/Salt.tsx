@@ -1,11 +1,13 @@
-// Bo Kluea's salt hut's screen: the 3D hut (salt3d.ts) with its tap targets, the 👆 after a while with nothing touched,
-// and at the end (the bags on the shelf) the end card: 🔁 the salt hut again, or 🗺️ back to the Nan map (its stamp
-// lands there).
+// Bo Kluea's salt hut's screen: the 3D hut and the village street (salt3d.ts) with its tap targets, the 👆 after a while
+// with nothing touched, and at the end (the bags on the shelf) the end card: 🔁 the salt hut again, or 🗺️ back to the
+// Nan map (its stamp lands there). Sparkle sits in the corner (trip/legs/Guide.tsx, hidden under the end card) and
+// everyone talks out loud in their own voice: the salt aunty, Daddy, Sparkle.
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { FarmEnd } from '../mushrooms/Mushrooms'
 import type { Round } from './layout'
 import { SALT_ANCHORS, SaltHut } from './salt3d'
@@ -23,6 +25,7 @@ export function Salt({ round, onRound, onMap }: Props) {
   const [done, setDone] = useState(false)
   const worldRef = useRef<SaltHut | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   // A rebuilt world (a lost GPU context, 🔁) starts where she is now, not where the link was.
   const now = useRef(round)
   const cb = useRef(onRound)
@@ -32,7 +35,7 @@ export function Salt({ round, onRound, onMap }: Props) {
     const w = new SaltHut(
       renderer,
       {
-        say: () => {},
+        say: (l) => guideRef.current?.speak(l),
         section: () => {},
         done: () => {},
         round: (r) => {
@@ -86,6 +89,7 @@ export function Salt({ round, onRound, onMap }: Props) {
           🧂 Tap to wake the salt hut
         </button>
       )}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={done} />}
       <AnimatePresence>{done && <FarmEnd onAgain={again} onMap={onMap} label="The salt hut again" />}</AnimatePresence>
     </div>
   )

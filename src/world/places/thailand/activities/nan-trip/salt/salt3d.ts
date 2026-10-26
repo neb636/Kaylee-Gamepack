@@ -1,6 +1,7 @@
-// Bo Kluea's salt wells (plan: planning/around-the-world/thailand/nan-trip.html, "4. Bo Kluea salt wells"), greybox:
-// shapes and sounds, no voices yet. One open-sided salt hut seen from the front: the well on the left, the big pan on
-// its mud stove on the right, a bamboo beam over both with the bucket hanging from it on a rope.
+// Bo Kluea's salt wells (plan: planning/around-the-world/thailand/nan-trip.html, "Bo Kluea salt wells"), built: the
+// look, the sounds and the voices. One open-sided salt hut seen from the front (hut.ts), the wet village street and the
+// house with the painted couple behind it (village.ts): the well on the left, the big pan on its mud stove on the right,
+// a bamboo beam over both with the bucket hanging from it on a rope.
 //
 // The toy, the bucket: her finger held anywhere pulls the bucket there (it swings on its rope, heavy when it's full).
 // Down into the well and it fills (splash, glug); carried over the pan and lowered, it tips and the brine pours in.
@@ -19,11 +20,18 @@
 // a cloud of steam); tap Kaylee once she has touched the brine and she licks her finger: a big salty face. Things to
 // poke: the aunty, the cat, the rooster, the baskets, the painted couple across the road, the well (an echo), the
 // steam, the family.
+// Talk (lines.ts L.nan.salt): the salt aunty says hello as they arrive, then Sparkle says each round's one line as it
+// begins (dip, fire, scrape) and, after ~8 s with nothing done (counted from 3 s after the round's line), what to do
+// (stuckLine); the aunty says when the fire's lit, the salt shows and the bags fill; Daddy reacts to the brine on his
+// foot and Kaylee's salty face; tapped, the aunty and Daddy say their lines in turn (not while Sparkle talks); the first
+// poke at the steam (or the boiling pan) tells the fact. Ambient life: drips off the eaves, rings on the road's
+// puddles, low cloud drifting on the mountains, steam, the cat, the rooster, a scooter now and then.
 import { Color, IcosahedronGeometry, Matrix4, Mesh, MeshBasicMaterial, OctahedronGeometry, Plane, Quaternion, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp } from '../../../../../../sdk'
+import { bell, clamp, speakingVoice, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { FaceLife } from '../../../characters/face'
 import type { Member } from '../../../characters/member'
+import { L } from '../../../lines'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { Shot } from '../../../engine/camera'
 import { solid } from '../../../engine/geo'
@@ -53,6 +61,7 @@ import {
   JI_AT,
   KAYLEE_AT,
   KAYLEE_FIRE,
+  KAYLEE_SCRAPE,
   KAYLEE_LEAD,
   KAYLEE_X,
   KAYLEE_Z,
@@ -80,6 +89,7 @@ import {
   type Round,
 } from './layout'
 import { saltSfx as sfx } from './sounds'
+import { stepVillage } from './village'
 
 export interface SaltEvents extends LegEvents {
   /** A new round began (the address bar follows). */
@@ -98,13 +108,14 @@ export const SALT_ANCHORS: AnchorInfo[] = [
   { id: 'aunty', label: 'Salt aunty', kind: 'thing' },
   { id: 'cat', label: 'Sleepy cat', kind: 'thing' },
   { id: 'rooster', label: 'Rooster', kind: 'thing' },
+  { id: 'hen', label: 'Hen and chicks', kind: 'thing' },
   { id: 'baskets', label: 'Baskets', kind: 'thing' },
   { id: 'mural', label: 'Painted couple', kind: 'thing' },
   ...(['kaylee', 'nick', 'ji'] as const).map((e): AnchorInfo => ({ id: `family:${e}`, label: { kaylee: 'Kaylee', nick: 'Daddy', ji: 'Mommy' }[e], kind: 'family' })),
 ]
 
 /** Taps on these are pokes: a finger on them doesn't pull the bucket or the paddle. */
-const POKES = new Set(['aunty', 'cat', 'rooster', 'baskets', 'mural', 'basket', 'family:kaylee', 'family:nick', 'family:ji'])
+const POKES = new Set(['aunty', 'cat', 'rooster', 'hen', 'baskets', 'mural', 'basket', 'family:kaylee', 'family:nick', 'family:ji'])
 
 type Step = 'dip' | 'pour'
 
@@ -120,6 +131,13 @@ interface Fly {
 }
 
 const STUCK_S = 5
+/** Nothing done for this long: Sparkle says what to do (again after SAY_EVERY, at most SAY_MAX times a round). */
+const SAY_S = 8
+const SAY_EVERY = 20
+const SAY_MAX = 3
+const R = L.nan.salt
+/** The back eave, where the rain drips off the roof. */
+const EAVE = { y: 2.7, z: -1.7 }
 /** Round 2: no log for this long (and the fire low) and the aunty throws one on herself. */
 const AUNTY_LOG_S = 9
 const LIFT_PX = 30
@@ -179,12 +197,20 @@ export class SaltHut extends Stage {
   private catStretch = 1
   private auntyHop = 1
   private roosterCrow = 1
+  private henFlap = 1
   private basketsWobble = 1
   private basketBounce = 1
   private muralGlow = 1
   private scooterT = 4
   private woodBounce = 1
   private steamPokes: { at: Vector3; t: number }[] = []
+  // ---- Talk ----
+  private told = new Set<string>()
+  private lastSay = -99
+  private quietFrom = 0
+  private sayN = 0
+  private auntyTap = 0
+  private dadTap = 0
   // ---- Effects ----
   private drops: Floaters
   private stream: Floaters
@@ -197,12 +223,12 @@ export class SaltHut extends Stage {
   constructor(renderer: WebGLRenderer, private ev: SaltEvents, start: { round: Round }) {
     super(renderer, ev)
     const { scene, bag } = this
-    scene.background = new Color('#D6E3EE')
+    scene.background = new Color('#DCE0EC')
     this.rig.fov = 32
     this.rig.lag = 0.45
     this.hut = buildHut(bag)
     scene.add(this.hut.root)
-    this.auntyLife = new FaceLife(this.hut.aunty)
+    this.auntyLife = new FaceLife(this.hut.aunty, 'saltaunty')
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
     this.kaylee = kaylee
     this.nick = members.get('nick')!
@@ -227,6 +253,48 @@ export class SaltHut extends Stage {
       this.touchedBrine = true
     } else if (start.round === '3') this.startScraping(true)
     this.lastLog = 0
+    // The aunty says hello as they arrive (only at the start of the stop), then Sparkle's line for the round.
+    this.quietFrom = 3
+    if (start.round === '1') this.after(0.4, () => this.once('hi', R.hi))
+    this.after(start.round === '1' ? 0.6 : 0.5, () => this.roundLine(start.round, true))
+  }
+
+  // ---------------------------------------------------------------- talk
+
+  /** Says it the first time only. A reaction (`now`) is dropped while Sparkle talks, rather than heard late. */
+  private once(key: string, l: Line, now = false) {
+    if (this.told.has(key)) return
+    if (now && speakingVoice() === 'sparkle') return
+    this.told.add(key)
+    this.ev.say(l)
+  }
+  /** A story line from the aunty or Daddy that shouldn't be lost: it waits (a little) until nobody is talking. */
+  private soon(key: string, l: Line, tries = 6) {
+    if (this.told.has(key)) return
+    if (speakingVoice() && tries > 0) return this.after(0.7, () => this.soon(key, l, tries - 1))
+    this.once(key, l)
+  }
+  /** A new round's line (the aunty's first when the fire's lit), and the stuck count starts again 3 s later. */
+  private roundLine(r: Round, arrived = false) {
+    this.sayN = 0
+    this.lastSay = -99
+    this.quietFrom = this.time + 3
+    if (r === '1') return this.once('r1', R.dip)
+    if (r === '2') {
+      if (!arrived) this.once('lit', R.lit)
+      return this.after(arrived ? 0 : 0.3, () => this.once('r2', R.fire))
+    }
+    this.once('r3', R.scrape)
+  }
+  /** A tapped character's next line, in turn (not while Sparkle talks: it would come late). */
+  private chat(key: string, lines: readonly Line[], n: number) {
+    if (speakingVoice() === 'sparkle') return false
+    let said = false
+    this.talkTo(key, () => {
+      this.ev.say(lines[n % lines.length])
+      said = true
+    }, 3)
+    return said
   }
 
   // ---------------------------------------------------------------- the bucket
@@ -296,7 +364,9 @@ export class SaltHut extends Stage {
     } else if (this.bottom > FILL_BELOW + 0.1) b.splashed = false
     // ---- Tipping: held low anywhere but over the well, it tips and pours ----
     const low = this.bottom < (overPan(b.at.x) ? TIP_BELOW_PAN : TIP_BELOW)
-    const want = b.fill > 0.001 && low && !overWell(b.at.x) && this.bottom > WELL.rim - 0.05 ? 1.85 : 0
+    // (Carried over for her by a tap, it doesn't spill on the way: it tips once it's over the pan.)
+    const carried = this.auto[0] === 'pour' && !overPan(b.at.x)
+    const want = b.fill > 0.001 && low && !carried && !overWell(b.at.x) && this.bottom > WELL.rim - 0.05 ? 1.85 : 0
     b.tilt += (want - b.tilt) * Math.min(1, dt * 7)
     if (b.tilt > 0.9 && b.fill > 0) this.pour(dt)
     else b.pourS = 0
@@ -350,7 +420,11 @@ export class SaltHut extends Stage {
       this.talkTo('nickfoot', () => {
         this.nick.react('hop')
         sfx.splash(0.6)
-        this.after(0.15, () => sfx.haha())
+        if (speakingVoice() === 'sparkle' || this.time - (this.cool.get('nickfoot-say') ?? -99) < 8) this.after(0.15, () => sfx.haha())
+        else {
+          this.cool.set('nickfoot-say', this.time)
+          this.ev.say(R.foot)
+        }
       }, 1.6)
     const cat = this.hut.cat.root.position
     if (Math.abs(x - cat.x) < 0.35) this.wetCat()
@@ -371,14 +445,15 @@ export class SaltHut extends Stage {
     this.after(0.6, () => {
       sfx.full()
       this.hopAunty()
-      sfx.aunty()
       this.sparkles.burst(new Vector3(PAN_X, PAN.top + 0.05, 0), 18, 1.2, 1.2, 0.9, 0.045)
-      this.after(0.8, () => {
+      this.once('lit', R.lit)
+      this.after(1.0, () => {
         this.fire = Math.max(this.fire, 0.3)
         this.lastLog = this.time
         sfx.log()
         this.sparkles.burst(new Vector3(MOUTH.x, MOUTH.y, STOVE_FRONT + 0.1), 10, 0.8, 1, 0.6, 0.035, 0)
         this.ev.round('2')
+        this.roundLine('2')
       })
     })
   }
@@ -473,6 +548,8 @@ export class SaltHut extends Stage {
         this.shimmered = true
         sfx.shimmer()
         this.sparkles.burst(new Vector3(PAN.x0 + 0.1, PAN.top, 0), 8, 0.6, 0.8, 0.7, 0.03, 2)
+        this.hopAunty()
+        this.soon('white', R.white)
       }
       if (before > BOILED && this.level <= BOILED) this.boiledDown()
     }
@@ -490,6 +567,7 @@ export class SaltHut extends Stage {
       sfx.aunty()
       this.startScraping(false)
       this.ev.round('3')
+      this.roundLine('3')
     })
   }
 
@@ -509,6 +587,7 @@ export class SaltHut extends Stage {
     this.hut.paddle.root.visible = this.hut.handle.visible = true
     this.bucket.fill = 0
     if (now) {
+      this.put(this.kaylee, ...KAYLEE_SCRAPE, 'stand', 0)
       this.bucket.at.set(...BUCKET_AWAY)
       this.bucket.goal.set(...BUCKET_AWAY)
     }
@@ -619,8 +698,9 @@ export class SaltHut extends Stage {
     const ls = Math.min(1.3, p.load / PADDLE_HOLDS * 1.3)
     lp.scale.setScalar(Math.max(0.001, ls * (1 + 0.04 * Math.sin(t * 6))))
     stick(this.hut.handle, o.localToWorld(tmp.set(0, 0.03, 0.08)), hand)
-    // Kaylee keeps up with the blade along the front.
-    this.follow(o.position.x - 0.15)
+    // Kaylee stands at the pan's left end (not in front of it) and reaches in with the long paddle.
+    const kp = this.kaylee.root.position
+    if (!this.kaylee.walking && Math.hypot(kp.x - KAYLEE_SCRAPE[0], kp.z - KAYLEE_SCRAPE[2]) > 0.1) this.kaylee.walk([[KAYLEE_SCRAPE[0], KAYLEE_SCRAPE[2]]])
   }
 
   /** The blade's goal is right under her finger (the blade lies flat in the pan, nothing to hide); `jump` puts it there
@@ -664,6 +744,7 @@ export class SaltHut extends Stage {
         const b = this.hut.bags[i]
         b.visible = true
         this.bagsUp = i + 1
+        if (i === 0) this.soon('bags', R.bags)
         sfx.bag(i)
         this.sparkles.burst(b.position.clone().add(new Vector3(0, 0.2, 0.1)), 8, 0.7, 1, 0.6, 0.03)
       })
@@ -696,7 +777,14 @@ export class SaltHut extends Stage {
     }
     this.salty = 0
     sfx.salty()
-    this.after(0.5, () => this.talkTo('nicklaugh', () => (this.nick.react('hop'), sfx.haha()), 3))
+    this.after(0.5, () =>
+      this.talkTo('nicklaugh', () => {
+        this.nick.react('hop')
+        if (speakingVoice() === 'sparkle' || this.time - (this.cool.get('salty-say') ?? -99) < 8) return sfx.haha()
+        this.cool.set('salty-say', this.time)
+        this.ev.say(R.salty)
+      }, 3),
+    )
   }
 
   private cheer() {
@@ -860,6 +948,8 @@ export class SaltHut extends Stage {
         return
       case 'bucket':
       case 'pan':
+        // The first poke at the boiling pan tells what's happening in it.
+        if (id === 'pan' && (this.round === '3' || (this.round === '2' && this.fire > 0.05))) this.once('boil', R.boil, true)
         if (this.round === '3') {
           if (id === 'pan' && this.paddle.dump < 0 && !this.swept) {
             const hit = this.onPlane(x, y, saltPlane)
@@ -887,7 +977,8 @@ export class SaltHut extends Stage {
         return
       case 'aunty':
         this.hopAunty()
-        this.talkTo('aunty', () => sfx.aunty(), 1)
+        if (this.chat('aunty-say', R.tap, this.auntyTap)) this.auntyTap++
+        else this.talkTo('aunty', () => sfx.aunty(), 1)
         return
       case 'cat':
         this.catStretch = 0
@@ -896,6 +987,13 @@ export class SaltHut extends Stage {
       case 'rooster':
         this.roosterCrow = 0
         this.talkTo('rooster', () => sfx.crow(), 1.2)
+        return
+      case 'hen':
+        this.henFlap = 0
+        this.talkTo('hen', () => {
+          sfx.cluck()
+          this.after(0.25, () => sfx.peep())
+        }, 1)
         return
       case 'baskets':
         this.basketsWobble = 0
@@ -910,7 +1008,8 @@ export class SaltHut extends Stage {
         return this.lick()
       case 'family:nick':
         this.nick.react('hop')
-        sfx.haha()
+        if (this.chat('nick-say', R.dad, this.dadTap)) this.dadTap++
+        else sfx.haha()
         return
       case 'family:ji':
         this.ji.react('wave')
@@ -925,6 +1024,7 @@ export class SaltHut extends Stage {
         this.steamPokes.push({ at: p, t: this.time })
         this.sparkles.burst(p, 6, 0.6, 0.6, 0.5, 0.03, 2)
         sfx.pop()
+        this.once('boil', R.boil, true)
       }
     }
   }
@@ -1013,6 +1113,19 @@ export class SaltHut extends Stage {
     this.roosterCrow = Math.min(1, this.roosterCrow + dt / 1.3)
     const rh = this.hut.rooster.head
     rh.rotation.z = this.roosterCrow < 1 ? bell(this.roosterCrow) * 0.9 : Math.max(0, Math.sin(t * 2.3)) ** 6 * -0.8
+    // ---- The hen pecks about; poked, she flaps up and her chicks hop and scurry round her ----
+    this.henFlap = Math.min(1, this.henFlap + dt / 0.9)
+    const { hen, chicks } = this.hut.village
+    const hf = bell(this.henFlap)
+    hen.root.position.y = hf * 0.22
+    hen.root.scale.set(1 + 0.12 * hf, 1 - 0.08 * hf, 1 + 0.12 * hf)
+    hen.head.rotation.z = this.henFlap < 1 ? 0.5 * hf : -(Math.max(0, Math.sin(t * 1.9 + 1)) ** 8) * 1.1
+    for (const [i, c] of chicks.entries()) {
+      const [hx, hz] = c.userData.home as [number, number]
+      const run = this.henFlap < 1 ? hf : 0
+      c.position.set(hx + Math.sin(t * 0.6 + i * 2) * 0.12 + Math.cos(i * 2.4) * run * 0.25, Math.abs(Math.sin(t * 9 + i)) * 0.06 * run + Math.max(0, Math.sin(t * 3 + i * 1.3)) ** 12 * 0.04, hz + Math.cos(t * 0.5 + i) * 0.1 + Math.sin(i * 2.4) * run * 0.25)
+      c.rotation.y = i * 2.1 + Math.sin(t * 0.6 + i * 2) * 1.2
+    }
     this.basketsWobble = Math.min(1, this.basketsWobble + dt / 0.8)
     this.hut.baskets.rotation.z = Math.sin(this.basketsWobble * Math.PI * 4) * 0.12 * (1 - this.basketsWobble)
     this.woodBounce = Math.min(1, this.woodBounce + dt / 0.35)
@@ -1020,16 +1133,24 @@ export class SaltHut extends Stage {
     this.muralGlow = Math.min(1, this.muralGlow + dt / 1.2)
     this.hut.mural.scale.setScalar(1 + 0.04 * bell(this.muralGlow))
     // ---- A scooter putters past on the road now and then ----
+    // (On the far lane, heading right: Thailand drives on the left.) Its wheels spin and throw up a little spray.
     this.scooterT -= dt
     const sc = this.hut.scooter
     if (this.scooterT < 0) {
       sc.position.x += dt * 2.4
-      sc.position.y = Math.abs(Math.sin(t * 9)) * 0.02
-      if (sc.position.x > 8) {
-        sc.position.x = -8
+      sc.position.y = Math.abs(Math.sin(t * 9)) * 0.015
+      for (const w of this.hut.village.wheels) w.rotation.z -= (dt * 2.4) / 0.14
+      if (Math.random() < dt * 14) this.drops.emit(tmp.set(sc.position.x - 0.38, 0.05, sc.position.z), tmp2.set(-0.5 - Math.random() * 0.4, 0.6 + Math.random() * 0.5, (Math.random() - 0.5) * 0.3), 0.4, 0.02)
+      if (sc.position.x > 10) {
+        sc.position.x = -10
         this.scooterT = 10 + Math.random() * 8
       }
-    } else if (sc.position.x < -7 || sc.position.x > 7) sc.position.set(-8, 0, ROAD_Z + 0.3)
+    } else if (sc.position.x < -9 || sc.position.x > 9) sc.position.set(-10, 0, ROAD_Z - 0.45)
+    // ---- The street: the clouds drift, drizzle rings on the puddles, drips off the back eave; a wisp of steam off
+    // the hot pan of salt ----
+    stepVillage(this.hut.village, dt, t)
+    if (Math.random() < dt * 1.6) this.drops.emit(tmp.set(-3 + Math.random() * 6, EAVE.y, EAVE.z), tmp2.set(0, -0.5, 0), 0.9, 0.022)
+    if (this.round === '3' && !this.doneSaid && Math.random() < dt * 1.2) this.steam.emit(tmp.set(PAN.x0 + Math.random() * (PAN.x1 - PAN.x0), PAN.top, (Math.random() - 0.5) * 0.5), tmp2.set(0, 0.3, 0), 1.4, 0.08)
     // ---- The family: Kaylee walks along under the bucket and reaches for it; everyone watches ----
     if (this.round !== '3' && (this.bucket.held || this.auto.length)) this.follow(this.bucket.at.x + KAYLEE_LEAD)
     else if (this.round === '2' && !this.log) this.follow(KAYLEE_FIRE[0])
@@ -1044,7 +1165,26 @@ export class SaltHut extends Stage {
     this.ji.lookAt(look.x, look.y, look.z)
     this.poseArms()
     this.saltyFace(dt)
+    this.stuck()
     for (const fl of [this.drops, this.stream, this.steam, this.bubbles, this.sparkles, this.grains, this.smoke]) fl.update(dt)
+  }
+
+  /** After a while with nothing done, Sparkle says what to do (a few times a round at most). */
+  private stuck() {
+    if (this.bucket.held || this.paddle.held || this.log || this.blowing || this.auto.length || this.paddle.dump >= 0 || this.flights.length) return
+    if (this.time - Math.max(this.lastTouch, this.quietFrom) < SAY_S || this.time - this.lastSay < SAY_EVERY || this.sayN >= SAY_MAX) return
+    if (speakingVoice()) return
+    const l = this.stuckLine()
+    if (!l) return
+    this.lastSay = this.time
+    this.sayN++
+    this.ev.say(l)
+  }
+  private stuckLine(): Line | null {
+    if (this.round === '1') return this.bucket.fill > 0.4 ? R.hint.pour : R.hint.dip
+    // (A big fire boils on by itself: she's watching, not stuck.)
+    if (this.round === '2') return this.fire < 0.4 ? R.hint.fire : null
+    return this.swept ? null : R.hint.scrape
   }
 
   /** Her arms up toward the bucket while she's leading it, or forward on the paddle (over whatever the pose did). */
@@ -1155,6 +1295,8 @@ export class SaltHut extends Stage {
         return three ? null : { at: new Vector3(ROOSTER[0], 0.3, ROOSTER[2]), r: 0.18, max: 110 }
       case 'baskets':
         return three ? null : { at: this.hut.baskets.position.clone().setY(0.25), r: 0.2, max: 110 }
+      case 'hen':
+        return three ? null : { at: this.hut.village.hen.root.position.clone().setY(0.2), r: 0.22, max: 110 }
       case 'mural':
         return three ? null : { at: new Vector3(MURAL.x, MURAL.y, MURAL.z), r: 0.6, prio: 0, max: 150 }
     }
