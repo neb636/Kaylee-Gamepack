@@ -111,13 +111,14 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 
 ### Thailand
 
-**Home base (the house)**: [Arrive by tuk-tuk](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/arrive) · [Downstairs](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/downstairs) · [Family photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/family)
+**Home base (the house)**: [Arrive by tuk-tuk](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/arrive) · [In front of Agong's house](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/street) · [Downstairs](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/downstairs) · [Kaylee's room upstairs](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/upstairs) · [Family photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/family)
 
 **Boat Trip**
 
 - **Getting there**
   - [Mommy asks: ready for a trip?](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/invite)
   - [Pack the suitcase](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/pack)
+  - [Goodbye at Agong's house, into Aunty Sri's van](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/goodbye)
   - [The x-ray belt](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/airport)
   - [Window seat: seatbelt and takeoff](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/takeoff)
   - [Window seat: tray, snacks, the elephant below](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/fly)
@@ -141,6 +142,8 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   - [The race podium and the trophy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/podium)
   - [The Nail Island and the photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/nail)
   - [The ride back at sunset, and the porpoise (then 🐘 at the pier, or ✈️🏠 after the elephants)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/sunset) ([after the elephants: ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/sunset?been=chang))
+- **Home**
+  - [The photo for Agong's wall, and the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/home)
 
 **Mall Day at ICONSIAM**
 
@@ -151,15 +154,24 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - **HarborLand mini games**
   - [HarborLand: walk the hall and pick a mini game](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/hall)
   - [The Vet Clinic: heal the puppy, the pony and the baby elephant](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/vet)
+  - [The Barber Salon: Daddy's new look, grow and snip](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/barber)
+  - [The Barber Salon: colors, the dryer and bows](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/barber?round=2)
+  - [The Barber Salon: kids come in with picture cards](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/barber?round=3)
   - [Cafe & Cake: blend, pour and serve drinks to Daddy and Mommy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/cafe)
   - [The Racing Slide: climb, 3-2-1, scoot down into the balls](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/race)
   - [Little Land: stack the giant foam bricks, copy the card, build taller than Daddy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/blocks)
   - [The Golden Mountain: climb hold by hold, counting, ring the bell, zoom down the steel slide, then race Daddy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/mountain)
+  - [Muay Thai: the wai kru, then free punching](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/boxing)
+  - [Muay Thai: punch along on the beat](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/boxing?round=2)
+  - [Muay Thai: Daddy's pad and the big kick](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/boxing?round=3)
   - [The Sky Pod: slap the lights, copy the tune, race Daddy to ten](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/skypod)
   - [The Big Frame: climb up, slide down (the mask, the dragons, the roller, the donut, the zip line), the cannon at Daddy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/frame)
+  - [HarborLand: Daddy's tummy rumbles, Mommy asks: pizza time?](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/hungry)
 - **The Pizza Company**
   - [Pick a pizza](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/menu)
   - [Pull the cheesy slices and share them fairly](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/share)
+- **Home**
+  - [The pizza box for Agong, the cousins' phones down, the photo on his wall, the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/home)
 
 **Road Trip to Nan**
 
