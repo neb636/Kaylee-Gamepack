@@ -4,6 +4,9 @@
 //
 // The top bar covers the top of the screen, so the view is extended upward by the bar's height (setViewOffset): the
 // framing is centered in the part of the screen below the bar.
+//
+// The camera lab (?cam=1, lab/camera/) can change whatever shot the game asks for (`override`): the game keeps choosing
+// its shots, the rig frames the changed one.
 import { PerspectiveCamera, Vector3 } from 'three'
 import { TUNE } from './tune'
 
@@ -23,6 +26,30 @@ export interface Shot {
   follow?: boolean
 }
 
+/** The camera lab's change to the game's shots. */
+export interface CamOverride {
+  /** nudge: `yaw` and `pitch` are added to the game's; lock: they replace them. */
+  mode: 'nudge' | 'lock'
+  yaw: number
+  pitch: number
+  /** Times the distance that fits the game's box (below 1: closer). */
+  zoom: number
+  /** Degrees of view, top to bottom (null: the game's lens). */
+  fov: number | null
+  /** Meters the look-at point moves: to the right across the screen, and up. */
+  px: number
+  py: number
+}
+
+/** Where the camera is aiming now (for the lab's readout and guides). */
+export interface Framed {
+  center: Vector3
+  yaw: number
+  pitch: number
+  dist: number
+  fov: number
+}
+
 const deg = Math.PI / 180
 
 export class CameraRig {
@@ -39,6 +66,15 @@ export class CameraRig {
   /** Degrees of view, top to bottom (default: TUNE.fov). A chase camera behind a boat wants a wider lens than the
    *  dollhouse, so the horizon and the rock towers show. */
   fov: number | null = null
+  /** The camera lab's change (null: the game's shots as they are). */
+  private over: CamOverride | null = null
+  /** Seconds left of a snappy glide after the lab moved a slider. */
+  private quick = 0
+
+  /** The lens in use: the lab's, the game's, or the house default. */
+  get lens() {
+    return this.over?.fov ?? this.fov ?? TUNE.fov
+  }
 
   setSize(w: number, h: number, top: number) {
     this.w = Math.max(1, w)
@@ -46,7 +82,7 @@ export class CameraRig {
     this.top = Math.max(0, Math.min(top, h * 0.4))
     this.fits.clear()
     const c = this.camera
-    c.fov = this.fov ?? TUNE.fov
+    c.fov = this.lens
     c.aspect = this.w / (this.h + this.top)
     c.setViewOffset(this.w, this.h + this.top, 0, 0, this.w, this.h)
     c.updateProjectionMatrix()
@@ -57,28 +93,53 @@ export class CameraRig {
   setShot(shot: Shot, snap = false) {
     this.goal = shot
     if (snap) {
-      this.cur.center.copy(shot.center)
-      this.cur.yaw = shot.yaw
-      this.cur.pitch = shot.pitch
-      this.cur.dist = this.fit(shot)
+      const a = this.aim(shot)
+      this.cur.center.copy(a.center)
+      this.cur.yaw = a.yaw
+      this.cur.pitch = a.pitch
+      this.cur.dist = a.dist
       this.place()
     }
+  }
+
+  /** The shot the game asks for now (before the lab's change). */
+  get shot(): Shot | null {
+    return this.goal
+  }
+
+  /** The camera lab changes every shot from now on (null: back to the game's). `snap` jumps there at once. */
+  setOverride(o: CamOverride | null, snap = false) {
+    const lens = this.lens
+    this.over = o
+    if (this.lens !== lens) this.setSize(this.w, this.h, this.top)
+    this.quick = 0.4
+    if (snap && this.goal) this.setShot(this.goal, true)
+  }
+
+  /** Where the camera is aiming now, after the lab's change (null: no shot yet). */
+  framed(): Framed | null {
+    if (!this.goal) return null
+    return { ...this.aim(this.goal), fov: this.lens }
   }
 
   /** Forget cached fits (the ?debug panel changed the field of view). */
   refit() {
     this.fits.clear()
-    if (this.camera.fov !== (this.fov ?? TUNE.fov)) this.setSize(this.w, this.h, this.top)
+    if (this.camera.fov !== this.lens) this.setSize(this.w, this.h, this.top)
   }
 
   update(dt: number) {
     const g = this.goal
     if (!g) return
-    const k = 1 - Math.exp(-dt / Math.max(0.01, this.lag))
-    this.cur.center.lerp(g.center, k)
-    this.cur.yaw += (g.yaw - this.cur.yaw) * k
-    this.cur.pitch += (g.pitch - this.cur.pitch) * k
-    this.cur.dist += (this.fit(g) - this.cur.dist) * k
+    // Right after a lab slider moved, the camera follows it at once (the game's own glides stay as they are).
+    const lag = this.quick > 0 ? Math.min(this.lag, 0.06) : this.lag
+    this.quick = Math.max(0, this.quick - dt)
+    const k = 1 - Math.exp(-dt / Math.max(0.01, lag))
+    const a = this.aim(g)
+    this.cur.center.lerp(a.center, k)
+    this.cur.yaw += (a.yaw - this.cur.yaw) * k
+    this.cur.pitch += (a.pitch - this.cur.pitch) * k
+    this.cur.dist += (a.dist - this.cur.dist) * k
     this.place()
   }
 
@@ -91,7 +152,23 @@ export class CameraRig {
   get moving() {
     const g = this.goal
     if (!g) return false
-    return this.cur.center.distanceToSquared(g.center) > 1e-4 || Math.abs(g.yaw - this.cur.yaw) > 0.05 || Math.abs(this.fit(g) - this.cur.dist) > 0.02
+    const a = this.aim(g)
+    return this.cur.center.distanceToSquared(a.center) > 1e-4 || Math.abs(a.yaw - this.cur.yaw) > 0.05 || Math.abs(a.dist - this.cur.dist) > 0.02
+  }
+
+  /** The shot with the lab's change: where to look from, and how far. */
+  private aim(g: Shot) {
+    const o = this.over
+    if (!o) return { center: g.center, yaw: g.yaw, pitch: g.pitch, dist: this.fit(g) }
+    const yaw = o.mode === 'lock' ? o.yaw : g.yaw + o.yaw
+    const pitch = Math.max(-20, Math.min(89, o.mode === 'lock' ? o.pitch : g.pitch + o.pitch))
+    const dist = this.fit({ ...g, yaw, pitch }) * o.zoom
+    const y = yaw * deg
+    const center = g.center.clone()
+    center.x += Math.cos(y) * o.px
+    center.z -= Math.sin(y) * o.px
+    center.y += o.py
+    return { center, yaw, pitch, dist }
   }
 
   private place() {

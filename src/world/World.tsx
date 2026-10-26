@@ -1,5 +1,5 @@
 // Around the World: the shell section with the world map, the passport, the coloring book, the theater and every country
-// (and the labs: 2D puppets, 3D characters).
+// (and the labs: 2D puppets, 3D characters, the camera lab).
 import { lazy, Suspense } from 'react'
 import { go } from '../router'
 import { PuzzleBook } from './PuzzleBook'
@@ -15,6 +15,8 @@ import './world.css'
 
 // The 3D character lab (#/world/characters/<id>): loaded on demand, so only it downloads three.js.
 const CharacterLab = lazy(() => import('./places/thailand/lab/CharacterLab'))
+// The camera lab (?cam=1 on any section of a 3D country): the game in an iPad-sized frame with camera controls beside it.
+const CameraLab = lazy(() => import('./places/thailand/lab/camera/CameraLab'))
 
 export function World({ place, activity, section, params = {} }: { place?: string; activity?: string; section?: string; params?: Record<string, string> }) {
   let screen
@@ -30,8 +32,17 @@ export function World({ place, activity, section, params = {} }: { place?: strin
   else if (place === 'puzzles') screen = <PuzzleBook page={activity} />
   else if (place === 'coloring') screen = <ColoringBook page={activity} />
   else if (place === 'theater') screen = <Theater places={places.map((p) => p.meta).filter((m) => m.videos?.length)} onExit={() => go.world()} exitIcon="🌍" exitLabel="World map" title="🎬 Theater" />
-  else if (place) screen = <PlaceFrame id={place} activity={activity} section={section} params={params} />
-  else screen = <WorldMap />
+  else if (place) {
+    screen = <PlaceFrame id={place} activity={activity} section={section} params={params} />
+    if (params.cam !== undefined)
+      screen = (
+        <Suspense fallback={null}>
+          <CameraLab place={place} params={params}>
+            {screen}
+          </CameraLab>
+        </Suspense>
+      )
+  } else screen = <WorldMap />
   return (
     <div className="world" style={{ position: 'absolute', inset: 0 }}>
       {screen}

@@ -229,7 +229,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   const hintRef = useRef<HTMLDivElement>(null)
   const state = useRef({ section, packed, mount, busy: false, saved, ribbons, stops, photos, found, fed, straw, been })
   state.current = { ...state.current, section, packed, mount, saved, ribbons, stops, photos, found, fed, straw, been }
-  // Read once: the address bar follows her and drops ?debug=1.
+  // Read once, when the world opens.
   const [debug] = useState(() => flag('debug') !== null)
   // Driving the longtail on a phone (race/tilt.ts), in the bay and in the boat race alike: held sideways, tilt to
   // steer, with a gas pedal. The first time she's at the wheel, the phone turned sideways (or ▶ to play upright) and,

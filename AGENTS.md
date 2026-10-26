@@ -207,6 +207,11 @@ what's next; PR bodies end with the next prompt.
   for a new trip instead of building travel again.
 - **Debugging:** `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?fps=N` overrides the frame cap,
   `window.__thaiHouseQA()` is read-only state for tests (no jump hooks: tests open section links).
+- **The camera lab:** `?cam=1` on any 3D section link opens it (`lab/camera/`): the real game in an iPad or iPhone
+  frame, a panel that nudges the game's camera or locks one of your own (`CameraRig.setOverride`, so no game code
+  changes), freeze, orbit by hand, guides (the fit box, the top bar, tap-target sizes). When Dad sends a lab link or a
+  "Copy for agent" note, bake it into that world's `shot()` for that round and screen shape (tall or wide) and its
+  `rig.fov`. Leave the other branches alone unless he says otherwise, and check the targets stay at 64 px or more.
 - **Gotchas:** never name a shader variable `patch` or `sample` (reserved in WebGL2; the shader silently fails). Dispose
   what you create (`engine/dispose.ts`). Keep three.js out of `meta.ts` and `sections.ts`.
 - **Dad decides the family:** who each person is, which animal, who comes on a trip. Ask, don't invent family facts.
