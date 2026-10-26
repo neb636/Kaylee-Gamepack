@@ -14,7 +14,8 @@ export const DOOR_MAX = 4
 /** The photo's size: a little portrait. */
 export const DOOR_SIZE = { w: 240, h: 320 }
 
-/** `crown,hearts;bow,fairy,dress-mint` (a link's `door`) → up to 4 pictures. */
+/** `crown,hearts;bow,fairy,dress-mint` (a link's `door`) → up to 4 pictures. A picture of her with nothing on is `bare`
+ *  (any word that isn't a thing or a color is an empty look). */
 export function parseDoor(text: string): DoorPhoto[] {
   return text
     .split(';')

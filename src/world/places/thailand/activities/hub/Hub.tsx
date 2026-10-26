@@ -48,7 +48,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const [startDoor] = useState(() => (param('door') ? parseDoor(param('door')) : cleanDoor(savedDoor)))
   // The pictures and the drawer as the address bar shows them (so a copied link reproduces the door).
   const doorNow = useRef<{ photos: DoorPhoto[]; drawer: DrawerId | null }>({ photos: startDoor, drawer: null })
-  const wardrobeState = () => ({ ...(doorNow.current.drawer ? { drawer: doorNow.current.drawer } : {}), ...(doorNow.current.photos.length ? { door: doorNow.current.photos.map((p) => p.look).join(';') } : {}) })
+  const wardrobeState = () => ({ ...(doorNow.current.drawer ? { drawer: doorNow.current.drawer } : {}), ...(doorNow.current.photos.length ? { door: doorNow.current.photos.map((p) => p.look || 'bare').join(';') } : {}) })
   const wardrobe = useRef<WardrobePlugin | null>(null)
   const [startDrawer] = useState(() => (initial.section === 'wardrobe' ? ((param('drawer') || null) as DrawerId | null) : null))
   // The mirror button's sparkle across the screen as she pops over to her wardrobe.
