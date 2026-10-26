@@ -269,6 +269,11 @@ main build, `https://neb636.github.io/Kaylee-Gamepack/#/world/<place>/<activity>
 section needs. Label development-only tools and give their full `localhost` URLs. PR test links still target that PR's
 preview (see "Opening the PR").
 
+Keep the Thailand directory skimmable on a phone: one bold heading per trip, then a bullet per stage ("Getting there",
+the place or game, "Finale") with one link per nested bullet, in play order, never a single paragraph of `·`-joined
+links. Don't repeat the stage name in each link's label. Alternate states of one section (`?been=bay`, `?steer=tilt`)
+stay in parentheses on that section's bullet.
+
 ## A country's folder
 
 ```
