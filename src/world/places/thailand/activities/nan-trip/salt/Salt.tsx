@@ -1,16 +1,19 @@
 // Bo Kluea's salt hut's screen: the 3D hut and the village street (salt3d.ts) with its tap targets, the 👆 after a while
-// with nothing touched, and at the end (the bags on the shelf) the end card: 🔁 the salt hut again, or 🗺️ back to the
+// with nothing touched, and at the end (the bags on the shelf) the video of real salt being made (skippable: ⏭ 🧂
+// back to the end card; the 3D world holds still under it), then the end card: 🔁 the salt hut again, or 🗺️ back to the
 // Nan map (its stamp lands there). Sparkle sits in the corner (trip/legs/Guide.tsx, hidden under the end card) and
 // everyone talks out loud in their own voice: the salt aunty, Daddy, Sparkle.
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
+import { VideoBreak } from '../../../../../kit/Theater'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
 import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { FarmEnd } from '../mushrooms/Mushrooms'
 import type { Round } from './layout'
 import { SALT_ANCHORS, SaltHut } from './salt3d'
+import { SALT_VIDEO } from './video'
 
 interface Props {
   round: Round
@@ -23,6 +26,7 @@ export function Salt({ round, onRound, onMap }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [done, setDone] = useState(false)
+  const [video, setVideo] = useState(false)
   const worldRef = useRef<SaltHut | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const guideRef = useRef<TripGuideHandle>(null)
@@ -42,7 +46,7 @@ export function Salt({ round, onRound, onMap }: Props) {
           now.current = r
           cb.current(r)
         },
-        allDone: () => setDone(true),
+        allDone: () => setVideo(true),
       },
       { round: now.current },
     )
@@ -52,6 +56,7 @@ export function Salt({ round, onRound, onMap }: Props) {
 
   const again = () => {
     setDone(false)
+    setVideo(false)
     now.current = '1'
     onRound('1')
     setKey((k) => k + 1)
@@ -66,6 +71,7 @@ export function Salt({ round, onRound, onMap }: Props) {
         worldRef={worldRef}
         onMode={setMode}
         make={make}
+        paused={video}
         anchors={(input, els) => (
           <>
             <Anchors list={SALT_ANCHORS} els={els} {...input} />
@@ -89,7 +95,17 @@ export function Salt({ round, onRound, onMap }: Props) {
           🧂 Tap to wake the salt hut
         </button>
       )}
-      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={done} />}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={video || done} />}
+      {video && (
+        <VideoBreak
+          video={SALT_VIDEO}
+          next="🧂"
+          onDone={() => {
+            setVideo(false)
+            setDone(true)
+          }}
+        />
+      )}
       <AnimatePresence>{done && <FarmEnd onAgain={again} onMap={onMap} label="The salt hut again" />}</AnimatePresence>
     </div>
   )
