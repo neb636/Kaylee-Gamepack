@@ -20,9 +20,9 @@ export const TUNE = {
   insidePitch: 50,
   insideFitW: 5.65,
   insideFitD: 4.6,
-  /** Camera in the street. */
+  /** Camera in the street (every outside shot of the house is 17° lower than it was, Dad 2026-10-26). */
   streetYaw: 8,
-  streetPitch: 18,
+  streetPitch: 1,
   fov: 30,
   /** Kaylee's walk. */
   walkSpeed: 1.8,
