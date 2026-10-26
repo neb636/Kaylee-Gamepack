@@ -153,6 +153,8 @@ export class Golden extends Stage {
     // ---- Kaylee in her grip socks, Daddy (with the hairdo she gave him at the barber's), the monkeys ----
     const { kaylee } = this.makeFamily([])
     this.kaylee = kaylee
+    // Climbing all the way (the camera looks at her back): her wings stay folded flat so her hooves show.
+    kaylee.tuck = true
     wearSocks(kaylee, SOCK_COLORS[start.socks] ?? SOCK_COLORS.pink, bag)
     this.daddy = new Racer('nick', bag)
     wearHair(this.daddy.rig, LOOKS.nick, start.hair, bag)

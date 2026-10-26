@@ -175,6 +175,8 @@ export class MuayThai extends Stage {
     this.kaylee = kaylee
     this.nick = members.get('nick')!
     kaylee.wear(['gloves', 'mongkhon'])
+    // The gold belt goes round her dress (a tutu or a gown is wider than the belt): Muay Thai takes her outfit too.
+    kaylee.claim('belt', ['outfit'])
     wearSocks(kaylee, SOCK_COLORS[start.socks] ?? SOCK_COLORS.pink, bag)
     // Round her waist (the vinyl toy's dress is narrower than the code-built capsule the belt was made for: 0.172),
     // in a group of its own so the belt's pop can scale it.

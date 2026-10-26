@@ -3,14 +3,43 @@
 // and gave the big cousins (Gan, Ken, BB) phones they never look up from. The concepts are in planning/around-the-world/thailand/lineup.webp;
 // characters/animal.ts builds them in 3D. The vet's patients at HarborLand (a puppy, a pony, a baby elephant) are toy
 // animals too (PATIENT_LOOKS). Pure data (no three.js).
+import type { Slot } from './style'
+
 export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony' | 'monkey'
 export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
 /** What Kaylee can wear on a trip, from her suitcase (or Mommy's spare sun hat if she packed none), or at HarborLand
  *  (the vet's blue scrubs and cap, the cafe's apron and chef's hat, the barber's smock, Muay Thai's boxing gloves and red
  *  headband, the mongkhon): Avatar.wear. */
-export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties' | 'scrubs' | 'scrub-cap' | 'apron' | 'chef-hat' | 'smock' | 'gloves' | 'mongkhon'
+export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties' | 'scrubs' | 'scrub-cap' | 'apron' | 'chef-hat' | 'smock' | 'gloves' | 'mongkhon' | 'ngob'
+/** The ones any character can be dressed in (the lab's chips). The rice farm's `ngob` is built by the farm itself and
+ *  handed to Avatar.attach, so it isn't here. */
 export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasses', 'floaties', 'scrubs', 'scrub-cap', 'apron', 'chef-hat', 'smock', 'gloves', 'mongkhon']
-export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Wearable
+export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Exclude<Wearable, 'ngob'>
+
+/** The spots on Kaylee a thing can take: her look's five (style.ts) and the two only a costume uses (boxing gloves on
+ *  her hooves, floaties on her arms). */
+export type Spot = Slot | 'hands' | 'arms'
+/** The costume layer (wardrobe plan, "When her look clashes with a game"): the spots each costume takes. On those the
+ *  game's thing wins and her own goes in her pocket; she keeps everything else. The vet only needs her head and body,
+ *  so she can do it in heart sunglasses and fairy wings; the barber's smock would have wings poking through it, so it
+ *  takes her back too; nothing goes near a mongkhon (it takes her face as well). */
+export const SPOTS_OF: Record<Wearable, readonly Spot[]> = {
+  sunhat: ['head'],
+  'spare-hat': ['head'],
+  sunglasses: ['face'],
+  floaties: ['arms'],
+  scrubs: ['outfit'],
+  'scrub-cap': ['head'],
+  apron: ['outfit'],
+  'chef-hat': ['head'],
+  smock: ['outfit', 'back'],
+  gloves: ['hands'],
+  mongkhon: ['head', 'face'],
+  ngob: ['head'],
+}
+/** Hats that come off for a wai (into her hooves, then back on). The mongkhon never does: it's blessed, and stays on
+ *  for the wai kru. */
+export const HATS: readonly Wearable[] = ['sunhat', 'spare-hat', 'scrub-cap', 'chef-hat', 'ngob']
 
 export interface Look {
   species: Species

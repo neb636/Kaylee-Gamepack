@@ -4,7 +4,7 @@
 // How she moves: a bouncy hop-trot along a path (a little hop every step, squash when she lands, stretch at the top,
 // leaning into the walk), turning with a spring so corners curve, a settle wobble when she arrives. Everything else
 // (sitting down, hopping onto the mattress, each stair) is a short tween with an arc.
-import { Group, Vector3, type Object3D } from 'three'
+import { Box3, Euler, Group, Vector3, type Object3D } from 'three'
 import { bell, clamp, span, wobble } from '../../../../sdk'
 import type { Bag } from '../engine/dispose'
 import type { XZ } from '../engine/nav'
@@ -12,12 +12,11 @@ import { TUNE } from '../engine/tune'
 import { buildAnimal, buildWorn, Wind, type Rig } from './animal'
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { FaceLife } from './face'
-import { LOOKS, type Wearable } from './looks'
+import { HATS, LOOKS, SPOTS_OF, type Spot, type Wearable } from './looks'
 import { buildModelRig, kayleeModel } from './model'
-import { BARE, itemById, paintOf, PAINT_PARTS, type PaintColor, type PaintPart, type Slot, type Style } from './style'
+import { BARE, currentLook, itemById, paintOf, PAINT_PARTS, SLOTS, type PaintColor, type PaintPart, type Slot, type Style } from './style'
 import type { Character, Pose } from './types'
 
-const H = LOOKS.kaylee.height
 const BOUNCES = [0.28, 0.5, 0.78]
 /** A rig with legs (the modelled Kaylee) sitting: how far her body drops onto her hips, and the legs' swing forward. */
 const HIP_DROP = 0.11
@@ -30,6 +29,361 @@ interface Tween {
   arc: number
   t: number
   done?: () => void
+}
+
+// ---------------------------------------------------------------- the costume layer
+//
+// Two layers on her (wardrobe plan, "When her look clashes with a game"): her own look (style.ts, what she picked in
+// her wardrobe) and a game's costume (`wear`: the vet's scrubs, the packed sun hat). Each costume takes only the spots
+// it needs (looks.ts SPOTS_OF); she keeps her own things on every other spot. A thing of hers that loses its spot
+// doesn't vanish: it shrinks into a sparkle at her hip (her pocket) and pops back out when the spot is free again.
+// Sun smarts: on a sunny trip a shady hat of hers counts (no spare hat), and tinted glasses count as sunglasses.
+// Her wings fold when she sits, lies, walks or climbs (inside her walking circle), and flap when she hops; every hat
+// comes off into her hooves for a wai. The Avatar and the race's Racer both dress through this, so her look shows up
+// in every scene from one place: their constructors read currentLook().
+
+/** Where her pocket is: body-local, at her right hip. */
+const POCKET = new Vector3(0.17, 0.27, 0.07)
+/** Where a hat goes for a wai: body-local, held in front of her chest. */
+const HAT_HELD = new Vector3(0, 0.36, 0.2)
+const v1 = new Vector3()
+
+interface Home {
+  pos: Vector3
+  rot: Euler
+}
+const homeOf = (g: Group): Home => (g.userData.home ??= { pos: g.position.clone(), rot: g.rotation.clone() }) as Home
+const ease = (k: number) => k * k * (3 - 2 * k)
+/** The middle of a thing, from its group's origin, in its pivot's frame (measured once, at rest): a hat's middle is
+ *  what lands in her hooves for a wai. */
+function midOf(g: Group): Vector3 {
+  if (g.userData.mid) return g.userData.mid as Vector3
+  const mid = new Vector3()
+  if (g.parent) {
+    g.parent.updateWorldMatrix(true, true)
+    new Box3().setFromObject(g).getCenter(mid)
+    g.parent.worldToLocal(mid).sub(g.position)
+  }
+  g.userData.mid = mid
+  return mid
+}
+
+/** How she's posed this frame, for what she wears: folded wings, a flap, a wai. */
+export interface DressPose {
+  /** 0 wings spread (standing still) .. 1 folded flat (sitting, lying, walking, climbing). */
+  fold: number
+  /** Hopping or bouncing: the wings flap. */
+  flap: boolean
+  /** Doing a wai: her hat comes off into her hooves. */
+  wai: boolean
+}
+
+export class Dress {
+  /** Her own look. Bare until setLook. */
+  style: Style = BARE
+  /** The costume the game asked for (`wear`). */
+  private asked: Wearable[] = []
+  /** What's on her of it (sun smarts can leave the spare hat and the packed sunglasses off). */
+  private costume: Wearable[] = []
+  /** Spots something outside the costume took (HarborLand's grip socks, Agong's shoe rack, the boxing belt). */
+  private claims = new Map<string, readonly Spot[]>()
+  private worn = new Map<Wearable, Group[]>()
+  private entering = new Map<Wearable, number>()
+  private closet = new Map<string, Group[]>()
+  /** Her things showing on her now (not taken by a costume). */
+  private shown = new Set<string>()
+  private popping = new Map<string, number>()
+  /** Her things on their way into her pocket (0..1). */
+  private pocketing = new Map<string, number>()
+  private up = false
+  private foldK = 0
+  private waiK = 0
+  private flapT = 0
+  private flapping = 0
+
+  constructor(
+    private rig: Rig,
+    private bag: Bag,
+  ) {}
+
+  /** Can she wear her own things (the modelled Kaylee)? The code-built one has no closet and no paint. */
+  get dressable() {
+    return !!this.rig.closet
+  }
+
+  /** Her own look: her things on their spots (the free ones), her colors. `show`: what's new pops on. */
+  setLook(style: Style, show = false) {
+    const before = this.style
+    this.style = style
+    this.apply(show ? 'pop' : 'instant', before)
+    const colors = {} as Record<PaintPart, PaintColor>
+    for (const p of PAINT_PARTS) colors[p] = paintOf(style, p)
+    if (PAINT_PARTS.some((p) => paintOf(before, p) !== colors[p]) || before === BARE) this.rig.paint?.(colors)
+  }
+
+  /** The game's costume: exactly these (the last call's go). They take their spots; her own things on those spots go
+   *  in her pocket, and come back when the costume comes off. */
+  wear(ids: readonly Wearable[]) {
+    this.asked = [...ids]
+    this.apply('pocket')
+  }
+  /** Puts these on with a little show: the hat drops onto her head, the sunglasses slide down, the floaties pop on. */
+  putOn(ids: readonly Wearable[]) {
+    const before = new Set(this.costume)
+    this.wear(ids)
+    for (const id of this.costume) if (!before.has(id)) this.entering.set(id, 0)
+  }
+  /** Something a game puts on her itself takes these spots (null gives them back). `quiet`: her own things there just
+   *  go (and come back) without the pocket show, because the game shows it (her shoes hopping into a cubby). */
+  claim(key: string, spots: readonly Spot[] | null, quiet = false) {
+    if (spots) this.claims.set(key, spots)
+    else this.claims.delete(key)
+    this.apply(quiet ? 'instant' : 'pocket')
+  }
+  /** A costume thing a game built itself (the rice farm's ngob): from now on `wear([id])` puts it on. `pivot` is where
+   *  each group rides (her head, an arm). */
+  attach(id: Wearable, parts: [Group, Object3D][]) {
+    const groups: Group[] = []
+    for (const [g, pivot] of parts) {
+      if (g.parent !== pivot) pivot.add(g)
+      g.userData.base = g.position.clone()
+      g.userData.baseRx = g.rotation.x
+      if (HATS.includes(id)) midOf(g)
+      g.visible = false
+      groups.push(g)
+    }
+    this.worn.set(id, groups)
+    this.apply('instant')
+  }
+  /** Indoors (the plane) she pushes whatever glasses are on her face up onto her hair; outdoors they're back on her eyes. */
+  glassesUp(up: boolean) {
+    this.up = up
+    const R = 0.24 * LOOKS.kaylee.height
+    const to = this.rig.wardrobe?.glassesUp ?? { y: 0.62 * R, z: 0.12 * R, tilt: -0.42 }
+    for (const g of this.worn.get('sunglasses') ?? []) {
+      g.position.set(0, up ? to.y : 0, up ? to.z : 0)
+      g.userData.base = g.position.clone()
+      g.rotation.x = up ? to.tilt : 0
+    }
+  }
+
+  /** The costume on her now. */
+  get wearing(): Wearable[] {
+    return [...this.costume]
+  }
+  /** The spots taken from her look (by the costume or a game's claim). */
+  get taken(): Set<Spot> {
+    return new Set<Spot>([...this.costume.flatMap((c) => SPOTS_OF[c]), ...[...this.claims.values()].flat()])
+  }
+  /** Her own things in her pocket now (on her look, but their spot is taken). */
+  get pocket(): string[] {
+    return SLOTS.map((s) => this.style.on[s]).filter((id): id is string => !!id && !this.shown.has(id))
+  }
+  /** The groups of what's on a spot of hers now (empty if nothing is): the wardrobe aims at them and takes them off. */
+  onSpot(slot: Slot): Group[] {
+    const id = this.style.on[slot]
+    return id && this.shown.has(id) ? (this.closet.get(id) ?? []) : []
+  }
+  get busy() {
+    return this.popping.size > 0 || this.pocketing.size > 0 || this.entering.size > 0 || this.flapping > 0 || Math.abs(this.waiK - Math.round(this.waiK)) > 0.01
+  }
+
+  /** Works out what shows: sun smarts, the costume, then her things on every spot left free. */
+  private apply(how: 'instant' | 'pop' | 'pocket', before: Style = this.style) {
+    const head = itemById(this.style.on.head ?? '')
+    const face = itemById(this.style.on.face ?? '')
+    // ---- Sun smarts: her own shady hat and tinted glasses count ----
+    this.costume = this.asked.filter((id) => !(id === 'spare-hat' && head?.shade) && !(id === 'sunglasses' && face?.tinted))
+    for (const id of new Set([...this.costume, ...this.worn.keys()])) {
+      const on = this.costume.includes(id)
+      let groups = this.worn.get(id)
+      if (!groups && on) groups = this.buildCostume(id)
+      for (const g of groups ?? []) g.visible = on
+      if (!on) this.entering.delete(id)
+    }
+    // ---- Her own things, on the spots nobody took ----
+    const taken = this.taken
+    const mine = new Set(Object.values(this.style.on))
+    const had = new Set(Object.values(before.on))
+    for (const slot of SLOTS) {
+      const id = this.style.on[slot]
+      if (id && !this.closet.has(id)) this.buildOwn(id)
+    }
+    for (const [id, groups] of this.closet) {
+      const item = itemById(id)
+      const want = !!item && mine.has(id) && !taken.has(item.slot)
+      const was = this.shown.has(id)
+      if (want && !was) {
+        this.shown.add(id)
+        this.pocketing.delete(id)
+        for (const g of groups) this.rest(g, true)
+        // Back out of her pocket (or new on her from the wardrobe): pop!
+        if ((how === 'pocket' && had.has(id)) || (how === 'pop' && !had.has(id))) this.popping.set(id, 0)
+      } else if (!want && was) {
+        this.shown.delete(id)
+        this.popping.delete(id)
+        // Still hers, but a costume took its spot: into her pocket with a sparkle. Taken off in the wardrobe: just gone.
+        if (how === 'pocket' && mine.has(id)) this.pocketing.set(id, 0)
+        else for (const g of groups) this.rest(g, false)
+      } else if (!want) for (const g of groups) if (!this.pocketing.has(id)) g.visible = false
+    }
+  }
+
+  private buildCostume(id: Wearable): Group[] {
+    const c = this.rig
+    const w = c.wardrobe?.build(id, this.bag) ?? buildWorn(LOOKS.kaylee, id as Exclude<Wearable, 'ngob'>, this.bag)
+    const groups: Group[] = []
+    for (const [g, pivot] of [[w.head, c.head], [w.armL, c.armL], [w.armR, c.armR], [w.body, c.body], [w.legL, c.legL], [w.legR, c.legR]] as const) {
+      if (!g || !pivot) continue
+      pivot.add(g)
+      groups.push(g)
+      // Hats sit tipped back a little, so her face shows under the brim.
+      if (id === 'sunhat' || id === 'spare-hat') g.rotation.x = -0.16
+      g.userData.base = g.position.clone()
+      g.userData.baseRx = g.rotation.x
+      if (pivot === c.head && HATS.includes(id)) midOf(g)
+    }
+    this.worn.set(id, groups)
+    return groups
+  }
+
+  private buildOwn(id: string) {
+    const c = this.rig
+    const w = c.closet?.(id, this.bag)
+    const groups: Group[] = []
+    if (w) {
+      for (const [g, pivot] of [[w.head, c.head], [w.armL, c.armL], [w.armR, c.armR], [w.body, c.body], [w.legL, c.legL], [w.legR, c.legR]] as const) {
+        if (!g || !pivot) continue
+        pivot.add(g)
+        g.userData.closet = id
+        homeOf(g)
+        if (pivot === c.head) midOf(g)
+        g.visible = false
+        groups.push(g)
+      }
+    }
+    this.closet.set(id, groups)
+  }
+
+  /** Back where it sits on her, full size. */
+  private rest(g: Group, visible: boolean) {
+    const h = homeOf(g)
+    g.position.copy(h.pos)
+    g.rotation.copy(h.rot)
+    g.scale.setScalar(1)
+    g.visible = visible
+  }
+
+  /** A body-local point, in the frame of `g`'s pivot. */
+  private bodyPoint(g: Group, p: Vector3, out: Vector3) {
+    this.rig.body.localToWorld(out.copy(p))
+    return g.parent ? g.parent.worldToLocal(out) : out
+  }
+
+  update(dt: number, pose: DressPose) {
+    // (Only a wai and the pocket move things between pivots, which needs this frame's matrices.)
+    if (pose.wai || this.waiK > 0 || this.pocketing.size) this.rig.root.updateMatrixWorld(true)
+    this.foldK += (pose.fold - this.foldK) * (1 - Math.exp(-dt * 10))
+    this.waiK = clamp(this.waiK + (pose.wai ? dt : -dt) / 0.4)
+    if (pose.flap) this.flapping = 1
+    else this.flapping = Math.max(0, this.flapping - dt / 0.3)
+    this.flapT += dt
+    const wai = ease(this.waiK)
+    // ---- The costume: the little show putting each on, and hats off for a wai ----
+    for (const [id, gs] of this.worn) {
+      const e = this.entering.get(id)
+      if (e !== undefined) {
+        const next = Math.min(1, e + dt / 0.5)
+        if (next >= 1) this.entering.delete(id)
+        else this.entering.set(id, next)
+      }
+      const k = this.entering.get(id) ?? 1
+      const hat = HATS.includes(id)
+      for (const g of gs) {
+        if (!g.visible) continue
+        const base = (g.userData.base as Vector3 | undefined) ?? g.position
+        g.position.copy(base)
+        g.scale.setScalar(1)
+        if (k < 1) {
+          if (id === 'floaties') g.scale.setScalar(Math.max(0.01, k < 0.6 ? (k / 0.6) * 1.2 : 1.2 - (k - 0.6) * 0.5))
+          else if (id === 'sunglasses' || id === 'ngob') g.position.y += (1 - k) * 0.12
+          else {
+            g.position.y += (1 - k) ** 2 * 0.55
+            g.scale.set(1, 1 - 0.22 * bell(span(k, 0.65, 1)), 1)
+          }
+        }
+        if (hat && wai > 0 && g.parent === this.rig.head) {
+          this.bodyPoint(g, HAT_HELD, v1).sub(midOf(g))
+          g.position.lerp(v1, wai)
+          g.position.y += bell(wai) * 0.08
+          g.rotation.x = ((g.userData.baseRx as number | undefined) ?? 0) * (1 - wai) - 1.1 * wai
+        } else if (hat) g.rotation.x = (g.userData.baseRx as number | undefined) ?? g.rotation.x
+      }
+    }
+    // ---- Her own things ----
+    const R = 0.24 * LOOKS.kaylee.height
+    const up = this.rig.wardrobe?.glassesUp ?? { y: 0.62 * R, z: 0.12 * R, tilt: -0.42 }
+    const fold = this.foldK
+    const flap = this.flapping > 0 ? Math.sin(this.flapT * 26) * 0.22 * this.flapping : 0
+    for (const [id, gs] of this.closet) {
+      const slot = itemById(id)?.slot
+      const pop = this.popping.get(id)
+      const out = this.pocketing.get(id)
+      let k = 1
+      if (pop !== undefined) {
+        const e = Math.min(1, pop + dt / 0.45)
+        if (e >= 1) this.popping.delete(id)
+        else this.popping.set(id, e)
+        // From nothing, past full size, back: pop!
+        k = e < 0.6 ? (e / 0.6) * 1.18 : 1.18 - 0.18 * span(e, 0.6, 1)
+      }
+      for (const g of gs) {
+        const h = homeOf(g)
+        if (!g.visible && out === undefined) continue
+        g.position.copy(h.pos)
+        g.rotation.copy(h.rot)
+        let sx = 1
+        let sy = 1
+        let sz = 1
+        if (slot === 'back') {
+          if (g.userData.wings) {
+            // Folded flat against her back (inside her walking circle), spread standing still, a flutter on a hop.
+            sx = (1 - 0.6 * fold) * (1 + flap)
+            sz = 1 - 0.3 * fold
+            g.rotation.x = h.rot.x - 0.25 * fold
+          } else {
+            // The cape drapes: shorter and closer in when she sits.
+            sy = 1 - 0.18 * fold
+            sz = 1 - 0.25 * fold
+          }
+        } else if (slot === 'face' && this.up) {
+          g.position.y += up.y
+          g.position.z += up.z
+          g.rotation.x += up.tilt
+        } else if (slot === 'head' && wai > 0) {
+          this.bodyPoint(g, HAT_HELD, v1).sub(midOf(g))
+          g.position.lerp(v1, wai)
+          g.position.y += bell(wai) * 0.08
+          g.rotation.x = h.rot.x - 1.1 * wai
+        }
+        if (out !== undefined) {
+          // Into her pocket: smaller and smaller, toward her hip, then gone.
+          const e = ease(out)
+          this.bodyPoint(g, POCKET, v1)
+          g.position.lerp(v1, e)
+          k *= Math.max(0.01, 1 - e)
+        }
+        g.scale.set(sx * k, sy * k, sz * k)
+      }
+      if (out !== undefined) {
+        const e = Math.min(1, out + dt / 0.45)
+        if (e >= 1) {
+          this.pocketing.delete(id)
+          for (const g of gs) this.rest(g, false)
+        } else this.pocketing.set(id, e)
+      }
+    }
+  }
 }
 
 export class Avatar implements Character {
@@ -63,28 +417,25 @@ export class Avatar implements Character {
   private life: FaceLife
   private waving = -1
   private wind = new Wind()
-  /** What she has on (her sun hat, sunglasses, floaties), built the first time she puts each on. */
-  private worn = new Map<Wearable, Group[]>()
-  /** Things she's just put on, and how far through their little show (0..1). */
-  private entering = new Map<Wearable, number>()
-  /** Her own look (style.ts): what's on each spot and her colors. Bare until the scene dresses her (setLook). */
-  private style: Style = BARE
-  /** Her own things (closet/), built the first time she puts each on. */
-  private closet = new Map<string, Group[]>()
-  /** Her own things just put on (pop!), and how far through it (0..1). */
-  private popping = new Map<string, number>()
+  /** Her look and the game's costume on her (the costume layer, Dress above). */
+  readonly dress: Dress
+  /** Climbing or crawling (Golden Mountain, a tunnel): her wings fold flat, so they don't hide her hooves. */
+  tuck = false
   /** A twirl on the spot (0..1), -1 when not twirling. */
   private twirling = -1
 
   /** `model`: the modelled vinyl-toy Kaylee (model.ts), the one the game uses (Place.tsx loads it before any scene
    *  builds); `null` builds the code-built Kaylee instead (the lab's comparison, or if the model couldn't load). */
-  constructor(private bag: Bag, model: GLTF | null = kayleeModel()) {
+  constructor(bag: Bag, model: GLTF | null = kayleeModel()) {
     this.chibi = model ? buildModelRig(model, bag) : buildAnimal(LOOKS.kaylee, bag)
     this.height = this.chibi.height
     this.life = new FaceLife(this.chibi)
     this.root = this.chibi.root
     this.root.rotation.y = this.yaw
     this.root.userData.pick = 'kaylee'
+    this.dress = new Dress(this.chibi, bag)
+    // In her own look in every scene: the link's ?look=, else the one saved in her wardrobe (style.ts).
+    if (model) this.dress.setLook(currentLook())
   }
 
   get position() {
@@ -94,69 +445,34 @@ export class Avatar implements Character {
   get rig(): Rig {
     return this.chibi
   }
-  /** Puts on exactly these (and takes off the rest): they ride on her head and arms. */
+  /** The game's costume: exactly these (and none of the last ones). They take only the spots they need (looks.ts
+   *  SPOTS_OF); her own things on those spots go in her pocket until the costume comes off. */
   wear(ids: readonly Wearable[]) {
-    for (const id of new Set([...ids, ...this.worn.keys()])) {
-      const on = ids.includes(id)
-      let groups = this.worn.get(id)
-      if (!groups && on) {
-        const c = this.chibi
-        const w = c.wardrobe?.build(id, this.bag) ?? buildWorn(LOOKS.kaylee, id, this.bag)
-        groups = []
-        for (const [g, pivot] of [[w.head, c.head], [w.armL, c.armL], [w.armR, c.armR], [w.body, c.body], [w.legL, c.legL], [w.legR, c.legR]] as const) {
-          if (!g || !pivot) continue
-          pivot.add(g)
-          groups.push(g)
-          g.userData.base = g.position.clone()
-          // Hats sit tipped back a little, so her face shows under the brim.
-          if (id === 'sunhat' || id === 'spare-hat') g.rotation.x = -0.16
-        }
-        this.worn.set(id, groups)
-      }
-      for (const g of groups ?? []) g.visible = on
-    }
+    this.dress.wear(ids)
   }
   /** Dresses her in her own look (style.ts): her things on their spots, her colors. `show`: what's new pops on. Things
    *  she can't wear (the code-built Kaylee has no closet and no paint) are just left off. */
   setLook(style: Style, show = false) {
-    const before = this.style
-    this.style = style
-    const on = new Set(Object.values(style.on))
-    for (const id of new Set([...on, ...this.closet.keys()])) {
-      const wanted = on.has(id)
-      let groups = this.closet.get(id)
-      if (!groups && wanted) {
-        const c = this.chibi
-        const w = c.closet?.(id, this.bag)
-        groups = []
-        if (w) {
-          for (const [g, pivot] of [[w.head, c.head], [w.armL, c.armL], [w.armR, c.armR], [w.body, c.body], [w.legL, c.legL], [w.legR, c.legR]] as const) {
-            if (!g || !pivot) continue
-            pivot.add(g)
-            g.userData.closet = id
-            groups.push(g)
-          }
-        }
-        this.closet.set(id, groups)
-      }
-      for (const g of groups ?? []) g.visible = wanted
-      if (show && wanted && !Object.values(before.on).includes(id)) this.popping.set(id, 0)
-    }
-    const colors = {} as Record<PaintPart, PaintColor>
-    for (const p of PAINT_PARTS) colors[p] = paintOf(style, p)
-    if (PAINT_PARTS.some((p) => paintOf(before, p) !== colors[p]) || before === BARE) this.chibi.paint?.(colors)
+    this.dress.setLook(style, show)
   }
   get myLook(): Style {
-    return this.style
+    return this.dress.style
   }
   /** Can she wear her own things and paint (the modelled Kaylee)? */
   get dressable() {
-    return !!this.chibi.closet
+    return this.dress.dressable
   }
   /** The groups of what's on a spot now (empty if nothing is): the wardrobe aims at them and takes them off. */
   onSpot(slot: Slot): Group[] {
-    const id = this.style.on[slot]
-    return id ? (this.closet.get(id) ?? []).filter((g) => g.visible) : []
+    return this.dress.onSpot(slot)
+  }
+  /** Something a game puts on her itself (grip socks, the shoe rack) takes these spots; null gives them back. */
+  claim(key: string, spots: readonly Spot[] | null, quiet = false) {
+    this.dress.claim(key, spots, quiet)
+  }
+  /** A costume thing a game built itself (the rice farm's ngob): `wear([id])` puts it on from then on. */
+  attach(id: Wearable, parts: [Group, Object3D][]) {
+    this.dress.attach(id, parts)
   }
   /** Which of her own things this is (a mesh inside one of them), if any. */
   itemOf(o: Object3D | null): string | null {
@@ -171,22 +487,16 @@ export class Avatar implements Character {
 
   /** Puts these on with a little show: the hat drops onto her head, the sunglasses slide down, the floaties pop on. */
   putOn(ids: readonly Wearable[]) {
-    const before = new Set(this.wearing)
-    this.wear(ids)
-    for (const id of ids) if (!before.has(id)) this.entering.set(id, 0)
+    this.dress.putOn(ids)
   }
-  /** Indoors (the plane) she pushes her sunglasses up onto her hat's brim; outdoors they're back on her eyes. */
+  /** Indoors (the plane) she pushes the glasses on her face (packed or her own) up onto her hair; outdoors they're
+   *  back on her eyes. */
   glassesUp(up: boolean) {
-    const R = 0.24 * H
-    const to = this.chibi.wardrobe?.glassesUp ?? { y: 0.62 * R, z: 0.12 * R, tilt: -0.42 }
-    for (const g of this.worn.get('sunglasses') ?? []) {
-      g.position.set(0, up ? to.y : 0, up ? to.z : 0)
-      g.userData.base = g.position.clone()
-      g.rotation.x = up ? to.tilt : 0
-    }
+    this.dress.glassesUp(up)
   }
+  /** The costume on her now (QA: what she packed shows here). */
   get wearing(): Wearable[] {
-    return [...this.worn].filter(([, gs]) => gs[0]?.visible).map(([id]) => id)
+    return this.dress.wearing
   }
   /** Wind in her mane and tail: 0 still, 1 strong (it eases there). */
   setWind(k: number) {
@@ -198,7 +508,7 @@ export class Avatar implements Character {
   }
   /** Something is moving (the frame loop may slow down when nothing is). */
   get busy() {
-    return this.walking || this.speed > 0.01 || this.pose === 'bounce' || this.settle < 1 || this.flop < 1 || this.popping.size > 0 || this.twirling >= 0
+    return this.walking || this.speed > 0.01 || this.pose === 'bounce' || this.settle < 1 || this.flop < 1 || this.dress.busy || this.twirling >= 0
   }
 
   /** Puts her somewhere at once (a deep link, the end of the arrival). */
@@ -287,29 +597,10 @@ export class Avatar implements Character {
     this.pose3d(t)
     this.life.update(dt)
     this.wind.update(this.chibi, dt, t)
-    for (const [id, e0] of this.entering) {
-      const e = Math.min(1, e0 + dt / 0.5)
-      if (e >= 1) this.entering.delete(id)
-      else this.entering.set(id, e)
-      for (const g of this.worn.get(id) ?? []) {
-        const base = (g.userData.base as Vector3 | undefined) ?? g.position
-        g.position.copy(base)
-        if (id === 'floaties') g.scale.setScalar(Math.max(0.01, e < 0.6 ? (e / 0.6) * 1.2 : 1.2 - (e - 0.6) * 0.5))
-        else if (id === 'sunglasses') g.position.y += (1 - e) * 0.12
-        else {
-          g.position.y += (1 - e) ** 2 * 0.55
-          g.scale.set(1, 1 - 0.22 * bell(span(e, 0.65, 1)), 1)
-        }
-      }
-    }
-    for (const [id, e0] of this.popping) {
-      const e = Math.min(1, e0 + dt / 0.45)
-      if (e >= 1) this.popping.delete(id)
-      else this.popping.set(id, e)
-      // From nothing, past full size, back: pop!
-      const k = e < 0.6 ? (e / 0.6) * 1.18 : 1.18 - 0.18 * span(e, 0.6, 1)
-      for (const g of this.closet.get(id) ?? []) g.scale.setScalar(Math.max(0.01, k))
-    }
+    // Wings fold when she sits, lies, walks or climbs, spread when she stands still, flap when she hops.
+    const walkK = Math.min(1, this.speed / TUNE.walkSpeed)
+    const fold = Math.max(this.sitK, this.pose === 'lie' ? 1 : 0, walkK, this.tuck ? 1 : 0)
+    this.dress.update(dt, { fold, flap: this.tweens.length > 0 || this.pose === 'bounce', wai: this.pose === 'wai' })
     if (this.twirling >= 0) {
       this.twirling = Math.min(1, this.twirling + dt / 0.75)
       if (this.twirling >= 1) this.twirling = -1

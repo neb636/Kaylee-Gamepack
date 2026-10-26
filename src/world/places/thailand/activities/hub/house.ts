@@ -13,7 +13,7 @@
 // (ids starting with "trip:"). The house stays the house.
 import { Color, Group, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { Avatar } from '../../characters/avatar'
-import { currentLook, formatLook } from '../../characters/style'
+import { formatLook } from '../../characters/style'
 import { FAMILY, type FamilyMember } from '../../characters/family'
 import { Member } from '../../characters/member'
 import type { AnchorInfo } from '../../engine/Anchors'
@@ -39,6 +39,7 @@ import { Traffic } from './build/traffic'
 import { buildUpper } from './build/upper'
 import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
 import type { HubSection } from './sections'
+import { ShoeRack } from './shoes'
 
 export type Spot = 'street' | 'downstairs' | 'upstairs'
 export interface Start {
@@ -133,6 +134,10 @@ export class House implements World3D {
   private reactor: Reactor
   private lights = makeLights(this.scene)
   readonly kaylee: Avatar
+  /** Her shoes hop onto the rack at the door when she comes in, and back on when she goes out (shoes.ts). */
+  readonly shoes: ShoeRack
+  /** The wardrobe is open: her shoes stay on her to try them (its plugin sets it). */
+  trying = false
   readonly family = new Map<string, Member>()
   /** Where a plugin has moved someone (the goodbye at the shutter, Gan in the suitcase). */
   private moved = new Map<string, FamilySpot>()
@@ -231,10 +236,11 @@ export class House implements World3D {
       this.family.set(m.id, p)
       scene.add(p.root)
     }
+    // (In her own look from the wardrobe: Avatar reads it, the saved one or the link's ?look=.)
     this.kaylee = new Avatar(this.bag)
-    // In her own look from the wardrobe (saved on the iPad, or the link's ?look=).
-    this.kaylee.setLook(currentLook())
     scene.add(this.kaylee.root)
+    this.shoes = new ShoeRack(this.kaylee, this.bag)
+    scene.add(this.shoes.root)
     this.marker = new TapMarker(this.bag)
     scene.add(this.marker.root)
 
@@ -769,7 +775,7 @@ export class House implements World3D {
 
   /** Nothing is moving: the frame loop may drop to 30 fps. */
   get calm() {
-    return !this.kaylee.busy && !this.reactor.busy && !this.rig.moving && !this.arriving && !this.plugin?.busy
+    return !this.kaylee.busy && !this.shoes.busy && !this.reactor.busy && !this.rig.moving && !this.arriving && !this.plugin?.busy
   }
 
   update(dt: number) {
@@ -815,6 +821,8 @@ export class House implements World3D {
         this.setSpot('street')
       }
     }
+    // Shoes off inside Agong's house, back on in the street (not in the family photo out front).
+    this.shoes.update(dt, this.mode !== 'street' && !this.photo, this.trying)
     // Walls glide down and up.
     for (const c of this.cuts) {
       const target = c.when(this.mode) ? c.low : 1
@@ -984,6 +992,9 @@ export class House implements World3D {
       shutterOpen: this.reactor.shutterOpen,
       pos: [k.position.x, k.position.y, k.position.z].map((v) => Math.round(v * 100) / 100),
       look: formatLook(k.myLook),
+      costume: k.wearing,
+      pocket: k.dress.pocket,
+      shoesOnRack: this.shoes.onRack,
       ...this.plugin?.qa?.(),
     }
   }

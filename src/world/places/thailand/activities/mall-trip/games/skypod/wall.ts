@@ -142,6 +142,8 @@ export class SkyPodWall extends Stage {
     scene.add(this.pods.root)
     // ---- Kaylee in her grip socks on the mat; Daddy watching from the side ----
     this.kaylee = new Racer('kaylee', bag)
+    // On the climbing wall: her wings stay folded flat so her hooves show.
+    this.kaylee.tuck = true
     wearSocks(this.kaylee, SOCK_COLORS[start.socks] ?? SOCK_COLORS.pink, bag)
     this.kaylee.root.userData.pick = 'family:kaylee'
     this.nick = new Racer('nick', bag)
