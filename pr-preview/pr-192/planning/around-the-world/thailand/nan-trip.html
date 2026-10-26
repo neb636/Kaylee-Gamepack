@@ -1382,7 +1382,7 @@
               "status": "done",
               "date": "2026-10-24",
               "pr": 158,
-              "md": "The headline, and the riskiest. The road kit, a box Pajero, finger steering, the chase camera, the roads `valley`, `sky` and `three` (and `city`), the horn, a buffalo, a songthaew, the cloud, the flat fallback. Listed under `inTheWorks`."
+              "md": "The headline, and the riskiest. The road kit, a box Pajero, finger steering, the chase camera, the roads `valley`, `sky` and `three` (and `city`), the horn, a buffalo, a songthaew, the cloud. Listed under `inTheWorks`."
             },
             {
               "n": 2,
@@ -1482,7 +1482,7 @@
                     "**The road kit** (`trip/road/`, reusable for any later drive): `road.ts` (an open centripetal Catmull-Rom road through `[x, z, y]` points, 1 m samples, `spotAt`/`locate`/`bendAhead`, pure), `build.ts` (one height field for the hills: the road's own heights spread over the land plus noise hills that grow away from it, so the ground always meets the road; the ribbon with white edges, a dashed yellow middle and dirt verges; guard rails wherever the ground drops beside it; chevron signs on the outside of sharp bends; round convex mirrors; trees; far mountains; a river and bridge), `traffic.ts` (oncoming songthaews, scooters, tuk-tuks and the blind bend's car, a buffalo that ambles across, chickens that flap off, a monkey on the rail), `clouds.ts` (a cloud layer and puffs).",
                     "**The box Pajero** (`trip/vehicles/pajero.ts`): silver, tall, big wheels, headlights and soft beams for the cloud; root > tilt (the slope) > body (leans out on bends, squats when it brakes, bounces, squashes on a boing).",
                     {
-                      "text": "**The drive** (`activities/nan-trip/drive/`): `roads.ts` (the four roads as data), `mountain.ts` (the world), `Drive.tsx` (the screen), `Flat.tsx` (no WebGL: the road from above, Mommy drives, a held finger goes faster), `landmarks.ts`, `sounds.ts`.",
+                      "text": "**The drive** (`activities/nan-trip/drive/`): `roads.ts` (the four roads as data), `mountain.ts` (the world), `Drive.tsx` (the screen), `landmarks.ts`, `sounds.ts`.",
                       "items": [
                         "Steering: her finger anywhere on the road ahead picks where across it the Pajero goes. It reads the road as it looks on screen (the stretch of road under her finger, then how far across), not a flat plane, so it works while the road climbs and turns. Let go and Mommy keeps the left lane. A little past the edge is allowed: the edge boings the car back like a pinball bumper (sparkles, a wobble). It always rolls forward; it can't leave the road.",
                         "Mommy's foot: slower into the bends, slower in the cloud, a stop for the buffalo, easing into the stop at the end.",
@@ -1524,7 +1524,6 @@
                     },
                     "**The pizza** (`round=pizza`): a wooden deck over the rice steps and the hills (a painted far ridge with cloud on the tops, a drifting cloud), the table with three stools and plates (Mommy, Kaylee, Daddy), the pizza board, the clay oven with the aunty beside it, and her basket. Drag a mushroom from the basket onto the pizza and it stays where she drops it (on the wedge under it); drop it off the pizza and it hops back; drag one on the pizza to move it. A tap on the basket (or on the pizza, near where she tapped) puts the next one on. Basket empty: the oven's mouth glows; tap it (or the pizza) and the pizza flies in, the fire crackles and roars (steam from the chimney), it comes out golden, ding, the family cheers. Then each tap on the pizza sends a slice (with the mushrooms on it) to the next plate, Kaylee, Mommy, Daddy, twice round; a tap on a plate or a face munches it (crumbs). All six shared: the end card (🔁 the farm again, 🚙 back on the road: the sky road, up to the café).",
                     "**The road leads here:** the valley road's end card has a big 🍄 that opens the farm.",
-                    "No flat version (3D activities don't need one since #159).",
                     "**QA:** `qa-screens` (`nan-mushrooms-1|2|3|pizza`), `qa-motion` (`nan-mist`, `nan-pick`), `qa-pacing` (`nan-mushrooms`, `nan-mushroom-pizza`). Played in headless Chromium with software WebGL (WebKit couldn't be downloaded in this session): misting the rack grew all 12, round 2 picked by drag and by tap, round 3 grew pink and gold and went to the table, the pizza took 9 mushrooms, baked and shared all 6 slices, with no errors. 110-140 draw calls, 150-215k triangles."
                   ]
                 }
@@ -1643,9 +1642,10 @@
                 "**Landing in Nan** (`trip/legs/plane.ts`, `landing: 'nan'`): rice fields and round green mountains with cloud on their tops rise past the window, Daddy cheers “Yay! We're in Nan!”, and the trip goes on to the rental desk (⏩ skips there).",
                 "**The 3's photo:** once she has drawn the 3 on the trip, Mommy says “Everybody say three!”, a flash and the print drops in, and the end card adds a big ✈️🏠.",
                 "**Home** (`activities/nan-trip/Loop.tsx`): the flight home, Aunty Sri's van at Agong's door, and her photos fan out: one per stop she did (`deck`, `pizza`, `salt`) and the 3, drawn in code for now (`photo.ts`, helpers shared with the mall day in `trip/postcard.ts`). The one she gives Agong hangs in the Nan trip's own frame, above the boat and mall photos, and tapping it says “Our trip to Nan!”. Then the stamp, with the trip's facts (`NAN_FACTS`).",
-                "**The boarding pass** between the kit's legs (🧳 ✈️ 🔑 🍄 🌾 🧂 🏠, the stops punched as she does them), and **resume and replays** (`useSaved('thailand-nan-trip')`): saying yes again offers 🧳 a new trip, keep going, or after a whole trip 🗺️ straight to the Nan map. A bare `nan-trip` link now opens Mommy's card. Without WebGL the trip's legs are a picture book (`LoopFlat.tsx`).",
+                "**The boarding pass** between the kit's legs (🧳 ✈️ 🔑 🍄 🌾 🧂 🏠, the stops punched as she does them), and **resume and replays** (`useSaved('thailand-nan-trip')`): saying yes again offers 🧳 a new trip, keep going, or after a whole trip 🗺️ straight to the Nan map. A bare `nan-trip` link now opens Mommy's card.",
                 "**Voices:** 11 new clips (`L.nan.trip`: the cool hint, the umbrella, landing, the 3's photo, the wall, six facts).",
-                "**QA:** `qa-screens` (`nan-invite`, `nan-pack`, `nan-goodbye`, `nan-airport`, `nan-fly`, `nan-land`, `nan-home`, `nan-loop-flat`). A robot in WebKit (iPad landscape) picked 🏔️🚙, packed the raincoat, boots and teddy, closed the suitcase (the umbrella went in) and reached the goodbye; watched the landing play out to the rental desk; and at home picked the 3's photo, gave it to Agong and saw everyone gather at the wall. No console errors."
+                "**QA:** `qa-screens` (`nan-invite`, `nan-pack`, `nan-goodbye`, `nan-airport`, `nan-fly`, `nan-land`, `nan-home`, `nan-loop-flat`). A robot in WebKit (iPad landscape) picked 🏔️🚙, packed the raincoat, boots and teddy, closed the suitcase (the umbrella went in) and reached the goodbye; watched the landing play out to the rental desk; and at home picked the 3's photo, gave it to Agong and saw everyone gather at the wall. No console errors.",
+                "**No flat fallbacks any more** (Dad, 2026-10-25: we always have WebGL): every Thailand screen is WebGL2 only. The picture books (`Flat.tsx`, `LoopFlat.tsx`), the `?gl=off` switch and their tests and QA screens are gone; a lost GPU context still offers “Tap to wake”."
               ]
             }
           ]
@@ -1661,7 +1661,7 @@
           "type": "callout",
           "tone": "warn",
           "title": "Step 7: changed from the plan",
-          "md": "- Agong asks for his photo as on the boat trip (`gift: 'photo'`) instead of a new “no gift” kind: it's the same moment (she picks the photo, he hangs it), with no new code.\n- No jumper: the room got a raincoat, rain boots and the umbrella (three toys, not four).\n- The photos are drawn in code for now; the look step can take real snapshots at each stop.\n- The rental desk still has no flat version (as in step 6)."
+          "md": "- Agong asks for his photo as on the boat trip (`gift: 'photo'`) instead of a new “no gift” kind: it's the same moment (she picks the photo, he hangs it), with no new code.\n- No jumper: the room got a raincoat, rain boots and the umbrella (three toys, not four).\n- The photos are drawn in code for now; the look step can take real snapshots at each stop."
         }
       ]
     },
@@ -1825,7 +1825,7 @@
           "items": [
             "`trip/types.ts`: a `{ kind: 'car'; driver: 'ji'; car: 'pajero' }` leg (or a separate rental leg), `carOf` widened, `pack.hint: 'cool'`, and `gift: 'none'` (no gift: the home leg goes straight to picking the wall photo).",
             "`trip/outline.ts` `PLACES`: `nan: [100.78, 18.81]` for the crayon line.",
-            "`trip/legs/Ask.tsx` `TRIP_CHOICES`: a third choice (🏔️🚙). `activities/mall-trip/Loop.tsx` and `LoopFlat.tsx` hard-code a two-way choice (`t === 'boat-trip' ? … : …`): make them open whichever trip she picked.",
+            "`trip/legs/Ask.tsx` `TRIP_CHOICES`: a third choice (🏔️🚙). `activities/mall-trip/Loop.tsx` hard-codes a two-way choice (`t === 'boat-trip' ? … : …`): make them open whichever trip she picked.",
             "`trip/wall.ts`: `WALL_SLOTS['nan-trip']` and a wall line. `trip/facts.ts`: `NAN_FACTS`.",
             "`engine/View3D.tsx`: a `'__thaiNanQA'` QA key.",
             "`meta.ts`: the activity in `inTheWorks` until step 10. Its sticker: **a pink mushroom** 🍄 (Dad left it to the builder: the mushroom farm was his must-have, and pink is Kaylee's color)."
@@ -1837,7 +1837,7 @@
         },
         {
           "type": "code",
-          "text": "trip/road/                  the road kit (reusable for any later drive): road.ts (open spline with height, spotAt,\n                            locate, bendAhead), build.ts (ribbon, verges, hills, rails, chevrons, mirrors),\n                            traffic.ts (songthaew, scooters, buffalo), clouds.ts\ntrip/vehicles/pajero.ts     the Pajero, modelled on veloz.ts\nactivities/nan-trip/\n  sections.ts  trip.ts      the sections (no three.js) and the TripDef\n  NanTrip.tsx  Flat.tsx     runs the legs and the stops; the no-WebGL picture book\n  rental/  map/  drive/     the rental desk, the diorama hub, the drives (roads as data: valley.ts, sky.ts, three.ts, city.ts)\n  mushrooms/  rice/  salt/  one folder per stop, self-contained (X.ts, Flat.tsx, layout.ts, sounds.ts)"
+          "text": "trip/road/                  the road kit (reusable for any later drive): road.ts (open spline with height, spotAt,\n                            locate, bendAhead), build.ts (ribbon, verges, hills, rails, chevrons, mirrors),\n                            traffic.ts (songthaew, scooters, buffalo), clouds.ts\ntrip/vehicles/pajero.ts     the Pajero, modelled on veloz.ts\nactivities/nan-trip/\n  sections.ts  trip.ts      the sections (no three.js) and the TripDef\n  NanTrip.tsx  Loop.tsx     runs the stops; the trip kit's legs around them\n  rental/  map/  drive/     the rental desk, the diorama hub, the drives (roads as data: valley.ts, sky.ts, three.ts, city.ts)\n  mushrooms/  rice/  salt/  one folder per stop, self-contained (X.ts, X.tsx, layout.ts, sounds.ts)"
         },
         {
           "type": "list",
