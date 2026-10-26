@@ -11,7 +11,7 @@
 // A trip (thailand/trip/legs/house-plugin.ts) mounts the house with a plugin: it gets the scene, the pokes, the
 // avatar and the family, sees every touch first, can move the family, take the camera, and add tap targets of its own
 // (ids starting with "trip:"). The house stays the house.
-import { Color, Group, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
+import { Color, Group, PerspectiveCamera, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { Avatar } from '../../characters/avatar'
 import { formatLook } from '../../characters/style'
 import { FAMILY, type FamilyMember } from '../../characters/family'
@@ -28,6 +28,8 @@ import type { World3D } from '../../engine/View3D'
 import { say } from '../../../../../sdk'
 import { L } from '../../lines'
 import { sfx } from '../../sfx'
+import { snapPhoto } from '../../engine/photo'
+import { noticeLine } from './notice'
 import { Gecko } from './build/gecko'
 import { buildDivider, DIVIDER_BASE } from './build/divider'
 import { buildGround } from './build/ground'
@@ -555,7 +557,7 @@ export class House implements World3D {
     const s = m && this.spotOf(m)
     if (!m || !s || !who || !this.familyVisible(`family:${id}`)) return
     who.react('wave')
-    if (!this.events.onGreet?.(id)) this.hello(m, who)
+    if (!this.events.onGreet?.(id)) this.hello(m, who, true)
     const face = s.face * deg
     // Stand in front of them (or as close as there's room), then they hop together.
     const front: XZ = [s.x + Math.sin(face) * 0.95, s.z + Math.cos(face) * 0.95]
@@ -567,6 +569,20 @@ export class House implements World3D {
       sfx.boing()
       setTimeout(() => k.react('wave'), 450)
     })
+  }
+
+  /** Someone who can see her says what they think of her new look (Mommy, when she steps away from her wardrobe). True
+   *  if they did: they hop and say it, once per look. */
+  notice(id: string): boolean {
+    const who = this.family.get(id)
+    if (!who || this.photo || !this.familyVisible(`family:${id}`)) return false
+    const line = noticeLine(id, this.kaylee.myLook)
+    if (!line) return false
+    who.react('hop')
+    who.react('wave')
+    // (After whatever was just said: she may have tapped someone as the doors shut.)
+    void say(line, { interrupt: false })
+    return true
   }
 
   /** In the family photo: a happy hop and a hello, right where they stand. */
@@ -581,7 +597,14 @@ export class House implements World3D {
 
   /** They say hi in their own voice: Sawasdee the first time, then something else each time (the big cousins mumble
    *  it over the tap-tap of their phones). */
-  private hello(m: (typeof FAMILY)[number], who: Member) {
+  private hello(m: (typeof FAMILY)[number], who: Member, tapped = false) {
+    // A new look first (notice.ts): "Ooh, a crown, Kaylee!" instead of the hello, which waits for the next tap.
+    const note = tapped ? noticeLine(m.id, this.kaylee.myLook) : null
+    if (note) {
+      if (who.onPhone) sfx.phone()
+      void say(note)
+      return
+    }
     const n = this.greeted.get(m.id) ?? 0
     this.greeted.set(m.id, n + 1)
     const lines = L.family[m.id]
@@ -837,6 +860,12 @@ export class House implements World3D {
     this.rig.update(dt)
     const c = this.rig.camera.position
     this.lights.follow(c.x * 0.2, k.position.y, k.position.z)
+  }
+
+  /** A JPEG of the room from `cam` (the wardrobe's mirror pictures). Call it in the plugin's update: the next frame draws
+   *  over it. */
+  snap(cam: PerspectiveCamera, size: { w: number; h: number }) {
+    return snapPhoto(this.renderer, this.scene, cam, size)
   }
 
   render() {

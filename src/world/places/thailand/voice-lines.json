@@ -161,6 +161,381 @@
     "text": "Peep peep!",
     "voice": "putter"
   },
+  "Your wardrobe! Dress up, Kaylee!",
+  "Drag it onto you, Kaylee!",
+  "Hair, dress or fur!",
+  "Pull a drawer!",
+  "Tap the mirror for a picture!",
+  "Click! A picture of your look, Kaylee!",
+  "Your whole look! Wow, Kaylee!",
+  "Ta da! Magic!",
+  "Sparkle magic!",
+  "Ooh, a surprise!",
+  "Whoosh! A new look!",
+  "A shoe on your head! Hee hee!",
+  "Glasses on your tail! Hee hee!",
+  "Splat on the mirror! Hee hee!",
+  "A crown!",
+  "A tiara!",
+  "An orchid crown!",
+  "A big bow!",
+  "Bunny ears!",
+  "Cat ears!",
+  "A baseball cap!",
+  "A cowboy hat!",
+  "A bucket hat!",
+  "A sun hat!",
+  "Heart sunglasses!",
+  "Star sunglasses!",
+  "Round glasses!",
+  "Fairy wings!",
+  "Unicorn wings!",
+  "A princess cape!",
+  "A bunny backpack!",
+  "A twirly tutu!",
+  "A princess gown!",
+  "Overalls!",
+  "Chut thai, a Thai dress!",
+  "Light-up sneakers!",
+  "Party shoes!",
+  "Rain boots!",
+  "Sandals!",
+  "Pink paint!",
+  "Lilac paint!",
+  "Mint paint!",
+  "Sky blue paint!",
+  "Butter yellow paint!",
+  "Peachy orange paint!",
+  "Brown paint!",
+  "Cream paint!",
+  {
+    "text": "Ooh, what a pretty hat, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Ooh, fancy glasses, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Ooh, so pretty, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Ooh, what a pretty outfit, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Ooh, nice shoes, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Ooh, new colors, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Wow, cool hat!",
+    "voice": "nick"
+  },
+  {
+    "text": "Cool shades, Kaylee!",
+    "voice": "nick"
+  },
+  {
+    "text": "Whoa, cool, Kaylee!",
+    "voice": "nick"
+  },
+  {
+    "text": "Whoa, what an outfit!",
+    "voice": "nick"
+  },
+  {
+    "text": "Cool shoes, Kaylee!",
+    "voice": "nick"
+  },
+  {
+    "text": "Whoa, new colors!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ho ho! So pretty!",
+    "voice": "agong"
+  },
+  {
+    "text": "Ho ho! So fancy!",
+    "voice": "agong"
+  },
+  {
+    "text": "Ho ho! So pretty, Kaylee!",
+    "voice": "agong"
+  },
+  {
+    "text": "Ho ho! Nice shoes!",
+    "voice": "agong"
+  },
+  {
+    "text": "Ho ho! New colors!",
+    "voice": "agong"
+  },
+  {
+    "text": "Oh! What a pretty hat, Kaylee!",
+    "voice": "jum"
+  },
+  {
+    "text": "Oh! So fancy, Kaylee!",
+    "voice": "jum"
+  },
+  {
+    "text": "Oh! So pretty, Kaylee!",
+    "voice": "jum"
+  },
+  {
+    "text": "Oh! What a pretty outfit!",
+    "voice": "jum"
+  },
+  {
+    "text": "Oh! Nice shoes, Kaylee!",
+    "voice": "jum"
+  },
+  {
+    "text": "Oh! I love the colors!",
+    "voice": "jum"
+  },
+  {
+    "text": "Wow! I love your hat!",
+    "voice": "joy"
+  },
+  {
+    "text": "Wow! Fancy glasses!",
+    "voice": "joy"
+  },
+  {
+    "text": "Wow! So cute, Kaylee!",
+    "voice": "joy"
+  },
+  {
+    "text": "Wow! What an outfit!",
+    "voice": "joy"
+  },
+  {
+    "text": "Wow! Cute shoes!",
+    "voice": "joy"
+  },
+  {
+    "text": "Wow! New colors!",
+    "voice": "joy"
+  },
+  {
+    "text": "Nice hat, Kaylee!",
+    "voice": "bird"
+  },
+  {
+    "text": "Nice glasses, Kaylee!",
+    "voice": "bird"
+  },
+  {
+    "text": "Ho ho! Nice, Kaylee!",
+    "voice": "bird"
+  },
+  {
+    "text": "Nice outfit, Kaylee!",
+    "voice": "bird"
+  },
+  {
+    "text": "Nice shoes, Kaylee!",
+    "voice": "bird"
+  },
+  {
+    "text": "Ho ho! New colors!",
+    "voice": "bird"
+  },
+  {
+    "text": "Nice hat... one sec.",
+    "voice": "gan"
+  },
+  {
+    "text": "Cool glasses... uh-huh.",
+    "voice": "gan"
+  },
+  {
+    "text": "Cool... uh-huh.",
+    "voice": "gan"
+  },
+  {
+    "text": "Nice outfit... uh-huh.",
+    "voice": "gan"
+  },
+  {
+    "text": "Nice shoes... one sec.",
+    "voice": "gan"
+  },
+  {
+    "text": "New colors... cool.",
+    "voice": "gan"
+  },
+  {
+    "text": "Oh. Nice hat.",
+    "voice": "ken"
+  },
+  {
+    "text": "Oh. Cool glasses.",
+    "voice": "ken"
+  },
+  {
+    "text": "Oh. Nice.",
+    "voice": "ken"
+  },
+  {
+    "text": "Oh. Nice outfit.",
+    "voice": "ken"
+  },
+  {
+    "text": "Oh. Nice shoes.",
+    "voice": "ken"
+  },
+  {
+    "text": "Oh. New colors.",
+    "voice": "ken"
+  },
+  {
+    "text": "So cute, Kaylee... one sec.",
+    "voice": "bb"
+  },
+  {
+    "text": "Cute glasses... uh-huh.",
+    "voice": "bb"
+  },
+  {
+    "text": "So cute... one sec.",
+    "voice": "bb"
+  },
+  {
+    "text": "Cute outfit... uh-huh.",
+    "voice": "bb"
+  },
+  {
+    "text": "Nice shoes... one sec.",
+    "voice": "bb"
+  },
+  {
+    "text": "Cute colors... uh-huh.",
+    "voice": "bb"
+  },
+  {
+    "text": "So pretty, Kaylee!",
+    "voice": "ja"
+  },
+  {
+    "text": "So fancy, Kaylee!",
+    "voice": "ja"
+  },
+  {
+    "text": "What a pretty outfit!",
+    "voice": "ja"
+  },
+  {
+    "text": "What cute shoes!",
+    "voice": "ja"
+  },
+  {
+    "text": "So pretty, new colors!",
+    "voice": "ja"
+  },
+  {
+    "text": "Lovely hat! Say cheese!",
+    "voice": "sri"
+  },
+  {
+    "text": "Lovely glasses! Say cheese!",
+    "voice": "sri"
+  },
+  {
+    "text": "Lovely! Say cheese!",
+    "voice": "sri"
+  },
+  {
+    "text": "Lovely outfit! Say cheese!",
+    "voice": "sri"
+  },
+  {
+    "text": "Lovely shoes! Say cheese!",
+    "voice": "sri"
+  },
+  {
+    "text": "Lovely colors! Say cheese!",
+    "voice": "sri"
+  },
+  {
+    "text": "Cool hat!",
+    "voice": "putto"
+  },
+  {
+    "text": "Cool glasses!",
+    "voice": "putto"
+  },
+  {
+    "text": "Cool!",
+    "voice": "putto"
+  },
+  {
+    "text": "Cool outfit!",
+    "voice": "putto"
+  },
+  {
+    "text": "Cool shoes!",
+    "voice": "putto"
+  },
+  {
+    "text": "Cool colors!",
+    "voice": "putto"
+  },
+  {
+    "text": "Look, a hat!",
+    "voice": "putter"
+  },
+  {
+    "text": "Look, glasses!",
+    "voice": "putter"
+  },
+  {
+    "text": "Look, so cute!",
+    "voice": "putter"
+  },
+  {
+    "text": "Look, new clothes!",
+    "voice": "putter"
+  },
+  {
+    "text": "Look, new shoes!",
+    "voice": "putter"
+  },
+  {
+    "text": "Look, new colors!",
+    "voice": "putter"
+  },
+  {
+    "text": "Ooh, a crown, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Ooh, Kaylee, you can fly!",
+    "voice": "ji"
+  },
+  {
+    "text": "Ooh, a princess cape, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Ooh, a bunny backpack, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Ooh, cute overalls, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Cool wings!",
+    "voice": "nick"
+  },
   {
     "text": "Kaylee, are you ready to go on a trip?",
     "voice": "ji"
@@ -219,6 +594,10 @@
   },
   {
     "text": "Here's Mommy's spare sun hat!",
+    "voice": "ji"
+  },
+  {
+    "text": "Good hat, Kaylee!",
     "voice": "ji"
   },
   {

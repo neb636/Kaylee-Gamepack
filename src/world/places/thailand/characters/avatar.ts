@@ -74,6 +74,16 @@ function midOf(g: Group): Vector3 {
   return mid
 }
 
+const X_AXIS = new Vector3(1, 0, 0)
+/** Her hat in the air for the top bounce: up and a full somersault about its own middle. */
+function flipped(g: Group, rx: number, k: number, tmp: Vector3) {
+  const angle = ease(k) * Math.PI * 2
+  g.position.y += Math.sin(Math.PI * k) * 0.22
+  g.rotation.x = rx + angle
+  const m = midOf(g)
+  g.position.add(m).sub(tmp.copy(m).applyAxisAngle(X_AXIS, angle))
+}
+
 /** How she's posed this frame, for what she wears: folded wings, a flap, a wai. */
 export interface DressPose {
   /** 0 wings spread (standing still) .. 1 folded flat (sitting, lying, walking, climbing). */
@@ -106,6 +116,8 @@ export class Dress {
   private up = false
   private foldK = 0
   private waiK = 0
+  /** The hat flipping up and landing back on (the top bounce on the mattress): 0..1, -1 when not. */
+  private flipK = -1
   private flapT = 0
   private flapping = 0
   /** The lights in her shoes (the light-up sneakers'), by thing. */
@@ -171,6 +183,11 @@ export class Dress {
     this.apply('instant')
   }
   /** Indoors (the plane) she pushes whatever glasses are on her face up onto her hair; outdoors they're back on her eyes. */
+  /** The top bounce: her hat flips up into the air and lands back on her head. */
+  flipHat() {
+    this.flipK = 0
+  }
+
   glassesUp(up: boolean) {
     this.up = up
     const R = 0.24 * LOOKS.kaylee.height
@@ -320,6 +337,10 @@ export class Dress {
     // (Only a wai and the pocket move things between pivots, which needs this frame's matrices.)
     if (pose.wai || this.waiK > 0 || this.pocketing.size) this.rig.root.updateMatrixWorld(true)
     this.foldK += (pose.fold - this.foldK) * (1 - Math.exp(-dt * 10))
+    if (this.flipK >= 0) {
+      this.flipK += dt / 0.8
+      if (this.flipK >= 1) this.flipK = -1
+    }
     this.waiK = clamp(this.waiK + (pose.wai ? dt : -dt) / 0.4)
     if (pose.flap) this.flapping = 1
     else this.flapping = Math.max(0, this.flapping - dt / 0.3)
@@ -354,6 +375,7 @@ export class Dress {
           g.position.y += bell(wai) * 0.08
           g.rotation.x = ((g.userData.baseRx as number | undefined) ?? 0) * (1 - wai) - 1.1 * wai
         } else if (hat) g.rotation.x = (g.userData.baseRx as number | undefined) ?? g.rotation.x
+        if (hat && this.flipK >= 0 && g.parent === this.rig.head) flipped(g, g.rotation.x, this.flipK, v1)
       }
     }
     // ---- Her own things ----
@@ -402,6 +424,7 @@ export class Dress {
           g.position.y += bell(wai) * 0.08
           g.rotation.x = h.rot.x - 1.1 * wai
         }
+        if (slot === 'head' && this.flipK >= 0) flipped(g, g.rotation.x, this.flipK, v1)
         if (out !== undefined) {
           // Into her pocket: smaller and smaller, toward her hip, then gone.
           const e = ease(out)
@@ -641,7 +664,11 @@ export class Avatar implements Character {
     else if (this.bounce.level >= BOUNCES.length - 1) {
       this.setPose('lie')
       return BOUNCES.length
-    } else this.bounce.level++
+    } else {
+      this.bounce.level++
+      // The top bounce throws her hat in the air (it lands back on her head).
+      if (this.bounce.level === BOUNCES.length - 1) this.dress.flipHat()
+    }
     return this.bounce.level
   }
 
