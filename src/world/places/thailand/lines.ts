@@ -398,13 +398,13 @@ export const L = {
       waterfall: nick('Look! A waterfall!'),
       rain: nick('Swish, swish, go the wipers!'),
       // Tap Daddy in the car (in turn).
-      tap: [nick('Great driving, Kaylee!'), nick('Wheee!'), nick('Are we there yet?')],
+      tap: [nick('Great driving, Kaylee!'), nick('Wheee! Bumpy!'), nick('Are we there yet?')],
     },
     // Baan Huanam Mushroom Farm (mushrooms/): the farmer aunty (a buffalo) and Daddy react, Sparkle says what's new.
     mushrooms: {
-      mist: `Spray the bags, ${NAME}! Mushrooms love water.`,
+      mist: `Spray the bags, ${NAME}!`,
       pick: 'Pull the mushrooms off!',
-      colors: 'Pink and golden mushrooms!',
+      colors: 'More bags to spray!',
       pizza: 'Put your mushrooms on the pizza!',
       hint: {
         mist: 'Hold your finger on the bags!',
@@ -456,6 +456,8 @@ export const L = {
       three: ji('Everybody say three!'),
       // The frame on the wall, tapped in the house.
       wall: ji('Our trip to Nan!'),
+      // The stamp screen's sticker.
+      sticker: 'Pink mushroom sticker! Mushrooms love the rain.',
       // The stamp screen's tap-to-hear facts (trip/facts.ts NAN_FACTS), in Sparkle's voice.
       facts: {
         nan: 'Nan is in the mountains, next to Laos!',
