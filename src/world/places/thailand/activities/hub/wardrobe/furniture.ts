@@ -67,6 +67,11 @@ export function shelfSlot(i: number, n: number): Vector3 {
   return new Vector3(ROW_X + (k - (inRow - 1) / 2) * (ROW / per), ys[row], 0.03)
 }
 
+/** Where the 4 pictures hang on the left door's inside (the door's own frame, facing -z, the room when it's open): two
+ *  columns, two rows, over the hearts. */
+export const PHOTO_SIZE = { w: 0.27, h: 0.36 }
+export const photoPin = (i: number): V3 => [(DOOR.w / 2) + (i % 2 ? 0.16 : -0.16), (DOOR.y0 + DOOR.y1) / 2 + (i < 2 ? 0.27 : -0.27), -0.018]
+
 /** A heart standing up on a face, facing +z (a door, a knob). */
 const heartOn = (r: number, depth: number, c: string, at: V3): BufferGeometry => P.prism(heart(r), depth, c, { at })
 

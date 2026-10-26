@@ -7,21 +7,22 @@ import { PerspectiveCamera, Vector2, type Scene, type WebGLRenderer } from 'thre
 export const PHOTO = { w: 480, h: 360 }
 const size = new Vector2()
 
-/** A JPEG data URL of `scene` seen from `camera` (its aspect is set to 4:3). */
-export function snapPhoto(renderer: WebGLRenderer, scene: Scene, camera: PerspectiveCamera): string {
+/** A JPEG data URL of `scene` seen from `camera` (its aspect is set to `out`'s: 4:3 by default, 3:4 for a portrait). */
+export function snapPhoto(renderer: WebGLRenderer, scene: Scene, camera: PerspectiveCamera, out_: { w: number; h: number } = PHOTO): string {
   const canvas = renderer.domElement
   const W = canvas.width
   const H = canvas.height
-  // The biggest 4:3 box that fits the canvas, in device pixels, at its bottom-left corner.
+  const ratio = out_.w / out_.h
+  // The biggest box of that shape that fits the canvas, in device pixels, at its bottom-left corner.
   let w = W
-  let h = Math.round((W * 3) / 4)
+  let h = Math.round(W / ratio)
   if (h > H) {
     h = H
-    w = Math.round((H * 4) / 3)
+    w = Math.round(H * ratio)
   }
   const pr = renderer.getPixelRatio()
   renderer.getSize(size)
-  camera.aspect = 4 / 3
+  camera.aspect = ratio
   camera.clearViewOffset()
   camera.updateProjectionMatrix()
   renderer.setScissorTest(true)
@@ -29,9 +30,9 @@ export function snapPhoto(renderer: WebGLRenderer, scene: Scene, camera: Perspec
   renderer.setScissor(0, 0, w / pr, h / pr)
   renderer.render(scene, camera)
   const out = document.createElement('canvas')
-  out.width = PHOTO.w
-  out.height = PHOTO.h
-  out.getContext('2d')?.drawImage(canvas, 0, H - h, w, h, 0, 0, PHOTO.w, PHOTO.h)
+  out.width = out_.w
+  out.height = out_.h
+  out.getContext('2d')?.drawImage(canvas, 0, H - h, w, h, 0, 0, out_.w, out_.h)
   renderer.setScissorTest(false)
   renderer.setViewport(0, 0, size.x, size.y)
   return out.toDataURL('image/jpeg', 0.82)

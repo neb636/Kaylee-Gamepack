@@ -3,7 +3,7 @@
 // Sparkle (Guide) says the few things there are to say; the family say hello themselves.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { say, sounds, useSaved } from '../../../../../sdk'
+import { say, sounds, useSaved, type Line } from '../../../../../sdk'
 import { updateStickyParam, useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { flag } from '../../engine/flags'
@@ -18,6 +18,7 @@ import { bothPlugins, type House, type HousePlugin, type Spot, type Start } from
 import { HouseView, type RenderMode } from './HouseView'
 import HUB_SECTIONS from './sections'
 import type { DrawerId } from './wardrobe/furniture'
+import { cleanDoor, DOOR_KEY, parseDoor, type DoorPhoto } from './wardrobe/door'
 import { WARDROBE_ANCHORS, WardrobePlugin } from './wardrobe/plugin'
 
 // Per visit to the app: the tuk-tuk brings her the first time; after that she's back where she left off.
@@ -42,6 +43,12 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   // Her wardrobe (wardrobe/): her look is saved on the iPad as she changes it, and a link's ?look= follows along.
   const [, saveLook] = useSaved<Style>(LOOK_KEY, BARE)
   const [dressing, setDressing] = useState(initial.section === 'wardrobe')
+  // The pictures on its door (the mirror takes them): saved on the iPad; a link's ?door= puts its own there.
+  const [savedDoor, saveDoor] = useSaved<DoorPhoto[]>(DOOR_KEY, [])
+  const [startDoor] = useState(() => (param('door') ? parseDoor(param('door')) : cleanDoor(savedDoor)))
+  // The pictures and the drawer as the address bar shows them (so a copied link reproduces the door).
+  const doorNow = useRef<{ photos: DoorPhoto[]; drawer: DrawerId | null }>({ photos: startDoor, drawer: null })
+  const wardrobeState = () => ({ ...(doorNow.current.drawer ? { drawer: doorNow.current.drawer } : {}), ...(doorNow.current.photos.length ? { door: doorNow.current.photos.map((p) => p.look || 'bare').join(';') } : {}) })
   const wardrobe = useRef<WardrobePlugin | null>(null)
   const [startDrawer] = useState(() => (initial.section === 'wardrobe' ? ((param('drawer') || null) as DrawerId | null) : null))
   // The mirror button's sparkle across the screen as she pops over to her wardrobe.
@@ -64,7 +71,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const trips = TRIP_CHOICES.filter((t) => meta.activities.some((a) => a.id === t.id))
 
   useEffect(() => {
-    enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : startDrawer ? { drawer: startDrawer } : {})
+    doorNow.current.drawer = startDrawer
+    enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : initial.section === 'wardrobe' ? wardrobeState() : {})
     if (initial.section !== 'arrive') arrivedThisVisit = true
     if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section === 'wardrobe' ? 'upstairs' : initial.section
     if (initial.section === 'upstairs' && !askedThisVisit) ask(4000)
@@ -91,8 +99,13 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       // Mommy waits to ask about a trip until she's done dressing up.
       clearTimeout(askTimer.current)
       setAsking(false)
-      enter('wardrobe', drawer ? { drawer } : {})
-    } else enter('upstairs')
+      doorNow.current.drawer = drawer
+      enter('wardrobe', wardrobeState())
+    } else {
+      enter('upstairs')
+      // Mommy sees her new look from across the room, once the doors are shut.
+      setTimeout(() => houseRef.current?.notice('ji'), 900)
+    }
   }
   /** The mirror button: from anywhere in the house, straight to her wardrobe with its doors open. */
   const toWardrobe = () => {
@@ -109,20 +122,31 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   }
   const wardrobeEvents = useRef({ onWardrobe, onLook })
   wardrobeEvents.current = { onWardrobe, onLook }
+  const sayRef = useRef((line: Line) => guide.current?.speak(line))
   const makePlugin = (): HousePlugin => {
     const w = new WardrobePlugin(
-      { onState: (open, drawer) => wardrobeEvents.current.onWardrobe(open, drawer), onLook: (style) => wardrobeEvents.current.onLook(style) },
-      { open: initial.section === 'wardrobe', drawer: startDrawer },
+      {
+        onState: (open, drawer) => wardrobeEvents.current.onWardrobe(open, drawer),
+        onLook: (style) => wardrobeEvents.current.onLook(style),
+        say: (line) => sayRef.current(line),
+        onPhotos: (list) => {
+          saveDoor(list)
+          doorNow.current.photos = list
+          if (wardrobe.current?.isOpen) enter('wardrobe', wardrobeState())
+        },
+      },
+      { open: initial.section === 'wardrobe', drawer: startDrawer, door: startDoor },
     )
     wardrobe.current = w
     return onWall.size ? bothPlugins(w, new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos')) : w
   }
   // Tap Mommy and she asks after her hello; tap Daddy and he asks instead of saying hello.
-  const onGreet = (id: string) => {
+  const onGreet = (id: string, noticed = false) => {
     if (photo || arriving) return false
     if (id === 'ji') ask(1200)
     if (id !== 'nick') return false
-    ask(250, 'nick')
+    // (Daddy first says what he thinks of her look, then asks.)
+    ask(noticed ? 2800 : 250, 'nick')
     return true
   }
   /** Mommy asks if she's ready to go on a trip (her room is upstairs, by the suitcase); Daddy asks on the street. */
