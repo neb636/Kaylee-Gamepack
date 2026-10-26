@@ -1,7 +1,7 @@
-// The L-shaped stairs at the back left, like Agong's real ones (Dad's photo and sketch): concrete steps with cream
-// terrazzo treads and brick-red edges, red railings with a brown handrail. Flight 1 starts toward the back of the house
-// and climbs toward the left wall along the wall that hides the kitchen (closed in underneath); a landing in the
-// corner; then flight 2 turns and climbs forward along the left wall (open underneath) and comes out in the upstairs
+// The L-shaped stairs in the front room's back left corner, like Agong's real ones (Dad's photo and sketch): concrete
+// steps with cream terrazzo treads and brick-red edges, red railings with a brown handrail. Flight 1 starts toward the
+// back of the house and climbs toward the left wall along the divider's cabinets (closed in underneath); a landing in
+// the corner; then flight 2 turns and climbs forward along the left wall (open underneath) and comes out in the upstairs
 // hallway. Shared by both floors: from upstairs you see them through the stairwell.
 import type { BufferGeometry, Group } from 'three'
 import { P } from '../../../engine/geo'

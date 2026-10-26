@@ -6,13 +6,14 @@
 // Facing is in degrees: 0 = toward the street (and the camera), 180 = toward the back, 90 = toward +x.
 //
 // The plan (Dad, 2026-10-17; the stairs and the divider from his sketch, 2026-10-20): downstairs, Agong's desk against
-// the right wall at the front, the table and the couch on the left, then the cabinet divider with a doorway to the
-// stairs. The stairs are an L like the real ones: they start toward the back (the foot faces the right wall), climb
-// along the wall that hides the kitchen to a landing in the back left corner, then turn and climb forward along the
-// left wall, coming out upstairs against it in a small hallway. There's no front room upstairs: the front half is open
-// to the shop below, and the hallway looks down into it over a balcony railing. Glass doors lead back into Kaylee's
-// room, which wraps round the walled-in stairwell. Like the real one (Dad's photos, 2026-10-24) a plastic accordion
-// partition splits it: the TV room in front, where she sleeps behind.
+// the right wall at the front, the table on the left, the couch on the right, then the cabinet divider with a doorway
+// to the back room. The stairs are an L like the real ones, in the front room's back left corner: they start toward
+// the back (the foot faces the right wall), climb along the divider to a landing in the corner, then turn and climb
+// forward along the left wall, coming out upstairs against it in a small hallway. There's no front room upstairs: the
+// front half is open to the shop below, and the hallway looks down into it over a balcony railing. The stairwell is
+// in the hallway (Dad, 2026-10-25: it mustn't take a bite out of her room), and the glass wall right behind it leads
+// into Kaylee's room. Like the real one (Dad's photos, 2026-10-24) a plastic accordion partition splits it: the TV
+// room in front, where she sleeps behind.
 //
 //   GROUND FLOOR (back)          UPSTAIRS (back)
 //  +-----------------+          +-----------------+
@@ -21,14 +22,15 @@
 //  |  kitchen fridge |          |      lamp drawers|
 //  |                 |          |=accordion== open|
 //  |=====wall====    |          |TV  unicorn  sofa|
-//  |LL <<(1)<<< foot |          |---+         sofa|
-//  |2^               |          ||w|  mats  cabinet|
-//  |=2^=door=cab=====|          ||w|=door==glass===|
-//  |2^ top           |          |+-+ top     plant|
-//  | couch       fan |          |=== balcony rail=|
-//  | table    Agong D|          |  open: looks    |
-//  | table         E |          |  down into the  |
-//  |               K |          |  shop below     |
+//  |                 |          |  mats       sofa|
+//  |   back room     |          |table     cabinet|
+//  |=cab=cab=door=cab|          |=glass=door=glass|
+//  |LL <<(1)< f couch|          |LL|         plant|
+//  |2^          couch|          |2^| hallway      |
+//  |2^ top    fan    |          |2^ top           |
+//  | table    Agong D|          |=== balcony rail=|
+//  | table         E |          |  open: looks    |
+//  |               K |          |  down into shop |
 //  +----shutter------+          +---balcony-------+
 import type { Pose } from '../../characters/types'
 
@@ -51,36 +53,36 @@ export const DIM = {
   row: [-11.425, -6.025, 0, 6.025, 11.425],
   houseW: 6.65,
   /**
-   * The L-shaped stairs at the back left (Dad's sketch, 2026-10-20). Flight 1 starts toward the back: from the foot at
-   * xFoot it climbs toward the left wall along the wall behind the stairs (zLanding..zBack), to a landing in the corner
+   * The L-shaped stairs at the left (Dad's sketch, 2026-10-20). Flight 1 starts toward the back: from the foot at
+   * xFoot it climbs toward the left wall along the divider (zLanding..zBack), to a landing in the corner
    * (x0..xLanding); flight 2 turns and climbs forward along the left wall (zLanding..zTop), coming out upstairs against
    * it. Flight 1 has `steps1` treads, flight 2 `steps2`. Flight 1 and the landing are closed in; flight 2 is open underneath. Its back
-   * edge (zBack) lines up with the glass wall upstairs. (Dad, 2026-10-20: both flights 40% wider, 1.26 and 1.19 m;
+   * edge (zBack) is the divider's front face, and the glass wall upstairs stands right behind it. (Dad, 2026-10-20: both flights 40% wider, 1.26 and 1.19 m;
    * flight 1 widened toward the back, so the kitchen got smaller and the front room didn't. Then the room between the
    * divider and the kitchen 25% deeper, 3.73 m: the kitchen wall went back again and both flights got longer, 9 steps.
    * Then the front room 0.5 m bigger, the middle room the same and the kitchen smaller; flight 2 now ends just behind
    * the divider (zTop is its back face), so the divider can go up to the ceiling all the way across. Then both flights
    * 20% wider again, 1.5 and 1.43 m, and the foot in the middle of the room so they take up only its left half: flight 1
-   * is shorter than flight 2 now, 6 steps to 9.)
+   * is shorter than flight 2 now, 6 steps to 9. Then, 2026-10-25, the whole L 4.15 m forward, in front of the
+   * divider, so upstairs the stairwell is in the hallway and not in her room.)
    */
-  stairs: { x0: -3.125, xLanding: -1.625, xFoot: 0, zTop: -9.01, zLanding: -11.31, zBack: -12.74, steps1: 6, steps2: 9 },
-  /** The wall behind the stairs that hides the kitchen: from the left wall to x1, `t` thick, its front face on the
-   *  stairs' back edge. */
-  stairWall: { x1: 1.85, t: 0.15 },
+  stairs: { x0: -3.125, xLanding: -1.625, xFoot: 0, zTop: -4.86, zLanding: -7.16, zBack: -8.59, steps1: 6, steps2: 9 },
+  /** The wall that hides the kitchen, between it and the back room: from the left wall to x1, `t` thick, its front
+   *  face at `z` (where the back of the stairs was before they moved forward). */
+  stairWall: { z: -12.74, x1: 1.85, t: 0.15 },
   /**
-   * The wooden divider between the front room and the stairs, like Agong's real one (Dad's photo, 2026-10-20): a wall
-   * of rosewood cabinets, floor to ceiling, centered at `z` and `d` deep, running all the way from the left wall to
-   * the right one. Flight 2 of the stairs ends against its back; the doorway (open0..open1) she walks through to the
-   * stairs and the back room is just right of them, the rest of the cabinets to its right.
+   * The wooden divider between the front room and the back room, like Agong's real one (Dad's photo, 2026-10-20): a
+   * wall of rosewood cabinets, floor to ceiling, centered at `z` and `d` deep, running all the way from the left wall
+   * to the right one. Flight 1 of the stairs runs along its front; the doorway (open0..open1) she walks through to the
+   * back room is just right of the foot of the stairs, the shelves with the TV and the Garuda to its right.
    */
-  divider: { z: -8.8, d: 0.42, open0: -1.505, open1: 0.5 },
+  divider: { z: -8.8, d: 0.42, open0: 0.1, open1: 1.1 },
   /** Upstairs: the balcony railing at the front edge of the floor (open to the shop below), and the glass wall into
-   *  Kaylee's room, from the walled-in stairwell (x0) to the right wall, with its doorway. (Dad, 2026-10-19: stairs,
-   *  railing and glass all 2.2 m further forward than at first. Then, 2026-10-24, the glass in line with the top of the
-   *  stairs, so her room is as long as the real one and wraps round the stairwell.) */
-  hall: { zFront: -5.2, zGlass: -9.05, x0: -1.625, door0: -1.55, door1: -0.4 },
-  /** The walls round the stairwell upstairs (its right side and its back), `t` thick, on the room's side. */
-  stairBox: { t: 0.12 },
+   *  Kaylee's room, wall to wall just behind the stairwell (above the divider), with its doorway. (Dad, 2026-10-19:
+   *  stairs, railing and glass all 2.2 m further forward than at first. Then, 2026-10-24, her room as long as the real
+   *  one. Then, 2026-10-25, the stairwell out of her room and into the hallway, so the hallway reaches further forward
+   *  to where she steps off the stairs.) */
+  hall: { zFront: -3.6, zGlass: -8.65, door0: -1.45, door1: -0.3 },
   /** The plastic accordion partition across her room (Dad's photos, 2026-10-24): `n` cream panels on a track at `z`;
    *  folded open they stack against the right wall from `open0`. */
   partition: { z: -15.0, open0: 2.55, n: 16, t: 0.1 },
@@ -160,10 +162,10 @@ export const PICKABLES: Pickable[] = [
   // ---- Downstairs ----
   { id: 'desk', label: "Agong's desk", floor: 0, area: 'inside', at: [2.765, 0.9, -4.45], r: 0.7, react: 'hop', use: { x: 2.225, z: -3.1, face: 150, pose: 'peek' } },
   { id: 'table', label: 'Table', floor: 0, area: 'inside', at: [-2.075, 0.75, -2.6], r: 1.05, react: 'jelly', use: { x: -0.55, z: -2.0, face: -90, pose: 'sit', snap: { x: -1.3, z: -2.0, y: 0.45 } } },
-  { id: 'ground-couch', label: 'Grey couch', floor: 0, area: 'inside', at: [-2.7, 0.5, -6.5], r: 0.9, react: 'jelly', use: { x: -1.65, z: -6.5, face: 90, pose: 'sit', snap: { x: -2.6, z: -6.5, y: 0.44 } } },
-  { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.45, -4.0], r: 0.95, react: 'tilt', use: { x: -0.3, z: -3.0, face: -70, pose: 'lookup' } },
-  { id: 'clock', label: 'Clock', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.85, -5.75], r: 0.32, react: 'tick', use: { x: -1.3, z: -5.95, face: -80, pose: 'lookup' } },
-  { id: 'fan', label: 'Fan', floor: 0, area: 'inside', at: [2.5, 1.15, -5.75], r: 0.5, react: 'spin', use: { x: 1.75, z: -5.3, face: 120, pose: 'peek' } },
+  { id: 'ground-couch', label: 'Grey couch', floor: 0, area: 'inside', at: [2.7, 0.5, -7.0], r: 0.9, react: 'jelly', use: { x: 1.65, z: -7.0, face: -90, pose: 'sit', snap: { x: 2.6, z: -7.0, y: 0.44 } } },
+  { id: 'photos', label: 'Old photos', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.45, -3.4], r: 0.95, react: 'tilt', use: { x: -0.3, z: -2.6, face: -70, pose: 'lookup' } },
+  { id: 'clock', label: 'Clock', floor: 0, area: 'inside', at: [DIM.left + 0.05, 2.85, -1.55], r: 0.32, react: 'tick', use: { x: -0.55, z: -1.2, face: -80, pose: 'lookup' } },
+  { id: 'fan', label: 'Fan', floor: 0, area: 'inside', at: [1.5, 1.15, -5.35], r: 0.5, react: 'spin', use: { x: 0.8, z: -4.95, face: 120, pose: 'peek' } },
   { id: 'fridge', label: 'Fridge', floor: 0, area: 'inside', at: [2.775, 0.9, -15.9], r: 0.65, react: 'open', use: { x: 2.025, z: -15.9, face: 90, pose: 'peek' } },
   { id: 'altar', label: 'Family altar', floor: 0, area: 'inside', at: [-0.3, 1.35, B + 0.3], r: 0.8, react: 'glow', gentle: true, use: { x: -0.3, z: B + 1.15, face: 180, pose: 'wai' } },
   { id: 'photos-back', label: 'More old photos', floor: 0, area: 'inside', at: [-1.85, 2.95, B + 0.03], r: 0.7, react: 'tilt', use: { x: -1.7, z: B + 1.0, face: 180, pose: 'lookup' } },
@@ -172,12 +174,12 @@ export const PICKABLES: Pickable[] = [
   { id: 'rice-cooker', label: 'Rice cooker', floor: 0, area: 'inside', at: [2.775, 1.0, -18.098], r: 0.4, react: 'puff', use: { x: 2.075, z: -18.098, face: 90, pose: 'peek' } },
   { id: 'doormat', label: 'Go outside', floor: 0, area: 'inside', at: [0, 0.05, -0.6], r: 0.7, react: 'jelly', use: { x: 0.3, z: 1.35, face: 15, pose: 'stand' } },
   { id: 'shoes', label: 'Shoes', floor: 0, area: 'inside', at: [2.825, 0.2, -0.85], r: 0.42, react: 'hop', use: { x: 2.125, z: -0.85, face: 90, pose: 'peek' } },
-  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [-0.8125, 0.7, -12.025], r: 0.9, react: 'stairs' },
+  { id: 'stairs-up', label: 'Stairs up', floor: 0, area: 'inside', at: [(DIM.stairs.xLanding + DIM.stairs.xFoot) / 2, 0.7, (DIM.stairs.zLanding + DIM.stairs.zBack) / 2], r: 0.9, react: 'stairs' },
 
   // ---- Upstairs: the hallway, then Kaylee's room at the back: the TV room, the partition, where she sleeps ----
-  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [-2.375, U + 0.2, -9.8], r: 0.7, react: 'stairs' },
+  { id: 'stairs-down', label: 'Stairs down', floor: 1, area: 'inside', at: [(DIM.stairs.x0 + DIM.stairs.xLanding) / 2, U + 0.2, DIM.stairs.zTop - 0.8], r: 0.7, react: 'stairs' },
   { id: 'plant', label: 'Plant', floor: 1, area: 'inside', at: [2.1, U + 0.4, -5.65], r: 0.35, react: 'jelly', use: { x: 1.4, z: -5.8, face: 90, pose: 'peek' } },
-  { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [(DIM.hall.door0 + DIM.hall.door1) / 2, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: -0.95, z: -10.2, face: 180, pose: 'stand' } },
+  { id: 'glass-doors', label: 'Glass doors', floor: 1, area: 'inside', at: [(DIM.hall.door0 + DIM.hall.door1) / 2, U + 0.8, DIM.hall.zGlass], r: 0.65, react: 'jelly', use: { x: (DIM.hall.door0 + DIM.hall.door1) / 2, z: DIM.hall.zGlass - 0.9, face: 180, pose: 'stand' } },
   { id: 'cabinet', label: 'Glass cabinet', floor: 1, area: 'inside', at: [2.9, U + 1.0, -9.475], r: 0.5, react: 'open', use: { x: 2.0, z: -9.6, face: 90, pose: 'peek' } },
   { id: 'couch', label: 'Sofa', floor: 1, area: 'inside', at: [2.7, U + 0.5, -11.2], r: 0.8, react: 'jelly', use: { x: 1.75, z: -11.0, face: -90, pose: 'sit', snap: { x: 2.6, z: -11.0, y: 0.44 } } },
   { id: 'tv', label: 'TV', floor: 1, area: 'inside', at: [DIM.left + 0.06, U + 1.4, -14.0], r: 0.6, react: 'tv', use: { x: -1.4, z: -14.0, face: -90, pose: 'lookup' } },
@@ -199,7 +201,6 @@ export const PICKABLES: Pickable[] = [
 /** Where she walks on each floor (carved), and what's in the way (blocked). Rects are [x0, x1, z0, z1]. */
 const S = DIM.stairs
 const HALL = DIM.hall
-const BOX = DIM.stairBox
 export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; circles: Circle[] }> = {
   0: {
     bounds: [-13, 13, -21.098, 2.8],
@@ -212,13 +213,13 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [2.425, DIM.right, -5.25, -3.65], // Agong's desk
       [1.725, 2.325, -4.5, -3.9], // his chair
       [-2.625, -1.525, -3.77, -1.43], // table
-      [DIM.left, -2.25, -7.9, -5.1], // grey couch
+      [2.25, DIM.right, -8.4, -5.6], // grey couch
       [2.425, DIM.right, -16.25, -15.55], // fridge
       [2.575, DIM.right, -1.25, -0.45], // shoes
       [S.x0, S.xLanding + 0.05, S.zBack, S.zTop], // stairs: flight 2 and the landing
       [S.xLanding, S.xFoot + 0.05, S.zBack, S.zLanding], // flight 1
-      [DIM.left, DIM.stairWall.x1, S.zBack - DIM.stairWall.t, S.zBack], // the wall behind them
-      [DIM.left, DIM.divider.open0, DIM.divider.z - DIM.divider.d / 2, DIM.divider.z + DIM.divider.d / 2], // the divider left of the doorway, under the stairs
+      [DIM.left, DIM.stairWall.x1, DIM.stairWall.z - DIM.stairWall.t, DIM.stairWall.z], // the wall that hides the kitchen
+      [DIM.left, DIM.divider.open0, DIM.divider.z - DIM.divider.d / 2, DIM.divider.z + DIM.divider.d / 2], // the divider left of the doorway, behind the stairs
       [DIM.divider.open1, DIM.right, DIM.divider.z - DIM.divider.d / 2, DIM.divider.z + DIM.divider.d / 2], // and its cabinets
       [-1.0, 0.4, B, B + 0.55], // altar
       [0.65, 1.15, B, B + 0.4], // little shrine
@@ -231,7 +232,7 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [-1.3, -3.2, 0.17],
       [-2.075, -1.15, 0.17],
       [-2.075, -4.05, 0.17], // stools (the one at -1.3, -2.0 is hers)
-      [2.5, -5.75, 0.28], // fan
+      [1.5, -5.35, 0.28], // fan
       [4.3, 0.5, 0.28], // spirit house
       [-2.2, 0.4, 0.26],
       [2.2, 0.4, 0.26],
@@ -242,13 +243,11 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
     ],
   },
   1: {
-    bounds: [-3.325, 3.325, -21.098, -7.2],
+    bounds: [-3.325, 3.325, -21.098, DIM.hall.zFront + 0.2],
     carve: [[DIM.left, DIM.right, DIM.back, HALL.zFront]],
     block: [
-      [S.x0, S.xLanding + 0.05, S.zBack, S.zTop], // stairwell (she comes out of it at the front, along the left wall)
-      [S.xLanding, S.xLanding + BOX.t, S.zBack - BOX.t, HALL.zGlass], // its walls: the right side
-      [DIM.left, S.xLanding + BOX.t, S.zBack - BOX.t, S.zBack], // and the back
-      [HALL.x0, HALL.door0, HALL.zGlass - 0.06, HALL.zGlass + 0.06], // the glass wall, left of the doorway
+      [S.x0, S.xLanding + 0.1, S.zBack, S.zTop], // stairwell and its railing (she comes out of it at the front, along the left wall)
+      [DIM.left, HALL.door0, HALL.zGlass - 0.06, HALL.zGlass + 0.06], // the glass wall, left of the doorway
       [HALL.door1, DIM.right, HALL.zGlass - 0.06, HALL.zGlass + 0.06],
       ROOM.sofa,
       ROOM.chaise,
@@ -278,7 +277,7 @@ export const STARTS = {
   arrive: { floor: 0 as const, x: 0.45, z: 1.55, face: 15 },
   street: { floor: 0 as const, x: 0.45, z: 1.55, face: 15 },
   downstairs: { floor: 0 as const, x: 0.2, z: -1.3, face: 160 },
-  upstairs: { floor: 1 as const, x: -2.2, z: -7.6, face: 135 },
+  upstairs: { floor: 1 as const, x: -2.2, z: DIM.stairs.zTop + 0.85, face: 135 },
   family: { floor: 0 as const, x: 1.05, z: 1.75, face: 0 },
 }
 

@@ -1,6 +1,6 @@
-// The divider between Agong's front room and the stairs, like his real one (Dad's photo, 2026-10-20): a wall of glossy
-// rosewood cabinets, floor to ceiling, from the left wall to the right one; the stairs end against its back (Dad's
-// sketch). A doorway with carved corner brackets leads through to the stairs, a lucky
+// The divider between Agong's front room and the back room, like his real one (Dad's photo, 2026-10-20): a wall of glossy
+// rosewood cabinets, floor to ceiling, from the left wall to the right one; the stairs climb along its front (Dad,
+// 2026-10-25). A doorway with carved corner brackets leads through to the back room, just right of their foot, a lucky
 // charm hanging by it; glass-doored cabinets full of little treasures run along the top; on the right, open shelves with
 // the gold Garuda and the Buddhas, the TV, a picture and the red and gold boxes; cupboards along the bottom.
 // The part above the cupboards lowers (house.ts) when she walks behind it, so the camera still sees her.
@@ -77,7 +77,7 @@ export function buildDivider(kit: Kit): Divider {
     }
   })
 
-  // ---- Posts: the doorway's two (the left one just right of the stairs), and one against each wall ----
+  // ---- Posts: the doorway's two (the left one just right of the foot of the stairs), and one against each wall ----
   for (const [x, w, top] of [
     [left + 0.04, 0.08, g0],
     [open0 - 0.06, 0.12, g0],
@@ -159,8 +159,9 @@ export function buildDivider(kit: Kit): Divider {
       P.sphere(0.035, GILT, { at: [tx + s * 0.36, gy + 0.19, z] }),
       P.cone(0.015, 0.04, GILT, { at: [tx + s * 0.36, gy + 0.23, z] }),
     ]),
-    P.cyl(0.04, 0.05, 0.12, WHITE, { at: [tx - 0.48, gy + 0.06, z + 0.04] }),
-    P.sphere(0.05, WHITE, { at: [tx - 0.48, gy + 0.15, z + 0.04] }),
+    // A little white vase in front of the Garuda's left wing (clear of the doorway post).
+    P.cyl(0.04, 0.05, 0.12, WHITE, { at: [Math.max(tx - 0.48, open1 + 0.2), gy + 0.06, z + 0.12] }),
+    P.sphere(0.05, WHITE, { at: [Math.max(tx - 0.48, open1 + 0.2), gy + 0.15, z + 0.12] }),
   )
   // Right bay: a deity picture in a gold frame and two white vases; up top the red box under the gold tin.
   const bx = (xm + right) / 2
@@ -178,7 +179,7 @@ export function buildDivider(kit: Kit): Divider {
     P.box(0.3, 0.1, 0.01, RED, { at: [bx, shelfR + 0.26, z + 0.14] }),
   )
 
-  // Left, in front of the stairs: one shelf with Agong's books, a jar and a green tub.
+  // Left, behind the stairs: one shelf with Agong's books, a jar and a green tub.
   const lw = open0 - 0.12 - left
   const lc = left + lw / 2
   const shelfL = 1.78

@@ -59,18 +59,21 @@ The plan (Dad, 2026-10-17, from a photo of the real stairs): the house is 5 m wi
 - **Downstairs:** Agong's desk against the right wall at the front, where he sits a lot (an abacus, a red telephone, his ledger, tea,
   a little radio). The long table on the left with red plastic stools, old photos and a clock on the left wall, the
   cabinet of treasures (a lucky cat waving on top, little elephants, porcelain jars), a fan, a shoe rack
-  and a doormat. The stairs are at the back left: U-turn stairs filling the left half, like the real ones (cream
-  terrazzo treads with brick-red edges, red railings, a brown handrail), opening across the width of the house.
-  Flight 1 climbs toward the left wall, a landing against it, flight 2 climbs back across, closed in underneath. The
+  and a doormat, the grey couch on the right wall. The stairs are an L in the front room's back left corner, like the
+  real ones (cream terrazzo treads with brick-red edges, red railings, a brown handrail): flight 1 climbs toward the
+  left wall along the rosewood cabinet divider, a landing in the corner, flight 2 climbs forward along the left wall
+  (moved forward on 2026-10-25 so upstairs the stairwell is in the hallway, not in her room). The doorway through the
+  divider to the back room is just right of the foot of the stairs. The
   fridge stands against the right wall in front of the back room. In the back room: the family altar on the back wall with ancestor photos, lanterns, candles and incense, more old photos, the little earth-god shrine, and the
   kitchen counter with the rice cooker. Joy is by the cabinet, Jum in the kitchen.
 - **Upstairs:** the stairs come out in a small hallway (Ken is there). There's no front room: the front half of the
   house is open two floors high, and the hallway looks down into the shop over a balcony railing. Glass sliding doors in
-  dark wood frames, in line with the top of the stairs, lead into **Kaylee's room**. Like the real one (Dad's photos,
-  2026-10-24, kept outside the repo) it's long: it wraps round the walled-in stairwell, and a cream plastic accordion
-  partition splits it in two. Tap the partition and it folds shut; if she's sent to the other side it folds back open
+  dark wood frames, wall to wall right behind the stairwell, lead into **Kaylee's room**. The stairwell stays out in
+  the hallway with a railing round it (Dad, 2026-10-25), so the room is a full rectangle. Like the real one (Dad's
+  photos, 2026-10-24, kept outside the repo) it's long, and a cream plastic accordion partition (no beam across the top)
+  splits it in two. Tap the partition and it folds shut; if she's sent to the other side it folds back open
   by itself. In front of it is the TV room: the grey leather L sofa along the right wall (BB sits there), a dark wood
-  glass cabinet in the corner by the doors, the TV on the left wall in the nook behind the stairwell (tap it: candy
+  glass cabinet in the corner by the doors, the TV on the left wall (tap it: candy
   colours), its light wood stand of toys, the wooden chair, a fan, the pink bouncy unicorn she rides, a little table
   and foam play mats. Behind the partition is where she sleeps: the big mattress along the left wall (Gan asleep on it,
   Mommy beside it), the chrome clothes rack full of her dresses and the clear plastic drawers along the right wall with the

@@ -1,8 +1,8 @@
 // Upstairs: the stairs come out in a small hallway that looks down into the shop over a balcony railing (the front
 // half of the house is open, two floors high), and glass sliding doors in dark wood frames lead back into the room
-// Kaylee sleeps in. Like the real one (Dad's photos, 2026-10-24) it's long: it starts in line with the top of the
-// stairs and wraps round the walled-in stairwell, and a plastic accordion partition splits it into the TV room and the
-// bedroom at the back (the furniture is in room.ts). The floor is pale grey terrazzo tiles like the real one
+// Kaylee sleeps in. Like the real one (Dad's photos, 2026-10-24) it's long, and the stairwell stays out in the hallway
+// with a railing round it (Dad, 2026-10-25), the glass wall right behind it. A plastic accordion partition splits the
+// room into the TV room and the bedroom at the back (the furniture is in room.ts). The floor is pale grey terrazzo tiles like the real one
 // (tiles.ts). The house gecko lives on the back wall (gecko.ts).
 import { Group, Mesh, MeshBasicMaterial, type BufferGeometry } from 'three'
 import { P } from '../../../engine/geo'
@@ -24,8 +24,6 @@ export interface Upper {
   rightWall: Group
   /** The glass wall into her room (lowered while she's in the room). */
   glassWall: Group
-  /** The walls round the stairwell (lowered while she's upstairs, like the right wall). */
-  stairBox: Group
   /** The accordion partition (folds open and shut; lowered while she's behind it). */
   partition: Partition
 }
@@ -34,11 +32,9 @@ export function buildUpper(kit: Kit): Upper {
   const room = new Group()
   const rightWall = new Group()
   const glassWall = new Group()
-  const stairBox = new Group()
   const { left, right, back, g0: U, g1 } = DIM
   const { xLanding: sx1, zTop: zFront, zBack } = DIM.stairs
-  const { zFront: hz, zGlass, x0, door0, door1 } = DIM.hall
-  const bt = DIM.stairBox.t
+  const { zFront: hz, zGlass, door0, door1 } = DIM.hall
   const depth = -back
 
   // ---- Floor (terrazzo tiles) with the stairwell hole, walls ----
@@ -80,32 +76,30 @@ export function buildUpper(kit: Kit): Upper {
   railing(rails, [left, U, hz + 0.04], [right, U, hz + 0.04])
   room.add(poke(kit, 'stairs-down', [], [0, 0, 0]).add(scenery(kit, rails, 1.5)))
 
-  // ---- The stairwell, walled in on the room's side (its front stays open: she comes up into the hallway) ----
-  stairBox.add(
-    scenery(kit, [
-      P.box(bt, g1, zGlass - (zBack - bt), WALL, { at: [sx1 + bt / 2, U + g1 / 2, (zGlass + zBack - bt) / 2] }),
-      P.box(sx1 + bt - left, g1, bt, WALL, { at: [(left + sx1 + bt) / 2, U + g1 / 2, zBack - bt / 2] }),
-      // Skirting along their feet.
-      P.box(0.02, 0.1, zGlass - (zBack - bt), '#CFC8BE', { at: [sx1 + bt + 0.01, U + 0.05, (zGlass + zBack - bt) / 2] }),
-      P.box(sx1 + bt - left, 0.1, 0.02, '#CFC8BE', { at: [(left + sx1 + bt) / 2, U + 0.05, zBack - bt - 0.01] }),
-    ]),
-  )
-  room.add(stairBox)
+  // ---- The railing round the stairwell, on its open right side (its back is the glass wall; she steps off the
+  // stairs at the front) ----
+  const well: BufferGeometry[] = []
+  railing(well, [sx1 + 0.05, U, zBack + 0.02], [sx1 + 0.05, U, zFront])
+  room.add(scenery(kit, well, 1.5))
 
   // ---- The glass wall into her room: dark wood frames round three rows of tinted panes, and the sliding door (slid
   // open over the pane to its right, so she can go in) ----
-  const W = right - x0
+  const W = right - left
   const bay = (right - door1) / 3
-  const posts = [x0 + 0.04, door0, door1, door1 + bay, door1 + bay * 2, right - 0.04]
-  const frames: BufferGeometry[] = [P.box(W, 0.1, 0.1, FRAME, { at: [(x0 + right) / 2, U + 2.3, zGlass] }), P.box(W, 0.08, 0.1, FRAME, { at: [(x0 + right) / 2, U + 0.04, zGlass] })]
+  const posts = [left + 0.04, door0, door1, door1 + bay, door1 + bay * 2, right - 0.04]
+  const frames: BufferGeometry[] = [P.box(W, 0.1, 0.1, FRAME, { at: [(left + right) / 2, U + 2.3, zGlass] }), P.box(W, 0.08, 0.1, FRAME, { at: [(left + right) / 2, U + 0.04, zGlass] })]
   for (const x of posts) frames.push(P.box(0.08, 2.3, 0.1, FRAME, { at: [x, U + 1.15, zGlass] }))
-  // The glazing bars: three rows of panes in each fixed bay.
-  for (const y of [0.78, 1.54]) frames.push(P.box(right - door1, 0.05, 0.06, FRAME, { at: [(door1 + right) / 2, U + y, zGlass] }))
-  frames.push(P.box(W, g1 - 2.35, 0.12, WALL, { at: [(x0 + right) / 2, U + 2.35 + (g1 - 2.35) / 2, zGlass] }))
+  // The glazing bars: three rows of panes in each fixed bay (both sides of the doorway).
+  for (const y of [0.78, 1.54]) {
+    frames.push(P.box(door0 - left, 0.05, 0.06, FRAME, { at: [(left + door0) / 2, U + y, zGlass] }))
+    frames.push(P.box(right - door1, 0.05, 0.06, FRAME, { at: [(door1 + right) / 2, U + y, zGlass] }))
+  }
+  frames.push(P.box(W, g1 - 2.35, 0.12, WALL, { at: [(left + right) / 2, U + 2.35 + (g1 - 2.35) / 2, zGlass] }))
   glassWall.add(scenery(kit, frames, 1.5))
   const glassMat = kit.bag.add(new MeshBasicMaterial({ color: '#9FC4D8', transparent: true, opacity: 0.3, depthWrite: false }))
   const pane = (w: number, x: number, z = zGlass) => new Mesh(kit.bag.add(P.box(w, 2.22, 0.02, '#FFFFFF', { at: [x, U + 1.15, z] })), glassMat)
-  for (let i = 2; i < posts.length - 1; i++) glassWall.add(pane(posts[i + 1] - posts[i], (posts[i] + posts[i + 1]) / 2))
+  // Every bay but the doorway's (posts 1..2) is glazed.
+  for (let i = 0; i < posts.length - 1; i++) if (i !== 1) glassWall.add(pane(posts[i + 1] - posts[i], (posts[i] + posts[i + 1]) / 2))
   const w = door1 - door0
   const doors = poke(kit, 'glass-doors', [], [door1 + w / 2, U, zGlass - 0.08])
   doors.add(new Mesh(kit.bag.add(P.box(w - 0.1, 2.12, 0.02, '#FFFFFF', { at: [0, 1.12, 0] })), glassMat))
@@ -127,5 +121,5 @@ export function buildUpper(kit: Kit): Upper {
   const { partition } = buildRoom(kit, room)
   room.add(partition.root)
   room.add(glassWall)
-  return { room, rightWall, glassWall, stairBox, partition }
+  return { room, rightWall, glassWall, partition }
 }

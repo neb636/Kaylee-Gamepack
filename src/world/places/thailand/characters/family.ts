@@ -24,7 +24,7 @@ export interface FamilyMember {
 export const FAMILY: FamilyMember[] = [
   { id: 'agong', name: 'Agong', thai: 'อากง', who: 'Grandpa', color: '#B9A6F5', height: 1.45, pitch: 150, spot: { floor: 0, x: 2.025, z: -4.2, face: 65, pose: 'sit', seat: 0.45 } },
   { id: 'jum', name: 'Jum', who: 'Aunt', color: '#FFB3CF', height: 1.5, pitch: 260, spot: { floor: 0, x: 1.0, z: -18.698, face: -30, pose: 'stand' } },
-  { id: 'joy', name: 'Joy', who: 'Aunt, mom of Gan and Ken', color: '#FBEA9A', height: 1.5, pitch: 280, spot: { floor: 0, x: 0.2, z: -7.0, face: -20, pose: 'stand' } },
+  { id: 'joy', name: 'Joy', who: 'Aunt, mom of Gan and Ken', color: '#FBEA9A', height: 1.5, pitch: 280, spot: { floor: 0, x: 0.7, z: -6.1, face: -20, pose: 'stand' } },
   { id: 'bird', name: 'Bird', who: 'Uncle, dad of BB', color: '#A8DCFF', height: 1.65, pitch: 130, spot: { floor: 0, x: -3.3, z: 1.0, face: 25, pose: 'stand' } },
   { id: 'nick', name: 'Daddy', who: "Kaylee's dad (Nick)", color: '#7FD1B9', height: 1.7, pitch: 120, spot: { floor: 0, x: 2.9, z: 1.15, face: -30, pose: 'stand' } },
   { id: 'ji', name: 'Mommy', who: "Kaylee's mom (Ji)", color: '#FF8FB8', height: 1.55, pitch: 300, spot: { floor: 1, x: 0.55, z: -18.898, face: -15, pose: 'stand' } },

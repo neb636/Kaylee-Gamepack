@@ -187,19 +187,17 @@ export class House implements World3D {
       { obj: street.frontRight, low: 1.0 / DIM.g0, when: (m) => m !== 'street', value: 1 },
       { obj: upper.rightWall, low: 1.0 / DIM.g1, when: (m) => m === 'inside1', value: 1 },
       { obj: upperFront, low: 0.12, when: (m) => m === 'inside1', value: 1 },
-      // Upstairs the glass wall stands between the camera and her room once she's in it, the walls round the stairwell
-      // between the camera and the stairs and the TV nook behind them (so they stay low, like the right wall), and the
-      // partition once she's behind it.
+      // Upstairs the glass wall stands between the camera and her room once she's in it, and the partition once she's
+      // behind it.
       { obj: upper.glassWall, low: 0.12, when: (m) => m === 'inside1' && this.kaylee.position.z < DIM.hall.zGlass - 0.1, value: 1 },
-      { obj: upper.stairBox, low: 1.0 / DIM.g1, when: (m) => m === 'inside1', value: 1 },
       { obj: upper.partition.root, low: 0.12, when: (m) => m === 'inside1' && this.kaylee.position.z < DIM.partition.z + 0.05, value: 1 },
       // Downstairs the divider's cabinets would hide her once she walks through its doorway (the cupboards stay).
       { obj: divider.high, low: 0.02, when: (m) => m === 'inside0' && this.kaylee.position.z < DIM.divider.z + DIM.divider.d / 2, value: 1 },
-      // And the wall behind the stairs, once she's in the kitchen.
-      { obj: ground.stairWall, low: 1.0 / DIM.g0, when: (m) => m === 'inside0' && this.kaylee.position.z < DIM.stairs.zBack - DIM.stairWall.t, value: 1 },
+      // And the wall that hides the kitchen, once she's in the kitchen.
+      { obj: ground.stairWall, low: 1.0 / DIM.g0, when: (m) => m === 'inside0' && this.kaylee.position.z < DIM.stairWall.z - DIM.stairWall.t, value: 1 },
     )
     // The upper wall pieces scale from the upstairs floor, not from the street.
-    const upperCuts: Object3D[] = [upper.rightWall, upperFront, upper.glassWall, upper.stairBox, upper.partition.root]
+    const upperCuts: Object3D[] = [upper.rightWall, upperFront, upper.glassWall, upper.partition.root]
     for (const c of this.cuts) c.obj.userData.cutBase = upperCuts.includes(c.obj) ? DIM.g0 : c.obj === divider.high ? DIVIDER_BASE : 0
 
     this.reactor = new Reactor(kit, this.bag)

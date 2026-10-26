@@ -22,7 +22,6 @@ const LIGHT_WOOD = '#DDBF93'
 const CHROME = '#C9CDD3'
 const PLASTIC = '#F3EEE2'
 const PLASTIC_RIB = '#E1D8C7'
-const WALL = '#F4F1EC'
 
 /** The accordion partition: `set(closed)` lays its panels out, 0 = folded against the right wall, 1 = across the room. */
 export interface Partition {
@@ -287,19 +286,18 @@ function drawers(kit: Kit) {
 }
 
 /**
- * The cream plastic accordion partition across the room, like the real one: `n` ribbed panels on a track under a
- * header strip. Its panels zig-zag: folded open they stand almost edge-on in a stack against the right wall; closed
- * they spread across the room. One poke ('partition'): any panel is a tap on it.
+ * The cream plastic accordion partition across the room, like the real one: `n` ribbed panels (no header beam across
+ * the room over them, Dad 2026-10-25). Its panels zig-zag: folded open they stand almost edge-on in a stack against
+ * the right wall; closed they spread across the room. One poke ('partition'): any panel is a tap on it.
  */
 function partition(kit: Kit, span: number): Partition {
-  const { right, g0: U, g1 } = DIM
+  const { right, g0: U } = DIM
   const { z, n } = DIM.partition
   const H = 2.42
   const OPEN = 1.48
   const SHUT = 0.25
   const pw = span / (n * Math.cos(SHUT))
   const root = new Group()
-  root.add(scenery(kit, [P.box(span + 0.3, g1 - H - 0.04, 0.14, WALL, { at: [(DIM.left + right) / 2, U + H + 0.04 + (g1 - H - 0.04) / 2, z] }), P.box(span, 0.04, 0.1, '#CFC8BE', { at: [(DIM.left + right) / 2, U + H + 0.02, z] })], 1.5))
   const g = poke(kit, 'partition', [], [0, 0, 0])
   const panels = Array.from({ length: n }, () => {
     const p = new Group()
