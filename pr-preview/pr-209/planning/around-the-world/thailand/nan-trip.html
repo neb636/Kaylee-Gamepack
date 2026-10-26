@@ -22,7 +22,7 @@
     "tone": "mint"
   },
   "pitch": "Kaylee presses the key and the big Pajero beeps hello. Mommy drives and Kaylee steers it round the bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.",
-  "next": "Dad plays the [valley road](#/world/thailand/nan-trip/drive) and the [sky road](#/world/thailand/nan-trip/drive?road=sky&weather=cloud) on the iPad: turn the wheel under her finger, bump along the grass, push on past it and watch the Pajero tumble off and drop back (is it too easy to go off? too slow to come back?), and drive into the cloud (can you see enough now?). Then **the whole trip** from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?",
+  "next": "Dad steers the [valley road](#/world/thailand/nan-trip/drive) and the [3 road](#/world/thailand/nan-trip/drive?road=three) again on the iPhone and the iPad: is the wheel calm enough now (no back-and-forth)? Too slow? Yank it hard for the tyre squeal. Then [the 3 from above](#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt) (no crayon now). Then **the whole trip** from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?",
   "facts": [
     {
       "icon": "⏱️",
@@ -996,7 +996,7 @@
               "title": "The “3” road",
               "tag": "`three`; counting",
               "status": "done",
-              "md": "The last drive (`drive?road=three`), and then the viewpoint: the Pajero stops at a lay-by, the camera lifts up and over the hill, and the road below is a big swoopy **3**. Kaylee traces it with her finger and a crayon line follows (one, two, three), the family photo is taken with the 3 behind them, and Sparkle says “Three! Kaylee drove the 3!”. Then the road goes on to the airport and the plane home."
+              "md": "The last drive (`drive?road=three`), and then the viewpoint: the Pajero stops at a lay-by, the camera lifts up and over the hill, and the road below is a big swoopy **3**. Its bends pop one by one (one, two, three; nothing to draw, Dad took the crayon out 2026-10-26), the family photo is taken with the 3 behind them, and Sparkle says “Three! Kaylee drove the 3!”. Then the road goes on to the airport and the plane home."
             },
             {
               "icon": "🏠",
@@ -1296,10 +1296,10 @@
               "name": "Picked on the map: the farm opens at the end of the road"
             },
             {
-              "n": "✏️",
+              "n": "3️⃣",
               "id": "three",
               "query": "stops=mushrooms,rice,salt",
-              "name": "Draw the 3 with the big pink crayon"
+              "name": "The 3 from above: one, two, three, the photo"
             },
             {
               "n": "🏠",
@@ -1498,7 +1498,7 @@
                         "Mommy's foot: slower into the bends, slower in the cloud, a stop for the buffalo, easing into the stop at the end.",
                         "Keep left: an oncoming driver with her over the middle line pulls onto the verge, stops and toots a tune, and Mommy eases her back to the left.",
                         "The steering wheel (bottom right) turns with the car; the whole wheel is the horn (the Pajero is too). A beep gets answers: the blind bend's car beeps back (its mirror flashes pink and the wheel pulses until she beeps; if she doesn't, it beeps first), the buffalo moos and hurries, chickens scatter. *(2026-10-26: the corner wheel and the horn are gone; see the last log entry.)*",
-                        "`city` 272 m (tuk-tuks, the bridge over the Nan River, the market; it ended at Wat Phumin until 2026-10-25, now at the market square), `valley` 533 m (paddies, chickens, a songthaew, a scooter, the buffalo crossing, the mushroom house), `sky` ~590 m (switchbacks climbing 92 m: rain, blind bends with mirrors, a waterfall, a monkey, into the cloud at 38 m with the headlights on, out above it at 62 m into blue sky, Stop Time Cafe's deck at the top), `three` 471 m (downhill hairpins drawn as a 3: a giant 1, 2, 3 as she rounds each bend; at the lay-by the camera lifts over the hill and a pink crayon line draws the 3 along the road, counting again).",
+                        "`city` 272 m (tuk-tuks, the bridge over the Nan River, the market; it ended at Wat Phumin until 2026-10-25, now at the market square), `valley` 533 m (paddies, chickens, a songthaew, a scooter, the buffalo crossing, the mushroom house), `sky` ~590 m (switchbacks climbing 92 m: rain, blind bends with mirrors, a waterfall, a monkey, into the cloud at 38 m with the headlights on, out above it at 62 m into blue sky, Stop Time Cafe's deck at the top), `three` 471 m (downhill hairpins drawn as a 3: a giant 1, 2, 3 as she rounds each bend; at the lay-by the camera lifts over the hill and its bends pop one, two, three by themselves, `updateView`).",
                         "At the end of each road the Pajero pulls in by its stop, the camera turns to look (or lifts, for the 3), and the end card offers 🔁 this road again or the other three (there's no map yet).",
                         "👆 on the road ahead if she hasn't steered by 2.5 s, or after 8 s without touching."
                       ]
@@ -1693,6 +1693,18 @@
                 "**Wiggling** (her push swapping sides 4 times in 3 s): the car rocks, `wiggle` (“Wibbly wobbly!”).",
                 "**The cloud** (`clouds.ts` `buildCloudLayer` `opacity`, 0.45 on the sky road; `AIR.inside` fog 10-85 m instead of 3-30 m): misty, and the road shows well ahead.",
                 "Tried in WebKit (iPad landscape, a robot finger holding the wheel all the way over): onto the grass in ~1.5 s and over the edge ~1.5 s later on the valley, sky and 3 roads (the 3 road over its guard rail); back on the road ~3 s after going over. QA keys: `overs`, `grass`, `wiggles`, `hops`, `off`, `falling`, `rail`. `qa-motion` `nan-steer` now drives off and back."
+              ]
+            },
+            {
+              "title": "Calmer steering, a tyre squeal, no crayon",
+              "date": "2026-10-26",
+              "status": "done",
+              "summary": "Dad found the wheel far too twitchy on an iPhone and a trackpad (the Pajero pivoted and kept correcting back and forth). Now it slides slower, small pushes are gentle, quick flicks are smoothed out, and a hard yank squeals the tyres. The 3 from above has nothing to draw any more.",
+              "items": [
+                "**Calmer wheel** (`mountain.ts`): `SLIDE` 7.5 → 4.2 m/s; a push curve (`STICK_CURVE` 1.6: a small push barely moves it, a full push still goes all the way); the push is smoothed (`STICK_EASE` 0.3 s, so jitters and quick back-and-forth twitches average out); the aim point never comes closer than 13 m (was 6 m, which swung the nose round and back); the camera follows the car's heading less (0.3, was 0.5).",
+                "**Still goes off on purpose:** a held full push reaches the grass in ~2.7 s and goes over in ~4-5 s (the steer target can run 3 m past the grass now, was 1.5 m). A jittery finger moves it about 1 m.",
+                "**Tyre squeal** (`screech`, `roadSfx.screech`): a quick, hard flick of the wheel (`SCREECH_FLICK` 5/s, at least 0.45 over, moving) squeals “eeeee”, puffs smoke off the back wheels and rocks the body; at most one every 0.7 s. A slow push never squeals. QA key `screeches`.",
+                "**No crayon** (`updateView`): from the viewpoint the camera lifts over the hill and the bends pop 1, 2, 3 by themselves (from 1.8 s, 0.75 s apart, sparkles on each), then the fanfare and “Three! Kaylee drove the three!”. The crayon, its line, tracing, the tap-to-draw-on, the 👆 along the road and “Draw the three with your finger!” are gone; Mommy's photo shows a grey road for the 3. `qa-motion` `nan-trace` is now `nan-three-view` (it just watches)."
               ]
             }
           ]
