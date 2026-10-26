@@ -1146,8 +1146,8 @@ GAME_SCENARIOS.push(
 )
 
 // The Nan road trip's mountain road (greybox): her finger steering the Pajero, the core verb. On the valley road she
-// holds the road ahead on the left, then sweeps right across into the edge (the rail boings her back, the body leans
-// out), lets go (Mommy takes it back to the left lane), and beeps the horn.
+// puts her finger down (the steering ring appears), pushes the knob right and holds it till the Pajero slides into the
+// edge (the rail boings her back, the body leans out), lets go (Mommy takes it back to the left lane), and beeps the horn.
 GAME_SCENARIOS.push({
   name: 'nan-steer',
   seconds: 9,
