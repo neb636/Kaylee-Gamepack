@@ -82,6 +82,9 @@ export const GECKO: V3 = [-2.05, 1.95, BACK_Z + 0.04]
 export const BEAM_Y = 2.2
 export const DRIP: V3 = [0.12, BEAM_Y - 0.06, 0.62]
 export const DOG: V3 = [0.95, 0, 0.9]
+/** The bulb hanging from the roof (moths visit it), and where else the roof drips (just to watch). */
+export const BULB: V3 = [-0.42, 2.48, 0.3]
+export const DRIPS: V3[] = [[-2.3, BEAM_Y - 0.06, 0.62], [1.05, BEAM_Y - 0.06, -0.1], [2.6, BEAM_Y - 0.06, 0.62]]
 export const HOUSE_BASKET: V3 = [-1.0, 0, 0.72]
 export const BASKET_R = 0.2
 export const KAYLEE_AT: V3 = [-1.5, 0, 0.42]

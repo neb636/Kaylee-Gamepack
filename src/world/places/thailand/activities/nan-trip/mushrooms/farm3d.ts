@@ -1,6 +1,7 @@
 // Baan Huanam Mushroom Farm (plan: planning/around-the-world/thailand/nan-trip.html, "2. Baan Huanam Mushroom Farm"),
-// greybox: shapes and sounds, no voices yet. Two places in one world: the dim mushroom house (the camera low in the
-// aisle, looking at the rack of sawdust bags) and the farm's table outside, 8 m along, where the camera glides for lunch.
+// in the toon look, with voices. Two places in one world: the cozy, dim mushroom house (the camera low in the aisle,
+// looking at the rack of sawdust bags; warm light through the plank walls) and the farm's table outside, 8 m along, on a
+// deck over the cool green mountains, where the camera glides for lunch.
 //
 // The toy, the misting hose: her finger held anywhere on the rack sprays a soft mist there (Kaylee holds the hose, its
 // wand points where she sprays, a little rainbow shows in the mist). Every bag the mist reaches drinks; a thirsty bag
@@ -21,10 +22,17 @@
 // Silly instead of wrong: mist Daddy and a mushroom grows on his head (it gets bigger the more she sprays); mist the
 // dog and she wakes and shakes; the giant mushroom. Things to poke: the aunty, the gecko, the dog, the drip, the sign,
 // the basket, the view, Kaylee and Daddy (and Mommy at the table).
+// Ambient life: the gecko scuttles now and then, the dog snores a bubble, the roof drips, two moths circle the bulb,
+// the low cloud drifts along the valley, the flower on the table nods.
+// Talk (lines.ts L.nan.mushrooms): the farmer aunty says hello as she arrives, then Sparkle says each round's one line
+// as it begins and, after ~8 s with nothing done (counted from 3 s after the round's start), what to do; the aunty,
+// Daddy and Mommy react, each thing once (a reaction is dropped while Sparkle talks rather than heard late); tapping
+// the aunty or Daddy says their lines in turn; the sign tells a fact.
 import { CatmullRomCurve3, Color, Group, IcosahedronGeometry, Mesh, MeshBasicMaterial, OctahedronGeometry, Plane, TubeGeometry, Vector3, type BufferGeometry, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp } from '../../../../../../sdk'
+import { bell, clamp, speakingVoice, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { FaceLife } from '../../../characters/face'
+import { L } from '../../../lines'
 import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { Shot } from '../../../engine/camera'
@@ -35,10 +43,12 @@ import { buildHouse, buildTable, ovenGlow, type House, type Table } from './farm
 import { Floaters } from './fx'
 import {
   BAGS,
+  BULB,
   BURST_S,
   COLORS,
   DOG,
   DRIP,
+  DRIPS,
   EATER_NAMES,
   EATERS,
   FARMER_AT,
@@ -158,6 +168,13 @@ interface Fly {
 }
 
 const STUCK_S = 5
+/** Nothing done for this long: Sparkle says what to do (again after SAY_EVERY, at most SAY_MAX times a round). */
+const SAY_S = 8
+const SAY_EVERY = 20
+const SAY_MAX = 3
+const M = L.nan.mushrooms
+/** The light: warm and dim in the house, cool and bright on the deck. */
+const LIGHT = { house: { sun: new Color('#F2D2B4'), amb: new Color('#E6D4E2'), sky: new Color('#4E3833') }, table: { sun: new Color('#F6FAFF'), amb: new Color('#FFF7F0'), sky: new Color('#D6E6EE') } }
 /** A mushroom's size on the pizza (and in her hand over it). */
 const ON_PIZZA = 0.95
 const LIFT_PX = 34
@@ -254,6 +271,19 @@ export class MushroomFarm extends Stage {
   private cloudT = 0
   private plateBounce = new Map<EaterId, number>()
   private cool = new Map<string, number>()
+  // ---- Ambient life ----
+  private moths: { root: Group; wings: Group[]; phase: number }[] = []
+  private drips: { o: Group; at: Vector3; t: number; period: number }[] = []
+  private geckoNext = 6
+  private snore = 0
+  // ---- Talk: lines said once, Sparkle's hints this round, the aunty's and Daddy's tap lines in turn ----
+  private told = new Set<string>()
+  private lastSay = -99
+  /** Sparkle's hints count quiet time from here (a round's start and its line), not from her last touch. */
+  private quietFrom = 0
+  private sayN = 0
+  private farmerTap = 0
+  private nickTap = 0
 
   constructor(renderer: WebGLRenderer, private ev: FarmEvents, start: { round: Round; basket: string }) {
     super(renderer, ev)
@@ -318,6 +348,25 @@ export class MushroomFarm extends Stage {
     this.pie.position.set(PIZZA.x, PIZZA.y, PIZZA.z)
     scene.add(this.pie)
     for (let i = 0; i < SLICES; i++) this.wedges.push(this.buildWedge(i))
+    // ---- Ambient life: moths round the bulb, more drips from the roof ----
+    for (let k = 0; k < 2; k++) {
+      const root = new Group()
+      root.add(solid(merge([P.capsule(0.012, 0.03, '#CFC3E6', { rot: [Math.PI / 2, 0, 0] }), ...[-1, 1].map((sx) => P.sphere(0.006, PAL.ink, { at: [sx * 0.008, 0.006, 0.025] }, 5))]), bag, 1))
+      const wings = [-1, 1].map((sx) => {
+        const w = new Group()
+        w.add(solid(P.sphere(0.04, k ? '#F4EEFF' : '#FFF1DC', { at: [sx * 0.035, 0, 0], scale: [1, 0.12, 0.8] }, 8), bag, 1))
+        root.add(w)
+        return w
+      })
+      scene.add(root)
+      this.moths.push({ root, wings, phase: k * 2.4 })
+    }
+    for (const [k, d] of DRIPS.entries()) {
+      const o = solid(P.sphere(0.03, '#BFE6FF', { scale: [1, 1.35, 1] }, 10), bag, 1)
+      o.position.set(...d)
+      scene.add(o)
+      this.drips.push({ o, at: new Vector3(...d), t: k * 1.1, period: 3.1 + k * 0.7 })
+    }
     // ---- Where the link starts ----
     if (start.round === 'pizza') {
       this.phase = 'table'
@@ -326,11 +375,68 @@ export class MushroomFarm extends Stage {
     } else {
       this.phase = 'house'
       this.put(kaylee, ...KAYLEE_AT, 'stand', 120)
-      this.put(this.nick, ...NICK_AT, 'stand', -80)
+      this.put(this.nick, ...NICK_AT, 'stand', -60)
       this.fillHouseBasket()
       if (start.round === '2') for (const b of this.bags) this.grow(b, 1.02, true)
     }
     this.wandAt.copy(this.handAt())
+    this.light(true)
+    this.roundLine(start.round, true)
+  }
+
+  // ---------------------------------------------------------------- talk
+
+  /** The round's line as it begins (Sparkle), with the aunty's hello first when she arrives. */
+  private roundLine(r: Round, arriving = false) {
+    this.sayN = 0
+    this.lastSay = -99
+    this.quietFrom = this.time + 3
+    const d = arriving ? 0.5 : 0.3
+    if (r === '1') this.after(0.4, () => this.once('hi', M.hi))
+    const l: Record<Round, Line> = { '1': M.mist, '2': M.pick, '3': M.colors, pizza: M.pizza }
+    this.after(r === '1' ? 0.6 : r === 'pizza' && !arriving ? 1.5 : d, () => this.once(r, l[r]))
+  }
+  /** Says it the first time only. A reaction (`now`) is dropped while Sparkle talks, rather than heard late. */
+  private once(key: string, l: Line, now = false) {
+    if (this.told.has(key)) return
+    if (now && speakingVoice() === 'sparkle') return
+    this.told.add(key)
+    this.ev.say(l)
+  }
+  /** A tap line in turn (not while Sparkle talks: it would come late). False when nothing was said. */
+  private inTurn(key: string, lines: readonly Line[], n: number) {
+    if (speakingVoice() === 'sparkle' || this.time - (this.cool.get(key) ?? -99) < 3) return false
+    this.cool.set(key, this.time)
+    this.ev.say(lines[n % lines.length])
+    return true
+  }
+
+  /** After a while with nothing done, Sparkle says what to do (a few times a round at most). */
+  private stuck() {
+    if (this.grab || this.carried || this.held || this.bake || this.flights.length || this.phase === 'walk' || this.spray.on || this.time < this.spray.until) return
+    if (this.time - Math.max(this.lastTouch, this.quietFrom) < SAY_S || this.time - this.lastSay < SAY_EVERY || this.sayN >= SAY_MAX) return
+    const l = this.stuckLine()
+    if (!l || speakingVoice()) return
+    this.lastSay = this.time
+    this.sayN++
+    this.ev.say(l)
+  }
+  private stuckLine(): Line | null {
+    if (this.phase === 'house') return this.round !== '1' && this.bags.some((b) => b.stage === 'grown' && !b.giant) ? M.hint.pick : M.hint.mist
+    if (this.phase !== 'table') return null
+    if (!this.baked) return this.inBasket().length ? M.hint.pizza : this.ovenReady ? M.hint.oven : null
+    return this.served < SLICES ? M.hint.share : null
+  }
+
+  /** Warm and dim in the house, cool and bright outside (`now`: at once, else it eases there as the camera glides). */
+  private lightK = 0
+  private light(now = false, dt = 0) {
+    const goal = this.phase === 'table' ? 1 : 0
+    this.lightK = now ? goal : this.lightK + (goal - this.lightK) * Math.min(1, dt * 1.6)
+    const k = this.lightK
+    this.lights.sun.color.copy(LIGHT.house.sun).lerp(LIGHT.table.sun, k)
+    this.lights.ambient.color.copy(LIGHT.house.amb).lerp(LIGHT.table.amb, k)
+    ;(this.scene.background as Color).copy(LIGHT.house.sky).lerp(LIGHT.table.sky, k)
   }
 
   // ---------------------------------------------------------------- building bits
@@ -341,8 +447,18 @@ export class MushroomFarm extends Stage {
     root.position.set(Math.sin(a) * MID, 0, Math.cos(a) * MID)
     root.rotation.y = a
     const crust = solid(wedgeGeo(PIZZA.r, 0.035, 0, CRUST), this.bag, 2)
-    const cheese = solid(merge([wedgeGeo(PIZZA.r - 0.03, 0.012, 0.021, CHEESE), P.sphere(0.02, '#FF9A7A', { at: [0.03, 0.03, 0.02], scale: [1, 0.3, 1] }, 8)]), this.bag, 0)
-    root.add(crust, cheese)
+    const cheese = solid(wedgeGeo(PIZZA.r - 0.03, 0.012, 0.021, CHEESE), this.bag, 0)
+    // Tomato peeking through the cheese and a basil leaf (they stay their color in the oven).
+    const top = solid(
+      merge([
+        P.sphere(0.022, '#FF8A70', { at: [0.035, 0.03, 0.03], scale: [1, 0.25, 1] }, 8),
+        P.sphere(0.016, '#FF8A70', { at: [-0.04, 0.03, -0.05], scale: [1, 0.25, 1] }, 8),
+        P.sphere(0.022, '#6CC08A', { at: [-0.03, 0.032, 0.07], rot: [0, i * 1.3, 0], scale: [1.5, 0.2, 0.8] }, 8),
+      ]),
+      this.bag,
+      0,
+    )
+    root.add(crust, cheese, top)
     this.pie.add(root)
     return { i, root, crust: crust.children[0] as Mesh, cheese: cheese.children[0] as Mesh, where: 'pizza', owner: null, bites: 0 }
   }
@@ -421,6 +537,7 @@ export class MushroomFarm extends Stage {
       b.clump.visible = true
       if (!quiet) {
         sfx.bloop(this.pops++ % 13)
+        if (b.color !== 'grey') this.after(0.5, () => this.once('colors2', M.colors2, true))
         this.sparkles.burst(tmp.copy(b.at).add(new Vector3(0, 0, 0.08)), 5, 0.6, 0.6, 0.6, 0.03)
       }
     }
@@ -441,7 +558,8 @@ export class MushroomFarm extends Stage {
         this.sparkles.burst(tmp.copy(b.at).add(new Vector3(0, 0.1, 0.2)), 18, 1.4, 1.2, 1.0, 0.05)
         this.talkTo('nick', () => {
           this.nick.react('hop')
-          sfx.haha()
+          if (this.told.has('giant') || speakingVoice() === 'sparkle') sfx.haha()
+          this.once('giant', M.giant, true)
         })
       }
     }
@@ -466,6 +584,8 @@ export class MushroomFarm extends Stage {
         this.hopFarmer()
         for (const b of this.bags) this.sparkles.burst(tmp.copy(b.at).add(new Vector3(0, 0.05, 0.15)), 4, 0.8, 1, 0.9, 0.04)
         this.ev.round('2', formatBasket(this.basket))
+        this.once('grown', M.grown, true)
+        this.roundLine('2')
       })
     }
   }
@@ -500,6 +620,7 @@ export class MushroomFarm extends Stage {
       })
     })
     this.ev.round('3', formatBasket(this.basket))
+    this.roundLine('3')
   }
 
   // ---------------------------------------------------------------- picking
@@ -585,6 +706,7 @@ export class MushroomFarm extends Stage {
     this.fillTableBasket()
     this.after(1.6, () => (this.rig.lag = 0.45))
     this.ev.round('pizza', formatBasket(this.basket))
+    this.roundLine('pizza')
   }
 
   // ---------------------------------------------------------------- the pizza
@@ -685,6 +807,7 @@ export class MushroomFarm extends Stage {
     this.bake = { t: 0 }
     this.hopFarmer()
     sfx.slide()
+    this.once('oven', M.oven, true)
     this.basketBounce = 0
   }
   private baking(dt: number) {
@@ -734,6 +857,9 @@ export class MushroomFarm extends Stage {
         for (let i = 0; i < 6; i++) this.steam.emit(new Vector3(PIZZA.x + (Math.random() - 0.5) * 0.4, PIZZA.y + 0.05, PIZZA.z + (Math.random() - 0.5) * 0.3), new Vector3(0, 0.35, 0), 1.4, 0.1)
         this.sparkles.burst(new Vector3(PIZZA.x, PIZZA.y + 0.1, PIZZA.z), 16, 1.2, 1.4, 1, 0.045)
         this.cheer()
+        this.after(0.6, () => this.once('share', M.share, true))
+        this.quietFrom = this.time + 3
+        this.sayN = 0
       }
     }
   }
@@ -787,6 +913,7 @@ export class MushroomFarm extends Stage {
     if (w.bites >= 3) w.root.visible = false
     sfx.chomp()
     this.after(0.12, () => sfx.munch())
+    this.after(0.5, () => this.once('yum', M.yum, true))
     this.crumbs.burst(w.root.getWorldPosition(new Vector3()).add(new Vector3(0, 0.05, 0)), 8, 0.5, 0.8, 0.6, 0.02)
   }
 
@@ -1014,6 +1141,10 @@ export class MushroomFarm extends Stage {
         }
         this.spray.until = -1
         this.pickOff(b.i)
+      } else if (b && b.stage === 'grown' && this.round === '1') {
+        // Poking a grown one before it's time to pick: it boings, and the first time Sparkle tells where they grow from.
+        b.boing = 0
+        this.once('sawdust', M.sawdust)
       }
       // Otherwise the press already sprayed a puff there.
       return
@@ -1024,9 +1155,7 @@ export class MushroomFarm extends Stage {
         sfx.basket(basketSize(this.basket))
         return
       case 'farmer':
-        this.hopFarmer()
-        this.talkTo('farmer', () => sfx.aunty(), 1)
-        return
+        return this.tapFarmer()
       case 'gecko': {
         const g = this.house.gecko
         const to = new Vector3(GECKO[0] + (g.position.x > GECKO[0] ? -0.5 : 0.5) * (0.6 + Math.random() * 0.4), GECKO[1] + (Math.random() - 0.5) * 0.3, GECKO[2])
@@ -1044,6 +1173,7 @@ export class MushroomFarm extends Stage {
       case 'sign':
         this.signSpin = 0
         sfx.ding()
+        this.once('sawdust', M.sawdust)
         return
       case 'family:kaylee':
         this.kaylee.react('wiggle')
@@ -1051,9 +1181,16 @@ export class MushroomFarm extends Stage {
         return
       case 'family:nick':
         this.nick.react('hop')
-        sfx.haha()
+        if (!this.inTurn('nick', M.dad, this.nickTap)) sfx.haha()
+        else this.nickTap++
         return
     }
+  }
+
+  private tapFarmer() {
+    this.hopFarmer()
+    if (this.inTurn('farmer', M.tap, this.farmerTap)) this.farmerTap++
+    else this.talkTo('farmer', () => sfx.aunty(), 1)
   }
 
   private tapTable(id: string | null, _x: number, _y: number) {
@@ -1084,9 +1221,7 @@ export class MushroomFarm extends Stage {
         this.steam.burst(new Vector3(OVEN[0] - 0.08, 1.2, OVEN[2] - 0.12), 4, 0.2, 0.5, 1.2, 0.08)
         return
       case 'farmer':
-        this.hopFarmer()
-        this.talkTo('farmer', () => sfx.aunty(), 1)
-        return
+        return this.tapFarmer()
       case 'view':
         this.cloudT = 0
         this.table.cloud.position.x = TX - 6
@@ -1143,6 +1278,11 @@ export class MushroomFarm extends Stage {
     this.cloudT += dt
     this.table.cloud.position.x = TX - 6 + this.cloudT * 0.35
     if (this.table.cloud.position.x > TX + 6) this.cloudT = 0
+    // The low cloud drifts slowly along the valley and back; the flower nods.
+    for (const [i, m] of this.table.mist.entries()) m.position.x = (m.userData.home as number) + Math.sin(t * 0.06 + i * 1.9) * 1.6
+    this.table.flower.rotation.z = Math.sin(t * 1.3) * 0.08
+    this.light(false, dt)
+    this.stuck()
     // ---- Her baskets ----
     this.basketBounce = Math.min(1, this.basketBounce + dt / 0.4)
     const bb = bell(this.basketBounce)
@@ -1258,6 +1398,7 @@ export class MushroomFarm extends Stage {
       this.rainbow.quaternion.copy(this.rig.camera.quaternion)
       ;(this.rainbow.material as MeshBasicMaterial).opacity = 0.42 * this.spray.k
     }
+    this.houseLife(dt, t)
     // ---- Pokes ----
     this.dogWake = Math.min(1, this.dogWake + dt / 1.6)
     const dg = this.house.dog
@@ -1294,6 +1435,53 @@ export class MushroomFarm extends Stage {
     this.house.puddle.scale.set(1 + 0.15 * bell(pk), 1 + 0.15 * bell(pk), 1)
   }
 
+  /** The house's ambient life: the bulb sways, two moths circle it, the roof drips, the dog's snore bubble, the gecko
+   *  scuttles a little now and then by itself. */
+  private houseLife(dt: number, t: number) {
+    const bulb = this.house.bulb
+    bulb.rotation.z = Math.sin(t * 0.9) * 0.03
+    bulb.rotation.x = Math.sin(t * 0.7 + 1) * 0.02
+    for (const m of this.moths) {
+      const a = t * 1.7 + m.phase
+      m.root.position.set(BULB[0] + Math.cos(a) * 0.24 + Math.sin(a * 2.3) * 0.05, BULB[1] - 0.02 + Math.sin(a * 1.6) * 0.1, BULB[2] + Math.sin(a) * 0.2)
+      m.root.rotation.y = -a
+      const flap = Math.sin(t * 38 + m.phase) * 0.9
+      m.wings[0].rotation.z = flap
+      m.wings[1].rotation.z = -flap
+    }
+    for (const d of this.drips) {
+      d.t += dt
+      const k = d.t - (d.period - 0.45)
+      if (k < 0) {
+        d.o.position.copy(d.at)
+        d.o.scale.setScalar(clamp(d.t / (d.period - 0.45), 0.2, 1))
+      } else if (k < 0.45) d.o.position.y = d.at.y - (d.at.y - 0.03) * (k / 0.45) ** 2
+      else {
+        d.t = 0
+        this.drops.burst(new Vector3(d.at.x, 0.04, d.at.z), 3, 0.3, 0.6, 0.35, 0.016)
+      }
+    }
+    // The snore bubble swells with each slow breath out and pops (not while she's awake).
+    const bub = this.house.dog.bubble
+    if (this.dogWake < 1) {
+      bub.visible = false
+      this.snore = 0
+    } else {
+      this.snore += dt / 3.2
+      const k = this.snore % 1
+      bub.visible = k < 0.8
+      bub.scale.setScalar(0.3 + 1.4 * Math.sin((k / 0.8) * Math.PI * 0.5))
+      if (k >= 0.8 && (this.snore - dt / 3.2) % 1 < 0.8) this.drops.burst(this.house.dog.root.localToWorld(bub.position.clone()), 4, 0.25, 0.3, 0.3, 0.012)
+    }
+    // Now and then the gecko scuttles a little way by itself.
+    if (!this.geckoRun && t > this.geckoNext) {
+      this.geckoNext = t + 6 + Math.random() * 6
+      const g = this.house.gecko
+      const to = new Vector3(clamp(g.position.x + (Math.random() - 0.5) * 0.6, GECKO[0] - 0.4, GECKO[0] + 0.4), clamp(g.position.y + (Math.random() - 0.5) * 0.4, GECKO[1] - 0.3, GECKO[1] + 0.2), GECKO[2])
+      this.geckoRun = { from: g.position.clone(), to, t: 0 }
+    }
+  }
+
   /** Mist on Daddy grows a mushroom on his head; on the dog, she wakes and shakes; on the aunty, she laughs. */
   private sillySpray(dt: number) {
     const near = (w: Vector3, px: number) => {
@@ -1309,7 +1497,7 @@ export class MushroomFarm extends Stage {
         if (first) {
           sfx.bloop(6)
           this.nick.react('hop')
-          sfx.haha()
+          this.after(0.3, () => this.once('hat', M.hat, true))
         }
       }
     }
@@ -1365,11 +1553,11 @@ export class MushroomFarm extends Stage {
   protected shot(): Shot {
     const tall = this.w < this.h
     if (this.phase === 'house') {
-      if (tall) return { center: new Vector3(0, 0.95, 0.3), half: new Vector3(1.42, 1.0, 0.55), yaw: 0, pitch: 11, minDist: 3 }
-      return { center: new Vector3(0.1, 1.0, 0.2), half: new Vector3(2.35, 0.85, 0.5), yaw: 0, pitch: 8, minDist: 3 }
+      if (tall) return { center: new Vector3(0, 0.95, 0.3), half: new Vector3(1.42, 1.0, 0.55), yaw: 5, pitch: 13, minDist: 3 }
+      return { center: new Vector3(0.1, 1.0, 0.2), half: new Vector3(2.35, 0.85, 0.5), yaw: 7, pitch: 12, minDist: 3 }
     }
     // The pizza big in the middle, the plates and the family's faces behind it, the oven at the side.
-    if (tall) return { center: new Vector3(TX - 0.15, 0.85, -0.2), half: new Vector3(1.05, 0.75, 0.75), yaw: 0, pitch: 46, minDist: 2.5 }
+    if (tall) return { center: new Vector3(TX - 0.3, 0.85, -0.2), half: new Vector3(1.25, 0.75, 0.75), yaw: 0, pitch: 46, minDist: 2.5 }
     return { center: new Vector3(TX - 0.45, 0.85, -0.2), half: new Vector3(1.55, 0.42, 0.7), yaw: 0, pitch: 44, minDist: 2.5 }
   }
 

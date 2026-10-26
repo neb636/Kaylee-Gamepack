@@ -1,11 +1,12 @@
 // Baan Huanam Mushroom Farm's screen: the 3D farm (farm3d.ts) with its tap targets, the 👆 after a while with nothing
 // touched, and at the end (every slice shared) the end card: 🔁 the farm again, or 🗺️ back to the Nan map (its stamp
-// lands there).
+// lands there). Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks out loud in their own voice.
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { FARM_ANCHORS, MushroomFarm } from './farm3d'
 import type { Round } from './layout'
 
@@ -24,6 +25,7 @@ export function Mushrooms({ round, basket, onRound, onBasket, onMap }: Props) {
   const [done, setDone] = useState(false)
   const worldRef = useRef<MushroomFarm | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   // A rebuilt world (a lost GPU context, 🔁) starts where she is now, not where the link was.
   const now = useRef({ round, basket })
   const cb = useRef({ onRound, onBasket })
@@ -33,7 +35,7 @@ export function Mushrooms({ round, basket, onRound, onBasket, onMap }: Props) {
     const w = new MushroomFarm(
       renderer,
       {
-        say: () => {},
+        say: (l) => guideRef.current?.speak(l),
         section: () => {},
         done: () => {},
         round: (r, b) => {
@@ -91,6 +93,7 @@ export function Mushrooms({ round, basket, onRound, onBasket, onMap }: Props) {
           🍄 Tap to wake the farm
         </button>
       )}
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={done} />}
       <AnimatePresence>{done && <FarmEnd onAgain={again} onMap={onMap} />}</AnimatePresence>
     </div>
   )
