@@ -1,12 +1,10 @@
 // The Golden Mountain's screen: the 3D mountain (golden.ts), its tap targets, the big number that pops over each hold
-// she grabs, the 👆 after a while with nothing touched, and the flat picture version without WebGL (Flat.tsx). After
-// the third round a big 🛝 takes her back to the hall.
+// she grabs and the 👆 after a while with nothing touched. After the third round a big 🛝 takes her back to the hall.
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../../engine/View3D'
-import { MountainFlat } from './Flat'
 import { Golden, MOUNTAIN_ANCHORS } from './golden'
 import type { Round } from './layout'
 import { mallVoice } from '../../voice'
@@ -55,33 +53,29 @@ export function Mountain({ round, socks, hair, onRound, onTop, onPlay }: Props) 
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#EBDDFF', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <MountainFlat round={round} onRound={onRound} onTop={onTop} onAllDone={() => setAllDone(true)} />
-      ) : (
-        <View3D
-          key={key}
-          name="The Golden Mountain"
-          qaKey="__thaiMallQA"
-          worldRef={worldRef}
-          onMode={setMode}
-          make={make}
-          anchors={(input, els) => (
-            <>
-              <Anchors list={MOUNTAIN_ANCHORS} els={els} {...input} />
-              {/* The count: the hold's number, big, over the hold she just grabbed. */}
-              <div ref={countRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 19000 }}>
-                <div style={{ translate: '-50% -50%', fontSize: 'clamp(54px, 9vmin, 92px)', fontWeight: 700, lineHeight: 1, color: 'var(--hotpink)', WebkitTextStroke: '3px #fff', paintOrder: 'stroke fill', textShadow: '0 4px 10px rgba(43,35,48,.3)' }} />
-              </div>
-              {/* After a while with nothing touched: a finger on the next hold (or the bell, or the slide). */}
-              <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-                <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                  👆
-                </motion.div>
-              </div>
-            </>
-          )}
-        />
-      )}
+      <View3D
+        key={key}
+        name="The Golden Mountain"
+        qaKey="__thaiMallQA"
+        worldRef={worldRef}
+        onMode={setMode}
+        make={make}
+        anchors={(input, els) => (
+          <>
+            <Anchors list={MOUNTAIN_ANCHORS} els={els} {...input} />
+            {/* The count: the hold's number, big, over the hold she just grabbed. */}
+            <div ref={countRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 19000 }}>
+              <div style={{ translate: '-50% -50%', fontSize: 'clamp(54px, 9vmin, 92px)', fontWeight: 700, lineHeight: 1, color: 'var(--hotpink)', WebkitTextStroke: '3px #fff', paintOrder: 'stroke fill', textShadow: '0 4px 10px rgba(43,35,48,.3)' }} />
+            </div>
+            {/* After a while with nothing touched: a finger on the next hold (or the bell, or the slide). */}
+            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
+              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
+                👆
+              </motion.div>
+            </div>
+          </>
+        )}
+      />
       {mode === 'lost' && (
         <button
           onClick={() => {

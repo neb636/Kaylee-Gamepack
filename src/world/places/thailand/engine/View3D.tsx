@@ -1,13 +1,13 @@
 // Mounts one 3D world (Agong's house, the bay): takes the shared WebGL renderer, builds the world, runs the frame loop,
 // routes taps and drags (from the canvas and from the DOM tap targets over it) and cleans everything up when it
-// unmounts. No WebGL2: tells the screen to show its flat fallback instead (without a console error).
+// unmounts. If the iPad takes the GPU back (a lost context), it tells the screen, which offers to wake it.
 import { useEffect, useRef, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
 import type { Camera, Scene, WebGLRenderer } from 'three'
 import { automated } from './flags'
 import { frameLoop } from './loop'
 import { acquireRenderer, dropRenderer, releaseRenderer } from './renderer'
 
-export type RenderMode = 'webgl' | 'flat' | 'lost'
+export type RenderMode = 'webgl' | 'lost'
 
 /** What View3D needs from a world. */
 export interface World3D {
@@ -54,9 +54,9 @@ export interface AnchorInput {
 }
 
 interface Props<W extends World3D> {
-  /** Builds the world (throwing = show the flat fallback). */
+  /** Builds the world. */
   make: (renderer: WebGLRenderer) => W
-  /** For the console warning if it can't be built. */
+  /** For the error if it can't be built. */
   name: string
   qaKey: QAKey
   onMode: (mode: RenderMode) => void
@@ -81,21 +81,13 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
   useEffect(() => {
     const el = host.current!
     const renderer = acquireRenderer()
-    if (!renderer) {
-      document.documentElement.dataset.render = 'flat'
-      modeRef.current('flat')
-      return
-    }
     let world: W
     try {
       world = make(renderer)
     } catch (e) {
-      console.warn(`${name} could not be built, showing the flat version instead.`, e)
       releaseRenderer(renderer)
-      modeRef.current('flat')
-      return
+      throw new Error(`${name} could not be built`, { cause: e })
     }
-    document.documentElement.dataset.render = 'webgl'
     worldRef.current = world
     world.setAnchorElements(anchorEls.current)
     const canvas = renderer.domElement

@@ -269,7 +269,7 @@ export default function CharacterLab({ id, params = {} }: { id?: string; params?
           {mode === 'webgl' ? (
             <View3D make={make} name="The character lab" qaKey="__thaiCastQA" onMode={setMode} worldRef={studio} anchors={() => null} />
           ) : (
-            <div className="cl-empty">{mode === 'lost' ? 'The 3D view stopped (the iPad took the GPU back). Reload the page to wake it.' : 'The character lab needs WebGL2, which this browser is missing.'}</div>
+            <div className="cl-empty">The 3D view stopped (the iPad took the GPU back). Reload the page to wake it.</div>
           )}
         </div>
         {!left && (

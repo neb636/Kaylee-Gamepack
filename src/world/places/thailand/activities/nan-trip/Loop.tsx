@@ -11,7 +11,7 @@
 //   takeoff, fly, land            the window seat north to Nan (trip/legs/plane.ts, `landing: 'nan'`): a green valley
 //                                 in the mountains comes up under the plane, then the rental desk
 //
-// Sparkle sits in the corner (trip/legs/Guide.tsx). Without WebGL it's a picture book (LoopFlat.tsx). The trip around it
+// Sparkle sits in the corner (trip/legs/Guide.tsx). The trip around it
 // (the boarding pass between legs, resume and replays, the stops) is NanTrip.tsx.
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
@@ -28,7 +28,6 @@ import { TRIP_HOUSE_ANCHORS, TripHouse, type HouseLeg, type Phase } from '../../
 import { PackCard } from '../../trip/legs/PackCard'
 import { PLANE_ANCHORS, PlaneRide, type FlySection } from '../../trip/legs/plane'
 import { addWallPhoto, newestByTrip, shrinkPhoto, today, useWallPhotos } from '../../trip/wall-photos'
-import { LoopFlat } from './LoopFlat'
 import { drawPhoto, type PhotoId } from './photo'
 import { FLIGHT, NAN_TRIP, WORLD_OF, type LoopSection, type LoopWorld } from './trip'
 
@@ -85,10 +84,7 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
   /** The last section a world moved on to by itself (no rebuild for that one). */
   const told = useRef<string | null>(null)
 
-  // (Without WebGL there's no house: the picture book turns to its packing page.)
-  const modeRef = useRef(mode)
-  modeRef.current = mode
-  useImperativeHandle(ref, () => ({ startPack: () => (modeRef.current === 'flat' ? cb.current.onSection('pack') : tripRef.current?.startPack()) }))
+  useImperativeHandle(ref, () => ({ startPack: () => tripRef.current?.startPack() }))
 
   // A new section: one the world moved on to by itself just follows; in the same house, the plugin sets it up; another
   // world mounts behind the boarding pass.
@@ -168,43 +164,25 @@ export const NanLoop = forwardRef<NanLoopHandle, Props>(function NanLoop({ secti
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <LoopFlat
-          section={section}
-          packed={packed}
-          photos={fan}
-          covered={covered}
-          onYes={onYes}
-          onTrip={onTrip}
-          onNotYet={onNotYet}
-          onLeg={onLeg}
-          onPacked={onPacked}
-          onDone={(src) => {
-            void shrinkPhoto(src).then((small) => setWallPhotos((list) => addWallPhoto(list, { trip: NAN_TRIP.id, src: small, at: today() })))
-            onDone()
-          }}
-        />
-      ) : (
-        <View3D
-          key={mount.key}
-          name={`The Nan road trip (${mount.world})`}
-          qaKey="__thaiNanQA"
-          worldRef={worldRef}
-          onMode={setMode}
-          make={make}
-          anchors={(input, els) => (
-            <>
-              <Anchors list={ANCHORS_OF[mount.world]} els={els} {...input} />
-              {/* After a while with nothing touched: a finger pressing where to touch. */}
-              <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-                <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                  👆
-                </motion.div>
-              </div>
-            </>
-          )}
-        />
-      )}
+      <View3D
+        key={mount.key}
+        name={`The Nan road trip (${mount.world})`}
+        qaKey="__thaiNanQA"
+        worldRef={worldRef}
+        onMode={setMode}
+        make={make}
+        anchors={(input, els) => (
+          <>
+            <Anchors list={ANCHORS_OF[mount.world]} els={els} {...input} />
+            {/* After a while with nothing touched: a finger pressing where to touch. */}
+            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
+              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
+                👆
+              </motion.div>
+            </div>
+          </>
+        )}
+      />
       {mode === 'lost' && (
         <button
           onClick={() => {

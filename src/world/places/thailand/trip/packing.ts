@@ -1,12 +1,12 @@
 // What Kaylee can pack for a trip, and the `packed` list that carries through every leg (the URL param, what she
-// saved, the x-ray screen). Pure data (no three.js): sections.ts and the flat version read it too.
+// saved, the x-ray screen). Pure data (no three.js): sections.ts reads it too.
 import type { Wearable } from '../characters/looks'
 
 export interface PackItem {
   id: string
   /** What it's called (tap target label, for Dad and for tests). */
   label: string
-  /** For the flat version and the boarding pass. */
+  /** For the packing card and the boarding pass. */
   icon: string
   /** Mommy's hint ("It's hot and sunny at the sea!") makes these glint. */
   sun?: boolean

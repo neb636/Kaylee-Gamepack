@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
 // Captain Kaylee's boat trip, greybox 1 (src/world/places/thailand/activities/boat-trip/): the bay in 3D with every
-// section link, the flat version without WebGL, and no leftover GPU memory going back and forth to Agong's house.
+// section link, and no leftover GPU memory going back and forth to Agong's house.
 // Read-only state comes from window.__thaiBoatQA (no jump hooks: tests open section links).
 
 type BoatQA = {
@@ -49,15 +49,6 @@ test('the bay renders in 3D and every section link lands', async ({ page }) => {
     await expect.poll(field(page, 'mode'), { timeout: 20_000 }).toBe('webgl')
     expect(await page.evaluate(() => window.__kayleeSectionLog?.[0]?.id)).toBe(s)
   }
-  expect(errors).toEqual([])
-})
-
-test('without WebGL, the flat stops still work', async ({ page }) => {
-  const errors = trackErrors(page)
-  await open(page, 'bay', '?gl=off')
-  // (The picture book's stops are cards: the village, the hong through the cave, the Nail Island.)
-  await page.getByRole('button', { name: 'The hong' }).click({ force: true })
-  await expect.poll(() => page.evaluate(() => window.__kayleeSection?.id)).toBe('hong')
   expect(errors).toEqual([])
 })
 

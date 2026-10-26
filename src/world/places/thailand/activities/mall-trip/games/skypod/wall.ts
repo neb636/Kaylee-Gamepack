@@ -6,7 +6,7 @@
 // The toy: slap a pod. It reacts the moment her finger lands: it squashes into the wall, flashes, plays its own note
 // (left to right they climb a scale, so the wall is an instrument), and sparks fly. Kaylee bounces over to it on the
 // mat and slaps it too: a jump for the high ones, her arm reaching up. A finger sliding across the pods plays them all.
-// The rules (which pods are lit, the score, the pattern, Daddy's race) are game.ts, shared with the flat version.
+// The rules (which pods are lit, the score, the pattern, Daddy's race) are game.ts.
 // Nothing fails: lights wait for her, a wrong pod is a funny note, Daddy never wins.
 // Pokeables: the scoreboard (its numbers wave), the speaker (a beat to play along to: the pods and Daddy bob), the
 // rocket on top (it rumbles and hops), the moon (it rocks, the painted stars twinkle), Kaylee, Daddy, the mat (she

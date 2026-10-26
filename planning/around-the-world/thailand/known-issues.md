@@ -70,10 +70,6 @@ Code paths are under `src/world/places/thailand/`.
   - Check: `#/world/thailand/hub/downstairs?at=photos` at iPhone portrait size, after playing `home` once.
   - Code: `trip/wall.ts` (`WallPlugin.shot`), `trip/legs/house-plugin.ts` (`shot`, the gather's tall framing).
   - Ideas: aim further left on very narrow screens, or let the camera come further out.
-- [ ] **The picture book (no WebGL) draws its scenes with emoji.** It's only for a browser without WebGL2 (or
-  `?gl=off`); Sparkle, the crab sticker and the drawn photo are real, the family and the legs are emoji.
-  - Check: `?gl=off#/world/thailand/boat-trip/invite`.
-  - Code: `activities/boat-trip/Flat.tsx` (`LEGS`, `STOPS`, `Home`).
 - [ ] **More frames as trips grow.** Each trip keeps one frame (the newest photo of that trip); later trips' frames go
   toward the door or in a row above (`WALL_SLOTS`). Playtest QA suggested the wall should grow a little every replay
   (more photos, or the critters she found); not built.

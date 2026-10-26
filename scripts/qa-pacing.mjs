@@ -176,8 +176,6 @@ const SCENARIOS = [
   { name: 'thailand nan: the nan map', id: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true },
   { name: 'thailand nan: the 3 from above', id: 'nan-three-view', hash: '#/world/thailand/nan-trip/three', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
-  // (?gl=off goes before the hash: the section's address drops anything it doesn't know.)
-  { name: 'thailand trip: picture book without webgl', id: 'trip-book', search: '?gl=off', hash: '#/world/thailand/boat-trip/invite', reset: true },
 ].filter((s) => !flag('only') || flag('only').split(',').includes(s.id))
 
 // Is there something (other than the story overlay, the top bar or a "hear it again" button) she can touch?
@@ -242,7 +240,7 @@ try {
       await page.evaluate(() => (window.__kayleeSpeech = []))
       const t0 = await page.evaluate(() => performance.now())
       await page.evaluate(watchFirstTouch, [s.hash, interactive.toString()])
-      await page.goto(`${base}${s.search ?? ''}${s.hash}`)
+      await page.goto(`${base}${s.hash}`)
       // Story lines play out on their own (instantly in an automated browser); wait for the first touchable thing.
       await page.waitForFunction(() => window.__qaTouchAt != null, null, { timeout: 9000 }).catch(() => {})
       const tTouch = await page.evaluate(() => window.__qaTouchAt)

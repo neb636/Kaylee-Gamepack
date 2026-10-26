@@ -86,5 +86,5 @@ export const ROUNDS: Record<Round, { orders: Order[]; together: boolean; tray: I
 /** The drinks from earlier rounds already on the shelf when a link starts later (what they'd likely have made). */
 export const EARLIER: Fruit[][] = [['strawberry', 'banana'], ['mango'], ['strawberry', 'banana'], ['mango', 'banana']]
 
-/** UI pictures (the order bubbles, the flat version). */
+/** UI pictures (the order bubbles). */
 export const ICONS: Record<ItemId, string> = { mango: '🥭', strawberry: '🍓', watermelon: '🍉', banana: '🍌', coconut: '🥥', tea: '🍵', ice: '🧊', milk: '🥛', cream: '🍦', straw: '🥤' }

@@ -1,4 +1,4 @@
-// Little Land's stacking, with no physics engine (pure: the 3D build and the flat version share it). The mat is cut
+// Little Land's stacking, with no physics engine (pure, no three.js). The mat is cut
 // into half-brick columns and the bricks into rows: a brick covers two columns side by side, and it rests on whatever
 // is highest under either half (so a brick half over the edge still rests on the half that's held). The spots she can
 // put a brick on are those resting places; the cards are shapes of spots, filled row by row.

@@ -304,7 +304,7 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
       ) : pizzaTime ? (
         <Pizza section={section} pizza={pizza} shared={shared} hair={hair} onPizza={setPizza} onServed={() => setSection('share')} onShared={setShared} onAllDone={allShared} />
       ) : section === 'frame' ? (
-        <FrameScreen at={at} socks={socks} hair={hair} rode={games.includes('frame')} onAt={setAt} onRide={() => sticker('frame')} />
+        <FrameScreen at={at} socks={socks} hair={hair} onAt={setAt} onRide={() => sticker('frame')} />
       ) : null}
       {!inHall && !pizzaTime && !onLoop && (
         <motion.button

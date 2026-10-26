@@ -8,7 +8,7 @@
 //   and a monkey on the rail.
 // - three: the hairpins down to Santi Suk (count the bends: one, two, three); from the viewpoint at the end the road
 //   below is a giant 3.
-// Pure (no three.js): the 3D drive and the flat fallback both read it. Control points are [x, z, y]; for the 3, z runs
+// Pure (no three.js). Control points are [x, z, y]; for the 3, z runs
 // down the page as you look at it from above (the top of the 3 is at -z).
 import { Road, type RoadPoint } from '../../../trip/road/road'
 import type { RoadLook } from '../../../trip/road/build'

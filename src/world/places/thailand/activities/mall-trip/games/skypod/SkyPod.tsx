@@ -1,13 +1,12 @@
 // The Sky Pod's screen: the 3D wall of pods (wall.ts), its tap targets, the scoreboard's big numbers (HTML laid over
-// the board's dark screen, never in a picture), a "+1" floating up from each light she gets, the 👆 after a while with
-// nothing touched, and the flat version without WebGL (Flat.tsx). After the finale a big 🛝 takes her back to the hall
+// the board's dark screen, never in a picture), a "+1" floating up from each light she gets and the 👆 after a while
+// with nothing touched. After the finale a big 🛝 takes her back to the hall
 // (the wall stays open to play).
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../../engine/View3D'
-import { SkyPodFlat } from './Flat'
 import type { Phase } from './game'
 import { ScoreBoard } from './board'
 import { BLUE, PINK, type Round } from './layout'
@@ -78,33 +77,29 @@ export function SkyPod({ round, socks, onRound, onSticker, onPlay }: Props) {
   const race = board.round === 3 && (board.phase === 'play' || board.phase === 'cheer')
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#2E2748', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <SkyPodFlat round={round} onRound={onRound} onSticker={onSticker} onAllDone={() => setAllDone(true)} />
-      ) : (
-        <View3D
-          key={key}
-          name="The Sky Pod"
-          qaKey="__thaiMallQA"
-          worldRef={worldRef}
-          onMode={setMode}
-          make={make}
-          anchors={(input, els) => (
-            <>
-              {/* The scoreboard's numbers (wall.ts moves and sizes this over the board every frame). */}
-              <div ref={boardRef} aria-label={`Score: ${board.score}`} style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 1, alignItems: 'center', justifyContent: 'center', gap: '0.12em', fontWeight: 700, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
-                <ScoreBoard {...board} race={race} />
-              </div>
-              <Anchors list={SKYPOD_ANCHORS} els={els} {...input} />
-              {/* After a while with nothing touched: a finger on one of her lights (or the pattern's next pod). */}
-              <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-                <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                  👆
-                </motion.div>
-              </div>
-            </>
-          )}
-        />
-      )}
+      <View3D
+        key={key}
+        name="The Sky Pod"
+        qaKey="__thaiMallQA"
+        worldRef={worldRef}
+        onMode={setMode}
+        make={make}
+        anchors={(input, els) => (
+          <>
+            {/* The scoreboard's numbers (wall.ts moves and sizes this over the board every frame). */}
+            <div ref={boardRef} aria-label={`Score: ${board.score}`} style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 1, alignItems: 'center', justifyContent: 'center', gap: '0.12em', fontWeight: 700, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+              <ScoreBoard {...board} race={race} />
+            </div>
+            <Anchors list={SKYPOD_ANCHORS} els={els} {...input} />
+            {/* After a while with nothing touched: a finger on one of her lights (or the pattern's next pod). */}
+            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
+              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
+                👆
+              </motion.div>
+            </div>
+          </>
+        )}
+      />
       {/* "+1" floating up from each light she (or Daddy) gets. */}
       <div aria-hidden style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 30 }}>
         <AnimatePresence>

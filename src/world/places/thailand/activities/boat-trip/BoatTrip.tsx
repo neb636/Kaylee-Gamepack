@@ -67,7 +67,6 @@ import { ChangLayer } from './chang/ChangLayer'
 import { changOpen } from './chang/open'
 import { isStraw, type StrawColor } from './chang/layout'
 import { Debug } from './Debug'
-import { Flat } from './Flat'
 import { FORK_CARDS } from './ForkCards'
 import { PhotoFan } from './PhotoFan'
 import { Race, RACE_ANCHORS, type RaceHud, type RaceSection } from './race/race'
@@ -491,12 +490,6 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
       return () => clearTimeout(t)
     }
   }, [phase, section])
-  // Without WebGL the picture book has its own pages (nothing to build behind a boarding pass).
-  useEffect(() => {
-    if (mode !== 'flat' || !prep.current) return
-    prep.current = false
-    setPass(null)
-  }, [mode])
   // A `home` link: once the bay has taken the photos it was asked for, on home.
   useEffect(() => {
     if (prep.current && prepWant.current && photos.length >= prepWant.current) finish('home', null)
@@ -638,74 +631,55 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <Flat
-          section={section}
-          packed={packed}
-          onPacked={(ids) => {
-            state.current.packed = ids
-            setPacked(ids)
-            enter(state.current.section, params(ids))
-          }}
-          onSection={(s) => moveTo(s)}
-          fork={open}
-          onDone={() => {
-            // The picture book's whole trip counts too (the next time, the 🚤 replay).
-            setSaved((p) => ({ at: null, packed: formatPacked(state.current.packed) || p.packed, trips: (p.trips ?? 0) + 1 }))
-            onDone?.()
-          }}
-        />
-      ) : (
-        <View3D
-          key={mount.key}
-          name={`The boat trip (${mount.world})`}
-          qaKey="__thaiBoatQA"
-          worldRef={worldRef}
-          onMode={setMode}
-          make={make}
-          anchors={(input, els) => (
-            <>
-              <Anchors list={ANCHORS_OF[mount.world]} els={els} {...input} />
-              {/* The bay: arrows at the screen's edge toward glows that are off screen. */}
-              {mount.world === 'bay' &&
-                GLOWS.map((g) => (
-                  <div
-                    key={g}
-                    role="button"
-                    aria-label={`Go to: ${g}`}
-                    ref={(el) => {
-                      if (el) arrowEls.current.set(g, el)
-                      else arrowEls.current.delete(g)
-                    }}
-                    // Tap the badge: the boat sets off there.
-                    onPointerDown={(e) => {
-                      e.stopPropagation()
-                      sounds.pop()
-                      worldRef.current?.tap(0, 0, `glow:${g}`)
-                    }}
-                    style={{ position: 'absolute', left: 0, top: 0, display: 'none', zIndex: 19000, cursor: 'pointer' }}
-                  >
-                    {/* The pointer (bay.ts turns it toward the glow), then the glow's little badge. */}
-                    <div style={{ position: 'absolute', left: -34, top: -34, width: 68, height: 68 }}>
-                      <div style={{ position: 'absolute', left: 22, top: -18, width: 0, height: 0, borderLeft: '12px solid transparent', borderRight: '12px solid transparent', borderBottom: '18px solid #fff' }} />
-                    </div>
-                    <div style={{ position: 'absolute', left: -34, top: -34, width: 68, height: 68, display: 'grid', placeItems: 'center', borderRadius: '50%', background: 'rgba(255,200,61,.9)', border: '4px solid #fff', boxShadow: '0 0 16px 4px rgba(255,200,61,.6)', fontSize: 30 }}>{ARROW_ICONS[g]}</div>
-                  </div>
-                ))}
-              {/* After a while with nothing touched: a finger pressing where to touch. */}
-              <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-                <motion.div
-                  animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }}
-                  transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }}
-                  style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}
+      <View3D
+        key={mount.key}
+        name={`The boat trip (${mount.world})`}
+        qaKey="__thaiBoatQA"
+        worldRef={worldRef}
+        onMode={setMode}
+        make={make}
+        anchors={(input, els) => (
+          <>
+            <Anchors list={ANCHORS_OF[mount.world]} els={els} {...input} />
+            {/* The bay: arrows at the screen's edge toward glows that are off screen. */}
+            {mount.world === 'bay' &&
+              GLOWS.map((g) => (
+                <div
+                  key={g}
+                  role="button"
+                  aria-label={`Go to: ${g}`}
+                  ref={(el) => {
+                    if (el) arrowEls.current.set(g, el)
+                    else arrowEls.current.delete(g)
+                  }}
+                  // Tap the badge: the boat sets off there.
+                  onPointerDown={(e) => {
+                    e.stopPropagation()
+                    sounds.pop()
+                    worldRef.current?.tap(0, 0, `glow:${g}`)
+                  }}
+                  style={{ position: 'absolute', left: 0, top: 0, display: 'none', zIndex: 19000, cursor: 'pointer' }}
                 >
-                  👆
-                </motion.div>
-              </div>
-            </>
-          )}
-        />
-      )}
+                  {/* The pointer (bay.ts turns it toward the glow), then the glow's little badge. */}
+                  <div style={{ position: 'absolute', left: -34, top: -34, width: 68, height: 68 }}>
+                    <div style={{ position: 'absolute', left: 22, top: -18, width: 0, height: 0, borderLeft: '12px solid transparent', borderRight: '12px solid transparent', borderBottom: '18px solid #fff' }} />
+                  </div>
+                  <div style={{ position: 'absolute', left: -34, top: -34, width: 68, height: 68, display: 'grid', placeItems: 'center', borderRadius: '50%', background: 'rgba(255,200,61,.9)', border: '4px solid #fff', boxShadow: '0 0 16px 4px rgba(255,200,61,.6)', fontSize: 30 }}>{ARROW_ICONS[g]}</div>
+                </div>
+              ))}
+            {/* After a while with nothing touched: a finger pressing where to touch. */}
+            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
+              <motion.div
+                animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }}
+                transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }}
+                style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}
+              >
+                👆
+              </motion.div>
+            </div>
+          </>
+        )}
+      />
       {mode === 'lost' && (
         <button
           onClick={() => {

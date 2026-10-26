@@ -2,7 +2,7 @@
 // with nothing touched, the photo Mommy takes on the deck (a flash, then it pops up like a print), the video of real rice
 // growing (skippable: ⏭ ☕ back to the deck; the 3D world holds still under it), and the end card: 🔁 the farm again, or
 // 🗺️ back to the Nan map (its stamp lands there). Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks
-// out loud in their own voice. (No flat version: 3D activities don't need one.)
+// out loud in their own voice.
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
@@ -69,28 +69,26 @@ export function Rice({ round, onRound, onMap }: Props) {
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#D6E3EE', overflow: 'clip' }}>
-      {mode !== 'flat' && (
-        <View3D
-          key={key}
-          name="Rice farm"
-          qaKey="__thaiNanQA"
-          worldRef={worldRef}
-          paused={video}
-          onMode={setMode}
-          make={make}
-          anchors={(input, els) => (
-            <>
-              <Anchors list={RICE_ANCHORS} els={els} {...input} />
-              {/* After a while with nothing touched: a finger on what to do next. */}
-              <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-                <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.0, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                  👆
-                </motion.div>
-              </div>
-            </>
-          )}
-        />
-      )}
+      <View3D
+        key={key}
+        name="Rice farm"
+        qaKey="__thaiNanQA"
+        worldRef={worldRef}
+        paused={video}
+        onMode={setMode}
+        make={make}
+        anchors={(input, els) => (
+          <>
+            <Anchors list={RICE_ANCHORS} els={els} {...input} />
+            {/* After a while with nothing touched: a finger on what to do next. */}
+            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
+              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.0, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
+                👆
+              </motion.div>
+            </div>
+          </>
+        )}
+      />
       {mode === 'lost' && (
         <button
           onClick={() => {

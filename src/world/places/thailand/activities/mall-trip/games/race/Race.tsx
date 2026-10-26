@@ -1,12 +1,10 @@
 // The Racing Slide's screen: the 3D slide (track.ts), its tap targets, the countdown's big numbers, the ring that closes
-// on her before each bump (rounds 2 and 3), the 👆 when she's stuck (or the first time something's new), and the flat
-// picture version without WebGL (Flat.tsx). After three races a big 🛝 takes her back to the playground.
+// on her before each bump (rounds 2 and 3) and the 👆 when she's stuck (or the first time something's new). After three races a big 🛝 takes her back to the playground.
 import { AnimatePresence, motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../../engine/View3D'
-import { RaceFlat } from './Flat'
 import { RACE_ANCHORS, RaceSlide } from './track'
 import { mallVoice } from '../../voice'
 
@@ -55,31 +53,27 @@ export function Race({ round, onRound, onWon, onPlay }: Props) {
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#4A4166', overflow: 'clip' }}>
-      {mode === 'flat' ? (
-        <RaceFlat round={round} onRound={onRound} onWon={onWon} onAllDone={() => setAllDone(true)} />
-      ) : (
-        <View3D
-          key={key}
-          name="The Racing Slide"
-          qaKey="__thaiMallQA"
-          worldRef={worldRef}
-          onMode={setMode}
-          make={make}
-          anchors={(input, els) => (
-            <>
-              <Anchors list={RACE_ANCHORS} els={els} {...input} />
-              {/* Before each bump (rounds 2 and 3): a ring closing on her, gold when a tap makes her fly. */}
-              <div ref={ringRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 15000, borderRadius: '50%', border: '6px solid rgba(255,255,255,.9)', boxSizing: 'border-box' }} />
-              {/* Stuck for a while, or the first time something's new: a finger on what to tap. */}
-              <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-                <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 0.9, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                  👆
-                </motion.div>
-              </div>
-            </>
-          )}
-        />
-      )}
+      <View3D
+        key={key}
+        name="The Racing Slide"
+        qaKey="__thaiMallQA"
+        worldRef={worldRef}
+        onMode={setMode}
+        make={make}
+        anchors={(input, els) => (
+          <>
+            <Anchors list={RACE_ANCHORS} els={els} {...input} />
+            {/* Before each bump (rounds 2 and 3): a ring closing on her, gold when a tap makes her fly. */}
+            <div ref={ringRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 15000, borderRadius: '50%', border: '6px solid rgba(255,255,255,.9)', boxSizing: 'border-box' }} />
+            {/* Stuck for a while, or the first time something's new: a finger on what to tap. */}
+            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
+              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 0.9, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
+                👆
+              </motion.div>
+            </div>
+          </>
+        )}
+      />
       {mode === 'lost' && (
         <button
           onClick={() => {

@@ -1,12 +1,11 @@
 // HarborLand's Big Frame on screen: the 3D frame in its hall (frame.ts) with its tap targets, the lit sign's letters laid
-// over it, the 👆 after a while with nothing touched, and the flat picture page without WebGL (Flat.tsx). The `at` in
+// over it and the 👆 after a while with nothing touched. The `at` in
 // the address follows the level she's on.
 import { motion } from 'motion/react'
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../engine/Anchors'
 import { View3D, type RenderMode } from '../../../engine/View3D'
-import { Flat } from './Flat'
 import { BigFrame, FRAME_ANCHORS } from './frame'
 import type { At, RideId } from './layout'
 import { HarborSign } from './sign'
@@ -17,13 +16,11 @@ interface Props {
   socks: string
   /** Daddy's hairdo from the barber. */
   hair: string
-  /** She's been on a big ride already (the frame's sticker is on her sock band). */
-  rode: boolean
   onAt(at: At): void
   onRide(id: RideId): void
 }
 
-export function FrameScreen({ at, socks, hair, rode, onAt, onRide }: Props) {
+export function FrameScreen({ at, socks, hair, onAt, onRide }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const worldRef = useRef<BigFrame | null>(null)
@@ -44,30 +41,26 @@ export function FrameScreen({ at, socks, hair, rode, onAt, onRide }: Props) {
 
   return (
     <>
-      {mode === 'flat' ? (
-        <Flat rode={rode} onRide={onRide} />
-      ) : (
-        <View3D
-          key={key}
-          name="the Big Frame"
-          qaKey="__thaiMallQA"
-          worldRef={worldRef}
-          onMode={setMode}
-          make={make}
-          anchors={(input, els) => (
-            <>
-              <HarborSign ref={signRef} />
-              <Anchors list={FRAME_ANCHORS} els={els} {...input} />
-              {/* After a while with nothing touched: a finger pressing a big ride she hasn't had yet. */}
-              <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-                <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                  👆
-                </motion.div>
-              </div>
-            </>
-          )}
-        />
-      )}
+      <View3D
+        key={key}
+        name="the Big Frame"
+        qaKey="__thaiMallQA"
+        worldRef={worldRef}
+        onMode={setMode}
+        make={make}
+        anchors={(input, els) => (
+          <>
+            <HarborSign ref={signRef} />
+            <Anchors list={FRAME_ANCHORS} els={els} {...input} />
+            {/* After a while with nothing touched: a finger pressing a big ride she hasn't had yet. */}
+            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
+              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 1.1, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
+                👆
+              </motion.div>
+            </div>
+          </>
+        )}
+      />
       {mode === 'lost' && (
         <button
           onClick={() => {
