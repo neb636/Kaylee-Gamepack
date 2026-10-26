@@ -72,9 +72,9 @@ export interface DriveEvents {
 /** Where a drive starts: rolling at the start of the road, or (the 3 road) parked at the viewpoint, the 3 below. */
 export type DriveStart = 'road' | 'view'
 
-/** The heavy, bouncy Pajero, leaning a lot. 40% quicker than it first was (top 9.5, accel 4, turn 1.15): the turn rate
+/** The heavy, bouncy Pajero, leaning a lot. 60% quicker than it first was (top 9.5, accel 4, turn 1.15): the turn rate
  *  rises with it so it still holds the same line round the hairpins. */
-const ZOOM = 1.4
+const ZOOM = 1.6
 const PAJERO_FEEL: Feel = { top: 9.5 * ZOOM, boost: 1.2, accel: 4 * ZOOM, coast: 0.6, turn: 1.15 * ZOOM, grip: 7, near: 2, far: 7, dead: 0.02, lean: 0.12 }
 /** The steering ring (sled style): how far across the road the knob pushed all the way slides it (m/s), the middle
  *  that counts as straight (share of the ring), and how quickly Mommy eases it back into her lane after she lets go (s). */
