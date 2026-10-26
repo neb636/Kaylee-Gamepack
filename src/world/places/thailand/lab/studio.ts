@@ -9,11 +9,11 @@ import { Box3, CircleGeometry, Color, Group, Mesh, MeshBasicMaterial, Plane, Ray
 import { clamp, say } from '../../../../sdk'
 import { applyPose, clearPose } from '../activities/boat-trip/bay/poses'
 import { buildBird, buildCat, buildCrab, buildLizard, buildMacaque, buildMudskipper, buildNeedlefish, buildPorpoise, type Blink, type CritterId } from '../activities/boat-trip/bay/critters'
-import { Avatar } from '../characters/avatar'
+import { Avatar, SHOW_SECS } from '../characters/avatar'
 import { kayleeModel, loadKayleeModel } from '../characters/model'
 import { Member } from '../characters/member'
 import type { Wearable } from '../characters/looks'
-import { parseLook } from '../characters/style'
+import { parseLook, type ShowPose } from '../characters/style'
 import type { Pose } from '../characters/types'
 import { CameraRig, type Shot } from '../engine/camera'
 import { Bag } from '../engine/dispose'
@@ -310,6 +310,12 @@ export class Studio implements World3D {
       const every = ACTION_SECS[kind] / 5
       this.film = { frames: [], t: 0, every, next: 0 }
     }
+  }
+
+  /** Kaylee shows off something she put on (the wardrobe's poses: style.ts's `pose` for each thing). */
+  showOff(kind: ShowPose) {
+    for (const a of this.actors) if (a.char instanceof Avatar) a.char.showOff(kind)
+    this.film = { frames: [], t: 0, every: SHOW_SECS[kind] / 5, next: 0 }
   }
 
   /** Plays a line in the selected character's voice (their mouth moves with it). */

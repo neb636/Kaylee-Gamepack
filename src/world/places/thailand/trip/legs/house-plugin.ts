@@ -801,13 +801,15 @@ export class TripHouse implements HousePlugin {
       this.flyTo(th, this.slotWorld(this.order.length - 1, this.order.length), undefined, 0.4)
     }
     // Sun smarts: a shady hat of her own (the cap) counts, so Mommy's spare stays in her bag (Avatar's costume layer
-    // leaves it off; gate 4 gives Mommy her "Good hat, Kaylee!").
+    // leaves it off) and Mommy says it's a good one.
     const shady = !!itemById(this.house.kaylee.myLook.on.head ?? '')?.shade
-    const spare = !this.order.includes('sunhat') && this.weather === 'sun' && !shady
+    const sunny = !this.order.includes('sunhat') && this.weather === 'sun'
+    const spare = sunny && !shady
     if (spare) this.events.say(L.trip.pack.hat)
+    else if (sunny) this.events.say(L.trip.pack.goodHat)
     else if (added.includes('sunscreen')) this.events.say(L.trip.pack.sunscreen)
     else if (added.includes('umbrella')) this.events.say(L.nan.trip.umbrella)
-    if (added.length || spare) ji?.react('wiggle')
+    if (added.length || sunny) ji?.react('wiggle')
     this.events.packed([...this.order])
     this.setPhase('closed')
     setTimeout(() => {

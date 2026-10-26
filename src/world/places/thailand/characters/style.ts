@@ -3,8 +3,8 @@
 // fur. Saved on the iPad (the wardrobe writes it with useSaved('thailand-look')), and any link can set it with
 // `?look=crown,hearts,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky` (a sticky param, kit/sections.ts).
 //
-// Her look is a layer of its own: the game's costumes (Avatar.wear: the vet's scrubs, the packed sun hat) are another.
-// Greybox 1 wears it in the house; greybox 2 puts it on in every scene and lets a costume take only the spots it needs.
+// Her look is a layer of its own: the game's costumes (Avatar.wear: the vet's scrubs, the packed sun hat) are another,
+// and a costume takes only the spots it needs (avatar.ts's Dress).
 //
 // Pure data (no three.js): the closet (closet/) builds the things, model.ts paints the colors.
 import { savedKey } from '../../../../sdk/hooks'
@@ -18,6 +18,10 @@ export type PaintPart = 'dress' | 'hair' | 'fur'
 export const PAINT_PARTS: readonly PaintPart[] = ['dress', 'hair', 'fur']
 export type PaintColor = 'pink' | 'lilac' | 'mint' | 'sky' | 'butter' | 'peach' | 'brown' | 'cream'
 
+/** How she shows a thing off when it pops on (Avatar.showOff): a curtsy for the crown, a flutter hop for wings, a cool
+ *  lean for sunglasses... */
+export type ShowPose = 'curtsy' | 'wave' | 'twirl' | 'cute' | 'bunny' | 'paw' | 'cheer' | 'yeehaw' | 'peek' | 'cool' | 'flutter' | 'stomp'
+
 export interface Item {
   id: string
   slot: Slot
@@ -25,27 +29,43 @@ export interface Item {
   name: string
   /** Its main color (the drawer's swatch, the shelf). */
   color: string
+  /** Her little show when it goes on. */
+  pose: ShowPose
   /** A shady hat: it counts as a sun hat on a sunny trip (greybox 2's sun smarts). */
   shade?: boolean
   /** Tinted glasses: they count as sunglasses. */
   tinted?: boolean
 }
 
-/** Greybox 1's things: 2-3 per drawer, simple shapes (closet/). The plan's full list (~30) comes in gate 3. Ids are
- *  unique across slots, so a look is just a list of ids. */
+/** Everything in her wardrobe, drawer by drawer in the order they stand on the shelves (closet/ builds them). Ids are
+ *  unique across slots, so a look is just a list of ids. Her striped dress isn't a thing: it's what she wears under
+ *  everything (the paint changes its color). */
 export const ITEMS: readonly Item[] = [
-  { id: 'crown', slot: 'head', name: 'Crown', color: '#FFC83D' },
-  { id: 'bow', slot: 'head', name: 'Big bow', color: '#FF4F9A' },
-  { id: 'cap', slot: 'head', name: 'Cap', color: '#8EC9F5', shade: true },
-  { id: 'hearts', slot: 'face', name: 'Heart sunglasses', color: '#FF4F9A', tinted: true },
-  { id: 'stars', slot: 'face', name: 'Star sunglasses', color: '#FFC83D', tinted: true },
-  { id: 'round', slot: 'face', name: 'Round glasses', color: '#B9A6F5' },
-  { id: 'fairy', slot: 'back', name: 'Fairy wings', color: '#C9F2E4' },
-  { id: 'cape', slot: 'back', name: 'Princess cape', color: '#B48CF0' },
-  { id: 'tutu', slot: 'outfit', name: 'Tutu', color: '#D9CCFF' },
-  { id: 'gown', slot: 'outfit', name: 'Princess gown', color: '#FBEA9A' },
-  { id: 'sneakers', slot: 'feet', name: 'Light-up sneakers', color: '#FFFFFF' },
-  { id: 'boots', slot: 'feet', name: 'Rain boots', color: '#FF8FB8' },
+  { id: 'crown', slot: 'head', name: 'Crown', color: '#FFC83D', pose: 'curtsy' },
+  { id: 'tiara', slot: 'head', name: 'Tiara', color: '#E9E4FF', pose: 'wave' },
+  { id: 'orchid', slot: 'head', name: 'Orchid crown', color: '#C86BE0', pose: 'twirl' },
+  { id: 'bow', slot: 'head', name: 'Big bow', color: '#FF4F9A', pose: 'cute' },
+  { id: 'bunny', slot: 'head', name: 'Bunny ears', color: '#FFFFFF', pose: 'bunny' },
+  { id: 'kitty', slot: 'head', name: 'Cat ears', color: '#5A4A66', pose: 'paw' },
+  { id: 'cap', slot: 'head', name: 'Cap', color: '#8EC9F5', pose: 'cheer', shade: true },
+  { id: 'cowboy', slot: 'head', name: 'Cowboy hat', color: '#FF8FB8', pose: 'yeehaw', shade: true },
+  { id: 'bucket', slot: 'head', name: 'Bucket hat', color: '#FBE27A', pose: 'peek', shade: true },
+  { id: 'sunhat', slot: 'head', name: 'Sun hat', color: '#FFE3A8', pose: 'cute', shade: true },
+  { id: 'hearts', slot: 'face', name: 'Heart sunglasses', color: '#FF4F9A', pose: 'cool', tinted: true },
+  { id: 'stars', slot: 'face', name: 'Star sunglasses', color: '#FFC83D', pose: 'cool', tinted: true },
+  { id: 'round', slot: 'face', name: 'Round glasses', color: '#B9A6F5', pose: 'peek' },
+  { id: 'fairy', slot: 'back', name: 'Fairy wings', color: '#C9F2E4', pose: 'flutter' },
+  { id: 'wings', slot: 'back', name: 'Unicorn wings', color: '#FFC2DD', pose: 'flutter' },
+  { id: 'cape', slot: 'back', name: 'Princess cape', color: '#B48CF0', pose: 'twirl' },
+  { id: 'backpack', slot: 'back', name: 'Bunny backpack', color: '#FFD3E5', pose: 'bunny' },
+  { id: 'tutu', slot: 'outfit', name: 'Tutu', color: '#D9CCFF', pose: 'twirl' },
+  { id: 'gown', slot: 'outfit', name: 'Princess gown', color: '#FBEA9A', pose: 'curtsy' },
+  { id: 'overalls', slot: 'outfit', name: 'Overalls', color: '#7FB2EE', pose: 'cheer' },
+  { id: 'chut-thai', slot: 'outfit', name: 'Chut thai', color: '#C04FB0', pose: 'wave' },
+  { id: 'sneakers', slot: 'feet', name: 'Light-up sneakers', color: '#FFFFFF', pose: 'stomp' },
+  { id: 'party', slot: 'feet', name: 'Party shoes', color: '#C9B5F7', pose: 'twirl' },
+  { id: 'boots', slot: 'feet', name: 'Rain boots', color: '#FF8FB8', pose: 'stomp' },
+  { id: 'sandals', slot: 'feet', name: 'Sandals', color: '#8FE3C8', pose: 'bunny' },
 ]
 export const itemById = (id: string) => ITEMS.find((i) => i.id === id)
 

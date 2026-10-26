@@ -1836,7 +1836,8 @@ export class RiceFarm extends Stage {
       center.x += (k.x - center.x) * (tall ? 0.2 : 0.1)
       center.z += (k.z - center.z) * 0.08
       if (tall) return { center, half: new Vector3(5.5, 0.6, 4.4), yaw: 0, pitch: 58, minDist: 8 }
-      return { center, half: new Vector3(5.4, 0.6, 4.25), yaw: 0, pitch: 46, minDist: 8 }
+      // Wide: low and close, looking across the paddies (Dad's camera-lab framing on iPhone landscape).
+      return { center, half: new Vector3(4.48, 0.5, 3.53), yaw: 0, pitch: 17, minDist: 6.64 }
     }
     if (this.phase === 'thresh') {
       const center = new Vector3(BASKET[0] - 0.2, 0.7, BASKET[2] - 1.0)

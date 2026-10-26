@@ -126,6 +126,7 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   - [Doors open](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/wardrobe)
   - [Hats drawer out](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/wardrobe?drawer=head) (`drawer=face`, `back`, `outfit`, `feet`)
   - [Paint drawer out](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/wardrobe?drawer=paint)
+  - [Four pictures of looks on the door](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/wardrobe?drawer=head&door=crown,hearts,tutu;bow,fairy,dress-mint;cap,stars,cape;overalls,boots,hair-pink,fur-sky) (`door=` up to 4 looks, `;` between them, `bare` for a picture with nothing on; the mirror inside the right door takes new ones; Sparkle's wand floats by the rug)
   - [Her room in a look](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/upstairs?look=crown,hearts,fairy,dress-mint)
 - [Family photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/family)
 
