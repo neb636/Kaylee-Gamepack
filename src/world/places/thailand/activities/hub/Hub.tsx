@@ -238,14 +238,22 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
             key="mirror"
             aria-label="Dress up"
             initial={{ scale: 0 }}
-            animate={{ scale: 1, rotate: [-6, 6, -6] }}
+            animate={{ scale: 1 }}
             exit={{ scale: 0 }}
-            transition={{ scale: { type: 'spring', delay: 0.2 }, rotate: { repeat: Infinity, duration: 2.8, ease: 'easeInOut' } }}
+            transition={{ type: 'spring', delay: 0.2 }}
             whileTap={{ scale: 0.85 }}
             onClick={toWardrobe}
-            style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', right: 'calc(var(--safe-right, 0px) + 16px)', width: 'var(--btn)', height: 'var(--btn)', borderRadius: '50%', border: '4px solid #fff', background: 'var(--pink)', fontSize: 'calc(var(--btn) * .5)', boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center', zIndex: 50 }}
+            // A big target (--target: 96px on iPad, 72px in iPhone landscape) round a circle the size of the top bar's
+            // buttons, lined up with them.
+            style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px - (var(--target) - var(--btn)) / 2)', right: 'calc(var(--safe-right, 0px) + 16px - (var(--target) - var(--btn)) / 2)', width: 'var(--target)', height: 'var(--target)', padding: 0, border: 'none', background: 'none', display: 'grid', placeItems: 'center', zIndex: 50 }}
           >
-            🪞
+            <motion.span
+              animate={{ rotate: [-6, 6, -6] }}
+              transition={{ repeat: Infinity, duration: 2.8, ease: 'easeInOut' }}
+              style={{ width: 'var(--btn)', height: 'var(--btn)', borderRadius: '50%', border: '4px solid #fff', background: 'var(--pink)', fontSize: 'calc(var(--btn) * .5)', boxShadow: 'var(--shadow)', display: 'grid', placeItems: 'center', boxSizing: 'border-box' }}
+            >
+              🪞
+            </motion.span>
           </motion.button>
         )}
       </AnimatePresence>
