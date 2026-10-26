@@ -642,6 +642,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
         qaKey="__thaiBoatQA"
         worldRef={worldRef}
         onMode={setMode}
+        // Baan Chang holds still under the elephants' video (no splashes, trumpets or hints over it), like the rice farm.
+        paused={!!changVideo}
         make={make}
         anchors={(input, els) => (
           <>
