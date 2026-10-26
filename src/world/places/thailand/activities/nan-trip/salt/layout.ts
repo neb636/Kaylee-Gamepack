@@ -107,4 +107,4 @@ export const ROOSTER: V3 = [-2.45, 0, -1.65]
 export const ROAD_Z = -2.6
 export const MURAL = { x: 0.7, y: 1.12, z: -4.15, w: 2.6, h: 1.55 }
 /** On a tall screen the edges come in a little, so everyone fits. */
-export const TALL = { ji: [-1.55, 0, -0.85] as V3, aunty: [1.9, 0, -0.62] as V3, wood: [1.95, 0, 0.75] as V3, baskets: [-1.95, 0, 0.62] as V3 }
+export const TALL = { ji: [-1.55, 0, -0.85] as V3, aunty: [1.7, 0, -0.75] as V3, wood: [1.95, 0, 0.75] as V3, baskets: [-1.95, 0, 0.62] as V3 }

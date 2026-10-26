@@ -660,13 +660,13 @@ export class RentalDesk extends Stage {
     if (this.speed > 0) return { center: c.clone().setY(1.1), half: new Vector3(3.2, 1.3, 1.6), yaw: 0, pitch: 12, minDist: 6 }
     if (this.round === 'belt')
       // At Kaylee's open door: her in her seat, the belt, Mommy at the wheel in front.
-      return tall ? { center: new Vector3(3.9, 1.25, -0.9), half: new Vector3(1.0, 0.9, 0.9), yaw: 0, pitch: 12, minDist: 3 } : { center: new Vector3(4.05, 1.25, -0.95), half: new Vector3(1.35, 0.8, 0.9), yaw: 0, pitch: 10, minDist: 3 }
+      return tall ? { center: new Vector3(4.0, 1.1, -1.0), half: new Vector3(1.4, 0.9, 0.9), yaw: -12, pitch: 24, minDist: 3 } : { center: new Vector3(4.05, 1.25, -0.95), half: new Vector3(1.35, 0.8, 0.9), yaw: 0, pitch: 10, minDist: 3 }
     if (this.round === 'boot')
       // From behind and beside the car: the open boot and the bags waiting.
-      return tall ? { center: new Vector3(1.25, 0.85, -1.35), half: new Vector3(1.4, 1.0, 1.3), yaw: -62, pitch: 22, minDist: 3 } : { center: new Vector3(1.3, 0.85, -1.4), half: new Vector3(1.6, 0.85, 1.4), yaw: -62, pitch: 20, minDist: 3 }
+      return tall ? { center: new Vector3(2.3, 0.9, -1.4), half: new Vector3(2.6, 1.0, 1.3), yaw: -55, pitch: 22, minDist: 3 } : { center: new Vector3(1.3, 0.85, -1.4), half: new Vector3(1.6, 0.85, 1.4), yaw: -62, pitch: 20, minDist: 3 }
     // The counter, Kaylee with the fob, and the Pajero waiting in the car park.
     // (Tall: Kaylee and the end of the counter, the Pajero's back with its winking tail lamps.)
-    if (tall) return { center: new Vector3(1.2, 1.05, -1.3), half: new Vector3(2.75, 1.2, 1.3), yaw: 0, pitch: 14, minDist: 4 }
+    if (tall) return { center: new Vector3(2.15, 1.0, -1.5), half: new Vector3(4.1, 0.9, 1.1), yaw: -42, pitch: 16, minDist: 4 }
     return { center: new Vector3(1.65, 1.0, -1.35), half: new Vector3(4.55, 0.95, 1.25), yaw: 0, pitch: 12, minDist: 4 }
   }
 

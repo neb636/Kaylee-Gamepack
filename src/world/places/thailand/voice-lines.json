@@ -777,7 +777,7 @@
   "Tap the pizza to share it!",
   "Mushrooms grow from sawdust, not seeds!",
   {
-    "text": "Sawasdee ka! My mushrooms are thirsty!",
+    "text": "My mushrooms are thirsty!",
     "voice": "farmer"
   },
   {
@@ -837,7 +837,7 @@
   "Move the paddle through the salt!",
   "The water boils away, and the salt stays!",
   {
-    "text": "Sawasdee ka! This well is very salty!",
+    "text": "This well is very salty!",
     "voice": "saltaunty"
   },
   {

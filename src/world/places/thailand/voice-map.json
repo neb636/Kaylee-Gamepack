@@ -2058,11 +2058,11 @@
     "file": "c85be58b8e1a.mp3"
   },
   {
-    "text": "Sawasdee ka! My mushrooms are thirsty!",
+    "text": "My mushrooms are thirsty!",
     "voice": "farmer",
     "sig": "b380f72617",
-    "ms": 4113,
-    "file": "7beec7cbd8f6.mp3"
+    "ms": 2426,
+    "file": "4aecf410fb41.mp3"
   },
   {
     "text": "Look at them grow!",
@@ -2205,11 +2205,11 @@
     "file": "8bbbb92f90e0.mp3"
   },
   {
-    "text": "Sawasdee ka! This well is very salty!",
+    "text": "This well is very salty!",
     "voice": "saltaunty",
     "sig": "501a2e7836",
-    "ms": 4493,
-    "file": "df4b813b2ef6.mp3"
+    "ms": 2654,
+    "file": "f95642bf89ac.mp3"
   },
   {
     "text": "Now we light the fire!",

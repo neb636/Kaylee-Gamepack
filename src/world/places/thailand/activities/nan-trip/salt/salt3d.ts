@@ -1231,13 +1231,16 @@ export class SaltHut extends Stage {
 
   protected shot(): Shot {
     const tall = this.w < this.h
+    // A very wide, short screen (an iPhone on its side): a little more room above and below, so heads and feet stay
+    // clear of the top bar and the bottom edge.
+    const wide = this.w > this.h * 1.8
     if (this.round === '3') {
-      // Down on the pan, her basket beside it.
-      if (tall) return { center: new Vector3(0.55, 0.78, 0.2), half: new Vector3(0.95, 0.5, 0.8), yaw: 0, pitch: 58, minDist: 2.6 }
-      return { center: new Vector3(0.6, 0.78, 0.15), half: new Vector3(1.6, 0.45, 0.78), yaw: 0, pitch: 55, minDist: 3 }
+      // Down on the pan, Kaylee at its left end with her basket, the aunty behind its right end.
+      if (tall) return { center: new Vector3(0.6, 0.78, 0.15), half: new Vector3(1.3, 0.5, 0.8), yaw: 0, pitch: 58, minDist: 2.6 }
+      return { center: new Vector3(0.6, 0.8, 0.15), half: new Vector3(1.6, wide ? 0.62 : 0.45, 0.78), yaw: 0, pitch: 55, minDist: 3 }
     }
     if (tall) return { center: new Vector3(0.05, 1.0, 0.3), half: new Vector3(2.0, 1.15, 0.8), yaw: 0, pitch: 32, minDist: 3 }
-    return { center: new Vector3(0.1, 1.1, 0.15), half: new Vector3(2.3, 1.1, 0.65), yaw: 0, pitch: 22, minDist: 3 }
+    return { center: new Vector3(0.1, wide ? 1.05 : 1.1, 0.15), half: new Vector3(2.3, wide ? 1.32 : 1.1, 0.65), yaw: 0, pitch: 22, minDist: 3 }
   }
 
   /** What the hint finger (and the glow) points at now. */

@@ -53,6 +53,7 @@ import {
   EATERS,
   FARMER_AT,
   FARMER_TABLE,
+  FARMER_TABLE_TALL,
   formatBasket,
   GECKO,
   GIANT,
@@ -517,7 +518,7 @@ export class MushroomFarm extends Stage {
     // The aunty goes ahead to light the oven (once the camera has left the house).
     const f = this.house.farmer.root
     const go = () => {
-      f.position.set(...FARMER_TABLE)
+      f.position.set(...(this.w < this.h ? FARMER_TABLE_TALL : FARMER_TABLE))
       f.rotation.y = 0.9
     }
     if (now) go()
@@ -1546,6 +1547,7 @@ export class MushroomFarm extends Stage {
       this.house.farmer.root.position.set(...(tall ? TALL.farmer : FARMER_AT))
       this.homeZ = k[2]
     }
+    if (this.phase === 'table' && !this.bake) this.house.farmer.root.position.set(...(tall ? FARMER_TABLE_TALL : FARMER_TABLE))
     super.setSize(w, h, top)
   }
   private homeZ = KAYLEE_AT[2]
@@ -1553,11 +1555,13 @@ export class MushroomFarm extends Stage {
   protected shot(): Shot {
     const tall = this.w < this.h
     if (this.phase === 'house') {
-      if (tall) return { center: new Vector3(0, 0.95, 0.3), half: new Vector3(1.42, 1.0, 0.55), yaw: 5, pitch: 13, minDist: 3 }
+      if (tall) return { center: new Vector3(0.15, 0.95, 0.3), half: new Vector3(1.8, 1.0, 0.55), yaw: 5, pitch: 13, minDist: 3 }
       return { center: new Vector3(0.1, 1.0, 0.2), half: new Vector3(2.35, 0.85, 0.5), yaw: 7, pitch: 12, minDist: 3 }
     }
     // The pizza big in the middle, the plates and the family's faces behind it, the oven at the side.
-    if (tall) return { center: new Vector3(TX - 0.3, 0.85, -0.2), half: new Vector3(1.25, 0.75, 0.75), yaw: 0, pitch: 46, minDist: 2.5 }
+    if (tall) return { center: new Vector3(TX - 0.45, 0.9, -0.3), half: new Vector3(1.45, 0.8, 0.85), yaw: 0, pitch: 46, minDist: 2.5 }
+    // A short, wide screen (an iPhone on its side): taller box, so the family's heads clear the top bar.
+    if (this.w / this.h > 1.7) return { center: new Vector3(TX - 0.45, 1.08, -0.35), half: new Vector3(1.55, 0.78, 0.75), yaw: 0, pitch: 38, minDist: 2.5 }
     return { center: new Vector3(TX - 0.45, 0.85, -0.2), half: new Vector3(1.55, 0.42, 0.7), yaw: 0, pitch: 44, minDist: 2.5 }
   }
 
