@@ -47,6 +47,9 @@ export interface CamView {
 
 export const DEFAULTS: CamView = { mode: 'nudge', yaw: 0, pitch: 0, zoom: 1, fov: 0, px: 0, py: 0, frame: 'fill', guides: ['bar', 'targets'] }
 
+/** The view with the game's own camera again (the screen and the guides stay): every new scene starts here. */
+export const freshCamera = (v: CamView): CamView => ({ ...DEFAULTS, frame: v.frame, guides: v.guides })
+
 const num = (v: string | undefined, d: number) => (v !== undefined && v !== '' && !isNaN(+v) ? +v : d)
 
 /** The view a link describes (anything missing: the defaults). */

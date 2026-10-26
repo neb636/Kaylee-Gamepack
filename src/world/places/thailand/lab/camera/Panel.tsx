@@ -8,7 +8,7 @@ import { findPlace, sectionsFor } from '../../../../registry'
 import { camLab } from '../../engine/camLab'
 import { TUNE } from '../../engine/tune'
 import { IconButton, Section, Segmented, Select, Slider, Toggle, Field } from '../ui'
-import { camParams, DEFAULTS, FRAMES, frameById, GUIDES, untouched, withoutCam, type CamView } from './link'
+import { camParams, FRAMES, frameById, freshCamera, GUIDES, untouched, withoutCam, type CamView } from './link'
 
 export interface PanelProps {
   place: string
@@ -60,11 +60,10 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
   const tall = screen.w < screen.h
   const reach = Math.max(1, Math.ceil(Math.max(shot?.half.x ?? 1, shot?.half.y ?? 1, shot?.half.z ?? 1) * 2))
 
-  const open = (act: string, sec: string | undefined, keep: boolean) => {
-    // Another activity starts from the game's own camera; another section of the same one keeps yours. (The lab reads
-    // the new link's camera.)
-    const next = keep ? view : { ...DEFAULTS, frame: view.frame, guides: view.guides }
-    location.hash = worldLink(place, act, sec, camParams(next))
+  // Another scene starts from the game's own camera, so what you change is only ever this scene's. (The lab reads the
+  // new link's camera.)
+  const open = (act: string, sec: string | undefined) => {
+    location.hash = worldLink(place, act, sec, camParams(freshCamera(view)))
   }
 
   const setMode = (mode: CamView['mode']) => {
@@ -75,7 +74,7 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
     else set({ mode, yaw: view.yaw - g.yaw, pitch: view.pitch - g.pitch })
   }
 
-  const reset = () => set({ mode: 'nudge', yaw: 0, pitch: 0, zoom: 1, fov: 0, px: 0, py: 0 })
+  const reset = () => set(freshCamera(view))
 
   const copy = (text: string, done: string) => {
     if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => toast(done), () => toast('Copy it from the address bar'))
@@ -137,7 +136,7 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
               options={activities.map((a) => ({ id: a.id, label: `${a.icon ?? ''} ${a.name}` }))}
               label={<span className="cm-ellipsis">{activities.find((a) => a.id === activity)?.name ?? 'Pick a game'}</span>}
               align="right"
-              onChange={(id) => open(id, undefined, false)}
+              onChange={(id) => open(id, undefined)}
             />
           </Field>
           <Field label={<span className="cl-sub">Section</span>}>
@@ -146,7 +145,7 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
               options={sections.map((s, i) => ({ id: s.id, label: `${i + 1}. ${s.name}` }))}
               label={<span className="cm-ellipsis">{sections.find((s) => s.id === here?.id)?.name ?? 'From the start'}</span>}
               align="right"
-              onChange={(id) => activity && open(activity, id, true)}
+              onChange={(id) => activity && open(activity, id)}
             />
           </Field>
           {state.length > 0 && <div className="cl-sub cm-mono">{state.join(' · ')}</div>}

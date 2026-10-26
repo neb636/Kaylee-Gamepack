@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom'
 import { camLab } from '../../engine/camLab'
 import { IconButton } from '../ui'
 import { Guides } from './Guides'
-import { frameById, fromParams, toOverride, writeHash, type CamView, type Frame } from './link'
+import { frameById, freshCamera, fromParams, toOverride, untouched, writeHash, type CamView, type Frame } from './link'
 import { CamPanel } from './Panel'
 import '../lab.css'
 
@@ -76,6 +76,37 @@ export default function CameraLab({ place, params, host }: { place: string; para
     setToast(text)
     clearTimeout(toastTimer.current)
     toastTimer.current = window.setTimeout(() => setToast(null), 1800)
+  }, [])
+
+  // The game moving on by itself (the next section or round, as she plays) is a new scene too: back to the game's own
+  // camera, so a change made for one scene never carries into the next. A link opened by hand keeps its camera: the
+  // section it lands on is adopted as it is.
+  const scene = useRef<string | null>(null)
+  useEffect(() => {
+    const key = () => {
+      const s = window.__kayleeSection
+      return s ? JSON.stringify([s.place, s.activity, s.id, s.params]) : null
+    }
+    scene.current = key()
+    const onHash = () => {
+      window.__kayleeSection = undefined
+      scene.current = null
+    }
+    const id = setInterval(() => {
+      const k = key()
+      if (!k || k === scene.current) return
+      const moved = scene.current !== null
+      scene.current = k
+      if (moved && !untouched(viewRef.current)) {
+        setView(freshCamera(viewRef.current))
+        showToast('New scene: the game’s camera')
+      }
+    }, 250)
+    window.addEventListener('hashchange', onHash)
+    return () => {
+      clearInterval(id)
+      window.removeEventListener('hashchange', onHash)
+    }
   }, [])
 
   // How much room the frame has (measured before the first paint, so the game never lays out at zero size).
