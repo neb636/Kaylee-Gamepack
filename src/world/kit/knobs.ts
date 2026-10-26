@@ -96,9 +96,11 @@ export const feelLab = {
     for (const g of groups.values()) for (const [k, s] of Object.entries(g.specs)) g.values[k] = s.value
     emit()
   },
-  /** The feel.* params for what differs from the defaults. */
+  /** The feel.* params for what differs from the defaults (and the link's own, for a game that hasn't loaded yet: the
+   *  lab can open before the game's code, which reads them when it declares its knobs). */
   params() {
     const p: Record<string, string> = {}
+    for (const [k, v] of linkValues()) if (!groups.has(k.split('.')[0])) p[`${PREFIX}${k}`] = String(v)
     for (const g of groups.values()) for (const [k, s] of Object.entries(g.specs)) if (g.values[k] !== s.value) p[`${PREFIX}${g.id}.${k}`] = String(+g.values[k].toFixed(4))
     return p
   },
