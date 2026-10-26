@@ -89,6 +89,8 @@ export const CLOUDS: [number, number, number][] = [
   [0.35, 1.05, -1.05],
   [1.95, 0.85, -0.05],
   [-2.25, 0.8, -1.3],
+  [2.75, 0.8, -1.45],
+  [-2.35, 0.68, 0.55],
 ]
 /** Where the fish jumps (the river), the buffalo grazing in the paddies by the river, the flags. */
 export const FISH: XZ = [-0.62, 0.15]

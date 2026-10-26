@@ -1,5 +1,5 @@
-// The rental desk at Nan airport (section `rental`, plan: thailand/nan-trip.html, "The rental desk", build step 6: the
-// greybox): one short beat, not a full activity. Shapes and sounds, no voices yet.
+// The rental desk at Nan airport (section `rental`, plan: thailand/nan-trip.html, "The rental desk"): one short beat,
+// not a full activity. Built: the toy (step 6), the look (step 8: desk.ts) and the voices (step 9).
 //
 // key: the clerk slides the key fob across the counter and it hops into Kaylee's hoof. The toy: press it (a tap on the
 //   fob, or on the Pajero) and the big silver Pajero outside answers, chirp chirp, its lights winking. The first press
@@ -12,14 +12,21 @@
 //   cars keep left), Daddy beside Mommy. Tap the seatbelt: click! The door shuts, the engine starts and off they go
 //   (the car waits for the click: buckle up first).
 // Things to poke: the clerk (she laughs), the bell on the counter (ding, and the clerk hops), the orchids, the rack of
-// maps (one flaps out), the poster of a mountain (it rains a little), Mommy, Daddy, Kaylee, the Pajero.
+// maps (one flaps out), the poster of a mountain (it rains a little), Mommy, Daddy, Kaylee, the Pajero. Ambient life: the
+// clouds drift on the painted sky, a tiny plane crosses it now and then, the clock ticks, the garland sways.
+// Talk (lines.ts L.nan.rental): the clerk says hello as she hands over the key and goodbye as they head out; Sparkle
+// says each beat's one line as it begins (the key's only if she hasn't pressed it yet) and again after ~8 s with
+// nothing done (counted from 3 s after the beat's line), at most three times a beat; Daddy's "Whoa!" at the 2nd press
+// and "In they go!" with the last bag, Mommy's "Let's go!" after the click (family lines are dropped while Sparkle
+// talks); tapping the clerk says her lines in turn, the bell her "Yes please?".
 import { Color, CylinderGeometry, IcosahedronGeometry, Mesh, OctahedronGeometry, Plane, Vector3, type Group, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp } from '../../../../../../sdk'
+import { bell, clamp, speakingVoice, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { FaceLife } from '../../../characters/face'
 import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { Shot } from '../../../engine/camera'
+import { L } from '../../../lines'
 import { PAL, toon } from '../../../engine/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { buildPajero, type Pajero } from '../../../trip/vehicles/pajero'
@@ -50,6 +57,14 @@ export const RENTAL_ANCHORS: AnchorInfo[] = [
 
 /** Nothing touched for this long: what to do next glows. */
 const STUCK_S = 4
+/** Nothing done for this long: Sparkle says what to do (again after SAY_EVERY, at most SAY_MAX times a beat). */
+const SAY_S = 8
+const SAY_EVERY = 20
+const SAY_MAX = 3
+/** The tiny plane crosses the sky this often (s), taking PLANE_S to do it. */
+const PLANE_EVERY = 22
+const PLANE_S = 9
+const R = L.nan.rental
 const LIFT_PX = 26
 const up = new Vector3(0, 1, 0)
 const tmp = new Vector3()
@@ -105,6 +120,14 @@ export class RentalDesk extends Stage {
   private counted = false
   private sparkles: Floaters
   private drops: Floaters
+  // ---- Talk: lines said once, Sparkle's hints this beat, the clerk's tap lines in turn ----
+  private told = new Set<string>()
+  private lastSay = -99
+  /** Sparkle's hints count quiet time from here (a beat's start and its line), not from her last touch. */
+  private quietFrom = 0
+  private sayN = 0
+  private clerkTap = 0
+  private planeT = 6 - PLANE_EVERY
 
   constructor(renderer: WebGLRenderer, private ev: RentalEvents, start: { round: Round }) {
     super(renderer, ev)
@@ -153,6 +176,7 @@ export class RentalDesk extends Stage {
         this.put(kaylee, ...AT.boot.kaylee, 'stand', -90)
         this.put(this.ji, ...AT.boot.ji, 'stand', -120)
         this.put(this.nick, ...AT.boot.nick, 'stand', -60)
+        this.after(0.6, () => this.beatLine('boot'))
       } else {
         for (const [i, b] of this.desk.bags.entries()) this.stow(b, i, true)
         this.gateShut = true
@@ -179,10 +203,13 @@ export class RentalDesk extends Stage {
       arc: 0,
       done: () => {
         sfx.ding()
+        this.once('hi', R.hi)
         this.after(0.35, () => {
           this.kaylee.react('hop')
           this.fobToHand()
         })
+        // (Only if she hasn't found the fob by herself.)
+        this.after(1.6, () => this.presses === 0 && this.beatLine('key'))
       },
     })
   }
@@ -216,6 +243,7 @@ export class RentalDesk extends Stage {
     if (this.presses === 2) this.after(0.3, () => {
       this.nick.react('hop')
       sfx.haha()
+      this.once('jump', R.jump, true)
     })
     if (this.presses === PRESSES) {
       this.after(0.35, () => {
@@ -232,6 +260,8 @@ export class RentalDesk extends Stage {
     if (this.round !== 'key') return
     this.round = 'boot'
     this.ev.round('boot')
+    this.once('bye', R.bye)
+    this.after(1.0, () => this.beatLine('boot'))
     this.kaylee.walk([[0.6, -0.4], [AT.boot.kaylee[0], AT.boot.kaylee[2]]])
     this.hop(this.ji, this.scene, new Vector3(...AT.boot.ji), { face: -120, dur: 0.9, arc: 0.5, delay: 0.2 })
     this.hop(this.nick, this.scene, new Vector3(...AT.boot.nick), { face: -60, dur: 0.9, arc: 0.5, delay: 0.5 })
@@ -239,7 +269,7 @@ export class RentalDesk extends Stage {
 
   /** Where the open boot is (world): bags let go near it go in. */
   private bootMouth() {
-    return this.car.body.localToWorld(tmp2.set(0, 1.15, -2.6))
+    return this.car.body.localToWorld(tmp2.set(0, 1.15, -this.car.length / 2 - 0.2))
   }
 
   /** A bag into the boot, flying from wherever it is (or put there at once). */
@@ -267,7 +297,10 @@ export class RentalDesk extends Stage {
         this.squash.v -= 1.6
         sfx.bagIn(this.bagIn.filter(Boolean).length)
         this.sparkles.burst(this.car.body.localToWorld(slot.clone()).setY(1.3), 10, 0.8, 1, 0.6, 0.035)
-        if (this.bagIn.every(Boolean)) this.after(0.5, () => this.closeGate())
+        if (this.bagIn.every(Boolean)) {
+          this.once('bags', R.bags, true)
+          this.after(0.5, () => this.closeGate())
+        }
       },
     })
   }
@@ -329,6 +362,9 @@ export class RentalDesk extends Stage {
         done: () => {
           this.seated = true
           this.lastTouch = this.time - STUCK_S + 1.2
+          // She turns to the door (and to us) to find her seatbelt.
+          this.kaylee.face(-0.95)
+          this.beatLine('belt')
         },
       })
     })
@@ -340,6 +376,7 @@ export class RentalDesk extends Stage {
     this.after(0.32, () => {
       sfx.click()
       this.kaylee.react('wiggle')
+      this.kaylee.face(0)
       this.sparkles.burst(this.car.body.localToWorld(new Vector3(...this.car.belt.to)), 14, 0.8, 1, 0.6, 0.03)
     })
     this.after(0.9, () => {
@@ -349,6 +386,7 @@ export class RentalDesk extends Stage {
     this.after(1.9, () => {
       sfx.vroom()
       this.ji.react('wave')
+      this.once('go', R.go)
     })
     this.after(2.6, () => (this.speed = 0.01))
   }
@@ -437,13 +475,29 @@ export class RentalDesk extends Stage {
     d.fob.scale.setScalar(1 + fk * 0.3)
     // ---- The family: everyone looks at what's happening; her arm up, the fob pointed at the car ----
     for (const ch of [this.kaylee, this.nick, this.ji]) ch.update(dt, t)
-    const look = this.round === 'key' ? (this.fobState === 'hand' ? c.root.position.clone().setY(1.3) : d.fob.position.clone()) : this.round === 'boot' ? (this.bagHeld >= 0 ? d.bags[this.bagHeld].position.clone() : this.bootMouth().clone()) : c.body.localToWorld(new Vector3(...c.belt.to))
-    this.kaylee.lookAt(look.x, look.y, look.z)
+    const look = this.round === 'key' ? (this.fobState === 'hand' ? (this.flash > 0 ? c.root.position.clone().setY(1.3) : d.fob.getWorldPosition(new Vector3())) : d.fob.position.clone()) : this.round === 'boot' ? (this.bagHeld >= 0 ? d.bags[this.bagHeld].position.clone() : this.bootMouth().clone()) : c.body.localToWorld(new Vector3(...(this.buckled ? c.belt.to : c.belt.from)))
+    // (Waiting for the click she looks out of the door at the strap, toward us; then down at the buckle.)
+    if (this.round === 'belt' && this.seated && !this.buckled) this.kaylee.lookAt(look.x, look.y - 0.2, look.z + 1.5)
+    else this.kaylee.lookAt(look.x, look.y, look.z)
     this.nick.lookAt(look.x, look.y, look.z)
     this.ji.lookAt(look.x, look.y, look.z)
-    if (this.round === 'key' && !this.kaylee.walking && !this.hopping) this.kaylee.faceToward(kp.x + 1, kp.z + 1.3)
+    if (this.round === 'key' && !this.kaylee.walking && !this.hopping) this.kaylee.faceToward(kp.x + 0.5, kp.z + 2)
     if (this.round === 'key' && this.fobState === 'hand') this.kaylee.rig.armR.rotation.set(-1.25 - fk * 0.3, 0, -0.15)
     for (const f of [this.sparkles, this.drops]) f.update(dt)
+    // ---- Ambient life: the clouds drift, the clock ticks, the garland sways, a tiny plane now and then ----
+    d.sky.offset.x = t * 0.002
+    d.clock.min.rotation.z = -t * 0.5
+    d.clock.hour.rotation.z = -t * 0.04
+    d.garland.rotation.x = Math.sin(t * 1.3) * 0.06
+    this.planeT += dt
+    if (this.planeT > PLANE_EVERY) this.planeT = 0
+    const pk2 = this.planeT / PLANE_S
+    d.plane.visible = pk2 < 1
+    if (pk2 < 1) {
+      d.plane.position.set(-14 + pk2 * 34, 7.2 + pk2 * 2.4, -18)
+      d.plane.rotation.set(0, 0, 0.12)
+    }
+    this.stuck()
   }
 
   // ---------------------------------------------------------------- helpers
@@ -456,6 +510,31 @@ export class RentalDesk extends Stage {
     this.cool.set(key, this.time)
     f()
   }
+  /** Says it the first time only. A family reaction (`now`) is dropped while Sparkle talks, rather than heard late. */
+  private once(key: string, l: Line, now = false) {
+    if (this.told.has(key)) return
+    if (now && speakingVoice() === 'sparkle') return
+    this.told.add(key)
+    this.ev.say(l)
+  }
+  /** Sparkle's line as a beat begins; her hints count quiet time from 3 s after it. */
+  private beatLine(r: Round) {
+    if (this.round !== r) return
+    this.sayN = 0
+    this.lastSay = -99
+    this.quietFrom = this.time + 3
+    this.once(r, R[r])
+  }
+  /** After a while with nothing done, Sparkle says the beat's line again (a few times a beat at most). */
+  private stuck() {
+    if (this.bagHeld >= 0 || this.hopping || this.kaylee.walking || this.speed > 0 || !this.hintTarget()) return
+    if (this.time - Math.max(this.lastTouch, this.quietFrom) < SAY_S || this.time - this.lastSay < SAY_EVERY || this.sayN >= SAY_MAX) return
+    if (speakingVoice()) return
+    this.lastSay = this.time
+    this.sayN++
+    this.ev.say(R[this.round])
+  }
+
   /** Where a screen point meets the upright plane through the boot that faces the camera. */
   private onPlane(x: number, y: number) {
     const cam = this.rig.camera
@@ -535,12 +614,15 @@ export class RentalDesk extends Stage {
         return this.buckle()
       case 'clerk':
         this.pokeT.set('clerk', this.time)
-        this.talkTo('clerk', () => sfx.clerk())
+        sfx.clerk()
+        // (Not while Sparkle talks: it would come late.)
+        if (speakingVoice() !== 'sparkle') this.talkTo('clerk-say', () => this.ev.say(R.tap[this.clerkTap++ % R.tap.length]), 2.5)
         return
       case 'bell':
         this.pokeT.set('bell', this.time)
         sfx.ding()
         this.after(0.2, () => this.pokeT.set('clerk', this.time))
+        if (speakingVoice() !== 'sparkle') this.after(0.35, () => this.talkTo('bell-say', () => this.ev.say(R.bell), 4))
         return
       case 'orchids':
         this.pokeT.set('orchids', this.time)

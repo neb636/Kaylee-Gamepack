@@ -1,5 +1,8 @@
-// The Nan map (section `map`, plan: thailand/nan-trip.html, "The Nan map", build step 6: the greybox): the trip's hub, a
-// toy diorama of Nan on a table (diorama.ts), seen from above at a slant. The little silver Pajero sits on its roads.
+// The Nan map (section `map`, plan: thailand/nan-trip.html, "The Nan map"): the trip's hub, a toy diorama of Nan on a
+// table (diorama.ts), seen from above at a slant (north up the screen; on a tall screen the camera swings round to the
+// west side, so the board's long side runs up the screen and Laos is at the top). The little silver Pajero sits on its
+// roads: where she last drove from (`from`: the stop she came back from, Nan town after the city road), else at the
+// last stop, else at the airport. Built: the toy (step 6), the look (step 8) and the voices (step 9).
 //
 // The toy: the Pajero is a toy car on the board. Tap a place and it drives there along the roads (beep, putter), and
 // when it gets there the camera dives into the road and she drives it for real (the drive section). Or grab the car and
@@ -11,14 +14,21 @@
 // Things to poke: the clouds on the peaks (a little rain), the river (a fish jumps), the tiny plane (it takes off,
 // loops round and lands), the buffalo (moo), the flags of Thailand and Laos (they wave: Laos is just over the border),
 // the places she's done (a happy jingle and their stamp spins), and the Pajero itself (beep beep).
+//
+// Talk (lines.ts L.nan.map): the first time, Sparkle asks where to go first; after ~8 s with nothing done (counted from
+// 3 s after the opening line) she says "Tap a place to drive there!" (at most three times). After two stops, each time
+// she's back, Mommy asks "Home, or one more?" (NanMap.tsx shows 🏠 and 🚙: 🏠 drives to the airport, 🚙 lets her pick);
+// after all three, Mommy says it's time to fly home and the airport glows. Laos's flag: Sparkle says it's another
+// country.
 import { Color, IcosahedronGeometry, OctahedronGeometry, Vector3, type WebGLRenderer } from 'three'
-import { bell, clamp } from '../../../../../../sdk'
+import { bell, clamp, speakingVoice } from '../../../../../../sdk'
 import type { AnchorInfo } from '../../../engine/Anchors'
 import type { Shot } from '../../../engine/camera'
 import { PAL } from '../../../engine/toon'
+import { L } from '../../../lines'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { Floaters } from '../mushrooms/fx'
-import { buildDiorama, type Diorama } from './diorama'
+import { buildDiorama, PLACE_SCALE, type Diorama } from './diorama'
 import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, modelAt, PLACE_IDS, PLACES, RUNWAY, STAMP_Y, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
 import { buildNet, nearest, route, STEP } from './net'
 import { mapSfx as sfx } from './sounds'
@@ -26,6 +36,8 @@ import { mapSfx as sfx } from './sounds'
 export interface MapEvents extends LegEvents {
   /** The little Pajero got to the place she picked: drive there for real. */
   go(place: PlaceId): void
+  /** Mommy's "Home, or one more?": show the 🏠 and 🚙 buttons (or hide them: she's off somewhere). */
+  ask(on: boolean): void
 }
 
 export const MAP_ANCHORS: AnchorInfo[] = [
@@ -47,6 +59,12 @@ const DWELL_S = 0.8
 /** The camera dives into the road this long before the drive opens. */
 const DIVE_S = 1.15
 const PLANE_S = 6
+/** Nothing done for this long: Sparkle says what to do (again after SAY_EVERY, at most SAY_MAX times). */
+const SAY_S = 8
+const SAY_EVERY = 20
+const SAY_MAX = 3
+const M = L.nan.map
+const DEG = Math.PI / 180
 
 const tmp = new Vector3()
 
@@ -72,8 +90,15 @@ export class NanMap extends Stage {
   private sparkles: Floaters
   private drops: Floaters
   private steam: Floaters
+  // ---- Talk ----
+  private told = new Set<string>()
+  private lastSay = -99
+  private quietFrom = 3
+  private sayN = 0
+  /** Mommy's question is up (the 🏠 and 🚙 buttons). */
+  private asking = false
 
-  constructor(renderer: WebGLRenderer, private ev: MapEvents, start: { stops: Stop[] }) {
+  constructor(renderer: WebGLRenderer, private ev: MapEvents, start: { stops: Stop[]; from?: PlaceId | null }) {
     super(renderer, ev)
     const { scene, bag } = this
     this.scene.background = new Color('#E4DDF4')
@@ -85,17 +110,66 @@ export class NanMap extends Stage {
     this.drops = new Floaters(new IcosahedronGeometry(0.5, 0), ['#A8DCFF', '#D6EEFF'], 80, bag, 2.2, 0.2)
     this.steam = new Floaters(new IcosahedronGeometry(0.5, 1), ['#FFFFFF', '#F1F4F8'], 40, bag, -0.15, 1.0, 0.7, 1.8)
     scene.add(this.sparkles.mesh, this.drops.mesh, this.steam.mesh)
-    // ---- Where the link starts: the stops done so far, and the Pajero at the last one (or at the airport) ----
+    // ---- Where the link starts: the stops done so far, and the Pajero where she drove from (or at the last stop, or
+    // at the airport). Back from a stop, its stamp lands; back from the city road, nothing new.
     this.done = new Set(start.stops)
     const last = start.stops[start.stops.length - 1]
-    this.fresh = last ?? null
-    const at = this.net.place[last ?? 'airport']
+    const from = start.from ?? last ?? 'airport'
+    this.fresh = last && from === last ? last : null
+    const at = this.net.place[from]
     this.car.path = [at]
     const n = this.net.nbr[at][0]
     if (n !== undefined) this.car.heading = Math.atan2(this.net.pts[at][0] - this.net.pts[n][0], this.net.pts[at][1] - this.net.pts[n][1])
     for (const s of STOPS) this.d.stamps[s].visible = this.done.has(s) && s !== this.fresh
     if (this.fresh) this.after(0.7, () => this.landStamp())
     this.placeCar(0)
+    // ---- The opening line: Sparkle the first time, Mommy once two stops are done ----
+    const count = this.done.size
+    const t0 = this.fresh ? 1.6 : 0.8
+    if (count === 0) this.after(t0, () => this.say('first', M.first))
+    else if (count >= STOPS.length) this.after(t0, () => this.say('home', M.home))
+    else if (count >= HOME_AFTER)
+      this.after(t0, () => {
+        this.say('more', M.more)
+        this.setAsking(true)
+      })
+    this.quietFrom = t0 + 3
+  }
+
+  // ---------------------------------------------------------------- talk, Mommy's question
+
+  private say(key: string, l: Parameters<MapEvents['say']>[0]) {
+    if (this.told.has(key)) return
+    this.told.add(key)
+    this.ev.say(l)
+  }
+  private setAsking(on: boolean) {
+    if (this.asking === on) return
+    this.asking = on
+    this.ev.ask(on)
+  }
+  /** 🏠 on Mommy's question: off to the airport (home, down the 3 road). */
+  home() {
+    this.setAsking(false)
+    this.lastTouch = this.time
+    if (!this.arrived) this.goTo('airport')
+  }
+  /** 🚙 on Mommy's question: one more stop (she picks it). */
+  more() {
+    this.setAsking(false)
+    this.lastTouch = this.time
+    this.quietFrom = this.time + 3
+    this.car.hop = 0
+    sfx.horn()
+  }
+  /** After a while with nothing done, Sparkle says what to do (a few times at most). */
+  private stuck() {
+    if (this.asking || this.held || this.going || this.arrived || this.allDone) return
+    if (this.time - Math.max(this.lastTouch, this.quietFrom) < SAY_S || this.time - this.lastSay < SAY_EVERY || this.sayN >= SAY_MAX) return
+    if (speakingVoice()) return
+    this.lastSay = this.time
+    this.sayN++
+    this.ev.say(M.hint)
   }
 
   // ---------------------------------------------------------------- which places are open
@@ -138,6 +212,7 @@ export class NanMap extends Stage {
     this.car.speed = Math.max(CAR_SPEED, (this.car.path.length * STEP) / 2.6)
     this.going = id
     this.car.hop = 0
+    this.setAsking(false)
     sfx.zoom()
   }
 
@@ -146,6 +221,7 @@ export class NanMap extends Stage {
     if (this.arrived) return
     this.going = null
     this.held = false
+    this.setAsking(false)
     this.arrived = { id, t: this.time }
     this.car.hop = 0
     this.car.flash = 0.6
@@ -335,7 +411,7 @@ export class NanMap extends Stage {
     for (const id of PLACE_IDS) {
       const k = Math.min(1, (this.time - (this.pokeT.get(id) ?? -9)) / 0.45)
       const b = bell(k)
-      d.places[id].scale.set(1 + 0.08 * b, 1 - 0.12 * b + 0.12 * b * (k > 0.5 ? 1 : 0), 1 + 0.08 * b)
+      d.places[id].scale.set(1 + 0.08 * b, 1 - 0.12 * b + 0.12 * b * (k > 0.5 ? 1 : 0), 1 + 0.08 * b).multiplyScalar(PLACE_SCALE)
       // A glow-bounce on the place she should go to, when she's stuck.
       if (this.time - this.lastTouch > STUCK_S && this.hintPlace() === id) d.places[id].position.y = heightAt(...modelAt(id)) + Math.abs(Math.sin(t * 4)) * 0.04
       else d.places[id].position.y = heightAt(...modelAt(id))
@@ -346,7 +422,7 @@ export class NanMap extends Stage {
       const [x, z] = modelAt(s)
       const base = heightAt(x, z) + STAMP_Y
       const spin = clamp((this.time - (this.pokeT.get(`stamp:${s}`) ?? -9)) / 0.8, 0, 1)
-      g.rotation.y = Math.sin(t * 1.3 + x) * 0.25 + (spin < 1 ? spin * Math.PI * 2 : 0)
+      g.rotation.y = this.rig.yaw * DEG + Math.sin(t * 1.3 + x) * 0.25 + (spin < 1 ? spin * Math.PI * 2 : 0)
       if (s === this.fresh && this.stampT >= 0) {
         this.stampT += dt
         const k = Math.min(1, this.stampT / 0.45)
@@ -364,6 +440,7 @@ export class NanMap extends Stage {
     for (const [i, c] of d.clouds.entries()) {
       const [x, cy, z] = CLOUDS[i]
       c.position.set(x + Math.sin(t * 0.3 + i * 2) * 0.08, cy + Math.sin(t * 0.7 + i) * 0.02, z + Math.cos(t * 0.25 + i) * 0.05)
+      c.rotation.y = this.rig.yaw * DEG
       if (this.rain[i] >= 0) {
         this.rain[i] += dt
         const k = this.rain[i]
@@ -390,11 +467,14 @@ export class NanMap extends Stage {
     d.buffalo.root.position.y = heightAt(d.buffalo.root.position.x, d.buffalo.root.position.z) + 0.012 + bell(bk) * 0.06
     for (const [key, f] of [['flag:thai', d.flags.thai], ['flag:laos', d.flags.laos]] as const) {
       const k = clamp((this.time - (this.pokeT.get(key) ?? -9)) / 1.2, 0, 1)
+      // (Facing the camera, whichever side of the board it's on.)
+      f.rotation.y = this.rig.yaw * DEG
       const cloth = f.children[1]
       cloth.rotation.y = Math.sin(t * (k < 1 ? 14 : 2.4) + f.position.x) * (k < 1 ? 0.45 : 0.15)
     }
     if (Math.random() < dt * 5) this.steam.emit(tmp.set(...d.steam), new Vector3((Math.random() - 0.5) * 0.04, 0.12, 0), 1.4, 0.03)
     for (const f of [this.sparkles, this.drops, this.steam]) f.update(dt)
+    this.stuck()
   }
 
   // ---------------------------------------------------------------- touch
@@ -438,6 +518,7 @@ export class NanMap extends Stage {
     const onCar = id === 'car' || (!id && !!s && Math.hypot(s.x - x, s.y - y) < 80)
     if (!onCar) return
     this.held = true
+    this.setAsking(false)
     this.target = -1
     this.going = null
     this.finger = { x, y }
@@ -508,6 +589,10 @@ export class NanMap extends Stage {
         this.pokeT.set(id, this.time)
         sfx.flutter()
         sfx.chime()
+        if (id === 'flag:laos' && speakingVoice() !== 'sparkle' && this.time - (this.pokeT.get('laos-say') ?? -99) > 6) {
+          this.pokeT.set('laos-say', this.time)
+          this.ev.say(M.laos)
+        }
         return
     }
   }
@@ -518,10 +603,11 @@ export class NanMap extends Stage {
     if (this.arrived) {
       // Diving into the road: down close to the little Pajero.
       const p = this.d.car.root.position
-      return { center: p.clone().setY(p.y + 0.05), half: new Vector3(0.22, 0.1, 0.22), yaw: 0, pitch: 30, minDist: 0.7 }
+      return { center: p.clone().setY(p.y + 0.05), half: new Vector3(0.22, 0.1, 0.22), yaw: this.w < this.h ? -90 : 0, pitch: 30, minDist: 0.7 }
     }
     const tall = this.w < this.h
-    if (tall) return { center: new Vector3(0, 0.25, 0.1), half: new Vector3(2.95, 0.35, 2.2), yaw: 0, pitch: 64, minDist: 3 }
+    // Tall: from the west side, so the board's long side runs up the screen (Laos at the top).
+    if (tall) return { center: new Vector3(-0.2, 0.25, 0), half: new Vector3(2.95, 0.35, 2.2), yaw: -90, pitch: 66, minDist: 3 }
     return { center: new Vector3(0, 0.25, 0.12), half: new Vector3(2.95, 0.35, 2.15), yaw: 0, pitch: 54, minDist: 3 }
   }
 
@@ -587,6 +673,7 @@ export class NanMap extends Stage {
     }
     return {
       game: 'map',
+      asking: this.asking,
       stops: [...this.done],
       open: PLACE_IDS.filter((p) => this.open(p)),
       car: pt(this.carPos()),

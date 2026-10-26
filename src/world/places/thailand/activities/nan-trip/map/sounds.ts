@@ -1,5 +1,5 @@
-// The Nan map's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet (the
-// greybox): the little Pajero's beep and putter, the stamp landing, the pokes' answers.
+// The Nan map's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise; the voices are lines.ts
+// L.nan.map): the little Pajero's beep and putter, the stamp landing, the pokes' answers.
 import { noise, tone } from '../../../../../kit/sfx'
 import { roadSfx } from '../drive/sounds'
 
