@@ -17,11 +17,11 @@
   "kind": "Family trip",
   "updated": "2026-10-25",
   "status": {
-    "label": "In the works: the whole trip joined up, from Mommy's card to Agong's wall",
-    "tone": "gold"
+    "label": "Built and on for Kaylee: the third Thailand trip, from Mommy's card to Agong's wall",
+    "tone": "mint"
   },
   "pitch": "Kaylee presses the key and the big Pajero beeps hello. Mommy drives and Kaylee steers it round the bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.",
-  "next": "Dad plays **step 7, the whole trip** on the iPad, from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙): packing for the mountains, the goodbye, the plane north into [the green valley](#/world/thailand/nan-trip/land), the rental desk, the stops, the 3 road from the airport (after two stops) and its [photo with ✈️🏠](#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt), then [home](#/world/thailand/nan-trip/home?photos=deck,three,pizza,salt) to pick the photo for Agong's wall. Does the trip hang together, and is the way there short enough before the fun starts? Then **step 8, the look**: the real Pajero, the landmarks, rain and cloud.",
+  "next": "Dad plays **the whole trip** on the iPad from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙), and listens: the clerk, the mushroom aunty and the salt aunty are new voices, and the roads talk while she steers (is the [sky road](#/world/thailand/nan-trip/drive?road=sky&weather=rain) too chatty?). Watch where she drifts on a first trip (it's ~15-20 min with the travel). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?",
   "facts": [
     {
       "icon": "⏱️",
@@ -46,7 +46,7 @@
     {
       "icon": "🔗",
       "value": "15",
-      "label": "sections, all built"
+      "label": "sections, all built and voiced"
     }
   ],
   "related": [
@@ -1337,6 +1337,11 @@
               "empty: the end card"
             ],
             [
+              "`weather`",
+              "the drive's weather, `rain|sun|cloud`",
+              "empty: rolled at random each drive"
+            ],
+            [
               "`round`",
               "the step of the stop on screen, `1|2|3` (plus `pizza` at the mushroom farm; the rice farm's are `plant|grow|harvest|thresh|deck`)",
               "`1`"
@@ -1438,19 +1443,23 @@
             {
               "n": 8,
               "title": "The look",
-              "status": "next",
-              "md": "The Pajero, the landmarks, rain and cloud."
+              "status": "done",
+              "md": "The Pajero, the landmarks, rain and cloud; the look of the rental desk, the map, the mushroom farm and the salt wells.",
+              "date": "2026-10-25"
             },
             {
               "n": 9,
               "title": "Voices and QA",
-              "status": "todo"
+              "status": "done",
+              "date": "2026-10-25",
+              "md": "84 new clips (the clerk, the mushroom aunty, the salt aunty, the family in the car, Sparkle's hints), full QA."
             },
             {
               "n": 10,
               "title": "Into the game",
-              "status": "todo",
-              "md": "From `inTheWorks` to `activities`."
+              "status": "done",
+              "md": "From `inTheWorks` to `activities`.",
+              "date": "2026-10-25"
             }
           ]
         }
@@ -1646,6 +1655,22 @@
                 "**Voices:** 11 new clips (`L.nan.trip`: the cool hint, the umbrella, landing, the 3's photo, the wall, six facts).",
                 "**QA:** `qa-screens` (`nan-invite`, `nan-pack`, `nan-goodbye`, `nan-airport`, `nan-fly`, `nan-land`, `nan-home`, `nan-loop-flat`). A robot in WebKit (iPad landscape) picked 🏔️🚙, packed the raincoat, boots and teddy, closed the suitcase (the umbrella went in) and reached the goodbye; watched the landing play out to the rental desk; and at home picked the 3's photo, gave it to Agong and saw everyone gather at the wall. No console errors.",
                 "**No flat fallbacks any more** (Dad, 2026-10-25: we always have WebGL): every Thailand screen is WebGL2 only. The picture books (`Flat.tsx`, `LoopFlat.tsx`), the `?gl=off` switch and their tests and QA screens are gone; a lost GPU context still offers “Tap to wake”."
+              ]
+            },
+            {
+              "title": "Steps 8-10, the look, the voices and into the game",
+              "status": "done",
+              "date": "2026-10-25",
+              "summary": "Dad: “finish it up in this session, no more gates”. Every leg got its finished look and its voices, full QA ran, and the trip is in Thailand's `activities`: Mommy's card offers 🏔️🚙 everywhere, the passport has its slot, and it earns the pink mushroom sticker.",
+              "items": [
+                "**The Pajero** (`trip/vehicles/pajero.ts`): a chunky silver Pajero Sport in code (black grille with chrome bars, slim lights, black arches and steps, roof rails, six-spoke wheels, shine strips on the silver); same API, so the rental desk and the map use it unchanged. The family rides inside; a pink elephant toy nods on the back shelf; front and rear wipers.",
+                "**The roads** (`drive/`, `trip/road/`): rain, sun or cloud rolled each drive (`weather` pins it), wet shiny roads with puddles that splash, low cloud on the hills, a sea of clouds above the sky road, the landmarks rebuilt, traffic and animals that change each drive. New pokes: Daddy (tap lines), the elephant toy, the wipers (faster). Voices `L.nan.drive`: Mommy's road lines, Daddy's reactions (at least 8 s apart), Sparkle's new things and stuck hints.",
+                "**The rental desk** (`rental/`): a painted sky and ridges, the hall (windows, garland, clock, bench, palm, the pink rental sign), the car park. The clerk (a puppy, new voice `clerk`) hands over the key; Sparkle says each beat; Daddy jumps; Mommy “Ready? Let's go!”. Kaylee looks out of her door at the belt.",
+                "**The Nan map** (`map/`): a wooden frame on a pink cloth, bigger landmarks, round trees, more paddies; in portrait the camera looks from the west so the board fills the screen. **Mommy's “Home, or one more?”** after two stops (🏠 / 🚙), “Time to fly home!” after three. The car waits in town after the city road.",
+                "**The mushroom farm** (`mushrooms/`): plank walls with daylight through the gaps, a dripping roof, plump sawdust bags with collars, frilly oyster clumps in grey, pink and gold, moss, a bulb with moths, the snoring dog; outside, the table with the mountain view, the stone oven. The aunty (a buffalo, new voice `farmer`) and Daddy talk; a giant mushroom picks on the third tap.",
+                "**The salt wells** (`salt/`, new `village.ts`): the hut with a cut-away tin roof, a mossy well, the mud stove and its chimney, the woodpile; across the wet street the wooden house with the painted Tai Lue couple, waving. A scooter in the drizzle, a hen and chicks. The aunty (a pony, new voice `saltaunty`) and Daddy talk.",
+                "**Into the game** (`meta.ts`): from `inTheWorks` to `activities`, the pink mushroom sticker (`assets/pink-mushroom.webp`), the trip's facts on the passport, the README without “in the works”.",
+                "**QA:** layout-qa at iPad portrait, iPad landscape and iPhone landscape, then playtest-qa (mushrooms and the drives fun; salt, the map and the rental desk OK; nothing blocking). Fixed from it: portrait framing at the mushroom farm, the rental desk and the salt wells; heads under the top bar on iPhone; Kaylee in front of the pan; talk before the first touch (the aunties' hellos are shorter); finishing the rental desk saves the trip."
               ]
             }
           ]
