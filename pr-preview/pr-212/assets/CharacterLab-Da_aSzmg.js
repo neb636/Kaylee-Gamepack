@@ -3,7 +3,7 @@ const __lock$m = await (async () => {
   const k = globalThis.__kayleeLocks?.["thailand"] ?? (() => { try { return localStorage.getItem("kaylee-lock:thailand") } catch { return null } })()
   if (!k) throw new Error("thailand is locked")
   const key = await crypto.subtle.importKey('raw', Uint8Array.from(atob(k), (c) => c.charCodeAt(0)), 'AES-GCM', false, ['decrypt'])
-  const res = await fetch(new URL("./CameraLab-l4xpS2u0.lock", import.meta.url))
+  const res = await fetch(new URL("./CharacterLab-Da_aSzmg.lock", import.meta.url))
   if (!res.ok) throw new Error('locked chunk: HTTP ' + res.status)
   const data = new Uint8Array(await res.arrayBuffer())
   let plain
