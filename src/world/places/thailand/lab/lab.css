@@ -828,16 +828,8 @@
   min-height: 0;
   overflow: hidden;
 }
-/* The game's screen: its own containing block, so even its fixed overlays stay inside the iPad. */
-.cm-frame {
-  position: absolute;
-  overflow: hidden;
-  contain: layout paint;
-}
-.cm-frame.device {
-  border-radius: 18px;
-  box-shadow: 0 0 0 1px rgba(20, 20, 30, 0.1), 0 14px 44px rgba(20, 20, 30, 0.2);
-}
+/* The game's own element sits on top of the stage (z-index 1, styled by CameraLab.tsx); the panel and the buttons over
+   the stage sit above it. */
 .cm-guides {
   position: absolute;
   inset: 0;
@@ -877,14 +869,17 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  z-index: 5;
+  z-index: 3;
   padding: 4px;
 }
 .cm-toast {
   top: 16px;
+  z-index: 3;
   font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
 }
 .cm-panel {
+  position: relative;
+  z-index: 2;
   margin: 10px 10px 10px 0;
 }
 .cm-frames {

@@ -1,9 +1,10 @@
-// ?cam=1 on any section of a 3D country: the camera lab, for finding the best camera for a scene. The real game runs in
-// a frame the size of an iPad (or the whole window) next to a panel that nudges the game's camera or locks your own,
+// ?cam=1 on any section of a 3D country: the camera lab, for finding the best camera for a scene. The real game keeps
+// running in its own element (World.tsx's `host`), which the lab sizes like an iPad (or the whole window) next to a panel that nudges the game's camera or locks your own,
 // freezes the moment, draws guides (the box the game frames, the top bar, the tap targets), and copies a link or a note
 // an agent can bake into that world's shot(). Everything you set is in the address bar. Not something Kaylee plays:
 // World.tsx loads it lazily, only when the link asks for it.
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type PointerEvent, type ReactNode } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type PointerEvent } from 'react'
+import { createPortal } from 'react-dom'
 import { camLab } from '../../engine/camLab'
 import { IconButton } from '../ui'
 import { Guides } from './Guides'
@@ -16,7 +17,7 @@ const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v
 const r1 = (n: number) => Math.round(n * 10) / 10
 
 /** world.css sizes follow the window's media queries; a framed iPad or iPhone gets its own. */
-function deviceVars(f: Frame): CSSProperties {
+function deviceVars(f: Frame): Record<string, string> {
   if (!f.w || !f.h) return {}
   const short = f.h <= 560
   const narrow = f.w <= 520
@@ -29,10 +30,10 @@ function deviceVars(f: Frame): CSSProperties {
     '--say-size': short ? '48px' : narrow ? '52px' : '64px',
     '--target': short ? '72px' : narrow ? '84px' : '96px',
     '--theater-side': `${clamp(f.w * 0.04, 16, 56).toFixed(0)}px`,
-  } as CSSProperties
+  }
 }
 
-export default function CameraLab({ place, params, children }: { place: string; params: Record<string, string>; children: ReactNode }) {
+export default function CameraLab({ place, params, host }: { place: string; params: Record<string, string>; host: HTMLDivElement }) {
   const [view, setView] = useState(() => fromParams(params))
   const [ab, setAb] = useState(false)
   const [orbit, setOrbit] = useState(false)
@@ -40,7 +41,6 @@ export default function CameraLab({ place, params, children }: { place: string; 
   const [toast, setToast] = useState<string | null>(null)
   const [room, setRoom] = useState({ w: 0, h: 0 })
   const stage = useRef<HTMLDivElement>(null)
-  const frameEl = useRef<HTMLDivElement>(null)
   const viewRef = useRef(view)
   viewRef.current = view
   const frozen = useSyncExternalStore(camLab.subscribe, () => camLab.frozen)
@@ -78,11 +78,13 @@ export default function CameraLab({ place, params, children }: { place: string; 
     toastTimer.current = window.setTimeout(() => setToast(null), 1800)
   }, [])
 
-  // How much room the frame has.
-  useEffect(() => {
+  // How much room the frame has (measured before the first paint, so the game never lays out at zero size).
+  useLayoutEffect(() => {
     const el = stage.current
     if (!el) return
-    const ro = new ResizeObserver(() => setRoom({ w: el.clientWidth, h: el.clientHeight }))
+    const measure = () => setRoom({ w: el.clientWidth, h: el.clientHeight })
+    measure()
+    const ro = new ResizeObserver(measure)
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
@@ -90,25 +92,54 @@ export default function CameraLab({ place, params, children }: { place: string; 
   const frame = frameById(view.frame)
   const pad = 20
   const scale = frame.w && frame.h && room.w ? Math.min((room.w - 2 * pad) / frame.w, (room.h - 2 * pad) / frame.h, 1) : 1
-  const frameStyle: CSSProperties =
-    frame.w && frame.h
-      ? { width: frame.w, height: frame.h, left: Math.round((room.w - frame.w * scale) / 2), top: Math.round((room.h - frame.h * scale) / 2), transform: `scale(${scale})`, transformOrigin: '0 0', ...deviceVars(frame) }
-      : { inset: 0 }
   const screen = frame.w && frame.h ? { w: frame.w, h: frame.h } : room
+
+  // The game's element becomes the frame: sized and scaled in the stage (which starts at the world's top left corner),
+  // its own containing block and stacking layer. Closing the lab gives it back as it was.
+  const original = useRef<string | null>(null)
+  useLayoutEffect(() => {
+    if (!room.w || !room.h) return
+    original.current ??= host.style.cssText
+    const vars = deviceVars(frame)
+    const dev = !!(frame.w && frame.h)
+    const w = dev ? frame.w! : room.w
+    const h = dev ? frame.h! : room.h
+    host.style.cssText = original.current
+    Object.assign(host.style, {
+      inset: 'auto',
+      left: `${dev ? Math.round((room.w - w * scale) / 2) : 0}px`,
+      top: `${dev ? Math.round((room.h - h * scale) / 2) : 0}px`,
+      width: `${w}px`,
+      height: `${h}px`,
+      transform: dev ? `scale(${scale})` : '',
+      transformOrigin: '0 0',
+      overflow: 'hidden',
+      contain: 'layout paint',
+      zIndex: '1',
+      borderRadius: dev ? '18px' : '',
+      boxShadow: dev ? '0 0 0 1px rgba(20, 20, 30, 0.1), 0 14px 44px rgba(20, 20, 30, 0.2)' : '',
+    })
+    for (const [k, v] of Object.entries(vars)) host.style.setProperty(k, v)
+  }, [host, frame, room.w, room.h, scale])
+  useEffect(
+    () => () => {
+      if (original.current !== null) host.style.cssText = original.current
+    },
+    [host],
+  )
 
   // Scroll or pinch over the game zooms (always); with "orbit by hand" on, a drag turns the camera and shift-drag pans.
   useEffect(() => {
-    const el = stage.current
-    if (!el) return
+    const els = [stage.current, host].filter((x): x is HTMLDivElement => !!x)
     const wheel = (e: WheelEvent) => {
       e.preventDefault()
       const v = viewRef.current
       const k = Math.exp(e.deltaY * (e.ctrlKey ? 0.01 : 0.0015))
       setView({ ...v, zoom: Math.round(clamp(v.zoom * k, 0.3, 3) * 100) / 100 })
     }
-    el.addEventListener('wheel', wheel, { passive: false })
-    return () => el.removeEventListener('wheel', wheel)
-  }, [])
+    for (const el of els) el.addEventListener('wheel', wheel, { passive: false })
+    return () => els.forEach((el) => el.removeEventListener('wheel', wheel))
+  }, [host])
 
   const drag = useRef<{ x: number; y: number; pan: boolean; v: CamView; pointer: number } | null>(null)
   const onOrbitDown = (e: PointerEvent) => {
@@ -138,13 +169,15 @@ export default function CameraLab({ place, params, children }: { place: string; 
   return (
     <div className={`cam-lab${panel ? '' : ' no-panel'}`}>
       <main className="cm-stage" ref={stage}>
-        <div ref={frameEl} className={`cm-frame${frame.w ? ' device' : ''}`} style={frameStyle}>
-          {children}
-          <Guides guides={view.guides} />
-          {orbit && <div className="cm-orbit" onPointerDown={onOrbitDown} onPointerMove={onOrbitMove} onPointerUp={onOrbitUp} onPointerCancel={onOrbitUp} onContextMenu={(e) => e.preventDefault()} />}
-          {ab && <div className="cm-badge">Game’s camera</div>}
-          {frozen && <div className="cm-badge right">Frozen</div>}
-        </div>
+        {createPortal(
+          <>
+            <Guides guides={view.guides} />
+            {orbit && <div className="cm-orbit" onPointerDown={onOrbitDown} onPointerMove={onOrbitMove} onPointerUp={onOrbitUp} onPointerCancel={onOrbitUp} onContextMenu={(e) => e.preventDefault()} />}
+            {ab && <div className="cm-badge">Game’s camera</div>}
+            {frozen && <div className="cm-badge right">Frozen</div>}
+          </>,
+          host,
+        )}
         {!panel && (
           <div className="cam-panel cl-card cm-open">
             <IconButton icon="panelR" label="Show the camera lab" onClick={() => setPanel(true)} />
