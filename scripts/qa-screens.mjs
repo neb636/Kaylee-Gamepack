@@ -64,6 +64,16 @@ const SCREENS = [
       await p.waitForTimeout(600)
     },
   },
+  // The game shelf (the world map's list view) and a game's own page.
+  { name: 'world-shelf', hash: '#/world?view=list' },
+  {
+    name: 'world-shelf-page',
+    hash: '#/world?view=list',
+    act: async (p) => {
+      await p.getByRole('button', { name: 'Vet' }).click()
+      await p.waitForTimeout(900)
+    },
+  },
   { name: 'passport-empty', hash: '#/world/passport', reset: true },
   { name: 'coloring-shelf', hash: '#/world/coloring' },
   {

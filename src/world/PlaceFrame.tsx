@@ -5,12 +5,14 @@ import { go } from '../router'
 import { motion } from 'motion/react'
 import { Mascot, sounds, StarProgress, stopSpeaking, useOnline, type GameMeta } from '../sdk'
 import { WinCeremony } from '../shell/WinCeremony'
+import listIcon from './assets/icon-view-list.webp'
 import theaterArt from './assets/theater.webp'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { HUB, SectionLinkProvider, type SectionLink } from './kit/sections'
 import { Theater } from './kit/Theater'
 import { findPlace, type PlaceEntry } from './registry'
+import { FROM_SHELF } from './Shelf'
 import { addStamp, markVisited, resetPassport, setStamps, usePassport } from './stamps'
 import type { PlaceMeta } from './types'
 
@@ -59,6 +61,14 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
 
   const setProgress = useCallback((done: number, total: number) => setProgressState({ done, total }), [])
   const backToMap = useCallback(() => go.world(meta.id), [meta.id])
+  // Opened from the game shelf (Shelf.tsx): the top bar's back button goes back to the shelf, not the country map.
+  const fromShelf = useMemo(() => {
+    try {
+      return sessionStorage.getItem(FROM_SHELF) === meta.id
+    } catch {
+      return false
+    }
+  }, [meta.id])
   const openActivity = useCallback((id: string) => go.world(meta.id, id), [meta.id])
   const earnStamp = useCallback(
     (id: string) => {
@@ -124,7 +134,11 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
 
       {/* The theater draws its own top bar (its back button goes to the shelf while a video plays). */}
       {activity === 'theater' ? null : activity || (meta.hubHome && section && section !== meta.hubHome) ? (
-        <TopBar icon="🗺️" label="Back to the map" onBack={backToMap}>
+        <TopBar
+          icon={fromShelf ? <img src={listIcon} alt="" style={{ width: '70%', height: '70%', objectFit: 'contain' }} /> : '🗺️'}
+          label={fromShelf ? 'Back to the games' : 'Back to the map'}
+          onBack={fromShelf ? () => go.world() : backToMap}
+        >
           {progress.total > 0 && (
             <BarPill>
               <StarProgress done={progress.done} total={progress.total} size="clamp(22px, min(6vw, 6vh), 34px)" />
