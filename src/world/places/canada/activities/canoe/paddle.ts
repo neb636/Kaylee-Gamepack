@@ -1074,13 +1074,17 @@ export class RedCanoe implements World3D {
 
   private shot(): Shot {
     const tall = this.tall
+    // The chase camera's yaw, kept continuous as the canoe turns round and round (camYaw is never wrapped: a yaw that
+    // jumped from +180° to -180° would swing the rig a whole turn). Fixed shots pick their turn nearest to it.
+    const chase = (this.camYaw - Math.PI) * DEG
+    const near = (deg: number) => deg + 360 * Math.round((chase - deg) / 360)
     if (this.section === 'glide' && this.time < 2.2) {
       // The first look: the whole lake from behind the dock, the glacier at the far end.
-      return { center: new Vector3(0, 6, -6), half: tall ? new Vector3(20, 10, 30) : new Vector3(30, 8, 26), yaw: 0, pitch: 16, follow: false }
+      return { center: new Vector3(0, 6, -6), half: tall ? new Vector3(20, 10, 30) : new Vector3(30, 8, 26), yaw: near(0), pitch: 16, follow: false }
     }
     if (this.doneT >= 0 && this.doneT < 5) {
       // The family round the canoe, the glacier behind.
-      return { center: new Vector3(this.x, 1.4, this.z - 2.5), half: tall ? new Vector3(5.5, 2.4, 6.5) : new Vector3(8.5, 2.4, 5.5), yaw: 24, pitch: 20 }
+      return { center: new Vector3(this.x, 1.4, this.z - 2.5), half: tall ? new Vector3(5.5, 2.4, 6.5) : new Vector3(8.5, 2.4, 5.5), yaw: near(24), pitch: 20 }
     }
     const f = { x: Math.sin(this.camYaw), z: Math.cos(this.camYaw) }
     const ahead = 1.6 + Math.max(0, this.speed) * 0.35
@@ -1088,7 +1092,7 @@ export class RedCanoe implements World3D {
     return {
       center: new Vector3(this.x + f.x * ahead, 0.6, this.z + f.z * ahead),
       half: tall ? new Vector3(pull ? 3.4 : 2.8, 1.2, pull ? 7 : 5.4) : new Vector3(pull ? 6.2 : 5, 1.2, pull ? 6 : 4.4),
-      yaw: -Math.atan2(f.x, -f.z) * DEG,
+      yaw: chase,
       pitch: pull ? 34 : 28,
       follow: true,
       minDist: 6,
