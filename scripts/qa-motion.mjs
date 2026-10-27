@@ -1311,6 +1311,46 @@ GAME_SCENARIOS.push({
   },
 })
 
+// The Nan Mountain Cup (greybox 1): the kart toy. After GO her finger holds the road just ahead of the kart (where QA's
+// `aim` says it is) and swings from side to side across it, over coins and pads; then (nan-bounce) the forest's trick:
+// racing on by itself up to the first bouncy mushroom, and boing, up in the air.
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-kart',
+    seconds: 12,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/race`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().phase === 'race', null, { timeout: 40000 })
+    },
+    act: async (page) => {
+      const aim = () => page.evaluate(() => window.__thaiNanQA().aim)
+      let a = await aim()
+      await page.mouse.move(a?.x ?? vp.width / 2, a?.y ?? vp.height * 0.45)
+      await page.mouse.down()
+      for (let i = 0; i < 20; i++) {
+        await page.waitForTimeout(500)
+        a = await aim()
+        if (a) await page.mouse.move(a.x + Math.sin(i / 2.5) * vp.width * 0.12, a.y, { steps: 4 })
+      }
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'nan-bounce',
+    seconds: 8,
+    setup: async (page, base) => {
+      // Racing on by itself, it drives straight over the mushrooms (the good bits don't need her to aim): up to just
+      // before the first one.
+      await page.goto(`${base}#/world/thailand/nan-trip/race`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 140, null, { timeout: 60000 })
+    },
+    act: async (page) => {
+      await page.waitForFunction(() => window.__thaiNanQA().bounces > 0, null, { timeout: 8000 }).catch(() => {})
+      await page.waitForTimeout(2500)
+    },
+  },
+)
+
 // The Nan road trip's mushroom farm (greybox): misting, the core verb. Her finger holds the hose on the rack and sweeps
 // along the middle row (mist, pins popping, swelling, the rainbow), then in round 2 pulls a grown clump off and carries
 // it to the basket.

@@ -1,4 +1,5 @@
-// The gas pedal, for driving the longtail by tilting the phone (tilt.ts): the boat race and the whole bay on an iPhone.
+// The gas pedal, for driving by tilting the phone (tilt.ts): the longtail in the boat race and the whole bay, and the
+// kart in the Nan Mountain Cup, on an iPhone.
 // A big green button bottom left (beside Sparkle, under her left thumb). Held down = full speed; it stays held if her
 // thumb slides off it, until it lifts. A finger bounces on it when she hasn't pressed it for a while. On a computer,
 // the space bar is the pedal.

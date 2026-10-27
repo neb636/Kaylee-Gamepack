@@ -4,9 +4,9 @@
 // - Finger on the water (or on the boat, then drag): the boat goes after it. Far ahead = fast, near = slow, held to one
 //   side it keeps turning (doughnuts), behind it = a U-turn. Let go and it coasts and bobs. A tap = go there.
 //   Both at once, Dad's pick (PR #99): a finger anywhere on the water, or one that grabs the boat and drags.
-// - On an iPhone (race/tilt.ts, as in the boat race): she holds the phone sideways and turns it like a wheel to steer,
-//   and holds the gas pedal (race/GasPedal.tsx) to go. Off the pedal it coasts and settles (a tilt still turns the bow
-//   at a crawl); a finger on the water no longer drives, but taps still poke things and a glow still takes her there.
+// - On an iPhone (trip/race/tilt.ts, as in the boat race): she holds the phone sideways and turns it like a wheel to
+//   steer, and holds the gas pedal (trip/race/GasPedal.tsx) to go. Off the pedal it coasts and settles (a tilt still
+//   turns the bow at a crawl); a finger on the water no longer drives, but taps still poke things and a glow still takes her there.
 // - Tap the boat: VROOM. Bump a rock: boing (it slides round, never stuck). Cross the tour boat's wake fast: a jump.
 // The verb deepens three ways: open water (rocks, wakes, critters to drive up to), tight places (the village's lane,
 // where boats go slowly; the canoe through the low cave, where the family must lie down or Daddy's horn bonks the
@@ -40,7 +40,7 @@ import { Driver } from '../../../../../engine3d/drive'
 import { buildCanoe } from '../../../trip/vehicles/canoe'
 import { buildLongtail, type Longtail } from '../../../trip/vehicles/longtail'
 import type { Vehicle } from '../../../trip/vehicles/vehicle'
-import type { SteerMode, Tilt } from '../race/tilt'
+import type { SteerMode, Tilt } from '../../../trip/race/tilt'
 import type { BoatSection } from '../sections'
 import { CAVE_ANCHORS, CaveStop } from './cave'
 import type { CritterId } from './critters'

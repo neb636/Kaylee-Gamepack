@@ -19,6 +19,8 @@ export interface RoadLook {
   /** A river crossing under the road at `s` (a bridge carries the road over it). */
   river?: { s: number; width: number }
   trees: number
+  /** Chevron signs round the sharp bends (on unless false: a race track has hay bales there instead). */
+  signs?: boolean
   /** Seed for the hills and the trees (the same road always looks the same). */
   seed: number
 }
@@ -281,7 +283,7 @@ export function buildRoadScene(road: Road, look: RoadLook, bag: Bag): RoadScene 
 
   // ---- Chevron signs round the sharp bends, on the outside, facing her as she comes ----
   const signs: BufferGeometry[] = []
-  for (let s = 8; s < road.length - 8; s += 7) {
+  for (let s = 8; s < road.length - 8 && look.signs !== false; s += 7) {
     const k = road.bendAhead(s - 6, 12) / 12
     if (Math.abs(k) < 1 / 38) continue
     const side = -Math.sign(k)

@@ -63,4 +63,4 @@ export function legOf(s: NanSection): string | null {
 }
 /** Where the trip picks up next time she says yes to the mountains (the start of a leg). */
 export const RESUME: NanSection[] = ['goodbye', 'airport', 'takeoff', 'rental', 'map']
-export const RESUME_AT: Partial<Record<NanSection, NanSection>> = { fly: 'takeoff', land: 'takeoff', drive: 'map', mushrooms: 'map', rice: 'map', salt: 'map', three: 'map' }
+export const RESUME_AT: Partial<Record<NanSection, NanSection>> = { fly: 'takeoff', land: 'takeoff', drive: 'map', mushrooms: 'map', rice: 'map', salt: 'map', race: 'map', three: 'map' }
