@@ -173,10 +173,8 @@ const SCENARIOS = [
   // Bo Kluea's salt wells: a tap on the pan (or the bucket) dips a bucketful and pours it, a tap on the woodpile throws a
   // log on, a tap on the pan in round 3 scrapes a stripe, so the auto-player can play it through to the bags.
   { name: 'thailand nan: the salt wells', id: 'nan-salt', hash: '#/world/thailand/nan-trip/salt', reset: true },
-  // The rental desk, the Nan map and the 3 (greybox, step 6): a tap on the fob presses it, a tap on a bag puts it in the
-  // boot, a tap on the seatbelt clicks it, so the auto-player can buckle up and drive off; on the map a tap on a place
-  // drives the little Pajero there; the 3 from above plays by itself.
-  { name: 'thailand nan: the rental desk', id: 'nan-rental', hash: '#/world/thailand/nan-trip/rental', reset: true },
+  // The Nan map and the 3 (greybox, step 6): on the map a tap on a place drives the little Pajero there; the 3 from
+  // above plays by itself.
   { name: 'thailand nan: the nan map', id: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true },
   { name: 'thailand nan: the 3 from above', id: 'nan-three-view', hash: '#/world/thailand/nan-trip/three', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },

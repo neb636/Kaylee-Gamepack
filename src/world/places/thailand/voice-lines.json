@@ -1016,45 +1016,6 @@
     "voice": "ji"
   },
   "Want to see real rice grow, Kaylee?",
-  "Press the key!",
-  "Put the bags in the car!",
-  "Click your seatbelt, Kaylee!",
-  {
-    "text": "Sawasdee ka! Here is your key!",
-    "voice": "clerk"
-  },
-  {
-    "text": "Have a happy trip!",
-    "voice": "clerk"
-  },
-  {
-    "text": "Hee hee!",
-    "voice": "clerk"
-  },
-  {
-    "text": "Welcome to Nan!",
-    "voice": "clerk"
-  },
-  {
-    "text": "What a big car!",
-    "voice": "clerk"
-  },
-  {
-    "text": "Ding! Yes please?",
-    "voice": "clerk"
-  },
-  {
-    "text": "Whoa! Beep beep!",
-    "voice": "nick"
-  },
-  {
-    "text": "In they go!",
-    "voice": "nick"
-  },
-  {
-    "text": "Ready? Let's go!",
-    "voice": "ji"
-  },
   "Where shall we go first, Kaylee?",
   "Tap a place to drive there!",
   {

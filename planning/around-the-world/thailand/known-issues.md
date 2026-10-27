@@ -132,8 +132,8 @@ stop after the city road) are fixed.
 - [ ] **The salt wells' three verbs** (bucket, logs, paddle) are one grab-and-move verb but feel like three; round 2 has
   ~20-30 s of waiting for the boil. Playtest QA scored it OK, not fun.
   - Check: `#/world/thailand/nan-trip/salt?round=2`. Code: `activities/nan-trip/salt/salt3d.ts`.
-- [ ] **A first trip is long** (~15-20 min with packing, the plane and the rental desk before two stops). Watch where she
-  drifts; ideas: ✈️🏠 after one stop on a first trip, a shorter rental desk.
+- [ ] **A first trip is long** (~15-20 min with packing and the plane before two stops; the rental desk was cut
+  2026-10-27). Watch where she drifts; idea: ✈️🏠 after one stop on a first trip.
 - [ ] **Kaylee is mostly seen from behind** at the mushroom rack (she faces the bags).
 - [ ] **The map's crayons and cloth are clipped** at the board's edge in some sizes (nothing she plays with).
 - [ ] **Listen:** the clerk, the mushroom aunty, the salt aunty (new voices, northern Thai accent), Daddy's "Whoa! Beep

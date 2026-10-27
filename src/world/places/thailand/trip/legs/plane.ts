@@ -18,7 +18,7 @@
 //   "Where to?" (`events.asking`: the trip shows his card of postcards, WhereTo.tsx): the elephants turn it up the
 //   side road (to Baan Chang), the longtail drives on to the pier (`choose`).
 //   The Nan road trip lands in the mountains instead (`landing: 'nan'`): a green valley with rice fields and a ring of
-//   round mountains comes up under the plane, and after the claps the trip goes on to the rental desk (`events.done`).
+//   round mountains comes up under the plane, and after the claps the trip goes on to the Nan map (`events.done`).
 // Every part moves on by itself (about 35 s in all), whatever she does, and the ⏩ button skips ahead (`skip`).
 import { CanvasTexture, CatmullRomCurve3, Color, ConeGeometry, ExtrudeGeometry, Fog, Group, Matrix4, Mesh, MeshBasicMaterial, Path, PlaneGeometry, Shape, ShapeGeometry, Sprite, SpriteMaterial, SRGBColorSpace, TextureLoader, TubeGeometry, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds } from '../../../../../sdk'
@@ -178,7 +178,7 @@ export class PlaneRide extends Stage {
   private counts = { snacks: 0, shades: 0, lights: 0, screens: 0, belts: 0, vents: 0 }
   /** Flight seconds per real second (the trip's cap). */
   private pace = 1
-  /** Landed in Nan and off to the rental desk. */
+  /** Landed in Nan and off to the Nan map. */
   private off = false
 
   constructor(renderer: WebGLRenderer, protected events: Ev, start: FlySection, private packed: string[], private route: { from: LonLat; to: LonLat } = { from: PLACES.bangkok, to: PLACES.krabi }, cap = FLIGHT_S, private fork: KrabiFork = 'pier', private landing: Landing = 'krabi') {
@@ -1086,10 +1086,10 @@ export class PlaneRide extends Stage {
   }
 
   /** Off the plane: the family on the songthaew's bench at the arrivals arch, the suitcase across from them. (In Nan
-   *  the trip goes on to the rental desk.) */
+   *  the trip goes on to the Nan map.) */
   private toKrabi() {
     if (this.landing === 'nan') {
-      if (!this.off) this.events.done('rental')
+      if (!this.off) this.events.done('map')
       this.off = true
       return
     }

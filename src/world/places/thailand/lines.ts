@@ -434,20 +434,6 @@ export const L = {
       // The rice farm's video, after Mommy's photo on the deck (rice/video.ts).
       video: `Want to see real rice grow, ${NAME}?`,
     },
-    // The rental desk at Nan airport (rental/): the clerk (a puppy) hands over the key, the bags go in, the seatbelt.
-    rental: {
-      key: 'Press the key!',
-      boot: 'Put the bags in the car!',
-      belt: `Click your seatbelt, ${NAME}!`,
-      hi: by('clerk')('Sawasdee ka! Here is your key!'),
-      bye: by('clerk')('Have a happy trip!'),
-      // Tap the clerk (in turn), and the bell on the counter.
-      tap: [by('clerk')('Hee hee!'), by('clerk')('Welcome to Nan!'), by('clerk')('What a big car!')],
-      bell: by('clerk')('Ding! Yes please?'),
-      jump: nick('Whoa! Beep beep!'),
-      bags: nick('In they go!'),
-      go: ji("Ready? Let's go!"),
-    },
     // The Nan map (map/): Sparkle's first line, her hint, and Mommy after two stops and after all three.
     map: {
       first: `Where shall we go first, ${NAME}?`,

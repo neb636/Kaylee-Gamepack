@@ -740,13 +740,12 @@ const SCREENS = [
   { name: 'nan-salt-1', hash: '#/world/thailand/nan-trip/salt', reset: true, wait: 3500 },
   { name: 'nan-salt-2', hash: '#/world/thailand/nan-trip/salt?round=2', reset: true, wait: 3500 },
   { name: 'nan-salt-3', hash: '#/world/thailand/nan-trip/salt?round=3', reset: true, wait: 3500 },
-  // The rental desk, the Nan map (none done, then two stops done: the airport opens) and the 3 from above.
-  ...['key', 'boot', 'belt'].map((round) => ({ name: `nan-rental-${round}`, hash: `#/world/thailand/nan-trip/rental?round=${round}`, reset: true, wait: round === 'belt' ? 4500 : 3500 })),
+  // The Nan map (none done, then two stops done: the airport opens) and the 3 from above.
   { name: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true, wait: 3500 },
   { name: 'nan-map-stops', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,rice', reset: true, wait: 3500 },
   { name: 'nan-three', hash: '#/world/thailand/nan-trip/three', reset: true, wait: 4000 },
   // The Nan trip's loop (the trip kit's legs): Mommy's card with 🏔️🚙, packing with the mountain things, the goodbye,
-  // the x-ray, the window seat, landing in Nan's green valley (it plays out to the rental desk), and coming home (the
+  // the x-ray, the window seat, landing in Nan's green valley (it plays out to the Nan map), and coming home (the
   // flight, then Agong asks for his photo and the Nan photos fan out).
   ...['invite', 'pack', 'goodbye', 'airport', 'fly'].map((to) => ({ name: `nan-${to}`, hash: `#/world/thailand/nan-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : 2600 })),
   { name: 'nan-land', hash: '#/world/thailand/nan-trip/land', reset: true, wait: 5500 },

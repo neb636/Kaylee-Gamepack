@@ -2,8 +2,7 @@
 // `activities`), with its look and voices. The whole trip:
 //   the way there and home (Loop.tsx, the trip kit's legs): Mommy asks where to (invite, 🏔️🚙), packing for the
 //   mountains (pack), the goodbye and Aunty Sri's van (goodbye), the x-ray belt (airport), the window seat north to Nan
-//   (takeoff, fly, land), then
-//   the rental desk (rental/, section rental): the key fob, the bags into the boot, the seatbelt, and off they drive to
+//   (takeoff, fly, land), then off the plane straight to
 //   the Nan map (map/, section map), the trip's hub: tap a place (or drag the little Pajero there) and it drives there
 //   on the diorama, then the mountain road (drive/, section drive) to it: the valley road to Baan Huanam Mushroom Farm
 //   (mushrooms/), the sky road to Kaylee's rice farm under Stop Time Cafe (rice/) or to Bo Kluea's salt wells (salt/),
@@ -28,8 +27,6 @@ import { NanMap } from './map/NanMap'
 import { BASKET_SEED, ROUNDS as FARM_ROUNDS, type Round } from './mushrooms/layout'
 import { Mushrooms } from './mushrooms/Mushrooms'
 import { parsePhotos, PHOTO_OF, type PhotoId } from './photo'
-import { ROUNDS as RENTAL_ROUNDS, type Round as RentalRound } from './rental/layout'
-import { Rental } from './rental/Rental'
 import { ROUNDS as RICE_ROUNDS, type Round as RiceRound } from './rice/layout'
 import { Rice } from './rice/Rice'
 import type { Round as SaltRound } from './salt/layout'
@@ -39,7 +36,6 @@ import { isLoop, legOf, PASS, RESUME, RESUME_AT, type LoopSection } from './trip
 
 type At =
   | { section: LoopSection }
-  | { section: 'rental'; round: RentalRound }
   | { section: 'map' }
   | { section: 'drive'; road: RoadId; to: string }
   | { section: 'three' }
@@ -68,8 +64,7 @@ function driveTo(place: PlaceId): At {
 
 /** The legs punched on the boarding pass before `next`'s: the way there up to it, and the stops done. */
 function doneBefore(next: NanSection, stops: Stop[], punch: string | null) {
-  const way = isLoop(next) && next !== 'home' ? ['pack', 'fly'].slice(0, next === 'invite' || next === 'pack' ? 0 : next === 'goodbye' ? 1 : 2) : ['pack', 'fly', 'rental']
-  if (next === 'rental') way.pop()
+  const way = isLoop(next) && next !== 'home' ? ['pack', 'fly'].slice(0, next === 'invite' || next === 'pack' ? 0 : next === 'goodbye' ? 1 : 2) : ['pack', 'fly']
   return [...way, ...stops].filter((id) => id !== punch && id !== legOf(next))
 }
 
@@ -111,9 +106,8 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     if (first === 'salt') return { section: 'salt', round: (['1', '2', '3'].includes(round) ? round : '1') as SaltRound }
     if (first === 'rice') return { section: 'rice', round: ((RICE_ROUNDS as readonly string[]).includes(round) ? round : 'plant') as RiceRound }
     if (first === 'drive') return { section: 'drive', road: param('road') as RoadId, to: param('to') }
-    if (first === 'map') return { section: 'map' }
     if (first === 'three') return { section: 'three' }
-    return { section: 'rental', round: ((RENTAL_ROUNDS as readonly string[]).includes(round) ? round : 'key') as RentalRound }
+    return { section: 'map' }
   })
   useEffect(() => {
     const p = formatPacked(packed)
@@ -156,7 +150,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     }, 2300)
   }
   /** The legs of the trip kit end in one of these. */
-  const onLeg = (next: string) => go(next === 'rental' ? { section: 'rental', round: 'key' } : { section: next as LoopSection })
+  const onLeg = (next: string) => go(isLoop(next) ? { section: next } : { section: 'map' })
 
   /** 🏔️🚙 on Mommy's card: straight to packing; or, with a trip half done or after her first whole trip, where to start
    *  (🧳 a new trip, the next leg's icon to keep going, 🗺️ straight to the Nan map). */
@@ -186,7 +180,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     setStops(st)
     state.current = { ...state.current, packed: ids, stops: st }
     const to = how === 'map' ? 'map' : saved.at!
-    setTimeout(() => go(to === 'rental' ? { section: 'rental', round: 'key' } : isLoop(to) ? { section: to } : { section: 'map' }), 50)
+    setTimeout(() => go(isLoop(to) ? { section: to } : { section: 'map' }), 50)
   }
 
   /** Back to the map from a stop: its stamp lands there (the trip saves there). */
@@ -227,19 +221,6 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
           onLeg={onLeg}
           onPacked={setPacked}
           onDone={finished}
-        />
-      )
-    if (at.section === 'rental')
-      return (
-        <Rental
-          key="rental"
-          round={at.round}
-          onRound={(round) => setAt({ section: 'rental', round })}
-          onDone={() => {
-            // Saved, so "Keep going" opens the map instead of the key, the bags and the belt again.
-            save('map')
-            setAt({ section: 'map' })
-          }}
         />
       )
     if (at.section === 'map')
