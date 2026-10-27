@@ -904,6 +904,16 @@ export class IcebergMaker implements World3D {
           }
           f.vz = Math.max(f.vz, Math.min(3, (front - f.z) * 1.5))
         }
+        // Never off the sides of the screen: a soft wall turns it back (so a sideways flick can't lose it).
+        if (f.state === 'float' && !held) {
+          const side = this.tall ? 6.5 : 10
+          const over = Math.abs(f.x) - side
+          if (over > 0) {
+            const k = Math.sign(f.x)
+            if (f.vx * k > 0) f.vx *= -0.4
+            f.vx -= k * Math.min(4, over * 3) * dt
+          }
+        }
         // Far enough out (sail): it's away.
         if (f.state === 'float' && this.section === 'sail' && f.z > AWAY_Z && f.kind !== 'growler') this.sailAway(f)
         break
