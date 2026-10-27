@@ -737,6 +737,42 @@ GAME_SCENARIOS.push(
   },
 )
 
+// Sugar Snow (2D greybox): her finger tips the pot and pours a wave of syrup across the snow (thin where she moves,
+// a puddle where she stops), it steams and sets, then the stick rolls it back up into a lollipop that flies to Maple.
+GAME_SCENARIOS.push({
+  name: 'canada-taffy-pour',
+  seconds: 9,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/canada/taffy/pour`)
+    await page.waitForFunction(() => window.__canadaTaffyQA?.().section, null, { timeout: 20000 })
+    await page.waitForTimeout(600)
+  },
+  act: async (page) => {
+    const snow = (fx, fy) =>
+      page.evaluate(([fx, fy]) => {
+        const svg = document.querySelector('svg[aria-label="Pour maple syrup on the snow"]')
+        const wide = svg.clientWidth / svg.clientHeight >= 1.05
+        const s = wide ? { x: 330, y: 270, w: 940, h: 630 } : { x: 85, y: 440, w: 830, h: 730 }
+        const p = new DOMPoint(s.x + s.w * fx, s.y + s.h * fy).matrixTransform(svg.getScreenCTM())
+        return [p.x, p.y]
+      }, [fx, fy])
+    const wave = Array.from({ length: 24 }, (_, i) => [0.2 + (0.6 * i) / 23, 0.5 + 0.2 * Math.sin((i / 23) * Math.PI * 2)])
+    await page.mouse.move(...(await snow(...wave[0])))
+    await page.mouse.down()
+    for (const p of wave) {
+      await page.mouse.move(...(await snow(...p)), { steps: 3 })
+      await page.waitForTimeout(40)
+    }
+    await page.waitForTimeout(900)
+    await page.mouse.up()
+    await page.waitForTimeout(2800)
+    await page.mouse.move(...(await snow(...wave[0])))
+    await page.mouse.down()
+    for (const p of wave) await page.mouse.move(...(await snow(...p)), { steps: 3 })
+    await page.mouse.up()
+  },
+})
+
 // Mountain Bike (3D greybox): Maple riding the blue way's berms with the wheel under her finger, pushed right up the
 // berm and held, then let go: she leans into the bends, bumps over the roots and drifts back to the middle of her way.
 GAME_SCENARIOS.push({
