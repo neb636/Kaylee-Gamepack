@@ -39,6 +39,8 @@ const deg = Math.PI / 180
 /** Kaylee's size over the 1 m model (model.ts's KAYLEE_SIZE): small things (the crown) stand on the shelf a bit
  *  bigger than on her, so they're easy to see and grab. */
 const SIZE = 1.25
+/** How far in front of her (toward the camera, m) a dragged thing is carried, so her body never hides it. */
+const DRAG_FRONT = 0.5
 /** Where each of her pivots is in her body (model meters), so a thing on the shelf is put together like on her. */
 const PIVOTS: Record<string, [number, number, number]> = { head: [0, 0.44, 0.04], body: [0, 0, 0], legL: [-0.072, 0.16, 0.03], legR: [0.072, 0.16, 0.03], armL: [-0.11, 0.4, 0.04], armR: [0.11, 0.4, 0.04] }
 
@@ -775,11 +777,17 @@ export class WardrobePlugin implements HousePlugin {
     return Math.hypot(at.x - k.x, at.z - k.z) < 0.5 && up > -0.1 && up < this.kaylee.height * 1.15
   }
 
-  /** Where the finger is on an upright plane through her, facing the camera (where a dragged thing goes). */
+  /** The camera's facing, flat on the floor. */
+  private camFlat() {
+    return this.house.rig.camera.getWorldDirection(new Vector3()).setY(0).normalize()
+  }
+
+  /** Where the finger is on an upright plane facing the camera, just in front of her (where a dragged thing goes), so
+   *  what she's carrying passes in front of her instead of into her. */
   private dragPoint(x: number, y: number) {
     this.ray.setFromCamera(this.ndc(x, y), this.house.rig.camera)
-    const n = this.house.rig.camera.getWorldDirection(new Vector3()).setY(0).normalize()
-    const p = this.kaylee.position.clone().add(new Vector3(0, 0.6, 0))
+    const n = this.camFlat()
+    const p = this.kaylee.position.clone().add(new Vector3(0, 0.6, 0)).addScaledVector(n, -DRAG_FRONT)
     return this.ray.ray.intersectPlane(new Plane().setFromNormalAndCoplanarPoint(n, p), new Vector3())
   }
 
@@ -865,7 +873,8 @@ export class WardrobePlugin implements HousePlugin {
     if (d.kind !== 'thing' || !d.id) return true
     const t = this.thing(d.id)
     const at = t.holder.position.clone()
-    const onHer = this.near(at) || !!this.partAt(d.lastX, d.lastY, at)
+    // Pushed back onto her plane to judge where it landed (the drag plane is in front of her).
+    const onHer = this.near(at.clone().addScaledVector(this.camFlat(), DRAG_FRONT)) || !!this.partAt(d.lastX, d.lastY, at)
     if (d.id.startsWith('pot-')) {
       const mirror = this.mirrorAt(d.lastX, d.lastY)
       const part = mirror ? null : this.partAt(d.lastX, d.lastY, at)
