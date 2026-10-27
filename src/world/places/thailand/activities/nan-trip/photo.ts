@@ -2,16 +2,17 @@
 // outlined look (no words in them), 4:3 like the other trips' photos. Coming home, they fan out and she picks the one
 // for Agong's wall. `deck`: Mommy's photo on Stop Time Cafe's deck over the rice steps, a cloud on the ridge; `three`:
 // the family at the viewpoint with the giant 3 of the road behind them; `pizza`: the mushroom pizza with her pink
-// mushrooms; `salt`: the big pan in Bo Kluea, steaming, with her heap of white salt. (The look step may take real
-// snapshots instead.) No three.js.
+// mushrooms; `salt`: the big pan in Bo Kluea, steaming, with her heap of white salt; `cup`: Kaylee on top of the
+// podium holding up the Nan Mountain Cup, with Mommy and Daddy cheering. (The look step may take real snapshots
+// instead.) No three.js.
 import { photoColors } from '../../characters/style'
 import { blob, INK, unicorn } from '../../trip/postcard'
 import type { Stop } from './map/layout'
 
-export type PhotoId = 'deck' | 'three' | 'pizza' | 'salt'
-export const PHOTO_IDS: PhotoId[] = ['deck', 'three', 'pizza', 'salt']
+export type PhotoId = 'deck' | 'three' | 'pizza' | 'salt' | 'cup'
+export const PHOTO_IDS: PhotoId[] = ['deck', 'three', 'pizza', 'salt', 'cup']
 /** Each stop's photo (the 3's comes from the viewpoint). */
-export const PHOTO_OF: Record<Stop, PhotoId> = { rice: 'deck', mushrooms: 'pizza', salt: 'salt' }
+export const PHOTO_OF: Record<Stop, PhotoId> = { rice: 'deck', mushrooms: 'pizza', salt: 'salt', cup: 'cup' }
 
 const W = 480
 const H = 360
@@ -30,7 +31,7 @@ export function drawPhoto(id: PhotoId): string {
   const g = c.getContext('2d')
   if (!g) return ''
   g.lineJoin = g.lineCap = 'round'
-  ;({ deck, three, pizza, salt })[id](g)
+  ;({ deck, three, pizza, salt, cup })[id](g)
   return c.toDataURL('image/jpeg', 0.85)
 }
 
@@ -185,4 +186,52 @@ function salt(g: CanvasRenderingContext2D) {
     g.closePath()
     g.fill()
   }
+}
+
+function cup(g: CanvasRenderingContext2D) {
+  // The race ground: a blue sky with bunting, the podium in the middle, Kaylee on top holding the big gold Cup up,
+  // Mommy and Daddy cheering either side.
+  g.fillStyle = '#BFE3F2'
+  g.fillRect(0, 0, W, H)
+  for (const [x, y] of [[80, 70], [400, 54]]) blob(g, x, y, 50, 16, '#FFFFFF', 0)
+  const flags = ['#FF4F9A', '#FFC83D', '#8FE3C8', '#A8DCFF', '#B9A6F5']
+  for (let i = 0; i < 12; i++) {
+    const x = 10 + i * 40
+    const y = 30 + Math.sin((i / 11) * Math.PI) * 26
+    g.beginPath()
+    g.moveTo(x, y)
+    g.lineTo(x + 34, y + (i < 6 ? 4 : -4))
+    g.lineTo(x + 17, y + 30)
+    g.closePath()
+    g.fillStyle = flags[i % flags.length]
+    g.fill()
+    stroke(g, 3, INK)
+  }
+  g.fillStyle = '#9ED9A6'
+  g.fillRect(0, 280, W, H)
+  // The podium: 2 on the left, 1 in the middle, 3 on the right.
+  for (const [x, w, h, c] of [[110, 100, 50, '#D9DCE8'], [190, 100, 80, '#FFC83D'], [290, 100, 34, '#FFC2A8']] as const) {
+    g.fillStyle = c
+    g.fillRect(x, 300 - h, w, h + 70)
+    g.strokeStyle = INK
+    g.lineWidth = 5
+    g.strokeRect(x, 300 - h, w, h + 70)
+  }
+  unicorn(g, 240, 200, 34, ...KAYLEE)
+  // The Cup over her head: a gold bowl with handles on a stem and a base.
+  blob(g, 240, 112, 34, 26, '#FFC83D')
+  g.beginPath()
+  g.arc(206, 108, 12, Math.PI * 0.5, Math.PI * 1.5)
+  g.arc(274, 108, 12, Math.PI * 1.5, Math.PI * 0.5)
+  stroke(g, 5, INK)
+  g.fillStyle = '#FFC83D'
+  g.fillRect(232, 134, 16, 16)
+  g.fillRect(220, 148, 40, 10)
+  g.strokeStyle = INK
+  g.lineWidth = 4
+  g.strokeRect(232, 134, 16, 16)
+  g.strokeRect(220, 148, 40, 10)
+  blob(g, 240, 106, 12, 6, '#FFF0B8', 0)
+  unicorn(g, 60, 290, 40, ...MOMMY)
+  unicorn(g, 420, 290, 44, ...DADDY)
 }

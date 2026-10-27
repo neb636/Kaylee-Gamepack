@@ -608,6 +608,34 @@ GAME_SCENARIOS.push(
     },
   },
   {
+    // Iceberg Maker: the long crack tapped all the way (it creaks, leans out, groans), the giant drops with a splash and
+    // a wave, rocks and settles, and the camera sinks under the waterline; then her finger pushes it down and lets go.
+    name: 'poles-iceberg-giant',
+    seconds: 14,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/poles/iceberg/giant?pole=north`)
+      await page.waitForFunction(() => window.__polesIcebergQA?.().section, null, { timeout: 20000 })
+      await page.waitForTimeout(1000)
+    },
+    act: async (page) => {
+      for (let i = 0; i < 5; i++) {
+        const b = await page.locator('[data-anchor="giant"]').boundingBox()
+        if (!b) break
+        await page.mouse.click(b.x + b.width / 2, b.y + b.height / 2)
+        await page.waitForTimeout(450)
+      }
+      await page.waitForFunction(() => window.__polesIcebergQA?.().under, null, { timeout: 12000 })
+      await page.waitForTimeout(1500)
+      const b = await page.locator('[data-anchor="berg"]').boundingBox()
+      if (!b) throw new Error('no berg')
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+      await page.mouse.down()
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2 + vp.height * 0.25, { steps: 20 })
+      await page.waitForTimeout(800)
+      await page.mouse.up()
+    },
+  },
+  {
     name: 'poles-sun',
     seconds: 6,
     setup: async (page, base) => {
@@ -623,6 +651,26 @@ GAME_SCENARIOS.push(
       await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2 + vp.height * 0.45, { steps: 30 })
       await page.waitForTimeout(2500)
       await page.mouse.up()
+    },
+  },
+  {
+    // Snow Coats (2D): her finger zigzags over the brown fox; the coat goes white where it goes and fluffs up, then the
+    // rest puffs on by itself and the fox hops.
+    name: 'poles-coats-rub',
+    seconds: 6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/poles/coats/fox`)
+      await page.waitForFunction(() => window.__polesCoatsQA?.().section, null, { timeout: 20000 })
+      await page.waitForTimeout(800)
+    },
+    act: async (page) => {
+      const b = await page.locator('[data-k="fox-body"]').boundingBox()
+      if (!b) throw new Error('no fox')
+      await page.mouse.move(b.x, b.y + b.height * 0.25)
+      await page.mouse.down()
+      for (let r = 0; r <= 12; r++) await page.mouse.move(b.x + (r % 2 ? 0 : b.width), b.y + b.height * (0.25 + (0.65 * r) / 12), { steps: 14 })
+      await page.mouse.up()
+      await page.waitForTimeout(1500)
     },
   },
 )
@@ -1416,6 +1464,67 @@ GAME_SCENARIOS.push(
     act: async (page) => {
       await page.waitForFunction(() => window.__thaiNanQA().bounces > 0, null, { timeout: 8000 }).catch(() => {})
       await page.waitForTimeout(2500)
+    },
+  },
+)
+
+// The Nan Mountain Cup, greybox 2: each new track's trick. On the rice steps (nan-splash) racing on by itself through
+// the first puddles (it steers into them): the splash, the mud on the kart. On the climb (nan-cloud) from just below the
+// cloud: the white closing in and the lanterns lighting up one by one as it drives under them.
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-splash',
+    seconds: 8,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 50, null, { timeout: 60000 })
+    },
+    act: async (page) => {
+      await page.waitForFunction(() => window.__thaiNanQA().splashes > 1, null, { timeout: 12000 }).catch(() => {})
+      await page.waitForTimeout(1500)
+    },
+  },
+  {
+    name: 'nan-cloud',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=cloud`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().cloud?.in > 0.15, null, { timeout: 120000 })
+    },
+    act: async (page) => {
+      await page.waitForTimeout(10000)
+    },
+  },
+)
+
+// The Nan Mountain Cup (greybox 3): the silver podium, where she taps the winner (Grandma Taeng) for a high five and
+// Taeng hops down to tie her ribbon on the pink kart and back up; then the Cup ceremony: the scoreboard lights up race by
+// race, the Cup flies over from its stand, a tap and she lifts it over her head (fireworks, everyone cheering).
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-high-five',
+    seconds: 6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/podium?track=steps&place=2`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().mode === 'podium', null, { timeout: 30000 })
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      await page.getByRole('button', { name: 'Grandma Taeng', exact: true }).click({ force: true }).catch(() => {})
+      await page.waitForFunction(() => window.__thaiNanQA().ui.next, null, { timeout: 30000 }).catch(() => {})
+      await page.waitForTimeout(800)
+    },
+  },
+  {
+    name: 'nan-cup-lift',
+    seconds: 7,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/cup-win`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().cupHere, null, { timeout: 60000 })
+    },
+    act: async (page) => {
+      await page.getByRole('button', { name: 'The Nan Mountain Cup', exact: true }).click({ force: true }).catch(() => {})
+      await page.waitForTimeout(6000)
     },
   },
 )

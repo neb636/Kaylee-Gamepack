@@ -6,8 +6,10 @@
 // lights, benches and stools, the steps up), Bo Kluea's salt village at the turn-off off the sky road (a wet street
 // down to the open salt huts: the big pan steaming over its fire, baskets heaped with white salt, the well with its
 // bamboo pole, and the wooden house with its mural of a Tai Lue couple), the 3 road's viewpoint (a little open pavilion with a pink roof, a fence
-// at the edge, a bench, a coin telescope, pots of pink bougainvillea), Nan town's market stalls, and the three-step
-// waterfall down the mountain beside the sky road. Each faces +z (the road).
+// at the edge, a bench, a coin telescope, pots of pink bougainvillea), Nan town's market stalls, the three-step
+// waterfall down the mountain beside the sky road, and, with the Nan Mountain Cup on (cup/cup.ts), the market square
+// dressed as its race ground (a balloon arch over the way in, the board with its three tracks, the grandstand, the Cup
+// on its stand, bunting). Each faces +z (the road).
 import { Group, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../../../engine3d/geo'
@@ -59,6 +61,29 @@ export function buildLandmark(kind: LandmarkKind, bag: Bag): Group {
       ...[-1, 1].map((sx) => P.cyl(0.05, 0.05, 3.6, DARK, { at: [sx * 5, 1.8, 3.6] })),
       ...[-4, -2.4, -0.8, 0.8, 2.4, 4].map((x, i) => P.sphere(0.24, [PAL.hotpink, PAL.gold, PAL.pink][i % 3], { at: [x, 3.1 - Math.cos((x / 5) * 1.3) * 0.4 + 0.15, 3.6], scale: [1, 1.2, 1] }, 10)),
     )
+  } else if (kind === 'raceground') {
+    // The race ground: the square's paving, a checkered arch with balloons over the way in, the board with its three
+    // tracks (forest green, rice-step green, cloud blue), the grandstand with its striped roof, the Cup on a pink stand.
+    const colors = [PAL.pink, PAL.butter, PAL.mint, PAL.sky, PAL.lavender]
+    parts.push(P.box(12, 0.15, 10, '#ECE4EF', { at: [0, 0.075, 0] }))
+    for (const sx of [-1, 1]) parts.push(P.cyl(0.2, 0.24, 4.6, PAL.cream, { at: [sx * 3.2, 2.3, 4.2] }, 10))
+    for (let i = 0; i < 8; i++) parts.push(P.box(0.8, 0.7, 0.25, i % 2 ? '#FFFFFF' : PAL.ink, { at: [-2.8 + i * 0.8, 4.6, 4.2] }))
+    for (const sx of [-1, 1]) for (let i = 0; i < 5; i++) parts.push(P.sphere(0.32, colors[i], { at: [sx * (3.2 + Math.cos(i * 1.3) * 0.45), 5.3 + (i % 3) * 0.4, 4.2 + Math.sin(i * 1.3) * 0.4], scale: [1, 1.15, 1] }, 10))
+    // The board, at the back on the left.
+    parts.push(
+      P.cyl(0.14, 0.16, 4, PAL.cream, { at: [-5.2, 2, -2.4] }, 8),
+      P.cyl(0.14, 0.16, 4, PAL.cream, { at: [-0.8, 2, -2.4] }, 8),
+      P.rbox(4.8, 2.4, 0.2, 0.1, PAL.lavender, { at: [-3, 2.6, -2.3] }),
+      ...['#5FAE7E', '#BFE8C8', '#A8DCFF'].map((c, i) => P.rbox(1.25, 1.25, 0.1, 0.08, c, { at: [-4.45 + i * 1.45, 2.5, -2.15] })),
+    )
+    // The grandstand on the right, its roof striped pink and white.
+    for (let i = 0; i < 3; i++) parts.push(P.box(4.6, 0.45 * (i + 1), 0.8, i % 2 ? '#C9BDF0' : PAL.lavender, { at: [3.2, 0.225 * (i + 1), -1.6 - i * 0.8] }))
+    for (let i = 0; i < 6; i++) parts.push(P.box(0.8, 0.08, 3, i % 2 ? '#FFFFFF' : PAL.hotpink, { at: [1.2 + i * 0.8, 3.1, -2.4] }))
+    for (const x of [1.0, 5.4]) parts.push(P.cyl(0.08, 0.08, 3.1, PAL.cream, { at: [x, 1.55, -0.9] }, 8))
+    // The Cup on its stand in the middle.
+    parts.push(P.cyl(0.4, 0.5, 1.2, PAL.pink, { at: [0, 0.75, -0.6] }, 14), P.cyl(0.08, 0.12, 0.3, GOLD, { at: [0, 1.5, -0.6] }, 10), P.cyl(0.36, 0.14, 0.45, GOLD, { at: [0, 1.85, -0.6] }, 16))
+    // Bunting from the arch to the grandstand.
+    for (let i = 0; i < 12; i++) parts.push(P.cone(0.2, 0.4, [PAL.hotpink, GOLD, PAL.mint, PAL.sky][i % 4], { at: [-3 + i * 0.75, 4.1 - Math.sin((i / 11) * Math.PI) * 0.6, 1.4], rot: [Math.PI, 0, 0], scale: [1, 1, 0.2] }, 3))
   } else if (kind === 'mushrooms') {
     // Baan Huanam: the dark plank mushroom house with a tin roof and the big pink mushroom on it, its door open on the
     // rows of sawdust bags; out front the farm's table under an umbrella and mushroom stools; trees behind.

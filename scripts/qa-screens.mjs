@@ -393,7 +393,14 @@ const SCREENS = [
   ...['story', 'steady', 'drift', 'melt', 'mama'].map((to) => ({ name: `poles-floe-${to}`, hash: `#/world/poles/floe/${to}`, reset: true, wait: to === 'mama' ? 4200 : 1800 })),
   // Penguin Slide (greybox 3): each stretch from its link (home: the feeding, then the colony).
   ...['top', 'bumps?run=right', 'dive', 'home?krill=12'].map((to) => ({ name: `poles-slide-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/poles/slide/${to}`, reset: true, wait: to.startsWith('home') ? 5000 : 2500 })),
-  { name: 'poles-coats-soon', hash: '#/world/poles/coats/soon', wait: 800 },
+  // Iceberg Maker (greybox 4): the pick, then each stretch at both poles from its link (sail: the camera turned round,
+  // looking out to sea from the cliff top).
+  { name: 'poles-iceberg-pick', hash: '#/world/poles/iceberg/pick', reset: true, wait: 1800 },
+  ...['bits', 'giant', 'sail'].flatMap((to) => ['north', 'south'].map((pole) => ({ name: `poles-iceberg-${to}-${pole}`, hash: `#/world/poles/iceberg/${to}?pole=${pole}`, reset: true, wait: to === 'sail' ? 3000 : 1800 }))),
+  // Snow Coats (greybox 5, 2D): the brown fox in late summer, hide and seek (half painted), the summer.
+  { name: 'poles-coats-fox', hash: '#/world/poles/coats/fox', reset: true, wait: 1500 },
+  { name: 'poles-coats-hide', hash: '#/world/poles/coats/hide?painted=fox,hare', reset: true, wait: 1500 },
+  { name: 'poles-coats-summer', hash: '#/world/poles/coats/summer', reset: true, wait: 1500 },
   { name: 'poles-party-soon', hash: '#/world/poles/party/soon', wait: 800 },
   // Canada: the train map (greybox 1): the whole country first, then the train at each stop and on the way (the
   // prairies, just out of the Spiral Tunnel); then an activity's and the finale's "coming soon" cards.
@@ -748,6 +755,18 @@ const SCREENS = [
   // itself, a bit slower, with no finger down).
   { name: 'nan-cup-grid', hash: '#/world/thailand/nan-trip/race', reset: true, wait: 4500 },
   { name: 'nan-cup-race', hash: '#/world/thailand/nan-trip/race?result=lose', reset: true, wait: 14000 },
+  // Greybox 2: the Rice Steps (the terraces, the first puddles) and the Cloud Top Climb (a blossom shower), a few seconds
+  // in. (In the cloud and the waterfall are qa-motion's nan-cloud and nan-splash.)
+  { name: 'nan-cup-steps', hash: '#/world/thailand/nan-trip/race?track=steps', reset: true, wait: 14000 },
+  { name: 'nan-cup-cloud', hash: '#/world/thailand/nan-trip/race?track=cloud', reset: true, wait: 14000 },
+  // Greybox 3: the race ground's board (one race done, its medal), the podium both ways (gold; silver with the winner
+  // glowing for her high five), the Cup ceremony (the scoreboard lit, the Cup floating beside her), and the Nan map with
+  // the Cup's stamp on Nan town.
+  { name: 'nan-cup-board', hash: '#/world/thailand/nan-trip/cup?cup=forest:1', reset: true, wait: 6000 },
+  { name: 'nan-cup-gold', hash: '#/world/thailand/nan-trip/podium?track=forest&place=1', reset: true, wait: 6000 },
+  { name: 'nan-cup-silver', hash: '#/world/thailand/nan-trip/podium?track=steps&place=2', reset: true, wait: 6000 },
+  { name: 'nan-cup-win', hash: '#/world/thailand/nan-trip/cup-win', reset: true, wait: 12000 },
+  { name: 'nan-cup-map', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,cup&cup=1', reset: true, wait: 5000 },
   { name: 'nan-salt-1', hash: '#/world/thailand/nan-trip/salt', reset: true, wait: 3500 },
   { name: 'nan-salt-2', hash: '#/world/thailand/nan-trip/salt?round=2', reset: true, wait: 3500 },
   { name: 'nan-salt-3', hash: '#/world/thailand/nan-trip/salt?round=3', reset: true, wait: 3500 },

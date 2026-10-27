@@ -12,9 +12,13 @@
 // salt wells (salt?round=1|2|3, step 4): dip the bucket in the well and pour the brine into the big pan, feed the fire
 // till it boils down, scrape the salt into her basket; and the 3 from above (three, step 6): the "number 3" road
 // below, its bends popping one, two, three, then Mommy's photo with the 3 behind them and ✈️🏠. In the works (plan:
-// thailand/nan-cup.html, greybox 1; only its link reaches it): the Nan Mountain Cup's kart race (race?track=forest&
-// result=win|lose), her pink kart against Grandma Taeng, Pao and Moon through the Mushroom Forest, won by a nose or
-// (the one race she loses) lost by one. Loaded at startup: keep three.js out of this file.
+// thailand/nan-cup.html, greyboxes 1-3, behind CUP_OPEN in cup/cup.ts; `?cup=1` turns it on): the Nan Mountain Cup at
+// the end of the city road. The race ground and its board (cup?cup=<record>&lose=<track>): pick a track; the kart race
+// (race?track=forest|steps|cloud&result=win|lose), her pink kart against Grandma Taeng, Pao and Moon through the
+// Mushroom Forest, down the Rice Steps or up into the cloud, won by a nose or (the one race she loses) lost by one; the
+// podium (podium?track=...&place=1|2: gold, or silver, a high five and the winner's gift on her kart); the Cup ceremony
+// (cup-win?cup=...: the scoreboard, KAYLEE lifts the Cup, the photo, the stamp on Nan town). Loaded at startup: keep
+// three.js out of this file.
 import { defineSections } from '../../../../kit/sections'
 import { ITEMS } from '../../trip/packing'
 import { RESULTS } from './cup/rivals'
@@ -29,13 +33,16 @@ const NAN_SECTIONS = defineSections('thailand', 'nan-trip', {
     packed: { default: 'raincoat,boots,teddy,umbrella', doc: `what's in her suitcase, a comma list of ${ITEMS.map((i) => i.id).join(', ')} (Mommy always tucks in the umbrella)` },
     photos: { default: '', doc: "the trip's photos to pick from at home, a comma list of deck (Stop Time Cafe), three (the 3 from the viewpoint), pizza (the mushroom farm) and salt (Bo Kluea). Empty: one for each stop done and the 3 (deck,three with none)" },
     replay: { default: '', doc: '1 = she has done the whole trip before: picking 🏔️🚙 offers 🧳 a new trip or 🗺️ straight to the Nan map, and the flight is shorter' },
-    stops: { default: '', doc: `the stops done so far, in the order she did them: a comma list of ${STOPS.join(', ')}. They wear a stamp on the Nan map (the newest one lands when she comes back to it), the Pajero waits at the last one, and after two the airport opens (home, down the 3 road)` },
+    stops: { default: '', doc: `the stops done so far, in the order she did them: a comma list of ${STOPS.join(', ')} (cup: the Nan Mountain Cup, only with the Cup on). They wear a stamp on the Nan map (the newest one lands when she comes back to it), the Pajero waits at the last one, and after two the airport opens (home, down the 3 road)` },
     road: { default: 'valley', values: ROAD_IDS, doc: 'which road the drive plays: city (through Nan town to its market, over the river), valley (the rice fields to the mushroom farm: chickens, a songthaew, a buffalo crossing), sky (up Doi Phu Kha: blind bends with round mirrors, into the cloud and out above it) or three (down the hairpins, counting the bends, then the 3 from the viewpoint)' },
     to: { default: '', doc: `where the drive is going (picked on the Nan map): ${STOPS.join(', ')} (its stop opens by itself at the end of the road) or map (back to the map: the city road). Empty: the end card` },
     weather: { default: '', values: WEATHERS, doc: "the drive's weather: rain (the wipers swish, the road shines, puddles splash), sun or cloud (grey, low cloud on the hills). Empty: rolled afresh for every drive, like the traffic and the animals" },
     round: { default: '1', values: [...new Set([...FARM_ROUNDS, ...RICE_ROUNDS])], doc: "the step of the stop on screen. The mushroom farm: 1 mist the sawdust bags until grey oyster mushrooms pop and swell, 2 pick them into the basket (keep spraying one and it grows giant), 3 new bags with pink and golden mushrooms, pizza top the mushroom pizza with her basket, bake it and share it. The rice farm (lead Kaylee with a finger; what she walks through changes behind her): plant the seedlings plip in behind her (paddy A is flooded, the other three are dry until she opens their gates), grow the rice grows from green to gold while she shoos the birds off it, harvest she cuts the golden rice into bundles (the water drained), thresh she swings each bundle from the drying rack and bangs it on the board, the grains spray into the basket, the straw onto the pile, then the steaming kratip of sticky rice, deck the sticky rice, the pink milk, Mommy's photo and the rice video on Stop Time Cafe's deck" },
-    track: { default: 'forest', values: TRACK_IDS, doc: "the Nan Mountain Cup's track: forest (the Mushroom Forest, Moon's home track: bouncy mushrooms). The rice steps and the cloud come in greybox 2" },
-    result: { default: 'win', values: RESULTS, doc: "how the Cup's race ends: win (she crosses the line first, the home rival right beside her) or lose (the home rival edges past on the last stretch and wins by a nose; she's second, never last)" },
+    track: { default: 'forest', values: TRACK_IDS, doc: "the Nan Mountain Cup's track: forest (the Mushroom Forest, Moon's home track: bouncy mushrooms), steps (the Rice Steps Rally, Grandma Taeng's: puddles that splash and muddy the kart, a waterfall that washes it) or cloud (the Cloud Top Climb, Pao's: into the cloud with glowing lanterns, pink blossom showers for a burst of speed)" },
+    result: { default: 'win', values: RESULTS, doc: "how the Cup's race ends: win (she crosses the line first, the home rival right beside her) or lose (the home rival edges past on the last stretch and wins by a nose; she's second, never last). From the board it's set by the roll (cup/cup.ts resultFor)" },
+    cup: { default: '', doc: "with the Cup on (any value turns it on: 1 before any race), the Nan Mountain Cup's races done so far, in the order she ran them, and her place in each: <track>:<1|2>, e.g. forest:1,steps:2. On the podium it includes that race. Empty: none yet (the ceremony: the whole Cup, forest:1,steps:2,cloud:1)" },
+    lose: { default: '', values: TRACK_IDS, doc: "the track she loses (forest, steps or cloud): rolled when she gets to the race ground and saved for the trip; never the last race she runs (if she won the first and this is the other one, the loss moves to the second). Empty: rolled" },
+    place: { default: '1', values: ['1', '2'], doc: 'her place on the podium: 1 (gold, the home rival beside her on 2) or 2 (silver: the home rival on 1, she gives them a high five and gets their gift on her kart)' },
     basket: { default: '', doc: "the mushrooms in her basket, <color><count> pairs of grey, pink and gold, e.g. grey5,pink2,gold1. Empty: what she'd have by then (nothing in rounds 1 and 2, grey6 in round 3, grey4,pink2 at the pizza)" },
   },
   sections: [
@@ -46,12 +53,15 @@ const NAN_SECTIONS = defineSections('thailand', 'nan-trip', {
     { id: 'takeoff', name: 'The window seat: seatbelt on, take off', params: ['packed', 'replay'] },
     { id: 'fly', name: 'The window seat: the tray, snacks, Thailand below, north to Nan', params: ['packed', 'replay'] },
     { id: 'land', name: 'Landing in the green valley at Nan, then the Nan map', params: ['packed'] },
-    { id: 'map', name: 'The Nan map: pick the next stop, or drag the little Pajero there', params: ['stops', 'packed'] },
-    { id: 'drive', name: 'The mountain road: steer the silver Pajero', params: ['road', 'to', 'weather', 'stops', 'packed'] },
+    { id: 'map', name: 'The Nan map: pick the next stop, or drag the little Pajero there', params: ['stops', 'cup', 'lose', 'packed'] },
+    { id: 'drive', name: 'The mountain road: steer the silver Pajero', params: ['road', 'to', 'weather', 'stops', 'cup', 'lose', 'packed'] },
     { id: 'mushrooms', name: 'Baan Huanam Mushroom Farm: mist the bags, pick the mushrooms, top the pizza', params: ['round', 'basket', 'stops', 'packed'] },
     { id: 'rice', name: "Kaylee's rice farm: plant the paddies, shoo the birds, cut the rice, the café's deck", params: ['round', 'stops', 'packed'] },
     { id: 'salt', name: 'Bo Kluea salt wells: dip and pour the brine (round 1), feed the fire (2), scrape the salt into the basket (3)', params: ['round', 'stops', 'packed'] },
-    { id: 'race', name: 'The Nan Mountain Cup (greybox): race the pink kart through the Mushroom Forest', params: ['track', 'result', 'stops', 'packed'] },
+    { id: 'cup', name: 'The Nan Mountain Cup (greybox): the race ground and the board, pick a track', params: ['cup', 'lose', 'stops', 'packed'] },
+    { id: 'race', name: 'The Nan Mountain Cup (greybox): race the pink kart through the Mushroom Forest, down the Rice Steps or up into the cloud', params: ['track', 'result', 'cup', 'lose', 'stops', 'packed'] },
+    { id: 'podium', name: "The Nan Mountain Cup (greybox): the podium, gold, or silver and the winner's gift", params: ['track', 'place', 'cup', 'lose', 'stops', 'packed'] },
+    { id: 'cup-win', name: 'The Nan Mountain Cup (greybox): the Cup ceremony, KAYLEE on the Cup, the photo, the stamp', params: ['cup', 'stops', 'packed'] },
     { id: 'three', name: 'The "number 3" from the viewpoint: its bends pop one, two, three, the photo, then home', params: ['stops', 'packed'] },
     { id: 'home', name: "Home: the flight, Agong's photo, the frame on his wall, the stamp", params: ['packed', 'photos'] },
   ],

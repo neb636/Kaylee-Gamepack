@@ -16,6 +16,8 @@ export interface RoadLook {
   wall?: number
   /** Flat rice paddies in squares beside the road (the valley). */
   paddies?: boolean
+  /** The paddies stepped into terraces down the hill, each step this many meters high (the rice steps). */
+  terraces?: number
   /** A river crossing under the road at `s` (a bridge carries the road over it). */
   river?: { s: number; width: number }
   trees: number
@@ -135,6 +137,7 @@ export class HeightField {
     let h = base + amp * fbm(x / 55, z / 55, look.seed)
     if (look.wall) h += look.wall * smooth(90, 260, d) * (0.65 + 0.35 * fbm(x / 30, z / 30, look.seed + 7))
     if (look.paddies && d < 120) h = base - 0.4 + (h - base) * smooth(70, 120, d)
+    if (look.terraces && d < 140) h = Math.round(h / look.terraces) * look.terraces
     // Flat under the road and its verges, easing out into the hills.
     const flat = yNear - 0.25
     h = flat + (h - flat) * smooth(road.half + 1.6, road.half + 9, d)
@@ -175,6 +178,7 @@ export class HeightField {
     const greens = ['#A3DC9C', '#8ED39A', '#77C48C', '#62B283'].map((g) => new Color(g))
     const paddy = [new Color('#B5E8A4'), new Color('#9FDCA0'), new Color('#BFE3EC')]
     const verge = new Color(VERGE)
+    const bank = new Color('#6FAE6E')
     for (let j = 0; j < nz; j++)
       for (let i = 0; i < nx; i++) {
         const k = j * nx + i
@@ -184,6 +188,12 @@ export class HeightField {
         const d = this.d[k]
         const n = fbm(x / 22, z / 22, look.seed + 3)
         if (d < road.half + 1.2) c.copy(verge)
+        else if (look.paddies && look.terraces && d < 75) {
+          // Each step its own paddy, and a grassy bank along each step's edge.
+          const hk = this.h[k]
+          const drop = Math.max(...[k - 1, k + 1, k - nx, k + nx].map((n) => (n >= 0 && n < this.h.length ? hk - this.h[n] : 0)))
+          c.copy(drop > look.terraces * 0.5 ? bank : paddy[Math.abs(Math.round(hk / look.terraces)) % 3])
+        }
         else if (look.paddies && d < 75) c.copy(paddy[Math.abs(Math.floor(x / 14) + Math.floor(z / 14)) % 3])
         else c.copy(greens[Math.min(3, Math.max(0, Math.floor((n + 1) * 2)))])
         col.set([c.r, c.g, c.b], k * 3)

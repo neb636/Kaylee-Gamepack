@@ -20,6 +20,7 @@ guides and a "Copy for agent" note to bake the camera into the game):
 graph, and a "Copy for agent" note with the numbers to bake in):
 - [The Nan mountain road's steering](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)
 - [The Nan Mountain Cup's kart: steering, the mushrooms' bounce, the rivals' rubber band](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=forest&feel=1)
+- [The Nan Mountain Cup's mud and the cloud: per puddle, how much faster, the waterfall's and the blossoms' bursts, how far she sees in the cloud](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=steps&feel=1)
 - [Canada's train: how it feels to push](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=quebec&feel=1)
 - [Canada's Mountain Bike: the steering, the lean and the bounce](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bike/berms?trail=blue&feel=1)
 
@@ -224,9 +225,18 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   - [Dip the bucket in the well, pour the brine into the pan](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/salt)
   - [Feed the fire till the brine boils down](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/salt?round=2)
   - [Scrape the salt into the basket, the bags on the shelf, then the real salt video](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/salt?round=3)
-- **The Nan Mountain Cup** (greybox, not in the game yet)
+- **The Nan Mountain Cup** (greybox, not in the game yet: `?cup=1` on a Nan trip link turns it on)
+  - [Getting there: the city road ends at the race ground](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/drive?road=city&to=cup&cup=1)
+  - [The race ground: the board, pick a track](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/cup) ([one race done](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/cup?cup=forest:1&lose=steps))
   - [The Mushroom Forest race: she wins by a nose](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=forest&result=win)
   - [The Mushroom Forest race: Moon wins by a nose, she's second](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=forest&result=lose)
+  - [The Rice Steps Rally: puddles, mud and the waterfall, she wins by a nose](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=steps&result=win) ([Grandma Taeng wins](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=steps&result=lose))
+  - [The Cloud Top Climb: the lanterns in the cloud and the blossoms, she wins by a nose](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=cloud&result=win) ([Pao wins](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=cloud&result=lose))
+  - [The podium: gold, the home rival on 2](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/podium?track=forest&place=1)
+  - [The podium: silver, a high five to Grandma Taeng and her ribbon on the kart](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/podium?track=steps&place=2&cup=forest:1,steps:2)
+  - [The last race's podium, then 🏆](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/podium?track=cloud&place=1&cup=forest:1,steps:2,cloud:1)
+  - [The Cup ceremony: the scoreboard, lift the Cup, the photo, the stamp on Nan town](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/cup-win?cup=forest:1,steps:2,cloud:1)
+  - [The Nan map with the Cup's stamp on Nan town](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/map?stops=mushrooms,cup&cup=1)
 - **Viewpoint and home**
   - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
 
@@ -254,7 +264,20 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [Under the sea](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/dive)
 - [Feeding Pebble](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/home?krill=12)
 
-**Coming soon**: [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Iceberg Maker](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+**Iceberg Maker (greybox)**
+
+- [North or south?](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/pick)
+- [Little bits](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/bits?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/bits?pole=south))
+- [The giant one (under the water)](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/giant?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/giant?pole=south))
+- [Send them sailing](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/sail?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/sail?pole=south))
+
+**Snow Coats (greybox)**
+
+- [Paint the fox](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/fox)
+- [Hide and seek](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox) ([the lemming still brown](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox,hare,ptarmigan))
+- [Rub the summer back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/summer)
+
+**Coming soon**: [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
 
 ### Canada
 
