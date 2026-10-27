@@ -229,6 +229,8 @@ class TaffyWorld {
     this.pot.x = this.pot.sx = stage.stove[0]
     this.pot.y = this.pot.sy = stage.stove[1]
     if (section === 'share') this.later(() => this.crunchAll(), 900)
+    // An orders link with everyone already full (a reload in the moment before the finale): on to everyone crunching.
+    else if (section === 'orders' && ORDER_IDS.every((id) => this.animals.get(id)?.done)) this.later(() => this.ev.section('share', { made }), 1500)
   }
 
   setStage(stage: StageDef) {
