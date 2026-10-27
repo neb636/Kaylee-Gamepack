@@ -849,6 +849,28 @@ GAME_SCENARIOS.push({
   },
 })
 
+// Whale Watch (3D greybox): her finger held on the water out ahead and to the left of the boat out at sea (it speeds up
+// and swoops round, hopping off the waves), then swung across to the right (it turns back), then let go (it coasts).
+GAME_SCENARIOS.push({
+  name: 'canada-whales-steer',
+  seconds: 9,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/canada/whales/spouts`)
+    await page.waitForFunction(() => window.__canadaWhalesQA?.().section, null, { timeout: 20000 })
+    await page.waitForTimeout(1500)
+  },
+  act: async (page) => {
+    const { boat } = await page.evaluate(() => window.__canadaWhalesQA())
+    const up = Math.min(boat.y - vp.height * 0.2, vp.height * 0.4)
+    await page.mouse.move(boat.x - vp.width * 0.18, boat.y - up)
+    await page.mouse.down()
+    await page.waitForTimeout(2600)
+    await page.mouse.move(boat.x + vp.width * 0.25, boat.y - up, { steps: 14 })
+    await page.waitForTimeout(2600)
+    await page.mouse.up()
+  },
+})
+
 // Mountain Bike (3D greybox): Maple riding the blue way's berms with the wheel under her finger, pushed right up the
 // berm and held, then let go: she leans into the bends, bumps over the roots and drifts back to the middle of her way.
 GAME_SCENARIOS.push({

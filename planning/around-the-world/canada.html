@@ -18,11 +18,11 @@
   "kind": "New place (3D + 2D)",
   "updated": "2026-10-27",
   "status": {
-    "label": "Greybox 6 built: Dad leads the herd over the bridge",
+    "label": "Greybox 7 built: Dad steers the boat out to the whales",
     "tone": "pink"
   },
   "pitch": "Sparkle's balloon lands in snowy **Quebec City**, where **Maple the beaver** wants to see all of Canada and gather a hockey team on the way. Kaylee pushes the red **Maple Leaf Train** across a 3D map of the country to four stops: **Quebec City** (maple taffy on snow, rolling carnival snowmen), **Mont-Sainte-Anne** (biking down the mountain, a campfire night with a flashlight), **Banff** (a red canoe on a turquoise lake, the animal bridge over the highway) and **British Columbia** (whales and sea otters off Tofino, salmon and the white spirit bear). Every stop has one 3D and one 2D activity, and about 40 animals to meet and collect in Maple's book. The finale is a pond hockey game on Ottawa's frozen canal.",
-  "next": "Dad plays **greybox 6, Animal Bridge** on the iPad (the PR's links: the elk family, the bighorn sheep, the shy grizzlies, the camera's photos; add `?feel=1` to tune how mama follows her finger and how the line follows her), says whether leading the herd is fun, and answers the **[open questions](#questions)** (and, if not yet, which way to paddle stays in Red Canoe). Next: **greybox 7: Whale Watch**.",
+  "next": "Dad plays **greybox 7, Whale Watch** on the iPad (the PR's links: the harbour, the otters in the kelp, follow the spouts, the orca family, listen under the water; the 🎡 button at the top right swaps to steering with the wheel; add `?feel=1` to tune the boat's steering, its bounce on the waves and how close is close enough), says whether steering the boat is fun and which way to steer stays, and answers the **[open questions](#questions)**. Next: **greybox 8: Salmon Leap**.",
   "facts": [
     {
       "icon": "🚂",
@@ -1921,12 +1921,14 @@
             {
               "n": 8,
               "title": "Greybox: Whale Watch",
-              "status": "next"
+              "status": "done",
+              "date": "2026-10-27",
+              "md": "The boat toy off Tofino on the shared water and drive control: her finger holds the water where the boat should go (or the bike's finger wheel, side by side), and it bounces on the waves, hopping off the crests when it's fast. The harbour, then towing the sleepy otter home gently, then following the spouts to two grey whales and two humpbacks (the last one jumps), then the orca family jumping in the wake and the baby copying her turns; the yellow microphone dips the camera under the waves to listen. Steering, bounce and finding are feel-lab knobs."
             },
             {
               "n": 9,
               "title": "Greybox: Salmon Leap",
-              "status": "todo"
+              "status": "next"
             },
             {
               "n": 10,
@@ -2207,6 +2209,49 @@
                 }
               ],
               "pr": 246
+            },
+            {
+              "title": "Greybox 7: Whale Watch",
+              "date": "2026-10-27",
+              "status": "done",
+              "summary": "The sea off Tofino, seen from just behind the boat: the little town on the south shore with its dock and two fishing boats, the lighthouse point and the eagle's point either side of the harbour, the sea lions' flat rock, the kelp bed with the otters' raft, the puffins' stack, a big wooded island with the surf breaking on its beach, and the open Pacific to the north with Vancouver Island's misty mountains all round. The sea is the shared `engine3d/water.ts`; the boat drives on the shared `engine3d/drive.ts`. Maple stands at the wheel of a little pink-tubed whale-watching boat in her pink life jacket, binoculars round her neck; the yellow underwater microphone sits on its reel at the stern. Placeholder shapes, no voices yet; a short line at the bottom says what's on screen, for Dad.",
+              "items": [
+                "**Steer** (`?steer=finger`, the default): her finger holds the water where the boat should go and it follows, like the Thai bay: far ahead is fast, near is a crawl, to one side it keeps turning, behind it is a U-turn; a pink ring shows where. A tap on the water drives it there and stops. A finger on an animal pokes it with a tap, and steers once it's held or moves.",
+                "**The wheel** (`?steer=wheel`): the Mountain Bike's finger wheel. A finger down anywhere goes, pushing it left or right turns, letting go coasts. The 👆/🎡 switch at the top right swaps between the two from the same part of the sea.",
+                "**The bounce:** calm in the harbour, bigger waves out past the points. Each crest that passes under rocks the bow up; faster than about half speed, a crest throws the boat into the air and it splashes down (spray both sides, the tubes squash). It leans into turns, the wheel turns in Maple's paws, and it bumps softly off the rocks, the islands and the dock. Near the edge of the sea it turns gently back.",
+                "**The harbour** (`harbour`): from the dock. Out past the points (about 25 m) it's on to the otters.",
+                "**The otters in the kelp** (`otters`): four otters float on their backs in the kelp, holding hands in pairs; a sleepy one has drifted off (sparkles over her). Go gently close (slower than about 3 m/s) and she wakes, waves and grabs the boat's rope; the boat tows her slowly by itself (a speed cap, so she can't be lost) and near the raft she swims to her friend and they hold hands. Then the second one floats off and it happens again. Zoom past the raft fast and they all dive and pop up with seaweed on their heads, frowning; go gently by and they wave. After 15 s the sleepy one paddles toward the boat herself, and the 👆 points her way.",
+                "**Follow the spouts** (`spouts`, `?found=0-3`): a spout shoots up 30-45 m ahead and to one side, again every 4 s, and Maple lifts her binoculars. Steer there and the whale comes up across the boat's way, blows, rolls, shows its tail and dives. Two grey whales, then a humpback (long white flippers), then a humpback that jumps right out and crashes down. Close enough is 12 m, growing to 22 m after 15 s; after 20 s the spout moves closer. Sit right on it when it blows and the whale sneezes on the boat: Maple is soaked, droops, then shakes the water off.",
+                "**The orca family** (`orcas`): grandma, mama, the tall-finned dad and the baby swim in from ahead and keep beside the boat, fins up. Going fast, one jumps in the wake every second or so; slow, now and then anyway. A clear turn makes the baby turn too, with a wiggle and a squeak. After 8 fast jumps and 2 copied turns they all jump together, the camera swings round, Maple cheers and slaps her tail, a fanfare and confetti; 🔁 sets off from the harbour again.",
+                "**Listen under the water** (`listen`, and the 🎧 microphone any time): tap the microphone and the boat stops, the microphone goes down on its cable, and the camera dips under the waves: the sea floor, the kelp's long stalks, the bright surface above, the humpback swimming round singing (long synthesized swoops) and, once she's met them, the orcas whistling and clicking. Tap the whale and it sings, an orca and it whistles, the water and bubbles come up. Tap the microphone again, steer, or wait 16 s, and it comes back up.",
+                "**Pokes:** Maple's boat (a toot-toot, Maple waves, every third one a tail slap), the otters (one cracks a shell on her tummy: clack clack), the sleepy otter (she waves), the whale while it's up (a tail slap), any orca (it jumps and calls), the sea lions (bark; sometimes one slides off into the water and hauls out again), the bald eagle on the dead tree (wings out, a screech), the puffin (flaps and hops), the purple sea stars (wiggle, a twinkle), the surfer (wobbles and falls off, climbs back on), the lighthouse (the foghorn, the beam spins fast), the kelp (a rustle), the water (a splash). No steering for 8 s: a 👆 presses the water toward the sleepy otter or the spout (the wheel's slide hint with `?steer=wheel`).",
+                "**Knobs** (`?feel=1`): `whaleHelm` (top speed, speeding up, coasting drag, turn rate, grip, crawl-when-close, full-speed-from, the straight-ahead zone, lean, the camera turning with it), `whaleWheel` (wheel size, dead middle, gentle small pushes, smoothing, how far a full push turns), `whaleBounce` (waves, between crests, hops from, hop, rocking, springiness, squash on landing) and `whaleFind` (gently and too fast near the otters, the towing speed, the spout's close-enough and how it grows, the sneeze distance, the orcas' jumping speed and jumps before the finale). The graph shows how far ahead her finger is, the turn she asks for, the speed, the turning, the height in the air and the pitch."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "items": [
+                    "Two ways to steer side by side, like Red Canoe: the plan's finger on the water (the Thai bay's) and the bike's finger wheel, so Dad can pick on the iPad.",
+                    "The otters are a job, not only a stop: a sleepy otter has drifted from the raft and she tows her home gently, so “go gently” is something she does (and that's why otters hold hands). The silly dive with seaweed on their heads stays for zooming past.",
+                    "The orcas' payoff waits for jumps and copied turns (8 and 2, knobs), so she plays with them a while before the big family jump.",
+                    "Listening is a side verb: the microphone works anywhere, the `listen` link opens it out at sea with the humpback and the orcas, and the address bar goes to `listen` while it's down and back when it comes up. The humpback always comes to sing, even in the harbour.",
+                    "No story section yet (the one line before the first touch comes with the voices). `found` (0-3) starts a spouts link at a later whale."
+                  ]
+                },
+                {
+                  "type": "list",
+                  "title": "Known small things",
+                  "items": [
+                    "The boat drives through a whale that comes up in its way (no bump yet).",
+                    "Under the water the islands' rocks end just below the surface (the fog hides it mostly).",
+                    "The robot run took about 95 s through all four parts with a finger held on each target; with a child's wandering it should land in the plan's 2-3 min.",
+                    "The harbour is about 180 draw calls (every kelp frond is its own shape); fine on an iPad, merge them at the art gate.",
+                    "Placeholder shapes everywhere (the art gate gives the boat, Maple, the whales and the coast their looks)."
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -2216,7 +2261,7 @@
       "id": "sections",
       "title": "Sections: tap to play",
       "icon": "🔗",
-      "lede": "In play order. Built so far: the hub, Mountain Bike, Sugar Snow, Campfire Night and Red Canoe; the rest are the planned links.",
+      "lede": "In play order. Built so far: the hub, Mountain Bike, Sugar Snow, Campfire Night, Red Canoe, Animal Bridge and Whale Watch; the rest are the planned links.",
       "blocks": [
         {
           "type": "sections",
@@ -2566,35 +2611,67 @@
             {
               "n": 1,
               "id": "harbour",
-              "name": "The harbour",
-              "status": "todo"
+              "name": "The harbour"
             },
             {
               "n": 2,
               "id": "otters",
-              "name": "The otters in the kelp",
-              "status": "todo"
+              "name": "The otters in the kelp"
             },
             {
               "n": 3,
               "id": "spouts",
-              "name": "Follow the spouts",
-              "status": "todo"
+              "name": "Follow the spouts"
             },
             {
               "n": 4,
               "id": "orcas",
-              "name": "The orca family",
-              "status": "todo"
+              "name": "The orca family"
             },
             {
               "n": 5,
               "id": "listen",
-              "name": "Listen under the water",
-              "status": "todo"
+              "name": "Listen under the water"
             }
           ],
           "title": "Whale Watch"
+        },
+        {
+          "type": "sections",
+          "base": "#/world/canada/whales/",
+          "title": "Whale Watch: handy cases",
+          "items": [
+            {
+              "n": 1,
+              "id": "harbour",
+              "query": "steer=wheel",
+              "name": "Steering with the finger wheel instead"
+            },
+            {
+              "n": 2,
+              "id": "spouts",
+              "query": "found=2",
+              "name": "The humpback"
+            },
+            {
+              "n": 3,
+              "id": "spouts",
+              "query": "found=3",
+              "name": "The humpback that jumps"
+            },
+            {
+              "n": 4,
+              "id": "spouts",
+              "query": "feel=1",
+              "name": "Tune the steering, the bounce and the finding (feel lab)"
+            },
+            {
+              "n": 5,
+              "id": "spouts",
+              "query": "steer=wheel&feel=1",
+              "name": "Tune the wheel (feel lab)"
+            }
+          ]
         },
         {
           "type": "sections",

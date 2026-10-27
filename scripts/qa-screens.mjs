@@ -423,6 +423,9 @@ const SCREENS = [
   // Animal Bridge (2D greybox): each family from its link (the grizzlies at the bare bridge, then the bridge planted),
   // and the camera's photos at the end.
   ...['elk', 'sheep', 'bears', 'bears?green=1', 'album'].map((to) => ({ name: `canada-bridge-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/bridge/${to}`, reset: true, wait: to === 'album' ? 3200 : 1500 })),
+  // Whale Watch (3D greybox): each part from its link (the harbour both ways to steer, the humpback that jumps), and
+  // under the water listening.
+  ...['harbour', 'harbour?steer=wheel', 'otters', 'spouts', 'spouts?found=3', 'orcas', 'listen'].map((to) => ({ name: `canada-whales-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/whales/${to}`, reset: true, wait: to === 'listen' ? 4500 : 3000 })),
   { name: 'canada-party-soon', hash: '#/world/canada/party/soon', wait: 800 },
   // The mall day's trip loop (greybox): Mommy's card (🚤 / 🛝🍕), the day pass's choices on a replay, the goodbye with
   // the whole family and the Veloz (then everyone in it), ICONSIAM's glimpse, the lift going up, the counter with her

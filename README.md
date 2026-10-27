@@ -27,6 +27,7 @@ graph, and a "Copy for agent" note with the numbers to bake in):
 - [Canada's Campfire Night: the flashlight's size and softness, how it follows her finger, finding things, roasting](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/eyes?feel=1)
 - [Canada's Red Canoe: stroke power, turn and drag](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/glide?feel=1) ([the finger pull](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/glide?paddle=pull&feel=1))
 - [Canada's Animal Bridge: how mama follows her finger, how the line follows mama, planting the bridge](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/elk?feel=1)
+- [Canada's Whale Watch: the boat's steering and its bounce on the waves, finding the animals](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts?feel=1) ([with the wheel](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts?steer=wheel&feel=1))
 
 
 **Offline:** after it opens once on wifi it saves every game, picture and voice, so it plays in the car or on a plane.
@@ -334,10 +335,18 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [The shy grizzlies](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/bears?crossed=elk,sheep) ([the bridge already planted](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/bears?crossed=elk,sheep&green=1))
 - [The camera’s photos](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/album?crossed=elk,sheep,bears)
 
+**Whale Watch (greybox)**
+
+- [The harbour](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/harbour) ([steering with the wheel instead](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/harbour?steer=wheel))
+- [The otters in the kelp](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/otters)
+- [Follow the spouts](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts) ([the humpback](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts?found=2), [the humpback that jumps](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts?found=3))
+- [The orca family](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/orcas)
+- [Listen under the water](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/listen)
+
 **Coming soon**
 
 - Quebec City: [Carnival Snowballs](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/soon)
-- British Columbia: [Whale Watch](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/soon), [Salmon Leap](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/soon)
+- British Columbia: [Salmon Leap](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/soon)
 - Finale: [Animal Homes + Pond Hockey](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/soon)
 
 ## How new things get made
