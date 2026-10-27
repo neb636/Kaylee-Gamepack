@@ -681,6 +681,24 @@ GAME_SCENARIOS.push(
     },
   },
   {
+    // The finale: her finger steers Terry left, right, left over the Arctic; the fish he flies over are his.
+    name: 'poles-party-fly',
+    seconds: 7,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/poles/party/fly?leg=north`)
+      await page.waitForFunction(() => window.__polesPartyQA?.().mode, null, { timeout: 20000 })
+      await page.waitForTimeout(1200)
+    },
+    act: async (page) => {
+      for (const x of [0.2, 0.8, 0.3, 0.7]) {
+        await page.mouse.move(vp.width * x, vp.height * 0.75)
+        await page.mouse.down()
+        await page.waitForTimeout(1400)
+        await page.mouse.up()
+      }
+    },
+  },
+  {
     // Snow Coats (2D): her finger zigzags over the brown fox; the coat goes white where it goes and fluffs up, then the
     // rest puffs on by itself and the fox hops.
     name: 'poles-coats-rub',

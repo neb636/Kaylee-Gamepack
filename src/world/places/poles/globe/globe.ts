@@ -112,7 +112,7 @@ function rng(seed: number) {
 }
 
 /** Antarctica's height at this many degrees from the South Pole. */
-const domeR = (deg: number) => 1 + DOME_H * Math.cos(Math.min(deg / DOME_DEG, 1) * (Math.PI / 2)) ** 2
+export const domeR = (deg: number) => 1 + DOME_H * Math.cos(Math.min(deg / DOME_DEG, 1) * (Math.PI / 2)) ** 2
 
 /** A lathed cap round the +y axis: `outer(deg)` from the pole out to `maxDeg`, back along `inner`. */
 function cap(maxDeg: number, outer: (deg: number) => number, inner: number) {
@@ -137,7 +137,7 @@ function upTo(dir: Vector3): [number, number, number] {
 }
 
 /** Stands something on the globe at a latitude and longitude, `r` from the center, feet down. */
-function standOn(o: Object3D, lat: number, lon: number, r: number) {
+export function standOn(o: Object3D, lat: number, lon: number, r: number) {
   ll(lat, lon, r, o.position)
   o.quaternion.setFromUnitVectors(UP, tmp.copy(o.position).normalize())
 }
@@ -209,10 +209,10 @@ export class Critter {
     this.arms.forEach((a, i) => (a.rotation.z = (i ? -1 : 1) * (0.25 + w * (1.9 + 0.45 * Math.sin(this.waveT * 16)))))
   }
 }
-const HOP_S = 0.7
+export const HOP_S = 0.7
 const WAVE_S = 1.6
 
-interface Floe {
+export interface Floe {
   o: Group
   dir: Vector3
   base: Quaternion
@@ -220,6 +220,125 @@ interface Floe {
   /** How far into summer it melts (outer floes go first). */
   melt: number
 }
+
+// ---------------------------------------------------------------- the Earth's parts (shared with the finale)
+
+/** Where the Earth's parts go and how they're drawn (the globe's light, an ink outline). */
+export interface EarthKit {
+  spin: Group
+  prop(geometry: BufferGeometry, px?: number): Group
+}
+
+/** The Arctic: a thin sheet of sea ice floating on the ocean, broken into floes round its edge. */
+export function buildNorth(k: EarthKit) {
+  const floes: Floe[] = []
+  const capN = k.prop(bake(cap(13, () => 1.022, 0.996), ICE), 2.5)
+  k.spin.add(capN)
+  const r = rng(7)
+  const n = 18
+  for (let i = 0; i < n; i++) {
+    const fromPole = 14.5 + r() * 6
+    const size = 0.035 + r() * 0.03
+    const o = k.prop(bake(new CylinderGeometry(size, size, 0.02, 7), ICE, { scale: [1, 1, 0.65 + r() * 0.5], rot: [0, r() * 3, 0] }), 1.5)
+    standOn(o, 90 - fromPole, (360 * i) / n + r() * 12, 1.004)
+    k.spin.add(o)
+    floes.push({ o, dir: o.position.clone().normalize(), base: o.quaternion.clone(), phase: r() * 6, melt: 0.15 + 0.7 * (1 - (fromPole - 14.5) / 6) })
+  }
+  return { cap: capN, floes }
+}
+
+/** Antarctica: a high dome of ice on land, with mountains and the peninsula, ringed by sea ice that comes and goes. */
+export function buildSouth(k: EarthKit) {
+  const floes: Floe[] = []
+  const south = (lat: number, lon: number) => ll(lat, lon, 1)
+  const parts = [
+    bake(cap(DOME_DEG, domeR, 0.99), LAND_ICE, { rot: [Math.PI, 0, 0] }),
+    // East Antarctica bulges out further, and the peninsula reaches toward South America.
+    bake(cap(13, (d) => 1 + 0.05 * Math.cos(Math.min(d / 13, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-73, 80)) }),
+    bake(cap(5, (d) => 1 + 0.03 * Math.cos(Math.min(d / 5, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-67, -62)) }),
+    bake(cap(4, (d) => 1 + 0.025 * Math.cos(Math.min(d / 4, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-71, -66)) }),
+  ]
+  // The Transantarctic Mountains, across the middle.
+  for (const [lat, lon, s] of [[-84, -170, 1], [-85, 175, 1.2], [-83, 160, 0.9], [-80, 155, 1.1], [-86, -150, 0.8], [-78, 162, 0.8], [-82, -175, 0.7]] as const) {
+    const fromPole = 90 + lat
+    const dir = south(lat, lon)
+    const at = dir.clone().multiplyScalar(domeR(fromPole) - 0.004)
+    const h = 0.07 * s
+    const up = upTo(dir)
+    parts.push(bake(P.cone(0.032 * s, h, '#FFFFFF').translate(0, h / 2, 0), '#FFFFFF', { at: [at.x, at.y, at.z], rot: up }))
+  }
+  k.spin.add(k.prop(merge(parts), 2.5))
+  const r = rng(11)
+  const n = 24
+  for (let i = 0; i < n; i++) {
+    const fromPole = 23.5 + r() * 5
+    const size = 0.035 + r() * 0.03
+    const o = k.prop(bake(new CylinderGeometry(size, size, 0.02, 7), ICE, { scale: [1, 1, 0.65 + r() * 0.5], rot: [0, r() * 3, 0] }), 1.5)
+    standOn(o, -90 + fromPole, (360 * i) / n + r() * 10, 1.004)
+    k.spin.add(o)
+    floes.push({ o, dir: o.position.clone().normalize(), base: o.quaternion.clone(), phase: r() * 6, melt: 0.15 + 0.7 * (1 - (fromPole - 23.5) / 5) })
+  }
+  return floes
+}
+
+export function makePola(k: EarthKit) {
+  const c = new Critter(0.17)
+  const white = '#FFFFFF'
+  c.body.add(
+    k.prop(
+      merge([
+        P.sphere(0.055, white, { at: [0, 0.058, 0], scale: [1, 0.92, 1.12] }),
+        P.sphere(0.042, white, { at: [0, 0.125, 0.035] }),
+        P.sphere(0.014, white, { at: [0.029, 0.16, 0.028] }),
+        P.sphere(0.014, white, { at: [-0.029, 0.16, 0.028] }),
+        P.sphere(0.018, '#FFF7F0', { at: [0, 0.114, 0.072], scale: [1, 0.8, 1] }),
+        P.sphere(0.008, PAL.ink, { at: [0, 0.121, 0.089] }),
+        P.sphere(0.0065, PAL.ink, { at: [0.017, 0.137, 0.07] }),
+        P.sphere(0.0065, PAL.ink, { at: [-0.017, 0.137, 0.07] }),
+        P.capsule(0.016, 0.01, white, { at: [0.03, 0.018, 0.022] }),
+        P.capsule(0.016, 0.01, white, { at: [-0.03, 0.018, 0.022] }),
+      ]),
+      2,
+    ),
+  )
+  for (const x of [0.05, -0.05]) {
+    const arm = new Group()
+    arm.position.set(x, 0.085, 0.02)
+    arm.add(k.prop(P.capsule(0.014, 0.03, white, { at: [0, -0.026, 0] }), 1.5))
+    c.body.add(arm)
+    c.arms.push(arm)
+  }
+  return c
+}
+
+export function makePebble(k: EarthKit) {
+  const c = new Critter(0.155)
+  const dark = '#3A3550'
+  c.body.add(
+    k.prop(
+      merge([
+        P.sphere(0.05, '#B9B4C9', { at: [0, 0.06, 0], scale: [1, 1.15, 0.95] }),
+        P.sphere(0.04, dark, { at: [0, 0.125, 0.005] }),
+        P.sphere(0.03, '#FFFFFF', { at: [0, 0.122, 0.026], scale: [1.05, 0.85, 0.6] }),
+        P.sphere(0.006, PAL.ink, { at: [0.012, 0.128, 0.05] }),
+        P.sphere(0.006, PAL.ink, { at: [-0.012, 0.128, 0.05] }),
+        P.cone(0.008, 0.022, dark, { at: [0, 0.115, 0.06], rot: [Math.PI / 2, 0, 0] }),
+        P.sphere(0.012, '#6F6A80', { at: [0.018, 0.006, 0.02], scale: [1, 0.5, 1.5] }),
+        P.sphere(0.012, '#6F6A80', { at: [-0.018, 0.006, 0.02], scale: [1, 0.5, 1.5] }),
+      ]),
+      2,
+    ),
+  )
+  for (const x of [0.046, -0.046]) {
+    const arm = new Group()
+    arm.position.set(x, 0.088, 0)
+    arm.add(k.prop(P.capsule(0.01, 0.035, '#8F8AA3', { at: [0, -0.026, 0] }), 1.5))
+    c.body.add(arm)
+    c.arms.push(arm)
+  }
+  return c
+}
+
 
 export class PolesGlobe implements World3D {
   readonly scene = new Scene()
@@ -318,10 +437,11 @@ export class PolesGlobe implements World3D {
     this.bag.add(hull.geometry)
     this.spin.add(new Mesh(sphere, this.mats.land), hull)
 
-    this.buildNorth()
-    this.buildSouth()
-    this.pola = this.makePola()
-    this.pebble = this.makePebble()
+    const kit: EarthKit = { spin: this.spin, prop: (g, px) => this.prop(g, px) }
+    ;({ cap: this.capN, floes: this.floesN } = buildNorth(kit))
+    this.floesS = buildSouth(kit)
+    this.pola = makePola(kit)
+    this.pebble = makePebble(kit)
     standOn(this.pola.root, 85, -95, 1.022)
     standOn(this.pebble.root, -81, -60, domeR(9) - 0.002)
     this.spin.add(this.pola.root, this.pebble.root)
@@ -337,7 +457,7 @@ export class PolesGlobe implements World3D {
         world: this.scene,
         camera: this.rig.camera,
         prop: (g, px) => this.prop(g, px),
-        make: (kind) => (kind === 'bear' ? this.makePola() : this.makePebble()),
+        make: (kind) => (kind === 'bear' ? makePola(kit) : makePebble(kit)),
         friend: (kind) => (kind === 'bear' ? this.pola : this.pebble),
         ground: (lat) => (lat < 0 ? domeR(90 + lat) : 1.022),
         show: (pole) => {
@@ -387,112 +507,6 @@ export class PolesGlobe implements World3D {
       g.add(hull)
     }
     return g
-  }
-
-  /** The Arctic: a thin sheet of sea ice floating on the ocean, broken into floes round its edge. */
-  private buildNorth() {
-    this.capN = this.prop(bake(cap(13, () => 1.022, 0.996), ICE), 2.5)
-    this.spin.add(this.capN)
-    const r = rng(7)
-    const n = 18
-    for (let i = 0; i < n; i++) {
-      const fromPole = 14.5 + r() * 6
-      const size = 0.035 + r() * 0.03
-      const o = this.prop(bake(new CylinderGeometry(size, size, 0.02, 7), ICE, { scale: [1, 1, 0.65 + r() * 0.5], rot: [0, r() * 3, 0] }), 1.5)
-      standOn(o, 90 - fromPole, (360 * i) / n + r() * 12, 1.004)
-      this.spin.add(o)
-      this.floesN.push({ o, dir: o.position.clone().normalize(), base: o.quaternion.clone(), phase: r() * 6, melt: 0.15 + 0.7 * (1 - (fromPole - 14.5) / 6) })
-    }
-  }
-
-  /** Antarctica: a high dome of ice on land, with mountains and the peninsula, ringed by sea ice that comes and goes. */
-  private buildSouth() {
-    const south = (lat: number, lon: number) => ll(lat, lon, 1)
-    const parts = [
-      bake(cap(DOME_DEG, domeR, 0.99), LAND_ICE, { rot: [Math.PI, 0, 0] }),
-      // East Antarctica bulges out further, and the peninsula reaches toward South America.
-      bake(cap(13, (d) => 1 + 0.05 * Math.cos(Math.min(d / 13, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-73, 80)) }),
-      bake(cap(5, (d) => 1 + 0.03 * Math.cos(Math.min(d / 5, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-67, -62)) }),
-      bake(cap(4, (d) => 1 + 0.025 * Math.cos(Math.min(d / 4, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-71, -66)) }),
-    ]
-    // The Transantarctic Mountains, across the middle.
-    for (const [lat, lon, s] of [[-84, -170, 1], [-85, 175, 1.2], [-83, 160, 0.9], [-80, 155, 1.1], [-86, -150, 0.8], [-78, 162, 0.8], [-82, -175, 0.7]] as const) {
-      const fromPole = 90 + lat
-      const dir = south(lat, lon)
-      const at = dir.clone().multiplyScalar(domeR(fromPole) - 0.004)
-      const h = 0.07 * s
-      const up = upTo(dir)
-      parts.push(bake(P.cone(0.032 * s, h, '#FFFFFF').translate(0, h / 2, 0), '#FFFFFF', { at: [at.x, at.y, at.z], rot: up }))
-    }
-    this.spin.add(this.prop(merge(parts), 2.5))
-    const r = rng(11)
-    const n = 24
-    for (let i = 0; i < n; i++) {
-      const fromPole = 23.5 + r() * 5
-      const size = 0.035 + r() * 0.03
-      const o = this.prop(bake(new CylinderGeometry(size, size, 0.02, 7), ICE, { scale: [1, 1, 0.65 + r() * 0.5], rot: [0, r() * 3, 0] }), 1.5)
-      standOn(o, -90 + fromPole, (360 * i) / n + r() * 10, 1.004)
-      this.spin.add(o)
-      this.floesS.push({ o, dir: o.position.clone().normalize(), base: o.quaternion.clone(), phase: r() * 6, melt: 0.15 + 0.7 * (1 - (fromPole - 23.5) / 5) })
-    }
-  }
-
-  private makePola() {
-    const c = new Critter(0.17)
-    const white = '#FFFFFF'
-    c.body.add(
-      this.prop(
-        merge([
-          P.sphere(0.055, white, { at: [0, 0.058, 0], scale: [1, 0.92, 1.12] }),
-          P.sphere(0.042, white, { at: [0, 0.125, 0.035] }),
-          P.sphere(0.014, white, { at: [0.029, 0.16, 0.028] }),
-          P.sphere(0.014, white, { at: [-0.029, 0.16, 0.028] }),
-          P.sphere(0.018, '#FFF7F0', { at: [0, 0.114, 0.072], scale: [1, 0.8, 1] }),
-          P.sphere(0.008, PAL.ink, { at: [0, 0.121, 0.089] }),
-          P.sphere(0.0065, PAL.ink, { at: [0.017, 0.137, 0.07] }),
-          P.sphere(0.0065, PAL.ink, { at: [-0.017, 0.137, 0.07] }),
-          P.capsule(0.016, 0.01, white, { at: [0.03, 0.018, 0.022] }),
-          P.capsule(0.016, 0.01, white, { at: [-0.03, 0.018, 0.022] }),
-        ]),
-        2,
-      ),
-    )
-    for (const x of [0.05, -0.05]) {
-      const arm = new Group()
-      arm.position.set(x, 0.085, 0.02)
-      arm.add(this.prop(P.capsule(0.014, 0.03, white, { at: [0, -0.026, 0] }), 1.5))
-      c.body.add(arm)
-      c.arms.push(arm)
-    }
-    return c
-  }
-
-  private makePebble() {
-    const c = new Critter(0.155)
-    const dark = '#3A3550'
-    c.body.add(
-      this.prop(
-        merge([
-          P.sphere(0.05, '#B9B4C9', { at: [0, 0.06, 0], scale: [1, 1.15, 0.95] }),
-          P.sphere(0.04, dark, { at: [0, 0.125, 0.005] }),
-          P.sphere(0.03, '#FFFFFF', { at: [0, 0.122, 0.026], scale: [1.05, 0.85, 0.6] }),
-          P.sphere(0.006, PAL.ink, { at: [0.012, 0.128, 0.05] }),
-          P.sphere(0.006, PAL.ink, { at: [-0.012, 0.128, 0.05] }),
-          P.cone(0.008, 0.022, dark, { at: [0, 0.115, 0.06], rot: [Math.PI / 2, 0, 0] }),
-          P.sphere(0.012, '#6F6A80', { at: [0.018, 0.006, 0.02], scale: [1, 0.5, 1.5] }),
-          P.sphere(0.012, '#6F6A80', { at: [-0.018, 0.006, 0.02], scale: [1, 0.5, 1.5] }),
-        ]),
-        2,
-      ),
-    )
-    for (const x of [0.046, -0.046]) {
-      const arm = new Group()
-      arm.position.set(x, 0.088, 0)
-      arm.add(this.prop(P.capsule(0.01, 0.035, '#8F8AA3', { at: [0, -0.026, 0] }), 1.5))
-      c.body.add(arm)
-      c.arms.push(arm)
-    }
-    return c
   }
 
   /** Stars over one pole (`y` = 1 north, -1 south), shown when it's night there. */
