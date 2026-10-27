@@ -848,6 +848,36 @@ GAME_SCENARIOS.push({
   },
 })
 
+// Red Canoe (3D greybox): long paddle strokes from the dock, alternating left and right of the canoe (it glides off,
+// zigzagging gently), then two on the left only (it turns right) and the blade held still on the right (it brakes and
+// turns that way).
+GAME_SCENARIOS.push({
+  name: 'canada-canoe-stroke',
+  seconds: 10,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/canada/canoe/glide`)
+    await page.waitForFunction(() => window.__canadaCanoeQA?.().section, null, { timeout: 20000 })
+    await page.waitForTimeout(3500)
+  },
+  act: async (page) => {
+    const reach = Math.min(130, vp.width * 0.14)
+    for (const side of [-1, 1, -1, 1, -1, -1]) {
+      const { canoe } = await page.evaluate(() => window.__canadaCanoeQA())
+      await page.mouse.move(canoe.x + side * reach, canoe.y - reach * 0.8)
+      await page.mouse.down()
+      await page.mouse.move(canoe.x + side * reach, canoe.y + reach, { steps: 12 })
+      await page.mouse.up()
+      await page.waitForTimeout(350)
+    }
+    const { canoe } = await page.evaluate(() => window.__canadaCanoeQA())
+    await page.mouse.move(canoe.x + reach, canoe.y)
+    await page.mouse.down()
+    await page.mouse.move(canoe.x + reach, canoe.y + 20, { steps: 3 })
+    await page.waitForTimeout(1500)
+    await page.mouse.up()
+  },
+})
+
 // Baan Chang's feeding yard (3D greybox): a banana pulled out of Daddy's basket and held up on Mali's side (her trunk
 // snakes after it, curls round it and swings it to her mouth), then a stick of sugarcane held high on the right (the
 // trunks stretch up after it) and brought down to Khanom.

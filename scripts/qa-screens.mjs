@@ -418,6 +418,8 @@ const SCREENS = [
   // Campfire Night (2D greybox): the dark campsite under the flashlight; the last one with the darkness turned off (a
   // feel-lab knob) to check where everything stands.
   ...['eyes', 'sounds', 'bandit', 'marshmallow', 'stars', 'bandit?feel.campTorch.dark=0'].map((to) => ({ name: `canada-campfire-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/campfire/${to}`, reset: true, wait: 1800 })),
+  // Red Canoe (3D greybox): each part from its link (glide both ways to paddle), the loon family at the glacier.
+  ...['glide', 'glide?paddle=pull', 'stream', 'loon', 'glacier'].map((to) => ({ name: `canada-canoe-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/canoe/${to}`, reset: true, wait: to.startsWith('glide') ? 4000 : 3000 })),
   { name: 'canada-party-soon', hash: '#/world/canada/party/soon', wait: 800 },
   // The mall day's trip loop (greybox): Mommy's card (🚤 / 🛝🍕), the day pass's choices on a replay, the goodbye with
   // the whole family and the Veloz (then everyone in it), ICONSIAM's glimpse, the lift going up, the counter with her

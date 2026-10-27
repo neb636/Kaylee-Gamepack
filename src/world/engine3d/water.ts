@@ -3,6 +3,9 @@
 // and haze toward the horizon in the scene's fog color. One draw call however big the bay is.
 //
 // swell() is the gentle up-and-down every boat on it rides (the plane itself stays flat in the greybox).
+//
+// With `opacity` below 1 the water lets through what's under it: a still lake shows the mountains' reflection that way
+// (a mirrored copy of them below the surface, places/canada/activities/canoe/).
 import { Color, Mesh, PlaneGeometry, ShaderMaterial, type ColorRepresentation } from 'three'
 import type { Bag } from './dispose'
 
@@ -22,6 +25,7 @@ const fragmentShader = /* glsl */ `
   uniform float uTime;
   uniform float uHazeNear;
   uniform float uHazeFar;
+  uniform float uAlpha;
   varying vec3 vWorld;
   float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   void main() {
@@ -40,8 +44,10 @@ const fragmentShader = /* glsl */ `
     // Dashes thin out with distance (no shimmering far away).
     dash *= 1.0 - smoothstep(14.0, 42.0, dist);
     col = mix(col, uDash, dash * 0.7);
-    col = mix(col, uHaze, smoothstep(uHazeNear, uHazeFar, dist));
-    gl_FragColor = vec4(col, 1.0);
+    float haze = smoothstep(uHazeNear, uHazeFar, dist);
+    col = mix(col, uHaze, haze);
+    // (Far off it turns solid, so the haze matches the sky's; dashes are never see-through.)
+    gl_FragColor = vec4(col, mix(uAlpha, 1.0, max(haze, dash * 0.7)));
     // The colors are linear (like every material's): convert for the screen, as three's own materials do.
     #include <colorspace_fragment>
   }
@@ -54,6 +60,8 @@ export interface WaterOpts {
   haze: ColorRepresentation
   hazeNear: number
   hazeFar: number
+  /** Below 1, see-through (default 1: solid). */
+  opacity?: number
 }
 
 export class Water {
@@ -71,9 +79,11 @@ export class Water {
           uTime: { value: 0 },
           uHazeNear: { value: o.hazeNear },
           uHazeFar: { value: o.hazeFar },
+          uAlpha: { value: o.opacity ?? 1 },
         },
         vertexShader,
         fragmentShader,
+        transparent: (o.opacity ?? 1) < 1,
       }),
     )
     this.mesh = new Mesh(bag.add(new PlaneGeometry(o.size, o.size)), this.mat)
@@ -82,6 +92,11 @@ export class Water {
 
   update(t: number) {
     this.mat.uniforms.uTime.value = t
+  }
+
+  /** How see-through it is (when it was made see-through). */
+  set opacity(a: number) {
+    this.mat.uniforms.uAlpha.value = a
   }
 
   /** New colors (the bay at sunset). */

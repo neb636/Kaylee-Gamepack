@@ -1,15 +1,14 @@
 // Canada (plan: planning/around-the-world/canada.html): ocean to ocean on the Maple Leaf Train. The home base is the 3D
 // toy-table map (activities/hub/, map/): push the train from Quebec to the Pacific, stop at a station and its two
 // activities pop up. The eight activities and the finale come one greybox at a time (Mountain Bike, activities/bike/;
-// Sugar Snow, activities/taffy/, 2D and loaded on its own so it brings no three.js); until then their links open a
-// "coming soon" card.
+// Sugar Snow, activities/taffy/, 2D and loaded on its own so it brings no three.js; Campfire Night; Red Canoe,
+// activities/canoe/, 3D and loaded on its own); until then their links open a "coming soon" card.
 import { lazy, Suspense } from 'react'
 import type { ActivitySections } from '../../kit/sections'
 import { Soon } from '../../kit/Soon'
 import type { PlaceProps } from '../../types'
 import { MountainBike } from './activities/bike/MountainBike'
 import BRIDGE from './activities/bridge/sections'
-import CANOE from './activities/canoe/sections'
 import { Hub } from './activities/hub/Hub'
 import PARTY from './activities/Party.sections'
 import SALMON from './activities/salmon/sections'
@@ -18,8 +17,9 @@ import WHALES from './activities/whales/sections'
 
 const SugarSnow = lazy(() => import('./activities/taffy/SugarSnow').then((m) => ({ default: m.SugarSnow })))
 const CampfireNight = lazy(() => import('./activities/campfire/CampfireNight').then((m) => ({ default: m.CampfireNight })))
+const RedCanoe = lazy(() => import('./activities/canoe/RedCanoe').then((m) => ({ default: m.RedCanoe })))
 const BACK = { icon: '🚂', label: 'Back to the train' }
-const SOON: Record<string, ActivitySections> = { snowman: SNOWMAN, canoe: CANOE, bridge: BRIDGE, whales: WHALES, salmon: SALMON }
+const SOON: Record<string, ActivitySections> = { snowman: SNOWMAN, bridge: BRIDGE, whales: WHALES, salmon: SALMON }
 
 export default function Place(props: PlaceProps) {
   const { meta, activity, backToMap } = props
@@ -34,6 +34,12 @@ export default function Place(props: PlaceProps) {
     return (
       <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#14102A' }} />}>
         <CampfireNight />
+      </Suspense>
+    )
+  if (activity === 'canoe')
+    return (
+      <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#C4E8FA' }} />}>
+        <RedCanoe />
       </Suspense>
     )
   if (activity === 'party') return <Soon def={PARTY} icon="🏒" name="Animal Homes + Pond Hockey" onBack={backToMap} back={BACK} />
