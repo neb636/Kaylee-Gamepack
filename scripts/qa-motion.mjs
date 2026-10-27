@@ -653,6 +653,26 @@ GAME_SCENARIOS.push(
       await page.mouse.up()
     },
   },
+  {
+    // Snow Coats (2D): her finger zigzags over the brown fox; the coat goes white where it goes and fluffs up, then the
+    // rest puffs on by itself and the fox hops.
+    name: 'poles-coats-rub',
+    seconds: 6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/poles/coats/fox`)
+      await page.waitForFunction(() => window.__polesCoatsQA?.().section, null, { timeout: 20000 })
+      await page.waitForTimeout(800)
+    },
+    act: async (page) => {
+      const b = await page.locator('[data-k="fox-body"]').boundingBox()
+      if (!b) throw new Error('no fox')
+      await page.mouse.move(b.x, b.y + b.height * 0.25)
+      await page.mouse.down()
+      for (let r = 0; r <= 12; r++) await page.mouse.move(b.x + (r % 2 ? 0 : b.width), b.y + b.height * (0.25 + (0.65 * r) / 12), { steps: 14 })
+      await page.mouse.up()
+      await page.waitForTimeout(1500)
+    },
+  },
 )
 
 // The Thailand map (2D greybox, thailand-map.html): the toy plane grabbed at Bangkok and swooped up north and round in a
