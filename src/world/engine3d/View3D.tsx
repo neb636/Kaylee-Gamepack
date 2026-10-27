@@ -37,7 +37,7 @@ export interface World3D {
 }
 
 /** Read-only state for tests and QA scripts (no jump hooks: use section links). */
-export type QAKey = '__thaiHouseQA' | '__thaiBoatQA' | '__thaiMallQA' | '__thaiNanQA' | '__thaiCastQA' | '__polesGlobeQA' | '__polesFloeQA' | '__polesSlideQA' | '__canadaMapQA'
+export type QAKey = '__thaiHouseQA' | '__thaiBoatQA' | '__thaiMallQA' | '__thaiNanQA' | '__thaiCastQA' | '__polesGlobeQA' | '__polesFloeQA' | '__polesSlideQA' | '__canadaMapQA' | '__canadaBikeQA'
 declare global {
   interface Window {
     __thaiHouseQA?: () => Record<string, unknown>
@@ -49,6 +49,7 @@ declare global {
     __polesFloeQA?: () => Record<string, unknown>
     __polesSlideQA?: () => Record<string, unknown>
     __canadaMapQA?: () => Record<string, unknown>
+    __canadaBikeQA?: () => Record<string, unknown>
   }
 }
 

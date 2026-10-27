@@ -399,7 +399,8 @@ const SCREENS = [
   // prairies, just out of the Spiral Tunnel); then an activity's and the finale's "coming soon" cards.
   { name: 'canada-intro', hash: '#/world/canada', reset: true, wait: 900 },
   ...['msa', 'quebec', 'ottawa', 'prairies', 'banff', 'rockies', 'bc'].map((at) => ({ name: `canada-map-${at}`, hash: `#/world/canada/hub/map?at=${at}`, reset: true, wait: 2200 })),
-  { name: 'canada-bike-soon', hash: '#/world/canada/bike/soon', wait: 800 },
+  // Mountain Bike (greybox 2): the gondola, each stretch from its link (berms: both ways), the waterfall at the end.
+  ...['gondola', 'green', 'berms?trail=green', 'berms?trail=blue', 'creek', 'falls'].map((to) => ({ name: `canada-bike-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/bike/${to}`, reset: true, wait: to === 'falls' ? 14000 : to === 'gondola' ? 4000 : 3500 })),
   { name: 'canada-party-soon', hash: '#/world/canada/party/soon', wait: 800 },
   // The mall day's trip loop (greybox): Mommy's card (🚤 / 🛝🍕), the day pass's choices on a replay, the goodbye with
   // the whole family and the Veloz (then everyone in it), ICONSIAM's glimpse, the lift going up, the counter with her

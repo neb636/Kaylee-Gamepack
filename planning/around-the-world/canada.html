@@ -18,11 +18,11 @@
   "kind": "New place (3D + 2D)",
   "updated": "2026-10-27",
   "status": {
-    "label": "Greybox 1 built: Dad pushes the train",
+    "label": "Greybox 2 built: Dad rides the Mountain Bike",
     "tone": "pink"
   },
   "pitch": "Sparkle's balloon lands in snowy **Quebec City**, where **Maple the beaver** wants to see all of Canada and gather a hockey team on the way. Kaylee pushes the red **Maple Leaf Train** across a 3D map of the country to four stops: **Quebec City** (maple taffy on snow, rolling carnival snowmen), **Mont-Sainte-Anne** (biking down the mountain, a campfire night with a flashlight), **Banff** (a red canoe on a turquoise lake, the animal bridge over the highway) and **British Columbia** (whales and sea otters off Tofino, salmon and the white spirit bear). Every stop has one 3D and one 2D activity, and about 40 animals to meet and collect in Maple's book. The finale is a pond hockey game on Ottawa's frozen canal.",
-  "next": "Dad plays **greybox 1, the train map** on the iPad (the PR's links; add `?feel=1` to tune the push by hand) and answers the **[open questions](#questions)** (whose trip it is, Quebec's season, which BC places, the friend's name). Next: **greybox 2: Mountain Bike**, steering down Mont-Sainte-Anne with the shared drive control.",
+  "next": "Dad rides **greybox 2, Mountain Bike** on the iPad (the PR's links: the gondola, then down the green trail, the berms, the creek and the jump to the waterfall; add `?feel=1` to tune the steering, the lean and the bounce by hand) and answers the **[open questions](#questions)**. Next: **greybox 3: Sugar Snow**, the cheapest 2D toy.",
   "facts": [
     {
       "icon": "🚂",
@@ -1881,13 +1881,14 @@
             {
               "n": 3,
               "title": "Greybox: Mountain Bike",
-              "status": "next",
-              "md": "First, because it's the feel to get right (steering on a slope) and Dad named it."
+              "status": "done",
+              "md": "First, because it's the feel to get right (steering on a slope) and Dad named it. The gondola up, then the trail down to the waterfall in four stretches, with the shared drive control and finger wheel; steering, lean and bounce are feel-lab knobs.",
+              "date": "2026-10-27"
             },
             {
               "n": 4,
               "title": "Greybox: Sugar Snow",
-              "status": "todo",
+              "status": "next",
               "md": "Second: the cheapest 2D toy, quick to try on the iPad."
             },
             {
@@ -1988,6 +1989,34 @@
                   "items": [
                     "Mont-Sainte-Anne and Quebec City are close: standing between them, the nearer one lights up.",
                     "Placeholder shapes everywhere (the art gate gives the train, the stations and the animals their looks)."
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Greybox 2: Mountain Bike",
+              "date": "2026-10-27",
+              "status": "done",
+              "summary": "Mont-Sainte-Anne in the fall: the gondola carries Maple and her bike up, and Kaylee steers the bike all the way down a 900 m forest trail to a waterfall. Placeholder shapes in the toon look (Maple is a brown beaver of spheres in a pink helmet), no voices yet.",
+              "items": [
+                "**The steer:** her finger goes down anywhere and the shared finger wheel (`engine3d/wheel.ts`, the Nan drive's) appears under it; pushing it slides where she's steering across the trail, and the bike follows with the shared drive control (`engine3d/drive.ts`). Let go and it drifts back to the middle of the trail (or of her way). The mountain does the going: steeper is faster. The bike leans into the bends and tips with the banked berms; the springs squash on bumps and landings and Maple's flat tail flaps. Knobs `bars` (the wheel, aim, turn rate, grip, the camera following the bike) and `bike` (speed, steeper is faster, lean, lean with the berm, hops off the bumps, gravity in the air, bounce, springiness), with a graph of her push, where she steers to, where the bike is, the lean and the bounce.",
+                "**Up the gondola** (11 s): her pink cabin climbs over the forest, the other cabins pass going down, each swinging on its grip; drag to rock her cabin, tap any cabin to swing it. At the top she rolls out of the station's door.",
+                "**The green trail:** wide, gentle bends, red maple leaf piles that burst all over Maple (she comes out covered in leaves), stumps on the shoulders that boing her into the air with a ring of the bell, a chipmunk running alongside, a woodpecker drumming on a birch, a moose in a pond lifting his dripping head, the gondola overhead, and three little rollers at the end.",
+                "**Berms and bumps:** the trail splits round a mossy island at green and blue signs: the green way's gentle rollers, or the blue way's steep banked berms, roots that rattle, two rock hops and two doubles. The address bar follows which way she took (`?trail=`). A porcupine up a maple puffs his quills.",
+                "**The creek and the jump:** a wooden bridge on the left (tock-tock over the planks) or a splash through the ford on the right (a frog jumps), then a wooden kicker: the bike lines up with it unless she steers round, and flies.",
+                "**The waterfall:** the meadow at the bottom, a waterfall pouring over a rock cliff into a pool; the bike rolls to a stop, Maple cheers, a rainbow fades in, a photo flash, and 🔁 rides down again from the top station.",
+                "**The look:** the trail is a banked ribbon of packed dirt (a worn line, tire ruts, about 5,000 fallen leaves); about 1,800 outlined spruces, maples and birches near it and thousands more further out; ferns, red mushrooms and boulders; the whole mountain in a fall quilt; ski runs; the St. Lawrence and its long island far below, the far shore and three layers of hills; clouds; leaves drifting down; the creek and the falls in their own flowing-water shader.",
+                "**Pokes:** Maple (the bell, a wave), every gondola cabin, the chipmunk, the moose, the woodpecker, the porcupine, the frog, leaf piles, any tree (leaves fall), the pond and the pool (splash), the ground (a puff)."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "items": [
+                    "The waterfall section is `falls`; the creek link needs no `trail` (the ways join again before the creek).",
+                    "Not in this greybox: Maple's photo in the book (a flash for now), the moose on her hockey team, the woodpecker and porcupine as stickers.",
+                    "Fall colors (red, orange and gold maples) rather than summer: Quebec's forest is at its best then, and the leaf piles need leaves."
                   ]
                 }
               ]
@@ -2142,34 +2171,39 @@
             {
               "n": 1,
               "id": "gondola",
-              "name": "Up the gondola",
-              "status": "todo"
+              "name": "Up the gondola"
             },
             {
               "n": 2,
               "id": "green",
-              "name": "The green trail",
-              "status": "todo"
+              "name": "The green trail"
             },
             {
               "n": 3,
               "id": "berms",
-              "name": "Berms and bumps",
-              "status": "todo",
-              "query": "trail=blue"
+              "name": "Berms and bumps (the green way)"
             },
             {
               "n": 4,
-              "id": "creek",
-              "name": "The creek and the jump",
-              "status": "todo",
+              "id": "berms",
+              "name": "Berms and bumps (the blue way)",
               "query": "trail=blue"
             },
             {
               "n": 5,
+              "id": "creek",
+              "name": "The creek and the jump"
+            },
+            {
+              "n": 6,
               "id": "falls",
-              "name": "The waterfall",
-              "status": "todo"
+              "name": "The waterfall"
+            },
+            {
+              "n": 7,
+              "id": "berms",
+              "name": "Tune the steering, lean and bounce (feel lab)",
+              "query": "trail=blue&feel=1"
             }
           ],
           "title": "Mountain Bike"
