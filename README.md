@@ -240,7 +240,15 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [Spin the globe](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe) ([north side](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe?side=north), [south side](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe?side=south))
 - [Drag the sun](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun) ([summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?summer=north), [the north's winter night](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?side=north&summer=south))
 
-**Coming soon**: [Ice Floe Hop](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/soon) · [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Penguin Slide](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Iceberg Maker](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+**Ice Floe Hop (greybox)**
+
+- [Pola is far from Mama](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/story)
+- [Big steady floes](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/steady) ([another layout](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/steady?layout=2))
+- [Floes that drift](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/drift)
+- [Summer melt: push the floes](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/melt)
+- [Back to Mama](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/mama)
+
+**Coming soon**: [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Penguin Slide](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Iceberg Maker](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
 
 ## How new things get made
 
