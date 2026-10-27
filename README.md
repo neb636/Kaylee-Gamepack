@@ -19,6 +19,7 @@ guides and a "Copy for agent" note to bake the camera into the game):
 **Feel lab** (development tool, add `?feel=1` to any section: sliders over the playing game for how it feels, a live
 graph, and a "Copy for agent" note with the numbers to bake in):
 - [The Nan mountain road's steering](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)
+- [Canada's train: how it feels to push](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=quebec&feel=1)
 
 
 **Offline:** after it opens once on wifi it saves every game, picture and voice, so it plays in the car or on a plane.
@@ -241,6 +242,21 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [Drag the sun](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun) ([summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?summer=north), [the north's winter night](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?side=north&summer=south))
 
 **Coming soon**: [Ice Floe Hop](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/soon) · [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Penguin Slide](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Iceberg Maker](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+
+### Canada
+
+**Home base (the train map, greybox)**
+
+- [The whole country, then the train in Quebec City](https://neb636.github.io/Kaylee-Gamepack/#/world/canada)
+- [Push the train](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map) ([Mont-Sainte-Anne](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=msa), [Ottawa](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=ottawa), [the forests](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=forest), [the prairies](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=prairies), [Banff](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=banff), [out of the Spiral Tunnel](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=rockies), [Vancouver](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=bc))
+
+**Coming soon**
+
+- Quebec City: [Sugar Snow](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/soon), [Carnival Snowballs](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/soon)
+- Mont-Sainte-Anne: [Mountain Bike](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bike/soon), [Campfire Night](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/soon)
+- Banff: [Red Canoe](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/soon), [Animal Bridge](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/soon)
+- British Columbia: [Whale Watch](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/soon), [Salmon Leap](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/soon)
+- Finale: [Animal Homes + Pond Hockey](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/soon)
 
 ## How new things get made
 
