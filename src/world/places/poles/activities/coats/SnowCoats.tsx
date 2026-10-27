@@ -940,6 +940,12 @@ export function SnowCoats() {
     if (w.stage !== stage) w.setStage(stage)
   })
 
+  const toSummer = () => {
+    setPhase('play')
+    setNote(false)
+    setRun((r) => ({ section: 'summer', painted: [], n: r.n + 1 }))
+  }
+
   const again = () => {
     setPhase('play')
     setNote(false)
@@ -1084,7 +1090,7 @@ export function SnowCoats() {
       <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
         {phase === 'dusk' && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5, type: 'spring' }} style={CORNER}>
-            <BigButton onClick={() => world.current && setRun((r) => ({ section: 'summer', painted: [], n: r.n + 1 }))} ariaLabel="Bring the summer back">
+            <BigButton onClick={toSummer} ariaLabel="Bring the summer back">
               ☀️ ▶
             </BigButton>
           </motion.div>
