@@ -22,7 +22,12 @@
 //                           in its own lagoon (race/race.ts, its screen race/RaceLayer.tsx), three laps against the
 //                           village kids and the macaque; she always wins, lifts the trophy on the podium (it goes in
 //                           her Trophy Room and rides in the bow), and 🚤 takes her back out of the gate
-//   home                    Agong's house again (the plugin's `home` leg): the flight home, Aunty Sri's van at the door,
+//   (the end)               From the Thailand map (Dad, 2026-10-27): ✈️🏠 at the pier or after the splash ends the trip
+//                           there (endTrip): her best photo goes on Agong's wall by itself, then the stamp, and the
+//                           plane flies home on the map. The first trip of a session packs, then straight down the
+//                           stairs to the window seat (the goodbye and the x-ray belt are out of the way); later ones
+//                           open at `land?quick=1`: straight to Krabi airport, where Daddy asks 🐘 or 🚤.
+//   home                    (only its links now) Agong's house again (the plugin's `home` leg): the flight home, Aunty Sri's van at the door,
 //                           the photo she picks (PhotoFan.tsx) goes on Agong's wall (saved on the iPad, trip/wall-photos.ts),
 //                           the cousins look up from their phones, and the stamp (onDone)
 //
@@ -147,6 +152,8 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   // the boarding pass, at the pier and on a replay.
   const [open] = useState(changOpen)
   const legs = open ? PASS : PASS.filter((p) => p.id !== 'chang')
+  // From the Thailand map's short flight: off the plane and straight to Krabi airport (read once).
+  const [quick] = useState(() => flag('quick') === '1')
   const [stored, setSaved] = useSaved<Progress>('thailand-boat-trip', { at: null, packed: DEFAULT_PACKED })
   // A trip saved before a leg was cut (Aunty Sri's car ride) starts over.
   const saved = stored.at && !(stored.at in WORLD_OF) ? { ...stored, at: null } : stored
@@ -443,13 +450,26 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     }
   }, [atPier, mount.world, changNext])
 
-  /** The big 🏠 at the pier: the boarding pass, then the flight home and Aunty Sri's van at Agong's door. */
+  /** The trip is over (✈️🏠): her best photo goes on Agong's wall by itself (the Nail Island's, else the newest that
+   *  isn't a selfie), the trip counts as done, then the stamp and back to the Thailand map (Place.tsx). */
+  const endTrip = () => {
+    const st = state.current
+    if (st.busy || finished.current) return
+    finished.current = true
+    const ps = st.photos
+    const best = ps.find((p) => p.kind === 'nail') ?? [...ps].reverse().find((p) => p.kind !== 'selfie') ?? ps.at(-1)
+    if (best) void shrinkPhoto(best.src).then((small) => setWallPhotos((list) => addWallPhoto(list, { trip: 'boat-trip', src: small, at: today() })))
+    setSaved((p) => ({ at: null, packed: formatPacked(st.packed) || p.packed, trips: (p.trips ?? 0) + 1 }))
+    sounds.sparkle()
+    onDone()
+  }
+  /** The big ✈️🏠 at the pier: the trip is over. */
   const goHome = () => {
     if (!atPier) return
     sounds.pop()
     setAtPier(false)
     setAlbumOpen(false)
-    finish('home', null)
+    endTrip()
   }
   /** The big 🐘 at the pier (Baan Chang still to do): the songthaew to the elephants. */
   const goChang = () => {
@@ -465,6 +485,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
     setOnward(false)
     setAlbumOpen(false)
     addBeen('chang')
+    if (to === 'home') return endTrip()
     finish(to, 'chang')
   }
   /** A photo for the album (the bay's, the race's, Baan Chang's): at most 12, the oldest selfie goes first. */
@@ -499,6 +520,18 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   useEffect(() => {
     if (prep.current && prepWant.current && photos.length >= prepWant.current) finish('home', null)
   }, [photos])
+
+  // The Thailand map's short flight was the flight: once the plane is built, straight off it to Krabi airport.
+  useEffect(() => {
+    if (!quick || mount.key !== 0 || mount.world !== 'plane') return
+    const id = setInterval(() => {
+      const w = worldRef.current
+      if (!(w instanceof PlaneRide) || w.stats.fps <= 0) return
+      clearInterval(id)
+      w.skip()
+    }, 100)
+    return () => clearInterval(id)
+  }, [mount.key])
 
   const leg: LegEvents & { flash(): void; asking(on: boolean): void } = {
     say,

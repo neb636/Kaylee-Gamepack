@@ -3,12 +3,13 @@ import { art } from './art'
 import { L } from './lines'
 import { MALL_FACTS, NAN_FACTS, TRIP_FACTS } from './trip/facts'
 
-// Thailand is Kaylee's family's country, built in 3D (plan: planning/around-the-world/thailand.md). Its home base is
-// Agong's shophouse, where she walks around; the places the family loves become activities, one per PR. The first is
+// Thailand is Kaylee's family's country, built in 3D (plan: planning/around-the-world/thailand.md). She lands on the
+// Thailand map (thailand/thailand-map.html) and flies the toy plane to Agong's shophouse in Bangkok, where she walks
+// around, or to Krabi or Nan; the places the family loves become activities, one per PR. The first is
 // the boat trip (thailand/boat-trip.md), the whole loop from Mommy's question to her photo on Agong's wall: it earns
 // the fiddler crab sticker, and its tap-to-hear facts are on the stamp screen and the passport. The second is the mall
 // day at ICONSIAM (thailand/mall-trip.md): it earns the pizza slice sticker. The third is the Nan road trip
-// (thailand/nan-trip.html), the pink mushroom sticker. Mommy's card offers all three.
+// (thailand/nan-trip.html), the pink mushroom sticker. Krabi's and Nan's pins on the map start those two; the mall starts in the house.
 const meta: PlaceMeta = {
   id: 'thailand',
   name: 'Thailand',
@@ -17,10 +18,12 @@ const meta: PlaceMeta = {
   mapPos: { x: 74, y: 49 },
   friend: { name: 'Agong', img: art.balloon },
   trophyTitle: 'Thailand Explorer',
+  // The Thailand map; the house's back button goes there.
+  hubHome: 'map',
   activities: [
-    { id: 'boat-trip', name: "Captain Kaylee's Boat Trip", icon: '🚤', pos: { x: 50, y: 70 }, sticker: { name: 'Fiddler crab', img: art.crab, fact: L.home.sticker } },
-    { id: 'mall-trip', name: 'Mall Day at ICONSIAM', icon: '🛝', pos: { x: 50, y: 40 }, sticker: { name: 'Pizza slice', img: art.pizza, fact: L.mall.trip.sticker } },
-    { id: 'nan-trip', name: 'Road Trip to Nan', icon: '🚙', pos: { x: 50, y: 22 }, sticker: { name: 'Pink mushroom', img: art.mushroom, fact: L.nan.trip.sticker } },
+    { id: 'boat-trip', name: "Captain Kaylee's Boat Trip", icon: '🚤', pos: { x: 27, y: 81 }, sticker: { name: 'Fiddler crab', img: art.crab, fact: L.home.sticker } },
+    { id: 'mall-trip', name: 'Mall Day at ICONSIAM', icon: '🛝', pos: { x: 43, y: 45 }, sticker: { name: 'Pizza slice', img: art.pizza, fact: L.mall.trip.sticker } },
+    { id: 'nan-trip', name: 'Road Trip to Nan', icon: '🚙', pos: { x: 45, y: 14 }, sticker: { name: 'Pink mushroom', img: art.mushroom, fact: L.nan.trip.sticker } },
   ],
   facts: [
     { icon: '👋', label: 'Sawasdee!', say: L.facts.hello },

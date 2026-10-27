@@ -1,4 +1,4 @@
-// Thailand's home base: Agong's house. Kaylee arrives by tuk-tuk, then walks around the street, downstairs and her
+// Agong's house in Bangkok (landing the plane on Bangkok on the Thailand map opens it). Kaylee arrives by tuk-tuk, then walks around the street, downstairs and her
 // room upstairs (deep-linkable spots, sections.ts). The 3D house is HouseView.
 // Sparkle (Guide) says the few things there are to say; the family say hello themselves.
 import { AnimatePresence, motion } from 'motion/react'
@@ -9,6 +9,7 @@ import type { PlaceProps } from '../../../../types'
 import { flag } from '../../../../engine3d/flags'
 import { L } from '../../lines'
 import { Ask, saidYes, TRIP_CHOICES, type Asker } from '../../trip/legs/Ask'
+import { tripSession } from '../../trip/session'
 import { WallPlugin, WALL_LINES, WALL_SLOTS, wallAnchorId } from '../../trip/wall'
 import { newestByTrip, useWallPhotos } from '../../trip/wall-photos'
 import { Debug } from './Debug'
@@ -24,13 +25,15 @@ import { WARDROBE_ANCHORS, WardrobePlugin } from './wardrobe/plugin'
 // Per visit to the app: the tuk-tuk brings her the first time; after that she's back where she left off.
 let arrivedThisVisit = false
 let lastSpot: Spot = 'street'
-// Mommy asks about the trip on her own the first time Kaylee comes upstairs each visit (after that, tap Mommy). On the
+/** The map's Bangkok pin opens the house where she left off (trip/session.ts). */
+const remember = () => (tripSession.house = arrivedThisVisit ? lastSpot : 'arrive')
+// Mommy asks about the mall on her own the first time Kaylee comes upstairs each visit (after that, tap Mommy). On the
 // street, tap Daddy and he asks right away: no need to go upstairs.
 let askedThisVisit = false
 
 export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
-  const [initial] = useState<Start>(() => ({ section: start ?? (arrivedThisVisit ? lastSpot : 'arrive'), at: param('at') || undefined, who: param('who') || undefined }))
+  const [initial] = useState<Start>(() => ({ section: (start && start !== 'map' ? start : null) ?? (arrivedThisVisit ? lastSpot : 'arrive'), at: param('at') || undefined, who: param('who') || undefined }))
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
   const [arriving, setArriving] = useState(initial.section === 'arrive')
@@ -67,19 +70,21 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     const line = WALL_LINES[trip]
     if (line) void say(line)
   }
-  // Mommy offers each trip that's in the game: with more than one, a picture button for each (🚤, 🛝🍕).
-  const trips = TRIP_CHOICES.filter((t) => meta.activities.some((a) => a.id === t.id))
+  // Mommy and Daddy only offer the mall: the other trips start on the Thailand map (Dad, 2026-10-27).
+  const trips = TRIP_CHOICES.filter((t) => t.id === 'mall-trip' && meta.activities.some((a) => a.id === t.id))
 
   useEffect(() => {
     doorNow.current.drawer = startDrawer
     enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : initial.section === 'wardrobe' ? wardrobeState() : {})
     if (initial.section !== 'arrive') arrivedThisVisit = true
     if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section === 'wardrobe' ? 'upstairs' : initial.section
+    remember()
     if (initial.section === 'upstairs' && !askedThisVisit) ask(4000)
   }, [])
 
   const arrived = () => {
     arrivedThisVisit = true
+    remember()
     setArriving(false)
     guide.current?.speak(L.house.arrive)
     guide.current?.speak(L.house.door, true)
@@ -87,6 +92,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
 
   const onSpot = (s: Spot, at?: string) => {
     lastSpot = s
+    remember()
     setSpot(s)
     enter(s, at ? { at } : {})
     guide.current?.arrivedAt(s)
@@ -149,14 +155,14 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     ask(noticed ? 2800 : 250, 'nick')
     return true
   }
-  /** Mommy asks if she's ready to go on a trip (her room is upstairs, by the suitcase); Daddy asks on the street. */
+  /** Mommy asks if she wants to go to the mall (her room is upstairs); Daddy asks on the street. */
   const ask = (after: number, who: Asker = 'ji') => {
     askedThisVisit = true
     clearTimeout(askTimer.current)
     setAsker(who)
     askTimer.current = setTimeout(() => setAsking(true), after)
   }
-  const yes = (trip = 'boat-trip') => {
+  const yes = (trip = 'mall-trip') => {
     saidYes.at = performance.now()
     saidYes.trip = trip
     setAsking(false)
@@ -294,7 +300,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
         )}
       </AnimatePresence>
       {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing} />}
-      <Ask open={asking && !arriving && mode !== 'lost'} who={asker} trips={trips.length > 1 ? trips : undefined} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />
+      {trips.length > 0 && <Ask open={asking && !arriving && mode !== 'lost'} who={asker} trips={trips} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />}
       {debug && <Debug houseRef={houseRef} />}
     </div>
   )

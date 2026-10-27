@@ -605,6 +605,30 @@ GAME_SCENARIOS.push(
   },
 )
 
+// The Thailand map (2D greybox, thailand-map.html): the toy plane grabbed at Bangkok and swooped up north and round in a
+// curve (it banks, buzzes and puffs a trail), then let go to glide into its lazy circle.
+GAME_SCENARIOS.push({
+  name: 'thailand-plane',
+  seconds: 7,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand`)
+    await page.waitForTimeout(1800)
+  },
+  act: async (page) => {
+    const b = await page.getByLabel("Bangkok, Agong's house").boundingBox()
+    if (!b) throw new Error('no Bangkok pin')
+    const [x, y] = [b.x + b.width / 2, b.y + b.height / 2]
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    for (let i = 1; i <= 30; i++) {
+      const a = (i / 30) * Math.PI * 1.5
+      await page.mouse.move(x + Math.sin(a) * vp.width * 0.25, y - (1 - Math.cos(a)) * vp.height * 0.15)
+      await page.waitForTimeout(60)
+    }
+    await page.mouse.up()
+  },
+})
+
 // Canada's train map (3D greybox): the train grabbed in Quebec and pushed west hard (it chugs, puffs and whistles, the
 // camera rides along), let go to roll on; then by Ottawa a tap sends the moose on the track ambling off with a snort, and
 // a second tap makes it hop where it stands.

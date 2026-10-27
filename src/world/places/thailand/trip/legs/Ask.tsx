@@ -1,5 +1,6 @@
 // Mommy asks if she's ready to go on a trip, with two big buttons that need no reading: 👍 yes (with the suitcase) and
-// ✋ not yet. Once there are two trips (`trips`), she asks where to, and 👍 becomes a picture button for each: 🚤 the
+// ✋ not yet. With one trip on the card (the house: only the mall, since the other trips start on the Thailand map), she
+// asks about that one and 👍 carries its picture. Once there are two trips (`trips`), she asks where to, and 👍 becomes a picture button for each: 🚤 the
 // boat trip, 🛝🍕 the mall day, 🏔️🚙 the Nan road trip. It shows in the house (when Kaylee comes up to her room, or taps Mommy) and as each
 // trip's first section. "Not yet" gets a happy "OK! Tell me when!" and the card goes, nothing lost. Mommy says it out
 // loud in her own voice (her 3D mouth moves with it); the card shows the words for Dad. On the street Daddy asks
@@ -33,9 +34,9 @@ export const tripChoices = (also?: string) => TRIP_CHOICES.filter((t) => t.id ==
 /** Who asks: Mommy upstairs and in the trips, Daddy on the street. Their lines (one trip / two or more / not yet), their
  *  name and the color of their unicorn. */
 const ASKERS = {
-  ji: { name: 'Mommy', color: '#FF8FB8', question: L.trip.ask.question, where: L.mall.trip.where, later: L.trip.ask.later },
+  ji: { name: 'Mommy', color: '#FF8FB8', question: L.trip.ask.question, where: L.mall.trip.where, later: L.trip.ask.later, mall: L.trip.ask.mall },
   nick: { name: 'Daddy', color: '#7FD1B9', ...L.trip.ask.daddy },
-} satisfies Record<string, { name: string; color: string; question: Line; where: Line; later: Line }>
+} satisfies Record<string, { name: string; color: string; question: Line; where: Line; later: Line; mall: Line }>
 export type Asker = keyof typeof ASKERS
 
 interface Props {
@@ -59,7 +60,8 @@ export function Ask({ open, onYes, onNotYet, trips, who = 'ji' }: Props) {
   }, [open])
   useEffect(() => () => clearTimeout(timer.current), [])
   const where = !!trips && trips.length > 1
-  const line = later ? asker.later : where ? asker.where : asker.question
+  const one = trips?.length === 1 ? trips[0] : null
+  const line = later ? asker.later : where ? asker.where : one?.id === 'mall-trip' ? asker.mall : asker.question
   useEffect(() => {
     if (open) void say(line)
   }, [open, line])
@@ -67,7 +69,7 @@ export function Ask({ open, onYes, onNotYet, trips, who = 'ji' }: Props) {
     sounds.correct()
     onYes(trip)
   }
-  const picks = where ? trips.map((t) => ({ id: t.id, label: t.label, icon: t.icon, extra: '', color: t.color, on: yes(t.id) })) : [{ id: 'yes', label: 'Yes', icon: '👍', extra: '🧳', color: 'var(--mint)', on: yes() }]
+  const picks = where ? trips.map((t) => ({ id: t.id, label: t.label, icon: t.icon, extra: '', color: t.color, on: yes(t.id) })) : [{ id: 'yes', label: 'Yes', icon: '👍', extra: one ? one.icon : '🧳', color: one ? one.color : 'var(--mint)', on: yes(one?.id) }]
   const buttons = [
     ...picks,
     { id: 'not-yet', label: 'Not yet', icon: '✋', extra: '⏳', color: 'var(--lavender)', on: () => {
