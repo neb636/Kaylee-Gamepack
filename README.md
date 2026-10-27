@@ -263,7 +263,13 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [The giant one (under the water)](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/giant?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/giant?pole=south))
 - [Send them sailing](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/sail?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/sail?pole=south))
 
-**Coming soon**: [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+**Snow Coats (greybox)**
+
+- [Paint the fox](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/fox)
+- [Hide and seek](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox) ([the lemming still brown](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox,hare,ptarmigan))
+- [Rub the summer back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/summer)
+
+**Coming soon**: [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
 
 ### Canada
 

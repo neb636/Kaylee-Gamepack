@@ -397,7 +397,10 @@ const SCREENS = [
   // looking out to sea from the cliff top).
   { name: 'poles-iceberg-pick', hash: '#/world/poles/iceberg/pick', reset: true, wait: 1800 },
   ...['bits', 'giant', 'sail'].flatMap((to) => ['north', 'south'].map((pole) => ({ name: `poles-iceberg-${to}-${pole}`, hash: `#/world/poles/iceberg/${to}?pole=${pole}`, reset: true, wait: to === 'sail' ? 3000 : 1800 }))),
-  { name: 'poles-coats-soon', hash: '#/world/poles/coats/soon', wait: 800 },
+  // Snow Coats (greybox 5, 2D): the brown fox in late summer, hide and seek (half painted), the summer.
+  { name: 'poles-coats-fox', hash: '#/world/poles/coats/fox', reset: true, wait: 1500 },
+  { name: 'poles-coats-hide', hash: '#/world/poles/coats/hide?painted=fox,hare', reset: true, wait: 1500 },
+  { name: 'poles-coats-summer', hash: '#/world/poles/coats/summer', reset: true, wait: 1500 },
   { name: 'poles-party-soon', hash: '#/world/poles/party/soon', wait: 800 },
   // Canada: the train map (greybox 1): the whole country first, then the train at each stop and on the way (the
   // prairies, just out of the Spiral Tunnel); then an activity's and the finale's "coming soon" cards.
