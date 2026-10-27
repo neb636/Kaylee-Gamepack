@@ -181,7 +181,8 @@ export class NanMap extends Stage {
    *  ground: she can go back to race for fun after the Cup too); the airport after two. */
   private open(id: PlaceId) {
     if (id === 'airport') return this.done.size >= HOME_AFTER
-    if (id === 'town') return this.done.size < this.stops.length
+    // (With the Cup on, Nan town stays open: back to the race ground to race for fun, even after every stop.)
+    if (id === 'town') return this.done.size < this.stops.length || this.stops.includes('cup')
     return !this.done.has(id as Stop)
   }
   private get allDone() {

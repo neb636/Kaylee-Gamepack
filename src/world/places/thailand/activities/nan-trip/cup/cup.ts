@@ -3,7 +3,8 @@
 // three.js here.
 //
 // - Behind a flag: with CUP_OPEN false the city road still ends at Nan town's market and goes back to the map, as
-//   before. `?cup=1` on any Nan trip link turns it on to try (the city road ends at the race ground, the Cup is a
+//   before. `?cup=1` (or any `cup` record, which the trip's sections carry while it's on) on a Nan trip link turns it
+//   on to try (the city road ends at the race ground, the Cup is a
 //   fourth stop with its stamp on Nan town, the boarding pass gains 🏁). Every Cup section link works either way.
 // - The roll: she wins two races and loses one. When she gets to the race ground, the Cup rolls which track she'll
 //   lose (`lose`) and the trip saves it; a whole new trip rolls again. The loss is never the last race she runs (Dad,
@@ -18,8 +19,8 @@ import { TRACK_IDS, type TrackId } from './track'
 /** Is the Cup on the trip? Off until Dad turns it on (step 5, the full loop). */
 export const CUP_OPEN = false
 
-/** Read once when the trip mounts (the address bar drops `cup=1` as she plays). */
-export const cupOpen = () => CUP_OPEN || flag('cup') === '1'
+/** Read once when the trip mounts: on when the link has `cup` (`1`, or the record the trip carries while it's on). */
+export const cupOpen = () => CUP_OPEN || !!flag('cup')
 
 export type Place = 1 | 2
 /** The races she has run in the Cup, in the order she ran them, and her place in each. */
