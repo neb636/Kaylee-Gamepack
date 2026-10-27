@@ -1436,7 +1436,7 @@ GAME_SCENARIOS.push(
     name: 'nan-kart',
     seconds: 12,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?steer=finger`)
       await page.waitForFunction(() => window.__thaiNanQA?.().phase === 'race', null, { timeout: 40000 })
     },
     act: async (page) => {
@@ -1458,7 +1458,7 @@ GAME_SCENARIOS.push(
     setup: async (page, base) => {
       // Racing on by itself, it drives straight over the mushrooms (the good bits don't need her to aim): up to just
       // before the first one.
-      await page.goto(`${base}#/world/thailand/nan-trip/race`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?steer=finger`)
       await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 140, null, { timeout: 60000 })
     },
     act: async (page) => {
@@ -1476,7 +1476,7 @@ GAME_SCENARIOS.push(
     name: 'nan-splash',
     seconds: 8,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps&steer=finger`)
       await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 50, null, { timeout: 60000 })
     },
     act: async (page) => {
@@ -1488,7 +1488,7 @@ GAME_SCENARIOS.push(
     name: 'nan-cloud',
     seconds: 10,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race?track=cloud`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=cloud&steer=finger`)
       await page.waitForFunction(() => window.__thaiNanQA?.().cloud?.in > 0.15, null, { timeout: 120000 })
     },
     act: async (page) => {
@@ -1519,7 +1519,7 @@ GAME_SCENARIOS.push(
     name: 'nan-ducks',
     seconds: 6,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps&steer=finger`)
       await page.waitForFunction(() => window.__thaiNanQA?.().scenery?.ducks?.state === 'cross', null, { timeout: 120000 })
     },
     act: async (page) => {
@@ -1530,7 +1530,7 @@ GAME_SCENARIOS.push(
     name: 'nan-log',
     seconds: 6,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?steer=finger`)
       await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 660, null, { timeout: 180000 })
     },
     act: async (page) => {

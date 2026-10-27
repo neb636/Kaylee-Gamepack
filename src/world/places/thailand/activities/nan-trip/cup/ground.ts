@@ -128,7 +128,7 @@ const CROWD_AT = [
   { x: 3.5, z: -6.9 },
   { x: 11.3, z: -6.9 },
   { x: 12.4, z: -7.1 },
-  { x: -11.6, z: -2.4 },
+  { x: -9.1, z: -0.6 },
 ]
 
 /** Where the camera looks: the board, the podium (and the scoreboard over it for the Cup). */
@@ -1016,6 +1016,15 @@ export class CupGround extends Stage {
         parts.push(P.rbox(2.1, 0.62, 0.8, 0.12, '#E8C46A', { at: [x + dx, y, z] }), P.box(2.12, 0.08, 0.82, '#C9A24E', { at: [x + dx, y + 0.11, z] }))
       }
     for (const [x, z] of [[-9.6, 1.6], [-8.2, 1.9], [4.2, 1.6], [5.6, 1.3], [8.4, 0.8]]) parts.push(P.cone(0.24, 0.7, '#FF8A3D', { at: [x, 0.37, z] }, 12), P.cyl(0.165, 0.2, 0.12, '#FFFFFF', { at: [x, 0.34, z] }, 12), P.box(0.55, 0.05, 0.55, '#FF8A3D', { at: [x, 0.025, z] }))
+    // Along the front of the square (seen on a tall screen, under the start line): a rope on little posts, pink and
+    // white, with flower boxes and a couple of bales.
+    for (let x = -12; x <= 5; x += 1.7) parts.push(P.cyl(0.07, 0.08, 0.8, '#FFFFFF', { at: [x, 0.4, 3.4] }, 6), P.sphere(0.1, PAL.hotpink, { at: [x, 0.84, 3.4] }, 8))
+    for (let x = -12; x < 5; x += 1.7) parts.push(P.cyl(0.035, 0.035, 1.7, (Math.round(x * 10) % 2) ? PAL.pink : '#FFFFFF', { at: [x + 0.85, 0.68, 3.4], rot: [0, 0, Math.PI / 2] }, 5))
+    for (const x of [-10.3, -5.2, -0.1]) {
+      parts.push(P.rbox(1.2, 0.45, 0.55, 0.1, '#C9875C', { at: [x, 0.23, 4.2] }))
+      for (let i = 0; i < 6; i++) parts.push(P.sphere(0.13, [PAL.hotpink, PAL.butter, '#FFFFFF', PAL.lavenderDark][i % 4], { at: [x - 0.45 + i * 0.18, 0.55 + (i % 2) * 0.07, 4.2] }, 8))
+    }
+    for (const x of [-7.8, 2.6]) parts.push(P.rbox(2.1, 0.62, 0.8, 0.12, '#E8C46A', { at: [x, 0.31, 4.6] }), P.box(2.12, 0.08, 0.82, '#C9A24E', { at: [x, 0.42, 4.6] }))
     // Flowers in planters at the board's feet.
     for (const x of [BOARD.x - BOARD.w / 2 - 0.5, BOARD.x + BOARD.w / 2 + 0.5]) {
       parts.push(P.rbox(1.0, 0.5, 0.6, 0.1, PAL.lavender, { at: [x, 0.25, BOARD.z + 0.3] }))

@@ -94,7 +94,7 @@ export class Scenery {
   private water: CanvasTexture[] = []
   private flies: { mesh: InstancedMesh; halo: InstancedMesh; at: V3[]; phase: number[] } | null = null
   private bridge: { deck: Group; rails: Group; load: number; wobble: number; creak: number } | null = null
-  private ducks: { list: Duck[]; state: 'wait' | 'cross' | 'done'; lat: number; dir: number; held: number; s: number } | null = null
+  private ducks: { list: Duck[]; state: 'wait' | 'cross' | 'done'; lat: number; dir: number; held: number; s: number; flap: number } | null = null
   private scarecrows: Scarecrow[] = []
   private grazers: Grazer[] = []
   private crowd: { rigs: Rig[]; s: number; cheer: number; cheered: boolean } | null = null
@@ -220,7 +220,8 @@ export class Scenery {
     const bend = (u: number) => Math.sin(u * 0.09) * 6 * wiggle + Math.sin(u * 0.23 + 1) * 2 * wiggle
     let n = 0
     for (let u = -reach; u <= reach; u += 1.5) {
-      const along = Math.abs(u) < this.track.edge + 1 ? 0 : bend(u)
+      // (Straight across the road, easing into its bends beyond the bales.)
+      const along = bend(u) * clamp((Math.abs(u) - this.track.edge - 1) / 8, 0, 1)
       const c = this.groundAt(s + along, u)
       for (const k of [-1, 1]) {
         pos.push(c.x + t.tx * k * w / 2, c.y + (Math.abs(u) < this.track.def.half + 0.5 ? 0.09 : 0.07), c.z + t.tz * k * w / 2)
@@ -242,7 +243,7 @@ export class Scenery {
     for (let u = -reach + 2; u < reach - 2; u += 2.2) {
       if (Math.abs(u) < this.track.edge + 1.5) continue
       for (const k of [-1, 1]) {
-        const c = this.groundAt(s + bend(u) + k * (w / 2 + 0.3), u)
+        const c = this.groundAt(s + bend(u) * clamp((Math.abs(u) - this.track.edge - 1) / 8, 0, 1) + k * (w / 2 + 0.3), u)
         if (rand() < 0.65) bank.push(P.sphere(0.25 + rand() * 0.3, ['#B9B3CC', '#C9C3D8', '#A7A1BD'][Math.floor(rand() * 3)], { at: [c.x, c.y + 0.08, c.z], scale: [1.2, 0.6, 1] }, 7))
         if (rand() < 0.35) for (let j = 0; j < 3; j++) bank.push(P.cone(0.06, 1.0 + rand() * 0.6, '#6FAE6A', { at: [c.x + (rand() - 0.5) * 0.5, c.y + 0.5, c.z + (rand() - 0.5) * 0.5], rot: [(rand() - 0.5) * 0.3, 0, (rand() - 0.5) * 0.3] }, 5))
       }
@@ -250,7 +251,7 @@ export class Scenery {
     if (this.track.def.id === 'forest') {
       // A frog on a stone in the stream, just off the road.
       const u = -(this.track.edge + 4)
-      const c = this.groundAt(s + bend(u), u)
+      const c = this.groundAt(s + bend(u) * clamp((Math.abs(u) - this.track.edge - 1) / 8, 0, 1), u)
       bank.push(P.sphere(0.6, '#A7A1BD', { at: [c.x, c.y + 0.1, c.z], scale: [1.3, 0.55, 1.1] }, 9))
       bank.push(P.sphere(0.26, '#8CCB6A', { at: [c.x, c.y + 0.5, c.z], scale: [1.2, 0.8, 1] }, 10))
       for (const k of [-1, 1]) bank.push(P.sphere(0.09, '#8CCB6A', { at: [c.x + k * 0.12, c.y + 0.72, c.z + 0.08] }, 8), P.sphere(0.045, PAL.ink, { at: [c.x + k * 0.12, c.y + 0.76, c.z + 0.15] }, 6))
@@ -293,7 +294,7 @@ export class Scenery {
     for (let i = 0; i < N; i++) {
       const s = s0 + rand() * (s1 - s0)
       const over = rand() < 0.25
-      const lat = over ? (rand() * 2 - 1) * this.track.def.half : (rand() < 0.5 ? 1 : -1) * (this.track.def.half + 0.5 + rand() * (this.track.def.grass + 6))
+      const lat = over ? (rand() * 2 - 1) * this.track.def.half : (rand() < 0.5 ? 1 : -1) * (this.track.def.half + 2.5 + rand() * (this.track.def.grass + 5))
       const c = this.groundAt(s, lat)
       at.push([c.x, c.y + (over ? 5 + rand() * 3 : 0.4 + rand() * 3), c.z])
       phase.push(rand() * 20)
@@ -380,7 +381,7 @@ export class Scenery {
       list.push({ g: d, i })
     }
     const start = side * (this.track.edge + 2.5)
-    this.ducks = { list, state: 'wait', lat: start, dir: -side, held: 0, s }
+    this.ducks = { list, state: 'wait', lat: start, dir: -side, held: 0, s, flap: 0 }
     this.placeDucks(0, 0)
     return g
   }
@@ -398,7 +399,25 @@ export class Scenery {
       d.g.rotation.z = moving ? Math.sin(t * (14 + hurry * 10) + d.i) * 0.16 : 0
       // Pecking when they're not walking.
       d.g.rotation.x = moving ? 0 : Math.max(0, Math.sin(t * 2.5 + d.i * 1.7)) * 0.35
+      // Tapped: the mother flaps up, the ducklings hop.
+      if (D.flap > 0) {
+        const k = Math.sin((1 - D.flap) * Math.PI)
+        d.g.position.y += k * (d.i === 0 ? 0.5 : 0.3) * Math.abs(Math.sin(t * 18 + d.i))
+        d.g.scale.set(1 + 0.15 * k, 1 - 0.1 * k, 1)
+      } else d.g.scale.set(1, 1, 1)
     }
+  }
+
+  /** Where the mother duck is (for her tap target), when the ducks are near the road. */
+  duckAt() {
+    const D = this.ducks
+    return D ? D.list[0].g.position : null
+  }
+  /** A tap on the ducks: the mother flaps and quacks, the ducklings hop. */
+  pokeDucks(ev: SceneryEvents) {
+    if (!this.ducks) return
+    this.ducks.flap = 1
+    ev.quack()
   }
 
   /** The wobbly bamboo bridge: a deck of bamboo poles across the road over the stream, bamboo rails tied with twine. */
@@ -416,7 +435,7 @@ export class Scenery {
     let i = 0
     for (let a = -BRIDGE_LEN / 2; a <= BRIDGE_LEN / 2; a += 0.26) {
       const p = this.road.sampleAt(s + a)
-      deck.push(P.cyl(0.11, 0.11, half * 2, COLORS[i++ % 3], { at: local(a, 0, 0.08), rot: [0, Math.atan2(p.tx, p.tz) + Math.PI / 2, Math.PI / 2] }, 8))
+      deck.push(P.cyl(0.11, 0.11, half * 2, COLORS[i++ % 3], { at: local(a, 0, 0.08), rot: [0, Math.atan2(p.tx, p.tz), Math.PI / 2] }, 8))
     }
     // Two long poles under the ends of the slats, along each side.
     for (const k of [-1, 1]) deck.push(this.pole(local(-BRIDGE_LEN / 2, k * (half - 0.3), -0.02), local(BRIDGE_LEN / 2, k * (half - 0.3), -0.02), 0.13, '#B9A55A'))
@@ -515,7 +534,7 @@ export class Scenery {
   /** The fastest a kart at `s` may go (m/s): slow while the ducks are crossing just ahead of it (Infinity: no limit). */
   hold(s: number) {
     const D = this.ducks
-    if (!D || D.state !== 'cross' || D.held > 2.2) return Infinity
+    if (!D || D.state !== 'cross' || D.held > 2.8) return Infinity
     const onRoad = D.list.some((d) => Math.abs(D.lat - D.dir * d.i * 0.9) < this.track.def.half + 1)
     return onRoad && s > D.s - 13 && s < D.s - 1.5 ? 1.5 : Infinity
   }
@@ -578,13 +597,14 @@ export class Scenery {
           this.counts.duckWait += dt
           hurry = 1
         }
-        D.lat += D.dir * dt * (hurry ? 6 : 3)
+        D.lat += D.dir * dt * (hurry ? 7.5 : 3)
         // Across when the last duckling is on the far side.
         if (D.dir * (D.lat - D.dir * (D.list.length - 1) * 0.9 - far) > 0) {
           D.state = 'done'
           ev.quack()
         }
       }
+      D.flap = Math.max(0, D.flap - dt / 0.6)
       this.placeDucks(t, hurry)
     }
     // ---- The bamboo bridge bounces under the karts ----
@@ -608,13 +628,13 @@ export class Scenery {
     }
     // ---- The scarecrows wave at her ----
     for (const sc of this.scarecrows) {
-      if (!sc.waved && Math.abs(her.s - sc.s) < 16) {
+      if (!sc.waved && her.s > sc.s - 28) {
         sc.waved = true
-        sc.wave = 2
+        sc.wave = 3
         this.counts.waves++
       }
       sc.wave = Math.max(0, sc.wave - dt)
-      sc.arms.rotation.z = Math.sin(t * 9) * 0.35 * bell(sc.wave / 2) + Math.sin(t * 0.8 + sc.s) * 0.04
+      sc.arms.rotation.z = Math.sin(t * 9) * 0.35 * bell(sc.wave / 3) + Math.sin(t * 0.8 + sc.s) * 0.04
     }
     // ---- The buffalo graze, look up at her and moo ----
     for (const g of this.grazers) {

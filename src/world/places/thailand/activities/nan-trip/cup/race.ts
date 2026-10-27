@@ -124,6 +124,7 @@ export const KART_ANCHORS: AnchorInfo[] = [
   ...RIVAL_IDS.map((id): AnchorInfo => ({ id: `rival:${id}`, label: RIVALS[id].label, kind: 'thing' })),
   ...[0, 1, 2, 3].map((i): AnchorInfo => ({ id: `mushroom:${i}`, label: 'Bouncy mushroom', kind: 'thing' })),
   { id: 'waterfall', label: 'The waterfall', kind: 'thing' },
+  { id: 'ducks', label: 'The ducks', kind: 'thing' },
   ...[0, 1, 2, 3, 4].map((i): AnchorInfo => ({ id: `tree:${i}`, label: 'Pink blossom tree', kind: 'thing' })),
 ]
 
@@ -745,6 +746,10 @@ export class KartRace implements World3D {
       m.squash = 0
       sfx.boingAt(2)
     }
+    if (id === 'ducks') {
+      this.counts.pokes++
+      this.scenery.pokeDucks(this.sceneryEvents)
+    }
     if (id === 'waterfall' && this.fall) {
       // A big splash off the rocks.
       this.counts.pokes++
@@ -844,7 +849,7 @@ export class KartRace implements World3D {
     this.pads.update(t)
     for (const p of [this.dust, this.straw, this.sparkle, this.fireworks, this.confetti, this.splash, this.petals]) p?.update(dt)
     this.updateTricks(dt, t)
-    this.scenery.update(dt, t, this.k, this.racers, { quack: sfx.quack, moo: sfx.moo, cheer: sfx.cheer, creak: sfx.creak })
+    this.scenery.update(dt, t, this.k, this.racers, this.sceneryEvents)
     this.engine(dt)
     this.celebrate(dt)
     this.idleHints()
@@ -894,6 +899,7 @@ export class KartRace implements World3D {
   /** Under the forest's big trees (and inside the log) it's shady: the light dims and the sky and haze turn a deep green,
    *  so the fireflies glow. */
   private shadeK = 0
+  private sceneryEvents = { quack: sfx.quack, moo: sfx.moo, cheer: sfx.cheer, creak: sfx.creak }
   private shade(dt: number) {
     if (!this.track.dark && this.track.log === null) return
     this.shadeK += (this.track.shadeAt(this.k.s) - this.shadeK) * (1 - Math.exp(-dt * 2.5))
@@ -1399,7 +1405,8 @@ export class KartRace implements World3D {
       const pz = d.z + Math.cos(d.heading) * at
       const loc = road.locate(px, pz, r.i, 12)
       // (Past the end of the road, the clearing's bales too.)
-      const lim = this.track.edge - r.v.hull.r
+      // (On the bamboo bridge, the rails are the edge.)
+      const lim = (this.track.onBridge(loc.s) ? this.track.def.half + 0.15 : this.track.edge) - r.v.hull.r
       if (Math.abs(loc.lat) <= lim && loc.s < road.length - 0.5) continue
       const p = road.sampleAt(loc.s)
       const side = Math.sign(loc.lat)
@@ -1663,6 +1670,11 @@ export class KartRace implements World3D {
       const m = this.shrooms[Number(id.slice(9))]
       if (!m || Math.hypot(m.g.position.x - k.d.x, m.g.position.z - k.d.z) > 50) return null
       return { at: m.g.position.clone().setY(m.g.position.y + 0.6), r: m.m.r * 0.8, prio: 0, max: 140 }
+    }
+    if (id === 'ducks') {
+      const at = this.scenery.duckAt()
+      if (!at || at.distanceTo(tmp.set(k.d.x, k.y, k.d.z)) > 40) return null
+      return { at: at.clone().setY(at.y + 0.6), r: 1.2, prio: 1, max: 140 }
     }
     if (id === 'waterfall') {
       if (!this.fall || this.fall.at.distanceTo(tmp.set(k.d.x, k.y, k.d.z)) > 50) return null
