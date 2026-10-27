@@ -420,7 +420,9 @@ Dad played greybox B (2026-10-25): threshing feels good (ten bangs, the swing he
   the photo and in Daddy's "Kaylee? Where did you go?" joke).
 - Far-off farm life: every 5-10 s, when nobody's talking, a quiet frog, bird, duck, chime or buffalo
   (`riceSfx.far`), so the farm is never silent between touches.
-- Sparkle waits her turn behind Lung (she's queued half a second after his line starts, once his clip is playing).
+- Sparkle waits her turn behind Lung: `TripGuide` now counts a line that's still loading as talking, so a friend's
+  line then Sparkle's, back to back, play in that order on every trip leg (before, Sparkle cut the friend off when
+  their clip hadn't started yet).
 
 **Next:** Dad listens on the iPad: Lung's voice and accent (the Thai numbers especially), and whether Lung + Daddy +
 Sparkle is too much talk. Then the next stop: Bo Kluea salt (step 4).

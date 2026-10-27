@@ -46,6 +46,8 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
   const [line, setLine] = useState<{ l: Line; n: number } | null>(null)
   const last = useRef<Line | null>(null)
   const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
+  /** Whose line was asked for last and hasn't finished: it counts as talking while its clip is still loading. */
+  const asked = useRef<{ voice: string } | null>(null)
 
   useImperativeHandle(ref, () => ({
     speak(l, mute) {
@@ -63,9 +65,13 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
       }
       // The family's reactions cut in on each other ("My horn!" right away), but Sparkle's lines and anything said
       // while Sparkle talks wait their turn, so a fact is never cut off.
-      const now = speakingVoice()
+      // (A line still loading counts too, so a friend's line then Sparkle's, back to back, play in that order.)
+      const now = speakingVoice() ?? asked.current?.voice
       const interrupt = !now || (voice !== 'sparkle' && now !== 'sparkle')
+      const mine = { voice }
+      asked.current = mine
       void say(l, { interrupt }).then(() => {
+        if (asked.current === mine) asked.current = null
         hide.current = setTimeout(() => setLine((cur) => (cur?.l === l ? null : cur)), 1600)
       })
     },

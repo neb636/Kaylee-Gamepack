@@ -531,12 +531,11 @@ export class RiceFarm extends Stage {
   private roundLine(r: Round) {
     if (r === 'deck') return this.after(0.6, () => this.once('hi', R.hi))
     if (r === 'harvest') return this.once(r, R[r]) // (Lung said it's golden as it ripened.)
-    // (Into the growing, after his thank-you for the planting.) Sparkle comes half a second later, once his clip is
-    // playing, so she waits her turn behind him instead of cutting him off.
+    // (Into the growing, after his thank-you for the planting.) Sparkle waits her turn behind him (TripGuide queues her).
     this.after(r === 'grow' ? 1.0 : 0, () => {
       this.once(`ask-${r}`, R.ask[r])
       this.lung.react('wave')
-      this.after(0.5, () => this.once(r, R[r]))
+      this.once(r, R[r])
     })
   }
   /** Says it the first time only. A family reaction (`now`) is dropped while Sparkle talks, rather than heard late. */
