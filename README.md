@@ -198,11 +198,7 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   - [Pack for the mountains (raincoat, rain boots, umbrella)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/pack)
   - [The window seat: take off](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/takeoff)
   - [The window seat: north to Nan](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/fly)
-  - [Landing in Nan's green valley, then the rental desk](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/land)
-- **Rental desk**
-  - [Press the key fob (the Pajero chirps)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/rental)
-  - [The bags into the boot](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/rental?round=boot)
-  - [Click the seatbelt, off they go](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/rental?round=belt)
+  - [Landing in Nan's green valley, then the Nan map](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/land)
 - **Nan map and the mountain road**
   - [The Nan map: pick a stop, or drag the little Pajero there](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/map)
   - [The Nan map after two stops (stamps, the airport opens)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/map?stops=mushrooms,rice)

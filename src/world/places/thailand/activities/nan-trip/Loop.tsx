@@ -9,7 +9,7 @@
 //                                 his wall, in the Nan trip's own frame
 //   airport                       the x-ray belt (trip/legs/airport.ts)
 //   takeoff, fly, land            the window seat north to Nan (trip/legs/plane.ts, `landing: 'nan'`): a green valley
-//                                 in the mountains comes up under the plane, then the rental desk
+//                                 in the mountains comes up under the plane, then the Nan map
 //
 // Sparkle sits in the corner (trip/legs/Guide.tsx). The trip around it
 // (the boarding pass between legs, resume and replays, the stops) is NanTrip.tsx.

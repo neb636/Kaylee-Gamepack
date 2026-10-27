@@ -101,11 +101,6 @@
       "pitch": 4,
       "instructions": "You are a little kid of about six at the HarborLand playground in Bangkok, giggly and excited, talking to a new friend. Thai child speaking English with a Thai accent."
     },
-    "clerk": {
-      "voice": "coral",
-      "pitch": 1,
-      "instructions": "You are the car rental clerk at the little airport in Nan, a bubbly young puppy in a blue shirt and scarf. Bright, welcoming and giggly, talking to a five-year-old. English with a warm Thai accent."
-    },
     "farmer": {
       "voice": "sage",
       "pitch": -1,

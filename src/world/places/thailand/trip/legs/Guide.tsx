@@ -27,7 +27,6 @@ const WHO: Record<string, { name: string; icon: string; color: string }> = {
   staff: { name: 'HarborLand', icon: '🐃', color: '#FFD27A' },
   server: { name: 'The Pizza Company', icon: '🦊', color: '#8FD9A8' },
   kid: { name: 'A friend', icon: '🧒', color: '#A8DCFF' },
-  clerk: { name: 'The car desk', icon: '🐶', color: '#A8C4F0' },
   farmer: { name: 'Mushroom aunty', icon: '🐃', color: '#8FE3C8' },
   saltaunty: { name: 'Salt aunty', icon: '🐴', color: '#9FD3F7' },
   lung: { name: 'Lung Kham', icon: '🐒', color: '#7FA8E0' },
