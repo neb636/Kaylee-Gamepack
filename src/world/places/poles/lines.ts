@@ -20,4 +20,13 @@ export const L = {
     chick: 'Emperor penguin dads keep the egg warm on their feet.',
     narwhal: 'Narwhals have a long tooth that grows out like a unicorn horn!',
   },
+  // The Theater's real-world videos (meta.videos), offered after an activity or picked from the shelf.
+  videos: {
+    bears: 'Want to see real polar bear cubs on the ice?',
+    fox: 'Want to see foxes that turn white for winter?',
+    penguins: "Let's see penguins zoom out of the sea!",
+    huddle: "Let's see the penguin dads huddle!",
+    iceberg: 'Want to see a real iceberg break off?',
+    narwhal: "Let's see narwhals, the unicorns of the sea!",
+  },
 }
