@@ -227,7 +227,7 @@ export const BOOSTS: { s: number; lat: number }[] = [
   { s: at(0.935), lat: 0 },
 ]
 export const BOOST_HALF = { across: 2.4, along: 3.4 }
-/** The ramps: up and over, a trick in the air (any tap), a speed burst on landing. The small one at the left lobe's
+/** The ramps: up and over, a speed burst on landing. The small one at the left lobe's
  *  end; the BIG JUMP across the whole course on the long left side, through a giant flower hoop, with coins in the
  *  air along the way it flies. `kick` is how hard it throws a boat up. */
 export interface Ramp {

@@ -792,14 +792,7 @@ GAME_SCENARIOS.push(
     }
     await page.mouse.up()
   }),
-  thaiRace('race-ramp-trick', 5, 'race?lap=3', () => (window.__thaiBoatQA?.().racers?.kaylee?.s ?? 0) > 280, async (page) => {
-    for (let i = 0; i < 50; i++) {
-      if (await page.evaluate(() => window.__thaiBoatQA?.().airborne)) {
-        await page.mouse.click(vp.width * 0.5, vp.height * 0.5)
-        break
-      }
-      await page.waitForTimeout(100)
-    }
+  thaiRace('race-ramp', 5, 'race?lap=3', () => (window.__thaiBoatQA?.().racers?.kaylee?.s ?? 0) > 280, async (page) => {
     await page.waitForTimeout(3000)
   }),
   thaiRace('race-podium', 7, 'podium', null, async (page) => {
