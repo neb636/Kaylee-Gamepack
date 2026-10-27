@@ -7,7 +7,7 @@
 // section skypod) and the Big Frame (harborland/, section frame: `at` follows the level she's
 // on); and the pizza toy at The Pizza Company (pizza/, sections menu and
 // share). Each mini game is a sticker on her sock band in the corner (`games`), and a big ↩️ takes her back out to the
-// hall. After four stickers (or five minutes) Daddy's tummy rumbles and Mommy asks about pizza. The trip around it
+// hall. After every sticker (or fifteen minutes) Daddy's tummy rumbles and Mommy asks about pizza. The trip around it
 // (Loop.tsx): Mommy asks where to (invite), the goodbye and Mommy's grey Veloz (goodbye), ICONSIAM, the lift and
 // the counter where she picks her socks (arrive), and home once Agong's box is shut at the table (home: the box for
 // Agong, the photo on his wall, then the stamp, onDone). A day pass covers the change between legs. The trip saves
@@ -35,7 +35,7 @@ import type { Round as SkyRound } from './games/skypod/layout'
 import { SkyPod } from './games/skypod/SkyPod'
 import { Vet } from './games/vet/Vet'
 import { HallScreen } from './hall/HallScreen'
-import type { DoorId, GameDoor } from './hall/layout'
+import { GAME_ICON, type DoorId, type GameDoor } from './hall/layout'
 import { FrameScreen } from './harborland/FrameScreen'
 import type { At } from './harborland/layout'
 import type { PizzaId } from './pizza/layout'
@@ -51,22 +51,12 @@ type GameId = (typeof GAMES)[number]
 const OLD_RIDES = ['pool', 'donut', 'zip', 'roller', 'dragon']
 const list = (s: string) => s.split(',').map((x) => (OLD_RIDES.includes(x) ? 'frame' : x)).filter((x): x is GameId => (GAMES as readonly string[]).includes(x))
 /** Her sock band: a slot for each mini game she can play (the rest add theirs when they're built). */
-const BAND: { id: GameDoor; icon: string }[] = [
-  { id: 'vet', icon: '🩺' },
-  { id: 'cafe', icon: '🥤' },
-  { id: 'barber', icon: '💈' },
-  { id: 'race', icon: '🏁' },
-  { id: 'frame', icon: '🛝' },
-  { id: 'blocks', icon: '🧱' },
-  { id: 'mountain', icon: '⛰️' },
-  { id: 'boxing', icon: '🥊' },
-  { id: 'skypod', icon: '💡' },
-]
+const BAND: { id: GameDoor; icon: string }[] = (['vet', 'cafe', 'barber', 'race', 'frame', 'blocks', 'mountain', 'boxing', 'skypod'] as const).map((id) => ({ id, icon: GAME_ICON[id] }))
 const bandOf = (games: GameId[]): GameDoor[] => BAND.map((b) => b.id).filter((id) => games.includes(id))
 /** The way in each section is behind (where she comes back out). */
 const DOOR_OF: Partial<Record<MallSection, DoorId>> = { vet: 'vet', cafe: 'cafe', race: 'race', barber: 'barber', frame: 'frame', blocks: 'blocks', mountain: 'mountain', boxing: 'boxing', skypod: 'skypod' }
-/** Daddy gets hungry after four stickers, or this long in HarborLand. */
-const HUNGRY_MS = 5 * 60_000
+/** Daddy gets hungry once every sticker is on her band (so no mini game gets missed), or after this long in HarborLand. */
+const HUNGRY_MS = 15 * 60_000
 /** The trip's legs around HarborLand (Loop.tsx). */
 const LOOP: MallSection[] = ['invite', 'goodbye', 'arrive', 'home']
 
@@ -116,6 +106,8 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
   const [games, setGames] = useState<GameId[]>(() => [...new Set([...list(param('games')), ...list(param('rides')), ...(first === 'vet' && patient !== 'puppy' ? ['vet' as const] : []), ...(first === 'cafe' && round > 1 ? ['cafe' as const] : []), ...(first === 'race' && round > 1 ? ['race' as const] : []), ...(first === 'barber' && round > 1 ? ['barber' as const] : []), ...(first === 'blocks' && blocksRound > 1 ? ['blocks' as const] : []), ...(first === 'mountain' && mountainRound > 1 ? ['mountain' as const] : []), ...(first === 'boxing' && boxingRound > 1 ? ['boxing' as const] : []), ...(first === 'skypod' && skyRound > 1 ? ['skypod' as const] : [])])])
   const [section, setSection] = useState<MallSection>(first)
   const [from, setFrom] = useState<DoorId | 'in'>(() => param('from') as DoorId | 'in')
+  // HarborLand's map is open in the hall.
+  const [map, setMap] = useState(() => param('map') === '1')
   const [pizza, setPizza] = useState(() => param('pizza') as PizzaId)
   const [at, setAt] = useState<At>(() => (legacy === 'dragon' ? 'top' : (param('at') as At)))
   const [shared, setShared] = useState(() => Number(param('shared')))
@@ -129,7 +121,7 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
   const inHall = section === 'hall' || section === 'hungry'
   const onLoop = LOOP.includes(section)
   const band = bandOf(games)
-  const hungry = (band.length >= 4 || performance.now() - since.current > HUNGRY_MS) && visits > notYet
+  const hungry = (band.length >= BAND.length || performance.now() - since.current > HUNGRY_MS) && visits > notYet
   // Everyone's lines play through Sparkle's corner guide (the words show with who said them).
   const guide = useRef<TripGuideHandle>(null)
   useEffect(() => {
@@ -146,7 +138,7 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
     ...(section === 'home' ? { photos, pizza } : {}),
     socks,
     games: games.join(','),
-    ...(section === 'hall' ? { from } : {}),
+    ...(section === 'hall' ? { from, map: map ? '1' : '' } : {}),
     ...(section === 'vet' ? { patient } : {}),
     ...(section === 'cafe' || section === 'race' || section === 'barber' ? { round: String(round) } : {}),
     ...(section === 'blocks' ? { round: String(blocksRound), ...(blocksRound === 2 ? { card } : {}) } : {}),
@@ -169,7 +161,7 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
       return
     }
     enter(section, params())
-  }, [section, games, patient, round, blocksRound, mountainRound, boxingRound, skyRound, card, pizza, shared, from, hair, at, socks])
+  }, [section, map, games, patient, round, blocksRound, mountainRound, boxingRound, skyRound, card, pizza, shared, from, hair, at, socks])
 
   // ---- The trip around HarborLand: the day pass between legs, resume and replays ----
   const [pass, setPass] = useState<{ punch: string | null; done: string[]; choices?: PassChoice[] } | null>(null)
@@ -276,6 +268,8 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
           from={from}
           hungry={hungry || section === 'hungry'}
           asking={section === 'hungry'}
+          map={map && section === 'hall'}
+          onMap={setMap}
           onEnter={goIn}
           onHungry={() => setSection('hungry')}
           onPizza={() => setSection('menu')}
@@ -328,7 +322,8 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
   )
 }
 
-/** Her sock band in the corner: a sticker for each mini game she's played, popping in the first time. */
+/** Her sock band in the corner: a sticker for each mini game she's played, popping in the first time (the ones still to
+ *  play show faintly, so she can see what's left). */
 export function SockBand({ done, color }: { done: GameDoor[]; color: string }) {
   return (
     <div
@@ -336,7 +331,12 @@ export function SockBand({ done, color }: { done: GameDoor[]; color: string }) {
       style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 12px)', top: 'calc(var(--safe-top) + 14px)', display: 'flex', gap: 'clamp(4px, 0.8vw, 8px)', padding: 'clamp(5px, 0.9vw, 8px) clamp(8px, 1.4vw, 12px)', borderRadius: 999, background: color, border: '4px solid #fff', boxShadow: 'var(--shadow)', zIndex: 30, pointerEvents: 'none' }}
     >
       {BAND.map(({ id, icon }) => (
-        <div key={id} style={{ width: 'clamp(34px, 5.2vmin, 48px)', height: 'clamp(34px, 5.2vmin, 48px)', borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,.55)', border: '2px dashed rgba(255,255,255,.9)', fontSize: 'clamp(20px, 3.3vmin, 30px)' }}>
+        <div key={id} style={{ position: 'relative', width: 'clamp(34px, 5.2vmin, 48px)', height: 'clamp(34px, 5.2vmin, 48px)', borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,.55)', border: '2px dashed rgba(255,255,255,.9)', fontSize: 'clamp(20px, 3.3vmin, 30px)' }}>
+          {!done.includes(id) && (
+            <span aria-hidden style={{ position: 'absolute', opacity: 0.3, filter: 'grayscale(1)' }}>
+              {icon}
+            </span>
+          )}
           <AnimatePresence>
             {done.includes(id) && (
               <motion.span key={id} initial={{ scale: 0, rotate: -40 }} animate={{ scale: [0, 1.5, 1], rotate: 0 }} transition={{ duration: 0.5 }}>
