@@ -2,7 +2,7 @@
 // builds any of them in 3D. Thailand's family are Looks (places/thailand/characters/looks.ts), and so is any country's
 // 3D friend. Pure data (no three.js).
 
-export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony' | 'monkey'
+export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony' | 'monkey' | 'tortoise' | 'bear'
 export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
 /** What Kaylee can wear on a trip, from her suitcase (or Mommy's spare sun hat if she packed none), or at HarborLand
  *  (the vet's blue scrubs and cap, the cafe's apron and chef's hat, the barber's smock, Muay Thai's boxing gloves and red
@@ -11,7 +11,9 @@ export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties' | 'scr
 /** The ones any character can be dressed in (the lab's chips). The rice farm's `ngob` is built by the farm itself and
  *  handed to Avatar.attach, so it isn't here. */
 export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasses', 'floaties', 'scrubs', 'scrub-cap', 'apron', 'chef-hat', 'smock', 'gloves', 'mongkhon']
-export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Exclude<Wearable, 'ngob'>
+/** `mailbag`: a postman's satchel on a strap across the chest (Pao, the Nan Mountain Cup). `bun`: a little white bun
+ *  of hair on top, with a pink pin (Grandma Taeng). */
+export type Extra = 'cane' | 'mailbag' | 'bun' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Exclude<Wearable, 'ngob'>
 
 export interface Look {
   species: Species
@@ -19,13 +21,13 @@ export interface Look {
   height: number
   /** How round the body is (1 = the usual chibi build; Mommy 1.15, Jum 1.25). */
   chub?: number
-  /** Main fur or feathers. */
+  /** Main fur, feathers or skin. */
   fur: string
   /** Muzzle, face, belly, paws: the light color. */
   light: string
-  /** The second color: hooves, panda patches, penguin back, beak. */
+  /** The second color: hooves, panda patches, penguin back, beak, a tortoise's shell, a bear's nose and paws. */
   dark: string
-  /** Inside the ears. */
+  /** Inside the ears (a tortoise: the plates on its shell). */
   ear?: string
   /** Unicorn (or pony) mane and tail, in order. */
   mane?: string[]

@@ -1,6 +1,6 @@
 // The Nan Mountain Cup's race (section `race`, plan: planning/around-the-world/thailand/nan-cup.html; greybox 1: the
-// kart toy, greybox 2: the other two tracks). Kaylee drives her pink kart against Grandma Taeng, Pao and Moon (blocks for
-// now, blocks.ts) from the start line to the finish, one run along a track (track.ts: `forest`, `steps`, `cloud`), not
+// kart toy, greybox 2: the other two tracks, step 4: the look). Kaylee drives her pink kart against Grandma
+// Taeng, Pao and Moon (toy animals on the chibi rig, riders.ts) from the start line to the finish, one run along a track (track.ts: `forest`, `steps`, `cloud`), not
 // laps.
 //
 // The toy is the boat race's verb, which she already knows:
@@ -50,7 +50,9 @@ import type { SteerMode, Tilt } from '../../../trip/race/tilt'
 import { buildMirror, buildRoadScene, rng, type RoadScene } from '../../../trip/road/build'
 import { buildCloudLayer, buildCloudSea } from '../../../trip/road/clouds'
 import { buildKart, type Kart } from '../../../trip/vehicles/kart'
-import { buildBlock, type Block } from './blocks'
+import { dressKart, type KartDress } from './karts'
+import { buildRider, type Rider } from './riders'
+import { Scenery } from './scenery'
 import { animateGifts, giveGifts, type Gift } from './gifts'
 import { GRID, HOME, RIVAL_IDS, RIVALS, scripts, type RacerId, type Result, type Rival, type RivalId } from './rivals'
 import { cupSfx as sfx } from './sounds'
@@ -122,6 +124,7 @@ export const KART_ANCHORS: AnchorInfo[] = [
   ...RIVAL_IDS.map((id): AnchorInfo => ({ id: `rival:${id}`, label: RIVALS[id].label, kind: 'thing' })),
   ...[0, 1, 2, 3].map((i): AnchorInfo => ({ id: `mushroom:${i}`, label: 'Bouncy mushroom', kind: 'thing' })),
   { id: 'waterfall', label: 'The waterfall', kind: 'thing' },
+  { id: 'ducks', label: 'The ducks', kind: 'thing' },
   ...[0, 1, 2, 3, 4].map((i): AnchorInfo => ({ id: `tree:${i}`, label: 'Pink blossom tree', kind: 'thing' })),
 ]
 
@@ -133,7 +136,9 @@ interface Racer {
   /** Its usual top speed (coins and the rubber band raise it). */
   base: number
   rival: Rival | null
-  block: Block | null
+  rider: Rider | null
+  /** Its kart dressed as its own (karts.ts). */
+  dress: KartDress | null
   script: Script | null
   roll: { x: number; v: number }
   pitch: { x: number; v: number }
@@ -193,6 +198,9 @@ export class KartRace implements World3D {
   private lights = makeLights(this.scene)
   readonly track: Track
   private world: RoadScene
+  /** Each track's scenery (the log, the stream, the big trees, the cafe, the ducks, the bridge, ...). */
+  private scenery: Scenery
+  private air: (typeof AIR)['forest']
   private coins: Coins
   private pads: Pads
   private shrooms: { m: Mushroom; g: Group; squash: number }[] = []
@@ -248,7 +256,7 @@ export class KartRace implements World3D {
   private gasDown = false
   private aimLat = 0
   private waiting = false
-  private counts = { coinsTaken: 0, pads: 0, bounces: 0, bigBounces: 0, bales: 0, grass: 0, bumps: 0, honks: 0, pokes: 0, splashes: 0, washes: 0, lanterns: 0, showers: 0 }
+  private counts = { coinsTaken: 0, pads: 0, bounces: 0, bigBounces: 0, bales: 0, grass: 0, bumps: 0, honks: 0, pokes: 0, splashes: 0, washes: 0, lanterns: 0, showers: 0, fords: 0 }
   private timers: number[] = []
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
@@ -265,7 +273,7 @@ export class KartRace implements World3D {
     const track = (this.track = new Track(start.track))
     const road = track.road
     applyBands()
-    const air = AIR[start.track] ?? AIR.forest
+    const air = (this.air = AIR[start.track] ?? AIR.forest)
     scene.background = new Color(air.bg)
     this.fog = scene.fog = new Fog(air.fog, air.near, air.far)
     this.rig.fov = 55
@@ -276,6 +284,8 @@ export class KartRace implements World3D {
     scene.add(this.world.root)
     scene.add(this.bales())
     scene.add(this.verges())
+    this.scenery = new Scenery(track, this.world.field, bag)
+    scene.add(this.scenery.root)
     for (const m of track.mushrooms) {
       const g = this.mushroom(m)
       this.shrooms.push({ m, g, squash: 1 })
@@ -303,12 +313,12 @@ export class KartRace implements World3D {
       scene.add(this.petals.mesh)
     }
 
-    // ---- The karts: hers (pink, with Kaylee in it) and the rivals' (blocks for now) ----
+    // ---- The karts: hers (pink, with Kaylee in it) and the rivals' (each with its rider) ----
     this.winner = start.result === 'lose' ? HOME[start.track] : 'kaylee'
     const plan = scripts(start.track, start.result)
     const racer = (id: RacerId, v: Kart, rival: Rival | null): Racer => {
       v.feel.top = KART.top * (rival?.pace ?? 1)
-      const r: Racer = { id, v, d: new Driver(v.feel), feel: v.feel, base: v.feel.top, rival, block: null, script: rival ? plan[rival.id] : null, roll: { x: 0, v: 0 }, pitch: { x: 0, v: 0 }, squash: 1, i: 0, s: 0, lat: 0, progress: 0, y: 0, done: -1, coins: 0, grass: false, bumpCool: 0, padCool: 0, bounceCool: 0, splashCool: 0, mud: 0, splats: [], sway: Math.random() * 6 }
+      const r: Racer = { id, v, d: new Driver(v.feel), feel: v.feel, base: v.feel.top, rival, rider: null, dress: null, script: rival ? plan[rival.id] : null, roll: { x: 0, v: 0 }, pitch: { x: 0, v: 0 }, squash: 1, i: 0, s: 0, lat: 0, progress: 0, y: 0, done: -1, coins: 0, grass: false, bumpCool: 0, padCool: 0, bounceCool: 0, splashCool: 0, mud: 0, splats: [], sway: Math.random() * 6 }
       v.root.add(blobShadow(1.3, bag))
       if (this.track.puddles.length) r.splats = this.mudSplats(v)
       scene.add(v.root)
@@ -317,11 +327,13 @@ export class KartRace implements World3D {
     const mine = buildKart(bag)
     this.gifts = giveGifts(mine, start.gifts ?? [], bag)
     this.racers = [racer('kaylee', mine, null)]
+    this.racers[0].dress = dressKart(mine, 'kaylee', bag)
     for (const id of RIVAL_IDS) {
       const rv = RIVALS[id]
       const r = racer(id, buildKart(bag, rv.kart, { horn: false }), rv)
-      r.block = buildBlock(bag, id)
-      r.v.seat.add(r.block.root)
+      r.rider = buildRider(bag, id)
+      r.dress = dressKart(r.v, id, bag)
+      r.v.seat.add(r.rider.root)
       this.racers.push(r)
     }
     this.kaylee = new Avatar(bag)
@@ -651,7 +663,7 @@ export class KartRace implements World3D {
       r.y = this.groundAt(r)
       this.poseKart(r, 0, 0)
     }
-    this.racer('taeng').block!.nap = true
+    this.racer('taeng').rider!.nap = true
     this.lastProgress = this.k.progress
     this.camHeading = this.k.d.heading
     this.phase = 'intro'
@@ -721,8 +733,8 @@ export class KartRace implements World3D {
     if (id?.startsWith('rival:')) {
       const r = this.racer(id.slice(6) as RacerId)
       this.counts.pokes++
-      r.block!.nap = false
-      r.block!.react('hop')
+      r.rider!.nap = false
+      r.rider!.react('hop')
       r.squash = 0.4
       sfx.boop()
       return
@@ -733,6 +745,10 @@ export class KartRace implements World3D {
       this.counts.pokes++
       m.squash = 0
       sfx.boingAt(2)
+    }
+    if (id === 'ducks') {
+      this.counts.pokes++
+      this.scenery.pokeDucks(this.sceneryEvents)
     }
     if (id === 'waterfall' && this.fall) {
       // A big splash off the rocks.
@@ -813,7 +829,8 @@ export class KartRace implements World3D {
     for (const r of this.racers) {
       this.poseKart(r, dt, t)
       this.trail(r, dt)
-      r.block?.update(dt, t, clamp(-r.d.yawRate / r.feel.turn, -1, 1))
+      r.rider?.update(dt, t, clamp(-r.d.yawRate / r.feel.turn, -1, 1))
+      r.dress?.update(t, clamp(Math.abs(r.d.speed) / KART.top, 0, 1))
     }
     this.kaylee.setWind(clamp(Math.abs(this.k.d.speed) / KART.top, 0, 1))
     const look = this.track.road.spotAt(this.k.s + 20, 0)
@@ -832,6 +849,7 @@ export class KartRace implements World3D {
     this.pads.update(t)
     for (const p of [this.dust, this.straw, this.sparkle, this.fireworks, this.confetti, this.splash, this.petals]) p?.update(dt)
     this.updateTricks(dt, t)
+    this.scenery.update(dt, t, this.k, this.racers, this.sceneryEvents)
     this.engine(dt)
     this.celebrate(dt)
     this.idleHints()
@@ -843,6 +861,7 @@ export class KartRace implements World3D {
     this.rig.update(rawDt)
     this.clearTerrain()
     this.lights.follow(d.x, this.k.y, d.z)
+    this.shade(dt)
     this.emitHud()
   }
 
@@ -875,6 +894,21 @@ export class KartRace implements World3D {
       }
     }
     if (this.track.def.cloud) this.updateCloud(dt, t)
+  }
+
+  /** Under the forest's big trees (and inside the log) it's shady: the light dims and the sky and haze turn a deep green,
+   *  so the fireflies glow. */
+  private shadeK = 0
+  private sceneryEvents = { quack: sfx.quack, moo: sfx.moo, cheer: sfx.cheer, creak: sfx.creak }
+  private shade(dt: number) {
+    if (!this.track.dark && this.track.log === null) return
+    this.shadeK += (this.track.shadeAt(this.k.s) - this.shadeK) * (1 - Math.exp(-dt * 2.5))
+    const k = this.shadeK
+    this.lights.ambient.intensity *= 1 - 0.5 * k
+    this.lights.sun.intensity *= 1 - 0.78 * k
+    ;(this.scene.background as Color).set(this.air.bg).lerp(tmpColor.set('#3E6A5C'), k * 0.85)
+    this.fog.color.set(this.air.fog).lerp(tmpColor.set('#4C7A66'), k * 0.85)
+    this.scenery.fireflyGlow(k)
   }
 
   /** The climb's cloud: the haze closes in to white as she climbs into it, and she pops out above into the sunshine,
@@ -947,7 +981,7 @@ export class KartRace implements World3D {
     this.phaseT = 0
     this.music.start()
     this.rig.lag = 0.3
-    const taeng = this.racer('taeng').block!
+    const taeng = this.racer('taeng').rider!
     taeng.nap = false
     taeng.react('hop')
     const k = this.k
@@ -1020,7 +1054,7 @@ export class KartRace implements World3D {
         cap = Math.min(cap, lim)
       }
     }
-    d.cap = cap
+    d.cap = Math.min(cap, this.duckCap(k))
     d.hold(target.x, target.z)
     // How fast she's getting on along the road (the rivals keep up with this).
     const rate = (k.progress - this.lastProgress) / Math.max(1e-3, dt)
@@ -1073,8 +1107,14 @@ export class KartRace implements World3D {
       let cap = clamp(vt / r.feel.top, 0, 1)
       if (r.done < 0) cap *= this.bendSlow(r.s, rv.bends)
       if (r.grass) cap *= KART.grass
-      d.cap = cap
+      d.cap = Math.min(cap, this.duckCap(r))
     }
+  }
+
+  /** Waiting a moment for the ducks to cross (rice steps): the share of its top speed a kart may go (1: no limit). */
+  private duckCap(r: Racer) {
+    const v = this.scenery.hold(r.s)
+    return v === Infinity ? 1 : v / Math.max(1, r.feel.top)
   }
 
   /** Where a racer is on the road now. */
@@ -1133,7 +1173,7 @@ export class KartRace implements World3D {
         if (m.big) this.counts.bigBounces++
         this.slow = Math.max(this.slow, BOUNCE.slow * (m.big ? 1.6 : 1))
         sounds.sparkle()
-      } else r.block?.react('hop')
+      } else r.rider?.react('hop')
     }
     r.splashCool -= dt
     // A puddle: SPLASH, muddier (and a little faster).
@@ -1156,7 +1196,7 @@ export class KartRace implements World3D {
         sfx.puddle()
         this.slow = Math.max(this.slow, MUD.splash)
         this.kaylee.react('hop')
-      } else r.block?.react('hop')
+      } else r.rider?.react('hop')
     }
     // The waterfall's stream: washed clean, and a burst of speed.
     if (this.track.inStream(r.s) && r.splashCool <= 0) {
@@ -1173,6 +1213,26 @@ export class KartRace implements World3D {
         this.boostKick = 0.8
       }
     }
+    // The forest's stream: a big splash through it.
+    if (this.track.inFord(r.s) && r.splashCool <= 0 && !d.airborne) {
+      r.splashCool = 0.9
+      r.squash = 0.4
+      r.pitch.v += 1
+      const sp = Math.abs(d.speed)
+      for (const side of [1, -1]) {
+        const lx = Math.cos(d.heading) * side
+        const lz = -Math.sin(d.heading) * side
+        for (let i = 0; i < (r === this.k ? 16 : 6); i++)
+          this.splash.emit(d.x + lx * 0.8, r.y + 0.3, d.z + lz * 0.8, lx * (2 + Math.random() * 3) + Math.sin(d.heading) * sp * 0.3, 3 + Math.random() * 4, lz * (2 + Math.random() * 3) + Math.cos(d.heading) * sp * 0.3, 0.9, 0.2 + Math.random() * 0.1, Math.floor(Math.random() * 3))
+      }
+      if (r === this.k) {
+        this.counts.fords++
+        sfx.splash(1)
+        this.kaylee.react('hop')
+      } else r.rider?.react('hop')
+    }
+    // The bamboo bridge: bumpy, the poles clatter under the wheels.
+    if (this.track.onBridge(r.s) && !d.airborne) r.pitch.v += (Math.random() - 0.5) * dt * 40
     // A blossom shower: petals swirl round the kart, and a burst of speed.
     const sh = r.padCool <= 0 && !d.airborne ? this.track.showerAt(r.s, r.lat) : undefined
     if (sh && this.petals) {
@@ -1244,9 +1304,9 @@ export class KartRace implements World3D {
       // A photo finish: slow motion as the winner noses over the line, the camera head on.
       this.photoFinish = true
       this.slow = SLOWMO
-      r.block?.react('wave', 4)
+      r.rider?.react('wave', 4)
       sfx.cheer()
-    } else r.block?.react('wave', 2)
+    } else r.rider?.react('wave', 2)
   }
 
   /** She's over the line: first (fanfare, fireworks, the crowd) or second by a nose (so close! a silver cheer). */
@@ -1284,7 +1344,7 @@ export class KartRace implements World3D {
   private places() {
     const order = this.order()
     const place = order.indexOf('kaylee') + 1
-    if (this.phase === 'race' && place > this.lastPlace && this.phaseT > 3) this.racer(order[place - 2]).block?.react('wave', 1)
+    if (this.phase === 'race' && place > this.lastPlace && this.phaseT > 3) this.racer(order[place - 2]).rider?.react('wave', 1)
     this.lastPlace = place
   }
 
@@ -1328,8 +1388,8 @@ export class KartRace implements World3D {
               A.squash = B.squash = 0.3
               A.roll.v += nz * 2
               B.roll.v -= nz * 2
-              A.block?.react('hop')
-              B.block?.react('hop')
+              A.rider?.react('hop')
+              B.rider?.react('hop')
               this.dust.burst((ax + bx) / 2, A.y + 0.4, (az + bz) / 2, 8, 2, 2, 0.2)
             }
           }
@@ -1345,7 +1405,8 @@ export class KartRace implements World3D {
       const pz = d.z + Math.cos(d.heading) * at
       const loc = road.locate(px, pz, r.i, 12)
       // (Past the end of the road, the clearing's bales too.)
-      const lim = this.track.edge - r.v.hull.r
+      // (On the bamboo bridge, the rails are the edge.)
+      const lim = (this.track.onBridge(loc.s) ? this.track.def.half + 0.15 : this.track.edge) - r.v.hull.r
       if (Math.abs(loc.lat) <= lim && loc.s < road.length - 0.5) continue
       const p = road.sampleAt(loc.s)
       const side = Math.sign(loc.lat)
@@ -1601,7 +1662,7 @@ export class KartRace implements World3D {
     if (id.startsWith('rival:')) {
       const r = this.racer(id.slice(6) as RacerId)
       if (Math.hypot(r.d.x - k.d.x, r.d.z - k.d.z) > 45) return null
-      const at = r.block!.head.getWorldPosition(new Vector3())
+      const at = r.rider!.head.getWorldPosition(new Vector3())
       at.y += 0.3
       return { at, r: 0.8, prio: 2, max: 110 }
     }
@@ -1609,6 +1670,11 @@ export class KartRace implements World3D {
       const m = this.shrooms[Number(id.slice(9))]
       if (!m || Math.hypot(m.g.position.x - k.d.x, m.g.position.z - k.d.z) > 50) return null
       return { at: m.g.position.clone().setY(m.g.position.y + 0.6), r: m.m.r * 0.8, prio: 0, max: 140 }
+    }
+    if (id === 'ducks') {
+      const at = this.scenery.duckAt()
+      if (!at || at.distanceTo(tmp.set(k.d.x, k.y, k.d.z)) > 40) return null
+      return { at: at.clone().setY(at.y + 0.6), r: 1.2, prio: 1, max: 140 }
     }
     if (id === 'waterfall') {
       if (!this.fall || this.fall.at.distanceTo(tmp.set(k.d.x, k.y, k.d.z)) > 50) return null
@@ -1685,6 +1751,7 @@ export class KartRace implements World3D {
       ...this.counts,
       grass: r2(this.counts.grass),
       mud: r2(this.k.mud),
+      scenery: { ...this.scenery.counts, duckWait: r2(this.scenery.counts.duckWait), shade: r2(this.shadeK), ducks: this.scenery.duckState },
       cloud: this.track.def.cloud ? { in: r2(this.cloudK), above: this.wasAbove, lanterns: this.track.lanterns.length } : null,
     }
   }

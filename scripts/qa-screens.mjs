@@ -767,6 +767,9 @@ const SCREENS = [
   { name: 'nan-cup-silver', hash: '#/world/thailand/nan-trip/podium?track=steps&place=2', reset: true, wait: 6000 },
   { name: 'nan-cup-win', hash: '#/world/thailand/nan-trip/cup-win', reset: true, wait: 12000 },
   { name: 'nan-cup-map', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,cup&cup=1', reset: true, wait: 5000 },
+  // (The look step: the rivals on the chibi rig in the character lab, front and back.)
+  { name: 'nan-cup-rivals', hash: '#/world/characters/taeng?lineup=taeng,pao,moon', wait: 3000 },
+  { name: 'nan-cup-rivals-back', hash: '#/world/characters/taeng?lineup=taeng,pao,moon&yaw=150', wait: 3000 },
   { name: 'nan-salt-1', hash: '#/world/thailand/nan-trip/salt', reset: true, wait: 3500 },
   { name: 'nan-salt-2', hash: '#/world/thailand/nan-trip/salt?round=2', reset: true, wait: 3500 },
   { name: 'nan-salt-3', hash: '#/world/thailand/nan-trip/salt?round=3', reset: true, wait: 3500 },

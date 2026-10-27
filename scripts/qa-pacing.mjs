@@ -181,11 +181,11 @@ const SCENARIOS = [
   // The Nan Mountain Cup (greybox 1, no voices): the kart races on by itself when no finger is down, so the
   // auto-player's taps are honks and pokes (the rivals, the mushrooms) all the way to the line; the finger-held run is
   // qa-motion's nan-kart.
-  { name: 'thailand nan: the cup race', id: 'nan-cup', hash: '#/world/thailand/nan-trip/race', reset: true },
+  { name: 'thailand nan: the cup race', id: 'nan-cup', hash: '#/world/thailand/nan-trip/race?steer=finger', reset: true },
   // Greybox 2's tracks: racing on by itself it drives through the puddles and the waterfall (the rice steps), the
   // blossom showers and under the lanterns (the cloud), so the auto-player sees each trick.
-  { name: 'thailand nan: the cup race, rice steps', id: 'nan-cup-steps', hash: '#/world/thailand/nan-trip/race?track=steps', reset: true },
-  { name: 'thailand nan: the cup race, cloud top', id: 'nan-cup-cloud', hash: '#/world/thailand/nan-trip/race?track=cloud', reset: true },
+  { name: 'thailand nan: the cup race, rice steps', id: 'nan-cup-steps', hash: '#/world/thailand/nan-trip/race?track=steps&steer=finger', reset: true },
+  { name: 'thailand nan: the cup race, cloud top', id: 'nan-cup-cloud', hash: '#/world/thailand/nan-trip/race?track=cloud&steer=finger', reset: true },
   // Greybox 3: the silver podium (the auto-player's taps find the glowing winner for the high five, then ➡️) and the
   // Cup ceremony (the Cup floats over, a tap lifts it, the photo, 🗺️).
   { name: 'thailand nan: the cup podium, silver', id: 'nan-cup-podium', hash: '#/world/thailand/nan-trip/podium?track=steps&place=2', reset: true },

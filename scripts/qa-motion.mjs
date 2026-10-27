@@ -1436,7 +1436,7 @@ GAME_SCENARIOS.push(
     name: 'nan-kart',
     seconds: 12,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?steer=finger`)
       await page.waitForFunction(() => window.__thaiNanQA?.().phase === 'race', null, { timeout: 40000 })
     },
     act: async (page) => {
@@ -1458,7 +1458,7 @@ GAME_SCENARIOS.push(
     setup: async (page, base) => {
       // Racing on by itself, it drives straight over the mushrooms (the good bits don't need her to aim): up to just
       // before the first one.
-      await page.goto(`${base}#/world/thailand/nan-trip/race`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?steer=finger`)
       await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 140, null, { timeout: 60000 })
     },
     act: async (page) => {
@@ -1476,7 +1476,7 @@ GAME_SCENARIOS.push(
     name: 'nan-splash',
     seconds: 8,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps&steer=finger`)
       await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 50, null, { timeout: 60000 })
     },
     act: async (page) => {
@@ -1488,11 +1488,70 @@ GAME_SCENARIOS.push(
     name: 'nan-cloud',
     seconds: 10,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/thailand/nan-trip/race?track=cloud`)
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=cloud&steer=finger`)
       await page.waitForFunction(() => window.__thaiNanQA?.().cloud?.in > 0.15, null, { timeout: 120000 })
     },
     act: async (page) => {
       await page.waitForTimeout(10000)
+    },
+  },
+)
+
+// The Nan Mountain Cup, the look step: the rivals on the chibi rig waving in the character lab (Grandma Taeng, Pao,
+// Moon); on the rice steps (nan-ducks) the mother duck and her ducklings waddling across the road while every kart waits
+// a moment; in the forest (nan-log) through the hollow log near the end. Both race there with a finger held on the road
+// ahead (as she would), so they get there in good time.
+const raceTo = async (page, until, ms, press = true) => {
+  await page.waitForFunction(() => window.__thaiNanQA?.().phase === 'race', null, { timeout: 60000 })
+  let a = await page.evaluate(() => window.__thaiNanQA().aim)
+  if (press) {
+    await page.mouse.move(a?.x ?? vp.width / 2, a?.y ?? vp.height * 0.45)
+    await page.mouse.down()
+  }
+  const t0 = Date.now()
+  while (Date.now() - t0 < ms && !(await page.evaluate(until))) {
+    a = await page.evaluate(() => window.__thaiNanQA().aim)
+    if (a) await page.mouse.move(a.x, a.y)
+    await page.waitForTimeout(150)
+  }
+}
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-cup-rivals',
+    seconds: 4,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/characters/taeng?lineup=taeng,pao,moon`)
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      await page.getByRole('button', { name: 'Hop', exact: true }).click().catch(() => {})
+      await page.waitForTimeout(1200)
+      await page.getByRole('button', { name: 'Wave', exact: true }).click().catch(() => {})
+      await page.waitForTimeout(2500)
+    },
+  },
+  {
+    name: 'nan-ducks',
+    seconds: 6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps&steer=finger`)
+      await raceTo(page, () => window.__thaiNanQA().scenery?.ducks?.state === 'cross', 240000)
+    },
+    act: async (page) => {
+      await raceTo(page, () => false, 6000, false)
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'nan-log',
+    seconds: 6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/race?steer=finger`)
+      await raceTo(page, () => window.__thaiNanQA().racers?.kaylee.progress > 670, 300000)
+    },
+    act: async (page) => {
+      await raceTo(page, () => false, 6000, false)
+      await page.mouse.up()
     },
   },
 )

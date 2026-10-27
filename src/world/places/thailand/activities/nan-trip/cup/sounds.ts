@@ -16,6 +16,10 @@ export const cupSfx = {
   honk: () => [0, 0.16].forEach((d) => tone(740, 720, 0.12, 0.09, 'square', d)),
   /** Bumping over the grass. */
   rumble: () => noise(0.12, 0.05, 'lowpass', 300, 200, 0, 1.2),
+  /** A duck: quack quack! */
+  quack: () => [0, 0.17].forEach((d) => tone(560, 380, 0.11, 0.06, 'square', d)),
+  /** The bamboo bridge creaking under the karts. */
+  creak: () => [0, 0.09, 0.2].forEach((d, i) => tone(180 + i * 40, 140 + i * 30, 0.08, 0.035, 'sawtooth', d)),
   /** Second by a nose: a soft falling "aww", then a little climb (it's still great). */
   soClose: () => {
     tone(660, 520, 0.35, 0.07, 'triangle')
