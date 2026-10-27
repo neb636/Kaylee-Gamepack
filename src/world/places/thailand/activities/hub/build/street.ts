@@ -33,6 +33,8 @@ const LEAF = '#7FCB8F'
 const SHUT = 2.8
 /** The step along the row: height and depth (the pots and the spirit house stand on it). */
 export const STEP_H = 0.2
+/** Top of the painted sill in Agong's doorway (the step is only this thick there). */
+const SILL_TOP = 0.035
 const STEP_D = 0.6
 /** How far the balcony sticks out over the sidewalk (shallow, so the sign below it still shows). */
 const BALCONY = 0.66
@@ -200,10 +202,10 @@ export function buildStreet(kit: Kit): Street {
 
   // ---- Sidewalk things ----
   props.add(spiritHouse(kit), motorbike(kit), cat(kit), tukTuk(kit))
-  // (The pots, the spirit house and the cat stand on the step.)
+  // (The spirit house, the basil and the cat stand on the step; the two pots stand in the doorway, on the sill.)
   props.add(
-    poke(kit, 'pot-left', [P.cyl(0.24, 0.17, 0.42, POT, { at: [0, 0.21, 0] }), P.sphere(0.3, LEAF, { at: [0, 0.62, 0] }), ...[0, 1.2, 2.4, 3.6, 4.8].map((a) => P.sphere(0.09, PAL.hotpink, { at: [Math.cos(a) * 0.24, 0.7 + (a % 2) * 0.1, Math.sin(a) * 0.24] }))], [-2.2, STEP_H, 0.4]),
-    poke(kit, 'pot-right', [P.cyl(0.24, 0.17, 0.42, POT, { at: [0, 0.21, 0] }), P.cyl(0.04, 0.05, 0.4, '#B98A6A', { at: [0, 0.6, 0] }), P.sphere(0.34, LEAF, { at: [0, 0.95, 0] }), ...[0.5, 2.2, 4].map((a) => P.sphere(0.07, '#D4F07A', { at: [Math.cos(a) * 0.3, 0.95, Math.sin(a) * 0.3] }))], [2.2, STEP_H, 0.4]),
+    poke(kit, 'pot-left', [P.cyl(0.24, 0.17, 0.42, POT, { at: [0, 0.21, 0] }), P.sphere(0.3, LEAF, { at: [0, 0.62, 0] }), ...[0, 1.2, 2.4, 3.6, 4.8].map((a) => P.sphere(0.09, PAL.hotpink, { at: [Math.cos(a) * 0.24, 0.7 + (a % 2) * 0.1, Math.sin(a) * 0.24] }))], [-2.2, SILL_TOP, 0.4]),
+    poke(kit, 'pot-right', [P.cyl(0.24, 0.17, 0.42, POT, { at: [0, 0.21, 0] }), P.cyl(0.04, 0.05, 0.4, '#B98A6A', { at: [0, 0.6, 0] }), P.sphere(0.34, LEAF, { at: [0, 0.95, 0] }), ...[0.5, 2.2, 4].map((a) => P.sphere(0.07, '#D4F07A', { at: [Math.cos(a) * 0.3, 0.95, Math.sin(a) * 0.3] }))], [2.2, SILL_TOP, 0.4]),
     poke(kit, 'basil', [P.cyl(0.2, 0.15, 0.3, POT, { at: [0, 0.15, 0] }), ...[0, 2.1, 4.2].map((a) => P.sphere(0.13, '#6FBF7F', { at: [Math.cos(a) * 0.1, 0.4, Math.sin(a) * 0.1] }))], [-7.0, STEP_H, 0.45]),
   )
 

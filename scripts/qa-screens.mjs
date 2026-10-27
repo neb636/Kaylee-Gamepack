@@ -366,9 +366,9 @@ const SCREENS = [
     reset: true,
     wait: 1800,
   })),
-  // Her wardrobe (wardrobe.html, greybox 1): the doors open, the hats drawer, the paint drawer, and her room in a look.
-  ...['wardrobe', 'wardrobe?drawer=head', 'wardrobe?drawer=paint&look=crown,hearts,fairy,tutu,sneakers,hair-pink', 'upstairs?look=cap,stars,cape,gown,fur-mint'].map((to) => ({
-    name: `thailand-${to.replace(/[?=&,]/g, '-')}`.slice(0, 60),
+  // Her wardrobe (wardrobe.html): the doors open, the hats drawer, the paint drawer, her room in a look, and the door with its 4 pictures.
+  ...['wardrobe', 'wardrobe?drawer=head', 'wardrobe?drawer=paint&look=crown,hearts,fairy,tutu,sneakers,hair-pink', 'upstairs?look=cap,stars,cape,gown,fur-mint', 'wardrobe?drawer=outfit&look=bow,fairy,tutu&door=crown,hearts,tutu;bow,fairy,dress-mint;cap,stars,cape;overalls,boots,hair-pink,fur-sky'].map((to) => ({
+    name: `thailand-${to.replace(/[?=&,;]/g, '-')}`.slice(0, 60),
     hash: `#/world/thailand/hub/${to}`,
     reset: true,
     wait: 1800,

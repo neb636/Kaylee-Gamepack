@@ -76,7 +76,11 @@ const TUNIC: [number, number, number][] = [
   [0.45, 0.112, 0.072],
   [0.468, 0.07, 0.045],
 ]
-const tunic = (hem: number, color: string) => shell([[hem, 0, 0], [hem, 0.176, 0.157], ...TUNIC, [0.472, 0, 0]], color)
+export const tunic = (hem: number, color: string) => {
+  // (A short top starts at its own hem: the rings below it would fold the shell back on itself.)
+  const [, rx, rz] = TUNIC.find((r) => r[0] >= hem) ?? TUNIC[0]
+  return shell([[hem, 0, 0], [hem, Math.max(rx, 0.12) + 0.004, Math.max(rz, 0.1) + 0.004], ...TUNIC.filter((r) => r[0] > hem), [0.472, 0, 0]], color)
+}
 
 /** Where the tunic's front is at height `y`, `x` out from the middle (body-local z), for things sewn on it. */
 export function onTunic(x: number, y: number): number {
@@ -93,7 +97,7 @@ export const along = (s: number, d: number): V3 => [s * Math.sin(ARM) * d, -Math
 
 /** A short sleeve over the top of her arm, from over the shoulder cap (which rises 0.04 above the pivot) to past her
  *  dress's own sleeve. */
-const sleeve = (s: number, color: string) => P.capsule(0.049, 0.07, color, { at: along(s, 0.015), rot: [0, 0, s * ARM] })
+export const sleeve = (s: number, color: string) => P.capsule(0.049, 0.07, color, { at: along(s, 0.015), rot: [0, 0, s * ARM] })
 
 /** Groups for whatever has parts, with her line. */
 export const group = (lined: Parts, plain: Parts, bag: Bag) => (lined.length || plain.length ? solidMix(lined, plain, bag, PX) : null)
@@ -131,7 +135,7 @@ function scrubCap(bag: Bag) {
 /** How far her hair reaches out from the headband's center, every 15° round from the front toward her left (+x), in
  *  the band's tipped plane (measured on kaylee.glb, the braid and streaks included). Not round: furthest at the front
  *  where her bangs and the pink lock stand out, small at the back. */
-const BAND_R = [0.306, 0.307, 0.302, 0.286, 0.273, 0.267, 0.26, 0.247, 0.244, 0.241, 0.22, 0.209, 0.205, 0.21, 0.22, 0.241, 0.244, 0.248, 0.26, 0.268, 0.29, 0.306, 0.302, 0.308]
+export const BAND_R = [0.306, 0.307, 0.302, 0.286, 0.273, 0.267, 0.26, 0.247, 0.244, 0.241, 0.22, 0.209, 0.205, 0.21, 0.22, 0.241, 0.244, 0.248, 0.26, 0.268, 0.29, 0.306, 0.302, 0.308]
 
 /** The red Muay Thai headband (mongkhon), made for her: a band that follows her hair all the way round over the top
  *  of her bangs (a round one sinks into her hair at the sides and goes under the pink lock), its two tails hanging

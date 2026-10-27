@@ -264,6 +264,6 @@ export class Racer {
     this.root.rotation.y = this.yaw + this.spin
     this.flipper.rotation.x = this.flip
     // Her wings fold on the slide (she sits), in the ring, walking and climbing; they flutter on a hop.
-    this.dress.update(dt, { fold: this.sitting || inRing || this.walkSpeed > 0 || this.tuck ? 1 : 0, flap: this.hopK < 1 || arc > 0, wai: false })
+    this.dress.update(dt, { fold: this.sitting || inRing || this.walkSpeed > 0 || this.tuck ? 1 : 0, flap: this.hopK < 1 || arc > 0, wai: false, walk: this.walkSpeed > 0 })
   }
 }

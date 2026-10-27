@@ -13,6 +13,9 @@ const nick = by('nick')
 const ji = by('ji')
 const kids = by('kids')
 
+/** One line for each thing a look can change, in order: hat, glasses, wings, outfit, shoes, paint. */
+const notice = (say: (text: string) => Line, texts: string[]) => Object.fromEntries(['head', 'face', 'back', 'outfit', 'feet', 'paint'].map((k, i) => [k, say(texts[i])]))
+
 /** Each person's first hello, then what they say each time after (in turn). */
 const hello = (voice: string, hi: string, again: string[]) => ({ hi: by(voice)(hi), again: again.map(by(voice)) })
 
@@ -73,6 +76,89 @@ export const L = {
     putter: hello('putter', 'Hi Kaylee! Hee hee!', ['Peep peep!']),
   } as Record<string, { hi: Line; again: Line[] }>,
 
+  // Kaylee's wardrobe in her room (activities/hub/wardrobe/, plan: thailand/wardrobe.html). Sparkle says what to do the
+  // first time and the name of each thing the first time she touches it; the family notice her new look in their own
+  // voices (activities/hub/notice.ts).
+  wardrobe: {
+    open: `Your wardrobe! Dress up, ${NAME}!`,
+    // The first drawer she pulls out (the paint drawer says its own).
+    drawer: `Drag it onto you, ${NAME}!`,
+    paint: 'Hair, dress or fur!',
+    // After ~8 seconds with nothing touched: a drawer or a thing on the shelf glints.
+    hint: { drawer: 'Pull a drawer!', thing: `Drag it onto you, ${NAME}!`, photo: 'Tap the mirror for a picture!' },
+    // The mirror takes a picture of her look and pins it to the door; a picture dropped on her puts the whole look on.
+    photo: `Click! A picture of your look, ${NAME}!`,
+    look: `Your whole look! Wow, ${NAME}!`,
+    // Sparkle's wand: a surprise look, a different one each tap (in turn).
+    wand: ['Ta da! Magic!', 'Sparkle magic!', 'Ooh, a surprise!', 'Whoosh! A new look!'],
+    // Silly, never wrong.
+    silly: { shoe: 'A shoe on your head! Hee hee!', glasses: 'Glasses on your tail! Hee hee!', mirror: 'Splat on the mirror! Hee hee!' },
+    // The first time she touches each thing (by item id; `pot-` and the color for the paint).
+    names: {
+      crown: 'A crown!',
+      tiara: 'A tiara!',
+      orchid: 'An orchid crown!',
+      bow: 'A big bow!',
+      bunny: 'Bunny ears!',
+      kitty: 'Cat ears!',
+      cap: 'A baseball cap!',
+      cowboy: 'A cowboy hat!',
+      bucket: 'A bucket hat!',
+      sunhat: 'A sun hat!',
+      hearts: 'Heart sunglasses!',
+      stars: 'Star sunglasses!',
+      round: 'Round glasses!',
+      fairy: 'Fairy wings!',
+      wings: 'Unicorn wings!',
+      cape: 'A princess cape!',
+      backpack: 'A bunny backpack!',
+      tutu: 'A twirly tutu!',
+      gown: 'A princess gown!',
+      overalls: 'Overalls!',
+      'chut-thai': 'Chut thai, a Thai dress!',
+      sneakers: 'Light-up sneakers!',
+      party: 'Party shoes!',
+      boots: 'Rain boots!',
+      sandals: 'Sandals!',
+      'pot-pink': 'Pink paint!',
+      'pot-lilac': 'Lilac paint!',
+      'pot-mint': 'Mint paint!',
+      'pot-sky': 'Sky blue paint!',
+      'pot-butter': 'Butter yellow paint!',
+      'pot-peach': 'Peachy orange paint!',
+      'pot-brown': 'Brown paint!',
+      'pot-cream': 'Cream paint!',
+    } as Record<string, string>,
+    // The family notice her look the first time she walks up to them in it (hat, glasses, wings, outfit, shoes, paint),
+    // once per change. Mommy: a crown has its own line; Daddy: so do wings.
+    notice: {
+      ji: notice(ji, [`Ooh, what a pretty hat, ${NAME}!`, `Ooh, fancy glasses, ${NAME}!`, `Ooh, so pretty, ${NAME}!`, `Ooh, what a pretty outfit, ${NAME}!`, `Ooh, nice shoes, ${NAME}!`, `Ooh, new colors, ${NAME}!`]),
+      nick: notice(nick, ['Wow, cool hat!', 'Cool shades, Kaylee!', 'Whoa, cool, Kaylee!', 'Whoa, what an outfit!', 'Cool shoes, Kaylee!', 'Whoa, new colors!']),
+      agong: notice(by('agong'), ['Ho ho! So pretty!', 'Ho ho! So fancy!', 'Ho ho! So pretty!', 'Ho ho! So pretty, Kaylee!', 'Ho ho! Nice shoes!', 'Ho ho! New colors!']),
+      jum: notice(by('jum'), [`Oh! What a pretty hat, ${NAME}!`, 'Oh! So fancy, Kaylee!', 'Oh! So pretty, Kaylee!', 'Oh! What a pretty outfit!', 'Oh! Nice shoes, Kaylee!', 'Oh! I love the colors!']),
+      joy: notice(by('joy'), ['Wow! I love your hat!', 'Wow! Fancy glasses!', 'Wow! So cute, Kaylee!', 'Wow! What an outfit!', 'Wow! Cute shoes!', 'Wow! New colors!']),
+      bird: notice(by('bird'), ['Nice hat, Kaylee!', 'Nice glasses, Kaylee!', 'Ho ho! Nice, Kaylee!', 'Nice outfit, Kaylee!', 'Nice shoes, Kaylee!', 'Ho ho! New colors!']),
+      gan: notice(by('gan'), ['Nice hat... one sec.', 'Cool glasses... uh-huh.', 'Cool... uh-huh.', 'Nice outfit... uh-huh.', 'Nice shoes... one sec.', 'New colors... cool.']),
+      ken: notice(by('ken'), ['Oh. Nice hat.', 'Oh. Cool glasses.', 'Oh. Nice.', 'Oh. Nice outfit.', 'Oh. Nice shoes.', 'Oh. New colors.']),
+      bb: notice(by('bb'), ['So cute, Kaylee... one sec.', 'Cute glasses... uh-huh.', 'So cute... one sec.', 'Cute outfit... uh-huh.', 'Nice shoes... one sec.', 'Cute colors... uh-huh.']),
+      ja: notice(by('ja'), ['So pretty, Kaylee!', 'So fancy, Kaylee!', 'So pretty, Kaylee!', 'What a pretty outfit!', 'What cute shoes!', 'So pretty, new colors!']),
+      sri: notice(by('sri'), ['Lovely hat! Say cheese!', 'Lovely glasses! Say cheese!', 'Lovely! Say cheese!', 'Lovely outfit! Say cheese!', 'Lovely shoes! Say cheese!', 'Lovely colors! Say cheese!']),
+      putto: notice(by('putto'), ['Cool hat!', 'Cool glasses!', 'Cool!', 'Cool outfit!', 'Cool shoes!', 'Cool colors!']),
+      putter: notice(by('putter'), ['Look, a hat!', 'Look, glasses!', 'Look, so cute!', 'Look, new clothes!', 'Look, new shoes!', 'Look, new colors!']),
+    } as Record<string, Record<string, Line>>,
+    noticeItem: {
+      ji: {
+        crown: ji(`Ooh, a crown, ${NAME}!`),
+        fairy: ji(`Ooh, ${NAME}, you can fly!`),
+        wings: ji(`Ooh, ${NAME}, you can fly!`),
+        cape: ji(`Ooh, a princess cape, ${NAME}!`),
+        backpack: ji(`Ooh, a bunny backpack, ${NAME}!`),
+        overalls: ji(`Ooh, cute overalls, ${NAME}!`),
+      },
+      nick: { fairy: nick('Cool wings!'), wings: nick('Cool wings!') },
+    } as Record<string, Record<string, Line>>,
+  },
+
   // The boat trip's way there (trip/legs/): Mommy asks, packing, the goodbye, the airport, the window seat. Each line
   // is said once, for something new (or a hint after a while with nothing done). The officer and the flight attendant
   // are background figures with a line or two each. Kaylee never talks: she giggles.
@@ -98,6 +184,8 @@ export const L = {
       fan: ji('The fan blew it open!'),
       sunscreen: ji('Mommy always packs sunscreen!'),
       hat: ji("Here's Mommy's spare sun hat!"),
+      // Her own shady hat (the cap, the cowboy hat...) is a good sun hat: no spare.
+      goodHat: ji('Good hat, Kaylee!'),
     },
     goodbye: {
       agong: by('agong')('Bring Agong a photo of the Nail Island!'),

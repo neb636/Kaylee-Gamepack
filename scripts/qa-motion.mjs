@@ -456,10 +456,42 @@ const thaiHouse = (name, seconds, section, taps) => ({
     }
   },
 })
+// A thing dropped where it doesn't belong (a shoe on her head, paint on the mirror): silly, never wrong. The drag goes
+// from the thing's tap target to a point on the screen (fractions of the viewport).
+const thaiDrop = (name, seconds, drawer, thing, to) => ({
+  name,
+  seconds,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/hub/wardrobe?drawer=${drawer}`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiHouseQA?.().wardrobe, null, { timeout: 20000 })
+    await page.waitForTimeout(1200)
+  },
+  act: async (page) => {
+    const box = await page.locator(`[data-anchor="trip:ward:thing:${thing}"]`).boundingBox()
+    const [x, y] = [box.x + box.width / 2, box.y + box.height / 2]
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    await page.mouse.move(x + 6, y + 6, { steps: 2 })
+    await page.mouse.move(vp.width * to[0], vp.height * to[1], { steps: 10 })
+    await page.mouse.up()
+    await page.waitForTimeout(seconds * 1000 - 800)
+  },
+})
+GAME_SCENARIOS.push(
+  thaiDrop('wardrobe-shoe-on-head', 4, 'feet', 'boots', [0.71, 0.52]),
+  thaiDrop('wardrobe-paint-mirror', 4, 'paint', 'pot-pink', [0.56, 0.43]),
+)
 GAME_SCENARIOS.push(
   thaiHouse('thai-walk', 2.6, 'downstairs', [['floor', 0]]),
   thaiHouse('thai-stairs', 6, 'downstairs?at=fridge', [['stairs-up', 0]]),
   thaiHouse('thai-bounce', 5, 'upstairs?at=mattress', [['mattress', 900], ['mattress', 1100], ['mattress', 1300]]),
+  // Her wardrobe (wardrobe.html, gate 4): two things on in turn (each pops on and she shows it off), the mirror's picture
+  // flying to the door, Sparkle's wand (a surprise look), and a picture tapped on the door (the whole look at once).
+  thaiHouse('wardrobe-dress', 5, 'wardrobe?drawer=head', [['trip:ward:thing:crown', 1600], ['trip:ward:thing:cowboy', 2200]]),
+  thaiHouse('wardrobe-mirror', 5, 'wardrobe?drawer=head&look=cowboy,fairy', [['trip:ward:mirror', 3800]]),
+  thaiHouse('wardrobe-wand', 4, 'wardrobe', [['trip:ward:wand', 3000]]),
+  thaiHouse('wardrobe-door', 4, 'wardrobe?door=crown,hearts,tutu;bow,fairy,dress-mint', [['trip:ward:thing:photo-1', 2500]]),
 )
 
 // Thailand's boat trip (3D greybox): a finger held on the water ahead of the longtail (it surges after it, then turns

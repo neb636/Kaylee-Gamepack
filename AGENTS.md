@@ -379,7 +379,8 @@ the country's `known-issues.md` (Thailand has one) instead of growing the PR.
    spoken lines, run `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs` first and commit the clips.
 2. **Do not run `npm run test`, `npm run tap-around` or `npm run check` locally.** CI runs the Playwright specs on the PR
    (`tap-around` only for the countries you touched, everything when shared code changed). After opening the PR, start the
-   Codex review watcher (`open-pr` skill, step 4), then report and stop; don't wait for CI. If CI is red, read `gh run view --log-failed`, check whether the same spec fails on
+   Codex review watcher (`open-pr` skill, step 4), then report and stop; don't wait for CI. Fix real review findings;
+   for nitpicky ones (the skill lists what counts) react 👎 and reply why instead of changing code. If CI is red, read `gh run view --log-failed`, check whether the same spec fails on
    `main`, then fix only that spec. To run just what your branch affects, `npm run test:changed` (opt-in).
 3. **New activities get no bespoke e2e spec.** `tests/sections.spec.ts` and `tests/tap-around.spec.ts` discover
    every section by themselves and only fail on exceptions, so UI tweaks don't break them. A bespoke spec is for a
@@ -410,6 +411,19 @@ Deployed builds play offline: `src/offline/sw.js` (written to `dist/sw.js` with 
 always gets the latest deploy, and the saved copies are used only when the network fails or takes over 4 s. Never make it
 cache-first. It doesn't run in `npm run dev` or test browsers (add `?sw=1` to try it on `npm run preview`). Anything
 that needs the internet (YouTube) checks `useOnline()` from the SDK and hides itself offline.
+
+## Thailand is locked (the family code)
+
+Thailand's 3D house is the family's real home, and the site is public, so the deployed builds (main and every PR
+preview) encrypt Thailand's code: it opens only after a grown-up types the family code once on that device
+(`src/world/lock.ts`, `LockScreen.tsx`; the 3D labs ask too). The build does it (`scripts/vite-lock.ts`) when
+`LOCK_CODE` is set, which the deploy and preview workflows take from the `THAILAND_CODE` repository secret (they fail
+without it). `npm run dev`, CI tests and local builds lock nothing. Try the lock locally with
+`LOCK_CODE=test npm run build && npm run preview`.
+- Startup code stays readable (Thailand's `meta.ts`, `sections.ts`, `lines.ts`, voice clips, pictures). Never put the
+  house's layout or anything that describes the home in those files or in shared code outside `places/thailand/`.
+- The build fails if code that loads at startup imports a locked chunk: move the shared piece out of `places/thailand/`.
+- This repo is public, so the source itself is still readable on GitHub until the repo goes private.
 
 ## Local commands
 

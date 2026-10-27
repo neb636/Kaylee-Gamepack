@@ -1258,7 +1258,9 @@ export class SaltHut extends Stage {
       return { center: new Vector3(0.6, 0.8, 0.15), half: new Vector3(1.6, wide ? 0.62 : 0.45, 0.78), yaw: 0, pitch: 55, minDist: 3 }
     }
     if (tall) return { center: new Vector3(0.05, 1.0, 0.3), half: new Vector3(2.0, 1.15, 0.8), yaw: 0, pitch: 32, minDist: 3 }
-    return { center: new Vector3(0.1, wide ? 1.05 : 1.1, 0.15), half: new Vector3(2.3, wide ? 1.32 : 1.1, 0.65), yaw: 0, pitch: 22, minDist: 3 }
+    // Lab round 1 (iPhone landscape): a lower pitch, so the scene sits flatter in the short frame.
+    if (wide) return { center: new Vector3(0.1, 1.05, 0.15), half: new Vector3(2.3, 1.32, 0.65), yaw: 0, pitch: 11, minDist: 3 }
+    return { center: new Vector3(0.1, 1.1, 0.15), half: new Vector3(2.3, 1.1, 0.65), yaw: 0, pitch: 22, minDist: 3 }
   }
 
   /** What the hint finger (and the glow) points at now. */
