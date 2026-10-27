@@ -17,9 +17,9 @@
   "icon": "🏁",
   "kind": "Nan trip stop",
   "updated": "2026-10-27",
-  "status": { "label": "Greybox 1 built", "tone": "pink" },
+  "status": { "label": "Greybox 2 built", "tone": "pink" },
   "pitch": "At the end of the city road, Nan town's market square becomes the race ground for the **Nan Mountain Cup**. Kaylee drives her own pink kart against three mountain racers on three tracks, each one different: a misty mushroom forest, the rice steps and the climb into the clouds. She wins two races and loses one. Which one she loses is rolled fresh every time she plays. Winning two makes her the champion, so the Cup with KAYLEE on it is hers.",
-  "next": "Dad plays greybox 1 on the iPad: [a race she wins](#/world/thailand/nan-trip/race?track=forest&result=win), [the race she loses](#/world/thailand/nan-trip/race?track=forest&result=lose), and [the feel lab](#/world/thailand/nan-trip/race?track=forest&feel=1) for the kart's steering, the bounce and the rivals' gap (“Copy for agent” sends the numbers back). The **open questions** below are still open: greybox 1 went with the plan's suggestions (her pink kart, the boat race's finger verb, the three made-up rivals). Then greybox 2: the rice steps and the cloud.",
+  "next": "Dad plays greybox 2 on the iPad: [the Rice Steps Rally](#/world/thailand/nan-trip/race?track=steps&result=win) (puddles, mud, the waterfall) and [the Cloud Top Climb](#/world/thailand/nan-trip/race?track=cloud&result=win) (the lanterns in the cloud, the blossoms), each also lost by a nose ([steps](#/world/thailand/nan-trip/race?track=steps&result=lose), [cloud](#/world/thailand/nan-trip/race?track=cloud&result=lose)). [The feel lab](#/world/thailand/nan-trip/race?track=steps&feel=1) has the mud, the waterfall's and the blossoms' bursts and how far she sees in the cloud, next to the kart's steering (no numbers came back from greybox 1, so it still has its first guesses). The **open questions** below are still open. Then greybox 3: the race ground, the board, the podiums and the Cup.",
   "facts": [
     { "icon": "🏁", "value": "3", "label": "tracks, any order" },
     { "icon": "🥇", "value": "2 wins, 1 loss", "label": "rolled each time" },
@@ -201,12 +201,16 @@
       "id": "sections",
       "title": "Sections: tap to play",
       "icon": "🔗",
-      "lede": "Greybox 1 built the race (the Mushroom Forest). Sections live in the Nan trip's `sections.ts`, so they open as `nan-trip/<section>`.",
+      "lede": "Greybox 1 built the race (the Mushroom Forest), greybox 2 the other two tracks. Sections live in the Nan trip's `sections.ts`, so they open as `nan-trip/<section>`.",
       "blocks": [
         { "type": "sections", "base": "#/world/thailand/nan-trip/", "items": [
           { "n": "1", "id": "cup", "name": "The race ground and the board: pick a track", "status": "todo" },
           { "n": "2", "id": "race", "name": "A race (greybox 1: the Mushroom Forest, she wins by a nose)", "query": "?track=forest&result=win" },
           { "n": "2b", "id": "race", "name": "The race she loses: Moon wins by a nose, she's second", "query": "?track=forest&result=lose" },
+          { "n": "2c", "id": "race", "name": "The Rice Steps Rally (greybox 2): puddles, mud and the waterfall, she wins by a nose", "query": "?track=steps&result=win" },
+          { "n": "2d", "id": "race", "name": "The Rice Steps Rally she loses: Grandma Taeng wins by a nose", "query": "?track=steps&result=lose" },
+          { "n": "2e", "id": "race", "name": "The Cloud Top Climb (greybox 2): the lanterns in the cloud and the blossoms, she wins by a nose", "query": "?track=cloud&result=win" },
+          { "n": "2f", "id": "race", "name": "The Cloud Top Climb she loses: Pao wins by a nose", "query": "?track=cloud&result=lose" },
           { "n": "3", "id": "podium", "name": "That race's podium (gold, or silver and a gift)", "query": "?track=forest&place=2", "status": "todo" },
           { "n": "4", "id": "cup-win", "name": "The Cup ceremony", "query": "?cup=forest:1,steps:2,cloud:1", "status": "todo" }
         ] },
@@ -243,8 +247,8 @@
         { "type": "build", "items": [
           { "n": 0, "title": "This plan", "status": "done", "date": "2026-10-27" },
           { "n": 1, "title": "Greybox 1: the kart toy on the forest track", "status": "done", "date": "2026-10-27", "md": "Her kart, the three rivals as blocks, one track with coins, arrow pads and the bouncy mushrooms. The scripted finish works both ways (`?result=win|lose`). Feel numbers on knobs, with a `?feel=1` link." },
-          { "n": 2, "title": "Greybox 2: the rice steps and the cloud", "status": "next", "md": "Both tracks with their tricks (puddles and mud, the cloud with its lanterns and the blossoms)." },
-          { "n": 3, "title": "Greybox 3: the Cup", "status": "todo", "md": "The race ground at the end of the city road (it replaces the market square), the board, the roll for the loss, each podium with its gift, the Cup ceremony, the stamp on the map. Behind a flag, so Kaylee doesn't reach it yet." },
+          { "n": 2, "title": "Greybox 2: the rice steps and the cloud", "status": "done", "date": "2026-10-27", "pr": 237, "md": "Both tracks with their tricks (puddles and mud, the cloud with its lanterns and the blossoms)." },
+          { "n": 3, "title": "Greybox 3: the Cup", "status": "next", "md": "The race ground at the end of the city road (it replaces the market square), the board, the roll for the loss, each podium with its gift, the Cup ceremony, the stamp on the map. Behind a flag, so Kaylee doesn't reach it yet." },
           { "n": 4, "title": "The look", "status": "todo", "md": "The rivals on the chibi rig, the karts, each track's scenery." },
           { "n": 5, "title": "Full loop", "status": "todo", "md": "Voices (the rivals' cast with northern Thai accents), facts, the Trophy Room cup, QA, and the flag turned on." }
         ] }
@@ -264,7 +268,7 @@
               "title": "Greybox 1: the kart toy on the Mushroom Forest track",
               "date": "2026-10-27",
               "status": "done",
-              "open": true,
+              "open": false,
               "summary": "Her pink kart against three blocks through an 800 m forest road, with coins, arrow pads, bouncy mushrooms and a scripted finish both ways.",
               "items": [
                 "**The shared race core** moved out of the boat race into `trip/race/` (the boat race uses it, and plays the same): `course.ts` (the closed loop and the minimap), `rubber.ts` (the scripts and the rubber band, now with a rival that may win: `rivalPace({ winner })` and `herLimit()`), `items.ts` (coins, including air lines with their own arc, and arrow pads on water or a hilly road), `RaceHud.tsx` (standings, coins and lap, the minimap, the countdown, the banners with a new 🥈 2nd!, the checkered flag), and `tilt.ts`, `GasPedal.tsx`, `TiltSetup.tsx`, `music.ts` as they were.",
@@ -288,6 +292,45 @@
                   "items": [
                     "The arrow pads read a little brown on the grey road (the gold rim over asphalt).",
                     "With no finger down she cruises at 62% and comes in behind (the rivals wait, but the autopilot is slow on purpose: Dad decides on the iPad)."
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Greybox 2: the Rice Steps Rally and the Cloud Top Climb",
+              "date": "2026-10-27",
+              "status": "done",
+              "pr": 237,
+              "open": true,
+              "summary": "The other two tracks on the same race (`?track=steps|cloud`), each with its trick, its home rival who wins the race she loses, and its feel numbers on knobs.",
+              "items": [
+                "**The tracks** (`cup/track.ts`, still roads from the road kit): the 🌾 **Rice Steps** zig-zag down six terraces at Sapan, 1177 m of road and 1100 m of race, 54 m down to a river with a bridge just past the finish (about 75 s with a finger held). The ☁️ **Cloud Top Climb** goes up eight hairpins on Doi Phu Kha, 1257 m of road and 1180 m of race, 85 m up to the summit (about 75 s). Both narrower than the forest (5.5 m and 5 m half-width against 6).",
+                "**The terraces:** a new `terraces` option on the road kit's ground (`trip/road/build.ts` `RoadLook`): near the road the paddies step down the hill, 1.6 m a step, each step a paddy color (young rice or water) with a darker grassy bank along its edge.",
+                "**Puddles and mud** (the steps): 12 muddy puddles, more on the inside of the bends. Driving through one is a big splash (brown and white spray, a splosh, a moment of slow motion, Kaylee hops) and a third more mud on the kart (splats on its sides, nose and back, in three steps). All muddy, her kart is 10% faster. The rivals splash and get muddy too.",
+                "**The waterfall** (the steps, 89% of the way): rocks beside the road with the water tumbling down them and its stream running right across the road (scrolling water). Every kart that drives through is washed clean and gets a burst of speed; tap the waterfall for a splash.",
+                "**The cloud** (the climb, 36 to 61 m up, about 42% to 72% of the way): the haze closes in to white, a layer of soft cloud blobs sits across the mountain, and out the top the sky turns blue with a sparkle and a chime over the sea of clouds (the road kit's `clouds.ts`, as on the Doi Phu Kha drive). Inside, about 40 round paper lanterns float over the road, one every 9 m, along the inside of each bend: they glow through the white (no fog on them), and each one she drives under lights up, bobs and chimes a note higher. Driving by itself, the kart follows them; the hint finger points along their line.",
+                "**Chomphu Phu Kha blossoms** (the climb): five pink trees leaning over the road, each letting petals drift down across it. Driving through a shower is a swirl of petals and a burst of speed (rivals too); tap a tree and it shakes down a flurry. More pink trees line the road below and above the cloud. Three round mirrors on the blind hairpins.",
+                "**The rivals' stories** (`cup/rivals.ts`): Grandma Taeng's steps (she naps, then catches up bend by bend and is beside her at the waterfall) and Pao's climb (he leads most of the way up and is beside her at the top). In the race she loses, the home rival edges past on the last 70 m as in the forest. The rivals get no bursts on the last 15% any more (a late arrow pad could put the wrong rival second).",
+                "**Knobs** (`?feel=1`): *Puddles and mud* (mud per puddle, how much faster all muddy, the splash's slow motion, the waterfall's burst) and *The cloud and the blossoms* (how far she sees in the cloud, how near a lantern she has to pass, the blossoms' burst).",
+                "**QA:** `nan-cup-steps` and `nan-cup-cloud` in qa-screens and qa-pacing, `nan-splash` and `nan-cloud` in qa-motion; `window.__thaiNanQA()` adds `splashes`, `washes`, `lanterns`, `showers`, `mud` and `cloud` (how deep in, above it). Robot runs with a held finger: the steps won in 77 s and lost to Taeng in 76 s, the climb won in 75 s and lost to Pao in 77 s, every lantern lit and every shower driven through."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "items": [
+                    "No feel-lab numbers came back from greybox 1, so all the knobs still have their first guesses.",
+                    "The wobbly bamboo bridge, the ducks crossing, the scarecrows, the buffalo and the deck's cheering crowd wait for the look step (greybox 2 is the tricks).",
+                    "The lanterns chime but don't give speed: they show the way, the blossoms are the climb's burst."
+                  ]
+                },
+                {
+                  "type": "list",
+                  "title": "Known small things",
+                  "items": [
+                    "From the grid, the climb's overview looks into the green hillside beside the start.",
+                    "With no finger down the kart cruises at 62% (as in the forest), so the auto-run takes about a minute to reach the cloud."
                   ]
                 }
               ]
