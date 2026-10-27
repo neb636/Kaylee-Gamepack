@@ -116,7 +116,8 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   const [stops, setStops] = useState<Stop[]>(() => parseStops(param('stops'), cupOn))
   // The Cup: the races done (the ceremony's link with none: the whole Cup), and the track she'll lose (the link's, or
   // rolled; saved with the trip, rolled again for a new trip).
-  // (A podium link's race is in its record, at the link's place.)
+  // (A podium link's race is in its record, at the link's place, unless the record already has that track: then it's a
+  // race for fun after the Cup, and the record keeps the place she first got there.)
   const [linkPodium] = useState(() => {
     if (first !== 'podium') return null
     const track = param('track') as TrackId
@@ -124,7 +125,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   })
   const [cup, setCup] = useState<CupRecord>(() => {
     const c = parseCup(param('cup') || (first === 'cup-win' ? FULL_CUP : ''))
-    return linkPodium ? [...c.filter((x) => x.track !== linkPodium.track), linkPodium] : c
+    return linkPodium && !c.some((x) => x.track === linkPodium.track) ? [...c, linkPodium] : c
   })
   const [lose, setLose] = useState<TrackId>(() => {
     const l = param('lose')
@@ -158,9 +159,9 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     if (first === 'cup') return { section: 'cup' }
     if (first === 'cup-win') return { section: 'cup-win' }
     if (linkPodium) {
-      // (The last race, if it's the one that makes the Cup.)
-      const before = cup.filter((x) => x.track !== linkPodium.track)
-      return { section: 'podium', ...linkPodium, last: !cupDone(before) && cupDone(cup) }
+      // (The last race, if it's the one that makes the Cup: the last one in the record, and the Cup's done.)
+      const last = cupDone(cup) && cup[cup.length - 1].track === linkPodium.track && cup[cup.length - 1].place === linkPodium.place
+      return { section: 'podium', ...linkPodium, last }
     }
     return { section: 'map' }
   })
