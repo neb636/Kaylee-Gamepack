@@ -175,6 +175,10 @@ const SCENARIOS = [
   // Bo Kluea's salt wells: a tap on the pan (or the bucket) dips a bucketful and pours it, a tap on the woodpile throws a
   // log on, a tap on the pan in round 3 scrapes a stripe, so the auto-player can play it through to the bags.
   { name: 'thailand nan: the salt wells', id: 'nan-salt', hash: '#/world/thailand/nan-trip/salt', reset: true },
+  // The Nan Mountain Cup (greybox 1, no voices): the kart races on by itself when no finger is down, so the
+  // auto-player's taps are honks and pokes (the rivals, the mushrooms) all the way to the line; the finger-held run is
+  // qa-motion's nan-kart.
+  { name: 'thailand nan: the cup race', id: 'nan-cup', hash: '#/world/thailand/nan-trip/race', reset: true },
   // The Nan map and the 3 (greybox, step 6): on the map a tap on a place drives the little Pajero there; the 3 from
   // above plays by itself.
   { name: 'thailand nan: the nan map', id: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true },

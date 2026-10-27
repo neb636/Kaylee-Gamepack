@@ -17,25 +17,14 @@
 // She drives up the right side from the start, over the right lobe, through the dip, over the left lobe, down the long
 // left side and round the point. Heading 0 faces +z and turns toward +x (like the bay: atan2(dx, dz)). `s` is meters
 // along the course from the start line, `lat` meters to the left of the middle (looking along the course; left is the
-// island's side, right is the lagoon wall's).
+// island's side, right is the lagoon wall's). The loop's math is the races' shared course (trip/race/course.ts).
+import { courseMap, Loop } from '../../../trip/race/course'
 
-export interface Sample {
-  x: number
-  z: number
-  /** The way the course runs here (unit vector), and its left (unit, a quarter turn from it). */
-  tx: number
-  tz: number
-  lx: number
-  lz: number
-  s: number
-}
+export type { Sample } from '../../../trip/race/course'
 
 /** Half the course's usual width (the buoy ropes are just outside). It's wider round the Twin Rocks (halfAt). */
 export const HALF = 10
 export const LAPS = 3
-/** Meters between samples along the middle of the course. */
-const STEP = 1
-
 // The control points, in driving order: the start line first. A heart (the minimap draws z down the screen, so the
 // lobes are at -z): up the right side, the right lobe, the dip, the left lobe, down the left side, the point.
 const K = 0.945
@@ -65,126 +54,23 @@ const POINTS: [number, number][] = (
   ] as [number, number][]
 ).map(([x, z]) => [x * K, z * K])
 
-/** A point on the closed centripetal Catmull-Rom curve through POINTS: segment i, t 0..1. */
-function curve(i: number, t: number): [number, number] {
-  const n = POINTS.length
-  const p = [-1, 0, 1, 2].map((k) => POINTS[(((i + k) % n) + n) % n])
-  const dt = (a: [number, number], b: [number, number]) => Math.max(1e-4, Math.sqrt(Math.hypot(b[0] - a[0], b[1] - a[1])))
-  const t0 = 0
-  const t1 = t0 + dt(p[0], p[1])
-  const t2 = t1 + dt(p[1], p[2])
-  const t3 = t2 + dt(p[2], p[3])
-  const u = t1 + (t2 - t1) * t
-  const lerp = (a: [number, number], b: [number, number], ta: number, tb: number): [number, number] => {
-    const w = (u - ta) / (tb - ta)
-    return [a[0] + (b[0] - a[0]) * w, a[1] + (b[1] - a[1]) * w]
-  }
-  const a1 = lerp(p[0], p[1], t0, t1)
-  const a2 = lerp(p[1], p[2], t1, t2)
-  const a3 = lerp(p[2], p[3], t2, t3)
-  const b1 = lerp(a1, a2, t0, t2)
-  const b2 = lerp(a2, a3, t1, t3)
-  return lerp(b1, b2, t1, t2)
-}
-
-function build(): { samples: Sample[]; length: number } {
-  // A dense polyline first, then resampled every STEP meters (even spacing makes `s` and the nearest search simple).
-  const dense: [number, number][] = []
-  for (let i = 0; i < POINTS.length; i++) for (let k = 0; k < 60; k++) dense.push(curve(i, k / 60))
-  const cum = [0]
-  for (let i = 1; i <= dense.length; i++) {
-    const a = dense[i - 1]
-    const b = dense[i % dense.length]
-    cum.push(cum[i - 1] + Math.hypot(b[0] - a[0], b[1] - a[1]))
-  }
-  const total = cum[cum.length - 1]
-  const n = Math.round(total / STEP)
-  const length = n * STEP
-  const pts: [number, number][] = []
-  let j = 0
-  for (let k = 0; k < n; k++) {
-    const want = (k / n) * total
-    while (cum[j + 1] < want) j++
-    const w = (want - cum[j]) / (cum[j + 1] - cum[j] || 1)
-    const a = dense[j]
-    const b = dense[(j + 1) % dense.length]
-    pts.push([a[0] + (b[0] - a[0]) * w, a[1] + (b[1] - a[1]) * w])
-  }
-  const samples = pts.map(([x, z], k): Sample => {
-    const a = pts[(k - 1 + n) % n]
-    const b = pts[(k + 1) % n]
-    const l = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1
-    const tx = (b[0] - a[0]) / l
-    const tz = (b[1] - a[1]) / l
-    // Left of the way it runs: heading 0 faces +z and turns toward +x, so the left of +z is +x.
-    return { x, z, tx, tz, lx: tz, lz: -tx, s: k * STEP }
-  })
-  return { samples, length }
-}
-
-const BUILT = build()
-export const SAMPLES = BUILT.samples
+/** The course itself (trip/race/course.ts): sampled every meter round the loop. */
+const LOOP = new Loop(POINTS)
+export const SAMPLES = LOOP.samples
 /** One lap, in meters (about 590: half as long again as the first course). */
-export const LENGTH = BUILT.length
-
-const wrapS = (s: number) => ((s % LENGTH) + LENGTH) % LENGTH
+export const LENGTH = LOOP.length
 
 /** The middle of the course at `s` (interpolated), and its direction. */
-export function sampleAt(s: number): Sample {
-  const u = wrapS(s) / STEP
-  const i = Math.floor(u)
-  const w = u - i
-  const a = SAMPLES[i % SAMPLES.length]
-  const b = SAMPLES[(i + 1) % SAMPLES.length]
-  const tx = a.tx + (b.tx - a.tx) * w
-  const tz = a.tz + (b.tz - a.tz) * w
-  const l = Math.hypot(tx, tz) || 1
-  return { x: a.x + (b.x - a.x) * w, z: a.z + (b.z - a.z) * w, tx: tx / l, tz: tz / l, lx: tz / l, lz: -tx / l, s: wrapS(s) }
-}
-
+export const sampleAt = (s: number) => LOOP.sampleAt(s)
 /** A spot `lat` meters left of the middle at `s`, and the heading along the course there. */
-export function spotAt(s: number, lat = 0) {
-  const p = sampleAt(s)
-  return { x: p.x + p.lx * lat, z: p.z + p.lz * lat, heading: Math.atan2(p.tx, p.tz) }
-}
-
+export const spotAt = (s: number, lat = 0) => LOOP.spotAt(s, lat)
 /** Where (x, z) is on the course: the nearest sample's index, `s` and `lat`. With `near` (an index), it only looks
  *  within `span` samples of it (a boat on one side of the lagoon never snaps to the course across the island). */
-export function locate(x: number, z: number, near?: number, span = 70) {
-  const n = SAMPLES.length
-  let best = 0
-  let bestD = Infinity
-  const check = (i: number) => {
-    const p = SAMPLES[((i % n) + n) % n]
-    const d = (p.x - x) ** 2 + (p.z - z) ** 2
-    if (d < bestD) {
-      bestD = d
-      best = ((i % n) + n) % n
-    }
-  }
-  if (near === undefined) for (let i = 0; i < n; i++) check(i)
-  else for (let k = -span; k <= span; k++) check(near + k)
-  const p = SAMPLES[best]
-  const dx = x - p.x
-  const dz = z - p.z
-  const along = dx * p.tx + dz * p.tz
-  return { i: best, s: wrapS(p.s + along), lat: dx * p.lx + dz * p.lz }
-}
-
+export const locate = (x: number, z: number, near?: number, span = 70) => LOOP.locate(x, z, near, span)
 /** How sharply the course turns over the next `ahead` meters from `s` (radians, signed: + = left). */
-export function bendAhead(s: number, ahead = 24) {
-  const a = sampleAt(s)
-  const b = sampleAt(s + ahead)
-  return Math.atan2(a.tx * b.tz - a.tz * b.tx, a.tx * b.tx + a.tz * b.tz) * -1
-}
-
+export const bendAhead = (s: number, ahead = 24) => LOOP.bendAhead(s, ahead)
 /** Signed meters from `a` forward to `b` round the loop (-L/2..L/2). */
-export function ahead(a: number, b: number) {
-  let d = wrapS(b) - wrapS(a)
-  if (d > LENGTH / 2) d -= LENGTH
-  if (d < -LENGTH / 2) d += LENGTH
-  return d
-}
+export const ahead = (a: number, b: number) => LOOP.ahead(a, b)
 
 // ---------------------------------------------------------------- what stands on the course (fractions of a lap)
 
@@ -291,26 +177,7 @@ export const PODIUM = (() => {
 
 // ---------------------------------------------------------------- the minimap (RaceLayer.tsx)
 
-/** The minimap's size (SVG units), the course fitted inside with a margin. */
-export const MAP = (() => {
-  const xs = SAMPLES.map((p) => p.x)
-  const zs = SAMPLES.map((p) => p.z)
-  const pad = HALF + 2
-  const x0 = Math.min(...xs) - pad
-  const z0 = Math.min(...zs) - pad
-  const w = Math.max(...xs) + pad - x0
-  const h = Math.max(...zs) + pad - z0
-  const k = 100 / Math.max(w, h)
-  return { x0, z0, k, w: w * k, h: h * k }
-})()
-/** A point in the lagoon on the minimap (x across, z down the map). */
-export function mapXY(x: number, z: number): [number, number] {
-  return [(x - MAP.x0) * MAP.k, (z - MAP.z0) * MAP.k]
-}
-/** The course's middle as an SVG path. */
-export const MAP_PATH = SAMPLES.filter((_, i) => i % 4 === 0)
-  .map((p, i) => {
-    const [x, y] = mapXY(p.x, p.z)
-    return `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`
-  })
-  .join(' ') + ' Z'
+/** The minimap: the course fitted inside 100 SVG units with a margin, a point in the lagoon on it (x across, z down the
+ *  map), and the course's middle as an SVG path. */
+export const MAP = courseMap(SAMPLES, HALF + 2, true)
+export const mapXY = MAP.xy

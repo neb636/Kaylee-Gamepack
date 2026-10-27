@@ -1,10 +1,10 @@
-// Tilt to steer, for the boat race on a phone (the iPad keeps the finger on the water): she holds the iPhone sideways
+// Tilt to steer, for the races on a phone (the boat race, the Nan Mountain Cup; the iPad keeps the finger on the course): she holds the iPhone sideways
 // like a steering wheel and turns it, and a gas pedal on the screen is full speed (RaceLayer.tsx).
 //
 // The tilt comes from the phone's orientation events (beta, gamma) turned into which way "up" points across the screen,
 // so it works however far back she leans the phone: held up like a wheel or flat like a tray, the right edge going down
 // steers right. iOS only sends the events after a tap asks for them (askForTilt, from a button).
-// No three.js here: BoatTrip.tsx reads the helpers.
+// No three.js here: BoatTrip.tsx and the Cup's screen read the helpers.
 
 export type SteerMode = 'finger' | 'tilt'
 

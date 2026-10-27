@@ -79,9 +79,9 @@ import { FORK_CARDS } from './ForkCards'
 import { PhotoFan } from './PhotoFan'
 import { Race, RACE_ANCHORS, type RaceHud, type RaceSection } from './race/race'
 import { RACE_TROPHY, RaceFlag, RaceLayer } from './race/RaceLayer'
-import { askForTilt, needsAsking, steerFor, Tilt, type SteerMode } from './race/tilt'
-import { GasPedal } from './race/GasPedal'
-import { TiltSetup } from './race/TiltSetup'
+import { askForTilt, needsAsking, steerFor, Tilt, type SteerMode } from '../../trip/race/tilt'
+import { GasPedal } from '../../trip/race/GasPedal'
+import { TiltSetup } from '../../trip/race/TiltSetup'
 import BOAT_SECTIONS, { type BoatSection } from './sections'
 import { BEEN, BOAT_TRIP, LEG_OF_BEEN, PASS, PUNCH, WORLD_OF, type Been, type TripWorld } from './trip'
 
@@ -238,7 +238,7 @@ export function BoatTrip({ onExit, onDone }: { onExit: () => void; onDone: () =>
   state.current = { ...state.current, section, packed, mount, saved, ribbons, stops, photos, found, fed, straw, been }
   // Read once, when the world opens.
   const [debug] = useState(() => flag('debug') !== null)
-  // Driving the longtail on a phone (race/tilt.ts), in the bay and in the boat race alike: held sideways, tilt to
+  // Driving the longtail on a phone (trip/race/tilt.ts), in the bay and in the boat race alike: held sideways, tilt to
   // steer, with a gas pedal. The first time she's at the wheel, the phone turned sideways (or ▶ to play upright) and,
   // on iOS, a tap to allow the tilt; a no there, or a phone that sends no tilt, drives with the finger as on the iPad.
   // A link's `steer=tilt` / `steer=finger` tries either anywhere (on a computer, ← → steer and the space bar is the

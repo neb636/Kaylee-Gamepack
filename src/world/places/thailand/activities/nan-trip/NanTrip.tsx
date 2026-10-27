@@ -12,6 +12,7 @@
 //   flies home on the Thailand map (Dad, 2026-10-27; section home, the flight home and picking a photo for Agong, is
 //   only reached by its link now). The trips start on the Thailand map: the first of a session packs and goes down
 //   the stairs straight to the window seat; later ones open straight on the Nan map.
+//   In the works: the Nan Mountain Cup (cup/, section race; greybox 1, only its link reaches it), a kart race.
 // Between the trip kit's legs a boarding pass slides up (punching the leg she finished) and hides the next world being
 // built. The trip saves at each leg (useSaved): saying yes to the mountains again offers to keep going and, after a
 // whole trip, 🗺️ straight to the Nan map with the Pajero ready.
@@ -29,6 +30,9 @@ import { PLACES, STOPS, type PlaceId, type Stop } from './map/layout'
 import { NanMap } from './map/NanMap'
 import { BASKET_SEED, ROUNDS as FARM_ROUNDS, type Round } from './mushrooms/layout'
 import { Mushrooms } from './mushrooms/Mushrooms'
+import { Cup } from './cup/Cup'
+import { RESULTS, type Result } from './cup/rivals'
+import { TRACK_IDS, type TrackId } from './cup/track'
 import { drawPhoto, parsePhotos, PHOTO_OF, type PhotoId } from './photo'
 import { addWallPhoto, shrinkPhoto, today, useWallPhotos } from '../../trip/wall-photos'
 import { ROUNDS as RICE_ROUNDS, type Round as RiceRound } from './rice/layout'
@@ -46,6 +50,7 @@ type At =
   | { section: 'mushrooms'; round: Round; basket: string }
   | { section: 'rice'; round: RiceRound }
   | { section: 'salt'; round: SaltRound }
+  | { section: 'race'; track: TrackId; result: Result }
 
 /** Where the trip picks up next time (the start of a leg), what was in her suitcase and the stops done. */
 interface Progress {
@@ -110,6 +115,11 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     if (first === 'salt') return { section: 'salt', round: (['1', '2', '3'].includes(round) ? round : '1') as SaltRound }
     if (first === 'rice') return { section: 'rice', round: ((RICE_ROUNDS as readonly string[]).includes(round) ? round : 'plant') as RiceRound }
     if (first === 'drive') return { section: 'drive', road: param('road') as RoadId, to: param('to') }
+    if (first === 'race') {
+      const track = param('track') as TrackId
+      const result = param('result') as Result
+      return { section: 'race', track: TRACK_IDS.includes(track) ? track : 'forest', result: RESULTS.includes(result) ? result : 'win' }
+    }
     if (first === 'three') return { section: 'three' }
     return { section: 'map' }
   })
@@ -123,6 +133,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     else if (at.section === 'drive') enter('drive', { road: at.road, ...(at.to ? { to: at.to } : {}), ...s })
     else if (at.section === 'map' || at.section === 'three') enter(at.section, s)
     else if (at.section === 'mushrooms') enter('mushrooms', { round: at.round, basket: at.basket, ...s })
+    else if (at.section === 'race') enter('race', { track: at.track, result: at.result, ...s })
     else if ('round' in at) enter(at.section, { round: at.round, ...s })
   }, [at, stops, packed])
 
@@ -262,6 +273,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
         />
       )
     if (at.section === 'salt') return <Salt key="salt" round={at.round} onRound={(round) => setAt({ section: 'salt', round })} onMap={done('salt')} />
+    if (at.section === 'race') return <Cup key="race" track={at.track} result={at.result} packed={packed} onMap={() => setAt({ section: 'map' })} />
     if (at.section === 'rice') return <Rice key="rice" round={at.round} onRound={(round) => setAt({ section: 'rice', round })} onMap={done('rice')} />
     // The 3 from above is the 3 road's world, parked at the viewpoint (the same Drive, so it doesn't rebuild when the
     // road gets there).

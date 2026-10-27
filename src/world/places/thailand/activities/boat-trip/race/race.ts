@@ -50,16 +50,17 @@ import { Sky } from '../bay/sky'
 import { BeachBalls } from './balls'
 import { buildBananaBoat, buildKidsBoat, buildMonkeyCrew, RACE_FEEL, type Crew } from './boats'
 import { buildAura, Course } from './items'
-import { RaceMusic } from './music'
+import { RaceMusic } from '../../../trip/race/music'
+import type { RaceHud as SharedHud, RacePhase } from '../../../trip/race/RaceHud'
+import { rivalPace, scripted, type Script } from '../../../trip/race/rubber'
 import { buildRaceScenery, RAINBOW, type RaceScenery } from './scenery'
 import { ahead, bendAhead, branchLat, ELEPHANTS, FORK, GRID, halfAt, HOOP, LAPS, LENGTH, locate, mapXY, PODIUM, RAMPS, rockAt, spotAt, STAND } from './track'
 import { buildPodium, buildTrophy, type Podium } from './trophy'
-import type { SteerMode, Tilt } from './tilt'
+import type { SteerMode, Tilt } from '../../../trip/race/tilt'
 import { Dolphins, Elephants, type Splasher } from './wildlife'
 
 export type RaceSection = 'race' | 'podium'
 export type RacerId = 'kaylee' | 'kids' | 'monkey'
-export type RacePhase = 'intro' | 'count' | 'race' | 'finish' | 'podium'
 
 export interface RaceStart {
   section: RaceSection
@@ -72,21 +73,7 @@ export interface RaceStart {
 }
 
 /** What the screen shows (RaceLayer.tsx): sent when it changes. */
-export interface RaceHud {
-  phase: RacePhase
-  /** The countdown: 3, 2, 1, then 0 for GO! (-1: none showing). */
-  count: number
-  /** Her lap, 1..LAPS. */
-  lap: number
-  /** Her place, 1..3, and everyone in order. */
-  place: number
-  order: RacerId[]
-  coins: number
-  /** A big word sweeping across: a new lap, the last lap, the win (`n` changes each time). */
-  banner: { kind: 'lap2' | 'final' | 'win'; n: number } | null
-  /** On the podium, the trophy is in her hands. */
-  trophy: boolean
-}
+export type RaceHud = SharedHud<RacerId>
 
 export interface RaceEvents {
   onSection(s: RaceSection): void
@@ -192,18 +179,9 @@ const SLOWMO = 1.3
 /** Where each rival wants to be, in meters ahead of her (negative: behind), through the race (0 = the start, 1 = the
  *  line). The story: they lead off the start, she catches the macaque, swaps places with the kids, and on the last
  *  lap the kids are right beside her until she pulls ahead at the very end. */
-const SCRIPT: Record<'kids' | 'monkey', [number, number][]> = {
+const SCRIPT: Record<'kids' | 'monkey', Script> = {
   kids: [[0, 7], [0.18, 9], [0.36, -4], [0.5, 4], [0.64, 5], [0.76, 2.5], [0.88, 1.2], [0.95, -1.5], [1, -5]],
   monkey: [[0, 5], [0.14, 3], [0.28, -6], [0.46, 7], [0.58, -2], [0.72, -9], [1, -16]],
-}
-function scripted(id: 'kids' | 'monkey', f: number) {
-  const k = SCRIPT[id]
-  for (let i = 1; i < k.length; i++) if (f <= k[i][0]) {
-    const [f0, g0] = k[i - 1]
-    const [f1, g1] = k[i]
-    return g0 + ((g1 - g0) * (f - f0)) / (f1 - f0)
-  }
-  return k[k.length - 1][1]
 }
 
 export class Race implements World3D {
@@ -729,7 +707,6 @@ export class Race implements World3D {
   private driveRivals(dt: number) {
     const k = this.k
     const f = clamp(k.progress / TOTAL, 0, 1)
-    const vRef = Math.max(this.herRate, 10)
     for (const r of this.racers.slice(1)) {
       const d = r.d
       r.sway += dt * 0.35
@@ -752,13 +729,8 @@ export class Race implements World3D {
       let vt: number
       if (k.done >= 0) vt = r.done >= 0 ? r.feel.top * 0.45 : r.feel.top * 0.95
       else {
-        const want = scripted(r.id as 'kids' | 'monkey', f)
-        const gap = r.progress - k.progress
-        vt = vRef + 0.32 * (want - gap)
-        // The end: never past her near the line (they ease off alongside), and never over it first.
-        const rem = TOTAL - r.progress
-        if (rem < 150 && r.progress > k.progress - 1.2) vt = Math.min(vt, this.herRate * 0.85)
-        if (rem < 3) vt = 0
+        // (The end: never past her near the line, they ease off alongside, and never over it first.)
+        vt = rivalPace({ want: scripted(SCRIPT[r.id as 'kids' | 'monkey'], f), gap: r.progress - k.progress, herRate: this.herRate, floor: 10, pull: 0.32, rem: TOTAL - r.progress, easeAt: 150, winner: false })
       }
       // Behind the story (she's flying, all boosts and coins): they find more speed, up to half as fast again.
       r.feel.top = clamp(vt, r.base, r.base * 1.5)

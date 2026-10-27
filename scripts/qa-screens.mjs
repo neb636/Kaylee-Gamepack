@@ -743,6 +743,10 @@ const SCREENS = [
   { name: 'nan-mushrooms-2', hash: '#/world/thailand/nan-trip/mushrooms?round=2', reset: true, wait: 3500 },
   { name: 'nan-mushrooms-3', hash: '#/world/thailand/nan-trip/mushrooms?round=3', reset: true, wait: 3500 },
   { name: 'nan-mushrooms-pizza', hash: '#/world/thailand/nan-trip/mushrooms?round=pizza&basket=grey5,pink3,gold2', reset: true, wait: 3500 },
+  // The Nan Mountain Cup (greybox 1): the grid and the countdown, and racing a few seconds in (the race drives on by
+  // itself, a bit slower, with no finger down).
+  { name: 'nan-cup-grid', hash: '#/world/thailand/nan-trip/race', reset: true, wait: 4500 },
+  { name: 'nan-cup-race', hash: '#/world/thailand/nan-trip/race?result=lose', reset: true, wait: 14000 },
   { name: 'nan-salt-1', hash: '#/world/thailand/nan-trip/salt', reset: true, wait: 3500 },
   { name: 'nan-salt-2', hash: '#/world/thailand/nan-trip/salt?round=2', reset: true, wait: 3500 },
   { name: 'nan-salt-3', hash: '#/world/thailand/nan-trip/salt?round=3', reset: true, wait: 3500 },

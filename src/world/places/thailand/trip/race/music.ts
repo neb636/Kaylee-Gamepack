@@ -1,8 +1,9 @@
-// The boat race's music, synthesized like the rest of Thailand's sounds (kit/sfx tone and noise, no files): a bouncy
-// four-bar loop (bass, a little drum kit, chords and a tune), quiet under the voices (it ducks while anyone talks),
-// faster on the last lap, with sparkly runs on top while the rainbow lasts. Notes are scheduled a moment ahead.
-import { speakingVoice } from '../../../../../../sdk'
-import { noise, tone } from '../../../../../kit/sfx'
+// The races' music (the boat race, the Nan Mountain Cup), synthesized like the rest of Thailand's sounds (kit/sfx tone
+// and noise, no files): a bouncy four-bar loop (bass, a little drum kit, chords and a tune), quiet under the voices (it
+// ducks while anyone talks), faster on the last lap (or the last stretch), with sparkly runs on top while the rainbow
+// lasts. Notes are scheduled a moment ahead.
+import { speakingVoice } from '../../../../../sdk'
+import { noise, tone } from '../../../../kit/sfx'
 
 const C4 = 261.63
 const f = (semi: number) => C4 * 2 ** (semi / 12)

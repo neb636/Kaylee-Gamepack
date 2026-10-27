@@ -19,6 +19,7 @@ guides and a "Copy for agent" note to bake the camera into the game):
 **Feel lab** (development tool, add `?feel=1` to any section: sliders over the playing game for how it feels, a live
 graph, and a "Copy for agent" note with the numbers to bake in):
 - [The Nan mountain road's steering](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)
+- [The Nan Mountain Cup's kart: steering, the mushrooms' bounce, the rivals' rubber band](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=forest&feel=1)
 - [Canada's train: how it feels to push](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=quebec&feel=1)
 
 
@@ -222,6 +223,9 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   - [Dip the bucket in the well, pour the brine into the pan](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/salt)
   - [Feed the fire till the brine boils down](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/salt?round=2)
   - [Scrape the salt into the basket, the bags on the shelf, then the real salt video](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/salt?round=3)
+- **The Nan Mountain Cup** (greybox, not in the game yet)
+  - [The Mushroom Forest race: she wins by a nose](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=forest&result=win)
+  - [The Mushroom Forest race: Moon wins by a nose, she's second](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=forest&result=lose)
 - **Viewpoint and home**
   - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
 

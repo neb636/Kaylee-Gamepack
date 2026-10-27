@@ -1,55 +1,20 @@
 // What lies on the race course (race.ts), Mario Kart style, in the toon look:
-// - Lines of gold coins along the course (each one makes her boat a little faster, up to ten), back again next lap.
-// - Golden arrow pads that give a burst of speed, and two striped ramps to jump off: a
-//   small one, and the BIG JUMP right across the course, through a giant flower hoop, with a line of coins in the air.
+// - Lines of gold coins along the course (each one makes her boat a little faster, up to ten), back again next lap,
+//   and golden arrow pads that give a burst of speed (the races' shared ones: trip/race/items.ts).
+// - Two striped ramps to jump off: a small one, and the BIG JUMP right across the course, through a giant flower hoop,
+//   with a line of coins in the air.
 // - Banana peels on the water (the macaque drops them): drive over one and spin round.
 // Each check takes a racer's place on the course (track.ts: `s` along it, `lat` across it).
-import { AdditiveBlending, CanvasTexture, Color, DoubleSide, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, RepeatWrapping, TorusGeometry, Vector3, type BufferGeometry } from 'three'
+import { AdditiveBlending, Color, Group, Mesh, MeshBasicMaterial, TorusGeometry, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
-import { PAL, toon } from '../../../../../engine3d/toon'
+import { PAL } from '../../../../../engine3d/toon'
 import { swell } from '../../../../../engine3d/water'
+import { Coins, Pads, type Place } from '../../../trip/race/items'
 import { ahead, BOOST_HALF, BOOSTS, COIN_LINES, HOOP, RAMPS, spotAt, type Ramp } from './track'
 
-const tmp = new Vector3()
-const m4 = new Matrix4()
-const q = new Quaternion()
-const scl = new Vector3()
-
-/** Gold and pink arrows pointing along the course (they scroll forward). */
-function arrowTexture(bag: Bag) {
-  const c = document.createElement('canvas')
-  c.width = 64
-  c.height = 64
-  const g = c.getContext('2d')!
-  g.clearRect(0, 0, 64, 64)
-  g.fillStyle = 'rgba(255,200,61,0.95)'
-  g.beginPath()
-  g.moveTo(6, 54)
-  g.lineTo(32, 18)
-  g.lineTo(58, 54)
-  g.lineTo(44, 54)
-  g.lineTo(32, 37)
-  g.lineTo(20, 54)
-  g.closePath()
-  g.fill()
-  g.strokeStyle = 'rgba(255,79,154,0.95)'
-  g.lineWidth = 4
-  g.stroke()
-  const t = bag.add(new CanvasTexture(c))
-  t.wrapS = t.wrapT = RepeatWrapping
-  return t
-}
-
-interface Coin {
-  s: number
-  lat: number
-  x: number
-  /** How high it floats (the big jump's coins hang up along the way she flies). */
-  y: number
-  z: number
-  gone: number
-}
+/** On the flat water: the ground is the surface. */
+const place: Place = (s, lat) => ({ ...spotAt(s, lat), y: 0 })
 
 interface Peel {
   g: Group
@@ -61,52 +26,16 @@ interface Peel {
 
 export class Course {
   readonly root = new Group()
-  private coins: Coin[] = []
-  private coinMesh: InstancedMesh
-  private pads: { mesh: Mesh; s: number; lat: number }[] = []
-  private arrows: CanvasTexture
+  private coins: Coins
+  private pads: Pads
   private peels: Peel[] = []
   private time = 0
 
   constructor(private bag: Bag) {
-    // ---- Coins (one instanced mesh) ----
-    // A gold coin: a darker rim, the face, a lighter middle.
-    const coinGeo = merge([
-      P.cyl(0.5, 0.5, 0.1, '#C98F1E', { rot: [Math.PI / 2, 0, 0] }, 16),
-      P.cyl(0.44, 0.44, 0.13, PAL.gold, { rot: [Math.PI / 2, 0, 0] }, 16),
-      P.cyl(0.28, 0.28, 0.15, '#FFE07A', { rot: [Math.PI / 2, 0, 0] }, 12),
-    ])
-    for (const line of COIN_LINES)
-      for (let i = 0; i < line.n; i++) {
-        const s = line.s + i * (line.air ? 3 : 2.4)
-        const p = spotAt(s, line.lat)
-        // Up in the air: an arc like the one a boat flies off the big jump (1..5 m up and down again).
-        const y = line.air ? 1 + Math.sin(((i + 0.5) / line.n) * Math.PI) * 3.6 : 1
-        this.coins.push({ s, lat: line.lat, x: p.x, y, z: p.z, gone: 0 })
-      }
-    this.coinMesh = bag.add(new InstancedMesh(bag.add(coinGeo), toon('#ffffff', true), this.coins.length))
-    this.coinMesh.frustumCulled = false
-    this.root.add(this.coinMesh)
-
-    // ---- Boost pads ----
-    this.arrows = arrowTexture(bag)
-    const padMat = bag.add(new MeshBasicMaterial({ map: this.arrows, transparent: true, depthWrite: false, side: DoubleSide, polygonOffset: true, polygonOffsetFactor: -3 }))
-    this.arrows.repeat.set(1, 2)
-    for (const b of BOOSTS) {
-      const p = spotAt(b.s, b.lat)
-      const plate = new Mesh(bag.add(new PlaneGeometry(BOOST_HALF.across * 2, BOOST_HALF.along * 2)), padMat)
-      // Flat on the water, its arrows (the texture's up) pointing along the course.
-      plate.rotation.set(-Math.PI / 2, p.heading + Math.PI, 0, 'YXZ')
-      plate.position.set(p.x, 0.06, p.z)
-      plate.renderOrder = 2
-      // A glowing rim round it.
-      const rim = new Mesh(bag.add(new PlaneGeometry(BOOST_HALF.across * 2 + 0.6, BOOST_HALF.along * 2 + 0.6)), bag.add(new MeshBasicMaterial({ color: PAL.gold, transparent: true, opacity: 0.35, depthWrite: false, side: DoubleSide, polygonOffset: true, polygonOffsetFactor: -2 })))
-      rim.rotation.copy(plate.rotation)
-      rim.position.set(p.x, 0.05, p.z)
-      rim.renderOrder = 1
-      this.root.add(rim, plate)
-      this.pads.push({ mesh: plate, s: b.s, lat: b.lat })
-    }
+    // ---- Coins and boost pads ----
+    this.coins = new Coins(bag, COIN_LINES, place)
+    this.pads = new Pads(bag, BOOSTS, BOOST_HALF, place, ahead)
+    this.root.add(this.coins.mesh, this.pads.root)
 
     // ---- The ramps: striped wedges on floats, their lips at the far end; the flower hoop past the big jump ----
     for (const r of RAMPS) this.root.add(this.ramp(r))
@@ -188,18 +117,12 @@ export class Course {
 
   /** Coins she drove (or flew) through, `y` her height above the water (each comes back after a while). */
   takeCoins(x: number, y: number, z: number): Vector3[] {
-    const out: Vector3[] = []
-    for (const c of this.coins) {
-      if (c.gone > 0 || (c.x - x) ** 2 + (c.z - z) ** 2 > 2.1 ** 2 || Math.abs(c.y - (y + 1)) > 2.2) continue
-      c.gone = 12
-      out.push(new Vector3(c.x, c.y, c.z))
-    }
-    return out
+    return this.coins.take(x, y, z)
   }
 
   /** On a boost pad at (s, lat)? */
   onPad(s: number, lat: number) {
-    return this.pads.some((p) => Math.abs(ahead(p.s, s)) < BOOST_HALF.along && Math.abs(lat - p.lat) < BOOST_HALF.across + 0.6)
+    return this.pads.on(s, lat)
   }
 
   /** Going up a ramp at (s, lat): which one, and how far up it (0 bottom .. 1 the lip), or null when not on one. */
@@ -242,15 +165,8 @@ export class Course {
   update(dt: number) {
     this.time += dt
     const t = this.time
-    this.coins.forEach((c, i) => {
-      if (c.gone > 0) c.gone -= dt
-      const s = c.gone > 0 ? 0.0001 : 1
-      q.setFromAxisAngle(tmp.set(0, 1, 0), t * 3 + i * 0.4)
-      m4.compose(tmp.set(c.x, c.y + Math.sin(t * 3 + i) * 0.12, c.z), q, scl.setScalar(c.y > 1 ? s * 1.3 : s))
-      this.coinMesh.setMatrixAt(i, m4)
-    })
-    this.coinMesh.instanceMatrix.needsUpdate = true
-    this.arrows.offset.y = -t * 1.6
+    this.coins.update(dt)
+    this.pads.update(t)
     for (const p of this.peels) {
       if (!p.on) continue
       p.age += dt
