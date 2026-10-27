@@ -81,19 +81,21 @@ const ZOOM = 1.6
 const PAJERO_FEEL: Feel = { top: 9.5 * ZOOM, boost: 1.2, accel: 4 * ZOOM, coast: 0.6, turn: 1.15 * ZOOM, grip: 7, near: 2, far: 7, dead: 0.02, lean: 0.12 }
 /** The steering's feel, live in the feel lab (?feel=1 on the drive's link). The wheel is sled style: a push slides her
  *  across the road for as long as she holds it. Dad found 7.5 m/s with no smoothing far too twitchy on a phone and a
- *  trackpad, then 4.2 m/s with 0.3 s smoothing too sluggish (2026-10-26): these sit between, for him to tune. */
+ *  trackpad, then 4.2 m/s with 0.3 s smoothing too sluggish (2026-10-26). These are his, tuned by hand in the lab after
+ *  five setups (2026-10-27): quick and direct (6.5 m/s, 0.08 s), a wider dead middle and a bigger wheel to forgive
+ *  her, a planted car (grip 13) and a faster road. */
 const STEER = knobs('steer', 'Steering', 'src/world/places/thailand/activities/nan-trip/drive/mountain.ts', {
-  slide: { value: 5.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides the car across the road' },
-  reach: { value: 1, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)' },
-  dead: { value: 0.12, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
+  slide: { value: 6.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides the car across the road' },
+  reach: { value: 1.2, min: 0.4, max: 2.5, step: 0.05, label: 'Wheel size', unit: '×', note: 'how far her finger moves for a full push (smaller = touchier)' },
+  dead: { value: 0.15, min: 0, max: 0.4, step: 0.01, label: 'Dead middle', note: 'share of the wheel near the middle that counts as straight' },
   curve: { value: 1.3, min: 1, max: 3, step: 0.05, label: 'Gentle small pushes', note: '1 = even all the way; higher = a small push barely steers' },
-  ease: { value: 0.15, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
+  ease: { value: 0.08, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: 'how long a quick flick takes to count in full (0 = none)' },
   aim: { value: 10, min: 4, max: 24, step: 0.5, label: 'Aim ahead', unit: 'm', note: 'the nearest point it steers toward: closer = sharper, but it swings back and forth' },
   pull: { value: 1.2, min: 0, max: 4, step: 0.1, label: 'Aim closer when far off', note: 'per meter she is from where she steers: a full push swerves more' },
-  turn: { value: 1.15 * ZOOM, min: 0.5, max: 4, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast the Pajero can swing its nose' },
-  grip: { value: 7, min: 1, max: 15, step: 0.5, label: 'Grip', note: 'how quickly a sideways slide dies out (low = drifty)' },
-  top: { value: 9.5 * ZOOM, min: 5, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Mommy\'s foot on the straights' },
-  back: { value: 1.4, min: 0.3, max: 4, step: 0.1, label: 'Back to her lane', unit: 's', note: 'how slowly Mommy eases back after she lets go' },
+  turn: { value: 2.1, min: 0.5, max: 4, step: 0.05, label: 'Turn rate', unit: 'rad/s', note: 'how fast the Pajero can swing its nose' },
+  grip: { value: 13, min: 1, max: 15, step: 0.5, label: 'Grip', note: 'how quickly a sideways slide dies out (low = drifty)' },
+  top: { value: 23, min: 5, max: 25, step: 0.5, label: 'Top speed', unit: 'm/s', note: 'Mommy\'s foot on the straights' },
+  back: { value: 1.2, min: 0.3, max: 4, step: 0.1, label: 'Back to her lane', unit: 's', note: 'how slowly Mommy eases back after she lets go' },
   camera: { value: 0.3, min: 0, max: 1, step: 0.05, label: 'Camera follows the nose', note: '0 = the camera looks down the road; 1 = it turns with the car' },
   screech: { value: 5, min: 2, max: 15, step: 0.5, label: 'Squeal at a flick of', unit: '/s', note: 'how fast a yank must be to squeal the tyres' },
 })
