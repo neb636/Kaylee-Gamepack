@@ -271,16 +271,17 @@ export function WorldMap({ view: linked }: { view?: string }) {
 const BADGE: CSSProperties = { position: 'absolute', top: -8, right: -8, background: 'var(--hotpink)', color: '#fff', borderRadius: 999, minWidth: 34, height: 34, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 20, boxShadow: 'var(--shadow)', padding: '0 6px' }
 
 function ViewButton({ img, label, on, onClick }: { img: string; label: string; on: boolean; onClick: () => void }) {
+  // The button keeps the full touch size (88 px on iPad, 72 on phones); only the picture shrinks when it's off.
+  const size = 'calc(var(--btn) + 12px)'
   return (
     <motion.button
       aria-label={label}
       aria-pressed={on}
       whileTap={{ scale: 0.85 }}
-      animate={{ scale: on ? 1 : 0.88 }}
       onClick={onClick}
-      style={{ width: 'var(--btn)', height: 'var(--btn)', borderRadius: '50%', background: on ? 'var(--pink)' : 'transparent', boxShadow: on ? 'inset 0 0 0 4px #fff' : 'none', padding: 'calc(var(--btn) * 0.12)', display: 'grid', placeItems: 'center', opacity: on ? 1 : 0.7 }}
+      style={{ width: size, height: size, borderRadius: '50%', background: on ? 'var(--pink)' : 'transparent', boxShadow: on ? 'inset 0 0 0 4px #fff' : 'none', padding: 'calc(var(--btn) * 0.14)', display: 'grid', placeItems: 'center' }}
     >
-      <img src={img} alt="" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      <motion.img src={img} alt="" draggable={false} animate={{ scale: on ? 1 : 0.86, opacity: on ? 1 : 0.7 }} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
     </motion.button>
   )
 }

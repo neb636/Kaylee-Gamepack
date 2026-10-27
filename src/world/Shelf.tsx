@@ -228,7 +228,7 @@ function GamePage({ game, loved, onLove, onPlay, onClose }: { game: ShelfGame; l
           onClick={() => speak(game.key)}
           animate={{ rotate: [0, -1.5, 1.5, 0] }}
           transition={{ repeat: Infinity, duration: 3 }}
-          style={{ width: 'min(70vw, 52vh, 500px)', aspectRatio: '1', objectFit: 'cover', borderRadius: 30, border: '5px solid #fff', boxShadow: 'var(--shadow)' }}
+          style={{ pointerEvents: 'auto', width: 'min(70vw, 52vh, 500px)', aspectRatio: '1', objectFit: 'cover', borderRadius: 30, border: '5px solid #fff', boxShadow: 'var(--shadow)' }}
         />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(10px, 2.4vmin, 22px)' }}>
           <div style={{ fontSize: 'clamp(22px, min(4vw, 4.4vh), 38px)', fontWeight: 700, color: 'var(--ink)', textAlign: 'center', maxWidth: 'min(70vw, 360px)' }}>{game.name}</div>

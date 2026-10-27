@@ -137,7 +137,7 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
         <TopBar
           icon={fromShelf ? <img src={listIcon} alt="" style={{ width: '70%', height: '70%', objectFit: 'contain' }} /> : '🗺️'}
           label={fromShelf ? 'Back to the games' : 'Back to the map'}
-          onBack={fromShelf ? () => go.world() : backToMap}
+          onBack={fromShelf ? () => (location.hash = '#/world?view=list') : backToMap}
         >
           {progress.total > 0 && (
             <BarPill>
