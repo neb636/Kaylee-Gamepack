@@ -13,9 +13,9 @@
 // bounces there). A pod slapped five times fast pops out on its spring.
 import { Color, IcosahedronGeometry, OctahedronGeometry, Plane, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds, span, wobble } from '../../../../../../../sdk'
-import type { AnchorInfo } from '../../../../engine/Anchors'
-import type { Shot } from '../../../../engine/camera'
-import { PAL } from '../../../../engine/toon'
+import type { AnchorInfo } from '../../../../../../engine3d/Anchors'
+import type { Shot } from '../../../../../../engine3d/camera'
+import { PAL } from '../../../../../../engine3d/toon'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../../trip/legs/stage'
 import { SOCK_COLORS, wearSocks } from '../../socks'
 import { Racer } from '../race/racer'

@@ -2,7 +2,7 @@
 // soda bubbles, chili flakes, a flurry of napkins, sparkles when the box closes. (Copied from the vet's Floaters: each
 // mini game stays self-contained.)
 import { Color, DynamicDrawUsage, InstancedMesh, Matrix4, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
-import type { Bag } from '../../../engine/dispose'
+import type { Bag } from '../../../../../engine3d/dispose'
 
 const m = new Matrix4()
 const q = new Quaternion()

@@ -4,8 +4,8 @@
 // Every hat stays under the tip of her horn (head-local y 0.56: kaylee.glb's horn tops out at 1.0 m, her head pivot is
 // at 0.44), so every roof in the game that clears her horn clears her hats (the plan's horn rule; closetCheck below).
 import { Box3, type Group } from 'three'
-import type { Bag } from '../../engine/dispose'
-import type { Worn } from '../animal'
+import type { Bag } from '../../../../engine3d/dispose'
+import type { Worn } from '../../../../engine3d/characters/animal'
 import { itemById } from '../style'
 import { buildBack } from './back'
 import { buildFace } from './glasses'

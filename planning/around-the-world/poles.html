@@ -18,11 +18,11 @@
   "kind": "New place (3D + 2D)",
   "updated": "2026-10-27",
   "status": {
-    "label": "Planned: Dad reads it",
+    "label": "Engine moved: Dad answers the open questions",
     "tone": "lav"
   },
   "pitch": "Sparkle's balloon flies to the top of the world and the bottom. Up north, **Pola the polar bear cub** lives on ice floating on the sea; down south, **Pebble the penguin chick** lives on a giant land made of ice. They are pen pals who can never meet, because polar bears only live in the north and penguins only live in the south. Kaylee hops floes, belly-slides, huddles in a blizzard and cracks icebergs off a glacier, and learns the difference by playing in both. At the very end, Sparkle's **Polar Quiz** checks what she learned, and she answers by doing: dragging Pola to his pole, spinning the globe to the bottom.",
-  "next": "Dad reads this plan and answers the **open questions** (one place or two, the friends' names, Santa or not, and the [3D and 2D split](#look)). Then **move the 3D engine out of Thailand** (so the Poles don't need the family code), then **greybox 1: the globe hub** in 3D (spin the globe, drag the sun, see day and night swap between the poles); the quiz and the finale reuse that same globe. Then one activity per PR, toy first.",
+  "next": "Dad answers the **open questions** (one place or two, the friends' names, Santa or not, and the [3D and 2D split](#look)). The 3D engine is out of Thailand now (`src/world/engine3d/`), so the Poles won't need the family code. Next: **greybox 1: the globe hub** in 3D (spin the globe, drag the sun, see day and night swap between the poles); the quiz and the finale reuse that same globe. Then one activity per PR, toy first.",
   "facts": [
     {
       "icon": "🧭",
@@ -1386,13 +1386,14 @@
             {
               "n": 1,
               "title": "Move the 3D engine out of Thailand",
-              "status": "todo",
-              "md": "Its own PR, before any Poles code: the engine and the generic chibi rig to a shared folder, so the Poles open without the family code. Thailand plays the same."
+              "status": "done",
+              "md": "Its own PR, before any Poles code: the engine and the generic chibi rig to a shared folder, so the Poles open without the family code. Thailand plays the same.",
+              "date": "2026-10-27"
             },
             {
               "n": 2,
               "title": "Greybox: the globe hub",
-              "status": "todo",
+              "status": "next",
               "md": "Place folder, map pins, the 3D globe: spin it, drag the sun. Activities listed under `inTheWorks`."
             },
             {
@@ -1437,6 +1438,26 @@
               "title": "Finale: Pole to Pole + Polar Quiz",
               "status": "todo",
               "md": "Its own PR: the tern flight, then the quiz on the hub's globe, then the trophy."
+            }
+          ]
+        },
+        {
+          "type": "log",
+          "title": "What's built",
+          "items": [
+            {
+              "title": "The 3D engine moves out of Thailand",
+              "date": "2026-10-27",
+              "status": "done",
+              "summary": "The engine, the chibi rig and the camera and feel labs now live outside the locked folder. Thailand plays the same.",
+              "items": [
+                "`src/world/engine3d/`: everything that was `places/thailand/engine/` (renderer, toon, outline, camera, loop, View3D, Anchors, water, particles, nav, ...).",
+                "`src/world/engine3d/characters/`: the chibi rig (`animal.ts`), `face.ts`, and `look.ts` (the `Look` type, species, outfits, wearables). The family's own looks (`LOOKS`, the vet's patients, the coach) stay in `thailand/characters/looks.ts`, which re-exports the shared types.",
+                "`src/world/labs/`: the camera lab (`?cam=1`), the feel lab (`?feel=1`) and their controls. They no longer ask for the family code outside Thailand. The character lab stays in Thailand (it shows the family).",
+                "`TUNE` split: the look (light, bands, outlines, lens) stays in `engine3d/tune.ts`; the house camera and Kaylee's walk move to `thailand/tune.ts` (`THAI_TUNE`). The house's `?debug` panel edits and copies both.",
+                "`scripts/check-heavy-imports.mjs` allows three in `engine3d/` and `labs/`, and fails if a startup file imports them.",
+                "Checked with a locked build (`LOCK_CODE=test`): only Thailand's chunks are locked, and a probe import of `View3D` from outside Thailand landed in its own unlocked chunk."
+              ]
             }
           ]
         }

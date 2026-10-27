@@ -5,7 +5,7 @@
 // World.tsx loads it lazily, only when the link asks for it.
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type PointerEvent } from 'react'
 import { createPortal } from 'react-dom'
-import { camLab } from '../../engine/camLab'
+import { camLab } from '../../engine3d/camLab'
 import { IconButton } from '../ui'
 import { Guides } from './Guides'
 import { frameById, freshCamera, STATE_KEYS, fromParams, toOverride, untouched, writeHash, type CamView, type Frame } from './link'

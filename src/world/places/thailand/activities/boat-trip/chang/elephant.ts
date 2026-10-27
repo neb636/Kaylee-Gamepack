@@ -6,9 +6,9 @@
 // moustache on the tip of his trunk. Faces +z, the family.
 import { Group, Vector3 } from 'three'
 import { clamp } from '../../../../../../sdk'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid, solidMix } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid, solidMix } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { CHANG_FEEL } from './feel'
 import { floorAt, type ElephantSpot } from './layout'
 import { drawTrunk, makeTrunk, stepTrunk, type Trunk } from './trunk'

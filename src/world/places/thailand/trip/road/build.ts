@@ -4,9 +4,9 @@
 // round convex mirrors on blind bends, trees, a ring of far mountains, and a river with a bridge where one crosses; and
 // after rain, the wet road's shine and its puddles (buildWet). Few draw calls: each kind of thing is merged into one mesh (plus its outline).
 import { BoxGeometry, BufferAttribute, BufferGeometry, Color, Group, Matrix4, Mesh, MeshBasicMaterial, Quaternion, Vector3 } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { bake, merge, P, solid, type V3 } from '../../engine/geo'
-import { PAL, toon } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { bake, merge, P, solid, type V3 } from '../../../../engine3d/geo'
+import { PAL, toon } from '../../../../engine3d/toon'
 import type { Road } from './road'
 
 export interface RoadLook {

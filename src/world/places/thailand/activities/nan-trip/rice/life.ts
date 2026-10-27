@@ -1,9 +1,9 @@
 // The farm's little ambient life, nothing to do but watch: dragonflies that hover over the paddies, dart to a new spot
 // every few seconds and zip away from Kaylee when she wades near; and butterflies that flutter round the flowers at the
-// edges. Built from the same toon parts as everything else (engine/geo.ts).
+// edges. Built from the same toon parts as everything else (engine3d/geo.ts).
 import { Group, Vector3 } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
 import { PADDIES, type V3 } from './layout'
 
 interface Flier {

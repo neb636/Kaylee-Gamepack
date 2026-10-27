@@ -1,5 +1,5 @@
 // What every ride-along leg of a trip shares (Aunty Sri's car, the airport, the window seat): one 3D world in the
-// house's look for engine/View3D.tsx, with a follow camera that frames a box, DOM tap targets laid over the things she
+// house's look for engine3d/View3D.tsx, with a follow camera that frames a box, DOM tap targets laid over the things she
 // can poke, a "do this" finger after a while with nothing touched, and little hops for the family (into a seat, up
 // the plane's stairs). Each leg says what's where (anchorAt), where the camera looks (shot) and what a tap does (onTap).
 import { Color, Object3D, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
@@ -7,11 +7,11 @@ import { bell, clamp, type Line } from '../../../../../sdk'
 import { Avatar } from '../../characters/avatar'
 import { FAMILY } from '../../characters/family'
 import { Member } from '../../characters/member'
-import { CameraRig, type Shot } from '../../engine/camera'
-import { Bag } from '../../engine/dispose'
-import { setOutlineResolution } from '../../engine/outline'
-import { applyBands, makeLights, PAL } from '../../engine/toon'
-import type { World3D } from '../../engine/View3D'
+import { CameraRig, type Shot } from '../../../../engine3d/camera'
+import { Bag } from '../../../../engine3d/dispose'
+import { setOutlineResolution } from '../../../../engine3d/outline'
+import { applyBands, makeLights, PAL } from '../../../../engine3d/toon'
+import type { World3D } from '../../../../engine3d/View3D'
 import { sfx } from '../../sfx'
 
 /** What a leg tells the screen around it (BoatTrip.tsx). */

@@ -6,7 +6,7 @@ import { Group, Vector3 } from 'three'
 import { bell, clamp } from '../../../../../sdk'
 import type { Avatar } from '../../characters/avatar'
 import { buildShoes } from '../../characters/closet/shoes'
-import type { Bag } from '../../engine/dispose'
+import type { Bag } from '../../../../engine3d/dispose'
 import { sfx } from '../../sfx'
 
 /** Her pair's spot on the rack (world, on top of the family's slippers), toes toward the room. */

@@ -2,7 +2,7 @@
 // the signpost (🐘 or 🚤, either first), the pier and the replay offer 🐘 and the boarding pass has 🐘. Set it to false
 // to hide it again (every Baan Chang section link still works, and `?chang=1` turns it back on to try). Loaded at
 // startup: no three.js here.
-import { flag } from '../../../engine/flags'
+import { flag } from '../../../../../engine3d/flags'
 
 export const CHANG_OPEN = true
 

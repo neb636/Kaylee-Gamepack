@@ -2,9 +2,9 @@
 // sunglasses, and round lavender glasses like Agong's. On her face: a sphere of 0.24 around (0, 0.148, -0.02), her
 // eyes 0.109 out to each side (model-wear.ts's FACE).
 import { Group } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { P, type V3 } from '../../engine/geo'
-import { buildWorn } from '../animal'
+import type { Bag } from '../../../../engine3d/dispose'
+import { P, type V3 } from '../../../../engine3d/geo'
+import { buildWorn } from '../../../../engine3d/characters/animal'
 import { LOOKS } from '../looks'
 import { FACE, group, PX } from '../model-wear'
 import { star } from './fit'

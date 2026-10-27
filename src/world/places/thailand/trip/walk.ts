@@ -5,7 +5,7 @@
 // (`run`): the walker only says when, and which way. Agong's house keeps its own walking for now.
 import type { Ray } from 'three'
 import type { Avatar } from '../characters/avatar'
-import type { NavGrid, XZ } from '../engine/nav'
+import type { NavGrid, XZ } from '../../../engine3d/nav'
 
 export interface Floor {
   id: string

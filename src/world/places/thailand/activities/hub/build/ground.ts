@@ -5,8 +5,8 @@
 // The desk, his slatted wooden chair, the pictures and the big fan follow Dad's photos of the
 // real room (~/refs, 2026-10-18): glossy dark red-brown wood, cream walls, golden terrazzo with green bands.
 import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry } from 'three'
-import { P, type V3 } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import { P, type V3 } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { DIM } from '../layout'
 import { part, poke, scenery, type Kit } from './kit'
 import { pictureMesh, picturePlane, type PictureKind } from './pictures'

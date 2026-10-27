@@ -7,10 +7,10 @@
 // on the small bag, a hop, a ram muay pose. Blinks and the mouth with his voice come from FaceLife (cast id `coach`).
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span } from '../../../../../../../sdk'
-import { buildAnimal, type Rig } from '../../../../characters/animal'
-import { FaceLife } from '../../../../characters/face'
+import { buildAnimal, type Rig } from '../../../../../../engine3d/characters/animal'
+import { FaceLife } from '../../../../../../engine3d/characters/face'
 import { COACH_LOOK } from '../../../../characters/looks'
-import type { Bag } from '../../../../engine/dispose'
+import type { Bag } from '../../../../../../engine3d/dispose'
 
 const deg = Math.PI / 180
 export type CoachMode = 'wai' | 'drum' | 'guard'

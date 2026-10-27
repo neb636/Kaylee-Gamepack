@@ -6,9 +6,9 @@
 //     purple, yellow), a bowl of ice and Daddy's coffee pot. The jug, the bottle and the pot are built round their
 //     middles, so they tip round her finger; the spoon stands on its bowl, a straw on its bottom end.
 import { Color, Group, Mesh, Vector3, type ShaderMaterial } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { liquidMaterial, mix, setFlat, setStripes } from '../../mall-trip/games/cafe/liquid'
 import { buildItem, glass as glassMat } from '../../mall-trip/games/cafe/props'
 import { GLASS, STRAW_COLORS, type StrawColor } from './layout'

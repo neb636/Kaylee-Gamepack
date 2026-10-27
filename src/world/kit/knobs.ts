@@ -1,6 +1,6 @@
 // Knobs: the numbers that decide how a game *feels* (how fast the wheel steers, how much a quick flick is smoothed, how
 // high a hop goes), declared where the game uses them so Dad can tune them by hand in the feel lab (?feel=1 on any
-// section link, places/thailand/lab/feel/). A robot finger can check that a mechanic works; only a real finger on the
+// section link, labs/feel/). A robot finger can check that a mechanic works; only a real finger on the
 // iPad says whether it feels right, so anything like that gets knobs instead of hard-coded constants:
 //
 //   const STEER = knobs('steer', 'Steering', 'src/world/.../mountain.ts', {

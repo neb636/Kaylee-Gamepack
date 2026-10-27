@@ -8,9 +8,9 @@
 // cloth, crayons and a cup of pink milk beside it; the landmarks are big chunky toys (PLACE_SCALE); round trees mixed
 // with the pointy ones, rice paddies in the valleys, little pink mushrooms round the farm.
 import { BufferAttribute, BufferGeometry, Color, Group, PlaneGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { bake, merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { bake, merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { buildPajero, type Pajero } from '../../../trip/vehicles/pajero'
 import {
   BOARD,

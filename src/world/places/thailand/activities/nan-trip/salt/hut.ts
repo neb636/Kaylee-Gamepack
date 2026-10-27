@@ -1,4 +1,4 @@
-// Bo Kluea's salt hut, modeled in code in the house's toon look (engine/geo.ts parts), cooler and greener for the
+// Bo Kluea's salt hut, modeled in code in the house's toon look (engine3d/geo.ts parts), cooler and greener for the
 // mountains. The open-sided hut on its earth floor (wet and darker where the brine splashes): wooden posts on stone feet,
 // a tin roof cut away like a doll's house (the back slope's rusty tin and the rafters), the stone well with moss at its
 // foot, the bamboo beam and the bucket on its rope, the big pan with its rolled rim on its mud stove (soot round the
@@ -7,11 +7,11 @@
 // the water jar, the salt aunty, the cat by the fire, the stack of baskets and the rooster outside. The street and the
 // house with the painted couple across it are village.ts.
 import { CanvasTexture, CylinderGeometry, Group, InstancedMesh, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace } from 'three'
-import { buildAnimal, type Rig } from '../../../characters/animal'
+import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import type { Look } from '../../../characters/looks'
-import type { Bag } from '../../../engine/dispose'
-import { bake, blobShadow, merge, P, solid } from '../../../engine/geo'
-import { PAL, toon } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { bake, blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL, toon } from '../../../../../engine3d/toon'
 import {
   AUNTY_AT,
   BAGS,

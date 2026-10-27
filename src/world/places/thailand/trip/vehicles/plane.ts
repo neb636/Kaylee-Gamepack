@@ -6,10 +6,10 @@
 // The body is one lathe (a round nose that droops a little like a beak, a tail cone that sweeps up), painted with a
 // canvas livery: the side view is drawn once and wrapped onto both sides, so the swooshes stay crisp curves.
 import { CanvasTexture, Group, LatheGeometry, Mesh, MeshToonMaterial, SRGBColorSpace, Vector2 } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { merge, P, solid, type V3 } from '../../engine/geo'
-import { makeHull } from '../../engine/outline'
-import { PAL, toonGradient } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid, type V3 } from '../../../../engine3d/geo'
+import { makeHull } from '../../../../engine3d/outline'
+import { PAL, toonGradient } from '../../../../engine3d/toon'
 
 const PURPLE = '#6E3FC4'
 const MAGENTA = '#E8409A'

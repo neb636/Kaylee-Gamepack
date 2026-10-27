@@ -8,15 +8,16 @@
 //
 // Pure data (no three.js): the closet (closet/) builds the things, model.ts paints the colors.
 import { savedKey } from '../../../../sdk/hooks'
-import { flag } from '../engine/flags'
+import type { PaintColor, PaintPart } from '../../../engine3d/characters/look'
+import { flag } from '../../../engine3d/flags'
+
+export type { PaintColor, PaintPart } from '../../../engine3d/characters/look'
 
 /** The spots on her a thing can take (one thing each). */
 export type Slot = 'head' | 'face' | 'back' | 'outfit' | 'feet'
 export const SLOTS: readonly Slot[] = ['head', 'face', 'back', 'outfit', 'feet']
 /** What a pot of paint can change: where it's dropped decides which. */
-export type PaintPart = 'dress' | 'hair' | 'fur'
 export const PAINT_PARTS: readonly PaintPart[] = ['dress', 'hair', 'fur']
-export type PaintColor = 'pink' | 'lilac' | 'mint' | 'sky' | 'butter' | 'peach' | 'brown' | 'cream'
 
 /** How she shows a thing off when it pops on (Avatar.showOff): a curtsy for the crown, a flutter hop for wings, a cool
  *  lean for sunglasses... */

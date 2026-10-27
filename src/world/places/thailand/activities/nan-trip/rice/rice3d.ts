@@ -35,12 +35,12 @@ import { bell, clamp, speakingVoice, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import type { Member } from '../../../characters/member'
 import { L } from '../../../lines'
-import type { AnchorInfo } from '../../../engine/Anchors'
-import type { Shot } from '../../../engine/camera'
-import { merge, P, solid } from '../../../engine/geo'
-import { photoCamera, snapPhoto } from '../../../engine/photo'
-import { PAL } from '../../../engine/toon'
-import { TUNE } from '../../../engine/tune'
+import type { AnchorInfo } from '../../../../../engine3d/Anchors'
+import type { Shot } from '../../../../../engine3d/camera'
+import { merge, P, solid } from '../../../../../engine3d/geo'
+import { photoCamera, snapPhoto } from '../../../../../engine3d/photo'
+import { PAL } from '../../../../../engine3d/toon'
+import { THAI_TUNE } from '../../../tune'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { Floaters } from '../mushrooms/fx'
 import { Birds, type BirdHost } from './birds'
@@ -1173,7 +1173,7 @@ export class RiceFarm extends Stage {
       this.finger.fresh = false
       if (d <= 0.1 && !this.finger.held) this.finger.target = null
     }
-    this.kaylee.pace = (this.ground === 'wade' || this.ground === 'channel' ? SPEED_WADE : SPEED_BANK) / TUNE.walkSpeed
+    this.kaylee.pace = (this.ground === 'wade' || this.ground === 'channel' ? SPEED_WADE : SPEED_BANK) / THAI_TUNE.walkSpeed
     // ---- Kept on the farm, sliding round the scarecrow, the hut, the rack... ----
     k.x = clamp(k.x, WALK.x0, WALK.x1)
     k.z = clamp(k.z, WALK.z0, WALK.z1)

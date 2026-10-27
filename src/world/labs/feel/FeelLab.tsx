@@ -6,7 +6,7 @@
 // the address bar (feel.<group>.<knob>=n). Not something Kaylee plays: World.tsx loads it lazily, only when the link
 // asks for it.
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
-import { feelLab, isFeelParam, type KnobGroup } from '../../../../kit/knobs'
+import { feelLab, isFeelParam, type KnobGroup } from '../../kit/knobs'
 import { IconButton, Section } from '../ui'
 import '../lab.css'
 

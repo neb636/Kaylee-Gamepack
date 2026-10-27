@@ -4,14 +4,14 @@
 // a `flipper` at the hips (so a head-first dive turns round the middle, not the feet), then the chibi rig.
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span, wobble } from '../../../../../../../sdk'
-import { buildAnimal, Wind, type Rig } from '../../../../characters/animal'
+import { buildAnimal, Wind, type Rig } from '../../../../../../engine3d/characters/animal'
 import { Dress } from '../../../../characters/avatar'
-import { FaceLife } from '../../../../characters/face'
+import { FaceLife } from '../../../../../../engine3d/characters/face'
 import { LOOKS, type Look } from '../../../../characters/looks'
 import { buildModelRig, kayleeModel } from '../../../../characters/model'
 import { currentLook } from '../../../../characters/style'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P, solid } from '../../../../engine/geo'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../../engine3d/geo'
 import type { RacerId } from './layout'
 
 /** The two kids racing beside her: plain placeholders (a puppy and a pony) until the art gate. */

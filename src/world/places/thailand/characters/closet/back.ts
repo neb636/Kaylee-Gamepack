@@ -6,10 +6,10 @@
 // bunny backpack (a bunny's face on the back, lop ears down its sides). Wings fold flat when she sits, walks or lies
 // (avatar.ts's Dress: `userData.wings`), the cape drapes shorter (`userData.cape`); the backpack stays put.
 import { DoubleSide, Group, LatheGeometry, Mesh, MeshToonMaterial, Vector2, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { bake, P } from '../../engine/geo'
-import { makeHull } from '../../engine/outline'
-import { toonGradient } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { bake, P } from '../../../../engine3d/geo'
+import { makeHull } from '../../../../engine3d/outline'
+import { toonGradient } from '../../../../engine3d/toon'
 import { group, PX, ZC } from '../model-wear'
 import { aim, facing, star } from './fit'
 

@@ -1,5 +1,6 @@
-// Every number worth tuning by eye, in one place. The ?debug panel edits this object live (on the iPad too) and can
-// copy it as JSON to paste back here.
+// The look's numbers worth tuning by eye, shared by every 3D world. The ?debug panel (and the character lab's light
+// sliders) edit this object live, on the iPad too, and can copy it as JSON to paste back here. A country's own camera
+// and walk numbers live in its folder (Thailand's: places/thailand/tune.ts).
 export const TUNE = {
   /** Share of light every face gets, and share from the sun (together 1 = a lit face shows its exact palette color). */
   ambient: 0.6,
@@ -14,19 +15,7 @@ export const TUNE = {
   /** Outline width multiplier (characters 3 px, props 2 px, trinkets 1.5 px at 1). 0.75: Dad found the full width
    *  heavy (2026-10-25). */
   outline: 0.75,
-  /** Camera inside the house: degrees, and the floor box (meters) that must fit on screen around Kaylee. */
-  insideYawWide: 30,
-  insideYawTall: 16,
-  insidePitch: 50,
-  insideFitW: 5.65,
-  insideFitD: 4.6,
-  /** Camera in the street (every outside shot of the house is 17° lower than it was, Dad 2026-10-26). */
-  streetYaw: 8,
-  streetPitch: 1,
+  /** The default lens, degrees top to bottom (a world's rig.fov overrides it). */
   fov: 30,
-  /** Kaylee's walk. */
-  walkSpeed: 1.8,
-  stepsPerSecond: 3.2,
-  hop: 0.07,
 }
 export type Tune = typeof TUNE

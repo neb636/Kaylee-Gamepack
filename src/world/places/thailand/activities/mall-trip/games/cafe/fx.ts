@@ -3,10 +3,10 @@
 //   - Floaters fly free and fade: drops off the stream, steam, hearts, sparkles, frost round Daddy's head.
 //   - Splats stick where they land (the ceiling beam, the wall) and slowly shrink away.
 import { Color, DynamicDrawUsage, Euler, IcosahedronGeometry, InstancedMesh, Matrix4, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
-import type { Bag } from '../../../../engine/dispose'
+import type { Bag } from '../../../../../../engine3d/dispose'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-import { merge, P } from '../../../../engine/geo'
-import { toon } from '../../../../engine/toon'
+import { merge, P } from '../../../../../../engine3d/geo'
+import { toon } from '../../../../../../engine3d/toon'
 
 const m = new Matrix4()
 const q = new Quaternion()

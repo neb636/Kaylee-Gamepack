@@ -8,12 +8,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { stopSpeaking } from '../../../../sdk'
 import type { Wearable } from '../characters/looks'
 import type { Pose } from '../characters/types'
-import { View3D, type RenderMode } from '../engine/View3D'
+import { View3D, type RenderMode } from '../../../engine3d/View3D'
 import { CAST, castById } from './catalog'
 import { BACKDROPS, LeftPanel, LineBar, RightPanel, Toolbar, TopRight, type LabApi } from './Panels'
 import { Studio, type Hideable, type ShotKind, type StudioView, type Tool } from './studio'
-import { IconButton } from './ui'
-import './lab.css'
+import { IconButton } from '../../../labs/ui'
+import '../../../labs/lab.css'
 
 const DEFAULTS: StudioView = {
   ids: ['kaylee'],

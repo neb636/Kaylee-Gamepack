@@ -1,6 +1,6 @@
 // The small life every face has: a blink every few seconds, and a mouth that opens with their own voice (the SDK's
-// speechLevel reads the clip that's playing). Shared by Kaylee and the family.
-import { bell, speechLevel } from '../../../../sdk'
+// speechLevel reads the clip that's playing). Shared by every 3D character (Kaylee and the family in Thailand).
+import { bell, speechLevel } from '../../../sdk'
 import type { Rig } from './animal'
 
 export class FaceLife {

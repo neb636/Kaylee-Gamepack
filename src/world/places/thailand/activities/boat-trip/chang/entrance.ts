@@ -4,9 +4,9 @@
 // wall of upright bamboo poles under a thick thatched band. "Baan Chang Café" and the smaller line under it are canvas
 // text on the wall (the way the shop sign is in hub/build/street.ts), never generated. Oil palms stand behind.
 import { BackSide, BufferGeometry, CanvasTexture, CylinderGeometry, DoubleSide, Float32BufferAttribute, Group, Mesh, MeshToonMaterial, SRGBColorSpace } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { bake, merge, P, solid } from '../../../engine/geo'
-import { PAL, toonGradient } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { bake, merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL, toonGradient } from '../../../../../engine3d/toon'
 import { buildSongthaew, type Songthaew } from '../../../trip/vehicles/songthaew'
 import { DECK, ENTRY, ROAD, TOTEMS, WALL } from './layout'
 import { EARTH, FROND, FROND_DARK, grassPatches, groundScatter, oilPalm } from './nature'

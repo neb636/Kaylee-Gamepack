@@ -4,9 +4,9 @@
 //     right (the cups are to the right), the handle on its left.
 //   - A liquid is a unit-tall cylinder standing on the bottom, scaled up as it fills (liquid.ts draws it).
 import { BufferGeometry, Color, Float32BufferAttribute, Group, LatheGeometry, Mesh, MeshBasicMaterial, Vector2, type ShaderMaterial } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { bake, merge, P, solid } from '../../../../engine/geo'
-import { PAL } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { bake, merge, P, solid } from '../../../../../../engine3d/geo'
+import { PAL } from '../../../../../../engine3d/toon'
 import { BASE_H, CUP, JAR, type ItemId } from './layout'
 import { liquidMaterial } from './liquid'
 

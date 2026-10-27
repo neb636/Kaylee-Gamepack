@@ -3,7 +3,7 @@
 // Island photo's four (wave, cheer, heart, silly: Kaylee picks one, Mommy and Daddy copy her), Kaylee's hands on the
 // longtail's tiller, Daddy pointing, Mommy holding up her phone for a selfie.
 // Arm pivots: rotation.x < 0 swings an arm forward; rotation.z > 0 lifts the right arm out and up (the left arm < 0).
-import type { Rig } from '../../../characters/animal'
+import type { Rig } from '../../../../../engine3d/characters/animal'
 import type { PoseKind } from './part'
 
 export const PHOTO_POSES: { id: PoseKind; icon: string; label: string }[] = [

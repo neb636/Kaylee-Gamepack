@@ -3,8 +3,8 @@
 // for the splashes). No physics engine: simple arcs and pushes. (Floaters is copied from the vet's fx.ts, so each mini
 // game stays in its own folder.)
 import { Color, DynamicDrawUsage, Group, InstancedMesh, Matrix4, MeshBasicMaterial, Quaternion, SphereGeometry, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { toon } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { toon } from '../../../../../../engine3d/toon'
 import { PIT } from './layout'
 
 const m = new Matrix4()

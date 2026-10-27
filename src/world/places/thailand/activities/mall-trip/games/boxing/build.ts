@@ -4,9 +4,9 @@
 // water bottle on its stool, the board with three stars and the lamps that fill each round, Daddy's pink pad, and the
 // gold champion's belt. Pure shapes: the world (ring.ts) moves them.
 import { Group, Mesh, SphereGeometry, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P, solid } from '../../../../engine/geo'
-import { PAL, toon } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../../engine3d/geo'
+import { PAL, toon } from '../../../../../../engine3d/toon'
 import { BAG, BAG2, BELL, BOARD, BOTTLE, DRUM, MAT, PAD, POST_H, POSTS, ROPE_COLORS, ROPE_Y, WALL_Z } from './layout'
 
 export interface Swinger {

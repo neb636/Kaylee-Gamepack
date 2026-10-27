@@ -5,8 +5,8 @@
 // the gold Garuda and the Buddhas, the TV, a picture and the red and gold boxes; cupboards along the bottom.
 // The part above the cupboards lowers (house.ts) when she walks behind it, so the camera still sees her.
 import { Group, Mesh, MeshBasicMaterial, type BufferGeometry } from 'three'
-import { merge, P } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import { merge, P } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { DIM } from '../layout'
 import { BRASS, FRAME_DARK, GILT, GILT_DARK, ROSE, ROSE_DARK, ROSE_LIGHT } from './ground'
 import { scenery, type Kit } from './kit'

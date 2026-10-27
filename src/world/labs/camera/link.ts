@@ -2,7 +2,7 @@
 // what Dad changed (only what differs from the defaults), next to the section's own state:
 //   #/world/thailand/mall-trip/barber?round=3&cam=1&cam.pitch=18&cam.zoom=0.85&cam.frame=ipad-wide
 // kit/sections.ts keeps these params in the address bar as she plays, so the link always reproduces the moment.
-import type { CamOverride } from '../../engine/camera'
+import type { CamOverride } from '../../engine3d/camera'
 
 export type FrameId = 'fill' | 'ipad-tall' | 'ipad-wide' | 'ipadpro-wide' | 'iphone-wide'
 export type Guide = 'box' | 'bar' | 'thirds' | 'targets'

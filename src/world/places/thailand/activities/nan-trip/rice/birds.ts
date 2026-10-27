@@ -5,9 +5,9 @@
 // and rounder; a round one has to waddle-hop before it can take off. Toy-sized, so she can see them from up high.
 import { Group, Vector3 } from 'three'
 import { bell, clamp } from '../../../../../../sdk'
-import type { Bag } from '../../../engine/dispose'
-import { blobShadow, merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { FAT_S, levelAt, SHOO_R, WATER_DOWN } from './layout'
 
 type State = 'off' | 'in' | 'peck' | 'up' | 'perch' | 'away'

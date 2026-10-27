@@ -3,9 +3,9 @@
 // rolling on it), and puffs resting on peaks or hanging low on the hills. Toon white with lavender shade bands; one or
 // two meshes each.
 import { CircleGeometry, Group, Mesh, type BufferGeometry, type Material } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { merge, P, solid } from '../../engine/geo'
-import { toon } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../engine3d/geo'
+import { toon } from '../../../../engine3d/toon'
 import { rng } from './build'
 
 /** A layer of cloud between heights y0 and y1 over the box (meters), `n` blobs. Below 1, `opacity` lets the road and the

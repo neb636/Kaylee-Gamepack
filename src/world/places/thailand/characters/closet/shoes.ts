@@ -4,8 +4,8 @@
 // Light-up sneakers (white, a mint sole, a pink stripe, lights that blink as she walks: `userData.blink`, avatar.ts's
 // Dress), sparkly lavender party shoes with a strap and a bow, pink rain boots, and mint sandals with a flower.
 import type { BufferGeometry, Group } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { P, type V3 } from '../../engine/geo'
+import type { Bag } from '../../../../engine3d/dispose'
+import { P, type V3 } from '../../../../engine3d/geo'
 import { group } from '../model-wear'
 
 type Parts = BufferGeometry[]

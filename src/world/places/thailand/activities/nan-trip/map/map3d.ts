@@ -22,9 +22,9 @@
 // country.
 import { Color, IcosahedronGeometry, OctahedronGeometry, Vector3, type WebGLRenderer } from 'three'
 import { bell, clamp, speakingVoice } from '../../../../../../sdk'
-import type { AnchorInfo } from '../../../engine/Anchors'
-import type { Shot } from '../../../engine/camera'
-import { PAL } from '../../../engine/toon'
+import type { AnchorInfo } from '../../../../../engine3d/Anchors'
+import type { Shot } from '../../../../../engine3d/camera'
+import { PAL } from '../../../../../engine3d/toon'
 import { L } from '../../../lines'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { Floaters } from '../mushrooms/fx'

@@ -1,11 +1,11 @@
-// A family member in Agong's house: their toy animal (animal.ts, looks.ts) standing, sitting or lying at their spot,
-// breathing and blinking, turning their head to look at Kaylee when she comes near, waving and hopping when she says
-// hi, and moving their mouth when their voice plays (face.ts).
+// A family member in Agong's house: their toy animal (engine3d/characters/animal.ts, looks.ts) standing, sitting or
+// lying at their spot, breathing and blinking, turning their head to look at Kaylee when she comes near, waving and
+// hopping when she says hi, and moving their mouth when their voice plays (engine3d/characters/face.ts).
 import { Group, Vector3 } from 'three'
 import { bell, clamp, span } from '../../../../sdk'
-import type { Bag } from '../engine/dispose'
-import { buildAnimal, Wind, type Rig } from './animal'
-import { FaceLife } from './face'
+import type { Bag } from '../../../engine3d/dispose'
+import { buildAnimal, Wind, type Rig } from '../../../engine3d/characters/animal'
+import { FaceLife } from '../../../engine3d/characters/face'
 import type { FamilyMember } from './family'
 import { LOOKS, type Look } from './looks'
 import type { Character, Pose } from './types'

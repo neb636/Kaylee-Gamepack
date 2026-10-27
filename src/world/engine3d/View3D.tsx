@@ -1,4 +1,4 @@
-// Mounts one 3D world (Agong's house, the bay): takes the shared WebGL renderer, builds the world, runs the frame loop,
+// Mounts one 3D world (Agong's house, the bay, any 3D country): takes the shared WebGL renderer, builds the world, runs the frame loop,
 // routes taps and drags (from the canvas and from the DOM tap targets over it) and cleans everything up when it
 // unmounts. If the iPad takes the GPU back (a lost context), it tells the screen, which offers to wake it.
 import { useEffect, useRef, type MutableRefObject, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'

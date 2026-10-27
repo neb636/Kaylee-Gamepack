@@ -6,8 +6,8 @@
 // boarding pass gets its last punch (BoatTrip.tsx). Tap the boat and they hop back in for more.
 import { Vector3 } from 'three'
 import { bell } from '../../../../../../sdk'
-import type { AnchorInfo } from '../../../engine/Anchors'
-import type { Shot } from '../../../engine/camera'
+import type { AnchorInfo } from '../../../../../engine3d/Anchors'
+import type { Shot } from '../../../../../engine3d/camera'
 import { L } from '../../../lines'
 import { sfx } from '../../../sfx'
 import type { BoatSection } from '../sections'

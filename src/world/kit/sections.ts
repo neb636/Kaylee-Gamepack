@@ -51,7 +51,7 @@ export function defineSections<const P extends string, const S extends string>(
 }
 
 /** Switches that stay in the address bar while she plays: ?debug=1, ?fps=N, the camera lab's ?cam=1 with its cam.*
- *  settings (engine/flags.ts, places/thailand/lab/camera/), the feel lab's ?feel=1 with its feel.* knobs (kit/knobs.ts), and Thailand's ?look= (Kaylee's look from her wardrobe,
+ *  settings (engine3d/flags.ts, labs/camera/), the feel lab's ?feel=1 with its feel.* knobs (kit/knobs.ts), and Thailand's ?look= (Kaylee's look from her wardrobe,
  *  places/thailand/characters/style.ts), so a link opens every scene in that look. */
 const sticky = (key: string) => key === 'debug' || key === 'fps' || key === 'cam' || key.startsWith('cam.') || isFeelParam(key) || key === 'look'
 

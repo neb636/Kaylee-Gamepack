@@ -4,8 +4,8 @@
 // make it feel like a snake following her finger. Drawn as one tapered cylinder (with a knuckle) per segment, each
 // turned toward the next point: nothing is rebuilt per frame, and the ink outline still works.
 import { Group, Quaternion, Vector3 } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
 
 export interface Trunk {
   pts: Vector3[]

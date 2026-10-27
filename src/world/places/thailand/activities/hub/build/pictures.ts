@@ -4,7 +4,7 @@
 // one small canvas (an atlas), so a whole wall of frames is one textured mesh.
 import { CanvasTexture, Matrix4, Mesh, MeshToonMaterial, PlaneGeometry, SRGBColorSpace, type BufferGeometry } from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-import { toonGradient } from '../../../engine/toon'
+import { toonGradient } from '../../../../../engine3d/toon'
 import type { Kit } from './kit'
 
 export type PictureKind = 'uniform-white' | 'uniform-blue' | 'couple' | 'family' | 'certificate' | 'calendar'

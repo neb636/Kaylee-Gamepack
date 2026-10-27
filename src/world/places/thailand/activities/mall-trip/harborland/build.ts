@@ -10,9 +10,9 @@
 //     ring, and the lit sign's mount and glow (its words are HTML: sign.tsx).
 // Everything still is merged into a few meshes; what moves comes back as its own group.
 import { AdditiveBlending, BufferAttribute, BufferGeometry, CanvasTexture, CatmullRomCurve3, Color, CylinderGeometry, DoubleSide, Euler, Group, Mesh, MeshBasicMaterial, MeshToonMaterial, PlaneGeometry, Quaternion, TubeGeometry, Vector3, type Curve, type Object3D } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { bake, merge, P, solid, solidMix, type V3 } from '../../../engine/geo'
-import { PAL, toon, toonGradient } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { bake, merge, P, solid, solidMix, type V3 } from '../../../../../engine3d/geo'
+import { PAL, toon, toonGradient } from '../../../../../engine3d/toon'
 import { BOXER, BRIDGE, bx, CANNON, DECKS, DONUT, FRAME, LV, MASK, MASK_BASE, NET_FACE, NET_TUNNEL, NETS, NOSE, NOSE_MAT, NOSE_STEP, PIT, ROLLER, ROPE, SIGN, SPIRES, TOWER, TUNNEL, WALL, ZB, ZF, ZIP, ZIP_DECK, type Rect } from './layout'
 import { BallPool } from './pool'
 

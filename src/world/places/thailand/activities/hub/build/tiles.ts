@@ -3,7 +3,7 @@
 // in big square tiles with dark seams. Each is one tile drawn on a canvas (chips and all) and repeated; the toon
 // material still gives it the house's light bands. Seeded, so screenshots are the same every time.
 import { CanvasTexture, Mesh, MeshToonMaterial, PlaneGeometry, RepeatWrapping, SRGBColorSpace } from 'three'
-import { toonGradient } from '../../../engine/toon'
+import { toonGradient } from '../../../../../engine3d/toon'
 import type { Kit } from './kit'
 
 interface Chips {

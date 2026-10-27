@@ -32,8 +32,8 @@
 // something yummy, the cousins wave without looking up, and the doors go thunk, thunk.
 import { Group, Vector3, type Object3D } from 'three'
 import { bell, clamp, sounds, wobble, type Line } from '../../../../../sdk'
-import type { AnchorInfo } from '../../engine/Anchors'
-import type { Shot } from '../../engine/camera'
+import type { AnchorInfo } from '../../../../engine3d/Anchors'
+import type { Shot } from '../../../../engine3d/camera'
 import { DIM } from '../../activities/hub/layout'
 import type { House, HousePlugin } from '../../activities/hub/house'
 import { sfx } from '../../sfx'

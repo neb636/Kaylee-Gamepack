@@ -3,10 +3,10 @@
 // rides home in the longtail afterwards (bay/race-gate.ts puts it in the boat).
 import { CanvasTexture, Group, LatheGeometry, Mesh, MeshBasicMaterial, PlaneGeometry, Vector2, Vector3, type BufferGeometry } from 'three'
 import { KID_NAME } from '../../../../../../sdk'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
-import { makeHull } from '../../../engine/outline'
-import { PAL, toon } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
+import { makeHull } from '../../../../../engine3d/outline'
+import { PAL, toon } from '../../../../../engine3d/toon'
 import { RAINBOW } from './scenery'
 
 const GOLD = '#FFC83D'

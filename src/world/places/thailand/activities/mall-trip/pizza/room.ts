@@ -1,13 +1,13 @@
-// The Pizza Company's corner, modeled in code in the house's toon look (engine/geo.ts parts): a green booth against a
+// The Pizza Company's corner, modeled in code in the house's toon look (engine3d/geo.ts parts): a green booth against a
 // cream wall, the table, the green sign (a pizza slice on it, no words) and the window onto Alangkarn's waterfall. And
 // the things to poke: the soda with its straw, the onion rings, the chili shaker, the napkin box, the server. Greybox:
 // shapes only.
 import { CanvasTexture, Group, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, SRGBColorSpace } from 'three'
-import { buildAnimal, type Rig } from '../../../characters/animal'
+import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import type { Look } from '../../../characters/looks'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { BACK_Z, CHILI, NAPKINS, RINGS, SEAT_Z, SERVER_AT, SIGN, SODA, TABLE, WINDOW } from './layout'
 
 const GREEN = '#4DB57A'

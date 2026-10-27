@@ -1,4 +1,4 @@
-// A patient on the vet's table: a toy animal (characters/animal.ts) that breathes, blinks, watches the tool in her
+// A patient on the vet's table: a toy animal (engine3d/characters/animal.ts) that breathes, blinks, watches the tool in her
 // hand, wags, hops and shakes, plus everything a vet visit does to it: suds and mud, the thorn in the puppy's paw,
 // cream and a bandage, red cheeks, a bow, the elephant's sniffle.
 //
@@ -7,11 +7,11 @@
 // (VetClinic.zoneAt). That works the same on any screen, because it's what she sees.
 import { Group, Mesh, MeshBasicMaterial, Vector3, type Object3D } from 'three'
 import { bell, clamp, span, wobble } from '../../../../../../../sdk'
-import { buildAnimal, type Rig } from '../../../../characters/animal'
-import { FaceLife } from '../../../../characters/face'
+import { buildAnimal, type Rig } from '../../../../../../engine3d/characters/animal'
+import { FaceLife } from '../../../../../../engine3d/characters/face'
 import { PATIENT_LOOKS } from '../../../../characters/looks'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P, solid } from '../../../../engine/geo'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../../engine3d/geo'
 import type { PatientId } from '../../sections'
 import { Blobs } from './fx'
 import { NEEDS, type Need } from './layout'

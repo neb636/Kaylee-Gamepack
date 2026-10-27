@@ -1,10 +1,10 @@
 // HarborLand's grip socks (a must for everyone there): the three colors she can pick at the counter, and Kaylee wearing
 // them, in the hall and in the playground. (No three.js imports of its own: it uses the engine's shapes.)
 import type { Group } from 'three'
-import type { Rig } from '../../characters/animal'
+import type { Rig } from '../../../../engine3d/characters/animal'
 import type { Dress } from '../../characters/avatar'
-import type { Bag } from '../../engine/dispose'
-import { merge, P, solid } from '../../engine/geo'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../engine3d/geo'
 
 export const SOCK_COLORS: Record<string, string> = { pink: '#FF8FB8', lavender: '#C9B5F7', mint: '#8FE3C8' }
 

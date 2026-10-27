@@ -3,9 +3,9 @@
 // its three stars, the foam ball and the foam rocking elephant, round 3's ribbon at Daddy's height, the chedi's gold
 // spire and the elephant's face. The bricks are the hall's (hall/build.ts): the same rounded box in the same colors.
 import { Color, Group, Mesh, MeshBasicMaterial, type BufferGeometry } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P, solid } from '../../../../engine/geo'
-import { PAL } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../../engine3d/geo'
+import { PAL } from '../../../../../../engine3d/toon'
 import { CARDS, type Cell } from './grid'
 import { BALL, BD, BH, BOX, BRICK_COLORS, BW, EASEL, HALF, MARK_Y, ROCKER, STAR_Y, WALL, X0, type CardId } from './layout'
 

@@ -7,9 +7,9 @@
 // three on at the pier (setRibbons, setGarland), and they stream back and flutter faster the faster she goes. What
 // rides along (the football, the coconut, the duck's string) sits in `cargo`, at the CARGO spots.
 import { Group, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { merge, P, solid } from '../../engine/geo'
-import { PAL } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../engine3d/geo'
+import { PAL } from '../../../../engine3d/toon'
 import type { Feel } from '../drive'
 import type { Vehicle } from './vehicle'
 

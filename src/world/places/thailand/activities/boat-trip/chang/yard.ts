@@ -4,8 +4,8 @@
 // round (nature.ts). Each layer is merged into one mesh (two draw calls with its outline). And the cafe at the top of
 // the boardwalk (buildCafe).
 import { Group } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
 import { BENCH, BOULDERS, CAFE, COUNTER, LAMYAI_BACK, MILK, RAIL, TROUGH } from './layout'
 import { boulder, EARTH, FROND, FROND_DARK, grassPatches, groundScatter, meshPanel, oilPalm } from './nature'
 

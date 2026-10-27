@@ -2,11 +2,11 @@
 // freeze and orbit, the guides, what the camera is doing now, and the hand-off (a link, a note for an agent, a PNG).
 import { useEffect, useState } from 'react'
 import type { Vector3 } from 'three'
-import { worldLink } from '../../../../../router'
-import { HUB } from '../../../../kit/sections'
-import { findPlace, sectionsFor } from '../../../../registry'
-import { camLab } from '../../engine/camLab'
-import { TUNE } from '../../engine/tune'
+import { worldLink } from '../../../router'
+import { HUB } from '../../kit/sections'
+import { findPlace, sectionsFor } from '../../registry'
+import { camLab } from '../../engine3d/camLab'
+import { TUNE } from '../../engine3d/tune'
 import { IconButton, Section, Segmented, Select, Slider, Toggle, Field } from '../ui'
 import { camParams, FRAMES, STATE_KEYS, frameById, freshCamera, GUIDES, untouched, withoutCam, type CamView } from './link'
 

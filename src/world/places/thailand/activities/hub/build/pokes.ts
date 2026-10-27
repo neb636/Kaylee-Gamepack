@@ -3,8 +3,8 @@
 // candles glow brighter, a curl of incense smoke rises and a soft bell rings.
 import { Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Object3D } from 'three'
 import { bell, clamp, sounds, span, wobble } from '../../../../../../sdk'
-import type { Bag } from '../../../engine/dispose'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { PAL } from '../../../../../engine3d/toon'
 import { sfx } from '../../../sfx'
 import type { Pickable } from '../layout'
 import type { Kit } from './kit'

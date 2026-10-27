@@ -11,7 +11,7 @@ Code paths are under `src/world/places/thailand/`.
 - [ ] **The sunset's lower third is plain water.** The sky turns pink and gold, but the bottom of the screen is flat
   water with nothing in it, so the payoff frame looks empty.
   - Check: `#/world/thailand/boat-trip/sunset`, drive toward the pier.
-  - Code: `activities/boat-trip/bay/sunset.ts` (the sunset's shot), `bay/sky.ts`, `engine/water.ts` (`setColors`).
+  - Code: `activities/boat-trip/bay/sunset.ts` (the sunset's shot), `bay/sky.ts`, `src/world/engine3d/water.ts` (`setColors`).
   - Ideas: sparkles of sun on the water, the porpoise closer in front, the camera lower so the towers fill more of it.
 - [ ] **The canoe's oar crosses the tunnel walls.** In the low cave, the paddle sometimes swings visibly through the
   rock.

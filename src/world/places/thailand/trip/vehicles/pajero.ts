@@ -15,9 +15,9 @@
 // root (where it is, which way it faces) > tilt (the road's slope) > body (leans out on bends, squats when it brakes,
 // bounces): the drive moves each.
 import { Group, Mesh, MeshBasicMaterial, type BufferGeometry } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { blobShadow, merge, P, solid, solidMix, type V3 } from '../../engine/geo'
-import { PAL } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { blobShadow, merge, P, solid, solidMix, type V3 } from '../../../../engine3d/geo'
+import { PAL } from '../../../../engine3d/toon'
 
 const SILVER = '#CDD1DC'
 const SHADE = '#A9AEBC'

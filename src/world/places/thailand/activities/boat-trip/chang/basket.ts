@@ -2,8 +2,8 @@
 // sugarcane on the right. The same eight foods go round and round: she pulls one out, a trunk takes it, it's eaten, and a
 // moment later it's back in the basket (Daddy brought plenty), so the toy never runs out.
 import { BufferGeometry, Color, Float32BufferAttribute, Group, Vector3, type Object3D } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
 import { BASKET, type FoodKind } from './layout'
 
 const WEAVE = '#E2B878'

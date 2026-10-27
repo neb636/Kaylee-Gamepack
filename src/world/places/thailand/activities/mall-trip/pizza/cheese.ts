@@ -4,8 +4,8 @@
 // (the pan's half into the pan, the slice's half curls up under the slice). One mesh and one outline per tube, so it is
 // a thing in the toon world rather than a line drawn over it (flat lit and outlined in gold, so it stays cheese-yellow).
 import { BufferAttribute, BufferGeometry, Group, Mesh, MeshBasicMaterial, Vector3 } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { outlineMaterial } from '../../../engine/outline'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { outlineMaterial } from '../../../../../engine3d/outline'
 
 const RINGS = 14
 const SIDES = 8

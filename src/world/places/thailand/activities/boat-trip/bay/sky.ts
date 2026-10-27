@@ -1,10 +1,10 @@
 // The bay's sky: a pastel gradient dome, fat toon clouds drifting round the horizon, and the colors of the whole bay
 // (the haze, the water, the sunlight) with one dial for the sunset: 0 = a sunny day, 1 = the pink-gold ride home.
 import { BackSide, Color, Group, Mesh, MeshToonMaterial, ShaderMaterial, SphereGeometry, type Fog } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P } from '../../../engine/geo'
-import { toonGradient } from '../../../engine/toon'
-import type { Water } from '../../../engine/water'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P } from '../../../../../engine3d/geo'
+import { toonGradient } from '../../../../../engine3d/toon'
+import type { Water } from '../../../../../engine3d/water'
 
 const vertexShader = /* glsl */ `
   varying vec3 vDir;

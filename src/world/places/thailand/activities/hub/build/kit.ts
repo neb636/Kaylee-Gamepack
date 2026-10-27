@@ -1,8 +1,8 @@
 // What the house builders share: the dispose bag, the pokeable objects by pickable id, their named moving parts
 // ('fridge.hinge', 'fan.blades'...), and the walls the cutaway lowers.
 import { Group, type BufferGeometry, type Object3D } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, solid, type V3 } from '../../../engine/geo'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, solid, type V3 } from '../../../../../engine3d/geo'
 
 export interface Kit {
   bag: Bag

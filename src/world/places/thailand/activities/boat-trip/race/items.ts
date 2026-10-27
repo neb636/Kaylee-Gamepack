@@ -5,10 +5,10 @@
 // - Banana peels on the water (the macaque drops them): drive over one and spin round.
 // Each check takes a racer's place on the course (track.ts: `s` along it, `lat` across it).
 import { AdditiveBlending, CanvasTexture, Color, DoubleSide, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, RepeatWrapping, TorusGeometry, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
-import { PAL, toon } from '../../../engine/toon'
-import { swell } from '../../../engine/water'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL, toon } from '../../../../../engine3d/toon'
+import { swell } from '../../../../../engine3d/water'
 import { ahead, BOOST_HALF, BOOSTS, COIN_LINES, HOOP, RAMPS, spotAt, type Ramp } from './track'
 
 const tmp = new Vector3()

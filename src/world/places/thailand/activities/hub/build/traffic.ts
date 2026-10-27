@@ -1,8 +1,8 @@
 // Life on the street: now and then a scooter or a pink taxi (Bangkok's taxis are pink!) drives past on the far lane,
 // with a little putt-putt as it goes by. Only while she's outside; not tappable (it doesn't stop).
 import { Group } from 'three'
-import { P } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import { P } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { sfx } from '../../../sfx'
 import { scenery, type Kit } from './kit'
 

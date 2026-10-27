@@ -2,9 +2,9 @@
 // nozzle, where the scissors' blades cross, the comb's teeth, the spray's nozzle, the dryer's mouth, the bow) and the
 // rest of it above, so wherever she holds it, that end is where it works. On the trolley they stand facing her.
 import { ExtrudeGeometry, Group, Path, Shape, type BufferGeometry } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { bake, merge, P, solid, type V3 } from '../../../../engine/geo'
-import { PAL } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { bake, merge, P, solid, type V3 } from '../../../../../../engine3d/geo'
+import { PAL } from '../../../../../../engine3d/toon'
 import { BOW_COLORS } from './hair'
 import type { ToolId, TrayItem } from './layout'
 

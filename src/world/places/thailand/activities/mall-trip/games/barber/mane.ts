@@ -9,11 +9,11 @@
 // Her tools work on what's under her finger on screen (Salon): `nearest` finds the strands there, `cut` snips every
 // strand a finger's sweep crosses (on an iPhone too: it tests the whole sweep, not just where the finger is now).
 import { CylinderGeometry, SphereGeometry, Color, DynamicDrawUsage, Group, InstancedMesh, Matrix4, Quaternion, ShaderMaterial, BackSide, Vector2, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
-import type { Rig } from '../../../../characters/animal'
+import type { Rig } from '../../../../../../engine3d/characters/animal'
 import type { Look } from '../../../../characters/looks'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P, solid } from '../../../../engine/geo'
-import { PAL, toon } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../../engine3d/geo'
+import { PAL, toon } from '../../../../../../engine3d/toon'
 import { BOW_COLORS, decodeHair, encodeHair, HAIR_COLORS, LEN_STEPS, NATURAL, TUFTS, type BowId, type ColorId, type Hairdo, type Style } from './hair'
 
 /** Segments per strand, strands per tuft, strands per eyebrow. */

@@ -4,7 +4,7 @@
 //   - liquidMaterial(): flat toon bands like the rest of the world, plus swirling stripes of up to six colors that
 //     melt into one (`mix` 0 → 1) while the blender runs, and the milk's white curls in a cha yen.
 import { Color, ShaderMaterial, SRGBColorSpace, Vector3, type ColorRepresentation } from 'three'
-import type { Bag } from '../../../../engine/dispose'
+import type { Bag } from '../../../../../../engine3d/dispose'
 
 const rgb = { r: 0, g: 0, b: 0 }
 

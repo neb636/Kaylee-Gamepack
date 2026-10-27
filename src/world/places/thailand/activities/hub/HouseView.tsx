@@ -1,8 +1,8 @@
-// Mounts Agong's house in the shared 3D view (engine/View3D.tsx): the renderer, the frame loop, taps and drags. This file only builds the house and lays its tap targets over it.
+// Mounts Agong's house in the shared 3D view (engine3d/View3D.tsx): the renderer, the frame loop, taps and drags. This file only builds the house and lays its tap targets over it.
 import { useRef, type MutableRefObject } from 'react'
-import { Anchors } from '../../engine/Anchors'
-import { View3D, type RenderMode } from '../../engine/View3D'
-import type { AnchorInfo } from '../../engine/Anchors'
+import { Anchors } from '../../../../engine3d/Anchors'
+import { View3D, type RenderMode } from '../../../../engine3d/View3D'
+import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import { ANCHORS, House, type HouseEvents, type HousePlugin, type Start } from './house'
 
 export type { RenderMode }
