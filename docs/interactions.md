@@ -38,7 +38,7 @@ const [inRoof, setInRoof] = useState(false)
     <Piece
       snapTo="roof"
       onPlace={({ target }) => {
-        if (target === 'roof') { setInRoof(true); say(`The roof! Great job, ${KID_NAME}!`); return 'snap' }
+        if (target === 'roof') { setInRoof(true); say('The roof! Great job!'); return 'snap' }
         setMisses((m) => m + 1); sounds.oops(); return 'home'
       }}
       onTap={() => setMisses((m) => m + 1)} // tapping shows where it goes
