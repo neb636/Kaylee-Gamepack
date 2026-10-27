@@ -1,5 +1,6 @@
 // Toy animals built from simple shapes in the toon look: Kaylee's family in Thailand (places/thailand/characters/looks.ts
-// says who is what), and any country's 3D friends (the Nan Mountain Cup's tortoise, hornbill and sun bear too).
+// says who is what), and any country's 3D friends (the Nan Mountain Cup's tortoise, hornbill and sun bear, the Poles'
+// polar bear cub, emperor chick and Arctic tern too).
 //
 // Every character is the same chibi rig: a root at the feet (facing +z), a `body` group that squashes and leans, and
 // inside it the torso (legs, clothes, tail), a `head` pivot at the neck, and an arm pivot at each shoulder. The eyes
@@ -83,6 +84,8 @@ const BLUSH = '#FF9DB8'
 const MOUTH = '#7A2745'
 const TONGUE = '#FF8FA8'
 const WHITE = '#FFFFFF'
+/** The dark grey ends of a tern's wings. */
+const WING_TIP = '#7E88A0'
 
 type Parts = BufferGeometry[]
 
@@ -110,16 +113,16 @@ export interface Frame {
 function frameOf(look: Look): Frame {
   const H = look.height
   const penguin = look.species === 'penguin'
-  const bird = look.species === 'hornbill'
-  const R = (penguin ? 0.27 : look.species === 'panda' || look.species === 'elephant' || look.species === 'bear' ? 0.26 : bird ? 0.22 : look.species === 'puppy' || look.species === 'tortoise' ? 0.25 : 0.24) * H
+  const bird = look.species === 'hornbill' || look.species === 'tern'
+  const R = (penguin ? 0.27 : look.species === 'panda' || look.species === 'elephant' || look.species === 'bear' || look.species === 'polarbear' ? 0.26 : bird ? 0.22 : look.species === 'puppy' || look.species === 'tortoise' ? 0.25 : 0.24) * H
   const c = look.chub ?? 1
   const headY = penguin ? 0.2 * H : R * 0.92
   return {
     H,
     R,
     headY,
-    shoulder: penguin ? [0.3 * H, 0.5 * H, 0] : [0.155 * H * c, 0.47 * H, 0],
-    eyeX: look.species === 'unicorn' || look.species === 'pony' ? 0.37 * R : bird ? 0.46 * R : 0.36 * R,
+    shoulder: penguin ? [0.3 * H, 0.5 * H, 0] : look.species === 'tern' ? [0.15 * H, 0.45 * H, -0.01 * H] : [0.155 * H * c, 0.47 * H, 0],
+    eyeX: look.species === 'unicorn' || look.species === 'pony' ? 0.37 * R : look.species === 'hornbill' ? 0.46 * R : bird ? 0.42 * R : 0.36 * R,
     eyeY: look.species === 'unicorn' || look.species === 'pony' ? 0.12 * R : penguin ? 0.02 * R : bird ? 0.14 * R : 0.05 * R,
     eyeSize: 0.21 * R,
     lift: penguin ? 0.12 * R : look.species === 'monkey' ? 0.07 * R : 0,
@@ -302,7 +305,11 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const { H, R, headY, shoulder, eyeX, eyeY, eyeSize, lift, on, turnTo } = f
   const px = H >= 1 ? 3 : 2.5
   const penguin = look.species === 'penguin'
-  const bird = look.species === 'hornbill'
+  const bird = look.species === 'hornbill' || look.species === 'tern'
+  const tern = look.species === 'tern'
+  const polar = look.species === 'polarbear'
+  /** Paws and hooves in the dark color (a polar bear's are furry and light, like its fur). */
+  const darkPaws = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear'
 
   const torso: Parts = []
   const torsoPlain: Parts = []
@@ -330,21 +337,28 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
 
   // ---- Body ----
   if (penguin) {
-    // The body stays below the face (its top at the chin), so the cream face mask shows whole.
+    // The body stays below the face (its top at the chin), so the cream face mask shows whole. An emperor chick (a
+    // `cap` on the head) is grey fluff all over, with tufts sticking out round its middle.
+    if (look.cap) for (let i = 0; i < 9; i++) {
+      const a = (i / 9) * Math.PI * 2 + 0.3
+      torso.push(P.sphere(0.07 * H, look.fur, { at: [Math.sin(a) * 0.28 * H, (0.24 + (i % 2) * 0.05) * H, Math.cos(a) * 0.26 * H], rot: [0, a, 0.5], scale: [0.7, 1, 0.7] }))
+    }
     torso.push(P.sphere(0.31 * H, look.fur, { at: [0, 0.33 * H, 0], scale: [1, 1.02, 0.95] }, 24))
     torso.push(P.sphere(0.25 * H, look.light, { at: [0, 0.3 * H, 0.12 * H], scale: [1, 1.08, 0.66] }, 20))
     for (const s of [-1, 1]) torso.push(P.sphere(0.09 * H, look.dark, { at: [s * 0.11 * H, 0.025 * H, 0.13 * H], scale: [1, 0.42, 1.45] }))
   } else if (bird) {
-    torso.push(P.sphere(0.17 * H, look.fur, { at: [0, 0.36 * H, 0], scale: [1, 1.2, 1] }, 20))
-    torso.push(P.sphere(0.13 * H, look.light, { at: [0, 0.3 * H, 0.07 * H], scale: [1, 1.15, 0.7] }))
+    // A tern is a pale grey back with a white chest that wraps right round the front, on short red legs.
+    torso.push(P.sphere(0.17 * H, look.fur, { at: [0, 0.36 * H, tern ? -0.015 * H : 0], scale: [1, 1.2, 1] }, 20))
+    torso.push(tern ? P.sphere(0.16 * H, look.light, { at: [0, 0.34 * H, 0.035 * H], scale: [1, 1.15, 0.9] }, 20) : P.sphere(0.13 * H, look.light, { at: [0, 0.3 * H, 0.07 * H], scale: [1, 1.15, 0.7] }))
+    const leg = tern ? look.dark : look.fur
     for (const s of [-1, 1]) {
       const x = s * 0.07 * H
-      torso.push(P.capsule(0.025 * H, 0.12 * H, look.fur, { at: [x, 0.1 * H, 0] }))
-      for (const a of [-0.5, 0, 0.5]) torso.push(P.capsule(0.017 * H, 0.06 * H, look.fur, { at: [x + Math.sin(a) * 0.04 * H, 0.015 * H, Math.cos(a) * 0.04 * H], rot: [Math.PI / 2, a, 0] }))
+      torso.push(P.capsule(0.025 * H, 0.12 * H, leg, { at: [x, 0.1 * H, 0] }))
+      for (const a of [-0.5, 0, 0.5]) torso.push(P.capsule(0.017 * H, 0.06 * H, leg, { at: [x + Math.sin(a) * 0.04 * H, 0.015 * H, Math.cos(a) * 0.04 * H], rot: [Math.PI / 2, a, 0] }))
     }
   } else {
     const legColor = look.species === 'panda' ? look.dark : look.fur
-    const feetColor = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear' ? look.dark : look.light
+    const feetColor = darkPaws ? look.dark : look.light
     const legX = 0.085 * H * (1 + (c - 1) * 0.7)
     const legR = 0.07 * H * (1 + (c - 1) * 0.6)
     for (const s of [-1, 1]) {
@@ -427,13 +441,18 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     if (penguin) {
       parts.push(P.capsule(0.07 * H, 0.14 * H, look.fur, { at: [s * 0.015 * H, -0.12 * H, 0], rot: [0, 0, s * 0.3], scale: [0.45, 1, 1] }))
       if (o) parts.push(P.sphere(0.06 * H, o.color, { at: [s * 0.0, -0.02 * H, 0], scale: [0.8, 1, 1] }))
+    } else if (tern) {
+      // Long pointed wings folded along the body, the tips crossing behind it: they hang from the shoulder, so a
+      // wave or a cheer spreads them out.
+      parts.push(P.sphere(0.1 * H, look.fur, { at: [s * 0.025 * H, -0.12 * H, -0.03 * H], rot: [0.35, 0, s * 0.1], scale: [0.34, 1.6, 0.85] }))
+      parts.push(P.sphere(0.06 * H, WING_TIP, { at: [s * 0.035 * H, -0.25 * H, -0.08 * H], rot: [0.45, 0, s * 0.1], scale: [0.36, 1.7, 0.7] }))
     } else if (bird) {
       parts.push(P.sphere(0.08 * H, look.fur, { at: [s * 0.02 * H, -0.09 * H, 0], rot: [0, 0, s * 0.3], scale: [0.5, 1.35, 0.95] }))
       parts.push(P.sphere(0.04 * H, look.light, { at: [s * 0.05 * H, -0.18 * H, 0.02 * H], scale: [0.6, 1, 0.9] }))
       if (o) parts.push(P.sphere(0.06 * H, o.color, { at: [0, -0.01 * H, 0] }))
     } else {
       const armColor = look.species === 'panda' ? look.dark : look.fur
-      const hand = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear' ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' ? look.light : look.fur
+      const hand = darkPaws ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' || polar ? look.light : look.fur
       parts.push(P.capsule(0.052 * H, 0.09 * H, armColor, { at: [s * 0.025 * H, -0.075 * H, 0], rot: [0, 0, s * 0.35] }))
       parts.push(P.sphere(0.054 * H, hand, { at: [s * 0.05 * H, -0.14 * H, 0.005 * H] }))
       if (o) parts.push(P.sphere(0.068 * H, o.color, { at: [s * 0.004 * H, -0.015 * H, 0] }))
@@ -662,7 +681,10 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       break
     }
     case 'penguin': {
-      head.push(P.sphere(R, look.fur, { at: [0, headY, 0] }, 26))
+      const top = look.cap ?? look.fur
+      head.push(P.sphere(R, top, { at: [0, headY, 0] }, 26))
+      // An emperor's gold patches, on the sides of the head behind the face.
+      if (look.ear) for (const s of [-1, 1]) head.push(P.sphere(0.3 * R, look.ear, { at: [s * 0.8 * R, headY - 0.3 * R, 0.22 * R], rot: [0, s * 0.6, s * -0.3], scale: [0.55, 1.15, 0.9] }))
       // A big heart-shaped cream face (two overlapping ovals), dark only over the top and the sides.
       for (const s of [-1, 1]) head.push(P.sphere(0.62 * R, look.light, { at: [s * 0.28 * R, headY - 0.16 * R, 0.48 * R], scale: [1, 1.02, 0.95] }))
       // Talking happens just under the beak.
@@ -672,8 +694,8 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
         head.push(P.cone(0.14 * R, 0.26 * R, look.dark, { at: [0, headY - 0.33 * R, 1.06 * R], rot: [Math.PI / 2 + 0.4, 0, 0], scale: [1.4, 1, 0.6] }))
         rest.push(P.sphere(0.11 * R, MOUTH, { scale: [1.5, 0.6, 0.5] }))
       } else head.push(P.cone(0.18 * R, 0.36 * R, look.dark, { at: [0, headY - 0.2 * R, 1.12 * R], rot: [Math.PI / 2, 0, 0], scale: [1.45, 1, 0.65] }))
-      if (look.extras?.includes('tuft')) head.push(...[-0.15, 0.05, 0.24].map((x, i) => P.sphere(0.17 * R, look.fur, { at: [x * R, headY + (1.0 + (i % 2) * 0.1) * R, 0.0], rot: [0, 0, -x * 2.5], scale: [0.7, 1.5, 0.7] })))
-      if (!look.extras?.includes('tuft')) head.push(P.sphere(0.18 * R, look.fur, { at: [0.05 * R, headY + 0.93 * R, 0.1 * R], scale: [1.3, 0.6, 1] }))
+      if (look.extras?.includes('tuft')) head.push(...[-0.15, 0.05, 0.24].map((x, i) => P.sphere(0.17 * R, top, { at: [x * R, headY + (1.0 + (i % 2) * 0.1) * R, 0.0], rot: [0, 0, -x * 2.5], scale: [0.7, 1.5, 0.7] })))
+      if (!look.extras?.includes('tuft')) head.push(P.sphere(0.18 * R, top, { at: [0.05 * R, headY + 0.93 * R, 0.1 * R], scale: [1.3, 0.6, 1] }))
       break
     }
     case 'tortoise': {
@@ -698,6 +720,35 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       mouth(mouthPoint(-0.52 * R, 0.92 * R))
       tailRoot = [0, 0.2 * H, -0.15 * H * round[2]]
       tail.push(P.sphere(0.05 * H, look.fur, { at: [0, 0.2 * H, -0.17 * H * round[2]] }))
+      break
+    }
+    case 'polarbear': {
+      // A polar bear cub: all white and fluffy, a longer cream muzzle with a big black nose, little round ears set out
+      // to the sides, fluffy cheeks, a tuft on top and a stubby tail.
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.08, 0.98, 1] }, 26))
+      for (const s of [-1, 1]) {
+        head.push(P.sphere(0.25 * R, look.fur, { at: [s * 0.78 * R, headY + 0.6 * R, -0.06 * R], scale: [1, 1, 0.7] }))
+        headPlain.push(P.sphere(0.14 * R, look.ear ?? look.light, { at: [s * 0.79 * R, headY + 0.59 * R, 0.07 * R], scale: [1, 1, 0.4] }))
+        head.push(P.sphere(0.2 * R, look.fur, { at: [s * 0.86 * R, headY - 0.3 * R, 0.2 * R], scale: [0.7, 0.9, 0.9] }))
+      }
+      head.push(...[-0.18, 0.04, 0.22].map((x, i) => P.sphere(0.15 * R, look.fur, { at: [x * R, headY + (0.94 + (i % 2) * 0.08) * R, 0.06 * R], rot: [0, 0, -x * 2.2], scale: [0.75, 1.3, 0.75] })))
+      head.push(P.sphere(0.5 * R, look.light, { at: [0, headY - 0.3 * R, 0.66 * R], scale: [1.15, 0.78, 0.9] }))
+      head.push(P.sphere(0.15 * R, look.dark, { at: [0, headY - 0.13 * R, 1.08 * R], scale: [1.35, 0.95, 0.8] }))
+      mouth(mouthPoint(-0.52 * R, 1.0 * R))
+      tailRoot = [0, 0.2 * H, -0.15 * H * round[2]]
+      tail.push(P.sphere(0.05 * H, look.fur, { at: [0, 0.2 * H, -0.17 * H * round[2]] }))
+      break
+    }
+    case 'tern': {
+      // An Arctic tern: a white face under a black cap that sweeps down the back of the head, a slim red-orange beak,
+      // and a long forked tail of two white streamers.
+      head.push(P.sphere(R, look.light, { at: [0, headY, 0] }, 26))
+      head.push(P.sphere(1.05 * R, look.cap ?? INK, { at: [0, headY + 0.12 * R, -0.24 * R], rot: [-0.75, 0, 0], scale: [1.03, 0.8, 1] }, 26))
+      head.push(P.cone(0.2 * R, 0.75 * R, look.dark, { at: [0, headY - 0.16 * R, 1.22 * R], rot: [Math.PI / 2 + 0.15, 0, 0], scale: [1, 1, 0.8] }))
+      mouthAt = [0, headY - 0.36 * R, 0.92 * R]
+      tailRoot = [0, 0.27 * H, -0.15 * H]
+      tail.push(P.sphere(0.07 * H, look.fur, { at: [0, 0.25 * H, -0.18 * H], scale: [1, 0.7, 1.2] }))
+      for (const s of [-1, 1]) tail.push(P.cone(0.035 * H, 0.3 * H, look.light, { at: [s * 0.045 * H, 0.17 * H, -0.3 * H], rot: [-(Math.PI / 2 + 0.6), s * 0.3, 0] }))
       break
     }
     case 'hornbill': {

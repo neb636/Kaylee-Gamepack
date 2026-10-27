@@ -11,19 +11,21 @@ import { SERVER } from '../activities/mall-trip/pizza/room'
 import { RIVAL_LOOKS } from '../activities/nan-trip/cup/rivals'
 import { LUNG } from '../activities/nan-trip/rice/farm'
 import { FAMILY } from '../characters/family'
+import { POLES_LOOKS } from '../../poles/characters/looks'
 import { COACH_LOOK, LOOKS, PATIENT_LOOKS, type Look, type Wearable } from '../characters/looks'
 import cast from '../cast.json'
 import { L } from '../lines'
 import { ATTENDANT } from '../trip/legs/plane'
 import { OFFICER } from '../trip/legs/airport'
 
-export type CastGroup = 'family' | 'trip' | 'mall' | 'nan' | 'critters'
+export type CastGroup = 'family' | 'trip' | 'mall' | 'nan' | 'critters' | 'poles'
 export const GROUPS: { id: CastGroup; name: string }[] = [
   { id: 'family', name: 'Kaylee & family' },
   { id: 'trip', name: 'Boat trip' },
   { id: 'mall', name: 'Mall day' },
   { id: 'nan', name: 'Nan trip' },
   { id: 'critters', name: 'Bay critters' },
+  { id: 'poles', name: 'The Poles' },
 ]
 
 /** One choice in a character's variations popover: another look in their group, or an outfit for Kaylee. */
@@ -87,6 +89,14 @@ const nan: CastEntry[] = [
   person('moon', 'Moon', 'Nan Mountain Cup: the sun bear honey seller', 'nan', RIVAL_LOOKS.moon, 'activities/nan-trip/cup/rivals.ts', 'moon', 'cup-rivals'),
 ]
 
+const poles: CastEntry[] = [
+  person('pola', 'Pola', 'The Poles: the polar bear cub (north)', 'poles', POLES_LOOKS.pola, '../poles/characters/looks.ts', undefined, 'polar-bears'),
+  person('mama-bear', 'Mama Bear', 'The Poles: Pola\'s mama', 'poles', POLES_LOOKS.mama, '../poles/characters/looks.ts', undefined, 'polar-bears'),
+  person('pebble', 'Pebble', 'The Poles: the emperor penguin chick (south)', 'poles', POLES_LOOKS.pebble, '../poles/characters/looks.ts', undefined, 'emperors'),
+  person('papa', 'Papa', 'The Poles: Pebble\'s papa, an emperor penguin', 'poles', POLES_LOOKS.papa, '../poles/characters/looks.ts', undefined, 'emperors'),
+  person('terry', 'Terry', 'The Poles: the Arctic tern who flies pole to pole', 'poles', POLES_LOOKS.terry, '../poles/characters/looks.ts'),
+]
+
 const CRITTER_INFO: Record<CritterId, { name: string; color: string }> = {
   needlefish: { name: 'Needlefish', color: '#B8E6D8' },
   eagle: { name: 'Sea eagle', color: '#8E8AA8' },
@@ -100,7 +110,7 @@ const CRITTER_INFO: Record<CritterId, { name: string; color: string }> = {
 }
 const critters: CastEntry[] = CRITTERS.map((id) => ({ id, name: CRITTER_INFO[id].name, who: 'Phang Nga Bay sticker', group: 'critters', kind: 'critter', critter: id, src: 'activities/boat-trip/bay/critters.ts', color: CRITTER_INFO[id].color }))
 
-export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...nan, ...critters]
+export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...nan, ...critters, ...poles]
 export const castById = (id: string | undefined) => CAST.find((c) => c.id === id)
 
 /** Kaylee's outfits (what she wears on each trip and at each HarborLand game). */

@@ -2,7 +2,7 @@
 // builds any of them in 3D. Thailand's family are Looks (places/thailand/characters/looks.ts), and so is any country's
 // 3D friend. Pure data (no three.js).
 
-export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony' | 'monkey' | 'tortoise' | 'bear'
+export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony' | 'monkey' | 'tortoise' | 'bear' | 'polarbear' | 'tern'
 export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
 /** What Kaylee can wear on a trip, from her suitcase (or Mommy's spare sun hat if she packed none), or at HarborLand
  *  (the vet's blue scrubs and cap, the cafe's apron and chef's hat, the barber's smock, Muay Thai's boxing gloves and red
@@ -27,8 +27,11 @@ export interface Look {
   light: string
   /** The second color: hooves, panda patches, penguin back, beak, a tortoise's shell, a bear's nose and paws. */
   dark: string
-  /** Inside the ears (a tortoise: the plates on its shell). */
+  /** Inside the ears (a tortoise: the plates on its shell; a penguin: the gold patches beside its face). */
   ear?: string
+  /** The head (or the top of it) when it isn't the body's color: an emperor chick's black head over grey fluff, a
+   *  tern's black cap. */
+  cap?: string
   /** Unicorn (or pony) mane and tail, in order. */
   mane?: string[]
   /** Unicorn mane length: short (Daddy), to the shoulders, or long and flowing (Mommy). */
