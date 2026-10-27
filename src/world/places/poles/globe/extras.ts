@@ -709,7 +709,10 @@ export class GlobeExtras {
     if (id === 'lost') {
       const l = this.lost
       if (!l || l.state === 'fly' || l.state === 'wrong' || l.state === 'home') return null
-      if (l.state === 'held') return { facing: 1, size: 0.3 }
+      if (l.state === 'held') {
+        l.c.root.getWorldPosition(out)
+        return { facing: 1, size: 0.3 }
+      }
       return { facing: facing(l.c.root, 0.07), size: 0.3 }
     }
     if (id === 'marker') return { facing: facing(this.marker, 0.08), size: 0.22 }
