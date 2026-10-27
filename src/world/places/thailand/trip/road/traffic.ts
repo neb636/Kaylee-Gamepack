@@ -294,7 +294,12 @@ export class Traffic {
     m.root.rotation.y = p.heading + Math.PI
     m.hop = Math.max(0, m.hop - dt * 2.5)
     m.body.position.y = Math.abs(Math.sin(t * 9 + m.i)) * 0.03 * Math.min(1, m.v / 3) + Math.sin(m.hop * Math.PI) * 0.35
-    for (const w of m.wheels) w.rotation.x += (m.v * dt) / 0.3
+    // (The songthaew is built facing +x, so its wheels roll forward about -z, as everywhere else it drives.)
+    const roll = (m.v * dt) / 0.3
+    for (const w of m.wheels) {
+      if (m.plan.kind === 'songthaew') w.rotation.z -= roll
+      else w.rotation.x += roll
+    }
     if (m.lamps) m.lamps.color.set(m.replied && Math.sin(t * 18) > 0 ? '#FFFFFF' : '#FFF1B8')
   }
 
