@@ -293,7 +293,13 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [Crack! Pebble's egg](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch) ([already hatched: tuck Pebble back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch?chick=hatched))
 - [The first sunrise](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/sunrise)
 
-**Coming soon**: [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+**Finale: Pole to Pole and the Polar Quiz (greybox)**
+
+- Pole to Pole
+  - [Over the Arctic](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/fly?stamps=all) ([the warm middle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/fly?stamps=all&leg=warm), [the windy south](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/fly?stamps=all&leg=south))
+- [The postcard for Pebble](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/deliver?stamps=all)
+- [The Polar Quiz](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=bear) ([spin to the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=south), [the coldest pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=coldest), [who visits both](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=tern), [summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=summer), [the last question](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=ocean&stars=5))
+- [The Polar Explorer badge](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/badge?stamps=all)
 
 ### Canada
 

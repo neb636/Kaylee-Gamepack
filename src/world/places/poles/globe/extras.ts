@@ -10,12 +10,21 @@
 // (The lights in the night sky are globe.ts's: they flare when tapped.) Placeholder shapes until the art gate.
 import { CanvasTexture, Group, Mesh, MeshBasicMaterial, Object3D, Quaternion, Sprite, SpriteMaterial, Vector3, type BufferGeometry, type PerspectiveCamera } from 'three'
 import { bell, clamp, smooth, sounds, span, wobble } from '../../../../sdk'
+import { knobs, watch } from '../../../kit/knobs'
 import { sfx, tone } from '../../../kit/sfx'
 import type { Bag } from '../../../engine3d/dispose'
 import { merge, P } from '../../../engine3d/geo'
 import { PAL } from '../../../engine3d/toon'
 import { ll } from './earth'
 import type { Critter } from './globe'
+
+/** How carrying the lost one feels (live in the feel lab: ?feel=1 on the hub's `lost` link). */
+export const CARRY = knobs('carry', 'Carry it home', 'src/world/places/poles/globe/extras.ts', {
+  follow: { value: 18, min: 2, max: 40, step: 1, label: 'Follow her finger', unit: '/s', note: 'how tightly it sticks to her finger while carried (lower = it trails behind)' },
+  deadZone: { value: 14, min: 0, max: 60, step: 1, label: 'Dead zone', unit: 'px', note: 'how far her finger must move before it counts as carried (less is a tap: it hops and goes back on its berg)' },
+  poleReach: { value: 0.45, min: 0.1, max: 0.9, step: 0.05, label: 'Pole reach', unit: '× radius', note: 'how far above (or below) the globe’s middle she must let go for it to land on that pole' },
+  next: { value: 3, min: 0.5, max: 10, step: 0.5, label: 'Next one after', unit: 's', note: 'how long until the next lost one turns up after one is home' },
+})
 
 export type Lost = 'penguin' | 'bear'
 export type PokeId = 'lost' | 'marker' | 'seal' | 'station' | 'whale'
@@ -100,6 +109,13 @@ export class GlobeExtras {
   private nextIn = -1
   private order: Lost[]
   private crowd: Record<Lost, Critter[]> = { penguin: [], bear: [] }
+  /** Ones that wandered off, kept to ride the next berg (so endless rescues don't keep building new shapes). */
+  private spare: Record<Lost, Critter[]> = { penguin: [], bear: [] }
+  private berg: Group | null = null
+  private unwatch: () => void
+  /** For the feel lab's graph: her finger and the carried one, in screen pixels. */
+  finger = { x: 0, y: 0 }
+  carried = { x: 0, y: 0 }
   private glow: { s: Sprite; t: number; pole: 'north' | 'south' }
   private question: Sprite
   private held = new Vector3()
@@ -150,6 +166,16 @@ export class GlobeExtras {
     this.buildSeal()
     this.buildStation()
     this.buildWhale()
+    this.unwatch = watch('carry', () => ({
+      'finger x (px)': [this.finger.x, 1400],
+      'carried x (px)': [this.carried.x, 1400],
+      'finger y (px)': [this.finger.y, 1000],
+      'carried y (px)': [this.carried.y, 1000],
+    }))
+  }
+
+  dispose() {
+    this.unwatch()
   }
 
   // ---------------------------------------------------------------- building
@@ -316,17 +342,20 @@ export class GlobeExtras {
   private spawn() {
     const kind = this.order[this.saves % 2]
     const [lat, lon] = this.seaInFront()
-    const berg = this.host.prop(
+    const berg = (this.berg ??= this.host.prop(
       merge([P.cyl(0.05, 0.058, 0.02, '#F4FBFF', { scale: [1, 1, 0.75] }, 8), P.cone(0.03, 0.035, '#F4FBFF', { at: [-0.018, 0.026, -0.01] }, 7)]),
       1.5,
-    )
+    ))
     this.place(berg, lat, lon)
     berg.scale.setScalar(0.001)
     this.host.spin.add(berg)
-    const c = this.host.make(kind)
+    const c = this.spare[kind].pop() ?? this.host.make(kind)
     c.root.scale.setScalar(BERG_RIDER)
     berg.add(c.root)
-    c.root.position.y = 0.01
+    // (A recycled one still stands where it was at its pole.)
+    c.root.position.set(0, 0.01, 0)
+    c.root.quaternion.identity()
+    c.body.position.x = 0
     this.lost = { kind, c, berg, lat, lon, state: 'drift', t: 0, from: new Vector3(), to: { lat: 0, lon: 0, r: 1, pole: 'north' }, moved: false, waveAt: WAVE_S }
     sounds.sparkle()
     this.host.lost(kind)
@@ -397,7 +426,7 @@ export class GlobeExtras {
       }
     } else if (l.state === 'held') {
       // It follows her finger closely, legs dangling (a little sway behind the finger).
-      c.root.position.lerp(this.held, 1 - Math.exp(-dt * 18))
+      c.root.position.lerp(this.held, 1 - Math.exp(-dt * CARRY.follow))
       c.root.rotation.z = 0.25 * Math.sin(t * 9)
     } else if (l.state === 'fly' || l.state === 'back') {
       const dur = l.state === 'fly' ? 0.65 : 0.45
@@ -487,11 +516,12 @@ export class GlobeExtras {
     if (crowd.length > HOME_MAX) {
       const old = crowd.shift()!
       old.root.removeFromParent()
+      this.spare[l.kind].push(old)
     }
     l.berg.removeFromParent()
     this.lost = null
     this.saves++
-    this.nextIn = 3
+    this.nextIn = CARRY.next
     this.host.lost(null)
     this.host.show(null)
   }
@@ -679,7 +709,10 @@ export class GlobeExtras {
     if (id === 'lost') {
       const l = this.lost
       if (!l || l.state === 'fly' || l.state === 'wrong' || l.state === 'home') return null
-      if (l.state === 'held') return { facing: 1, size: 0.3 }
+      if (l.state === 'held') {
+        l.c.root.getWorldPosition(out)
+        return { facing: 1, size: 0.3 }
+      }
       return { facing: facing(l.c.root, 0.07), size: 0.3 }
     }
     if (id === 'marker') return { facing: facing(this.marker, 0.08), size: 0.22 }

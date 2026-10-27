@@ -417,7 +417,14 @@ const SCREENS = [
   { name: 'poles-huddle-hatch', hash: '#/world/poles/huddle/hatch', reset: true, wait: 1500 },
   { name: 'poles-huddle-chick', hash: '#/world/poles/huddle/hatch?chick=hatched', reset: true, wait: 5000 },
   { name: 'poles-huddle-sunrise', hash: '#/world/poles/huddle/sunrise', reset: true, wait: 6000 },
-  { name: 'poles-party-soon', hash: '#/world/poles/party/soon', wait: 800 },
+  // The finale (greybox): Terry over each leg of the flight, the postcard at the colony, a question of each kind
+  // (drag, spin, tap a pole, pick from the row) and the badge.
+  ...['fly?leg=north', 'fly?leg=warm', 'fly?leg=south', 'deliver', 'quiz?q=bear', 'quiz?q=south&stars=2', 'quiz?q=coldest&stars=3', 'quiz?q=summer&stars=4', 'badge'].map((to) => ({
+    name: `poles-party-${to.replace(/[?=&]/g, '-')}`,
+    hash: `#/world/poles/party/${to}`,
+    reset: true,
+    wait: to === 'deliver' ? 3600 : 2500,
+  })),
   // Canada: the train map (greybox 1): the whole country first, then the train at each stop and on the way (the
   // prairies, just out of the Spiral Tunnel); then an activity's and the finale's "coming soon" cards.
   { name: 'canada-intro', hash: '#/world/canada', reset: true, wait: 900 },
