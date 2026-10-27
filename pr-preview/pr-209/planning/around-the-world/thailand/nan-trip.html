@@ -16,13 +16,13 @@
   "title": "The Nan Road Trip",
   "icon": "🏔️",
   "kind": "Family trip",
-  "updated": "2026-10-26",
+  "updated": "2026-10-27",
   "status": {
     "label": "Built and on for Kaylee: the third Thailand trip, from Mommy's card to Agong's wall",
     "tone": "mint"
   },
   "pitch": "Kaylee presses the key and the big Pajero beeps hello. Mommy drives and Kaylee steers it round the bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.",
-  "next": "Dad tunes the steering in the **feel lab**: the [valley road with sliders](#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1) on the iPhone, the trackpad and the iPad, then sends the “For agent” note to bake in. Then **the whole trip** from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?",
+  "next": "The steering is Dad's now (tuned in the [feel lab](#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)). Next, **the whole trip** from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?",
   "facts": [
     {
       "icon": "⏱️",
@@ -1716,6 +1716,16 @@
                 "**Defaults moved to the middle** (`mountain.ts` `STEER`): slide 5.5 m/s (round 1: 7.5, round 2: 4.2), push curve 1.3 (1.6), smoothing 0.15 s (0.3), aim at least 10 m ahead (13). Also knobs: wheel size, dead middle, how much it aims closer when far off, turn rate, grip, top speed, back to her lane, how much the camera turns with the car, and the squeal's flick speed.",
                 "**The feel lab** (`lab/feel/FeelLab.tsx`, shared registry `kit/knobs.ts`): sliders with − and + steps over the real game, which stays full size and playable; changed knobs turn pink with ↺ back to the default; a graph of the last 6 s (her push, the steer, where she's steering to, the car, the nose turning); Reset, Link and “For agent”, which lists the changed numbers and the file to bake them into. What changed stays in the address bar (`feel.steer.slide=7`).",
                 "For the next games: AGENTS.md (“The feel lab”, and the greybox gate) and `docs/interactions.md` (“Tuning the feel”, with the steering lessons) say to declare feel numbers as knobs and link `?feel=1` in the PR."
+              ]
+            },
+            {
+              "title": "Dad's steering, baked in",
+              "date": "2026-10-27",
+              "status": "done",
+              "summary": "Dad tried five setups in the feel lab (snappy, quick but steady, floaty, Kaylee-proof, finger is the wheel), liked the snappy, forgiving and direct ones, and settled on a blend. His numbers are now the defaults; the knobs stay in.",
+              "items": [
+                "**Steering** (`mountain.ts` `STEER`): slide 6.5 m/s (was 5.5), wheel size 1.2× (1), dead middle 0.15 (0.12), smoothing 0.08 s (0.15), turn rate 2.1 rad/s (1.84), grip 13 (7), top speed 23 m/s (15.2), back to her lane 1.2 s (1.4). Unchanged: push curve 1.3, aim 10 m, pull 1.2, camera 0.3, squeal 5/s.",
+                "What his three favourites shared: a planted car (grip) and the camera turning a little with it; the two he liked less made it drifty or turned the camera less."
               ]
             }
           ]
