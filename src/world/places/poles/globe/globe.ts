@@ -20,7 +20,7 @@ import { makeHull, setOutlineResolution } from '../../../engine3d/outline'
 import { PAL } from '../../../engine3d/toon'
 import type { World3D } from '../../../engine3d/View3D'
 import { earthTexture, ll } from './earth'
-import { GlobeExtras, type Lost, type PokeId } from './extras'
+import { CARRY, GlobeExtras, type Lost, type PokeId } from './extras'
 import { globeMaterials } from './material'
 
 const FILE = 'src/world/places/poles/globe/globe.ts'
@@ -878,7 +878,10 @@ export class PolesGlobe implements World3D {
     const smoothing = SPIN.flick > 0 ? 1 - Math.exp(-dt / SPIN.flick) : 1
     this.fingerVy += (my / dt - this.fingerVy) * smoothing
     if (this.grab === 'sun') return this.dragSun(x, y)
-    if (this.grab === 'lost') return this.extras.drag(this.inFront(x, y), Math.hypot(x - this.down.x, y - this.down.y) > 14)
+    if (this.grab === 'lost') {
+      this.extras.finger = { x, y }
+      return this.extras.drag(this.inFront(x, y), Math.hypot(x - this.down.x, y - this.down.y) > CARRY.deadZone)
+    }
     // The spot under her finger follows it (at grip 1): a move of one globe-radius turns it by one radian.
     // (Rolled upside down for the south: the same finger moves turn it the other way.)
     const k = (Math.cos(this.rolled) * SPIN.grip) / this.globeOnScreen().r
@@ -925,7 +928,7 @@ export class PolesGlobe implements World3D {
       // Over the top of the globe: the north. Over the bottom: the south. (Upside down when the world is rolled.)
       const g = this.globeOnScreen()
       const dy = ((this.last.y - g.y) / g.r) * Math.sign(Math.cos(this.rolled) || 1)
-      this.extras.drop(dy < -0.45 ? 'north' : dy > 0.45 ? 'south' : null)
+      this.extras.drop(dy < -CARRY.poleReach ? 'north' : dy > CARRY.poleReach ? 'south' : null)
     }
     if (grab !== 'globe') return
     // A finger that stopped before letting go doesn't flick.
@@ -982,6 +985,7 @@ export class PolesGlobe implements World3D {
         const s = this.extras.spot(id as PokeId, tmp)
         if (s && s.facing > 0.2) {
           const p = this.toScreen(tmp)
+          if (id === 'lost') this.extras.carried = { x: p.x, y: p.y }
           // Above the globe and the friends (the lost one most of all: it's the thing to do).
           if (p.z < 1) spot = { x: p.x, y: p.y, size: Math.max(min, g.r * s.size), z: id === 'lost' ? 9500 : 6000, glow: id === 'lost' }
         }
@@ -1032,6 +1036,7 @@ export class PolesGlobe implements World3D {
 
   dispose() {
     this.unwatch()
+    this.extras.dispose()
     this.scene.clear()
     this.bag.dispose()
   }
