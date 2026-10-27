@@ -27,6 +27,7 @@ graph, and a "Copy for agent" note with the numbers to bake in):
 - [Canada's Campfire Night: the flashlight's size and softness, how it follows her finger, finding things, roasting](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/eyes?feel=1)
 - [Canada's Red Canoe: stroke power, turn and drag](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/glide?feel=1) ([the finger pull](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/glide?paddle=pull&feel=1))
 - [Canada's Animal Bridge: how mama follows her finger, how the line follows mama, planting the bridge](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/elk?feel=1)
+- [Canada's Salmon Leap: the flick's power, the arcs, the aim help, the rock, the log and the bears' boops](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/falls?feel=1)
 
 
 **Offline:** after it opens once on wifi it saves every game, picture and voice, so it plays in the car or on a plane.
@@ -334,10 +335,17 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [The shy grizzlies](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/bears?crossed=elk,sheep) ([the bridge already planted](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/bears?crossed=elk,sheep&green=1))
 - [The camera’s photos](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/album?crossed=elk,sheep,bears)
 
+**Salmon Leap (greybox)**
+
+- [Little steps](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/steps)
+- [The big falls](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/falls?home=3)
+- [The bears are fishing](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/bears?home=7) ([the spirit bear on the low ledge](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/bears?home=7&spirit=low))
+- [Home: the eggs hatch](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/eggs?home=11)
+
 **Coming soon**
 
 - Quebec City: [Carnival Snowballs](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/soon)
-- British Columbia: [Whale Watch](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/soon), [Salmon Leap](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/soon)
+- British Columbia: [Whale Watch](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/soon)
 - Finale: [Animal Homes + Pond Hockey](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/soon)
 
 ## How new things get made
