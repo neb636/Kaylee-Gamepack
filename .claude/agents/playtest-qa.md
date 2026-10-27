@@ -57,6 +57,9 @@ is broken. Passing every layout check does not make an activity fun.
 - **Juicy feedback:** every tap gets motion + sound (and often a word). Wrong answers wiggle gently and help.
 - **Can she get stuck?** Steps that can't be finished, taps that do nothing, overlays that block play (from the code and
   layout-qa's "broken" findings).
+- **Can she fail over and over?** Losing a race or a round now and then is fine (don't flag it). Flag a challenge she
+  would lose again and again, one that doesn't ease off after a miss or two, or a loss that is long, scolding or stops
+  play.
 - **Tone:** pink, cute, kind, her name only at the big moments (flag lines that repeat it); anything scary, confusing or ugly for a 5-year-old.
 
 ## 4. Report
