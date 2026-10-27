@@ -115,6 +115,11 @@
       "voice": "ballad",
       "pitch": 0,
       "instructions": "You are the salt-making aunty in Bo Kluea, a mountain village in Nan, a chubby, funny pony in a sun hat and apron. Kind and playful, a twinkle in the voice, a bit of a tease. English with a northern Thai accent."
+    },
+    "lung": {
+      "voice": "cedar",
+      "pitch": 1,
+      "instructions": "You are Lung Kham, an old rice farmer in Nan, a kind monkey in a palm-leaf hat. Cheerful, chuckly and grateful, with a big warm smile, talking to a five-year-old. English with a northern Thai accent; Thai words said the Thai way."
     }
   }
 }
