@@ -3834,6 +3834,7 @@ void main() {
   uniform float uTime;
   uniform float uHazeNear;
   uniform float uHazeFar;
+  uniform float uAlpha;
   varying vec3 vWorld;
   float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   void main() {
@@ -3852,9 +3853,11 @@ void main() {
     // Dashes thin out with distance (no shimmering far away).
     dash *= 1.0 - smoothstep(14.0, 42.0, dist);
     col = mix(col, uDash, dash * 0.7);
-    col = mix(col, uHaze, smoothstep(uHazeNear, uHazeFar, dist));
-    gl_FragColor = vec4(col, 1.0);
+    float haze = smoothstep(uHazeNear, uHazeFar, dist);
+    col = mix(col, uHaze, haze);
+    // (Far off it turns solid, so the haze matches the sky's; dashes are never see-through.)
+    gl_FragColor = vec4(col, mix(uAlpha, 1.0, max(haze, dash * 0.7)));
     // The colors are linear (like every material's): convert for the screen, as three's own materials do.
     #include <colorspace_fragment>
   }
-`,qi=class{mesh;mat;constructor(e,t){this.mat=t.add(new C({uniforms:{uDeep:{value:new F(e.deep)},uShallow:{value:new F(e.shallow)},uDash:{value:new F(`#FFFFFF`)},uHaze:{value:new F(e.haze)},uTime:{value:0},uHazeNear:{value:e.hazeNear},uHazeFar:{value:e.hazeFar}},vertexShader:Gi,fragmentShader:Ki})),this.mesh=new B(t.add(new w(e.size,e.size)),this.mat),this.mesh.rotation.x=-Math.PI/2}update(e){this.mat.uniforms.uTime.value=e}setColors(e,t,n){let r=this.mat.uniforms;r.uDeep.value.set(e),r.uShallow.value.set(t),r.uHaze.value.set(n)}};function Ji(e,t,n){return .05*Math.sin(e*.21+n*1.3)+.04*Math.sin(t*.17-n*1.1)+.02*Math.sin((e-t)*.5+n*2.1)}export{ri as C,Z as E,ai as S,Wr as T,yi as _,Ai as a,li as b,Ni as c,Di as d,Ti as f,gi as g,pi as h,ji as i,Pi as l,xi as m,Ji as n,Ii as o,Oi as p,Wi as r,Mi as s,qi as t,Ei as u,vi as v,ti as w,fi as x,hi as y};
+`,qi=class{mesh;mat;constructor(e,t){this.mat=t.add(new C({uniforms:{uDeep:{value:new F(e.deep)},uShallow:{value:new F(e.shallow)},uDash:{value:new F(`#FFFFFF`)},uHaze:{value:new F(e.haze)},uTime:{value:0},uHazeNear:{value:e.hazeNear},uHazeFar:{value:e.hazeFar},uAlpha:{value:e.opacity??1}},vertexShader:Gi,fragmentShader:Ki,transparent:(e.opacity??1)<1})),this.mesh=new B(t.add(new w(e.size,e.size)),this.mat),this.mesh.rotation.x=-Math.PI/2}update(e){this.mat.uniforms.uTime.value=e}set opacity(e){this.mat.uniforms.uAlpha.value=e}setColors(e,t,n){let r=this.mat.uniforms;r.uDeep.value.set(e),r.uShallow.value.set(t),r.uHaze.value.set(n)}};function Ji(e,t,n){return .05*Math.sin(e*.21+n*1.3)+.04*Math.sin(t*.17-n*1.1)+.02*Math.sin((e-t)*.5+n*2.1)}export{ri as C,Z as E,ai as S,Wr as T,yi as _,Ai as a,li as b,Ni as c,Di as d,Ti as f,gi as g,pi as h,ji as i,Pi as l,xi as m,Ji as n,Ii as o,Oi as p,Wi as r,Mi as s,qi as t,Ei as u,vi as v,ti as w,fi as x,hi as y};

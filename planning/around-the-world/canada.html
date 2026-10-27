@@ -18,11 +18,11 @@
   "kind": "New place (3D + 2D)",
   "updated": "2026-10-27",
   "status": {
-    "label": "Greybox 4 built: Dad shines the flashlight",
+    "label": "Greybox 5 built: Dad paddles the canoe",
     "tone": "pink"
   },
   "pitch": "Sparkle's balloon lands in snowy **Quebec City**, where **Maple the beaver** wants to see all of Canada and gather a hockey team on the way. Kaylee pushes the red **Maple Leaf Train** across a 3D map of the country to four stops: **Quebec City** (maple taffy on snow, rolling carnival snowmen), **Mont-Sainte-Anne** (biking down the mountain, a campfire night with a flashlight), **Banff** (a red canoe on a turquoise lake, the animal bridge over the highway) and **British Columbia** (whales and sea otters off Tofino, salmon and the white spirit bear). Every stop has one 3D and one 2D activity, and about 40 animals to meet and collect in Maple's book. The finale is a pond hockey game on Ottawa's frozen canal.",
-  "next": "Dad plays **greybox 4, Campfire Night** on the iPad (the PR's links: find the eyes, who's that sound, the marshmallow bandit, roast a marshmallow, around the fire; add `?feel=1` to tune the flashlight's size and softness, how it follows her finger, how close and how long finding takes, and the roasting) and answers the **[open questions](#questions)**. Next: **greybox 5: Red Canoe**.",
+  "next": "Dad plays **greybox 5, Red Canoe** on the iPad, both ways to paddle side by side (the PR's links: glide, where the blue comes from, follow the loon, the loon family; the switch at the top right swaps `?paddle=stroke` and `?paddle=pull`; add `?feel=1` to tune the stroke's power, turn and drag, and the pull), says which way stays, and answers the **[open questions](#questions)** (Lake Louise or Moraine Lake?). Next: **greybox 6: Animal Bridge**.",
   "facts": [
     {
       "icon": "🚂",
@@ -1905,13 +1905,14 @@
             {
               "n": 6,
               "title": "Greybox: Red Canoe",
-              "status": "next",
-              "md": "The paddle feel is the riskiest; the greybox tries the stroke and the finger-pull fallback side by side (`?paddle=stroke` / `?paddle=pull`)."
+              "status": "done",
+              "md": "The paddle feel was the riskiest, so the greybox has both ways side by side: `?paddle=stroke` (her finger is the paddle's blade: drag it back beside the canoe, a stroke on the left turns it right) and `?paddle=pull` (the fallback: her finger on the water pulls the canoe there). Glide from the dock, the glacier stream's milky rock flour (the lake glows bluer), then the loon diving and popping up, with her chick by the glacier. Stroke power, turn and drag are feel-lab knobs.",
+              "date": "2026-10-27"
             },
             {
               "n": 7,
               "title": "Greybox: Animal Bridge",
-              "status": "todo"
+              "status": "next"
             },
             {
               "n": 8,
@@ -2109,6 +2110,58 @@
                 }
               ],
               "pr": 244
+            },
+            {
+              "title": "Greybox 5: Red Canoe",
+              "date": "2026-10-27",
+              "status": "done",
+              "summary": "A glacier lake in Banff, about 100 m long, bright turquoise among snowy peaks, seen from just behind the canoe: the dock at the south end, the glacier coming down to the water at the north end, the glacier stream tumbling into the north-west corner. The water is the shared `engine3d/water.ts`, now see-through, over a mirror image of the shore and the mountains, so the lake reflects them. Maple sits in the stern of the red canoe in a pink life jacket, holding the paddle; a backpack rides in the bow. Placeholder shapes in the toon look, no voices yet; a short line at the bottom says what's on screen, for Dad.",
+              "items": [
+                "**Two ways to paddle, side by side** (a switch at the top right swaps them from the same part of the lake; the address bar keeps `paddle`):",
+                {
+                  "text": "**Stroke** (`?paddle=stroke`, the default): her finger is the paddle's blade, and Maple's paws follow the shaft.",
+                  "items": [
+                    "She puts her finger on the water beside the canoe and drags it back: the blade dips in under her finger, the canoe glides forward and turns away from that side (a stroke on the left turns it right). Left, right, left goes straight.",
+                    "Long strokes glide far; a stroke faster than the splash speed pushes no harder and splashes. A stroke far out from the hull turns more than one close to it.",
+                    "Moving her finger forward lifts the blade out (no brake), so scrubbing back and forth still paddles. Held still in the water, the blade slows the canoe and turns it toward that side.",
+                    "Only her finger's own movement counts (the canoe gliding past a still finger isn't a stroke), measured in the canoe's frame on screen, so it works whichever way the camera faces."
+                  ]
+                },
+                {
+                  "text": "**Pull** (`?paddle=pull`, the fallback): her finger holds a spot on the water (a pink ring) and the canoe swings round and is pulled toward it, gentler as it gets close; Maple paddles by herself, side to side. A tap gives a little pull; a finger held on the glacier or the loon pulls there too."
+                },
+                "Either way the canoe glides on after she lets go and slowly stops. It bumps softly off the pebbles and, near the shore, turns gently back toward open water so it never gets stuck facing the beach. It wakes ripples off the bow and the stern, and rocks with each stroke.",
+                "**Glide** (`glide`): from the dock (the first look shows the whole lake for two seconds). Calm water, the mountains in the water, the duck family paddling in circles. Glide close to the ducks and they line up behind the canoe like a parade for 25 s (the ducklings peep). After about 32 m of paddling (or reaching the milky water) it's on to the stream.",
+                "**Where the blue comes from** (`stream`): the rock flour, a milky swirl spreading from the stream's mouth, sparkles to call her and Maple looks at it. Paddle into it (or tap it once she's near) and it sparkles all round, Maple cheers, and the lake glows bluer; from then on the canoe's wake is turquoise. After 18 s without finding it, the stream's current carries her there.",
+                "**Follow the loon** (`loon`): bubbles come up ahead of the canoe, then the loon pops up there, laughing (a synthesized tremolo); she floats, turning to face the canoe and calling, until the canoe comes close: she flaps, Maple waves, and down she goes, bubbles somewhere else. Three times; the closer-is-close-enough grows from 6 to 11 m after 12 s, and after 22 s she swims toward the canoe herself. The fourth time the bubbles are by the glacier, and she comes up with her chick on her back.",
+                "**The loon family** (`glacier`): the whole lake glows turquoise, the mother (and her chick) and the father swim round and round the canoe, sparkles, Maple cheers and slaps her tail, confetti, and 🔁 sets off from the dock again. Paddling still works.",
+                "**Pokes:** Maple (a wave and a tail slap), the loon (she calls), the ducks (they flap and quack), the beaver lodge (a beaver pops up, looks round and slaps his tail; Maple slaps back; he also pops up when the canoe glides by), the moose wading by the east shore (lifts his dripping head; the Mountain Bike's moose), the pika on the rock pile (pops up: eep!), the ground squirrel on his rock by the dock (stands up and chirps), a trout that jumps now and then near the canoe (tap it: another jump; a tap on the water sometimes makes one jump there), the glacier (it cracks and an ice chunk falls into the lake, splashes, floats and drifts), any mountain (snow slides off its peak; now and then one does by itself), the rock flour (sparkles), the water (a plop). No paddling for 8 s, a hand shows how (a stroke beside the canoe, or a press ahead of it).",
+                "**Knobs** (`?feel=1`): `canoeStroke` (stroke power, splashes above, turn, wide strokes turn more, held still: brake and turn, reach, held still below, lifts out at), `canoePull` (pull, full pull from, stops pulling at, turns toward it, a tap pulls for) and `canoe` (drag, top speed, keel, turn slows, dizzy at, camera turns with it). The graph shows her stroke's speed, whether the blade is in the water and on which side, the canoe's speed, its turning and any sideways slide."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "items": [
+                    "No `dock` section and no `?lake=` yet: Lake Louise or Moraine Lake is still an open question, so it's one glacier lake with Moraine's rock pile (the pika) and a glacier at the far end. The story line before the first touch comes with the voices. The sections are `glide`, `stream`, `loon`, `glacier`, each with `paddle`.",
+                    "Maple sits in the stern holding the paddle (Kaylee's finger moves its blade, the way she steers Maple's bike), not in the bow.",
+                    "The silly moments are in: spin the canoe fast for a second and Maple gets dizzy (her head wobbles, stars go round, a wheee); glide into the ducks and they parade behind.",
+                    "Added a ground squirrel, a trout you can tap, a glacier that drops ice chunks, and the father loon in the payoff. The moose is the bike's.",
+                    "Shared code: `engine3d/water.ts` takes an optional `opacity` (below 1 the water is see-through; far off and on its white dashes it stays solid). Nothing else that uses it changes."
+                  ]
+                },
+                {
+                  "type": "list",
+                  "title": "Known small things",
+                  "items": [
+                    "A stroke's length is measured on screen, so the same swipe is a little longer on an iPhone than on an iPad.",
+                    "The reflection is a mirrored copy of the shore under the see-through water (no real mirror), so the canoe and the animals have none.",
+                    "In a headless test browser it runs at about 12 frames a second; only the iPad says how the strokes feel.",
+                    "Placeholder shapes everywhere (the art gate gives the canoe, Maple, the loons and the lake their looks)."
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -2118,7 +2171,7 @@
       "id": "sections",
       "title": "Sections: tap to play",
       "icon": "🔗",
-      "lede": "In play order. Built so far: the hub, Mountain Bike, Sugar Snow and Campfire Night; the rest are the planned links.",
+      "lede": "In play order. Built so far: the hub, Mountain Bike, Sugar Snow, Campfire Night and Red Canoe; the rest are the planned links.",
       "blocks": [
         {
           "type": "sections",
@@ -2371,37 +2424,48 @@
           "items": [
             {
               "n": 1,
-              "id": "dock",
-              "name": "The dock",
-              "status": "todo",
-              "query": "lake=moraine"
+              "id": "glide",
+              "name": "Glide"
             },
             {
               "n": 2,
-              "id": "glide",
-              "name": "Glide",
-              "status": "todo"
+              "id": "stream",
+              "name": "Where the blue comes from"
             },
             {
               "n": 3,
-              "id": "stream",
-              "name": "Where the blue comes from",
-              "status": "todo"
+              "id": "loon",
+              "name": "Follow the loon"
             },
             {
               "n": 4,
-              "id": "loon",
-              "name": "Follow the loon",
-              "status": "todo"
-            },
-            {
-              "n": 5,
               "id": "glacier",
-              "name": "The loon family",
-              "status": "todo"
+              "name": "The loon family"
             }
           ],
           "title": "Red Canoe"
+        },
+        {
+          "type": "sections",
+          "title": "Red Canoe: handy cases",
+          "base": "#/world/canada/canoe/",
+          "items": [
+            {
+              "id": "glide",
+              "name": "Pulled by her finger instead (the fallback)",
+              "query": "paddle=pull"
+            },
+            {
+              "id": "glide",
+              "name": "Tune the stroke's power, turn and drag (feel lab)",
+              "query": "feel=1"
+            },
+            {
+              "id": "glide",
+              "name": "Tune the finger pull (feel lab)",
+              "query": "paddle=pull&feel=1"
+            }
+          ]
         },
         {
           "type": "sections",
