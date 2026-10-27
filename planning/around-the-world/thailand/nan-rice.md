@@ -78,14 +78,17 @@ chime), the farm hut's chime.
 - Leave birds pecking: they get **rounder** (a fat-bird joke). A fat bird she shoos waddle-hops away before it flies.
 - Walk her in circles: the seedlings stay in that pattern through the grow round (a heart of rice).
 
-**Story frame (≤ 2 lines before her hands are busy):** Sparkle: "Let's plant rice, Kaylee! Walk in the water." The
-first paddy is already flooded, so her first touch plants at once.
-Sparkle speaks during play only when:
-- she plants in a dry paddy for the first time: "Rice likes water! Open the gate." (and the gate glows)
-- round 2 begins: "The birds want the rice! Shoo, shoo!"
-- round 3 begins: "It's golden! Time to cut the rice."
-- thresh begins: "Bang the rice! The grains fall out."
-- stuck ~8 s: the 👆 on what to do next (no line, or the round's line once more)
+**Story frame (≤ 2 lines before her hands are busy):** the farm belongs to **Lung Kham** (an old monkey farmer,
+"lung" = uncle), who needs a helper, the way Chef Fu needs one in China's dumpling house. Lung: "Sawasdee krap! I need a
+helper!" Sparkle: "Walk through the water to plant!" (about 5 s together). The first paddy is already flooded, so her
+first touch plants at once. (Until 2026-10-27 the farm had no farmer and Sparkle opened with "Let's plant rice,
+Kaylee!": nobody needed anything, so Dad asked for a reason to help.)
+Each round, Lung says what it's for and Sparkle what to do:
+- she plants in a dry paddy for the first time: Sparkle "Rice likes water! Open the gate." (and the gate glows)
+- round 2 begins: Lung "Oh no! Birds in my rice!", Sparkle "Shoo them away!"
+- the rice ripens: Lung "Golden! My rice is ready!"; round 3 begins: Sparkle "Walk through the rice to cut it!"
+- thresh begins: Lung "Now we bang the grains out!", Sparkle "Tap to bang the rice!"
+- stuck ~8 s: the 👆 on what to do next, and the round's hint
 
 **What it teaches, by doing:**
 - Rice grows **standing in water** (she floods the paddies; droopy seedlings stand up when the water comes).
@@ -310,7 +313,7 @@ good (speed, the 0.5 m brush, the plip sound, the splashes) before the birds, th
    card. One clip (the video line).
 3. Then the trip plan's own later steps cover this stop too: the look (step 8), voices and QA (step 9).
 
-Out of scope (keep it small): no farmer character (the scarecrow and the buffalo carry the farm), no seasons or
+Out of scope (keep it small): no seasons or
 day/night, no selling or counting money, no tools to pick, no saving her planting pattern between visits, no flat
 version (3D activities don't need one).
 
@@ -398,14 +401,38 @@ Dad played greybox B (2026-10-25): threshing feels good (ten bangs, the swing he
 - Left for later (`known-issues.md`): the terraces don't show on the farm cameras (only the deck and very wide
   screens); grow has short stretches where only the clock moves; Daddy stands still while she threshes.
 
-**Next:** Dad listens on the iPad (lip sync, whether Daddy talks too much). Then the next stop: Bo Kluea salt (step 4).
+**Lung Kham, the farmer who needs help (2026-10-27, Dad: "the farmers need help", after China's dumpling house):**
+- Lung Kham, an old monkey farmer (white moustache, the indigo mor hom shirt, a scarf, his own ngob with a mint band),
+  stands on the boardwalk's right end (`LUNG_AT`; while she threshes, on the bank at her left, where the camera sees
+  him). He watches her, hops when a paddy's done, waves when a round starts, and talks in his own voice (`cast.json`
+  `lung`: cedar, a northern Thai accent). Tap him for his lines in turn. He's in the character lab's new "Nan trip"
+  group.
+- The story in his voice: the opening ("Sawasdee krap! I need a helper!"), the first gate ("Ahh! Water for my rice!"), all
+  planted ("All planted! Khob khun krap!", which replaced Daddy's "Our very own rice farm!"), the birds, the rice
+  growing tall (fills a quiet stretch of the grow round), ripe, and the sticky rice ("Sticky rice, for my helper!").
+- Thai by doing, like the dumpling house's "Ee, are, san": Lung counts the five bundles as she threshes them ("Neung!
+  Song! Sahm! See! Hah!", then "That's one to five in Thai!"). Daddy's "Whack! Good one!" is gone (it would have cut
+  into the count); Daddy still hops. Mommy says "Aroi mak! That means so yummy!" at the first ball of sticky rice;
+  Sparkle's sticky-rice fact moved to the second.
+- New tap-to-hear facts (Sparkle, first poke): the buffalo ("Buffalo helped farmers get the mud ready!") and a duck
+  ("Ducks eat the bugs in the rice!"). Lung's "Hey! My scarecrow!" the first time she spins it.
+- Kaylee's name is gone from "Look at those rows!" and the video's "Want to see real farmers grow rice?" (name only at
+  the photo and in Daddy's "Kaylee? Where did you go?" joke).
+- Far-off farm life: every 5-10 s, when nobody's talking, a quiet frog, bird, duck, chime or buffalo
+  (`riceSfx.far`), so the farm is never silent between touches.
+- Sparkle waits her turn behind Lung: `TripGuide` now counts a line that's still loading as talking, so a friend's
+  line then Sparkle's, back to back, play in that order on every trip leg (before, Sparkle cut the friend off when
+  their clip hadn't started yet).
+
+**Next:** Dad listens on the iPad: Lung's voice and accent (the Thai numbers especially), and whether Lung + Daddy +
+Sparkle is too much talk. Then the next stop: Bo Kluea salt (step 4).
 
 ## Fun check
 
 - **Core verb:** lead Kaylee; it deepens: plant behind her, shoo birds, cut the gold. One side verb: bang the bundles.
 - **Hands busy:** one line, and paddy A is wet so the first touch plants. No waiting longer than the 2 s beats.
 - **Choices:** order of paddies and gates, the planting pattern, which birds, where to cut.
-- **Pokeables:** gates, scarecrow, buffalo, ducks, frog, Daddy, straw pile, nursery, chimes.
+- **Pokeables:** gates, scarecrow, buffalo, ducks, frog, Daddy, Lung, straw pile, nursery, chimes.
 - **Grows:** brown → water → green rows → gold → bundles → grains → sticky rice.
 - **Surprise:** droopy seedlings jumping up when the water arrives; fat birds; only her horn showing in the tall rice;
   flopping into the straw pile; straw on Daddy's head.

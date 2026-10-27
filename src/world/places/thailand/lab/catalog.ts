@@ -8,6 +8,7 @@ import { GRANDMA, KIDS } from '../activities/boat-trip/bay/village'
 import { KID_LOOKS } from '../activities/mall-trip/games/race/racer'
 import { KID_C, STAFF_LOOKS } from '../activities/mall-trip/hall/kids'
 import { SERVER } from '../activities/mall-trip/pizza/room'
+import { LUNG } from '../activities/nan-trip/rice/farm'
 import { FAMILY } from '../characters/family'
 import { COACH_LOOK, LOOKS, PATIENT_LOOKS, type Look, type Wearable } from '../characters/looks'
 import cast from '../cast.json'
@@ -15,11 +16,12 @@ import { L } from '../lines'
 import { ATTENDANT } from '../trip/legs/plane'
 import { OFFICER } from '../trip/legs/airport'
 
-export type CastGroup = 'family' | 'trip' | 'mall' | 'critters'
+export type CastGroup = 'family' | 'trip' | 'mall' | 'nan' | 'critters'
 export const GROUPS: { id: CastGroup; name: string }[] = [
   { id: 'family', name: 'Kaylee & family' },
   { id: 'trip', name: 'Boat trip' },
   { id: 'mall', name: 'Mall day' },
+  { id: 'nan', name: 'Nan trip' },
   { id: 'critters', name: 'Bay critters' },
 ]
 
@@ -77,6 +79,8 @@ const mall: CastEntry[] = [
   ...(Object.keys(PATIENT_LOOKS) as (keyof typeof PATIENT_LOOKS)[]).map((id) => person(`patient-${id}`, `${id[0].toUpperCase()}${id.slice(1)} patient`, 'Vet clinic patient', 'mall', PATIENT_LOOKS[id], 'characters/looks.ts', undefined, 'patients')),
 ]
 
+const nan: CastEntry[] = [person('lung', 'Lung Kham', 'Rice farmer', 'nan', LUNG, 'activities/nan-trip/rice/farm.ts', 'lung')]
+
 const CRITTER_INFO: Record<CritterId, { name: string; color: string }> = {
   needlefish: { name: 'Needlefish', color: '#B8E6D8' },
   eagle: { name: 'Sea eagle', color: '#8E8AA8' },
@@ -90,7 +94,7 @@ const CRITTER_INFO: Record<CritterId, { name: string; color: string }> = {
 }
 const critters: CastEntry[] = CRITTERS.map((id) => ({ id, name: CRITTER_INFO[id].name, who: 'Phang Nga Bay sticker', group: 'critters', kind: 'critter', critter: id, src: 'activities/boat-trip/bay/critters.ts', color: CRITTER_INFO[id].color }))
 
-export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...critters]
+export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...nan, ...critters]
 export const castById = (id: string | undefined) => CAST.find((c) => c.id === id)
 
 /** Kaylee's outfits (what she wears on each trip and at each HarborLand game). */

@@ -140,6 +140,8 @@ export const WALK = { x0: -6.0, x1: 6.1, z0: -3.85, z1: 4.3 }
 
 export const KAYLEE_AT: V3 = [-1.3, BOARDWALK.y, 4.0]
 export const NICK_AT: V3 = [-4.35, BOARDWALK.y, 4.05]
+/** Lung Kham, the farmer, on the boardwalk's right end (beside the threshing corner, so he's there to count). */
+export const LUNG_AT: V3 = [3.6, BOARDWALK.y, 4.1]
 export const SCARECROW: V3 = [1.75, 0, -0.02]
 export const NURSERY = { x: -5.35, z: 2.3, w: 1.0, d: 1.7 }
 export const BANANA: V3 = [-5.55, 0, 0.0]
@@ -176,6 +178,7 @@ export const BLOCKERS: [number, number, number][] = [
   [RACK.x - RACK.len / 2, RACK.z, 0.3],
   [RACK.x + RACK.len / 2, RACK.z, 0.3],
   [BASKET[0], BASKET[2], 0.5],
+  [LUNG_AT[0], LUNG_AT[2], 0.35],
 ]
 
 // ---------------------------------------------------------------- Stop Time Cafe's deck

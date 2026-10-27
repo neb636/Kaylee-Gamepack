@@ -245,7 +245,14 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [Summer melt: push the floes](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/melt)
 - [Back to Mama](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/mama)
 
-**Coming soon**: [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Penguin Slide](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Iceberg Maker](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+**Penguin Slide (greybox)**
+
+- [The gentle slope](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/top)
+- [Bumps and cracks](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps) ([the moguls run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=left), [the kicker run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=right))
+- [Under the sea](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/dive)
+- [Feeding Pebble](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/home?krill=12)
+
+**Coming soon**: [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Iceberg Maker](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
 
 ### Canada
 
