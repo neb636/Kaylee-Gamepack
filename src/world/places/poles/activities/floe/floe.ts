@@ -429,6 +429,8 @@ export class FloeHop implements World3D {
 
   private launch() {
     const range = this.range
+    // Where her last move aimed (it may have come after this frame's update).
+    this.aimAt.set(this.pos.x + this.aimDir.x * range, 0, this.pos.z + this.aimDir.y * range)
     const was = this.on!
     // He pushes off: his floe bobs and leans away.
     was.hv -= FLOES.thump * 0.4
@@ -918,6 +920,11 @@ export class FloeHop implements World3D {
 
   pointerDown(x: number, y: number, id?: string) {
     this.lastTouch = this.time
+    // A second finger while one already holds Pola or a floe: View3D now follows the new finger, so let go of the old
+    // grab cleanly (Pola stands back up, unflung) before taking the new one.
+    if (this.grab === 'pola' && this.mode === 'aim') this.setMode('stand')
+    this.pullPx = this.range = this.power = 0
+    this.held = null
     if (this.section === 'story') this.endStory()
     const pp = this.polaOnScreen()
     const onPola = id === 'pola' || (!id && Math.hypot(x - pp.x, y - pp.y) < pp.r)
@@ -925,7 +932,6 @@ export class FloeHop implements World3D {
       this.grab = 'pola'
       this.down = { x, y }
       this.downHit.copy(this.hitPlane(x, y, this.surfaceY(this.on)) ?? this.pos)
-      this.power = this.pullPx = this.range = 0
       this.setMode('aim')
       sounds.pickup()
       return
