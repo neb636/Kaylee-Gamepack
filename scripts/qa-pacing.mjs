@@ -87,6 +87,7 @@ const SCENARIOS = [
   { name: "peru rosa's rainy river", id: 'river', hash: '#/world/peru/river', reset: true },
   { name: "thailand agong's house (arrival)", id: 'thailand', hash: '#/world/thailand', reset: true, play: false },
   { name: 'poles globe hub', id: 'poles', hash: '#/world/poles', reset: true },
+  { name: 'poles ice floe hop', id: 'floe', hash: '#/world/poles/floe', reset: true },
   { name: 'canada train map', id: 'canada', hash: '#/world/canada', reset: true },
   // The trip there, one run per leg (each from its own section link).
   { name: "thailand: kaylee's wardrobe", id: 'wardrobe', hash: '#/world/thailand/hub/wardrobe?drawer=head', reset: true },

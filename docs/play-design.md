@@ -32,7 +32,9 @@ We keep our story, learning and stamps, but the minute-to-minute play should fee
    most.
 6. **Silly is good, and nothing is wrong.** Odd play gets a funny reaction, not an "oops": bump a bridge and the hat
    pops off, overfill the cup and it's a fountain. Offer absurd choices (a bathtub gondola). Wrong-answer hints are
-   for the few real questions, not for play.
+   for the few real questions, not for play. A real contest is different: a race or a game *can* be lost now and
+   then, and that makes winning feel earned. Keep losses rare (she wins most of the time, and it gets easier after a
+   miss), short and kind, with "again!" right away. What she must never meet is a wall she fails at over and over.
 7. **A quiet guide.** Sparkle speaks when something new appears, or when Kaylee hasn't made progress for about 8
    seconds. Not after every action. Friends react with short lines and sounds. Silence while her hands are busy is
    fine; she's playing.

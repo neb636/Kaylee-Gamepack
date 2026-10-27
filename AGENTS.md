@@ -82,8 +82,13 @@ smoke test still work). Don't add packages when the SDK or a pre-approved librar
 1. **No reading required.** Every instruction is spoken. Show short text too (for Dad), with a way to hear it again
    (`<SayButton>`, the prompt bubble). Every exact phrase that can be spoken is listed for recording (see "Voices");
    keep random speech finite. Never use the iPad's built-in voice.
-2. **No failing, ever.** No lives, no punishing timers, no "game over". Odd play gets a silly reaction; when she's stuck,
-   *help* (highlight it, bring it closer, show the way).
+2. **Losing now and then is fine; failing over and over isn't.** A race she sometimes loses, a tower that sometimes
+   topples, a shot the goalie sometimes saves is real play, and winning means more when it was close. What isn't OK
+   is something so hard she fails again and again, or a loss that ends the fun: no lives, no "game over", no timers
+   that stop play. Tune it so she wins most of the time, and ease off quietly after a miss or two (slower rivals, a
+   wider gap, a bigger target). A loss is short and kind ("So close! Again?") and she can go again at once. Odd play
+   gets a silly reaction; when she's stuck, *help* (highlight it, bring it closer, show the way). A stamp, a sticker
+   or the trophy never waits on winning one round.
 3. **Big touch targets** (≥ 88px on iPad, ≥ 64px on iPhone and for 3D tap targets), one clear thing to do at a time,
    lots of juicy feedback: `sounds.*`, `sfx`, bounces, `burst()` confetti for mini-wins.
 4. **Go easy on her name.** Hearing "Kaylee" in line after line gets annoying: save it for the big moments (a stamp,
@@ -390,7 +395,8 @@ the country's `known-issues.md` (Thailand has one) instead of growing the PR.
    every section by themselves and only fail on exceptions, so UI tweaks don't break them. A bespoke spec is for a
    non-visual contract only (voice plays, GPU memory, a deep link lands). Step-by-step walkthroughs are
    tagged `@behavior`: they run nightly (`npm run test:behavior`), not on PRs.
-4. Re-read "What Kaylee told us" and the design rules. Is every instruction spoken? Is there no way to fail? Are her
+4. Re-read "What Kaylee told us" and the design rules. Is every instruction spoken? Does she win most of the time, and can she never fail
+   over and over? Are her
    hands busy? Does it work in portrait and landscape? Run the fun check in `docs/play-design.md`.
 5. Update the plan (what's built, what's next) so the next session can pick it up. For a plan page: the build step,
    a `log` entry, the hero's `next`, then `node scripts/plan.mjs check` (the `plan-page` skill).

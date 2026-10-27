@@ -559,6 +559,33 @@ GAME_SCENARIOS.push(
     },
   },
   {
+    // Ice Floe Hop: grab Pola, pull back (he crouches, the arc and ring show), let go: the leap and the landing thump on
+    // the next floe; then a fling far off to the side: the belly-flop, the swim and the climb out.
+    name: 'poles-floe-fling',
+    seconds: 9,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/poles/floe/steady`)
+      await page.waitForFunction(() => window.__polesFloeQA?.().mode, null, { timeout: 20000 })
+      await page.waitForTimeout(1200)
+    },
+    act: async (page) => {
+      const pull = async (dx, dy) => {
+        const b = await page.locator('[data-anchor="pola"]').boundingBox()
+        if (!b) throw new Error('no Pola')
+        const x = b.x + b.width / 2
+        const y = b.y + b.height / 2
+        await page.mouse.move(x, y)
+        await page.mouse.down()
+        await page.mouse.move(x + dx, y + dy, { steps: 14 })
+        await page.waitForTimeout(500)
+        await page.mouse.up()
+      }
+      await pull(0, Math.min(110, vp.height * 0.18))
+      await page.waitForTimeout(2000)
+      await pull(Math.min(240, vp.width * 0.3), Math.min(60, vp.height * 0.1))
+    },
+  },
+  {
     name: 'poles-sun',
     seconds: 6,
     setup: async (page, base) => {

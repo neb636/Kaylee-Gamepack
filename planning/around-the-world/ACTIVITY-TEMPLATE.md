@@ -25,6 +25,9 @@ Side verb (at most one): <e.g. paint the mask> or none.
 
 **Silly moments (instead of failure):** <what happens when she does something odd>.
 
+**Can she lose? (races and contests only):** <none, or: how often (she wins most of the time), what a loss looks
+like (short, kind, go again at once), how it eases off after a miss or two>.
+
 **Story frame (at most 2 lines before her hands are busy):** <friend line> / <Sparkle line>.
 When Sparkle talks during play: <only when something new appears, or after ~8 s stuck: list those moments>.
 
