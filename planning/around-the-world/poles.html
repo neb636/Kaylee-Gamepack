@@ -15,14 +15,14 @@
   "schema": 1,
   "title": "The Poles: North and South",
   "icon": "🧊",
-  "kind": "New place (2D)",
-  "updated": "2026-10-26",
+  "kind": "New place (3D + 2D)",
+  "updated": "2026-10-27",
   "status": {
     "label": "Planned: Dad reads it",
     "tone": "lav"
   },
   "pitch": "Sparkle's balloon flies to the top of the world and the bottom. Up north, **Pola the polar bear cub** lives on ice floating on the sea; down south, **Pebble the penguin chick** lives on a giant land made of ice. They are pen pals who can never meet, because polar bears only live in the north and penguins only live in the south. Kaylee hops floes, belly-slides, huddles in a blizzard and cracks icebergs off a glacier, and learns the difference by playing in both. At the very end, Sparkle's **Polar Quiz** checks what she learned, and she answers by doing: dragging Pola to his pole, spinning the globe to the bottom.",
-  "next": "Dad reads this plan and answers the **open questions** (one place or two, the friends' names, Santa or not). Then **greybox 1: the globe hub** (spin the globe, drag the sun, see day and night swap between the poles); the quiz reuses that same globe. Then one activity per PR, toy first.",
+  "next": "Dad reads this plan and answers the **open questions** (one place or two, the friends' names, Santa or not, and the [3D and 2D split](#look)). Then **move the 3D engine out of Thailand** (so the Poles don't need the family code), then **greybox 1: the globe hub** in 3D (spin the globe, drag the sun, see day and night swap between the poles); the quiz and the finale reuse that same globe. Then one activity per PR, toy first.",
   "facts": [
     {
       "icon": "🧭",
@@ -33,6 +33,11 @@
       "icon": "🎮",
       "value": "5 + finale",
       "label": "2 north · 2 south · 1 both"
+    },
+    {
+      "icon": "🧊",
+      "value": "4 in 3D · 2 in 2D",
+      "label": "globe, floes, slide, icebergs · coats, huddle"
     },
     {
       "icon": "⏱️",
@@ -149,7 +154,7 @@
                 {
                   "icon": "🌍",
                   "label": "Spin the globe",
-                  "note": "top = north, bottom = south",
+                  "note": "3D · top = north, bottom = south",
                   "hl": true
                 }
               ]
@@ -159,11 +164,13 @@
               "steps": [
                 {
                   "icon": "🐻‍❄️",
-                  "label": "Ice Floe Hop"
+                  "label": "Ice Floe Hop",
+                  "note": "3D"
                 },
                 {
                   "icon": "🦊",
-                  "label": "Snow Coats"
+                  "label": "Snow Coats",
+                  "note": "2D"
                 }
               ]
             },
@@ -172,11 +179,13 @@
               "steps": [
                 {
                   "icon": "🐧",
-                  "label": "Penguin Slide"
+                  "label": "Penguin Slide",
+                  "note": "3D"
                 },
                 {
                   "icon": "🥚",
-                  "label": "Emperor Huddle"
+                  "label": "Emperor Huddle",
+                  "note": "2D"
                 }
               ]
             },
@@ -186,7 +195,7 @@
                 {
                   "icon": "🧊",
                   "label": "Iceberg Maker",
-                  "note": "she picks which pole"
+                  "note": "3D · she picks which pole"
                 }
               ]
             },
@@ -196,13 +205,13 @@
                 {
                   "icon": "🐦",
                   "label": "Pole to Pole",
-                  "note": "the Arctic tern carries a gift",
+                  "note": "3D · the Arctic tern carries a gift",
                   "hl": true
                 },
                 {
                   "icon": "❓",
                   "label": "Polar Quiz",
-                  "note": "answer by doing, on the globe",
+                  "note": "3D · answer by doing, on the globe",
                   "hl": true
                 },
                 {
@@ -219,6 +228,87 @@
           "icon": "🔀",
           "title": "Any order, as Kaylee asked",
           "md": "All five activities are open from the start. Each earns a stamp and a sticker right away. All five stamps unlock the finale."
+        }
+      ]
+    },
+    {
+      "id": "look",
+      "title": "3D and 2D: what uses which",
+      "icon": "🧊",
+      "lede": "A hybrid: the globe and the icy sea in 3D like Thailand, two activities flat like Australia.",
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "note",
+          "icon": "📐",
+          "title": "The rule",
+          "md": "**3D when the lesson is about shape and space:** a round world, ice that floats, a slope down to the sea, the part of an iceberg hidden under the water. **2D when it's about a surface or a crowd:** rubbing a coat white, white animals vanishing into white snow, lots of round bodies squishing together."
+        },
+        {
+          "type": "cards",
+          "title": "In 3D (the Thailand look: toon bands, ink outlines, blob shadows)",
+          "items": [
+            {
+              "icon": "🌍",
+              "title": "The globe hub",
+              "md": "A real ball she spins with her finger. The sun she drags is the light, so day and night draw themselves, and tilting the Earth makes the opposite seasons real instead of faked."
+            },
+            {
+              "icon": "🐻‍❄️",
+              "title": "Ice Floe Hop",
+              "md": "Floes that dip under Pola's weight, tip at the edge and drift on a real sea, with more than one path across. The water already exists (Thailand's boat trip), and “dip under the ice” is just a camera move."
+            },
+            {
+              "icon": "🐧",
+              "title": "Penguin Slide",
+              "md": "The Nan drive's steering (Dad tuned it in the feel lab, PR #209) on an icy slope, then the same steering underwater. Bumps, two runs and the dive come straight from the drive and the boat race."
+            },
+            {
+              "icon": "🧊",
+              "title": "Iceberg Maker",
+              "md": "Shares the floes' sea and bobbing. A berg that rolls over, and the camera sinking under the waterline to show the hidden 9 parts out of 10, read best in 3D. **The one that could go either way:** if we want a cheaper activity, this one goes 2D."
+            },
+            {
+              "icon": "🐦",
+              "title": "Pole to Pole (finale)",
+              "md": "**Changed:** Terry flies down over the same globe while it turns underneath, past the pins of the countries she has visited. “Opposite ends of the world” becomes something she sees, and nobody has to draw Italy, Egypt and Peru again for a side-scroller."
+            },
+            {
+              "icon": "❓",
+              "title": "Polar Quiz",
+              "md": "Already on the hub's globe: she drops Pola on the top, spins the bottom to face her, taps a pole to dip under the ice."
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "title": "In 2D (puppets and painted scenes, like Australia)",
+          "items": [
+            {
+              "icon": "🦊",
+              "title": "Snow Coats",
+              "md": "Rubbing a coat white with `perfect-freehand` is a mask on a flat puppet; on a 3D model it means painting into textures, which is harder and looks worse. White animals vanishing into the snow is also a flat-picture trick."
+            },
+            {
+              "icon": "🥚",
+              "title": "Emperor Huddle",
+              "md": "Squishing a crowd of round penguins is 2D physics: cheap and solid in Phaser. In 3D it would be the same circle packing with more work."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warn",
+          "icon": "🐧",
+          "title": "The catch: friends in both",
+          "md": "Pebble slides in 3D and hatches in the 2D huddle, and Pola shows up on the 2D postcards. Each friend gets a 3D character **and** a 2D puppet that must look like the same animal. 3D comes first; then the character lab's PNG export is the reference picture the 2D puppet is drawn to match (the way puppets already match their references)."
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "icon": "🦄",
+          "title": "Kaylee herself stays out",
+          "md": "She doesn't walk around the ice as the unicorn: these activities are about the animals, and her model and wardrobe would have to leave Thailand's locked folder too. Easy to add later if Dad wants it."
         }
       ]
     },
@@ -261,7 +351,7 @@
     },
     {
       "id": "hub",
-      "title": "The hub: the globe and the sun",
+      "title": "The hub: the globe and the sun · 3D",
       "icon": "🌍",
       "lede": "The hub is a toy, not a menu. It teaches the poles' biggest idea before any activity.",
       "blocks": [
@@ -269,7 +359,7 @@
           "type": "callout",
           "tone": "dad",
           "title": "Core verb: spin the globe",
-          "md": "Her finger grabs the big globe and spins it up and down. Spin to the top and the scene becomes the **Arctic** (sea, floating ice, Pola waving). Spin to the bottom and it's **Antarctica** (a white land, mountains, penguins). The activity spots sit on each side."
+          "md": "Her finger grabs the big globe and spins it up and down. Spin to the top and the scene becomes the **Arctic** (sea, floating ice, Pola waving). Spin to the bottom and it's **Antarctica** (a white land, mountains, penguins). The activity spots sit on each side. In 3D: a toon-shaded ball, the sun is the light, and the Earth's tilt is real, so drag the sun and the seasons follow."
         },
         {
           "type": "ladder",
@@ -329,7 +419,7 @@
     },
     {
       "id": "floe",
-      "title": "1. Ice Floe Hop (north)",
+      "title": "1. Ice Floe Hop (north) · 3D",
       "icon": "🐻‍❄️",
       "lede": "The North Pole is frozen sea: the ice floats.",
       "blocks": [
@@ -341,7 +431,7 @@
           "type": "callout",
           "tone": "dad",
           "title": "Core verb: fling Pola onto the next floe",
-          "md": "Grab Pola, pull back and let go: he crouches, leaps, and lands with a thump. The floe dips under his weight, bobs and rocks. Fun with no goal: the floes wobble and splash differently each landing. Greybox: a white circle on grey slabs on blue."
+          "md": "Grab Pola, pull back and let go: he crouches, leaps, and lands with a thump. The floe dips under his weight, bobs and rocks. Fun with no goal: the floes wobble and splash differently each landing. Greybox (3D, already in the toon look): a white ball on flat grey slabs on a blue sea. The fling's pull-back, power and arc are feel-lab knobs."
         },
         {
           "type": "ladder",
@@ -433,7 +523,7 @@
     },
     {
       "id": "coats",
-      "title": "2. Snow Coats (north)",
+      "title": "2. Snow Coats (north) · 2D",
       "icon": "🦊",
       "lede": "Arctic animals change color with the seasons, and many live on land up north.",
       "blocks": [
@@ -520,7 +610,7 @@
     },
     {
       "id": "slide",
-      "title": "3. Penguin Slide (south)",
+      "title": "3. Penguin Slide (south) · 3D",
       "icon": "🐧",
       "lede": "Antarctica is land: a giant mountain of ice that slopes down to the sea.",
       "blocks": [
@@ -532,7 +622,7 @@
           "type": "callout",
           "tone": "dad",
           "title": "Core verb: steer the sliding penguin",
-          "md": "She holds the penguin and moves her finger left and right; he toboggans downhill on his belly (the slope does the forward part, like the Nan trip's driver). He bumps, spins and whooshes. Fun with no goal: sliding down a big icy hill. Greybox: a black oval on a white ramp."
+          "md": "She holds the penguin and moves her finger left and right; he toboggans downhill on his belly (the slope does the forward part, like the Nan trip's driver). He bumps, spins and whooshes. Fun with no goal: sliding down a big icy hill. Greybox (3D): a black capsule on a white slope, steering read from the Nan drive's knobs."
         },
         {
           "type": "ladder",
@@ -625,7 +715,7 @@
     },
     {
       "id": "huddle",
-      "title": "4. Emperor Huddle (south)",
+      "title": "4. Emperor Huddle (south) · 2D",
       "icon": "🥚",
       "lede": "Winter in Antarctica: dark, windy and the coldest place on Earth.",
       "blocks": [
@@ -726,7 +816,7 @@
     },
     {
       "id": "iceberg",
-      "title": "5. Iceberg Maker (both poles)",
+      "title": "5. Iceberg Maker (both poles) · 3D",
       "icon": "🧊",
       "lede": "Where icebergs come from, why most of one is hidden, and how north and south bergs differ.",
       "blocks": [
@@ -738,7 +828,7 @@
           "type": "callout",
           "tone": "dad",
           "title": "Core verb: tap the cracks to break off ice",
-          "md": "She taps a crack in the front of the glacier: it creaks, the crack grows, and on the next tap a chunk tips over and **SPLASH** (a wave rolls across the screen). Fun with no goal: smashing ice into the sea. Greybox: a white wall with drawn cracks."
+          "md": "She taps a crack in the front of the glacier: it creaks, the crack grows, and on the next tap a chunk tips over and **SPLASH** (a wave rolls across the screen). Fun with no goal: smashing ice into the sea. Greybox (3D): a white cliff of blocks with dark crack lines over a blue sea."
         },
         {
           "type": "callout",
@@ -827,7 +917,7 @@
     },
     {
       "id": "finale",
-      "title": "Finale: Pole to Pole",
+      "title": "Finale: Pole to Pole · 3D",
       "icon": "🐦",
       "blocks": [
         {
@@ -838,7 +928,7 @@
           "type": "callout",
           "tone": "dad",
           "title": "Core verb: steer the tern",
-          "md": "Drag Terry up and down as the world scrolls past: the Arctic, then the ocean, past the countries she's visited (Italy's coast, Egypt, Peru... whatever's on her map), getting warmer in the middle, then cold again and down to Antarctica. Catch fish on the way. The postcard gets delivered; Pebble shows Pola's picture of a polar bear to the colony (they gasp). Then Sparkle's **Polar Quiz** (below), then the trophy: **Polar Explorer**."
+          "md": "Drag Terry left and right as he flies down over the big globe from the hub, which turns under him: the Arctic, then the ocean, past the pins of the countries she's visited (Italy, Egypt, Peru... whatever's on her map), getting warmer in the middle (the sea turns turquoise, a beach), then cold again and down to Antarctica. Catch fish on the way. The postcard gets delivered; Pebble shows Pola's picture of a polar bear to the colony (they gasp). Then Sparkle's **Polar Quiz** (below), then the trophy: **Polar Explorer**."
         },
         {
           "type": "list",
@@ -852,7 +942,7 @@
     },
     {
       "id": "quiz",
-      "title": "The Polar Quiz (the very end)",
+      "title": "The Polar Quiz (the very end) · 3D",
       "icon": "❓",
       "lede": "Dad's ask (2026-10-26): a quiz at the end to check what she learned. She can't read, so every question is spoken, and she answers by moving things on the globe, not by picking word cards.",
       "blocks": [
@@ -1265,7 +1355,7 @@
             },
             {
               "q": "2D or 3D?",
-              "why": "My pick: **2D** like Australia: the activities are side-view scenes and quick to build, and it's not a family place. 3D would only pay off if you want her walking around on the ice as the unicorn."
+              "why": "My pick: **both** (see [3D and 2D](#look)). The globe hub, the quiz, the tern flight, Ice Floe Hop, Penguin Slide and Iceberg Maker in 3D; Snow Coats and Emperor Huddle in 2D. Iceberg Maker could go 2D if we want it cheaper. Kaylee doesn't walk around as the unicorn here."
             },
             {
               "q": "How much about melting ice?",
@@ -1295,49 +1385,55 @@
             },
             {
               "n": 1,
-              "title": "Greybox: the globe hub",
+              "title": "Move the 3D engine out of Thailand",
               "status": "todo",
-              "md": "Place folder, map pins, spin the globe, drag the sun. Activities listed under `inTheWorks`."
+              "md": "Its own PR, before any Poles code: the engine and the generic chibi rig to a shared folder, so the Poles open without the family code. Thailand plays the same."
             },
             {
               "n": 2,
+              "title": "Greybox: the globe hub",
+              "status": "todo",
+              "md": "Place folder, map pins, the 3D globe: spin it, drag the sun. Activities listed under `inTheWorks`."
+            },
+            {
+              "n": 3,
               "title": "Greybox: Ice Floe Hop",
               "status": "todo"
             },
             {
-              "n": 3,
+              "n": 4,
               "title": "Greybox: Penguin Slide",
               "status": "todo",
               "md": "Built second so north and south can be compared early."
             },
             {
-              "n": 4,
+              "n": 5,
               "title": "Greybox: Iceberg Maker",
               "status": "todo"
             },
             {
-              "n": 5,
+              "n": 6,
               "title": "Greybox: Snow Coats",
               "status": "todo"
             },
             {
-              "n": 6,
+              "n": 7,
               "title": "Greybox: Emperor Huddle",
               "status": "todo"
             },
             {
-              "n": 7,
-              "title": "Art + puppets",
+              "n": 8,
+              "title": "Art + characters",
               "status": "todo",
-              "md": "Pola, Pebble, Terry as live puppets; layered scenes; stickers. One activity per PR."
+              "md": "Pola, Pebble and Terry as 3D characters first (the chibi rig; Terry needs wings), then 2D puppets drawn to match them for Snow Coats and the huddle; painted 2D scenes for those two; stickers. One activity per PR."
             },
             {
-              "n": 8,
+              "n": 9,
               "title": "Full loop: story, voices, facts",
               "status": "todo"
             },
             {
-              "n": 9,
+              "n": 10,
               "title": "Finale: Pole to Pole + Polar Quiz",
               "status": "todo",
               "md": "Its own PR: the tern flight, then the quiz on the hub's globe, then the trophy."
@@ -1581,16 +1677,21 @@
       "blocks": [
         {
           "type": "code",
-          "text": "src/world/places/poles/\n  meta.ts          # id 'poles', mapPos on Antarctica (~x 50, y 93), trophyTitle 'Polar Explorer'\n  Place.tsx        # globe hub + activities + finale\n  lines.ts, cast.json  # Pola, Pebble, Terry, Mama Bear, Pebble's dad\n  activities/\n    floe/      sections.ts  # useGameLoop: fling + floe buoyancy\n    coats/     sections.ts  # perfect-freehand strokes as a reveal mask\n    slide/     sections.ts  # the Nan Driver's steer-across-a-course idea, in 2D\n    huddle/    sections.ts  # soft-body-ish packing: Phaser (many round bodies pushing)\n    iceberg/   sections.ts  # crack state + a bob spring; camera pans under the waterline\n    party/     sections.ts\n  puppets/  pola.tsx, pebble.tsx, terry.tsx, index.ts"
+          "text": "src/world/engine3d/      # moved from places/thailand/engine/ (renderer, toon, outline, camera, loop, water, View3D, Anchors, ...)\n  characters/          # the generic chibi rig + face from thailand/characters/animal.ts, face.ts (the family's looks stay in Thailand)\nsrc/world/places/poles/\n  meta.ts          # id 'poles', mapPos on Antarctica (~x 50, y 93), trophyTitle 'Polar Explorer'\n  Place.tsx        # globe hub (3D) + activities + finale\n  lines.ts, cast.json  # Pola, Pebble, Terry, Mama Bear, Pebble's dad\n  globe/           # 3D: the globe, the sun light, the tilt; shared by the hub, the finale and the quiz\n  characters/      # 3D: Pola, Pebble, Terry looks on the chibi rig (Terry gets a bird rig)\n  activities/\n    hub/       sections.ts  # 3D: spin, drag the sun, the lost penguin\n    floe/      sections.ts  # 3D: fling + floe buoyancy on engine3d water, knobs for the fling\n    coats/     sections.ts  # 2D: perfect-freehand strokes as a reveal mask on SVG puppets\n    slide/     sections.ts  # 3D: the Nan drive's steering on a slope, then underwater\n    huddle/    sections.ts  # 2D: soft-body-ish packing: Phaser (many round bodies pushing)\n    iceberg/   sections.ts  # 3D: crack state + buoyancy bob; camera sinks under the waterline\n    party/     sections.ts  # 3D: the tern over the globe, then the quiz on it\n  puppets/  pola.tsx, pebble.tsx, fox.tsx, index.ts   # 2D: for Snow Coats, the huddle and the postcards"
         },
         {
           "type": "list",
           "title": "Notes",
           "items": [
+            "**Move the engine first (its own PR).** `scripts/vite-lock.ts` encrypts every chunk holding code from `/src/world/places/thailand/`, so a Poles import of `thailand/engine` would lock the Poles behind the family code. The engine is self-contained (about 1,600 lines, imports only three and React): move it to `src/world/engine3d/`, plus the generic rig in `characters/animal.ts` and `face.ts` (its `WEARABLES`/`Look` imports need splitting from the family's looks, which stay locked). Nothing that describes the house leaves Thailand. Touches Thailand, so CI runs its tap-around.",
+            "**Heavy imports:** `scripts/check-heavy-imports.mjs` only allows three inside `src/games/<id>/` or `src/world/places/<id>/`. Add `src/world/engine3d/` to the lazy folders, and keep it out of anything that loads at startup.",
+            "**The labs:** the camera lab and the character lab live in `thailand/lab/` (the feel lab is already shared, `kit/knobs.ts`). Move the camera lab with the engine so `?cam=1` works on Poles links; put the Poles characters in a shared catalog so they show up at `#/world/characters/<id>`.",
+            "**The rig:** the bipedal chibi rig fits Pola (a cub on his back legs or on all fours) and Pebble (flippers as arms). Terry needs wings: a small bird rig on the same root/body/head pivots, with the same face.",
+            "**2D activities load no three.js:** Snow Coats and the huddle are lazy chunks that never import `engine3d`.",
             "**The map:** add `poles` to the map; `PlaceMeta.mapPos` is one point, so the second (north) pin needs a small change in `WorldMap.tsx` (an extra pin that routes to `#/world/poles?side=north`). The map art has no Arctic drawn: the north pin sits in the sea at the top, maybe on a small drawn ice cap.",
             "**Flag:** `PlaceMeta.flag` is required, but neither pole has a country flag. Make it optional, or use a simple snowflake badge in `Flag.tsx` (never generate a flag).",
-            "**Greybox risks first:** the fling feel and floe bob (Ice Floe Hop) and the huddle packing (decide Phaser vs a simple circle-packing loop with `useGameLoop`).",
-            "**One camera per scene:** every scene is a straight-on side view; Iceberg Maker's underwater view is the same camera panned down, not a cross-section drawing.",
+            "**Greybox risks first:** the fling feel and floe bob (Ice Floe Hop, knobs from day one), the globe spin on a finger (grab the ball, not an invisible swipe zone), and the huddle packing (decide Phaser vs a simple circle-packing loop with `useGameLoop`).",
+            "**One camera per scene:** the 2D scenes (Snow Coats, the huddle) are straight-on side views. In 3D the camera frames a box (`engine3d/camera.ts`) in portrait and landscape; Iceberg Maker's underwater view is the same camera sinking below the waterline, not a cross-section drawing.",
             "**Distinct art:** sea ice (thin, flat, floating, cracks showing water) must not look like the Antarctic land ice (thick, rising to mountains), and snow drifts must not look like clouds (AGENTS.md).",
             "**Sections:** every activity gets its `sections.ts`, and the README's Jump to a game section directory gets a Poles heading in the same PR.",
             "**Facts to check before recording:** the Inuktitut hello word; Antarctica's record low (−89.2 °C at Vostok, 1983); ice up to ~4.8 km thick; ~70% of the world's fresh water.",
