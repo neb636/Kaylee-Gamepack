@@ -10,7 +10,7 @@ import { Group, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
-import type { Feel } from '../drive'
+import type { Feel } from '../../../../engine3d/drive'
 import type { Vehicle } from './vehicle'
 
 const WOOD = '#E6A375'
