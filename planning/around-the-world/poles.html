@@ -10,19 +10,18 @@
 </head>
 <body>
 <div id="app"><noscript>This plan is drawn by planning/viewer/plan.js. Read it as Markdown with: node scripts/plan.mjs md &lt;this file&gt;</noscript></div>
-<script type="application/json" id="plan">
-{
+<script type="application/json" id="plan">{
   "schema": 1,
   "title": "The Poles: North and South",
   "icon": "🧊",
   "kind": "New place (3D + 2D)",
   "updated": "2026-10-27",
   "status": {
-    "label": "Greybox 2 built: Dad flings Pola",
+    "label": "Greybox 3 built: Dad steers the penguin",
     "tone": "pink"
   },
   "pitch": "Sparkle's balloon flies to the top of the world and the bottom. Up north, **Pola the polar bear cub** lives on ice floating on the sea; down south, **Pebble the penguin chick** lives on a giant land made of ice. They are pen pals who can never meet, because polar bears only live in the north and penguins only live in the south. Kaylee hops floes, belly-slides, huddles in a blizzard and cracks icebergs off a glacier, and learns the difference by playing in both. At the very end, Sparkle's **Polar Quiz** checks what she learned, and she answers by doing: dragging Pola to his pole, spinning the globe to the bottom.",
-  "next": "Dad plays **greybox 2, Ice Floe Hop** on the iPad (the PR's links; add `?feel=1` to tune the fling and the floes by hand) and answers the **open questions** (the friends' names, one map pin or two, Santa or not, the [3D and 2D split](#look)). Next: **greybox 3: Penguin Slide**, so north and south can be compared early. Then one activity per PR, toy first.",
+  "next": "Dad plays **greybox 3, Penguin Slide** on the iPad (the PR's links; add `?feel=1` to tune the steering, the slide and the swim by hand), and Ice Floe Hop if he hasn't yet, and answers the **open questions** (the friends' names, one map pin or two, Santa or not, the [3D and 2D split](#look)). Next: **greybox 4: Iceberg Maker**. Then one activity per PR, toy first.",
   "facts": [
     {
       "icon": "🧭",
@@ -1410,13 +1409,14 @@
             {
               "n": 4,
               "title": "Greybox: Penguin Slide",
-              "status": "next",
-              "md": "Built second so north and south can be compared early."
+              "status": "done",
+              "md": "Pebble's papa belly-slides down an icy valley with the Nan drive's finger wheel: Adélies to dodge or bump, a snowbank to plunge into, bumps, two runs and a crack, then off the ice cliff and the same steering under the sea through the krill, home to feed Pebble. The steering, the slide and the swim are feel-lab knobs.",
+              "date": "2026-10-27"
             },
             {
               "n": 5,
               "title": "Greybox: Iceberg Maker",
-              "status": "todo"
+              "status": "next"
             },
             {
               "n": 6,
@@ -1527,6 +1527,37 @@
                     "The full pull is never more than 30% of the screen's short side, so an iPhone held sideways has room to pull back under him.",
                     "No pokeable animals yet (the seal, the narwhal, the walrus...) and no dip under the ice: they come with the art.",
                     "About 20 rows from Pola to Mama, so about 20 flings plus misses, a little under the plan's 25-35: Dad's play will say if it wants more."
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Greybox 3: Penguin Slide",
+              "date": "2026-10-27",
+              "status": "done",
+              "summary": "Pebble's papa on his belly down an icy valley, in the toon look: her finger steers him with the Nan drive's wheel, the slope does the going. Bumps throw him in the air, the runs split round a rock, the ice ends at a cliff, and the same steering flies him through the krill under the sea. Home, he feeds Pebble.",
+              "items": [
+                "**The steering:** her finger goes down anywhere and the Nan drive's wheel appears under it (moved to `engine3d/SteerWheel.tsx`, the finger math to `engine3d/wheel.ts`; the Nan drive uses the same wheel). Push left or right and he slides that way for as long as she holds it, swerving toward a point ahead; let go and he drifts back to the middle of the valley (or of his run). Not steered yet, or for 8 s: the 👆 slides side to side.",
+                "**The slope** (`course.ts`, data in meters, one height field for the mesh and the physics): an icy blue valley between snowbanks, with stripes and little flags streaming past. He follows the ice, and where it drops away faster than he can fall (a mound's top, the kicker's end, the lip) he flies: wings out, a boing, a thump and a puff of snow when he lands.",
+                "**The gentle slope (`top`):** he flops onto his tummy and goes. Ten Adélies on the way: the wide-awake ones squawk and hop aside, the sleepy ones stay put, and if he hits one they both spin like tops. Steer hard up a snowbank and he plunges in head first, feet wiggling, then pops out. Three little rollers at the end are a taste of what's next.",
+                "**Bumps and cracks (`bumps`):** snow mounds to hop off, a rock ridge (pink flags at its nose) splitting two runs: moguls on the left, a big kicker on the right. He bonks off the rock's side instead of going through. Then a lip and a crack right across: he always flies it (and if he ever drops in, a boing pops him out).",
+                "**Under the sea (`dive`):** the ice ends at a cliff: off he goes, splash, and the camera follows him under (blue fog, the bright surface above, rocks below). The same wheel steers him through 16 pink krill swarms (later ones drift); a near one drifts into his beak (gulp, a rising note, his tummy grows and the 🦐 tummy in the corner fills pink). A leopard seal loops round him; bump it and you both spin. At the end he rockets up onto the colony's ice.",
+                "**Feeding Pebble (`home`):** he slides in on his tummy, stands up, and feeds her one beakful at a time (at least 4, so she's never hungry); her tummy grows, then everyone hops, fanfare, confetti. 🔁 slides again from the top.",
+                "**Sections:** `slide/top`, `slide/bumps?run=left|right` (the run he starts toward), `slide/dive`, `slide/home?krill=N`. The address bar follows him, with his krill.",
+                "**Feel knobs** (`?feel=1`): *Steering*: Dad's Nan numbers to start (slide speed, wheel size, dead middle, gentle small pushes, smoothing, aim ahead, aim closer when far off), plus sharpest swerve and back to the middle. *The slide*: top speed, gentle slope share, speeding up, gravity in the air, up the snowbank, stuck in the snow, when the Adélies hop aside. *Under the sea*: swim speed, slide speed, krill come to him, leap out. The graph shows her push, the steer, where she's steering to, where he is and his height in the air.",
+                "**Files:** `places/poles/activities/slide/`: `slide.ts` (the world), `course.ts` (the course), `penguin.ts` (Papa, Pebble, the Adélies and the seal as greybox shapes), `PenguinSlide.tsx`, `sections.ts`. Still under `inTheWorks`. No voices (greybox). QA: the screens, a motion scenario (`poles-slide-steer`) and pacing."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "icon": "🔀",
+                  "title": "Changed from the plan",
+                  "items": [
+                    "**Pebble's papa slides, not Pebble** (as the plan's pitch has it): emperor chicks can't swim yet. Pebble waits at the colony and gets fed.",
+                    "The krill tummy is his own round tummy in 3D plus a 🦐 tummy in the corner that fills pink.",
+                    "A snowbank plunge (head first, feet wiggling) is the silly moment for steering off the side.",
+                    "No pokeable animals yet besides the Adélies, Pebble, the colony and the seal (the skua, the Weddell and elephant seals, the whale, the station): they come with the art. “Which way to leap out” isn't in yet: he always comes out onto the colony's ice.",
+                    "About 1 min 45 s top to bottom (26 s gentle slope, 29 s bumps, 40 s under the sea, then home), steering the whole way."
                   ]
                 }
               ]
@@ -1659,28 +1690,24 @@
             {
               "n": 1,
               "id": "top",
-              "name": "The gentle slope",
-              "status": "todo"
+              "name": "The gentle slope"
             },
             {
               "n": 2,
               "id": "bumps",
               "name": "Bumps and cracks",
-              "query": "run=left",
-              "status": "todo"
+              "query": "run=left"
             },
             {
               "n": 3,
               "id": "dive",
-              "name": "Under the sea",
-              "status": "todo"
+              "name": "Under the sea"
             },
             {
               "n": 4,
               "id": "home",
               "name": "Feeding Pebble",
-              "query": "krill=12",
-              "status": "todo"
+              "query": "krill=12"
             }
           ]
         },
@@ -1813,8 +1840,7 @@
       ]
     }
   ]
-}
-</script>
+}</script>
 <script src="../viewer/plan.js"></script>
 </body>
 </html>
