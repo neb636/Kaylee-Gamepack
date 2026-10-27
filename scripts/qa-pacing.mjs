@@ -90,6 +90,7 @@ const SCENARIOS = [
   { name: 'poles globe hub', id: 'poles', hash: '#/world/poles', reset: true },
   { name: 'poles ice floe hop', id: 'floe', hash: '#/world/poles/floe', reset: true },
   { name: 'poles penguin slide', id: 'slide', hash: '#/world/poles/slide', reset: true },
+  { name: 'poles iceberg maker', id: 'iceberg', hash: '#/world/poles/iceberg', reset: true },
   { name: 'canada train map', id: 'canada', hash: '#/world/canada', reset: true },
   // The trip there, one run per leg (each from its own section link).
   { name: "thailand: kaylee's wardrobe", id: 'wardrobe', hash: '#/world/thailand/hub/wardrobe?drawer=head', reset: true },

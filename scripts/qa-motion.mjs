@@ -608,6 +608,34 @@ GAME_SCENARIOS.push(
     },
   },
   {
+    // Iceberg Maker: the long crack tapped all the way (it creaks, leans out, groans), the giant drops with a splash and
+    // a wave, rocks and settles, and the camera sinks under the waterline; then her finger pushes it down and lets go.
+    name: 'poles-iceberg-giant',
+    seconds: 14,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/poles/iceberg/giant?pole=north`)
+      await page.waitForFunction(() => window.__polesIcebergQA?.().section, null, { timeout: 20000 })
+      await page.waitForTimeout(1000)
+    },
+    act: async (page) => {
+      for (let i = 0; i < 5; i++) {
+        const b = await page.locator('[data-anchor="giant"]').boundingBox()
+        if (!b) break
+        await page.mouse.click(b.x + b.width / 2, b.y + b.height / 2)
+        await page.waitForTimeout(450)
+      }
+      await page.waitForFunction(() => window.__polesIcebergQA?.().under, null, { timeout: 12000 })
+      await page.waitForTimeout(1500)
+      const b = await page.locator('[data-anchor="berg"]').boundingBox()
+      if (!b) throw new Error('no berg')
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+      await page.mouse.down()
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2 + vp.height * 0.25, { steps: 20 })
+      await page.waitForTimeout(800)
+      await page.mouse.up()
+    },
+  },
+  {
     name: 'poles-sun',
     seconds: 6,
     setup: async (page, base) => {
