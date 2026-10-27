@@ -9,7 +9,6 @@ import { Soon } from '../../kit/Soon'
 import type { PlaceProps } from '../../types'
 import { MountainBike } from './activities/bike/MountainBike'
 import BRIDGE from './activities/bridge/sections'
-import CAMPFIRE from './activities/campfire/sections'
 import CANOE from './activities/canoe/sections'
 import { Hub } from './activities/hub/Hub'
 import PARTY from './activities/Party.sections'
@@ -18,8 +17,9 @@ import SNOWMAN from './activities/snowman/sections'
 import WHALES from './activities/whales/sections'
 
 const SugarSnow = lazy(() => import('./activities/taffy/SugarSnow').then((m) => ({ default: m.SugarSnow })))
+const CampfireNight = lazy(() => import('./activities/campfire/CampfireNight').then((m) => ({ default: m.CampfireNight })))
 const BACK = { icon: '🚂', label: 'Back to the train' }
-const SOON: Record<string, ActivitySections> = { snowman: SNOWMAN, campfire: CAMPFIRE, canoe: CANOE, bridge: BRIDGE, whales: WHALES, salmon: SALMON }
+const SOON: Record<string, ActivitySections> = { snowman: SNOWMAN, canoe: CANOE, bridge: BRIDGE, whales: WHALES, salmon: SALMON }
 
 export default function Place(props: PlaceProps) {
   const { meta, activity, backToMap } = props
@@ -28,6 +28,12 @@ export default function Place(props: PlaceProps) {
     return (
       <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#E3EAF4' }} />}>
         <SugarSnow />
+      </Suspense>
+    )
+  if (activity === 'campfire')
+    return (
+      <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#14102A' }} />}>
+        <CampfireNight />
       </Suspense>
     )
   if (activity === 'party') return <Soon def={PARTY} icon="🏒" name="Animal Homes + Pond Hockey" onBack={backToMap} back={BACK} />

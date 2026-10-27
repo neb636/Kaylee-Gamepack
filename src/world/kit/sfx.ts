@@ -2,7 +2,8 @@
 // Each one layers a pitched tone with filtered noise so it reads as a real "thing" (a boing, a splash) rather than a beep.
 
 let ctx: AudioContext | undefined
-function audio() {
+/** The shared AudioContext (for a country that builds its own sounds, e.g. panned to one side). */
+export function audio() {
   if (!ctx && typeof AudioContext !== 'undefined') ctx = new AudioContext()
   if (ctx?.state === 'suspended') void ctx.resume()
   return ctx

@@ -795,6 +795,36 @@ GAME_SCENARIOS.push({
   },
 })
 
+// Campfire Night (2D greybox): her finger sweeps the flashlight across the dark campsite from the lake to the tent and
+// back up into the trees, resting on whatever eyes it finds (they come out), then up into the sky (stars come out).
+GAME_SCENARIOS.push({
+  name: 'canada-campfire-light',
+  seconds: 9,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/canada/campfire/eyes`)
+    await page.waitForFunction(() => window.__canadaCampfireQA?.().section, null, { timeout: 20000 })
+    await page.waitForTimeout(600)
+  },
+  act: async (page) => {
+    const at = (x, y) =>
+      page.evaluate(([x, y]) => {
+        const svg = document.querySelector('[aria-label="Shine the flashlight around the campsite"] svg')
+        const wide = svg.clientWidth / svg.clientHeight >= 1.05
+        const s = wide ? { w: 1600, h: 1000 } : { w: 1000, h: 1500 }
+        const p = new DOMPoint(s.w * x, s.h * y).matrixTransform(svg.getScreenCTM())
+        return [p.x, p.y]
+      }, [x, y])
+    const sweep = [[0.15, 0.85], [0.3, 0.75], [0.5, 0.65], [0.7, 0.62], [0.85, 0.7], [0.7, 0.45], [0.45, 0.35], [0.25, 0.4], [0.4, 0.2], [0.7, 0.15]]
+    await page.mouse.move(...(await at(...sweep[0])))
+    await page.mouse.down()
+    for (const p of sweep) {
+      await page.mouse.move(...(await at(...p)), { steps: 6 })
+      await page.waitForTimeout(500)
+    }
+    await page.mouse.up()
+  },
+})
+
 // Mountain Bike (3D greybox): Maple riding the blue way's berms with the wheel under her finger, pushed right up the
 // berm and held, then let go: she leans into the bends, bumps over the roots and drifts back to the middle of her way.
 GAME_SCENARIOS.push({

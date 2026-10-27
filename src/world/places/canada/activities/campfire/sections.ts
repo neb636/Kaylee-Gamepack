@@ -1,4 +1,19 @@
-// Campfire Night: its greybox comes later (planning/around-the-world/canada.html). Until then its link opens a "coming soon" card.
+// Campfire Night (greybox 4, plan: planning/around-the-world/canada.html): a dark campsite at the foot of Mont-Sainte-
+// Anne, lit only by the flashlight that follows her finger. #/world/canada/campfire/<section>?found=4
+// A section link sets the scene up as if she had played to there. Loaded at startup by the section index.
 import { defineSections } from '../../../../kit/sections'
 
-export default defineSections('canada', 'campfire', { sections: [{ id: 'soon', name: 'Campfire Night (coming soon)' }] })
+const CAMPFIRE_SECTIONS = defineSections('canada', 'campfire', {
+  params: {
+    found: { default: '', doc: 'the night animals she has met so far: a number for the first N of Maple’s book (owl, raccoon, deer, frog, beaver, mosquito, skunk, kits), or a comma list of those ids when she met them out of order (empty = what that section starts with: 0, 4, 6 or 8)' },
+  },
+  sections: [
+    { id: 'eyes', name: 'Find the eyes', params: ['found'] },
+    { id: 'sounds', name: 'Who’s that sound?', params: ['found'] },
+    { id: 'bandit', name: 'The marshmallow bandit', params: ['found'] },
+    { id: 'marshmallow', name: 'Roast a marshmallow', params: ['found'] },
+    { id: 'stars', name: 'Around the fire', params: ['found'] },
+  ],
+})
+export default CAMPFIRE_SECTIONS
+export type CampSection = (typeof CAMPFIRE_SECTIONS)['sections'][number]['id']
