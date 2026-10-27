@@ -61,6 +61,25 @@ export const L = {
   },
 
   // The family (their voices in cast.json; their animals in characters/looks.ts).
+  // Sparkle on the Thailand map (activities/hub/map/): the welcome, a hint when nothing's touched, and something true
+  // the first time she meets each thing on the map (tapped, or the plane flown low over it).
+  map: {
+    hello: 'This is Thailand! Grab the plane and fly!',
+    again: 'Where shall we fly?',
+    hint: 'Fly the plane to a picture!',
+    pokes: {
+      elephant: 'Elephants live in the north of Thailand!',
+      clouds: "It rains a lot in Nan's mountains!",
+      gibbon: 'Gibbons swing through the jungle! Whoop whoop!',
+      buffalo: 'Water buffalo help on the rice farms!',
+      hornbill: 'A hornbill! Look at its big beak!',
+      tuktuk: 'A tuk-tuk! Tuk tuk tuk!',
+      dolphins: 'Dolphins swim in the Gulf of Thailand!',
+      boat: 'A longtail boat! Its motor has a long tail!',
+      palm: 'Coconuts grow on palm trees by the sea!',
+    } as Record<string, Line>,
+  },
+
   family: {
     agong: hello('agong', `Sawasdee krub, ${NAME}! Welcome home!`, ['Come, sit with Agong.', 'Ho ho! My little unicorn!']),
     ji: hello('ji', 'Hi sweetie! This is our room!', ['Bounce on the mattress!', `I love you, ${NAME}!`]),
@@ -167,11 +186,14 @@ export const L = {
     ask: {
       question: ji('Kaylee, are you ready to go on a trip?'),
       later: ji('OK! Tell me when!'),
+      // The house only offers the mall now (the other trips start on the Thailand map).
+      mall: ji('Shall we go to the mall?'),
       // Daddy on the street, when she taps him (the hub's quick way to a trip).
       daddy: {
         question: nick(`Ready for a trip, ${NAME}?`),
         where: nick(`Where do you want to go, ${NAME}?`),
         later: nick('OK! Just tap me!'),
+        mall: nick('Want to go to the mall?'),
       },
     },
     pack: {

@@ -21,6 +21,18 @@
   "The lucky cat waves for good luck!",
   "A gecko! It sings took-geh, took-geh!",
   "Lots of people in Thailand ride motorbikes!",
+  "This is Thailand! Grab the plane and fly!",
+  "Where shall we fly?",
+  "Fly the plane to a picture!",
+  "Elephants live in the north of Thailand!",
+  "It rains a lot in Nan's mountains!",
+  "Gibbons swing through the jungle! Whoop whoop!",
+  "Water buffalo help on the rice farms!",
+  "A hornbill! Look at its big beak!",
+  "A tuk-tuk! Tuk tuk tuk!",
+  "Dolphins swim in the Gulf of Thailand!",
+  "A longtail boat! Its motor has a long tail!",
+  "Coconuts grow on palm trees by the sea!",
   {
     "text": "Sawasdee krub, Kaylee! Welcome home!",
     "voice": "agong"
@@ -545,6 +557,10 @@
     "voice": "ji"
   },
   {
+    "text": "Shall we go to the mall?",
+    "voice": "ji"
+  },
+  {
     "text": "Ready for a trip, Kaylee?",
     "voice": "nick"
   },
@@ -554,6 +570,10 @@
   },
   {
     "text": "OK! Just tap me!",
+    "voice": "nick"
+  },
+  {
+    "text": "Want to go to the mall?",
     "voice": "nick"
   },
   {

@@ -154,6 +154,90 @@
     "file": "6aec27896584.mp3"
   },
   {
+    "text": "This is Thailand! Grab the plane and fly!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3903,
+    "file": "d4931fd52394.mp3"
+  },
+  {
+    "text": "Where shall we fly?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1700,
+    "file": "2217cb1167f5.mp3"
+  },
+  {
+    "text": "Fly the plane to a picture!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1916,
+    "file": "d20fa1e8c88f.mp3"
+  },
+  {
+    "text": "Elephants live in the north of Thailand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2614,
+    "file": "8eb84a83a0ac.mp3"
+  },
+  {
+    "text": "It rains a lot in Nan's mountains!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3052,
+    "file": "e2e43c6214bb.mp3"
+  },
+  {
+    "text": "Gibbons swing through the jungle! Whoop whoop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3675,
+    "file": "4c5f49378ffa.mp3"
+  },
+  {
+    "text": "Water buffalo help on the rice farms!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3150,
+    "file": "4dd43eea6ad8.mp3"
+  },
+  {
+    "text": "A hornbill! Look at its big beak!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3558,
+    "file": "ed9a97f2096f.mp3"
+  },
+  {
+    "text": "A tuk-tuk! Tuk tuk tuk!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2748,
+    "file": "99ff67540a88.mp3"
+  },
+  {
+    "text": "Dolphins swim in the Gulf of Thailand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3892,
+    "file": "b1c170663a98.mp3"
+  },
+  {
+    "text": "A longtail boat! Its motor has a long tail!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4250,
+    "file": "bb7d253cca0b.mp3"
+  },
+  {
+    "text": "Coconuts grow on palm trees by the sea!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3272,
+    "file": "667a35ed53a1.mp3"
+  },
+  {
     "text": "Sawasdee krub, Kaylee! Welcome home!",
     "voice": "agong",
     "sig": "0f90e139f5",
@@ -1316,6 +1400,13 @@
     "file": "a0bc3ee70699.mp3"
   },
   {
+    "text": "Shall we go to the mall?",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1692,
+    "file": "eeb99dae4fc2.mp3"
+  },
+  {
     "text": "Ready for a trip, Kaylee?",
     "voice": "nick",
     "sig": "a2881bb105",
@@ -1335,6 +1426,13 @@
     "sig": "a2881bb105",
     "ms": 1654,
     "file": "70094ee39d0a.mp3"
+  },
+  {
+    "text": "Want to go to the mall?",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1912,
+    "file": "438f26054545.mp3"
   },
   {
     "text": "Tap your things to pack them, Kaylee!",

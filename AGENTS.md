@@ -211,7 +211,12 @@ what's next; PR bodies end with the next prompt.
   read the one source of truth.
 - **The hub is a toy:** tap the floor and Kaylee walks there; tap a thing and it reacts at once, then she uses it; tap
   someone and they hop and say hello. Sacred things (the altar, the spirit house) never wobble: they glow, a bell rings,
-  she does a wai. Trips start from the house (Mommy asks in her room) and end back home (a photo on Agong's wall).
+  she does a wai.
+- **The Thailand map** (`activities/hub/map/`, 2D, plan `thailand/thailand-map.html`) is where she lands: she flies the
+  family's toy plane to a pin. Bangkok opens the house; a trip somewhere else gets a pin, starts there and ends there
+  (the stamp lands on its pin, the trip's photo goes on Agong's wall by itself). Only the first trip of a session packs
+  and rides the window seat (`trip/session.ts`); later ones take a short flight on the map. The mall day, in Bangkok,
+  still starts in the house (Mommy or Daddy asks) and ends there.
 - **The trip kit** (`trip/`): packing, the goodbye, the vehicles, the airport, the window seat, the photo wall. Reuse it
   for a new trip instead of building travel again.
 - **Debugging:** `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?fps=N` overrides the frame cap,

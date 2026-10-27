@@ -23,6 +23,7 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
     fed: { default: '0', doc: 'Baan Chang: how many foods the elephants have had already (their bellies are that round)' },
     straw: { default: 'pink', values: ['pink', 'purple', 'yellow'], doc: 'Baan Chang: the straw she put in her chocolate milk at the cafe (it rides along to the yard, on the rail post)' },
     lap: { default: '1', values: ['1', '2', '3'], doc: 'the boat race: the lap it starts on (3 = straight to the last lap and the finish)' },
+    quick: { default: '', values: ['', '1'], doc: "1 = from the Thailand map's short flight: the landing goes straight to Krabi airport (Daddy asks 🐘 or 🚤)" },
     replay: { default: '', doc: "1 = she has done the whole trip before (as after her first trip): yes to Mommy offers 🧳 the whole trip or 🚤 straight to the pier, and the flight is shorter" },
   },
   sections: [
@@ -32,7 +33,7 @@ const BOAT_SECTIONS = defineSections('thailand', 'boat-trip', {
     { id: 'airport', name: 'The x-ray belt', params: ['packed', 'replay'] },
     { id: 'takeoff', name: 'Window seat: seatbelt and takeoff', params: ['packed', 'replay'] },
     { id: 'fly', name: 'Window seat: tray, snacks, the elephant below', params: ['packed', 'replay'] },
-    { id: 'land', name: "Landing in Krabi (and the signpost: 🐘 or 🚤)", params: ['packed', 'replay', 'been'] },
+    { id: 'land', name: "Landing in Krabi (and the signpost: 🐘 or 🚤)", params: ['packed', 'replay', 'been', 'quick'] },
     { id: 'chang', name: 'Baan Chang: the songthaew to the elephant cafe', params: ['packed', 'been'] },
     { id: 'sign', name: 'Baan Chang: the bamboo sign wall and a photo', params: ['packed', 'been', 'photos', 'found'] },
     { id: 'drinks', name: 'Baan Chang: the cafe, her chocolate milk (and an iced coffee for Daddy)', params: ['packed', 'straw', 'been'] },
