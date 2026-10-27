@@ -3,7 +3,7 @@
 // (invite: 🚤 or 🛝🍕), the goodbye at Agong's house and Mommy's grey Veloz (goodbye), ICONSIAM, the lift and the
 // HarborLand counter (arrive), and home (home?photos=<the photos from the day>: the pizza box for Agong, the photo on
 // his wall, the stamp); replay=1 plays it as a trip she has done before. In between: HarborLand's hall
-// (hall?from=<the door she comes out of>, and hungry: Mommy asks "Pizza time?"), the mini games: the Vet Clinic
+// (hall?from=<the door she comes out of>&map=1 for the 🗺️ map of every mini game, and hungry: Mommy asks "Pizza time?"), the mini games: the Vet Clinic
 // (vet?patient=puppy|pony|elephant), the Barber Salon (barber?round=1|2|3&hair=<Daddy's hairdo>), Cafe & Cake
 // (cafe?round=1|2|3), the Racing Slide (race?round=1|2|3), Little Land's foam blocks
 // (blocks?round=1|2|3&card=chedi|elephant), the Golden Mountain (mountain?round=1|2|3), Muay Thai (boxing?round=1|2|3:
@@ -23,6 +23,7 @@ const MALL_SECTIONS = defineSections('thailand', 'mall-trip', {
     socks: { default: 'pink', values: ['pink', 'lavender', 'mint'], doc: 'the grip socks she picked at the counter' },
     games: { default: '', doc: 'what she has played so far, a comma list of vet, barber, cafe, race, blocks, mountain, boxing, skypod and frame (any big ride in the Big Frame fills its sticker on her sock band)' },
     from: { default: 'in', values: ['in', 'vet', 'cafe', 'barber', 'race', 'frame', 'blocks', 'mountain', 'boxing', 'skypod'], doc: "the hall: the door she comes out of (in: she's just come in, by the bench)" },
+    map: { default: '', values: ['', '1'], doc: "the hall: 1 = HarborLand's map is open (every mini game as a big picture, in the hall's order: tap one and she goes there and in)" },
     rides: { default: '', doc: 'the old name of games (links from PR #120 still work)' },
     hair: { default: '', doc: "Daddy's hairdo from the barber, which he keeps for the rest of the trip (games/barber/hair.ts): <lengths>.<colors>.<styles>.<bows>.<brows>, e.g. k.r (long and red), k.n.s (long spikes). Empty: his own mane" },
     patient: { default: 'puppy', values: PATIENTS, doc: "who's on the vet's table: the puppy's sore paw, the muddy pony's bath, the sniffly baby elephant" },
@@ -38,7 +39,7 @@ const MALL_SECTIONS = defineSections('thailand', 'mall-trip', {
     { id: 'invite', name: 'Mommy asks: where shall we go? (🚤 or 🛝🍕)', params: ['replay'] },
     { id: 'goodbye', name: "Goodbye at Agong's house (hugs), into Mommy's grey Veloz", params: ['replay'] },
     { id: 'arrive', name: 'ICONSIAM: pull up by the river, the lift to 6, shoes off, socks on, the height chart', params: ['socks', 'replay'] },
-    { id: 'hall', name: 'HarborLand: walk the hall and pick a mini game', params: ['socks', 'games', 'from', 'hair'] },
+    { id: 'hall', name: 'HarborLand: walk the hall and pick a mini game (or tap 🗺️ for the map)', params: ['socks', 'games', 'from', 'hair', 'map'] },
     { id: 'vet', name: 'The Vet Clinic: heal the puppy, the pony and the baby elephant', params: ['socks', 'games', 'patient'] },
     { id: 'barber', name: "The Barber Salon: Daddy's new look (grow, snip, comb, colors), then kids with picture cards", params: ['socks', 'games', 'round', 'hair'] },
     { id: 'cafe', name: 'Cafe & Cake: blend, pour and serve drinks to Daddy and Mommy', params: ['socks', 'games', 'round'] },

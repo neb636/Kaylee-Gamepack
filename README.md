@@ -169,7 +169,7 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   - [Goodbye at Agong's house (hugs), into Mommy's grey Veloz](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/goodbye)
   - [ICONSIAM: pull up by the river, the lift to 6, shoes off, socks on, the height chart](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/arrive)
 - **HarborLand mini games**
-  - [HarborLand: walk the hall and pick a mini game](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/hall)
+  - [HarborLand: walk the hall and pick a mini game](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/hall) ([the 🗺️ map](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/hall?map=1&games=vet,cafe,race))
   - [The Vet Clinic: heal the puppy, the pony and the baby elephant](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/vet)
   - [The Barber Salon: Daddy's new look, grow and snip](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/barber)
   - [The Barber Salon: colors, the dryer and bows](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/barber?round=2)

@@ -47,6 +47,8 @@ export interface HallEvents extends LegEvents {
   enter(door: GameDoor): void
   /** Daddy's tummy rumbled: the screen around asks "Pizza time?". */
   hungry(): void
+  /** She's stuck and every way in she hasn't been through is off the screen: the map button bounces (or stops). */
+  nudge(on: boolean): void
 }
 export interface HallStart {
   socks: string
@@ -146,6 +148,8 @@ export class Hall extends Stage {
   private staffHi = false
   /** Mommy's card is up (no hint over her question). */
   private asking = false
+  /** The map button is bouncing (stuck, the new ways in all off the screen). */
+  private nudging = false
 
   constructor(
     renderer: WebGLRenderer,
@@ -313,6 +317,32 @@ export class Hall extends Stage {
       this.kaylee.faceToward(d.in[0], d.in[1])
       if (isGame(door)) this.goIn(door)
     })
+  }
+
+  /** Picked on the map: near, she walks there; far, she's there at once (the camera glides along the hall after her,
+   *  Daddy with her) and goes straight in. */
+  travel(door: GameDoor) {
+    if (this.entering) return
+    this.lastTouch = this.time
+    this.touches++
+    const d = DOORS[door]
+    const k = this.kaylee.position
+    if (Math.hypot(k.x - d.at[0], k.z - d.at[1]) < 8) return this.go(door)
+    sfx.whoosh()
+    this.walker.stop()
+    this.walker.place('hall', d.at[0], d.at[1], 0)
+    this.kaylee.faceToward(d.in[0], d.in[1])
+    this.daddy.stop()
+    this.daddy.place(clamp(d.at[0] + 1.3, HALL[0] + 0.5, HALL[1] - 0.5), 0, d.at[1] + 0.4, -0.6)
+    this.lastPos.copy(this.kaylee.position)
+    this.vel.set(0, 0, 0)
+    this.goIn(door)
+  }
+
+  /** The way in nearest her now (the 🦄 on the map). */
+  nearest(): GameDoor {
+    const k = this.kaylee.position
+    return OPEN_DOORS.reduce((a, b) => (Math.abs(DOORS[b].at[0] - k.x) < Math.abs(DOORS[a].at[0] - k.x) ? b : a))
   }
 
   /** At a way in: the door swings open, the camera moves in, she steps through, and the mini game opens. */
@@ -604,10 +634,18 @@ export class Hall extends Stage {
     this.marker.update(dt)
     this.lights.follow(kp.x, kp.y, kp.z)
 
-    // ---- Stuck: when the finger shows, Sparkle says what to do (once each time) ----
-    if (this.time - this.lastTouch > STUCK_S && this.hintedAt !== this.lastTouch && !this.asking && this.hintAt()) {
+    // ---- Stuck: when the finger shows, Sparkle says what to do (once each time). With every new way in off the
+    // screen (the far end of the hall), the map button bounces instead and she says to tap it. ----
+    const stuck = this.time - this.lastTouch > STUCK_S && !this.asking && !this.entering
+    const near = stuck ? this.hintAt() : null
+    const nudge = stuck && !near && !this.walker.busy && OPEN_DOORS.some((d) => !this.done.has(d))
+    if (nudge !== this.nudging) {
+      this.nudging = nudge
+      this.hev.nudge(nudge)
+    }
+    if (stuck && this.hintedAt !== this.lastTouch && (near || nudge)) {
       this.hintedAt = this.lastTouch
-      this.hev.say(L.mall.hall.hint)
+      this.hev.say(near ? L.mall.hall.hint : L.mall.hall.hintMap)
     }
   }
 
@@ -750,7 +788,8 @@ export class Hall extends Stage {
     })
   }
 
-  /** After a while with nothing touched: the nearest way in she hasn't been through yet. */
+  /** After a while with nothing touched: the nearest way in she hasn't been through yet, if it's on the screen (when
+   *  none is, the map button bounces: `nudge`). */
   protected hintAt() {
     if (this.walker.busy || this.entering) return null
     let best: Vector3 | null = null
@@ -758,7 +797,7 @@ export class Hall extends Stage {
     for (const [anchor, door] of Object.entries(DOOR_OF)) {
       if (!isGame(door) || this.done.has(door)) continue
       const a = this.anchorAt(anchor)
-      const dd = a ? Math.abs(a.at.x - this.kaylee.position.x) : Infinity
+      const dd = a && this.toScreen(a.at, a.r) ? Math.abs(a.at.x - this.kaylee.position.x) : Infinity
       if (a && dd < bestD) {
         bestD = dd
         best = a.at
@@ -776,6 +815,7 @@ export class Hall extends Stage {
       entering: this.entering?.door ?? null,
       done: [...this.done],
       hungry: this.hungry,
+      nudging: this.nudging,
       daddy: [this.daddy.pos.x, this.daddy.pos.z, this.daddy.yaw].map((n) => Math.round(n * 100) / 100),
       kids: this.kids.map((k) => ({ at: [k.r.pos.x, k.r.pos.y, k.r.pos.z].map((n) => Math.round(n * 10) / 10), sliding: k.sliding })),
       touches: this.touches,

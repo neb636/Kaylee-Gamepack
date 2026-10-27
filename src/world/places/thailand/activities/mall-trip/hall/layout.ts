@@ -101,6 +101,20 @@ export type DoorId = keyof typeof DOORS
 /** The ways in that open a mini game. */
 export const OPEN_DOORS = ['vet', 'cafe', 'race', 'frame', 'barber', 'blocks', 'mountain', 'boxing', 'skypod'] as const
 export type GameDoor = (typeof OPEN_DOORS)[number]
+/** Each mini game's picture (her sock band's stickers, the map's stops) and name (for Dad), along the hall from left to
+ *  right (the map's order). */
+export const GAMES: { id: GameDoor; icon: string; name: string; color: string }[] = [
+  { id: 'vet', icon: '🩺', name: 'Vet Clinic', color: '#A7EBD0' },
+  { id: 'cafe', icon: '🥤', name: 'Cafe & Cake', color: '#FFD9E8' },
+  { id: 'barber', icon: '💈', name: 'Barber Salon', color: '#CFE3FF' },
+  { id: 'frame', icon: '🛝', name: 'Big Frame', color: '#E9DDFF' },
+  { id: 'race', icon: '🏁', name: 'Racing Slide', color: '#FFD6A8' },
+  { id: 'mountain', icon: '⛰️', name: 'Golden Mountain', color: '#FFE89A' },
+  { id: 'blocks', icon: '🧱', name: 'Little Land', color: '#BFF0DC' },
+  { id: 'boxing', icon: '🥊', name: 'Muay Thai', color: '#FFC2C2' },
+  { id: 'skypod', icon: '💡', name: 'Sky Pod', color: '#C9E6FF' },
+]
+export const GAME_ICON = Object.fromEntries(GAMES.map((g) => [g.id, g.icon])) as Record<GameDoor, string>
 
 /** Where she stands when she first comes in: in front of Mommy's bench, between the town and the frame. */
 export const START: { at: XZ; face: number } = { at: [-3.4, 1.0], face: 0 }

@@ -415,8 +415,9 @@ const SCREENS = [
   } },
   // HarborLand's hall (greybox): just in by Mommy's bench, out of the vet's door (Harbor Town), out of the racing
   // slide (the lanes, the crocodile), going in at the cafe (the door open, the camera in close), Mommy's "Pizza time?"
-  // card after four stickers.
+  // card once every sticker is on her band, and the 🗺️ map of every mini game.
   { name: 'mall-hall', hash: '#/world/thailand/mall-trip/hall', reset: true, wait: 3500 },
+  { name: 'mall-hall-map', hash: '#/world/thailand/mall-trip/hall?map=1&games=vet,cafe,race', reset: true, wait: 3500 },
   { name: 'mall-hall-town', hash: '#/world/thailand/mall-trip/hall?from=vet&games=vet', reset: true, wait: 3500 },
   { name: 'mall-hall-lanes', hash: '#/world/thailand/mall-trip/hall?from=race', reset: true, wait: 3500 },
   { name: 'mall-hall-little-land', hash: '#/world/thailand/mall-trip/hall?from=blocks&games=blocks', reset: true, wait: 3500 },

@@ -7,8 +7,9 @@ import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import { HarborSign } from '../harborland/sign'
 import { Hall, HALL_ANCHORS, LABELS } from './hall'
+import { HallMap } from './HallMap'
 import { Hungry } from './Hungry'
-import type { DoorId, GameDoor } from './layout'
+import { GAMES, type DoorId, type GameDoor } from './layout'
 import { mallVoice } from '../voice'
 
 /** Each sign's letters. */
@@ -24,24 +25,42 @@ interface Props {
   hungry: boolean
   /** Mommy's card is up. */
   asking: boolean
+  /** The map is open (a `map=1` link opens it). */
+  map: boolean
+  /** She's just come back out of `from` (not a link): the map opens by itself once she's out, with her new star. */
+  back: boolean
+  onMap(open: boolean): void
   onEnter(door: GameDoor): void
   onHungry(): void
   onPizza(): void
   onMorePlay(): void
 }
 
-export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, onHungry, onPizza, onMorePlay }: Props) {
+export function HallScreen({ socks, hair, done, from, hungry, asking, map, back, onMap, onEnter, onHungry, onPizza, onMorePlay }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [going, setGoing] = useState(false)
+  const [nudge, setNudge] = useState(false)
+  const [here, setHere] = useState<GameDoor | null>(null)
   const worldRef = useRef<Hall | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const labelRef = useRef<HTMLDivElement>(null)
   const signRef = useRef<HTMLDivElement>(null)
   const cb = useRef({ onEnter, onHungry })
   cb.current = { onEnter, onHungry }
-  // No hint from Sparkle over Mommy's question.
-  useEffect(() => worldRef.current?.setAsking(asking), [asking])
+  // No hint from Sparkle over Mommy's question or the map. (The map's 🦄: the stop nearest her.)
+  useEffect(() => worldRef.current?.setAsking(asking || map), [asking, map])
+  useEffect(() => {
+    if (map) setHere(worldRef.current?.nearest() ?? null)
+  }, [map])
+  // Back out of a mini game with more still to play: once she's stepped out, the map comes up (where next?). Not when
+  // Daddy's about to ask about pizza.
+  const fresh = back && from !== 'in' ? from : null
+  useEffect(() => {
+    if (!fresh || hungry || asking || done.length >= GAMES.length) return
+    const t = setTimeout(() => onMap(true), 1700)
+    return () => clearTimeout(t)
+  }, [])
 
   const make = (renderer: WebGLRenderer) => {
     const w = new Hall(
@@ -53,8 +72,9 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, o
         going: () => setGoing(true),
         enter: (d) => cb.current.onEnter(d),
         hungry: () => cb.current.onHungry(),
+        nudge: setNudge,
       },
-      { socks, done, from: from === 'in' ? '' : from, hungry, hair, asking },
+      { socks, done, from: from === 'in' ? '' : from, hungry, hair, asking: asking || map },
     )
     w.setHintElement(hintRef.current)
     w.setLabelBox(labelRef.current)
@@ -105,6 +125,19 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, onEnter, o
       )}
       {/* Stepping through a way in: the hall fades out into the mini game. */}
       <AnimatePresence>{going && <motion.div key="fade" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.95, duration: 0.5 }} style={{ position: 'absolute', inset: 0, background: '#FFF7F0', pointerEvents: 'none', zIndex: 60 }} />}</AnimatePresence>
+      <HallMap
+        open={map && !asking && !going}
+        done={done}
+        here={here}
+        fresh={fresh}
+        nudge={nudge}
+        hidden={asking || going || mode !== 'webgl'}
+        onOpen={onMap}
+        onPick={(door) => {
+          onMap(false)
+          worldRef.current?.travel(door)
+        }}
+      />
       <Hungry open={asking} onPizza={onPizza} onPlay={onMorePlay} />
     </div>
   )

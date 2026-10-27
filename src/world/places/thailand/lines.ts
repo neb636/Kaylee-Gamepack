@@ -580,8 +580,11 @@ export const L = {
       tummy: nick('My tummy is rumbling!'),
       pizza: ji('Hungry, Kaylee? Pizza time?'),
       more: ji('OK! A little more!'),
-      // Sparkle, when the finger shows after a while with nothing touched.
+      // Sparkle, when the finger shows after a while with nothing touched; or, with every new game off the screen, when
+      // the map button bounces. And as the map opens.
       hint: 'Tap a door to play!',
+      hintMap: `More games to find! Tap the map, ${NAME}!`,
+      map: `Where shall we play, ${NAME}?`,
     },
 
     // The Vet Clinic (games/vet/). Daddy welcomes Doctor Kaylee; Sparkle says who's coming in. The patients only bark,
