@@ -1499,7 +1499,22 @@ GAME_SCENARIOS.push(
 
 // The Nan Mountain Cup, the look step: the rivals on the chibi rig waving in the character lab (Grandma Taeng, Pao,
 // Moon); on the rice steps (nan-ducks) the mother duck and her ducklings waddling across the road while every kart waits
-// a moment; in the forest (nan-log) through the hollow log near the end.
+// a moment; in the forest (nan-log) through the hollow log near the end. Both race there with a finger held on the road
+// ahead (as she would), so they get there in good time.
+const raceTo = async (page, until, ms, press = true) => {
+  await page.waitForFunction(() => window.__thaiNanQA?.().phase === 'race', null, { timeout: 60000 })
+  let a = await page.evaluate(() => window.__thaiNanQA().aim)
+  if (press) {
+    await page.mouse.move(a?.x ?? vp.width / 2, a?.y ?? vp.height * 0.45)
+    await page.mouse.down()
+  }
+  const t0 = Date.now()
+  while (Date.now() - t0 < ms && !(await page.evaluate(until))) {
+    a = await page.evaluate(() => window.__thaiNanQA().aim)
+    if (a) await page.mouse.move(a.x, a.y)
+    await page.waitForTimeout(150)
+  }
+}
 GAME_SCENARIOS.push(
   {
     name: 'nan-cup-rivals',
@@ -1520,10 +1535,11 @@ GAME_SCENARIOS.push(
     seconds: 6,
     setup: async (page, base) => {
       await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps&steer=finger`)
-      await page.waitForFunction(() => window.__thaiNanQA?.().scenery?.ducks?.state === 'cross', null, { timeout: 120000 })
+      await raceTo(page, () => window.__thaiNanQA().scenery?.ducks?.state === 'cross', 240000)
     },
     act: async (page) => {
-      await page.waitForTimeout(6000)
+      await raceTo(page, () => false, 6000, false)
+      await page.mouse.up()
     },
   },
   {
@@ -1531,10 +1547,11 @@ GAME_SCENARIOS.push(
     seconds: 6,
     setup: async (page, base) => {
       await page.goto(`${base}#/world/thailand/nan-trip/race?steer=finger`)
-      await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 660, null, { timeout: 180000 })
+      await raceTo(page, () => window.__thaiNanQA().racers?.kaylee.progress > 670, 300000)
     },
     act: async (page) => {
-      await page.waitForTimeout(6000)
+      await raceTo(page, () => false, 6000, false)
+      await page.mouse.up()
     },
   },
 )
