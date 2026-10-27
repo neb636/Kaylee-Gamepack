@@ -385,7 +385,8 @@ export function buildDiorama(bag: Bag, net: Net): Diorama {
   buffalo.head.add(solid(merge([
     P.sphere(0.028, '#8E86A8', { at: [0.015, -0.005, 0] }),
     P.sphere(0.018, '#C9C1D9', { at: [0.035, -0.012, 0] }),
-    ...[-1, 1].map((s) => P.cone(0.008, 0.035, '#FFF4E6', { at: [0.0, 0.02, s * 0.03], rot: [s * -1.2, 0, 0] }, 6)),
+    // The horns point out to the sides (it faces +x), up and a little back.
+    ...[-1, 1].map((s) => P.cone(0.008, 0.035, '#FFF4E6', { at: [0.0, 0.02, s * 0.03], rot: [s * 0.9, 0, 0.4] }, 6)),
   ]), bag, 1.5))
   buffalo.root.add(buffalo.head)
   root.add(buffalo.root)

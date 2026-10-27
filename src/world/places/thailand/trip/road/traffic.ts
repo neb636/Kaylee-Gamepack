@@ -3,9 +3,9 @@
 // chickens that flap off it, a monkey on the guard rail). They keep to THEIR left (her right, lat < 0), and they never
 // crash into her: if she drifts onto their side, they pull onto the verge, stop and toot a tune until she's past.
 // Every one of them reacts to a tap. Pure behavior plus toy models; the drive (activities/nan-trip/drive/) says when.
-import { Group, MeshBasicMaterial, Vector3, Mesh } from 'three'
+import { Euler, Group, MeshBasicMaterial, Quaternion, Vector3, Mesh, type BufferGeometry, type ColorRepresentation } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
-import { blobShadow, merge, P, solid } from '../../../../engine3d/geo'
+import { blobShadow, merge, P, solid, type V3 } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
 import { buildSongthaew } from '../vehicles/songthaew'
 import type { HeightField } from './build'
@@ -111,6 +111,32 @@ interface Monkey {
 }
 
 const LANE = 0.5
+
+/** A water buffalo's big horns (the road's and the rice farm's): each a crescent out from the top of the head, down a
+ *  little, then curling up, swept back, with a pointed tip; the left one is the right one mirrored. `root` is where the
+ *  right horn leaves the head (head space, facing +z), `r` the curl's radius, `tube` the horn's thickness. */
+export function buffaloHorns(root: V3, r: number, tube: number, color: ColorRepresentation = '#EDE3D2', back = 0.45): BufferGeometry[] {
+  const ARC = 2.0
+  const parts: BufferGeometry[] = []
+  for (const s of [-1, 1]) {
+    // The right horn's arc runs from just inside the bottom of its circle round to just past the outside; the left
+    // one is the same arc mirrored, so it starts at its tip and ends at the head.
+    const a0 = s > 0 ? -Math.PI / 2 - 0.2 : Math.PI / 2 + 0.2 - ARC + Math.PI
+    const rot: V3 = [-back, 0, a0]
+    const q = new Quaternion().setFromEuler(new Euler(...rot))
+    const on = (a: number) => new Vector3(Math.cos(a) * r, Math.sin(a) * r, 0).applyQuaternion(q)
+    const [base, end] = s > 0 ? [0, ARC] : [ARC, 0]
+    const centre = new Vector3(s * root[0], root[1], root[2]).sub(on(base))
+    parts.push(P.torus(r, tube, color, { at: centre.toArray(), rot }, ARC))
+    // The tip carries on along the curl.
+    const along = new Vector3(-Math.sin(end), Math.cos(end), 0).multiplyScalar(s).applyQuaternion(q)
+    const len = tube * 3
+    const tip = on(end).add(centre).addScaledVector(along, len / 2)
+    const e = new Euler().setFromQuaternion(new Quaternion().setFromUnitVectors(new Vector3(0, 1, 0), along))
+    parts.push(P.cone(tube, len, color, { at: tip.toArray(), rot: [e.x, e.y, e.z] }, 10))
+  }
+  return parts
+}
 const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 
 export class Traffic {
@@ -418,8 +444,7 @@ export class Traffic {
     head.add(solid(merge([
       P.rbox(0.62, 0.6, 0.8, 0.25, C, { at: [0, -0.1, 0.35] }),
       P.rbox(0.5, 0.32, 0.3, 0.12, '#9C93AE', { at: [0, -0.26, 0.74] }),
-      // The big swept-back horns.
-      ...[-1, 1].map((k) => P.torus(0.4, 0.07, '#EDE3D2', { at: [k * 0.42, 0.18, 0.12], rot: [Math.PI / 2, 0, k > 0 ? 0 : Math.PI] }, Math.PI * 0.75)),
+      ...buffaloHorns([0.24, 0.14, 0.18], 0.34, 0.07),
       ...[-1, 1].map((k) => P.sphere(0.06, PAL.ink, { at: [k * 0.24, 0.05, 0.62] })),
     ]), bag, 2))
     root.add(head)
