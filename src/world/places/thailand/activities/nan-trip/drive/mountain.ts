@@ -122,7 +122,7 @@ const VIEW_GAP = 0.75
 
 /** The road's tap targets: the Pajero (Daddy in it, the elephant toy, the wipers), then whoever is on the road this
  *  drive (`traffic`: its roll). */
-export function driveAnchors(id: RoadId, traffic?: TrafficPlan, to = ''): AnchorInfo[] {
+export function driveAnchors(id: RoadId, traffic?: TrafficPlan, to = '', cup = false): AnchorInfo[] {
   const r = nanRoad(id)
   const t = traffic ?? r.traffic
   return [
@@ -136,7 +136,7 @@ export function driveAnchors(id: RoadId, traffic?: TrafficPlan, to = ''): Anchor
     ...t.monkeys.map((_, i): AnchorInfo => ({ id: `monkey:${i}`, label: 'Monkey', kind: 'thing' })),
     ...r.blind.map((_, i): AnchorInfo => ({ id: `mirror:${i}`, label: 'Round mirror', kind: 'thing' })),
     ...(r.falls !== undefined ? [{ id: 'falls', label: 'Waterfall', kind: 'thing' } as AnchorInfo] : []),
-    { id: 'landmark', label: id === 'sky' && to === 'salt' ? 'Bo Kluea salt village' : { market: 'The market', mushrooms: 'The mushroom farm', cafe: 'Stop Time Cafe', salt: 'Bo Kluea salt village', viewpoint: 'The viewpoint' }[r.landmark], kind: 'thing' },
+    { id: 'landmark', label: id === 'sky' && to === 'salt' ? 'Bo Kluea salt village' : id === 'city' && cup ? 'The race ground' : { market: 'The market', mushrooms: 'The mushroom farm', cafe: 'Stop Time Cafe', salt: 'Bo Kluea salt village', viewpoint: 'The viewpoint', raceground: 'The race ground' }[r.landmark], kind: 'thing' },
   ]
 }
 
@@ -290,6 +290,8 @@ export class NanDrive implements World3D {
     private to = '',
     /** Where along the road she starts (m): the sky road's second trip up starts above the cloud. */
     fromS = 4,
+    /** The Nan Mountain Cup is on (cup/cup.ts): the city road ends at its race ground instead of the market. */
+    private cup = false,
   ) {
     const { scene, bag } = this
     const r = (this.r = nanRoad(road))
@@ -335,7 +337,7 @@ export class NanDrive implements World3D {
     // The stop at the end, on the left, facing the road.
     const end = r.road.spotAt(r.road.length - 16, half + 9)
     const et = r.road.sampleAt(r.road.length - 16)
-    this.landmark = buildLandmark(r.id === 'sky' && to === 'salt' ? 'salt' : r.landmark, bag)
+    this.landmark = buildLandmark(r.id === 'sky' && to === 'salt' ? 'salt' : r.id === 'city' && cup ? 'raceground' : r.landmark, bag)
     this.landmark.position.set(end.x, field.at(end.x, end.z), end.z)
     this.landmark.rotation.y = Math.atan2(-et.lx, -et.lz)
     scene.add(this.landmark)
@@ -673,7 +675,8 @@ export class NanDrive implements World3D {
       const T = L.nan.drive.to
       const line = { city: T.market, valley: T.mushrooms, sky: this.to === 'salt' ? T.salt : T.rice, three: T.view }[this.r.id]
       this.told.add('arrive')
-      this.speak(line)
+      // (The Cup's race ground has no line yet: its voices come with the full loop.)
+      if (!(this.r.id === 'city' && this.cup)) this.speak(line)
       this.ji.react('wave')
     }
     if (this.phase !== 'drive') {

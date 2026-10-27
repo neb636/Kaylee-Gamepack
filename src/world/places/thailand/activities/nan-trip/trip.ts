@@ -50,16 +50,20 @@ export const PASS: { id: string; icon: string; label: string }[] = [
   { id: 'mushrooms', icon: '🍄', label: 'Mushrooms' },
   { id: 'rice', icon: '🌾', label: 'Rice' },
   { id: 'salt', icon: '🧂', label: 'Salt' },
+  { id: 'cup', icon: '🏁', label: 'The Cup' },
   { id: 'home', icon: '🏠', label: 'Home' },
 ]
+/** The boarding pass's legs on this trip (🏁 only with the Cup on). */
+export const passFor = (cup: boolean) => (cup ? PASS : PASS.filter((p) => p.id !== 'cup'))
 /** The boarding pass's leg for a section (the goodbye, the airport and the plane are all the flight). */
 export function legOf(s: NanSection): string | null {
   if (s === 'invite') return null
   if (s === 'pack') return 'pack'
   if (s === 'goodbye' || s === 'airport' || s === 'takeoff' || s === 'fly' || s === 'land') return 'fly'
   if (s === 'mushrooms' || s === 'rice' || s === 'salt' || s === 'home') return s
+  if (s === 'cup' || s === 'race' || s === 'podium' || s === 'cup-win') return 'cup'
   return null
 }
 /** Where the trip picks up next time she says yes to the mountains (the start of a leg). */
 export const RESUME: NanSection[] = ['goodbye', 'airport', 'takeoff', 'map']
-export const RESUME_AT: Partial<Record<NanSection, NanSection>> = { fly: 'takeoff', land: 'takeoff', drive: 'map', mushrooms: 'map', rice: 'map', salt: 'map', race: 'map', three: 'map' }
+export const RESUME_AT: Partial<Record<NanSection, NanSection>> = { fly: 'takeoff', land: 'takeoff', drive: 'map', mushrooms: 'map', rice: 'map', salt: 'map', cup: 'map', race: 'map', podium: 'map', 'cup-win': 'map', three: 'map' }

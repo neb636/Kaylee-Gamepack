@@ -20,7 +20,7 @@ export const ROAD_IDS = ['city', 'valley', 'sky', 'three'] as const
 export type RoadId = (typeof ROAD_IDS)[number]
 export const WEATHERS = ['rain', 'sun', 'cloud'] as const
 export type Weather = (typeof WEATHERS)[number]
-export type LandmarkKind = 'market' | 'mushrooms' | 'cafe' | 'salt' | 'viewpoint'
+export type LandmarkKind = 'market' | 'mushrooms' | 'cafe' | 'salt' | 'viewpoint' | 'raceground'
 
 export interface NanRoad {
   id: RoadId

@@ -1,8 +1,8 @@
 // The Nan Mountain Cup's race screen (section `race`; greybox 1): the 3D race (race.ts) with its tap targets and the
 // hint finger, the races' HUD over it (trip/race/RaceHud.tsx: her place and everyone's faces, coins, the minimap, the
 // countdown, the banners), and on a phone the tilt steering and the gas pedal, as in the boat race. When the race is
-// over, the end card: 🔁 race again, or 🗺️ back to the Nan map. (The podium, the board and the Cup come in greybox 3.)
-import { AnimatePresence, motion } from 'motion/react'
+// over (everyone over the line, the fireworks going), it hands over to the podium on the race ground (Ground.tsx).
+import { motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { bigCelebration, sounds, useLandscape } from '../../../../../../sdk'
@@ -14,9 +14,8 @@ import { GasPedal } from '../../../trip/race/GasPedal'
 import { Banner, CoinsAndMap, Countdown, Standings, type Face } from '../../../trip/race/RaceHud'
 import { askForTilt, needsAsking, steerFor, Tilt, type SteerMode } from '../../../trip/race/tilt'
 import { TiltingPhone, TiltSetup } from '../../../trip/race/TiltSetup'
-import { FarmEnd } from '../mushrooms/Mushrooms'
 import { KART_ANCHORS, KartRace, type KartHud } from './race'
-import { RIVALS, type RacerId, type Result } from './rivals'
+import { RIVALS, type RacerId, type Result, type RivalId } from './rivals'
 import { Track, type TrackId } from './track'
 
 const FACES: Record<RacerId, Face> = {
@@ -31,11 +30,15 @@ interface Props {
   track: TrackId
   result: Result
   packed: string[]
-  /** The end card's 🗺️: back to the Nan map. */
-  onMap: () => void
+  /** The gifts on her kart (from the races she lost). */
+  gifts?: readonly RivalId[]
+  /** She has raced already this visit (a shorter start). */
+  again?: boolean
+  /** The race is over: her place (1 or 2), off to the podium. */
+  onFinish: (place: number) => void
 }
 
-export function Cup({ track, result, packed, onMap }: Props) {
+export function Cup({ track, result, packed, gifts = [], again: before = false, onFinish }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [hud, setHud] = useState<KartHud | null>(null)
@@ -43,7 +46,9 @@ export function Cup({ track, result, packed, onMap }: Props) {
   const worldRef = useRef<KartRace | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const mapEls = useRef(new Map<string, SVGElement>())
-  const raced = useRef(0)
+  const raced = useRef(before ? 1 : 0)
+  const finish = useRef(onFinish)
+  finish.current = onFinish
   const map = useMemo(() => new Track(track).map, [track])
 
   // On a phone, tilt to steer with a gas pedal (trip/race/tilt.ts), as in the boat race: the phone turned sideways (or
@@ -81,19 +86,18 @@ export function Cup({ track, result, packed, onMap }: Props) {
   }, [hud?.phase === 'finish'])
 
   const make = (renderer: WebGLRenderer) => {
-    const w = new KartRace(renderer, { track, result, packed, again: raced.current > 0 }, { onHud: setHud, onDone: () => setDone(true) })
+    const w = new KartRace(renderer, { track, result, packed, again: raced.current > 0, gifts }, {
+      onHud: setHud,
+      onDone: (place) => {
+        setDone(true)
+        // (A moment of the fireworks, then the podium.)
+        setTimeout(() => finish.current(place), 700)
+      },
+    })
     w.setHintElement(hintRef.current)
     w.setMapElements(mapEls.current)
     w.setSteer(steerRef.current ? 'tilt' : 'finger', (tiltRef.current ??= new Tilt()))
     return w
-  }
-
-  const again = () => {
-    sounds.pop()
-    raced.current++
-    setDone(false)
-    setHud(null)
-    setKey((k) => k + 1)
   }
 
   const racing = !!hud && !done && (hud.phase === 'race' || hud.phase === 'count' || hud.phase === 'finish')
@@ -159,7 +163,6 @@ export function Cup({ track, result, packed, onMap }: Props) {
           })
         }}
       />
-      <AnimatePresence>{done && <FarmEnd onAgain={again} onMap={onMap} label="Race again" />}</AnimatePresence>
     </div>
   )
 }

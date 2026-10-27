@@ -22,8 +22,9 @@
 // - The rivals keep it close the whole way (the races' rubber band, trip/race/rubber.ts, round a story per track in
 //   rivals.ts). The finish is scripted both ways (`result`): she wins by a nose, or (the one race she loses) the home
 //   rival, Moon here, edges past on the last stretch and wins by a nose in a slow-motion photo finish, with her second,
-//   never last. Fireworks either way, and then the end card (Cup.tsx).
-// Greybox: no voices, no podium yet (greybox 3). The numbers that decide how it feels are knobs (?feel=1): her kart,
+//   never last. Fireworks either way, and then the podium (Cup.tsx hands over to the race ground, ground.ts). The gifts
+//   from the races she lost ride on her kart (gifts.ts).
+// Greybox: no voices. The numbers that decide how it feels are knobs (?feel=1): her kart,
 // the bounce, the mud, the cloud and the blossoms, the rivals' rubber band; the lab's graph shows her finger across the
 // road against the kart.
 import { BufferAttribute, BufferGeometry, CanvasTexture, Color, DoubleSide, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Raycaster, RepeatWrapping, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
@@ -50,7 +51,8 @@ import { buildMirror, buildRoadScene, rng, type RoadScene } from '../../../trip/
 import { buildCloudLayer, buildCloudSea } from '../../../trip/road/clouds'
 import { buildKart, type Kart } from '../../../trip/vehicles/kart'
 import { buildBlock, type Block } from './blocks'
-import { GRID, HOME, RIVAL_IDS, RIVALS, scripts, type RacerId, type Result, type Rival } from './rivals'
+import { animateGifts, giveGifts, type Gift } from './gifts'
+import { GRID, HOME, RIVAL_IDS, RIVALS, scripts, type RacerId, type Result, type Rival, type RivalId } from './rivals'
 import { cupSfx as sfx } from './sounds'
 import { SHOWER_LEN, STREAM_LEN, Track, type Mushroom, type TrackId } from './track'
 
@@ -105,6 +107,8 @@ export interface KartStart {
   packed: string[]
   /** She has raced here before this visit (a shorter start). */
   again: boolean
+  /** The gifts on her kart, from the rivals who won a race of the Cup (cup/gifts.ts). */
+  gifts?: readonly RivalId[]
 }
 
 export interface KartEvents {
@@ -212,6 +216,8 @@ export class KartRace implements World3D {
   private music = new RaceMusic()
   readonly racers: Racer[]
   private kaylee: Avatar
+  private gifts: Gift[] = []
+  private giftWiggle = 0
   private winner: RacerId
   private phase: RacePhase = 'intro'
   private phaseT = 0
@@ -309,6 +315,7 @@ export class KartRace implements World3D {
       return r
     }
     const mine = buildKart(bag)
+    this.gifts = giveGifts(mine, start.gifts ?? [], bag)
     this.racers = [racer('kaylee', mine, null)]
     for (const id of RIVAL_IDS) {
       const rv = RIVALS[id]
@@ -746,10 +753,11 @@ export class KartRace implements World3D {
     }
   }
 
-  /** Tap her kart: beep beep! The horn squashes, the kart bounces. */
+  /** Tap her kart: beep beep! The horn squashes, the kart bounces, the gifts on it wiggle. */
   private honk() {
     this.counts.honks++
     sfx.honk()
+    this.giftWiggle = 1
     this.k.squash = 0.35
     const h = this.k.v.horn
     if (h) h.scale.set(1.5, 1.5, 0.6)
@@ -813,6 +821,8 @@ export class KartRace implements World3D {
     this.kaylee.update(dt, t)
     const horn = this.k.v.horn
     if (horn) horn.scale.lerp(tmp.set(1, 1, 1), Math.min(1, dt * 8))
+    this.giftWiggle = Math.max(0, this.giftWiggle - dt / 0.8)
+    animateGifts(this.gifts, t, clamp(Math.abs(this.k.d.speed) / KART.top, 0, 1), this.giftWiggle)
     for (const m of this.shrooms) {
       m.squash = Math.min(1, m.squash + dt / 0.5)
       const s = m.squash < 1 ? Math.cos(m.squash * Math.PI * 3) * (1 - m.squash) ** 2 : 0
@@ -1653,6 +1663,7 @@ export class KartRace implements World3D {
       track: this.start.track,
       result: this.start.result,
       winner: this.winner,
+      gifts: this.gifts.map((g) => g.id),
       phase: this.phase,
       ended: this.ended,
       place: this.order().indexOf('kaylee') + 1,

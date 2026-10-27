@@ -45,9 +45,9 @@ export const go = {
 /** The hash for one section of an activity, with the state it needs: `#/world/italy/pizzeria/own?at=oven&sauce=pink`. */
 export function worldLink(place: string, activity: string, section?: string, params: Record<string, string> = {}) {
   const path = ['#/world', place, activity, ...(section ? [section] : [])].map((p, i) => (i ? encodeURIComponent(p) : p)).join('/')
-  // Commas stay readable in lists (toppings=basil,olive).
+  // Commas and colons stay readable in lists (toppings=basil,olive; cup=forest:1,steps:2).
   const query = Object.entries(params)
-    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v).replace(/%2C/g, ',')}`)
+    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v).replace(/%2C/g, ',').replace(/%3A/g, ':')}`)
     .join('&')
   return query ? `${path}?${query}` : path
 }

@@ -47,10 +47,15 @@ export const RIVER_W = 0.13
 
 // ---------------------------------------------------------------- the places
 
-/** The stops (each its own section) and the two other places on the map. */
-export const STOPS = ['mushrooms', 'rice', 'salt'] as const
+/** The stops (each its own section) and the two other places on the map. The Nan Mountain Cup (`cup`, behind its flag:
+ *  cup/cup.ts) is a stop in Nan town: the city road ends at its race ground, and its stamp lands on Nan town. */
+export const STOPS = ['mushrooms', 'rice', 'salt', 'cup'] as const
 export type Stop = (typeof STOPS)[number]
-export type PlaceId = Stop | 'airport' | 'town'
+export type PlaceId = 'mushrooms' | 'rice' | 'salt' | 'airport' | 'town'
+/** Where each stop is on the map. */
+export const STOP_PLACE: Record<Stop, PlaceId> = { mushrooms: 'mushrooms', rice: 'rice', salt: 'salt', cup: 'town' }
+/** The stops on this trip: the Cup only when it's open. */
+export const liveStops = (cup: boolean): readonly Stop[] => (cup ? STOPS : STOPS.filter((s) => s !== 'cup'))
 
 /** Where each place stands, and the road that drives there (the 3 road is the way home). */
 export const PLACES: Record<PlaceId, { at: XZ; road: 'city' | 'valley' | 'sky' | 'three'; label: string }> = {

@@ -29,7 +29,7 @@ import { L } from '../../../lines'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { Floaters } from '../mushrooms/fx'
 import { buildDiorama, PLACE_SCALE, type Diorama } from './diorama'
-import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, modelAt, PLACE_IDS, PLACES, RUNWAY, STAMP_Y, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
+import { BOARD, CAR_SPEED, CLOUDS, DRAG_SPEED, FISH, heightAt, HOME_AFTER, LAOS_FLAG, liveStops, modelAt, PLACE_IDS, PLACES, RUNWAY, STAMP_Y, STOP_PLACE, STOPS, THAI_FLAG, type PlaceId, type Stop } from './layout'
 import { buildNet, nearest, route, STEP } from './net'
 import { mapSfx as sfx } from './sounds'
 
@@ -73,6 +73,8 @@ export class NanMap extends Stage {
   private net = buildNet()
   private done: Set<Stop>
   private fresh: Stop | null
+  /** The stops on this trip (the Cup in Nan town only when it's open). */
+  private stops: readonly Stop[]
   private car = { path: [0], k: 0, speed: CAR_SPEED, heading: 0, hop: 1, flash: 0, putT: 0, lift: 0 }
   private going: PlaceId | null = null
   private arrived: { id: PlaceId; t: number } | null = null
@@ -98,7 +100,7 @@ export class NanMap extends Stage {
   /** Mommy's question is up (the 🏠 and 🚙 buttons). */
   private asking = false
 
-  constructor(renderer: WebGLRenderer, private ev: MapEvents, start: { stops: Stop[]; from?: PlaceId | null }) {
+  constructor(renderer: WebGLRenderer, private ev: MapEvents, start: { stops: Stop[]; from?: PlaceId | null; cup?: boolean }) {
     super(renderer, ev)
     const { scene, bag } = this
     this.scene.background = new Color('#E4DDF4')
@@ -112,10 +114,11 @@ export class NanMap extends Stage {
     scene.add(this.sparkles.mesh, this.drops.mesh, this.steam.mesh)
     // ---- Where the link starts: the stops done so far, and the Pajero where she drove from (or at the last stop, or
     // at the airport). Back from a stop, its stamp lands; back from the city road, nothing new.
-    this.done = new Set(start.stops)
+    this.stops = liveStops(!!start.cup)
+    this.done = new Set(start.stops.filter((s) => this.stops.includes(s)))
     const last = start.stops[start.stops.length - 1]
-    const from = start.from ?? last ?? 'airport'
-    this.fresh = last && from === last ? last : null
+    const from = start.from ?? (last ? STOP_PLACE[last] : null) ?? 'airport'
+    this.fresh = last && from === STOP_PLACE[last] ? last : null
     const at = this.net.place[from]
     this.car.path = [at]
     const n = this.net.nbr[at][0]
@@ -127,7 +130,7 @@ export class NanMap extends Stage {
     const count = this.done.size
     const t0 = this.fresh ? 1.6 : 0.8
     if (count === 0) this.after(t0, () => this.say('first', M.first))
-    else if (count >= STOPS.length) this.after(t0, () => this.say('home', M.home))
+    else if (count >= this.stops.length) this.after(t0, () => this.say('home', M.home))
     else if (count >= HOME_AFTER)
       this.after(t0, () => {
         this.say('more', M.more)
@@ -174,14 +177,15 @@ export class NanMap extends Stage {
 
   // ---------------------------------------------------------------- which places are open
 
-  /** Can she go there now? The stops she hasn't done; Nan town until all three are done; the airport after two. */
+  /** Can she go there now? The stops she hasn't done; Nan town until all of them are done (with the Cup on, its race
+   *  ground: she can go back to race for fun after the Cup too); the airport after two. */
   private open(id: PlaceId) {
     if (id === 'airport') return this.done.size >= HOME_AFTER
-    if (id === 'town') return this.done.size < STOPS.length
-    return !this.done.has(id)
+    if (id === 'town') return this.done.size < this.stops.length
+    return !this.done.has(id as Stop)
   }
   private get allDone() {
-    return this.done.size >= STOPS.length
+    return this.done.size >= this.stops.length
   }
 
   // ---------------------------------------------------------------- the little Pajero
@@ -315,14 +319,15 @@ export class NanMap extends Stage {
   private poke(id: PlaceId) {
     this.pokeT.set(id, this.time)
     if (id === 'airport') return this.fly()
-    if (id === 'town') {
+    const stop = this.stops.find((s) => STOP_PLACE[s] === id)
+    const stamp = stop ? this.d.stamps[stop] : null
+    if (id === 'town' && !stamp?.visible) {
       sfx.chime()
       return
     }
-    const stamp = this.d.stamps[id as Stop]
     if (stamp?.visible) {
       sfx.been()
-      this.pokeT.set(`stamp:${id}`, this.time)
+      this.pokeT.set(`stamp:${stop}`, this.time)
       this.sparkles.burst(stamp.position.clone(), 12, 0.5, 0.6, 0.7, 0.025)
     } else sfx.bloop()
   }
@@ -419,7 +424,7 @@ export class NanMap extends Stage {
     for (const s of STOPS) {
       const g = d.stamps[s]
       if (!g.visible) continue
-      const [x, z] = modelAt(s)
+      const [x, z] = modelAt(STOP_PLACE[s])
       const base = heightAt(x, z) + STAMP_Y
       const spin = clamp((this.time - (this.pokeT.get(`stamp:${s}`) ?? -9)) / 0.8, 0, 1)
       g.rotation.y = this.rig.yaw * DEG + Math.sin(t * 1.3 + x) * 0.25 + (spin < 1 ? spin * Math.PI * 2 : 0)
@@ -618,10 +623,11 @@ export class NanMap extends Stage {
     const p = this.carPos()
     let best: PlaceId | null = null
     let bd = Infinity
-    for (const s of STOPS) {
+    for (const s of this.stops) {
       if (this.done.has(s)) continue
-      const d = Math.hypot(PLACES[s].at[0] - p.x, PLACES[s].at[1] - p.z)
-      if (d < bd) (bd = d), (best = s)
+      const at = PLACES[STOP_PLACE[s]].at
+      const d = Math.hypot(at[0] - p.x, at[1] - p.z)
+      if (d < bd) (bd = d), (best = STOP_PLACE[s])
     }
     return best
   }
