@@ -1,7 +1,8 @@
-// The rice farm's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise). No voices yet (the
-// greybox): Kaylee's sploosh in the water and her thud on the banks, the seedlings' plips (climbing a happy scale), a
-// gate's creak and the water gushing in, the birds' cheeps and flutters, the sickle's swish, a bundle tied and thunked
-// onto the rack, the thwack of the threshing and the grains, the steam off the sticky rice, the frogs, ducks and the buffalo, the chimes, and the pink milk on the deck.
+// The rice farm's sounds, synthesized like the rest of Thailand's (the world kit's tone/noise): Kaylee's sploosh in
+// the water and her thud on the banks, the seedlings' plips (climbing a happy scale), a gate's creak and the water
+// gushing in, the birds' cheeps and flutters, the sickle's swish, a bundle tied and thunked onto the rack, the thwack of
+// the threshing and the grains, the steam off the sticky rice, the frogs, ducks and the buffalo, the chimes, the pink
+// milk on the deck, Lung Kham's chuckle, and the far-off farm life the farm plays quietly now and then.
 import { noise, tone } from '../../../../../kit/sfx'
 import { sfx } from '../../../sfx'
 
@@ -115,6 +116,19 @@ export const riceSfx = {
   steam: () => noise(0.9, 0.035, 'highpass', 3800, 2600, 0, 0.6),
   /** A ball of sticky rice: nom nom. */
   nom: () => [0, 0.16].forEach((d) => tone(300, 220, 0.09, 0.08, 'triangle', d)),
+  /** Lung Kham's low chuckle (tapped while someone else talks). */
+  chuckle: () => [0, 0.15, 0.3].forEach((d, i) => tone(230 - i * 14, 185 - i * 14, 0.11, 0.07, 'triangle', d)),
+  /** Far-off farm life, quiet, now and then (never over anyone talking): a frog, a bird, a duck, a chime, the buffalo. */
+  far: [
+    () => [0, 0.14].forEach((d, i) => tone(i ? 250 : 190, i ? 165 : 145, 0.1, 0.022, 'square', d)),
+    () => [0, 0.1, 0.19].forEach((d) => tone(4300 + Math.random() * 500, 3400, 0.05, 0.012, 'sine', d)),
+    () => [0, 0.18].forEach((d) => tone(500, 370, 0.12, 0.018, 'sawtooth', d)),
+    () => [0, 1].forEach((i) => {
+      const f = 880 * Math.pow(2, (PENTA[Math.floor(Math.random() * 7)] + 12) / 12)
+      tone(f, f, 0.9, 0.01, 'sine', i * 0.16)
+    }),
+    () => tone(140, 105, 0.9, 0.03, 'sawtooth'),
+  ],
   /** Splash! Daddy got wet. */
   wet: () => {
     noise(0.3, 0.07, 'bandpass', 1400, 600, 0, 1)

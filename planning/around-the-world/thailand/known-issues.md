@@ -109,11 +109,14 @@ Code paths are under `src/world/places/thailand/`.
   - Check: `#/world/thailand/nan-trip/rice?round=plant` in iPad landscape.
 - [ ] **Grow has short stretches where only the clock moves.** Shorter rests for the first wave of birds would help.
   - Check: `#/world/thailand/nan-trip/rice?round=grow`.
-- [ ] **Daddy stands still while she threshes,** apart from the hop on "Whack! Good one!".
+- [ ] **Daddy stands still while she threshes,** apart from a hop on the third bang (Lung counts the bundles now).
   - Check: `#/world/thailand/nan-trip/rice?round=thresh`.
 - [ ] **The 🏠 sits on the hut's roof corner** at the top left of the farm (the hut is scenery, not a target).
-- [ ] **Listen to the rice farm's voices** (32 clips): is Daddy too chatty (8-10 one-time lines a run)? The transcription
-  check heard "Go, farmer Kaylee!" as "Cayley" (likely just spelling).
+- [ ] **Listen to the rice farm's voices**: is Daddy too chatty (8-10 one-time lines a run)? The transcription
+  check heard "Go, farmer Kaylee!" as "Cayley" (likely just spelling). Since 2026-10-27 Lung Kham talks too: listen to
+  his Thai numbers and "Khob khun krap!".
+- [ ] **The mushroom aunty's mouth may not move when she talks:** her `FaceLife` is made without her voice
+  (`activities/nan-trip/mushrooms/farm3d.ts`, `new FaceLife(this.house.farmer)`; it needs `'farmer'`).
 
 ## The Nan trip: the look and the voices (steps 8-10)
 The step 6 issues (the small map on a tall iPad, the back of Kaylee's head at the belt, the car starting at the last

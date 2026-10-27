@@ -2380,11 +2380,32 @@
     "file": "84fa172ff8f5.mp3"
   },
   {
-    "text": "Let's plant rice, Kaylee! Walk in the water.",
+    "text": "Sawasdee krap! I need a helper!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2364,
+    "file": "141aa5054dc6.mp3"
+  },
+  {
+    "text": "Oh no! Birds in my rice!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2111,
+    "file": "8b1c34db5e6b.mp3"
+  },
+  {
+    "text": "Now we bang the grains out!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1860,
+    "file": "3693d4f91ae9.mp3"
+  },
+  {
+    "text": "Walk through the water to plant!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3610,
-    "file": "206fede16731.mp3"
+    "ms": 2705,
+    "file": "008f0d3e2f38.mp3"
   },
   {
     "text": "Rice likes water! Open the gate.",
@@ -2394,25 +2415,25 @@
     "file": "d5a697b5e261.mp3"
   },
   {
-    "text": "The birds want the rice! Shoo, shoo!",
+    "text": "Shoo them away!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3040,
-    "file": "86acdcc6d840.mp3"
+    "ms": 1193,
+    "file": "02d09004c1ed.mp3"
   },
   {
-    "text": "It's golden! Time to cut the rice.",
+    "text": "Walk through the rice to cut it!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3446,
-    "file": "6bf21e5c6c95.mp3"
+    "ms": 1699,
+    "file": "fa907242d081.mp3"
   },
   {
-    "text": "Bang the rice! The grains fall out.",
+    "text": "Tap to bang the rice!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3346,
-    "file": "14296a37c6eb.mp3"
+    "ms": 2224,
+    "file": "8ece81e39462.mp3"
   },
   {
     "text": "In Nan, people eat sticky rice with their fingers!",
@@ -2429,11 +2450,123 @@
     "file": "a0c0d7533194.mp3"
   },
   {
-    "text": "Walk through the water to plant!",
+    "text": "Buffalo helped farmers get the mud ready!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2705,
-    "file": "008f0d3e2f38.mp3"
+    "ms": 3271,
+    "file": "4a844da8c79f.mp3"
+  },
+  {
+    "text": "Ducks eat the bugs in the rice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2961,
+    "file": "3563bb441b28.mp3"
+  },
+  {
+    "text": "Ahh! Water for my rice!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2455,
+    "file": "c509d77b5890.mp3"
+  },
+  {
+    "text": "All planted! Khob khun krap!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2162,
+    "file": "5319638b9ac0.mp3"
+  },
+  {
+    "text": "Look how tall it grows!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1540,
+    "file": "6e2812211c27.mp3"
+  },
+  {
+    "text": "Golden! My rice is ready!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2445,
+    "file": "20e651d3c6c8.mp3"
+  },
+  {
+    "text": "Neung!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 554,
+    "file": "f6d1f5ec6da7.mp3"
+  },
+  {
+    "text": "Song!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 795,
+    "file": "0e6a4447d704.mp3"
+  },
+  {
+    "text": "Sahm!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 815,
+    "file": "778eb99850ad.mp3"
+  },
+  {
+    "text": "See!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 606,
+    "file": "b37555e37826.mp3"
+  },
+  {
+    "text": "Hah!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 363,
+    "file": "ccfda7b2865a.mp3"
+  },
+  {
+    "text": "That's one to five in Thai!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2474,
+    "file": "4bac9c3a1c4e.mp3"
+  },
+  {
+    "text": "Sticky rice, for my helper!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2128,
+    "file": "3f92260ec21d.mp3"
+  },
+  {
+    "text": "Hey! My scarecrow!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1687,
+    "file": "8b6a6bc7a463.mp3"
+  },
+  {
+    "text": "Hee hee! Sawasdee krap!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1869,
+    "file": "ed1e99263079.mp3"
+  },
+  {
+    "text": "Mud is good for rice!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1819,
+    "file": "4c1644ea876c.mp3"
+  },
+  {
+    "text": "My back says thank you!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2082,
+    "file": "9031c1aafc0b.mp3"
   },
   {
     "text": "Tap the gate to let the water in!",
@@ -2457,13 +2590,6 @@
     "file": "ec82d03a5d47.mp3"
   },
   {
-    "text": "Tap to bang the rice!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2224,
-    "file": "8ece81e39462.mp3"
-  },
-  {
     "text": "Tap the sticky rice!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2478,18 +2604,11 @@
     "file": "198ba781861c.mp3"
   },
   {
-    "text": "Look at those rows, Kaylee!",
+    "text": "Look at those rows!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 2210,
-    "file": "3b9659feb2ed.mp3"
-  },
-  {
-    "text": "Our very own rice farm!",
-    "voice": "nick",
-    "sig": "a2881bb105",
-    "ms": 2056,
-    "file": "41944577cb8a.mp3"
+    "ms": 1857,
+    "file": "a36e9b579ad3.mp3"
   },
   {
     "text": "Hey! I'm all wet!",
@@ -2548,13 +2667,6 @@
     "file": "03bb4bcbc4f4.mp3"
   },
   {
-    "text": "Whack! Good one!",
-    "voice": "nick",
-    "sig": "a2881bb105",
-    "ms": 1530,
-    "file": "01a16154248b.mp3"
-  },
-  {
     "text": "Mmm, coffee.",
     "voice": "nick",
     "sig": "a2881bb105",
@@ -2583,11 +2695,18 @@
     "file": "b3bf77d14bbf.mp3"
   },
   {
-    "text": "Sticky rice from your farm!",
+    "text": "You grew this sticky rice!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 1581,
-    "file": "9a6a5aa93d5f.mp3"
+    "ms": 2251,
+    "file": "d644a8095092.mp3"
+  },
+  {
+    "text": "Aroi mak! That means so yummy!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 3846,
+    "file": "c39e6ddb39a0.mp3"
   },
   {
     "text": "Smile, Kaylee!",
@@ -2597,11 +2716,11 @@
     "file": "8acd13c669db.mp3"
   },
   {
-    "text": "Want to see real rice grow, Kaylee?",
+    "text": "Want to see real farmers grow rice?",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2946,
-    "file": "beda945df11d.mp3"
+    "ms": 3146,
+    "file": "dec52d23b545.mp3"
   },
   {
     "text": "Press the key!",
