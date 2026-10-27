@@ -297,7 +297,6 @@ export const L = {
     gate: 'A boat race! Drive through the rainbow gate!',
     start: 'Hold your finger on the water to go fast!',
     count: ['Three!', 'Two!', 'One!', 'Go!'],
-    ramp: 'A ramp! Tap in the air for a trick!',
     lap2: 'Lap two!',
     final: 'Last lap!',
     win: `${NAME} wins! First place!`,

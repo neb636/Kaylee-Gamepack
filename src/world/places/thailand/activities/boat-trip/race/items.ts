@@ -1,6 +1,6 @@
 // What lies on the race course (race.ts), Mario Kart style, in the toon look:
 // - Lines of gold coins along the course (each one makes her boat a little faster, up to ten), back again next lap.
-// - Golden arrow pads that give a burst of speed, and two striped ramps to jump off (a tap in the air is a trick): a
+// - Golden arrow pads that give a burst of speed, and two striped ramps to jump off: a
 //   small one, and the BIG JUMP right across the course, through a giant flower hoop, with a line of coins in the air.
 // - Banana peels on the water (the macaque drops them): drive over one and spin round.
 // Each check takes a racer's place on the course (track.ts: `s` along it, `lat` across it).
