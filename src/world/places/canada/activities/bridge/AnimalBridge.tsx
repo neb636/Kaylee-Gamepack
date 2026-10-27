@@ -59,10 +59,14 @@ const START_CROSSED: Record<BridgeSection, FamilyId[]> = { elk: [], sheep: ['elk
 
 function parseCrossed(v: string, section: BridgeSection): FamilyId[] {
   if (v === '') return START_CROSSED[section]
+  if (v === 'none') return []
   const ids = new Set(v.split(','))
   return FAMILIES.filter((id) => ids.has(id))
 }
-const crossedParam = (ids: FamilyId[], section: BridgeSection) => (ids.length === START_CROSSED[section].length && ids.every((id) => START_CROSSED[section].includes(id)) ? '' : FAMILIES.filter((id) => ids.includes(id)).join(','))
+/** The shortest `?crossed=` for these families: empty for the section's own start, `none` for nobody (an empty value
+ *  would read as the section's start), else the list. */
+const crossedParam = (ids: FamilyId[], section: BridgeSection) =>
+  ids.length === START_CROSSED[section].length && ids.every((id) => START_CROSSED[section].includes(id)) ? '' : ids.length ? FAMILIES.filter((id) => ids.includes(id)).join(',') : 'none'
 const greenParam = (g: number) => (g < 0.05 ? '' : String(Math.round(g * 10) / 10))
 /** The section for this moment: the family she leads (or leads next), or the photos once everyone is across. */
 function sectionOf(lead: FamilyId | null, crossed: FamilyId[]): BridgeSection {
@@ -1004,7 +1008,8 @@ export function AnimalBridge() {
     const w = new BridgeWorld(svg.current, stage, run.section, run.crossed, run.green, run.seed, {
       info: (i) => {
         setInfo(i)
-        enter(i.section, { crossed: crossedParam(i.crossed, i.section), green: i.section === 'bears' ? greenParam(i.green) : '' })
+        // The bridge's green counts in every section (she can plant it while leading any family).
+        enter(i.section, { crossed: crossedParam(i.crossed, i.section), green: greenParam(i.green) })
       },
       say: setSay,
       album: setAlbum,

@@ -6,12 +6,12 @@ import { defineSections } from '../../../../kit/sections'
 
 const BRIDGE_SECTIONS = defineSections('canada', 'bridge', {
   params: {
-    crossed: { default: '', doc: 'the families already across the highway, a comma list of elk, sheep, bears (empty = what that section starts with: none, elk, elk and sheep, everyone)' },
+    crossed: { default: '', doc: 'the families already across the highway, a comma list of elk, sheep, bears, or none (empty = what that section starts with: none, elk, elk and sheep, everyone)' },
     green: { default: '', doc: 'how planted the bridge is, 0 to 1 (empty = bare; the bears cross once it is about 0.6)' },
   },
   sections: [
-    { id: 'elk', name: 'The elk family', params: ['crossed'] },
-    { id: 'sheep', name: 'The bighorn sheep', params: ['crossed'] },
+    { id: 'elk', name: 'The elk family', params: ['crossed', 'green'] },
+    { id: 'sheep', name: 'The bighorn sheep', params: ['crossed', 'green'] },
     { id: 'bears', name: 'The shy grizzlies', params: ['crossed', 'green'] },
     { id: 'album', name: 'The camera’s photos', params: ['crossed'] },
   ],
