@@ -213,6 +213,8 @@ interface Dad {
   lift: number
   held: boolean
   walk: { x: number; y: number } | null
+  /** Seconds on the current walk (a walk the huddle blocks gives up). */
+  walkFor: number
   cork: { x0: number; y0: number; x1: number; y1: number; t0: number } | null
   anim: Anim | null
   egg: boolean
@@ -296,7 +298,7 @@ class HuddleWorld {
       const keys = ['', '-body', '-shadow', '-back', '-belly', '-cheek', '-flip', '-flipfill', '-egg', '-eggwob', '-shell', '-crack1', '-crack2', '-snowback', '-snowcap', '-eye']
       const els: Record<string, SVGElement> = {}
       for (const s of keys) els[s.slice(1) || 'root'] = q(`d${i}${s}`)
-      this.dads.push({ i, on: false, x: -9999, y: 0, speed: 0, warmth: 1, cold: false, coldFor: 0, exposed: false, alone: false, snow: 0, face: 1, lift: 0, held: false, walk: null, cork: null, anim: null, egg: true, blinkAt: 1 + Math.random() * 4, els })
+      this.dads.push({ i, on: false, x: -9999, y: 0, speed: 0, warmth: 1, cold: false, coldFor: 0, exposed: false, alone: false, snow: 0, face: 1, lift: 0, held: false, walk: null, walkFor: 0, cork: null, anim: null, egg: true, blinkAt: 1 + Math.random() * 4, els })
     }
     // Where to start: each section as if she had played to there.
     const starts: Start[] = section === 'small' ? SMALL : section === 'blizzard' ? BIG : section === 'hatch' && chick === 'egg' ? HATCH : SNUG
@@ -352,6 +354,8 @@ class HuddleWorld {
   setStage(st: StageDef) {
     const old = this.stage
     if (old === st) return
+    // The new stage first, so walk targets are clamped to its field, not the old one.
+    this.stage = st
     const k = st.base / old.base
     const move = (x: number, y: number): [number, number] => [st.home[0] + (x - old.home[0]) * k, st.home[1] + (y - old.home[1]) * k]
     for (const d of this.dads) {
@@ -369,7 +373,6 @@ class HuddleWorld {
       this.chick.tumble = null
       this.chick.state = 'out'
     }
-    this.stage = st
     for (const d of this.dads) if (d.on) this.clampDad(d)
   }
 
@@ -920,12 +923,16 @@ class HuddleWorld {
         const dy = (d.walk.y - d.y) / DEPTH
         const l = Math.hypot(dx, dy)
         const v = 230 * st.base * dt
-        if (l < 12) d.walk = null
-        else {
+        d.walkFor += dt
+        if (l < 12 || d.walkFor > 6) {
+          d.walk = null
+          d.walkFor = 0
+        } else {
           d.x += (dx / l) * Math.min(v, l)
           d.y += (dy / l) * Math.min(v, l) * DEPTH
         }
       }
+      if (!d.walk) d.walkFor = 0
       d.lift += ((d.held ? 1 : 0) - d.lift) * Math.min(1, dt * 14)
       if (dt > 0) d.speed = d.speed * 0.8 + (Math.hypot(d.x - px, d.y - py) / dt) * 0.2
     }
