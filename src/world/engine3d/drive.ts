@@ -1,5 +1,5 @@
-// The one finger control every trip vehicle shares (plan: planning/around-the-world/thailand/boat-trip.md, "The drive
-// control"). Pure math, no three.js: a heading and a velocity on the ground (or water) plane.
+// The one finger control every vehicle shares: Thailand's boats and the Nan Pajero, and any 3D country's bike, boat or
+// sled. Pure math, no three.js: a heading and a velocity on the ground (or water) plane.
 //
 // - hold(x, z) every frame while her finger is down: that point is where the vehicle wants to be. Far ahead = fast,
 //   near = slow, to one side = it keeps turning that way (doughnuts), behind it = a happy U-turn (or, locked to a line

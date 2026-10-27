@@ -8,14 +8,14 @@ import { FaceLife } from '../../../../../engine3d/characters/face'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
-import type { Feel } from '../../../trip/drive'
+import type { Feel } from '../../../../../engine3d/drive'
 import { buildLongtail, type Longtail } from '../../../trip/vehicles/longtail'
 import type { Vehicle } from '../../../trip/vehicles/vehicle'
 import { buildMacaque, type Monkey } from '../bay/critters'
 import { applyPose, clearPose } from '../bay/poses'
 import { KIDS } from '../bay/village'
 
-/** How every racing boat drives (trip/drive.ts): quicker and grippier than cruising the bay, and always full speed
+/** How every racing boat drives (engine3d/drive.ts): quicker and grippier than cruising the bay, and always full speed
  *  toward a finger held on the water (`near`/`far` are short: the target is always well ahead on the course). */
 export const RACE_FEEL: Feel = { top: 16, boost: 1.6, accel: 9, coast: 0.5, turn: 2.1, grip: 3.2, near: 2, far: 9, dead: 0.04, lean: 0.22 }
 
