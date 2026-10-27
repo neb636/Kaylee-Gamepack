@@ -352,7 +352,10 @@ export class GlobeExtras {
     const c = this.spare[kind].pop() ?? this.host.make(kind)
     c.root.scale.setScalar(BERG_RIDER)
     berg.add(c.root)
-    c.root.position.y = 0.01
+    // (A recycled one still stands where it was at its pole.)
+    c.root.position.set(0, 0.01, 0)
+    c.root.quaternion.identity()
+    c.body.position.x = 0
     this.lost = { kind, c, berg, lat, lon, state: 'drift', t: 0, from: new Vector3(), to: { lat: 0, lon: 0, r: 1, pole: 'north' }, moved: false, waveAt: WAVE_S }
     sounds.sparkle()
     this.host.lost(kind)
