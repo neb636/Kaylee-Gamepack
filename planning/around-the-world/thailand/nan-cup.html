@@ -17,9 +17,9 @@
   "icon": "🏁",
   "kind": "Nan trip stop",
   "updated": "2026-10-27",
-  "status": { "label": "Planned", "tone": "lav" },
+  "status": { "label": "Greybox 1 built", "tone": "pink" },
   "pitch": "At the end of the city road, Nan town's market square becomes the race ground for the **Nan Mountain Cup**. Kaylee drives her own pink kart against three mountain racers on three tracks, each one different: a misty mushroom forest, the rice steps and the climb into the clouds. She wins two races and loses one. Which one she loses is rolled fresh every time she plays. Winning two makes her the champion, so the Cup with KAYLEE on it is hers.",
-  "next": "Dad reads this plan and answers the **open questions** (most of all: the kart or the Pajero, and whether the last race is always a win). Then greybox 1: one track, the kart toy and a scripted win or loss, with a `?feel=1` link.",
+  "next": "Dad plays greybox 1 on the iPad: [a race she wins](#/world/thailand/nan-trip/race?track=forest&result=win), [the race she loses](#/world/thailand/nan-trip/race?track=forest&result=lose), and [the feel lab](#/world/thailand/nan-trip/race?track=forest&feel=1) for the kart's steering, the bounce and the rivals' gap (“Copy for agent” sends the numbers back). The **open questions** below are still open: greybox 1 went with the plan's suggestions (her pink kart, the boat race's finger verb, the three made-up rivals). Then greybox 2: the rice steps and the cloud.",
   "facts": [
     { "icon": "🏁", "value": "3", "label": "tracks, any order" },
     { "icon": "🥇", "value": "2 wins, 1 loss", "label": "rolled each time" },
@@ -201,11 +201,12 @@
       "id": "sections",
       "title": "Sections: tap to play",
       "icon": "🔗",
-      "lede": "Nothing is built yet. Sections live in the Nan trip's `sections.ts`, so they open as `nan-trip/<section>`.",
+      "lede": "Greybox 1 built the race (the Mushroom Forest). Sections live in the Nan trip's `sections.ts`, so they open as `nan-trip/<section>`.",
       "blocks": [
         { "type": "sections", "base": "#/world/thailand/nan-trip/", "items": [
           { "n": "1", "id": "cup", "name": "The race ground and the board: pick a track", "status": "todo" },
-          { "n": "2", "id": "race", "name": "A race (forest, steps or cloud)", "query": "?track=forest", "status": "todo" },
+          { "n": "2", "id": "race", "name": "A race (greybox 1: the Mushroom Forest, she wins by a nose)", "query": "?track=forest&result=win" },
+          { "n": "2b", "id": "race", "name": "The race she loses: Moon wins by a nose, she's second", "query": "?track=forest&result=lose" },
           { "n": "3", "id": "podium", "name": "That race's podium (gold, or silver and a gift)", "query": "?track=forest&place=2", "status": "todo" },
           { "n": "4", "id": "cup-win", "name": "The Cup ceremony", "query": "?cup=forest:1,steps:2,cloud:1", "status": "todo" }
         ] },
@@ -214,7 +215,8 @@
           ["`lose`", "rolled", "the track she loses (`forest|steps|cloud`); a link pins it, otherwise it's rolled and saved"],
           ["`cup`", "empty", "races done and her place in each, e.g. `forest:1,steps:2`"],
           ["`place`", "from `lose`", "the podium's place, 1 or 2"],
-          ["`kart`", "`pink`", "her kart's color, if she gets to pick (open question)"]
+          ["`kart`", "`pink`", "her kart's color, if she gets to pick (open question)"],
+          ["`result`", "`win`", "greybox 1: how the race ends, `win` (she crosses first) or `lose` (the home rival edges past and wins by a nose). Greybox 3 sets it from `lose` and the roll"]
         ] }
       ]
     },
@@ -239,13 +241,59 @@
       "icon": "🧱",
       "blocks": [
         { "type": "build", "items": [
-          { "n": 0, "title": "This plan", "status": "next", "date": "2026-10-27" },
-          { "n": 1, "title": "Greybox 1: the kart toy on the forest track", "status": "todo", "md": "Her kart, the three rivals as blocks, one track with coins, arrow pads and the bouncy mushrooms. The scripted finish works both ways (`?result=win|lose`). Feel numbers on knobs, with a `?feel=1` link." },
-          { "n": 2, "title": "Greybox 2: the rice steps and the cloud", "status": "todo", "md": "Both tracks with their tricks (puddles and mud, the cloud with its lanterns and the blossoms)." },
+          { "n": 0, "title": "This plan", "status": "done", "date": "2026-10-27" },
+          { "n": 1, "title": "Greybox 1: the kart toy on the forest track", "status": "done", "date": "2026-10-27", "md": "Her kart, the three rivals as blocks, one track with coins, arrow pads and the bouncy mushrooms. The scripted finish works both ways (`?result=win|lose`). Feel numbers on knobs, with a `?feel=1` link." },
+          { "n": 2, "title": "Greybox 2: the rice steps and the cloud", "status": "next", "md": "Both tracks with their tricks (puddles and mud, the cloud with its lanterns and the blossoms)." },
           { "n": 3, "title": "Greybox 3: the Cup", "status": "todo", "md": "The race ground at the end of the city road (it replaces the market square), the board, the roll for the loss, each podium with its gift, the Cup ceremony, the stamp on the map. Behind a flag, so Kaylee doesn't reach it yet." },
           { "n": 4, "title": "The look", "status": "todo", "md": "The rivals on the chibi rig, the karts, each track's scenery." },
           { "n": 5, "title": "Full loop", "status": "todo", "md": "Voices (the rivals' cast with northern Thai accents), facts, the Trophy Room cup, QA, and the flag turned on." }
         ] }
+      ]
+    },
+    {
+      "id": "built",
+      "title": "What's built",
+      "icon": "✅",
+      "group": "For the builder",
+      "for": "build",
+      "blocks": [
+        {
+          "type": "log",
+          "items": [
+            {
+              "title": "Greybox 1: the kart toy on the Mushroom Forest track",
+              "date": "2026-10-27",
+              "status": "done",
+              "open": true,
+              "summary": "Her pink kart against three blocks through an 800 m forest road, with coins, arrow pads, bouncy mushrooms and a scripted finish both ways.",
+              "items": [
+                "**The shared race core** moved out of the boat race into `trip/race/` (the boat race uses it, and plays the same): `course.ts` (the closed loop and the minimap), `rubber.ts` (the scripts and the rubber band, now with a rival that may win: `rivalPace({ winner })` and `herLimit()`), `items.ts` (coins, including air lines with their own arc, and arrow pads on water or a hilly road), `RaceHud.tsx` (standings, coins and lap, the minimap, the countdown, the banners with a new 🥈 2nd!, the checkered flag), and `tilt.ts`, `GasPedal.tsx`, `TiltSetup.tsx`, `music.ts` as they were.",
+                "**The kart:** `trip/vehicles/kart.ts`, simple shapes in the toon look: a pink tub with a white stripe, a horn on the nose (tap the kart: beep beep), fat wheels that spin and steer, Kaylee sitting in it in what she packed. The rivals drive the same kart in their colors (Taeng's wooden one, Pao's orange, Moon's honey yellow).",
+                "**The rivals as blocks** (`cup/blocks.ts`): a body and a head in each one's color with dot eyes and one sign of who it is (Taeng's shell and pink parasol, Pao's beak and mailbag, Moon's ears and the cream moon). They lean into bends, hop when tapped or bounced, wave at the line. Grandma Taeng naps on the grid and wakes up at GO.",
+                "**The track** (`cup/track.ts`): a road from the road kit (`trip/road/`), 860 m with gentle hills, the race 790 m from the start arch to the finish arch with balloons (about 65 s). 3.5 m of grass each side (slower, shaking, dust), then a row of hay bales that boing her back. Lines of coins, five arrow pads, four giant pink mushrooms (the last one big) with coins in the air along the bounce. Little mushrooms in the grass, 1100 trees.",
+                "**The finish, both ways** (`?result=win|lose`, `cup/rivals.ts`): each rival follows a story script; in a win Moon is right beside her at the end and she pulls ahead by a nose; in the loss Moon edges past on the last 70 m (she can't quite keep up there), a slow-motion photo finish, and she's 2nd. A hard rule at the line makes sure only the winner crosses first (a bump or a rolling rival waits at the line). Fireworks, confetti, then the end card: 🔁 race again or 🗺️ the Nan map.",
+                "**Knobs** (`?feel=1`): her kart (top speed, speeding up, turn, grip, how near and far her finger aims, how far onto the grass a finger can aim, cruising with no finger, the grass, each coin, the arrow pad's burst), the bounce (normal, big, slow motion up there) and the rivals' rubber band (gap, pull, where they ease off). The graph shows her finger across the road against the kart, and the speed.",
+                "**QA:** `nan-cup-grid` and `nan-cup-race` in qa-screens, `nan-kart` and `nan-bounce` in qa-motion, `nan-cup` in qa-pacing; `window.__thaiNanQA().aim` is where the road ahead is on the screen (for a robot finger). Robot runs: a held finger wins with `result=win` and comes 2nd behind Moon with `result=lose`, about 65 s each."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "- No podium, board or Cup yet (greybox 3): the race ends on an end card.\n- `result` is a greybox param for now; greybox 3 rolls `lose` and sets it.\n- No voices (greybox), so the countdown is lights and beeps, not Sparkle's “Sam! Song! Neung!”.\n- The stream, the log tunnel and the fireflies wait for the look step."
+                },
+                {
+                  "type": "list",
+                  "title": "Known small things",
+                  "items": [
+                    "The arrow pads read a little brown on the grey road (the gold rim over asphalt).",
+                    "With no finger down she cruises at 62% and comes in behind (the rivals wait, but the autopilot is slow on purpose: Dad decides on the iPad)."
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
