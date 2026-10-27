@@ -99,6 +99,10 @@ const SCENARIOS = [
   { name: 'canada train map', id: 'canada', hash: '#/world/canada', reset: true },
   { name: 'canada mountain bike', id: 'bike', hash: '#/world/canada/bike', reset: true },
   { name: 'canada sugar snow', id: 'taffy', hash: '#/world/canada/taffy', reset: true },
+  // Campfire Night (greybox, no voices): a tap moves the flashlight there and a tap on eyes finds the animal at once,
+  // so the auto-player gets through the eyes; the sounds, the trail and the marshmallow need the light held and dragged
+  // (qa-motion's canada-campfire-light).
+  { name: 'canada campfire night', id: 'campfire', hash: '#/world/canada/campfire', reset: true },
   // The trip there, one run per leg (each from its own section link).
   { name: "thailand: kaylee's wardrobe", id: 'wardrobe', hash: '#/world/thailand/hub/wardrobe?drawer=head', reset: true },
   { name: 'thailand trip: mommy asks', id: 'trip-invite', hash: '#/world/thailand/boat-trip/invite', reset: true },
