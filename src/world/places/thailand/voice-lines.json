@@ -1068,10 +1068,8 @@
   },
   "Over there is Laos, another country!",
   "Steer the car with your finger, Kaylee!",
-  "Beep before the bend!",
   "We're driving into a cloud!",
   "Let's count the bends!",
-  "Draw the three with your finger!",
   "Three! Kaylee drove the three!",
   {
     "text": "Steer for me, Kaylee!",
@@ -1131,6 +1129,66 @@
   },
   {
     "text": "Swish, swish, go the wipers!",
+    "voice": "nick"
+  },
+  {
+    "text": "Oh no!",
+    "voice": "ji"
+  },
+  {
+    "text": "Whoaaa! We can fly!",
+    "voice": "nick"
+  },
+  {
+    "text": "Oh no, not again!",
+    "voice": "ji"
+  },
+  {
+    "text": "Wheee! Here we go!",
+    "voice": "nick"
+  },
+  {
+    "text": "We're back!",
+    "voice": "nick"
+  },
+  {
+    "text": "Phew!",
+    "voice": "ji"
+  },
+  {
+    "text": "Again! Again!",
+    "voice": "nick"
+  },
+  {
+    "text": "Back on the road!",
+    "voice": "ji"
+  },
+  {
+    "text": "Oh no, the grass!",
+    "voice": "ji"
+  },
+  {
+    "text": "Bumpy bumpy bumpy!",
+    "voice": "nick"
+  },
+  {
+    "text": "Back on the road, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "Moo! We're a cow!",
+    "voice": "nick"
+  },
+  {
+    "text": "Wibbly wobbly!",
+    "voice": "nick"
+  },
+  {
+    "text": "Silly driving, Kaylee!",
+    "voice": "ji"
+  },
+  {
+    "text": "My tummy!",
     "voice": "nick"
   },
   {

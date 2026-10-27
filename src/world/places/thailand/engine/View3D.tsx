@@ -109,6 +109,9 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
 
     // ---- Size: the canvas fills the screen; the camera keeps the framing below the top bar ----
     let dpr = Math.min(window.devicePixelRatio || 1, 2)
+    // (Drawing has begun, after the shaders compiled; the view is going away.)
+    let started = false
+    let gone = false
     const measure = () => {
       // Unscaled (the camera lab shows an iPad's screen scaled down; the world still lays out at the iPad's size).
       const r = el.getBoundingClientRect()
@@ -118,6 +121,11 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       renderer.setPixelRatio(dpr)
       renderer.setSize(w, h, false)
       world.setSize(w, h, topProbe.current?.offsetHeight ?? 104)
+      // Resizing the canvas clears it, and the canvas is opaque with no kept buffer on a real device (renderer.ts): draw
+      // again at once, or the screen flashes black until the next frame (Dad saw it on the mountain road whenever the
+      // slow-device pixel-ratio drop below kicked in, or Safari's toolbar resized the page, 2026-10-26). Test browsers
+      // keep the buffer, so they never showed it.
+      if (started && !gone) world.render()
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -134,8 +142,6 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     const times: number[] = []
     let slow = 0
     let stop = () => {}
-    let started = false
-    let gone = false
     const begin = () => {
       if (started || gone) return
       started = true

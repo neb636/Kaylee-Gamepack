@@ -2737,13 +2737,6 @@
     "file": "f3c6c523d6b6.mp3"
   },
   {
-    "text": "Beep before the bend!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1682,
-    "file": "21610959d319.mp3"
-  },
-  {
     "text": "We're driving into a cloud!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2756,13 +2749,6 @@
     "sig": "ed7dbdac3d",
     "ms": 1673,
     "file": "dd7390d12e14.mp3"
-  },
-  {
-    "text": "Draw the three with your finger!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1830,
-    "file": "7969afa31278.mp3"
   },
   {
     "text": "Three! Kaylee drove the three!",
@@ -2875,6 +2861,111 @@
     "sig": "a2881bb105",
     "ms": 2230,
     "file": "c561ea00bfb5.mp3"
+  },
+  {
+    "text": "Oh no!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1302,
+    "file": "ad74db0f5b68.mp3"
+  },
+  {
+    "text": "Whoaaa! We can fly!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2302,
+    "file": "b88e453a1a66.mp3"
+  },
+  {
+    "text": "Oh no, not again!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1887,
+    "file": "b0f87a7a5259.mp3"
+  },
+  {
+    "text": "Wheee! Here we go!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 2464,
+    "file": "d2b8699dea1e.mp3"
+  },
+  {
+    "text": "We're back!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 992,
+    "file": "06d25e686267.mp3"
+  },
+  {
+    "text": "Phew!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 722,
+    "file": "02a2b8d163d4.mp3"
+  },
+  {
+    "text": "Again! Again!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1541,
+    "file": "ea8f0496ee03.mp3"
+  },
+  {
+    "text": "Back on the road!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1523,
+    "file": "5610e53a6a06.mp3"
+  },
+  {
+    "text": "Oh no, the grass!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 2086,
+    "file": "e42f85dffd62.mp3"
+  },
+  {
+    "text": "Bumpy bumpy bumpy!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1763,
+    "file": "a0aa22b55953.mp3"
+  },
+  {
+    "text": "Back on the road, Kaylee!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1647,
+    "file": "0a7e35194ee6.mp3"
+  },
+  {
+    "text": "Moo! We're a cow!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 3018,
+    "file": "d46523fc5c45.mp3"
+  },
+  {
+    "text": "Wibbly wobbly!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1132,
+    "file": "633d72b27ee0.mp3"
+  },
+  {
+    "text": "Silly driving, Kaylee!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1967,
+    "file": "06ae26beeb2a.mp3"
+  },
+  {
+    "text": "My tummy!",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1508,
+    "file": "031fa6265ecd.mp3"
   },
   {
     "text": "Great driving, Kaylee!",

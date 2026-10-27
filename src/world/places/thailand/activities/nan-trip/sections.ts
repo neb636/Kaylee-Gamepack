@@ -11,8 +11,8 @@
 // (rice?round=plant|grow|harvest|thresh|deck, step 3): lead Kaylee through the paddies to plant them, shoo the birds
 // while it grows, cut the golden rice, bang out the grains, then the pink milk and Mommy's photo on the deck; Bo Kluea's
 // salt wells (salt?round=1|2|3, step 4): dip the bucket in the well and pour the brine into the big pan, feed the fire
-// till it boils down, scrape the salt into her basket; and the 3 from above (three, step 6): her finger draws the
-// "number 3" road with a big pink crayon, then Mommy's photo with the 3 behind them and ✈️🏠. Loaded at startup: keep
+// till it boils down, scrape the salt into her basket; and the 3 from above (three, step 6): the "number 3" road
+// below, its bends popping one, two, three, then Mommy's photo with the 3 behind them and ✈️🏠. Loaded at startup: keep
 // three.js out of this file.
 import { defineSections } from '../../../../kit/sections'
 import { ITEMS } from '../../trip/packing'
@@ -48,7 +48,7 @@ const NAN_SECTIONS = defineSections('thailand', 'nan-trip', {
     { id: 'mushrooms', name: 'Baan Huanam Mushroom Farm: mist the bags, pick the mushrooms, top the pizza', params: ['round', 'basket', 'stops', 'packed'] },
     { id: 'rice', name: "Kaylee's rice farm: plant the paddies, shoo the birds, cut the rice, the café's deck", params: ['round', 'stops', 'packed'] },
     { id: 'salt', name: 'Bo Kluea salt wells: dip and pour the brine (round 1), feed the fire (2), scrape the salt into the basket (3)', params: ['round', 'stops', 'packed'] },
-    { id: 'three', name: 'The "number 3" from the viewpoint: draw it with the big pink crayon, the photo, then home', params: ['stops', 'packed'] },
+    { id: 'three', name: 'The "number 3" from the viewpoint: its bends pop one, two, three, the photo, then home', params: ['stops', 'packed'] },
     { id: 'home', name: "Home: the flight, Agong's photo, the frame on his wall, the stamp", params: ['packed', 'photos'] },
   ],
 })

@@ -940,3 +940,127 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ---------------------------------------------------------------- the feel lab (?feel=1, feel/FeelLab.tsx)
+   Over the game, which stays full size and playable: a panel down the right side (narrower on a phone), or a small tab
+   when hidden. */
+.feel-panel {
+  position: absolute;
+  top: calc(var(--safe-top, 0px) + 8px);
+  right: calc(var(--safe-right, 0px) + 8px);
+  bottom: calc(var(--safe-bottom, 0px) + 8px);
+  width: min(320px, 42vw);
+  z-index: 300;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 20px 60px rgba(20, 20, 30, 0.22);
+}
+.feel-panel .cl-panel-scroll {
+  touch-action: pan-y;
+}
+.feel-panel .cl-section {
+  padding: 10px 12px;
+}
+.feel-tab {
+  position: absolute;
+  top: 50%;
+  right: calc(var(--safe-right, 0px) + 8px);
+  transform: translateY(-50%);
+  z-index: 300;
+}
+.feel-tab button {
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+  display: grid;
+  place-items: center;
+}
+.feel-knob {
+  padding: 5px 0;
+}
+.feel-knob-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.feel-label {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+}
+.feel-knob output {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.feel-knob output.moved {
+  color: var(--pinkish);
+  font-weight: 700;
+}
+.feel-undo {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+}
+.feel-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 28px;
+  align-items: center;
+  gap: 6px;
+}
+.feel-row input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+.feel-step {
+  height: 28px;
+  border-radius: 8px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  font-weight: 700;
+}
+.feel-note {
+  margin-top: 1px;
+  font-size: 11.5px;
+}
+.feel-graph canvas {
+  display: block;
+  width: 100%;
+  height: 110px;
+  background: var(--soft);
+  border-radius: 10px;
+}
+.feel-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 6px 2px 2px;
+  font-size: 11.5px;
+}
+.feel-legend i {
+  display: inline-block;
+  width: 10px;
+  height: 3px;
+  margin-right: 4px;
+  vertical-align: middle;
+  border-radius: 2px;
+}
+.feel-actions {
+  flex-wrap: wrap;
+}
+.feel-actions .cl-btn {
+  padding: 6px 10px;
+}
+.feel-toast {
+  top: auto;
+  bottom: 64px;
+}
+@media (max-height: 500px) {
+  .feel-panel .cl-head {
+    padding: 8px 10px 6px;
+  }
+  .feel-graph canvas {
+    height: 80px;
+  }
+}

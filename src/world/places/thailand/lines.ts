@@ -460,13 +460,11 @@ export const L = {
     // The mountain roads (drive/): Mommy drives and says the road lines, Daddy reacts, Sparkle says what's new.
     drive: {
       steer: `Steer the car with your finger, ${NAME}!`,
-      mirror: 'Beep before the bend!',
       cloud: "We're driving into a cloud!",
       count: "Let's count the bends!",
       one: 'One!',
       two: 'Two!',
       three: 'Three!',
-      draw: 'Draw the three with your finger!',
       drew: `Three! ${NAME} drove the three!`,
       go: ji(`Steer for me, ${NAME}!`),
       left: ji('Keep left!'),
@@ -485,6 +483,12 @@ export const L = {
       monkey: nick('A monkey on the rail!'),
       waterfall: nick('Look! A waterfall!'),
       rain: nick('Swish, swish, go the wipers!'),
+      // Silly driving (each list in turn): over the edge and tumbling down, dropped back on the road, bumping along the
+      // grass, wiggling all over the road.
+      over: [ji('Oh no!'), nick('Whoaaa! We can fly!'), ji('Oh no, not again!'), nick('Wheee! Here we go!')],
+      back: [nick("We're back!"), ji('Phew!'), nick('Again! Again!'), ji('Back on the road!')],
+      grass: [ji('Oh no, the grass!'), nick('Bumpy bumpy bumpy!'), ji('Back on the road, Kaylee!'), nick("Moo! We're a cow!")],
+      wiggle: [nick('Wibbly wobbly!'), ji('Silly driving, Kaylee!'), nick('My tummy!')],
       // Tap Daddy in the car (in turn).
       tap: [nick('Great driving, Kaylee!'), nick('Wheee! Bumpy!'), nick('Are we there yet?')],
     },

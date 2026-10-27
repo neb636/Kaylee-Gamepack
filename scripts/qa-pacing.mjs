@@ -172,7 +172,7 @@ const SCENARIOS = [
   { name: 'thailand nan: the salt wells', id: 'nan-salt', hash: '#/world/thailand/nan-trip/salt', reset: true },
   // The rental desk, the Nan map and the 3 (greybox, step 6): a tap on the fob presses it, a tap on a bag puts it in the
   // boot, a tap on the seatbelt clicks it, so the auto-player can buckle up and drive off; on the map a tap on a place
-  // drives the little Pajero there; at the viewpoint a tap draws the crayon on round the next bend.
+  // drives the little Pajero there; the 3 from above plays by itself.
   { name: 'thailand nan: the rental desk', id: 'nan-rental', hash: '#/world/thailand/nan-trip/rental', reset: true },
   { name: 'thailand nan: the nan map', id: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true },
   { name: 'thailand nan: the 3 from above', id: 'nan-three-view', hash: '#/world/thailand/nan-trip/three', reset: true },

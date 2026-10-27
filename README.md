@@ -16,6 +16,10 @@ unicorn and goes on day trips with the family.
 guides and a "Copy for agent" note to bake the camera into the game):
 - [The Barber Salon in iPad landscape](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/barber?cam=1&cam.frame=ipad-wide)
 
+**Feel lab** (development tool, add `?feel=1` to any section: sliders over the playing game for how it feels, a live
+graph, and a "Copy for agent" note with the numbers to bake in):
+- [The Nan mountain road's steering](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)
+
 
 **Offline:** after it opens once on wifi it saves every game, picture and voice, so it plays in the car or on a plane.
 Online it always loads the latest version; offline the YouTube videos are hidden. After a new deploy, open it once on
@@ -224,7 +228,7 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   - [Feed the fire till the brine boils down](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/salt?round=2)
   - [Scrape the salt into the basket, the bags on the shelf, then the real salt video](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/salt?round=3)
 - **Viewpoint and home**
-  - [The "number 3" from the viewpoint: draw it, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
+  - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
   - [Home: pick the photo for Agong's wall, the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/home?photos=deck,three,pizza,salt)
 
 **Finale**: [Family party (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/party/soon)

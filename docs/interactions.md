@@ -87,6 +87,34 @@ just fills. Build it as a puppet (`usePuppet`) if it should blink and talk. See 
 `useLandscape()`, `useElementSize(ref)`, `useGameLoop((dt) => ..., running)`, `useSaved(key, initial)`.
 New sounds: `sounds.pickup()`, `sounds.place()`, `sounds.snap()`.
 
+## Tuning the feel: knobs and the feel lab
+
+A mechanic that works can still feel wrong, and a robot finger can't tell. Declare the numbers that decide the feel
+as knobs, read them every frame, and watch the input against the result. Then Dad tunes them on his own devices in
+the feel lab (`?feel=1` on the section link) and sends back a "Copy for agent" note:
+
+```ts
+import { knobs, watch } from '../../../../kit/knobs'
+
+const STEER = knobs('steer', 'Steering', 'src/world/.../mountain.ts', {
+  slide: { value: 5.5, min: 1, max: 12, step: 0.1, label: 'Slide speed', unit: 'm/s', note: 'how fast a full push slides it' },
+  ease: { value: 0.15, min: 0, max: 0.6, step: 0.01, label: 'Smoothing', unit: 's', note: '0 = none' },
+})
+// every frame: this.k += (push - this.k) * (1 - Math.exp(-dt / STEER.ease))
+// in the world's constructor (and call the result in dispose()):
+this.unwatch = watch('steer', () => ({ 'her push': [this.push, 1], 'the car (m)': [this.lat, 8] }))
+```
+
+Steering we learned the hard way on the Nan mountain road (2026-10-26):
+- **Don't map the finger straight to a fast slide.** Raw finger jitter on a phone or trackpad becomes swerving.
+  Smooth the input with an exponential ease (0.1-0.2 s), and use a push curve (a power of 1.2-1.6) so small pushes
+  are gentle.
+- **Don't aim too close ahead.** A chase point a few meters ahead makes the nose swing past and back: the
+  back-and-forth correcting. Keep it roughly 10 m or more ahead at driving speed.
+- **Too much of both feels dead.** 0.3 s of smoothing with a slow slide was sluggish. Put the numbers on knobs and
+  let Dad find the middle.
+- **A camera that turns with the car** amplifies every wobble. Let it follow the road more than the nose.
+
 ## Pitfalls we've hit
 
 - **Motion `drag` can lock up in iPad Safari** when an element unmounts or toggles `drag={false}` right after a

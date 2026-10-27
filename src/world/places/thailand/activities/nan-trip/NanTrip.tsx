@@ -8,7 +8,7 @@
 //   on the diorama, then the mountain road (drive/, section drive) to it: the valley road to Baan Huanam Mushroom Farm
 //   (mushrooms/), the sky road to Kaylee's rice farm under Stop Time Cafe (rice/) or to Bo Kluea's salt wells (salt/),
 //   the city road through Nan town and back. Each stop's end card goes back to the map, where its stamp lands. After
-//   two stops the airport opens: the 3 road, and at its viewpoint she draws the 3 (section three), Mommy takes their
+//   two stops the airport opens: the 3 road, and at its viewpoint the 3 from above (section three), Mommy takes their
 //   photo and ✈️🏠 flies them home (section home: the photo she picks goes on Agong's wall, then the stamp, onDone).
 // Between the trip kit's legs a boarding pass slides up (punching the leg she finished) and hides the next world being
 // built. The trip saves at each leg (useSaved): saying yes to the mountains again offers to keep going and, after a
@@ -93,12 +93,12 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
   const [packed, setPacked] = useState<string[]>(() => parsePacked(flag('packed') ?? (first === 'invite' || first === 'pack' ? '' : DEFAULT_PACKED)))
   // (Read once: the address changes as she plays.)
   const [stops, setStops] = useState<Stop[]>(() => parseStops(param('stops')))
-  // The photos from the trip: a link's, or one for each stop done and the 3 once it's drawn.
+  // The photos from the trip: a link's, or one for each stop done and the 3 once Mommy took it.
   const [linkPhotos] = useState(() => parsePhotos(param('photos')))
-  const [drew3, setDrew3] = useState(false)
+  const [saw3, setSaw3] = useState(false)
   // Where she last drove to from the map: the little Pajero waits there when she's back (Nan town after the city road).
   const [from, setFrom] = useState<PlaceId | null>(null)
-  const photos: PhotoId[] = linkPhotos.length ? linkPhotos : [...stops.map((s) => PHOTO_OF[s]), ...(drew3 ? (['three'] as const) : [])]
+  const photos: PhotoId[] = linkPhotos.length ? linkPhotos : [...stops.map((s) => PHOTO_OF[s]), ...(saw3 ? (['three'] as const) : [])]
   const homePhotos: PhotoId[] = photos.length ? photos : ['deck', 'three']
   const [at, setAt] = useState<At>(() => {
     const round = param('round')
@@ -283,7 +283,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
         }}
         onMap={() => setAt({ section: 'map' })}
         onView={() => setAt({ section: 'three' })}
-        onDrawn={() => setDrew3(true)}
+        onPhoto={() => setSaw3(true)}
         onHome={() => go({ section: 'home' })}
       />
     )

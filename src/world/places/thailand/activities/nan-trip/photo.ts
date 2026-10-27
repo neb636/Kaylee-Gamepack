@@ -100,7 +100,7 @@ function three(g: CanvasRenderingContext2D) {
   mountains(g, 170)
   g.fillStyle = '#9ED9A6'
   g.fillRect(0, 170, W, H)
-  // The road down the hill, drawn as a giant 3: two round bumps, cream with a pink crayon line along it.
+  // The road down the hill, a giant 3: two round bumps, grey tarmac with its dashed middle line, like the real road.
   const road = () => {
     g.beginPath()
     g.moveTo(170, 60 + 130)
@@ -112,9 +112,11 @@ function three(g: CanvasRenderingContext2D) {
   road()
   stroke(g, 34, INK)
   road()
-  stroke(g, 26, '#FFF4DC')
+  stroke(g, 26, '#8E8AA0')
   road()
-  stroke(g, 6, '#FF6FA8')
+  g.setLineDash([10, 10])
+  stroke(g, 3, '#FFF4DC')
+  g.setLineDash([])
   // The family in front, cheering.
   unicorn(g, 80, 290, 38, ...MOMMY)
   unicorn(g, 420, 286, 42, ...DADDY)
