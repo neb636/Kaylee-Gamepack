@@ -9,7 +9,10 @@
 //   (mushrooms/), the sky road to Kaylee's rice farm under Stop Time Cafe (rice/) or to Bo Kluea's salt wells (salt/),
 //   the city road through Nan town and back. Each stop's end card goes back to the map, where its stamp lands. After
 //   two stops the airport opens: the 3 road, and at its viewpoint the 3 from above (section three), Mommy takes their
-//   photo and ✈️🏠 flies them home (section home: the photo she picks goes on Agong's wall, then the stamp, onDone).
+//   photo and ✈️🏠 ends the trip (endTrip): the 3's photo goes on Agong's wall by itself, then the stamp, and the plane
+//   flies home on the Thailand map (Dad, 2026-10-27; section home, the flight home and picking a photo for Agong, is
+//   only reached by its link now). The trips start on the Thailand map: the first of a session packs and goes down
+//   the stairs straight to the window seat; later ones open straight on the Nan map.
 // Between the trip kit's legs a boarding pass slides up (punching the leg she finished) and hides the next world being
 // built. The trip saves at each leg (useSaved): saying yes to the mountains again offers to keep going and, after a
 // whole trip, 🗺️ straight to the Nan map with the Pajero ready.
@@ -27,7 +30,8 @@ import { PLACES, STOPS, type PlaceId, type Stop } from './map/layout'
 import { NanMap } from './map/NanMap'
 import { BASKET_SEED, ROUNDS as FARM_ROUNDS, type Round } from './mushrooms/layout'
 import { Mushrooms } from './mushrooms/Mushrooms'
-import { parsePhotos, PHOTO_OF, type PhotoId } from './photo'
+import { drawPhoto, parsePhotos, PHOTO_OF, type PhotoId } from './photo'
+import { addWallPhoto, shrinkPhoto, today, useWallPhotos } from '../../trip/wall-photos'
 import { ROUNDS as RENTAL_ROUNDS, type Round as RentalRound } from './rental/layout'
 import { Rental } from './rental/Rental'
 import { ROUNDS as RICE_ROUNDS, type Round as RiceRound } from './rice/layout'
@@ -196,6 +200,17 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
     setSaved((p) => ({ ...p, at: 'map', packed: formatPacked(state.current.packed) || p.packed, stops: next.join(',') }))
     setAt({ section: 'map' })
   }
+  const [, setWallPhotos] = useWallPhotos()
+  /** ✈️🏠 at the viewpoint: the 3's photo (or the newest) goes on Agong's wall by itself, then the stamp. */
+  const ended = useRef(false)
+  const endTrip = () => {
+    if (ended.current) return
+    ended.current = true
+    const id = homePhotos.includes('three') ? 'three' : homePhotos[homePhotos.length - 1]
+    void shrinkPhoto(drawPhoto(id)).then((small) => setWallPhotos((list) => addWallPhoto(list, { trip: 'nan-trip', src: small, at: today() })))
+    sounds.sparkle()
+    finished()
+  }
   const finished = () => {
     setSaved((p) => ({ at: null, packed: formatPacked(state.current.packed) || p.packed, stops: '', trips: (p.trips ?? 0) + 1 }))
     onDone?.()
@@ -284,7 +299,7 @@ export function NanTrip({ onExit, onTrip, onDone }: Props = {}) {
         onMap={() => setAt({ section: 'map' })}
         onView={() => setAt({ section: 'three' })}
         onPhoto={() => setSaw3(true)}
-        onHome={() => go({ section: 'home' })}
+        onHome={endTrip}
       />
     )
   }

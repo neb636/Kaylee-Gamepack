@@ -357,8 +357,12 @@ const SCREENS = [
   })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party/soon', stampAll: 'peru', wait: 800 },
-  // Thailand: Agong's house in 3D (the arrival mid-ride, each spot, a few things in use),
-  // and the party card.
+  // Thailand: the Thailand map (thailand-map.html: where she lands; the plane parked at Bangkok, flown to Krabi, home
+  // with a stamp landing, every stamp in), then Agong's house in 3D (the arrival mid-ride, each spot, a few things in
+  // use), and the party card.
+  { name: 'thailand-map', hash: '#/world/thailand', reset: true, wait: 1500 },
+  { name: 'thailand-map-krabi', hash: '#/world/thailand/hub/map?plane=krabi', reset: true, wait: 1200 },
+  { name: 'thailand-map-home', hash: '#/world/thailand/hub/map?plane=krabi&fly=bangkok&stamp=boat-trip', stampAll: 'thailand', wait: 5200 },
   { name: 'thailand-arrive', hash: '#/world/thailand/hub/arrive', reset: true, wait: 1400 },
   ...['street', 'downstairs', 'downstairs?at=table', 'downstairs?at=desk', 'downstairs?at=altar', 'downstairs?at=photos', 'upstairs', 'upstairs?at=mattress', 'upstairs?at=couch', 'upstairs?at=bathroom-door'].map((to) => ({
     name: `thailand-${to.replace('?at=', '-')}`,

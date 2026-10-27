@@ -123,7 +123,7 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
       </Suspense>
 
       {/* The theater draws its own top bar (its back button goes to the shelf while a video plays). */}
-      {activity === 'theater' ? null : activity ? (
+      {activity === 'theater' ? null : activity || (meta.hubHome && section && section !== meta.hubHome) ? (
         <TopBar icon="🗺️" label="Back to the map" onBack={backToMap}>
           {progress.total > 0 && (
             <BarPill>
