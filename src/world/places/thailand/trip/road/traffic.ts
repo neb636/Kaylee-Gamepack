@@ -137,6 +137,34 @@ export function buffaloHorns(root: V3, r: number, tube: number, color: ColorRepr
   }
   return parts
 }
+/** A water buffalo toy (the road's, and the rice steps' in the Nan Mountain Cup): a big rounded lavender-grey body,
+ *  its head on its own pivot (grazing, looking up), the big horns, and a leg pivot at each corner. Faces +z, feet on
+ *  the ground at the origin. */
+export function buildBuffaloToy(bag: Bag) {
+  const root = new Group()
+  const C = '#6F6884'
+  const body = solid(merge([P.rbox(1.15, 1.0, 2.1, 0.4, C, { at: [0, 1.15, 0] }), P.cyl(0.05, 0.03, 0.6, C, { at: [0, 1.1, -1.15], rot: [0.4, 0, 0] })]), bag, 2)
+  root.add(body)
+  const head = new Group()
+  head.position.set(0, 1.45, 1.05)
+  head.add(solid(merge([
+    P.rbox(0.62, 0.6, 0.8, 0.25, C, { at: [0, -0.1, 0.35] }),
+    P.rbox(0.5, 0.32, 0.3, 0.12, '#9C93AE', { at: [0, -0.26, 0.74] }),
+    ...buffaloHorns([0.24, 0.14, 0.18], 0.34, 0.07),
+    ...[-1, 1].map((k) => P.sphere(0.06, PAL.ink, { at: [k * 0.24, 0.05, 0.62] })),
+  ]), bag, 2))
+  root.add(head)
+  const legs = [[-0.38, 0.7], [0.38, -0.7], [0.38, 0.7], [-0.38, -0.7]].map(([x, z]) => {
+    const l = new Group()
+    l.position.set(x, 0.75, z)
+    l.add(solid(P.rbox(0.24, 0.8, 0.26, 0.08, C, { at: [0, -0.38, 0] }), bag, 2))
+    root.add(l)
+    return l
+  })
+  root.add(blobShadow(1.4, bag))
+  return { root, head, legs }
+}
+
 const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 
 export class Traffic {
@@ -435,27 +463,7 @@ export class Traffic {
   }
 
   private buildBuffalo(s: number, side: number, i: number, bag: Bag): Buffalo {
-    const root = new Group()
-    const C = '#6F6884'
-    const body = solid(merge([P.rbox(1.15, 1.0, 2.1, 0.4, C, { at: [0, 1.15, 0] }), P.cyl(0.05, 0.03, 0.6, C, { at: [0, 1.1, -1.15], rot: [0.4, 0, 0] })]), bag, 2)
-    root.add(body)
-    const head = new Group()
-    head.position.set(0, 1.45, 1.05)
-    head.add(solid(merge([
-      P.rbox(0.62, 0.6, 0.8, 0.25, C, { at: [0, -0.1, 0.35] }),
-      P.rbox(0.5, 0.32, 0.3, 0.12, '#9C93AE', { at: [0, -0.26, 0.74] }),
-      ...buffaloHorns([0.24, 0.14, 0.18], 0.34, 0.07),
-      ...[-1, 1].map((k) => P.sphere(0.06, PAL.ink, { at: [k * 0.24, 0.05, 0.62] })),
-    ]), bag, 2))
-    root.add(head)
-    const legs = [[-0.38, 0.7], [0.38, -0.7], [0.38, 0.7], [-0.38, -0.7]].map(([x, z]) => {
-      const l = new Group()
-      l.position.set(x, 0.75, z)
-      l.add(solid(P.rbox(0.24, 0.8, 0.26, 0.08, C, { at: [0, -0.38, 0] }), bag, 2))
-      root.add(l)
-      return l
-    })
-    root.add(blobShadow(1.4, bag))
+    const { root, head, legs } = buildBuffaloToy(bag)
     this.root.add(root)
     return { root, head, legs, s, side, lat: side * (this.road.half + 3.6), state: 'graze', hurry: 0, hop: 0, i }
   }

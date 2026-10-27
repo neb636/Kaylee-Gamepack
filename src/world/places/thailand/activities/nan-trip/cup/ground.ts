@@ -13,9 +13,12 @@
 // - The Cup (section `cup-win`): the scoreboard over the grandstand lights up race by race (gold, silver, gold), the
 //   big gold Nan Mountain Cup with KAYLEE on it flies over from its stand and floats in front of her; she taps it and
 //   lifts it over her head: fireworks, confetti, everyone cheering. Mommy's photo, then 🗺️ and the stamp on Nan town.
+// Dressed for the Cup (the look step): big pennant flags flying on tall poles, a fruit stall and a drinks stall beside
+// Moon's honey stall, round paper lanterns hanging along the grandstand's roof, hay bales and cones round the edge, and
+// Nan folk come to watch, who cheer with everyone (and jump when she taps them).
 // Things to poke: the rivals (hop; Grandma Taeng wakes up), Kaylee, her kart (beep beep, the gifts wiggle), Mommy and
-// Daddy, the balloons on the board (one floats off), Moon's honey stall (the bee buzzes round), a hen (flaps), the
-// Cup on its stand (a twinkle).
+// Daddy, the crowd (they cheer), the balloons on the board (one floats off), Moon's honey stall (the bee buzzes round),
+// a hen (flaps), the Cup on its stand (a twinkle).
 import { CanvasTexture, Color, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3, type BufferGeometry, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, KID_NAME, sounds } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
@@ -23,13 +26,17 @@ import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../engine3d/camera'
 import type { Bag } from '../../../../../engine3d/dispose'
+import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import { blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
 import { Particles } from '../../../../../engine3d/particles'
 import { PAL } from '../../../../../engine3d/toon'
 import { wearing } from '../../../trip/packing'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
 import { buildKart, type Kart } from '../../../trip/vehicles/kart'
-import { buildBlock, type Block } from './blocks'
+import { dressKart, type KartDress } from './karts'
+import { buildRider, type Rider } from './riders'
+import { CROWD } from './scenery'
+import { applyPose, clearPose } from '../../boat-trip/bay/poses'
 import { cupDone, giftsOf, podiumOf, type CupRecord, type Place } from './cup'
 import { animateGifts, buildGift, type Gift } from './gifts'
 import { HOME, RIVAL_IDS, RIVALS, type RivalId } from './rivals'
@@ -65,6 +72,7 @@ export const GROUND_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'Kaylee', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
+  { id: 'crowd', label: 'The crowd', kind: 'thing' },
   { id: 'balloons', label: 'Balloons', kind: 'thing' },
   { id: 'stall', label: "Moon's honey stall", kind: 'thing' },
   { id: 'hen', label: 'Hen', kind: 'thing' },
@@ -105,6 +113,23 @@ const BALLOONS = [
   { x: BOARD.x + BOARD.w / 2 + 0.1, y: BOARD.y1 + 0.5 },
 ]
 const BALLOON_COLORS = [PAL.pink, PAL.butter, PAL.mint, PAL.sky, PAL.lavender]
+/** The race ground dressed up: the flag poles, the other two stalls, where the crowd stands (left and right of the
+ *  grandstand), the hay bales and the cones. */
+const FLAGS = [
+  { x: -12.4, z: -7, c: PAL.hotpink },
+  { x: 2.3, z: -8.8, c: PAL.mint },
+  { x: 13, z: -7, c: PAL.butter },
+  { x: -6.8, z: -9.6, c: PAL.sky },
+]
+const FRUIT = { x: -12.8, z: -4.6 }
+const DRINKS = { x: 13.4, z: -3.4 }
+const CROWD_AT = [
+  { x: 2.4, z: -7.1 },
+  { x: 3.5, z: -6.9 },
+  { x: 11.3, z: -6.9 },
+  { x: 12.4, z: -7.1 },
+  { x: -11.6, z: -2.4 },
+]
 
 /** Where the camera looks: the board, the podium (and the scoreboard over it for the Cup). */
 const SHOTS = {
@@ -118,7 +143,7 @@ const tmp = new Vector3()
 interface Holder {
   id: RivalId
   g: Group
-  block: Block
+  rider: Rider
   kart: Kart
   /** A hop from here to there (the winner taking the gift to her kart). */
   move: { from: Vector3; to: Vector3; t: number; dur: number; done?: () => void } | null
@@ -134,6 +159,8 @@ export class CupGround extends Stage {
   private gifts: Gift[] = []
   private giftWiggle = 0
   private holders = new Map<RivalId, Holder>()
+  /** Every kart dressed as its own (karts.ts): hers and the rivals'. */
+  private dresses: KartDress[] = []
   private tiles = new Map<TrackId, Group>()
   private medals = new Map<TrackId, { g: Group; gold: Group; silver: Group; drop: number; spin: number }>()
   private score: { gold: Group; silver: Group; lit: number }[] = []
@@ -145,6 +172,11 @@ export class CupGround extends Stage {
   private beeFast = 0
   private hen: Group
   private henFlap = 1
+  /** The dressing that moves: the flags, the lanterns, the crowd. */
+  private flags: Group[] = []
+  private lanterns: Group[] = []
+  private crowd: Rig[] = []
+  private crowdCheer = 0
   private sparkle: Particles
   private fireworks: Particles
   private confetti: Particles
@@ -168,7 +200,7 @@ export class CupGround extends Stage {
     scene.background = new Color('#C9E6F4')
     this.rig.fov = 38
     this.rig.lag = 0.6
-    scene.add(this.buildGround(), this.buildBoard(), this.buildPodium(), this.buildStand(), this.buildStall(), this.buildBunting())
+    scene.add(this.buildGround(), this.buildBoard(), this.buildPodium(), this.buildStand(), this.buildStall(), this.buildBunting(), this.buildDressing())
     // ---- The Cup on its stand ----
     this.cup = buildTrophy(bag)
     this.cup.scale.setScalar(CUP_SCALE)
@@ -218,8 +250,9 @@ export class CupGround extends Stage {
     ]), bag, 1.5))
     this.hen.add(blobShadow(0.4, bag))
     scene.add(this.hen)
-    // ---- The karts: hers (pink) and the rivals' (each with its block in it) ----
+    // ---- The karts: hers (pink) and the rivals' (each with its rider in it) ----
     this.kart = buildKart(bag)
+    this.dresses.push(dressKart(this.kart, 'kaylee', bag))
     this.kart.root.add(blobShadow(1.3, bag))
     scene.add(this.kart.root)
     for (const id of RIVAL_IDS) {
@@ -227,11 +260,12 @@ export class CupGround extends Stage {
       const kart = buildKart(bag, rv.kart, { horn: false })
       kart.root.position.set(tileX(homeOf(id)), 0, PARK_Z)
       kart.root.add(blobShadow(1.3, bag))
+      this.dresses.push(dressKart(kart, id, bag))
       scene.add(kart.root)
-      const block = buildBlock(bag, id)
+      const rider = buildRider(bag, id)
       const g = new Group()
-      g.add(block.root)
-      this.holders.set(id, { id, g, block, kart, move: null })
+      g.add(rider.root)
+      this.holders.set(id, { id, g, rider, kart, move: null })
     }
     // ---- The family: Kaylee, Mommy and Daddy in the grandstand ----
     const { kaylee, members } = this.makeFamily(['ji', 'nick'])
@@ -318,7 +352,8 @@ export class CupGround extends Stage {
       h.g.position.set(0, 0, 0)
       h.g.rotation.set(0, 0, 0)
       h.kart.seat.add(h.g)
-      h.block.nap = false
+      h.rider.sit = true
+      h.rider.nap = false
     }
   }
   /** A rival standing at a spot in the world, facing the camera. */
@@ -328,7 +363,8 @@ export class CupGround extends Stage {
     this.scene.add(h.g)
     h.g.position.set(x, y, z)
     h.g.rotation.set(0, 0, 0)
-    h.block.nap = false
+    h.rider.sit = false
+    h.rider.nap = false
   }
   private standKaylee(x: number, y: number, z: number, face = 0) {
     this.scene.add(this.kaylee.root)
@@ -341,7 +377,7 @@ export class CupGround extends Stage {
     this.rivalsInKarts()
     this.standKaylee(KAYLEE_AT.x, 0, KAYLEE_AT.z, -20)
     // Grandma Taeng naps in her kart (a tap wakes her up).
-    this.holders.get('taeng')!.block.nap = true
+    this.holders.get('taeng')!.rider.nap = true
     if (fresh) {
       const m = this.medals.get(fresh)!
       m.drop = 0
@@ -380,12 +416,12 @@ export class CupGround extends Stage {
     } else {
       sfx.soClose()
       this.after(0.5, () => {
-        this.holders.get(this.winner!)!.block.react('wave', 2)
+        this.holders.get(this.winner!)!.rider.react('wave', 2)
         this.confettiBurst(STEP[1].x, 3)
       })
       this.after(1.2, () => sfx.cheer())
     }
-    this.holders.get(who.clap)!.block.react('wave', 4)
+    this.holders.get(who.clap)!.rider.react('wave', 4)
   }
 
   private toCup() {
@@ -425,12 +461,13 @@ export class CupGround extends Stage {
     sfx.cheer()
     let d = 0
     for (const h of this.holders.values()) {
-      this.after(d, () => h.block.react('hop'))
-      this.after(d + 0.3, () => h.block.react('wave', 1.6))
+      this.after(d, () => h.rider.react('hop'))
+      this.after(d + 0.3, () => h.rider.react('wave', 1.6))
       d += 0.18
     }
     this.ji.react('hop')
     this.after(0.2, () => this.nick.react('hop'))
+    this.crowdCheer = 2.6
   }
 
   private confettiBurst(x: number, n: number) {
@@ -488,6 +525,10 @@ export class CupGround extends Stage {
         this.chest.spin = 0
         sfx.chime()
         return
+      case 'crowd':
+        this.crowdCheer = 2
+        sfx.cheer()
+        return
       case 'balloons':
         return this.balloonAway()
       case 'stall':
@@ -520,7 +561,7 @@ export class CupGround extends Stage {
     this.setUi({ map: false })
     this.sparkle.burst(tileX(t), TILE.y, BOARD.z + 0.4, 24, 2.2, 1.6, 0.16)
     this.hop(this.kaylee, this.kart.seat, new Vector3(0, 0, 0), { pose: 'sit', face: 0, dur: 0.5, arc: 0.9 })
-    for (const h of this.holders.values()) h.block.nap = false
+    for (const h of this.holders.values()) h.rider.nap = false
     this.after(0.75, () => sfx.honk())
     this.after(1.15, () => this.ev.race(t))
   }
@@ -528,10 +569,10 @@ export class CupGround extends Stage {
   private pokeRival(id: RivalId) {
     const h = this.holders.get(id)!
     if (this.mode === 'podium' && id === this.winner && !this.fiveDone) return this.highFive()
-    h.block.react('hop')
-    if (h.block.nap) {
+    h.rider.react('hop')
+    if (h.rider.nap) {
       // Grandma Taeng wakes up with a start, then nods off again.
-      h.block.nap = false
+      h.rider.nap = false
       this.napUntil = this.time + 6
       sfx.boop()
       return
@@ -545,7 +586,7 @@ export class CupGround extends Stage {
     this.fiving = true
     const w = this.holders.get(this.winner)!
     this.kaylee.showOff('paw')
-    w.block.react('wave', 1)
+    w.rider.react('wave', 1)
     this.after(0.25, () => {
       sfx.kick()
       sounds.correct()
@@ -566,10 +607,10 @@ export class CupGround extends Stage {
     sounds.sparkle()
     const k = this.kart.root.position
     this.sparkle.burst(k.x, 1.3, k.z, 30, 2, 1.6, 0.15)
-    this.holders.get(id)!.block.react('hop')
+    this.holders.get(id)!.rider.react('hop')
     this.fiveDone = true
     // …and back up on top.
-    this.after(0.9, () => this.moveRival(id, new Vector3(STEP[1].x, STEP[1].h, POD.z), 0.8, () => this.holders.get(id)!.block.react('wave', 1.4)))
+    this.after(0.9, () => this.moveRival(id, new Vector3(STEP[1].x, STEP[1].h, POD.z), 0.8, () => this.holders.get(id)!.rider.react('wave', 1.4)))
     this.after(1.3, () => this.setUi({ next: true }))
   }
   private moveRival(id: RivalId, to: Vector3, dur: number, done?: () => void) {
@@ -607,7 +648,7 @@ export class CupGround extends Stage {
       this.later.splice(this.later.indexOf(l), 1)
       if (!this.disposed) l.f()
     }
-    // ---- The rivals: blocks, hops across, Grandma Taeng's naps ----
+    // ---- The rivals: riders, hops across, Grandma Taeng's naps ----
     for (const h of this.holders.values()) {
       if (h.move) {
         const m = h.move
@@ -621,12 +662,24 @@ export class CupGround extends Stage {
           m.done?.()
         }
       }
-      h.block.update(dt, t, 0)
+      h.rider.update(dt, t, 0)
     }
     if (this.mode === 'board' && !this.leaving && this.napUntil && this.time > this.napUntil) {
       this.napUntil = 0
-      this.holders.get('taeng')!.block.nap = true
+      this.holders.get('taeng')!.rider.nap = true
     }
+    // ---- The dressing: the flags fly, the lanterns sway, the crowd bobs (and cheers) ----
+    this.flags.forEach((f, i) => (f.rotation.y = Math.sin(t * 3.1 + i * 1.7) * 0.25 + Math.sin(t * 7.3 + i) * 0.06))
+    this.lanterns.forEach((l, i) => (l.rotation.z = Math.sin(t * 1.4 + i * 0.9) * 0.08))
+    this.crowdCheer = Math.max(0, this.crowdCheer - dt)
+    this.crowd.forEach((rig, i) => {
+      clearPose(rig)
+      const on = this.crowdCheer > 0
+      if (on) applyPose(rig, i % 2 ? 'cheer' : 'wave', t + i, Math.min(1, (2.6 - this.crowdCheer) / 0.25))
+      rig.root.position.y = on ? Math.abs(Math.sin(t * 7 + i * 1.3)) * 0.22 : 0
+      rig.head.rotation.y = on ? 0 : Math.sin(t * 0.45 + i * 2) * 0.35
+      rig.body.scale.y = 1 + Math.sin(t * 2.6 + i) * 0.015
+    })
     // ---- Kaylee, Mommy and Daddy ----
     for (const c of [this.kaylee, this.ji, this.nick]) c.update(dt, t)
     if (this.lifted >= 0 && Math.floor((this.lifted + dt) / 1.3) > Math.floor(this.lifted / 1.3)) this.kaylee.showOff('cheer')
@@ -635,6 +688,7 @@ export class CupGround extends Stage {
     if (horn) horn.scale.lerp(tmp.set(1, 1, 1), Math.min(1, dt * 8))
     this.giftWiggle = Math.max(0, this.giftWiggle - dt / 0.8)
     animateGifts(this.gifts, t, 0, this.giftWiggle)
+    for (const d of this.dresses) d.update(t, 0)
     // ---- The tiles: a gentle pulse on the ones to race; a bounce when tapped ----
     const open = (tr: TrackId) => this.mode === 'board' && !this.leaving && (cupDone(this.record) || !this.record.some((x) => x.track === tr))
     for (const [tr, g] of this.tiles) {
@@ -776,6 +830,8 @@ export class CupGround extends Stage {
         const m = id === 'family:ji' ? this.ji : this.nick
         return { at: m.root.position.clone().setY(m.root.position.y + m.height * 0.55), r: 0.5, prio: 0, max: 130 }
       }
+      case 'crowd':
+        return this.mode === 'board' ? { at: new Vector3(CROWD_AT[4].x, 0.8, CROWD_AT[4].z), r: 0.6, prio: 0, max: 120 } : { at: new Vector3((CROWD_AT[2].x + CROWD_AT[3].x) / 2, 0.8, CROWD_AT[2].z), r: 0.9, prio: 0, max: 140 }
       case 'balloons':
         return this.mode === 'board' ? { at: new Vector3(BALLOONS[1].x, BALLOONS[1].y + 0.9, BOARD.z), r: 0.7, prio: 1, max: 140 } : null
       case 'stall':
@@ -922,6 +978,68 @@ export class CupGround extends Stage {
       ]),
     ]
     return solid(merge(parts), this.bag, 2)
+  }
+
+  /** The race ground dressed for the Cup: flags on tall poles, a fruit stall and a drinks stall, round paper lanterns
+   *  along the grandstand's roof, hay bales and cones round the edge, and the crowd. */
+  private buildDressing() {
+    const g = new Group()
+    const parts: BufferGeometry[] = []
+    // The flag poles (a gold ball on top); each flag is its own group, so it flies.
+    for (const f of FLAGS) {
+      parts.push(P.cyl(0.08, 0.1, 6.4, PAL.cream, { at: [f.x, 3.2, f.z] }, 8), P.sphere(0.16, PAL.gold, { at: [f.x, 6.5, f.z] }, 8))
+      const flag = new Group()
+      flag.position.set(f.x, 6.0, f.z)
+      flag.add(solid(merge([P.prism([[0, 0.45], [0, -0.45], [1.7, 0]], 0.04, f.c), P.sphere(0.12, '#FFFFFF', { at: [0.5, 0, 0], scale: [1, 1, 0.5] }, 8)]), this.bag, 1.5))
+      g.add(flag)
+      this.flags.push(flag)
+    }
+    // A fruit stall (oranges, pink dragon fruit, bananas) and a drinks stall (orange Thai tea, green coconuts with straws),
+    // each under a striped awning.
+    const stall = (x: number, z: number, stripe: string) => {
+      parts.push(P.box(2.4, 0.9, 1.1, '#C9875C', { at: [x, 0.45, z] }))
+      for (const sx of [-1, 1]) for (const sz of [-1, 1]) parts.push(P.cyl(0.05, 0.05, 2.4, '#F4EFF8', { at: [x + sx * 1.15, 1.2, z + sz * 0.5] }, 6))
+      for (let i = 0; i < 4; i++) parts.push(P.box(0.6, 0.06, 1.4, i % 2 ? '#FFFFFF' : stripe, { at: [x - 0.9 + i * 0.6, 2.45, z], rot: [0.15, 0, 0] }))
+    }
+    stall(FRUIT.x, FRUIT.z, PAL.hotpink)
+    for (let i = 0; i < 6; i++) parts.push(P.sphere(0.13, '#FFA640', { at: [FRUIT.x - 0.8 + (i % 3) * 0.24, 1.0 + Math.floor(i / 3) * 0.17, FRUIT.z + 0.15 - Math.floor(i / 3) * 0.08] }, 8))
+    for (let i = 0; i < 3; i++) parts.push(P.sphere(0.17, '#FF5FA2', { at: [FRUIT.x + 0.05 + i * 0.3, 1.05, FRUIT.z + 0.15], scale: [1, 1.2, 1] }, 9), P.cone(0.06, 0.14, '#8FD36A', { at: [FRUIT.x + 0.05 + i * 0.3, 1.27, FRUIT.z + 0.15] }, 5))
+    for (let i = 0; i < 3; i++) parts.push(P.capsule(0.05, 0.3, '#FFE15A', { at: [FRUIT.x + 0.85, 1.05, FRUIT.z + 0.05 + i * 0.1], rot: [0, 0, 1.2 - i * 0.15] }))
+    stall(DRINKS.x, DRINKS.z, PAL.mint)
+    for (let i = 0; i < 4; i++) parts.push(P.cyl(0.09, 0.07, 0.26, '#FF9A4D', { at: [DRINKS.x - 0.85 + i * 0.25, 1.03, DRINKS.z + 0.2] }, 8), P.cyl(0.095, 0.095, 0.04, '#FFFFFF', { at: [DRINKS.x - 0.85 + i * 0.25, 1.17, DRINKS.z + 0.2] }, 8))
+    for (let i = 0; i < 3; i++) parts.push(P.sphere(0.2, '#8FCB6A', { at: [DRINKS.x + 0.25 + i * 0.32, 1.1, DRINKS.z + 0.1] }, 9), P.cyl(0.015, 0.015, 0.3, PAL.hotpink, { at: [DRINKS.x + 0.3 + i * 0.32, 1.38, DRINKS.z + 0.1], rot: [0, 0, -0.3] }, 5))
+    // Hay bales stacked at the corners, cones along the front.
+    for (const [x, z, n] of [[-11.2, -0.6, 3], [12.2, -0.4, 2]] as const)
+      for (let i = 0; i < n; i++) {
+        const y = i === 2 ? 0.95 : 0.31
+        const dx = i === 2 ? 0 : (i - 0.5) * 2.1
+        parts.push(P.rbox(2.1, 0.62, 0.8, 0.12, '#E8C46A', { at: [x + dx, y, z] }), P.box(2.12, 0.08, 0.82, '#C9A24E', { at: [x + dx, y + 0.11, z] }))
+      }
+    for (const [x, z] of [[-9.6, 1.6], [-8.2, 1.9], [4.2, 1.6], [5.6, 1.3], [8.4, 0.8]]) parts.push(P.cone(0.24, 0.7, '#FF8A3D', { at: [x, 0.37, z] }, 12), P.cyl(0.165, 0.2, 0.12, '#FFFFFF', { at: [x, 0.34, z] }, 12), P.box(0.55, 0.05, 0.55, '#FF8A3D', { at: [x, 0.025, z] }))
+    // Flowers in planters at the board's feet.
+    for (const x of [BOARD.x - BOARD.w / 2 - 0.5, BOARD.x + BOARD.w / 2 + 0.5]) {
+      parts.push(P.rbox(1.0, 0.5, 0.6, 0.1, PAL.lavender, { at: [x, 0.25, BOARD.z + 0.3] }))
+      for (let i = 0; i < 5; i++) parts.push(P.sphere(0.13, [PAL.hotpink, PAL.butter, '#FFFFFF'][i % 3], { at: [x - 0.36 + i * 0.18, 0.6 + (i % 2) * 0.08, BOARD.z + 0.3] }, 8))
+    }
+    g.add(solid(merge(parts), this.bag, 2))
+    // Round paper lanterns hanging along the front of the grandstand's roof.
+    const LANTERN = [PAL.pink, PAL.butter, PAL.mint, PAL.sky, PAL.lavender, '#FFB07A', PAL.pink]
+    LANTERN.forEach((c, i) => {
+      const l = new Group()
+      l.position.set(STAND.x - STAND.w / 2 + 0.75 + i * ((STAND.w - 1.5) / 6), 3.38, STAND.z + STAND.deep + 0.6)
+      l.add(solid(merge([P.cyl(0.01, 0.01, 0.4, PAL.ink, { at: [0, -0.2, 0] }, 4), P.sphere(0.26, c, { at: [0, -0.58, 0], scale: [1, 1.1, 1] }, 12), P.cyl(0.11, 0.13, 0.07, PAL.hotpink, { at: [0, -0.3, 0] }, 8), P.cyl(0.13, 0.11, 0.07, PAL.hotpink, { at: [0, -0.86, 0] }, 8), P.cyl(0.02, 0.04, 0.22, PAL.hotpink, { at: [0, -1.0, 0] }, 5)]), this.bag, 1.2))
+      g.add(l)
+      this.lanterns.push(l)
+    })
+    // The crowd: Nan folk come to watch, facing the square.
+    CROWD_AT.forEach((at, i) => {
+      const rig = buildAnimal(CROWD[i % CROWD.length], this.bag)
+      rig.root.position.set(at.x, 0, at.z)
+      rig.root.rotation.y = at.x < -5 ? 0.6 : at.x < 5 ? 0.35 : -0.35
+      g.add(rig.root)
+      this.crowd.push(rig)
+    })
+    return g
   }
 
   /** Bunting across the square, between the board and the grandstand. */

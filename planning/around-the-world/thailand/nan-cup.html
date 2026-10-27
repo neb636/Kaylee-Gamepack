@@ -17,9 +17,9 @@
   "icon": "🏁",
   "kind": "Nan trip stop",
   "updated": "2026-10-27",
-  "status": { "label": "Greybox 3 built (behind a flag)", "tone": "pink" },
+  "status": { "label": "The look built (behind a flag)", "tone": "pink" },
   "pitch": "At the end of the city road, Nan town's market square becomes the race ground for the **Nan Mountain Cup**. Kaylee drives her own pink kart against three mountain racers on three tracks, each one different: a misty mushroom forest, the rice steps and the climb into the clouds. She wins two races and loses one. Which one she loses is rolled fresh every time she plays. Winning two makes her the champion, so the Cup with KAYLEE on it is hers.",
-  "next": "Dad plays greybox 3 on the iPad: [the race ground's board](#/world/thailand/nan-trip/cup) (tap a track to race it), [a silver podium](#/world/thailand/nan-trip/podium?track=steps&place=2&cup=forest:1,steps:2) (tap Grandma Taeng for a high five, her ribbon goes on the kart), [the Cup ceremony](#/world/thailand/nan-trip/cup-win) (tap the Cup to lift it) and [the whole Cup from the Nan map](#/world/thailand/nan-trip/map?cup=1) (Nan town: the city road ends at the race ground). The Cup is behind a flag (`CUP_OPEN` in `cup/cup.ts`, `?cup=1` to try), so Kaylee can't reach it yet. No feel-lab numbers came back from greybox 2, so the kart still has its first guesses ([the feel lab](#/world/thailand/nan-trip/race?track=steps&feel=1)). Then step 4, the look.",
+  "next": "Dad plays the look on the iPad: [the board](#/world/thailand/nan-trip/cup) (the rivals in their dressed karts, the race ground dressed for the Cup), [the Mushroom Forest](#/world/thailand/nan-trip/race) (the stream, the dark bit with the fireflies, the hollow log near the end), [the Rice Steps Rally](#/world/thailand/nan-trip/race?track=steps) (the cafe's cheering deck, the ducks crossing, the scarecrows, the buffalo, the bamboo bridge), [the Cloud Top Climb](#/world/thailand/nan-trip/race?track=cloud) (the ring of flags at the summit), [a podium](#/world/thailand/nan-trip/podium?track=steps&place=2&cup=forest:1,steps:2) and [the three rivals in the character lab](#/world/characters/taeng?lineup=taeng,pao,moon). Still behind the flag (`CUP_OPEN` in `cup/cup.ts`, `?cup=1` to try). No feel-lab numbers came back from greybox 3, so the kart keeps its first guesses ([the feel lab](#/world/thailand/nan-trip/race?track=steps&feel=1)). Then step 5, the full loop.",
   "facts": [
     { "icon": "🏁", "value": "3", "label": "tracks, any order" },
     { "icon": "🥇", "value": "2 wins, 1 loss", "label": "rolled each time" },
@@ -255,8 +255,8 @@
           { "n": 1, "title": "Greybox 1: the kart toy on the forest track", "status": "done", "date": "2026-10-27", "md": "Her kart, the three rivals as blocks, one track with coins, arrow pads and the bouncy mushrooms. The scripted finish works both ways (`?result=win|lose`). Feel numbers on knobs, with a `?feel=1` link." },
           { "n": 2, "title": "Greybox 2: the rice steps and the cloud", "status": "done", "date": "2026-10-27", "pr": 237, "md": "Both tracks with their tricks (puddles and mud, the cloud with its lanterns and the blossoms)." },
           { "n": 3, "title": "Greybox 3: the Cup", "status": "done", "date": "2026-10-27", "md": "The race ground at the end of the city road (it replaces the market square), the board, the roll for the loss, each podium with its gift, the Cup ceremony, the stamp on the map. Behind a flag, so Kaylee doesn't reach it yet." },
-          { "n": 4, "title": "The look", "status": "next", "md": "The rivals on the chibi rig, the karts, each track's scenery." },
-          { "n": 5, "title": "Full loop", "status": "todo", "md": "Voices (the rivals' cast with northern Thai accents), facts, the Trophy Room cup, QA, and the flag turned on." }
+          { "n": 4, "title": "The look", "status": "done", "date": "2026-10-27", "md": "The rivals on the chibi rig (a tortoise, a hornbill and a sun bear), each kart dressed as its own, each track's scenery (the log, the stream and the fireflies in the forest; the cafe's deck, the ducks, the scarecrows, the buffalo and the bamboo bridge on the rice steps; the summit's flags), and the race ground dressed up. Still behind the flag." },
+          { "n": 5, "title": "Full loop", "status": "next", "md": "Voices (the rivals' cast with northern Thai accents), facts, the Trophy Room cup, QA, and the flag turned on." }
         ] }
       ]
     },
@@ -376,6 +376,46 @@
                   "items": [
                     "The Cup is still a plain stop on the map's hint: the hint finger points at Nan town only when it's the nearest stop left.",
                     "In portrait the board's shot fits the board's width, so the race ground looks small on a tall iPhone."
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Step 4: the look",
+              "date": "2026-10-27",
+              "status": "done",
+              "open": true,
+              "summary": "The rivals as toy animals on the chibi rig, the karts dressed as their own, each track's scenery and the race ground dressed for the Cup. Still behind the flag.",
+              "items": [
+                "**No feel-lab numbers** came back from greyboxes 1-3, so the kart's knobs keep their first guesses (nothing to bake in).",
+                "**Two new animals on the shared rig** (`engine3d/characters/animal.ts`, `look.ts`): a `tortoise` (a round shell on the back like a backpack, with plates and a cream rim, a cream chin, a pointed tail) and a `bear` (round ears on top, a big honey-colored muzzle, the sun bear's cream crescent on the chest). Two new extras: `mailbag` (a satchel on a strap across the chest, a letter and a pink stamp) and `bun` (white hair with a bun and a pink pin).",
+                "**The rivals** (`cup/rivals.ts` `RIVAL_LOOKS`, built by `cup/riders.ts`, which replaces `cup/blocks.ts`): Grandma Taeng, a soft green tortoise with a caramel shell, her white bun, gold glasses and a pink blouse; Pao, a black-and-white hornbill with an orange beak, the postman's navy cap and his mailbag; Moon, a big round chocolate sun bear with a honey-colored face and the crescent on her chest. In a kart they sit low in the seat with both hands on the wheel, lean and look into the bends, hop, wave; standing (the podium) their arms rest at their sides. Grandma Taeng naps at the wheel (head drops, eyes close, she sways). A bee buzzes round Moon all the time and now and then she swats at it. They blink, and their mouths will move with their voices (`FaceLife`, voices `taeng`, `pao`, `moon` in the full loop). In the character lab (`lab/catalog.ts`, Nan trip group): `#/world/characters/taeng?lineup=taeng,pao,moon`.",
+                "**The karts** (`cup/karts.ts` `dressKart`, on the race and the race ground): hers gets a white heart on each side and a pink pennant with a gold star off the back (it flutters with speed). Grandma Taeng's old wooden kart: plank seams with brass rivets, a basket of rice sheaves on the back and her pink parasol over the seat, twirling as she goes. Pao's: white envelopes on the sides and a red postbox stuffed with letters on the back. Moon's: honeycomb on the sides, two honey pots on the back and honey dripping down the nose.",
+                "**The forest's scenery** (`cup/scenery.ts`, places in `cup/track.ts`): a stream winding through the trees and across the road at 29% (every kart splashes through: spray, a hop, `fords` in QA); the dark stretch under huge old trees whose crowns meet over the road, 60-73% (the light dims and the sky turns a deep green, `Track.shadeAt`; 200 fireflies with a soft glow blink in the shade, none in the camera's way); and the giant hollow log at 88.5%, on the straightest stretch: 14 m long, 11 m inside, built in slices that follow the road, bark and ridges outside, pale wood inside, rings at its ends, moss and little pink mushrooms on top (a little shady inside).",
+                "**The rice steps' scenery:** Stop Time Cafe's deck up on stilts on the high side near the top (10%): a striped awning, a white rail, coffee on a table and five Nan folk (toy animals, not family) who jump and wave as she passes. The duck crossing (21.5%): a mother duck and four ducklings start across the road as she comes; a kart just before them may only go 1.5 m/s while they're on the road, so everyone waits a moment (about 2 s, never more than 2.2 s), the ducks hurry when she's waiting and peck on the far side after (`Scenery.hold`, `duckWait` in QA). Five scarecrows in the paddies in farmer's hats wave as she goes by; two water buffalo (the road kit's toy, now `buildBuffaloToy` in `trip/road/traffic.ts`) look up and moo. The wobbly bamboo bridge (63%, 11 m) over a stream: bamboo slats across the road, rails tied at the posts; it bounces under the karts, they jiggle on it, and it creaks.",
+                "**The climb:** a ring of twelve pennant flags on tall poles round the summit, just past the finish, flying in the wind.",
+                "**The race ground dressed up** (`cup/ground.ts` `buildDressing`): four big pennant flags flying on tall poles, a fruit stall and a drinks stall beside Moon's honey stall, seven round paper lanterns swaying along the grandstand's roof, hay bales stacked at the corners and cones along the front, flowers in planters at the board's feet, and five Nan folk who watch, cheer with everyone, and cheer when she taps them (`crowd`). The city road's view of it (`drive/landmarks.ts` `raceground`) has flags, lanterns, the rivals' karts by the board and cones too.",
+                "**Sounds:** `cupSfx.quack` and `cupSfx.creak` (the bridge); the buffalo moo and the cafe's cheer are the road's and Thailand's.",
+                "**QA:** `nan-cup-rivals` and `nan-cup-rivals-back` in qa-screens (the lab lineup), `nan-cup-rivals`, `nan-ducks` and `nan-log` in qa-motion; `window.__thaiNanQA().scenery` has `duckWait`, `waves`, `moos`, `cheers`, `shade` and `ducks` (`state`, `lat`), and `fords` counts her splashes through the stream. Robot runs with a held finger: the ducks held the karts 2.25 s, every scarecrow waved, the buffalo mooed, the cafe cheered."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "items": [
+                    "The log moved to the end of the forest (88.5%): it's the straightest stretch, and a log in a bend had the road running through its wall.",
+                    "The stream across the forest road is a splash only (no mud, no speed): the mud is the rice steps' trick.",
+                    "No voices yet (full loop), so the rivals, the ducks and the crowd only make sounds."
+                  ]
+                },
+                {
+                  "type": "list",
+                  "title": "Known small things",
+                  "items": [
+                    "Every QA run here used Chromium (WebKit's download was blocked in this session); the iPad is the real check.",
+                    "From far away the scarecrows and buffalo are small; they're nearest as she passes.",
+                    "Moon claps beside Kaylee's kart at the Cup ceremony, a little close to it (as in greybox 3)."
                   ]
                 }
               ]

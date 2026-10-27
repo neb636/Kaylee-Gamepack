@@ -1,5 +1,5 @@
 // Toy animals built from simple shapes in the toon look: Kaylee's family in Thailand (places/thailand/characters/looks.ts
-// says who is what), and any country's 3D friends.
+// says who is what), and any country's 3D friends (the Nan Mountain Cup's tortoise, hornbill and sun bear too).
 //
 // Every character is the same chibi rig: a root at the feet (facing +z), a `body` group that squashes and leans, and
 // inside it the torso (legs, clothes, tail), a `head` pivot at the neck, and an arm pivot at each shoulder. The eyes
@@ -111,7 +111,7 @@ function frameOf(look: Look): Frame {
   const H = look.height
   const penguin = look.species === 'penguin'
   const bird = look.species === 'hornbill'
-  const R = (penguin ? 0.27 : look.species === 'panda' || look.species === 'elephant' ? 0.26 : bird ? 0.22 : look.species === 'puppy' ? 0.25 : 0.24) * H
+  const R = (penguin ? 0.27 : look.species === 'panda' || look.species === 'elephant' || look.species === 'bear' ? 0.26 : bird ? 0.22 : look.species === 'puppy' || look.species === 'tortoise' ? 0.25 : 0.24) * H
   const c = look.chub ?? 1
   const headY = penguin ? 0.2 * H : R * 0.92
   return {
@@ -344,7 +344,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     }
   } else {
     const legColor = look.species === 'panda' ? look.dark : look.fur
-    const feetColor = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' ? look.dark : look.light
+    const feetColor = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear' ? look.dark : look.light
     const legX = 0.085 * H * (1 + (c - 1) * 0.7)
     const legR = 0.07 * H * (1 + (c - 1) * 0.6)
     for (const s of [-1, 1]) {
@@ -354,6 +354,31 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     torso.push(P.capsule(0.155 * H, 0.1 * H, look.fur, { at: [0, 0.34 * H, 0], scale: round }))
     if ((look.species === 'fox' || look.species === 'puppy') && !look.outfit?.lace) torso.push(P.sphere(0.075 * H, look.light, { at: [0, 0.5 * H, 0.11 * H * round[2]], scale: [1.1, 0.8, 0.7] }))
     if (look.species === 'buffalo' && !look.outfit) torso.push(P.sphere(0.11 * H, look.light, { at: [0, 0.27 * H, 0.1 * H], scale: [1, 1.1, 0.55] }))
+    if (look.species === 'tortoise') {
+      // A big round shell on the back (like a backpack): a dome in the shell color with round plates sunk into it, a
+      // cream rim where it meets the body, and a cream plate down the tummy (under any clothes).
+      const sr = 0.2 * H * c
+      const C: V3 = [0, 0.35 * H, -0.06 * H * round[2]]
+      const k: V3 = [1.02, 1.05, 0.85]
+      torso.push(P.sphere(sr, look.dark, { at: C, scale: k }, 26))
+      const plate = (dx: number, dy: number, r: number) => {
+        const dz = -Math.sqrt(Math.max(0, 1 - dx * dx - dy * dy))
+        torsoPlain.push(P.sphere(r * H * c, look.ear ?? look.light, { at: [C[0] + dx * sr * k[0] * 0.97, C[1] + dy * sr * k[1] * 0.97, C[2] + dz * sr * k[2] * 0.97], scale: [1, 1, 0.45] }, 14))
+      }
+      plate(0, 0.12, 0.07)
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2 + Math.PI / 6
+        plate(Math.cos(a) * 0.6, 0.1 + Math.sin(a) * 0.55, 0.05)
+      }
+      torso.push(P.torus(sr * 0.96, 0.024 * H, look.light, { at: [0, C[1], 0.01 * H], scale: [k[0], k[1], 1] }))
+      if (!look.outfit) torso.push(P.sphere(0.13 * H, look.light, { at: [0, 0.31 * H, 0.1 * H * round[2]], scale: [1.05 * c, 1.25, 0.55] }))
+    }
+    if (look.species === 'bear') {
+      // The sun bear's cream crescent on the chest: a "U" under the chin.
+      const y = 0.445 * H
+      const z = Math.sqrt(Math.max(0, (0.155 * H) ** 2 - (y - 0.39 * H) ** 2)) * round[2]
+      torso.push(P.torus(0.07 * H * c, 0.026 * H, look.light, { at: [0, y + 0.03 * H, z - 0.008 * H], rot: [-0.45, 0, Math.PI], scale: [1.15, 1, 1] }, Math.PI))
+    }
   }
 
   // ---- Clothes ----
@@ -408,7 +433,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       if (o) parts.push(P.sphere(0.06 * H, o.color, { at: [0, -0.01 * H, 0] }))
     } else {
       const armColor = look.species === 'panda' ? look.dark : look.fur
-      const hand = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' ? look.light : look.fur
+      const hand = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear' ? look.dark : look.species === 'fox' || look.species === 'puppy' || look.species === 'monkey' ? look.light : look.fur
       parts.push(P.capsule(0.052 * H, 0.09 * H, armColor, { at: [s * 0.025 * H, -0.075 * H, 0], rot: [0, 0, s * 0.35] }))
       parts.push(P.sphere(0.054 * H, hand, { at: [s * 0.05 * H, -0.14 * H, 0.005 * H] }))
       if (o) parts.push(P.sphere(0.068 * H, o.color, { at: [s * 0.004 * H, -0.015 * H, 0] }))
@@ -651,6 +676,30 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       if (!look.extras?.includes('tuft')) head.push(P.sphere(0.18 * R, look.fur, { at: [0.05 * R, headY + 0.93 * R, 0.1 * R], scale: [1.3, 0.6, 1] }))
       break
     }
+    case 'tortoise': {
+      // A round, slightly long head with a cream chin and snout, two nostrils, no ears; a little pointed tail.
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1, 0.96, 1.04] }, 26))
+      head.push(P.sphere(0.5 * R, look.light, { at: [0, headY - 0.36 * R, 0.6 * R], scale: [1.2, 0.68, 0.72] }))
+      headPlain.push(...[-1, 1].map((s) => P.sphere(0.035 * R, INK, { at: [s * 0.13 * R, headY - 0.17 * R, 1.02 * R], scale: [1, 0.8, 0.6] })))
+      mouth(mouthPoint(-0.44 * R, 0.92 * R))
+      tailRoot = [0, 0.16 * H, -0.2 * H * round[2]]
+      tail.push(P.cone(0.035 * H, 0.1 * H, look.fur, { at: [0, 0.15 * H, -0.25 * H * round[2]], rot: [-Math.PI / 2 - 0.3, 0, 0] }, 10))
+      break
+    }
+    case 'bear': {
+      // Small round ears on top, a big cream muzzle with a dark round nose (a sun bear's honey-colored face), a stubby tail.
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.08, 1, 1] }, 26))
+      for (const s of [-1, 1]) {
+        head.push(P.sphere(0.3 * R, look.fur, { at: [s * 0.74 * R, headY + 0.7 * R, -0.08 * R], scale: [1, 1, 0.7] }))
+        headPlain.push(P.sphere(0.17 * R, look.ear ?? look.light, { at: [s * 0.74 * R, headY + 0.69 * R, 0.07 * R], scale: [1, 1, 0.4] }))
+      }
+      head.push(P.sphere(0.5 * R, look.light, { at: [0, headY - 0.33 * R, 0.6 * R], scale: [1.25, 0.8, 0.78] }))
+      head.push(P.sphere(0.14 * R, look.dark, { at: [0, headY - 0.16 * R, 0.99 * R], scale: [1.4, 0.9, 0.8] }))
+      mouth(mouthPoint(-0.52 * R, 0.92 * R))
+      tailRoot = [0, 0.2 * H, -0.15 * H * round[2]]
+      tail.push(P.sphere(0.05 * H, look.fur, { at: [0, 0.2 * H, -0.17 * H * round[2]] }))
+      break
+    }
     case 'hornbill': {
       mouthAt = [0, headY - 0.45 * R, 0.95 * R]
       head.push(P.sphere(R, look.fur, { at: [0, headY, 0] }, 26))
@@ -675,6 +724,24 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       const rr = (e === 'glasses' ? 0.2 : 0.26) * R
       for (const s of [-1, 1]) head.push(P.torus(rr, 0.03 * R, c, { at: on(s * eyeX, eyeY, 0.06 * R), rot: turnTo(s * eyeX) }))
       head.push(P.capsule(0.025 * R, eyeX * 2 - rr * 2, c, { at: on(0, eyeY + 0.03 * R, 0.08 * R), rot: [0, 0, Math.PI / 2] }))
+    }
+    if (e === 'mailbag') {
+      // A postman's satchel: a strap across the chest from the right shoulder to the left hip, and the bag on that hip
+      // with its flap, a letter peeking out and a pink stamp on it.
+      const tan = '#C98A55'
+      torso.push(P.torus((bird ? 0.185 : 0.168 * c) * H, 0.013 * H, tan, { at: [0, 0.37 * H, 0], rot: [Math.PI / 2, 0.75, 0], scale: [1, 1, round[2]] }))
+      torso.push(P.rbox(0.16 * H, 0.13 * H, 0.07 * H, 0.02 * H, tan, { at: [-0.2 * H * c, 0.22 * H, 0.04 * H], rot: [0, -0.5, 0] }))
+      torso.push(P.rbox(0.165 * H, 0.06 * H, 0.075 * H, 0.02 * H, '#A86E44', { at: [-0.2 * H * c, 0.27 * H, 0.045 * H], rot: [0, -0.5, 0] }))
+      torsoPlain.push(P.box(0.09 * H, 0.05 * H, 0.008 * H, WHITE, { at: [-0.21 * H * c, 0.31 * H, 0.03 * H], rot: [0, -0.5, 0.15] }))
+      torsoPlain.push(P.box(0.022 * H, 0.022 * H, 0.004 * H, '#FF6FAE', { at: [-0.185 * H * c, 0.325 * H, 0.04 * H], rot: [0, -0.5, 0.15] }))
+    }
+    if (e === 'bun') {
+      // White hair: a soft cap over the top of the head, a round bun on top with a pink pin through it.
+      const w = '#F4F0F6'
+      head.push(P.sphere(R, w, { at: [0, headY + 0.4 * R, -0.12 * R], scale: [1.08, 0.7, 1.04] }, 26))
+      head.push(P.sphere(0.34 * R, w, { at: [0, headY + 1.08 * R, -0.3 * R] }, 18))
+      head.push(P.capsule(0.035 * R, 0.62 * R, '#FF6FAE', { at: [0.05 * R, headY + 1.12 * R, -0.3 * R], rot: [0, 0, 1.25] }))
+      headPlain.push(P.sphere(0.08 * R, '#FF9CC8', { at: [0.4 * R, headY + 1.23 * R, -0.3 * R] }))
     }
     if (e === 'moustache') for (const s of [-1, 1]) head.push(P.capsule(0.08 * R, 0.24 * R, '#F4EFF4', { at: [s * 0.18 * R, headY - 0.33 * R, 0.95 * R], rot: [0, 0, s * 1.15] }))
     if (e === 'cap') {

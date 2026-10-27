@@ -1497,6 +1497,48 @@ GAME_SCENARIOS.push(
   },
 )
 
+// The Nan Mountain Cup, the look step: the rivals on the chibi rig waving in the character lab (Grandma Taeng, Pao,
+// Moon); on the rice steps (nan-ducks) the mother duck and her ducklings waddling across the road while every kart waits
+// a moment; in the forest (nan-log) through the hollow log near the end.
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-cup-rivals',
+    seconds: 4,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/characters/taeng?lineup=taeng,pao,moon`)
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      await page.getByRole('button', { name: 'Hop', exact: true }).click().catch(() => {})
+      await page.waitForTimeout(1200)
+      await page.getByRole('button', { name: 'Wave', exact: true }).click().catch(() => {})
+      await page.waitForTimeout(2500)
+    },
+  },
+  {
+    name: 'nan-ducks',
+    seconds: 6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().scenery?.ducks?.state === 'cross', null, { timeout: 120000 })
+    },
+    act: async (page) => {
+      await page.waitForTimeout(6000)
+    },
+  },
+  {
+    name: 'nan-log',
+    seconds: 6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/race`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 660, null, { timeout: 180000 })
+    },
+    act: async (page) => {
+      await page.waitForTimeout(6000)
+    },
+  },
+)
+
 // The Nan Mountain Cup (greybox 3): the silver podium, where she taps the winner (Grandma Taeng) for a high five and
 // Taeng hops down to tie her ribbon on the pink kart and back up; then the Cup ceremony: the scoreboard lights up race by
 // race, the Cup flies over from its stand, a tap and she lifts it over her head (fireworks, everyone cheering).

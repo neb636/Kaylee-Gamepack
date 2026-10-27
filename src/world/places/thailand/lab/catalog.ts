@@ -8,6 +8,7 @@ import { GRANDMA, KIDS } from '../activities/boat-trip/bay/village'
 import { KID_LOOKS } from '../activities/mall-trip/games/race/racer'
 import { KID_C, STAFF_LOOKS } from '../activities/mall-trip/hall/kids'
 import { SERVER } from '../activities/mall-trip/pizza/room'
+import { RIVAL_LOOKS } from '../activities/nan-trip/cup/rivals'
 import { LUNG } from '../activities/nan-trip/rice/farm'
 import { FAMILY } from '../characters/family'
 import { COACH_LOOK, LOOKS, PATIENT_LOOKS, type Look, type Wearable } from '../characters/looks'
@@ -79,7 +80,12 @@ const mall: CastEntry[] = [
   ...(Object.keys(PATIENT_LOOKS) as (keyof typeof PATIENT_LOOKS)[]).map((id) => person(`patient-${id}`, `${id[0].toUpperCase()}${id.slice(1)} patient`, 'Vet clinic patient', 'mall', PATIENT_LOOKS[id], 'characters/looks.ts', undefined, 'patients')),
 ]
 
-const nan: CastEntry[] = [person('lung', 'Lung Kham', 'Rice farmer', 'nan', LUNG, 'activities/nan-trip/rice/farm.ts', 'lung')]
+const nan: CastEntry[] = [
+  person('lung', 'Lung Kham', 'Rice farmer', 'nan', LUNG, 'activities/nan-trip/rice/farm.ts', 'lung'),
+  person('taeng', 'Grandma Taeng', 'Nan Mountain Cup: the champion, a tortoise', 'nan', RIVAL_LOOKS.taeng, 'activities/nan-trip/cup/rivals.ts', 'taeng', 'cup-rivals'),
+  person('pao', 'Pao', 'Nan Mountain Cup: the hornbill postman', 'nan', RIVAL_LOOKS.pao, 'activities/nan-trip/cup/rivals.ts', 'pao', 'cup-rivals'),
+  person('moon', 'Moon', 'Nan Mountain Cup: the sun bear honey seller', 'nan', RIVAL_LOOKS.moon, 'activities/nan-trip/cup/rivals.ts', 'moon', 'cup-rivals'),
+]
 
 const CRITTER_INFO: Record<CritterId, { name: string; color: string }> = {
   needlefish: { name: 'Needlefish', color: '#B8E6D8' },

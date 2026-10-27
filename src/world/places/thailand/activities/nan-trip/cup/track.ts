@@ -15,6 +15,10 @@
 //   to the summit. Its trick: the cloud. Halfway up everything turns white and a line of glowing lanterns shows the way
 //   (each one she drives under chimes); out the top, sunshine over a sea of clouds. Pink Chomphu Phu Kha blossoms fall
 //   across the road in showers: driving through one is a burst of speed.
+// The scenery along each one (scenery.ts builds it): in the forest a giant hollow log the road runs through, a stream
+// to splash across and a dark stretch under the big trees where fireflies blink; on the rice steps Stop Time Cafe's deck
+// full of cheering people near the top, ducks that waddle across the road in a line (everyone waits a moment), a wobbly
+// bamboo bridge over a stream, scarecrows in the paddies that wave as she passes, and buffalo in the next fields.
 // Either side of the road is a strip of grass (she can drive on it, bumpier and slower), then a row of hay bales that
 // boing her back on (she never leaves the track).
 import { Road, type RoadPoint } from '../../../trip/road/road'
@@ -51,6 +55,10 @@ export interface Shower {
 /** The meters of road a blossom shower covers (along it), and of a waterfall's stream (across it, the whole width). */
 export const SHOWER_LEN = 7
 export const STREAM_LEN = 3.2
+/** The forest's hollow log (meters along the road, and its inside radius), and the bamboo bridge's length. */
+export const LOG_LEN = 14
+export const LOG_R = 11
+export const BRIDGE_LEN = 11
 
 export interface TrackDef {
   id: TrackId
@@ -76,6 +84,18 @@ export interface TrackDef {
   showers?: { f: number; side: number }[]
   /** Round mirrors on the blind hairpins (where along the race, which side). */
   mirrors?: { f: number; side: number }[]
+  /** The scenery (where along the race; `side` +1 is the road's left). The forest: the hollow log, the stream across
+   *  the road, the dark stretch under the big trees (fireflies). */
+  log?: { f: number }
+  ford?: { f: number }
+  dark?: { f0: number; f1: number }
+  /** The rice steps: Stop Time Cafe's deck (on the uphill side), the ducks' crossing, the bamboo bridge, scarecrows
+   *  and buffalo out in the paddies. */
+  deck?: { f: number }
+  ducks?: { f: number; side: number }
+  bridge?: { f: number }
+  scarecrows?: { f: number; side: number }[]
+  buffalo?: { f: number; side: number }[]
 }
 
 const FOREST: TrackDef = {
@@ -128,6 +148,10 @@ const FOREST: TrackDef = {
     { f: 0.56, lat: -2.4, r: 1.7 },
     { f: 0.79, lat: 0, r: 2.2, big: true },
   ],
+  // (The log on the straightest stretch, near the end; the dark bit just after the mushrooms, before the big one.)
+  ford: { f: 0.29 },
+  log: { f: 0.885 },
+  dark: { f0: 0.6, f1: 0.73 },
 }
 
 const STEPS: TrackDef = {
@@ -178,6 +202,20 @@ const STEPS: TrackDef = {
     { f: 0.84, lat: -2, r: 2 },
   ],
   waterfall: { f: 0.89, side: 1 },
+  deck: { f: 0.1 },
+  ducks: { f: 0.215, side: -1 },
+  bridge: { f: 0.63 },
+  scarecrows: [
+    { f: 0.05, side: -1 },
+    { f: 0.28, side: 1 },
+    { f: 0.45, side: -1 },
+    { f: 0.55, side: 1 },
+    { f: 0.76, side: -1 },
+  ],
+  buffalo: [
+    { f: 0.38, side: 1 },
+    { f: 0.7, side: -1 },
+  ],
 }
 
 const CLOUD: TrackDef = {
@@ -246,6 +284,12 @@ export class Track {
   readonly lanterns: { s: number; lat: number }[]
   /** The minimap (the races' HUD). */
   readonly map: ReturnType<typeof courseMap>
+  /** The scenery, meters along the road (null: not on this track). */
+  readonly log: number | null
+  readonly ford: number | null
+  readonly dark: { s0: number; s1: number } | null
+  readonly bridge: number | null
+  readonly ducks: { s: number; side: number } | null
 
   constructor(id: TrackId) {
     const def = (this.def = TRACK_DEFS[id] ?? FOREST)
@@ -272,6 +316,35 @@ export class Track {
       }
     }
     this.map = courseMap(this.road.samples, def.half + 4, false)
+    this.log = def.log ? s(def.log.f) : null
+    this.ford = def.ford ? s(def.ford.f) : null
+    this.dark = def.dark ? { s0: s(def.dark.f0), s1: s(def.dark.f1) } : null
+    this.bridge = def.bridge ? s(def.bridge.f) : null
+    this.ducks = def.ducks ? { s: s(def.ducks.f), side: def.ducks.side } : null
+  }
+
+  /** Meters along the road for a fraction of the race. */
+  at(f: number) {
+    return this.def.start + f * this.length
+  }
+
+  /** In the forest's stream (anywhere across the road). */
+  inFord(s: number) {
+    return this.ford !== null && Math.abs(s - this.ford) < STREAM_LEN / 2
+  }
+
+  /** On the bamboo bridge. */
+  onBridge(s: number) {
+    return this.bridge !== null && Math.abs(s - this.bridge) < BRIDGE_LEN / 2
+  }
+
+  /** How shady it is at `s` (0 sunny .. 1 deep under the big trees; inside the log, a little). */
+  shadeAt(s: number) {
+    const ramp = (a: number, b: number, x: number) => Math.max(0, Math.min(1, (x - a) / (b - a)))
+    let k = 0
+    if (this.dark) k = Math.max(k, ramp(this.dark.s0 - 12, this.dark.s0 + 8, s) * (1 - ramp(this.dark.s1 - 8, this.dark.s1 + 12, s)))
+    if (this.log !== null) k = Math.max(k, 0.55 * ramp(this.log - LOG_LEN / 2 - 2, this.log - LOG_LEN / 2 + 2, s) * (1 - ramp(this.log + LOG_LEN / 2 - 2, this.log + LOG_LEN / 2 + 2, s)))
+    return k
   }
 
   /** How far she can go across before the hay bales (meters from the middle). */

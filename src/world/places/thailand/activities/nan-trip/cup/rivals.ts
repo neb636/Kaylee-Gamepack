@@ -1,8 +1,8 @@
 // The Nan Mountain Cup's racers (plan: thailand/nan-cup.html, "The rivals"), pure data: Kaylee in her pink kart and three
-// Nan locals in theirs. Greybox 1: the rivals are blocks in their colors (blocks.ts); they get the chibi rig in the
-// look step. Each drives its own way, and each track tells its own story through the scripts: where each rival wants
+// Nan locals in theirs, toy animals on the chibi rig (riders.ts builds them from RIVAL_LOOKS). Each drives its own way, and each track tells its own story through the scripts: where each rival wants
 // to be against her (meters ahead of her) from the start line (0) to the finish (1), for a race she wins and for the
 // one she loses, when the home rival edges past on the last stretch and wins by a nose.
+import type { Look } from '../../../../../engine3d/characters/look'
 import type { Script } from '../../../trip/race/rubber'
 import type { TrackId } from './track'
 
@@ -34,6 +34,16 @@ export const RIVALS: Record<RivalId, Rival> = {
   pao: { id: 'pao', label: 'Pao', icon: '🐦', color: '#FF9A3C', kart: { body: '#FF9A3C', trim: '#FFFFFF', seat: '#5E5468' }, pace: 1.04, lane: 2.6, bends: 0.5 },
   // Moon, the sun bear honey seller: very fast on the straights, slow in the bends.
   moon: { id: 'moon', label: 'Moon', icon: '🐻', color: '#8A6450', kart: { body: '#FFC83D', trim: '#FFFFFF', seat: '#8A6450' }, pace: 1.06, lane: -2.4, bends: 1.7 },
+}
+
+/** The rivals as toy animals (the shared chibi rig, engine3d/characters/animal.ts). Grandma Taeng: a soft green tortoise
+ *  with a caramel shell, white hair in a bun, gold glasses and a pink blouse. Pao: a black-and-white hornbill with an
+ *  orange beak, the postman's navy cap and his mailbag. Moon: a big, round chocolate sun bear with a honey-colored face
+ *  and the cream crescent on her chest, beaming. */
+export const RIVAL_LOOKS: Record<RivalId, Look> = {
+  taeng: { species: 'tortoise', height: 1.1, chub: 1.25, fur: '#AFD9A2', light: '#FFF2D2', dark: '#C98B5C', ear: '#E8B987', outfit: { kind: 'blouse', color: '#FFB8D0' }, extras: ['bun', 'glasses'], lashes: true },
+  pao: { species: 'hornbill', height: 1.18, fur: '#3F3A52', light: '#FFF4E4', dark: '#FF9A3C', extras: ['officer-cap', 'mailbag'], open: true },
+  moon: { species: 'bear', height: 1.3, chub: 1.25, fur: '#6E4F4A', light: '#FFD48A', dark: '#3A2A30', ear: '#FFB8A8', lashes: true, open: true },
 }
 
 /** Whose home track it is: on the race she loses, this rival wins. */
