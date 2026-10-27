@@ -17,9 +17,9 @@
   "icon": "🏁",
   "kind": "Nan trip stop",
   "updated": "2026-10-27",
-  "status": { "label": "Greybox 2 built", "tone": "pink" },
+  "status": { "label": "Greybox 3 built (behind a flag)", "tone": "pink" },
   "pitch": "At the end of the city road, Nan town's market square becomes the race ground for the **Nan Mountain Cup**. Kaylee drives her own pink kart against three mountain racers on three tracks, each one different: a misty mushroom forest, the rice steps and the climb into the clouds. She wins two races and loses one. Which one she loses is rolled fresh every time she plays. Winning two makes her the champion, so the Cup with KAYLEE on it is hers.",
-  "next": "Dad plays greybox 2 on the iPad: [the Rice Steps Rally](#/world/thailand/nan-trip/race?track=steps&result=win) (puddles, mud, the waterfall) and [the Cloud Top Climb](#/world/thailand/nan-trip/race?track=cloud&result=win) (the lanterns in the cloud, the blossoms), each also lost by a nose ([steps](#/world/thailand/nan-trip/race?track=steps&result=lose), [cloud](#/world/thailand/nan-trip/race?track=cloud&result=lose)). [The feel lab](#/world/thailand/nan-trip/race?track=steps&feel=1) has the mud, the waterfall's and the blossoms' bursts and how far she sees in the cloud, next to the kart's steering (no numbers came back from greybox 1, so it still has its first guesses). The **open questions** below are still open. Then greybox 3: the race ground, the board, the podiums and the Cup.",
+  "next": "Dad plays greybox 3 on the iPad: [the race ground's board](#/world/thailand/nan-trip/cup) (tap a track to race it), [a silver podium](#/world/thailand/nan-trip/podium?track=steps&place=2&cup=forest:1,steps:2) (tap Grandma Taeng for a high five, her ribbon goes on the kart), [the Cup ceremony](#/world/thailand/nan-trip/cup-win) (tap the Cup to lift it) and [the whole Cup from the Nan map](#/world/thailand/nan-trip/map?cup=1) (Nan town: the city road ends at the race ground). The Cup is behind a flag (`CUP_OPEN` in `cup/cup.ts`, `?cup=1` to try), so Kaylee can't reach it yet. No feel-lab numbers came back from greybox 2, so the kart still has its first guesses ([the feel lab](#/world/thailand/nan-trip/race?track=steps&feel=1)). Then step 4, the look.",
   "facts": [
     { "icon": "🏁", "value": "3", "label": "tracks, any order" },
     { "icon": "🥇", "value": "2 wins, 1 loss", "label": "rolled each time" },
@@ -70,7 +70,7 @@
             ] }
           ]
         },
-        { "type": "callout", "tone": "note", "title": "Which race she loses", "md": "When she first gets to the race ground, the Cup rolls which track she'll lose (`lose=forest|steps|cloud`) and saves it. Next time she plays the trip, it rolls again. On that track the home rival wins by a nose; she wins the other two. My suggestion: never make the **last** race she runs the loss (see the open questions), so the Cup always comes right after a win. To do that, the roll picks only from the tracks she hasn't raced yet, and stops being random once two are done." }
+        { "type": "callout", "tone": "note", "title": "Which race she loses", "md": "When she first gets to the race ground, the Cup rolls which track she'll lose (`lose=forest|steps|cloud`) and saves it. Next time she plays the trip, it rolls again. On that track the home rival wins by a nose; she wins the other two. It's never the **last** race she runs (Dad, 2026-10-27), so the Cup always comes right after a win: if she won the first race and the roll is the track she hasn't picked yet, the loss moves to the one she's racing now. So the roll stops being random once one race is done and won." }
       ]
     },
     {
@@ -201,26 +201,32 @@
       "id": "sections",
       "title": "Sections: tap to play",
       "icon": "🔗",
-      "lede": "Greybox 1 built the race (the Mushroom Forest), greybox 2 the other two tracks. Sections live in the Nan trip's `sections.ts`, so they open as `nan-trip/<section>`.",
+      "lede": "Greybox 1 built the race (the Mushroom Forest), greybox 2 the other two tracks, greybox 3 the race ground, the podiums and the Cup. Sections live in the Nan trip's `sections.ts`, so they open as `nan-trip/<section>`.",
       "blocks": [
         { "type": "sections", "base": "#/world/thailand/nan-trip/", "items": [
-          { "n": "1", "id": "cup", "name": "The race ground and the board: pick a track", "status": "todo" },
+          { "n": "0", "id": "drive", "name": "Getting there: the city road ends at the race ground (the Cup on)", "query": "?road=city&to=cup&cup=1" },
+          { "n": "1", "id": "cup", "name": "The race ground and the board: pick a track (greybox 3)" },
+          { "n": "1b", "id": "cup", "name": "The board with one race done: its medal, the next track glowing", "query": "?cup=forest:1&lose=steps" },
           { "n": "2", "id": "race", "name": "A race (greybox 1: the Mushroom Forest, she wins by a nose)", "query": "?track=forest&result=win" },
           { "n": "2b", "id": "race", "name": "The race she loses: Moon wins by a nose, she's second", "query": "?track=forest&result=lose" },
           { "n": "2c", "id": "race", "name": "The Rice Steps Rally (greybox 2): puddles, mud and the waterfall, she wins by a nose", "query": "?track=steps&result=win" },
           { "n": "2d", "id": "race", "name": "The Rice Steps Rally she loses: Grandma Taeng wins by a nose", "query": "?track=steps&result=lose" },
           { "n": "2e", "id": "race", "name": "The Cloud Top Climb (greybox 2): the lanterns in the cloud and the blossoms, she wins by a nose", "query": "?track=cloud&result=win" },
           { "n": "2f", "id": "race", "name": "The Cloud Top Climb she loses: Pao wins by a nose", "query": "?track=cloud&result=lose" },
-          { "n": "3", "id": "podium", "name": "That race's podium (gold, or silver and a gift)", "query": "?track=forest&place=2", "status": "todo" },
-          { "n": "4", "id": "cup-win", "name": "The Cup ceremony", "query": "?cup=forest:1,steps:2,cloud:1", "status": "todo" }
+          { "n": "3", "id": "podium", "name": "The podium, gold: Kaylee on 1, Moon on 2 (greybox 3)", "query": "?track=forest&place=1" },
+          { "n": "3b", "id": "podium", "name": "The podium, silver: a high five to Grandma Taeng, her ribbon on the kart", "query": "?track=steps&place=2&cup=forest:1,steps:2" },
+          { "n": "3c", "id": "podium", "name": "The last race's podium, then 🏆 to the Cup", "query": "?track=cloud&place=1&cup=forest:1,steps:2,cloud:1" },
+          { "n": "4", "id": "cup-win", "name": "The Cup ceremony: the scoreboard, lift the Cup, the photo (greybox 3)", "query": "?cup=forest:1,steps:2,cloud:1" },
+          { "n": "5", "id": "map", "name": "The Nan map with the Cup's stamp on Nan town", "query": "?stops=mushrooms,cup&cup=1" }
         ] },
         { "type": "table", "title": "New params", "head": ["param", "default", "what it does"], "rows": [
           ["`track`", "`forest`", "which track: `forest`, `steps`, `cloud`"],
-          ["`lose`", "rolled", "the track she loses (`forest|steps|cloud`); a link pins it, otherwise it's rolled and saved"],
-          ["`cup`", "empty", "races done and her place in each, e.g. `forest:1,steps:2`"],
-          ["`place`", "from `lose`", "the podium's place, 1 or 2"],
+          ["`lose`", "rolled", "the track she loses (`forest|steps|cloud`); a link pins it, otherwise it's rolled when she gets to the race ground and saved with the trip (a new trip rolls again). Never the last race: it moves to her second race if it would be"],
+          ["`cup`", "empty", "races done, in order, and her place in each, e.g. `forest:1,steps:2`. On the podium it includes that race; the ceremony's link with none is the whole Cup, `forest:1,steps:2,cloud:1`"],
+          ["`place`", "`1`", "the podium's place, 1 (gold) or 2 (silver)"],
           ["`kart`", "`pink`", "her kart's color, if she gets to pick (open question)"],
-          ["`result`", "`win`", "greybox 1: how the race ends, `win` (she crosses first) or `lose` (the home rival edges past and wins by a nose). Greybox 3 sets it from `lose` and the roll"]
+          ["`result`", "`win`", "greybox 1: how the race ends, `win` (she crosses first) or `lose` (the home rival edges past and wins by a nose). From the board it comes from the roll (`cup/cup.ts` `resultFor`)"],
+          ["`cup=1`", "off", "any `cup` value turns the Cup on for the trip (`CUP_OPEN` in `cup/cup.ts`): `1` before any race, then the record, which the map, the roads and the stops carry along with `lose` while it's on; a link that starts in one of the Cup's sections turns it on too"]
         ] }
       ]
     },
@@ -231,7 +237,7 @@
       "blocks": [
         { "type": "qa", "items": [
           { "q": "What does she drive?", "why": "I suggest **her own pink kart** with a little horn on the nose. It's a race, so she drives, like the longtail in Krabi. The other choice is the family Pajero with Mommy driving, as on the roads, but a Pajero racing animal karts feels odd." },
-          { "q": "Is the last race always a win?", "why": "You said random. I suggest the loss is random among the tracks, but never the **last** one she races, so the Cup always comes right after a win. Or fully random, and some days the Cup comes right after a loss." },
+          { "q": "Is the last race always a win?", "a": "Yes (Dad, 2026-10-27): the loss is rolled, but never the last race she runs, so the Cup always comes right after a win." },
           { "q": "Which steering?", "why": "The boat race's verb (hold a finger on the track and the kart goes there) is my pick, since she already knows it and it's made for racing. The mountain road's steering wheel under her finger is for gentle driving with Mommy." },
           { "q": "Are the rivals right?", "why": "Grandma Taeng the tortoise, Pao the hornbill postman and Moon the sun bear honey seller are all made up. Swap any of them, or put someone from the family in the race (a cousin?). You decide the family." },
           { "q": "Where are Mommy and Daddy?", "why": "I'd put them in the grandstand cheering, with Daddy waving the checkered flag at the finish. Tell me if they should be somewhere else." },
@@ -248,8 +254,8 @@
           { "n": 0, "title": "This plan", "status": "done", "date": "2026-10-27" },
           { "n": 1, "title": "Greybox 1: the kart toy on the forest track", "status": "done", "date": "2026-10-27", "md": "Her kart, the three rivals as blocks, one track with coins, arrow pads and the bouncy mushrooms. The scripted finish works both ways (`?result=win|lose`). Feel numbers on knobs, with a `?feel=1` link." },
           { "n": 2, "title": "Greybox 2: the rice steps and the cloud", "status": "done", "date": "2026-10-27", "pr": 237, "md": "Both tracks with their tricks (puddles and mud, the cloud with its lanterns and the blossoms)." },
-          { "n": 3, "title": "Greybox 3: the Cup", "status": "next", "md": "The race ground at the end of the city road (it replaces the market square), the board, the roll for the loss, each podium with its gift, the Cup ceremony, the stamp on the map. Behind a flag, so Kaylee doesn't reach it yet." },
-          { "n": 4, "title": "The look", "status": "todo", "md": "The rivals on the chibi rig, the karts, each track's scenery." },
+          { "n": 3, "title": "Greybox 3: the Cup", "status": "done", "date": "2026-10-27", "md": "The race ground at the end of the city road (it replaces the market square), the board, the roll for the loss, each podium with its gift, the Cup ceremony, the stamp on the map. Behind a flag, so Kaylee doesn't reach it yet." },
+          { "n": 4, "title": "The look", "status": "next", "md": "The rivals on the chibi rig, the karts, each track's scenery." },
           { "n": 5, "title": "Full loop", "status": "todo", "md": "Voices (the rivals' cast with northern Thai accents), facts, the Trophy Room cup, QA, and the flag turned on." }
         ] }
       ]
@@ -331,6 +337,45 @@
                   "items": [
                     "From the grid, the climb's overview looks into the green hillside beside the start.",
                     "With no finger down the kart cruises at 62% (as in the forest), so the auto-run takes about a minute to reach the cloud."
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Greybox 3: the race ground, the podiums and the Cup",
+              "date": "2026-10-27",
+              "status": "done",
+              "open": true,
+              "summary": "The Cup as a whole, behind a flag: the race ground at the end of the city road, the board, the roll for the loss, a podium after each race (gold, or silver, a high five and the winner's gift on her kart), the Cup ceremony, Mommy's photo and the stamp on Nan town.",
+              "items": [
+                "**The flag** (`cup/cup.ts`): `CUP_OPEN = false`; `?cup=1` (any `cup` value) on a Nan trip link turns it on for that trip, and so does a link that starts in one of the Cup's sections. While it's on, every section's link carries `cup` (`1`, then the record) and `lose`, so a reload keeps the Cup on with its medals and gifts. Nan town stays open on the map with the Cup on, even after every stop (races for fun). Off, the city road ends at the market and goes back to the map as before.",
+                "**The roll** (`cup/cup.ts`, pure): `lose` is rolled when the trip mounts (a link's `lose` pins it), shown in the address bar from the race ground on, and saved with the trip (`useSaved` `thailand-nan-trip`: `cup` and `lose`); a new trip rolls again. `resultFor(track, record, lose)` decides each race: the rolled track loses, except that the loss is never the last race (if she won the first and the roll is the only track left, the loss moves to the one she's racing now). A track already raced, or any race after the Cup, is a race for fun: a win, and the record stays as it was.",
+                "**A fourth stop**: `STOPS` gains `cup`, on Nan town (`STOP_PLACE`), only when it's on (`liveStops`). The city road from the map drives `to=cup` and ends at the race ground (`drive/landmarks.ts` `raceground`: a balloon arch, the board, the grandstand, the Cup on its stand, bunting; Mommy's market line is skipped there for now). The city road's end card gains 🏁. The boarding pass gains 🏁 (`passFor`). The Cup's stamp is gold and lands on Nan town; Nan town stays open after it (races for fun).",
+                "**The race ground** (`cup/ground.ts`, one 3D world on the trip kit's `Stage`, `cup/Ground.tsx` over it): the board with the three tracks as tiles (a little picture of each: pines and a pink mushroom, the terraces, the cloudy peak), the rivals sitting in their karts under their home tracks (Grandma Taeng napping, her three old cups on top of the board), a medal hanging under each track raced (the newest drops in), the Cup on a pink stand, her kart with Kaylee by it, Moon's honey stall with a bee, a hen, balloons on the board, the grandstand with Mommy and Daddy and the scoreboard (a slot per race). Tap a track: Kaylee hops into her kart, off to the race. 🗺️ back to the map.",
+                "**The podium**: the race hands over to it when everyone's over the line (`Cup.tsx` `onFinish`; the race's end card is gone). Gold: Kaylee on 1 with a gold medal dropping onto her, the home rival on 2, another rival on 3, the last one clapping, fanfare and confetti, then ➡️. Silver: the home rival on 1 (glowing), Kaylee on 2 with silver; she taps the winner for a high five (a raised hoof, a clap, sparkles), the winner hops down to her kart, puts their gift on it and hops back, then ➡️. After the last race the ➡️ is 🏆.",
+                "**The gifts** (`cup/gifts.ts`): Grandma Taeng's pink ribbon tied on the seat's back, Pao's orange feather stuck up behind the seat, Moon's honey-pot sticker on the side. They stay on her kart on the board and in the next races, flutter as she drives, and wiggle when she taps her kart.",
+                "**The Cup ceremony**: Kaylee on top, the rival who beat her on 2; the scoreboard lights up race by race (gold, silver, gold), fanfare, and the Cup (gold, a pink ribbon, KAYLEE on a plate on its base, code-drawn text) flies over from its stand and floats beside her, glowing. A tap and she lifts it over her head: fireworks, confetti, everyone cheering. Then Mommy's photo (`photo.ts` `cup`: Kaylee on the podium holding up the Cup, Mommy and Daddy cheering; it's one to pick for Agong's wall) and 🗺️: back to the map, where the gold stamp lands on Nan town.",
+                "**Links**: the address bar writes the record as `cup=forest%3A1,steps%3A2` (the shared `router.ts` encodes colons); links typed with plain colons work the same.",
+                "**QA:** `nan-cup-board`, `nan-cup-gold`, `nan-cup-silver`, `nan-cup-win` and `nan-cup-map` in qa-screens, `nan-high-five` and `nan-cup-lift` in qa-motion, `nan-cup-podium` and `nan-cup-win` in qa-pacing; `window.__thaiNanQA()` on the race ground has `mode`, `record`, `winner`, `highFive`, `gifts`, `cupHere`, `lifted`, `scored`, `ui` and screen points (`points.tracks`, `points.next`, `points.cup`)."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "items": [
+                    "No feel-lab numbers came back from greybox 2 either, so the kart's knobs still have their first guesses.",
+                    "No voices yet: no Daddy “Look! A race!”, no Sparkle “Sam! Song! Neung!”, no rivals' lines; the city road's arrival line is skipped at the race ground.",
+                    "Mommy and Daddy sit in the grandstand (my suggestion, still an open question); Daddy doesn't wave the checkered flag yet.",
+                    "The rivals' tap-to-hear lines on the board, the bump-a-rival “Hey!” and the start lights' Thai count wait for the full loop. The Trophy Room cup waits for the full loop too."
+                  ]
+                },
+                {
+                  "type": "list",
+                  "title": "Known small things",
+                  "items": [
+                    "The Cup is still a plain stop on the map's hint: the hint finger points at Nan town only when it's the nearest stop left.",
+                    "In portrait the board's shot fits the board's width, so the race ground looks small on a tall iPhone."
                   ]
                 }
               ]

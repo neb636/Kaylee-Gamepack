@@ -755,6 +755,14 @@ const SCREENS = [
   // in. (In the cloud and the waterfall are qa-motion's nan-cloud and nan-splash.)
   { name: 'nan-cup-steps', hash: '#/world/thailand/nan-trip/race?track=steps', reset: true, wait: 14000 },
   { name: 'nan-cup-cloud', hash: '#/world/thailand/nan-trip/race?track=cloud', reset: true, wait: 14000 },
+  // Greybox 3: the race ground's board (one race done, its medal), the podium both ways (gold; silver with the winner
+  // glowing for her high five), the Cup ceremony (the scoreboard lit, the Cup floating beside her), and the Nan map with
+  // the Cup's stamp on Nan town.
+  { name: 'nan-cup-board', hash: '#/world/thailand/nan-trip/cup?cup=forest:1', reset: true, wait: 6000 },
+  { name: 'nan-cup-gold', hash: '#/world/thailand/nan-trip/podium?track=forest&place=1', reset: true, wait: 6000 },
+  { name: 'nan-cup-silver', hash: '#/world/thailand/nan-trip/podium?track=steps&place=2', reset: true, wait: 6000 },
+  { name: 'nan-cup-win', hash: '#/world/thailand/nan-trip/cup-win', reset: true, wait: 12000 },
+  { name: 'nan-cup-map', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,cup&cup=1', reset: true, wait: 5000 },
   { name: 'nan-salt-1', hash: '#/world/thailand/nan-trip/salt', reset: true, wait: 3500 },
   { name: 'nan-salt-2', hash: '#/world/thailand/nan-trip/salt?round=2', reset: true, wait: 3500 },
   { name: 'nan-salt-3', hash: '#/world/thailand/nan-trip/salt?round=3', reset: true, wait: 3500 },

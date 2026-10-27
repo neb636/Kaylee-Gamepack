@@ -184,6 +184,10 @@ const SCENARIOS = [
   // blossom showers and under the lanterns (the cloud), so the auto-player sees each trick.
   { name: 'thailand nan: the cup race, rice steps', id: 'nan-cup-steps', hash: '#/world/thailand/nan-trip/race?track=steps', reset: true },
   { name: 'thailand nan: the cup race, cloud top', id: 'nan-cup-cloud', hash: '#/world/thailand/nan-trip/race?track=cloud', reset: true },
+  // Greybox 3: the silver podium (the auto-player's taps find the glowing winner for the high five, then ➡️) and the
+  // Cup ceremony (the Cup floats over, a tap lifts it, the photo, 🗺️).
+  { name: 'thailand nan: the cup podium, silver', id: 'nan-cup-podium', hash: '#/world/thailand/nan-trip/podium?track=steps&place=2', reset: true },
+  { name: 'thailand nan: the cup ceremony', id: 'nan-cup-win', hash: '#/world/thailand/nan-trip/cup-win', reset: true },
   // The Nan map and the 3 (greybox, step 6): on the map a tap on a place drives the little Pajero there; the 3 from
   // above plays by itself.
   { name: 'thailand nan: the nan map', id: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true },

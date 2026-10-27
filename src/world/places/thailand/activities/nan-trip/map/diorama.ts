@@ -32,6 +32,7 @@ import {
   THAI_FLAG,
   type PlaceId,
   type Stop,
+  STOP_PLACE,
   type XZ,
 } from './layout'
 import { smoothLine, type Net } from './net'
@@ -338,12 +339,13 @@ export function buildDiorama(bag: Bag, net: Net): Diorama {
   const stamps = {} as Record<Stop, Group>
   for (const id of STOPS) {
     const g = new Group()
-    const [x, z] = modelAt(id)
+    // (The Cup's stamp lands on Nan town, in gold.)
+    const [x, z] = modelAt(STOP_PLACE[id])
     g.position.set(x, y(x, z) + STAMP_Y, z)
     const face = new Group()
     face.rotation.x = Math.PI / 2 - 0.85
     face.add(solid(merge([
-      P.cyl(0.13, 0.13, 0.025, PAL.hotpink, {}, 24),
+      P.cyl(0.13, 0.13, 0.025, id === 'cup' ? PAL.gold : PAL.hotpink, {}, 24),
       P.torus(0.105, 0.008, '#FFFFFF', { at: [0, 0.014, 0], rot: [Math.PI / 2, 0, 0] }),
       ...[-1, 1].map((s) => P.sphere(0.035, '#FFFFFF', { at: [s * 0.026, 0.016, -0.018], scale: [1, 0.3, 1] }, 10)),
       P.cone(0.058, 0.07, '#FFFFFF', { at: [0, 0.016, 0.022], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.3] }, 10),

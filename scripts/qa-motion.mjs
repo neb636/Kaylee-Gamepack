@@ -1454,6 +1454,38 @@ GAME_SCENARIOS.push(
   },
 )
 
+// The Nan Mountain Cup (greybox 3): the silver podium, where she taps the winner (Grandma Taeng) for a high five and
+// Taeng hops down to tie her ribbon on the pink kart and back up; then the Cup ceremony: the scoreboard lights up race by
+// race, the Cup flies over from its stand, a tap and she lifts it over her head (fireworks, everyone cheering).
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-high-five',
+    seconds: 6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/podium?track=steps&place=2`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().mode === 'podium', null, { timeout: 30000 })
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      await page.getByRole('button', { name: 'Grandma Taeng', exact: true }).click({ force: true }).catch(() => {})
+      await page.waitForFunction(() => window.__thaiNanQA().ui.next, null, { timeout: 30000 }).catch(() => {})
+      await page.waitForTimeout(800)
+    },
+  },
+  {
+    name: 'nan-cup-lift',
+    seconds: 7,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/cup-win`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().cupHere, null, { timeout: 60000 })
+    },
+    act: async (page) => {
+      await page.getByRole('button', { name: 'The Nan Mountain Cup', exact: true }).click({ force: true }).catch(() => {})
+      await page.waitForTimeout(6000)
+    },
+  },
+)
+
 // The Nan road trip's mushroom farm (greybox): misting, the core verb. Her finger holds the hose on the rack and sweeps
 // along the middle row (mist, pins popping, swelling, the rainbow), then in round 2 pulls a grown clump off and carries
 // it to the basket.
