@@ -37,7 +37,7 @@ export const RIVALS: Record<RivalId, Rival> = {
 }
 
 /** Whose home track it is: on the race she loses, this rival wins. */
-export const HOME: Record<TrackId, RivalId> = { forest: 'moon' }
+export const HOME: Record<TrackId, RivalId> = { forest: 'moon', steps: 'taeng', cloud: 'pao' }
 
 /** Where everyone lines up, meters behind the start line and across: the rivals ahead of her (they lead off the
  *  start), Grandma Taeng beside her (napping till GO). */
@@ -55,6 +55,20 @@ const WIN: Record<TrackId, Record<RivalId, Script>> = {
     moon: [[0, 6], [0.15, 9], [0.32, -3], [0.5, 5], [0.66, 3], [0.8, 1.5], [0.92, 0.5], [0.97, -1.5], [1, -4]],
     pao: [[0, 6], [0.12, 4], [0.28, -6], [0.45, 6], [0.58, -3], [0.75, -10], [1, -16]],
     taeng: [[0, 0], [0.08, -6], [0.3, -12], [0.5, -5], [0.7, -3], [0.85, -9], [1, -12]],
+  },
+  // Grandma Taeng's own rice steps: slow off the start (she naps), then steady down the terraces, catching up on every
+  // bend until she's beside her at the waterfall. Moon splashes off ahead and fades; Pao is near the middle.
+  steps: {
+    taeng: [[0, 0], [0.1, -8], [0.25, -5], [0.4, -2], [0.55, 2], [0.7, 1], [0.8, 1.5], [0.92, 0.5], [0.97, -1.5], [1, -4]],
+    moon: [[0, 6], [0.12, 10], [0.3, 4], [0.45, -6], [0.6, -10], [1, -16]],
+    pao: [[0, 6], [0.15, 7], [0.35, -4], [0.55, 4], [0.7, -6], [1, -14]],
+  },
+  // Pao's own mountain: he knows every hairpin, so he leads most of the way up and is still beside her at the top. Moon
+  // brakes hard for the bends and drops back; Grandma Taeng hangs on through the cloud.
+  cloud: {
+    pao: [[0, 6], [0.15, 5], [0.3, 8], [0.45, 3], [0.6, 5], [0.72, 2.5], [0.8, 1.5], [0.92, 0.5], [0.97, -1.5], [1, -4]],
+    moon: [[0, 6], [0.12, 8], [0.25, -4], [0.4, -10], [0.6, -14], [1, -20]],
+    taeng: [[0, 0], [0.1, -6], [0.3, -3], [0.5, 3], [0.65, -4], [0.8, -8], [1, -12]],
   },
 }
 /** The race she loses: the same until the last stretch, where she's just ahead, then the home rival edges past and
