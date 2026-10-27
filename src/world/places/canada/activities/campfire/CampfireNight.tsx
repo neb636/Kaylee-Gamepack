@@ -61,9 +61,24 @@ const SAY: Record<CampSection, string> = {
   marshmallow: '🔥 Hold the marshmallow near the fire',
   stars: '🌌 Shine the light at the sky',
 }
-/** How many night animals each section starts with (`?found=` overrides). */
+/** How many night animals each section starts with (the first N of Maple's book; `?found=` overrides). */
 const START_FOUND: Record<CampSection, number> = { eyes: 0, sounds: 4, bandit: 6, marshmallow: 8, stars: 8 }
 const EATEN_TO_STARS = 4
+
+/** Who she has met, from `?found=`: a number (the first N of Maple's book) or a comma list of ids; empty = what the
+ *  section starts with. */
+function parseFound(v: string, section: CampSection): CritterId[] {
+  if (v === '') return ROSTER.slice(0, START_FOUND[section])
+  if (/^\d+$/.test(v)) return ROSTER.slice(0, Math.min(ROSTER.length, parseInt(v)))
+  const ids = new Set(v.split(','))
+  return ROSTER.filter((id) => ids.has(id))
+}
+/** The shortest `?found=` for these ids: empty for the section's own start, a number for the first N, else the list. */
+function foundParam(ids: CritterId[], section: CampSection) {
+  const prefix = ids.every((id, i) => ROSTER[i] === id)
+  if (prefix && ids.length === START_FOUND[section]) return ''
+  return prefix ? String(ids.length) : ids.join(',')
+}
 const INK = '#4A3B57'
 const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v)
 const bell = (p: number) => (p <= 0 || p >= 1 ? 0 : Math.sin(p * Math.PI))
@@ -121,7 +136,7 @@ interface Fly {
 }
 
 interface Events {
-  section: (s: CampSection, found: number) => void
+  section: (s: CampSection, found: CritterId[]) => void
   found: (ids: CritterId[]) => void
   say: (text: string) => void
   beam: (x: number, y: number) => void
@@ -183,7 +198,7 @@ class CampWorld {
     front: SVGSVGElement,
     stage: StageDef,
     section: CampSection,
-    found: number,
+    found: CritterId[],
     seed: number,
     light: Pt | null,
     private ev: Events,
@@ -198,7 +213,7 @@ class CampWorld {
     const r = rng(seed)
     const pick = (spots: Pt[]) => spots[Math.floor(r() * spots.length) % spots.length]
     const spot: Record<string, Pt> = { owl: pick(stage.spots.owl), raccoon: pick(stage.spots.raccoon), deer: pick(stage.spots.deer), frog: pick(stage.spots.frog) }
-    const known = new Set(ROSTER.slice(0, clamp(found, 0, ROSTER.length)))
+    const known = new Set(found)
     for (const id of ROSTER) {
       const c: Crit = {
         id,
@@ -229,7 +244,7 @@ class CampWorld {
     }
     if (section === 'eyes') {
       for (const id of EYES) set(id, spot[id], { hiding: !this.crits.get(id)!.found, eyes: !this.crits.get(id)!.found })
-      if (EYES.every((id) => this.crits.get(id)!.found)) this.later(() => this.ev.section('sounds', this.count()), 1500)
+      if (EYES.every((id) => this.crits.get(id)!.found)) this.later(() => this.ev.section('sounds', this.foundIds()), 1500)
     } else if (section === 'sounds') {
       set('raccoon', spot.raccoon)
       set('deer', spot.deer)
@@ -261,6 +276,7 @@ class CampWorld {
         set('raccoon', [fx, fy])
         set('kits', [fx + 110, fy + 20])
         for (const id of ['raccoon', 'kits'] as CritterId[]) this.crits.get(id)!.found = true
+        if (!known.has('raccoon') || !known.has('kits')) this.later(() => this.ev.found(this.foundIds()), 0)
         for (const c of this.crits.values()) c.frontA = c.found ? 1 : 0
       } else {
         let i = 0
@@ -296,9 +312,6 @@ class CampWorld {
 
   foundIds() {
     return ROSTER.filter((id) => this.crits.get(id)!.found)
-  }
-  count() {
-    return this.foundIds().length
   }
 
   /** Where an animal stands once it has come out (in front of its bush, on the shore). */
@@ -535,7 +548,7 @@ class CampWorld {
         burst()
         this.say('✨ Everybody’s out!')
       }, 1200)
-      this.later(() => this.ev.section('sounds', this.count()), 3000)
+      this.later(() => this.ev.section('sounds', this.foundIds()), 3000)
     }
   }
 
@@ -566,7 +579,7 @@ class CampWorld {
         burst()
         this.say('✨ You found every sound!')
       }, 600)
-      this.later(() => this.ev.section('bandit', this.count()), 2600)
+      this.later(() => this.ev.section('bandit', this.foundIds()), 2600)
       return
     }
     const id = SOUNDS[s.i]
@@ -677,7 +690,7 @@ class CampWorld {
       if (!was) this.ev.found(this.foundIds())
       burst()
     }, 700)
-    this.later(() => this.ev.section('marshmallow', this.count()), 4200)
+    this.later(() => this.ev.section('marshmallow', this.foundIds()), 4200)
   }
 
   // -------------------------------------------------------------- the marshmallow
@@ -767,7 +780,7 @@ class CampWorld {
       this.say(s.charred ? '🦝 The raccoons LOVE the burnt ones!' : '🦝 Crunch munch!')
     }
     s.eaten++
-    if (s.eaten === EATEN_TO_STARS) this.later(() => this.ev.section('stars', this.count()), 2600)
+    if (s.eaten === EATEN_TO_STARS) this.later(() => this.ev.section('stars', this.foundIds()), 2600)
   }
 
   // -------------------------------------------------------------- the stars
@@ -1395,7 +1408,7 @@ const FLIES = 9
 
 interface Run {
   section: CampSection
-  found: number
+  found: CritterId[]
   seed: number
   n: number
   light: Pt | null
@@ -1404,9 +1417,9 @@ interface Run {
 export function CampfireNight() {
   const { start, param, enter } = useSections(CAMPFIRE_SECTIONS)
   const first = (start ?? 'eyes') as CampSection
-  const [run, setRun] = useState<Run>(() => ({ section: first, found: param('found') === '' ? START_FOUND[first] : clamp(parseInt(param('found')) || 0, 0, ROSTER.length), seed: (Math.random() * 1e9) | 0, n: 0, light: null }))
+  const [run, setRun] = useState<Run>(() => ({ section: first, found: parseFound(param('found'), first), seed: (Math.random() * 1e9) | 0, n: 0, light: null }))
   const [say, setSay] = useState(SAY[run.section])
-  const [found, setFound] = useState<CritterId[]>(() => ROSTER.slice(0, run.found))
+  const [found, setFound] = useState<CritterId[]>(run.found)
   const [ended, setEnded] = useState(false)
   const beam = useRef<((x: number, y: number) => void) | null>(null)
   const box = useRef<HTMLDivElement>(null)
@@ -1427,8 +1440,8 @@ export function CampfireNight() {
   const vb = { x: (stage.w - vw) / 2, y: (stage.h - vh) / 2, w: vw, h: vh }
 
   useEffect(() => {
-    enter(run.section, { found: run.found === START_FOUND[run.section] ? '' : String(run.found) })
-    setFound(ROSTER.slice(0, run.found))
+    enter(run.section, { found: foundParam(run.found, run.section) })
+    setFound(run.found)
   }, [run])
 
   useLayoutEffect(() => {
@@ -1439,7 +1452,10 @@ export function CampfireNight() {
         setSay(SAY[s])
         setRun((r) => ({ section: s, found: n, seed: r.seed, n: r.n + 1, light: s === 'stars' ? null : [w.light.x, w.light.y] }))
       },
-      found: setFound,
+      found: (ids) => {
+        setFound(ids)
+        enter(w.section, { found: foundParam(ids, w.section) })
+      },
       say: setSay,
       beam: (x, y) => beam.current?.(x, y),
       end: () => setEnded(true),
@@ -1492,14 +1508,14 @@ export function CampfireNight() {
     w.setVb(vb)
     if (shape.current !== stage) {
       shape.current = stage
-      setRun((r) => ({ ...r, found: w.count(), n: r.n + 1, light: null }))
+      setRun((r) => ({ ...r, found: w.foundIds(), n: r.n + 1, light: null }))
     }
   })
 
   const again = () => {
     setEnded(false)
     setSay(SAY.eyes)
-    setRun((r) => ({ section: 'eyes', found: 0, seed: (Math.random() * 1e9) | 0, n: r.n + 1, light: null }))
+    setRun((r) => ({ section: 'eyes', found: [], seed: (Math.random() * 1e9) | 0, n: r.n + 1, light: null }))
   }
 
   const section = run.section

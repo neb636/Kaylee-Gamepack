@@ -5,13 +5,13 @@ import { defineSections } from '../../../../kit/sections'
 
 const CAMPFIRE_SECTIONS = defineSections('canada', 'campfire', {
   params: {
-    found: { default: '', doc: 'how many night animals she has met so far, in the order of Maple’s book: owl, raccoon, deer, frog, beaver, mosquito, skunk, raccoon babies (empty = what that section starts with: 0, 4, 6 or 8)' },
+    found: { default: '', doc: 'the night animals she has met so far: a number for the first N of Maple’s book (owl, raccoon, deer, frog, beaver, mosquito, skunk, kits), or a comma list of those ids when she met them out of order (empty = what that section starts with: 0, 4, 6 or 8)' },
   },
   sections: [
-    { id: 'eyes', name: 'Find the eyes' },
+    { id: 'eyes', name: 'Find the eyes', params: ['found'] },
     { id: 'sounds', name: 'Who’s that sound?', params: ['found'] },
     { id: 'bandit', name: 'The marshmallow bandit', params: ['found'] },
-    { id: 'marshmallow', name: 'Roast a marshmallow' },
+    { id: 'marshmallow', name: 'Roast a marshmallow', params: ['found'] },
     { id: 'stars', name: 'Around the fire', params: ['found'] },
   ],
 })
