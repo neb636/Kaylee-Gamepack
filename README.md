@@ -23,6 +23,7 @@ graph, and a "Copy for agent" note with the numbers to bake in):
 - [The Nan Mountain Cup's mud and the cloud: per puddle, how much faster, the waterfall's and the blossoms' bursts, how far she sees in the cloud](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=steps&feel=1)
 - [Canada's train: how it feels to push](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=quebec&feel=1)
 - [Canada's Mountain Bike: the steering, the lean and the bounce](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bike/berms?trail=blue&feel=1)
+- [Canada's Sugar Snow: the pour, the setting and the roll](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/pour?feel=1)
 
 
 **Offline:** after it opens once on wifi it saves every game, picture and voice, so it plays in the car or on a plane.
@@ -293,6 +294,13 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [The whole country, then the train in Quebec City](https://neb636.github.io/Kaylee-Gamepack/#/world/canada)
 - [Push the train](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map) ([Mont-Sainte-Anne](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=msa), [Ottawa](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=ottawa), [the forests](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=forest), [the prairies](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=prairies), [Banff](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=banff), [out of the Spiral Tunnel](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=rockies), [Vancouver](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=bc))
 
+**Sugar Snow (greybox)**
+
+- [Lines: pour, let it set, roll it up](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/pour) ([tip by pulling ahead](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/pour?tip=lead))
+- [Shapes](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/shapes)
+- [Orders](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/orders) ([the chipmunk fed](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/orders?made=7&fed=chipmunk))
+- [Everyone crunches](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/share)
+
 **Mountain Bike (greybox)**
 
 - [Up the gondola](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bike/gondola)
@@ -303,7 +311,7 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 
 **Coming soon**
 
-- Quebec City: [Sugar Snow](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/soon), [Carnival Snowballs](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/soon)
+- Quebec City: [Carnival Snowballs](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/soon)
 - Mont-Sainte-Anne: [Campfire Night](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/soon)
 - Banff: [Red Canoe](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/soon), [Animal Bridge](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/soon)
 - British Columbia: [Whale Watch](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/soon), [Salmon Leap](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/soon)

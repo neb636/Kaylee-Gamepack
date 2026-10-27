@@ -28,7 +28,11 @@ feelLab.subscribe(() => void version++)
 
 export default function FeelLab() {
   useSyncExternalStore(feelLab.subscribe, () => version)
-  const groups = feelLab.groups()
+  // A country loads its other games' knobs too (Canada's bike and train come with it): the knobs of the activity on
+  // screen go first.
+  const [, place, activity] = location.hash.split('?')[0].match(/^#\/world\/([^/]+)\/([^/]+)/) ?? []
+  const here = (g: KnobGroup) => (activity && g.file.includes(`/places/${place}/activities/${activity}/`) ? 0 : 1)
+  const groups = feelLab.groups().sort((a, b) => here(a) - here(b))
   const watchers = feelLab.watchers()
   const [open, setOpen] = useState(true)
   const [notes, setNotes] = useState(true)
