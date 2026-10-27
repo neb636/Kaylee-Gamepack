@@ -17,11 +17,11 @@
   "kind": "New place (3D + 2D)",
   "updated": "2026-10-27",
   "status": {
-    "label": "Greybox 5 built: Dad rubs the snow coats",
+    "label": "Greybox 6 built: Dad huddles the penguins",
     "tone": "pink"
   },
   "pitch": "Sparkle's balloon flies to the top of the world and the bottom. Up north, **Pola the polar bear cub** lives on ice floating on the sea; down south, **Pebble the penguin chick** lives on a giant land made of ice. They are pen pals who can never meet, because polar bears only live in the north and penguins only live in the south. Kaylee hops floes, belly-slides, huddles in a blizzard and cracks icebergs off a glacier, and learns the difference by playing in both. At the very end, Sparkle's **Polar Quiz** checks what she learned, and she answers by doing: dragging Pola to his pole, spinning the globe to the bottom.",
-  "next": "Dad plays **greybox 5, Snow Coats** on the iPad (the PR's links; add `?feel=1` to tune the brush size and smoothing, when a coat finishes itself and when the bear comes), and the earlier greyboxes if he hasn't yet (no feel notes came back on Iceberg Maker, PR #235, so its numbers are unchanged), and answers the **open questions** (the friends' names, one map pin or two, Santa or not, the [3D and 2D split](#look)). Next: **greybox 6: Emperor Huddle** (2D). Then one activity per PR, toy first.",
+  "next": "Dad plays **greybox 6, Emperor Huddle** on the iPad (the PR's links; add `?feel=1` to tune the drag, the squish, and how fast they warm up and cool down), and Snow Coats if he hasn't yet (no feel notes came back on PR #239, so its numbers are unchanged), and answers the **open questions** (the friends' names, one map pin or two, Santa or not, the [3D and 2D split](#look)). All five activities are greyboxed now. Next: **step 8, art and characters**: Pola, Pebble and Terry in 3D first, then the 2D puppets drawn to match them; one activity per PR.",
   "facts": [
     {
       "icon": "🧭",
@@ -1433,12 +1433,14 @@
             {
               "n": 7,
               "title": "Greybox: Emperor Huddle",
-              "status": "next"
+              "status": "done",
+              "date": "2026-10-27",
+              "md": "Emperor dads with eggs on their feet on the night ice. Her finger lifts a shivering one off the windy edge and carries him into the middle: the huddle squishes to make room and he warms up (pink cheeks), and someone else ends up on the edge. Two more dads and a blizzard; the wind swings round and they all turn their backs to it. Pebble's papa, kept warm, hatches the egg; gusts blow Pebble across the ice and she carries the chick back to Papa's feet. Then the first sunrise. The drag and the warmth are feel-lab knobs."
             },
             {
               "n": 8,
               "title": "Art + characters",
-              "status": "todo",
+              "status": "next",
               "md": "Pola, Pebble and Terry as 3D characters first (the chibi rig; Terry needs wings), then 2D puppets drawn to match them for Snow Coats and the huddle; painted 2D scenes for those two; stickers. One activity per PR."
             },
             {
@@ -1622,6 +1624,45 @@
                 },
                 "**Known small things:** the feel lab lists every Poles activity's knobs, so *Rub the coat* is near the bottom of the panel. The lemming is small next to the brush, so it goes white in two or three strokes. No pokeable reindeer, musk ox or popping lemming yet (they come with the art). The same layout every time (the plan's replay with other animals isn't in yet)."
               ]
+            },
+            {
+              "title": "Greybox 6: Emperor Huddle",
+              "date": "2026-10-27",
+              "status": "done",
+              "summary": "Winter night in Antarctica, in 2D: her finger carries shivering emperor dads from the windy edge into the middle of the huddle, where they warm up, and moving one in pushes another out, so the huddle keeps turning like a real one. Then the wind swings round, Pebble's egg hatches on Papa's feet, gusts blow Pebble out and she tucks Pebble back, and the sun comes up for the first time in months. One verb (drag a penguin in) from five dads, to seven in a blizzard, to the chick.",
+              "items": [
+                "**The drag:** her finger on a penguin lifts him off the ice (feet paddling, flippers out) and he follows it (*follow her finger*); a held one shoves the others aside a little (*push while held*). Let go: he lands with a squash and the huddle squishes to make room (*squish*), everyone shuffles, and the warm ones shuffle back up to touch the huddle (*huddle together*). A tap without a drag: he sings his own call, or a snowy one shakes his snow off.",
+                "**The huddle:** each penguin stands on a round footprint on the ice (depth squashed, `huddle.ts`); nearer ones are lower on the screen and a little bigger, sorted every frame. They turn their backs to the wind. A neighbour standing upwind, close enough (*shelter reach*), keeps him out of the wind and he warms up (*warm-up time*, 3 s); on the windy edge he cools (*cool-down time*, 15 s; faster alone or in the blizzard). Below *shivers below* (0.4) he shivers, his back goes blue and snow piles on his head and back. Warmed up from there, he hops, honks, gets pink cheeks and fills a dot. Moving one into the middle pushes another out to the edge, so there is always someone to rescue; the whole huddle slowly shuffles back to the middle of the ice (*back to the middle*).",
+                "**A small huddle (`small`):** five dads, each with an egg on his feet, a light wind; one stands alone on the windy edge, shivering. Five rescued, and two more dads waddle in from the dark.",
+                "**The wind turns (`blizzard`):** seven dads, a stronger wind; every 18 s (*wind turns every*) it swings round with a big whoosh, they all turn their backs to it, and the other side gets cold. The address bar follows it (`?wind=left|right`). Eight rescued.",
+                "**Crack! (`hatch`):** the dad on the cold edge right then is Pebble's papa (his egg turns pink). Brought in and kept warm, the egg wobbles, cracks twice and hatches (*egg hatches after*, 5 s warm): Pebble on his feet, everyone hops. Then a gust blows Pebble off his feet and rolling across the ice; she carries the chick back to Papa's feet (the same drag) and Pebble tucks in (*tuck reach*). Three gusts (*gusts*, *gust after* 7 s). Left out 14 s, Papa waddles over and scoops Pebble up himself.",
+                "**The first sunrise (`sunrise`):** the wind drops, Papa steps out to the front with Pebble, the sky turns peach and the sun peeks over the horizon; everyone turns to look, fanfare, confetti, then 🔁 plays again with the wind from the other side.",
+                "**Silly, never “oops”:** frozen for 10 s (*sneeze after*), he sneezes a snowball and waddles in by himself, so she's never stuck. A hard shove right into another pops that one out of the top like a cork (*cork pop*: a careful drop goes about 0.2 in, a hard shove 0.4). Eight seconds with no touch: a 👆 carries the one who needs it toward the middle (or Pebble to Papa).",
+                "**Pokes:** every penguin (his call, or a shake), Pebble (a chirp), the sky (the southern lights glow), the moon (it twinkles), the ice (a puff of snow).",
+                "**Feel knobs** (`?feel=1`): *Drag a penguin*: follow her finger, lift, grab reach, push while held, squish, huddle together, back to the middle, cork pop. *Wind and warmth*: warm-up time, cool-down time, blizzard is colder, alone is colder, shivers below, shelter reach, warm-ups in the small huddle and the blizzard, wind turns every, sneeze after, egg hatches after, gusts, gust after, tuck reach. The graph shows her finger's speed, how far the held penguin lags behind it, the coldest penguin, the held one's warmth and the wind.",
+                "**Screens:** a wide stage (1600 × 1000) and a tall one (1000 × 1500) that scale to fit; the extra edge is more sky and more ice. The 🔁 button waits in the sky's corner.",
+                "**Files:** `places/poles/activities/huddle/`: `EmperorHuddle.tsx` (the scene, the drag, the packing, the wind), `huddle.ts` (the placeholder shapes, the two stages, the starting huddles), `sections.ts`. Loaded on its own (no three.js, no Phaser). Still under `inTheWorks`. No voices (greybox): a short line at the bottom says what is on screen. QA: the screens, a motion scenario (`poles-huddle-drag`) and pacing. A robot dragging in the coldest one each time played from the small huddle to the sunrise in about 2 minutes, no errors."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "icon": "🔀",
+                  "title": "Changed from the plan",
+                  "items": [
+                    "**A small packing loop on SVG, not Phaser:** seven round penguins don't need a physics engine, and SVG keeps the ink outline (and the 2D puppets to come).",
+                    "**Every dad has an egg** on his feet, as real emperor dads do. Pebble's papa is whoever is on the cold edge when the egg starts, so she has to bring him in.",
+                    "**Rescues, not rounds:** the dots count cold dads she warms up (5, then 8). The huddle is never all warm at once, because someone is always on the windy edge.",
+                    "The cold ones are too frozen to move by themselves (only the warm ones shuffle up), until one sneezes.",
+                    "At sunrise Papa steps out to the front, so Pebble isn't hidden behind the other dads.",
+                    "The sunrise is a section of its own, and `chick=hatched` starts at the gusts."
+                  ]
+                },
+                {
+                  "type": "text",
+                  "md": "**Known small things:** tucked in the middle of the huddle, Pebble is behind the front row (true to life, but hard to see). No snow on Pebble. The moms coming back from the sea aren't in it. The plan's replay with another penguin's egg isn't in yet (🔁 swaps the wind's side). The southern lights glow all night instead of only when tapped."
+                }
+              ]
             }
           ]
         }
@@ -1783,20 +1824,34 @@
             {
               "n": 1,
               "id": "small",
-              "name": "A small huddle",
-              "status": "todo"
+              "name": "A small huddle"
             },
             {
               "n": 2,
               "id": "blizzard",
-              "name": "The wind turns",
-              "status": "todo"
+              "name": "The wind turns"
             },
             {
               "n": 3,
               "id": "hatch",
-              "name": "Crack! and sunrise",
-              "status": "todo"
+              "name": "Crack! Pebble's egg"
+            },
+            {
+              "n": 4,
+              "id": "sunrise",
+              "name": "The first sunrise"
+            },
+            {
+              "n": 5,
+              "id": "hatch",
+              "name": "Pebble hatched: tuck Pebble back",
+              "query": "chick=hatched"
+            },
+            {
+              "n": 6,
+              "id": "small",
+              "name": "A small huddle, wind from the right",
+              "query": "wind=right"
             }
           ]
         },
@@ -1888,7 +1943,7 @@
       "blocks": [
         {
           "type": "code",
-          "text": "src/world/engine3d/      # moved from places/thailand/engine/ (renderer, toon, outline, camera, loop, water, View3D, Anchors, ...)\n  characters/          # the generic chibi rig + face from thailand/characters/animal.ts, face.ts (the family's looks stay in Thailand)\nsrc/world/places/poles/\n  meta.ts          # id 'poles', mapPos on Antarctica (~x 50, y 93), trophyTitle 'Polar Explorer'\n  Place.tsx        # globe hub (3D) + activities + finale\n  lines.ts, cast.json  # Pola, Pebble, Terry, Mama Bear, Pebble's dad\n  globe/           # 3D: the globe, the sun light, the tilt; shared by the hub, the finale and the quiz\n  characters/      # 3D: Pola, Pebble, Terry looks on the chibi rig (Terry gets a bird rig)\n  activities/\n    hub/       sections.ts  # 3D: spin, drag the sun, the lost penguin\n    floe/      sections.ts  # 3D: fling + floe buoyancy on engine3d water, knobs for the fling\n    coats/     sections.ts  # 2D: perfect-freehand strokes as a reveal mask on SVG puppets\n    slide/     sections.ts  # 3D: the Nan drive's steering on a slope, then underwater\n    huddle/    sections.ts  # 2D: soft-body-ish packing: Phaser (many round bodies pushing)\n    iceberg/   sections.ts  # 3D: crack state + buoyancy bob; camera sinks under the waterline\n    party/     sections.ts  # 3D: the tern over the globe, then the quiz on it\n  puppets/  pola.tsx, pebble.tsx, fox.tsx, index.ts   # 2D: for Snow Coats, the huddle and the postcards"
+          "text": "src/world/engine3d/      # moved from places/thailand/engine/ (renderer, toon, outline, camera, loop, water, View3D, Anchors, ...)\n  characters/          # the generic chibi rig + face from thailand/characters/animal.ts, face.ts (the family's looks stay in Thailand)\nsrc/world/places/poles/\n  meta.ts          # id 'poles', mapPos on Antarctica (~x 50, y 93), trophyTitle 'Polar Explorer'\n  Place.tsx        # globe hub (3D) + activities + finale\n  lines.ts, cast.json  # Pola, Pebble, Terry, Mama Bear, Pebble's dad\n  globe/           # 3D: the globe, the sun light, the tilt; shared by the hub, the finale and the quiz\n  characters/      # 3D: Pola, Pebble, Terry looks on the chibi rig (Terry gets a bird rig)\n  activities/\n    hub/       sections.ts  # 3D: spin, drag the sun, the lost penguin\n    floe/      sections.ts  # 3D: fling + floe buoyancy on engine3d water, knobs for the fling\n    coats/     sections.ts  # 2D: perfect-freehand strokes as a reveal mask on SVG puppets\n    slide/     sections.ts  # 3D: the Nan drive's steering on a slope, then underwater\n    huddle/    sections.ts  # 2D: circle packing in plain TypeScript on SVG (no Phaser)\n    iceberg/   sections.ts  # 3D: crack state + buoyancy bob; camera sinks under the waterline\n    party/     sections.ts  # 3D: the tern over the globe, then the quiz on it\n  puppets/  pola.tsx, pebble.tsx, fox.tsx, index.ts   # 2D: for Snow Coats, the huddle and the postcards"
         },
         {
           "type": "list",
@@ -1901,7 +1956,7 @@
             "**2D activities load no three.js:** Snow Coats and the huddle are lazy chunks that never import `engine3d`.",
             "**The map:** add `poles` to the map; `PlaceMeta.mapPos` is one point, so the second (north) pin needs a small change in `WorldMap.tsx` (an extra pin that routes to `#/world/poles?side=north`). The map art has no Arctic drawn: the north pin sits in the sea at the top, maybe on a small drawn ice cap.",
             "**Flag:** `PlaceMeta.flag` is required, but neither pole has a country flag. Make it optional, or use a simple snowflake badge in `Flag.tsx` (never generate a flag).",
-            "**Greybox risks first:** the fling feel and floe bob (Ice Floe Hop, knobs from day one), the globe spin on a finger (grab the ball, not an invisible swipe zone), and the huddle packing (decide Phaser vs a simple circle-packing loop with `useGameLoop`).",
+            "**Greybox risks first:** the fling feel and floe bob (Ice Floe Hop, knobs from day one), the globe spin on a finger (grab the ball, not an invisible swipe zone), and the huddle packing (decide Phaser vs a simple circle-packing loop with `useGameLoop`). Decided (greybox 6): a simple circle-packing loop on SVG, no Phaser.",
             "**One camera per scene:** the 2D scenes (Snow Coats, the huddle) are straight-on side views. In 3D the camera frames a box (`engine3d/camera.ts`) in portrait and landscape; Iceberg Maker's underwater view is the same camera sinking below the waterline, not a cross-section drawing.",
             "**Distinct art:** sea ice (thin, flat, floating, cracks showing water) must not look like the Antarctic land ice (thick, rising to mountains), and snow drifts must not look like clouds (AGENTS.md).",
             "**Sections:** every activity gets its `sections.ts`, and the README's Jump to a game section directory gets a Poles heading in the same PR.",

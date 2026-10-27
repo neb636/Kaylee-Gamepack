@@ -673,6 +673,28 @@ GAME_SCENARIOS.push(
       await page.waitForTimeout(1500)
     },
   },
+  {
+    // Emperor Huddle (2D): the shivering dad alone on the windy edge lifted (feet paddling), carried into the middle and
+    // let go: the huddle squishes to make room, everyone shuffles, and out of the wind he warms up (pink cheeks, a hop).
+    name: 'poles-huddle-drag',
+    seconds: 7,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/poles/huddle/small`)
+      await page.waitForFunction(() => window.__polesHuddleQA?.().section, null, { timeout: 20000 })
+      await page.waitForTimeout(800)
+    },
+    act: async (page) => {
+      const a = await page.locator('[data-k="d0-body"]').boundingBox()
+      const b = await page.locator('[data-k="d3-body"]').boundingBox()
+      if (!a || !b) throw new Error('no penguins')
+      await page.mouse.move(a.x + a.width / 2, a.y + a.height / 2)
+      await page.mouse.down()
+      await page.mouse.move(b.x + b.width * 0.2, b.y + b.height * 0.4, { steps: 30 })
+      await page.waitForTimeout(400)
+      await page.mouse.up()
+      await page.waitForTimeout(4000)
+    },
+  },
 )
 
 // The Thailand map (2D greybox, thailand-map.html): the toy plane grabbed at Bangkok and swooped up north and round in a
