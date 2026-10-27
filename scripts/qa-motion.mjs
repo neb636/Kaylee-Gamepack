@@ -586,6 +586,28 @@ GAME_SCENARIOS.push(
     },
   },
   {
+    // Penguin Slide: Papa belly-sliding down the bumps (the wheel under her finger), held over to one side up the
+    // snowbank (head first in the snow, feet wiggling), then let go: he pops out and drifts back to the middle.
+    name: 'poles-slide-steer',
+    seconds: 9,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/poles/slide/bumps`)
+      await page.waitForFunction(() => window.__polesSlideQA?.().mode, null, { timeout: 20000 })
+      await page.waitForTimeout(800)
+    },
+    act: async (page) => {
+      const x = vp.width / 2
+      const y = vp.height * 0.7
+      await page.mouse.move(x, y)
+      await page.mouse.down()
+      await page.mouse.move(x - Math.min(70, vp.width * 0.08), y, { steps: 8 })
+      await page.waitForTimeout(1500)
+      await page.mouse.move(x + Math.min(120, vp.width * 0.14), y, { steps: 10 })
+      await page.waitForTimeout(3500)
+      await page.mouse.up()
+    },
+  },
+  {
     name: 'poles-sun',
     seconds: 6,
     setup: async (page, base) => {
@@ -604,6 +626,30 @@ GAME_SCENARIOS.push(
     },
   },
 )
+
+// The Thailand map (2D greybox, thailand-map.html): the toy plane grabbed at Bangkok and swooped up north and round in a
+// curve (it banks, buzzes and puffs a trail), then let go to glide into its lazy circle.
+GAME_SCENARIOS.push({
+  name: 'thailand-plane',
+  seconds: 7,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand`)
+    await page.waitForTimeout(1800)
+  },
+  act: async (page) => {
+    const b = await page.getByLabel("Bangkok, Agong's house").boundingBox()
+    if (!b) throw new Error('no Bangkok pin')
+    const [x, y] = [b.x + b.width / 2, b.y + b.height / 2]
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    for (let i = 1; i <= 30; i++) {
+      const a = (i / 30) * Math.PI * 1.5
+      await page.mouse.move(x + Math.sin(a) * vp.width * 0.25, y - (1 - Math.cos(a)) * vp.height * 0.15)
+      await page.waitForTimeout(60)
+    }
+    await page.mouse.up()
+  },
+})
 
 // Canada's train map (3D greybox): the train grabbed in Quebec and pushed west hard (it chugs, puffs and whistles, the
 // camera rides along), let go to roll on; then by Ottawa a tap sends the moose on the track ambling off with a snort, and
@@ -1511,8 +1557,7 @@ GAME_SCENARIOS.push(
   },
 )
 
-// The Nan trip's rental desk, map and the 3 (greybox, step 6): the key fob pressed again and again (the Pajero chirps,
-// its lights wink, the mirrors fold out, Daddy jumps, the tailgate pops up); on the map, the little Pajero grabbed at
+// The Nan trip's map and the 3 (greybox, step 6): on the map, the little Pajero grabbed at
 // the airport and pulled along the roads over the bridge, through town and up the valley to the mushroom farm (held
 // there, it goes: the camera dives into the road); at the viewpoint, a finger drawing the 3 along the road below.
 const nanReady = async (page, base, hash, ready) => {
@@ -1521,18 +1566,6 @@ const nanReady = async (page, base, hash, ready) => {
   await page.waitForTimeout(1500)
 }
 GAME_SCENARIOS.push(
-  {
-    name: 'nan-fob',
-    seconds: 7,
-    setup: (page, base) => nanReady(page, base, 'rental', () => window.__thaiNanQA?.().fob === 'hand'),
-    act: async (page) => {
-      for (let k = 0; k < 4; k++) {
-        const p = (await page.evaluate(() => window.__thaiNanQA())).points
-        if (p.fob) await page.mouse.click(...p.fob)
-        await page.waitForTimeout(1100)
-      }
-    },
-  },
   {
     name: 'nan-map-drag',
     seconds: 9,

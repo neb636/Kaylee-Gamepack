@@ -2,8 +2,8 @@
 
 A pink, unicorn-filled learning app made just for Kaylee. In **Around the World** she flies Sparkle's hot-air balloon
 from country to country, helps a friend in each one, collects passport stamps and stickers, and wins a gold trophy
-with **KAYLEE** engraved on it. **Thailand**, the family's country, is in 3D: she walks around Agong's house as a
-unicorn and goes on day trips with the family.
+with **KAYLEE** engraved on it. **Thailand**, the family's country, is in 3D: she flies a toy plane around a map of
+Thailand to Agong's house, where she walks around as a unicorn, and to the places the family loves.
 
 **Play:** https://neb636.github.io/Kaylee-Gamepack/ · [Jump to a game section](#jump-to-a-game-section)
 (iPad: open in Safari → Share → **Add to Home Screen**. It opens full-screen like a real app.)
@@ -118,6 +118,12 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 
 ### Thailand
 
+**The Thailand map** (where she lands: fly the toy plane to a pin)
+
+- [The map, the plane at Bangkok](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand)
+- [The short flight to Krabi, then Krabi airport](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/map?fly=krabi) ([to Nan, then the Nan map](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/map?fly=nan))
+- [Home from a trip: the plane flies back, the stamp lands on Krabi](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/map?plane=krabi&fly=bangkok&stamp=boat-trip)
+
 **Home base (the house)**
 
 - [Arrive by tuk-tuk](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/arrive)
@@ -135,13 +141,10 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 **Boat Trip**
 
 - **Getting there**
-  - [Mommy asks: ready for a trip?](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/invite)
   - [Pack the suitcase](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/pack)
-  - [Goodbye at Agong's house, into Aunty Sri's van](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/goodbye)
-  - [The x-ray belt](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/airport)
   - [Window seat: seatbelt and takeoff](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/takeoff)
   - [Window seat: tray, snacks, the elephant below](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/fly)
-  - [Landing in Krabi (and the signpost: 🐘 or 🚤)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/land)
+  - [Landing in Krabi (and the signpost: 🐘 or 🚤)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/land) ([after the map's short flight: straight to the signpost](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/land?quick=1))
 - **Baan Chang**
   - [The songthaew to the elephant cafe](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/chang)
   - [The bamboo sign wall and a photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/sign)
@@ -161,13 +164,11 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   - [The race podium and the trophy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/podium)
   - [The Nail Island and the photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/nail)
   - [The ride back at sunset, and the porpoise (then 🐘 at the pier, or ✈️🏠 after the elephants)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/sunset) ([after the elephants: ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/sunset?been=chang))
-- **Home**
-  - [The photo for Agong's wall, and the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/boat-trip/home)
 
 **Mall Day at ICONSIAM**
 
 - **Getting there**
-  - [Mommy asks: where shall we go? (🚤 or 🛝🍕)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/invite)
+  - [Mommy asks: shall we go to the mall?](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/upstairs) ([Daddy asks on the street](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/street))
   - [Goodbye at Agong's house (hugs), into Mommy's grey Veloz](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/goodbye)
   - [ICONSIAM: pull up by the river, the lift to 6, shoes off, socks on, the height chart](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/mall-trip/arrive)
 - **HarborLand mini games**
@@ -195,17 +196,10 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 **Road Trip to Nan**
 
 - **Getting there**
-  - [Mommy asks: where shall we go? (🏔️🚙)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/invite)
   - [Pack for the mountains (raincoat, rain boots, umbrella)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/pack)
-  - [Goodbye at Agong's house, into Aunty Sri's van](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/goodbye)
-  - [The airport: the suitcase on the x-ray belt](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/airport)
   - [The window seat: take off](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/takeoff)
   - [The window seat: north to Nan](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/fly)
-  - [Landing in Nan's green valley, then the rental desk](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/land)
-- **Rental desk**
-  - [Press the key fob (the Pajero chirps)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/rental)
-  - [The bags into the boot](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/rental?round=boot)
-  - [Click the seatbelt, off they go](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/rental?round=belt)
+  - [Landing in Nan's green valley, then the Nan map](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/land)
 - **Nan map and the mountain road**
   - [The Nan map: pick a stop, or drag the little Pajero there](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/map)
   - [The Nan map after two stops (stamps, the airport opens)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/map?stops=mushrooms,rice)
@@ -234,7 +228,6 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
   - [The Mushroom Forest race: Moon wins by a nose, she's second](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=forest&result=lose)
 - **Viewpoint and home**
   - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
-  - [Home: pick the photo for Agong's wall, the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/home?photos=deck,three,pizza,salt)
 
 **Finale**: [Family party (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/party/soon)
 
@@ -253,7 +246,14 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [Summer melt: push the floes](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/melt)
 - [Back to Mama](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/mama)
 
-**Coming soon**: [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Penguin Slide](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Iceberg Maker](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+**Penguin Slide (greybox)**
+
+- [The gentle slope](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/top)
+- [Bumps and cracks](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps) ([the moguls run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=left), [the kicker run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=right))
+- [Under the sea](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/dive)
+- [Feeding Pebble](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/home?krill=12)
+
+**Coming soon**: [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Iceberg Maker](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
 
 ### Canada
 

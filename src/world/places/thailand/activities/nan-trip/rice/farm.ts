@@ -5,9 +5,10 @@
 // in its ngob, the farm hut under its thatch, a banana plant, bamboo, the nursery bed of seedlings, the drying rack, the
 // threshing basket and the straw pile, the buffalo in its wallow, ducks and a frog, the hill behind with its trees and
 // Stop Time Cafe up on it, Sapan's rice steps on the valley's sides (what the deck looks out at), low clouds drifting
-// round them, and the far mountains all the way round.
+// round them, and the far mountains all the way round. Lung Kham, the farmer, is built here too (his look and his ngob).
 import { BackSide, BufferAttribute, CanvasTexture, Color, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, Path, PlaneGeometry, Quaternion, RepeatWrapping, RingGeometry, Shape, SRGBColorSpace, Vector2, Vector3, type BufferGeometry } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
+import type { Look } from '../../../characters/looks'
 import { bake, blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 import {
@@ -813,6 +814,15 @@ function buildDuck(bag: Bag) {
     ),
   )
   return root
+}
+
+/** Lung Kham, the farmer (not family: the farm's uncle, like the mushroom aunty): an old monkey with a white moustache,
+ *  in the indigo mor hom shirt northern farmers wear and a scarf. */
+export const LUNG: Look = { species: 'monkey', height: 1.22, chub: 1.08, fur: '#A88466', light: '#F4E4D0', dark: '#6E5646', ear: '#F2B8A8', outfit: { kind: 'shirt', color: '#43549E' }, extras: ['moustache', 'scarf'], open: true }
+
+/** Lung's own ngob: plain, with a mint band (Kaylee's is pink, the scarecrow's bare), sitting straight on his head. */
+export function lungNgob(bag: Bag) {
+  return solid(merge([...ngobParts(0.34), P.torus(0.34 * 0.8, 0.34 * 0.05, '#7FD6B4', { at: [0, 0.34 * 0.42 * 0.2, 0], rot: [Math.PI / 2, 0, 0] })]), bag, 2)
 }
 
 /** Kaylee's things on the farm: the seedling bundle she plants from, the sickle, the armful of cut rice, her ngob. */

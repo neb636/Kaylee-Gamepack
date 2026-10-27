@@ -11,6 +11,7 @@ const by = (voice: string) => (text: string) => ({ text, voice })
 
 const nick = by('nick')
 const ji = by('ji')
+const lung = by('lung')
 const kids = by('kids')
 
 /** One line for each thing a look can change, in order: hat, glasses, wings, outfit, shoes, paint. */
@@ -60,6 +61,25 @@ export const L = {
   },
 
   // The family (their voices in cast.json; their animals in characters/looks.ts).
+  // Sparkle on the Thailand map (activities/hub/map/): the welcome, a hint when nothing's touched, and something true
+  // the first time she meets each thing on the map (tapped, or the plane flown low over it).
+  map: {
+    hello: 'This is Thailand! Grab the plane and fly!',
+    again: 'Where shall we fly?',
+    hint: 'Fly the plane to a picture!',
+    pokes: {
+      elephant: 'Elephants live in the north of Thailand!',
+      clouds: "It rains a lot in Nan's mountains!",
+      gibbon: 'Gibbons swing through the jungle! Whoop whoop!',
+      buffalo: 'Water buffalo help on the rice farms!',
+      hornbill: 'A hornbill! Look at its big beak!',
+      tuktuk: 'A tuk-tuk! Tuk tuk tuk!',
+      dolphins: 'Dolphins swim in the Gulf of Thailand!',
+      boat: 'A longtail boat! Its motor has a long tail!',
+      palm: 'Coconuts grow on palm trees by the sea!',
+    } as Record<string, Line>,
+  },
+
   family: {
     agong: hello('agong', `Sawasdee krub, ${NAME}! Welcome home!`, ['Come, sit with Agong.', 'Ho ho! My little unicorn!']),
     ji: hello('ji', 'Hi sweetie! This is our room!', ['Bounce on the mattress!', `I love you, ${NAME}!`]),
@@ -166,11 +186,14 @@ export const L = {
     ask: {
       question: ji('Kaylee, are you ready to go on a trip?'),
       later: ji('OK! Tell me when!'),
+      // The house only offers the mall now (the other trips start on the Thailand map).
+      mall: ji('Shall we go to the mall?'),
       // Daddy on the street, when she taps him (the hub's quick way to a trip).
       daddy: {
         question: nick(`Ready for a trip, ${NAME}?`),
         where: nick(`Where do you want to go, ${NAME}?`),
         later: nick('OK! Just tap me!'),
+        mall: nick('Want to go to the mall?'),
       },
     },
     pack: {
@@ -390,19 +413,39 @@ export const L = {
 
   // The Nan road trip (planning/around-the-world/thailand/nan-trip.html). The stops fill in as each one gets its voices.
   nan: {
-    // Kaylee's rice farm under Stop Time Cafe (activities/nan-trip/rice/, plan: thailand/nan-rice.md). Sparkle says what's
-    // new at each round and, after a while with nothing done, what to do; Daddy (on the farm) and Mommy (on the deck)
-    // react in their own voices. Kaylee never talks: she giggles.
+    // The rice farm under Stop Time Cafe (activities/nan-trip/rice/, plan: thailand/nan-rice.md). Lung Kham, the farmer
+    // (a monkey: "lung" is uncle), needs a helper: he says what each round is for, Sparkle then says what to do and, after
+    // a while with nothing done, says it again; Lung and Daddy (on the farm) and Mommy (on the deck) react in their own
+    // voices. Kaylee never talks: she giggles.
     rice: {
-      // Sparkle: each round as it begins (the first one before her first touch).
-      plant: `Let's plant rice, ${NAME}! Walk in the water.`,
+      // Lung, as each round begins, then Sparkle's line (the first two before her first touch).
+      ask: {
+        plant: lung('Sawasdee krap! I need a helper!'),
+        grow: lung('Oh no! Birds in my rice!'),
+        thresh: lung('Now we bang the grains out!'),
+      },
+      plant: 'Walk through the water to plant!',
       dry: 'Rice likes water! Open the gate.',
-      grow: 'The birds want the rice! Shoo, shoo!',
-      harvest: "It's golden! Time to cut the rice.",
-      thresh: 'Bang the rice! The grains fall out.',
-      // The first time she pokes the kratip, and the view from the deck (tap-to-hear facts).
+      grow: 'Shoo them away!',
+      harvest: 'Walk through the rice to cut it!',
+      thresh: 'Tap to bang the rice!',
+      // The first time she pokes the kratip, the view from the deck, the buffalo and a duck (tap-to-hear facts).
       sticky: 'In Nan, people eat sticky rice with their fingers!',
       steps: 'The steps on the hill keep the water for the rice!',
+      buffalo: 'Buffalo helped farmers get the mud ready!',
+      duck: 'Ducks eat the bugs in the rice!',
+      // Lung on the farm: the first gate opened, all planted, the rice growing tall, ripe, the bundles counted in Thai
+      // as she threshes them (one to five), the basket heaped, the kratip popping out of it.
+      water: lung('Ahh! Water for my rice!'),
+      thanks: lung('All planted! Khob khun krap!'),
+      tall: lung('Look how tall it grows!'),
+      ripe: lung('Golden! My rice is ready!'),
+      count: [lung('Neung!'), lung('Song!'), lung('Sahm!'), lung('See!'), lung('Hah!')],
+      counted: lung("That's one to five in Thai!"),
+      helper: lung('Sticky rice, for my helper!'),
+      scarecrow: lung('Hey! My scarecrow!'),
+      // Tap Lung (in turn).
+      lungTap: [lung('Hee hee! Sawasdee krap!'), lung('Mud is good for rice!'), lung('My back says thank you!')],
       // Sparkle, after a while with nothing done.
       hint: {
         plant: 'Walk through the water to plant!',
@@ -414,8 +457,7 @@ export const L = {
         photo: 'Tap Mommy for a photo!',
       },
       // Daddy on the farm.
-      planted: nick('Look at those rows, Kaylee!'),
-      farm: nick('Our very own rice farm!'),
+      planted: nick('Look at those rows!'),
       wet: nick("Hey! I'm all wet!"),
       hat: nick('A straw hat! Thank you!'),
       muddy: nick('A muddy unicorn!'),
@@ -424,29 +466,15 @@ export const L = {
       fat: nick('That bird ate too much!'),
       where: nick('Kaylee? Where did you go?'),
       lots: nick('Look at all that rice!'),
-      bang: nick('Whack! Good one!'),
       coffee: nick('Mmm, coffee.'),
       // Tap Daddy on the farm (in turn).
       tap: [nick('Go, farmer Kaylee!'), nick('Splish, splash!'), nick('Daddy is watching!')],
       // Mommy on the deck.
-      hi: ji('Sticky rice from your farm!'),
+      hi: ji('You grew this sticky rice!'),
+      aroi: ji('Aroi mak! That means so yummy!'),
       smile: ji(`Smile, ${NAME}!`),
       // The rice farm's video, after Mommy's photo on the deck (rice/video.ts).
-      video: `Want to see real rice grow, ${NAME}?`,
-    },
-    // The rental desk at Nan airport (rental/): the clerk (a puppy) hands over the key, the bags go in, the seatbelt.
-    rental: {
-      key: 'Press the key!',
-      boot: 'Put the bags in the car!',
-      belt: `Click your seatbelt, ${NAME}!`,
-      hi: by('clerk')('Sawasdee ka! Here is your key!'),
-      bye: by('clerk')('Have a happy trip!'),
-      // Tap the clerk (in turn), and the bell on the counter.
-      tap: [by('clerk')('Hee hee!'), by('clerk')('Welcome to Nan!'), by('clerk')('What a big car!')],
-      bell: by('clerk')('Ding! Yes please?'),
-      jump: nick('Whoa! Beep beep!'),
-      bags: nick('In they go!'),
-      go: ji("Ready? Let's go!"),
+      video: 'Want to see real farmers grow rice?',
     },
     // The Nan map (map/): Sparkle's first line, her hint, and Mommy after two stops and after all three.
     map: {

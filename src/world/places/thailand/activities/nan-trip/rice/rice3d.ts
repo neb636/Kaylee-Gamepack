@@ -23,17 +23,20 @@
 //            white, and a steaming kratip of sticky rice pops up out of it. Then the deck.
 //   deck:    #168's: Kaylee and Daddy on the tall stools, her pink milk (tap to sip), the kratip (tap: she eats a ball of
 //            sticky rice, a grain stuck on her cheek), Mommy's photo, then the video and the end card (Rice.tsx).
+// Lung Kham, the farmer (an old monkey in his ngob, on the boardwalk's right end), needs a helper: he says what each
+// round is for, hops when a paddy's done, counts the bundles in Thai as she threshes, and gives her the sticky rice.
 // Silly instead of wrong: wade into Daddy and he shakes like a dog (in the harvest she drops straw on his head); walk
 // into the buffalo's wallow and you both get muddy (the water washes it off); flop into the straw pile; round birds.
 // Things to poke: the gates, the scarecrow (it spins, its hat flies), the buffalo, the ducks, the frog, the nursery bed,
-// the straw pile, the hut's chime, the banana plant, the bamboo, the café up the hill, Daddy.
-// Talk (lines.ts L.nan.rice): Sparkle says each round's one line as it begins and, after ~8 s with nothing done, what to
-// do (stuckLine); Daddy reacts on the farm and Mommy on the deck, each thing once; a tap on the view or the kratip tells
-// a fact.
+// the straw pile, the hut's chime, the banana plant, the bamboo, the café up the hill, Daddy, Lung.
+// Talk (lines.ts L.nan.rice): Lung says what the round is for, then Sparkle (queued behind him) what to do, and after
+// ~8 s with nothing done she says it again (stuckLine); Lung and Daddy react on the farm and Mommy on the deck, each
+// thing once; a first tap on the buffalo, a duck, the view or the kratip tells a fact. Now and then, when nobody's
+// talking, far-off farm life: a frog, a bird, a duck, a chime, the buffalo.
 import { Color, Group, IcosahedronGeometry, Matrix4, MeshBasicMaterial, OctahedronGeometry, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, speakingVoice, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
-import type { Member } from '../../../characters/member'
+import { Member } from '../../../characters/member'
 import { L } from '../../../lines'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../engine3d/camera'
@@ -45,7 +48,7 @@ import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage
 import { Floaters } from '../mushrooms/fx'
 import { Birds, type BirdHost } from './birds'
 import { buildDeck, buildKratip, type Deck, type Kratip } from './deck'
-import { buildFarm, buildKayleeKit, sheaf, STRAW, type Farm } from './farm'
+import { buildFarm, buildKayleeKit, LUNG, lungNgob, sheaf, STRAW, type Farm } from './farm'
 import { bladesGeometry, headsGeometry, hillMatrix, Instanced, stubbleGeometry } from './hills'
 import { FarmLife } from './life'
 import {
@@ -65,6 +68,7 @@ import {
   KAYLEE_AT,
   LEAN_R,
   levelAt,
+  LUNG_AT,
   MOMMY_AT,
   MUD_DOWN,
   NICK_AT,
@@ -130,6 +134,7 @@ export const RICE_ANCHORS: AnchorInfo[] = [
   { id: 'family:kaylee', label: 'Kaylee', kind: 'family' },
   { id: 'family:nick', label: 'Daddy', kind: 'family' },
   { id: 'family:ji', label: 'Mommy', kind: 'family' },
+  { id: 'family:lung', label: 'Lung Kham, the farmer', kind: 'family' },
 ]
 
 type Phase = 'farm' | 'thresh' | 'deck'
@@ -238,6 +243,8 @@ export class RiceFarm extends Stage {
   private kaylee: Avatar
   private nick: Member
   private ji: Member
+  /** Lung Kham, the farmer. */
+  private lung: Member
   /** Kaylee rides on this: it lifts her onto the banks, down into the water, up the step. */
   private carrier = new Group()
   private kit: ReturnType<typeof buildKayleeKit>
@@ -345,6 +352,9 @@ export class RiceFarm extends Stage {
   private quietFrom = 0
   private sayN = 0
   private nickTap = 0
+  private lungTap = 0
+  /** Seconds to the next far-off farm sound. */
+  private farT = 6
   private hintNow: { at: Vector3; id?: string } | null = null
 
   constructor(renderer: WebGLRenderer, private ev: RiceEvents, start: { round: Round }) {
@@ -406,6 +416,14 @@ export class RiceFarm extends Stage {
     this.nickHat.position.set(0, this.nick.rig.face.headY + this.nick.rig.face.R * 0.95, 0)
     this.nickHat.visible = false
     this.nick.rig.head.add(this.nickHat)
+    // Lung Kham, in his own ngob.
+    this.lung = new Member({ id: 'lung', name: 'Lung Kham', who: 'The rice farmer', height: LUNG.height, spot: null, pitch: 180 }, bag, LUNG, 'lung')
+    const ngob = lungNgob(bag)
+    ngob.position.set(0, this.lung.rig.face.headY + this.lung.rig.face.R * 0.82, -0.02)
+    ngob.rotation.x = -0.12
+    this.lung.rig.head.add(ngob)
+    scene.add(this.lung.root)
+    this.put(this.lung, ...LUNG_AT, 'stand', 25)
 
     // ---- The rice: every hill, and the three instanced shapes ----
     this.hills = HILLS.map((h, i) => ({ i, ...h, planted: false, pop: 0, wait: 0, wet: 1, spring: 1, lx: 0, lz: 0, vx: 0, vz: 0, twitch: 1, cut: false, cutK: 1, phase: Math.random() * 6, turn: Math.random() * 6, shade: Math.random() * 2 - 1, droop: Math.random() * Math.PI * 2 }))
@@ -505,12 +523,20 @@ export class RiceFarm extends Stage {
     if (r === 'deck') this.seatOnDeck(true)
     this.placeCritters(0)
     this.after(r === 'plant' ? 0.4 : 0.8, () => this.roundLine(r))
+    // Sparkle's hints count quiet time from after the opening (Lung's line and hers), so she doesn't say it twice.
+    this.quietFrom = 6
   }
 
-  /** Sparkle's line as a round begins (Mommy's hello on the deck). */
+  /** A round begins: Lung says what it's for, then Sparkle what to do (Mommy's hello on the deck). */
   private roundLine(r: Round) {
     if (r === 'deck') return this.after(0.6, () => this.once('hi', R.hi))
-    this.once(r, R[r])
+    if (r === 'harvest') return this.once(r, R[r]) // (Lung said it's golden as it ripened.)
+    // (Into the growing, after his thank-you for the planting.) Sparkle waits her turn behind him (TripGuide queues her).
+    this.after(r === 'grow' ? 1.0 : 0, () => {
+      this.once(`ask-${r}`, R.ask[r])
+      this.lung.react('wave')
+      this.once(r, R[r])
+    })
   }
   /** Says it the first time only. A family reaction (`now`) is dropped while Sparkle talks, rather than heard late. */
   private once(key: string, l: Line, now = false) {
@@ -547,7 +573,7 @@ export class RiceFarm extends Stage {
     this.after(0.6, () => {
       sfx.allDone()
       this.cheer()
-      this.once('farm', R.farm)
+      this.once('thanks', R.thanks)
       for (const s of this.paddies) this.sparkles.burst(tmp.set(...s.p.mid).setY(s.p.mid[1] + 0.3), 8, 1, 1.2, 0.9, 0.07)
     })
     // A short beat (the sun comes over the hill), then the rice starts to grow.
@@ -559,6 +585,7 @@ export class RiceFarm extends Stage {
     this.birds.away()
     sfx.allDone()
     this.cheer()
+    this.after(0.3, () => this.once('ripe', R.ripe))
     for (const s of this.paddies) this.after(0.2 + Math.random() * 0.6, () => this.sparkles.burst(tmp.set(...s.p.mid).setY(s.p.mid[1] + 0.8), 10, 1.2, 1.2, 1, 0.08, 0))
     // The water is let out before the cutting.
     this.after(1.4, () => {
@@ -613,6 +640,9 @@ export class RiceFarm extends Stage {
     // Daddy watches from the far side of the basket (not between her and the camera).
     this.nick.root.position.set(BASKET[0] + 1.35, 0, BASKET[2] + 0.15)
     this.nick.root.rotation.y = Math.atan2(to.x - BASKET[0] - 1.35, to.z - BASKET[2] - 0.15)
+    // Lung steps onto the bank at her left, to count (on the boardwalk he'd stand between her and the camera).
+    this.lung.root.position.set(THRESH_AT.x - 1.45, 0, THRESH_AT.z - 0.4)
+    this.lung.root.rotation.y = 0.7 // (half toward her, half toward the camera: his head turns to watch her)
   }
 
   /** A tap while threshing: take the next bundle if her hands are empty, then swing it and bang it on the board. */
@@ -654,10 +684,7 @@ export class RiceFarm extends Stage {
     this.bits.burst(at, 5, 0.8, 1, 0.5, 0.03)
     this.farm.basket.board.rotation.z = -0.3
     this.basketShake = 0.6
-    if (this.banged === 3 && !this.told.has('bang') && speakingVoice() !== 'sparkle') {
-      this.once('bang', R.bang)
-      this.nick.react('hop')
-    }
+    if (this.banged === 3) this.nick.react('hop')
     this.held.heads.scale.setScalar(Math.max(0.01, 1 - this.hits / BANGS_PER))
     this.kaylee.react('wiggle')
   }
@@ -672,6 +699,9 @@ export class RiceFarm extends Stage {
     this.straw.t = 0
     this.threshed++
     sfx.toss()
+    // Lung counts the bundles in Thai (behind Sparkle, if she's talking).
+    this.ev.say(R.count[this.threshed - 1])
+    this.lung.react('hop')
     if (this.threshed >= THRESHED) this.after(0.8, () => this.heaped())
   }
 
@@ -682,6 +712,9 @@ export class RiceFarm extends Stage {
     this.cheer()
     const mid = new Vector3(BASKET[0], 0.6, BASKET[2])
     this.sparkles.burst(mid, 12, 1, 1.4, 1, 0.06)
+    // Lung's "one to five" (2.5 s) right after his "Hah!", then his sticky rice line once it's done (two of his lines
+    // would cut each other off), then the deck once that's done too.
+    this.after(0.5, () => this.once('counted', R.counted))
     this.after(1.0, () => {
       this.basketShake = -1.2
       sfx.blow()
@@ -699,7 +732,11 @@ export class RiceFarm extends Stage {
       sfx.boing()
       sfx.steam()
     })
-    this.after(5.0, () => this.toDeck())
+    this.after(3.4, () => {
+      this.once('helper', R.helper)
+      this.lung.react('wave')
+    })
+    this.after(6.0, () => this.toDeck())
   }
 
   private stepThresh(dt: number) {
@@ -800,6 +837,7 @@ export class RiceFarm extends Stage {
     sfx.gate()
     this.after(0.25, () => sfx.gush())
     this.talkTo('kaylee-cheer', () => this.kaylee.react('hop'), 2)
+    this.after(1.0, () => this.once('water', R.water, true))
   }
 
   private drain(s: PaddyState, now: boolean) {
@@ -857,6 +895,7 @@ export class RiceFarm extends Stage {
           this.sparkles.burst(tmp.set(...s.p.mid).setY(s.p.mid[1] + 0.3), 12, 1.2, 1.2, 0.9, 0.07, 3)
           this.talkTo('kaylee-cheer', () => this.kaylee.react('hop'), 2)
           this.nick.react('hop')
+          this.lung.react('hop')
           if (this.paddies.some((x) => !x.done)) this.once('planted', R.planted, true)
           this.checkPlanted()
         })
@@ -1042,7 +1081,8 @@ export class RiceFarm extends Stage {
       this.cheekGrain.visible = true
       this.cheekUntil = this.time + 1.8
     })
-    this.after(0.9, () => this.once('sticky', R.sticky))
+    if (this.eaten === 1) this.after(0.7, () => this.once('aroi', R.aroi))
+    if (this.eaten === 2) this.after(0.9, () => this.once('sticky', R.sticky))
   }
 
   /** The kratips' steam, the ball on its way to her mouth, the rice going down as she eats. */
@@ -1370,16 +1410,19 @@ export class RiceFarm extends Stage {
       d.dash = 1
       d.dir = -d.dir
       sfx.quack()
+      this.after(0.6, () => this.once('duck', R.duck))
       return this.splash.burst(this.farm.ducks[Number(id.slice(5))].position, 6, 0.7, 1.2, 0.4, 0.035)
     }
     switch (id) {
       case 'scarecrow':
         this.scareSpin = 0
         this.hatFlip = 0
+        this.after(0.4, () => this.once('scarecrow', R.scarecrow, true))
         return sfx.spin()
       case 'buffalo':
         this.buffaloLook = 0
         this.buffaloRoll = Math.min(this.buffaloRoll, 0.3)
+        this.after(1.0, () => this.once('buffalo', R.buffalo))
         return this.talkTo('moo', () => sfx.moo(), 1.2)
       case 'frog':
         this.frog.croak = 0
@@ -1412,6 +1455,10 @@ export class RiceFarm extends Stage {
         // (Not while Sparkle talks: it would come late.)
         if (speakingVoice() === 'sparkle') return
         return this.talkTo('nick-tap', () => this.ev.say(R.tap[this.nickTap++ % R.tap.length]), 3)
+      case 'family:lung':
+        this.lung.react('hop')
+        if (speakingVoice() === 'sparkle') return sfx.chuckle()
+        return this.talkTo('lung-tap', () => this.ev.say(R.lungTap[this.lungTap++ % R.lungTap.length]), 3)
     }
   }
 
@@ -1562,6 +1609,7 @@ export class RiceFarm extends Stage {
         sfx.cheep()
       }
       if (this.growth >= 0.48 && this.cloudT < 0) this.cloudT = 0
+      if (this.growth >= 0.78) this.once('tall', R.tall, true)
       if (this.growth >= 1) this.ripe()
     }
     this.birds.update(dt, t, this.birdHost, this.kaylee.root.position, this.round === 'grow')
@@ -1625,6 +1673,7 @@ export class RiceFarm extends Stage {
       this.nick.lookAt(ph.x, ph.y, ph.z)
       const k = this.deckAt(0, 1.0, -0.95)
       this.ji.lookAt(k.x, k.y, k.z)
+      this.lung.lookAt(k.x, k.y, k.z)
     } else {
       const k = this.kaylee.root.position
       const bird = this.birds.longest()
@@ -1632,6 +1681,7 @@ export class RiceFarm extends Stage {
       if (look) this.kaylee.lookAt(look.x, 0.4, look.z)
       else this.kaylee.lookAway()
       this.nick.lookAt(k.x, this.carrier.position.y + 0.8, k.z)
+      this.lung.lookAt(k.x, this.carrier.position.y + 0.8, k.z)
     }
     // ---- Milk, the photo ----
     this.milkShown += (this.milk - this.milkShown) * Math.min(1, dt * 5)
@@ -1642,7 +1692,13 @@ export class RiceFarm extends Stage {
       this.after(0.6, () => (this.phone.visible = false))
     }
     this.chimeDeck(dt, t)
-    for (const c of [this.kaylee, this.nick, this.ji]) c.update(dt, t)
+    for (const c of [this.kaylee, this.nick, this.ji, this.lung]) c.update(dt, t)
+    // ---- Far-off farm life, now and then, when nobody's talking ----
+    this.farT -= dt
+    if (this.farT <= 0) {
+      this.farT = 5 + Math.random() * 5
+      if (!speakingVoice()) sfx.far[Math.floor(Math.random() * sfx.far.length)]()
+    }
     this.threshArms()
     this.stepSticky(dt)
     for (const f of [this.splash, this.sparkles, this.bits, this.feathers, this.mudBits, this.rain, this.grains, this.steam]) f.update(dt)
@@ -1812,7 +1868,7 @@ export class RiceFarm extends Stage {
     f()
   }
   private cheer() {
-    for (const [k, c] of [this.kaylee, this.nick, this.ji].entries()) this.after(k * 0.12, () => c.react('hop'))
+    for (const [k, c] of [this.kaylee, this.nick, this.ji, this.lung].entries()) this.after(k * 0.12, () => c.react('hop'))
     sfx.cheer()
   }
   private screen(world: Vector3) {
@@ -1896,6 +1952,11 @@ export class RiceFarm extends Stage {
     const idle = this.time - this.lastTouch > STUCK_S
     const hinted = idle && this.hintNow?.id === id
     const f = this.farm
+    if (id === 'family:lung') {
+      if (this.phase !== 'farm') return null
+      const r = this.lung.rig
+      return { at: r.head.localToWorld(new Vector3(0, r.face.headY, 0)), r: r.face.R * 1.2, prio: 1, max: 120 }
+    }
     if (id.startsWith('family:')) {
       const e = id.slice(7)
       if (e === 'ji' && this.phase !== 'deck') return null

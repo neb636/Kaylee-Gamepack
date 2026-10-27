@@ -850,7 +850,9 @@ export class TripHouse implements HousePlugin {
   private leave() {
     if (this.phase !== 'leaving') return
     this.setPhase('gone')
-    this.events.done('goodbye')
+    // Down the stairs with the suitcase and straight to the window seat: the trips start on the Thailand map now, so
+    // the goodbye at the shutter and the x-ray belt are out of the way there (Dad, 2026-10-27; their links still work).
+    this.events.done('takeoff')
   }
 
   // ---------------------------------------------------------------- the goodbye

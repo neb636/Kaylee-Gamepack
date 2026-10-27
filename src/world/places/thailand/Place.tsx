@@ -1,5 +1,6 @@
-// Thailand: Kaylee's family's country, in 3D (plan: planning/around-the-world/thailand.md). The home base is Agong's
-// shophouse (activities/hub/), where she walks around, meets her family and pokes everything. The places the family
+// Thailand: Kaylee's family's country, in 3D (plan: planning/around-the-world/thailand.md). She lands on the Thailand
+// map (activities/hub/map/, plan: thailand/thailand-map.html) and flies the toy plane to Bangkok, Krabi or Nan. Bangkok
+// is Agong's shophouse (activities/hub/), where she walks around, meets her family and pokes everything. The places the family
 // loves become activities, one per PR: the first is the boat trip (activities/boat-trip/), which ends with her photo on
 // Agong's wall and the stamp (the fiddler crab sticker, and the trip's facts to tap); the second is the mall day
 // (activities/mall-trip/, greyboxes so far, still in the works: Mommy's question, the Veloz, ICONSIAM, HarborLand's
@@ -9,10 +10,13 @@
 import { use, useState } from 'react'
 import { StampEarned } from '../../kit/StampEarned'
 import { worldLink } from '../../../router'
+import { useSections } from '../../kit/sections'
 import type { PlaceProps } from '../../types'
 import { BoatTrip } from './activities/boat-trip/BoatTrip'
 import { kayleeReady } from './characters/model'
 import { Hub } from './activities/hub/Hub'
+import { ThaiMap } from './activities/hub/map/ThaiMap'
+import HUB_SECTIONS from './activities/hub/sections'
 import { MallTrip } from './activities/mall-trip/MallTrip'
 import { NanTrip } from './activities/nan-trip/NanTrip'
 import { PartySoon } from './PartySoon'
@@ -26,7 +30,8 @@ export default function Place(props: PlaceProps) {
   use(kayleeReady())
   const [justEarned, setJustEarned] = useState<string | null>(null)
   if (activity === 'party') return <PartySoon backToMap={backToMap} />
-  // A trip ends on Agong's wall: the stamp, then back in the house downstairs, by her photo.
+  // The boat and Nan trips end on the Thailand map: the stamp, then the plane flies home and the stamp lands on the
+  // pin. The mall day ends on Agong's wall: the stamp, then back in the house downstairs, by her photo.
   const info = meta.activities.find((a) => a.id === activity) ?? meta.inTheWorks?.find((a) => a.id === activity)
   const live = !!info && meta.activities.includes(info)
   const finish = () => {
@@ -45,7 +50,10 @@ export default function Place(props: PlaceProps) {
           closeIcon="🏠 ▶"
           onClose={() => {
             setJustEarned(null)
-            location.hash = worldLink(meta.id, 'hub', 'downstairs', { at: 'photos' })
+            location.hash =
+              info.id === 'mall-trip'
+                ? worldLink(meta.id, 'hub', 'downstairs', { at: 'photos' })
+                : worldLink(meta.id, 'hub', 'map', { plane: info.id === 'boat-trip' ? 'krabi' : 'nan', fly: 'bangkok', stamp: info.id })
           }}
         />
       </div>
@@ -84,5 +92,11 @@ export default function Place(props: PlaceProps) {
       </>
     )
   }
-  return <Hub {...props} />
+  return <Home {...props} />
+}
+
+/** No activity: the Thailand map, or (a house link: arrive, street, downstairs, ...) Agong's house. */
+function Home(props: PlaceProps) {
+  const { start } = useSections(HUB_SECTIONS)
+  return start && start !== 'map' ? <Hub {...props} /> : <ThaiMap {...props} />
 }

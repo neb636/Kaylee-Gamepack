@@ -2,8 +2,7 @@
 // #/world/thailand/nan-trip/<section>?stops=<done so far>&... The trip loop (step 7): Mommy asks where to (invite:
 // 🚤, 🛝🍕 or 🏔️🚙), packing for the mountains (pack?packed=...), the goodbye and Aunty Sri's van (goodbye), the x-ray
 // belt (airport), the window seat north to Nan (takeoff, fly, land), and home (home?photos=...: the flight home, Agong
-// asks for his photo, she picks one for his wall, the stamp). Then: the rental desk at Nan airport
-// (rental?round=key|boot|belt, step 6): press the key fob, the bags into the boot, click the seatbelt; the Nan map
+// asks for his photo, she picks one for his wall, the stamp). Then, straight off the plane: the Nan map
 // (map?stops=..., step 6), the trip's hub: a toy diorama where she picks the next stop (or drags the little Pajero
 // there); the mountain road (drive?road=city|valley|sky|three&to=<stop>, step 1); Baan Huanam Mushroom Farm
 // (mushrooms?round=1|2|3|pizza&basket=<what she picked>, step 2): mist the sawdust bags, pick into the basket (pink
@@ -23,7 +22,6 @@ import { TRACK_IDS } from './cup/track'
 import { ROAD_IDS, WEATHERS } from './drive/roads'
 import { STOPS } from './map/layout'
 import { ROUNDS as FARM_ROUNDS } from './mushrooms/layout'
-import { ROUNDS as RENTAL_ROUNDS } from './rental/layout'
 import { ROUNDS as RICE_ROUNDS } from './rice/layout'
 
 const NAN_SECTIONS = defineSections('thailand', 'nan-trip', {
@@ -35,7 +33,7 @@ const NAN_SECTIONS = defineSections('thailand', 'nan-trip', {
     road: { default: 'valley', values: ROAD_IDS, doc: 'which road the drive plays: city (through Nan town to its market, over the river), valley (the rice fields to the mushroom farm: chickens, a songthaew, a buffalo crossing), sky (up Doi Phu Kha: blind bends with round mirrors, into the cloud and out above it) or three (down the hairpins, counting the bends, then the 3 from the viewpoint)' },
     to: { default: '', doc: `where the drive is going (picked on the Nan map): ${STOPS.join(', ')} (its stop opens by itself at the end of the road) or map (back to the map: the city road). Empty: the end card` },
     weather: { default: '', values: WEATHERS, doc: "the drive's weather: rain (the wipers swish, the road shines, puddles splash), sun or cloud (grey, low cloud on the hills). Empty: rolled afresh for every drive, like the traffic and the animals" },
-    round: { default: '1', values: [...new Set([...FARM_ROUNDS, ...RICE_ROUNDS, ...RENTAL_ROUNDS])], doc: "the step of the stop on screen. The rental desk: key the clerk slides the key fob over and she presses it (the Pajero chirps, its mirrors fold out, the tailgate pops up), boot her suitcase, Mommy's bag and Daddy's backpack into the boot, belt she hops into her seat behind Mommy and clicks the seatbelt, and off they drive. The mushroom farm: 1 mist the sawdust bags until grey oyster mushrooms pop and swell, 2 pick them into the basket (keep spraying one and it grows giant), 3 new bags with pink and golden mushrooms, pizza top the mushroom pizza with her basket, bake it and share it. The rice farm (lead Kaylee with a finger; what she walks through changes behind her): plant the seedlings plip in behind her (paddy A is flooded, the other three are dry until she opens their gates), grow the rice grows from green to gold while she shoos the birds off it, harvest she cuts the golden rice into bundles (the water drained), thresh she swings each bundle from the drying rack and bangs it on the board, the grains spray into the basket, the straw onto the pile, then the steaming kratip of sticky rice, deck the sticky rice, the pink milk, Mommy's photo and the rice video on Stop Time Cafe's deck" },
+    round: { default: '1', values: [...new Set([...FARM_ROUNDS, ...RICE_ROUNDS])], doc: "the step of the stop on screen. The mushroom farm: 1 mist the sawdust bags until grey oyster mushrooms pop and swell, 2 pick them into the basket (keep spraying one and it grows giant), 3 new bags with pink and golden mushrooms, pizza top the mushroom pizza with her basket, bake it and share it. The rice farm (lead Kaylee with a finger; what she walks through changes behind her): plant the seedlings plip in behind her (paddy A is flooded, the other three are dry until she opens their gates), grow the rice grows from green to gold while she shoos the birds off it, harvest she cuts the golden rice into bundles (the water drained), thresh she swings each bundle from the drying rack and bangs it on the board, the grains spray into the basket, the straw onto the pile, then the steaming kratip of sticky rice, deck the sticky rice, the pink milk, Mommy's photo and the rice video on Stop Time Cafe's deck" },
     track: { default: 'forest', values: TRACK_IDS, doc: "the Nan Mountain Cup's track: forest (the Mushroom Forest, Moon's home track: bouncy mushrooms). The rice steps and the cloud come in greybox 2" },
     result: { default: 'win', values: RESULTS, doc: "how the Cup's race ends: win (she crosses the line first, the home rival right beside her) or lose (the home rival edges past on the last stretch and wins by a nose; she's second, never last)" },
     basket: { default: '', doc: "the mushrooms in her basket, <color><count> pairs of grey, pink and gold, e.g. grey5,pink2,gold1. Empty: what she'd have by then (nothing in rounds 1 and 2, grey6 in round 3, grey4,pink2 at the pizza)" },
@@ -47,8 +45,7 @@ const NAN_SECTIONS = defineSections('thailand', 'nan-trip', {
     { id: 'airport', name: 'The airport: the suitcase on the x-ray belt', params: ['packed'] },
     { id: 'takeoff', name: 'The window seat: seatbelt on, take off', params: ['packed', 'replay'] },
     { id: 'fly', name: 'The window seat: the tray, snacks, Thailand below, north to Nan', params: ['packed', 'replay'] },
-    { id: 'land', name: 'Landing in the green valley at Nan', params: ['packed'] },
-    { id: 'rental', name: 'The rental desk: press the key fob, the bags into the boot (round boot), click the seatbelt (round belt)', params: ['round', 'packed'] },
+    { id: 'land', name: 'Landing in the green valley at Nan, then the Nan map', params: ['packed'] },
     { id: 'map', name: 'The Nan map: pick the next stop, or drag the little Pajero there', params: ['stops', 'packed'] },
     { id: 'drive', name: 'The mountain road: steer the silver Pajero', params: ['road', 'to', 'weather', 'stops', 'packed'] },
     { id: 'mushrooms', name: 'Baan Huanam Mushroom Farm: mist the bags, pick the mushrooms, top the pizza', params: ['round', 'basket', 'stops', 'packed'] },

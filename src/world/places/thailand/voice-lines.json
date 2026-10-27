@@ -21,6 +21,18 @@
   "The lucky cat waves for good luck!",
   "A gecko! It sings took-geh, took-geh!",
   "Lots of people in Thailand ride motorbikes!",
+  "This is Thailand! Grab the plane and fly!",
+  "Where shall we fly?",
+  "Fly the plane to a picture!",
+  "Elephants live in the north of Thailand!",
+  "It rains a lot in Nan's mountains!",
+  "Gibbons swing through the jungle! Whoop whoop!",
+  "Water buffalo help on the rice farms!",
+  "A hornbill! Look at its big beak!",
+  "A tuk-tuk! Tuk tuk tuk!",
+  "Dolphins swim in the Gulf of Thailand!",
+  "A longtail boat! Its motor has a long tail!",
+  "Coconuts grow on palm trees by the sea!",
   {
     "text": "Sawasdee krub, Kaylee! Welcome home!",
     "voice": "agong"
@@ -545,6 +557,10 @@
     "voice": "ji"
   },
   {
+    "text": "Shall we go to the mall?",
+    "voice": "ji"
+  },
+  {
     "text": "Ready for a trip, Kaylee?",
     "voice": "nick"
   },
@@ -554,6 +570,10 @@
   },
   {
     "text": "OK! Just tap me!",
+    "voice": "nick"
+  },
+  {
+    "text": "Want to go to the mall?",
     "voice": "nick"
   },
   {
@@ -933,26 +953,94 @@
   "Tap Agong to give it to him!",
   "Tap the plane to fly home!",
   "Pack again, or go straight to the boat?",
-  "Let's plant rice, Kaylee! Walk in the water.",
+  {
+    "text": "Sawasdee krap! I need a helper!",
+    "voice": "lung"
+  },
+  {
+    "text": "Oh no! Birds in my rice!",
+    "voice": "lung"
+  },
+  {
+    "text": "Now we bang the grains out!",
+    "voice": "lung"
+  },
+  "Walk through the water to plant!",
   "Rice likes water! Open the gate.",
-  "The birds want the rice! Shoo, shoo!",
-  "It's golden! Time to cut the rice.",
-  "Bang the rice! The grains fall out.",
+  "Shoo them away!",
+  "Walk through the rice to cut it!",
+  "Tap to bang the rice!",
   "In Nan, people eat sticky rice with their fingers!",
   "The steps on the hill keep the water for the rice!",
-  "Walk through the water to plant!",
+  "Buffalo helped farmers get the mud ready!",
+  "Ducks eat the bugs in the rice!",
+  {
+    "text": "Ahh! Water for my rice!",
+    "voice": "lung"
+  },
+  {
+    "text": "All planted! Khob khun krap!",
+    "voice": "lung"
+  },
+  {
+    "text": "Look how tall it grows!",
+    "voice": "lung"
+  },
+  {
+    "text": "Golden! My rice is ready!",
+    "voice": "lung"
+  },
+  {
+    "text": "Neung!",
+    "voice": "lung"
+  },
+  {
+    "text": "Song!",
+    "voice": "lung"
+  },
+  {
+    "text": "Sahm!",
+    "voice": "lung"
+  },
+  {
+    "text": "See!",
+    "voice": "lung"
+  },
+  {
+    "text": "Hah!",
+    "voice": "lung"
+  },
+  {
+    "text": "That's one to five in Thai!",
+    "voice": "lung"
+  },
+  {
+    "text": "Sticky rice, for my helper!",
+    "voice": "lung"
+  },
+  {
+    "text": "Hey! My scarecrow!",
+    "voice": "lung"
+  },
+  {
+    "text": "Hee hee! Sawasdee krap!",
+    "voice": "lung"
+  },
+  {
+    "text": "Mud is good for rice!",
+    "voice": "lung"
+  },
+  {
+    "text": "My back says thank you!",
+    "voice": "lung"
+  },
   "Tap the gate to let the water in!",
   "Walk to the birds!",
   "Walk through the golden rice!",
-  "Tap to bang the rice!",
   "Tap the sticky rice!",
   "Tap Mommy for a photo!",
   {
-    "text": "Look at those rows, Kaylee!",
-    "voice": "nick"
-  },
-  {
-    "text": "Our very own rice farm!",
+    "text": "Look at those rows!",
     "voice": "nick"
   },
   {
@@ -988,10 +1076,6 @@
     "voice": "nick"
   },
   {
-    "text": "Whack! Good one!",
-    "voice": "nick"
-  },
-  {
     "text": "Mmm, coffee.",
     "voice": "nick"
   },
@@ -1008,53 +1092,18 @@
     "voice": "nick"
   },
   {
-    "text": "Sticky rice from your farm!",
+    "text": "You grew this sticky rice!",
+    "voice": "ji"
+  },
+  {
+    "text": "Aroi mak! That means so yummy!",
     "voice": "ji"
   },
   {
     "text": "Smile, Kaylee!",
     "voice": "ji"
   },
-  "Want to see real rice grow, Kaylee?",
-  "Press the key!",
-  "Put the bags in the car!",
-  "Click your seatbelt, Kaylee!",
-  {
-    "text": "Sawasdee ka! Here is your key!",
-    "voice": "clerk"
-  },
-  {
-    "text": "Have a happy trip!",
-    "voice": "clerk"
-  },
-  {
-    "text": "Hee hee!",
-    "voice": "clerk"
-  },
-  {
-    "text": "Welcome to Nan!",
-    "voice": "clerk"
-  },
-  {
-    "text": "What a big car!",
-    "voice": "clerk"
-  },
-  {
-    "text": "Ding! Yes please?",
-    "voice": "clerk"
-  },
-  {
-    "text": "Whoa! Beep beep!",
-    "voice": "nick"
-  },
-  {
-    "text": "In they go!",
-    "voice": "nick"
-  },
-  {
-    "text": "Ready? Let's go!",
-    "voice": "ji"
-  },
+  "Want to see real farmers grow rice?",
   "Where shall we go first, Kaylee?",
   "Tap a place to drive there!",
   {

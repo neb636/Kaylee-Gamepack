@@ -357,8 +357,12 @@ const SCREENS = [
   })),
   { name: 'peru-hub-stamps', hash: '#/world/peru', stampAll: 'peru' },
   { name: 'peru-balloon-soon', hash: '#/world/peru/party/soon', stampAll: 'peru', wait: 800 },
-  // Thailand: Agong's house in 3D (the arrival mid-ride, each spot, a few things in use),
-  // and the party card.
+  // Thailand: the Thailand map (thailand-map.html: where she lands; the plane parked at Bangkok, flown to Krabi, home
+  // with a stamp landing, every stamp in), then Agong's house in 3D (the arrival mid-ride, each spot, a few things in
+  // use), and the party card.
+  { name: 'thailand-map', hash: '#/world/thailand', reset: true, wait: 1500 },
+  { name: 'thailand-map-krabi', hash: '#/world/thailand/hub/map?plane=krabi', reset: true, wait: 1200 },
+  { name: 'thailand-map-home', hash: '#/world/thailand/hub/map?plane=krabi&fly=bangkok&stamp=boat-trip', stampAll: 'thailand', wait: 5200 },
   { name: 'thailand-arrive', hash: '#/world/thailand/hub/arrive', reset: true, wait: 1400 },
   ...['street', 'downstairs', 'downstairs?at=table', 'downstairs?at=desk', 'downstairs?at=altar', 'downstairs?at=photos', 'upstairs', 'upstairs?at=mattress', 'upstairs?at=couch', 'upstairs?at=bathroom-door'].map((to) => ({
     name: `thailand-${to.replace('?at=', '-')}`,
@@ -387,6 +391,8 @@ const SCREENS = [
   })),
   // Ice Floe Hop (greybox 2): Mama far away, then each stage's first floe, and home with Mama (the hug, then the look back).
   ...['story', 'steady', 'drift', 'melt', 'mama'].map((to) => ({ name: `poles-floe-${to}`, hash: `#/world/poles/floe/${to}`, reset: true, wait: to === 'mama' ? 4200 : 1800 })),
+  // Penguin Slide (greybox 3): each stretch from its link (home: the feeding, then the colony).
+  ...['top', 'bumps?run=right', 'dive', 'home?krill=12'].map((to) => ({ name: `poles-slide-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/poles/slide/${to}`, reset: true, wait: to.startsWith('home') ? 5000 : 2500 })),
   { name: 'poles-coats-soon', hash: '#/world/poles/coats/soon', wait: 800 },
   { name: 'poles-party-soon', hash: '#/world/poles/party/soon', wait: 800 },
   // Canada: the train map (greybox 1): the whole country first, then the train at each stop and on the way (the
@@ -744,13 +750,12 @@ const SCREENS = [
   { name: 'nan-salt-1', hash: '#/world/thailand/nan-trip/salt', reset: true, wait: 3500 },
   { name: 'nan-salt-2', hash: '#/world/thailand/nan-trip/salt?round=2', reset: true, wait: 3500 },
   { name: 'nan-salt-3', hash: '#/world/thailand/nan-trip/salt?round=3', reset: true, wait: 3500 },
-  // The rental desk, the Nan map (none done, then two stops done: the airport opens) and the 3 from above.
-  ...['key', 'boot', 'belt'].map((round) => ({ name: `nan-rental-${round}`, hash: `#/world/thailand/nan-trip/rental?round=${round}`, reset: true, wait: round === 'belt' ? 4500 : 3500 })),
+  // The Nan map (none done, then two stops done: the airport opens) and the 3 from above.
   { name: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true, wait: 3500 },
   { name: 'nan-map-stops', hash: '#/world/thailand/nan-trip/map?stops=mushrooms,rice', reset: true, wait: 3500 },
   { name: 'nan-three', hash: '#/world/thailand/nan-trip/three', reset: true, wait: 4000 },
   // The Nan trip's loop (the trip kit's legs): Mommy's card with 🏔️🚙, packing with the mountain things, the goodbye,
-  // the x-ray, the window seat, landing in Nan's green valley (it plays out to the rental desk), and coming home (the
+  // the x-ray, the window seat, landing in Nan's green valley (it plays out to the Nan map), and coming home (the
   // flight, then Agong asks for his photo and the Nan photos fan out).
   ...['invite', 'pack', 'goodbye', 'airport', 'fly'].map((to) => ({ name: `nan-${to}`, hash: `#/world/thailand/nan-trip/${to}`, reset: true, wait: to === 'invite' ? 3800 : 2600 })),
   { name: 'nan-land', hash: '#/world/thailand/nan-trip/land', reset: true, wait: 5500 },

@@ -154,6 +154,90 @@
     "file": "6aec27896584.mp3"
   },
   {
+    "text": "This is Thailand! Grab the plane and fly!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3903,
+    "file": "d4931fd52394.mp3"
+  },
+  {
+    "text": "Where shall we fly?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1700,
+    "file": "2217cb1167f5.mp3"
+  },
+  {
+    "text": "Fly the plane to a picture!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1916,
+    "file": "d20fa1e8c88f.mp3"
+  },
+  {
+    "text": "Elephants live in the north of Thailand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2614,
+    "file": "8eb84a83a0ac.mp3"
+  },
+  {
+    "text": "It rains a lot in Nan's mountains!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3052,
+    "file": "e2e43c6214bb.mp3"
+  },
+  {
+    "text": "Gibbons swing through the jungle! Whoop whoop!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3675,
+    "file": "4c5f49378ffa.mp3"
+  },
+  {
+    "text": "Water buffalo help on the rice farms!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3150,
+    "file": "4dd43eea6ad8.mp3"
+  },
+  {
+    "text": "A hornbill! Look at its big beak!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3558,
+    "file": "ed9a97f2096f.mp3"
+  },
+  {
+    "text": "A tuk-tuk! Tuk tuk tuk!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2748,
+    "file": "99ff67540a88.mp3"
+  },
+  {
+    "text": "Dolphins swim in the Gulf of Thailand!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3892,
+    "file": "b1c170663a98.mp3"
+  },
+  {
+    "text": "A longtail boat! Its motor has a long tail!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4250,
+    "file": "bb7d253cca0b.mp3"
+  },
+  {
+    "text": "Coconuts grow on palm trees by the sea!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3272,
+    "file": "667a35ed53a1.mp3"
+  },
+  {
     "text": "Sawasdee krub, Kaylee! Welcome home!",
     "voice": "agong",
     "sig": "0f90e139f5",
@@ -1316,6 +1400,13 @@
     "file": "a0bc3ee70699.mp3"
   },
   {
+    "text": "Shall we go to the mall?",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 1692,
+    "file": "eeb99dae4fc2.mp3"
+  },
+  {
     "text": "Ready for a trip, Kaylee?",
     "voice": "nick",
     "sig": "a2881bb105",
@@ -1335,6 +1426,13 @@
     "sig": "a2881bb105",
     "ms": 1654,
     "file": "70094ee39d0a.mp3"
+  },
+  {
+    "text": "Want to go to the mall?",
+    "voice": "nick",
+    "sig": "a2881bb105",
+    "ms": 1912,
+    "file": "438f26054545.mp3"
   },
   {
     "text": "Tap your things to pack them, Kaylee!",
@@ -2380,11 +2478,32 @@
     "file": "84fa172ff8f5.mp3"
   },
   {
-    "text": "Let's plant rice, Kaylee! Walk in the water.",
+    "text": "Sawasdee krap! I need a helper!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2364,
+    "file": "141aa5054dc6.mp3"
+  },
+  {
+    "text": "Oh no! Birds in my rice!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2111,
+    "file": "8b1c34db5e6b.mp3"
+  },
+  {
+    "text": "Now we bang the grains out!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1860,
+    "file": "3693d4f91ae9.mp3"
+  },
+  {
+    "text": "Walk through the water to plant!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3610,
-    "file": "206fede16731.mp3"
+    "ms": 2705,
+    "file": "008f0d3e2f38.mp3"
   },
   {
     "text": "Rice likes water! Open the gate.",
@@ -2394,25 +2513,25 @@
     "file": "d5a697b5e261.mp3"
   },
   {
-    "text": "The birds want the rice! Shoo, shoo!",
+    "text": "Shoo them away!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3040,
-    "file": "86acdcc6d840.mp3"
+    "ms": 1193,
+    "file": "02d09004c1ed.mp3"
   },
   {
-    "text": "It's golden! Time to cut the rice.",
+    "text": "Walk through the rice to cut it!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3446,
-    "file": "6bf21e5c6c95.mp3"
+    "ms": 1699,
+    "file": "fa907242d081.mp3"
   },
   {
-    "text": "Bang the rice! The grains fall out.",
+    "text": "Tap to bang the rice!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3346,
-    "file": "14296a37c6eb.mp3"
+    "ms": 2224,
+    "file": "8ece81e39462.mp3"
   },
   {
     "text": "In Nan, people eat sticky rice with their fingers!",
@@ -2429,11 +2548,123 @@
     "file": "a0c0d7533194.mp3"
   },
   {
-    "text": "Walk through the water to plant!",
+    "text": "Buffalo helped farmers get the mud ready!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2705,
-    "file": "008f0d3e2f38.mp3"
+    "ms": 3271,
+    "file": "4a844da8c79f.mp3"
+  },
+  {
+    "text": "Ducks eat the bugs in the rice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2961,
+    "file": "3563bb441b28.mp3"
+  },
+  {
+    "text": "Ahh! Water for my rice!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2455,
+    "file": "c509d77b5890.mp3"
+  },
+  {
+    "text": "All planted! Khob khun krap!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2162,
+    "file": "5319638b9ac0.mp3"
+  },
+  {
+    "text": "Look how tall it grows!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1540,
+    "file": "6e2812211c27.mp3"
+  },
+  {
+    "text": "Golden! My rice is ready!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2445,
+    "file": "20e651d3c6c8.mp3"
+  },
+  {
+    "text": "Neung!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 554,
+    "file": "f6d1f5ec6da7.mp3"
+  },
+  {
+    "text": "Song!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 795,
+    "file": "0e6a4447d704.mp3"
+  },
+  {
+    "text": "Sahm!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 815,
+    "file": "778eb99850ad.mp3"
+  },
+  {
+    "text": "See!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 606,
+    "file": "b37555e37826.mp3"
+  },
+  {
+    "text": "Hah!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 363,
+    "file": "ccfda7b2865a.mp3"
+  },
+  {
+    "text": "That's one to five in Thai!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2474,
+    "file": "4bac9c3a1c4e.mp3"
+  },
+  {
+    "text": "Sticky rice, for my helper!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2128,
+    "file": "3f92260ec21d.mp3"
+  },
+  {
+    "text": "Hey! My scarecrow!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1687,
+    "file": "8b6a6bc7a463.mp3"
+  },
+  {
+    "text": "Hee hee! Sawasdee krap!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1869,
+    "file": "ed1e99263079.mp3"
+  },
+  {
+    "text": "Mud is good for rice!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 1819,
+    "file": "4c1644ea876c.mp3"
+  },
+  {
+    "text": "My back says thank you!",
+    "voice": "lung",
+    "sig": "a47a4251da",
+    "ms": 2082,
+    "file": "9031c1aafc0b.mp3"
   },
   {
     "text": "Tap the gate to let the water in!",
@@ -2457,13 +2688,6 @@
     "file": "ec82d03a5d47.mp3"
   },
   {
-    "text": "Tap to bang the rice!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2224,
-    "file": "8ece81e39462.mp3"
-  },
-  {
     "text": "Tap the sticky rice!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -2478,18 +2702,11 @@
     "file": "198ba781861c.mp3"
   },
   {
-    "text": "Look at those rows, Kaylee!",
+    "text": "Look at those rows!",
     "voice": "nick",
     "sig": "a2881bb105",
-    "ms": 2210,
-    "file": "3b9659feb2ed.mp3"
-  },
-  {
-    "text": "Our very own rice farm!",
-    "voice": "nick",
-    "sig": "a2881bb105",
-    "ms": 2056,
-    "file": "41944577cb8a.mp3"
+    "ms": 1857,
+    "file": "a36e9b579ad3.mp3"
   },
   {
     "text": "Hey! I'm all wet!",
@@ -2548,13 +2765,6 @@
     "file": "03bb4bcbc4f4.mp3"
   },
   {
-    "text": "Whack! Good one!",
-    "voice": "nick",
-    "sig": "a2881bb105",
-    "ms": 1530,
-    "file": "01a16154248b.mp3"
-  },
-  {
     "text": "Mmm, coffee.",
     "voice": "nick",
     "sig": "a2881bb105",
@@ -2583,11 +2793,18 @@
     "file": "b3bf77d14bbf.mp3"
   },
   {
-    "text": "Sticky rice from your farm!",
+    "text": "You grew this sticky rice!",
     "voice": "ji",
     "sig": "ba2e98c34e",
-    "ms": 1581,
-    "file": "9a6a5aa93d5f.mp3"
+    "ms": 2251,
+    "file": "d644a8095092.mp3"
+  },
+  {
+    "text": "Aroi mak! That means so yummy!",
+    "voice": "ji",
+    "sig": "ba2e98c34e",
+    "ms": 3846,
+    "file": "c39e6ddb39a0.mp3"
   },
   {
     "text": "Smile, Kaylee!",
@@ -2597,95 +2814,11 @@
     "file": "8acd13c669db.mp3"
   },
   {
-    "text": "Want to see real rice grow, Kaylee?",
+    "text": "Want to see real farmers grow rice?",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2946,
-    "file": "beda945df11d.mp3"
-  },
-  {
-    "text": "Press the key!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1350,
-    "file": "90dc5a60e126.mp3"
-  },
-  {
-    "text": "Put the bags in the car!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1608,
-    "file": "3c868126b5fc.mp3"
-  },
-  {
-    "text": "Click your seatbelt, Kaylee!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2388,
-    "file": "ce744a2fb134.mp3"
-  },
-  {
-    "text": "Sawasdee ka! Here is your key!",
-    "voice": "clerk",
-    "sig": "8ecbc394e7",
-    "ms": 3150,
-    "file": "85dbcd7fe81f.mp3"
-  },
-  {
-    "text": "Have a happy trip!",
-    "voice": "clerk",
-    "sig": "8ecbc394e7",
-    "ms": 1502,
-    "file": "427d5ef7f609.mp3"
-  },
-  {
-    "text": "Hee hee!",
-    "voice": "clerk",
-    "sig": "8ecbc394e7",
-    "ms": 583,
-    "file": "e5cabbe295a3.mp3"
-  },
-  {
-    "text": "Welcome to Nan!",
-    "voice": "clerk",
-    "sig": "8ecbc394e7",
-    "ms": 1639,
-    "file": "909320501c50.mp3"
-  },
-  {
-    "text": "What a big car!",
-    "voice": "clerk",
-    "sig": "8ecbc394e7",
-    "ms": 1601,
-    "file": "b644b463db44.mp3"
-  },
-  {
-    "text": "Ding! Yes please?",
-    "voice": "clerk",
-    "sig": "8ecbc394e7",
-    "ms": 2190,
-    "file": "fe5494d61388.mp3"
-  },
-  {
-    "text": "Whoa! Beep beep!",
-    "voice": "nick",
-    "sig": "a2881bb105",
-    "ms": 1706,
-    "file": "e009a624fb40.mp3"
-  },
-  {
-    "text": "In they go!",
-    "voice": "nick",
-    "sig": "a2881bb105",
-    "ms": 1004,
-    "file": "0af5f6e3b681.mp3"
-  },
-  {
-    "text": "Ready? Let's go!",
-    "voice": "ji",
-    "sig": "ba2e98c34e",
-    "ms": 2576,
-    "file": "511996bced0f.mp3"
+    "ms": 3146,
+    "file": "dec52d23b545.mp3"
   },
   {
     "text": "Where shall we go first, Kaylee?",

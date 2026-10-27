@@ -85,9 +85,11 @@ const SCENARIOS = [
   { name: "peru pepa's penguin cliff", id: 'penguins', hash: '#/world/peru/penguins', reset: true },
   { name: "peru coco's canyon glide", id: 'condor', hash: '#/world/peru/condor', reset: true },
   { name: "peru rosa's rainy river", id: 'river', hash: '#/world/peru/river', reset: true },
-  { name: "thailand agong's house (arrival)", id: 'thailand', hash: '#/world/thailand', reset: true, play: false },
+  { name: 'thailand map (fly the plane)', id: 'thailand', hash: '#/world/thailand', reset: true },
+  { name: "thailand agong's house (arrival)", id: 'thailand-house', hash: '#/world/thailand/hub/arrive', reset: true, play: false },
   { name: 'poles globe hub', id: 'poles', hash: '#/world/poles', reset: true },
   { name: 'poles ice floe hop', id: 'floe', hash: '#/world/poles/floe', reset: true },
+  { name: 'poles penguin slide', id: 'slide', hash: '#/world/poles/slide', reset: true },
   { name: 'canada train map', id: 'canada', hash: '#/world/canada', reset: true },
   // The trip there, one run per leg (each from its own section link).
   { name: "thailand: kaylee's wardrobe", id: 'wardrobe', hash: '#/world/thailand/hub/wardrobe?drawer=head', reset: true },
@@ -173,14 +175,12 @@ const SCENARIOS = [
   // Bo Kluea's salt wells: a tap on the pan (or the bucket) dips a bucketful and pours it, a tap on the woodpile throws a
   // log on, a tap on the pan in round 3 scrapes a stripe, so the auto-player can play it through to the bags.
   { name: 'thailand nan: the salt wells', id: 'nan-salt', hash: '#/world/thailand/nan-trip/salt', reset: true },
-  // The rental desk, the Nan map and the 3 (greybox, step 6): a tap on the fob presses it, a tap on a bag puts it in the
-  // boot, a tap on the seatbelt clicks it, so the auto-player can buckle up and drive off; on the map a tap on a place
-  // drives the little Pajero there; the 3 from above plays by itself.
   // The Nan Mountain Cup (greybox 1, no voices): the kart races on by itself when no finger is down, so the
   // auto-player's taps are honks and pokes (the rivals, the mushrooms) all the way to the line; the finger-held run is
   // qa-motion's nan-kart.
   { name: 'thailand nan: the cup race', id: 'nan-cup', hash: '#/world/thailand/nan-trip/race', reset: true },
-  { name: 'thailand nan: the rental desk', id: 'nan-rental', hash: '#/world/thailand/nan-trip/rental', reset: true },
+  // The Nan map and the 3 (greybox, step 6): on the map a tap on a place drives the little Pajero there; the 3 from
+  // above plays by itself.
   { name: 'thailand nan: the nan map', id: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true },
   { name: 'thailand nan: the 3 from above', id: 'nan-three-view', hash: '#/world/thailand/nan-trip/three', reset: true },
   { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
