@@ -276,3 +276,25 @@
   height: 100%;
   border: 0;
 }
+
+/* The game shelf (Shelf.tsx): rows of cards that scroll sideways without a scroll bar; a game's page is picture then
+   buttons, side by side when the screen is wide. */
+.world .shelf-row {
+  scrollbar-width: none;
+}
+.world .shelf-row::-webkit-scrollbar {
+  display: none;
+}
+.world .shelf-page {
+  flex-direction: column;
+}
+@media (orientation: landscape) {
+  .world .shelf-page {
+    flex-direction: row;
+  }
+}
+@media (max-width: 600px) {
+  .world .world-title-text {
+    display: none;
+  }
+}

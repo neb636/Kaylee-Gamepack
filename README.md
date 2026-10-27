@@ -8,6 +8,10 @@ Thailand to Agong's house, where she walks around as a unicorn, and to the place
 **Play:** https://neb636.github.io/Kaylee-Gamepack/ · [Jump to a game section](#jump-to-a-game-section)
 (iPad: open in Safari → Share → **Add to Home Screen**. It opens full-screen like a real app.)
 
+**The world map** comes in two views (the two buttons in its top bar; she keeps the one she used last):
+- [The map](https://neb636.github.io/Kaylee-Gamepack/#/world?view=map)
+- [The game shelf](https://neb636.github.io/Kaylee-Gamepack/#/world?view=list) (every game as a picture card, a row per country and per Thailand trip; ❤️ favorites, 🎁 surprise)
+
 **3D character lab** (development tool, every 3D character on a turntable: poses, actions, lines, outfits, lighting): 
 - [Kaylee](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee)
 - [Kaylee in a look from her wardrobe](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee?look=crown,stars,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky) (the Look panel: her things and the paint)
