@@ -24,6 +24,9 @@ export const places: PlaceEntry[] = Object.entries(metas)
   .filter((p): p is PlaceEntry => p !== null)
   .sort((a, b) => a.meta.createdAt.localeCompare(b.meta.createdAt))
 
+// The countries Kaylee can find (map pins, passport, books, Theater). Ones still being built only open from their links.
+export const openPlaces = places.filter((p) => !p.meta.inTheWorksPlace)
+
 export const findPlace = (id: string) => places.find((p) => p.meta.id === id)
 
 // Deep-linkable sections (kit/sections.ts): each activity's sections.ts (or <Name>.sections.ts), found automatically.

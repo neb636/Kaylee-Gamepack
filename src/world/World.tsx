@@ -12,7 +12,7 @@ import { PlaceFrame } from './PlaceFrame'
 import { PuppetLab } from './PuppetLab'
 import { SectionIndex } from './SectionIndex'
 import { isFeelParam } from './kit/knobs'
-import { places } from './registry'
+import { openPlaces as places } from './registry'
 import { WorldMap } from './WorldMap'
 import './world.css'
 

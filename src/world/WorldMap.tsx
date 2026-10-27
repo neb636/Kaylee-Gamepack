@@ -14,7 +14,7 @@ import passportArt from './assets/passport.webp'
 import theaterArt from './assets/theater.webp'
 import { BarPill, FitBox, TopBar } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
-import { places, type PlaceEntry } from './registry'
+import { openPlaces as places, type PlaceEntry } from './registry'
 import { totalStamps, usePassport } from './stamps'
 import { Travel } from './Travel'
 

@@ -15,6 +15,8 @@ const meta: PlaceMeta = {
   mapPos: { x: 50, y: 91 },
   friend: { name: 'Pola the polar bear cub', img: globe },
   trophyTitle: 'Polar Explorer',
+  // Hidden from the world map until every activity is finished (Dad, 2026-10-27).
+  inTheWorksPlace: true,
   activities: [],
   inTheWorks: [
     { id: 'floe', name: 'Ice Floe Hop', icon: '🐻‍❄️', pos: { x: 50, y: 20 }, sticker: { name: 'Polar bear', img: globe, fact: L.stickers.bear } },

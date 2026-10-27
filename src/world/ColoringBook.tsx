@@ -6,7 +6,7 @@ import { BarPill, TopBar } from './kit/Chrome'
 import { ColoringPage } from './kit/ColoringPage'
 import { Flag } from './kit/Flag'
 import { WORLD_LINES } from './lines'
-import { places } from './registry'
+import { openPlaces as places } from './registry'
 
 const pages = places.flatMap(({ meta }) => meta.coloringPages.map((p) => ({ ...p, place: meta })))
 

@@ -57,6 +57,10 @@ export interface PlaceMeta {
    *  poke them, but they're nowhere in the game yet: no button, no passport slot, and the finale doesn't wait for their
    *  stamps. Move one to `activities` when it's ready for Kaylee. */
   inTheWorks?: ActivityInfo[]
+  /** The whole country is still being built: it opens from its own links (#/world/<id>, #/world/sections, a PR's test
+   *  links) and the tests poke it, but Kaylee can't find it yet: no pin on the world map, no passport page, nothing in
+   *  the coloring book, puzzles or Theater. Remove it when the country is finished. */
+  inTheWorksPlace?: boolean
   /** A hub with more than one place in it (Thailand: the map, and Agong's house): the hub section the top bar's back
    *  button goes to from the others, before the world map. */
   hubHome?: string

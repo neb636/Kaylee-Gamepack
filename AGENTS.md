@@ -252,7 +252,8 @@ skims long Markdown, so a plan is an HTML page drawn from JSON (read one with `n
 One activity per PR (the finale is its own PR); a big activity (a trip, a hall of mini games) gets a plan PR and one
 PR per greybox. Until an activity is ready for Kaylee, list it in the country's `meta.ts` under `inTheWorks`, not
 `activities`. Its links and the tests still reach it, but she can't: no way in, no passport slot, and the finale
-doesn't wait for its stamp. An OK to "build it in one go" covers that one activity, not the next ones.
+doesn't wait for its stamp. A whole country still being built sets `inTheWorksPlace: true` in its `meta.ts`
+(Canada and the Poles do): its links work, but it has no pin on the world map and no passport page until it's finished. An OK to "build it in one go" covers that one activity, not the next ones.
 A plan that reads well can still be thin to play: judge it by the verbs and the numbers, not the prose.
 
 **Screens.** The iPad is where she plays: every iPad size must look great. iPhones must work (nothing cut off,

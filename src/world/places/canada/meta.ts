@@ -15,6 +15,8 @@ const meta: PlaceMeta = {
   mapPos: { x: 27, y: 25 },
   friend: { name: 'Maple the beaver', img: globe },
   trophyTitle: 'Canada Champion',
+  // Hidden from the world map until every activity is finished (Dad, 2026-10-27).
+  inTheWorksPlace: true,
   activities: [],
   // In play order along the track, east to west (`pos` is unused: the hub is the 3D map, map/track.ts places the stops).
   inTheWorks: [

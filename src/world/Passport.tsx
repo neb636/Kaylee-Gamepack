@@ -6,7 +6,7 @@ import { Mascot, say, sounds, useSayOnMount } from '../sdk'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { WORLD_LINES } from './lines'
-import { places } from './registry'
+import { openPlaces as places } from './registry'
 import { usePassport } from './stamps'
 import type { PlaceMeta } from './types'
 

@@ -5,7 +5,7 @@ import { BigButton, JigsawPuzzle, SayButton, SparklePuppet, say, sounds, useSayO
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { WORLD_LINES as L } from './lines'
-import { places } from './registry'
+import { openPlaces as places } from './registry'
 
 const pictures = places.flatMap(({ meta }) => (meta.puzzles ?? []).map(p => ({ ...p, place: meta })))
 const counts = [{ rows: 2, cols: 2 }, { rows: 2, cols: 3 }, { rows: 3, cols: 3 }, { rows: 3, cols: 4 }]
