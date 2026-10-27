@@ -6,10 +6,12 @@ const HUB_SECTIONS = defineSections('poles', HUB, {
   params: {
     side: { default: 'middle', values: ['middle', 'north', 'south'], doc: 'which way the globe faces her: middle (the whole globe), north (the Arctic) or south (Antarctica)' },
     summer: { default: 'middle', values: ['middle', 'north', 'south'], doc: 'where the sun shines: north (summer up north, night down south), south, or middle (both in between)' },
+    who: { default: 'penguin', values: ['penguin', 'bear'], doc: 'who is lost on the little iceberg: a penguin (home is the bottom) or a polar bear cub (the top)' },
   },
   sections: [
     { id: 'globe', name: 'Spin the globe', params: ['side'] },
     { id: 'sun', name: 'Drag the sun', params: ['side', 'summer'] },
+    { id: 'lost', name: 'The lost one', params: ['summer', 'who'] },
   ],
 })
 export default HUB_SECTIONS

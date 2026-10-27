@@ -654,6 +654,33 @@ GAME_SCENARIOS.push(
     },
   },
   {
+    // The hub's lost penguin (hub greybox 2): carried to the top (the wrong pole: a look round, a "?", the bottom glows,
+    // back onto the berg), then to the bottom, where the globe turns to show him home with Pebble.
+    name: 'poles-lost',
+    seconds: 11,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/poles/hub/lost?who=penguin`)
+      await page.waitForFunction(() => window.__polesGlobeQA?.().lost === 'penguin:drift', null, { timeout: 20000 })
+      await page.waitForTimeout(800)
+    },
+    act: async (page) => {
+      const g = await page.locator('[data-anchor="globe"]').boundingBox()
+      const carry = async (to) => {
+        await page.waitForFunction(() => window.__polesGlobeQA?.().lost === 'penguin:drift', null, { timeout: 8000 })
+        const b = await page.locator('[data-anchor="lost"]').boundingBox()
+        if (!b || !g) throw new Error('no lost penguin')
+        await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+        await page.mouse.down()
+        await page.mouse.move(b.x + b.width / 2, g.y + g.height * to, { steps: 20 })
+        await page.mouse.up()
+      }
+      await carry(0.06)
+      await page.waitForTimeout(4200)
+      await carry(0.94)
+      await page.waitForTimeout(3000)
+    },
+  },
+  {
     // Snow Coats (2D): her finger zigzags over the brown fox; the coat goes white where it goes and fluffs up, then the
     // rest puffs on by itself and the fox hops.
     name: 'poles-coats-rub',
