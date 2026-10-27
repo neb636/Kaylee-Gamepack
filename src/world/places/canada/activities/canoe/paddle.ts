@@ -47,6 +47,7 @@ const STROKE = knobs('canoeStroke', 'Paddle stroke', FILE, {
   sweep: { value: 1.2, min: 0, max: 4, step: 0.1, label: 'Wide strokes turn more', unit: '×', note: 'extra turn for a stroke far out from the hull (0 = the same wherever she strokes)' },
   rudder: { value: 0.35, min: 0, max: 1.5, step: 0.05, label: 'Held still: brake and turn', note: 'the blade held still in the water slows the canoe and turns it toward that side' },
   reach: { value: 1.5, min: 0.7, max: 3, step: 0.05, label: 'Reach', unit: 'm', note: 'how far out from the hull the blade goes under her finger' },
+  held: { value: 0.3, min: 0, max: 2, step: 0.05, label: 'Held still below', unit: 'm/s', note: 'the blade moving back slower than this counts as held still (the brake), not a stroke' },
   lift: { value: 0.25, min: 0, max: 1.5, step: 0.05, label: 'Lifts out at', unit: 'm/s', note: 'moving forward faster than this, the blade comes out of the water (no brake)' },
 })
 /** The fallback (?paddle=pull): her finger pulls the canoe along. */
@@ -95,8 +96,6 @@ export const CANOE_ANCHORS: AnchorInfo[] = [
 const ORDER: CanoeSection[] = ['glide', 'stream', 'loon', 'glacier']
 const DEG = 180 / Math.PI
 const HINT_S = 8
-/** A blade moving back slower than this (m/s) is held still: the brake, not a stroke. */
-const HELD = 0.3
 /** The lake's colors: before she finds the rock flour, and glowing turquoise at the end. */
 const DULL = { deep: new Color('#3B97B0'), shallow: new Color('#57B2C4') }
 const GLOW = { deep: new Color('#16C2CB'), shallow: new Color('#6BE6DE') }
@@ -550,7 +549,7 @@ export class RedCanoe implements World3D {
 
     const back = -this.bladeV
     // (The smoothed speed only fades toward zero once her finger stops, so below a slow drift the blade counts as held.)
-    if (back > HELD) {
+    if (back > STROKE.held) {
       // A stroke: forward, and turning away from its side (more when it's out wide).
       const eff = Math.min(back, STROKE.quick) * dt
       const wide = clamp((Math.abs(at.across) - 0.62) / Math.max(0.1, STROKE.reach - 0.62))
