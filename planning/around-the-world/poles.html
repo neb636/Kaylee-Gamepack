@@ -17,11 +17,11 @@
   "kind": "New place (3D + 2D)",
   "updated": "2026-10-27",
   "status": {
-    "label": "Greybox 4 built: Dad cracks the icebergs",
+    "label": "Greybox 5 built: Dad rubs the snow coats",
     "tone": "pink"
   },
   "pitch": "Sparkle's balloon flies to the top of the world and the bottom. Up north, **Pola the polar bear cub** lives on ice floating on the sea; down south, **Pebble the penguin chick** lives on a giant land made of ice. They are pen pals who can never meet, because polar bears only live in the north and penguins only live in the south. Kaylee hops floes, belly-slides, huddles in a blizzard and cracks icebergs off a glacier, and learns the difference by playing in both. At the very end, Sparkle's **Polar Quiz** checks what she learned, and she answers by doing: dragging Pola to his pole, spinning the globe to the bottom.",
-  "next": "Dad plays **greybox 4, Iceberg Maker** on the iPad (the PR's links; add `?feel=1` to tune the cracking, the bobbing and the push), and the earlier greyboxes if he hasn't yet (no feel notes came back on Penguin Slide, PR #229, so its numbers are unchanged), and answers the **open questions** (the friends' names, one map pin or two, Santa or not, the [3D and 2D split](#look)). Next: **greybox 5: Snow Coats** (2D). Then one activity per PR, toy first.",
+  "next": "Dad plays **greybox 5, Snow Coats** on the iPad (the PR's links; add `?feel=1` to tune the brush size and smoothing, when a coat finishes itself and when the bear comes), and the earlier greyboxes if he hasn't yet (no feel notes came back on Iceberg Maker, PR #235, so its numbers are unchanged), and answers the **open questions** (the friends' names, one map pin or two, Santa or not, the [3D and 2D split](#look)). Next: **greybox 6: Emperor Huddle** (2D). Then one activity per PR, toy first.",
   "facts": [
     {
       "icon": "🧭",
@@ -1425,12 +1425,15 @@
             {
               "n": 6,
               "title": "Greybox: Snow Coats",
-              "status": "next"
+              "status": "done",
+              "date": "2026-10-27",
+              "pr": 239,
+              "md": "One Arctic fox, brown in late summer: snow falls and her finger rubs it white where it goes (perfect-freehand strokes as a mask on a flat shape), and it fluffs up. Then a hare, a ptarmigan and a lemming; a polar bear sniffs past and can't find the white ones (one with brown left giggles and runs). Dusk: only their eyes blink. Then her finger is sunshine: the snow melts in streaks, flowers pop up, coats go brown; the snowy owl stays white. The brush and the coats are feel-lab knobs."
             },
             {
               "n": 7,
               "title": "Greybox: Emperor Huddle",
-              "status": "todo"
+              "status": "next"
             },
             {
               "n": 8,
@@ -1592,6 +1595,33 @@
                 },
                 "**Known small things:** the berg doesn't flip over to show its smooth blue bottom (a silly moment in the plan) yet; no fish under the berg yet; no voices (the full-loop gate)."
               ]
+            },
+            {
+              "title": "Greybox 5: Snow Coats",
+              "date": "2026-10-27",
+              "status": "done",
+              "pr": 239,
+              "summary": "Arctic animals change coats with the seasons, in 2D: her finger rubs snow over brown animals and their coats go white where it goes, the white ones vanish into the snow so the polar bear can't find them, then her finger rubs the summer back. One verb (rub) from one fox, to four animals and a bear, to the whole tundra.",
+              "items": [
+                "**The rub:** every stroke is a [perfect-freehand](https://github.com/steveruizok/perfect-freehand) outline added to the animal's mask, in the animal's own units, so the paint moves with it (a hop, a run, turning the iPad). The white coat is the same flat shape drawn over the brown one, showing only where her strokes are. A grid of cells under each coat counts how much is done; past *finishes itself at* (78%) the rest puffs on by itself, with a sparkle and a hop. A rising note at every fifth of a coat. Fluffy tufts grow along the outline wherever the coat is white. A tap on an animal is a giggle or a hop (and a little dot of snow).",
+                "**Paint the fox (`fox`):** late-summer tundra (brown ground, grass tufts, a grey sky). Snow starts to fall, more and more; the ground slowly goes white by itself (*snow settles*, 35 s), and she can rub snow onto it too. The fox done: it hops, the ground goes all white, and hide and seek starts (`hide?painted=fox`).",
+                "**Hide and seek (`hide`):** the white fox plus a brown hare, ptarmigan and lemming on the snow (two rows, so each is big enough to rub). As a coat gets whiter its outline fades into the snow; done, it's gone but for its eyes and nose. The address bar keeps `painted` up to date. When every animal is at least half white and she stops rubbing for 4 s (*bear comes after*), a polar bear walks in sniffing. At each animal he stops and sniffs: a white one isn't there (he looks round, a “?”); one with brown left giggles and runs to a free spot behind him (silly, never caught), and he comes back from the other side later. When he can't find any: dusk, the northern lights, only their eyes and noses blinking. The ☀️ button (or 14 s) brings the summer.",
+                "**Rub the summer back (`summer`):** a blue sky and a sun (tap: it sparkles), everything white. Now her strokes melt: the snow comes off the ground in streaks showing the tundra, flowers pop up where it melted (*flowers*, 30% of patches), coats turn brown and their outlines come back. The snowy owl on its rock stays white: rub or tap it and it shakes its head, and the line says snowy owls and polar bears stay white all year. All four brown: the rest of the snow melts, flowers everywhere, fanfare, confetti, everyone hops; 🔁 starts again from the fox.",
+                "**Pokes:** the animals (giggle or hop), the sky (a puff of snowflakes; at dusk the northern lights ripple), the sun, the owl, the bear (a huff).",
+                "**Feel knobs** (`?feel=1`): *Rub the coat*: brush size, smoothing, streamline, thinning, point spacing, counts as painted. *Coats and hiding*: finishes itself at, fluff, snow settles, bear comes after, bear walk, sniff, flowers. The graph shows her finger's speed, the brush size, how done the last coat she touched is, and how snowy the ground is.",
+                "**Screens:** a wide stage (1600 × 1000) and a tall one (1000 × 1500) that scale to fit; the extra edge is more sky and more snow. The ☀️ and 🔁 buttons wait in the sky's top corner, clear of the animals.",
+                "**Files:** `places/poles/activities/coats/`: `SnowCoats.tsx` (the scene, the strokes, the bear), `animals.ts` (the placeholder shapes, the coat grids, the two stages), `sections.ts`. Loaded on its own (no three.js). Still under `inTheWorks`. No voices (greybox): a short line at the bottom says what is on screen. QA: the screens, a motion scenario (`poles-coats-rub`) and pacing.",
+                {
+                  "text": "Changed from the plan",
+                  "items": [
+                    "The bear comes when every animal is at least half white and she has paused, not only when all are done, so a missed brown patch gets found (the silly run).",
+                    "The payoff is dusk with the northern lights: the white animals vanish into the snow, only eyes and noses blink.",
+                    "The ground snow is rubbable too: snow onto the tundra in the fox section, melted off in streaks in the summer.",
+                    "The snowy owl is in the summer; the bear only walks through hide and seek (the line about both staying white shows when she rubs the owl)."
+                  ]
+                },
+                "**Known small things:** the feel lab lists every Poles activity's knobs, so *Rub the coat* is near the bottom of the panel. The lemming is small next to the brush, so it goes white in two or three strokes. No pokeable reindeer, musk ox or popping lemming yet (they come with the art). The same layout every time (the plan's replay with other animals isn't in yet)."
+              ]
             }
           ]
         }
@@ -1695,21 +1725,24 @@
             {
               "n": 1,
               "id": "fox",
-              "name": "Paint the fox",
-              "status": "todo"
+              "name": "Paint the fox"
             },
             {
               "n": 2,
               "id": "hide",
               "name": "Hide and seek",
-              "query": "painted=fox",
-              "status": "todo"
+              "query": "painted=fox"
             },
             {
               "n": 3,
               "id": "summer",
-              "name": "Rub the summer back",
-              "status": "todo"
+              "name": "Rub the summer back"
+            },
+            {
+              "n": 4,
+              "id": "hide",
+              "name": "Hide and seek, the lemming still brown",
+              "query": "painted=fox,hare,ptarmigan"
             }
           ]
         },
