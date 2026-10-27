@@ -377,6 +377,16 @@ const SCREENS = [
   { name: 'thailand-family', hash: '#/world/thailand/hub/family', reset: true, wait: 1800 },
   ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
+  // The Poles: the globe hub (greybox 1) from the middle, each pole, the sun out with summer up north, and the north in
+  // its winter night; then an activity's and the finale's "coming soon" cards.
+  ...['globe', 'globe?side=north', 'globe?side=south', 'sun?summer=north', 'sun?side=north&summer=south', 'sun?side=south&summer=south'].map((to) => ({
+    name: `poles-${to.replace(/[?=&]/g, '-')}`,
+    hash: `#/world/poles/hub/${to}`,
+    reset: true,
+    wait: 1800,
+  })),
+  { name: 'poles-floe-soon', hash: '#/world/poles/floe/soon', wait: 800 },
+  { name: 'poles-party-soon', hash: '#/world/poles/party/soon', wait: 800 },
   // The mall day's trip loop (greybox): Mommy's card (🚤 / 🛝🍕), the day pass's choices on a replay, the goodbye with
   // the whole family and the Veloz (then everyone in it), ICONSIAM's glimpse, the lift going up, the counter with her
   // socks on, home (the car at Agong's door; the box given, the photo on the wall).

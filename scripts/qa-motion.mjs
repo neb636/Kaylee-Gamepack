@@ -528,6 +528,56 @@ GAME_SCENARIOS.push(
   thaiBoat('boat-cave-roof', 8, 'cave', [['down', 0, 0.25, 7800]]),
 )
 
+// The Poles' globe (3D greybox): grab it and pull down so the Arctic rolls to the front (Pola hops and waves), flick it
+// up past the middle to Antarctica (the world rolls over so the penguins stand up), back to the middle; then the sun
+// dragged from summer up north down to summer in the south (the north goes dark: stars and the northern lights).
+const polesDrag = async (page, path) => {
+  const [x0, y0] = path[0]
+  await page.mouse.move(vp.width * x0, vp.height * y0)
+  await page.mouse.down()
+  for (const [fx, fy, ms] of path.slice(1)) {
+    await page.mouse.move(vp.width * fx, vp.height * fy, { steps: 10 })
+    await page.waitForTimeout(ms)
+  }
+  await page.mouse.up()
+}
+GAME_SCENARIOS.push(
+  {
+    name: 'poles-spin',
+    seconds: 8,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/poles/hub/globe`)
+      await page.waitForFunction(() => window.__polesGlobeQA?.().mode, null, { timeout: 20000 })
+      await page.waitForTimeout(1000)
+    },
+    act: async (page) => {
+      await polesDrag(page, [[0.5, 0.35], [0.52, 0.6, 60]])
+      await page.waitForTimeout(2000)
+      await polesDrag(page, [[0.5, 0.6], [0.5, 0.25, 0]])
+      await page.waitForTimeout(2200)
+      await polesDrag(page, [[0.5, 0.5], [0.3, 0.42, 0]])
+    },
+  },
+  {
+    name: 'poles-sun',
+    seconds: 6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/poles/hub/sun?summer=north`)
+      await page.waitForFunction(() => window.__polesGlobeQA?.().mode, null, { timeout: 20000 })
+      await page.waitForTimeout(1200)
+    },
+    act: async (page) => {
+      const b = await page.locator('[data-anchor="sun"]').boundingBox()
+      if (!b) throw new Error('no sun')
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+      await page.mouse.down()
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2 + vp.height * 0.45, { steps: 30 })
+      await page.waitForTimeout(2500)
+      await page.mouse.up()
+    },
+  },
+)
+
 // Baan Chang's feeding yard (3D greybox): a banana pulled out of Daddy's basket and held up on Mali's side (her trunk
 // snakes after it, curls round it and swings it to her mouth), then a stick of sugarcane held high on the right (the
 // trunks stretch up after it) and brought down to Khanom.

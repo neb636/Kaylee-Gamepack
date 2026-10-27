@@ -233,6 +233,15 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 
 **Finale**: [Family party (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/party/soon)
 
+### The Poles
+
+**Home base (the globe, greybox)**
+
+- [Spin the globe](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe) ([north side](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe?side=north), [south side](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe?side=south))
+- [Drag the sun](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun) ([summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?summer=north), [the north's winter night](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?side=north&summer=south))
+
+**Coming soon**: [Ice Floe Hop](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/soon) · [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Penguin Slide](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Iceberg Maker](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+
 ## How new things get made
 
 1. Dad asks an AI agent (Claude Code or Codex) for one piece: a plan, a greybox toy, art, the full loop, or a fix.
