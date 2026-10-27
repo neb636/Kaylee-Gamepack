@@ -2,7 +2,8 @@
 import { motion } from 'motion/react'
 import { useId, type CSSProperties, type ReactElement } from 'react'
 
-export type FlagId = 'australia' | 'china' | 'thailand' | 'egypt' | 'italy' | 'peru'
+// `poles` is the fallback for a place with no national flag (the Arctic and Antarctica belong to no one country).
+export type FlagId = 'australia' | 'china' | 'thailand' | 'egypt' | 'italy' | 'peru' | 'poles'
 
 /** Points of a star polygon centred on (cx, cy). */
 export function starPoints(cx: number, cy: number, outer: number, points: number, innerRatio = 4 / 9) {
@@ -146,7 +147,20 @@ function Peru() {
   )
 }
 
-const FLAGS: Record<FlagId, () => ReactElement> = { australia: () => <Australia />, china: China, thailand: Thailand, egypt: Egypt, italy: Italy, peru: Peru }
+// Not a real flag: the poles have none, so a place with no national flag shows a little emblem instead. Here, the globe
+// with white ice at the top and the bottom.
+function Poles() {
+  return (
+    <>
+      <rect width="10080" height="5040" fill="#A8DCFF" />
+      <circle cx="5040" cy="2520" r="1900" fill="#7EC8F2" stroke="#fff" strokeWidth="160" />
+      <path d="M3720,1150 Q5040,420 6360,1150 Q5040,1500 3720,1150 Z" fill="#fff" />
+      <path d="M3550,3700 Q5040,4900 6530,3700 Q5040,4050 3550,3700 Z" fill="#fff" />
+    </>
+  )
+}
+
+const FLAGS: Record<FlagId, () => ReactElement> = { australia: () => <Australia />, china: China, thailand: Thailand, egypt: Egypt, italy: Italy, peru: Peru, poles: Poles }
 
 /** A flag with a white rounded border. Width sets the size (flags here are all 2:1). */
 export function Flag({ id, width = 200, parts, style }: { id: FlagId; width?: number | string; parts?: AustraliaFlagParts; style?: CSSProperties }) {
