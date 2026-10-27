@@ -277,7 +277,14 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [Hide and seek](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox) ([the lemming still brown](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox,hare,ptarmigan))
 - [Rub the summer back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/summer)
 
-**Coming soon**: [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+**Emperor Huddle (greybox)**
+
+- [A small huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/small) ([wind from the right](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/small?wind=right))
+- [The wind turns](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/blizzard)
+- [Crack! Pebble's egg](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch) ([already hatched: tuck Pebble back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch?chick=hatched))
+- [The first sunrise](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/sunrise)
+
+**Coming soon**: [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
 
 ### Canada
 
