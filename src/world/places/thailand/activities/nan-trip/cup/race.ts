@@ -580,7 +580,7 @@ export class KartRace implements World3D {
       P.cyl(0.2, 0.16, 0.1, PAL.hotpink, { at: [0, -0.44, 0] }, 10),
       P.cyl(0.03, 0.06, 0.3, PAL.hotpink, { at: [0, -0.64, 0] }, 6),
     ])
-    const mesh = new InstancedMesh(this.bag.add(geo), this.bag.add(new MeshBasicMaterial({ vertexColors: true, fog: false })), Math.max(1, list.length))
+    const mesh = this.bag.add(new InstancedMesh(this.bag.add(geo), this.bag.add(new MeshBasicMaterial({ vertexColors: true, fog: false })), Math.max(1, list.length)))
     mesh.count = list.length
     mesh.frustumCulled = false
     for (let i = 0; i < list.length; i++) mesh.setColorAt(i, tmpColor.set('#F0E0D0'))
