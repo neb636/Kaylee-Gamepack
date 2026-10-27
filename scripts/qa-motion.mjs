@@ -825,6 +825,30 @@ GAME_SCENARIOS.push({
   },
 })
 
+// Animal Bridge (2D greybox): her finger on mama elk, up the forest bank to the bridge, over it while the cars zoom
+// under, and down into the meadow; the calves follow in a wobbly line (and munch when they get there).
+GAME_SCENARIOS.push({
+  name: 'canada-bridge-lead',
+  seconds: 9,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/canada/bridge/elk`)
+    await page.waitForFunction(() => window.__canadaBridgeQA?.().section, null, { timeout: 20000 })
+    await page.waitForTimeout(600)
+  },
+  act: async (page) => {
+    const q = await page.evaluate(() => window.__canadaBridgeQA())
+    const way = [{ x: q.bridge.left.x - 40, y: q.bridge.left.y + 40 }, q.bridge.left, q.bridge.middle, q.bridge.right, q.meadow]
+    await page.mouse.move(q.fams.elk.x, q.fams.elk.y)
+    await page.mouse.down()
+    for (const p of way) {
+      await page.mouse.move(p.x, p.y, { steps: 18 })
+      await page.waitForTimeout(350)
+    }
+    await page.waitForTimeout(1200)
+    await page.mouse.up()
+  },
+})
+
 // Mountain Bike (3D greybox): Maple riding the blue way's berms with the wheel under her finger, pushed right up the
 // berm and held, then let go: she leans into the bends, bumps over the roots and drifts back to the middle of her way.
 GAME_SCENARIOS.push({

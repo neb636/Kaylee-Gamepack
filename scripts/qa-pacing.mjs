@@ -106,6 +106,9 @@ const SCENARIOS = [
   // Red Canoe (greybox, no voices): the core verb is a stroke (a drag beside the canoe), so the auto-player's taps only
   // splash, poke and make trout jump; the robot run that paddles is qa-motion's canada-canoe-stroke.
   { name: 'canada red canoe', id: 'canoe', hash: '#/world/canada/canoe', reset: true },
+  // Animal Bridge (greybox, no voices): a tap on the ground walks the family she leads there and a tap pokes things, so
+  // the auto-player wanders the herd about; leading them over the bridge is a long drag (qa-motion's canada-bridge-lead).
+  { name: 'canada animal bridge', id: 'bridge', hash: '#/world/canada/bridge', reset: true },
   // The trip there, one run per leg (each from its own section link).
   { name: "thailand: kaylee's wardrobe", id: 'wardrobe', hash: '#/world/thailand/hub/wardrobe?drawer=head', reset: true },
   { name: 'thailand trip: mommy asks', id: 'trip-invite', hash: '#/world/thailand/boat-trip/invite', reset: true },
