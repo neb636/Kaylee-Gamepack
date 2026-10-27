@@ -1,5 +1,5 @@
-// The character lab's small controls (lab.css): line icons, a segmented control, a dark toggle, a slider row, a
-// dropdown menu. Plain React, no packages.
+// The labs' small controls (lab.css; the character, camera and feel labs all use them): line icons, a segmented
+// control, a dark toggle, a slider row, a dropdown menu. Plain React, no packages.
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 const PATHS = {

@@ -1,4 +1,5 @@
-// Kaylee's family as toy animals, built from simple shapes in the house's toon look (looks.ts says who is what).
+// Toy animals built from simple shapes in the toon look: Kaylee's family in Thailand (places/thailand/characters/looks.ts
+// says who is what), and any country's 3D friends.
 //
 // Every character is the same chibi rig: a root at the feet (facing +z), a `body` group that squashes and leans, and
 // inside it the torso (legs, clothes, tail), a `head` pivot at the neck, and an arm pivot at each shoulder. The eyes
@@ -9,10 +10,9 @@
 // Sizes are fractions of the character's height H, so the same recipe makes Agong and little Putter; `chub` makes the
 // body rounder (Mommy, and Jum the elephant).
 import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../engine/dispose'
-import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../engine/geo'
-import { WEARABLES, type Look, type Wearable } from './looks'
-import type { PaintColor, PaintPart } from './style'
+import type { Bag } from '../dispose'
+import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
+import { WEARABLES, type Look, type PaintColor, type PaintPart, type Wearable } from './look'
 
 export interface Rig {
   root: Group

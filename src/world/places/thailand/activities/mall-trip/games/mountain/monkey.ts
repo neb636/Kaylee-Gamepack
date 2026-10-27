@@ -8,9 +8,9 @@
 //   cheer      both arms up, bouncing
 import { CatmullRomCurve3, Group, TubeGeometry, Vector3 } from 'three'
 import { bell, clamp, span } from '../../../../../../../sdk'
-import { bake, merge, P, solid } from '../../../../engine/geo'
-import type { Bag } from '../../../../engine/dispose'
-import { PAL } from '../../../../engine/toon'
+import { bake, merge, P, solid } from '../../../../../../engine3d/geo'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { PAL } from '../../../../../../engine3d/toon'
 
 const FUR = '#A8774F'
 const DARK = '#7E5434'

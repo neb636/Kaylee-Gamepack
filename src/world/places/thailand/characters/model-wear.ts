@@ -11,9 +11,9 @@
 // shoulders at y 0.46, hem at 0.19; arms from (±0.11, 0.40, 0.04), hoof 0.184 out at 0.818 rad from straight down;
 // legs from hips at (±0.072, 0.16, 0.03), hooves below y 0.07.
 import { CatmullRomCurve3, Group, LatheGeometry, SphereGeometry, TubeGeometry, Vector2, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../engine/dispose'
-import { bake, P, solidMix, type V3 } from '../engine/geo'
-import { buildWorn, SCRUBS, SCRUBS_DARK, type Frame, type Wardrobe, type Worn } from './animal'
+import type { Bag } from '../../../engine3d/dispose'
+import { bake, P, solidMix, type V3 } from '../../../engine3d/geo'
+import { buildWorn, SCRUBS, SCRUBS_DARK, type Frame, type Wardrobe, type Worn } from '../../../engine3d/characters/animal'
 import { LOOKS, type Wearable } from './looks'
 
 /** The model's ink width (model.ts's PX), so what she wears is drawn with the same line as she is. */

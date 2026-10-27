@@ -8,8 +8,8 @@
 // Built facing +z around its own base, then turned to face into the room (+x) at layout.ts's DIM.wardrobe.
 import { CylinderGeometry, Group, Vector3, type BufferGeometry } from 'three'
 import { heart } from '../../../characters/closet/fit'
-import { bake, P, type V3 } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import { bake, P, type V3 } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import type { Slot } from '../../../characters/style'
 import { part, poke, scenery, type Kit } from '../build/kit'
 import { DIM } from '../layout'

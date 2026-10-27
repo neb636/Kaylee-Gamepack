@@ -1,10 +1,10 @@
-// The salon, modeled in code in the house's toon look (engine/geo.ts parts): a checkered floor, pale blue walls, the
+// The salon, modeled in code in the house's toon look (engine3d/geo.ts parts): a checkered floor, pale blue walls, the
 // big mirror in its bulb frame, the big chair (it pumps up and down and spins round), Kaylee's step stool, the waiting
 // bench, and the things to poke: the striped pole (it spins) and the jar of comb water (it bubbles). Greybox: shapes only.
 import { BufferGeometry, Color, Float32BufferAttribute, Group } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P, solid } from '../../../../engine/geo'
-import { PAL } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../../engine3d/geo'
+import { PAL } from '../../../../../../engine3d/toon'
 import { BENCH, CHAIR, MIRROR, POLE, ROOM, SHELF, STOOL } from './layout'
 
 const WALL = '#DCEBFF'

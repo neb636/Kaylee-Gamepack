@@ -3,8 +3,8 @@
 // Daddy's flop. Flying balls arc up and drop back into the layer (and bounce off a deck over the pit). No physics
 // engine: simple arcs and pushes. A pit that already has its balls (the racing slide's) can take just the splashes.
 import { Color, DynamicDrawUsage, Group, InstancedMesh, Matrix4, Quaternion, SphereGeometry, Vector3 } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { toon } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { toon } from '../../../../../engine3d/toon'
 import type { Rect } from './layout'
 
 const COLORS = ['#FF8FB8', '#A8DCFF', '#FBEA9A', '#8FE3C8', '#D9CCFF', '#FFFFFF', '#FF4F9A', '#FFC2A8'].map((c) => new Color(c))

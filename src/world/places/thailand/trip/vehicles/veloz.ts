@@ -8,9 +8,9 @@
 // windows, so whoever is inside shows. Faces +z. The roof is high enough for Daddy's horn with everyone sitting up (a
 // toy's proportions, not the real 1.7 m).
 import { Group, Mesh, MeshBasicMaterial } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { merge, P, solid, type V3 } from '../../engine/geo'
-import { PAL } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid, type V3 } from '../../../../engine3d/geo'
+import { PAL } from '../../../../engine3d/toon'
 
 const GREY = '#A9ADB8'
 const SHADE = '#8E929F'

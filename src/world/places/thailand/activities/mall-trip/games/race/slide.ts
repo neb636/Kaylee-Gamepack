@@ -4,9 +4,9 @@
 // ribbon board, and the dark hall behind (HarborLand's ceiling with its strip lights). Still things are merged into a
 // few meshes; what moves (the rail, the flags, the lamps, the bump stripes in her lane) comes back as its own piece.
 import { BufferAttribute, BufferGeometry, CatmullRomCurve3, Color, DoubleSide, Group, Mesh, MeshBasicMaterial, MeshToonMaterial, PlaneGeometry, TubeGeometry, Vector3 } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { bake, merge, P, solid, type V3 } from '../../../../engine/geo'
-import { PAL, toon, toonGradient } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { bake, merge, P, solid, type V3 } from '../../../../../../engine3d/geo'
+import { PAL, toon, toonGradient } from '../../../../../../engine3d/toon'
 import { BOARD, CRESTS, DECK, FLAG_COLORS, FLAG_H, LAMPS, LANE_W, LANES, laneSlope, laneY, laneZ, PIT, RAIL_X, SLIDE, STEPS, stepAt } from './layout'
 
 export const RC = {

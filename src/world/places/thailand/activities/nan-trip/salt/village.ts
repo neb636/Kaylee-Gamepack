@@ -5,9 +5,9 @@
 // mountains with low cloud lying on them (a painted ring all the way round, and soft clouds that drift). A scooter
 // putters past now and then, on the far lane (Thailand drives on the left).
 import { BackSide, CanvasTexture, CylinderGeometry, Group, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, RingGeometry, SRGBColorSpace } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { blobShadow, merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { MURAL, ROAD_Z, type V3 } from './layout'
 
 const ROAD = '#8F8BA6'

@@ -2,8 +2,8 @@
 // room upstairs (Dad, 2026-10-19), stops, looks around, and now and then calls. Tap it and it calls and scurries off
 // somewhere else.
 import { Group } from 'three'
-import { P } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import { P } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { DIM } from '../layout'
 import { poke, scenery, type Kit } from './kit'
 

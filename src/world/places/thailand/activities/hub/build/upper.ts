@@ -6,8 +6,8 @@
 // back on the right, aluminium like the real one (Dad's photo, 2026-10-18). It's locked: it only rattles. The floor is
 // pale grey terrazzo tiles like the real one (tiles.ts). The house gecko lives on the back wall (gecko.ts).
 import { Group, Mesh, MeshBasicMaterial, type BufferGeometry } from 'three'
-import { P } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import { P } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { DIM } from '../layout'
 import { standingFan } from './ground'
 import { part, poke, scenery, type Kit } from './kit'

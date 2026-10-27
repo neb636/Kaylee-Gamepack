@@ -4,10 +4,10 @@
 // look is set by rice3d.ts every frame: how big, which way it leans (wind, a droopy dry seedling, Kaylee wading past),
 // and its colors.
 import { Color, InstancedMesh, Matrix4, Quaternion, ShaderMaterial, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P } from '../../../engine/geo'
-import { hullGeometry, outlineMaterial } from '../../../engine/outline'
-import { toon } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P } from '../../../../../engine3d/geo'
+import { hullGeometry, outlineMaterial } from '../../../../../engine3d/outline'
+import { toon } from '../../../../../engine3d/toon'
 
 // The outline of an instanced shape: the engine's inverted hull, moved by each instance's matrix.
 const hullVertex = /* glsl */ `

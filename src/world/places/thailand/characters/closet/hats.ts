@@ -7,9 +7,9 @@
 // (Thailand's flower) round her hair, a big bow on the side, floppy bunny ears and cat ears on headbands behind her own
 // ears, a cap worn backwards, a pink cowboy hat and a bucket hat (her horn pokes out of both), and the sun hat she packs.
 import { Group, LatheGeometry, SphereGeometry, Vector2, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { bake, P, type V3 } from '../../engine/geo'
-import { buildWorn } from '../animal'
+import type { Bag } from '../../../../engine3d/dispose'
+import { bake, P, type V3 } from '../../../../engine3d/geo'
+import { buildWorn } from '../../../../engine3d/characters/animal'
 import { LOOKS } from '../looks'
 import { group, HAIR, HAIR_Z, PX } from '../model-wear'
 import { aim, brim, facing, heart, onHair, outFrom, placed, star } from './fit'

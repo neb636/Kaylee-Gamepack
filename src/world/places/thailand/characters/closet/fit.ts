@@ -1,7 +1,7 @@
 // Small helpers for fitting her things to her measured shape (model-wear.ts's numbers): a point on her hair all the way
 // round (the mongkhon's measured band), parts turned to face a direction, a hat brim that curls up at the sides.
 import { Euler, ExtrudeGeometry, Group, Matrix4, Path, Quaternion, Shape, Vector3, type BufferGeometry } from 'three'
-import { bake, type V3 } from '../../engine/geo'
+import { bake, type V3 } from '../../../../engine3d/geo'
 import { BAND_R } from '../model-wear'
 
 const UP = new Vector3(0, 1, 0)

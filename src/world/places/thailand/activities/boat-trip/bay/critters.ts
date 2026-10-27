@@ -3,9 +3,9 @@
 // lizard, kingfisher, finless porpoise) and the little rock crab that scuttles out of a notch. Each builder returns the
 // pieces its owner moves (a claw that waves, wings that flap, a tail that swishes); the owner does the acting.
 import { Group, type BufferGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { blobShadow, merge, P, solid, solidMix, type V3 } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { blobShadow, merge, P, solid, solidMix, type V3 } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 
 const INK = '#2E2233'
 const WHITE = '#FFFFFF'

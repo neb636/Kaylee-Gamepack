@@ -19,9 +19,9 @@ import './world.css'
 // The 3D character lab (#/world/characters/<id>): loaded on demand, so only it downloads three.js.
 const CharacterLab = lazy(() => import('./places/thailand/lab/CharacterLab'))
 // The camera lab (?cam=1 on any section of a 3D country): the game in an iPad-sized frame with camera controls beside it.
-const CameraLab = lazy(() => import('./places/thailand/lab/camera/CameraLab'))
+const CameraLab = lazy(() => import('./labs/camera/CameraLab'))
 // The feel lab (?feel=1 on any section): sliders over the playing game for every knob it declares (kit/knobs.ts).
-const FeelLab = lazy(() => import('./places/thailand/lab/feel/FeelLab'))
+const FeelLab = lazy(() => import('./labs/feel/FeelLab'))
 
 /** The labs' own params (?cam=1, cam.*, ?feel=1, feel.*): never part of the game's state. */
 const isLab = (k: string) => k === 'cam' || k.startsWith('cam.') || isFeelParam(k)
@@ -34,8 +34,9 @@ export function World({ place, activity, section, params = {} }: { place?: strin
   let lab = false
   let feel = false
   let screen
-  // A locked country (lock.ts) asks for the family code first, and so do the 3D labs, which are built from its code.
-  if (lockedPlace && needsCode(lockedPlace) && (place === lockedPlace || place === 'characters' || params.cam !== undefined))
+  // A locked country (lock.ts) asks for the family code first, and so does the character lab, which is built from its
+  // code. The camera and feel labs are shared (labs/), so they only ask on the locked country's own links.
+  if (lockedPlace && needsCode(lockedPlace) && (place === lockedPlace || place === 'characters'))
     screen = <LockScreen place={lockedPlace} onUnlock={() => setUnlocked((n) => n + 1)} />
   else if (place === 'passport') screen = <Passport />
   else if (place === 'puppets') screen = <PuppetLab only={activity} />

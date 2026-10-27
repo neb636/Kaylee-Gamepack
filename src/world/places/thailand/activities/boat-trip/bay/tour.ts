@@ -1,10 +1,10 @@
 // The big white tour boat, greybox: it cruises a slow loop round the middle of the bay and leaves a wake behind it.
 // Cross the wake fast and the longtail hops off it like a ramp. It's a soft wall too (boing), and toots when tapped.
 import { Group } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
-import type { Particles } from '../../../engine/particles'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
+import type { Particles } from '../../../../../engine3d/particles'
 import { TOUR } from './layout'
 
 /** A ridge of its wake: where, which way the boat was going, and when. */

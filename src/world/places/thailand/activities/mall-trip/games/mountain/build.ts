@@ -4,9 +4,9 @@
 // pink mat, the monkeys' rock and ledge, and a flag on the rail for each round. The holds are made one by one
 // (golden.ts places them for each round).
 import { CatmullRomCurve3, Group, MeshBasicMaterial, Mesh, TubeGeometry, Vector3, type BufferGeometry, type Curve } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { bake, merge, P, solid } from '../../../../engine/geo'
-import { PAL } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { bake, merge, P, solid } from '../../../../../../engine3d/geo'
+import { PAL } from '../../../../../../engine3d/toon'
 import { trough } from '../../harborland/build'
 import { BANDS, BELL, CONE, ELEPHANTS, FLAG_A, HOLD_COLORS, MAT, MONKEYS, onCone, rAt, SLIDE_A, slidePath, WALL_Z, type HoldColor } from './layout'
 

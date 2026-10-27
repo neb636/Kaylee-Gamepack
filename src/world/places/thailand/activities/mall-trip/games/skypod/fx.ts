@@ -2,7 +2,7 @@
 // the finale's confetti, puffs off the springy mat. (Floaters is copied from Little Land's fx.ts, so each mini game
 // stays in its own folder.)
 import { Color, DynamicDrawUsage, InstancedMesh, Matrix4, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
-import type { Bag } from '../../../../engine/dispose'
+import type { Bag } from '../../../../../../engine3d/dispose'
 
 const m = new Matrix4()
 const q = new Quaternion()

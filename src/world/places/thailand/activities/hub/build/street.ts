@@ -6,8 +6,8 @@
 // (Sa-nguan hardware), and its Chinese name 源成 between little red plaques, and a turquoise step along the row with
 // yellow steps up at the end.
 import { BufferGeometry, CanvasTexture, CatmullRomCurve3, Group, Mesh, MeshToonMaterial, PlaneGeometry, SRGBColorSpace, TubeGeometry, Vector3 } from 'three'
-import { P, solidMix, type V3 } from '../../../engine/geo'
-import { PAL, toon, toonGradient } from '../../../engine/toon'
+import { P, solidMix, type V3 } from '../../../../../engine3d/geo'
+import { PAL, toon, toonGradient } from '../../../../../engine3d/toon'
 import { DIM } from '../layout'
 import { part, poke, scenery, type Kit } from './kit'
 

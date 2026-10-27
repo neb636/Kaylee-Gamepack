@@ -10,9 +10,9 @@
 // And the drop-off in front (buildDropOff): the road with its markings, Thai painted kerbs (red and white; yellow and
 // white where a car may stop to let people out), a zebra crossing, a turning circle by the river, lamps, hedges.
 import { ExtrudeGeometry, Group, Path, Shape, Vector2, type BufferGeometry } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { bake, merge, P, solid } from '../../engine/geo'
-import { PAL } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { bake, merge, P, solid } from '../../../../engine3d/geo'
+import { PAL } from '../../../../engine3d/toon'
 
 /** Where the parts are (meters): the ground floor's glass front, the sign's letters, the crown's tip. */
 export const ICON = {

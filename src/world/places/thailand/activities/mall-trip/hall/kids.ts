@@ -5,7 +5,7 @@
 import type { Curve, Vector3 } from 'three'
 import { Vector3 as V } from 'three'
 import type { Look } from '../../../characters/looks'
-import type { Bag } from '../../../engine/dispose'
+import type { Bag } from '../../../../../engine3d/dispose'
 import { KID_LOOKS, Racer } from '../games/race/racer'
 
 export type Move = { walk: [number, number, number] } | { hop: [number, number, number]; dur?: number; arc?: number } | { slide: Curve<Vector3>; speed: number } | { wait: number } | { cheer: number }

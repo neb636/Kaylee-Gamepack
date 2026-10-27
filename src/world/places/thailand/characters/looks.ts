@@ -1,20 +1,15 @@
 // How each of Kaylee's family looks as a toy animal: Dad's picks from the lineup (2026-10-17: column A, so kids share
 // their parent's animal, and Kaylee's lilac unicorn); later Dad made Jum a chubby pink elephant and Mommy a bit rounder,
 // and gave the big cousins (Gan, Ken, BB) phones they never look up from. The concepts are in planning/around-the-world/thailand/lineup.webp;
-// characters/animal.ts builds them in 3D. The vet's patients at HarborLand (a puppy, a pony, a baby elephant) are toy
+// engine3d/characters/animal.ts builds them in 3D. The vet's patients at HarborLand (a puppy, a pony, a baby elephant) are toy
 // animals too (PATIENT_LOOKS). Pure data (no three.js).
+import type { Look, Wearable } from '../../../engine3d/characters/look'
 import type { Slot } from './style'
 
-export type Species = 'unicorn' | 'panda' | 'elephant' | 'fox' | 'buffalo' | 'penguin' | 'hornbill' | 'puppy' | 'pony' | 'monkey'
-export type Outfit = 'tee' | 'dress' | 'polo' | 'blouse' | 'shirt'
-/** What Kaylee can wear on a trip, from her suitcase (or Mommy's spare sun hat if she packed none), or at HarborLand
- *  (the vet's blue scrubs and cap, the cafe's apron and chef's hat, the barber's smock, Muay Thai's boxing gloves and red
- *  headband, the mongkhon): Avatar.wear. */
-export type Wearable = 'sunhat' | 'spare-hat' | 'sunglasses' | 'floaties' | 'scrubs' | 'scrub-cap' | 'apron' | 'chef-hat' | 'smock' | 'gloves' | 'mongkhon' | 'ngob'
-/** The ones any character can be dressed in (the lab's chips). The rice farm's `ngob` is built by the farm itself and
- *  handed to Avatar.attach, so it isn't here. */
-export const WEARABLES: readonly Wearable[] = ['sunhat', 'spare-hat', 'sunglasses', 'floaties', 'scrubs', 'scrub-cap', 'apron', 'chef-hat', 'smock', 'gloves', 'mongkhon']
-export type Extra = 'cane' | 'glasses' | 'moustache' | 'cap' | 'officer-cap' | 'round-glasses' | 'scarf' | 'bib' | 'pigtails' | 'tuft' | 'phone' | Exclude<Wearable, 'ngob'>
+// The shapes a toy animal comes in live with the shared rig (engine3d/characters/look.ts): re-exported here, so the
+// family's code keeps importing them from one place.
+export type { Extra, Look, Outfit, Species, Wearable } from '../../../engine3d/characters/look'
+export { WEARABLES } from '../../../engine3d/characters/look'
 
 /** The spots on Kaylee a thing can take: her look's five (style.ts) and the two only a costume uses (boxing gloves on
  *  her hooves, floaties on her arms). */
@@ -40,47 +35,6 @@ export const SPOTS_OF: Record<Wearable, readonly Spot[]> = {
 /** Hats that come off for a wai (into her hooves, then back on). The mongkhon never does: it's blessed, and stays on
  *  for the wai kru. */
 export const HATS: readonly Wearable[] = ['sunhat', 'spare-hat', 'scrub-cap', 'chef-hat', 'ngob']
-
-export interface Look {
-  species: Species
-  /** Meters, to the top of the head (ears and horns stick up past it). Kaylee is 1.0. */
-  height: number
-  /** How round the body is (1 = the usual chibi build; Mommy 1.15, Jum 1.25). */
-  chub?: number
-  /** Main fur or feathers. */
-  fur: string
-  /** Muzzle, face, belly, paws: the light color. */
-  light: string
-  /** The second color: hooves, panda patches, penguin back, beak. */
-  dark: string
-  /** Inside the ears. */
-  ear?: string
-  /** Unicorn (or pony) mane and tail, in order. */
-  mane?: string[]
-  /** Unicorn mane length: short (Daddy), to the shoulders, or long and flowing (Mommy). */
-  hair?: 'short' | 'medium' | 'long'
-  outfit?: {
-    kind: Outfit
-    color: string
-    shorts?: string
-    /** A scalloped lace collar in this color and a pleated front (Joy's white blouse). */
-    lace?: string
-    /** Flowers printed all over, in these colors, with green leaves and an open camp collar (Bird's party shirt). */
-    print?: string[]
-  }
-  /** The real person's hair on their animal (Dad's photos, 2026-10-24), so Kaylee knows who's who: a straight cut to the
-   *  shoulders parted in the middle (Joy), or short thick hair that sticks up in spikes (Bird). */
-  hairdo?: { style: 'bob' | 'spiky'; color: string }
-  /** A big smile showing the top teeth (Joy): it stretches when they talk. */
-  smile?: 'teeth'
-  /** A fox's cheeks as flatter, smaller mounds on the face, this big (Joy 0.8); without it, the usual round fluffy ones. */
-  cheeks?: number
-  extras?: Extra[]
-  /** Lashes on the eyes. */
-  lashes?: boolean
-  /** A big open happy mouth instead of a small smile. */
-  open?: boolean
-}
 
 const FOX = { species: 'fox' as const, fur: '#FF9A4D', light: '#FFF1E2', dark: '#2B2330', ear: '#FFE6CC' }
 const BUFFALO = { species: 'buffalo' as const, fur: '#94A0C8', light: '#DCD8EE', dark: '#4C4F6B', ear: '#FFB8CC' }

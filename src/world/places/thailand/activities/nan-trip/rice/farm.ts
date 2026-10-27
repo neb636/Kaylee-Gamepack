@@ -1,4 +1,4 @@
-// Sapan's little rice farm, modeled in code in the house's toon look (engine/geo.ts parts), from Dad's Animal Crossing
+// Sapan's little rice farm, modeled in code in the house's toon look (engine3d/geo.ts parts), from Dad's Animal Crossing
 // pictures: two levels of ground with thick grass lips over sandy cut sides, four square paddies sunk into them (cracked
 // mud floors, water that rises and shines), the channel running between them from a bamboo pipe off the hill, down the
 // step and under the boardwalk, a wooden gate for each paddy, the plank boardwalk and bridge, the stairs, the scarecrow
@@ -7,9 +7,9 @@
 // Stop Time Cafe up on it, Sapan's rice steps on the valley's sides (what the deck looks out at), low clouds drifting
 // round them, and the far mountains all the way round.
 import { BackSide, BufferAttribute, CanvasTexture, Color, CylinderGeometry, Euler, ExtrudeGeometry, Group, Matrix4, Mesh, MeshBasicMaterial, Path, PlaneGeometry, Quaternion, RepeatWrapping, RingGeometry, Shape, SRGBColorSpace, Vector2, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { bake, blobShadow, merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { bake, blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import {
   BAMBOO,
   BANANA,

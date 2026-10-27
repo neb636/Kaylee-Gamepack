@@ -3,10 +3,10 @@
 // the patient never wears it (on the tray the whole thing is a toy to grab: tools.ts). It pops onto her while she
 // holds the chest piece and pops off when it's back on the tray.
 import { Group, Vector3, type Object3D } from 'three'
-import type { Rig } from '../../../../characters/animal'
-import type { Bag } from '../../../../engine/dispose'
-import { P, solid } from '../../../../engine/geo'
-import { PAL } from '../../../../engine/toon'
+import type { Rig } from '../../../../../../engine3d/characters/animal'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { P, solid } from '../../../../../../engine3d/geo'
+import { PAL } from '../../../../../../engine3d/toon'
 import { Cord } from './cord'
 
 const STEEL = '#D8D2E6'

@@ -3,7 +3,7 @@
 // target with its size in pixels (red when it's under 64 px or its middle is under the top bar).
 import { useEffect, useRef } from 'react'
 import { Vector3 } from 'three'
-import { camLab } from '../../engine/camLab'
+import { camLab } from '../../engine3d/camLab'
 import type { Guide } from './link'
 
 /** Smallest tap target in a 3D scene (AGENTS.md design rule 3). */

@@ -3,7 +3,7 @@
 // white glints that twinkle (drifting downstream in the channel), and the ripple rings Kaylee leaves as she wades
 // (shared by every water surface: a ring she starts in one paddy spreads only where there's water to draw it on).
 import { Color, Mesh, PlaneGeometry, ShaderMaterial, Vector4, type ColorRepresentation } from 'three'
-import type { Bag } from '../../../engine/dispose'
+import type { Bag } from '../../../../../engine3d/dispose'
 
 const RIPPLES = 12
 

@@ -7,9 +7,9 @@
 // the road to the pier (the boat trip's fork, plan: thailand/baan-chang.html). It's scenery: she picks on Daddy's card
 // of postcards (WhereTo.tsx), which has room for more places than a signpost has for boards.
 import { Group } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { merge, P, solid, type V3 } from '../../engine/geo'
-import { PAL } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid, type V3 } from '../../../../engine3d/geo'
+import { PAL } from '../../../../engine3d/toon'
 import { buildSongthaew, type Songthaew } from '../vehicles/songthaew'
 
 const TILE = '#FF8A4D'

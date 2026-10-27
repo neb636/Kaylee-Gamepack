@@ -13,9 +13,9 @@
 // the top, follows her down, then the pit. Then round again (after the third, the 🛝 shows and she can keep racing).
 import { Color, IcosahedronGeometry, OctahedronGeometry, Vector3, type Group, type Object3D, type WebGLRenderer } from 'three'
 import { bell, clamp, wobble } from '../../../../../../../sdk'
-import type { AnchorInfo } from '../../../../engine/Anchors'
-import type { Shot } from '../../../../engine/camera'
-import { PAL } from '../../../../engine/toon'
+import type { AnchorInfo } from '../../../../../../engine3d/Anchors'
+import type { Shot } from '../../../../../../engine3d/camera'
+import { PAL } from '../../../../../../engine3d/toon'
 import { L } from '../../../../lines'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../../trip/legs/stage'
 import { BallPit, Floaters } from './fx'

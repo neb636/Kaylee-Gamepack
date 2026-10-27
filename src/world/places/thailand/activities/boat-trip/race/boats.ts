@@ -3,11 +3,11 @@
 // outboard motor (he drops banana peels behind him). Their crews are the bay's own toy animals; each crew reacts to the
 // race: a cheer when they pass her, a "whoa" when they spin out on a banana, a wave at the finish.
 import { Group, Vector3, type BufferGeometry } from 'three'
-import { buildAnimal } from '../../../characters/animal'
-import { FaceLife } from '../../../characters/face'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import { buildAnimal } from '../../../../../engine3d/characters/animal'
+import { FaceLife } from '../../../../../engine3d/characters/face'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import type { Feel } from '../../../trip/drive'
 import { buildLongtail, type Longtail } from '../../../trip/vehicles/longtail'
 import type { Vehicle } from '../../../trip/vehicles/vehicle'

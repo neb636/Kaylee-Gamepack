@@ -1,11 +1,11 @@
-// The cafe's kitchen, modeled in code in the house's toon look (engine/geo.ts parts): white tiles behind, the front
+// The cafe's kitchen, modeled in code in the house's toon look (engine3d/geo.ts parts): white tiles behind, the front
 // counter Kaylee works at, the back counter and the shelf where finished drinks line up, the ceiling beam the blender
 // splats, and the things to poke: the fridge (its door swings, the bottles clink), the coffee machine (it steams),
 // the bread baskets (the pretzels bounce), the cake stand (it spins) and the tea set (she pours Mommy a cup).
 import { Group, Mesh, MeshBasicMaterial, type ShaderMaterial } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P, solid } from '../../../../engine/geo'
-import { PAL } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../../engine3d/geo'
+import { PAL } from '../../../../../../engine3d/toon'
 import { BACK, BEAM, BREAD, CAKE, COFFEE, COUNTER, FRIDGE, ROOM, SHELF, TEA } from './layout'
 import { liquidMaterial } from './liquid'
 

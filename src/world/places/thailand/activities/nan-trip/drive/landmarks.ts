@@ -9,9 +9,9 @@
 // at the edge, a bench, a coin telescope, pots of pink bougainvillea), Nan town's market stalls, and the three-step
 // waterfall down the mountain beside the sky road. Each faces +z (the road).
 import { Group, type BufferGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid, solidMix } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid, solidMix } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import type { HeightField } from '../../../trip/road/build'
 import type { Road } from '../../../trip/road/road'
 import type { LandmarkKind } from './roads'

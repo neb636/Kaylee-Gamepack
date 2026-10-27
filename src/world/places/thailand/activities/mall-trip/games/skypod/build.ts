@@ -3,9 +3,9 @@
 // are HTML, laid over it by wall.ts); the springy mat in front; the big speaker; the rocket on top. Two of everything
 // that depends on the screen (the wall is wide with an arch of pods, or tall with a three-by-three): wall.ts shows one.
 import { Group, type BufferGeometry } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P, solid } from '../../../../engine/geo'
-import { PAL } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../../engine3d/geo'
+import { PAL } from '../../../../../../engine3d/toon'
 import { boardSpot, matX, moonSpot, podSpots, rocketSpot, speakerSpot, wallSize, BEZEL_R, KAYLEE_Z } from './layout'
 
 /** The springy mat's top (Kaylee and Daddy stand on it). */

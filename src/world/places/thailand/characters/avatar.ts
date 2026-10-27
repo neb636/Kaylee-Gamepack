@@ -6,13 +6,13 @@
 // (sitting down, hopping onto the mattress, each stair) is a short tween with an arc.
 import { Box3, Euler, Group, Vector3, type Object3D } from 'three'
 import { bell, clamp, span, wobble } from '../../../../sdk'
-import type { Bag } from '../engine/dispose'
-import { Particles } from '../engine/particles'
-import type { XZ } from '../engine/nav'
-import { TUNE } from '../engine/tune'
-import { buildAnimal, buildWorn, Wind, type Rig } from './animal'
+import type { Bag } from '../../../engine3d/dispose'
+import { Particles } from '../../../engine3d/particles'
+import type { XZ } from '../../../engine3d/nav'
+import { THAI_TUNE } from '../tune'
+import { buildAnimal, buildWorn, Wind, type Rig } from '../../../engine3d/characters/animal'
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { FaceLife } from './face'
+import { FaceLife } from '../../../engine3d/characters/face'
 import { HATS, LOOKS, SPOTS_OF, type Spot, type Wearable } from './looks'
 import { buildModelRig, kayleeModel } from './model'
 import { BARE, currentLook, itemById, paintOf, PAINT_PARTS, SLOTS, type PaintColor, type PaintPart, type ShowPose, type Slot, type Style } from './style'
@@ -693,7 +693,7 @@ export class Avatar implements Character {
     this.life.update(dt)
     this.wind.update(this.chibi, dt, t)
     // Wings fold when she sits, lies, walks or climbs, spread when she stands still, flap when she hops.
-    const walkK = Math.min(1, this.speed / TUNE.walkSpeed)
+    const walkK = Math.min(1, this.speed / THAI_TUNE.walkSpeed)
     const fold = Math.max(this.sitK, this.pose === 'lie' ? 1 : 0, walkK, this.tuck ? 1 : 0)
     if (this.showing) this.show(dt)
     this.dress.update(dt, { fold, flap: this.tweens.length > 0 || this.pose === 'bounce' || this.showing?.kind === 'flutter', wai: this.pose === 'wai', walk: walkK > 0.1 })
@@ -737,8 +737,8 @@ export class Avatar implements Character {
       const left = d + this.pathLength()
       // Long trips (across the house to the stairs) turn into a happy run, up to 1.6x.
       const run = 1 + clamp((left - 4) / 6, 0, 0.6)
-      const max = TUNE.walkSpeed * this.pace * run * clamp(left / 0.45, 0.35, 1)
-      this.speed = this.speed > max ? max : Math.min(max, this.speed + ((TUNE.walkSpeed * this.pace) / 0.15) * dt)
+      const max = THAI_TUNE.walkSpeed * this.pace * run * clamp(left / 0.45, 0.35, 1)
+      this.speed = this.speed > max ? max : Math.min(max, this.speed + ((THAI_TUNE.walkSpeed * this.pace) / 0.15) * dt)
       const move = this.speed * dt
       if (d <= Math.max(move, 0.02)) {
         p.x = tx
@@ -763,7 +763,7 @@ export class Avatar implements Character {
     this.yawVel += (220 * diff - 28 * this.yawVel) * dt
     this.yaw += this.yawVel * dt
     // Gait phase: one hop per step, faster the faster she goes.
-    if (this.speed > 0.01) this.phase += Math.PI * TUNE.stepsPerSecond * (this.speed / TUNE.walkSpeed) * dt
+    if (this.speed > 0.01) this.phase += Math.PI * THAI_TUNE.stepsPerSecond * (this.speed / THAI_TUNE.walkSpeed) * dt
     else this.phase = 0
     this.settle = Math.min(1, this.settle + dt / 0.35)
     this.flop = Math.min(1, this.flop + dt / 0.5)
@@ -884,10 +884,10 @@ export class Avatar implements Character {
     let lean = 0
     let roll = 0
     let headPitch = 0
-    const walkK = this.speed / TUNE.walkSpeed
+    const walkK = this.speed / THAI_TUNE.walkSpeed
     if (walkK > 0.01) {
       const s = Math.abs(Math.sin(this.phase))
-      y = s * TUNE.hop
+      y = s * THAI_TUNE.hop
       sy *= 1 + 0.06 * (s - 0.5) * 2 * walkK
       lean = 0.14 * walkK
     }

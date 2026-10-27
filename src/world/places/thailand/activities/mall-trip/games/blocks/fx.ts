@@ -2,7 +2,7 @@
 // star, and puffs of mat dust where a brick lands. (Floaters is copied from the race's fx.ts, so each mini game stays in
 // its own folder.)
 import { Color, DynamicDrawUsage, InstancedMesh, Matrix4, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
-import type { Bag } from '../../../../engine/dispose'
+import type { Bag } from '../../../../../../engine3d/dispose'
 
 const m = new Matrix4()
 const q = new Quaternion()

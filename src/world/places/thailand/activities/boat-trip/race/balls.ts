@@ -3,9 +3,9 @@
 // slowly back to their places for the next lap (one knocked far away drops back in from the sky). Just for fun: they
 // never slow her down.
 import { BackSide, CanvasTexture, Group, Mesh, MeshBasicMaterial, Quaternion, SphereGeometry, Vector3 } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { PAL } from '../../../engine/toon'
-import { swell } from '../../../engine/water'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { PAL } from '../../../../../engine3d/toon'
+import { swell } from '../../../../../engine3d/water'
 import { BALLS, halfAt, locate, spotAt } from './track'
 
 const R = 1.4

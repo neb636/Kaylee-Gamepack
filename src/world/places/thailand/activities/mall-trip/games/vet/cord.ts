@@ -2,9 +2,9 @@
 // that is rebuilt every frame in place, so it stretches from Kaylee's ears and chest to wherever she holds the chest
 // piece. One geometry feeds both the toon mesh and its outline (no welding needed: a tube's normals are already smooth).
 import { BufferAttribute, BufferGeometry, CatmullRomCurve3, Color, Group, Mesh, Vector3 } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { outlineMaterial } from '../../../../engine/outline'
-import { toon } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { outlineMaterial } from '../../../../../../engine3d/outline'
+import { toon } from '../../../../../../engine3d/toon'
 
 const SEG = 18
 const SIDES = 6

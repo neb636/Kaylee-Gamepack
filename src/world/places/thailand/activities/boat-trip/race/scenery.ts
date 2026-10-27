@@ -14,9 +14,9 @@
 // - The waterfall pours off the big rock inside the hairpin at the heart's point.
 // - Hot-air balloons drift overhead; the far towers stand in the haze beyond the ring.
 import { CanvasTexture, DoubleSide, ExtrudeGeometry, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, RepeatWrapping, RingGeometry, Shape, ShapeGeometry, SphereGeometry, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { bake, merge, P, solid, solidMix } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { bake, merge, P, solid, solidMix } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import type { Rock } from '../bay/layout'
 import { foamRing, JUNGLE, JUNGLE_DARK, ROCK, ROCK_DARK, SAND, tower } from '../bay/scenery'
 import { DOLPHIN_RUN, ELEPHANTS, FALLS, FORK, GROTTO, halfAt, HALF, HEART_S, locate, PODIUM, SAMPLES, spotAt, STAND } from './track'

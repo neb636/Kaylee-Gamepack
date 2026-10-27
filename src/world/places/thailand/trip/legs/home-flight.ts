@@ -5,10 +5,10 @@
 // Looks toward -z.
 import { BackSide, BufferAttribute, Color, Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3 } from 'three'
 import { bell } from '../../../../../sdk'
-import type { Shot } from '../../engine/camera'
-import type { Bag } from '../../engine/dispose'
-import { merge, P, solid } from '../../engine/geo'
-import { PAL } from '../../engine/toon'
+import type { Shot } from '../../../../engine3d/camera'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../engine3d/geo'
+import { PAL } from '../../../../engine3d/toon'
 import { buildPlaneOutside } from '../vehicles/plane'
 
 /** Where the set is in the house's world: far below the street, out of every other camera's sight. */

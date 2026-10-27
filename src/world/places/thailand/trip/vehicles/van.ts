@@ -4,9 +4,9 @@
 // sliding door is on the left, the curb side. Big windows all round, so whoever is inside shows. Faces +z. The roof is
 // high enough for Daddy's ears with everyone sitting up (seated, his head comes to about 2.45 m).
 import { Group, Mesh, MeshBasicMaterial } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { merge, P, solid, type V3 } from '../../engine/geo'
-import { PAL } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid, type V3 } from '../../../../engine3d/geo'
+import { PAL } from '../../../../engine3d/toon'
 
 const BODY = '#FBFAFF'
 const TRIM = '#D9D5E6'

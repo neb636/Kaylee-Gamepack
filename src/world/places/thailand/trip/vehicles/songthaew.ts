@@ -3,9 +3,9 @@
 // one is coral pink with white and butter stripes. The family sit on the far bench (facing the camera at the curb), the
 // suitcase rides on the near one. Faces +x (it drives along the road).
 import { Group } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { merge, P, solid } from '../../engine/geo'
-import { PAL } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../engine3d/geo'
+import { PAL } from '../../../../engine3d/toon'
 
 const BODY = '#FF6F8E'
 const STRIPE = PAL.cream

@@ -2,9 +2,9 @@
 // branches, the peaked roof, two tall stools, a high table with the pink milk, Daddy's coffee and the kratip of sticky
 // rice she threshed, and the wind chime. Built deck-local (its railing toward -z), placed and turned on the hill by DECK.
 import { Group, Mesh, type BufferGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { CHIME, DECK, HIGH_TABLE, RAIL_Z, STOOLS } from './layout'
 
 const WOOD = '#B98A64'

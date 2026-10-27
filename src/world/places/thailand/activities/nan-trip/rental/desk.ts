@@ -7,11 +7,11 @@
 // grey-lavender sky that drifts, and a tiny plane that crosses it now and then. And the things she uses: the key fob,
 // her pink suitcase, Mommy's bag and Daddy's backpack.
 import { BackSide, CanvasTexture, CylinderGeometry, Group, Mesh, MeshBasicMaterial, RepeatWrapping, SRGBColorSpace } from 'three'
-import { buildAnimal, type Rig } from '../../../characters/animal'
+import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import type { Look } from '../../../characters/looks'
-import type { Bag } from '../../../engine/dispose'
-import { blobShadow, merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { buildSuitcase } from '../../../trip/props'
 import { BELL, CLERK_AT, COUNTER, MAPS, ORCHIDS, POSTER, WALL } from './layout'
 

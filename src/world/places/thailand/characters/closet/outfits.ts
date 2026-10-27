@@ -7,9 +7,9 @@
 // with a heart on the bib, and a chut thai: what Thai kids wear for a school festival, a long purple pha sin skirt with
 // gold bands and a sash (sabai) over one shoulder.
 import type { BufferGeometry } from 'three'
-import type { Worn } from '../animal'
-import type { Bag } from '../../engine/dispose'
-import { P } from '../../engine/geo'
+import type { Worn } from '../../../../engine3d/characters/animal'
+import type { Bag } from '../../../../engine3d/dispose'
+import { P } from '../../../../engine3d/geo'
 import { group, onArm, onTunic, shell, sleeve, tunic, ZC } from '../model-wear'
 import { heart, star } from './fit'
 

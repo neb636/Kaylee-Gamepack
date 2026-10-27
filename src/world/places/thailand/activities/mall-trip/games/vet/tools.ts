@@ -2,9 +2,9 @@
 // the thermometer's bulb, the tweezers' points, the soap's middle) and the rest of it above, so wherever she holds it,
 // the tip is where it works. On the tray they stand up facing her; held, they lean a little.
 import { Group, Mesh, MeshBasicMaterial } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P, solid } from '../../../../engine/geo'
-import { PAL } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../../engine3d/geo'
+import { PAL } from '../../../../../../engine3d/toon'
 import { TOOL_SCALE, type ToolId, type TrayItem } from './layout'
 
 const STEEL = '#D8D2E6'

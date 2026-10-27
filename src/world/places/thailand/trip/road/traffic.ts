@@ -4,9 +4,9 @@
 // crash into her: if she drifts onto their side, they pull onto the verge, stop and toot a tune until she's past.
 // Every one of them reacts to a tap. Pure behavior plus toy models; the drive (activities/nan-trip/drive/) says when.
 import { Group, MeshBasicMaterial, Vector3, Mesh } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { blobShadow, merge, P, solid } from '../../engine/geo'
-import { PAL } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { blobShadow, merge, P, solid } from '../../../../engine3d/geo'
+import { PAL } from '../../../../engine3d/toon'
 import { buildSongthaew } from '../vehicles/songthaew'
 import type { HeightField } from './build'
 import type { Road } from './road'

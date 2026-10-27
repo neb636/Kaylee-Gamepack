@@ -4,9 +4,9 @@
 // longtail glides in, and the race begins (BoatTrip.tsx swaps worlds behind a checkered flag). The gate stays open
 // after: through it again is a rematch. Once she has won, her trophy rides in the boat's bow.
 import { DoubleSide, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3, type BufferGeometry } from 'three'
-import type { AnchorInfo } from '../../../engine/Anchors'
-import { merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { AnchorInfo } from '../../../../../engine3d/Anchors'
+import { merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { L } from '../../../lines'
 import { sfx } from '../../../sfx'
 import { CARGO } from '../../../trip/vehicles/longtail'

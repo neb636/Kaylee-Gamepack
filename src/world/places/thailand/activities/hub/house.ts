@@ -16,19 +16,19 @@ import { Avatar } from '../../characters/avatar'
 import { formatLook } from '../../characters/style'
 import { FAMILY, type FamilyMember } from '../../characters/family'
 import { Member } from '../../characters/member'
-import type { AnchorInfo } from '../../engine/Anchors'
-import { CameraRig, type Shot } from '../../engine/camera'
-import { Bag } from '../../engine/dispose'
-import { NavGrid, type XZ } from '../../engine/nav'
-import { TapMarker } from '../../engine/marker'
-import { setHullHighlight, setOutlineResolution } from '../../engine/outline'
-import { applyBands, makeLights, PAL } from '../../engine/toon'
-import { TUNE } from '../../engine/tune'
-import type { World3D } from '../../engine/View3D'
+import type { AnchorInfo } from '../../../../engine3d/Anchors'
+import { CameraRig, type Shot } from '../../../../engine3d/camera'
+import { Bag } from '../../../../engine3d/dispose'
+import { NavGrid, type XZ } from '../../../../engine3d/nav'
+import { TapMarker } from '../../../../engine3d/marker'
+import { setHullHighlight, setOutlineResolution } from '../../../../engine3d/outline'
+import { applyBands, makeLights, PAL } from '../../../../engine3d/toon'
+import { THAI_TUNE } from '../../tune'
+import type { World3D } from '../../../../engine3d/View3D'
 import { say } from '../../../../../sdk'
 import { L } from '../../lines'
 import { sfx } from '../../sfx'
-import { snapPhoto } from '../../engine/photo'
+import { snapPhoto } from '../../../../engine3d/photo'
 import { noticeLine } from './notice'
 import { Gecko } from './build/gecko'
 import { buildDivider, DIVIDER_BASE } from './build/divider'
@@ -746,7 +746,7 @@ export class House implements World3D {
     this.rig.setShot(this.shot(), true)
   }
 
-  /** The ?debug panel changed TUNE: re-apply the light bands, the outline width and the camera fit. */
+  /** The ?debug panel changed TUNE or THAI_TUNE: re-apply the light bands, the outline width and the camera fit. */
   retune() {
     applyBands()
     setOutlineResolution(this.w, this.h)
@@ -778,20 +778,20 @@ export class House implements World3D {
       return {
         center: new Vector3(clamp(k.x * 0.6, -5, 5), 2.3 - 0.6 * wide, 0.9),
         half: new Vector3(2.6 + 3.2 * wide, 2.0, 1.4),
-        yaw: TUNE.streetYaw,
-        pitch: TUNE.streetPitch,
+        yaw: THAI_TUNE.streetYaw,
+        pitch: THAI_TUNE.streetPitch,
         minDist: 6,
       }
     }
     const fy = this.kaylee.floor * DIM.g0
-    const D = TUNE.insideFitD
+    const D = THAI_TUNE.insideFitD
     const ahead = this.climbing ? 0 : 0.7
     const cz = clamp(k.z - 0.4 + this.vel.z * ahead, DIM.back + D / 2 - 0.4, -D / 2 + 0.6)
     return {
       center: new Vector3(clamp(k.x * 0.3 + this.vel.x * ahead * 0.3, -0.7, 0.7), fy + 0.8, cz),
-      half: new Vector3(TUNE.insideFitW / 2, 0.9, D / 2),
-      yaw: TUNE.insideYawTall + (TUNE.insideYawWide - TUNE.insideYawTall) * wide,
-      pitch: TUNE.insidePitch,
+      half: new Vector3(THAI_TUNE.insideFitW / 2, 0.9, D / 2),
+      yaw: THAI_TUNE.insideYawTall + (THAI_TUNE.insideYawWide - THAI_TUNE.insideYawTall) * wide,
+      pitch: THAI_TUNE.insidePitch,
       minDist: 6,
     }
   }

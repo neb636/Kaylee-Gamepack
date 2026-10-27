@@ -5,7 +5,7 @@
 import type { PerspectiveCamera, Vector3 } from 'three'
 import type { Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
-import type { Shot } from '../../../engine/camera'
+import type { Shot } from '../../../../../engine3d/camera'
 import type { Member } from '../../../characters/member'
 import type { Driver } from '../../../trip/drive'
 import type { Vehicle } from '../../../trip/vehicles/vehicle'

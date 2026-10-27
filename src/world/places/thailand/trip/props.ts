@@ -3,9 +3,9 @@
 // stairs, Aunty Sri's van, the x-ray belt). Each prop is one merged toy (two for the fan, whose blades spin), with an
 // ink line round its main shapes and none round the little shines, dots and blushes.
 import { Group, type BufferGeometry } from 'three'
-import type { Bag } from '../engine/dispose'
-import { P, solidMix } from '../engine/geo'
-import { PAL } from '../engine/toon'
+import type { Bag } from '../../../engine3d/dispose'
+import { P, solidMix } from '../../../engine3d/geo'
+import { PAL } from '../../../engine3d/toon'
 
 const TAU = Math.PI * 2
 const SHINE = '#FFFFFF'

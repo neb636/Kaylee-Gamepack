@@ -1,14 +1,14 @@
-// The mushrooms, the bags they grow from and the basket, modeled in code in the house's toon look (engine/geo.ts parts).
+// The mushrooms, the bags they grow from and the basket, modeled in code in the house's toon look (engine3d/geo.ts parts).
 // An oyster mushroom is a fan: a flat round cap like a little shelf with a ruffled edge (darker in the middle, paler at
 // the rim), pale gills under it, on a short stem. A bag's clump is seven of them fanning out of its mouth in layers
 // (each clump one toy shape that grows as a whole); in the basket and on the pizza a mushroom is a single fan. Each
 // color's shapes are built once and shared by every clump of that color. A bag is a plump sack of sawdust lying on the
 // rack, gathered into a neck with a plastic collar round its mouth.
 import { Color, Euler, Group, Mesh, Quaternion, SphereGeometry, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { bake, merge, P, solid, type PartOpts, type V3 } from '../../../engine/geo'
-import { makeHull } from '../../../engine/outline'
-import { toon } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { bake, merge, P, solid, type PartOpts, type V3 } from '../../../../../engine3d/geo'
+import { makeHull } from '../../../../../engine3d/outline'
+import { toon } from '../../../../../engine3d/toon'
 import { BAG_LEN, BAG_R, BASKET_R, type BagKind, type ShroomColor } from './layout'
 
 export const SHROOM: Record<ShroomColor, { cap: string; mid: string; gill: string; stem: string }> = {

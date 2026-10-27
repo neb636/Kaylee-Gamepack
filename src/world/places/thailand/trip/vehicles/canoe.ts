@@ -1,9 +1,9 @@
 // The yellow sea canoe, greybox: the hidden lagoons are only reached by little boats through low caves (Phang Nga Bay's
 // real canoe trips). Low and drifty. Daddy paddles in front; Kaylee steers from the back, like a canoe's captain.
 import { Group } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { merge, P, solid } from '../../engine/geo'
-import { PAL } from '../../engine/toon'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../engine3d/geo'
+import { PAL } from '../../../../engine3d/toon'
 import type { Feel } from '../drive'
 import type { Vehicle } from './vehicle'
 

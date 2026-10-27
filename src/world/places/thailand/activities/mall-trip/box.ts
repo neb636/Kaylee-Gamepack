@@ -2,8 +2,8 @@
 // band and Agong the panda on the front, the two slices she saved inside. Coming home she carries it to him, and its
 // lid opens (trip/legs/house-plugin.ts, a box trip's gift). Built facing +z, its lid hinged at the back.
 import { Group } from 'three'
-import type { Bag } from '../../engine/dispose'
-import { merge, P, solid } from '../../engine/geo'
+import type { Bag } from '../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../engine3d/geo'
 import type { PizzaId } from './pizza/layout'
 
 const TOPPING: Record<PizzaId, string> = { hawaiian: '#FFD24D', seafood: '#FF8F7A', cheese: '#FFE9A0' }

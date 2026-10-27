@@ -3,9 +3,9 @@
 //   - Blobs stick to a patient (on the body, the head or the paw, so they move with it): suds where she rubs the
 //     soap, the pony's mud, the cream on the puppy's paw. They pop in, and shrink away when washed off.
 import { Color, DynamicDrawUsage, IcosahedronGeometry, InstancedMesh, Matrix4, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry, type ColorRepresentation, type Object3D } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P } from '../../../../engine/geo'
-import { toon } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { merge, P } from '../../../../../../engine3d/geo'
+import { toon } from '../../../../../../engine3d/toon'
 
 const m = new Matrix4()
 const q = new Quaternion()

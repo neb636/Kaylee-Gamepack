@@ -4,9 +4,9 @@
 // away, islands stand in three layers of flat silhouettes fading into the haze, so the bay feels endless. The stops
 // build their own (village.ts, cave.ts, nail.ts).
 import { CylinderGeometry, DoubleSide, Group, Mesh, MeshBasicMaterial, RingGeometry, Shape, ShapeGeometry, type BufferGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { BOUNDS, CAVE_GLOW, BEACH_GLOW, EXIT_GLOW, PIER, PIER_GLOW, RACE_GLOW, RAFT, ROCKS, SHORE_Z, VILLAGE_GLOW, type Rock } from './layout'
 
 export const ROCK = '#C3B8D2'

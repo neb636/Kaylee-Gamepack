@@ -5,9 +5,9 @@
 // moves (the shop doors, the barber's pole, the bricks, the bags, the crocodile's jaw, the sign bulbs, the Sky Pod's
 // buttons) comes back as its own group. The slides come back as curves the kids ride.
 import { CatmullRomCurve3, Group, Mesh, TubeGeometry, Vector3, type BufferGeometry, type Curve } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { bake, merge, P, solid, type V3 } from '../../../engine/geo'
-import { PAL, toon } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { bake, merge, P, solid, type V3 } from '../../../../../engine3d/geo'
+import { PAL, toon } from '../../../../../engine3d/toon'
 import { buildBigFrame, HL, trough, type FrameBuilt } from '../harborland/build'
 import { BACK_Z, BENCH, SIGN_H, ZONE_SIGNS, BLOCKS, BOXING, CROC, DOOR, HALL, LANES, MOUNTAIN, PIT, SHOP_W, SHOPS, SKYPOD, STEPS, TOWN, WALL, type ShopId } from './layout'
 

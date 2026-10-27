@@ -1,10 +1,10 @@
-// The exam room, modeled in code in the house's toon look (engine/geo.ts parts): mint walls, the exam table, a window
+// The exam room, modeled in code in the house's toon look (engine3d/geo.ts parts): mint walls, the exam table, a window
 // into the waiting room (healed patients sit on its bench), and the things to poke: the x-ray box (the patient's bones
 // wag), the parrot on its perch, the cat in its carrier, the treat jar and the scale. Greybox: shapes only.
 import { CanvasTexture, Group, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { merge, P, solid } from '../../../../engine/geo'
-import { PAL } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../../engine3d/geo'
+import { PAL } from '../../../../../../engine3d/toon'
 import type { PatientId } from '../../sections'
 import { BENCH, CABINET, CARRIER, JAR, PARROT, ROOM, SCALE, TABLE, WINDOW, XRAY } from './layout'
 

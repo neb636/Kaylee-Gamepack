@@ -1,25 +1,29 @@
 // ?debug=1: a tuning panel for Dad's iPad and for me. Live frame time and draw calls, where Kaylee is, sliders for the
-// camera, the light bands and the outlines, and a button that copies the tuned numbers (paste them into engine/tune.ts).
+// camera, the light bands and the outlines, and a button that copies the tuned numbers (paste the look's into
+// engine3d/tune.ts and the house's into ../../tune.ts).
 import { useEffect, useState, type RefObject } from 'react'
-import { TUNE, type Tune } from '../../engine/tune'
+import { TUNE } from '../../../../engine3d/tune'
+import { THAI_TUNE } from '../../tune'
 import type { House } from './house'
 
-type NumKey = { [K in keyof Tune]: Tune[K] extends number ? K : never }[keyof Tune]
-const SLIDERS: [NumKey, number, number, number][] = [
-  ['insideYawWide', -10, 60, 1],
-  ['insideYawTall', -10, 60, 1],
-  ['insidePitch', 20, 80, 1],
-  ['insideFitW', 3, 9, 0.1],
-  ['insideFitD', 3, 12, 0.1],
-  ['streetYaw', -30, 30, 1],
-  ['streetPitch', -10, 50, 1],
-  ['fov', 15, 60, 1],
-  ['ambient', 0, 1, 0.01],
-  ['sun', 0, 1, 0.01],
-  ['outline', 0, 3, 0.05],
-  ['walkSpeed', 0.5, 4, 0.1],
-  ['stepsPerSecond', 1, 6, 0.1],
-  ['hop', 0, 0.2, 0.01],
+type Nums = Record<string, number>
+/** The sliders only touch the look's plain numbers (not its bands). */
+const LOOK = TUNE as unknown as Nums
+const SLIDERS: [Nums, string, number, number, number][] = [
+  [THAI_TUNE, 'insideYawWide', -10, 60, 1],
+  [THAI_TUNE, 'insideYawTall', -10, 60, 1],
+  [THAI_TUNE, 'insidePitch', 20, 80, 1],
+  [THAI_TUNE, 'insideFitW', 3, 9, 0.1],
+  [THAI_TUNE, 'insideFitD', 3, 12, 0.1],
+  [THAI_TUNE, 'streetYaw', -30, 30, 1],
+  [THAI_TUNE, 'streetPitch', -10, 50, 1],
+  [LOOK, 'fov', 15, 60, 1],
+  [LOOK, 'ambient', 0, 1, 0.01],
+  [LOOK, 'sun', 0, 1, 0.01],
+  [LOOK, 'outline', 0, 3, 0.05],
+  [THAI_TUNE, 'walkSpeed', 0.5, 4, 0.1],
+  [THAI_TUNE, 'stepsPerSecond', 1, 6, 0.1],
+  [THAI_TUNE, 'hop', 0, 0.2, 0.01],
 ]
 
 export function Debug({ houseRef }: { houseRef: RefObject<House | null> }) {
@@ -39,7 +43,7 @@ export function Debug({ houseRef }: { houseRef: RefObject<House | null> }) {
       {open && (
         <>
           <div style={{ opacity: 0.8, margin: '4px 0' }}>{qa ? `${qa.mode} · ${qa.spot} · floor ${qa.floor} · ${qa.pose}${qa.using ? ` (${qa.using})` : ''} · [${(qa.pos as number[] | undefined)?.join(', ')}]` : ''}</div>
-          {SLIDERS.map(([key, min, max, step]) => (
+          {SLIDERS.map(([tune, key, min, max, step]) => (
             <label key={key} style={{ display: 'grid', gridTemplateColumns: '110px 1fr 44px', gap: 6, alignItems: 'center' }}>
               <span>{key}</span>
               <input
@@ -47,14 +51,14 @@ export function Debug({ houseRef }: { houseRef: RefObject<House | null> }) {
                 min={min}
                 max={max}
                 step={step}
-                value={TUNE[key]}
+                value={tune[key]}
                 onChange={(e) => {
-                  TUNE[key] = Number(e.target.value)
+                  tune[key] = Number(e.target.value)
                   houseRef.current?.retune()
                   tick((n) => n + 1)
                 }}
               />
-              <span>{TUNE[key]}</span>
+              <span>{tune[key]}</span>
             </label>
           ))}
           <label style={{ display: 'grid', gridTemplateColumns: '110px 1fr 44px', gap: 6, alignItems: 'center' }}>
@@ -74,7 +78,7 @@ export function Debug({ houseRef }: { houseRef: RefObject<House | null> }) {
             />
             <span>{TUNE.bands[0][0]}</span>
           </label>
-          <button onClick={() => void navigator.clipboard?.writeText(JSON.stringify(TUNE, null, 2)).catch(() => {})} style={{ marginTop: 6, borderRadius: 8, padding: '4px 10px' }}>
+          <button onClick={() => void navigator.clipboard?.writeText(JSON.stringify({ look: TUNE, house: THAI_TUNE }, null, 2)).catch(() => {})} style={{ marginTop: 6, borderRadius: 8, padding: '4px 10px' }}>
             Copy numbers
           </button>
           {qa?.memory && <div style={{ opacity: 0.7, marginTop: 4 }}>{`geometries ${qa.memory.geometries} · textures ${qa.memory.textures}`}</div>}

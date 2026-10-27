@@ -1,4 +1,4 @@
-// Baan Huanam's mushroom house and its table, modeled in code in the house's toon look (engine/geo.ts parts).
+// Baan Huanam's mushroom house and its table, modeled in code in the house's toon look (engine3d/geo.ts parts).
 // The house: a cozy, dim wooden shed. Rough planks in a few browns with the day shining through the gaps (soft rays
 // slant down into the room), a dripping roof (beads of water on the beams, the misting pipe), the rack of sawdust bags
 // with their collars, spare bags piled on the floor, moss in the damp corners, a bulb on a cord, the bright door, the
@@ -8,11 +8,11 @@
 // going down, the table with its mats, plates and a flower, the pizza board, the clay oven on its stone stand with the
 // woodpile and the peel, and the farmer aunty.
 import { CanvasTexture, CircleGeometry, DoubleSide, Group, Mesh, MeshBasicMaterial, PlaneGeometry, SphereGeometry, SRGBColorSpace, type BufferGeometry } from 'three'
-import { buildAnimal, type Rig } from '../../../characters/animal'
+import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import type { Look } from '../../../characters/looks'
-import type { Bag } from '../../../engine/dispose'
-import { blobShadow, merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { BACK_Z, BAG_R, BAG_Y, BAGS, BEAM_Y, BULB, DOG, DOOR, DRIP, EATERS, FARMER_AT, GECKO, OVEN, PIZZA, PLATE_R, PLATE_Z, RACK, RAIL_Z, SEAT_Z, SEATS, SIGN, TABLE, TX, type EaterId } from './layout'
 import { bagsGeo, COLLAR, SAWDUST } from './shroom'
 

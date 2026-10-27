@@ -7,10 +7,10 @@ import { lineText, stopSpeaking, type Line } from '../../../../sdk'
 import { WEARABLES, type Look } from '../characters/looks'
 import { formatLook, ITEMS, PAINT_COLORS, PAINT_PARTS, PAINTS, paintOf, parseLook, SLOTS, withItem, withPaint, type ShowPose } from '../characters/style'
 import type { Pose } from '../characters/types'
-import { TUNE } from '../engine/tune'
+import { TUNE } from '../../../engine3d/tune'
 import { CAST, GROUPS, linesFor, variantsFor, voiceLabel, type CastEntry, type Variant } from './catalog'
 import { POSES, type Action, type Hideable, type Studio, type StudioView } from './studio'
-import { Field, Icon, IconButton, Section, Segmented, Select, Slider, Toggle, type IconName } from './ui'
+import { Field, Icon, IconButton, Section, Segmented, Select, Slider, Toggle, type IconName } from '../../../labs/ui'
 
 export interface LabApi {
   view: StudioView

@@ -3,8 +3,8 @@
 // arch out and droop, and orange fruit bunches under them), the big mossy boulders (faceted khaki rock, moss on the
 // faces that look up), the gravel's dirt patches and pebbles, and the boardwalk's steel mesh.
 import { BufferAttribute, CanvasTexture, Color, DoubleSide, Euler, IcosahedronGeometry, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, RepeatWrapping, SRGBColorSpace, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { P } from '../../../engine/geo'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { P } from '../../../../../engine3d/geo'
 
 export const FROND = '#7CC98A'
 export const FROND_DARK = '#5DA872'

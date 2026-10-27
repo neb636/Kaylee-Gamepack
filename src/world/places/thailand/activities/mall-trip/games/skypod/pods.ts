@@ -3,8 +3,8 @@
 // the ring's ink outline (the house's outline, instanced, like the barber's mane), and a soft halo behind the lit ones.
 // The wall (wall.ts) says each pod's color, halo and squash every frame; this only draws them.
 import { AdditiveBlending, BackSide, CanvasTexture, Color, DynamicDrawUsage, Group, InstancedMesh, Matrix4, MeshBasicMaterial, PlaneGeometry, Quaternion, ShaderMaterial, SphereGeometry, TorusGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
-import type { Bag } from '../../../../engine/dispose'
-import { PAL, toon } from '../../../../engine/toon'
+import type { Bag } from '../../../../../../engine3d/dispose'
+import { PAL, toon } from '../../../../../../engine3d/toon'
 import { BEZEL_R, DOME_R, PODS, type V3 } from './layout'
 
 const outlineVert = /* glsl */ `

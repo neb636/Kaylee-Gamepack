@@ -2,7 +2,7 @@
 // the wet bags, sparkles when a mushroom pops or swells, crumbs at lunch, the oven's steam. (Copied from the pizza
 // table's Floaters, with see-through mist: each stop stays self-contained.)
 import { Color, DynamicDrawUsage, InstancedMesh, Matrix4, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry, type ColorRepresentation } from 'three'
-import type { Bag } from '../../../engine/dispose'
+import type { Bag } from '../../../../../engine3d/dispose'
 
 const m = new Matrix4()
 const q = new Quaternion()

@@ -57,7 +57,7 @@ else), or does a family member (Mom, Agong) give the instructions? What is each 
 ## Agong's house (the hub)
 
 Camera: a follow camera from the front-right, looking into the house like a dollhouse with its front, its right wall
-and its ceiling cut away. Inside it frames a box around Kaylee (`engine/tune.ts`). On the street it is low and
+and its ceiling cut away. Inside it frames a box around Kaylee (`thailand/tune.ts`). On the street it is low and
 straight-on.
 
 - **Street:** a row of five pastel shophouses, Agong's in the middle with a roll-up shutter, a sign board, a balcony
@@ -136,7 +136,8 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
 
 ## Tech notes
 
-- `engine/` holds generic 3D: one shared renderer (we make the WebGL2 context ourselves, so no console error without
+- `src/world/engine3d/` (moved out of Thailand 2026-10-27, so other 3D countries don't need the family code) holds
+  generic 3D: one shared renderer (we make the WebGL2 context ourselves, so no console error without
   one), the frame loop (60 fps cap; 30 when nothing moves; 30/4 in test browsers), toon materials, screen-space
   ink outlines, a box-fitting follow camera, a walk grid with A*, and the tap marker. `View3D.tsx` mounts any 3D world
   (the house, the bay) with its DOM tap targets (`Anchors.tsx`); `water.ts` and `particles.ts` (foam, spray) came with

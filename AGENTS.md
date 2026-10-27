@@ -22,6 +22,8 @@ gone: don't add school-paper games unless Dad asks for one.
 ```
 src/world/places/<id>/   # one country per folder, found automatically (Thailand, Australia, Italy, ...)
 src/world/kit/           # shared country pieces: Stage, StoryBeat, StampEarned, sections, sfx, Flag, ...
+src/world/engine3d/      # the shared 3D engine (toon look, camera, View3D, water) and the chibi rig in characters/
+src/world/labs/          # the camera lab (?cam=1) and the feel lab (?feel=1), for any country
 src/sdk/                 # shared building blocks: say, sounds, puppets, drag and drop, ... (see "SDK")
 src/shell/               # the app wrapper: splash, trophy ceremony, trophy room ("Let's play!" lands on the world map)
 src/games/<id>/          # the original school-paper games (just the tea party, the 🏡 pin on the map), found automatically
@@ -35,14 +37,15 @@ docs/                    # play-design.md (what makes it fun), interactions.md (
 
 Installed and pre-approved for hands-on play that plain React can't do well (see `docs/interactions.md`):
 - **three** (0.180): 3D, for a country Dad wants in 3D (Thailand). Keep the flat look: toon bands, ink outlines, blob
-  shadows, no post-processing (see `src/world/places/thailand/engine/`). React draws the buttons and the tap targets
+  shadows, no post-processing (see `src/world/engine3d/`). React draws the buttons and the tap targets
   over the canvas.
 - **phaser** (v4): real-time arcade or physics play (bouncing, stacking, many moving sprites). Canvas, so keep
   puppets, speech bubbles and buttons in React on top of it.
 - **perfect-freehand**: smooth finger strokes, for tracing and drawing.
 
-Import these **only from inside a country or game folder** (`src/world/places/<id>/`, `src/games/<id>/`), and never
-from a file that loads at startup: a `meta.ts`, a `*sections.ts` or a `puppets/index.ts`. Then only that country
+Import these **only from inside a country or game folder** (`src/world/places/<id>/`, `src/games/<id>/`) or the
+shared 3D engine (`src/world/engine3d/`, which only countries import), and never from a file that loads at startup:
+a `meta.ts`, a `*sections.ts` or a `puppets/index.ts`. Then only that country
 downloads them. `npm run verify` enforces this (`scripts/check-heavy-imports.mjs`).
 
 If you believe another package would greatly improve the experience for the task at hand, ask Dad before installing
@@ -103,8 +106,9 @@ The reference pictures in `art/source/mascot/` are exported from that puppet. Se
 **In 3D (Thailand):** the characters are built from code, not generated pictures, except Kaylee herself: she is a
 modelled vinyl toy made with Tripo3D and split in Blender into the same rig (`characters/model.ts`; the next family
 members follow `docs/3d-characters.md`). `characters/looks.ts` describes each
-family member (Dad picked them from `planning/around-the-world/thailand/lineup.webp`), `characters/animal.ts` builds the
-chibi rig (body, head, arms, tail on their own pivots), and `characters/face.ts` blinks, looks at her and opens the
+family member (Dad picked them from `planning/around-the-world/thailand/lineup.webp`). The shared
+`src/world/engine3d/characters/animal.ts` builds the chibi rig from any `Look` (body, head, arms, tail on their own pivots;
+any 3D country's friends use it too), and `engine3d/characters/face.ts` blinks, looks at her and opens the
 mouth with the character's voice. They wave, hop, sit, lie down, do a wai: ease into each pose (lean, settle), never
 jump between poses in one frame. See them all at `#/world/thailand/hub/family` (`?who=<id>` for one on a turntable), or inspect any of them in the
 **character lab** `#/world/characters/<id>` (`thailand/lab/`): poses, actions in slow motion with a filmstrip, every line
@@ -192,10 +196,10 @@ working on: `thailand/nan-trip.html` (a road trip in the mountains, the road kit
 what's next; PR bodies end with the next prompt.
 
 - **The look:** flat pastel 3D. Toon shading in a few flat bands with lavender shadows, screen-space ink outlines like
-  the 2D art, blob shadows, no post-processing (`engine/toon.ts`, `engine/outline.ts`).
-- **The engine** (`engine/`) is generic: one shared renderer (we make the WebGL2 context ourselves, so no console error
-  without one), the frame loop (60 fps cap; 30 when nothing moves; slower in test browsers), a box-fitting follow
-  camera, a walk grid with A*, the tap marker, water and particles. `View3D.tsx` mounts any 3D world with its DOM tap
+  the 2D art, blob shadows, no post-processing (`engine3d/toon.ts`, `engine3d/outline.ts`).
+- **The engine** (`src/world/engine3d/`, outside the locked folder) is shared by every 3D country: one shared
+  renderer (we make the WebGL2 context ourselves, so no console error without one), the frame loop (60 fps cap; 30
+  when nothing moves; slower in test browsers), a box-fitting follow camera, a walk grid with A*, the tap marker, water and particles. `View3D.tsx` mounts any 3D world with its DOM tap
   targets (`Anchors.tsx`): real buttons, at least 64 px, placed over the 3D things every frame, so VoiceOver,
   tap-around and QA can find them. Overlapping targets must not steal each other's taps.
 - **Layouts are data in meters** (`activities/hub/layout.ts`): the build, the walk grids and the tap targets all
@@ -207,12 +211,12 @@ what's next; PR bodies end with the next prompt.
   for a new trip instead of building travel again.
 - **Debugging:** `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), `?fps=N` overrides the frame cap,
   `window.__thaiHouseQA()` is read-only state for tests (no jump hooks: tests open section links).
-- **The camera lab:** `?cam=1` on any 3D section link opens it (`lab/camera/`): the real game in an iPad or iPhone
-  frame, a panel that nudges the game's camera or locks one of your own (`CameraRig.setOverride`, so no game code
+- **The camera lab:** `?cam=1` on any 3D section link opens it (`src/world/labs/camera/`): the real game in an iPad
+  or iPhone frame, a panel that nudges the game's camera or locks one of your own (`CameraRig.setOverride`, so no game code
   changes), freeze, orbit by hand, guides (the fit box, the top bar, tap-target sizes). When Dad sends a lab link or a
   "Copy for agent" note, bake it into that world's `shot()` for that round and screen shape (tall or wide) and its
   `rig.fov`. Leave the other branches alone unless he says otherwise, and check the targets stay at 64 px or more.
-- **The feel lab:** `?feel=1` on any section link (2D or 3D, `lab/feel/`) puts sliders over the real, playable game
+- **The feel lab:** `?feel=1` on any section link (2D or 3D, `src/world/labs/feel/`) puts sliders over the real, playable game
   for every number the scene declares with `knobs()` (`src/world/kit/knobs.ts`), and a live graph of whatever it
   `watch()`es (her finger against what the car does). Playwright can check that a mechanic *works*; only Dad's finger
   can say it *feels* right, and we got steering wrong twice in a row by guessing. So whenever a core verb has numbers
@@ -221,7 +225,7 @@ what's next; PR bodies end with the next prompt.
   the input and the result, and put a `?feel=1` link in the PR. When Dad sends a "Copy for agent" note, bake the
   changed numbers into the knobs' `value`s and leave the knobs in.
 - **Gotchas:** never name a shader variable `patch` or `sample` (reserved in WebGL2; the shader silently fails). Dispose
-  what you create (`engine/dispose.ts`). Keep three.js out of `meta.ts` and `sections.ts`.
+  what you create (`engine3d/dispose.ts`). Keep three.js out of `meta.ts` and `sections.ts`.
 - **Dad decides the family:** who each person is, which animal, who comes on a trip. Ask, don't invent family facts.
   Photos of Kaylee stay out of this public repo; describe them in words in the plan.
 
@@ -247,7 +251,7 @@ scene out on a **logical stage** (one for wide screens, one for tall) that scale
 more of the scene (sky above, water below, a blurred extension at the sides). Don't cover-crop a painting and then
 place things by per-device fractions: that's how Etna's summit ended up under the top bar. Whatever the activity is
 about (the crater, the canal fork) stays inside the stage's safe zone. In 3D the camera frames what matters
-(`engine/camera.ts` fits a box), in portrait and landscape.
+(`engine3d/camera.ts` fits a box), in portrait and landscape.
 
 **Scenes are worlds, not pictures.** In 2D, generate scenes as layers (sky, far, mid, near, foreground) that move at
 different speeds when the camera moves; a strip that scrolls must tile seamlessly (no mirrored copies). What she touches
@@ -298,7 +302,7 @@ src/world/places/<id>/
   cast.json        # the friends' voices (Sparkle comes from src/sdk/cast.json)
   activities/      # one folder per activity, each with its sections.ts
   puppets/*.tsx    # 2D: the friend and main animals as live puppets, plus index.ts for #/world/puppets
-  characters/, engine/  # 3D (Thailand): the family builder and the 3D engine
+  characters/      # 3D (Thailand): the family's looks and Kaylee (the engine and the rig are in src/world/engine3d/)
   assets/*.webp    # from art/source/world/<id>/*.png via `npm run art -- world`
 ```
 
@@ -416,13 +420,15 @@ that needs the internet (YouTube) checks `useOnline()` from the SDK and hides it
 
 Thailand's 3D house is the family's real home, and the site is public, so the deployed builds (main and every PR
 preview) encrypt Thailand's code: it opens only after a grown-up types the family code once on that device
-(`src/world/lock.ts`, `LockScreen.tsx`; the 3D labs ask too). The build does it (`scripts/vite-lock.ts`) when
+(`src/world/lock.ts`, `LockScreen.tsx`; the character lab asks too). The build does it (`scripts/vite-lock.ts`) when
 `LOCK_CODE` is set, which the deploy and preview workflows take from the `THAILAND_CODE` repository secret (they fail
 without it). `npm run dev`, CI tests and local builds lock nothing. Try the lock locally with
 `LOCK_CODE=test npm run build && npm run preview`.
 - Startup code stays readable (Thailand's `meta.ts`, `sections.ts`, `lines.ts`, voice clips, pictures). Never put the
   house's layout or anything that describes the home in those files or in shared code outside `places/thailand/`.
 - The build fails if code that loads at startup imports a locked chunk: move the shared piece out of `places/thailand/`.
+- Code another country needs (the 3D engine, the rig, the labs) lives outside `places/thailand/` (`src/world/engine3d/`,
+  `src/world/labs/`), or that country would be locked too. The family's looks, the house and Kaylee stay inside.
 - This repo is public, so the source itself is still readable on GitHub until the repo goes private.
 
 ## Local commands

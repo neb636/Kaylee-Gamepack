@@ -5,8 +5,8 @@
 // it, so a frond floats down. Mommy and Daddy tag along behind her (Tagalong).
 import { Group, Vector3 } from 'three'
 import type { Member } from '../../../characters/member'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
 import { GECKO, SHAKE_PALM, WALK } from './layout'
 import { FROND, FROND_DARK, groundScatter, meshPanel, oilPalm, oilPalmParts } from './nature'
 import { STEEL } from './yard'

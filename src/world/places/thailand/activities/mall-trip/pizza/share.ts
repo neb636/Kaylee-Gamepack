@@ -2,9 +2,9 @@
 // pan on its stand, the three plates (a glow under the one that's behind, a pink ring under the one she's holding a
 // slice over) and Agong's take-away box with its lid. Plus the sharing sums: who's behind, where a slice stacks.
 import { Group, Mesh, MeshBasicMaterial, Quaternion, Vector3, type BufferGeometry } from 'three'
-import type { Bag } from '../../../engine/dispose'
-import { merge, P, solid } from '../../../engine/geo'
-import { PAL } from '../../../engine/toon'
+import type { Bag } from '../../../../../engine3d/dispose'
+import { merge, P, solid } from '../../../../../engine3d/geo'
+import { PAL } from '../../../../../engine3d/toon'
 import { CHEESE } from './cheese'
 import { BOX, EATERS, PAN, PLATE_R, PLATE_Z, SEATS, SLICES, TABLE, type EaterId, type PizzaId } from './layout'
 

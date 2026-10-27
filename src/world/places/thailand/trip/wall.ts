@@ -6,12 +6,12 @@
 // mall day's frame hangs next to the boat trip's, toward the door. A link with `at=photos` (where the
 // trip's stamp lands) starts with the camera on the wall, the old photos and hers, until she taps anything else.
 import { Group, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace, TextureLoader, Vector3, type Object3D, type Texture } from 'three'
-import type { Shot } from '../engine/camera'
+import type { Shot } from '../../../engine3d/camera'
 import type { House, HousePlugin } from '../activities/hub/house'
 import { DIM } from '../activities/hub/layout'
-import type { Bag } from '../engine/dispose'
-import { merge, P, solid, type V3 } from '../engine/geo'
-import { PAL } from '../engine/toon'
+import type { Bag } from '../../../engine3d/dispose'
+import { merge, P, solid, type V3 } from '../../../engine3d/geo'
+import { PAL } from '../../../engine3d/toon'
 import { sfx } from '../sfx'
 import { L } from '../lines'
 import type { Line } from '../../../../sdk'

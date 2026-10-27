@@ -4,7 +4,7 @@
 // corner; then flight 2 turns and climbs forward along the left wall (open underneath) and comes out in the upstairs
 // hallway. Shared by both floors: from upstairs you see them through the stairwell.
 import type { BufferGeometry, Group } from 'three'
-import { P } from '../../../engine/geo'
+import { P } from '../../../../../engine3d/geo'
 import { DIM, LANES, RISE, RUN1, RUN2 } from '../layout'
 import { poke, scenery, type Kit } from './kit'
 

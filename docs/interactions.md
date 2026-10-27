@@ -19,7 +19,7 @@ party keeps working as it is.
 | Scratch or paint to reveal | Canvas + `usePointerDrag` | See `ColoringPage` in `src/world/kit/` for canvas pixel mapping. |
 | Something moving by itself (catch falling stars, steer a boat) | `useGameLoop` + refs | A few moving things. Write to `el.style`, not state. |
 | Real-time arcade or physics (bouncing, stacking, many sprites, particles) | **Phaser 4** (pre-approved) | Only when the DOM really can't do it; see the recipe below. |
-| Walk, drive or play in a 3D world | **three** (pre-approved), Thailand's `engine/` | `View3D` + DOM tap targets (`Anchors.tsx`). See "Thailand" in `AGENTS.md`. |
+| Walk, drive or play in a 3D world | **three** (pre-approved), `src/world/engine3d/` | `View3D` + DOM tap targets (`Anchors.tsx`). See "Thailand" in `AGENTS.md`. |
 
 ## The kit
 
@@ -167,6 +167,6 @@ export function Arcade({ onCaught }: { onCaught: (n: number) => void }) {
 
 ## Adding a library
 
-Pre-approved (already installed): **phaser**, **perfect-freehand**, **three** (3D countries; Thailand's
-`engine/` folder shows the toon look, the follow camera and tap-to-walk). Anything else: see "Dependencies" in
+Pre-approved (already installed): **phaser**, **perfect-freehand**, **three** (3D countries; the shared
+`src/world/engine3d/` folder shows the toon look, the follow camera and tap-to-walk). Anything else: see "Dependencies" in
 `AGENTS.md`. Ask first, and explain what it enables and what it costs.
