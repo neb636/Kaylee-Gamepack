@@ -54,15 +54,16 @@ function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number
         left: `${x}%`,
         top: `${y}%`,
         translate: '-50% -50%',
-        width: 'clamp(56px, 11cqw, var(--target))',
+        // About 18% smaller than before (2026-10-27): with a pin for every country the map was getting crowded.
+        width: 'clamp(46px, 9cqw, calc(var(--target) * 0.82))',
         aspectRatio: '1',
         borderRadius: '50%',
         background: dim ? 'rgba(255,255,255,0.75)' : '#fff',
-        border: `5px solid ${glow ? 'var(--gold)' : '#fff'}`,
+        border: `4px solid ${glow ? 'var(--gold)' : '#fff'}`,
         boxShadow: 'var(--shadow)',
         display: 'grid',
         placeItems: 'center',
-        fontSize: 'clamp(28px, 5.5cqw, 48px)',
+        fontSize: 'clamp(23px, 4.5cqw, 40px)',
         zIndex: 3,
       }}
     >
