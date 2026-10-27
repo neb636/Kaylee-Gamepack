@@ -26,8 +26,8 @@ export const sample = <T,>(items: readonly T[], count: number): T[] => shuffle(i
 
 const PRAISE = ['Great job', 'You did it', 'Amazing', 'Super', 'Wonderful', 'Hooray', 'Fantastic', 'Awesome', 'Yay', 'Brilliant']
 
-/** Something nice to say, sometimes with her name: "Amazing, Kaylee!" */
-export const praise = () => (Math.random() < 0.6 ? `${pick(PRAISE)}, ${KID_NAME}!` : `${pick(PRAISE)}!`)
+/** Something nice to say: "Amazing!" (no name: hearing it on every cheer gets old). */
+export const praise = () => `${pick(PRAISE)}!`
 
 const NUMBER_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
 

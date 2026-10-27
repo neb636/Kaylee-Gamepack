@@ -11,8 +11,7 @@ the family loves become day trips (the boat trip in Phang Nga Bay, the mall day 
 Thailand's way of building (plans in `planning/around-the-world/thailand*`, see "Thailand: the 3D country" below).
 Australia, Italy, China, Egypt and Peru are 2D countries; Australia is the 2D reference.
 
-Kaylee loves **unicorns, the color pink, winning, and trophies with her name on them.** She likes seeing and hearing
-her name. She **cannot read yet**.
+Kaylee loves **unicorns, the color pink, winning, and trophies with her name on them.** She **cannot read yet**.
 
 The app started as one game per school paper (`src/games/`, only the unicorn tea party is left). That pipeline is
 gone: don't add school-paper games unless Dad asks for one.
@@ -87,7 +86,8 @@ smoke test still work). Don't add packages when the SDK or a pre-approved librar
    *help* (highlight it, bring it closer, show the way).
 3. **Big touch targets** (≥ 88px on iPad, ≥ 64px on iPhone and for 3D tap targets), one clear thing to do at a time,
    lots of juicy feedback: `sounds.*`, `sfx`, bounces, `burst()` confetti for mini-wins.
-4. **Use her name** in spoken lines ("Great job, Kaylee!"). `KID_NAME` is exported.
+4. **Go easy on her name.** Hearing "Kaylee" in line after line gets annoying: save it for the big moments (a stamp,
+   the finale, the trophy), not every cheer or instruction. `KID_NAME` is exported.
 5. Kind, gentle, girly-cute tone. Pink/lavender/pastels. Unicorns welcome (Sparkle is the guide; in Thailand Kaylee
    herself is a lilac unicorn).
 6. **Characters feel alive** (next section). Never just slide or bob a flat picture around.
