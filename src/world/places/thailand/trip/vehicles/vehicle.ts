@@ -2,7 +2,7 @@
 // the moving parts the drive animates. The world moves `root` (where it is, which way it faces); `body` inside it
 // rolls, pitches, bobs and squashes.
 import type { Group } from 'three'
-import type { Feel } from '../drive'
+import type { Feel } from '../../../../engine3d/drive'
 
 export interface Seat {
   /** Local to `body`, meters. */
@@ -20,7 +20,7 @@ export interface Vehicle {
   seats: { kaylee: Seat; ji: Seat; nick: Seat }
   /** Along its length (local z), the centers of the circles that bump into things, and their radius. */
   hull: { at: number[]; r: number }
-  /** How it drives (trip/drive.ts). */
+  /** How it drives (engine3d/drive.ts). */
   feel: Feel
   /** Where the spray and the wake come off (local z): the propeller, or the stern. */
   stern: number

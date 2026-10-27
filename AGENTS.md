@@ -199,7 +199,7 @@ what's next; PR bodies end with the next prompt.
   the 2D art, blob shadows, no post-processing (`engine3d/toon.ts`, `engine3d/outline.ts`).
 - **The engine** (`src/world/engine3d/`, outside the locked folder) is shared by every 3D country: one shared
   renderer (we make the WebGL2 context ourselves, so no console error without one), the frame loop (60 fps cap; 30
-  when nothing moves; slower in test browsers), a box-fitting follow camera, a walk grid with A*, the tap marker, water and particles. `View3D.tsx` mounts any 3D world with its DOM tap
+  when nothing moves; slower in test browsers), a box-fitting follow camera, a walk grid with A*, the tap marker, the finger drive control for vehicles (`drive.ts`), water and particles. `View3D.tsx` mounts any 3D world with its DOM tap
   targets (`Anchors.tsx`): real buttons, at least 64 px, placed over the 3D things every frame, so VoiceOver,
   tap-around and QA can find them. Overlapping targets must not steal each other's taps.
 - **Layouts are data in meters** (`activities/hub/layout.ts`): the build, the walk grids and the tap targets all
