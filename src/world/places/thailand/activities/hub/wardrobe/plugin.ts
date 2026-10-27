@@ -874,10 +874,11 @@ export class WardrobePlugin implements HousePlugin {
     const t = this.thing(d.id)
     const at = t.holder.position.clone()
     // Pushed back onto her plane to judge where it landed (the drag plane is in front of her).
-    const onHer = this.near(at.clone().addScaledVector(this.camFlat(), DRAG_FRONT)) || !!this.partAt(d.lastX, d.lastY, at)
+    const landed = at.clone().addScaledVector(this.camFlat(), DRAG_FRONT)
+    const onHer = this.near(landed) || !!this.partAt(d.lastX, d.lastY, landed)
     if (d.id.startsWith('pot-')) {
       const mirror = this.mirrorAt(d.lastX, d.lastY)
-      const part = mirror ? null : this.partAt(d.lastX, d.lastY, at)
+      const part = mirror ? null : this.partAt(d.lastX, d.lastY, landed)
       if (mirror) this.splat(potColor(d.id), mirror)
       else if (part) this.paintOn(potColor(d.id), part, at)
       else sfx.boing()
