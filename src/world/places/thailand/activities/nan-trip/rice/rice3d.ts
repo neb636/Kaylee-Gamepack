@@ -713,8 +713,10 @@ export class RiceFarm extends Stage {
     this.cheer()
     const mid = new Vector3(BASKET[0], 0.6, BASKET[2])
     this.sparkles.burst(mid, 12, 1, 1.4, 1, 0.06)
+    // Lung's "one to five" (2.5 s) right after his "Hah!", then his sticky rice line once it's done (two of his lines
+    // would cut each other off), then the deck once that's done too.
+    this.after(0.5, () => this.once('counted', R.counted))
     this.after(1.0, () => {
-      this.once('counted', R.counted)
       this.basketShake = -1.2
       sfx.blow()
       for (let i = 0; i < 24; i++) this.bits.emit(mid, tmp.set(1.2 + Math.random() * 1.6, 0.8 + Math.random() * 1.2, (Math.random() - 0.5) * 1.2), 1.1, 0.025)
@@ -730,10 +732,12 @@ export class RiceFarm extends Stage {
       this.kratip.root.visible = true
       sfx.boing()
       sfx.steam()
+    })
+    this.after(3.4, () => {
       this.once('helper', R.helper)
       this.lung.react('wave')
     })
-    this.after(5.4, () => this.toDeck())
+    this.after(6.0, () => this.toDeck())
   }
 
   private stepThresh(dt: number) {
