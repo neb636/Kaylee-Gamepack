@@ -393,6 +393,10 @@ const SCREENS = [
   ...['story', 'steady', 'drift', 'melt', 'mama'].map((to) => ({ name: `poles-floe-${to}`, hash: `#/world/poles/floe/${to}`, reset: true, wait: to === 'mama' ? 4200 : 1800 })),
   // Penguin Slide (greybox 3): each stretch from its link (home: the feeding, then the colony).
   ...['top', 'bumps?run=right', 'dive', 'home?krill=12'].map((to) => ({ name: `poles-slide-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/poles/slide/${to}`, reset: true, wait: to.startsWith('home') ? 5000 : 2500 })),
+  // Iceberg Maker (greybox 4): the pick, then each stretch at both poles from its link (sail: the camera turned round,
+  // looking out to sea from the cliff top).
+  { name: 'poles-iceberg-pick', hash: '#/world/poles/iceberg/pick', reset: true, wait: 1800 },
+  ...['bits', 'giant', 'sail'].flatMap((to) => ['north', 'south'].map((pole) => ({ name: `poles-iceberg-${to}-${pole}`, hash: `#/world/poles/iceberg/${to}?pole=${pole}`, reset: true, wait: to === 'sail' ? 3000 : 1800 }))),
   { name: 'poles-coats-soon', hash: '#/world/poles/coats/soon', wait: 800 },
   { name: 'poles-party-soon', hash: '#/world/poles/party/soon', wait: 800 },
   // Canada: the train map (greybox 1): the whole country first, then the train at each stop and on the way (the

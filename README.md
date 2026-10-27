@@ -253,7 +253,14 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [Under the sea](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/dive)
 - [Feeding Pebble](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/home?krill=12)
 
-**Coming soon**: [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Iceberg Maker](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+**Iceberg Maker (greybox)**
+
+- [North or south?](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/pick)
+- [Little bits](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/bits?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/bits?pole=south))
+- [The giant one (under the water)](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/giant?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/giant?pole=south))
+- [Send them sailing](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/sail?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/sail?pole=south))
+
+**Coming soon**: [Snow Coats](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/soon) · [Emperor Huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/soon) · [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
 
 ### Canada
 
