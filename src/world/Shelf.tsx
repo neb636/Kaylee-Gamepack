@@ -302,4 +302,4 @@ function Spinner({ played, onLand, onCancel }: { played: string[]; onLand: (g: S
   )
 }
 
-const CLOSE: CSSProperties = { position: 'absolute', top: 'calc(var(--safe-top) + 12px)', right: 16, width: 'var(--btn)', height: 'var(--btn)', borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 'calc(var(--btn) * 0.45)', display: 'grid', placeItems: 'center' }
+const CLOSE: CSSProperties = { position: 'absolute', top: 'calc(var(--safe-top) + 12px)', right: 16, width: 'calc(var(--btn) + 12px)', height: 'calc(var(--btn) + 12px)', borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 'calc(var(--btn) * 0.45)', display: 'grid', placeItems: 'center' }
