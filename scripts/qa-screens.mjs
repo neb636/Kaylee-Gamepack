@@ -391,6 +391,12 @@ const SCREENS = [
   ...['top', 'bumps?run=right', 'dive', 'home?krill=12'].map((to) => ({ name: `poles-slide-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/poles/slide/${to}`, reset: true, wait: to.startsWith('home') ? 5000 : 2500 })),
   { name: 'poles-coats-soon', hash: '#/world/poles/coats/soon', wait: 800 },
   { name: 'poles-party-soon', hash: '#/world/poles/party/soon', wait: 800 },
+  // Canada: the train map (greybox 1): the whole country first, then the train at each stop and on the way (the
+  // prairies, just out of the Spiral Tunnel); then an activity's and the finale's "coming soon" cards.
+  { name: 'canada-intro', hash: '#/world/canada', reset: true, wait: 900 },
+  ...['msa', 'quebec', 'ottawa', 'prairies', 'banff', 'rockies', 'bc'].map((at) => ({ name: `canada-map-${at}`, hash: `#/world/canada/hub/map?at=${at}`, reset: true, wait: 2200 })),
+  { name: 'canada-bike-soon', hash: '#/world/canada/bike/soon', wait: 800 },
+  { name: 'canada-party-soon', hash: '#/world/canada/party/soon', wait: 800 },
   // The mall day's trip loop (greybox): Mommy's card (🚤 / 🛝🍕), the day pass's choices on a replay, the goodbye with
   // the whole family and the Veloz (then everyone in it), ICONSIAM's glimpse, the lift going up, the counter with her
   // socks on, home (the car at Agong's door; the box given, the photo on the wall).

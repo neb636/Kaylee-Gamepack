@@ -627,6 +627,44 @@ GAME_SCENARIOS.push(
   },
 )
 
+// Canada's train map (3D greybox): the train grabbed in Quebec and pushed west hard (it chugs, puffs and whistles, the
+// camera rides along), let go to roll on; then by Ottawa a tap sends the moose on the track ambling off with a snort, and
+// a second tap makes it hop where it stands.
+GAME_SCENARIOS.push(
+  {
+    name: 'canada-push',
+    seconds: 7,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/canada/hub/map?at=quebec`)
+      await page.waitForFunction(() => window.__canadaMapQA?.().mode, null, { timeout: 20000 })
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      const b = await page.locator('[data-anchor="train"]').boundingBox()
+      if (!b) throw new Error('no train')
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
+      await page.mouse.down()
+      await page.mouse.move(vp.width * 0.08, b.y + b.height / 2, { steps: 25 })
+      await page.waitForTimeout(2500)
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'canada-moose',
+    seconds: 8,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/canada/hub/map?at=ottawa`)
+      await page.waitForFunction(() => window.__canadaMapQA?.().mode, null, { timeout: 20000 })
+      await page.waitForTimeout(1500)
+    },
+    act: async (page) => {
+      await page.locator('[data-anchor="animal:moose"]').click({ force: true })
+      await page.waitForTimeout(400)
+      await page.locator('[data-anchor="animal:moose"]').click({ force: true })
+    },
+  },
+)
+
 // Baan Chang's feeding yard (3D greybox): a banana pulled out of Daddy's basket and held up on Mali's side (her trunk
 // snakes after it, curls round it and swings it to her mouth), then a stick of sugarcane held high on the right (the
 // trunks stretch up after it) and brought down to Khanom.

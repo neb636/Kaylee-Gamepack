@@ -312,7 +312,7 @@ export class PenguinSlide implements World3D {
 
     // ---- Krill swarms, bubbles, snow ----
     const krillGeo = bag.add(new SphereGeometry(0.07, 6, 4).scale(1, 0.7, 1.6))
-    this.krillMesh = new InstancedMesh(krillGeo, toon(PAL.pink), KRILL.length * PER)
+    this.krillMesh = bag.add(new InstancedMesh(krillGeo, toon(PAL.pink), KRILL.length * PER))
     this.krillMesh.frustumCulled = false
     scene.add(this.krillMesh)
     KRILL.forEach(([s, lat, drift], i) => {
@@ -321,7 +321,7 @@ export class PenguinSlide implements World3D {
       const y = depth(s)
       this.swarms.push({ s, lat, drift, y, x: cx(s) + lat, z: -s, yy: y, pull: new Vector3(), eaten: -1, offsets })
     })
-    this.bubbles = new InstancedMesh(bag.add(new SphereGeometry(0.5, 8, 6)), bag.add(new MeshBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: 0.7 })), BUBBLES)
+    this.bubbles = bag.add(new InstancedMesh(bag.add(new SphereGeometry(0.5, 8, 6)), bag.add(new MeshBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: 0.7 })), BUBBLES))
     this.bubbles.frustumCulled = false
     this.bubbles.count = 0
     scene.add(this.bubbles)
@@ -961,19 +961,6 @@ export class PenguinSlide implements World3D {
   // ---------------------------------------------------------------- home: feeding Pebble
 
   private feed(dt: number) {
-    if (this.fed >= this.feedN) {
-      if (this.homeT < 0) {
-        this.homeT = 0
-        this.setMode('done')
-        this.papa.hop()
-        this.pebble.hop()
-        for (const c of this.colony) c.hop()
-        honk(true)
-        sounds.fanfare()
-        this.events.home()
-      }
-      return
-    }
     // One beakful at a time: a pink krill hops from his beak to hers.
     this.feedT -= dt
     for (const b of this.bites) {
@@ -989,6 +976,20 @@ export class PenguinSlide implements World3D {
       }
       b.position.lerpVectors(from, to, u)
       b.position.y += Math.sin(u * Math.PI) * 0.5
+    }
+    if (this.fed >= this.feedN) {
+      // The last beakfuls land first, then everyone cheers.
+      if (this.homeT < 0 && !this.bites.some((m) => m.visible)) {
+        this.homeT = 0
+        this.setMode('done')
+        this.papa.hop()
+        this.pebble.hop()
+        for (const c of this.colony) c.hop()
+        honk(true)
+        sounds.fanfare()
+        this.events.home()
+      }
+      return
     }
     if (this.feedT <= 0) {
       const b = this.bites.find((m) => !m.visible)

@@ -3,7 +3,7 @@ import { motion } from 'motion/react'
 import { useId, type CSSProperties, type ReactElement } from 'react'
 
 // `poles` is the fallback for a place with no national flag (the Arctic and Antarctica belong to no one country).
-export type FlagId = 'australia' | 'china' | 'thailand' | 'egypt' | 'italy' | 'peru' | 'poles'
+export type FlagId = 'australia' | 'china' | 'thailand' | 'egypt' | 'italy' | 'peru' | 'canada' | 'poles'
 
 /** Points of a star polygon centred on (cx, cy). */
 export function starPoints(cx: number, cy: number, outer: number, points: number, innerRatio = 4 / 9) {
@@ -147,6 +147,22 @@ function Peru() {
   )
 }
 
+// Canada's flag: red bands a quarter wide each side, a white square middle, and the 11-point maple leaf (the official
+// construction, drawn on a 9600 x 4800 grid and scaled to ours).
+function Canada() {
+  return (
+    <>
+      <rect width="10080" height="5040" fill="#D52B1E" />
+      <rect x="2520" width="5040" height="5040" fill="#fff" />
+      <path
+        transform="scale(1.05)"
+        fill="#D52B1E"
+        d="m4890 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"
+      />
+    </>
+  )
+}
+
 // Not a real flag: the poles have none, so a place with no national flag shows a little emblem instead. Here, the globe
 // with white ice at the top and the bottom.
 function Poles() {
@@ -160,7 +176,7 @@ function Poles() {
   )
 }
 
-const FLAGS: Record<FlagId, () => ReactElement> = { australia: () => <Australia />, china: China, thailand: Thailand, egypt: Egypt, italy: Italy, peru: Peru, poles: Poles }
+const FLAGS: Record<FlagId, () => ReactElement> = { australia: () => <Australia />, china: China, thailand: Thailand, egypt: Egypt, italy: Italy, peru: Peru, canada: Canada, poles: Poles }
 
 /** A flag with a white rounded border. Width sets the size (flags here are all 2:1). */
 export function Flag({ id, width = 200, parts, style }: { id: FlagId; width?: number | string; parts?: AustraliaFlagParts; style?: CSSProperties }) {
