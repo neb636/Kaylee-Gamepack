@@ -179,6 +179,10 @@ const SCENARIOS = [
   // auto-player's taps are honks and pokes (the rivals, the mushrooms) all the way to the line; the finger-held run is
   // qa-motion's nan-kart.
   { name: 'thailand nan: the cup race', id: 'nan-cup', hash: '#/world/thailand/nan-trip/race', reset: true },
+  // Greybox 2's tracks: racing on by itself it drives through the puddles and the waterfall (the rice steps), the
+  // blossom showers and under the lanterns (the cloud), so the auto-player sees each trick.
+  { name: 'thailand nan: the cup race, rice steps', id: 'nan-cup-steps', hash: '#/world/thailand/nan-trip/race?track=steps', reset: true },
+  { name: 'thailand nan: the cup race, cloud top', id: 'nan-cup-cloud', hash: '#/world/thailand/nan-trip/race?track=cloud', reset: true },
   // The Nan map and the 3 (greybox, step 6): on the map a tap on a place drives the little Pajero there; the 3 from
   // above plays by itself.
   { name: 'thailand nan: the nan map', id: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true },

@@ -1397,6 +1397,35 @@ GAME_SCENARIOS.push(
   },
 )
 
+// The Nan Mountain Cup, greybox 2: each new track's trick. On the rice steps (nan-splash) racing on by itself through
+// the first puddles (it steers into them): the splash, the mud on the kart. On the climb (nan-cloud) from just below the
+// cloud: the white closing in and the lanterns lighting up one by one as it drives under them.
+GAME_SCENARIOS.push(
+  {
+    name: 'nan-splash',
+    seconds: 8,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=steps`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().racers?.kaylee.progress > 50, null, { timeout: 60000 })
+    },
+    act: async (page) => {
+      await page.waitForFunction(() => window.__thaiNanQA().splashes > 1, null, { timeout: 12000 }).catch(() => {})
+      await page.waitForTimeout(1500)
+    },
+  },
+  {
+    name: 'nan-cloud',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/nan-trip/race?track=cloud`)
+      await page.waitForFunction(() => window.__thaiNanQA?.().cloud?.in > 0.15, null, { timeout: 120000 })
+    },
+    act: async (page) => {
+      await page.waitForTimeout(10000)
+    },
+  },
+)
+
 // The Nan road trip's mushroom farm (greybox): misting, the core verb. Her finger holds the hose on the rack and sweeps
 // along the middle row (mist, pins popping, swelling, the rainbow), then in round 2 pulls a grown clump off and carries
 // it to the basket.

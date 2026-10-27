@@ -1,6 +1,7 @@
 // The Nan Mountain Cup's race (section `race`, plan: planning/around-the-world/thailand/nan-cup.html; greybox 1: the
-// kart toy on the Mushroom Forest track). Kaylee drives her pink kart against Grandma Taeng, Pao and Moon (blocks for
-// now, blocks.ts) from the start line to the finish, one run through the forest (track.ts), not laps.
+// kart toy, greybox 2: the other two tracks). Kaylee drives her pink kart against Grandma Taeng, Pao and Moon (blocks for
+// now, blocks.ts) from the start line to the finish, one run along a track (track.ts: `forest`, `steps`, `cloud`), not
+// laps.
 //
 // The toy is the boat race's verb, which she already knows:
 // - Hold a finger on the road ahead: the kart races there at full speed (only forward along the track: her finger
@@ -8,8 +9,14 @@
 // - On a phone she tilts it to steer and holds a gas pedal (trip/race/tilt.ts, GasPedal.tsx), as in the boat race.
 // - The start: three lights and GO; a finger already down at GO is a rocket start. Grandma Taeng naps on the grid and
 //   wakes up at GO.
-// - Pick a line: gold coins make her a little faster (up to ten), gold arrow pads give a burst of speed, and the
-//   forest's trick, giant pink mushrooms: drive over one and she goes *boing* up into the air, where more coins hang.
+// - Pick a line: gold coins make her a little faster (up to ten), gold arrow pads give a burst of speed, and each
+//   track's own trick:
+//   - the forest's giant pink mushrooms: drive over one and she goes *boing* up into the air, where more coins hang;
+//   - the rice steps' puddles: SPLASH, and the kart gets muddier (and a little faster) each time, until the waterfall
+//     near the end washes it clean with a burst of speed;
+//   - the cloud: halfway up the mountain everything turns white, and a line of glowing lanterns shows the way (each one
+//     she drives under chimes, higher and higher); out the top, sunshine over a sea of clouds. Showers of pink
+//     Chomphu Phu Kha blossoms fall across the road: driving through one is a burst of speed.
 // - Silly, never a crash: off the road she bumps along the grass (slower, shaking), and the hay bales at its edge boing
 //   her back; bump a rival and you both bounce; facing the wrong way, the kart turns round by itself.
 // - The rivals keep it close the whole way (the races' rubber band, trip/race/rubber.ts, round a story per track in
@@ -17,8 +24,9 @@
 //   rival, Moon here, edges past on the last stretch and wins by a nose in a slow-motion photo finish, with her second,
 //   never last. Fireworks either way, and then the end card (Cup.tsx).
 // Greybox: no voices, no podium yet (greybox 3). The numbers that decide how it feels are knobs (?feel=1): her kart,
-// the bounce, the rivals' rubber band; the lab's graph shows her finger across the road against the kart.
-import { Color, Fog, Group, Mesh, MeshBasicMaterial, CanvasTexture, PlaneGeometry, Raycaster, Scene, Vector2, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
+// the bounce, the mud, the cloud and the blossoms, the rivals' rubber band; the lab's graph shows her finger across the
+// road against the kart.
+import { BufferAttribute, BufferGeometry, CanvasTexture, Color, DoubleSide, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Raycaster, RepeatWrapping, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp, sounds } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -38,12 +46,13 @@ import { RaceMusic } from '../../../trip/race/music'
 import type { RaceHud, RacePhase } from '../../../trip/race/RaceHud'
 import { herLimit, rivalPace, scripted, type Script } from '../../../trip/race/rubber'
 import type { SteerMode, Tilt } from '../../../trip/race/tilt'
-import { buildRoadScene, type RoadScene } from '../../../trip/road/build'
+import { buildMirror, buildRoadScene, rng, type RoadScene } from '../../../trip/road/build'
+import { buildCloudLayer, buildCloudSea } from '../../../trip/road/clouds'
 import { buildKart, type Kart } from '../../../trip/vehicles/kart'
 import { buildBlock, type Block } from './blocks'
 import { GRID, HOME, RIVAL_IDS, RIVALS, scripts, type RacerId, type Result, type Rival } from './rivals'
 import { cupSfx as sfx } from './sounds'
-import { Track, type Mushroom, type TrackId } from './track'
+import { SHOWER_LEN, STREAM_LEN, Track, type Mushroom, type TrackId } from './track'
 
 const FILE = 'src/world/places/thailand/activities/nan-trip/cup/race.ts'
 /** Her kart: how it drives under her finger. */
@@ -66,6 +75,19 @@ const BOUNCE = knobs('bounce', 'Bouncy mushrooms', FILE, {
   up: { value: 8.5, min: 3, max: 16, step: 0.5, label: 'Bounce', unit: 'm/s up' },
   big: { value: 11.5, min: 4, max: 20, step: 0.5, label: 'The big one', unit: 'm/s up' },
   slow: { value: 0.5, min: 0, max: 1.5, step: 0.05, label: 'Slow motion up there', unit: 's' },
+})
+/** The rice steps' puddles and the waterfall. */
+const MUD = knobs('mud', 'Puddles and mud', FILE, {
+  each: { value: 0.34, min: 0.1, max: 1, step: 0.02, label: 'Mud per puddle', unit: '× all muddy', note: 'about three puddles and the kart is as muddy as it gets' },
+  fast: { value: 0.1, min: 0, max: 0.3, step: 0.01, label: 'All muddy: faster by', unit: '× top' },
+  splash: { value: 0.35, min: 0, max: 1.5, step: 0.05, label: 'Splash slow motion', unit: 's' },
+  wash: { value: 1.2, min: 0, max: 3, step: 0.1, label: 'The waterfall: burst', unit: 's of burst' },
+})
+/** The cloud on the climb, its lanterns and the blossom showers. */
+const CLOUD = knobs('cloud', 'The cloud and the blossoms', FILE, {
+  see: { value: 40, min: 15, max: 150, step: 5, label: 'In the cloud she sees', unit: 'm', note: 'how far before everything is white (the lanterns glow through it)' },
+  lantern: { value: 1.8, min: 0.8, max: 3.5, step: 0.1, label: 'Under a lantern within', unit: 'm across' },
+  petals: { value: 1.1, min: 0.2, max: 3, step: 0.1, label: 'Through the blossoms', unit: 's of burst' },
 })
 /** The rivals' rubber band (trip/race/rubber.ts). */
 const BAND = knobs('rivals', "The rivals' rubber band", FILE, {
@@ -95,6 +117,8 @@ export const KART_ANCHORS: AnchorInfo[] = [
   { id: 'kart', label: 'Her kart', kind: 'thing' },
   ...RIVAL_IDS.map((id): AnchorInfo => ({ id: `rival:${id}`, label: RIVALS[id].label, kind: 'thing' })),
   ...[0, 1, 2, 3].map((i): AnchorInfo => ({ id: `mushroom:${i}`, label: 'Bouncy mushroom', kind: 'thing' })),
+  { id: 'waterfall', label: 'The waterfall', kind: 'thing' },
+  ...[0, 1, 2, 3, 4].map((i): AnchorInfo => ({ id: `tree:${i}`, label: 'Pink blossom tree', kind: 'thing' })),
 ]
 
 interface Racer {
@@ -124,6 +148,10 @@ interface Racer {
   bumpCool: number
   padCool: number
   bounceCool: number
+  splashCool: number
+  /** How muddy the kart is (0..1, the rice steps), and its splats (a third more of them for each step up). */
+  mud: number
+  splats: Group[]
   /** A slow sway round its lane (the rivals). */
   sway: number
 }
@@ -139,6 +167,20 @@ const BEAT = 0.9
 const SLOWMO = 1.3
 /** The finish clearing: where each racer rolls to a stop after the line (meters left of the middle). */
 const PARK: Record<RacerId, number> = { kaylee: 0, moon: -3.2, pao: 3.2, taeng: -1.6 }
+/** Each track's sky and haze; the climb's inside the cloud and above it. */
+const AIR = {
+  forest: { bg: '#BFE3F2', fog: '#D6ECEC', near: 110, far: 420 },
+  steps: { bg: '#BFE3FF', fog: '#E4F3FC', near: 160, far: 620 },
+  cloud: { bg: '#C9DCEF', fog: '#D9E3EF', near: 110, far: 420 },
+  inside: { bg: '#F2F0FA', fog: '#F2F0FA', near: 6 },
+  above: { bg: '#9FD6FF', fog: '#E6F5FF', near: 220, far: 760 },
+}
+const smooth = (a: number, b: number, x: number) => {
+  const t = clamp((x - a) / (b - a), 0, 1)
+  return t * t * (3 - 2 * t)
+}
+const tmpColor = new Color()
+const m4 = new Matrix4()
 
 export class KartRace implements World3D {
   readonly scene = new Scene()
@@ -150,6 +192,18 @@ export class KartRace implements World3D {
   private coins: Coins
   private pads: Pads
   private shrooms: { m: Mushroom; g: Group; squash: number }[] = []
+  /** The waterfall (the rice steps): its rocks, and the falling water and the stream across the road (they scroll). */
+  private fall: { g: Group; at: Vector3; water: CanvasTexture[]; splash: number } | null = null
+  /** The cloud (the climb): the sea of clouds seen from above, how deep in she is (0..1), the lanterns. */
+  private sea: Group | null = null
+  private fog: Fog
+  private cloudK = 0
+  private wasIn = false
+  private wasAbove = false
+  private lanterns: { mesh: InstancedMesh; lit: number[]; on: boolean[] } | null = null
+  private trees: { at: Vector3; shake: number; g: Group }[] = []
+  private petals: Particles | null = null
+  private splash: Particles
   private dust: Particles
   private straw: Particles
   private sparkle: Particles
@@ -188,7 +242,7 @@ export class KartRace implements World3D {
   private gasDown = false
   private aimLat = 0
   private waiting = false
-  private counts = { coinsTaken: 0, pads: 0, bounces: 0, bigBounces: 0, bales: 0, grass: 0, bumps: 0, honks: 0, pokes: 0 }
+  private counts = { coinsTaken: 0, pads: 0, bounces: 0, bigBounces: 0, bales: 0, grass: 0, bumps: 0, honks: 0, pokes: 0, splashes: 0, washes: 0, lanterns: 0, showers: 0 }
   private timers: number[] = []
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
@@ -205,8 +259,9 @@ export class KartRace implements World3D {
     const track = (this.track = new Track(start.track))
     const road = track.road
     applyBands()
-    scene.background = new Color('#BFE3F2')
-    scene.fog = new Fog('#D6ECEC', 110, 420)
+    const air = AIR[start.track] ?? AIR.forest
+    scene.background = new Color(air.bg)
+    this.fog = scene.fog = new Fog(air.fog, air.near, air.far)
     this.rig.fov = 55
     this.rig.camera.far = 900
 
@@ -221,6 +276,11 @@ export class KartRace implements World3D {
       scene.add(g)
     }
     scene.add(this.line(track.def.start, false), this.line(track.def.finish, true))
+    if (track.puddles.length) scene.add(this.puddles())
+    if (track.stream) scene.add(this.waterfall())
+    if (track.def.cloud) this.cloud()
+    if (track.showers.length) scene.add(this.blossomTrees())
+    for (const m of track.def.mirrors ?? []) scene.add(buildMirror(road, this.world.field, track.def.start + m.f * track.length, m.side, bag).root)
     this.coins = new Coins(bag, track.coins, track.place, { airGap: 3 })
     this.pads = new Pads(bag, track.pads, { across: 2.2, along: 3 }, track.place, (a, b) => b - a)
     scene.add(this.coins.mesh, this.pads.root)
@@ -230,15 +290,21 @@ export class KartRace implements World3D {
     this.sparkle = new Particles({ kind: 'spray', count: 360, colors: rainbow, gravity: 1.5 }, bag)
     this.fireworks = new Particles({ kind: 'spray', count: 500, colors: [...rainbow, PAL.gold, '#FFFFFF'], gravity: 4 }, bag)
     this.confetti = new Particles({ kind: 'spray', count: 320, colors: [...rainbow, PAL.gold], gravity: 1.2 }, bag)
-    scene.add(this.dust.mesh, this.straw.mesh, this.sparkle.mesh, this.fireworks.mesh, this.confetti.mesh)
+    this.splash = new Particles({ kind: 'spray', count: 420, colors: ['#FFFFFF', '#CFE9F5', '#A9D3EA', '#9C7A5B', '#B89A7A'], gravity: 10 }, bag)
+    scene.add(this.dust.mesh, this.straw.mesh, this.sparkle.mesh, this.fireworks.mesh, this.confetti.mesh, this.splash.mesh)
+    if (track.showers.length) {
+      this.petals = new Particles({ kind: 'spray', count: 700, colors: [PAL.pink, '#FFB3CF', '#FFD1E1', PAL.hotpink, '#FFFFFF'], gravity: 0.5 }, bag)
+      scene.add(this.petals.mesh)
+    }
 
     // ---- The karts: hers (pink, with Kaylee in it) and the rivals' (blocks for now) ----
     this.winner = start.result === 'lose' ? HOME[start.track] : 'kaylee'
     const plan = scripts(start.track, start.result)
     const racer = (id: RacerId, v: Kart, rival: Rival | null): Racer => {
       v.feel.top = KART.top * (rival?.pace ?? 1)
-      const r: Racer = { id, v, d: new Driver(v.feel), feel: v.feel, base: v.feel.top, rival, block: null, script: rival ? plan[rival.id] : null, roll: { x: 0, v: 0 }, pitch: { x: 0, v: 0 }, squash: 1, i: 0, s: 0, lat: 0, progress: 0, y: 0, done: -1, coins: 0, grass: false, bumpCool: 0, padCool: 0, bounceCool: 0, sway: Math.random() * 6 }
+      const r: Racer = { id, v, d: new Driver(v.feel), feel: v.feel, base: v.feel.top, rival, block: null, script: rival ? plan[rival.id] : null, roll: { x: 0, v: 0 }, pitch: { x: 0, v: 0 }, squash: 1, i: 0, s: 0, lat: 0, progress: 0, y: 0, done: -1, coins: 0, grass: false, bumpCool: 0, padCool: 0, bounceCool: 0, splashCool: 0, mud: 0, splats: [], sway: Math.random() * 6 }
       v.root.add(blobShadow(1.3, bag))
+      if (this.track.puddles.length) r.splats = this.mudSplats(v)
       scene.add(v.root)
       return r
     }
@@ -366,6 +432,205 @@ export class KartRace implements World3D {
     return g
   }
 
+  /** The rice steps' puddles: muddy water in the flooded corners, a pale rim round a sky-blue shine. One mesh. */
+  private puddles() {
+    const pos: number[] = []
+    const col: number[] = []
+    const c = new Color()
+    const N = 18
+    for (const p of this.track.puddles) {
+      const t = this.track.road.sampleAt(p.s)
+      for (const [k, color, y] of [[1.12, '#B89A7A', 0.06], [1, '#9C8A78', 0.065], [0.7, '#A9C9DE', 0.07], [0.32, '#E4F1FA', 0.075]] as const)
+        for (let i = 0; i < N; i++) {
+          const at = (a: number) => {
+            const along = Math.cos(a) * p.r * 1.5 * k
+            const across = p.lat + Math.sin(a) * p.r * k
+            return [t.x + t.tx * along + t.lx * across, t.y + y, t.z + t.tz * along + t.lz * across]
+          }
+          // (The shine sits a little off the middle.)
+          const m = k < 0.5 ? [t.x + t.lx * (p.lat + p.r * 0.2) + t.tx * p.r * 0.3, t.y + y, t.z + t.lz * (p.lat + p.r * 0.2) + t.tz * p.r * 0.3] : [t.x + t.lx * p.lat, t.y + y, t.z + t.lz * p.lat]
+          const off = k < 0.5 ? [t.lx * p.r * 0.2 + t.tx * p.r * 0.3, 0, t.lz * p.r * 0.2 + t.tz * p.r * 0.3] : [0, 0, 0]
+          const a = at((i / N) * Math.PI * 2)
+          const b = at(((i + 1) / N) * Math.PI * 2)
+          c.set(color)
+          for (const v of [m, [a[0] + off[0], a[1], a[2] + off[2]], [b[0] + off[0], b[1], b[2] + off[2]]]) {
+            pos.push(...v)
+            col.push(c.r, c.g, c.b)
+          }
+        }
+    }
+    const g = new BufferGeometry()
+    g.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3))
+    g.setAttribute('color', new BufferAttribute(new Float32Array(col), 3))
+    const mesh = new Mesh(this.bag.add(g), this.bag.add(new MeshBasicMaterial({ vertexColors: true, side: DoubleSide, polygonOffset: true, polygonOffsetFactor: -3 })))
+    mesh.renderOrder = 3
+    return mesh
+  }
+
+  /** Mud on a kart, in three steps (each a third muddier): brown splats over its nose, sides and back. */
+  private mudSplats(v: Kart) {
+    const MUDDY = ['#8B6A4E', '#9C7A5B', '#7A5C44']
+    const rand = rng(v.root.id + 3)
+    const steps: Group[] = []
+    for (let k = 0; k < 3; k++) {
+      const parts: BufferGeometry[] = []
+      for (let i = 0; i < 6; i++) {
+        const side = rand() < 0.5 ? 1 : -1
+        const where = rand()
+        // On a side, the nose or the back bumper.
+        const at: [number, number, number] =
+          where < 0.55 ? [side * 0.62, 0.42 + rand() * 0.2, -0.9 + rand() * 1.6] : where < 0.8 ? [(rand() - 0.5) * 0.8, 0.55, 0.6 + rand() * 0.4] : [(rand() - 0.5) * 1, 0.32, -1.18]
+        const r = 0.09 + rand() * 0.1
+        parts.push(P.sphere(r, MUDDY[i % 3], { at, scale: [1.3, 0.8, 1.3] }, 7))
+      }
+      const g = new Group()
+      g.add(solid(merge(parts), this.bag, 1))
+      g.visible = false
+      v.body.add(g)
+      steps.push(g)
+    }
+    return steps
+  }
+
+  /** Falling water: a canvas of soft pale streaks that scrolls (down the rocks, or across the road). */
+  private waterTexture() {
+    const c = document.createElement('canvas')
+    c.width = 64
+    c.height = 64
+    const x = c.getContext('2d')!
+    x.fillStyle = '#9FD4F0'
+    x.fillRect(0, 0, 64, 64)
+    const rand = rng(11)
+    for (let i = 0; i < 22; i++) {
+      x.fillStyle = rand() < 0.5 ? '#FFFFFF' : '#CFEAF8'
+      x.fillRect(Math.floor(rand() * 60), Math.floor(rand() * 64), 2 + Math.floor(rand() * 3), 8 + Math.floor(rand() * 16))
+    }
+    const tex = this.bag.add(new CanvasTexture(c))
+    tex.wrapS = tex.wrapT = RepeatWrapping
+    return tex
+  }
+
+  /** The rice steps' little waterfall: rocks beside the road, the water tumbling down them into a pool, and its stream
+   *  running right across the road (every kart drives through it: washed clean). */
+  private waterfall() {
+    const st = this.track.stream!
+    const { road } = this.track
+    const field = this.world.field
+    const side = st.side
+    const t = road.sampleAt(st.s)
+    const g = new Group()
+    // The rocks: a stack of big rounded lavender-grey stones, their face toward the road.
+    const foot = road.spotAt(st.s, side * (this.track.edge + 4))
+    const y0 = Math.min(field.at(foot.x, foot.z), t.y - 0.3)
+    const rocks: BufferGeometry[] = []
+    const rand = rng(23)
+    for (let i = 0; i < 9; i++) {
+      const a = (i / 9) * Math.PI * 2
+      const r = 1.6 + rand() * 1.2
+      const along = Math.cos(a) * 3.2
+      const out = 1.5 + Math.abs(Math.sin(a)) * 1.8
+      const p = road.spotAt(st.s + along, side * (this.track.edge + 3 + out))
+      rocks.push(P.sphere(r, ['#B9B3CC', '#A7A1BD', '#C9C3D8'][i % 3], { at: [p.x, y0 + 1 + rand() * 4.5, p.z], scale: [1, 1.1, 1] }, 9))
+    }
+    const top = road.spotAt(st.s, side * (this.track.edge + 4.2))
+    rocks.push(P.sphere(2.4, '#A7A1BD', { at: [top.x, y0 + 6, top.z], scale: [1.2, 0.8, 1.2] }, 10))
+    g.add(solid(merge(rocks), this.bag, 2))
+    // The falling water down the rocks' face: a tall strip facing the road.
+    const fallTex = this.waterTexture()
+    const fallMat = this.bag.add(new MeshBasicMaterial({ map: fallTex, transparent: true, opacity: 0.9, side: DoubleSide, depthWrite: false }))
+    const fall = new Mesh(this.bag.add(new PlaneGeometry(2.6, 6.4)), fallMat)
+    const face = road.spotAt(st.s, side * (this.track.edge + 1.9))
+    fall.position.set(face.x, y0 + 3.4, face.z)
+    fall.rotation.y = Math.atan2(t.tx, t.tz)
+    fall.renderOrder = 4
+    g.add(fall)
+    // The stream across the road (and the grass): a band of moving water, flowing away from the waterfall.
+    const streamTex = this.waterTexture()
+    streamTex.repeat.set(1, 4)
+    const w = (this.track.edge + 3) * 2
+    const stream = new Mesh(this.bag.add(new PlaneGeometry(STREAM_LEN, w)), this.bag.add(new MeshBasicMaterial({ map: streamTex, transparent: true, opacity: 0.85, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4 })))
+    stream.rotation.x = -Math.PI / 2
+    stream.rotation.z = Math.atan2(t.tx, t.tz) - Math.PI / 2
+    stream.position.set(t.x, t.y + 0.09, t.z)
+    stream.renderOrder = 4
+    g.add(stream)
+    const at = new Vector3(face.x, y0 + 3, face.z)
+    this.fall = { g, at, water: [fallTex, streamTex], splash: 0 }
+    return g
+  }
+
+  /** The climb's cloud: a layer of soft blobs across the mountain (white all round inside), the sea of clouds seen from
+   *  above it, and the glowing lanterns that show the way through. */
+  private cloud() {
+    const { y0, y1 } = this.track.def.cloud!
+    const b = this.track.road.bounds(120)
+    this.scene.add(buildCloudLayer(b, y0, y1, 260, this.track.def.look.seed, this.bag, 0.45))
+    this.sea = buildCloudSea(b, y0 + (y1 - y0) * 0.62, this.track.def.look.seed, this.bag)
+    this.sea.visible = false
+    this.scene.add(this.sea)
+    // The lanterns: warm paper lanterns floating over the road (they glow through the white: no fog on them).
+    const list = this.track.lanterns
+    // (A round paper lantern: ribs round it, a pink cap and base, a tassel.)
+    const ribs = [0, 1, 2].map((i) => P.torus(0.33 - Math.abs(i - 1) * 0.08, 0.025, '#FF9A3C', { at: [0, (i - 1) * 0.2, 0], rot: [Math.PI / 2, 0, 0] }))
+    const geo = merge([
+      P.sphere(0.38, '#FFC46B', { scale: [1, 1.15, 1] }, 14),
+      P.sphere(0.24, '#FFF3C4', { at: [0, 0, 0.17], scale: [1, 1.2, 0.6] }, 10),
+      ...ribs,
+      P.cyl(0.16, 0.2, 0.1, PAL.hotpink, { at: [0, 0.44, 0] }, 10),
+      P.cyl(0.2, 0.16, 0.1, PAL.hotpink, { at: [0, -0.44, 0] }, 10),
+      P.cyl(0.03, 0.06, 0.3, PAL.hotpink, { at: [0, -0.64, 0] }, 6),
+    ])
+    const mesh = new InstancedMesh(this.bag.add(geo), this.bag.add(new MeshBasicMaterial({ vertexColors: true, fog: false })), Math.max(1, list.length))
+    mesh.count = list.length
+    mesh.frustumCulled = false
+    for (let i = 0; i < list.length; i++) mesh.setColorAt(i, tmpColor.set('#F0E0D0'))
+    this.lanterns = { mesh, lit: list.map(() => 0), on: list.map(() => false) }
+    this.scene.add(mesh)
+  }
+
+  /** Chomphu Phu Kha trees: one leaning over the road at each blossom shower (the petals fall from it), and more along
+   *  the way. */
+  private blossomTrees() {
+    const { road } = this.track
+    const field = this.world.field
+    const root = new Group()
+    const PINKS = ['#FF9EC4', '#FFB7D2', PAL.pink]
+    // A tree `out` meters from the road's middle, its blossoms `reach` meters in toward the road (local +x is the road's
+    // left: in toward the road is -side).
+    const tree = (s: number, side: number, out: number, k: number, reach: number) => {
+      const p = road.spotAt(s, side * out)
+      const t = road.sampleAt(s)
+      const y = field.at(p.x, p.z)
+      const g = new Group()
+      g.position.set(p.x, y, p.z)
+      g.rotation.y = Math.atan2(t.tx, t.tz)
+      const H = 4.6 * k
+      const lean = Math.atan2(reach, H)
+      const parts: BufferGeometry[] = [P.cyl(0.18 * k, 0.28 * k, H, '#8E6E62', { at: [(-side * reach) / 2, H / 2, 0], rot: [0, 0, side * lean] }, 7)]
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2
+        parts.push(P.sphere((1.1 + (i % 2) * 0.4) * k, PINKS[i % 3], { at: [-side * reach + Math.cos(a) * 1.2 * k, H + Math.sin(a * 2) * 0.4 * k, Math.sin(a) * 1.3 * k] }, 9))
+      }
+      g.add(solid(merge(parts), this.bag, 2))
+      root.add(g)
+      return g
+    }
+    for (const w of this.track.showers) {
+      const out = this.track.edge + 1
+      const g = tree(w.s, w.side, out, 1.2, out - this.track.def.half - 0.5)
+      const top = road.spotAt(w.s, w.side * (this.track.def.half + 0.5))
+      this.trees.push({ at: new Vector3(top.x, road.sampleAt(w.s).y + 5.5, top.z), shake: 0, g })
+    }
+    const rand = rng(this.track.def.look.seed + 9)
+    for (let s = 40; s < road.length - 20; s += 22 + rand() * 26) {
+      const y = road.sampleAt(s).y
+      const c = this.track.def.cloud
+      if (c && y > c.y0 - 2 && y < c.y1) continue
+      tree(s, rand() < 0.5 ? 1 : -1, this.track.edge + 3 + rand() * 5, 0.8 + rand() * 0.5, 0.4)
+    }
+    return root
+  }
+
   // ---------------------------------------------------------------- setting up
 
   /** Everyone on the grid behind the start line, then the countdown. */
@@ -462,6 +727,23 @@ export class KartRace implements World3D {
       m.squash = 0
       sfx.boingAt(2)
     }
+    if (id === 'waterfall' && this.fall) {
+      // A big splash off the rocks.
+      this.counts.pokes++
+      this.fall.splash = 1
+      const a = this.fall.at
+      this.splash.burst(a.x, a.y - 2, a.z, 30, 4, 5, 0.22, 1)
+      sfx.splash(1.2)
+    }
+    if (id?.startsWith('tree:')) {
+      // The tree shakes and lets go of a flurry of petals.
+      const tr = this.trees[Number(id.slice(5))]
+      if (!tr || !this.petals) return
+      this.counts.pokes++
+      tr.shake = 1
+      for (let i = 0; i < 40; i++) this.petals.emit(tr.at.x + (Math.random() - 0.5) * 4, tr.at.y + Math.random(), tr.at.z + (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 2, Math.random(), (Math.random() - 0.5) * 2, 3 + Math.random() * 2, 0.16)
+      sfx.chime()
+    }
   }
 
   /** Tap her kart: beep beep! The horn squashes, the kart bounces. */
@@ -509,7 +791,7 @@ export class KartRace implements World3D {
       r.feel.boost = KART.boost
     }
     this.k.base = KART.top
-    this.k.feel.top = KART.top * (1 + KART.coin * this.k.coins)
+    this.k.feel.top = KART.top * (1 + KART.coin * this.k.coins + MUD.fast * this.k.mud)
 
     this.updatePhase()
     if (this.phase === 'race' || this.phase === 'finish') {
@@ -538,7 +820,8 @@ export class KartRace implements World3D {
     }
     this.coins.update(dt)
     this.pads.update(t)
-    for (const p of [this.dust, this.straw, this.sparkle, this.fireworks, this.confetti]) p.update(dt)
+    for (const p of [this.dust, this.straw, this.sparkle, this.fireworks, this.confetti, this.splash, this.petals]) p?.update(dt)
+    this.updateTricks(dt, t)
     this.engine(dt)
     this.celebrate(dt)
     this.idleHints()
@@ -551,6 +834,80 @@ export class KartRace implements World3D {
     this.clearTerrain()
     this.lights.follow(d.x, this.k.y, d.z)
     this.emitHud()
+  }
+
+  /** Each track's trick, every frame: the mud on the karts, the waterfall's water, the blossoms falling, the cloud's
+   *  white closing in, the lanterns bobbing (and glowing once she's been under them). */
+  private updateTricks(dt: number, t: number) {
+    for (const r of this.racers) r.splats.forEach((g, i) => (g.visible = r.mud > i / 3 + 0.01))
+    if (this.fall) {
+      this.fall.water[0].offset.y += dt * 1.6
+      this.fall.water[1].offset.y -= dt * 0.9
+      this.fall.splash = Math.max(0, this.fall.splash - dt)
+      // Spray at the foot of the fall.
+      if (Math.random() < dt * 14) {
+        const a = this.fall.at
+        this.splash.emit(a.x + (Math.random() - 0.5) * 2, a.y - 2.8, a.z + (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 2 + Math.random() * 2, (Math.random() - 0.5) * 2, 0.7, 0.16, 1)
+      }
+    }
+    if (this.petals) {
+      // Petals drift down over every shower near her (always some in the air, so she can see where they are).
+      const k = this.k
+      for (const w of this.track.showers) {
+        if (Math.abs(w.s - k.s) > 80 || Math.random() > dt * 30) continue
+        const p = this.track.road.spotAt(w.s + (Math.random() - 0.5) * SHOWER_LEN, (Math.random() - 0.3) * w.side * (this.track.def.half + 1))
+        const y = this.track.road.sampleAt(w.s).y
+        this.petals.emit(p.x, y + 4 + Math.random() * 2, p.z, (Math.random() - 0.5) * 1.2, -0.3, (Math.random() - 0.5) * 1.2, 4, 0.13)
+      }
+      for (const tr of this.trees) {
+        tr.shake = Math.max(0, tr.shake - dt * 1.5)
+        tr.g.rotation.z = Math.sin(t * 22) * 0.04 * tr.shake
+      }
+    }
+    if (this.track.def.cloud) this.updateCloud(dt, t)
+  }
+
+  /** The climb's cloud: the haze closes in to white as she climbs into it, and she pops out above into the sunshine,
+   *  over the sea of clouds. The lanterns bob; each one she's been under glows bright. */
+  private updateCloud(dt: number, t: number) {
+    const { y0, y1 } = this.track.def.cloud!
+    const y = this.k.y
+    const above = y > y1 + 1
+    const base = y > y1 ? AIR.above : AIR.cloud
+    const k = smooth(y0 - 3, y0 + 5, y) * (1 - smooth(y1 - 4, y1 + 2, y))
+    this.cloudK += (k - this.cloudK) * (1 - Math.exp(-dt * 2))
+    const c = this.cloudK
+    ;(this.scene.background as Color).set(base.bg).lerp(tmpColor.set(AIR.inside.bg), c)
+    this.fog.color.set(base.fog).lerp(tmpColor.set(AIR.inside.fog), c)
+    this.fog.near = base.near + (AIR.inside.near - base.near) * c
+    this.fog.far = base.far + (CLOUD.see - base.far) * c
+    const inside = c > 0.6
+    if (inside && !this.wasIn) sfx.cloudIn()
+    if (this.sea) this.sea.visible = y > y1 - 4
+    if (above && !this.wasAbove && this.phase === 'race') {
+      sfx.cloudOut()
+      this.sparkle.burst(this.k.d.x, y + 3, this.k.d.z, 40, 5, 6, 0.26)
+      this.kaylee.react('hop')
+    }
+    this.wasIn = inside
+    this.wasAbove = above
+    const L = this.lanterns
+    if (!L) return
+    const list = this.track.lanterns
+    for (let i = 0; i < list.length; i++) {
+      const l = list[i]
+      L.lit[i] = Math.max(0, L.lit[i] - dt * 1.4)
+      const p = this.track.place(l.s, l.lat)
+      const lift = L.lit[i] * 0.8
+      m4.makeRotationZ(Math.sin(t * 1.3 + i) * 0.08 + Math.sin(t * 9) * 0.25 * L.lit[i])
+      m4.setPosition(p.x, p.y + 2.35 + Math.sin(t * 1.6 + i * 0.7) * 0.15 + lift, p.z)
+      const sc = 1 + L.lit[i] * 0.35
+      m4.scale(tmp.set(sc, sc, sc))
+      L.mesh.setMatrixAt(i, m4)
+      L.mesh.setColorAt(i, tmpColor.set(L.on[i] ? '#FFFFFF' : '#F0E0D0'))
+    }
+    L.mesh.instanceMatrix.needsUpdate = true
+    if (L.mesh.instanceColor) L.mesh.instanceColor.needsUpdate = true
   }
 
   /** The intro, the countdown, GO, the finish and the end. */
@@ -636,7 +993,8 @@ export class KartRace implements World3D {
       // By herself: along the inside of the next bend, but straight over a mushroom or a pad just ahead (the good bits
       // shouldn't need her to aim).
       const look = k.s + this.lookAhead(k.s, 10 + Math.abs(d.speed) * 0.45)
-      const good = [...this.track.mushrooms, ...this.track.pads].map((g) => ({ g, a: g.s - k.s })).filter((x) => x.a > 2 && x.a < 26).sort((a, b) => a.a - b.a)[0]
+      const showers = this.track.showers.map((w) => ({ s: w.s, lat: 0 }))
+      const good = [...this.track.mushrooms, ...this.track.pads, ...this.track.puddles, ...showers, ...this.track.lanterns].map((g) => ({ g, a: g.s - k.s })).filter((x) => x.a > 2 && x.a < 26).sort((a, b) => a.a - b.a)[0]
       const lat = good ? good.g.lat : clamp(road.bendAhead(k.s, 25) * 3, -3, 3)
       target = road.spotAt(look, lat)
       cap = KART.cruise * this.bendSlow(k.s, 1)
@@ -738,10 +1096,12 @@ export class KartRace implements World3D {
     this.atTheLine(r)
     if (r.done < 0 && r.progress >= this.track.length) this.crossed(r)
     if (r.done >= 0 || this.phase !== 'race') return
+    // (The rivals get the bursts too, except on the last stretch: there the story says who's beside her at the line.)
+    const bursts = r === this.k || r.progress < this.track.length * 0.85
     // Gold arrow pads: a burst of speed.
     if (this.pads.on(r.s, r.lat) && r.padCool <= 0 && !d.airborne) {
       r.padCool = 0.8
-      d.vroom(KART.pad)
+      if (bursts) d.vroom(KART.pad)
       if (r === this.k) {
         this.counts.pads++
         sfx.zoom()
@@ -765,7 +1125,70 @@ export class KartRace implements World3D {
         sounds.sparkle()
       } else r.block?.react('hop')
     }
+    r.splashCool -= dt
+    // A puddle: SPLASH, muddier (and a little faster).
+    const pud = !d.airborne && r.splashCool <= 0 ? this.track.puddleAt(r.s, r.lat) : undefined
+    if (pud) {
+      r.splashCool = 0.7
+      r.mud = Math.min(1, r.mud + MUD.each)
+      r.squash = 0.3
+      r.pitch.v += 1.2
+      const sp = Math.abs(d.speed)
+      for (const side of [1, -1]) {
+        const lx = Math.cos(d.heading) * side
+        const lz = -Math.sin(d.heading) * side
+        for (let i = 0; i < (r === this.k ? 18 : 8); i++)
+          this.splash.emit(d.x + lx * 0.8, r.y + 0.3, d.z + lz * 0.8, lx * (2 + Math.random() * 3) + Math.sin(d.heading) * sp * 0.3, 3 + Math.random() * 4, lz * (2 + Math.random() * 3) + Math.cos(d.heading) * sp * 0.3, 0.9, 0.2 + Math.random() * 0.12, Math.floor(Math.random() * 5))
+      }
+      if (r === this.k) {
+        this.counts.splashes++
+        sfx.splash(0.8)
+        sfx.puddle()
+        this.slow = Math.max(this.slow, MUD.splash)
+        this.kaylee.react('hop')
+      } else r.block?.react('hop')
+    }
+    // The waterfall's stream: washed clean, and a burst of speed.
+    if (this.track.inStream(r.s) && r.splashCool <= 0) {
+      r.splashCool = 1.5
+      const was = r.mud
+      r.mud = 0
+      if (bursts) d.vroom(MUD.wash)
+      this.splash.burst(d.x, r.y + 1.5, d.z, r === this.k ? 40 : 14, 3, 4, 0.22, 1)
+      if (r === this.k) {
+        this.counts.washes++
+        sfx.splash(1.4)
+        this.later(() => sounds.sparkle(), 250)
+        this.sparkle.burst(d.x, r.y + 1, d.z, was > 0 ? 30 : 12, 3, 3, 0.16)
+        this.boostKick = 0.8
+      }
+    }
+    // A blossom shower: petals swirl round the kart, and a burst of speed.
+    const sh = r.padCool <= 0 && !d.airborne ? this.track.showerAt(r.s, r.lat) : undefined
+    if (sh && this.petals) {
+      r.padCool = SHOWER_LEN / Math.max(4, Math.abs(d.speed)) + 0.3
+      if (bursts) d.vroom(CLOUD.petals)
+      for (let i = 0; i < (r === this.k ? 36 : 12); i++) this.petals.emit(d.x + (Math.random() - 0.5) * 2, r.y + 0.5 + Math.random() * 1.5, d.z + (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 5, 1 + Math.random() * 3, (Math.random() - 0.5) * 5, 2.2, 0.15)
+      if (r === this.k) {
+        this.counts.showers++
+        sfx.zoom()
+        sfx.chime()
+        this.boostKick = 0.8
+      }
+    }
     if (r !== this.k) return
+    // Under a lantern in the cloud: it lights up bright, bobs and chimes, one note higher each time.
+    const L = this.lanterns
+    if (L)
+      this.track.lanterns.forEach((l, i) => {
+        if (L.on[i] || Math.abs(l.s - r.s) > 1.6 || Math.abs(l.lat - r.lat) > CLOUD.lantern) return
+        L.on[i] = true
+        L.lit[i] = 1
+        this.counts.lanterns++
+        sounds.note(Math.min(10, this.counts.lanterns % 11))
+        const p = this.track.place(l.s, l.lat)
+        this.sparkle.burst(p.x, p.y + 2.35, p.z, 10, 1.5, 1.5, 0.12, 1)
+      })
     if (r.grass && !d.airborne) {
       this.counts.grass += dt
       if (Math.random() < dt * 5) sfx.rumble()
@@ -1049,7 +1472,10 @@ export class KartRace implements World3D {
     let at: Vector3 | null = null
     const idle = this.time - this.lastTouch
     if (this.steer === 'finger' && ((this.phase === 'count' && !this.finger) || (this.phase === 'race' && idle > 7 && this.k.done < 0))) {
-      const p = this.track.place(this.k.s + 14, 0)
+      // (In the cloud: on the next lantern's line.)
+      const l = this.track.lanterns.find((x) => x.s > this.k.s + 8)
+      const lat = l && l.s < this.k.s + 30 ? l.lat : 0
+      const p = this.track.place(this.k.s + 14, lat)
       at = new Vector3(p.x, p.y + 0.3, p.z)
     }
     const s = at ? this.toScreen(at, 1) : null
@@ -1174,6 +1600,15 @@ export class KartRace implements World3D {
       if (!m || Math.hypot(m.g.position.x - k.d.x, m.g.position.z - k.d.z) > 50) return null
       return { at: m.g.position.clone().setY(m.g.position.y + 0.6), r: m.m.r * 0.8, prio: 0, max: 140 }
     }
+    if (id === 'waterfall') {
+      if (!this.fall || this.fall.at.distanceTo(tmp.set(k.d.x, k.y, k.d.z)) > 50) return null
+      return { at: this.fall.at, r: 1.4, prio: 0, max: 140 }
+    }
+    if (id.startsWith('tree:')) {
+      const tr = this.trees[Number(id.slice(5))]
+      if (!tr || tr.at.distanceTo(tmp.set(k.d.x, k.y, k.d.z)) > 45) return null
+      return { at: tr.at, r: 1.5, prio: 0, max: 130 }
+    }
     return null
   }
 
@@ -1238,6 +1673,8 @@ export class KartRace implements World3D {
       steer: { mode: this.steer, gas: this.gasDown, tilt: r2(this.tilt?.value ?? 0), live: this.tilt?.live ?? false, aim: r2(this.aimLat), waiting: this.waiting },
       ...this.counts,
       grass: r2(this.counts.grass),
+      mud: r2(this.k.mud),
+      cloud: this.track.def.cloud ? { in: r2(this.cloudK), above: this.wasAbove, lanterns: this.track.lanterns.length } : null,
     }
   }
   memory() {

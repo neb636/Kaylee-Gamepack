@@ -20,6 +20,7 @@ guides and a "Copy for agent" note to bake the camera into the game):
 graph, and a "Copy for agent" note with the numbers to bake in):
 - [The Nan mountain road's steering](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)
 - [The Nan Mountain Cup's kart: steering, the mushrooms' bounce, the rivals' rubber band](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=forest&feel=1)
+- [The Nan Mountain Cup's mud and the cloud: per puddle, how much faster, the waterfall's and the blossoms' bursts, how far she sees in the cloud](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=steps&feel=1)
 - [Canada's train: how it feels to push](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=quebec&feel=1)
 
 
@@ -226,6 +227,8 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - **The Nan Mountain Cup** (greybox, not in the game yet)
   - [The Mushroom Forest race: she wins by a nose](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=forest&result=win)
   - [The Mushroom Forest race: Moon wins by a nose, she's second](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=forest&result=lose)
+  - [The Rice Steps Rally: puddles, mud and the waterfall, she wins by a nose](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=steps&result=win) ([Grandma Taeng wins](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=steps&result=lose))
+  - [The Cloud Top Climb: the lanterns in the cloud and the blossoms, she wins by a nose](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=cloud&result=win) ([Pao wins](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/race?track=cloud&result=lose))
 - **Viewpoint and home**
   - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
 

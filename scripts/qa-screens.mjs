@@ -747,6 +747,10 @@ const SCREENS = [
   // itself, a bit slower, with no finger down).
   { name: 'nan-cup-grid', hash: '#/world/thailand/nan-trip/race', reset: true, wait: 4500 },
   { name: 'nan-cup-race', hash: '#/world/thailand/nan-trip/race?result=lose', reset: true, wait: 14000 },
+  // Greybox 2: the Rice Steps (the terraces, the first puddles) and the Cloud Top Climb (a blossom shower), a few seconds
+  // in. (In the cloud and the waterfall are qa-motion's nan-cloud and nan-splash.)
+  { name: 'nan-cup-steps', hash: '#/world/thailand/nan-trip/race?track=steps', reset: true, wait: 14000 },
+  { name: 'nan-cup-cloud', hash: '#/world/thailand/nan-trip/race?track=cloud', reset: true, wait: 14000 },
   { name: 'nan-salt-1', hash: '#/world/thailand/nan-trip/salt', reset: true, wait: 3500 },
   { name: 'nan-salt-2', hash: '#/world/thailand/nan-trip/salt?round=2', reset: true, wait: 3500 },
   { name: 'nan-salt-3', hash: '#/world/thailand/nan-trip/salt?round=3', reset: true, wait: 3500 },
