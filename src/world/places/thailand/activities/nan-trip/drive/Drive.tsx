@@ -7,9 +7,10 @@
 // family's photo with the 3 behind them and the end card offers ✈️🏠 home. Every drive (and every 🔁) rolls its own
 // weather and traffic (roads.ts rollDrive); a link's `weather` holds for the drive it opens.
 import { AnimatePresence, motion } from 'motion/react'
-import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../../../engine3d/Anchors'
+import { SteerHint, SteerWheel } from '../../../../../engine3d/SteerWheel'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import { driveAnchors, NanDrive, type DriveHud } from './mountain'
 import { L } from '../../../lines'
@@ -107,13 +108,9 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
         anchors={(input, els) => (
           <>
             <Anchors list={driveAnchors(road, roll.traffic, to)} els={els} {...input} />
-            <Stick ref={stickRef} />
-            {/* Not steering for a while: a finger sliding side to side, the way the ring steers. */}
-            <div ref={hintRef} aria-hidden style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 20000 }}>
-              <motion.div animate={{ y: [0, 14, 0], scale: [1, 0.9, 1] }} transition={{ repeat: Infinity, duration: 0.9, ease: 'easeInOut' }} style={{ fontSize: 'clamp(48px, 7vw, 72px)', translate: '-30% -10%', filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.35))' }}>
-                👆
-              </motion.div>
-            </div>
+            <SteerWheel ref={stickRef} />
+            {/* Not steering for a while: a finger sliding side to side, the way the wheel steers. */}
+            <SteerHint ref={hintRef} />
           </>
         )}
       />
@@ -135,41 +132,6 @@ export function Drive({ road, view = false, to = '', onRoad, onStop, onMap, onVi
     </div>
   )
 }
-
-/** The steering wheel, sled style: it appears centred where her finger went down and turns as she pushes left or right
- *  (her finger is on its rim). mountain.ts shows it, places it (transform), sizes it (--r) and turns it (--turn). */
-const Stick = forwardRef<HTMLDivElement>(function Stick(_, ref) {
-  return (
-    <div ref={ref} aria-hidden style={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0, display: 'none', pointerEvents: 'none', zIndex: 19000 }}>
-      <svg
-        viewBox="-50 -50 100 100"
-        style={{
-          position: 'absolute',
-          left: 'calc(var(--r, 72px) * -1)',
-          top: 'calc(var(--r, 72px) * -1)',
-          width: 'calc(var(--r, 72px) * 2)',
-          height: 'calc(var(--r, 72px) * 2)',
-          overflow: 'visible',
-          rotate: 'var(--turn, 0deg)',
-          opacity: 0.92,
-          filter: 'drop-shadow(0 4px 6px rgba(43,35,48,.3))',
-        }}
-      >
-        {/* The rim (white edged so it reads on the road and the grass), three spokes, the pink middle with a heart. */}
-        <circle r={44} fill="none" stroke="#FFFFFF" strokeWidth={15} />
-        <circle r={44} fill="none" stroke="#6E5C8A" strokeWidth={10} />
-        <circle r={44} fill="none" stroke="#8A78A6" strokeWidth={3} strokeDasharray="5 8" />
-        {[90, 210, 330].map((a) => (
-          <rect key={a} x={-5} y={10} width={10} height={32} rx={4} fill="#6E5C8A" stroke="#FFFFFF" strokeWidth={2} transform={`rotate(${a})`} />
-        ))}
-        <circle r={17} fill="#FF4F9A" stroke="#FFFFFF" strokeWidth={4} />
-        <path d="M0 8 C -11 0, -9 -9, -3.5 -8 C -1.5 -7.6, -0.5 -6, 0 -4.5 C 0.5 -6, 1.5 -7.6, 3.5 -8 C 9 -9, 11 0, 0 8 Z" fill="#FFFFFF" />
-        {/* Where her hands hold it, on top: it swings round as the wheel turns. */}
-        <circle cy={-44} r={8} fill="#FFC83D" stroke="#FFFFFF" strokeWidth={3} />
-      </svg>
-    </div>
-  )
-})
 
 /** The 3 road's count: a giant 1, 2, 3 as she rounds each bend (and again from the viewpoint, as each bend pops). */
 function CountPop({ count }: { count: DriveHud['count'] }) {
