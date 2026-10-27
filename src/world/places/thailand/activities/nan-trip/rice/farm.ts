@@ -39,6 +39,7 @@ import {
   type Paddy,
   type V3,
 } from './layout'
+import { buffaloHorns } from '../../../trip/road/traffic'
 import { FarmWater } from './water'
 
 export const GRASS = '#86CF78'
@@ -752,7 +753,7 @@ function buildBuffalo(bag: Bag) {
       merge([
         P.rbox(0.44, 0.42, 0.56, 0.18, C, { at: [0, -0.07, 0.24] }),
         P.rbox(0.36, 0.22, 0.2, 0.08, '#9C93AE', { at: [0, -0.18, 0.52] }),
-        ...[-1, 1].map((k) => P.torus(0.28, 0.05, '#EDE3D2', { at: [k * 0.3, 0.12, 0.08], rot: [Math.PI / 2, 0, k > 0 ? 0 : Math.PI] }, Math.PI * 0.75)),
+        ...buffaloHorns([0.17, 0.09, 0.14], 0.25, 0.05),
         ...[-1, 1].map((k) => P.sphere(0.04, PAL.ink, { at: [k * 0.17, 0.04, 0.44] }, 8)),
         ...[-1, 1].map((k) => P.sphere(0.055, '#FF9DB8', { at: [k * 0.19, -0.1, 0.42], scale: [1, 0.6, 0.4] }, 8)),
       ]),
