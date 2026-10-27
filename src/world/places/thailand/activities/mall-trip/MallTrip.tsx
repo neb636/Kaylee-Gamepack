@@ -108,6 +108,8 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
   const [from, setFrom] = useState<DoorId | 'in'>(() => param('from') as DoorId | 'in')
   // HarborLand's map is open in the hall.
   const [map, setMap] = useState(() => param('map') === '1')
+  // She's just come back out of a mini game (not a link): the map opens by itself, her new star popping on.
+  const [backOut, setBackOut] = useState(false)
   const [pizza, setPizza] = useState(() => param('pizza') as PizzaId)
   const [at, setAt] = useState<At>(() => (legacy === 'dragon' ? 'top' : (param('at') as At)))
   const [shared, setShared] = useState(() => Number(param('shared')))
@@ -237,6 +239,7 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
   }
   /** Back out to the hall, by the door she went in. */
   const goOut = () => {
+    setBackOut(true)
     setFrom(DOOR_OF[section] ?? 'in')
     setSection('hall')
   }
@@ -269,6 +272,7 @@ export function MallTrip({ onExit, onTrip, onDone }: Props = {}) {
           hungry={hungry || section === 'hungry'}
           asking={section === 'hungry'}
           map={map && section === 'hall'}
+          back={backOut}
           onMap={setMap}
           onEnter={goIn}
           onHungry={() => setSection('hungry')}

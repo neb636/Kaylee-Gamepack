@@ -9,7 +9,7 @@ import { HarborSign } from '../harborland/sign'
 import { Hall, HALL_ANCHORS, LABELS } from './hall'
 import { HallMap } from './HallMap'
 import { Hungry } from './Hungry'
-import type { DoorId, GameDoor } from './layout'
+import { GAMES, type DoorId, type GameDoor } from './layout'
 import { mallVoice } from '../voice'
 
 /** Each sign's letters. */
@@ -27,6 +27,8 @@ interface Props {
   asking: boolean
   /** The map is open (a `map=1` link opens it). */
   map: boolean
+  /** She's just come back out of `from` (not a link): the map opens by itself once she's out, with her new star. */
+  back: boolean
   onMap(open: boolean): void
   onEnter(door: GameDoor): void
   onHungry(): void
@@ -34,7 +36,7 @@ interface Props {
   onMorePlay(): void
 }
 
-export function HallScreen({ socks, hair, done, from, hungry, asking, map, onMap, onEnter, onHungry, onPizza, onMorePlay }: Props) {
+export function HallScreen({ socks, hair, done, from, hungry, asking, map, back, onMap, onEnter, onHungry, onPizza, onMorePlay }: Props) {
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [key, setKey] = useState(0)
   const [going, setGoing] = useState(false)
@@ -51,6 +53,14 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, map, onMap
   useEffect(() => {
     if (map) setHere(worldRef.current?.nearest() ?? null)
   }, [map])
+  // Back out of a mini game with more still to play: once she's stepped out, the map comes up (where next?). Not when
+  // Daddy's about to ask about pizza.
+  const fresh = back && from !== 'in' ? from : null
+  useEffect(() => {
+    if (!fresh || hungry || asking || done.length >= GAMES.length) return
+    const t = setTimeout(() => onMap(true), 1700)
+    return () => clearTimeout(t)
+  }, [])
 
   const make = (renderer: WebGLRenderer) => {
     const w = new Hall(
@@ -119,6 +129,7 @@ export function HallScreen({ socks, hair, done, from, hungry, asking, map, onMap
         open={map && !asking && !going}
         done={done}
         here={here}
+        fresh={fresh}
         nudge={nudge}
         hidden={asking || going || mode !== 'webgl'}
         onOpen={onMap}

@@ -9,7 +9,10 @@ import { useEffect, useState } from 'react'
 import { sounds, useLandscape } from '../../../../../../sdk'
 import { L } from '../../../lines'
 import { mallVoice } from '../voice'
-import { GAMES, type GameDoor } from './layout'
+import { GAMES, type DoorId, type GameDoor } from './layout'
+
+/** Times the map has opened by itself (coming back out of a mini game) this time in the mall. */
+let autoOpens = 0
 
 interface Props {
   open: boolean
@@ -17,6 +20,8 @@ interface Props {
   done: GameDoor[]
   /** The stop nearest her now (the 🦄). */
   here: GameDoor | null
+  /** The way in she's just come back out of: its star pops on as the map opens. */
+  fresh: DoorId | null
   /** She's stuck with every new game off the screen: the button bounces with a finger. */
   nudge: boolean
   /** Hidden while Mommy's card is up or she's going in somewhere. */
@@ -25,7 +30,7 @@ interface Props {
   onPick(door: GameDoor): void
 }
 
-export function HallMap({ open, done, here, nudge, hidden, onOpen, onPick }: Props) {
+export function HallMap({ open, done, here, fresh, nudge, hidden, onOpen, onPick }: Props) {
   const landscape = useLandscape()
   // The button's badge cycles through the games she hasn't played yet (so it isn't the top bar's 🗺️, and says "more!").
   const left = GAMES.filter((g) => !done.includes(g.id))
@@ -35,8 +40,17 @@ export function HallMap({ open, done, here, nudge, hidden, onOpen, onPick }: Pro
     return () => clearInterval(t)
   }, [])
   const badge = left.length ? left[tick % left.length] : null
+  // Sparkle asks where to when it opens; opening by itself after a mini game, only the first time this trip (then the
+  // star popping on says it).
   useEffect(() => {
-    if (open) mallVoice.say(L.mall.hall.map)
+    if (!open || (fresh && autoOpens++ > 0)) return
+    mallVoice.say(L.mall.hall.map)
+  }, [open])
+  // The new star's twinkle.
+  useEffect(() => {
+    if (!open || !fresh || !(done as string[]).includes(fresh)) return
+    const t = setTimeout(() => sounds.sparkle(), 700)
+    return () => clearTimeout(t)
   }, [open])
   const tile = landscape ? 'clamp(88px, min(15vw, 24vh), 150px)' : 'clamp(88px, min(25vw, 15vh), 170px)'
   return (
@@ -120,9 +134,15 @@ export function HallMap({ open, done, here, nudge, hidden, onOpen, onPick }: Pro
                       </span>
                       <span style={{ fontSize: 'clamp(11px, calc(' + tile + ' * 0.12), 17px)', fontWeight: 700, lineHeight: 1.05, textAlign: 'center' }}>{g.name}</span>
                       {played && (
-                        <span aria-hidden style={{ position: 'absolute', right: -10, top: -12, fontSize: 'clamp(26px, calc(' + tile + ' * 0.26), 40px)' }}>
+                        <motion.span
+                          aria-hidden
+                          initial={fresh === g.id ? { scale: 0, rotate: -90 } : false}
+                          animate={fresh === g.id ? { scale: [0, 1.7, 1], rotate: 0 } : undefined}
+                          transition={{ delay: 0.5, duration: 0.6 }}
+                          style={{ position: 'absolute', right: -10, top: -12, fontSize: 'clamp(26px, calc(' + tile + ' * 0.26), 40px)' }}
+                        >
                           ⭐
-                        </span>
+                        </motion.span>
                       )}
                       {here === g.id && (
                         <motion.span aria-hidden animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 1 }} style={{ position: 'absolute', left: -10, top: -14, fontSize: 'clamp(26px, calc(' + tile + ' * 0.26), 40px)' }}>
