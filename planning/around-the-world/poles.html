@@ -1399,6 +1399,13 @@
               "pr": 219
             },
             {
+              "n": "2b",
+              "title": "Greybox: the lost penguin, and things to poke",
+              "status": "done",
+              "date": "2026-10-27",
+              "md": "The hub's step 3: once the sun's been dragged, a penguin or a polar bear cub turns up adrift on a little iceberg in the warm middle of the world, and she carries it home to its pole. Plus the hub's pokeables: the North Pole marker, a seal in its hole, the science station, a whale, the lights, snowflakes."
+            },
+            {
               "n": 3,
               "title": "Greybox: Ice Floe Hop",
               "status": "done",
@@ -1665,6 +1672,27 @@
                   "md": "**Known small things:** tucked in the middle of the huddle, Pebble is behind the front row (true to life, but hard to see). No snow on Pebble. The moms coming back from the sea aren't in it. The plan's replay with another penguin's egg isn't in yet (🔁 swaps the wind's side). The southern lights glow all night instead of only when tapped."
                 }
               ]
+            },
+            {
+              "title": "Hub greybox 2: the lost penguin, and things to poke",
+              "date": "2026-10-27",
+              "status": "done",
+              "summary": "The hub's third step: after she has dragged the sun, a lost penguin (or polar bear cub) turns up on a little iceberg in the warm middle of the world, fanning itself. She grabs it and carries it to the top or the bottom of the globe. The globe turns to show where it lands. Its own pole: it lands by Pebble (or Pola), they hop and wave, confetti. The wrong pole: it looks round, a pink “?” pops over its head, whoever lives there jumps back, then its own pole glows and it hops back onto its berg to be carried again. Never an “oops”. Then the next one, a bear after a penguin.",
+              "items": [
+                "**Carrying it:** her finger on the lost one lifts it off the berg (bigger, legs swinging) and it follows her finger in front of the globe; while she holds it, the globe turns back to the whole view so both poles are in sight. Let go over the top of the globe (the north), the bottom (the south) or in between (it splashes back onto its berg). A tap without a drag is a hop.",
+                "**The berg** stands up toward the top of the screen instead of straight out of the sea, so from the middle view she sees the penguin from the side, not from above. It drifts and bobs with the globe's spin, and turns up in whichever warm sea is facing her. Left alone 6 s, the lost one waves.",
+                "**Home:** each saved one stays on its pole (up to 3, then the oldest wanders off), so the colony and the bears grow as she plays.",
+                "**Pokes:** the North Pole's striped marker wobbles and rings; a seal pops out of its breathing hole by Pola, looks round and barks (and pops up by itself now and then); the science station's door swings open and a scientist steps out and waves; a whale in the South Atlantic surfaces, spouts and slaps its tail (and does it by itself every ~10 s); a tap on the empty sky bursts snowflakes, and in a pole's winter night the lights flare up and ripple faster with a chime.",
+                "**Sections:** `hub/lost?who=penguin|bear&summer=...`: the sun out and already dragged, the lost one adrift at once. The address bar switches to `lost` when the first one appears.",
+                "**Files:** `globe/extras.ts` (the lost one and the pokes), hooked into `globe/globe.ts` (anchors, the carry, the sky tap, the lights' flare). QA: two `qa-screens` routes (`lost?who=penguin`, `lost?who=bear`) and a `qa-motion` scenario (`poles-lost`: the wrong pole, then home). No voices (the full-loop gate).",
+                {
+                  "text": "**Known small things:**",
+                  "items": [
+                    "The whale is seen from above (it's on the globe's face), so it reads as a blue blob with a spout until the art.",
+                    "There are no animals adrift other than a penguin and a bear cub yet. A walrus or an Arctic fox to sort (the quiz's “who lives up north?”) could come later."
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -1718,7 +1746,13 @@
               "n": 7,
               "id": "lost",
               "name": "The lost penguin",
-              "status": "todo"
+              "query": "who=penguin"
+            },
+            {
+              "n": 8,
+              "id": "lost",
+              "name": "A lost polar bear cub",
+              "query": "who=bear"
             }
           ]
         },

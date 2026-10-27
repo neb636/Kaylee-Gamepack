@@ -382,8 +382,9 @@ const SCREENS = [
   ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
   { name: 'thailand-party-soon', hash: '#/world/thailand/party/soon', stampAll: 'thailand', wait: 800 },
   // The Poles: the globe hub (greybox 1) from the middle, each pole, the sun out with summer up north, and the north in
-  // its winter night; Ice Floe Hop; then an activity's and the finale's "coming soon" cards.
-  ...['globe', 'globe?side=north', 'globe?side=south', 'sun?summer=north', 'sun?side=north&summer=south', 'sun?side=south&summer=south'].map((to) => ({
+  // its winter night; the lost penguin and the lost bear cub adrift (hub greybox 2); Ice Floe Hop; then an activity's
+  // and the finale's "coming soon" cards.
+  ...['globe', 'globe?side=north', 'globe?side=south', 'sun?summer=north', 'sun?side=north&summer=south', 'sun?side=south&summer=south', 'lost?who=penguin', 'lost?who=bear'].map((to) => ({
     name: `poles-${to.replace(/[?=&]/g, '-')}`,
     hash: `#/world/poles/hub/${to}`,
     reset: true,
