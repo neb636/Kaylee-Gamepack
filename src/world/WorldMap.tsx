@@ -48,26 +48,38 @@ function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number
         e.stopPropagation()
         onTap()
       }}
-      className={glow ? 'world-glow' : undefined}
       style={{
+        // The button is the tap target and keeps its full size; the circle drawn inside it is smaller (82%,
+        // 2026-10-27), so the map looks less crowded without making the pins harder to hit.
         position: 'absolute',
         left: `${x}%`,
         top: `${y}%`,
         translate: '-50% -50%',
-        // About 18% smaller than before (2026-10-27): with a pin for every country the map was getting crowded.
-        width: 'clamp(46px, 9cqw, calc(var(--target) * 0.82))',
+        width: 'clamp(56px, 11cqw, var(--target))',
         aspectRatio: '1',
         borderRadius: '50%',
-        background: dim ? 'rgba(255,255,255,0.75)' : '#fff',
-        border: `4px solid ${glow ? 'var(--gold)' : '#fff'}`,
-        boxShadow: 'var(--shadow)',
         display: 'grid',
         placeItems: 'center',
         fontSize: 'clamp(23px, 4.5cqw, 40px)',
         zIndex: 3,
       }}
     >
-      {children}
+      <span
+        className={glow ? 'world-glow' : undefined}
+        style={{
+          position: 'relative',
+          width: '82%',
+          aspectRatio: '1',
+          borderRadius: '50%',
+          background: dim ? 'rgba(255,255,255,0.75)' : '#fff',
+          border: `4px solid ${glow ? 'var(--gold)' : '#fff'}`,
+          boxShadow: 'var(--shadow)',
+          display: 'grid',
+          placeItems: 'center',
+        }}
+      >
+        {children}
+      </span>
     </motion.button>
   )
 }
