@@ -95,6 +95,8 @@ export const CANOE_ANCHORS: AnchorInfo[] = [
 const ORDER: CanoeSection[] = ['glide', 'stream', 'loon', 'glacier']
 const DEG = 180 / Math.PI
 const HINT_S = 8
+/** A blade moving back slower than this (m/s) is held still: the brake, not a stroke. */
+const HELD = 0.3
 /** The lake's colors: before she finds the rock flour, and glowing turquoise at the end. */
 const DULL = { deep: new Color('#3B97B0'), shallow: new Color('#57B2C4') }
 const GLOW = { deep: new Color('#16C2CB'), shallow: new Color('#6BE6DE') }
@@ -547,7 +549,8 @@ export class RedCanoe implements World3D {
     if (!this.bladeIn) return
 
     const back = -this.bladeV
-    if (back > 0) {
+    // (The smoothed speed only fades toward zero once her finger stops, so below a slow drift the blade counts as held.)
+    if (back > HELD) {
       // A stroke: forward, and turning away from its side (more when it's out wide).
       const eff = Math.min(back, STROKE.quick) * dt
       const wide = clamp((Math.abs(at.across) - 0.62) / Math.max(0.1, STROKE.reach - 0.62))
