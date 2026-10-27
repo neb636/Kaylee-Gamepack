@@ -737,6 +737,29 @@ GAME_SCENARIOS.push(
   },
 )
 
+// Mountain Bike (3D greybox): Maple riding the blue way's berms with the wheel under her finger, pushed right up the
+// berm and held, then let go: she leans into the bends, bumps over the roots and drifts back to the middle of her way.
+GAME_SCENARIOS.push({
+  name: 'canada-bike-steer',
+  seconds: 9,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/canada/bike/berms?trail=blue`)
+    await page.waitForFunction(() => window.__canadaBikeQA?.().mode, null, { timeout: 20000 })
+    await page.waitForTimeout(1200)
+  },
+  act: async (page) => {
+    const x = vp.width / 2
+    const y = vp.height * 0.7
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    await page.mouse.move(x + Math.min(110, vp.width * 0.12), y, { steps: 8 })
+    await page.waitForTimeout(2500)
+    await page.mouse.move(x - Math.min(60, vp.width * 0.07), y, { steps: 8 })
+    await page.waitForTimeout(1500)
+    await page.mouse.up()
+  },
+})
+
 // Baan Chang's feeding yard (3D greybox): a banana pulled out of Daddy's basket and held up on Mali's side (her trunk
 // snakes after it, curls round it and swings it to her mouth), then a stick of sugarcane held high on the right (the
 // trunks stretch up after it) and brought down to Khanom.
