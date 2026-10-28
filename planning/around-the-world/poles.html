@@ -1895,6 +1895,21 @@
                 "`art/source/world/poles/sticker-*.png` and `friend-pola.png` (Codex) → `assets/*.webp`; `art.ts` points `stickers` and `friend` at them. qa-art: the cream fur and highlights are marked fine.",
                 "**Known small things:** the Adélie sticker has no white eye ring, and the chick's face isn't heart-shaped."
               ]
+            },
+            {
+              "title": "Steps 8b + 9: Snow Coats' art, and it goes into the game",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "The animals in Snow Coats are puppets now and the tundra is painted. Her finger still rubs their summer coats white, and they look at her finger, swish their tails, blink, giggle and hop. Sparkle says one short line as each part starts, helps when she's stuck, and tells a fact the first time she pokes an animal. When every coat is brown again in the summer: the stamp and the fox sticker.",
+              "items": [
+                "**The animals** (`activities/coats/animals.ts`): the fox, hare, ptarmigan and lemming in a brown summer coat with a lighter belly and darker markings, all still rubbable, with the head and tail on their own pivots. On top whatever the season: big eyes with highlights (they blink and follow her finger), the nose, a mouth that opens to giggle, blush and pink inner ears, the hare's black ear tips, the ptarmigan's red comb and beak. The polar bear (Mama Bear's look) and the snowy owl use the same puppet; the owl shakes its head and looks round.",
+                "`SnowCoats.tsx`: `AnimalEl` draws each pivot as silhouette, fluff, summer coat, the masked white coat, then the details. `poseRig` moves the head (toward her finger, lagging a hop, a nod on landing), the tail (a spring: it swishes, flies up in a hop, streams back in a run), the blinks and the mouth. While she rubs one it holds nearly still. Each animal has its own squeak.",
+                "**The painted tundra** (`art.coats`, six Codex backdrops `bg-coats-sky-*` and `bg-coats-ground-*`): late summer for the fox, winter for hide and seek, summer for the melt. The winter hills fade in as the snow settles and out as she melts it; the painted snow ground still rubs on and off through the same mask.",
+                "**Sparkle** (`kit/Guide`): one line as each part starts (it plays while she can already rub: no talk before the first touch), a hint after 8 s, the bear coming, an animal running off, the dusk. Facts the first time she pokes the fox, hare, ptarmigan, lemming, the bear or the ground (Arctic land animals), and camouflage when the bear first finds nobody. `L.coats`: 18 lines, all Sparkle.",
+                "The summer all brown: the fanfare, “Brown coats for the summer!”, then `onDone` 4.5 s later. `info.ts`: `READY = true`. `qa.mjs`: the pacing run opens `/coats/fox`.",
+                "**Changed from the plan:** no StoryBeat (one opening line while she rubs). The animals are puppets inside the scene's own SVG, not lab puppets in `#/world/puppets`, so their coats stay rubbable. The bear has no voice: he huffs and sniffs.",
+                "**Known small things:** no reindeer, musk ox or popping lemming to poke yet. On iPhone landscape the far hills stretch about 2× sideways. Paint on a swishing tail can slide a little inside the tail. Two lines say the polar bear stays white (the owl line and the bear fact)."
+              ]
             }
           ]
         }
