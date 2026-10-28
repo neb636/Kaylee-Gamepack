@@ -1829,6 +1829,22 @@
                 "**Changed from the plan:** Mama's “Hop home to me, Pola!” is her first tap line instead of part of the opening, to keep the talk short. No pokeable seals, narwhals, walruses or belugas yet (the greybox never had them), so the facts hang on the ice and the water.",
                 "**Known small things:** three Pola clips transcribe a little off (“Wheee! A slide!”, “Brr! Paddle paddle!”, “Hee hee!”): listen on the iPad. “Fling me again!” kept coming out as “Sing me again”, so it's “Again! Again!”."
               ]
+            },
+            {
+              "title": "Step 9: Iceberg Maker goes into the game",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Iceberg Maker talks now, and its 🧊 spot shows on both sides of the globe. Sparkle, in a corner, says what to do at each stretch (and again when she's stuck), with a short fact the first time something comes up. Pola on the north glacier and Papa on the south ice shelf say hello and react in their own voices to the big moments. When her fleet sails off: the stamp, the narwhal sticker, then the iceberg video.",
+              "items": [
+                "**Sparkle (`kit/Guide`):** “Pick a pole: north or south?”, tap the cracks, the giant crack, “most of the iceberg hides under the water”, push it down, push them out to sea, and the goodbye. Each instruction is also her hint after 8 s with nothing touched. The greybox's text pill is gone.",
+                "**Facts, once each:** calving at the first bit; tall and pointy (north) or flat like a table (south) at the second; nine parts out of ten under the water at the first push; fresh water, not salty, when they set sail; bergy seltzer at the first fizz; blue old ice at a tapped scar; the napping seal; orcas at both poles.",
+                "**The friends:** a hello after the pick, a word on some bits (at most one every 4 s), a groan line when the giant lets go, a soaked line after its splash, wonder at the hidden part, “I'm riding the iceberg!” / “All aboard, everyone!”, a giggle when tapped, and the goodbye.",
+                "**The stamp:** 5.5 s after the fleet has sailed (the goodbyes first), `onDone`. The 🔁 “other pole” button is gone: opening the activity again starts at the pick.",
+                "`L.iceberg`: 38 lines (16 Sparkle, 11 Pola, 11 Papa). Pacing: no talk before the first touch (the pick line plays while she can already tap), about 0.7 s of talk per tap.",
+                "**Files:** `activities/iceberg/iceberg.ts` (a new `moment` event: bit, groan, soak, push, ride, away, giantAway, fizz, blue, seal, orca, friends), `IcebergMaker.tsx` (who says what and how often), `info.ts` (`READY = true`), `qa.mjs` (the pacing run opens `/pick`).",
+                "**Changed from the plan:** Papa speaks for the south (Pebble isn't on the shelf; the Adélies and emperors are).",
+                "**Known small things:** Sparkle's corner covers a little of the cliff top in portrait (nothing tappable there). The pacing robot can't push or flick, so it never reaches the stamp; the drags are checked by the `poles-iceberg-giant` motion scenario."
+              ]
             }
           ]
         }
