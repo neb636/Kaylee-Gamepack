@@ -60,7 +60,49 @@ export const L = {
   huddle: {},
 
   // ---- Iceberg Maker (activities/iceberg/) ----
-  iceberg: {},
+  iceberg: {
+    // Sparkle: what to do (each is also the hint when she's stuck there).
+    pick: 'Pick a pole: north or south?',
+    bits: 'Tap the cracks to break off the ice!',
+    giant: 'A giant crack! Tap, tap, tap!',
+    under: 'Look! Most of the iceberg hides under the water.',
+    push: 'Push the iceberg down with your finger!',
+    sail: 'Now push the icebergs out to sea!',
+    done: 'Your icebergs are sailing away!',
+    // Sparkle's facts, each the first time it comes up.
+    facts: {
+      calving: "When ice breaks off, it's called calving!",
+      north: 'Icebergs up north are tall and pointy.',
+      south: 'Icebergs down south are flat, like a table!',
+      hidden: 'Nine parts out of ten are under the water!',
+      fresh: "Icebergs are made of snow, so they're not salty!",
+      fizz: 'Fizz! Old air bubbles pop out of the ice.',
+      blue: 'Old ice is packed so tight, it looks blue!',
+      seal: 'A seal is napping on a little iceberg.',
+      orca: 'Orcas live at both poles!',
+    },
+    // The friend at each pole: Pola on Greenland's glacier, Papa with the penguins on Antarctica's shelf.
+    north: {
+      hi: pola('Hi! Break off some ice with me!'),
+      bit: [pola('Wheee, splash!'),pola('Ooh, a little one!'), pola('Another one!')],
+      groan: pola("Whoa! It's a big one!"),
+      soak: pola("Splash! I'm all wet!"),
+      under: pola('Wow, it goes way down!'),
+      ride: pola("I'm riding the iceberg!"),
+      poke: [pola('Hee hee!'), pola('Hi again!')],
+      bye: pola('Bye bye, icebergs!'),
+    },
+    south: {
+      hi: papa('Welcome to our ice shelf!'),
+      bit: [papa('Splendid!'), papa('Plop, into the sea!'), papa('Another one!')],
+      groan: papa('Oh my, a giant!'),
+      soak: papa('Brr! A cold shower!'),
+      under: papa('So much ice under the water!'),
+      ride: papa('All aboard, everyone!'),
+      poke: [papa('Hello there!'), papa('Honk honk!')],
+      bye: papa('Off they go! Thank you!'),
+    },
+  },
 
   // ---- The finale: Pole to Pole and the Polar Quiz (activities/party/) ----
   party: {},

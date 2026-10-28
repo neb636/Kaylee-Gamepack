@@ -78,7 +78,13 @@ export interface IcebergEvents {
   under(on: boolean): void
   /** Her fleet sailed off. */
   done(): void
+  /** Something worth a word happened (IcebergMaker.tsx decides who says what, and how often). */
+  moment(m: IcebergMoment): void
 }
+/** The moments the voices react to: a bit splashed in, the giant let go (a groan), its splash soaked the friends on the
+ *  cliff, she pushed the giant under, the friends hopped on to ride it, a berg sailed away (the giant: `giantAway`), and
+ *  the pokes (a berg fizzing, a blue scar, the seal, the orca, the friends). */
+export type IcebergMoment = 'bit' | 'groan' | 'soak' | 'push' | 'ride' | 'away' | 'giantAway' | 'fizz' | 'blue' | 'seal' | 'orca' | 'friends'
 
 export const ICEBERG_ANCHORS: AnchorInfo[] = [
   { id: 'north', label: 'The North Pole: a tall glacier', kind: 'thing' },
@@ -569,6 +575,7 @@ export class IcebergMaker implements World3D {
       noise(1.4, 0.12, 'lowpass', 300, 80)
       noise(0.12, 0.4, 'highpass', 1200, 2400, 0.2)
       this.addScar(0, f.y + this.shape.giant.tip / 2, this.shape.giant.hw * 2, this.shape.giant.tip + 2)
+      this.events.moment('groan')
     } else {
       noise(0.08, 0.35, 'highpass', 1500, 2500)
       if (f.slot >= 0) this.addScar(this.shape.slots[f.slot][0], this.shape.slots[f.slot][1], f.size)
@@ -598,6 +605,7 @@ export class IcebergMaker implements World3D {
     } else {
       this.counts.bits++
       this.broken++
+      this.events.moment('bit')
     }
     this.spray.burst(f.x, 0.15, f.z, Math.round(16 * k), 2.4 * Math.sqrt(k), 4.5 * Math.sqrt(k), 0.22 * Math.sqrt(k))
     for (let i = 0; i < 3; i++) this.foam.emit(f.x, 0.02, f.z, 0, 0, 0, 1.2 + i * 0.4, (1.6 + i) * k)
@@ -693,6 +701,7 @@ export class IcebergMaker implements World3D {
         r.hopT = 1.1 - i * 0.3
       }
     }
+    if (!snap) this.events.moment('ride')
     if (this.growler) {
       // The seal's growler drifts out to sea by itself.
       this.growler.vz = 0.5
@@ -1005,6 +1014,7 @@ export class IcebergMaker implements World3D {
     f.park.set(clamp(f.x * 0.5, -8, 8) + (n % 2 ? 3.5 : -3.5) * Math.ceil(n / 2) * 0.8, 32 + (n % 3) * 4 + this.rand() * 3)
     sounds.note(Math.min(10, 3 + n))
     for (const r of this.riders) if (r.on === f) r.bear ? r.bear.wave() : r.penguin?.hop()
+    this.events.moment(f === this.giant ? 'giantAway' : 'away')
   }
 
   /** The giant's splash soaks the friends on the cliff top: they shake it off. */
@@ -1018,6 +1028,7 @@ export class IcebergMaker implements World3D {
       else r.penguin?.hop()
     }
     sfx.splash()
+    this.events.moment('soak')
   }
 
   private updateRiders(dt: number, t: number) {
@@ -1095,6 +1106,7 @@ export class IcebergMaker implements World3D {
       this.bubble(f.x + Math.cos(a) * f.r * 0.7, -0.4 - Math.random() * f.size, f.z + Math.sin(a) * f.r * 0.7)
     }
     for (let i = 0; i < 6; i++) noise(0.03, 0.12, 'highpass', 4000 + Math.random() * 3000, 6000, i * 0.06 + Math.random() * 0.04, 4)
+    this.events.moment('fizz')
   }
 
   // ---------------------------------------------------------------- the camera
@@ -1235,6 +1247,7 @@ export class IcebergMaker implements World3D {
         this.releasedT = 0
         // Let go: up it shoots (the water pushes it), and bobs.
         sfx.boing()
+        this.events.moment('push')
       }
       return
     }
@@ -1278,6 +1291,7 @@ export class IcebergMaker implements World3D {
       tone(320, 200, 0.14, 0.12, 'square')
       tone(300, 180, 0.16, 0.12, 'square', 0.18)
       this.counts.pokes++
+      this.events.moment('seal')
       return
     }
     if (id === 'orca') {
@@ -1285,6 +1299,7 @@ export class IcebergMaker implements World3D {
       tone(1800, 2600, 0.25, 0.08, 'sine')
       tone(2400, 1500, 0.3, 0.08, 'sine', 0.25)
       this.counts.pokes++
+      this.events.moment('orca')
       return
     }
     // A stuck chunk (missed its target), a floating one, the face, or the water.
@@ -1304,6 +1319,7 @@ export class IcebergMaker implements World3D {
       if (f === this.giant && this.underT >= 0) {
         this.pushes++
         this.releasedT = 0
+        this.events.moment('push')
       }
       return
     }
@@ -1314,6 +1330,7 @@ export class IcebergMaker implements World3D {
       if (scar) {
         this.scarMat.color.set(CRACK_GLOW)
         sounds.note(6)
+        this.events.moment('blue')
         window.setTimeout(() => this.scarMat.color.set(SCAR), 500)
       } else {
         this.spray.burst(wall.x, wall.y, 0.3, 8, 1, 1.2, 0.1)
@@ -1365,6 +1382,7 @@ export class IcebergMaker implements World3D {
 
   private pokeFriends() {
     this.counts.pokes++
+    this.events.moment('friends')
     this.riders.forEach((r, i) => {
       if (r.bear) {
         r.bear.hop()

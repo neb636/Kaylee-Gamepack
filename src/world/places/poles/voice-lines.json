@@ -16,5 +16,109 @@
   "Let's see penguins zoom out of the sea!",
   "Let's see the penguin dads huddle!",
   "Want to see a real iceberg break off?",
-  "Let's see narwhals, the unicorns of the sea!"
+  "Let's see narwhals, the unicorns of the sea!",
+  "Pick a pole: north or south?",
+  "Tap the cracks to break off the ice!",
+  "A giant crack! Tap, tap, tap!",
+  "Look! Most of the iceberg hides under the water.",
+  "Push the iceberg down with your finger!",
+  "Now push the icebergs out to sea!",
+  "Your icebergs are sailing away!",
+  "When ice breaks off, it's called calving!",
+  "Icebergs up north are tall and pointy.",
+  "Icebergs down south are flat, like a table!",
+  "Nine parts out of ten are under the water!",
+  "Icebergs are made of snow, so they're not salty!",
+  "Fizz! Old air bubbles pop out of the ice.",
+  "Old ice is packed so tight, it looks blue!",
+  "A seal is napping on a little iceberg.",
+  "Orcas live at both poles!",
+  {
+    "text": "Hi! Break off some ice with me!",
+    "voice": "pola"
+  },
+  {
+    "text": "Wheee, splash!",
+    "voice": "pola"
+  },
+  {
+    "text": "Ooh, a little one!",
+    "voice": "pola"
+  },
+  {
+    "text": "Another one!",
+    "voice": "pola"
+  },
+  {
+    "text": "Whoa! It's a big one!",
+    "voice": "pola"
+  },
+  {
+    "text": "Splash! I'm all wet!",
+    "voice": "pola"
+  },
+  {
+    "text": "Wow, it goes way down!",
+    "voice": "pola"
+  },
+  {
+    "text": "I'm riding the iceberg!",
+    "voice": "pola"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "pola"
+  },
+  {
+    "text": "Hi again!",
+    "voice": "pola"
+  },
+  {
+    "text": "Bye bye, icebergs!",
+    "voice": "pola"
+  },
+  {
+    "text": "Welcome to our ice shelf!",
+    "voice": "papa"
+  },
+  {
+    "text": "Splendid!",
+    "voice": "papa"
+  },
+  {
+    "text": "Plop, into the sea!",
+    "voice": "papa"
+  },
+  {
+    "text": "Another one!",
+    "voice": "papa"
+  },
+  {
+    "text": "Oh my, a giant!",
+    "voice": "papa"
+  },
+  {
+    "text": "Brr! A cold shower!",
+    "voice": "papa"
+  },
+  {
+    "text": "So much ice under the water!",
+    "voice": "papa"
+  },
+  {
+    "text": "All aboard, everyone!",
+    "voice": "papa"
+  },
+  {
+    "text": "Hello there!",
+    "voice": "papa"
+  },
+  {
+    "text": "Honk honk!",
+    "voice": "papa"
+  },
+  {
+    "text": "Off they go! Thank you!",
+    "voice": "papa"
+  }
 ]
