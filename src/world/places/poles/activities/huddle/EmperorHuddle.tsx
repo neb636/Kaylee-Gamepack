@@ -1,4 +1,4 @@
-// Emperor Huddle (greybox 6, plan: planning/around-the-world/poles.html): winter night in Antarctica. One verb, drag a
+// Emperor Huddle (plan: planning/around-the-world/poles.html): winter night in Antarctica. One verb, drag a
 // penguin into the huddle, that gets richer three times:
 //   small     five emperor dads, each with an egg on his feet. The ones on the windy edge slowly get cold: they shiver,
 //             go blue and snow piles on their backs. Her finger lifts one (he paddles his feet), carries him into the
@@ -14,52 +14,22 @@
 // another pops the other out the top like a cork. Every penguin sings when tapped (or shakes off his snow), the sky
 // glows with the southern lights, the moon twinkles, the ice puffs snow.
 // The huddle packs as circles on the ice (huddle.ts). Plain SVG written to every frame, no three.js and no Phaser.
-// The drag and the warmth are knobs (?feel=1). No voices yet (the full-loop gate): a short line at the bottom says what's
-// on screen, for Dad.
+// The dads and Pebble are the 2D puppets (puppets/Emperor.tsx, Pebble.tsx) on the painted night (bg-huddle-night).
+// Sparkle says what to do from her corner (kit/Guide), the dads talk in Papa's voice and Pebble in Pebble's (L.huddle).
+// The sunrise is the payoff: then `onDone` (the stamp). The drag and the warmth are knobs (?feel=1).
 import { motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, burst, sounds, useElementSize } from '../../../../../sdk'
+import { BigButton, burst, say, sounds, useElementSize, type Line } from '../../../../../sdk'
+import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { ActivityProps } from '../../Place'
-import {
-  BIG,
-  CHICK_BEAK,
-  CHICK_BODY,
-  CHICK_EYE,
-  CHICK_FEET,
-  CHICK_HEAD,
-  CHICK_INK,
-  CHICK_MASK,
-  DAD_BACK,
-  DAD_BEAK,
-  DAD_BELLY,
-  DAD_CHEEK,
-  DAD_CHEST,
-  DAD_EAR,
-  DAD_EYE,
-  DAD_FEET,
-  DAD_FLIPPER,
-  DAD_INK,
-  DEPTH,
-  EGG,
-  HATCH,
-  LATE,
-  onChick,
-  onDad,
-  RADIUS,
-  scaleAt,
-  SMALL,
-  SNOW_BACK,
-  SNOW_CAP,
-  SNUG,
-  TALL,
-  WIDE,
-  type Part,
-  type StageDef,
-  type Start,
-} from './huddle'
+import { Emperor, emperorLive, type EmperorLive } from '../../puppets/Emperor'
+import { Pebble } from '../../puppets/Pebble'
+import night from '../../assets/bg-huddle-night.webp'
+import { L } from '../../lines'
+import { BIG, DEPTH, HATCH, LATE, onChick, onDad, RADIUS, scaleAt, SMALL, SNUG, TALL, WIDE, type StageDef, type Start } from './huddle'
 import HUDDLE_SECTIONS, { type HuddleSection } from './sections'
 
 const FILE = 'src/world/places/poles/activities/huddle/EmperorHuddle.tsx'
@@ -94,21 +64,15 @@ const WARM = knobs('huddle', 'Wind and warmth', FILE, {
 
 const INK = '#4A3B57'
 const SNOW = '#F7FAFE'
-const BACK_WARM = '#2F2A3D'
-const BACK_COLD = '#5B6E9E'
-const BELLY_WARM = '#FFFFFF'
-const BELLY_COLD = '#CFE0F6'
 const MAX_DADS = 7
+/** The painted night: its shape, where its horizon is (a fraction of its height), and the colors at its edges. */
+const NIGHT = { aspect: 1536 / 1024, horizon: 532 / 1024, top: '#1E275B', ice: '#C2CFEF' }
 
-const SAY: Record<HuddleSection, string> = {
-  small: '🐧 Brrr! Bring the cold ones into the middle',
-  blizzard: '🌬️ Blizzard! Keep the cold ones moving in',
-  hatch: '🥚 Keep Pebble’s papa warm…',
-  sunrise: '🌅 The sun is back! Winter is ending',
-}
-const HATCHED = '🐣 Pebble! Tuck Pebble back under Papa'
-const TURNED = '🌬️ The wind turned!'
-const MORE = '🐧 More dads are coming!'
+/** What Sparkle says to do at each moment (L.huddle): spoken when it changes (`speak`), and her hint when stuck. */
+export type Cue = 'small' | 'more' | 'blizzard' | 'turned' | 'hatch' | 'hatched' | 'blown' | 'sunrise' | 'done'
+/** A friend's line: Papa's (one of the dads) or Pebble's. */
+export type Talk = 'cold' | 'thanks' | 'egg' | 'hatched' | 'blown' | 'tucked' | 'sunrise' | 'hi'
+export type Fact = 'egg' | 'coldest' | 'night'
 
 type Step = 'small' | 'more' | 'blizzard' | 'egg' | 'chick' | 'sunrise'
 type Wind = 'left' | 'right'
@@ -116,77 +80,29 @@ type Phase = 'play' | 'end'
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v)
 const ease = (p: number) => (p <= 0 ? 0 : p >= 1 ? 1 : p * p * (3 - 2 * p))
-const hex = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16))
-function mix(a: string, b: string, t: number) {
-  const x = hex(a)
-  const y = hex(b)
-  return `rgb(${x.map((v, i) => Math.round(v + (y[i] - v) * t)).join(',')})`
-}
 
-// ---------------------------------------------------------------- drawing the placeholder shapes
+// ---------------------------------------------------------------- drawing: the puppets (puppets/Emperor.tsx, Pebble.tsx)
 
-const partEl = (pt: Part, key: number | string, props: Record<string, unknown>) =>
-  'e' in pt ? (
-    <ellipse key={key} cx={pt.e[0]} cy={pt.e[1]} rx={pt.e[2]} ry={pt.e[3]} transform={pt.e[4] ? `rotate(${pt.e[4]} ${pt.e[0]} ${pt.e[1]})` : undefined} {...props} />
-  ) : (
-    <polygon key={key} points={pt.p.join(' ')} strokeLinejoin="round" {...props} />
-  )
-
-function DadEl({ i }: { i: number }) {
+// The huddle moves each one about (its root and body groups); the puppet draws him, breathes, blinks, watches her
+// finger and reads how cold and snowy he is, the egg and his beak from `live` every frame.
+function DadEl({ i, live }: { i: number; live: EmperorLive }) {
   const k = `d${i}`
   return (
     <g data-k={k} data-dad={i} transform="translate(-9999 0)">
       <ellipse data-k={`${k}-shadow`} cx={10} cy={0} rx={58} ry={13} fill="#6E76A8" opacity={0.35} />
       <g data-k={`${k}-body`}>
-        {/* The 5-unit ink outline: every part filled and stroked in ink, under the fills. */}
-        <g fill={INK} stroke={INK}>{DAD_INK.map((pt, j) => partEl(pt, j, { strokeWidth: 10 }))}</g>
-        <g data-k={`${k}-back`} fill={BACK_WARM}>
-          {DAD_BACK.map((pt, j) => partEl(pt, j, {}))}
-        </g>
-        {partEl(DAD_FEET, 'feet', { fill: '#4A4458' })}
-        {/* The egg on his feet, peeking out from under his belly (the brood pouch). */}
-        <g data-k={`${k}-egg`}>
-          <g data-k={`${k}-eggwob`}>
-            <ellipse data-k={`${k}-shell`} cx={EGG.at[0]} cy={EGG.at[1]} rx={EGG.rx} ry={EGG.ry} fill="#FFF3DA" stroke={INK} strokeWidth={4} />
-            <path data-k={`${k}-crack1`} d="M10 -8 l6 4 l5 -6 l6 5 l7 -3" stroke={INK} strokeWidth={2.5} fill="none" strokeLinejoin="round" opacity={0} />
-            <path data-k={`${k}-crack2`} d="M13 0 l7 -3 l4 5 l8 -4" stroke={INK} strokeWidth={2.5} fill="none" strokeLinejoin="round" opacity={0} />
-          </g>
-        </g>
-        {partEl(DAD_BELLY, 'belly', { 'data-k': `${k}-belly`, fill: BELLY_WARM })}
-        {partEl(DAD_CHEST, 'chest', { fill: '#FFE7A3' })}
-        {partEl(DAD_EAR, 'ear', { fill: '#FFC24A' })}
-        {partEl(DAD_BEAK, 'beak', { fill: '#2E2A3D' })}
-        <path d="M44 -181 L74 -184" stroke="#FF9E5E" strokeWidth={4} strokeLinecap="round" />
-        <circle data-k={`${k}-eye`} cx={DAD_EYE[0]} cy={DAD_EYE[1]} r={DAD_EYE[2]} fill="#2B2236" />
-        <circle cx={DAD_EYE[0] + 2} cy={DAD_EYE[1] - 2} r={2} fill="#fff" />
-        {partEl(DAD_CHEEK, 'cheek', { 'data-k': `${k}-cheek`, fill: '#FF9EC8', opacity: 0 })}
-        <g data-k={`${k}-flip`}>{partEl(DAD_FLIPPER, 'flip', { 'data-k': `${k}-flipfill`, fill: BACK_WARM, stroke: INK, strokeWidth: 5 })}</g>
-        {/* Snow piling up on his back and head. */}
-        <g data-k={`${k}-snowback`} transform={`translate(${SNOW_BACK.at[0]} ${SNOW_BACK.at[1]}) scale(0)`}>
-          <ellipse rx={SNOW_BACK.rx} ry={SNOW_BACK.ry} fill={SNOW} stroke={INK} strokeWidth={4} />
-        </g>
-        <g data-k={`${k}-snowcap`} transform={`translate(${SNOW_CAP.at[0]} ${SNOW_CAP.at[1]}) scale(0)`}>
-          <ellipse rx={SNOW_CAP.rx} ry={SNOW_CAP.ry} fill={SNOW} stroke={INK} strokeWidth={4} />
-        </g>
+        <Emperor embed live={live} />
       </g>
     </g>
   )
 }
 
-function ChickEl() {
+function ChickEl({ live }: { live: { cold: number } }) {
   return (
     <g data-k="chick" transform="translate(-9999 0)">
       <ellipse data-k="chick-shadow" cx={4} cy={0} rx={30} ry={7} fill="#6E76A8" opacity={0.3} />
       <g data-k="chick-body">
-        <g fill={INK} stroke={INK}>{CHICK_INK.map((pt, j) => partEl(pt, j, { strokeWidth: 10 }))}</g>
-        {partEl(CHICK_FEET, 'feet', { fill: '#5E586E' })}
-        {partEl(CHICK_BODY, 'body', { 'data-k': 'chick-fluff', fill: '#B6B0C6' })}
-        {partEl(CHICK_HEAD, 'head', { fill: '#2E2A3D' })}
-        {partEl(CHICK_MASK, 'mask', { fill: '#fff' })}
-        {partEl(CHICK_BEAK, 'beak', { fill: '#2E2A3D' })}
-        <circle data-k="chick-eye" cx={CHICK_EYE[0]} cy={CHICK_EYE[1]} r={CHICK_EYE[2]} fill="#2B2236" />
-        <circle cx={CHICK_EYE[0] + 1.6} cy={CHICK_EYE[1] - 1.6} r={1.6} fill="#fff" />
-        <ellipse cx={20} cy={-66} rx={6} ry={4} fill="#FF9EC8" opacity={0.8} />
+        <Pebble embed live={live} />
       </g>
     </g>
   )
@@ -219,7 +135,8 @@ interface Dad {
   cork: { x0: number; y0: number; x1: number; y1: number; t0: number } | null
   anim: Anim | null
   egg: boolean
-  blinkAt: number
+  /** What the puppet reads every frame. */
+  live: EmperorLive
   els: Record<string, SVGElement>
 }
 interface Chick {
@@ -235,7 +152,12 @@ interface Chick {
 }
 interface Events {
   section: (s: HuddleSection, p: Record<string, string>) => void
-  say: (text: string) => void
+  /** Sparkle's instruction changed (spoken when `speak`). */
+  cue: (c: Cue, speak: boolean) => void
+  /** A friend talks: Papa (the dad `dad`, whose beak moves) or Pebble. */
+  talk: (who: 'papa' | 'pebble', what: Talk) => void
+  /** Something true about it, the first time it comes up. */
+  fact: (f: Fact) => void
   dots: (n: number, of: number) => void
   phase: (p: Phase) => void
 }
@@ -273,7 +195,11 @@ class HuddleWorld {
   nextWhoosh = 0
   aurora = -9
   moonPulse = -9
-  sayNow = ''
+  cueNow: Cue | '' = ''
+  /** The dad whose beak moves with Papa's voice. */
+  talker = 0
+  gusts = 0
+  turns = 0
   order = ''
   streaks: { el: SVGLineElement; u: number; v: number; len: number; spd: number }[] = []
   vb = { x: 0, y: 0, w: 1600, h: 1000 }
@@ -287,19 +213,21 @@ class HuddleWorld {
     wind: Wind,
     chick: 'egg' | 'hatched',
     private ev: Events,
+    lives: EmperorLive[],
+    private chickLive: { cold: number },
   ) {
     this.stage = stage
     this.section = section
     this.windFrom = wind
     this.angle = this.angleTo = wind === 'left' ? 0 : Math.PI
     const q = <T extends SVGElement>(k: string) => svg.querySelector(`[data-k="${k}"]`) as T
-    for (const k of ['layer', 'chick', 'chick-body', 'chick-shadow', 'chick-fluff', 'sun', 'moon', 'stars', 'aurora', 'sunrise', 'icewarm', 'hint', 'fx']) this.els[k] = q(k)
+    for (const k of ['layer', 'chick', 'chick-body', 'chick-shadow', 'sun', 'moon', 'stars', 'aurora', 'sunrise', 'icewarm', 'hint', 'fx']) this.els[k] = q(k)
     for (const el of svg.querySelectorAll<SVGLineElement>('[data-k="streak"]')) this.streaks.push({ el, u: Math.random(), v: Math.random(), len: 30 + Math.random() * 50, spd: 0.7 + Math.random() * 0.6 })
     for (let i = 0; i < MAX_DADS; i++) {
-      const keys = ['', '-body', '-shadow', '-back', '-belly', '-cheek', '-flip', '-flipfill', '-egg', '-eggwob', '-shell', '-crack1', '-crack2', '-snowback', '-snowcap', '-eye']
+      const keys = ['', '-body', '-shadow']
       const els: Record<string, SVGElement> = {}
       for (const s of keys) els[s.slice(1) || 'root'] = q(`d${i}${s}`)
-      this.dads.push({ i, on: false, x: -9999, y: 0, speed: 0, warmth: 1, cold: false, coldFor: 0, exposed: false, alone: false, snow: 0, face: 1, lift: 0, held: false, walk: null, walkFor: 0, cork: null, anim: null, egg: true, blinkAt: 1 + Math.random() * 4, els })
+      this.dads.push({ i, on: false, x: -9999, y: 0, speed: 0, warmth: 1, cold: false, coldFor: 0, exposed: false, alone: false, snow: 0, face: 1, lift: 0, held: false, walk: null, walkFor: 0, cork: null, anim: null, egg: true, live: lives[i], els })
     }
     // Where to start: each section as if she had played to there.
     const starts: Start[] = section === 'small' ? SMALL : section === 'blizzard' ? BIG : section === 'hatch' && chick === 'egg' ? HATCH : SNUG
@@ -331,7 +259,9 @@ class HuddleWorld {
     }
     const step = this.step as Step
     if (step !== 'sunrise') this.ev.dots(step === 'chick' ? this.tucks : 0, step === 'chick' ? WARM.gusts : this.goal)
-    this.say(section === 'hatch' && chick === 'hatched' ? HATCHED : SAY[section])
+    // The cold dad alone on the edge says so first, then Sparkle says what to do.
+    if (section === 'small') this.talk('papa', 'cold', 0)
+    this.cue(section === 'hatch' && chick === 'hatched' ? 'hatched' : section)
     this.tick(0)
   }
 
@@ -377,10 +307,14 @@ class HuddleWorld {
     for (const d of this.dads) if (d.on) this.clampDad(d)
   }
 
-  private say(text: string) {
-    if (text === this.sayNow) return
-    this.sayNow = text
-    this.ev.say(text)
+  private cue(c: Cue, speak = true) {
+    if (c === this.cueNow) return
+    this.cueNow = c
+    this.ev.cue(c, speak)
+  }
+  private talk(who: 'papa' | 'pebble', what: Talk, dad = this.pebble) {
+    if (who === 'papa') this.talker = dad
+    this.ev.talk(who, what)
   }
 
   // -------------------------------------------------------------- geometry
@@ -469,6 +403,7 @@ class HuddleWorld {
       what.walk = null
       what.anim = null
       sounds.pickup()
+      this.ev.fact('egg')
     }
     this.finger = { id: e.pointerId, x, y, sx: e.clientX, sy: e.clientY, t0: this.now, moved: 0, dx, dy, what, speed: 0, tl: this.now }
   }
@@ -535,6 +470,7 @@ class HuddleWorld {
     if (y < st.horizon) {
       if (Math.hypot(x - st.moon[0], y - st.moon[1]) < 110 && this.sunT < 0.5) {
         this.moonPulse = this.now
+        this.ev.fact('night')
         sounds.sparkle()
       } else {
         this.aurora = this.now
@@ -614,6 +550,7 @@ class HuddleWorld {
     }
     if (this.step !== 'small' && this.step !== 'blizzard') return
     this.warmups++
+    if (this.warmups === 1 || this.warmups % 3 === 0) this.talk('papa', 'thanks', d.i)
     sounds.note(Math.min(10, 1 + Math.round((this.warmups / this.goal) * 9)))
     this.ev.dots(this.warmups, this.goal)
     if (this.warmups < this.goal) return
@@ -624,7 +561,7 @@ class HuddleWorld {
   private toBlizzard() {
     this.step = 'more'
     sounds.sparkle()
-    this.say(MORE)
+    this.cue('more')
     this.at(0.8, () => {
       const st = this.stage
       const m = this.windFrom === 'left' ? 1 : -1
@@ -649,7 +586,8 @@ class HuddleWorld {
       noise(1.6, 0.12, 'bandpass', 500, 1400, 0, 0.7)
       this.ev.section('blizzard', { wind: this.windFrom })
       this.ev.dots(0, this.goal)
-      this.say(SAY.blizzard)
+      this.cue('blizzard')
+      this.ev.fact('coldest')
     })
   }
 
@@ -669,7 +607,8 @@ class HuddleWorld {
     sounds.sparkle()
     this.ev.section('hatch', { wind: this.windFrom, chick: 'egg' })
     this.ev.dots(0, 3)
-    this.say(SAY.hatch)
+    this.talk('papa', 'egg')
+    this.cue('hatch')
   }
 
   /** Pebble is out of the egg, on Papa's feet. */
@@ -691,7 +630,9 @@ class HuddleWorld {
     this.dads.forEach((o, i) => o.on && (o.anim = { kind: 'hop', t0: this.now + 0.3 + i * 0.12 }))
     this.ev.section('hatch', { wind: this.windFrom, chick: 'hatched' })
     this.ev.dots(0, WARM.gusts)
-    this.say(HATCHED)
+    this.talk('papa', 'hatched')
+    this.talk('pebble', 'hi')
+    this.cue('hatched')
   }
 
   /** A gust blows Pebble off Papa's feet, rolling across the ice. */
@@ -713,6 +654,10 @@ class HuddleWorld {
     noise(1.2, 0.16, 'bandpass', 600, 1800, 0, 0.7)
     sfx.chirp()
     d.anim = { kind: 'sing', t0: this.now + 0.3 }
+    this.gusts++
+    this.talk(this.gusts % 2 ? 'pebble' : 'papa', 'blown')
+    // Sparkle says it the first time; after that it's her hint.
+    this.cue('blown', this.gusts === 1)
   }
 
   private dropChick() {
@@ -737,6 +682,8 @@ class HuddleWorld {
     sfx.fwip()
     setTimeout(() => sfx.chirp(), 150)
     this.tucks++
+    this.talk(this.tucks % 2 ? 'papa' : 'pebble', 'tucked')
+    this.cue('hatched', false)
     sounds.note(Math.min(10, 2 + this.tucks * 2))
     this.ev.dots(this.tucks, WARM.gusts)
     if (this.tucks >= WARM.gusts) this.at(1.4, () => this.sunrise())
@@ -756,7 +703,11 @@ class HuddleWorld {
     pd.walk = this.clampSpot(pd.x * 0.5 + this.stage.home[0] * 0.5, front + 1.6 * this.r(pd) * DEPTH)
     this.ev.section('sunrise', {})
     this.ev.dots(0, 0)
-    this.say(SAY.sunrise)
+    this.cue('sunrise')
+    this.at(4.5, () => {
+      this.talk('papa', 'sunrise')
+      this.talk('pebble', 'sunrise')
+    })
   }
 
   // -------------------------------------------------------------- every frame
@@ -875,7 +826,8 @@ class HuddleWorld {
       this.angleTo = this.windFrom === 'left' ? 0 : Math.PI
       this.gustT = now
       noise(2.2, 0.14, 'bandpass', 400, 1600, 0, 0.6)
-      this.say(TURNED)
+      // Said the first two times; after that the whoosh says it.
+      if (++this.turns <= 2) this.ev.cue('turned', true)
     }
     const da = this.angleTo - this.angle
     if (Math.abs(da) > 0.002) this.angle += da * Math.min(1, dt * 1.1)
@@ -884,7 +836,7 @@ class HuddleWorld {
       this.turning = false
       this.nextTurn = now + WARM.turn
       if (this.step === 'blizzard') this.ev.section('blizzard', { wind: this.windFrom })
-      this.at(1.5, () => this.step === 'blizzard' && this.say(SAY.blizzard))
+
     }
     this.windInt += (this.windIntTo - this.windInt) * Math.min(1, dt * 0.8)
     const gust = Math.max(0, 1 - (now - this.gustT) / 1.6)
@@ -1026,11 +978,12 @@ class HuddleWorld {
       this.sunT = Math.min(1, (now - this.sunStart) / 7)
       if (this.sunT > 0.5 && !this.sunCheer) {
         this.sunCheer = true
+        this.at(1.6, () => this.cue('done'))
         sounds.fanfare()
         burst()
         this.chick.hop = now
         this.dads.forEach((d, i) => d.on && (d.anim = { kind: 'hop', t0: now + 0.2 + i * 0.12 }))
-        this.at(4, () => this.ev.phase('end'))
+        this.at(5, () => this.ev.phase('end'))
       }
     }
 
@@ -1065,6 +1018,7 @@ class HuddleWorld {
       let ty = 0
       let rot = 0
       let flip = 0
+      let beak = 0
       let jx = 0
       if (d.cork) {
         const p = (now - d.cork.t0) / 0.9
@@ -1089,9 +1043,11 @@ class HuddleWorld {
             sx = 2 - sy
             rot = -8 * Math.sin(p * Math.PI)
             flip = -45 * Math.sin(p * Math.PI) + 10 * Math.sin(t * 30)
+            beak = Math.sin(p * Math.PI) * (0.6 + 0.4 * Math.sin(t * 24))
           } else if (kind === 'shake') rot = 9 * Math.sin(t * 34) * (1 - p)
           else if (kind === 'sneeze') {
             rot = p < 0.4 ? -10 * (p / 0.4) : 14 * Math.sin(((p - 0.4) / 0.6) * Math.PI)
+            beak = p > 0.35 && p < 0.6 ? 1 : 0
           } else if (kind === 'land') {
             sy = 1 - 0.12 * Math.sin(p * Math.PI)
             sx = 2 - sy
@@ -1107,33 +1063,24 @@ class HuddleWorld {
       // Shivering.
       const shiver = d.cold && !d.held ? clamp01((WARM.shiver - d.warmth) / WARM.shiver + 0.35) : 0
       if (shiver) jx = Math.sin(now * 47 + d.i * 2) * 3.2 * shiver
-      if (!d.anim && !d.held && !d.cork) sy *= 1 + Math.sin(now * 2.2 + d.i) * 0.012
       const face = Math.abs(d.face) < 0.06 ? 0.06 * Math.sign(d.face || 1) : d.face
       set(e.root, 'transform', `translate(${d.x.toFixed(1)} ${d.y.toFixed(1)}) scale(${s.toFixed(3)})`)
       set(e.body, 'transform', `translate(${jx.toFixed(1)} ${(ty - lift / s).toFixed(1)}) rotate(${rot.toFixed(2)} 0 -90) scale(${(face * sx).toFixed(3)} ${sy.toFixed(3)})`)
       set(e.shadow, 'transform', `scale(${(1 - d.lift * 0.3).toFixed(3)})`)
       set(e.shadow, 'opacity', (0.35 * (1 - d.lift * 0.4) * (d.cork ? 0.4 : 1)).toFixed(2))
-      set(e.flip, 'transform', `rotate(${flip.toFixed(1)} -8 -146)`)
-      const cold = clamp01((0.65 - d.warmth) / 0.65)
-      const back = mix(BACK_WARM, BACK_COLD, cold)
-      set(e.back, 'fill', back)
-      set(e.flipfill, 'fill', back)
-      const belly = mix(BELLY_WARM, BELLY_COLD, cold)
-      set(e.belly, 'fill', belly)
-      set(e.cheek, 'opacity', clamp01((d.warmth - 0.75) / 0.25).toFixed(2))
-      set(e.snowback, 'transform', `translate(${SNOW_BACK.at[0]} ${SNOW_BACK.at[1]}) scale(${(d.snow * 1.1).toFixed(3)})`)
-      set(e.snowcap, 'transform', `translate(${SNOW_CAP.at[0]} ${SNOW_CAP.at[1] + (1 - d.snow) * 6}) scale(${(clamp01(d.snow * 1.4 - 0.2) * 1.1).toFixed(3)})`)
-      // The egg: Pebble's wobbles and cracks as Papa keeps it warm.
+      // What the puppet draws itself: cold, snow, the flipper, the beak, the egg.
+      const L = d.live
+      L.cold = clamp01((0.65 - d.warmth) / 0.65)
+      L.snow = d.snow
+      L.lift = d.lift
+      L.flip = flip
+      L.beak = beak
+      L.speaks = d.i === this.talker
+      // The egg: Pebble's (pink) wobbles and cracks as Papa keeps it warm.
       const isPebble = d.i === this.pebble && (this.step === 'egg' || this.section === 'hatch')
-      set(e.egg, 'opacity', d.egg ? '1' : '0')
-      set(e.shell, 'fill', isPebble && this.step === 'egg' ? '#FFE4EF' : '#FFF3DA')
-      const wob = isPebble && this.step === 'egg' && this.eggP > 0 ? Math.sin(now * (8 + this.eggP * 14)) * (3 + this.eggP * 9) * (d.warmth > 0.7 ? 1 : 0.3) : 0
-      set(e.eggwob, 'transform', `rotate(${wob.toFixed(1)} ${EGG.at[0]} ${EGG.at[1] + EGG.ry})`)
-      set(e.crack1, 'opacity', isPebble && this.eggP >= 1 / 3 ? '1' : '0')
-      set(e.crack2, 'opacity', isPebble && this.eggP >= 2 / 3 ? '1' : '0')
-      // Blinks.
-      if (now > d.blinkAt + 0.14) d.blinkAt = now + 2 + Math.random() * 4
-      set(e.eye, 'r', now > d.blinkAt && now < d.blinkAt + 0.14 ? '1.5' : String(DAD_EYE[2]))
+      L.egg = d.egg ? (isPebble && this.step === 'egg' ? 2 : 1) : 0
+      L.wob = isPebble && this.step === 'egg' && this.eggP > 0 ? Math.sin(now * (8 + this.eggP * 14)) * (3 + this.eggP * 9) * (d.warmth > 0.7 ? 1 : 0.3) : 0
+      L.crack = isPebble && this.step === 'egg' ? Math.floor(this.eggP * 3) : 0
     }
     // The chick.
     const c = this.chick
@@ -1158,7 +1105,7 @@ class HuddleWorld {
       ce?.setAttribute('transform', `translate(${x.toFixed(1)} ${baseY.toFixed(1)}) scale(${s.toFixed(3)})`)
       set(this.els['chick-body'], 'transform', `translate(0 ${((y - baseY) / s + ty).toFixed(1)}) rotate(${rot.toFixed(1)} 0 -40) scale(${Math.abs(face) < 0.1 ? 0.1 : face} 1)`)
       set(this.els['chick-shadow'], 'opacity', c.state === 'tucked' ? '0' : '0.3')
-      set(this.els['chick-fluff'], 'fill', c.state === 'out' ? '#A7B4D2' : '#B6B0C6')
+      this.chickLive.cold = c.state === 'out' || c.state === 'tumble' ? 0.7 : 0
     }
     // Depth order: nearer ones (lower on the screen) in front; whatever her finger holds on top.
     const items: [number, SVGElement][] = []
@@ -1201,7 +1148,7 @@ class HuddleWorld {
     set(this.els.sunrise, 'opacity', sunT.toFixed(3))
     set(this.els.icewarm, 'opacity', (sunT * 0.55).toFixed(3))
     set(this.els.stars, 'opacity', (1 - sunT).toFixed(3))
-    set(this.els.sun, 'transform', `translate(${st.sunX} ${(st.horizon + 90 - sunT * 135).toFixed(1)})`)
+    set(this.els.sun, 'transform', `translate(${st.sunX} ${(st.horizon + 150 - sunT * 195).toFixed(1)})`)
     const mk = Math.max(0, 1 - (now - this.moonPulse) / 0.6)
     set(this.els.moon, 'transform', `translate(${st.moon[0]} ${st.moon[1]}) scale(${(1 + 0.15 * mk * Math.sin(mk * 9)).toFixed(3)})`)
     set(this.els.moon, 'opacity', (1 - sunT).toFixed(3))
@@ -1277,8 +1224,7 @@ class HuddleWorld {
 const STREAKS = 70
 const STARS: [number, number, number][] = Array.from({ length: 46 }, (_, i) => [((i * 61) % 100) / 100, ((i * 37) % 100) / 100, 2 + (i % 3) * 1.4])
 
-// `onDone` (Place.tsx): call it at the payoff for the stamp. Not called yet: the full loop wires it in.
-export function EmperorHuddle(_props: ActivityProps) {
+export function EmperorHuddle({ onDone }: ActivityProps) {
   const { start, param, enter } = useSections(HUDDLE_SECTIONS)
   const [run, setRun] = useState(() => ({
     section: (start ?? 'small') as HuddleSection,
@@ -1287,7 +1233,20 @@ export function EmperorHuddle(_props: ActivityProps) {
     n: 0,
   }))
   const [phase, setPhase] = useState<Phase>('play')
-  const [line, setLine] = useState('')
+  const [hint, setHint] = useState<Line | null>(null)
+  const guide = useRef<GuideHandle>(null)
+  const lives = useRef(Array.from({ length: MAX_DADS }, emperorLive)).current
+  const chickLive = useRef({ cold: 0 }).current
+  const done = useRef(false)
+  const thanks = useRef(0)
+  // The same line twice in a row within a moment is one line (React mounts the world twice in development).
+  const said = useRef({ key: '', at: 0 })
+  const fresh = (key: string) => {
+    const now = performance.now()
+    if (said.current.key === key && now - said.current.at < 400) return false
+    said.current = { key, at: now }
+    return true
+  }
   const [dots, setDots] = useState<[number, number]>([0, 0])
   const box = useRef<HTMLDivElement>(null)
   const svg = useRef<SVGSVGElement>(null)
@@ -1302,6 +1261,9 @@ export function EmperorHuddle(_props: ActivityProps) {
   const vw = size.width ? size.width / k : stage.w
   const vh = size.height ? size.height / k : stage.h
   const vb = { x: (stage.w - vw) / 2, y: (stage.h - vh) / 2, w: vw, h: vh }
+  // The painting's horizon on the stage's, and as big as it takes to cover the screen above and below it.
+  const bgH = Math.max(vb.w / NIGHT.aspect, (stage.horizon - vb.y) / NIGHT.horizon, (vb.y + vb.h - stage.horizon) / (1 - NIGHT.horizon))
+  const bg = { x: stage.w / 2 - (bgH * NIGHT.aspect) / 2, y: stage.horizon - NIGHT.horizon * bgH, w: bgH * NIGHT.aspect, h: bgH }
 
   useEffect(() => {
     enter(run.section, run.section === 'sunrise' ? {} : run.section === 'hatch' ? { wind: run.wind, chick: run.chick } : { wind: run.wind })
@@ -1312,10 +1274,27 @@ export function EmperorHuddle(_props: ActivityProps) {
     setPhase('play')
     const w = new HuddleWorld(svg.current, stage, run.section, run.wind, run.chick, {
       section: (s, p) => enter(s, p),
-      say: setLine,
+      cue: (c, speak) => {
+        const line = L.huddle[c]
+        if (c !== 'turned' && c !== 'done') setHint(line)
+        if (speak && fresh(`cue:${c}`)) guide.current?.speak(line, true)
+      },
+      talk: (who, what) => {
+        if (!fresh(`${who}:${what}`)) return
+        const line = who === 'pebble' ? L.huddle.pebble[what as keyof typeof L.huddle.pebble] : what === 'thanks' ? L.huddle.papa.thanks[thanks.current++ % L.huddle.papa.thanks.length] : L.huddle.papa[what as Exclude<keyof typeof L.huddle.papa, 'thanks'>]
+        if (line) void say(line, { interrupt: false })
+      },
+      fact: (f) => guide.current?.once(`huddle:${f}`, L.huddle.facts[f], true),
       dots: (n, of) => setDots([n, of]),
-      phase: setPhase,
-    })
+      phase: (ph) => {
+        setPhase(ph)
+        // The payoff: the stamp and the sticker (Place.tsx), once.
+        if (ph === 'end' && !done.current) {
+          done.current = true
+          onDone()
+        }
+      },
+    }, lives, chickLive)
     w.vb = vb
     world.current = w
     ;(window as unknown as { __polesHuddleQA?: () => unknown }).__polesHuddleQA = () => w.qa()
@@ -1378,10 +1357,6 @@ export function EmperorHuddle(_props: ActivityProps) {
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', touchAction: 'none', display: 'block', userSelect: 'none', WebkitUserSelect: 'none' }}
       >
         <defs>
-          <linearGradient id={`${mid}-sky`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#1B2150" />
-            <stop offset="1" stopColor="#4F4E8C" />
-          </linearGradient>
           <linearGradient id={`${mid}-dawn`} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#6E8FD6" />
             <stop offset="0.65" stopColor="#F7B7C8" />
@@ -1393,12 +1368,16 @@ export function EmperorHuddle(_props: ActivityProps) {
             <stop offset="1" stopColor="#C98BFF" stopOpacity="0" />
           </linearGradient>
         </defs>
-        {/* The night sky, the dawn over it, stars, the southern lights, the moon. */}
-        <rect x={-big} y={-big} width={big * 2} height={big + h0} fill={`url(#${mid}-sky)`} />
-        <rect data-k="sunrise" x={-big} y={-big} width={big * 2} height={big + h0} fill={`url(#${mid}-dawn)`} opacity={0} />
+        {/* The painted night (bg-huddle-night: the sky, the far ice and the tabletop bergs on the horizon, the flat ice),
+            its horizon pinned to the stage's, big enough to cover the screen; plain sky and ice past its edges. */}
+        <rect x={-big} y={-big} width={big * 2} height={big + h0} fill={NIGHT.top} />
+        <rect x={-big} y={h0} width={big * 2} height={big} fill={NIGHT.ice} />
+        <image href={night} x={bg.x} y={bg.y} width={bg.w} height={bg.h} preserveAspectRatio="none" />
+        {/* The dawn: a warm light over the sky and the far ice (screen, so the painting shows through). */}
+        <rect data-k="sunrise" x={-big} y={-big} width={big * 2} height={big + h0} fill={`url(#${mid}-dawn)`} opacity={0} style={{ mixBlendMode: 'screen' }} />
         <g data-k="stars" fill="#FFF6D8">
           {STARS.map(([u, v, r], i) => (
-            <circle key={i} cx={vb.x + u * vb.w} cy={vb.y + v * (h0 - vb.y) * 0.9} r={r} className={i % 4 ? undefined : 'huddle-twinkle'} />
+            <circle key={i} cx={vb.x + u * vb.w} cy={vb.y + v * (h0 - vb.y) * 0.8} r={r} className={i % 4 ? undefined : 'huddle-twinkle'} />
           ))}
         </g>
         <g data-k="aurora" opacity={0.35}>
@@ -1411,27 +1390,25 @@ export function EmperorHuddle(_props: ActivityProps) {
           <circle cx={-16} cy={-10} r={10} fill="#EFE3BE" />
           <circle cx={14} cy={16} r={7} fill="#EFE3BE" />
         </g>
-        {/* The sun, behind the far ice until it rises. */}
-        <g data-k="sun" transform={`translate(${stage.sunX} ${h0 + 90})`}>
-          {Array.from({ length: 12 }, (_, i) => (
-            <rect key={i} x={-9} y={-128} width={18} height={40} rx={9} fill="#FFD84D" stroke={INK} strokeWidth={5} transform={`rotate(${i * 30})`} />
-          ))}
-          <circle r={74} fill="#FFE27A" stroke={INK} strokeWidth={5} />
+        {/* The sun, under the horizon until it rises. */}
+        <clipPath id={`${mid}-above`}>
+          <rect x={-big} y={-big} width={big * 2} height={big + h0 - 3} />
+        </clipPath>
+        <g clipPath={`url(#${mid}-above)`}>
+          <g data-k="sun" transform={`translate(${stage.sunX} ${h0 + 150})`}>
+            {Array.from({ length: 12 }, (_, i) => (
+              <rect key={i} x={-9} y={-128} width={18} height={40} rx={9} fill="#FFD84D" stroke={INK} strokeWidth={5} transform={`rotate(${i * 30})`} />
+            ))}
+            <circle r={74} fill="#FFE27A" stroke={INK} strokeWidth={5} />
+          </g>
         </g>
-        {/* The far ice: a ridge on the horizon, then the flat ice the huddle stands on. */}
-        <path d={`M${-big} ${h0 + 40} L${-big} ${h0 - 30} L ${stage.w * 0.1} ${h0 - 40} Q ${stage.w * 0.22} ${h0 - 90} ${stage.w * 0.34} ${h0 - 36} L ${stage.w * 0.6} ${h0 - 30} Q ${stage.w * 0.7} ${h0 - 70} ${stage.w * 0.82} ${h0 - 28} L ${big} ${h0 - 34} L ${big} ${h0 + 40} Z`} fill="#AEB7D8" stroke={INK} strokeWidth={5} strokeLinejoin="round" />
-        <rect x={-big} y={h0} width={big * 2} height={big} fill="#C7D0EA" />
-        <rect data-k="icewarm" x={-big} y={h0} width={big * 2} height={big} fill="#FFE1D6" opacity={0} />
-        <line x1={-big} y1={h0} x2={big} y2={h0} stroke={INK} strokeWidth={5} />
-        {SASTRUGI.map(([u, v, l], i) => (
-          <path key={i} d={`M${u * stage.w} ${h0 + 40 + v * (stage.h - h0)} q ${l / 2} -10 ${l} 0`} stroke="#9AA6CC" strokeWidth={4} fill="none" strokeLinecap="round" />
-        ))}
+        <rect data-k="icewarm" x={-big} y={h0} width={big * 2} height={big} fill="#FFD9C2" opacity={0} style={{ mixBlendMode: 'screen' }} />
         {/* The huddle (dads and Pebble), sorted by depth every frame. */}
         <g data-k="layer">
           {Array.from({ length: MAX_DADS }, (_, i) => (
-            <DadEl key={i} i={i} />
+            <DadEl key={i} i={i} live={lives[i]} />
           ))}
-          <ChickEl />
+          <ChickEl live={chickLive} />
         </g>
         {/* Blowing snow, pokes, the hint. */}
         <g stroke="#fff" strokeWidth={5} strokeLinecap="round" pointerEvents="none">
@@ -1461,15 +1438,12 @@ export function EmperorHuddle(_props: ActivityProps) {
             ))}
           </div>
         )}
-        <motion.div key={line} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={PILL}>
-          {line}
-        </motion.div>
       </div>
+      <Guide ref={guide} hint={phase === 'end' ? null : hint} />
     </div>
   )
 }
 
-const SASTRUGI: [number, number, number][] = Array.from({ length: 14 }, (_, i) => [((i * 41) % 100) / 100, ((i * 67) % 100) / 100, 50 + (i % 4) * 25])
 
 const CSS = `
 .huddle-fly { animation: huddle-fly .7s ease-out both; }
@@ -1484,15 +1458,3 @@ const CSS = `
 
 /** The 🔁 button waits in the sky's corner, clear of the huddle. */
 const CORNER = { position: 'fixed' as const, right: 'calc(var(--safe-right, 0px) + 20px)', top: 'calc(var(--top-clear) + 12px)', pointerEvents: 'auto' as const }
-
-const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  padding: '8px 20px',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
-}

@@ -265,6 +265,13 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [Drag the sun](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun) ([summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?summer=north), [the north's winter night](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?side=north&summer=south))
 - [The lost penguin: carry him home](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=penguin) ([a lost polar bear cub](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=bear))
 
+**Emperor Huddle**
+
+- [A small huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/small) ([wind from the right](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/small?wind=right))
+- [The wind turns](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/blizzard)
+- [Crack! Pebble's egg](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch) ([already hatched: tuck Pebble back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch?chick=hatched))
+- [The first sunrise](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/sunrise)
+
 **Ice Floe Hop** (in the works)
 
 - [Pola is far from Mama](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/story)
@@ -285,13 +292,6 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [Bumps and cracks](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps) ([the moguls run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=left), [the kicker run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=right))
 - [Under the sea](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/dive)
 - [Feeding Pebble](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/home?krill=12)
-
-**Emperor Huddle** (in the works)
-
-- [A small huddle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/small) ([wind from the right](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/small?wind=right))
-- [The wind turns](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/blizzard)
-- [Crack! Pebble's egg](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch) ([already hatched: tuck Pebble back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch?chick=hatched))
-- [The first sunrise](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/sunrise)
 
 **Iceberg Maker** (in the works)
 

@@ -1,4 +1,4 @@
-// Emperor Huddle (greybox 6, plan: planning/around-the-world/poles.html): drag the shivering emperor dads from the windy
+// Emperor Huddle (plan: planning/around-the-world/poles.html): drag the shivering emperor dads from the windy
 // edge into the middle of the huddle, keep them moving in when the wind turns, then Pebble's egg hatches and the first
 // sunrise. #/world/poles/huddle/<section>?wind=left&chick=hatched
 // A section link sets the scene up as if she had played to there. Loaded at startup by the section index.

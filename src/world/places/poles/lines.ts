@@ -57,7 +57,39 @@ export const L = {
   slide: {},
 
   // ---- Emperor Huddle (activities/huddle/) ----
-  huddle: {},
+  // Sparkle says what to do (and a fact the first time something comes up); the dads speak in Papa's voice (the one
+  // whose beak moves is the one talking), Pebble in Pebble's. Finite: one line per moment, a few thank-yous in turn.
+  huddle: {
+    small: 'Carry the cold penguin into the middle!',
+    more: 'More penguin dads are coming!',
+    blizzard: 'A blizzard! Keep the cold ones moving in.',
+    turned: 'The wind turned around!',
+    hatch: "Keep Pebble's papa warm in the middle.",
+    hatched: 'Tuck Pebble back under Papa!',
+    blown: 'Whoosh! Carry Pebble back to Papa.',
+    sunrise: 'Look! The sun is coming back!',
+    done: 'You kept them all warm, Kaylee!',
+    facts: {
+      egg: 'Emperor dads keep the egg warm on their feet!',
+      coldest: 'Antarctica is the coldest, windiest place on Earth.',
+      night: 'In winter here, the sun stays away for months!',
+    },
+    papa: {
+      cold: papa('Brrr! So cold!'),
+      thanks: [papa('Ahh, much better!'), papa('Thank you! So cozy.'), papa('Warm at last!')],
+      egg: papa('My egg is getting cold!'),
+      hatched: papa('Hello, little Pebble!'),
+      blown: papa('Oh no! Pebble!'),
+      tucked: papa('There you are, Pebble!'),
+      sunrise: papa('Look, Pebble. The sun!'),
+    },
+    pebble: {
+      hi: pebble('Hi, Papa! Peep peep!'),
+      blown: pebble('Whoa! Papa, help!'),
+      tucked: pebble('So cozy!'),
+      sunrise: pebble('Ooh, so pretty!'),
+    },
+  },
 
   // ---- Iceberg Maker (activities/iceberg/) ----
   iceberg: {},

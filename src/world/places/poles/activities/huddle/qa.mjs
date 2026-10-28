@@ -12,8 +12,8 @@ export const screens = [
 
 /** Auto-played runs: talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
-  // Emperor Huddle (greybox, no voices): the core verb is a drag, so the auto-player's taps only sing and poke; the cold
-  // ones sneeze and waddle in by themselves, so it gets slowly through the small huddle. The robot run that drags them in
+  // Emperor Huddle: Papa says he is cold and Sparkle says what to do, then the core verb is a drag, so the auto-player's
+  // taps only sing and poke; the cold ones sneeze and waddle in by themselves, so it gets slowly through the small huddle. The robot run that drags them in
   // is qa-motion's poles-huddle-drag.
   { name: 'poles emperor huddle', id: 'huddle', hash: '#/world/poles/huddle', reset: true },
 ]
