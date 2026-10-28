@@ -4,8 +4,10 @@ import { vp } from '../../../../../../scripts/qa-lib.mjs'
 
 /** Screenshots: how to get to each screen from a fresh start. */
 export const screens = [
-  // Ice Floe Hop (greybox 2): Mama far away, then each stage's first floe, and home with Mama (the hug, then the look back).
-  ...['story', 'steady', 'drift', 'melt', 'mama'].map((to) => ({ name: `poles-floe-${to}`, hash: `#/world/poles/floe/${to}`, reset: true, wait: to === 'mama' ? 4200 : 1800 })),
+  // Ice Floe Hop: Mama far away, then each stage's first floe, and home with Mama (the hug, before the stamp).
+  ...['story', 'steady', 'drift', 'melt', 'mama'].map((to) => ({ name: `poles-floe-${to}`, hash: `#/world/poles/floe/${to}`, reset: true, wait: to === 'mama' ? 2200 : 1800 })),
+  // Then the stamp and the polar bear sticker (test browsers skip the clips, so it comes in about 3.5 s).
+  { name: 'poles-floe-stamp', hash: '#/world/poles/floe/mama', reset: true, wait: 6000 },
 ]
 
 /** Auto-played runs: talk before the first touch, talk per touch, the play strip. */

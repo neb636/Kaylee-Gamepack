@@ -10,6 +10,7 @@ const SLIDE_SECTIONS = defineSections('poles', 'slide', {
     krill: { default: '0', doc: 'how many krill swarms he has gulped (his round tummy, and what Pebble gets; he always brings her a few)' },
   },
   sections: [
+    { id: 'story', name: 'Pebble is hungry' },
     { id: 'top', name: 'The gentle slope' },
     { id: 'bumps', name: 'Bumps and cracks', params: ['run'], links: [{ label: 'Bumps and cracks', also: [{ label: 'the moguls run', params: { run: 'left' } }, { label: 'the kicker run', params: { run: 'right' } }] }] },
     { id: 'dive', name: 'Under the sea', params: ['krill'] },

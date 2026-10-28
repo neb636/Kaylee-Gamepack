@@ -79,19 +79,118 @@ export const L = {
   },
 
   // ---- Ice Floe Hop (activities/floe/) ----
-  floe: {},
+  floe: {
+    // The opening (the story section): Pola far out on the ice calls to Mama, who waves from the big ice.
+    story: [pola('Mama! I am way over here!')],
+    // Sparkle: what to do at each stretch (said when it starts, and again when she's stuck).
+    hint: {
+      steady: 'Pull Pola back, and let go!',
+      drift: 'The ice is drifting. Wait, then fling!',
+      melt: 'Summer melts the ice. Push floes together!',
+    },
+    // Pola arriving on a new kind of ice.
+    arrive: {
+      drift: pola('Whoa! This ice is moving!'),
+      melt: pola('The ice is so little now!'),
+    },
+    // A miss: a happy belly-flop (in turn, not every time).
+    flop: [pola('Splash! I love swimming!'), pola('Polar bears are great swimmers!'), pola('Wheee! Splash!'), pola('Brr! Paddle paddle!')],
+    // Landing on a tippy edge: down it like a slide.
+    slide: [pola('Wheee! A slide!'), pola('Whoops! Too tippy!')],
+    // Taps on the friends.
+    pola: [pola('Hee hee!'), pola('That tickles!'), pola('Again! Again!')],
+    mama: [mama('Hop home to me, Pola!'), mama('I am right here, Pola!'), mama('You can do it, little one!'), mama('Keep hopping!')],
+    // Tap-to-hear, the first time she pokes the ice or the water.
+    floeFact: 'This ice is floating on the sea!',
+    waterFact: 'The North Pole is a frozen sea. There is water under the ice!',
+    // Home with Mama.
+    home: [mama('My brave little cub! You made it!'), pola('Mama! I hopped all the way home!')],
+    homeCheer: `${NAME}, you got Pola home!`,
+  },
 
   // ---- Snow Coats (activities/coats/) ----
   coats: {},
 
   // ---- Penguin Slide (activities/slide/) ----
-  slide: {},
+  slide: {
+    // The story (a fresh start only; a tap skips it): Pebble is hungry, so Papa goes fishing.
+    story: [pebble("Papa, I'm so hungry!"), papa('Krill coming right up!')],
+    // Sparkle, when each stretch starts (and again when she's stuck there).
+    hints: {
+      top: 'Steer Papa left and right!',
+      bumps: 'Bumps! Pick a way down the hill!',
+      dive: 'Steer Papa to the pink krill!',
+    },
+    // The first time each new thing comes along: what's true about it (Sparkle).
+    bumps: 'Antarctica is one big hill of ice!',
+    dive: 'Penguins fly under the water!',
+    // Papa, when something happens to him (a few each, not every time).
+    air: [papa('Whoa, I can fly!'), papa('Wheee!')],
+    bank: [papa('Oops! Snow on my beak!'), papa('Brr, a snowy nose!')],
+    bump: [papa('Oh! Sorry, little friend!'), papa('Round and round!')],
+    seal: papa('Hello, silly seal!'),
+    gulp: [papa('Yum, krill!'), papa('Gulp!'), papa('More for Pebble!')],
+    leap: papa("Pebble, I'm home!"),
+    // Home: Pebble is fed.
+    fed: pebble('Yummy! Thank you, Papa!'),
+    pebbleTap: [pebble('Hee hee!'), pebble('Hi, hi!')],
+    // Tap-to-hear facts, the first time she pokes each one (Sparkle).
+    facts: {
+      papa: 'Emperor penguins are the biggest penguins of all!',
+      adelie: 'These little ones are Adelie penguins.',
+      seal: 'A leopard seal! This one just wants to play.',
+      pebble: 'Penguin chicks eat krill, tiny pink sea animals.',
+      noBears: 'No polar bears live here, so the penguins are not scared.',
+    },
+  },
 
   // ---- Emperor Huddle (activities/huddle/) ----
   huddle: {},
 
   // ---- Iceberg Maker (activities/iceberg/) ----
-  iceberg: {},
+  iceberg: {
+    // Sparkle: what to do (each is also the hint when she's stuck there).
+    pick: 'Pick a pole: north or south?',
+    bits: 'Tap the cracks to break off the ice!',
+    giant: 'A giant crack! Tap, tap, tap!',
+    under: 'Look! Most of the iceberg hides under the water.',
+    push: 'Push the iceberg down with your finger!',
+    sail: 'Now push the icebergs out to sea!',
+    done: 'Your icebergs are sailing away!',
+    // Sparkle's facts, each the first time it comes up.
+    facts: {
+      calving: "When ice breaks off, it's called calving!",
+      north: 'Icebergs up north are tall and pointy.',
+      south: 'Icebergs down south are flat, like a table!',
+      hidden: 'Nine parts out of ten are under the water!',
+      fresh: "Icebergs are made of snow, so they're not salty!",
+      fizz: 'Fizz! Old air bubbles pop out of the ice.',
+      blue: 'Old ice is packed so tight, it looks blue!',
+      seal: 'A seal is napping on a little iceberg.',
+      orca: 'Orcas live at both poles!',
+    },
+    // The friend at each pole: Pola on Greenland's glacier, Papa with the penguins on Antarctica's shelf.
+    north: {
+      hi: pola('Hi! Break off some ice with me!'),
+      bit: [pola('Wheee, splash!'),pola('Ooh, a little one!'), pola('Another one!')],
+      groan: pola("Whoa! It's a big one!"),
+      soak: pola("Splash! I'm all wet!"),
+      under: pola('Wow, it goes way down!'),
+      ride: pola("I'm riding the iceberg!"),
+      poke: [pola('Hee hee!'), pola('Hi again!')],
+      bye: pola('Bye bye, icebergs!'),
+    },
+    south: {
+      hi: papa('Welcome to our ice shelf!'),
+      bit: [papa('Splendid!'), papa('Plop, into the sea!'), papa('Another one!')],
+      groan: papa('Oh my, a giant!'),
+      soak: papa('Brr! A cold shower!'),
+      under: papa('So much ice under the water!'),
+      ride: papa('All aboard, everyone!'),
+      poke: [papa('Hello there!'), papa('Honk honk!')],
+      bye: papa('Off they go! Thank you!'),
+    },
+  },
 
   // ---- The finale: Pole to Pole and the Polar Quiz (activities/party/) ----
   party: {
