@@ -265,7 +265,7 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [Drag the sun](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun) ([summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?summer=north), [the north's winter night](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?side=north&summer=south))
 - [The lost penguin: carry him home](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=penguin) ([a lost polar bear cub](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=bear))
 
-**Ice Floe Hop** (in the works)
+**Ice Floe Hop**
 
 - [Pola is far from Mama](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/story)
 - [Big steady floes](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/steady) ([another layout](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/steady?layout=2))

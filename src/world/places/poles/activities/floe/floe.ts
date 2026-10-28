@@ -1,4 +1,4 @@
-// Ice Floe Hop (greybox 2, plan: planning/around-the-world/poles.html): the North Pole is frozen sea, and the ice
+// Ice Floe Hop (plan: planning/around-the-world/poles.html): the North Pole is frozen sea, and the ice
 // floats. Pola the polar bear cub is far from Mama Bear across the floating sea ice; Kaylee flings him floe to floe.
 //
 // The toy (core verb): grab Pola, pull back and let go. He crouches deeper the further she pulls (a dotted arc and a
@@ -64,6 +64,12 @@ export interface FloeEvents {
   shake(): void
   /** Home with Mama. */
   home(): void
+  /** A miss: he belly-flopped into the sea. */
+  flop(): void
+  /** He landed on a tippy edge and is sliding off. */
+  slide(): void
+  /** She poked something (Pola, Mama, a floe, the open water). */
+  poke(what: 'pola' | 'mama' | 'floe' | 'water'): void
 }
 
 export const FLOE_ANCHORS: AnchorInfo[] = [
@@ -450,7 +456,11 @@ export class FloeHop implements World3D {
 
   private land() {
     const l = this.landing(this.end.x, this.end.z)
-    if (!l) return this.flop()
+    if (!l) {
+      this.flop()
+      this.events.flop()
+      return
+    }
     const f = l.f
     this.attach(f, l.x, l.z)
     this.setMode('stand')
@@ -473,6 +483,7 @@ export class FloeHop implements World3D {
       this.setMode('slide')
       this.counts.slides++
       sfx.fwip()
+      this.events.slide()
       return
     }
     this.faceGoal = 0
@@ -984,12 +995,14 @@ export class FloeHop implements World3D {
         sfx.chirp()
         if (this.on) this.on.hv -= FLOES.thump * 0.3
       } else if (this.mode === 'swim') this.splash(this.pos.x, this.pos.z, 0.4)
+      this.events.poke('pola')
       return
     }
     if (id === 'mama') {
       this.mama.hop()
       this.mama.wave()
       sfx.boing()
+      this.events.poke('mama')
       return
     }
     const hit = this.hitPlane(x, y, TOP)
@@ -1005,8 +1018,10 @@ export class FloeHop implements World3D {
       f.tzv -= ((l.x * c + l.z * s) / f.r) * 0.6
       sfx.thump()
       if (this.mode === 'swim') this.swimTo = f
+      this.events.poke('floe')
     } else {
       this.splash(hit.x, hit.z, 0.45)
+      this.events.poke('water')
     }
   }
 
