@@ -13,7 +13,7 @@ export const screens = [
     reset: true,
     wait: 1800,
   })),
-  // The finale : Terry over each leg of the flight, the postcard at the colony, a question of each kind
+  // The finale: Terry over each leg of the flight, the postcard at the colony, a question of each kind
   // (drag, spin, tap a pole, pick from the row) and the badge (with every stamp, or the finale opens the globe).
   ...['fly?leg=north', 'fly?leg=warm', 'fly?leg=south', 'deliver', 'quiz?q=bear', 'quiz?q=south&stars=2', 'quiz?q=coldest&stars=3', 'quiz?q=summer&stars=4', 'badge'].map((to) => ({
     name: `poles-party-${to.replace(/[?=&]/g, '-')}`,
