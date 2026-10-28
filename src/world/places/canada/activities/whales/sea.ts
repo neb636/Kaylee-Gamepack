@@ -25,7 +25,11 @@ export const SEALION_ROCK: Isle = { x: 24, z: 36, r: 4.6, h: 1.4, trees: 0 }
 export const PUFFIN_ROCK: Isle = { x: -44, z: -6, r: 5, h: 5.5, trees: 0 }
 export const BIG_ISLE: Isle = { x: 60, z: -6, r: 19, h: 9, trees: 22 }
 export const WEST_ISLE: Isle = { x: -78, z: -60, r: 16, h: 8, trees: 16 }
-export const ISLES: Isle[] = [LIGHTHOUSE_PT, EAGLE_PT, SEALION_ROCK, PUFFIN_ROCK, BIG_ISLE, WEST_ISLE]
+/** The tide pool's flat shelf at the foot of the sea lions' rock (the sea stars and anemones), and the harbour seals'
+ *  low rock by the town, where they nap. */
+export const TIDE_SHELF: Isle = { x: SEALION_ROCK.x - 4.2, z: SEALION_ROCK.z - 2.6, r: 2.8, h: 1, trees: 0 }
+export const SEAL_ROCK: Isle = { x: -10, z: 64, r: 3.4, h: 0.9, trees: 0 }
+export const ISLES: Isle[] = [LIGHTHOUSE_PT, EAGLE_PT, SEALION_ROCK, PUFFIN_ROCK, BIG_ISLE, WEST_ISLE, TIDE_SHELF, SEAL_ROCK]
 
 /** The lighthouse on its point, and the eagle's dead tree on the other point. */
 export const LIGHTHOUSE = { x: LIGHTHOUSE_PT.x + 2, z: LIGHTHOUSE_PT.z - 3 }
@@ -43,6 +47,7 @@ export const DRIFTS = [
 
 /** The boat's start for each section link. */
 export const STARTS = {
+  story: { x: DOCK.x - 3.2, z: 76, h: Math.PI },
   harbour: { x: DOCK.x - 3.2, z: 76, h: Math.PI },
   otters: { x: 2, z: 42, h: Math.PI + 0.35 },
   spouts: { x: -2, z: -6, h: Math.PI },

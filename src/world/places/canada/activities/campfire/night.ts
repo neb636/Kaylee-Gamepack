@@ -87,6 +87,22 @@ export const night = {
   },
   /** A mosquito's whine (it wobbles). */
   whine: (pan = 0, vol = 0.07, dur = 1.1) => tone(640, 700, dur, vol, 'sawtooth', pan, 0, 11),
+  /** A spring peeper's high "peep! peep!" (a tiny frog, a big voice). */
+  peep: (pan = 0, vol = 0.09) => {
+    tone(2300, 2900, 0.13, vol, 'sine', pan, 0)
+    tone(2300, 2900, 0.13, vol, 'sine', pan, 0.32)
+  },
+  /** A snowshoe hare thumping its big back feet: thump, thump-thump. */
+  thump: (pan = 0, vol = 0.32) => {
+    for (const d of [0, 0.32, 0.46]) {
+      tone(110, 50, 0.12, vol, 'sine', pan, d)
+      noise(0.05, vol * 0.4, 'lowpass', 500, 200, pan, d)
+    }
+  },
+  /** A porcupine puffing up its quills (a dry rattle). */
+  quills: (pan = 0) => {
+    for (let i = 0; i < 7; i++) noise(0.04, 0.1, 'bandpass', 3200 + Math.random() * 1500, 2600, pan, i * 0.035, 3)
+  },
   /** Leaves rustling in a bush. */
   rustle: (pan = 0, vol = 0.12) => {
     for (let i = 0; i < 5; i++) noise(0.09, vol * (0.6 + Math.random() * 0.5), 'bandpass', 2600 + Math.random() * 1500, 1800, pan, i * 0.07 + Math.random() * 0.03, 2)

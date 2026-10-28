@@ -1239,6 +1239,8 @@ export function EmperorHuddle({ onDone }: ActivityProps) {
   const lives = useRef(Array.from({ length: MAX_DADS }, emperorLive)).current
   const chickLive = useRef({ cold: 0 }).current
   const done = useRef(false)
+  /** Cancels the payoff's stamp while it waits for the cheers (🔁 or leaving drops it, and the next round can stamp). */
+  const cancelStamp = useRef<(() => void) | null>(null)
   const thanks = useRef(0)
   // The same line twice in a row within a moment is one line (React mounts the world twice in development).
   const said = useRef({ key: '', at: 0 })
@@ -1293,7 +1295,10 @@ export function EmperorHuddle({ onDone }: ActivityProps) {
         if (ph === 'end' && !done.current) {
           done.current = true
           // After the sunrise cheers have been said (the stamp's sticker line would cut them off).
-          afterTalk(onDone)
+          cancelStamp.current = afterTalk(() => {
+            cancelStamp.current = null
+            onDone()
+          })
         }
       },
     }, lives, chickLive)
@@ -1322,6 +1327,11 @@ export function EmperorHuddle({ onDone }: ActivityProps) {
     }
     raf = requestAnimationFrame(loop)
     return () => {
+      if (cancelStamp.current) {
+        cancelStamp.current()
+        cancelStamp.current = null
+        done.current = false
+      }
       cancelAnimationFrame(raf)
       unwatch()
       if (world.current === w) world.current = null

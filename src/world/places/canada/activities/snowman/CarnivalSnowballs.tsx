@@ -1,30 +1,40 @@
-// Carnival Snowballs (greybox 9): Kaylee rolls snowballs in the snowy park below Quebec City's castle hotel, stacks
-// them into snowmen, dresses them for the Winter Carnival and starts the parade (carnival.ts is the world). The address
-// bar follows her from part to part (sections.ts) and keeps how many snowmen she has made. No voices yet (the full-loop
-// gate): a short line at the bottom says what's on screen, for Dad. After the parade, "again" starts a fresh park.
+// Carnival Snowballs: Kaylee rolls snowballs in the snowy park below Quebec City's castle hotel, stacks them into
+// snowmen, dresses them for the Winter Carnival and starts the parade (carnival.ts is the world). The bare link opens
+// with the story (Maple waves and asks for snowmen, in the scene; a touch skips it). Sparkle, in the corner, says the one
+// instruction for each part when it begins and helps when Kaylee is stuck; tap her or the line to hear it again. The
+// address bar follows her from part to part (sections.ts) and keeps how many snowmen she has made. After the parade the
+// stamp (onDone); "again" starts a fresh park.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst } from '../../../../../sdk'
+import { BigButton, burst, lineText, say, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
-import { CarnivalSnowballs as World, SNOW_ANCHORS, type SnowEvents, type SnowStart } from './carnival'
+import { L } from '../../lines'
+import type { CanadaActivityProps } from '../props'
+import { CarnivalSnowballs as World, SNOW_ANCHORS, type HintKind, type SnowEvents, type SnowStart } from './carnival'
 import SNOWMAN_SECTIONS, { type BallSize, type SnowmanSection } from './sections'
 
-const SAY: Record<SnowmanSection, string> = {
-  roll: '⛄ Push the snowball! Watch it grow!',
-  stack: '⛄ Roll the little ball into the big one!',
-  dress: '🎩 Roll a snowball into the hat box and the sash box!',
-  parade: '🎺 The carnival parade!',
+const S = L.snowman
+/** What Sparkle says (and the line shows) as each part begins. The story is Maple's. */
+const SAY: Record<SnowmanSection, Line> = {
+  story: S.story[0],
+  roll: S.roll,
+  stack: S.stack,
+  dress: S.dress,
+  parade: S.parade,
 }
-const READY = '🥁 Tap the drum to start the parade!'
+const ICON: Record<SnowmanSection, string> = { story: '🎪', roll: '⛄', stack: '⛄', dress: '🎩', parade: '🎺' }
+const PARTS: SnowmanSection[] = ['roll', 'stack', 'dress', 'parade']
 const DEFAULT_SNOWMEN: Partial<Record<SnowmanSection, number>> = { dress: 1, parade: 4 }
+/** Sparkle doesn't repeat a hint sooner than this (s). */
+const HINT_GAP = 16
 
-export function CarnivalSnowballs() {
+export function CarnivalSnowballs({ onDone, setProgress }: Partial<CanadaActivityProps> = {}) {
   const { start, param, enter } = useSections(SNOWMAN_SECTIONS)
   const [run, setRun] = useState<SnowStart & { n: number }>(() => {
-    const section = (start ?? 'roll') as SnowmanSection
+    const section = (start ?? 'story') as SnowmanSection
     const n = Number(param('snowmen')) || DEFAULT_SNOWMEN[section] || 0
     return { section, size: param('size') as BallSize, snowmen: n, n: 0 }
   })
@@ -32,21 +42,60 @@ export function CarnivalSnowballs() {
   const [ready, setReady] = useState(false)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [done, setDone] = useState(false)
+  const [line, setLine] = useState<Line>(SAY[run.section])
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const sparkle = useRef<PuppetHandle>(null)
+  const finished = useRef(false)
+  const lastHint = useRef(-Infinity)
+  const cb = useRef({ onDone, setProgress })
+  cb.current = { onDone, setProgress }
 
   const state = (s: SnowmanSection, snowmen: number) => (s === 'stack' ? { size: run.size } : s === 'dress' || s === 'parade' ? { snowmen: String(Math.max(1, snowmen)) } : {})
-  useEffect(() => enter(run.section, state(run.section, run.snowmen)), [run])
+  const progress = (s: SnowmanSection) => cb.current.setProgress?.(Math.max(0, PARTS.indexOf(s)), PARTS.length)
+  useEffect(() => {
+    enter(run.section, state(run.section, run.snowmen))
+    progress(run.section)
+  }, [run])
+
+  /** Sparkle says it (after whoever is talking), and the line shows it. */
+  const guide = (l: Line) => {
+    setLine(l)
+    sparkle.current?.play('wave')
+    void say(l, { interrupt: false })
+  }
+  // A section link that starts past the story: Sparkle says what to do there.
+  useEffect(() => {
+    if (run.section !== 'story' && run.section !== 'parade') guide(SAY[run.section])
+  }, [run])
 
   const events = useRef<SnowEvents>({
     section: (s, snowmen) => {
       setSection(s)
       enter(s, state(s, snowmen))
+      progress(s)
+      if (s === 'parade') setLine(SAY.parade)
+      else guide(SAY[s])
     },
-    ready: () => setReady(true),
+    ready: () => {
+      setReady(true)
+      guide(S.ready)
+    },
+    hint: (kind: HintKind) => {
+      const now = performance.now() / 1000
+      if (now - lastHint.current < HINT_GAP) return
+      lastHint.current = now
+      guide(S.hint[kind])
+    },
     done: () => {
       setDone(true)
       burst()
+      cb.current.setProgress?.(PARTS.length, PARTS.length)
+      // The stamp, once (a replay after it doesn't earn another).
+      if (!finished.current) {
+        finished.current = true
+        setTimeout(() => cb.current.onDone?.(), 1200)
+      }
     },
   })
 
@@ -59,10 +108,11 @@ export function CarnivalSnowballs() {
     setDone(false)
     setReady(false)
     setSection(s)
+    setLine(SAY[s])
     setRun((r) => ({ ...r, section: s, snowmen: DEFAULT_SNOWMEN[s] ?? 0, n: r.n + 1 }))
   }
 
-  const line = section === 'dress' && ready ? READY : SAY[section]
+  const shown = section === 'dress' && ready && line === S.dress ? S.ready : line
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#DCE6F6', overflow: 'clip' }}>
       <style>{HINT_CSS}</style>
@@ -93,7 +143,20 @@ export function CarnivalSnowballs() {
           ⛄ Tap to wake the park
         </button>
       )}
-      <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
+      {/* Sparkle in the corner: she gives the instructions; a tap hears the last one again. */}
+      {section !== 'story' && (
+        <button
+          aria-label="Hear it again"
+          onClick={() => {
+            sparkle.current?.play('nod')
+            void say(shown)
+          }}
+          style={{ position: 'absolute', left: 'max(8px, env(safe-area-inset-left))', bottom: 'calc(var(--safe-bottom) + 4px)', width: 'var(--target, 88px)', height: 'calc(var(--target, 88px) * 1.25)', zIndex: 21, background: 'none', border: 'none', padding: 0 }}
+        >
+          <SparklePuppet ref={sparkle} height="100%" lookToward={0.6} />
+        </button>
+      )}
+      <div style={{ position: 'absolute', left: 'calc(var(--target, 88px) + 16px)', right: 'calc(var(--target, 88px) + 16px)', bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
         {done && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 3, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
             <BigButton onClick={() => restart('roll')} ariaLabel="Make more snowmen">
@@ -102,9 +165,9 @@ export function CarnivalSnowballs() {
           </motion.div>
         )}
         <AnimatePresence mode="popLayout">
-          <motion.div key={line} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-            {line}
-          </motion.div>
+          <motion.button key={lineText(shown)} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL} onClick={() => void say(shown)} aria-label="Hear it again">
+            {ICON[section]} {lineText(shown)}
+          </motion.button>
         </AnimatePresence>
       </div>
     </div>
@@ -115,12 +178,15 @@ const PILL = {
   background: 'rgba(255,255,255,.92)',
   color: 'var(--ink)',
   borderRadius: 999,
+  border: 'none',
   padding: '8px 20px',
   fontSize: 'clamp(16px, 2.4vmin, 22px)',
   fontWeight: 600,
+  fontFamily: 'inherit',
   boxShadow: 'var(--shadow)',
   textAlign: 'center' as const,
   maxWidth: '100%',
+  pointerEvents: 'auto' as const,
 }
 
 /** The hint's hand: a push from the ball toward where it should go (--dx, --dy), or a press on the drum. */
