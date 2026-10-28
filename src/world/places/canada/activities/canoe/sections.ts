@@ -13,7 +13,7 @@ const CANOE_SECTIONS = defineSections('canada', 'canoe', {
     },
   },
   sections: [
-    { id: 'glide', name: 'Glide', params: ['paddle'] },
+    { id: 'glide', name: 'Glide', params: ['paddle'], links: [{ label: 'Glide', also: [{ label: 'pulled by her finger instead', params: { paddle: 'pull' } }] }] },
     { id: 'stream', name: 'Where the blue comes from', params: ['paddle'] },
     { id: 'loon', name: 'Follow the loon', params: ['paddle'] },
     { id: 'glacier', name: 'The loon family', params: ['paddle'] },

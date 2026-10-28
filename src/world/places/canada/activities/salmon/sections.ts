@@ -11,9 +11,9 @@ const SALMON_SECTIONS = defineSections('canada', 'salmon', {
   },
   sections: [
     { id: 'steps', name: 'Little steps', params: ['home'] },
-    { id: 'falls', name: 'The big falls', params: ['home'] },
-    { id: 'bears', name: 'The bears are fishing', params: ['home', 'spirit'] },
-    { id: 'eggs', name: 'Home: the eggs hatch', params: ['home'] },
+    { id: 'falls', name: 'The big falls', params: ['home'], links: [{ label: 'The big falls', params: { home: '3' } }] },
+    { id: 'bears', name: 'The bears are fishing', params: ['home', 'spirit'], links: [{ label: 'The bears are fishing', params: { home: '7' }, also: [{ label: 'the spirit bear on the low ledge', params: { home: '7', spirit: 'low' } }] }] },
+    { id: 'eggs', name: 'Home: the eggs hatch', params: ['home'], links: [{ label: 'Home: the eggs hatch', params: { home: '11' } }] },
   ],
 })
 export default SALMON_SECTIONS

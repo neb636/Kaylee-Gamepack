@@ -11,7 +11,7 @@ const BIKE_SECTIONS = defineSections('canada', 'bike', {
   sections: [
     { id: 'gondola', name: 'Up the gondola' },
     { id: 'green', name: 'The green trail' },
-    { id: 'berms', name: 'Berms and bumps', params: ['trail'] },
+    { id: 'berms', name: 'Berms and bumps', params: ['trail'], links: [{ label: 'Berms and bumps', also: [{ label: 'the blue way', params: { trail: 'blue' } }] }] },
     { id: 'creek', name: 'The creek and the jump' },
     { id: 'falls', name: 'The waterfall' },
   ],

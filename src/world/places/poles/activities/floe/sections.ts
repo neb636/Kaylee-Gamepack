@@ -9,7 +9,7 @@ const FLOE_SECTIONS = defineSections('poles', 'floe', {
   },
   sections: [
     { id: 'story', name: 'Pola is far from Mama', params: ['layout'] },
-    { id: 'steady', name: 'Big steady floes', params: ['layout'] },
+    { id: 'steady', name: 'Big steady floes', params: ['layout'], links: [{ label: 'Big steady floes', also: [{ label: 'another layout', params: { layout: '2' } }] }] },
     { id: 'drift', name: 'Floes that drift', params: ['layout'] },
     { id: 'melt', name: 'Summer melt (push the floes)', params: ['layout'] },
     { id: 'mama', name: 'Back to Mama', params: ['layout'] },
