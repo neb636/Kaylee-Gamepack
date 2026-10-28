@@ -97,6 +97,7 @@ const poles: CastEntry[] = [
   person('pebble', 'Pebble', 'The Poles: the emperor penguin chick (south)', 'poles', POLES_LOOKS.pebble, '../poles/characters/looks.ts', undefined, 'emperors'),
   person('papa', 'Papa', 'The Poles: Pebble\'s papa, an emperor penguin', 'poles', POLES_LOOKS.papa, '../poles/characters/looks.ts', undefined, 'emperors'),
   person('terry', 'Terry', 'The Poles: the Arctic tern who flies pole to pole', 'poles', POLES_LOOKS.terry, '../poles/characters/looks.ts'),
+  person('adelie', 'Adélie penguin', 'The Poles: the little penguins on Penguin Slide', 'poles', POLES_LOOKS.adelie, '../poles/characters/looks.ts'),
 ]
 
 const CRITTER_INFO: Record<CritterId, { name: string; color: string }> = {

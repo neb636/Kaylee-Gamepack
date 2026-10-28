@@ -1,30 +1,39 @@
-// Penguin Slide (greybox 3): steer Pebble's papa down the ice and through the sea, home to feed Pebble (slide.ts is the
-// world). The address bar follows him from stretch to stretch (sections.ts). The steering wheel appears under her
-// finger (engine3d/SteerWheel.tsx, the Nan drive's). No voices yet (the full-loop gate): a short line at the bottom
-// says what's on screen, for Dad, and his round tummy in the corner fills with the krill he catches. Home with Pebble,
-// "again" slides from the top.
-import { AnimatePresence, motion } from 'motion/react'
+// Penguin Slide: steer Pebble's papa down the ice and through the sea, home to feed Pebble (slide.ts is the world). A
+// fresh start opens on the story (Pebble is hungry, Papa goes fishing; a tap skips it) while Papa waits at the top. The
+// address bar follows him from stretch to stretch (sections.ts). The steering wheel appears under her finger
+// (engine3d/SteerWheel.tsx, the Nan drive's). Sparkle in the corner (kit/Guide.tsx) says what to do when each stretch
+// starts and when she's stuck, and something true the first time she pokes someone; Papa and Pebble say their own
+// lines when something happens to them (lines.ts, L.slide). His round tummy in the corner fills with the krill he
+// catches. Pebble fed: the stamp (onDone).
+import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst } from '../../../../../sdk'
+import { burst, pick, say, speakingVoice, type Line } from '../../../../../sdk'
+import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
+import { StoryBeat } from '../../../../kit/StoryBeat'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { SteerHint, SteerWheel } from '../../../../engine3d/SteerWheel'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
+import { L } from '../../lines'
+import type { ActivityProps } from '../../Place'
+import { Pebble } from '../../puppets/Pebble'
 import SLIDE_SECTIONS, { type SlideSection } from './sections'
-import { PenguinSlide as World, SLIDE_ANCHORS, type SlideEvents, type SlideStart } from './slide'
+import { PenguinSlide as World, SLIDE_ANCHORS, type SlideEvents, type SlideMoment, type SlideStart } from './slide'
 
-const SAY: Record<SlideSection, string> = {
-  top: '🐧 Steer Papa down the ice!',
-  bumps: '❄️ Bumps! Pick a way down',
-  dive: '🦐 Swim through the pink krill!',
-  home: '🐣 Krill for Pebble!',
-}
+/** How many times Papa says something about each kind of moment in one slide, and the gap between two of his lines. */
+const MAX_SAID = 2
+const PAPA_GAP_S = 6
+/** Pebble fed: this long for the cheer and Pebble's thank-you, then the stamp. */
+const DONE_S = 3.4
 
-export function PenguinSlide() {
+export function PenguinSlide({ onDone }: ActivityProps) {
   const { start, param, enter } = useSections(SLIDE_SECTIONS)
+  // The story on a fresh start or its own link (any other section link goes straight to the play), while Papa waits at
+  // the top of the slope.
+  const [story, setStory] = useState(!start || start === 'story')
   const [run, setRun] = useState<SlideStart & { n: number }>(() => ({
-    section: (start ?? 'top') as SlideSection,
+    section: (!start || start === 'story' ? 'top' : start) as SlideSection,
     run: param('run') as SlideStart['run'],
     krill: Math.max(0, Math.floor(+param('krill')) || 0),
     n: 0,
@@ -32,36 +41,95 @@ export function PenguinSlide() {
   const [section, setSection] = useState<SlideSection>(run.section)
   const [krill, setKrill] = useState(run.krill)
   const [mode, setMode] = useState<RenderMode>('webgl')
-  const [home, setHome] = useState(false)
   const worldRef = useRef<World | null>(null)
   const wheelRef = useRef<HTMLDivElement>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const guide = useRef<GuideHandle>(null)
+  const storyRef = useRef(story)
+  storyRef.current = story
+  const said = useRef<Partial<Record<SlideMoment | 'gulp', number>>>({})
+  const lastPapa = useRef(-Infinity)
+  const done = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const pebbleTaps = useRef(0)
+  const adeliePokes = useRef(0)
 
-  useEffect(() => enter(run.section, run.section === 'bumps' ? { run: run.run } : run.section === 'top' ? {} : { krill: String(run.krill) }), [run])
+  useEffect(() => {
+    if (storyRef.current) enter('story')
+    else enter(run.section, run.section === 'bumps' ? { run: run.run } : run.section === 'top' ? {} : { krill: String(run.krill) })
+  }, [run])
+  useEffect(() => () => clearTimeout(done.current), [])
+
+  /** Sparkle says what to do on this stretch (with what's new about it first). */
+  const arrive = (s: SlideSection) => {
+    const g = guide.current
+    if (!g) return
+    if (s === 'top') g.speak(L.slide.hints.top)
+    else if (s === 'bumps') {
+      g.speak(L.slide.bumps)
+      g.speak(L.slide.hints.bumps, true)
+    } else if (s === 'dive') {
+      g.speak(L.slide.dive)
+      g.speak(L.slide.hints.dive, true)
+    }
+  }
+  // A section link: the instruction straight away (a fresh start says it when the story ends).
+  useEffect(() => {
+    if (!story) arrive(run.section)
+  }, [])
+
+  /** Papa says something about what just happened: a few times each, never over someone else talking. */
+  const papaSays = (kind: SlideMoment | 'gulp', lines: Line | Line[], max = MAX_SAID) => {
+    const now = performance.now() / 1000
+    const n = said.current[kind] ?? 0
+    if (n >= max || now - lastPapa.current < PAPA_GAP_S || speakingVoice()) return
+    said.current[kind] = n + 1
+    lastPapa.current = now
+    void say(Array.isArray(lines) ? lines[n % lines.length] : lines)
+  }
 
   const events = useRef<SlideEvents>({
     section: (s, n) => {
       setSection(s)
       enter(s, s === 'dive' || s === 'home' ? { krill: String(n) } : {})
+      arrive(s)
     },
-    krill: setKrill,
+    krill: (n) => {
+      setKrill(n)
+      // The first swarm, then now and then.
+      if (n === 1 || n % 4 === 0) papaSays('gulp', L.slide.gulp, 3)
+    },
     home: () => {
-      setHome(true)
       burst()
+      void say(L.slide.fed)
+      clearTimeout(done.current)
+      done.current = setTimeout(onDone, DONE_S * 1000)
+    },
+    moment: (m) => {
+      if (m === 'go') return
+      if (m === 'leap') return void say(L.slide.leap)
+      papaSays(m, m === 'seal' ? L.slide.seal : L.slide[m], m === 'seal' ? 1 : MAX_SAID)
+    },
+    poke: (id) => {
+      const g = guide.current
+      if (id === 'pebble' && pebbleTaps.current++ % 2 === 1 && !speakingVoice()) return void say(pick(L.slide.pebbleTap))
+      if (id === 'adelie' && adeliePokes.current++ > 0) return void g?.once('slide:noBears', L.slide.facts.noBears)
+      g?.once(`slide:${id}`, L.slide.facts[id])
     },
   })
 
   const make = (renderer: WebGLRenderer) => {
     const w = new World(renderer, run, events.current)
+    w.held = storyRef.current
     w.setWheelElement(wheelRef.current)
     w.setHintElement(hintRef.current)
     return w
   }
-  const again = () => {
-    setHome(false)
-    setSection('top')
-    setKrill(0)
-    setRun((r) => ({ section: 'top', run: 'middle', krill: 0, n: r.n + 1 }))
+  const endStory = () => {
+    setStory(false)
+    if (worldRef.current) worldRef.current.held = false
+    arrive('top')
+    // The address bar moves on once the slope is showing (qa-pacing times her first touch on the story's link).
+    setTimeout(() => enter('top'), 300)
   }
 
   return (
@@ -93,20 +161,8 @@ export function PenguinSlide() {
         </button>
       )}
       {(section === 'dive' || section === 'home' || krill > 0) && <Tummy n={krill} />}
-      <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
-        {home && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.2, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
-            <BigButton onClick={again} ariaLabel="Slide again">
-              🔁 🐧
-            </BigButton>
-          </motion.div>
-        )}
-        <AnimatePresence mode="popLayout">
-          <motion.div key={section} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-            {SAY[section]}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      <Guide ref={guide} quiet={story} hint={section === 'home' || section === 'story' ? null : L.slide.hints[section]} />
+      {story && <StoryBeat lines={L.slide.story} friend={<Pebble height="100%" />} onDone={endStory} />}
     </div>
   )
 }
@@ -128,16 +184,4 @@ function Tummy({ n }: { n: number }) {
       <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', fontSize: 'clamp(28px, 5vmin, 44px)' }}>🦐</div>
     </motion.div>
   )
-}
-
-const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  padding: '8px 20px',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
 }

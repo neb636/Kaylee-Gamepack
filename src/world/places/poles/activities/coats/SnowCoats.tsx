@@ -22,6 +22,7 @@ import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import { BEAR_HEAD, COAT_IDS, coatGrid, inShape, SHAPES, TALL, WIDE, type CoatGrid, type CoatId, type Face, type Part, type Shape, type StageDef } from './animals'
 import COATS_SECTIONS, { type CoatsSection } from './sections'
+import type { ActivityProps } from '../../Place'
 
 const FILE = 'src/world/places/poles/activities/coats/SnowCoats.tsx'
 /** Her finger's brush (live in the feel lab: ?feel=1). Sizes are stage units: the wide stage is 1600 x 1000, the tall
@@ -870,7 +871,8 @@ class CoatsWorld {
 
 const FLAKES = 80
 
-export function SnowCoats() {
+// `onDone` (Place.tsx): call it at the payoff for the stamp. Not called yet: the full loop wires it in.
+export function SnowCoats(_props: ActivityProps) {
   const { start, param, enter } = useSections(COATS_SECTIONS)
   const [run, setRun] = useState(() => ({ section: (start ?? 'fox') as CoatsSection, painted: (param('painted') || '').split(',').filter(Boolean), n: 0 }))
   const [phase, setPhase] = useState<Phase>('play')

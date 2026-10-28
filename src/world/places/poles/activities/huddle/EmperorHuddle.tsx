@@ -22,6 +22,7 @@ import { BigButton, burst, sounds, useElementSize } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
+import type { ActivityProps } from '../../Place'
 import {
   BIG,
   CHICK_BEAK,
@@ -1276,7 +1277,8 @@ class HuddleWorld {
 const STREAKS = 70
 const STARS: [number, number, number][] = Array.from({ length: 46 }, (_, i) => [((i * 61) % 100) / 100, ((i * 37) % 100) / 100, 2 + (i % 3) * 1.4])
 
-export function EmperorHuddle() {
+// `onDone` (Place.tsx): call it at the payoff for the stamp. Not called yet: the full loop wires it in.
+export function EmperorHuddle(_props: ActivityProps) {
   const { start, param, enter } = useSections(HUDDLE_SECTIONS)
   const [run, setRun] = useState(() => ({
     section: (start ?? 'small') as HuddleSection,

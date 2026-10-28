@@ -1,39 +1,30 @@
 // The Poles' home base: the globe (greybox 1, globe/globe.ts). She spins it to the Arctic and to Antarctica, then the
 // sun comes out and she drags it up and down so day and night swap between the poles. Then (greybox 2, globe/extras.ts)
 // a penguin or a polar bear cub turns up lost on a little iceberg, and she carries it home to its pole. The address bar
-// follows her (sections.ts): which side faces her, where the summer is, and who is lost. No voices yet (the full-loop gate): a short line at the
-// bottom says what's on screen, for Dad.
+// follows her (sections.ts): which side faces her, where the summer is, and who is lost. Each activity's spot shows on
+// its side of the globe (meta.ts ACTIVITY_POLE: the floes and the coats up north, the slide and the huddle down south,
+// the icebergs on both), and the finale's once every stamp is in. Sparkle in the corner (kit/Guide) says what to do and
+// a fact the first time she pokes something; Pola and Pebble say hello in their own voices when their side comes round.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { burst } from '../../../../../sdk'
+import { burst, say, sounds, type Line } from '../../../../../sdk'
+import { Guide, type GuideHandle } from '../../../../kit/Guide'
+import { useLandscape } from '../../../../kit/useLandscape'
 import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
 import type { Lost } from '../../globe/extras'
+import { L } from '../../lines'
+import { ACTIVITY_POLE } from '../../meta'
 import { GLOBE_ANCHORS, PolesGlobe, type GlobeEvents, type Side } from '../../globe/globe'
 import HUB_SECTIONS, { type HubSection } from './sections'
 
-const WHERE: Record<Side, string> = {
-  north: '🐻‍❄️ The Arctic: ice floating on the sea',
-  south: '🐧 Antarctica: ice on a big land',
-  middle: '🌍 Spin the globe!',
-}
-const SUMMER: Record<Side, string> = {
-  north: '☀️ Summer up north · 🌙 night down south',
-  south: '🌙 Night up north · ☀️ summer down south',
-  middle: '☀️ Drag the sun up or down',
-}
-const LOST: Record<Lost, string> = {
-  penguin: '🐧 A lost penguin! Carry him home',
-  bear: '🐻‍❄️ A lost polar bear cub! Carry her home',
-}
-const LANDED: Record<Lost, [home: string, wrong: string]> = {
-  penguin: ['🐧 Home with the penguins!', '🐧 No penguins up here... Try the bottom!'],
-  bear: ['🐻‍❄️ Home on the sea ice!', '🐻‍❄️ No polar bears down here... Try the top!'],
-}
+// Per visit to the app: the welcome, and which friend lines come next when she taps them.
+let welcomed = false
+const taps = { pola: 0, pebble: 0 }
 
-export function Hub(_props: PlaceProps) {
+export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
   const [initial] = useState(() => {
     const section = (start ?? 'globe') as HubSection
@@ -45,8 +36,12 @@ export function Hub(_props: PlaceProps) {
   const [sunOut, setSunOut] = useState(initial.section !== 'globe')
   const [summer, setSummer] = useState<Side>(initial.section !== 'globe' ? initial.summer : 'middle')
   const [lost, setLost] = useState<Lost | null>(null)
-  const [landed, setLanded] = useState<{ kind: Lost; home: boolean; n: number } | null>(null)
   const worldRef = useRef<PolesGlobe | null>(null)
+  const guide = useRef<GuideHandle>(null)
+  const party = meta.activities.length > 0 && meta.activities.every((a) => stamps.includes(a.id))
+  const spotsOn = (s: Side) => s !== 'middle' && meta.activities.some((a) => ACTIVITY_POLE[a.id] === s || ACTIVITY_POLE[a.id] === 'both')
+  // A friend says it (their mouth moves on the globe), not Sparkle: no bubble in her corner.
+  const friend = (l: Line) => void say(l)
   // What the address bar shows (so a copied link reproduces the moment).
   const now = useRef({ section: initial.section, side: initial.side, summer: initial.section !== 'globe' ? initial.summer : 'middle', who: initial.who ?? 'penguin' })
   const show = () => {
@@ -54,36 +49,65 @@ export function Hub(_props: PlaceProps) {
     enter(n.section, n.section === 'lost' ? { summer: n.summer, who: n.who } : n.section === 'sun' ? { side: n.side, summer: n.summer } : { side: n.side })
   }
   useEffect(show, [])
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (party) guide.current?.once('party', L.hub.party)
+      else if (!welcomed && initial.section === 'globe') guide.current?.speak(L.hub.welcome)
+      welcomed = true
+    }, 600)
+    return () => clearTimeout(t)
+  }, [])
 
+  // Which friends have said hello in this hub.
+  const said = useRef(new Set<string>())
   const events = useRef<GlobeEvents>({
     side: (s) => {
       now.current.side = s
       setSide(s)
       show()
+      // The first time each friend's side comes round: their hello, then where to tap to play.
+      if (s === 'north' && !said.current.has('polaHi')) {
+        said.current.add('polaHi')
+        friend(L.hub.polaHi)
+      } else if (s === 'south' && !said.current.has('pebbleHi')) {
+        said.current.add('pebbleHi')
+        friend(L.hub.pebbleHi)
+      }
+      if (spotsOn(s)) guide.current?.once('spots', L.hub.spots, true)
     },
     sunOut: () => {
       now.current.section = 'sun'
       setSunOut(true)
       show()
+      guide.current?.speak(L.hub.sunOut)
     },
     summer: (s) => {
       now.current.summer = s
       setSummer(s)
       if (now.current.section !== 'globe') show()
+      if (s !== 'middle' && now.current.section === 'sun') guide.current?.once(`summer-${s}`, L.hub.summer[s])
     },
     lost: (kind) => {
       setLost(kind)
       if (!kind) return
-      setLanded(null)
       now.current.section = 'lost'
       now.current.who = kind
       show()
+      guide.current?.speak(L.hub.lost[kind], true)
     },
     saved: (kind, home) => {
-      setLanded((l) => ({ kind, home, n: (l?.n ?? 0) + 1 }))
+      friend(home ? L.hub.home[kind] : L.hub.wrong[kind])
       if (home) burst()
     },
+    poke: (id) => {
+      if (id === 'pola' || id === 'pebble') {
+        const lines = L.hub[id]
+        friend(lines[taps[id]++ % lines.length])
+      } else if (id in L.hub.pokes) guide.current?.once(`poke:${id}`, L.hub.pokes[id as keyof typeof L.hub.pokes])
+    },
   })
+  // What she's stuck on, for Sparkle's hint.
+  const hint: Line | null = lost && side === 'middle' ? L.hub.carry : !sunOut ? L.hub.spin : summer === 'middle' ? L.hub.sun : party ? L.hub.party : spotsOn(side) ? L.hub.spots : L.hub.spin
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#F6EEFF', overflow: 'clip' }}>
@@ -107,40 +131,65 @@ export function Hub(_props: PlaceProps) {
           🌍 Tap to wake the globe
         </button>
       )}
-      <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, pointerEvents: 'none', zIndex: 20 }}>
-        <AnimatePresence mode="popLayout">
-          {sunOut && side === 'middle' && !lost && !landed && (
-            <motion.div key={`summer-${summer}`} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-              {SUMMER[summer]}
-            </motion.div>
-          )}
-          {landed ? (
-            <motion.div key={`landed-${landed.n}`} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-              {LANDED[landed.kind][landed.home ? 0 : 1]}
-            </motion.div>
-          ) : lost && side === 'middle' ? (
-            <motion.div key={`lost-${lost}`} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-              {LOST[lost]}
-            </motion.div>
-          ) : (
-            <motion.div key={`side-${side}`} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-              {side === 'middle' && sunOut ? '🌍 Spin the globe, drag the sun' : WHERE[side]}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      <Spots meta={meta} stamps={stamps} side={side} openActivity={openActivity} />
+      <Guide ref={guide} hint={hint} />
     </div>
   )
 }
 
-const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  padding: '8px 20px',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
+/** The activities on the side of the globe facing her (none from the middle: she spins to a pole to find them), and
+ *  the finale once every stamp is in. A column down the right edge on a wide screen, a row above Sparkle on a tall one. */
+function Spots({ meta, stamps, side, openActivity }: Pick<PlaceProps, 'meta' | 'stamps' | 'openActivity'> & { side: Side }) {
+  const wide = useLandscape()
+  const here = side === 'middle' ? [] : meta.activities.filter((a) => ACTIVITY_POLE[a.id] === side || ACTIVITY_POLE[a.id] === 'both')
+  const party = meta.activities.length > 0 && meta.activities.every((a) => stamps.includes(a.id))
+  const spots = [...here.map((a) => ({ id: a.id, icon: a.icon, name: a.name, done: stamps.includes(a.id) })), ...(party ? [{ id: 'party', icon: '🎉', name: 'The finale: Pole to Pole', done: false }] : [])]
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        zIndex: 20,
+        pointerEvents: 'none',
+        display: 'flex',
+        gap: 'min(16px, 2vmin)',
+        ...(wide
+          ? { right: 'calc(var(--safe-right, 0px) + 16px)', top: 'var(--top-clear)', bottom: 'calc(var(--safe-bottom) + 16px)', flexDirection: 'column', justifyContent: 'center' }
+          : { left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + min(150px, 20vh))', flexDirection: 'row', justifyContent: 'center' }),
+      }}
+    >
+      <AnimatePresence>
+        {spots.map((s, i) => (
+          <motion.button
+            key={`${side}-${s.id}`}
+            aria-label={s.name}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1, y: s.done ? 0 : [0, -8, 0] }}
+            exit={{ scale: 0 }}
+            transition={{ scale: { delay: 0.25 + i * 0.08, type: 'spring' }, y: { repeat: Infinity, duration: 1.4, delay: i * 0.2 } }}
+            whileTap={{ scale: 0.85 }}
+            className={s.done ? undefined : 'world-glow'}
+            onClick={() => {
+              sounds.pop()
+              openActivity(s.id)
+            }}
+            style={{
+              pointerEvents: 'auto',
+              width: 'clamp(64px, 13vmin, 118px)',
+              aspectRatio: '1',
+              borderRadius: '50%',
+              background: s.done ? 'var(--cream)' : '#fff',
+              border: s.done ? '5px dashed var(--hotpink)' : '5px solid var(--gold)',
+              boxShadow: 'var(--shadow)',
+              display: 'grid',
+              placeItems: 'center',
+              fontSize: 'clamp(30px, 6.5vmin, 58px)',
+              padding: 0,
+            }}
+          >
+            {s.icon}
+          </motion.button>
+        ))}
+      </AnimatePresence>
+    </div>
+  )
 }
