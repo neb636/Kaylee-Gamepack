@@ -1,72 +1,40 @@
-// Pola and Mama Bear as greybox shapes (the art gate builds them on the chibi rig): a white ball of a polar bear cub in
-// the toon look, with arms on their own pivots so he can paddle, wave and flail. The world (floe.ts) sets his pose each
-// frame; this file only owns the shapes and the little actions that play by themselves (a hop, a wave, a shake).
+// Pola and Mama Bear on the chibi rig (engine3d/characters/animal.ts, their looks in characters/looks.ts): the toy polar
+// bears from the character lab, with the body, head and arms on their own pivots so he can paddle, wave and flail. The
+// world (floe.ts) sets his pose each frame; this file owns the little actions that play by themselves (a hop, a wave, a
+// shake) and the face's life (blinks, and the mouth with their voice once they have one).
 import { Group, type Vector3 } from 'three'
 import { bell, span } from '../../../../../sdk'
+import { buildAnimal, type Rig } from '../../../../engine3d/characters/animal'
+import { FaceLife } from '../../../../engine3d/characters/face'
 import type { Bag } from '../../../../engine3d/dispose'
-import { P, solidMix } from '../../../../engine3d/geo'
-import { PAL } from '../../../../engine3d/toon'
+import { POLES_LOOKS } from '../../characters/looks'
 
-const WHITE = '#FFFFFF'
 const HOP_S = 0.55
 const WAVE_S = 1.6
 const SHAKE_S = 0.9
 
 export class Bear {
   /** Where it stands (on a floe, or in the sea). */
-  readonly root = new Group()
-  /** Turns, leans, squashes and hops. */
-  readonly body = new Group()
-  readonly arms: Group[] = []
-  /** Inside the body at its size: the actions move this. */
-  private inner = new Group()
+  readonly root: Group
+  readonly rig: Rig
   /** Meters from its feet to the top of its head. */
   readonly height: number
+  private life: FaceLife
   private hopT = -1
   private waveT = -1
   private shakeT = -1
   private phase = Math.random() * 6
 
-  constructor(bag: Bag, readonly size = 1) {
-    this.height = 1.05 * size
-    this.root.add(this.body)
-    this.body.scale.setScalar(size)
-    const inner = this.inner
-    this.body.add(inner)
-    inner.add(
-      solidMix(
-        [
-          P.sphere(0.34, WHITE, { at: [0, 0.36, 0], scale: [1, 0.92, 1.12] }),
-          P.sphere(0.26, WHITE, { at: [0, 0.78, 0.12] }),
-          P.sphere(0.085, WHITE, { at: [0.17, 0.98, 0.08] }),
-          P.sphere(0.085, WHITE, { at: [-0.17, 0.98, 0.08] }),
-          P.sphere(0.12, PAL.cream, { at: [0, 0.71, 0.33], scale: [1, 0.78, 1] }),
-          P.capsule(0.08, 0.08, WHITE, { at: [0.16, 0.08, 0.12], rot: [Math.PI / 2, 0, 0] }),
-          P.capsule(0.08, 0.08, WHITE, { at: [-0.16, 0.08, 0.12], rot: [Math.PI / 2, 0, 0] }),
-          P.sphere(0.07, WHITE, { at: [0, 0.3, -0.37] }),
-        ],
-        [
-          P.sphere(0.045, PAL.ink, { at: [0, 0.76, 0.44] }),
-          P.sphere(0.034, PAL.ink, { at: [0.1, 0.86, 0.335] }),
-          P.sphere(0.034, PAL.ink, { at: [-0.1, 0.86, 0.335] }),
-          P.sphere(0.012, WHITE, { at: [0.11, 0.875, 0.365] }),
-          P.sphere(0.012, WHITE, { at: [-0.09, 0.875, 0.365] }),
-          P.sphere(0.05, PAL.pink, { at: [0.18, 0.74, 0.29], scale: [1, 0.6, 0.4] }),
-          P.sphere(0.05, PAL.pink, { at: [-0.18, 0.74, 0.29], scale: [1, 0.6, 0.4] }),
-          P.sphere(0.045, PAL.pink, { at: [0.17, 0.99, 0.15], scale: [1, 1, 0.4] }),
-          P.sphere(0.045, PAL.pink, { at: [-0.17, 0.99, 0.15], scale: [1, 1, 0.4] }),
-        ],
-        bag,
-        3,
-      ),
-    )
-    for (const x of [0.3, -0.3]) {
-      const arm = new Group()
-      arm.position.set(x, 0.52, 0.08)
-      arm.add(solidMix([P.capsule(0.075, 0.16, WHITE, { at: [0, -0.14, 0] })], [], bag, 2.5))
-      inner.add(arm)
-      this.arms.push(arm)
-    }
+  /**
+   * `height`: bigger than in the lab (Pola stands 0.9 m beside Kaylee), so he reads from the camera over the floes.
+   * `shadow`: the rig's own blob shadow (Pola's is drawn on whatever is under him by the world instead).
+   */
+  constructor(bag: Bag, who: 'pola' | 'mama', height: number, shadow = true) {
+    this.rig = buildAnimal({ ...POLES_LOOKS[who], height }, bag)
+    this.root = this.rig.root
+    this.root.children[0].visible = shadow
+    this.height = height
+    this.life = new FaceLife(this.rig, who)
   }
 
   hop() {
@@ -92,7 +60,8 @@ export class Bear {
    * arms paddle), flail (0..1, the arms go up in the air).
    */
   update(dt: number, t: number, pose: { crouch?: number; lean?: number; stretch?: number; swim?: number; flail?: number } = {}) {
-    const inner = this.inner
+    const { body, head, armL, armR, tail } = this.rig
+    this.life.update(dt)
     // The little actions.
     let lift = 0
     let sq = 0
@@ -113,16 +82,19 @@ export class Bear {
     const stretch = pose.stretch ?? 0
     const breathe = 0.025 * Math.sin(t * 2.6 + this.phase)
     const squash = sq + crouch * 0.32 - stretch
-    inner.position.y = lift
-    inner.scale.set(1 + squash * 0.6, 1 - squash + breathe, 1 + squash * 0.6)
-    inner.rotation.x = (pose.lean ?? 0) - crouch * 0.25
-    inner.rotation.z = this.shakeT >= 0 ? 0.32 * Math.sin(this.shakeT * 42) * (1 - this.shakeT / SHAKE_S) : 0
+    const shake = this.shakeT >= 0 ? Math.sin(this.shakeT * 42) * (1 - this.shakeT / SHAKE_S) : 0
+    const w = this.waveT >= 0 ? bell(this.waveT / WAVE_S) : 0
+    body.position.y = lift
+    body.scale.set(1 + squash * 0.6, 1 - squash + breathe, 1 + squash * 0.6)
+    body.rotation.set((pose.lean ?? 0) - crouch * 0.25, 0, 0.32 * shake)
+    // The head follows through: it lags the shake the other way, tips up into a flail and to the side for a wave.
+    head.rotation.set(-0.3 * (pose.flail ?? 0) + crouch * 0.2, 0, -0.35 * shake + 0.18 * w)
+    if (tail) tail.rotation.z = 0.4 * Math.sin(t * 3 + this.phase) * (0.3 + Math.abs(shake))
 
-    // The arms: hanging, paddling, flailing or waving (the right one).
+    // The arms: hanging, paddling, flailing or waving (the right one). armR is on +x, so its "out" is +z.
     const swim = pose.swim ?? 0
     const flail = pose.flail ?? 0
-    const w = this.waveT >= 0 ? bell(this.waveT / WAVE_S) : 0
-    this.arms.forEach((a, i) => {
+    ;[armR, armL].forEach((a, i) => {
       const s = i ? -1 : 1
       a.rotation.x = swim * (Math.sin(t * 9 + i * Math.PI) * 1.1 - 0.9) - crouch * 0.6
       a.rotation.z = s * (0.18 + flail * (2.3 + 0.3 * Math.sin(t * 20 + i)) + (i === 0 ? w * (2.2 + 0.4 * Math.sin(this.waveT * 15)) : 0))
