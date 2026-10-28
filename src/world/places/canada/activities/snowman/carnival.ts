@@ -1,5 +1,5 @@
-// Carnival Snowballs (greybox 9, plan: planning/around-the-world/canada.html): a snowy park below Quebec City's castle
-// hotel, at the Winter Carnival. The carnival needs snowmen for its parade; Kaylee rolls snowballs that grow, stacks them
+// Carnival Snowballs (plan: planning/around-the-world/canada.html): a snowy park below Quebec City's castle hotel, at
+// the Winter Carnival. The carnival needs snowmen for its parade; Kaylee rolls snowballs that grow, stacks them
 // and dresses them in the carnival's red tuque and woven sash, and they march off in the parade.
 //
 // The toy (core verb): push a snowball. Her finger lands on a ball and it rolls after her finger, growing with every
@@ -11,16 +11,18 @@
 //          upside down. Whenever there's no little ball left, Maple pats a new one.
 //   dress  the carnival's hat box and sash box hop into the park: roll a snowball into one and out flies a red tuque or
 //          a woven sash, onto a snowman who needs it. Dressed, he wakes up, waves and hops off to the parade line.
-// Then the parade: tap the drum (it asks, once someone's in the line; at five it starts by itself) and the snowmen march
+// The story: Maple waves from the park and asks for snowmen (tap anywhere skips). Then the parade: tap the drum (it asks, once someone's in the line; at five it starts by itself) and the snowmen march
 // past the castle while Maple drums, and the last one waves.
 // Silly moments: roll one ball forever and it gets bigger than Maple, so she climbs on top and rides it; balls chase her
 // and she hops out of the way; a hat with nobody to wear it lands on Maple.
 //
-// park.ts has where everything stands, props.ts the shapes. Built for engine3d/View3D.tsx; nothing here comes from
-// Thailand. The push, the growth and the box's aim help are feel-lab knobs (?feel=1), with a graph of her finger
+// park.ts has where everything stands, props.ts the park's shapes, castle.ts Old Quebec on the cliff, maple.ts Maple on
+// the chibi rig, critters.ts the horse and carriage, the trumpet, the fox and the geese. Maple and the snowmen talk in
+// their own voices (lines.ts, L.snowman); Sparkle's instructions and hints come from the page (CarnivalSnowballs.tsx).
+// Built for engine3d/View3D.tsx; nothing here comes from Thailand. The push, the growth and the box's aim help are feel-lab knobs (?feel=1), with a graph of her finger
 // against the ball.
 import { Color, Fog, Group, Plane, Quaternion, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, burst, clamp, sounds, span, wobble } from '../../../../../sdk'
+import { bell, burst, clamp, say, sounds, span, speakingVoice, speechLevel, stopSpeaking, wait, wobble, type Line } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -31,8 +33,12 @@ import { setOutlineResolution } from '../../../../engine3d/outline'
 import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights, PAL } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
-import { BIG_R, BOX_HALF, CLIMB_R, DRUM, HAT_BOX, HUGE_R, keepIn, lineX, MAPLE_START, MOOSE, PARADE_END_X, PARK, PATH_Z, SASH_BOX, SNOWMAN_RS, START, TREE_R } from './park'
-import { Box, buildPark, Drum, makeHat, makeSash, Maple, Owl, Sled, SKY, Trail, type Park } from './props'
+import { meet } from '../../book/met'
+import { L } from '../../lines'
+import { Carriage, Fox, Geese, honk, Trumpet, whinny, yip } from './critters'
+import { BIG_R, BOX_HALF, CASTLE, CLIFF_Y, CLIMB_R, DRUM, HAT_BOX, HUGE_R, keepIn, lineX, MAPLE_START, MOOSE, PARADE_END_X, PARK, PATH_Z, SASH_BOX, SNOWMAN_RS, START, TREE_R } from './park'
+import { Maple } from './maple'
+import { Box, buildPark, Drum, makeHat, makeSash, Owl, Sled, SKY, Trail, type Park } from './props'
 import type { BallSize, SnowmanSection } from './sections'
 
 const FILE = 'src/world/places/canada/activities/snowman/carnival.ts'
@@ -70,9 +76,12 @@ export interface SnowEvents {
   section(s: SnowmanSection, snowmen: number): void
   /** The parade can start (someone's in the line): the line at the bottom says so. */
   ready(): void
-  /** The parade has finished. */
+  /** The parade has finished (and the last snowman and Maple have said goodbye). */
   done(): void
+  /** She's been stuck a while: Sparkle says how (the hand shows it too). */
+  hint(kind: HintKind): void
 }
+export type HintKind = 'roll' | 'stack' | 'hat' | 'sash' | 'drum'
 
 export const SNOW_ANCHORS: AnchorInfo[] = [
   { id: 'maple', label: 'Maple', kind: 'thing' },
@@ -83,9 +92,13 @@ export const SNOW_ANCHORS: AnchorInfo[] = [
   { id: 'hatbox', label: 'The hat box', kind: 'thing' },
   { id: 'sashbox', label: 'The sash box', kind: 'thing' },
   { id: 'drum', label: 'The parade drum', kind: 'thing' },
+  { id: 'trumpet', label: 'The carnival trumpet', kind: 'thing' },
+  { id: 'carriage', label: 'The horse and carriage', kind: 'thing' },
+  { id: 'fox', label: 'The red fox', kind: 'thing' },
+  { id: 'geese', label: 'The Canada geese', kind: 'thing' },
 ]
 
-const ORDER: SnowmanSection[] = ['roll', 'stack', 'dress', 'parade']
+const ORDER: SnowmanSection[] = ['story', 'roll', 'stack', 'dress', 'parade']
 const HINT_S = 8
 /** How many loose balls she can have lying around before a drag on bare snow grabs the nearest instead. */
 const LOOSE_MAX = 4
@@ -98,10 +111,11 @@ const HOP_S = 0.5
 const tmp = new Vector3()
 const tmp2 = new Vector3()
 const tmp3 = new Vector3()
+const tmpPlane = new Plane()
 const q = new Quaternion()
 const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 
-// ---- Sounds (synthesized; the voices come at the full-loop gate).
+// ---- Sounds (synthesized; the voices are in lines.ts).
 const crunch = (r: number) => noise(0.16, 0.05 + r * 0.03, 'bandpass', 900 - r * 280, 500 - r * 120, 0, 1.3)
 const pat = () => [0, 0.11, 0.22].forEach((d) => noise(0.07, 0.12, 'bandpass', 1300, 700, d, 1.4))
 const hoo = () => [0, 0.45].forEach((d) => tone(420, 360, 0.32, 0.07, 'sine', d))
@@ -146,6 +160,8 @@ interface Pile {
   wob: number
   wobV: number
   face: Group | null
+  /** The coal smile (it opens when he talks). */
+  mouth: Group | null
   arm: Group | null
   hat: Group | null
   sash: Group | null
@@ -244,6 +260,14 @@ export class CarnivalSnowballs implements World3D {
   private boingCool = 0
   private hatOnMaple = 0
   private owl: Owl
+  private carriage: Carriage
+  private carriageT = 7
+  private carriageDir: 1 | -1 = 1
+  private trumpet: Trumpet
+  private fox: Fox
+  private foxT = 18
+  private geese: Geese
+  private geeseT = 12
   private sled: Sled
   private sledT = 14
   private litT = -1
@@ -256,6 +280,16 @@ export class CarnivalSnowballs implements World3D {
   private sparkle: Particles
 
   private lastTouch = 0
+  /** The story: whether Maple has started talking, and when it ended (the camera glides down after it). */
+  private storyGo = false
+  private storyEnd = -10
+  /** Who is talking (a snowman's smile opens with his voice), and how soon anyone may chime in again. */
+  private talker: Pile | null = null
+  private quietUntil = 0
+  private dodgeTalk = 0
+  private hintFor = -1
+  private told = { castle: false, moose: false }
+  private gone = false
   private counts = { drags: 0, grabs: 0, made: 0, rolledM: 0, stacks: 0, snowmen: 0, upside: 0, hats: 0, sashes: 0, mapleHats: 0, trees: 0, bumps: 0, climbs: 0, dodges: 0, taps: 0, pokes: 0, parade: 0 }
 
   constructor(
@@ -288,17 +322,24 @@ export class CarnivalSnowballs implements World3D {
       [0.05, 0.1, -0.98],
     ]
     this.ballTpl = solid(merge([P.sphere(1, '#FFFFFF', {}, 22), ...lumps.map(([x, y, z], i) => P.sphere(0.22, i % 2 ? '#E9EDF8' : '#F1F3FB', { at: [x * 0.88, y * 0.88, z * 0.88] }, 10))]), bag, 2)
-    const smile: [number, number, number][] = [-0.5, -0.25, 0, 0.25, 0.5].map((a) => [Math.sin(a) * 0.62, -0.28 - Math.cos(a * 1.4) * 0.12, 0.86])
-    this.faceTpl = solid(
-      merge([
-        P.sphere(0.12, PAL.ink, { at: [0.3, 0.3, 0.88] }, 10),
-        P.sphere(0.12, PAL.ink, { at: [-0.3, 0.3, 0.88] }, 10),
-        P.cone(0.13, 0.62, '#FF8A3D', { at: [0, 0.02, 1.2], rot: [Math.PI / 2, 0, 0] }, 10),
-        ...smile.map((at) => P.sphere(0.07, PAL.ink, { at }, 8)),
-      ]),
-      bag,
-      1.4,
+    // Coal eyes, a carrot nose and a coal smile (the smile on its own pivot, so it opens when he talks).
+    const smile: [number, number, number][] = [-0.5, -0.25, 0, 0.25, 0.5].map((a) => [Math.sin(a) * 0.62, -Math.cos(a * 1.4) * 0.12 + 0.06, 0])
+    this.faceTpl = new Group()
+    this.faceTpl.add(
+      solid(
+        merge([
+          P.sphere(0.12, PAL.ink, { at: [0.3, 0.3, 0.88] }, 10),
+          P.sphere(0.12, PAL.ink, { at: [-0.3, 0.3, 0.88] }, 10),
+          P.cone(0.13, 0.62, '#FF8A3D', { at: [0, 0.02, 1.2], rot: [Math.PI / 2, 0, 0] }, 10),
+        ]),
+        bag,
+        1.4,
+      ),
     )
+    const mouthTpl = new Group()
+    mouthTpl.position.set(0, -0.34, 0.86)
+    mouthTpl.add(solid(merge([...smile.map((at) => P.sphere(0.07, PAL.ink, { at }, 8)), P.sphere(0.2, '#5A3448', { at: [0, -0.02, -0.06], scale: [1.4, 0.5, 0.3] }, 10)]), bag, 1.4))
+    this.faceTpl.add(mouthTpl)
     // A stick arm, from the ball's side outward (its pivot at the ball's surface): two twigs at the end.
     this.armTpl = solid(
       merge([
@@ -327,7 +368,11 @@ export class CarnivalSnowballs implements World3D {
     this.owl = new Owl(bag)
     this.owl.root.position.set(this.park.lamp.position.x, 4.1, this.park.lamp.position.z)
     this.sled = new Sled(bag)
-    scene.add(this.owl.root, this.sled.root)
+    this.carriage = new Carriage(bag)
+    this.trumpet = new Trumpet(bag)
+    this.fox = new Fox(bag)
+    this.geese = new Geese(bag)
+    scene.add(this.owl.root, this.sled.root, this.carriage.root, this.trumpet.root, this.fox.root, this.geese.root)
 
     this.puff = new Particles({ kind: 'spray', count: 220, color: '#FFFFFF', gravity: 7 }, bag)
     this.snowfall = new Particles({ kind: 'spray', count: 320, color: '#FFFFFF', gravity: 0.25 }, bag)
@@ -354,7 +399,7 @@ export class CarnivalSnowballs implements World3D {
 
   private setUp(start: SnowStart) {
     const n = start.snowmen
-    if (start.section === 'roll') {
+    if (start.section === 'story' || start.section === 'roll') {
       this.addBall(START.x, START.z, GROW.fresh, true)
       return
     }
@@ -400,6 +445,24 @@ export class CarnivalSnowballs implements World3D {
     return this.piles[0] ? { x: this.piles[0].x, z: this.piles[0].z } : START
   }
 
+  /** Someone says something: `must` lines (the story, the payoff) cut in; a reaction waits its turn and is skipped if
+   *  someone is already talking (so lines never pile up). `who`: the snowman talking (his smile opens). */
+  private talk(line: Line, who: Pile | null = null, must = false): Promise<void> {
+    if (!must && (speakingVoice() || this.time < this.quietUntil)) return Promise.resolve()
+    this.quietUntil = this.time + 1.2
+    if (who) this.talker = who
+    return say(line, { interrupt: must })
+  }
+
+  /** The story ends (it ran out, or she touched the snow): on to rolling. */
+  private endStory(skipped: boolean) {
+    if (this.section !== 'story') return
+    if (skipped) stopSpeaking()
+    this.storyEnd = this.time
+    this.lastTouch = this.time
+    this.enter('roll')
+  }
+
   /** A finished snowman (links): three balls, a little different each time. */
   private snowmanAt(x: number, z: number, i: number) {
     const k = 1 + ((i * 37) % 9) / 40 - 0.1
@@ -442,6 +505,7 @@ export class CarnivalSnowballs implements World3D {
       wob: 0,
       wobV: 0,
       face: null,
+      mouth: null,
       arm: null,
       hat: null,
       sash: null,
@@ -549,6 +613,8 @@ export class CarnivalSnowballs implements World3D {
     this.updateFlights(dt)
     this.updateMaple(dt, t)
     this.story(dt, t)
+    this.storyBeat()
+    this.critters(dt, t)
 
     // Things round the park.
     for (const tr of this.park.trees) {
@@ -582,10 +648,76 @@ export class CarnivalSnowballs implements World3D {
 
     this.lights.follow(this.focus.x, 0, this.focus.z)
     this.moveFocus(dt)
-    this.rig.lag = t < 2.6 && this.section === 'roll' ? 1 : 0.4
+    // The first look glides down to the ball once the story's done.
+    this.rig.lag = this.section === 'story' || t - this.storyEnd < 2.2 ? 1 : 0.4
     this.rig.setShot(this.shot())
     this.rig.update(dt)
     this.drawHint(t)
+  }
+
+  /** The story: Maple waves and asks for snowmen (two short lines), then on to rolling. */
+  private storyBeat() {
+    if (this.section !== 'story' || this.storyGo || this.time < 0.6) return
+    this.storyGo = true
+    this.maple.wave()
+    void (async () => {
+      await Promise.all([this.talk(L.snowman.story[0], null, true), wait(2000)])
+      if (this.section !== 'story' || this.gone) return
+      this.maple.hop()
+      await Promise.all([this.talk(L.snowman.story[1], null, true), wait(2400)])
+      this.endStory(false)
+    })()
+  }
+
+  /** The horse and carriage, the trumpet, the fox and the geese: when they come, and their moves. */
+  private critters(dt: number, t: number) {
+    const live = this.section !== 'story'
+    // The carriage crosses the terrace every half minute or so.
+    this.carriage.update(dt, t, this.focus.x)
+    if (live && !this.carriage.passing && (this.carriageT -= dt) < 0) {
+      this.carriageT = 28 + Math.random() * 14
+      this.carriage.go(this.carriageDir)
+      this.carriageDir = this.carriageDir > 0 ? -1 : 1
+    }
+    this.trumpet.update(dt, t)
+    // The geese fly over the top of what she's looking at.
+    this.geese.update(dt, t)
+    if (live && !this.geese.flying && (this.geeseT -= dt) < 0) {
+      this.geeseT = 34 + Math.random() * 14
+      const z = this.focus.z - 9
+      const hit = this.ray(this.w / 2, this.h * 0.15).ray.intersectPlane(tmpPlane.set(tmp.set(0, 0, 1), -z), tmp2)
+      const y = hit ? clamp(hit.y, 2.6, 16) : 7
+      const dir = Math.random() < 0.5 ? 1 : -1
+      this.geese.go(this.focus.x - dir * 30, this.focus.x + dir * 30, y, z)
+      honk(2)
+    }
+    // The fox trots in to watch now and then, and off again if a ball rolls at her.
+    const ev = this.fox.update(dt, t)
+    if (ev === 'yip') yip()
+    if (ev === 'dive') {
+      const f = this.fox.pos
+      this.puff.burst(f.x, 0.3, f.z, 30, 2.4, 3.2, 0.2)
+      noise(0.25, 0.08, 'lowpass', 1200, 300)
+    }
+    if (this.fox.here) {
+      const f = this.fox.pos
+      for (const p of this.piles)
+        if (p.state === 'loose' && Math.hypot(p.vx, p.vz) > 0.5 && Math.hypot(p.x - f.x, p.z - f.z) < p.balls[0].r + 1.1) {
+          if (this.fox.pokeable) yip()
+          this.fox.shoo()
+        }
+    } else if (live && this.paradeT < 0 && (this.foxT -= dt) < 0) {
+      this.foxT = 6
+      const side = Math.random() < 0.5 ? -1 : 1
+      const g = this.groundAt(this.w * (0.5 + side * 0.3), this.h * 0.58, tmp)
+      if (g) {
+        const spot = { x: clamp(g.x, PARK.x0 + 1, PARK.x1 - 1), z: clamp(g.z, PARK.z0 + 1, PARK.z1 - 1) }
+        if (this.isFree(spot.x, spot.z, 0.7) && Math.hypot(spot.x - this.mx, spot.z - this.mz) > 1.6) {
+          this.foxT = 30 + Math.random() * 12
+          this.fox.come({ x: spot.x + side * 11, z: spot.z - 1 }, spot)
+        }
+      }
+    }
   }
 
   private dropFlake(age: number) {
@@ -622,6 +754,10 @@ export class CarnivalSnowballs implements World3D {
       }
     }
     p.root.rotation.x = p.wob * 0.4
+    if (p.mouth) {
+      const k = p === this.talker ? speechLevel('snowman') : 0
+      p.mouth.scale.set(1 + k * 0.25, 1 + k * 2.2, 1)
+    }
 
     if (p.state === 'hop') return this.updateHop(p, dt)
     if (p.state === 'walk' || p.state === 'parade') return this.updateStep(p, dt, t)
@@ -870,6 +1006,7 @@ export class CarnivalSnowballs implements World3D {
     if (p.upside) face.rotation.z = Math.PI
     p.balls[p.upside ? 0 : 2].root.add(face)
     p.face = face
+    p.mouth = face.children[1] as Group
     const mid = p.balls[1].root
     const armL = this.armTpl.clone()
     armL.position.set(0.88, 0.1, 0)
@@ -887,11 +1024,12 @@ export class CarnivalSnowballs implements World3D {
     burst()
     this.confetti.burst(p.x, this.topY(p) + 0.3, p.z, 40, 3, 5, 0.16)
     this.maple.cheer()
-    // Head on the bottom: he says hello upside down (a giggle and a wave).
+    // Head on the bottom: he says hello upside down (a giggle and a wave). Otherwise Maple cheers.
     if (p.upside) {
       giggle()
       p.waveT = 0.4
-    }
+      this.talk(L.snowman.upside, p)
+    } else this.talk(L.snowman.made[(this.counts.snowmen - 1) % L.snowman.made.length])
     if (this.section === 'roll' || this.section === 'stack') {
       this.enter('dress')
       this.hatBox.appear()
@@ -956,6 +1094,7 @@ export class CarnivalSnowballs implements World3D {
         if (f.kind === 'hat') this.hatOnMaple = 5
         this.maple.giggle()
         giggle()
+        this.talk(L.snowman.mapleHat)
       }
     }
   }
@@ -979,6 +1118,7 @@ export class CarnivalSnowballs implements World3D {
       p.waveT = 0
       p.wobV += 4
       sounds.sparkle()
+      this.talk(L.snowman.wake[(this.lineCount + this.made) % L.snowman.wake.length], p)
       this.confetti.burst(p.x, this.topY(p), p.z, 24, 2, 3.5, 0.14)
     }
     if (p.wakeT > 1.8) {
@@ -1006,7 +1146,7 @@ export class CarnivalSnowballs implements World3D {
   private updateStep(p: Pile, dt: number, t: number) {
     this.updateWave(p, dt)
     const parade = p.state === 'parade'
-    const len = parade ? 0.6 : 1.3
+    const len = parade ? 0.8 : 1.3
     const dur = parade ? 0.46 : 0.45
     if (p.stepT < 0) {
       const dx = p.goal.x - p.x
@@ -1018,10 +1158,12 @@ export class CarnivalSnowballs implements World3D {
         return
       }
       const s = Math.min(len, d)
+      // Hopping to the line, he goes round trees, boxes, balls and the others instead of through them.
+      const dir = parade ? { x: dx / d, z: dz / d } : this.around(p, dx / d, dz / d, d)
       p.stepFrom = { x: p.x, z: p.z }
-      p.stepTo = { x: p.x + (dx / d) * s, z: p.z + (dz / d) * s }
+      p.stepTo = { x: p.x + dir.x * s, z: p.z + dir.z * s }
       p.stepT = 0
-      p.root.rotation.y = Math.atan2(dx, dz) * 0.35
+      p.root.rotation.y = Math.atan2(dir.x, dir.z) * 0.35
     }
     p.stepT += dt / dur
     const k = clamp(p.stepT)
@@ -1037,6 +1179,40 @@ export class CarnivalSnowballs implements World3D {
       if (!parade) noise(0.1, 0.05, 'lowpass', 700, 250)
     }
     void t
+  }
+
+  /** Which way to hop toward (gx, gz) (`far` away) so he goes round what's in the way. */
+  private around(p: Pile, gx: number, gz: number, far: number) {
+    const r = p.balls[0].r
+    const obs: { x: number; z: number; r: number }[] = [
+      ...this.park.trees.map((t) => ({ x: t.x, z: t.z, r: TREE_R })),
+      { x: MOOSE.x, z: MOOSE.z, r: MOOSE.r },
+      { x: this.mx, z: this.mz, r: 0.45 },
+    ]
+    for (const box of [this.hatBox, this.sashBox]) if (box.root.visible) obs.push({ x: box.root.position.x, z: box.root.position.z, r: BOX_HALF * 1.3 })
+    for (const o of this.piles) if (o !== p && o.state !== 'hop' && o.state !== 'parade') obs.push({ x: o.x, z: o.z, r: o.balls[0].r })
+    let ax = gx
+    let az = gz
+    for (const o of obs) {
+      const vx = p.x - o.x
+      const vz = p.z - o.z
+      const d = Math.hypot(vx, vz)
+      const clear = o.r + r + 0.5
+      // Only what's close and ahead of him, and not past where he's going.
+      if (d < 1e-3 || d > clear + 1.4 || d - o.r > far) continue
+      if (-(vx * gx + vz * gz) / d < -0.3) continue
+      const w = clamp((clear + 1.4 - d) / 1.4, 0, 2)
+      let tx = -vz / d
+      let tz = vx / d
+      if (tx * gx + tz * gz < 0) {
+        tx = -tx
+        tz = -tz
+      }
+      ax += (vx / d) * w * 0.7 + tx * w * 1.3
+      az += (vz / d) * w * 0.7 + tz * w * 1.3
+    }
+    const n = Math.hypot(ax, az) || 1
+    return { x: ax / n, z: az / n }
   }
 
   private arrived(p: Pile) {
@@ -1078,6 +1254,8 @@ export class CarnivalSnowballs implements World3D {
     this.hatBox.hide()
     this.sashBox.hide()
     toot()
+    this.trumpet.toot()
+    this.talk(L.snowman.parade, null, true)
     this.litT = 0
   }
 
@@ -1087,6 +1265,7 @@ export class CarnivalSnowballs implements World3D {
       this.enter('stack')
       this.maple.cheer()
       sounds.sparkle()
+      this.talk(L.snowman.big)
     }
     // Whenever there's no little ball to roll, Maple pats one together.
     if (this.section !== 'roll' && this.paradeT < 0 && this.mMode === 'free' && !this.patSpot) {
@@ -1125,7 +1304,13 @@ export class CarnivalSnowballs implements World3D {
         this.confetti.burst(p.x, this.topY(p) + 0.5, p.z, 30, 3, 6, 0.16)
       }
       this.maple.cheer()
-      this.events.done()
+      this.trumpet.toot()
+      void (async () => {
+        await Promise.all([this.talk(L.snowman.bye, last, true), wait(1700)])
+        this.maple.cheer()
+        await Promise.all([this.talk(L.snowman.done, null, true), wait(2400)])
+        if (!this.gone) this.events.done()
+      })()
     }
     if (this.doneT >= 0) {
       this.doneT += dt
@@ -1238,6 +1423,7 @@ export class CarnivalSnowballs implements World3D {
             this.counts.climbs++
             this.maple.cheer()
             sfx.chirp()
+            this.talk(L.snowman.climb)
           } else {
             this.mMode = 'free'
             this.my = 0
@@ -1317,6 +1503,10 @@ export class CarnivalSnowballs implements World3D {
             this.boingCool = 1.5
             sfx.boing()
           }
+          if (this.time > this.dodgeTalk) {
+            this.dodgeTalk = this.time + 12
+            this.talk(L.snowman.dodge)
+          }
         }
       }
     }
@@ -1327,7 +1517,7 @@ export class CarnivalSnowballs implements World3D {
     if (lookAt) this.maple.look(Math.atan2(lookAt.x - this.mx, lookAt.z - this.mz) - this.myaw)
     else this.maple.look(0)
     if (this.mMode !== 'drum') this.maple.drumming = false
-    this.maple.update(dt, t, this.mWalk)
+    this.maple.update(dt, t, this.mWalk, this.my > 0.15)
   }
 
   // ---------------------------------------------------------------- the camera
@@ -1367,21 +1557,21 @@ export class CarnivalSnowballs implements World3D {
   private shot(): Shot {
     const tall = this.tall
     const f = this.focus
-    if (this.section === 'roll' && this.time < 2.6) {
-      // The first look: the park, the castle up on the cliff behind it.
-      return { center: new Vector3(0, 5, -9), half: tall ? new Vector3(11, 9, 14) : new Vector3(17, 7, 11), yaw: 0, pitch: 16 }
+    if (this.section === 'story') {
+      // The first look: the park with Maple in it, the castle up on the cliff behind.
+      return { center: new Vector3(0, 5.5, -6.5), half: tall ? new Vector3(11, 10, 14) : new Vector3(16, 8.5, 12.5), yaw: 0, pitch: 13 }
     }
     if (this.paradeT >= 0) {
       // Alongside the marchers, the castle behind them.
       const m = this.piles.filter((p) => p.state === 'parade')
       const mx = m.length ? m.reduce((a, p) => a + p.x, 0) / m.length : 0
-      return { center: new Vector3(clamp(mx, -6, 6), 1.8, PATH_Z), half: tall ? new Vector3(4.8, 3, 3) : new Vector3(8, 2.4, 2.6), yaw: 0, pitch: 14 }
+      return { center: new Vector3(clamp(mx, -6, 6), 2.8, PATH_Z), half: tall ? new Vector3(4.8, 3.6, 3) : new Vector3(8, 3.2, 2.6), yaw: 0, pitch: 9 }
     }
     if (this.section === 'dress') {
       // Wide enough for the boxes, the snowman she's dressing and the line behind.
       const cx = f.x * 0.45
       const cz = (f.z - 3.5) * 0.5
-      return { center: new Vector3(cx, 1.4, cz), half: tall ? new Vector3(5, 3, 8) : new Vector3(8.5, 2.2, 5.6), yaw: 0, pitch: 28 }
+      return { center: new Vector3(cx, 1.4, cz), half: tall ? new Vector3(5, 3, 8) : new Vector3(8.5, 2.2, 5.6), yaw: 0, pitch: 25 }
     }
     const extra = Math.max(0, this.focusR - 0.3) * 2.6
     return {
@@ -1472,6 +1662,8 @@ export class CarnivalSnowballs implements World3D {
   pointerDown(x: number, y: number, id?: string) {
     this.lastTouch = this.time
     this.finger = { x, y }
+    // A touch during the story skips it (and she can push the ball right away).
+    this.endStory(true)
     this.grabbedNow = null
     // A ball under her finger always wins (even over a tap target): she pushes it.
     const hit = this.paradeT < 0 ? this.ballAt(x, y) : null
@@ -1500,12 +1692,18 @@ export class CarnivalSnowballs implements World3D {
     if (id) this.counts.pokes++
     if (id === 'maple') {
       this.maple.wave()
-      if (this.mOn) this.maple.slap()
-      else this.maple.giggle()
+      if (this.mOn) {
+        this.maple.slap()
+        this.talk(L.snowman.ride)
+      } else {
+        this.maple.giggle()
+        this.talk(L.snowman.poke[this.counts.pokes % L.snowman.poke.length])
+      }
       sfx.chirp()
       return
     }
     if (id === 'owl') {
+      meet('snowy-owl')
       if (!this.owl.busy) {
         this.owl.poke()
         hoo()
@@ -1517,6 +1715,36 @@ export class CarnivalSnowballs implements World3D {
       chime()
       const c = this.park.castle.position
       this.sparkle.burst(c.x, c.y + 8, c.z + 4, 30, 6, 3, 0.4)
+      if (!this.told.castle) {
+        this.told.castle = true
+        void say(L.snowman.castle)
+      }
+      return
+    }
+    if (id === 'trumpet') {
+      this.trumpet.toot()
+      toot()
+      const b = this.trumpet.bellAt(tmp)
+      this.sparkle.burst(b.x, b.y, b.z, 18, 2.2, 2.5, 0.16)
+      // The snowmen in the line hop to it.
+      for (const p of this.piles) if (p.state === 'line') p.wobV += 4
+      this.maple.hop()
+      return
+    }
+    if (id === 'carriage') {
+      this.carriage.poke()
+      whinny()
+      return
+    }
+    if (id === 'fox') {
+      meet('red-fox')
+      if (!this.fox.pounce()) yip()
+      return
+    }
+    if (id === 'geese') {
+      meet('canada-goose')
+      this.geese.poke()
+      honk(3)
       return
     }
     if (id === 'slide') {
@@ -1526,6 +1754,10 @@ export class CarnivalSnowballs implements World3D {
     if (id === 'moose') {
       this.sparkle.burst(MOOSE.x, 1.8, MOOSE.z, 24, 1.6, 1.8, 0.14)
       chime()
+      if (!this.told.moose) {
+        this.told.moose = true
+        void say(L.snowman.iceMoose)
+      }
       return
     }
     if (id === 'hatbox' || id === 'sashbox') {
@@ -1551,6 +1783,7 @@ export class CarnivalSnowballs implements World3D {
       sm.wobV += 5
       giggle()
       if (sm.upside || Math.random() < 0.4) sm.waveT = 0
+      if (sm.face && Math.random() < 0.5) this.talk(sm.upside ? L.snowman.upside : L.snowman.tickle, sm)
       this.counts.pokes++
       return
     }
@@ -1597,7 +1830,8 @@ export class CarnivalSnowballs implements World3D {
     if (!el) return
     const idle = t - this.lastTouch
     const first = this.counts.drags === 0 && idle > 2.8
-    let show = this.paradeT < 0 && !this.finger && !this.flights.length && (first || idle > HINT_S) && !(this.section === 'roll' && t < 2.8)
+    let show = this.section !== 'story' && t - this.storyEnd > 2.4 && this.paradeT < 0 && !this.finger && !this.flights.length && (first || idle > HINT_S)
+    let kind: HintKind = 'roll'
     let from: Vector3 | null = null
     let to: { x: number; z: number } | null = null
     let press = false
@@ -1609,17 +1843,26 @@ export class CarnivalSnowballs implements World3D {
         // Everyone's dressed: the drum.
         from = tmp.set(DRUM.x, 1.6, DRUM.z)
         press = true
+        kind = 'drum'
       } else if (ball) {
         from = tmp.set(ball.x, ball.balls[0].root.position.y, ball.z)
         const stack = this.piles.find((p) => p.state === 'stack') ?? this.piles.find((p) => p.state === 'loose' && p !== ball && p.balls[0].r > ball.balls[0].r)
-        if (box && this.section === 'dress') to = { x: box.root.position.x, z: box.root.position.z }
-        else if (stack && this.section !== 'roll') to = stack
-        else to = { x: ball.x + (ball.x > 4 ? -4 : 4), z: ball.z }
+        if (box && this.section === 'dress') {
+          to = { x: box.root.position.x, z: box.root.position.z }
+          kind = box.kind
+        } else if (stack && this.section !== 'roll') {
+          to = stack
+          kind = 'stack'
+        } else to = { x: ball.x + (ball.x > 4 ? -4 : 4), z: ball.z }
       } else show = false
     }
     const want = show ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
     if (!show || !from) return
+    if (idle > HINT_S && this.hintFor !== this.lastTouch) {
+      this.hintFor = this.lastTouch
+      this.events.hint(kind)
+    }
     const p = this.toScreen(from)
     el.dataset.kind = press ? 'press' : 'drag'
     if (to) {
@@ -1657,12 +1900,16 @@ export class CarnivalSnowballs implements World3D {
     for (const [id, el] of this.anchorEls) {
       if (id === 'maple') place(el, pos(this.maple.root), this.maple.height, 0.9)
       else if (id === 'owl') place(el, pos(this.owl.root), 0.9, 1.6)
-      else if (id === 'castle') place(el, new Vector3(0, 4 + 6, -23.5), 8, 0.7)
+      else if (id === 'castle') place(el, new Vector3(CASTLE.x, CLIFF_Y + 1, CASTLE.z + 3), 11, 0.75)
       else if (id === 'slide') place(el, new Vector3(18.6, 2.4, -2.8), 3, 0.8)
       else if (id === 'moose') place(el, new Vector3(MOOSE.x, 0, MOOSE.z), 2.5, 0.9)
       else if (id === 'hatbox') place(el, this.hatBox.root.visible ? pos(this.hatBox.root) : null, BOX_HALF * 2, 1)
       else if (id === 'sashbox') place(el, this.sashBox.root.visible ? pos(this.sashBox.root) : null, BOX_HALF * 2, 1)
       else if (id === 'drum') place(el, this.drum.root.visible ? pos(this.drum.root) : null, 2, 0.9)
+      else if (id === 'trumpet') place(el, pos(this.trumpet.root), 2.6, 0.8)
+      else if (id === 'carriage') place(el, this.carriage.passing ? this.carriage.center(tmp3).setY(CLIFF_Y + 0.3).clone() : null, 2, 1)
+      else if (id === 'fox') place(el, this.fox.here && this.fox.pokeable ? this.fox.center(tmp3).setY(0).clone() : null, 1.1, 1.2)
+      else if (id === 'geese') place(el, this.geese.flying ? this.geese.center(tmp3).setY(this.geese.root.position.y - 0.6).clone() : null, 1.2, 2)
       el.style.zIndex = id === 'maple' ? '3' : id === 'castle' ? '0' : '1'
     }
   }
@@ -1691,6 +1938,9 @@ export class CarnivalSnowballs implements World3D {
       sashBox: this.sashBox.shown ? scr(SASH_BOX.x, 0.5, SASH_BOX.z) : null,
       drum: this.drum.root.visible ? scr(DRUM.x, 1.3, DRUM.z) : null,
       trail: this.trail.dabs,
+      fox: this.fox.state,
+      carriage: this.carriage.passing,
+      geese: this.geese.flying,
       ...this.counts,
       rolledM: +this.counts.rolledM.toFixed(1),
     }
@@ -1701,6 +1951,7 @@ export class CarnivalSnowballs implements World3D {
   }
 
   dispose() {
+    this.gone = true
     this.unwatch()
     this.scene.clear()
     this.bag.dispose()

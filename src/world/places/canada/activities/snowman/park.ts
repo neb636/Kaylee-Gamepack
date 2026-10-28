@@ -17,7 +17,11 @@ export const DRUM = { x: 11.6, z: -11.2 }
 /** The cliff and the castle hotel on top of it. */
 export const CLIFF_Z = -13.2
 export const CLIFF_Y = 4
-export const CASTLE = { x: 0, z: -27 }
+export const CASTLE = { x: 0, z: -23.5 }
+/** The terrace on the cliff in front of the castle (its railing between ±TERRACE_HALF): the horse and carriage
+ *  clip-clop along it at TERRACE_Z. */
+export const TERRACE_HALF = 13
+export const TERRACE_Z = -16.4
 
 /** Trees in the park (the balls bump them and snow falls on the ball), and the ones round its edges. */
 export const TREES_IN: { x: number; z: number; s: number }[] = [
@@ -33,6 +37,9 @@ export const LAMP = { x: -6.4, z: -12.2 }
 export const LAMPS = [-14, 2, 14]
 export const MOOSE = { x: -11.2, z: -6.4, r: 1.1 }
 export const SLIDE = { top: { x: 21, y: 6.4, z: -7 }, foot: { x: 15.6, y: 0, z: 1.8 } }
+
+/** The carnival trumpet on its striped stand behind the path. */
+export const TRUMPET = { x: 5.2, z: -12.5 }
 
 /** The carnival's two boxes (dress): roll a snowball in and out pops a hat or a sash. */
 export const HAT_BOX = { x: -5.6, z: -4.8 }
