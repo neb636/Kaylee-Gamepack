@@ -107,6 +107,57 @@ export const L = {
   // ---- One block per activity (activities/<id>/). Story lines, Sparkle's instructions and hints, the friends'
   // reactions. Keep each line under ~3 seconds; say Kaylee's name only at the big moments. ----
   hub: {
+    // The first visit: Maple on Quebec City's platform tells the story, then Sparkle says what to do.
+    story: [maple("Bonjour! I'm Maple. I want to see all of Canada, ocean to ocean!"), maple("And find a hockey team for the big game in Ottawa!")],
+    push: 'Push the train with your finger!',
+    bubbles: 'Tap a bubble to play!',
+    soon: 'That one is coming soon!',
+    // Maple, when the train pulls in.
+    arrive: {
+      msa: maple('Bonjour, Mont-Sainte-Anne!'),
+      quebec: maple('Bonjour, Quebec!'),
+      ottawa: maple('Hello, Ottawa! Our hockey rink!'),
+      banff: maple('Hello, Banff! Look at the mountains!'),
+      bc: maple('Hello, Vancouver! The Pacific Ocean!'),
+    },
+    teamHere: maple('Look! Our hockey team!'),
+    teamAll: maple("Our whole team is here! Let's play!"),
+    locked: maple('We need our whole team first!'),
+    newFriend: maple('A new friend for our team!'),
+    // Maple, riding through (once each).
+    ride: {
+      forest: maple('So many trees and lakes!'),
+      prairies: maple('The prairies! So flat!'),
+      rockies: maple('The Rocky Mountains!'),
+      tunnel: maple('Round and round, inside the mountain!'),
+    },
+    // Somebody on the track.
+    blocked: {
+      moose: maple('Oh! A moose on the track!'),
+      bison: maple('Oh! A bison on the track!'),
+      geese: maple('Oh! Geese on the track!'),
+    },
+    tapIt: 'Tap it, so it can move!',
+    sorry: by('moose')('Oops! Sorry!'),
+    // Tap Maple.
+    maple: [maple('Choo choo!'), maple("Let's go!"), maple('Bonjour!')],
+    // Sparkle, the first time she pokes a landmark.
+    pokes: {
+      cn: 'The CN Tower, in Toronto. It is very tall!',
+      niagara: 'Niagara Falls! Look, a rainbow!',
+      montmorency: 'Montmorency Falls. Even taller than Niagara Falls!',
+      ferry: 'A ferry. It takes people across the river.',
+    },
+    // Her hockey team, when she taps them (the loon just calls).
+    team: {
+      taffy: by('chipmunk')('Go, team, go!'),
+      snowman: by('owl')('Hoo! Go team!'),
+      bike: by('moose')("I'm the goalie!"),
+      campfire: by('raccoon')("I'll get the puck!"),
+      bridge: by('bear')('Go team!'),
+      whales: by('otter')('Hockey! Yay!'),
+      salmon: by('bear')('I love to skate!'),
+    },
   },
   taffy: {
     // The story beat (Maple, then her little cousin).
