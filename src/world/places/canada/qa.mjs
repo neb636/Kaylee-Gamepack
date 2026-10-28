@@ -27,6 +27,9 @@ export const screens = [
   // Salmon Leap (2D greybox): each stretch of the river from its link (the bears' falls with the spirit bear low too),
   // and the stream where the eggs hatch.
   ...['steps', 'falls', 'bears', 'bears?spirit=low', 'eggs'].map((to) => ({ name: `canada-salmon-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/salmon/${to}`, reset: true, wait: 1500 })),
+  // Carnival Snowballs (3D greybox): each part from its link (the stack with the huge ball and Maple on top; dressing
+  // with two already in the parade line), and the parade.
+  ...['roll', 'stack', 'stack?size=huge', 'dress', 'dress?snowmen=3', 'parade'].map((to) => ({ name: `canada-snowman-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/snowman/${to}`, reset: true, wait: to === 'roll' ? 4000 : to === 'parade' ? 6000 : 2500 })),
   { name: 'canada-party-soon', hash: '#/world/canada/party/soon', wait: 800 },
 ]
 
@@ -51,6 +54,9 @@ export const pacing = [
   // Salmon Leap (greybox, no voices): a tap on a salmon makes it hop and a tap pokes things, so the auto-player hops
   // them about and pokes; flicking them up the falls is a quick drag (qa-motion's canada-salmon-flick).
   { name: 'canada salmon leap', id: 'salmon', hash: '#/world/canada/salmon', reset: true },
+  // Carnival Snowballs (greybox, no voices): the core verb is a push (a drag on the ball), so the auto-player's taps only
+  // pat the ball, shake trees and poke; the robot run that rolls, stacks and dresses is qa-motion's canada-snowman-roll.
+  { name: 'canada carnival snowballs', id: 'snowman', hash: '#/world/canada/snowman', reset: true },
 ]
 
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
@@ -279,6 +285,49 @@ motion.push({
     await page.mouse.down()
     await page.mouse.move(canoe.x + reach, canoe.y + 20, { steps: 3 })
     await page.waitForTimeout(1500)
+    await page.mouse.up()
+  },
+})
+
+// Carnival Snowballs (3D greybox): the little ball pushed round in a big loop (it grows and leaves a green stripe, the
+// camera follows), then a fresh ball dragged out of bare snow and pushed into the big one (it hops on top).
+motion.push({
+  name: 'canada-snowman-roll',
+  seconds: 12,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/canada/snowman/roll`)
+    await page.waitForFunction(() => window.__canadaSnowmanQA?.().section, null, { timeout: 20000 })
+    await page.waitForTimeout(3200)
+  },
+  act: async (page) => {
+    const step = Math.min(150, vp.width * 0.16)
+    for (const [dx, dy] of [
+      [1, 0],
+      [0, -0.6],
+      [-1, 0],
+      [-1, 0],
+      [0, 0.6],
+      [1, 0],
+    ]) {
+      const { ball } = await page.evaluate(() => window.__canadaSnowmanQA())
+      if (!ball) break
+      await page.mouse.move(ball.x, ball.y)
+      await page.mouse.down()
+      await page.mouse.move(ball.x + dx * step, ball.y + dy * step, { steps: 14 })
+      await page.waitForTimeout(250)
+      await page.mouse.up()
+      await page.waitForTimeout(250)
+    }
+    // A new ball out of the snow beside the big one, pushed into it.
+    const { loose } = await page.evaluate(() => window.__canadaSnowmanQA())
+    const big = loose[0]
+    if (!big) return
+    const sx = big.x + step * 1.4
+    await page.mouse.move(sx, big.y)
+    await page.mouse.down()
+    await page.mouse.move(sx - 20, big.y, { steps: 3 })
+    await page.mouse.move(big.x, big.y, { steps: 16 })
+    await page.waitForTimeout(600)
     await page.mouse.up()
   },
 })

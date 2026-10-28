@@ -322,7 +322,12 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [Orders](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/orders) ([the chipmunk fed](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/orders?made=7&fed=chipmunk))
 - [Everyone crunches](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/share)
 
-**Carnival Snowballs** (in the works): [Carnival Snowballs (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/soon)
+**Carnival Snowballs** (in the works)
+
+- [Roll one](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/roll)
+- [Stack a snowman](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/stack) ([the huge ball, Maple on top](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/stack?size=huge))
+- [Dress it for the carnival](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/dress) ([two already in the parade line](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/dress?snowmen=3))
+- [The parade](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/parade) ([a long one](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/parade?snowmen=5))
 
 **Mountain Bike** (in the works)
 
