@@ -1,29 +1,39 @@
-// Red Canoe (greybox 5): Kaylee paddles the red canoe across Banff's turquoise lake (paddle.ts is the world). The
-// address bar follows her from part to part (sections.ts) and keeps how she paddles (`?paddle=stroke` or `pull`); the
-// little switch at the top right swaps between the two so Dad can try them side by side. No voices yet (the full-loop
-// gate): a short line at the bottom says what's on screen, for Dad. With the loon family at the glacier, "again" sets
-// off from the dock once more.
+// Red Canoe: Maple wonders why Moraine Lake is so blue, and Kaylee paddles the red canoe across it to find out
+// (paddle.ts is the world; it also does the talking: Maple's question, Sparkle's one line per part and her help when
+// she's stuck, Maple's and the animals' reactions). The address bar follows her from part to part (sections.ts) and
+// keeps how she paddles (`?paddle=stroke` or `pull`); the little switch at the top right swaps between the two so Dad
+// can try them side by side. The bubble at the bottom shows what Sparkle said (tap it to hear it again). The stars fill
+// part by part; with the loon family at the glacier the celebration plays, then the stamp (onDone), and "again" sets off
+// from the dock once more.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst } from '../../../../../sdk'
+import { BigButton, burst, lineText, say, type Line } from '../../../../../sdk'
+import { isFeelParam } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
-import { CANOE_ANCHORS, RedCanoe as World, type CanoeEvents, type CanoeStart } from './paddle'
+import { L } from '../../lines'
+import type { CanadaActivityProps } from '../props'
+import { CANOE_ANCHORS, CANOE_PARTS, DONE_S, RedCanoe as World, type CanoeEvents, type CanoeStart } from './paddle'
 import CANOE_SECTIONS, { type CanoeSection, type PaddleMode } from './sections'
 
-const SAY: Record<CanoeSection, Record<PaddleMode, string>> = {
-  glide: { stroke: '🛶 Pull the paddle back through the water!', pull: '🛶 Hold the water where the canoe should go!' },
-  stream: { stroke: '✨ Paddle to the milky water by the glacier stream!', pull: '✨ Go to the milky water by the glacier stream!' },
-  loon: { stroke: '🫧 Follow the bubbles to find the loon!', pull: '🫧 Follow the bubbles to find the loon!' },
-  glacier: { stroke: '💙 The loon family! The whole lake glows!', pull: '💙 The loon family! The whole lake glows!' },
+/** What the bubble says in each part (Sparkle's line), and its little picture. */
+const SAY: Record<CanoeSection, (p: PaddleMode) => { icon: string; line: Line }> = {
+  story: () => ({ icon: '🦫', line: L.canoe.story }),
+  glide: (p) => ({ icon: '🛶', line: L.canoe.go[p] }),
+  stream: () => ({ icon: '✨', line: L.canoe.stream }),
+  loon: () => ({ icon: '🫧', line: L.canoe.loon }),
+  glacier: () => ({ icon: '💙', line: L.canoe.family }),
 }
-const FOUND = '🏔️ Rock flour from the glacier makes the lake so blue!'
+const FOUND = { icon: '🏔️', line: L.canoe.found }
 
-export function RedCanoe() {
+const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').keys()].some(isFeelParam)
+
+export function RedCanoe({ onDone, setProgress }: CanadaActivityProps) {
+  const [feel] = useState(feelOn)
   const { start, param, enter } = useSections(CANOE_SECTIONS)
-  const [run, setRun] = useState<CanoeStart & { n: number }>(() => ({ section: (start ?? 'glide') as CanoeSection, paddle: param('paddle') as PaddleMode, n: 0 }))
+  const [run, setRun] = useState<CanoeStart & { n: number }>(() => ({ section: (start ?? 'story') as CanoeSection, paddle: param('paddle') as PaddleMode, n: 0 }))
   const [section, setSection] = useState<CanoeSection>(run.section)
   const [found, setFound] = useState(false)
   const [mode, setMode] = useState<RenderMode>('webgl')
@@ -32,8 +42,13 @@ export function RedCanoe() {
   const hintRef = useRef<HTMLDivElement>(null)
   const paddle = useRef(run.paddle)
   paddle.current = run.paddle
+  const finished = useRef(false)
+  const stampTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const props = useRef({ onDone, setProgress })
+  props.current = { onDone, setProgress }
 
   useEffect(() => enter(run.section, { paddle: run.paddle }), [run])
+  useEffect(() => () => void (stampTimer.current && clearTimeout(stampTimer.current)), [])
 
   const events = useRef<CanoeEvents>({
     section: (s) => {
@@ -42,9 +57,15 @@ export function RedCanoe() {
       enter(s, { paddle: paddle.current })
     },
     found: () => setFound(true),
+    progress: (n) => props.current.setProgress(n, CANOE_PARTS),
     done: () => {
       setDone(true)
       burst()
+      // The celebration plays (the loon family round the canoe, Maple cheering), then the stamp, the first time.
+      if (!finished.current) {
+        finished.current = true
+        stampTimer.current = setTimeout(() => props.current.onDone(), DONE_S * 1000)
+      }
     },
   })
 
@@ -61,12 +82,13 @@ export function RedCanoe() {
   }
 
   const other: PaddleMode = run.paddle === 'stroke' ? 'pull' : 'stroke'
+  const bubble = found ? FOUND : SAY[section](run.paddle)
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#C4E8FA', overflow: 'clip' }}>
       <style>{HINT_CSS}</style>
       <View3D
         key={run.n}
-        name="the turquoise lake"
+        name="Moraine Lake"
         qaKey="__canadaCanoeQA"
         worldRef={worldRef}
         onMode={setMode}
@@ -91,14 +113,17 @@ export function RedCanoe() {
           🛶 Tap to wake the lake
         </button>
       )}
-      {/* For Dad: try the other way to paddle, from the same part of the lake. */}
-      <button
-        onClick={() => restart(section === 'glacier' ? 'loon' : section, other)}
-        aria-label={`Paddle by ${other} instead`}
-        style={{ position: 'absolute', right: 12, top: 'calc(var(--top-clear) + 6px)', zIndex: 20, minHeight: 56, padding: '6px 16px', borderRadius: 999, border: 'none', background: 'rgba(255,255,255,.88)', boxShadow: 'var(--shadow)', fontSize: 'clamp(14px, 2vmin, 18px)', fontWeight: 600, color: 'var(--ink)' }}
-      >
-        {run.paddle === 'stroke' ? '🛶 Stroke' : '👆 Pull'} <span style={{ opacity: 0.55 }}>→ {other === 'stroke' ? '🛶' : '👆'}</span>
-      </button>
+      {/* For Dad (with ?feel=1): try the other way to paddle, from the same part of the lake. (Without it, a tap here
+          would restart her part.) */}
+      {feel && section !== 'story' && (
+        <button
+          onClick={() => restart(section === 'glacier' ? 'loon' : section, other)}
+          aria-label={`Paddle by ${other} instead`}
+          style={{ position: 'absolute', right: 12, top: 'calc(var(--top-clear) + 6px)', zIndex: 20, minHeight: 56, padding: '6px 16px', borderRadius: 999, border: 'none', background: 'rgba(255,255,255,.88)', boxShadow: 'var(--shadow)', fontSize: 'clamp(14px, 2vmin, 18px)', fontWeight: 600, color: 'var(--ink)' }}
+        >
+          {run.paddle === 'stroke' ? '🛶 Stroke' : '👆 Pull'} <span style={{ opacity: 0.55 }}>→ {other === 'stroke' ? '🛶' : '👆'}</span>
+        </button>
+      )}
       <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
         {done && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 4, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
@@ -108,9 +133,17 @@ export function RedCanoe() {
           </motion.div>
         )}
         <AnimatePresence mode="popLayout">
-          <motion.div key={found ? 'found' : section} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-            {found ? FOUND : SAY[section][run.paddle]}
-          </motion.div>
+          <motion.button
+            key={found ? 'found' : section}
+            initial={{ scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.6, opacity: 0 }}
+            onClick={() => void say(bubble.line)}
+            aria-label={`Hear it again: ${lineText(bubble.line)}`}
+            style={PILL}
+          >
+            {bubble.icon} {lineText(bubble.line)} <span style={{ opacity: 0.6 }}>🔊</span>
+          </motion.button>
         </AnimatePresence>
       </div>
     </div>
@@ -118,12 +151,16 @@ export function RedCanoe() {
 }
 
 const PILL = {
+  pointerEvents: 'auto' as const,
+  border: 'none',
   background: 'rgba(255,255,255,.92)',
   color: 'var(--ink)',
   borderRadius: 999,
   padding: '8px 20px',
+  minHeight: 48,
   fontSize: 'clamp(16px, 2.4vmin, 22px)',
   fontWeight: 600,
+  fontFamily: 'inherit',
   boxShadow: 'var(--shadow)',
   textAlign: 'center' as const,
   maxWidth: '100%',

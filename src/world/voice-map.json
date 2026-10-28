@@ -462,6 +462,13 @@
     "file": "9931dcf87ecc.mp3"
   },
   {
+    "text": "Canada!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 671,
+    "file": "af90d2b4b389.mp3"
+  },
+  {
     "text": "A tea party with me!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -838,5 +845,61 @@
     "sig": "ed7dbdac3d",
     "ms": 1928,
     "file": "6d39e8f71a29.mp3"
+  },
+  {
+    "text": "Maple taffy on snow!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2413,
+    "file": "136ce4203660.mp3"
+  },
+  {
+    "text": "The snowman parade!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2349,
+    "file": "d493821a5b71.mp3"
+  },
+  {
+    "text": "The mountain bike!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1905,
+    "file": "8eaae872efe0.mp3"
+  },
+  {
+    "text": "The campfire night!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1781,
+    "file": "c6a412cf3971.mp3"
+  },
+  {
+    "text": "The red canoe!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1799,
+    "file": "0878786887d8.mp3"
+  },
+  {
+    "text": "The animal bridge!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1610,
+    "file": "3477d251fe7d.mp3"
+  },
+  {
+    "text": "The whale watch!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2159,
+    "file": "dff7c4c559d3.mp3"
+  },
+  {
+    "text": "The salmon leap!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1820,
+    "file": "8aba076db215.mp3"
   }
 ]

@@ -1,8 +1,9 @@
-// Red Canoe's lake animals as greybox shapes in the toon look (the art gate builds them properly): the loon (who dives
-// and pops up somewhere else, laughing; the last time with her chick on her back), a mother duck and her ducklings, a
-// beaver who pops up by the lodge and slaps his tail, a pika who says "eep!" on the rock pile, a ground squirrel who
-// stands up on his rock, and a trout who jumps. The moose is the Mountain Bike's (bike/critters.ts). Each one has its
-// own little action; the world (paddle.ts) places them and says when.
+// Red Canoe's lake animals, code-built in the toon look: the common loon (who dives and pops up somewhere else,
+// laughing; the last time with her chick on her back), a mother duck and her ducklings, a beaver who pops up by the
+// lodge and slaps his tail, a pika who says "eep!" on the rock pile, a hoary marmot who whistles from the top of it, a
+// ground squirrel who stands up on his rock, a trout who jumps, a bald eagle circling high over the lake, and a mountain
+// goat on a cliff ledge. The moose is on the chibi rig (moose.ts). Each one has its own little action; the world
+// (paddle.ts) places them and says when.
 import { Group } from 'three'
 import { bell, clamp, span } from '../../../../../sdk'
 import type { Bag } from '../../../../engine3d/dispose'
@@ -38,41 +39,104 @@ abstract class Critter {
   abstract update(dt: number, t: number): void
 }
 
-/** The loon: black head, white necklace, a black back checkered white, a red eye, a long dark beak. She floats low;
- *  `dive()` tips her forward and under, `surface()` pops her back up. A chick can ride on her back. */
+/** The common loon, as a toy: a long low black body with the white checkerboard on her back, a white breast, a black
+ *  head with a green sheen, the striped white necklace, a ruby-red eye and a long dagger beak. She floats low;
+ *  `dive()` tips her forward and under, `surface()` pops her back up. A poke (or a call) throws her head back with her
+ *  beak open to laugh; `flap()` rears her up out of the water with her wings spread (the loon's wing-flap). A chick can
+ *  ride on her back. */
 export class Loon extends Critter {
   readonly height = 0.75
   private body = new Group()
   private neck = new Group()
+  private jaw = new Group()
+  private wings: Group[] = []
   private chick = new Group()
   /** 0 = under the water, 1 = floating. */
   up = 1
   private goal = 1
   private diveT = -1
+  private flapT = -1
   constructor(bag: Bag, withChick = false) {
     super()
     this.root.add(this.body)
-    const black = '#2E2A3A'
-    const dots = []
-    for (let i = 0; i < 14; i++) {
-      const a = (i % 7) * 0.22 - 0.66
-      const r = Math.floor(i / 7)
-      dots.push(P.sphere(0.035, '#FFFFFF', { at: [(r ? 1 : -1) * (0.2 + Math.abs(a) * 0.02), 0.2, a * 0.6 - 0.05], scale: [0.6, 0.6, 1] }))
-    }
-    this.body.add(solidMix([P.sphere(0.32, black, { at: [0, 0.06, 0], scale: [0.85, 0.6, 1.5] }), P.sphere(0.22, '#FFFFFF', { at: [0, -0.04, 0.05], scale: [0.95, 0.5, 1.5] })], dots, bag, 2))
-    this.neck.position.set(0, 0.16, 0.36)
-    this.body.add(this.neck)
-    this.neck.add(
+    const black = '#23212D'
+    const sheen = '#20393A'
+    const white = '#FFFFFF'
+    // The back's checkerboard: little white squares in rows on top of the body (on the ellipsoid's surface).
+    const rx = 0.25
+    const ry = 0.17
+    const rz = 0.5
+    const cy = 0.03
+    const checks = []
+    for (let i = 0; i < 6; i++)
+      for (let j = 0; j < 9; j++) {
+        if ((i + j) % 2) continue
+        const x = (i - 2.5) * 0.065
+        const z = (j - 4.5) * 0.075 - 0.04
+        const q = 1 - (x / rx) ** 2 - (z / rz) ** 2
+        if (q < 0.18) continue
+        const y = cy + ry * Math.sqrt(q)
+        const tilt = Math.atan2((z / (rz * rz)) * ry, Math.sqrt(q)) * 0.6
+        checks.push(P.box(0.034, 0.014, 0.038, white, { at: [x, y + 0.003, z], rot: [tilt, 0, -x * 4] }))
+      }
+    this.body.add(
       solidMix(
-        [P.capsule(0.09, 0.14, black, { at: [0, 0.12, 0.02], rot: [-0.25, 0, 0] }), P.sphere(0.13, black, { at: [0, 0.3, 0.06] }), P.cone(0.04, 0.24, '#3A3346', { at: [0, 0.28, 0.27], rot: [Math.PI / 2, 0, 0] }, 8)],
-        [P.torus(0.092, 0.018, '#FFFFFF', { at: [0, 0.12, 0.02], rot: [Math.PI / 2 - 0.25, 0, 0] }), ...eyes(0.09, 0.34, 0.12, 0.028, '#E2364B')],
+        [
+          P.sphere(0.32, black, { at: [0, cy, 0], scale: [rx / 0.32, ry / 0.32, rz / 0.32] }, 22),
+          // The white breast, just above the water at the front, and the little tail at the back.
+          P.sphere(0.16, white, { at: [0, -0.02, 0.32], scale: [1.05, 0.7, 1] }),
+          P.cone(0.07, 0.16, black, { at: [0, 0.06, -0.52], rot: [-Math.PI / 2 - 0.25, 0, 0], scale: [1.4, 1, 0.5] }, 8),
+        ],
+        checks,
         bag,
         2,
       ),
     )
+    // Folded wings along her sides (they spread when she flaps).
+    for (const s of [1, -1]) {
+      const w = new Group()
+      w.position.set(s * 0.2, 0.1, 0.05)
+      const spots = [0, 1, 2].map((k) => P.box(0.012, 0.02, 0.03, white, { at: [s * 0.045, 0.02, -0.05 - k * 0.09] }))
+      w.add(solidMix([P.sphere(0.2, black, { at: [s * 0.01, 0, -0.12], scale: [0.22, 0.38, 1.25] })], spots, bag, 1.6))
+      this.body.add(w)
+      this.wings.push(w)
+    }
+    // The neck and head on a pivot at the front of the body.
+    this.neck.position.set(0, 0.12, 0.34)
+    this.body.add(this.neck)
+    const collar = []
+    for (let k = 0; k < 12; k++) {
+      const a = (k / 12) * Math.PI * 2
+      collar.push(P.box(0.018, 0.05, 0.012, white, { at: [Math.sin(a) * 0.088, 0.13, Math.cos(a) * 0.088 + 0.03], rot: [0, a, 0] }))
+      if (k % 2 === 0 && Math.cos(a) > 0.2) collar.push(P.box(0.014, 0.035, 0.01, white, { at: [Math.sin(a) * 0.085, 0.2, Math.cos(a) * 0.085 + 0.045], rot: [0, a, 0] }))
+    }
+    this.neck.add(
+      solidMix(
+        [P.capsule(0.085, 0.16, black, { at: [0, 0.13, 0.03], rot: [-0.2, 0, 0] }), P.sphere(0.125, sheen, { at: [0, 0.31, 0.07], scale: [0.95, 0.92, 1.12] }), P.cone(0.036, 0.25, '#3A3346', { at: [0, 0.31, 0.3], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.75] }, 8)],
+        [
+          ...collar,
+          // Ruby-red eyes with a dark pupil and a shine.
+          ...[1, -1].flatMap((s) => [P.sphere(0.036, '#E3263F', { at: [s * 0.088, 0.34, 0.12] }), P.sphere(0.016, PAL.ink, { at: [s * 0.112, 0.345, 0.13] }), P.sphere(0.008, white, { at: [s * 0.118, 0.355, 0.14] })]),
+        ],
+        bag,
+        2,
+      ),
+    )
+    // The lower half of the beak opens to laugh.
+    this.jaw.position.set(0, 0.285, 0.17)
+    this.neck.add(this.jaw)
+    this.jaw.add(solid(merge([P.cone(0.026, 0.2, '#4A4258', { at: [0, 0, 0.1], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.55] }, 8)]), bag, 1.4))
     if (withChick) {
-      this.chick.add(solidMix([P.sphere(0.14, '#8E8496', { scale: [1, 0.9, 1.15] }), P.sphere(0.09, '#8E8496', { at: [0, 0.14, 0.1] }), P.cone(0.025, 0.08, '#3A3346', { at: [0, 0.14, 0.22], rot: [Math.PI / 2, 0, 0] }, 6)], [...eyes(0.045, 0.17, 0.17, 0.018), ...cheeks(0.06, 0.12, 0.15, 0.025)], bag, 2))
-      this.chick.position.set(0, 0.3, -0.12)
+      const fluff = '#6E6372'
+      this.chick.add(
+        solidMix(
+          [P.sphere(0.14, fluff, { scale: [1, 0.85, 1.2] }), P.sphere(0.095, '#4E4556', { at: [0, 0.13, 0.11] }), P.cone(0.022, 0.08, '#3A3346', { at: [0, 0.12, 0.23], rot: [Math.PI / 2, 0, 0] }, 6), P.sphere(0.08, '#C9BFCB', { at: [0, -0.04, 0.08], scale: [1, 0.6, 1] })],
+          [...eyes(0.045, 0.16, 0.18, 0.018), ...cheeks(0.06, 0.11, 0.17, 0.022)],
+          bag,
+          2,
+        ),
+      )
+      this.chick.position.set(0, 0.28, -0.12)
       this.body.add(this.chick)
     }
   }
@@ -91,6 +155,10 @@ export class Loon extends Critter {
     this.diveT = -1
     this.up = Math.min(this.up, 0.01)
   }
+  /** Rears up out of the water and flaps her wings. */
+  flap() {
+    this.flapT = 0
+  }
   update(dt: number, t: number) {
     // Up and down: diving takes a moment (tip, then under); surfacing pops up quickly.
     if (this.goal === 0) {
@@ -101,13 +169,31 @@ export class Loon extends Critter {
       this.up = Math.min(1, this.up + dt * 3)
       this.body.rotation.x *= 1 - Math.min(1, dt * 6)
     }
-    this.body.position.y = -0.95 * (1 - this.up) + Math.sin(t * 1.9 + this.phase) * 0.025
+    // The wing-flap: she rises up on her tail, wings open and beating, then settles back with a bob.
+    let rear = 0
+    let open = 0
+    if (this.flapT >= 0) {
+      this.flapT += dt
+      const k = span(this.flapT, 0, 1.3)
+      rear = bell(k)
+      open = bell(span(k, 0.08, 0.9))
+      if (this.flapT > 1.3) this.flapT = -1
+    }
+    this.body.position.y = -0.95 * (1 - this.up) + Math.sin(t * 1.9 + this.phase) * 0.025 + rear * 0.22
+    if (this.goal !== 0 && rear > 0) this.body.rotation.x = -0.75 * rear
     this.body.visible = this.up > 0.02
-    // A poke (or a call): her head goes up and back, beak open to the sky.
+    this.wings.forEach((w, i) => {
+      const s = i ? -1 : 1
+      w.rotation.z = s * open * (1.3 + Math.sin(this.flapT * 26) * 0.5)
+      w.rotation.y = s * open * 0.3
+    })
+    // A poke (or a call): her head goes up and back, beak open to the sky, and the laugh wobbles it.
     const k = this.tick(dt, 1.4)
     const call = k < 0 ? 0 : bell(span(k, 0, 1))
-    this.neck.rotation.x = -0.7 * call + Math.sin(t * 1.3 + this.phase) * 0.05
-    this.chick.position.y = 0.3 + Math.abs(Math.sin(t * 3)) * 0.02
+    this.neck.rotation.x = -0.75 * call + rear * 0.5 + Math.sin(t * 1.3 + this.phase) * 0.05
+    this.neck.rotation.y = Math.sin(t * 0.7 + this.phase) * 0.2 * (1 - call)
+    this.jaw.rotation.x = call * (0.35 + Math.abs(Math.sin((k < 0 ? 0 : this.t) * 22)) * 0.2)
+    this.chick.position.y = 0.28 + Math.abs(Math.sin(t * 3)) * 0.02
     this.chick.rotation.y = Math.sin(t * 0.9) * 0.4
   }
 }
@@ -277,5 +363,182 @@ export class Trout extends Critter {
     this.fish.position.set(0, -0.2 + this.peak * 4 * k * (1 - k), (k - 0.5) * 1.6)
     this.fish.rotation.x = clamp(-(1 - 2 * k) * 1.1, -1.1, 1.1)
     this.fish.rotation.y = Math.sin(this.t * 30) * 0.25
+  }
+}
+
+/** A hoary marmot: a chubby silver-grey rock sitter with a dark cap and feet and a white band across the nose. He sits
+ *  on top of the rock pile looking round; poked, he sits up tall on his back legs, paws together, and whistles. */
+export class Marmot extends Critter {
+  readonly height = 0.75
+  private body = new Group()
+  private head = new Group()
+  private tail = new Group()
+  constructor(bag: Bag) {
+    super()
+    this.root.add(this.body)
+    const fur = '#A9A3A8'
+    const silver = '#E4E0E4'
+    const dark = '#5B4C4A'
+    this.body.add(
+      solid(
+        merge([
+          P.sphere(0.26, fur, { at: [0, 0.24, 0], scale: [1, 1.05, 0.95] }),
+          P.sphere(0.2, silver, { at: [0, 0.4, 0.03], scale: [1.15, 0.7, 1] }),
+          P.sphere(0.13, '#C9C1BE', { at: [0, 0.2, 0.17], scale: [1, 1.2, 0.6] }),
+          ...[1, -1].map((s) => P.sphere(0.07, dark, { at: [s * 0.12, 0.03, 0.12], scale: [1, 0.6, 1.3] })),
+          ...[1, -1].map((s) => P.capsule(0.045, 0.08, fur, { at: [s * 0.1, 0.3, 0.2], rot: [0.9, 0, s * 0.2] })),
+        ]),
+        bag,
+        2,
+      ),
+    )
+    this.head.position.set(0, 0.5, 0.05)
+    this.body.add(this.head)
+    this.head.add(
+      solidMix(
+        [
+          P.sphere(0.15, fur, { at: [0, 0.08, 0.02] }),
+          P.sphere(0.12, dark, { at: [0, 0.14, -0.01], scale: [1, 0.7, 1] }),
+          P.sphere(0.08, silver, { at: [0, 0.03, 0.12], scale: [1.2, 0.8, 0.9] }),
+          P.sphere(0.03, '#3A2E2C', { at: [0, 0.06, 0.2] }),
+          ...[1, -1].map((s) => P.sphere(0.045, dark, { at: [s * 0.11, 0.19, -0.02], scale: [1, 0.8, 0.5] })),
+        ],
+        [P.box(0.1, 0.025, 0.02, '#FFFFFF', { at: [0, 0.1, 0.15] }), ...eyes(0.065, 0.12, 0.12, 0.022), ...cheeks(0.09, 0.05, 0.11, 0.025)],
+        bag,
+        2,
+      ),
+    )
+    this.tail.position.set(0, 0.12, -0.22)
+    this.body.add(this.tail)
+    this.tail.add(solid(merge([P.capsule(0.06, 0.16, '#7A6A66', { at: [0, 0.02, -0.12], rot: [-1.2, 0, 0] })]), bag, 1.6))
+  }
+  update(dt: number, t: number) {
+    const k = this.tick(dt, 1.8)
+    // Up on his back legs (a little squat first), a hold while he whistles, then back down.
+    const up = k < 0 ? 0 : k < 0.1 ? -0.3 * (k / 0.1) : bell(span(k, 0.1, 1)) ** 0.5
+    this.body.scale.set(1 - up * 0.08, 1 + up * 0.28, 1)
+    this.body.rotation.x = -0.15 * Math.max(0, up)
+    this.head.rotation.x = -0.25 * Math.max(0, up)
+    this.head.rotation.y = k < 0 ? Math.sin(t * 0.6 + this.phase) * 0.6 : 0
+    this.tail.rotation.x = Math.sin(t * (k < 0 ? 1.5 : 18)) * (k < 0 ? 0.05 : 0.3)
+  }
+}
+
+/** A bald eagle, soaring high over the lake: dark brown with a white head and tail, a hooked yellow beak and yellow
+ *  feet, its long wings spread flat with the feathers fingered at the tips. The world flies it round in circles and
+ *  says how much it banks; poked, it beats its wings hard (and the world makes it scream). */
+export class Eagle extends Critter {
+  readonly height = 0.7
+  private wings: Group[] = []
+  private head = new Group()
+  private flapT = -1
+  /** How much it banks into its circle (radians, the world sets it). */
+  bank = 0
+  constructor(bag: Bag) {
+    super()
+    const brown = '#5A3E31'
+    const white = '#FFFFFF'
+    const gold = '#FFC23D'
+    this.root.add(
+      solid(
+        merge([
+          P.sphere(0.24, brown, { at: [0, 0, 0], scale: [0.8, 0.7, 1.7] }),
+          // The white tail, fanned.
+          P.cone(0.22, 0.42, white, { at: [0, 0, -0.52], rot: [-Math.PI / 2, 0, 0], scale: [1.3, 1, 0.25] }, 10),
+          ...[1, -1].map((s) => P.cone(0.04, 0.12, gold, { at: [s * 0.08, -0.12, -0.18], rot: [-Math.PI / 2 - 0.4, 0, 0] }, 6)),
+        ]),
+        bag,
+        2,
+      ),
+    )
+    this.head.position.set(0, 0.06, 0.38)
+    this.root.add(this.head)
+    this.head.add(solidMix([P.sphere(0.16, white, { scale: [0.95, 0.95, 1.1] }), P.cone(0.06, 0.16, gold, { at: [0, -0.03, 0.18], rot: [Math.PI / 2 + 0.35, 0, 0] }, 8)], eyes(0.08, 0.04, 0.11, 0.024), bag, 2))
+    for (const s of [1, -1]) {
+      const w = new Group()
+      w.position.set(s * 0.16, 0.05, 0.05)
+      const parts = [P.sphere(0.5, brown, { at: [s * 0.55, 0, 0], scale: [1.25, 0.08, 0.42] })]
+      // The fingered tips.
+      for (let i = 0; i < 4; i++) parts.push(P.rbox(0.32, 0.03, 0.07, 0.02, '#4A3328', { at: [s * (1.15 + i * 0.03), 0, 0.12 - i * 0.09], rot: [0, s * (0.15 - i * 0.12), 0] }))
+      w.add(solid(merge(parts), bag, 2))
+      this.root.add(w)
+      this.wings.push(w)
+    }
+  }
+  /** A few hard wing beats. */
+  flap() {
+    this.flapT = 0
+  }
+  update(dt: number, t: number) {
+    this.tick(dt, 1)
+    let beat = 0.12 * Math.sin(t * 1.3 + this.phase)
+    if (this.flapT >= 0) {
+      this.flapT += dt
+      beat = Math.sin(this.flapT * 14) * 0.55 * (1 - span(this.flapT, 0.6, 1.6))
+      if (this.flapT > 1.6) this.flapT = -1
+    }
+    this.wings.forEach((w, i) => (w.rotation.z = (i ? -1 : 1) * (0.08 + beat)))
+    this.root.rotation.z = this.bank
+    this.head.rotation.y = Math.sin(t * 0.8 + this.phase) * 0.4
+  }
+}
+
+/** A mountain goat on a cliff ledge: shaggy white, with a long beard, short black horns curving back, black hooves and
+ *  a black nose. He chews and looks round; poked, he crouches and hops along his ledge and back (and bleats). */
+export class Goat extends Critter {
+  readonly height = 1.1
+  private body = new Group()
+  private head = new Group()
+  constructor(bag: Bag) {
+    super()
+    this.root.add(this.body)
+    const wool = '#FBF8F2'
+    const shade = '#E6E0D8'
+    const hoof = '#2E2A33'
+    const parts = [
+      P.rbox(0.42, 0.42, 0.78, 0.18, wool, { at: [0, 0.62, 0] }),
+      // The shaggy hump over the shoulders and the "pants" of long hair on the legs.
+      P.sphere(0.26, wool, { at: [0, 0.82, 0.22], scale: [0.95, 0.8, 1] }),
+      P.sphere(0.2, shade, { at: [0, 0.5, -0.32], scale: [1.1, 0.9, 0.8] }),
+    ]
+    for (const [x, z] of [[0.13, 0.27], [-0.13, 0.27], [0.13, -0.27], [-0.13, -0.27]]) {
+      parts.push(P.cyl(0.07, 0.06, 0.42, wool, { at: [x, 0.25, z] }, 8), P.cyl(0.05, 0.05, 0.08, hoof, { at: [x, 0.04, z] }, 8))
+    }
+    this.body.add(solid(merge(parts), bag, 2))
+    this.head.position.set(0, 0.86, 0.42)
+    this.body.add(this.head)
+    this.head.add(
+      solidMix(
+        [
+          P.rbox(0.2, 0.22, 0.34, 0.09, wool, { at: [0, 0.02, 0.12], rot: [0.5, 0, 0] }),
+          P.sphere(0.035, hoof, { at: [0, -0.06, 0.3] }),
+          P.cone(0.06, 0.2, shade, { at: [0, -0.17, 0.18], rot: [Math.PI, 0, 0] }, 8),
+          ...[1, -1].map((s) => P.cone(0.025, 0.18, hoof, { at: [s * 0.05, 0.17, 0.02], rot: [-0.55, 0, s * 0.1] }, 8)),
+          ...[1, -1].map((s) => P.sphere(0.04, wool, { at: [s * 0.11, 0.1, 0.0], scale: [1.4, 0.6, 0.7] })),
+        ],
+        [...eyes(0.075, 0.07, 0.18, 0.02), ...cheeks(0.08, 0.0, 0.2, 0.02)],
+        bag,
+        2,
+      ),
+    )
+  }
+  update(dt: number, t: number) {
+    const k = this.tick(dt, 1.4)
+    // A hop: crouch, up and over (along the ledge), land with a squash, and back to where he stood.
+    let y = 0
+    let sq = 0
+    let along = 0
+    if (k >= 0) {
+      if (k < 0.15) sq = 0.12 * bell(k / 0.3)
+      const air = span(k, 0.15, 0.6)
+      y = bell(air) * 0.45
+      along = Math.sin(Math.min(1, k / 0.6) * Math.PI * 0.5) * 0.6 * (1 - span(k, 0.65, 1))
+      if (k > 0.6 && k < 0.75) sq = 0.1 * bell(span(k, 0.6, 0.75))
+    }
+    this.body.position.set(along, y, 0)
+    this.body.scale.set(1 + sq * 0.5, 1 - sq, 1 + sq * 0.3)
+    const chew = Math.sin(t * 6) * 0.03
+    this.head.rotation.x = (k < 0 ? 0.1 : -0.2) + chew
+    this.head.rotation.y = k < 0 ? Math.sin(t * 0.45 + this.phase) * 0.7 : 0
   }
 }

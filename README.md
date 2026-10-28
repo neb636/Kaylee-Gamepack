@@ -312,62 +312,77 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 **Home base**
 
 - [The whole country, then the train in Quebec City](https://neb636.github.io/Kaylee-Gamepack/#/world/canada)
-- [Push the train](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map) ([Mont-Sainte-Anne](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=msa), [Ottawa](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=ottawa), [the forests](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=forest), [the prairies](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=prairies), [Banff](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=banff), [out of the Spiral Tunnel](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=rockies), [Vancouver](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=bc))
+- [Push the train](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map) ([Mont-Sainte-Anne](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=msa), [Ottawa](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=ottawa), [Ottawa with a hockey team](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=ottawa&team=bike,campfire,canoe,whales), [the forests](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=forest), [the prairies](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=prairies), [Banff](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=banff), [out of the Spiral Tunnel](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=rockies), [Vancouver](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=bc))
+- [Maple's animal book (every animal she's met, grey shapes for the rest)](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/book)
 
-**Sugar Snow** (in the works)
+**Sugar Snow**
 
+- [Maple's cousins](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/story)
 - [Lines: pour, let it set, roll it up](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/pour) ([tip by pulling ahead](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/pour?tip=lead))
 - [Shapes](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/shapes)
 - [Orders](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/orders) ([the chipmunk fed](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/orders?made=7&fed=chipmunk))
 - [Everyone crunches](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/share)
 
-**Carnival Snowballs** (in the works)
+**Carnival Snowballs**
 
+- [Maple asks for snowmen](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/story)
 - [Roll one](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/roll)
 - [Stack a snowman](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/stack) ([the huge ball, Maple on top](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/stack?size=huge))
 - [Dress it for the carnival](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/dress) ([two already in the parade line](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/dress?snowmen=3))
 - [The parade](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/parade) ([a long one](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/parade?snowmen=5))
 
-**Mountain Bike** (in the works)
+**Mountain Bike**
 
+- [Maple wants to ride to the waterfall](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bike/story)
 - [Up the gondola](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bike/gondola)
 - [The green trail](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bike/green)
 - [Berms and bumps](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bike/berms) ([the blue way](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bike/berms?trail=blue))
 - [The creek and the jump](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bike/creek)
 - [The waterfall](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bike/falls)
 
-**Campfire Night** (in the works): [Find the eyes](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/eyes) · [Who’s that sound?](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/sounds?found=4) · [The marshmallow bandit](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/bandit?found=6) · [Roast a marshmallow](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/marshmallow) · [Around the fire](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/stars?found=8)
+**Campfire Night**: [Something is out there (Maple)](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/story) · [Find the eyes](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/eyes) · [Who’s that sound?](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/sounds?found=4) · [The marshmallow bandit](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/bandit?found=6) · [Roast a marshmallow](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/marshmallow) · [Around the fire](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/stars?found=8)
 
-**Red Canoe** (in the works)
+**Red Canoe**
 
+- [Maple's question](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/story)
 - [Glide](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/glide) ([pulled by her finger instead](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/glide?paddle=pull))
 - [Where the blue comes from](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/stream)
 - [Follow the loon](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/loon)
 - [The loon family](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/glacier)
 
-**Animal Bridge** (in the works)
+**Animal Bridge**
 
+- [Maple at the highway](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/story)
 - [The elk family](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/elk)
 - [The bighorn sheep](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/sheep?crossed=elk)
 - [The shy grizzlies](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/bears?crossed=elk,sheep) ([the bridge already planted](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/bears?crossed=elk,sheep&green=1))
 - [The camera’s photos](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/album?crossed=elk,sheep,bears)
 
-**Whale Watch** (in the works)
+**Whale Watch**
 
+- [Maple has never seen a whale](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/story)
 - [The harbour](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/harbour) ([steering with the wheel instead](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/harbour?steer=wheel))
 - [The otters in the kelp](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/otters)
 - [Follow the spouts](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts) ([the humpback](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts?found=2), [the humpback that jumps](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts?found=3))
 - [The orca family](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/orcas)
 - [Listen under the water](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/listen)
 
-**Salmon Leap** (in the works)
+**Salmon Leap**
 
+- [Maple at the river (story)](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/story)
 - [Little steps](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/steps)
 - [The big falls](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/falls?home=3)
 - [The bears are fishing](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/bears?home=7) ([the spirit bear on the low ledge](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/bears?home=7&spirit=low))
 - [Home: the eggs hatch](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/eggs?home=11)
 
-**Finale**: [Animal Homes + Pond Hockey (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/soon?stamps=all)
+**Finale: Animal Homes + Pond Hockey** (The finale in Ottawa. The team is whoever her stamps brought (team= changes it for a test).)
+
+- [Bonjour, Ottawa!](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/story?stamps=all)
+- [Animal Homes: the polar bear first](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/homes?stamps=all) ([the orca](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/homes?stamps=all&q=orca), [the loon](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/homes?stamps=all&q=loon), [the last animal](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/homes?stamps=all&q=beaver&home=5))
+- [Pond Hockey: the first goal, open net](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/hockey?stamps=all&team=all) ([only Maple and the moose](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/hockey?stamps=all&team=none), [with a few friends](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/hockey?stamps=all&team=taffy,campfire,whales))
+- [Pond Hockey: the geese skate in the way](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/hockey?stamps=all&score=1&team=all)
+- [Pond Hockey: the last goal](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/hockey?stamps=all&score=2&team=all)
+- [The big win on the canal](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/win?stamps=all&team=all)
 
 <!-- sections:end -->
 

@@ -19,7 +19,7 @@
 // reflection, and the canoe's wake ripples over it. Built for engine3d/View3D.tsx; nothing here comes from Thailand.
 // Stroke power, turn and drag are feel-lab knobs (?feel=1), with a graph of her stroke against what the canoe does.
 import { Color, Fog, Group, Mesh, Plane, Raycaster, RingGeometry, MeshBasicMaterial, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, sounds } from '../../../../../sdk'
+import { clamp, say, sounds, stopSpeaking, type Line } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -31,12 +31,15 @@ import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights, PAL } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
 import { swell, Water } from '../../../../engine3d/water'
-import { Moose } from '../bike/critters'
+import type { AnimalId } from '../../book/animals'
+import { meet } from '../../book/met'
+import { L } from '../../lines'
 import { Canoe, CANOE_LEN, SEAT_Z } from './boat'
-import { Beaver, Duck, Loon, Pika, Squirrel, Trout } from './critters'
-import { DUCKS, FAMILY, FLOUR, GLACIER, GLIDE_M, inward, keepOn, landY, LODGE, MOOSE, PADDLE_K, PIKA, shoreK, SQUIRREL, STARTS } from './lake'
+import { Beaver, Duck, Eagle, Goat, Loon, Marmot, Pika, Squirrel, Trout } from './critters'
+import { DUCKS, EAGLE_Y, FAMILY, FLOUR, GLACIER, GLIDE_M, inward, keepOn, landY, LODGE, MARMOT, MOOSE, PADDLE_K, PIKA, shoreK, SQUIRREL, STARTS } from './lake'
+import { Moose } from './moose'
 import type { CanoeSection, PaddleMode } from './sections'
-import { buildShore, mirror, SKY, type Shore } from './shore'
+import { buildClouds, buildShore, buildSky, goatSpot, mirror, pileY, SKY, type Shore } from './shore'
 
 const FILE = 'src/world/places/canada/activities/canoe/paddle.ts'
 /** The stroke (?paddle=stroke): how her finger's paddle moves the canoe. */
@@ -77,9 +80,14 @@ export interface CanoeEvents {
   section(s: CanoeSection): void
   /** She found the rock flour (the line at the bottom says why the lake is blue). */
   found(): void
+  /** How far through the four parts she is (glide, the blue, the loon, the family). */
+  progress(done: number): void
   /** The loon family by the glacier. */
   done(): void
 }
+
+/** The parts that fill the stars: glide, where the blue comes from, follow the loon, the loon family. */
+export const CANOE_PARTS = 4
 
 export const CANOE_ANCHORS: AnchorInfo[] = [
   { id: 'maple', label: 'Maple', kind: 'thing' },
@@ -91,9 +99,19 @@ export const CANOE_ANCHORS: AnchorInfo[] = [
   { id: 'squirrel', label: 'The ground squirrel', kind: 'thing' },
   { id: 'trout', label: 'The trout', kind: 'thing' },
   { id: 'glacier', label: 'The glacier', kind: 'thing' },
+  { id: 'marmot', label: 'The marmot', kind: 'thing' },
+  { id: 'eagle', label: 'The bald eagle', kind: 'thing' },
+  { id: 'goat', label: 'The mountain goat', kind: 'thing' },
+  { id: 'logs', label: 'The log jam', kind: 'thing' },
 ]
 
-const ORDER: CanoeSection[] = ['glide', 'stream', 'loon', 'glacier']
+const ORDER: CanoeSection[] = ['story', 'glide', 'stream', 'loon', 'glacier']
+/** The chase camera's tilt, and the one the stroke's feel was tuned at (the greybox, PR #245): a stroke is measured on
+ *  screen, so with the camera lower (to show the Ten Peaks) its forward part is scaled back to feel the same. */
+const PITCH = { stroke: 19, pull: 25 }
+const TUNED_PITCH = 28
+/** Seconds after the payoff starts that the stamp comes (the celebration plays first). */
+export const DONE_S = 7
 const DEG = 180 / Math.PI
 const HINT_S = 8
 /** The lake's colors: before she finds the rock flour, and glowing turquoise at the end. */
@@ -130,6 +148,14 @@ const crack = () => {
 }
 const rumble = () => noise(1.4, 0.07, 'lowpass', 320, 110, 0, 0.7)
 const crunch = () => noise(0.12, 0.12, 'bandpass', 600, 300, 0, 1.5)
+/** The marmot's long whistle, the eagle's thin scream, the goat's bleat, a log knocking on a log. */
+const whistle = () => tone(2500, 2900, 0.5, 0.05, 'sine')
+const scream = () => [0, 0.14, 0.26].forEach((d, i) => tone(2100 - i * 150, 1500 - i * 100, 0.12, 0.035, 'sawtooth', d))
+const bleat = () => {
+  tone(420, 380, 0.42, 0.05, 'sawtooth')
+  tone(840, 760, 0.42, 0.015, 'triangle')
+}
+const clonk = () => [0, 0.11].forEach((d, i) => tone(240 - i * 40, 150, 0.12, 0.12, 'triangle', d))
 const wheee = () => {
   tone(520, 1250, 0.45, 0.05, 'triangle')
   tone(1250, 480, 0.6, 0.05, 'triangle', 0.45)
@@ -243,6 +269,27 @@ export class RedCanoe implements World3D {
   private troutT = 7
   private chunks: Chunk[] = []
   private snowT = 18
+  private marmot: Marmot
+  private marmotT = 12
+  private eagle: Eagle
+  private eagleC = new Vector3()
+  private eagleA = 0
+  private eagleDip = 0
+  private goat: Goat
+  private logsBob = -1
+  private clouds: Group
+  private cloudsM: Group
+
+  // ---- The story and Sparkle's help.
+  private storyT = 0
+  private storyLeft = false
+  private idleSaid = -100
+  private sectionT = 0
+  private hintsSaid = 0
+  private pokesOf = new Map<string, number>()
+  private lastShore = -100
+  private dead = false
+  private parts = 0
 
   private foam: Particles
   private glowFoam: Particles
@@ -261,9 +308,10 @@ export class RedCanoe implements World3D {
   ) {
     const { scene, bag } = this
     scene.background = new Color(SKY)
-    scene.fog = new Fog(SKY, 140, 760)
+    scene.fog = new Fog(SKY, 160, 820)
     applyBands()
-    this.rig.fov = 48
+    // (A wide lens, so the Ten Peaks stand over the lake behind the canoe.)
+    this.rig.fov = 58
     this.rig.lag = 0.35
     this.rig.camera.far = 1500
     this.section = start.section
@@ -271,10 +319,14 @@ export class RedCanoe implements World3D {
 
     // ---- The shore, its reflection under the see-through water, the water.
     this.shore = buildShore(bag)
-    scene.add(this.shore.land, this.shore.shallows, this.shore.flour)
+    scene.add(buildSky(bag), this.shore.land, this.shore.shallows, this.shore.flour, this.shore.logs)
     this.reflection = mirror(this.shore.land)
     scene.add(this.reflection)
-    this.water = new Water({ size: 1600, deep: DULL.deep, shallow: DULL.shallow, haze: SKY, hazeNear: 120, hazeFar: 700, opacity: 0.68 }, bag)
+    // The clouds turn slowly round the sky, and so does their reflection.
+    this.clouds = buildClouds(bag)
+    this.cloudsM = mirror(this.clouds)
+    scene.add(this.clouds, this.cloudsM)
+    this.water = new Water({ size: 1600, deep: DULL.deep, shallow: DULL.shallow, haze: SKY, hazeNear: 130, hazeFar: 760, opacity: 0.62 }, bag)
     scene.add(this.water.mesh)
 
     // ---- The canoe and Maple.
@@ -319,15 +371,33 @@ export class RedCanoe implements World3D {
     this.beaver.root.position.set(LODGE.x + lodgeIn.x * 3.6, 0, LODGE.z + lodgeIn.z * 3.6 + 1)
     this.beaver.root.rotation.y = Math.atan2(lodgeIn.x, lodgeIn.z)
     scene.add(this.beaver.root)
-    this.moose = new Moose(bag)
-    this.moose.root.position.set(MOOSE.x, -0.75, MOOSE.z)
+    this.moose = new Moose(bag, 3.2)
+    this.moose.root.position.set(MOOSE.x, -0.95, MOOSE.z)
     this.moose.root.rotation.y = MOOSE.h
     scene.add(this.moose.root)
+    // The pika among the rock pile's lower boulders, the marmot on top (toy-sized, so they read from the water).
     this.pika = new Pika(bag)
-    this.pika.root.position.set(PIKA.x - 0.3, landY(PIKA.x, PIKA.z) + 1.45, PIKA.z + 0.4)
+    this.pika.root.scale.setScalar(2)
+    this.pika.root.position.set(PIKA.x, pileY(PIKA.x, PIKA.z) + 0.35, PIKA.z)
     this.pika.root.rotation.y = Math.atan2(-PIKA.x, -PIKA.z)
     scene.add(this.pika.root)
+    this.marmot = new Marmot(bag)
+    this.marmot.root.scale.setScalar(1.6)
+    this.marmot.root.position.set(MARMOT.x, pileY(MARMOT.x, MARMOT.z) + 0.25, MARMOT.z)
+    this.marmot.root.rotation.y = Math.atan2(-MARMOT.x, -MARMOT.z)
+    scene.add(this.marmot.root)
+    // The mountain goat on his ledge, and the bald eagle circling high over the lake.
+    this.goat = new Goat(bag)
+    const gs = goatSpot()
+    this.goat.root.scale.setScalar(1.5)
+    this.goat.root.position.set(gs.x, gs.y, gs.z)
+    this.goat.root.rotation.y = gs.h
+    scene.add(this.goat.root)
+    this.eagle = new Eagle(bag)
+    this.eagle.root.scale.setScalar(1.5)
+    scene.add(this.eagle.root)
     this.squirrel = new Squirrel(bag)
+    this.squirrel.root.scale.setScalar(1.5)
     this.squirrel.root.position.set(SQUIRREL.x, landY(SQUIRREL.x, SQUIRREL.z) + 0.95, SQUIRREL.z)
     this.squirrel.root.rotation.y = Math.atan2(-SQUIRREL.x, -SQUIRREL.z)
     scene.add(this.squirrel.root)
@@ -351,14 +421,20 @@ export class RedCanoe implements World3D {
     scene.add(this.foam.mesh, this.glowFoam.mesh, this.spray.mesh, this.sparkle.mesh, this.snow.mesh, this.bubbles.mesh)
 
     // ---- Where the link starts.
+    const at = ORDER.indexOf(start.section)
     if (start.section === 'loon' || start.section === 'glacier') {
       this.found = true
       this.glow = this.glowGoal = 0.6
     }
+    this.parts = Math.max(0, at - 1)
+    this.events.progress(this.parts)
     if (start.section === 'loon') this.startLoon()
     if (start.section === 'glacier') this.reachFamily()
+    // A section link starts playing at once; the bare link opens with Maple's question (the story).
+    else if (start.section !== 'story') setTimeout(() => this.go(start.section), 400)
     this.setGlow()
     this.placeCanoe(0)
+    this.eagleC.set(this.x, EAGLE_Y, this.z - 20)
 
     this.unwatch = watch('canoe', () => ({
       'her stroke (m/s)': [this.mode === 'stroke' ? -this.bladeV : this.thrust, 16],
@@ -411,7 +487,85 @@ export class RedCanoe implements World3D {
   private enter(s: CanoeSection) {
     if (ORDER.indexOf(s) <= ORDER.indexOf(this.section)) return
     this.section = s
+    this.sectionT = 0
+    this.hintsSaid = 0
     this.events.section(s)
+    this.go(s)
+  }
+
+  /** Fills a star: one per part she finishes. */
+  private progress(n: number) {
+    if (n <= this.parts) return
+    this.parts = n
+    this.events.progress(n)
+  }
+
+  // ---------------------------------------------------------------- talk: Maple's story, Sparkle's help
+
+  private saying: Promise<void> = Promise.resolve()
+  /** Says a line now (interrupting), or after whatever is being said (`after`). */
+  private talk(line: Line, after = false) {
+    if (this.dead) return this.saying
+    this.saying = after ? this.saying.then(() => (this.dead ? undefined : say(line, { interrupt: false }))) : say(line)
+    return this.saying
+  }
+
+  /** Each part begins: Sparkle says what to do (one line), Maple sometimes adds hers. */
+  private go(s: CanoeSection) {
+    if (this.dead) return
+    if (s === 'glide') this.talk(L.canoe.go[this.mode])
+    else if (s === 'stream') {
+      this.progress(1)
+      this.talk(L.canoe.stream)
+      this.talk(L.canoe.streamMaple, true)
+      this.canoe.wave()
+    } else if (s === 'loon') {
+      this.progress(2)
+      // (After the rock flour's lines, if they're still going.)
+      this.talk(L.canoe.loon, this.foundT >= 0)
+    }
+  }
+
+  private stuckSaid = 0
+  private loonHinted = false
+  /** Help when she's stuck, never a "wrong": no paddling for 8 s, Sparkle says how (the hand shows it too); paddling
+   *  round without finding the milky water or the loon, Sparkle points her there (the sparkles and the current help). */
+  private helpIfStuck(t: number) {
+    if (this.section === 'story' || this.doneT >= 0) return
+    const idle = t - this.lastTouch
+    if (idle > HINT_S && t - this.idleSaid > 16 && this.hintsSaid < 2) {
+      this.idleSaid = t
+      this.hintsSaid++
+      this.talk(L.canoe.hint[this.mode])
+      return
+    }
+    if (this.section !== 'stream') this.stuckSaid = 0
+    if (this.section === 'stream' && !this.found && this.stuckSaid < 2 && this.sectionT > 14 + this.stuckSaid * 16 && t - this.idleSaid > 6) {
+      this.stuckSaid++
+      this.idleSaid = t
+      this.talk(L.canoe.streamHint)
+      this.canoe.wave()
+    }
+    if (this.loonPhase !== 'float') this.loonHinted = false
+    else if (!this.loonHinted && this.loonT > 10 && t - this.idleSaid > 6) {
+      this.loonHinted = true
+      this.idleSaid = t
+      this.talk(L.canoe.loonHint)
+    }
+  }
+
+  /** The story ends (Maple has asked, or she tapped): off we go. */
+  private endStory() {
+    if (this.section !== 'story') return
+    this.enter('glide')
+  }
+
+  /** She poked an animal: its card pops up in Maple's book the first time (Sparkle names it). Returns how many times. */
+  private poked(id: string, animal?: AnimalId) {
+    const n = (this.pokesOf.get(id) ?? 0) + 1
+    this.pokesOf.set(id, n)
+    if (animal) meet(animal)
+    return n
   }
 
   update(dt: number) {
@@ -420,6 +574,18 @@ export class RedCanoe implements World3D {
     this.shore.stream.update(t)
     this.splashCool -= dt
     this.bumpCool -= dt
+    this.sectionT += dt
+    // The story: Maple waves from the canoe at the dock and asks her question; then off we go (a tap skips it).
+    if (this.section === 'story') {
+      const was = this.storyT
+      this.storyT += dt
+      if (was < 0.6 && this.storyT >= 0.6) {
+        this.canoe.wave()
+        void this.talk(L.canoe.story).then(() => (this.storyLeft = true))
+      }
+      if ((this.storyLeft && this.storyT > 3.2) || this.storyT > 8) this.endStory()
+    }
+    this.helpIfStuck(t)
 
     // Pulling, a finger held still on something (the glacier, the loon) pulls the canoe there too.
     if (this.pending && this.mode === 'pull' && t - this.pending.t > 0.3) {
@@ -459,9 +625,11 @@ export class RedCanoe implements World3D {
       this.snowPuff(this.shore.peaks[Math.floor(Math.random() * this.shore.peaks.length)].top, false)
     }
 
+    // The clouds drift round the sky (their reflection with them).
+    this.clouds.rotation.y = this.cloudsM.rotation.y = t * 0.004
     this.lights.follow(this.x, 0, this.z)
     this.camYaw += wrap(this.head - this.camYaw) * ease(dt, 0.4 + BOAT.camera * 4)
-    this.rig.lag = this.doneT >= 0 && this.doneT < 5 ? 0.9 : t < 2.2 && this.section === 'glide' ? 0.9 : 0.35
+    this.rig.lag = this.doneT >= 0 && this.doneT < 5 ? 0.9 : this.section === 'story' || (this.section === 'glide' && this.sectionT < 1.5) ? 1.1 : 0.35
     this.rig.setShot(this.shot())
     this.rig.update(dt)
     this.drawHint(t)
@@ -512,7 +680,7 @@ export class RedCanoe implements World3D {
 
   private strokeInput(dt: number) {
     this.thrust = 0
-    if (!this.stroking || !this.finger || (this.doneT >= 0 && this.doneT < 1)) {
+    if (!this.stroking || !this.finger || this.section === 'story' || (this.doneT >= 0 && this.doneT < 1)) {
       this.bladeIn = false
       this.bladeV *= 1 - ease(dt, 10)
       return
@@ -528,7 +696,9 @@ export class RedCanoe implements World3D {
       this.endStroke()
       drip()
     }
-    const v = dt > 0 ? mv.along / dt : 0
+    // (Measured on screen: the lower camera makes the same swipe cover more water, so it's scaled back to the feel the
+    // knobs were set at.)
+    const v = dt > 0 ? ((mv.along / dt) * Math.sin(PITCH.stroke / DEG)) / Math.sin(TUNED_PITCH / DEG) : 0
     this.bladeV += (v - this.bladeV) * ease(dt, 18)
     // Moving forward (recovering), the blade lifts out; back or held still, it's in the water.
     const wasIn = this.bladeIn
@@ -598,7 +768,7 @@ export class RedCanoe implements World3D {
       }
     }
     this.pullFor -= dt
-    const on = held || this.pullFor > 0
+    const on = (held || this.pullFor > 0) && this.section !== 'story'
     this.marker.visible = on
     this.thrust = 0
     if (!on || (this.doneT >= 0 && this.doneT < 1)) {
@@ -680,6 +850,11 @@ export class RedCanoe implements World3D {
           this.counts.bumps++
           crunch()
           this.canoe.rock(0.4)
+          // (A silly bump, not an "oops": Maple giggles, now and then.)
+          if (this.time - this.lastShore > 14) {
+            this.lastShore = this.time
+            this.talk(L.canoe.bonk, true)
+          }
         }
       }
     }
@@ -694,6 +869,7 @@ export class RedCanoe implements World3D {
       this.canoe.dizzy()
       this.counts.dizzy++
       wheee()
+      if (this.counts.dizzy < 4) this.talk(L.canoe.dizzy)
     }
     // The wake: ripples off the bow and the stern (turquoise once she has found the rock flour).
     const sp = Math.hypot(this.vx, this.vz)
@@ -713,7 +889,8 @@ export class RedCanoe implements World3D {
     this.shadow.rotation.z = -this.head
     let look: Vector3 | null = null
     const near = (v: Vector3, d: number) => v.distanceTo(tmp3.set(this.x, v.y, this.z)) < d
-    if (this.loon.root.visible && !this.loon.under) look = this.loon.root.position
+    if (this.section === 'story' || (this.doneT > 3 && this.doneT < 6)) look = this.rig.camera.position
+    else if (this.loon.root.visible && !this.loon.under) look = this.loon.root.position
     else if (this.mama.root.visible && !this.mama.under) look = this.mama.root.position
     else if (this.section === 'stream' && !this.found) look = tmp2.set(FLOUR.x, 0.3, FLOUR.z)
     else if (this.trout.flying) look = this.trout.root.position
@@ -749,7 +926,7 @@ export class RedCanoe implements World3D {
     }
     if (this.foundT >= 0) {
       this.foundT += dt
-      if (this.foundT > 4.5 && this.section === 'stream') {
+      if (this.foundT > 5 && this.section === 'stream') {
         this.enter('loon')
         this.startLoon()
       }
@@ -777,6 +954,8 @@ export class RedCanoe implements World3D {
     sounds.sparkle()
     this.canoe.cheer()
     this.events.found()
+    this.talk(L.canoe.foundMaple)
+    this.talk(L.canoe.found, true)
   }
 
   /** The loon's first dive: she pops up ahead, laughs and goes under. */
@@ -804,13 +983,13 @@ export class RedCanoe implements World3D {
   }
 
   private updateLoon(dt: number, t: number) {
-    const L = this.loonPhase
+    const phase = this.loonPhase
     this.loonT += dt
     const final = this.loonFinds >= LOON_FINDS
     const who = final ? this.mama : this.loon
     const dist = Math.hypot(this.x - this.loonAt.x, this.z - this.loonAt.z)
     const reach = LOON_NEAR + (LOON_NEAR_MAX - LOON_NEAR) * clamp((this.loonT - 12) / 20)
-    if (L === 'bubbles') {
+    if (phase === 'bubbles') {
       // Bubbles where she'll come up; she comes up after a moment (at once if the canoe is already there).
       if (Math.random() < dt * 14) this.bubbles.emit(this.loonAt.x + (Math.random() - 0.5) * 1.2, -0.3, this.loonAt.z + (Math.random() - 0.5) * 1.2, 0, 0.7, 0, 0.7, 0.1)
       if (Math.random() < dt * 3) this.foam.emit(this.loonAt.x, 0.02, this.loonAt.z, 0, 0, 0, 1.2, 0.8)
@@ -826,7 +1005,7 @@ export class RedCanoe implements World3D {
         loonLaugh(this.loonFinds === 0 || final)
         this.callT = 4
       }
-    } else if (L === 'float') {
+    } else if (phase === 'float') {
       // She floats there, facing the canoe, laughing now and then, until the canoe comes close. Taking a long while,
       // she swims toward the canoe herself.
       const face = Math.atan2(this.x - who.root.position.x, this.z - who.root.position.z)
@@ -855,9 +1034,13 @@ export class RedCanoe implements World3D {
         else {
           this.loonFinds++
           this.canoe.wave()
+          who.flap()
+          if (this.loonFinds === 1) meet('loon')
+          if (this.loonFinds >= LOON_FINDS) this.progress(3)
+          this.talk(L.canoe.loonFound[(this.loonFinds - 1) % L.canoe.loonFound.length], true)
         }
       }
-    } else if (L === 'found') {
+    } else if (phase === 'found') {
       // A moment to see her, then down she goes and the bubbles come up somewhere else.
       if (this.loonT > 1.3 && !this.loon.diving) {
         this.loon.dive()
@@ -871,7 +1054,7 @@ export class RedCanoe implements World3D {
         if (this.loonFinds >= LOON_FINDS) this.loonAt.set(FAMILY.x, 0, FAMILY.z)
         else this.pickLoonSpot(11, 16)
       }
-    } else if (L === 'family') {
+    } else if (phase === 'family') {
       // The payoff: the mother (her chick on her back) and the father swim round and round the canoe.
       const r = 4.6
       const a = t * 0.45
@@ -898,15 +1081,20 @@ export class RedCanoe implements World3D {
     this.mama.surface()
     this.loon.root.visible = true
     this.loon.surface()
+    this.mama.flap()
     this.glowGoal = 1
     this.doneT = 0
     this.callT = 2.5
     this.enter('glacier')
+    this.progress(CANOE_PARTS)
     this.canoe.cheer()
     this.canoe.slap()
     sounds.fanfare()
     loonLaugh(true)
     this.sparkle.burst(this.x, 0.5, this.z, 60, 3.5, 3, 0.2)
+    meet('loon')
+    this.talk(L.canoe.chick)
+    this.talk(L.canoe.family, true)
     this.events.done()
   }
 
@@ -921,6 +1109,10 @@ export class RedCanoe implements World3D {
       this.counts.parades++
       quack()
       mom.d.poke()
+      if (this.counts.parades < 3) {
+        this.talk(L.canoe.parade, true)
+        this.canoe.wave()
+      }
     }
     this.parade -= dt
     const f = this.fwd
@@ -980,13 +1172,46 @@ export class RedCanoe implements World3D {
       // Maple slaps back.
       if (Math.hypot(this.x - p.x, this.z - p.z) < 30) setTimeout(() => this.canoe.slap(), 500)
     }
+    // The moose: grazes on lake weeds; when the canoe glides close he watches it; water drips off his chin.
+    const mooseNear = Math.hypot(this.x - MOOSE.x, this.z - MOOSE.z) < 20
+    this.moose.watch(mooseNear ? this.canoe.root.position : null)
     this.moose.update(dt, t)
-    if (this.moose.up > 0.5 && Math.random() < dt * 14) {
+    if (this.moose.up > 0.5 && this.moose.up < 0.97 && Math.random() < dt * 18) {
       const ch = this.moose.chin(tmp2)
       this.spray.emit(ch.x + (Math.random() - 0.5) * 0.3, ch.y, ch.z + (Math.random() - 0.5) * 0.3, 0, -0.5, 0, 0.6, 0.09)
     }
     this.pika.update(dt, t)
     this.squirrel.update(dt, t)
+    // The marmot whistles from the top of the rock pile now and then when the canoe is near.
+    if ((this.marmotT -= dt) < 0) {
+      this.marmotT = 14 + Math.random() * 10
+      if (Math.hypot(this.x - MARMOT.x, this.z - MARMOT.z) < 30 && !this.marmot.busy) {
+        this.marmot.poke()
+        whistle()
+      }
+    }
+    this.marmot.update(dt, t)
+    this.goat.update(dt, t)
+    // The bald eagle circles over the lake ahead of the canoe (its circle drifts along after it); poked, it dips.
+    const f2 = this.fwd
+    tmp.set(this.x + f2.x * 26, EAGLE_Y, this.z + f2.z * 26)
+    this.eagleC.lerp(tmp, ease(dt, 0.08))
+    this.eagleA += dt * 0.22
+    this.eagleDip = Math.max(0, this.eagleDip - dt * 0.5)
+    const er = 15
+    const dip = Math.sin(Math.min(1, this.eagleDip) * Math.PI) * 5
+    this.eagle.root.position.set(this.eagleC.x + Math.cos(this.eagleA) * er, EAGLE_Y + Math.sin(t * 0.3) * 1.5 - dip, this.eagleC.z + Math.sin(this.eagleA) * er)
+    this.eagle.root.rotation.y = Math.atan2(-Math.sin(this.eagleA), Math.cos(this.eagleA))
+    this.eagle.bank = -0.32
+    this.eagle.update(dt, t)
+    // The log jam bobs after a poke.
+    if (this.logsBob >= 0) {
+      this.logsBob += dt
+      const k = Math.exp(-this.logsBob * 2.2)
+      this.shore.logs.position.y = Math.sin(this.logsBob * 9) * 0.12 * k
+      this.shore.logs.rotation.z = Math.sin(this.logsBob * 7) * 0.03 * k
+      if (this.logsBob > 2.5) this.logsBob = -1
+    }
 
     // The trout jumps now and then, somewhere near the canoe.
     if ((this.troutT -= dt) < 0 && !this.trout.flying) {
@@ -1080,22 +1305,28 @@ export class RedCanoe implements World3D {
     // jumped from +180° to -180° would swing the rig a whole turn). Fixed shots pick their turn nearest to it.
     const chase = (this.camYaw - Math.PI) * DEG
     const near = (deg: number) => deg + 360 * Math.round((chase - deg) / 360)
-    if (this.section === 'glide' && this.time < 2.2) {
-      // The first look: the whole lake from behind the dock, the glacier at the far end.
-      return { center: new Vector3(0, 6, -6), half: tall ? new Vector3(20, 10, 30) : new Vector3(30, 8, 26), yaw: near(0), pitch: 16, follow: false }
+    if (this.section === 'story') {
+      // Maple's question: from the bow, a three-quarter look at her face in the stern, the dock and the rock pile behind
+      // her (a slow push in); then the camera swings round behind the canoe, to the lake and the Ten Peaks.
+      const k = clamp(this.storyT / 5)
+      const f = this.fwd
+      const mz = this.z - f.z * -SEAT_Z
+      const mx = this.x - f.x * -SEAT_Z
+      const s = 1.25 - 0.25 * k
+      return { center: new Vector3(mx, 1.0, mz), half: tall ? new Vector3(1.4 * s, 1.3 * s, 1.6 * s) : new Vector3(1.9 * s, 1.1 * s, 1.6 * s), yaw: near(145), pitch: 10, follow: false, minDist: 3 }
     }
     if (this.doneT >= 0 && this.doneT < 5) {
-      // The family round the canoe, the glacier behind.
-      return { center: new Vector3(this.x, 1.4, this.z - 2.5), half: tall ? new Vector3(5.5, 2.4, 6.5) : new Vector3(8.5, 2.4, 5.5), yaw: near(24), pitch: 20 }
+      // The family round the canoe, the glacier and the Ten Peaks behind.
+      return { center: new Vector3(this.x, 1.3, this.z - 1.5), half: tall ? new Vector3(4.6, 2.2, 5.5) : new Vector3(6.5, 2.2, 4.5), yaw: near(24), pitch: 14 }
     }
     const f = { x: Math.sin(this.camYaw), z: Math.cos(this.camYaw) }
     const ahead = 1.6 + Math.max(0, this.speed) * 0.35
     const pull = this.mode === 'pull'
     return {
-      center: new Vector3(this.x + f.x * ahead, 0.6, this.z + f.z * ahead),
-      half: tall ? new Vector3(pull ? 3.4 : 2.8, 1.2, pull ? 7 : 5.4) : new Vector3(pull ? 6.2 : 5, 1.2, pull ? 6 : 4.4),
+      center: new Vector3(this.x + f.x * ahead, 0.7, this.z + f.z * ahead),
+      half: tall ? new Vector3(pull ? 3.4 : 2.8, 1.3, pull ? 7 : 5.4) : new Vector3(pull ? 6.2 : 5, 1.3, pull ? 6 : 4.4),
       yaw: chase,
-      pitch: pull ? 34 : 28,
+      pitch: pull ? PITCH.pull : PITCH.stroke,
       follow: true,
       minDist: 6,
     }
@@ -1132,6 +1363,11 @@ export class RedCanoe implements World3D {
 
   pointerDown(x: number, y: number, id?: string) {
     this.lastTouch = this.time
+    // (A touch during Maple's question skips it: off we go.)
+    if (this.section === 'story') {
+      this.endStory()
+      return
+    }
     // On a tap target, wait: a tap pokes it, a drag paddles (strokes can start anywhere).
     if (id) {
       this.pending = { x, y, id, t: this.time }
@@ -1166,18 +1402,28 @@ export class RedCanoe implements World3D {
 
   tap(x: number, y: number, id?: string) {
     this.lastTouch = this.time
+    if (this.section === 'story') {
+      this.endStory()
+      return
+    }
     this.counts.taps++
     if (id) this.counts.pokes++
     if (id === 'maple') {
+      const n = this.poked('maple')
       this.canoe.wave()
       this.canoe.slap()
       sfx.chirp()
+      if (n % 2 === 1) this.talk(n === 1 ? L.bonjour : L.canoe.pokeMaple[((n - 3) / 2) % L.canoe.pokeMaple.length])
       return
     }
     if (id === 'loon') {
       const who = this.loon.root.visible && !this.loon.under ? this.loon : this.mama
+      const n = this.poked('loon', 'loon')
       who.poke()
+      if (n % 3 === 0) who.flap()
       loonLaugh(false)
+      // The second poke: the loonie (tap-to-hear).
+      if (n === 2) this.talk(L.canoe.loonie, true)
       return
     }
     if (id === 'ducks') {
@@ -1186,31 +1432,70 @@ export class RedCanoe implements World3D {
       return
     }
     if (id === 'lodge') {
+      const n = this.poked('lodge', 'beaver')
       if (!this.beaver.busy) this.beaver.poke()
+      if (n === 2) this.talk(L.canoe.beaver, true)
       return
     }
     if (id === 'moose') {
+      const n = this.poked('moose', 'moose')
       this.moose.poke()
       moo()
+      if (n === 2) this.talk(L.canoe.moose, true)
       return
     }
     if (id === 'pika') {
+      this.poked('pika', 'pika')
       this.pika.poke()
       eep()
       return
     }
+    if (id === 'marmot') {
+      this.poked('marmot', 'marmot')
+      this.marmot.poke()
+      whistle()
+      return
+    }
+    if (id === 'eagle') {
+      this.poked('eagle', 'bald-eagle')
+      this.eagle.flap()
+      if (this.eagleDip <= 0) this.eagleDip = 1
+      scream()
+      return
+    }
+    if (id === 'goat') {
+      this.poked('goat', 'mountain-goat')
+      this.goat.poke()
+      bleat()
+      // A little shower of pebbles off the ledge.
+      const p = this.goat.root.position
+      this.snow.burst(p.x, p.y, p.z, 10, 1.5, 1, 0.12)
+      return
+    }
+    if (id === 'logs') {
+      this.poked('logs')
+      this.logsBob = 0
+      clonk()
+      const p = this.shore.logs.position
+      this.foam.emit(p.x, 0.03, p.z, 0, 0, 0, 1.4, 2.4)
+      return
+    }
     if (id === 'squirrel') {
+      this.poked('squirrel', 'ground-squirrel')
       this.squirrel.poke()
       sfx.chirp()
       return
     }
     if (id === 'trout') {
+      this.poked('trout', 'trout')
       const p = this.trout.root.position
       this.jumpTrout(p.x + (Math.random() - 0.5) * 2, p.z + (Math.random() - 0.5) * 2)
       return
     }
     if (id === 'glacier') {
+      const n = this.poked('glacier')
       this.dropChunk()
+      if (n === 1) this.talk(L.canoe.glacier, true)
       return
     }
     // A peak: snow slides off it.
@@ -1250,7 +1535,7 @@ export class RedCanoe implements World3D {
     const el = this.hintEl
     if (!el) return
     const idle = t - this.lastTouch
-    const show = this.doneT < 0 && !this.finger && !(this.section === 'glide' && t < 2.4) && ((this.counts.strokes + this.counts.pulls === 0 && idle > 2.4) || idle > HINT_S)
+    const show = this.doneT < 0 && !this.finger && this.section !== 'story' && this.sectionT > 1.5 && ((this.counts.strokes + this.counts.pulls === 0 && idle > 2.4) || idle > HINT_S)
     const want = show ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
     el.dataset.mode = this.mode
@@ -1297,6 +1582,10 @@ export class RedCanoe implements World3D {
       else if (id === 'squirrel') place(el, close(this.squirrel.root, 50), 0.5, 2.4)
       else if (id === 'trout') place(el, this.trout.flying ? this.trout.root : null, 1.2, 1.6)
       else if (id === 'glacier') place(el, close(this.shore.glacier, 90) ? this.glacierSpot() : null, 4, 0.9)
+      else if (id === 'marmot') place(el, close(this.marmot.root, 60), 0.75, 2.2)
+      else if (id === 'goat') place(el, close(this.goat.root, 75), 1.1, 1.8)
+      else if (id === 'eagle') place(el, this.eagle.root, 0.7, 3)
+      else if (id === 'logs') place(el, close(this.shore.logs, 55), 0.6, 1.2)
       el.style.zIndex = id === 'maple' ? '3' : id === 'loon' ? '2' : '1'
     }
   }
@@ -1347,6 +1636,8 @@ export class RedCanoe implements World3D {
   }
 
   dispose() {
+    this.dead = true
+    stopSpeaking()
     this.unwatch()
     this.scene.clear()
     this.bag.dispose()

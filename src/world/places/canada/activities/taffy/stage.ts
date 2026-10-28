@@ -1,7 +1,8 @@
-// Sugar Snow's two logical stages (wide 1600 x 1000, tall 1000 x 1500) and its placeholder shapes. The camera looks
-// straight down at the table, like a kitchen toy: the tray of snow in the middle, the stove with the pot and the jar of
-// sticks on one side, the maple tree with its sap bucket and the sugar shack's roof on the other, and the animals across
-// the table peeking over the tray's far edge (their faces toward her). Plain data, no React.
+// Sugar Snow's two logical stages (wide 1600 x 1000, tall 1000 x 1500) and the animals' looks. One camera for the whole
+// scene: straight down at the table, like a kitchen toy (every prop is drawn from above: the tray of snow in the
+// middle, the stove with the pot and the crate of sticks on one side, the maple tree with its sap bucket and the sugar
+// shack's roof on the other). The animals stand across the table, lean over the tray's far edge and look straight up at
+// her, so from above we see their faces, with their paws on the rim. Plain data, no React.
 
 export type Pt = [number, number]
 export interface Box {
@@ -51,8 +52,8 @@ export const WIDE: StageDef = {
   bucket: [235, 575],
   roof: [140, 820],
   post: [1450, 300],
-  maple: [800, 200],
-  line: { maple: [410, 205], chipmunk: [590, 212], cousin: [770, 205], owl: [960, 205], moose: [1200, 195] },
+  maple: [800, 172],
+  line: { maple: [410, 178], chipmunk: [590, 212], cousin: [770, 205], owl: [960, 205], moose: [1200, 195] },
   card: [150, 175],
   tally: [350, 904],
   mooseIn: [1200, -140],
@@ -68,18 +69,18 @@ export const TALL: StageDef = {
   jar: [840, 1350],
   tree: [140, 1330],
   bucket: [235, 1440],
-  roof: [395, 1405],
+  roof: [372, 1410],
   post: [860, 285],
-  maple: [500, 335],
-  line: { maple: [130, 340], chipmunk: [300, 346], cousin: [470, 340], owl: [640, 340], moose: [840, 328] },
+  maple: [500, 318],
+  line: { maple: [150, 322], chipmunk: [306, 362], cousin: [470, 350], owl: [640, 350], moose: [840, 328] },
   card: [150, 260],
   tally: [105, 1174],
   mooseIn: [840, -150],
   bubbles: { chipmunk: [0, -92], cousin: [0, -108], owl: [0, -110], moose: [118, -16] },
-  roofScale: 0.75,
+  roofScale: 0.66,
 }
 
-// ---------------------------------------------------------------- the animals (front faces, placeholder shapes)
+// ---------------------------------------------------------------- the animals (faces looking up at her, code-drawn)
 
 export interface Look {
   /** Head radius (stage units). */
@@ -102,11 +103,11 @@ export interface Look {
 }
 
 export const LOOKS: Record<AnimalId | 'squirrel', Look> = {
-  maple: { r: 74, fill: '#9A6236', ears: [[-0.72, -0.72, 0.26], [0.72, -0.72, 0.26]], earFill: '#7A4A28', muzzle: [0, 0.38, 0.5, 0.36], muzzleFill: '#C99A6E', eyes: 0.36, eyeY: -0.12, nose: '#3A2622', teeth: true },
-  cousin: { r: 58, fill: '#B07848', ears: [[-0.72, -0.72, 0.26], [0.72, -0.72, 0.26]], earFill: '#8A5A34', muzzle: [0, 0.38, 0.5, 0.36], muzzleFill: '#DDB287', eyes: 0.36, eyeY: -0.12, nose: '#3A2622', teeth: true },
+  maple: { r: 86, fill: '#A8714A', ears: [[-0.72, -0.72, 0.26], [0.72, -0.72, 0.26]], earFill: '#7A4A28', muzzle: [0, 0.38, 0.5, 0.36], muzzleFill: '#C99A6E', eyes: 0.36, eyeY: -0.12, nose: '#3A2622', teeth: true },
+  cousin: { r: 60, fill: '#B98257', ears: [[-0.72, -0.72, 0.26], [0.72, -0.72, 0.26]], earFill: '#F2A7A0', muzzle: [0, 0.38, 0.5, 0.36], muzzleFill: '#E2B48A', eyes: 0.36, eyeY: -0.12, nose: '#3A2622', teeth: true },
   chipmunk: { r: 42, fill: '#C9884A', ears: [[-0.6, -0.8, 0.24], [0.6, -0.8, 0.24]], earFill: '#A86A34', muzzle: [0, 0.4, 0.46, 0.32], muzzleFill: '#F4DCC0', eyes: 0.34, eyeY: -0.1, nose: '#3A2622', stripes: true },
   owl: { r: 60, fill: '#FBFBFF', ears: [[-0.6, -0.86, 0.18], [0.6, -0.86, 0.18]], earFill: '#E4E6F2', eyes: 0.36, eyeY: -0.08, beak: true, yellowEyes: true },
-  moose: { r: 92, fill: '#6E4A32', ears: [[-0.86, -0.42, 0.24], [0.86, -0.42, 0.24]], earFill: '#5A3A26', muzzle: [0, 0.5, 0.56, 0.42], muzzleFill: '#8A6448', eyes: 0.36, eyeY: -0.22, nose: '#2E1E18', antlers: true },
+  moose: { r: 92, fill: '#8A5A3C', ears: [[-0.86, -0.42, 0.24], [0.86, -0.42, 0.24]], earFill: '#C79A72', muzzle: [0, 0.5, 0.56, 0.42], muzzleFill: '#C79A72', eyes: 0.36, eyeY: -0.22, nose: '#2E1E18', antlers: true },
   squirrel: { r: 40, fill: '#D0612E', ears: [[-0.56, -0.86, 0.22], [0.56, -0.86, 0.22]], earFill: '#B04A20', muzzle: [0, 0.4, 0.44, 0.3], muzzleFill: '#F6E2CC', eyes: 0.32, eyeY: -0.1, nose: '#3A2622' },
 }
 

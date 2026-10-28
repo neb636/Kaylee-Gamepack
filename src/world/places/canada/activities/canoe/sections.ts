@@ -1,7 +1,7 @@
-// Red Canoe (greybox 5, plan: planning/around-the-world/canada.html): paddle the red canoe across Banff's turquoise
-// lake, find where the blue comes from (the glacier stream's rock flour) and follow the loon to the glacier.
-// #/world/canada/canoe/<section>?paddle=pull. A section link sets the lake up as if she had played to there.
-// Loaded at startup by the section index (keep three.js out of this file).
+// Red Canoe (plan: planning/around-the-world/canada.html): Maple wonders why Moraine Lake is so blue; Kaylee paddles the
+// red canoe across it, finds where the blue comes from (the glacier stream's rock flour) and follows the loon to the
+// glacier. #/world/canada/canoe/<section>?paddle=pull. A section link sets the lake up as if she had played to there
+// (and skips Maple's question). Loaded at startup by the section index (keep three.js out of this file).
 import { defineSections } from '../../../../kit/sections'
 
 const CANOE_SECTIONS = defineSections('canada', 'canoe', {
@@ -13,6 +13,7 @@ const CANOE_SECTIONS = defineSections('canada', 'canoe', {
     },
   },
   sections: [
+    { id: 'story', name: "Maple's question", params: ['paddle'] },
     { id: 'glide', name: 'Glide', params: ['paddle'], links: [{ label: 'Glide', also: [{ label: 'pulled by her finger instead', params: { paddle: 'pull' } }] }] },
     { id: 'stream', name: 'Where the blue comes from', params: ['paddle'] },
     { id: 'loon', name: 'Follow the loon', params: ['paddle'] },

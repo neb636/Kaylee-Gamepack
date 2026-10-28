@@ -88,6 +88,16 @@ export const noises = {
   },
   /** A baby salmon hatching. */
   hatch: () => sfx.crack(),
+  /** The cub's little squeak as it rolls over. */
+  squeak() {
+    tone(900, 1400, 0.12, 0.06, 'triangle')
+    tone(1300, 1000, 0.14, 0.05, 'triangle', 0.14)
+  },
+  /** The banana slug pulling its eyes in: a soft squish. */
+  squish() {
+    noise(0.18, 0.12, 'lowpass', 900, 300, 0, 1.2)
+    tone(500, 260, 0.18, 0.04, 'sine')
+  },
   /** Berries jiggling. */
   jiggle() {
     for (const d of [0, 0.06, 0.12]) tone(1200, 1500, 0.05, 0.04, 'sine', d)

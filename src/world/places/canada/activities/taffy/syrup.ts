@@ -1,7 +1,7 @@
 // The syrup on the snow: each pour is a Piece, a line of points (each with its own width and the syrup it holds) plus
 // puddles where the pot stood still. Pieces are drawn as perfect-freehand strokes (the line) and wobbly blobs (the
-// puddles) into three shared layers, so overlapping pours look like one: the melt mark pressed into the snow, the ink
-// outline, and the syrup on top. Rolling eats points off a piece; only the runs that are left get drawn.
+// puddles) into four shared layers, so overlapping pours look like one: the melt mark pressed into the snow, the ink
+// outline, the syrup, and a glossy highlight along the top of it (hot syrup shines; set taffy keeps a softer shine). Rolling eats points off a piece; only the runs that are left get drawn.
 import { getStroke } from 'perfect-freehand'
 
 export interface LinePt {
@@ -32,7 +32,7 @@ export interface Piece {
   total: number
   dirty: boolean
   dentDirty: boolean
-  els: { dent: SVGGElement; ink: SVGGElement; fill: SVGGElement }
+  els: { dent: SVGGElement; ink: SVGGElement; fill: SVGGElement; gloss: SVGGElement }
 }
 
 export interface FreehandFeel {
@@ -42,8 +42,8 @@ export interface FreehandFeel {
 }
 
 const NS = 'http://www.w3.org/2000/svg'
-export const HOT = [0xb8, 0x62, 0x16]
-export const SET = [0xe8, 0xae, 0x52]
+export const HOT = [0xc2, 0x6a, 0x12]
+export const SET = [0xf0, 0xb4, 0x4c]
 export const INK = '#4A3B57'
 
 export const puddleVol = (p: Puddle) => Math.PI * p.r * p.r
@@ -52,12 +52,14 @@ export const left = (p: Piece) => p.pts.reduce((s, q) => s + (q.eaten ? 0 : q.v)
 export const isGone = (p: Piece) => p.pts.every((q) => q.eaten) && p.puddles.every((q) => q.eaten)
 
 let nextId = 1
-export function newPiece(layers: { dent: SVGGElement; ink: SVGGElement; fill: SVGGElement }): Piece {
+export type Layers = { dent: SVGGElement; ink: SVGGElement; fill: SVGGElement; gloss: SVGGElement }
+export function newPiece(layers: Layers): Piece {
   const g = () => document.createElementNS(NS, 'g') as SVGGElement
-  const els = { dent: g(), ink: g(), fill: g() }
+  const els = { dent: g(), ink: g(), fill: g(), gloss: g() }
   layers.dent.appendChild(els.dent)
   layers.ink.appendChild(els.ink)
   layers.fill.appendChild(els.fill)
+  layers.gloss.appendChild(els.gloss)
   return { id: nextId++, pts: [], puddles: [], endAt: Infinity, setAt: Infinity, turn: 0, lastDir: null, total: 0, dirty: true, dentDirty: true, els }
 }
 
@@ -65,6 +67,7 @@ export function removePiece(p: Piece) {
   p.els.dent.remove()
   p.els.ink.remove()
   p.els.fill.remove()
+  p.els.gloss.remove()
 }
 
 /** A perfect-freehand outline as a smooth closed path (the same quadratic smoothing Snow Coats uses). */
@@ -143,11 +146,13 @@ export function drawPiece(p: Piece, rMax: number, feel: FreehandFeel) {
     const ds = shapes(p, rMax, feel, 1, false)
     fillGroup(p.els.ink, ds, { fill: INK, stroke: INK, 'stroke-width': '9', 'stroke-linejoin': 'round' })
     fillGroup(p.els.fill, ds, {})
+    // The shine: a thinner copy of the syrup nudged up and to the left (the light comes from the top left).
+    fillGroup(p.els.gloss, shapes(p, rMax, feel, 0.34, false), { fill: '#FFF3D0', transform: 'translate(-5 -6)' })
     p.dirty = false
   }
   if (p.dentDirty) {
     // The melt mark stays in the snow after the taffy is rolled up (fresh snow from the roof covers it).
-    fillGroup(p.els.dent, shapes(p, rMax, feel, 1.45, true), { fill: '#C9D6E8' })
+    fillGroup(p.els.dent, shapes(p, rMax, feel, 1.45, true), { fill: '#D8E2F0' })
     p.dentDirty = false
   }
 }
