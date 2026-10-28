@@ -256,6 +256,69 @@
   "A leopard seal! This one just wants to play.",
   "Penguin chicks eat krill, tiny pink sea animals.",
   "No polar bears live here, so the penguins are not scared.",
+  "Carry the cold penguin into the middle!",
+  "More penguin dads are coming!",
+  "A blizzard! Keep the cold ones moving in.",
+  "The wind turned around!",
+  "Keep Pebble's papa warm in the middle.",
+  "Tuck Pebble back under Papa!",
+  "Whoosh! Carry Pebble back to Papa.",
+  "Look! The sun is coming back!",
+  "You kept them all warm, Kaylee!",
+  "Emperor dads keep the egg warm on their feet!",
+  "In winter here, the sun stays away for months!",
+  {
+    "text": "Brrr! So cold!",
+    "voice": "papa"
+  },
+  {
+    "text": "Ahh, much better!",
+    "voice": "papa"
+  },
+  {
+    "text": "Thank you! So cozy.",
+    "voice": "papa"
+  },
+  {
+    "text": "Warm at last!",
+    "voice": "papa"
+  },
+  {
+    "text": "My egg is getting cold!",
+    "voice": "papa"
+  },
+  {
+    "text": "Hello, little Pebble!",
+    "voice": "papa"
+  },
+  {
+    "text": "Oh no! Pebble!",
+    "voice": "papa"
+  },
+  {
+    "text": "There you are, Pebble!",
+    "voice": "papa"
+  },
+  {
+    "text": "Look, Pebble. The sun!",
+    "voice": "papa"
+  },
+  {
+    "text": "Hi, Papa! Peep peep!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Whoa! Papa, help!",
+    "voice": "pebble"
+  },
+  {
+    "text": "So cozy!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Ooh, so pretty!",
+    "voice": "pebble"
+  },
   "Pick a pole: north or south?",
   "Tap the cracks to break off the ice!",
   "A giant crack! Tap, tap, tap!",
@@ -445,5 +508,5 @@
   "That's right!",
   "You got it!",
   "Super!",
-  "Wow, Kaylee, you know your poles!"
+  "Wow, you know your poles!"
 ]

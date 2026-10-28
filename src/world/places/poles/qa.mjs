@@ -13,11 +13,11 @@ export const screens = [
     reset: true,
     wait: 1800,
   })),
-  // The finale (greybox): Terry over each leg of the flight, the postcard at the colony, a question of each kind
-  // (drag, spin, tap a pole, pick from the row) and the badge.
+  // The finale: Terry over each leg of the flight, the postcard at the colony, a question of each kind
+  // (drag, spin, tap a pole, pick from the row) and the badge (with every stamp, or the finale opens the globe).
   ...['fly?leg=north', 'fly?leg=warm', 'fly?leg=south', 'deliver', 'quiz?q=bear', 'quiz?q=south&stars=2', 'quiz?q=coldest&stars=3', 'quiz?q=summer&stars=4', 'badge'].map((to) => ({
     name: `poles-party-${to.replace(/[?=&]/g, '-')}`,
-    hash: `#/world/poles/party/${to}`,
+    hash: `#/world/poles/party/${to}${to.includes('?') ? '&' : '?'}stamps=all`,
     reset: true,
     wait: to === 'deliver' ? 3600 : 2500,
   })),
@@ -113,7 +113,7 @@ motion.push(
     name: 'poles-party-fly',
     seconds: 7,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/poles/party/fly?leg=north`)
+      await page.goto(`${base}#/world/poles/party/fly?leg=north&stamps=all`)
       await page.waitForFunction(() => window.__polesPartyQA?.().mode, null, { timeout: 20000 })
       await page.waitForTimeout(1200)
     },

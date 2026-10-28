@@ -113,23 +113,38 @@ async function acquireSlot() {
 /** Takes a QA slot, then serves dist/ with vite preview; returns { base, stop } (stop also frees the slot). */
 export async function serve(basePort) {
   const { slot, release } = await acquireSlot()
-  const port = basePort + slot * 100
-  const server = spawn('npx', ['vite', 'preview', '--port', String(port), '--strictPort'], { cwd: root, stdio: 'ignore' })
-  const stop = () => {
-    server.kill()
-    release()
-  }
-  const base = `http://localhost:${port}/`
-  for (let i = 0; i < 80; i++) {
-    try {
-      if ((await fetch(base)).ok) return { base, stop }
-    } catch {
-      /* not up yet */
+  // A port someone else's preview server already holds (another checkout's leftover) makes ours exit at once, while
+  // theirs answers the fetch: the run would screenshot their build. So the page must be our own dist/index.html, and
+  // if our server quits, the next port.
+  const ours = readFileSync(path.join(root, 'dist/index.html'), 'utf8')
+  for (let tries = 0; tries < 8; tries++) {
+    const port = basePort + slot * 100 + tries * 7
+    const server = spawn('npx', ['vite', 'preview', '--port', String(port), '--strictPort'], { cwd: root, stdio: 'ignore' })
+    let exited = false
+    server.on('exit', () => (exited = true))
+    const stop = () => {
+      server.kill()
+      release()
     }
-    await new Promise((r) => setTimeout(r, 250))
+    const base = `http://localhost:${port}/`
+    for (let i = 0; i < 80 && !exited; i++) {
+      await new Promise((r) => setTimeout(r, 250))
+      try {
+        const res = await fetch(base)
+        if (res.ok && (await res.text()) === ours && !exited) return { base, stop }
+      } catch {
+        /* not up yet */
+      }
+    }
+    server.kill()
+    if (!exited) {
+      release()
+      throw new Error(`Server did not start at ${base}`)
+    }
+    console.log(`Port ${port} is taken by another server; trying the next one.`)
   }
-  stop()
-  throw new Error(`Server did not start at ${base}`)
+  release()
+  throw new Error(`No free port near ${basePort + slot * 100}`)
 }
 
 export const launch = () => browserType.launch()
