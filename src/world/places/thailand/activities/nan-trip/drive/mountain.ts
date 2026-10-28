@@ -290,7 +290,7 @@ export class NanDrive implements World3D {
     private to = '',
     /** Where along the road she starts (m): the sky road's second trip up starts above the cloud. */
     fromS = 4,
-    /** The Nan Mountain Cup is on (cup/cup.ts): the city road ends at its race ground instead of the market. */
+    /** The Nan Mountain Cup is on (cup/rules.ts): the city road ends at its race ground instead of the market. */
     private cup = false,
   ) {
     const { scene, bag } = this

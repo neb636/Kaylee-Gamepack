@@ -10,7 +10,7 @@ const COATS_SECTIONS = defineSections('poles', 'coats', {
   },
   sections: [
     { id: 'fox', name: 'Paint the fox' },
-    { id: 'hide', name: 'Hide and seek', params: ['painted'] },
+    { id: 'hide', name: 'Hide and seek', params: ['painted'], links: [{ label: 'Hide and seek', params: { painted: 'fox' }, also: [{ label: 'the lemming still brown', params: { painted: 'fox,hare,ptarmigan' } }] }] },
     { id: 'summer', name: 'Rub the summer back' },
   ],
 })

@@ -12,7 +12,7 @@ import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import { TripGuide } from '../../../trip/legs/Guide'
 import { drawPhoto } from '../photo'
 import { Snapshot } from '../Snapshot'
-import { CupGround, GROUND_ANCHORS, type GroundStart, type GroundUi } from './ground'
+import { CupGround, GROUND_ANCHORS, type GroundStart, type GroundUi } from './ground3d'
 import type { TrackId } from './track'
 
 interface Props {

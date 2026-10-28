@@ -10,9 +10,9 @@ const HUDDLE_SECTIONS = defineSections('poles', 'huddle', {
     chick: { default: 'egg', values: ['egg', 'hatched'], doc: "Pebble's egg: still an egg on Papa's feet, or hatched (start at the gusts that blow Pebble out)" },
   },
   sections: [
-    { id: 'small', name: 'A small huddle', params: ['wind'] },
+    { id: 'small', name: 'A small huddle', params: ['wind'], links: [{ label: 'A small huddle', also: [{ label: 'wind from the right', params: { wind: 'right' } }] }] },
     { id: 'blizzard', name: 'The wind turns', params: ['wind'] },
-    { id: 'hatch', name: "Crack! Pebble's egg", params: ['wind', 'chick'] },
+    { id: 'hatch', name: "Crack! Pebble's egg", params: ['wind', 'chick'], links: [{ label: "Crack! Pebble's egg", also: [{ label: 'already hatched: tuck Pebble back', params: { chick: 'hatched' } }] }] },
     { id: 'sunrise', name: 'The first sunrise' },
   ],
 })

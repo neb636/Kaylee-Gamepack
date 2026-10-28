@@ -11,9 +11,9 @@ const BRIDGE_SECTIONS = defineSections('canada', 'bridge', {
   },
   sections: [
     { id: 'elk', name: 'The elk family', params: ['crossed', 'green'] },
-    { id: 'sheep', name: 'The bighorn sheep', params: ['crossed', 'green'] },
-    { id: 'bears', name: 'The shy grizzlies', params: ['crossed', 'green'] },
-    { id: 'album', name: 'The camera’s photos', params: ['crossed'] },
+    { id: 'sheep', name: 'The bighorn sheep', params: ['crossed', 'green'], links: [{ label: 'The bighorn sheep', params: { crossed: 'elk' } }] },
+    { id: 'bears', name: 'The shy grizzlies', params: ['crossed', 'green'], links: [{ label: 'The shy grizzlies', params: { crossed: 'elk,sheep' }, also: [{ label: 'the bridge already planted', params: { crossed: 'elk,sheep', green: '1' } }] }] },
+    { id: 'album', name: 'The camera’s photos', params: ['crossed'], links: [{ label: 'The camera’s photos', params: { crossed: 'elk,sheep,bears' } }] },
   ],
 })
 export default BRIDGE_SECTIONS

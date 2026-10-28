@@ -11,9 +11,9 @@ const SLIDE_SECTIONS = defineSections('poles', 'slide', {
   },
   sections: [
     { id: 'top', name: 'The gentle slope' },
-    { id: 'bumps', name: 'Bumps and cracks', params: ['run'] },
+    { id: 'bumps', name: 'Bumps and cracks', params: ['run'], links: [{ label: 'Bumps and cracks', also: [{ label: 'the moguls run', params: { run: 'left' } }, { label: 'the kicker run', params: { run: 'right' } }] }] },
     { id: 'dive', name: 'Under the sea', params: ['krill'] },
-    { id: 'home', name: 'Feeding Pebble', params: ['krill'] },
+    { id: 'home', name: 'Feeding Pebble', params: ['krill'], links: [{ label: 'Feeding Pebble', params: { krill: '12' } }] },
   ],
 })
 export default SLIDE_SECTIONS

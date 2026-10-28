@@ -11,9 +11,9 @@ const TAFFY_SECTIONS = defineSections('canada', 'taffy', {
     tip: { default: 'hold', values: ['hold', 'lead'], doc: 'how her finger tips the pot: hold (the longer she holds it, the more it tips) or lead (it tips the further her finger pulls ahead of it)' },
   },
   sections: [
-    { id: 'pour', name: 'Lines', params: ['tip'] },
+    { id: 'pour', name: 'Lines', params: ['tip'], links: [{ label: 'Lines: pour, let it set, roll it up', also: [{ label: 'tip by pulling ahead', params: { tip: 'lead' } }] }] },
     { id: 'shapes', name: 'Shapes', params: ['made', 'tip'] },
-    { id: 'orders', name: 'Orders', params: ['made', 'fed', 'tip'] },
+    { id: 'orders', name: 'Orders', params: ['made', 'fed', 'tip'], links: [{ label: 'Orders', also: [{ label: 'the chipmunk fed', params: { made: '7', fed: 'chipmunk' } }] }] },
     { id: 'share', name: 'Everyone crunches', params: ['made'] },
   ],
 })

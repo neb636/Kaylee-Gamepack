@@ -9,10 +9,10 @@ const CAMPFIRE_SECTIONS = defineSections('canada', 'campfire', {
   },
   sections: [
     { id: 'eyes', name: 'Find the eyes', params: ['found'] },
-    { id: 'sounds', name: 'Who’s that sound?', params: ['found'] },
-    { id: 'bandit', name: 'The marshmallow bandit', params: ['found'] },
+    { id: 'sounds', name: 'Who’s that sound?', params: ['found'], links: [{ label: 'Who’s that sound?', params: { found: '4' } }] },
+    { id: 'bandit', name: 'The marshmallow bandit', params: ['found'], links: [{ label: 'The marshmallow bandit', params: { found: '6' } }] },
     { id: 'marshmallow', name: 'Roast a marshmallow', params: ['found'] },
-    { id: 'stars', name: 'Around the fire', params: ['found'] },
+    { id: 'stars', name: 'Around the fire', params: ['found'], links: [{ label: 'Around the fire', params: { found: '8' } }] },
   ],
 })
 export default CAMPFIRE_SECTIONS
