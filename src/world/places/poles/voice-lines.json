@@ -17,6 +17,84 @@
   "Let's see the penguin dads huddle!",
   "Want to see a real iceberg break off?",
   "Let's see narwhals, the unicorns of the sea!",
+  {
+    "text": "Mama! I am way over here!",
+    "voice": "pola"
+  },
+  "Pull Pola back, and let go!",
+  "The ice is drifting. Wait, then fling!",
+  "Summer melts the ice. Push floes together!",
+  {
+    "text": "Whoa! This ice is moving!",
+    "voice": "pola"
+  },
+  {
+    "text": "The ice is so little now!",
+    "voice": "pola"
+  },
+  {
+    "text": "Splash! I love swimming!",
+    "voice": "pola"
+  },
+  {
+    "text": "Polar bears are great swimmers!",
+    "voice": "pola"
+  },
+  {
+    "text": "Wheee! Splash!",
+    "voice": "pola"
+  },
+  {
+    "text": "Brr! Paddle paddle!",
+    "voice": "pola"
+  },
+  {
+    "text": "Wheee! A slide!",
+    "voice": "pola"
+  },
+  {
+    "text": "Whoops! Too tippy!",
+    "voice": "pola"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "pola"
+  },
+  {
+    "text": "That tickles!",
+    "voice": "pola"
+  },
+  {
+    "text": "Again! Again!",
+    "voice": "pola"
+  },
+  {
+    "text": "Hop home to me, Pola!",
+    "voice": "mama"
+  },
+  {
+    "text": "I am right here, Pola!",
+    "voice": "mama"
+  },
+  {
+    "text": "You can do it, little one!",
+    "voice": "mama"
+  },
+  {
+    "text": "Keep hopping!",
+    "voice": "mama"
+  },
+  "This ice is floating on the sea!",
+  "The North Pole is a frozen sea. There is water under the ice!",
+  {
+    "text": "My brave little cub! You made it!",
+    "voice": "mama"
+  },
+  {
+    "text": "Mama! I hopped all the way home!",
+    "voice": "pola"
+  },
+  "Kaylee, you got Pola home!",
   "Pick a pole: north or south?",
   "Tap the cracks to break off the ice!",
   "A giant crack! Tap, tap, tap!",
@@ -63,10 +141,6 @@
   },
   {
     "text": "I'm riding the iceberg!",
-    "voice": "pola"
-  },
-  {
-    "text": "Hee hee!",
     "voice": "pola"
   },
   {

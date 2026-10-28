@@ -48,7 +48,34 @@ export const L = {
   hub: {},
 
   // ---- Ice Floe Hop (activities/floe/) ----
-  floe: {},
+  floe: {
+    // The opening (the story section): Pola far out on the ice calls to Mama, who waves from the big ice.
+    story: [pola('Mama! I am way over here!')],
+    // Sparkle: what to do at each stretch (said when it starts, and again when she's stuck).
+    hint: {
+      steady: 'Pull Pola back, and let go!',
+      drift: 'The ice is drifting. Wait, then fling!',
+      melt: 'Summer melts the ice. Push floes together!',
+    },
+    // Pola arriving on a new kind of ice.
+    arrive: {
+      drift: pola('Whoa! This ice is moving!'),
+      melt: pola('The ice is so little now!'),
+    },
+    // A miss: a happy belly-flop (in turn, not every time).
+    flop: [pola('Splash! I love swimming!'), pola('Polar bears are great swimmers!'), pola('Wheee! Splash!'), pola('Brr! Paddle paddle!')],
+    // Landing on a tippy edge: down it like a slide.
+    slide: [pola('Wheee! A slide!'), pola('Whoops! Too tippy!')],
+    // Taps on the friends.
+    pola: [pola('Hee hee!'), pola('That tickles!'), pola('Again! Again!')],
+    mama: [mama('Hop home to me, Pola!'), mama('I am right here, Pola!'), mama('You can do it, little one!'), mama('Keep hopping!')],
+    // Tap-to-hear, the first time she pokes the ice or the water.
+    floeFact: 'This ice is floating on the sea!',
+    waterFact: 'The North Pole is a frozen sea. There is water under the ice!',
+    // Home with Mama.
+    home: [mama('My brave little cub! You made it!'), pola('Mama! I hopped all the way home!')],
+    homeCheer: `${NAME}, you got Pola home!`,
+  },
 
   // ---- Snow Coats (activities/coats/) ----
   coats: {},

@@ -17,11 +17,11 @@
   "kind": "New place (3D + 2D)",
   "updated": "2026-10-28",
   "status": {
-    "label": "Step 8b: the friends going into the activities",
+    "label": "Step 9: the full loop",
     "tone": "pink"
   },
   "pitch": "Sparkle's balloon flies to the top of the world and the bottom. Up north, **Pola the polar bear cub** lives on ice floating on the sea; down south, **Pebble the penguin chick** lives on a giant land made of ice. They are pen pals who can never meet, because polar bears only live in the north and penguins only live in the south. Kaylee hops floes, belly-slides, huddles in a blizzard and cracks icebergs off a glacier, and learns the difference by playing in both. At the very end, Sparkle's **Polar Quiz** checks what she learned, and she answers by doing: dragging Pola to his pole, spinning the globe to the bottom.",
-  "next": "Dad plays **Penguin Slide** with the real Papa and Pebble ([#/world/poles/slide/top](#/world/poles/slide/top), [feeding Pebble](#/world/poles/slide/home?krill=12)) and says what to change. Still open: the friends' names, one map pin or two, Santa or not. Next, one per PR: **the 2D Pebble and emperor dads into the huddle**, then Snow Coats, then the painted 2D scenes and the stickers.",
+  "next": "Nothing new to play in this step on its own: the next PRs, stacked on it, put each activity into the game with its story and voices (Ice Floe Hop, Penguin Slide, Iceberg Maker, Snow Coats and Emperor Huddle with their painted 2D scenes), then the globe's and the finale's voices and the stickers. Still open: the friends' names, one map pin or two, Santa or not.",
   "facts": [
     {
       "icon": "🧭",
@@ -1473,7 +1473,9 @@
             {
               "n": 9,
               "title": "Full loop: story, voices, facts",
-              "status": "todo"
+              "status": "doing",
+              "date": "2026-10-28",
+              "md": "One PR each, stacked: **the way in** first (stamps, the spots on the globe, Sparkle's corner, the friends' voices), then each activity's story, voices and hints, and it goes into the game."
             },
             {
               "n": 10,
@@ -1757,9 +1759,9 @@
                     "The badge doesn't pin onto the passport page yet."
                   ]
                 }
-                ]
-              },
-              {
+              ]
+            },
+            {
               "title": "Step 8a: the friends, in 3D and 2D",
               "date": "2026-10-27",
               "status": "done",
@@ -1796,6 +1798,36 @@
                 "Sizes stay the greybox's (Papa 1.44 m, Pebble 0.82 m). The rig's blob shadow stays flat on the snow when he tips over; Papa hides his, since the world draws one under him.",
                 "**Came along:** the five emperors in the colony and Iceberg Maker's emperors use the same look as Papa (one `Penguin` class). The **Adélies** stay greybox: there's no Adélie look yet.",
                 "**Not yet:** voices, an Adélie look, different faces for the colony's dads."
+              ]
+            },
+            {
+              "title": "Step 9, part 1: the way in",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Everything the activities need to go into the game, before any of them does: their spots on the globe, the stamp, the sticker and the video when one finishes, the finale once all five stamps are in, Sparkle in a corner to say what to do, and the friends' voices. Nothing changes for Kaylee yet: every activity is still in the works until its own PR says it's ready.",
+              "items": [
+                "**Spots on the globe** (`activities/hub/Hub.tsx` `Spots`): spin to a pole and its activities pop up as big round buttons (a column on the right on a wide screen, a row near the bottom on a tall one): the floes and the coats up north, the slide and the huddle down south, the icebergs on both. A done one has a dashed pink ring. Nothing shows from the middle, so she spins to find them. 🎉 opens the finale once every stamp is in.",
+                "**The stamp** (`Place.tsx`): an activity calls `onDone` at its payoff: the stamp and the sticker (`kit/StampEarned`, 🌍 to go on), then its video from `meta.videos` (skippable), then back to the globe. The finale opens only with every stamp (or `?stamps=all`).",
+                "**Each activity says when it's ready** (`activities/<id>/info.ts`: its name, icon, sticker, `READY` and which `POLE` its spot is on). `meta.ts` builds `activities` and `inTheWorks` from them, so each activity goes into the game in its own PR without touching the others.",
+                "**Sparkle in a corner** (`src/world/kit/Guide.tsx`, shared): a small live Sparkle who says what to do with the line in a bubble, a hint after 8 s with nothing touched (then every 20 s, four at most), tap her to hear it again, and `once()` for a fact the first time she pokes something. For 3D worlds and full-screen 2D stages.",
+                "**The friends' voices** (`cast.json`): Pola (a bouncy cub), Mama Bear (warm and calm), Pebble (a squeaky chick), Papa (a proud, gentle emperor dad) and Terry (a chirpy, fast-talking tern). No accents: nobody lives at the poles for good. `lines.ts` has a block per activity, and the trophy's lines are recorded.",
+                "**QA scenarios per activity** (`activities/<id>/qa.mjs`): the screens, pacing runs and filmed moments moved next to each activity; the Poles' own `qa.mjs` keeps the hub and the finale.",
+                "`art.ts` holds the stickers and the friend's portrait (still the world's globe until the sticker art)."
+              ]
+            },
+            {
+              "title": "Step 9: Ice Floe Hop goes into the game",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Pola calls out to Mama across the sea ice, and Sparkle, in the corner, says what to do at each stretch (and again when she's stuck). Pola and Mama react in their own voices to the belly-flops, the tippy slides, the new ice and her taps. Home with Mama they cheer, then the stamp and the polar bear sticker. Ice Floe Hop has its spot on the globe's north side now.",
+              "items": [
+                "`activities/floe/FloeHop.tsx`: one Pola line, then Sparkle's instruction (5.1 s of talk before the first touch). Sparkle's corner (`kit/Guide`) has a hint for each stretch (steady, drift, melt) and replaces the greybox's text pill. The friends' reactions take turns from a list, at least 5 s apart. A fact the first time she pokes the ice (“This ice is floating on the sea!”) and the open water.",
+                "Home: Mama's and Pola's lines, then “Kaylee, you got Pola home!”, then `onDone` (the stamp, the sticker, the video), after the lines or 9 s at most. 🔁 still plays again.",
+                "`floe.ts`: new events `flop`, `slide`, `poke(pola | mama | floe | water)`.",
+                "`L.floe` in `lines.ts`: 24 lines (13 Pola, 5 Mama, 6 Sparkle). Pola's lines use the name, not he or she.",
+                "`info.ts`: `READY = true`. `qa.mjs`: the hug and the stamp as two screens.",
+                "**Changed from the plan:** Mama's “Hop home to me, Pola!” is her first tap line instead of part of the opening, to keep the talk short. No pokeable seals, narwhals, walruses or belugas yet (the greybox never had them), so the facts hang on the ice and the water.",
+                "**Known small things:** three Pola clips transcribe a little off (“Wheee! A slide!”, “Brr! Paddle paddle!”, “Hee hee!”): listen on the iPad. “Fling me again!” kept coming out as “Sing me again”, so it's “Again! Again!”."
               ]
             }
           ]
