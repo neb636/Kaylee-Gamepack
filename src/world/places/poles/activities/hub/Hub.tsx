@@ -1,16 +1,20 @@
 // The Poles' home base: the globe (greybox 1, globe/globe.ts). She spins it to the Arctic and to Antarctica, then the
 // sun comes out and she drags it up and down so day and night swap between the poles. Then (greybox 2, globe/extras.ts)
 // a penguin or a polar bear cub turns up lost on a little iceberg, and she carries it home to its pole. The address bar
-// follows her (sections.ts): which side faces her, where the summer is, and who is lost. No voices yet (the full-loop gate): a short line at the
-// bottom says what's on screen, for Dad.
+// follows her (sections.ts): which side faces her, where the summer is, and who is lost. Each activity's spot shows on
+// its side of the globe (meta.ts ACTIVITY_POLE: the floes and the coats up north, the slide and the huddle down south,
+// the icebergs on both), and the finale's once every stamp is in. No voices yet: a short line at the bottom says
+// what's on screen, for Dad.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { burst } from '../../../../../sdk'
+import { burst, sounds } from '../../../../../sdk'
+import { useLandscape } from '../../../../kit/useLandscape'
 import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
 import type { Lost } from '../../globe/extras'
+import { ACTIVITY_POLE } from '../../meta'
 import { GLOBE_ANCHORS, PolesGlobe, type GlobeEvents, type Side } from '../../globe/globe'
 import HUB_SECTIONS, { type HubSection } from './sections'
 
@@ -33,7 +37,7 @@ const LANDED: Record<Lost, [home: string, wrong: string]> = {
   bear: ['🐻‍❄️ Home on the sea ice!', '🐻‍❄️ No polar bears down here... Try the top!'],
 }
 
-export function Hub(_props: PlaceProps) {
+export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
   const [initial] = useState(() => {
     const section = (start ?? 'globe') as HubSection
@@ -107,6 +111,7 @@ export function Hub(_props: PlaceProps) {
           🌍 Tap to wake the globe
         </button>
       )}
+      <Spots meta={meta} stamps={stamps} side={side} openActivity={openActivity} />
       <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, pointerEvents: 'none', zIndex: 20 }}>
         <AnimatePresence mode="popLayout">
           {sunOut && side === 'middle' && !lost && !landed && (
@@ -129,6 +134,63 @@ export function Hub(_props: PlaceProps) {
           )}
         </AnimatePresence>
       </div>
+    </div>
+  )
+}
+
+/** The activities on the side of the globe facing her (none from the middle: she spins to a pole to find them), and
+ *  the finale once every stamp is in. A column down the right edge on a wide screen, a row above the line on a tall one. */
+function Spots({ meta, stamps, side, openActivity }: Pick<PlaceProps, 'meta' | 'stamps' | 'openActivity'> & { side: Side }) {
+  const wide = useLandscape()
+  const here = side === 'middle' ? [] : meta.activities.filter((a) => ACTIVITY_POLE[a.id] === side || ACTIVITY_POLE[a.id] === 'both')
+  const party = meta.activities.length > 0 && meta.activities.every((a) => stamps.includes(a.id))
+  const spots = [...here.map((a) => ({ id: a.id, icon: a.icon, name: a.name, done: stamps.includes(a.id) })), ...(party ? [{ id: 'party', icon: '🎉', name: 'The finale: Pole to Pole', done: false }] : [])]
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        zIndex: 20,
+        pointerEvents: 'none',
+        display: 'flex',
+        gap: 'min(16px, 2vmin)',
+        ...(wide
+          ? { right: 'calc(var(--safe-right, 0px) + 16px)', top: 'var(--top-clear)', bottom: 'calc(var(--safe-bottom) + 70px)', flexDirection: 'column', justifyContent: 'center' }
+          : { left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 70px)', flexDirection: 'row', justifyContent: 'center' }),
+      }}
+    >
+      <AnimatePresence>
+        {spots.map((s, i) => (
+          <motion.button
+            key={`${side}-${s.id}`}
+            aria-label={s.name}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1, y: s.done ? 0 : [0, -8, 0] }}
+            exit={{ scale: 0 }}
+            transition={{ scale: { delay: 0.25 + i * 0.08, type: 'spring' }, y: { repeat: Infinity, duration: 1.4, delay: i * 0.2 } }}
+            whileTap={{ scale: 0.85 }}
+            className={s.done ? undefined : 'world-glow'}
+            onClick={() => {
+              sounds.pop()
+              openActivity(s.id)
+            }}
+            style={{
+              pointerEvents: 'auto',
+              width: 'clamp(64px, 13vmin, 118px)',
+              aspectRatio: '1',
+              borderRadius: '50%',
+              background: s.done ? 'var(--cream)' : '#fff',
+              border: s.done ? '5px dashed var(--hotpink)' : '5px solid var(--gold)',
+              boxShadow: 'var(--shadow)',
+              display: 'grid',
+              placeItems: 'center',
+              fontSize: 'clamp(30px, 6.5vmin, 58px)',
+              padding: 0,
+            }}
+          >
+            {s.icon}
+          </motion.button>
+        ))}
+      </AnimatePresence>
     </div>
   )
 }

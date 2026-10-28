@@ -9,6 +9,7 @@ import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
 import { FLOE_ANCHORS, FloeHop as World, type FloeEvents } from './floe'
 import FLOE_SECTIONS, { type FloeSection } from './sections'
+import type { ActivityProps } from '../../Place'
 
 const SAY: Record<FloeSection, string> = {
   story: '🐻‍❄️ Pola is far from Mama Bear',
@@ -18,7 +19,8 @@ const SAY: Record<FloeSection, string> = {
   mama: '🐻‍❄️ Home with Mama!',
 }
 
-export function FloeHop() {
+// `onDone` (Place.tsx): call it at the payoff for the stamp. Not called yet: the full loop wires it in.
+export function FloeHop(_props: ActivityProps) {
   const { start, param, enter } = useSections(FLOE_SECTIONS)
   const [run, setRun] = useState(() => ({ section: (start ?? 'story') as FloeSection, layout: Math.max(1, Math.floor(+param('layout')) || 1), n: 0 }))
   const [section, setSection] = useState<FloeSection>(run.section)

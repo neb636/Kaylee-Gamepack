@@ -13,6 +13,7 @@ import { SteerHint, SteerWheel } from '../../../../engine3d/SteerWheel'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
 import SLIDE_SECTIONS, { type SlideSection } from './sections'
 import { PenguinSlide as World, SLIDE_ANCHORS, type SlideEvents, type SlideStart } from './slide'
+import type { ActivityProps } from '../../Place'
 
 const SAY: Record<SlideSection, string> = {
   top: '🐧 Steer Papa down the ice!',
@@ -21,7 +22,8 @@ const SAY: Record<SlideSection, string> = {
   home: '🐣 Krill for Pebble!',
 }
 
-export function PenguinSlide() {
+// `onDone` (Place.tsx): call it at the payoff for the stamp. Not called yet: the full loop wires it in.
+export function PenguinSlide(_props: ActivityProps) {
   const { start, param, enter } = useSections(SLIDE_SECTIONS)
   const [run, setRun] = useState<SlideStart & { n: number }>(() => ({
     section: (start ?? 'top') as SlideSection,

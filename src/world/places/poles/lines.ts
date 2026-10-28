@@ -1,9 +1,23 @@
 // Every phrase that can be spoken at the Poles. `node scripts/world-voice-lines.mjs` turns this into voice-lines.json.
-// (This file is also read by Node, so it imports nothing.) Plain strings are Sparkle, the guide. The friends (Pola the
-// polar bear cub, Pebble the penguin chick, Terry the Arctic tern) get their voices in cast.json with the full loop;
-// the greyboxes are silent. Straight apostrophes only: curly ones failed the transcription check in PR #63.
+// (This file is also read by Node, so it imports nothing. NAME matches KID_NAME.) Plain strings are Sparkle, the guide:
+// she says what to do. The friends say their own story and reaction lines in their own voices (cast.json): Pola the
+// polar bear cub and Mama Bear up north, Pebble the emperor chick and Papa down south, Terry the Arctic tern who visits
+// both. Each activity has its own block below (one per PR, so they don't collide). Keep lines under ~3 seconds, and the
+// name for the big moments only. Straight apostrophes only: curly ones failed the transcription check in PR #63.
+const NAME = 'Kaylee'
+
+// A friend speaking: pola("Hi!") is { text: "Hi!", voice: "pola" }. (Exported, so a block that has no lines yet compiles.)
+const by = (voice: string) => (text: string) => ({ text, voice })
+export const pola = by('pola')
+export const mama = by('mama')
+export const pebble = by('pebble')
+export const papa = by('papa')
+export const terry = by('terry')
 
 export const L = {
+  // The shell's trophy ceremony and the trophy room speak these.
+  trophyWin: `${NAME}, you did it! You won the Polar Explorer trophy!`,
+  trophyRoom: `${NAME}, Polar Explorer! From The Poles.`,
   passport: 'These are the Poles! The top and the bottom of the world.',
   // The passport's tap-to-hear facts (planning/around-the-world/poles.html, "Passport facts").
   facts: {
@@ -29,4 +43,25 @@ export const L = {
     iceberg: 'Want to see a real iceberg break off?',
     narwhal: "Let's see narwhals, the unicorns of the sea!",
   },
+
+  // ---- The globe hub (activities/hub/) ----
+  hub: {},
+
+  // ---- Ice Floe Hop (activities/floe/) ----
+  floe: {},
+
+  // ---- Snow Coats (activities/coats/) ----
+  coats: {},
+
+  // ---- Penguin Slide (activities/slide/) ----
+  slide: {},
+
+  // ---- Emperor Huddle (activities/huddle/) ----
+  huddle: {},
+
+  // ---- Iceberg Maker (activities/iceberg/) ----
+  iceberg: {},
+
+  // ---- The finale: Pole to Pole and the Polar Quiz (activities/party/) ----
+  party: {},
 }

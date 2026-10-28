@@ -10,6 +10,7 @@ import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
 import { ICEBERG_ANCHORS, IcebergMaker as World, type IcebergEvents, type IcebergStart } from './iceberg'
 import ICEBERG_SECTIONS, { type IcebergSection, type Pole } from './sections'
+import type { ActivityProps } from '../../Place'
 
 const SAY: Record<IcebergSection, string> = {
   pick: '🐻‍❄️ North or 🐧 south? Pick one!',
@@ -19,7 +20,8 @@ const SAY: Record<IcebergSection, string> = {
 }
 const UNDER = '🌊 Most of the iceberg is under the water! Push it down'
 
-export function IcebergMaker() {
+// `onDone` (Place.tsx): call it at the payoff for the stamp. Not called yet: the full loop wires it in.
+export function IcebergMaker(_props: ActivityProps) {
   const { start, param, enter } = useSections(ICEBERG_SECTIONS)
   const [run, setRun] = useState<IcebergStart & { n: number }>(() => ({ section: (start ?? 'pick') as IcebergSection, pole: param('pole') as Pole, n: 0 }))
   const [section, setSection] = useState<IcebergSection>(run.section)
