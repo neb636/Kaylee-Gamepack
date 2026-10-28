@@ -2112,7 +2112,8 @@ export function CampfireNight({ onDone, setProgress }: CanadaActivityProps) {
           </BigButton>
         </motion.div>
       )}
-      <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 30 }}>
+      {/* At the top, under the tally's row: at the bottom it sat over Maple's log and the marshmallow stick. */}
+      <div style={{ position: 'absolute', left: 16, right: 'calc(var(--safe-right, 0px) + 16px)', top: 'calc(var(--top-clear) + 52px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 30 }}>
         <AnimatePresence mode="popLayout">
           <motion.button
             key={pill}
@@ -2201,7 +2202,7 @@ const CSS = `
 `
 
 /** The 🔁 button waits in the corner under the row of animals, clear of the fire. */
-const AGAIN = { position: 'absolute' as const, zIndex: 31, right: 'calc(var(--safe-right, 0px) + 16px)', top: 'calc(var(--top-clear) + 60px)', pointerEvents: 'auto' as const }
+const AGAIN = { position: 'absolute' as const, zIndex: 31, right: 'calc(var(--safe-right, 0px) + 16px)', top: 'calc(var(--top-clear) + 120px)', pointerEvents: 'auto' as const }
 
 const TALLY = {
   position: 'absolute' as const,

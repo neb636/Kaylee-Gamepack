@@ -108,7 +108,7 @@ export const L = {
   // reactions. Keep each line under ~3 seconds; say Kaylee's name only at the big moments. ----
   hub: {
     // The first visit: Maple on Quebec City's platform tells the story, then Sparkle says what to do.
-    story: [maple("Bonjour! I'm Maple. I want to see all of Canada, ocean to ocean!"), maple("And find a hockey team for the big game in Ottawa!")],
+    story: [maple("Bonjour! Let's ride all across Canada!"), maple("And find a hockey team!")],
     push: 'Push the train with your finger!',
     bubbles: 'Tap a bubble to play!',
     soon: 'That one is coming soon!',
@@ -161,7 +161,7 @@ export const L = {
   },
   taffy: {
     // The story beat (Maple, then her little cousin).
-    story: [maple('Bonjour! My cousins are coming for a treat!'), by('cousin')('Maple taffy, please!')],
+    story: [maple('Bonjour! My cousins want maple taffy!')],
     // Sparkle: one line when something new starts, and the hints when she's stuck (~8 s).
     pour: 'Tip the pot and pour syrup on the snow!',
     set: "It's set! Roll it up on a stick.",
@@ -204,7 +204,7 @@ export const L = {
   },
   snowman: {
     // The story (Maple, in the park below the castle), then Sparkle's one instruction per part.
-    story: [maple("Bonjour! It's the Winter Carnival!"), maple("The parade needs snowmen. Let's roll some!")],
+    story: [maple("Bonjour! It's the Winter Carnival!"), maple("Let's roll snowmen!")],
     roll: 'Push the snowball! Watch it grow!',
     stack: 'Now roll the little ball into the big one!',
     dress: 'Roll a snowball into a box!',
@@ -267,7 +267,7 @@ export const L = {
   },
   campfire: {
     // The story (before the first touch): Maple, then Sparkle's one instruction.
-    story: [maple('Shh! Something is out there in the dark.'), 'Move your finger to shine the light!'],
+    story: [maple("Shh! Who's out there?"), 'Move your finger to shine the light!'],
     // Sparkle: each part's instruction (the prompt bubble plays it again), and her hints when Kaylee is stuck.
     eyes: 'Move your finger to shine the light!',
     eyesHint: 'Look for shiny eyes in the dark!',
@@ -305,7 +305,7 @@ export const L = {
   },
   canoe: {
     // The story: Maple at the dock, in the red canoe.
-    story: maple('Bonjour! Why is my lake so blue?'),
+    story: maple('Why is my lake so blue?'),
     // Sparkle: how to paddle (one way or the other), and the hint when she hasn't paddled for a while.
     go: { stroke: 'Pull the paddle back through the water!', pull: 'Hold the water where the canoe should go!' },
     hint: { stroke: 'Drag your finger back, beside the canoe.', pull: 'Press the water in front of the canoe.' },
@@ -334,7 +334,7 @@ export const L = {
   },
   bridge: {
     // The story (Maple, then Sparkle's one instruction).
-    story: [maple('Bonjour! The animals want to cross the big highway.'), 'Lead them over the animal bridge!'],
+    story: [maple('The animals need to cross!'), 'Lead them over the animal bridge!'],
     // Sparkle: whose turn it is (a link that starts there, the next family, and the hint when she's stuck).
     lead: {
       elk: 'Drag mama elk over the bridge.',
@@ -411,7 +411,7 @@ export const L = {
   },
   salmon: {
     // The story (Maple, at the river).
-    story: [maple('The salmon are swimming home, up the river!'), maple('Can you help them jump the falls?')],
+    story: [maple('Help the salmon jump home!')],
     // Sparkle: once when each stretch of the river begins, and again when she's stuck.
     steps: 'Grab a salmon, and flick it up!',
     falls: 'The big falls! Try the rock, or the log.',

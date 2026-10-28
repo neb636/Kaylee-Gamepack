@@ -886,7 +886,7 @@ export class RinkWorld extends Base3D implements World3D {
     // Low, behind her goal, up the ice to the geese's net and Parliament beyond.
     const tall = this.tall
     if (this.phase === 'win') return { center: new Vector3(0, 2.4, -3.4), half: tall ? new Vector3(4.2, 2.6, 3) : new Vector3(6, 2.6, 2.6), yaw: 0, pitch: 12 }
-    return { center: new Vector3(0, 1.6, -1.8), half: tall ? new Vector3(RINK.x + 0.4, 1.2, 7.4) : new Vector3(RINK.x + 1.8, 1.2, 7.6), yaw: 0, pitch: 19 }
+    return { center: tall ? new Vector3(0, 1.6, -1.8) : new Vector3(0, 1.6, -1.2), half: tall ? new Vector3(RINK.x + 0.4, 1.2, 7.4) : new Vector3(RINK.x + 1.8, 1.2, 8.4), yaw: 0, pitch: 19 }
   }
 
   // ---------------------------------------------------------------- her finger

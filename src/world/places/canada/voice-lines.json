@@ -75,11 +75,11 @@
   "A Mountie horse! Mounties are Canada's police on horses.",
   "A polar bear! It lives far up north, by the ice.",
   {
-    "text": "Bonjour! I'm Maple. I want to see all of Canada, ocean to ocean!",
+    "text": "Bonjour! Let's ride all across Canada!",
     "voice": "maple"
   },
   {
-    "text": "And find a hockey team for the big game in Ottawa!",
+    "text": "And find a hockey team!",
     "voice": "maple"
   },
   "Push the train with your finger!",
@@ -199,12 +199,8 @@
     "voice": "bear"
   },
   {
-    "text": "Bonjour! My cousins are coming for a treat!",
+    "text": "Bonjour! My cousins want maple taffy!",
     "voice": "maple"
-  },
-  {
-    "text": "Maple taffy, please!",
-    "voice": "cousin"
   },
   "Tip the pot and pour syrup on the snow!",
   "It's set! Roll it up on a stick.",
@@ -324,7 +320,7 @@
     "voice": "maple"
   },
   {
-    "text": "The parade needs snowmen. Let's roll some!",
+    "text": "Let's roll snowmen!",
     "voice": "maple"
   },
   "Push the snowball! Watch it grow!",
@@ -507,7 +503,7 @@
     "voice": "bear"
   },
   {
-    "text": "Shh! Something is out there in the dark.",
+    "text": "Shh! Who's out there?",
     "voice": "maple"
   },
   "Move your finger to shine the light!",
@@ -602,7 +598,7 @@
     "voice": "maple"
   },
   {
-    "text": "Bonjour! Why is my lake so blue?",
+    "text": "Why is my lake so blue?",
     "voice": "maple"
   },
   "Pull the paddle back through the water!",
@@ -677,7 +673,7 @@
     "voice": "moose"
   },
   {
-    "text": "Bonjour! The animals want to cross the big highway.",
+    "text": "The animals need to cross!",
     "voice": "maple"
   },
   "Lead them over the animal bridge!",
@@ -833,11 +829,7 @@
     "voice": "maple"
   },
   {
-    "text": "The salmon are swimming home, up the river!",
-    "voice": "maple"
-  },
-  {
-    "text": "Can you help them jump the falls?",
+    "text": "Help the salmon jump home!",
     "voice": "maple"
   },
   "Grab a salmon, and flick it up!",
