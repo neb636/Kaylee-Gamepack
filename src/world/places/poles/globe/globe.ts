@@ -20,6 +20,7 @@ import { makeHull, setOutlineResolution } from '../../../engine3d/outline'
 import { PAL } from '../../../engine3d/toon'
 import type { World3D } from '../../../engine3d/View3D'
 import { earthTexture, ll } from './earth'
+import { CARRY, GlobeExtras, type Lost, type PokeId } from './extras'
 import { globeMaterials } from './material'
 
 const FILE = 'src/world/places/poles/globe/globe.ts'
@@ -50,6 +51,8 @@ export interface GlobeStart {
   sun: boolean
   /** Where the sun shines. */
   summer: Side
+  /** Step 3 from the start: this one is lost in the middle of the ocean (the `lost` section). */
+  lost: Lost | null
 }
 export interface GlobeEvents {
   /** Another pole (or the middle) came to the front. */
@@ -58,6 +61,10 @@ export interface GlobeEvents {
   sunOut(): void
   /** Summer moved: north, south, or in between. */
   summer(s: Side): void
+  /** A lost penguin or bear turned up adrift (or the last one is home: null). */
+  lost(kind: Lost | null): void
+  /** She put the lost one down on a pole: its own (`home`), or the other one. */
+  saved(kind: Lost, home: boolean): void
 }
 
 export const GLOBE_ANCHORS: AnchorInfo[] = [
@@ -65,7 +72,13 @@ export const GLOBE_ANCHORS: AnchorInfo[] = [
   { id: 'pola', label: 'Pola the polar bear cub', kind: 'thing' },
   { id: 'pebble', label: 'Pebble the penguin chick', kind: 'thing' },
   { id: 'sun', label: 'The sun: drag it up and down', kind: 'thing' },
+  { id: 'lost', label: 'The lost one: carry it home', kind: 'thing' },
+  { id: 'marker', label: 'The North Pole', kind: 'thing' },
+  { id: 'seal', label: 'A seal in its hole', kind: 'thing' },
+  { id: 'station', label: 'The science station', kind: 'thing' },
+  { id: 'whale', label: 'A whale', kind: 'thing' },
 ]
+const POKES = new Set<string>(['lost', 'marker', 'seal', 'station', 'whale'])
 
 const DEG = Math.PI / 180
 const UP = new Vector3(0, 1, 0)
@@ -99,7 +112,7 @@ function rng(seed: number) {
 }
 
 /** Antarctica's height at this many degrees from the South Pole. */
-const domeR = (deg: number) => 1 + DOME_H * Math.cos(Math.min(deg / DOME_DEG, 1) * (Math.PI / 2)) ** 2
+export const domeR = (deg: number) => 1 + DOME_H * Math.cos(Math.min(deg / DOME_DEG, 1) * (Math.PI / 2)) ** 2
 
 /** A lathed cap round the +y axis: `outer(deg)` from the pole out to `maxDeg`, back along `inner`. */
 function cap(maxDeg: number, outer: (deg: number) => number, inner: number) {
@@ -124,13 +137,13 @@ function upTo(dir: Vector3): [number, number, number] {
 }
 
 /** Stands something on the globe at a latitude and longitude, `r` from the center, feet down. */
-function standOn(o: Object3D, lat: number, lon: number, r: number) {
+export function standOn(o: Object3D, lat: number, lon: number, r: number) {
   ll(lat, lon, r, o.position)
   o.quaternion.setFromUnitVectors(UP, tmp.copy(o.position).normalize())
 }
 
 /** Pola and Pebble, as placeholder shapes until the art gate: they turn to look at her, breathe, hop and wave. */
-class Critter {
+export class Critter {
   /** Stands on the globe (its up = away from the center). */
   readonly root = new Group()
   /** Turns to face her, hops and squashes. */
@@ -196,10 +209,10 @@ class Critter {
     this.arms.forEach((a, i) => (a.rotation.z = (i ? -1 : 1) * (0.25 + w * (1.9 + 0.45 * Math.sin(this.waveT * 16)))))
   }
 }
-const HOP_S = 0.7
+export const HOP_S = 0.7
 const WAVE_S = 1.6
 
-interface Floe {
+export interface Floe {
   o: Group
   dir: Vector3
   base: Quaternion
@@ -207,6 +220,125 @@ interface Floe {
   /** How far into summer it melts (outer floes go first). */
   melt: number
 }
+
+// ---------------------------------------------------------------- the Earth's parts (shared with the finale)
+
+/** Where the Earth's parts go and how they're drawn (the globe's light, an ink outline). */
+export interface EarthKit {
+  spin: Group
+  prop(geometry: BufferGeometry, px?: number): Group
+}
+
+/** The Arctic: a thin sheet of sea ice floating on the ocean, broken into floes round its edge. */
+export function buildNorth(k: EarthKit) {
+  const floes: Floe[] = []
+  const capN = k.prop(bake(cap(13, () => 1.022, 0.996), ICE), 2.5)
+  k.spin.add(capN)
+  const r = rng(7)
+  const n = 18
+  for (let i = 0; i < n; i++) {
+    const fromPole = 14.5 + r() * 6
+    const size = 0.035 + r() * 0.03
+    const o = k.prop(bake(new CylinderGeometry(size, size, 0.02, 7), ICE, { scale: [1, 1, 0.65 + r() * 0.5], rot: [0, r() * 3, 0] }), 1.5)
+    standOn(o, 90 - fromPole, (360 * i) / n + r() * 12, 1.004)
+    k.spin.add(o)
+    floes.push({ o, dir: o.position.clone().normalize(), base: o.quaternion.clone(), phase: r() * 6, melt: 0.15 + 0.7 * (1 - (fromPole - 14.5) / 6) })
+  }
+  return { cap: capN, floes }
+}
+
+/** Antarctica: a high dome of ice on land, with mountains and the peninsula, ringed by sea ice that comes and goes. */
+export function buildSouth(k: EarthKit) {
+  const floes: Floe[] = []
+  const south = (lat: number, lon: number) => ll(lat, lon, 1)
+  const parts = [
+    bake(cap(DOME_DEG, domeR, 0.99), LAND_ICE, { rot: [Math.PI, 0, 0] }),
+    // East Antarctica bulges out further, and the peninsula reaches toward South America.
+    bake(cap(13, (d) => 1 + 0.05 * Math.cos(Math.min(d / 13, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-73, 80)) }),
+    bake(cap(5, (d) => 1 + 0.03 * Math.cos(Math.min(d / 5, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-67, -62)) }),
+    bake(cap(4, (d) => 1 + 0.025 * Math.cos(Math.min(d / 4, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-71, -66)) }),
+  ]
+  // The Transantarctic Mountains, across the middle.
+  for (const [lat, lon, s] of [[-84, -170, 1], [-85, 175, 1.2], [-83, 160, 0.9], [-80, 155, 1.1], [-86, -150, 0.8], [-78, 162, 0.8], [-82, -175, 0.7]] as const) {
+    const fromPole = 90 + lat
+    const dir = south(lat, lon)
+    const at = dir.clone().multiplyScalar(domeR(fromPole) - 0.004)
+    const h = 0.07 * s
+    const up = upTo(dir)
+    parts.push(bake(P.cone(0.032 * s, h, '#FFFFFF').translate(0, h / 2, 0), '#FFFFFF', { at: [at.x, at.y, at.z], rot: up }))
+  }
+  k.spin.add(k.prop(merge(parts), 2.5))
+  const r = rng(11)
+  const n = 24
+  for (let i = 0; i < n; i++) {
+    const fromPole = 23.5 + r() * 5
+    const size = 0.035 + r() * 0.03
+    const o = k.prop(bake(new CylinderGeometry(size, size, 0.02, 7), ICE, { scale: [1, 1, 0.65 + r() * 0.5], rot: [0, r() * 3, 0] }), 1.5)
+    standOn(o, -90 + fromPole, (360 * i) / n + r() * 10, 1.004)
+    k.spin.add(o)
+    floes.push({ o, dir: o.position.clone().normalize(), base: o.quaternion.clone(), phase: r() * 6, melt: 0.15 + 0.7 * (1 - (fromPole - 23.5) / 5) })
+  }
+  return floes
+}
+
+export function makePola(k: EarthKit) {
+  const c = new Critter(0.17)
+  const white = '#FFFFFF'
+  c.body.add(
+    k.prop(
+      merge([
+        P.sphere(0.055, white, { at: [0, 0.058, 0], scale: [1, 0.92, 1.12] }),
+        P.sphere(0.042, white, { at: [0, 0.125, 0.035] }),
+        P.sphere(0.014, white, { at: [0.029, 0.16, 0.028] }),
+        P.sphere(0.014, white, { at: [-0.029, 0.16, 0.028] }),
+        P.sphere(0.018, '#FFF7F0', { at: [0, 0.114, 0.072], scale: [1, 0.8, 1] }),
+        P.sphere(0.008, PAL.ink, { at: [0, 0.121, 0.089] }),
+        P.sphere(0.0065, PAL.ink, { at: [0.017, 0.137, 0.07] }),
+        P.sphere(0.0065, PAL.ink, { at: [-0.017, 0.137, 0.07] }),
+        P.capsule(0.016, 0.01, white, { at: [0.03, 0.018, 0.022] }),
+        P.capsule(0.016, 0.01, white, { at: [-0.03, 0.018, 0.022] }),
+      ]),
+      2,
+    ),
+  )
+  for (const x of [0.05, -0.05]) {
+    const arm = new Group()
+    arm.position.set(x, 0.085, 0.02)
+    arm.add(k.prop(P.capsule(0.014, 0.03, white, { at: [0, -0.026, 0] }), 1.5))
+    c.body.add(arm)
+    c.arms.push(arm)
+  }
+  return c
+}
+
+export function makePebble(k: EarthKit) {
+  const c = new Critter(0.155)
+  const dark = '#3A3550'
+  c.body.add(
+    k.prop(
+      merge([
+        P.sphere(0.05, '#B9B4C9', { at: [0, 0.06, 0], scale: [1, 1.15, 0.95] }),
+        P.sphere(0.04, dark, { at: [0, 0.125, 0.005] }),
+        P.sphere(0.03, '#FFFFFF', { at: [0, 0.122, 0.026], scale: [1.05, 0.85, 0.6] }),
+        P.sphere(0.006, PAL.ink, { at: [0.012, 0.128, 0.05] }),
+        P.sphere(0.006, PAL.ink, { at: [-0.012, 0.128, 0.05] }),
+        P.cone(0.008, 0.022, dark, { at: [0, 0.115, 0.06], rot: [Math.PI / 2, 0, 0] }),
+        P.sphere(0.012, '#6F6A80', { at: [0.018, 0.006, 0.02], scale: [1, 0.5, 1.5] }),
+        P.sphere(0.012, '#6F6A80', { at: [-0.018, 0.006, 0.02], scale: [1, 0.5, 1.5] }),
+      ]),
+      2,
+    ),
+  )
+  for (const x of [0.046, -0.046]) {
+    const arm = new Group()
+    arm.position.set(x, 0.088, 0)
+    arm.add(k.prop(P.capsule(0.01, 0.035, '#8F8AA3', { at: [0, -0.026, 0] }), 1.5))
+    c.body.add(arm)
+    c.arms.push(arm)
+  }
+  return c
+}
+
 
 export class PolesGlobe implements World3D {
   readonly scene = new Scene()
@@ -245,7 +377,8 @@ export class PolesGlobe implements World3D {
   private inviteAt = INVITE_S
 
   // ---- Her finger.
-  private grab: 'globe' | 'sun' | null = null
+  private grab: 'globe' | 'sun' | 'lost' | null = null
+  private down = { x: 0, y: 0 }
   private last = { x: 0, y: 0, t: 0 }
   private vYaw = 0
   private vPitch = 0
@@ -280,7 +413,11 @@ export class PolesGlobe implements World3D {
   private starMatS: SpriteMaterial
   private auroraN: ShaderMaterial
   private auroraS: ShaderMaterial
+  /** A tap on the night sky: the lights flare up and ripple faster for a moment. */
+  private flare = { n: 0, s: 0, tN: 0, tS: 0 }
   private bg = BG.middle.clone()
+  /** Step 3 and the pokes (extras.ts). */
+  private extras: GlobeExtras
 
   constructor(
     private renderer: WebGLRenderer,
@@ -300,10 +437,11 @@ export class PolesGlobe implements World3D {
     this.bag.add(hull.geometry)
     this.spin.add(new Mesh(sphere, this.mats.land), hull)
 
-    this.buildNorth()
-    this.buildSouth()
-    this.pola = this.makePola()
-    this.pebble = this.makePebble()
+    const kit: EarthKit = { spin: this.spin, prop: (g, px) => this.prop(g, px) }
+    ;({ cap: this.capN, floes: this.floesN } = buildNorth(kit))
+    this.floesS = buildSouth(kit)
+    this.pola = makePola(kit)
+    this.pebble = makePebble(kit)
     standOn(this.pola.root, 85, -95, 1.022)
     standOn(this.pebble.root, -81, -60, domeR(9) - 0.002)
     this.spin.add(this.pola.root, this.pebble.root)
@@ -312,6 +450,24 @@ export class PolesGlobe implements World3D {
     this.auroraN = this.makeAurora(1, '#8FE3C8', '#FF8FB8')
     this.auroraS = this.makeAurora(-1, '#8FE3C8', '#B9A6F5')
     this.makeSun()
+    this.extras = new GlobeExtras(
+      {
+        bag: this.bag,
+        spin: this.spin,
+        world: this.scene,
+        camera: this.rig.camera,
+        prop: (g, px) => this.prop(g, px),
+        make: (kind) => (kind === 'bear' ? makePola(kit) : makePebble(kit)),
+        friend: (kind) => (kind === 'bear' ? this.pola : this.pebble),
+        ground: (lat) => (lat < 0 ? domeR(90 + lat) : 1.022),
+        show: (pole) => {
+          if (this.grab !== 'globe') this.rest = this.restFor(pole ?? 'middle')
+        },
+        lost: (kind) => this.events.lost(kind),
+        saved: (kind, home) => this.events.saved(kind, home),
+      },
+      start.lost,
+    )
 
     // Where the link starts.
     this.side = start.side
@@ -322,6 +478,8 @@ export class PolesGlobe implements World3D {
     this.sunOut = start.sun
     this.sunT = start.sun ? 9 : 0
     this.sunLight = start.sun ? 1 : 0
+    // (Starting with a lost one: the sun has been dragged already.)
+    this.sunDragged = !!start.lost
     const tilt = SUN.tilt * DEG
     this.decl = this.declGoal = start.summer === 'north' ? tilt : start.summer === 'south' ? -tilt : 0
     this.season = this.decl / tilt
@@ -349,112 +507,6 @@ export class PolesGlobe implements World3D {
       g.add(hull)
     }
     return g
-  }
-
-  /** The Arctic: a thin sheet of sea ice floating on the ocean, broken into floes round its edge. */
-  private buildNorth() {
-    this.capN = this.prop(bake(cap(13, () => 1.022, 0.996), ICE), 2.5)
-    this.spin.add(this.capN)
-    const r = rng(7)
-    const n = 18
-    for (let i = 0; i < n; i++) {
-      const fromPole = 14.5 + r() * 6
-      const size = 0.035 + r() * 0.03
-      const o = this.prop(bake(new CylinderGeometry(size, size, 0.02, 7), ICE, { scale: [1, 1, 0.65 + r() * 0.5], rot: [0, r() * 3, 0] }), 1.5)
-      standOn(o, 90 - fromPole, (360 * i) / n + r() * 12, 1.004)
-      this.spin.add(o)
-      this.floesN.push({ o, dir: o.position.clone().normalize(), base: o.quaternion.clone(), phase: r() * 6, melt: 0.15 + 0.7 * (1 - (fromPole - 14.5) / 6) })
-    }
-  }
-
-  /** Antarctica: a high dome of ice on land, with mountains and the peninsula, ringed by sea ice that comes and goes. */
-  private buildSouth() {
-    const south = (lat: number, lon: number) => ll(lat, lon, 1)
-    const parts = [
-      bake(cap(DOME_DEG, domeR, 0.99), LAND_ICE, { rot: [Math.PI, 0, 0] }),
-      // East Antarctica bulges out further, and the peninsula reaches toward South America.
-      bake(cap(13, (d) => 1 + 0.05 * Math.cos(Math.min(d / 13, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-73, 80)) }),
-      bake(cap(5, (d) => 1 + 0.03 * Math.cos(Math.min(d / 5, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-67, -62)) }),
-      bake(cap(4, (d) => 1 + 0.025 * Math.cos(Math.min(d / 4, 1) * (Math.PI / 2)) ** 2, 0.99), LAND_ICE, { rot: upTo(south(-71, -66)) }),
-    ]
-    // The Transantarctic Mountains, across the middle.
-    for (const [lat, lon, s] of [[-84, -170, 1], [-85, 175, 1.2], [-83, 160, 0.9], [-80, 155, 1.1], [-86, -150, 0.8], [-78, 162, 0.8], [-82, -175, 0.7]] as const) {
-      const fromPole = 90 + lat
-      const dir = south(lat, lon)
-      const at = dir.clone().multiplyScalar(domeR(fromPole) - 0.004)
-      const h = 0.07 * s
-      const up = upTo(dir)
-      parts.push(bake(P.cone(0.032 * s, h, '#FFFFFF').translate(0, h / 2, 0), '#FFFFFF', { at: [at.x, at.y, at.z], rot: up }))
-    }
-    this.spin.add(this.prop(merge(parts), 2.5))
-    const r = rng(11)
-    const n = 24
-    for (let i = 0; i < n; i++) {
-      const fromPole = 23.5 + r() * 5
-      const size = 0.035 + r() * 0.03
-      const o = this.prop(bake(new CylinderGeometry(size, size, 0.02, 7), ICE, { scale: [1, 1, 0.65 + r() * 0.5], rot: [0, r() * 3, 0] }), 1.5)
-      standOn(o, -90 + fromPole, (360 * i) / n + r() * 10, 1.004)
-      this.spin.add(o)
-      this.floesS.push({ o, dir: o.position.clone().normalize(), base: o.quaternion.clone(), phase: r() * 6, melt: 0.15 + 0.7 * (1 - (fromPole - 23.5) / 5) })
-    }
-  }
-
-  private makePola() {
-    const c = new Critter(0.17)
-    const white = '#FFFFFF'
-    c.body.add(
-      this.prop(
-        merge([
-          P.sphere(0.055, white, { at: [0, 0.058, 0], scale: [1, 0.92, 1.12] }),
-          P.sphere(0.042, white, { at: [0, 0.125, 0.035] }),
-          P.sphere(0.014, white, { at: [0.029, 0.16, 0.028] }),
-          P.sphere(0.014, white, { at: [-0.029, 0.16, 0.028] }),
-          P.sphere(0.018, '#FFF7F0', { at: [0, 0.114, 0.072], scale: [1, 0.8, 1] }),
-          P.sphere(0.008, PAL.ink, { at: [0, 0.121, 0.089] }),
-          P.sphere(0.0065, PAL.ink, { at: [0.017, 0.137, 0.07] }),
-          P.sphere(0.0065, PAL.ink, { at: [-0.017, 0.137, 0.07] }),
-          P.capsule(0.016, 0.01, white, { at: [0.03, 0.018, 0.022] }),
-          P.capsule(0.016, 0.01, white, { at: [-0.03, 0.018, 0.022] }),
-        ]),
-        2,
-      ),
-    )
-    for (const x of [0.05, -0.05]) {
-      const arm = new Group()
-      arm.position.set(x, 0.085, 0.02)
-      arm.add(this.prop(P.capsule(0.014, 0.03, white, { at: [0, -0.026, 0] }), 1.5))
-      c.body.add(arm)
-      c.arms.push(arm)
-    }
-    return c
-  }
-
-  private makePebble() {
-    const c = new Critter(0.155)
-    const dark = '#3A3550'
-    c.body.add(
-      this.prop(
-        merge([
-          P.sphere(0.05, '#B9B4C9', { at: [0, 0.06, 0], scale: [1, 1.15, 0.95] }),
-          P.sphere(0.04, dark, { at: [0, 0.125, 0.005] }),
-          P.sphere(0.03, '#FFFFFF', { at: [0, 0.122, 0.026], scale: [1.05, 0.85, 0.6] }),
-          P.sphere(0.006, PAL.ink, { at: [0.012, 0.128, 0.05] }),
-          P.sphere(0.006, PAL.ink, { at: [-0.012, 0.128, 0.05] }),
-          P.cone(0.008, 0.022, dark, { at: [0, 0.115, 0.06], rot: [Math.PI / 2, 0, 0] }),
-          P.sphere(0.012, '#6F6A80', { at: [0.018, 0.006, 0.02], scale: [1, 0.5, 1.5] }),
-          P.sphere(0.012, '#6F6A80', { at: [-0.018, 0.006, 0.02], scale: [1, 0.5, 1.5] }),
-        ]),
-        2,
-      ),
-    )
-    for (const x of [0.046, -0.046]) {
-      const arm = new Group()
-      arm.position.set(x, 0.088, 0)
-      arm.add(this.prop(P.capsule(0.01, 0.035, '#8F8AA3', { at: [0, -0.026, 0] }), 1.5))
-      c.body.add(arm)
-      c.arms.push(arm)
-    }
-    return c
   }
 
   /** Stars over one pole (`y` = 1 north, -1 south), shown when it's night there. */
@@ -583,7 +635,7 @@ export class PolesGlobe implements World3D {
   }
 
   get calm() {
-    return !this.grab && Math.abs(this.spinVel) < 0.02 && Math.abs(this.pitchVel) < 0.01 && Math.abs(this.roll.rotation.z - (this.side === 'south' ? Math.PI : 0)) < 0.01 && !this.pola.busy && !this.pebble.busy && (!this.sunOut || this.sunT > 2)
+    return !this.grab && Math.abs(this.spinVel) < 0.02 && Math.abs(this.pitchVel) < 0.01 && Math.abs(this.roll.rotation.z - (this.side === 'south' ? Math.PI : 0)) < 0.01 && !this.pola.busy && !this.pebble.busy && !this.extras.busy && (!this.sunOut || this.sunT > 2)
   }
 
   update(dt: number) {
@@ -604,7 +656,16 @@ export class PolesGlobe implements World3D {
         s.scale.setScalar(s.userData.size * (1 + 0.25 * Math.sin(t * 3 + s.userData.phase)))
       }
     }
-    this.auroraN.uniforms.uTime.value = this.auroraS.uniforms.uTime.value = t
+    this.extras.tick(dt, t, this.side)
+    const f = this.flare
+    f.n = Math.max(0, f.n - dt * 0.6)
+    f.s = Math.max(0, f.s - dt * 0.6)
+    f.tN += dt * (1 + 3 * f.n)
+    f.tS += dt * (1 + 3 * f.s)
+    this.auroraN.uniforms.uTime.value = f.tN
+    this.auroraS.uniforms.uTime.value = f.tS
+    this.auroraN.uniforms.uOpacity.value = this.nightN * (1 + 0.8 * f.n)
+    this.auroraS.uniforms.uOpacity.value = this.nightS * (1 + 0.8 * f.s)
 
     // The sky: the side's pastel, fading toward night when the pole in front of her is in the dark.
     const night = this.side === 'north' ? this.nightN : this.side === 'south' ? this.nightS : 0
@@ -639,7 +700,7 @@ export class PolesGlobe implements World3D {
       if (this.wobbleT > 0.6) this.wobbleT = -1
     }
     this.spin.scale.setScalar(s)
-    if (!this.grab && this.time - this.lastTouch > this.inviteAt && (!this.sunOut || this.sunDragged)) {
+    if (!this.grab && this.time - this.lastTouch > this.inviteAt && (!this.sunOut || this.sunDragged) && !this.extras.active) {
       this.inviteAt = this.time - this.lastTouch + INVITE_S
       this.pitchVel += (this.side === 'north' ? -1 : 1) * 1.6
     }
@@ -800,14 +861,20 @@ export class PolesGlobe implements World3D {
     this.inviteAt = INVITE_S
     this.last = { x, y, t: performance.now() }
     this.vYaw = this.vPitch = this.fingerVy = 0
+    this.down = { x, y }
     const g = this.globeOnScreen()
-    if (id === 'sun' || (!id && this.nearSun(x, y))) {
+    if (id === 'lost' && this.extras.grab()) {
+      this.grab = 'lost'
+      // Back to the whole globe, so both poles are in sight while she carries it.
+      this.rest = 0
+      this.spinVel = 0
+    } else if (id === 'sun' || (!id && this.nearSun(x, y))) {
       this.grab = 'sun'
       this.sunDragged = true
       // Back to the whole globe, so she sees both poles while she moves the sun.
       this.rest = 0
       sounds.pickup()
-    } else if (id === 'globe' || id === 'pola' || id === 'pebble' || (!id && Math.hypot(x - g.x, y - g.y) < g.r * 1.15)) {
+    } else if (id === 'globe' || id === 'pola' || id === 'pebble' || (id && POKES.has(id)) || (!id && Math.hypot(x - g.x, y - g.y) < g.r * 1.15)) {
       this.grab = 'globe'
       this.pulled = this.pitch
       this.spinVel = 0
@@ -825,6 +892,10 @@ export class PolesGlobe implements World3D {
     const smoothing = SPIN.flick > 0 ? 1 - Math.exp(-dt / SPIN.flick) : 1
     this.fingerVy += (my / dt - this.fingerVy) * smoothing
     if (this.grab === 'sun') return this.dragSun(x, y)
+    if (this.grab === 'lost') {
+      this.extras.finger = { x, y }
+      return this.extras.drag(this.inFront(x, y), Math.hypot(x - this.down.x, y - this.down.y) > CARRY.deadZone)
+    }
     // The spot under her finger follows it (at grip 1): a move of one globe-radius turns it by one radian.
     // (Rolled upside down for the south: the same finger moves turn it the other way.)
     const k = (Math.cos(this.rolled) * SPIN.grip) / this.globeOnScreen().r
@@ -855,9 +926,24 @@ export class PolesGlobe implements World3D {
     this.declGoal = d
   }
 
+  /** The point under her finger just in front of the globe (where a carried thing goes). */
+  private inFront(x: number, y: number) {
+    const cam = this.rig.camera
+    this.raycaster.setFromCamera(new Vector2((x / this.w) * 2 - 1, -(y / this.h) * 2 + 1), cam)
+    const plane = new Plane().setFromNormalAndCoplanarPoint(cam.getWorldDirection(new Vector3()), tmp.copy(cam.position).normalize().multiplyScalar(1.1))
+    return this.raycaster.ray.intersectPlane(plane, new Vector3()) ?? tmp.set(0, 0, 1.1)
+  }
+
   pointerUp() {
     const grab = this.grab
     this.grab = null
+    if (grab === 'sun') this.extras.begin()
+    if (grab === 'lost') {
+      // Over the top of the globe: the north. Over the bottom: the south. (Upside down when the world is rolled.)
+      const g = this.globeOnScreen()
+      const dy = ((this.last.y - g.y) / g.r) * Math.sign(Math.cos(this.rolled) || 1)
+      this.extras.drop(dy < -CARRY.poleReach ? 'north' : dy > CARRY.poleReach ? 'south' : null)
+    }
     if (grab !== 'globe') return
     // A finger that stopped before letting go doesn't flick.
     if (performance.now() - this.last.t > 90) this.vYaw = this.vPitch = 0
@@ -874,7 +960,8 @@ export class PolesGlobe implements World3D {
     this.lastTouch = this.time
     this.touches++
     const hit = id ?? (this.nearSun(x, y) ? 'sun' : Math.hypot(x - this.globeOnScreen().x, y - this.globeOnScreen().y) < this.globeOnScreen().r ? 'globe' : null)
-    if (hit === 'pola') this.pola.hop(true)
+    if (hit && POKES.has(hit)) this.extras.poke(hit as PokeId)
+    else if (hit === 'pola') this.pola.hop(true)
     else if (hit === 'pebble') this.pebble.hop(true)
     else if (hit === 'sun') {
       this.sunJiggle = 0
@@ -882,7 +969,18 @@ export class PolesGlobe implements World3D {
     } else if (hit === 'globe') {
       this.wobbleT = 0
       sfx.pop()
-    } else sfx.fwip()
+    } else this.skyTap(x, y)
+  }
+
+  /** A tap on the empty sky: snowflakes burst, and on a pole's night the lights flare up. */
+  private skyTap(x: number, y: number) {
+    this.extras.snow(this.inFront(x, y))
+    const night = this.side === 'north' ? this.nightN : this.side === 'south' ? this.nightS : 0
+    if (night > 0.4) {
+      if (this.side === 'north') this.flare.n = 1
+      else this.flare.s = 1
+      ;[0, 0.12, 0.24].forEach((d, i) => tone(660 * 1.25 ** i, 660 * 1.25 ** i, 0.5, 0.045, 'sine', d))
+    }
   }
 
   // ---------------------------------------------------------------- tap targets
@@ -897,6 +995,14 @@ export class PolesGlobe implements World3D {
       else if (id === 'sun' && this.sunOut && this.sunT > 0.3) {
         const s = this.toScreen(this.sunGroup.getWorldPosition(tmp))
         if (s.z < 1) spot = { x: s.x, y: s.y, size: Math.max(min, g.r * 0.62), z: 9000, glow: !this.sunDragged }
+      } else if (POKES.has(id)) {
+        const s = this.extras.spot(id as PokeId, tmp)
+        if (s && s.facing > 0.2) {
+          const p = this.toScreen(tmp)
+          if (id === 'lost') this.extras.carried = { x: p.x, y: p.y }
+          // Above the globe and the friends (the lost one most of all: it's the thing to do).
+          if (p.z < 1) spot = { x: p.x, y: p.y, size: Math.max(min, g.r * s.size), z: id === 'lost' ? 9500 : 6000, glow: id === 'lost' }
+        }
       } else if (id === 'pola' || id === 'pebble') {
         const c = id === 'pola' ? this.pola : this.pebble
         const at = c.center(tmp)
@@ -934,6 +1040,7 @@ export class PolesGlobe implements World3D {
       floesNorth: this.floesN.filter((f) => f.o.visible).length,
       floesSouth: this.floesS.filter((f) => f.o.visible).length,
       touches: this.touches,
+      ...this.extras.qa(),
     }
   }
 
@@ -943,6 +1050,7 @@ export class PolesGlobe implements World3D {
 
   dispose() {
     this.unwatch()
+    this.extras.dispose()
     this.scene.clear()
     this.bag.dispose()
   }

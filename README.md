@@ -8,6 +8,10 @@ Thailand to Agong's house, where she walks around as a unicorn, and to the place
 **Play:** https://neb636.github.io/Kaylee-Gamepack/ · [Jump to a game section](#jump-to-a-game-section)
 (iPad: open in Safari → Share → **Add to Home Screen**. It opens full-screen like a real app.)
 
+**The world map** comes in two views (the two buttons in its top bar; she keeps the one she used last):
+- [The map](https://neb636.github.io/Kaylee-Gamepack/#/world?view=map)
+- [The game shelf](https://neb636.github.io/Kaylee-Gamepack/#/world?view=list) (every game as a picture card, a row per country and per Thailand trip; ❤️ favorites, 🎁 surprise)
+
 **3D character lab** (development tool, every 3D character on a turntable: poses, actions, lines, outfits, lighting): 
 - [Kaylee](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee)
 - [Kaylee in a look from her wardrobe](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee?look=crown,stars,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky) (the Look panel: her things and the paint)
@@ -27,6 +31,7 @@ graph, and a "Copy for agent" note with the numbers to bake in):
 - [Canada's Campfire Night: the flashlight's size and softness, how it follows her finger, finding things, roasting](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/campfire/eyes?feel=1)
 - [Canada's Red Canoe: stroke power, turn and drag](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/glide?feel=1) ([the finger pull](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/canoe/glide?paddle=pull&feel=1))
 - [Canada's Animal Bridge: how mama follows her finger, how the line follows mama, planting the bridge](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/elk?feel=1)
+- [Canada's Whale Watch: the boat's steering and its bounce on the waves, finding the animals](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts?feel=1) ([with the wheel](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts?steer=wheel&feel=1))
 - [Canada's Salmon Leap: the flick's power, the arcs, the aim help, the rock, the log and the bears' boops](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/falls?feel=1)
 
 
@@ -253,6 +258,7 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 
 - [Spin the globe](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe) ([north side](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe?side=north), [south side](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe?side=south))
 - [Drag the sun](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun) ([summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?summer=north), [the north's winter night](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?side=north&summer=south))
+- [The lost penguin: carry him home](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=penguin) ([a lost polar bear cub](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=bear))
 
 **Ice Floe Hop (greybox)**
 
@@ -289,7 +295,13 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [Crack! Pebble's egg](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch) ([already hatched: tuck Pebble back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch?chick=hatched))
 - [The first sunrise](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/sunrise)
 
-**Coming soon**: [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+**Finale: Pole to Pole and the Polar Quiz (greybox)**
+
+- Pole to Pole
+  - [Over the Arctic](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/fly?stamps=all) ([the warm middle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/fly?stamps=all&leg=warm), [the windy south](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/fly?stamps=all&leg=south))
+- [The postcard for Pebble](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/deliver?stamps=all)
+- [The Polar Quiz](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=bear) ([spin to the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=south), [the coldest pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=coldest), [who visits both](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=tern), [summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=summer), [the last question](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=ocean&stars=5))
+- [The Polar Explorer badge](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/badge?stamps=all)
 
 ### Canada
 
@@ -335,6 +347,14 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [The shy grizzlies](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/bears?crossed=elk,sheep) ([the bridge already planted](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/bears?crossed=elk,sheep&green=1))
 - [The camera’s photos](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/bridge/album?crossed=elk,sheep,bears)
 
+**Whale Watch (greybox)**
+
+- [The harbour](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/harbour) ([steering with the wheel instead](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/harbour?steer=wheel))
+- [The otters in the kelp](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/otters)
+- [Follow the spouts](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts) ([the humpback](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts?found=2), [the humpback that jumps](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/spouts?found=3))
+- [The orca family](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/orcas)
+- [Listen under the water](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/listen)
+
 **Salmon Leap (greybox)**
 
 - [Little steps](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/steps)
@@ -345,7 +365,6 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 **Coming soon**
 
 - Quebec City: [Carnival Snowballs](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/soon)
-- British Columbia: [Whale Watch](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/whales/soon)
 - Finale: [Animal Homes + Pond Hockey](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/soon)
 
 ## How new things get made

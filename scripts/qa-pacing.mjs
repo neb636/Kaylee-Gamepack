@@ -96,6 +96,8 @@ const SCENARIOS = [
   // ones sneeze and waddle in by themselves, so it gets slowly through the small huddle. The robot run that drags them in
   // is qa-motion's poles-huddle-drag.
   { name: 'poles emperor huddle', id: 'huddle', hash: '#/world/poles/huddle', reset: true },
+  // The finale: Terry's flight from the top (she steers; the robot just watches him fly).
+  { name: 'poles pole to pole', id: 'party', hash: '#/world/poles/party/fly?stamps=all', reset: true },
   { name: 'canada train map', id: 'canada', hash: '#/world/canada', reset: true },
   { name: 'canada mountain bike', id: 'bike', hash: '#/world/canada/bike', reset: true },
   { name: 'canada sugar snow', id: 'taffy', hash: '#/world/canada/taffy', reset: true },
@@ -109,6 +111,9 @@ const SCENARIOS = [
   // Animal Bridge (greybox, no voices): a tap on the ground walks the family she leads there and a tap pokes things, so
   // the auto-player wanders the herd about; leading them over the bridge is a long drag (qa-motion's canada-bridge-lead).
   { name: 'canada animal bridge', id: 'bridge', hash: '#/world/canada/bridge', reset: true },
+  // Whale Watch (greybox, no voices): a tap on the water drives the boat there, so the auto-player's taps steer it about
+  // and poke the animals; holding the water and steering out to the otters and the spouts is qa-motion's canada-whales-steer.
+  { name: 'canada whale watch', id: 'whales', hash: '#/world/canada/whales', reset: true },
   // Salmon Leap (greybox, no voices): a tap on a salmon makes it hop and a tap pokes things, so the auto-player hops
   // them about and pokes; flicking them up the falls is a quick drag (qa-motion's canada-salmon-flick).
   { name: 'canada salmon leap', id: 'salmon', hash: '#/world/canada/salmon', reset: true },
