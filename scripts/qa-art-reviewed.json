@@ -39,6 +39,158 @@
     "hash": "58b724ddc530",
     "note": "eye highlight"
   },
+  "src/world/places/canada/assets/animal-bald-eagle.webp": {
+    "hash": "4d6d609ae2de",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-barred-owl.webp": {
+    "hash": "0b996a6e46d7",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-beluga.webp": {
+    "hash": "9e88778b6bb8",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-bighorn.webp": {
+    "hash": "e46cc5b5fc41",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-canada-goose.webp": {
+    "hash": "625e151dc690",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-chickadee.webp": {
+    "hash": "f4aebba17b0c",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-deer.webp": {
+    "hash": "7b80734b79f9",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-grey-whale.webp": {
+    "hash": "f41b8a7ca7b8",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-ground-squirrel.webp": {
+    "hash": "3acc93727309",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-harbour-seal.webp": {
+    "hash": "a8a2da2893fb",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-hare.webp": {
+    "hash": "53bab488ee35",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-humpback.webp": {
+    "hash": "d20177d97fee",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-loon.webp": {
+    "hash": "c6b5e85523a1",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-marmot.webp": {
+    "hash": "6ecc27c25d50",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-mountain-goat.webp": {
+    "hash": "df38c3fcd189",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-orca.webp": {
+    "hash": "c35d9008ccbb",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-peeper.webp": {
+    "hash": "bbd82dfabe44",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-polar-bear.webp": {
+    "hash": "a5eb701a9d69",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-puffin.webp": {
+    "hash": "4b449a0b6336",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-raccoon.webp": {
+    "hash": "1fcae96d76bc",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-red-fox.webp": {
+    "hash": "6a41cff5516e",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-snowy-owl.webp": {
+    "hash": "dd393654f329",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-spirit-bear.webp": {
+    "hash": "51f674538a61",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-trout.webp": {
+    "hash": "34e8c90ae92e",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/animal-woodpecker.webp": {
+    "hash": "8f41389bcf8b",
+    "note": "real white in the animal; book and sticker pictures sit on white cards"
+  },
+  "src/world/places/canada/assets/bridge-car-back.webp": {
+    "hash": "928bcb65cc9c",
+    "note": "rear window glare"
+  },
+  "src/world/places/canada/assets/bridge-car-front.webp": {
+    "hash": "f070ae434811",
+    "note": "windshield glare"
+  },
+  "src/world/places/canada/assets/bridge-eagle.webp": {
+    "hash": "e9748caaa2d2",
+    "note": "white head and tail"
+  },
+  "src/world/places/canada/assets/bridge-goat.webp": {
+    "hash": "92b2d4ba7ae5",
+    "note": "white coat"
+  },
+  "src/world/places/canada/assets/bridge-mountains-hd.webp": {
+    "hash": "cc2d21a7d370",
+    "note": "snow caps"
+  },
+  "src/world/places/canada/assets/bridge-town.webp": {
+    "hash": "fe7a8a6a9886",
+    "note": "window trim"
+  },
+  "src/world/places/canada/assets/bridge-truck-front.webp": {
+    "hash": "3ec8f5ef1e75",
+    "note": "headlights"
+  },
+  "src/world/places/canada/assets/campfire-bag.webp": {
+    "hash": "4cd6b9f6d360",
+    "note": "marshmallows are white"
+  },
+  "src/world/places/canada/assets/campfire-beaver.webp": {
+    "hash": "087652bea7f2",
+    "note": "eye whites"
+  },
+  "src/world/places/canada/assets/campfire-fern.webp": {
+    "hash": "e7f45de11f4b",
+    "note": "white flower"
+  },
+  "src/world/places/canada/assets/campfire-owl.webp": {
+    "hash": "981bcee66646",
+    "note": "eye highlights"
+  },
+  "src/world/places/canada/assets/campfire-peeper.webp": {
+    "hash": "2381892c1677",
+    "note": "eye highlights"
+  },
+  "src/world/places/canada/assets/campfire-porcupine.webp": {
+    "hash": "1f4e4bade597",
+    "note": "eye whites"
+  },
   "src/world/places/china/assets/bamboo-bundle.webp": {
     "hash": "e3d7471d707d",
     "note": "cut bamboo ends"
