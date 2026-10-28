@@ -1924,6 +1924,20 @@
                 "`L.huddle`: 23 lines (13 Sparkle, 9 Papa, 4 Pebble). `huddle.ts` keeps only the stages, the starting huddles and the hit areas; the knobs and the packing didn't change. `info.ts`: `READY = true`.",
                 "**Known small things:** in portrait the huddle and Pebble are small on the tall stage (the greybox's scale). The dawn tint washes the far ridges pale. The egg fact can play while she's dragging. Pebble's “Whoa! Papa, help!” transcribes as “wow”: listen. The puppet wasn't compared with a screenshot of the 3D Papa. Not checked on iPhone."
               ]
+            },
+            {
+              "title": "QA: the whole Poles, and the fixes",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "The first full QA of the Poles at all seven screen sizes, then the playtest. No blockers, no console errors, and no stamp waits on winning. The globe, Snow Coats, Penguin Slide and the huddle came out fun; Ice Floe Hop, Iceberg Maker and the finale OK. Fixed here: Sparkle nagging while a finger is playing, cheers cut off by the stamp, an early instruction in the huddle, and the finale's top row on iPhone.",
+              "items": [
+                "`kit/Guide`: a held, moving finger counts as playing and a friend talking counts as talk, so the stuck hint never repeats while she steers and never cuts a friend off. `afterTalk()` waits for the talking to stop: Ice Floe Hop's and the huddle's stamps wait for the cheers.",
+                "The huddle's hatch no longer says “tuck Pebble back” before the gust. Penguin Slide says the instruction before the fact. The badge line drops her name (the trophy's line says it right after).",
+                "The finale: the stars and the 🔊 sit below the top bar on iPhone landscape; the 🏆 button sits under the badge, clear of Sparkle's line.",
+                "`scripts/qa-lib.mjs`: a leftover preview server from another checkout held the QA port, so the first sweep screenshotted another build. `serve()` now checks the page is our own build and moves to a free port.",
+                "**Next from the playtest:** Ice Floe Hop and Iceberg Maker still have the greybox look (the floes, and a cliff that reads as a building): their look comes next, one PR each.",
+                "**Known small things (from the playtest):** many clips run over 3 s; the hub's welcome bubble covers Pebble at the bottom of the globe; the finale flight shows Terry and the fish small; the huddle can leave her waiting a few seconds for the next cold dad; Mama Bear looks like a big Pola; a white bar on Snow Coats' ground; the huddle's dots are tiny; two quiz questions test facts she only heard."
+              ]
             }
           ]
         }
