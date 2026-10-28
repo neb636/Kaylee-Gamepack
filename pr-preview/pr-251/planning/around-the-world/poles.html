@@ -1459,8 +1459,10 @@
             {
               "n": 10,
               "title": "Finale: Pole to Pole + Polar Quiz",
-              "status": "todo",
-              "md": "Its own PR: the tern flight, then the quiz on the hub's globe, then the trophy."
+              "status": "doing",
+              "md": "Its own PR: the tern flight, then the quiz on the hub's globe, then the trophy. **Greybox built** (PR #255): Terry's flight, the postcard, the quiz with 8 questions in the pool, the badge and `onWin`. Voices and the art come with steps 8 and 9.",
+              "date": "2026-10-27",
+              "pr": 255
             }
           ]
         },
@@ -1690,6 +1692,50 @@
                   "items": [
                     "The whale is seen from above (it's on the globe's face), so it reads as a blue blob with a spout until the art.",
                     "There are no animals adrift other than a penguin and a bear cub yet. A walrus or an Arctic fox to sort (the quiz's “who lives up north?”) could come later."
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Finale greybox: Pole to Pole and the Polar Quiz",
+              "date": "2026-10-27",
+              "status": "done",
+              "pr": 255,
+              "summary": "The finale end to end in placeholder shapes. Terry the Arctic tern flies Pola's postcard from the top of the world to the bottom while the globe turns under him, past the pins of the countries she has been to. Her finger steers him, and he gulps the fish he flies over. He lands at Pebble's colony and hands over the postcard; the penguins see Pola's picture and jump back. Then the camera pulls back to the whole globe for the Polar Quiz: six questions from a pool of eight, each answered by doing. Six stars, the Polar Explorer badge, then the trophy.",
+              "items": [
+                "**The flight** (`party/route.ts`): great circles from near the North Pole, through the countries she has visited (north to south, from the passport), down to the colony on Antarctica's coast. With no countries visited, it goes straight down the Atlantic. It takes about 80 s (*shortest flight*); a long way just flies faster.",
+                "**Steering:** her finger anywhere and Terry heads for it, left or right, banking into the turn (*reach*, *steer smoothing*). A tap on him is a barrel roll.",
+                "**Three legs** (the address bar follows: `fly?leg=north|warm|south`):",
+                {
+                  "text": "Each leg adds something:",
+                  "items": [
+                    "**The Arctic:** blue-lilac fish between the floes.",
+                    "**The warm middle:** a peach sky, orange fish and clouds to puff through (a barrel roll and a giggle). The pins pop as he passes, with the country's name.",
+                    "**The windy south:** a lavender sky, two pink fish at a time, and gusts with white streaks that push him sideways (*gusts*)."
+                  ]
+                },
+                "Fish only leap in the sea (the painted map's land is masked out). The 🐟 counter fills, with a rising note for each fish.",
+                "**The postcard** (`deliver`): he glides down in front of Pebble, the card goes up into Pebble's flippers, and the four penguins around her see the polar bear on it and jump back. Then everyone hops and the fanfare plays. A tap on Pebble, the penguins or Terry is a hop. About 7 s, then the quiz.",
+                {
+                  "text": "**The quiz** (`quiz?q=<question>&stars=N`): the globe swings round to north-up; pieces stand on little floes in a row under it. Four kinds of answers:",
+                  "items": [
+                    "**Drag** (`bear`, `penguin`): put Pola (or Pebble) on the globe. Let go over the top or the bottom.",
+                    "**Spin** (`north`, `south`): spin the globe so that pole faces her. A flag pops up there. The wrong pole: the globe wobbles back like a top.",
+                    "**Tap a pole** (`ocean`, `coldest`): the globe tips to show it. Ocean: fish leap round the north (right), or a rock pops up under Antarctica's ice (wrong). Coldest: a thermometer freezes solid with a crack (south, right), or shivers (north).",
+                    "**Pick from the row** (`tern`: the bear, the penguin or Terry, who loops round the globe; `summer`: the sun rises over the north and the south goes dark, pick the snowman or the beach ball)."
+                  ]
+                },
+                "**A miss:** a pink “?” and a silly bit, then the right thing glows (*look for the glow*) and she does it herself. Every question ends in a star. The six stars sit at the top; the address bar keeps `q` and `stars`.",
+                "**The badge** (`badge`): six stars, confetti, then the shell's trophy (`onWin`) after 4.5 s or on 🏆.",
+                "**Feel knobs** (`?feel=1`, *Fly Terry*): flying speed, shortest flight, reach, steer smoothing, catch width, fish every, gusts. The graph shows her finger against Terry, the gust and the fish.",
+                "**Files:** `activities/party/` (`party.ts` the world, `route.ts`, `Finale.tsx`, `sections.ts`; `Party.sections.ts` and `Soon.tsx` are gone). The Earth's parts (the Arctic, Antarctica, Pola, Pebble) are now functions in `globe/globe.ts` (`buildNorth`, `buildSouth`, `makePola`, `makePebble`) that the hub and the finale share. QA: `qa-screens` (each leg, the postcard, a question of each kind, the badge), a `qa-motion` scenario (`poles-party-fly`) and `qa-pacing`.",
+                "**Changed from the plan:** the iceberg question and “who lives up north” aren't in the pool yet (8 questions instead of 9; the iceberg one needs the water from Iceberg Maker). Terry flies over the passport's countries, not the world map's pins. There's no “Wow, Kaylee” line yet (voices are the full-loop gate).",
+                {
+                  "text": "**Known small things:**",
+                  "items": [
+                    "Over a big continent (Africa) there are no fish for a while, only clouds.",
+                    "A wrong drop on the South Pole lands under the globe, where the “?” is hard to see.",
+                    "The badge doesn't pin onto the passport page yet."
                   ]
                 }
               ]
@@ -1942,29 +1988,49 @@
               "n": 1,
               "id": "fly",
               "name": "Pole to Pole",
-              "query": "stamps=all",
-              "status": "todo"
+              "query": "stamps=all"
             },
             {
               "n": 2,
-              "id": "quiz",
-              "name": "Polar Quiz (first question)",
-              "query": "stamps=all",
-              "status": "todo"
+              "id": "fly",
+              "name": "The warm middle",
+              "query": "stamps=all&leg=warm"
             },
             {
               "n": 3,
-              "id": "quiz",
-              "name": "Polar Quiz, one question",
-              "query": "stamps=all&q=south-pole",
-              "status": "todo"
+              "id": "fly",
+              "name": "The windy south",
+              "query": "stamps=all&leg=south"
             },
             {
               "n": 4,
-              "id": "trophy",
+              "id": "deliver",
+              "name": "The postcard for Pebble",
+              "query": "stamps=all"
+            },
+            {
+              "n": 5,
+              "id": "quiz",
+              "name": "Polar Quiz (first question)",
+              "query": "stamps=all&q=bear"
+            },
+            {
+              "n": 6,
+              "id": "quiz",
+              "name": "Polar Quiz: spin to the South Pole",
+              "query": "stamps=all&q=south"
+            },
+            {
+              "n": 7,
+              "id": "quiz",
+              "name": "Polar Quiz: the last question",
+              "query": "stamps=all&q=coldest&stars=5"
+            },
+            {
+              "n": 8,
+              "id": "badge",
               "name": "Badge and trophy",
-              "query": "stamps=all&stars=6",
-              "status": "todo"
+              "query": "stamps=all"
             }
           ]
         }
