@@ -66,7 +66,7 @@ export const WORLD_LINES = {
       'thailand/street': "Agong's house!",
       'thailand/upstairs': 'Your room!',
       'thailand/wardrobe': 'Your wardrobe!',
-      'thailand/map': 'Fly the toy plane!',
+      'thailand/map': 'Where should we fly?',
       'thailand/hall': 'HarborLand!',
       'thailand/vet': 'The vet!',
       'thailand/barber': 'The barber!',

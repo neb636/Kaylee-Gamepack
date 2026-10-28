@@ -67,7 +67,7 @@ export const ISLANDS: [XY, number, number][] = [
   [proj([99.95, 9.75]), 9, 8],
 ]
 
-/** A pin she lands the plane on: where it is, which activity's stamp it wears, its picture. */
+/** A pin she taps to go there: where it is, which activity's stamp it wears, its picture. */
 export type PinId = 'bangkok' | 'krabi' | 'nan'
 export interface Pin {
   id: PinId
@@ -83,10 +83,8 @@ export const PINS: Pin[] = [
   { id: 'bangkok', at: proj([100.52, 13.75]), activity: 'mall-trip', icon: '🏠', label: "Bangkok, Agong's house", color: 'var(--pink)' },
   { id: 'krabi', at: proj([98.9, 8.08]), activity: 'boat-trip', icon: '🚤', label: 'Krabi, the boat and the elephants', color: 'var(--sky)' },
 ]
-export const PIN_IDS = PINS.map((p) => p.id)
-export const pinOf = (id: string) => PINS.find((p) => p.id === id)
 
-/** Things to poke (tap, or fly the plane low over them). */
+/** Things to poke (tap them). */
 export type PokeId = 'elephant' | 'clouds' | 'boat' | 'dolphins' | 'gibbon' | 'hornbill' | 'buffalo' | 'tuktuk' | 'palm'
 export const POKES: { id: PokeId; at: XY; label: string }[] = [
   { id: 'elephant', at: proj([99.1, 17.6]), label: 'The elephant' },

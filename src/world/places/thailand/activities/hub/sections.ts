@@ -1,13 +1,9 @@
-// Thailand's home base as deep-linkable spots: the Thailand map (map/, where she lands: fly the toy plane to Bangkok,
-// Krabi or Nan) and Agong's house in Bangkok: #/world/thailand/hub/<section>?at=<thing>.
+// Thailand's home base as deep-linkable spots: the Thailand map (map/, where she lands: tap Bangkok, Krabi or Nan) and Agong's house in Bangkok: #/world/thailand/hub/<section>?at=<thing>.
 // Loaded at startup by the section index (keep three.js out of this file).
 import { defineSections, HUB } from '../../../../kit/sections'
-import { PIN_IDS } from './map/geo'
 
 const HUB_SECTIONS = defineSections('thailand', HUB, {
   params: {
-    plane: { default: 'bangkok', values: PIN_IDS, doc: 'the map: the pin the toy plane is parked at (bangkok, krabi, nan)' },
-    fly: { default: '', values: ['', ...PIN_IDS], doc: 'the map: the plane takes off and flies there by itself (the short flight), and that place opens (bangkok: the house; krabi: the boat trip at Krabi airport; nan: the Nan map)' },
     stamp: { default: '', values: ['', 'boat-trip', 'nan-trip', 'mall-trip'], doc: "the map: this trip's stamp lands on its pin (the end of a trip: Krabi's for boat-trip, Nan's for nan-trip, Bangkok's for mall-trip)" },
     at: {
       default: '',
@@ -28,7 +24,7 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
     },
   },
   sections: [
-    { id: 'map', name: 'The Thailand map: fly the toy plane, land on a pin', params: ['plane', 'fly', 'stamp'], group: 'The Thailand map', links: [{ label: 'The map, the plane at Bangkok', bare: true }, { label: 'The short flight to Krabi, then Krabi airport', params: { fly: 'krabi' }, also: [{ label: 'to Nan, then the Nan map', params: { fly: 'nan' } }] }, { label: 'Home from a trip: the plane flies back, the stamp lands on Krabi', params: { plane: 'krabi', fly: 'bangkok', stamp: 'boat-trip' } }] },
+    { id: 'map', name: 'The Thailand map: tap a pin to go there', params: ['stamp'], group: 'The Thailand map', links: [{ label: 'The map', bare: true }, { label: 'Home from a trip: the stamp lands on Krabi', params: { stamp: 'boat-trip' } }] },
     { id: 'arrive', name: 'Arrive by tuk-tuk', group: "Agong's house" },
     { id: 'street', name: "In front of Agong's house", params: ['at'], group: "Agong's house" },
     { id: 'downstairs', name: 'Downstairs', params: ['at'], group: "Agong's house" },

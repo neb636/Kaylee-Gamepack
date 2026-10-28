@@ -1,4 +1,4 @@
-// Agong's house in Bangkok (landing the plane on Bangkok on the Thailand map opens it). Kaylee arrives by tuk-tuk, then walks around the street, downstairs and her
+// Agong's house in Bangkok (tapping Bangkok on the Thailand map opens it). Kaylee arrives by tuk-tuk, then walks around the street, downstairs and her
 // room upstairs (deep-linkable spots, sections.ts). The 3D house is HouseView.
 // Sparkle (Guide) says the few things there are to say; the family say hello themselves.
 import { AnimatePresence, motion } from 'motion/react'

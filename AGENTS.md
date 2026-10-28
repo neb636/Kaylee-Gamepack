@@ -212,10 +212,10 @@ what's next; PR bodies end with the next prompt.
 - **The hub is a toy:** tap the floor and Kaylee walks there; tap a thing and it reacts at once, then she uses it; tap
   someone and they hop and say hello. Sacred things (the altar, the spirit house) never wobble: they glow, a bell rings,
   she does a wai.
-- **The Thailand map** (`activities/hub/map/`, 2D, plan `thailand/thailand-map.html`) is where she lands: she flies the
-  family's toy plane to a pin. Bangkok opens the house; a trip somewhere else gets a pin, starts there and ends there
+- **The Thailand map** (`activities/hub/map/`, 2D, plan `thailand/thailand-map.html`) is where she lands: a tap map like
+  Australia's, where tapping a pin opens that place. Bangkok opens the house; a trip somewhere else gets a pin, starts there and ends there
   (the stamp lands on its pin, the trip's photo goes on Agong's wall by itself). Only the first trip of a session packs
-  and rides the window seat (`trip/session.ts`); later ones take a short flight on the map. The mall day, in Bangkok,
+  and rides the window seat (`trip/session.ts`); later ones go straight to their landing spot. The mall day, in Bangkok,
   still starts in the house (Mommy or Daddy asks) and ends there.
 - **The trip kit** (`trip/`): packing, the goodbye, the vehicles, the airport, the window seat, the photo wall. Reuse it
   for a new trip instead of building travel again.

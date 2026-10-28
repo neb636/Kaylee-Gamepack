@@ -19,12 +19,11 @@ async function slideTo(page, until, taps = 0, after = 0) {
 
 /** Screenshots (scripts/qa-screens.mjs): how to get to each screen from a fresh start. */
 export const screens = [
-  // Thailand: the Thailand map (thailand-map.html: where she lands; the plane parked at Bangkok, flown to Krabi, home
-  // with a stamp landing, every stamp in), then Agong's house in 3D (the arrival mid-ride, each spot, a few things in
+  // Thailand: the Thailand map (thailand-map.html: where she lands; home from a trip with a stamp landing, every stamp
+  // in), then Agong's house in 3D (the arrival mid-ride, each spot, a few things in
   // use), and the party card.
   { name: 'thailand-map', hash: '#/world/thailand', reset: true, wait: 1500 },
-  { name: 'thailand-map-krabi', hash: '#/world/thailand/hub/map?plane=krabi', reset: true, wait: 1200 },
-  { name: 'thailand-map-home', hash: '#/world/thailand/hub/map?plane=krabi&fly=bangkok&stamp=boat-trip', stampAll: 'thailand', wait: 5200 },
+  { name: 'thailand-map-home', hash: '#/world/thailand/hub/map?stamp=boat-trip', stampAll: 'thailand', wait: 2200 },
   { name: 'thailand-arrive', hash: '#/world/thailand/hub/arrive', reset: true, wait: 1400 },
   ...['street', 'downstairs', 'downstairs?at=table', 'downstairs?at=desk', 'downstairs?at=altar', 'downstairs?at=photos', 'upstairs', 'upstairs?at=mattress', 'upstairs?at=couch', 'upstairs?at=bathroom-door'].map((to) => ({
     name: `thailand-${to.replace('?at=', '-')}`,
@@ -728,7 +727,7 @@ export const screens = [
 
 /** Auto-played runs (scripts/qa-pacing.mjs): talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
-  { name: 'thailand map (fly the plane)', id: 'thailand', hash: '#/world/thailand', reset: true },
+  { name: 'thailand map (tap a pin)', id: 'thailand', hash: '#/world/thailand', reset: true },
   { name: "thailand agong's house (arrival)", id: 'thailand-house', hash: '#/world/thailand/hub/arrive', reset: true, play: false },
   // The trip there, one run per leg (each from its own section link).
   { name: "thailand: kaylee's wardrobe", id: 'wardrobe', hash: '#/world/thailand/hub/wardrobe?drawer=head', reset: true },
@@ -927,30 +926,6 @@ motion.push(
   thaiBoat('boat-doughnut', 5, 'bay', [['down', 0.45, 0.05, 4800]]),
   thaiBoat('boat-cave-roof', 8, 'cave', [['down', 0, 0.25, 7800]]),
 )
-
-// The Thailand map (2D greybox, thailand-map.html): the toy plane grabbed at Bangkok and swooped up north and round in a
-// curve (it banks, buzzes and puffs a trail), then let go to glide into its lazy circle.
-motion.push({
-  name: 'thailand-plane',
-  seconds: 7,
-  setup: async (page, base) => {
-    await page.goto(`${base}#/world/thailand`)
-    await page.waitForTimeout(1800)
-  },
-  act: async (page) => {
-    const b = await page.getByLabel("Bangkok, Agong's house").boundingBox()
-    if (!b) throw new Error('no Bangkok pin')
-    const [x, y] = [b.x + b.width / 2, b.y + b.height / 2]
-    await page.mouse.move(x, y)
-    await page.mouse.down()
-    for (let i = 1; i <= 30; i++) {
-      const a = (i / 30) * Math.PI * 1.5
-      await page.mouse.move(x + Math.sin(a) * vp.width * 0.25, y - (1 - Math.cos(a)) * vp.height * 0.15)
-      await page.waitForTimeout(60)
-    }
-    await page.mouse.up()
-  },
-})
 
 // Baan Chang's feeding yard (3D greybox): a banana pulled out of Daddy's basket and held up on Mali's side (her trunk
 // snakes after it, curls round it and swings it to her mouth), then a stick of sugarcane held high on the right (the
