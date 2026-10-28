@@ -298,6 +298,31 @@ export const L = {
     song: maple('The humpback is singing!'),
   },
   salmon: {
+    // The story (Maple, at the river).
+    story: [maple('The salmon are swimming home, up the river!'), maple('Can you help them jump the falls?')],
+    // Sparkle: once when each stretch of the river begins, and again when she's stuck.
+    steps: 'Grab a salmon, and flick it up!',
+    falls: 'The big falls! Try the rock, or the log.',
+    bears: 'The bears are fishing! Flick the salmon past them.',
+    eggs: 'Home! Tap each salmon to lay its eggs.',
+    hatch: 'Spring! Tap the eggs.',
+    bonk: 'Bonk! Try a bigger flick.',
+    rain: "Rain! It's a rainforest.",
+    cedar: 'This cedar tree is taller than a house!',
+    seasons: 'Fall... winter... and spring!',
+    // Maple, cheering on the bank (and catching the ones flicked too hard).
+    home: [maple('Bravo!'), maple('Home!'), maple('Youpi!'), maple('Allez, allez!')],
+    lap: [maple('Ooh! A salmon in my lap!'), maple('Hee hee! Too high!')],
+    poke: [maple('Allez, salmon!'), maple('Jump, jump!')],
+    berries: maple('The bears went to eat berries!'),
+    sea: maple('Bye, little salmon! Swim to the sea!'),
+    win: maple('Kaylee, you brought the salmon home!'),
+    // The bears (the same gentle bear voice for both).
+    achoo: by('bear')('Ah... choo!'),
+    spirit: by('bear')("I'm a spirit bear!"),
+    black: by('bear')("Shh, I'm fishing."),
+    giveUp: [by('bear')('Okay, berries instead!'), by('bear')('Berries are easier!')],
+    yum: by('bear')('Mmm, berries!'),
   },
   party: {
   },

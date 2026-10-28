@@ -10,6 +10,7 @@ const SALMON_SECTIONS = defineSections('canada', 'salmon', {
     spirit: { default: 'high', doc: 'where the white spirit bear fishes in the bears’ falls: high (the top ledge) or low (the black bear swaps up)' },
   },
   sections: [
+    { id: 'story', name: 'Maple at the river (story)' },
     { id: 'steps', name: 'Little steps', params: ['home'] },
     { id: 'falls', name: 'The big falls', params: ['home'], links: [{ label: 'The big falls', params: { home: '3' } }] },
     { id: 'bears', name: 'The bears are fishing', params: ['home', 'spirit'], links: [{ label: 'The bears are fishing', params: { home: '7' }, also: [{ label: 'the spirit bear on the low ledge', params: { home: '7', spirit: 'low' } }] }] },
