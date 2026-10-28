@@ -1,61 +1,72 @@
-// Salmon Leap (greybox 8, plan: planning/around-the-world/canada.html): the salmon swimming home up a river in BC's
-// Great Bear Rainforest, seen from the side. One verb, flick the salmon: her finger grabs one in its pool and flicks it
-// (fish.ts), it leaps in an arc, splashes into the pool it comes down in and wiggles. It gets richer three times:
+// Salmon Leap (plan: planning/around-the-world/canada.html): the salmon swimming home up a river in BC's Great Bear
+// Rainforest in late summer, seen from the side like a theater stage. Maple says what's happening (kit/StoryBeat), then
+// one verb, flick the salmon: her finger grabs a sockeye in its pool and flicks it (fish.ts), it leaps in an arc,
+// splashes into the pool it comes down in and wiggles. It gets richer three times:
 //   steps   A little cascade of four low steps, one salmon at a time. Each one up a step does a happy wiggle.
-//   falls   The big falls: three tall ledges, three salmon at once, a rock to bounce off and a springy log that throws
-//           them up the falls (her choice: the rock face, the log, or one big flick).
-//   bears   The same falls with a black bear and the white spirit bear fishing on the ledges. They lunge, but the
-//           salmon bounce off their noses (boop!, up and over), the bears sneeze and plop back in the water, and after a
-//           couple of boops each wades off to the berry bushes instead.
+//   falls   The big falls: three tall ledges, three salmon at once, a mossy boulder that throws them up (a stepping
+//           stone) and a springy log that throws them up the falls (her choice: the rock, the log, or one big flick).
+//   bears   The same falls with a black bear and the white spirit bear fishing on the ledges (Bear.tsx: they swipe at
+//           the water and snap at the salmon flying past). The salmon bounce off their noses (boop!, up and over), the
+//           bears sneeze and plop back in the water, and after a couple of boops each rolls over and wades off to the
+//           salmonberry bushes for a happy munch instead.
 //   eggs    Home: the stream where they were born. She taps each salmon to lay its pink eggs in the gravel, the seasons
 //           turn (fall, snow, spring blossoms), and she taps the eggs to hatch the babies, who swim off to the sea.
-// A flick too hard flies over the whole falls into Maple's lap (she giggles and drops it in the stream); a flick into
-// the rock face bonks and slides back down; nothing is ever lost. Always there: rain (tap the cloud; it's a
-// rainforest), a bald eagle circling (tap: it swoops), a raven on the giant cedar (tap: kraa), the cedar itself (tap:
-// it creaks and drops a cone), a banana slug on a log (tap: it pulls its eyes in), the berry bushes, Maple's tail slap.
-// The flick and the bounces are knobs (fish.ts), the hint here (?feel=1). 2D only: one SVG written every frame, no
-// three.js or Phaser. Placeholder shapes, no voices yet (the full-loop gate): a short line at the bottom says what's on
-// screen, for Dad.
+//           Then Maple waves them off and the stamp comes (onDone).
+// A flick too hard flies over the whole falls into Maple's lap (<Maple>, on the bank: she cheers and drops it in the
+// stream); a flick into the rock face bonks and slides back down; nothing is ever lost. Always there to poke: the rain
+// cloud (it's a rainforest), a bald eagle circling (it swoops), a raven on the giant cedar (kraa), the cedar itself (it
+// creaks and drops a cone), a banana slug on a mossy log (it pulls its eyes in), a black bear cub by the berries (it
+// rolls over), the berry bushes, Maple (tail slap), the bears (hello), the water (a ripple). Each animal is met in
+// Maple's book (meet) the first time she touches it.
+// Layers, back to front: sky, the far misty mountains, the rainforest edge, the giant cedar and the spruces, the mossy
+// bank with ferns, the river (water, bears, rock, falls, the boulder and the log), Maple (HTML over the scene), then
+// the salmon, the eagle and the splashes in a front SVG. The flick and the bounces are knobs (fish.ts), the hint here
+// (?feel=1). 2D only: the SVGs are written every frame, no three.js or Phaser.
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, bigCelebration, burst, useElementSize } from '../../../../../sdk'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent, type RefObject } from 'react'
+import { BigButton, bigCelebration, burst, lineText, say, speakingVoice, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
+import { StoryBeat } from '../../../../kit/StoryBeat'
+import boulderImg from '../../assets/salmon-boulder.webp'
+import bushImg from '../../assets/salmon-bush.webp'
+import cedarImg from '../../assets/salmon-cedar-hd.webp'
+import farImg from '../../assets/salmon-far-hd.webp'
+import fern2Img from '../../assets/salmon-fern2.webp'
+import fernImg from '../../assets/salmon-fern.webp'
+import forestImg from '../../assets/salmon-forest-hd.webp'
+import mossyLogImg from '../../assets/salmon-mossylog.webp'
+import plankImg from '../../assets/salmon-plank.webp'
+import spruceImg from '../../assets/salmon-spruce.webp'
+import { meet } from '../../book/met'
+import { L } from '../../lines'
+import { Maple } from '../../puppets/Maple'
+import type { CanadaActivityProps } from '../props'
+import { Bear, type BearAction, type BearCtl } from './Bear'
 import { BOUNCE, FISH_R, FLICK, aim, launchTo, newFish, stepAir, type Bumper, type Fish } from './fish'
 import { noises } from './noises'
 import SALMON_SECTIONS, { type SalmonSection } from './sections'
-import { TALL, WIDE, bearAt, bearsRiver, lip, poolAt, rng, type Pt, type River, type StageDef } from './stage'
+import { PHONE, TALL, WIDE, bearAt, bearsRiver, lip, poolAt, rng, type Pt, type River, type StageDef } from './stage'
 
 const FILE = 'src/world/places/canada/activities/salmon/SalmonLeap.tsx'
 const HINT = knobs('salmonHint', 'The hint', FILE, {
-  after: { value: 8, min: 3, max: 30, step: 1, label: 'Hint after', unit: 's', note: 'a hand shows a flick up to the next pool after this long without one' },
+  after: { value: 8, min: 3, max: 30, step: 1, label: 'Hint after', unit: 's', note: 'a hand shows a flick up to the next pool (and Sparkle says it again) after this long without one' },
 })
 
-const SAY: Record<SalmonSection, string> = {
-  steps: '🐟 Flick the salmon up the little falls',
-  falls: '🌊 The big falls! Flick them up: off the rock, the log, or one big flick',
-  bears: '🐻 The bears are fishing! Flick the salmon past them',
-  eggs: '🥚 Home! Tap each salmon to lay its eggs',
-}
-const LINES = {
-  bonk: '💫 Bonk! A bigger flick',
-  lap: '🦫 Too high! Right into Maple’s lap',
-  boop: '🐻 Boop! Right on the nose',
-  berries: '🫐 The bears went to eat berries instead',
-  home: '🏡 Home in the stream!',
-  log: '🪵 Boing! The springy log',
-  rain: '🌧️ Rain! It’s a rainforest',
-  spring: '🍂 Fall… ❄️ winter… 🌸 spring!',
-  hatch: '🐣 Tap the eggs: the babies hatch',
-  sea: '🌊 The babies swim off to the sea!',
-}
-const ORDER: SalmonSection[] = ['steps', 'falls', 'bears', 'eggs']
+/** The stretches of the river (the story is before them). */
+type Part = Exclude<SalmonSection, 'story'>
+const T = L.salmon
+const SAY: Record<Part, Line> = { steps: T.steps, falls: T.falls, bears: T.bears, eggs: T.eggs }
+const ORDER: Part[] = ['steps', 'falls', 'bears', 'eggs']
 /** How many are home at the start of each section (`?home=` overrides), and how many get home in it. */
-const START_HOME: Record<SalmonSection, number> = { steps: 0, falls: 3, bears: 7, eggs: 11 }
-const NEED: Record<SalmonSection, number> = { steps: 3, falls: 4, bears: 4, eggs: 0 }
+const START_HOME: Record<Part, number> = { steps: 0, falls: 3, bears: 7, eggs: 11 }
+const NEED: Record<Part, number> = { steps: 3, falls: 4, bears: 4, eggs: 0 }
 /** How many swim in the bottom pool at once. */
-const AT_ONCE: Record<SalmonSection, number> = { steps: 1, falls: 3, bears: 3, eggs: 0 }
-const homeParam = (home: number, section: SalmonSection) => (home === START_HOME[section] ? '' : String(home))
+const AT_ONCE: Record<Part, number> = { steps: 1, falls: 3, bears: 3, eggs: 0 }
+const homeParam = (home: number, section: Part) => (home === START_HOME[section] ? '' : String(home))
+
+// The pictures' shapes (width / height, after the cutout trims them), so each one is placed by its foot.
+const ASPECT = { far: 2.579, forest: 1.517, cedar: 0.718, spruce: 0.486, fern: 1.06, fern2: 1.274, bush: 1.196, mossyLog: 3.18, boulder: 1.61, plank: 6.564 }
 
 const INK = '#4A3B57'
 const BIG = 6000
@@ -66,8 +77,11 @@ const MAX_EGGS = 12
 const FRY_EACH = 3
 const N_DROPS = 40
 const N_RIPPLES = 6
+const N_SPRAY = 28
 const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v)
 const ease = (p: number) => (p <= 0 ? 0 : p >= 1 ? 1 : p * p * (3 - 2 * p))
+// Sockeye on their way home: a bright red body, an olive-green head, a darker red tail and fins.
+const SOCKEYE = { body: '#E8463F', head: '#6FA35A', fin: '#B8323C', belly: '#F2836E' }
 
 /** Writes an SVG attribute only when it changes (most of the scene is still most frames). */
 const written = new WeakMap<Element, Record<string, string>>()
@@ -93,13 +107,21 @@ interface BearRt {
   t0: number
   boops: number
   lunge: number
-  wave: number
   from: Pt
   bush: Pt
+  /** When she next swipes at the water, and when she last snapped at a salmon. */
+  swipeAt: number
+  snapAt: number
+  munchAt: number
   el: SVGGElement
-  pose: SVGGElement
-  head: SVGGElement
-  jaw: Element
+  foam: Element | null
+  ctl: BearCtl
+  h: RefObject<PuppetHandle | null>
+}
+/** What React hands the river for each bear puppet. */
+export interface BearLink {
+  ctl: BearCtl
+  h: RefObject<PuppetHandle | null>
 }
 interface Egg {
   x: number
@@ -111,20 +133,26 @@ interface Egg {
 type Phase = 'play' | 'lay' | 'skip' | 'hatch' | 'done'
 
 interface Info {
-  section: SalmonSection
+  section: Part
   home: number
 }
 interface Events {
   info: (i: Info) => void
-  say: (text: string) => void
-  next: (section: SalmonSection, home: number) => void
+  /** Sparkle's instruction for now (the line at the bottom shows it, and it can be heard again). */
+  prompt: (line: Line) => void
+  next: (section: Part, home: number) => void
   done: () => void
+  maple: (action: 'hop' | 'wave' | 'cheer' | 'wiggle' | 'slap') => void
+  progress: (done: number) => void
 }
+
+/** Lines said once per visit (the first rain, the first bonk...). */
+const saidOnce = new Set<string>()
 
 class SalmonWorld {
   st: StageDef
   river: River
-  section: SalmonSection
+  section: Part
   home: number
   startHome: number
   /** How many have come into the bottom pool in this section. */
@@ -140,16 +168,18 @@ class SalmonWorld {
   fingerSpeed = 0
   lastLaunch = 0
   bears: BearRt[] = []
+  cub: { h: RefObject<PuppetHandle | null>; at: number; munch: number } | null = null
   eggs: Egg[] = []
   phase: Phase
   phaseAt = 0
   laid = new Set<number>()
   vb = { x: 0, y: 0, w: 1600, h: 1000 }
   els: Record<string, Element | null> = {}
-  fishEls: { root: SVGGElement; body: SVGGElement; tail: SVGGElement; glow: Element }[] = []
+  fishEls: { root: SVGGElement; body: SVGGElement; tail: SVGGElement; fin: SVGGElement; glow: Element }[] = []
   eggEls: { g: SVGGElement; fry: SVGGElement[] }[] = []
   drops: { el: SVGLineElement; x: number; y: number; v: number }[] = []
   ripples: { el: SVGEllipseElement; x: number; y: number; t: number; big: boolean }[] = []
+  spray: { el: SVGCircleElement; x: number; y: number; vx: number; vy: number; t: number; life: number }[] = []
   rain = { on: false, t0: -9, next: 40 }
   eagle = { a: 0, swoop: -9 }
   raven = -9
@@ -157,8 +187,12 @@ class SalmonWorld {
   cone = { t0: -9, x: 0, y: 0 }
   slug = { x: 0, dir: 1, tuck: -9 }
   bushes = [-9, -9]
-  maple = { slap: -9, lap: -9 }
+  maple = { lap: -9, poke: 0, home: 0, said: -9 }
   bonk = { t0: -9, x: 0, y: 0 }
+  /** When she was last nudged (the hint line), so it's said once per stuck stretch. */
+  hinted = -1
+  /** When a friend last reacted out loud (reactions are short and never pile up). */
+  reacted = -9
   doneAt = -1
   r: () => number
   /** Set when the scene goes away (a new run, or React trying the effect twice): its timers do nothing then. */
@@ -168,13 +202,16 @@ class SalmonWorld {
   }
 
   constructor(
+    root: HTMLElement,
     private svg: SVGSVGElement,
     stage: StageDef,
-    section: SalmonSection,
+    section: Part,
     home: number,
     spirit: 'high' | 'low',
     seed: number,
     private ev: Events,
+    bearLinks: BearLink[],
+    cubLink: RefObject<PuppetHandle | null>,
   ) {
     this.st = stage
     this.section = section
@@ -183,19 +220,21 @@ class SalmonWorld {
     this.r = rng(seed)
     this.river = section === 'bears' ? bearsRiver(stage, spirit) : stage.rivers[section === 'eggs' ? 'eggs' : section]
     this.phase = section === 'eggs' ? 'lay' : 'play'
-    const q = <T extends Element>(k: string) => svg.querySelector(`[data-k="${k}"]`) as T | null
-    const qa = <T extends Element>(k: string) => [...svg.querySelectorAll(`[data-k="${k}"]`)] as T[]
-    for (const k of ['hint', 'hint-path', 'hint-hand', 'eagle', 'eagle-wings', 'raven', 'raven-head', 'cedar', 'cone', 'slug', 'slug-eyes', 'maple', 'maple-tail', 'bonk', 'rain', 'cloud', 'season', 'snow', 'bloom', 'bush0', 'bush1'])
+    const q = <E extends Element>(k: string) => root.querySelector(`[data-k="${k}"]`) as E | null
+    const qa = <E extends Element>(k: string) => [...root.querySelectorAll(`[data-k="${k}"]`)] as E[]
+    for (const k of ['hint', 'hint-path', 'hint-hand', 'eagle', 'eagle-wings', 'eagle-head', 'raven', 'raven-head', 'raven-wing', 'cedar', 'cone', 'slug', 'slug-eyes', 'lap', 'bonk', 'rain', 'cloud', 'cloud-dark', 'season', 'snow', 'bloom', 'bush0', 'bush1', 'cub'])
       this.els[k] = q(k)
-    for (const root of qa<SVGGElement>('fish'))
-      this.fishEls.push({ root, body: root.querySelector('[data-k="fbody"]')!, tail: root.querySelector('[data-k="ftail"]')!, glow: root.querySelector('[data-k="fglow"]')! })
+    for (const g of qa<SVGGElement>('fish'))
+      this.fishEls.push({ root: g, body: g.querySelector('[data-k="fbody"]')!, tail: g.querySelector('[data-k="ftail"]')!, fin: g.querySelector('[data-k="ffin"]')!, glow: g.querySelector('[data-k="fglow"]')! })
     for (const g of qa<SVGGElement>('egg')) this.eggEls.push({ g, fry: [...g.querySelectorAll<SVGGElement>('[data-k="fry"]')] })
     for (const el of qa<SVGLineElement>('drop')) this.drops.push({ el, x: 0, y: -9999, v: 0 })
     for (const el of qa<SVGEllipseElement>('ripple')) this.ripples.push({ el, x: 0, y: 0, t: 9, big: false })
+    for (const el of qa<SVGCircleElement>('spray')) this.spray.push({ el, x: 0, y: 0, vx: 0, vy: 0, t: 9, life: 1 })
     // The bears on their ledges.
     for (const [i, b] of this.river.bears.entries()) {
       const at = bearAt(this.river, b.lip)
       const el = q<SVGGElement>(`bear-${i}`)!
+      const link = bearLinks[i]
       this.bears.push({
         id: i,
         spirit: b.spirit,
@@ -206,15 +245,18 @@ class SalmonWorld {
         t0: 0,
         boops: 0,
         lunge: 0,
-        wave: -9,
         from: [at.x, at.y],
         bush: stage.berries[i % stage.berries.length],
+        swipeAt: 1.5 + i * 1.7,
+        snapAt: -9,
+        munchAt: 0,
         el,
-        pose: el.querySelector('[data-k="pose"]')!,
-        head: el.querySelector('[data-k="head"]')!,
-        jaw: el.querySelector('[data-k="jaw"]')!,
+        foam: el.querySelector('[data-k="foam"]'),
+        ctl: link.ctl,
+        h: link.h,
       })
     }
+    this.cub = { h: cubLink, at: -9, munch: 4 }
     this.slug.x = stage.slug[0]
     if (section === 'eggs') {
       // The salmon that made it home, swimming in the stream.
@@ -230,7 +272,13 @@ class SalmonWorld {
       // The first salmon are in the bottom pool already (so her finger has one at once).
       for (let i = 0; i < AT_ONCE[section]; i++) this.spawn(false)
     }
-    this.later(() => this.info(), 0)
+    this.later(() => {
+      this.info()
+      this.ev.progress(ORDER.indexOf(section))
+      this.ev.prompt(SAY[section])
+    }, 0)
+    // (A moment later, so a scene rebuilt at once for the screen's shape doesn't say it twice.)
+    this.later(() => void say(SAY[section]), 350)
   }
 
   // -------------------------------------------------------------- state
@@ -239,8 +287,19 @@ class SalmonWorld {
     this.ev.info({ section: this.section, home: this.home })
   }
 
-  private say(text: string) {
-    this.ev.say(text)
+  /** A friend's short reaction: only when nobody is talking and nobody just did (so they never pile up). */
+  private react(line: Line, gap = 1.6) {
+    if (speakingVoice() || this.now - this.reacted < gap) return
+    this.reacted = this.now
+    void say(line, { interrupt: false })
+  }
+
+  /** Sparkle's line, said once per visit. */
+  private once(key: string, line: Line) {
+    if (saidOnce.has(key)) return
+    saidOnce.add(key)
+    this.reacted = this.now
+    void say(line)
   }
 
   setVb(vb: { x: number; y: number; w: number; h: number }) {
@@ -285,17 +344,20 @@ class SalmonWorld {
     if (this.finger) return
     const [x, y] = this.toStage(e)
     this.lastTouch = this.now
+    this.hinted = -1
     const f = { id: e.pointerId, fish: null as Fish | null, x, y, sx: e.clientX, sy: e.clientY, moved: 0, trail: [[this.now, x, y]] as [number, number, number][] }
     this.finger = f
     // A salmon first (the eggs' stream: a tap lays eggs; the river: grab it to flick).
     const hit = this.nearestFish(x, y)
     if (hit) {
+      meet('salmon')
       if (this.phase === 'lay') return this.lay(hit)
       if (this.phase === 'play') {
         f.fish = hit
         hit.mode = 'held'
         hit.t = 0
         noises.splash(false)
+        this.splash(hit.x, this.river.pools[hit.pool].y, 4, 260)
         return
       }
     }
@@ -308,6 +370,7 @@ class SalmonWorld {
     const pi = this.poolUnder(x, y)
     if (pi >= 0) {
       this.ripple(x, this.river.pools[pi].y, false)
+      this.splash(x, this.river.pools[pi].y, 5, 300)
       noises.splash(false)
     }
   }
@@ -401,6 +464,7 @@ class SalmonWorld {
     this.lastLaunch = Math.hypot(vx, vy)
     noises.leap(clamp(this.lastLaunch / FLICK.max, 0, 1))
     this.ripple(s.x, this.river.pools[s.pool].y, false)
+    this.splash(s.x, this.river.pools[s.pool].y, 7, 380)
   }
 
   // -------------------------------------------------------------- pokes
@@ -409,38 +473,59 @@ class SalmonWorld {
     const st = this.st
     const near = (p: Pt, r: number) => Math.hypot(p[0] - x, p[1] - y) < r
     for (const b of this.bears) {
-      if (Math.hypot(b.x - 40 - x, b.y - 80 - y) < 100) {
-        if (b.state === 'fish' || b.state === 'berries') {
-          b.wave = this.now
+      if (Math.hypot(b.x - 30 - x, b.y - 110 - y) < 110) {
+        meet(b.spirit ? 'spirit-bear' : 'black-bear')
+        if (b.state === 'fish') {
+          void b.h.current?.play('hello')
           noises.grumble()
+          this.react(b.spirit ? T.spirit : T.black)
+        } else if (b.state === 'berries') {
+          void b.h.current?.play('munch')
+          b.munchAt = this.now + 2.5
+          noises.grumble()
+          this.react(T.yum)
         }
         return true
       }
     }
-    if (near([st.maple[0], st.maple[1] - 50], 90)) {
-      this.maple.slap = this.now
-      noises.slap()
+    if (near([st.maple[0], st.maple[1] - 80], 100)) {
+      const n = this.maple.poke++
+      this.ev.maple(n % 2 ? 'wiggle' : 'slap')
+      if (n % 2 === 0) this.later(() => noises.slap(), 420)
+      this.react(T.poke[n % T.poke.length])
+      return true
+    }
+    if (this.cub && near([st.cub[0] - 10, st.cub[1] - 40], 75)) {
+      meet('black-bear')
+      if (this.now - this.cub.at > 1.1) {
+        this.cub.at = this.now
+        void this.cub.h.current?.play('roll')
+        noises.squeak()
+      }
       return true
     }
     for (const [i, p] of st.berries.entries())
-      if (near([p[0], p[1] - 30], 70)) {
+      if (near([p[0], p[1] - 50], 80)) {
         this.bushes[i] = this.now
         noises.jiggle()
         return true
       }
-    if (near(this.eaglePos(), 90)) {
+    if (near(this.eaglePos(), 100)) {
+      meet('bald-eagle')
       if (this.now - this.eagle.swoop > 2.2) this.eagle.swoop = this.now
       noises.screech()
       return true
     }
-    if (near(st.raven, 70)) {
+    if (near([st.raven[0], st.raven[1] - 20], 75)) {
+      meet('raven')
       this.raven = this.now
       noises.kraa()
       return true
     }
-    if (near([this.slug.x, st.slug[1] - 14], 70)) {
+    if (near([this.slug.x, st.slug[1] - 30], 80)) {
+      meet('banana-slug')
       this.slug.tuck = this.now
-      noises.jiggle()
+      noises.squish()
       return true
     }
     if (near(st.cloud, 130)) {
@@ -448,9 +533,10 @@ class SalmonWorld {
       return true
     }
     const [cx, ch] = st.cedar
-    if (Math.abs(x - cx) < 75 && y < st.bank && y > st.bank - ch) {
+    if (Math.abs(x - cx) < 90 && y < st.bank && y > st.bank - ch - 2000) {
       this.cedar = this.now
       noises.creak()
+      this.once('cedar', T.cedar)
       if (this.now - this.cone.t0 > 1.4) this.cone = { t0: this.now, x: cx + 60 + this.r() * 60, y: Math.max(this.vb.y + 40, y - 40) }
       return true
     }
@@ -463,7 +549,7 @@ class SalmonWorld {
     this.rain.next = this.now + (this.rain.on ? 14 : 45)
     if (this.rain.on) {
       noises.rain()
-      this.say(LINES.rain)
+      this.once('rain', T.rain)
     }
   }
 
@@ -481,6 +567,21 @@ class SalmonWorld {
     r.y = y
     r.t = 0
     r.big = big
+  }
+
+  /** A spray of water drops thrown up from the surface at (x, y). */
+  private splash(x: number, y: number, n: number, speed: number) {
+    for (let i = 0; i < n; i++) {
+      const d = this.spray.reduce((a, b) => (b.t / b.life > a.t / a.life ? b : a))
+      const a = -Math.PI / 2 + (this.r() - 0.5) * 1.8
+      const v = speed * (0.6 + this.r() * 0.6)
+      d.x = x + (this.r() - 0.5) * 30
+      d.y = y
+      d.vx = Math.cos(a) * v
+      d.vy = Math.sin(a) * v
+      d.t = 0
+      d.life = 0.45 + this.r() * 0.35
+    }
   }
 
   // -------------------------------------------------------------- the eggs
@@ -501,7 +602,7 @@ class SalmonWorld {
     if (this.phase !== 'lay') return
     this.phase = 'skip'
     this.phaseAt = this.now
-    this.say(LINES.spring)
+    void say(T.seasons)
   }
 
   private hatch(g: Egg) {
@@ -513,11 +614,21 @@ class SalmonWorld {
     if (this.eggs.every((e) => e.hatched >= 0)) {
       this.phase = 'done'
       this.doneAt = this.now
+      this.ev.progress(ORDER.length)
+      // The babies swim off to the sea, Maple waves them goodbye, and the stamp.
       this.later(() => {
-        bigCelebration()
-        noises.home()
-        this.say(LINES.sea)
-        this.ev.done()
+        void (async () => {
+          bigCelebration()
+          noises.home()
+          this.ev.maple('wave')
+          await say(T.sea)
+          if (this.dead) return
+          this.ev.maple('cheer')
+          await say(T.win)
+          if (this.dead) return
+          await wait(600)
+          if (!this.dead) this.ev.done()
+        })()
       }, 900)
     }
   }
@@ -543,7 +654,7 @@ class SalmonWorld {
       if (waiting < AT_ONCE[this.section] && this.spawned < NEED[this.section] && this.fish.every((f) => f.mode !== 'arrive')) this.spawn(true)
     }
     const bumpers: Bumper[] = []
-    for (const b of this.bears) if (b.state === 'fish') bumpers.push({ id: b.id, ...this.nose(b), r: 44 })
+    for (const b of this.bears) if (b.state === 'fish') bumpers.push({ id: b.id, ...this.nose(b), r: 52 })
     const x0 = this.vb.x
     for (const f of [...this.fish]) {
       f.t += dt
@@ -565,13 +676,13 @@ class SalmonWorld {
           bonk: (s) => {
             noises.bonk()
             this.bonk = { t0: now, x: s.x + FISH_R, y: s.y }
-            this.say(LINES.bonk)
+            this.once('bonk', T.bonk)
           },
-          rock: () => noises.knock(),
-          log: () => {
-            noises.boing()
-            this.say(LINES.log)
+          rock: (s) => {
+            noises.knock()
+            this.splash(s.x, s.y, 3, 200)
           },
+          log: () => noises.boing(),
           boop: (_s, id) => this.booped(this.bears[id]),
           land: (s, i) => this.land(s, i),
           lap: (s) => {
@@ -579,14 +690,15 @@ class SalmonWorld {
             s.t = 0
             this.maple.lap = now
             noises.giggle()
-            this.say(LINES.lap)
+            this.ev.maple('cheer')
+            this.react(T.lap[(this.maple.home++ + 1) % T.lap.length], 0.8)
           },
         })
         // Never stuck in the air (bouncing between a rock and a lip): after a while it drops into the pool under it.
         if (f.mode === 'air' && f.t > 4) this.land(f, poolAt(r, f.x))
       } else if (f.mode === 'lap') {
-        f.x = this.st.maple[0] - 24
-        f.y = this.st.maple[1] - 44
+        f.x = this.st.maple[0] - 8
+        f.y = this.st.maple[1] - 66
         f.wig += dt * 20
         // Maple drops it in the stream.
         if (f.t > 1.3) {
@@ -623,13 +735,25 @@ class SalmonWorld {
     if (this.phase === 'play' && this.home - this.startHome >= NEED[this.section] && this.doneAt < 0) {
       this.doneAt = now
       const next = ORDER[ORDER.indexOf(this.section) + 1]
+      this.ev.maple('cheer')
       this.later(() => this.ev.next(next, this.home), 2200)
+    }
+    // Stuck for a while: Sparkle says it again, once (the hand shows it too).
+    const idle = now - Math.max(this.lastTouch, this.lastFlick, this.phase === 'hatch' ? this.phaseAt : 0)
+    if (!this.finger && idle > HINT.after && this.hinted < 0 && (this.phase === 'play' || this.phase === 'lay' || this.phase === 'hatch')) {
+      this.hinted = now
+      void say(this.phase === 'hatch' ? T.hatch : SAY[this.section])
     }
     // Rain comes and goes by itself too (it's a rainforest).
     if (now > this.rain.next) this.toggleRain()
     this.eagle.a += dt * 0.35
     this.slug.x += dt * 6 * this.slug.dir * (now - this.slug.tuck < 1.6 ? 0 : 1)
-    if (Math.abs(this.slug.x - this.st.slug[0]) > 50) this.slug.dir = this.slug.x > this.st.slug[0] ? -1 : 1
+    if (Math.abs(this.slug.x - this.st.slug[0]) > 40) this.slug.dir = this.slug.x > this.st.slug[0] ? -1 : 1
+    // The cub nibbles a berry now and then.
+    if (this.cub && now > this.cub.munch) {
+      this.cub.munch = now + 5 + this.r() * 4
+      if (now - this.cub.at > 1.2) void this.cub.h.current?.play('munch')
+    }
     this.draw(dt)
   }
 
@@ -646,6 +770,7 @@ class SalmonWorld {
     const [lo, hi] = this.bounds(i)
     f.goal = clamp(f.x + (f.dir > 0 ? 60 : -60), lo, hi)
     this.ripple(f.x, p.y, fell > 900)
+    this.splash(f.x, p.y, fell > 900 ? 10 : 6, fell > 900 ? 520 : 360)
     noises.splash(fell > 900)
     if (i === top) {
       f.mode = 'home'
@@ -657,7 +782,8 @@ class SalmonWorld {
       noises.home()
       const pt = this.frac(f.x, p.y)
       if (pt) burst(pt[0], pt[1])
-      this.say(LINES.home)
+      this.ev.maple(this.r() < 0.5 ? 'cheer' : 'hop')
+      this.react(T.home[this.maple.home++ % T.home.length], 2.5)
       this.info()
       return
     }
@@ -673,7 +799,11 @@ class SalmonWorld {
 
   /** A bear's head (what a salmon boops), leaning out when she lunges. */
   private nose(b: BearRt) {
-    return { x: b.x - 64 - b.lunge * 26, y: b.y - 96 - b.lunge * 10 }
+    return { x: b.x - 44 - b.lunge * 26, y: b.y - 128 - b.lunge * 8 }
+  }
+
+  private play(b: BearRt, a: BearAction) {
+    void b.h.current?.play(a)
   }
 
   private booped(b: BearRt) {
@@ -681,8 +811,10 @@ class SalmonWorld {
     b.boops++
     b.state = 'sneeze'
     b.t0 = this.now
+    meet(b.spirit ? 'spirit-bear' : 'black-bear')
+    this.play(b, 'sneeze')
     noises.boop()
-    this.say(LINES.boop)
+    this.later(() => this.react(T.achoo, 0.6), 250)
   }
 
   private tickBears(dt: number) {
@@ -690,36 +822,68 @@ class SalmonWorld {
     for (const b of this.bears) {
       const t = now - b.t0
       if (b.state === 'fish') {
-        // Lunge at a salmon flying near.
+        // Lunge at a salmon flying near (and snap at it), and swipe at the water now and then.
         const n = this.nose(b)
         const near = this.fish.some((f) => f.mode === 'air' && Math.hypot(f.x - n.x, f.y - n.y) < 260)
         b.lunge += ((near ? 1 : 0) - b.lunge) * (1 - Math.exp(-dt * (near ? 10 : 4)))
+        if (near && now - b.snapAt > 1.2) {
+          b.snapAt = now
+          this.play(b, 'snap')
+        }
+        if (!near && now > b.swipeAt) {
+          b.swipeAt = now + 3 + this.r() * 3
+          this.play(b, 'swipe')
+          this.later(() => {
+            if (b.state !== 'fish') return
+            const py = this.river.pools[poolAt(this.river, b.x)].y
+            this.ripple(b.x - 70, py, false)
+            this.splash(b.x - 70, py, 6, 340)
+            noises.splash(false)
+          }, 470)
+        }
       } else b.lunge += (0 - b.lunge) * (1 - Math.exp(-dt * 6))
-      if (b.state === 'sneeze' && t > 0.9) {
+      b.ctl.lunge = b.lunge
+      if (b.state === 'sneeze' && t > 1) {
         b.state = 'plop'
         b.t0 = now
-        noises.plop()
-        this.ripple(b.x, b.home[1] - 30, true)
+        this.play(b, 'plop')
+        this.later(() => {
+          noises.plop()
+          this.ripple(b.x, b.home[1] - 30, true)
+          this.splash(b.x, b.home[1] - 30, 10, 480)
+        }, 260)
       } else if (b.state === 'plop' && t > 1.1) {
         b.t0 = now
         if (b.boops >= BOUNCE.boops) {
           b.state = 'roll'
+          this.play(b, 'roll')
           noises.grumble()
+          this.react(T.giveUp[b.id % T.giveUp.length], 0.5)
         } else b.state = 'fish'
       } else if (b.state === 'roll' && t > 1) {
         b.state = 'wade'
         b.t0 = now
         b.from = [b.x, b.y]
+        b.ctl.walk = true
       } else if (b.state === 'wade') {
         const p = ease(t / 2.8)
-        b.x = b.from[0] + (b.bush[0] - 60 - b.from[0]) * p
-        b.y = b.from[1] + (b.bush[1] + 6 - b.from[1]) * p - Math.abs(Math.sin(t * 7)) * 8
+        b.x = b.from[0] + (b.bush[0] - 70 - b.from[0]) * p
+        b.y = b.from[1] + (b.bush[1] + 4 - b.from[1]) * p
         if (t > 2.8) {
           b.state = 'berries'
           b.t0 = now
+          b.ctl.walk = false
+          b.munchAt = now + 0.3
           noises.grumble()
-          if (this.bears.every((o) => o.state === 'berries')) this.say(LINES.berries)
+          if (this.bears.every((o) => o.state === 'berries')) {
+            this.ev.maple('cheer')
+            this.later(() => this.react(T.berries, 0.5), 900)
+          }
         }
+      } else if (b.state === 'berries' && now > b.munchAt) {
+        b.munchAt = now + 2.4 + this.r() * 1.5
+        this.play(b, 'munch')
+        this.bushes[b.id % this.bushes.length] = now
       }
     }
   }
@@ -732,7 +896,8 @@ class SalmonWorld {
       if (t > 4.6) {
         this.phase = 'hatch'
         this.phaseAt = this.now
-        this.say(LINES.hatch)
+        this.ev.prompt(T.hatch)
+        void say(T.hatch)
       }
     }
     for (const g of this.eggs)
@@ -775,37 +940,22 @@ class SalmonWorld {
       }
       const fade = this.phase === 'skip' ? 1 - clamp((now - this.phaseAt - 1.2) / 1.6, 0, 1) : this.phase === 'hatch' || this.phase === 'done' ? 0 : 1
       const inWater = f.mode !== 'air' && f.mode !== 'lap' && !(f.mode === 'held' && f.y < r.pools[f.pool].y)
+      // Squash and stretch: long in the air, a squash just after it lands, a wriggle in her hand.
+      const sq = f.mode === 'air' ? 1 + clamp(Math.hypot(f.vx, f.vy) / 4000, 0, 0.18) : f.mode === 'swim' && f.t < 0.3 ? 1 - 0.18 * Math.sin((f.t / 0.3) * Math.PI) : 1
       put(el.root, 'transform', `translate(${f.x.toFixed(1)} ${(f.y + dip).toFixed(1)})`)
-      put(el.root, 'opacity', (fade * (inWater ? 0.78 : 1)).toFixed(2))
-      put(el.body, 'transform', `scale(${flip} 1) rotate(${(ang * flip).toFixed(1)})`)
-      put(el.tail, 'transform', `rotate(${(Math.sin(f.wig) * (f.mode === 'air' || f.mode === 'held' ? 30 : 16)).toFixed(1)} -30 0)`)
+      put(el.root, 'opacity', (fade * (inWater ? 0.82 : 1)).toFixed(2))
+      put(el.body, 'transform', `scale(${flip} 1) rotate(${(ang * flip).toFixed(1)}) scale(${sq.toFixed(3)} ${(1 / sq).toFixed(3)})`)
+      const w = Math.sin(f.wig) * (f.mode === 'air' || f.mode === 'held' || f.mode === 'lap' ? 32 : 16)
+      put(el.tail, 'transform', `rotate(${w.toFixed(1)} -28 0)`)
+      put(el.fin, 'transform', `rotate(${(Math.sin(f.wig + 1.2) * 20).toFixed(1)} 4 6)`)
       put(el.glow, 'opacity', f === glowFish ? (0.45 + 0.35 * Math.sin(now * 6)).toFixed(2) : '0')
     }
-    // The bears.
+    // The bears: where they are (the puppets do the rest).
     for (const b of this.bears) {
-      const t = now - b.t0
-      let rot = 0
-      let dy = 0
-      let headRot = -b.lunge * 18
-      let jaw = 0.2 + b.lunge * 0.8
-      if (b.state === 'sneeze') {
-        headRot = t < 0.45 ? -10 * Math.sin((t / 0.45) * Math.PI) : 22 * Math.sin(((t - 0.45) / 0.45) * Math.PI)
-        jaw = t > 0.45 ? 1 : 0.4
-      } else if (b.state === 'plop') {
-        dy = 36 * Math.sin(clamp(t / 0.3, 0, 1) * Math.PI * 0.5) * (1 - clamp((t - 0.7) / 0.4, 0, 1))
-        rot = 8 * Math.sin(t * 6) * (1 - t / 1.1)
-      } else if (b.state === 'roll') rot = -360 * ease(t)
-      else if (b.state === 'berries') {
-        headRot = 10 + Math.sin(now * 5) * 8
-        jaw = 0.4 + 0.4 * Math.abs(Math.sin(now * 5))
-      } else if (b.state === 'fish') dy = Math.sin(now * 1.6 + b.id) * 2
-      const wave = now - b.wave
-      if (wave < 0.8) headRot += Math.sin(wave * 16) * 12
-      const scale = b.state === 'wade' || b.state === 'berries' ? 1 - 0.2 * clamp((b.home[1] - b.y) / Math.max(1, b.home[1] - b.bush[1]), 0, 1) : 1
-      put(b.el, 'transform', `translate(${b.x.toFixed(1)} ${(b.y + dy).toFixed(1)}) scale(${scale.toFixed(3)})`)
-      put(b.pose, 'transform', `rotate(${rot.toFixed(1)} 0 -60)`)
-      put(b.head, 'transform', `rotate(${headRot.toFixed(1)} -30 -78) translate(${(-b.lunge * 20).toFixed(1)} 0)`)
-      put(b.jaw, 'transform', `scale(1 ${jaw.toFixed(2)})`)
+      const scale = b.state === 'wade' || b.state === 'berries' ? 1 - 0.25 * clamp((b.home[1] - b.y) / Math.max(1, b.home[1] - b.bush[1]), 0, 1) : 1
+      const face = b.state === 'wade' && b.bush[0] > b.from[0] ? -1 : 1
+      put(b.el, 'transform', `translate(${b.x.toFixed(1)} ${b.y.toFixed(1)}) scale(${(scale * face).toFixed(3)} ${scale.toFixed(3)})`)
+      put(b.foam, 'opacity', b.state === 'berries' || (b.state === 'wade' && now - b.t0 > 1.2) ? '0' : '0.9')
     }
     // Ripples and splashes.
     for (const rp of this.ripples) {
@@ -818,13 +968,27 @@ class SalmonWorld {
       put(rp.el, 'ry', (4 + p * 12 * s).toFixed(1))
       put(rp.el, 'opacity', p >= 1 ? '0' : (0.9 * (1 - p)).toFixed(2))
     }
+    for (const d of this.spray) {
+      if (d.t > d.life) {
+        put(d.el, 'opacity', '0')
+        continue
+      }
+      d.t += dt
+      d.vy += 1800 * dt
+      d.x += d.vx * dt
+      d.y += d.vy * dt
+      put(d.el, 'cx', d.x.toFixed(0))
+      put(d.el, 'cy', d.y.toFixed(0))
+      put(d.el, 'opacity', d.t > d.life ? '0' : (1 - d.t / d.life).toFixed(2))
+    }
     // The bonk's stars.
     const bk = now - this.bonk.t0
-    put(this.els.bonk, 'transform', `translate(${this.bonk.x.toFixed(0)} ${(this.bonk.y - 30 - bk * 30).toFixed(0)})`)
+    put(this.els.bonk, 'transform', `translate(${this.bonk.x.toFixed(0)} ${(this.bonk.y - 30 - bk * 30).toFixed(0)}) rotate(${(bk * 200).toFixed(0)})`)
     put(this.els.bonk, 'opacity', bk < 0.8 ? (1 - bk / 0.8).toFixed(2) : '0')
     // The rain.
     const rainOn = this.rain.on ? clamp((now - this.rain.t0) / 1.5, 0, 1) : 1 - clamp((now - this.rain.t0) / 1.5, 0, 1)
     put(this.els.rain, 'opacity', rainOn.toFixed(2))
+    put(this.els['cloud-dark'], 'opacity', (rainOn * 0.55).toFixed(2))
     put(this.els.cloud, 'transform', `translate(${(this.st.cloud[0] + Math.sin(now * 0.2) * 30).toFixed(0)} ${this.st.cloud[1]}) scale(${(1 + rainOn * 0.15).toFixed(3)})`)
     if (rainOn > 0)
       for (const d of this.drops) {
@@ -839,14 +1003,19 @@ class SalmonWorld {
         put(d.el, 'x2', (d.x - 6).toFixed(0))
         put(d.el, 'y2', (d.y + 28).toFixed(0))
       }
-    // The eagle.
+    // The eagle: wings beat faster on the swoop, and it tilts into the turn.
     const [ex, ey] = this.eaglePos()
-    const flap = Math.sin(now * (now - this.eagle.swoop < 2 ? 10 : 3))
-    put(this.els.eagle, 'transform', `translate(${ex.toFixed(0)} ${ey.toFixed(0)}) scale(${-Math.sin(this.eagle.a) >= 0 ? 1 : -1} 1)`)
-    put(this.els['eagle-wings'], 'transform', `scale(1 ${(0.4 + 0.6 * Math.abs(flap)).toFixed(2)})`)
-    // The raven, the cedar, the cone, the slug, the bushes, Maple.
+    const sw = now - this.eagle.swoop
+    const flap = Math.sin(now * (sw < 2 ? 11 : 3.2))
+    const dirX = -Math.sin(this.eagle.a) >= 0 ? 1 : -1
+    put(this.els.eagle, 'transform', `translate(${ex.toFixed(0)} ${ey.toFixed(0)}) scale(${dirX} 1) rotate(${(Math.cos(this.eagle.a) * 6 + (sw < 2 ? Math.sin(sw * Math.PI) * 18 : 0)).toFixed(1)})`)
+    put(this.els['eagle-wings'], 'transform', `scale(1 ${(0.25 + 0.75 * flap).toFixed(2)})`)
+    put(this.els['eagle-head'], 'transform', `rotate(${sw < 1 ? (Math.sin(sw * 20) * 12).toFixed(1) : '0'} 20 -4)`)
+    // The raven, the cedar, the cone, the slug, the bushes, Maple's lap.
     const rv = now - this.raven
-    put(this.els['raven-head'], 'transform', `rotate(${rv < 0.7 ? (Math.sin(rv * 18) * 20).toFixed(1) : '0'} 0 -16)`)
+    put(this.els['raven-head'], 'transform', `rotate(${rv < 0.9 ? (Math.sin(rv * 18) * 22).toFixed(1) : (Math.sin(now * 0.7) * 4).toFixed(1)} -14 -26)`)
+    put(this.els['raven-wing'], 'transform', `rotate(${rv < 0.9 ? (-Math.abs(Math.sin(rv * 14)) * 40).toFixed(1) : '0'} 6 -18)`)
+    put(this.els.raven, 'transform', `translate(${this.st.raven[0]} ${(this.st.raven[1] - (rv < 0.5 ? Math.sin((rv / 0.5) * Math.PI) * 14 : 0)).toFixed(1)})`)
     const cd = now - this.cedar
     put(this.els.cedar, 'transform', `rotate(${cd < 1 ? (Math.sin(cd * 14) * 1.2 * (1 - cd)).toFixed(2) : '0'} ${this.st.cedar[0]} ${this.st.bank})`)
     const ct = now - this.cone.t0
@@ -854,16 +1023,13 @@ class SalmonWorld {
     put(this.els.cone, 'transform', `translate(${this.cone.x.toFixed(0)} ${Math.min(cy, this.st.bank + 30).toFixed(0)}) rotate(${(ct * 300).toFixed(0)})`)
     put(this.els.cone, 'opacity', ct < 2.2 ? '1' : '0')
     const tuck = now - this.slug.tuck
-    put(this.els.slug, 'transform', `translate(${this.slug.x.toFixed(1)} ${this.st.slug[1]}) scale(${this.slug.dir} 1)`)
+    const crawl = Math.sin(now * 2.2) * 0.04
+    put(this.els.slug, 'transform', `translate(${this.slug.x.toFixed(1)} ${this.st.slug[1]}) scale(${(this.slug.dir * (1 + crawl)).toFixed(3)} ${(1 - crawl).toFixed(3)})`)
     put(this.els['slug-eyes'], 'transform', `scale(1 ${tuck < 1.6 ? (0.15 + 0.85 * clamp((tuck - 1.1) / 0.5, 0, 1)).toFixed(2) : '1'})`)
     for (const i of [0, 1]) {
       const bt = now - this.bushes[i]
       put(this.els[`bush${i}`], 'transform', `rotate(${bt < 0.6 ? (Math.sin(bt * 30) * 4).toFixed(1) : '0'} ${this.st.berries[i][0]} ${this.st.berries[i][1]})`)
     }
-    const sl = now - this.maple.slap
-    const lp = now - this.maple.lap
-    put(this.els['maple-tail'], 'transform', `rotate(${sl < 0.5 ? (-40 * Math.sin((sl / 0.5) * Math.PI)).toFixed(1) : '0'} 18 -14)`)
-    put(this.els.maple, 'transform', `translate(${this.st.maple[0]} ${this.st.maple[1]}) rotate(${lp < 1.3 ? (Math.sin(lp * 16) * 5).toFixed(1) : '0'} 0 -40)`)
     // The payoff: the eggs, the babies and the seasons.
     for (let i = 0; i < this.eggEls.length; i++) {
       const el = this.eggEls[i]
@@ -968,10 +1134,15 @@ class SalmonWorld {
       fish: this.fish.map((f) => ({ pool: f.pool, mode: f.mode, ...scr(f.x, f.y) })),
       waiting: waiting ? { pool: waiting.pool, ...scr(waiting.x, waiting.y) } : null,
       pools: r.pools.map((p, i) => scr(i === r.pools.length - 1 ? lip(r, i - 1).x + 120 : (Math.max(i ? lip(r, i - 1).x : this.vb.x + 80, this.vb.x + 80) + lip(r, i).x) / 2, p.y)),
-      bears: this.bears.map((b) => ({ spirit: b.spirit, state: b.state, boops: b.boops, ...scr(b.x - 50, b.y - 90) })),
+      bears: this.bears.map((b) => ({ spirit: b.spirit, state: b.state, boops: b.boops, ...scr(b.x - 30, b.y - 110) })),
       eggs: this.eggs.map((g) => ({ hatched: g.hatched >= 0, ...scr(g.x, g.y) })),
-      maple: scr(this.st.maple[0], this.st.maple[1] - 50),
+      maple: scr(this.st.maple[0], this.st.maple[1] - 80),
       cloud: scr(this.st.cloud[0], this.st.cloud[1]),
+      eagle: scr(...this.eaglePos()),
+      raven: scr(this.st.raven[0], this.st.raven[1] - 20),
+      slug: scr(this.slug.x, this.st.slug[1] - 30),
+      cub: scr(this.st.cub[0] - 10, this.st.cub[1] - 40),
+      cedar: scr(this.st.cedar[0], this.st.bank - 200),
       rain: this.rain.on,
     }
   }
@@ -979,7 +1150,7 @@ class SalmonWorld {
   private hintFishAny() {
     let best: Fish | null = null
     const top = this.river.pools.length - 1
-    for (const f of this.fish) if ((f.mode === 'swim' || f.mode === 'arrive') && (this.phase !== 'play' || f.pool < top) && (!best || f.pool < best.pool)) best = f
+    for (const f of this.fish) if ((f.mode === 'swim' || f.mode === 'arrive') && (this.phase !== 'play' || f.pool < top) && !(this.phase === 'lay' && this.laid.has(f.id)) && (!best || f.pool < best.pool)) best = f
     return best
   }
 }
@@ -987,30 +1158,48 @@ class SalmonWorld {
 // ---------------------------------------------------------------- React
 
 interface Run {
-  section: SalmonSection
+  section: Part
   home: number
   spirit: 'high' | 'low'
   seed: number
   n: number
 }
 
-export function SalmonLeap() {
-  const { start, param, enter } = useSections(SALMON_SECTIONS)
-  const first = (start ?? 'steps') as SalmonSection
+/** The story first (Maple at the river), unless a link starts further up. */
+export function SalmonLeap(props: CanadaActivityProps) {
+  const sec = useSections(SALMON_SECTIONS)
+  const [story, setStory] = useState(!sec.start || sec.start === 'story')
+  useEffect(() => {
+    if (story) sec.enter('story')
+  }, [])
+  if (story) return <StoryBeat lines={T.story} friend={<Maple height="100%" />} onDone={() => setStory(false)} />
+  return <TheRiver {...props} sec={sec} />
+}
+
+function TheRiver({ sec, onDone, setProgress }: CanadaActivityProps & { sec: ReturnType<typeof useSections<'home' | 'spirit', SalmonSection>> }) {
+  const { start, param, enter } = sec
+  const first: Part = !start || start === 'story' ? 'steps' : start
   const [run, setRun] = useState<Run>(() => {
     const h = parseInt(param('home'), 10)
     return { section: first, home: Number.isFinite(h) ? clamp(h, 0, 40) : START_HOME[first], spirit: param('spirit') === 'low' ? 'low' : 'high', seed: (Math.random() * 1e9) | 0, n: 0 }
   })
-  const [say, setSay] = useState(SAY[run.section])
+  const [prompt, setPrompt] = useState<Line>(SAY[run.section])
   const [info, setInfo] = useState<Info>({ section: run.section, home: run.home })
   const [done, setDone] = useState(false)
+  const finished = useRef(false)
   const box = useRef<HTMLDivElement>(null)
   const svg = useRef<SVGSVGElement>(null)
   const world = useRef<SalmonWorld | null>(null)
+  const maple = useRef<PuppetHandle>(null)
+  const cub = useRef<PuppetHandle>(null)
+  const bearH = [useRef<PuppetHandle>(null), useRef<PuppetHandle>(null)]
+  const bearCtl = useMemo<BearCtl[]>(() => [{ lunge: 0, walk: false }, { lunge: 0, walk: false }], [run])
   const size = useElementSize(box)
-  const wide = !size.height || size.width / size.height >= 1.05
-  const stage = wide ? WIDE : TALL
+  const aspect = size.height ? size.width / Math.max(1, size.height - BOTTOM) : 1.6
+  const stage = !size.height || aspect >= 1.05 ? WIDE : aspect < 0.62 ? PHONE : TALL
   const mid = `salmon${run.n}`
+  const cb = useRef({ onDone, setProgress })
+  cb.current = { onDone, setProgress }
 
   // The view box: the stage scaled to fit above the line at the bottom (so it never covers the bottom pool, where the
   // salmon wait), the extra edge filled with more of the forest (sky above, the river at the sides, its rock below).
@@ -1022,17 +1211,35 @@ export function SalmonLeap() {
   const river = run.section === 'bears' ? bearsRiver(stage, run.spirit) : stage.rivers[run.section === 'eggs' ? 'eggs' : run.section]
 
   useLayoutEffect(() => {
-    if (!svg.current) return
-    setSay(SAY[run.section])
-    const w = new SalmonWorld(svg.current, stage, run.section, run.home, run.spirit, run.seed, {
-      info: (i) => {
-        setInfo(i)
-        enter(i.section, { home: homeParam(i.home, i.section), spirit: run.spirit })
+    if (!svg.current || !box.current) return
+    setPrompt(SAY[run.section])
+    const w = new SalmonWorld(
+      box.current,
+      svg.current,
+      stage,
+      run.section,
+      run.home,
+      run.spirit,
+      run.seed,
+      {
+        info: (i) => {
+          setInfo(i)
+          enter(i.section, { home: homeParam(i.home, i.section), spirit: run.spirit })
+        },
+        prompt: setPrompt,
+        next: (section, home) => setRun((r) => ({ ...r, section, home, n: r.n + 1 })),
+        done: () => {
+          setDone(true)
+          if (finished.current) return
+          finished.current = true
+          cb.current.onDone()
+        },
+        maple: (a) => void maple.current?.play(a),
+        progress: (d) => cb.current.setProgress(d, ORDER.length),
       },
-      say: setSay,
-      next: (section, home) => setRun((r) => ({ ...r, section, home, n: r.n + 1 })),
-      done: () => setDone(true),
-    })
+      bearCtl.map((ctl, i) => ({ ctl, h: bearH[i] })),
+      cub,
+    )
     w.setVb(vb)
     world.current = w
     ;(window as unknown as { __canadaSalmonQA?: () => unknown }).__canadaSalmonQA = () => w.qa()
@@ -1086,6 +1293,10 @@ export function SalmonLeap() {
 
   const st = stage
   const scene = useScene(st, river, vb)
+  // Maple sits on the bank above the top pool (HTML over the scene, under the salmon), this tall in stage units.
+  const mapleH = 200 * k
+  const mapleBox = { left: (st.maple[0] - vb.x) * k - mapleH / 2, top: (st.maple[1] - vb.y) * k - mapleH * 0.95, width: mapleH, height: mapleH }
+  const sky = `url(#${mid}-sky)`
 
   return (
     <div
@@ -1104,102 +1315,122 @@ export function SalmonLeap() {
       <svg key={`s${run.n}`} ref={svg} viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`} style={SVG_STYLE} aria-hidden>
         <defs>
           <linearGradient id={`${mid}-sky`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#B9E2EE" />
-            <stop offset="1" stopColor="#E6F5F0" />
+            <stop offset="0" stopColor="#BFE3EC" />
+            <stop offset="1" stopColor="#EAF6F0" />
           </linearGradient>
           <linearGradient id={`${mid}-water`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#7CC6E4" />
-            <stop offset="1" stopColor="#3E8CB8" />
+            <stop offset="0" stopColor="#86CDE2" />
+            <stop offset="1" stopColor="#3F86A8" />
           </linearGradient>
         </defs>
-        <rect x={-BIG} y={-BIG} width={BIG * 2} height={BIG + st.bank} fill={`url(#${mid}-sky)`} />
-        {/* The rain cloud. */}
+        <rect x={-BIG} y={-BIG} width={BIG * 2} height={BIG + st.bank + 40} fill={sky} />
+        {/* The rain cloud (it darkens when it rains). */}
         <g data-k="cloud" transform={`translate(${st.cloud[0]} ${st.cloud[1]})`}>
           <ellipse cx={0} cy={0} rx={110} ry={40} fill="#FFFFFF" stroke={INK} strokeWidth={5} />
           <circle cx={-40} cy={-24} r={38} fill="#FFFFFF" stroke={INK} strokeWidth={5} />
           <circle cx={26} cy={-34} r={46} fill="#FFFFFF" stroke={INK} strokeWidth={5} />
           <ellipse cx={0} cy={4} rx={104} ry={34} fill="#FFFFFF" />
-        </g>
-        {/* Misty mountains and the far forest along the bank. */}
-        <path d={scene.hills} fill="#A9D3C8" />
-        {scene.far.map(([x, h], i) => (
-          <path key={i} d={`M${x - 22} ${st.bank} L ${x} ${st.bank - h} L ${x + 22} ${st.bank} Z`} fill="#6FAE8E" />
-        ))}
-        <rect x={-BIG} y={st.bank} width={BIG * 2} height={BIG} fill="#7DBE7A" />
-        {/* The giant cedar, taller than a building (it goes off the top), with the raven's branch. */}
-        <g data-k="cedar">
-          <rect x={st.cedar[0] - 46} y={st.bank - st.cedar[1] - 400} width={92} height={st.cedar[1] + 410} fill="#9A5C3C" stroke={INK} strokeWidth={5} />
-          <path d={`M${st.cedar[0] - 46} ${st.bank} Q ${st.cedar[0] - 80} ${st.bank + 4} ${st.cedar[0] - 100} ${st.bank + 10} L ${st.cedar[0] + 100} ${st.bank + 10} Q ${st.cedar[0] + 80} ${st.bank + 4} ${st.cedar[0] + 46} ${st.bank} Z`} fill="#9A5C3C" stroke={INK} strokeWidth={5} />
-          <line x1={st.cedar[0] + 40} y1={st.raven[1] + 6} x2={st.raven[0] + 70} y2={st.raven[1] - 6} stroke={INK} strokeWidth={14} strokeLinecap="round" />
-          <line x1={st.cedar[0] + 40} y1={st.raven[1] + 6} x2={st.raven[0] + 70} y2={st.raven[1] - 6} stroke="#9A5C3C" strokeWidth={6} strokeLinecap="round" />
-          {[0, 1, 2, 3].map((i) => (
-            <ellipse key={i} cx={st.cedar[0] + (i % 2 ? 70 : -70)} cy={st.raven[1] - 140 - i * 110} rx={120} ry={46} fill="#3F8A62" stroke={INK} strokeWidth={5} />
-          ))}
-          <g data-k="raven" transform={`translate(${st.raven[0]} ${st.raven[1]})`}>
-            <ellipse cx={0} cy={-14} rx={26} ry={16} fill="#2E2A3A" stroke={INK} strokeWidth={4} />
-            <path d="M18 -16 L 40 -4 L 22 -6 Z" fill="#2E2A3A" />
-            <g data-k="raven-head">
-              <circle cx={-20} cy={-28} r={13} fill="#2E2A3A" stroke={INK} strokeWidth={4} />
-              <path d="M-31 -30 L -46 -24 L -31 -23 Z" fill="#4A4458" />
-              <circle cx={-22} cy={-31} r={3} fill="#FFFFFF" />
-            </g>
+          <g data-k="cloud-dark" opacity={0}>
+            <ellipse cx={0} cy={4} rx={104} ry={34} fill="#9AA6BF" />
+            <circle cx={-40} cy={-24} r={35} fill="#9AA6BF" />
+            <circle cx={26} cy={-34} r={43} fill="#9AA6BF" />
           </g>
         </g>
+        {/* Far: the misty coast mountains, then a band of mist. */}
+        {scene.farTiles.map((x, i) => (
+          <image key={i} href={farImg} x={x} y={st.bank - 40 - scene.farW / ASPECT.far} width={scene.farW + 2} height={scene.farW / ASPECT.far} preserveAspectRatio="none" />
+        ))}
+        <rect x={-BIG} y={st.bank - 150} width={BIG * 2} height={120} fill="#EAF6F0" opacity={0.45} />
+        {/* Mid: the edge of the rainforest across the river. */}
+        {scene.forestTiles.map((x, i) => (
+          <image key={i} href={forestImg} x={x} y={st.bank + 30 - scene.forestW / ASPECT.forest} width={scene.forestW + 2} height={scene.forestW / ASPECT.forest} preserveAspectRatio="none" />
+        ))}
+        {/* The mossy bank, stepping down with the river, ferns and boulders on it. */}
+        <rect x={-BIG} y={st.bank + 20} width={BIG * 2} height={BIG} fill="#8BB36A" />
+        {scene.mounds.map(([d, c], i) => (
+          <path key={i} d={d} fill={c} stroke="#5E8A4E" strokeWidth={4} strokeLinejoin="round" />
+        ))}
+        {scene.bankRocks.map(([x, y, w], i) => (
+          <image key={i} href={boulderImg} x={x - w / 2} y={y - w / ASPECT.boulder} width={w} height={w / ASPECT.boulder} />
+        ))}
+        {scene.bankFerns.map(([x, y, w, two], i) => (
+          <image key={i} href={two ? fern2Img : fernImg} x={x - w / 2} y={y - w / (two ? ASPECT.fern2 : ASPECT.fern)} width={w} height={w / (two ? ASPECT.fern2 : ASPECT.fern)} />
+        ))}
         {scene.trees.map(([x, y, h], i) => (
-          <Spruce key={i} x={x} y={y} h={h} />
+          <image key={i} href={spruceImg} x={x - (h * ASPECT.spruce) / 2} y={y - h} width={h * ASPECT.spruce} height={h} />
         ))}
-        {/* The banana slug on its mossy log, and the berry bushes. */}
-        <rect x={st.slug[0] - 80} y={st.slug[1] - 6} width={160} height={30} rx={15} fill="#8BB36A" stroke={INK} strokeWidth={5} />
-        <g data-k="slug" transform={`translate(${st.slug[0]} ${st.slug[1]})`}>
-          <path d="M-30 -6 Q -28 -22 0 -22 Q 26 -22 30 -6 Z" fill="#F6D44A" stroke={INK} strokeWidth={4} />
-          <g data-k="slug-eyes" transform="scale(1 1)" style={{ transformOrigin: '22px -18px' }}>
-            <line x1={22} y1={-18} x2={28} y2={-36} stroke={INK} strokeWidth={3} />
-            <line x1={18} y1={-18} x2={20} y2={-34} stroke={INK} strokeWidth={3} />
-            <circle cx={28} cy={-36} r={3} fill={INK} />
-            <circle cx={20} cy={-34} r={3} fill={INK} />
-          </g>
+        {/* The giant cedar, taller than a building (its trunk goes on up off the top), with the raven's branch. */}
+        <g data-k="cedar">
+          <rect x={st.cedar[0] - 52} y={st.bank - st.cedar[1] - 3000} width={104} height={3000 + 200} fill="#9A5C3C" stroke={INK} strokeWidth={5} />
+          <path d={`M${st.cedar[0] - 22} ${st.bank - st.cedar[1] - 3000} L ${st.cedar[0] - 22} ${st.bank - st.cedar[1] + 140} M${st.cedar[0] + 18} ${st.bank - st.cedar[1] - 3000} L ${st.cedar[0] + 18} ${st.bank - st.cedar[1] + 160}`} stroke="#B97A55" strokeWidth={10} />
+          <image href={cedarImg} x={st.cedar[0] - scene.cedarW / 2} y={st.bank + 20 - scene.cedarW / ASPECT.cedar} width={scene.cedarW} height={scene.cedarW / ASPECT.cedar} />
+          <line x1={st.cedar[0] + 40} y1={st.raven[1] + 6} x2={st.raven[0] + 70} y2={st.raven[1] - 6} stroke={INK} strokeWidth={16} strokeLinecap="round" />
+          <line x1={st.cedar[0] + 40} y1={st.raven[1] + 6} x2={st.raven[0] + 70} y2={st.raven[1] - 6} stroke="#9A5C3C" strokeWidth={7} strokeLinecap="round" />
+          <Raven />
         </g>
+        {/* The banana slug on its mossy log, the cub and the salmonberry bushes. */}
+        <image href={mossyLogImg} x={st.slug[0] - 120} y={st.slug[1] + 26 - 240 / ASPECT.mossyLog} width={240} height={240 / ASPECT.mossyLog} />
+        <Slug />
         {st.berries.map(([x, y], i) => (
           <g key={i} data-k={`bush${i}`}>
-            <ellipse cx={x} cy={y - 30} rx={62} ry={40} fill="#4E9A5C" stroke={INK} strokeWidth={5} />
-            {[-30, -6, 18, 34, -18, 8].map((dx, j) => (
-              <circle key={j} cx={x + dx} cy={y - 40 + (j % 3) * 12} r={7} fill="#4A5BC4" stroke={INK} strokeWidth={2.5} />
-            ))}
+            <image href={bushImg} x={x - 85} y={y + 10 - 170 / ASPECT.bush} width={170} height={170 / ASPECT.bush} />
           </g>
         ))}
-        {/* The river: pools behind, then the salmon, then the rock (which hides the water under each floor and the lips),
-            the waterfalls over the lips, the rocks and the log. */}
+        <g data-k="cub" transform={`translate(${st.cub[0]} ${st.cub[1]}) scale(-1 1)`}>
+          <Bear ref={cub} cub />
+        </g>
+        {scene.ferns.map(([x, y, w, two], i) => (
+          <image key={i} href={two ? fern2Img : fernImg} x={x - w / 2} y={y - w / (two ? ASPECT.fern2 : ASPECT.fern)} width={w} height={w / (two ? ASPECT.fern2 : ASPECT.fern)} />
+        ))}
+        {/* The river: the pools, the bears standing in them, then the rock (which hides the water under each floor and
+            the bears' feet), the moss on the lips, the waterfalls over the lips, the boulder and the log. */}
         {scene.water.map((d, i) => (
           <path key={i} d={d} fill={`url(#${mid}-water)`} />
         ))}
-        {river.bears.map((b, i) => (
-          <BearShape key={i} id={i} spirit={b.spirit} />
+        {scene.shine.map(([x, y, w], i) => (
+          <line key={i} x1={x} y1={y} x2={x + w} y2={y} stroke="#D8F1F7" strokeWidth={5} strokeLinecap="round" opacity={0.75} className="salmon-shine" style={{ animationDelay: `${(i % 5) * -0.7}s` }} />
         ))}
-        <path d={scene.rock} fill="#A79C92" stroke={INK} strokeWidth={5} strokeLinejoin="round" />
+        {river.bears.map((b, i) => (
+          <g key={`${run.n}-${i}`} data-k={`bear-${i}`}>
+            <Bear ref={bearH[i]} spirit={b.spirit} ctl={bearCtl[i]} />
+            <g data-k="foam" opacity={0.9} className="salmon-foam">
+              <ellipse cx={-6} cy={-26} rx={66} ry={9} fill="#FFFFFF" />
+              {[-56, -30, 0, 26, 50].map((x, j) => (
+                <circle key={j} cx={x} cy={-30 + (j % 2) * 4} r={j % 2 ? 9 : 12} fill="#FFFFFF" stroke="#9FD6EC" strokeWidth={3} />
+              ))}
+            </g>
+          </g>
+        ))}
+        <path d={scene.rock} fill="#A89CAA" stroke={INK} strokeWidth={5} strokeLinejoin="round" />
+        {scene.stones.map(([x, y, rx, ry], i) => (
+          <ellipse key={i} cx={x} cy={y} rx={rx} ry={ry} fill="#94889A" />
+        ))}
         {scene.moss.map((d, i) => (
           <path key={i} d={d} fill="#8BB36A" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
         ))}
         {run.section === 'eggs' && scene.gravel.map(([x, y, r, c], i) => <circle key={i} cx={x} cy={y} r={r} fill={c} stroke={INK} strokeWidth={2} />)}
         {scene.falls.map(([x, y0, y1], i) => (
           <g key={i}>
-            <rect x={x - 20} y={y0} width={24} height={y1 - y0} fill="#E8F7FC" stroke={INK} strokeWidth={4} />
-            <line x1={x - 13} y1={y0} x2={x - 13} y2={y1} stroke="#9FD6EC" strokeWidth={4} className="salmon-fall" />
-            <line x1={x - 4} y1={y0} x2={x - 4} y2={y1} stroke="#9FD6EC" strokeWidth={4} className="salmon-fall salmon-fall2" />
-            <ellipse cx={x - 8} cy={y1} rx={40} ry={10} fill="#FFFFFF" opacity={0.9} />
+            <path d={`M${x - 26} ${y0} Q ${x - 30} ${(y0 + y1) / 2} ${x - 32} ${y1} L ${x + 4} ${y1} L ${x + 4} ${y0} Z`} fill="#E8F7FC" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
+            <line x1={x - 18} y1={y0} x2={x - 20} y2={y1} stroke="#9FD6EC" strokeWidth={4} className="salmon-fall" />
+            <line x1={x - 8} y1={y0} x2={x - 9} y2={y1} stroke="#9FD6EC" strokeWidth={4} className="salmon-fall salmon-fall2" />
+            <g className="salmon-foam">
+              <circle cx={x - 44} cy={y1 - 2} r={14} fill="#FFFFFF" stroke={INK} strokeWidth={3} />
+              <circle cx={x - 18} cy={y1 - 8} r={18} fill="#FFFFFF" stroke={INK} strokeWidth={3} />
+              <circle cx={x + 6} cy={y1 - 2} r={12} fill="#FFFFFF" stroke={INK} strokeWidth={3} />
+              <ellipse cx={x - 18} cy={y1 + 2} rx={40} ry={9} fill="#FFFFFF" />
+            </g>
           </g>
         ))}
-        {river.rocks.map((k, i) => (
-          <g key={i}>
-            <path d={`M${k.x - k.r} ${k.y + 30} Q ${k.x - k.r} ${k.y - k.r} ${k.x} ${k.y - k.r} Q ${k.x + k.r} ${k.y - k.r} ${k.x + k.r} ${k.y + 30} Z`} fill="#8E837A" stroke={INK} strokeWidth={5} />
-          </g>
+        {river.rocks.map((o, i) => (
+          <image key={i} href={boulderImg} x={o.x - o.r * 1.35} y={o.y + 34 - (o.r * 2.7) / ASPECT.boulder} width={o.r * 2.7} height={(o.r * 2.7) / ASPECT.boulder} />
         ))}
-        {river.logs.map((g, i) => (
-          <g key={i}>
-            <line x1={g.a[0]} y1={g.a[1]} x2={g.b[0]} y2={g.b[1]} stroke={INK} strokeWidth={34} strokeLinecap="round" />
-            <line x1={g.a[0]} y1={g.a[1]} x2={g.b[0]} y2={g.b[1]} stroke="#B07A4E" strokeWidth={24} strokeLinecap="round" />
-            <circle cx={g.b[0]} cy={g.b[1]} r={10} fill="#E3B98A" stroke={INK} strokeWidth={3} />
-          </g>
-        ))}
+        {river.logs.map((g, i) => {
+          const len = Math.hypot(g.b[0] - g.a[0], g.b[1] - g.a[1]) + 40
+          const ang = (Math.atan2(g.b[1] - g.a[1], g.b[0] - g.a[0]) * 180) / Math.PI
+          const h = len / ASPECT.plank
+          return <image key={i} href={plankImg} x={-len / 2} y={-h / 2} width={len} height={h} transform={`translate(${(g.a[0] + g.b[0]) / 2} ${(g.a[1] + g.b[1]) / 2}) rotate(${ang.toFixed(1)})`} />
+        })}
         {/* The eggs in the gravel, each with its babies. */}
         <g>
           {Array.from({ length: MAX_EGGS }, (_, i) => (
@@ -1212,72 +1443,52 @@ export function SalmonLeap() {
                   [-10, 10],
                   [11, 10],
                 ].map(([x, y], j) => (
-                  <circle key={j} cx={x} cy={y} r={11} fill="#FF8FB1" stroke={INK} strokeWidth={3} />
+                  <g key={j}>
+                    <circle cx={x} cy={y} r={11} fill="#FF8FB1" stroke={INK} strokeWidth={3} />
+                    <circle cx={x - 3} cy={y - 4} r={3} fill="#FFFFFF" opacity={0.8} />
+                  </g>
                 ))}
               </g>
               {Array.from({ length: FRY_EACH }, (_, j) => (
                 <g key={j} data-k="fry" display="none">
-                  <ellipse cx={0} cy={0} rx={18} ry={8} fill="#F3B3A8" stroke={INK} strokeWidth={2.5} />
-                  <circle cx={-9} cy={-2} r={2.5} fill={INK} />
-                  <circle cx={3} cy={6} r={4.5} fill="#FF8FB1" stroke={INK} strokeWidth={1.5} />
+                  <path d="M16 0 C10 -8 -6 -8 -14 -2 L -22 -8 L -20 0 L -22 8 L -14 2 C -6 8 10 8 16 0Z" fill="#E9C3B4" stroke={INK} strokeWidth={2.5} strokeLinejoin="round" />
+                  <circle cx={8} cy={-1} r={2.5} fill={INK} />
+                  <circle cx={0} cy={5} r={4.5} fill="#FF8FB1" stroke={INK} strokeWidth={1.5} />
                 </g>
               ))}
             </g>
           ))}
         </g>
-        {/* The salmon. */}
+      </svg>
+      {/* Maple on the bank. */}
+      <div style={{ position: 'absolute', ...mapleBox, pointerEvents: 'none' }}>
+        <Maple ref={maple} height="100%" flip={-1} />
+      </div>
+      {/* In front: the salmon, the eagle, the splashes, the rain, the seasons and the hint. */}
+      <svg key={`f${run.n}`} viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`} style={{ ...SVG_STYLE, pointerEvents: 'none' }} aria-hidden>
         {Array.from({ length: MAX_FISH }, (_, i) => (
           <g key={i} data-k="fish" display="none">
-            <ellipse data-k="fglow" cx={0} cy={0} rx={62} ry={36} fill="#FFFFFF" opacity={0} />
+            <ellipse data-k="fglow" cx={0} cy={0} rx={64} ry={38} fill="#FFFFFF" opacity={0} />
             <g data-k="fbody">
-              <g data-k="ftail">
-                <path d="M-28 0 L -54 -18 L -48 0 L -54 18 Z" fill="#D9434F" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
-              </g>
-              <ellipse cx={0} cy={0} rx={34} ry={15} fill="#E85A64" stroke={INK} strokeWidth={4} />
-              <path d="M-26 -6 Q 0 -18 26 -6" fill="none" stroke="#8C9A6E" strokeWidth={7} strokeLinecap="round" />
-              <path d="M-6 -14 L 4 -24 L 10 -13 Z" fill="#D9434F" stroke={INK} strokeWidth={3} strokeLinejoin="round" />
-              <circle cx={20} cy={-3} r={4.5} fill="#FFFFFF" stroke={INK} strokeWidth={2} />
-              <circle cx={21} cy={-3} r={2} fill={INK} />
+              <Sockeye />
             </g>
           </g>
         ))}
-        {/* Maple the beaver on the top bank (the salmon flicked too hard land in her lap). */}
-        <g data-k="maple" transform={`translate(${st.maple[0]} ${st.maple[1]})`}>
-          <ellipse cx={0} cy={6} rx={70} ry={12} fill="#000" opacity={0.12} />
-          <g data-k="maple-tail">
-            <ellipse cx={42} cy={-6} rx={36} ry={14} fill="#5A4A5E" stroke={INK} strokeWidth={4} transform="rotate(-15 42 -6)" />
-          </g>
-          <ellipse cx={0} cy={-36} rx={38} ry={40} fill="#A86B3C" stroke={INK} strokeWidth={5} />
-          <ellipse cx={0} cy={-24} rx={22} ry={22} fill="#E6C49A" />
-          <circle cx={-6} cy={-86} r={30} fill="#A86B3C" stroke={INK} strokeWidth={5} />
-          <circle cx={-28} cy={-108} r={9} fill="#A86B3C" stroke={INK} strokeWidth={4} />
-          <circle cx={16} cy={-108} r={9} fill="#A86B3C" stroke={INK} strokeWidth={4} />
-          <circle cx={-16} cy={-90} r={4} fill={INK} />
-          <circle cx={6} cy={-90} r={4} fill={INK} />
-          <ellipse cx={-5} cy={-77} rx={9} ry={6} fill="#4A3B57" />
-          <rect x={-10} y={-72} width={10} height={10} fill="#FFFFFF" stroke={INK} strokeWidth={2} />
-          <circle cx={-26} cy={-78} r={5} fill="#F7A9C0" />
-          <circle cx={14} cy={-78} r={5} fill="#F7A9C0" />
-        </g>
-        {/* The bald eagle. */}
-        <g data-k="eagle">
-          <g data-k="eagle-wings">
-            <path d="M-6 0 Q -50 -40 -90 -10 Q -50 -14 -6 8 Z" fill="#5A3E2E" stroke={INK} strokeWidth={4} />
-            <path d="M6 0 Q 50 -40 90 -10 Q 50 -14 6 8 Z" fill="#5A3E2E" stroke={INK} strokeWidth={4} />
-          </g>
-          <ellipse cx={0} cy={4} rx={20} ry={13} fill="#5A3E2E" stroke={INK} strokeWidth={4} />
-          <circle cx={22} cy={-2} r={11} fill="#FFFFFF" stroke={INK} strokeWidth={4} />
-          <path d="M31 -3 L 42 2 L 31 4 Z" fill="#F4C542" />
-        </g>
-        {/* Splashes, bonks, the cone, the rain. */}
+        <Eagle />
         {Array.from({ length: N_RIPPLES }, (_, i) => (
           <ellipse key={i} data-k="ripple" cx={0} cy={0} rx={10} ry={4} fill="none" stroke="#FFFFFF" strokeWidth={5} opacity={0} />
         ))}
-        <text data-k="bonk" fontSize={56} textAnchor="middle" opacity={0}>
-          💫
-        </text>
+        {Array.from({ length: N_SPRAY }, (_, i) => (
+          <circle key={i} data-k="spray" cx={0} cy={-9999} r={i % 3 ? 6 : 9} fill="#E8F7FC" stroke="#7FB6D9" strokeWidth={2} opacity={0} />
+        ))}
+        <g data-k="bonk" opacity={0}>
+          {[0, 120, 240].map((a) => (
+            <path key={a} d={star(0, -26, 14)} transform={`rotate(${a})`} fill="#FFD55A" stroke={INK} strokeWidth={3} strokeLinejoin="round" />
+          ))}
+        </g>
         <g data-k="cone" opacity={0}>
           <ellipse cx={0} cy={0} rx={10} ry={16} fill="#8A5A34" stroke={INK} strokeWidth={3} />
+          <path d="M-8 -6 L 8 -6 M-9 2 L 9 2 M-7 9 L 7 9" stroke="#5E3A22" strokeWidth={2.5} />
         </g>
         <g data-k="rain" opacity={0}>
           {Array.from({ length: N_DROPS }, (_, i) => (
@@ -1287,7 +1498,7 @@ export function SalmonLeap() {
         {/* The payoff's seasons: a tint for fall and winter, snow, and blossoms on the bank. */}
         {run.section === 'eggs' && (
           <>
-            <rect data-k="season" x={-BIG} y={-BIG} width={BIG * 2} height={BIG * 2} fill="#FFFFFF" opacity={0} pointerEvents="none" />
+            <rect data-k="season" x={-BIG} y={-BIG} width={BIG * 2} height={BIG * 2} fill="#FFFFFF" opacity={0} />
             <g data-k="snow" opacity={0}>
               {scene.snow.map(([x, y], i) => (
                 <circle key={i} cx={x} cy={y} r={6} fill="#FFFFFF" />
@@ -1300,7 +1511,7 @@ export function SalmonLeap() {
             </g>
           </>
         )}
-        <g data-k="hint" opacity={0} pointerEvents="none">
+        <g data-k="hint" opacity={0}>
           <polyline data-k="hint-path" points="" fill="none" stroke="#FFFFFF" strokeWidth={10} strokeDasharray="4 22" strokeLinecap="round" strokeLinejoin="round" opacity={0.9} />
           <g data-k="hint-hand">
             <text fontSize={90} textAnchor="middle" dominantBaseline="middle" className="salmon-hint">
@@ -1329,11 +1540,23 @@ export function SalmonLeap() {
           </BigButton>
         </motion.div>
       )}
+      {/* What Sparkle said (for Dad): tap it to hear it again. */}
       <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 30 }}>
         <AnimatePresence mode="popLayout">
-          <motion.div key={say} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-            {say}
-          </motion.div>
+          <motion.button
+            key={lineText(prompt)}
+            initial={{ scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.6, opacity: 0 }}
+            style={PILL}
+            aria-label="Hear it again"
+            onPointerDown={(e) => {
+              e.stopPropagation()
+              void say(prompt)
+            }}
+          >
+            🔊 {lineText(prompt)}
+          </motion.button>
         </AnimatePresence>
       </div>
     </div>
@@ -1342,42 +1565,110 @@ export function SalmonLeap() {
 
 // ---------------------------------------------------------------- pieces of the scene
 
-/** A bear standing in the falls facing left, feet at (0, 0): `pose` rolls, `head` lunges and sneezes, `jaw` opens. */
-function BearShape({ id, spirit }: { id: number; spirit: boolean }) {
-  const fill = spirit ? '#F6F1E6' : '#3A3340'
-  const dark = spirit ? '#DCD2C0' : '#26212C'
+/** A sockeye salmon on its way home, facing right, centered: bright red body, olive-green head, a hooked nose, a
+ *  forked tail on a hinge (`ftail`) and a little fin (`ffin`). */
+function Sockeye() {
+  const body = 'M-30 0 C-30 -12 -14 -20 4 -19 C20 -18 33 -12 41 -3 C43 0 42 3 38 5 C30 12 16 16 0 16 C-16 16 -30 10 -30 0Z'
   return (
-    <g data-k={`bear-${id}`}>
-      <g data-k="pose">
-        <rect x={-34} y={-30} width={24} height={34} rx={10} fill={dark} stroke={INK} strokeWidth={5} />
-        <rect x={18} y={-30} width={24} height={34} rx={10} fill={dark} stroke={INK} strokeWidth={5} />
-        <ellipse cx={0} cy={-60} rx={62} ry={46} fill={fill} stroke={INK} strokeWidth={5} />
-        <g data-k="head">
-          <circle cx={-36} cy={-120} r={13} fill={fill} stroke={INK} strokeWidth={5} />
-          <circle cx={-2} cy={-118} r={13} fill={fill} stroke={INK} strokeWidth={5} />
-          <circle cx={-30} cy={-92} r={36} fill={fill} stroke={INK} strokeWidth={5} />
-          <g data-k="jaw" style={{ transformOrigin: '-62px -80px' }}>
-            <ellipse cx={-62} cy={-76} rx={16} ry={9} fill="#C94F6D" stroke={INK} strokeWidth={3} />
-          </g>
-          <ellipse cx={-62} cy={-88} rx={20} ry={14} fill="#C9A57E" stroke={INK} strokeWidth={4} />
-          <ellipse cx={-78} cy={-92} rx={8} ry={6} fill={INK} />
-          <circle cx={-40} cy={-104} r={4.5} fill={INK} />
-          <circle cx={-48} cy={-84} r={6} fill="#F7A9C0" opacity={0.8} />
-        </g>
+    <>
+      <g data-k="ftail">
+        <path d="M-27 0 C-36 -4 -44 -14 -58 -22 C-53 -8 -53 8 -58 22 C-44 14 -36 4 -27 0Z" fill={SOCKEYE.fin} stroke={INK} strokeWidth={4} strokeLinejoin="round" />
       </g>
-      <ellipse cx={0} cy={-6} rx={70} ry={10} fill="#FFFFFF" opacity={0.85} />
+      <path d="M-14 -16 C-10 -29 4 -31 12 -18Z" fill={SOCKEYE.fin} stroke={INK} strokeWidth={3.5} strokeLinejoin="round" />
+      <path d={body} fill={SOCKEYE.body} />
+      <path d="M-24 6 C-10 13 10 14 30 7 C24 13 12 16 0 16 C-12 16 -22 12 -24 6Z" fill={SOCKEYE.belly} />
+      {/* The green head, with the hooked nose of a salmon going home. */}
+      <path d="M17 -18 C28 -15 37 -10 41 -3 C43 0 42 3 38 5 C32 9 25 12 17 14 C21 4 21 -8 17 -18Z" fill={SOCKEYE.head} />
+      <path d={body} fill="none" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
+      <path d="M17 -17 C21 -8 21 4 17 13" fill="none" stroke={INK} strokeWidth={2.5} strokeLinecap="round" />
+      <path d="M38 5 C40 9 37 11 33 9" fill="none" stroke={INK} strokeWidth={2.5} strokeLinecap="round" />
+      <circle cx={28} cy={-6} r={6} fill="#FFFFFF" stroke={INK} strokeWidth={2.2} />
+      <circle cx={29.5} cy={-6} r={3.4} fill={INK} />
+      <circle cx={28.4} cy={-7.6} r={1.2} fill="#FFFFFF" />
+      <ellipse cx={26} cy={5} rx={4.5} ry={2.6} fill="#FF9DB8" opacity={0.9} />
+      <g data-k="ffin">
+        <path d="M4 6 C2 14 -6 19 -11 17 C-7 12 -2 8 4 6Z" fill={SOCKEYE.fin} stroke={INK} strokeWidth={3} strokeLinejoin="round" />
+      </g>
+    </>
+  )
+}
+
+/** The bald eagle, wings spread (they beat on `eagle-wings`), white head and tail, yellow beak. Faces right. */
+function Eagle() {
+  return (
+    <g data-k="eagle">
+      <path d="M-26 2 L -52 -8 L -50 4 L -54 14 L -26 8 Z" fill="#FFFFFF" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
+      <g data-k="eagle-wings">
+        <path d="M-10 -2 C -30 -46 -70 -56 -112 -40 L -100 -30 L -112 -22 L -96 -16 L -104 -6 C -70 -10 -36 -4 -10 8 Z" fill="#5A3E2E" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
+        <path d="M10 -2 C 30 -46 70 -56 112 -40 L 100 -30 L 112 -22 L 96 -16 L 104 -6 C 70 -10 36 -4 10 8 Z" fill="#6B4A36" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
+      </g>
+      <ellipse cx={0} cy={4} rx={30} ry={15} fill="#5A3E2E" stroke={INK} strokeWidth={4} />
+      <path d="M-4 18 L -2 26 M6 18 L 8 26" stroke="#F4C542" strokeWidth={5} strokeLinecap="round" />
+      <g data-k="eagle-head">
+        <circle cx={28} cy={-4} r={14} fill="#FFFFFF" stroke={INK} strokeWidth={4} />
+        <path d="M38 -8 C 50 -8 52 0 46 6 L 40 2 Z" fill="#F4C542" stroke={INK} strokeWidth={3} strokeLinejoin="round" />
+        <circle cx={31} cy={-7} r={3} fill={INK} />
+      </g>
     </g>
   )
 }
 
-function Spruce({ x, y, h }: { x: number; y: number; h: number }) {
-  const w = h * 0.36
+/** The raven on the cedar's branch: glossy black with a purple sheen and a big beak. Faces left. */
+function Raven() {
   return (
-    <g>
-      <rect x={x - 7} y={y - 20} width={14} height={24} fill="#7A5236" />
-      <path d={`M${x} ${y - h} L ${x + w * 0.55} ${y - h * 0.55} L ${x + w * 0.3} ${y - h * 0.55} L ${x + w} ${y - 16} L ${x - w} ${y - 16} L ${x - w * 0.3} ${y - h * 0.55} L ${x - w * 0.55} ${y - h * 0.55} Z`} fill="#4F9A6E" stroke={INK} strokeWidth={5} strokeLinejoin="round" />
+    <g data-k="raven">
+      <path d="M18 -14 L 44 -2 L 40 -10 L 46 -14 L 22 -22 Z" fill="#2E2A3A" stroke={INK} strokeWidth={3.5} strokeLinejoin="round" />
+      <ellipse cx={0} cy={-16} rx={28} ry={18} fill="#2E2A3A" stroke={INK} strokeWidth={4} />
+      <g data-k="raven-wing">
+        <path d="M-8 -22 C 6 -28 22 -22 26 -12 C 14 -8 0 -10 -8 -22Z" fill="#4B4060" stroke={INK} strokeWidth={3} strokeLinejoin="round" />
+      </g>
+      <path d="M-6 0 L -8 8 M6 0 L 6 8" stroke={INK} strokeWidth={4} strokeLinecap="round" />
+      <g data-k="raven-head">
+        <circle cx={-20} cy={-30} r={14} fill="#2E2A3A" stroke={INK} strokeWidth={4} />
+        <path d="M-31 -34 L -52 -27 L -31 -24 Z" fill="#3E3850" stroke={INK} strokeWidth={3} strokeLinejoin="round" />
+        <circle cx={-22} cy={-33} r={3.6} fill="#FFFFFF" />
+        <circle cx={-23} cy={-33} r={1.8} fill={INK} />
+        <path d="M-14 -40 C -10 -38 -8 -34 -9 -30" fill="none" stroke="#8C7BB8" strokeWidth={2.5} strokeLinecap="round" />
+      </g>
     </g>
   )
+}
+
+/** The banana slug: big, bright yellow with brown spots, two eye stalks (`slug-eyes`, they pull in when poked). */
+function Slug() {
+  return (
+    <g data-k="slug">
+      <path d="M-40 0 C -40 -14 -28 -24 -6 -26 C 16 -28 30 -22 36 -10 C 40 -2 38 0 34 0 Z" fill="#F6D44A" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
+      <path d="M-30 0 L 34 0" stroke="#E2B92E" strokeWidth={4} />
+      {[
+        [-22, -14, 4],
+        [-6, -18, 3.5],
+        [10, -16, 4],
+        [-14, -6, 3],
+      ].map(([x, y, r], i) => (
+        <circle key={i} cx={x} cy={y} r={r} fill="#8A6A2E" />
+      ))}
+      <circle cx={26} cy={-12} r={2.6} fill={INK} />
+      <path d="M22 -4 Q 27 -1 31 -4" fill="none" stroke={INK} strokeWidth={2} strokeLinecap="round" />
+      <g data-k="slug-eyes" style={{ transformOrigin: '30px -20px' }}>
+        <line x1={28} y1={-20} x2={36} y2={-44} stroke={INK} strokeWidth={3.5} strokeLinecap="round" />
+        <line x1={22} y1={-22} x2={24} y2={-44} stroke={INK} strokeWidth={3.5} strokeLinecap="round" />
+        <circle cx={36} cy={-44} r={4.5} fill="#F6D44A" stroke={INK} strokeWidth={2.5} />
+        <circle cx={24} cy={-44} r={4.5} fill="#F6D44A" stroke={INK} strokeWidth={2.5} />
+      </g>
+    </g>
+  )
+}
+
+/** A five-pointed star centered at (cx, cy). */
+function star(cx: number, cy: number, r: number) {
+  const pts: string[] = []
+  for (let i = 0; i < 10; i++) {
+    const a = -Math.PI / 2 + (i * Math.PI) / 5
+    const rr = i % 2 ? r * 0.45 : r
+    pts.push(`${(cx + Math.cos(a) * rr).toFixed(1)} ${(cy + Math.sin(a) * rr).toFixed(1)}`)
+  }
+  return `M${pts.join(' L ')} Z`
 }
 
 function useScene(st: StageDef, river: River, vb: { x: number; y: number; w: number; h: number }) {
@@ -1393,27 +1684,80 @@ function useScene(st: StageDef, river: River, vb: { x: number; y: number; w: num
       const x1 = i === n - 1 ? BIG : lip(river, i).x + 2
       return `M${x0} ${p.y} L ${x1} ${p.y} L ${x1} ${p.y + p.d + 20} L ${x0} ${p.y + p.d + 20} Z`
     })
+    // Light on the water: short shining streaks in every pool.
+    const shine: [number, number, number][] = []
+    for (const [i, p] of river.pools.entries()) {
+      const a = Math.max(vx0, i === 0 ? vx0 : lip(river, i - 1).x + 20)
+      const b = Math.min(vx1, i === n - 1 ? vx1 : lip(river, i).x - 30)
+      for (let x = a + 20; x < b - 60; x += 110 + r() * 80) shine.push([x, p.y + 16 + r() * Math.min(60, p.d - 30), 30 + r() * 40])
+    }
     // The rock: under each pool's floor, up each lip's face to just under the upper pool's water, along the lip, down
     // into the upper pool.
     const pts: string[] = [`${-BIG} ${bot}`, `${-BIG} ${river.pools[0].y + river.pools[0].d}`]
     const moss: string[] = []
     const falls: [number, number, number][] = []
+    const stones: [number, number, number, number][] = []
     for (let i = 0; i < n - 1; i++) {
       const l = lip(river, i)
       const lo = river.pools[i]
       const up = river.pools[i + 1]
       pts.push(`${l.x - 30} ${lo.y + lo.d}`, `${l.x} ${lo.y + lo.d - 30}`, `${l.x} ${l.top}`, `${up.x0 - 6} ${l.top}`, `${up.x0 + 30} ${up.y + up.d}`)
       falls.push([l.x, up.y - 2, lo.y + 4])
-      moss.push(`M${l.x - 4} ${lo.y + 2} Q ${l.x - 18} ${lo.y - 14} ${l.x - 4} ${lo.y - 26} Z`)
+      moss.push(`M${l.x - 4} ${lo.y + 2} Q ${l.x - 22} ${lo.y - 16} ${l.x - 4} ${lo.y - 30} Z`)
+      // Moss hanging from the lip's top edge, beside the falls.
+      moss.push(`M${l.x + 4} ${l.top - 2} L ${up.x0 - 4} ${l.top - 2} Q ${(l.x + up.x0) / 2 + 6} ${l.top + 22} ${l.x + 8} ${l.top + 14} Z`)
+      for (let y = l.top + 60; y < lo.y - 20; y += 70) stones.push([l.x + 26 + r() * 20, y, 12 + r() * 8, 7 + r() * 4])
+    }
+    // Pebbles in the rock under each pool's floor.
+    for (const [i, p] of river.pools.entries()) {
+      const a = Math.max(vx0, i === 0 ? vx0 : lip(river, i - 1).x + 40)
+      const b = Math.min(vx1, i === n - 1 ? vx1 : lip(river, i).x - 50)
+      for (let x = a + 30; x < b; x += 150 + r() * 100) stones.push([x, p.y + p.d + 50 + r() * 60, 18 + r() * 12, 9 + r() * 5])
     }
     const last = river.pools[n - 1]
     pts.push(`${BIG} ${last.y + last.d}`, `${BIG} ${bot}`)
     const rock = `M${pts.join(' L ')} Z`
-    // The far hills, the far forest, the near spruces on the bank.
-    const hills = `M${-BIG} ${st.bank} L ${-BIG} ${st.bank - 120} ` + Array.from({ length: 24 }, (_, i) => `Q ${-400 + i * 200 + 100} ${st.bank - 260 - (i % 3) * 60} ${-400 + (i + 1) * 200} ${st.bank - 140}`).join(' ') + ` L ${BIG} ${st.bank - 120} L ${BIG} ${st.bank} Z`
-    const far: [number, number][] = []
-    for (let x = vx0 - 200; x < vx1 + 200; x += 36) if (Math.abs(x - st.cedar[0]) > 70) far.push([x, 50 + 30 * Math.abs(Math.sin(x * 0.05)) + 14 * Math.sin(x * 0.013)])
+    // The far and mid layers, side by side across the view.
+    const farW = 1150
+    const forestW = 950
+    const farTiles: number[] = []
+    for (let x = Math.floor((vx0 - 200) / farW) * farW; x < vx1 + 200; x += farW) farTiles.push(x)
+    const forestTiles: number[] = []
+    for (let x = Math.floor((vx0 - 200) / forestW) * forestW + 300; x < vx1 + 200; x += forestW) forestTiles.push(x - forestW)
+    forestTiles.push(forestTiles[forestTiles.length - 1] + forestW)
+    // The mossy bank below the forest, in soft mounds that step down toward the river.
+    const mounds: [string, string][] = []
+    const tones = ['#9CC27A', '#8DB86E', '#80AE66', '#74A35E', '#6A9A58']
+    const bankFerns: [number, number, number, boolean][] = []
+    const bankRocks: [number, number, number][] = []
+    for (let row = 0; row < tones.length; row++) {
+      const y0 = st.bank + 60 + row * 150
+      if (y0 > river.pools[0].y) break
+      // Ferns and the odd mossy boulder along the crest (only where the river doesn't cover it).
+      for (let x = vx0 - 40 + r() * 120; x < vx1 + 40; x += 150 + r() * 130) {
+        if (river.pools[poolAt(river, x)].y < y0 + 30) continue
+        if (row === 0 && (Math.abs(x - st.slug[0]) < 150 || Math.abs(x - st.cedar[0]) < 120)) continue
+        if (r() < 0.18) bankRocks.push([x, y0 + 24, 70 + r() * 40])
+        else bankFerns.push([x, y0 + 30, 90 + r() * 50 + row * 8, r() < 0.35])
+      }
+      let d = `M${vx0 - 300} ${y0 + 800}`
+      for (let x = vx0 - 300; x < vx1 + 300; x += 180) d += ` L ${x} ${y0 + 20 * Math.sin(x * 0.01 + row)} Q ${x + 90} ${y0 - 50 - 20 * Math.sin(x * 0.02 + row)} ${x + 180} ${y0 + 20 * Math.sin((x + 180) * 0.01 + row)}`
+      d += ` L ${vx1 + 300} ${y0 + 800} Z`
+      mounds.push([d, tones[row]])
+    }
+    // Ferns: along the back of each pool (their feet in the water) and dotted on the bank.
+    const ferns: [number, number, number, boolean][] = []
+    for (const [i, p] of river.pools.entries()) {
+      const a = Math.max(vx0 - 60, i === 0 ? vx0 - 60 : lip(river, i - 1).x + 30)
+      const b = Math.min(vx1 + 60, i === n - 1 ? vx1 + 60 : lip(river, i).x - 20)
+      for (let x = a; x < b; x += 190 + r() * 120) ferns.push([x, p.y + 14, 110 + r() * 50, r() < 0.35])
+    }
+    for (let x = vx0 - 40; x < vx1 + 40; x += 260 + r() * 140) {
+      if (Math.abs(x - st.maple[0]) < 120 || st.berries.some(([bx]) => Math.abs(x - bx) < 110) || Math.abs(x - st.slug[0]) < 140 || Math.abs(x - st.cub[0]) < 80) continue
+      ferns.push([x, st.bank + 40, 120 + r() * 40, r() < 0.4])
+    }
     const trees = st.trees
+    const cedarW = 300
     // The stream's gravel (the payoff), snow and blossoms.
     const gravel: [number, number, number, string][] = []
     const p0 = river.pools[0]
@@ -1421,9 +1765,10 @@ function useScene(st: StageDef, river: River, vb: { x: number; y: number; w: num
     const snow: Pt[] = []
     for (let i = 0; i < 80; i++) snow.push([vx0 + r() * (vx1 - vx0), vb.y - 120 + r() * (vb.h + 120)])
     const bloom: Pt[] = []
-    for (const [x, y, h] of trees) for (let j = 0; j < 4; j++) bloom.push([x + (r() - 0.5) * h * 0.5, y - h * (0.2 + r() * 0.6)])
+    for (const [x, y, h] of trees) for (let j = 0; j < 4; j++) bloom.push([x + (r() - 0.5) * h * 0.4, y - h * (0.2 + r() * 0.6)])
     for (let j = 0; j < 6; j++) bloom.push([st.cedar[0] + (r() - 0.5) * 200, st.raven[1] - 140 - r() * 330])
-    return { water, rock, moss, falls, hills, far, trees, gravel, snow, bloom }
+    for (const [bx, by] of st.berries) for (let j = 0; j < 4; j++) bloom.push([bx + (r() - 0.5) * 120, by - 30 - r() * 90])
+    return { water, shine, rock, moss, falls, stones, farW, forestW, farTiles, forestTiles, mounds, bankFerns, bankRocks, ferns, trees, cedarW, gravel, snow, bloom }
   }, [st, river, vx0, vx1, vb.y, vb.h])
 }
 
@@ -1435,6 +1780,10 @@ const CSS = `
 .salmon-fall { stroke-dasharray: 18 26; animation: salmon-fall 0.5s linear infinite; }
 .salmon-fall2 { animation-duration: 0.37s; }
 @keyframes salmon-fall { to { stroke-dashoffset: -44 } }
+.salmon-foam { animation: salmon-foam 0.9s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+@keyframes salmon-foam { 0%,100% { transform: scale(1, 1) } 50% { transform: scale(1.06, 0.9) } }
+.salmon-shine { animation: salmon-shine 3.5s ease-in-out infinite; }
+@keyframes salmon-shine { 0%,100% { opacity: 0.15 } 50% { opacity: 0.8 } }
 `
 
 const AGAIN = { position: 'absolute' as const, zIndex: 31, right: 'calc(var(--safe-right, 0px) + 16px)', bottom: 'calc(var(--safe-bottom) + 70px)', pointerEvents: 'auto' as const }
@@ -1442,7 +1791,8 @@ const AGAIN = { position: 'absolute' as const, zIndex: 31, right: 'calc(var(--sa
 const TALLY = {
   position: 'absolute' as const,
   zIndex: 30,
-  right: 'calc(var(--safe-right, 0px) + 12px)',
+  left: '50%',
+  transform: 'translateX(-50%)',
   top: 'calc(var(--top-clear) + 8px)',
   display: 'flex',
   alignItems: 'center',
@@ -1465,11 +1815,15 @@ const DOT = { width: 12, height: 12, borderRadius: 99, border: '2px solid rgba(7
 const PILL = {
   background: 'rgba(255,255,255,.92)',
   color: 'var(--ink)',
+  border: 'none',
   borderRadius: 999,
   padding: '8px 20px',
+  minHeight: 44,
+  fontFamily: 'inherit',
   fontSize: 'clamp(16px, 2.4vmin, 22px)',
   fontWeight: 600,
   boxShadow: 'var(--shadow)',
   textAlign: 'center' as const,
   maxWidth: '100%',
+  pointerEvents: 'auto' as const,
 }
