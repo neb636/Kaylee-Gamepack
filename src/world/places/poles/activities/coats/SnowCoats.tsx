@@ -1081,6 +1081,8 @@ export function SnowCoats({ onDone }: ActivityProps) {
   const guide = useRef<GuideHandle>(null)
   const alive = useAlive()
   const talk = useRef({ ran: -99, owl: -99 })
+  /** The summer payoff's stamp, waiting for the cheer; 🔁 cancels it. */
+  const stampTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   const box = useRef<HTMLDivElement>(null)
   const svg = useRef<SVGSVGElement>(null)
   const world = useRef<CoatsWorld | null>(null)
@@ -1125,7 +1127,8 @@ export function SnowCoats({ onDone }: ActivityProps) {
         else if (p === 'dusk') guide.current?.speak(L.coats.hide.gone)
         else if (p === 'end') {
           guide.current?.speak(L.coats.summer.end)
-          setTimeout(() => alive() && onDone(), DONE_AFTER_S * 1000)
+          clearTimeout(stampTimer.current)
+          stampTimer.current = setTimeout(() => alive() && onDone(), DONE_AFTER_S * 1000)
         }
       },
       note: (show) => show && say(L.coats.summer.owl, 'owl'),
@@ -1170,6 +1173,7 @@ export function SnowCoats({ onDone }: ActivityProps) {
   }
 
   const again = () => {
+    clearTimeout(stampTimer.current)
     setPhase('play')
     setRun((r) => ({ section: 'fox', painted: [], n: r.n + 1 }))
   }

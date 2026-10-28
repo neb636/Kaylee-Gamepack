@@ -1,64 +1,108 @@
-// Red Canoe's canoe and Maple as greybox shapes in the toon look (the art gate builds Maple on the chibi rig): a red
-// canoe with wooden gunwales and seats, Maple the beaver in a pink life jacket in the stern holding the paddle, her flat
-// tail out over the back, a backpack in the bow. Kaylee's finger moves the paddle's blade (the world says where: paddle.ts)
-// and Maple's arms follow the shaft. She also waves, cheers, slaps her tail, gets dizzy, and looks at things.
+// Red Canoe's canoe and Maple: a red cedar-strip canoe (a real canoe's shape: long and narrow, pointed at both ends, the
+// ends sweeping up, wooden gunwales and thwarts, little decks at the tips), with Maple the beaver on the chibi rig
+// (engine3d/characters/animal.ts, CANADA_LOOKS.maple) sitting in the stern in a pink life jacket. Kaylee's finger moves
+// the paddle's blade (the world says where: paddle.ts); Maple's paws hold the shaft, one on the grip, one down low, and
+// her body leans into each stroke. She also waves, cheers (a little hop on her seat, with a crouch first), slaps her
+// tail, gets dizzy (her head goes round, stars circle it), looks at whatever is interesting, blinks, and talks with
+// her own voice (engine3d/characters/face.ts).
 //
 // Local frame: +z is the bow (forward), +x is the canoe's left (facing +z, the right-hand side is -x).
-import { Group, Quaternion, Vector3, type BufferGeometry } from 'three'
+import { BufferGeometry, Float32BufferAttribute, Group, Quaternion, Vector3 } from 'three'
 import { bell, clamp, span } from '../../../../../sdk'
+import { buildAnimal, type Rig } from '../../../../engine3d/characters/animal'
+import { FaceLife } from '../../../../engine3d/characters/face'
 import type { Bag } from '../../../../engine3d/dispose'
-import { merge, P, solid, solidMix } from '../../../../engine3d/geo'
+import { bake, merge, P, solid, solidMix } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
+import { CANADA_LOOKS } from '../../characters/looks'
 
 export const CANOE_LEN = 4.6
 const RED = '#E8443F'
 const RED_DARK = '#C23634'
+const CREAM = '#F6DCC0'
 const WOOD = '#D2A67E'
 const WOOD_DARK = '#A97A55'
-const FUR = '#A8714A'
-const FUR_LIGHT = '#E2B48A'
-const TAIL = '#6E4B3B'
-const TEETH = '#FF9A3C'
 const VEST = PAL.hotpink
 const BLADE = PAL.pink
 
-/** Where Maple sits (the stern seat), her shoulders, and how long the paddle is. */
+/** The hull's shape: half its width amidships, the gunwale's height there, how deep it is, and how much the ends rise. */
+const W = 0.5
+const GUN = 0.42
+const DEPTH = 0.4
+const SHEER = 0.26
+/** Where Maple sits (the stern seat), how tall she is, and how long the paddle is. */
 export const SEAT_Z = -1.3
-const SHOULDER_Y = 0.98
-const SHOULDER_X = 0.22
-const PADDLE_LEN = 1.6
-const ARM_R = 0.065
-const WAVE_S = 1.4
-const CHEER_S = 1.8
+const MAPLE_H = 1.2
+const SIT_Y = 0.17
+const PADDLE_LEN = 1.9
+const WAVE_S = 1.5
+const CHEER_S = 1.9
 const SLAP_S = 0.9
 const DIZZY_S = 3.2
 
-const Y = new Vector3(0, 1, 0)
 const tv = new Vector3()
+const tv2 = new Vector3()
 const tq = new Quaternion()
+const tq2 = new Quaternion()
 
-/** A round bar along +y, one meter long, stretched between two points each frame (an arm). */
-class Bone {
-  readonly g = new Group()
-  constructor(bag: Bag, r: number, c: string, parent: Group, hand?: string) {
-    const parts: BufferGeometry[] = [P.cyl(r, r * 0.9, 1, c, { at: [0, 0.5, 0] }, 8)]
-    this.g.add(solid(merge(parts), bag, 2))
-    if (hand) {
-      // The paw at the end, not stretched with the arm.
-      this.hand = solid(merge([P.sphere(r * 1.45, hand)]), bag, 2)
-      parent.add(this.hand)
+/** Half the hull's width, the gunwale's height and the keel's depth below it at z (along the canoe). */
+function hullAt(z: number) {
+  const u = clamp((2 * z) / CANOE_LEN, -1, 1)
+  return { w: W * Math.max(0, 1 - u * u) ** 0.62, g: GUN + SHEER * u ** 4, d: DEPTH * Math.max(0, 1 - u * u) ** 0.35 + 0.02 }
+}
+
+/** One surface of the hull swept from bow to stern: a U across the canoe at each station, `inset` in from the outside
+ *  (the inside surface is inset and shallower, and flat at the tips, where the little decks are). */
+function sweep(inset: number, inner: boolean) {
+  const S = 40
+  const M = 14
+  const pos: number[] = []
+  const idx: number[] = []
+  for (let i = 0; i <= S; i++) {
+    const z = -CANOE_LEN / 2 + (CANOE_LEN * i) / S
+    const { w, g, d } = hullAt(z)
+    const u = Math.abs((2 * z) / CANOE_LEN)
+    // (Inside, the floor rises to the gunwale near the tips: the decks.)
+    const deck = inner ? span(u, 0.72, 0.84) : 0
+    const wi = Math.max(0, w - inset)
+    const di = Math.max(0, d - inset * 1.2) * (1 - deck)
+    for (let j = 0; j <= M; j++) {
+      const a = Math.PI + (Math.PI * j) / M
+      pos.push(Math.cos(a) * wi, g + Math.sin(a) * di - (inner ? 0.004 : 0), z)
     }
-    parent.add(this.g)
   }
-  hand?: Group
-  set(a: Vector3, b: Vector3) {
-    this.g.position.copy(a)
-    tv.subVectors(b, a)
-    const len = tv.length()
-    this.g.quaternion.setFromUnitVectors(Y, tv.multiplyScalar(1 / Math.max(1e-4, len)))
-    this.g.scale.set(1, len, 1)
-    this.hand?.position.copy(b)
+  for (let i = 0; i < S; i++)
+    for (let j = 0; j < M; j++) {
+      const a = i * (M + 1) + j
+      const b = a + M + 1
+      // Outside faces out (down and away), inside faces in (up toward Maple).
+      if (inner) idx.push(a, b, a + 1, a + 1, b, b + 1)
+      else idx.push(a, a + 1, b, a + 1, b + 1, b)
+    }
+  const g = new BufferGeometry()
+  g.setAttribute('position', new Float32BufferAttribute(pos, 3))
+  g.setIndex(idx)
+  g.computeVertexNormals()
+  return g
+}
+
+/** A wooden rail along the gunwale on one side (a chain of short boxes following the sheer). */
+function gunwale(side: number) {
+  const parts: BufferGeometry[] = []
+  const S = 18
+  for (let i = 0; i < S; i++) {
+    const z0 = -CANOE_LEN / 2 + 0.12 + ((CANOE_LEN - 0.24) * i) / S
+    const z1 = -CANOE_LEN / 2 + 0.12 + ((CANOE_LEN - 0.24) * (i + 1)) / S
+    const a = hullAt(z0)
+    const b = hullAt(z1)
+    const x0 = side * a.w
+    const x1 = side * b.w
+    const len = Math.hypot(x1 - x0, b.g - a.g, z1 - z0)
+    const yaw = Math.atan2(x1 - x0, z1 - z0)
+    const pitch = -Math.atan2(b.g - a.g, Math.hypot(x1 - x0, z1 - z0))
+    parts.push(P.box(0.07, 0.05, len + 0.02, WOOD, { at: [(x0 + x1) / 2, (a.g + b.g) / 2 + 0.01, (z0 + z1) / 2], rot: [pitch, yaw, 0] }))
   }
+  return parts
 }
 
 export interface CanoePose {
@@ -77,131 +121,99 @@ export class Canoe {
   readonly root = new Group()
   /** Rocks and bobs on the water. */
   readonly hull = new Group()
-  /** Maple, sitting in the stern. */
-  readonly maple = new Group()
-  readonly height = 1.4
-  private head = new Group()
-  private tail = new Group()
+  /** Maple, sitting in the stern (the rig's root). */
+  readonly maple: Group
+  readonly height = MAPLE_H
+  readonly rig: Rig
+  private life: FaceLife
   private stars = new Group()
   private paddle = new Group()
-  private armL: Bone
-  private armR: Bone
-  private blade = new Vector3(0.6, 0.45, SEAT_Z + 0.35)
-  private grip = new Vector3(-0.5, 0.5, SEAT_Z + 0.35)
+  private blade = new Vector3(0.62, 0.48, SEAT_Z + 0.42)
   private rollV = 0
   private roll = 0
   private waveT = -1
   private cheerT = -1
   private slapT = -1
   private dizzyT = -1
-  private blink = 0
-  private eyes: Group
+  private stroke = 0
+  private lastBlade = new Vector3()
+  private phase = Math.random() * 6
   /** A tail slap hits the water now (the world splashes). */
   slapped = false
 
   constructor(bag: Bag) {
     this.root.add(this.hull)
     const L = CANOE_LEN
-    // ---- The canoe: a long low hull, pointed at both ends, wooden gunwales and seats.
+    // ---- The canoe: the red outside, the cream inside, wooden gunwales, thwarts and the two seats.
+    const thwart = (z: number, y: number, c: string, deep = 0.1) => {
+      const { w } = hullAt(z)
+      return P.box(w * 2 - 0.06, 0.05, deep, c, { at: [0, y, z] })
+    }
     this.hull.add(
-      solid(
-        merge([
-          P.capsule(0.48, L - 0.96, RED, { at: [0, 0.16, 0], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.62] }),
-          P.capsule(0.4, L - 1.1, '#FFE9DA', { at: [0, 0.27, 0], rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.42] }),
-          P.box(0.08, 0.06, L - 1.0, WOOD, { at: [0.45, 0.42, 0] }),
-          P.box(0.08, 0.06, L - 1.0, WOOD, { at: [-0.45, 0.42, 0] }),
-          P.box(0.92, 0.06, 0.32, WOOD_DARK, { at: [0, 0.4, SEAT_Z] }),
-          P.box(0.92, 0.06, 0.32, WOOD_DARK, { at: [0, 0.4, 1.3] }),
-          P.box(0.92, 0.05, 0.1, WOOD, { at: [0, 0.42, 0] }),
-          // Red tips at the bow and stern, a white stripe under the gunwale.
-          P.sphere(0.2, RED_DARK, { at: [0, 0.44, L / 2 - 0.32], scale: [0.6, 1, 1] }, 10),
-          P.sphere(0.2, RED_DARK, { at: [0, 0.44, -L / 2 + 0.32], scale: [0.6, 1, 1] }, 10),
-          P.box(0.02, 0.06, L - 1.5, '#FFFFFF', { at: [0.5, 0.3, 0] }),
-          P.box(0.02, 0.06, L - 1.5, '#FFFFFF', { at: [-0.5, 0.3, 0] }),
-          // The backpack in the bow.
-          P.rbox(0.42, 0.42, 0.3, 0.1, PAL.lavender, { at: [0, 0.55, 1.05] }),
-          P.rbox(0.3, 0.16, 0.08, 0.04, PAL.lavenderDark, { at: [0, 0.5, 1.22] }),
-        ]),
-        bag,
-        2,
-      ),
-    )
-
-    // ---- Maple, sitting on the stern seat facing the bow.
-    this.maple.position.set(0, 0, SEAT_Z)
-    this.hull.add(this.maple)
-    this.maple.add(
-      solid(
-        merge([
-          P.sphere(0.33, FUR, { at: [0, 0.62, 0], scale: [1, 1.05, 0.92] }),
-          P.cyl(0.3, 0.34, 0.32, VEST, { at: [0, 0.66, 0] }, 14),
-          P.box(0.08, 0.3, 0.04, '#FFFFFF', { at: [0.1, 0.66, 0.3] }),
-          P.box(0.08, 0.3, 0.04, '#FFFFFF', { at: [-0.1, 0.66, 0.3] }),
-          P.sphere(0.12, FUR, { at: [0.17, 0.42, 0.3], scale: [1, 0.7, 1.3] }),
-          P.sphere(0.12, FUR, { at: [-0.17, 0.42, 0.3], scale: [1, 0.7, 1.3] }),
-        ]),
-        bag,
-        2,
-      ),
-    )
-    // The head on its pivot (at the neck): round, a light muzzle, a dark nose, two big orange teeth, little ears.
-    this.head.position.set(0, 0.92, 0.02)
-    this.maple.add(this.head)
-    this.head.add(
       solidMix(
         [
-          P.sphere(0.27, FUR, { at: [0, 0.2, 0] }),
-          P.sphere(0.15, FUR_LIGHT, { at: [0, 0.12, 0.2], scale: [1.25, 0.85, 0.9] }),
-          P.sphere(0.065, '#4A3036', { at: [0, 0.2, 0.33], scale: [1.3, 0.9, 0.9] }),
-          P.sphere(0.07, FUR, { at: [0.2, 0.42, -0.02] }),
-          P.sphere(0.07, FUR, { at: [-0.2, 0.42, -0.02] }),
-          P.rbox(0.055, 0.09, 0.03, 0.01, TEETH, { at: [0.03, 0.02, 0.31] }),
-          P.rbox(0.055, 0.09, 0.03, 0.01, TEETH, { at: [-0.03, 0.02, 0.31] }),
+          bake(sweep(0, false), RED),
+          ...gunwale(1),
+          ...gunwale(-1),
+          thwart(SEAT_Z, GUN - 0.1, WOOD_DARK, 0.3),
+          thwart(1.35, GUN - 0.08, WOOD_DARK, 0.26),
+          thwart(0, GUN - 0.02, WOOD),
+          // The backpack in the bow, its pocket and a rolled-up mat on top.
+          P.rbox(0.42, 0.4, 0.3, 0.1, PAL.lavender, { at: [0, 0.38, 0.9] }),
+          P.rbox(0.3, 0.16, 0.07, 0.04, PAL.lavenderDark, { at: [0, 0.32, 1.07] }),
+          P.cyl(0.08, 0.08, 0.44, PAL.mint, { at: [0, 0.62, 0.88], rot: [0, 0, Math.PI / 2] }, 12),
         ],
-        [P.sphere(0.04, PAL.pink, { at: [0.15, 0.13, 0.22], scale: [1, 0.6, 0.4] }), P.sphere(0.04, PAL.pink, { at: [-0.15, 0.13, 0.22], scale: [1, 0.6, 0.4] })],
+        [
+          bake(sweep(0.035, true), CREAM),
+          // The white stripe along the outside under the gunwale, and the darker tips.
+          ...[1, -1].map((s) => P.box(0.015, 0.05, L * 0.62, '#FFFFFF', { at: [s * (W + 0.004), GUN - 0.07, 0] })),
+          ...[1, -1].map((s) => P.sphere(0.07, RED_DARK, { at: [0, GUN + SHEER - 0.02, s * (L / 2 - 0.05)], scale: [0.6, 1.2, 1] }, 10)),
+        ],
         bag,
         2,
       ),
     )
-    this.eyes = solid(
-      merge([
-        P.sphere(0.04, PAL.ink, { at: [0.1, 0.27, 0.23] }),
-        P.sphere(0.04, PAL.ink, { at: [-0.1, 0.27, 0.23] }),
-        P.sphere(0.014, '#FFFFFF', { at: [0.11, 0.29, 0.26] }),
-        P.sphere(0.014, '#FFFFFF', { at: [-0.09, 0.29, 0.26] }),
-      ]),
-      bag,
-      0,
+
+    // ---- Maple on the rig, sitting on the stern seat facing the bow, in her pink life jacket.
+    this.rig = buildAnimal({ ...CANADA_LOOKS.maple, height: MAPLE_H }, bag)
+    this.maple = this.rig.root
+    this.maple.children[0].visible = false // (the rig's own blob shadow: she sits in the canoe)
+    this.maple.position.set(0, SIT_Y, SEAT_Z)
+    this.hull.add(this.maple)
+    const H = MAPLE_H
+    this.rig.body.add(
+      solidMix(
+        [P.cyl(0.255 * H, 0.27 * H, 0.2 * H, VEST, { at: [0, 0.3 * H, 0.005 * H], scale: [1.02, 1, 0.98] }, 18), P.box(0.06 * H, 0.14 * H, 0.03 * H, VEST, { at: [0.11 * H, 0.43 * H, 0.17 * H] }), P.box(0.06 * H, 0.14 * H, 0.03 * H, VEST, { at: [-0.11 * H, 0.43 * H, 0.17 * H] })],
+        [P.box(0.05 * H, 0.16 * H, 0.012 * H, '#FFFFFF', { at: [0.06 * H, 0.3 * H, 0.27 * H] }), P.box(0.05 * H, 0.16 * H, 0.012 * H, '#FFFFFF', { at: [-0.06 * H, 0.3 * H, 0.27 * H] }), P.rbox(0.09 * H, 0.03 * H, 0.015 * H, 0.008 * H, PAL.butter, { at: [0, 0.3 * H, 0.275 * H] })],
+        bag,
+        2,
+      ),
     )
-    this.head.add(this.eyes)
+    this.life = new FaceLife(this.rig, 'maple')
     // Dizzy stars round her head.
-    for (let i = 0; i < 3; i++) {
-      const s = solid(merge([P.sphere(0.06, PAL.butter, { scale: [1, 1, 0.5] })]), bag, 1.2)
-      s.position.set(Math.cos((i * Math.PI * 2) / 3) * 0.32, 0.55, Math.sin((i * Math.PI * 2) / 3) * 0.32)
+    for (let i = 0; i < 4; i++) {
+      const s = solid(merge([P.sphere(0.055, PAL.butter, { scale: [1, 1, 0.45] }), P.cone(0.03, 0.08, PAL.butter, { at: [0, 0.07, 0] }, 5), P.cone(0.03, 0.08, PAL.butter, { at: [0, -0.07, 0], rot: [Math.PI, 0, 0] }, 5)]), bag, 1.2)
+      s.position.set(Math.cos((i * Math.PI) / 2) * 0.34, 0, Math.sin((i * Math.PI) / 2) * 0.34)
       this.stars.add(s)
     }
+    this.stars.position.y = this.rig.face.headY + this.rig.face.R * 1.25
     this.stars.visible = false
-    this.head.add(this.stars)
-    // The flat tail out over the stern, on a pivot for the slap.
-    this.tail.position.set(0, 0.42, -0.3)
-    this.maple.add(this.tail)
-    this.tail.add(solid(merge([P.rbox(0.3, 0.06, 0.62, 0.03, TAIL, { at: [0, 0, -0.32] }), ...[0, 1, 2].map((i) => P.box(0.26, 0.065, 0.02, '#5A3B2E', { at: [0, 0, -0.15 - i * 0.16] }))]), bag, 2))
+    this.rig.head.add(this.stars)
 
-    // ---- The paddle (a wooden shaft, a pink blade, a grip on top) and Maple's arms.
+    // ---- The paddle: a wooden shaft, a pink blade, a T-grip on top (its origin is the blade's middle).
     this.paddle.add(
       solid(
         merge([
-          P.cyl(0.03, 0.03, PADDLE_LEN, WOOD, { at: [0, PADDLE_LEN / 2, 0] }, 8),
-          P.rbox(0.2, 0.5, 0.045, 0.04, BLADE, { at: [0, 0.18, 0] }),
-          P.rbox(0.16, 0.05, 0.06, 0.02, WOOD_DARK, { at: [0, PADDLE_LEN, 0] }),
+          P.cyl(0.028, 0.028, PADDLE_LEN - 0.2, WOOD, { at: [0, (PADDLE_LEN - 0.2) / 2 + 0.2, 0] }, 8),
+          P.rbox(0.2, 0.52, 0.045, 0.06, BLADE, { at: [0, 0.06, 0] }),
+          P.cyl(0.034, 0.02, 0.12, WOOD, { at: [0, 0.36, 0] }, 8),
+          P.rbox(0.15, 0.05, 0.06, 0.02, WOOD_DARK, { at: [0, PADDLE_LEN, 0] }),
         ]),
         bag,
         1.6,
       ),
     )
     this.hull.add(this.paddle)
-    this.armL = new Bone(bag, ARM_R, FUR, this.hull, FUR_LIGHT)
-    this.armR = new Bone(bag, ARM_R, FUR, this.hull, FUR_LIGHT)
   }
 
   // ---- Actions.
@@ -222,6 +234,9 @@ export class Canoe {
   get isDizzy() {
     return this.dizzyT >= 0
   }
+  get busy() {
+    return this.waveT >= 0 || this.cheerT >= 0 || this.slapT >= 0 || this.dizzyT >= 0
+  }
   /** A stroke's push sideways (the canoe rocks). */
   rock(k: number) {
     this.rollV += k
@@ -234,6 +249,8 @@ export class Canoe {
 
   update(dt: number, t: number, pose: CanoePose) {
     const ease = (rate: number) => 1 - Math.exp(-dt * rate)
+    const { body, head, armL, armR, tail, eyes } = this.rig
+    const H = MAPLE_H
     // ---- The hull: rocks back level after a stroke, leans out of turns, the bow lifts with speed.
     this.rollV += (-60 * this.roll - 5 * this.rollV) * dt
     this.roll += this.rollV * dt
@@ -249,88 +266,145 @@ export class Canoe {
     this.slapT = tick(this.slapT, SLAP_S)
     if (wasSlap >= 0 && wasSlap < 0.42 && (this.slapT >= 0.42 || this.slapT < 0)) this.slapped = true
     this.dizzyT = tick(this.dizzyT, DIZZY_S)
+    this.life.update(dt)
 
-    // ---- The paddle: the blade glides to where the world says (or rests across her lap while she waves or cheers).
-    const busy = this.cheerT >= 0
-    const rest = !pose.blade || busy
-    const want = rest ? tv.set(0.62, 0.48, SEAT_Z + 0.42) : tv.copy(pose.blade!)
+    // ---- The blade glides to where the world says (or the paddle rests across her lap while she cheers).
+    const cheering = this.cheerT >= 0
+    const rest = !pose.blade || cheering
+    const want = rest ? tv.set(0.66, 0.5, SEAT_Z + 0.5) : tv.copy(pose.blade!)
+    this.lastBlade.copy(this.blade)
     this.blade.lerp(want, ease(rest ? 6 : 26))
-    const sh = new Vector3(0, SHOULDER_Y + 0.42, SEAT_Z)
-    if (rest) this.grip.lerp(new Vector3(-0.6, 0.5, SEAT_Z + 0.42), ease(6))
-    else this.grip.copy(this.blade).add(sh.clone().sub(this.blade).normalize().multiplyScalar(PADDLE_LEN))
-    this.paddle.position.copy(this.blade)
-    this.paddle.quaternion.setFromUnitVectors(Y, tv.subVectors(this.grip, this.blade).normalize())
-    // Maple's hands: the top hand on the grip, the lower one down the shaft (on the blade's side).
+    // How hard she's pulling right now (the blade moving back in the water): her body leans into it.
+    const back = dt > 0 ? clamp((this.lastBlade.z - this.blade.z) / dt / 3, 0, 1) : 0
+    this.stroke += ((this.blade.y < 0.1 ? back : 0) - this.stroke) * ease(8)
     const side = this.blade.x >= 0 ? 1 : -1
-    const shL = new Vector3(SHOULDER_X, SHOULDER_Y, SEAT_Z + 0.02)
-    const shR = new Vector3(-SHOULDER_X, SHOULDER_Y, SEAT_Z + 0.02)
-    const top = this.grip.clone()
-    const low = this.blade.clone().lerp(this.grip, 0.58)
-    let handL = side > 0 ? low : top
-    let handR = side > 0 ? top : low
-    if (rest) {
-      handL = this.blade.clone().lerp(this.grip, 0.25)
-      handR = this.blade.clone().lerp(this.grip, 0.78)
-    }
-    // A wave: her right paw (the camera's left) up and swinging; a cheer: both up.
-    if (this.waveT >= 0) {
-      const k = bell(span(this.waveT / WAVE_S, 0, 1))
-      handR = shR.clone().lerp(new Vector3(-0.42 + Math.sin(this.waveT * 14) * 0.12, SHOULDER_Y + 0.55, SEAT_Z + 0.15), k)
-    }
-    if (busy) {
-      const k = bell(span(this.cheerT / CHEER_S, 0, 1)) ** 0.5
-      const j = Math.abs(Math.sin(this.cheerT * 9)) * 0.08
-      handL = shL.clone().lerp(new Vector3(0.36, SHOULDER_Y + 0.6 + j, SEAT_Z + 0.1), k)
-      handR = shR.clone().lerp(new Vector3(-0.36, SHOULDER_Y + 0.6 + j, SEAT_Z + 0.1), k)
-    }
-    // (Arms don't stretch past a beaver's reach: the hand stops short of the shaft.)
-    const reach = (s: Vector3, h: Vector3) => {
-      const d = h.clone().sub(s)
-      const l = d.length()
-      return l > 0.62 ? s.clone().add(d.multiplyScalar(0.62 / l)) : h
-    }
-    this.armL.set(shL, reach(shL, handL))
-    this.armR.set(shR, reach(shR, handR))
-    this.maple.position.y = this.cheerT >= 0 ? Math.abs(Math.sin(this.cheerT * 9)) * 0.06 : 0
-    this.maple.rotation.y = rest ? 0 : clamp(this.blade.x * 0.25, -0.3, 0.3)
 
-    // ---- Her head: looks at what's interesting, wobbles round when dizzy; blinks.
+    // ---- Her body: sits, breathes, twists toward the paddle's side and leans into a stroke; a cheer is a hop on the
+    // seat (a crouch first, then up, then a squashy landing); dizzy, she sways round.
+    const breathe = 0.02 * Math.sin(t * 2.4 + this.phase)
+    let hop = 0
+    let squash = 0
+    if (cheering) {
+      const c = this.cheerT
+      squash = c < 0.18 ? 0.12 * bell(c / 0.36) : 0
+      const air = span(c, 0.18, 0.62)
+      hop = bell(air) * 0.12 + (c > 0.62 ? Math.abs(Math.sin((c - 0.62) * 9)) * 0.04 * (1 - span(c, 0.62, CHEER_S)) : 0)
+      if (c > 0.62 && c < 0.8) squash = 0.08 * bell(span(c, 0.62, 0.8))
+    }
+    const dz = this.dizzyT >= 0 ? bell(span(this.dizzyT / DIZZY_S, 0, 1)) : 0
+    body.position.y = hop
+    body.scale.set(1 + squash * 0.5, 1 - squash + breathe, 1 + squash * 0.5)
+    const twist = rest ? 0 : clamp(this.blade.x * 0.28, -0.32, 0.32)
+    body.rotation.y += (twist + Math.sin(this.dizzyT * 7) * 0.2 * dz - body.rotation.y) * ease(8)
+    body.rotation.x += (this.stroke * 0.22 - (rest ? 0 : 0.04) - body.rotation.x) * ease(10)
+    body.rotation.z += (-side * this.stroke * 0.08 * (rest ? 0 : 1) + Math.cos(this.dizzyT * 7) * 0.12 * dz - body.rotation.z) * ease(8)
+
+    // ---- The paddle: the top paw (away from the blade) holds the grip up by her shoulder; the shaft runs from the
+    // blade through it; the low paw holds the shaft down near the blade.
+    this.root.updateMatrixWorld(true)
+    const top = side > 0 ? armL : armR
+    const low = side > 0 ? armR : armL
+    const sTop = this.toHull(top.getWorldPosition(tv2), new Vector3())
+    const sLow = this.toHull(low.getWorldPosition(tv2), new Vector3())
+    const grip = rest ? new Vector3(-0.42, 0.62, SEAT_Z + 0.42) : new Vector3(sTop.x - side * 0.08, sTop.y + 0.2, sTop.z + 0.2)
+    const topPaw = this.aimArm(top, sTop, grip, dt, rest ? 8 : 22)
+    const shaft = topPaw.clone().sub(this.blade).normalize()
+    this.paddle.position.copy(this.blade)
+    this.paddle.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), shaft)
+    // The low paw: the point on the shaft nearest its shoulder (a little toward the blade).
+    const along = clamp(sLow.clone().sub(this.blade).dot(shaft) - 0.06, 0.35, PADDLE_LEN - 0.4)
+    const lowAt = this.blade.clone().addScaledVector(shaft, along)
+    this.aimArm(low, sLow, lowAt, dt, rest ? 8 : 22)
+    // A wave (the paw on the camera's side, away from the blade) or a cheer (both paws up) take over from the paddle.
+    const w = this.waveT >= 0 ? bell(span(this.waveT / WAVE_S, 0, 1)) ** 0.6 : 0
+    if (w > 0) {
+      const waving = side > 0 ? armL : armR
+      const s = waving === armR ? 1 : -1
+      const sh = this.toHull(waving.getWorldPosition(tv2), new Vector3())
+      const up = sh.clone().add(new Vector3(s * (0.16 + Math.sin(this.waveT * 13) * 0.08), 0.3, 0.06))
+      this.aimArm(waving, sh, up, dt, 30, w)
+    }
+    if (cheering) {
+      const k = bell(span(this.cheerT / CHEER_S, 0, 1)) ** 0.4
+      for (const [a, s] of [[armR, 1], [armL, -1]] as const) {
+        const sh = this.toHull(a.getWorldPosition(tv2), new Vector3())
+        this.aimArm(a, sh, sh.clone().add(new Vector3(s * 0.14, 0.3, 0.05 + Math.sin(this.cheerT * 10 + s) * 0.04)), dt, 30, k)
+      }
+    }
+
+    // ---- Her head: looks at what's interesting (and up at the paddle's side mid-stroke), wobbles round when dizzy,
+    // tips to the side as she waves.
     let yaw = 0
     let pitch = 0
     if (pose.look) {
-      this.head.updateWorldMatrix(true, false)
-      const local = this.head.parent!.worldToLocal(tv.copy(pose.look))
-      yaw = clamp(Math.atan2(local.x - this.head.position.x, local.z - this.head.position.z), -1.2, 1.2)
-      pitch = clamp(-Math.atan2(local.y - this.head.position.y, Math.hypot(local.x, local.z)) * 0.5, -0.4, 0.3)
+      const local = this.toHull(tv.copy(pose.look), new Vector3())
+      yaw = clamp(Math.atan2(local.x, local.z - SEAT_Z) - body.rotation.y, -1.1, 1.1)
+      pitch = clamp(-Math.atan2(local.y - 1, Math.hypot(local.x, local.z - SEAT_Z)) * 0.5, -0.35, 0.3)
     }
-    if (this.dizzyT >= 0) {
-      const k = bell(span(this.dizzyT / DIZZY_S, 0, 1))
-      yaw = Math.sin(this.dizzyT * 7) * 0.45 * k
-      pitch = Math.cos(this.dizzyT * 7) * 0.2 * k
-      this.head.rotation.z = Math.sin(this.dizzyT * 7) * 0.25 * k
-      this.stars.visible = true
+    let roll = -0.15 * w
+    if (dz > 0) {
+      yaw = Math.sin(this.dizzyT * 7) * 0.5 * dz
+      pitch = Math.cos(this.dizzyT * 7) * 0.22 * dz
+      roll = Math.sin(this.dizzyT * 7 + 1) * 0.28 * dz
+    }
+    if (cheering) pitch = -0.25 * bell(span(this.cheerT / CHEER_S, 0, 1))
+    head.rotation.y += (yaw - head.rotation.y) * ease(dz > 0 ? 14 : 5)
+    head.rotation.x += (pitch - head.rotation.x) * ease(dz > 0 ? 14 : 5)
+    head.rotation.z += (roll - head.rotation.z) * ease(8)
+    this.stars.visible = dz > 0.02
+    if (this.stars.visible) {
       this.stars.rotation.y = this.dizzyT * 6
-    } else {
-      this.head.rotation.z *= 1 - ease(8)
-      this.stars.visible = false
+      this.stars.scale.setScalar(0.4 + dz * 0.6)
     }
-    this.head.rotation.y += (yaw - this.head.rotation.y) * ease(5)
-    this.head.rotation.x += (pitch - this.head.rotation.x) * ease(5)
-    this.blink -= dt
-    if (this.blink < -0.12) this.blink = 2 + Math.random() * 3
-    this.eyes.scale.y = this.blink < 0 || this.dizzyT >= 0 ? 0.15 : 1
+    if (dz > 0.2) eyes.scale.y = 0.18
 
-    // ---- The tail: wags behind her; a slap swings it up and down onto the water.
-    if (this.slapT >= 0) {
-      const q = this.slapT / SLAP_S
-      this.tail.rotation.x = q < 0.3 ? -1.1 * (q / 0.3) : q < 0.45 ? -1.1 + 1.5 * ((q - 0.3) / 0.15) : 0.4 * (1 - span(q, 0.45, 1))
-    } else this.tail.rotation.x = Math.sin(t * 2.1) * 0.08
-    this.tail.rotation.y = Math.sin(t * 1.3) * 0.15
+    // ---- The tail: lies out over the stern seat and wags; a slap swings it up (anticipation), down hard, and settles.
+    if (tail) {
+      if (this.slapT >= 0) {
+        const q = this.slapT / SLAP_S
+        tail.rotation.x = q < 0.3 ? 1.0 * (q / 0.3) : q < 0.45 ? 1.0 - 1.35 * ((q - 0.3) / 0.15) : -0.35 * (1 - span(q, 0.45, 1))
+      } else tail.rotation.x = 0.12 + Math.sin(t * 2.1) * 0.06
+      tail.rotation.y = Math.sin(t * 1.3) * 0.18
+    }
+    void H
+  }
+
+  /** A world point in the hull's frame. */
+  private toHull(p: Vector3, out: Vector3) {
+    return this.hull.worldToLocal(out.copy(p))
+  }
+
+  /**
+   * Turns an arm (on its shoulder pivot) to reach toward `target` (hull-local), stretching a little if it's far
+   * (a toy's arms are short), easing there at `rate`. `weight` blends it in over the arm's other pose. Returns where the
+   * paw ends up (hull-local).
+   */
+  private aimArm(arm: Group, shoulder: Vector3, target: Vector3, dt: number, rate: number, weight = 1) {
+    const H = MAPLE_H
+    // The arm hangs along this (arm-local), and the paw sits this far out.
+    const rest = tv.set(arm === this.rig.armR ? 0.05 * H : -0.05 * H, -0.14 * H, 0.005 * H)
+    const reach = rest.length()
+    const restDir = rest.clone().normalize()
+    const d = target.clone().sub(shoulder)
+    const len = d.length()
+    // Hull-local direction into the arm's parent (the body) frame.
+    this.hull.getWorldQuaternion(tq)
+    arm.parent!.getWorldQuaternion(tq2)
+    const dir = d.normalize().applyQuaternion(tq).applyQuaternion(tq2.invert())
+    const q = new Quaternion().setFromUnitVectors(restDir, dir)
+    const k = (1 - Math.exp(-dt * rate)) * weight
+    arm.quaternion.slerp(q, weight >= 1 ? k : Math.min(1, k * 3))
+    const stretch = clamp(len / reach, 1, 1.9)
+    arm.scale.y += (stretch - arm.scale.y) * k
+    arm.scale.x = arm.scale.z = 1
+    return shoulder.clone().add(target.clone().sub(shoulder).normalize().multiplyScalar(reach * arm.scale.y))
   }
 
   /** The tail's tip in the world (a slap splashes there). */
   tailTip(out: Vector3) {
-    return this.tail.localToWorld(out.set(0, 0, -0.6))
+    const tail = this.rig.tail
+    if (!tail) return this.hull.localToWorld(out.set(0, 0.3, SEAT_Z - 0.5))
+    return tail.localToWorld(out.set(0, 0.07 * MAPLE_H, -0.45 * MAPLE_H))
   }
   /** The blade in the world. */
   bladeWorld(out: Vector3) {

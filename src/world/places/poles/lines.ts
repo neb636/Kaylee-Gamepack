@@ -219,16 +219,16 @@ export const L = {
     pick: 'Pick a pole: north or south?',
     bits: 'Tap the cracks to break off the ice!',
     giant: 'A giant crack! Tap, tap, tap!',
-    under: 'Look! Most of the iceberg hides under the water.',
+    under: 'Look how big it is under the water!',
     push: 'Push the iceberg down with your finger!',
     sail: 'Now push the icebergs out to sea!',
     done: 'Your icebergs are sailing away!',
-    // Sparkle's facts, each the first time it comes up.
+    // Sparkle's facts: the first two as the first bits splash in, the rest the first time she pokes or pushes something.
     facts: {
       calving: "When ice breaks off, it's called calving!",
       north: 'Icebergs up north are tall and pointy.',
       south: 'Icebergs down south are flat, like a table!',
-      hidden: 'Nine parts out of ten are under the water!',
+      hidden: 'Most of it hides under the sea!',
       fresh: "Icebergs are made of snow, so they're not salty!",
       fizz: 'Fizz! Old air bubbles pop out of the ice.',
       blue: 'Old ice is packed so tight, it looks blue!',

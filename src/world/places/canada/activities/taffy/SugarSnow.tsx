@@ -1,5 +1,6 @@
-// Sugar Snow (greybox 3, plan: planning/around-the-world/canada.html): maple taffy on snow (tire d'érable). One verb,
-// pour, that gets richer three times, and the stick that rolls up what she poured:
+// Sugar Snow (plan: planning/around-the-world/canada.html): maple taffy on snow (tire d'érable) at a Quebec sugar shack
+// in winter. Maple's cousins are coming for a treat (the story beat). One verb, pour, that gets richer three times, and
+// the stick that rolls up what she poured:
 //   pour    tip the pot over the tray of snow: a little tilt pours a thin golden line, more tilt gushes, and standing
 //           still makes a puddle. Wherever the pot goes the syrup draws on the snow (perfect-freehand strokes, as wide as
 //           the syrup that fell there), steams, and sets lighter. Then she drags the stick along her line and it winds
@@ -14,17 +15,45 @@
 // right round, a red squirrel sneaks in to lick the set syrup, a chickadee lands on a stick left lying.
 // Two ways to tip the pot (`?tip=hold`: it tips more the longer she holds it; `?tip=lead`: it trails her finger and
 // tips by how far she pulls ahead). The pour, the setting and the roll are knobs (?feel=1). 2D only: SVG written every
-// frame, no three.js. Placeholder shapes, no voices yet (the full-loop gate): a short line at the bottom says what's
-// on screen, for Dad.
+// frame, no three.js. One camera: straight down at the table (the props are drawn from above; the animals lean over
+// the tray's far edge and look up at her). Maple is her live puppet; the others are code-drawn faces that blink, chomp
+// and puff their cheeks. Sparkle speaks when something new starts and when she's stuck; the friends react in their own
+// voices (lines.ts, L.taffy). A short line at the bottom shows what's said, for Dad.
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, bigCelebration, burst, sounds, useElementSize } from '../../../../../sdk'
+import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent, type Ref } from 'react'
+import { BigButton, bigCelebration, burst, say, sounds, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
+import { StoryBeat } from '../../../../kit/StoryBeat'
+import { meet } from '../../book/met'
+import type { AnimalId as BookId } from '../../book/animals'
+import { L } from '../../lines'
+import { Maple } from '../../puppets/Maple'
+import type { CanadaActivityProps } from '../props'
+import potImg from '../../assets/taffy-pot.webp'
+import { Bucket, Crate, Drips, Post, ROOF_CHIMNEY, Roof, Sparkles, Stove, Tray, Tree, Yard } from './Scenery'
+import { CANADA_COLORS } from '../../characters/looks'
 import TAFFY_SECTIONS, { type TaffySection } from './sections'
 import { LOOKS, ORDER_IDS, SHAPE_IDS, TALL, WANTS, WIDE, sampleShape, shapePath, type AnimalId, type Look, type OrderId, type Pt, type ShapeId, type StageDef } from './stage'
-import { drawPiece, isGone, isSet, left, newPiece, puddleVol, removePiece, syrupColor, type Piece } from './syrup'
+import { drawPiece, isGone, isSet, left, newPiece, puddleVol, removePiece, syrupColor, type Layers, type Piece } from './syrup'
+
+const T = L.taffy
+/** Who each animal at the table is in Maple's book. */
+const BOOK: Record<AnimalId, BookId> = { maple: 'beaver', cousin: 'beaver', chipmunk: 'chipmunk', owl: 'snowy-owl', moose: 'moose' }
+/** Their reactions, in their own voices: a hello when poked, more please, full, and far too big. */
+const VOICE: Record<OrderId, { hi: Line; yum: Line; full: Line; big?: Line }> = {
+  chipmunk: { hi: T.chipHi, yum: T.chipYum, full: T.chipFull, big: T.chipBig },
+  cousin: { hi: T.cousinHi, yum: T.cousinYum, full: T.cousinFull },
+  owl: { hi: T.owlHi, yum: T.owlYum, full: T.owlFull },
+  moose: { hi: T.mooseHi, yum: T.mooseYum, full: T.mooseFull },
+}
+/** Maple's puppet acts out what the code animals do with their faces. */
+type AnimKind = 'hop' | 'wiggle' | 'chomp' | 'spin' | 'puff' | 'squint' | 'wave' | 'slap'
+const MAPLE_ACT: Record<AnimKind, string> = { hop: 'hop', wiggle: 'wiggle', chomp: 'chomp', spin: 'hop', puff: 'wiggle', squint: 'wiggle', wave: 'wave', slap: 'slap' }
+/** Maple's puppet: its 500-unit box is drawn this big (stage units), with her head's middle on the animal's spot. */
+const MAPLE_BOX = 336
+const MAPLE_HEAD: Pt = [250, 186]
 
 const FILE = 'src/world/places/canada/activities/taffy/SugarSnow.tsx'
 /** Sizes are stage units (the wide stage is 1600 x 1000; on an iPad a stage unit is about 0.7 px). Syrup is measured
@@ -70,6 +99,7 @@ const UNIT = () => ROLL.unit
 const ballR = (vol: number) => ROLL.ball * Math.sqrt(Math.max(0, vol) / UNIT())
 
 const SAY: Record<TaffySection, string> = {
+  story: "🍁 Maple's cousins are coming!",
   pour: '🍯 Tip the pot onto the snow',
   shapes: '💗 Pour a shape!',
   orders: '🍭 Who wants which size?',
@@ -77,7 +107,7 @@ const SAY: Record<TaffySection, string> = {
 }
 const SHAPE_NAME: Record<ShapeId, string> = { heart: 'A heart', leaf: 'A maple leaf', loop: 'A loop', k: 'A K' }
 /** How many lollipops each section starts with (the little sticks along the tray). */
-const START_MADE: Record<TaffySection, number> = { pour: 0, shapes: 3, orders: 6, share: 10 }
+const START_MADE: Record<TaffySection, number> = { story: 0, pour: 0, shapes: 3, orders: 6, share: 10 }
 
 const ease = (p: number) => (p < 0 ? 0 : p > 1 ? 1 : p * p * (3 - 2 * p))
 const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v)
@@ -115,13 +145,13 @@ interface Animal {
   x: number
   y: number
   look: Look
-  anim: { kind: 'hop' | 'wiggle' | 'chomp' | 'spin' | 'puff' | 'squint'; t0: number; dur: number } | null
+  anim: { kind: AnimKind; t0: number; dur: number; played?: boolean } | null
   fill: number
   done: boolean
   /** A silly overfill: puffed-out cheeks for a while. */
   puffed: number
   shown: boolean
-  els: { root: SVGGElement; body: SVGGElement; mouth: SVGEllipseElement | null; cheeks: SVGGElement | null; head: SVGGElement | null; meter: SVGCircleElement | null; bubble: SVGGElement | null; eyes: SVGElement[]; happy: SVGElement | null }
+  els: { root: SVGGElement; body: SVGGElement | null; paws: SVGGElement | null; mouth: SVGEllipseElement | null; cheeks: SVGGElement | null; head: SVGGElement | null; meter: SVGCircleElement | null; bubble: SVGGElement | null; eyes: SVGElement[]; happy: SVGElement | null }
 }
 interface Puff {
   el: SVGCircleElement
@@ -138,6 +168,10 @@ interface Events {
   fed: (fed: string, made: number) => void
   say: (text: string) => void
   share: () => void
+  /** Speak a line (Sparkle's or a friend's); `queue` waits for what's being said. */
+  talk: (line: Line, queue?: boolean) => void
+  /** The payoff has played: the stamp. */
+  done: () => void
 }
 
 class TaffyWorld {
@@ -147,7 +181,15 @@ class TaffyWorld {
   made: number
   sectionMade = 0
   pieces: Piece[] = []
-  layers: { dent: SVGGElement; ink: SVGGElement; fill: SVGGElement }
+  layers: Layers
+  /** Maple's puppet (set by React). */
+  maple: PuppetHandle | null = null
+  /** When each once-only or rate-limited line was last said. */
+  talked = new Map<string, number>()
+  crunches = 0
+  /** The section's first line has been said (after the story). */
+  started = false
+  idleHinted = false
   pot = { x: 0, y: 0, sx: 0, sy: 0, held: false, tilt: 0, level: 0, angle: Math.PI / 2, piece: null as Piece | null, last: null as Pt | null, acc: 0, wobble: -9, flow: 0, width: 0 }
   lollies: Lolly[] = []
   animals = new Map<AnimalId, Animal>()
@@ -161,7 +203,7 @@ class TaffyWorld {
   steamAcc = 0
   smokeAt = 2
   owlSpin = -9
-  squirrel = { state: 'off' as 'off' | 'in' | 'lick' | 'out', x: 0, y: 0, x0: 0, y0: 0, tx: 0, ty: 0, t: 0, next: 22, ate: 0 }
+  squirrel = { state: 'off' as 'off' | 'in' | 'lick' | 'out', x: 0, y: 0, x0: 0, y0: 0, tx: 0, ty: 0, t: 0, next: 12, ate: 0 }
   bird = { on: null as Lolly | null, t: 0, flyT: -9, x: 0, y: 0 }
   shape = { i: 0, guide: [] as Pt[], matched: false, checkAt: 0 }
   bucket = 0.3
@@ -174,6 +216,33 @@ class TaffyWorld {
   dead = false
   private later(f: () => void, ms: number) {
     setTimeout(() => !this.dead && f(), ms)
+  }
+
+  /** Says a line. With a key: once only (every = 0), or at most every `every` seconds. */
+  private talk(line: Line, key?: string, every = 0, queue = false) {
+    if (key) {
+      const at = this.talked.get(key)
+      if (at !== undefined && (every <= 0 || this.now - at < every)) return
+      this.talked.set(key, this.now)
+    }
+    this.ev.talk(line, queue)
+  }
+
+  /** The play begins (after the story, or straight from a section link): Sparkle says what's new, once. */
+  start() {
+    if (this.started) return
+    this.started = true
+    this.lastTouch = this.now
+    if (this.section === 'pour') this.talk(T.pour)
+    else if (this.section === 'shapes') {
+      this.talk(T.shapes)
+      this.talk(T.card[SHAPE_IDS[this.shape.i % SHAPE_IDS.length]], undefined, 0, true)
+    } else if (this.section === 'orders') this.talk(T.orders)
+  }
+
+  /** She poked or fed an animal: the first time, it goes in Maple's book. */
+  private met(id: AnimalId) {
+    meet(BOOK[id])
   }
 
   constructor(
@@ -191,8 +260,8 @@ class TaffyWorld {
     this.tipMode = tip
     const q = <T extends Element>(k: string) => svg.querySelector(`[data-k="${k}"]`) as T
     const qa = <T extends Element>(k: string) => [...svg.querySelectorAll(`[data-k="${k}"]`)] as T[]
-    this.layers = { dent: q('dents'), ink: q('ink'), fill: q('fill') }
-    for (const k of ['pot', 'pot-body', 'pot-syrup', 'pot-stream', 'steam', 'fx', 'lollies', 'hint', 'tally', 'guide', 'guide-glow', 'squirrel', 'squirrel-body', 'bird', 'owl-head', 'bucket-sap', 'smoke', 'drips']) this.els[k] = q(k)
+    this.layers = { dent: q('dents'), ink: q('ink'), fill: q('fill'), gloss: q('gloss') }
+    for (const k of ['pot-gloss', 'pot', 'pot-body', 'pot-syrup', 'pot-stream', 'steam', 'fx', 'lollies', 'hint', 'tally', 'guide', 'guide-glow', 'squirrel', 'squirrel-body', 'bird', 'owl-head', 'bucket-sap', 'smoke', 'drips']) this.els[k] = q(k)
     for (const el of qa<SVGCircleElement>('flake')) this.flakes.push({ el, x: Math.random(), y: Math.random(), vy: 0.7 + Math.random() * 0.8, ph: Math.random() * 6 })
     for (const el of qa<SVGCircleElement>('puff')) this.puffs.push({ el, x: 0, y: 0, t: 9, life: 1, r: 10, vy: 0 })
     for (const el of qa<SVGCircleElement>('drip')) this.drips.push({ el, t: 9 })
@@ -214,6 +283,7 @@ class TaffyWorld {
         els: {
           root,
           body: q(`a-${id}-body`),
+          paws: q(`a-${id}-paws`),
           mouth: q(`a-${id}-mouth`),
           cheeks: q(`a-${id}-cheeks`),
           head: q(`a-${id}-head`),
@@ -284,6 +354,7 @@ class TaffyWorld {
     // 1. A finished lollipop waiting to be given, or the stick she left lying with taffy on it.
     const near = this.lollies.filter((l) => l.state === 'ready' || l.state === 'lying').sort((a, b) => Math.hypot(a.x - x, a.y - y) - Math.hypot(b.x - x, b.y - y))[0]
     if (near && this.hitLolly(near, x, y)) {
+      if (this.bird.on === near) meet('chickadee')
       this.scareBird(near)
       f.lolly = near
       if (near.state === 'ready') {
@@ -414,7 +485,10 @@ class TaffyWorld {
     pot.flow = over && level && pot.tilt > TIP.start ? FLOW.max * Math.pow(t, FLOW.curve) : 0
     if (pot.flow > 0) this.deposit(pot.flow * UNIT() * dt)
     else if (pot.piece) this.endPour()
-    if (holding && pot.tilt > TIP.start && !level && Math.random() < dt * 3) tone(500, 300, 0.08, 0.05, 'sine')
+    if (holding && pot.tilt > TIP.start && !level) {
+      if (Math.random() < dt * 3) tone(500, 300, 0.08, 0.05, 'sine')
+      this.talk(T.empty, 'empty', 12)
+    }
   }
 
   /** `dv` square units of syrup fall at the spout this frame. */
@@ -584,7 +658,8 @@ class TaffyWorld {
     if (hot && Math.random() < dt * 6) {
       noise(0.18, 0.05, 'highpass', 3000, 6000)
       this.steamAt(l.x, l.y, 3)
-      this.say('♨️ Still hot! Wait for it to set')
+      this.say('♨️ Still hot! Let it set')
+      this.talk(T.hot, 'hot', 10)
     }
   }
 
@@ -640,6 +715,7 @@ class TaffyWorld {
       l.state = 'ready'
       l.home = this.readySpot(this.lollies.filter((o) => o.state === 'ready').length)
       l.still = 0
+      this.talk(T.give, 'give')
       return
     }
     const giant = l.vol / UNIT() >= ROLL.giant
@@ -676,6 +752,7 @@ class TaffyWorld {
     for (const a of this.animals.values()) {
       if (!a.shown) continue
       if (Math.hypot(a.x - l.x, a.y + a.look.r * 0.3 - l.y) < a.look.r + 80) {
+        this.met(a.id)
         this.flyTo(l, a.id)
         return
       }
@@ -685,6 +762,7 @@ class TaffyWorld {
   }
 
   private mouth(a: Animal): Pt {
+    if (a.id === 'maple') return [a.x, a.y + 56]
     return [a.x, a.y + a.look.r * (a.id === 'moose' ? 0.62 : 0.5)]
   }
 
@@ -716,13 +794,15 @@ class TaffyWorld {
           a.anim = { kind: 'squint', t0: this.now, dur: 0.9 }
           const moose = this.animals.get('moose')
           if (moose) {
-            moose.x = this.stage.maple[0] + 170
+            moose.x = this.stage.maple[0] + 200
             moose.y = this.stage.maple[1] - 10
             moose.anim = { kind: 'hop', t0: this.now + 0.3, dur: 0.5 }
             moose.shown = true
           }
           l.fly = { x0: l.x, y0: l.y, t0: this.now + 0.5, dur: 0.45, to: 'moose' }
           this.say('🫎 Too big for Maple… the moose eats it in one bite!')
+          this.talk(T.tooBig)
+          if (moose) this.met('moose')
         } else {
           l.state = 'eat'
           l.eatT = this.now
@@ -730,6 +810,8 @@ class TaffyWorld {
           l.by = a.id
           a.anim = { kind: 'chomp', t0: this.now, dur: a.id === 'moose' && l.vol / UNIT() >= ROLL.giant ? 0.45 : 1.05 }
           l.eatDur = a.anim.dur
+          if (!l.gift && a.id === 'maple') this.talk(T.crunch[this.crunches++ % T.crunch.length])
+          else if (!l.gift && a.id === 'moose' && this.section !== 'orders') this.talk(T.mooseGulp, undefined, 0, true)
         }
       }
     } else if (l.state === 'eat') {
@@ -778,8 +860,11 @@ class TaffyWorld {
       const add = want.swirl ? (swirl ? size * 1.6 : size * 0.55) : size
       const was = a.fill
       a.fill += add
+      const v = VOICE[a.id as OrderId]
+      let line: Line | null = null
       if (!a.done && size > want.size * 2.4 && a.id !== 'moose') {
         // Silly: far too big for her. Cheeks puff right out, a wobble, and she's full anyway.
+        line = v.big ?? null
         a.puffed = this.now
         a.anim = { kind: 'puff', t0: this.now, dur: 1.4 }
         sfx.boing()
@@ -787,6 +872,7 @@ class TaffyWorld {
       }
       if (!a.done && a.fill >= want.size * ROLL.done) {
         a.done = true
+        line = v.full
         burst()
         sounds.fanfare()
         const fed = ORDER_IDS.filter((id) => this.animals.get(id)?.done)
@@ -794,7 +880,9 @@ class TaffyWorld {
         if (fed.length === ORDER_IDS.length) this.later(() => this.ev.section('share', { made: this.made }), 2200)
       } else if (!a.done && was < a.fill) {
         this.say(want.swirl && !swirl ? '🦉 Yum! The owl wants a swirl' : `😋 More, please!`)
+        line = line ?? v.yum
       } else if (a.done && was >= want.size) sfx.boing()
+      if (line) this.talk(line)
       if (!a.done) this.ev.fed(ORDER_IDS.filter((id) => this.animals.get(id)?.done).join(','), this.made)
       return
     }
@@ -824,6 +912,7 @@ class TaffyWorld {
     this.svg.querySelector('[data-k="card"]')?.classList.remove('taffy-pop')
     void (this.svg.querySelector('[data-k="card"]') as SVGGElement | null)?.getBBox()
     this.svg.querySelector('[data-k="card"]')?.classList.add('taffy-pop')
+    if (this.started && i > 0 && !this.ended) this.talk(T.card[id], undefined, 0, true)
   }
 
   private checkShape() {
@@ -843,6 +932,7 @@ class TaffyWorld {
       const a = this.animals.get('maple')
       if (a) a.anim = { kind: 'hop', t0: this.now, dur: 0.55 }
       this.say(`✨ ${SHAPE_NAME[SHAPE_IDS[this.shape.i % SHAPE_IDS.length]]}! Roll it up`)
+      this.talk(T.pretty)
     }
   }
 
@@ -862,19 +952,35 @@ class TaffyWorld {
 
   private poke(x: number, y: number) {
     const st = this.stage
-    if (this.bird.on && Math.hypot(this.bird.x - x, this.bird.y - y) < 70) return this.scareBird(this.bird.on)
+    if (this.bird.on && Math.hypot(this.bird.x - x, this.bird.y - y) < 70) {
+      meet('chickadee')
+      return this.scareBird(this.bird.on)
+    }
     if (this.squirrel.state !== 'off' && Math.hypot(this.squirrel.x - x, this.squirrel.y - y) < 80) {
       ;[0, 0.08, 0.16, 0.24].forEach((d) => tone(1800, 2400, 0.06, 0.06, 'square', d))
+      meet('red-squirrel')
       this.squirrelOut()
       return
     }
     for (const a of this.animals.values()) {
       if (!a.shown || Math.hypot(a.x - x, a.y - y) > a.look.r + 30) continue
-      a.anim = { kind: a.id === 'owl' ? 'spin' : Math.random() < 0.5 ? 'hop' : 'wiggle', t0: this.now, dur: a.id === 'owl' ? 1.1 : 0.6 }
-      if (a.id === 'owl') this.hoo()
-      else if (a.id === 'maple' || a.id === 'cousin') (sfx.thump(), sfx.splash())
-      else if (a.id === 'moose') tone(160, 110, 0.5, 0.18, 'sawtooth')
-      else sfx.chirp()
+      const pokes = (this.talked.get(`poke-${a.id}`) ?? 0) + 1
+      this.talked.set(`poke-${a.id}`, pokes)
+      if (a.id === 'maple') {
+        // Maple: a different trick each time (a hop, a wave, a tail slap, a wiggle).
+        const kinds: AnimKind[] = ['wave', 'hop', 'slap', 'wiggle']
+        a.anim = { kind: kinds[(pokes - 1) % kinds.length], t0: this.now, dur: 0.9 }
+        sfx.thump()
+        this.talk(pokes === 1 ? L.bonjour : T.mapleHi, 'maple-hi', 4)
+      } else {
+        a.anim = { kind: a.id === 'owl' ? 'spin' : Math.random() < 0.5 ? 'hop' : 'wiggle', t0: this.now, dur: a.id === 'owl' ? 1.1 : 0.6 }
+        if (a.id === 'owl') this.hoo()
+        else if (a.id === 'cousin') (sfx.thump(), sfx.splash())
+        else if (a.id === 'moose') tone(160, 110, 0.5, 0.18, 'sawtooth')
+        else sfx.chirp()
+        this.talk(VOICE[a.id as OrderId].hi, `hi-${a.id}`, 5)
+      }
+      this.met(a.id)
       return
     }
     if (Math.hypot(st.tree[0] - x, st.tree[1] - y) < 150 || Math.hypot(st.bucket[0] - x, st.bucket[1] - y) < 80) return this.tapTree()
@@ -887,6 +993,8 @@ class TaffyWorld {
     if (Math.hypot(st.post[0] - x, st.post[1] - y) < 90) {
       this.owlSpin = this.now
       this.hoo()
+      this.talk(T.owlHi, 'hi-owl', 5)
+      meet('snowy-owl')
       return
     }
     if (Math.hypot(st.card[0] - x, st.card[1] - y) < 100) {
@@ -907,6 +1015,7 @@ class TaffyWorld {
 
   /** Drip, drip, drip: sap from the tree's tap into the bucket, and the bucket into the pot. */
   private tapTree() {
+    this.talk(T.tree, 'tree')
     this.drips.forEach((d, i) => (d.t = -i * 0.28))
     ;[0, 0.28, 0.56].forEach((d) => tone(1300, 900, 0.07, 0.08, 'sine', d + 0.25))
     this.later(() => {
@@ -921,7 +1030,7 @@ class TaffyWorld {
   private smoke(big = false) {
     const [rx, ry] = this.stage.roof
     const k = this.stage.roofScale
-    for (let i = 0; i < (big ? 6 : 1); i++) this.emit(rx + 52 * k + (Math.random() - 0.5) * 10, ry - 60 * k, big ? 26 : 18, 1.8, 50, '#B9B4C4')
+    for (let i = 0; i < (big ? 6 : 1); i++) this.emit(rx + ROOF_CHIMNEY[0] * k + (Math.random() - 0.5) * 10, ry + ROOF_CHIMNEY[1] * k, big ? 26 : 18, 1.8, 50, '#B9B4C4')
   }
 
   private flakePuff(x: number, y: number) {
@@ -998,7 +1107,10 @@ class TaffyWorld {
           const q = pts.length ? pts[Math.floor(Math.random() * pts.length)] : p.puddles.find((o) => !o.eaten)
           if (q) this.emit(q.x + (Math.random() - 0.5) * q.r, q.y + (Math.random() - 0.5) * q.r, 9 + Math.random() * 9, 1 + Math.random() * 0.6, 50)
         }
-        if (!pouring && now >= p.setAt - dt && now < p.setAt) tone(1200, 1500, 0.08, 0.04, 'sine')
+        if (!pouring && now >= p.setAt - dt && now < p.setAt) {
+          tone(1200, 1500, 0.08, 0.04, 'sine')
+          if (this.section === 'pour') this.talk(T.set, 'set')
+        }
       } else set++
     }
     this.checkShape()
@@ -1072,6 +1184,14 @@ class TaffyWorld {
       s.setAttribute('r', (8 + 58 * Math.sqrt(lvl)).toFixed(1))
       s.setAttribute('cy', (t * 22 * (1 - lvl * 0.5)).toFixed(1))
       s.setAttribute('opacity', lvl > 0.01 ? '1' : '0')
+      // The shine on the syrup rides on top of it.
+      const r = 8 + 58 * Math.sqrt(lvl)
+      const gl = this.els['pot-gloss']
+      gl?.setAttribute('cx', (-r * 0.36).toFixed(1))
+      gl?.setAttribute('cy', (t * 22 * (1 - lvl * 0.5) - r * 0.4).toFixed(1))
+      gl?.setAttribute('rx', (r * 0.42).toFixed(1))
+      gl?.setAttribute('ry', (r * 0.2).toFixed(1))
+      gl?.setAttribute('opacity', lvl > 0.01 ? '0.75' : '0')
     }
     const stream = this.els['pot-stream']
     if (stream) {
@@ -1122,6 +1242,17 @@ class TaffyWorld {
         continue
       }
       a.els.root.setAttribute('opacity', '1')
+      if (a.id === 'maple') {
+        // Maple is her own puppet: it breathes and blinks by itself; the world only moves her and starts her actions.
+        if (a.anim && !a.anim.played && now >= a.anim.t0) {
+          a.anim.played = true
+          void this.maple?.play(MAPLE_ACT[a.anim.kind])
+        }
+        if (a.anim && now - a.anim.t0 >= a.anim.dur) a.anim = null
+        a.els.root.setAttribute('transform', `translate(${a.x.toFixed(1)} ${a.y.toFixed(1)})`)
+        a.els.paws?.setAttribute('transform', `translate(${a.x.toFixed(1)} ${a.y.toFixed(1)})`)
+        continue
+      }
       let ty = 0
       let sx = 1
       let sy = 1 + Math.sin(now * 2.2 + r) * 0.012
@@ -1160,7 +1291,7 @@ class TaffyWorld {
         }
       }
       a.els.root.setAttribute('transform', `translate(${a.x.toFixed(1)} ${a.y.toFixed(1)})`)
-      a.els.body.setAttribute('transform', `translate(0 ${ty.toFixed(1)}) rotate(${rot.toFixed(2)}) scale(${sx.toFixed(3)} ${sy.toFixed(3)})`)
+      a.els.body?.setAttribute('transform', `translate(0 ${ty.toFixed(1)}) rotate(${rot.toFixed(2)}) scale(${sx.toFixed(3)} ${sy.toFixed(3)})`)
       a.els.mouth?.setAttribute('ry', (r * 0.2 * mouth).toFixed(2))
       const puff = a.puffed > 0 ? Math.max(0, 1 - (now - a.puffed) / 3) : 0
       a.els.cheeks?.setAttribute('transform', `scale(${(puff > 0 ? 0.4 + 0.6 * ease(Math.min(1, puff * 3)) : 0).toFixed(3)})`)
@@ -1174,7 +1305,7 @@ class TaffyWorld {
       for (const e of a.els.eyes) e.setAttribute('opacity', closed ? '0' : '1')
       a.els.happy?.setAttribute('opacity', closed ? '1' : '0')
       // The order bubble: the lollipop she wants, at its real size, filling up as she eats.
-      if (a.els.meter && a.id !== 'maple') {
+      if (a.els.meter) {
         const want = WANTS[a.id as OrderId]
         const k = clamp(a.fill / (want.size * ROLL.done), 0, 1)
         const C = 2 * Math.PI * 40
@@ -1201,11 +1332,17 @@ class TaffyWorld {
       this.flyTo(l, a.id, false, i * 0.18)
       i++
     }
-    // ...then they all crunch at once.
+    this.talk(T.share)
+    // ...then they all crunch at once, Maple says thank you, and the stamp.
     this.later(() => {
       bigCelebration()
       sounds.fanfare()
+      for (const a of this.animals.values()) if (a.id !== 'maple') a.anim = { kind: 'hop', t0: this.now + Math.random() * 0.3, dur: 0.6 }
+      const m = this.animals.get('maple')
+      if (m) m.anim = { kind: 'slap', t0: this.now + 0.4, dur: 1 }
     }, 1500)
+    this.later(() => this.talk(T.thanks, undefined, 0, true), 2300)
+    this.later(() => this.ev.done(), 5200)
   }
 
   // -------------------------------------------------------------- the squirrel and the chickadee
@@ -1341,6 +1478,16 @@ class TaffyWorld {
       } else if (this.pot.level <= 0.01) at = [this.stage.tree[0], this.stage.tree[1]]
       else at = [this.pot.x, this.pot.y]
     }
+    // Sparkle says the hint once per quiet stretch (and not again for a while).
+    if (!idle) this.idleHinted = false
+    else if (at && !this.idleHinted && this.started) {
+      this.idleHinted = true
+      const ready = this.lollies.some((l) => l.state === 'ready')
+      const lying = this.lollies.some((l) => l.state === 'lying')
+      const set = this.pieces.some((p) => isSet(p, this.now) && !isGone(p))
+      const line = ready ? T.give : lying ? T.rest : set ? T.set : this.pot.level <= 0.01 ? T.empty : this.section === 'shapes' ? T.shapes : this.section === 'orders' ? T.orders : T.pour
+      this.talk(line, 'hint', 16)
+    }
     h.setAttribute('opacity', at ? '1' : '0')
     if (at) h.setAttribute('transform', `translate(${at[0].toFixed(0)} ${(at[1] + 30).toFixed(0)})`)
   }
@@ -1387,8 +1534,10 @@ class TaffyWorld {
   }
 }
 
-// ---------------------------------------------------------------- the placeholder shapes
+// ---------------------------------------------------------------- the animals at the table (code-drawn faces)
 
+/** One of the friends across the table, leaning over the rim and looking up at her: paws on the rim, a face that
+ *  blinks, chomps, puffs its cheeks and closes its eyes happily when full. */
 function AnimalEl({ id, order }: { id: AnimalId; order: boolean }) {
   const L = LOOKS[id]
   const r = L.r
@@ -1396,51 +1545,86 @@ function AnimalEl({ id, order }: { id: AnimalId; order: boolean }) {
   const ink = '#4A3B57'
   const eyeX = L.eyes * r
   const eyeY = L.eyeY * r
+  const moose = id === 'moose'
+  const beaver = id === 'cousin'
   return (
     <g data-k={`a-${id}`}>
       {/* Paws on the tray's edge. */}
-      <ellipse cx={-r * 0.52} cy={r * 0.98} rx={r * 0.22} ry={r * 0.14} fill={L.fill} stroke={ink} strokeWidth={5} />
-      <ellipse cx={r * 0.52} cy={r * 0.98} rx={r * 0.22} ry={r * 0.14} fill={L.fill} stroke={ink} strokeWidth={5} />
+      {[-1, 1].map((s) => (
+        <g key={s}>
+          <ellipse cx={s * r * 0.52} cy={r * 0.98} rx={r * 0.24} ry={r * 0.15} fill={moose ? '#4A3328' : L.fill} stroke={ink} strokeWidth={5} />
+          {!moose && <path d={`M${s * r * 0.52 - r * 0.08} ${r * 1.02} l0 ${r * 0.06} M${s * r * 0.52 + r * 0.08} ${r * 1.02} l0 ${r * 0.06}`} stroke={ink} strokeWidth={2.5} strokeLinecap="round" />}
+        </g>
+      ))}
       <g data-k={`a-${id}-body`}>
         <g data-k={id === 'owl' ? `a-${id}-head` : undefined}>
           {L.antlers &&
             [-1, 1].map((s) => (
-              <path key={s} d={`M${s * r * 0.55} ${-r * 0.55} C ${s * r * 0.95} ${-r * 0.7}, ${s * r * 1.2} ${-r * 0.9}, ${s * r * 1.32} ${-r * 1.2} L ${s * r * 1.16} ${-r * 1.04} L ${s * r * 1.12} ${-r * 1.38} L ${s * r * 0.98} ${-r * 1.0} L ${s * r * 0.88} ${-r * 1.3} L ${s * r * 0.8} ${-r * 0.92} C ${s * r * 0.78} ${-r * 0.84}, ${s * r * 0.66} ${-r * 0.78}, ${s * r * 0.45} ${-r * 0.72} Z`} fill="#E6CFA2" stroke={ink} strokeWidth={5} strokeLinejoin="round" />
+              // Wide flat moose antlers (palms with points along the top).
+              <path key={s} d={`M${s * r * 0.5} ${-r * 0.6} C ${s * r * 0.8} ${-r * 0.66}, ${s * r * 1.0} ${-r * 0.7}, ${s * r * 1.14} ${-r * 0.82} L ${s * r * 1.5} ${-r * 0.96} L ${s * r * 1.36} ${-r * 1.04} L ${s * r * 1.5} ${-r * 1.22} L ${s * r * 1.28} ${-r * 1.2} L ${s * r * 1.3} ${-r * 1.42} L ${s * r * 1.1} ${-r * 1.28} L ${s * r * 1.0} ${-r * 1.46} L ${s * r * 0.9} ${-r * 1.18} C ${s * r * 0.84} ${-r * 0.96}, ${s * r * 0.66} ${-r * 0.82}, ${s * r * 0.44} ${-r * 0.76} Z`} fill="#E9D3A6" stroke={ink} strokeWidth={5} strokeLinejoin="round" />
             ))}
           {L.ears.map(([x, y, er], i) => (
-            <circle key={i} cx={x * r} cy={y * r} r={er * r} fill={L.earFill} stroke={ink} strokeWidth={5} />
+            <g key={i}>
+              {moose ? (
+                <ellipse cx={x * r} cy={y * r} rx={er * r * 1.3} ry={er * r * 0.7} fill={L.fill} stroke={ink} strokeWidth={5} transform={`rotate(${x < 0 ? 24 : -24} ${x * r} ${y * r})`} />
+              ) : (
+                <circle cx={x * r} cy={y * r} r={er * r} fill={id === 'owl' ? '#FBFBFF' : L.fill} stroke={ink} strokeWidth={5} />
+              )}
+              {!moose && id !== 'owl' && <circle cx={x * r * 0.96} cy={y * r * 0.96} r={er * r * 0.55} fill={L.earFill} />}
+              {moose && <ellipse cx={x * r} cy={y * r} rx={er * r * 0.7} ry={er * r * 0.32} fill={L.earFill} transform={`rotate(${x < 0 ? 24 : -24} ${x * r} ${y * r})`} />}
+            </g>
           ))}
+          {/* The moose's long nose hangs below its face; the dewlap under its chin. */}
+          {moose && <ellipse cx={0} cy={r * 0.62} rx={r * 0.6} ry={r * 0.5} fill={L.muzzleFill} stroke={ink} strokeWidth={5} />}
           <circle r={r} fill={L.fill} stroke={ink} strokeWidth={5} />
-          {L.stripes && [-0.25, 0, 0.25].map((x) => <path key={x} d={`M${x * r} ${-r * 0.95} L ${x * r} ${-r * 0.45}`} stroke="#6E4224" strokeWidth={6} strokeLinecap="round" />)}
-          {id === 'owl' && [-0.3, 0, 0.3].map((x) => <path key={x} d={`M${x * r - 6} ${r * 0.55} l 6 6 l 6 -6`} stroke="#B9B2C6" strokeWidth={3} fill="none" strokeLinecap="round" />)}
-          {L.muzzle && <ellipse cx={L.muzzle[0] * r} cy={L.muzzle[1] * r} rx={L.muzzle[2] * r} ry={L.muzzle[3] * r} fill={L.muzzleFill} stroke={ink} strokeWidth={4} />}
+          {beaver && <path d={`M${-r * 0.12} ${-r * 0.96} q ${r * 0.1} ${-r * 0.26} ${r * 0.24} ${-r * 0.06}`} stroke={ink} strokeWidth={4} fill={L.fill} strokeLinecap="round" />}
+          {L.stripes && (
+            <g>
+              {[-0.25, 0, 0.25].map((x) => (
+                <path key={x} d={`M${x * r} ${-r * 0.95} L ${x * r} ${-r * 0.45}`} stroke="#5A3420" strokeWidth={7} strokeLinecap="round" />
+              ))}
+              {[-1, 1].map((s) => (
+                <path key={s} d={`M${s * r * 0.15} ${-r * 0.26} q ${s * r * 0.3} ${-r * 0.1} ${s * r * 0.62} ${r * 0.06}`} stroke="#FFF1DE" strokeWidth={6} fill="none" strokeLinecap="round" />
+              ))}
+            </g>
+          )}
+          {id === 'owl' && (
+            <g>
+              {[[-0.5, 0.4], [0.46, 0.5], [-0.2, 0.7], [0.18, 0.66], [0.4, -0.6], [-0.36, -0.66]].map(([fx, fy], i) => (
+                <path key={i} d={`M${fx * r - 5} ${fy * r} l5 4 l5 -4`} stroke="#5A4E68" strokeWidth={3} fill="none" strokeLinecap="round" />
+              ))}
+            </g>
+          )}
+          {L.muzzle && !moose && <ellipse cx={L.muzzle[0] * r} cy={L.muzzle[1] * r} rx={L.muzzle[2] * r} ry={L.muzzle[3] * r} fill={L.muzzleFill} stroke={ink} strokeWidth={4} />}
           {/* Puffed cheeks (a silly too-big lollipop). */}
           <g data-k={`a-${id}-cheeks`} transform="scale(0)">
             {[-1, 1].map((s) => (
               <circle key={s} cx={s * r * 0.62} cy={r * 0.38} r={r * 0.42} fill={L.fill} stroke={ink} strokeWidth={5} />
             ))}
           </g>
-          <ellipse data-k={`a-${id}-mouth`} cx={0} cy={r * (L.muzzle ? L.muzzle[1] + 0.22 : 0.42)} rx={r * 0.2} ry={1} fill="#5A2A32" />
+          <ellipse data-k={`a-${id}-mouth`} cx={0} cy={r * (moose ? 0.84 : L.muzzle ? L.muzzle[1] + 0.22 : 0.42)} rx={r * 0.2} ry={1} fill="#5A2A32" />
           {L.teeth && (
             <g>
-              <rect x={-r * 0.13} y={r * 0.42} width={r * 0.12} height={r * 0.2} rx={3} fill="#F6A43C" stroke={ink} strokeWidth={3} />
-              <rect x={r * 0.01} y={r * 0.42} width={r * 0.12} height={r * 0.2} rx={3} fill="#F6A43C" stroke={ink} strokeWidth={3} />
+              <rect x={-r * 0.13} y={r * 0.42} width={r * 0.12} height={r * 0.2} rx={3} fill="#FF9A3C" stroke={ink} strokeWidth={3} />
+              <rect x={r * 0.01} y={r * 0.42} width={r * 0.12} height={r * 0.2} rx={3} fill="#FF9A3C" stroke={ink} strokeWidth={3} />
             </g>
           )}
-          {L.nose && <ellipse cx={0} cy={r * (L.muzzle ? L.muzzle[1] - 0.12 : 0.2)} rx={r * 0.13} ry={r * 0.09} fill={L.nose} />}
+          {moose && [-1, 1].map((s) => <ellipse key={s} cx={s * r * 0.2} cy={r * 0.66} rx={r * 0.08} ry={r * 0.11} fill="#4A3328" />)}
+          {L.nose && !moose && <ellipse cx={0} cy={r * (L.muzzle ? L.muzzle[1] - 0.12 : 0.2)} rx={r * 0.13} ry={r * 0.09} fill={L.nose} />}
           {L.beak && <polygon points={`${-r * 0.1},${r * 0.12} ${r * 0.1},${r * 0.12} 0,${r * 0.34}`} fill="#3A2F45" stroke="#3A2F45" strokeWidth={3} strokeLinejoin="round" />}
           {[-1, 1].map((s) => (
             <g key={s}>
               {L.yellowEyes && <circle cx={s * eyeX} cy={eyeY} r={r * 0.2} fill="#FFD84D" stroke={ink} strokeWidth={3} />}
               <g data-k={`a-${id}-eye`}>
-                <circle cx={s * eyeX} cy={eyeY} r={r * 0.11} fill="#2B2236" />
-                <circle cx={s * eyeX + r * 0.04} cy={eyeY - r * 0.04} r={r * 0.04} fill="#fff" />
+                <circle cx={s * eyeX} cy={eyeY} r={r * 0.12} fill="#2B2236" />
+                <circle cx={s * eyeX + r * 0.04} cy={eyeY - r * 0.05} r={r * 0.045} fill="#fff" />
+                <circle cx={s * eyeX - r * 0.04} cy={eyeY + r * 0.04} r={r * 0.02} fill="#fff" />
               </g>
             </g>
           ))}
           <path data-k={`a-${id}-happy`} opacity={0} d={`M${-eyeX - r * 0.12} ${eyeY + 2} q ${r * 0.12} ${-r * 0.14} ${r * 0.24} 0 M${eyeX - r * 0.12} ${eyeY + 2} q ${r * 0.12} ${-r * 0.14} ${r * 0.24} 0`} stroke="#2B2236" strokeWidth={5} fill="none" strokeLinecap="round" />
           {[-1, 1].map((s) => (
-            <ellipse key={s} cx={s * r * 0.6} cy={r * 0.25} rx={r * 0.12} ry={r * 0.07} fill="#FF9EB8" opacity={0.6} />
+            <ellipse key={s} cx={s * r * 0.6} cy={r * 0.25} rx={r * 0.13} ry={r * 0.075} fill="#FF9EB8" opacity={0.7} />
           ))}
         </g>
       </g>
@@ -1456,34 +1640,65 @@ function AnimalEl({ id, order }: { id: AnimalId; order: boolean }) {
   )
 }
 
+/** Maple, her live puppet, standing behind the tray (the tray hides her tummy) with her head over the far rim. */
+function MapleEl({ puppet }: { puppet: Ref<PuppetHandle> }) {
+  const k = MAPLE_BOX / 500
+  return (
+    <g data-k="a-maple">
+      <svg x={-MAPLE_HEAD[0] * k} y={-MAPLE_HEAD[1] * k} width={MAPLE_BOX} height={MAPLE_BOX} viewBox={`0 0 ${MAPLE_BOX} ${MAPLE_BOX}`} overflow="visible">
+        <Maple ref={puppet} height="100%" />
+      </svg>
+    </g>
+  )
+}
+
+/** Maple's paws on the rim, in front of the tray. */
+function MaplePaws({ rimY }: { rimY: number }) {
+  const ink = '#4A3B57'
+  return (
+    <g data-k="a-maple-paws" pointerEvents="none">
+      {[-1, 1].map((s) => (
+        <g key={s}>
+          <ellipse cx={s * 58} cy={rimY} rx={24} ry={15} fill={CANADA_COLORS.beaverFur} stroke={ink} strokeWidth={5} />
+          <path d={`M${s * 58 - 8} ${rimY + 4} l0 7 M${s * 58 + 8} ${rimY + 4} l0 7`} stroke={ink} strokeWidth={2.5} strokeLinecap="round" />
+        </g>
+      ))}
+    </g>
+  )
+}
+
 /** The lollipop in a bubble: drawn at 0.45 of a real one's size, so the moose's still fits. */
 function BubbleLolly({ size, swirl }: { size: number; swirl: boolean }) {
   const r = 36 * Math.sqrt(size) * 0.45
   return (
     <g transform={`translate(${-r * 0.2} ${-r * 0.2})`}>
-      <rect x={-3} y={0} width={6} height={r + 16} rx={3} fill="#F3E2C0" stroke="#4A3B57" strokeWidth={2.5} transform="rotate(-35)" />
+      <rect x={-3} y={0} width={6} height={r + 16} rx={3} fill="#FFF3DC" stroke="#4A3B57" strokeWidth={2.5} transform="rotate(-35)" />
       <circle r={r} fill={syrupFill} stroke="#4A3B57" strokeWidth={3} />
+      <ellipse cx={-r * 0.35} cy={-r * 0.38} rx={r * 0.3} ry={r * 0.16} fill="#FFF3D0" opacity={0.8} transform={`rotate(-30 ${-r * 0.35} ${-r * 0.38})`} />
       {swirl && <path d={`M0 0 C ${r * 0.2} ${-r * 0.35} ${r * 0.62} ${-r * 0.12} ${r * 0.5} ${r * 0.25} C ${r * 0.38} ${r * 0.62} ${-r * 0.3} ${r * 0.66} ${-r * 0.56} ${r * 0.28} C ${-r * 0.8} ${-r * 0.1} ${-r * 0.5} ${-r * 0.68} ${r * 0.04} ${-r * 0.72}`} fill="none" stroke="#9A5A1E" strokeWidth={3} strokeLinecap="round" />}
     </g>
   )
 }
-const syrupFill = '#E8AE52'
+const syrupFill = '#F0B44C'
 
+/** The copper pot from above: handle away from her, the spout toward her, hot syrup bubbling inside. */
 function Pot() {
   const ink = '#4A3B57'
   return (
     <g data-k="pot">
       <g data-k="pot-body">
-        {/* The handle (away from her), the body, the syrup inside, the spout (toward her). */}
-        <rect x={-14} y={-POT_R - 70} width={28} height={84} rx={12} fill="#5B4652" stroke={ink} strokeWidth={5} />
-        <path d={`M-26 ${POT_R - 10} L 0 ${POT_R + 24} L 26 ${POT_R - 10} Z`} fill="#8C6A5A" stroke={ink} strokeWidth={5} strokeLinejoin="round" />
-        <circle r={POT_R} fill="#8C6A5A" stroke={ink} strokeWidth={5} />
-        <circle r={POT_R - 14} fill="#5E4438" />
-        <circle data-k="pot-syrup" r={50} fill="#B8621A" />
-        <ellipse cx={-POT_R * 0.35} cy={-POT_R * 0.35} rx={14} ry={8} fill="#fff" opacity={0.45} transform={`rotate(-40 ${-POT_R * 0.35} ${-POT_R * 0.35})`} />
+        {/* The copper pot (painted from above: the handle away from her, the spout toward her). */}
+        <image href={potImg} x={-POT_R * 1.006} y={-POT_R * 1.875} width={POT_R * 2.012} height={POT_R * 3.048} />
+        <circle data-k="pot-syrup" r={50} fill="#C26A12" />
+        <ellipse data-k="pot-gloss" cx={-18} cy={-20} rx={22} ry={10} fill="#FFE2A8" opacity={0.7} transform="rotate(-30)" />
+        <g data-k="pot-bubbles">
+          {[[-14, 16, 0], [18, -4, 0.5], [6, 26, 1.1], [-26, -8, 1.6]].map(([bx, by, d], i) => (
+            <circle key={i} cx={bx} cy={by} r={5} fill="none" stroke="#FFD58A" strokeWidth={2.5} className="taffy-bubble" style={{ animationDelay: `${d}s` }} />
+          ))}
+        </g>
       </g>
       {/* The stream landing at the spout. */}
-      <circle data-k="pot-stream" cx={0} cy={POT_R + 22} r={0} fill="#B8621A" stroke={ink} strokeWidth={3} />
+      <circle data-k="pot-stream" cx={0} cy={POT_R + 22} r={0} fill="#C26A12" stroke={ink} strokeWidth={3} />
     </g>
   )
 }
@@ -1492,17 +1707,23 @@ function Pot() {
 
 const FLAKES = 70
 const PUFFS = 70
+const PARTS: TaffySection[] = ['pour', 'shapes', 'orders', 'share']
 
-export function SugarSnow() {
+export function SugarSnow({ onDone, setProgress }: CanadaActivityProps) {
   const { start, param, enter } = useSections(TAFFY_SECTIONS)
-  const first = (start ?? 'pour') as TaffySection
+  const first = (start && start !== 'story' ? start : 'pour') as TaffySection
+  const [story, setStory] = useState(!start || start === 'story')
   const tip = param('tip') as 'hold' | 'lead'
   const [run, setRun] = useState(() => ({ section: first, made: param('made') === '' ? START_MADE[first] : Math.max(0, parseInt(param('made')) || 0), fed: param('fed').split(',').filter((f): f is OrderId => (ORDER_IDS as readonly string[]).includes(f)), n: 0 }))
-  const [say, setSay] = useState(SAY[run.section])
+  const [say_, setSay] = useState(SAY[run.section])
   const [ended, setEnded] = useState(false)
   const box = useRef<HTMLDivElement>(null)
   const svg = useRef<SVGSVGElement>(null)
   const world = useRef<TaffyWorld | null>(null)
+  const maple = useRef<PuppetHandle>(null)
+  const storyRef = useRef(story)
+  storyRef.current = story
+  const doneRef = useRef(false)
   const size = useElementSize(box)
   const wide = !size.height || size.width / size.height >= 1.05
   const stage = wide ? WIDE : TALL
@@ -1515,8 +1736,14 @@ export function SugarSnow() {
   const vb = { x: (stage.w - vw) / 2, y: (stage.h - vh) / 2, w: vw, h: vh }
 
   useEffect(() => {
-    enter(run.section, { made: run.made === START_MADE[run.section] ? '' : String(run.made), fed: run.section === 'orders' ? run.fed.join(',') : '', tip })
-  }, [run])
+    if (story) enter('story')
+    else enter(run.section, { made: run.made === START_MADE[run.section] ? '' : String(run.made), fed: run.section === 'orders' ? run.fed.join(',') : '', tip })
+  }, [run, story])
+
+  // The stars in the top bar: one per part.
+  useEffect(() => {
+    setProgress(ended ? PARTS.length : PARTS.indexOf(run.section), PARTS.length)
+  }, [run.section, ended])
 
   useLayoutEffect(() => {
     if (!svg.current) return
@@ -1529,9 +1756,17 @@ export function SugarSnow() {
       fed: (fed, made) => enter('orders', { made: made === START_MADE.orders ? '' : String(made), fed, tip }),
       say: setSay,
       share: () => setEnded(true),
+      talk: (line, queue) => void say(line, { interrupt: !queue }),
+      done: () => {
+        if (doneRef.current) return
+        doneRef.current = true
+        onDone()
+      },
     })
     w.vb = vb
+    w.maple = maple.current
     world.current = w
+    if (!storyRef.current) w.start()
     ;(window as unknown as { __canadaTaffyQA?: () => unknown }).__canadaTaffyQA = () => w.qa()
     const unwatch = watch('taffy', () => {
       const l = w.lollies.find((o) => o.state === 'roll')
@@ -1559,6 +1794,7 @@ export function SugarSnow() {
     const w = world.current
     if (!w) return
     w.vb = vb
+    w.maple = maple.current
     if (w.stage !== stage) w.setStage(stage)
   })
 
@@ -1569,20 +1805,14 @@ export function SugarSnow() {
   }
 
   const section = run.section
-  const big = 6000
   const s = stage.snow
   const lineUp = section === 'orders' || section === 'share'
-  const animals: AnimalId[] = lineUp ? ['maple', ...ORDER_IDS] : ['maple', 'moose']
-  const [tx, ty] = stage.tree
-  const [bx, by] = stage.bucket
-  const [rx, ry] = stage.roof
-  const [px, py] = stage.post
-  const [jx, jy] = stage.jar
-  const [sx, sy] = stage.stove
+  const animals: OrderId[] = lineUp ? [...ORDER_IDS] : ['moose']
+  const mapleAt = lineUp ? stage.line.maple : stage.maple
   const [cx, cy] = stage.card
 
   return (
-    <div ref={box} style={{ position: 'absolute', inset: 0, background: '#E3EAF4', overflow: 'clip' }}>
+    <div ref={box} style={{ position: 'absolute', inset: 0, background: '#E8EFF8', overflow: 'clip' }}>
       <style>{CSS}</style>
       <svg
         key={run.n}
@@ -1598,82 +1828,19 @@ export function SugarSnow() {
         onPointerCancel={(e) => world.current?.up(e)}
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', touchAction: 'none', display: 'block', userSelect: 'none', WebkitUserSelect: 'none' }}
       >
-        <defs>
-          <pattern id={`${mid}-snow`} width={120} height={120} patternUnits="userSpaceOnUse">
-            <rect width={120} height={120} fill="#FBFDFF" />
-            <circle cx={22} cy={30} r={4} fill="#E4ECF6" />
-            <circle cx={84} cy={64} r={5} fill="#E8EEF7" />
-            <circle cx={50} cy={100} r={3} fill="#E4ECF6" />
-          </pattern>
-        </defs>
-        {/* The snowy yard, with a few spruces seen from above. */}
-        <rect x={-big} y={-big} width={big * 2} height={big * 2} fill="#E3EAF4" />
-        {YARD.map(([fx, fy, fr], i) => (
-          <g key={i} transform={`translate(${(fx * stage.w).toFixed(0)} ${(fy * stage.h).toFixed(0)})`}>
-            <circle r={fr} fill="#5E8C6A" stroke="#4A3B57" strokeWidth={5} />
-            <circle r={fr * 0.62} fill="#6FA07A" />
-            <circle r={fr * 0.25} fill="#F7FAFE" opacity={0.8} />
-          </g>
-        ))}
-        {/* The maple tree, its tap and the sap bucket. */}
-        <g transform={`translate(${tx} ${ty})`}>
-          <circle r={128} fill="#D8574A" stroke="#4A3B57" strokeWidth={5} />
-          {[[-50, -30, 48], [40, -50, 44], [30, 40, 50], [-40, 50, 40]].map(([x, y, r], i) => (
-            <circle key={i} cx={x} cy={y} r={r} fill="#E8735E" />
-          ))}
-          <circle r={26} fill="#7A5236" stroke="#4A3B57" strokeWidth={5} />
-          <rect x={20} y={56} width={40} height={14} rx={5} fill="#A9A6B4" stroke="#4A3B57" strokeWidth={4} />
-        </g>
-        <g transform={`translate(${bx} ${by})`}>
-          <circle r={40} fill="#A9A6B4" stroke="#4A3B57" strokeWidth={5} />
-          <circle r={30} fill="#7E7B8C" />
-          <circle data-k="bucket-sap" r={10} fill="#F1E6C8" />
-        </g>
-        <g data-k="drips">
-          {[0, 1, 2].map((i) => (
-            <circle key={i} data-k="drip" r={8} fill="#F1E6C8" stroke="#4A3B57" strokeWidth={3} opacity={0} />
-          ))}
-        </g>
-        {/* The sugar shack's roof and chimney. */}
-        <g transform={`translate(${rx} ${ry}) scale(${stage.roofScale})`}>
-          <rect x={-120} y={-95} width={240} height={190} rx={10} fill="#8E4A3A" stroke="#4A3B57" strokeWidth={5} />
-          <path d="M-120 0 L120 0" stroke="#4A3B57" strokeWidth={5} />
-          {[-80, -40, 0, 40, 80].map((x) => (
-            <path key={x} d={`M${x} -95 L${x} 95`} stroke="#7A3C2E" strokeWidth={4} />
-          ))}
-          <rect x={-118} y={-93} width={236} height={40} rx={8} fill="#FBFDFF" opacity={0.9} />
-          <rect x={30} y={-75} width={44} height={44} rx={6} fill="#B9B2C6" stroke="#4A3B57" strokeWidth={5} />
-          <circle cx={52} cy={-53} r={12} fill="#3A2F45" />
-        </g>
-        {/* The owl's post (lines and shapes; in orders the owl is in the line). */}
-        <g transform={`translate(${px} ${py})`}>
-          <circle r={46} fill="#9C7A5A" stroke="#4A3B57" strokeWidth={5} />
-          {!lineUp && (
-            <g data-k="owl-head">
-              <circle r={40} fill="#FBFBFF" stroke="#4A3B57" strokeWidth={5} />
-              <circle cx={-14} cy={-6} r={10} fill="#FFD84D" stroke="#4A3B57" strokeWidth={3} />
-              <circle cx={14} cy={-6} r={10} fill="#FFD84D" stroke="#4A3B57" strokeWidth={3} />
-              <circle cx={-14} cy={-6} r={5} fill="#2B2236" />
-              <circle cx={14} cy={-6} r={5} fill="#2B2236" />
-              <polygon points="-6,4 6,4 0,16" fill="#3A2F45" />
-            </g>
-          )}
-        </g>
-        {/* The stove under the pot, and the jar of sticks. */}
-        <g transform={`translate(${sx} ${sy})`}>
-          <rect x={-115} y={-115} width={230} height={250} rx={24} fill="#4E4A5C" stroke="#4A3B57" strokeWidth={5} />
-          <circle r={92} fill="#3A3646" />
-          <circle r={70} fill="none" stroke="#FF8A4C" strokeWidth={6} opacity={0.7} className="taffy-flame" />
-        </g>
-        <g transform={`translate(${jx} ${jy})`}>
-          <circle r={62} fill="#CFE2F2" stroke="#4A3B57" strokeWidth={5} />
-          {[[-22, -14], [0, -24], [20, -6], [-8, 14], [16, 18], [-26, 10]].map(([x, y], i) => (
-            <circle key={i} cx={x} cy={y} r={10} fill="#F3E2C0" stroke="#4A3B57" strokeWidth={4} />
-          ))}
-        </g>
-        {/* The tray: a wooden frame, the snow inside. */}
-        <rect x={s.x - 30} y={s.y - 30} width={s.w + 60} height={s.h + 60} rx={30} fill="#B57B4E" stroke="#4A3B57" strokeWidth={5} />
-        <rect x={s.x} y={s.y} width={s.w} height={s.h} rx={14} fill={`url(#${mid}-snow)`} stroke="#8E5C38" strokeWidth={4} />
+        {/* Everything seen from straight above: the yard, the tree and its bucket, the shack's roof, the owl's post. */}
+        <Yard stage={stage} mid={mid} />
+        <Tree x={stage.tree[0]} y={stage.tree[1]} />
+        <Bucket x={stage.bucket[0]} y={stage.bucket[1]} />
+        <Drips />
+        <Roof x={stage.roof[0]} y={stage.roof[1]} scale={stage.roofScale} />
+        <Post x={stage.post[0]} y={stage.post[1]} owl={!lineUp} />
+        <Stove x={stage.stove[0]} y={stage.stove[1]} />
+        <Crate x={stage.jar[0]} y={stage.jar[1]} />
+        {/* Maple stands behind the tray, her head over its far rim. */}
+        <MapleEl puppet={maple} />
+        <Tray stage={stage} mid={mid} />
+        <Sparkles stage={stage} />
         <g data-k="tally" />
         {/* The shape pressed into the snow, and its glow when she pours over it. */}
         {section === 'shapes' && (
@@ -1682,38 +1849,49 @@ export function SugarSnow() {
             <path data-k="guide-glow" d="" fill="none" stroke="#FFE27A" strokeWidth={30} strokeLinecap="round" strokeLinejoin="round" opacity={0} className="taffy-glow" />
           </g>
         )}
-        {/* The syrup: melt marks, ink, then the syrup itself. */}
+        {/* The syrup: melt marks, ink, the syrup itself, and its shine. */}
         <g data-k="dents" pointerEvents="none" />
         <g data-k="ink" pointerEvents="none" />
         <g data-k="fill" pointerEvents="none" />
+        <g data-k="gloss" pointerEvents="none" opacity={0.75} />
         {/* Across the table. */}
+        <MaplePaws rimY={s.y - 22 - mapleAt[1]} />
         {animals.map((id) => (
           <AnimalEl key={id} id={id} order={lineUp} />
         ))}
-        {/* The squirrel and the chickadee. */}
+        {/* The red squirrel and the chickadee. */}
         <g data-k="squirrel" opacity={0}>
-          <path d="M28 8 C 70 -10, 80 -70, 40 -80 C 20 -60, 40 -30, 20 -10 Z" fill="#D0612E" stroke="#4A3B57" strokeWidth={5} strokeLinejoin="round" />
+          <path d="M26 6 C 74 -6, 92 -70, 50 -88 C 22 -84, 30 -50, 40 -36 C 46 -24, 34 -10, 18 -8 Z" fill="#D0612E" stroke="#4A3B57" strokeWidth={5} strokeLinejoin="round" />
+          <path d="M40 -20 C 66 -34, 70 -66, 52 -78" stroke="#F09060" strokeWidth={7} fill="none" strokeLinecap="round" />
+          <path d="M-22 -22 l-6 -20 l14 10 M22 -22 l6 -20 l-14 10" fill="#B04A20" stroke="#4A3B57" strokeWidth={4} strokeLinejoin="round" />
           <circle r={30} fill="#D0612E" stroke="#4A3B57" strokeWidth={5} />
-          <circle cx={-10} cy={-6} r={4} fill="#2B2236" />
-          <circle cx={10} cy={-6} r={4} fill="#2B2236" />
-          <circle cx={-16} cy={-26} r={8} fill="#B04A20" stroke="#4A3B57" strokeWidth={3} />
-          <circle cx={16} cy={-26} r={8} fill="#B04A20" stroke="#4A3B57" strokeWidth={3} />
-          <ellipse cx={0} cy={8} rx={10} ry={7} fill="#F6E2CC" />
+          <ellipse cx={0} cy={10} rx={14} ry={10} fill="#F6E2CC" stroke="#4A3B57" strokeWidth={3} />
+          <circle cx={-11} cy={-7} r={6} fill="#fff" stroke="#4A3B57" strokeWidth={2} />
+          <circle cx={11} cy={-7} r={6} fill="#fff" stroke="#4A3B57" strokeWidth={2} />
+          <circle cx={-11} cy={-6} r={4} fill="#2B2236" />
+          <circle cx={11} cy={-6} r={4} fill="#2B2236" />
+          <ellipse cx={0} cy={4} rx={4} ry={3} fill="#3A2622" />
+          <ellipse cx={-20} cy={8} rx={6} ry={3.5} fill="#FF9EB8" opacity={0.7} />
+          <ellipse cx={20} cy={8} rx={6} ry={3.5} fill="#FF9EB8" opacity={0.7} />
         </g>
         <g data-k="lollies" />
         <g data-k="bird" opacity={0}>
-          <ellipse rx={30} ry={22} fill="#D9D4CC" stroke="#4A3B57" strokeWidth={4} />
+          <path d="M22 -4 L46 -10 L44 6 Z" fill="#8E8A9C" stroke="#4A3B57" strokeWidth={3.5} strokeLinejoin="round" />
+          <ellipse rx={30} ry={22} fill="#E7DCCB" stroke="#4A3B57" strokeWidth={4} />
+          <ellipse cx={8} cy={-2} rx={18} ry={14} fill="#A8A4B4" />
           <circle cx={-18} cy={-10} r={17} fill="#2B2236" stroke="#4A3B57" strokeWidth={3} />
-          <ellipse cx={-14} cy={-6} rx={9} ry={7} fill="#fff" />
-          <circle cx={-12} cy={-9} r={3} fill="#2B2236" />
+          <ellipse cx={-15} cy={-5} rx={10} ry={8} fill="#fff" />
+          <circle cx={-12} cy={-12} r={3.5} fill="#fff" />
+          <circle cx={-12} cy={-12} r={2} fill="#2B2236" />
           <polygon points="-34,-10 -44,-7 -34,-4" fill="#3A2F45" />
         </g>
         {/* The shape card from Maple. */}
         {section === 'shapes' && (
           <g transform={`translate(${cx} ${cy})`}>
             <g data-k="card">
-              <rect x={-82} y={-72} width={164} height={144} rx={18} fill="#fff" stroke="#4A3B57" strokeWidth={5} transform="rotate(-4)" />
-              <path data-k="card-shape" d="" fill="none" stroke="#B8621A" strokeWidth={12} strokeLinecap="round" strokeLinejoin="round" transform="rotate(-4)" />
+              <rect x={-82} y={-72} width={164} height={144} rx={18} fill="#FFF7F0" stroke="#4A3B57" strokeWidth={5} transform="rotate(-4)" />
+              <rect x={-70} y={-60} width={140} height={120} rx={12} fill="none" stroke="#FF8FB8" strokeWidth={3} strokeDasharray="8 8" transform="rotate(-4)" />
+              <path data-k="card-shape" d="" fill="none" stroke="#C26A12" strokeWidth={12} strokeLinecap="round" strokeLinejoin="round" transform="rotate(-4)" />
             </g>
           </g>
         )}
@@ -1735,34 +1913,26 @@ export function SugarSnow() {
           </text>
         </g>
       </svg>
+      {story && <StoryBeat lines={T.story} friend={<Maple height="100%" />} onDone={() => (setStory(false), world.current?.start())} />}
       <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
         {ended && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5, type: 'spring' }} style={CORNER}>
+          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 6, type: 'spring' }} style={CORNER}>
             <BigButton onClick={again} ariaLabel="Again">
               🔁 🍁
             </BigButton>
           </motion.div>
         )}
-        <AnimatePresence mode="popLayout">
-          <motion.div key={say} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-            {say}
-          </motion.div>
-        </AnimatePresence>
+        {!story && (
+          <AnimatePresence mode="popLayout">
+            <motion.div key={say_} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
+              {say_}
+            </motion.div>
+          </AnimatePresence>
+        )}
       </div>
     </div>
   )
 }
-
-/** Spruces around the yard (fractions of the stage), clear of the tray and the things on the table. */
-const YARD: [number, number, number][] = [
-  [-0.08, 0.1, 90],
-  [1.08, 0.12, 100],
-  [-0.1, 0.92, 110],
-  [1.1, 0.95, 90],
-  [0.5, -0.12, 80],
-  [0.3, 1.1, 90],
-  [0.75, 1.12, 100],
-]
 
 const CSS = `
 .taffy-pop { animation: taffy-pop .45s cubic-bezier(.3,1.6,.5,1) both; transform-box: fill-box; transform-origin: center; }
@@ -1775,6 +1945,10 @@ const CSS = `
 @keyframes taffy-glow { 0%,100% { stroke-opacity: .5 } 50% { stroke-opacity: 1 } }
 .taffy-flame { animation: taffy-flame 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 @keyframes taffy-flame { 0%,100% { transform: scale(1) } 50% { transform: scale(1.06) } }
+.taffy-twinkle { animation: taffy-twinkle 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; opacity: 0; }
+@keyframes taffy-twinkle { 0%,70%,100% { opacity: 0; transform: scale(.2) rotate(0deg) } 82% { opacity: 1; transform: scale(1) rotate(25deg) } }
+.taffy-bubble { animation: taffy-bubble 1.8s ease-out infinite; transform-box: fill-box; transform-origin: center; opacity: 0; }
+@keyframes taffy-bubble { 0% { opacity: 0; transform: scale(.3) } 30% { opacity: .9 } 100% { opacity: 0; transform: scale(1.5) } }
 `
 
 /** The 🔁 button waits in the corner, clear of the table. */

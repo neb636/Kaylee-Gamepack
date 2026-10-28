@@ -40,6 +40,9 @@ export interface Member {
   speed: number
   /** 0..1, eased: how much it's on the boulders (the sheep hop up them). */
   rocky: number
+  /** Out of the line (the calf that stopped to sniff a flower): it stands, or walks after her finger by itself. */
+  lost: boolean
+  lostTo: Pt | null
 }
 export interface Family {
   id: FamilyId
@@ -73,7 +76,7 @@ export class Herd {
   ) {
     for (const id of Object.keys(MEMBERS) as FamilyId[]) {
       const at = spots[id]
-      const m = MEMBERS[id].map((kind, i): Member => ({ fam: id, i, kind, x: at[i][0], y: at[i][1], vx: 0, vy: 0, dir: at[0][0] >= at[Math.min(1, at.length - 1)][0] ? 1 : -1, walk: i * 37, speed: 0, rocky: 0 }))
+      const m = MEMBERS[id].map((kind, i): Member => ({ fam: id, i, kind, x: at[i][0], y: at[i][1], vx: 0, vy: 0, dir: at[0][0] >= at[Math.min(1, at.length - 1)][0] ? 1 : -1, walk: i * 37, speed: 0, rocky: 0, lost: false, lostTo: null }))
       // The line they're standing in counts as the path mama walked.
       this.fams[id] = { id, m, trail: at.slice(1).reverse().map(([x, y]) => [x, y] as Pt), target: null, auto: false, push: 0, block: null, hold: 0, shy: false }
     }
@@ -183,6 +186,10 @@ export class Herd {
     const c = 2 * FOLLOW.wobble * FOLLOW.pull
     for (let i = 1; i < f.m.length; i++) {
       const me = f.m[i]
+      if (me.lost) {
+        this.stepLost(f, me, dt)
+        continue
+      }
       const a = f.m[i - 1]
       const [px, py] = this.pathPoint(f, i * FOLLOW.gap)
       let sx = me.x
@@ -216,6 +223,31 @@ export class Herd {
       }
       this.after(me, rr.moved, dt)
     }
+  }
+
+  /** A little one out of the line walks after her finger by itself (a bit slower than mama), or stands. */
+  private stepLost(f: Family, me: Member, dt: number) {
+    let wx = 0
+    let wy = 0
+    if (me.lostTo) {
+      const dx = me.lostTo[0] - me.x
+      const dy = me.lostTo[1] - me.y
+      const d = Math.hypot(dx, dy)
+      if (d > 4) {
+        const v = Math.min(LEAD.speed * 0.85, d * LEAD.tight)
+        wx = (dx / d) * v
+        wy = (dy / d) * v
+      }
+    }
+    const e = 1 - Math.exp(-dt * LEAD.ease)
+    me.vx += (wx - me.vx) * e
+    me.vy += (wy - me.vy) * e
+    const r = this.move(f, me, me.vx * dt, me.vy * dt)
+    if (r.blocked) {
+      me.vx *= 0.6
+      me.vy *= 0.6
+    }
+    this.after(me, r.moved, dt)
   }
 
   private after(a: Member, moved: number, dt: number) {

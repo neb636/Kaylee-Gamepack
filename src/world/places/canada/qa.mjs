@@ -5,32 +5,31 @@ import { vp } from '../../../../scripts/qa-lib.mjs'
 
 /** Screenshots (scripts/qa-screens.mjs): how to get to each screen from a fresh start. */
 export const screens = [
-  // Canada: the train map (greybox 1): the whole country first, then the train at each stop and on the way (the
+  // Canada: the train map: the whole country first, then the train at each stop and on the way (the
   // prairies, just out of the Spiral Tunnel); then an activity's and the finale's "coming soon" cards.
   { name: 'canada-intro', hash: '#/world/canada', reset: true, wait: 900 },
   ...['msa', 'quebec', 'ottawa', 'prairies', 'banff', 'rockies', 'bc'].map((at) => ({ name: `canada-map-${at}`, hash: `#/world/canada/hub/map?at=${at}`, reset: true, wait: 2200 })),
-  // Mountain Bike (greybox 2): the gondola, each stretch from its link (berms: both ways), the waterfall at the end.
+  // Mountain Bike: the gondola, each stretch from its link (berms: both ways), the waterfall at the end.
   ...['gondola', 'green', 'berms?trail=green', 'berms?trail=blue', 'creek', 'falls'].map((to) => ({ name: `canada-bike-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/bike/${to}`, reset: true, wait: to === 'falls' ? 14000 : to === 'gondola' ? 4000 : 3500 })),
-  // Sugar Snow (greybox 3, 2D): each part from its link (orders with the chipmunk fed; share: everyone's lollipop).
+  // Sugar Snow (2D): each part from its link (orders with the chipmunk fed; share: everyone's lollipop).
   ...['pour', 'shapes', 'orders?fed=chipmunk', 'share'].map((to) => ({ name: `canada-taffy-${to.replace(/[?=&,]/g, '-')}`, hash: `#/world/canada/taffy/${to}`, reset: true, wait: to === 'share' ? 2400 : 1500 })),
-  // Campfire Night (2D greybox): the dark campsite under the flashlight; the last one with the darkness turned off (a
+  // Campfire Night: the dark campsite under the flashlight; the last one with the darkness turned off (a
   // feel-lab knob) to check where everything stands.
   ...['eyes', 'sounds', 'bandit', 'marshmallow', 'stars', 'bandit?feel.campTorch.dark=0'].map((to) => ({ name: `canada-campfire-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/campfire/${to}`, reset: true, wait: 1800 })),
-  // Red Canoe (3D greybox): each part from its link (glide both ways to paddle), the loon family at the glacier.
+  // Red Canoe: each part from its link (glide both ways to paddle), the loon family at the glacier.
   ...['glide', 'glide?paddle=pull', 'stream', 'loon', 'glacier'].map((to) => ({ name: `canada-canoe-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/canoe/${to}`, reset: true, wait: to.startsWith('glide') ? 4000 : 3000 })),
-  // Animal Bridge (2D greybox): each family from its link (the grizzlies at the bare bridge, then the bridge planted),
+  // Animal Bridge: each family from its link (the grizzlies at the bare bridge, then the bridge planted),
   // and the camera's photos at the end.
   ...['elk', 'sheep', 'bears', 'bears?green=1', 'album'].map((to) => ({ name: `canada-bridge-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/bridge/${to}`, reset: true, wait: to === 'album' ? 3200 : 1500 })),
-  // Whale Watch (3D greybox): each part from its link (the harbour both ways to steer, the humpback that jumps), and
+  // Whale Watch: each part from its link (the harbour both ways to steer, the humpback that jumps), and
   // under the water listening.
   ...['harbour', 'harbour?steer=wheel', 'otters', 'spouts', 'spouts?found=3', 'orcas', 'listen'].map((to) => ({ name: `canada-whales-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/whales/${to}`, reset: true, wait: to === 'listen' ? 4500 : 3000 })),
-  // Salmon Leap (2D greybox): each stretch of the river from its link (the bears' falls with the spirit bear low too),
+  // Salmon Leap: each stretch of the river from its link (the bears' falls with the spirit bear low too),
   // and the stream where the eggs hatch.
   ...['steps', 'falls', 'bears', 'bears?spirit=low', 'eggs'].map((to) => ({ name: `canada-salmon-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/salmon/${to}`, reset: true, wait: 1500 })),
-  // Carnival Snowballs (3D greybox): each part from its link (the stack with the huge ball and Maple on top; dressing
+  // Carnival Snowballs: each part from its link (the stack with the huge ball and Maple on top; dressing
   // with two already in the parade line), and the parade.
   ...['roll', 'stack', 'stack?size=huge', 'dress', 'dress?snowmen=3', 'parade'].map((to) => ({ name: `canada-snowman-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/snowman/${to}`, reset: true, wait: to === 'roll' ? 4000 : to === 'parade' ? 6000 : 2500 })),
-  { name: 'canada-party-soon', hash: '#/world/canada/party/soon', wait: 800 },
 ]
 
 /** Auto-played runs (scripts/qa-pacing.mjs): talk before the first touch, talk per touch, the play strip. */
@@ -38,23 +37,23 @@ export const pacing = [
   { name: 'canada train map', id: 'canada', hash: '#/world/canada', reset: true },
   { name: 'canada mountain bike', id: 'bike', hash: '#/world/canada/bike', reset: true },
   { name: 'canada sugar snow', id: 'taffy', hash: '#/world/canada/taffy', reset: true },
-  // Campfire Night (greybox, no voices): a tap moves the flashlight there and a tap on eyes finds the animal at once,
+  // Campfire Night: a tap moves the flashlight there and a tap on eyes finds the animal at once,
   // so the auto-player gets through the eyes; the sounds, the trail and the marshmallow need the light held and dragged
   // (qa-motion's canada-campfire-light).
   { name: 'canada campfire night', id: 'campfire', hash: '#/world/canada/campfire', reset: true },
-  // Red Canoe (greybox, no voices): the core verb is a stroke (a drag beside the canoe), so the auto-player's taps only
+  // Red Canoe: the core verb is a stroke (a drag beside the canoe), so the auto-player's taps only
   // splash, poke and make trout jump; the robot run that paddles is qa-motion's canada-canoe-stroke.
   { name: 'canada red canoe', id: 'canoe', hash: '#/world/canada/canoe', reset: true },
-  // Animal Bridge (greybox, no voices): a tap on the ground walks the family she leads there and a tap pokes things, so
+  // Animal Bridge: a tap on the ground walks the family she leads there and a tap pokes things, so
   // the auto-player wanders the herd about; leading them over the bridge is a long drag (qa-motion's canada-bridge-lead).
   { name: 'canada animal bridge', id: 'bridge', hash: '#/world/canada/bridge', reset: true },
-  // Whale Watch (greybox, no voices): a tap on the water drives the boat there, so the auto-player's taps steer it about
+  // Whale Watch: a tap on the water drives the boat there, so the auto-player's taps steer it about
   // and poke the animals; holding the water and steering out to the otters and the spouts is qa-motion's canada-whales-steer.
   { name: 'canada whale watch', id: 'whales', hash: '#/world/canada/whales', reset: true },
-  // Salmon Leap (greybox, no voices): a tap on a salmon makes it hop and a tap pokes things, so the auto-player hops
+  // Salmon Leap: a tap on a salmon makes it hop and a tap pokes things, so the auto-player hops
   // them about and pokes; flicking them up the falls is a quick drag (qa-motion's canada-salmon-flick).
   { name: 'canada salmon leap', id: 'salmon', hash: '#/world/canada/salmon', reset: true },
-  // Carnival Snowballs (greybox, no voices): the core verb is a push (a drag on the ball), so the auto-player's taps only
+  // Carnival Snowballs: the core verb is a push (a drag on the ball), so the auto-player's taps only
   // pat the ball, shake trees and poke; the robot run that rolls, stacks and dresses is qa-motion's canada-snowman-roll.
   { name: 'canada carnival snowballs', id: 'snowman', hash: '#/world/canada/snowman', reset: true },
 ]
@@ -62,7 +61,7 @@ export const pacing = [
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
 export const motion = []
 
-// Canada's train map (3D greybox): the train grabbed in Quebec and pushed west hard (it chugs, puffs and whistles, the
+// Canada's train map: the train grabbed in Quebec and pushed west hard (it chugs, puffs and whistles, the
 // camera rides along), let go to roll on; then by Ottawa a tap sends the moose on the track ambling off with a snort, and
 // a second tap makes it hop where it stands.
 motion.push(
@@ -100,7 +99,7 @@ motion.push(
   },
 )
 
-// Sugar Snow (2D greybox): her finger tips the pot and pours a wave of syrup across the snow (thin where she moves,
+// Sugar Snow: her finger tips the pot and pours a wave of syrup across the snow (thin where she moves,
 // a puddle where she stops), it steams and sets, then the stick rolls it back up into a lollipop that flies to Maple.
 motion.push({
   name: 'canada-taffy-pour',
@@ -136,7 +135,7 @@ motion.push({
   },
 })
 
-// Campfire Night (2D greybox): her finger sweeps the flashlight across the dark campsite from the lake to the tent and
+// Campfire Night: her finger sweeps the flashlight across the dark campsite from the lake to the tent and
 // back up into the trees, resting on whatever eyes it finds (they come out), then up into the sky (stars come out).
 motion.push({
   name: 'canada-campfire-light',
@@ -166,7 +165,7 @@ motion.push({
   },
 })
 
-// Animal Bridge (2D greybox): her finger on mama elk, up the forest bank to the bridge, over it while the cars zoom
+// Animal Bridge: her finger on mama elk, up the forest bank to the bridge, over it while the cars zoom
 // under, and down into the meadow; the calves follow in a wobbly line (and munch when they get there).
 motion.push({
   name: 'canada-bridge-lead',
@@ -190,7 +189,7 @@ motion.push({
   },
 })
 
-// Whale Watch (3D greybox): her finger held on the water out ahead and to the left of the boat out at sea (it speeds up
+// Whale Watch: her finger held on the water out ahead and to the left of the boat out at sea (it speeds up
 // and swoops round, hopping off the waves), then swung across to the right (it turns back), then let go (it coasts).
 motion.push({
   name: 'canada-whales-steer',
@@ -212,7 +211,7 @@ motion.push({
   },
 })
 
-// Salmon Leap (2D greybox): in the bears' falls, the waiting salmon flicked up one pool at a time: the leap, the splash
+// Salmon Leap: in the bears' falls, the waiting salmon flicked up one pool at a time: the leap, the splash
 // and the happy wiggle, a bear lunging and the boop on its nose.
 motion.push({
   name: 'canada-salmon-flick',
@@ -236,7 +235,7 @@ motion.push({
   },
 })
 
-// Mountain Bike (3D greybox): Maple riding the blue way's berms with the wheel under her finger, pushed right up the
+// Mountain Bike: Maple riding the blue way's berms with the wheel under her finger, pushed right up the
 // berm and held, then let go: she leans into the bends, bumps over the roots and drifts back to the middle of her way.
 motion.push({
   name: 'canada-bike-steer',
@@ -259,7 +258,7 @@ motion.push({
   },
 })
 
-// Red Canoe (3D greybox): long paddle strokes from the dock, alternating left and right of the canoe (it glides off,
+// Red Canoe: long paddle strokes from the dock, alternating left and right of the canoe (it glides off,
 // zigzagging gently), then two on the left only (it turns right) and the blade held still on the right (it brakes and
 // turns that way).
 motion.push({
@@ -289,7 +288,7 @@ motion.push({
   },
 })
 
-// Carnival Snowballs (3D greybox): the little ball pushed round in a big loop (it grows and leaves a green stripe, the
+// Carnival Snowballs: the little ball pushed round in a big loop (it grows and leaves a green stripe, the
 // camera follows), then a fresh ball dragged out of bare snow and pushed into the big one (it hops on top).
 motion.push({
   name: 'canada-snowman-roll',

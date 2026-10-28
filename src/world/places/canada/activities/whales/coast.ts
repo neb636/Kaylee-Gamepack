@@ -9,7 +9,7 @@ import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
 import { rng } from '../canoe/shore'
-import { BIG_ISLE, DOCK, EAGLE_TREE, ISLES, KELP, LIGHTHOUSE, PUFFIN_ROCK, SEALION_ROCK, SHORE_Z, SURF, type Isle } from './sea'
+import { BIG_ISLE, DOCK, EAGLE_TREE, ISLES, KELP, LIGHTHOUSE, PUFFIN_ROCK, SEAL_ROCK, SEALION_ROCK, SHORE_Z, SURF, TIDE_SHELF, type Isle } from './sea'
 
 export const SKY = '#CFEAF7'
 export const DEEP = '#2F8FA3'
@@ -28,8 +28,8 @@ export interface Coast {
   under: Group
   /** The bright underside of the surface. */
   ceiling: Mesh
-  /** The kelp's stalks and fronds, swaying. */
-  kelp: Group[]
+  /** The kelp bed in a few clumps (each clump's fronds one shape on the water, its stalks one shape below), swaying. */
+  kelp: Kelp[]
   /** The lighthouse's turning beam, and its lamp. */
   beam: Group
   lamp: Group
@@ -39,8 +39,18 @@ export interface Coast {
   lions: { x: number; y: number; z: number; h: number }[]
   puffin: Vector3
   eagle: Vector3
-  /** The rocks' sea stars, by the water on the sea lions' rock. */
+  /** The tide pool on its shelf (the sea stars' group sits here), and the sea stars round it (pool-local). */
+  pool: Vector3
   stars: [number, number, number, number][]
+  /** Where the harbour seals nap (and which way they lie), and the raven's post at the end of the dock. */
+  seals: { x: number; y: number; z: number; h: number }[]
+  raven: Vector3
+}
+
+export interface Kelp {
+  top: Group
+  stalk: Group
+  a: number
 }
 
 /** One rocky island or point: a rounded rock rising out of the sea, a green top, rainforest on it. */
@@ -150,11 +160,26 @@ export function buildCoast(bag: Bag): Coast {
     { x: sr.x + 1.2, y: sr.h - 0.3, z: sr.z - 1, h: -1.6 },
     { x: sr.x + 0.2, y: sr.h - 0.2, z: sr.z + 2.2, h: -3 },
   ]
+  // ---- The tide pool: a flat rock shelf at the foot of the sea lions' rock with a pool of clear water on top, sea
+  // stars round its rim and anemones in it.
+  const ts = TIDE_SHELF
+  const shelfTop = ts.h - 0.4
+  const pool = new Vector3(ts.x, shelfTop + 0.02, ts.z)
+  land.add(solid(merge([P.cyl(ts.r * 0.62, ts.r * 0.62, 0.06, '#8FDCE3', { at: [ts.x, shelfTop + 0.01, ts.z] }, 16), P.sphere(0.5, ROCK_DARK, { at: [ts.x + 1.2, shelfTop + 0.1, ts.z - 1.4], scale: [1, 0.5, 1] }, 8)]), bag, 1.5))
   const stars: [number, number, number, number][] = [
-    [sr.x - 3.4, 0.5, sr.z - 3, 0.5],
-    [sr.x - 4.4, 0.6, sr.z - 1.2, 1.2],
-    [sr.x - 2.6, 0.3, sr.z - 3.8, -0.4],
+    [-1.9, 0.06, 0.6, 0.5],
+    [0.4, 0.06, 2.0, 1.2],
+    [1.8, 0.06, -0.3, -0.4],
+    [-0.9, 0.06, -1.9, 2.2],
   ]
+  // ---- The harbour seals' low rock, by the town.
+  const seals = [
+    { x: SEAL_ROCK.x - 0.9, y: SEAL_ROCK.h - 0.45, z: SEAL_ROCK.z + 0.4, h: 0.8 },
+    { x: SEAL_ROCK.x + 1.1, y: SEAL_ROCK.h - 0.45, z: SEAL_ROCK.z - 0.6, h: -2.2 },
+  ]
+  // ---- The raven's post: a tall mooring post at the end of the dock.
+  const raven = new Vector3(DOCK.x + DOCK.w / 2 - 0.1, 2.2, DOCK.z1 + 0.4)
+  land.add(solid(merge([P.cyl(0.24, 0.26, 2.6, '#8C6A55', { at: [raven.x, 0.9, raven.z] }, 8), P.cyl(0.28, 0.28, 0.12, '#6E5243', { at: [raven.x, 2.2, raven.z] }, 8)]), bag, 2))
   // ---- The puffins' stack.
   const puffin = new Vector3(PUFFIN_ROCK.x + 0.8, PUFFIN_ROCK.h - 0.35, PUFFIN_ROCK.z + 2.2)
 
@@ -167,25 +192,39 @@ export function buildCoast(bag: Bag): Coast {
   surf.position.set(SURF.x, 0.1, SURF.z)
   land.add(surf)
 
-  // ---- The kelp: golden-olive fronds floating on the water in the bed, long stalks down to the sea floor.
-  const kelp: Group[] = []
-  for (let i = 0; i < 26; i++) {
+  // ---- The kelp: bull kelp, a golden float with long ribbon blades lying on the water, and a long stalk down to the
+  // sea floor. In four clumps, so the whole bed is a handful of shapes (it was one shape per frond): each clump's
+  // fronds sway together on the water, its stalks lean together from the floor.
+  const kelp: Kelp[] = []
+  const clumps: { tops: BufferGeometry[]; stalks: BufferGeometry[] }[] = Array.from({ length: 4 }, () => ({ tops: [], stalks: [] }))
+  for (let i = 0; i < 30; i++) {
     const a = rand() * Math.PI * 2
     const r = Math.sqrt(rand()) * KELP.r
-    const x = KELP.x + Math.cos(a) * r
-    const z = KELP.z + Math.sin(a) * r
-    const g = new Group()
-    g.position.set(x, 0, z)
-    const top = solid(merge([P.sphere(0.35, '#B79A3E', { at: [0, 0.03, 0], scale: [1, 0.25, 1] }, 8), P.rbox(0.5, 0.04, 2, 0.1, '#9C8A3A', { at: [0.3, 0.02, 0.8], rot: [0, a, 0] }), P.rbox(0.45, 0.04, 1.7, 0.1, '#A99440', { at: [-0.4, 0.02, -0.5], rot: [0, a + 2, 0] })]), bag, 1.5)
-    g.add(top)
-    const stalk = solid(merge([P.cyl(0.08, 0.1, -FLOOR_Y, '#8E7E36', { at: [0, FLOOR_Y / 2, 0] }, 5), ...[0, 1, 2, 3].map((j) => P.rbox(0.35, 1.4, 0.04, 0.05, '#A39242', { at: [0.25 * (j % 2 ? 1 : -1), FLOOR_Y * (0.2 + j * 0.2), 0], rot: [0, j, (j % 2 ? -1 : 1) * 0.5] }))]), bag, 1.2)
-    under.add(stalk)
-    stalk.position.set(x, 0, z)
-    stalk.userData.base = { x, z, a }
-    g.userData.stalk = stalk
-    land.add(g)
-    kelp.push(g)
+    const x = Math.cos(a) * r
+    const z = Math.sin(a) * r
+    const c = clumps[Math.floor(((a + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 2)) % 4]
+    const b = rand() * Math.PI * 2
+    c.tops.push(
+      P.sphere(0.32, '#C7A646', { at: [x, 0.05, z], scale: [1, 0.55, 1] }, 8),
+      P.rbox(0.42, 0.04, 2.2, 0.1, '#9C8A3A', { at: [x + Math.sin(b) * 1.1, 0.02, z + Math.cos(b) * 1.1], rot: [0, b, 0] }),
+      P.rbox(0.38, 0.04, 1.8, 0.1, '#AE9A42', { at: [x + Math.sin(b + 2.2) * 0.9, 0.025, z + Math.cos(b + 2.2) * 0.9], rot: [0, b + 2.2, 0] }),
+      P.rbox(0.34, 0.04, 1.5, 0.1, '#8E7E36', { at: [x + Math.sin(b - 2) * 0.75, 0.02, z + Math.cos(b - 2) * 0.75], rot: [0, b - 2, 0] }),
+    )
+    c.stalks.push(P.cyl(0.08, 0.1, -FLOOR_Y, '#8E7E36', { at: [x, FLOOR_Y / 2, z] }, 5), ...[0, 1, 2, 3].map((j) => P.rbox(0.35, 1.4, 0.04, 0.05, '#A39242', { at: [x + 0.25 * (j % 2 ? 1 : -1), FLOOR_Y * (0.2 + j * 0.2), z], rot: [0, j + b, (j % 2 ? -1 : 1) * 0.5] })))
   }
+  clumps.forEach((c, i) => {
+    const top = solid(merge(c.tops), bag, 1.5)
+    top.position.set(KELP.x, 0, KELP.z)
+    land.add(top)
+    // (The stalks lean from the sea floor.)
+    const stalk = new Group()
+    stalk.position.set(KELP.x, FLOOR_Y, KELP.z)
+    const g = solid(merge(c.stalks), bag, 1.2)
+    g.position.y = -FLOOR_Y
+    stalk.add(g)
+    under.add(stalk)
+    kelp.push({ top, stalk, a: i * 1.7 })
+  })
 
   // ---- Under the water: the sea floor (sand with rocks) and the surface seen from below.
   const floor: BufferGeometry[] = [P.box(900, 1, 900, '#C8D9C0', { at: [0, FLOOR_Y - 0.5, 0] })]
@@ -202,5 +241,5 @@ export function buildCoast(bag: Bag): Coast {
   under.add(ceiling)
   under.visible = false
 
-  return { land, under, ceiling, kelp, beam, lamp, surf, lions, puffin, eagle, stars }
+  return { land, under, ceiling, kelp, beam, lamp, surf, lions, puffin, eagle, pool, stars, seals, raven }
 }
