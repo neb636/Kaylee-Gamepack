@@ -1,4 +1,4 @@
-// Penguin Slide (greybox 3, plan: planning/around-the-world/poles.html): Antarctica is land, a giant mountain of ice
+// Penguin Slide (plan: planning/around-the-world/poles.html): Antarctica is land, a giant mountain of ice
 // that slopes down to the sea. Pebble is hungry; Kaylee steers Pebble's papa on his belly down the ice and into the sea
 // to catch krill for her.
 //
@@ -76,7 +76,13 @@ export interface SlideEvents {
   krill(n: number): void
   /** Pebble is fed. */
   home(): void
+  /** Something happened that a friend says something about (PenguinSlide.tsx picks the lines). */
+  moment(m: SlideMoment): void
+  /** She poked someone (the first time, Sparkle says something true about them). */
+  poke(id: 'papa' | 'pebble' | 'seal' | 'adelie'): void
 }
+/** Off he goes; big air off a bump; head first in a snowbank; bumped an Adélie; booped by the seal; out of the sea. */
+export type SlideMoment = 'go' | 'air' | 'bank' | 'bump' | 'seal' | 'leap'
 
 export const SLIDE_ANCHORS: AnchorInfo[] = [
   { id: 'papa', label: "Pebble's papa", kind: 'thing' },
@@ -498,6 +504,9 @@ export class PenguinSlide implements World3D {
     this.hintEl = el
   }
 
+  /** Waiting at the top while the story's opening lines play (PenguinSlide.tsx lets him go). */
+  held = false
+
   get calm() {
     return this.mode === 'done' && !this.papa.busy && !this.spray.busy && !this.rig.moving
   }
@@ -531,12 +540,14 @@ export class PenguinSlide implements World3D {
 
     switch (this.mode) {
       case 'ready':
-        // He looks down the hill, flops onto his tummy, and off he goes.
-        if (this.modeT > 0.7) {
+        // He looks down the hill, flops onto his tummy, and off he goes (once the story's opening lines are done).
+        if (this.held) this.modeT = 0
+        else if (this.modeT > 0.7) {
           this.setMode('slide')
           this.v = 2
           sounds.whoosh()
           honk(true)
+          this.events.moment('go')
         }
         break
       case 'slide':
@@ -672,6 +683,7 @@ export class PenguinSlide implements World3D {
     if (!this.air && Math.abs(this.lat) > half(this.s) + SLIDE.bank * 0.6 && pushing && this.v > 5 && this.bankCool <= 0 && this.s < EDGE - 12) {
       this.bankCool = 5
       this.counts.banks++
+      this.events.moment('bank')
       this.setMode('bank')
       this.lat = Math.sign(this.lat) * (edge + 0.4)
       this.y = ground(this.s, this.lat) - 0.35
@@ -735,7 +747,10 @@ export class PenguinSlide implements World3D {
         this.air = false
         this.gv = NaN
         if (this.airT > 0.25) this.counts.hops++
-        if (this.airT > 0.7) this.counts.bigAir++
+        if (this.airT > 0.7) {
+          this.counts.bigAir++
+          this.events.moment('air')
+        }
         this.thump(impact)
       }
       return
@@ -804,6 +819,7 @@ export class PenguinSlide implements World3D {
       const to = SHELF + 4
       this.leapTo.set(cx(to) + this.lat * 0.4, SHELF_Y, -to)
       this.setMode('leap')
+      this.events.moment('leap')
       this.enter('home')
       sounds.whoosh()
       honk(true)
@@ -916,6 +932,7 @@ export class PenguinSlide implements World3D {
     if (this.mode === 'swim' && this.sealCool <= 0 && this.sealPos.distanceTo(p) < 1.5) {
       this.sealCool = 3
       this.counts.boops++
+      this.events.moment('seal')
       this.seal.spin()
       this.papa.spin()
       sfx.boing()
@@ -949,6 +966,7 @@ export class PenguinSlide implements World3D {
         a.pen.spin()
         this.papa.spin()
         this.counts.bumps++
+        this.events.moment('bump')
         honk()
         honk(true)
         this.spray.burst(x, y + 0.4, -a.s, 12, 2, 2.5, 0.16)
@@ -1117,6 +1135,7 @@ export class PenguinSlide implements World3D {
     this.counts.taps++
     if (id === 'papa') {
       this.counts.pokes++
+      this.events.poke('papa')
       honk(true)
       if (this.mode === 'feed' || this.mode === 'done' || this.mode === 'ready') this.papa.hop()
       else if (this.mode === 'swim') {
@@ -1127,12 +1146,14 @@ export class PenguinSlide implements World3D {
     }
     if (id === 'pebble') {
       this.counts.pokes++
+      this.events.poke('pebble')
       this.pebble.hop()
       sfx.chirp()
       return
     }
     if (id === 'seal') {
       this.counts.pokes++
+      this.events.poke('seal')
       this.seal.spin()
       sfx.boing()
       return
@@ -1141,6 +1162,7 @@ export class PenguinSlide implements World3D {
       const a = this.adelies[+id.slice(7)]
       if (!a) return
       this.counts.pokes++
+      this.events.poke('adelie')
       a.pen.hop()
       honk()
       return

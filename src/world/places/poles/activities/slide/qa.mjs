@@ -4,13 +4,16 @@ import { vp } from '../../../../../../scripts/qa-lib.mjs'
 
 /** Screenshots: how to get to each screen from a fresh start. */
 export const screens = [
-  // Penguin Slide (greybox 3): each stretch from its link (home: the feeding, then the colony).
-  ...['top', 'bumps?run=right', 'dive', 'home?krill=12'].map((to) => ({ name: `poles-slide-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/poles/slide/${to}`, reset: true, wait: to.startsWith('home') ? 5000 : 2500 })),
+  // Penguin Slide: the story on a fresh start (Pebble is hungry), each stretch from its link (Sparkle in the corner),
+  // the feeding at home, then the stamp and the Adélie sticker.
+  { name: 'poles-slide-story', hash: '#/world/poles/slide/story', reset: true, wait: 1500 },
+  ...['top', 'bumps?run=right', 'dive', 'home?krill=12'].map((to) => ({ name: `poles-slide-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/poles/slide/${to}`, reset: true, wait: to.startsWith('home') ? 3000 : 2500 })),
+  { name: 'poles-slide-stamp', hash: '#/world/poles/slide/home?krill=12', reset: true, wait: 15000 },
 ]
 
 /** Auto-played runs: talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
-  { name: 'poles penguin slide', id: 'slide', hash: '#/world/poles/slide', reset: true },
+  { name: 'poles penguin slide', id: 'slide', hash: '#/world/poles/slide/story', reset: true },
 ]
 
 /** Filmed moments: the core verb, driven the way a child would. */
