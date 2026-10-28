@@ -1480,8 +1480,8 @@
             {
               "n": 10,
               "title": "Finale: Pole to Pole + Polar Quiz",
-              "status": "doing",
-              "md": "Its own PR: the tern flight, then the quiz on the hub's globe, then the trophy. **Greybox built** (PR #255): Terry's flight, the postcard, the quiz with 8 questions in the pool, the badge and `onWin`. Voices and the art come with steps 8 and 9.",
+              "status": "done",
+              "md": "Its own PR: the tern flight, then the quiz on the hub's globe, then the trophy. **Greybox built** (PR #255). **Voices and the toys in** (2026-10-28): Terry is the rig toy, he talks on the way, Sparkle speaks every question.",
               "date": "2026-10-27",
               "pr": 255
             }
@@ -1813,6 +1813,87 @@
                 "**The friends' voices** (`cast.json`): Pola (a bouncy cub), Mama Bear (warm and calm), Pebble (a squeaky chick), Papa (a proud, gentle emperor dad) and Terry (a chirpy, fast-talking tern). No accents: nobody lives at the poles for good. `lines.ts` has a block per activity, and the trophy's lines are recorded.",
                 "**QA scenarios per activity** (`activities/<id>/qa.mjs`): the screens, pacing runs and filmed moments moved next to each activity; the Poles' own `qa.mjs` keeps the hub and the finale.",
                 "`art.ts` holds the stickers and the friend's portrait (still the world's globe until the sticker art)."
+              ]
+            },
+            {
+              "title": "Step 9: Ice Floe Hop goes into the game",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Pola calls out to Mama across the sea ice, and Sparkle, in the corner, says what to do at each stretch (and again when she's stuck). Pola and Mama react in their own voices to the belly-flops, the tippy slides, the new ice and her taps. Home with Mama they cheer, then the stamp and the polar bear sticker. Ice Floe Hop has its spot on the globe's north side now.",
+              "items": [
+                "`activities/floe/FloeHop.tsx`: one Pola line, then Sparkle's instruction (5.1 s of talk before the first touch). Sparkle's corner (`kit/Guide`) has a hint for each stretch (steady, drift, melt) and replaces the greybox's text pill. The friends' reactions take turns from a list, at least 5 s apart. A fact the first time she pokes the ice (“This ice is floating on the sea!”) and the open water.",
+                "Home: Mama's and Pola's lines, then “Kaylee, you got Pola home!”, then `onDone` (the stamp, the sticker, the video), after the lines or 9 s at most. 🔁 still plays again.",
+                "`floe.ts`: new events `flop`, `slide`, `poke(pola | mama | floe | water)`.",
+                "`L.floe` in `lines.ts`: 24 lines (13 Pola, 5 Mama, 6 Sparkle). Pola's lines use the name, not he or she.",
+                "`info.ts`: `READY = true`. `qa.mjs`: the hug and the stamp as two screens.",
+                "**Changed from the plan:** Mama's “Hop home to me, Pola!” is her first tap line instead of part of the opening, to keep the talk short. No pokeable seals, narwhals, walruses or belugas yet (the greybox never had them), so the facts hang on the ice and the water.",
+                "**Known small things:** three Pola clips transcribe a little off (“Wheee! A slide!”, “Brr! Paddle paddle!”, “Hee hee!”): listen on the iPad. “Fling me again!” kept coming out as “Sing me again”, so it's “Again! Again!”."
+              ]
+            },
+            {
+              "title": "Step 9: Iceberg Maker goes into the game",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Iceberg Maker talks now, and its 🧊 spot shows on both sides of the globe. Sparkle, in a corner, says what to do at each stretch (and again when she's stuck), with a short fact the first time something comes up. Pola on the north glacier and Papa on the south ice shelf say hello and react in their own voices to the big moments. When her fleet sails off: the stamp, the narwhal sticker, then the iceberg video.",
+              "items": [
+                "**Sparkle (`kit/Guide`):** “Pick a pole: north or south?”, tap the cracks, the giant crack, “most of the iceberg hides under the water”, push it down, push them out to sea, and the goodbye. Each instruction is also her hint after 8 s with nothing touched. The greybox's text pill is gone.",
+                "**Facts, once each:** calving at the first bit; tall and pointy (north) or flat like a table (south) at the second; nine parts out of ten under the water at the first push; fresh water, not salty, when they set sail; bergy seltzer at the first fizz; blue old ice at a tapped scar; the napping seal; orcas at both poles.",
+                "**The friends:** a hello after the pick, a word on some bits (at most one every 4 s), a groan line when the giant lets go, a soaked line after its splash, wonder at the hidden part, “I'm riding the iceberg!” / “All aboard, everyone!”, a giggle when tapped, and the goodbye.",
+                "**The stamp:** 5.5 s after the fleet has sailed (the goodbyes first), `onDone`. The 🔁 “other pole” button is gone: opening the activity again starts at the pick.",
+                "`L.iceberg`: 38 lines (16 Sparkle, 11 Pola, 11 Papa). Pacing: no talk before the first touch (the pick line plays while she can already tap), about 0.7 s of talk per tap.",
+                "**Files:** `activities/iceberg/iceberg.ts` (a new `moment` event: bit, groan, soak, push, ride, away, giantAway, fizz, blue, seal, orca, friends), `IcebergMaker.tsx` (who says what and how often), `info.ts` (`READY = true`), `qa.mjs` (the pacing run opens `/pick`).",
+                "**Changed from the plan:** Papa speaks for the south (Pebble isn't on the shelf; the Adélies and emperors are).",
+                "**Known small things:** Sparkle's corner covers a little of the cliff top in portrait (nothing tappable there). The pacing robot can't push or flick, so it never reaches the stamp; the drags are checked by the `poles-iceberg-giant` motion scenario."
+              ]
+            },
+            {
+              "title": "Step 9: Penguin Slide goes into the game, and the Adélies",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Penguin Slide is in the game. Pebble says “Papa, I'm so hungry!” and Papa goes off fishing. Sparkle in the corner says what to do on each stretch, and Papa talks when he flies off a bump, plunges into a snowbank, bumps an Adélie, meets the seal or gulps krill. When Pebble is fed she says thank you, and the stamp follows. The little penguins on the slope are Adélies on the rig now.",
+              "items": [
+                "`activities/slide/PenguinSlide.tsx`: a `StoryBeat` with the 2D Pebble (a fresh start or the `story` link; a tap skips), Papa held at the top of the slope (`World.held`) until it ends: 3.7 s of talk before the first touch. `kit/Guide` gives each stretch's instruction when it starts (with “Antarctica is one big hill of ice!” at the bumps and “Penguins fly under the water!” at the dive) and again when she's stuck. A fact the first time she pokes Papa, Pebble, the seal or an Adélie (a second Adélie: no polar bears here). Papa says at most two lines per kind of moment, at least 6 s apart, never over someone else. `onDone` 3.4 s after Pebble is fed. The text pill and 🔁 are gone (she replays from the globe).",
+                "`slide.ts`: a `moment` event (go, air, bank, bump, seal, leap), a `poke` event, and `held`. `sections.ts`: a new `story` section (“Pebble is hungry”).",
+                "`L.slide`: 26 lines (10 Sparkle, 13 Papa, 4 Pebble).",
+                "**The Adélie** (`characters/looks.ts` `adelie`, in the character lab at [#/world/characters/adelie](#/world/characters/adelie)): black head and back, white tummy, and a new `eye-ring` extra on the rig (`engine3d/characters/look.ts`, `animal.ts`: white rings round the eyes; off for everyone else). `slide/penguin.ts` builds every penguin on the rig now, so Iceberg Maker's Adélies changed too.",
+                "`info.ts`: `READY = true`. `qa.mjs`: story and stamp screens; the pacing run starts at `/slide/story`.",
+                "**Changed from the plan:** the story has its own section. Pokeables are the ones the greybox had (Papa, Pebble, the leopard seal, the Adélies): no Weddell seal, skua, whale or station yet.",
+                "**Known small things:** the transcription check flagged “Bumps! Pick a way down the hill!”, “Wheee!” and “Hee hee!” (they look like transcription quirks): listen on the iPad. The pacing robot can only tap, so it never reaches the stamp."
+              ]
+            },
+            {
+              "title": "Step 9: the globe hub talks",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Sparkle sits in a corner of the globe and says what to do: spin it, drag the sun, carry the lost one home, tap a picture to play. When Pola's and Pebble's sides come round they say hello in their own voices, and they're surprised when she puts the lost one on the wrong pole. The first time she pokes the North Pole, the seal, the station, the whale or the lights, she hears a fact.",
+              "items": [
+                "`activities/hub/Hub.tsx` drives `kit/Guide`; the text pill is gone. The welcome on the first visit, or “You got every stamp! Tap the party!” once every stamp is in. Hints after 8 s with nothing touched: spin, the sun, carry it home, or tap a picture. Summer lines once per side. A tap on Pola or Pebble: three lines each, in turn.",
+                "`globe/globe.ts`: a `poke(id)` event (the pokes, the friends, `lightsNorth`/`lightsSouth`). Pola and Pebble on the globe, and the lost ones, are the rig toys (`makePola`, `makePebble`, `Critter.dress` with `FaceLife`, so the two friends' mouths move when they talk).",
+                "The spots' row on a tall screen sits above Sparkle. Four more passport facts: the coldest place, hidden ice, fresh water, the scientists (`meta.facts`). Pacing: no talk before the first touch, 12.5 s of talk over 45 taps.",
+                "**Changed from the plan:** no Inuktitut hello (not confirmed yet).",
+                "**Known small things:** the rig toys don't darken in a pole's winter night (the globe has its own day and night shader). The lost penguin is the chick toy."
+              ]
+            },
+            {
+              "title": "Step 10: Pole to Pole and the Polar Quiz talk",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Terry is the toy tern now, flying flat with his wings out and folding them to stand when he lands. He talks on the way: setting off with Pola's postcard, the warm middle, the windy south, a cheer every six fish and hello to each country she's been to. He hands Pebble the card (“From Pola! Look, a polar bear!”), then Sparkle asks each quiz question, with a 🔊 to hear it again. A miss gets something silly, then “Look for the sparkle!”; the badge gets “Wow, Kaylee, you know your poles!”",
+              "items": [
+                "`party.ts`: `ternRig` with the `FLAT`/`UPRIGHT` poses, `flapWings` and Terry's `FaceLife` (`TERN_H` 0.07). The colony is four emperors with Papa's look, spread out so Pebble shows. The quiz's tern is the rig too.",
+                "`Finale.tsx`: `kit/Guide` with a hint for each section, quiet during the postcard and the badge; a `SayButton` by the stars; only the country-name pill stays. Pola's and Pebble's misses are said by the friend (`FRIEND_MISS`). Sparkle's “Steer Terry with your finger!” comes before Terry's first line.",
+                "**Changed from the plan:** the colony's dads are smaller than real life so Pebble stays the star.",
+                "**Known small things:** the flight is seen from behind, so Terry is mostly his back and wings; he's small standing at the colony; the badge doesn't pin onto the passport yet."
+              ]
+            },
+            {
+              "title": "Art: the stickers and Pola's portrait",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Five stickers (a polar bear cub, an Arctic fox, an Adélie penguin, an emperor chick, a narwhal) and a waving Pola for the friend's picture, flat and cute in the app's style.",
+              "items": [
+                "`art/source/world/poles/sticker-*.png` and `friend-pola.png` (Codex) → `assets/*.webp`; `art.ts` points `stickers` and `friend` at them. qa-art: the cream fur and highlights are marked fine.",
+                "**Known small things:** the Adélie sticker has no white eye ring, and the chick's face isn't heart-shaped."
               ]
             }
           ]
