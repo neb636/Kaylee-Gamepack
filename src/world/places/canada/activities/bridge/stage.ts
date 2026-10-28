@@ -53,6 +53,9 @@ export interface StageDef {
   wolf: Pt
   /** Spruces along the back of each bank: [x, base y, height]. */
   trees: [number, number, number][]
+  /** Where Maple stands watching, in the meadow (her feet), and how tall she is. */
+  maple: Pt
+  mapleH: number
 }
 
 export const WIDE: StageDef = {
@@ -78,7 +81,7 @@ export const WIDE: StageDef = {
   camera: [1112, 702],
   peaks: [[160, 250], [520, 150], [880, 250], [1240, 175], [1560, 255]],
   goat: [[478, 245], [566, 292], [440, 322]],
-  town: { x: 1270, w: 240, y: 462 },
+  town: { x: 1180, w: 250, y: 462 },
   eagle: { x: 1040, y: 190, rx: 170, ry: 50 },
   wolf: [128, 520],
   trees: [
@@ -90,6 +93,8 @@ export const WIDE: StageDef = {
     [1190, 500, 200],
     [1540, 504, 230],
   ],
+  maple: [1515, 640],
+  mapleH: 190,
 }
 
 export const TALL: StageDef = {
@@ -124,6 +129,8 @@ export const TALL: StageDef = {
     [660, 660, 150],
     [880, 666, 200],
   ],
+  maple: [905, 775],
+  mapleH: 170,
 }
 
 /** Animals keep this far from the cut's edge (the wildlife fence stands on it). */
@@ -190,8 +197,8 @@ export interface Look {
 }
 
 export const LOOKS: Record<Kind, Look> = {
-  elk: { rx: 70, ry: 36, legs: 50, legW: 13, head: 23, neck: [76, -48], fill: '#A8703E', dark: '#6E4426', light: '#E6CFA2', ears: 'tall', rump: true },
-  calf: { rx: 42, ry: 23, legs: 34, legW: 9, head: 17, neck: [46, -30], fill: '#B9844E', dark: '#7A5030', light: '#F2E2C2', ears: 'tall', spots: true },
+  elk: { rx: 70, ry: 36, legs: 50, legW: 13, head: 23, neck: [88, -40], fill: '#A8703E', dark: '#6E4426', light: '#E6CFA2', ears: 'tall', rump: true },
+  calf: { rx: 42, ry: 23, legs: 34, legW: 9, head: 17, neck: [52, -26], fill: '#B9844E', dark: '#7A5030', light: '#F2E2C2', ears: 'tall', spots: true },
   ram: { rx: 56, ry: 33, legs: 36, legW: 12, head: 21, neck: [60, -30], fill: '#9A8068', dark: '#6A523E', light: '#F4ECDC', ears: 'side', horns: true, rump: true },
   ewe: { rx: 50, ry: 30, legs: 33, legW: 11, head: 18, neck: [54, -27], fill: '#A48A72', dark: '#72594A', light: '#F4ECDC', ears: 'side', rump: true },
   lamb: { rx: 32, ry: 20, legs: 25, legW: 8, head: 14, neck: [35, -18], fill: '#B49A80', dark: '#80664E', light: '#FAF4E8', ears: 'side', rump: true },
@@ -208,4 +215,17 @@ export function rng(seed: number) {
     s ^= s << 5
     return (s >>> 0) / 4294967296
   }
+}
+
+/** Where the painted Rockies (art.ts `mountains`) stand: along the treeline, a little wider than the stage, and a bit
+ *  flatter than painted so the peaks stay clear of the top bar. */
+export function mountainsBox(st: StageDef) {
+  const w = st.w + (st.w > st.h ? 100 : 120)
+  const h = (w / 3.01) * (st.w > st.h ? 0.7 : 0.8)
+  return { x: (st.w - w) / 2, y: st.back + 12 - h, w, h }
+}
+// The mountain goat's ledges: on the second peak's left slope in the painting (fractions of the picture).
+for (const st of [WIDE, TALL]) {
+  const m = mountainsBox(st)
+  st.goat = ([[0.265, 0.43], [0.335, 0.52], [0.235, 0.62]] as Pt[]).map(([fx, fy]) => [Math.round(m.x + fx * m.w), Math.round(m.y + fy * m.h)])
 }

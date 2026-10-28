@@ -104,6 +104,38 @@ export const L = {
   canoe: {
   },
   bridge: {
+    // The story (Maple, then Sparkle's one instruction).
+    story: [maple('Bonjour! The animals want to cross the big highway.'), 'Lead them over the animal bridge!'],
+    // Sparkle: whose turn it is (a link that starts there, the next family, and the hint when she's stuck).
+    lead: {
+      elk: 'Drag mama elk over the bridge.',
+      sheep: 'The sheep love the rocky way!',
+      bears: 'Lead the grizzlies over the bridge.',
+    },
+    fence: 'Not on the road! Over the bridge.',
+    fenceTap: 'The fence keeps the animals off the road.',
+    camera: 'Click! The camera takes a photo of every animal.',
+    bonk: 'Bonk! The rams bump heads.',
+    lost: 'Oh! A baby stopped to smell a flower.',
+    fetch: 'Go get the little one!',
+    seeds: 'Walk the others over. They carry seeds!',
+    // Mama elk.
+    elkGo: by('elk')('Come along, babies!'),
+    elkHome: by('elk')('Mmm, yummy meadow!'),
+    elkFound: by('elk')('There you are, little one!'),
+    // Mama grizzly.
+    bareNo: by('bear')('Hmm. Too bare for me.'),
+    bearYes: by('bear')('Ooh! It looks like the forest!'),
+    bearHome: by('bear')('Thank you! Berries!'),
+    // Maple, watching from the meadow.
+    cheer: {
+      elk: maple('Bravo! The elk made it!'),
+      sheep: maple('Yay, the bighorn sheep!'),
+      bears: maple('The bears too! Bravo!'),
+    },
+    giggle: maple('Hee hee! That tickles!'),
+    album: maple('Look! Photos of everyone!'),
+    done: 'You helped them all cross, Kaylee!',
   },
   whales: {
   },
