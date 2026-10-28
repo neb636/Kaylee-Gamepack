@@ -34,6 +34,18 @@ export const L = {
     otter: "Sea otters hold hands so they don't float away.",
     spirit: 'The spirit bear is a black bear with white fur.',
   },
+  // The Theater's real videos (meta.videos), offered after each activity.
+  videos: {
+    taffy: 'Real maple taffy on real snow!',
+    snowman: 'The real Winter Carnival in Quebec City!',
+    bike: 'Real bikes on the real mountain!',
+    campfire: 'Animals that can see in the dark!',
+    canoe: 'A real red canoe on Moraine Lake!',
+    bridge: 'Real animals crossing their bridge!',
+    whales: 'Real sea otters holding hands!',
+    salmon: 'Real spirit bears catching salmon!',
+    hockey: 'Skating on the real frozen canal!',
+  },
   // Maple's animal book (book/animals.ts): Sparkle names each animal the first time Kaylee pokes it, with one short fact.
   // The same line plays again when she taps it in the book.
   book: {
