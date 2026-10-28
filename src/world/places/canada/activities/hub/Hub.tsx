@@ -12,6 +12,7 @@ import { View3D, type RenderMode } from '../../../../engine3d/View3D'
 import type { Region } from '../../map/canada'
 import { STOPS } from '../../map/canada'
 import { CanadaMap, MAP_ANCHORS, type MapEvents } from '../../map/map'
+import { Book } from '../../book/Book'
 import HUB_SECTIONS from './sections'
 
 const WHERE: Record<Region, string> = {
@@ -33,7 +34,8 @@ export function Hub({ meta, openActivity }: PlaceProps) {
   const [where, setWhere] = useState<Region>(initial.at)
   const worldRef = useRef<CanadaMap | null>(null)
   const at = useRef(initial.at)
-  useEffect(() => enter('map', { at: at.current }), [])
+  const [book, setBook] = useState(start === 'book')
+  useEffect(() => enter(book ? 'book' : 'map', { at: at.current }), [book])
 
   const events = useRef<MapEvents>({
     where: setWhere,
@@ -74,6 +76,14 @@ export function Hub({ meta, openActivity }: PlaceProps) {
           🚂 Tap to wake the train
         </button>
       )}
+      <button
+        aria-label="Maple's animal book"
+        onClick={() => setBook(true)}
+        style={{ position: 'absolute', right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', zIndex: 25, width: 'var(--target)', height: 'var(--target)', borderRadius: 24, border: '5px solid #C98A55', background: '#FFF6E6', boxShadow: 'var(--shadow)', fontSize: 'clamp(34px, 5vmin, 48px)', display: 'grid', placeItems: 'center' }}
+      >
+        📒
+      </button>
+      {book && <Book onClose={() => setBook(false)} />}
       <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', justifyContent: 'center', pointerEvents: 'none', zIndex: 20 }}>
         <AnimatePresence mode="popLayout">
           <motion.div key={where} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>

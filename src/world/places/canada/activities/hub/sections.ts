@@ -10,6 +10,6 @@ const HUB_SECTIONS = defineSections('canada', HUB, {
       doc: 'where the train is: a stop (msa = Mont-Sainte-Anne, quebec, ottawa, banff, bc = Vancouver) or on the way (forest = north of Lake Superior, prairies, rockies = just past the Spiral Tunnel)',
     },
   },
-  sections: [{ id: 'map', name: 'Push the train across Canada', params: ['at'], links: [{ label: 'The whole country, then the train in Quebec City', bare: true }, { label: 'Push the train', also: [{ label: 'Mont-Sainte-Anne', params: { at: 'msa' } }, { label: 'Ottawa', params: { at: 'ottawa' } }, { label: 'the forests', params: { at: 'forest' } }, { label: 'the prairies', params: { at: 'prairies' } }, { label: 'Banff', params: { at: 'banff' } }, { label: 'out of the Spiral Tunnel', params: { at: 'rockies' } }, { label: 'Vancouver', params: { at: 'bc' } }] }] }],
+  sections: [{ id: 'map', name: 'Push the train across Canada', params: ['at'], links: [{ label: 'The whole country, then the train in Quebec City', bare: true }, { label: 'Push the train', also: [{ label: 'Mont-Sainte-Anne', params: { at: 'msa' } }, { label: 'Ottawa', params: { at: 'ottawa' } }, { label: 'the forests', params: { at: 'forest' } }, { label: 'the prairies', params: { at: 'prairies' } }, { label: 'Banff', params: { at: 'banff' } }, { label: 'out of the Spiral Tunnel', params: { at: 'rockies' } }, { label: 'Vancouver', params: { at: 'bc' } }] }] }, { id: 'book', name: "Maple's animal book", links: [{ label: "Maple's animal book (every animal she's met, grey shapes for the rest)" }] }],
 })
 export default HUB_SECTIONS

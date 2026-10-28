@@ -12,13 +12,14 @@ import { RIVAL_LOOKS } from '../activities/nan-trip/cup/rivals'
 import { LUNG } from '../activities/nan-trip/rice/farm'
 import { FAMILY } from '../characters/family'
 import { POLES_LOOKS } from '../../poles/characters/looks'
+import { CANADA_LOOKS } from '../../canada/characters/looks'
 import { COACH_LOOK, LOOKS, PATIENT_LOOKS, type Look, type Wearable } from '../characters/looks'
 import cast from '../cast.json'
 import { L } from '../lines'
 import { ATTENDANT } from '../trip/legs/plane'
 import { OFFICER } from '../trip/legs/airport'
 
-export type CastGroup = 'family' | 'trip' | 'mall' | 'nan' | 'critters' | 'poles'
+export type CastGroup = 'family' | 'trip' | 'mall' | 'nan' | 'critters' | 'poles' | 'canada'
 export const GROUPS: { id: CastGroup; name: string }[] = [
   { id: 'family', name: 'Kaylee & family' },
   { id: 'trip', name: 'Boat trip' },
@@ -26,6 +27,7 @@ export const GROUPS: { id: CastGroup; name: string }[] = [
   { id: 'nan', name: 'Nan trip' },
   { id: 'critters', name: 'Bay critters' },
   { id: 'poles', name: 'The Poles' },
+  { id: 'canada', name: 'Canada' },
 ]
 
 /** One choice in a character's variations popover: another look in their group, or an outfit for Kaylee. */
@@ -110,7 +112,14 @@ const CRITTER_INFO: Record<CritterId, { name: string; color: string }> = {
 }
 const critters: CastEntry[] = CRITTERS.map((id) => ({ id, name: CRITTER_INFO[id].name, who: 'Phang Nga Bay sticker', group: 'critters', kind: 'critter', critter: id, src: 'activities/boat-trip/bay/critters.ts', color: CRITTER_INFO[id].color }))
 
-export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...nan, ...critters, ...poles]
+const canada: CastEntry[] = [
+  person('maple', 'Maple', 'Canada: the beaver who travels ocean to ocean with Kaylee', 'canada', CANADA_LOOKS.maple, '../canada/characters/looks.ts', undefined, 'beavers'),
+  person('cousin', 'Maple\'s cousin', 'Canada: a little beaver at the sugar shack', 'canada', CANADA_LOOKS.cousin, '../canada/characters/looks.ts', undefined, 'beavers'),
+  person('moose', 'Moose', 'Canada: the gentle giant at every stop (the goalie)', 'canada', CANADA_LOOKS.moose, '../canada/characters/looks.ts'),
+  person('raccoon', 'Raccoon', 'Canada: the marshmallow bandit of the campsite', 'canada', CANADA_LOOKS.raccoon, '../canada/characters/looks.ts'),
+]
+
+export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...nan, ...critters, ...poles, ...canada]
 export const castById = (id: string | undefined) => CAST.find((c) => c.id === id)
 
 /** Kaylee's outfits (what she wears on each trip and at each HarborLand game). */
