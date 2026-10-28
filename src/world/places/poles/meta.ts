@@ -30,6 +30,15 @@ const meta: PlaceMeta = {
     { icon: '🌙', label: 'Long nights', say: L.facts.nights },
   ],
   coloringPages: [],
+  // Real-world videos for the Theater (button in the place's top bar). `after` offers one when that activity is done.
+  videos: [
+    { id: 'bears', youtubeId: 'mIGpzhADMC4', icon: '🐻‍❄️', title: 'Polar bear cubs on the ice', say: L.videos.bears, after: 'floe' },
+    { id: 'fox', youtubeId: '5FnJ70WwCXw', icon: '🦊', title: 'White for winter', say: L.videos.fox, after: 'coats' },
+    { id: 'penguins', youtubeId: 'A9mbCNs47FI', icon: '🐧', title: 'Penguins zoom out of the sea', say: L.videos.penguins, after: 'slide' },
+    { id: 'huddle', youtubeId: 'OL7O5O7U4Gs', icon: '🥚', title: 'The emperor huddle', say: L.videos.huddle, after: 'huddle' },
+    { id: 'iceberg', youtubeId: '00_-JlbIftg', icon: '🧊', title: 'An iceberg breaks off', say: L.videos.iceberg, after: 'iceberg' },
+    { id: 'narwhal', youtubeId: 'MXsZg1sQYvA', icon: '🦄', title: 'Narwhals', say: L.videos.narwhal },
+  ],
   passportLine: L.passport,
   createdAt: '2026-10-27',
 }

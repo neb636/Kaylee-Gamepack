@@ -1308,14 +1308,25 @@
         },
         {
           "type": "list",
-          "title": "Theater videos (to find in the build, `meta.videos`)",
+          "title": "Theater videos (in `meta.videos`, 2026-10-27)",
           "items": [
-            "Real polar bears on the sea ice (after Ice Floe Hop)",
-            "Arctic fox changing coats (after Snow Coats)",
-            "Penguins tobogganing and porpoising (after Penguin Slide)",
-            "Emperor penguin huddle (after Emperor Huddle)",
-            "An iceberg calving from a glacier (after Iceberg Maker)",
-            "Narwhals"
+            "🐻‍❄️ [Polar bear cubs slip on the Arctic ice](https://www.youtube.com/watch?v=mIGpzhADMC4) (BBC Earth, 2 min), after Ice Floe Hop",
+            "🦊 [Animals that change colour when it snows](https://www.youtube.com/watch?v=5FnJ70WwCXw) (BBC, Life in Colour, 2.5 min), after Snow Coats. Dad: preview it; the other animals in it aren't checked",
+            "🐧 [Emperor penguins speed-launch out of the water](https://www.youtube.com/watch?v=A9mbCNs47FI) (National Geographic, 3 min), after Penguin Slide",
+            "🥚 [Emperor penguins huddle for warmth](https://www.youtube.com/watch?v=OL7O5O7U4Gs) (Nature on PBS, 3 min), after Emperor Huddle",
+            "🧊 [A huge iceberg breaks off a Greenland glacier](https://www.youtube.com/watch?v=00_-JlbIftg) (National Geographic, 1 min), after Iceberg Maker",
+            "🦄 [Narwhals: the unicorns of the sea](https://www.youtube.com/watch?v=MXsZg1sQYvA) (Nat Geo Animals, 3 min), Theater only",
+            {
+              "text": "Backups, all embeddable:",
+              "items": [
+                "Bears: `N8JD_P2J24g` (cubs' first steps), `-Kfl3385O44` (cubs sledging)",
+                "Fox: `X6G1RB3ELPg` (fox cubs leave the den, gentle, no coat change)",
+                "Penguins sliding on their bellies: `9dvipJ1vEyk` (20 s, no words)",
+                "Huddle: `Y_qyV0zdFcU` (Spy in the Huddle, the dads)",
+                "Iceberg: `hC3VTgIPoGU` (Chasing Ice, start at 0:30; talk over it)",
+                "Narwhals: `CJbmSsSxf_A` (SciShow Kids)"
+              ]
+            }
           ]
         },
         {
@@ -1399,6 +1410,13 @@
               "pr": 219
             },
             {
+              "n": "2b",
+              "title": "Greybox: the lost penguin, and things to poke",
+              "status": "done",
+              "date": "2026-10-27",
+              "md": "The hub's step 3: once the sun's been dragged, a penguin or a polar bear cub turns up adrift on a little iceberg in the warm middle of the world, and she carries it home to its pole. Plus the hub's pokeables: the North Pole marker, a seal in its hole, the science station, a whale, the lights, snowflakes."
+            },
+            {
               "n": 3,
               "title": "Greybox: Ice Floe Hop",
               "status": "done",
@@ -1459,8 +1477,10 @@
             {
               "n": 10,
               "title": "Finale: Pole to Pole + Polar Quiz",
-              "status": "todo",
-              "md": "Its own PR: the tern flight, then the quiz on the hub's globe, then the trophy."
+              "status": "doing",
+              "md": "Its own PR: the tern flight, then the quiz on the hub's globe, then the trophy. **Greybox built** (PR #255): Terry's flight, the postcard, the quiz with 8 questions in the pool, the badge and `onWin`. Voices and the art come with steps 8 and 9.",
+              "date": "2026-10-27",
+              "pr": 255
             }
           ]
         },
@@ -1674,6 +1694,71 @@
               ]
             },
             {
+              "title": "Hub greybox 2: the lost penguin, and things to poke",
+              "date": "2026-10-27",
+              "status": "done",
+              "summary": "The hub's third step: after she has dragged the sun, a lost penguin (or polar bear cub) turns up on a little iceberg in the warm middle of the world, fanning itself. She grabs it and carries it to the top or the bottom of the globe. The globe turns to show where it lands. Its own pole: it lands by Pebble (or Pola), they hop and wave, confetti. The wrong pole: it looks round, a pink “?” pops over its head, whoever lives there jumps back, then its own pole glows and it hops back onto its berg to be carried again. Never an “oops”. Then the next one, a bear after a penguin.",
+              "items": [
+                "**Carrying it:** her finger on the lost one lifts it off the berg (bigger, legs swinging) and it follows her finger in front of the globe; while she holds it, the globe turns back to the whole view so both poles are in sight. Let go over the top of the globe (the north), the bottom (the south) or in between (it splashes back onto its berg). A tap without a drag is a hop.",
+                "**The berg** stands up toward the top of the screen instead of straight out of the sea, so from the middle view she sees the penguin from the side, not from above. It drifts and bobs with the globe's spin, and turns up in whichever warm sea is facing her. Left alone 6 s, the lost one waves.",
+                "**Home:** each saved one stays on its pole (up to 3, then the oldest wanders off), so the colony and the bears grow as she plays.",
+                "**Pokes:** the North Pole's striped marker wobbles and rings; a seal pops out of its breathing hole by Pola, looks round and barks (and pops up by itself now and then); the science station's door swings open and a scientist steps out and waves; a whale in the South Atlantic surfaces, spouts and slaps its tail (and does it by itself every ~10 s); a tap on the empty sky bursts snowflakes, and in a pole's winter night the lights flare up and ripple faster with a chime.",
+                "**Sections:** `hub/lost?who=penguin|bear&summer=...`: the sun out and already dragged, the lost one adrift at once. The address bar switches to `lost` when the first one appears.",
+                "**Files:** `globe/extras.ts` (the lost one and the pokes), hooked into `globe/globe.ts` (anchors, the carry, the sky tap, the lights' flare). QA: two `qa-screens` routes (`lost?who=penguin`, `lost?who=bear`) and a `qa-motion` scenario (`poles-lost`: the wrong pole, then home). No voices (the full-loop gate).",
+                {
+                  "text": "**Known small things:**",
+                  "items": [
+                    "The whale is seen from above (it's on the globe's face), so it reads as a blue blob with a spout until the art.",
+                    "There are no animals adrift other than a penguin and a bear cub yet. A walrus or an Arctic fox to sort (the quiz's “who lives up north?”) could come later."
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Finale greybox: Pole to Pole and the Polar Quiz",
+              "date": "2026-10-27",
+              "status": "done",
+              "pr": 255,
+              "summary": "The finale end to end in placeholder shapes. Terry the Arctic tern flies Pola's postcard from the top of the world to the bottom while the globe turns under him, past the pins of the countries she has been to. Her finger steers him, and he gulps the fish he flies over. He lands at Pebble's colony and hands over the postcard; the penguins see Pola's picture and jump back. Then the camera pulls back to the whole globe for the Polar Quiz: six questions from a pool of eight, each answered by doing. Six stars, the Polar Explorer badge, then the trophy.",
+              "items": [
+                "**The flight** (`party/route.ts`): great circles from near the North Pole, through the countries she has visited (north to south, from the passport), down to the colony on Antarctica's coast. With no countries visited, it goes straight down the Atlantic. It takes about 80 s (*shortest flight*); a long way just flies faster.",
+                "**Steering:** her finger anywhere and Terry heads for it, left or right, banking into the turn (*reach*, *steer smoothing*). A tap on him is a barrel roll.",
+                "**Three legs** (the address bar follows: `fly?leg=north|warm|south`):",
+                {
+                  "text": "Each leg adds something:",
+                  "items": [
+                    "**The Arctic:** blue-lilac fish between the floes.",
+                    "**The warm middle:** a peach sky, orange fish and clouds to puff through (a barrel roll and a giggle). The pins pop as he passes, with the country's name.",
+                    "**The windy south:** a lavender sky, two pink fish at a time, and gusts with white streaks that push him sideways (*gusts*)."
+                  ]
+                },
+                "Fish only leap in the sea (the painted map's land is masked out). The 🐟 counter fills, with a rising note for each fish.",
+                "**The postcard** (`deliver`): he glides down in front of Pebble, the card goes up into Pebble's flippers, and the four penguins around her see the polar bear on it and jump back. Then everyone hops and the fanfare plays. A tap on Pebble, the penguins or Terry is a hop. About 7 s, then the quiz.",
+                {
+                  "text": "**The quiz** (`quiz?q=<question>&stars=N`): the globe swings round to north-up; pieces stand on little floes in a row under it. Four kinds of answers:",
+                  "items": [
+                    "**Drag** (`bear`, `penguin`): put Pola (or Pebble) on the globe. Let go over the top or the bottom.",
+                    "**Spin** (`north`, `south`): spin the globe so that pole faces her. A flag pops up there. The wrong pole: the globe wobbles back like a top.",
+                    "**Tap a pole** (`ocean`, `coldest`): the globe tips to show it. Ocean: fish leap round the north (right), or a rock pops up under Antarctica's ice (wrong). Coldest: a thermometer freezes solid with a crack (south, right), or shivers (north).",
+                    "**Pick from the row** (`tern`: the bear, the penguin or Terry, who loops round the globe; `summer`: the sun rises over the north and the south goes dark, pick the snowman or the beach ball)."
+                  ]
+                },
+                "**A miss:** a pink “?” and a silly bit, then the right thing glows (*look for the glow*) and she does it herself. Every question ends in a star. The six stars sit at the top; the address bar keeps `q` and `stars`.",
+                "**The badge** (`badge`): six stars, confetti, then the shell's trophy (`onWin`) after 4.5 s or on 🏆.",
+                "**Feel knobs** (`?feel=1`, *Fly Terry*): flying speed, shortest flight, reach, steer smoothing, catch width, fish every, gusts. The graph shows her finger against Terry, the gust and the fish.",
+                "**Files:** `activities/party/` (`party.ts` the world, `route.ts`, `Finale.tsx`, `sections.ts`; `Party.sections.ts` and `Soon.tsx` are gone). The Earth's parts (the Arctic, Antarctica, Pola, Pebble) are now functions in `globe/globe.ts` (`buildNorth`, `buildSouth`, `makePola`, `makePebble`) that the hub and the finale share. QA: `qa-screens` (each leg, the postcard, a question of each kind, the badge), a `qa-motion` scenario (`poles-party-fly`) and `qa-pacing`.",
+                "**Changed from the plan:** the iceberg question and “who lives up north” aren't in the pool yet (8 questions instead of 9; the iceberg one needs the water from Iceberg Maker). Terry flies over the passport's countries, not the world map's pins. There's no “Wow, Kaylee” line yet (voices are the full-loop gate).",
+                {
+                  "text": "**Known small things:**",
+                  "items": [
+                    "Over a big continent (Africa) there are no fish for a while, only clouds.",
+                    "A wrong drop on the South Pole lands under the globe, where the “?” is hard to see.",
+                    "The badge doesn't pin onto the passport page yet."
+                  ]
+                }
+                ]
+              },
+              {
               "title": "Step 8a: the friends, in 3D and 2D",
               "date": "2026-10-27",
               "status": "done",
@@ -1739,7 +1824,13 @@
               "n": 7,
               "id": "lost",
               "name": "The lost penguin",
-              "status": "todo"
+              "query": "who=penguin"
+            },
+            {
+              "n": 8,
+              "id": "lost",
+              "name": "A lost polar bear cub",
+              "query": "who=bear"
             }
           ]
         },
@@ -1929,29 +2020,49 @@
               "n": 1,
               "id": "fly",
               "name": "Pole to Pole",
-              "query": "stamps=all",
-              "status": "todo"
+              "query": "stamps=all"
             },
             {
               "n": 2,
-              "id": "quiz",
-              "name": "Polar Quiz (first question)",
-              "query": "stamps=all",
-              "status": "todo"
+              "id": "fly",
+              "name": "The warm middle",
+              "query": "stamps=all&leg=warm"
             },
             {
               "n": 3,
-              "id": "quiz",
-              "name": "Polar Quiz, one question",
-              "query": "stamps=all&q=south-pole",
-              "status": "todo"
+              "id": "fly",
+              "name": "The windy south",
+              "query": "stamps=all&leg=south"
             },
             {
               "n": 4,
-              "id": "trophy",
+              "id": "deliver",
+              "name": "The postcard for Pebble",
+              "query": "stamps=all"
+            },
+            {
+              "n": 5,
+              "id": "quiz",
+              "name": "Polar Quiz (first question)",
+              "query": "stamps=all&q=bear"
+            },
+            {
+              "n": 6,
+              "id": "quiz",
+              "name": "Polar Quiz: spin to the South Pole",
+              "query": "stamps=all&q=south"
+            },
+            {
+              "n": 7,
+              "id": "quiz",
+              "name": "Polar Quiz: the last question",
+              "query": "stamps=all&q=coldest&stars=5"
+            },
+            {
+              "n": 8,
+              "id": "badge",
               "name": "Badge and trophy",
-              "query": "stamps=all&stars=6",
-              "status": "todo"
+              "query": "stamps=all"
             }
           ]
         }

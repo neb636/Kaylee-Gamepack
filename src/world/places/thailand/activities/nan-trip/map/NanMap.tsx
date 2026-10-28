@@ -17,7 +17,7 @@ interface Props {
   stops: Stop[]
   /** Where she last drove to from the map (the little Pajero waits there; none: at the last stop, or the airport). */
   from?: PlaceId | null
-  /** The Nan Mountain Cup is on the trip (cup/cup.ts): a stop in Nan town. */
+  /** The Nan Mountain Cup is on the trip (cup/rules.ts): a stop in Nan town. */
   cup?: boolean
   onGo: (place: PlaceId) => void
 }

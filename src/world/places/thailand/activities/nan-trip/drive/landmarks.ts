@@ -7,7 +7,7 @@
 // down to the open salt huts: the big pan steaming over its fire, baskets heaped with white salt, the well with its
 // bamboo pole, and the wooden house with its mural of a Tai Lue couple), the 3 road's viewpoint (a little open pavilion with a pink roof, a fence
 // at the edge, a bench, a coin telescope, pots of pink bougainvillea), Nan town's market stalls, the three-step
-// waterfall down the mountain beside the sky road, and, with the Nan Mountain Cup on (cup/cup.ts), the market square
+// waterfall down the mountain beside the sky road, and, with the Nan Mountain Cup on (cup/rules.ts), the market square
 // dressed as its race ground (a balloon arch over the way in, the board with its three tracks, the grandstand, the Cup
 // on its stand, bunting). Each faces +z (the road).
 import { Group, type BufferGeometry } from 'three'
@@ -84,7 +84,7 @@ export function buildLandmark(kind: LandmarkKind, bag: Bag): Group {
     parts.push(P.cyl(0.4, 0.5, 1.2, PAL.pink, { at: [0, 0.75, -0.6] }, 14), P.cyl(0.08, 0.12, 0.3, GOLD, { at: [0, 1.5, -0.6] }, 10), P.cyl(0.36, 0.14, 0.45, GOLD, { at: [0, 1.85, -0.6] }, 16))
     // Bunting from the arch to the grandstand.
     for (let i = 0; i < 12; i++) parts.push(P.cone(0.2, 0.4, [PAL.hotpink, GOLD, PAL.mint, PAL.sky][i % 4], { at: [-3 + i * 0.75, 4.1 - Math.sin((i / 11) * Math.PI) * 0.6, 1.4], rot: [Math.PI, 0, 0], scale: [1, 1, 0.2] }, 3))
-    // Dressed for the Cup, like the race ground itself (cup/ground.ts): pennant flags on tall poles, round paper lanterns
+    // Dressed for the Cup, like the race ground itself (cup/ground3d.ts): pennant flags on tall poles, round paper lanterns
     // along the grandstand's roof, the three rivals' karts parked by the board, cones along the front.
     for (const [x, z, c] of [[-5.6, 3, PAL.hotpink], [5.6, 3, GOLD], [-5.6, -4.2, PAL.mint], [5.8, -4.2, PAL.sky]] as const) parts.push(P.cyl(0.07, 0.09, 5, PAL.cream, { at: [x, 2.5, z] }, 8), P.sphere(0.13, GOLD, { at: [x, 5.05, z] }, 8), P.prism([[0, 0.35], [0, -0.35], [1.3, 0]], 0.04, c, { at: [x, 4.6, z] }))
     for (let i = 0; i < 5; i++) parts.push(P.cyl(0.006, 0.006, 0.3, PAL.ink, { at: [1.4 + i * 0.95, 2.95, -0.9] }, 4), P.sphere(0.2, colors[i], { at: [1.4 + i * 0.95, 2.62, -0.9], scale: [1, 1.1, 1] }, 10))

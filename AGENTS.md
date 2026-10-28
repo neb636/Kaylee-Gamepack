@@ -289,18 +289,18 @@ with any state they need carried in the URL: `#/world/<place>/<activity>/<sectio
 - `#/world/sections` lists every section link (for the iPad), and `tests/sections.spec.ts` fails if an activity has no
   sections or a link doesn't land in its section.
 
-**README directory.** Whenever you add or change an activity or section (`sections.ts`, a section's name, its order or
-its params), update the README's **Jump to a game section** directory in the same change: add new sections, revise
-changed ones and remove obsolete entries, keeping each activity's links in play order. Links point to the published
-main build, `https://neb636.github.io/Kaylee-Gamepack/#/world/<place>/<activity>/<section>?<state>`, with the params the
-section needs. Label development-only tools and give their full `localhost` URLs. PR test links still target that PR's
-preview (see "Opening the PR").
+**README directory (generated).** The README's **Jump to a game section** directory is written from the sections
+every activity declares: `npm run sections-readme` rewrites it, and `npm run verify` fails when it's out of date, so
+never edit it by hand. What it shows lives in `sections.ts`, next to the section:
+- A section's `name` is its link. `group` ("Getting there", "Baan Chang") puts sections under a bullet for that stage,
+  and a label that starts with the group's name drops it ("Baan Chang: the cafe" reads "The cafe").
+- `links` replaces that one link when a section needs more: a step per round in play order (`{ label, params: {
+  round: '2' } }`), with variants of the same step in brackets on its line (`also: [{ label: 'iPhone tilt to steer',
+  flags: { steer: 'tilt' } }]`). `params` are the activity's own (typo-checked); `flags` are switches like `steer` and
+  `look`. A finale's links get `?stamps=all` by themselves.
+- `title` names a finale or hub in its heading, `note` adds a line under it. Activities in `inTheWorks` say so.
 
-Keep the Thailand directory skimmable on a phone: one bold heading per trip, then a bullet per stage ("Getting there",
-the place or game, "Finale") with one link per nested bullet, in play order, never a single paragraph of `·`-joined
-links. Don't repeat the stage name in each link's label. A game's rounds or steps in play order (`?round=2`,
-`?round=pizza`) each get their own bullet; a variant of the same step (`?been=bay`, `?steer=tilt`) stays in parentheses on
-that step's bullet.
+Links point to the published main build. PR test links still target that PR's preview (see "Opening the PR").
 
 ## A country's folder
 
@@ -362,8 +362,11 @@ After `npm run build`; WebKit, because the iPad runs Safari (`npx playwright ins
   the fun numbers: talk per touch, seconds with nothing to touch, how many different things she touched, and a play
   strip (12 frames across a whole auto-played run, `qa-output/play/`). `--video` also records each run
   (`qa-output/video/`). Keep talk before the first touch under ~6 seconds and talk per touch under ~1.5 s.
-- **Every new activity adds itself to all three scripts** (screens, a motion scenario for its core verb, pacing).
-  A screen QA never looked at is a screen nobody checked.
+- **The scenarios live with the country, not in the scripts:** `src/world/places/<id>/qa.mjs` exports `screens`,
+  `pacing` and `motion` (a new activity can keep its own in `activities/<id>/qa.mjs`; helpers like `vp`, `skip`,
+  `tapAnchor` and `seedWall` come from `scripts/qa-lib.mjs`). An activity with none still gets a screenshot per section
+  and a plain pacing run, but every new activity adds a motion scenario for its core verb and the screens and runs that
+  need a finger. A screen QA never looked at is a screen nobody checked.
 
 **When to run it (scope).** CI already opens and pokes every section of every activity on every PR
 (`tests/tap-around.spec.ts`, WebKit) and fails on any exception, so the agents are only for what a test can't judge:
@@ -389,7 +392,8 @@ the country's `known-issues.md` (Thailand has one) instead of growing the PR.
 
 ## Checks before you finish
 
-1. `npm run verify` must pass (voice-clip check, heavy-import check, typecheck, build; about 2 minutes). If you changed
+1. `npm run verify` must pass (voice-clip check, heavy-import check, file names that differ only in case, the README
+   directory, plan pages, typecheck, build; about 2 minutes). If you changed
    spoken lines, run `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs` first and commit the clips.
 2. **Do not run `npm run test`, `npm run tap-around` or `npm run check` locally.** CI runs the Playwright specs on the PR
    (`tap-around` only for the countries you touched, everything when shared code changed). After opening the PR, start the
@@ -447,7 +451,8 @@ without it). `npm run dev`, CI tests and local builds lock nothing. Try the lock
 ```
 npm run dev          # http://localhost:5173 (then #/world, #/world/sections, #/world/puppets or #/playground)
 npm run typecheck    # fast check while you iterate
-npm run verify       # voice clips + heavy imports + typecheck + build (before every PR)
+npm run verify       # voice clips, heavy imports, name case, README directory, plans, typecheck, build (before every PR)
+npm run sections-readme  # rewrite the README's section directory from every sections.ts
 npm run art -- world # PNG -> webp with background cutout
 npm run icons        # rebuild app icons from art/source/icon-1024.png
 node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs   # lines.ts -> voice-lines.json -> clips

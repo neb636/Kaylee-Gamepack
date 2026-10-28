@@ -1,20 +1,24 @@
 // The world map, and the app's home screen: tap continents to hear their names, tap a country pin to fly there,
-// tap home for Sparkle's tea party.
+// tap home for Sparkle's tea party. The two buttons in the top bar swap the map for the game shelf (Shelf.tsx: every
+// game as a picture card, straight in); she keeps whichever she used last (#/world?view=list or map opens one).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
 import { gameLogger } from '../posthog-logger'
 import { go } from '../router'
-import { Mascot, say, sounds, useOnline } from '../sdk'
+import { Mascot, say, sounds, useOnline, useSaved } from '../sdk'
 import { useTrophies } from '../sdk/trophies'
 import balloon from './assets/balloon.webp'
 import crayons from './assets/crayon-box.webp'
 import mapArt from './assets/bg-world-map.webp'
 import passportArt from './assets/passport.webp'
+import listIcon from './assets/icon-view-list.webp'
+import mapIcon from './assets/icon-view-map.webp'
 import theaterArt from './assets/theater.webp'
 import { BarPill, FitBox, TopBar } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
 import { places, type PlaceEntry } from './registry'
+import { FROM_SHELF, Shelf } from './Shelf'
 import { totalStamps, usePassport } from './stamps'
 import { Travel } from './Travel'
 
@@ -84,18 +88,42 @@ function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number
   )
 }
 
-export function WorldMap() {
+type View = 'map' | 'list'
+
+export function WorldMap({ view: linked }: { view?: string }) {
   const passport = usePassport()
   const trophies = useTrophies()
   const online = useOnline() // the Theater needs the internet
   const [label, setLabel] = useState<{ text: string; x: number; y: number } | null>(null)
   const [travelTo, setTravelTo] = useState<PlaceEntry | null>(null)
+  const [saved, setView] = useSaved<View>('world:view', 'map')
+  // A link's ?view= wins until she taps the other button.
+  const [fromLink, setFromLink] = useState<View | undefined>(linked === 'list' || linked === 'map' ? linked : undefined)
+  useEffect(() => {
+    if (linked === 'list' || linked === 'map') setFromLink(linked)
+  }, [linked])
+  const view = fromLink ?? saved
   const firstTime = passport.visited.length === 0
 
   useEffect(() => {
-    void say(firstTime ? WORLD_LINES.firstHello : WORLD_LINES.hello, { interrupt: false })
+    // Back on the world map: a game opened from here again goes back to the country's map.
+    try {
+      sessionStorage.removeItem(FROM_SHELF)
+    } catch {
+      // No session storage.
+    }
+    void say(view === 'list' ? WORLD_LINES.shelf.hello : firstTime ? WORLD_LINES.firstHello : WORLD_LINES.hello, { interrupt: false })
     // Only on arrival.
   }, [firstTime])
+
+  const switchTo = (next: View) => {
+    if (next === view) return
+    sounds.pop()
+    setLabel(null)
+    setFromLink(undefined)
+    setView(next)
+    void say(next === 'list' ? WORLD_LINES.shelf.showList : WORLD_LINES.shelf.showMap)
+  }
 
   const show = (text: string, x: number, y: number) => {
     sounds.pop()
@@ -115,10 +143,22 @@ export function WorldMap() {
         label="My trophies"
         onBack={go.trophies}
       >
-        <BarPill>🌍 Around the World</BarPill>
+        <BarPill>
+          🌍<span className="world-title-text"> Around the World</span>
+        </BarPill>
+        <div style={{ marginLeft: 'auto', pointerEvents: 'auto', display: 'flex', gap: 4, borderRadius: 999, background: 'rgba(255,255,255,0.9)', boxShadow: 'var(--shadow)' }}>
+          <ViewButton img={mapIcon} label="Map" on={view === 'map'} onClick={() => switchTo('map')} />
+          <ViewButton img={listIcon} label="All the games" on={view === 'list'} onClick={() => switchTo('list')} />
+        </div>
       </TopBar>
 
       <div className="world-split" style={{ flex: 1, minHeight: 0, gap: 'min(16px, 2vh)', alignItems: 'center' }}>
+        {view === 'list' ? (
+          // The shelf is as wide as the screen, so on short screens (where the map sits beside the top bar) it starts below the bar.
+          <div style={{ position: 'relative', flex: 1, alignSelf: 'stretch', minWidth: 0, minHeight: 0, marginTop: 'max(0px, calc(var(--bar-clear) - var(--top-clear)))' }}>
+            <Shelf />
+          </div>
+        ) : (
         <FitBox ratio={1.5}>
           <div style={{ position: 'absolute', inset: 0, borderRadius: 28, overflow: 'hidden', boxShadow: 'var(--shadow)', border: '5px solid #fff', background: `url(${mapArt}) center / cover` }} onClick={() => setLabel(null)}>
             {CONTINENTS.map((c) => (
@@ -210,6 +250,7 @@ export function WorldMap() {
             )}
           </AnimatePresence>
         </FitBox>
+        )}
 
         <div className="world-side" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'min(20px, 3vw)', flexShrink: 0 }}>
           <div className="world-side-mascot">
@@ -228,6 +269,22 @@ export function WorldMap() {
 }
 
 const BADGE: CSSProperties = { position: 'absolute', top: -8, right: -8, background: 'var(--hotpink)', color: '#fff', borderRadius: 999, minWidth: 34, height: 34, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 20, boxShadow: 'var(--shadow)', padding: '0 6px' }
+
+function ViewButton({ img, label, on, onClick }: { img: string; label: string; on: boolean; onClick: () => void }) {
+  // The button keeps the full touch size (88 px on iPad, 72 on phones); only the picture shrinks when it's off.
+  const size = 'calc(var(--btn) + 12px)'
+  return (
+    <motion.button
+      aria-label={label}
+      aria-pressed={on}
+      whileTap={{ scale: 0.85 }}
+      onClick={onClick}
+      style={{ width: size, height: size, borderRadius: '50%', background: on ? 'var(--pink)' : 'transparent', boxShadow: on ? 'inset 0 0 0 4px #fff' : 'none', padding: 'calc(var(--btn) * 0.14)', display: 'grid', placeItems: 'center' }}
+    >
+      <motion.img src={img} alt="" draggable={false} animate={{ scale: on ? 1 : 0.86, opacity: on ? 1 : 0.7 }} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+    </motion.button>
+  )
+}
 
 function SideButton({ img, icon, label, color, onClick, badge }: { img?: string; icon?: string; label: string; color: string; onClick: () => void; badge?: number }) {
   return (

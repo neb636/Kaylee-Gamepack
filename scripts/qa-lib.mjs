@@ -2,10 +2,12 @@
 // WebKit is the default because Kaylee's iPad runs Safari; pass --chromium to compare.
 import { chromium, webkit } from '@playwright/test'
 import { spawn } from 'node:child_process'
-import { mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs'
+import { globSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 import sharp from 'sharp'
+import { loadWorld, worldLink } from './world-registry.mjs'
 
 export const root = path.resolve(import.meta.dirname, '..')
 export const out = path.join(root, 'qa-output')
@@ -169,4 +171,71 @@ export async function filmstrip(frames, file) {
     .composite(tiles.map((input, i) => ({ input, left: (i % 4) * (w + 4), top: Math.floor(i / 4) * (h + 4) })))
     .png()
     .toFile(file)
+}
+
+// ---- Scenarios: each country's (and activity's) own qa.mjs, so adding an activity never edits these scripts.
+
+/** The viewport the running script films or plays at (qa-motion and qa-pacing set it before loading scenarios). */
+export const vp = { name: '', width: 0, height: 0 }
+
+// Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
+// friends), for the photo wall's screens. Runs in the page (`seed: seedWall`).
+export function seedWall() {
+  const c = document.createElement('canvas')
+  c.width = 320
+  c.height = 240
+  const g = c.getContext('2d')
+  const sky = g.createLinearGradient(0, 0, 0, 240)
+  sky.addColorStop(0, '#A98FE8')
+  sky.addColorStop(0.6, '#FF9DC0')
+  sky.addColorStop(1, '#5FC7B4')
+  g.fillStyle = sky
+  g.fillRect(0, 0, 320, 240)
+  g.fillStyle = '#8A7FA8'
+  g.fillRect(150, 60, 26, 130)
+  g.fillStyle = '#FF8FB8'
+  for (const x of [90, 220, 250]) {
+    g.beginPath()
+    g.arc(x, 180, 22, 0, 7)
+    g.fill()
+  }
+  localStorage.setItem('kaylee-gamepack:/:saved:thailand-photo-wall', JSON.stringify([{ trip: 'boat-trip', src: c.toDataURL('image/jpeg', 0.8), at: '2026-10-20' }]))
+}
+
+/** Tap a 3D scene's DOM tap target (engine3d/Anchors.tsx) by its id. */
+export const tapAnchor = (page, id) => page.locator(`[data-anchor="${id}"]`).click({ force: true }).catch(() => {})
+
+/** `n` points in a loose circle around [0, y] (fractions of a target's radius), for strokes and sweeps. */
+export const around = (n, y) => Array.from({ length: n }, (_, i) => [Math.cos(i * 0.5) * 0.9, y + Math.sin(i * 0.5) * 0.4])
+
+/**
+ * The `screens`, `pacing` or `motion` lists of every src/world/places/<id>/qa.mjs and every activity's own qa.mjs (and
+ * src/games/<id>/qa.mjs), in folder order. Each is an array of the same shape the script's own central list uses.
+ */
+export async function loadScenarios(kind) {
+  const files = globSync('src/{world/places,games}/**/qa.mjs', { cwd: root }).sort()
+  const all = []
+  for (const f of files) all.push(...((await import(pathToFileURL(path.join(root, f)).href))[kind] ?? []))
+  return all
+}
+
+/** The path part of a #/world link (`#/world/italy/venice/cruise?x=1` -> `#/world/italy/venice/cruise`). */
+const pagePart = (hash) => hash.split('?')[0]
+
+/**
+ * Activities (and hubs and finales) no scenario reaches yet, each with its section links, so a new activity is
+ * screenshotted and auto-played before anyone writes it a qa.mjs. `covered` is the list of hashes already in use.
+ */
+export async function uncovered(covered) {
+  const pages = covered.map(pagePart)
+  const out = []
+  for (const p of await loadWorld()) {
+    for (const a of p.activities) {
+      const at = `#/world/${p.id}/${a.id}`
+      if (!a.sections || pages.some((h) => h === at || h.startsWith(`${at}/`))) continue
+      const extra = a.kind === 'finale' ? { stamps: 'all' } : {}
+      out.push({ place: p.id, activity: a.id, kind: a.kind, hash: worldLink(p.id, a.id, undefined, extra), sections: a.sections.sections.map((s) => ({ id: s.id, hash: worldLink(p.id, a.id, s.id, extra) })) })
+    }
+  }
+  return out
 }

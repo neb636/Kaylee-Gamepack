@@ -48,7 +48,7 @@ export const RIVER_W = 0.13
 // ---------------------------------------------------------------- the places
 
 /** The stops (each its own section) and the two other places on the map. The Nan Mountain Cup (`cup`, behind its flag:
- *  cup/cup.ts) is a stop in Nan town: the city road ends at its race ground, and its stamp lands on Nan town. */
+ *  cup/rules.ts) is a stop in Nan town: the city road ends at its race ground, and its stamp lands on Nan town. */
 export const STOPS = ['mushrooms', 'rice', 'salt', 'cup'] as const
 export type Stop = (typeof STOPS)[number]
 export type PlaceId = 'mushrooms' | 'rice' | 'salt' | 'airport' | 'town'

@@ -10,9 +10,9 @@ const ICEBERG_SECTIONS = defineSections('poles', 'iceberg', {
   },
   sections: [
     { id: 'pick', name: 'North or south?' },
-    { id: 'bits', name: 'Little bits', params: ['pole'] },
-    { id: 'giant', name: 'The giant one', params: ['pole'] },
-    { id: 'sail', name: 'Send them sailing', params: ['pole'] },
+    { id: 'bits', name: 'Little bits', params: ['pole'], links: [{ label: 'Little bits', params: { pole: 'north' }, also: [{ label: 'at the South Pole', params: { pole: 'south' } }] }] },
+    { id: 'giant', name: 'The giant one', params: ['pole'], links: [{ label: 'The giant one (under the water)', params: { pole: 'north' }, also: [{ label: 'at the South Pole', params: { pole: 'south' } }] }] },
+    { id: 'sail', name: 'Send them sailing', params: ['pole'], links: [{ label: 'Send them sailing', params: { pole: 'north' }, also: [{ label: 'at the South Pole', params: { pole: 'south' } }] }] },
   ],
 })
 export default ICEBERG_SECTIONS

@@ -12,7 +12,7 @@
 //   flies home on the Thailand map (Dad, 2026-10-27; section home, the flight home and picking a photo for Agong, is
 //   only reached by its link now). The trips start on the Thailand map: the first of a session packs and goes down
 //   the stairs straight to the window seat; later ones open straight on the Nan map.
-//   In the works: the Nan Mountain Cup (cup/, greyboxes 1-3, behind CUP_OPEN in cup/cup.ts, `?cup=1` turns it on): the
+//   In the works: the Nan Mountain Cup (cup/, greyboxes 1-3, behind CUP_OPEN in cup/rules.ts, `?cup=1` turns it on): the
 //   city road ends at its race ground (section cup: the board), a kart race on each of three tracks (race), a podium
 //   after each (podium), the Cup ceremony after the third (cup-win), and its stamp on Nan town (stop `cup`). The Cup's
 //   record and the rolled loss ride along in the link (`cup`, `lose`) and are saved with the trip.
@@ -34,7 +34,7 @@ import { NanMap } from './map/NanMap'
 import { BASKET_SEED, ROUNDS as FARM_ROUNDS, type Round } from './mushrooms/layout'
 import { Mushrooms } from './mushrooms/Mushrooms'
 import { Cup } from './cup/Cup'
-import { addRace, cupDone, cupOpen, formatCup, FULL_CUP, giftsOf, isTrack, parseCup, resultFor, rollLose, type CupRecord, type Place } from './cup/cup'
+import { addRace, cupDone, cupOpen, formatCup, FULL_CUP, giftsOf, isTrack, parseCup, resultFor, rollLose, type CupRecord, type Place } from './cup/rules'
 import { Ground } from './cup/Ground'
 import { RESULTS, type Result } from './cup/rivals'
 import { TRACK_IDS, type TrackId } from './cup/track'

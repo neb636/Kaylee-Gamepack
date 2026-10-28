@@ -45,7 +45,7 @@ interface Props {
   /** On the trip: the bends have popped and Mommy took the photo (it's one to pick for Agong's wall), and ✈️🏠 goes home. */
   onPhoto?: () => void
   onHome?: () => void
-  /** The Nan Mountain Cup is on (cup/cup.ts): the city road ends at its race ground. */
+  /** The Nan Mountain Cup is on (cup/rules.ts): the city road ends at its race ground. */
   cup?: boolean
 }
 

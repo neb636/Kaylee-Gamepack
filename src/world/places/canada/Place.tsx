@@ -2,8 +2,8 @@
 // toy-table map (activities/hub/, map/): push the train from Quebec to the Pacific, stop at a station and its two
 // activities pop up. The eight activities and the finale come one greybox at a time (Mountain Bike, activities/bike/;
 // Sugar Snow, activities/taffy/, 2D and loaded on its own so it brings no three.js; Campfire Night; Red Canoe,
-// activities/canoe/, 3D and loaded on its own; Animal Bridge, activities/bridge/, 2D); until then their links open a
-// "coming soon" card.
+// activities/canoe/, 3D and loaded on its own; Animal Bridge, activities/bridge/, 2D; Whale Watch, activities/whales/, 3D
+// and loaded on its own; Salmon Leap, activities/salmon/, 2D); until then their links open a "coming soon" card.
 import { lazy, Suspense } from 'react'
 import type { ActivitySections } from '../../kit/sections'
 import { Soon } from '../../kit/Soon'
@@ -11,16 +11,16 @@ import type { PlaceProps } from '../../types'
 import { MountainBike } from './activities/bike/MountainBike'
 import { Hub } from './activities/hub/Hub'
 import PARTY from './activities/Party.sections'
-import SALMON from './activities/salmon/sections'
 import SNOWMAN from './activities/snowman/sections'
-import WHALES from './activities/whales/sections'
 
 const SugarSnow = lazy(() => import('./activities/taffy/SugarSnow').then((m) => ({ default: m.SugarSnow })))
 const CampfireNight = lazy(() => import('./activities/campfire/CampfireNight').then((m) => ({ default: m.CampfireNight })))
 const RedCanoe = lazy(() => import('./activities/canoe/RedCanoe').then((m) => ({ default: m.RedCanoe })))
+const WhaleWatch = lazy(() => import('./activities/whales/WhaleWatch').then((m) => ({ default: m.WhaleWatch })))
 const AnimalBridge = lazy(() => import('./activities/bridge/AnimalBridge').then((m) => ({ default: m.AnimalBridge })))
+const SalmonLeap = lazy(() => import('./activities/salmon/SalmonLeap').then((m) => ({ default: m.SalmonLeap })))
 const BACK = { icon: '🚂', label: 'Back to the train' }
-const SOON: Record<string, ActivitySections> = { snowman: SNOWMAN, whales: WHALES, salmon: SALMON }
+const SOON: Record<string, ActivitySections> = { snowman: SNOWMAN }
 
 export default function Place(props: PlaceProps) {
   const { meta, activity, backToMap } = props
@@ -47,6 +47,18 @@ export default function Place(props: PlaceProps) {
     return (
       <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#BFE3F7' }} />}>
         <AnimalBridge />
+      </Suspense>
+    )
+  if (activity === 'whales')
+    return (
+      <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#CFEAF7' }} />}>
+        <WhaleWatch />
+      </Suspense>
+    )
+  if (activity === 'salmon')
+    return (
+      <Suspense fallback={<div style={{ position: 'absolute', inset: 0, background: '#CFEDE6' }} />}>
+        <SalmonLeap />
       </Suspense>
     )
   if (activity === 'party') return <Soon def={PARTY} icon="🏒" name="Animal Homes + Pond Hockey" onBack={backToMap} back={BACK} />

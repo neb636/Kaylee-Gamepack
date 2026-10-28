@@ -28,13 +28,13 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
     },
   },
   sections: [
-    { id: 'map', name: 'The Thailand map: fly the toy plane, land on a pin', params: ['plane', 'fly', 'stamp'] },
-    { id: 'arrive', name: 'Arrive by tuk-tuk' },
-    { id: 'street', name: "In front of Agong's house", params: ['at'] },
-    { id: 'downstairs', name: 'Downstairs', params: ['at'] },
-    { id: 'upstairs', name: "Kaylee's room upstairs", params: ['at'] },
-    { id: 'wardrobe', name: "Kaylee's wardrobe", params: ['drawer', 'door'] },
-    { id: 'family', name: 'Family photo', params: ['who'] },
+    { id: 'map', name: 'The Thailand map: fly the toy plane, land on a pin', params: ['plane', 'fly', 'stamp'], group: 'The Thailand map', links: [{ label: 'The map, the plane at Bangkok', bare: true }, { label: 'The short flight to Krabi, then Krabi airport', params: { fly: 'krabi' }, also: [{ label: 'to Nan, then the Nan map', params: { fly: 'nan' } }] }, { label: 'Home from a trip: the plane flies back, the stamp lands on Krabi', params: { plane: 'krabi', fly: 'bangkok', stamp: 'boat-trip' } }] },
+    { id: 'arrive', name: 'Arrive by tuk-tuk', group: "Agong's house" },
+    { id: 'street', name: "In front of Agong's house", params: ['at'], group: "Agong's house" },
+    { id: 'downstairs', name: 'Downstairs', params: ['at'], group: "Agong's house" },
+    { id: 'upstairs', name: "Kaylee's room upstairs", params: ['at'], group: "Agong's house", links: [{ label: "Kaylee's room upstairs", also: [{ label: 'in a look from her wardrobe', flags: { look: 'crown,hearts,fairy,dress-mint' } }] }] },
+    { id: 'wardrobe', name: "Kaylee's wardrobe", params: ['drawer', 'door'], group: "Agong's house", links: [{ label: 'Her wardrobe: doors open (any link takes ?look=crown,hearts,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky)' }, { label: 'Her wardrobe: the hats drawer out', params: { drawer: 'head' }, also: [{ label: 'face', params: { drawer: 'face' } }, { label: 'back', params: { drawer: 'back' } }, { label: 'outfit', params: { drawer: 'outfit' } }, { label: 'feet', params: { drawer: 'feet' } }] }, { label: 'Her wardrobe: the paint drawer out', params: { drawer: 'paint' } }, { label: 'Her wardrobe: four pictures of looks on the door', params: { drawer: 'head', door: 'crown,hearts,tutu;bow,fairy,dress-mint;cap,stars,cape;overalls,boots,hair-pink,fur-sky' } }] },
+    { id: 'family', name: 'Family photo', params: ['who'], group: "Agong's house" },
   ],
 })
 export default HUB_SECTIONS

@@ -11,206 +11,22 @@
 // Writes qa-output/pacing.md and qa-output/play/<id>.png; --video also records each run to qa-output/video/<id>.webm.
 import { readdirSync, readFileSync, renameSync, writeFileSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
-import { args, browserName, device, filmstrip, flag, launch, openApp, out, root, serve, skip, VIEWPORTS } from './qa-lib.mjs'
+import { args, browserName, device, filmstrip, flag, launch, loadScenarios, openApp, out, root, serve, skip, uncovered, vp, VIEWPORTS } from './qa-lib.mjs'
 
 const PORT = 4185
 const TOO_MUCH_BEFORE_TOUCH = 6 // seconds
 const LONG_LINE = 4 // seconds
 const TALK_PER_TOUCH = 1.5 // seconds of talk per touch during play
 const video = args.includes('--video')
-const vp = VIEWPORTS[0] // iPad portrait
+Object.assign(vp, VIEWPORTS[0]) // iPad portrait
 
-// Kaylee's boat trip photo on Agong's wall, as if she had finished a trip (a drawn stand-in: pink sky, the nail, three
-// friends), for the photo wall's screens. Runs in the page.
-function seedWall() {
-  const c = document.createElement('canvas')
-  c.width = 320
-  c.height = 240
-  const g = c.getContext('2d')
-  const sky = g.createLinearGradient(0, 0, 0, 240)
-  sky.addColorStop(0, '#A98FE8')
-  sky.addColorStop(0.6, '#FF9DC0')
-  sky.addColorStop(1, '#5FC7B4')
-  g.fillStyle = sky
-  g.fillRect(0, 0, 320, 240)
-  g.fillStyle = '#8A7FA8'
-  g.fillRect(150, 60, 26, 130)
-  g.fillStyle = '#FF8FB8'
-  for (const x of [90, 220, 250]) {
-    g.beginPath()
-    g.arc(x, 180, 22, 0, 7)
-    g.fill()
-  }
-  localStorage.setItem('kaylee-gamepack:/:saved:thailand-photo-wall', JSON.stringify([{ trip: 'boat-trip', src: c.toDataURL('image/jpeg', 0.8), at: '2026-10-20' }]))
-}
-
-const SCENARIOS = [
+// Each country's runs are in its src/world/places/<id>/qa.mjs (`pacing`); an activity with none gets a plain run.
+const CENTRAL = [
   { name: 'world-map (first visit)', id: 'world', hash: '#/world', reset: true, play: false },
-  { name: 'australia intro + map', id: 'intro', hash: '#/world/australia', reset: true, play: false },
-  { name: 'outback', id: 'outback', hash: '#/world/australia/outback' },
-  { name: 'forest', id: 'forest', hash: '#/world/australia/forest' },
-  { name: 'reef', id: 'reef', hash: '#/world/australia/reef' },
-  { name: 'stars', id: 'stars', hash: '#/world/australia/stars' },
-  { name: 'croc', id: 'croc', hash: '#/world/australia/croc' },
-  { name: 'postcard', id: 'postcard', hash: '#/world/australia/postcard' },
-  { name: 'party (finale)', id: 'party', hash: '#/world/australia/party', stampAll: true },
-  { name: 'china intro + map', id: 'china', hash: '#/world/china', reset: true, play: false },
-  { name: 'china dumpling house', id: 'dumplings', hash: '#/world/china/dumplings', reset: true },
-  { name: 'china great wall', id: 'wall', hash: '#/world/china/wall', reset: true },
-  { name: 'china bamboo forest', id: 'bamboo', hash: '#/world/china/bamboo', reset: true },
-  { name: 'china hotpot night', id: 'hotpot', hash: '#/world/china/hotpot', reset: true },
-  { name: 'china magic brush', id: 'brush', hash: '#/world/china/brush', reset: true },
-  { name: 'china great race', id: 'race', hash: '#/world/china/race', reset: true },
-  { name: 'china bullet train', id: 'train', hash: '#/world/china/train', reset: true },
-  { name: 'china dragon parade (finale)', id: 'parade', hash: '#/world/china/party', stampAll: 'china' },
-  { name: 'egypt intro + map', id: 'egypt-intro', hash: '#/world/egypt', reset: true, play: false },
-  { name: 'pyramid', id: 'pyramid', hash: '#/world/egypt/pyramid' },
-  { name: 'passage', id: 'passage', hash: '#/world/egypt/passage' },
-  { name: 'sphinx', id: 'sphinx', hash: '#/world/egypt/sphinx' },
-  { name: 'nile', id: 'nile', hash: '#/world/egypt/nile' },
-  { name: 'scribe', id: 'scribe', hash: '#/world/egypt/scribe' },
-  { name: 'market', id: 'market', hash: '#/world/egypt/market' },
-  { name: 'light show (finale)', id: 'show', hash: '#/world/egypt/party', stampAll: 'egypt' },
-  { name: 'italy intro + map', id: 'italy', hash: '#/world/italy', reset: true, play: false },
-  { name: 'italy pizzeria', id: 'pizzeria', hash: '#/world/italy/pizzeria', reset: true },
-  { name: 'italy olive grove', id: 'olives', hash: '#/world/italy/olives', reset: true },
-  { name: 'italy trevi fountain', id: 'trevi', hash: '#/world/italy/trevi', reset: true },
-  { name: 'italy colosseum', id: 'colosseum', hash: '#/world/italy/colosseum', reset: true },
-  { name: 'italy venice', id: 'venice', hash: '#/world/italy/venice', reset: true },
-  { name: 'italy snow on a volcano', id: 'etna', hash: '#/world/italy/etna', reset: true },
-  { name: 'italy opera (finale)', id: 'opera', hash: '#/world/italy/party', stampAll: 'italy' },
-  { name: 'peru intro + map', id: 'peru', hash: '#/world/peru', reset: true, play: false },
-  { name: "peru luna's fluffy day", id: 'alpaca', hash: '#/world/peru/alpaca', reset: true },
-  { name: "peru tika's mountain terraces", id: 'machu-picchu', hash: '#/world/peru/machu-picchu', reset: true },
-  { name: "peru pepa's penguin cliff", id: 'penguins', hash: '#/world/peru/penguins', reset: true },
-  { name: "peru coco's canyon glide", id: 'condor', hash: '#/world/peru/condor', reset: true },
-  { name: "peru rosa's rainy river", id: 'river', hash: '#/world/peru/river', reset: true },
-  { name: 'thailand map (fly the plane)', id: 'thailand', hash: '#/world/thailand', reset: true },
-  { name: "thailand agong's house (arrival)", id: 'thailand-house', hash: '#/world/thailand/hub/arrive', reset: true, play: false },
-  { name: 'poles globe hub', id: 'poles', hash: '#/world/poles', reset: true },
-  { name: 'poles ice floe hop', id: 'floe', hash: '#/world/poles/floe', reset: true },
-  { name: 'poles penguin slide', id: 'slide', hash: '#/world/poles/slide', reset: true },
-  { name: 'poles iceberg maker', id: 'iceberg', hash: '#/world/poles/iceberg', reset: true },
-  { name: 'poles snow coats', id: 'coats', hash: '#/world/poles/coats', reset: true },
-  // Emperor Huddle (greybox, no voices): the core verb is a drag, so the auto-player's taps only sing and poke; the cold
-  // ones sneeze and waddle in by themselves, so it gets slowly through the small huddle. The robot run that drags them in
-  // is qa-motion's poles-huddle-drag.
-  { name: 'poles emperor huddle', id: 'huddle', hash: '#/world/poles/huddle', reset: true },
-  { name: 'canada train map', id: 'canada', hash: '#/world/canada', reset: true },
-  { name: 'canada mountain bike', id: 'bike', hash: '#/world/canada/bike', reset: true },
-  { name: 'canada sugar snow', id: 'taffy', hash: '#/world/canada/taffy', reset: true },
-  // Campfire Night (greybox, no voices): a tap moves the flashlight there and a tap on eyes finds the animal at once,
-  // so the auto-player gets through the eyes; the sounds, the trail and the marshmallow need the light held and dragged
-  // (qa-motion's canada-campfire-light).
-  { name: 'canada campfire night', id: 'campfire', hash: '#/world/canada/campfire', reset: true },
-  // Red Canoe (greybox, no voices): the core verb is a stroke (a drag beside the canoe), so the auto-player's taps only
-  // splash, poke and make trout jump; the robot run that paddles is qa-motion's canada-canoe-stroke.
-  { name: 'canada red canoe', id: 'canoe', hash: '#/world/canada/canoe', reset: true },
-  // Animal Bridge (greybox, no voices): a tap on the ground walks the family she leads there and a tap pokes things, so
-  // the auto-player wanders the herd about; leading them over the bridge is a long drag (qa-motion's canada-bridge-lead).
-  { name: 'canada animal bridge', id: 'bridge', hash: '#/world/canada/bridge', reset: true },
-  // The trip there, one run per leg (each from its own section link).
-  { name: "thailand: kaylee's wardrobe", id: 'wardrobe', hash: '#/world/thailand/hub/wardrobe?drawer=head', reset: true },
-  { name: 'thailand trip: mommy asks', id: 'trip-invite', hash: '#/world/thailand/boat-trip/invite', reset: true },
-  { name: 'thailand trip: packing', id: 'trip-pack', hash: '#/world/thailand/boat-trip/pack', reset: true },
-  { name: "thailand trip: goodbye and aunty sri's van", id: 'trip-goodbye', hash: '#/world/thailand/boat-trip/goodbye', reset: true },
-  { name: 'thailand trip: airport', id: 'trip-airport', hash: '#/world/thailand/boat-trip/airport', reset: true },
-  { name: 'thailand trip: window seat, takeoff', id: 'trip-plane', hash: '#/world/thailand/boat-trip/takeoff', reset: true },
-  { name: 'thailand trip: window seat, up in the sky', id: 'trip-fly', hash: '#/world/thailand/boat-trip/fly', reset: true },
-  { name: 'thailand trip: landing and krabi', id: 'trip-land', hash: '#/world/thailand/boat-trip/land', reset: true },
-  { name: 'thailand trip: landing and the signpost (baan chang open)', id: 'trip-fork', hash: '#/world/thailand/boat-trip/land', reset: true },
-  { name: 'thailand baan chang: the songthaew to the entrance', id: 'chang-arrive', hash: '#/world/thailand/boat-trip/chang', reset: true, next: 'sign' },
-  { name: 'thailand baan chang: the photo at the bamboo sign', id: 'chang-sign', hash: '#/world/thailand/boat-trip/sign', reset: true, next: 'drinks' },
-  { name: 'thailand baan chang: her chocolate milk at the cafe', id: 'chang-drinks', hash: '#/world/thailand/boat-trip/drinks', reset: true, next: 'boardwalk' },
-  { name: 'thailand baan chang: down the boardwalk', id: 'chang-boardwalk', hash: '#/world/thailand/boat-trip/boardwalk', reset: true, next: 'feed' },
-  { name: 'thailand baan chang: feeding mali and khanom', id: 'chang-feed', hash: '#/world/thailand/boat-trip/feed', reset: true, next: 'favorites' },
-  { name: 'thailand baan chang: favorites', id: 'chang-favorites', hash: '#/world/thailand/boat-trip/favorites', reset: true, next: 'lamyai' },
-  { name: 'thailand baan chang: lamyai and the sneaky sips', id: 'chang-lamyai', hash: '#/world/thailand/boat-trip/lamyai', reset: true, next: 'splash' },
-  { name: 'thailand baan chang: the splash', id: 'chang-splash', hash: '#/world/thailand/boat-trip/splash', reset: true, next: 'pier' },
-  // The bay, one run per section (links with the section's path: a bare /boat-trip gets rewritten). It never "finishes"
-  // (the trip goes on to the way home in a later gate), so talk per touch is total talk / taps by hand.
-  { name: 'thailand bay: the pier and its ribbons', id: 'bay-pier', hash: '#/world/thailand/boat-trip/pier', reset: true },
-  { name: 'thailand bay: open water, where to?', id: 'bay-open', hash: '#/world/thailand/boat-trip/bay', reset: true },
-  { name: 'thailand bay: the village and the football', id: 'bay-village', hash: '#/world/thailand/boat-trip/village', reset: true },
-  { name: 'thailand bay: the canoe under the low roof', id: 'bay-cave', hash: '#/world/thailand/boat-trip/cave', reset: true },
-  { name: 'thailand bay: the hong', id: 'bay-hong', hash: '#/world/thailand/boat-trip/hong', reset: true },
-  { name: 'thailand bay: the nail island and the photo', id: 'bay-nail', hash: '#/world/thailand/boat-trip/nail', reset: true },
-  { name: 'thailand bay: the sunset ride back', id: 'bay-sunset', hash: '#/world/thailand/boat-trip/sunset', reset: true },
-  { name: 'thailand bay: the boat race', id: 'bay-race', hash: '#/world/thailand/boat-trip/race', reset: true },
-  { name: 'thailand bay: the race podium', id: 'bay-podium', hash: '#/world/thailand/boat-trip/podium', reset: true },
-  // Home (step 5): a home link builds the bay first for its photos, then the flight home, the van, the photo for Agong.
-  { name: 'thailand trip: home, the photo for agong', id: 'trip-home', hash: '#/world/thailand/boat-trip/home?photos=village,hong,nail&found=crab,eagle', reset: true },
-  { name: 'thailand trip: a replay (🧳 or 🚤)', id: 'trip-replay', hash: '#/world/thailand/boat-trip/invite?replay=1', reset: true },
-  // The mall day's trip loop (greybox, no voices yet: the words show in bubbles). Mommy's card, the goodbye (hugs, the
-  // Veloz), ICONSIAM (the lift, the counter's toys, the gate), and home (the box for Agong, the photo on the wall).
-  { name: 'thailand mall: mommy asks where to', id: 'mall-invite', hash: '#/world/thailand/mall-trip/invite', reset: true },
-  { name: 'thailand mall: goodbye and the veloz', id: 'mall-goodbye', hash: '#/world/thailand/mall-trip/goodbye', reset: true },
-  { name: 'thailand mall: iconsiam, the lift and the counter', id: 'mall-arrive', hash: '#/world/thailand/mall-trip/arrive', reset: true },
-  { name: 'thailand mall: home, the box for agong', id: 'mall-home', hash: '#/world/thailand/mall-trip/home', reset: true },
-  // HarborLand's hall (greybox, no voices): walking between the ways in; a tap on one goes into that mini game.
-  { name: 'thailand mall: the hall', id: 'mall-hall', hash: '#/world/thailand/mall-trip/hall', reset: true },
-  // HarborLand's Big Frame (greybox, no voices, and no end: a toy with no goal): climb up, slide down, the cannon.
-  { name: 'thailand mall: the big frame', id: 'mall-frame', hash: '#/world/thailand/mall-trip/frame', reset: true },
-  // The Vet Clinic (greybox, no voices): tapping a tool does a short go with it, so the auto-player can heal all three.
-  { name: 'thailand mall: vet clinic', id: 'mall-vet', hash: '#/world/thailand/mall-trip/vet', reset: true },
-  // The Barber Salon (greybox, no voices): a tap on a tool does a short go with it (a squirt, a trim, a comb, a bow), and
-  // the mirror glows after enough of them.
-  { name: 'thailand mall: barber salon', id: 'mall-barber', hash: '#/world/thailand/mall-trip/barber', reset: true },
-  // Cafe & Cake (greybox, no voices): taps work too (a fruit hops in, the jar pours by itself, the straw serves).
-  { name: 'thailand mall: cafe & cake', id: 'mall-cafe', hash: '#/world/thailand/mall-trip/cafe', reset: true },
-  // The Racing Slide (greybox, no voices): taps climb the steps and scoot down (it never "finishes": round after round).
-  { name: 'thailand mall: racing slide', id: 'mall-race', hash: '#/world/thailand/mall-trip/race', reset: true },
-  // Little Land (greybox, no voices): a tap on the box hops the next brick to a good spot, a tap on the glowing stack
-  // pushes it over, so the auto-player can play all three rounds.
-  { name: 'thailand mall: little land', id: 'mall-blocks', hash: '#/world/thailand/mall-trip/blocks', reset: true },
-  // Muay Thai (greybox, no voices): her glowing gloves for the wai kru, then a tap on the bag or the pad is a punch, so
-  // the auto-player can play all three rounds (round 2 ends after 16 punches even off the beat).
-  { name: 'thailand mall: muay thai', id: 'mall-boxing', hash: '#/world/thailand/mall-trip/boxing', reset: true },
-  // The Golden Mountain (greybox, no voices): only the holds in reach have tap targets, and the bell and the slide's
-  // mouth show at the top, so the auto-player climbs, rings and slides through all three rounds.
-  { name: 'thailand mall: golden mountain', id: 'mall-mountain', hash: '#/world/thailand/mall-trip/mountain', reset: true },
-  // The Sky Pod (greybox, no voices): a tap on a pod slaps it, so the auto-player plays the wall (its taps land on lit
-  // pods only by chance, so it may not reach the finale: the scripted run in the plan does).
-  { name: 'thailand mall: sky pod', id: 'mall-skypod', hash: '#/world/thailand/mall-trip/skypod', reset: true },
-  // The Pizza Company (greybox, no voices): a tap on the pizza serves a slice (with its stretch) to the plate that's
-  // behind, so the auto-player can share all eight and fill Agong's box.
-  { name: 'thailand mall: pizza share', id: 'mall-pizza', hash: '#/world/thailand/mall-trip/share', reset: true },
-  // The Nan road trip's mountain road (greybox, no voices): Mommy drives by herself to the end of the road, so the
-  // auto-player's taps are pokes and steering; one run per road that deepens the verb.
-  { name: 'thailand nan: the valley road', id: 'nan-valley', hash: '#/world/thailand/nan-trip/drive', reset: true },
-  { name: 'thailand nan: the sky road', id: 'nan-sky', hash: '#/world/thailand/nan-trip/drive?road=sky', reset: true },
-  { name: 'thailand nan: the 3 road', id: 'nan-three', hash: '#/world/thailand/nan-trip/drive?road=three', reset: true },
-  // The mushroom farm (greybox, no voices): a tap on a bag is a puff of mist, a tap on a grown one picks it, a tap on
-  // the basket or the pizza puts the next mushroom on, so the auto-player can play the rounds through to lunch.
-  { name: 'thailand nan: the mushroom farm', id: 'nan-mushrooms', hash: '#/world/thailand/nan-trip/mushrooms', reset: true },
-  { name: 'thailand nan: the mushroom pizza', id: 'nan-mushroom-pizza', hash: '#/world/thailand/nan-trip/mushrooms?round=pizza', reset: true },
-  // Kaylee's rice farm (greybox A, no voices): a tap on the farm walks Kaylee there (planting, shooing or cutting what
-  // she walks through), a tap on a gate floods its paddy. The auto-player can't hold a finger down, so it only gets
-  // partway; the robot run that drags through every round is qa-motion's nan-plant and nan-shoo.
-  { name: 'thailand nan: the rice farm', id: 'nan-rice', hash: '#/world/thailand/nan-trip/rice', reset: true },
-  // Its threshing and the deck (greybox B): any tap bangs the next bundle, then the kratip on the deck and Mommy's photo.
-  { name: 'thailand nan: threshing the rice', id: 'nan-rice-thresh', hash: '#/world/thailand/nan-trip/rice?round=thresh', reset: true },
-  // Bo Kluea's salt wells: a tap on the pan (or the bucket) dips a bucketful and pours it, a tap on the woodpile throws a
-  // log on, a tap on the pan in round 3 scrapes a stripe, so the auto-player can play it through to the bags.
-  { name: 'thailand nan: the salt wells', id: 'nan-salt', hash: '#/world/thailand/nan-trip/salt', reset: true },
-  // The Nan Mountain Cup (greybox 1, no voices): the kart races on by itself when no finger is down, so the
-  // auto-player's taps are honks and pokes (the rivals, the mushrooms) all the way to the line; the finger-held run is
-  // qa-motion's nan-kart.
-  { name: 'thailand nan: the cup race', id: 'nan-cup', hash: '#/world/thailand/nan-trip/race?steer=finger', reset: true },
-  // Greybox 2's tracks: racing on by itself it drives through the puddles and the waterfall (the rice steps), the
-  // blossom showers and under the lanterns (the cloud), so the auto-player sees each trick.
-  { name: 'thailand nan: the cup race, rice steps', id: 'nan-cup-steps', hash: '#/world/thailand/nan-trip/race?track=steps&steer=finger', reset: true },
-  { name: 'thailand nan: the cup race, cloud top', id: 'nan-cup-cloud', hash: '#/world/thailand/nan-trip/race?track=cloud&steer=finger', reset: true },
-  // Greybox 3: the silver podium (the auto-player's taps find the glowing winner for the high five, then ➡️) and the
-  // Cup ceremony (the Cup floats over, a tap lifts it, the photo, 🗺️).
-  { name: 'thailand nan: the cup podium, silver', id: 'nan-cup-podium', hash: '#/world/thailand/nan-trip/podium?track=steps&place=2', reset: true },
-  { name: 'thailand nan: the cup ceremony', id: 'nan-cup-win', hash: '#/world/thailand/nan-trip/cup-win', reset: true },
-  // The Nan map and the 3 (greybox, step 6): on the map a tap on a place drives the little Pajero there; the 3 from
-  // above plays by itself.
-  { name: 'thailand nan: the nan map', id: 'nan-map', hash: '#/world/thailand/nan-trip/map', reset: true },
-  { name: 'thailand nan: the 3 from above', id: 'nan-three-view', hash: '#/world/thailand/nan-trip/three', reset: true },
-  { name: "thailand house: the photo wall (agong's wall downstairs)", id: 'photo-wall', hash: '#/world/thailand/hub/downstairs?at=photos', reset: true, seed: seedWall },
-].filter((s) => !flag('only') || flag('only').split(',').includes(s.id))
+]
+const placed = [...CENTRAL, ...(await loadScenarios('pacing'))]
+const fresh = (await uncovered(placed.map((s) => s.hash))).filter((a) => a.kind === 'live' || a.kind === 'works').map((a) => ({ name: `${a.place} ${a.activity}`, id: `${a.place}-${a.activity}`, hash: a.hash, reset: true }))
+const SCENARIOS = [...placed, ...fresh].filter((s) => !flag('only') || flag('only').split(',').includes(s.id))
 
 // Is there something (other than the story overlay, the top bar or a "hear it again" button) she can touch?
 // Uses layout size (offsetWidth), not the transformed box, so things popping in from scale 0 count from their first frame.
