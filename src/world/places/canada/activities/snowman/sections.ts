@@ -1,4 +1,4 @@
-// Carnival Snowballs (greybox 9, plan: planning/around-the-world/canada.html): roll snowballs in the snowy park below
+// Carnival Snowballs (plan: planning/around-the-world/canada.html): roll snowballs in the snowy park below
 // Quebec City's castle hotel, stack them into snowmen, dress them for the Winter Carnival and march them in its parade.
 // #/world/canada/snowman/<section>?size=huge&snowmen=3. A section link sets the park up as if she had played to there.
 // Loaded at startup by the section index (keep three.js out of this file).
@@ -10,6 +10,7 @@ const SNOWMAN_SECTIONS = defineSections('canada', 'snowman', {
     snowmen: { default: '', values: ['', '1', '2', '3', '4', '5'], doc: 'how many snowmen she has made (empty = what that section starts with: dress 1, the newest still to dress and the others in the parade line; parade 4, all in the parade)' },
   },
   sections: [
+    { id: 'story', name: 'Maple asks for snowmen' },
     { id: 'roll', name: 'Roll one' },
     { id: 'stack', name: 'Stack a snowman', params: ['size'], links: [{ label: 'Stack a snowman', also: [{ label: 'the huge ball, Maple on top', params: { size: 'huge' } }] }] },
     { id: 'dress', name: 'Dress it for the carnival', params: ['snowmen'], links: [{ label: 'Dress it for the carnival', also: [{ label: 'two already in the parade line', params: { snowmen: '3' } }] }] },

@@ -1,39 +1,31 @@
-// Carnival Snowballs' park as greybox shapes in the toon look (the art gate dresses it up): the snowy ground, the parade
-// path with its red flags, the cliff with the old city wall and the castle hotel on top (its windows light up), spruces
-// with snow on them, lamp posts (the snowy owl sits on one), the ice moose, the toboggan slide and its sled, the
-// carnival's hat box and sash box, the parade drum, and Maple the beaver in a pink tuque and scarf.
-// park.ts says where everything stands.
+// Carnival Snowballs' park in the toon look: the snowy ground (softer patches, footprints), the parade path with its red
+// flags and bunting between the lamp posts (the snowy owl sits on one), Old Quebec up on the cliff (castle.ts: the wall,
+// the terrace and the castle hotel), spruces with snow on them, the ice moose, the toboggan slide and its sled, the
+// carnival's hat box and sash box, the parade drum, and what the snowmen wear. Maple is maple.ts, the other animals
+// critters.ts; park.ts says where everything stands.
 import { Color, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry, Quaternion, Vector3, type BufferGeometry } from 'three'
 import { bell, clamp, span, wobble } from '../../../../../sdk'
 import type { Bag } from '../../../../engine3d/dispose'
-import { merge, P, solid, solidMix } from '../../../../engine3d/geo'
+import { merge, P, solid } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
-import { BOX_HALF, CASTLE, CLIFF_Y, CLIFF_Z, DRUM, LAMP, LAMPS, MOOSE, PATH_Z, SLIDE, TREES_IN } from './park'
+import { buildOldTown, mulberry } from './castle'
+import { BOX_HALF, CLIFF_Y, DRUM, LAMP, LAMPS, MOOSE, PATH_Z, SLIDE, TREES_IN } from './park'
 
 export const SKY = '#DCE6F6'
 const SNOW = '#FBFBFF'
 const SNOW_SHADE = '#EEF0FA'
 const PATH = '#E4DEEE'
-const ROCK = '#C8C0D4'
-const STONE = '#DCD2C6'
-const BRICK = '#E09A86'
-const BRICK_DARK = '#C97F6E'
-const COPPER = '#79C9AE'
-const COPPER_DARK = '#5DAF95'
 const SPRUCE = '#3F8F6C'
 const SPRUCE_DARK = '#33795B'
 const BARK = '#8A6248'
 const ICE = '#BFE8F6'
 const ICE_LIGHT = '#E2F7FD'
 const RED = '#E8443F'
-const FUR = '#A8714A'
 const FUR_LIGHT = '#E2B48A'
-const TAIL = '#6E4B3B'
-const TEETH = '#FF9A3C'
-const WINDOW_DARK = new Color('#6E6288')
-const WINDOW_LIT = new Color('#FFE58A')
 
 /** A spruce with snow on its tiers, standing at its foot (s = how big). */
+export { mulberry }
+
 export function spruce(s: number, at: [number, number, number] = [0, 0, 0], snowy = true): BufferGeometry[] {
   const [x, y, z] = at
   const parts: BufferGeometry[] = [P.cyl(0.16 * s, 0.2 * s, 0.7 * s, BARK, { at: [x, y + 0.35 * s, z] }, 8)]
@@ -54,7 +46,6 @@ export interface Park {
   /** The park's trees, each on its own (a bump shakes it); `top` is where its snow falls from. */
   trees: { g: Group; x: number; z: number; top: Vector3; shake: number }[]
   castle: Group
-  windows: Mesh
   lamp: Group
   moose: Group
   slide: Group
@@ -91,59 +82,64 @@ export function buildPark(bag: Bag): Park {
   }
   root.add(solid(merge(flags), bag, 1.4))
 
-  // ---- The cliff, the old city wall on its edge, and the castle hotel on top.
-  const cliff: BufferGeometry[] = [
-    P.box(90, CLIFF_Y, 40, ROCK, { at: [0, CLIFF_Y / 2, CLIFF_Z - 20] }),
-    P.box(90, 0.3, 40, SNOW, { at: [0, CLIFF_Y + 0.1, CLIFF_Z - 20] }),
-    // Snow banked against its foot.
-    P.box(90, 0.9, 1.2, SNOW, { at: [0, 0.3, CLIFF_Z + 0.3], rot: [-0.5, 0, 0] }),
-    // The wall: stones along the edge, with battlements.
-    P.box(64, 1.1, 0.8, STONE, { at: [0, CLIFF_Y + 0.55, CLIFF_Z - 0.6] }),
-  ]
-  for (let x = -31; x <= 31; x += 1.6) cliff.push(P.box(0.8, 0.5, 0.8, STONE, { at: [x, CLIFF_Y + 1.35, CLIFF_Z - 0.6] }))
-  // Spruces up on top, either side of the castle.
-  for (const [x, z, s] of [
-    [-22, -18, 1.4],
-    [-17, -21, 1.2],
-    [-25, -24, 1.5],
-    [19, -18, 1.3],
-    [24, -22, 1.5],
-    [15, -24, 1.1],
-  ] as const)
-    cliff.push(...spruce(s, [x, CLIFF_Y, z]))
-  root.add(solid(merge(cliff), bag, 1.6))
-
-  const castle = new Group()
-  castle.position.set(CASTLE.x, CLIFF_Y, CASTLE.z)
-  // A big brick hotel: a tall middle tower with a steep copper roof, wings either side, round turrets with pointed caps.
-  const c: BufferGeometry[] = [
-    P.box(10, 9, 7, BRICK, { at: [0, 4.5, 0] }),
-    P.box(6, 6, 7, BRICK, { at: [0, 12, 0] }),
-    P.cone(5.2, 7, COPPER, { at: [0, 18.5, 0] }, 4),
-    P.box(9, 6.5, 6, BRICK_DARK, { at: [-9.5, 3.25, 1] }),
-    P.box(9, 6.5, 6, BRICK_DARK, { at: [9.5, 3.25, 1] }),
-    P.prism([[-4.5, 0], [4.5, 0], [3.2, 3], [-3.2, 3]], 6, COPPER, { at: [-9.5, 6.5, 1] }),
-    P.prism([[-4.5, 0], [4.5, 0], [3.2, 3], [-3.2, 3]], 6, COPPER, { at: [9.5, 6.5, 1] }),
-  ]
-  for (const [x, z, h] of [
-    [-5, 3.4, 10.5],
-    [5, 3.4, 10.5],
-    [-14, 3.8, 8.5],
-    [14, 3.8, 8.5],
-  ] as const) {
-    c.push(P.cyl(1.2, 1.2, h, BRICK, { at: [x, h / 2, z] }, 14))
-    c.push(P.cone(1.55, 3.2, COPPER_DARK, { at: [x, h + 1.6, z] }, 14))
+  // ---- Old Quebec up on the cliff: the wall, the terrace, the castle hotel and the old town (castle.ts); spruces behind.
+  const town = buildOldTown(bag)
+  root.add(town.root)
+  const cliffTop: BufferGeometry[] = []
+  const rc = mulberry(5)
+  for (let i = 0; i < 22; i++) {
+    const x = -46 + i * 4.4 + rc() * 2
+    if (Math.abs(x) < 12) continue
+    cliffTop.push(...spruce(1.2 + rc() * 0.6, [x, CLIFF_Y, -24 - rc() * 6]))
   }
-  castle.add(solid(merge(c), bag, 2))
-  // The windows, on their own mesh so a tap lights them all up.
-  const w: BufferGeometry[] = []
-  for (let row = 0; row < 3; row++) for (let i = -3; i <= 3; i++) w.push(P.box(0.8, 1.1, 0.1, '#FFFFFF', { at: [i * 1.35, 1.8 + row * 2.4, 3.55] }))
-  for (let row = 0; row < 2; row++) for (let i = -1; i <= 1; i++) w.push(P.box(0.8, 1.1, 0.1, '#FFFFFF', { at: [i * 1.6, 10.3 + row * 2.2, 3.55] }))
-  for (const side of [-1, 1]) for (let row = 0; row < 2; row++) for (let i = -2; i <= 2; i++) w.push(P.box(0.7, 1, 0.1, '#FFFFFF', { at: [side * 9.5 + i * 1.5, 1.6 + row * 2.4, 4.05] }))
-  const winMat = bag.add(new MeshBasicMaterial({ color: WINDOW_DARK.clone() }))
-  const windows = new Mesh(bag.add(merge(w)), winMat)
-  castle.add(windows)
-  root.add(castle)
+  for (const [x, z, s] of [
+    [-12.5, -29, 1.5],
+    [12.8, -29.5, 1.6],
+    [-6, -31, 1.3],
+    [6.5, -31.5, 1.4],
+  ] as const)
+    cliffTop.push(...spruce(s, [x, CLIFF_Y, z]))
+  root.add(solid(merge(cliffTop), bag, 1.6))
+
+  // ---- Bunting between the lamp posts: little triangle flags, red, white, blue and gold.
+  const bunt: BufferGeometry[] = []
+  const posts = [...LAMPS, LAMP.x].sort((a, b) => a - b)
+  const BUNT = [RED, '#FFFFFF', '#4F7FD0', PAL.butter]
+  for (let i = 0; i < posts.length - 1; i++) {
+    const a = posts[i]
+    const b = posts[i + 1]
+    const n = Math.round((b - a) / 0.7)
+    for (let k = 1; k < n; k++) {
+      const u = k / n
+      const x = a + (b - a) * u
+      const y = 3.55 - Math.sin(u * Math.PI) * 0.55
+      bunt.push(
+        P.prism(
+          [
+            [-0.2, 0],
+            [0.2, 0],
+            [0, -0.42],
+          ],
+          0.03,
+          BUNT[(i * 7 + k) % BUNT.length],
+          { at: [x, y, LAMP.z] },
+        ),
+      )
+    }
+  }
+  root.add(solid(merge(bunt), bag, 1.2))
+
+  // ---- The snow isn't all one white: softer patches, and a line of footprints across it.
+  const patches: BufferGeometry[] = []
+  const rp = mulberry(9)
+  for (let i = 0; i < 44; i++) {
+    const x = -15 + rp() * 30
+    const z = -8.5 + rp() * 17
+    const r = 0.6 + rp() * 1.4
+    patches.push(P.cyl(r, r, 0.02, i % 4 ? SNOW_SHADE : '#E7EAF7', { at: [x, 0.006, z], scale: [1.6, 1, 1] }, 14))
+  }
+  for (let i = 0; i < 26; i++) patches.push(P.cyl(0.12, 0.12, 0.02, '#E2E5F4', { at: [-14 + i * 1.1, 0.012, 6.2 + Math.sin(i * 0.5) * 1.2 + (i % 2 ? 0.18 : -0.18)], scale: [1, 1, 1.5] }, 8))
+  root.add(new Mesh(bag.add(merge(patches)), bag.add(new MeshBasicMaterial({ vertexColors: true, polygonOffset: true, polygonOffsetFactor: -1 }))))
 
   // ---- Spruces round the park's edges (one mesh), and the park's own trees (each on its own, to shake).
   const edge: BufferGeometry[] = []
@@ -227,26 +223,11 @@ export function buildPark(bag: Bag): Park {
   return {
     root,
     trees,
-    castle,
-    windows,
+    castle: town.castle,
     lamp,
     moose,
     slide,
-    setWindows(k: number) {
-      winMat.color.copy(WINDOW_DARK).lerp(WINDOW_LIT, clamp(k))
-    },
-  }
-}
-
-/** A little seeded random, so the park looks the same every time. */
-export function mulberry(seed: number) {
-  let a = seed
-  return () => {
-    a |= 0
-    a = (a + 0x6d2b79f5) | 0
-    let t = Math.imul(a ^ (a >>> 15), 1 | a)
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+    setWindows: town.setWindows,
   }
 }
 
@@ -560,178 +541,4 @@ export function makeSash(bag: Bag) {
     P.cone(0.12, 0.2, PAL.butter, { at: [0.58, -0.9, 0.94], rot: [Math.PI, 0, 0] }, 8),
   ]
   return solid(merge(parts), bag, 2)
-}
-
-// ---------------------------------------------------------------- Maple
-
-/** Maple the beaver standing on her feet, in a pink tuque and scarf for the winter (the art gate builds her on the
- *  chibi rig). She waves, cheers, hops, slaps her tail, drums and pats snowballs together. */
-export class Maple {
-  readonly root = new Group()
-  readonly height = 1.25
-  private body = new Group()
-  private head = new Group()
-  private armL = new Group()
-  private armR = new Group()
-  private tail = new Group()
-  private eyes: Group
-  private waveT = -1
-  private cheerT = -1
-  private hopT = -1
-  private slapT = -1
-  private patT = -1
-  private giggleT = -1
-  private blink = 2
-  /** Drumming (the parade): her arms beat. */
-  drumming = false
-  /** A hat on her head (a box popped and no snowman needed one). */
-  readonly hat: Group
-  constructor(bag: Bag) {
-    this.root.add(this.body)
-    this.body.add(
-      solid(
-        merge([
-          P.sphere(0.36, FUR, { at: [0, 0.48, 0], scale: [1, 1.12, 0.92] }),
-          P.sphere(0.24, FUR_LIGHT, { at: [0, 0.44, 0.17], scale: [1, 1.2, 0.6] }),
-          P.sphere(0.12, FUR, { at: [0.16, 0.07, 0.1], scale: [1, 0.6, 1.5] }),
-          P.sphere(0.12, FUR, { at: [-0.16, 0.07, 0.1], scale: [1, 0.6, 1.5] }),
-          // The scarf, its end hanging over her shoulder.
-          P.torus(0.24, 0.08, PAL.hotpink, { at: [0, 0.84, 0], rot: [Math.PI / 2, 0, 0] }),
-          P.rbox(0.13, 0.36, 0.06, 0.03, PAL.hotpink, { at: [0.16, 0.66, 0.2], rot: [0.2, 0, 0.15] }),
-        ]),
-        bag,
-        2,
-      ),
-    )
-    this.head.position.set(0, 0.92, 0)
-    this.body.add(this.head)
-    this.head.add(
-      solidMix(
-        [
-          P.sphere(0.29, FUR, { at: [0, 0.2, 0] }),
-          P.sphere(0.16, FUR_LIGHT, { at: [0, 0.12, 0.21], scale: [1.25, 0.85, 0.9] }),
-          P.sphere(0.07, '#4A3036', { at: [0, 0.2, 0.35], scale: [1.3, 0.9, 0.9] }),
-          P.rbox(0.06, 0.1, 0.03, 0.01, TEETH, { at: [0.033, 0.02, 0.33] }),
-          P.rbox(0.06, 0.1, 0.03, 0.01, TEETH, { at: [-0.033, 0.02, 0.33] }),
-          // The pink tuque with its pompom.
-          P.sphere(0.3, PAL.pink, { at: [0, 0.3, -0.02], scale: [1, 0.75, 1] }),
-          P.cyl(0.29, 0.31, 0.1, '#FFFFFF', { at: [0, 0.3, -0.02] }, 16),
-          P.sphere(0.1, '#FFFFFF', { at: [0, 0.58, -0.04] }),
-        ],
-        [P.sphere(0.045, PAL.pink, { at: [0.16, 0.13, 0.23], scale: [1, 0.6, 0.4] }), P.sphere(0.045, PAL.pink, { at: [-0.16, 0.13, 0.23], scale: [1, 0.6, 0.4] })],
-        bag,
-        2,
-      ),
-    )
-    this.eyes = solid(merge([P.sphere(0.045, PAL.ink, { at: [0.1, 0.25, 0.25] }), P.sphere(0.045, PAL.ink, { at: [-0.1, 0.25, 0.25] }), P.sphere(0.016, '#FFFFFF', { at: [0.11, 0.27, 0.29] }), P.sphere(0.016, '#FFFFFF', { at: [-0.09, 0.27, 0.29] })]), bag, 0)
-    this.head.add(this.eyes)
-    this.hat = makeHat(bag)
-    this.hat.scale.setScalar(0.34)
-    this.hat.position.set(0, 0.12, -0.02)
-    this.hat.visible = false
-    this.head.add(this.hat)
-    for (const [arm, side] of [
-      [this.armL, 1],
-      [this.armR, -1],
-    ] as const) {
-      arm.position.set(side * 0.3, 0.68, 0.04)
-      arm.add(solid(merge([P.capsule(0.075, 0.26, FUR, { at: [0, -0.18, 0] }), P.sphere(0.09, FUR_LIGHT, { at: [0, -0.36, 0] })]), bag, 2))
-      this.body.add(arm)
-    }
-    this.tail.position.set(0, 0.2, -0.28)
-    this.body.add(this.tail)
-    this.tail.add(solid(merge([P.rbox(0.34, 0.07, 0.6, 0.03, TAIL, { at: [0, 0, -0.3] }), ...[0, 1, 2].map((i) => P.box(0.3, 0.075, 0.02, '#5A3B2E', { at: [0, 0, -0.14 - i * 0.15] }))]), bag, 2))
-  }
-
-  wave() {
-    if (this.cheerT < 0) this.waveT = 0
-  }
-  cheer() {
-    this.cheerT = 0
-    this.hopT = 0
-    this.waveT = -1
-  }
-  hop() {
-    if (this.hopT < 0) this.hopT = 0
-  }
-  slap() {
-    this.slapT = 0
-  }
-  pat() {
-    this.patT = 0
-  }
-  giggle() {
-    this.giggleT = 0
-  }
-  get hopping() {
-    return this.hopT >= 0
-  }
-
-  /** `walk` is how fast she's walking (m/s): she bobs and her arms swing. */
-  update(dt: number, t: number, walk: number) {
-    const step = (v: number) => (v >= 0 ? v + dt : v)
-    this.waveT = step(this.waveT)
-    this.cheerT = step(this.cheerT)
-    this.hopT = step(this.hopT)
-    this.slapT = step(this.slapT)
-    this.patT = step(this.patT)
-    this.giggleT = step(this.giggleT)
-    if (this.waveT > 1.4) this.waveT = -1
-    if (this.cheerT > 1.6) this.cheerT = -1
-    if (this.hopT > 0.6) this.hopT = -1
-    if (this.slapT > 0.7) this.slapT = -1
-    if (this.patT > 0.9) this.patT = -1
-    if (this.giggleT > 0.9) this.giggleT = -1
-
-    // A hop: crouch, up, land with a squash.
-    let y = 0
-    let sq = 0
-    if (this.hopT >= 0) {
-      const p = this.hopT / 0.6
-      y = p > 0.15 && p < 0.8 ? bell(span(p, 0.15, 0.8)) * 0.5 : 0
-      sq = p < 0.15 ? -bell(p / 0.15) * 0.12 : p > 0.8 ? -bell(span(p, 0.8, 1)) * 0.1 : bell(span(p, 0.15, 0.8)) * 0.06
-    }
-    const bob = walk > 0.2 ? Math.abs(Math.sin(t * 11)) * 0.08 * Math.min(1, walk / 2) : 0
-    const breathe = Math.sin(t * 2.2) * 0.015
-    this.body.position.y = y + bob
-    this.body.scale.set(1 - sq * 0.6, 1 + sq + breathe, 1 - sq * 0.6)
-    this.body.rotation.z = this.giggleT >= 0 ? Math.sin(this.giggleT * 28) * 0.12 * (1 - this.giggleT / 0.9) : walk > 0.2 ? Math.sin(t * 11) * 0.06 : 0
-
-    // Arms: swing while walking; a wave; both up for a cheer; patting a snowball; drumming.
-    let l = walk > 0.2 ? Math.sin(t * 11) * 0.5 : 0.1
-    let r = -l
-    let lz = 0.15
-    let rz = -0.15
-    if (this.patT >= 0) {
-      const k = Math.abs(Math.sin(this.patT * 14)) * bell(this.patT / 0.9)
-      l = r = -1.2 - k * 0.4
-      lz = -0.35
-      rz = 0.35
-    }
-    if (this.drumming) {
-      l = -1.5 + Math.max(0, Math.sin(t * 9)) * 0.8
-      r = -1.5 + Math.max(0, Math.sin(t * 9 + Math.PI)) * 0.8
-    }
-    if (this.waveT >= 0) {
-      const k = bell(span(this.waveT, 0, 1.4))
-      r = -2.6 * Math.min(1, k * 2)
-      rz = -0.3 + Math.sin(this.waveT * 14) * 0.45 * k
-    }
-    if (this.cheerT >= 0) {
-      const k = Math.min(1, bell(span(this.cheerT, 0, 1.6)) * 2)
-      l = r = -2.8 * k
-      lz = 0.4 * k
-      rz = -0.4 * k
-    }
-    this.armL.rotation.set(l, 0, lz)
-    this.armR.rotation.set(r, 0, rz)
-    this.tail.rotation.x = this.slapT >= 0 ? -bell(span(this.slapT, 0, 0.35)) * 1.1 + bell(span(this.slapT, 0.35, 0.7)) * 0.3 : Math.sin(t * 3) * 0.06
-    this.head.rotation.z = this.giggleT >= 0 ? Math.sin(this.giggleT * 20) * 0.15 : Math.sin(t * 0.9) * 0.05
-    if ((this.blink -= dt) < 0) this.blink = 2 + Math.random() * 3
-    this.eyes.scale.y = this.blink < 0.12 ? 0.15 : this.giggleT >= 0 ? 0.35 : 1
-  }
-  /** Turns her head toward a point (world), or straight ahead. */
-  look(yaw: number) {
-    this.head.rotation.y += (clamp(yaw, -1, 1) - this.head.rotation.y) * 0.12
-  }
 }

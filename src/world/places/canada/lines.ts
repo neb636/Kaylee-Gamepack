@@ -96,6 +96,39 @@ export const L = {
   taffy: {
   },
   snowman: {
+    // The story (Maple, in the park below the castle), then Sparkle's one instruction per part.
+    story: [maple("Bonjour! It's the Winter Carnival!"), maple("The parade needs snowmen. Let's roll some!")],
+    roll: 'Push the snowball! Watch it grow!',
+    stack: 'Now roll the little ball into the big one!',
+    dress: 'Roll a snowball into a box!',
+    ready: 'Tap the drum for the parade, or make more snowmen!',
+    // Stuck for a while: Sparkle helps (the hand shows it too).
+    hint: {
+      roll: 'Put your finger on the snowball and push!',
+      stack: 'Push the little ball into the big one!',
+      hat: 'Roll a snowball into the hat box!',
+      sash: 'Roll a snowball into the sash box!',
+      drum: 'Tap the big drum!',
+    },
+    // Tap-to-hear facts, the first time she pokes them.
+    castle: 'This castle is really a big hotel!',
+    iceMoose: 'A moose made of ice!',
+    // Maple acting it out.
+    big: maple('Wow, a big one!'),
+    made: [maple('A snowman! Ta-da!'), maple('Another snowman!'), maple("He's so wobbly!")],
+    climb: maple("Whee! I'm on top!"),
+    ride: maple('Look at me!'),
+    mapleHat: maple("Hee hee! That's for a snowman!"),
+    dodge: maple('Eek! Watch out!'),
+    poke: [maple('Hee hee!'), maple('Bonjour!')],
+    parade: maple('Here comes the parade!'),
+    // The snowmen wake up and talk.
+    wake: [by('snowman')('Bonjour!'), by('snowman')('Hello, hello!'), by('snowman')('To the parade!')],
+    upside: by('snowman')('Hello! Why is the sky down there?'),
+    tickle: by('snowman')('Hee hee, that tickles!'),
+    bye: by('snowman')('Merci! Bye bye!'),
+    // The payoff (the stamp comes next).
+    done: maple(`${NAME}, you made a whole parade!`),
   },
   bike: {
   },
