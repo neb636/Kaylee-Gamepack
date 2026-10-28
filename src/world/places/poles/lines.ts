@@ -51,7 +51,34 @@ export const L = {
   floe: {},
 
   // ---- Snow Coats (activities/coats/) ----
-  coats: {},
+  // Sparkle says what to do as each part starts (and again when nothing's been touched for a while); the facts come the
+  // first time she pokes an animal (Guide.once), never as required listening.
+  coats: {
+    fox: { start: 'Brr, winter is coming! Rub snow on the fox.', hint: 'Rub the fox with your finger.' },
+    hide: {
+      start: 'Now rub them all white, so they can hide!',
+      hint: 'Rub snow on the brown ones.',
+      bear: 'Shh! Here comes the polar bear.',
+      ran: 'He saw some brown! Make it white.',
+      gone: "He can't find anyone! White hides in the snow.",
+      dusk: 'Tap the sun to bring the summer.',
+    },
+    summer: {
+      start: 'Summer is here! Rub the snow away.',
+      hint: 'Rub them brown again.',
+      owl: 'Snowy owls and polar bears stay white all year!',
+      end: 'Brown coats for the summer!',
+    },
+    facts: {
+      fox: 'Arctic foxes turn white in winter and brown in summer.',
+      hare: 'Arctic hares have black tips on their ears.',
+      ptarmigan: 'This bird is a ptarmigan. Even its feet go white!',
+      lemming: 'Lemmings live in tunnels under the snow.',
+      bear: 'Polar bears are white all year.',
+      camo: "White fur hides in white snow. That's camouflage!",
+      land: 'Lots of animals live on the land around the frozen sea.',
+    },
+  },
 
   // ---- Penguin Slide (activities/slide/) ----
   slide: {},

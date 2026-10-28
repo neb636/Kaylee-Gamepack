@@ -265,6 +265,12 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [Drag the sun](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun) ([summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?summer=north), [the north's winter night](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?side=north&summer=south))
 - [The lost penguin: carry him home](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=penguin) ([a lost polar bear cub](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=bear))
 
+**Snow Coats**
+
+- [Paint the fox](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/fox)
+- [Hide and seek](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox) ([the lemming still brown](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox,hare,ptarmigan))
+- [Rub the summer back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/summer)
+
 **Ice Floe Hop** (in the works)
 
 - [Pola is far from Mama](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/story)
@@ -272,12 +278,6 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [Floes that drift](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/drift)
 - [Summer melt (push the floes)](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/melt)
 - [Back to Mama](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/mama)
-
-**Snow Coats** (in the works)
-
-- [Paint the fox](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/fox)
-- [Hide and seek](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox) ([the lemming still brown](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox,hare,ptarmigan))
-- [Rub the summer back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/summer)
 
 **Penguin Slide** (in the works)
 
