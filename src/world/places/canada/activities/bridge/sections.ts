@@ -1,7 +1,8 @@
-// Animal Bridge (greybox 6, plan: planning/around-the-world/canada.html): the green wildlife bridge over the highway in
+// Animal Bridge (plan: planning/around-the-world/canada.html): the green wildlife bridge over the highway in
 // Banff. #/world/canada/bridge/<section>?crossed=elk,sheep&green=0.5
-// A section is the family she leads next; a link sets the scene up as if she had played to there (the families in
-// `crossed` already graze in the meadow across the highway). Loaded at startup by the section index.
+// `story` is Maple's opening line (the bare link); after it, a section is the family she leads next. A link sets the
+// scene up as if she had played to there (the families in `crossed` already graze in the meadow across the highway).
+// Loaded at startup by the section index.
 import { defineSections } from '../../../../kit/sections'
 
 const BRIDGE_SECTIONS = defineSections('canada', 'bridge', {
@@ -10,6 +11,7 @@ const BRIDGE_SECTIONS = defineSections('canada', 'bridge', {
     green: { default: '', doc: 'how planted the bridge is, 0 to 1 (empty = bare; the bears cross once it is about 0.6)' },
   },
   sections: [
+    { id: 'story', name: 'Maple at the highway' },
     { id: 'elk', name: 'The elk family', params: ['crossed', 'green'] },
     { id: 'sheep', name: 'The bighorn sheep', params: ['crossed', 'green'], links: [{ label: 'The bighorn sheep', params: { crossed: 'elk' } }] },
     { id: 'bears', name: 'The shy grizzlies', params: ['crossed', 'green'], links: [{ label: 'The shy grizzlies', params: { crossed: 'elk,sheep' }, also: [{ label: 'the bridge already planted', params: { crossed: 'elk,sheep', green: '1' } }] }] },

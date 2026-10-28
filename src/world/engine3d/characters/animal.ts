@@ -1,6 +1,6 @@
 // Toy animals built from simple shapes in the toon look: Kaylee's family in Thailand (places/thailand/characters/looks.ts
 // says who is what), and any country's 3D friends (the Nan Mountain Cup's tortoise, hornbill and sun bear, the Poles'
-// polar bear cub, emperor chick and Arctic tern too).
+// polar bear cub, emperor chick and Arctic tern, Canada's beaver, moose and raccoon too).
 //
 // Every character is the same chibi rig: a root at the feet (facing +z), a `body` group that squashes and leans, and
 // inside it the torso (legs, clothes, tail), a `head` pivot at the neck, and an arm pivot at each shoulder. The eyes
@@ -114,7 +114,7 @@ function frameOf(look: Look): Frame {
   const H = look.height
   const penguin = look.species === 'penguin'
   const bird = look.species === 'hornbill' || look.species === 'tern'
-  const R = (penguin ? 0.27 : look.species === 'panda' || look.species === 'elephant' || look.species === 'bear' || look.species === 'polarbear' ? 0.26 : bird ? 0.22 : look.species === 'puppy' || look.species === 'tortoise' ? 0.25 : 0.24) * H
+  const R = (penguin ? 0.27 : look.species === 'panda' || look.species === 'elephant' || look.species === 'bear' || look.species === 'polarbear' || look.species === 'beaver' || look.species === 'moose' ? 0.26 : bird ? 0.22 : look.species === 'puppy' || look.species === 'tortoise' ? 0.25 : 0.24) * H
   const c = look.chub ?? 1
   const headY = penguin ? 0.2 * H : R * 0.92
   return {
@@ -309,7 +309,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
   const tern = look.species === 'tern'
   const polar = look.species === 'polarbear'
   /** Paws and hooves in the dark color (a polar bear's are furry and light, like its fur). */
-  const darkPaws = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear'
+  const darkPaws = look.species === 'unicorn' || look.species === 'buffalo' || look.species === 'panda' || look.species === 'pony' || look.species === 'bear' || look.species === 'moose' || look.species === 'raccoon'
 
   const torso: Parts = []
   const torsoPlain: Parts = []
@@ -752,6 +752,65 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       tailRoot = [0, 0.27 * H, -0.15 * H]
       tail.push(P.sphere(0.07 * H, look.fur, { at: [0, 0.25 * H, -0.18 * H], scale: [1, 0.7, 1.2] }))
       for (const s of [-1, 1]) tail.push(P.cone(0.035 * H, 0.3 * H, look.light, { at: [s * 0.045 * H, 0.17 * H, -0.3 * H], rot: [-(Math.PI / 2 + 0.6), s * 0.3, 0] }))
+      break
+    }
+    case 'beaver': {
+      // A beaver: small round ears, a big light muzzle with a dark nose, two big orange front teeth under it (Canada's
+      // beavers are proud of them), and the flat paddle tail lying out behind, criss-crossed like scales.
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.08, 1, 1] }, 26))
+      for (const s of [-1, 1]) {
+        head.push(P.sphere(0.2 * R, look.fur, { at: [s * 0.72 * R, headY + 0.68 * R, -0.05 * R], scale: [1, 1, 0.7] }))
+        headPlain.push(P.sphere(0.11 * R, look.ear ?? look.light, { at: [s * 0.72 * R, headY + 0.67 * R, 0.06 * R], scale: [1, 1, 0.4] }))
+        head.push(P.sphere(0.32 * R, look.light, { at: [s * 0.2 * R, headY - 0.32 * R, 0.72 * R], scale: [1, 0.8, 0.75] }))
+      }
+      head.push(P.sphere(0.14 * R, look.dark, { at: [0, headY - 0.14 * R, 1.0 * R], scale: [1.4, 0.9, 0.8] }))
+      head.push(...[-1, 1].map((s) => P.rbox(0.19 * R, 0.3 * R, 0.08 * R, 0.05 * R, '#FF9A3C', { at: [s * 0.1 * R, headY - 0.62 * R, 0.86 * R], rot: [-0.3, 0, 0] })))
+      // (She talks between her cheeks, the teeth hanging from it: lower down, a scarf would hide it.)
+      mouth(mouthPoint(-0.44 * R, 0.97 * R))
+      tailRoot = [0, 0.13 * H, -0.15 * H * round[2]]
+      tail.push(P.sphere(0.16 * H, look.dark, { at: [0, 0.07 * H, -0.3 * H * round[2]], rot: [0.12, 0, 0], scale: [0.72, 0.16, 1.15] }, 20))
+      for (const a of [-0.5, 0.5]) for (const k of [-0.07, 0, 0.07]) tail.push(P.capsule(0.004 * H, 0.17 * H, '#4F3428', { at: [k * H, 0.095 * H, -0.3 * H * round[2]], rot: [Math.PI / 2 + 0.12, a, 0] }))
+      break
+    }
+    case 'moose': {
+      // A moose: a long droopy muzzle with big nostrils, ears out to the sides, wide flat antlers like open hands (a
+      // few points round the rim), and the little beard (the bell) under the chin.
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.02, 1, 1] }, 26))
+      head.push(P.sphere(0.58 * R, look.light, { at: [0, headY - 0.38 * R, 0.66 * R], scale: [1.0, 0.75, 1.0] }))
+      head.push(P.sphere(0.3 * R, look.light, { at: [0, headY - 0.42 * R, 1.08 * R], scale: [1.2, 0.85, 0.7] }))
+      headPlain.push(...[-1, 1].map((s) => P.sphere(0.06 * R, INK, { at: [s * 0.15 * R, headY - 0.34 * R, 1.27 * R], scale: [1, 1.3, 0.6] })))
+      mouth(mouthPoint(-0.62 * R, 1.12 * R))
+      head.push(P.sphere(0.13 * R, look.fur, { at: [0, headY - 0.98 * R, 0.42 * R], scale: [0.8, 1.6, 0.8] }))
+      for (const s of [-1, 1]) {
+        head.push(P.cone(0.18 * R, 0.5 * R, look.fur, { at: [s * 0.9 * R, headY + 0.42 * R, -0.12 * R], rot: [0, 0, -s * 1.1] }))
+        headPlain.push(P.cone(0.1 * R, 0.32 * R, look.ear ?? look.light, { at: [s * 0.9 * R, headY + 0.42 * R, -0.04 * R], rot: [0, 0, -s * 1.1] }))
+        const antler = '#E9D3A6'
+        head.push(P.capsule(0.07 * R, 0.25 * R, antler, { at: [s * 0.62 * R, headY + 0.86 * R, -0.05 * R], rot: [0, 0, -s * 1.0] }))
+        head.push(P.sphere(0.5 * R, antler, { at: [s * 1.12 * R, headY + 1.12 * R, -0.08 * R], rot: [0.15, 0, -s * 0.35], scale: [1.15, 0.62, 0.2] }))
+        for (let i = 0; i < 4; i++) {
+          const a = 0.35 + i * 0.42
+          head.push(P.cone(0.09 * R, 0.3 * R, antler, { at: [s * (1.12 + Math.cos(a) * 0.55) * R, headY + (1.12 + Math.sin(a) * 0.36) * R, -0.08 * R], rot: [0, 0, -s * (Math.PI / 2 - a)] }))
+        }
+      }
+      tailRoot = [0, 0.24 * H, -0.15 * H * round[2]]
+      tail.push(P.sphere(0.04 * H, look.fur, { at: [0, 0.24 * H, -0.17 * H * round[2]] }))
+      break
+    }
+    case 'raccoon': {
+      // A raccoon: pointy round-tipped ears with light rims, a light muzzle and brows, the dark bandit mask across the
+      // eyes, a dark nose, and the big ringed tail.
+      head.push(P.sphere(R, look.fur, { at: [0, headY, 0], scale: [1.1, 0.98, 1] }, 26))
+      for (const s of [-1, 1]) {
+        head.push(P.cone(0.3 * R, 0.55 * R, look.fur, { at: [s * 0.62 * R, headY + 0.84 * R, -0.08 * R], rot: [-0.1, 0, -s * 0.45] }))
+        headPlain.push(P.cone(0.18 * R, 0.34 * R, look.ear ?? look.light, { at: [s * 0.6 * R, headY + 0.8 * R, 0.04 * R], rot: [-0.1, 0, -s * 0.45] }))
+        head.push(P.sphere(0.36 * R, look.dark, { at: on(s * eyeX, eyeY - 0.02 * R, -0.17 * R), rot: [0, s * 0.5, s * 0.3], scale: [1.35, 0.8, 0.5] }))
+        head.push(P.sphere(0.16 * R, look.light, { at: on(s * 0.3 * R, eyeY + 0.36 * R, -0.04 * R), rot: [0, s * 0.3, 0], scale: [1.4, 0.55, 0.5] }))
+      }
+      head.push(P.sphere(0.4 * R, look.light, { at: [0, headY - 0.38 * R, 0.66 * R], scale: [1.2, 0.72, 0.8] }))
+      head.push(P.sphere(0.11 * R, INK, { at: [0, headY - 0.22 * R, 1.01 * R], scale: [1.35, 0.9, 0.8] }))
+      mouth(mouthPoint(-0.5 * R, 0.96 * R))
+      tailRoot = [0, 0.18 * H, -0.15 * H * round[2]]
+      for (let i = 0; i < 6; i++) tail.push(P.sphere((0.075 - i * 0.004) * H, i % 2 ? look.dark : look.fur, { at: [0, (0.17 + i * 0.055) * H, (-0.22 - i * 0.03) * H * round[2]], rot: [-0.5, 0, 0], scale: [1, 0.75, 1] }))
       break
     }
     case 'hornbill': {

@@ -58,7 +58,8 @@ export const PADDLE_K = 0.9
 /** The canoe's start at the dock, and where each section link puts it. */
 export const DOCK = { x: 5, z: 50 }
 export const STARTS = {
-  glide: { x: 5, z: 43, h: Math.PI },
+  story: { x: 2.4, z: 45.4, h: Math.PI },
+  glide: { x: 2.4, z: 45.4, h: Math.PI },
   stream: { x: -2, z: 4, h: Math.PI + 0.42 },
   loon: { x: -10, z: -20, h: Math.PI - 0.5 },
   glacier: { x: 2, z: -33, h: Math.PI },
@@ -75,9 +76,18 @@ export const FAMILY = { x: 2, z: -40 }
 /** Everyone round the shore. */
 export const LODGE = { x: -25.5, z: 6 }
 export const MOOSE = { x: 25, z: 13, h: -Math.PI / 2 - 0.5 }
-export const PIKA = { x: 23.5, z: -37 }
-export const SQUIRREL = { x: 15, z: 47 }
+/** Moraine Lake's famous rock pile at the outlet (south-east, beside the dock), the log jam in the outlet in front of
+ *  it, the pika among its lower boulders and the marmot on top. */
+export const ROCKPILE = { x: 20.5, z: 45, r: 6.5, top: 6 }
+export const LOGJAM = { x: 15, z: 40.5 }
+export const PIKA = { x: 16.6, z: 42.6 }
+export const MARMOT = { x: 20.5, z: 44.2 }
+export const SQUIRREL = { x: -6, z: 50 }
 export const DUCKS = { x: -7, z: 28 }
+/** A grey crag on the north-east shore under the Ten Peaks, with the mountain goat on its ledge. */
+export const CLIFF = { x: 28.5, z: -31, h: 9 }
+/** The bald eagle circles this high over the lake. */
+export const EAGLE_Y = 16
 
 /** Glide becomes "where the blue comes from" after she has paddled this far (m), or reached the milky water. */
 export const GLIDE_M = 32

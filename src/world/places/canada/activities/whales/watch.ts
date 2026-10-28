@@ -1,5 +1,8 @@
-// Whale Watch (greybox 7, plan: planning/around-the-world/canada.html): Tofino, on the Pacific side of Canada. Maple has
+// Whale Watch (plan: planning/around-the-world/canada.html): Tofino, on the Pacific side of Canada, in summer. Maple has
 // never seen a whale; Kaylee steers the little boat out of the harbour to find the otters, the whales and the orcas.
+// The story opens at the dock: Maple (on the chibi rig, maple.ts) waves from the wheel and says so, then the boat is
+// Kaylee's. Sparkle gives the few instructions (events.say, WhaleWatch.tsx speaks them); Maple and the otters react in
+// their own voices (lines.ts, L.whales). Every animal she pokes or finds goes into Maple's book (book/met.ts).
 //
 // The toy (core verb): steer the boat. The shared drive control (engine3d/drive.ts, the Thai bay's and the Nan
 // Pajero's) on the sea, two ways to try side by side (`?steer=`):
@@ -17,10 +20,11 @@
 // together). The side verb: tap the yellow microphone and the boat stops, the microphone goes down on its cable and the
 // camera dips under the waves to hear the humpback's song and the orcas' calls.
 //
-// The sea is the shared engine3d/water.ts. Built for engine3d/View3D.tsx; nothing here comes from Thailand. The
+// Ambient life: gulls wheeling, clouds drifting, the seals napping, the raven tipping its head. The sea is the shared
+// engine3d/water.ts. Built for engine3d/View3D.tsx; nothing here comes from Thailand. The
 // steering and the bounce are feel-lab knobs (?feel=1), with a graph of her finger against what the boat does.
 import { Color, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, sounds } from '../../../../../sdk'
+import { clamp, sounds, type Line } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -36,8 +40,10 @@ import { swell, Water } from '../../../../engine3d/water'
 import { FingerWheel } from '../../../../engine3d/wheel'
 import { Boat, BOAT_LEN } from './boat'
 import { buildCoast, DEEP, SKY, type Coast } from './coast'
-import { Eagle, Orca, Otter, Puffin, SeaLion, SeaStars, Surfer, Whale, type OrcaWho } from './critters'
-import { DRIFTS, HARBOUR_END_Z, keepOff, KELP, LIGHTHOUSE, open, RAFT, SEA, SPOUT_BOX, STARTS, SURF } from './sea'
+import { meet } from '../../book/met'
+import { L } from '../../lines'
+import { Clouds, Eagle, Gulls, HarbourSeal, Orca, Otter, Puffin, Raven, SeaLion, SeaStars, Surfer, Whale, type OrcaWho } from './critters'
+import { DOCK, DRIFTS, HARBOUR_END_Z, keepOff, KELP, LIGHTHOUSE, open, RAFT, SEA, SPOUT_BOX, STARTS, SURF } from './sea'
 import type { SteerMode, WhaleSection } from './sections'
 
 const FILE = 'src/world/places/canada/activities/whales/watch.ts'
@@ -94,6 +100,10 @@ export interface WhaleEvents {
   section(s: WhaleSection): void
   /** The orca family's big jump. */
   done(): void
+  /** Someone says something (Sparkle's hints, Maple's and the otters' reactions). */
+  say(line: Line): void
+  /** The parts she's finished (the otters home, the four whales, the orca family), for the stars in the top bar. */
+  progress(done: number): void
 }
 
 const ORCAS: OrcaWho[] = ['grandma', 'mama', 'dad', 'baby']
@@ -114,17 +124,23 @@ export const WHALE_ANCHORS: AnchorInfo[] = [
   ...ORCAS.map((w) => ({ id: `orca:${w}`, label: w === 'baby' ? 'The baby orca' : w === 'dad' ? 'The daddy orca' : w === 'mama' ? 'The mama orca' : 'The grandma orca', kind: 'thing' as const })),
   ...Array.from({ length: LIONS }, (_, i) => ({ id: `lion:${i}`, label: 'A sea lion', kind: 'thing' as const })),
   { id: 'eagle', label: 'The bald eagle', kind: 'thing' },
+  { id: 'seal:0', label: 'A harbour seal', kind: 'thing' },
+  { id: 'seal:1', label: 'A harbour seal', kind: 'thing' },
+  { id: 'raven', label: 'The raven', kind: 'thing' },
   { id: 'puffin', label: 'The puffin', kind: 'thing' },
   { id: 'stars', label: 'The sea stars', kind: 'thing' },
   { id: 'surfer', label: 'The surfer', kind: 'thing' },
   { id: 'lighthouse', label: 'The lighthouse', kind: 'thing' },
 ]
 
-const ORDER: WhaleSection[] = ['harbour', 'otters', 'spouts', 'orcas']
+const ORDER: WhaleSection[] = ['story', 'harbour', 'otters', 'spouts', 'orcas']
 const DEG = 180 / Math.PI
 const HINT_S = 8
 /** Listening: how long the microphone stays down by itself. */
 const LISTEN_S = 16
+/** Sparkle's spoken hint: after this long with nothing new (and at most this often). */
+const STUCK_S = 12
+const HINT_EVERY_S = 22
 
 const tmp = new Vector3()
 const tmp2 = new Vector3()
@@ -163,6 +179,18 @@ const foghorn = () => {
 }
 const twinkle = () => [0, 0.08, 0.16].forEach((d, i) => tone(1500 + i * 400, 1700 + i * 400, 0.1, 0.04, 'sine', d))
 const growl = () => noise(0.6, 0.1, 'lowpass', 400, 200)
+const caw = () => {
+  tone(520, 380, 0.22, 0.06, 'sawtooth')
+  noise(0.2, 0.05, 'bandpass', 1200, 700)
+}
+const grunt = () => {
+  tone(150, 110, 0.35, 0.09, 'sawtooth')
+  noise(0.3, 0.05, 'lowpass', 500, 250)
+}
+const bonk = () => {
+  tone(210, 140, 0.2, 0.1, 'sine')
+  noise(0.25, 0.08, 'lowpass', 700, 250)
+}
 /** The humpback's song: long, slow swoops up and down. */
 function whaleSong() {
   const notes: [number, number, number][] = [
@@ -281,6 +309,8 @@ export class WhaleWatch implements World3D {
   private orcaIn = false
   private jumps = 0
   private copies = 0
+  /** Seconds in the orca part: after a while every jump counts, and enough copied turns end it at any speed. */
+  private orcaT = 0
   private jumpCool = 2
   private copyCool = 0
   private doneT = -1
@@ -291,6 +321,10 @@ export class WhaleWatch implements World3D {
   private puffin: Puffin
   private stars: SeaStars
   private surfer: Surfer
+  private seals: HarbourSeal[] = []
+  private raven: Raven
+  private gulls: Gulls
+  private clouds: Clouds
   private surfT = 0
   private beamSpin = 0
   private hornN = 0
@@ -302,6 +336,15 @@ export class WhaleWatch implements World3D {
   private bubbles: Particles
 
   private lastTouch = 0
+  /** The story at the dock: Maple's little show (seconds since it began). */
+  private storyT = 0
+  /** Talk: when something last moved the story on, when Sparkle last hinted, and lines already said once. */
+  private lastProgress = 0
+  private lastHint = -99
+  private hintsHere = 0
+  private said = new Set<string>()
+  private talkCool = 0
+  private bumpTalkT = -99
   private counts = { steers: 0, taps: 0, pokes: 0, hops: 0, bumps: 0, tows: 0, dives: 0, spouts: 0, sneezes: 0, jumps: 0, copies: 0, listens: 0, horns: 0 }
 
   constructor(
@@ -320,6 +363,7 @@ export class WhaleWatch implements World3D {
     this.section = start.section === 'listen' ? 'orcas' : start.section
     this.mode = start.steer
     this.found = start.section === 'spouts' ? start.found : start.section === 'orcas' || start.section === 'listen' ? 4 : 0
+    this.lastTouch = 0
 
     // ---- The coast, the sea.
     this.coast = buildCoast(bag)
@@ -405,9 +449,30 @@ export class WhaleWatch implements World3D {
     this.puffin.root.rotation.y = 0.8
     this.puffin.root.scale.setScalar(2)
     this.stars = new SeaStars(bag, this.coast.stars)
+    this.stars.root.position.copy(this.coast.pool)
+    this.stars.root.scale.setScalar(1.5)
     this.surfer = new Surfer(bag)
     this.surfer.root.scale.setScalar(1.4)
-    scene.add(this.eagle.root, this.puffin.root, this.stars.root, this.surfer.root)
+    this.coast.seals.forEach((p, i) => {
+      const s = new HarbourSeal(bag, i ? '#B3A79C' : '#9EA3B3')
+      s.root.position.set(p.x, p.y, p.z)
+      s.root.rotation.y = p.h
+      s.root.scale.setScalar(1.6)
+      scene.add(s.root)
+      this.seals.push(s)
+    })
+    this.raven = new Raven(bag)
+    this.raven.root.position.copy(this.coast.raven)
+    this.raven.root.rotation.y = Math.PI * 0.85
+    this.raven.root.scale.setScalar(1.6)
+    this.gulls = new Gulls(bag, [
+      { x: DOCK.x - 6, z: 66 },
+      { x: -20, z: 40 },
+      { x: 30, z: 10 },
+      { x: -10, z: -50 },
+    ])
+    this.clouds = new Clouds(bag)
+    scene.add(this.eagle.root, this.puffin.root, this.stars.root, this.surfer.root, this.raven.root, this.gulls.root, this.clouds.root)
 
     // ---- Wake, spray, the spouts' mist, sparkles, bubbles.
     this.foam = new Particles({ kind: 'foam', count: 220, opacity: 0.85 }, bag)
@@ -475,7 +540,38 @@ export class WhaleWatch implements World3D {
   private enter(s: WhaleSection) {
     if (ORDER.indexOf(s) <= ORDER.indexOf(this.section)) return
     this.section = s
+    this.progressed()
+    this.hintsHere = 0
     if (!this.listening) this.events.section(s)
+  }
+
+  /** The story's over (her tap, or Maple's lines are done): the boat is hers. */
+  play() {
+    if (this.section !== 'story') return
+    this.lastTouch = this.time
+    this.enter('harbour')
+  }
+
+  /** Something moved the story on (no hint for a while). */
+  private progressed() {
+    this.lastProgress = this.time
+  }
+  /** A line, unless it was said a moment ago (`once`: only ever once). */
+  private talk(line: Line, opts: { once?: string; cool?: number } = {}) {
+    if (opts.once) {
+      if (this.said.has(opts.once)) return
+      this.said.add(opts.once)
+    }
+    if (this.time < this.talkCool) return
+    this.talkCool = this.time + (opts.cool ?? 1.6)
+    this.events.say(line)
+  }
+  /** A new animal for the book; false when she'd met it already (then a friend can say something instead). */
+  private met(id: Parameters<typeof meet>[0]) {
+    const first = meet(id)
+    // (The book's card speaks: nobody talks over it for a moment.)
+    if (first) this.talkCool = this.time + 3.5
+    return first
   }
 
   update(dt: number) {
@@ -484,6 +580,7 @@ export class WhaleWatch implements World3D {
     this.water.update(t)
     this.bumpCool -= dt
 
+    if (this.section === 'story') this.storyT += dt
     this.steer(dt)
     // Towing the sleepy otter, the boat goes gently by itself (she can't lose her on the way home).
     this.d.cap = this.activeDrifter?.state === 'towed' ? FIND.tow : 1
@@ -513,6 +610,22 @@ export class WhaleWatch implements World3D {
     this.rig.setShot(this.shot())
     this.rig.update(dt)
     this.drawHint(t)
+    this.speakHint(t)
+  }
+
+  /** Stuck for a while (nothing new happening): Sparkle helps, out loud. */
+  private speakHint(t: number) {
+    if (this.section === 'story' || this.listening || this.doneT >= 0 || this.hintsHere >= 3) return
+    if (t - this.lastProgress < STUCK_S || t - this.lastHint < HINT_EVERY_S) return
+    const h = L.whales.hint
+    const dr = this.activeDrifter
+    // (With the orcas, the first time, the tap-to-listen microphone: the side verb she may not have found yet.)
+    const mic = this.section === 'orcas' && this.counts.listens === 0 && !this.said.has('mic')
+    if (mic) this.said.add('mic')
+    const line = mic ? h.mic : this.section === 'harbour' ? h.harbour : this.section === 'otters' ? (dr?.state === 'towed' ? h.tow : h.otters) : this.section === 'spouts' ? h.spouts : h.orcas
+    this.lastHint = t
+    this.hintsHere++
+    this.events.say(line)
   }
 
   // ---------------------------------------------------------------- her finger: steering
@@ -522,7 +635,7 @@ export class WhaleWatch implements World3D {
     const f = this.finger
     this.marker.visible = false
     this.aimAhead = this.aimTurn = 0
-    if (this.listening) {
+    if (this.listening || this.section === 'story') {
       d.stop()
       this.wheel.update(dt, this.time, WHEEL)
       this.wheel.draw(this.wheelEl, false, WHEEL.reach)
@@ -596,7 +709,7 @@ export class WhaleWatch implements World3D {
       p.x = SEA.x + (ox / r) * SEA.r
       p.z = SEA.z + (oz / r) * SEA.r
     }
-    const hit = keepOff(p, 2.6)
+    const hit = keepOff(p, 2.6) ?? this.keepOffWhale(p)
     d.x = p.x
     d.z = p.z
     if (hit) {
@@ -646,6 +759,41 @@ export class WhaleWatch implements World3D {
     }
   }
 
+  /** A whale up in the boat's way: the boat bumps gently off its side (a bonk, Maple wobbles, the whale puffs). */
+  private keepOffWhale(p: { x: number; z: number }): { nx: number; nz: number } | null {
+    const w = this.whale
+    if (!w?.up || w.body.position.y < -1.6) return null
+    // The whale's body as a line from its tail stock to its head, in the water's plane.
+    const a = w.body.localToWorld(tmp.set(0, 0, w.len * 0.42))
+    const ax = a.x
+    const az = a.z
+    const b = w.body.localToWorld(tmp.set(0, 0, -w.len * 0.45))
+    const bx = b.x - ax
+    const bz = b.z - az
+    const l2 = bx * bx + bz * bz
+    const k = l2 > 1e-4 ? clamp(((p.x - ax) * bx + (p.z - az) * bz) / l2) : 0
+    const cx = ax + bx * k
+    const cz = az + bz * k
+    const dx = p.x - cx
+    const dz = p.z - cz
+    const dist = Math.hypot(dx, dz)
+    const r = 1.4 + 1.5
+    if (dist >= r) return null
+    const nx = dist > 1e-3 ? dx / dist : 1
+    const nz = dist > 1e-3 ? dz / dist : 0
+    p.x = cx + nx * r
+    p.z = cz + nz * r
+    if (this.time - this.bumpTalkT > 1.2) {
+      this.bumpTalkT = this.time
+      bonk()
+      this.boat.wobble()
+      const h = w.holeAt(tmp)
+      this.puff(h.x, h.z, 0.35)
+      this.talk(L.whales.bump, { cool: 6 })
+    }
+    return { nx, nz }
+  }
+
   private splashDown(v: number) {
     const d = this.d
     this.squash = 0
@@ -682,7 +830,8 @@ export class WhaleWatch implements World3D {
     this.shadow.visible = !this.below
     // Maple looks at whatever's most interesting.
     let look: Vector3 | null = null
-    if (this.whale?.up) look = this.whale.root.position
+    if (this.section === 'story') look = this.rig.camera.position
+    else if (this.whale?.up) look = this.whale.root.position
     else if (this.spot) look = tmp2.set(this.spot.x, 1, this.spot.z)
     else if (this.orcaIn) look = this.orcas.find((o) => o.o.jumping)?.o.root.position ?? this.orcas[3].o.root.position
     else if (this.section === 'otters' && this.activeDrifter) look = this.activeDrifter.o.root.position
@@ -708,6 +857,15 @@ export class WhaleWatch implements World3D {
 
   private story(dt: number, t: number) {
     const d = this.d
+    if (this.section === 'story') {
+      // Maple waves hello from the wheel, points out to sea ("let's find them!"), and does a happy hop.
+      const was = this.storyT - dt
+      const at = (s: number) => was < s && this.storyT >= s
+      if (at(0.4)) this.boat.wave()
+      if (at(2.6)) this.boat.pointAt(tmp.set(d.x + Math.sin(d.heading) * 40, 2, d.z + Math.cos(d.heading) * 40))
+      if (at(4.6)) this.boat.cheer()
+      if (this.storyT > 7) this.storyT = 0
+    }
     if (this.section === 'harbour' && d.z < HARBOUR_END_Z) this.enter('otters')
     if (this.section === 'otters' || this.section === 'harbour') this.updateOtters(dt, t)
     else this.updateRaft(dt, t)
@@ -733,10 +891,12 @@ export class WhaleWatch implements World3D {
         for (const dr of this.drifters) if (dr.state === 'home') dr.o.dive()
         sfx.splash()
         setTimeout(() => squeak(), 1700)
+        setTimeout(() => this.talk(L.whales.otterGrumpy, { cool: 8 }), 2000)
       } else if (sp < FIND.gentle && dist < 10) {
         this.raftCool = 5
         this.raft.forEach((o, i) => setTimeout(() => o.wave(), i * 120))
         squeak()
+        if (!this.met('sea-otter')) this.talk(L.whales.otterHi, { cool: 10 })
       }
     }
     // The kelp sways; bubbles come up now and then.
@@ -778,10 +938,14 @@ export class WhaleWatch implements World3D {
         squeak()
         sounds.pop()
         this.counts.tows++
+        this.progressed()
+        if (!this.met('sea-otter')) this.talk(L.whales.otterWake)
+        setTimeout(() => this.talk(L.whales.otterTow, { once: `tow${this.homed}` }), 1800)
       } else if (dist < 6 && sp > FIND.fast && !o.diving) {
         o.dive()
         this.counts.dives++
         sfx.splash()
+        setTimeout(() => this.talk(L.whales.otterGrumpy, { cool: 8 }), 2000)
       }
     } else if (dr.state === 'towed') {
       // On the rope behind the stern, swinging along (the boat goes gently by itself while it tows her).
@@ -813,10 +977,15 @@ export class WhaleWatch implements World3D {
     squeak()
     this.boat.wave()
     this.ottersT = 0
+    this.progressed()
+    this.talk(L.whales.otterHome)
+    // (The first time, Maple says why they hold hands.)
+    setTimeout(() => this.talk(L.whales.otterHold, { once: 'hold' }), 1600)
     if (this.homed >= this.drifters.length) {
       this.boat.cheer()
-      setTimeout(() => this.enter('spouts'), 1500)
-      this.nextSpotT = 3
+      this.events.progress(1)
+      setTimeout(() => this.enter('spouts'), 2600)
+      this.nextSpotT = 4
     }
   }
 
@@ -836,12 +1005,13 @@ export class WhaleWatch implements World3D {
   }
 
   private swayKelp(t: number) {
-    for (const g of this.coast.kelp) {
-      const st = g.userData.stalk as Group
-      const b = st.userData.base as { a: number }
-      g.rotation.y = Math.sin(t * 0.5 + b.a) * 0.2
-      st.rotation.z = Math.sin(t * 0.6 + b.a) * 0.04
-      st.rotation.x = Math.cos(t * 0.5 + b.a) * 0.04
+    for (const k of this.coast.kelp) {
+      // The fronds drift to and fro on the swell; the stalks lean with them from the floor.
+      k.top.position.x = KELP.x + Math.sin(t * 0.5 + k.a) * 0.35
+      k.top.position.z = KELP.z + Math.cos(t * 0.4 + k.a) * 0.3
+      k.top.position.y = Math.sin(t * 1.1 + k.a) * 0.04
+      k.stalk.rotation.z = Math.sin(t * 0.6 + k.a) * 0.02
+      k.stalk.rotation.x = Math.cos(t * 0.5 + k.a) * 0.02
     }
   }
 
@@ -851,6 +1021,7 @@ export class WhaleWatch implements World3D {
     const d = this.d
     if (this.whale?.busy) return
     if (this.found >= 4) {
+      this.events.progress(2)
       this.enter('orcas')
       this.meetOrcas(false)
       return
@@ -865,8 +1036,11 @@ export class WhaleWatch implements World3D {
     this.spoutT -= dt
     if (this.spoutT <= 0) {
       this.spoutT = 4.2
-      this.puff(this.spot.x, this.spot.z, 0.7)
-      if (this.lookT < 1) this.boat.spot()
+      this.puff(this.spot.x, this.spot.z, 0.7, this.found < 2)
+      if (this.lookT < 1) {
+        this.boat.spot()
+        setTimeout(() => this.spot && this.boat.pointAt(tmp2.set(this.spot.x, 1.5, this.spot.z)), 2300)
+      }
     }
     // Taking a while: the next spout comes up closer.
     if (this.lookT > 20) {
@@ -897,8 +1071,10 @@ export class WhaleWatch implements World3D {
   }
 
   /** A spout: a white plume and a whoosh (`k` = how big). */
-  private puff(x: number, z: number, k: number) {
-    for (let i = 0; i < 40 * k; i++) this.mist.emit(x + (Math.random() - 0.5) * 0.6, 0.6, z + (Math.random() - 0.5) * 0.6, (Math.random() - 0.5) * 1.6, 7 + Math.random() * 5 * k, (Math.random() - 0.5) * 1.6, 1.2 + Math.random() * 0.4, 0.35 + Math.random() * 0.35)
+  private puff(x: number, z: number, k: number, heart = false) {
+    // A grey whale's blow comes out in a V, like a heart (two blowholes side by side); a humpback's is one tall bush.
+    const sides = heart ? [-1, 1] : [0]
+    for (const side of sides) for (let i = 0; i < (40 * k) / sides.length; i++) this.mist.emit(x + (Math.random() - 0.5) * 0.6, 0.6, z + (Math.random() - 0.5) * 0.6, (Math.random() - 0.5) * 1.4 + side * 1.6, 7 + Math.random() * 5 * k, (Math.random() - 0.5) * 1.4, 1.2 + Math.random() * 0.4, 0.35 + Math.random() * 0.35)
     this.foam.emit(x, 0.03, z, 0, 0, 0, 1.4, 2.6)
     blow()
     this.counts.spouts++
@@ -916,7 +1092,14 @@ export class WhaleWatch implements World3D {
     if (this.found === 3) w.breach()
     else w.surface()
     this.spot = null
-    this.boat.spot()
+    this.boat.pointAt(w.root.position)
+    this.progressed()
+    // She found it: into the book (the card names it), or Maple says something about this one.
+    const first = this.met(w.kind === 'grey' ? 'grey-whale' : 'humpback')
+    if (!first) {
+      if (this.found === 0) this.talk(L.whales.whaleUp)
+      else if (this.found === 2) this.talk(L.whales.humpback)
+    }
   }
 
   private updateWhale(dt: number, t: number) {
@@ -926,12 +1109,14 @@ export class WhaleWatch implements World3D {
     if (!w) return
     if (w.blew) {
       const h = w.holeAt(tmp)
-      this.puff(h.x, h.z, 1)
+      this.puff(h.x, h.z, 1, w.kind === 'grey')
+      if (this.found === 1) this.talk(L.whales.whaleBlow, { once: 'blow' })
       // Sitting right where it comes up: the whale sneezes on the boat and Maple gets soaked.
       if (Math.hypot(this.d.x - h.x, this.d.z - h.z) < FIND.sneeze + BOAT_LEN * 0.4) {
         this.counts.sneezes++
         achoo()
         this.boat.soak()
+        setTimeout(() => this.talk(L.whales.sneeze, { cool: 4 }), 700)
         const m = this.boat.headAt(tmp2)
         for (let i = 0; i < 40; i++) this.spray.emit(m.x + (Math.random() - 0.5) * 2, m.y + 3 + Math.random() * 2, m.z + (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, -2, (Math.random() - 0.5) * 2, 0.9, 0.18)
       }
@@ -944,17 +1129,20 @@ export class WhaleWatch implements World3D {
       noise(0.9, 0.2, 'lowpass', 800, 150)
       this.boat.cheer()
       this.boat.slap()
+      this.talk(L.whales.breach, { once: 'breach' })
     }
     if (w.slapped) {
       const p = w.body.localToWorld(tmp.set(0, 0, -w.len * 0.7))
       this.spray.burst(p.x, 0.3, p.z, 16, 3, 4, 0.3)
       sfx.splash()
+      if (this.found === 1) this.talk(L.whales.whaleTail, { once: 'tail' })
     }
     if (!w.busy && !this.listening) {
       this.whale = null
       this.found++
       sounds.correct()
       this.boat.cheer()
+      this.progressed()
       this.nextSpotT = 2.5
     }
   }
@@ -976,7 +1164,12 @@ export class WhaleWatch implements World3D {
       r.h = d.heading + (snap ? 0 : Math.PI)
       r.o.root.visible = true
     }
-    if (!snap) orcaCall()
+    if (!snap) {
+      orcaCall()
+      setTimeout(() => {
+        if (!this.met('orca')) this.talk(L.whales.orcaHello, { once: 'orcas' })
+      }, 2500)
+    }
   }
 
   private updateOrcas(dt: number) {
@@ -994,22 +1187,27 @@ export class WhaleWatch implements World3D {
       this.counts.copies++
       this.orcas[3].o.happy()
       orcaCall(true)
+      this.progressed()
+      if (this.copies === 1 || this.copies === 4) this.talk(L.whales.babyCopy, { once: `copy${this.copies}` })
     }
-    // Fast: one of them jumps in the wake every so often; slow, now and then anyway.
+    // Fast: one of them jumps in the wake every so often; slow, now and then anyway. She was just told to go gently
+    // with the otters, so after 15 s the slow jumps count too, and after 30 s six copied turns are enough.
+    this.orcaT += dt
     this.jumpCool -= dt
     if (this.jumpCool <= 0 && this.doneT < 0) {
-      const fast = k > FIND.jumpAt
+      const fast = k > FIND.jumpAt - (this.orcaT > 25 ? 0.25 : 0)
       this.jumpCool = fast ? 1.3 + Math.random() * 0.6 : 4 + Math.random() * 3
       const r = this.orcas[Math.floor(Math.random() * 4)]
       if (!r.o.jumping) {
         r.o.jump()
-        if (fast) {
+        if (fast || this.orcaT > 15) {
           this.jumps++
           this.counts.jumps++
+          this.progressed()
         }
       }
     }
-    if (this.doneT < 0 && this.jumps >= FIND.jumps && this.copies >= 2) this.finale()
+    if (this.doneT < 0 && ((this.jumps >= FIND.jumps && this.copies >= 2) || (this.orcaT > 30 && this.copies >= 6) || this.orcaT > 75)) this.finale()
     for (const r of this.orcas) {
       const f = FORMATION[r.o.who]
       // Their place beside the boat (the baby swings out the way she turns).
@@ -1046,6 +1244,8 @@ export class WhaleWatch implements World3D {
       sounds.fanfare()
     }, 900)
     orcaCall()
+    this.events.progress(3)
+    setTimeout(() => this.talk(L.whales.finale, { once: 'finale' }), 1800)
     this.events.done()
   }
 
@@ -1136,7 +1336,12 @@ export class WhaleWatch implements World3D {
     })
     this.eagle.update(dt, t)
     this.puffin.update(dt, t)
-    this.stars.update(dt)
+    this.stars.update(dt, t)
+    for (const s of this.seals) s.update(dt, t)
+    this.raven.update(dt, t)
+    if (this.raven.caw) caw()
+    this.gulls.update(dt, t)
+    this.clouds.update(dt)
     // The surfer rides up and down along the wave.
     this.surfT += dt
     const along = Math.sin(this.surfT * 0.35) * SURF.len * 0.4
@@ -1161,6 +1366,11 @@ export class WhaleWatch implements World3D {
     const d = this.d
     const tall = this.tall
     const chase = (this.camYaw + Math.PI) * DEG
+    if (this.section === 'story') {
+      // At the dock: in front of the boat and a little to the side, on Maple at the wheel (the harbour behind her).
+      const yaw = this.d.heading * DEG + 58
+      return { center: new Vector3(d.x + Math.sin(d.heading) * -0.4, 1.4, d.z + Math.cos(d.heading) * -0.4), half: tall ? new Vector3(1.2, 1.0, 1.3) : new Vector3(1.7, 0.9, 1.3), yaw, pitch: 16, minDist: 3, maxDist: 20 }
+    }
     if (this.listening && this.mic > 0.5) {
       // Under the boat: looking along under the waves at whoever's singing, from just below the surface.
       return { center: new Vector3(d.x + Math.sin(d.heading) * 3, -5.5, d.z + Math.cos(d.heading) * 3), half: tall ? new Vector3(6, 4, 8) : new Vector3(11, 4, 7), yaw: chase + 35, pitch: 4, minDist: 12, maxDist: 24 }
@@ -1251,6 +1461,7 @@ export class WhaleWatch implements World3D {
       horn()
       this.boat.wave()
       if (this.hornN % 3 === 0) this.boat.slap()
+      if (this.hornN === 1 || this.hornN % 5 === 0) this.talk(L.whales.toot, { cool: 3 })
       return
     }
     if (id === 'mic') {
@@ -1266,6 +1477,7 @@ export class WhaleWatch implements World3D {
       }
       this.raft.reduce((a, o) => (gap(o) < gap(a) ? o : a)).poke()
       squeak()
+      if (!this.met('sea-otter') && Math.random() < 0.4) this.talk(L.whales.otterClack, { cool: 8 })
       return
     }
     if (id === 'drifter') {
@@ -1273,6 +1485,7 @@ export class WhaleWatch implements World3D {
       if (dr) {
         dr.o.wave()
         squeak()
+        this.met('sea-otter')
       }
       return
     }
@@ -1281,7 +1494,11 @@ export class WhaleWatch implements World3D {
         whaleSong()
         const p = this.hump.body.getWorldPosition(tmp)
         this.bubbles.burst(p.x, p.y + 1, p.z, 16, 1, 1.5, 0.2)
-      } else this.whale?.slap()
+        if (!this.met('humpback')) this.talk(L.whales.song, { once: 'song' })
+      } else if (this.whale) {
+        this.whale.slap()
+        this.met(this.whale.kind === 'grey' ? 'grey-whale' : 'humpback')
+      }
       return
     }
     if (id?.startsWith('orca:')) {
@@ -1290,6 +1507,7 @@ export class WhaleWatch implements World3D {
         if (!this.listening) r.o.jump()
         else r.o.happy()
         orcaCall(r.o.who === 'baby')
+        if (!this.met('orca') && r.o.who === 'grandma') this.talk(L.whales.grandma, { once: 'grandma' })
       }
       return
     }
@@ -1298,21 +1516,37 @@ export class WhaleWatch implements World3D {
       s.poke()
       bark()
       if (Math.random() < 0.5) s.slide()
+      this.met('sea-lion')
       return
     }
     if (id === 'eagle') {
       this.eagle.poke()
       screech()
+      this.met('bald-eagle')
       return
     }
     if (id === 'puffin') {
       this.puffin.poke()
       tone(900, 700, 0.15, 0.05, 'square')
+      this.met('puffin')
       return
     }
     if (id === 'stars') {
       this.stars.poke()
       twinkle()
+      this.met('sea-star')
+      return
+    }
+    if (id?.startsWith('seal:')) {
+      const s = this.seals[+id.slice(5)]
+      if (!s.busy) s.poke()
+      grunt()
+      this.met('harbour-seal')
+      return
+    }
+    if (id === 'raven') {
+      if (!this.raven.busy) this.raven.poke()
+      this.met('raven')
       return
     }
     if (id === 'surfer') {
@@ -1351,7 +1585,7 @@ export class WhaleWatch implements World3D {
 
   private drawHint(t: number) {
     const idle = t - this.lastTouch
-    const show = this.doneT < 0 && !this.listening && !this.finger && !this.d.driven && ((this.counts.steers === 0 && idle > 2.4) || idle > HINT_S)
+    const show = this.section !== 'story' && this.doneT < 0 && !this.listening && !this.finger && !this.d.driven && ((this.counts.steers === 0 && idle > 2.4) || idle > HINT_S)
     if (this.mode === 'wheel') {
       this.wheel.hint(this.steerHintEl, show, t, WHEEL.reach)
       if (this.hintEl && this.hintEl.style.display !== 'none') this.hintEl.style.display = 'none'
@@ -1398,6 +1632,10 @@ export class WhaleWatch implements World3D {
     const under = this.below
     const above = (o: Object3D | null) => (under ? null : o)
     for (const [id, el] of this.anchorEls) {
+      if (this.section === 'story') {
+        if (el.style.display !== 'none') el.style.display = 'none'
+        continue
+      }
       if (id === 'boat') place(el, above(this.boat.maple), this.boat.height, 1.1)
       else if (id === 'mic') place(el, this.mic > 0.5 || !under ? this.boat.mic : null, 0.5, 2.4)
       else if (id === 'otters') place(el, above(close(this.raft[1].root, 70)), 0.8, 3.2)
@@ -1412,6 +1650,8 @@ export class WhaleWatch implements World3D {
         place(el, this.orcaIn ? r.o.body : null, 1.4, 1.2)
       } else if (id.startsWith('lion:')) place(el, above(close(this.lions[+id.slice(5)].root, 70)), 0.9, 1.5)
       else if (id === 'eagle') place(el, above(close(this.eagle.root, 90)), 1, 1.4)
+      else if (id.startsWith('seal:')) place(el, above(close(this.seals[+id.slice(5)].root, 70)), 0.7, 1.8)
+      else if (id === 'raven') place(el, above(close(this.raven.root, 70)), 0.6, 2)
       else if (id === 'puffin') place(el, above(close(this.puffin.root, 70)), 0.6, 2)
       else if (id === 'stars') place(el, above(close(this.stars.root, 60)), 0.6, 2)
       else if (id === 'surfer') place(el, above(close(this.surfer.root, 90)), 1.6, 1.2)
@@ -1456,6 +1696,7 @@ export class WhaleWatch implements World3D {
       orcas: this.orcaIn,
       orcaJumps: this.jumps,
       soaked: this.boat.soaked,
+      story: this.section === 'story',
       done: this.doneT >= 0,
       boat: sc(tmp2.set(d.x, 0.5, d.z)),
       ...this.counts,

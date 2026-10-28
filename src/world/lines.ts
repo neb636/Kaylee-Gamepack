@@ -60,6 +60,7 @@ export const WORLD_LINES = {
       egypt: 'Egypt!',
       italy: 'Italy!',
       peru: 'Peru!',
+      canada: 'Canada!',
     },
     games: {
       teaParty: 'A tea party with me!',
@@ -118,6 +119,14 @@ export const WORLD_LINES = {
       'peru/penguins': 'The penguin cliff!',
       'peru/condor': 'Fly with the condor!',
       'peru/river': 'The rainy river!',
+      'canada/taffy': 'Maple taffy on snow!',
+      'canada/snowman': 'The snowman parade!',
+      'canada/bike': 'The mountain bike!',
+      'canada/campfire': 'The campfire night!',
+      'canada/canoe': 'The red canoe!',
+      'canada/bridge': 'The animal bridge!',
+      'canada/whales': 'The whale watch!',
+      'canada/salmon': 'The salmon leap!',
     },
   },
 }

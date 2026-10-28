@@ -55,6 +55,8 @@ export interface StageDef {
   cedar: [number, number]
   /** The raven's branch on the cedar. */
   raven: Pt
+  /** The black bear cub, by the berry bushes. */
+  cub: Pt
   /** The banana slug's mossy log, on the far bank. */
   slug: Pt
   /** The rain cloud. */
@@ -80,6 +82,7 @@ export const WIDE: StageDef = {
   berries: [[1300, 330], [1400, 336]],
   cedar: [150, 900],
   raven: [215, 190],
+  cub: [800, 334],
   slug: [600, 336],
   cloud: [760, 110],
   eagle: { x: 900, y: 200, rx: 220, ry: 50 },
@@ -105,6 +108,7 @@ export const TALL: StageDef = {
   berries: [[700, 520], [800, 526]],
   cedar: [70, 1100],
   raven: [130, 360],
+  cub: [510, 524],
   slug: [330, 526],
   cloud: [520, 240],
   eagle: { x: 560, y: 380, rx: 170, ry: 46 },
@@ -121,6 +125,36 @@ export const TALL: StageDef = {
     eggs: { pools: [{ x0: -BIG, x1: BIG, y: 1000, d: 260 }], rocks: [], logs: [], bears: [], lipW: 0 },
   },
 }
+
+/** The tall stage squeezed narrower, for a phone held tall: the screen is so narrow there that the tall stage's river
+ *  came out small; at 0.8 of its width everything she touches is a quarter bigger (same heights, so the same leaps). */
+function narrow(st: StageDef, k: number): StageDef {
+  const x = (v: number) => (Math.abs(v) >= BIG ? v : v * k)
+  const pt = (p: Pt): Pt => [x(p[0]), p[1]]
+  const river = (r: River): River => ({
+    ...r,
+    pools: r.pools.map((p) => ({ ...p, x0: x(p.x0), x1: x(p.x1) })),
+    rocks: r.rocks.map((o) => ({ ...o, x: x(o.x) })),
+    logs: r.logs.map((g) => ({ a: pt(g.a), b: pt(g.b) })),
+    lipW: r.lipW * k,
+  })
+  return {
+    ...st,
+    w: st.w * k,
+    maple: pt(st.maple),
+    berries: st.berries.map(pt),
+    cedar: [x(st.cedar[0]), st.cedar[1]],
+    raven: pt(st.raven),
+    cub: pt(st.cub),
+    slug: pt(st.slug),
+    cloud: pt(st.cloud),
+    eagle: { ...st.eagle, x: x(st.eagle.x), rx: st.eagle.rx * k },
+    trees: st.trees.map(([tx, y, h]) => [x(tx), y, h]),
+    rivers: { steps: river(st.rivers.steps), falls: river(st.rivers.falls), eggs: river(st.rivers.eggs) },
+  }
+}
+// (Maple moves in a little so she isn't cut off at the edge, and the berries with her.)
+export const PHONE: StageDef = { ...narrow(TALL, 0.8), maple: [700, 520], berries: [[520, 520], [600, 526]] }
 
 /** The bears' falls: the big falls with a bear on its two upper lips (`spirit` says which lip the white one takes). */
 export function bearsRiver(st: StageDef, spirit: 'high' | 'low'): River {

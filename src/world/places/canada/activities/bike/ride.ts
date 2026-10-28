@@ -1,6 +1,10 @@
-// Mountain Bike (greybox 2, plan: planning/around-the-world/canada.html): Mont-Sainte-Anne in the fall. Maple wants to
-// ride all the way down the mountain to the waterfall; the gondola carries her and her bike up, then Kaylee steers
-// the bike down the forest trail.
+// Mountain Bike (plan: planning/around-the-world/canada.html): Mont-Sainte-Anne in the fall. Maple wants to ride all the
+// way down the mountain to the waterfall: she tells Kaylee in her gondola cabin at the bottom (the story), the gondola
+// carries her and her bike up, then Kaylee steers the bike down the forest trail. Maple is the chibi rig on a pink
+// kids' mountain bike (rider.ts); the moose in his pond is the rig too, and the chipmunk, woodpecker, porcupine, spring
+// peeper, deer, black bear and snowshoe hare are toon critters (critters.ts). Poking each one the first time meets it
+// for Maple's animal book. Sparkle says the one instruction, what's new (the two trails, the creek) and a hint when
+// she's stuck; Maple whoops in her own voice at the silly moments (leaves, the bell, the splash, the jump).
 //
 // The toy (core verb): steer the bike. Her finger goes down anywhere and the shared finger wheel appears under it
 // (engine3d/wheel.ts, the Nan drive's): pushing it left or right slides where she's steering across the trail for as
@@ -16,21 +20,23 @@
 // can fall (a roller's crest, a rock hop, the kicker), it flies. Built for engine3d/View3D.tsx; nothing here comes from
 // Thailand. The steering, the lean and the bounce are feel-lab knobs (?feel=1).
 import { Color, Fog, Group, Mesh, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, sounds } from '../../../../../sdk'
+import { clamp, pick, sounds, type Line } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../engine3d/camera'
 import { Bag } from '../../../../engine3d/dispose'
 import { Driver, type Feel } from '../../../../engine3d/drive'
-import { blobShadow, merge, P, solid } from '../../../../engine3d/geo'
+import { blobShadow, merge, P, solid, solidMix } from '../../../../engine3d/geo'
 import { setOutlineResolution } from '../../../../engine3d/outline'
 import { Particles } from '../../../../engine3d/particles'
 import { applyBands, makeLights } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
 import { Water } from '../../../../engine3d/water'
 import { FingerWheel } from '../../../../engine3d/wheel'
-import { Chipmunk, Frog, Moose, Porcupine, Woodpecker } from './critters'
+import { meet } from '../../book/met'
+import { L } from '../../lines'
+import { Bear, Chipmunk, Deer, Hare, Moose, Peeper, Porcupine, Woodpecker } from './critters'
 import { Rider } from './rider'
 import { buildClouds, buildCreek, buildFallen, buildFalls, buildForest, buildHills, buildLand, buildProps, buildRainbow, buildSky, buildTrail, FALL, FlowMaterial, Gondola, HANG, onRun, roundWater, SKY } from './scenery'
 import type { BikeSection } from './sections'
@@ -75,6 +81,11 @@ export interface BikeEvents {
   way(w: 'green' | 'blue'): void
   /** At the bottom by the waterfall. */
   done(): void
+  /** Someone speaks: Sparkle (a plain string: an instruction, a hint) or a friend in their own voice. `chat` lines are
+   *  Maple's whoops and the animals' words: they never cut anyone off. */
+  say(line: Line, chat: boolean): void
+  /** How far down she's got: one part per stretch (green, berms, creek, falls). */
+  progress(done: number): void
 }
 
 const CABS = 12
@@ -86,18 +97,31 @@ export const BIKE_ANCHORS: AnchorInfo[] = [
   { id: 'moose', label: 'The moose', kind: 'thing' },
   { id: 'woodpecker', label: 'The woodpecker', kind: 'thing' },
   { id: 'porcupine', label: 'The porcupine', kind: 'thing' },
-  { id: 'frog', label: 'The frog', kind: 'thing' },
+  { id: 'frog', label: 'The spring peeper', kind: 'thing' },
+  { id: 'deer', label: 'The deer', kind: 'thing' },
+  { id: 'bear', label: 'The black bear', kind: 'thing' },
+  { id: 'hare', label: 'The snowshoe hare', kind: 'thing' },
 ]
 
-type Mode = 'gondola' | 'ride' | 'done'
+type Mode = 'story' | 'gondola' | 'ride' | 'done'
 
-const ORDER: BikeSection[] = ['gondola', 'green', 'berms', 'creek', 'falls']
+const ORDER: BikeSection[] = ['story', 'gondola', 'green', 'berms', 'creek', 'falls']
+/** The stretches she rides down (setProgress: one part each). */
+const PARTS: BikeSection[] = ['green', 'berms', 'creek', 'falls']
+/** Maple's whoops: at most one this often (s). */
+const CHAT_S = 3.5
+/** The deer among the trees, the black bear far off eating berries, the hare who hops across the trail (s, side). */
+const DEER = { s: 468, side: 1, off: 7 }
+const BEAR = { s: 236, side: -1, off: 8.5 }
+const HARE = { s: 152, side: -1 }
 /** No steering for this long: the 👆 shows how. */
 const HINT_S = 8
 const DEG = 180 / Math.PI
 /** The gondola ride: how far up the line it starts (m below the top) and how long it takes (s). */
 const GOND_FROM = 170
 const GOND_S = 11
+/** The story's camera, turned from the gondola's (rad): in front of Maple. */
+const STORY_YAW = 1.25
 /** Leaf piles (s, lat: + right of the trail, as a share of the edge so they sit right at it) and stumps on the shoulders. */
 const PILES: [number, number][] = [
   [42, -0.8],
@@ -147,6 +171,17 @@ const moo = () => {
 }
 const ribbit = () => [0, 0.13].forEach((d) => tone(330, 230, 0.1, 0.08, 'square', d))
 const creak = () => tone(520, 430, 0.35, 0.035, 'triangle')
+/** A spring peeper's peep: a short rising whistle, twice. */
+const peep = () => [0, 0.55].forEach((d) => tone(2600, 3200, 0.14, 0.035, 'sine', d))
+/** A hare's thump of a back foot. */
+const thump = () => noise(0.06, 0.12, 'lowpass', 300, 200, 0, 2)
+/** A deer's snort and the leaves as she bounds. */
+const snort = () => noise(0.25, 0.1, 'bandpass', 1200, 600, 0, 1.2)
+/** A bear's soft happy grunt. */
+const grunt = () => {
+  tone(150, 110, 0.4, 0.1, 'sawtooth')
+  tone(300, 220, 0.4, 0.02, 'triangle')
+}
 
 interface Pile {
   s: number
@@ -231,8 +266,20 @@ export class MountainBike implements World3D {
   private pecker: Woodpecker
   private peckSeen = 0
   private porky: Porcupine
-  private frog: Frog
+  private frog: Peeper
   private frogHome = new Vector3()
+  private peepSeen = 0
+  private deer: Deer
+  private deerHome = { x: 0, z: 0, nx: 0, nz: 0 }
+  private bear: Bear
+  private hare: Hare
+  private hareK = 0
+  private looked = new Set<string>()
+  /** When someone last spoke (Maple's whoops wait their turn), what Sparkle said already. */
+  private chatAt = -99
+  private told = new Set<string>()
+  private hintAt = -99
+  private bridgeSaid = false
   private piles: Pile[] = []
   private stumps: Stump[] = []
   private leaves: Particles
@@ -277,6 +324,8 @@ export class MountainBike implements World3D {
     scene.add(this.ribbon, buildFallen(course, bag))
     scene.add(this.gondola.group)
     const st = course.station
+    const deerAt = t.spot(DEER.s, DEER.side * (half(DEER.s) + DEER.off))
+    const bearAt = t.spot(BEAR.s, BEAR.side * (half(BEAR.s) + BEAR.off))
     const keepOut = (x: number, z: number) =>
       gondolaNear(x, z, 2) ||
       onRun(x, z, 2) ||
@@ -284,6 +333,8 @@ export class MountainBike implements World3D {
       Math.hypot(x - course.pond.x, z - course.pond.z) < POND.r + 2.5 ||
       Math.hypot(x - course.pool.x, z - course.pool.z) < POOL.r + 7 ||
       Math.hypot(x - g0.x, z - g0.z) < 14 ||
+      Math.hypot(x - deerAt.x, z - deerAt.z) < 4 ||
+      Math.hypot(x - bearAt.x, z - bearAt.z) < 6 ||
       (course.gully(x, z).depth > 0.6 && Math.abs(course.gully(x, z).off) < 4)
     this.forest = buildForest(course, keepOut, bag)
     scene.add(this.forest.group)
@@ -345,7 +396,7 @@ export class MountainBike implements World3D {
     this.chip.root.visible = false
     scene.add(this.chip.root)
     this.moose = new Moose(bag)
-    this.moose.root.position.set(course.pond.x + 0.6, course.pondY - 0.85, course.pond.z)
+    this.moose.root.position.set(course.pond.x + 0.6, course.pondY - 0.4, course.pond.z)
     const tp = t.spot(POND.s, 0)
     this.moose.root.rotation.y = Math.atan2(tp.x - course.pond.x, tp.z - course.pond.z) + 0.9
     scene.add(this.moose.root)
@@ -379,7 +430,7 @@ export class MountainBike implements World3D {
     this.porky.root.position.set(pp.x + 1.3, py + 3.45, pp.z)
     this.porky.root.rotation.y = Math.atan2(-Math.cos(phi(PORCUPINE.s)) * PORCUPINE.side, -Math.sin(phi(PORCUPINE.s)) * PORCUPINE.side)
     scene.add(this.porky.root)
-    this.frog = new Frog(bag)
+    this.frog = new Peeper(bag)
     const fp = t.spot(CREEK.at - 2.9, half(CREEK.at) + 0.9)
     const fy = course.ground(CREEK.at - 2.9, half(CREEK.at) + 0.9)
     scene.add(solid(merge([P.sphere(0.55, '#A9A1BA', { at: [fp.x, fy, fp.z], scale: [1.3, 0.7, 1.1] }, 8)]), bag, 1.8))
@@ -387,6 +438,39 @@ export class MountainBike implements World3D {
     this.frog.root.position.copy(this.frogHome)
     this.frog.root.rotation.y = phi(CREEK.at) + Math.PI / 2
     scene.add(this.frog.root)
+    // The deer among the trees (grazing along the trail), the black bear far off by her blueberry bush, the hare at the
+    // trail's edge.
+    this.deer = new Deer(bag)
+    {
+      const a = phi(DEER.s)
+      this.deerHome = { x: deerAt.x, z: deerAt.z, nx: Math.cos(a) * DEER.side, nz: Math.sin(a) * DEER.side }
+      this.deer.root.position.set(deerAt.x, course.land(deerAt.x, deerAt.z), deerAt.z)
+      this.deer.root.rotation.y = Math.PI - a + 0.5
+      scene.add(this.deer.root)
+    }
+    this.bear = new Bear(bag)
+    {
+      const a = phi(BEAR.s)
+      const by = course.land(bearAt.x, bearAt.z)
+      this.bear.root.position.set(bearAt.x, by, bearAt.z)
+      // She faces the trail, the bush between her and it.
+      this.bear.root.rotation.y = Math.atan2(-Math.cos(a) * BEAR.side, -Math.sin(a) * BEAR.side)
+      scene.add(this.bear.root)
+      const bx = bearAt.x - Math.cos(a) * BEAR.side * 1.3
+      const bz = bearAt.z - Math.sin(a) * BEAR.side * 1.3
+      const bush = []
+      for (let i = 0; i < 5; i++) bush.push(P.sphere(0.55 - i * 0.04, ['#4E9A5B', '#5FAE66', '#468F52'][i % 3], { at: [bx + Math.sin(i * 2.1) * 0.6, by + 0.4 + (i % 2) * 0.25, bz + Math.cos(i * 2.1) * 0.6] }, 10))
+      const berries = []
+      for (let i = 0; i < 26; i++) {
+        const u = i * 2.39
+        const r = 0.55 + (i % 3) * 0.12
+        berries.push(P.sphere(0.07, i % 4 ? '#5A6FD6' : '#7E5BC9', { at: [bx + Math.sin(u) * r, by + 0.35 + ((i * 7) % 5) * 0.14, bz + Math.cos(u) * r] }, 6))
+      }
+      scene.add(solidMix(bush, berries, bag, 2))
+    }
+    this.hare = new Hare(bag)
+    this.placeHare()
+    scene.add(this.hare.root)
 
     // ---- Maple and the bike ----
     this.rider = new Rider(bag)
@@ -407,17 +491,19 @@ export class MountainBike implements World3D {
 
     // ---- Where the link starts ----
     this.section = start.section
-    if (start.section === 'gondola') {
-      this.mode = 'gondola'
+    if (start.section === 'gondola' || start.section === 'story') {
+      // (The story: her cabin waits at the bottom of the shot while Maple tells Kaylee where she's going.)
+      this.mode = start.section
       this.gondU = this.gondola.length - GOND_FROM
       this.gondola.hers.swing.add(this.rider.root)
-      this.rider.root.position.set(0, -HANG + 0.86, 0)
+      // On the cabin's floor, small enough to fit under the roof.
+      this.rider.root.position.set(0, -HANG + 0.88, 0)
       this.rider.root.rotation.y = Math.PI / 2
-      this.rider.root.scale.setScalar(0.92)
+      this.rider.root.scale.setScalar(0.64)
       this.shadow.visible = false
     } else {
       this.gondola.hers.root.visible = false
-      const s = { green: START - 5, berms: GREEN_END - 6, creek: BERMS_END + 2, falls: CREEK_END + 6 }[start.section]
+      const s = { green: START - 5, berms: GREEN_END - 6, creek: BERMS_END + 2, falls: CREEK_END + 6 }[start.section as 'green']
       this.prefer = start.section === 'berms' ? (start.trail === 'blue' ? 1 : -1) : 0
       this.lat = this.steerLat = this.prefer * 1.6
       this.place(s, this.lat, start.section === 'green' ? 0 : RIDE.speed * 0.9)
@@ -474,6 +560,11 @@ export class MountainBike implements World3D {
     this.hintEl = el
   }
 
+  /** In her gondola cabin (the story, and the ride up). */
+  private get inCabin() {
+    return this.mode === 'gondola' || this.mode === 'story'
+  }
+
   get calm() {
     return false
   }
@@ -482,6 +573,30 @@ export class MountainBike implements World3D {
     if (ORDER.indexOf(s) <= ORDER.indexOf(this.section)) return
     this.section = s
     this.events.section(s)
+    const part = PARTS.indexOf(s)
+    if (part > 0) this.events.progress(part)
+  }
+
+  /** The story's over (or she tapped through it): up the mountain. */
+  go() {
+    if (this.mode !== 'story') return
+    this.mode = 'gondola'
+    this.modeT = 0
+    this.enter('gondola')
+  }
+
+  /** Sparkle says something new, once a ride. */
+  private tell(key: keyof typeof L.bike) {
+    if (this.told.has(key)) return
+    this.told.add(key)
+    this.chatAt = this.time + 1.5
+    this.events.say(L.bike[key] as Line, false)
+  }
+  /** Maple (or an animal) pipes up, unless someone just spoke. */
+  private chat(line: Line | readonly Line[], force = false) {
+    if (!force && this.time - this.chatAt < CHAT_S) return
+    this.chatAt = this.time
+    this.events.say(Array.isArray(line) ? pick(line as Line[]) : (line as Line), true)
   }
 
   update(dt: number) {
@@ -500,7 +615,22 @@ export class MountainBike implements World3D {
 
     const cam = this.rig.camera.position
     this.gondola.update(dt, t, cam)
-    if (this.mode === 'gondola') this.upTheGondola()
+    if (this.mode === 'story') {
+      // Waiting at the bottom of the shot while Maple talks.
+      const her = this.gondola.hers
+      this.gondU = this.gondola.length - GOND_FROM
+      this.gondola.at('up', this.gondU, her.root.position)
+      her.root.rotation.y = this.gondola.yawAt(this.gondU)
+      // She waves hello, then rings her bell when they're about to go.
+      if (this.modeT > 0.9 && !this.told.has('hello')) {
+        this.told.add('hello')
+        this.rider.wave()
+      }
+      if (this.modeT > 4.2 && !this.told.has('ding')) {
+        this.told.add('ding')
+        this.rider.cheer()
+      }
+    } else if (this.mode === 'gondola') this.upTheGondola()
     else if (this.mode === 'ride') this.ride(dt, k)
     else this.d.stop()
     if (this.doneT >= 0) this.doneT += dt
@@ -509,7 +639,7 @@ export class MountainBike implements World3D {
     this.updatePiles(dt)
     this.placeRider(dt)
     this.rider.update(dt, t, {
-      speed: this.mode === 'gondola' ? 0 : Math.max(0, this.d.speed),
+      speed: this.inCabin ? 0 : Math.max(0, this.d.speed),
       pedal: this.mode === 'ride' && this.d.speed < this.d.feel.top * 0.8 ? 1 : 0.15,
       squash: this.sq,
       air: this.air ? Math.min(1, this.airT * 4) : 0,
@@ -547,19 +677,28 @@ export class MountainBike implements World3D {
     // The camera looks down the trail, turning a little with the bike.
     this.camYaw += wrap(this.camWant() - this.camYaw) * (1 - Math.exp(-dt * 4))
     // (Riding along with the moving cabin, the camera keeps up tightly or the cabin slides off a phone's screen.)
-    this.rig.lag = this.mode === 'gondola' ? 0.05 : 0.3
+    this.rig.lag = this.inCabin ? 0.05 : 0.3
     this.rig.setShot(this.shot())
     this.rig.update(dt)
     this.clearTerrain()
     this.wheel.draw(this.wheelEl, this.mode === 'ride', STEER.reach)
     const idle = t - Math.max(this.lastTouch, this.lastSteer)
     const steering = this.mode === 'ride' && this.s < END - 30
-    this.wheel.hint(this.hintEl, steering && !this.wheel.finger && ((this.counts.steered < 1 && t > 2.5 && idle > 2.5) || idle > HINT_S), t, STEER.reach)
+    const stuck = steering && !this.wheel.finger && ((this.counts.steered < 1 && t > 2.5 && idle > 2.5) || idle > HINT_S)
+    this.wheel.hint(this.hintEl, stuck, t, STEER.reach)
+    // Sparkle's one instruction as the bike rolls (a section link that starts on the trail hears it too); stuck for
+    // a while, her hint (and the hand shows how).
+    if (this.mode === 'ride' && this.modeT > 1.6) this.tell('steer')
+    if (stuck && idle > HINT_S && t - this.hintAt > 25 && this.told.has('steer')) {
+      this.hintAt = t
+      this.chatAt = t
+      this.events.say(L.bike.hint, false)
+    }
   }
 
   /** Where the bike is in the world. */
   private bikePos(out: Vector3) {
-    if (this.mode === 'gondola') {
+    if (this.inCabin) {
       this.gondola.at('up', this.gondU, out)
       out.y -= HANG
       return out
@@ -570,10 +709,14 @@ export class MountainBike implements World3D {
   // ---------------------------------------------------------------- the gondola
 
   private upTheGondola() {
-    const L = this.gondola.length
+    const len = this.gondola.length
     const q = clamp(this.modeT / GOND_S)
     const e = q * q * (3 - 2 * q)
-    this.gondU = L - GOND_FROM + (GOND_FROM - 3) * e
+    this.gondU = len - GOND_FROM + (GOND_FROM - 3) * e
+    if (this.modeT > 4.5 && !this.told.has('high')) {
+      this.told.add('high')
+      this.chat(this.counts.swings ? L.bike.rock : L.bike.high, true)
+    }
     const her = this.gondola.hers
     this.gondola.at('up', this.gondU, her.root.position)
     her.root.rotation.y = this.gondola.yawAt(this.gondU)
@@ -589,6 +732,7 @@ export class MountainBike implements World3D {
       sounds.whoosh()
       bell()
       this.rider.ring()
+      this.chat(L.bike.go, true)
     }
   }
 
@@ -658,6 +802,8 @@ export class MountainBike implements World3D {
         this.counts.bonks++
         sfx.thump()
         this.sqV += 0.6 * RIDE.bounce
+        this.rider.wobble()
+        this.chat(L.bike.bonk)
       }
     }
     if (Math.abs(loc.lat) > edge) pushTo(Math.sign(loc.lat) * edge, -Math.sign(loc.lat), false)
@@ -695,7 +841,11 @@ export class MountainBike implements World3D {
     if (w && this.s > SPLIT.from + 12 && this.picked !== w) {
       this.picked = w
       this.events.way(w)
+      this.chat(w === 'blue' ? L.bike.blue : L.bike.green, true)
     }
+    // Something new coming: Sparkle says what (once).
+    if (this.s > SPLIT.from - 34 && this.s < SPLIT.from) this.tell('split')
+    if (this.s > CREEK.at - BRIDGE_HALF - 30 && this.s < CREEK.at - BRIDGE_HALF) this.tell('creek')
     if (this.s >= BERMS_END) this.enter('creek')
     if (this.s >= CREEK_END) this.enter('falls')
     if (this.s > END - 3 && d.speed < 0.5 && this.doneT < 0) {
@@ -703,8 +853,11 @@ export class MountainBike implements World3D {
       this.mode = 'done'
       this.modeT = 0
       this.rider.cheer()
+      this.rider.look(0.5)
       bell()
       sounds.fanfare()
+      this.events.progress(PARTS.length)
+      this.chat(L.bike.falls, true)
       this.events.done()
     }
   }
@@ -726,7 +879,10 @@ export class MountainBike implements World3D {
         this.air = false
         this.gv = NaN
         if (this.airT > 0.25) this.counts.hops++
-        if (this.airT > 0.6) this.counts.bigAir++
+        if (this.airT > 0.6) {
+          this.counts.bigAir++
+          this.chat(L.bike.whee)
+        }
         this.landed(impact)
       }
       return
@@ -743,6 +899,7 @@ export class MountainBike implements World3D {
       if (Math.abs(s - JUMP.s - JUMP.len) < 1.5 && lat > 0) {
         this.counts.jumps++
         sounds.whoosh()
+        this.chat(L.bike.jump, true)
       }
       if (this.vy > 1 && Math.abs(s - JUMP.s - JUMP.len) > 3) this.counts.rocks++
       return
@@ -778,6 +935,8 @@ export class MountainBike implements World3D {
       this.frog.poke()
       ribbit()
       this.sqV += 0.4 * RIDE.bounce
+      this.rider.shake()
+      this.chat(L.bike.splash, true)
     }
     this.wet = wet
     if ((this.trailT -= dt) < 0 && !this.air && v > 1) {
@@ -789,6 +948,10 @@ export class MountainBike implements World3D {
       if (!wet && Math.random() < 0.25 + v * 0.02) this.leaves.emit(p.x + back.x, p.y + 0.15, p.z + back.z, (Math.random() - 0.5) * 2, 1.5 + Math.random() * 2, (Math.random() - 0.5) * 2, 1.4, 0.13)
     }
     // Tock tock over the bridge's planks.
+    if (this.onBridge && !this.bridgeSaid) {
+      this.bridgeSaid = true
+      this.chat(L.bike.bridge, true)
+    }
     if (this.onBridge && !this.air) {
       this.plankAt += v * dt
       if (this.plankAt > 0.55) {
@@ -816,6 +979,7 @@ export class MountainBike implements World3D {
         sfx.boing()
         bell()
         this.rider.ring()
+        this.chat(L.bike.bell)
       }
     }
   }
@@ -830,6 +994,7 @@ export class MountainBike implements World3D {
     if (ridden) {
       this.counts.piles++
       this.rider.leafy()
+      this.chat(L.bike.leaves)
       this.sqV += 0.25 * RIDE.bounce
     }
   }
@@ -883,6 +1048,65 @@ export class MountainBike implements World3D {
     }
     this.porky.update(dt, t)
     this.frog.update(dt, t)
+    if (this.frog.peeps !== this.peepSeen) {
+      this.peepSeen = this.frog.peeps
+      if (Math.abs(this.s - CREEK.at) < 40) peep()
+    }
+    // The moose looks at her when his head is up.
+    const ml = this.moose.root.worldToLocal(this.bikePos(tmp2).clone())
+    this.moose.look = clamp(Math.atan2(ml.x, ml.z), -0.9, 0.9)
+
+    // The deer bounds off away from the trail, and wanders back facing home.
+    const dh = this.deerHome
+    const da = this.deer.away
+    this.deer.root.position.set(dh.x + dh.nx * da, 0, dh.z + dh.nz * da)
+    this.deer.root.position.y = c.land(this.deer.root.position.x, this.deer.root.position.z)
+    const out = Math.atan2(dh.nx, dh.nz)
+    const want = this.deer.busy ? out : this.deer.walkBack ? out + Math.PI : Math.PI - phi(DEER.s) + 0.5
+    this.deer.root.rotation.y += wrap(want - this.deer.root.rotation.y) * Math.min(1, dt * 5)
+    this.deer.update(dt, t)
+    // (She bounds off by herself if Maple whooshes right past her.)
+    if (this.mode === 'ride' && Math.abs(this.s - DEER.s) < 3 && this.lat * DEER.side > half(this.s) * 0.5 && !this.deer.busy && this.deer.away === 0) this.deer.poke()
+    this.bear.update(dt, t)
+
+    // The hare hops across the trail in front of her as she comes.
+    if (this.mode === 'ride' && !this.hare.crossing && this.hareK === 0 && HARE.s - this.s < 15 && HARE.s - this.s > 4) this.hare.crossing = true
+    if (this.hare.crossing) {
+      this.hareK = Math.min(1, this.hareK + dt / 1.5)
+      if (this.hareK >= 1) {
+        this.hare.crossing = false
+        thump()
+      }
+      this.placeHare()
+    }
+    this.hare.update(dt, t)
+
+    // Maple looks at the animals as she rides past (once each).
+    if (this.mode === 'ride')
+      for (const [id, at, side] of [
+        ['moose', POND.s, 1],
+        ['bear', BEAR.s, BEAR.side],
+        ['deer', DEER.s, DEER.side],
+        ['porcupine', PORCUPINE.s, PORCUPINE.side],
+      ] as const) {
+        if (this.looked.has(id) || at - this.s > 12 || at - this.s < 2) continue
+        this.looked.add(id)
+        this.rider.look(-side * 0.9)
+      }
+  }
+
+  /** The hare at the trail's edge, or partway across (hareK 0..1, left edge to right edge). */
+  private placeHare() {
+    const c = this.course
+    const edge = half(HARE.s) + 1.3
+    const lat = HARE.side * edge * (1 - 2 * this.hareK)
+    const s = HARE.s + this.hareK * 1.5
+    const p = c.trail.spot(s, lat)
+    this.hare.root.position.set(p.x, c.ground(s, lat), p.z)
+    // Facing across the trail while he hops, facing the trail when he sits.
+    const a = phi(s)
+    const across = Math.atan2(-Math.cos(a) * HARE.side, -Math.sin(a) * HARE.side)
+    this.hare.root.rotation.y = this.hare.crossing ? across : this.hareK >= 1 ? across + Math.PI : across
   }
 
   // ---------------------------------------------------------------- Maple: where and how she rides
@@ -890,7 +1114,7 @@ export class MountainBike implements World3D {
   private placeRider(dt: number) {
     const k = (rate: number) => (dt ? 1 - Math.exp(-dt * rate) : 1)
     const root = this.rider.root
-    if (this.mode === 'gondola') {
+    if (this.inCabin) {
       // Standing in her cabin, rocking with it.
       this.rider.lean.rotation.set(0, 0, 0)
       return
@@ -921,6 +1145,12 @@ export class MountainBike implements World3D {
     const tall = this.tall
     const c = this.course
     const t = c.trail
+    if (this.mode === 'story') {
+      // Close on Maple in her cabin, from in front of her.
+      const her = this.gondola.hers.root.position
+      const yaw = this.gondola.yawAt(this.gondU) + STORY_YAW
+      return { center: new Vector3(her.x, her.y - HANG + 1.35, her.z), half: tall ? new Vector3(0.9, 0.8, 0.9) : new Vector3(1.3, 0.8, 1.0), yaw: yaw * DEG, pitch: 12, minDist: 2.2 }
+    }
     if (this.mode === 'gondola') {
       // Uphill of her cabin and off to the side, looking back down at it: the trail, the valley and the river behind.
       const her = this.gondola.hers.root.position
@@ -929,13 +1159,13 @@ export class MountainBike implements World3D {
     }
     if (this.mode === 'done') {
       // Maple and the waterfall, the rainbow over the pool.
-      const wide = this.doneT > 1.4
+      const wide = this.doneT > 3
       const s = wide ? (END + FALLS) / 2 - 6 : END + 1
       const p = t.spot(s, wide ? POOL.lat * 0.6 : 0)
       return {
-        center: new Vector3(p.x, c.meadowY + (wide ? 5 : 1), p.z),
-        half: wide ? (tall ? new Vector3(7, 5.5, 5) : new Vector3(10.5, 5.5, 5)) : tall ? new Vector3(2, 1.2, 2) : new Vector3(3, 1.2, 2),
-        yaw: -phi(s) * DEG + (wide ? 22 : 40),
+        center: new Vector3(p.x, c.meadowY + (wide ? 5 : 1.15), p.z),
+        half: wide ? (tall ? new Vector3(7, 5.5, 5) : new Vector3(10.5, 5.5, 5)) : tall ? new Vector3(1.3, 1, 1.3) : new Vector3(1.9, 1, 1.4),
+        yaw: -phi(s) * DEG + (wide ? 22 : 150),
         pitch: wide ? 10 : 12,
       }
     }
@@ -978,8 +1208,8 @@ export class MountainBike implements World3D {
     const target = this.bikePos(tmp2).clone()
     target.y += 1
     const c = this.course
-    let lift = Math.max(0, c.land(p.x, p.z, this.mode === 'gondola' ? undefined : this.s) + 1.6 - p.y)
-    if (this.mode !== 'gondola')
+    let lift = Math.max(0, c.land(p.x, p.z, this.inCabin ? undefined : this.s) + 1.6 - p.y)
+    if (!this.inCabin)
       for (const k of [0.3, 0.6]) {
         const x = p.x + (target.x - p.x) * k
         const z = p.z + (target.z - p.z) * k
@@ -1034,6 +1264,7 @@ export class MountainBike implements World3D {
       bell()
       this.rider.ring()
       this.rider.wave()
+      this.chat(L.bike.bell)
       return
     }
     if (id === 'cabin') {
@@ -1042,6 +1273,7 @@ export class MountainBike implements World3D {
       this.gondola.push(-1, 0.5, 0.25)
       this.rider.wave()
       creak()
+      this.chat(this.counts.swings > 2 ? L.bike.rock : L.bike.high)
       return
     }
     if (id?.startsWith('car:')) {
@@ -1058,29 +1290,58 @@ export class MountainBike implements World3D {
       this.chip.poke()
       sfx.chirp()
       sfx.munch()
+      this.chat(L.bike.chipmunk, true)
+      meet('chipmunk')
       return
     }
     if (id === 'moose') {
       this.counts.pokes++
       this.moose.poke()
       moo()
+      this.chat(L.bike.moose[this.counts.pokes % 2], true)
+      meet('moose')
       return
     }
     if (id === 'woodpecker') {
       this.counts.pokes++
       this.pecker.poke()
+      meet('woodpecker')
       return
     }
     if (id === 'porcupine') {
       this.counts.pokes++
       this.porky.poke()
       sfx.pop()
+      meet('porcupine')
       return
     }
     if (id === 'frog') {
       this.counts.pokes++
       this.frog.poke()
-      ribbit()
+      peep()
+      meet('peeper')
+      return
+    }
+    if (id === 'deer') {
+      this.counts.pokes++
+      this.deer.poke()
+      snort()
+      meet('deer')
+      return
+    }
+    if (id === 'bear') {
+      this.counts.pokes++
+      this.bear.poke()
+      grunt()
+      this.chat(L.bike.bear, true)
+      meet('black-bear')
+      return
+    }
+    if (id === 'hare') {
+      this.counts.pokes++
+      this.hare.poke()
+      thump()
+      meet('hare')
       return
     }
     // A leaf pile bursts; a tree rustles and drops leaves; water splashes; the ground puffs.
@@ -1132,7 +1393,7 @@ export class MountainBike implements World3D {
     }
     const near = (s: number, from = -6, to = 70) => this.mode === 'ride' && s - this.s > from && s - this.s < to
     for (const [id, el] of this.anchorEls) {
-      if (id === 'bike') place(el, this.mode !== 'gondola' ? this.rider.root : null, this.rider.height, 1.1)
+      if (id === 'bike') place(el, !this.inCabin ? this.rider.root : null, this.rider.height, 1.1)
       else if (id === 'cabin') place(el, this.mode === 'gondola' ? this.gondola.hers.root : null, 2.6, 1.3, -HANG)
       else if (id.startsWith('car:')) {
         const cab = this.gondola.cabins[+id.slice(4)]
@@ -1143,6 +1404,9 @@ export class MountainBike implements World3D {
       else if (id === 'woodpecker') place(el, near(WOODPECKER.s, -2, 60) ? this.pecker.root : null, this.pecker.height, 1.8)
       else if (id === 'porcupine') place(el, near(PORCUPINE.s, -2, 60) ? this.porky.root : null, this.porky.height, 1.8)
       else if (id === 'frog') place(el, near(CREEK.at, -3, 50) ? this.frog.root : null, this.frog.height, 2)
+      else if (id === 'deer') place(el, near(DEER.s, -4, 60) ? this.deer.root : null, this.deer.height, 1.2)
+      else if (id === 'bear') place(el, near(BEAR.s, -6, 90) ? this.bear.root : null, this.bear.height, 1.3)
+      else if (id === 'hare') place(el, near(HARE.s, -4, 50) ? this.hare.root : null, this.hare.height, 2)
       el.style.zIndex = id === 'bike' ? '3' : '1'
     }
   }
@@ -1166,6 +1430,7 @@ export class MountainBike implements World3D {
       wet: this.wet,
       gondola: this.mode === 'gondola' ? +clamp(this.modeT / GOND_S).toFixed(2) : 1,
       done: this.doneT >= 0,
+      arms: [+this.rider.rig.armL.rotation.z.toFixed(2), +this.rider.rig.armR.rotation.z.toFixed(2)],
       dir: Math.round(wrap(Math.PI - this.d.heading - phi(this.s)) * DEG),
       cam: Math.round(wrap(this.camYaw - phi(this.s)) * DEG),
       roll: +this.roll.toFixed(2),

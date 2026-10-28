@@ -1,15 +1,18 @@
-// Red Canoe's lake shore and mountains as greybox shapes in the toon look (the art gate dresses them): the pebble beach,
-// the meadow and the spruce forest round the lake, a ring of snowy peaks, the glacier coming down to the water at the
-// north end, the glacier stream tumbling into the north-west corner with its milky rock flour spreading on the lake,
-// the dock, the beaver lodge and the rock piles. The world (paddle.ts) adds the water, the canoe and the animals.
+// Red Canoe's lake: Moraine Lake in Banff, in the toon look. The pebble beach, the meadow and the spruce forest round
+// the water; across from the dock the Valley of the Ten Peaks, a wall of jagged grey summits with snow in their gullies,
+// and the glacier coming down from them to the water at the north end; lower forested mountains round the rest. The
+// glacier stream tumbles into the north-west corner with its milky rock flour spreading on the lake. By the dock, the
+// famous rock pile at the outlet (the pika's and the marmot's home) with the log jam in front of it; the beaver lodge on
+// the west shore; a crag for the mountain goat on the north-east shore; the sky and its clouds. The world (paddle.ts)
+// adds the water, the canoe and the animals.
 //
 // Everything above the water goes in `land`, so the world can mirror it under the see-through lake as its reflection.
-import { BufferGeometry, CanvasTexture, CircleGeometry, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, Vector3, type Object3D } from 'three'
+import { BackSide, BufferGeometry, CanvasTexture, CircleGeometry, Color, Float32BufferAttribute, Group, Mesh, MeshBasicMaterial, SphereGeometry, Vector3, type Object3D } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../engine3d/geo'
 import { toon } from '../../../../engine3d/toon'
-import { FlowMaterial } from '../bike/scenery'
-import { DOCK, FLOUR, GLACIER, LAND, landY, LODGE, MOUTH, PIKA, ringPoint, SQUIRREL } from './lake'
+import { FlowMaterial } from './flow'
+import { CLIFF, DOCK, FLOUR, GLACIER, LAND, landY, LODGE, LOGJAM, MOUTH, ringPoint, ROCKPILE, SQUIRREL } from './lake'
 
 export const SKY = '#C4E8FA'
 const SPRUCE = ['#3F8E6E', '#4C9E78', '#357F63']
@@ -64,60 +67,132 @@ function buildLand(bag: Bag) {
   return new Mesh(bag.add(g), toon('#ffffff', true))
 }
 
-/** The mountains: snowy peaks all round, the biggest behind the glacier. Returns each peak (for taps and snow puffs). */
+/** The mountains. Across the lake from the dock, the Valley of the Ten Peaks: a wall of ten jagged grey summits in a
+ *  row, each a sharp faceted spire with a smaller one at its shoulder, snow on the tops and in the gullies, little
+ *  hanging glaciers between them and the big glacier coming down from the middle. Round the rest of the lake, lower
+ *  mountains with forest up their sides and only a little snow. Returns each peak (for taps and snow puffs). */
 function buildPeaks(bag: Bag) {
   const rand = rng(7)
   const group = new Group()
   const peaks: { mesh: Object3D; top: Vector3 }[] = []
-  const add = (th: number, k: number, r: number, h: number, squash: number) => {
+  /** One jagged peak: a faceted spire (few sides, turned at random), a shoulder spire, darker rock on one face,
+   *  a snow cap and streaks of snow down the gullies. */
+  const spire = (th: number, k: number, r: number, h: number, snowy: number, rock: string, dark: string) => {
     const p = ringPoint(th, k)
     const y = landY(p.x, p.z) - 4
-    const capH = h * 0.32
-    const g = solid(
-      merge([
-        P.cone(r, h, ROCK, { at: [0, h / 2, 0], scale: [1, 1, squash] }, 9),
-        P.cone(r * 0.62, h * 0.38, ROCK_DARK, { at: [r * 0.35, h * 0.19, r * 0.2], scale: [1, 1, squash] }, 7),
-        P.cone(r * 0.33, capH, SNOW, { at: [0, h - capH / 2 + 0.05, 0], scale: [1.02, 1, squash * 1.02] }, 9),
-      ]),
-      bag,
-      2,
-    )
+    const seg = 4 + Math.floor(rand() * 2)
+    const lean = (rand() - 0.5) * 0.12
+    const parts = [
+      P.cone(r, h, rock, { at: [0, h / 2, 0], rot: [0, 0, lean] }, seg),
+      P.cone(r * 0.66, h * 0.72, rock, { at: [r * 0.62, h * 0.36, r * 0.1], rot: [0, rand() * 2, -0.08] }, seg),
+      P.cone(r * 0.58, h * 0.5, dark, { at: [-r * 0.35, h * 0.25, r * 0.38], rot: [0, rand() * 2, 0] }, 5),
+      P.cone(r * 0.5, h * 0.42, dark, { at: [-r * 0.5, h * 0.21, -r * 0.3], rot: [0, rand() * 2, 0] }, 4),
+    ]
+    if (snowy > 0) {
+      const cap = h * 0.3 * snowy
+      parts.push(P.cone(r * (cap / h) * 1.06, cap, SNOW, { at: [Math.sin(lean) * -(h - cap / 2) * 0, h - cap / 2 + 0.1, 0], rot: [0, 0, lean] }, seg))
+      const cap2 = h * 0.72 * 0.26 * snowy
+      parts.push(P.cone(r * 0.66 * (cap2 / (h * 0.72)) * 1.06, cap2, SNOW, { at: [r * 0.62, h * 0.72 - cap2 / 2 + 0.1, r * 0.1] }, seg))
+      // A band of snow lower down, where a ledge holds it (a thin ring hugging the spire).
+      const yy = h * (0.42 + rand() * 0.1)
+      parts.push(P.cyl(r * (1 - (yy + 1.2) / h) * 1.04, r * (1 - yy / h) * 1.05, 1.2, SNOW, { at: [0, yy + 0.6, 0], rot: [0, 0, lean] }, seg))
+    }
+    const g = solid(merge(parts), bag, 2)
     g.position.set(p.x, y, p.z)
     g.rotation.y = rand() * Math.PI * 2
     group.add(g)
     peaks.push({ mesh: g, top: new Vector3(p.x, y + h, p.z) })
+    return { x: p.x, y, z: p.z }
   }
-  // Behind the glacier (north, -z: the oval's angle -π/2), then round the rest.
-  add(-Math.PI / 2, 2.15, 30, 78, 0.8)
-  add(-Math.PI / 2 - 0.55, 2.1, 24, 62, 0.9)
-  add(-Math.PI / 2 + 0.55, 2.2, 26, 66, 0.85)
-  const n = 13
+  // The Ten Peaks, from the north-west round the north (the glacier) to the east.
+  const ten: { x: number; y: number; z: number }[] = []
+  for (let i = 0; i < 10; i++) {
+    const th = -2.3 + (i / 9) * 2.75
+    const big = i === 4 || i === 5 ? 12 : 0
+    ten.push(spire(th, 2.3 + 0.12 * Math.sin(i * 1.7), 13 + rand() * 4, (52 + 12 * Math.sin(i * 2.3 + 0.5) + big + rand() * 5) * 0.9, 1, ROCK, ROCK_DARK))
+  }
+  // The wall between them (a long low ridge under the summits).
+  const wall = []
+  for (let i = 0; i < 9; i++) {
+    const a = ten[i]
+    const b = ten[i + 1]
+    const mx = (a.x + b.x) / 2
+    const mz = (a.z + b.z) / 2
+    const my = (a.y + b.y) / 2
+    const d = Math.hypot(b.x - a.x, b.z - a.z)
+    wall.push(P.cone(d * 0.75, 30, ROCK_DARK, { at: [mx, my + 15, mz], scale: [1, 1, 0.55], rot: [0, Math.atan2(b.x - a.x, b.z - a.z) + Math.PI / 2, 0] }, 6))
+  }
+  group.add(solid(merge(wall), bag, 2))
+  // The forested mountains round the south and west: lower, greener, a little snow on the highest.
+  const n = 11
   for (let i = 0; i < n; i++) {
-    const th = -Math.PI / 2 + 1.0 + (i / (n - 1)) * (Math.PI * 2 - 2.0)
-    // (Lower in the south behind the dock, so the lake opens up there.)
+    const th = 0.78 + (i / (n - 1)) * 3.1
     const south = Math.max(0, Math.sin(th))
-    add(th, 2.2 + rand() * 0.9, 18 + rand() * 12, (44 + rand() * 30) * (1 - south * 0.35), 0.75 + rand() * 0.3)
+    const h = (34 + rand() * 26) * (1 - south * 0.3)
+    spire(th, 2.15 + rand() * 0.7, 18 + rand() * 10, h, h > 42 ? 0.6 : 0, i % 2 ? '#8FA59A' : '#97A9A4', '#738C84')
   }
   return { group, peaks }
+}
+
+/** The sky: a big dome, deeper blue overhead and pale at the horizon (and the same below it, so the lake mirrors it). */
+export function buildSky(bag: Bag) {
+  const g = new SphereGeometry(900, 32, 20)
+  const pos = g.attributes.position
+  const col: number[] = []
+  const lo = new Color('#CDEBFA')
+  const hi = new Color('#7CC6EE')
+  const c = new Color()
+  for (let i = 0; i < pos.count; i++) {
+    const k = Math.min(1, Math.abs(pos.getY(i)) / 600) ** 0.8
+    c.copy(lo).lerp(hi, k)
+    col.push(c.r, c.g, c.b)
+  }
+  g.setAttribute('color', new Float32BufferAttribute(col, 3))
+  const m = new Mesh(bag.add(g), bag.add(new MeshBasicMaterial({ vertexColors: true, side: BackSide, fog: false, depthWrite: false })))
+  m.renderOrder = -10
+  return m
+}
+
+/** Puffy toon clouds high over the mountains (the world turns them slowly round the sky). */
+export function buildClouds(bag: Bag) {
+  const rand = rng(61)
+  const parts = []
+  for (let i = 0; i < 9; i++) {
+    const a = (i / 9) * Math.PI * 2 + rand() * 0.4
+    const d = 210 + rand() * 160
+    const y = 105 + rand() * 50
+    const s = 9 + rand() * 7
+    const cx = Math.cos(a) * d
+    const cz = Math.sin(a) * d
+    for (let j = 0; j < 5; j++) parts.push(P.sphere(s * (j === 2 ? 1.25 : 0.75 + rand() * 0.3), '#FFFFFF', { at: [cx + (j - 2) * s * 0.9 * Math.sin(a), y + (j === 2 ? s * 0.35 : 0), cz - (j - 2) * s * 0.9 * Math.cos(a)], scale: [1, 0.72, 1] }, 10))
+  }
+  return solid(merge(parts), bag, 2.5)
 }
 
 /** Spruces round the lake on the meadow and the forest band (never on the beach, the glacier or the stream). */
 function buildSpruces(bag: Bag) {
   const rand = rng(23)
   const parts = []
-  for (let i = 0; i < 520; i++) {
+  for (let i = 0; i < 640; i++) {
     const th = rand() * Math.PI * 2
     const k = 1.09 + rand() ** 1.6 * 0.75
     const p = ringPoint(th, k)
-    // Not on the glacier, its stream, the dock or the rock piles.
+    // Not on the glacier, its stream, the dock, the rock pile, the cliff or the squirrel's rock.
     if (Math.abs(p.x - GLACIER.x) < GLACIER.halfWidth + 4 && p.z < -40) continue
     if (Math.hypot(p.x - MOUTH.x, p.z - MOUTH.z) < 7 || (p.x < MOUTH.x + 4 && p.x > MOUTH.x - 16 && p.z < MOUTH.z + 2 && p.z > MOUTH.z - 30)) continue
-    if (Math.hypot(p.x - DOCK.x, p.z - DOCK.z) < 7 || Math.hypot(p.x - PIKA.x, p.z - PIKA.z) < 5 || Math.hypot(p.x - SQUIRREL.x, p.z - SQUIRREL.z) < 4) continue
+    if (Math.hypot(p.x - DOCK.x, p.z - DOCK.z) < 7 || Math.hypot(p.x - ROCKPILE.x, p.z - ROCKPILE.z) < ROCKPILE.r + 1 || Math.hypot(p.x - SQUIRREL.x, p.z - SQUIRREL.z) < 4) continue
+    if (Math.hypot(p.x - CLIFF.x, p.z - CLIFF.z) < 6) continue
     const y = landY(p.x, p.z)
-    const h = 3.2 + rand() * 3.4
-    const r = h * 0.3
+    // Tall narrow spruces in three tiers, a few smaller ones among them.
+    const h = (rand() < 0.2 ? 2.4 : 4) + rand() * 3.6
+    const r = h * 0.24
     const c = SPRUCE[i % 3]
-    parts.push(P.cyl(0.12, 0.16, 0.8, '#7E553E', { at: [p.x, y + 0.3, p.z] }, 5), P.cone(r, h * 0.6, c, { at: [p.x, y + 0.5 + h * 0.3, p.z] }, 7), P.cone(r * 0.72, h * 0.5, c, { at: [p.x, y + 0.5 + h * 0.62, p.z] }, 7))
+    parts.push(
+      P.cyl(0.1, 0.14, 0.8, '#7E553E', { at: [p.x, y + 0.3, p.z] }, 5),
+      P.cone(r, h * 0.48, c, { at: [p.x, y + 0.55 + h * 0.24, p.z] }, 7),
+      P.cone(r * 0.78, h * 0.42, c, { at: [p.x, y + 0.55 + h * 0.5, p.z] }, 7),
+      P.cone(r * 0.52, h * 0.36, c, { at: [p.x, y + 0.55 + h * 0.76, p.z] }, 7),
+    )
   }
   return solid(merge(parts), bag, 1.4)
 }
@@ -143,18 +218,36 @@ function buildGlacier(bag: Bag) {
   const parts = [ramp(g.halfWidth * 2, 0, 0, '#D6EEF8'), ramp(g.halfWidth * 1.35, 0.6, 7, '#E9F6FB'), ramp(g.halfWidth * 0.7, 1.2, 17, SNOW)]
   // Blue cracks across it, lying on the slope; rocky ridges (moraines) down both sides.
   const slope = Math.atan2(29.6, 46)
-  for (let i = 0; i < 7; i++) {
-    const d = 5 + i * 5.6
-    const w = g.halfWidth * 2 * (0.75 - i * 0.06)
-    for (const s of [-0.22, 0.2]) parts.push(P.rbox(w * 0.36, 0.14, 0.42, 0.06, ICE_BLUE, { at: [g.x + s * w + Math.sin(i * 2.1) * 1.2, 2.8 + d * Math.tan(slope) + (d > 17 ? 1.2 : d > 7 ? 0.6 : 0) + 0.05, g.z - d], rot: [-slope, 0, 0] }))
+  // (Crevasses bow downhill in the middle, the way the ice flows faster there: short tilted dashes in a curve.)
+  const rand = rng(83)
+  for (let i = 0; i < 6; i++) {
+    const d = 6 + i * 6.4
+    const w = g.halfWidth * 2 * (0.7 - i * 0.06)
+    const lift = d > 17 ? 1.2 : d > 7 ? 0.6 : 0
+    for (let j = 0; j < 5; j++) {
+      const u = (j - 2) / 2.4
+      const x = g.x + u * w * 0.5 + (rand() - 0.5) * 0.8
+      const dd = d + (1 - u * u) * 2.2
+      parts.push(P.rbox(w * (0.12 + rand() * 0.06), 0.14, 0.34, 0.06, ICE_BLUE, { at: [x, 2.8 + dd * Math.tan(slope) + lift + 0.05, g.z - dd], rot: [-slope, -u * 0.5, 0] }))
+    }
+  }
+  // Seracs: jagged blocks of ice along the top of the cliff at the water.
+  for (let i = 0; i < 9; i++) {
+    const x = g.x + (i / 8 - 0.5) * g.halfWidth * 1.8
+    const h = 1.4 + rand() * 1.6
+    parts.push(P.cone(1.3 + rand() * 0.6, h, i % 2 ? '#E9F6FB' : '#CDEBF6', { at: [x, 3 + h / 2, g.z - 1.2 - rand()], rot: [0, rand() * 2, (rand() - 0.5) * 0.3] }, 4))
   }
   for (const side of [-1, 1])
     for (let i = 0; i < 8; i++) {
       const d = 2 + i * 6
       parts.push(P.sphere(2 + (i % 3) * 0.6, ROCK_DARK, { at: [g.x + side * (g.halfWidth + 0.6 - i * 0.35), 1 + d * Math.tan(slope) * 0.95, g.z - d], scale: [1, 0.6, 1.4] }, 7))
     }
-  // The ice cliff at the water's edge.
-  parts.push(P.rbox(g.halfWidth * 2.05, 3.6, 2.4, 0.5, ICE_BLUE, { at: [g.x, 0.9, g.z + 0.4] }))
+  // The ice cliff at the water's edge: blocks of different heights, blue and pale.
+  for (let i = 0; i < 7; i++) {
+    const w = (g.halfWidth * 2.05) / 7
+    const h = 3.2 + rand() * 1.4
+    parts.push(P.rbox(w + 0.3, h, 2.4 + rand() * 0.6, 0.35, i % 2 ? ICE_BLUE : '#B7E3F3', { at: [g.x - g.halfWidth * 1.025 + w * (i + 0.5), h / 2 - 0.9, g.z + 0.4 + rand() * 0.4] }))
+  }
   return solid(merge(parts), bag, 2)
 }
 
@@ -202,6 +295,89 @@ function rocks(at: { x: number; z: number }, n: number, size: number, seed: numb
   const g = solid(merge(parts), bag, 2)
   g.position.set(at.x, landY(at.x, at.z) - 0.2, at.z)
   return g
+}
+
+/** How high the rock pile is at a point (its boulders rise in a mound to `top` in the middle). */
+export function pileY(x: number, z: number) {
+  const d = Math.hypot(x - ROCKPILE.x, z - ROCKPILE.z) / ROCKPILE.r
+  return landY(x, z) + Math.max(0, ROCKPILE.top * (1 - d) ** 0.8)
+}
+
+/** Moraine Lake's rock pile at the outlet: a big mound of grey boulders heaped up by an old rockslide, a few spruces
+ *  on top, a little zigzag of steps up its side. */
+function buildRockPile(bag: Bag) {
+  const rand = rng(57)
+  const parts = []
+  for (let i = 0; i < 70; i++) {
+    const a = rand() * Math.PI * 2
+    const d = rand() ** 0.7 * ROCKPILE.r
+    const x = ROCKPILE.x + Math.cos(a) * d
+    const z = ROCKPILE.z + Math.sin(a) * d
+    const s = 0.7 + rand() * 1.1
+    parts.push(P.sphere(s, i % 4 === 0 ? ROCK_DARK : i % 4 === 1 ? '#B8B1C6' : ROCK, { at: [x, pileY(x, z) - s * 0.35, z], rot: [rand(), rand() * 3, rand()], scale: [1.25, 0.7, 1] }, 6))
+  }
+  for (let i = 0; i < 5; i++) {
+    const a = i * 1.3 + 0.4
+    const d = 1.2 + i * 0.5
+    const x = ROCKPILE.x + Math.cos(a) * d
+    const z = ROCKPILE.z + Math.sin(a) * d - 1.5
+    const y = pileY(x, z) - 0.2
+    const h = 3 + rand() * 2.5
+    parts.push(P.cyl(0.1, 0.14, 0.7, '#7E553E', { at: [x, y + 0.3, z] }, 5), P.cone(h * 0.24, h * 0.5, SPRUCE[i % 3], { at: [x, y + 0.5 + h * 0.25, z] }, 7), P.cone(h * 0.17, h * 0.42, SPRUCE[(i + 1) % 3], { at: [x, y + 0.5 + h * 0.6, z] }, 7))
+  }
+  return solid(merge(parts), bag, 2)
+}
+
+/** The log jam in the outlet: silver-grey drift logs piled criss-cross in the water, their ends showing the rings. */
+export function buildLogJam(bag: Bag) {
+  const rand = rng(71)
+  const parts = []
+  for (let i = 0; i < 11; i++) {
+    const len = 3.5 + rand() * 4
+    const r = 0.18 + rand() * 0.12
+    const a = (i % 2 ? 0.6 : -0.5) + (rand() - 0.5) * 0.8
+    const x = (rand() - 0.5) * 4.5
+    const z = (rand() - 0.5) * 3
+    const y = 0.05 + (i > 6 ? 0.32 : 0) + (rand() - 0.5) * 0.1
+    const tilt = (rand() - 0.5) * 0.25
+    // Each log is built lying along z at the origin, then turned and moved into the pile.
+    const log = [P.cyl(r, r * 1.08, len, i % 3 ? '#D3CBC4' : '#BDB2AA', { rot: [Math.PI / 2 + tilt, 0, 0] }, 8)]
+    for (const e of [-1, 1]) log.push(P.cyl(r * 0.72, r * 0.72, 0.03, '#A48F80', { at: [0, -Math.sin(tilt) * e * len * 0.5, e * (len * 0.5 + 0.01) * Math.cos(tilt)], rot: [Math.PI / 2 + tilt, 0, 0] }, 8))
+    for (const p of log) parts.push(p.rotateY(a).translate(x, y, z))
+  }
+  const g = solid(merge(parts), bag, 2)
+  g.position.set(LOGJAM.x, 0, LOGJAM.z)
+  g.rotation.y = 0.5
+  return g
+}
+
+/** A grey crag on the north-east shore, stepped like the mountains' layers, with a flat ledge for the mountain goat. */
+function buildCliff(bag: Bag) {
+  const y = landY(CLIFF.x, CLIFF.z) - 1
+  const h = CLIFF.h
+  const parts = [
+    P.cone(6, h + 6, ROCK, { at: [1.5, (h + 6) / 2, -1.5] }, 5),
+    P.cone(4.5, h * 0.85, ROCK_DARK, { at: [-2.5, (h * 0.85) / 2, 1.5] }, 4),
+    P.cone(3.5, h * 0.7, ROCK, { at: [3, (h * 0.7) / 2, 2.8] }, 5),
+    // The ledge, facing the lake, and the layers of rock across the face.
+    P.rbox(3.2, 0.5, 2.2, 0.2, '#B8B1C6', { at: [-1.6, h, 2.2] }),
+    P.rbox(5, 0.35, 0.8, 0.12, ROCK_DARK, { at: [0.5, h * 0.55, 3.2], rot: [0, -0.3, 0] }),
+    P.rbox(4, 0.3, 0.7, 0.1, ROCK_DARK, { at: [1.2, h * 0.3, 3.6], rot: [0, 0.2, 0] }),
+    P.cone(1.2, 3.2, SPRUCE[0], { at: [1.6, h + 2.4, 1], rot: [0, 0, 0.1] }, 7),
+  ]
+  const g = solid(merge(parts), bag, 2)
+  g.position.set(CLIFF.x, y, CLIFF.z)
+  // Facing the middle of the lake.
+  g.rotation.y = Math.atan2(-CLIFF.x, -CLIFF.z) - 0.6
+  return g
+}
+/** Where the goat stands on the ledge (world), and which way he faces. */
+export function goatSpot() {
+  const y = landY(CLIFF.x, CLIFF.z) - 1 + CLIFF.h + 0.25
+  const r = Math.atan2(-CLIFF.x, -CLIFF.z) - 0.6
+  const lx = -1.6
+  const lz = 2.2
+  return { x: CLIFF.x + Math.cos(r) * lx + Math.sin(r) * lz, y, z: CLIFF.z - Math.sin(r) * lx + Math.cos(r) * lz, h: r + 0.9 }
 }
 
 /** The glacier stream: down the mountainside from beside the glacier to its mouth in the lake. */
@@ -288,6 +464,8 @@ export interface Shore {
   peaks: { mesh: Object3D; top: Vector3 }[]
   glacier: Group
   lodge: Group
+  /** The log jam in the outlet (it bobs when she pokes it). */
+  logs: Group
   stream: FlowMaterial
   /** The milky patch at the stream's mouth (two discs that turn slowly). */
   flour: Group
@@ -306,7 +484,9 @@ export function buildShore(bag: Bag): Shore {
   land.add(buildDock(bag))
   const lodge = buildLodge(bag)
   land.add(lodge)
-  land.add(rocks(PIKA, 14, 1.5, 51, bag), rocks(SQUIRREL, 5, 1.1, 53, bag))
+  const logs = buildLogJam(bag)
+  // (The logs float in the water, so they aren't mirrored: the world adds them, and bobs them.)
+  land.add(buildRockPile(bag), buildCliff(bag), rocks(SQUIRREL, 5, 1.1, 53, bag))
   // The shallows: a pale band under the water round the shore (the lake looks shallow and clear at its edge).
   const sh = new BufferGeometry()
   const pos: number[] = []
@@ -330,7 +510,7 @@ export function buildShore(bag: Bag): Shore {
   d2.position.y = 0.01
   flour.add(d1, d2)
   flour.position.set(FLOUR.x, 0.03, FLOUR.z)
-  return { land, shallows, peaks, glacier, lodge, stream, flour }
+  return { land, shallows, peaks, glacier, lodge, logs, stream, flour }
 }
 
 /** A mirror image of `src` under the water (no ink lines: a reflection is soft). */
