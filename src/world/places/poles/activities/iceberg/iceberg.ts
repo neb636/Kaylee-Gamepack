@@ -30,7 +30,7 @@ import type { World3D } from '../../../../engine3d/View3D'
 import { swell, Water } from '../../../../engine3d/water'
 import { Bear } from '../floe/bear'
 import { Penguin, Seal } from '../slide/penguin'
-import { bitGeo, buildCliff, buildOrca, giantGeo, growlerGeo, rng, SHAPES, type PoleShape } from './ice'
+import { bitGeo, buildCliff, buildOrca, giantGeo, growlerGeo, rng, scarGeo, SHAPES, type PoleShape } from './ice'
 import type { IcebergSection, Pole } from './sections'
 
 const FILE = 'src/world/places/poles/activities/iceberg/iceberg.ts'
@@ -104,6 +104,9 @@ const DEEP = '#3F86C8'
 const CRACK_INK = '#2E4F96'
 const CRACK_GLOW = '#5FD0FF'
 const SCAR = '#8EC5F0'
+/** The facets deep inside a scar, and when she taps it. */
+const SCAR_DEEP = '#5B9BE0'
+const SCAR_DEEP_GLOW = '#36B8F5'
 /** No touch for this long: the next thing to tap glows. */
 const HINT_S = 8
 /** Past this far from the cliff, a berg has sailed away. */
@@ -224,8 +227,9 @@ export class IcebergMaker implements World3D {
   private floaters: Floater[] = []
   private giant: Floater | null = null
   private giantCrack: Crack | null = null
-  private scars: Mesh[] = []
+  private scars: { group: Group; giant: boolean }[] = []
   private scarMat: MeshBasicMaterial
+  private scarDeepMat: MeshBasicMaterial
   private used = new Set<number>()
   private nextCrack = 0
   private broken = 0
@@ -313,6 +317,7 @@ export class IcebergMaker implements World3D {
     scene.add(this.bubbles)
     for (let i = 0; i < 90; i++) this.bubblePool.push({ x: 0, y: 0, z: 0, vy: 0, age: 1, life: 0, size: 0 })
     this.scarMat = bag.add(new MeshBasicMaterial({ color: SCAR, polygonOffset: true, polygonOffsetFactor: -2 }))
+    this.scarDeepMat = bag.add(new MeshBasicMaterial({ color: SCAR_DEEP, polygonOffset: true, polygonOffsetFactor: -3 }))
 
     this.orca = buildOrca(bag)
     scene.add(this.orca)
@@ -417,7 +422,7 @@ export class IcebergMaker implements World3D {
     this.broken = FLOATING.length
     if (section === 'sail') {
       this.dropGiantAt(0, 9)
-      this.addScar(0, g.y + s.giant.tip / 2, s.giant.hw * 2, s.giant.tip + 2)
+      this.addScar(0, g.y + s.giant.tip / 2, s.giant.hw * 2, s.giant.tip + 2, true)
       this.startSail(true)
     }
   }
@@ -452,7 +457,7 @@ export class IcebergMaker implements World3D {
     if (!free.length) {
       // Every spot has fallen: the face is fresh again.
       this.used.clear()
-      for (const m of this.scars) m.visible = false
+      for (const m of this.scars) m.group.visible = false
       return Math.floor(this.rand() * this.shape.slots.length)
     }
     const i = free[Math.floor(this.rand() * free.length)]
@@ -520,15 +525,21 @@ export class IcebergMaker implements World3D {
     return { group, segs, lens, total: lens.reduce((a, b) => a + b, 0), mat, shown: start, goal: start, start, taps: 0 }
   }
 
-  private addScar(x: number, y: number, w: number, h = w) {
-    const m = this.scars.find((s) => !s.visible) ?? new Mesh(this.bag.add(new PlaneGeometry(1, 1)), this.scarMat)
-    if (!this.scars.includes(m)) {
-      this.scars.push(m)
-      this.scene.add(m)
+  /** The hollow a chunk leaves in the face: ragged and faceted (ice.ts scarGeo), the giant's an arch from the water. */
+  private addScar(x: number, y: number, w: number, h = w, giant = false) {
+    let scar = this.scars.find((s) => !s.group.visible && s.giant === giant)
+    if (!scar) {
+      const [rim, deep] = scarGeo(giant, this.rand)
+      const group = new Group()
+      group.add(new Mesh(this.bag.add(rim), this.scarMat), new Mesh(this.bag.add(deep), this.scarDeepMat))
+      this.scene.add(group)
+      scar = { group, giant }
+      this.scars.push(scar)
     }
+    const m = scar.group
     m.visible = true
     m.position.set(x, y, 0.025)
-    m.scale.set(w * 0.85, h * 0.8, 1)
+    m.scale.set(w * (giant ? 0.92 : 0.85), h * (giant ? 0.92 : 0.8), 1)
   }
 
   // ---------------------------------------------------------------- cracking
@@ -574,7 +585,7 @@ export class IcebergMaker implements World3D {
       tone(50, 30, 1.6, 0.26, 'sawtooth')
       noise(1.4, 0.12, 'lowpass', 300, 80)
       noise(0.12, 0.4, 'highpass', 1200, 2400, 0.2)
-      this.addScar(0, f.y + this.shape.giant.tip / 2, this.shape.giant.hw * 2, this.shape.giant.tip + 2)
+      this.addScar(0, f.y + this.shape.giant.tip / 2, this.shape.giant.hw * 2, this.shape.giant.tip + 2, true)
       this.events.moment('groan')
     } else {
       noise(0.08, 0.35, 'highpass', 1500, 2500)
@@ -1326,12 +1337,16 @@ export class IcebergMaker implements World3D {
     const wall = this.hitWall(x, y)
     if (wall) {
       // A puff of snow off the face (a scar glows blue).
-      const scar = this.scars.find((m) => m.visible && Math.abs(m.position.x - wall.x) < m.scale.x / 2 && Math.abs(m.position.y - wall.y) < m.scale.y / 2)
+      const scar = this.scars.map((s) => s.group).find((m) => m.visible && Math.abs(m.position.x - wall.x) < m.scale.x / 2 && Math.abs(m.position.y - wall.y) < m.scale.y / 2)
       if (scar) {
         this.scarMat.color.set(CRACK_GLOW)
+        this.scarDeepMat.color.set(SCAR_DEEP_GLOW)
         sounds.note(6)
         this.events.moment('blue')
-        window.setTimeout(() => this.scarMat.color.set(SCAR), 500)
+        window.setTimeout(() => {
+          this.scarMat.color.set(SCAR)
+          this.scarDeepMat.color.set(SCAR_DEEP)
+        }, 500)
       } else {
         this.spray.burst(wall.x, wall.y, 0.3, 8, 1, 1.2, 0.1)
         noise(0.08, 0.1, 'bandpass', 2000, 900, 0, 2)

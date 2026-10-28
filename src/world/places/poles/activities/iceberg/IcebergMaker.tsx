@@ -1,7 +1,8 @@
 // Iceberg Maker: pick a pole, crack icebergs off its cliff, see the hidden part, send them sailing (iceberg.ts is the
 // world). The address bar follows her from stretch to stretch (sections.ts). Sparkle, in the corner (kit/Guide), says
-// what to do at each stretch (again when she's stuck) and a fact the first time something comes up: calving, the
-// pole's shape of berg, the hidden part, fresh water, bergy seltzer, blue ice, the seal, the orca. The friend at that
+// what to do at each stretch (again when she's stuck) and a fact: calving and the pole's shape of berg as the first bits
+// splash in, then the rest the first time she does or pokes the thing: the hidden part (her push), fresh water (the
+// first berg she sends off), bergy seltzer (a fizzing berg), blue ice (a scar), the seal, the orca. The friend at that
 // pole (Pola up north, Papa down south) says hello and reacts in their own voice to the big moments. When the giant
 // drops, a wave rolls across the screen. When her fleet has sailed, the stamp.
 import { AnimatePresence, motion } from 'motion/react'
@@ -97,6 +98,10 @@ export function IcebergMaker({ onDone }: ActivityProps) {
         return g?.once('orca', T.facts.orca)
       case 'friends':
         return react(f.poke[talk.current.pokes++ % f.poke.length])
+      // The first berg she sends off: what it's made of (her flick, not a stretch starting).
+      case 'away':
+      case 'giantAway':
+        return g?.once('fresh', T.facts.fresh, true)
     }
   }
 
@@ -105,10 +110,7 @@ export function IcebergMaker({ onDone }: ActivityProps) {
       setSection(s)
       enter(s, { pole: poleRef.current })
       if (s === 'giant') guide.current?.speak(T.giant)
-      if (s === 'sail') {
-        guide.current?.speak(T.sail, true)
-        guide.current?.once('fresh', T.facts.fresh, true)
-      }
+      if (s === 'sail') guide.current?.speak(T.sail, true)
     },
     pick: (pole) => {
       setSection('bits')
