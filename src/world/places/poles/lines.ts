@@ -103,6 +103,13 @@ export const L = {
     // Tap-to-hear, the first time she pokes the ice or the water.
     floeFact: 'This ice is floating on the sea!',
     waterFact: 'The North Pole is a frozen sea. There is water under the ice!',
+    // Tap-to-hear, the first time she pokes each critter around the floes (scenery.ts).
+    critters: {
+      seal: 'A seal! It breathes through a hole in the ice.',
+      narwhal: 'A narwhal! The unicorn of the sea!',
+      walrus: 'Walruses use their long tusks to climb onto the ice.',
+      beluga: 'Belugas are white whales. They sing squeaky songs!',
+    },
     // Home with Mama.
     home: [mama('My brave little cub! You made it!'), pola('Mama! I hopped all the way home!')],
     homeCheer: `${NAME}, you got Pola home!`,

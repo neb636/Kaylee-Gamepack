@@ -4,7 +4,7 @@
 // when she's stuck, and a fact the first time she pokes the ice or the sea. Home with Mama: the hug, then the stamp
 // (onDone). "Again" lays the floes out a new way.
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type RefObject } from 'react'
 import { BigButton, burst, say, useAlive, wait, type Line } from '../../../../../sdk'
 import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
@@ -86,7 +86,9 @@ export function FloeHop({ onDone }: ActivityProps) {
       if (what === 'pola') react('pola', L.floe.pola)
       else if (what === 'mama') react('mama', L.floe.mama)
       else if (what === 'floe') guide.current?.once('poles-floe-ice', L.floe.floeFact)
-      else guide.current?.once('poles-floe-water', L.floe.waterFact)
+      else if (what === 'water') guide.current?.once('poles-floe-water', L.floe.waterFact)
+      // A critter (scenery.ts): what it is, the first time she pokes it.
+      else guide.current?.once(`poles-floe-${what}`, L.floe.critters[what])
     },
     home: () => {
       setHome(true)
@@ -160,6 +162,7 @@ export function FloeHop({ onDone }: ActivityProps) {
           </motion.div>
         )}
       </AnimatePresence>
+      <MamaPointer world={worldRef} />
       <Guide ref={guide} hint={home || section === 'story' || section === 'mama' ? null : HINT[section]} quiet={home} />
       {home && (
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 2.5, type: 'spring' }} style={{ position: 'absolute', right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', zIndex: 20 }}>
@@ -169,6 +172,42 @@ export function FloeHop({ onDone }: ActivityProps) {
         </motion.div>
       )}
     </div>
+  )
+}
+
+/**
+ * Mama is a long way up the sea ice: while she's out of sight, a pin at the top of the screen points the way (under the
+ * top bar, on her side). A tap on it is a tap on Mama (she waves and calls).
+ */
+function MamaPointer({ world }: { world: RefObject<World | null> }) {
+  const el = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    let raf = 0
+    const tick = () => {
+      raf = requestAnimationFrame(tick)
+      const w = world.current
+      const b = el.current
+      if (!w || !b) return
+      const p = w.mamaPointer()
+      const show = p.off ? 'flex' : 'none'
+      if (b.style.display !== show) b.style.display = show
+      if (p.off) b.style.left = `${p.x.toFixed(0)}px`
+    }
+    tick()
+    return () => cancelAnimationFrame(raf)
+  }, [])
+  return (
+    <button
+      ref={el}
+      aria-label="Mama Bear is this way"
+      onClick={() => world.current?.tap(0, 0, 'mama')}
+      style={{ position: 'absolute', top: 'calc(var(--bar-clear) - 4px)', translate: '-50% 0', zIndex: 18, minWidth: 72, height: 72, padding: '0 14px', border: '4px solid var(--hotpink)', borderRadius: 999, background: 'rgba(255,255,255,.94)', boxShadow: 'var(--shadow)', fontSize: 30, lineHeight: 1, display: 'none', alignItems: 'center', gap: 4, color: 'var(--hotpink)', fontWeight: 700 }}
+    >
+      <motion.span animate={{ y: [0, -6, 0] }} transition={{ repeat: Infinity, duration: 1.1 }}>
+        ⬆
+      </motion.span>
+      <span>🐻‍❄️</span>
+    </button>
   )
 }
 
