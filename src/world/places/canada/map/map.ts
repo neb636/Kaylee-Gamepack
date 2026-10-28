@@ -144,6 +144,8 @@ interface Stop {
 interface OnTrack {
   kind: Blocker
   s: number
+  /** It came back onto the track once already (it only comes back once). */
+  returned?: boolean
   root: Group
   /** The moose is a friend on the rig; the bison and the geese are code-built. */
   moose?: Actor
@@ -864,11 +866,13 @@ export class CanadaMap implements World3D {
           if (b.state === 'off' && b.bison) this.roll(b)
         }
       } else if (b.state === 'off') {
-        // Back on the track after a while, once the train is far away (so she meets them again on another trip).
+        // Back on the track after a while, once the train is far away (so she meets them again on another trip), but
+        // only once each: three forced taps on every crossing got old (playtest, 2026-10-28).
         b.t += dt
-        if (b.t > 40 && Math.abs(b.s - (this.s - CAR_GAP)) > 7) {
+        if (!b.returned && b.t > 40 && Math.abs(b.s - (this.s - CAR_GAP)) > 7) {
           b.state = 'back'
           b.t = 0
+          b.returned = true
         }
       }
       if (b.nudge >= 0) {

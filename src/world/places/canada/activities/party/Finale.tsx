@@ -69,7 +69,7 @@ export function Finale({ onDone, setProgress, stamps }: CanadaActivityProps) {
       setHome(n)
       setLine({ text: `${EMOJI[q]} ${L.party.home[q]}`, say: L.party.home[q] })
     },
-    wrong: (q) => setLine({ text: `${EMOJI[q]} ${L.party.ask[q]} ✨ ${L.party.glow}`, say: L.party.ask[q] }),
+    wrong: (q) => setLine({ text: `${EMOJI[q]} ${L.party.where[q]}`, say: L.party.where[q] }),
     done: () => {
       // Off to the canal: a snowy white fade, then the rink.
       setFade(true)

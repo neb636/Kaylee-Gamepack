@@ -143,7 +143,6 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
       await talk(L.hub.story[0])
       if (!story.current.on) return
       worldRef.current?.mapleDoes('hop')
-      await talk(L.hub.story[1])
       endStory(false)
     }
     void play()

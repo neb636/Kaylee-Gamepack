@@ -9,6 +9,8 @@ import { ANIMAL, picOf, type AnimalId } from './animals'
 import { onMeet } from './met'
 
 const SHOW_MS = 3600
+/** When she meets several animals in a row, only the first one's fact is spoken (the cards still show). */
+let lastSpoke = 0
 
 export function MetCard() {
   const [queue, setQueue] = useState<AnimalId[]>([])
@@ -17,7 +19,10 @@ export function MetCard() {
   useEffect(() => {
     if (!id) return
     sounds.sparkle()
-    void say(L.book[id], { interrupt: false })
+    if (Date.now() - lastSpoke > SHOW_MS) {
+      lastSpoke = Date.now()
+      void say(L.book[id], { interrupt: false })
+    }
     const t = window.setTimeout(() => setQueue((q) => q.slice(1)), SHOW_MS)
     return () => window.clearTimeout(t)
   }, [id])

@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { BigButton, burst, lineText, say, type Line } from '../../../../../sdk'
+import { isFeelParam } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
@@ -27,7 +28,10 @@ const SAY: Record<CanoeSection, (p: PaddleMode) => { icon: string; line: Line }>
 }
 const FOUND = { icon: '🏔️', line: L.canoe.found }
 
+const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').keys()].some(isFeelParam)
+
 export function RedCanoe({ onDone, setProgress }: CanadaActivityProps) {
+  const [feel] = useState(feelOn)
   const { start, param, enter } = useSections(CANOE_SECTIONS)
   const [run, setRun] = useState<CanoeStart & { n: number }>(() => ({ section: (start ?? 'story') as CanoeSection, paddle: param('paddle') as PaddleMode, n: 0 }))
   const [section, setSection] = useState<CanoeSection>(run.section)
@@ -109,8 +113,9 @@ export function RedCanoe({ onDone, setProgress }: CanadaActivityProps) {
           🛶 Tap to wake the lake
         </button>
       )}
-      {/* For Dad: try the other way to paddle, from the same part of the lake. */}
-      {section !== 'story' && (
+      {/* For Dad (with ?feel=1): try the other way to paddle, from the same part of the lake. (Without it, a tap here
+          would restart her part.) */}
+      {feel && section !== 'story' && (
         <button
           onClick={() => restart(section === 'glacier' ? 'loon' : section, other)}
           aria-label={`Paddle by ${other} instead`}

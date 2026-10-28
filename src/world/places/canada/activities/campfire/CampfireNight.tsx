@@ -379,9 +379,10 @@ class CampWorld {
     }
     this.stick.x = this.stick.rx = stage.stick[0]
     this.stick.y = this.stick.ry = stage.stick[1]
-    // The light starts where she left it, or on the forest just above the fire.
-    // (The bandit starts on the empty marshmallow bag, where the trail begins.)
-    const [lx, ly] = section === 'bandit' ? [stage.bag[0], stage.bag[1] - 30] : (light ?? [stage.fire[0], section === 'stars' ? stage.sky - 60 : stage.treeline - 60])
+    // The light starts where she left it, or on the forest just above the fire (the first part: up in the empty sky,
+    // so nobody is found before she has touched anything). The bandit starts on the empty marshmallow bag, where the
+    // trail begins.
+    const [lx, ly] = section === 'bandit' ? [stage.bag[0], stage.bag[1] - 30] : (light ?? [stage.fire[0], section === 'stars' || section === 'eyes' || section === 'story' ? stage.sky - 60 : stage.treeline - 60])
     this.light.x = this.light.tx = lx
     this.light.y = this.light.ty = ly
     for (const el of qa<SVGCircleElement>('star')) {

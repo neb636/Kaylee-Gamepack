@@ -309,6 +309,8 @@ export class WhaleWatch implements World3D {
   private orcaIn = false
   private jumps = 0
   private copies = 0
+  /** Seconds in the orca part: after a while every jump counts, and enough copied turns end it at any speed. */
+  private orcaT = 0
   private jumpCool = 2
   private copyCool = 0
   private doneT = -1
@@ -1188,22 +1190,24 @@ export class WhaleWatch implements World3D {
       this.progressed()
       if (this.copies === 1 || this.copies === 4) this.talk(L.whales.babyCopy, { once: `copy${this.copies}` })
     }
-    // Fast: one of them jumps in the wake every so often; slow, now and then anyway.
+    // Fast: one of them jumps in the wake every so often; slow, now and then anyway. She was just told to go gently
+    // with the otters, so after 15 s the slow jumps count too, and after 30 s six copied turns are enough.
+    this.orcaT += dt
     this.jumpCool -= dt
     if (this.jumpCool <= 0 && this.doneT < 0) {
-      const fast = k > FIND.jumpAt
+      const fast = k > FIND.jumpAt - (this.orcaT > 25 ? 0.25 : 0)
       this.jumpCool = fast ? 1.3 + Math.random() * 0.6 : 4 + Math.random() * 3
       const r = this.orcas[Math.floor(Math.random() * 4)]
       if (!r.o.jumping) {
         r.o.jump()
-        if (fast) {
+        if (fast || this.orcaT > 15) {
           this.jumps++
           this.counts.jumps++
           this.progressed()
         }
       }
     }
-    if (this.doneT < 0 && this.jumps >= FIND.jumps && this.copies >= 2) this.finale()
+    if (this.doneT < 0 && ((this.jumps >= FIND.jumps && this.copies >= 2) || (this.orcaT > 30 && this.copies >= 6) || this.orcaT > 75)) this.finale()
     for (const r of this.orcas) {
       const f = FORMATION[r.o.who]
       // Their place beside the boat (the baby swings out the way she turns).

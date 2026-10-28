@@ -466,6 +466,7 @@ export class HomesWorld extends Base3D implements World3D {
     right.glowGoal = 1
     this.events.wrong(p.id, kind)
     void say(L.party.oops[kind])
+    void say(L.party.where[p.id], { interrupt: false })
   }
   private oopsKind: HomeKind = 'nope'
 
@@ -540,7 +541,7 @@ export class HomesWorld extends Base3D implements World3D {
       this.homes.get(p.id)!.glowGoal = 1
       if (!this.hinted) {
         this.hinted = true
-        void say(L.party.glow)
+        void say(L.party.where[p.id])
       }
     }
     this.drawHint(waiting && this.hinted ? tmp.copy(p.pos).setY(p.pos.y + 0.5 * S) : null, waiting && this.hinted ? this.homes.get(p.id)!.at : undefined)
