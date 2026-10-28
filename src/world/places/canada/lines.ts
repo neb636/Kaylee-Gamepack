@@ -22,6 +22,9 @@ export const L = {
     winter: 'Canada has long, snowy winters, and red and orange leaves in the fall.',
     beaver: "The beaver is Canada's animal. Its teeth are orange and never stop growing.",
     syrup: "Most of the world's maple syrup comes from Quebec.",
+    castle: "In Quebec City there's a hotel that looks like a castle.",
+    hockey: "Hockey is Canada's favorite winter sport.",
+    bridges: 'In Banff, animals cross the highway on their own bridges.',
   },
   // One sticker per stamp (the plan's sticker table).
   stickers: {
