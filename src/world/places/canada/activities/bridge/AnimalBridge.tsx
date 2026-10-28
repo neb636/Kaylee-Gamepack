@@ -1,32 +1,42 @@
-// Animal Bridge (greybox 6, plan: planning/around-the-world/canada.html): the green wildlife bridge over the
-// Trans-Canada Highway in Banff, seen straight down the road. One verb, lead the herd: her finger leads a family's mama
-// and the rest follow in a wobbly line (herd.ts), up the forest bank, over the bridge while the cars zoom under it, and
-// down into the meadow. It gets richer three times:
-//   elk     Mama elk and her three spotted calves. Over the bridge, into the meadow, and they munch.
+// Animal Bridge (plan: planning/around-the-world/canada.html): the green wildlife bridge over the Trans-Canada
+// Highway in Banff in summer, seen straight down the road like a theater stage. One verb, lead the herd: her finger
+// leads a family's mama and the rest follow in a wobbly line (herd.ts), up the forest bank, over the bridge while the
+// cars and trucks zoom under it, and down into the meadow where Maple the beaver watches and cheers. It gets richer three
+// times:
+//   elk     Mama elk and her three spotted calves. On the way the littlest calf stops to sniff a flower and she has to
+//           fetch it (lead it over by itself). Into the meadow, and they munch.
 //   sheep   The bighorn sheep: the big ram leads, over the boulders by the fence if she likes (the rocky way: they hop
 //           up it, the elk and bears slow down there) or round them (the grassy way). In the middle of the bridge the
 //           two rams bonk heads.
 //   bears   Mama grizzly won't step on a bare bridge: she sniffs at it and sits down. Now the others carry seeds (in
 //           their fur): every one she leads over the bridge, either way, makes grass, then bushes, then berries grow
 //           behind it. Once it looks like the forest, the bears follow her over.
-//   album   Everyone in the meadow, and the wildlife camera's photos of each family on the bridge.
-// Any family can go next (she leads whichever she touches); a finger anywhere else leads the family she led last.
-// Always there: cars and trucks zooming under the bridge (tap: honk), the wildlife camera (tap: click, flash), a bald
-// eagle circling, a wolf peeking out of the forest, a mountain goat on a ledge, an elk walking down Banff's street, the
-// fence (it rattles; dragged toward the highway, mama stops there, looks at her and shakes her head).
-// How mama follows her finger and how the line follows mama are knobs (herd.ts), with the planting and the highway's
-// here (?feel=1). 2D only: one SVG written every frame, no three.js. Placeholder shapes, no voices yet (the full-loop
-// gate): a short line at the bottom says what's on screen, for Dad.
+//   album   Everyone in the meadow, and the wildlife camera's photos of each family on the bridge; then the stamp.
+// The bare link opens with Maple's story line (`story`). Any family can go next (she leads whichever she touches); a
+// finger anywhere else leads the family she led last. Always there: cars and trucks zooming under the bridge (tap:
+// honk), the wildlife camera (tap: click, flash), a bald eagle circling, a wolf peeking out of his bush, a mountain goat
+// on a ledge, an elk walking down Banff's street, the fence (it rattles; dragged toward the highway, mama stops there,
+// looks at her and shakes her head), Maple (a giggle). The animals are live SVG puppets (critters.tsx); the scenery is
+// painted sprites (assets/bridge-*.webp) placed on the stage. How mama follows her finger and how the line follows mama
+// are knobs (herd.ts), with the planting and the highway's here (?feel=1). 2D only: one SVG written every frame.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, bigCelebration, burst, sounds, useElementSize } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, lineText, say as speak, sounds, speechLevel, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { sfx } from '../../../../kit/sfx'
+import { StoryBeat } from '../../../../kit/StoryBeat'
+import { meet } from '../../book/met'
+import type { AnimalId } from '../../book/animals'
+import { L } from '../../lines'
+import { Maple } from '../../puppets/Maple'
+import type { CanadaActivityProps } from '../props'
+import { ART, type Pic } from './art'
+import { collect, Critter, CritterLife, INK, poseCritter, put, type CritterEls } from './critters'
 import { FOLLOW, Herd, LEAD, type Family, type Member } from './herd'
 import { noises } from './noises'
 import BRIDGE_SECTIONS, { type BridgeSection } from './sections'
-import { EMOJI, FAMILIES, FENCE_GAP, LOOKS, MEMBERS, TALL, WIDE, deckEnds, depth, halfCut, inMeadow, lift, onBridge, onDeck, rng, type FamilyId, type Kind, type Pt, type StageDef } from './stage'
+import { EMOJI, FAMILIES, FENCE_GAP, LOOKS, MEMBERS, TALL, WIDE, deckEnds, depth, halfCut, inMeadow, lift, mountainsBox, onBridge, onDeck, rng, type FamilyId, type Kind, type Pt, type StageDef } from './stage'
 
 const FILE = 'src/world/places/canada/activities/bridge/AnimalBridge.tsx'
 const PLANT = knobs('bridgePlant', 'Planting the bridge (for the bears)', FILE, {
@@ -39,25 +49,19 @@ const ROAD = knobs('bridgeRoad', 'The highway and the hints', FILE, {
   help: { value: 8, min: 3, max: 30, step: 1, label: 'Hint after', unit: 's', note: 'a hand shows the way after this long without her leading' },
 })
 
-const SAY: Record<BridgeSection, string> = {
-  elk: '🦌 Lead the elk family over the bridge to the meadow',
-  sheep: '🐏 The rams love the rocky way! Lead them over',
-  bears: '🐻 Lead the grizzlies over the bridge',
-  album: '📷 The wildlife camera’s photos!',
-}
-const LINES = {
-  fence: '🚧 Not on the highway! Over the bridge',
-  bare: '🌱 Too bare for the bears! Bring the others over with seeds',
-  ready: '🌳 Now it looks like the forest! Lead the grizzlies over',
-  seeds: '🌱 Lead them over the bridge: plants grow behind them',
-  photo: '📷 Click! The wildlife camera took their photo',
-  bonk: '🐏 Bonk! The rams bonk heads',
-  munch: '🌼 Yum, the meadow!',
-}
+/** The play sections (Maple's story comes before them). */
+type Part = Exclude<BridgeSection, 'story'>
+const B = L.bridge
+/** Sparkle's line when a family's turn begins (the photos: Maple). */
+const SAY: Record<Part, Line> = { elk: B.lead.elk, sheep: B.lead.sheep, bears: B.lead.bears, album: B.album }
+/** Each family's page in Maple's animal book. */
+const ANIMAL: Record<FamilyId, AnimalId> = { elk: 'elk', sheep: 'bighorn', bears: 'grizzly' }
+/** The mamas who talk (their mouths open with their voices). */
+const VOICE: Partial<Record<FamilyId, string>> = { elk: 'elk', bears: 'bear' }
 /** Who is already across at the start of each section (`?crossed=` overrides). */
-const START_CROSSED: Record<BridgeSection, FamilyId[]> = { elk: [], sheep: ['elk'], bears: ['elk', 'sheep'], album: ['elk', 'sheep', 'bears'] }
+const START_CROSSED: Record<Part, FamilyId[]> = { elk: [], sheep: ['elk'], bears: ['elk', 'sheep'], album: ['elk', 'sheep', 'bears'] }
 
-function parseCrossed(v: string, section: BridgeSection): FamilyId[] {
+function parseCrossed(v: string, section: Part): FamilyId[] {
   if (v === '') return START_CROSSED[section]
   if (v === 'none') return []
   const ids = new Set(v.split(','))
@@ -65,17 +69,16 @@ function parseCrossed(v: string, section: BridgeSection): FamilyId[] {
 }
 /** The shortest `?crossed=` for these families: empty for the section's own start, `none` for nobody (an empty value
  *  would read as the section's start), else the list. */
-const crossedParam = (ids: FamilyId[], section: BridgeSection) =>
+const crossedParam = (ids: FamilyId[], section: Part) =>
   ids.length === START_CROSSED[section].length && ids.every((id) => START_CROSSED[section].includes(id)) ? '' : ids.length ? FAMILIES.filter((id) => ids.includes(id)).join(',') : 'none'
 const greenParam = (g: number) => (g < 0.05 ? '' : String(Math.round(g * 10) / 10))
 /** The section for this moment: the family she leads (or leads next), or the photos once everyone is across. */
-function sectionOf(lead: FamilyId | null, crossed: FamilyId[]): BridgeSection {
+function sectionOf(lead: FamilyId | null, crossed: FamilyId[]): Part {
   if (crossed.length === FAMILIES.length) return 'album'
   if (lead && !crossed.includes(lead)) return lead
   return FAMILIES.find((id) => !crossed.includes(id))!
 }
 
-const INK = '#4A3B57'
 const N_CELLS = 12
 const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v)
 const bell = (p: number) => (p <= 0 || p >= 1 ? 0 : Math.sin(p * Math.PI))
@@ -89,19 +92,12 @@ interface Anim {
   t0: number
   dur: number
 }
-interface AnimalEls {
-  root: SVGGElement
-  pose: SVGGElement
-  head: SVGGElement | null
-  headPivot: Pt
-  legs: { el: SVGGElement; px: number; py: number }[]
-  seeds: SVGGElement | null
-}
 interface Car {
   el: SVGGElement
-  body: SVGRectElement
-  box: SVGRectElement
-  lights: SVGCircleElement[]
+  /** The car's and the truck's sprites, seen from the front (coming at us) and the back (driving away). */
+  looks: Record<'car-front' | 'car-back' | 'truck-front' | 'truck-back', SVGElement>
+  /** A glow over its lights when it honks. */
+  glow: SVGElement
   on: boolean
   s: number
   dir: 1 | -1
@@ -116,26 +112,20 @@ export interface Snapshot {
 }
 
 interface Info {
-  section: BridgeSection
+  section: Part
   crossed: FamilyId[]
   green: number
   seeds: boolean
 }
 interface Events {
   info: (i: Info) => void
-  say: (text: string) => void
+  /** Speak a line (and show its words for Dad). `queue` waits for the line playing now (a book card's) to finish. */
+  say: (line: Line, queue: boolean) => void
   album: (photos: Snapshot[]) => void
-}
-
-/** Writes an SVG attribute only when it changes (most of the scene is still most frames). */
-const written = new WeakMap<Element, Record<string, string>>()
-function put(el: Element | null | undefined, name: string, value: string) {
-  if (!el) return
-  let w = written.get(el)
-  if (!w) written.set(el, (w = {}))
-  if (w[name] === value) return
-  w[name] = value
-  el.setAttribute(name, value)
+  /** Maple in the meadow: an action. */
+  maple: (action: 'cheer' | 'hop' | 'wave' | 'wiggle' | 'slap') => void
+  /** Every family is across and the album has played: the payoff is over. */
+  done: () => void
 }
 
 class BridgeWorld {
@@ -143,16 +133,17 @@ class BridgeWorld {
   herd: Herd
   lead: FamilyId | null
   crossed: FamilyId[]
-  section: BridgeSection
+  section: Part
   now = 0
   lastTouch = 0
   /** Her finger, and the family it leads (fixed while it's down, so a family arriving doesn't hand her drag to the next). */
-  finger: { id: number; x: number; y: number; sx: number; sy: number; t0: number; moved: number; who: Member | null; poke: boolean; fam: FamilyId | null } | null = null
+  finger: { id: number; x: number; y: number; sx: number; sy: number; t0: number; moved: number; who: Member | null; poke: boolean; fam: FamilyId | null; lost: Member | null } | null = null
   /** Waypoints for a family walking by itself (over the bridge to the meadow for the photos). */
   routes = new Map<FamilyId, Pt[]>()
   vb = { x: 0, y: 0, w: 1600, h: 1000 }
   els: Record<string, Element | null> = {}
-  ael = new Map<Member, AnimalEls>()
+  ael = new Map<Member, CritterEls>()
+  life = new Map<Member, CritterLife>()
   anims = new Map<Member, Anim>()
   order: Member[] = []
   cells: number[] = new Array(N_CELLS).fill(0)
@@ -167,7 +158,7 @@ class BridgeWorld {
   cars: Car[] = []
   nextCar = 0.4
   eagle = { dive: -9 }
-  wolf = { up: 0, next: 9, until: -9, howl: -9 }
+  wolf = { up: 0, next: 9, until: -9, howl: -9, rustle: -9 }
   goat = { at: 0, from: 0, t0: -9 }
   townElk = { x: 0, dir: 1, stop: -9 }
   clouds: { el: SVGGElement; x: number; y: number; v: number }[] = []
@@ -178,6 +169,16 @@ class BridgeWorld {
   sayAt = -9
   lastSay = ''
   sentGreen = -1
+  /** Lines said once a run, and when a book card last popped (lines after it wait their turn). */
+  once = new Set<string>()
+  metAt = -9
+  /** The littlest calf that stops to sniff a flower (once a run, on the elk's first crossing). */
+  strayed = false
+  strayAt = -9
+  fetched = false
+  flower: Pt | null = null
+  /** The hint's spoken line, at most once per stuck spell. */
+  hintSaid = false
   r: () => number
   /** Set when the scene goes away (a new run, or React trying the effect twice): its timers do nothing then. */
   dead = false
@@ -188,7 +189,7 @@ class BridgeWorld {
   constructor(
     private svg: SVGSVGElement,
     stage: StageDef,
-    section: BridgeSection,
+    section: Part,
     crossed: FamilyId[],
     green: number,
     seed: number,
@@ -207,23 +208,19 @@ class BridgeWorld {
     this.lead = s0 === 'album' ? null : s0
     const q = <T extends Element>(k: string) => svg.querySelector(`[data-k="${k}"]`) as T | null
     const qa = <T extends Element>(k: string) => [...svg.querySelectorAll(`[data-k="${k}"]`)] as T[]
-    for (const k of ['animals', 'deck-green', 'deck-trees', 'camera', 'lamp', 'flash', 'stars', 'hint', 'hint-path', 'hint-hand', 'eagle', 'eagle-wings', 'wolf', 'goat', 'town-elk', 'town-car']) this.els[k] = q(k)
-    for (const m of this.herd.all()) {
-      const root = q<SVGGElement>(`a-${m.fam}-${m.i}`)!
-      const head = root.querySelector<SVGGElement>('[data-k="head"]')
-      this.ael.set(m, {
-        root,
-        pose: root.querySelector<SVGGElement>('[data-k="pose"]')!,
-        head,
-        headPivot: head ? [+(head.dataset.px ?? 0), +(head.dataset.py ?? 0)] : [0, 0],
-        legs: [...root.querySelectorAll<SVGGElement>('[data-leg]')].map((el) => ({ el, px: +(el.dataset.px ?? 0), py: +(el.dataset.py ?? 0) })),
-        seeds: root.querySelector<SVGGElement>('[data-k="seeds"]'),
-      })
-    }
+    for (const k of ['animals', 'deck-green', 'deck-trees', 'camera', 'lamp', 'flash', 'stars', 'hint', 'hint-path', 'hint-hand', 'eagle', 'eagle-wings', 'wolf', 'goat', 'town-elk', 'town-car', 'flower', 'bush']) this.els[k] = q(k)
+    this.herd.all().forEach((m, i) => {
+      this.ael.set(m, collect(q<SVGGElement>(`a-${m.fam}-${m.i}`)!))
+      const life = new CritterLife(i * 5 + 3)
+      life.face = m.dir
+      this.life.set(m, life)
+    })
     for (const g of qa<SVGGElement>('cell'))
       this.cellEls.push({ g, grass: g.querySelector('[data-k="grass"]')!, bush: g.querySelector('[data-k="bush"]')!, berry: g.querySelector('[data-k="berry"]')!, pop: -9 })
-    for (const el of qa<SVGGElement>('car'))
-      this.cars.push({ el, body: el.querySelector('[data-k="car-body"]')!, box: el.querySelector('[data-k="car-box"]')!, lights: [...el.querySelectorAll<SVGCircleElement>('[data-k="car-light"]')], on: false, s: 0, dir: 1, truck: false, honk: -9, zoomed: false })
+    for (const el of qa<SVGGElement>('car')) {
+      const look = (k: string) => el.querySelector<SVGElement>(`[data-k="${k}"]`)!
+      this.cars.push({ el, looks: { 'car-front': look('car-front'), 'car-back': look('car-back'), 'truck-front': look('truck-front'), 'truck-back': look('truck-back') }, glow: look('car-glow'), on: false, s: 0, dir: 1, truck: false, honk: -9, zoomed: false })
+    }
     for (const el of qa<SVGGElement>('cloud')) this.clouds.push({ el, x: +(el.dataset.x ?? 0), y: +(el.dataset.y ?? 0), v: 6 + this.r() * 8 })
     for (const el of qa<SVGCircleElement>('seed')) this.seedDots.push({ el, x: 0, y: 0, t: 9 })
     // The bridge as planted as the link says (the bears' section can start green).
@@ -237,7 +234,7 @@ class BridgeWorld {
     this.wolf.next = 6 + this.r() * 8
     // Album: the photos are there already when a link opens it.
     for (const id of crossed) this.photos.set(id, this.posed(id))
-    if (section === 'album') this.later(() => this.ev.album(this.album()), 900)
+    if (section === 'album') this.albumAt = 0.9
     this.later(() => this.info(), 0)
   }
 
@@ -247,17 +244,29 @@ class BridgeWorld {
     return this.cells.reduce((s, c) => s + Math.min(3, c), 0) / (3 * N_CELLS)
   }
 
-  private info() {
+  info() {
     const section = sectionOf(this.lead, this.crossed)
     this.section = section
     this.ev.info({ section, crossed: [...this.crossed], green: this.green(), seeds: this.seedsOn })
   }
 
-  private say(text: string, minGap = 0) {
+  private say(line: Line, minGap = 0) {
+    const text = lineText(line)
     if (text === this.lastSay && this.now - this.sayAt < minGap) return
     this.lastSay = text
     this.sayAt = this.now
-    this.ev.say(text)
+    // Right after a book card pops up, Sparkle is naming the animal: wait for her.
+    this.ev.say(line, this.now - this.metAt < 3)
+  }
+  /** Say it only the first time this run. */
+  private sayOnce(key: string, line: Line) {
+    if (this.once.has(key)) return
+    this.once.add(key)
+    this.say(line)
+  }
+  /** She touched this animal: its page in Maple's book (the card pops up the first time). */
+  private met(id: AnimalId) {
+    if (meet(id)) this.metAt = this.now
   }
 
   private album() {
@@ -293,14 +302,27 @@ class BridgeWorld {
     if (this.finger) return
     const [x, y] = this.toStage(e)
     this.lastTouch = this.now
-    const f = { id: e.pointerId, x, y, sx: e.clientX, sy: e.clientY, t0: this.now, moved: 0, who: null as Member | null, poke: false, fam: this.lead }
+    const f = { id: e.pointerId, x, y, sx: e.clientX, sy: e.clientY, t0: this.now, moved: 0, who: null as Member | null, poke: false, fam: this.lead, lost: null as Member | null }
     this.finger = f
+    this.hintSaid = false
     // Things to poke come first (they don't lead anyone).
     if (this.pokeAt(x, y)) {
       f.poke = true
       return
     }
     const hit = this.herd.near(x, y, LEAD.grab)
+    // The calf sniffing its flower: her finger leads it by itself, back to its family.
+    if (hit?.a.lost) {
+      f.who = hit.a
+      f.fam = null
+      f.lost = hit.a
+      hit.a.lostTo = this.aim(x, y)
+      this.fetched = true
+      this.play(hit.a, 'hop', 0.45)
+      noises.call('calf')
+      this.met('elk')
+      return
+    }
     if (hit) {
       f.who = hit.a
       f.fam = hit.f.id
@@ -330,6 +352,10 @@ class BridgeWorld {
     f.x = x
     f.y = y
     this.lastTouch = this.now
+    if (f.lost) {
+      if (f.moved >= 12 && f.lost.lost) f.lost.lostTo = this.aim(x, y)
+      return
+    }
     if (f.poke || !f.fam) return
     if (f.who && f.moved < 12) return
     this.lead_(f.fam, x, y)
@@ -340,12 +366,13 @@ class BridgeWorld {
     if (!f || f.id !== e.pointerId) return
     this.finger = null
     this.lastTouch = this.now
+    if (f.lost) f.lost.lostTo = null
     const tap = f.moved < 12 && this.now - f.t0 < 0.45
     if (!tap || f.poke) return
-    if (f.who) this.pokeAnimal(f.who)
-    else if (this.nearFence(f.x, f.y)) {
+    if (f.who && !f.lost) this.pokeAnimal(f.who)
+    else if (!f.who && this.nearFence(f.x, f.y)) {
       noises.rattle()
-      this.say('🚧 The wildlife fence keeps the animals off the highway', 4)
+      this.sayOnce('fenceTap', B.fenceTap)
     }
   }
 
@@ -361,10 +388,11 @@ class BridgeWorld {
     f.auto = false
     sounds.pickup()
     this.play(f.m[0], 'hop', 0.45)
+    this.met(ANIMAL[id])
     const before = this.section
     this.info()
     if (this.section !== before && this.section !== 'album') this.say(SAY[this.section])
-    else if (this.seedsOn && id !== 'bears' && this.herd.fams.bears.shy) this.say(LINES.seeds, 6)
+    else if (id === 'elk') this.sayOnce('elkGo', B.elkGo)
   }
 
   private nearFence(x: number, y: number) {
@@ -378,7 +406,7 @@ class BridgeWorld {
     const st = this.st
     // The wildlife camera.
     const [cx, cy] = st.camera
-    if (dist(x, y, cx, cy - 120) < 80) {
+    if (dist(x, y, cx, cy - 100) < 80) {
       this.snap(true)
       return true
     }
@@ -390,7 +418,6 @@ class BridgeWorld {
       if (Math.abs(x - px) < 60 * sz && y < py + 6 && y > py - (c.truck ? 110 : 70) * sz) {
         c.honk = this.now
         noises.honk(c.truck)
-        if (c.truck) this.say('🚚 Honk honk! Trucks drive under the bridge', 4)
         return true
       }
     }
@@ -399,19 +426,22 @@ class BridgeWorld {
     if (dist(x, y, ea[0], ea[1]) < 100) {
       this.eagle.dive = this.now
       noises.screech()
-      this.say('🦅 A bald eagle!', 4)
+      this.met('bald-eagle')
       return true
     }
     // The wolf (peeking or not: a tap on his bush brings him out).
     const [wx, wy] = st.wolf
-    if (dist(x, y, wx, wy - 30) < 80) {
-      if (this.wolf.up > 0.5) {
+    const onWolf = this.wolf.up > 0.5 && dist(x, y, wx, wy - 150) < 90
+    if (onWolf || dist(x, y, wx, wy - 40) < 100) {
+      if (onWolf) {
         this.wolf.howl = this.now
         noises.howl()
-        this.say('🐺 A wolf! Wolves use the bridges too', 4)
+        this.met('wolf')
       } else {
+        // His bush rustles, and out he peeks.
         sfx.fwip()
         this.wolf.next = this.now
+        this.wolf.rustle = this.now
       }
       return true
     }
@@ -422,7 +452,7 @@ class BridgeWorld {
       this.goat.at = (this.goat.at + 1) % st.goat.length
       this.goat.t0 = this.now
       sfx.boing()
-      this.say('🐐 A mountain goat on the cliff', 4)
+      this.met('mountain-goat')
       return true
     }
     // The elk walking down Banff's street.
@@ -430,7 +460,7 @@ class BridgeWorld {
       this.townElk.stop = this.now
       noises.honk(false)
       noises.call('calf')
-      this.say('🦌 An elk in Banff town! The cars wait for it', 4)
+      this.met('elk')
       return true
     }
     return false
@@ -448,6 +478,7 @@ class BridgeWorld {
     }
     this.play(a, 'hop', 0.5)
     sfx.boing()
+    this.met(ANIMAL[a.fam])
     this.later(() => noises.call(a.kind), 120)
   }
 
@@ -460,7 +491,7 @@ class BridgeWorld {
     f.target = null
     a.dir = b.x < a.x ? -1 : 1
     b.dir = a.x > b.x ? 1 : -1
-    this.say(LINES.bonk, 3)
+    this.sayOnce('bonk', B.bonk)
     this.later(() => noises.bonk(), 600)
   }
 
@@ -481,8 +512,8 @@ class BridgeWorld {
     if (who && !this.photos.has(who.id)) {
       const L = who.m[0]
       this.photos.set(who.id, { fam: who.id, pts: who.m.map((a) => [a.kind, a.x - L.x, a.y - L.y, a.dir]) })
-      this.say(LINES.photo, 3)
-    } else if (byHand) this.say(who ? '📷 Click!' : '📷 Click! Nobody on the bridge yet', 3)
+      this.sayOnce('camera', B.camera)
+    } else if (byHand) this.sayOnce('camera', B.camera)
   }
 
   private plant(a: Member) {
@@ -525,7 +556,7 @@ class BridgeWorld {
         noises.call('grizzly')
       }, 1100)
       sounds.sparkle()
-      this.say(LINES.ready)
+      this.say(B.bearYes)
       this.info()
     }
   }
@@ -541,7 +572,8 @@ class BridgeWorld {
     this.later(() => {
       for (const m of f.m) this.play(m, 'sit', 2.4)
     }, 1500)
-    this.say(LINES.bare)
+    this.say(B.bareNo, 6)
+    this.later(() => this.herd.fams.bears.shy && this.say(B.seeds, 6), 2600)
     if (!this.seedsOn) {
       this.seedsOn = true
       sounds.sparkle()
@@ -556,7 +588,7 @@ class BridgeWorld {
     this.play(f.m[0], 'shake', 1)
     noises.huff()
     noises.rattle()
-    this.say(LINES.fence, 2)
+    this.say(B.fence, 8)
   }
 
   private arrive(f: Family) {
@@ -567,20 +599,26 @@ class BridgeWorld {
     sounds.correct()
     const p = this.toScreen(f.m[0].x, f.m[0].y - 60)
     if (p) burst(p[0], p[1])
-    this.say(LINES.munch)
+    // Maple cheers them in, and the mamas say thank you.
+    this.ev.maple('cheer')
+    this.say(B.cheer[f.id])
+    const thanks = f.id === 'elk' ? B.elkHome : f.id === 'bears' ? B.bearHome : null
+    if (thanks) this.later(() => this.say(thanks), 1900)
     if (!this.photos.has(f.id)) this.photos.set(f.id, this.posed(f.id))
     if (this.lead === f.id) this.lead = FAMILIES.find((id) => !this.crossed.includes(id)) ?? null
     const before = this.section
     this.info()
     if (this.section === 'album') {
-      this.albumAt = this.now + 1.6
+      // (After Maple's cheer and the mama's thank-you.)
+      this.albumAt = this.now + (thanks ? 3.8 : 2.4)
       this.later(() => this.gather(), 1200)
     } else if (this.section !== before)
       this.later(() => {
-        this.say(SAY[this.section])
+        // Unless she's already leading the next ones.
+        if (!this.finger) this.say(SAY[this.section])
         const next = this.lead && this.herd.fams[this.lead]
         if (next) this.play(next.m[0], 'hop', 0.5)
-      }, 1800)
+      }, 3400)
   }
 
   /** Everyone walks into the meadow for the photos. */
@@ -612,9 +650,13 @@ class BridgeWorld {
     this.anims.set(a, { kind, t0: this.now, dur })
   }
 
+  dt = 1 / 60
+  /** While the story plays over the scene: no hints. */
+  paused = false
   tick(dt: number) {
     if (this.dead) return
     this.now += dt
+    this.dt = dt
     const st = this.st
     const now = this.now
     // Her finger keeps leading while it's down (the target was set by down/move); the herd walks.
@@ -660,10 +702,9 @@ class BridgeWorld {
     }
     if (this.albumAt > 0 && now >= this.albumAt) {
       this.albumAt = -1
-      sounds.fanfare()
-      bigCelebration()
-      this.ev.album(this.album())
+      this.payoff()
     }
+    this.lostCalf()
     // Idle families graze now and then.
     this.graze -= dt
     if (this.graze <= 0) {
@@ -672,8 +713,14 @@ class BridgeWorld {
       const m = all[Math.floor(this.r() * all.length)]
       if (m) this.play(m, 'munch', 1.6 + this.r() * 1.4)
     }
-    // Stuck: show the way.
-    this.hint(now - this.lastTouch > ROAD.help && !this.finger)
+    // Stuck: show the way (and say it, once per stuck spell).
+    const stuck = !this.paused && now - this.lastTouch > ROAD.help && !this.finger && this.section !== 'album'
+    this.hint(stuck)
+    if (stuck && !this.hintSaid) {
+      this.hintSaid = true
+      const calf = this.herd.fams.elk.m.find((m) => m.lost)
+      this.say(calf ? B.fetch : this.lead === 'bears' && this.herd.fams.bears.shy && this.seedsOn ? B.seeds : this.lead ? SAY[this.lead] : B.lead.elk)
+    }
     this.cars_(dt)
     this.ambient(dt)
     this.draw()
@@ -690,6 +737,16 @@ class BridgeWorld {
     // Who to lead: the family whose turn it is, or (the bears waiting at a bare bridge) one that carries seeds.
     let who: Family | null = this.lead ? this.herd.fams[this.lead] : null
     if (who?.id === 'bears' && bears.shy && this.seedsOn) who = this.herd.fams[(['elk', 'sheep'] as FamilyId[]).find((id) => this.crossed.includes(id)) ?? 'elk']
+    // The lost calf: from it, over the bridge, to its family.
+    const calf = this.herd.fams.elk.m.find((m) => m.lost)
+    if (calf) {
+      const mama = this.herd.fams.elk.m[0]
+      const [l, r] = deckEnds(st)
+      const my = (st.deck[0] + st.deck[1]) / 2
+      const across = mama.x > st.road.x
+      this.hintPath(across ? [[calf.x, calf.y], [l - 10, my + 20], [st.road.x, my], [r - 20, my], [mama.x - 80, mama.y]] : [[calf.x, calf.y], [mama.x - 60, mama.y]])
+      return
+    }
     if (!who) {
       put(hint, 'opacity', '0')
       return
@@ -701,6 +758,12 @@ class BridgeWorld {
     const pts: Pt[] = right
       ? [[L.x, L.y], [r + 10, my + 20], [st.road.x, my], [l + 20, my], [st.wait[who.id][0][0], st.wait[who.id][0][1]]]
       : [[L.x, L.y], [l - 10, my + 20], [st.road.x, my], [r - 20, my], [st.meadow[who.id][0][0], st.meadow[who.id][0][1]]]
+    this.hintPath(pts)
+  }
+
+  /** The dotted way and the hand walking along it. */
+  private hintPath(pts: Pt[]) {
+    const hint = this.els.hint
     put(this.els['hint-path'], 'points', pts.map((p) => `${p[0].toFixed(0)},${p[1].toFixed(0)}`).join(' '))
     // The hand walks the way, then starts again.
     const p = ((this.now - this.lastTouch - ROAD.help) % 3) / 2.4
@@ -748,10 +811,10 @@ class BridgeWorld {
         c.s = c.dir === 1 ? 0 : 1.05
         c.truck = this.r() < 0.25
         c.zoomed = false
-        const colors = ['#F48FB1', '#9AD0F5', '#FFE08A', '#A8E6B8', '#C7B3F0', '#FFB38A']
-        put(c.body, 'fill', c.truck ? '#E8E4F0' : colors[Math.floor(this.r() * colors.length)])
-        put(c.box, 'visibility', c.truck ? 'visible' : 'hidden')
-        for (const l of c.lights) put(l, 'fill', c.dir === 1 ? '#FFF6C8' : '#FF6A6A')
+        // Coming at us we see its front; driving away, its back.
+        const look = `${c.truck ? 'truck' : 'car'}-${c.dir === 1 ? 'front' : 'back'}`
+        for (const [k, el] of Object.entries(c.looks)) put(el, 'visibility', k === look ? 'visible' : 'hidden')
+        put(c.glow, 'fill', c.dir === 1 ? '#FFF6C8' : '#FF8A8A')
       }
     }
     for (const c of this.cars) {
@@ -799,7 +862,10 @@ class BridgeWorld {
     const want = now < w.until || now - w.howl < 1.6 ? 1 : 0
     w.up += (want - w.up) * Math.min(1, dt * 5)
     const tilt = now - w.howl < 1.6 ? -25 * bell((now - w.howl) / 1.6) : 0
-    put(this.els.wolf, 'transform', `translate(${st.wolf[0]} ${(st.wolf[1] + (1 - w.up) * 70).toFixed(1)}) rotate(${tilt.toFixed(1)})`)
+    const peek = Math.sin(now * 1.7) * 3 * w.up
+    put(this.els.wolf, 'transform', `translate(${st.wolf[0]} ${(st.wolf[1] - 104 + (1 - w.up) * 130).toFixed(1)}) rotate(${(tilt + peek).toFixed(1)})`)
+    const rs = now - w.rustle < 0.5 ? Math.sin((now - w.rustle) * 50) * 4 * (1 - (now - w.rustle) / 0.5) : 0
+    put(this.els.bush, 'transform', `rotate(${rs.toFixed(1)} ${st.wolf[0]} ${st.wolf[1] + 22})`)
     // The goat.
     const [gx, gy] = this.goatPos()
     put(this.els.goat, 'transform', `translate(${gx.toFixed(1)} ${gy.toFixed(1)})`)
@@ -868,6 +934,10 @@ class BridgeWorld {
       put(d.el, 'opacity', d.t < 0.6 ? (1 - d.t / 0.6).toFixed(2) : '0')
       if (d.t < 0.6) put(d.el, 'transform', `translate(${d.x.toFixed(0)} ${(d.y + d.t * 60).toFixed(0)})`)
     }
+    // The flower the lost calf sniffs (it stays where it grew).
+    const fl = this.flower
+    put(this.els.flower, 'visibility', fl ? 'visible' : 'hidden')
+    if (fl) put(this.els.flower, 'transform', `translate(${fl[0].toFixed(0)} ${fl[1].toFixed(0)}) scale(${depth(st, fl[1]).toFixed(2)})`)
     // The camera's flash.
     const fp = (now - this.flashAt) / 0.35
     put(this.els.flash, 'opacity', fp < 1 ? (0.4 * (1 - fp)).toFixed(2) : '0')
@@ -879,14 +949,12 @@ class BridgeWorld {
       const { x, y, sz } = this.carAt(c)
       const honk = now - c.honk < 0.5
       put(c.el, 'transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${(sz * (honk ? 1.08 : 1)).toFixed(3)})`)
-      for (const l of c.lights) put(l, 'r', honk && Math.floor(now * 10) % 2 ? '13' : '9')
+      put(c.glow, 'opacity', honk && Math.floor(now * 10) % 2 ? '0.85' : '0')
     }
   }
 
   private drawAnimal(m: Member) {
     const st = this.st
-    const e = this.ael.get(m)!
-    const look = LOOKS[m.kind]
     const a = this.anims.get(m)
     const now = this.now
     let p = a ? (now - a.t0) / a.dur : 1
@@ -894,34 +962,13 @@ class BridgeWorld {
       this.anims.delete(m)
       p = 1
     }
-    const kind = a && p < 1 ? a.kind : null
-    // Walking: legs swing, the body bobs, and the sheep hop up the boulders.
-    const stride = look.rx * 0.55
-    const ph = m.walk / stride
-    const go = clamp(m.speed / 60, 0, 1)
-    let bob = -Math.abs(Math.sin(ph)) * 3 * go
-    bob -= Math.abs(Math.sin(m.walk / 38)) * (m.fam === 'sheep' ? 22 : 7) * m.rocky * go
-    let sx = 1
-    let sy = 1
-    let headA = 0
-    let dx = 0
-    if (kind === 'hop' || kind === 'sit') {
-      if (kind === 'hop') {
-        bob -= bell(p) * 38
-        const sq = p < 0.15 ? 1 - p / 0.15 : p > 0.85 ? (p - 0.85) / 0.15 : 0
-        sx = 1 + 0.12 * (p < 0.15 || p > 0.85 ? Math.sin(sq * Math.PI) : 0)
-        sy = 2 - sx
-      } else {
-        const s = Math.min(1, p * 5, (1 - p) * 5)
-        sy = 1 - 0.18 * s
-        sx = 1 + 0.08 * s
-      }
-    } else if (kind === 'shake') headA = Math.sin(p * Math.PI * 6) * 20 * (1 - p)
-    else if (kind === 'sniff') headA = -18 + Math.sin(p * Math.PI * 10) * 6
-    else if (kind === 'munch') headA = 38 * Math.min(1, p * 6, (1 - p) * 6) + Math.sin(now * 12) * 3 * (p > 0.15 && p < 0.85 ? 1 : 0)
+    const act = a && p < 1 ? a.kind : null
     // The bonk: back up, charge, knock, wobble.
+    let dx = 0
+    let bonkHead: number | null = null
     const bk = this.bonk
     if (bk && (bk.a === m || bk.b === m)) {
+      const look = LOOKS[m.kind]
       const q = (now - bk.t0) / 1.8
       const toward = (bk.a === m ? bk.b.x : bk.a.x) > m.x ? 1 : -1
       const gap = Math.abs(bk.a.x - bk.b.x)
@@ -930,16 +977,86 @@ class BridgeWorld {
       else if (q < 0.33) dx = -toward * 22 + toward * (meet + 22) * ((q - 0.2) / 0.13)
       else if (q < 0.85) dx = toward * meet - toward * 10 * bell((q - 0.33) / 0.52)
       else dx = toward * meet * (1 - (q - 0.85) / 0.15)
-      headA = q > 0.12 && q < 0.4 ? 22 : q < 0.85 ? Math.sin(q * 40) * 8 : 0
+      bonkHead = q > 0.12 && q < 0.4 ? 22 : q < 0.85 ? Math.sin(q * 40) * 8 : 0
     }
-    const s = depth(st, m.y)
-    const y = m.y - lift(st, m.x, m.y)
-    put(e.root, 'transform', `translate(${(m.x + dx).toFixed(1)} ${y.toFixed(1)}) scale(${(m.dir * s).toFixed(3)} ${s.toFixed(3)})`)
-    put(e.pose, 'transform', `translate(0 ${bob.toFixed(1)}) scale(${sx.toFixed(3)} ${sy.toFixed(3)})`)
-    if (e.head) put(e.head, 'transform', `rotate(${headA.toFixed(1)} ${e.headPivot[0]} ${e.headPivot[1]})`)
-    const swing = Math.sin(ph) * 28 * go
-    e.legs.forEach((l, i) => put(l.el, 'transform', `rotate(${((i === 0 || i === 3 ? 1 : -1) * swing).toFixed(1)} ${l.px} ${l.py})`))
-    if (e.seeds) put(e.seeds, 'visibility', this.seedsOn && this.herd.fams.bears.shy ? 'visible' : 'hidden')
+    // The mamas' mouths move with their voices.
+    const voice = m.i === 0 ? VOICE[m.fam] : undefined
+    poseCritter(this.ael.get(m)!, this.life.get(m)!, {
+      kind: m.kind,
+      x: m.x,
+      y: m.y - lift(st, m.x, m.y),
+      scale: depth(st, m.y),
+      dir: m.dir,
+      walk: m.walk,
+      speed: m.speed,
+      rocky: m.rocky,
+      sheep: m.fam === 'sheep',
+      now,
+      dt: this.dt,
+      act: act === 'bonk' ? null : act,
+      p,
+      dx,
+      bonkHead,
+      mouth: voice ? speechLevel(voice) : 0,
+      seeds: m.fam !== 'bears' && this.seedsOn && this.herd.fams.bears.shy,
+    })
+  }
+
+  /** The littlest calf stops to sniff a flower on the elk's first crossing (once a run), and waits to be fetched. */
+  private lostCalf() {
+    const st = this.st
+    const elk = this.herd.fams.elk
+    const calf = elk.m[elk.m.length - 1]
+    const mama = elk.m[0]
+    const [l] = deckEnds(st)
+    if (!this.strayed && !this.crossed.includes('elk') && onDeck(st, mama.y) && Math.abs(mama.x - st.road.x) < halfCut(st, mama.y) && calf.x < l - 40 && !onBridge(st, calf.x, calf.y)) {
+      this.strayed = true
+      this.strayAt = this.now
+      calf.lost = true
+      calf.lostTo = null
+      calf.vx = 0
+      calf.vy = 0
+      this.flower = [calf.x + calf.dir * 46, calf.y + 6]
+      this.play(calf, 'sniff', 1.4)
+      this.later(() => noises.call('calf'), 400)
+      this.later(() => this.say(B.lost), 1200)
+    }
+    if (!calf.lost) return
+    // Sniffing away at its flower until she fetches it, with a little bleat now and then.
+    if (!this.finger?.lost && !this.anims.has(calf) && this.flower) {
+      calf.dir = this.flower[0] > calf.x ? 1 : -1
+      if (dist(calf.x, calf.y, this.flower[0], this.flower[1]) < 120) this.play(calf, 'sniff', 1.6 + this.r())
+      else if (this.r() < 0.02) {
+        this.play(calf, 'hop', 0.4)
+        noises.call('calf')
+      }
+    }
+    // Back with its family: it hops into the line again.
+    // (Once she's touched it, or after a while: her family came back for it.)
+    const near = elk.m.some((o) => o !== calf && !o.lost && dist(o.x, o.y, calf.x, calf.y) < 170)
+    if (near && (this.fetched || this.now - this.strayAt > 4)) {
+      calf.lost = false
+      calf.lostTo = null
+      if (this.finger?.lost === calf) this.finger.lost = null
+      this.play(calf, 'hop', 0.5)
+      this.play(mama, 'hop', 0.5)
+      noises.call('calf')
+      sounds.correct()
+      const sp = this.toScreen(calf.x, calf.y - 60)
+      if (sp) burst(sp[0], sp[1])
+      this.say(B.elkFound)
+    }
+  }
+
+  /** Everyone is across: the camera's photos pop in, Maple cheers, and then the stamp. */
+  private payoff() {
+    sounds.fanfare()
+    bigCelebration()
+    this.ev.album(this.album())
+    this.ev.maple('cheer')
+    this.say(B.album)
+    this.later(() => this.say(B.done, 0), 2600)
+    this.later(() => this.ev.done(), 5200)
   }
 
   qa() {
@@ -962,6 +1079,8 @@ class BridgeWorld {
       seeds: this.seedsOn,
       photos: [...this.photos.keys()],
       fams,
+      calf: ((c) => (c ? scr(c.x, c.y - 30) : null))(this.herd.fams.elk.m.find((m) => m.lost)),
+      strayed: this.strayed,
       bridge: { left: scr(l + 30, my), middle: scr(st.road.x, my), right: scr(r - 30, my) },
       forest: scr(st.wait.elk[0][0], st.wait.elk[0][1]),
       meadow: scr(st.meadow.elk[0][0], st.meadow.elk[0][1]),
@@ -974,27 +1093,35 @@ class BridgeWorld {
 // ---------------------------------------------------------------- React
 
 interface Run {
-  section: BridgeSection
+  section: Part
   crossed: FamilyId[]
   green: number
   seed: number
   n: number
 }
 
-export function AnimalBridge() {
+export function AnimalBridge({ onDone, setProgress }: CanadaActivityProps) {
   const { start, param, enter } = useSections(BRIDGE_SECTIONS)
-  const first = (start ?? 'elk') as BridgeSection
+  const first = (start && start !== 'story' ? start : 'elk') as Part
+  // The bare link (and the story's own link) opens with Maple's line; a later section starts playing at once.
+  const [story, setStory] = useState(start === null || start === 'story')
+  const storyOn = useRef(story)
   const [run, setRun] = useState<Run>(() => ({ section: first, crossed: parseCrossed(param('crossed'), first), green: clamp(parseFloat(param('green')) || 0, 0, 1), seed: (Math.random() * 1e9) | 0, n: 0 }))
-  const [say, setSay] = useState(SAY[run.section])
+  const [say, setSay] = useState<Line>(SAY[run.section])
   const [info, setInfo] = useState<Info>({ section: run.section, crossed: run.crossed, green: run.green, seeds: run.green > 0 })
   const [album, setAlbum] = useState<Snapshot[] | null>(null)
   const box = useRef<HTMLDivElement>(null)
   const svg = useRef<SVGSVGElement>(null)
   const world = useRef<BridgeWorld | null>(null)
+  const maple = useRef<PuppetHandle>(null)
+  const finished = useRef(false)
+  const giggled = useRef(-99)
   const size = useElementSize(box)
   const wide = !size.height || size.width / size.height >= 1.05
   const stage = wide ? WIDE : TALL
   const mid = `bridge${run.n}`
+  const props = useRef({ onDone, setProgress })
+  props.current = { onDone, setProgress }
 
   // The view box: the stage scaled to fit, the extra edge filled with more of the valley (sky above, the banks at the
   // sides, the highway and the banks below).
@@ -1003,18 +1130,40 @@ export function AnimalBridge() {
   const vh = size.height ? size.height / k : stage.h
   const vb = { x: (stage.w - vw) / 2, y: (stage.h - vh) / 2, w: vw, h: vh }
 
+  useEffect(() => {
+    if (storyOn.current) enter('story')
+    // A link into the middle: Sparkle says whose turn it is (the photos speak for themselves).
+    else if (first !== 'album') {
+      setSay(SAY[first])
+      void speak(SAY[first])
+      const t = setTimeout(() => void maple.current?.play('wave'), 600)
+      return () => clearTimeout(t)
+    }
+  }, [])
+
   useLayoutEffect(() => {
     if (!svg.current) return
     const w = new BridgeWorld(svg.current, stage, run.section, run.crossed, run.green, run.seed, {
       info: (i) => {
         setInfo(i)
+        props.current.setProgress(i.crossed.length, FAMILIES.length)
         // The bridge's green counts in every section (she can plant it while leading any family).
-        enter(i.section, { crossed: crossedParam(i.crossed, i.section), green: greenParam(i.green) })
+        if (!storyOn.current) enter(i.section, { crossed: crossedParam(i.crossed, i.section), green: greenParam(i.green) })
       },
-      say: setSay,
+      say: (line, queue) => {
+        setSay(line)
+        void speak(line, { interrupt: !queue })
+      },
       album: setAlbum,
+      maple: (a) => void maple.current?.play(a),
+      done: () => {
+        if (finished.current) return
+        finished.current = true
+        props.current.onDone()
+      },
     })
     w.setVb(vb)
+    w.paused = storyOn.current
     world.current = w
     ;(window as unknown as { __canadaBridgeQA?: () => unknown }).__canadaBridgeQA = () => w.qa()
     const unwatch = watch('bridge', () => {
@@ -1068,9 +1217,22 @@ export function AnimalBridge() {
     return () => ts.forEach(clearTimeout)
   }, [album])
 
+  const endStory = () => {
+    storyOn.current = false
+    setStory(false)
+    const w = world.current
+    if (w) {
+      w.paused = false
+      w.lastTouch = w.now
+      w.info()
+    }
+    setTimeout(() => void maple.current?.play('wave'), 300)
+  }
+
   const again = () => {
     setAlbum(null)
     setSay(SAY.elk)
+    void speak(SAY.elk)
     setRun((r) => ({ section: 'elk', crossed: [], green: 0, seed: (Math.random() * 1e9) | 0, n: r.n + 1 }))
   }
 
@@ -1078,8 +1240,11 @@ export function AnimalBridge() {
   const big = 6000
   const [deckL, deckR] = deckEnds(st)
   const rc = st.road.x
-  const bottom = Math.max(st.h, vb.y + vb.h) + 40
   const scene = useScene(st)
+  const mb = mountainsBox(st)
+  // Maple stands in the meadow, on the stage like everyone else (her feet on her spot).
+  const mh = st.mapleH * k
+  const mapleBox = { left: (st.maple[0] - vb.x) * k - mh / 2, top: (st.maple[1] - vb.y) * k - mh * 0.97, width: mh, height: mh }
 
   return (
     <div
@@ -1106,86 +1271,75 @@ export function AnimalBridge() {
         {scene.clouds.map(([x, y, s], i) => (
           <g key={i} data-k="cloud" data-x={x} data-y={y} transform={`translate(${x} ${y})`}>
             <g transform={`scale(${s})`}>
-              <ellipse cx={0} cy={0} rx={70} ry={26} fill="#FFFFFF" />
-              <circle cx={-26} cy={-16} r={26} fill="#FFFFFF" />
-              <circle cx={18} cy={-22} r={32} fill="#FFFFFF" />
+              <path d="M-74 10 C -84 -10, -60 -24, -40 -16 C -36 -40, 0 -50, 14 -28 C 30 -46, 66 -36, 62 -12 C 84 -12, 88 10, 70 14 Z" fill="#FFFFFF" stroke="#C9DDF0" strokeWidth={4} strokeLinejoin="round" />
             </g>
           </g>
         ))}
-        {/* The bald eagle circling. */}
-        <g data-k="eagle">
-          <g data-k="eagle-wings">
-            <path d="M0 0 C -30 -26, -64 -24, -90 -8 C -60 -6, -40 4, -14 8 Z" fill="#5A3E2E" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
-            <path d="M0 0 C 30 -26, 64 -24, 90 -8 C 60 -6, 40 4, 14 8 Z" fill="#5A3E2E" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
-          </g>
-          <ellipse cx={0} cy={4} rx={26} ry={12} fill="#6A4A36" stroke={INK} strokeWidth={4} />
-          <circle cx={28} cy={-2} r={12} fill="#FFFFFF" stroke={INK} strokeWidth={4} />
-          <path d="M38 -4 L 50 0 L 38 4 Z" fill="#FFC85A" stroke={INK} strokeWidth={3} strokeLinejoin="round" />
-          <path d="M-26 4 L -42 -2 L -42 12 Z" fill="#FFFFFF" stroke={INK} strokeWidth={3} strokeLinejoin="round" />
-        </g>
-        {/* The Rockies. */}
-        {st.peaks.map(([px, py], i) => (
-          <g key={i}>
-            <path d={`M${px - 330} ${st.back + 10} L ${px} ${py} L ${px + 330} ${st.back + 10} Z`} fill={i % 2 ? '#8E9CC0' : '#7F8EB4'} stroke={INK} strokeWidth={5} strokeLinejoin="round" />
-            <path d={`M${px - 66} ${py + 60} L ${px} ${py} L ${px + 66} ${py + 60} L ${px + 30} ${py + 48} L ${px + 6} ${py + 70} L ${px - 24} ${py + 46} Z`} fill="#F8FAFF" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
-          </g>
+        {/* The Rockies: the painted range, and more peaks beyond it on very wide screens. */}
+        {scene.extraPeaks.map(([px, py], i) => (
+          <path key={i} d={`M${px - 260} ${st.back + 12} L ${px - 40} ${py + 30} L ${px} ${py} L ${px + 50} ${py + 40} L ${px + 260} ${st.back + 12} Z`} fill={i % 2 ? '#8E9CC0' : '#7F8EB4'} stroke="#2B2330" strokeWidth={3} strokeLinejoin="round" />
+        ))}
+        <image href={ART.mountains.src} x={mb.x} y={mb.y} width={mb.w} height={mb.h} preserveAspectRatio="none" />
+        {/* Two peaks over the painting's cut ends (only seen on very wide screens). */}
+        {[vb.x < mb.x + 4 ? mb.x + 30 : null, vb.x + vb.w > mb.x + mb.w - 4 ? mb.x + mb.w - 30 : null].map((px, i) => px !== null && (
+          <path key={i} d={`M${px - 230} ${st.back + 12} L ${px - 30} ${mb.y + mb.h * 0.42} L ${px} ${mb.y + mb.h * 0.36} L ${px + 40} ${mb.y + mb.h * 0.46} L ${px + 230} ${st.back + 12} Z`} fill={i ? '#8E9CC0' : '#7F8EB4'} stroke="#2B2330" strokeWidth={3} strokeLinejoin="round" />
         ))}
         {/* The goat's ledges, and the goat. */}
         {st.goat.map(([x, y], i) => (
-          <path key={i} d={`M${x - 34} ${y + 4} L ${x + 34} ${y + 4}`} stroke="#5E6A8E" strokeWidth={8} strokeLinecap="round" />
+          <path key={i} d={`M${x - 34} ${y + 2} L ${x + 34} ${y + 2} L ${x + 24} ${y + 14} L ${x - 26} ${y + 12} Z`} fill="#A7B2D6" stroke="#2B2330" strokeWidth={3} strokeLinejoin="round" />
         ))}
         <g data-k="goat">
-          <g transform="scale(0.42)">
-            <Critter kind="ewe" tint="#F8F6F0" />
+          <Sprite pic={ART.goat} h={64} />
+        </g>
+        {/* The bald eagle circling. */}
+        <g data-k="eagle">
+          <g data-k="eagle-wings">
+            <Sprite pic={ART.eagle} h={110} y={40} />
           </g>
         </g>
-        {/* Banff town in the valley, with its elk on the street. */}
-        {scene.houses.map(([x, w, h, c], i) => (
-          <g key={i}>
-            <rect x={x} y={st.town.y - h} width={w} height={h} fill={c} stroke={INK} strokeWidth={3} />
-            <path d={`M${x - 4} ${st.town.y - h} L ${x + w / 2} ${st.town.y - h - w * 0.45} L ${x + w + 4} ${st.town.y - h} Z`} fill="#C85A6A" stroke={INK} strokeWidth={3} strokeLinejoin="round" />
-          </g>
+        {/* The far forest along the back, then Banff town in the valley, with its elk on the street. */}
+        {scene.far.map(([x, h], i) => (
+          <path key={i} d={`M${x - h * 0.3} ${st.back + 6} L ${x - h * 0.12} ${st.back - h * 0.45} L ${x - h * 0.2} ${st.back - h * 0.45} L ${x} ${st.back - h} L ${x + h * 0.2} ${st.back - h * 0.45} L ${x + h * 0.12} ${st.back - h * 0.45} L ${x + h * 0.3} ${st.back + 6} Z`} fill={i % 2 ? '#3E7A5A' : '#4A8A64'} stroke={INK} strokeWidth={3} strokeLinejoin="round" />
         ))}
+        <Sprite pic={ART.town} w={st.town.w} x={st.town.x + st.town.w / 2} y={st.town.y + 2} />
         <g data-k="town-car">
-          <rect x={-14} y={-12} width={28} height={12} rx={5} fill="#9AD0F5" stroke={INK} strokeWidth={2} />
+          <path d="M-15 -4 L -15 -10 Q -12 -14 -6 -14 L -2 -20 L 8 -20 L 12 -14 L 15 -12 L 15 -4 Z" fill="#FF8FB8" stroke={INK} strokeWidth={2} strokeLinejoin="round" />
+          <circle cx={-8} cy={-3} r={3.5} fill={INK} />
+          <circle cx={8} cy={-3} r={3.5} fill={INK} />
         </g>
         <g data-k="town-elk">
           <Critter kind="elk" />
         </g>
-        {/* The far forest along the back. */}
-        {scene.far.map(([x, h], i) => (
-          <path key={i} d={`M${x - h * 0.32} ${st.back + 6} L ${x} ${st.back - h} L ${x + h * 0.32} ${st.back + 6} Z`} fill={i % 2 ? '#3E7A5A' : '#4A8A64'} stroke={INK} strokeWidth={3} strokeLinejoin="round" />
-        ))}
         {/* The banks: the forest floor on the left, the meadow on the right. */}
         <rect x={-big} y={st.back} width={big + rc} height={big} fill="#86B46C" />
         <rect x={rc} y={st.back} width={big} height={big} fill="#A9D684" />
-        {scene.flowers.map(([x, y, c], i) => (
-          <circle key={i} cx={x} cy={y} r={7} fill={c} stroke={INK} strokeWidth={2} />
+        {scene.dots.map(([x, y, c], i) => (
+          <circle key={i} cx={x} cy={y} r={6} fill={c} stroke={INK} strokeWidth={2} />
+        ))}
+        {scene.flowers.map(([x, y, s], i) => (
+          <Sprite key={i} pic={ART.flower} h={s} x={x} y={y} />
         ))}
         {scene.ferns.map(([x, y], i) => (
-          <path key={i} d={`M${x} ${y} q -18 -26 -30 -30 M ${x} ${y} q 0 -30 2 -40 M ${x} ${y} q 18 -26 30 -30`} stroke="#4E8A4A" strokeWidth={6} strokeLinecap="round" fill="none" />
+          <path key={i} d={`M${x - 16} ${y} q 4 -18 8 -20 q 1 12 4 13 q 4 -20 8 -24 q 1 16 4 18 q 5 -14 10 -16 q -1 14 -2 29 Z`} fill="#6E9E58" stroke={INK} strokeWidth={2.5} strokeLinejoin="round" />
         ))}
-        {/* The wolf, behind his bush at the forest's edge (clipped at the bush's foot, so he can duck out of sight). */}
+        {/* The wolf, behind his bush at the forest's edge (clipped at the bush's middle, so he can duck out of sight). */}
         <clipPath id={`${mid}-wolf`}>
-          <rect x={st.wolf[0] - 200} y={st.wolf[1] - 400} width={400} height={400 + 14} />
+          <rect x={st.wolf[0] - 200} y={st.wolf[1] - 400} width={400} height={400 - 50} />
         </clipPath>
         <g clipPath={`url(#${mid}-wolf)`}>
-        <g data-k="wolf">
-          <path d="M-30 -44 L -22 -78 L -6 -52 Z M 30 -44 L 22 -78 L 6 -52 Z" fill="#8A8A9A" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
-          <ellipse cx={0} cy={-34} rx={36} ry={30} fill="#9A9AAA" stroke={INK} strokeWidth={4} />
-          <ellipse cx={0} cy={-20} rx={18} ry={13} fill="#E4E2EA" stroke={INK} strokeWidth={3} />
-          <circle cx={0} cy={-26} r={5} fill={INK} />
-          <circle cx={-13} cy={-42} r={4} fill={INK} />
-          <circle cx={13} cy={-42} r={4} fill={INK} />
+          <g data-k="wolf">
+            <Sprite pic={ART.wolf} h={110} y={14} />
+          </g>
         </g>
+        <g data-k="bush">
+          <Sprite pic={ART.bush} w={190} x={st.wolf[0]} y={st.wolf[1] + 40} />
         </g>
-        <Bush x={st.wolf[0]} y={st.wolf[1] + 22} r={62} />
         {st.trees.map(([x, y, h], i) => (
-          <Spruce key={i} x={x} y={y} h={h} fill={x < rc ? '#2F6A4E' : '#3E7E58'} />
+          <Sprite key={i} pic={i % 3 === 1 ? ART.spruce2 : ART.spruce} h={i % 3 === 1 ? h * 0.8 : h} x={x} y={y + 6} />
         ))}
         {/* The highway in its cut, coming toward us from the forest. */}
-        <path d={`M${rc - halfCut(st, st.back)} ${st.back} L ${rc + halfCut(st, st.back)} ${st.back} L ${rc + halfCut(st, bottom)} ${bottom} L ${rc - halfCut(st, bottom)} ${bottom} Z`} fill="#93A07E" />
-        <path d={`M${rc - halfCut(st, st.back) * 0.8} ${st.back} L ${rc + halfCut(st, st.back) * 0.8} ${st.back} L ${rc + halfCut(st, bottom) * 0.8} ${bottom} L ${rc - halfCut(st, bottom) * 0.8} ${bottom} Z`} fill="#8C8A98" stroke={INK} strokeWidth={4} />
+        <path d={scene.cut} fill="#93A07E" />
+        <path d={scene.road} fill="#8C8A98" stroke={INK} strokeWidth={4} />
         {scene.dashes.map((d, i) => (
           <path key={i} d={d} fill="#FFE07A" />
         ))}
@@ -1195,13 +1349,22 @@ export function AnimalBridge() {
         <g>
           {Array.from({ length: 7 }, (_, i) => (
             <g key={i} data-k="car" visibility="hidden">
-              <rect data-k="car-box" x={-52} y={-112} width={104} height={64} rx={6} fill="#F4F2F8" stroke={INK} strokeWidth={4} visibility="hidden" />
-              <rect data-k="car-body" x={-56} y={-62} width={112} height={56} rx={16} fill="#F48FB1" stroke={INK} strokeWidth={4} />
-              <rect x={-40} y={-54} width={80} height={22} rx={6} fill="#CFE8F6" stroke={INK} strokeWidth={3} />
-              <circle data-k="car-light" cx={-36} cy={-18} r={9} fill="#FFF6C8" stroke={INK} strokeWidth={3} />
-              <circle data-k="car-light" cx={36} cy={-18} r={9} fill="#FFF6C8" stroke={INK} strokeWidth={3} />
-              <rect x={-50} y={-8} width={18} height={10} rx={3} fill={INK} />
-              <rect x={32} y={-8} width={18} height={10} rx={3} fill={INK} />
+              <g data-k="car-front" visibility="hidden">
+                <Sprite pic={ART.carFront} w={124} />
+              </g>
+              <g data-k="car-back" visibility="hidden">
+                <Sprite pic={ART.carBack} w={124} />
+              </g>
+              <g data-k="truck-front" visibility="hidden">
+                <Sprite pic={ART.truckFront} w={150} />
+              </g>
+              <g data-k="truck-back" visibility="hidden">
+                <Sprite pic={ART.truckBack} w={150} />
+              </g>
+              <g data-k="car-glow" opacity={0}>
+                <circle cx={-40} cy={-34} r={20} />
+                <circle cx={40} cy={-34} r={20} />
+              </g>
             </g>
           ))}
         </g>
@@ -1212,15 +1375,22 @@ export function AnimalBridge() {
         {scene.posts.map(([x, y, h], i) => (
           <path key={i} d={`M${x} ${y} L ${x} ${y - h}`} stroke="#5E5A6E" strokeWidth={5} strokeLinecap="round" />
         ))}
-        {/* The animal bridge: its shadow on the road, its concrete face, the walkway on top. */}
+        {/* The animal bridge: its shadow on the road, its stone face with the arch, the walkway on top with its grassy
+            lip, and the plants that grow on it. */}
         <path d={scene.shadow} fill="#5A5870" opacity={0.35} />
-        <path d={scene.face} fill="#C2BCCC" stroke={INK} strokeWidth={5} strokeLinejoin="round" />
-        <path d={scene.arch} fill="none" stroke="#A29CB0" strokeWidth={5} />
+        <path d={scene.face} fill="#C9C2D6" stroke={INK} strokeWidth={5} strokeLinejoin="round" />
+        {scene.blocks.map((d, i) => (
+          <path key={i} d={d} stroke="#A9A1B8" strokeWidth={3} fill="none" strokeLinecap="round" />
+        ))}
+        <path d={scene.arch} fill="#6E6A82" stroke={INK} strokeWidth={5} strokeLinejoin="round" />
         <path d={scene.deck} fill="#D9C79C" stroke={INK} strokeWidth={5} strokeLinejoin="round" />
         <path data-k="deck-green" d={scene.deck} fill="#7CC46A" opacity={0.15} />
+        {scene.lip.map((d, i) => (
+          <path key={i} d={d} fill="#7CBF62" stroke={INK} strokeWidth={3} strokeLinejoin="round" />
+        ))}
         <g data-k="deck-trees" opacity={0}>
-          <Spruce x={deckL + 30} y={st.deck[0] + 6} h={110} fill="#3E8A5A" />
-          <Spruce x={deckR - 30} y={st.deck[0] + 6} h={110} fill="#3E8A5A" />
+          <Sprite pic={ART.spruce2} h={120} x={deckL + 30} y={st.deck[0] + 10} />
+          <Sprite pic={ART.spruce2} h={120} x={deckR - 30} y={st.deck[0] + 10} />
         </g>
         {scene.cells.map(([x, y], i) => (
           <g key={i} data-k="cell" data-x={x} data-y={y} transform={`translate(${x} ${y})`}>
@@ -1243,24 +1413,18 @@ export function AnimalBridge() {
         ))}
         {/* The wildlife camera on its post. */}
         <g data-k="camera">
-          <path d={`M${st.camera[0]} ${st.camera[1]} L ${st.camera[0]} ${st.camera[1] - 104}`} stroke="#7A6A5A" strokeWidth={10} strokeLinecap="round" />
-          <rect x={st.camera[0] - 30} y={st.camera[1] - 146} width={60} height={46} rx={8} fill="#5E7A5A" stroke={INK} strokeWidth={4} />
-          <circle cx={st.camera[0] - 30} cy={st.camera[1] - 123} r={13} fill="#2E3A4A" stroke={INK} strokeWidth={4} />
-          <circle data-k="lamp" cx={st.camera[0] + 18} cy={st.camera[1] - 136} r={5} fill="#7A2A3A" />
+          <Sprite pic={ART.camera} h={125} x={st.camera[0]} y={st.camera[1]} />
+          <circle data-k="lamp" cx={st.camera[0] + 6} cy={st.camera[1] - 102} r={5} fill="#7A2A3A" stroke={INK} strokeWidth={2} />
         </g>
         {/* The rocky way: boulders against the fence. */}
-        <g>
-          {scene.boulders.map(([x, y, r], i) => (
-            <ellipse key={i} cx={x} cy={y} rx={r} ry={r * 0.78} fill={i % 2 ? '#A8A4B4' : '#B8B4C4'} stroke={INK} strokeWidth={5} />
-          ))}
-          {scene.boulders.map(([x, y, r], i) => (
-            <path key={i} d={`M${x - r * 0.4} ${y - r * 0.36} q ${r * 0.3} -${r * 0.2} ${r * 0.6} 0`} stroke="#D4D0DE" strokeWidth={5} fill="none" strokeLinecap="round" />
-          ))}
-        </g>
+        <Sprite pic={ART.boulders} w={st.rocks.rx * 2.5} x={st.rocks.x} y={st.rocks.y + st.rocks.ry * 0.85} />
         <g fill="#C8A24A" stroke={INK} strokeWidth={2}>
           {Array.from({ length: 10 }, (_, i) => (
             <circle key={i} data-k="seed" r={5} opacity={0} />
           ))}
+        </g>
+        <g data-k="flower" visibility="hidden">
+          <Sprite pic={ART.flower} h={70} />
         </g>
         {/* The families. */}
         <g data-k="animals">
@@ -1274,6 +1438,10 @@ export function AnimalBridge() {
             )),
           )}
         </g>
+        {/* Grass tufts along the front edge. */}
+        {scene.tufts.map(([x, y], i) => (
+          <path key={i} d={`M${x - 26} ${y} q 6 -30 12 -34 q 2 20 6 22 q 6 -34 14 -40 q 2 26 6 30 q 8 -24 16 -28 q -2 24 -2 50 Z`} fill={x < rc ? '#6E9E58' : '#8CC46C'} stroke={INK} strokeWidth={3} strokeLinejoin="round" />
+        ))}
         <g data-k="stars" opacity={0}>
           {[0, 120, 240].map((a) => (
             <path key={a} transform={`rotate(${a}) translate(0 -26)`} d="M0 -12 L 4 -4 L 12 -3 L 6 3 L 8 12 L 0 7 L -8 12 L -6 3 L -12 -3 L -4 -4 Z" fill="#FFE07A" stroke={INK} strokeWidth={2.5} strokeLinejoin="round" />
@@ -1289,6 +1457,27 @@ export function AnimalBridge() {
         </g>
         <rect data-k="flash" x={-big} y={-big} width={big * 2} height={big * 2} fill="#FFFFFF" opacity={0} pointerEvents="none" />
       </svg>
+      {/* Maple watching from the meadow: she cheers each family in. A tap: she giggles. */}
+      {size.width > 0 && (
+        <div
+          style={{ position: 'absolute', zIndex: 5, ...mapleBox }}
+          aria-label="Maple"
+          onPointerDown={(e) => {
+            e.stopPropagation()
+            const w = world.current
+            if (w) w.lastTouch = w.now
+            sfx.pop()
+            void maple.current?.play('hop')
+            if (performance.now() - giggled.current > 8000) {
+              giggled.current = performance.now()
+              setSay(B.giggle)
+              void speak(B.giggle)
+            }
+          }}
+        >
+          <Maple ref={maple} height="100%" flip={-1} />
+        </div>
+      )}
       {/* The families across so far, and how green the bridge is (for Dad). */}
       <div style={TALLY}>
         {info.seeds && (
@@ -1325,97 +1514,36 @@ export function AnimalBridge() {
           </BigButton>
         </motion.div>
       )}
-      <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 30 }}>
-        <AnimatePresence mode="popLayout">
-          <motion.div key={say} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-            {say}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      {/* What was just said, for Dad: tap to hear it again. */}
+      {!story && (
+        <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 30 }}>
+          <AnimatePresence mode="popLayout">
+            <motion.button
+              key={lineText(say)}
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.6, opacity: 0 }}
+              style={PILL}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={() => void speak(say)}
+            >
+              🔊 {lineText(say)}
+            </motion.button>
+          </AnimatePresence>
+        </div>
+      )}
+      {story && <StoryBeat lines={B.story} friend={<Maple height="100%" />} onDone={endStory} />}
     </div>
   )
 }
 
 // ---------------------------------------------------------------- pieces of the scene
 
-/** One animal, facing right with its feet at (0, 0). `live` marks the parts the world moves (legs, head, seeds). */
-function Critter({ kind, seeds, live, tint }: { kind: Kind; seeds?: boolean; live?: boolean; tint?: string }) {
-  const L = LOOKS[kind]
-  const fill = tint ?? L.fill
-  const cy = -(L.legs + L.ry * 0.7)
-  const hipY = cy + L.ry * 0.35
-  const hx = L.rx * 0.55
-  const [nx, ny] = L.neck
-  const hcx = nx
-  const hcy = cy + ny
-  const pivot: Pt = [L.rx * 0.6, cy - L.ry * 0.3]
-  const leg = (x: number, far: boolean, n: number) => (
-    <g key={n} data-leg={live ? n : undefined} data-px={x} data-py={hipY}>
-      <rect x={x - L.legW / 2} y={hipY} width={L.legW} height={-hipY + 2} rx={L.legW / 2} fill={far ? L.dark : fill} stroke={INK} strokeWidth={4} />
-      {L.ears !== 'round' && <rect x={x - L.legW / 2} y={-8} width={L.legW} height={10} rx={3} fill={INK} />}
-    </g>
-  )
-  const H = L.head
-  return (
-    <g>
-      {leg(-hx + 9, true, 0)}
-      {leg(hx + 9, true, 1)}
-      {L.hump && <circle cx={L.rx * 0.32} cy={cy - L.ry * 0.62} r={L.ry * 0.55} fill={fill} stroke={INK} strokeWidth={5} />}
-      <ellipse cx={0} cy={cy} rx={L.rx} ry={L.ry} fill={fill} stroke={INK} strokeWidth={5} />
-      {L.hump && <circle cx={L.rx * 0.32} cy={cy - L.ry * 0.6} r={L.ry * 0.55 - 3} fill={fill} />}
-      {L.rump && <ellipse cx={-L.rx * 0.74} cy={cy + L.ry * 0.05} rx={L.rx * 0.26} ry={L.ry * 0.62} fill={L.light} />}
-      {L.spots && [[-0.4, -0.3], [-0.05, -0.45], [0.3, -0.25], [-0.2, 0.05], [0.15, 0.1]].map(([sx, sy], i) => <circle key={i} cx={sx * L.rx} cy={cy + sy * L.ry} r={L.ry * 0.14} fill={L.light} />)}
-      {seeds && (
-        <g data-k={live ? 'seeds' : undefined} visibility="hidden">
-          <path d={`M${-L.rx * 0.1} ${cy - L.ry * 0.92} q 10 -24 26 -18 q -8 16 -26 18 Z`} fill="#6CC05A" stroke={INK} strokeWidth={2.5} />
-          {[-0.35, -0.05, 0.25].map((s, i) => (
-            <circle key={i} cx={s * L.rx} cy={cy - L.ry * 0.88 + (i % 2) * 4} r={5.5} fill="#E0B44A" stroke={INK} strokeWidth={2} />
-          ))}
-        </g>
-      )}
-      {leg(-hx - 4, false, 2)}
-      {leg(hx - 4, false, 3)}
-      <g data-k={live ? 'head' : undefined} data-px={pivot[0]} data-py={pivot[1]}>
-        {L.ears === 'tall' && (
-          <>
-            <path d={`M${pivot[0]} ${pivot[1]} L ${hcx - H * 0.2} ${hcy}`} stroke={INK} strokeWidth={H * 1.15 + 9} strokeLinecap="round" />
-            <path d={`M${pivot[0]} ${pivot[1]} L ${hcx - H * 0.2} ${hcy}`} stroke={kind === 'elk' ? L.dark : fill} strokeWidth={H * 1.15} strokeLinecap="round" />
-          </>
-        )}
-        {L.ears === 'side' && (
-          <>
-            <path d={`M${pivot[0]} ${pivot[1]} L ${hcx - H * 0.3} ${hcy}`} stroke={INK} strokeWidth={H * 1.1 + 9} strokeLinecap="round" />
-            <path d={`M${pivot[0]} ${pivot[1]} L ${hcx - H * 0.3} ${hcy}`} stroke={fill} strokeWidth={H * 1.1} strokeLinecap="round" />
-          </>
-        )}
-        {L.ears === 'tall' && <path d={`M${hcx - H * 0.55} ${hcy - H * 0.45} L ${hcx - H * 0.95} ${hcy - H * 1.55} L ${hcx - H * 0.1} ${hcy - H * 0.7} Z`} fill={L.light} stroke={INK} strokeWidth={4} strokeLinejoin="round" />}
-        {L.ears === 'round' && (
-          <>
-            <circle cx={hcx - H * 0.45} cy={hcy - H * 0.8} r={H * 0.32} fill={fill} stroke={INK} strokeWidth={4} />
-            <circle cx={hcx + H * 0.25} cy={hcy - H * 0.88} r={H * 0.32} fill={fill} stroke={INK} strokeWidth={4} />
-          </>
-        )}
-        {L.ears === 'tall' ? (
-          <ellipse cx={hcx} cy={hcy} rx={H * 1.15} ry={H * 0.8} fill={fill} stroke={INK} strokeWidth={4} transform={`rotate(18 ${hcx} ${hcy})`} />
-        ) : (
-          <circle cx={hcx} cy={hcy} r={H} fill={L.ears === 'side' ? L.dark : fill} stroke={INK} strokeWidth={4} />
-        )}
-        {L.ears === 'side' && <ellipse cx={hcx - H * 0.45} cy={hcy - H * 0.55} rx={H * 0.4} ry={H * 0.2} fill={L.dark} stroke={INK} strokeWidth={3} transform={`rotate(-30 ${hcx - H * 0.45} ${hcy - H * 0.55})`} />}
-        {L.horns && (
-          <>
-            <circle cx={hcx - H * 0.3} cy={hcy - H * 0.05} r={H * 0.62} fill="none" stroke={INK} strokeWidth={H * 0.42 + 7} />
-            <circle cx={hcx - H * 0.3} cy={hcy - H * 0.05} r={H * 0.62} fill="none" stroke="#D9C29A" strokeWidth={H * 0.42} />
-            <circle cx={hcx - H * 0.3} cy={hcy - H * 0.05} r={H * 0.18} fill="#D9C29A" stroke={INK} strokeWidth={3} />
-          </>
-        )}
-        <ellipse cx={hcx + H * 0.8} cy={hcy + H * 0.3} rx={H * 0.5} ry={H * 0.42} fill={L.light} stroke={INK} strokeWidth={3.5} />
-        <ellipse cx={hcx + H * 1.18} cy={hcy + H * 0.16} rx={H * 0.17} ry={H * 0.13} fill={INK} />
-        <circle cx={hcx + H * 0.22} cy={hcy - H * 0.22} r={Math.max(3.5, H * 0.17)} fill={INK} />
-        <circle cx={hcx + H * 0.27} cy={hcy - H * 0.28} r={Math.max(1.5, H * 0.06)} fill="#FFFFFF" />
-        <circle cx={hcx + H * 0.3} cy={hcy + H * 0.25} r={H * 0.18} fill="#F4A0B4" opacity={0.6} />
-      </g>
-    </g>
-  )
+/** A painted piece standing on (x, y): its feet there, `h` tall (or `w` wide). */
+function Sprite({ pic, x = 0, y = 0, h, w }: { pic: Pic; x?: number; y?: number; h?: number; w?: number }) {
+  const hh = h ?? (w ?? 100) / pic.aspect
+  const ww = w ?? hh * pic.aspect
+  return <image href={pic.src} x={x - ww / 2} y={y - hh} width={ww} height={hh} />
 }
 
 /** A photo from the wildlife camera: the family on the bridge's grass, as it crossed. */
@@ -1434,6 +1562,7 @@ function Photo({ shot }: { shot: Snapshot }) {
   const order = [...shot.pts].sort((a, b) => a[2] - b[2])
   return (
     <svg viewBox={`${x0} ${y0} ${w} ${h}`} style={{ width: '100%', aspectRatio: '4 / 3', display: 'block', borderRadius: 6, background: '#BFE3F7' }}>
+      <image href={ART.mountains.src} x={x0 - w * 0.1} y={y1 - 70 - w * 0.3} width={w * 1.2} height={w * 0.36} preserveAspectRatio="none" />
       <rect x={x0} y={y1 - 70} width={w} height={200} fill="#8CCB72" />
       {order.map(([kind, x, y, dir], i) => (
         <g key={i} transform={`translate(${x} ${y}) scale(${dir} 1)`}>
@@ -1441,26 +1570,6 @@ function Photo({ shot }: { shot: Snapshot }) {
         </g>
       ))}
     </svg>
-  )
-}
-
-function Spruce({ x, y, h, fill }: { x: number; y: number; h: number; fill: string }) {
-  const w = h * 0.36
-  return (
-    <g>
-      <rect x={x - 8} y={y - h * 0.16} width={16} height={h * 0.18} fill="#7A5236" stroke={INK} strokeWidth={4} />
-      <path d={`M${x} ${y - h} L ${x + w * 0.55} ${y - h * 0.6} L ${x + w * 0.3} ${y - h * 0.6} L ${x + w} ${y - h * 0.14} L ${x - w} ${y - h * 0.14} L ${x - w * 0.3} ${y - h * 0.6} L ${x - w * 0.55} ${y - h * 0.6} Z`} fill={fill} stroke={INK} strokeWidth={5} strokeLinejoin="round" />
-    </g>
-  )
-}
-
-function Bush({ x, y, r }: { x: number; y: number; r: number }) {
-  return (
-    <g>
-      <circle cx={x - r * 0.55} cy={y - r * 0.3} r={r * 0.62} fill="#4A8E4E" stroke={INK} strokeWidth={5} />
-      <circle cx={x + r * 0.55} cy={y - r * 0.3} r={r * 0.62} fill="#4A8E4E" stroke={INK} strokeWidth={5} />
-      <circle cx={x} cy={y - r * 0.6} r={r * 0.75} fill="#56A05A" stroke={INK} strokeWidth={5} />
-    </g>
   )
 }
 
@@ -1481,6 +1590,9 @@ function useScene(st: StageDef) {
       dashes.push(`M${rc - wa} ${a} L ${rc + wa} ${a} L ${rc + wb} ${b} L ${rc - wb} ${b} Z`)
     }
     const edges = [-1, 1].map((s) => `M${rc + s * halfCut(st, st.back) * 0.72} ${st.back} L ${rc + s * halfCut(st, bot) * 0.72} ${bot}`)
+    const band = (f: number) => `M${rc - halfCut(st, st.back) * f} ${st.back} L ${rc + halfCut(st, st.back) * f} ${st.back} L ${rc + halfCut(st, bot) * f} ${bot} L ${rc - halfCut(st, bot) * f} ${bot} Z`
+    const cut = band(1)
+    const road = band(0.8)
     // The fences: posts closer together far away.
     const posts: [number, number, number][] = []
     const fences: string[] = []
@@ -1513,7 +1625,21 @@ function useScene(st: StageDef) {
     const faceH = 48
     const face = `M${fl} ${d1 - hump(fl)} ` + fxs.map((x) => `L ${x.toFixed(1)} ${(d1 - hump(x)).toFixed(1)}`).join(' ') + ` L ${fr} ${d1 - hump(fr)} L ${fr} ${d1 + faceH} L ${fl} ${d1 + faceH} Z`
     const ah = halfCut(st, d1 + faceH) * 0.8
-    const arch = `M${rc - ah} ${d1 + faceH} Q ${rc} ${d1 + 2} ${rc + ah} ${d1 + faceH}`
+    // The dark opening the highway runs through, and the stone blocks of the face either side of it.
+    const arch = `M${rc - ah} ${d1 + faceH} L ${rc - ah} ${d1 + faceH * 0.55} Q ${rc - ah} ${d1 + 8} ${rc} ${d1 + 8} Q ${rc + ah} ${d1 + 8} ${rc + ah} ${d1 + faceH * 0.55} L ${rc + ah} ${d1 + faceH} Z`
+    const blocks: string[] = []
+    for (const side of [-1, 1]) {
+      const x0 = side < 0 ? fl + 10 : rc + ah + 8
+      const x1 = side < 0 ? rc - ah - 8 : fr - 10
+      blocks.push(`M${x0} ${d1 + faceH * 0.5} L ${x1} ${d1 + faceH * 0.5}`)
+      for (let x = x0 + 26; x < x1 - 10; x += 52) blocks.push(`M${x} ${d1 + 6 - hump(x)} L ${x} ${d1 + faceH * 0.5}`, `M${x + 26} ${d1 + faceH * 0.5} L ${x + 26} ${d1 + faceH - 2}`)
+    }
+    // The grassy lip along the walkway's front edge.
+    const lip: string[] = []
+    for (let x = l - 10; x < rr + 10; x += 30) {
+      const y = d1 - hump(x) + 2
+      lip.push(`M${x - 18} ${y} q 6 -16 10 -18 q 2 10 6 12 q 6 -14 12 -16 q 0 12 6 22 Z`)
+    }
     const shadow = `M${rc - halfCut(st, d1 + faceH)} ${d1 + faceH} L ${rc + halfCut(st, d1 + faceH)} ${d1 + faceH} L ${rc + halfCut(st, d1 + faceH + 40)} ${d1 + faceH + 40} L ${rc - halfCut(st, d1 + faceH + 40)} ${d1 + faceH + 40} Z`
     // Where plants grow: a row of spots along the walkway, back and front by turns.
     const cells: Pt[] = []
@@ -1530,8 +1656,10 @@ function useScene(st: StageDef) {
       [rk.x + rk.rx * 0.45, rk.y + rk.ry * 0.3, rk.ry * 0.85],
       [rk.x - rk.rx * 0.1, rk.y + rk.ry * 0.55, rk.ry * 0.7],
     ]
-    // Flowers in the meadow, ferns on the forest floor (kept off the road, the rocks and the waiting spots).
-    const flowers: [number, number, string][] = []
+    // Flowers in the meadow (a few painted clumps, the rest dots), ferns on the forest floor (kept off the road and the
+    // rocks).
+    const dots: [number, number, string][] = []
+    const flowers: [number, number, number][] = []
     const ferns: Pt[] = []
     for (let i = 0; i < 60; i++) {
       const y = st.back + 30 + r() * (st.h - st.back + 200)
@@ -1539,7 +1667,8 @@ function useScene(st: StageDef) {
       const edge = halfCut(st, y) + 50
       const x = right ? rc + edge + r() * (st.w * 0.55) : rc - edge - r() * (st.w * 0.55)
       if (Math.abs(((x - rk.x) / (rk.rx + 30)) ** 2 + ((y - rk.y) / (rk.ry + 30)) ** 2) < 1) continue
-      if (right) flowers.push([Math.round(x), Math.round(y), ['#F48FB1', '#FFFFFF', '#FFE07A', '#C7B3F0'][i % 4]])
+      if (right && i % 6 === 0) flowers.push([Math.round(x), Math.round(y), Math.round(40 + 20 * depth(st, y))])
+      else if (right) dots.push([Math.round(x), Math.round(y), ['#F48FB1', '#FFF7F0', '#FFE07A', '#C7B3F0'][i % 4]])
       else if (i % 4 === 1) ferns.push([Math.round(x), Math.round(y)])
     }
     // The far forest along the treeline, with a gap for the road and for Banff town.
@@ -1556,7 +1685,18 @@ function useScene(st: StageDef) {
       [st.w * 0.55, st.back * 0.12, 0.8],
       [st.w * 0.85, st.back * 0.32, 1],
     ]
-    return { dashes, edges, posts, fences, deck, face, arch, shadow, cells, boulders, flowers, ferns, far, houses, clouds }
+    // More peaks past the painted range, for very wide screens.
+    const m = mountainsBox(st)
+    const extraPeaks: Pt[] = []
+    for (let x = m.x - 120; x > -1400; x -= 300) extraPeaks.push([x, m.y + m.h * (0.25 + 0.2 * Math.abs(Math.sin(x)))])
+    for (let x = m.x + m.w + 120; x < st.w + 1400; x += 300) extraPeaks.push([x, m.y + m.h * (0.25 + 0.2 * Math.abs(Math.sin(x)))])
+    // Grass tufts along the stage's front edge (and below it), off the road.
+    const tufts: Pt[] = []
+    for (let x = -1400; x < st.w + 1400; x += 110 + Math.round(r() * 60)) {
+      const y = st.h - 6 + Math.round(r() * 30)
+      if (Math.abs(x - rc) > halfCut(st, y) + 40) tufts.push([x, y])
+    }
+    return { dashes, edges, cut, road, posts, fences, deck, face, arch, blocks, lip, shadow, cells, boulders, dots, flowers, ferns, far, houses, clouds, extraPeaks, tufts }
   }, [st])
 }
 
@@ -1624,4 +1764,7 @@ const PILL = {
   boxShadow: 'var(--shadow)',
   textAlign: 'center' as const,
   maxWidth: '100%',
+  border: 'none',
+  font: 'inherit',
+  pointerEvents: 'auto' as const,
 }
