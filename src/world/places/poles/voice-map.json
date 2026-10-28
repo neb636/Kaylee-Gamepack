@@ -306,5 +306,432 @@
     "sig": "ed7dbdac3d",
     "ms": 4612,
     "file": "7c8f09c7c3ad.mp3"
+  },
+  {
+    "text": "Mama! I am way over here!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2638,
+    "file": "a78a4546df20.mp3"
+  },
+  {
+    "text": "Pull Pola back, and let go!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2782,
+    "file": "179149b706c3.mp3"
+  },
+  {
+    "text": "The ice is drifting. Wait, then fling!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3334,
+    "file": "2a16292e274e.mp3"
+  },
+  {
+    "text": "Summer melts the ice. Push floes together!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4202,
+    "file": "853ea359765a.mp3"
+  },
+  {
+    "text": "Whoa! This ice is moving!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2565,
+    "file": "4e4ac0b1ddc6.mp3"
+  },
+  {
+    "text": "The ice is so little now!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1978,
+    "file": "4e1513b2f902.mp3"
+  },
+  {
+    "text": "Splash! I love swimming!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2589,
+    "file": "8e6201bc8937.mp3"
+  },
+  {
+    "text": "Polar bears are great swimmers!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2023,
+    "file": "9c13cd1c870a.mp3"
+  },
+  {
+    "text": "Wheee! Splash!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2116,
+    "file": "8c78fef94a13.mp3"
+  },
+  {
+    "text": "Brr! Paddle paddle!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2535,
+    "file": "e67fec8226ae.mp3"
+  },
+  {
+    "text": "Wheee! A slide!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2126,
+    "file": "d56aff9c9646.mp3"
+  },
+  {
+    "text": "Whoops! Too tippy!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2049,
+    "file": "ae9b08f44ee1.mp3"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 884,
+    "file": "f54408fa888f.mp3"
+  },
+  {
+    "text": "That tickles!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1212,
+    "file": "8687bf4f8c53.mp3"
+  },
+  {
+    "text": "Again! Again!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1726,
+    "file": "0a5bf4f3f970.mp3"
+  },
+  {
+    "text": "Hop home to me, Pola!",
+    "voice": "mama",
+    "sig": "13d0232cf0",
+    "ms": 2520,
+    "file": "bb555c15db9b.mp3"
+  },
+  {
+    "text": "I am right here, Pola!",
+    "voice": "mama",
+    "sig": "13d0232cf0",
+    "ms": 2282,
+    "file": "bb3380b837a0.mp3"
+  },
+  {
+    "text": "You can do it, little one!",
+    "voice": "mama",
+    "sig": "13d0232cf0",
+    "ms": 2266,
+    "file": "e317100c2284.mp3"
+  },
+  {
+    "text": "Keep hopping!",
+    "voice": "mama",
+    "sig": "13d0232cf0",
+    "ms": 1514,
+    "file": "acf3f8777239.mp3"
+  },
+  {
+    "text": "This ice is floating on the sea!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2564,
+    "file": "033b32c7d39d.mp3"
+  },
+  {
+    "text": "The North Pole is a frozen sea. There is water under the ice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4853,
+    "file": "0d99601e2227.mp3"
+  },
+  {
+    "text": "My brave little cub! You made it!",
+    "voice": "mama",
+    "sig": "13d0232cf0",
+    "ms": 3419,
+    "file": "49d7e8351b12.mp3"
+  },
+  {
+    "text": "Mama! I hopped all the way home!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2958,
+    "file": "d49517138498.mp3"
+  },
+  {
+    "text": "Kaylee, you got Pola home!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2587,
+    "file": "26a6fa0a76af.mp3"
+  },
+  {
+    "text": "Pick a pole: north or south?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2762,
+    "file": "979011ff14de.mp3"
+  },
+  {
+    "text": "Tap the cracks to break off the ice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3378,
+    "file": "444880a39bb1.mp3"
+  },
+  {
+    "text": "A giant crack! Tap, tap, tap!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3310,
+    "file": "d333b52a9703.mp3"
+  },
+  {
+    "text": "Look! Most of the iceberg hides under the water.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4021,
+    "file": "0b1af93e9e76.mp3"
+  },
+  {
+    "text": "Push the iceberg down with your finger!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2525,
+    "file": "ce16db56197d.mp3"
+  },
+  {
+    "text": "Now push the icebergs out to sea!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3196,
+    "file": "9d2f0427ffa6.mp3"
+  },
+  {
+    "text": "Your icebergs are sailing away!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2647,
+    "file": "86102d4c2525.mp3"
+  },
+  {
+    "text": "When ice breaks off, it's called calving!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3196,
+    "file": "ff6dbed19602.mp3"
+  },
+  {
+    "text": "Icebergs up north are tall and pointy.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2912,
+    "file": "cb4f9343c592.mp3"
+  },
+  {
+    "text": "Icebergs down south are flat, like a table!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3405,
+    "file": "037e196d6a89.mp3"
+  },
+  {
+    "text": "Nine parts out of ten are under the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2836,
+    "file": "570ebe7b6111.mp3"
+  },
+  {
+    "text": "Icebergs are made of snow, so they're not salty!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3426,
+    "file": "59505e679b1b.mp3"
+  },
+  {
+    "text": "Fizz! Old air bubbles pop out of the ice.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3464,
+    "file": "eb39f5790904.mp3"
+  },
+  {
+    "text": "Old ice is packed so tight, it looks blue!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4203,
+    "file": "0032f07b1ba2.mp3"
+  },
+  {
+    "text": "A seal is napping on a little iceberg.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3332,
+    "file": "ed3c6cddcf21.mp3"
+  },
+  {
+    "text": "Orcas live at both poles!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2295,
+    "file": "b468590d7ebc.mp3"
+  },
+  {
+    "text": "Hi! Break off some ice with me!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2650,
+    "file": "5c6f2dd79e68.mp3"
+  },
+  {
+    "text": "Wheee, splash!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2554,
+    "file": "b3ac67f4ac86.mp3"
+  },
+  {
+    "text": "Ooh, a little one!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1900,
+    "file": "5eef52df5ac3.mp3"
+  },
+  {
+    "text": "Another one!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1051,
+    "file": "87fa6d7a9999.mp3"
+  },
+  {
+    "text": "Whoa! It's a big one!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 3120,
+    "file": "03f30b423670.mp3"
+  },
+  {
+    "text": "Splash! I'm all wet!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2851,
+    "file": "45ee8b646bf6.mp3"
+  },
+  {
+    "text": "Wow, it goes way down!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2882,
+    "file": "067765d5e5b5.mp3"
+  },
+  {
+    "text": "I'm riding the iceberg!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1917,
+    "file": "ed0d4c82d8db.mp3"
+  },
+  {
+    "text": "Hi again!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1025,
+    "file": "544f8d040904.mp3"
+  },
+  {
+    "text": "Bye bye, icebergs!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 1550,
+    "file": "c0641edf1804.mp3"
+  },
+  {
+    "text": "Welcome to our ice shelf!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1970,
+    "file": "ff25efa4bf93.mp3"
+  },
+  {
+    "text": "Splendid!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1110,
+    "file": "f9088a61b34b.mp3"
+  },
+  {
+    "text": "Plop, into the sea!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2336,
+    "file": "6e03f72788f2.mp3"
+  },
+  {
+    "text": "Another one!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1167,
+    "file": "5b34debce24b.mp3"
+  },
+  {
+    "text": "Oh my, a giant!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2893,
+    "file": "75cc102ae9ec.mp3"
+  },
+  {
+    "text": "Brr! A cold shower!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2730,
+    "file": "52f94e6afa94.mp3"
+  },
+  {
+    "text": "So much ice under the water!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2671,
+    "file": "3dbc0b8ef133.mp3"
+  },
+  {
+    "text": "All aboard, everyone!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2079,
+    "file": "ea639764ee77.mp3"
+  },
+  {
+    "text": "Hello there!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 939,
+    "file": "44cd3d594116.mp3"
+  },
+  {
+    "text": "Honk honk!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1477,
+    "file": "f5e1c215cea8.mp3"
+  },
+  {
+    "text": "Off they go! Thank you!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1934,
+    "file": "9cd04dfa3603.mp3"
   }
 ]
