@@ -98,6 +98,32 @@ export const L = {
   snowman: {
   },
   bike: {
+    // The story, in the gondola at the bottom (Maple, then up they go).
+    story: [maple('Bonjour! I want to ride all the way down to the waterfall!'), maple('Up we go!')],
+    // Sparkle: the one instruction when the bike rolls out of the station, what's new on the way, the stuck hint.
+    steer: 'Hold your finger down and steer the bike!',
+    split: 'Two trails! Green or blue?',
+    creek: 'The bridge, or splash through the creek?',
+    hint: 'Push your finger left or right!',
+    // Maple's whoops and her silly moments.
+    high: maple('Wow, so high!'),
+    rock: maple('Whoa, wobbly!'),
+    go: maple('Here we go!'),
+    whee: [maple('Wheee!'), maple('Woo-hoo!'), maple('Yahoo!')],
+    leaves: [maple('Ha ha! I am all leaves!'), maple('Leaf shower!')],
+    bell: [maple('Ding ding!'), maple('Boing!')],
+    splash: maple('Splash! My tail is wet!'),
+    bridge: maple('Tock, tock, tock!'),
+    bonk: maple('Oops, bumpy!'),
+    green: maple('The green way!'),
+    blue: maple('The blue way! Hold on!'),
+    jump: maple('Up, up and away!'),
+    falls: maple('We made it! The waterfall!'),
+    thanks: maple('Thank you, Kaylee! What a ride!'),
+    // The animals, in their own voices.
+    moose: [by('moose')('Mmm. Bonjour.'), by('moose')('Munch, munch.')],
+    chipmunk: by('chipmunk')('Seeds! Seeds!'),
+    bear: by('bear')('Mmm, berries!'),
   },
   campfire: {
   },
