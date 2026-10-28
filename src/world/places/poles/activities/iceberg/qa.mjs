@@ -12,7 +12,8 @@ export const screens = [
 
 /** Auto-played runs: talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
-  { name: 'poles iceberg maker', id: 'iceberg', hash: '#/world/poles/iceberg', reset: true },
+  // (The section link: a bare #/world/poles/iceberg moves on to /pick, and the timer waits for the hash it opened.)
+  { name: 'poles iceberg maker', id: 'iceberg', hash: '#/world/poles/iceberg/pick', reset: true },
 ]
 
 /** Filmed moments: the core verb, driven the way a child would. */

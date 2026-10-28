@@ -466,6 +466,7 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
     eyes.push(P.sphere(eyeSize, INK, { at: on(x, eyeY, lift - 0.03 * R), rot: turnTo(x), scale: [0.78, 1, 0.42] }))
     eyesPlain.push(P.sphere(eyeSize * 0.3, WHITE, { at: on(x + s * 0.05 * R, eyeY + 0.08 * R, lift + 0.035 * R) }))
     eyesPlain.push(P.sphere(eyeSize * 0.14, WHITE, { at: on(x - s * 0.05 * R, eyeY - 0.07 * R, lift + 0.035 * R) }))
+    if (look.extras?.includes('eye-ring')) headPlain.push(P.sphere(eyeSize * 1.55, WHITE, { at: on(x, eyeY, lift - 0.06 * R), rot: turnTo(x), scale: [0.9, 1.05, 0.3] }, 16))
     if (look.lashes) for (const k of [0, 1]) eyesPlain.push(P.capsule(0.012 * R, 0.07 * R, INK, { at: on(x + s * (0.16 + k * 0.05) * R, eyeY + (0.17 - k * 0.07) * R, lift + 0.01 * R), rot: [0, 0, s * (-0.9 - k * 0.5)] }))
     const blushY = look.species === 'unicorn' || look.species === 'pony' ? -0.08 * R : -0.2 * R
     headPlain.push(P.sphere(0.12 * R, BLUSH, { at: on(s * 0.58 * R, blushY, lift * 0.6 - 0.02 * R), rot: turnTo(s * 0.58 * R), scale: [1.25, 0.65, 0.3] }))
@@ -685,8 +686,10 @@ export function buildAnimal(look: Look, bag: Bag): Rig {
       head.push(P.sphere(R, top, { at: [0, headY, 0] }, 26))
       // An emperor's gold patches, on the sides of the head behind the face.
       if (look.ear) for (const s of [-1, 1]) head.push(P.sphere(0.3 * R, look.ear, { at: [s * 0.8 * R, headY - 0.3 * R, 0.22 * R], rot: [0, s * 0.6, s * -0.3], scale: [0.55, 1.15, 0.9] }))
-      // A big heart-shaped cream face (two overlapping ovals), dark only over the top and the sides.
-      for (const s of [-1, 1]) head.push(P.sphere(0.62 * R, look.light, { at: [s * 0.28 * R, headY - 0.16 * R, 0.48 * R], scale: [1, 1.02, 0.95] }))
+      // A big heart-shaped cream face (two overlapping ovals), dark only over the top and the sides (an Adélie's
+      // stays dark all over, with white rings round the eyes).
+      const mask = look.extras?.includes('eye-ring') ? top : look.light
+      for (const s of [-1, 1]) head.push(P.sphere(0.62 * R, mask, { at: [s * 0.28 * R, headY - 0.16 * R, 0.48 * R], scale: [1, 1.02, 0.95] }))
       // Talking happens just under the beak.
       mouthAt = [0, headY - (look.open ? 0.25 : 0.33) * R, (look.open ? 1.08 : 1.04) * R]
       if (look.open) {
