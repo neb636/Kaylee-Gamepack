@@ -136,9 +136,8 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 **Home base**
 
 - **The Thailand map**
-  - [The map, the plane at Bangkok](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand)
-  - [The short flight to Krabi, then Krabi airport](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/map?fly=krabi) ([to Nan, then the Nan map](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/map?fly=nan))
-  - [Home from a trip: the plane flies back, the stamp lands on Krabi](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/map?plane=krabi&fly=bangkok&stamp=boat-trip)
+  - [The map](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand)
+  - [Home from a trip: the stamp lands on Krabi](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/map?stamp=boat-trip)
 - **Agong's house**
   - [Arrive by tuk-tuk](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/arrive)
   - [In front of Agong's house](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/street)

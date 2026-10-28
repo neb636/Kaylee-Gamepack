@@ -86,7 +86,7 @@ her bounce higher with each tap until she flops down. Tap someone in the family 
 and they hop together. Sacred things (the altar, the shrines, the spirit house) never wobble: their candles glow, a
 curl of incense rises, a soft bell rings, and she does a wai.
 
-**The Thailand map (built 2026-10-27, greybox).** Thailand has outgrown starting every trip in the house: Kaylee lands on a map of Thailand and flies the family's toy plane to Bangkok (the house), Krabi or Nan, and the boat and Nan trips end back on the map. Only the mall day still starts in the house, so Mommy and Daddy only ask about the mall now. Plan: `thailand/thailand-map.html`.
+**The Thailand map (built 2026-10-27, greybox).** Thailand has outgrown starting every trip in the house: Kaylee lands on a map of Thailand and taps Bangkok (the house), Krabi or Nan (since 2026-10-28 a plain tap map like Australia's: Dad found flying the toy plane confusing), and the boat and Nan trips end back on the map. Only the mall day still starts in the house, so Mommy and Daddy only ask about the mall now. Plan: `thailand/thailand-map.html`.
 
 **Trips from the house.** Mommy asks in Kaylee's room (on her own the first time she comes up, then whenever she's
 tapped). Daddy asks on the street too (Dad, 2026-10-25): tap him where the tuk-tuk drops her off and he says "Where do
