@@ -1,4 +1,4 @@
-// Sugar Snow (greybox 3, plan: planning/around-the-world/canada.html): tip the pot to pour hot maple syrup on a tray of
+// Sugar Snow (plan: planning/around-the-world/canada.html): tip the pot to pour hot maple syrup on a tray of
 // snow, watch it steam and set, then roll it up on a stick. #/world/canada/taffy/<section>?made=3&fed=chipmunk&tip=hold
 // A section link sets the scene up as if she had played to there. Loaded at startup by the section index (keep
 // perfect-freehand out of this file).
@@ -11,6 +11,7 @@ const TAFFY_SECTIONS = defineSections('canada', 'taffy', {
     tip: { default: 'hold', values: ['hold', 'lead'], doc: 'how her finger tips the pot: hold (the longer she holds it, the more it tips) or lead (it tips the further her finger pulls ahead of it)' },
   },
   sections: [
+    { id: 'story', name: "Maple's cousins" },
     { id: 'pour', name: 'Lines', params: ['tip'], links: [{ label: 'Lines: pour, let it set, roll it up', also: [{ label: 'tip by pulling ahead', params: { tip: 'lead' } }] }] },
     { id: 'shapes', name: 'Shapes', params: ['made', 'tip'] },
     { id: 'orders', name: 'Orders', params: ['made', 'fed', 'tip'], links: [{ label: 'Orders', also: [{ label: 'the chipmunk fed', params: { made: '7', fed: 'chipmunk' } }] }] },
