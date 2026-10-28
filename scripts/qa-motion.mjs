@@ -916,6 +916,30 @@ GAME_SCENARIOS.push({
   },
 })
 
+// Salmon Leap (2D greybox): in the bears' falls, the waiting salmon flicked up one pool at a time: the leap, the splash
+// and the happy wiggle, a bear lunging and the boop on its nose.
+GAME_SCENARIOS.push({
+  name: 'canada-salmon-flick',
+  seconds: 9,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/canada/salmon/bears`)
+    await page.waitForFunction(() => window.__canadaSalmonQA?.().section, null, { timeout: 20000 })
+    await page.waitForTimeout(600)
+  },
+  act: async (page) => {
+    for (let i = 0; i < 6; i++) {
+      const q = await page.evaluate(() => window.__canadaSalmonQA())
+      if (!q.waiting) break
+      await page.mouse.move(q.waiting.x, q.waiting.y)
+      await page.mouse.down()
+      await page.waitForTimeout(60)
+      await page.mouse.move(q.waiting.x + 70, q.waiting.y - 100, { steps: 5 })
+      await page.mouse.up()
+      await page.waitForTimeout(1300)
+    }
+  },
+})
+
 // Mountain Bike (3D greybox): Maple riding the blue way's berms with the wheel under her finger, pushed right up the
 // berm and held, then let go: she leans into the bends, bumps over the roots and drifts back to the middle of her way.
 GAME_SCENARIOS.push({

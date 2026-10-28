@@ -114,6 +114,9 @@ const SCENARIOS = [
   // Whale Watch (greybox, no voices): a tap on the water drives the boat there, so the auto-player's taps steer it about
   // and poke the animals; holding the water and steering out to the otters and the spouts is qa-motion's canada-whales-steer.
   { name: 'canada whale watch', id: 'whales', hash: '#/world/canada/whales', reset: true },
+  // Salmon Leap (greybox, no voices): a tap on a salmon makes it hop and a tap pokes things, so the auto-player hops
+  // them about and pokes; flicking them up the falls is a quick drag (qa-motion's canada-salmon-flick).
+  { name: 'canada salmon leap', id: 'salmon', hash: '#/world/canada/salmon', reset: true },
   // The trip there, one run per leg (each from its own section link).
   { name: "thailand: kaylee's wardrobe", id: 'wardrobe', hash: '#/world/thailand/hub/wardrobe?drawer=head', reset: true },
   { name: 'thailand trip: mommy asks', id: 'trip-invite', hash: '#/world/thailand/boat-trip/invite', reset: true },

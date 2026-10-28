@@ -444,6 +444,9 @@ const SCREENS = [
   // Whale Watch (3D greybox): each part from its link (the harbour both ways to steer, the humpback that jumps), and
   // under the water listening.
   ...['harbour', 'harbour?steer=wheel', 'otters', 'spouts', 'spouts?found=3', 'orcas', 'listen'].map((to) => ({ name: `canada-whales-${to.replace(/[?=&]/g, '-')}`, hash: `#/world/canada/whales/${to}`, reset: true, wait: to === 'listen' ? 4500 : 3000 })),
+  // Salmon Leap (2D greybox): each stretch of the river from its link (the bears' falls with the spirit bear low too),
+  // and the stream where the eggs hatch.
+  ...['steps', 'falls', 'bears', 'bears?spirit=low', 'eggs'].map((to) => ({ name: `canada-salmon-${to.replace(/[?=&,.]/g, '-')}`, hash: `#/world/canada/salmon/${to}`, reset: true, wait: 1500 })),
   { name: 'canada-party-soon', hash: '#/world/canada/party/soon', wait: 800 },
   // The mall day's trip loop (greybox): Mommy's card (🚤 / 🛝🍕), the day pass's choices on a replay, the goodbye with
   // the whole family and the Veloz (then everyone in it), ICONSIAM's glimpse, the lift going up, the counter with her
