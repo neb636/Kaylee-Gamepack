@@ -265,13 +265,7 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [Drag the sun](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun) ([summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?summer=north), [the north's winter night](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?side=north&summer=south))
 - [The lost penguin: carry him home](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=penguin) ([a lost polar bear cub](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=bear))
 
-**Snow Coats**
-
-- [Paint the fox](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/fox)
-- [Hide and seek](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox) ([the lemming still brown](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox,hare,ptarmigan))
-- [Rub the summer back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/summer)
-
-**Ice Floe Hop** (in the works)
+**Ice Floe Hop**
 
 - [Pola is far from Mama](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/story)
 - [Big steady floes](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/steady) ([another layout](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/steady?layout=2))
@@ -279,12 +273,26 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [Summer melt (push the floes)](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/melt)
 - [Back to Mama](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/mama)
 
-**Penguin Slide** (in the works)
+**Snow Coats**
 
+- [Paint the fox](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/fox)
+- [Hide and seek](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox) ([the lemming still brown](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox,hare,ptarmigan))
+- [Rub the summer back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/summer)
+
+**Penguin Slide**
+
+- [Pebble is hungry](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/story)
 - [The gentle slope](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/top)
 - [Bumps and cracks](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps) ([the moguls run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=left), [the kicker run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=right))
 - [Under the sea](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/dive)
 - [Feeding Pebble](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/home?krill=12)
+
+**Iceberg Maker**
+
+- [North or south?](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/pick)
+- [Little bits](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/bits?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/bits?pole=south))
+- [The giant one (under the water)](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/giant?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/giant?pole=south))
+- [Send them sailing](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/sail?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/sail?pole=south))
 
 **Emperor Huddle** (in the works)
 
@@ -292,13 +300,6 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [The wind turns](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/blizzard)
 - [Crack! Pebble's egg](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch) ([already hatched: tuck Pebble back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch?chick=hatched))
 - [The first sunrise](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/sunrise)
-
-**Iceberg Maker** (in the works)
-
-- [North or south?](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/pick)
-- [Little bits](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/bits?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/bits?pole=south))
-- [The giant one (under the water)](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/giant?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/giant?pole=south))
-- [Send them sailing](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/sail?pole=north) ([at the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/iceberg/sail?pole=south))
 
 **Finale: Pole to Pole and the Polar Quiz**
 

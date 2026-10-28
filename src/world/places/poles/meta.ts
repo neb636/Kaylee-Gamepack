@@ -39,6 +39,10 @@ const meta: PlaceMeta = {
     { icon: '🐻‍❄️', label: 'Never meet', say: L.facts.neverMeet },
     { icon: '☀️', label: 'Opposite seasons', say: L.facts.seasons },
     { icon: '🌙', label: 'Long nights', say: L.facts.nights },
+    { icon: '🥶', label: 'Coldest', say: L.facts.coldest },
+    { icon: '🧊', label: 'Hidden ice', say: L.facts.hidden },
+    { icon: '💧', label: 'Fresh water', say: L.facts.fresh },
+    { icon: '🔬', label: 'Scientists', say: L.facts.scientists },
   ],
   coloringPages: [],
   // Real-world videos for the Theater (button in the place's top bar). `after` offers one when that activity is done.
