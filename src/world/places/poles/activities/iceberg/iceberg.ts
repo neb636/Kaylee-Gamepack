@@ -341,7 +341,7 @@ export class IcebergMaker implements World3D {
       this.scene.add(group)
       const pick: (typeof this.picks)[number] = { pole, group, x, y: 0, vy: 0, penguins: [] }
       if (pole === 'north') {
-        const b = new Bear(this.bag, 0.75)
+        const b = new Bear(this.bag, 'pola', 0.8)
         b.root.position.set(s.giant.deck[0][0] * k, s.giant.deck[0][1] * k, s.giant.deck[0][2] * k)
         group.add(b.root)
         pick.bear = b
@@ -364,7 +364,7 @@ export class IcebergMaker implements World3D {
 
     // The friends on the cliff top: Pola up north; Pebble's colony down south (the Adélies ride the giant later).
     if (s.pole === 'north') {
-      const b = new Bear(this.bag, 1.15)
+      const b = new Bear(this.bag, 'pola', 1.2)
       b.root.position.set(s.friends[0][0], s.h, s.friends[0][1])
       this.scene.add(b.root)
       this.riders.push({ obj: b.root, bear: b, hopT: -1, from: new Vector3(), to: new Vector3(), on: null })

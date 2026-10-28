@@ -247,8 +247,8 @@ export class FloeHop implements World3D {
     for (const spec of layout(start.layout)) this.floes.push(this.makeFloe(spec, this.floes.length))
     this.mamaFloe = this.floes.find((f) => f.spec.stage === 'mama')!
 
-    this.pola = new Bear(bag, 1.15)
-    this.mama = new Bear(bag, 1.7)
+    this.pola = new Bear(bag, 'pola', 1.2, false)
+    this.mama = new Bear(bag, 'mama', 1.8)
     this.shadow = blobShadow(0.45, bag)
     scene.add(this.shadow)
     // Mama on the far side of her ice, facing the way Pola comes.

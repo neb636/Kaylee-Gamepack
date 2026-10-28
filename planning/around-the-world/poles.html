@@ -15,13 +15,13 @@
   "title": "The Poles: North and South",
   "icon": "🧊",
   "kind": "New place (3D + 2D)",
-  "updated": "2026-10-27",
+  "updated": "2026-10-28",
   "status": {
-    "label": "Step 8 begun: the friends as 3D toys and 2D puppets",
+    "label": "Step 8b: the friends going into the activities",
     "tone": "pink"
   },
   "pitch": "Sparkle's balloon flies to the top of the world and the bottom. Up north, **Pola the polar bear cub** lives on ice floating on the sea; down south, **Pebble the penguin chick** lives on a giant land made of ice. They are pen pals who can never meet, because polar bears only live in the north and penguins only live in the south. Kaylee hops floes, belly-slides, huddles in a blizzard and cracks icebergs off a glacier, and learns the difference by playing in both. At the very end, Sparkle's **Polar Quiz** checks what she learned, and she answers by doing: dragging Pola to his pole, spinning the globe to the bottom.",
-  "next": "Dad meets the friends: **Pola, Mama Bear, Pebble, Papa and Terry** in the character lab ([#/world/characters/pola](#/world/characters/pola?lineup=mama-bear,pola,pebble,papa,terry), spin them, play their actions) and the matching 2D puppets ([#/world/puppets/pola](#/world/puppets/pola), [pebble](#/world/puppets/pebble), [terry](#/world/puppets/terry)), and says what to change. Still open: the friends' names, one map pin or two, Santa or not. Next: **the friends go into the activities, one per PR**: the 3D Pola and Mama Bear into Ice Floe Hop first, then Papa and Pebble into Penguin Slide, the 2D Pebble and emperor dads into the huddle, then the painted 2D scenes and the stickers.",
+  "next": "Dad plays **Ice Floe Hop** with the real Pola and Mama Bear ([#/world/poles/floe/steady](#/world/poles/floe/steady), [home with Mama](#/world/poles/floe/mama)) and says what to change. Still open: the friends' names, one map pin or two, Santa or not. Next, one per PR: **Papa and Pebble into Penguin Slide**, then the 2D Pebble and emperor dads into the huddle and Snow Coats, then the painted 2D scenes and the stickers.",
   "facts": [
     {
       "icon": "🧭",
@@ -1466,8 +1466,9 @@
             {
               "n": "8b",
               "title": "Art: the friends into each activity",
-              "status": "next",
-              "md": "One activity per PR: the 3D friends replace the greybox shapes (Ice Floe Hop, Penguin Slide, Iceberg Maker), the 2D puppets go into Snow Coats and the huddle, with painted 2D scenes for those two, then the stickers."
+              "status": "doing",
+              "date": "2026-10-28",
+              "md": "One activity per PR: the 3D friends replace the greybox shapes (Ice Floe Hop, Penguin Slide, Iceberg Maker), the 2D puppets go into Snow Coats and the huddle, with painted 2D scenes for those two, then the stickers. **Ice Floe Hop done** (the 3D Pola and Mama Bear; Iceberg Maker's Pola came along). Next: Penguin Slide (Papa, Pebble)."
             },
             {
               "n": 9,
@@ -1770,6 +1771,18 @@
                 "**The 2D puppets** (`places/poles/puppets/`, at [#/world/puppets](#/world/puppets)): Pola (hop, wave, cheer, wiggle, *shake* the sea water off, and `wet` for drips after a belly-flop), Pebble (hop, flap, cheer, wiggle, waddle, and `cold` for the huddle: shivers, droopy eyes and pale cheeks), Terry (flap, hop, cheer, wiggle, bow, and `flying`: wings out and beating, feet tucked). They breathe, blink, watch her finger, and their mouths (beaks) open with their voices. `face.tsx` holds the shared eyes and outlines.",
                 "**Files:** `places/poles/characters/looks.ts` (the five looks and `POLES_COLORS`, which the puppets read too), `engine3d/characters/animal.ts` and `look.ts` (the `polarbear` and `tern` species, `cap`, gold penguin patches; nobody in Thailand changes), `thailand/lab/catalog.ts` (The Poles group).",
                 "**Not yet:** voices (the full loop; the lab says “no voice”), the friends in the activities, the painted 2D scenes, the stickers. Kaylee doesn't walk on the ice (as planned)."
+              ]
+            },
+            {
+              "title": "Step 8b: Pola and Mama Bear into Ice Floe Hop",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "The greybox bears are gone: Pola and Mama Bear on the floes are the toys from the character lab. Everything he did still plays on the rig's own pivots: the crouch as she pulls back, the stretch and flail in the air, the belly-flop, the paddling swim, the climb out and the shake, the hop when she's stuck, and the wave.",
+              "items": [
+                "`activities/floe/bear.ts` builds the rig from `POLES_LOOKS` (`buildAnimal`) and drives `body` (hop, squash, lean, shake), `head` (it lags the shake, tips up in a flail, tilts into a wave), `armL`/`armR` (hang, paddle, flail, wave) and the tail. Blinks and the mouth come from `FaceLife` (cast ids `pola` and `mama`, so they talk once they have voices).",
+                "Sizes stay the greybox's so the fling, the camera and the tap targets don't change: Pola stands 1.2 m (0.9 m in the lab), Mama 1.8 m. Pola hides the rig's own shadow, since the world draws his on whatever is under him.",
+                "**Iceberg Maker** used the same `Bear`, so its Pola on the cliff and on the giant berg is the rig toy too (0.8 m and 1.2 m).",
+                "**Not yet:** voices, the painted look of the sea and the floes."
               ]
             }
           ]
