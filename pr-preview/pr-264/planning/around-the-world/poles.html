@@ -1480,8 +1480,8 @@
             {
               "n": 10,
               "title": "Finale: Pole to Pole + Polar Quiz",
-              "status": "doing",
-              "md": "Its own PR: the tern flight, then the quiz on the hub's globe, then the trophy. **Greybox built** (PR #255): Terry's flight, the postcard, the quiz with 8 questions in the pool, the badge and `onWin`. Voices and the art come with steps 8 and 9.",
+              "status": "done",
+              "md": "Its own PR: the tern flight, then the quiz on the hub's globe, then the trophy. **Greybox built** (PR #255). **Voices and the toys in** (2026-10-28): Terry is the rig toy, he talks on the way, Sparkle speaks every question.",
               "date": "2026-10-27",
               "pr": 255
             }
@@ -1859,6 +1859,41 @@
                 "`info.ts`: `READY = true`. `qa.mjs`: story and stamp screens; the pacing run starts at `/slide/story`.",
                 "**Changed from the plan:** the story has its own section. Pokeables are the ones the greybox had (Papa, Pebble, the leopard seal, the Adélies): no Weddell seal, skua, whale or station yet.",
                 "**Known small things:** the transcription check flagged “Bumps! Pick a way down the hill!”, “Wheee!” and “Hee hee!” (they look like transcription quirks): listen on the iPad. The pacing robot can only tap, so it never reaches the stamp."
+              ]
+            },
+            {
+              "title": "Step 9: the globe hub talks",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Sparkle sits in a corner of the globe and says what to do: spin it, drag the sun, carry the lost one home, tap a picture to play. When Pola's and Pebble's sides come round they say hello in their own voices, and they're surprised when she puts the lost one on the wrong pole. The first time she pokes the North Pole, the seal, the station, the whale or the lights, she hears a fact.",
+              "items": [
+                "`activities/hub/Hub.tsx` drives `kit/Guide`; the text pill is gone. The welcome on the first visit, or “You got every stamp! Tap the party!” once every stamp is in. Hints after 8 s with nothing touched: spin, the sun, carry it home, or tap a picture. Summer lines once per side. A tap on Pola or Pebble: three lines each, in turn.",
+                "`globe/globe.ts`: a `poke(id)` event (the pokes, the friends, `lightsNorth`/`lightsSouth`). Pola and Pebble on the globe, and the lost ones, are the rig toys (`makePola`, `makePebble`, `Critter.dress` with `FaceLife`, so the two friends' mouths move when they talk).",
+                "The spots' row on a tall screen sits above Sparkle. Four more passport facts: the coldest place, hidden ice, fresh water, the scientists (`meta.facts`). Pacing: no talk before the first touch, 12.5 s of talk over 45 taps.",
+                "**Changed from the plan:** no Inuktitut hello (not confirmed yet).",
+                "**Known small things:** the rig toys don't darken in a pole's winter night (the globe has its own day and night shader). The lost penguin is the chick toy."
+              ]
+            },
+            {
+              "title": "Step 10: Pole to Pole and the Polar Quiz talk",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Terry is the toy tern now, flying flat with his wings out and folding them to stand when he lands. He talks on the way: setting off with Pola's postcard, the warm middle, the windy south, a cheer every six fish and hello to each country she's been to. He hands Pebble the card (“From Pola! Look, a polar bear!”), then Sparkle asks each quiz question, with a 🔊 to hear it again. A miss gets something silly, then “Look for the sparkle!”; the badge gets “Wow, Kaylee, you know your poles!”",
+              "items": [
+                "`party.ts`: `ternRig` with the `FLAT`/`UPRIGHT` poses, `flapWings` and Terry's `FaceLife` (`TERN_H` 0.07). The colony is four emperors with Papa's look, spread out so Pebble shows. The quiz's tern is the rig too.",
+                "`Finale.tsx`: `kit/Guide` with a hint for each section, quiet during the postcard and the badge; a `SayButton` by the stars; only the country-name pill stays. Pola's and Pebble's misses are said by the friend (`FRIEND_MISS`). Sparkle's “Steer Terry with your finger!” comes before Terry's first line.",
+                "**Changed from the plan:** the colony's dads are smaller than real life so Pebble stays the star.",
+                "**Known small things:** the flight is seen from behind, so Terry is mostly his back and wings; he's small standing at the colony; the badge doesn't pin onto the passport yet."
+              ]
+            },
+            {
+              "title": "Art: the stickers and Pola's portrait",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Five stickers (a polar bear cub, an Arctic fox, an Adélie penguin, an emperor chick, a narwhal) and a waving Pola for the friend's picture, flat and cute in the app's style.",
+              "items": [
+                "`art/source/world/poles/sticker-*.png` and `friend-pola.png` (Codex) → `assets/*.webp`; `art.ts` points `stickers` and `friend` at them. qa-art: the cream fur and highlights are marked fine.",
+                "**Known small things:** the Adélie sticker has no white eye ring, and the chick's face isn't heart-shaped."
               ]
             }
           ]
