@@ -49,6 +49,34 @@
     "file": "fc491001db9d.mp3"
   },
   {
+    "text": "Antarctica is the coldest, windiest place on Earth.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4472,
+    "file": "a2f934421e35.mp3"
+  },
+  {
+    "text": "Most of an iceberg is hidden under the water.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3341,
+    "file": "cf056acfc227.mp3"
+  },
+  {
+    "text": "Antarctica's ice holds most of the world's fresh water.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4541,
+    "file": "ca0319af143b.mp3"
+  },
+  {
+    "text": "Nobody lives in Antarctica for good, but scientists work there together.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5146,
+    "file": "85304fe34b22.mp3"
+  },
+  {
     "text": "Polar bears have black skin under their white fur.",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
@@ -124,6 +152,209 @@
     "sig": "ed7dbdac3d",
     "ms": 3848,
     "file": "bda61dfe0899.mp3"
+  },
+  {
+    "text": "Welcome to the Poles! Grab the globe and spin it.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4157,
+    "file": "6339b7068d20.mp3"
+  },
+  {
+    "text": "Spin the globe up or down!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2162,
+    "file": "03bbff79e797.mp3"
+  },
+  {
+    "text": "Hi! I'm Pola. I live on the sea ice!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 3974,
+    "file": "11654609c30b.mp3"
+  },
+  {
+    "text": "Hi! I'm Pebble. I live in Antarctica!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 3109,
+    "file": "d28e1d211174.mp3"
+  },
+  {
+    "text": "Ha ha, that tickles!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2087,
+    "file": "063e0800181d.mp3"
+  },
+  {
+    "text": "The ice floats on the sea!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2186,
+    "file": "71a512a22ec7.mp3"
+  },
+  {
+    "text": "Brr! I love the cold!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2703,
+    "file": "8f332f76e701.mp3"
+  },
+  {
+    "text": "Hello again!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 708,
+    "file": "8f777315cb2c.mp3"
+  },
+  {
+    "text": "Waddle, waddle!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1646,
+    "file": "d51ad1390f47.mp3"
+  },
+  {
+    "text": "No polar bears down here!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1689,
+    "file": "b42f8bccfcb7.mp3"
+  },
+  {
+    "text": "Tap a picture to play!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2576,
+    "file": "088dc761cf9e.mp3"
+  },
+  {
+    "text": "You got every stamp! Tap the party!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3105,
+    "file": "90fdba831de6.mp3"
+  },
+  {
+    "text": "Here comes the sun! Drag it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3318,
+    "file": "cbfdc53f15bf.mp3"
+  },
+  {
+    "text": "Drag the sun up or down!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2225,
+    "file": "0f3cd0e36e24.mp3"
+  },
+  {
+    "text": "Summer up north, and night down south!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3055,
+    "file": "9c586f4cc957.mp3"
+  },
+  {
+    "text": "Summer down south, night up north!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3157,
+    "file": "fc0be4594f75.mp3"
+  },
+  {
+    "text": "A lost penguin! Carry him home.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2903,
+    "file": "b3ee1adcd8a0.mp3"
+  },
+  {
+    "text": "A lost polar bear cub! Carry her home.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4003,
+    "file": "4c421ff233c1.mp3"
+  },
+  {
+    "text": "Carry it home: the top or the bottom?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2890,
+    "file": "c9b9066d904d.mp3"
+  },
+  {
+    "text": "Yay! Welcome home!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2096,
+    "file": "4a5a5f77ca23.mp3"
+  },
+  {
+    "text": "Welcome home, little cub!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2110,
+    "file": "a7295c814ec2.mp3"
+  },
+  {
+    "text": "A penguin? Penguins live down south!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2795,
+    "file": "c9f03628ffe5.mp3"
+  },
+  {
+    "text": "Eek! Polar bears live up north!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2177,
+    "file": "5e8e9bedf2b7.mp3"
+  },
+  {
+    "text": "This is the North Pole, the very top of the world!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4132,
+    "file": "43cb4ffd20a0.mp3"
+  },
+  {
+    "text": "Seals pop up through holes in the ice to breathe.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3825,
+    "file": "79152e769695.mp3"
+  },
+  {
+    "text": "Scientists stay here to learn about the ice.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3583,
+    "file": "00fb82254a2f.mp3"
+  },
+  {
+    "text": "Whales swim in the cold seas at both poles.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4388,
+    "file": "d6b42d61c1db.mp3"
+  },
+  {
+    "text": "The northern lights! They dance in the dark winter sky.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4136,
+    "file": "366e7c22fdcc.mp3"
+  },
+  {
+    "text": "The southern lights! They glow in the long winter night.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4493,
+    "file": "1d108e5df93d.mp3"
   },
   {
     "text": "Mama! I am way over here!",
@@ -292,6 +523,188 @@
     "sig": "ed7dbdac3d",
     "ms": 2587,
     "file": "26a6fa0a76af.mp3"
+  },
+  {
+    "text": "Papa, I'm so hungry!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1971,
+    "file": "be7f3dd6a877.mp3"
+  },
+  {
+    "text": "Krill coming right up!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1715,
+    "file": "83d8761ab354.mp3"
+  },
+  {
+    "text": "Steer Papa left and right!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2571,
+    "file": "76ae5dd132b6.mp3"
+  },
+  {
+    "text": "Bumps! Pick a way down the hill!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2691,
+    "file": "64b64af148ec.mp3"
+  },
+  {
+    "text": "Steer Papa to the pink krill!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3130,
+    "file": "efd6a3f76ad4.mp3"
+  },
+  {
+    "text": "Antarctica is one big hill of ice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3699,
+    "file": "847b071efea0.mp3"
+  },
+  {
+    "text": "Penguins fly under the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2570,
+    "file": "6766e646b03b.mp3"
+  },
+  {
+    "text": "Whoa, I can fly!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2613,
+    "file": "ce257090c0fc.mp3"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 874,
+    "file": "1b068a213f0b.mp3"
+  },
+  {
+    "text": "Oops! Snow on my beak!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2467,
+    "file": "f8e2c0c39172.mp3"
+  },
+  {
+    "text": "Brr, a snowy nose!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2898,
+    "file": "0c641e4a8bc0.mp3"
+  },
+  {
+    "text": "Oh! Sorry, little friend!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2540,
+    "file": "f1cb2b65544a.mp3"
+  },
+  {
+    "text": "Round and round!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1694,
+    "file": "757f95f15eb3.mp3"
+  },
+  {
+    "text": "Hello, silly seal!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1870,
+    "file": "709e61b3e74d.mp3"
+  },
+  {
+    "text": "Yum, krill!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1994,
+    "file": "72030545310c.mp3"
+  },
+  {
+    "text": "Gulp!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 626,
+    "file": "0e385c214496.mp3"
+  },
+  {
+    "text": "More for Pebble!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1452,
+    "file": "8dceafb764a9.mp3"
+  },
+  {
+    "text": "Pebble, I'm home!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2011,
+    "file": "62f53b9681a7.mp3"
+  },
+  {
+    "text": "Yummy! Thank you, Papa!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1658,
+    "file": "f57f91c1c977.mp3"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 592,
+    "file": "8e1c05c5b6c5.mp3"
+  },
+  {
+    "text": "Hi, hi!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1552,
+    "file": "5d48a44f537e.mp3"
+  },
+  {
+    "text": "Emperor penguins are the biggest penguins of all!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3101,
+    "file": "c81edf7a62ed.mp3"
+  },
+  {
+    "text": "These little ones are Adelie penguins.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2741,
+    "file": "af8239d0781b.mp3"
+  },
+  {
+    "text": "A leopard seal! This one just wants to play.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3824,
+    "file": "72a091fc77e2.mp3"
+  },
+  {
+    "text": "Penguin chicks eat krill, tiny pink sea animals.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4655,
+    "file": "f127bdf33180.mp3"
+  },
+  {
+    "text": "No polar bears live here, so the penguins are not scared.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4612,
+    "file": "7c8f09c7c3ad.mp3"
   },
   {
     "text": "Pick a pole: north or south?",
@@ -551,5 +964,278 @@
     "sig": "c038db870a",
     "ms": 1934,
     "file": "9cd04dfa3603.mp3"
+  },
+  {
+    "text": "Pola's postcard! Let's fly it to Pebble!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 3286,
+    "file": "f3fd83dac3be.mp3"
+  },
+  {
+    "text": "Steer Terry with your finger!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2787,
+    "file": "3b8176178bc2.mp3"
+  },
+  {
+    "text": "Move your finger to steer Terry!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3813,
+    "file": "720484ab957d.mp3"
+  },
+  {
+    "text": "Phew! It's warm in the middle of the world!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 3470,
+    "file": "b5853da34963.mp3"
+  },
+  {
+    "text": "Brr, it's windy! Nearly at the South Pole!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 3928,
+    "file": "53af029ee6dc.mp3"
+  },
+  {
+    "text": "Yum, a fish!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 1947,
+    "file": "41bbab082f75.mp3"
+  },
+  {
+    "text": "Fishy!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 746,
+    "file": "ee5ae77cb1cc.mp3"
+  },
+  {
+    "text": "Got one!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 922,
+    "file": "260bf3f0a1b4.mp3"
+  },
+  {
+    "text": "Hello, Thailand!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 1375,
+    "file": "5329f6414428.mp3"
+  },
+  {
+    "text": "Hello, Australia!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 1742,
+    "file": "a65f5500d56a.mp3"
+  },
+  {
+    "text": "Hello, Italy!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 1651,
+    "file": "62c664a22583.mp3"
+  },
+  {
+    "text": "Hello, China!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 1653,
+    "file": "765923cd8108.mp3"
+  },
+  {
+    "text": "Hello, Egypt!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 1442,
+    "file": "056cd2ac4570.mp3"
+  },
+  {
+    "text": "Hello, Peru!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 1545,
+    "file": "47f121a24b32.mp3"
+  },
+  {
+    "text": "Hello, Canada!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 1546,
+    "file": "356b58508cb4.mp3"
+  },
+  {
+    "text": "A postcard for you, Pebble!",
+    "voice": "terry",
+    "sig": "164d612c04",
+    "ms": 2198,
+    "file": "9f79fc0ad173.mp3"
+  },
+  {
+    "text": "From Pola! Look, a polar bear!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2246,
+    "file": "a1aae28f6db4.mp3"
+  },
+  {
+    "text": "Quiz time!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1419,
+    "file": "c4ad91b93c2a.mp3"
+  },
+  {
+    "text": "Put Pola where polar bears live!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2309,
+    "file": "b21e405404be.mp3"
+  },
+  {
+    "text": "Put Pebble where penguins live!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2960,
+    "file": "cf049d6fbe8a.mp3"
+  },
+  {
+    "text": "Spin the South Pole to the front!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2653,
+    "file": "8186beca3ed2.mp3"
+  },
+  {
+    "text": "Spin the North Pole to the front!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3067,
+    "file": "798259c927b4.mp3"
+  },
+  {
+    "text": "Which pole is ocean under the ice? Tap it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3630,
+    "file": "d87409439577.mp3"
+  },
+  {
+    "text": "Which pole is the coldest? Tap it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3388,
+    "file": "1425ce2d7947.mp3"
+  },
+  {
+    "text": "Who visits both poles? Tap them!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3100,
+    "file": "b525f3430c92.mp3"
+  },
+  {
+    "text": "It's summer up north. What is it down south?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3286,
+    "file": "b58f1cd6cb4b.mp3"
+  },
+  {
+    "text": "Where's the sea ice? I live up top!",
+    "voice": "pola",
+    "sig": "2c88a3bfe7",
+    "ms": 2710,
+    "file": "b56909b8a13c.mp3"
+  },
+  {
+    "text": "Brr! Where is everybody?",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 2134,
+    "file": "0a173027ebd0.mp3"
+  },
+  {
+    "text": "Wobble, wobble! Try the other end.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2823,
+    "file": "535188dd7811.mp3"
+  },
+  {
+    "text": "That's rock and land under there! Try the other pole.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4006,
+    "file": "3aff6a7961b3.mp3"
+  },
+  {
+    "text": "Brr! The other pole is even colder.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3201,
+    "file": "c4f8183d3024.mp3"
+  },
+  {
+    "text": "Hmm, not them. Who can fly far?",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3646,
+    "file": "b6a20762ef2c.mp3"
+  },
+  {
+    "text": "Down south it's dark and snowy! Try again.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4198,
+    "file": "110e518355ca.mp3"
+  },
+  {
+    "text": "Look for the sparkle!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1349,
+    "file": "d82745b8e95f.mp3"
+  },
+  {
+    "text": "Yes!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 709,
+    "file": "3c8add79ca57.mp3"
+  },
+  {
+    "text": "That's right!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1114,
+    "file": "7de07a3719dc.mp3"
+  },
+  {
+    "text": "You got it!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 1335,
+    "file": "1d67b845a21b.mp3"
+  },
+  {
+    "text": "Super!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 780,
+    "file": "ac0ca7a06ade.mp3"
+  },
+  {
+    "text": "Wow, Kaylee, you know your poles!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3607,
+    "file": "d22efe82bf7f.mp3"
   }
 ]
