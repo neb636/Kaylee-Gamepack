@@ -21,7 +21,7 @@
     "tone": "mint"
   },
   "pitch": "Sparkle's balloon flies to the top of the world and the bottom. Up north, **Pola the polar bear cub** lives on ice floating on the sea; down south, **Pebble the penguin chick** lives on a giant land made of ice. They are pen pals who can never meet, because polar bears only live in the north and penguins only live in the south. Kaylee hops floes, belly-slides, huddles in a blizzard and cracks icebergs off a glacier, and learns the difference by playing in both. At the very end, Sparkle's **Polar Quiz** checks what she learned, and she answers by doing: dragging Pola to his pole, spinning the globe to the bottom.",
-  "next": "Dad plays the whole Poles on the iPad: [the globe](#/world/poles), spin to a pole and tap a picture; then listen to the friends' voices (Pola, Mama Bear, Pebble, Papa, Terry) and say what to change. Handy links: [Ice Floe Hop](#/world/poles/floe/story), [Penguin Slide](#/world/poles/slide/story), [Iceberg Maker](#/world/poles/iceberg/pick), [Snow Coats](#/world/poles/coats/fox), [Emperor Huddle](#/world/poles/huddle/small), [the finale](#/world/poles/party/fly?stamps=all). Still open: the friends' names (recorded as Pola, Pebble and Terry, so a new name means re-recording), one map pin or two, Santa or not, an Inuktitut hello.",
+  "next": "Dad plays the whole Poles on the iPad: [the globe](#/world/poles), spin to a pole and tap a picture; listen to the friends' voices (Pola, Mama Bear, Pebble, Papa, Terry) and say what to change. Handy links: [Ice Floe Hop](#/world/poles/floe/story), [Penguin Slide](#/world/poles/slide/story), [Iceberg Maker](#/world/poles/iceberg/pick), [Snow Coats](#/world/poles/coats/fox), [Emperor Huddle](#/world/poles/huddle/small), [the finale](#/world/poles/party/fly?stamps=all). Still open: the friends' names (recorded as Pola, Pebble and Terry, so a new name means re-recording), one map pin or two, Santa or not, an Inuktitut hello.",
   "facts": [
     {
       "icon": "🧭",
@@ -1951,6 +1951,20 @@
                 "Facts: calving and the pole's berg shape still come with the first two bits; “fresh water, not salty” now comes with the first berg she sends off; the rest stay on her pokes. “Nine parts out of ten” is now “Most of it hides under the sea!”, and the under-water line “Look how big it is under the water!”.",
                 "The crack mechanics, tap counts and every knob are unchanged.",
                 "**Known small things:** from above (sailing) the bits read as plain hexagons; the north glacier's snow caps look a bit like a row of pillows; iPad portrait wasn't re-shot after the last cliff change."
+              ]
+            },
+            {
+              "title": "Ice Floe Hop: the look, and Arctic animals to poke",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "The sea ice looks like sea ice now: pale snowy floes with white lumps and little cracks over lavender-blue sides, so white Pola stands out, and tall pointy icebergs on the horizon. Mama's tall pink flag shows her ice from far out, and while she's out of sight a pink pin at the top points the way. Along the way: a ringed seal popping out of its breathing hole, a narwhal (the unicorn of the sea) surfacing near Pola, walruses snorting on the side floes, and belugas arcing past.",
+              "items": [
+                "`activities/floe/scenery.ts` (new): `iceGeometry` colors each face by which way it points (snow, rim, sides, underside) with snow lumps and a crack; far pointy bergs; side floes out of a fling's way; Mama's striped pole and waving pink flag.",
+                "The critters, code-built in the toon look, each with a sound and a move: a ringed seal in a breathing hole on each big floe (a tap pops it up, a second barks and ducks it); a narwhal with a pink-striped tusk surfacing near Pola every 15 to 20 s (a tap: a roll and a sparkle); walruses that snort and toss their heads; two belugas that sing a squeaky song when tapped.",
+                "`floe.ts`: the floes use the new ice; new tap targets `seal`, `narwhal`, `walrus`, `beluga` (≥ 88 px on iPad, ≥ 64 on iPhone) and `mamaPointer()`. `FloeHop.tsx`: the `MamaPointer` under the top bar (a tap on it is a tap on Mama), and a Sparkle fact the first time she pokes each critter (`L.floe.critters`).",
+                "The course, the fling, the floes' physics and every knob are unchanged.",
+                "**Changed from the plan:** no snowy owl; Mama's ice is the same ice as the others, with the flag as the beacon.",
+                "**Known small things:** the snow lumps look a little cream under the warm sun; the narwhal is small at the play zoom; a walrus floe can sit under the top bar's corner; the four facts run about 4 to 5 s; Mama still looks like a big Pola; not checked on iPhone."
               ]
             }
           ]
