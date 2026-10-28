@@ -4,13 +4,29 @@
 // Sparkle only says what to do. Thailand's house has its own (thailand/activities/hub/Guide.tsx).
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, say, SparklePuppet, type Line, type PuppetHandle } from '../../sdk'
+import { lineText, say, speakingVoice, SparklePuppet, type Line, type PuppetHandle } from '../../sdk'
 
 export interface GuideHandle {
   /** Say a line now. `after`: wait for the line before to finish instead of cutting it off. */
   speak(line: Line, after?: boolean): void
   /** Say a line the first time `key` comes up in this visit to the app (a fact the first time she pokes something). */
   once(key: string, line: Line, after?: boolean): void
+}
+
+/** Calls `fn` once nobody has been talking for a moment (so a payoff like the stamp doesn't cut off a cheer), or after
+ *  `maxMs` at most. Returns a cancel. */
+export function afterTalk(fn: () => void, maxMs = 12000): () => void {
+  const t0 = performance.now()
+  let quietSince = t0
+  const timer = setInterval(() => {
+    const now = performance.now()
+    if (speakingVoice()) quietSince = now
+    if (now - quietSince > 500 || now - t0 > maxMs) {
+      clearInterval(timer)
+      fn()
+    }
+  }, 100)
+  return () => clearInterval(timer)
 }
 
 // Per visit to the app, like Thailand's house.
@@ -69,11 +85,18 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
 
   // Any touch anywhere resets the "stuck" clock; after a while with nothing touched, the hint.
   useEffect(() => {
+    // A finger down, or a finger held and moving (steering, rubbing, carrying), is playing, not being stuck.
     const touch = () => (lastTouch.current = performance.now())
+    const move = (e: PointerEvent) => {
+      if (e.buttons || e.pointerType === 'touch') touch()
+    }
     window.addEventListener('pointerdown', touch, true)
+    window.addEventListener('pointermove', move, true)
     const timer = setInterval(() => {
       const now = performance.now()
       const h = hintRef.current
+      // Someone talking (a friend's line) counts as talk too: the hint never cuts them off.
+      if (speakingVoice()) lastTalk.current = now
       if (quiet || !h || now - lastTouch.current < stuckS * 1000 || now - lastTalk.current < stuckS * 1000) return
       const r = hints.current
       if (r.count >= maxHints || (r.count > 0 && now - r.last < againS * 1000)) return
@@ -83,6 +106,7 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
     }, 500)
     return () => {
       window.removeEventListener('pointerdown', touch, true)
+      window.removeEventListener('pointermove', move, true)
       clearInterval(timer)
       clearTimeout(hide.current)
     }

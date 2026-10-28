@@ -11,7 +11,9 @@ export const screens = [
 
 /** Auto-played runs: talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
-  { name: 'poles snow coats', id: 'coats', hash: '#/world/poles/coats', reset: true },
+  // The section link (the activity rewrites a bare #/world/poles/coats to it, and the robot waits for its own hash).
+  // Its taps only poke (the verb is a rub), so it never finishes: the rub is qa-motion's poles-coats-rub.
+  { name: 'poles snow coats', id: 'coats', hash: '#/world/poles/coats/fox', reset: true },
 ]
 
 /** Filmed moments: the core verb, driven the way a child would. */

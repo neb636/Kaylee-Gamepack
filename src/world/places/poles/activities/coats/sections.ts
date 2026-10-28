@@ -1,4 +1,4 @@
-// Snow Coats (greybox 5, plan: planning/around-the-world/poles.html): rub snow over the Arctic animals so their coats go
+// Snow Coats (plan: planning/around-the-world/poles.html): rub snow over the Arctic animals so their coats go
 // white, watch the polar bear miss the white ones, then rub the summer back. #/world/poles/coats/<section>?painted=fox
 // A section link sets the scene up as if she had played to there. Loaded at startup by the section index (keep
 // perfect-freehand out of this file).
