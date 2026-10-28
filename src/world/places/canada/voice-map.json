@@ -2448,5 +2448,369 @@
     "sig": "6be9bff4b8",
     "ms": 1768,
     "file": "66b72e2720a8.mp3"
+  },
+  {
+    "text": "Bonjour, Ottawa! First, let's help the animals get home!",
+    "voice": "maple",
+    "sig": "3b837164b7",
+    "ms": 4512,
+    "file": "0068a0ed9e64.mp3"
+  },
+  {
+    "text": "Where does the polar bear live? Way up north, on the ice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5271,
+    "file": "92e443aa5f6c.mp3"
+  },
+  {
+    "text": "Where does the orca live? In the Pacific Ocean!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3815,
+    "file": "2ded7d796f14.mp3"
+  },
+  {
+    "text": "Where does the bison live? On the yellow prairies!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4052,
+    "file": "71ad36354255.mp3"
+  },
+  {
+    "text": "Where does the moose live? In the big green forest!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4214,
+    "file": "a898fa45f44a.mp3"
+  },
+  {
+    "text": "Where does the beaver live? By the river!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3703,
+    "file": "1761bbaa3fc8.mp3"
+  },
+  {
+    "text": "Where does the loon live? On a forest lake!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3810,
+    "file": "45054c3ce3af.mp3"
+  },
+  {
+    "text": "Where does the grizzly bear live? In the Rocky Mountains!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4335,
+    "file": "d4a8f731f919.mp3"
+  },
+  {
+    "text": "Where does the spirit bear live? In the rainforest by the sea!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5261,
+    "file": "16cb32b7adb0.mp3"
+  },
+  {
+    "text": "Where does the puffin live? By the Atlantic Ocean!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5086,
+    "file": "eb0b64ca5a5c.mp3"
+  },
+  {
+    "text": "Yes! Polar bears hunt on the sea ice.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3372,
+    "file": "eb53eca42a5e.mp3"
+  },
+  {
+    "text": "Yes! Orcas swim in big families.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3094,
+    "file": "40ee29be8c40.mp3"
+  },
+  {
+    "text": "Yes! Bison munch the prairie grass.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2942,
+    "file": "ab282cb4f0a6.mp3"
+  },
+  {
+    "text": "Yes! Moose love forest ponds.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3675,
+    "file": "9d630f22e320.mp3"
+  },
+  {
+    "text": "Yes! Beavers build their lodge in the river.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3844,
+    "file": "b1959197e9f1.mp3"
+  },
+  {
+    "text": "Yes! Loons dive deep in the lake.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3356,
+    "file": "18f902fb9181.mp3"
+  },
+  {
+    "text": "Yes! Grizzlies dig for roots in the mountains.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3990,
+    "file": "b47fff0198db.mp3"
+  },
+  {
+    "text": "Yes! Spirit bears catch salmon in the rainforest.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4490,
+    "file": "c654884116f0.mp3"
+  },
+  {
+    "text": "Yes! Puffins dive for fish in the Atlantic.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3656,
+    "file": "991bb05efce0.mp3"
+  },
+  {
+    "text": "Oui! Home sweet home!",
+    "voice": "maple",
+    "sig": "3b837164b7",
+    "ms": 1903,
+    "file": "d9099b8b39da.mp3"
+  },
+  {
+    "text": "Flop, flop! It needs the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2731,
+    "file": "115e25b1b3a1.mp3"
+  },
+  {
+    "text": "Splash! It lives on land!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2887,
+    "file": "b7cf9019a521.mp3"
+  },
+  {
+    "text": "Phew! Too hot for a polar bear!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2598,
+    "file": "00c0be33c482.mp3"
+  },
+  {
+    "text": "Brrr! Too cold up there!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3131,
+    "file": "13fc70303c71.mp3"
+  },
+  {
+    "text": "Hmm, not there! Look for the glow.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3579,
+    "file": "acaa9d83b13f.mp3"
+  },
+  {
+    "text": "Look for the glow!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2264,
+    "file": "fdacfb21cdc3.mp3"
+  },
+  {
+    "text": "Ottawa is Canada's capital city!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2808,
+    "file": "21e727a1e4fe.mp3"
+  },
+  {
+    "text": "Everybody's home! Now, hockey!",
+    "voice": "maple",
+    "sig": "3b837164b7",
+    "ms": 2354,
+    "file": "7bf1df9aafe0.mp3"
+  },
+  {
+    "text": "Flick the puck into the geese's net!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2861,
+    "file": "124910bd0cc3.mp3"
+  },
+  {
+    "text": "Swipe from the puck to the net!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2330,
+    "file": "fb0198e6343e.mp3"
+  },
+  {
+    "text": "The geese are in the way! Bounce it off the snow!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3685,
+    "file": "c2f030d9ce41.mp3"
+  },
+  {
+    "text": "One more goal to win!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2117,
+    "file": "cc87f145bc19.mp3"
+  },
+  {
+    "text": "The goose saved it! Again!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2282,
+    "file": "3133fa4af383.mp3"
+  },
+  {
+    "text": "So close! Try again!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2627,
+    "file": "baf10f3aaaef.mp3"
+  },
+  {
+    "text": "Goal!",
+    "voice": "maple",
+    "sig": "3b837164b7",
+    "ms": 689,
+    "file": "5dfadea492fa.mp3"
+  },
+  {
+    "text": "Beauty, eh!",
+    "voice": "maple",
+    "sig": "3b837164b7",
+    "ms": 1054,
+    "file": "dc321f731f8f.mp3"
+  },
+  {
+    "text": "Youpi, a goal!",
+    "voice": "maple",
+    "sig": "3b837164b7",
+    "ms": 2260,
+    "file": "9a7986e62a20.mp3"
+  },
+  {
+    "text": "Mmm. Nice one.",
+    "voice": "moose",
+    "sig": "1d4626e380",
+    "ms": 2759,
+    "file": "8c7e633c93b7.mp3"
+  },
+  {
+    "text": "Bonk. Not today, geese.",
+    "voice": "moose",
+    "sig": "1d4626e380",
+    "ms": 2279,
+    "file": "3371923a1b20.mp3"
+  },
+  {
+    "text": "We won! We're the champions!",
+    "voice": "maple",
+    "sig": "3b837164b7",
+    "ms": 2163,
+    "file": "b00fab92f812.mp3"
+  },
+  {
+    "text": "Hockey is Canada's favorite winter sport!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2993,
+    "file": "d8b747d99328.mp3"
+  },
+  {
+    "text": "Pass me the puck!",
+    "voice": "maple",
+    "sig": "3b837164b7",
+    "ms": 1396,
+    "file": "02b18f3c7249.mp3"
+  },
+  {
+    "text": "Hello. I am the goalie.",
+    "voice": "moose",
+    "sig": "1d4626e380",
+    "ms": 2717,
+    "file": "514389abe6bf.mp3"
+  },
+  {
+    "text": "Hoo! Pass to me!",
+    "voice": "owl",
+    "sig": "ea2e6e5659",
+    "ms": 2369,
+    "file": "589267eb8ef5.mp3"
+  },
+  {
+    "text": "Mine! I mean, yours!",
+    "voice": "raccoon",
+    "sig": "24ac8d43c3",
+    "ms": 2786,
+    "file": "1e8325585dd0.mp3"
+  },
+  {
+    "text": "Wheee! Look, I spin!",
+    "voice": "otter",
+    "sig": "24b0d2d3ef",
+    "ms": 3338,
+    "file": "bf0009ccff50.mp3"
+  },
+  {
+    "text": "Grr! Go team!",
+    "voice": "bear",
+    "sig": "6be9bff4b8",
+    "ms": 2430,
+    "file": "d032d045322c.mp3"
+  },
+  {
+    "text": "Watch my big slap shot!",
+    "voice": "bear",
+    "sig": "6be9bff4b8",
+    "ms": 2729,
+    "file": "f93d321624e3.mp3"
+  },
+  {
+    "text": "Go, go, go!",
+    "voice": "chipmunk",
+    "sig": "712ac7a947",
+    "ms": 2063,
+    "file": "95a35e7cf1f8.mp3"
+  },
+  {
+    "text": "Mmm, a BeaverTail! Sweet, like my tail!",
+    "voice": "maple",
+    "sig": "3b837164b7",
+    "ms": 4051,
+    "file": "71867f99a733.mp3"
+  },
+  {
+    "text": "That's Parliament, in Ottawa, Canada's capital!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3815,
+    "file": "31167ebba52f.mp3"
+  },
+  {
+    "text": "In winter, this canal freezes into a giant skating rink!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4362,
+    "file": "e87c269d7e2e.mp3"
   }
 ]

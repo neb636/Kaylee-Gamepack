@@ -375,7 +375,14 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [The bears are fishing](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/bears?home=7) ([the spirit bear on the low ledge](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/bears?home=7&spirit=low))
 - [Home: the eggs hatch](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/salmon/eggs?home=11)
 
-**Finale**: [Animal Homes + Pond Hockey (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/soon?stamps=all)
+**Finale: Animal Homes + Pond Hockey** (The finale in Ottawa. The team is whoever her stamps brought (team= changes it for a test).)
+
+- [Bonjour, Ottawa!](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/story?stamps=all)
+- [Animal Homes: the polar bear first](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/homes?stamps=all) ([the orca](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/homes?stamps=all&q=orca), [the loon](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/homes?stamps=all&q=loon), [the last animal](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/homes?stamps=all&q=beaver&home=5))
+- [Pond Hockey: the first goal, open net](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/hockey?stamps=all&team=all) ([only Maple and the moose](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/hockey?stamps=all&team=none), [with a few friends](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/hockey?stamps=all&team=taffy,campfire,whales))
+- [Pond Hockey: the geese skate in the way](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/hockey?stamps=all&score=1&team=all)
+- [Pond Hockey: the last goal](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/hockey?stamps=all&score=2&team=all)
+- [The big win on the canal](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/party/win?stamps=all&team=all)
 
 <!-- sections:end -->
 

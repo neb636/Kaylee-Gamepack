@@ -16,7 +16,7 @@ import { RINK_ANCHORS, RinkWorld, type RinkEvents } from './rink'
 import PARTY, { GOALS, HOME_ANIMALS, HOMES_N, teamOf, type HomeAnimal, type PartySection } from './sections'
 
 /** Read-only state for QA (one world at a time: the map, then the rink). */
-const QA_KEY = '__canadaPartyQA' as QAKey
+const QA_KEY: QAKey = '__canadaPartyQA'
 
 const EMOJI: Record<HomeAnimal, string> = { 'polar-bear': '🐻‍❄️', orca: '🐋', bison: '🦬', moose: '🫎', beaver: '🦫', loon: '🦆', grizzly: '🐻', 'spirit-bear': '🤍', puffin: '🐧' }
 const ROUND: Line[] = [L.party.rink, L.party.geese, L.party.last]

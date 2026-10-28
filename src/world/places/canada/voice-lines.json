@@ -912,5 +912,111 @@
   {
     "text": "Berries are easier!",
     "voice": "bear"
-  }
+  },
+  {
+    "text": "Bonjour, Ottawa! First, let's help the animals get home!",
+    "voice": "maple"
+  },
+  "Where does the polar bear live? Way up north, on the ice!",
+  "Where does the orca live? In the Pacific Ocean!",
+  "Where does the bison live? On the yellow prairies!",
+  "Where does the moose live? In the big green forest!",
+  "Where does the beaver live? By the river!",
+  "Where does the loon live? On a forest lake!",
+  "Where does the grizzly bear live? In the Rocky Mountains!",
+  "Where does the spirit bear live? In the rainforest by the sea!",
+  "Where does the puffin live? By the Atlantic Ocean!",
+  "Yes! Polar bears hunt on the sea ice.",
+  "Yes! Orcas swim in big families.",
+  "Yes! Bison munch the prairie grass.",
+  "Yes! Moose love forest ponds.",
+  "Yes! Beavers build their lodge in the river.",
+  "Yes! Loons dive deep in the lake.",
+  "Yes! Grizzlies dig for roots in the mountains.",
+  "Yes! Spirit bears catch salmon in the rainforest.",
+  "Yes! Puffins dive for fish in the Atlantic.",
+  {
+    "text": "Oui! Home sweet home!",
+    "voice": "maple"
+  },
+  "Flop, flop! It needs the water!",
+  "Splash! It lives on land!",
+  "Phew! Too hot for a polar bear!",
+  "Brrr! Too cold up there!",
+  "Hmm, not there! Look for the glow.",
+  "Look for the glow!",
+  "Ottawa is Canada's capital city!",
+  {
+    "text": "Everybody's home! Now, hockey!",
+    "voice": "maple"
+  },
+  "Flick the puck into the geese's net!",
+  "Swipe from the puck to the net!",
+  "The geese are in the way! Bounce it off the snow!",
+  "One more goal to win!",
+  "The goose saved it! Again!",
+  "So close! Try again!",
+  {
+    "text": "Goal!",
+    "voice": "maple"
+  },
+  {
+    "text": "Beauty, eh!",
+    "voice": "maple"
+  },
+  {
+    "text": "Youpi, a goal!",
+    "voice": "maple"
+  },
+  {
+    "text": "Mmm. Nice one.",
+    "voice": "moose"
+  },
+  {
+    "text": "Bonk. Not today, geese.",
+    "voice": "moose"
+  },
+  {
+    "text": "We won! We're the champions!",
+    "voice": "maple"
+  },
+  "Hockey is Canada's favorite winter sport!",
+  {
+    "text": "Pass me the puck!",
+    "voice": "maple"
+  },
+  {
+    "text": "Hello. I am the goalie.",
+    "voice": "moose"
+  },
+  {
+    "text": "Hoo! Pass to me!",
+    "voice": "owl"
+  },
+  {
+    "text": "Mine! I mean, yours!",
+    "voice": "raccoon"
+  },
+  {
+    "text": "Wheee! Look, I spin!",
+    "voice": "otter"
+  },
+  {
+    "text": "Grr! Go team!",
+    "voice": "bear"
+  },
+  {
+    "text": "Watch my big slap shot!",
+    "voice": "bear"
+  },
+  {
+    "text": "Go, go, go!",
+    "voice": "chipmunk"
+  },
+  {
+    "text": "Mmm, a BeaverTail! Sweet, like my tail!",
+    "voice": "maple"
+  },
+  "That's Parliament, in Ottawa, Canada's capital!",
+  "In winter, this canal freezes into a giant skating rink!"
 ]
