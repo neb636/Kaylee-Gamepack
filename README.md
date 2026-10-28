@@ -8,6 +8,10 @@ Thailand to Agong's house, where she walks around as a unicorn, and to the place
 **Play:** https://neb636.github.io/Kaylee-Gamepack/ · [Jump to a game section](#jump-to-a-game-section)
 (iPad: open in Safari → Share → **Add to Home Screen**. It opens full-screen like a real app.)
 
+**The world map** comes in two views (the two buttons in its top bar; she keeps the one she used last):
+- [The map](https://neb636.github.io/Kaylee-Gamepack/#/world?view=map)
+- [The game shelf](https://neb636.github.io/Kaylee-Gamepack/#/world?view=list) (every game as a picture card, a row per country and per Thailand trip; ❤️ favorites, 🎁 surprise)
+
 **3D character lab** (development tool, every 3D character on a turntable: poses, actions, lines, outfits, lighting): 
 - [Kaylee](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee)
 - [Kaylee in a look from her wardrobe](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee?look=crown,stars,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky) (the Look panel: her things and the paint)
@@ -253,6 +257,7 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 
 - [Spin the globe](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe) ([north side](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe?side=north), [south side](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/globe?side=south))
 - [Drag the sun](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun) ([summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?summer=north), [the north's winter night](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?side=north&summer=south))
+- [The lost penguin: carry him home](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=penguin) ([a lost polar bear cub](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=bear))
 
 **Ice Floe Hop (greybox)**
 
@@ -289,7 +294,13 @@ For local testing, run `npm run dev` and replace `https://neb636.github.io/Kayle
 - [Crack! Pebble's egg](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch) ([already hatched: tuck Pebble back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/hatch?chick=hatched))
 - [The first sunrise](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/huddle/sunrise)
 
-**Coming soon**: [Finale: Pole to Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/soon)
+**Finale: Pole to Pole and the Polar Quiz (greybox)**
+
+- Pole to Pole
+  - [Over the Arctic](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/fly?stamps=all) ([the warm middle](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/fly?stamps=all&leg=warm), [the windy south](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/fly?stamps=all&leg=south))
+- [The postcard for Pebble](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/deliver?stamps=all)
+- [The Polar Quiz](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=bear) ([spin to the South Pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=south), [the coldest pole](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=coldest), [who visits both](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=tern), [summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=summer), [the last question](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/quiz?stamps=all&q=ocean&stars=5))
+- [The Polar Explorer badge](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/party/badge?stamps=all)
 
 ### Canada
 

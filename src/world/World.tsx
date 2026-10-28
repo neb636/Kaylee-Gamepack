@@ -54,7 +54,7 @@ export function World({ place, activity, section, params = {} }: { place?: strin
     screen = <PlaceFrame id={place} activity={activity} section={section} params={gameParams} />
     lab = params.cam !== undefined
     feel = params.feel !== undefined
-  } else screen = <WorldMap />
+  } else screen = <WorldMap view={params.view} />
   return (
     <div className="world" style={{ position: 'absolute', inset: 0 }}>
       <div ref={setHost} style={{ position: 'absolute', inset: 0 }}>

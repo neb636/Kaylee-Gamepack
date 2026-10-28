@@ -96,6 +96,8 @@ const SCENARIOS = [
   // ones sneeze and waddle in by themselves, so it gets slowly through the small huddle. The robot run that drags them in
   // is qa-motion's poles-huddle-drag.
   { name: 'poles emperor huddle', id: 'huddle', hash: '#/world/poles/huddle', reset: true },
+  // The finale: Terry's flight from the top (she steers; the robot just watches him fly).
+  { name: 'poles pole to pole', id: 'party', hash: '#/world/poles/party/fly?stamps=all', reset: true },
   { name: 'canada train map', id: 'canada', hash: '#/world/canada', reset: true },
   { name: 'canada mountain bike', id: 'bike', hash: '#/world/canada/bike', reset: true },
   { name: 'canada sugar snow', id: 'taffy', hash: '#/world/canada/taffy', reset: true },

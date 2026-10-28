@@ -115,7 +115,8 @@ for (const file of files) {
   mkdirSync(dirname(dest), { recursive: true })
   if (isOpaque(file)) {
     // Panoramas (`*-wide`) get panned at full screen height, so they keep ~1100 px of height instead of 1600 px of width.
-    const box = basename(file).includes('-wide') ? { width: 3400, height: 1100 } : { width: 1600, height: 1600 }
+    // Game cards (`cover-game-*`, the world map's game shelf) are shown at most ~500 px across.
+    const box = basename(file).includes('-wide') ? { width: 3400, height: 1100 } : basename(file).startsWith('cover-game-') ? { width: 560, height: 560 } : { width: 1600, height: 1600 }
     await sharp(file).resize({ ...box, fit: 'inside', withoutEnlargement: true }).webp({ quality: 82 }).toFile(dest)
   } else {
     const cut = await cutout(file, basename(file, '.png').endsWith('-hd'))
