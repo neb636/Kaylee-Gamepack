@@ -1845,6 +1845,21 @@
                 "**Changed from the plan:** Papa speaks for the south (Pebble isn't on the shelf; the Adélies and emperors are).",
                 "**Known small things:** Sparkle's corner covers a little of the cliff top in portrait (nothing tappable there). The pacing robot can't push or flick, so it never reaches the stamp; the drags are checked by the `poles-iceberg-giant` motion scenario."
               ]
+            },
+            {
+              "title": "Step 9: Penguin Slide goes into the game, and the Adélies",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Penguin Slide is in the game. Pebble says “Papa, I'm so hungry!” and Papa goes off fishing. Sparkle in the corner says what to do on each stretch, and Papa talks when he flies off a bump, plunges into a snowbank, bumps an Adélie, meets the seal or gulps krill. When Pebble is fed she says thank you, and the stamp follows. The little penguins on the slope are Adélies on the rig now.",
+              "items": [
+                "`activities/slide/PenguinSlide.tsx`: a `StoryBeat` with the 2D Pebble (a fresh start or the `story` link; a tap skips), Papa held at the top of the slope (`World.held`) until it ends: 3.7 s of talk before the first touch. `kit/Guide` gives each stretch's instruction when it starts (with “Antarctica is one big hill of ice!” at the bumps and “Penguins fly under the water!” at the dive) and again when she's stuck. A fact the first time she pokes Papa, Pebble, the seal or an Adélie (a second Adélie: no polar bears here). Papa says at most two lines per kind of moment, at least 6 s apart, never over someone else. `onDone` 3.4 s after Pebble is fed. The text pill and 🔁 are gone (she replays from the globe).",
+                "`slide.ts`: a `moment` event (go, air, bank, bump, seal, leap), a `poke` event, and `held`. `sections.ts`: a new `story` section (“Pebble is hungry”).",
+                "`L.slide`: 26 lines (10 Sparkle, 13 Papa, 4 Pebble).",
+                "**The Adélie** (`characters/looks.ts` `adelie`, in the character lab at [#/world/characters/adelie](#/world/characters/adelie)): black head and back, white tummy, and a new `eye-ring` extra on the rig (`engine3d/characters/look.ts`, `animal.ts`: white rings round the eyes; off for everyone else). `slide/penguin.ts` builds every penguin on the rig now, so Iceberg Maker's Adélies changed too.",
+                "`info.ts`: `READY = true`. `qa.mjs`: story and stamp screens; the pacing run starts at `/slide/story`.",
+                "**Changed from the plan:** the story has its own section. Pokeables are the ones the greybox had (Papa, Pebble, the leopard seal, the Adélies): no Weddell seal, skua, whale or station yet.",
+                "**Known small things:** the transcription check flagged “Bumps! Pick a way down the hill!”, “Wheee!” and “Hee hee!” (they look like transcription quirks): listen on the iPad. The pacing robot can only tap, so it never reaches the stamp."
+              ]
             }
           ]
         }
