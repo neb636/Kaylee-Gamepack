@@ -1,4 +1,4 @@
-// Ice Floe Hop (greybox 2, plan: planning/around-the-world/poles.html): fling Pola floe to floe back to Mama Bear.
+// Ice Floe Hop (plan: planning/around-the-world/poles.html): fling Pola floe to floe back to Mama Bear.
 // #/world/poles/floe/<section>?layout=2. A section link starts Pola on that stage's first floe.
 // Loaded at startup by the section index (keep three.js out of this file).
 import { defineSections } from '../../../../kit/sections'
