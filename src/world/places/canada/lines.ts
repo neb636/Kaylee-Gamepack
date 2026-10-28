@@ -102,6 +102,33 @@ export const L = {
   campfire: {
   },
   canoe: {
+    // The story: Maple at the dock, in the red canoe.
+    story: maple('Bonjour! Why is my lake so blue?'),
+    // Sparkle: how to paddle (one way or the other), and the hint when she hasn't paddled for a while.
+    go: { stroke: 'Pull the paddle back through the water!', pull: 'Hold the water where the canoe should go!' },
+    hint: { stroke: 'Drag your finger back, beside the canoe.', pull: 'Press the water in front of the canoe.' },
+    // Where the blue comes from.
+    stream: 'Paddle to the milky water by the glacier stream!',
+    streamMaple: maple('Ooh! What is that milky water?'),
+    streamHint: 'Follow the sparkles to the milky water.',
+    found: 'Rock flour from the glacier makes the lake so blue!',
+    foundMaple: maple('We found the blue!'),
+    // Follow the loon.
+    loon: 'Bubbles! Follow them to find the loon.',
+    loonHint: 'Paddle to the bubbles!',
+    loonFound: [maple('There she is!'), maple('Found you, loon!'), maple('Peekaboo, loon!')],
+    chick: maple('Look! A baby loon on her back!'),
+    family: maple('A whole loon family! Merci!'),
+    // Tap-to-hear facts (the first time she pokes the glacier, the second time the loon).
+    glacier: 'A glacier is a river of ice. It moves very slowly.',
+    loonie: "The loon is on Canada's dollar coin. It's called a loonie!",
+    // Silly moments and pokes.
+    dizzy: maple("Whoa! I'm dizzy!"),
+    parade: maple('A duck parade!'),
+    bonk: maple('Bonk! Hee hee!'),
+    pokeMaple: [maple('Paddle, paddle!'), maple('Splish, splash!'), maple('I love my red canoe!')],
+    beaver: maple('Allo, cousin beaver!'),
+    moose: by('moose')('Mmm. Tasty lake weeds.'),
   },
   bridge: {
   },
