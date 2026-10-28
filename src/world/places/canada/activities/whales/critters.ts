@@ -68,21 +68,40 @@ export class Otter extends Critter {
   constructor(bag: Bag) {
     super()
     this.root.add(this.body)
-    const fur = '#8A5E45'
-    const face = '#E8D2B8'
-    // Lying on her back along +z (head at +z), tummy up.
-    this.body.add(solid(merge([P.capsule(0.22, 0.55, fur, { rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.75] }), P.sphere(0.17, '#B98D6E', { at: [0, 0.1, 0.05], scale: [1, 0.5, 1.6] }), P.sphere(0.07, '#5E4033', { at: [0.1, 0.12, -0.5] }), P.sphere(0.07, '#5E4033', { at: [-0.1, 0.12, -0.5] }), P.cone(0.07, 0.4, fur, { at: [0, 0, -0.6], rot: [-Math.PI / 2, 0, 0] }, 8)]), bag, 2))
-    this.head.position.set(0, 0.08, 0.48)
-    this.body.add(this.head)
-    this.head.add(
-      solidMix(
-        [P.sphere(0.2, face, { at: [0, 0.06, 0.05] }), P.sphere(0.1, '#F4E6D6', { at: [0, 0.02, 0.2], scale: [1.3, 0.8, 0.8] }), P.sphere(0.04, PAL.ink, { at: [0, 0.07, 0.29] }), P.sphere(0.05, fur, { at: [0.15, 0.17, 0] }), P.sphere(0.05, fur, { at: [-0.15, 0.17, 0] })],
-        cheeks(0.12, 0.04, 0.17, 0.03),
+    const fur = '#7A5240'
+    const face = '#EADCC8'
+    // Lying on her back along +z (head at +z), tummy up: a round furry body, a paler chest, the flat tail and the big
+    // webbed back feet sticking up out of the water at the far end.
+    this.body.add(
+      solid(
+        merge([
+          P.capsule(0.24, 0.5, fur, { rot: [Math.PI / 2, 0, 0], scale: [1.05, 1, 0.78] }),
+          P.sphere(0.19, '#A9785C', { at: [0, 0.1, 0.1], scale: [1, 0.5, 1.5] }),
+          P.rbox(0.18, 0.05, 0.42, 0.04, '#5E4033', { at: [0, -0.02, -0.62], rot: [-0.15, 0, 0] }),
+          ...[-1, 1].map((s) => P.sphere(0.1, '#5E4033', { at: [s * 0.13, 0.16, -0.48], rot: [-0.7, 0, s * 0.3], scale: [0.85, 0.35, 1.3] })),
+        ]),
         bag,
         2,
       ),
     )
-    this.eyes = solid(merge(eyes(0.08, 0.14, 0.17, 0.028)), bag, 0)
+    this.head.position.set(0, 0.1, 0.46)
+    this.body.add(this.head)
+    // A big round pale head (sea otters' faces go whitish), little ears, a fat whiskery muzzle and a dark button nose.
+    this.head.add(
+      solidMix(
+        [
+          P.sphere(0.23, face, { at: [0, 0.07, 0.05] }),
+          P.sphere(0.12, '#F7EEE2', { at: [0, 0.0, 0.21], scale: [1.35, 0.8, 0.8] }),
+          P.sphere(0.045, '#3A2A2E', { at: [0, 0.06, 0.31], scale: [1.3, 0.9, 0.8] }),
+          P.sphere(0.055, fur, { at: [0.17, 0.2, -0.02] }),
+          P.sphere(0.055, fur, { at: [-0.17, 0.2, -0.02] }),
+        ],
+        [...cheeks(0.14, 0.03, 0.18, 0.032), ...[-1, 1].flatMap((s) => [0, 1, 2].map((i) => P.sphere(0.008, '#8A7468', { at: [s * (0.05 + i * 0.025), 0.0 - i * 0.012, 0.29 - i * 0.012] })))],
+        bag,
+        2,
+      ),
+    )
+    this.eyes = solid(merge(eyes(0.085, 0.15, 0.19, 0.03)), bag, 0)
     this.head.add(this.eyes)
     // A frown when glaring: little dark brows.
     this.brows = solid(merge([P.box(0.07, 0.015, 0.015, PAL.ink, { at: [0.08, 0.2, 0.19], rot: [0, 0, -0.5] }), P.box(0.07, 0.015, 0.015, PAL.ink, { at: [-0.08, 0.2, 0.19], rot: [0, 0, 0.5] })]), bag, 0)
@@ -193,34 +212,68 @@ export class Whale {
     readonly kind: WhaleKind,
   ) {
     const grey = kind === 'grey'
-    const skin = grey ? '#8F95A6' : '#4C5568'
-    const belly = grey ? '#B4B9C6' : '#E9ECF4'
+    // A grey whale is slate grey all over, mottled with white and pale patches (and a few orange barnacle-lice spots),
+    // a narrow arched head and a row of knuckles along its back instead of a fin. A humpback is blue-black on top with a
+    // white throat full of grooves, a little fin on a hump, knobbly bumps all over its head and the longest white
+    // flippers of any whale; its tail is white underneath.
+    const skin = grey ? '#7F8698' : '#3A4255'
+    const belly = grey ? '#A7ADBB' : '#EDEFF6'
     this.len = grey ? 9 : 10
     const L = this.len
     this.root.add(this.body)
-    const spots = grey ? Array.from({ length: 14 }, (_, i) => P.sphere(0.22 + (i % 3) * 0.08, '#C5C9D4', { at: [(i % 2 ? 1 : -1) * (0.5 + (i % 4) * 0.15), 0.75 + (i % 3) * 0.1, L * 0.3 - i * 0.55], scale: [1, 0.3, 1.2] }, 8)) : []
-    const knuckles = grey ? Array.from({ length: 6 }, (_, i) => P.sphere(0.16, skin, { at: [0, 0.98 - i * 0.04, -L * 0.1 - i * 0.45] }, 8)) : [P.prism([[-0.4, 0], [0.4, 0], [0, 0.5]], 0.14, skin, { at: [0, 0.9, -L * 0.18], rot: [0, Math.PI / 2, 0] })]
+    const rand = (i: number) => (Math.sin(i * 12.9898) * 43758.5453) % 1
+    const mottle = grey
+      ? Array.from({ length: 34 }, (_, i) => {
+          const a = (Math.abs(rand(i + 1)) - 0.5) * 2.4
+          const z = L * 0.36 - Math.abs(rand(i + 7)) * L * 0.78
+          const c = i % 7 === 0 ? '#E3B48E' : i % 3 === 0 ? '#E4E7EE' : '#B9BECB'
+          const r = 0.16 + Math.abs(rand(i + 3)) * 0.22
+          return P.sphere(r, c, { at: [Math.sin(a) * 1.08, Math.cos(a) * 0.92, z], scale: [1, 0.35, 1.3], rot: [0, 0, -a] }, 8)
+        })
+      : []
+    const back = grey
+      ? Array.from({ length: 7 }, (_, i) => P.sphere(0.17, skin, { at: [0, 0.96 - i * 0.05, -L * 0.08 - i * 0.42] }, 8))
+      : [P.sphere(0.5, skin, { at: [0, 0.78, -L * 0.17], scale: [0.6, 0.5, 1.4] }, 10), P.prism([[-0.45, 0], [0.35, 0], [-0.25, 0.55]], 0.16, skin, { at: [0, 1.05, -L * 0.17], rot: [0, Math.PI / 2, 0] })]
+    // The humpback's knobs: rows of round bumps along the top of its head and on its chin.
+    const knobs = grey ? [] : Array.from({ length: 16 }, (_, i) => P.sphere(0.11, '#4A5368', { at: [(i % 2 ? 1 : -1) * (0.22 + (i % 4 > 1 ? 0.3 : 0)), 0.82 - (i % 4 > 1 ? 0.12 : 0), L * 0.42 - Math.floor(i / 2) * 0.32] }, 8))
+    const grooves = grey ? [] : Array.from({ length: 6 }, (_, i) => P.box(0.05, 0.03, L * 0.3, '#B9BDD0', { at: [(i - 2.5) * 0.28, -0.92 + Math.abs(i - 2.5) * 0.07, L * 0.22] }))
+    // (The grey's head comes to a narrow, arched point; the humpback's is broad and flat.)
+    const head = grey ? P.sphere(0.85, skin, { at: [0, 0.05, L * 0.36], scale: [0.85, 0.85, 1.6] }) : P.sphere(0.95, skin, { at: [0, -0.05, L * 0.34], scale: [1.05, 0.8, 1.5] })
     this.body.add(
       solidMix(
-        [P.sphere(1, skin, { at: [0, 0, 0], scale: [1.15, 1, L * 0.42] }), P.sphere(0.9, belly, { at: [0, -0.22, 0.2], scale: [1.05, 0.75, L * 0.38] }), P.cyl(0.42, 0.14, L * 0.32, skin, { at: [0, 0.05, -L * 0.48], rot: [Math.PI / 2, 0, 0] }, 12), ...knuckles],
-        [...spots, ...eyes(0.95, 0.05, L * 0.3, 0.09), P.sphere(0.12, '#2B2C3A', { at: [0, 1.0, L * 0.26], scale: [1.4, 0.4, 0.6] })],
+        [P.sphere(1, skin, { at: [0, 0, 0], scale: [1.15, 1, L * 0.42] }), head, P.sphere(0.9, belly, { at: [0, -0.24, 0.2], scale: [1.05, 0.72, L * 0.38] }), P.cyl(0.42, 0.14, L * 0.32, skin, { at: [0, 0.05, -L * 0.48], rot: [Math.PI / 2, 0, 0] }, 12), ...back, ...knobs],
+        [...mottle, ...grooves, ...eyes(0.95, 0.0, L * 0.3, 0.1), P.sphere(0.13, '#23242F', { at: [0, 1.0, L * 0.27], scale: [1.4, 0.4, 0.6] })],
         bag,
         3,
       ),
     )
-    this.hole = new Vector3(0, 1.0, L * 0.26)
-    // The tail's flukes on their pivot at the end of the tail stock.
+    this.hole = new Vector3(0, 1.0, L * 0.27)
+    // The tail's flukes on their pivot at the end of the tail stock (a humpback's are white underneath, edged dark).
     this.fluke.position.set(0, 0.05, -L * 0.62)
     this.body.add(this.fluke)
-    this.fluke.add(solid(merge([P.sphere(1, skin, { at: [0.85, 0, -0.35], scale: [1.05, 0.12, 0.5], rot: [0, 0.35, 0] }), P.sphere(1, skin, { at: [-0.85, 0, -0.35], scale: [1.05, 0.12, 0.5], rot: [0, -0.35, 0] }), P.sphere(0.5, belly, { at: [0.85, -0.08, -0.35], scale: [1.6, 0.12, 0.7], rot: [0, 0.35, 0] }), P.sphere(0.5, belly, { at: [-0.85, -0.08, -0.35], scale: [1.6, 0.12, 0.7], rot: [0, -0.35, 0] })]), bag, 3))
-    // Flippers: short for the grey, long and white for the humpback.
+    const under = grey ? '#9AA0AF' : '#F2F3F8'
+    this.fluke.add(
+      solid(
+        merge([
+          P.sphere(1, skin, { at: [0.85, 0, -0.35], scale: [1.05, 0.12, 0.5], rot: [0, 0.35, 0] }),
+          P.sphere(1, skin, { at: [-0.85, 0, -0.35], scale: [1.05, 0.12, 0.5], rot: [0, -0.35, 0] }),
+          P.sphere(0.5, under, { at: [0.8, -0.07, -0.33], scale: [1.75, 0.12, 0.78], rot: [0, 0.35, 0] }),
+          P.sphere(0.5, under, { at: [-0.8, -0.07, -0.33], scale: [1.75, 0.12, 0.78], rot: [0, -0.35, 0] }),
+        ]),
+        bag,
+        3,
+      ),
+    )
+    // Flippers: short and paddle-shaped for the grey, long, white and knobbly-edged for the humpback.
     for (const [g, side] of [
       [this.flipL, 1],
       [this.flipR, -1],
     ] as const) {
       g.position.set(side * 1.0, -0.35, L * 0.18)
-      const fl = grey ? 1 : 2.6
-      g.add(solid(merge([P.sphere(1, grey ? skin : belly, { at: [side * fl * 0.5, 0, -0.2], scale: [fl * 0.55, 0.1, 0.35], rot: [0, side * 0.4, 0] })]), bag, 2))
+      const fl = grey ? 1 : 2.8
+      const parts = [P.sphere(1, grey ? skin : belly, { at: [side * fl * 0.5, 0, -0.2], scale: [fl * 0.55, 0.1, 0.33], rot: [0, side * 0.4, 0] })]
+      if (!grey) for (let i = 0; i < 5; i++) parts.push(P.sphere(0.09, belly, { at: [side * (0.4 + i * 0.42), 0, -0.2 + 0.28 - i * 0.17], scale: [1, 0.6, 1] }, 6))
+      g.add(solid(merge(parts), bag, 2))
       this.body.add(g)
     }
     this.root.visible = false
@@ -349,17 +402,23 @@ export class Orca {
     this.root.add(this.body)
     const black = '#262433'
     const fin = who === 'dad' ? P.prism([[-0.35, 0], [0.3, 0], [0.05, 1.8]], 0.12, black, { at: [0, 0.6, -0.2], rot: [0, Math.PI / 2, 0] }) : P.prism([[-0.45, 0], [0.3, 0], [-0.4, 0.95]], 0.12, black, { at: [0, 0.6, -0.2], rot: [0, Math.PI / 2, 0] })
+    // Black on top, a white chin and belly that sweeps up into a white patch on each flank behind, the famous white oval
+    // over each eye, a grey saddle behind the fin, and black paddle flippers. (Her eyes sit at the front of the white
+    // patch, so they show on the black.) A baby orca's white is a little peachy, like real calves.
+    const white = who === 'baby' ? '#FFF1E6' : '#FFFFFF'
+    const eyePatch = (s: number) => P.sphere(0.3, white, { at: [s * 0.55, 0.32, 1.35], rot: [0, s * 0.35, s * -0.5], scale: [0.35, 0.5, 1.25] })
+    const flank = (s: number) => P.sphere(0.4, white, { at: [s * 0.52, -0.12, -1.2], rot: [0.4, 0, s * -0.4], scale: [0.4, 0.75, 1.5] })
     this.body.add(
       solidMix(
-        [P.sphere(1, black, { scale: [0.75, 0.7, 2.6] }), P.sphere(0.6, '#FFFFFF', { at: [0, -0.32, 0.6], scale: [0.95, 0.6, 2.6] }), P.cyl(0.3, 0.12, 1.6, black, { at: [0, 0.02, -2.9], rot: [Math.PI / 2, 0, 0] }, 10), fin],
-        [P.sphere(0.25, '#FFFFFF', { at: [0.6, 0.2, 1.5], scale: [0.4, 0.5, 1.4] }), P.sphere(0.25, '#FFFFFF', { at: [-0.6, 0.2, 1.5], scale: [0.4, 0.5, 1.4] }), P.sphere(0.35, '#B9B4C6', { at: [0, 0.55, -0.85], scale: [1, 0.4, 1.2] }), ...eyes(0.66, 0.12, 1.75, 0.05), ...(who === 'baby' ? cheeks(0.6, -0.05, 1.9, 0.08) : [])],
+        [P.sphere(1, black, { scale: [0.75, 0.7, 2.6] }), P.sphere(0.6, white, { at: [0, -0.32, 0.6], scale: [0.95, 0.6, 2.6] }), P.cyl(0.3, 0.12, 1.6, black, { at: [0, 0.02, -2.9], rot: [Math.PI / 2, 0, 0] }, 10), fin, ...[1, -1].map((s) => P.sphere(0.5, black, { at: [s * 0.95, -0.42, 1.0], rot: [0.3, s * 0.5, s * 0.6], scale: [1, 0.16, 0.6] }))],
+        [eyePatch(1), eyePatch(-1), flank(1), flank(-1), P.sphere(0.36, '#B9B4C6', { at: [0, 0.56, -0.85], scale: [1, 0.4, 1.25] }), ...eyes(0.6, 0.28, 1.72, 0.06), ...(who === 'baby' ? cheeks(0.6, 0.05, 1.95, 0.09) : [])],
         bag,
         2.5,
       ),
     )
     this.fluke.position.set(0, 0.02, -3.65)
     this.body.add(this.fluke)
-    this.fluke.add(solid(merge([P.sphere(1, black, { at: [0.55, 0, -0.2], scale: [0.65, 0.08, 0.32], rot: [0, 0.4, 0] }), P.sphere(1, black, { at: [-0.55, 0, -0.2], scale: [0.65, 0.08, 0.32], rot: [0, -0.4, 0] })]), bag, 2))
+    this.fluke.add(solid(merge([P.sphere(1, black, { at: [0.55, 0, -0.2], scale: [0.65, 0.08, 0.32], rot: [0, 0.4, 0] }), P.sphere(1, black, { at: [-0.55, 0, -0.2], scale: [0.65, 0.08, 0.32], rot: [0, -0.4, 0] }), P.sphere(0.5, white, { at: [0, -0.05, -0.15], scale: [1.6, 0.1, 0.5] })]), bag, 2))
   }
   get jumping() {
     return this.jumpT >= 0
@@ -376,7 +435,7 @@ export class Orca {
     this.landed = false
     this.wiggle = Math.max(0, this.wiggle - dt)
     // Cruising: the back rolls up and down through the surface, the fin always showing; the tail beats.
-    let y = -0.5 + Math.sin(t * 1.4 + phase) * 0.18 - (1 - this.up) * 3.4
+    let y = -0.32 + Math.sin(t * 1.4 + phase) * 0.16 - (1 - this.up) * 3.4
     let pitch = Math.cos(t * 1.4 + phase) * 0.06
     if (this.jumpT >= 0) {
       this.jumpT += dt
@@ -501,25 +560,45 @@ export class Puffin extends Critter {
   }
 }
 
-/** Purple sea stars stuck on the rock: poked, they wiggle their arms. */
+/** Sea stars in the tide pool by the sea lions' rock (Tofino's are purple and orange ochre stars), with pink anemones:
+ *  poked, the stars wiggle their arms and the anemones close up and open again. */
 export class SeaStars extends Critter {
   readonly height = 0.4
   private stars: Group[] = []
+  private anemones: Group[] = []
   constructor(bag: Bag, spots: [number, number, number, number][]) {
     super()
-    for (const [x, y, z, ry] of spots) {
-      const arms = Array.from({ length: 5 }, (_, i) => P.capsule(0.07, 0.22, '#9B5CC9', { at: [Math.sin((i * Math.PI * 2) / 5) * 0.16, 0, Math.cos((i * Math.PI * 2) / 5) * 0.16], rot: [Math.PI / 2, (i * Math.PI * 2) / 5, 0] }))
-      const s = solid(merge([...arms, P.sphere(0.12, '#B475E0', { scale: [1, 0.5, 1] })]), bag, 1.5)
+    const colors = [
+      ['#9B5CC9', '#B475E0'],
+      ['#FF8A4C', '#FFA66E'],
+      ['#C25CB8', '#DD7FD2'],
+    ]
+    spots.forEach(([x, y, z, ry], j) => {
+      const [arm, mid] = colors[j % colors.length]
+      const arms = Array.from({ length: 5 }, (_, i) => P.capsule(0.09, 0.28, arm, { at: [Math.sin((i * Math.PI * 2) / 5) * 0.2, 0, Math.cos((i * Math.PI * 2) / 5) * 0.2], rot: [Math.PI / 2, (i * Math.PI * 2) / 5, 0] }))
+      const dots = Array.from({ length: 5 }, (_, i) => P.sphere(0.03, '#FFFFFF', { at: [Math.sin((i * Math.PI * 2) / 5) * 0.2, 0.07, Math.cos((i * Math.PI * 2) / 5) * 0.2] }, 6))
+      const s = solidMix([...arms, P.sphere(0.15, mid, { scale: [1, 0.5, 1] })], dots, bag, 1.5)
       s.position.set(x, y, z)
-      s.rotation.set(-0.9, ry, 0)
+      s.rotation.set(-0.5, ry, 0)
       this.root.add(s)
       this.stars.push(s)
-    }
+    })
+    // Two pink anemones between them: a stubby stalk with a ring of tentacles.
+    spots.slice(0, 2).forEach(([x, y, z], i) => {
+      const g = solid(merge([P.cyl(0.13, 0.16, 0.2, '#E87BA8', { at: [0, 0.1, 0] }, 10), ...Array.from({ length: 8 }, (_, k) => P.capsule(0.03, 0.12, '#FFB3D1', { at: [Math.cos((k / 8) * Math.PI * 2) * 0.11, 0.25, Math.sin((k / 8) * Math.PI * 2) * 0.11], rot: [Math.sin((k / 8) * Math.PI * 2) * 0.5, 0, -Math.cos((k / 8) * Math.PI * 2) * 0.5] }))]), bag, 1.5)
+      g.position.set(x + 0.7, y - 0.05, z + (i ? -0.6 : 0.6))
+      this.root.add(g)
+      this.anemones.push(g)
+    })
   }
-  update(dt: number) {
-    const k = this.tick(dt, 1)
+  update(dt: number, t = 0) {
+    const k = this.tick(dt, 1.2)
     const w = k < 0 ? 0 : bell(k)
-    this.stars.forEach((s, i) => s.scale.setScalar(1 + w * 0.25 * Math.sin(this.t * 16 + i)))
+    this.stars.forEach((s, i) => {
+      s.scale.setScalar(1 + w * 0.25 * Math.sin(this.t * 16 + i))
+      s.rotation.y += w * dt * 3 * (i % 2 ? 1 : -1)
+    })
+    this.anemones.forEach((a, i) => a.scale.set(1 - w * 0.4, 1 - w * 0.55 + Math.sin(t * 1.5 + i) * 0.04, 1 - w * 0.4))
   }
 }
 
@@ -572,4 +651,151 @@ export class Surfer extends Critter {
     this.board.rotation.z = wob * 0.4
   }
   private wasOff = false
+}
+
+/** Harbour seals napping on their low rock: round, spotted grey, big dark eyes, whiskers. Asleep they lie flat; poked,
+ *  she curls up head and tail at once like a banana (a seal's way of stretching), grunts, rolls onto her back, and
+ *  flops down again. */
+export class HarbourSeal extends Critter {
+  readonly height = 0.7
+  private body = new Group()
+  private head = new Group()
+  private tail = new Group()
+  private lids: Group
+  constructor(bag: Bag, coat = '#9EA3B3') {
+    super()
+    this.root.add(this.body)
+    const spot = '#6E7385'
+    // Lying along +z (head at +z): a fat spotted sausage, the pale belly, two little front flippers.
+    const spots = Array.from({ length: 12 }, (_, i) => P.sphere(0.05 + (i % 3) * 0.015, spot, { at: [(i % 2 ? 1 : -1) * (0.1 + (i % 3) * 0.08), 0.5 - (i % 3) * 0.03, 0.4 - i * 0.07], scale: [1, 0.4, 1] }, 6))
+    this.body.add(solidMix([P.capsule(0.3, 0.55, coat, { at: [0, 0.27, 0], rot: [Math.PI / 2, 0, 0], scale: [1.05, 0.9, 1] }), P.sphere(0.26, '#D7DAE3', { at: [0, 0.12, 0.05], scale: [1, 0.5, 1.6] }), ...[-1, 1].map((s) => P.sphere(0.1, spot, { at: [s * 0.3, 0.1, 0.32], scale: [0.5, 0.3, 1] }))], spots, bag, 2))
+    this.head.position.set(0, 0.32, 0.5)
+    this.body.add(this.head)
+    this.head.add(solidMix([P.sphere(0.23, coat, { at: [0, 0.04, 0.1] }), P.sphere(0.12, '#C8CCD8', { at: [0, -0.04, 0.27], scale: [1.3, 0.85, 0.8] }), P.sphere(0.04, '#2B2836', { at: [0, 0.0, 0.37], scale: [1.4, 0.8, 0.8] })], [...eyes(0.1, 0.1, 0.27, 0.05), ...[-1, 1].flatMap((s) => [0, 1, 2].map((i) => P.sphere(0.01, '#F4F4F8', { at: [s * (0.06 + i * 0.028), -0.05 - i * 0.01, 0.35 - i * 0.012] })))], bag, 2))
+    // Sleepy lids over the eyes (shown while she naps).
+    this.lids = solid(merge([P.sphere(0.055, coat, { at: [0.1, 0.11, 0.28], scale: [1.1, 0.6, 0.7] }), P.sphere(0.055, coat, { at: [-0.1, 0.11, 0.28], scale: [1.1, 0.6, 0.7] })]), bag, 0)
+    this.head.add(this.lids)
+    this.tail.position.set(0, 0.25, -0.5)
+    this.body.add(this.tail)
+    this.tail.add(solid(merge([P.cone(0.18, 0.35, coat, { at: [0, 0, -0.15], rot: [-Math.PI / 2, 0, 0] }, 8), ...[-1, 1].map((s) => P.sphere(0.14, spot, { at: [s * 0.12, 0, -0.38], scale: [0.7, 0.25, 1.1], rot: [0, s * 0.4, 0] }))]), bag, 2))
+  }
+  update(dt: number, t: number) {
+    const k = this.tick(dt, 2.2)
+    // Banana (0-0.5), roll onto her back (0.3-0.95), and back over.
+    const banana = k < 0 ? 0 : bell(span(k, 0, 0.5)) ** 0.6
+    const roll = k < 0 ? 0 : bell(span(k, 0.3, 0.95))
+    const breathe = Math.sin(t * 1.2 + this.phase) * 0.03
+    this.body.scale.set(1 + breathe, 1 - breathe, 1)
+    this.head.rotation.x = -0.9 * banana + Math.sin(t * 0.4 + this.phase) * 0.05
+    this.tail.rotation.x = 0.8 * banana
+    this.body.rotation.z = roll * 2.2
+    this.lids.visible = k < 0 && Math.sin(t * 0.25 + this.phase) > -0.6
+  }
+}
+
+/** A raven on the dock's end post: glossy black, a thick beak, a shaggy throat. She tips her head at the boat; poked,
+ *  she flaps, hops round and calls "kraa!" with a bob of her head (the world plays the caws). */
+export class Raven extends Critter {
+  readonly height = 0.6
+  private body = new Group()
+  private head = new Group()
+  private wings: Group[] = []
+  /** A caw now (the world plays it). */
+  caw = false
+  private caws = 0
+  constructor(bag: Bag) {
+    super()
+    this.root.add(this.body)
+    const black = '#2A2638'
+    const sheen = '#4B4570'
+    this.body.add(solidMix([P.sphere(0.2, black, { at: [0, 0.27, 0], scale: [0.85, 1, 1.25], rot: [0.5, 0, 0] }), P.cone(0.12, 0.34, black, { at: [0, 0.18, -0.3], rot: [-2.1, 0, 0] }, 6), ...[-1, 1].map((s) => P.cyl(0.02, 0.02, 0.14, '#3A3548', { at: [s * 0.07, 0.06, 0.02] }, 5))], [P.sphere(0.12, sheen, { at: [0, 0.33, -0.05], scale: [0.8, 0.5, 1.2] })], bag, 2))
+    this.head.position.set(0, 0.45, 0.14)
+    this.body.add(this.head)
+    this.head.add(solidMix([P.sphere(0.12, black, {}), P.cone(0.05, 0.18, '#3A3548', { at: [0, -0.01, 0.17], rot: [Math.PI / 2 + 0.15, 0, 0] }, 6), P.sphere(0.07, black, { at: [0, -0.09, 0.05], scale: [1, 0.8, 1.2] })], eyes(0.07, 0.03, 0.08, 0.024), bag, 2))
+    for (const side of [1, -1]) {
+      const w = new Group()
+      w.position.set(side * 0.14, 0.32, -0.02)
+      w.add(solid(merge([P.sphere(0.16, black, { at: [side * 0.04, -0.03, -0.08], scale: [0.35, 0.8, 1.4] })]), bag, 1.5))
+      this.body.add(w)
+      this.wings.push(w)
+    }
+  }
+  poke() {
+    super.poke()
+    this.caws = 0
+  }
+  update(dt: number, t: number) {
+    this.caw = false
+    const k = this.tick(dt, 1.6)
+    // A hop and a flap (she turns right round), then three caws with a bob.
+    const hop = k < 0 ? 0 : bell(span(k, 0, 0.35))
+    const flap = k < 0 ? 0 : bell(span(k, 0, 0.45))
+    if (k > 0.35) {
+      const n = Math.floor(span(k, 0.35, 1) * 3)
+      if (n >= this.caws && this.caws < 3) {
+        this.caws++
+        this.caw = true
+      }
+    }
+    const bob = k > 0.35 ? Math.abs(Math.sin(span(k, 0.35, 1) * Math.PI * 3)) : 0
+    this.body.position.y = hop * 0.35
+    this.body.rotation.y = k < 0 ? Math.sin(t * 0.3 + this.phase) * 0.4 : Math.PI * 2 * span(k, 0, 0.35)
+    this.wings.forEach((w, i) => (w.rotation.z = (i ? -1 : 1) * flap * (1.2 + Math.sin(t * 30) * 0.5)))
+    // Head: tips side to side now and then, looking (ravens are curious); bobs down with each caw.
+    this.head.rotation.set(0.5 * bob, 0, k < 0 && Math.sin(t * 0.23 + this.phase) > 0 ? Math.sin(t * 0.9 + this.phase) * 0.35 : 0)
+  }
+}
+
+/** Gulls wheeling high over the harbour (ambient life): a few white birds with grey wings, gliding round in big lazy
+ *  circles and flapping now and then. */
+export class Gulls {
+  readonly root = new Group()
+  private birds: { g: Group; wings: Group[]; cx: number; cz: number; r: number; y: number; a: number; v: number }[] = []
+  constructor(bag: Bag, spots: { x: number; z: number }[]) {
+    spots.forEach((p, i) => {
+      const g = new Group()
+      g.add(solid(merge([P.sphere(0.25, '#FFFFFF', { scale: [0.7, 0.6, 1.6] }), P.cone(0.07, 0.2, PAL.gold, { at: [0, 0, 0.48], rot: [Math.PI / 2, 0, 0] }, 6)]), bag, 1.5))
+      const wings = [1, -1].map((s) => {
+        const w = new Group()
+        w.add(solid(merge([P.sphere(0.5, '#C9CEDB', { at: [s * 0.5, 0, 0], scale: [1.1, 0.08, 0.32] }), P.sphere(0.2, '#4A4458', { at: [s * 1.0, 0, -0.03], scale: [0.6, 0.08, 0.5] })]), bag, 1.5))
+        g.add(w)
+        return w
+      })
+      this.root.add(g)
+      this.birds.push({ g, wings, cx: p.x, cz: p.z, r: 10 + i * 4, y: 14 + i * 3, a: i * 2, v: (i % 2 ? 1 : -1) * (0.18 + i * 0.03) })
+    })
+  }
+  update(dt: number, t: number) {
+    this.birds.forEach((b, i) => {
+      b.a += b.v * dt
+      b.g.position.set(b.cx + Math.cos(b.a) * b.r, b.y + Math.sin(t * 0.5 + i) * 0.8, b.cz + Math.sin(b.a) * b.r)
+      // Facing along the circle, banked into it.
+      b.g.rotation.set(0, Math.atan2(-Math.sin(b.a) * b.v, Math.cos(b.a) * b.v), (b.v > 0 ? 1 : -1) * 0.3)
+      const flap = Math.sin(t * 0.6 + i * 1.7) > 0.6 ? Math.sin(t * 12) * 0.6 : 0.1
+      b.wings.forEach((w, k) => (w.rotation.z = (k ? -1 : 1) * flap))
+    })
+  }
+}
+
+/** Soft toon clouds drifting slowly over the sea (ambient life). */
+export class Clouds {
+  readonly root = new Group()
+  private list: { g: Group; v: number }[] = []
+  constructor(bag: Bag) {
+    for (let i = 0; i < 7; i++) {
+      const g = new Group()
+      const s = 10 + (i % 3) * 5
+      g.add(solid(merge([P.sphere(s, '#FFFFFF', { scale: [1.6, 0.6, 1] }), P.sphere(s * 0.7, '#FFFFFF', { at: [s * 0.9, s * 0.15, 0], scale: [1.3, 0.7, 1] }), P.sphere(s * 0.75, '#FFFFFF', { at: [-s * 0.95, s * 0.05, s * 0.1], scale: [1.3, 0.6, 1] }), P.sphere(s * 0.6, '#F3EEFF', { at: [s * 0.2, -s * 0.2, 0], scale: [2.2, 0.35, 1] })]), bag, 2))
+      const a = -Math.PI * 0.9 + i * 0.55
+      g.position.set(Math.sin(a) * 300, 70 + (i % 3) * 18, -Math.cos(a) * 300 - 40)
+      this.root.add(g)
+      this.list.push({ g, v: 1 + (i % 3) * 0.5 })
+    }
+  }
+  update(dt: number) {
+    for (const c of this.list) {
+      c.g.position.x += c.v * dt
+      if (c.g.position.x > 360) c.g.position.x = -360
+    }
+  }
 }
