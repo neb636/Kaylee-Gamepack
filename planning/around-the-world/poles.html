@@ -1814,6 +1814,21 @@
                 "**QA scenarios per activity** (`activities/<id>/qa.mjs`): the screens, pacing runs and filmed moments moved next to each activity; the Poles' own `qa.mjs` keeps the hub and the finale.",
                 "`art.ts` holds the stickers and the friend's portrait (still the world's globe until the sticker art)."
               ]
+            },
+            {
+              "title": "Step 9: Ice Floe Hop goes into the game",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Pola calls out to Mama across the sea ice, and Sparkle, in the corner, says what to do at each stretch (and again when she's stuck). Pola and Mama react in their own voices to the belly-flops, the tippy slides, the new ice and her taps. Home with Mama they cheer, then the stamp and the polar bear sticker. Ice Floe Hop has its spot on the globe's north side now.",
+              "items": [
+                "`activities/floe/FloeHop.tsx`: one Pola line, then Sparkle's instruction (5.1 s of talk before the first touch). Sparkle's corner (`kit/Guide`) has a hint for each stretch (steady, drift, melt) and replaces the greybox's text pill. The friends' reactions take turns from a list, at least 5 s apart. A fact the first time she pokes the ice (“This ice is floating on the sea!”) and the open water.",
+                "Home: Mama's and Pola's lines, then “Kaylee, you got Pola home!”, then `onDone` (the stamp, the sticker, the video), after the lines or 9 s at most. 🔁 still plays again.",
+                "`floe.ts`: new events `flop`, `slide`, `poke(pola | mama | floe | water)`.",
+                "`L.floe` in `lines.ts`: 24 lines (13 Pola, 5 Mama, 6 Sparkle). Pola's lines use the name, not he or she.",
+                "`info.ts`: `READY = true`. `qa.mjs`: the hug and the stamp as two screens.",
+                "**Changed from the plan:** Mama's “Hop home to me, Pola!” is her first tap line instead of part of the opening, to keep the talk short. No pokeable seals, narwhals, walruses or belugas yet (the greybox never had them), so the facts hang on the ice and the water.",
+                "**Known small things:** three Pola clips transcribe a little off (“Wheee! A slide!”, “Brr! Paddle paddle!”, “Hee hee!”): listen on the iPad. “Fling me again!” kept coming out as “Sing me again”, so it's “Again! Again!”."
+              ]
             }
           ]
         }
