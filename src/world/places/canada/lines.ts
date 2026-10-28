@@ -94,6 +94,47 @@ export const L = {
   hub: {
   },
   taffy: {
+    // The story beat (Maple, then her little cousin).
+    story: [maple('Bonjour! My cousins are coming for a treat!'), by('cousin')('Maple taffy, please!')],
+    // Sparkle: one line when something new starts, and the hints when she's stuck (~8 s).
+    pour: 'Tip the pot and pour syrup on the snow!',
+    set: "It's set! Roll it up on a stick.",
+    hot: 'Still hot! Let it set.',
+    rest: 'Roll up the rest!',
+    empty: 'The pot is empty! Tap the maple tree.',
+    tree: 'Sap from the maple tree makes the syrup!',
+    shapes: "Pour the shape on Maple's card!",
+    orders: 'Make each friend the size they want!',
+    give: 'Who gets this one?',
+    // Maple's cards (shapes), and her crunches.
+    card: {
+      heart: maple('A heart, please!'),
+      leaf: maple('A maple leaf!'),
+      loop: maple('A big loop!'),
+      k: maple('The letter K!'),
+    },
+    pretty: maple('Ooh, so pretty!'),
+    crunch: [maple('Mmm, crunchy!'), maple('Miam miam!'), maple('So sweet!')],
+    tooBig: maple('Too big for me!'),
+    mapleHi: maple('Hee hee! That tickles!'),
+    // The friends at the table (orders), in their own voices.
+    cousinYum: by('cousin')('Yummy yummy!'),
+    cousinFull: by('cousin')('Merci! My tummy is full!'),
+    cousinHi: by('cousin')('Hi hi!'),
+    chipYum: by('chipmunk')('Ooh! More, please!'),
+    chipFull: by('chipmunk')('Tiny and perfect!'),
+    chipBig: by('chipmunk')('Whoa! Too big!'),
+    chipHi: by('chipmunk')('Hello hello!'),
+    owlYum: by('owl')('Hoo! I like swirls.'),
+    owlFull: by('owl')('Hoo hoo! A swirl!'),
+    owlHi: by('owl')('Whooo is that?'),
+    mooseYum: by('moose')('Mmm. Bigger, please.'),
+    mooseFull: by('moose')('Mmm. Giant. Thank you.'),
+    mooseGulp: by('moose')('Gulp! Yum.'),
+    mooseHi: by('moose')('Hello, little one.'),
+    // Everyone crunches (the stamp moment: her name once).
+    share: maple('Everybody, crunch!'),
+    thanks: maple(`Merci, ${NAME}! Best taffy ever!`),
   },
   snowman: {
   },
