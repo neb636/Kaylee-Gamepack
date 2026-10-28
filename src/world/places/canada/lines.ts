@@ -159,6 +159,47 @@ export const L = {
   bridge: {
   },
   whales: {
+    // The story, at the dock (Maple at the wheel of the little boat).
+    story: [maple("I've never seen a whale!"), maple("Let's find them!")],
+    // Sparkle: how to steer (one line before her hands are busy), then only when something new appears.
+    steer: { finger: 'Hold the water where the boat should go!', wheel: 'Hold and push to steer the boat!' },
+    otters: 'A sleepy otter floated away. Go gently!',
+    spouts: 'A spout! Steer there to find the whale!',
+    orcas: 'The orca family! Go fast and turn!',
+    listen: 'Shh! Listen to the whales sing.',
+    // Sparkle, when she's stuck (~8 s with no progress): help, never "wrong".
+    hint: {
+      harbour: 'Steer out past the lighthouse!',
+      otters: 'Go slowly to the sleepy otter.',
+      tow: 'Take her back to her friends!',
+      spouts: 'Look for the spout. Steer there!',
+      orcas: 'Go fast and turn. The baby copies you!',
+      mic: 'Tap the yellow microphone to listen!',
+    },
+    // The sea otters.
+    otterWake: by('otter')('Oh! Hello!'),
+    otterTow: by('otter')('Wheee! Take me home!'),
+    otterHome: by('otter')('Thank you!'),
+    otterHold: maple("They hold hands so they don't float away!"),
+    otterGrumpy: by('otter')('Hey! Too fast!'),
+    otterHi: by('otter')('Hi hi!'),
+    otterClack: by('otter')('Yum, a clam!'),
+    // The whales.
+    whaleUp: maple('A whale! A real whale!'),
+    whaleBlow: maple('It breathes out of its head!'),
+    whaleTail: maple('Look at its tail!'),
+    humpback: maple('Look at its long flippers!'),
+    breach: maple('Wow! It jumped right out!'),
+    sneeze: maple('Achoo! I am all wet!'),
+    bump: maple('Oops! Excuse us, whale!'),
+    // The orcas.
+    orcaHello: maple('Orcas! A whole family!'),
+    grandma: maple('The grandma leads the family!'),
+    babyCopy: maple('The baby copies you!'),
+    // The big finish, and Maple's taps on the boat.
+    finale: maple(`They all jumped together! Merci, ${NAME}!`),
+    toot: maple('Toot toot!'),
+    song: maple('The humpback is singing!'),
   },
   salmon: {
   },
