@@ -20,7 +20,7 @@
 import { motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
 import { BigButton, burst, say, sounds, useElementSize, type Line } from '../../../../../sdk'
-import { Guide, type GuideHandle } from '../../../../kit/Guide'
+import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
@@ -632,7 +632,8 @@ class HuddleWorld {
     this.ev.dots(0, WARM.gusts)
     this.talk('papa', 'hatched')
     this.talk('pebble', 'hi')
-    this.cue('hatched')
+    // No “tuck Pebble back” yet: Pebble is still on Papa's feet until the first gust.
+    this.cue('hatched', false)
   }
 
   /** A gust blows Pebble off Papa's feet, rolling across the ice. */
@@ -1291,7 +1292,8 @@ export function EmperorHuddle({ onDone }: ActivityProps) {
         // The payoff: the stamp and the sticker (Place.tsx), once.
         if (ph === 'end' && !done.current) {
           done.current = true
-          onDone()
+          // After the sunrise cheers have been said (the stamp's sticker line would cut them off).
+          afterTalk(onDone)
         }
       },
     }, lives, chickLive)

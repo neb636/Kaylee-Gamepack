@@ -6,7 +6,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { BigButton, burst, say, useAlive, wait, type Line } from '../../../../../sdk'
-import { Guide, type GuideHandle } from '../../../../kit/Guide'
+import { afterTalk, Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
@@ -99,7 +99,8 @@ export function FloeHop({ onDone }: ActivityProps) {
         stamped.current = true
         onDone()
       }
-      setTimeout(stamp, HOME_MAX_MS)
+      // At most this long, unless someone is still cheering (then right after).
+      setTimeout(() => afterTalk(stamp, 6000), HOME_MAX_MS)
       void (async () => {
         await wait(600)
         for (const l of L.floe.home) {

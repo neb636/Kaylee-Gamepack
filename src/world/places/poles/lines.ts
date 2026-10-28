@@ -298,6 +298,7 @@ export const L = {
     },
     glow: 'Look for the sparkle!',
     right: ['Yes!', "That's right!", 'You got it!', 'Super!'],
-    badge: `Wow, ${NAME}, you know your poles!`,
+    // No name here: the trophy's line says it right after.
+    badge: 'Wow, you know your poles!',
   },
 }
