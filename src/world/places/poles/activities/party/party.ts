@@ -10,18 +10,21 @@
 // (drag Pola to his pole, spin the South Pole to the front, tap the coldest pole, tap who visits both...). A wrong
 // answer gets a silly reaction, then the right place glows and she does it herself: every question ends in a star.
 // Six stars: the badge, then the trophy (Finale.tsx calls onWin). No voices yet (the full-loop gate).
-import { CanvasTexture, Color, Group, Matrix4, Mesh, Plane, Quaternion, Raycaster, Scene, SphereGeometry, Sprite, SpriteMaterial, Vector2, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
+import { CanvasTexture, Color, Euler, Group, Matrix4, Mesh, Plane, Quaternion, Raycaster, Scene, SphereGeometry, Sprite, SpriteMaterial, Vector2, Vector3, type BufferGeometry, type WebGLRenderer } from 'three'
 import { bell, clamp, shuffle, smooth, sounds, span, wobble } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../engine3d/camera'
+import { buildAnimal, type Rig } from '../../../../engine3d/characters/animal'
+import { FaceLife } from '../../../../engine3d/characters/face'
 import { Bag } from '../../../../engine3d/dispose'
 import { merge, P } from '../../../../engine3d/geo'
 import { makeHull, setOutlineResolution } from '../../../../engine3d/outline'
-import { PAL } from '../../../../engine3d/toon'
+import { makeLights, PAL } from '../../../../engine3d/toon'
 import type { World3D } from '../../../../engine3d/View3D'
 import { earthTexture, ll } from '../../globe/earth'
+import { POLES_LOOKS } from '../../characters/looks'
 import { buildNorth, buildSouth, Critter, domeR, makePebble, makePola, standOn, type EarthKit, type Floe } from '../../globe/globe'
 import { globeMaterials } from '../../globe/material'
 import { COLONY, latOf, lonOf, PINS, point, Route } from './route'
@@ -75,6 +78,12 @@ export const PARTY_ANCHORS: AnchorInfo[] = [
 
 const DEG = Math.PI / 180
 const UP = new Vector3(0, 1, 0)
+/** How big Terry is (the rig's standing height; flying flat it's his length), in the Earth's units. */
+const TERN_H = 0.07
+/** Terry flying: the rig (head up +y, face +z) laid on its tummy, head first toward -z, back up. Standing: just turned
+ *  round to face -z. */
+const FLAT = new Quaternion().setFromRotationMatrix(new Matrix4().makeBasis(new Vector3(-1, 0, 0), new Vector3(0, 0, -1), new Vector3(0, -1, 0)))
+const UPRIGHT = new Quaternion().setFromEuler(new Euler(0, Math.PI, 0))
 /** Terry's height over the sea (the Earth is 1). */
 const ALT = 0.075
 const QUIZ_N = 6
@@ -161,7 +170,6 @@ export class PartyWorld implements World3D {
   private speed = 0
   private leg: Leg = 'north'
   private terry = new Group()
-  private wings: Group[] = []
   private terryX = 0
   private terryVX = 0
   private goalX = 0
@@ -232,6 +240,8 @@ export class PartyWorld implements World3D {
     start: PartyStart,
     private events: PartyEvents,
   ) {
+    // The friends' toon rigs (characters/looks.ts) need the engine's ambient and sun; the globe draws its own light.
+    makeLights(this.scene)
     this.scene.background = this.sky
     this.rig.fov = 40
     this.rig.lag = 0.5
@@ -246,7 +256,7 @@ export class PartyWorld implements World3D {
     const hull = makeHull(sphere, 3)
     this.bag.add(hull.geometry)
     this.earth.add(new Mesh(sphere, this.mats.land), hull)
-    const kit: EarthKit = { spin: this.earth, prop: (g, px) => this.prop(g, px) }
+    const kit: EarthKit = { spin: this.earth, bag: this.bag, prop: (g, px) => this.prop(g, px) }
     this.floesN = buildNorth(kit).floes
     this.floesS = buildSouth(kit)
 
@@ -259,14 +269,15 @@ export class PartyWorld implements World3D {
 
     // Pebble and the colony at the end of the way.
     const [clat, clon] = COLONY
-    this.pebble = makePebble(kit)
+    this.pebble = makePebble(kit, 'pebble')
     standOn(this.pebble.root, clat, clon, domeR(90 + clat) - 0.002)
     this.earth.add(this.pebble.root)
     for (let i = 0; i < 4; i++) {
-      const c = makePebble(kit)
-      c.root.scale.setScalar(1.15)
-      // Two either side of Pebble, a step back.
-      standOn(c.root, clat - 0.8 - (i % 2) * 1.4, clon + (i < 2 ? -1 : 1) * (14 + (i % 2) * 14), domeR(90 + clat - 1.5) - 0.002)
+      // The grown-up emperors (Papa's look) round her.
+      const c = new Critter(0.15)
+      c.dress(buildAnimal({ ...POLES_LOOKS.papa, height: 0.15 }, this.bag))
+      // Two either side of Pebble, a step back (wide apart: the toys' heads are big, and Pebble is the star).
+      standOn(c.root, clat - 0.8 - (i % 2) * 1.4, clon + (i < 2 ? -1 : 1) * (20 + (i % 2) * 18), domeR(90 + clat - 1.5) - 0.002)
       this.earth.add(c.root)
       this.colony.push(c)
     }
@@ -334,42 +345,34 @@ export class PartyWorld implements World3D {
     return g
   }
 
-  /** Terry the Arctic tern (placeholder shapes until the art gate): white, a black cap, a red beak, long grey wings and
-   *  a forked tail. His nose points to -z (the way he flies). */
-  private ternBody(scale: number) {
+  /** Terry the Arctic tern, the toy from the character lab: his long pointed wings hang from the rig's shoulders, so
+   *  flying spreads them out sideways. `g` turns him so his nose points to -z (the way he flies). */
+  private ternRig(height: number) {
+    const rig = buildAnimal({ ...POLES_LOOKS.terry, height }, this.bag)
+    rig.root.children[0].visible = false
     const g = new Group()
-    const body = this.prop(
-      merge([
-        P.sphere(0.018, '#FFFFFF', { scale: [0.85, 0.8, 1.6] }),
-        P.sphere(0.013, '#FFFFFF', { at: [0, 0.006, -0.025] }),
-        P.sphere(0.0135, '#3A3550', { at: [0, 0.011, -0.026], scale: [1.02, 0.7, 1.02] }),
-        P.cone(0.0045, 0.022, '#FF5A4F', { at: [0, 0.004, -0.045], rot: [-Math.PI / 2, 0, 0] }),
-        P.sphere(0.0028, PAL.ink, { at: [0.009, 0.008, -0.032] }),
-        P.sphere(0.0028, PAL.ink, { at: [-0.009, 0.008, -0.032] }),
-        P.cone(0.006, 0.026, '#FFFFFF', { at: [0.006, 0.002, 0.034], rot: [Math.PI / 2, 0, 0.25] }),
-        P.cone(0.006, 0.026, '#FFFFFF', { at: [-0.006, 0.002, 0.034], rot: [Math.PI / 2, 0, -0.25] }),
-      ]),
-      1.5,
-    )
-    g.add(body)
-    const wings: Group[] = []
-    for (const sx of [1, -1]) {
-      const wing = new Group()
-      wing.position.set(0.012 * sx, 0.006, -0.004)
-      wing.add(this.prop(P.sphere(0.026, '#C9CFE0', { at: [0.026 * sx, 0, 0.004], scale: [1.4, 0.12, 0.42], rot: [0, -0.25 * sx, 0] }), 1.2))
-      g.add(wing)
-      wings.push(wing)
-    }
-    g.scale.setScalar(scale)
-    return { g, wings }
+    g.add(rig.root)
+    return { g, rig }
   }
 
   private makeTerry() {
-    const { g, wings } = this.ternBody(1)
+    const { g, rig } = this.ternRig(TERN_H)
+    this.ternPose = g
+    this.ternRigged = rig
+    this.ternLife = new FaceLife(rig, 'terry')
+    g.quaternion.copy(FLAT)
     this.terry.add(g)
-    this.wings = wings
     this.terry.position.set(0, 1 + ALT, 0)
     this.scene.add(this.terry)
+  }
+  private ternPose = new Group()
+  private ternRigged!: Rig
+  private ternLife!: FaceLife
+  /** Terry's wings: `open` 0 folded along his body, 1 straight out sideways; `flap` -1..1 beats them round that. */
+  private flapWings(open: number, flap: number) {
+    const z = open * (Math.PI / 2 + 0.45 * flap) + 0.08
+    this.ternRigged.armR.rotation.z = z
+    this.ternRigged.armL.rotation.z = -z
   }
 
   /** The fish, the clouds and the pins along the way. */
@@ -455,9 +458,7 @@ export class PartyWorld implements World3D {
     return p
   }
   private ternPiece() {
-    const { g } = this.ternBody(2.6)
-    g.position.y = 0.06
-    g.rotation.y = Math.PI * 0.85
+    const { g } = this.ternRig(0.17)
     return this.standee(g)
   }
   private snowmanPiece() {
@@ -616,8 +617,8 @@ export class PartyWorld implements World3D {
       this.terry.rotation.z += smooth(clamp(this.flip / 0.6, 0, 1)) * Math.PI * 2
       if (this.flip > 0.6) this.flip = -1
     }
-    const flap = Math.sin(t * 12)
-    this.wings.forEach((wg, i) => (wg.rotation.z = (i ? -1 : 1) * (0.15 + 0.5 * flap)))
+    this.ternLife.update(dt)
+    this.flapWings(1, Math.sin(t * 12))
 
     for (let i = this.streaks.length - 1; i >= 0; i--) {
       const st = this.streaks[i]
@@ -709,8 +710,10 @@ export class PartyWorld implements World3D {
     this.terry.position.lerpVectors(this.landFrom, spot, k)
     this.terry.position.y += 0.03 * bell(k)
     this.terry.rotation.set(0, Math.PI * k, 0)
-    const flap = d < 1.2 ? Math.sin(t * 12) : 0
-    this.wings.forEach((wg, i) => (wg.rotation.z = (i ? -1 : 1) * (d < 1.2 ? 0.15 + 0.5 * flap : -0.9)))
+    // He tips up from flying flat to standing, and folds his wings when he lands.
+    this.ternPose.quaternion.slerpQuaternions(FLAT, UPRIGHT, smooth(span(d, 0.6, 1.3)))
+    this.ternLife.update(dt)
+    this.flapWings(1 - smooth(span(d, 1.1, 1.5)), d < 1.2 ? Math.sin(t * 12) : 0)
     if (d - dt < 1.2 && d >= 1.2) sfx.thump()
     // The card: out of his beak, up into Pebble's flippers, held up high.
     this.card.visible = d > 1.5

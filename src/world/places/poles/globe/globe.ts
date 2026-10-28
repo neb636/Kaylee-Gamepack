@@ -14,11 +14,14 @@ import { knobs, watch } from '../../../kit/knobs'
 import { sfx, tone } from '../../../kit/sfx'
 import type { AnchorInfo } from '../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../engine3d/camera'
+import { buildAnimal, type Rig } from '../../../engine3d/characters/animal'
+import { FaceLife } from '../../../engine3d/characters/face'
 import { Bag } from '../../../engine3d/dispose'
 import { bake, merge, P } from '../../../engine3d/geo'
 import { makeHull, setOutlineResolution } from '../../../engine3d/outline'
-import { PAL } from '../../../engine3d/toon'
+import { makeLights, PAL } from '../../../engine3d/toon'
 import type { World3D } from '../../../engine3d/View3D'
+import { POLES_LOOKS } from '../characters/looks'
 import { earthTexture, ll } from './earth'
 import { CARRY, GlobeExtras, type Lost, type PokeId } from './extras'
 import { globeMaterials } from './material'
@@ -65,6 +68,9 @@ export interface GlobeEvents {
   lost(kind: Lost | null): void
   /** She put the lost one down on a pole: its own (`home`), or the other one. */
   saved(kind: Lost, home: boolean): void
+  /** She tapped something: a poke (`marker`, `seal`, `station`, `whale`), a friend (`pola`, `pebble`), or the night sky
+   *  so the lights flared (`lightsNorth`, `lightsSouth`). */
+  poke(id: string): void
 }
 
 export const GLOBE_ANCHORS: AnchorInfo[] = [
@@ -154,8 +160,20 @@ export class Critter {
   private face = 0
   private phase = Math.random() * 6
 
+  /** The toy on the chibi rig (characters/looks.ts), and its blinks and talking mouth. */
+  private life: FaceLife | null = null
+
   constructor(readonly height: number) {
     this.root.add(this.body)
+  }
+
+  /** Puts a friend from the character lab in it: its arms are the rig's, its face blinks, and with `voice` (a cast id)
+   *  its mouth moves when that friend talks. */
+  dress(rig: Rig, voice?: string) {
+    rig.root.children[0].visible = false
+    this.body.add(rig.root)
+    this.arms.push(rig.armR, rig.armL)
+    this.life = new FaceLife(rig, voice)
   }
 
   hop(wave = false) {
@@ -178,6 +196,7 @@ export class Critter {
   }
 
   update(dt: number, t: number, cam: Vector3) {
+    this.life?.update(dt)
     // Turn to look at her.
     this.root.worldToLocal(tmp.copy(cam))
     let d = Math.atan2(tmp.x, tmp.z) - this.face
@@ -226,6 +245,8 @@ export interface Floe {
 /** Where the Earth's parts go and how they're drawn (the globe's light, an ink outline). */
 export interface EarthKit {
   spin: Group
+  /** What the friends' rigs are disposed with. */
+  bag: Bag
   prop(geometry: BufferGeometry, px?: number): Group
 }
 
@@ -281,64 +302,20 @@ export function buildSouth(k: EarthKit) {
   return floes
 }
 
-export function makePola(k: EarthKit) {
+/** Pola, the toy polar bear cub from the character lab, small enough to stand on the globe. `voice`: his cast id, for
+ *  the one who talks (the hub's Pola; the lost cubs and the quiz's piece don't). */
+export function makePola(k: EarthKit, voice?: string) {
   const c = new Critter(0.17)
-  const white = '#FFFFFF'
-  c.body.add(
-    k.prop(
-      merge([
-        P.sphere(0.055, white, { at: [0, 0.058, 0], scale: [1, 0.92, 1.12] }),
-        P.sphere(0.042, white, { at: [0, 0.125, 0.035] }),
-        P.sphere(0.014, white, { at: [0.029, 0.16, 0.028] }),
-        P.sphere(0.014, white, { at: [-0.029, 0.16, 0.028] }),
-        P.sphere(0.018, '#FFF7F0', { at: [0, 0.114, 0.072], scale: [1, 0.8, 1] }),
-        P.sphere(0.008, PAL.ink, { at: [0, 0.121, 0.089] }),
-        P.sphere(0.0065, PAL.ink, { at: [0.017, 0.137, 0.07] }),
-        P.sphere(0.0065, PAL.ink, { at: [-0.017, 0.137, 0.07] }),
-        P.capsule(0.016, 0.01, white, { at: [0.03, 0.018, 0.022] }),
-        P.capsule(0.016, 0.01, white, { at: [-0.03, 0.018, 0.022] }),
-      ]),
-      2,
-    ),
-  )
-  for (const x of [0.05, -0.05]) {
-    const arm = new Group()
-    arm.position.set(x, 0.085, 0.02)
-    arm.add(k.prop(P.capsule(0.014, 0.03, white, { at: [0, -0.026, 0] }), 1.5))
-    c.body.add(arm)
-    c.arms.push(arm)
-  }
+  c.dress(buildAnimal({ ...POLES_LOOKS.pola, height: 0.17 }, k.bag), voice)
   return c
 }
 
-export function makePebble(k: EarthKit) {
+/** Pebble, the toy emperor chick. */
+export function makePebble(k: EarthKit, voice?: string) {
   const c = new Critter(0.155)
-  const dark = '#3A3550'
-  c.body.add(
-    k.prop(
-      merge([
-        P.sphere(0.05, '#B9B4C9', { at: [0, 0.06, 0], scale: [1, 1.15, 0.95] }),
-        P.sphere(0.04, dark, { at: [0, 0.125, 0.005] }),
-        P.sphere(0.03, '#FFFFFF', { at: [0, 0.122, 0.026], scale: [1.05, 0.85, 0.6] }),
-        P.sphere(0.006, PAL.ink, { at: [0.012, 0.128, 0.05] }),
-        P.sphere(0.006, PAL.ink, { at: [-0.012, 0.128, 0.05] }),
-        P.cone(0.008, 0.022, dark, { at: [0, 0.115, 0.06], rot: [Math.PI / 2, 0, 0] }),
-        P.sphere(0.012, '#6F6A80', { at: [0.018, 0.006, 0.02], scale: [1, 0.5, 1.5] }),
-        P.sphere(0.012, '#6F6A80', { at: [-0.018, 0.006, 0.02], scale: [1, 0.5, 1.5] }),
-      ]),
-      2,
-    ),
-  )
-  for (const x of [0.046, -0.046]) {
-    const arm = new Group()
-    arm.position.set(x, 0.088, 0)
-    arm.add(k.prop(P.capsule(0.01, 0.035, '#8F8AA3', { at: [0, -0.026, 0] }), 1.5))
-    c.body.add(arm)
-    c.arms.push(arm)
-  }
+  c.dress(buildAnimal({ ...POLES_LOOKS.pebble, height: 0.155 }, k.bag), voice)
   return c
 }
-
 
 export class PolesGlobe implements World3D {
   readonly scene = new Scene()
@@ -424,6 +401,8 @@ export class PolesGlobe implements World3D {
     start: GlobeStart,
     private events: GlobeEvents,
   ) {
+    // The friends' toon rigs (characters/looks.ts) need the engine's ambient and sun; the globe draws its own light.
+    makeLights(this.scene)
     this.scene.background = this.bg
     this.rig.fov = 32
     this.rig.lag = 0.55
@@ -437,11 +416,11 @@ export class PolesGlobe implements World3D {
     this.bag.add(hull.geometry)
     this.spin.add(new Mesh(sphere, this.mats.land), hull)
 
-    const kit: EarthKit = { spin: this.spin, prop: (g, px) => this.prop(g, px) }
+    const kit: EarthKit = { spin: this.spin, bag: this.bag, prop: (g, px) => this.prop(g, px) }
     ;({ cap: this.capN, floes: this.floesN } = buildNorth(kit))
     this.floesS = buildSouth(kit)
-    this.pola = makePola(kit)
-    this.pebble = makePebble(kit)
+    this.pola = makePola(kit, 'pola')
+    this.pebble = makePebble(kit, 'pebble')
     standOn(this.pola.root, 85, -95, 1.022)
     standOn(this.pebble.root, -81, -60, domeR(9) - 0.002)
     this.spin.add(this.pola.root, this.pebble.root)
@@ -960,6 +939,7 @@ export class PolesGlobe implements World3D {
     this.lastTouch = this.time
     this.touches++
     const hit = id ?? (this.nearSun(x, y) ? 'sun' : Math.hypot(x - this.globeOnScreen().x, y - this.globeOnScreen().y) < this.globeOnScreen().r ? 'globe' : null)
+    if (hit && hit !== 'globe' && hit !== 'sun') this.events.poke(hit)
     if (hit && POKES.has(hit)) this.extras.poke(hit as PokeId)
     else if (hit === 'pola') this.pola.hop(true)
     else if (hit === 'pebble') this.pebble.hop(true)
@@ -979,6 +959,7 @@ export class PolesGlobe implements World3D {
     if (night > 0.4) {
       if (this.side === 'north') this.flare.n = 1
       else this.flare.s = 1
+      this.events.poke(this.side === 'north' ? 'lightsNorth' : 'lightsSouth')
       ;[0, 0.12, 0.24].forEach((d, i) => tone(660 * 1.25 ** i, 660 * 1.25 ** i, 0.5, 0.045, 'sine', d))
     }
   }
