@@ -19,11 +19,13 @@ export const POLES_COLORS = {
   ternWhite: '#FFFFFF',
   ternCap: '#2E2233',
   ternBeak: '#FF5A3C',
+  adelieBlack: '#2A2B3D',
+  adelieBeak: '#4A3A44',
 } as const
 
 const C = POLES_COLORS
 
-export type PolesFriend = 'pola' | 'mama' | 'pebble' | 'papa' | 'terry'
+export type PolesFriend = 'pola' | 'mama' | 'pebble' | 'papa' | 'terry' | 'adelie'
 
 export const POLES_LOOKS: Record<PolesFriend, Look> = {
   /** Pola: a small, round, fluffy cub, happy mouth open. */
@@ -34,5 +36,7 @@ export const POLES_LOOKS: Record<PolesFriend, Look> = {
   /** Papa: an emperor, black back and head, white tummy and the gold patches beside his face. */
   papa: { species: 'penguin', height: 1.3, fur: C.emperorBack, light: C.chickFace, dark: C.beakBlack, ear: C.emperorGold },
   /** Terry: pale grey wings, white body and face, a black cap, red-orange beak and legs. */
+  /** An Adélie (Penguin Slide's slope): small, all black on top with a white tummy and a white ring round each eye. */
+  adelie: { species: 'penguin', height: 0.86, fur: C.adelieBlack, light: C.chickFace, dark: C.adelieBeak, extras: ['eye-ring'] },
   terry: { species: 'tern', height: 0.8, fur: C.ternGrey, light: C.ternWhite, dark: C.ternBeak, cap: C.ternCap, open: false },
 }

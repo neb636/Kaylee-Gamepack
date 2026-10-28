@@ -265,6 +265,14 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [Drag the sun](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun) ([summer up north](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?summer=north), [the north's winter night](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/sun?side=north&summer=south))
 - [The lost penguin: carry him home](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=penguin) ([a lost polar bear cub](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/hub/lost?who=bear))
 
+**Penguin Slide**
+
+- [Pebble is hungry](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/story)
+- [The gentle slope](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/top)
+- [Bumps and cracks](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps) ([the moguls run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=left), [the kicker run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=right))
+- [Under the sea](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/dive)
+- [Feeding Pebble](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/home?krill=12)
+
 **Ice Floe Hop** (in the works)
 
 - [Pola is far from Mama](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/floe/story)
@@ -278,13 +286,6 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [Paint the fox](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/fox)
 - [Hide and seek](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox) ([the lemming still brown](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/hide?painted=fox,hare,ptarmigan))
 - [Rub the summer back](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/coats/summer)
-
-**Penguin Slide** (in the works)
-
-- [The gentle slope](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/top)
-- [Bumps and cracks](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps) ([the moguls run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=left), [the kicker run](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/bumps?run=right))
-- [Under the sea](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/dive)
-- [Feeding Pebble](https://neb636.github.io/Kaylee-Gamepack/#/world/poles/slide/home?krill=12)
 
 **Emperor Huddle** (in the works)
 

@@ -16,5 +16,79 @@
   "Let's see penguins zoom out of the sea!",
   "Let's see the penguin dads huddle!",
   "Want to see a real iceberg break off?",
-  "Let's see narwhals, the unicorns of the sea!"
+  "Let's see narwhals, the unicorns of the sea!",
+  {
+    "text": "Papa, I'm so hungry!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Krill coming right up!",
+    "voice": "papa"
+  },
+  "Steer Papa left and right!",
+  "Bumps! Pick a way down the hill!",
+  "Steer Papa to the pink krill!",
+  "Antarctica is one big hill of ice!",
+  "Penguins fly under the water!",
+  {
+    "text": "Whoa, I can fly!",
+    "voice": "papa"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "papa"
+  },
+  {
+    "text": "Oops! Snow on my beak!",
+    "voice": "papa"
+  },
+  {
+    "text": "Brr, a snowy nose!",
+    "voice": "papa"
+  },
+  {
+    "text": "Oh! Sorry, little friend!",
+    "voice": "papa"
+  },
+  {
+    "text": "Round and round!",
+    "voice": "papa"
+  },
+  {
+    "text": "Hello, silly seal!",
+    "voice": "papa"
+  },
+  {
+    "text": "Yum, krill!",
+    "voice": "papa"
+  },
+  {
+    "text": "Gulp!",
+    "voice": "papa"
+  },
+  {
+    "text": "More for Pebble!",
+    "voice": "papa"
+  },
+  {
+    "text": "Pebble, I'm home!",
+    "voice": "papa"
+  },
+  {
+    "text": "Yummy! Thank you, Papa!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Hi, hi!",
+    "voice": "pebble"
+  },
+  "Emperor penguins are the biggest penguins of all!",
+  "These little ones are Adelie penguins.",
+  "A leopard seal! This one just wants to play.",
+  "Penguin chicks eat krill, tiny pink sea animals.",
+  "No polar bears live here, so the penguins are not scared."
 ]

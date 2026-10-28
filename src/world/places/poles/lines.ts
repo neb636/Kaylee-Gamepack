@@ -54,7 +54,37 @@ export const L = {
   coats: {},
 
   // ---- Penguin Slide (activities/slide/) ----
-  slide: {},
+  slide: {
+    // The story (a fresh start only; a tap skips it): Pebble is hungry, so Papa goes fishing.
+    story: [pebble("Papa, I'm so hungry!"), papa('Krill coming right up!')],
+    // Sparkle, when each stretch starts (and again when she's stuck there).
+    hints: {
+      top: 'Steer Papa left and right!',
+      bumps: 'Bumps! Pick a way down the hill!',
+      dive: 'Steer Papa to the pink krill!',
+    },
+    // The first time each new thing comes along: what's true about it (Sparkle).
+    bumps: 'Antarctica is one big hill of ice!',
+    dive: 'Penguins fly under the water!',
+    // Papa, when something happens to him (a few each, not every time).
+    air: [papa('Whoa, I can fly!'), papa('Wheee!')],
+    bank: [papa('Oops! Snow on my beak!'), papa('Brr, a snowy nose!')],
+    bump: [papa('Oh! Sorry, little friend!'), papa('Round and round!')],
+    seal: papa('Hello, silly seal!'),
+    gulp: [papa('Yum, krill!'), papa('Gulp!'), papa('More for Pebble!')],
+    leap: papa("Pebble, I'm home!"),
+    // Home: Pebble is fed.
+    fed: pebble('Yummy! Thank you, Papa!'),
+    pebbleTap: [pebble('Hee hee!'), pebble('Hi, hi!')],
+    // Tap-to-hear facts, the first time she pokes each one (Sparkle).
+    facts: {
+      papa: 'Emperor penguins are the biggest penguins of all!',
+      adelie: 'These little ones are Adelie penguins.',
+      seal: 'A leopard seal! This one just wants to play.',
+      pebble: 'Penguin chicks eat krill, tiny pink sea animals.',
+      noBears: 'No polar bears live here, so the penguins are not scared.',
+    },
+  },
 
   // ---- Emperor Huddle (activities/huddle/) ----
   huddle: {},

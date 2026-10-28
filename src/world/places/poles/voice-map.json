@@ -124,5 +124,187 @@
     "sig": "ed7dbdac3d",
     "ms": 3848,
     "file": "bda61dfe0899.mp3"
+  },
+  {
+    "text": "Papa, I'm so hungry!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1971,
+    "file": "be7f3dd6a877.mp3"
+  },
+  {
+    "text": "Krill coming right up!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1715,
+    "file": "83d8761ab354.mp3"
+  },
+  {
+    "text": "Steer Papa left and right!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2571,
+    "file": "76ae5dd132b6.mp3"
+  },
+  {
+    "text": "Bumps! Pick a way down the hill!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2691,
+    "file": "64b64af148ec.mp3"
+  },
+  {
+    "text": "Steer Papa to the pink krill!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3130,
+    "file": "efd6a3f76ad4.mp3"
+  },
+  {
+    "text": "Antarctica is one big hill of ice!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3699,
+    "file": "847b071efea0.mp3"
+  },
+  {
+    "text": "Penguins fly under the water!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2570,
+    "file": "6766e646b03b.mp3"
+  },
+  {
+    "text": "Whoa, I can fly!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2613,
+    "file": "ce257090c0fc.mp3"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 874,
+    "file": "1b068a213f0b.mp3"
+  },
+  {
+    "text": "Oops! Snow on my beak!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2467,
+    "file": "f8e2c0c39172.mp3"
+  },
+  {
+    "text": "Brr, a snowy nose!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2898,
+    "file": "0c641e4a8bc0.mp3"
+  },
+  {
+    "text": "Oh! Sorry, little friend!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2540,
+    "file": "f1cb2b65544a.mp3"
+  },
+  {
+    "text": "Round and round!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1694,
+    "file": "757f95f15eb3.mp3"
+  },
+  {
+    "text": "Hello, silly seal!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1870,
+    "file": "709e61b3e74d.mp3"
+  },
+  {
+    "text": "Yum, krill!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1994,
+    "file": "72030545310c.mp3"
+  },
+  {
+    "text": "Gulp!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 626,
+    "file": "0e385c214496.mp3"
+  },
+  {
+    "text": "More for Pebble!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 1452,
+    "file": "8dceafb764a9.mp3"
+  },
+  {
+    "text": "Pebble, I'm home!",
+    "voice": "papa",
+    "sig": "c038db870a",
+    "ms": 2011,
+    "file": "62f53b9681a7.mp3"
+  },
+  {
+    "text": "Yummy! Thank you, Papa!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1658,
+    "file": "f57f91c1c977.mp3"
+  },
+  {
+    "text": "Hee hee!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 592,
+    "file": "8e1c05c5b6c5.mp3"
+  },
+  {
+    "text": "Hi, hi!",
+    "voice": "pebble",
+    "sig": "77076520c0",
+    "ms": 1552,
+    "file": "5d48a44f537e.mp3"
+  },
+  {
+    "text": "Emperor penguins are the biggest penguins of all!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3101,
+    "file": "c81edf7a62ed.mp3"
+  },
+  {
+    "text": "These little ones are Adelie penguins.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 2741,
+    "file": "af8239d0781b.mp3"
+  },
+  {
+    "text": "A leopard seal! This one just wants to play.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 3824,
+    "file": "72a091fc77e2.mp3"
+  },
+  {
+    "text": "Penguin chicks eat krill, tiny pink sea animals.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4655,
+    "file": "f127bdf33180.mp3"
+  },
+  {
+    "text": "No polar bears live here, so the penguins are not scared.",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 4612,
+    "file": "7c8f09c7c3ad.mp3"
   }
 ]
