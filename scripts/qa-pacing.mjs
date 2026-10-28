@@ -111,6 +111,9 @@ const SCENARIOS = [
   // Animal Bridge (greybox, no voices): a tap on the ground walks the family she leads there and a tap pokes things, so
   // the auto-player wanders the herd about; leading them over the bridge is a long drag (qa-motion's canada-bridge-lead).
   { name: 'canada animal bridge', id: 'bridge', hash: '#/world/canada/bridge', reset: true },
+  // Whale Watch (greybox, no voices): a tap on the water drives the boat there, so the auto-player's taps steer it about
+  // and poke the animals; holding the water and steering out to the otters and the spouts is qa-motion's canada-whales-steer.
+  { name: 'canada whale watch', id: 'whales', hash: '#/world/canada/whales', reset: true },
   // The trip there, one run per leg (each from its own section link).
   { name: "thailand: kaylee's wardrobe", id: 'wardrobe', hash: '#/world/thailand/hub/wardrobe?drawer=head', reset: true },
   { name: 'thailand trip: mommy asks', id: 'trip-invite', hash: '#/world/thailand/boat-trip/invite', reset: true },
