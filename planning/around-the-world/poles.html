@@ -21,7 +21,7 @@
     "tone": "pink"
   },
   "pitch": "Sparkle's balloon flies to the top of the world and the bottom. Up north, **Pola the polar bear cub** lives on ice floating on the sea; down south, **Pebble the penguin chick** lives on a giant land made of ice. They are pen pals who can never meet, because polar bears only live in the north and penguins only live in the south. Kaylee hops floes, belly-slides, huddles in a blizzard and cracks icebergs off a glacier, and learns the difference by playing in both. At the very end, Sparkle's **Polar Quiz** checks what she learned, and she answers by doing: dragging Pola to his pole, spinning the globe to the bottom.",
-  "next": "Dad plays **Ice Floe Hop** with the real Pola and Mama Bear ([#/world/poles/floe/steady](#/world/poles/floe/steady), [home with Mama](#/world/poles/floe/mama)) and says what to change. Still open: the friends' names, one map pin or two, Santa or not. Next, one per PR: **Papa and Pebble into Penguin Slide**, then the 2D Pebble and emperor dads into the huddle and Snow Coats, then the painted 2D scenes and the stickers.",
+  "next": "Dad plays **Penguin Slide** with the real Papa and Pebble ([#/world/poles/slide/top](#/world/poles/slide/top), [feeding Pebble](#/world/poles/slide/home?krill=12)) and says what to change. Still open: the friends' names, one map pin or two, Santa or not. Next, one per PR: **the 2D Pebble and emperor dads into the huddle**, then Snow Coats, then the painted 2D scenes and the stickers.",
   "facts": [
     {
       "icon": "🧭",
@@ -1468,7 +1468,7 @@
               "title": "Art: the friends into each activity",
               "status": "doing",
               "date": "2026-10-28",
-              "md": "One activity per PR: the 3D friends replace the greybox shapes (Ice Floe Hop, Penguin Slide, Iceberg Maker), the 2D puppets go into Snow Coats and the huddle, with painted 2D scenes for those two, then the stickers. **Ice Floe Hop done** (the 3D Pola and Mama Bear; Iceberg Maker's Pola came along). Next: Penguin Slide (Papa, Pebble)."
+              "md": "One activity per PR: the 3D friends replace the greybox shapes (Ice Floe Hop, Penguin Slide, Iceberg Maker), the 2D puppets go into Snow Coats and the huddle, with painted 2D scenes for those two, then the stickers. **Ice Floe Hop done** (the 3D Pola and Mama Bear; Iceberg Maker's Pola came along, PR #257). **Penguin Slide done** (the 3D Papa and Pebble; the colony's emperors and Iceberg Maker's emperors came along). Next: the 2D puppets into the huddle and Snow Coats."
             },
             {
               "n": 9,
@@ -1783,6 +1783,19 @@
                 "Sizes stay the greybox's so the fling, the camera and the tap targets don't change: Pola stands 1.2 m (0.9 m in the lab), Mama 1.8 m. Pola hides the rig's own shadow, since the world draws his on whatever is under him.",
                 "**Iceberg Maker** used the same `Bear`, so its Pola on the cliff and on the giant berg is the rig toy too (0.8 m and 1.2 m).",
                 "**Not yet:** voices, the painted look of the sea and the floes."
+              ]
+            },
+            {
+              "title": "Step 8b: Papa and Pebble into Penguin Slide",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "Papa on his belly down the ice and Pebble waiting at home are the toys from the character lab now. Everything still plays on the rig: tipping onto his belly, flippers out like wings in the air, paddling in the sea, head first into a snowbank with his bottom wagging, spinning like a top, the hop, his tummy growing round with krill, and Pebble's waddle and hops as she's fed.",
+              "items": [
+                "`activities/slide/penguin.ts`: `emperor` and `chick` build the rig from `POLES_LOOKS` (`papa`, `pebble`) and drive its root (squash, hop, belly tilt, spin), `armL`/`armR` (the flippers), `body` (rounder when full; it wags in a snowbank, since the rig's feet have no pivot of their own) and `head` (up to see where he's going on his belly, up in a flail, a bob in a waddle). Blinks and the beak come from `FaceLife` (cast ids `papa`, `pebble`).",
+                "`Penguin.beak()` finds the real beak on the rig, so krill stream into Papa's beak and hop into Pebble's wherever their heads are.",
+                "Sizes stay the greybox's (Papa 1.44 m, Pebble 0.82 m). The rig's blob shadow stays flat on the snow when he tips over; Papa hides his, since the world draws one under him.",
+                "**Came along:** the five emperors in the colony and Iceberg Maker's emperors use the same look as Papa (one `Penguin` class). The **Adélies** stay greybox: there's no Adélie look yet.",
+                "**Not yet:** voices, an Adélie look, different faces for the colony's dads."
               ]
             }
           ]

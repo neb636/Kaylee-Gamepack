@@ -1,23 +1,27 @@
-// Penguin Slide's animals as greybox shapes in the toon look (the art gate builds them on the chibi rig): Pebble's papa
-// (an emperor penguin), Pebble (a grey fluffy chick), the Adélies on the slope, and a leopard seal. Flippers on their
-// own pivots so they flap, paddle and flail. The world (slide.ts) sets the pose each frame; this file only owns the
-// shapes and the little actions that play by themselves (a hop, a honk, a spin like a top).
+// Penguin Slide's animals: Pebble's papa (an emperor penguin) and Pebble (a grey fluffy chick) are the toys from the
+// character lab on the chibi rig (engine3d/characters/animal.ts, their looks in characters/looks.ts); the Adélies on the
+// slope and the leopard seal are still greybox shapes in the toon look. Flippers on their own pivots so they flap,
+// paddle and flail. The world (slide.ts) sets the pose each frame; this file owns the little actions that play by
+// themselves (a hop, a spin like a top) and the rig's face (blinks, and the beak with their voice once they have one).
 import { Group, type Vector3 } from 'three'
 import { bell, span } from '../../../../../sdk'
+import { buildAnimal, type Rig } from '../../../../engine3d/characters/animal'
+import { FaceLife } from '../../../../engine3d/characters/face'
 import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
+import { POLES_LOOKS } from '../../characters/looks'
 
 export type Kind = 'emperor' | 'chick' | 'adelie'
 
 const BLACK = '#3A3A4A'
 const WHITE = '#FFFFFF'
-const GREY = '#B9BFCB'
-const ORANGE = '#FFB04A'
 const HOP_S = 0.5
 const SPIN_S = 1.4
-/** Lying on his belly, he pivots round this high (m, before his size): his tummy touches the snow. */
+/** Lying on his belly, he pivots round this high (m, before his size): his tummy touches the snow. On the rig it's a
+ *  share of his height instead (the front of the rig penguin's tummy is 0.3 H out). */
 const PIVOT = 0.3
+const RIG_PIVOT = 0.3
 
 export interface Pose {
   /** 0 standing up, 1 flat on his belly. */
@@ -43,12 +47,20 @@ export class Penguin {
   private spinner = new Group()
   /** Tips forward onto the belly (round PIVOT). */
   private tilt = new Group()
-  /** Inside the tilt at its size: the actions move this. */
-  private inner = new Group()
+  /** Inside the tilt at its size: the actions move this (on the rig, the rig's root). */
+  private inner: Group
   readonly flippers: Group[] = []
-  private feet = new Group()
-  /** The tummy: it grows as he catches krill (or she gets fed). */
-  private tummy: Group
+  /** The greybox Adélie's feet (they wiggle on their own; the rig's are part of its body). */
+  private feet: Group | null = null
+  /** The greybox tummy: it grows as he catches krill (or she gets fed). The rig's whole body grows round instead. */
+  private tummy: Group | null = null
+  /** Papa and Pebble (emperor and chick): the chibi rig. */
+  readonly rig: Rig | null = null
+  private life: FaceLife | null = null
+  /** How high the belly pivot is (m). */
+  private pivot: number
+  /** The scale `inner` is at: the greybox shapes are built at size 1, the rig at its height. */
+  private k: number
   readonly height: number
   private hopT = -1
   private spinT = -1
@@ -56,92 +68,78 @@ export class Penguin {
   /** How round the tummy is (1 = normal). */
   full = 1
 
-  constructor(bag: Bag, readonly kind: Kind, readonly size = 1) {
+  /** `shadow`: the rig's own blob shadow (Papa's is drawn on whatever is under him by the world instead). */
+  constructor(bag: Bag, readonly kind: Kind, readonly size = 1, shadow = true) {
     this.root.add(this.spinner)
     this.spinner.add(this.tilt)
-    this.tilt.add(this.inner)
-    this.tilt.position.y = PIVOT * size
-    this.inner.position.y = -PIVOT * size
-    this.inner.scale.setScalar(size)
     const chick = kind === 'chick'
     this.height = (chick ? 0.82 : 1.15) * size
-    const body = chick ? GREY : BLACK
-    if (chick) {
-      // A grey fluffy ball with a black cap and a white face.
-      this.inner.add(
-        solidMix(
-          [
-            P.sphere(0.33, GREY, { at: [0, 0.34, 0], scale: [1, 0.95, 1] }),
-            P.sphere(0.21, BLACK, { at: [0, 0.68, 0] }),
-            P.sphere(0.165, WHITE, { at: [0, 0.65, 0.07], scale: [1.05, 0.9, 1] }),
-            P.cone(0.05, 0.12, BLACK, { at: [0, 0.64, 0.25], rot: [Math.PI / 2, 0, 0] }),
-          ],
-          [
-            P.sphere(0.03, PAL.ink, { at: [0.075, 0.69, 0.215] }),
-            P.sphere(0.03, PAL.ink, { at: [-0.075, 0.69, 0.215] }),
-            P.sphere(0.01, WHITE, { at: [0.085, 0.705, 0.24] }),
-            P.sphere(0.01, WHITE, { at: [-0.065, 0.705, 0.24] }),
-            P.sphere(0.04, PAL.pink, { at: [0.12, 0.62, 0.18], scale: [1, 0.6, 0.4] }),
-            P.sphere(0.04, PAL.pink, { at: [-0.12, 0.62, 0.18], scale: [1, 0.6, 0.4] }),
-          ],
-          bag,
-          2.5,
-        ),
-      )
+    if (kind === 'adelie') {
+      this.inner = new Group()
+      this.k = size
+      this.pivot = PIVOT * size
+      this.buildAdelie(bag)
     } else {
-      const adelie = kind === 'adelie'
-      this.inner.add(
-        solidMix(
-          [
-            P.sphere(0.32, BLACK, { at: [0, 0.48, -0.02], scale: [1, 1.45, 0.95] }),
-            P.sphere(0.21, BLACK, { at: [0, 0.98, 0.02] }),
-            P.cone(0.05, 0.2, adelie ? BLACK : PAL.ink, { at: [0, 0.96, 0.26], rot: [Math.PI / 2 + 0.15, 0, 0] }),
-            P.sphere(0.07, BLACK, { at: [0, 0.14, -0.3], scale: [1, 0.6, 1.2] }),
-            ...(adelie
-              ? []
-              : [
-                  // The emperor's sunny ear patches and the stripe on his beak.
-                  P.sphere(0.07, PAL.gold, { at: [0.17, 0.92, 0.05], scale: [0.6, 1.3, 0.8] }),
-                  P.sphere(0.07, PAL.gold, { at: [-0.17, 0.92, 0.05], scale: [0.6, 1.3, 0.8] }),
-                ]),
-          ],
-          [
-            ...(adelie
-              ? [
-                  // The Adélie's white eye rings.
-                  P.torus(0.04, 0.012, WHITE, { at: [0.09, 1.01, 0.18], rot: [0, 0.5, 0] }),
-                  P.torus(0.04, 0.012, WHITE, { at: [-0.09, 1.01, 0.18], rot: [0, -0.5, 0] }),
-                ]
-              : [P.box(0.025, 0.02, 0.1, ORANGE, { at: [0, 0.95, 0.26] })]),
-            P.sphere(0.03, PAL.ink, { at: [0.09, 1.01, 0.18] }),
-            P.sphere(0.03, PAL.ink, { at: [-0.09, 1.01, 0.18] }),
-            P.sphere(0.01, WHITE, { at: [0.1, 1.025, 0.205] }),
-            P.sphere(0.01, WHITE, { at: [-0.08, 1.025, 0.205] }),
-            P.sphere(0.04, PAL.pink, { at: [0.13, 0.93, 0.16], scale: [1, 0.6, 0.4] }),
-            P.sphere(0.04, PAL.pink, { at: [-0.13, 0.93, 0.16], scale: [1, 0.6, 0.4] }),
-          ],
-          bag,
-          2.5,
-        ),
-      )
+      // The same height as the greybox was (the slide, the camera and the tap targets were tuned to it).
+      const who = chick ? 'pebble' : 'papa'
+      const rig = buildAnimal({ ...POLES_LOOKS[who], height: this.height }, bag)
+      this.rig = rig
+      this.inner = rig.root
+      this.k = 1
+      this.pivot = RIG_PIVOT * this.height
+      this.flippers.push(rig.armR, rig.armL)
+      // The shadow stays on the snow when he tips onto his belly.
+      const blob = rig.root.children[0]
+      blob.visible = shadow
+      this.root.add(blob)
+      this.life = new FaceLife(rig, who)
     }
+    this.tilt.add(this.inner)
+    this.tilt.position.y = this.pivot
+    this.inner.position.y = -this.pivot
+    this.inner.scale.setScalar(this.k)
+  }
+
+  /** The greybox Adélie: black with white eye rings, a white tummy and pink feet. */
+  private buildAdelie(bag: Bag) {
+    this.inner.add(
+      solidMix(
+        [
+          P.sphere(0.32, BLACK, { at: [0, 0.48, -0.02], scale: [1, 1.45, 0.95] }),
+          P.sphere(0.21, BLACK, { at: [0, 0.98, 0.02] }),
+          P.cone(0.05, 0.2, BLACK, { at: [0, 0.96, 0.26], rot: [Math.PI / 2 + 0.15, 0, 0] }),
+          P.sphere(0.07, BLACK, { at: [0, 0.14, -0.3], scale: [1, 0.6, 1.2] }),
+        ],
+        [
+          P.torus(0.04, 0.012, WHITE, { at: [0.09, 1.01, 0.18], rot: [0, 0.5, 0] }),
+          P.torus(0.04, 0.012, WHITE, { at: [-0.09, 1.01, 0.18], rot: [0, -0.5, 0] }),
+          P.sphere(0.03, PAL.ink, { at: [0.09, 1.01, 0.18] }),
+          P.sphere(0.03, PAL.ink, { at: [-0.09, 1.01, 0.18] }),
+          P.sphere(0.01, WHITE, { at: [0.1, 1.025, 0.205] }),
+          P.sphere(0.01, WHITE, { at: [-0.08, 1.025, 0.205] }),
+          P.sphere(0.04, PAL.pink, { at: [0.13, 0.93, 0.16], scale: [1, 0.6, 0.4] }),
+          P.sphere(0.04, PAL.pink, { at: [-0.13, 0.93, 0.16], scale: [1, 0.6, 0.4] }),
+        ],
+        bag,
+        2.5,
+      ),
+    )
     // The white tummy (its own shape, so it can grow round).
-    this.tummy = solid(P.sphere(chick ? 0.2 : 0.27, chick ? '#E9ECF1' : WHITE, { scale: chick ? [1, 1, 0.6] : [0.86, 1.3, 0.62] }), bag, 2)
-    this.tummy.position.set(0, chick ? 0.3 : 0.47, chick ? 0.17 : 0.13)
+    this.tummy = solid(P.sphere(0.27, WHITE, { scale: [0.86, 1.3, 0.62] }), bag, 2)
+    this.tummy.position.set(0, 0.47, 0.13)
     this.inner.add(this.tummy)
     // Flippers on their shoulders.
     for (const x of [1, -1]) {
       const f = new Group()
-      f.position.set(x * (chick ? 0.3 : 0.31), chick ? 0.45 : 0.72, 0)
-      f.add(solid(P.capsule(chick ? 0.05 : 0.06, chick ? 0.14 : 0.26, body, { at: [0, chick ? -0.1 : -0.17, 0], scale: [0.55, 1, 1] }), bag, 2))
+      f.position.set(x * 0.31, 0.72, 0)
+      f.add(solid(P.capsule(0.06, 0.26, BLACK, { at: [0, -0.17, 0], scale: [0.55, 1, 1] }), bag, 2))
       this.inner.add(f)
       this.flippers.push(f)
     }
-    // Feet.
-    const foot = this.kind === 'adelie' ? PAL.pink : chick ? '#8A8F9C' : '#4D4D5E'
+    this.feet = new Group()
     this.feet.add(
       solid(
-        merge([P.rbox(0.13, 0.05, 0.17, 0.02, foot, { at: [0.11, 0.025, 0.1] }), P.rbox(0.13, 0.05, 0.17, 0.02, foot, { at: [-0.11, 0.025, 0.1] })]),
+        merge([P.rbox(0.13, 0.05, 0.17, 0.02, PAL.pink, { at: [0.11, 0.025, 0.1] }), P.rbox(0.13, 0.05, 0.17, 0.02, PAL.pink, { at: [-0.11, 0.025, 0.1] })]),
         bag,
         2,
       ),
@@ -168,8 +166,16 @@ export class Penguin {
     return this.root.localToWorld(out.set(0, this.height * 0.5, 0))
   }
 
+  /** The tip of the beak, in the world (krill go in here, and come out for Pebble). */
+  beak(out: Vector3) {
+    if (this.rig) return this.rig.head.localToWorld(out.set(...this.rig.face.mouth))
+    return this.inner.localToWorld(out.set(0, 0.96, 0.3))
+  }
+
   update(dt: number, t: number, pose: Pose = {}) {
     const inner = this.inner
+    const k = this.k
+    this.life?.update(dt)
     let lift = 0
     let sq = 0
     if (this.hopT >= 0) {
@@ -194,17 +200,29 @@ export class Penguin {
     const stretch = pose.stretch ?? 0
     const breathe = 0.025 * Math.sin(t * 2.6 + this.phase)
     const squash = sq - stretch
-    inner.position.y = -PIVOT * this.size + lift * this.size
-    inner.scale.set(this.size * (1 + squash * 0.5), this.size * (1 - squash + breathe * (1 - belly)), this.size * (1 + squash * 0.5))
+    inner.position.y = -this.pivot + lift * this.size
+    inner.scale.set(k * (1 + squash * 0.5), k * (1 - squash + breathe * (1 - belly)), k * (1 + squash * 0.5))
     // Onto his belly: head forward, tummy on the snow (wiggling: head down in the snow, feet up).
     const wiggle = pose.wiggle ?? 0
     this.tilt.rotation.x = belly * Math.PI * 0.5 + wiggle * Math.PI * 0.42
     this.spinner.rotation.y = spin
     this.tilt.rotation.z = (pose.waddle ?? 0) * 0.16 * Math.sin(t * 11) + (this.spinT >= 0 ? 0.25 * Math.sin(this.spinT * 18) * (1 - this.spinT / SPIN_S) : 0)
-    this.feet.rotation.x = wiggle * 0.5 * Math.sin(t * 22)
-    this.feet.rotation.z = wiggle * 0.3 * Math.sin(t * 17)
+    if (this.feet) {
+      this.feet.rotation.x = wiggle * 0.5 * Math.sin(t * 22)
+      this.feet.rotation.z = wiggle * 0.3 * Math.sin(t * 17)
+    }
     const g = this.full
-    this.tummy.scale.set(g, 1 + (g - 1) * 0.6, g)
+    this.tummy?.scale.set(g, 1 + (g - 1) * 0.6, g)
+    const rig = this.rig
+    if (rig) {
+      // A full tummy makes the whole round body rounder; stuck in a snowbank, his bottom (and feet) wag in the air.
+      const round = 1 + (g - 1) * 0.5
+      rig.body.scale.set(round, 1 + (g - 1) * 0.2, round)
+      rig.body.rotation.set(0, wiggle * 0.3 * Math.sin(t * 22), wiggle * 0.2 * Math.sin(t * 17))
+      // The head follows through: up as he lies down (looking where he's going), up again when he flails, and it
+      // bobs with a waddle.
+      rig.head.rotation.set(-0.9 * belly * (1 - wiggle) - 0.3 * (pose.flail ?? 0), 0, (pose.waddle ?? 0) * 0.25 * Math.sin(t * 11 + 0.6))
+    }
 
     const swim = pose.swim ?? 0
     const flail = pose.flail ?? 0

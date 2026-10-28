@@ -279,7 +279,7 @@ export class PenguinSlide implements World3D {
     scene.add(this.shelf)
 
     // ---- The penguins and the seal ----
-    this.papa = new Penguin(bag, 'emperor', 1.25)
+    this.papa = new Penguin(bag, 'emperor', 1.25, false)
     this.lean.add(this.papa.root)
     this.papaRoot.add(this.lean)
     scene.add(this.papaRoot)
@@ -863,7 +863,7 @@ export class PenguinSlide implements World3D {
 
   /** His beak, in the world. */
   private beak(out: Vector3) {
-    return this.papa.root.localToWorld(out.set(0, this.belly > 0.5 ? 0.35 : 1.2, this.belly > 0.5 ? 0.95 : 0.35))
+    return this.papa.beak(out)
   }
 
   private bubble(x: number, y: number, z: number) {
@@ -967,7 +967,7 @@ export class PenguinSlide implements World3D {
       if (!b.visible) continue
       const u = (b.userData.t += dt) / 0.32
       const from = b.userData.from as Vector3
-      const to = this.pebble.root.localToWorld(tmp.set(0, 0.62, 0.22))
+      const to = this.pebble.beak(tmp)
       if (u >= 1) {
         b.visible = false
         this.pebble.full = Math.min(1.45, this.pebble.full + 0.4 / this.feedN)
