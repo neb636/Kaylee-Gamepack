@@ -1,5 +1,6 @@
 // Keeps big libraries lazy: they may only be imported from a game or country folder, the shared 3D engine
-// (src/world/engine3d/, only countries import it) or the labs (src/world/labs/, loaded on demand), never from the SDK,
+// (src/world/engine3d/, only countries import it), the labs (src/world/labs/, loaded on demand) or the home globe
+// (src/world/globe/, which the world map loads on demand), never from the SDK,
 // the shell, the world kit or a file that loads at startup (a meta.ts, a sections file, a country's puppets/index.ts:
 // the registry and the puppet lab glob those eagerly).
 // Usage: node scripts/check-heavy-imports.mjs   (part of `npm run check`)
@@ -7,13 +8,13 @@ import { readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 
 const HEAVY = ['phaser', 'perfect-freehand', 'three']
-const lazyFolder = /^src\/((games|world\/places)\/[^/]+|world\/engine3d|world\/labs)\//
+const lazyFolder = /^src\/((games|world\/places)\/[^/]+|world\/engine3d|world\/labs|world\/globe)\//
 /** Files inside a game or country folder that are still loaded at startup. */
 const eagerInFolder = /\/(meta\.ts|[^/]*sections\.ts|puppets\/index\.ts)$/
 // The package itself or any subpath (three/examples/jsm/...).
 const importOf = new RegExp(`(?:from\\s*|import\\s*\\(?\\s*)['"](${HEAVY.join('|')})(?:/[^'"]*)?['"]`)
-// A static import of the engine or the labs (they import three themselves). Type-only and dynamic imports are fine.
-const engineImport = /^import\s+(?!type\s)[^'"]*from\s*['"][^'"]*\/(engine3d|labs)\/[^'"]*['"]/m
+// A static import of the engine, the labs or the home globe (they import three themselves). Type-only and dynamic imports are fine.
+const engineImport = /^import\s+(?!type\s)[^'"]*from\s*['"][^'"]*\/(engine3d|labs|globe)\/[^'"]*['"]/m
 
 const files = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((d) => {

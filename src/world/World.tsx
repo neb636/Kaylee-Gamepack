@@ -54,7 +54,11 @@ export function World({ place, activity, section, params = {} }: { place?: strin
     screen = <PlaceFrame id={place} activity={activity} section={section} params={gameParams} />
     lab = params.cam !== undefined
     feel = params.feel !== undefined
-  } else screen = <WorldMap view={params.view} />
+  } else {
+    screen = <WorldMap key={params.face} view={params.view} face={params.face} />
+    // The home globe's spin has knobs too (#/world?feel=1).
+    feel = params.feel !== undefined
+  }
   return (
     <div className="world" style={{ position: 'absolute', inset: 0 }}>
       <div ref={setHost} style={{ position: 'absolute', inset: 0 }}>

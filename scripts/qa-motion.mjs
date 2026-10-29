@@ -123,10 +123,52 @@ const PUPPET_SCENARIOS = [
   act: (page) => page.evaluate(([pid, a]) => void window.__puppets[pid].play(a), [id, action]),
 }))
 
+// The home globe (src/world/globe/): its arrival spin, a flick, and flying off to a place.
+const GLOBE_SCENARIOS = [
+  {
+    name: 'world-globe-arrive',
+    seconds: 3.4,
+    setup: async (page, base) => {
+      // The big spin plays once a session: forget it played, then come back to the world map.
+      await page.evaluate(() => sessionStorage.removeItem('world:globe-spun'))
+      await page.goto(`${base}#/world/passport`)
+      await page.waitForTimeout(800)
+    },
+    act: (page) => page.evaluate(() => void (location.hash = '#/world')),
+  },
+  {
+    name: 'world-globe-flick',
+    seconds: 2.6,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world?face=italy`)
+      await page.waitForTimeout(3200)
+    },
+    act: async (page) => {
+      const { width, height } = page.viewportSize()
+      await page.mouse.move(width * 0.32, height * 0.55)
+      await page.mouse.down()
+      for (let i = 1; i <= 8; i++) {
+        await page.mouse.move(width * (0.32 + 0.03 * i), height * (0.55 - 0.008 * i))
+        await page.waitForTimeout(16)
+      }
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'world-globe-fly',
+    seconds: 2.8,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world?face=australia`)
+      await page.waitForTimeout(3200)
+    },
+    act: (page) => page.getByRole('button', { name: 'Australia', exact: true }).click({ force: true }),
+  },
+]
+
 // In-activity moments, driven the way a child would (tolerant: the UI changes as activities get rebuilt): each
 // country's are in its src/world/places/<id>/qa.mjs (`motion`), an activity's can be in its own activities/<id>/qa.mjs.
 // --only=venice-drive,etna: exact scenario names, or a prefix for all of them (etna-*).
-const all = [...PUPPET_SCENARIOS, ...(await loadScenarios('motion'))].filter((s) => !flag('only') || flag('only').split(',').some((o) => s.name === o || s.name.startsWith(`${o}-`)))
+const all = [...PUPPET_SCENARIOS, ...GLOBE_SCENARIOS, ...(await loadScenarios('motion'))].filter((s) => !flag('only') || flag('only').split(',').some((o) => s.name === o || s.name.startsWith(`${o}-`)))
 
 const ffmpeg = (a) => spawnSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...a], { encoding: 'utf8' })
 const hasFfmpeg = !ffmpeg(['-version']).error

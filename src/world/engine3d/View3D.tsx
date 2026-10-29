@@ -43,7 +43,7 @@ export interface World3D extends Roamable {
 }
 
 /** Read-only state for tests and QA scripts (no jump hooks: use section links). */
-export type QAKey = '__thaiHouseQA' | '__thaiBoatQA' | '__thaiMallQA' | '__thaiNanQA' | '__thaiCastQA' | '__polesGlobeQA' | '__polesFloeQA' | '__polesSlideQA' | '__polesIcebergQA' | '__polesPartyQA' | '__canadaMapQA' | '__canadaBikeQA' | '__canadaCanoeQA' | '__canadaWhalesQA' | '__canadaSnowmanQA' | '__canadaPartyQA'
+export type QAKey = '__thaiHouseQA' | '__thaiBoatQA' | '__thaiMallQA' | '__thaiNanQA' | '__thaiCastQA' | '__polesGlobeQA' | '__polesFloeQA' | '__polesSlideQA' | '__polesIcebergQA' | '__polesPartyQA' | '__canadaMapQA' | '__canadaBikeQA' | '__canadaCanoeQA' | '__canadaWhalesQA' | '__canadaSnowmanQA' | '__canadaPartyQA' | '__worldGlobeQA'
 declare global {
   interface Window {
     __thaiHouseQA?: () => Record<string, unknown>
@@ -62,6 +62,7 @@ declare global {
     __canadaWhalesQA?: () => Record<string, unknown>
     __canadaSnowmanQA?: () => Record<string, unknown>
     __canadaPartyQA?: () => Record<string, unknown>
+    __worldGlobeQA?: () => Record<string, unknown>
   }
 }
 
