@@ -10,7 +10,7 @@
 // prints, so the path she made stays on the water.
 //
 // Built for engine3d/View3D.tsx; nothing here comes from Thailand. The fling and the floes are feel-lab knobs (?feel=1).
-import { CircleGeometry, Color, ExtrudeGeometry, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Shape, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
+import { CircleGeometry, Color, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp, smooth, sounds } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { sfx } from '../../../../kit/sfx'
@@ -25,6 +25,7 @@ import type { World3D } from '../../../../engine3d/View3D'
 import { swell, Water } from '../../../../engine3d/water'
 import { Bear } from './bear'
 import { layout, type FloeSpec, type Stage } from './layout'
+import { CRITTER_IDS, iceGeometry, Scenery, type CritterId } from './scenery'
 import type { FloeSection } from './sections'
 
 const FILE = 'src/world/places/poles/activities/floe/floe.ts'
@@ -68,13 +69,17 @@ export interface FloeEvents {
   flop(): void
   /** He landed on a tippy edge and is sliding off. */
   slide(): void
-  /** She poked something (Pola, Mama, a floe, the open water). */
-  poke(what: 'pola' | 'mama' | 'floe' | 'water'): void
+  /** She poked something (Pola, Mama, a floe, the open water, or a critter: scenery.ts). */
+  poke(what: 'pola' | 'mama' | 'floe' | 'water' | CritterId): void
 }
 
 export const FLOE_ANCHORS: AnchorInfo[] = [
   { id: 'pola', label: 'Pola: pull him back and let go', kind: 'thing' },
   { id: 'mama', label: 'Mama Bear', kind: 'thing' },
+  { id: 'seal', label: 'A seal in its breathing hole', kind: 'thing' },
+  { id: 'narwhal', label: 'A narwhal', kind: 'thing' },
+  { id: 'walrus', label: 'A walrus', kind: 'thing' },
+  { id: 'beluga', label: 'Belugas', kind: 'thing' },
 ]
 
 /** Floes' top above the water at rest, and how thick they are. */
@@ -90,9 +95,7 @@ const HINT_S = 8
 const ORDER: FloeSection[] = ['story', 'steady', 'drift', 'melt', 'mama']
 const STAGE_SECTION: Record<Stage, FloeSection> = { start: 'steady', steady: 'steady', drift: 'drift', melt: 'melt', mama: 'mama' }
 const SKY = '#E6F3FD'
-const ICE = '#D9E0EA'
-const ICE_MAMA = '#E4EAF2'
-const PRINT = '#97A3B8'
+const PRINT = '#9AAAD3'
 
 type Mode = 'stand' | 'aim' | 'fly' | 'flop' | 'swim' | 'climb' | 'slide' | 'walk'
 
@@ -180,6 +183,7 @@ export class FloeHop implements World3D {
   private shadow: Mesh
   private foam: Particles
   private spray: Particles
+  private scenery: Scenery
   private dots: Mesh[] = []
   private ring: Mesh
   private ringMat: MeshBasicMaterial
@@ -268,6 +272,17 @@ export class FloeHop implements World3D {
     this.spray = new Particles({ kind: 'spray', count: 160 }, bag)
     scene.add(this.foam.mesh, this.spray.mesh)
 
+    // The look and the life around the course: far bergs, Mama's flag, side floes, the critters (scenery.ts).
+    this.scenery = new Scenery(
+      bag,
+      this.floes.map((f) => ({ spinner: f.spinner, x: f.x, z: f.z, r: f.r, pts: f.pts, rest: f.spec.rest, mama: f === this.mamaFloe })),
+      TOP,
+      THICK,
+      this.spray,
+      (x, z, margin) => this.floes.every((f) => Math.hypot(f.x - x, f.z - z) > f.r * 1.15 + margin),
+    )
+    scene.add(this.scenery.root)
+
     // The aim: a dotted arc and a ring where he'll land.
     const dotGeo = bag.add(new SphereGeometry(0.08, 10, 8))
     const dotMat = bag.add(new MeshBasicMaterial({ color: '#FFFFFF' }))
@@ -317,13 +332,8 @@ export class FloeHop implements World3D {
   // ---------------------------------------------------------------- building
 
   private makeFloe(spec: FloeSpec, i: number): Floe {
-    // The outline drawn as a shape in x and -z, pushed down `THICK` with a soft rounded edge.
-    const shape = new Shape(spec.pts.map(([x, z]) => new Vector2(x, -z)))
-    const geo = new ExtrudeGeometry(shape, { depth: THICK - 0.12, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.08, bevelSegments: 2, curveSegments: 1 })
-    geo.rotateX(-Math.PI / 2)
-    // (The extrusion now runs up from y = 0: put its top at TOP.)
-    geo.translate(0, TOP - (THICK - 0.12) - 0.06, 0)
-    const body = solid(bake(geo, spec.stage === 'mama' ? ICE_MAMA : ICE), this.bag, 2.5)
+    // The outline pushed down `THICK` with a soft rounded edge: a snowy top with lumps and a crack, lavender-blue sides.
+    const body = solid(iceGeometry(spec.pts, TOP, THICK, i), this.bag, 2.5)
     const group = new Group()
     const spinner = new Group()
     spinner.add(body)
@@ -558,6 +568,7 @@ export class FloeHop implements World3D {
     this.updateFloes(dt, t)
     this.updatePola(dt, t)
     this.mama.update(dt, t)
+    this.scenery.update(dt, t, this.pos, this.section === 'story' || this.homeT >= 0, this.tall)
     this.foam.update(dt)
     this.spray.update(dt)
     // The spot she's aiming at rides along with him (on a drifting floe).
@@ -929,6 +940,16 @@ export class FloeHop implements World3D {
     return { x: c.x, y: c.y, r: Math.max(Math.min(this.w, this.h) < 500 ? 32 : 44, Math.abs(c.y - top.y) * 1.4) }
   }
 
+  /**
+   * Where Mama is, for the pointer at the top of the screen (FloeHop.tsx): `off` while she's out of sight (far up the
+   * screen, or behind), and the x to point from, kept on the screen.
+   */
+  mamaPointer(): { x: number; off: boolean } {
+    const c = this.toScreen(this.mama.center(tmp))
+    const off = this.homeT < 0 && this.section !== 'story' && (c.z >= 1 || c.y < this.h * 0.12 || c.x < 0 || c.x > this.w)
+    return { x: clamp(c.z >= 1 ? this.w / 2 : c.x, 60, this.w - 60), off }
+  }
+
   pointerDown(x: number, y: number, id?: string) {
     this.lastTouch = this.time
     // A second finger while one already holds Pola or a floe: View3D now follows the new finger, so let go of the old
@@ -998,6 +1019,11 @@ export class FloeHop implements World3D {
       this.events.poke('pola')
       return
     }
+    if (id && (CRITTER_IDS as string[]).includes(id)) {
+      this.scenery.poke(id as CritterId, this.pos)
+      this.events.poke(id as CritterId)
+      return
+    }
     if (id === 'mama') {
       this.mama.hop()
       this.mama.wave()
@@ -1039,6 +1065,14 @@ export class FloeHop implements World3D {
         const c = this.toScreen(this.mama.center(tmp))
         const top = this.toScreen(this.mama.root.localToWorld(tmp2.set(0, this.mama.height, 0)))
         if (c.z < 1) spot = { x: c.x, y: c.y, size: Math.max(min, Math.abs(c.y - top.y) * 2.2) }
+      } else if (this.homeT < 0 && this.section !== 'story') {
+        // A critter, while it's out (the seal's hole and the walruses always are).
+        const s = this.scenery.spot(id as CritterId, tmp.copy(this.pos))
+        if (s) {
+          const c = this.toScreen(tmp)
+          const edge = this.toScreen(tmp2.copy(tmp).add(this.rig.camera.up.clone().multiplyScalar(s.r)))
+          if (c.z < 1) spot = { x: c.x, y: c.y, size: Math.max(min, Math.abs(c.y - edge.y) * 2) }
+        }
       }
       const show = !!spot && spot.x > -spot.size / 2 && spot.x < this.w + spot.size / 2 && spot.y > -spot.size / 2 && spot.y < this.h + spot.size / 2
       if (show && spot) {
