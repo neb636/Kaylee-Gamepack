@@ -71,7 +71,7 @@ function city(): NanRoad {
       seed: 11,
       jungle: true,
       middle: 'dashed',
-      bloom: 0.05,
+      bloom: 0.025,
       villages: [
         { s: 8, side: 1, n: 15, town: true },
         { s: 10, side: -1, n: 14, town: true },
@@ -116,7 +116,7 @@ function valley(): NanRoad {
       seed: 23,
       jungle: true,
       middle: 'dashed',
-      bloom: 0.03,
+      bloom: 0.015,
       villages: [
         { s: at(5), side: -1, n: 4, near: 14, far: 30 },
         { s: at(3), side: 1, n: 3, near: 78, far: 110 },
@@ -158,7 +158,7 @@ function sky(): NanRoad {
     name: 'Up Doi Phu Kha into the clouds',
     road,
     // Doi Phu Kha: forest all the way up, pink Chomphu Phu Kha trees among the green, a few houses at the foot.
-    look: { hills: { near: 8, far: 34 }, wall: 70, trees: 420, seed: 37, jungle: true, middle: 'solid', bloom: 0.07, villages: [{ s: at(1), side: -1, n: 3, near: 16, far: 34 }] },
+    look: { hills: { near: 8, far: 34 }, wall: 70, trees: 420, seed: 37, jungle: true, middle: 'solid', bloom: 0.03, villages: [{ s: at(1), side: -1, n: 3, near: 16, far: 34 }] },
     weather: ['rain', 'cloud', 'sun'],
     extras: ['scooter', 'songthaew'],
     cloud: { y0: 38, y1: 62 },
@@ -208,7 +208,7 @@ function three(): NanRoad {
     name: 'The "number 3" road, down the hairpins',
     road,
     // (Its ends bend away sharply, so from the viewpoint the road below is a 3 and nothing more.)
-    look: { hills: { near: 4, far: 26 }, wall: 40, trees: 340, seed: 53, jungle: true, middle: 'solid', bloom: 0.04, runOn: 0.5, villages: [{ s: 30, side: -1, n: 3, near: 18, far: 36 }] },
+    look: { hills: { near: 4, far: 26 }, wall: 40, trees: 340, seed: 53, jungle: true, middle: 'solid', bloom: 0.02, runOn: 0.5, villages: [{ s: 30, side: -1, n: 3, near: 18, far: 36 }] },
     weather: ['sun', 'cloud', 'rain'],
     extras: ['scooter', 'songthaew'],
     traffic: {
