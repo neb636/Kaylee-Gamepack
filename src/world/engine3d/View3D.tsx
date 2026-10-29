@@ -94,7 +94,7 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
   const anchorEls = useRef(new Map<string, HTMLElement>())
   const modeRef = useRef(onMode)
   modeRef.current = onMode
-  const tracker = useRef<{ id?: string; x: number; y: number; t: number; pointer: number } | null>(null)
+  const tracker = useRef<{ id?: string; x: number; y: number; cx: number; cy: number; t: number; pointer: number } | null>(null)
   const downFromAnchor = useRef<((e: ReactPointerEvent, id: string) => void) | null>(null)
   const pad = useRef<RoamPadHandle>(null)
 
@@ -208,6 +208,10 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     let gesture: { kind: 'turn'; x: number; y: number } | { kind: 'pinch'; a: number; b: number; d0: number; z0: number } | null = null
     /** The finger down is holding something of the world's own (a drag that must not turn the camera). */
     let grabbed = false
+    /** Roblox's dynamic thumbstick: the finger whose drag started on the left half walks her (where it went down, in
+     *  client px). Other fingers keep turning and pinching the camera meanwhile. */
+    let stick: { pointer: number; cx: number; cy: number } | null = null
+    const others = () => [...fingers.keys()].filter((k) => k !== stick?.pointer)
     const turnable = () => !!world.roam?.() && world.rig.turnable
     const spread = (a: number, b: number) => {
       const p = fingers.get(a)
@@ -217,6 +221,10 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     const onMove = (e: PointerEvent) => {
       const p = local(e)
       if (fingers.has(e.pointerId)) fingers.set(e.pointerId, p)
+      if (stick?.pointer === e.pointerId) {
+        pad.current?.float(stick.cx, stick.cy, e.clientX, e.clientY)
+        return
+      }
       const g = gesture
       if (g?.kind === 'pinch') {
         if (e.pointerId === g.a || e.pointerId === g.b) {
@@ -234,20 +242,35 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
         g.y = p.y
         return
       }
-      if (held && !grabbed && turnable() && Math.hypot(p.x - t.x, p.y - t.y) > ROAM.dragStart) {
-        // From here the finger turns the camera: whatever the world started for it (a finger lead) lets go.
-        world.pointerUp()
-        gesture = { kind: 'turn', x: p.x, y: p.y }
-        return
+      if (held && !grabbed && Math.hypot(p.x - t.x, p.y - t.y) > ROAM.dragStart) {
+        // A drag that started on the left half is the thumbstick (wherever she put her finger down); anywhere else
+        // it turns the camera. Either way, whatever the world started for the finger (a finger lead) lets go.
+        if (world.roam?.()?.walk && !stick && t.x < el.offsetWidth * ROAM.stickSide) {
+          world.pointerUp()
+          stick = { pointer: t.pointer, cx: t.cx, cy: t.cy }
+          tracker.current = null
+          pad.current?.float(t.cx, t.cy, e.clientX, e.clientY)
+          return
+        }
+        if (turnable()) {
+          world.pointerUp()
+          gesture = { kind: 'turn', x: p.x, y: p.y }
+          return
+        }
       }
       world.pointerMove(p.x, p.y, t?.x ?? p.x, t?.y ?? p.y, held)
     }
     const onUp = (e: PointerEvent) => {
       const had = fingers.delete(e.pointerId)
+      if (stick?.pointer === e.pointerId) {
+        stick = null
+        pad.current?.sink()
+        return
+      }
       const g = gesture
       if (g?.kind === 'pinch') {
         // Both fingers off ends the pinch; one finger left on doesn't start anything new.
-        if (had && !fingers.size) gesture = null
+        if (had && !others().length) gesture = null
         return
       }
       const t = tracker.current
@@ -267,16 +290,17 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       const p = local(e)
       fingers.set(e.pointerId, p)
       if (gesture?.kind === 'pinch') return
-      // A second finger: a pinch (the first finger's tap, lead or turn is called off).
-      if (fingers.size === 2 && turnable() && !grabbed) {
-        const [a, b] = [...fingers.keys()]
+      // A second finger (besides one on the thumbstick): a pinch (the first finger's tap, lead or turn is called off).
+      const free = others()
+      if (free.length === 2 && turnable() && !grabbed) {
+        const [a, b] = free
         if (tracker.current && gesture?.kind !== 'turn') world.pointerUp()
         tracker.current = null
         gesture = { kind: 'pinch', a, b, d0: spread(a, b), z0: world.rig.user.zoom }
         return
       }
       if (tracker.current) return
-      tracker.current = { x: p.x, y: p.y, t: performance.now(), pointer: e.pointerId, id }
+      tracker.current = { x: p.x, y: p.y, cx: e.clientX, cy: e.clientY, t: performance.now(), pointer: e.pointerId, id }
       world.pointerDown(p.x, p.y, id)
       grabbed = world.roamGrabbed?.() ?? false
     }

@@ -893,8 +893,8 @@ motion.push(
   thaiHouse('wardrobe-door', 4, 'wardrobe?door=crown,hearts,tutu;bow,fairy,dress-mint', [['trip:ward:thing:photo-1', 2500]]),
 )
 
-// Roblox controls (engine3d/roam.ts) in the house: a drag swings the camera round, the pink thumbstick walks her the
-// way it's pushed (as the camera faces), and the jump button hops her along.
+// Roblox controls (engine3d/roam.ts) in the house: a drag on the right swings the camera round, a drag on the left is
+// the thumbstick that walks her the way it's pushed (as the camera faces), and the jump button hops her along.
 motion.push({
   name: 'thai-roam',
   seconds: 6,
@@ -910,11 +910,11 @@ motion.push({
     await page.mouse.move(vp.width * 0.3, vp.height * 0.38, { steps: 14 })
     await page.mouse.up()
     await page.waitForTimeout(500)
-    const box = await page.locator('[data-roam="stick"]').boundingBox()
-    const [x, y] = [box.x + box.width / 2, box.y + box.height / 2]
+    // Roblox's dynamic stick: a drag that starts anywhere on the left half walks her (the stick appears there).
+    const [x, y] = [vp.width * 0.25, vp.height * 0.6]
     await page.mouse.move(x, y)
     await page.mouse.down()
-    await page.mouse.move(x + box.width * 0.1, y - box.width * 0.4, { steps: 4 })
+    await page.mouse.move(x + 8, y - 70, { steps: 4 })
     await page.waitForTimeout(1600)
     await page.mouse.up()
     await page.locator('[data-roam="jump"]').click({ force: true })
