@@ -16,13 +16,13 @@
   "title": "The Nan Road Trip",
   "icon": "🏔️",
   "kind": "Family trip",
-  "updated": "2026-10-27",
+  "updated": "2026-10-28",
   "status": {
     "label": "Built and on for Kaylee: the third Thailand trip, from Mommy's card to Agong's wall",
     "tone": "mint"
   },
   "pitch": "The plane lands in the green valley and the big Pajero is waiting on the Nan map. Mommy drives and Kaylee steers it round the bends of the mountains into the clouds. At each stop she makes something the mountains make: she mists mushrooms until pink ones pop out, fills the rice steps with water, and boils salt from a well. On the way home the road draws a giant **3**.",
-  "next": "The steering is Dad's now (tuned in the [feel lab](#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)). Next, **the whole trip** from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?",
+  "next": "The Nan roads look like Nan now: play them on the iPad and check it stays smooth. The steering is Dad's now (tuned in the [feel lab](#/world/thailand/nan-trip/drive?road=valley&weather=sun&feel=1)). Next, **the whole trip** from [Mommy's card](#/world/thailand/nan-trip/invite) (🏔️🚙). Still open: are Baan Huanam's mushrooms really pink, and is the farmer a buffalo?",
   "facts": [
     {
       "icon": "⏱️",
@@ -1693,6 +1693,26 @@
               "items": [
                 "`plane.ts` ends the Nan landing with `done('map')`; `NAN_TRIP.arrive` is `map`; the 🔑 leg is off the boarding pass.",
                 "A trip saved at the old rental desk keeps going on the map."
+              ]
+            },
+            {
+              "title": "The roads look like Nan",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "From Dad's photos of Route 1081, 1256 and a hill village: forest canopy on every hill, layered blue ridges in the mist, real road markings, villages, and the road runs on past each stop instead of stopping dead.",
+              "blocks": [
+                {
+                  "type": "list",
+                  "items": [
+                    "**Forest** (`trip/road/forest.ts`): lumpy broadleaf crowns in many greens packed like broccoli, tall trees through the canopy, bamboo clumps, banana plants, bushes and tall grass by the road, palms in the paddies; a few pink (Chomphu Phu Kha) and gold (ratchaphruek) trees. Instanced per 160 m tile so tiles off screen aren't drawn; outlines only within 40 m of the road. Near the road the big trees stay low enough for the chase camera.",
+                    "**Far away** (`trip/road/far.ts`): four rings of ridges, each bluer and paler into the haze; a sky dome deeper overhead and pale at the horizon; mist banks in the valleys and on the hills (thicker in cloud and rain).",
+                    "**The road** (`build.ts`, `look.jungle`): dark asphalt, solid yellow middle on the mountain roads (dashed in town and the valley), concrete edge, grass shoulder; W-beam rails with amber reflectors; power poles with sagging wires (none round hairpins); white kilometer stones with red caps; cleared fields on far slopes; paddies cut into fields with green bunds.",
+                    "**Villages** (`trip/road/village.ts`): stilt houses with pink, blue, red and teal tin roofs; Nan town's two-storey shophouses with awnings along the city road.",
+                    "**The road runs on** about 150 m past both ends, bending away (the 3 road's ends bend sharply so the 3 stays a 3), and the spot the camera stands in to look round at each stop is kept clear of trees.",
+                    "The Cup's tracks keep their own look (no `jungle` flag): next, if Dad wants it there too.",
+                    "Cost: the sky road draws about 1.2M triangles in 250 calls (was about 200k): fine on a desktop GPU at 60 fps; needs a look on the iPad."
+                  ]
+                }
               ]
             }
           ]
