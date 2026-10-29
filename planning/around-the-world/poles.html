@@ -17,11 +17,11 @@
   "kind": "New place (3D + 2D)",
   "updated": "2026-10-28",
   "status": {
-    "label": "Step 9: the full loop",
-    "tone": "pink"
+    "label": "Built: all five activities and the finale are in the game",
+    "tone": "mint"
   },
   "pitch": "Sparkle's balloon flies to the top of the world and the bottom. Up north, **Pola the polar bear cub** lives on ice floating on the sea; down south, **Pebble the penguin chick** lives on a giant land made of ice. They are pen pals who can never meet, because polar bears only live in the north and penguins only live in the south. Kaylee hops floes, belly-slides, huddles in a blizzard and cracks icebergs off a glacier, and learns the difference by playing in both. At the very end, Sparkle's **Polar Quiz** checks what she learned, and she answers by doing: dragging Pola to his pole, spinning the globe to the bottom.",
-  "next": "Nothing new to play in this step on its own: the next PRs, stacked on it, put each activity into the game with its story and voices (Ice Floe Hop, Penguin Slide, Iceberg Maker, Snow Coats and Emperor Huddle with their painted 2D scenes), then the globe's and the finale's voices and the stickers. Still open: the friends' names, one map pin or two, Santa or not.",
+  "next": "Dad plays the whole Poles on the iPad: [the globe](#/world/poles), spin to a pole and tap a picture; then listen to the friends' voices (Pola, Mama Bear, Pebble, Papa, Terry) and say what to change. Handy links: [Ice Floe Hop](#/world/poles/floe/story), [Penguin Slide](#/world/poles/slide/story), [Iceberg Maker](#/world/poles/iceberg/pick), [Snow Coats](#/world/poles/coats/fox), [Emperor Huddle](#/world/poles/huddle/small), [the finale](#/world/poles/party/fly?stamps=all). Still open: the friends' names (recorded as Pola, Pebble and Terry, so a new name means re-recording), one map pin or two, Santa or not, an Inuktitut hello.",
   "facts": [
     {
       "icon": "🧭",
@@ -1466,16 +1466,16 @@
             {
               "n": "8b",
               "title": "Art: the friends into each activity",
-              "status": "doing",
+              "status": "done",
               "date": "2026-10-28",
-              "md": "One activity per PR: the 3D friends replace the greybox shapes (Ice Floe Hop, Penguin Slide, Iceberg Maker), the 2D puppets go into Snow Coats and the huddle, with painted 2D scenes for those two, then the stickers. **Ice Floe Hop done** (the 3D Pola and Mama Bear; Iceberg Maker's Pola came along, PR #257). **Penguin Slide done** (the 3D Papa and Pebble; the colony's emperors and Iceberg Maker's emperors came along). Next: the 2D puppets into the huddle and Snow Coats."
+              "md": "One activity per PR: the 3D friends replace the greybox shapes (Ice Floe Hop PR #257, Penguin Slide PR #258, Iceberg Maker came along), the Adélies on the rig, the 2D puppets and painted scenes for Snow Coats and the huddle, and the stickers (2026-10-28)."
             },
             {
               "n": 9,
               "title": "Full loop: story, voices, facts",
-              "status": "doing",
+              "status": "done",
               "date": "2026-10-28",
-              "md": "One PR each, stacked: **the way in** first (stamps, the spots on the globe, Sparkle's corner, the friends' voices), then each activity's story, voices and hints, and it goes into the game."
+              "md": "One PR each, stacked (2026-10-28): **the way in** (stamps, the spots on the globe, Sparkle's corner, the friends' voices), then Ice Floe Hop, Iceberg Maker, Penguin Slide, the globe and the finale, Snow Coats and Emperor Huddle, each with its story, voices and hints, into the game."
             },
             {
               "n": 10,
@@ -1894,6 +1894,49 @@
               "items": [
                 "`art/source/world/poles/sticker-*.png` and `friend-pola.png` (Codex) → `assets/*.webp`; `art.ts` points `stickers` and `friend` at them. qa-art: the cream fur and highlights are marked fine.",
                 "**Known small things:** the Adélie sticker has no white eye ring, and the chick's face isn't heart-shaped."
+              ]
+            },
+            {
+              "title": "Steps 8b + 9: Snow Coats' art, and it goes into the game",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "The animals in Snow Coats are puppets now and the tundra is painted. Her finger still rubs their summer coats white, and they look at her finger, swish their tails, blink, giggle and hop. Sparkle says one short line as each part starts, helps when she's stuck, and tells a fact the first time she pokes an animal. When every coat is brown again in the summer: the stamp and the fox sticker.",
+              "items": [
+                "**The animals** (`activities/coats/animals.ts`): the fox, hare, ptarmigan and lemming in a brown summer coat with a lighter belly and darker markings, all still rubbable, with the head and tail on their own pivots. On top whatever the season: big eyes with highlights (they blink and follow her finger), the nose, a mouth that opens to giggle, blush and pink inner ears, the hare's black ear tips, the ptarmigan's red comb and beak. The polar bear (Mama Bear's look) and the snowy owl use the same puppet; the owl shakes its head and looks round.",
+                "`SnowCoats.tsx`: `AnimalEl` draws each pivot as silhouette, fluff, summer coat, the masked white coat, then the details. `poseRig` moves the head (toward her finger, lagging a hop, a nod on landing), the tail (a spring: it swishes, flies up in a hop, streams back in a run), the blinks and the mouth. While she rubs one it holds nearly still. Each animal has its own squeak.",
+                "**The painted tundra** (`art.coats`, six Codex backdrops `bg-coats-sky-*` and `bg-coats-ground-*`): late summer for the fox, winter for hide and seek, summer for the melt. The winter hills fade in as the snow settles and out as she melts it; the painted snow ground still rubs on and off through the same mask.",
+                "**Sparkle** (`kit/Guide`): one line as each part starts (it plays while she can already rub: no talk before the first touch), a hint after 8 s, the bear coming, an animal running off, the dusk. Facts the first time she pokes the fox, hare, ptarmigan, lemming, the bear or the ground (Arctic land animals), and camouflage when the bear first finds nobody. `L.coats`: 18 lines, all Sparkle.",
+                "The summer all brown: the fanfare, “Brown coats for the summer!”, then `onDone` 4.5 s later. `info.ts`: `READY = true`. `qa.mjs`: the pacing run opens `/coats/fox`.",
+                "**Changed from the plan:** no StoryBeat (one opening line while she rubs). The animals are puppets inside the scene's own SVG, not lab puppets in `#/world/puppets`, so their coats stay rubbable. The bear has no voice: he huffs and sniffs.",
+                "**Known small things:** no reindeer, musk ox or popping lemming to poke yet. On iPhone landscape the far hills stretch about 2× sideways. Paint on a swishing tail can slide a little inside the tail. Two lines say the polar bear stays white (the owl line and the bear fact)."
+              ]
+            },
+            {
+              "title": "Steps 8b + 9: Emperor Huddle, the art, and it goes into the game",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "The huddle's grey ovals are live penguins now: emperor dads that shiver, go blue, get snowy and get pink cheeks when warm, each with an egg on his feet, and Pebble as the 2D chick. They stand on a painted Antarctic night under the moon and the southern lights. Papa and Pebble talk in their own voices, Sparkle says what to do from her corner, and the first sunrise earns the stamp.",
+              "items": [
+                "`puppets/Emperor.tsx`: the emperor dad, side view facing right, matched to the 3D `papa` look (black back and head, white tummy with a gold blush, gold patches, a slim beak with a peach stripe, shiny eyes). He breathes, blinks, watches her finger and opens his beak with Papa's voice; hop, sing, flap, waddle, shake. `cold` (bluer, droopy eyes), `snow` (lumps on his head and back), `egg` (cream, or Pebble's pink one that wobbles and cracks). In the puppet lab as `papa` and `papa-cold` ([#/world/puppets](#/world/puppets)).",
+                "`embed` mode on `Emperor` and `Pebble`: drawn inside the huddle's own SVG. The huddle still moves them (position, squash, hop, lift, backs to the wind) and writes cold, snow, lift, flipper, beak and egg into each one every frame. The dad whose beak moves is the one talking.",
+                "**The painted night** (`assets/bg-huddle-night.webp`, Codex), pinned to the stage's horizon and scaled to cover any screen. The moon, the southern lights, the stars, the blowing snow and the sun stay code-drawn on top; the dawn is a tint.",
+                "**The full loop:** `kit/Guide` replaces the text pill. The cold dad says “Brrr! So cold!” first (about 5.5 s of talk before her hands are needed; she can grab a penguin from the first frame). Thank-yous in turn; the wind-turned line only the first two times (then the whoosh says it). Papa and Pebble talk at the egg, the hatch, each gust and tuck, and the sunrise; Sparkle: “You kept them all warm, Kaylee!”, then `onDone` 5 s after the sunrise cheer. Facts once each: the egg on the feet, coldest and windiest, no sun for months.",
+                "`L.huddle`: 23 lines (13 Sparkle, 9 Papa, 4 Pebble). `huddle.ts` keeps only the stages, the starting huddles and the hit areas; the knobs and the packing didn't change. `info.ts`: `READY = true`.",
+                "**Known small things:** in portrait the huddle and Pebble are small on the tall stage (the greybox's scale). The dawn tint washes the far ridges pale. The egg fact can play while she's dragging. Pebble's “Whoa! Papa, help!” transcribes as “wow”: listen. The puppet wasn't compared with a screenshot of the 3D Papa. Not checked on iPhone."
+              ]
+            },
+            {
+              "title": "QA: the whole Poles, and the fixes",
+              "date": "2026-10-28",
+              "status": "done",
+              "summary": "The first full QA of the Poles at all seven screen sizes, then the playtest. No blockers, no console errors, and no stamp waits on winning. The globe, Snow Coats, Penguin Slide and the huddle came out fun; Ice Floe Hop, Iceberg Maker and the finale OK. Fixed here: Sparkle nagging while a finger is playing, cheers cut off by the stamp, an early instruction in the huddle, and the finale's top row on iPhone.",
+              "items": [
+                "`kit/Guide`: a held, moving finger counts as playing and a friend talking counts as talk, so the stuck hint never repeats while she steers and never cuts a friend off. `afterTalk()` waits for the talking to stop: Ice Floe Hop's and the huddle's stamps wait for the cheers.",
+                "The huddle's hatch no longer says “tuck Pebble back” before the gust. Penguin Slide says the instruction before the fact. The badge line drops her name (the trophy's line says it right after).",
+                "The finale: the stars and the 🔊 sit below the top bar on iPhone landscape; the 🏆 button sits under the badge, clear of Sparkle's line.",
+                "`scripts/qa-lib.mjs`: a leftover preview server from another checkout held the QA port, so the first sweep screenshotted another build. `serve()` now checks the page is our own build and moves to a free port.",
+                "**Next from the playtest:** Ice Floe Hop and Iceberg Maker still have the greybox look (the floes, and a cliff that reads as a building): their look comes next, one PR each.",
+                "**Known small things (from the playtest):** many clips run over 3 s; the hub's welcome bubble covers Pebble at the bottom of the globe; the finale flight shows Terry and the fish small; the huddle can leave her waiting a few seconds for the next cold dad; Mama Bear looks like a big Pola; a white bar on Snow Coats' ground; the huddle's dots are tiny; two quiz questions test facts she only heard."
               ]
             }
           ]
