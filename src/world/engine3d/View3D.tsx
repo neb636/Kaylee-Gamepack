@@ -355,7 +355,6 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
       window.removeEventListener('blur', onBlur)
-      pad.current?.show(null)
       canvas.removeEventListener('webglcontextlost', onLost)
       el.removeEventListener('gesturestart', stopGesture)
       el.removeEventListener('gesturechange', stopGesture)

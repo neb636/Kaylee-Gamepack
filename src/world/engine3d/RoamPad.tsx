@@ -2,7 +2,7 @@
 // mounts it hidden and shows each half when the world says so (style writes from the frame loop, no re-renders).
 // While it shows, it sets --roam-left and --roam-right on the page so the corner guide (Sparkle) and corner buttons
 // move out of its way.
-import { forwardRef, useImperativeHandle, useRef, type PointerEvent as ReactPointerEvent } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, type PointerEvent as ReactPointerEvent } from 'react'
 import { ROAM, type RoamState } from './roam'
 
 export interface RoamPadHandle {
@@ -18,6 +18,14 @@ interface Props {
 const STICK = 'clamp(112px, 22vmin, 184px)'
 const JUMP = 'clamp(88px, 15vmin, 128px)'
 const EDGE = 20
+/** Above every tap target in the world (the house and the trip legs give them depth z-indexes up to ~30000), so a
+ *  thing behind a corner never takes her stick or jump. */
+const PAD_Z = 50000
+/** Clears the corner offsets (on unmount too: React has dropped the ref by the time View3D's cleanup runs). */
+const clearOffsets = () => {
+  document.documentElement.style.removeProperty('--roam-left')
+  document.documentElement.style.removeProperty('--roam-right')
+}
 
 export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onStick, onJump }, ref) {
   const stickEl = useRef<HTMLDivElement>(null)
@@ -25,6 +33,7 @@ export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onSti
   const jumpEl = useRef<HTMLButtonElement>(null)
   const held = useRef<{ pointer: number; cx: number; cy: number; r: number } | null>(null)
   const shown = useRef({ walk: false, jump: false })
+  useEffect(() => clearOffsets, [])
 
   const release = () => {
     held.current = null
@@ -95,7 +104,7 @@ export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onSti
           background: 'radial-gradient(circle, rgba(255,255,255,.55) 0 30%, rgba(255,182,214,.5) 31% 100%)',
           border: '5px solid rgba(255,255,255,.9)',
           boxShadow: '0 4px 14px rgba(43,35,48,.22), inset 0 0 0 calc(var(--lit, 0) * 6px) rgba(255,79,154,.45)',
-          zIndex: 30,
+          zIndex: PAD_Z,
           touchAction: 'none',
         }}
       >
@@ -154,7 +163,7 @@ export const RoamPad = forwardRef<RoamPadHandle, Props>(function RoamPad({ onSti
           border: '5px solid #fff',
           background: 'radial-gradient(circle at 38% 32%, #fff3b8, var(--butter, #ffe27a) 70%)',
           boxShadow: '0 5px 14px rgba(43,35,48,.28)',
-          zIndex: 30,
+          zIndex: PAD_Z,
           touchAction: 'none',
           transition: 'scale .12s',
         }}
