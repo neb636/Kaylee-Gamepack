@@ -10,19 +10,18 @@
 </head>
 <body>
 <div id="app"><noscript>This plan is drawn by planning/viewer/plan.js. Read it as Markdown with: node scripts/plan.mjs md &lt;this file&gt;</noscript></div>
-<script type="application/json" id="plan">
-{
+<script type="application/json" id="plan">{
   "schema": 1,
   "title": "The Thailand map: tap a pin",
   "icon": "🗺️",
   "kind": "Country hub (2D)",
-  "updated": "2026-10-28",
+  "updated": "2026-10-29",
   "status": {
-    "label": "Built: a tap map, like Australia’s",
+    "label": "Built: a 3D clay map to tap",
     "tone": "pink"
   },
   "pitch": "Thailand has grown past one house. Now when Sparkle's balloon lands in Thailand, Kaylee sees a big **map of Thailand** with a pin for each place, like Australia's map. She taps **Bangkok** (Agong's house), **Krabi** (the boat and the elephants) or **Nan** (the mountains) and that place opens; the animals and boats on the map hop when she taps them. Trips end back on the map, where their stamp lands on the pin. The mall day still starts at the house: Mommy or Daddy asks if she wants to go to the mall.",
-  "next": "Dad taps around [the map](#/world/thailand) on the iPad, opens Krabi and Nan, and plays a trip to its end. The **[open questions](#questions)** went with my picks for now (they're easy to change). Next: **the look**, the painted map in layers with the pokes as sprites.",
+  "next": "Dad taps around [the new 3D map](#/world/thailand) on the iPad (portrait and landscape): the pins, the pokes, a trip back home ([the stamp lands](#/world/thailand/hub/map?stamp=boat-trip)). If the framing's off, send a camera-lab note (`?cam=1`). Next: new Sparkle lines for the balloons, and QA.",
   "facts": [
     {
       "icon": "📍",
@@ -46,8 +45,8 @@
     },
     {
       "icon": "🛠️",
-      "value": "3 of 5",
-      "label": "plan, greyboxes built; the look, voices + QA next"
+      "value": "4 of 5",
+      "label": "plan, greyboxes, the 3D look built; voices + QA next"
     }
   ],
   "related": [
@@ -185,6 +184,10 @@
             {
               "q": "The toy plane? (2026-10-28)",
               "a": "**Too confusing. Make it a normal map to tap, like Australia's.** The plane, its flights and its feel knobs are gone: tap a pin and that place opens."
+            },
+            {
+              "q": "The look? (2026-10-29)",
+              "a": "**A 3D clay diorama**, like Dad's two pictures (a clay-toy map, and a 3D Thailand on parchment), replacing the flat map. Built in three.js like the house: no image generation in that session, so a real 3D board instead of a painted picture. The temples, the golden chedi and the Buddhas in the pictures are left out (AGENTS.md rule 7)."
             }
           ]
         }
@@ -564,15 +567,16 @@
             },
             {
               "n": 5,
-              "title": "The look",
-              "status": "next",
-              "md": "The painted map in layers (sea, land, landmarks, clouds above), the pokeables as sprites in the same camera, their reactions."
+              "title": "The look: a 3D clay map",
+              "status": "done",
+              "md": "Thailand as a slab of green clay on a paper map on a wooden table (three.js, `board.ts` and `world.ts`): misty mountains and peaks in the north, rice-field patchwork on Isan and the central plain, the Chao Phraya and the Mekong, trees, Phuket and Samui, rock towers off Krabi, a compass rose. Bangkok (shophouses and ICONSIAM's towers), Nan (rice terraces, a hut, a pink mushroom) and Krabi stand like toys under the pins' poles. The pokes are 3D toys that act it out, plus three hot-air balloons.",
+              "date": "2026-10-29"
             },
             {
               "n": 6,
               "title": "Voices, hints, QA",
               "status": "todo",
-              "md": "Sparkle's welcome and the first-time facts (lines.ts), the hint after ~8 s (a fresh “tap a pin” line), the map in `qa-screens`, a `qa-motion` scenario for a tap, `qa-pacing`, full QA."
+              "md": "Sparkle's welcome and the first-time facts (lines.ts), the hint after ~8 s (a fresh “tap a pin” line), the map in `qa-screens`, a `qa-motion` scenario for a tap, `qa-pacing`, full QA. Sparkle lines for the balloons (they only whoosh for now)."
             }
           ]
         }
@@ -614,6 +618,20 @@
         {
           "type": "log",
           "items": [
+            {
+              "title": "The look: a 3D clay map",
+              "date": "2026-10-29",
+              "status": "done",
+              "summary": "Dad: “replace the flat Thailand map with something like this. 3d generated” (a clay-toy diorama map, and a 3D Thailand on parchment). The session couldn't generate pictures, so Dad picked a real 3D clay diorama in three.js.",
+              "items": [
+                "**The board** (`hub/map/board.ts`): the 2D map's data (`geo.ts`) at 4 mm a stage unit. The paper is the neighbours, cream with an inked double border and a compass rose; the Andaman and the Gulf are painted on it with shallow water along Thailand's coasts. Thailand is one extruded, beveled slab (10 cm) with a darker green side. On it: the Chao Phraya, rice-field patches (Isan, the central plain), round hills with pointed peaks and mist in the north, ~150 trees. Phuket and Samui are little slabs. Phang Nga's rock towers stand just off the coast (the simple coast swallows the bay).",
+                "**The places** stand under 60 cm pin poles, 1.7× the map's scale: Bangkok's shophouses and ICONSIAM's two towers, Nan's terraces with the hut and a pink mushroom, Krabi's rock towers, a beach and a parked longtail. Tapping a place's toy opens it, like its pin.",
+                "**The pokes** (1.8×) act it out in `world.ts`: the elephant lifts its trunk and sprays, the cloud rains, the gibbon swings, the buffalo tosses its head, the hornbill flaps, the tuk-tuk zips round, the dolphins leap (and peek up now and then), the longtail zooms round leaving foam, the palm drops a coconut. Same sounds and Sparkle facts as before. New: three hot-air balloons bob over the north and rise when poked (a whoosh, no words yet).",
+                "**The pins** are the same React buttons (stamps, bob, glow, the landing stamp), now moved every frame to sit on their poles. Camera: north up; tall screens from 60°, wide from 42°; a very wide, short screen (an iPhone on its side) from the west side, the country across the screen with north on the left, so its pins and pokes don't sit on each other. `window.__thaiMapQA()` gives the pins' screen points.",
+                "**Moved:** the rain cloud to 101.75°E 19.35°N (it sat behind Nan's pin), the longtail to 97.25°E 9.3°N (it ran into the rock towers).",
+                "**No temples or Buddhas**: the golden chedi, Wat Arun and the Buddha statues in Dad's pictures are left out."
+              ]
+            },
             {
               "title": "Greybox 3: a normal tap map",
               "date": "2026-10-28",
@@ -668,7 +686,7 @@
           "tone": "warn",
           "icon": "📷",
           "title": "One camera",
-          "md": "A storybook map seen from a **high bird's-eye view, about 60°**, so the landmarks stand up a little like toys. Every sprite on it (the elephants, the boats, the towers) uses the same view. Write it into every prompt (`art/STYLE.md`): “high bird's-eye view at about 60 degrees, no side view, no flat top-down”."
+          "md": "**A 3D clay diorama** (since 2026-10-29) on a paper map on a table, seen from above at a slant, north up: 60° on a tall screen, 42° on a wide one. Everything is built in code in the house's toon look (flat bands, ink outlines)."
         },
         {
           "type": "list",
@@ -692,7 +710,7 @@
         {
           "type": "list",
           "items": [
-            "**Where:** `src/world/places/thailand/activities/hub/map/` (2D, React + SVG + `motion`, no three.js; the hub stays one activity, `HUB`). `Place.tsx`'s default is the map, not the house; the house opens from the `arrive`/`street`/`downstairs`/`upstairs` sections as now.",
+            "**Where:** `src/world/places/thailand/activities/hub/map/`: `geo.ts` (where things are, stage units), `board.ts` (the 3D shapes), `world.ts` (the 3D world on the trip legs' `Stage`: camera, poke reactions, pin anchors), `ThaiMap.tsx` (pins, stamps, Sparkle, sounds, where a pin goes). The hub stays one activity, `HUB`. `Place.tsx`'s default is the map, not the house.",
             "**Sections:** `map` first in `activities/hub/sections.ts`, with `stamp` (see Section links). The README's Thailand directory is generated from it.",
             "**Pins** read `meta.activities[].pos`: today boat 50,70 / mall 50,40 / nan 50,22 are placeholders; set them to the map's Krabi, Bangkok and Nan. The mall pins to Bangkok, so the Bangkok pin shows the mall's stamp and opens the house.",
             "**The session flag:** a module-level `tripKitDone` (like Australia's `introSeen`), set when a trip's packing starts. `first=1` forces it.",
@@ -706,8 +724,7 @@
       ]
     }
   ]
-}
-</script>
+}</script>
 <script src="../../viewer/plan.js"></script>
 </body>
 </html>
