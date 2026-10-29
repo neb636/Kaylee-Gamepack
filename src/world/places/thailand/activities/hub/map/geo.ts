@@ -6,7 +6,7 @@
 // land (the neighbours: Myanmar, Laos, Cambodia, Malaysia).
 
 export type XY = [number, number]
-type LonLat = [number, number]
+export type LonLat = [number, number]
 
 const LON0 = 96
 const LAT1 = 21
@@ -21,13 +21,13 @@ const NORTH_EAST: LonLat[] = [
   [105.4, 15.8], [105.6, 15.1], [105.2, 14.35], [104.4, 14.35], [103.6, 14.4], [102.9, 14.2], [102.4, 13.6], [102.6, 12.6],
   [102.85, 12.0],
 ]
-const GULF_COAST: LonLat[] = [
+export const GULF_COAST: LonLat[] = [
   [102.9, 11.7], [102.4, 12.3], [101.8, 12.65], [101.0, 12.65], [100.9, 13.3], [100.6, 13.5], [100.0, 13.4], [99.95, 12.8],
   [99.6, 11.8], [99.2, 10.9], [99.2, 10.3], [99.3, 9.4], [99.8, 9.3], [100.3, 8.4], [100.4, 7.3], [100.6, 7.1], [101.0, 6.85],
   [101.5, 6.9], [102.1, 6.2],
 ]
 const MALAYSIA: LonLat[] = [[101.8, 5.8], [101.1, 6.25], [100.8, 6.45], [100.2, 6.6]]
-const ANDAMAN_COAST: LonLat[] = [
+export const ANDAMAN_COAST: LonLat[] = [
   [100.1, 6.45], [99.7, 6.9], [99.4, 7.5], [99.0, 7.9], [98.6, 8.1], [98.3, 8.2], [98.25, 8.9], [98.35, 9.6], [98.6, 10.0],
 ]
 const MYANMAR: LonLat[] = [
@@ -88,12 +88,12 @@ export const PINS: Pin[] = [
 export type PokeId = 'elephant' | 'clouds' | 'boat' | 'dolphins' | 'gibbon' | 'hornbill' | 'buffalo' | 'tuktuk' | 'palm'
 export const POKES: { id: PokeId; at: XY; label: string }[] = [
   { id: 'elephant', at: proj([99.1, 17.6]), label: 'The elephant' },
-  { id: 'clouds', at: proj([101.3, 19.9]), label: 'The rain cloud' },
+  { id: 'clouds', at: proj([101.75, 19.35]), label: 'The rain cloud' },
   { id: 'gibbon', at: proj([98.95, 15.2]), label: 'The gibbon' },
   { id: 'buffalo', at: proj([103.0, 16.0]), label: 'The water buffalo' },
   { id: 'hornbill', at: proj([102.6, 13.4]), label: 'The hornbill' },
   { id: 'tuktuk', at: proj([101.9, 14.9]), label: 'The tuk-tuk' },
   { id: 'dolphins', at: proj([101.2, 10.3]), label: 'The dolphins' },
-  { id: 'boat', at: proj([97.4, 7.4]), label: 'The longtail boat' },
+  { id: 'boat', at: proj([97.25, 9.3]), label: 'The longtail boat' },
   { id: 'palm', at: proj([99.3, 11.4]), label: 'The coconut palm' },
 ]
