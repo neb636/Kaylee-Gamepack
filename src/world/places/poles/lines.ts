@@ -109,7 +109,34 @@ export const L = {
   },
 
   // ---- Snow Coats (activities/coats/) ----
-  coats: {},
+  // Sparkle says what to do as each part starts (and again when nothing's been touched for a while); the facts come the
+  // first time she pokes an animal (Guide.once), never as required listening.
+  coats: {
+    fox: { start: 'Brr, winter is coming! Rub snow on the fox.', hint: 'Rub the fox with your finger.' },
+    hide: {
+      start: 'Now rub them all white, so they can hide!',
+      hint: 'Rub snow on the brown ones.',
+      bear: 'Shh! Here comes the polar bear.',
+      ran: 'He saw some brown! Make it white.',
+      gone: "He can't find anyone! White hides in the snow.",
+      dusk: 'Tap the sun to bring the summer.',
+    },
+    summer: {
+      start: 'Summer is here! Rub the snow away.',
+      hint: 'Rub them brown again.',
+      owl: 'Snowy owls and polar bears stay white all year!',
+      end: 'Brown coats for the summer!',
+    },
+    facts: {
+      fox: 'Arctic foxes turn white in winter and brown in summer.',
+      hare: 'Arctic hares have black tips on their ears.',
+      ptarmigan: 'This bird is a ptarmigan. Even its feet go white!',
+      lemming: 'Lemmings live in tunnels under the snow.',
+      bear: 'Polar bears are white all year.',
+      camo: "White fur hides in white snow. That's camouflage!",
+      land: 'Lots of animals live on the land around the frozen sea.',
+    },
+  },
 
   // ---- Penguin Slide (activities/slide/) ----
   slide: {
@@ -145,7 +172,39 @@ export const L = {
   },
 
   // ---- Emperor Huddle (activities/huddle/) ----
-  huddle: {},
+  // Sparkle says what to do (and a fact the first time something comes up); the dads speak in Papa's voice (the one
+  // whose beak moves is the one talking), Pebble in Pebble's. Finite: one line per moment, a few thank-yous in turn.
+  huddle: {
+    small: 'Carry the cold penguin into the middle!',
+    more: 'More penguin dads are coming!',
+    blizzard: 'A blizzard! Keep the cold ones moving in.',
+    turned: 'The wind turned around!',
+    hatch: "Keep Pebble's papa warm in the middle.",
+    hatched: 'Tuck Pebble back under Papa!',
+    blown: 'Whoosh! Carry Pebble back to Papa.',
+    sunrise: 'Look! The sun is coming back!',
+    done: 'You kept them all warm, Kaylee!',
+    facts: {
+      egg: 'Emperor dads keep the egg warm on their feet!',
+      coldest: 'Antarctica is the coldest, windiest place on Earth.',
+      night: 'In winter here, the sun stays away for months!',
+    },
+    papa: {
+      cold: papa('Brrr! So cold!'),
+      thanks: [papa('Ahh, much better!'), papa('Thank you! So cozy.'), papa('Warm at last!')],
+      egg: papa('My egg is getting cold!'),
+      hatched: papa('Hello, little Pebble!'),
+      blown: papa('Oh no! Pebble!'),
+      tucked: papa('There you are, Pebble!'),
+      sunrise: papa('Look, Pebble. The sun!'),
+    },
+    pebble: {
+      hi: pebble('Hi, Papa! Peep peep!'),
+      blown: pebble('Whoa! Papa, help!'),
+      tucked: pebble('So cozy!'),
+      sunrise: pebble('Ooh, so pretty!'),
+    },
+  },
 
   // ---- Iceberg Maker (activities/iceberg/) ----
   iceberg: {
@@ -239,6 +298,7 @@ export const L = {
     },
     glow: 'Look for the sparkle!',
     right: ['Yes!', "That's right!", 'You got it!', 'Super!'],
-    badge: `Wow, ${NAME}, you know your poles!`,
+    // No name here: the trophy's line says it right after.
+    badge: 'Wow, you know your poles!',
   },
 }

@@ -1,4 +1,4 @@
-// Snow Coats (greybox 5, plan: planning/around-the-world/poles.html): Arctic animals change coats with the seasons.
+// Snow Coats (plan: planning/around-the-world/poles.html): Arctic animals change coats with the seasons.
 // One verb, rub with her finger, that gets richer three times:
 //   fox    one Arctic fox, brown in late summer. Snow starts to fall; where her finger goes the coat turns white (and
 //          fluffier at the edges). The ground slowly goes white by itself, and she can rub snow onto it too.
@@ -8,21 +8,29 @@
 //          dusk falls: only their eyes and noses blink.
 //   summer now her finger is sunshine: the snow melts off the ground in streaks, flowers pop up, coats turn brown. The
 //          snowy owl stays white all year (rub it and it shakes its head).
-// Each coat is a flat placeholder shape (animals.ts) drawn brown, with its white coat on top masked by her strokes
-// (perfect-freehand outlines, in the animal's own units so the paint moves with it). A grid of cells under each coat
-// says how white it is; past "finishes itself at" the rest puffs on by itself. The brush and the coats are knobs
-// (?feel=1). 2D only: SVG written to every frame, no three.js. No voices yet (the full-loop gate): a short line at the
-// bottom says what's on screen, for Dad.
+// Each animal is a flat puppet (animals.ts) in its summer coat, with its white coat on top masked by her strokes
+// (perfect-freehand outlines, in the animal's own units so the paint moves with it). Its head and tail turn on their
+// own pivots, it breathes, blinks, watches her finger, giggles and hops. A grid of cells under each coat says how white
+// it is; past "finishes itself at" the rest puffs on by itself. The tundra is painted (art.coats): the far hills and the
+// ground of each season, the winter ones fading in as the snow settles and out as it melts. Sparkle (kit/Guide) says
+// one short line as each part starts, a hint when nothing's been touched for a while, and a fact the first time she
+// pokes an animal. The summer all brown: the stamp. The brush and the coats are knobs (?feel=1). 2D only: SVG written
+// to every frame, no three.js.
 import { getStroke } from 'perfect-freehand'
-import { AnimatePresence, motion } from 'motion/react'
+import { motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, burst, sounds, useElementSize } from '../../../../../sdk'
+import { BigButton, burst, sounds, useAlive, useElementSize, type Line } from '../../../../../sdk'
+import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
-import { BEAR_HEAD, COAT_IDS, coatGrid, inShape, SHAPES, TALL, WIDE, type CoatGrid, type CoatId, type Face, type Part, type Shape, type StageDef } from './animals'
-import COATS_SECTIONS, { type CoatsSection } from './sections'
+import { art } from '../../art'
+import { L } from '../../lines'
 import type { ActivityProps } from '../../Place'
+import { COAT_IDS, coatGrid, DARK, GROUPS, inShape, SHAPES, TALL, VOICE, WIDE, type CoatGrid, type CoatId, type Detail, type Group, type Part, type Shape, type StageDef } from './animals'
+import COATS_SECTIONS, { type CoatsSection } from './sections'
+
+type Geo = { e: [number, number, number, number, number?] } | { p: number[] }
 
 const FILE = 'src/world/places/poles/activities/coats/SnowCoats.tsx'
 /** Her finger's brush (live in the feel lab: ?feel=1). Sizes are stage units: the wide stage is 1600 x 1000, the tall
@@ -50,18 +58,12 @@ const PALE = [0xd4, 0xdd, 0xec]
 const SNOW = '#F7FAFE'
 const GROUND_CELL = 40
 
-const SAY: Record<CoatsSection, string> = {
-  fox: '❄️ Snow! Rub the fox white',
-  hide: '❄️ Rub them white so they can hide',
-  summer: '☀️ Rub the summer back!',
-}
+/** What Sparkle says as each part starts, and again when nothing's been touched for a while. */
+const START: Record<CoatsSection, Line> = { fox: L.coats.fox.start, hide: L.coats.hide.start, summer: L.coats.summer.start }
+const HINT: Record<CoatsSection, Line> = { fox: L.coats.fox.hint, hide: L.coats.hide.hint, summer: L.coats.summer.hint }
 type Phase = 'play' | 'bear' | 'dusk' | 'end'
-const PHASE_SAY: Partial<Record<Phase, string>> = {
-  bear: '🐻‍❄️ Shh! The polar bear is looking…',
-  dusk: '✨ He can’t find them! Can you? Look for the eyes',
-  end: '🌼 Summer! Brown coats again',
-}
-const OWL_NOTE = '🦉 Snowy owls and polar bears stay white all year!'
+/** After the summer's fanfare: the stamp. */
+const DONE_AFTER_S = 4.5
 
 type Mode = 'snow' | 'sun'
 const ease = (p: number) => (p < 0 ? 0 : p > 1 ? 1 : p * p * (3 - 2 * p))
@@ -79,9 +81,9 @@ function outline(points: number[][], size: number, last: boolean): string {
   return d + ' Z'
 }
 
-// ---------------------------------------------------------------- drawing the placeholder shapes
+// ---------------------------------------------------------------- drawing the animals
 
-const partEl = (pt: Part, key: number, props: Record<string, unknown>) =>
+const partEl = (pt: Geo, key: number, props: Record<string, unknown>) =>
   'e' in pt ? (
     <ellipse key={key} cx={pt.e[0]} cy={pt.e[1]} rx={pt.e[2]} ry={pt.e[3]} transform={pt.e[4] ? `rotate(${pt.e[4]} ${pt.e[0]} ${pt.e[1]})` : undefined} {...props} />
   ) : (
@@ -89,28 +91,111 @@ const partEl = (pt: Part, key: number, props: Record<string, unknown>) =>
   )
 
 /** The 5-unit ink outline: every part filled and stroked in ink, under the fills (so no lines inside the shape). */
-const Silhouette = ({ parts, s }: { parts: Part[]; s: number }) => <g style={{ fill: 'var(--ci)', stroke: 'var(--ci)' }}>{parts.map((pt, i) => partEl(pt, i, { strokeWidth: 10 / s }))}</g>
-const Fill = ({ parts, color }: { parts: Part[]; color: string }) => <g fill={color}>{parts.map((pt, i) => partEl(pt, i, {}))}</g>
+const Silhouette = ({ parts, s }: { parts: Geo[]; s: number }) => <g style={{ fill: 'var(--ci)', stroke: 'var(--ci)' }}>{parts.map((pt, i) => partEl(pt, i, { strokeWidth: 10 / s }))}</g>
+const Fill = ({ parts, color }: { parts: Geo[]; color: string }) => <g fill={color}>{parts.map((pt, i) => partEl(pt, i, {}))}</g>
+const coatColor = (sh: Shape, pt: Part) => (pt.c === 'l' ? sh.light : pt.c === 'd' ? sh.dark : sh.brown)
+const inGroup = (g: Group) => (x: { g?: Group }) => (x.g ?? 'body') === g
 
-function FaceEls({ face, k }: { face: Face; k: string }) {
-  return (
-    <g>
-      {face.beak && <polygon points={face.beak.join(' ')} fill="#3A2F45" stroke="#3A2F45" strokeWidth={3} strokeLinejoin="round" />}
-      {face.eyes.map(([x, y, r], i) => (
-        <g key={i}>
-          <ellipse data-k={`${k}-eye`} cx={x} cy={y} rx={r} ry={r} fill="#2B2236" />
-          <circle cx={x + r * 0.35} cy={y - r * 0.35} r={r * 0.35} fill="#fff" />
+/** What sits on top of the coat whatever the season: eyes (they blink and look at her finger), nose, mouth, blush. */
+function DetailEl({ d, k }: { d: Detail; k: string }) {
+  switch (d.k) {
+    case 'eye':
+      return (
+        <g data-k={`${k}-eye`} data-x={d.x} data-y={d.y} data-r={d.r}>
+          <g data-k={`${k}-pupil`}>
+            {d.iris ? (
+              <>
+                <circle cx={d.x} cy={d.y} r={d.r} fill={d.iris} stroke={DARK} strokeWidth={3} />
+                <circle cx={d.x} cy={d.y} r={d.r * 0.6} fill={DARK} />
+              </>
+            ) : (
+              <ellipse cx={d.x} cy={d.y} rx={d.r} ry={d.r * 1.15} fill={DARK} />
+            )}
+            <circle cx={d.x - d.r * 0.3} cy={d.y - d.r * 0.38} r={d.r * 0.36} fill="#fff" />
+            <circle cx={d.x + d.r * 0.32} cy={d.y + d.r * 0.3} r={d.r * 0.15} fill="#fff" />
+          </g>
         </g>
-      ))}
-      {face.nose && <ellipse cx={face.nose[0]} cy={face.nose[1]} rx={face.nose[2]} ry={face.nose[2] * 0.8} fill="#2B2236" />}
+      )
+    case 'nose':
+      return (
+        <g>
+          <ellipse cx={d.x} cy={d.y} rx={d.r} ry={d.r * 0.8} fill={d.color ?? DARK} />
+          <ellipse cx={d.x - d.r * 0.3} cy={d.y - d.r * 0.3} rx={d.r * 0.32} ry={d.r * 0.22} fill="#fff" opacity={0.7} />
+        </g>
+      )
+    case 'blush':
+      return <ellipse cx={d.x} cy={d.y} rx={d.r * 1.25} ry={d.r * 0.75} fill="#FF9DB8" opacity={0.6} />
+    case 'mouth':
+      return (
+        <g>
+          <path data-k={`${k}-smile`} d={`M${d.x - d.w} ${d.y} Q${d.x} ${d.y + d.w * 0.95} ${d.x + d.w} ${d.y}`} fill="none" stroke={DARK} strokeWidth={3.2} strokeLinecap="round" />
+          <path
+            data-k={`${k}-open`}
+            d={`M${d.x - d.w * 1.1} ${d.y - 1} Q${d.x} ${d.y - 3} ${d.x + d.w * 1.1} ${d.y - 1} C${d.x + d.w * 1.1} ${d.y + d.w * 1.3} ${d.x - d.w * 1.1} ${d.y + d.w * 1.3} ${d.x - d.w * 1.1} ${d.y - 1}Z`}
+            fill="#7A2745"
+            stroke={DARK}
+            strokeWidth={2.5}
+            strokeLinejoin="round"
+            style={{ display: 'none' }}
+          />
+        </g>
+      )
+    case 'ell':
+      return partEl({ e: d.e }, 0, { fill: d.color })
+    case 'poly':
+      return <polygon points={d.p.join(' ')} fill={d.color} stroke={d.color} strokeWidth={3} strokeLinejoin="round" />
+    case 'line':
+      return <path d={d.d} fill="none" stroke={d.color ?? 'var(--ci)'} strokeWidth={d.w ?? 4} strokeLinecap="round" strokeLinejoin="round" />
+  }
+}
+
+/** A puppet: its tail, body and head on their own pivots (back to front), each drawn as an ink silhouette, the fluff
+ *  (paintable coats only), the summer coat, the white coat under her strokes (`mid`), then the details. The bear and
+ *  the owl pass no grid and no mask: they're white all year. */
+function AnimalEl({ id, sh, grid, mid, s = 1 }: { id: string; sh: Shape; grid?: CoatGrid; mid?: string; s?: number }) {
+  return (
+    <g data-k={`${id}-body`}>
+      {GROUPS.map((g) => {
+        const parts = sh.parts.filter(inGroup(g))
+        const details = sh.details.filter(inGroup(g))
+        if (!parts.length && !details.length) return null
+        const edge = grid ? grid.edge.map((e, i) => [e, i] as const).filter(([, i]) => grid.edgeGroup[i] === g) : []
+        return (
+          <g key={g} data-k={`${id}-g-${g}`}>
+            <Silhouette parts={parts} s={s} />
+            {grid && (
+              <>
+                <g style={{ fill: 'var(--ci)' }}>
+                  {edge.map(([e, i]) => (
+                    <circle key={e} data-k={`${id}-fi`} data-i={i} cx={grid.xs[e]} cy={grid.ys[e]} r={0} />
+                  ))}
+                </g>
+                <g fill={SNOW}>
+                  {edge.map(([e, i]) => (
+                    <circle key={e} data-k={`${id}-fw`} data-i={i} cx={grid.xs[e]} cy={grid.ys[e]} r={0} />
+                  ))}
+                </g>
+              </>
+            )}
+            <g>{parts.map((pt, i) => partEl(pt, i, { fill: coatColor(sh, pt) }))}</g>
+            {mid && (
+              <g mask={`url(#${mid}-${id})`}>
+                <Fill parts={parts} color={SNOW} />
+              </g>
+            )}
+            {details.map((d, i) => (
+              <DetailEl key={i} d={d} k={id} />
+            ))}
+          </g>
+        )
+      })}
     </g>
   )
 }
 
-/** One paintable animal: ink silhouette (+ fluff), brown coat, white coat under the stroke mask, face. */
+/** One paintable animal: the mask her strokes draw into, then the puppet. */
 function CoatEl({ id, mid, base }: { id: CoatId; mid: string; base: 'white' | 'black' }) {
   const sh = SHAPES[id]
-  const g = GRIDS[id]
   const { x, y, w, h } = sh.box
   const m = 80
   return (
@@ -122,24 +207,7 @@ function CoatEl({ id, mid, base }: { id: CoatId; mid: string; base: 'white' | 'b
           <rect data-k={`${id}-finish`} x={x - m} y={y - m} width={w + 2 * m} height={h + 2 * m} fill={base === 'black' ? 'white' : 'black'} opacity={0} />
         </mask>
       </defs>
-      <g data-k={`${id}-body`}>
-        <Silhouette parts={sh.parts} s={1} />
-        <g style={{ fill: 'var(--ci)' }}>
-          {g.edge.map((e) => (
-            <circle key={e} data-k={`${id}-fi`} cx={g.xs[e]} cy={g.ys[e]} r={0} />
-          ))}
-        </g>
-        <g fill={SNOW}>
-          {g.edge.map((e) => (
-            <circle key={e} data-k={`${id}-fw`} cx={g.xs[e]} cy={g.ys[e]} r={0} />
-          ))}
-        </g>
-        <Fill parts={sh.parts} color={sh.brown} />
-        <g mask={`url(#${mid}-${id})`}>
-          <Fill parts={sh.parts} color={SNOW} />
-        </g>
-        <FaceEls face={sh.face} k={id} />
-      </g>
+      <AnimalEl id={id} sh={sh} grid={GRIDS[id]} mid={mid} />
     </g>
   )
 }
@@ -155,6 +223,55 @@ interface Seg {
 interface Anim {
   kind: 'hop' | 'giggle' | 'nope'
   t0: number
+}
+/** A puppet's moving bits, found once in the SVG: the head and tail pivots, the eyes, the mouth. */
+interface Rig {
+  head: SVGGElement | null
+  tail: SVGGElement | null
+  eyes: { el: SVGGElement; pupil: SVGGElement; x: number; y: number; r: number }[]
+  smile: SVGPathElement[]
+  open: SVGPathElement[]
+  pivots: Shape['pivots']
+  /** The tail's spring (it flops after a hop and streams back in a run). */
+  tail0: number
+  tailV: number
+  blinkAt: number
+  ph: number
+}
+function findRig(svg: SVGSVGElement, id: string, sh: Shape): Rig {
+  const q = <T extends Element>(k: string) => svg.querySelector(`[data-k="${k}"]`) as T | null
+  const eyes = [...svg.querySelectorAll<SVGGElement>(`[data-k="${id}-eye"]`)].map((el) => ({ el, pupil: el.querySelector<SVGGElement>(`[data-k="${id}-pupil"]`)!, x: +el.dataset.x!, y: +el.dataset.y!, r: +el.dataset.r! }))
+  return {
+    head: q<SVGGElement>(`${id}-g-head`),
+    tail: q<SVGGElement>(`${id}-g-tail`),
+    eyes,
+    smile: [...svg.querySelectorAll<SVGPathElement>(`[data-k="${id}-smile"]`)],
+    open: [...svg.querySelectorAll<SVGPathElement>(`[data-k="${id}-open"]`)],
+    pivots: sh.pivots,
+    tail0: 0,
+    tailV: 0,
+    blinkAt: 1 + Math.random() * 3,
+    ph: Math.random() * 6,
+  }
+}
+/** Each frame: head and tail angles (degrees), how open the eyes are (1 open, 0 shut), where the pupils look (-1..1),
+ *  and whether the mouth is open. */
+function poseRig(r: Rig, head: number, headY: number, tail: number, eyes: number, look: [number, number], open: boolean) {
+  const [hx, hy] = r.pivots.head ?? [0, 0]
+  r.head?.setAttribute('transform', `translate(0 ${headY.toFixed(1)}) rotate(${head.toFixed(2)} ${hx} ${hy})`)
+  const [tx, ty] = r.pivots.tail ?? [0, 0]
+  r.tail?.setAttribute('transform', `rotate(${tail.toFixed(2)} ${tx} ${ty})`)
+  for (const e of r.eyes) {
+    e.el.setAttribute('transform', `translate(0 ${(e.y * (1 - eyes)).toFixed(2)}) scale(1 ${Math.max(0.08, eyes).toFixed(3)})`)
+    e.pupil.setAttribute('transform', `translate(${(look[0] * e.r * 0.22).toFixed(2)} ${(look[1] * e.r * 0.2).toFixed(2)})`)
+  }
+  for (const s of r.smile) s.style.display = open ? 'none' : ''
+  for (const o of r.open) o.style.display = open ? '' : 'none'
+}
+/** Blinks: how open the eyes are now (a quick shut every few seconds, more often at dusk). */
+function blink(r: Rig, now: number, often: boolean) {
+  if (now > r.blinkAt + 0.14) r.blinkAt = now + (often ? 0.8 + Math.random() * 1.6 : 2 + Math.random() * 3.5)
+  return now > r.blinkAt && now < r.blinkAt + 0.14 ? 0.1 : 1
 }
 interface Coat {
   id: CoatId
@@ -173,9 +290,15 @@ interface Coat {
   finishT: number
   ink: number
   step: number
-  blinkAt: number
+  rig: Rig
   fluff: Float32Array
-  els: { root: SVGGElement; body: SVGGElement; strokes: SVGGElement; finish: SVGRectElement; fi: SVGCircleElement[]; fw: SVGCircleElement[]; eyes: SVGEllipseElement[] }
+  els: { root: SVGGElement; body: SVGGElement; strokes: SVGGElement; finish: SVGRectElement; fi: SVGCircleElement[]; fw: SVGCircleElement[] }
+}
+/** The fluff circles in edge order (each pivot group draws its own, so the document order is mixed). */
+const byIndex = (els: SVGCircleElement[]) => {
+  const out: SVGCircleElement[] = []
+  for (const el of els) out[+(el.dataset.i ?? 0)] = el
+  return out
 }
 interface Bear {
   state: 'off' | 'walk' | 'sniff' | 'leave'
@@ -194,6 +317,10 @@ interface Events {
   section: (s: CoatsSection, painted?: string) => void
   phase: (p: Phase) => void
   note: (show: boolean) => void
+  /** She poked something (a tap, not a rub): Sparkle's fact the first time. */
+  poked: (what: CoatId | 'bear' | 'land') => void
+  /** The bear sniffed an animal: nobody there (white), or it ran off giggling (brown showing). */
+  sniffed: (found: 'missed' | 'ran') => void
 }
 
 class CoatsWorld {
@@ -220,6 +347,8 @@ class CoatsWorld {
   aurora = -9
   phaseAt = 0
   els: Record<string, Element | null> = {}
+  bearRig: Rig | null = null
+  owlRig: Rig | null = null
 
   constructor(
     private svg: SVGSVGElement,
@@ -255,9 +384,9 @@ class CoatsWorld {
         finishT: section === 'hide' && white ? -100 : -1,
         ink: section === 'fox' ? 0 : white ? 1 : 0,
         step: white && section !== 'summer' ? 5 : 0,
-        blinkAt: 1 + Math.random() * 3,
+        rig: findRig(svg, id, SHAPES[id]),
         fluff: new Float32Array(grid.edge.length),
-        els: { root: q(`${id}-root`), body: q(`${id}-body`), strokes: q(`${id}-strokes`), finish: q(`${id}-finish`), fi: qa(`${id}-fi`), fw: qa(`${id}-fw`), eyes: qa(`${id}-eye`) },
+        els: { root: q(`${id}-root`), body: q(`${id}-body`), strokes: q(`${id}-strokes`), finish: q(`${id}-finish`), fi: byIndex(qa(`${id}-fi`)), fw: byIndex(qa(`${id}-fw`)) },
       }
       if (c.finishT === -100) c.els.finish.setAttribute('opacity', '1')
       this.coats.push(c)
@@ -268,7 +397,9 @@ class CoatsWorld {
     g.settle = q('ground-settle')
     g.flowers = q('flowers')
     for (const el of qa<SVGCircleElement>('flake')) this.flakes.push({ el, x: Math.random(), y: Math.random(), vy: 0.6 + Math.random() * 0.8, ph: Math.random() * 6 })
-    for (const k of ['bear-root', 'bear-body', 'bear-head', 'bear-head-fill', 'bear-q', 'owl-root', 'owl-body', 'dusk', 'aurora', 'sun', 'hint']) this.els[k] = q(k)
+    for (const k of ['bear-root', 'bear-body', 'bear-q', 'owl-root', 'owl-body', 'dusk', 'aurora', 'sun', 'hint', 'hills-alt', 'ground-alt']) this.els[k] = q(k)
+    this.bearRig = this.els['bear-body'] ? findRig(svg, 'bear', SHAPES.bear) : null
+    this.owlRig = this.els['owl-body'] ? findRig(svg, 'owl', SHAPES.owl) : null
     this.setStage(stage)
   }
 
@@ -537,7 +668,8 @@ class CoatsWorld {
       const [lx, ly] = this.local(c, x, y)
       if (!inShape(c.shape, lx, ly)) continue
       c.anim = { kind: Math.random() < 0.5 ? 'giggle' : 'hop', t0: this.now }
-      sfx.chirp()
+      this.squeak(c.id)
+      this.ev.poked(c.id)
       return
     }
     const b = this.bear
@@ -548,6 +680,7 @@ class CoatsWorld {
       if (inShape(SHAPES.bear, lx, ly) || Math.hypot(lx - 180, ly + 160) < 80) {
         b.huff = this.now
         noise(0.25, 0.12, 'lowpass', 500, 200)
+        this.ev.poked('bear')
         return
       }
     }
@@ -561,15 +694,22 @@ class CoatsWorld {
         return
       }
     }
-    if (y < this.stage.ground) {
-      if (this.phase === 'dusk') {
-        this.aurora = this.now
-        sounds.sparkle()
-      } else {
-        this.puff(x, y)
-        sounds.pop()
-      }
+    if (this.phase === 'dusk' && y < this.stage.ground) {
+      this.aurora = this.now
+      sounds.sparkle()
+      return
     }
+    // The sky puffs snowflakes (sparkles in summer); the land does too, and the first time Sparkle says who lives here.
+    this.puff(x, y)
+    sounds.pop()
+    if (y > this.stage.ground - 220) this.ev.poked('land')
+  }
+
+  /** Each animal's own little sound when it's poked or giggles. */
+  private squeak(id: CoatId) {
+    const v = VOICE[id]
+    tone(v.f, v.to, 0.09, 0.07, v.type)
+    tone(v.f * 1.15, v.to * 1.2, 0.09, 0.06, v.type, 0.12)
   }
 
   /** A little burst of snowflakes (or sparkles in summer) where she tapped the sky. */
@@ -615,6 +755,12 @@ class CoatsWorld {
       g.settle?.setAttribute('opacity', g.settleV.toFixed(3))
     }
     if (g.finishT >= 0) g.finish?.setAttribute('opacity', ease((now - g.finishT) / 1.6).toFixed(3))
+    // The far hills follow the ground: snowy as the snow settles, green as she melts it.
+    const alt = this.els['hills-alt']
+    if (alt) {
+      const melted = g.finishT >= 0 ? ease((now - g.finishT) / 1.6) : 0
+      alt.setAttribute('opacity', (this.section === 'fox' ? g.settleV : Math.min(1, (g.snow / Math.max(1, g.total)) * 1.15) * (1 - melted)).toFixed(3))
+    }
     for (const c of this.coats) this.tickCoat(c, dt)
     this.tickBear(dt)
     this.tickOwl()
@@ -696,7 +842,8 @@ class CoatsWorld {
       }
     } else if (!c.run) {
       // Breathing.
-      sy = 1 + Math.sin(now * 2.4 + c.blinkAt) * 0.012
+      sy = 1 + Math.sin(now * 2.4 + c.rig.ph) * 0.016
+      sx = 1 - Math.sin(now * 2.4 + c.rig.ph) * 0.008
     }
     c.els.root.setAttribute('transform', `translate(${x.toFixed(1)} ${c.y}) scale(${(c.s * c.dir).toFixed(3)} ${c.s.toFixed(3)})`)
     c.els.body.setAttribute('transform', `translate(0 ${ty.toFixed(1)}) rotate(${rot.toFixed(2)}) scale(${sx.toFixed(3)} ${sy.toFixed(3)})`)
@@ -730,22 +877,69 @@ class CoatsWorld {
       c.els.fw[i]?.setAttribute('r', r > 0.01 ? r.toFixed(2) : '0')
       c.els.fi[i]?.setAttribute('r', r > 0.5 ? (r + sw).toFixed(2) : '0')
     })
-    // Blinks (more often at dusk, when only the eyes show).
-    if (now > c.blinkAt + 0.14) c.blinkAt = now + (this.phase === 'dusk' ? 0.8 + Math.random() * 1.6 : 2 + Math.random() * 3.5)
-    const closed = now > c.blinkAt && now < c.blinkAt + 0.14
-    for (const e of c.els.eyes) e.setAttribute('ry', closed ? '1.5' : e.getAttribute('rx') ?? '6')
+    // The puppet: the head looks round (toward her finger), the tail swishes and flops after a hop or streams back in a
+    // run, the eyes blink (more often at dusk, when only the eyes show) and squeeze in a giggle. While she rubs it, it
+    // holds nearly still.
+    const r = c.rig
+    const still = c.seg ? 0.25 : 1
+    const f = this.finger
+    let look: [number, number] = [Math.sin(now * 0.5 + r.ph) * 0.4, 0.1]
+    let headTo = 0
+    if (f) {
+      const [lx, ly] = this.local(c, f.x, f.y)
+      const e = r.eyes[0]
+      if (e) {
+        look = [Math.max(-1, Math.min(1, (lx - e.x) / 160)), Math.max(-1, Math.min(1, (ly - e.y) / 160))]
+        headTo = look[1] * 5
+      }
+    }
+    let head = still * Math.sin(now * 1.1 + r.ph) * 3 + headTo
+    let headY = 0
+    let tailTo = still * Math.sin(now * 1.7 + r.ph) * 6
+    let eyes = blink(r, now, this.phase === 'dusk')
+    let open = false
+    if (c.run) {
+      tailTo = 22
+      head = -4
+      open = true
+    }
+    if (c.anim && now >= c.anim.t0) {
+      const t = now - c.anim.t0
+      if (c.anim.kind === 'hop') {
+        const p = t / 0.6
+        // The head lags the jump and nods on the landing; the tail flies up.
+        head += p < 0.2 ? 3 : p < 0.75 ? -6 : 5 * Math.sin(((p - 0.75) / 0.25) * Math.PI)
+        headY = p < 0.2 ? 3 : p < 0.75 ? -4 : 0
+        tailTo = p < 0.75 ? 26 : -8
+        open = p > 0.15 && p < 0.9
+      } else {
+        eyes = Math.min(eyes, 0.35)
+        open = true
+        head += Math.sin(t * 26) * 4
+      }
+    }
+    r.tailV += ((tailTo - r.tail0) * 90 - r.tailV * 9) * dt
+    r.tail0 += r.tailV * dt
+    poseRig(r, head, headY, r.tail0, eyes, look, open)
   }
 
   private tickOwl() {
     const body = this.els['owl-body']
     if (!body) return
-    let rot = 0
+    // An owl turns its head right round to look: a slow look about, a quick "no no" shake when she rubs sunshine on it.
+    let rot = Math.sin(this.now * 0.6) * 6
+    let open = false
     if (this.owlAnim) {
       const t = this.now - this.owlAnim.t0
-      if (t > 0.8) this.owlAnim = null
-      else rot = 10 * Math.sin(t * 22) * (1 - t / 0.8)
+      if (t > 0.9) this.owlAnim = null
+      else {
+        rot = 16 * Math.sin(t * 20) * (1 - t / 0.9)
+        open = true
+      }
     }
-    body.setAttribute('transform', `rotate(${rot.toFixed(2)} 0 -80) scale(1 ${(1 + Math.sin(this.now * 2) * 0.012).toFixed(3)})`)
+    body.setAttribute('transform', `translate(0 -20) scale(${(1 - Math.sin(this.now * 2) * 0.008).toFixed(3)} ${(1 + Math.sin(this.now * 2) * 0.016).toFixed(3)})`)
+    const r = this.owlRig
+    if (r) poseRig(r, rot, 0, 0, this.owlAnim ? 0.55 : blink(r, this.now, false), [Math.sin(this.now * 0.6) * 0.6, 0], open)
   }
 
   // -------------------------------------------------------------- the polar bear
@@ -809,10 +1003,12 @@ class CoatsWorld {
         if (c.done) {
           // Nobody here! He looks round, puzzled.
           tone(330, 250, 0.3, 0.08, 'triangle')
+          this.ev.sniffed('missed')
         } else {
           // Brown showing: a giggle and off it runs (never caught). He'll come back for it.
-          sfx.chirp()
-          setTimeout(() => sfx.chirp(), 180)
+          this.squeak(c.id)
+          setTimeout(() => this.squeak(c.id), 220)
+          this.ev.sniffed('ran')
           // A free spot on its own row, behind the bear (he has already looked there).
           let away = c.x
           let best = -Infinity
@@ -847,7 +1043,13 @@ class CoatsWorld {
     this.els['bear-root']?.setAttribute('transform', `translate(${b.x.toFixed(1)} ${st.bear.y}) scale(${(s * b.dir).toFixed(3)} ${s})`)
     this.els['bear-root']?.setAttribute('opacity', on ? '1' : '0')
     this.els['bear-body']?.setAttribute('transform', `translate(0 ${(-bob).toFixed(1)})`)
-    for (const k of ['bear-head', 'bear-head-fill']) this.els[k]?.setAttribute('transform', `rotate(${head.toFixed(2)} ${BEAR_HEAD.pivot[0]} ${BEAR_HEAD.pivot[1]})`)
+    const r = this.bearRig
+    if (r && on) {
+      // Sniffing, his nose twitches; puzzled, he looks round with his mouth open ("?"); a huff when she pokes him.
+      const sniff = b.state === 'sniff' && !b.found
+      const huff = this.now - b.huff < 0.5
+      poseRig(r, head, sniff ? Math.sin(this.now * 30) * 2 : 0, Math.sin(this.now * 3) * 8, q > 0 ? 1 : blink(r, this.now, false), q > 0 ? [Math.sin(this.now * 4), -0.6] : [0.8, 0.4], q > 0.5 || huff)
+    }
     const qe = this.els['bear-q']
     if (qe) {
       qe.setAttribute('opacity', (on ? q : 0).toFixed(2))
@@ -871,12 +1073,16 @@ class CoatsWorld {
 
 const FLAKES = 80
 
-// `onDone` (Place.tsx): call it at the payoff for the stamp. Not called yet: the full loop wires it in.
-export function SnowCoats(_props: ActivityProps) {
+/** `onDone` (Place.tsx): the stamp, a few seconds after the summer's fanfare. */
+export function SnowCoats({ onDone }: ActivityProps) {
   const { start, param, enter } = useSections(COATS_SECTIONS)
   const [run, setRun] = useState(() => ({ section: (start ?? 'fox') as CoatsSection, painted: (param('painted') || '').split(',').filter(Boolean), n: 0 }))
   const [phase, setPhase] = useState<Phase>('play')
-  const [note, setNote] = useState(false)
+  const guide = useRef<GuideHandle>(null)
+  const alive = useAlive()
+  const talk = useRef({ ran: -99, owl: -99 })
+  /** The summer payoff's stamp, waiting for the cheer; 🔁 cancels it. */
+  const stampTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   const box = useRef<HTMLDivElement>(null)
   const svg = useRef<SVGSVGElement>(null)
   const world = useRef<CoatsWorld | null>(null)
@@ -891,12 +1097,21 @@ export function SnowCoats(_props: ActivityProps) {
   const vh = size.height ? size.height / k : stage.h
   const vb = { x: (stage.w - vw) / 2, y: (stage.h - vh) / 2, w: vw, h: vh }
 
+  // Each part starts with one short line from Sparkle, then her hands are busy.
   useEffect(() => {
     enter(run.section, run.section === 'hide' ? { painted: run.painted.join(',') } : {})
+    const t = setTimeout(() => guide.current?.speak(START[run.section]), 400)
+    return () => clearTimeout(t)
   }, [run])
 
   useLayoutEffect(() => {
     if (!svg.current) return
+    const say = (l: Line, gap: 'ran' | 'owl') => {
+      const now = performance.now() / 1000
+      if (now - talk.current[gap] < 7) return
+      talk.current[gap] = now
+      guide.current?.speak(l)
+    }
     const w = new CoatsWorld(svg.current, stage, run.section, run.painted, {
       section: (s, painted) => {
         if (s === world.current?.section) {
@@ -904,11 +1119,21 @@ export function SnowCoats(_props: ActivityProps) {
           return
         }
         setPhase('play')
-        setNote(false)
         setRun((r) => ({ section: s, painted: (painted ?? '').split(',').filter(Boolean), n: r.n + 1 }))
       },
-      phase: setPhase,
-      note: setNote,
+      phase: (p) => {
+        setPhase(p)
+        if (p === 'bear') guide.current?.speak(L.coats.hide.bear)
+        else if (p === 'dusk') guide.current?.speak(L.coats.hide.gone)
+        else if (p === 'end') {
+          guide.current?.speak(L.coats.summer.end)
+          clearTimeout(stampTimer.current)
+          stampTimer.current = setTimeout(() => alive() && onDone(), DONE_AFTER_S * 1000)
+        }
+      },
+      note: (show) => show && say(L.coats.summer.owl, 'owl'),
+      poked: (what) => guide.current?.once(`coats-${what}`, L.coats.facts[what]),
+      sniffed: (found) => (found === 'ran' ? say(L.coats.hide.ran, 'ran') : guide.current?.once('coats-camo', L.coats.facts.camo)),
     })
     w.vb = vb
     world.current = w
@@ -944,27 +1169,26 @@ export function SnowCoats(_props: ActivityProps) {
 
   const toSummer = () => {
     setPhase('play')
-    setNote(false)
     setRun((r) => ({ section: 'summer', painted: [], n: r.n + 1 }))
   }
 
   const again = () => {
+    clearTimeout(stampTimer.current)
     setPhase('play')
-    setNote(false)
     setRun((r) => ({ section: 'fox', painted: [], n: r.n + 1 }))
   }
 
   const section = run.section
   const summer = section === 'summer'
-  const sky = section === 'fox' ? ['#B7C4D8', '#ECE5EE'] : summer ? ['#86CBF3', '#DDF2FF'] : ['#BCD7F1', '#EEF4FB']
+  const scene = SCENES[section]
   const big = 6000
   const ids: CoatId[] = section === 'fox' ? ['fox'] : [...COAT_IDS].sort((a, b) => stage.spots[a].y - stage.spots[b].y)
-  const bearSh = SHAPES.bear
-  const owl = SHAPES.owl
   const g0 = stage.ground
+  // The painted hills keep about the same height on every screen (stretched a little sideways on a very wide one).
+  const hillsH = wide ? 700 : 760
 
   return (
-    <div ref={box} style={{ position: 'absolute', inset: 0, background: sky[1], overflow: 'clip' }}>
+    <div ref={box} style={{ position: 'absolute', inset: 0, background: SKY[scene.from], overflow: 'clip' }}>
       <style>{CSS}</style>
       <svg
         key={run.n}
@@ -981,10 +1205,6 @@ export function SnowCoats(_props: ActivityProps) {
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', touchAction: 'none', display: 'block', userSelect: 'none', WebkitUserSelect: 'none' }}
       >
         <defs>
-          <linearGradient id={`${mid}-sky`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor={sky[0]} />
-            <stop offset="1" stopColor={sky[1]} />
-          </linearGradient>
           <linearGradient id={`${mid}-dusk`} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#252E5E" />
             <stop offset="1" stopColor="#7A6AA6" />
@@ -1001,8 +1221,15 @@ export function SnowCoats(_props: ActivityProps) {
             <rect data-k="ground-finish" x={-big} y={-200} width={big * 2} height={big} fill={summer ? 'black' : 'white'} opacity={0} />
           </mask>
         </defs>
-        {/* Sky, dusk and the northern lights. */}
-        <rect x={-big} y={-big} width={big * 2} height={big + g0} fill={`url(#${mid}-sky)`} />
+        {/* The painted sky and far hills (the season she starts in), and the winter ones over them that come and go
+            with the snow on the ground (settling while she paints the fox, melting in the summer). */}
+        <Backdrop scene={scene.from} vb={vb} g0={g0} h={hillsH} big={big} />
+        {scene.to && (
+          <g data-k="hills-alt" opacity={section === 'summer' ? 1 : 0}>
+            <Backdrop scene={scene.to} vb={vb} g0={g0} h={hillsH} big={big} />
+          </g>
+        )}
+        {/* Dusk and the northern lights. */}
         <rect data-k="dusk" x={-big} y={-big} width={big * 2} height={big + g0} fill={`url(#${mid}-dusk)`} opacity={0} />
         <g data-k="aurora" opacity={0}>
           {[0, 1, 2].map((i) => (
@@ -1017,16 +1244,12 @@ export function SnowCoats(_props: ActivityProps) {
             <circle r={88} fill="#FFE27A" stroke="#4A3B57" strokeWidth={5} />
           </g>
         )}
-        {/* Far hills. */}
-        <path d={`M${-big} ${g0} L${-big} ${g0 - 70} L ${stage.w * 0.12} ${g0 - 120} Q ${stage.w * 0.3} ${g0 - 210} ${stage.w * 0.48} ${g0 - 110} Q ${stage.w * 0.66} ${g0 - 40} ${stage.w * 0.8} ${g0 - 150} Q ${stage.w * 0.92} ${g0 - 210} ${big} ${g0 - 90} L ${big} ${g0} Z`} fill={summer ? '#B8C9B0' : section === 'fox' ? '#C5BFD4' : '#E4EAF4'} stroke="#4A3B57" strokeWidth={5} strokeLinejoin="round" />
-        {/* The ground: summer tundra, the snow over it under her strokes, flowers where it melted. */}
+        {/* The ground: the painted tundra, the painted snow over it under her strokes, flowers where it melted. */}
+        <image href={scene.ground} x={vb.x} y={g0} width={vb.w} height={Math.max(60, vb.y + vb.h - g0)} preserveAspectRatio="xMidYMin slice" />
         <g transform={`translate(${stage.w / 2} ${g0})`}>
-          <rect x={-big} y={0} width={big * 2} height={big} fill="#A99263" />
-          {TUFTS.map(([tx, ty], i) => (
-            <path key={i} d={`M${tx * stage.w} ${ty * (stage.h - g0) + 20} l -8 -22 m 8 22 l 2 -28 m -2 28 l 12 -20`} stroke="#6E7F45" strokeWidth={5} strokeLinecap="round" fill="none" />
-          ))}
           <g mask={`url(#${mid}-ground)`}>
-            <rect x={-big} y={-6} width={big * 2} height={big} fill={SNOW} />
+            <rect x={vb.x - stage.w / 2} y={-6} width={vb.w} height={8} fill={SNOW} />
+            <image href={art.coats.groundSnow} x={vb.x - stage.w / 2} y={0} width={vb.w} height={Math.max(60, vb.y + vb.h - g0)} preserveAspectRatio="xMidYMin slice" />
           </g>
           <line x1={-big} y1={0} x2={big} y2={0} stroke="#4A3B57" strokeWidth={5} />
           <g data-k="flowers" />
@@ -1035,37 +1258,14 @@ export function SnowCoats(_props: ActivityProps) {
         {summer && (
           <g data-k="owl-root" transform={`translate(${stage.owl.x} ${stage.owl.y}) scale(${stage.owl.s})`} style={{ ['--ci' as string]: 'rgb(74,59,87)' }}>
             <path d="M -110 30 Q -100 -20 -40 -20 L 50 -22 Q 110 -16 112 30 Z" fill="#9C93A8" stroke="#4A3B57" strokeWidth={5 / stage.owl.s} strokeLinejoin="round" />
-            <g data-k="owl-body" transform="translate(0 -20)">
-              <Silhouette parts={owl.parts} s={1} />
-              <Fill parts={owl.parts} color={SNOW} />
-              <FaceEls face={{ ...owl.face, eyes: [] }} k="owl" />
-              {owl.face.eyes.map(([x, y, r], i) => (
-                <g key={i}>
-                  <circle cx={x} cy={y} r={r + 4} fill="#FFD84D" />
-                  <circle cx={x} cy={y} r={r * 0.7} fill="#2B2236" />
-                </g>
-              ))}
-              {[-20, 0, 20].map((x) => (
-                <path key={x} d={`M${x - 8} -60 l 8 8 l 8 -8`} stroke="#B9B2C6" strokeWidth={3} fill="none" strokeLinecap="round" />
-              ))}
-            </g>
+            <AnimalEl id="owl" sh={SHAPES.owl} s={stage.owl.s} />
           </g>
         )}
         {/* The polar bear (hide and seek): white all year, behind the animals. */}
         {section === 'hide' && (
           <>
             <g data-k="bear-root" opacity={0} style={{ ['--ci' as string]: 'rgb(74,59,87)' }}>
-              <g data-k="bear-body">
-                <Silhouette parts={bearSh.parts} s={0.95} />
-                <g data-k="bear-head">
-                  <Silhouette parts={BEAR_HEAD.parts} s={0.95} />
-                </g>
-                <Fill parts={bearSh.parts} color={SNOW} />
-                <g data-k="bear-head-fill">
-                  <Fill parts={BEAR_HEAD.parts} color={SNOW} />
-                  <FaceEls face={BEAR_HEAD.face} k="bear" />
-                </g>
-              </g>
+              <AnimalEl id="bear" sh={SHAPES.bear} s={stage.bear.s} />
             </g>
             <text data-k="bear-q" opacity={0} fontSize={110} fontWeight={700} textAnchor="middle" fill="#4A3B57" stroke="#fff" strokeWidth={8} paintOrder="stroke" style={{ fontFamily: 'Fredoka, sans-serif' }}>
               ?
@@ -1104,17 +1304,33 @@ export function SnowCoats(_props: ActivityProps) {
             </BigButton>
           </motion.div>
         )}
-        <AnimatePresence mode="popLayout">
-          <motion.div key={note ? 'note' : phase === 'play' ? section : phase} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-            {note ? OWL_NOTE : phase === 'play' ? SAY[section] : PHASE_SAY[phase]}
-          </motion.div>
-        </AnimatePresence>
       </div>
+      <Guide ref={guide} hint={phase === 'play' ? HINT[section] : phase === 'dusk' ? L.coats.hide.dusk : null} quiet={phase === 'bear' || phase === 'end'} />
     </div>
   )
 }
 
-const TUFTS: [number, number][] = Array.from({ length: 34 }, (_, i) => [(((i * 37) % 100) / 100 - 0.5) * 1.3, ((i * 53) % 100) / 100])
+type Season = 'late' | 'winter' | 'summer'
+/** The flat sky color of each painted backdrop (sampled from its top), which carries on above the picture. */
+const SKY: Record<Season, string> = { late: '#C6C0D7', winter: '#BAE1FD', summer: '#92D3FD' }
+const HILLS: Record<Season, string> = { late: art.coats.skyLate, winter: art.coats.skyWinter, summer: art.coats.skySummer }
+/** Each part's painted scene: the season she starts in (`from`), the winter one over it that comes and goes with the
+ *  snow (`to`), and the tundra under the snow she rubs on and off. */
+const SCENES: Record<CoatsSection, { from: Season; to?: Season; ground: string }> = {
+  fox: { from: 'late', to: 'winter', ground: art.coats.groundLate },
+  hide: { from: 'winter', ground: art.coats.groundLate },
+  summer: { from: 'summer', to: 'winter', ground: art.coats.groundSummer },
+}
+
+/** A painted sky and far hills, standing on the ground line, with its flat sky color carrying on above it. */
+function Backdrop({ scene, vb, g0, h, big }: { scene: Season; vb: { x: number; y: number; w: number; h: number }; g0: number; h: number; big: number }) {
+  return (
+    <>
+      <rect x={-big} y={-big} width={big * 2} height={big + g0} fill={SKY[scene]} />
+      <image href={HILLS[scene]} x={vb.x} y={g0 - h} width={vb.w} height={h + 4} preserveAspectRatio="none" />
+    </>
+  )
+}
 
 const CSS = `
 .coats-pop { animation: coats-pop .45s cubic-bezier(.3,1.6,.5,1) both; transform-box: fill-box; transform-origin: 50% 100%; }
@@ -1127,15 +1343,3 @@ const CSS = `
 
 /** The ☀️ and 🔁 buttons wait in the sky's corner, clear of the animals on the snow. */
 const CORNER = { position: 'fixed' as const, right: 'calc(var(--safe-right, 0px) + 20px)', top: 'calc(var(--top-clear) + 12px)', pointerEvents: 'auto' as const }
-
-const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  padding: '8px 20px',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
-}

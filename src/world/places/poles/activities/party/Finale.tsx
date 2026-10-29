@@ -159,7 +159,7 @@ export function Finale({ onWin }: { onWin: () => void }) {
         <motion.div
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1, scale: section === 'badge' ? 1.5 : 1 }}
-          style={{ position: 'absolute', left: '50%', x: '-50%', top: section === 'badge' ? '38%' : 'calc(var(--top-clear) + 6px)', zIndex: 20, pointerEvents: 'none', display: 'flex', gap: 6, background: 'rgba(255,255,255,.94)', borderRadius: 999, padding: '8px 16px', boxShadow: 'var(--shadow)', transformOrigin: 'center' }}
+          style={{ position: 'absolute', left: '50%', x: '-50%', top: section === 'badge' ? '34%' : 'calc(var(--bar-clear) - 8px)', zIndex: 20, pointerEvents: 'none', display: 'flex', gap: 6, background: 'rgba(255,255,255,.94)', borderRadius: 999, padding: '8px 16px', boxShadow: 'var(--shadow)', transformOrigin: 'center' }}
         >
           {Array.from({ length: STARS }, (_, i) => (
             <motion.span key={i} animate={{ scale: i < stars ? [1.6, 1] : 1, opacity: i < stars ? 1 : 0.25 }} style={{ fontSize: 'clamp(24px, 4vmin, 36px)', filter: i < stars ? 'none' : 'grayscale(1)' }}>
@@ -168,20 +168,21 @@ export function Finale({ onWin }: { onWin: () => void }) {
           ))}
         </motion.div>
       )}
+      {/* On to the trophy: under the badge, clear of Sparkle's line at the bottom. */}
+      {section === 'badge' && (
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1.5, type: 'spring' }} style={{ position: 'absolute', left: '50%', x: '-50%', top: '52%', zIndex: 21 }}>
+          <BigButton onClick={win} ariaLabel="The trophy">
+            🏆 ▶
+          </BigButton>
+        </motion.div>
+      )}
       {/* Hear the question again. */}
       {section === 'quiz' && q && (
-        <div style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 16px)', top: 'calc(var(--top-clear) + 4px)', zIndex: 21 }}>
+        <div style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 16px)', top: 'calc(var(--bar-clear) - 10px)', zIndex: 21 }}>
           <SayButton text={L.party.ask[q]} size={64} />
         </div>
       )}
       <div style={{ position: 'absolute', left: 16, right: 16, bottom: 'calc(var(--safe-bottom) + 14px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
-        {section === 'badge' && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1.5, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
-            <BigButton onClick={win} ariaLabel="The trophy">
-              🏆 ▶
-            </BigButton>
-          </motion.div>
-        )}
         {/* The country Terry is flying over (for Dad; Terry says hello to it). */}
         <AnimatePresence>
           {section === 'fly' && place && pin && (

@@ -4,7 +4,7 @@ import type { ActivityInfo } from '../../../../types'
 import { art } from '../../art'
 import { L } from '../../lines'
 
-export const READY = false
+export const READY = true
 /** Which side of the globe its spot shows on. */
 export const POLE = 'north' as const
 

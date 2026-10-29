@@ -8,10 +8,14 @@ import { inkPass as inkPassIn, line as lineIn, useInk } from '../../../kit/ink'
 import { blob, BLUSH, C, Eye, INK, MOUTH, updateEyes, win, type EyeKind, type EyePart } from './face'
 
 export interface PebbleProps {
-  height: string
+  height?: string
   style?: CSSProperties
   /** 0 = warm and cosy, 1 = freezing (shivers, pale cheeks, flippers hugged in). */
   cold?: number
+  /** Drawn inside another SVG (the huddle): feet at (0, 0), about 100 units tall. */
+  embed?: boolean
+  /** Read every frame instead of `cold` (the huddle changes it without re-rendering). */
+  live?: { cold: number }
 }
 
 const FLUFF = C.chickFluff
@@ -33,7 +37,7 @@ const FLIPPER = 'M-20 -10 C-24 -30 20 -30 18 -8 C22 40 14 92 -2 116 C-14 96 -22 
 type Part = 'root' | 'head' | 'tuft' | 'flipL' | 'flipR' | 'blushL' | 'blushR' | 'beakTop' | 'beakLow' | 'mouth' | EyePart
 
 /** Pebble the emperor chick. Actions: hop, flap, cheer, wiggle, waddle. Voice: pebble. */
-export const Pebble = forwardRef<PuppetHandle, PebbleProps>(function Pebble({ height, style, cold = 0 }, ref) {
+export const Pebble = forwardRef<PuppetHandle, PebbleProps>(function Pebble({ height = '100%', style, cold = 0, embed = false, live }, ref) {
   const id = useId().replace(/:/g, '')
   const st = useRef({ cold: 0, headRot: 0, tuft: spring(160, 7) }).current
   const ink = useInk<Part>()
@@ -44,7 +48,7 @@ export const Pebble = forwardRef<PuppetHandle, PebbleProps>(function Pebble({ he
     reach: [250, 222],
     frame: (f, p) => {
       const { t, dt, look } = f
-      st.cold += (cold - st.cold) * Math.min(1, dt * 2)
+      st.cold += ((live ? live.cold : cold) - st.cold) * Math.min(1, dt * 2)
       const k = st.cold
       const q = f.p
       const act = f.action
@@ -168,21 +172,30 @@ export const Pebble = forwardRef<PuppetHandle, PebbleProps>(function Pebble({ he
     </g>
   )
 
+  const body = (
+    <g ref={part('root')} strokeLinejoin="round">
+      {(['L', 'R'] as const).map((s) => (
+        <g key={s}>
+          <g {...inkPass()}>{flipper(s, true)}</g>
+          {flipper(s, false)}
+        </g>
+      ))}
+      <g {...inkPass()}>{lower(true)}</g>
+      {lower(false)}
+      <path d="M200 330 Q206 340 214 332 M286 332 Q294 340 300 330 M236 300 Q244 308 252 300" {...line(2.6)} />
+      <g {...inkPass()}>{head(true)}</g>
+      {head(false)}
+    </g>
+  )
+  if (embed)
+    return (
+      <g ref={svg}>
+        <g transform="scale(0.215) translate(-250 -488)">{body}</g>
+      </g>
+    )
   return (
     <svg ref={svg} viewBox="0 0 500 500" aria-label="Pebble the emperor penguin chick" style={{ height, aspectRatio: '1 / 1', overflow: 'visible', display: 'block', ...style }}>
-      <g ref={part('root')} strokeLinejoin="round">
-        {(['L', 'R'] as const).map((s) => (
-          <g key={s}>
-            <g {...inkPass()}>{flipper(s, true)}</g>
-            {flipper(s, false)}
-          </g>
-        ))}
-        <g {...inkPass()}>{lower(true)}</g>
-        {lower(false)}
-        <path d="M200 330 Q206 340 214 332 M286 332 Q294 340 300 330 M236 300 Q244 308 252 300" {...line(2.6)} />
-        <g {...inkPass()}>{head(true)}</g>
-        {head(false)}
-      </g>
+      {body}
     </svg>
   )
 })

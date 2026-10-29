@@ -164,6 +164,24 @@
     "voice": "pola"
   },
   "Kaylee, you got Pola home!",
+  "Brr, winter is coming! Rub snow on the fox.",
+  "Rub the fox with your finger.",
+  "Now rub them all white, so they can hide!",
+  "Rub snow on the brown ones.",
+  "Shh! Here comes the polar bear.",
+  "He saw some brown! Make it white.",
+  "He can't find anyone! White hides in the snow.",
+  "Tap the sun to bring the summer.",
+  "Summer is here! Rub the snow away.",
+  "Rub them brown again.",
+  "Snowy owls and polar bears stay white all year!",
+  "Brown coats for the summer!",
+  "Arctic hares have black tips on their ears.",
+  "This bird is a ptarmigan. Even its feet go white!",
+  "Lemmings live in tunnels under the snow.",
+  "Polar bears are white all year.",
+  "White fur hides in white snow. That's camouflage!",
+  "Lots of animals live on the land around the frozen sea.",
   {
     "text": "Papa, I'm so hungry!",
     "voice": "pebble"
@@ -238,6 +256,69 @@
   "A leopard seal! This one just wants to play.",
   "Penguin chicks eat krill, tiny pink sea animals.",
   "No polar bears live here, so the penguins are not scared.",
+  "Carry the cold penguin into the middle!",
+  "More penguin dads are coming!",
+  "A blizzard! Keep the cold ones moving in.",
+  "The wind turned around!",
+  "Keep Pebble's papa warm in the middle.",
+  "Tuck Pebble back under Papa!",
+  "Whoosh! Carry Pebble back to Papa.",
+  "Look! The sun is coming back!",
+  "You kept them all warm, Kaylee!",
+  "Emperor dads keep the egg warm on their feet!",
+  "In winter here, the sun stays away for months!",
+  {
+    "text": "Brrr! So cold!",
+    "voice": "papa"
+  },
+  {
+    "text": "Ahh, much better!",
+    "voice": "papa"
+  },
+  {
+    "text": "Thank you! So cozy.",
+    "voice": "papa"
+  },
+  {
+    "text": "Warm at last!",
+    "voice": "papa"
+  },
+  {
+    "text": "My egg is getting cold!",
+    "voice": "papa"
+  },
+  {
+    "text": "Hello, little Pebble!",
+    "voice": "papa"
+  },
+  {
+    "text": "Oh no! Pebble!",
+    "voice": "papa"
+  },
+  {
+    "text": "There you are, Pebble!",
+    "voice": "papa"
+  },
+  {
+    "text": "Look, Pebble. The sun!",
+    "voice": "papa"
+  },
+  {
+    "text": "Hi, Papa! Peep peep!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Whoa! Papa, help!",
+    "voice": "pebble"
+  },
+  {
+    "text": "So cozy!",
+    "voice": "pebble"
+  },
+  {
+    "text": "Ooh, so pretty!",
+    "voice": "pebble"
+  },
   "Pick a pole: north or south?",
   "Tap the cracks to break off the ice!",
   "A giant crack! Tap, tap, tap!",
@@ -427,5 +508,5 @@
   "That's right!",
   "You got it!",
   "Super!",
-  "Wow, Kaylee, you know your poles!"
+  "Wow, you know your poles!"
 ]

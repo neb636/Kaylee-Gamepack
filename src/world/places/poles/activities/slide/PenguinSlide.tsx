@@ -65,11 +65,11 @@ export function PenguinSlide({ onDone }: ActivityProps) {
     if (!g) return
     if (s === 'top') g.speak(L.slide.hints.top)
     else if (s === 'bumps') {
-      g.speak(L.slide.bumps)
-      g.speak(L.slide.hints.bumps, true)
+      g.speak(L.slide.hints.bumps)
+      g.speak(L.slide.bumps, true)
     } else if (s === 'dive') {
-      g.speak(L.slide.dive)
-      g.speak(L.slide.hints.dive, true)
+      g.speak(L.slide.hints.dive)
+      g.speak(L.slide.dive, true)
     }
   }
   // A section link: the instruction straight away (a fresh start says it when the story ends).
