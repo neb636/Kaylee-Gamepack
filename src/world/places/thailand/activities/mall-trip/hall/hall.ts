@@ -21,7 +21,7 @@ import type { Avatar } from '../../../characters/avatar'
 import { LOOKS } from '../../../characters/looks'
 import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
-import type { Shot } from '../../../../../engine3d/camera'
+import type { Roam, Shot } from '../../../../../engine3d/camera'
 import { TapMarker } from '../../../../../engine3d/marker'
 import { NavGrid } from '../../../../../engine3d/nav'
 import { PAL, toon } from '../../../../../engine3d/toon'
@@ -39,6 +39,10 @@ import { BACK_Z, BENCH, BLOCKED, SIGN_H, ZONE_SIGNS, BLOCKS, BOXING, CIRCLES, CR
 import { hallSfx as sfx } from './sounds'
 
 const V = (x: number, y: number, z: number) => new Vector3(x, y, z)
+
+/** How far she may turn the camera herself (Roblox-style drag and pinch): round to either side of the shop fronts,
+ *  from nearly level to looking down on the hall. */
+const HALL_ROAM: Roam = { yaw: [-45, 45], pitch: [-10, 30], zoom: [0.6, 1.4] }
 
 export interface HallEvents extends LegEvents {
   /** She's going in through a way in (the screen fades as she steps through). */
@@ -448,6 +452,14 @@ export class Hall extends Stage {
     super.pointerDown()
     this.lead = { last: 0 }
   }
+  // Roblox controls: she walks the hall with the stick, and turns the camera with a drag (no follow-the-finger then).
+  protected roams() {
+    return !this.entering
+  }
+  protected roamer() {
+    const w = this.walker
+    return { k: this.kaylee, free: (x: number, z: number) => w.floor.nav.free(x, z), stop: () => w.stop() }
+  }
   /** Held and moved: she follows the finger (re-aimed every 150 ms). */
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
     if (!held || !this.lead || this.entering || Math.hypot(x - downX, y - downY) < 12) return
@@ -702,10 +714,10 @@ export class Hall extends Stage {
       return { center: V(d.at[0], y, z + 0.6), half: tall ? V(1.9, 2.1, 1.2) : V(2.7, 1.7, 1.2), yaw: 0, pitch: 10, minDist: 5 }
     }
     const ahead = clamp(this.vel.x * 0.5, -1.6, 1.6)
-    if (tall) return { center: V(clamp(k.x + ahead, HALL[0] + 2.2, HALL[1] - 2.2), 2.5, 0.4), half: V(2.2, 2.9, 2.2), yaw: 0, pitch: 14, minDist: 7 }
+    if (tall) return { center: V(clamp(k.x + ahead, HALL[0] + 2.2, HALL[1] - 2.2), 2.5, 0.4), half: V(2.2, 2.9, 2.2), yaw: 0, pitch: 14, minDist: 7, roam: HALL_ROAM }
     // A short wide screen (an iPhone on its side): closer in, so she isn't tiny.
-    if (this.w > this.h * 1.7) return { center: V(clamp(k.x + ahead, HALL[0] + 4, HALL[1] - 4), 1.75, 0.6), half: V(3.4, 1.55, 1.8), yaw: 0, pitch: 14, minDist: 6 }
-    return { center: V(clamp(k.x + ahead, HALL[0] + 4.6, HALL[1] - 4.6), 2.15, 0.4), half: V(4.2, 2.2, 2.4), yaw: 0, pitch: 14, minDist: 7 }
+    if (this.w > this.h * 1.7) return { center: V(clamp(k.x + ahead, HALL[0] + 4, HALL[1] - 4), 1.75, 0.6), half: V(3.4, 1.55, 1.8), yaw: 0, pitch: 14, minDist: 6, roam: HALL_ROAM }
+    return { center: V(clamp(k.x + ahead, HALL[0] + 4.6, HALL[1] - 4.6), 2.15, 0.4), half: V(4.2, 2.2, 2.4), yaw: 0, pitch: 14, minDist: 7, roam: HALL_ROAM }
   }
 
   protected anchorAt(id: string): AnchorSpot | null {

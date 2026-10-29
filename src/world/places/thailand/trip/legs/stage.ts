@@ -8,6 +8,7 @@ import { Avatar } from '../../characters/avatar'
 import { FAMILY } from '../../characters/family'
 import { Member } from '../../characters/member'
 import { CameraRig, type Shot } from '../../../../engine3d/camera'
+import { ROAM, stickToGround, type RoamState } from '../../../../engine3d/roam'
 import { Bag } from '../../../../engine3d/dispose'
 import { setOutlineResolution } from '../../../../engine3d/outline'
 import { applyBands, makeLights, PAL } from '../../../../engine3d/toon'
@@ -61,6 +62,8 @@ export abstract class Stage implements World3D {
   protected touches = 0
   /** Unmounted (a timer that fires late must not build anything). */
   protected disposed = false
+  /** The Roblox thumbstick's push (engine3d/roam.ts). */
+  private stickIn = { x: 0, y: 0 }
 
   constructor(
     protected renderer: WebGLRenderer,
@@ -83,6 +86,46 @@ export abstract class Stage implements World3D {
   /** The leg's own frame (the camera, the anchors and the hops run around it). */
   protected abstract step(dt: number, t: number): void
   abstract qa(): Record<string, unknown>
+  // ---------------------------------------------------------------- Roblox controls (engine3d/roam.ts)
+
+  /** She may turn the camera herself now (drag, pinch), within the shot's `roam`. */
+  protected roams(): boolean {
+    return false
+  }
+  /** Who the thumbstick and jump button move, and where they may stand (null: the camera turns, but no pad). `stop`
+   *  calls off a walk the world planned (a Walker's), the moment she takes the stick. */
+  protected roamer(): { k: Avatar; free: (x: number, z: number) => boolean; stop?: () => void } | null {
+    return null
+  }
+  roam(): RoamState | null {
+    if (!this.roams()) return null
+    const r = this.roamer()
+    return { walk: !!r, jump: !!r }
+  }
+  roamStick(x: number, y: number) {
+    this.stickIn.x = x
+    this.stickIn.y = y
+  }
+  roamJump() {
+    const r = this.roams() ? this.roamer() : null
+    if (!r) return
+    this.lastTouch = this.time
+    this.touches++
+    if (r.k.jump(ROAM.jumpHeight, ROAM.jumpTime, ROAM.jumpReach, r.free)) sfx.boing()
+  }
+  /** Before the leg's own frame: the stick walks her the way it pushes, as the camera faces now. */
+  private steer() {
+    const r = this.roams() ? this.roamer() : null
+    const g = r ? stickToGround(this.rig.yaw, this.stickIn.x, this.stickIn.y) : null
+    if (!r || !g?.k) {
+      if (r?.k.steering) r.k.steer(0, 0, 0, () => false)
+      return
+    }
+    if (!r.k.steering) r.stop?.()
+    this.lastTouch = this.time
+    r.k.steer(g.x, g.z, g.k, r.free, ROAM.speed)
+  }
+
   /** Roots to raycast for taps on the canvas (each tappable thing has userData.pick). */
   protected pickRoots(): Object3D[] {
     return []
@@ -138,6 +181,7 @@ export abstract class Stage implements World3D {
   update(dt: number) {
     this.time += dt
     this.hopper.update(dt)
+    this.steer()
     this.step(dt, this.time)
     this.rig.setShot(this.shot())
     this.rig.update(dt)

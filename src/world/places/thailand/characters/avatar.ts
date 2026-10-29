@@ -471,6 +471,8 @@ export class Avatar implements Character {
   private chibi: Rig
   private path: XZ[] = []
   private onArrive: (() => void) | null = null
+  /** The Roblox thumbstick (engine3d/roam.ts): which way on the ground, how hard, and where she may stand. */
+  private stick: { x: number; z: number; k: number; free: (x: number, z: number) => boolean } | null = null
   private speed = 0
   private yaw = Math.PI
   private yawVel = 0
@@ -599,7 +601,7 @@ export class Avatar implements Character {
   }
   /** Something is moving (the frame loop may slow down when nothing is). */
   get busy() {
-    return this.walking || this.speed > 0.01 || this.pose === 'bounce' || this.settle < 1 || this.flop < 1 || this.dress.busy || this.twirling >= 0 || !!this.showing
+    return this.walking || !!this.stick || this.speed > 0.01 || this.pose === 'bounce' || this.settle < 1 || this.flop < 1 || this.dress.busy || this.twirling >= 0 || !!this.showing
   }
 
   /** Puts her somewhere at once (a deep link, the end of the arrival). */
@@ -641,6 +643,53 @@ export class Avatar implements Character {
   stop() {
     this.path = []
     this.onArrive = null
+  }
+
+  /** The thumbstick walks her: `x`, `z` the way to go on the ground (a unit vector), `k` how hard (0..1, times her
+   *  walk and `fast`), `free` where she may stand (her floor's NavGrid): she slides along walls instead of stopping
+   *  dead. `k` 0 lets go (she slows to a stop). Any walk she was on is dropped; sitting or bouncing, she gets up. */
+  steer(x: number, z: number, k: number, free: (x: number, z: number) => boolean, fast = 1) {
+    if (k <= 0) {
+      // Let go: she stops and settles (a little bob), like at the end of a walk.
+      if (this.stick && !this.path.length) {
+        this.speed = 0
+        this.settle = 0
+      }
+      this.stick = null
+      return
+    }
+    if (this.path.length) this.stop()
+    if (this.pose !== 'stand' && !this.tweens.length) {
+      const to = this.standPoint
+      this.standPoint = null
+      this.setPose('stand')
+      if (to) this.hopTo(to, 0.28, 0.18)
+    }
+    this.stick = { x, z, k: Math.min(1, k) * fast, free }
+  }
+
+  get steering() {
+    return !!this.stick
+  }
+
+  /** The jump button: a hop on the spot, or carried `reach` meters the way the stick pushes when there's room to land.
+   *  False when she can't jump now (mid-hop, sitting). */
+  jump(height: number, dur: number, reach: number, free?: (x: number, z: number) => boolean) {
+    if (this.tweens.length || this.pose !== 'stand') return false
+    const p = this.root.position
+    const to = p.clone()
+    const st = this.stick
+    if (st && reach > 0) {
+      const d = reach * Math.min(1, st.k)
+      const x = p.x + st.x * d
+      const z = p.z + st.z * d
+      if ((free ?? st.free)(x, z)) {
+        to.x = x
+        to.z = z
+      }
+    }
+    this.hopTo(to, dur, height)
+    return true
   }
 
   /** A little jump to `to` (onto a stool, the mattress, the next stair). */
@@ -756,6 +805,21 @@ export class Avatar implements Character {
         p.z += (dz / d) * move
         this.yawGoal = Math.atan2(dx, dz)
       }
+    } else if (this.stick) {
+      // The thumbstick: speed eases toward the push, and a wall in the way turns the step into a slide along it.
+      const st = this.stick
+      const max = THAI_TUNE.walkSpeed * this.pace * st.k
+      this.speed += clamp((max - this.speed) / 0.12, -THAI_TUNE.walkSpeed * 8, THAI_TUNE.walkSpeed * 8) * dt
+      this.yawGoal = Math.atan2(st.x, st.z)
+      const move = this.speed * dt
+      const nx = p.x + st.x * move
+      const nz = p.z + st.z * move
+      if (st.free(nx, nz)) {
+        p.x = nx
+        p.z = nz
+      } else if (Math.abs(st.x) > 0.2 && st.free(nx, p.z)) p.x = nx
+      else if (Math.abs(st.z) > 0.2 && st.free(p.x, nz)) p.z = nz
+      else this.speed *= 0.5
     } else this.speed = 0
     // Turning spring (angle-wrapped).
     let diff = this.yawGoal - this.yaw

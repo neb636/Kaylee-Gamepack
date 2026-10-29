@@ -17,7 +17,8 @@ import { formatLook } from '../../characters/style'
 import { FAMILY, type FamilyMember } from '../../characters/family'
 import { Member } from '../../characters/member'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
-import { CameraRig, type Shot } from '../../../../engine3d/camera'
+import { CameraRig, type Roam, type Shot } from '../../../../engine3d/camera'
+import { ROAM, stickToGround, type RoamState } from '../../../../engine3d/roam'
 import { Bag } from '../../../../engine3d/dispose'
 import { NavGrid, type XZ } from '../../../../engine3d/nav'
 import { TapMarker } from '../../../../engine3d/marker'
@@ -43,6 +44,13 @@ import { buildUpper } from './build/upper'
 import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
 import type { HubSection } from './sections'
 import { ShoeRack } from './shoes'
+
+/** How far she may turn the camera herself (Roblox-style drag and pinch, on top of the game's view). It's a cutaway
+ *  dollhouse: inside, the camera stays on the open side (the right walls and the front come down for it, the left is
+ *  the neighbors' wall), so it swings from nearly straight in at the front round toward the right, and from low to
+ *  nearly overhead. Out on the street it swings further either way. */
+const INSIDE_ROAM: Roam = { yaw: [-28, 42], pitch: [-24, 30], zoom: [0.6, 1.4] }
+const STREET_ROAM: Roam = { yaw: [-50, 50], pitch: [-1, 38], zoom: [0.6, 1.35] }
 
 export type Spot = 'street' | 'downstairs' | 'upstairs'
 export interface Start {
@@ -179,6 +187,11 @@ export class House implements World3D {
   /** How many times she's said hi to each of them (their first hello is Sawasdee). */
   private greeted = new Map<string, number>()
   private lead: { x: number; y: number; last: number } | null = null
+  /** The Roblox thumbstick's push (roam.ts), applied every frame against the camera's turn. `wait`: a push walked her
+   *  onto the stairs, so it does nothing more until she lets go. */
+  private stickIn = { x: 0, y: 0, wait: false }
+  /** A plugin took the finger that's down (a drag of its own): it doesn't turn the camera. */
+  private pluginHeld = false
   stats = { fps: 0, p95: 0, calls: 0, tris: 0 }
   /** While setting up a deep link: the Hub has already announced the section, so no events. */
   private quiet = true
@@ -350,8 +363,58 @@ export class House implements World3D {
 
   /** A finger (or mouse) went down, on the canvas or on an anchor button. */
   pointerDown(x: number, y: number, id?: string) {
-    if (this.plugin?.pointerDown?.(x, y, id)) return
+    this.pluginHeld = !!this.plugin?.pointerDown?.(x, y, id)
+    if (this.pluginHeld) return
     this.lead = { x, y, last: performance.now() }
+  }
+  roamGrabbed() {
+    return this.pluginHeld
+  }
+
+  // ---------------------------------------------------------------- Roblox controls (engine3d/roam.ts)
+
+  /** The pad and the camera turn are hers whenever she's free to walk around (not in the arrival, the family photo, a
+   *  ride, or a plugin's own camera like the wardrobe mirror). */
+  roam(): RoamState | null {
+    if (this.arriving || this.photo || this.plugin?.shot?.() || this.kaylee.root.parent !== this.scene) return null
+    return { walk: true, jump: true }
+  }
+  roamStick(x: number, y: number) {
+    this.stickIn.x = x
+    this.stickIn.y = y
+    if (!x && !y) this.stickIn.wait = false
+  }
+  roamJump() {
+    if (!this.roam() || this.climbing) return
+    const k = this.kaylee
+    if (k.jump(ROAM.jumpHeight, ROAM.jumpTime, ROAM.jumpReach, (x, z) => this.nav[k.floor].free(x, z))) {
+      this.using = undefined
+      sfx.boing()
+    }
+  }
+  /** Every frame: the stick walks her the way it pushes, as the camera faces now; pushing into the stairs climbs them. */
+  private steer() {
+    const k = this.kaylee
+    const s = this.stickIn
+    const g = !s.wait && !this.climbing && this.roam() ? stickToGround(this.rig.yaw, s.x, s.y) : null
+    if (!g?.k) {
+      if (k.steering) k.steer(0, 0, 0, () => false)
+      return
+    }
+    const floor = k.floor
+    const p = k.position
+    const stairs = floor === 0 ? STAIRS_FOOT : STAIRS_TOP
+    // Up from the foot the stairs climb toward the left wall (-x); down from the top they go toward the back (-z).
+    const into = floor === 0 ? -g.x : -g.z
+    if (Math.hypot(p.x - stairs.x, p.z - stairs.z) < 0.45 && into > 0.6 && (floor === 1 || this.mode === 'inside0')) {
+      k.steer(0, 0, 0, () => false)
+      s.wait = true
+      this.using = undefined
+      this.climb(floor === 0)
+      return
+    }
+    this.using = undefined
+    k.steer(g.x, g.z, g.k, (x, z) => this.nav[floor].free(x, z), ROAM.speed)
   }
   /** While held: past 12 px she follows the finger (re-aimed every 150 ms). */
   pointerMove(x: number, y: number, downX: number, downY: number, held: boolean) {
@@ -790,6 +853,7 @@ export class House implements World3D {
         yaw: THAI_TUNE.streetYaw,
         pitch: THAI_TUNE.streetPitch,
         minDist: 6,
+        roam: STREET_ROAM,
       }
     }
     const fy = this.kaylee.floor * DIM.g0
@@ -802,6 +866,7 @@ export class House implements World3D {
       yaw: THAI_TUNE.insideYawTall + (THAI_TUNE.insideYawWide - THAI_TUNE.insideYawTall) * wide,
       pitch: THAI_TUNE.insidePitch,
       minDist: 6,
+      roam: INSIDE_ROAM,
     }
   }
 
@@ -817,6 +882,7 @@ export class House implements World3D {
     this.backdrop.update(dt)
     if (this.arrival && !this.arrival.done) this.updateArrival(dt)
     this.driveTuk(dt)
+    this.steer()
     k.update(dt, t)
     if (dt > 0) {
       tmp.copy(k.position).sub(this.lastPos).divideScalar(dt)
@@ -1027,6 +1093,9 @@ export class House implements World3D {
       pose: k.pose,
       using: this.using ?? null,
       walking: k.walking,
+      steering: k.steering,
+      turn: { ...this.rig.user },
+      roam: this.roam(),
       arriving: this.arriving,
       shutterOpen: this.reactor.shutterOpen,
       pos: [k.position.x, k.position.y, k.position.z].map((v) => Math.round(v * 100) / 100),

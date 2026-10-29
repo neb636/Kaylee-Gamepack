@@ -144,6 +144,16 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
   ink outlines, a box-fitting follow camera, a walk grid with A*, and the tap marker. `View3D.tsx` mounts any 3D world
   (the house, the bay) with its DOM tap targets (`Anchors.tsx`); `water.ts` and `particles.ts` (foam, spray) came with
   the boat trip. Shader code: never name a variable `patch` or `sample` (reserved in WebGL2; the shader silently fails).
+- **Roblox controls** (Dad, 2026-10-28: she keeps choosing Roblox, so the walk-around places borrow its iPad
+  controls): `engine3d/roam.ts` + `RoamPad.tsx`. Like Roblox's dynamic thumbstick, a drag that starts anywhere on the
+  left half of the screen brings the pink stick under her finger and walks her the way it's pushed (as the camera faces,
+  sliding along walls; pushing into the stairs climbs them in the house; Dad 2026-10-28: having to find the stick in
+  the corner wasn't Roblox). A jump button bottom right hops her along, a drag on the right half swings the camera
+  (at the same time as the stick, with another finger) and a pinch moves it in and out. Taps still poke and walk. On in
+  Agong's house (inside and the street), the ICONSIAM hall and HarborLand's Big Frame (stick on the floor she's on;
+  climbs and slides are still taps), and the airport (camera only, no stick). A world opts in with `roam()`, and each
+  shot says how far it may be turned (`Shot.roam`: the house keeps to the cutaway's open side). Feel numbers are knobs
+  (`?feel=1`, group "Roblox controls"). Next, if she likes it: the Nan stops she walks around in.
 - `activities/hub/layout.ts` is the one source of truth in meters (pure data): the build, the walk grids, the tap
   targets all read it.
 - The tap targets are DOM buttons placed over the 3D things every frame (`Anchors.tsx`), at least 64 px. They give

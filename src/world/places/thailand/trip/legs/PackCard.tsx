@@ -62,7 +62,7 @@ export function PackCard({ open, packed, sitting, onClose }: Props) {
           transition={{ repeat: Infinity, duration: 1.2, ease: 'easeInOut' }}
           whileTap={{ scale: 0.85 }}
           onClick={onClose}
-          style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 16px)', bottom: 'calc(var(--safe-bottom) + 16px)', width: 110, height: 110, borderRadius: '50%', border: '5px solid #fff', background: 'var(--hotpink)', boxShadow: 'var(--shadow)', zIndex: 46, display: 'grid', placeItems: 'center', padding: 0 }}
+          style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 16px)', bottom: 'calc(var(--safe-bottom) + 16px + var(--roam-right, 0px))', width: 110, height: 110, borderRadius: '50%', border: '5px solid #fff', background: 'var(--hotpink)', boxShadow: 'var(--shadow)', zIndex: 46, display: 'grid', placeItems: 'center', padding: 0 }}
         >
           <span aria-hidden style={{ position: 'relative', fontSize: 54, lineHeight: 1 }}>
             🧳

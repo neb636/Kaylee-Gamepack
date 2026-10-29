@@ -21,7 +21,7 @@ import type { Avatar } from '../../../characters/avatar'
 import { LOOKS } from '../../../characters/looks'
 import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
-import type { Shot } from '../../../../../engine3d/camera'
+import type { Roam, Shot } from '../../../../../engine3d/camera'
 import { TapMarker } from '../../../../../engine3d/marker'
 import { NavGrid } from '../../../../../engine3d/nav'
 import { Stage, type AnchorSpot, type LegEvents } from '../../../trip/legs/stage'
@@ -38,6 +38,10 @@ import { Rides } from './rides'
 import { chaseSign, placeSign } from './sign'
 import { frameSfx as sfx } from './sounds'
 import { FrameToys } from './toys'
+
+/** How far she may turn the camera herself (Roblox-style drag and pinch). Less than in the hall: the playground is
+ *  a dollhouse under a dark ceiling, so it swings a little either way and stays under the ceiling. */
+const HARBOR_ROAM: Roam = { yaw: [-35, 35], pitch: [-8, 16], zoom: [0.7, 1.3] }
 
 export interface FrameEvents extends LegEvents {
   /** A big ride for the first time: the frame's sticker on her sock band. */
@@ -445,6 +449,16 @@ export class BigFrame extends Stage {
     return [this.kaylee.root, this.ji.root, ...this.toys.pickRoots, ...this.kids.map((k) => k.r.root), ...this.f.picks, this.pool.root]
   }
 
+  // Roblox controls: the stick walks her on the floor she's on (climbs and slides are still a tap), a drag turns the
+  // camera (no follow-the-finger then).
+  protected roams() {
+    return !this.walker.riding
+  }
+  protected roamer() {
+    const w = this.walker
+    return { k: this.kaylee, free: (x: number, z: number) => w.floor.nav.free(x, z), stop: () => w.stop() }
+  }
+
   pointerDown() {
     super.pointerDown()
     this.lead = { last: 0 }
@@ -622,8 +636,8 @@ export class BigFrame extends Stage {
     const low = !this.walker.riding && (fl === 'in' || fl === 'pit') ? 1 : 0
     this.low += (low - this.low) * 0.06
     const pitch = 18 - 8 * up - 9 * this.low
-    if (tall) return { center: V(clamp(x, -2.2, 10.4), clamp(k.y * 0.6 + 1.9, 2.0, 4.8), -1.7), half: V(2.3, 2.5 - 0.3 * up, 1.5), yaw, pitch, minDist: 6 }
-    return { center: V(clamp(x, -2.6, 10.0), clamp(k.y + 0.95, 1.35, 5.25) - 0.25 * this.low, -1.8 - 0.4 * this.low), half: V(3.6 - 0.5 * up - 0.7 * this.low, 1.75 - 0.3 * up - 0.3 * this.low, 1.5), yaw, pitch, minDist: 5 }
+    if (tall) return { center: V(clamp(x, -2.2, 10.4), clamp(k.y * 0.6 + 1.9, 2.0, 4.8), -1.7), half: V(2.3, 2.5 - 0.3 * up, 1.5), yaw, pitch, minDist: 6, roam: HARBOR_ROAM }
+    return { center: V(clamp(x, -2.6, 10.0), clamp(k.y + 0.95, 1.35, 5.25) - 0.25 * this.low, -1.8 - 0.4 * this.low), half: V(3.6 - 0.5 * up - 0.7 * this.low, 1.75 - 0.3 * up - 0.3 * this.low, 1.5), yaw, pitch, minDist: 5, roam: HARBOR_ROAM }
   }
 
   protected anchorAt(id: string): AnchorSpot | null {
