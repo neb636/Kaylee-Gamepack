@@ -208,7 +208,10 @@ export class ThaiMapWorld extends Stage {
   protected shot(): Shot {
     // Thailand runs from about (-1.6, -3.0) to (1.7, 2.9): the whole country on screen, north up. A wide screen sees it
     // from a little lower (more of the table at the sides); a tall one from higher, so the long tail fits.
+    // A very wide, short screen (an iPhone on its side) would show the tall country tiny, its pins and pokes on top of
+    // each other: there the camera swings round to the west side, so the country runs across the screen (north left).
     const tall = this.w < this.h
+    if (this.w > this.h * 1.75) return { center: new Vector3(0.08, 0.35, 0.1), half: new Vector3(1.7, 0.45, 3.0), yaw: -90, pitch: 50, minDist: 3 }
     if (tall) return { center: new Vector3(0.08, 0.35, 0.3), half: new Vector3(1.7, 0.45, 2.95), yaw: 0, pitch: 60, minDist: 3 }
     return { center: new Vector3(0.08, 0.35, 0.3), half: new Vector3(1.5, 0.45, 2.65), yaw: 0, pitch: 42, minDist: 3 }
   }

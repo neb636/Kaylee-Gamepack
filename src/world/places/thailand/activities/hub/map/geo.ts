@@ -88,7 +88,7 @@ export const PINS: Pin[] = [
 export type PokeId = 'elephant' | 'clouds' | 'boat' | 'dolphins' | 'gibbon' | 'hornbill' | 'buffalo' | 'tuktuk' | 'palm'
 export const POKES: { id: PokeId; at: XY; label: string }[] = [
   { id: 'elephant', at: proj([99.1, 17.6]), label: 'The elephant' },
-  { id: 'clouds', at: proj([101.75, 19.35]), label: 'The rain cloud' },
+  { id: 'clouds', at: proj([101.5, 18.15]), label: 'The rain cloud' },
   { id: 'gibbon', at: proj([98.95, 15.2]), label: 'The gibbon' },
   { id: 'buffalo', at: proj([103.0, 16.0]), label: 'The water buffalo' },
   { id: 'hornbill', at: proj([102.6, 13.4]), label: 'The hornbill' },
