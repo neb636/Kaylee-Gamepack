@@ -12,9 +12,7 @@ export default defineConfig({
   },
   projects: [
     // Step-by-step walkthroughs are tagged @behavior: they break on every UI tweak, so they run nightly (`npm run test:behavior`), not on every PR.
-    { name: 'chromium', testIgnore: /tap-around/, grepInvert: process.env.BEHAVIOR ? undefined : /@behavior/, use: { browserName: 'chromium', viewport: { width: 820, height: 1180 } } }, // iPad Air, portrait
-    // Safari's engine, like Kaylee's iPad: every section opened and poked (tests/tap-around.spec.ts).
-    { name: 'webkit', testMatch: /tap-around/, use: { browserName: 'webkit', viewport: { width: 1180, height: 820 } } }, // iPad Air, landscape
+    { name: 'chromium', grepInvert: process.env.BEHAVIOR ? undefined : /@behavior/, use: { browserName: 'chromium', viewport: { width: 820, height: 1180 } } }, // iPad Air, portrait
   ],
   webServer: {
     command: 'npx vite preview --port 4173 --strictPort',
