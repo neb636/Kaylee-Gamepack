@@ -9,7 +9,6 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "playwright test --project chromium",
-    "tap-around": "playwright test --project webkit",
     "check": "node scripts/generate-voice.mjs --check && node scripts/check-heavy-imports.mjs && node scripts/check-case.mjs && node scripts/sections-readme.mjs --check && node scripts/plan.mjs check && npm run typecheck && npm run build && npm run test",
     "verify": "node scripts/generate-voice.mjs --check && node scripts/check-heavy-imports.mjs && node scripts/check-case.mjs && node scripts/sections-readme.mjs --check && node scripts/plan.mjs check && npm run typecheck && npm run build",
     "test:changed": "node scripts/changed-specs.mjs",

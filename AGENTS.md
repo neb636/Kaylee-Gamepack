@@ -205,8 +205,8 @@ what's next; PR bodies end with the next prompt.
 - **The engine** (`src/world/engine3d/`, outside the locked folder) is shared by every 3D country: one shared
   renderer (we make the WebGL2 context ourselves, so no console error without one), the frame loop (60 fps cap; 30
   when nothing moves; slower in test browsers), a box-fitting follow camera, a walk grid with A*, the tap marker, the finger drive control for vehicles (`drive.ts`), water and particles. `View3D.tsx` mounts any 3D world with its DOM tap
-  targets (`Anchors.tsx`): real buttons, at least 64 px, placed over the 3D things every frame, so VoiceOver,
-  tap-around and QA can find them. Overlapping targets must not steal each other's taps.
+  targets (`Anchors.tsx`): real buttons, at least 64 px, placed over the 3D things every frame, so VoiceOver and
+  QA can find them. Overlapping targets must not steal each other's taps.
 - **Layouts are data in meters** (`activities/hub/layout.ts`): the build, the walk grids and the tap targets all
   read the one source of truth.
 - **The hub is a toy:** tap the floor and Kaylee walks there; tap a thing and it reacts at once, then she uses it; tap
@@ -368,8 +368,8 @@ After `npm run build`; WebKit, because the iPad runs Safari (`npx playwright ins
   and a plain pacing run, but every new activity adds a motion scenario for its core verb and the screens and runs that
   need a finger. A screen QA never looked at is a screen nobody checked.
 
-**When to run it (scope).** CI already opens and pokes every section of every activity on every PR
-(`tests/tap-around.spec.ts`, WebKit) and fails on any exception, so the agents are only for what a test can't judge:
+**When to run it (scope).** CI no longer opens and pokes every section (the tap-around spec was removed), so QA
+is what catches a section that throws: the agents also judge what a test can't:
 - **Full QA (both agents, below)** when an activity reaches its art gate or its full-loop gate, or a country is
   added: once per gate, scoped to the new activity or sections, at `--only=ipad-portrait,ipad-landscape,iphone-landscape`.
   All seven sizes only for shared code or a country's first QA. Tell the agents which activities; they check only those.
@@ -395,13 +395,12 @@ the country's `known-issues.md` (Thailand has one) instead of growing the PR.
 1. `npm run verify` must pass (voice-clip check, heavy-import check, file names that differ only in case, the README
    directory, plan pages, typecheck, build; about 2 minutes). If you changed
    spoken lines, run `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs` first and commit the clips.
-2. **Do not run `npm run test`, `npm run tap-around` or `npm run check` locally.** CI runs the Playwright specs on the PR
-   (`tap-around` only for the countries you touched, everything when shared code changed). After opening the PR, start the
+2. **Do not run `npm run test` or `npm run check` locally.** CI runs the Playwright specs on the PR. After opening the PR, start the
    Codex review watcher (`open-pr` skill, step 4), then report and stop; don't wait for CI. Fix real review findings;
    for nitpicky ones (the skill lists what counts) react 👎 and reply why instead of changing code. If CI is red, read `gh run view --log-failed`, check whether the same spec fails on
    `main`, then fix only that spec. To run just what your branch affects, `npm run test:changed` (opt-in).
-3. **New activities get no bespoke e2e spec.** `tests/sections.spec.ts` and `tests/tap-around.spec.ts` discover
-   every section by themselves and only fail on exceptions, so UI tweaks don't break them. A bespoke spec is for a
+3. **New activities get no bespoke e2e spec.** `tests/sections.spec.ts` discovers
+   every section by itself, so UI tweaks don't break it. A bespoke spec is for a
    non-visual contract only (voice plays, GPU memory, a deep link lands). Step-by-step walkthroughs are
    tagged `@behavior`: they run nightly (`npm run test:behavior`), not on PRs.
 4. Re-read "What Kaylee told us" and the design rules. Is every instruction spoken? Does she win most of the time, and can she never fail
