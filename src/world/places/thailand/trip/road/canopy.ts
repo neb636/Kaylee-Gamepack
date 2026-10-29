@@ -23,10 +23,10 @@ const TILE = 512
 
 /** Each crown's leaves, darkest (deep shade) to lightest (sunlit tips). */
 const PAINT: Record<string, string[]> = {
-  lime: ['#24461C', '#3F7428', '#62A034', '#8FC74B', '#C3E77A'],
-  green: ['#1C4425', '#336E35', '#519645', '#7DBD5C', '#B3DE87'],
-  deep: ['#163720', '#28582F', '#3F7F3E', '#64A552', '#97CA79'],
-  olive: ['#33441D', '#53682C', '#7B913F', '#A6BA5C', '#D4DE92'],
+  lime: ['#2E5640', '#4E8436', '#7CB83A', '#A8D64A', '#DDF08A'],
+  green: ['#2A5244', '#477E38', '#6EAE36', '#98CC46', '#CFEA84'],
+  deep: ['#284C44', '#3F7238', '#5E9E34', '#86BE40', '#BFE07A'],
+  olive: ['#3A5440', '#5E8236', '#8AB03C', '#B4D04E', '#E2EC8E'],
   wide: ['#1F4524', '#376E34', '#579346', '#84BB5E', '#BBDE8E'],
   bush: ['#22502A', '#3A7A38', '#5DA24A', '#8BC864', '#C0E68F'],
   pink: ['#7E2F58', '#B44E82', '#E27BAD', '#FBA9CC', '#FFDDEC'],

@@ -5,17 +5,19 @@
 // ones poking up through the canopy; far off the canopy alone. Near the road the trees stay short enough that the
 // camera behind the Pajero sees over them. Palms by the villages and out in the paddies.
 //
-// The trees' crowns and the bushes are painted cards that face the camera (canopy.ts: the trick games use for forests,
-// Dad's ask, 2026-10-28), on a 3D trunk. The bamboo, bananas, palms and grass are shapes. Each kind is drawn many times
-// at once (an InstancedMesh, one per tile of ground so tiles off screen aren't drawn). No ink outlines on the plants:
-// Dad likes the trees without the black border (2026-10-29); a kind could still ask for one with `px`.
-import { BufferAttribute, Color, ConeGeometry, CylinderGeometry, Euler, Group, InstancedBufferAttribute, InstancedMesh, Matrix4, MeshToonMaterial, PlaneGeometry, Quaternion, SphereGeometry, Vector3, type BufferGeometry } from 'three'
+// The trees and bushes are leafy crowns (foliage.ts: clouds of small leaf cards lit like soft balls, Dad's sunny
+// stylized reference, 2026-10-29) on smooth forking trunks; far off the canopy is painted cards (canopy.ts), and so
+// are the bananas and the bamboo. Palms and grass are shapes. Everything is softly lit, not in toon bands. Each kind is
+// drawn many times at once (an InstancedMesh, one per tile of ground so tiles off screen aren't drawn). No ink
+// outlines on the plants: Dad likes the trees without the black border (2026-10-29); a kind could still ask for one
+// with `px`.
+import { BufferAttribute, Color, ConeGeometry, CylinderGeometry, Euler, Group, InstancedBufferAttribute, InstancedMesh, Matrix4, MeshLambertMaterial, PlaneGeometry, Quaternion, SphereGeometry, Vector3, type BufferGeometry } from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import type { Bag } from '../../../../engine3d/dispose'
 import { hullGeometry, instancedOutlineMaterial } from '../../../../engine3d/outline'
-import { toonGradient } from '../../../../engine3d/toon'
 import { fbm, rng, type HeightField, type RoadLook } from './build'
 import { BAMBOO_W, CROWN, crownMaterial, UPRIGHT, type CrownId } from './canopy'
+import { crownGeometry, foliageMaterial, trunkGeometry, windTick, type CrownShape } from './foliage'
 import type { Road } from './road'
 
 /** Somewhere to keep clear of plants: `r` meters round (x, z), or (`across`) a strip `w` meters either side of a line
@@ -50,7 +52,6 @@ function part(g: BufferGeometry, shade: string, tint: number, o: Opts = {}) {
   return g
 }
 
-const BARK = '#8A6B5A'
 const join = (parts: BufferGeometry[]) => {
   const g = mergeGeometries(parts, false)
   for (const p of parts) p.dispose()
@@ -67,20 +68,10 @@ interface Kind {
 }
 
 function kinds() {
-  // The trees' trunks (their crowns are painted cards, see CROWNS): a short one up into the crown, and the tall trees'
-  // long bare one. (They stop inside the crown: above that they'd show in front of the leaves.)
-  const trunk: Kind = {
-    geo: join([part(new CylinderGeometry(0.2, 0.34, 3.4, 6), BARK, 0, { at: [0, 1.7, 0] })]),
-    h: 3.4,
-    px: 0,
-    colors: ['#FFFFFF'],
-  }
-  const tallTrunk: Kind = {
-    geo: join([part(new CylinderGeometry(0.24, 0.46, 10.8, 6), '#9C8070', 0, { at: [0, 5.4, 0] })]),
-    h: 10.8,
-    px: 0,
-    colors: ['#FFFFFF'],
-  }
+  // The trees' trunks: a short thick one forking into three branches up into the crown, and the tall trees' long one.
+  const bark = (g: BufferGeometry) => part(g, '#FFFFFF', 1)
+  const trunk: Kind = { geo: bark(trunkGeometry(3.4, 0.36, 6.2, 3, 5)), h: 6.5, px: 0, colors: ['#8B5E3C', '#7E5434', '#946747', '#86603F'] }
+  const tallTrunk: Kind = { geo: bark(trunkGeometry(10.2, 0.44, 12.6, 3, 9)), h: 13, px: 0, colors: ['#9A7454', '#8E6A4C'] }
   // A coconut palm: a curving trunk, a crown of long drooping fronds, three coconuts.
   const palmParts: BufferGeometry[] = []
   let px = 0
@@ -108,26 +99,40 @@ function kinds() {
 }
 type KindId = keyof ReturnType<typeof kinds>
 
-/** The painted trees: how tall each is (m, at scale 1), its card's middle above the ground and its size, which trunk it
+/** The leafy crowns' shapes (foliage.ts), their greens, and what each tree stands on. */
+const SHAPES = {
+  round: { n: 44, size: 1.65, y: 6.2, r: [3.5, 3, 3.5], leaf: 'broad', seed: 1, ball: 1 },
+  wide: { n: 54, size: 1.8, y: 12.8, r: [4.8, 2.5, 4.8], leaf: 'broad', seed: 2, ball: 1 },
+  bloom: { n: 38, size: 1.6, y: 6.2, r: [3.4, 3, 3.4], leaf: 'blossom', seed: 3, ball: 1 },
+  mid: { n: 22, size: 2.2, y: 5.9, r: [3.6, 3.1, 3.6], leaf: 'small', seed: 4, ball: 0 },
+  bush: { n: 12, size: 1, y: 1, r: [1.4, 1, 1.4], leaf: 'bush', seed: 5, ball: 0 },
+} as const satisfies Record<string, CrownShape>
+type ShapeId = keyof typeof SHAPES
+const GREENS = ['#8BC63A', '#79BA34', '#9AD042', '#6FAE30', '#A8D84A', '#7FB838', '#63A236', '#93C23E']
+const LEAFY = {
+  broadleaf: { h: 9.5, shape: 'round', trunk: 'trunk' },
+  tall: { h: 16, shape: 'wide', trunk: 'tallTrunk' },
+  canopy: { h: 9.5, shape: 'mid', trunk: null },
+  shrub: { h: 2.2, shape: 'bush', trunk: null },
+} as const satisfies Record<string, { h: number; shape: ShapeId; trunk: KindId | null }>
+type LeafyId = keyof typeof LEAFY
+
+/** The painted cards: how tall each is (m, at scale 1), its card's middle above the ground and its size, which trunk it
  *  stands on, and which pictures it can be. */
 const CROWNS = {
-  broadleaf: { h: 9.5, y: 5.8, w: 8.8, ch: 7.8, trunk: 'trunk', tiles: ['lime', 'green', 'deep', 'olive', 'green'], upright: false },
-  tall: { h: 16, y: 12.8, w: 11.5, ch: 7.6, trunk: 'tallTrunk', tiles: ['wide'], upright: false },
-  canopy: { h: 9.5, y: 5.6, w: 9.6, ch: 8.4, trunk: null, tiles: ['lime', 'green', 'deep', 'olive', 'deep'], upright: false },
   far: { h: 11, y: 6.2, w: 12.5, ch: 10.6, trunk: null, tiles: ['green', 'deep', 'olive', 'lime', 'deep'], upright: false },
-  shrub: { h: 2.3, y: 1, w: 3, ch: 2.4, trunk: null, tiles: ['bush'], upright: false },
   // (Standing on the ground: the card's middle is half its height up.)
   banana: { h: 4.6, y: 2.3, w: 4.2, ch: 4.6, trunk: null, tiles: ['banana', 'banana2'], upright: true },
   bamboo: { h: 9.5, y: 4.75, w: BAMBOO_W, ch: 9.5, trunk: null, tiles: ['bamboo', 'bamboo2'], upright: true },
 } as const satisfies Record<string, { h: number; y: number; w: number; ch: number; trunk: KindId | null; tiles: readonly CrownId[]; upright: boolean }>
-type TreeId = keyof typeof CROWNS
+type TreeId = keyof typeof CROWNS | LeafyId
 
-/** The toon look with a per-plant tint: the leaves take the plant's color, the trunk keeps its own (the `tint`
- *  attribute: 1 tinted, 0 not). */
-let tinted: MeshToonMaterial | null = null
+/** Soft light (not toon bands, like the leafy crowns) with a per-plant tint: the leaves take the plant's color, the
+ *  trunk keeps its own (the `tint` attribute: 1 tinted, 0 not). */
+let tinted: MeshLambertMaterial | null = null
 function tintedToon() {
   if (tinted) return tinted
-  const m = new MeshToonMaterial({ vertexColors: true, gradientMap: toonGradient() })
+  const m = new MeshLambertMaterial({ vertexColors: true })
   m.onBeforeCompile = (sh) => {
     sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float tint;').replace(
       '#include <color_vertex>',
@@ -140,7 +145,7 @@ function tintedToon() {
       #endif`,
     )
   }
-  m.customProgramCacheKey = () => 'tinted-toon'
+  m.customProgramCacheKey = () => 'tinted-soft'
   return (tinted = m)
 }
 
@@ -162,6 +167,8 @@ export function buildForest(road: Road, field: HeightField, look: RoadLook, clea
   const bloom = look.bloom ?? 0
   /** The painted crowns: where each card's middle is, its size, its picture and its tint. */
   const crowns: { at: Vector3; w: number; h: number; tile: number; c: Color }[] = []
+  /** The leafy crowns, by shape: where each stands, and its green. */
+  const leafy = new Map<ShapeId, { m: Matrix4; c: Color }[]>()
   const shape = (id: KindId, x: number, y: number, z: number, k: number, color?: string) => {
     const kind = K[id]
     const c = new Color(color ?? kind.colors[Math.floor(rand() * kind.colors.length)])
@@ -176,11 +183,24 @@ export function buildForest(road: Road, field: HeightField, look: RoadLook, clea
    *  painted tree gets its trunk and its card (`tile`: a flowering one's picture instead of a green). */
   const plant = (id: KindId | TreeId, x: number, z: number, k: number, cap = Infinity, tile?: CrownId) => {
     const y = field.at(x, z)
-    const h = id in CROWNS ? CROWNS[id as TreeId].h : K[id as KindId].h
+    const h = id in LEAFY ? LEAFY[id as LeafyId].h : id in CROWNS ? CROWNS[id as keyof typeof CROWNS].h : K[id as KindId].h
     if (y + h * k > cap) k = (cap - y) / h
     if (k < 0.5) return false
+    if (id in LEAFY) {
+      // A leafy crown (a flowering one in pink or gold blossom), on its trunk.
+      const t = LEAFY[id as LeafyId]
+      if (t.trunk) shape(t.trunk, x, y, z, k)
+      const sh: ShapeId = tile === 'pink' || tile === 'gold' ? 'bloom' : t.shape
+      const c = new Color(tile === 'pink' ? (rand() < 0.5 ? '#F7A3C8' : '#F28CBB') : tile === 'gold' ? '#F4C842' : GREENS[Math.floor(rand() * GREENS.length)])
+      c.offsetHSL((rand() - 0.5) * 0.02, 0, (rand() - 0.5) * 0.06)
+      q.setFromAxisAngle(up, rand() * Math.PI * 2)
+      const list = leafy.get(sh) ?? []
+      list.push({ m: new Matrix4().compose(new Vector3(x, y - 0.15 * k, z), q, new Vector3(k, k * (0.9 + rand() * 0.2), k)), c })
+      leafy.set(sh, list)
+      return true
+    }
     if (!(id in CROWNS)) return shape(id as KindId, x, y, z, k), true
-    const t = CROWNS[id as TreeId]
+    const t = CROWNS[id as keyof typeof CROWNS]
     if (t.trunk) shape(t.trunk, x, y, z, k)
     // (Every crown a little different: its size, how wide, how light; an upright one mirrored half the time.)
     const w = t.w * k * (0.9 + rand() * 0.2) * (t.upright && rand() < 0.5 ? -1 : 1)
@@ -226,7 +246,7 @@ export function buildForest(road: Road, field: HeightField, look: RoadLook, clea
       }
       // (Where the road runs on past her part of it, only the simple canopy: she only glimpses it.)
       if (!seen) {
-        if (rand() < 0.75 && !field.open(x, z)) plant('canopy', x, z, 0.8 + rand() * 0.6, cap)
+        if (rand() < 0.75 && !field.open(x, z)) plant('far', x, z, 0.7 + rand() * 0.45, cap)
         continue
       }
       if (field.open(x, z) && d > 60) {
@@ -247,11 +267,15 @@ export function buildForest(road: Road, field: HeightField, look: RoadLook, clea
         // (Undergrowth between the trees.)
         if (rand() < 0.12) plant('shrub', x + (rand() - 0.5) * G, z + (rand() - 0.5) * G, 0.7 + rand() * 0.5)
       } else if (d < 56) {
+        // (From here on the simpler crown: the trunks are hidden by the trees in front.)
         const t = bigTree(d)
-        plant(rand() < 0.1 ? 'bamboo' : t.id, x, z, 0.8 + rand() * 0.6, cap, t.color)
+        plant(rand() < 0.1 ? 'bamboo' : t.id === 'broadleaf' && !t.color ? 'canopy' : t.id, x, z, 0.8 + rand() * 0.6, cap, t.color)
       } else if (rand() < 0.8) {
+        // (Past 80 m the painted card: from there nobody can tell, and it's 2 triangles instead of 60.)
         const t = bigTree(d)
-        plant(t.id === 'tall' ? 'tall' : 'canopy', x, z, 0.85 + rand() * 0.6, Infinity, t.color)
+        if (t.id === 'tall' && d < 80) plant('tall', x, z, 0.85 + rand() * 0.6, Infinity, t.color)
+        else if (d < 80) plant('canopy', x, z, 0.85 + rand() * 0.6, Infinity, t.color)
+        else plant('far', x, z, 0.72 + rand() * 0.5, Infinity, t.color)
       }
     }
   // Far off (every 8 m, out to where the haze takes over): the canopy alone.
@@ -297,6 +321,27 @@ export function buildForest(road: Road, field: HeightField, look: RoadLook, clea
       }
     }
   }
+  // The leafy crowns: one shape per kind, many per tile; the wind moves on as they're drawn.
+  for (const [id, list] of leafy) {
+    const geo = bag.add(crownGeometry(SHAPES[id]))
+    const tiles = new Map<string, typeof list>()
+    for (const p of list) {
+      const key = `${Math.floor(p.m.elements[12] / TILE)},${Math.floor(p.m.elements[14] / TILE)}`
+      const t = tiles.get(key) ?? []
+      t.push(p)
+      tiles.set(key, t)
+    }
+    for (const t of tiles.values()) {
+      const mesh = bag.add(new InstancedMesh(geo, foliageMaterial(), t.length))
+      t.forEach((p, i) => {
+        mesh.setMatrixAt(i, p.m)
+        mesh.setColorAt(i, p.c)
+      })
+      mesh.computeBoundingSphere()
+      mesh.onBeforeRender = windTick
+      root.add(mesh)
+    }
+  }
   // The painted crowns: one card shape, many cards per tile.
   const card = new PlaneGeometry(1, 1)
   const cardTiles = new Map<string, typeof crowns>()
@@ -323,6 +368,6 @@ export function buildForest(road: Road, field: HeightField, look: RoadLook, clea
   }
   card.dispose()
   for (const id of Object.keys(K) as KindId[]) if (!placed.has(id)) K[id].geo.dispose()
-  root.userData.counts = { ...Object.fromEntries([...placed].map(([id, l]) => [id, l.length])), crowns: crowns.length }
+  root.userData.counts = { ...Object.fromEntries([...placed].map(([id, l]) => [id, l.length])), ...Object.fromEntries([...leafy].map(([id, l]) => [`leafy-${id}`, l.length])), cards: crowns.length }
   return root
 }
