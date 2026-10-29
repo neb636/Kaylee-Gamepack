@@ -7,6 +7,10 @@
 //
 // The camera lab (?cam=1, lab/camera/) can change whatever shot the game asks for (`override`): the game keeps choosing
 // its shots, the rig frames the changed one.
+//
+// Kaylee can turn it herself, the way Roblox does on the iPad (`turn`, `pinch`, from View3D and roam.ts): a shot that
+// says how far (`roam`) lets a one-finger drag swing the camera around and a pinch move it in and out. Her turn stays
+// put between shots (like Roblox's), only clamped to whatever the new shot allows.
 import { PerspectiveCamera, Vector3 } from 'three'
 import { TUNE } from './tune'
 
@@ -24,6 +28,22 @@ export interface Shot {
   /** The box turns with the camera (a chase camera behind a boat): its x runs across the screen and its z away from the
    *  camera, so the fit is the same whichever way the camera faces. */
   follow?: boolean
+  /** How far she may turn this shot herself (Roblox-style drag and pinch): degrees added to its yaw and pitch, and how
+   *  far in and out (times the distance that fits). No `roam`: the camera is the game's alone. */
+  roam?: Roam
+}
+
+export interface Roam {
+  yaw: [min: number, max: number]
+  pitch: [min: number, max: number]
+  zoom: [min: number, max: number]
+}
+
+/** Her own turn of the camera, on top of the game's shot. */
+export interface UserTurn {
+  yaw: number
+  pitch: number
+  zoom: number
 }
 
 /** The camera lab's change to the game's shots. */
@@ -70,6 +90,8 @@ export class CameraRig {
   private over: CamOverride | null = null
   /** Seconds left of a snappy glide after the lab moved a slider. */
   private quick = 0
+  /** Her own turn (drag and pinch), clamped to each shot's `roam`. */
+  readonly user: UserTurn = { yaw: 0, pitch: 0, zoom: 1 }
 
   /** The lens in use: the lab's, the game's, or the house default. */
   get lens() {
@@ -122,6 +144,38 @@ export class CameraRig {
     return { ...this.aim(this.goal), fov: this.lens }
   }
 
+  /** Her drag swings the camera (degrees: positive yaw goes around to the right, positive pitch looks from higher up).
+   *  False when this shot can't be turned. */
+  turn(dyaw: number, dpitch: number) {
+    const r = this.goal?.roam
+    if (!r) return false
+    const u = this.user
+    u.yaw = clampTo(u.yaw + dyaw, r.yaw)
+    u.pitch = clampTo(u.pitch + dpitch, r.pitch)
+    this.quick = Math.max(this.quick, 0.12)
+    return true
+  }
+
+  /** Her pinch: `zoom` times the distance that fits (below 1: closer). */
+  pinch(zoom: number) {
+    const r = this.goal?.roam
+    if (!r) return false
+    this.user.zoom = clampTo(zoom, r.zoom)
+    this.quick = Math.max(this.quick, 0.12)
+    return true
+  }
+
+  /** Back to the game's own view (a new place, a deep link). */
+  resetTurn() {
+    this.user.yaw = this.user.pitch = 0
+    this.user.zoom = 1
+  }
+
+  /** Can she turn the shot on screen now? */
+  get turnable() {
+    return !!this.goal?.roam
+  }
+
   /** Forget cached fits (the ?debug panel changed the field of view). */
   refit() {
     this.fits.clear()
@@ -157,18 +211,33 @@ export class CameraRig {
   }
 
   /** The shot with the lab's change: where to look from, and how far. */
-  private aim(g: Shot) {
+  private aim(shot: Shot) {
+    const g = this.turned(shot)
     const o = this.over
-    if (!o) return { center: g.center, yaw: g.yaw, pitch: g.pitch, dist: this.fit(g) }
+    // (Turning keeps the distance that fits the game's own view, like Roblox's camera on its stick: no refit per degree.)
+    if (!o) return { center: g.center, yaw: g.yaw, pitch: g.pitch, dist: this.fit(shot) * (g.zoom ?? 1) }
     const yaw = o.mode === 'lock' ? o.yaw : g.yaw + o.yaw
     const pitch = Math.max(-20, Math.min(89, o.mode === 'lock' ? o.pitch : g.pitch + o.pitch))
-    const dist = this.fit({ ...g, yaw, pitch }) * o.zoom
+    const dist = this.fit({ ...g, yaw, pitch }) * o.zoom * (g.zoom ?? 1)
     const y = yaw * deg
     const center = g.center.clone()
     center.x += Math.cos(y) * o.px
     center.z -= Math.sin(y) * o.px
     center.y += o.py
     return { center, yaw, pitch, dist }
+  }
+
+  /** The game's shot with her own turn on it (clamped to what it allows; the clamp sticks, so a turn never winds up
+   *  past the edge and then has to be unwound). */
+  private turned(g: Shot): Shot & { zoom?: number } {
+    const r = g.roam
+    if (!r) return g
+    const u = this.user
+    u.yaw = clampTo(u.yaw, r.yaw)
+    u.pitch = clampTo(u.pitch, r.pitch)
+    u.zoom = clampTo(u.zoom, r.zoom)
+    if (!u.yaw && !u.pitch && u.zoom === 1) return g
+    return { ...g, yaw: g.yaw + u.yaw, pitch: Math.max(-20, Math.min(85, g.pitch + u.pitch)), zoom: u.zoom }
   }
 
   private place() {
@@ -221,3 +290,5 @@ function offset(yaw: number, pitch: number, dist: number) {
   const p = pitch * deg
   return new Vector3(Math.sin(y) * Math.cos(p), Math.sin(p), Math.cos(y) * Math.cos(p)).multiplyScalar(dist)
 }
+
+const clampTo = (v: number, [lo, hi]: [number, number]) => Math.max(lo, Math.min(hi, v))

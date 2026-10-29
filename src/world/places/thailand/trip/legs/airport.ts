@@ -11,7 +11,7 @@ import { buildAnimal, type Rig } from '../../../../engine3d/characters/animal'
 import { FaceLife } from '../../../../engine3d/characters/face'
 import type { Look } from '../../characters/looks'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
-import type { Shot } from '../../../../engine3d/camera'
+import type { Roam, Shot } from '../../../../engine3d/camera'
 import { merge, P, solid } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
 import { sfx } from '../../sfx'
@@ -21,6 +21,9 @@ import { buildSuitcase, type Suitcase } from '../props'
 import { L } from '../../lines'
 import { buildPlaneOutside, type PlaneOutside } from '../vehicles/plane'
 import { Stage, type AnchorSpot, type LegEvents, type Rider } from './stage'
+
+/** How far she may turn the camera herself (Roblox-style drag and pinch). */
+const AIRPORT_ROAM: Roam = { yaw: [-40, 40], pitch: [-8, 28], zoom: [0.6, 1.4] }
 
 export const AIRPORT_ANCHORS: AnchorInfo[] = [
   { id: 'suitcase', label: 'Suitcase', kind: 'thing' },
@@ -223,6 +226,15 @@ export class Airport extends Stage {
 
   protected pickRoots(): Object3D[] {
     return [this.suitcase.root, this.screen.mesh, this.officer.root, this.pass, this.flag, this.plane.root, ...Object.values(this.riders).map((r) => r.root)]
+  }
+
+  // Roblox controls: she can turn the camera round the airport (a drag that starts on the suitcase still drags it).
+  // The family walks her through it, so there's no stick here.
+  protected roams() {
+    return true
+  }
+  roamGrabbed() {
+    return !!this.drag
   }
 
   pointerDown(x?: number, y?: number) {
@@ -454,14 +466,14 @@ export class Airport extends Stage {
   protected shot(): Shot {
     const tall = this.w < this.h
     const out = this.phase === 'doors' || this.phase === 'board' || this.phase === 'gone'
-    if (out) return { center: new Vector3(tall ? 5.5 : 6.6, 1.5, -0.2), half: tall ? new Vector3(3.6, 1.8, 2.6) : new Vector3(5.6, 1.6, 2.4), yaw: 6, pitch: 15, minDist: 6 }
+    if (out) return { center: new Vector3(tall ? 5.5 : 6.6, 1.5, -0.2), half: tall ? new Vector3(3.6, 1.8, 2.6) : new Vector3(5.6, 1.6, 2.4), yaw: 6, pitch: 15, minDist: 6, roam: AIRPORT_ROAM }
     // At the belt with the family, then along with the suitcase to the x-ray, the screen and the officer.
     const scan = this.phase !== 'belt'
     // (Tall screens: a shallower box, so the family and the belt fill the screen instead of empty floor.)
     // Tall screens: the belt and the family, then close on the x-ray and its screen so the joke shows.
-    if (tall && scan) return { center: new Vector3(0.05, 1.3, -0.55), half: new Vector3(1.45, 0.85, 0.75), yaw: 6, pitch: 14, minDist: 3 }
-    if (tall) return { center: new Vector3(-2.7, 1.0, 0.1), half: new Vector3(1.8, 1.1, 0.9), yaw: 6, pitch: 18, minDist: 4 }
-    return { center: new Vector3(scan ? -1.0 : -1.9, 1.1, -0.1), half: new Vector3(3.6, 1.1, 1.6), yaw: 6, pitch: 22, minDist: 5 }
+    if (tall && scan) return { center: new Vector3(0.05, 1.3, -0.55), half: new Vector3(1.45, 0.85, 0.75), yaw: 6, pitch: 14, minDist: 3, roam: AIRPORT_ROAM }
+    if (tall) return { center: new Vector3(-2.7, 1.0, 0.1), half: new Vector3(1.8, 1.1, 0.9), yaw: 6, pitch: 18, minDist: 4, roam: AIRPORT_ROAM }
+    return { center: new Vector3(scan ? -1.0 : -1.9, 1.1, -0.1), half: new Vector3(3.6, 1.1, 1.6), yaw: 6, pitch: 22, minDist: 5, roam: AIRPORT_ROAM }
   }
 
   protected anchorAt(id: string): AnchorSpot | null {

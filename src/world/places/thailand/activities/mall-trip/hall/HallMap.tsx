@@ -69,7 +69,7 @@ export function HallMap({ open, done, here, fresh, nudge, hidden, onOpen, onPick
               sounds.pop()
               onOpen(true)
             }}
-            style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 14px)', bottom: 'calc(var(--safe-bottom, 0px) + 14px)', width: 'clamp(88px, 13vmin, 112px)', height: 'clamp(88px, 13vmin, 112px)', borderRadius: '50%', border: '5px solid #fff', background: 'var(--butter)', boxShadow: nudge ? '0 0 0 6px rgba(255,79,154,.55), 0 0 26px 10px rgba(255,200,61,.7)' : 'var(--shadow)', fontSize: 'clamp(44px, 7vmin, 58px)', padding: 0, zIndex: 45 }}
+            style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 14px)', bottom: 'calc(var(--safe-bottom, 0px) + 14px + var(--roam-right, 0px))', width: 'clamp(88px, 13vmin, 112px)', height: 'clamp(88px, 13vmin, 112px)', borderRadius: '50%', border: '5px solid #fff', background: 'var(--butter)', boxShadow: nudge ? '0 0 0 6px rgba(255,79,154,.55), 0 0 26px 10px rgba(255,200,61,.7)' : 'var(--shadow)', fontSize: 'clamp(44px, 7vmin, 58px)', padding: 0, zIndex: 45 }}
           >
             🗺️
             {badge && (

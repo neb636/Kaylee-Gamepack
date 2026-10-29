@@ -893,6 +893,35 @@ motion.push(
   thaiHouse('wardrobe-door', 4, 'wardrobe?door=crown,hearts,tutu;bow,fairy,dress-mint', [['trip:ward:thing:photo-1', 2500]]),
 )
 
+// Roblox controls (engine3d/roam.ts) in the house: a drag swings the camera round, the pink thumbstick walks her the
+// way it's pushed (as the camera faces), and the jump button hops her along.
+motion.push({
+  name: 'thai-roam',
+  seconds: 6,
+  setup: async (page, base) => {
+    await page.goto(`${base}#/world/thailand/hub/downstairs`)
+    await page.waitForTimeout(600)
+    await page.waitForFunction(() => window.__thaiHouseQA?.().roam, null, { timeout: 20000 })
+    await page.waitForTimeout(800)
+  },
+  act: async (page) => {
+    await page.mouse.move(vp.width * 0.62, vp.height * 0.45)
+    await page.mouse.down()
+    await page.mouse.move(vp.width * 0.3, vp.height * 0.38, { steps: 14 })
+    await page.mouse.up()
+    await page.waitForTimeout(500)
+    const box = await page.locator('[data-roam="stick"]').boundingBox()
+    const [x, y] = [box.x + box.width / 2, box.y + box.height / 2]
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    await page.mouse.move(x + box.width * 0.1, y - box.width * 0.4, { steps: 4 })
+    await page.waitForTimeout(1600)
+    await page.mouse.up()
+    await page.locator('[data-roam="jump"]').click({ force: true })
+    await page.waitForTimeout(1200)
+  },
+})
+
 // Thailand's boat trip (3D greybox): a finger held on the water ahead of the longtail (it surges after it, then turns
 // when the finger moves right, the wake and spray streaming), a VROOM tap, a finger held far to one side (doughnuts),
 // and the canoe paddling under the low cave roof (Daddy's horn bonks first, then Mommy's, then Kaylee's).
