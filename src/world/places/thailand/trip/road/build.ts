@@ -3,11 +3,20 @@
 // steel guard rails wherever the ground drops away beside it, black-and-white chevron signs round the sharp bends,
 // round convex mirrors on blind bends, trees, a ring of far mountains, and a river with a bridge where one crosses; and
 // after rain, the wet road's shine and its puddles (buildWet). Few draw calls: each kind of thing is merged into one mesh (plus its outline).
+//
+// The Nan look (`look.jungle`, the mountain roads; the photos Dad sent of Route 1081 and 1256): the road runs on past
+// both ends into the hills (it never just stops), dark asphalt with a solid yellow middle and a grass shoulder, steel
+// W-beam rails, power poles with sagging wires and white kilometer stones, hillsides deep in a lumpy forest canopy
+// (forest.ts), cleared fields on the far slopes, paddies cut into fields with green bunds, villages with tin roofs in
+// pink and blue (village.ts), and layer after layer of blue ridges going pale into the haze (far.ts).
 import { BoxGeometry, BufferAttribute, BufferGeometry, Color, Group, Matrix4, Mesh, MeshBasicMaterial, Quaternion, Vector3 } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import { bake, merge, P, solid, type V3 } from '../../../../engine3d/geo'
 import { PAL, toon } from '../../../../engine3d/toon'
-import type { Road } from './road'
+import { buildRidges } from './far'
+import { buildForest, type Clear } from './forest'
+import { Road, type RoadPoint } from './road'
+import { buildVillages, type Village } from './village'
 
 export interface RoadLook {
   /** How far the hills rise and dip (meters): beside the road, and far from it. */
@@ -25,6 +34,17 @@ export interface RoadLook {
   signs?: boolean
   /** Seed for the hills and the trees (the same road always looks the same). */
   seed: number
+  /** The Nan look: the forest canopy, the far ridges, the road running on past its ends (see the top of the file). */
+  jungle?: boolean
+  /** The road's middle line (the Nan look): solid yellow on the mountain roads, dashed in the valley and the town. */
+  middle?: 'solid' | 'dashed'
+  /** Villages beside the road (the Nan look). */
+  villages?: Village[]
+  /** Flowering trees among the green (the Nan look): the share of the big trees in pink (Chomphu Phu Kha, the sky
+   *  road's own) and gold (ratchaphruek). */
+  bloom?: number
+  /** How sharply the road bends away as it runs on past its ends (radians every 26 m; the Nan look). */
+  runOn?: number
 }
 
 const ASPHALT = '#8E88A3'
@@ -33,8 +53,13 @@ const MIDDLE = '#FFD45C'
 const VERGE = '#D9BC9C'
 const RAIL = '#E9ECF4'
 const POST = '#B9BCCB'
+// The Nan look's road: dark asphalt, a solid yellow middle, a concrete edge and a grass shoulder.
+const J_ASPHALT = '#7A7686'
+const J_MIDDLE = '#FFC93C'
+const J_KERB = '#C9C5CF'
+const J_VERGE = '#86C468'
 
-const smooth = (a: number, b: number, x: number) => {
+export const smooth = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)))
   return t * t * (3 - 2 * t)
 }
@@ -57,7 +82,7 @@ function hash(ix: number, iz: number, seed: number) {
   return ((h ^ (h >>> 16)) >>> 0) / 4294967296
 }
 /** Smooth value noise, -1..1, a few octaves. */
-function fbm(x: number, z: number, seed: number) {
+export function fbm(x: number, z: number, seed: number) {
   let sum = 0
   let amp = 1
   let norm = 0
@@ -90,12 +115,17 @@ export class HeightField {
   readonly nz: number
   readonly cell = 4
   readonly h: Float32Array
-  /** Meters to the road's middle at each grid point. */
+  /** Meters to the road's middle at each grid point, and the height of the road there and how far along it that is. */
   readonly d: Float32Array
+  readonly ry: Float32Array
+  readonly rs: Float32Array
 
   constructor(
     readonly road: Road,
     readonly look: RoadLook,
+    /** Where the drive's road starts along this one (the Nan look's road runs on past its ends): the river's `s` is the
+     *  drive's. */
+    readonly s0 = 0,
   ) {
     const b = road.bounds(170)
     this.x0 = b.x0
@@ -104,23 +134,28 @@ export class HeightField {
     this.nz = Math.ceil((b.z1 - b.z0) / this.cell) + 1
     this.h = new Float32Array(this.nx * this.nz)
     this.d = new Float32Array(this.nx * this.nz)
+    this.ry = new Float32Array(this.nx * this.nz)
+    this.rs = new Float32Array(this.nx * this.nz)
     const pts = road.samples.filter((_, i) => i % 3 === 0)
     for (let j = 0; j < this.nz; j++)
       for (let i = 0; i < this.nx; i++) {
         const x = this.x0 + i * this.cell
         const z = this.z0 + j * this.cell
-        const { h, d } = this.natural(x, z, pts)
+        const { h, d, y, s } = this.natural(x, z, pts)
         this.h[j * this.nx + i] = h
         this.d[j * this.nx + i] = d
+        this.ry[j * this.nx + i] = y
+        this.rs[j * this.nx + i] = s
       }
   }
 
-  private natural(x: number, z: number, pts: { x: number; y: number; z: number }[]) {
+  private natural(x: number, z: number, pts: { x: number; y: number; z: number; s: number }[]) {
     const { look, road } = this
     let sw = 0
     let swy = 0
     let best = Infinity
     let yNear = 0
+    let sNear = 0
     for (const p of pts) {
       const d2 = (p.x - x) ** 2 + (p.z - z) ** 2
       const w = 1 / (d2 + 36)
@@ -129,6 +164,7 @@ export class HeightField {
       if (d2 < best) {
         best = d2
         yNear = p.y
+        sNear = p.s
       }
     }
     const d = Math.sqrt(best)
@@ -143,24 +179,49 @@ export class HeightField {
     h = flat + (h - flat) * smooth(road.half + 1.6, road.half + 9, d)
     // (After the flattening: the river runs right under the bridge.)
     if (look.river) {
-      const r = road.spotAt(look.river.s)
-      const p = road.sampleAt(look.river.s)
+      const r = road.spotAt(look.river.s + this.s0)
+      const p = road.sampleAt(look.river.s + this.s0)
       // Meters from the river's middle (it runs across the road, along the road's left there).
       const off = Math.abs((x - r.x) * p.tx + (z - r.z) * p.tz)
       h = -3 + (h + 3) * smooth(look.river.width / 2, look.river.width / 2 + 10, off)
     }
-    return { h, d }
+    return { h, d, y: yNear, s: sNear }
   }
 
   /** How high the ground is at (x, z) (bilinear between the grid points; held at the edges). */
   at(x: number, z: number) {
+    return this.lerp(this.h, x, z)
+  }
+  /** Meters from (x, z) to the road's middle (near enough: bilinear between the grid points). */
+  dist(x: number, z: number) {
+    return this.lerp(this.d, x, z)
+  }
+  /** How high the road is nearest (x, z). */
+  roadY(x: number, z: number) {
+    return this.lerp(this.ry, x, z)
+  }
+  /** About how far along the road the nearest bit of it is (from the nearest grid point). */
+  roadS(x: number, z: number) {
+    const i = Math.round(Math.min(this.nx - 1, Math.max(0, (x - this.x0) / this.cell)))
+    const j = Math.round(Math.min(this.nz - 1, Math.max(0, (z - this.z0) / this.cell)))
+    return this.rs[j * this.nx + i]
+  }
+  /** The Nan look: a cleared field on a far slope (corn, dry grass) instead of forest. */
+  open(x: number, z: number) {
+    return this.look.jungle === true && fbm(x / 95, z / 95, this.look.seed + 17) > 0.3
+  }
+  /** The Nan look's paddies: flat fields beside the valley road. */
+  paddyAt(d: number) {
+    return !!this.look.paddies && d < 72
+  }
+
+  private lerp(h: Float32Array, x: number, z: number) {
     const u = Math.min(this.nx - 1.001, Math.max(0, (x - this.x0) / this.cell))
     const v = Math.min(this.nz - 1.001, Math.max(0, (z - this.z0) / this.cell))
     const i = Math.floor(u)
     const j = Math.floor(v)
     const fu = u - i
     const fv = v - j
-    const h = this.h
     const n = this.nx
     const a = h[j * n + i]
     const b = h[j * n + i + 1]
@@ -187,7 +248,8 @@ export class HeightField {
         pos.set([x, this.h[k], z], k * 3)
         const d = this.d[k]
         const n = fbm(x / 22, z / 22, look.seed + 3)
-        if (d < road.half + 1.2) c.copy(verge)
+        if (look.jungle) this.jungleColor(c, x, z, d, n)
+        else if (d < road.half + 1.2) c.copy(verge)
         else if (look.paddies && look.terraces && d < 75) {
           // Each step its own paddy, and a grassy bank along each step's edge.
           const hk = this.h[k]
@@ -211,7 +273,32 @@ export class HeightField {
     g.computeVertexNormals()
     return new Mesh(bag.add(g), toon('#ffffff', true))
   }
+
+  /** The Nan look's ground: a grass shoulder along the road, the dark floor under the forest (its gaps read as shade
+   *  between the crowns), cleared fields on the far slopes, green bunds round the paddies, and muddy banks by a river. */
+  private jungleColor(c: Color, x: number, z: number, d: number, n: number) {
+    const half = this.road.half
+    const k = (n + 1) / 2
+    c.copy(J.grass[0]).lerp(J.grass[1], k)
+    if (this.paddyAt(d)) return void c.copy(J.bund).lerp(J.grass[1], smooth(66, 74, d) * 0.5)
+    const forest = smooth(half + 3.5, half + 8, d)
+    if (forest <= 0) return
+    const f = tmpC.copy(J.floor[0]).lerp(J.floor[1], k)
+    if (fbm(x / 9, z / 9, this.look.seed + 5) > 0.35) f.lerp(J.floor[2], 0.6)
+    // (Each cleared field its own crop: dry corn, young corn, fresh grass, bare earth.)
+    if (this.open(x, z) && d > 60) f.copy(J.field[Math.floor(((fbm(x / 40, z / 40, this.look.seed + 23) + 1) / 2) * 4) % 4])
+    c.lerp(f, forest)
+  }
 }
+
+/** The Nan look's ground colors. */
+const J = {
+  grass: [new Color('#8CC86C'), new Color('#76B860')],
+  floor: [new Color('#4C8F55'), new Color('#5D9E57'), new Color('#3F7F4E')],
+  field: [new Color('#D9C78E'), new Color('#BFCB7C'), new Color('#A9D37A'), new Color('#C9A27E')],
+  bund: new Color('#7FBF68'),
+}
+const tmpC = new Color()
 
 /** A box from `a` to `b` (its length along the line between them), `w` wide and `h` tall. */
 function beam(a: Vector3, b: Vector3, w: number, h: number, color: string) {
@@ -258,47 +345,72 @@ export interface RoadScene {
   field: HeightField
   /** Where along the road there are guard rails, by side (+1 left, -1 right). */
   railed: (s: number, side: number) => boolean
+  /** The road as drawn: with the Nan look, longer than the one she drives (it runs on past both ends); its `s` is the
+   *  drive's plus `s0`. */
+  drawn: Road
+  s0: number
 }
 
-export function buildRoadScene(road: Road, look: RoadLook, bag: Bag): RoadScene {
+/** What to keep clear of trees and houses (a stop, the waterfall, the market): `r` meters round `lat` meters left of the
+ *  road at `s` (the drive's own s). */
+export interface ClearSpot {
+  s: number
+  lat: number
+  r: number
+}
+
+export function buildRoadScene(road: Road, look: RoadLook, bag: Bag, clear: ClearSpot[] = []): RoadScene {
   const root = new Group()
-  const field = new HeightField(road, look)
+  // (The Nan look: the road runs on into the hills past both ends, drawn and planted round like the rest of it.)
+  const { drawn, s0 } = look.jungle ? runOn(road, look.runOn ?? 0.2) : { drawn: road, s0: 0 }
+  const field = new HeightField(drawn, look, s0)
   root.add(field.mesh(bag))
-  root.add(ribbon(road, bag))
+  root.add(ribbon(drawn, look, bag))
 
   // ---- Guard rails where the ground drops away beside the road ----
-  const half = road.half
+  const half = drawn.half
   const railSet = new Set<string>()
   const railParts: BufferGeometry[] = []
   const POST_EVERY = 4
   for (const side of [1, -1]) {
     let prev: Vector3 | null = null
-    for (let s = 0; s <= road.length; s += POST_EVERY) {
-      const out = road.spotAt(s, side * (half + 5))
-      const drop = road.sampleAt(s).y - field.at(out.x, out.z)
-      const onBridge = look.river && Math.abs(s - look.river.s) < look.river.width / 2 + 4
+    for (let s = 0; s <= drawn.length; s += POST_EVERY) {
+      const out = drawn.spotAt(s, side * (half + 5))
+      const drop = drawn.sampleAt(s).y - field.at(out.x, out.z)
+      const onBridge = look.river && Math.abs(s - s0 - look.river.s) < look.river.width / 2 + 4
       if (drop < 1.6 && !onBridge) {
         prev = null
         continue
       }
       railSet.add(`${side}:${Math.round(s / POST_EVERY)}`)
-      const p = road.spotAt(s, side * (half + 0.55))
+      const p = drawn.spotAt(s, side * (half + 0.55))
       const at = new Vector3(p.x, p.y, p.z)
-      railParts.push(P.box(0.12, 0.85, 0.12, POST, { at: [at.x, at.y + 0.42, at.z] }))
-      if (prev) railParts.push(beam(prev.clone().setY(prev.y + 0.62), at.clone().setY(at.y + 0.62), 0.07, 0.3, RAIL))
+      if (look.jungle) {
+        // A W-beam on steel posts: the rail's two ridges catch the light, a groove between; an amber reflector now and then.
+        railParts.push(P.box(0.14, 0.8, 0.14, '#A9ADBC', { at: [at.x, at.y + 0.4, at.z] }))
+        if (Math.round(s / POST_EVERY) % 3 === 0) railParts.push(P.box(0.16, 0.12, 0.16, '#FFB23D', { at: [at.x, at.y + 0.86, at.z] }))
+        if (prev) {
+          const a = prev.clone().addScaledVector(new Vector3(-drawn.sampleAt(s - POST_EVERY).lx, 0, -drawn.sampleAt(s - POST_EVERY).lz), side * 0.06)
+          const c = at.clone().addScaledVector(new Vector3(-drawn.sampleAt(s).lx, 0, -drawn.sampleAt(s).lz), side * 0.06)
+          railParts.push(beam(a.clone().setY(a.y + 0.7), c.clone().setY(c.y + 0.7), 0.08, 0.36, '#E8EBF2'))
+          railParts.push(beam(a.clone().setY(a.y + 0.7), c.clone().setY(c.y + 0.7), 0.1, 0.06, '#B8BCCA'))
+        }
+      } else if (prev) railParts.push(beam(prev.clone().setY(prev.y + 0.62), at.clone().setY(at.y + 0.62), 0.07, 0.3, RAIL))
+      if (!look.jungle) railParts.push(P.box(0.12, 0.85, 0.12, POST, { at: [at.x, at.y + 0.42, at.z] }))
       prev = at
     }
   }
   if (railParts.length) root.add(solid(merge(railParts), bag, 2))
+  const railed = (s: number, side: number) => railSet.has(`${side}:${Math.round((s + s0) / POST_EVERY)}`)
 
   // ---- Chevron signs round the sharp bends, on the outside, facing her as she comes ----
   const signs: BufferGeometry[] = []
-  for (let s = 8; s < road.length - 8 && look.signs !== false; s += 7) {
-    const k = road.bendAhead(s - 6, 12) / 12
+  for (let s = 8; s < drawn.length - 8 && look.signs !== false; s += 7) {
+    const k = drawn.bendAhead(s - 6, 12) / 12
     if (Math.abs(k) < 1 / 38) continue
     const side = -Math.sign(k)
-    const p = road.spotAt(s, side * (half + 1.7))
-    const t = road.sampleAt(s)
+    const p = drawn.spotAt(s, side * (half + 1.7))
+    const t = drawn.sampleAt(s)
     const y = field.at(p.x, p.z)
     // The arrow points the way the road turns (seen from her side: +x is her right).
     const dir = k > 0 ? 1 : -1
@@ -315,80 +427,248 @@ export function buildRoadScene(road: Road, look: RoadLook, bag: Bag): RoadScene 
   }
   if (signs.length) root.add(solid(merge(signs), bag, 2))
 
-  // ---- Trees on the hills (not on the road, the paddies or in the river) ----
   const rand = rng(look.seed * 31 + 5)
-  const trees: BufferGeometry[] = []
-  const b = road.bounds(150)
-  for (let n = 0, tries = 0; n < look.trees && tries < look.trees * 12; tries++) {
-    const x = b.x0 + rand() * (b.x1 - b.x0)
-    const z = b.z0 + rand() * (b.z1 - b.z0)
-    const near = road.locate(x, z)
-    if (near.d < half + 6 || (look.paddies && near.d < 70)) continue
+  const b = drawn.bounds(150)
+  if (look.jungle) {
+    // ---- The Nan look: villages, power poles, kilometer stones, the forest, the far ridges ----
+    const clears: Clear[] = clear.map((c) => {
+      const p = drawn.spotAt(c.s + s0, c.lat)
+      return { x: p.x, z: p.z, r: c.r }
+    })
     if (look.river) {
-      const r = road.spotAt(look.river.s)
-      const p = road.sampleAt(look.river.s)
-      if (Math.abs((x - r.x) * p.tx + (z - r.z) * p.tz) < look.river.width / 2 + 3) continue
+      const r = drawn.spotAt(look.river.s + s0)
+      const t = drawn.sampleAt(look.river.s + s0)
+      clears.push({ x: r.x, z: r.z, r: 0, across: { tx: t.tx, tz: t.tz, w: look.river.width / 2 + 3 } })
     }
-    const y = field.at(x, z)
-    const k = 0.8 + rand() * 0.9
-    const green = ['#5FAE7E', '#6FBF86', '#4F9D78'][Math.floor(rand() * 3)]
-    trees.push(
-      rand() < 0.55
-        ? merge([P.cyl(0.18 * k, 0.24 * k, 2 * k, '#A07A63', { at: [x, y + k, z] }, 6), P.cone(1.6 * k, 3 * k, green, { at: [x, y + 2.9 * k, z] }, 8), P.cone(1.1 * k, 2.2 * k, green, { at: [x, y + 4.2 * k, z] }, 8)])
-        : merge([P.cyl(0.2 * k, 0.26 * k, 2.2 * k, '#A07A63', { at: [x, y + 1.1 * k, z] }, 6), P.sphere(1.7 * k, green, { at: [x, y + 3.2 * k, z], scale: [1, 0.85, 1] }, 8)]),
-    )
-    n++
-  }
-  if (trees.length) root.add(solid(merge(trees), bag, 2))
+    if (look.villages?.length) {
+      const v = buildVillages(drawn, field, look.villages.map((v) => ({ ...v, s: v.s + s0 })), look.seed, bag)
+      root.add(v.root)
+      clears.push(...v.clears)
+    }
+    if (look.paddies && !look.terraces) root.add(paddyFields(field, look, clears, bag))
+    root.add(roadside(drawn, field, railed, s0, clears, bag))
+    root.add(buildForest(drawn, field, look, clears, [s0, s0 + road.length], bag))
+    root.add(buildRidges(b, drawn.bounds().y0, look.seed, bag))
+  } else {
+    // ---- Trees on the hills (not on the road, the paddies or in the river) ----
+    const trees: BufferGeometry[] = []
+    for (let n = 0, tries = 0; n < look.trees && tries < look.trees * 12; tries++) {
+      const x = b.x0 + rand() * (b.x1 - b.x0)
+      const z = b.z0 + rand() * (b.z1 - b.z0)
+      const near = drawn.locate(x, z)
+      if (near.d < half + 6 || (look.paddies && near.d < 70)) continue
+      if (look.river) {
+        const r = drawn.spotAt(look.river.s)
+        const p = drawn.sampleAt(look.river.s)
+        if (Math.abs((x - r.x) * p.tx + (z - r.z) * p.tz) < look.river.width / 2 + 3) continue
+      }
+      const y = field.at(x, z)
+      const k = 0.8 + rand() * 0.9
+      const green = ['#5FAE7E', '#6FBF86', '#4F9D78'][Math.floor(rand() * 3)]
+      trees.push(
+        rand() < 0.55
+          ? merge([P.cyl(0.18 * k, 0.24 * k, 2 * k, '#A07A63', { at: [x, y + k, z] }, 6), P.cone(1.6 * k, 3 * k, green, { at: [x, y + 2.9 * k, z] }, 8), P.cone(1.1 * k, 2.2 * k, green, { at: [x, y + 4.2 * k, z] }, 8)])
+          : merge([P.cyl(0.2 * k, 0.26 * k, 2.2 * k, '#A07A63', { at: [x, y + 1.1 * k, z] }, 6), P.sphere(1.7 * k, green, { at: [x, y + 3.2 * k, z], scale: [1, 0.85, 1] }, 8)]),
+      )
+      n++
+    }
+    if (trees.length) root.add(solid(merge(trees), bag, 2))
 
-  // ---- A ring of far mountains, hazy in the fog ----
-  const far: BufferGeometry[] = []
-  const cx = (b.x0 + b.x1) / 2
-  const cz = (b.z0 + b.z1) / 2
-  const R = Math.max(b.x1 - b.x0, b.z1 - b.z0) / 2 + 140
-  const { y0 } = road.bounds()
-  for (let i = 0; i < 16; i++) {
-    const a = (i / 16) * Math.PI * 2 + rand() * 0.3
-    const r = R + rand() * 90
-    const h = 110 + rand() * 120
-    far.push(P.cone(70 + rand() * 60, h, ['#86BFA0', '#7AB497', '#93C7A8'][i % 3], { at: [cx + Math.cos(a) * r, y0 - 10 + h / 2, cz + Math.sin(a) * r] }, 9))
+    // ---- A ring of far mountains, hazy in the fog ----
+    const far: BufferGeometry[] = []
+    const cx = (b.x0 + b.x1) / 2
+    const cz = (b.z0 + b.z1) / 2
+    const R = Math.max(b.x1 - b.x0, b.z1 - b.z0) / 2 + 140
+    const { y0 } = drawn.bounds()
+    for (let i = 0; i < 16; i++) {
+      const a = (i / 16) * Math.PI * 2 + rand() * 0.3
+      const r = R + rand() * 90
+      const h = 110 + rand() * 120
+      far.push(P.cone(70 + rand() * 60, h, ['#86BFA0', '#7AB497', '#93C7A8'][i % 3], { at: [cx + Math.cos(a) * r, y0 - 10 + h / 2, cz + Math.sin(a) * r] }, 9))
+    }
+    root.add(solid(merge(far), bag, 0))
   }
-  root.add(solid(merge(far), bag, 0))
 
   // ---- A river under a bridge ----
   if (look.river) {
-    const r = road.spotAt(look.river.s)
-    const p = road.sampleAt(look.river.s)
-    const water = new Mesh(bag.add(P.box(look.river.width + 6, 0.1, 900, '#ffffff', { at: [0, 0, 0] })), toon('#86CBE6'))
+    const r = drawn.spotAt(look.river.s + s0)
+    const p = drawn.sampleAt(look.river.s + s0)
+    const water = new Mesh(bag.add(P.box(look.river.width + 6, 0.1, 900, '#ffffff', { at: [0, 0, 0] })), toon(look.jungle ? '#8FC9C2' : '#86CBE6'))
     water.position.set(r.x, -1.6, r.z)
     water.rotation.y = Math.atan2(p.tx, p.tz) + Math.PI / 2
     root.add(water)
     const bridge: BufferGeometry[] = []
     const w = look.river.width / 2 + 4
+    const from = look.river.s + s0
     for (const side of [1, -1])
-      for (let s = look.river.s - w; s < look.river.s + w; s += 2) {
-        const a = road.spotAt(s, side * (half + 0.6))
-        const c = road.spotAt(s + 2, side * (half + 0.6))
+      for (let s = from - w; s < from + w; s += 2) {
+        const a = drawn.spotAt(s, side * (half + 0.6))
+        const c = drawn.spotAt(s + 2, side * (half + 0.6))
         bridge.push(beam(new Vector3(a.x, a.y + 0.9, a.z), new Vector3(c.x, c.y + 0.9, c.z), 0.12, 0.14, PAL.cream))
         bridge.push(P.box(0.14, 0.9, 0.14, PAL.cream, { at: [a.x, a.y + 0.45, a.z] }))
       }
     // The deck under the road.
-    const a = road.spotAt(look.river.s - w)
-    const c = road.spotAt(look.river.s + w)
+    const a = drawn.spotAt(from - w)
+    const c = drawn.spotAt(from + w)
     bridge.push(beam(new Vector3(a.x, a.y - 0.45, a.z), new Vector3(c.x, c.y - 0.45, c.z), half * 2 + 1.6, 0.8, '#C9C3D8'))
     root.add(solid(merge(bridge), bag, 2))
   }
 
-  return { root, field, railed: (s, side) => railSet.has(`${side}:${Math.round(s / POST_EVERY)}`) }
+  return { root, field, railed, drawn, s0 }
+}
+
+/** The road running on past both ends (the Nan look): a long way on from the start and the stop, bending gently away from
+ *  the middle of the land and leveling off, so it goes on round a hill instead of stopping dead. The first point added
+ *  at each end is exactly where the spline carries on by itself, so the part she drives is drawn exactly where it was. */
+function runOn(road: Road, bend: number): { drawn: Road; s0: number } {
+  const pts = road.points
+  const n = pts.length
+  const b = road.bounds()
+  const cx = (b.x0 + b.x1) / 2
+  const cz = (b.z0 + b.z1) / 2
+  const away = (from: RoadPoint, prev: RoadPoint): RoadPoint[] => {
+    const out: RoadPoint[] = []
+    let [x, z, y] = from
+    let dx = from[0] - prev[0]
+    let dz = from[1] - prev[1]
+    const len = Math.hypot(dx, dz) || 1
+    let grade = (from[2] - prev[2]) / len
+    dx /= len
+    dz /= len
+    // (The spline's own next point first, then on in 26 m steps, turning a little further from the middle each time.)
+    x += dx * len
+    z += dz * len
+    y += grade * len
+    out.push([x, z, y])
+    for (let k = 0; k < 5; k++) {
+      const ox = x - cx
+      const oz = z - cz
+      const side = Math.sign(dx * oz - dz * ox) || 1
+      const turn = bend * side
+      const c = Math.cos(turn)
+      const s = Math.sin(turn)
+      ;[dx, dz] = [dx * c - dz * s, dx * s + dz * c]
+      grade *= 0.7
+      x += dx * 26
+      z += dz * 26
+      y += grade * 26
+      out.push([x, z, y])
+    }
+    return out
+  }
+  const lead = away(pts[0], pts[1]).reverse()
+  const tail = away(pts[n - 1], pts[n - 2])
+  const drawn = new Road([...lead, ...pts, ...tail], road.half)
+  return { drawn, s0: drawn.locate(pts[0][0], pts[0][1]).s }
+}
+
+/** The Nan look's paddies: the flat land beside the valley road cut into fields of every shape (a grid pulled about),
+ *  each its own green (bright young rice, deeper older rice, one still flooded and shining like the sky), with a strip of
+ *  grass bund between them (the ground showing through). One mesh. */
+function paddyFields(field: HeightField, look: RoadLook, clears: Clear[], bag: Bag) {
+  const C = 13
+  const half = field.road.half
+  const greens = ['#B4E66A', '#9BDB5C', '#86CF55', '#C5EC72', '#A4DD62', '#9ED4C4', '#78C452'].map((c) => new Color(c))
+  const corner = (i: number, j: number): [number, number] => [field.x0 + i * C + (hash(i, j, look.seed) - 0.5) * C * 0.5, field.z0 + j * C + (hash(i, j, look.seed + 1) - 0.5) * C * 0.5]
+  const pos: number[] = []
+  const col: number[] = []
+  const nx = Math.ceil(((field.nx - 1) * field.cell) / C)
+  const nz = Math.ceil(((field.nz - 1) * field.cell) / C)
+  for (let j = 0; j < nz; j++)
+    for (let i = 0; i < nx; i++) {
+      const q = [corner(i, j), corner(i + 1, j), corner(i + 1, j + 1), corner(i, j + 1)]
+      const cx = (q[0][0] + q[1][0] + q[2][0] + q[3][0]) / 4
+      const cz = (q[0][1] + q[1][1] + q[2][1] + q[3][1]) / 4
+      if (q.some(([x, z]) => field.dist(x, z) < half + 3 || !field.paddyAt(field.dist(x, z) + 2))) continue
+      if (clears.some((c) => (c.across ? Math.abs((cx - c.x) * c.across.tx + (cz - c.z) * c.across.tz) < c.across.w + 4 : Math.hypot(cx - c.x, cz - c.z) < c.r + 6))) continue
+      // (Pulled in from the bunds.)
+      const v = q.map(([x, z]): V3 => {
+        const dx = cx - x
+        const dz = cz - z
+        const l = Math.hypot(dx, dz) || 1
+        const px = x + (dx / l) * 0.7
+        const pz = z + (dz / l) * 0.7
+        return [px, field.at(px, pz) + 0.07, pz]
+      })
+      const c = greens[Math.floor(hash(i, j, look.seed + 2) * greens.length)]
+      for (const k of [0, 2, 1, 0, 3, 2]) {
+        pos.push(...v[k])
+        col.push(c.r, c.g, c.b)
+      }
+    }
+  const g = new BufferGeometry()
+  g.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3))
+  g.setAttribute('color', new BufferAttribute(new Float32Array(col), 3))
+  g.computeVertexNormals()
+  return new Mesh(bag.add(g), toon('#ffffff', true))
+}
+
+/** Along the road (the Nan look): concrete power poles on one side with three sagging wires, and a white kilometer stone
+ *  with a red cap every so often on her side. Kept clear of the rails, the bridge and the clear spots. */
+function roadside(road: Road, field: HeightField, railed: (s: number, side: number) => boolean, s0: number, clears: Clear[], bag: Bag) {
+  const half = road.half
+  const g = new Group()
+  const parts: BufferGeometry[] = []
+  const wires: BufferGeometry[] = []
+  const free = (x: number, z: number, r: number) => !clears.some((c) => (c.across ? Math.abs((x - c.x) * c.across.tx + (z - c.z) * c.across.tz) < c.across.w + r : Math.hypot(x - c.x, z - c.z) < c.r + r))
+  // The poles: every 32 m on the right (the oncoming side), standing back past the grass; none round the hairpins (the
+  // wires would cut across the bend, and the road).
+  const side = -1
+  const SPAN = 32
+  let last: Vector3[] | null = null
+  for (let s = 6; s < road.length - 4; s += SPAN) {
+    const p = road.spotAt(s, side * (half + 6.4))
+    const t = road.sampleAt(s)
+    const y = field.at(p.x, p.z)
+    if (!free(p.x, p.z, 2) || t.y - y > 6 || Math.abs(road.bendAhead(s - SPAN, SPAN * 2)) > 0.5) {
+      last = null
+      continue
+    }
+    const H = 8.5
+    const yaw = Math.atan2(t.tx, t.tz)
+    parts.push(placed([P.cyl(0.13, 0.2, H, '#D9D5DF', { at: [0, H / 2, 0] }, 6), P.box(2.2, 0.16, 0.16, '#C9C4D0', { at: [0, H - 0.5, 0] }), ...[-0.95, 0, 0.95].map((x) => P.cyl(0.05, 0.05, 0.22, '#F4F1F7', { at: [x, H - 0.3, 0] }, 5))], p.x, y, p.z, yaw))
+    const tops = [-0.95, 0, 0.95].map((x) => new Vector3(p.x + Math.cos(yaw) * x, y + H - 0.2, p.z - Math.sin(yaw) * x))
+    if (last) {
+      // Sagging between the poles, in short straight pieces.
+      for (let w = 0; w < 3; w++) {
+        const a = last[w]
+        const c = tops[w]
+        const N = 6
+        for (let i = 0; i < N; i++) {
+          const at = (u: number) => new Vector3(a.x + (c.x - a.x) * u, a.y + (c.y - a.y) * u - Math.sin(u * Math.PI) * 0.9, a.z + (c.z - a.z) * u)
+          wires.push(beam(at(i / N), at((i + 1) / N), 0.04, 0.04, '#4A4252'))
+        }
+      }
+    }
+    last = tops
+  }
+  // Kilometer stones (a toy's kilometer: one every 120 m) on her side, where there's no rail.
+  for (let s = 40; s < road.length - 20; s += 120) {
+    if (railed(s - s0, 1)) continue
+    const p = road.spotAt(s, half + 1.6)
+    const t = road.sampleAt(s)
+    const y = field.at(p.x, p.z)
+    parts.push(placed([P.rbox(0.42, 0.75, 0.2, 0.08, '#FBFAFF', { at: [0, 0.37, 0] }), P.rbox(0.44, 0.22, 0.22, 0.08, '#E8584F', { at: [0, 0.78, 0] })], p.x, y, p.z, Math.atan2(t.tx, t.tz) + Math.PI / 2))
+  }
+  if (parts.length) g.add(solid(merge(parts), bag, 2))
+  if (wires.length) g.add(solid(merge(wires), bag, 0))
+  return g
 }
 
 /** The road itself: strips across it (verge, edge line, lane, the dashed middle, lane, edge line, verge), one mesh. */
-function ribbon(road: Road, bag: Bag) {
+function ribbon(road: Road, look: RoadLook, bag: Bag) {
   const h = road.half
   // Across the road from right to left, with each strip's color (a function of `s` for the dashes).
-  const cuts = [-(h + 1.5), -h, -h + 0.2, -0.09, 0.09, h - 0.2, h, h + 1.5]
-  const color = (j: number, s: number) => [VERGE, LINE, ASPHALT, Math.floor(s / 3) % 2 ? ASPHALT : MIDDLE, ASPHALT, LINE, VERGE][j]
-  const lift = (j: number) => (j === 0 || j === 6 ? -0.03 : 0.03)
+  let cuts = [-(h + 1.5), -h, -h + 0.2, -0.09, 0.09, h - 0.2, h, h + 1.5]
+  let color = (j: number, s: number) => [VERGE, LINE, ASPHALT, Math.floor(s / 3) % 2 ? ASPHALT : MIDDLE, ASPHALT, LINE, VERGE][j]
+  if (look.jungle) {
+    // The Nan look: grass, a strip of concrete, a white edge line inset from it, dark asphalt, the yellow middle.
+    cuts = [-(h + 1.5), -(h + 0.25), -h, -h + 0.35, -h + 0.55, -0.1, 0.1, h - 0.55, h - 0.35, h, h + 0.25, h + 1.5]
+    const mid = (s: number) => (look.middle === 'dashed' && Math.floor(s / 3) % 2 ? J_ASPHALT : J_MIDDLE)
+    color = (j: number, s: number) => [J_VERGE, J_KERB, J_ASPHALT, LINE, J_ASPHALT, mid(s), J_ASPHALT, LINE, J_ASPHALT, J_KERB, J_VERGE][j]
+  }
+  const last = cuts.length - 2
+  const lift = (j: number) => (j === 0 || j === last ? -0.03 : 0.03)
   const pos: number[] = []
   const col: number[] = []
   const c = new Color()
@@ -402,7 +682,7 @@ function ribbon(road: Road, bag: Bag) {
       const l1 = cuts[j + 1]
       // The verges' outer edges dip a little into the ground.
       const y0 = j === 0 ? -0.2 : lift(j)
-      const y1 = j === 6 ? -0.2 : lift(j)
+      const y1 = j === last ? -0.2 : lift(j)
       const quad: V3[] = [
         [a.x + a.lx * l0, a.y + y0, a.z + a.lz * l0],
         [b.x + b.lx * l0, b.y + y0, b.z + b.lz * l0],

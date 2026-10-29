@@ -87,3 +87,19 @@ export function setHullHighlight(hull: Mesh, on: boolean) {
   const px = hull.userData.hull as number | undefined
   if (px !== undefined) hull.material = outlineMaterial(px, on ? PAL.hotpink : PAL.ink, hull.userData.hullBias ?? 0)
 }
+
+// The same line for an InstancedMesh (a forest of one tree shape): each copy's hull moved by its instance matrix.
+const instancedVertexShader = vertexShader
+  .replace('vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);', 'mat4 m = modelMatrix * instanceMatrix;\n    vec4 mvPosition = viewMatrix * m * vec4(position, 1.0);')
+  .replace('vec3 n = normalMatrix * normal;', 'vec3 n = mat3(viewMatrix) * mat3(m) * normal;')
+const instanced = new Map<number, ShaderMaterial>()
+/** The outline material for hulls drawn as an InstancedMesh (`hullGeometry` of the shape, the same instance matrices). */
+export function instancedOutlineMaterial(px: number) {
+  let m = instanced.get(px)
+  if (!m) {
+    const base = outlineMaterial(px)
+    m = new ShaderMaterial({ uniforms: { ...base.uniforms }, vertexShader: instancedVertexShader, fragmentShader, side: BackSide, fog: true })
+    instanced.set(px, m)
+  }
+  return m
+}

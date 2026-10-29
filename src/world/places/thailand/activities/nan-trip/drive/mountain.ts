@@ -46,8 +46,9 @@ import { applyBands, makeLights } from '../../../../../engine3d/toon'
 import type { World3D } from '../../../../../engine3d/View3D'
 import { Driver, type Feel } from '../../../../../engine3d/drive'
 import { put } from '../../../trip/legs/stage'
-import { buildMirror, buildRoadScene, buildWet, rng, type Mirror, type Puddle, type RoadScene } from '../../../trip/road/build'
+import { buildMirror, buildRoadScene, buildWet, rng, type ClearSpot, type Mirror, type Puddle, type RoadScene } from '../../../trip/road/build'
 import { buildCloudLayer, buildCloudSea, buildPuffs } from '../../../trip/road/clouds'
+import { buildMist, buildSky } from '../../../trip/road/far'
 import { Traffic, type Her, type TrafficEvents, type TrafficPlan } from '../../../trip/road/traffic'
 import { buildPajero, type Pajero } from '../../../trip/vehicles/pajero'
 import { L } from '../../../lines'
@@ -153,13 +154,15 @@ const tmp2 = new Vector3()
 /** Sky and haze for the weather (and above the cloud, the sunshine): soft grey-lavender when it's grey, deeper when it
  *  rains. */
 const AIR = {
-  cloud: { bg: '#D8D6E8', fog: '#DDDBEB', near: 100, far: 480 },
-  rain: { bg: '#C6C4D9', fog: '#CBC9DD', near: 60, far: 340 },
-  sun: { bg: '#BFE3FF', fog: '#E4F3FC', near: 160, far: 620 },
-  above: { bg: '#9FD6FF', fog: '#E6F5FF', near: 220, far: 760 },
+  cloud: { bg: '#D8D6E8', top: '#BDC3DE', fog: '#DDDBEB', near: 100, far: 480 },
+  rain: { bg: '#C6C4D9', top: '#A9ABC6', fog: '#CBC9DD', near: 60, far: 340 },
+  sun: { bg: '#BFE3FF', top: '#7FC0F2', fog: '#E4F3FC', near: 160, far: 620 },
+  above: { bg: '#9FD6FF', top: '#6FB6F0', fog: '#E6F5FF', near: 220, far: 760 },
   // (Misty, not a white wall: the road shows for a good way ahead.)
-  inside: { bg: '#F2F0FA', fog: '#F2F0FA', near: 10, far: 85 },
+  inside: { bg: '#F2F0FA', top: '#F2F0FA', fog: '#F2F0FA', near: 10, far: 85 },
 }
+/** How much mist lies in the valleys and on the hills (the Nan look). */
+const MIST: Record<Weather, number> = { sun: 0.15, cloud: 0.7, rain: 1 }
 /** How bright the sun is in each weather (the toon bands stay; the light just softens). */
 const SUNNY: Record<Weather, number> = { sun: 1, cloud: 0.86, rain: 0.74 }
 
@@ -193,6 +196,8 @@ export class NanDrive implements World3D {
   private rain: Particles
   private sparkle: Particles
   private fog: Fog
+  private sky: ReturnType<typeof buildSky>
+  private top = new Color()
   private air = new Color()
   private fogColor = new Color()
   private phase: DrivePhase = 'drive'
@@ -303,11 +308,28 @@ export class NanDrive implements World3D {
     scene.background = this.air.set(air.bg)
     this.fog = scene.fog = new Fog(air.fog, air.near, air.far)
 
-    // ---- The road and everything along it ----
-    this.world = buildRoadScene(r.road, r.look, bag)
+    // ---- The road and everything along it (kept clear of trees round the stop, the waterfall and the market) ----
+    const half = r.road.half
+    const clear: ClearSpot[] = [{ s: r.road.length - 16, lat: half + 9, r: r.id === 'city' && cup ? 24 : 17 }]
+    if (r.falls !== undefined) clear.push({ s: r.falls, lat: half + 6, r: 10 }, { s: r.falls, lat: -(half + 6), r: 10 })
+    if (r.market) for (let s = r.market[0]; s <= r.market[1]; s += 8) clear.push({ s, lat: half + 5, r: 6 }, { s, lat: -(half + 5), r: 6 })
+    // (And where the camera stands to look round at the stop, past the parked Pajero: see `shot`.)
+    if (r.id !== 'three') {
+      const car = r.road.spotAt(r.road.length - 14, half - 1.4)
+      const l = r.road.spotAt(r.road.length - 16, half + 9)
+      const yaw = Math.atan2(car.x - l.x, car.z - l.z) + 25 * deg
+      for (let k = 6; k <= 42; k += 6) {
+        const at = r.road.locate((car.x + l.x) / 2 + Math.sin(yaw) * k, (car.z + l.z) / 2 + Math.cos(yaw) * k)
+        clear.push({ s: at.s, lat: at.lat, r: 8 })
+      }
+    }
+    this.world = buildRoadScene(r.road, r.look, bag, clear)
     scene.add(this.world.root)
     const field = this.world.field
-    const half = r.road.half
+    // The sky (deep overhead, the haze at the horizon) and the mist in the valleys.
+    this.sky = buildSky(bag)
+    scene.add(this.sky.mesh)
+    scene.add(buildMist(this.world.drawn, field, this.world.drawn.bounds(150), MIST[this.weather], r.look.seed, bag))
     // A monkey with side 0 sits on whichever side has the rail.
     const traffic = { ...roll.traffic, monkeys: roll.traffic.monkeys.map((m) => ({ ...m, side: m.side || (this.world.railed(m.s, -1) ? -1 : 1) })) }
     this.traffic = new Traffic(r.road, field, traffic, bag)
@@ -375,9 +397,10 @@ export class NanDrive implements World3D {
     }
     // Rain: the road shines, with puddles.
     if (this.weather === 'rain') {
-      const wet = buildWet(r.road, r.look.seed, bag)
+      // (Wet all the way along, past the ends too; the puddles she can splash in are the ones on her part of it.)
+      const wet = buildWet(this.world.drawn, r.look.seed, bag)
       scene.add(wet.root)
-      this.puddles = wet.puddles
+      this.puddles = wet.puddles.map((p) => ({ ...p, s: p.s - this.world.s0 })).filter((p) => p.s > 10 && p.s < r.road.length - 20)
     }
 
     // ---- The Pajero and the particles ----
@@ -605,6 +628,7 @@ export class NanDrive implements World3D {
     this.rig.update(dt)
     this.clearTerrain()
     const cam = this.rig.camera
+    this.sky.mesh.position.copy(cam.position)
     this.lights.follow(this.d.x, this.carY(), this.d.z)
     // (Softer light when it's grey or raining; full sun above the cloud.)
     const sunK = this.wasAbove ? 1 : SUNNY[this.weather]
@@ -991,7 +1015,9 @@ export class NanDrive implements World3D {
     this.cloudK += (k - this.cloudK) * (1 - Math.exp(-dt * 2))
     const c = this.cloudK
     this.air.set(base.bg).lerp(tmpColor.set(AIR.inside.bg), c)
+    this.top.set(base.top).lerp(tmpColor.set(AIR.inside.top), c)
     this.fogColor.set(base.fog).lerp(tmpColor.set(AIR.inside.fog), c)
+    this.sky.set(this.top, this.fogColor)
     this.fog.color.copy(this.fogColor)
     this.fog.near = base.near + (AIR.inside.near - base.near) * c
     this.fog.far = base.far + (AIR.inside.far - base.far) * c
