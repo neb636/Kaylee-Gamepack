@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Home prototype: one map, one shelf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #fff7f0; --pink: #ff8fb8; --hotpink: #ff4f9a; --lavender: #d9ccff; --lavender-dark: #b9a6f5;
+  --butter: #fbea9a; --mint: #8fe3c8; --sky: #a8dcff; --peach: #ffc2a8; --gold: #ffc83d;
+  --ink: #2b2330; --ink-soft: #6b5d73; --shadow: 0 6px 0 rgba(43,35,48,.12);
+  --ease: cubic-bezier(.5,0,.2,1);
+  font-family: 'Fredoka', ui-rounded, 'SF Pro Rounded', system-ui, sans-serif; color: var(--ink);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #2b2330; }
+body { user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+button { font: inherit; color: inherit; border: 0; background: none; padding: 0; cursor: pointer; }
+
+/* ---- the Dad toolbar (not part of the game) ---- */
+#tools { position: fixed; inset: 0 0 auto 0; height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 14px; background: #1d1722; color: #fff; z-index: 50; font-size: 15px; }
+#tools button { background: #3a2f45; color: #fff; padding: 8px 14px; border-radius: 12px; font-weight: 500; }
+#tools button.on { background: var(--hotpink); }
+#tools .sp { flex: 1; }
+#where { color: #cdbfe0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#where b { color: #fff; }
+#rules { position: fixed; top: 58px; right: 14px; width: 360px; max-width: calc(100vw - 28px); background: #fff; border-radius: 20px; padding: 18px 20px; z-index: 60; box-shadow: 0 10px 40px rgba(0,0,0,.4); font-size: 15px; line-height: 1.4; display: none; }
+#rules.show { display: block; }
+#rules h3 { margin: 0 0 8px; font-size: 18px; }
+#rules ol { margin: 0; padding-left: 20px; } #rules li { margin: 6px 0; }
+
+#fit { position: fixed; inset: 52px 0 0 0; display: grid; place-items: center; overflow: hidden; }
+#stage { position: absolute; left: 50%; top: 50%; flex: none; overflow: hidden; border-radius: 28px; background: var(--cream); transform-origin: center center; box-shadow: 0 0 0 10px #000, 0 20px 60px rgba(0,0,0,.5); }
+
+/* ---- Home: the map ---- */
+#map { position: absolute; inset: 0; overflow: hidden; background: #97d7fd; touch-action: none; }
+#world { position: absolute; left: 0; top: 0; width: 1536px; height: 1024px; transform-origin: 0 0; background: url(assets/bg-world-map.webp) 0 0 / 100% 100%; transition: transform 1.1s var(--ease); }
+.pin { position: absolute; width: 76px; height: 76px; margin: -38px 0 0 -38px; border-radius: 50%; background: radial-gradient(circle at 50% 35%, #fff, var(--butter)); border: 6px solid var(--gold); box-shadow: 0 6px 0 rgba(43,35,48,.18); transition: left 1.1s var(--ease), top 1.1s var(--ease), opacity .4s, transform .15s; z-index: 3; }
+.pin img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+.pin.here { border-color: var(--hotpink); box-shadow: 0 0 0 8px rgba(255,79,154,.28), 0 6px 0 rgba(43,35,48,.18); }
+.pin.fresh { animation: wig 2.4s ease-in-out infinite; }
+.pin:active { transform: scale(.88); }
+.pin.off { opacity: 0; pointer-events: none; }
+.pin .cnt { position: absolute; left: 50%; bottom: -16px; transform: translateX(-50%); background: #fff; border-radius: 999px; padding: 1px 10px; font-size: 15px; font-weight: 600; box-shadow: 0 3px 0 rgba(43,35,48,.15); white-space: nowrap; color: var(--ink); }
+.pin .cnt.full { background: var(--gold); }
+.pin.sub { width: 84px; height: 84px; margin: -42px 0 0 -42px; }
+.pin .lbl { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); font-size: 15px; font-weight: 600; background: #fff; border-radius: 999px; padding: 1px 10px; white-space: nowrap; box-shadow: 0 3px 0 rgba(43,35,48,.15); }
+@keyframes wig { 0%,100% { transform: rotate(0) } 10% { transform: rotate(-7deg) } 20% { transform: rotate(7deg) } 30% { transform: rotate(0) } }
+#balloon { position: absolute; width: 92px; transform: translate(-50%, -100%); z-index: 5; pointer-events: none; transition: left 1.1s var(--ease), top 1.1s var(--ease); }
+#balloon img { width: 100%; display: block; filter: drop-shadow(0 8px 0 rgba(43,35,48,.14)); transform-origin: 50% 90%; animation: bob 3s ease-in-out infinite; }
+#balloon.fly img { animation: hop 1.1s var(--ease); }
+@keyframes bob { 0%,100% { transform: translateY(0) rotate(-2deg) } 50% { transform: translateY(-8px) rotate(2deg) } }
+@keyframes hop { 0% { transform: translateY(0) rotate(0) } 40% { transform: translateY(-34px) rotate(-7deg) } 100% { transform: translateY(0) rotate(0) } }
+#bubble { position: absolute; z-index: 6; background: #fff; border-radius: 22px; padding: 8px 18px; font-size: 24px; font-weight: 600; box-shadow: var(--shadow); transform: translate(-50%, -100%) scale(0); transform-origin: 50% 100%; transition: transform .25s cubic-bezier(.3,1.6,.5,1); pointer-events: none; white-space: nowrap; }
+#bubble.show { transform: translate(-50%, -100%) scale(1); }
+#bubble::after { content: ''; position: absolute; left: 50%; bottom: -9px; margin-left: -9px; border: 9px solid transparent; border-top-color: #fff; border-bottom: 0; }
+
+/* ---- the one top bar, same on every screen ---- */
+.bar { position: absolute; left: 0; right: 0; top: 0; padding: 22px 24px 0; display: flex; align-items: center; gap: 14px; z-index: 20; pointer-events: none; }
+.bar > * { pointer-events: auto; }
+.rb { width: 80px; height: 80px; border-radius: 50%; background: #fff; box-shadow: var(--shadow); display: grid; place-items: center; transition: transform .12s; }
+.rb:active { transform: scale(.9); }
+.rb img { width: 62px; height: 62px; object-fit: contain; }
+.rb svg { width: 46px; height: 46px; }
+.rb.pinkb { background: var(--hotpink); }
+.sp { flex: 1; pointer-events: none !important; }
+#mine { position: relative; width: 96px; height: 96px; margin-top: -4px; border-radius: 50%; background: linear-gradient(160deg, #ffe0ee, #ffc2d9); box-shadow: var(--shadow); display: grid; place-items: center; }
+#mine img { width: 74px; }
+#mine .badge { position: absolute; right: -6px; bottom: -6px; min-width: 40px; height: 34px; padding: 0 9px; border-radius: 999px; background: var(--gold); font-weight: 700; font-size: 18px; display: grid; place-items: center; box-shadow: 0 3px 0 rgba(43,35,48,.18); }
+#zoomout { display: none; }
+#zoomout.show { display: grid; animation: pop .3s cubic-bezier(.3,1.6,.5,1); }
+@keyframes pop { from { transform: scale(0) } to { transform: scale(1) } }
+
+/* ---- the shelf (bottom sheet) ---- */
+#sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--cream); border-radius: 36px 36px 0 0; box-shadow: 0 -10px 30px rgba(43,35,48,.18); transition: transform .45s var(--ease); z-index: 10; display: flex; flex-direction: column; overflow: hidden; }
+#sheet::before { content: ''; position: absolute; right: -80px; top: -60px; width: 300px; height: 300px; border-radius: 50%; background: rgba(217,204,255,.35); pointer-events: none; }
+#grab { height: 38px; flex: none; display: grid; place-items: center; touch-action: none; cursor: grab; position: relative; }
+#grab i { width: 84px; height: 9px; border-radius: 9px; background: var(--lavender-dark); opacity: .7; display: block; }
+#sbody { flex: 1; overflow-x: hidden; overflow-y: auto; padding-bottom: 40px; scrollbar-width: none; position: relative; }
+#sbody::-webkit-scrollbar { display: none; }
+#sheet.peek #sbody { overflow-y: hidden; }
+.blk { padding: 0 0 6px; }
+.blk.swap { animation: slidein .45s var(--ease); }
+@keyframes slidein { from { opacity: 0; transform: translateX(40px) } to { opacity: 1; transform: none } }
+.head { display: flex; align-items: center; gap: 16px; padding: 0 28px 10px; min-height: 78px; }
+.head .fr { width: 72px; height: 72px; flex: none; border-radius: 50%; background: radial-gradient(circle at 50% 35%, #fff, var(--butter)); border: 5px solid var(--gold); overflow: hidden; box-shadow: 0 4px 0 rgba(43,35,48,.14); }
+.head .fr img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.head .fr.hop { animation: hopf .5s cubic-bezier(.3,1.6,.5,1); }
+@keyframes hopf { 0% { transform: translateY(0) } 40% { transform: translateY(-14px) scale(1.06) } 100% { transform: none } }
+.head h2 { margin: 0; font-size: 30px; font-weight: 700; letter-spacing: .1px; white-space: nowrap; }
+.stars { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.star { width: 30px; height: 30px; border-radius: 50%; background: #efe6f3; border: 3px dashed #d3c4dc; display: grid; place-items: center; font-size: 17px; line-height: 1; transition: transform .2s; }
+.star.on { background: var(--gold); border: 3px solid #fff; box-shadow: 0 3px 0 rgba(43,35,48,.15); }
+.star.new { animation: stamppop .8s cubic-bezier(.3,1.7,.5,1); }
+@keyframes stamppop { 0% { transform: scale(0) rotate(-40deg) } 100% { transform: scale(1) rotate(0) } }
+.head .grow { flex: 1; }
+.chips { display: flex; gap: 12px; }
+.chip { width: 68px; height: 68px; border-radius: 50%; border: 5px solid #fff; background: var(--butter); box-shadow: 0 4px 0 rgba(43,35,48,.14); overflow: hidden; flex: none; position: relative; transition: transform .15s; }
+.chip img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.chip.on { border-color: var(--hotpink); transform: scale(1.12); }
+.chip .d { position: absolute; right: -2px; bottom: -2px; width: 24px; height: 24px; border-radius: 50%; background: var(--gold); font-size: 14px; display: grid; place-items: center; border: 2px solid #fff; }
+.row { display: flex; gap: 20px; overflow-x: auto; overflow-y: hidden; padding: 8px 28px 16px; scrollbar-width: none; scroll-snap-type: x proximity; scroll-padding-left: 28px; }
+.row::-webkit-scrollbar { display: none; }
+.tile { flex: none; width: var(--t); scroll-snap-align: start; text-align: center; transition: transform .12s; }
+.tile:active { transform: scale(.94); }
+.tile .art { position: relative; width: var(--t); height: var(--t); border-radius: 28px; border: 5px solid #fff; box-shadow: 0 6px 0 rgba(43,35,48,.13), 0 12px 22px rgba(43,35,48,.10); overflow: hidden; background: var(--lavender); display: grid; place-items: center; }
+.tile .art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tile .art.sprite { background: linear-gradient(170deg, #e6f6ff, #bfe6ff); }
+.tile .art.sprite img { object-fit: contain; padding: 12%; }
+.tile .art.line { background: #fff; }
+.tile .art.emoji { background: linear-gradient(160deg, #d6f8ec, #8fe3c8); font-size: calc(var(--t) * .5); }
+.tile .nm { margin-top: 8px; font-size: 19px; font-weight: 600; line-height: 1.2; min-height: 24px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile .st, .tile .nw, .tile .ty, .tile .fin { position: absolute; }
+.tile .st { left: 8px; top: 8px; width: 40px; height: 40px; border-radius: 50%; background: var(--gold); border: 3px solid #fff; display: grid; place-items: center; font-size: 22px; box-shadow: 0 3px 0 rgba(43,35,48,.2); }
+.tile .nw { right: 8px; top: 8px; background: var(--hotpink); color: #fff; border-radius: 999px; padding: 2px 11px; font-weight: 700; font-size: 16px; box-shadow: 0 3px 0 rgba(43,35,48,.2); animation: wig 2.4s ease-in-out infinite; }
+.tile .ty { right: 8px; bottom: 8px; width: 44px; height: 44px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 25px; box-shadow: 0 3px 0 rgba(43,35,48,.2); }
+.tile.sur .art { background: linear-gradient(160deg, #ffe0ee, #d9ccff); border-color: var(--gold); }
+.tile.sur .art img { object-fit: cover; }
+.tile.fin .art { border-color: var(--gold); box-shadow: 0 0 0 7px rgba(255,200,61,.5), 0 6px 0 rgba(43,35,48,.13); animation: glow 1.8s ease-in-out infinite; }
+@keyframes glow { 50% { box-shadow: 0 0 0 14px rgba(255,200,61,.3), 0 6px 0 rgba(43,35,48,.13); } }
+.tile.fin .art .tr { position: absolute; right: 8px; bottom: 8px; font-size: 40px; }
+.sep { flex: none; width: 4px; align-self: stretch; margin: 6px 4px 30px; border-radius: 4px; background: var(--lavender); opacity: .7; }
+.sect { display: flex; align-items: center; gap: 12px; padding: 18px 28px 0; }
+.sect .si { width: 52px; height: 52px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 30px; box-shadow: 0 4px 0 rgba(43,35,48,.12); }
+.sect h2 { margin: 0; font-size: 27px; font-weight: 700; }
+.empty { flex: none; width: var(--t); height: var(--t); border-radius: 28px; border: 5px dashed var(--pink); display: grid; place-items: center; font-size: calc(var(--t) * .4); opacity: .8; }
+.gohead { cursor: pointer; }
+.gohead .go { margin-left: auto; width: 64px; height: 64px; border-radius: 50%; background: #fff; box-shadow: 0 4px 0 rgba(43,35,48,.12); display: grid; place-items: center; font-size: 30px; }
+
+/* ---- a game (placeholder) ---- */
+.screen { position: absolute; inset: 0; z-index: 30; display: none; }
+.screen.show { display: block; animation: fade .3s; }
+@keyframes fade { from { opacity: 0 } to { opacity: 1 } }
+#game { background: #2b2330; overflow: hidden; }
+#gbg { position: absolute; inset: -40px; background-size: cover; background-position: center; filter: blur(26px) saturate(1.2) brightness(.8); }
+#gcard { position: absolute; left: 50%; top: 43%; transform: translate(-50%, -50%); width: min(440px, 56%); text-align: center; color: #fff; }
+#gcard .pic { width: 100%; aspect-ratio: 1; border-radius: 40px; border: 8px solid #fff; overflow: hidden; box-shadow: 0 12px 0 rgba(0,0,0,.18); background: var(--lavender); animation: bob2 3s ease-in-out infinite; }
+#gcard .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+#gcard .pic.sprite { background: linear-gradient(170deg, #e6f6ff, #bfe6ff); } #gcard .pic.sprite img { object-fit: contain; padding: 10%; }
+#gcard h1 { margin: 22px 0 6px; font-size: 44px; }
+#gcard p { margin: 0; font-size: 22px; opacity: .85; }
+@keyframes bob2 { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-10px) } }
+#finish { position: absolute; left: 50%; bottom: 5%; transform: translateX(-50%); background: var(--hotpink); color: #fff; font-size: 30px; font-weight: 700; padding: 20px 44px; border-radius: 999px; box-shadow: 0 8px 0 rgba(0,0,0,.22); }
+#finish:active { transform: translateX(-50%) translateY(4px); box-shadow: 0 4px 0 rgba(0,0,0,.22); }
+#heart { transition: transform .15s; } #heart.on { background: #fff; } #heart svg { width: 44px; height: 44px; }
+#award { position: absolute; inset: 0; z-index: 40; display: none; place-items: center; background: rgba(43,35,48,.55); }
+#award.show { display: grid; animation: fade .2s; }
+#award .ring { width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle at 50% 35%, #fff, var(--butter)); border: 14px solid var(--gold); display: grid; place-items: center; font-size: 120px; box-shadow: 0 12px 0 rgba(0,0,0,.2); animation: stamppop .7s cubic-bezier(.3,1.7,.5,1); overflow: hidden; }
+#award .ring img { width: 100%; height: 100%; object-fit: cover; }
+#award .cap { position: absolute; left: 0; right: 0; bottom: 18%; text-align: center; color: #fff; font-size: 40px; font-weight: 700; text-shadow: 0 3px 0 rgba(0,0,0,.25); }
+
+/* ---- Mine (passport + trophies + room) ---- */
+#minep { background: var(--cream); overflow-y: auto; scrollbar-width: none; }
+#minep::-webkit-scrollbar { display: none; }
+#minep .wrap { padding: 124px 32px 50px; display: flex; flex-direction: column; gap: 26px; }
+#minep h2 { margin: 0 0 12px; font-size: 30px; display: flex; align-items: center; gap: 12px; }
+#minep h2 img { width: 54px; }
+.card { background: #fff; border-radius: 32px; padding: 22px 26px; box-shadow: var(--shadow); }
+.stamprow { display: flex; align-items: center; gap: 16px; padding: 8px 0; border-top: 3px dotted #eadff0; }
+.stamprow:first-of-type { border-top: 0; }
+.stamprow .fr { width: 64px; height: 64px; flex: none; border-radius: 50%; border: 5px solid var(--gold); background: radial-gradient(circle at 50% 35%, #fff, var(--butter)); overflow: hidden; }
+.stamprow .fr img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.trophies { display: flex; gap: 16px; flex-wrap: wrap; }
+.troph { width: 120px; text-align: center; font-weight: 600; font-size: 16px; }
+.troph .t { width: 104px; height: 104px; margin: 0 auto 4px; border-radius: 50%; display: grid; place-items: center; font-size: 56px; background: #efe6f3; filter: grayscale(1); opacity: .55; border: 5px dashed #d3c4dc; }
+.troph.on .t { background: radial-gradient(circle at 50% 35%, #fff6c9, var(--gold)); filter: none; opacity: 1; border: 5px solid #fff; box-shadow: 0 5px 0 rgba(43,35,48,.15); }
+.troph small { display: block; color: var(--ink-soft); font-weight: 500; }
+.mini { display: flex; gap: 20px; }
+
+/* orientation */
+#stage.wide { --t: 168px; }
+#stage.tall { --t: 190px; }
+#stage.tall .pin { transform: none; }
+#stage.tall .head h2 { font-size: 28px; }
+</style>
+</head>
+<body>
+<div id="tools">
+  <button id="oW" class="on">iPad wide</button>
+  <button id="oT">iPad tall</button>
+  <span id="where"></span>
+  <span class="sp"></span>
+  <button id="demoAll">Demo: stamp everything here</button>
+  <button id="reset">Reset</button>
+  <button id="rulesBtn">How it works ?</button>
+</div>
+<div id="rules">
+  <h3>One navigation model</h3>
+  <ol>
+    <li><b>Two levels only:</b> Home, and a game.</li>
+    <li><b>The house button</b> (top left, same spot on every screen) always goes Home. Browser back does the same.</li>
+    <li><b>Home never resets.</b> The balloon, the zoom and the shelf stay where she left them.</li>
+    <li><b>Tap any tile</b> to play at once. If it's in another country the balloon flies there first.</li>
+    <li><b>Zoom is not navigation.</b> Tap the sea or the − button to zoom out of Thailand.</li>
+  </ol>
+</div>
+
+<div id="fit"><div id="stage" class="wide">
+
+  <!-- HOME -->
+  <div id="map">
+    <div id="world"></div>
+    <div id="pins"></div>
+    <div id="balloon"><img src="assets/balloon.webp" alt="Sparkle's balloon"></div>
+    <div id="bubble"></div>
+  </div>
+  <div class="bar" id="homebar">
+    <button class="rb" data-act="home" aria-label="Home"><svg viewBox="0 0 48 48"><path d="M7 23 24 8l17 15" fill="none" stroke="#ff4f9a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 22v17a2 2 0 0 0 2 2h8V30h4v11h8a2 2 0 0 0 2-2V22L24 10z" fill="#ffc2d9" stroke="#2b2330" stroke-width="3" stroke-linejoin="round"/></svg></button>
+    <button class="rb" id="zoomout" aria-label="Zoom out"><svg viewBox="0 0 48 48"><circle cx="21" cy="21" r="12" fill="#fff" stroke="#2b2330" stroke-width="4"/><path d="M15 21h12M30 30l11 11" stroke="#2b2330" stroke-width="4" stroke-linecap="round"/></svg></button>
+    <span class="sp"></span>
+    <button id="mine" data-act="mine" aria-label="My things"><img src="assets/passport.webp" alt=""><span class="badge" id="mineBadge"></span></button>
+  </div>
+  <div id="sheet" class="peek"><div id="grab"><i></i></div><div id="sbody"></div></div>
+
+  <!-- A GAME -->
+  <div id="game" class="screen">
+    <div id="gbg"></div>
+    <div id="gcard"><div class="pic"><img alt=""></div><h1></h1><p>(the game plays here)</p></div>
+    <button id="finish">Finish ✨</button>
+    <div class="bar">
+      <button class="rb" data-act="home" aria-label="Home"><svg viewBox="0 0 48 48"><path d="M7 23 24 8l17 15" fill="none" stroke="#ff4f9a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 22v17a2 2 0 0 0 2 2h8V30h4v11h8a2 2 0 0 0 2-2V22L24 10z" fill="#ffc2d9" stroke="#2b2330" stroke-width="3" stroke-linejoin="round"/></svg></button>
+      <span class="sp"></span>
+      <button class="rb" id="heart" aria-label="Favorite"><svg viewBox="0 0 48 48"><path d="M24 41C10 31 6 24 6 17a9 9 0 0 1 18-3 9 9 0 0 1 18 3c0 7-4 14-18 24z" id="heartp" fill="#fff" stroke="#ff4f9a" stroke-width="4" stroke-linejoin="round"/></svg></button>
+    </div>
+    <div id="award"><div class="ring" id="ring"></div><div class="cap" id="cap"></div></div>
+  </div>
+
+  <!-- MINE -->
+  <div id="minep" class="screen">
+    <div class="wrap" id="minebody"></div>
+    <div class="bar">
+      <button class="rb" data-act="home" aria-label="Home"><svg viewBox="0 0 48 48"><path d="M7 23 24 8l17 15" fill="none" stroke="#ff4f9a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 22v17a2 2 0 0 0 2 2h8V30h4v11h8a2 2 0 0 0 2-2V22L24 10z" fill="#ffc2d9" stroke="#2b2330" stroke-width="3" stroke-linejoin="round"/></svg></button>
+      <span class="sp"></span>
+    </div>
+  </div>
+</div></div>
+
+<script>
+const A = (n) => `assets/${n}.webp`
+const MAPW = 1536, MAPH = 1024
+
+/* ============ the data ============ */
+// A game: [card, name, kind?] kind: 'sprite' | 'line' | 'emoji'
+const g = (place, row, card, name, extra = {}) => ({ key: `${place}/${card}`, place, row, name, img: extra.img || A(`${place}-${card}`), ...extra })
+const extras = (p, o = {}) => [
+  ...(o.color ? [{ key: `${p}/color`, place: p, row: p, name: 'Color', img: A(`color-${p}`), look: 'line', type: 'color', ty: '🖍️' }] : []),
+  ...(o.puzzle ? [{ key: `${p}/puzzle`, place: p, row: p, name: 'Puzzle', img: A(`puzzle-${p}`), type: 'puzzle', ty: '🧩' }] : []),
+  ...(o.video ? [{ key: `${p}/video`, place: p, row: p, name: 'Videos', img: A('theater'), type: 'video', ty: '🍿' }] : []),
+]
+const PLACES = {
+  home: { name: "Sparkle's playroom", pos: [19, 33], face: A('cover-game-teaparty'), hello: 'Hi hi!', rows: [{ id: 'home', title: "Sparkle's playroom", games: [
+    { key: 'home/tea', place: 'home', row: 'home', name: 'Tea party', img: A('cover-game-teaparty') },
+    { key: 'home/color', place: 'home', row: 'home', name: 'Coloring', img: A('crayon-box'), type: 'color', ty: '🖍️' },
+    { key: 'home/puzzle', place: 'home', row: 'home', name: 'Puzzles', look: 'emoji', emoji: '🧩', type: 'puzzle', ty: '🧩' },
+    { key: 'home/video', place: 'home', row: 'home', name: 'Theater', img: A('theater'), type: 'video', ty: '🍿' },
+  ] }] },
+  thailand: { name: 'Thailand', pos: [74, 49], face: A('thailand-street'), hello: 'Sawasdee ka!', zoom: 2.6,
+    rows: [
+      { id: 'house', title: "Agong's house", face: A('thailand-street'), sub: [73.2, 48.9], games: [g('thailand','house','street',"Agong's house"), g('thailand','house','upstairs','My room'), g('thailand','house','wardrobe','Wardrobe'), g('thailand','house','map','Thailand map')] },
+      { id: 'mall', title: 'Mall day', face: A('thailand-hall'), sub: [76.4, 49.8], games: ['hall:HarborLand','vet:Vet','cafe:Cafe','barber:Barber','race:Racing slide','blocks:Giant blocks','mountain:Climbing wall','boxing:Muay Thai','skypod:Sky pod','frame:Big frame','pizza:Pizza'].map((s) => g('thailand','mall',...s.split(':'))) },
+      { id: 'krabi', title: 'Krabi', face: A('thailand-feed'), sub: [72.7, 56.5], games: ['feed:Elephants','drinks:Elephant cafe','pier:Boat ribbons','bay:Boat ride','village:Floating football','boatrace:Boat race'].map((s) => g('thailand','krabi',...s.split(':'))) },
+      { id: 'nan', title: 'Nan', face: A('thailand-drive'), sub: [76.0, 43.6], games: ['drive:Mountain road','mushrooms:Mushrooms','rice:Rice farm','salt:Salt wells'].map((s) => g('thailand','nan',...s.split(':'))) },
+    ], stampOf: (game) => game.row },
+  egypt: { name: 'Egypt', pos: [53, 42], face: A('friend-egypt'), hello: 'Marhaba!', rows: [{ id: 'egypt', title: 'Egypt', games: [
+    ...['pyramid:Pyramid builders','passage:Secret passage','sphinx:Wake the sphinx','nile:Sail the Nile','scribe:Write like a pharaoh','market:Miu’s market'].map((s) => g('egypt','egypt',...s.split(':'))), ...extras('egypt', { color: 1, puzzle: 1, video: 1 })] }] },
+  china: { name: 'China', pos: [77, 36], face: A('friend-china'), hello: 'Ni hao!', rows: [{ id: 'china', title: 'China', games: [
+    ...['bamboo:Bamboo forest','wall:Great Wall','hotpot:Hotpot night','brush:Magic brush','race:Great race','train:Bullet train','dumplings:Dumpling house'].map((s) => g('china','china',...s.split(':'))), ...extras('china', { color: 1, video: 1 })] }] },
+  italy: { name: 'Italy', pos: [48.5, 31], face: A('friend-italy'), hello: 'Ciao!', rows: [{ id: 'italy', title: 'Italy', games: [
+    ...['pizzeria:Pizzeria','olives:Olive grove','colosseum:Colosseum','venice:Venice','etna:Volcano','trevi:Trevi fountain'].map((s) => g('italy','italy',...s.split(':'))), ...extras('italy', { color: 1, puzzle: 1, video: 1 })] }] },
+  canada: { name: 'Canada', pos: [27, 25], face: A('friend-canada'), hello: 'Bonjour!', rows: [{ id: 'canada', title: 'Canada', games: [
+    ...['taffy:Sugar snow','snowman:Snowballs','bike:Mountain bike','campfire:Campfire','canoe:Red canoe','bridge:Animal bridge','whales:Whale watch','salmon:Salmon leap'].map((s) => g('canada','canada',...s.split(':'))), ...extras('canada', { color: 1, puzzle: 1, video: 1 })] }] },
+  australia: { name: 'Australia', pos: [87, 67], face: A('friend-australia'), hello: "G'day!", rows: [{ id: 'australia', title: 'Australia', games: [
+    ...['outback:Red outback','forest:Gum trees','reef:Great reef','stars:Starry night','croc:Crocodile river','postcard:Beach postcard'].map((s) => g('australia','australia',...s.split(':'))), ...extras('australia', { color: 1, puzzle: 1, video: 1 })] }] },
+  peru: { name: 'Peru', pos: [25.5, 61], face: A('friend-peru'), hello: 'Hola!', rows: [{ id: 'peru', title: 'Peru', games: ['alpaca:Fluffy day','machu-picchu:Mountain terraces','penguins:Penguin cliff','condor:Canyon glide','river:Rainy river'].map((s) => g('peru','peru',...s.split(':'))) }] },
+  poles: { name: 'The Poles', pos: [50, 91], face: A('friend-poles'), hello: 'Brrr, hi!', rows: [{ id: 'poles', title: 'The Poles', games: [['floe','Ice floe hop','bear'],['coats','Snow coats','fox'],['slide','Penguin slide','adelie'],['huddle','Emperor huddle','chick'],['iceberg','Iceberg maker','narwhal']].map(([c, n, s]) => ({ key: `poles/${c}`, place: 'poles', row: 'poles', name: n, img: A(`poles-${s}`), look: 'sprite' })) }] },
+}
+const ORDER = ['home', 'thailand', 'egypt', 'china', 'italy', 'canada', 'australia', 'peru', 'poles']
+const isType = (x) => !!x.type
+const rowsOf = (p) => PLACES[p].rows
+const allGames = () => ORDER.flatMap((p) => rowsOf(p).flatMap((r) => r.games))
+const byKey = (k) => allGames().find((x) => x.key === k)
+const stampId = (gm) => (PLACES[gm.place].stampOf ? PLACES[gm.place].stampOf(gm) : gm.key)
+const stampIds = (p) => [...new Set(rowsOf(p).flatMap((r) => r.games).filter((x) => !isType(x) && !(p === 'home')).map(stampId))]
+
+/* ============ saved state ============ */
+const SAVE = 'kaylee-nav-proto-v2'
+const fresh = () => ({ place: 'thailand', row: 'house', zoomed: false, stamps: [], played: ['thailand/street', 'thailand/upstairs', 'egypt/nile'], favs: ['home/tea'], trophies: [], recent: ['thailand/upstairs', 'thailand/street'] })
+let S = fresh()
+try { const raw = localStorage.getItem(SAVE); if (raw) S = { ...fresh(), ...JSON.parse(raw) } } catch {}
+const save = () => { try { localStorage.setItem(SAVE, JSON.stringify(S)) } catch {} }
+let sheetFull = false
+let view = 'home' // home | game | mine
+let current = null // the game open
+let busy = false
+let pan = { x: 0, y: 0 }
+let suppress = false
+let newStamp = null
+
+/* ============ layout + camera ============ */
+const stage = document.getElementById('stage')
+let SW = 1180, SH = 820, tall = false
+const peekH = () => (tall ? 452 : 376)
+const $ = (id) => document.getElementById(id)
+
+function fitStage() {
+  const fit = $('fit'), r = fit.getBoundingClientRect()
+  const sc = Math.min((r.width - 36) / SW, (r.height - 36) / SH)
+  stage.style.transform = `translate(-50%, -50%) scale(${sc})`
+}
+function setOrient(t) {
+  tall = t
+  SW = t ? 820 : 1180; SH = t ? 1180 : 820
+  stage.style.width = SW + 'px'; stage.style.height = SH + 'px'
+  stage.className = t ? 'tall' : 'wide'
+  $('oW').classList.toggle('on', !t); $('oT').classList.toggle('on', t)
+  $('sheet').style.height = SH - 100 + 'px'
+  fitStage(); place(false); renderAll()
+}
+function cam() {
+  const P = PLACES[S.place]
+  const sub = S.place === 'thailand' && S.zoomed ? rowsOf('thailand').find((r) => r.id === S.row) : null
+  const [px, py] = sub ? sub.sub : P.pos
+  const z = S.zoomed && P.zoom ? P.zoom : 1
+  const rh = SH - peekH()
+  const base = tall ? SW / MAPW : Math.max(SW / MAPW, rh / MAPH)
+  const s = base * z
+  const cx = SW / 2, cy = Math.max(rh / 2 + 36, 200)
+  let tx = cx - (px / 100) * MAPW * s, ty = cy - (py / 100) * MAPH * s
+  const t0x = tx, t0y = ty
+  tx += pan.x; ty += pan.y
+  tx = Math.min(0, Math.max(SW - MAPW * s, tx)); ty = Math.min(0, Math.max(rh - MAPH * s, ty))
+  if (MAPH * s < rh) ty = rh - MAPH * s
+  pan = { x: tx - t0x, y: ty - t0y }
+  return { s, tx, ty, px, py }
+}
+const scr = (c, x, y) => [c.tx + (x / 100) * MAPW * c.s, c.ty + (y / 100) * MAPH * c.s]
+
+function place(animate = true) {
+  const c = cam()
+  const w = $('world'), pins = $('pins'), b = $('balloon')
+  if (!animate) { w.style.transition = 'none'; b.style.transition = 'none'; pins.querySelectorAll('.pin').forEach((p) => (p.style.transition = 'opacity .4s')) }
+  w.style.transform = `translate(${c.tx}px, ${c.ty}px) scale(${c.s})`
+  // pins
+  const zoomedTH = S.zoomed && PLACES[S.place].zoom
+  pins.querySelectorAll('.pin').forEach((p) => {
+    const id = p.dataset.p, sub = p.dataset.sub
+    let pos
+    if (sub) { pos = rowsOf('thailand').find((r) => r.id === sub).sub; p.classList.toggle('off', !(zoomedTH && S.place === 'thailand')) }
+    else { pos = PLACES[id].pos; p.classList.toggle('off', !!zoomedTH) }
+    const [x, y] = scr(c, ...pos)
+    p.style.left = x + 'px'; p.style.top = y + 'px'
+    p.classList.toggle('here', sub ? sub === S.row : id === S.place)
+  })
+  const [bx, by] = scr(c, c.px, c.py)
+  b.style.left = bx + 'px'; b.style.top = by - 40 + 'px'
+  $('zoomout').classList.toggle('show', !!zoomedTH)
+  if (!animate) requestAnimationFrame(() => requestAnimationFrame(() => { w.style.transition = ''; b.style.transition = ''; pins.querySelectorAll('.pin').forEach((p) => (p.style.transition = '')) }))
+  $('sheet').style.transform = `translateY(${sheetFull ? 100 - 100 + 0 : SH - 100 - peekH()}px)`
+  $('sheet').classList.toggle('peek', !sheetFull)
+}
+
+function buildPins() {
+  const pins = $('pins')
+  let h = ''
+  for (const id of ORDER) {
+    const P = PLACES[id]
+    const stamps = stampIds(id)
+    const done = stamps.filter((s) => S.stamps.includes(s)).length
+    const fresher = !S.played.some((k) => k.startsWith(id + '/'))
+    h += `<button class="pin ${fresher ? 'fresh' : ''}" data-p="${id}" aria-label="${P.name}"><img src="${P.face}" alt="">${stamps.length ? `<span class="cnt ${done === stamps.length ? 'full' : ''}">⭐ ${done}/${stamps.length}</span>` : ''}</button>`
+  }
+  for (const r of rowsOf('thailand')) h += `<button class="pin sub off" data-p="thailand" data-sub="${r.id}" aria-label="${r.title}"><img src="${r.face}" alt=""><span class="lbl">${r.title}</span></button>`
+  pins.innerHTML = h
+}
+
+/* ============ the shelf ============ */
+const starsHtml = (ids) => `<div class="stars">${ids.map((s) => `<span class="star ${S.stamps.includes(s) ? 'on' : ''} ${newStamp === s ? 'new' : ''}">${S.stamps.includes(s) ? '⭐' : ''}</span>`).join('')}</div>`
+function tile(gm, opts = {}) {
+  const isNew = !isType(gm) && !S.played.includes(gm.key)
+  const stamped = !isType(gm) && S.stamps.includes(stampId(gm)) && PLACES[gm.place].stampOf === undefined
+  const cls = gm.look === 'sprite' ? 'sprite' : gm.look === 'line' ? 'line' : gm.look === 'emoji' ? 'emoji' : ''
+  const art = gm.look === 'emoji' ? gm.emoji : `<img src="${gm.img}" alt="">`
+  return `<button class="tile ${opts.cls || ''}" data-act="play" data-key="${gm.key}" aria-label="${gm.name}"><div class="art ${cls}">${art}${stamped ? '<span class="st">⭐</span>' : ''}${isNew && !opts.noNew ? '<span class="nw">NEW</span>' : ''}${gm.ty ? `<span class="ty">${gm.ty}</span>` : ''}${opts.fin ? '<span class="tr">🏆</span>' : ''}</div><div class="nm">${gm.name}</div></button>`
+}
+const surpriseTile = (scope) => `<button class="tile sur" data-act="surprise" data-scope="${scope}" aria-label="Surprise"><div class="art"><img src="${A('cover-game-surprise')}" alt=""></div><div class="nm" style="color:var(--hotpink)">Surprise!</div></button>`
+function finaleTile(p) {
+  const P = PLACES[p]
+  return `<button class="tile fin" data-act="finale" data-p="${p}" aria-label="${P.name} finale"><div class="art"><img src="${P.face}" alt=""><span class="tr">🏆</span></div><div class="nm">Finale!</div></button>`
+}
+function placeBlock(p, swap) {
+  const P = PLACES[p]
+  const row = p === 'thailand' ? rowsOf(p).find((r) => r.id === S.row) : rowsOf(p)[0]
+  const ids = stampIds(p)
+  const mainGames = row.games.filter((x) => !isType(x)), extra = row.games.filter(isType)
+  const complete = ids.length && ids.every((s) => S.stamps.includes(s))
+  const chips = p === 'thailand' ? `<div class="chips">${rowsOf(p).map((r) => `<button class="chip ${r.id === S.row ? 'on' : ''}" data-act="sub" data-sub="${r.id}" aria-label="${r.title}"><img src="${r.face}" alt="">${S.stamps.includes(r.id) ? '<span class="d">⭐</span>' : ''}</button>`).join('')}</div>` : ''
+  const title = p === 'thailand' ? row.title : P.name
+  return `<div class="blk ${swap ? 'swap' : ''}">
+    <div class="head"><button class="fr" data-act="hello" aria-label="Say hello"><img src="${P.face}" alt=""></button>
+      <h2>${title}</h2>${ids.length ? starsHtml(p === 'thailand' ? ids : ids) : ''}<span class="grow"></span>${chips}</div>
+    <div class="row">${surpriseTile(p)}${complete ? finaleTile(p) : ''}${mainGames.map((x) => tile(x)).join('')}${extra.length ? '<div class="sep"></div>' + extra.map((x) => tile(x)).join('') : ''}</div></div>`
+}
+function section(icon, title) { return `<div class="sect"><span class="si">${icon}</span><h2>${title}</h2></div>` }
+function fullRest() {
+  let h = ''
+  const recent = S.recent.map(byKey).filter(Boolean)
+  h += section('▶️', 'Keep playing') + `<div class="row">${recent.length ? recent.map((x) => tile(x, { noNew: true })).join('') : '<div class="empty">▶️</div>'}</div>`
+  const favs = S.favs.map(byKey).filter(Boolean)
+  h += section('❤️', 'Favorites') + `<div class="row">${favs.map((x) => tile(x, { noNew: true })).join('')}<div class="empty">🤍</div></div>`
+  const fresh8 = allGames().filter((x) => !isType(x) && !S.played.includes(x.key)).filter((_, i) => i % 3 === 0).slice(0, 9)
+  h += section('✨', 'New for you') + `<div class="row">${fresh8.map((x) => tile(x)).join('')}</div>`
+  for (const p of ORDER) {
+    const P = PLACES[p]
+    for (const r of rowsOf(p)) {
+      const main = r.games.filter((x) => !isType(x)), extra = r.games.filter(isType)
+      const ids = stampIds(p)
+      h += `<div class="blk"><div class="head gohead" data-act="goplace" data-p="${p}" data-row="${r.id}" style="padding-top:18px"><span class="fr"><img src="${r.face || P.face}" alt=""></span><h2>${r.title}</h2>${p !== 'thailand' && ids.length ? starsHtml(ids) : ''}<button class="go" aria-label="Show on the map">🗺️</button></div><div class="row">${main.map((x) => tile(x)).join('')}${extra.length ? '<div class="sep"></div>' + extra.map((x) => tile(x)).join('') : ''}</div></div>`
+    }
+  }
+  return h
+}
+function renderSheet(swap = false) {
+  const keep = $('sbody').scrollTop
+  $('sbody').innerHTML = placeBlock(S.place, swap) + fullRest()
+  $('sbody').scrollTop = sheetFull ? keep : 0
+  const total = S.stamps.length
+  $('mineBadge').textContent = '⭐ ' + total
+  $('where').innerHTML = view === 'home' ? `<b>Home</b> · balloon at ${PLACES[S.place].name}${S.place === 'thailand' ? ' › ' + rowsOf('thailand').find((r) => r.id === S.row).title : ''}` : view === 'game' ? `<b>Game</b> · ${current.name} · 🏠 goes Home` : `<b>Mine</b> · 🏠 goes Home`
+}
+function renderAll() { buildPins(); place(false); renderSheet() }
+
+/* ============ moving the balloon ============ */
+let bubbleT
+function hello(txt) {
+  const c = cam(), [bx, by] = scr(c, c.px, c.py)
+  const bu = $('bubble'); bu.textContent = txt
+  bu.style.left = bx + 'px'; bu.style.top = by - 158 + 'px'
+  bu.classList.add('show'); clearTimeout(bubbleT); bubbleT = setTimeout(() => bu.classList.remove('show'), 2200)
+}
+const wait = (ms) => new Promise((r) => setTimeout(r, ms))
+async function flyTo(p, row) {
+  const same = p === S.place
+  pan = { x: 0, y: 0 }
+  S.place = p
+  if (p === 'thailand') { S.row = row || (same ? S.row : 'house'); S.zoomed = true } else S.zoomed = false
+  save()
+  $('bubble').classList.remove('show')
+  const b = $('balloon'); b.classList.remove('fly'); void b.offsetWidth; b.classList.add('fly')
+  buildPins(); place(true); renderSheet(true)
+  await wait(1100)
+  hello(PLACES[p].hello)
+  const fr = $('sbody').querySelector('.fr'); if (fr) { fr.classList.add('hop'); setTimeout(() => fr.classList.remove('hop'), 600) }
+}
+
+/* ============ screens ============ */
+function show(v) {
+  view = v
+  $('game').classList.toggle('show', v === 'game'); $('minep').classList.toggle('show', v === 'mine')
+  renderSheetLabel()
+}
+function renderSheetLabel() { renderSheetMeta() }
+function renderSheetMeta() {
+  $('where').innerHTML = view === 'home' ? `<b>Home</b> · balloon at ${PLACES[S.place].name}${S.place === 'thailand' ? ' › ' + rowsOf('thailand').find((r) => r.id === S.row).title : ''}` : view === 'game' ? `<b>In a game</b> · ${current.name} · the 🏠 button goes Home` : `<b>My things</b> · the 🏠 button goes Home`
+}
+function openGame(gm, push = true) {
+  current = gm
+  S.recent = [gm.key, ...S.recent.filter((k) => k !== gm.key)].slice(0, 8)
+  if (!S.played.includes(gm.key)) S.played.push(gm.key)
+  save()
+  $('gbg').style.backgroundImage = `url(${gm.look === 'emoji' ? A('cover-game-surprise') : gm.img})`
+  const pic = $('gcard').querySelector('.pic'); pic.className = 'pic' + (gm.look === 'sprite' ? ' sprite' : '')
+  pic.innerHTML = gm.look === 'emoji' ? `<div style="font-size:240px;display:grid;place-items:center;height:100%;background:linear-gradient(160deg,#d6f8ec,#8fe3c8)">${gm.emoji}</div>` : `<img src="${gm.img}" alt="">`
+  $('gcard').querySelector('h1').textContent = gm.name
+  $('finish').textContent = gm.finale ? 'Win the finale 🏆' : isType(gm) ? 'All done' : 'Finish ✨'
+  $('heartp').setAttribute('fill', S.favs.includes(gm.key) ? '#ff4f9a' : '#fff')
+  show('game')
+  if (push) history.pushState({ view: 'game', key: gm.key }, '', '#game=' + gm.key)
+}
+function goHome() {
+  if (view === 'home') { sheetFull = false; place(true); return }
+  if (history.state && history.state.view) history.back()
+  else { show('home'); renderAll() }
+}
+window.addEventListener('popstate', () => {
+  const st = history.state
+  if (st && st.view === 'game') { const gm = byKey(st.key); if (gm) { openGame(gm, false); return } }
+  if (st && st.view === 'mine') { openMine(false); return }
+  show('home'); renderAll()
+})
+async function playTile(gm) {
+  if (busy) return
+  busy = true
+  if (gm.place !== S.place || (gm.place === 'thailand' && gm.row !== S.row)) {
+    sheetFull = false; place(true)
+    await flyTo(gm.place, gm.row)
+    await wait(350)
+  } else { await wait(200) }
+  busy = false
+  openGame(gm)
+}
+async function finish() {
+  const gm = current
+  if (!gm) return
+  const P = PLACES[gm.place]
+  if (gm.finale) {
+    if (!S.trophies.includes(gm.place)) S.trophies.push(gm.place)
+    await award('🏆', `${P.name} Explorer · KAYLEE`)
+  } else if (!isType(gm) && gm.place !== 'home') {
+    const id = stampId(gm)
+    if (!S.stamps.includes(id)) { S.stamps.push(id); newStamp = id; await award(`<img src="${P.face}" alt="">`, 'New stamp!', true) }
+  }
+  save()
+  const wasState = history.state && history.state.view
+  if (wasState) history.back(); else { show('home'); renderAll() }
+  setTimeout(() => { newStamp = null }, 1200)
+}
+function award(inner, cap, img) {
+  $('ring').innerHTML = inner; $('cap').textContent = cap
+  $('award').classList.add('show')
+  return wait(1700).then(() => $('award').classList.remove('show'))
+}
+function openMine(push = true) {
+  const rows = ORDER.filter((p) => stampIds(p).length).map((p) => {
+    const ids = stampIds(p)
+    return `<div class="stamprow"><span class="fr"><img src="${PLACES[p].face}" alt=""></span><b style="width:150px;font-size:22px">${PLACES[p].name}</b>${starsHtml(ids)}</div>`
+  }).join('')
+  const troph = ORDER.filter((p) => stampIds(p).length).map((p) => `<div class="troph ${S.trophies.includes(p) ? 'on' : ''}"><div class="t">🏆</div>${PLACES[p].name}${S.trophies.includes(p) ? '<small>KAYLEE</small>' : ''}</div>`).join('')
+  $('minebody').innerHTML = `
+    <div class="card"><h2><img src="${A('passport')}" alt="">My passport</h2>${rows}</div>
+    <div class="card"><h2>🏆 My trophies</h2><div class="trophies">${troph}</div></div>
+    <div class="card"><h2>👗 My room</h2><div class="mini">${tile(byKey('thailand/wardrobe'), { noNew: true })}${tile(byKey('thailand/upstairs'), { noNew: true })}</div></div>`
+  show('mine')
+  if (push) history.pushState({ view: 'mine' }, '', '#mine')
+}
+
+/* ============ events ============ */
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-act], .pin, #zoomout, #finish, #heart, #map')
+  if (!t) return
+  if (t.id === 'finish') return finish()
+  if (t.id === 'heart') {
+    const k = current.key
+    S.favs = S.favs.includes(k) ? S.favs.filter((x) => x !== k) : [k, ...S.favs]; save()
+    $('heartp').setAttribute('fill', S.favs.includes(k) ? '#ff4f9a' : '#fff'); return
+  }
+  if (t.id === 'zoomout') { pan = { x: 0, y: 0 }; S.zoomed = false; save(); place(true); return }
+  if (t.classList.contains('pin')) {
+    if (busy) return
+    const p = t.dataset.p, sub = t.dataset.sub
+    if (p === S.place && !sub && !(S.zoomed && PLACES[p].zoom)) { if (PLACES[p].zoom) { S.zoomed = true; S.row = S.row || 'house'; place(true); renderSheet(true) } hello(PLACES[p].hello); const fr = $('sbody').querySelector('.fr'); if (fr) { fr.classList.add('hop'); setTimeout(() => fr.classList.remove('hop'), 600) } return }
+    if (sub) { S.row = sub; save(); busy = true; flyTo('thailand', sub).then(() => (busy = false)); return }
+    busy = true; flyTo(p).then(() => (busy = false)); return
+  }
+  if (suppress && t.id === 'map') return
+  if (t.id === 'map') { if (S.zoomed && PLACES[S.place].zoom && e.target.id === 'map' || e.target.id === 'world') { if (S.zoomed) { S.zoomed = false; place(true) } } return }
+  const act = t.dataset.act
+  if (act === 'home') return goHome()
+  if (act === 'mine') return openMine()
+  if (act === 'play') return playTile(byKey(t.dataset.key))
+  if (act === 'sub') { S.row = t.dataset.sub; save(); if (S.zoomed) { place(true) } renderSheet(true); return }
+  if (act === 'hello') { hello(PLACES[S.place].hello); t.classList.add('hop'); setTimeout(() => t.classList.remove('hop'), 600); return }
+  if (act === 'goplace') { sheetFull = false; place(true); flyTo(t.dataset.p, t.dataset.row); return }
+  if (act === 'surprise') {
+    const p = t.dataset.scope
+    const pool = (p === 'home' ? allGames() : rowsOf(p).flatMap((r) => (p === 'thailand' ? (r.id === S.row ? r.games : []) : r.games))).filter((x) => !isType(x) || p === 'home')
+    return playTile(pool[Math.floor(Math.random() * pool.length)])
+  }
+  if (act === 'finale') { const p = t.dataset.p; return playTile({ key: `${p}/finale`, place: p, row: S.row, name: `${PLACES[p].name} finale`, img: PLACES[p].face, finale: true }) }
+})
+// drag the map to look around (the balloon doesn't move)
+{
+  const map = $('map'); let d = null
+  map.addEventListener('pointerdown', (e) => { if (e.target.closest('.pin, .bar, #sheet')) return; d = { x: e.clientX, y: e.clientY, px: pan.x, py: pan.y, moved: 0 } })
+  map.addEventListener('pointermove', (e) => {
+    if (!d) return
+    const k = 1 / (parseFloat(stage.style.transform.match(/scale\(([\d.]+)\)/)[1]) || 1)
+    const dx = (e.clientX - d.x) * k, dy = (e.clientY - d.y) * k
+    d.moved = Math.max(d.moved, Math.abs(dx) + Math.abs(dy))
+    if (d.moved < 8) return
+    pan = { x: d.px + dx, y: d.py + dy }; place(false)
+  })
+  const end = () => { if (d && d.moved >= 8) { suppress = true; setTimeout(() => (suppress = false), 50) } d = null }
+  map.addEventListener('pointerup', end); map.addEventListener('pointercancel', end)
+}
+// sheet drag
+{
+  const grab = $('grab'); let y0 = null, moved = 0
+  grab.addEventListener('pointerdown', (e) => { y0 = e.clientY; moved = 0; grab.setPointerCapture(e.pointerId) })
+  grab.addEventListener('pointermove', (e) => { if (y0 != null) moved = e.clientY - y0 })
+  const end = () => { if (y0 == null) return; const m = moved; y0 = null; sheetFull = Math.abs(m) < 12 ? !sheetFull : m < 0; if (!sheetFull) $('sbody').scrollTop = 0; place(true) }
+  grab.addEventListener('pointerup', end); grab.addEventListener('pointercancel', () => (y0 = null))
+}
+$('oW').onclick = () => setOrient(false); $('oT').onclick = () => setOrient(true)
+$('rulesBtn').onclick = () => $('rules').classList.toggle('show')
+$('reset').onclick = () => { S = fresh(); save(); sheetFull = false; history.replaceState(null, '', location.pathname); show('home'); renderAll() }
+$('demoAll').onclick = () => { stampIds(S.place).forEach((id) => !S.stamps.includes(id) && S.stamps.push(id)); save(); show('home'); renderAll() }
+window.addEventListener('resize', fitStage)
+
+history.replaceState(null, '', location.pathname)
+const q = new URLSearchParams(location.search)
+setOrient(q.get('tall') === '1')
+if (q.get('full') === '1') { sheetFull = true; place(false) }
+</script>
+</body>
+</html>
