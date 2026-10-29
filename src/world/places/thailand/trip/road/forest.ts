@@ -7,8 +7,8 @@
 //
 // The trees' crowns and the bushes are painted cards that face the camera (canopy.ts: the trick games use for forests,
 // Dad's ask, 2026-10-28), on a 3D trunk. The bamboo, bananas, palms and grass are shapes. Each kind is drawn many times
-// at once (an InstancedMesh, one per tile of ground so tiles off screen aren't drawn); the shapes near the road get the
-// ink outline.
+// at once (an InstancedMesh, one per tile of ground so tiles off screen aren't drawn). No ink outlines on the plants:
+// Dad likes the trees without the black border (2026-10-29); a kind could still ask for one with `px`.
 import { BufferAttribute, Color, ConeGeometry, CylinderGeometry, Euler, Group, InstancedBufferAttribute, InstancedMesh, Matrix4, MeshToonMaterial, PlaneGeometry, Quaternion, SphereGeometry, Vector3, type BufferGeometry } from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import type { Bag } from '../../../../engine3d/dispose'
@@ -72,13 +72,13 @@ function kinds() {
   const trunk: Kind = {
     geo: join([part(new CylinderGeometry(0.2, 0.34, 3.4, 6), BARK, 0, { at: [0, 1.7, 0] })]),
     h: 3.4,
-    px: 1.4,
+    px: 0,
     colors: ['#FFFFFF'],
   }
   const tallTrunk: Kind = {
     geo: join([part(new CylinderGeometry(0.24, 0.46, 10.8, 6), '#9C8070', 0, { at: [0, 5.4, 0] })]),
     h: 10.8,
-    px: 1.4,
+    px: 0,
     colors: ['#FFFFFF'],
   }
   // A coconut palm: a curving trunk, a crown of long drooping fronds, three coconuts.
@@ -94,7 +94,7 @@ function kinds() {
     palmParts.push(part(new ConeGeometry(0.55, 4.2, 4), '#FFFFFF', 1, { at: [px + Math.sin(a) * Math.sin(droop) * 2.1, 9.2 + Math.cos(droop) * 2.1, Math.cos(a) * Math.sin(droop) * 2.1], rot: [droop, a, 0], scale: [1, 1, 0.22] }))
   }
   for (let i = 0; i < 3; i++) palmParts.push(part(new SphereGeometry(0.22, 6, 4), '#8A6A3A', 0, { at: [px + Math.sin(i * 2.1) * 0.3, 8.9, Math.cos(i * 2.1) * 0.3] }))
-  const palm: Kind = { geo: join(palmParts), h: 10, px: 1.4, colors: ['#7DBA5A', '#8CC463', '#72B256'] }
+  const palm: Kind = { geo: join(palmParts), h: 10, px: 0, colors: ['#7DBA5A', '#8CC463', '#72B256'] }
   // A tuft of tall grass.
   const blades: BufferGeometry[] = []
   for (let i = 0; i < 9; i++) {
