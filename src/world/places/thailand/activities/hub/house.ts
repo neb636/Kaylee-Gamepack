@@ -11,7 +11,7 @@
 // A trip (thailand/trip/legs/house-plugin.ts) mounts the house with a plugin: it gets the scene, the pokes, the
 // avatar and the family, sees every touch first, can move the family, take the camera, and add tap targets of its own
 // (ids starting with "trip:"). The house stays the house.
-import { Color, Group, PerspectiveCamera, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
+import { Group, PerspectiveCamera, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { Avatar } from '../../characters/avatar'
 import { formatLook } from '../../characters/style'
 import { FAMILY, type FamilyMember } from '../../characters/family'
@@ -22,7 +22,7 @@ import { Bag } from '../../../../engine3d/dispose'
 import { NavGrid, type XZ } from '../../../../engine3d/nav'
 import { TapMarker } from '../../../../engine3d/marker'
 import { setHullHighlight, setOutlineResolution } from '../../../../engine3d/outline'
-import { applyBands, makeLights, PAL } from '../../../../engine3d/toon'
+import { applyBands, makeLights } from '../../../../engine3d/toon'
 import { THAI_TUNE } from '../../tune'
 import type { World3D } from '../../../../engine3d/View3D'
 import { say } from '../../../../../sdk'
@@ -31,6 +31,7 @@ import { sfx } from '../../sfx'
 import { snapPhoto } from '../../../../engine3d/photo'
 import { noticeLine } from './notice'
 import { Gecko } from './build/gecko'
+import { Backdrop, buildPlinth } from './build/diorama'
 import { buildDivider, DIVIDER_BASE } from './build/divider'
 import { buildGround } from './build/ground'
 import type { Kit } from './build/kit'
@@ -135,6 +136,8 @@ export class House implements World3D {
   readonly kit: Kit = { bag: this.bag, pokes: new Map(), parts: new Map() }
   private reactor: Reactor
   private lights = makeLights(this.scene)
+  /** The sky on the street, a warm glow behind the house inside (build/diorama.ts). */
+  private backdrop: Backdrop
   readonly kaylee: Avatar
   /** Her shoes hop onto the rack at the door when she comes in, and back on when she goes out (shoes.ts). */
   readonly shoes: ShoeRack
@@ -187,8 +190,11 @@ export class House implements World3D {
     private plugin: HousePlugin | null = null,
   ) {
     const { scene, kit } = this
-    scene.background = new Color(PAL.sky)
+    this.backdrop = new Backdrop(kit)
+    scene.background = this.backdrop.texture
     applyBands()
+    // The toy base the house stands on (inside, its side shows where the neighbors were).
+    scene.add(buildPlinth(kit))
 
     const street = buildStreet(kit)
     const ground = buildGround(kit)
@@ -248,6 +254,8 @@ export class House implements World3D {
 
     this.nav = { 0: this.buildNav(0), 1: this.buildNav(1) }
     this.begin(start)
+    // A deep link starts inside or out: no fade from the sky.
+    this.backdrop.set(this.mode !== 'street' && !this.photo, true)
     this.plugin?.attach(this)
     this.quiet = false
   }
@@ -717,6 +725,7 @@ export class House implements World3D {
    *  disappear (a dollhouse with its lid off). */
   private applyVisibility() {
     const m = this.mode
+    this.backdrop.set(m !== 'street' && !this.photo)
     this.groups.tall.visible = m === 'street'
     // Inside, the sidewalk things (and the people out there) would stand between the camera and the room; in the
     // family photo they'd stand among the family.
@@ -805,6 +814,7 @@ export class House implements World3D {
     this.time += dt
     const t = this.time
     const k = this.kaylee
+    this.backdrop.update(dt)
     if (this.arrival && !this.arrival.done) this.updateArrival(dt)
     this.driveTuk(dt)
     k.update(dt, t)
