@@ -476,7 +476,11 @@ function openGame(gm, push = true) {
   $('finish').textContent = gm.finale ? 'Win the finale 🏆' : isType(gm) ? 'All done' : 'Finish ✨'
   $('heartp').setAttribute('fill', S.favs.includes(gm.key) ? '#ff4f9a' : '#fff')
   show('game')
-  if (push) history.pushState({ view: 'game', key: gm.key }, '', '#game=' + gm.key)
+  if (push) {
+    // A game opened from My things takes its place in history, so Back (and the 🏠 button) go straight Home.
+    const from = history.state && history.state.view
+    history[from === 'mine' ? 'replaceState' : 'pushState']({ view: 'game', key: gm.key }, '', '#game=' + gm.key)
+  }
 }
 function goHome() {
   if (view === 'home') { sheetFull = false; place(true); return }
