@@ -6,9 +6,9 @@ import type { Bag } from '../engine3d/dispose'
 import { bake, merge, P, solid } from '../engine3d/geo'
 import { hullGeometry, instancedOutlineMaterial } from '../engine3d/outline'
 import { PAL, toon } from '../engine3d/toon'
-import { inside, LANDMASSES, NORTH_POLE, SPOTS, type ContinentKey, type Pt } from './continents'
+import { continentAt, GROUND, inside, LANDMASSES, NORTH_POLE, SPOTS, type ContinentKey, type Pt } from './continents'
 import { rng, unitAt } from './land'
-import { faceted, palm, rod, roundTree } from './toys'
+import { faceted, palm, rod } from './toys'
 
 const UP = new Vector3(0, 1, 0)
 const tq = new Quaternion()
@@ -32,36 +32,60 @@ export function frame(up: Vector3, out = new Quaternion()) {
 
 // ---------------------------------------------------------------- trees and mountains
 
-type Kind = 'pine' | 'round' | 'palm' | 'acacia' | 'peak' | 'bigPeak' | 'icePeak'
+type Kind = 'pine' | 'round' | 'palm' | 'acacia' | 'peak' | 'bigPeak' | 'icePeak' | 'house'
 
-/** One tree or mountain shape, 1 unit tall, standing on its base. */
-function shape(kind: Kind, land: string): BufferGeometry {
+/** The scenery's colors, like the concept art: deep leafy greens, brown trunks, slate-blue peaks with big snowcaps,
+ *  cream cottages with red roofs. */
+const LEAF = '#3FA94B'
+const LEAF_LIGHT = '#52BD57'
+const TRUNK = '#B57A4E'
+const ROCK = '#8C9DD6'
+
+/** One tree, mountain or cottage shape, 1 unit tall, standing on its base. */
+function shape(kind: Kind): BufferGeometry {
   switch (kind) {
     case 'pine':
-      return merge([P.cyl(0.06, 0.08, 0.3, '#B98260', { at: [0, 0.15, 0] }, 6), P.cone(0.32, 0.5, '#3FAF8A', { at: [0, 0.45, 0] }, 7), P.cone(0.24, 0.4, '#4FC497', { at: [0, 0.72, 0] }, 7)])
+      return merge([P.cyl(0.07, 0.09, 0.3, TRUNK, { at: [0, 0.15, 0] }, 6), P.cone(0.34, 0.5, '#2F9A55', { at: [0, 0.45, 0] }, 7), P.cone(0.26, 0.42, '#3BAE60', { at: [0, 0.74, 0] }, 7)])
     case 'round':
-      return merge(roundTree([0, 0, 0], 1, '#6DD3A8', 9))
+      // A chunky lollipop tree: a short trunk under a big round crown with two smaller puffs on it.
+      return merge([
+        P.cyl(0.08, 0.11, 0.4, TRUNK, { at: [0, 0.2, 0] }, 7),
+        P.sphere(0.34, LEAF, { at: [0, 0.62, 0] }, 12),
+        P.sphere(0.2, LEAF_LIGHT, { at: [-0.16, 0.76, 0.12] }, 10),
+        P.sphere(0.17, LEAF_LIGHT, { at: [0.17, 0.82, -0.06] }, 10),
+      ])
     case 'palm':
       return merge(palm([0, 0, 0], 1, 0.6, 5))
     case 'acacia':
-      return merge([rod([0, 0, 0], [0.05, 0.6, 0], 0.05, '#B98260', 5), P.sphere(0.38, '#86CF78', { at: [0.05, 0.68, 0], scale: [1.4, 0.38, 1.2] }, 10)])
+      return merge([rod([0, 0, 0], [0.05, 0.6, 0], 0.06, TRUNK, 5), P.sphere(0.38, '#5DB54A', { at: [0.05, 0.68, 0], scale: [1.4, 0.38, 1.2] }, 10)])
     case 'peak':
-    case 'bigPeak': {
-      const body = tintHex(land, -0.1)
-      return merge([faceted(P.cone(0.62, 1, body, { at: [0, 0.5, 0] }, 6), 0.14), faceted(P.cone(0.26, 0.42, '#FFFFFF', { at: [0, 0.8, 0] }, 6), 0.1)])
-    }
+    case 'bigPeak':
+      // Slate-blue rock under a big snowcap, with a little shoulder peak beside it.
+      return merge([
+        faceted(P.cone(0.62, 1, ROCK, { at: [0, 0.5, 0] }, 6), 0.16),
+        faceted(P.cone(0.33, 0.52, '#FFFFFF', { at: [0, 0.76, 0] }, 6), 0.08),
+        faceted(P.cone(0.36, 0.56, ROCK, { at: [0.42, 0.28, 0.12] }, 6), 0.16),
+        faceted(P.cone(0.17, 0.24, '#FFFFFF', { at: [0.42, 0.44, 0.12] }, 6), 0.08),
+      ])
     case 'icePeak':
       return merge([faceted(P.cone(0.6, 1, '#E7EEFF', { at: [0, 0.5, 0] }, 5)), faceted(P.cone(0.24, 0.4, '#FFFFFF', { at: [0, 0.8, 0] }, 5))])
+    case 'house':
+      // A cream cottage with a red roof, a door and a chimney.
+      return merge([
+        P.box(0.62, 0.46, 0.5, '#FFF3E0', { at: [0, 0.23, 0] }),
+        P.prism([[-0.42, 0], [0.42, 0], [0, 0.36]], 0.62, '#F2615A', { at: [0, 0.44, 0] }),
+        P.box(0.14, 0.24, 0.04, '#C98B62', { at: [0.12, 0.12, 0.26] }),
+        P.box(0.12, 0.12, 0.04, '#B7D8F7', { at: [-0.16, 0.26, 0.26] }),
+        P.box(0.1, 0.22, 0.1, '#E9524F', { at: [-0.2, 0.68, -0.08] }),
+      ])
   }
 }
 
-function tintHex(hex: string, k: number) {
-  const n = parseInt(hex.slice(1), 16)
-  const c = [(n >> 16) & 255, (n >> 8) & 255, n & 255]
-  const to = k > 0 ? [255, 255, 255] : [110, 70, 130]
-  const a = Math.abs(k)
-  return `#${c.map((v, i) => Math.round(v + (to[i] - v) * a).toString(16).padStart(2, '0')).join('')}`
-}
+/** Cottages dotted round the green land, like the concept art's little villages: [lat, lon]. */
+const HOUSES: Pt[] = [
+  [-80, 47], [-78, 40], [-120, 50], [-56, -20], [-62, -32], [-50, -8], [4, 49], [26, 57], [-2, 40], [24, -8], [-5, 8], [10, -28],
+  [62, 55], [86, 52], [116, 30], [122, 55], [40, 54], [117, -30], [146, -32],
+].map(([lon, lat]) => [lat, lon] as Pt)
 
 interface Placed {
   kind: Kind
@@ -72,10 +96,10 @@ interface Placed {
 
 /** Mountain ranges: from, to, how many peaks, how big. */
 const RANGES: { continent: ContinentKey; from: Pt; to: Pt; n: number; size: number; kind?: Kind }[] = [
-  { continent: 'northAmerica', from: [-128, 60], to: [-108, 38], n: 7, size: 0.075 },
-  { continent: 'southAmerica', from: [-77, 4], to: [-71, -46], n: 8, size: 0.075 },
-  { continent: 'europe', from: [6, 46], to: [14, 47], n: 3, size: 0.05 },
-  { continent: 'asia', from: [74, 35], to: [96, 28], n: 6, size: 0.095, kind: 'bigPeak' },
+  { continent: 'northAmerica', from: [-128, 60], to: [-108, 38], n: 6, size: 0.095 },
+  { continent: 'southAmerica', from: [-77, 4], to: [-71, -46], n: 7, size: 0.095 },
+  { continent: 'europe', from: [6, 46], to: [14, 47], n: 2, size: 0.065 },
+  { continent: 'asia', from: [74, 35], to: [96, 28], n: 5, size: 0.12, kind: 'bigPeak' },
   { continent: 'asia', from: [59, 52], to: [60, 64], n: 3, size: 0.045 },
   { continent: 'africa', from: [-6, 31.5], to: [6, 35], n: 2, size: 0.045 },
   { continent: 'africa', from: [37, -3], to: [37, -3], n: 1, size: 0.07 },
@@ -84,7 +108,7 @@ const RANGES: { continent: ContinentKey; from: Pt; to: Pt; n: number; size: numb
 ]
 
 /** No scenery this close to a landmark (degrees). */
-const CLEAR = 7.5
+const CLEAR = 8.5
 
 function nearSpot(lat: number, lon: number, clear = CLEAR) {
   const v = unitAt(lat, lon)
@@ -121,7 +145,7 @@ function scatter(): Map<ContinentKey, Placed[]> {
     const lats = m.outline.map((p) => p[1])
     const [x0, x1, y0, y1] = [Math.min(...lons), Math.max(...lons), Math.min(...lats), Math.max(...lats)]
     const area = (x1 - x0) * (y1 - y0)
-    const want = Math.round(area / 150)
+    const want = Math.round(area / 330)
     let placed = 0
     for (let tries = 0; tries < want * 6 && placed < want; tries++) {
       const lon = x0 + r() * (x1 - x0)
@@ -131,7 +155,7 @@ function scatter(): Map<ContinentKey, Placed[]> {
       if (!inside(m.outline, lon + 1.8, lat) || !inside(m.outline, lon - 1.8, lat) || !inside(m.outline, lon, lat + 1.6) || !inside(m.outline, lon, lat - 1.6)) continue
       if (desert(m.continent, lon, lat) && r() > 0.12) continue
       const continent = m.continent === 'asia' && lon < 45 && lat > 36 ? 'europe' : m.continent
-      add(continent, { kind: treeKind(continent, lat, r), lat, lon, size: 0.046 + r() * 0.024 })
+      add(continent, { kind: treeKind(continent, lat, r), lat, lon, size: 0.08 + r() * 0.035 })
       placed++
     }
   }
@@ -144,17 +168,12 @@ function scatter(): Map<ContinentKey, Placed[]> {
       add(range.continent, { kind: range.kind ?? 'peak', lat, lon, size: range.size * (0.75 + r() * 0.5) })
     }
   }
+  for (const [lat, lon] of HOUSES) {
+    const c = continentAt(lon, lat)
+    if (!c || nearSpot(lat, lon, 6)) continue
+    add(c, { kind: 'house', lat, lon, size: 0.056 + r() * 0.012 })
+  }
   return out
-}
-
-const LAND_OF: Record<ContinentKey, string> = {
-  northAmerica: '#8FE3C8',
-  southAmerica: '#FFC2A8',
-  europe: '#C9B6F5',
-  asia: '#FF9EC4',
-  africa: '#FBEA9A',
-  australia: '#FFB98A',
-  antarctica: '#FFFFFF',
 }
 
 /** The trees and mountains of one continent, to put in its group (so they bounce with it). */
@@ -169,10 +188,10 @@ export function scenery(bag: Bag, top: (c: ContinentKey) => number): Map<Contine
       kinds.get(p.kind)!.push(p)
     }
     for (const [kind, ps] of kinds) {
-      const geo = bag.add(shape(kind, LAND_OF[c]))
+      const geo = bag.add(shape(kind))
       const hull = bag.add(hullGeometry(geo))
       const mesh = new InstancedMesh(geo, toon('#ffffff', true), ps.length)
-      const line = new InstancedMesh(hull, instancedOutlineMaterial(kind === 'peak' || kind === 'bigPeak' || kind === 'icePeak' ? 2 : 1.5), ps.length)
+      const line = new InstancedMesh(hull, instancedOutlineMaterial(kind === 'peak' || kind === 'bigPeak' || kind === 'icePeak' || kind === 'house' ? 2 : 1.5), ps.length)
       const r = rng(ps.length * 7 + kind.length)
       ps.forEach((p, i) => {
         standAt(dummy, p.lat, p.lon, top(c) - 0.002, r() * Math.PI * 2)
@@ -218,7 +237,7 @@ export const ISLANDS: [number, number, number][] = [[20, -157, 1.1], [-17, -150,
 /** A sandy island with a palm tree (cm). */
 export function island(bag: Bag, seed: number) {
   const r = rng(seed * 31 + 3)
-  const parts: BufferGeometry[] = [P.sphere(5, '#FFE7B0', { at: [0, -1.8, 0], scale: [1, 0.55, 0.8] }, 14), P.sphere(2.6, '#A8E6A0', { at: [0.6, 0.2, -0.4], scale: [1, 0.4, 0.8] }, 10)]
+  const parts: BufferGeometry[] = [P.sphere(5, GROUND.sand, { at: [0, -1.8, 0], scale: [1, 0.55, 0.8] }, 14), P.sphere(2.8, GROUND.grass, { at: [0.6, 0.2, -0.4], scale: [1, 0.4, 0.8] }, 10)]
   parts.push(...palm([0.6, 0.6, -0.4], 6 + r() * 2, r() * 6, 6))
   if (r() < 0.6) parts.push(...palm([-2.2, 0.2, 1.1], 4.4, r() * 6, 6))
   return solid(merge(parts), bag, 2)
@@ -241,9 +260,9 @@ export function sailboat(bag: Bag) {
 
 // ---------------------------------------------------------------- the whale
 
-/** A happy blue whale, half in the water (cm: about 10 long). */
+/** A happy blue whale, half in the water in a ring of white splash (cm: about 10 long). */
 export function whale(bag: Bag) {
-  const blue = '#7FA8F0'
+  const blue = '#3F74DA'
   const outlined: BufferGeometry[] = [
     P.sphere(4, blue, { at: [0, 0, 0], scale: [1.35, 0.72, 0.85] }, 18),
     P.sphere(1.6, blue, { at: [-6.4, 0.9, 0], scale: [1, 0.5, 0.6] }, 10),
@@ -252,14 +271,21 @@ export function whale(bag: Bag) {
     P.sphere(1.1, blue, { at: [1.5, 0.2, 3.1], scale: [1.4, 0.35, 0.7], rot: [0.5, 0.4, 0] }, 10),
   ]
   const plain: BufferGeometry[] = [
-    P.sphere(3.3, '#DCE8FF', { at: [1, -0.9, 0], scale: [1.3, 0.5, 0.8] }, 14),
+    P.sphere(3.3, '#EEF4FF', { at: [1, -0.9, 0], scale: [1.3, 0.5, 0.8] }, 14),
     P.sphere(0.42, PAL.ink, { at: [3.6, 0.9, 2.6] }, 8),
     P.sphere(0.42, PAL.ink, { at: [3.6, 0.9, -2.6] }, 8),
     P.sphere(0.5, '#FF9DB8', { at: [4.3, 0.1, 2.3], scale: [1, 0.55, 0.4] }, 8),
     P.sphere(0.5, '#FF9DB8', { at: [4.3, 0.1, -2.3], scale: [1, 0.55, 0.4] }, 8),
   ]
+  // The splash it sits in: puffs of white foam round the waterline.
+  const foam: BufferGeometry[] = []
+  for (let i = 0; i < 11; i++) {
+    const a = (i / 11) * Math.PI * 2
+    const s = 1 + 0.35 * Math.sin(i * 2.3)
+    foam.push(P.sphere(1.15 * s, i % 3 ? '#FFFFFF' : '#E4FAFF', { at: [Math.cos(a) * 6.4 - 0.8, -0.3, Math.sin(a) * 4.4], scale: [1.2, 0.42, 1] }, 9))
+  }
   const g = new Group()
-  g.add(solid(merge(outlined), bag, 2), solid(merge(plain), bag, 0))
+  g.add(solid(merge(outlined), bag, 2), solid(merge(plain), bag, 0), solid(merge(foam), bag, 1.5))
   return g
 }
 

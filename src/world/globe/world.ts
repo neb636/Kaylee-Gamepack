@@ -19,7 +19,7 @@ import { makeLights, PAL, toonGradient } from '../engine3d/toon'
 import type { World3D } from '../engine3d/View3D'
 import type { FlagId } from '../kit/Flag'
 import { WORLD_LINES } from '../lines'
-import { CONTINENT_SPOTS, continentAt, LANDMASSES, type ContinentKey } from './continents'
+import { CONTINENT_SPOTS, continentAt, LAND_H, LANDMASSES, type ContinentKey } from './continents'
 import { balloon, cloud, CLOUDS, frame, island, ISLANDS, sailboat, scenery, standAt, whale } from './decor'
 import { buildLandmark, type Landmark } from './landmarks'
 import { landGeometry, latLonOf, unitAt } from './land'
@@ -311,13 +311,13 @@ export class HomeGlobe implements World3D {
       this.puffs.push({ o, phase: i * 1.7, base: o.position.clone(), squash: -1, popAt: 0 })
     })
 
-    // ---- The whale, south of the Atlantic.
+    // ---- The whale, out in the middle of the South Atlantic.
     const wo = new Group()
     const wm = whale(this.bag)
-    wm.scale.setScalar(CM * 1.8)
+    wm.scale.setScalar(CM * 2.3)
     wm.traverse((x) => (x.userData.tag = 'whale'))
     wo.add(wm)
-    standAt(wo, -36, -28, 0.998, 0.6)
+    standAt(wo, -27, -21, 0.998, 0.6)
     this.spin.add(wo)
     this.whale = { o: wo, t: -1, base: wo.quaternion.clone() }
 
@@ -388,7 +388,7 @@ export class HomeGlobe implements World3D {
     const c = continentAt(lon, lat)
     if (!c) return 1
     if (c === 'antarctica') return lat < -60 ? 1 + LANDMASSES.find((m) => m.continent === 'antarctica')!.height : 1
-    return 1 + 0.032
+    return 1 + LAND_H
   }
 
   // ---------------------------------------------------------------- the turn that brings a place to her

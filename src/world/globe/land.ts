@@ -1,7 +1,7 @@
 // The continents as raised slabs on the globe, like a toy planet's pressed-clay plates: each outline is rounded,
 // triangulated flat (in a projection centered on the landmass, so even Antarctica's ring round the pole works), cut into
-// small triangles that follow the sphere, lifted to its height, and given a wall down into the sea. The top reads the
-// painted map (paint.ts) through lon/lat UVs; the walls are the same color a shade darker.
+// small triangles that follow the sphere, lifted to its height, and given a rounded shore that slopes out into the sea.
+// The top reads the painted map (paint.ts) through lon/lat UVs; the shore samples the painted coast (sand) a shade darker.
 import { BufferAttribute, BufferGeometry, ShapeUtils, Vector2, Vector3 } from 'three'
 import { smoothOutline, type Landmass, type Pt } from './continents'
 
@@ -28,8 +28,14 @@ export function latLonOf(v: Vector3) {
 const MAX_EDGE = 0.06
 /** How far below the sea the walls go (hidden under the water). */
 const FOOT = 0.012
-/** The walls' shade (multiplies the painted color): a little darker and lavender, like the toon's shadow side. */
-const WALL = [0.8, 0.76, 0.9]
+/** How far the shore slopes out past the coast at the waterline (unit sphere): a soft, rounded clay edge. */
+const SKIRT = 0.016
+/** The shore's profile, top to foot: [how far out (× SKIRT), how far down (0 = the top, 1 = the foot)]. A rounded
+ *  shoulder, then a sandy slope into the sea, like the concept art's pressed-clay continents. */
+const PROFILE: [number, number][] = [[0, 0], [0.22, 0.12], [0.5, 0.42], [1, 1]]
+/** The shore's shade (multiplies the painted coast, which is sand): a touch warmer and darker. Ice gets lavender. */
+const WALL = [0.93, 0.86, 0.8]
+const ICE_WALL = [0.86, 0.86, 0.97]
 
 /** The slab (`geometry`) and its walls alone (`walls`): the ink outline is drawn from the walls, since a hull of
  *  the top's long thin triangles can flip and streak lines across the land. */
@@ -146,27 +152,51 @@ export function landGeometry(m: Landmass): { geometry: BufferGeometry; walls: Bu
       col.push(1, 1, 1)
     }
   }
+  // ---- The shore: from the top's edge it rounds over and slopes out into the sea. Each rim corner gets one outward
+  // direction (the average of its two edges'), so neighbouring strips meet without gaps.
   const n = new Vector3()
+  const outward = new Map<number, Vector3>()
+  for (const { a, b } of rim) {
+    n.subVectors(verts[b], verts[a]).cross(verts[a]).normalize()
+    for (const i of [a, b]) {
+      const o = outward.get(i)
+      if (o) o.add(n)
+      else outward.set(i, n.clone())
+    }
+  }
+  for (const [i, o] of outward) o.addScaledVector(verts[i], -o.dot(verts[i])).normalize()
+  const shade = m.ice ? ICE_WALL : WALL
+  const drop = top - foot
+  /** Ring `k` of the profile at rim corner `i`: where it is and its (smooth) normal, leaning from up to out. */
+  const ring = (i: number, k: number) => {
+    const [o, d] = PROFILE[k]
+    const up = verts[i]
+    const out = outward.get(i)!
+    const r = top - d * drop
+    const p = up.clone().multiplyScalar(r).addScaledVector(out, o * SKIRT)
+    const lean = k === 0 ? 0.45 : Math.min(1, 0.55 + k * 0.2)
+    const nn = up.clone().multiplyScalar(1 - lean).addScaledVector(out, lean).normalize()
+    return { p, nn }
+  }
   const wallFrom = pos.length / 3
   for (const { a, b } of rim) {
-    const va = verts[a]
-    const vb = verts[b]
-    const at = va.clone().multiplyScalar(top)
-    const bt = vb.clone().multiplyScalar(top)
-    const af = va.clone().multiplyScalar(foot)
-    const bf = vb.clone().multiplyScalar(foot)
-    // Facing out of the land: to the right of a→b seen from outside.
-    n.subVectors(vb, va).cross(va).normalize()
-    // Wound so the wall faces that way too.
-    tmp.subVectors(bt, at).cross(tmp2.subVectors(af, at))
-    const out = tmp.dot(n) > 0
-    const quad = out ? [at, bt, af, bt, bf, af] : [at, af, bt, bt, af, bf]
-    const quv = out ? [uvs[a], uvs[b], uvs[a], uvs[b], uvs[b], uvs[a]] : [uvs[a], uvs[a], uvs[b], uvs[b], uvs[a], uvs[b]]
-    for (let i = 0; i < 6; i++) {
-      pos.push(quad[i].x, quad[i].y, quad[i].z)
-      nrm.push(n.x, n.y, n.z)
-      uv.push(quv[i][0], quv[i][1])
-      col.push(WALL[0], WALL[1], WALL[2])
+    for (let k = 0; k < PROFILE.length - 1; k++) {
+      const A = ring(a, k)
+      const B = ring(b, k)
+      const A2 = ring(a, k + 1)
+      const B2 = ring(b, k + 1)
+      // Wound to face out of the land.
+      n.subVectors(verts[b], verts[a]).cross(verts[a])
+      tmp.subVectors(B.p, A.p).cross(tmp2.subVectors(A2.p, A.p))
+      const out = tmp.dot(n) > 0
+      const quad = out ? [A, B, A2, B, B2, A2] : [A, A2, B, B, A2, B2]
+      const quv = out ? [uvs[a], uvs[b], uvs[a], uvs[b], uvs[b], uvs[a]] : [uvs[a], uvs[a], uvs[b], uvs[b], uvs[a], uvs[b]]
+      for (let i = 0; i < 6; i++) {
+        pos.push(quad[i].p.x, quad[i].p.y, quad[i].p.z)
+        nrm.push(quad[i].nn.x, quad[i].nn.y, quad[i].nn.z)
+        uv.push(quv[i][0], quv[i][1])
+        col.push(shade[0], shade[1], shade[2])
+      }
     }
   }
   const g = new BufferGeometry()

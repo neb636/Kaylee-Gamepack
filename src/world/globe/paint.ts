@@ -1,11 +1,11 @@
-// The home globe's painted pictures, all drawn in code: the land's colors (the world map's, with a hand-painted
-// speckle, frosty tops and rivers), the sea (shallow bands round every coast and the flat map's little white waves),
+// The home globe's painted pictures, all drawn in code: the land's colors (green grass with hand-painted dabs, sandy
+// deserts and beaches, frosty tops and rivers), the sea (shallow bands round every coast and the flat map's little white waves),
 // the real flags (drawn from the SVG <Flag>, never generated art), and the soft sprites (glow, sparkle).
 import { createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 import { CanvasTexture, SRGBColorSpace } from 'three'
 import { Flag, type FlagId } from '../kit/Flag'
-import { EUROPE_EDGE, LAND, LANDMASSES, OCEAN, RIVERS, smoothOutline, type Pt } from './continents'
+import { DESERTS, GROUND, LANDMASSES, OCEAN, RIVERS, smoothOutline, type Pt } from './continents'
 import { rng } from './land'
 
 const W = 2048
@@ -49,63 +49,75 @@ function tint(hex: string, k: number) {
   return `rgb(${c.map((v, i) => Math.round(v + (to[i] - v) * a)).join(',')})`
 }
 
-/** The land's colors, read by every landmass's top through its lon/lat. */
+/** An ellipse in lon/lat degrees as a canvas path (stretched across the map the way the map stretches near the poles). */
+function blob(g: CanvasRenderingContext2D, lon: number, lat: number, rx: number, ry: number, turn = 0) {
+  const [x, y] = px([lon, lat])
+  g.beginPath()
+  g.ellipse(x, y, (rx / 360) * W, (ry / 180) * H, (-turn * Math.PI) / 180, 0, Math.PI * 2)
+}
+
+/** The land's colors, read by every landmass's top (and its shore) through its lon/lat: green grass with lighter and
+ *  darker dabs, sandy deserts, a sandy beach round every coast, frosty tops in the far north, rivers. */
 export function landTexture() {
   const { c, g } = canvas(W, H)
   const random = rng(7)
+  g.lineJoin = 'round'
   for (const m of LANDMASSES) {
-    const color = m.ice ? LAND.ice : LAND[m.continent as keyof typeof LAND] ?? LAND.ice
     const pts = smoothOutline(m.outline, 2)
-    // A little past the coast, so the slab's edge never samples the empty canvas.
+    // The fill, and a stroke a little past the coast so the slab's edge (and its shore) never samples the empty canvas:
+    // sand for the beach, white for ice.
     path(g, pts)
-    g.fillStyle = color
-    g.strokeStyle = color
-    g.lineWidth = 10
-    g.lineJoin = 'round'
-    g.fill()
+    g.fillStyle = m.ice ? GROUND.ice : GROUND.grass
+    g.strokeStyle = m.ice ? GROUND.ice : GROUND.sand
+    g.lineWidth = 12
     g.stroke()
-    if (m.continent === 'asia' && m.trees) {
-      // Europe is Eurasia's west end, in lavender like the map: everything west of the line from the Urals down.
-      g.save()
-      path(g, pts)
-      g.clip()
-      g.beginPath()
-      g.moveTo(...px([-40, 90]))
-      for (const p of EUROPE_EDGE) g.lineTo(...px(p))
-      g.lineTo(...px([20, 30]))
-      g.lineTo(...px([-40, 30]))
-      g.closePath()
-      g.fillStyle = LAND.europe
-      g.fill()
-      g.restore()
-    }
+    g.fill()
   }
-  // Hand-painted speckle: soft lighter and darker dabs, so a continent isn't one flat sheet.
   for (const m of LANDMASSES) {
-    if (m.ice || !m.trees) continue
+    if (m.ice) continue
     const pts = smoothOutline(m.outline, 2)
     g.save()
     path(g, pts)
     g.clip()
+    // Hand-painted dabs, so a continent isn't one flat sheet: light ones like sunny hilltops, a few darker ones.
     const xs = pts.map((p) => px(p)[0])
     const ys = pts.map((p) => px(p)[1])
     const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)]
-    const n = Math.round(((x1 - x0) * (y1 - y0)) / 2600)
+    const n = Math.round(((x1 - x0) * (y1 - y0)) / 2200)
     for (let i = 0; i < n; i++) {
       const x = x0 + random() * (x1 - x0)
       const y = y0 + random() * (y1 - y0)
-      const light = random() < 0.6
-      g.globalAlpha = light ? 0.26 : 0.08
-      g.fillStyle = light ? '#FFFFFF' : '#7A4F8C'
+      const light = random() < 0.62
+      g.globalAlpha = light ? 0.55 : 0.32
+      g.fillStyle = light ? GROUND.grassLight : GROUND.grassDark
       g.beginPath()
-      g.ellipse(x, y, 8 + random() * 18, 5 + random() * 10, random() * Math.PI, 0, Math.PI * 2)
+      g.ellipse(x, y, 8 + random() * 20, 5 + random() * 11, random() * Math.PI, 0, Math.PI * 2)
       g.fill()
     }
     g.globalAlpha = 1
-    // A light rim just inside the coast: the beach.
+    // Deserts: overlapping patches of sand that read as one, with a few lighter dunes in them.
+    g.fillStyle = GROUND.sand
+    for (const [lon, lat, rx, ry, turn] of DESERTS) {
+      blob(g, lon, lat, rx, ry, turn)
+      g.fill()
+    }
+    g.fillStyle = GROUND.sandLight
+    g.globalAlpha = 0.7
+    for (const [lon, lat, rx, ry] of DESERTS) {
+      for (let i = 0; i < 3; i++) {
+        blob(g, lon + (random() - 0.5) * rx, lat + (random() - 0.5) * ry, 1.6 + random() * 1.6, 0.8 + random() * 0.7, random() * 40 - 20)
+        g.fill()
+      }
+    }
+    g.globalAlpha = 1
+    // The beach: a sandy band just inside the coast, with a lighter wet-sand line at the water.
     path(g, pts)
     g.lineWidth = 9
-    g.strokeStyle = 'rgba(255,255,255,0.45)'
+    g.strokeStyle = GROUND.sand
+    g.stroke()
+    path(g, pts)
+    g.lineWidth = 3
+    g.strokeStyle = GROUND.sandLight
     g.stroke()
     g.restore()
   }
@@ -122,31 +134,31 @@ export function landTexture() {
     path(g, r, false)
     g.lineCap = 'round'
     g.lineJoin = 'round'
-    g.strokeStyle = '#FFFFFF'
-    g.lineWidth = 9
+    g.strokeStyle = GROUND.sandLight
+    g.lineWidth = 10
     g.stroke()
     g.strokeStyle = OCEAN
-    g.lineWidth = 5
+    g.lineWidth = 5.5
     g.stroke()
   }
   // The ice rows are white all the way across (a triangle across the date line samples both edges).
-  g.fillStyle = LAND.ice
+  g.fillStyle = GROUND.ice
   g.fillRect(0, px([0, -62])[1], W, H)
   g.fillRect(0, 0, W, px([0, 79])[1])
   return texture(c)
 }
 
-/** The sea: the world map's blue, lighter bands round every coast, and little white waves. */
+/** The sea: turquoise, lighter bands round every coast (the shallows), and a few little white waves. */
 export function oceanTexture() {
   const { c, g } = canvas(W, H)
   g.fillStyle = OCEAN
   g.fillRect(0, 0, W, H)
   const random = rng(11)
   // Waves first, so the shallow bands cover the ones near land.
-  g.strokeStyle = 'rgba(255,255,255,0.8)'
+  g.strokeStyle = 'rgba(255,255,255,0.55)'
   g.lineCap = 'round'
   g.lineWidth = 3
-  for (let i = 0; i < 170; i++) {
+  for (let i = 0; i < 110; i++) {
     const lat = (random() * 2 - 1) * 64
     const lon = random() * 360 - 180
     const [x, y] = px([lon, lat])
@@ -159,9 +171,9 @@ export function oceanTexture() {
     g.stroke()
   }
   const bands: [number, string][] = [
-    [46, tint(OCEAN, 0.22)],
-    [26, tint(OCEAN, 0.42)],
-    [10, tint(OCEAN, 0.75)],
+    [52, tint(OCEAN, 0.16)],
+    [30, tint(OCEAN, 0.32)],
+    [12, tint(OCEAN, 0.55)],
   ]
   g.lineJoin = 'round'
   for (const [width, color] of bands) {

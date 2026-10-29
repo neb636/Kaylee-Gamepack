@@ -1,22 +1,29 @@
-// The home globe's Earth: rough continent outlines (a toy's map, not an atlas), the world map's continent colors (so the
-// globe and the passport, the shelf and the old flat map all agree), and where each country sits on it. Pure data and a
+// The home globe's Earth: rough continent outlines (a toy's map, not an atlas), the ground's colors (green land, sandy
+// deserts, a turquoise sea, like the concept art), and where each country sits on it. Pure data and a
 // little math, no three.js.
 
 export type Pt = [lon: number, lat: number]
 export type ContinentKey = 'northAmerica' | 'southAmerica' | 'europe' | 'africa' | 'asia' | 'australia' | 'antarctica'
 
-/** The world map's continent colors (src/world/assets/bg-world-map.webp). */
-export const LAND = {
-  northAmerica: '#8FE3C8',
-  southAmerica: '#FFC2A8',
-  europe: '#C9B6F5',
-  asia: '#FF9EC4',
-  africa: '#FBEA9A',
-  australia: '#FFB98A',
+/** The globe's ground, like the concept art (a clay toy planet): lime-green land, sandy deserts and beaches, white ice.
+ *  Every continent is the same green; tapping one still pops it up and says its name. */
+export const GROUND = {
+  grass: '#8FD65C',
+  grassLight: '#B3E57C',
+  grassDark: '#62B84A',
+  sand: '#F1D49A',
+  sandLight: '#FBE6B8',
   ice: '#FFFFFF',
 } as const
 
-export const OCEAN = '#8CD2F6'
+/** The sea: a bright turquoise, lighter in the shallows. */
+export const OCEAN = '#3FC4EA'
+
+/** Deserts painted on the land: [lon, lat, half-width, half-height, turn] in degrees (clipped to the coast). */
+export const DESERTS: [number, number, number, number, number][] = [
+  [-4, 22, 15, 8.5, 0], [15, 22.5, 15, 8.5, 0], [29, 22, 9, 8.5, 0], [46, 23, 10, 7.5, 30], [57, 31, 7, 3.5, 0],
+  [83, 39, 7, 3, 0], [104, 43, 11, 4, 0], [128, -25, 12, 6.5, 0], [-112, 33, 5, 3, 20], [21, -24, 5, 4, 0], [-69, -43, 3.5, 7.5, 0],
+]
 
 const NORTH_AMERICA: Pt[] = [[-168, 66], [-162, 70], [-150, 71], [-140, 70], [-128, 70], [-115, 68], [-100, 68], [-95, 72], [-85, 70], [-80, 63], [-90, 58], [-82, 53], [-78, 58], [-70, 60], [-62, 57], [-56, 52], [-60, 47], [-66, 44], [-70, 42], [-75, 38], [-76, 35], [-81, 31], [-80, 26], [-82, 25], [-83, 29], [-90, 30], [-97, 27], [-97, 22], [-92, 19], [-88, 21], [-87, 16], [-83, 15], [-83, 10], [-79, 9], [-77, 8], [-80, 7], [-86, 11], [-92, 15], [-105, 20], [-110, 24], [-112, 29], [-115, 30], [-117, 33], [-121, 35], [-124, 40], [-124, 46], [-126, 50], [-132, 55], [-140, 60], [-148, 61], [-155, 58], [-162, 58], [-165, 62]]
 const GREENLAND: Pt[] = [[-55, 60], [-48, 61], [-42, 60], [-38, 65], [-22, 70], [-20, 76], [-18, 80], [-30, 83], [-45, 83], [-60, 82], [-70, 78], [-62, 76], [-56, 72], [-53, 67]]
@@ -67,7 +74,9 @@ export interface Landmass {
   trees?: boolean
 }
 
-const H = 0.032
+/** How far the continents stand up out of the sea: chunky, like pressed clay. */
+export const LAND_H = 0.042
+const H = LAND_H
 export const LANDMASSES: Landmass[] = [
   { continent: 'northAmerica', outline: NORTH_AMERICA, height: H, trees: true },
   { continent: 'northAmerica', outline: GREENLAND, height: H * 1.1, ice: true },

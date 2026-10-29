@@ -42,7 +42,7 @@ function toy(look: Look, height: number, at: V3, bag: Bag, turn = 0) {
 /** Italy: the Leaning Tower of Pisa on its lawn. */
 function italy(bag: Bag): Landmark {
   const g = new Group()
-  g.add(finish(bag, [P.cyl(5, 5.4, 0.8, '#A8E6A0', { at: [0, 0.2, 0] }, 20)]))
+  g.add(finish(bag, [P.cyl(5, 5.4, 0.8, '#A6DE6E', { at: [0, 0.2, 0] }, 20)]))
   const tower: Parts = []
   const cream = '#FFF7F0'
   const arch = '#C9B6F5'
@@ -96,7 +96,7 @@ function china(bag: Bag, toys: Toy[]): Landmark {
     path.push([x, Math.sin(x / 6) * 5 - 2])
   }
   const ground = (x: number) => 2.4 + 2.6 * Math.cos((x / 17) * Math.PI * 1.5)
-  for (const [x, z] of path.filter((_, i) => i % 2 === 0)) hills.push(P.sphere(7.5, '#A8E3A0', { at: [x, ground(x) - 5.6, z], scale: [1, 0.95, 0.85] }, 14))
+  for (const [x, z] of path.filter((_, i) => i % 2 === 0)) hills.push(P.sphere(7.5, '#A6DE6E', { at: [x, ground(x) - 5.6, z], scale: [1, 0.95, 0.85] }, 14))
   for (let i = 0; i < path.length - 1; i++) {
     const [x1, z1] = path[i]
     const [x2, z2] = path[i + 1]
@@ -310,7 +310,7 @@ function polesNorth(bag: Bag, toys: Toy[]): Landmark {
 function home(bag: Bag): Landmark {
   const g = new Group()
   const parts: Parts = [
-    P.cyl(6.2, 6.6, 0.6, '#A8E6A0', { at: [0, 0.1, 0.5] }, 20),
+    P.cyl(6.2, 6.6, 0.6, '#A6DE6E', { at: [0, 0.1, 0.5] }, 20),
     P.rbox(9, 6.5, 7.5, 0.6, '#FFC9DE', { at: [0, 3.4, 0] }),
     P.prism([[-5.7, 0], [5.7, 0], [0, 4.4]], 8.6, PAL.lavenderDark, { at: [0, 6.5, 0] }),
     P.rbox(2.2, 3.4, 0.5, 0.5, PAL.hotpink, { at: [0, 1.8, 3.8] }),
