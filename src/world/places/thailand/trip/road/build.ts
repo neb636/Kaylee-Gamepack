@@ -57,7 +57,7 @@ const POST = '#B9BCCB'
 const J_ASPHALT = '#7A7686'
 const J_MIDDLE = '#FFC93C'
 const J_KERB = '#C9C5CF'
-const J_VERGE = '#86C468'
+const J_VERGE = '#81B45E'
 
 export const smooth = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)))
@@ -293,8 +293,9 @@ export class HeightField {
 
 /** The Nan look's ground colors. */
 const J = {
-  grass: [new Color('#8CC86C'), new Color('#76B860')],
-  floor: [new Color('#4C8F55'), new Color('#5D9E57'), new Color('#3F7F4E')],
+  // (Halfway between the toy forest's bright greens and the Kingdom Come look's muted ones: the hybrid trees.)
+  grass: [new Color('#88BA62'), new Color('#72A955')],
+  floor: [new Color('#467C46'), new Color('#558C4A'), new Color('#396C3E')],
   field: [new Color('#D9C78E'), new Color('#BFCB7C'), new Color('#A9D37A'), new Color('#C9A27E')],
   bund: new Color('#7FBF68'),
 }
@@ -568,7 +569,7 @@ function runOn(road: Road, bend: number): { drawn: Road; s0: number } {
 function paddyFields(field: HeightField, look: RoadLook, clears: Clear[], bag: Bag) {
   const C = 13
   const half = field.road.half
-  const greens = ['#B4E66A', '#9BDB5C', '#86CF55', '#C5EC72', '#A4DD62', '#9ED4C4', '#78C452'].map((c) => new Color(c))
+  const greens = ['#A8D263', '#92C656', '#7EB84E', '#B7D86C', '#9CCA5C', '#98C6B6', '#72AE4A'].map((c) => new Color(c))
   const corner = (i: number, j: number): [number, number] => [field.x0 + i * C + (hash(i, j, look.seed) - 0.5) * C * 0.5, field.z0 + j * C + (hash(i, j, look.seed + 1) - 0.5) * C * 0.5]
   const pos: number[] = []
   const col: number[] = []
