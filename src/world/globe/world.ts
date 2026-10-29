@@ -194,6 +194,8 @@ export class HomeGlobe implements World3D {
   private pickables: Object3D[] = []
   /** Where on the sea her last tap landed (globe-local). */
   private lastSea: Vector3 | null = null
+  /** Where her last tap on the Arctic's ice landed (world). */
+  private lastIce: Vector3 | null = null
   private fadeEl: HTMLElement | null = null
   private labelEl: HTMLElement | null = null
 
@@ -866,6 +868,12 @@ export class HomeGlobe implements World3D {
       if (m) this.go(m)
     } else if (hit.startsWith('cont:') || hit.startsWith('land:')) this.continentTap(hit.slice(5) as ContinentKey)
     else if (hit === 'ocean') this.oceanTap()
+    else if (hit === 'ice') {
+      // The Arctic's sea ice: a crackle and a puff of icy sparkles.
+      if (this.lastIce) this.emit(this.lastIce, new Vector3(0, 0.2, 0.15), 0.6, 0.04, 7)
+      sfx.crack()
+      this.events.poke('ice')
+    }
     else if (hit === 'whale') this.whaleTap()
     else if (hit === 'balloon') {
       this.balloon.bounce = 0
@@ -901,7 +909,13 @@ export class HomeGlobe implements World3D {
       if (tag.startsWith('land:')) {
         const local = this.spin.worldToLocal(h.point.clone())
         const { lat, lon } = latLonOf(local)
-        return `land:${continentAt(lon, lat) ?? tag.slice(5)}`
+        const c = continentAt(lon, lat)
+        // The Arctic's sea ice isn't a continent (it shares Antarctica's group only for its look).
+        if (!c && lat > 60) {
+          this.lastIce = h.point.clone()
+          return 'ice'
+        }
+        return `land:${c ?? tag.slice(5)}`
       }
       if (tag === 'ocean') {
         this.lastSea = this.spin.worldToLocal(h.point.clone()).normalize()
@@ -1002,7 +1016,7 @@ export class HomeGlobe implements World3D {
         const at = this.spin.localToWorld(unitAt(s.lat, s.lon, tmp).multiplyScalar(1.04))
         const f = this.facingCam(at, unitAt(s.lat, s.lon, new Vector3()))
         const p = this.toScreen(at)
-        if (f > 0.15) spot = { x: p.x, y: p.y, size: Math.max(min * 0.8, g.r * 0.22), z: 3000 }
+        if (f > 0.15) spot = { x: p.x, y: p.y, size: Math.max(min, g.r * 0.22), z: 3000 }
       } else if (!flying && id === 'balloon') {
         const p = this.toScreen(this.balloon.o.getWorldPosition(tmp))
         const behind = this.balloon.o.position.z < 0 && Math.hypot(p.x - g.x, p.y - g.y) < g.r
