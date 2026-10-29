@@ -12,11 +12,22 @@ type Box = { x0: number; x1: number; z0: number; z1: number }
 
 /** The ridges: their greens, and how much of the haze is mixed into each (the furthest nearly sky). */
 const RIDGES = [
-  { color: '#4F8C5E', haze: 0.12, h: [70, 150], out: 70 },
-  { color: '#5E9A78', haze: 0.34, h: [100, 200], out: 260 },
-  { color: '#6E9FA0', haze: 0.55, h: [130, 250], out: 470 },
-  { color: '#86A9BC', haze: 0.72, h: [150, 290], out: 700 },
+  { color: '#4F8C5E', haze: 0.12, h: [70, 150], out: 225 },
+  { color: '#5E9A78', haze: 0.34, h: [100, 200], out: 385 },
+  { color: '#6E9FA0', haze: 0.55, h: [130, 250], out: 545 },
+  { color: '#86A9BC', haze: 0.72, h: [150, 290], out: 705 },
 ]
+/** The front foot of a ridge (m before its crest): the nearest ring's (out - FOOT) stays outside the land. */
+const FOOT = 210
+
+/** How far from the land's middle its edge is, looking along angle (ca, sa): a rounded rectangle just outside the land
+ *  (`hx` by `hz` half-sizes, plus the ground's margin), through its corners. A ring this far out plus a little never cuts
+ *  into the ground, however long and thin the road's land is. */
+export function rim(ca: number, sa: number, hx: number, hz: number) {
+  const ax = hx + 25
+  const az = hz + 25
+  return 1.19 * (Math.abs(ca / ax) ** 4 + Math.abs(sa / az) ** 4) ** -0.25
+}
 
 /** The toon look for a ridge: lit and shaded in bands like everything else, then `haze` of the fog's color mixed in,
  *  and the fog itself thinner on it (it's far off: the normal fog would hide it), but still white inside the cloud. */
@@ -47,7 +58,7 @@ export function buildRidges(box: Box, y0: number, seed: number, bag: Bag) {
     const rand = rng(seed * 17 + k * 101)
     const ph = rand() * 100
     // Across the ring from the front foot to the crest and down the back: [how far in or out (m), how high (0..1)].
-    const rows: [number, number][] = [[-210, 0], [-150, 0.3], [-90, 0.62], [-40, 0.88], [0, 1], [60, 0.7], [160, 0]]
+    const rows: [number, number][] = [[-FOOT, 0], [-150, 0.3], [-90, 0.62], [-40, 0.88], [0, 1], [60, 0.7], [160, 0]]
     const pos: number[] = []
     const col: number[] = []
     const c = new Color(L.color)
@@ -60,11 +71,12 @@ export function buildRidges(box: Box, y0: number, seed: number, bag: Bag) {
       const n = fbm(ca * 3.2 + ph, sa * 3.2 + ph, seed + k)
       const peak = 1 - Math.abs(fbm(ca * 7 + ph * 2, sa * 7, seed + k + 9))
       const crest = L.h[0] + (L.h[1] - L.h[0]) * (0.5 + 0.35 * n + 0.3 * (peak - 0.5))
+      const edge = rim(ca, sa, hx, hz)
       for (const [off, up] of rows) {
-        // An ellipse just outside the land, rounder the further out.
-        const R = L.out + off
-        const x = cx + ca * (hx * 1.08 + R)
-        const z = cz + sa * (hz * 1.08 + R)
+        // Round the land, never into it (the front foot of the nearest ring is just outside its edge).
+        const R = edge + L.out + off
+        const x = cx + ca * R
+        const z = cz + sa * R
         const gully = up > 0 && up < 1 ? fbm(ca * 18 + off / 40, sa * 18, seed + k + 3) * 18 * up * (1 - up) * 4 : 0
         pos.push(x, foot + (crest + 40) * up + gully, z)
         const cc = tmp.copy(c).lerp(lit, up)
@@ -179,9 +191,10 @@ export function buildMist(road: Road, field: HeightField, box: Box, thick: numbe
   // Banks in the valleys between the ridges.
   for (let i = 0; i < 26; i++) {
     const a = rand() * Math.PI * 2
-    const out = [10, 170, 360][i % 3] + rand() * 60
+    const out = [20, 235, 395][i % 3] + rand() * 60
     const s = new Sprite(banks)
-    s.position.set(cx + Math.cos(a) * (hx * 1.08 + out), y0 + 5 + rand() * 45, cz + Math.sin(a) * (hz * 1.08 + out))
+    const R = rim(Math.cos(a), Math.sin(a), hx, hz) + out
+    s.position.set(cx + Math.cos(a) * R, y0 + 5 + rand() * 45, cz + Math.sin(a) * R)
     const w = 260 + rand() * 260
     s.scale.set(w, w * 0.22, 1)
     g.add(s)
