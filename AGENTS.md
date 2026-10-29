@@ -1,7 +1,7 @@
 # Kaylee's Gamepack: guide for AI builders
 
 This is a learning app for **Kaylee, age 5**. She plays it on an iPad (saved to the home screen). Its heart is
-**Around the World** (`#/world`): a world map she explores in Sparkle's hot-air balloon, one country at a time, each
+**Around the World** (`#/world`): a 3D toy globe she spins and flies around in Sparkle's hot-air balloon, one country at a time, each
 with a friend who needs her help, a handful of activities, passport stamps, stickers and a finale. Dad asks for one
 piece at a time (a plan, a greybox, art, a fix), you build it on a branch, and he plays it on the PR preview on the iPad.
 
@@ -23,6 +23,7 @@ src/world/places/<id>/   # one country per folder, found automatically (Thailand
 src/world/kit/           # shared country pieces: Stage, StoryBeat, StampEarned, sections, sfx, Flag, ...
 src/world/engine3d/      # the shared 3D engine (toon look, camera, View3D, water) and the chibi rig in characters/
 src/world/labs/          # the camera lab (?cam=1) and the feel lab (?feel=1), for any country
+src/world/globe/         # the home screen's 3D globe (#/world): continents, a landmark per place, the balloon, the fly-in
 src/sdk/                 # shared building blocks: say, sounds, puppets, drag and drop, ... (see "SDK")
 src/shell/               # the app wrapper: splash, trophy ceremony, trophy room ("Let's play!" lands on the world map)
 src/games/<id>/          # the original school-paper games (just the tea party, the 🏡 pin on the map), found automatically
@@ -42,8 +43,9 @@ Installed and pre-approved for hands-on play that plain React can't do well (see
   puppets, speech bubbles and buttons in React on top of it.
 - **perfect-freehand**: smooth finger strokes, for tracing and drawing.
 
-Import these **only from inside a country or game folder** (`src/world/places/<id>/`, `src/games/<id>/`) or the
-shared 3D engine (`src/world/engine3d/`, which only countries import), and never from a file that loads at startup:
+Import these **only from inside a country or game folder** (`src/world/places/<id>/`, `src/games/<id>/`), the
+shared 3D engine (`src/world/engine3d/`, which only countries import) or the home globe (`src/world/globe/`, which
+the world map lazy-loads), and never from a file that loads at startup:
 a `meta.ts`, a `*sections.ts` or a `puppets/index.ts`. Then only that country
 downloads them. `npm run verify` enforces this (`scripts/check-heavy-imports.mjs`).
 
@@ -324,7 +326,8 @@ so the friend talks), `StampEarned`, `sfx` (boing, thump, splash, pop, fwip), `C
 offers one, skippable, right after that activity's stamp); a country with videos gets a Theater button in its top bar,
 and the world map's Theater shows every country's videos.
 
-Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),
+Adding a country: make the folder, add its pin in `meta.ts`, give it a spot on the home globe (`SPOTS` in
+`src/world/globe/continents.ts`) and a toy landmark (`src/world/globe/landmarks.ts`, a pink pin until it has one),
 write its plan in `planning/around-the-world/`, generate backgrounds, props and character reference pictures with Codex
 (`codex exec -m gpt-6.1-sol -c model_reasoning_effort="medium" ...`, style rules from `art/STYLE.md`; tell Codex never
 to run git or gh), build the friend's characters, cast their voices, then

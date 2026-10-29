@@ -18,6 +18,22 @@ export const WORLD_LINES = {
     antarctica: "That's Antarctica! Brrr, it's icy!",
   },
   teaParty: `Tea party at my house, ${NAME}!`,
+  // The home globe (globe/): spin it, tap the sea, the whale, a place to fly there.
+  globe: {
+    spin: 'Spin the world!',
+    ocean: "Splash! That's the ocean!",
+    whale: 'Hello, whale!',
+    go: {
+      australia: "Let's fly to Australia!",
+      canada: "Let's fly to Canada!",
+      china: "Let's fly to China!",
+      egypt: "Let's fly to Egypt!",
+      italy: "Let's fly to Italy!",
+      peru: "Let's fly to Peru!",
+      thailand: "Let's fly to Thailand!",
+      poles: "Let's fly to the Poles!",
+    },
+  },
   soon: {
     egypt: "We'll fly to Egypt soon! It has pyramids!",
     china: "We'll fly to China soon! It has pandas!",

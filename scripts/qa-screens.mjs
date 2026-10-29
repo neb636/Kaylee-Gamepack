@@ -33,15 +33,28 @@ async function raceTo(page, until, taps = 0, after = 0) {
 }
 
 const CENTRAL = [
-  { name: 'world-map', hash: '#/world' },
+  // The home globe: arrival (its spin takes ~3 s), a continent's name, the other side, and the swoop onto a place.
+  { name: 'world-map', hash: '#/world', wait: 3500 },
   {
     name: 'world-map-continent',
     hash: '#/world',
+    wait: 3500,
     act: async (p) => {
       await p.getByRole('button', { name: 'africa' }).click({ force: true })
       await p.waitForTimeout(600)
     },
   },
+  { name: 'world-globe-asia', hash: '#/world?face=china', wait: 3500 },
+  {
+    name: 'world-globe-fly',
+    hash: '#/world',
+    wait: 3500,
+    act: async (p) => {
+      await p.getByRole('button', { name: 'Italy', exact: true }).click({ force: true })
+      await p.waitForTimeout(1700)
+    },
+  },
+  { name: 'world-map-flat', hash: '#/world?view=flat' },
   // The game shelf (the world map's list view) and a game's own page.
   { name: 'world-shelf', hash: '#/world?view=list' },
   {

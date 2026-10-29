@@ -1,8 +1,10 @@
-// The world map, and the app's home screen: tap continents to hear their names, tap a country pin to fly there,
-// tap home for Sparkle's tea party. The two buttons in the top bar swap the map for the game shelf (Shelf.tsx: every
-// game as a picture card, straight in); she keeps whichever she used last (#/world?view=list or map opens one).
+// The app's home screen: the world as a 3D toy globe (globe/, loaded on demand). She spins it, taps a continent to hear
+// its name, taps a place's landmark to fly there in Sparkle's balloon, or Sparkle's pink house for the tea party. The
+// two buttons in the top bar swap the globe for the game shelf (Shelf.tsx: every game as a picture card, straight in);
+// she keeps whichever she used last (#/world?view=list or map opens one). #/world?face=<place> opens the globe turned to
+// a place. The old flat map is still at #/world?view=flat, to compare.
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
 import { gameLogger } from '../posthog-logger'
 import { go } from '../router'
@@ -17,10 +19,33 @@ import mapIcon from './assets/icon-view-map.webp'
 import theaterArt from './assets/theater.webp'
 import { BarPill, FitBox, TopBar } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
-import { places, type PlaceEntry } from './registry'
+import { needsCode } from './lock'
+import { findPlace, places, type PlaceEntry } from './registry'
 import { FROM_SHELF, Shelf } from './Shelf'
 import { totalStamps, usePassport } from './stamps'
 import { Travel } from './Travel'
+
+const HomeGlobe = lazy(() => import('./globe/HomeGlobe'))
+/** The place she flew to from the globe last (it comes round to it when she's back), and whether the globe's big
+ *  arrival spin has played this session. */
+const LAST_PLACE = 'world:globe-last'
+const SPUN = 'world:globe-spun'
+const session = {
+  get: (k: string) => {
+    try {
+      return sessionStorage.getItem(k)
+    } catch {
+      return null
+    }
+  },
+  set: (k: string, v: string) => {
+    try {
+      sessionStorage.setItem(k, v)
+    } catch {
+      // No session storage.
+    }
+  },
+}
 
 // Hotspots in % of the map picture (x, y = centre; w, h = size).
 const CONTINENTS: { key: keyof typeof WORLD_LINES.continents; x: number; y: number; w: number; h: number }[] = [
@@ -88,9 +113,10 @@ function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number
   )
 }
 
-type View = 'map' | 'list'
+type View = 'map' | 'list' | 'flat'
 
-export function WorldMap({ view: linked }: { view?: string }) {
+/** `face`: a place the globe comes round to (#/world?face=australia), else the one she just came back from. */
+export function WorldMap({ view: linked, face }: { view?: string; face?: string }) {
   const passport = usePassport()
   const trophies = useTrophies()
   const online = useOnline() // the Theater needs the internet
@@ -98,12 +124,26 @@ export function WorldMap({ view: linked }: { view?: string }) {
   const [travelTo, setTravelTo] = useState<PlaceEntry | null>(null)
   const [saved, setView] = useSaved<View>('world:view', 'map')
   // A link's ?view= wins until she taps the other button.
-  const [fromLink, setFromLink] = useState<View | undefined>(linked === 'list' || linked === 'map' ? linked : undefined)
+  const isView = (v?: string): v is View => v === 'list' || v === 'map' || v === 'flat'
+  const [fromLink, setFromLink] = useState<View | undefined>(isView(linked) ? linked : undefined)
   useEffect(() => {
-    if (linked === 'list' || linked === 'map') setFromLink(linked)
+    if (isView(linked)) setFromLink(linked)
   }, [linked])
-  const view = fromLink ?? saved
+  const view = fromLink ?? (saved === 'flat' ? 'map' : saved)
   const firstTime = passport.visited.length === 0
+  const slot = useRef<HTMLDivElement>(null)
+  // Read once on arrival: where the globe comes round to, and whether it gets the big spin.
+  const [arrival] = useState(() => {
+    const long = !session.get(SPUN)
+    session.set(SPUN, '1')
+    return { face: face ?? session.get(LAST_PLACE) ?? undefined, long }
+  })
+  const heard = useRef(new Set<string>())
+  const once = (key: string, line: string) => {
+    if (heard.current.has(key)) return
+    heard.current.add(key)
+    void say(line)
+  }
 
   useEffect(() => {
     // Back on the world map: a game opened from here again goes back to the country's map.
@@ -115,6 +155,35 @@ export function WorldMap({ view: linked }: { view?: string }) {
     void say(view === 'list' ? WORLD_LINES.shelf.hello : firstTime ? WORLD_LINES.firstHello : WORLD_LINES.hello, { interrupt: false })
     // Only on arrival.
   }, [firstTime])
+
+  const teaParty = () => {
+    const won = trophies.some((t) => t.gameId === TEA_PARTY)
+    if (isPostHogEnabled) posthog.capture('game_session_started', { game_id: TEA_PARTY, previously_completed: won })
+    gameLogger.sessionStarted(TEA_PARTY, won)
+    sounds.sparkle()
+    void say(WORLD_LINES.teaParty)
+  }
+
+  // What the globe tells the screen (globe/world.ts does the moving; the screen does the talking).
+  const globeEvents = {
+    pick: (id: string) => {
+      session.set(LAST_PLACE, id)
+      if (id === 'home') return teaParty()
+      sounds.whoosh()
+      void say(WORLD_LINES.globe.go[id as keyof typeof WORLD_LINES.globe.go] ?? WORLD_LINES.takeoff)
+      // Start downloading the country while she flies (a locked one can't yet).
+      const entry = findPlace(id)
+      if (entry && !needsCode(id)) void entry.load()
+    },
+    arrive: (id: string) => (id === 'home' ? go.game(TEA_PARTY) : go.world(id)),
+    continent: (key: keyof typeof WORLD_LINES.continents) => void say(WORLD_LINES.continents[key]),
+    poke: (what: string) => {
+      if (what === 'ocean') once('ocean', WORLD_LINES.globe.ocean)
+      else if (what === 'whale') once('whale', WORLD_LINES.globe.whale)
+      else if (what === 'balloon') void say(WORLD_LINES.hello)
+    },
+    hint: () => void say(WORLD_LINES.globe.spin),
+  }
 
   const switchTo = (next: View) => {
     if (next === view) return
@@ -131,8 +200,14 @@ export function WorldMap({ view: linked }: { view?: string }) {
     void say(text)
   }
 
+  const globe = view === 'map'
   return (
-    <div className="screen decorated" style={{ padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 12px)', overflow: 'hidden' }}>
+    <div className={globe ? 'screen' : 'screen decorated'} style={{ padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 12px)', overflow: 'hidden', background: globe ? '#F4EEFF' : undefined }}>
+      {globe && (
+        <Suspense fallback={<GlobeLoading />}>
+          <HomeGlobe visited={passport.visited} teaParty={trophies.some((t) => t.gameId === TEA_PARTY)} face={arrival.face} long={arrival.long} slot={slot} events={globeEvents} />
+        </Suspense>
+      )}
       <TopBar
         icon={
           <>
@@ -147,13 +222,16 @@ export function WorldMap({ view: linked }: { view?: string }) {
           🌍<span className="world-title-text"> Around the World</span>
         </BarPill>
         <div style={{ marginLeft: 'auto', pointerEvents: 'auto', display: 'flex', gap: 4, borderRadius: 999, background: 'rgba(255,255,255,0.9)', boxShadow: 'var(--shadow)' }}>
-          <ViewButton img={mapIcon} label="Map" on={view === 'map'} onClick={() => switchTo('map')} />
+          <ViewButton img={mapIcon} label="Map" on={view !== 'list'} onClick={() => switchTo('map')} />
           <ViewButton img={listIcon} label="All the games" on={view === 'list'} onClick={() => switchTo('list')} />
         </div>
       </TopBar>
 
-      <div className="world-split" style={{ flex: 1, minHeight: 0, gap: 'min(16px, 2vh)', alignItems: 'center' }}>
-        {view === 'list' ? (
+      <div className="world-split" style={{ flex: 1, minHeight: 0, gap: 'min(16px, 2vh)', alignItems: 'center', position: 'relative', pointerEvents: globe ? 'none' : undefined }}>
+        {globe ? (
+          // The globe is drawn behind everything (the whole screen is its sky); this is the space it's framed in.
+          <div ref={slot} style={{ flex: 1, alignSelf: 'stretch', minWidth: 0, minHeight: 0 }} />
+        ) : view === 'list' ? (
           // The shelf is as wide as the screen, so on short screens (where the map sits beside the top bar) it starts below the bar.
           <div style={{ position: 'relative', flex: 1, alignSelf: 'stretch', minWidth: 0, minHeight: 0, marginTop: 'max(0px, calc(var(--bar-clear) - var(--top-clear)))' }}>
             <Shelf />
@@ -180,11 +258,7 @@ export function WorldMap({ view: linked }: { view?: string }) {
             y={HOME.y}
             label="Tea party"
             onTap={() => {
-              const won = trophies.some((t) => t.gameId === TEA_PARTY)
-              if (isPostHogEnabled) posthog.capture('game_session_started', { game_id: TEA_PARTY, previously_completed: won })
-              gameLogger.sessionStarted(TEA_PARTY, won)
-              sounds.sparkle()
-              void say(WORLD_LINES.teaParty)
+              teaParty()
               go.game(TEA_PARTY)
             }}
           >
@@ -252,7 +326,7 @@ export function WorldMap({ view: linked }: { view?: string }) {
         </FitBox>
         )}
 
-        <div className="world-side" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'min(20px, 3vw)', flexShrink: 0 }}>
+        <div className="world-side" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'min(20px, 3vw)', flexShrink: 0, pointerEvents: 'auto' }}>
           <div className="world-side-mascot">
             <Mascot pose="wave" size={Math.min(170, window.innerHeight * 0.12)} />
           </div>
@@ -264,6 +338,19 @@ export function WorldMap({ view: linked }: { view?: string }) {
       </div>
 
       {travelTo && <Travel entry={travelTo} onDone={() => go.world(travelTo.meta.id)} />}
+    </div>
+  )
+}
+
+/** While the globe's code downloads: a soft round world where it will be. */
+function GlobeLoading() {
+  return (
+    <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', pointerEvents: 'none' }}>
+      <motion.div
+        animate={{ scale: [0.96, 1, 0.96] }}
+        transition={{ repeat: Infinity, duration: 1.6 }}
+        style={{ width: 'min(52vw, 52vh)', aspectRatio: '1', borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%, #CDEFFF, #8CD2F6 70%)', border: '4px solid var(--ink)', opacity: 0.35 }}
+      />
     </div>
   )
 }

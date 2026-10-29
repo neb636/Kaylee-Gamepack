@@ -46,7 +46,8 @@ export interface PlaceMeta {
   name: string
   emoji: string
   flag: FlagId
-  /** Pin position on the world map, in % of the map picture. */
+  /** Pin position on the flat world map, in % of the map picture (the home globe puts it at `SPOTS` in globe/continents.ts, or
+   *  reads this as a latitude and longitude until it has one). */
   mapPos: { x: number; y: number }
   /** The friend Sparkle meets there. */
   friend: { name: string; img: string }
