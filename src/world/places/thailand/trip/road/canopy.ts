@@ -61,9 +61,15 @@ function crownAtlas() {
     const ox = (k % COLS) * TILE
     const oy = Math.floor(k / COLS) * TILE
     const rand = rng(101 + k * 7)
+    // (Each picture kept inside its own tile, with a clear margin so the small mip levels don't blend in the next one.)
+    g.save()
+    g.beginPath()
+    g.rect(ox + 4, oy + 4, TILE - 8, TILE - 8)
+    g.clip()
     if (id.startsWith('banana')) paintBanana(g, ox, oy, rand)
     else if (id.startsWith('bamboo')) paintBamboo(g, ox, oy, rand)
     else paintCrown(g, ox, oy, id, rand)
+    g.restore()
   }
   atlas = new CanvasTexture(c)
   atlas.colorSpace = SRGBColorSpace
@@ -216,17 +222,19 @@ function paintBanana(g: CanvasRenderingContext2D, ox: number, oy: number, rand: 
   g.restore()
 }
 
-/** A clump of bamboo on a card 5 m wide and 9.5 m tall: canes fanning up from one root and arching out, dark rings at
- *  their joints, and sprays of narrow leaves hanging from their upper halves. */
+/** A clump of bamboo on a card BAMBOO_W wide and 9.5 m tall: canes fanning up from one root and arching out, dark
+ *  rings at their joints, and sprays of narrow leaves hanging from their upper halves (all of it inside the card). */
+export const BAMBOO_W = 8
 function paintBamboo(g: CanvasRenderingContext2D, ox: number, oy: number, rand: () => number) {
   g.save()
-  meters(g, ox, oy, 5, 9.5)
+  meters(g, ox, oy, BAMBOO_W, 9.5)
   const canes: [number, number][][] = []
   for (let i = 0; i < 11; i++) {
-    const lean = (i / 10 - 0.5) * 1.1 + (rand() - 0.5) * 0.15
-    const len = 7.6 + rand() * 1.6
+    // (Leaning out at most ~0.35 rad and arching a little more: the outer leaves end about 4 m out, the card's edge.)
+    const lean = (i / 10 - 0.5) * 0.58 + (rand() - 0.5) * 0.1
+    const len = 7.4 + rand() * 1.4
     const pts: [number, number][] = []
-    for (let t = 0; t <= 1.0001; t += 0.1) pts.push([(i / 10 - 0.5) * 0.5 + Math.sin(lean) * len * t + lean * t * t * 1.4, Math.cos(lean * 0.6) * len * t - Math.abs(lean) * t * t * 1.6])
+    for (let t = 0; t <= 1.0001; t += 0.1) pts.push([(i / 10 - 0.5) * 0.4 + Math.sin(lean) * len * t + lean * t * t * 0.5, Math.cos(lean * 0.6) * len * t - Math.abs(lean) * t * t * 1.6])
     canes.push(pts)
     g.strokeStyle = ['#8DA548', '#A2B95A', '#7E9640'][i % 3]
     g.lineWidth = 0.09
@@ -241,7 +249,7 @@ function paintBamboo(g: CanvasRenderingContext2D, ox: number, oy: number, rand: 
     for (let k = 4; k < pts.length; k++) {
       const [x, y] = pts[k]
       for (let i = 0; i < 26; i++) {
-        const lx = x + (rand() - 0.5) * 1.1
+        const lx = x + (rand() - 0.5) * 0.9
         const ly = y + (rand() - 0.7) * 0.9
         const shade = 1 + (ly / 9.5) * 2.2 + (rand() - 0.5) * 1.6
         g.fillStyle = leafColors[Math.max(0, Math.min(4, Math.round(shade)))]

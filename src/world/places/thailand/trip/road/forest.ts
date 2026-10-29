@@ -15,7 +15,7 @@ import type { Bag } from '../../../../engine3d/dispose'
 import { hullGeometry, instancedOutlineMaterial } from '../../../../engine3d/outline'
 import { toonGradient } from '../../../../engine3d/toon'
 import { fbm, rng, type HeightField, type RoadLook } from './build'
-import { CROWN, crownMaterial, UPRIGHT, type CrownId } from './canopy'
+import { BAMBOO_W, CROWN, crownMaterial, UPRIGHT, type CrownId } from './canopy'
 import type { Road } from './road'
 
 /** Somewhere to keep clear of plants: `r` meters round (x, z), or (`across`) a strip `w` meters either side of a line
@@ -118,7 +118,7 @@ const CROWNS = {
   shrub: { h: 2.3, y: 1, w: 3, ch: 2.4, trunk: null, tiles: ['bush'], upright: false },
   // (Standing on the ground: the card's middle is half its height up.)
   banana: { h: 4.6, y: 2.3, w: 4.2, ch: 4.6, trunk: null, tiles: ['banana', 'banana2'], upright: true },
-  bamboo: { h: 9.5, y: 4.75, w: 5, ch: 9.5, trunk: null, tiles: ['bamboo', 'bamboo2'], upright: true },
+  bamboo: { h: 9.5, y: 4.75, w: BAMBOO_W, ch: 9.5, trunk: null, tiles: ['bamboo', 'bamboo2'], upright: true },
 } as const satisfies Record<string, { h: number; y: number; w: number; ch: number; trunk: KindId | null; tiles: readonly CrownId[]; upright: boolean }>
 type TreeId = keyof typeof CROWNS
 
