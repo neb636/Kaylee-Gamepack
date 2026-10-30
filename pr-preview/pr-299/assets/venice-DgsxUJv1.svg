@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Venice</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff5d1"/><stop offset="1" stop-color="#ffe08f"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.4" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="canal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fe3ea"/><stop offset="1" stop-color="#2fb3c7"/></linearGradient>
+    <clipPath id="pole1"><rect x="93" y="44" width="6" height="62" rx="3"/></clipPath>
+    <clipPath id="pole2"><rect x="105" y="50" width="6" height="56" rx="3"/></clipPath>
+    <clipPath id="boat"><path d="M7 79C14 85 30 89 55 89C76 89 90 85 98 77C100 73 101 69 101 63L104 63C105 71 104 79 100 85C92 95 74 99 55 99C34 99 18 95 10 87C8 84 7 81 7 79Z"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="58" cy="46" r="52" fill="url(#glow)"/>
+
+  <!-- canal houses at the edges -->
+  <rect x="-2" y="28" width="26" height="50" fill="#f6a283"/>
+  <rect x="18" y="28" width="6" height="50" fill="#e9785a"/>
+  <rect x="-2" y="25" width="28" height="5" rx="1.5" fill="#fdeecc"/>
+  <path d="M4 50V42a3.5 3.5 0 0 1 7 0V50ZM14 50V42a3.5 3.5 0 0 1 7 0V50ZM4 66V58a3.5 3.5 0 0 1 7 0V66ZM14 66V58a3.5 3.5 0 0 1 7 0V66Z" fill="#7d75a6"/>
+  <rect x="96" y="32" width="26" height="46" fill="#ffc4da"/>
+  <rect x="96" y="29" width="26" height="5" rx="1.5" fill="#fdeecc"/>
+
+  <!-- the little arched bridge -->
+  <path d="M20 70C34 48 82 48 98 70L98 76C84 58 34 58 20 76Z" fill="#f5dba8"/>
+  <path d="M20 76C34 58 84 58 98 76L98 79C84 62 34 62 20 79Z" fill="#e3bb7a"/>
+  <path d="M22 66C36 46 82 46 96 66" fill="none" stroke="#fdeecc" stroke-width="2.4" stroke-linecap="round"/>
+  <g stroke="#e3bb7a" stroke-width="2" stroke-linecap="round"><path d="M34 56v-6M44 51.5v-6M54 49.5v-6M64 49.5v-6M74 51.5v-6M84 56v-6"/></g>
+  <path d="M30 51C44 41 74 41 88 51" fill="none" stroke="#f5dba8" stroke-width="2.6" stroke-linecap="round"/>
+
+  <!-- the canal -->
+  <rect y="74" width="120" height="48" fill="url(#canal)"/>
+  <path d="M30 76C44 70 74 70 88 76" fill="none" stroke="#5fc8d6" stroke-width="3" opacity="0.6"/>
+  <g fill="#fff" opacity="0.6"><rect x="14" y="104" width="20" height="3" rx="1.5"/><rect x="70" y="110" width="26" height="3" rx="1.5"/><rect x="40" y="114" width="16" height="3" rx="1.5"/></g>
+
+  <!-- striped mooring poles with gold caps -->
+  <g clip-path="url(#pole1)">
+    <rect x="93" y="44" width="6" height="62" fill="#fff"/>
+    <path d="M90 52L102 46V51L90 57ZM90 64L102 58V63L90 69ZM90 76L102 70V75L90 81ZM90 88L102 82V87L90 93Z" fill="#5fb0ea"/>
+    <rect x="97" y="44" width="2" height="62" fill="#4b3a8c" opacity="0.12"/>
+  </g>
+  <g clip-path="url(#pole2)">
+    <rect x="105" y="50" width="6" height="56" fill="#fff"/>
+    <path d="M102 58L114 52V57L102 63ZM102 70L114 64V69L102 75ZM102 82L114 76V81L102 87ZM102 94L114 88V93L102 99Z" fill="#ff6b6b"/>
+    <rect x="109" y="50" width="2" height="56" fill="#4b3a8c" opacity="0.12"/>
+  </g>
+  <circle cx="96" cy="43.5" r="3.6" fill="#ffc83d"/>
+  <circle cx="108" cy="49.5" r="3.6" fill="#ffc83d"/>
+  <circle cx="95" cy="42.5" r="1.2" fill="#ffe189"/>
+  <circle cx="107" cy="48.5" r="1.2" fill="#ffe189"/>
+
+  <!-- the gondola: a long black crescent, a silver comb on its bow, a red seat -->
+  <ellipse cx="55" cy="100" rx="46" ry="4" fill="#1f9cb3" opacity="0.45"/>
+  <g clip-path="url(#boat)">
+    <rect x="4" y="60" width="104" height="42" fill="#2b2330"/>
+    <path d="M7 79C14 85 30 89 55 89C76 89 90 85 98 77C100 73 101 69 101 63L104 63C104 70 102 76 98 81C88 90 72 93 55 93C34 93 18 90 9 84Z" fill="#3b3552"/>
+    <path d="M10 81C18 86 32 89 55 89C76 89 89 85 97 78" fill="none" stroke="#5d5478" stroke-width="2.2"/>
+  </g>
+  <path d="M10 83C18 88 34 91 55 91C74 91 88 87 96 81" fill="none" stroke="#ffc83d" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M100.5 66L101.5 53C103.5 51 106.5 51 108.5 53V56H104.5V58H108.5V60H104.5V62H108.5V65Z" fill="#dedaf0"/>
+  <path d="M104.5 56H108.5V58H104.5ZM104.5 60H108.5V62H104.5Z" fill="#bcb6d6"/>
+  <path d="M5 79C4 75 5 72 8 70L10 72C8.5 74 8 76 8.5 79Z" fill="#dedaf0"/>
+  <rect x="42" y="80" width="20" height="7" rx="3.5" fill="#ff6b6b"/>
+  <rect x="42" y="80" width="20" height="3" rx="1.5" fill="#ffa3a3"/>
+  <rect x="44" y="76" width="4" height="6" rx="2" fill="#ffc83d"/>
+  <rect x="56" y="76" width="4" height="6" rx="2" fill="#ffc83d"/>
+
+  <path d="M64 26v5M61.5 28.5h5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
