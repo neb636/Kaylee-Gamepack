@@ -1,7 +1,7 @@
 // Canada (plan: planning/around-the-world/canada.html): ocean to ocean on the Maple Leaf Train. The home base is the 3D
 // toy-table map (activities/hub/, map/): push the train from Quebec to the Pacific, stop at a station and its two
 // activities pop up. Each activity is its own folder in activities/ (the 3D ones and the 2D ones that bring a big piece
-// load on their own, so the hub brings no more than it needs): Sugar Snow (taffy/, 2D), Carnival Snowballs (snowman/,
+// load on their own, so the hub brings no more than it needs): Sugar Snow (taffy/, 2D), Decorate a Snowman (snowman/,
 // 3D), Mountain Bike (bike/, 3D), Campfire Night (campfire/, 2D), Red Canoe (canoe/, 3D), Animal Bridge (bridge/, 2D),
 // Whale Watch (whales/, 3D), Salmon Leap (salmon/, 2D), and the finale in Ottawa (party/). Every activity gets
 // CanadaActivityProps (activities/props.ts): `onDone` at its payoff shows the stamp and the sticker, then the video,
@@ -27,7 +27,7 @@ const ACTIVITIES: Record<string, { C: Lazy | ComponentType<CanadaActivityProps>;
   bridge: { C: lazyOf(() => import('./activities/bridge/AnimalBridge').then((m) => m.AnimalBridge)), bg: '#BFE3F7' },
   whales: { C: lazyOf(() => import('./activities/whales/WhaleWatch').then((m) => m.WhaleWatch)), bg: '#CFEAF7' },
   salmon: { C: lazyOf(() => import('./activities/salmon/SalmonLeap').then((m) => m.SalmonLeap)), bg: '#CFEDE6' },
-  snowman: { C: lazyOf(() => import('./activities/snowman/CarnivalSnowballs').then((m) => m.CarnivalSnowballs)), bg: '#DCE6F6' },
+  snowman: { C: lazyOf(() => import('./activities/snowman/DecorateSnowman').then((m) => m.DecorateSnowman)), bg: '#DCE6F6' },
   party: { C: lazyOf(() => import('./activities/party/Finale').then((m) => m.Finale)), bg: '#DDEBFA' },
 }
 

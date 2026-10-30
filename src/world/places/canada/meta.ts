@@ -33,7 +33,7 @@ const meta: PlaceMeta = {
   // In play order along the track, east to west (`pos` is unused: the hub is the 3D map, map/track.ts places the stops).
   activities: [
     { id: 'taffy', name: 'Sugar Snow', icon: '🍁', pos: { x: 85, y: 60 }, sticker: { name: 'Red squirrel', img: squirrel, fact: L.stickers.squirrel } },
-    { id: 'snowman', name: 'Carnival Snowballs', icon: '⛄', pos: { x: 85, y: 65 }, sticker: { name: 'Snowy owl', img: owl, fact: L.stickers.owl } },
+    { id: 'snowman', name: 'Decorate a Snowman', icon: '⛄', pos: { x: 85, y: 65 }, sticker: { name: 'Snowy owl', img: owl, fact: L.stickers.owl } },
     { id: 'bike', name: 'Mountain Bike', icon: '🚵', pos: { x: 90, y: 58 }, sticker: { name: 'Moose', img: moose, fact: L.stickers.moose } },
     { id: 'campfire', name: 'Campfire Night', icon: '⛺', pos: { x: 90, y: 62 }, sticker: { name: 'Raccoon', img: raccoon, fact: L.stickers.raccoon } },
     { id: 'canoe', name: 'Red Canoe', icon: '🛶', pos: { x: 25, y: 60 }, sticker: { name: 'Loon', img: loon, fact: L.stickers.loon } },

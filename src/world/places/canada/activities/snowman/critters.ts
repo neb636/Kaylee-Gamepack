@@ -1,7 +1,7 @@
 // The carnival's other life, code-built in the toon look: the horse and carriage (a calèche) that clip-clops along the
 // terrace under the castle, the big red carnival trumpet on its striped stand, a red fox who trots in to watch and
 // dives nose first into the snow after a mouse, and Canada geese flying over in a V. Each one moves by itself and
-// reacts to a tap; the world (carnival.ts) decides when they come and what she hears.
+// reacts to a tap; the world (decorate.ts) decides when they come and what she hears.
 import { Group, Vector3, type BufferGeometry } from 'three'
 import { bell, clamp, span, wobble } from '../../../../../sdk'
 import type { Bag } from '../../../../engine3d/dispose'

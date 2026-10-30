@@ -1,4 +1,4 @@
-// Carnival Snowballs' park as data in meters (the build, the balls' bumps and the tap targets all read it): a snowy park
+// The carnival park as data in meters (the build, the balls' bumps and the tap targets all read it): a snowy park
 // below Quebec City's old walls, the castle hotel up on the cliff behind it. The camera looks from the park's front (+z)
 // toward the castle (-z). The balls roll inside PARK; the parade path runs along its back, under the terrace, with the
 // drum at its right end; the toboggan slide comes down the hill on the right.
