@@ -37,9 +37,10 @@ export interface ShelfRow {
   games: ShelfGame[]
 }
 
-// The pictures, found by name (URLs; small ones are inlined by the build).
-const icons = import.meta.glob<string>('./shelf/icons/**/*.svg', { eager: true, import: 'default', query: '?url' })
-const banners = import.meta.glob<string>('./shelf/banners/*.svg', { eager: true, import: 'default', query: '?url' })
+// The pictures, found by name. Their URLs, never inlined: inlined they would all ride in the startup bundle; as files
+// they load when the shelf shows them and the offline cache keeps them.
+const icons = import.meta.glob<string>('./shelf/icons/**/*.svg', { eager: true, import: 'default', query: '?no-inline' })
+const banners = import.meta.glob<string>('./shelf/banners/*.svg', { eager: true, import: 'default', query: '?no-inline' })
 /** A game's icon: `icon('thailand/vet')` is shelf/icons/thailand/vet.svg. */
 const icon = (path: string): string | undefined => icons[`./shelf/icons/${path}.svg`]
 export const banner = (row: string): string | undefined => banners[`./shelf/banners/${row}.svg`]
