@@ -6,7 +6,7 @@ import path from 'node:path';
 import test from 'node:test';
 import labs from '../dist-electron/shared/labs.js';
 import runner from '../dist-electron/main/lab-ai.js';
-const { validateProposal, snapshotKey } = labs;
+const { validateProposal, snapshotKey, undoSceneKey } = labs;
 const { LabAi, labRequestSchema, labPrompt } = runner;
 const snapshot = { kind: 'camera', href: 'http://127.0.0.1:5174/#/world/thailand/hub/downstairs?cam=1', context: { mode: 'nudge', frame: 'ipad-wide', watched: 1 }, controls: [{ key: 'zoom', label: 'Zoom', min: .3, max: 3, step: .01, value: 1 }] };
 test('AI proposals reject invalid values atomically and never invent controls', () => {
@@ -20,6 +20,16 @@ test('AI proposals reject invalid values atomically and never invent controls', 
 test('freshness tracks the scene, mode, frame and controls, while ignoring live telemetry', () => {
   assert.equal(snapshotKey(snapshot), snapshotKey({ ...snapshot, context: { ...snapshot.context, watched: 99 } }));
   for (const changed of [{ ...snapshot, href: snapshot.href + '&round=2' }, { ...snapshot, context: { ...snapshot.context, mode: 'lock' } }, { ...snapshot, controls: [{ ...snapshot.controls[0], value: 2 }] }]) assert.notEqual(snapshotKey(snapshot), snapshotKey(changed));
+});
+test('Undo checks the hash section and game params, ignoring outer studio query and tuning values', () => {
+  const base = { ...snapshot, href: 'http://127.0.0.1:5174/?studio=1#/world/thailand/nan-trip/drive?road=valley&round=1&cam=1&cam.zoom=0.9' };
+  const changed = href => ({ ...base, href });
+  assert.notEqual(undoSceneKey(base), undoSceneKey(changed(base.href.replace('/drive?', '/race?'))));
+  assert.notEqual(undoSceneKey(base), undoSceneKey(changed(base.href.replace('road=valley', 'road=sky'))));
+  assert.notEqual(undoSceneKey(base), undoSceneKey(changed(base.href.replace('round=1', 'round=2'))));
+  assert.equal(undoSceneKey(base), undoSceneKey(changed('http://127.0.0.1:5174/?studio=other#/world/thailand/nan-trip/drive?cam=1&round=1&cam.zoom=1.2&road=valley&feel.steer.slide=5.5')));
+  assert.notEqual(undoSceneKey(base), undoSceneKey({ ...base, context: { ...base.context, mode: 'lock' } }));
+  assert.notEqual(undoSceneKey(base), undoSceneKey({ ...base, context: { ...base.context, frame: 'ipad-tall' } }));
 });
 test('tuning requests constrain provider/input and explicitly ask for values without edits', () => {
   const input = { id: randomUUID(), provider: 'codex', prompt: 'Wider please', snapshot };

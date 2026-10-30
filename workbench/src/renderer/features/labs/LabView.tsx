@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { GAME_ORIGIN, LAB_CHANNEL, snapshotKey, validateProposal, type LabProposal, type LabSnapshot } from '../../../shared/labs';
+import { GAME_ORIGIN, LAB_CHANNEL, snapshotKey, undoSceneKey, validateProposal, type LabProposal, type LabSnapshot } from '../../../shared/labs';
 import type { ViewComponentProps } from '../../core/view-registry';
 import { useWorkbenchStore } from '../../state/workbench-store';
 import { services } from '../../core/services';
@@ -65,7 +65,7 @@ export function LabView({ view, workspace }: ViewComponentProps) {
   const refresh = () => request('snapshot').catch(error => { if (alive.current) setMessage(String(error)); });
   async function tune() {
     const id = crypto.randomUUID(); job.current = id;
-    setBusy(true); setUndo(undefined); setMessage('Reading the live controls…');
+    setBusy(true); setMessage('Reading the live controls…');
     try {
       const before = await request('snapshot');
       if (!alive.current || job.current !== id) return;
@@ -89,7 +89,7 @@ export function LabView({ view, workspace }: ViewComponentProps) {
     if (!undo) return;
     try {
       const now = await request('snapshot');
-      if (now.href.split('?')[0] !== undo.href.split('?')[0] || now.context.mode !== undo.context.mode || now.context.frame !== undo.context.frame) throw new Error('Return to the original scene, mode and frame before undoing.');
+      if (undoSceneKey(now) !== undoSceneKey(undo)) throw new Error('Return to the original scene, mode and frame before undoing.');
       await request('apply', { expected: snapshotKey(now), proposal: { explanation: 'Undo AI tuning', changes: undo.controls.map(c => ({ key: c.key, value: c.value })) } });
       setUndo(undefined); setMessage('Restored the controls from before AI tuning.'); await refresh();
     } catch (error) { setMessage(String(error)); }

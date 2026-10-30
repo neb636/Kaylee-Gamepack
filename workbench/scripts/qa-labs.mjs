@@ -7,7 +7,7 @@ import { tmpdir } from 'node:os';
 const profile = await mkdtemp(path.join(tmpdir(), 'gamepack-labs-qa-'));
 const repo = path.resolve('..');
 await fetch('http://127.0.0.1:5175'); await fetch('http://127.0.0.1:5174');
-const fixture = `#!${process.execPath}\nconst fs=require('node:fs');let text='';process.stdin.on('data',b=>text+=b);process.stdin.on('end',()=>{const feel=text.includes('"kind":"feel"');const p={explanation:'Fixture control update',changes:[{key:feel?'steer.slide':'zoom',value:feel?5.5:.9}]};setTimeout(()=>{const i=process.argv.indexOf('--output-last-message');if(i>=0)fs.writeFileSync(process.argv[i+1],JSON.stringify(p));else process.stdout.write(JSON.stringify({structured_output:p}));},900);});`;
+const fixture = `#!${process.execPath}\nconst fs=require('node:fs');let text='';process.stdin.on('data',b=>text+=b);process.stdin.on('end',()=>{const feel=text.includes('"kind":"feel"');const fail=text.includes('FAIL_PREVIEW');const none=text.includes('NO_CHANGES');const p={explanation:none?'Fixture no changes':'Fixture control update',changes:none?[]:[{key:feel?'steer.slide':'zoom',value:feel?5.5:.9}]};setTimeout(()=>{if(fail){process.stderr.write('Fixture failed');process.exitCode=1;return;}const i=process.argv.indexOf('--output-last-message');if(i>=0)fs.writeFileSync(process.argv[i+1],JSON.stringify(p));else process.stdout.write(JSON.stringify({structured_output:p}));},900);});`;
 for(const name of ['claude','codex']) await writeFile(path.join(profile,name),fixture,{mode:0o755});
 let app;
 try {
@@ -25,15 +25,49 @@ try {
   await page.getByRole('button',{name:'Ask AI & preview controls'}).click();
   await page.getByText('Fixture control update',{exact:true}).waitFor();
   assert.equal(await frame().getByRole('slider').nth(2).inputValue(),'0.9');
+  // A later unsuccessful request must preserve the applied preview's original Undo.
+  await page.getByLabel('Lab prompt').fill('FAIL_PREVIEW');
+  await page.getByRole('button',{name:'Ask AI & preview controls'}).click();
+  await page.getByText(/codex exited 1: Fixture failed/).waitFor();
+  assert.equal(await page.getByRole('button',{name:'Undo AI change'}).isEnabled(),true,'Failed follow-up must preserve Undo');
+  await page.getByLabel('Lab prompt').fill('NO_CHANGES');
+  await page.getByRole('button',{name:'Ask AI & preview controls'}).click();
+  await page.getByText('Fixture no changes',{exact:true}).waitFor();
+  assert.equal(await page.getByRole('button',{name:'Undo AI change'}).isEnabled(),true,'No-change follow-up must preserve Undo');
+  await page.getByLabel('Lab prompt').fill('Wider please');
+  await page.getByRole('button',{name:'Ask AI & preview controls'}).click();
+  await page.getByText('Asking codex…',{exact:true}).waitFor();
+  await page.getByRole('button',{name:'Cancel',exact:true}).click();
+  await page.waitForFunction(()=>!document.querySelector('.studio-actions button').disabled);
+  assert.equal(await page.getByRole('button',{name:'Undo AI change'}).isEnabled(),true,'Cancelled follow-up must preserve Undo');
+  assert.equal(await frame().getByRole('slider').nth(2).inputValue(),'0.9');
+  // Navigate inside the game, so this studio view retains Undo while the section changes.
+  await frame().getByRole('button',{name:'Downstairs',exact:true}).click();
+  await frame().getByRole('menuitemradio',{name:/Kaylee.s room upstairs/}).click();
+  await frame().getByRole('button',{name:"Kaylee's room upstairs",exact:true}).waitFor();
+  await frame().getByRole('slider').nth(2).focus(); await page.keyboard.press('ArrowRight');
+  const otherZoom=await frame().getByRole('slider').nth(2).inputValue();
+  await page.getByRole('button',{name:'Undo AI change'}).click();
+  await page.getByText(/Return to the original scene, mode and frame before undoing/).waitFor();
+  assert.equal(await frame().getByRole('slider').nth(2).inputValue(),otherZoom,'Undo must not alter a different section');
+  await frame().getByRole('button',{name:"Kaylee's room upstairs",exact:true}).click();
+  await frame().getByRole('menuitemradio',{name:/Downstairs/}).click();
+  await frame().getByRole('button',{name:'Downstairs',exact:true}).waitFor();
   await page.getByRole('button',{name:'Undo AI change'}).click();
   await page.getByText('Restored the controls from before AI tuning.').waitFor();
   assert.equal(await frame().getByRole('slider').nth(2).inputValue(),'1');
   assert.equal(await frame().getByRole('slider').nth(3).inputValue(),'30');
   await page.getByRole('button',{name:'Ask AI & preview controls'}).click();
+  await page.getByText('Fixture control update',{exact:true}).waitFor();
+  await page.getByRole('button',{name:'Ask AI & preview controls'}).click();
   await page.getByText('Asking codex…',{exact:true}).waitFor();
   await frame().getByRole('slider').nth(2).focus(); await page.keyboard.press('ArrowRight');
   await page.getByText(/The scene or controls changed while AI was thinking/).waitFor();
-  assert.equal(await frame().getByRole('slider').nth(2).inputValue(),'1.01');
+  assert.equal(await frame().getByRole('slider').nth(2).inputValue(),'0.91');
+  assert.equal(await page.getByRole('button',{name:'Undo AI change'}).isEnabled(),true,'Stale follow-up must preserve Undo');
+  await page.getByRole('button',{name:'Undo AI change'}).click();
+  await page.getByText('Restored the controls from before AI tuning.').waitFor();
+  assert.equal(await frame().getByRole('slider').nth(2).inputValue(),'1');
   await page.getByRole('button',{name:'Ask AI & preview controls'}).click();
   await page.getByText('Asking codex…',{exact:true}).waitFor();
   await page.getByRole('button',{name:'Cancel',exact:true}).click();
@@ -57,5 +91,5 @@ try {
   await draft.waitFor(); assert.match(await draft.inputValue(),/"kind": "character"/);
   assert.match(await draft.inputValue(),/nick-code/);
   assert.deepEqual(errors,[]);
-  console.log('Camera and Feel preview/undo, stale reply, cancel, tab persistence, source handoff, character snapshot and native isolation passed.');
+  console.log('Camera/Feel preview and Undo, Undo retained after failed/cancelled/stale/no-change follow-ups, cross-section Undo guard, tab persistence, handoffs and native isolation passed.');
 } finally {await app?.close();}

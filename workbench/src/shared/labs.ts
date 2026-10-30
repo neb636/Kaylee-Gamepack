@@ -26,3 +26,15 @@ export function validateProposal(snapshot: LabSnapshot, input: unknown): LabProp
   return { explanation: p.explanation, changes: p.changes.map(c => ({ key: c.key, value: c.value })) };
 }
 export function snapshotKey(snapshot: LabSnapshot): string { return JSON.stringify({ kind: snapshot.kind, href: snapshot.href, mode: snapshot.context.mode, frame: snapshot.context.frame, controls: snapshot.controls }); }
+
+/** Undo belongs to one game scene, independent of the outer studio query and live lab values. */
+export function undoSceneKey(snapshot: LabSnapshot): string {
+  const url = new URL(snapshot.href);
+  const [route, query = ''] = url.hash.split('?');
+  const state = new URLSearchParams(query);
+  for (const key of [...state.keys()]) {
+    if (key === 'cam' || key.startsWith('cam.') || key === 'feel' || key.startsWith('feel.')) state.delete(key);
+  }
+  state.sort();
+  return JSON.stringify({ kind: snapshot.kind, origin: url.origin, path: url.pathname, route, state: state.toString(), mode: snapshot.context.mode, frame: snapshot.context.frame });
+}

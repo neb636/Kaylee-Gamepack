@@ -50,7 +50,7 @@ npm --prefix workbench run qa:labs  # with studio running; fixture CLIs, no mode
 npm --prefix workbench run qa:images # after studio:check; fixture concept workflow
 ```
 
-Verified locally: both studio builds, 49 Node contracts, fixture Electron lab and concept flows, plus real Codex camera/steering requests. Claude returned its sign-in error on this machine; run `/login` in Claude Code to use it.
+Verified locally: both studio builds, 50 Node contracts, fixture Electron lab and concept flows, plus real Codex camera/steering requests. Claude returned its sign-in error on this machine; run `/login` in Claude Code to use it.
 
 The migration plan is [planning/gamepack-studio.html](../planning/gamepack-studio.html). The upstream MIT license is
 preserved in `LICENSE` (upstream commit `81610597caaa18e68fb17731b54a7513c9985064`). Build products, dependencies, releases and private scratch data are ignored by Git.
