@@ -151,6 +151,12 @@ world feel alive and helps a child who can't read know who is talking:
 - In code `say({ text: 'Yum!', voice: 'koko' })` (the SDK type is `Line`). The character's mouth moves automatically
   when their voice plays.
 - Keep spoken lines short (under ~3 seconds); she's five.
+- **Don't nag (Dad, 2026-10-29: too many lines repeated by themselves).** A "stuck" hint asks `spendHint(line)` (SDK,
+  `src/sdk/hints.ts`) before it speaks: the first time it's only shown (glow, finger, Sparkle's bubble), then said at
+  most twice per visit to the app, 25 s apart from any other hint. `kit/Guide` does this for you; `voice={false}` for a
+  hub. Hubs and free-play toys (the maps, the house, the globe, the train) never speak an idle hint: they glow. A
+  welcome or menu line plays once per visit (`useSayOnMount(line, { once: true })`, `firstTime(key)`), and a hub only
+  talks when something is new (her first look, a new stamp, the party).
 - `node scripts/voice-audition.mjs <speaker> <voice> <voice>...` renders samples to compare. Generation trims silence,
   matches loudness, and transcribes each new clip to flag ones that don't say the right words. Locally it needs
   `OPENAI_API_KEY` in `.env` and ffmpeg. Run it once at the end, not after every line.

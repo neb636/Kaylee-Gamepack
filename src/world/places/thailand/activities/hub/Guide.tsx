@@ -1,7 +1,7 @@
 // Sparkle at Agong's house: a small Sparkle in the corner who says the few things there are to say. She welcomes
 // Kaylee when the tuk-tuk stops, says what to do the first time she's somewhere new, tells her something true about
-// Thailand the first time she pokes certain things, and gives a hint after a while with nothing touched. Tap Sparkle to
-// hear the last line again. The house's family speak for themselves (house.ts).
+// Thailand the first time she pokes certain things, and after a while with nothing touched waves with a hint in her bubble
+// (no voice: the house is a toy, there's nothing to be stuck on). Tap Sparkle to hear the last line again. The house's family speak for themselves (house.ts).
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { lineText, say, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
@@ -21,7 +21,7 @@ export interface GuideHandle {
 const told = new Set<string>()
 const STUCK_S = 12
 const REMINDER_S = 60
-const MAX_REMINDERS = 5
+const MAX_REMINDERS = 3
 
 export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(function Guide({ spot, quiet }, ref) {
   const sparkle = useRef<PuppetHandle>(null)
@@ -44,6 +44,14 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
     void say(l, { interrupt: !after }).then(() => {
       hide.current = setTimeout(() => setLine((cur) => (cur === l ? null : cur)), 2200)
     })
+  }
+  /** A hint without the voice: she waves and the bubble shows it for a moment (tap her to hear it). */
+  const show = (l: Line) => {
+    last.current = l
+    setLine(l)
+    void sparkle.current?.play('wave')
+    clearTimeout(hide.current)
+    hide.current = setTimeout(() => setLine((cur) => (cur === l ? null : cur)), 4000)
   }
   const once = (key: string, l: Line, after = false) => {
     if (told.has(key)) return
@@ -68,7 +76,7 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
     },
   }))
 
-  // A new floor visit gets two early hints, then at most one per minute (five total).
+  // A new floor visit gets two early hints, then at most one per minute (three total).
   // Moving between objects on the same floor does not reset the allowance.
   useEffect(() => {
     const now = performance.now()
@@ -88,7 +96,7 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
       reminder.count++
       reminder.last = now
       lastTouch.current = now
-      speak(L.house.stuck[spotRef.current])
+      show(L.house.stuck[spotRef.current])
     }, 1000)
     return () => {
       window.removeEventListener('pointerdown', touch, true)

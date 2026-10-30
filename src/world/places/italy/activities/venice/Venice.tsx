@@ -12,7 +12,7 @@
 // All feel numbers are in canal.ts (FEEL). Everything per-frame is written straight to the DOM from one game loop.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent, type ReactNode, type RefObject } from 'react'
-import { burst, say, sounds, SparklePuppet, useGameLoop, useSaved, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, sounds, spendHint, SparklePuppet, useGameLoop, useSaved, type Line, type PuppetHandle } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
@@ -773,7 +773,7 @@ export function Venice({ onDone, setProgress }: ActivityProps) {
     }
 
     // ---- "Pull the boat!" when she hasn't moved it for a while ----
-    if (playing && !s.drag && s.idle > 8 && s.t - s.lastTalk > 8 && cooled('stuck', 16)) talk(V.stuck)
+    if (playing && !s.drag && s.idle > 8 && s.t - s.lastTalk > 8 && cooled('stuck', 16) && spendHint(V.stuck)) talk(V.stuck)
 
     // ---- Passing boats in the back lane (a water bus, an ambulance, a fire boat) ----
     const tr = s.traffic

@@ -29,7 +29,7 @@
 // Daddy and Mommy react, each thing once (a reaction is dropped while Sparkle talks rather than heard late); tapping
 // the aunty or Daddy says their lines in turn; the sign tells a fact.
 import { CatmullRomCurve3, Color, Group, IcosahedronGeometry, Mesh, MeshBasicMaterial, OctahedronGeometry, Plane, TubeGeometry, Vector3, type BufferGeometry, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, speakingVoice, type Line } from '../../../../../../sdk'
+import { bell, clamp, speakingVoice, spendHint, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { FaceLife } from '../../../../../engine3d/characters/face'
 import { L } from '../../../lines'
@@ -420,7 +420,7 @@ export class MushroomFarm extends Stage {
     if (!l || speakingVoice()) return
     this.lastSay = this.time
     this.sayN++
-    this.ev.say(l)
+    if (spendHint(l)) this.ev.say(l)
   }
   private stuckLine(): Line | null {
     if (this.phase === 'house') return this.round !== '1' && this.bags.some((b) => b.stage === 'grown') ? M.hint.pick : M.hint.mist

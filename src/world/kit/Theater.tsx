@@ -137,7 +137,7 @@ function Offline() {
 }
 
 function Shelf({ places, onPick }: { places: PlaceMeta[]; onPick: (v: PlaceVideo) => void }) {
-  useSayOnMount(WORLD_LINES.theaterPick)
+  useSayOnMount(WORLD_LINES.theaterPick, { once: true })
   const many = places.length > 1
   let i = 0 // running index across countries, for the staggered entrance
   return (

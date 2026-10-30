@@ -4,7 +4,7 @@
 // little off the top ("Just a taste!") and it still counts.
 import { animate, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { burst, say, SparklePuppet, sounds, useAlive, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, spendHint, SparklePuppet, sounds, useAlive, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -205,7 +205,8 @@ export function Pour({ onStar, onDone }: { onStar: (n: number) => void; onDone: 
     const id = setInterval(() => {
       if (!busy && !holding.current && Date.now() - lastTouch.current > 9000) {
         lastTouch.current = Date.now()
-        void say(bottle === 0 ? O.pourFull : O.pourHalf)
+        const line = bottle === 0 ? O.pourFull : O.pourHalf
+        if (spendHint(line)) void say(line)
       }
     }, 1000)
     return () => clearInterval(id)

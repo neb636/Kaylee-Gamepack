@@ -18,7 +18,7 @@ import { numberParam, listParam } from '../../sectionState'
 // Every moving penguin is driven by refs and one game loop (no React re-render per frame).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type MutableRefObject, type PointerEvent as ReactPointerEvent } from 'react'
-import { burst, say, shuffle, sounds, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
@@ -1366,7 +1366,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       else if (p === 'swim') line = P.idle.swim
       if (line) {
         G.lastHint = now
-        void sayKey(line, 3)
+        if (spendHint(line)) void sayKey(line, 3)
         setHint(G.feeding ? 'chicks' : 'front')
       }
     }

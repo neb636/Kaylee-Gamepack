@@ -77,7 +77,7 @@ function PlacePage({ meta, stamps }: { meta: PlaceMeta; stamps: string[] }) {
 
 export function Passport() {
   const passport = usePassport()
-  useSayOnMount(WORLD_LINES.passport)
+  useSayOnMount(WORLD_LINES.passport, { once: true })
   return (
     <div className="screen decorated" style={{ paddingTop: 'var(--top-clear)', gap: 20 }}>
       <TopBar icon="🌍" label="World map" onBack={() => go.world()}>

@@ -27,7 +27,7 @@
 // poke at the steam (or the boiling pan) tells the fact. Ambient life: drips off the eaves, rings on the road's
 // puddles, low cloud drifting on the mountains, steam, the cat, the rooster, a scooter now and then.
 import { Color, IcosahedronGeometry, Matrix4, Mesh, MeshBasicMaterial, OctahedronGeometry, Plane, Quaternion, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, speakingVoice, type Line } from '../../../../../../sdk'
+import { bell, clamp, speakingVoice, spendHint, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { FaceLife } from '../../../../../engine3d/characters/face'
 import type { Member } from '../../../characters/member'
@@ -1196,7 +1196,7 @@ export class SaltHut extends Stage {
     if (!l) return
     this.lastSay = this.time
     this.sayN++
-    this.ev.say(l)
+    if (spendHint(l)) this.ev.say(l)
   }
   private stuckLine(): Line | null {
     if (this.round === '1') return this.bucket.fill > 0.4 ? R.hint.pour : R.hint.dip

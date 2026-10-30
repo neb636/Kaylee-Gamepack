@@ -5,7 +5,7 @@
 // and the family hop up the stairs, the wind on the apron blowing Kaylee's mane. The hall has a departure board, a row
 // of lounge chairs, orchids and the Thai flag; Kaylee wears what she packed (sunglasses up on her hat indoors).
 import { CanvasTexture, Color, Group, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, wobble } from '../../../../../sdk'
+import { bell, clamp, spendHint, wobble } from '../../../../../sdk'
 import type { Avatar } from '../../characters/avatar'
 import { buildAnimal, type Rig } from '../../../../engine3d/characters/animal'
 import { FaceLife } from '../../../../engine3d/characters/face'
@@ -446,7 +446,8 @@ export class Airport extends Stage {
     const idle = this.time - this.lastTouch
     if (idle > 8 && (ph === 'belt' || ph === 'doors') && !this.hinted.has(ph)) {
       this.hinted.add(ph)
-      this.events.say(ph === 'belt' ? L.trip.hint.belt : L.trip.hint.door)
+      const l = ph === 'belt' ? L.trip.hint.belt : L.trip.hint.door
+      if (spendHint(l)) this.events.say(l)
     }
     const o = this.officer
     const b = 1 + Math.sin(t * 2.6) * 0.018

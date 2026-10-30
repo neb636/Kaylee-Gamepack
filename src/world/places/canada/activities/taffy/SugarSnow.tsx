@@ -21,7 +21,7 @@
 // voices (lines.ts, L.taffy). A short line at the bottom shows what's said, for Dad.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent, type Ref } from 'react'
-import { BigButton, bigCelebration, burst, say, sounds, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, say, sounds, spendHint, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
@@ -1486,7 +1486,7 @@ class TaffyWorld {
       const lying = this.lollies.some((l) => l.state === 'lying')
       const set = this.pieces.some((p) => isSet(p, this.now) && !isGone(p))
       const line = ready ? T.give : lying ? T.rest : set ? T.set : this.pot.level <= 0.01 ? T.empty : this.section === 'shapes' ? T.shapes : this.section === 'orders' ? T.orders : T.pour
-      this.talk(line, 'hint', 16)
+      if (spendHint(line)) this.talk(line, 'hint', 16)
     }
     h.setAttribute('opacity', at ? '1' : '0')
     if (at) h.setAttribute('transform', `translate(${at[0].toFixed(0)} ${(at[1] + 30).toFixed(0)})`)

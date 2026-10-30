@@ -25,7 +25,7 @@
 // The race shows its state to the screen (onHud: the countdown, lap, place, coins); the minimap's dots and the
 // tap targets are written here every frame.
 import { Color, Fog, Group, Plane, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp, sounds, type Line } from '../../../../../../sdk'
+import { clamp, sounds, spendHint, type Line } from '../../../../../../sdk'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
@@ -1257,7 +1257,7 @@ export class Race implements World3D {
     if (s) el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0)`
     if (this.phase === 'race' && idle > 12 && this.time - (this.said.get('hint') ?? -99) > 20 && this.k.done < 0) {
       this.said.set('hint', this.time)
-      this.say(L.race.start)
+      if (spendHint(L.race.start)) this.say(L.race.start)
     }
   }
 

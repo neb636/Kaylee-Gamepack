@@ -9,6 +9,8 @@ import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, type Li
 export interface WhaleGuideHandle {
   /** Says it; resolves when it's done. */
   speak(line: Line): Promise<void>
+  /** Shows it in the bubble without the voice (a hint the budget in sdk/hints.ts keeps quiet; tap her to hear it). */
+  show(line: Line): void
 }
 
 const WHO: Record<string, { name: string; icon: string; color: string }> = {
@@ -48,6 +50,14 @@ export const WhaleGuide = forwardRef<WhaleGuideHandle, { hidden?: boolean }>(fun
         if (asked.current === mine) asked.current = null
         later(l)
       })
+    },
+    show(l) {
+      if (lineVoice(l) === 'sparkle') {
+        last.current = l
+        void sparkle.current?.play('wave')
+      }
+      show(l)
+      hide.current = setTimeout(() => setLine((cur) => (cur?.l === l ? null : cur)), 4000)
     },
   }))
   useEffect(() => () => clearTimeout(hide.current), [])

@@ -16,7 +16,7 @@ import { numberParam } from '../../sectionState'
 // game loop; React only sees phase changes.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
-import { burst, say, sounds, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
@@ -806,7 +806,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
     if (playing && !G.busy && !G.finger && now - G.lastTouch > 8000 && now - G.lastHint > 12000 && steerable(G.phase)) {
       G.lastHint = now
       const line = G.phase === 'start' ? C.idle.grab : G.phase === 'morning' ? C.warm : G.phase === 'follow' ? C.idle.places : G.phase === 'ridge' ? C.top : C.bigSwirl
-      say1(line)
+      if (spendHint(line)) say1(line)
       setGlow(true)
     }
   }

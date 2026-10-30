@@ -13,7 +13,7 @@
 // from one game loop (like Venice).
 import { AnimatePresence } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
-import { Buddy, say, sounds, SparklePuppet, useGameLoop, type Line, type PuppetHandle } from '../../../../../sdk'
+import { Buddy, say, sounds, spendHint, SparklePuppet, useGameLoop, type Line, type PuppetHandle } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { sfx } from '../../../../kit/sfx'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -568,8 +568,11 @@ export function Etna({ onDone, setProgress }: ActivityProps) {
         }
       }
       // Stuck? Sparkle reminds her which way (and the ring around Nino pulses).
-      if (s.idle > 8 && s.t - s.lastTalk > 8 && cooled('stuck', 16)) talk(full ? E.pullDown : E.pull)
-      if (!s.scarf && s.idle > 9 && Math.abs(x - SCARF_X) < 400 && cooled('scarfAgain', 25)) talk(E.scarf)
+      if (s.idle > 8 && s.t - s.lastTalk > 8 && cooled('stuck', 16)) {
+        const line = full ? E.pullDown : E.pull
+        if (spendHint(line)) talk(line)
+      }
+      if (!s.scarf && s.idle > 9 && Math.abs(x - SCARF_X) < 400 && cooled('scarfAgain', 25) && spendHint(E.scarf)) talk(E.scarf)
     }
 
     // ---- Camera: follows Nino, leading by his speed; a little to the left at first (to see the friends) ----

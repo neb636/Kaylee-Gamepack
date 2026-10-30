@@ -9,7 +9,7 @@
 // are all home: on to the hockey game. Finale.tsx carries the address bar and the words on screen.
 import { Color, Group, Mesh, MeshBasicMaterial, TorusGeometry, Vector3, type WebGLRenderer } from 'three'
 import { burst, shuffle, sounds, wobble } from '../../../../../sdk'
-import { say } from '../../../../../sdk'
+import { say, spendHint } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -541,7 +541,7 @@ export class HomesWorld extends Base3D implements World3D {
       this.homes.get(p.id)!.glowGoal = 1
       if (!this.hinted) {
         this.hinted = true
-        void say(L.party.where[p.id])
+        if (spendHint(L.party.where[p.id])) void say(L.party.where[p.id])
       }
     }
     this.drawHint(waiting && this.hinted ? tmp.copy(p.pos).setY(p.pos.y + 0.5 * S) : null, waiting && this.hinted ? this.homes.get(p.id)!.at : undefined)

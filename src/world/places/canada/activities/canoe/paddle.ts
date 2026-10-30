@@ -19,7 +19,7 @@
 // reflection, and the canoe's wake ripples over it. Built for engine3d/View3D.tsx; nothing here comes from Thailand.
 // Stroke power, turn and drag are feel-lab knobs (?feel=1), with a graph of her stroke against what the canoe does.
 import { Color, Fog, Group, Mesh, Plane, Raycaster, RingGeometry, MeshBasicMaterial, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, say, sounds, stopSpeaking, type Line } from '../../../../../sdk'
+import { clamp, say, sounds, spendHint, stopSpeaking, type Line } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -536,21 +536,21 @@ export class RedCanoe implements World3D {
     if (idle > HINT_S && t - this.idleSaid > 16 && this.hintsSaid < 2) {
       this.idleSaid = t
       this.hintsSaid++
-      this.talk(L.canoe.hint[this.mode])
+      if (spendHint(L.canoe.hint[this.mode])) this.talk(L.canoe.hint[this.mode])
       return
     }
     if (this.section !== 'stream') this.stuckSaid = 0
     if (this.section === 'stream' && !this.found && this.stuckSaid < 2 && this.sectionT > 14 + this.stuckSaid * 16 && t - this.idleSaid > 6) {
       this.stuckSaid++
       this.idleSaid = t
-      this.talk(L.canoe.streamHint)
+      if (spendHint(L.canoe.streamHint)) this.talk(L.canoe.streamHint)
       this.canoe.wave()
     }
     if (this.loonPhase !== 'float') this.loonHinted = false
     else if (!this.loonHinted && this.loonT > 10 && t - this.idleSaid > 6) {
       this.loonHinted = true
       this.idleSaid = t
-      this.talk(L.canoe.loonHint)
+      if (spendHint(L.canoe.loonHint)) this.talk(L.canoe.loonHint)
     }
   }
 

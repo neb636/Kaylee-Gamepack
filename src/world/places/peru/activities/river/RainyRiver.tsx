@@ -16,7 +16,7 @@ import { numberParam, listParam } from '../../sectionState'
 // Per-frame work (cloud, rain, water levels, Rosa, floating things) runs in refs and one game loop.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
-import { burst, say, shuffle, sounds, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
 import { art } from '../../art'
@@ -846,7 +846,8 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
     const idle = G.phase === 'forest' ? 'squeeze' : G.phase === 'river' ? 'river' : G.phase === 'lagoon' ? 'lagoon' : G.phase === 'pads' ? 'pads' : null
     if (idle && !G.busy && !c.held && !G.drag && G.rain === 0 && now - G.lastProgress > 8000 && now - G.lastTouch > 4000 && now - G.lastHint > 12000) {
       G.lastHint = now
-      void say(idle === 'lagoon' && G.lagoon >= 1 ? R.buds : R.idle[idle])
+      const line = idle === 'lagoon' && G.lagoon >= 1 ? R.buds : R.idle[idle]
+      if (spendHint(line)) void say(line)
       hintsOn.current = true
       if (idle === 'pads') setGlow('friends')
       else {

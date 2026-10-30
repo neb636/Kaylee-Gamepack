@@ -4,7 +4,7 @@
 // golden-green oil trickles out of the spout into the jug.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { burst, Piece, say, SparklePuppet, sounds, Target, useAlive, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, Piece, say, spendHint, SparklePuppet, sounds, Target, useAlive, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -87,7 +87,7 @@ export function Mill({ onDone }: { onDone: () => void }) {
       if (Date.now() - lastTouch.current > 9000) {
         lastTouch.current = Date.now()
         setHint(true)
-        void say(O.millHint)
+        if (spendHint(O.millHint)) void say(O.millHint)
       }
     }, 1000)
     return () => clearInterval(id)
@@ -243,7 +243,10 @@ export function Mill({ onDone }: { onDone: () => void }) {
             label="olive"
             snapTo="hopper"
             snapRadius={110}
-            onPickUp={() => sounds.pickup()}
+            onPickUp={() => {
+              lastTouch.current = Date.now()
+              sounds.pickup()
+            }}
             onTap={() => drop([lay.basket.x, basketTop])}
             onPlace={({ target, x, y }) => {
               if (target === 'hopper') {

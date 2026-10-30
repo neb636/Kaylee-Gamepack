@@ -7,7 +7,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
 import { gameLogger } from '../posthog-logger'
 import { go } from '../router'
-import { Mascot, say, sounds, useOnline, useSaved } from '../sdk'
+import { firstTime as firstTimeHere, lineText, Mascot, say, sounds, useOnline, useSaved } from '../sdk'
 import { useTrophies } from '../sdk/trophies'
 import balloon from './assets/balloon.webp'
 import mapArt from './assets/bg-world-map.webp'
@@ -109,8 +109,9 @@ export function WorldMap({ view: linked }: { view?: string }) {
     } catch {
       // No session storage.
     }
-    void say(view === 'list' ? WORLD_LINES.shelf.hello : firstTime ? WORLD_LINES.firstHello : WORLD_LINES.hello, { interrupt: false })
-    // Only on arrival.
+    // Only on arrival, and once per visit to the app (she comes back here after every country).
+    const hello = view === 'list' ? WORLD_LINES.shelf.hello : firstTime ? WORLD_LINES.firstHello : WORLD_LINES.hello
+    if (firstTimeHere(`world:${lineText(hello)}`)) void say(hello, { interrupt: false })
   }, [firstTime])
 
   const switchTo = (next: View) => {

@@ -87,10 +87,10 @@ export function MountainBike({ onDone, setProgress }: Partial<CanadaActivityProp
       enter('berms', { trail: w })
     },
     progress: (n) => progress.current?.(n, PARTS.length),
-    say: (line, chat) => {
+    say: (line, chat, voice = true) => {
       // Maple's whoops and the animals' words never cut anyone off; Sparkle's lines do.
       if (chat && speakingVoice()) return
-      void say(line)
+      if (voice) void say(line)
       if (typeof line === 'string') {
         setSaid((s) => ({ line, sparkle: true, n: (s?.n ?? 0) + 1 }))
         void sparkle.current?.play('nod')
