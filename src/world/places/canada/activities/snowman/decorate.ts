@@ -1102,7 +1102,7 @@ export class DecorateSnowman implements World3D {
     this.friend = { f, x: from.x, z: from.z, goal: spot, state: now ? 'wait' : 'in' }
     f.root.rotation.y = now ? -0.45 : -Math.PI / 2
     f.root.position.set(from.x, 0, from.z)
-    if (now) this.later.push({ t: 1.6, f: () => this.arrived() })
+    if (now) this.later.push({ t: 0.8, f: () => this.arrived() })
   }
 
   private arrived() {
@@ -1413,9 +1413,19 @@ export class DecorateSnowman implements World3D {
 
   private shot(): Shot {
     const tall = this.tall
-    if (this.section === 'story' || this.paradeT >= 0) {
-      // The park with Maple in it, the castle up on the cliff behind (and the parade hopping off toward it).
-      return { center: new Vector3(0, 4.5, -5.5), half: tall ? new Vector3(8, 9, 10) : new Vector3(12, 7, 10), yaw: 0, pitch: 10 }
+    if (this.paradeT >= 0) {
+      // Alongside the marchers (the whole line in view as they set off), the castle up on the cliff behind them.
+      const m = this.men.filter((p) => p.state === 'parade' || p.state === 'line')
+      const x0 = m.length ? Math.min(...m.map((p) => p.x)) : 0
+      const x1 = m.length ? Math.max(...m.map((p) => p.x)) : 0
+      const cx = clamp((x0 + x1) / 2, -8, 6)
+      const span = Math.max(tall ? 4 : 6, (x1 - x0) / 2 + 1.6)
+      return { center: new Vector3(cx, tall ? 5.5 : 4.2, -3.5), half: tall ? new Vector3(span, 7, 6) : new Vector3(span, 5, 6), yaw: 0, pitch: 10 }
+    }
+    if (this.section === 'story') {
+      // The park with Maple in it, the castle up on the cliff behind. (A tall screen aims higher, so the snow in front
+      // doesn't fill its bottom half.)
+      return { center: new Vector3(0, tall ? 6.5 : 4.5, -5.5), half: tall ? new Vector3(8, 8, 8) : new Vector3(12, 7, 10), yaw: 0, pitch: 10 }
     }
     // Close on him, Maple beside him, the toboggan along the bottom; the castle behind, up top.
     const line = this.made > 0 && !tall
