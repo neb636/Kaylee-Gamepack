@@ -6,11 +6,13 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type PointerEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { camLab } from '../../engine3d/camLab'
+import { TUNE } from '../../engine3d/tune'
 import { IconButton } from '../ui'
 import { Guides } from './Guides'
 import { frameById, freshCamera, STATE_KEYS, fromParams, toOverride, untouched, writeHash, type CamView, type Frame } from './link'
 import { CamPanel } from './Panel'
 import '../lab.css'
+import { useStudioBridge } from '../workbench'
 
 const deg = Math.PI / 180
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
@@ -44,6 +46,28 @@ export default function CameraLab({ place, params, host }: { place: string; para
   const viewRef = useRef(view)
   viewRef.current = view
   const frozen = useSyncExternalStore(camLab.subscribe, () => camLab.frozen)
+
+  useStudioBridge(() => {
+    const world = camLab.world
+    const shot = world?.rig.shot
+    const reach = Math.max(1, Math.ceil(Math.max(shot?.half.x ?? 1, shot?.half.y ?? 1, shot?.half.z ?? 1) * 2))
+    const v = viewRef.current
+    return {
+      kind: 'camera', href: location.href,
+      context: { place, mode: v.mode, frame: v.frame, frozen: camLab.frozen, ab, shot, framed: world?.rig.framed(), state: world?.qa(), instruction: 'Adjust only this shot and screen shape. Pan is in meters, angles in degrees. Preserve targets at 64px or larger. Values preview here; source is unchanged.' },
+      controls: world ? [
+        { key: 'yaw', label: 'Yaw', value: v.yaw, min: -180, max: 180, step: 1 },
+        { key: 'pitch', label: 'Pitch', value: v.pitch, min: v.mode === 'lock' ? -10 : -60, max: v.mode === 'lock' ? 89 : 60, step: 1 },
+        { key: 'zoom', label: 'Zoom', value: v.zoom, min: 0.3, max: 3, step: 0.01 },
+        { key: 'fov', label: 'Lens', value: v.fov || world?.rig.fov || TUNE.fov, min: 15, max: 80, step: 1 },
+        { key: 'px', label: 'Pan right', value: v.px, min: -reach, max: reach, step: reach / 200 },
+        { key: 'py', label: 'Pan up', value: v.py, min: -reach, max: reach, step: reach / 200 },
+      ] : [],
+    }
+  }, proposal => {
+    setAb(false)
+    setView(v => ({ ...v, ...Object.fromEntries(proposal.changes.map(c => [c.key, c.key === 'fov' && c.value === (camLab.world?.rig.fov ?? TUNE.fov) ? 0 : c.value])) }))
+  })
 
   const set = useCallback((patch: Partial<CamView>) => setView((v) => ({ ...v, ...patch })), [])
 

@@ -14,6 +14,7 @@ import { BACKDROPS, LeftPanel, LineBar, RightPanel, Toolbar, TopRight, type LabA
 import { Studio, type Hideable, type ShotKind, type StudioView, type Tool } from './studio'
 import { IconButton } from '../../../labs/ui'
 import '../../../labs/lab.css'
+import { useStudioBridge } from '../../../labs/workbench'
 
 const DEFAULTS: StudioView = {
   ids: ['kaylee'],
@@ -111,6 +112,8 @@ export default function CharacterLab({ id, params = {} }: { id?: string; params?
   const written = useRef('')
   const searchRef = useRef<HTMLInputElement>(null)
   const canvasRef = useRef<HTMLDivElement>(null)
+
+  useStudioBridge(() => ({ kind: 'character', href: location.href, context: { view: viewRef.current, catalog: 'src/world/places/thailand/lab/catalog.ts', recipe: 'docs/3d-characters.md' }, controls: [] }), () => { throw new Error('Use the character builder to edit the rig; this snapshot is read-only.') })
 
   const set = useCallback((patch: Partial<StudioView>) => setView((v) => ({ ...v, ...patch })), [])
 

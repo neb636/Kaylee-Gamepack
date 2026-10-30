@@ -7,7 +7,8 @@ import { World } from './world/World'
 
 export default function App() {
   const route = useRoute()
-  const [started, setStarted] = useState(false)
+  // The local desktop studio opens straight into its lab; deployed builds keep the normal audio-unlock splash.
+  const [started, setStarted] = useState(() => import.meta.env.DEV && location.origin === 'http://127.0.0.1:5174' && new URLSearchParams(location.search).get('studio') === '1')
 
   if (!started) return <Splash onStart={() => setStarted(true)} />
   switch (route.name) {

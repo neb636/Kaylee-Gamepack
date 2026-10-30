@@ -12,6 +12,9 @@ Thailand to Agong's house, where she walks around as a unicorn, and to the place
 - [The map](https://neb636.github.io/Kaylee-Gamepack/#/world?view=map)
 - [The game shelf](https://neb636.github.io/Kaylee-Gamepack/#/world?view=list) (every game as a picture card, a row per country and per Thailand trip; ❤️ favorites, 🎁 surprise)
 
+**Local Gamepack Studio:** `npm run studio:install` once, then `npm run studio`. The Electron app brings the three labs,
+Claude/Codex prompt composers and the character concept → Tripo → Blender workflow together. [Setup](workbench/README.md) · [Migration plan](planning/gamepack-studio.html).
+
 **3D character lab** (development tool, every 3D character on a turntable: poses, actions, lines, outfits, lighting): 
 - [Kaylee](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee)
 - [Kaylee in a look from her wardrobe](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee?look=crown,stars,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky) (the Look panel: her things and the paint)

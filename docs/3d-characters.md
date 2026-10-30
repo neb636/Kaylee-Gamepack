@@ -4,6 +4,11 @@ How we turn a family member into a modelled 3D toy: concept picture → Tripo3D 
 same rig the code-built characters use. Kaylee's unicorn was the first (2026-10-25). Follow this for the next one so
 nobody has to re-decide the same things.
 
+**Local studio:** run `npm run studio` after `npm run studio:install`. Its **Character concepts** view generates one
+concept, checks actual transparency, and refines the same character. Choose a workflow stage to prepare a Claude Code
+or Codex prompt with the chosen concept path, this recipe and Dad’s notes. Tripo stays a manual handoff; Blender uses
+the selected CLI’s configured MCP. [Studio setup](../workbench/README.md).
+
 The old way (every character built from code shapes in `src/world/engine3d/characters/animal.ts`) still works and is still the fallback.
 A modelled character must plug into the **same `Rig`** (body, head, arms, tail, eyes, mouth on their own pivots), so
 every walk, wave, wai, outfit and voice keeps working.
