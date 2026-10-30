@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Sky pod</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe1ee"/><stop offset="1" stop-color="#ffbcd8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="lit" cx="0.42" cy="0.4" r="0.6"><stop offset="0" stop-color="#fff"/><stop offset="0.45" stop-color="#fff6cc"/><stop offset="1" stop-color="#ffc83d"/></radialGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.5" r="0.5"><stop offset="0.3" stop-color="#fff6cc" stop-opacity="0.9"/><stop offset="1" stop-color="#fff6cc" stop-opacity="0"/></radialGradient>
+    <clipPath id="rim"><circle cx="60" cy="62" r="40"/></clipPath>
+    <clipPath id="face"><circle cx="60" cy="62" r="33"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <circle cx="63" cy="66" r="40" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the pod on the wall: a lavender rim, shaded bottom-right -->
+  <g clip-path="url(#rim)">
+    <rect x="20" y="22" width="80" height="80" fill="#937ee0"/>
+    <circle cx="57" cy="59" r="40" fill="#b9a6f5"/>
+  </g>
+  <path d="M27 50A34 34 0 0 1 48 29" fill="none" stroke="#ddd2ff" stroke-width="3" stroke-linecap="round"/>
+  <!-- its deep grape face, the rim's shadow on its top-left -->
+  <g clip-path="url(#face)">
+    <rect x="27" y="29" width="66" height="66" fill="#5b48b8"/>
+    <circle cx="62.5" cy="64.5" r="33" fill="#6a57c7"/>
+  </g>
+
+  <!-- six light buttons in their sockets -->
+  <g fill="#54429f">
+    <circle cx="60" cy="41" r="10"/><circle cx="78" cy="51.5" r="10"/><circle cx="78" cy="72.5" r="10"/>
+    <circle cx="60" cy="83" r="10"/><circle cx="42" cy="72.5" r="10"/><circle cx="42" cy="51.5" r="10"/>
+  </g>
+  <g transform="translate(78 51.5) scale(1.7)"><circle r="5" fill="#8ccfff"/><path d="M3-4A5 5 0 1 1-4 3A5 5 0 0 0 3-4Z" fill="#5fb0ea"/><circle cx="-2" cy="-2" r="1.5" fill="#c9e9ff"/></g>
+  <g transform="translate(78 72.5) scale(1.7)"><circle r="5" fill="#8fe3c8"/><path d="M3-4A5 5 0 1 1-4 3A5 5 0 0 0 3-4Z" fill="#5cc6a6"/><circle cx="-2" cy="-2" r="1.5" fill="#c7f3e4"/></g>
+  <g transform="translate(60 83) scale(1.7)"><circle r="5" fill="#ff8fb8"/><path d="M3-4A5 5 0 1 1-4 3A5 5 0 0 0 3-4Z" fill="#e7699c"/><circle cx="-2" cy="-2" r="1.5" fill="#ffc4da"/></g>
+  <g transform="translate(42 72.5) scale(1.7)"><circle r="5" fill="#ff9c57"/><path d="M3-4A5 5 0 1 1-4 3A5 5 0 0 0 3-4Z" fill="#e57a35"/><circle cx="-2" cy="-2" r="1.5" fill="#ffc595"/></g>
+  <g transform="translate(42 51.5) scale(1.7)"><circle r="5" fill="#ff6b6b"/><path d="M3-4A5 5 0 1 1-4 3A5 5 0 0 0 3-4Z" fill="#d9485e"/><circle cx="-2" cy="-2" r="1.5" fill="#ffa3a3"/></g>
+
+  <!-- the lit one, glowing -->
+  <circle cx="60" cy="41" r="22" fill="url(#halo)"/>
+  <circle cx="60" cy="41" r="9" fill="url(#lit)"/>
+  <circle cx="56.5" cy="37.5" r="2.5" fill="#fff"/>
+  <path d="M60 25.5V22M70.5 30.5L73 28M49.5 30.5L47 28M75.5 41H79M44.5 41H41" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- sparkles -->
+  <path d="M88 18l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2z" fill="#fff"/>
+  <path d="M30 20l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z" fill="#fff"/>
+  <path d="M103 64l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z" fill="#fff"/>
+</svg>

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>The vet</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ddf7ee"/><stop offset="1" stop-color="#a9e8d2"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="head"><circle cx="60" cy="50" r="25"/></clipPath>
+    <clipPath id="body"><path d="M37 105C33 90 39 73 60 71C81 73 87 90 83 105Z"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <ellipse cx="60" cy="105" rx="31" ry="5.5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- tail, wagging -->
+  <path d="M80 92C90 90 94 82 92 74" fill="none" stroke="#d9a275" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- body: tan, shaded on the right, a cream bib -->
+  <g clip-path="url(#body)">
+    <rect x="30" y="68" width="60" height="40" fill="#d9a275"/>
+    <path d="M37 105C33 90 39 73 60 71C70 72 76 77 78 84C74 92 70 100 70 105Z" fill="#f2c79b"/>
+    <ellipse cx="60" cy="88" rx="12" ry="15" fill="#fff7f0"/>
+  </g>
+  <!-- front paws -->
+  <ellipse cx="50" cy="103" rx="8.5" ry="5.5" fill="#fff7f0"/>
+  <ellipse cx="70" cy="103" rx="8.5" ry="5.5" fill="#fff7f0"/>
+  <path d="M63 104.5a8.5 5.5 0 0 0 15.5-2" fill="none" stroke="#efdccd" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- head: tan with a shaded crescent bottom-right, a light-brown patch -->
+  <g clip-path="url(#head)">
+    <rect x="30" y="20" width="60" height="60" fill="#d9a275"/>
+    <circle cx="56.5" cy="46.5" r="25" fill="#f2c79b"/>
+    <ellipse cx="70" cy="40" rx="11" ry="10" fill="#e5b78f"/>
+  </g>
+  <!-- floppy ears -->
+  <path d="M41 30C30 30 25 44 28 58C30 66 39 66 42 57C44 49 47 37 41 30Z" fill="#a46e4b"/>
+  <path d="M79 30C90 30 95 44 92 58C90 66 81 66 78 57C76 49 73 37 79 30Z" fill="#8a5b3d"/>
+  <path d="M38 34C33 38 31 46 32 53" fill="none" stroke="#b17d56" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- muzzle, nose, mouth -->
+  <ellipse cx="60" cy="60" rx="12.5" ry="9" fill="#fff7f0"/>
+  <path d="M55 54.5Q60 51.5 65 54.5Q63.5 59 60 59.5Q56.5 59 55 54.5Z" fill="#2b2330"/>
+  <ellipse cx="58.2" cy="54.2" rx="1.6" ry="0.9" fill="#fff"/>
+  <path d="M57.6 63.6Q60 69.5 62.4 63.6Z" fill="#ff8fb8"/>
+  <path d="M60 59.5V62.2M55.2 61.8Q57.6 65 60 62.2Q62.4 65 64.8 61.8" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- eyes and blush -->
+  <ellipse cx="50.5" cy="47" rx="3.6" ry="4.4" fill="#2b2330"/>
+  <ellipse cx="69.5" cy="47" rx="3.6" ry="4.4" fill="#2b2330"/>
+  <circle cx="51.8" cy="45.4" r="1.4" fill="#fff"/>
+  <circle cx="70.8" cy="45.4" r="1.4" fill="#fff"/>
+  <ellipse cx="44.5" cy="56.5" rx="4.5" ry="2.6" fill="#ff8fb8" opacity="0.55"/>
+  <ellipse cx="75.5" cy="56.5" rx="4.5" ry="2.6" fill="#ff8fb8" opacity="0.55"/>
+
+  <!-- a pink plaster on the head -->
+  <g transform="rotate(-28 50 32)">
+    <rect x="38" y="28" width="24" height="8.5" rx="4.25" fill="#ffc4da"/>
+    <rect x="46" y="28" width="8" height="8.5" fill="#ff8fb8"/>
+    <circle cx="42" cy="32.2" r="0.9" fill="#fff"/>
+    <circle cx="58" cy="32.2" r="0.9" fill="#fff"/>
+  </g>
+
+  <!-- a get-well heart -->
+  <g transform="translate(95 27) rotate(12)">
+    <path d="M0 9C-9 3-12-3-8.5-7C-6-9.8-2-9-0-5.6C2-9 6-9.8 8.5-7C12-3 9 3 0 9Z" fill="#ff4f9a"/>
+    <path d="M0 9C5 5.6 8.6 1.8 9.6-1.8C6 2 3 4.4 0 6Z" fill="#d8367f"/>
+    <path d="M-1.6-3.6h3.2v2.2h2.2v3.2h-2.2v2.2h-3.2v-2.2h-2.2v-3.2h2.2z" fill="#fff"/>
+  </g>
+  <path d="M84 16v5M81.5 18.5h5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
