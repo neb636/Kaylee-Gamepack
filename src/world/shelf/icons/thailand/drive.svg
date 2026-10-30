@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Drive the mountain road</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0f2ff"/><stop offset="1" stop-color="#b3dbff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9edfae"/><stop offset="1" stop-color="#73cf86"/></linearGradient>
+    <path id="bodyP" d="M24 82C24 78 26 75 30 75H84C90 75 95 79 96 85L97 90C97 93 95 95 92 95H28C25.5 95 24 93 24 90Z"/>
+    <clipPath id="body"><use href="#bodyP"/></clipPath>
+    <path id="cabP" d="M32 76L36 62C37 59 39 57 42 57H74C77 57 79 58.5 80.5 61L88 76Z"/>
+    <clipPath id="cab"><use href="#cabP"/></clipPath>
+    <g id="wheel">
+      <circle r="10.5" fill="#3e3849"/>
+      <circle r="5.5" fill="#d8dce8"/>
+      <circle cx="0.8" cy="0.8" r="5.5" fill="#aeb3c8" opacity="0.6"/>
+      <circle r="2.2" fill="#8a86a3"/>
+      <path d="M-7.5-3.5A8 8 0 0 1-3.5-7.5" fill="none" stroke="#6e6880" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="46" r="50" fill="url(#glow)"/>
+
+  <!-- far peaks in the haze, a cloud resting on one -->
+  <path d="M-2 50C8 40 18 26 30 22C38 19 44 26 50 30C58 22 66 12 76 12C86 12 94 24 102 32C108 30 116 34 122 40V60H-2Z" fill="#cdd5f5"/>
+  <path d="M76 12C86 12 94 24 102 32C98 38 96 44 96 50C92 38 86 24 76 12ZM30 22C38 19 44 26 50 30C47 34 45 38 44 42C42 34 37 27 30 22Z" fill="#b8c2ee"/>
+  <g fill="#fff" opacity="0.92">
+    <circle cx="88" cy="26" r="4.5"/><circle cx="94.5" cy="22.5" r="6"/><circle cx="101" cy="26.5" r="4"/>
+    <rect x="83.5" y="26" width="22" height="4.5" rx="2.25"/>
+  </g>
+
+  <!-- the big green hill, lit on the left, the road winding up it in hairpins -->
+  <path d="M-2 66C10 52 30 38 54 34C72 31 92 40 108 50C114 54 118 57 122 59V100H-2Z" fill="url(#hill)"/>
+  <path d="M54 34C72 31 92 40 108 50C114 54 118 57 122 59V92C112 80 102 70 96 66C94 54 82 40 54 34Z" fill="#5cbd78" opacity="0.6"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M124 80C100 76 64 70 32 63C14 59 12 52 26 49" stroke="#a9a3cc" stroke-width="6"/>
+    <path d="M26 49C46 45 76 43 90 40C102 37 100 31 88 31" stroke="#a9a3cc" stroke-width="4.6"/>
+    <path d="M88 31C78 31 68 31 60 28" stroke="#a9a3cc" stroke-width="3.6"/>
+    <path d="M124 78.5C100 74.5 64 68.5 32 61.5C15 58 13.5 52 25 48.5M28 47.5C46 43.5 76 41.5 89.5 38.5C99 36 98.5 32 89 30.5M86.5 29.5C78 29.5 68 29.5 61 27" stroke="#c8c3e0" stroke-width="1.6"/>
+  </g>
+
+  <!-- trees along the way -->
+  <circle cx="12" cy="76" r="6" fill="#48a96c"/><circle cx="10.5" cy="74.5" r="4.5" fill="#73cf86"/>
+  <path d="M14 54L9.5 64H18.5Z" fill="#2b7a5f"/><path d="M14 54L9.5 64H14Z" fill="#3e9e78"/>
+  <circle cx="110" cy="88" r="5" fill="#48a96c"/><circle cx="108.8" cy="86.8" r="3.6" fill="#73cf86"/>
+  <path d="M104 40L100 49H108Z" fill="#2b7a5f"/><path d="M104 40L100 49H104Z" fill="#3e9e78"/>
+  <path d="M42 38L38.5 45.5H45.5Z" fill="#2b7a5f"/><path d="M42 38L38.5 45.5H42Z" fill="#3e9e78"/>
+
+  <!-- the near road -->
+  <path d="M-2 94C30 91 90 91 122 94V120H-2Z" fill="#73cf86"/>
+  <path d="M-2 97C30 94 90 94 122 97V111C90 108 30 108 -2 111Z" fill="#9790ba"/>
+  <path d="M-2 97C30 94 90 94 122 97" fill="none" stroke="#bcb6d6" stroke-width="2.4"/>
+  <path d="M4 109.5L14 108.8M104 108.8L114 109.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+  <g fill="#ff8fb8"><circle cx="14" cy="117" r="2"/><circle cx="104" cy="116" r="2"/><circle cx="96" cy="118.5" r="1.6"/></g>
+
+  <!-- the silver 4x4: shadow, roof rails, cabin and windows, body, wheels -->
+  <ellipse cx="61" cy="106" rx="38" ry="3.4" fill="#4b3a8c" opacity="0.2"/>
+  <path d="M42 57.5V54.5M72 57.5V54.5" stroke="#3e3849" stroke-width="2.4" stroke-linecap="round"/>
+  <rect x="39" y="52.5" width="37" height="3" rx="1.5" fill="#3e3849"/>
+  <g clip-path="url(#cab)">
+    <rect x="30" y="56" width="60" height="22" fill="#aeb3c8"/>
+    <use href="#cabP" fill="#e3e6ef" transform="translate(-1.5 -1)"/>
+  </g>
+  <path d="M37.5 74L40.5 63C41 61.5 42 61 43.5 61H48V74Z" fill="#cdebff"/>
+  <rect x="51" y="61" width="12" height="13" rx="1.5" fill="#cdebff"/>
+  <path d="M66 61H74C75.5 61 76.5 61.5 77 63L82 74H66Z" fill="#cdebff"/>
+  <path d="M55 61.5L52 68V72L58 61.5ZM71 61.5L67 70V73L74 61.5Z" fill="#fff" opacity="0.8"/>
+  <circle cx="44" cy="70" r="2.6" fill="#ff8fb8"/>
+  <ellipse cx="46" cy="69.5" rx="1.3" ry="1.8" fill="#ffc4da"/>
+  <g clip-path="url(#body)">
+    <rect x="22" y="74" width="78" height="22" fill="#aeb3c8"/>
+    <use href="#bodyP" fill="#d8dce8" transform="translate(-1 -4)"/>
+    <path d="M28 79H90" stroke="#f4f6ff" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="42" cy="96" r="13" fill="#4a4458"/>
+    <circle cx="80" cy="96" r="13" fill="#4a4458"/>
+    <rect x="22" y="91" width="78" height="4" fill="#4a4458"/>
+  </g>
+  <path d="M64 76V90M48 76V90" stroke="#aeb3c8" stroke-width="2" stroke-linecap="round"/>
+  <rect x="67" y="80" width="5" height="2.2" rx="1.1" fill="#3e3849"/>
+  <rect x="51" y="80" width="5" height="2.2" rx="1.1" fill="#3e3849"/>
+  <path d="M82.5 68L86.5 67.5V72H82.5Z" fill="#3e3849"/>
+  <rect x="91" y="78.5" width="5.5" height="4" rx="2" fill="#fff6cc"/>
+  <rect x="23.5" y="78" width="3.5" height="5.5" rx="1.75" fill="#ff6b6b"/>
+  <use href="#wheel" transform="translate(42 96)"/>
+  <use href="#wheel" transform="translate(80 96)"/>
+</svg>

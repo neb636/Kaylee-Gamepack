@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>The boat ride in the bay</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0f2ff"/><stop offset="1" stop-color="#b3dbff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff8dc" stop-opacity="0.95"/><stop offset="1" stop-color="#fff3d0" stop-opacity="0"/></radialGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fe3ea"/><stop offset="0.4" stop-color="#4fcad6"/><stop offset="1" stop-color="#22a6bd"/></linearGradient>
+    <path id="rockP" d="M54 68C52 60 51 50 54 42C55 34 59 27 65 24C68 19 74 17 79 20C85 18 91 22 92 29C96 33 98 41 97 49C99 56 99 63 97 68Z"/>
+    <clipPath id="rock"><use href="#rockP"/></clipPath>
+    <path id="hullP" d="M95 79L38 80C30 80 26 73 24.5 60C24 57 20.5 56 19.5 59C19 75 24.5 89 36 94H86C92 93 96 87 95 79Z"/>
+    <clipPath id="hull"><use href="#hullP"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+
+  <!-- sun and a cloud -->
+  <circle cx="30" cy="28" r="18" fill="url(#sun)"/>
+  <circle cx="30" cy="28" r="7.5" fill="#fff6d2"/>
+  <g fill="#fff" opacity="0.92">
+    <circle cx="94" cy="34" r="5.5"/><circle cx="101.5" cy="30" r="7.5"/><circle cx="109" cy="34.5" r="5"/>
+    <rect x="88.5" y="33.5" width="25" height="6" rx="3"/>
+  </g>
+
+  <!-- a far island in the haze -->
+  <path d="M99 68C98 61 100 55 104 53C106 48 111 47 113 51C116 52 118 57 118 62V68Z" fill="#c4cff0"/>
+  <path d="M104 53C106 48 111 47 113 51C116 52 117.5 55 118 58C114 56 111 58 108 56C106 57 104 56 102.5 57C102.5 55.5 103 54 104 53Z" fill="#b7d6d8"/>
+
+  <!-- the sea -->
+  <rect y="66" width="120" height="54" fill="url(#sea)"/>
+  <rect y="66" width="120" height="2.5" fill="#effcff" opacity="0.85"/>
+
+  <!-- the karst island: grey limestone, a green cap, shaded on the right -->
+  <ellipse cx="76" cy="69" rx="26" ry="2.4" fill="#1f9cb3" opacity="0.45"/>
+  <g clip-path="url(#rock)">
+    <rect x="48" y="15" width="54" height="56" fill="#9790ba"/>
+    <path d="M54 68C52 60 51 50 54 42C55 34 59 27 65 24C70 22 76 21 80 21C83 32 85 46 85 58C85 63 85 66 84 68Z" fill="#bcb6d6"/>
+    <path d="M59 50C58 57 58 62 59 67M66 47C65 55 65 61 67 67" fill="none" stroke="#dedaf0" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M92 50C93 57 93 62 92 67" fill="none" stroke="#857eab" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M48 15H102V42C99 44 97 41 95 43C93 41 90 44 88 42C85 45 83 42 80 44C77 42 75 46 72 43C69 46 66 43 63 45C61 43 58 46 55 44C52 45 50 44 48 45Z" fill="#73cf86"/>
+    <path d="M83 15H102V42C99 44 97 41 95 43C93 41 90 44 88 42C86 44 85 43 83 44C85 36 85 26 83 15Z" fill="#48a96c"/>
+    <path d="M62 44c1 4 1 7 0 10c-1-3-1-6 0-10zM74 45c1 3 1 6 0 8c-1-2-1-5 0-8z" fill="#5cbd78"/>
+    <path d="M60 34C63 29 68 26 74 25" fill="none" stroke="#aee8b7" stroke-width="2.6" stroke-linecap="round"/>
+  </g>
+
+  <!-- water sparkle -->
+  <g fill="#fff" opacity="0.6">
+    <rect x="6" y="104" width="18" height="2.4" rx="1.2"/><rect x="40" y="108" width="28" height="2.4" rx="1.2"/><rect x="88" y="106" width="20" height="2.4" rx="1.2"/><rect x="12" y="74" width="14" height="2.2" rx="1.1"/>
+  </g>
+
+  <!-- the longtail boat: tail pole and splash, engine, hull, ribbons -->
+  <ellipse cx="58" cy="95" rx="42" ry="3" fill="#1f9cb3" opacity="0.5"/>
+  <path d="M93 76L111 93" stroke="#6b5d73" stroke-width="3" stroke-linecap="round"/>
+  <g fill="#fff" opacity="0.9"><ellipse cx="111" cy="95" rx="6.5" ry="2.4"/><circle cx="106" cy="91" r="1.8"/><circle cx="114.5" cy="90.5" r="1.5"/></g>
+  <rect x="84" y="70" width="13" height="10" rx="2.5" fill="#9790ba"/>
+  <rect x="84" y="70" width="13" height="3.5" rx="1.75" fill="#bcb6d6"/>
+  <g clip-path="url(#hull)">
+    <rect x="18" y="54" width="80" height="42" fill="#a46e4b"/>
+    <use href="#hullP" fill="#c99266" transform="translate(-1 -4)"/>
+    <path d="M40 86.5H88" stroke="#e5b78f" stroke-width="2.4" stroke-linecap="round"/>
+  </g>
+  <path d="M95 80.5L38 81.5C30 81.5 26 74.5 24.5 61.5" fill="none" stroke="#ff8fb8" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M24 63C30 59 35 62 41 59C38 64 33 65 25 66Z" fill="#b9a6f5"/>
+  <path d="M24.5 65.5C31 64.5 35.5 68.5 42 66.5C38 70.5 33 69.5 25 68.5Z" fill="#ff4f9a"/>
+  <path d="M25 68C31 70 34.5 74 41 74C36 77 31.5 74 25.5 71Z" fill="#ffc83d"/>
+  <circle cx="21.5" cy="57" r="3" fill="#ff8fb8"/>
+  <circle cx="20.6" cy="56" r="1.1" fill="#ffc4da"/>
+  <!-- bow wave -->
+  <path d="M12 94C15 91 18 90 21 91C19 93 16 95 12 94Z" fill="#fff" opacity="0.9"/>
+  <path d="M30 98H56" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity="0.7"/>
+</svg>

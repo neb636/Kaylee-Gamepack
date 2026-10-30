@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Chocolate milk at the elephant cafe</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9de"/><stop offset="1" stop-color="#ffc3a8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <path id="milkP" d="M27 58H61V97C61 100 59 102 56 102H32C29 102 27 100 27 97Z"/>
+    <clipPath id="milk"><use href="#milkP"/></clipPath>
+    <path id="puff1" d="M20 49C16 44 21 38 28 39C31 34 39 33 43 36C48 32 57 33 60 37C66 36 72 42 68 48C60 53 28 53 20 49Z"/>
+    <path id="puff2" d="M28 40C24 35 29 29 35 30C39 25 47 25 50 29C56 28 63 32 60 38C54 42 34 43 28 40Z"/>
+    <path id="puff3" d="M35 31C33 25 39 21 45 21C46 17 50 14 54 13C53 16 54 18 56 21C60 23 60 29 56 31C49 34 40 34 35 31Z"/>
+    <clipPath id="head"><circle cx="102" cy="80" r="19"/></clipPath>
+    <path id="trunkP" d="M90 94C80 94 72 87 71 75C70 63 72 49 75 37L74 29C76 26 81 25 84 27L82 37C80 49 79 61 80 71C81 77 85 81 91 82Z"/>
+    <clipPath id="trunk"><use href="#trunkP"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <ellipse cx="46" cy="105" rx="27" ry="4.5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the jar: see-through glass with a screw neck -->
+  <path d="M23 62C23 57 26 54 30 54H58C62 54 65 57 65 62V98C65 102 62 105 58 105H30C26 105 23 102 23 98Z" fill="#fff" opacity="0.5"/>
+  <rect x="25" y="46" width="38" height="9" rx="3" fill="#fff" opacity="0.6"/>
+
+  <!-- chocolate milk, shaded on the right, syrup running down the glass -->
+  <g clip-path="url(#milk)">
+    <rect x="26" y="56" width="36" height="47" fill="#a46e4b"/>
+    <use href="#milkP" fill="#c99266" transform="translate(-6 0)"/>
+    <path d="M30 56c0 7 3 10 2 17M40 56c0 6-3 9-1 14M50 56c0 7 3 9 1 15M58 56c0 5 2 8 1 11" fill="none" stroke="#8a5b3d" stroke-width="3" stroke-linecap="round"/>
+    <rect x="33" y="66" width="10" height="10" rx="2.5" fill="#fff" opacity="0.4" transform="rotate(-14 38 71)"/>
+    <rect x="45" y="80" width="9" height="9" rx="2.5" fill="#fff" opacity="0.3" transform="rotate(12 49.5 84.5)"/>
+  </g>
+  <rect x="27.5" y="62" width="3.5" height="32" rx="1.75" fill="#fff" opacity="0.8"/>
+  <path d="M27 50H61" stroke="#efdccd" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- the straw, pink and white, leaning out -->
+  <path d="M52 40L79 22" stroke="#ff8fb8" stroke-width="5" stroke-linecap="round"/>
+  <path d="M52 40L79 22" stroke="#fff" stroke-width="5" stroke-dasharray="3 3"/>
+
+  <!-- whipped cream in three puffs, a drizzle, sprinkles -->
+  <use href="#puff1" fill="#e4ddf6"/><use href="#puff1" fill="#fff" transform="translate(-1.5 -2.5)"/>
+  <use href="#puff2" fill="#e4ddf6"/><use href="#puff2" fill="#fff" transform="translate(-1.5 -2.5)"/>
+  <use href="#puff3" fill="#e4ddf6"/><use href="#puff3" fill="#fff" transform="translate(-1.5 -2)"/>
+  <path d="M23 43C27 40 30 45 34 42C38 39 41 44 45 41C49 38 52 43 56 40C59 38 62 42 65 41" fill="none" stroke="#8a5b3d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="36" y="25" width="5" height="2.4" rx="1.2" fill="#ff4f9a" transform="rotate(-30 38.5 26.2)"/>
+  <rect x="46" y="22" width="5" height="2.4" rx="1.2" fill="#8fe3c8" transform="rotate(40 48.5 23.2)"/>
+  <rect x="30" y="34" width="5" height="2.4" rx="1.2" fill="#ffc83d" transform="rotate(20 32.5 35.2)"/>
+  <rect x="52" y="32" width="5" height="2.4" rx="1.2" fill="#b9a6f5" transform="rotate(-40 54.5 33.2)"/>
+  <rect x="41" y="35" width="5" height="2.4" rx="1.2" fill="#8ccfff" transform="rotate(-10 43.5 36.2)"/>
+
+  <!-- the cheeky elephant peeking in: head, ear, tuft, face -->
+  <g clip-path="url(#head)">
+    <rect x="82" y="60" width="40" height="40" fill="#9790ba"/>
+    <circle cx="99" cy="77" r="19" fill="#bcb6d6"/>
+  </g>
+  <path d="M106 66C113 60 122 64 122 74C122 86 116 94 108 92C103 90 101 82 102 76C102.5 72 104 68 106 66Z" fill="#a9a3cc"/>
+  <path d="M108 70C112 67 118 69 118 76C118 84 114 89 109.5 88C106 87 105 82 105.5 78C106 75 106.5 72 108 70Z" fill="#ffc4da"/>
+  <path d="M88 70C90 66 93 63 97 62" fill="none" stroke="#dedaf0" stroke-width="3" stroke-linecap="round"/>
+  <path d="M96 61c-1-3 0-6 2-7M100 61c1-3 3-5 6-5" fill="none" stroke="#857eab" stroke-width="2.4" stroke-linecap="round"/>
+  <ellipse cx="94" cy="74" rx="3.3" ry="4.1" fill="#2b2330"/>
+  <circle cx="95.2" cy="72.5" r="1.3" fill="#fff"/>
+  <ellipse cx="97" cy="84" rx="3.8" ry="2.3" fill="#ff8fb8" opacity="0.55"/>
+
+  <!-- its trunk, sneaking a sip from the straw -->
+  <g clip-path="url(#trunk)">
+    <rect x="68" y="22" width="26" height="74" fill="#9790ba"/>
+    <use href="#trunkP" fill="#bcb6d6" transform="translate(-3 -1)"/>
+  </g>
+  <path d="M72 50h7.5M71.5 60h8M71.5 70l8 1" stroke="#a9a3cc" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="79" cy="27.5" rx="3.2" ry="1.6" fill="#857eab" transform="rotate(-8 79 27.5)"/>
+
+  <path d="M90 104v5M87.5 106.5h5M14 26v4M12 28h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

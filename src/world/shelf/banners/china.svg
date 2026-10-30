@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 450" preserveAspectRatio="xMidYMid slice">
+  <title>China</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="300" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9fd4fa"/><stop offset="1" stop-color="#e8f5ff"/></linearGradient>
+    <radialGradient id="sunglow" cx="1010" cy="92" r="230" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff8dc" stop-opacity="0.95"/><stop offset="0.35" stop-color="#fff3d0" stop-opacity="0.45"/><stop offset="1" stop-color="#fff3d0" stop-opacity="0"/></radialGradient>
+    <linearGradient id="hf" x1="0" y1="120" x2="0" y2="270" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#c3cdee"/><stop offset="1" stop-color="#e6ecfa"/></linearGradient>
+    <linearGradient id="h2" x1="0" y1="170" x2="0" y2="330" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9ad3ae"/><stop offset="1" stop-color="#d6f0df"/></linearGradient>
+    <linearGradient id="h1" x1="0" y1="220" x2="0" y2="340" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7fd08e"/><stop offset="1" stop-color="#bdeac4"/></linearGradient>
+    <linearGradient id="meadow" x1="0" y1="320" x2="0" y2="450" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8fdc96"/><stop offset="1" stop-color="#5cbd78"/></linearGradient>
+    <!-- the ridges' crest lines: the wall follows them -->
+    <path id="far" d="M-10 240C1.5 235.5 33.5 223.5 60 212C86.5 200.5 118.5 174 150 170C181.5 166 220 185.5 250 188C280 190.5 301.5 192 330 184C358.5 176 391.5 148.5 420 140C448.5 131.5 473.5 128.5 500 132C526.5 135.5 555 153.5 580 160C605 166.5 623.5 174.5 650 170C676.5 165.5 706.5 142 740 134C773.5 126 818.5 119 850 122C881.5 125 903.5 145 930 152C956.5 159 983.5 166.5 1010 164C1036.5 161.5 1063.5 142 1090 138C1116.5 134 1141.5 136.5 1170 140C1198.5 143.5 1245 156.5 1260 160V330H-10Z"/>
+    <path id="r2" d="M380 330C404.5 321 486 292.5 526 276C566 259.5 587.5 244.5 620 232C652.5 219.5 685 202.5 720 200C755 197.5 793.5 220.5 830 216C866.5 211.5 903.5 175 940 172C976.5 169 998.5 195 1050 198C1101.5 201 1216.5 191.5 1250 190V360H380Z"/>
+    <path id="r1" d="M-40 322C-18.5 316.5 50 300.5 90 288C130 275.5 165 256.5 200 246C235 235.5 266.5 227 300 226C333.5 225 362.5 231.5 400 240C437.5 248.5 486 265.5 526 276C566 286.5 594.5 295.5 640 302C685.5 308.5 740 313 800 316C860 319 926.5 318.5 1000 320C1073.5 321.5 1200 323.5 1240 324V370H-40Z"/>
+    <!-- the wall: from the near ridge on the left, up and over the far ridge on the right -->
+    <path id="wall" d="M-40 322C-18.5 316.5 50 300.5 90 288C130 275.5 165 256.5 200 246C235 235.5 266.5 227 300 226C333.5 225 362.5 231.5 400 240C437.5 248.5 486 265.5 526 276C566 259.5 587.5 244.5 620 232C652.5 219.5 685 202.5 720 200C755 197.5 793.5 220.5 830 216C866.5 211.5 903.5 175 940 172C976.5 169 998.5 195 1050 198C1101.5 201 1216.5 191.5 1250 190"/>
+    <clipPath id="farC"><use href="#far"/></clipPath>
+    <clipPath id="r2C"><use href="#r2"/></clipPath>
+    <clipPath id="r1C"><use href="#r1"/></clipPath>
+    <!-- a watchtower, 60 wide, its foot at 0,0 -->
+    <g id="tower">
+      <rect x="-30" y="-58" width="60" height="62" fill="#ecdfc9"/>
+      <rect x="12" y="-58" width="18" height="62" fill="#cdb99d"/>
+      <path d="M-34-58h68v-9h-9v-8h-9v8h-9v-8h-9v8h-9v-8h-9v8h-9v-8h-5z" fill="#ecdfc9"/>
+      <path d="M12-58h22v-9h-9v-8h-9v8h-4z" fill="#cdb99d"/>
+      <rect x="-34" y="-62" width="68" height="5" fill="#f8f1e5"/>
+      <rect x="12" y="-62" width="22" height="5" fill="#ddcbb0"/>
+      <path d="M-19-24v-14a6 6 0 0 1 12 0v14zM7-24v-14a6 6 0 0 1 12 0v14z" fill="#8a7a9e"/>
+      <path d="M-30-46H30M-30-12H30" stroke="#dccbb0" stroke-width="2.5"/>
+    </g>
+    <!-- bamboo: a stalk with nodes, its foot at 0,0 -->
+    <g id="stalk">
+      <rect x="-7" y="-340" width="14" height="340" rx="5" fill="#73cf86"/>
+      <rect x="2" y="-340" width="5" height="340" fill="#48a96c"/>
+      <rect x="-5" y="-340" width="3" height="340" fill="#aee8b7"/>
+      <g fill="#48a96c"><rect x="-9" y="-62" width="18" height="5" rx="2.5"/><rect x="-9" y="-132" width="18" height="5" rx="2.5"/><rect x="-9" y="-202" width="18" height="5" rx="2.5"/><rect x="-9" y="-272" width="18" height="5" rx="2.5"/></g>
+    </g>
+    <path id="bl" d="M0 0C10-6 28-8 46-2C30 2 14 4 0 0Z"/>
+    <!-- a red lantern, hanging from 0,0 -->
+    <ellipse id="lb" cx="0" cy="34" rx="26" ry="22"/>
+    <clipPath id="lc"><use href="#lb"/></clipPath>
+    <g id="lantern">
+      <path d="M0 0V12" stroke="#8a5b3d" stroke-width="3"/>
+      <rect x="-12" y="10" width="24" height="5" rx="2" fill="#ffc83d"/>
+      <g clip-path="url(#lc)">
+        <use href="#lb" fill="#d9485e"/>
+        <use href="#lb" fill="#ff6b6b" transform="translate(-5 -4)"/>
+        <path d="M-12 12C-18 26-18 42-12 56M12 12C18 26 18 42 12 56M0 12V56" fill="none" stroke="#d9485e" stroke-width="2.5"/>
+      </g>
+      <path d="M-16 24C-19 30-19 36-17 42" fill="none" stroke="#ffa3a3" stroke-width="4" stroke-linecap="round"/>
+      <rect x="-12" y="53" width="24" height="5" rx="2" fill="#ffc83d"/>
+      <path d="M0 58V76M-4 60V74M4 60V74" stroke="#ffc83d" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <!-- the panda's body and head, for their shading -->
+    <path id="pbody" d="M-46 0C-52-30-40-62 0-66C40-62 52-30 46 0Z"/>
+    <clipPath id="pbodyC"><use href="#pbody"/></clipPath>
+    <circle id="phead" cx="0" cy="-86" r="38"/>
+    <clipPath id="pheadC"><use href="#phead"/></clipPath>
+  </defs>
+
+  <!-- sky, sun, clouds, birds -->
+  <rect width="1200" height="330" fill="url(#sky)"/>
+  <circle cx="1010" cy="92" r="230" fill="url(#sunglow)"/>
+  <circle cx="1010" cy="92" r="40" fill="#fff6d2"/>
+  <g fill="#fff" opacity="0.9">
+    <circle cx="276" cy="84" r="17"/><circle cx="306" cy="68" r="26"/><circle cx="340" cy="78" r="19"/><circle cx="364" cy="90" r="11"/>
+    <rect x="258" y="84" width="118" height="18" rx="9"/>
+  </g>
+  <g fill="#fff" opacity="0.85">
+    <circle cx="640" cy="72" r="13"/><circle cx="662" cy="60" r="19"/><circle cx="686" cy="70" r="13"/>
+    <rect x="626" y="70" width="74" height="14" rx="7"/>
+  </g>
+  <g fill="none" stroke="#8a86c4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M500 92q7-7 14 0q7-7 14 0"/><path d="M538 72q6-6 12 0q6-6 12 0"/><path d="M864 76q5-5 10 0q5-5 10 0"/>
+  </g>
+
+  <!-- the far hills in the haze, shaded on the right -->
+  <g clip-path="url(#farC)">
+    <use href="#far" fill="#b6bfe9"/>
+    <use href="#far" fill="url(#hf)" transform="translate(-30 7)"/>
+  </g>
+  <!-- a faint far stretch of the wall on the far ridge -->
+  <path id="wfar" d="M580 166C605 172.5 623.5 180.5 650 176C676.5 171.5 706.5 148 740 140C773.5 132 818.5 125 850 128C881.5 131 903.5 151 930 158" fill="none" stroke="#cfcbe6" stroke-width="6" stroke-linecap="round"/>
+  <use href="#wfar" stroke="#e6e2f2" stroke-width="4" stroke-dasharray="4 4" transform="translate(0 -4)"/>
+  <g fill="#e6e2f2"><path d="M732 142v-18h4v3h3v-3h4v3h3v-3h4v18z"/><path d="M842 130v-18h4v3h3v-3h4v3h3v-3h4v18z"/></g>
+  <g fill="#cfcbe6"><rect x="744" y="124" width="6" height="18"/><rect x="854" y="112" width="6" height="18"/></g>
+  <g fill="#fff" opacity="0.72">
+    <rect x="-20" y="222" width="360" height="16" rx="8"/><rect x="520" y="206" width="320" height="16" rx="8"/><rect x="960" y="196" width="260" height="16" rx="8"/>
+  </g>
+
+  <!-- the middle ridge on the right: the wall climbs it to the far towers -->
+  <g clip-path="url(#r2C)">
+    <use href="#r2" fill="#78bb93"/>
+    <use href="#r2" fill="url(#h2)" transform="translate(-32 7)"/>
+    <path d="M600 246C640 222 680 206 714 204M900 186C914 178 926 176 940 178" fill="none" stroke="#d3f2dc" stroke-width="6" stroke-linecap="round"/>
+  </g>
+
+  <!-- the near ridge on the left: the wall comes down it toward the front -->
+  <g clip-path="url(#r1C)">
+    <use href="#r1" fill="#62bb7c"/>
+    <use href="#r1" fill="url(#h1)" transform="translate(-32 7)"/>
+    <path d="M150 268C200 246 244 236 290 234" fill="none" stroke="#cdf2d3" stroke-width="7" stroke-linecap="round"/>
+  </g>
+
+  <!-- the Great Wall: a lit walkway on top, the shaded face below, a crenellated parapet -->
+  <use href="#wall" fill="none" stroke="#b9a58a" stroke-width="34" stroke-linejoin="round" transform="translate(3 21)"/>
+  <use href="#wall" fill="none" stroke="#d9c6a8" stroke-width="34" stroke-linejoin="round" transform="translate(0 17)"/>
+  <use href="#wall" fill="none" stroke="#c6b294" stroke-width="2.5" stroke-dasharray="4 12" transform="translate(0 25)"/>
+  <use href="#wall" fill="none" stroke="#f1e6d2" stroke-width="14" stroke-linejoin="round" transform="translate(0 3)"/>
+  <use href="#wall" fill="none" stroke="#ecdfc9" stroke-width="12" stroke-dasharray="10 7" transform="translate(0 -6)"/>
+  <use href="#wall" fill="none" stroke="#f8f1e5" stroke-width="3" transform="translate(0 -1)"/>
+  <!-- watchtowers along it -->
+  <use href="#tower" transform="translate(300 230)"/>
+  <use href="#tower" transform="translate(720 204) scale(.85)"/>
+  <use href="#tower" transform="translate(940 176) scale(.75)"/>
+  <use href="#tower" transform="translate(1120 198) scale(.6)"/>
+
+  <!-- the meadow in front -->
+  <path d="M-40 450V338C0 336.5 123.5 329 200 328C276.5 327 350 330.5 420 332C490 333.5 553.5 338.5 620 338C686.5 337.5 753.5 330.5 820 328C886.5 325.5 950 322 1020 322C1090 322 1203.5 327 1240 328V450Z" fill="url(#meadow)"/>
+  <path d="M260 332C320 330 380 331 430 334M760 332C820 328 880 326 940 325" fill="none" stroke="#c4f2c8" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#fff"><circle cx="300" cy="372" r="4"/><circle cx="350" cy="388" r="3.5"/><circle cx="800" cy="376" r="4"/><circle cx="860" cy="392" r="3.5"/></g>
+  <g fill="#ff8fb8"><circle cx="320" cy="364" r="3.5"/><circle cx="830" cy="368" r="3.5"/><circle cx="380" cy="394" r="3.5"/></g>
+  <g fill="#ffc83d"><circle cx="330" cy="380" r="3"/><circle cx="780" cy="388" r="3"/></g>
+
+  <!-- bamboo on the left -->
+  <use href="#stalk" transform="translate(36 384)"/>
+  <use href="#stalk" transform="translate(80 366) scale(.85)"/>
+  <use href="#stalk" transform="translate(124 394) scale(1.05)"/>
+  <g fill="#48a96c">
+    <use href="#bl" transform="translate(42 130) rotate(-20)"/><use href="#bl" transform="translate(42 200) rotate(10)"/><use href="#bl" transform="translate(86 170) rotate(-30)"/><use href="#bl" transform="translate(130 110) rotate(-14)"/><use href="#bl" transform="translate(130 230) rotate(16)"/>
+    <use href="#bl" transform="translate(30 160) rotate(200)"/><use href="#bl" transform="translate(74 240) rotate(190)"/><use href="#bl" transform="translate(118 150) rotate(196)"/>
+  </g>
+  <g fill="#73cf86">
+    <use href="#bl" transform="translate(42 120) rotate(-36)"/><use href="#bl" transform="translate(86 160) rotate(-8)"/><use href="#bl" transform="translate(130 100) rotate(-40)"/><use href="#bl" transform="translate(30 150) rotate(220)"/><use href="#bl" transform="translate(118 140) rotate(176)"/><use href="#bl" transform="translate(130 220) rotate(-6)"/>
+  </g>
+  <!-- bamboo on the right -->
+  <use href="#stalk" transform="translate(1090 390) scale(.95)"/>
+  <use href="#stalk" transform="translate(1132 368) scale(.85)"/>
+  <use href="#stalk" transform="translate(1172 396)"/>
+  <g fill="#48a96c">
+    <use href="#bl" transform="translate(1090 150) rotate(200)"/><use href="#bl" transform="translate(1132 120) rotate(190)"/><use href="#bl" transform="translate(1172 180) rotate(204)"/><use href="#bl" transform="translate(1090 230) rotate(-20)"/><use href="#bl" transform="translate(1132 200) rotate(-14)"/>
+  </g>
+  <g fill="#73cf86">
+    <use href="#bl" transform="translate(1090 140) rotate(220)"/><use href="#bl" transform="translate(1132 110) rotate(170)"/><use href="#bl" transform="translate(1172 170) rotate(226)"/><use href="#bl" transform="translate(1172 260) rotate(-24)"/><use href="#bl" transform="translate(1132 270) rotate(196)"/>
+  </g>
+
+  <!-- red lanterns hanging from the bamboo -->
+  <path d="M96 140C126 148 156 152 186 148" fill="none" stroke="#8a5b3d" stroke-width="3"/>
+  <use href="#lantern" transform="translate(182 148)"/>
+  <path d="M1112 128C1082 136 1052 140 1022 138" fill="none" stroke="#8a5b3d" stroke-width="3"/>
+  <use href="#lantern" transform="translate(1026 138) scale(.85)"/>
+
+  <!-- the panda, sitting in the meadow with a bamboo stick -->
+  <g transform="translate(560 350)">
+    <ellipse cx="0" cy="2" rx="64" ry="7" fill="#4b3a8c" opacity="0.16"/>
+    <g clip-path="url(#pbodyC)">
+      <use href="#pbody" fill="#e4ddf6"/>
+      <use href="#pbody" fill="#fff" transform="translate(-7 -5)"/>
+    </g>
+    <ellipse cx="-30" cy="-6" rx="18" ry="13" fill="#3a3046"/>
+    <ellipse cx="30" cy="-6" rx="18" ry="13" fill="#2b2330"/>
+    <ellipse cx="-31" cy="-4" rx="9" ry="7" fill="#ffc4da"/><ellipse cx="31" cy="-4" rx="9" ry="7" fill="#ffc4da"/>
+    <!-- the bamboo stick she holds -->
+    <path d="M18-14L58-118" stroke="#73cf86" stroke-width="9" stroke-linecap="round"/>
+    <path d="M22-12L60-114" stroke="#48a96c" stroke-width="3" stroke-linecap="round"/>
+    <path d="M38-70l10 4M48-96l10 4" stroke="#48a96c" stroke-width="4" stroke-linecap="round"/>
+    <path d="M58-112C68-126 84-130 98-126C84-120 72-114 60-106ZM56-112C50-128 54-142 66-150C64-136 64-124 60-110Z" fill="#73cf86"/>
+    <path d="M-38-50C-48-40-50-28-44-20C-36-18-26-26-22-40Z" fill="#3a3046"/>
+    <path d="M38-52C48-46 52-34 46-24C40-18 30-22 24-34Z" fill="#2b2330"/>
+    <!-- head -->
+    <circle cx="-30" cy="-118" r="13" fill="#3a3046"/><circle cx="30" cy="-118" r="13" fill="#2b2330"/>
+    <g clip-path="url(#pheadC)">
+      <use href="#phead" fill="#e4ddf6"/>
+      <use href="#phead" fill="#fff" transform="translate(-6 -5)"/>
+    </g>
+    <ellipse cx="-15" cy="-86" rx="10" ry="12.5" fill="#3a3046" transform="rotate(26 -15 -86)"/>
+    <ellipse cx="15" cy="-86" rx="10" ry="12.5" fill="#2b2330" transform="rotate(-26 15 -86)"/>
+    <ellipse cx="-14" cy="-87" rx="3.4" ry="4.2" fill="#fff"/><ellipse cx="14" cy="-87" rx="3.4" ry="4.2" fill="#fff"/>
+    <ellipse cx="-13.4" cy="-86.4" rx="2.4" ry="3" fill="#2b2330"/><ellipse cx="14.6" cy="-86.4" rx="2.4" ry="3" fill="#2b2330"/>
+    <circle cx="-12.4" cy="-88" r="1" fill="#fff"/><circle cx="15.6" cy="-88" r="1" fill="#fff"/>
+    <ellipse cx="0" cy="-73" rx="14" ry="10" fill="#fff"/>
+    <path d="M-5-77Q0-80 5-77Q4-73 0-72.5Q-4-73-5-77Z" fill="#2b2330"/>
+    <path d="M0-72.5V-70M-4-69Q-2-67 0-69Q2-67 4-69" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="-24" cy="-72" rx="5" ry="3" fill="#ff8fb8" opacity="0.55"/><ellipse cx="24" cy="-72" rx="5" ry="3" fill="#ff8fb8" opacity="0.55"/>
+    <path d="M-26-112C-20-120-10-124 0-124" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+  </g>
+</svg>
