@@ -116,7 +116,7 @@ export class Arrive extends Stage {
   private gateK = 0
   private sockPairs: Record<SockId, Group>
   private sockHop: { id: SockId; t: number } | null = null
-  private worn: { id: SockId; kaylee: Group[]; nick: Group; stretch: number } | null = null
+  private worn: { id: SockId; kaylee: Group[]; nick: Group[]; stretch: number } | null = null
   /** Kaylee's shoes and Daddy's: at their feet, flying, or in the rack (Daddy's squashed in). */
   private shoes: { g: Group; owner: Who; from: Vector3; to: Vector3; t: number; state: 'feet' | 'fly' | 'in' | 'stuck' }[] = []
   private squash = 1
@@ -516,16 +516,32 @@ export class Arrive extends Stage {
     const n = this.riders.nick
     if (this.worn) {
       for (const g of this.worn.kaylee) g.removeFromParent()
-      n.rig.body.remove(this.worn.nick)
+      for (const g of this.worn.nick) g.removeFromParent()
       this.sockPairs[this.worn.id].visible = true
     }
     const kg = wearSocks(k, SOCK_COLORS[id], this.bag)
-    // Daddy's: up to his knees (they stretch up from his feet).
+    // Daddy's: up to his knees (they stretch up from his feet). A modelled Daddy's go on each leg, up to his shorts.
     const H = n.height
-    const ng = solid(merge([-1, 1].flatMap((s) => [P.sphere(0.075 * H, SOCK_COLORS[id], { at: [s * 0.085 * H, 0.03 * H, 0.02 * H], scale: [1, 0.66, 1.32] }), P.cyl(0.066 * H, 0.07 * H, 0.26 * H, '#FFFFFF', { at: [s * 0.085 * H, 0.13 * H, 0] }), P.cyl(0.069 * H, 0.069 * H, 0.03 * H, SOCK_COLORS[id], { at: [s * 0.085 * H, 0.25 * H, 0] })])), this.bag, 1.5)
-    n.rig.body.add(ng)
+    const shin = n.rig.spots?.leg
+    const { legL, legR } = n.rig
+    let ng: Group[]
+    if (shin && legL && legR) {
+      const { r, sole, hem } = shin
+      const tall = hem - sole
+      ng = [legL, legR].map((leg, i) => {
+        const s = i ? -1 : 1
+        const g = solid(merge([P.sphere(1.2 * r, SOCK_COLORS[id], { at: [0, 0.035 * H, 0.02 * H], scale: [1.05, 0.72, 1.35] }), P.cyl(0.98 * r, 1.02 * r, 0.8 * tall, '#FFFFFF', { at: [0, 0.45 * tall, 0] }), P.cyl(1.0 * r, 1.0 * r, 0.03 * H, SOCK_COLORS[id], { at: [0, 0.85 * tall, 0] })]), this.bag, 1.5)
+        g.position.set(s * shin.x, sole, shin.z)
+        leg.add(g)
+        return g
+      })
+    } else {
+      const g = solid(merge([-1, 1].flatMap((s) => [P.sphere(0.075 * H, SOCK_COLORS[id], { at: [s * 0.085 * H, 0.03 * H, 0.02 * H], scale: [1, 0.66, 1.32] }), P.cyl(0.066 * H, 0.07 * H, 0.26 * H, '#FFFFFF', { at: [s * 0.085 * H, 0.13 * H, 0] }), P.cyl(0.069 * H, 0.069 * H, 0.03 * H, SOCK_COLORS[id], { at: [s * 0.085 * H, 0.25 * H, 0] })])), this.bag, 1.5)
+      n.rig.body.add(g)
+      ng = [g]
+    }
     this.worn = { id, kaylee: kg, nick: ng, stretch: instant ? 1 : 0 }
-    ng.scale.y = instant ? 1 : 0.2
+    for (const g of ng) g.scale.y = instant ? 1 : 0.2
     this.sockPairs[id].visible = false
     this.done.socks = true
     if (!instant) {
@@ -724,7 +740,7 @@ export class Arrive extends Stage {
       this.worn.stretch = Math.min(1, this.worn.stretch + dt / 1.1)
       const k = this.worn.stretch
       // Pulled up in two tugs, then a boing.
-      this.worn.nick.scale.y = 0.2 + 0.8 * Math.min(1, k * 1.25) + wobble(Math.max(0, k * 1.25 - 0.25), 3) * 0.12
+      for (const g of this.worn.nick) g.scale.y = 0.2 + 0.8 * Math.min(1, k * 1.25) + wobble(Math.max(0, k * 1.25 - 0.25), 3) * 0.12
       if (k > 0.3 && k - dt / 1.1 <= 0.3) this.riders.nick.react('hop')
     }
     // The height chart's marker eases to her horn, or flies off the top and comes back.

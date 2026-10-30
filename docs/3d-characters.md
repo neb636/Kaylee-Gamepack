@@ -179,17 +179,21 @@ different from Kaylee, for the next family member:
   `eyes` blinks (no lids), and the code draws a smile on the muzzle (beads along the painted curve, each on the
   surface: a flat torus floats off where the face curves back) and the talking mouth.
 - **Same arm turn as Kaylee** (`swingForward`, model.ts): his head is wider than his reach.
-- **His pivots are in meters** (only the meshes are scaled up from the 1 m model, unlike Kaylee's scaled root), so
-  what the scenes hang on a family member's head or body (the boat's sunglasses, the mall's socks, the ball on his
-  horn) fits him as it fits the code-built toys. Props read `rig.face` (here a sphere round his head and hair) and
-  `rig.eyes`, never sizes worked out from the height.
-- **The barber** hides `Rig.hair` and `Rig.horn` (the model's own) under its strands and its horn, and starts the
-  strands in `Rig.hairColors`.
 - **Sitting** (member.ts): a rig with legs drops its body onto its hips and swings the legs forward over the seat.
 - Blender numbers (meters, Z up, front −Y, 1.0 tall): neck (0, −0.021, 0.462), shoulders (±0.175, −0.005, 0.405),
   hips (±0.086, −0.009, 0.175), eyes (0, −0.164, 0.627), tail root (0.022, 0.105, 0.23).
 - `Member` builds him whenever the look is his own (`LOOKS.nick`); the lab's `nick-code` keeps the code-built Daddy
   to compare (`#/world/characters/nick?lineup=nick,nick-code`).
+- **His pivots are in meters.** Unlike Kaylee's, his root isn't scaled: the pivots sit where they are at full size and
+  only the meshes are scaled up, so head-local, body-local and leg-local positions are meters, as on the code-built
+  rig. The trips already hang things on Daddy (the boat's sunglasses, the rice field's straw, the mall's socks, the
+  ball on his horn, the cafe's cream, the vet's suds, the barber's strands), and they all land right that way.
+- **Say where things go.** A head that isn't a ball doesn't fit the code-built formulas (`face.R`, `face.headY`), so
+  the rig gives `spots` (eyes, brow, nose, crown, horn tip, the shin below the shorts), measured in Blender, and those
+  consumers use them when they're there. His hair, brows and horn are their own (`hair`, `brows`, `horn`,
+  `hairColors`): the barber swaps them for strands in his browns and its own horn, and the vet's suds puff the hair
+  up (less than a mane, or it lifts off). A new modelled member: give the same fields, then check each trip that
+  dresses them.
 
 ## Open questions
 

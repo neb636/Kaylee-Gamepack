@@ -32,12 +32,6 @@ export interface Rig {
   /** A unicorn's mane locks (down the back and sides), pivoting at the top of the back of the head: the wind swings
    *  them (Wind). */
   mane: Group | null
-  /** A modelled toy's own hair (the modelled Daddy's): the barber's strands replace it, so it hides under them. */
-  hair?: Object3D
-  /** And its colors, for the strands that replace it (a code-built toy's come from its look's mane). */
-  hairColors?: string[]
-  /** A modelled toy's own horn: the barber's horn (one a snip can boing) stands in for it. */
-  horn?: Object3D
   height: number
   /** Body radius (lying down lifts the body by this). */
   radius: number
@@ -67,6 +61,30 @@ export interface Rig {
   waist?: { y: number; z: number; rx: number; rz: number }
   /** How far forward the front of the body is at (x, y), body-local z, for things stuck on it (mud). */
   front?: (x: number, y: number) => number
+  /** A modelled toy's own hairdo in one piece (the modelled Daddy), pivoting at its middle: the barber's strands
+   *  replace it and the vet's suds fluff it up. Unlike `mane`, the wind leaves it be. */
+  hair?: Group
+  /** The colors of that hairdo (the barber's strands start out in them, and so do the brows). */
+  hairColors?: string[]
+  /** A modelled toy's own eyebrows (the barber's strands grow new ones over them). */
+  brows?: Group
+  /** A modelled toy's own horn: the barber's horn (one a snip can boing) stands in for it. */
+  horn?: Object3D
+  /** Where things sit on a modelled head whose shape isn't the code-built ball (head-local meters): between the eyes
+   *  on the face (sunglasses), the middle of the left eyebrow (the barber's brows; the right one is mirrored), the tip
+   *  of the nose (a dab of cream), the top of the hair (a hat, straw), the tip of the horn (a ball stuck on it), and the
+   *  legs (socks). */
+  spots?: { eyes: V3; brow: V3; nose: V3; crown: V3; horn: V3; leg: Shin }
+}
+
+/** A modelled leg below the shorts, in its hip pivot's space (meters, the left leg; the right is mirrored): its middle
+ *  across and front-to-back, how thick it is, and the heights of the sole and of the hem it disappears under. */
+export interface Shin {
+  x: number
+  z: number
+  r: number
+  sole: number
+  hem: number
 }
 
 /** One worn thing, a group for each pivot it rides on (null where there's nothing). */

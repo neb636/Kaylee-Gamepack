@@ -22,11 +22,12 @@ export const DAD_SIZE = 1.7
  *  out to the side would end inside it. The same turn as Kaylee's. */
 const ARM_TILT = 2.0
 /** Sitting (member.ts puts the root 0.1 of his height under the seat): how far his body drops (meters), which leaves
- *  his hips just high enough for his legs (7 cm thick) to rest on the seat, and their swing forward. */
-export const DAD_SIT = { drop: 0.068, legs: -1.35 }
+ *  his hips just high enough for his legs (12 cm thick) to rest on the seat, and their swing forward. */
+export const DAD_SIT = { drop: 0.04 * DAD_SIZE, legs: -1.35 }
 
 /** His hair's browns (sampled from the model's texture): the barber's strands start in these. */
 export const DAD_HAIR = ['#6B4A33', '#8A6244', '#55392A']
+
 const SMILE = '#3B2230'
 const MOUTH = '#7A2745'
 const TONGUE = '#FF8FA8'
@@ -58,36 +59,65 @@ function onMuzzle(x: number, y: number, lift: number): V3 {
   const front = 0.239 - 9.4 * x * x + lift
   return [x, y - NECK_Y, front + NECK_Z]
 }
+/** A Blender point (heights from his soles) in the head pivot's space, in meters. */
+const onHead = (x: number, y: number, z: number): V3 => [x * DAD_SIZE, (y - NECK_Y) * DAD_SIZE, (z + NECK_Z) * DAD_SIZE]
 
-/** A rig like buildAnimal's, from the model (dadModel()). */
+/** A rig like buildAnimal's, from the model (dadModel()).
+ *
+ *  Unlike Kaylee's, the root isn't scaled: every pivot sits where it is at full size and only the meshes are scaled up,
+ *  so the rig keeps the code-built one's contract (head-local, body-local and leg-local meters). Everything the trips
+ *  already put on Daddy (the boat's sunglasses, the rice field's straw, the mall's socks, the ball on his horn, the
+ *  vet's suds) lands the same way on him. */
 export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
+  const S = DAD_SIZE
   const scene = gltf.scene.clone(true)
-  const node = (name: string): Group => {
+  const node = (name: string): Object3D => {
     const n = scene.getObjectByName(name)
     if (!n) throw new Error(`dad.glb has no ${name}`)
-    return n as Group
+    return n
   }
-  // The pivots stay in real meters, like a code-built toy's (only the meshes are scaled up from the 1 m model): what
-  // the scenes hang on him (the boat's sunglasses, the mall's socks, the ball on his horn) is sized in meters.
   const meshes: Mesh[] = []
   scene.traverse((o: Object3D) => {
-    o.position.multiplyScalar(DAD_SIZE)
+    if (o === scene) return
+    o.position.multiplyScalar(S)
     if (o instanceof Mesh) {
-      o.scale.multiplyScalar(DAD_SIZE)
+      o.scale.multiplyScalar(S)
       meshes.push(o)
     }
   })
   // Nothing was cut off him, so there are no flat caps to keep the ink off.
   inkPieces(meshes, bag, null)
 
-  const root = new Group()
-  const [body, head, eyes, armL, armR, tail, legL, legR] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail', 'legL', 'legR'].map(node)
-  root.add(blobShadow(0.3 * DAD_SIZE, bag), body)
+  const [body, head, eyes, armL, armR, tail, legL, legR] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail', 'legL', 'legR'].map(node) as Group[]
   for (const [arm, s] of [[armL, -1], [armR, 1]] as const) swingForward(arm, s, ARM_TILT)
 
+  // His hair and brows in groups of their own (the barber swaps them for strands), the hair pivoting at its middle so
+  // the vet's suds puff it up in place.
+  const group = (at: V3, names: string[]) => {
+    const g = new Group()
+    g.position.set(...at)
+    for (const n of names) {
+      const m = node(n)
+      m.position.sub(g.position)
+      g.add(m)
+    }
+    head.add(g)
+    return g
+  }
+  const hair = group(onHead(0, 0.764, -0.008), ['hair_mesh'])
+  const brows = group(onHead(0, 0.708, 0.2), ['brow_L', 'brow_R'])
+  // His own horn (the barber's, one a snip can boing, stands in for it).
+  const horn = node('horn')
+
+  const root = new Group()
+  root.add(blobShadow(0.3 * S, bag), body)
+
   // The smile: a row of little ink beads along the painted curve, each on the muzzle (a flat torus would float off
-  // its ends, where the face curves back). Measured on the 1 m model, so each mouth's shape is scaled up inside it
-  // (FaceLife and the plane's doze set the mouths' own scale).
+  // its ends, where the face curves back). Drawn in model meters inside a group scaled to his size (FaceLife sets the
+  // talking mouth's own scale).
+  const face = new Group()
+  face.scale.setScalar(S)
+  head.add(face)
   const mouthAt = onMuzzle(0, 0.556, 0)
   const at = (p: V3): V3 => [p[0] - mouthAt[0], p[1] - mouthAt[1], p[2] - mouthAt[2]]
   const beads = []
@@ -99,16 +129,12 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
   }
   const mouth = new Group()
   const talk = new Group()
-  for (const m of [mouth, talk]) m.position.set(...mouthAt).multiplyScalar(DAD_SIZE)
-  const sized = (g: Group) => {
-    g.scale.setScalar(DAD_SIZE)
-    return g
-  }
-  mouth.add(sized(solidMix([], beads, bag, 0)))
-  talk.add(sized(solidMix([], [P.sphere(0.036, MOUTH, { at: [0, -0.002, -0.002], scale: [1.15, 0.9, 0.35] }), P.sphere(0.019, TONGUE, { at: [0, -0.015, 0.004], scale: [1.3, 0.6, 0.5] })], bag, 0)))
+  for (const m of [mouth, talk]) m.position.set(...mouthAt)
+  mouth.add(solidMix([], beads, bag, 0))
+  talk.add(solidMix([], [P.sphere(0.036, MOUTH, { at: [0, -0.002, -0.002], scale: [1.15, 0.9, 0.35] }), P.sphere(0.019, TONGUE, { at: [0, -0.015, 0.004], scale: [1.3, 0.6, 0.5] })], bag, 0))
   talk.scale.setScalar(0.001)
   talk.visible = false
-  head.add(mouth, talk)
+  face.add(mouth, talk)
 
   return {
     root,
@@ -124,14 +150,24 @@ export function buildDadRig(gltf: GLTF, bag: Bag): Rig {
     legL,
     legR,
     mane: null,
-    hair: meshes.find((m) => m.name.startsWith('hair')),
-    horn: meshes.find((m) => m.name.startsWith('horn')),
+    hair,
     hairColors: DAD_HAIR,
-    height: DAD_SIZE,
-    radius: 0.2 * DAD_SIZE,
+    brows,
+    horn,
+    height: S,
+    radius: 0.2 * S,
     phone: null,
-    // His head with its hair (head-local): 0.41 m round, its middle 0.38 m above the neck (hats sit on it, the barber's
-    // strands grow from it, the sunglasses stand 0.93 of it in front).
-    face: { R: 0.24 * DAD_SIZE, headY: 0.224 * DAD_SIZE, mouth: [mouthAt[0] * DAD_SIZE, mouthAt[1] * DAD_SIZE, mouthAt[2] * DAD_SIZE] },
+    // His head (head-local): about 0.22 round, its middle 0.19 above the neck (model meters).
+    face: { R: 0.22 * S, headY: 0.19 * S, mouth: [mouthAt[0] * S, mouthAt[1] * S, mouthAt[2] * S] },
+    spots: {
+      // Between the eye domes, on their front; the tip of his nose; the top of his quiff; the horn's tip.
+      eyes: onHead(0, 0.645, 0.208),
+      brow: onHead(-0.1, 0.708, 0.22),
+      nose: onHead(0, 0.586, 0.247),
+      crown: onHead(0, 0.927, -0.01),
+      horn: onHead(0, 1.0, 0.16),
+      // His legs below the shorts (the hips pivot at 0.175 and 8.6 cm out; the hem is at 0.138).
+      leg: { x: -0.014 * S, z: 0.015 * S, r: 0.072 * S, sole: -0.175 * S, hem: -0.037 * S },
+    },
   }
 }

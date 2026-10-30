@@ -18,8 +18,8 @@
 import { CapsuleGeometry, Color, IcosahedronGeometry, OctahedronGeometry, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
 import { bell, spendHint, wobble, type Line } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
-import { LOOKS } from '../../../../characters/looks'
 import { DAD_HAIR } from '../../../../characters/dad-model'
+import { LOOKS } from '../../../../characters/looks'
 import { L } from '../../../../lines'
 import type { Member } from '../../../../characters/member'
 import type { AnchorInfo } from '../../../../../../engine3d/Anchors'
@@ -164,7 +164,10 @@ export class Salon extends Stage {
     // His horn, on its own (a snip makes it boing): a copy sitting just over the toy's own.
     const R = nr.face.R
     const horn = solid(P.cone(0.155 * R, 0.8 * R, '#FFC83D', { at: [0, 0.4 * R, 0] }), bag, 2.5)
-    horn.position.set(0, nr.face.headY + 0.72 * R, 0.14 * R)
+    // Over a modelled toy's own horn when it says where that is (its tip, rig.spots), or on the code-built head.
+    const tip = nr.spots?.horn
+    if (tip) horn.position.set(tip[0], tip[1] - 0.27, tip[2] - 0.07)
+    else horn.position.set(0, nr.face.headY + 0.72 * R, 0.14 * R)
     horn.rotation.x = 0.28
     nr.head.add(horn)
     if (nr.horn) nr.horn.visible = false
