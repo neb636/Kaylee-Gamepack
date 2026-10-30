@@ -92,7 +92,7 @@
     grid-template-columns: repeat(2, auto);
     align-content: center;
     gap: 14px !important;
-    padding-top: var(--bar-clear);
+    padding-top: calc(var(--bar-clear) + 14px);
   }
 }
 /* Phones held upright: Sparkle and three buttons don't fit in one row, so Sparkle waves from her own row above them. */

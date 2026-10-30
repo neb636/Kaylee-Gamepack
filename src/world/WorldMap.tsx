@@ -130,7 +130,7 @@ export function WorldMap({ view: linked }: { view?: string }) {
 
   return (
     <div className="screen decorated" style={{ padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 12px)', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', right: 16, display: 'flex', borderRadius: 999, padding: 5, gap: 4, background: 'rgba(255,255,255,0.92)', boxShadow: 'var(--shadow)', zIndex: 50 }}>
+      <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', right: 16, display: 'flex', borderRadius: 999, padding: 4, gap: 4, background: 'rgba(255,255,255,0.92)', boxShadow: 'var(--shadow)', zIndex: 50 }}>
         <ViewButton label="Map" on={view === 'map'} onClick={() => switchTo('map')} icon={(c) => <MapIcon color={c} />} />
         <ViewButton label="All the games" on={view === 'list'} onClick={() => switchTo('list')} icon={(c) => <ShelfIcon color={c} />} />
       </div>
@@ -253,14 +253,14 @@ export function WorldMap({ view: linked }: { view?: string }) {
 
 function ViewButton({ icon, label, on, onClick }: { icon: (color: string) => ReactNode; label: string; on: boolean; onClick: () => void }) {
   // The button keeps the full touch size (88 px on iPad, 72 on phones); only the picture shrinks when it's off.
-  const size = 'calc(var(--btn) + 2px)'
+  const size = 'calc(var(--btn) + 12px)'
   return (
     <motion.button
       aria-label={label}
       aria-pressed={on}
       whileTap={{ scale: 0.88 }}
       onClick={onClick}
-      style={{ width: size, height: size, borderRadius: '50%', background: on ? 'var(--hotpink)' : 'transparent', padding: 'calc(var(--btn) * 0.22)', display: 'grid', placeItems: 'center', transition: 'background 0.2s' }}
+      style={{ width: size, height: size, borderRadius: '50%', background: on ? 'var(--hotpink)' : 'transparent', padding: 'calc(var(--btn) * 0.28)', display: 'grid', placeItems: 'center', transition: 'background 0.2s' }}
     >
       <motion.div animate={{ scale: on ? 1 : 0.86 }} style={{ width: '100%', height: '100%' }}>
         {icon(on ? '#fff' : 'var(--lavender-dark)')}
