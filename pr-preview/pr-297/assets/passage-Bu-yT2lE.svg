@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Secret Passage</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ece6ff"/><stop offset="1" stop-color="#cdbfff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="fire" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff0b0" stop-opacity="0.95"/><stop offset="1" stop-color="#ffe189" stop-opacity="0"/></radialGradient>
+    <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fcd68a"/><stop offset="1" stop-color="#f3bf6c"/></linearGradient>
+    <!-- the scarab's shell and head, in its own coordinates -->
+    <clipPath id="shell"><ellipse cx="0" cy="2" rx="8" ry="9"/></clipPath>
+    <clipPath id="bugHead"><ellipse cx="0" cy="-8" rx="6" ry="4.6"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+
+  <!-- the stone wall: its lit top, its shaded end, the front in big blocks -->
+  <path d="M18 34L22 30H102L98 34Z" fill="#fdeecc"/>
+  <path d="M98 34L102 30V92L98 96Z" fill="#e3bb7a"/>
+  <rect x="18" y="34" width="80" height="62" fill="#f5dba8"/>
+  <path d="M18 50H98M18 66H98M18 82H98M36 34V50M84 34V50M28 50V66M88 50V66M34 66V82M86 66V82M26 82V96M90 82V96" stroke="#e3bb7a" stroke-width="2"/>
+  <path d="M21 37.5H32M30 53.5H38M90 53.5H95M37 69.5H41M20 85.5H23" stroke="#fdeecc" stroke-width="2" stroke-linecap="round"/>
+  <!-- a painted band on the lintel -->
+  <rect x="40" y="39.5" width="40" height="6" rx="3" fill="#3fc1cf"/>
+  <g fill="#ffc83d"><circle cx="45" cy="42.5" r="1.5"/><circle cx="52.5" cy="42.5" r="1.5"/><circle cx="60" cy="42.5" r="1.5"/><circle cx="67.5" cy="42.5" r="1.5"/><circle cx="75" cy="42.5" r="1.5"/></g>
+
+  <!-- the doorway: a dark passage going in, steps leading down, a glint at the end -->
+  <path d="M46 50H74L66 64.5H54Z" fill="#5d4aa8"/>
+  <path d="M46 50L54 64.5L52.5 85L43 96Z" fill="#4b3a8c"/>
+  <path d="M74 50L77 96L67.5 85L66 64.5Z" fill="#6a57c7"/>
+  <path d="M43 96L52.5 85H67.5L77 96Z" fill="#8b78e6"/>
+  <path d="M54 64.5H66L67.5 85H52.5Z" fill="#3a2c70"/>
+  <path d="M49 89H71M46 92.5H74" stroke="#b3a5f2" stroke-width="2"/>
+  <path d="M60 70l1.2 2.8 2.8 1.2-2.8 1.2-1.2 2.8-1.2-2.8-2.8-1.2 2.8-1.2z" fill="#ffe189"/>
+
+  <!-- the torch: its warm light on the stones, a wooden handle in a bracket, a gold cup, the flame -->
+  <circle cx="88" cy="42" r="25" fill="url(#fire)"/>
+  <rect x="85.5" y="47" width="5" height="19" rx="2.5" fill="#c99266"/>
+  <path d="M88 47H90.5V63.5A2.5 2.5 0 0 1 88 66Z" fill="#a46e4b"/>
+  <rect x="84" y="57" width="8" height="4.5" rx="2" fill="#6b432e"/>
+  <path d="M82 42.5H94L91.5 48.5H84.5Z" fill="#ffc83d"/>
+  <path d="M88 42.5H94L91.5 48.5H88Z" fill="#eba123"/>
+  <rect x="81.5" y="41" width="13" height="3" rx="1.5" fill="#ffe189"/>
+  <path d="M88 19C91.5 25 97 29.5 97 35.5C97 40 93 42.5 88 42.5C83 42.5 79 40 79 35.5C79 30.5 84 27 88 19Z" fill="#ff9c57"/>
+  <path d="M88 25.5C90.5 29.5 94 32 94 36.5C94 39.5 91.5 41.5 88 41.5C84.5 41.5 82 39.5 82 36.5C82 33 85.5 30.5 88 25.5Z" fill="#ffc83d"/>
+  <path d="M88 31.5C89.5 34 91.5 35.5 91.5 38C91.5 40 90 41 88 41C86 41 84.5 40 84.5 38C84.5 36 86.5 34 88 31.5Z" fill="#fff6cc"/>
+  <g fill="#ffc83d"><circle cx="81" cy="23.5" r="1.3"/><circle cx="95.5" cy="18.5" r="1.1"/></g>
+
+  <!-- a little scarab climbing the stones -->
+  <g transform="translate(29 77) rotate(16)">
+    <path d="M-6.5-2.5L-10.5-5.5M-7.5 2.5H-12M-6.5 7L-10 10.5M6.5-2.5L10.5-5.5M7.5 2.5H12M6.5 7L10 10.5M-2.5-11.5L-4.5-15M2.5-11.5L4.5-15" stroke="#1f9cb3" stroke-width="2.2" stroke-linecap="round"/>
+    <g clip-path="url(#shell)">
+      <rect x="-9" y="-8" width="18" height="20" fill="#1f9cb3"/>
+      <ellipse cx="-1.5" cy="0.5" rx="8" ry="9" fill="#3fc1cf"/>
+    </g>
+    <path d="M0-4.5V10" stroke="#1f9cb3" stroke-width="2" stroke-linecap="round"/>
+    <ellipse cx="-4" cy="-0.5" rx="1.8" ry="3" fill="#8fe3ea"/>
+    <g clip-path="url(#bugHead)">
+      <rect x="-7" y="-13" width="14" height="10" fill="#eba123"/>
+      <ellipse cx="-1" cy="-8.8" rx="6" ry="4.6" fill="#ffc83d"/>
+    </g>
+    <circle cx="-2.4" cy="-8.6" r="1.5" fill="#2b2330"/>
+    <circle cx="2.4" cy="-8.6" r="1.5" fill="#2b2330"/>
+    <circle cx="-1.9" cy="-9.2" r="0.6" fill="#fff"/>
+    <circle cx="2.9" cy="-9.2" r="0.6" fill="#fff"/>
+    <ellipse cx="-4.2" cy="-6.6" rx="1.4" ry="0.9" fill="#ff8fb8" opacity="0.55"/>
+    <ellipse cx="4.2" cy="-6.6" rx="1.4" ry="0.9" fill="#ff8fb8" opacity="0.55"/>
+  </g>
+
+  <!-- sand drifted against the wall -->
+  <path d="M0 92C16 89 32 90 46 93C56 95 66 95 76 93C90 90 106 91 120 92V120H0Z" fill="url(#sand)"/>
+  <path d="M10 102C20 99.5 30 99.5 38 101M82 106C92 103.5 102 103.5 110 105" fill="none" stroke="#fee8bb" stroke-width="3" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Coco's Canyon Glide</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9de"/><stop offset="1" stop-color="#ffc3a8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.4" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="left"><path d="M-2 72C10 69 22 71 34 75C40 86 44 102 46 122H-2Z"/></clipPath>
+    <clipPath id="right"><path d="M122 78C110 75 96 77 86 81C80 92 76 106 74 122H122Z"/></clipPath>
+    <clipPath id="head"><circle cx="60" cy="39" r="7"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="46" r="52" fill="url(#glow)"/>
+
+  <!-- far mesas in the haze, a little cloud -->
+  <path d="M-2 80V70H16L20 64H38L42 72H62L66 66H84L88 72H104L108 66H122V80Z" fill="#f5c6b4"/>
+  <g fill="#fff" opacity="0.9"><circle cx="92" cy="18" r="5"/><circle cx="98.5" cy="15" r="6.5"/><circle cx="105" cy="18.5" r="4.5"/><rect x="88" y="17" width="21" height="6" rx="3"/></g>
+
+  <!-- the river down in the canyon -->
+  <path d="M44 122C48 108 54 98 60 92C66 98 70 108 74 122Z" fill="#8fe3ea"/>
+  <path d="M57 108C58 103 59 99 60 96" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- the canyon walls: the left one lit on top, its inner face in shade; the right one's face catches the light -->
+  <g clip-path="url(#left)">
+    <rect x="-2" y="68" width="50" height="56" fill="#c97a62"/>
+    <path d="M-2 72C10 69 22 71 34 75C36 86 37 104 38 122H-2Z" fill="#e9a07f"/>
+    <path d="M-2 86C10 85 22 86 34 88M-2 100C12 99 24 100 36 102" fill="none" stroke="#f6c3a8" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M4 75C12 72.5 20 73 28 75" fill="none" stroke="#f6c3a8" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <g clip-path="url(#right)">
+    <rect x="72" y="74" width="52" height="50" fill="#e9a07f"/>
+    <path d="M122 78C112 76 102 77 94 79C92 92 92 108 92 122H122Z" fill="#c97a62"/>
+    <path d="M86 92C96 91 108 91 122 92M80 106C94 105 108 105 122 106" fill="none" stroke="#f6c3a8" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <ellipse cx="14" cy="71" rx="6" ry="2.6" fill="#73cf86"/>
+  <ellipse cx="108" cy="77" rx="6" ry="2.6" fill="#48a96c"/>
+
+  <!-- Coco the condor, gliding with huge wings -->
+  <path d="M56 50C46 42 32 38 18 39C14 39 10 41 7 43.5L12 44.5L6.5 47.5L12.5 48L8 51.5L14.5 51L11.5 55L18.5 53C30 54 42 57.5 56 60.5Z" fill="#3b3552"/>
+  <path d="M64 50C74 42 88 38 102 39C106 39 110 41 113 43.5L108 44.5L113.5 47.5L107.5 48L112 51.5L105.5 51L108.5 55L101.5 53C90 54 78 57.5 64 60.5Z" fill="#2f2a44"/>
+  <path d="M55 51C46 45.5 36 43.5 25 44C33 47 44 51 53 56Z" fill="#fff7f0"/>
+  <path d="M65 51C74 45.5 84 43.5 95 44C87 47 76 51 67 56Z" fill="#e4ddf6"/>
+  <path d="M50 46C40 41.5 30 40 21 40.5" fill="none" stroke="#5d5478" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M54 66L60 77L66 66Z" fill="#2f2a44"/>
+  <ellipse cx="60" cy="58" rx="8.5" ry="12" fill="#3b3552"/>
+  <path d="M55 52C56 49 58 47.5 60 47.5" fill="none" stroke="#5d5478" stroke-width="2.2" stroke-linecap="round"/>
+  <g fill="#fff7f0">
+    <circle cx="54.6" cy="47" r="3.4"/><circle cx="58.2" cy="45.4" r="3.6"/><circle cx="61.8" cy="45.4" r="3.6"/><circle cx="65.4" cy="47" r="3.4"/><circle cx="60" cy="48.6" r="3.6"/>
+  </g>
+  <g clip-path="url(#head)">
+    <rect x="52" y="31" width="16" height="16" fill="#e8897e"/>
+    <circle cx="59" cy="38" r="7" fill="#f2a49a"/>
+  </g>
+  <path d="M58.6 42Q60 47.8 61.6 42.4Z" fill="#efdccd"/>
+  <path d="M59.4 45.6Q60 47.6 60.7 45.8Z" fill="#6b5d73"/>
+  <circle cx="57.3" cy="38.6" r="1.6" fill="#2b2330"/>
+  <circle cx="62.7" cy="38.6" r="1.6" fill="#2b2330"/>
+  <circle cx="57.8" cy="38" r="0.6" fill="#fff"/>
+  <circle cx="63.2" cy="38" r="0.6" fill="#fff"/>
+  <ellipse cx="55.4" cy="41.6" rx="1.8" ry="1.1" fill="#ff8fb8" opacity="0.7"/>
+  <ellipse cx="64.6" cy="41.6" rx="1.8" ry="1.1" fill="#ff8fb8" opacity="0.7"/>
+
+  <path d="M26 24v5M23.5 26.5h5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
