@@ -74,12 +74,24 @@ p {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Soft pastel blobs behind the menus (like big flower shapes). */
+/* A dreamy pastel sky behind the menus: periwinkle up top melting into lavender and pink, soft glows of pink and
+   mint, a sunny haze, and a misty cloud floor along the bottom. Every layer fades out softly (no hard edges).
+   On a scrolling screen the background stays put, so the mist always sits at the bottom of the view. */
 .screen.decorated {
-  background-color: var(--cream);
+  background-color: #c9bdfb;
   background-image:
-    radial-gradient(circle at 92% 8%, rgba(251, 234, 154, 0.55) 0 120px, transparent 121px),
-    radial-gradient(circle at 4% 38%, rgba(217, 204, 255, 0.5) 0 160px, transparent 161px),
-    radial-gradient(circle at 96% 70%, rgba(255, 143, 184, 0.22) 0 190px, transparent 191px),
-    radial-gradient(circle at 12% 96%, rgba(143, 227, 200, 0.35) 0 150px, transparent 151px);
+    /* misty cloud floor */
+    radial-gradient(ellipse 55% 16% at 12% 102%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 70%),
+    radial-gradient(ellipse 50% 15% at 88% 103%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 70%),
+    radial-gradient(ellipse 60% 13% at 50% 100%, rgba(240, 226, 255, 0.85), rgba(240, 226, 255, 0) 72%),
+    radial-gradient(ellipse 40% 9% at 72% 92%, rgba(255, 236, 248, 0.6), rgba(255, 236, 248, 0) 70%),
+    radial-gradient(ellipse 38% 8% at 26% 90%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 70%),
+    /* sunny haze, top right */
+    radial-gradient(ellipse 65% 38% at 88% -4%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 70%),
+    /* soft color glows */
+    radial-gradient(ellipse 70% 42% at -6% 82%, rgba(255, 158, 206, 0.55), rgba(255, 158, 206, 0) 70%),
+    radial-gradient(ellipse 60% 40% at 106% 64%, rgba(160, 236, 222, 0.5), rgba(160, 236, 222, 0) 70%),
+    radial-gradient(ellipse 60% 34% at 4% 22%, rgba(186, 166, 255, 0.55), rgba(186, 166, 255, 0) 70%),
+    /* the sky */
+    linear-gradient(180deg, #9fb1f5 0%, #b4b3fb 26%, #d2c3fb 52%, #f3cfee 76%, #fde3ef 100%);
 }
