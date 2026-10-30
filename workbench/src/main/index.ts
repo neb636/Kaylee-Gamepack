@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain } from "electron";
+import { app, BrowserWindow, shell, ipcMain, dialog } from "electron";
 import path from "node:path";
 import { AgentSessionManager } from "./agent-session-manager";
 import { ImageLibrary } from "./image-library";
@@ -11,14 +11,26 @@ import { adoptLoginShellPath } from "./shell-environment";
 import { SourceControlService } from "./source-control/source-control-provider";
 import { WorkspaceFiles, WorkspaceRoots } from "./workspace-files";
 
+import { StudioServer } from './studio-server';
+import { STUDIO_ORIGIN } from '../shared/labs';
+import { GameServer, validateGameCheckout } from './game-server';
+import { createQuitHandler } from './quit-handler';
 import { LabAi } from './lab-ai';
 const labAi = new LabAi();
-const repoRoot = process.env.STUDIO_REPO_ROOT || path.resolve(__dirname, '../../..');
+const repoRoot = app.isPackaged ? null : process.env.STUDIO_REPO_ROOT || path.resolve(__dirname, '../../..');
+let servingRoot: string | undefined;
+let serverQueue = Promise.resolve();
+let quitting = false;
 // Same artwork as iOS Add to Home Screen, using its larger existing web export for the Dock.
-const appIcon = path.resolve(__dirname, '../../../public/icons/icon-512.png');
+const appIcon = app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.resolve(__dirname, '../../../public/icons/icon-512.png');
+const gameServer = new GameServer();
+const studioServer = new StudioServer();
 app.setName('Kaylee Gamepack Studio');
 app.setPath('userData', path.join(app.getPath('appData'), 'Kaylee Gamepack Studio'));
 if (process.env.WORKBENCH_USER_DATA_DIR) app.setPath("userData", process.env.WORKBENCH_USER_DATA_DIR);
+const hasLock = app.requestSingleInstanceLock();
+if (!hasLock) app.quit();
+app.on('second-instance', () => { const window = BrowserWindow.getAllWindows()[0]; window?.restore(); window?.focus(); });
 if (app.isPackaged) adoptLoginShellPath();
 
 const ptyManager = new PtyManager();
@@ -62,7 +74,7 @@ function createWindow(): BrowserWindow {
     return { action: "deny" };
   });
   window.webContents.on("will-navigate", (event, url) => {
-    const allowed = process.env.VITE_DEV_SERVER_URL;
+    const allowed = app.isPackaged ? STUDIO_ORIGIN : process.env.VITE_DEV_SERVER_URL;
     if (!allowed || new URL(url).origin !== new URL(allowed).origin) event.preventDefault();
   });
   window.webContents.on("destroyed", () => {
@@ -71,7 +83,9 @@ function createWindow(): BrowserWindow {
     agentSessionManager.terminateForOwner(window.webContents);
   });
 
-  if (process.env.VITE_DEV_SERVER_URL) {
+  if (app.isPackaged) {
+    void window.loadURL(STUDIO_ORIGIN);
+  } else if (process.env.VITE_DEV_SERVER_URL) {
     void window.loadURL(process.env.VITE_DEV_SERVER_URL);
   } else {
     void window.loadFile(path.join(__dirname, "../../dist/index.html"));
@@ -79,26 +93,58 @@ function createWindow(): BrowserWindow {
   return window;
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  if (!hasLock) return;
+  if (app.isPackaged) {
+    await studioServer.start(path.join(__dirname, "../../dist"));
+  }
   app.dock?.setIcon(appIcon);
   registerIpc(ptyManager, agentSessionManager, workspaceServices);
   const trusted = (event: Electron.IpcMainInvokeEvent | Electron.IpcMainEvent) => {
     if (event.senderFrame !== event.sender.mainFrame) throw new Error('Only the studio can use native APIs');
   };
-  ipcMain.handle('studio:repo-root', event => { trusted(event); roots.add(repoRoot); return repoRoot; });
+  ipcMain.handle('studio:repo-root', event => { trusted(event); if (repoRoot) roots.add(repoRoot); return repoRoot; });
+  ipcMain.handle('studio:use-checkout', (event, root: unknown) => {
+    trusted(event);
+    if (quitting) throw new Error('Studio is quitting.');
+    const next = serverQueue.catch(() => {}).then(async () => {
+      if (typeof root !== 'string') throw new Error('Choose a checkout.');
+      await roots.resolve(root);
+      if (!app.isPackaged) {
+        if (path.resolve(root) !== repoRoot) throw new Error('Use the packaged Studio app to preview another checkout.');
+        return;
+      }
+      if (servingRoot === root) return;
+      await validateGameCheckout(root);
+      await gameServer.stop();
+      servingRoot = undefined;
+      await gameServer.start(root, message => { servingRoot = undefined; dialog.showErrorBox('Game server stopped', message); });
+      servingRoot = root;
+    });
+    serverQueue = next;
+    return next;
+  });
   ipcMain.handle('studio:tune', (event, input: unknown) => { trusted(event); return labAi.run(input, event.sender.id); });
   ipcMain.on('studio:cancel', (event, id: unknown) => { trusted(event); if (typeof id === 'string') labAi.cancel(id, event.sender.id); });
   createWindow();
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+}).catch(error => {
+  dialog.showErrorBox('Studio could not start', `${String(error)}\n\nKeep the game checkout and its npm dependencies installed. Close any other Studio using ports 5174 or 5175 and try again.`);
+  app.quit();
 });
 
 app.on("window-all-closed", () => {
   app.quit();
 });
 
-app.on("before-quit", () => {
+app.on("before-quit", createQuitHandler(async () => {
+  quitting = true;
+  studioServer.stop();
   agentSessionManager.terminateAll();
   ptyManager.terminateAll();
-});
+  // A checkout switch may still be starting a server. Drain it before the final stop.
+  await serverQueue.catch(() => {});
+  await gameServer.stop();
+}, () => app.quit(), error => console.error('Studio cleanup failed', error)));

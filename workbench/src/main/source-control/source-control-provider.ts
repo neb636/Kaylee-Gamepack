@@ -8,6 +8,8 @@ export type ProviderStatus = Omit<SourceControlStatus, "providerId" | "providerL
 export interface SourceControlProvider {
   id: string;
   label: string;
+  branches: (root: string) => Promise<string[]>;
+  checkout: (root: string, branch: string) => Promise<void>;
   detect: (root: string) => Promise<boolean>;
   status: (root: string) => Promise<ProviderStatus>;
   /** Records every working change in one commit. */
@@ -36,6 +38,9 @@ export class SourceControlService {
     if (!provider) return null;
     return { ...(await provider.status(root)), providerId: provider.id, providerLabel: provider.label, root };
   }
+
+  async branches(root: string): Promise<string[]> { return (await this.require(root)).branches(root); }
+  async checkout(root: string, branch: string): Promise<void> { return (await this.require(root)).checkout(root, branch); }
 
   async commit(root: string, message: string): Promise<{ commitId: string }> {
     return (await this.require(root)).commit(root, message);

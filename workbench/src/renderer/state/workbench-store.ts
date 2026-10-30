@@ -49,13 +49,7 @@ export const useWorkbenchStore = create<WorkbenchStore>((set, get) => ({
     const persisted = await window.workbench.persistence.load();
     set({ ...persisted, isHydrated: true });
     const root = await window.workbench.studio.repoRoot();
-    const newCheckout = !get().workspaces.some(w => w.path === root);
-    const workspaceId = get().addWorkspace(root);
-    if (newCheckout) {
-      for (const [type, title] of [['image-generator', 'Character concepts'], ['feel-lab', 'Feel lab'], ['camera-lab', 'Camera lab'], ['character-lab', '3D character lab']]) {
-        get().createView(workspaceId, type, title, type === 'image-generator' ? { count: 1, autoTitle: false } : {});
-      }
-    }
+    if (root) get().addWorkspace(root);
   },
   addWorkspace: (path) => {
     const existing = get().workspaces.find((workspace) => workspace.path === path);
@@ -75,7 +69,7 @@ export const useWorkbenchStore = create<WorkbenchStore>((set, get) => ({
       id: workspaceId,
       name: workspaceName(path),
       path,
-      views: [initialView],
+      views: [initialView, ...[['image-generator', 'Character concepts'], ['feel-lab', 'Feel lab'], ['camera-lab', 'Camera lab'], ['character-lab', '3D character lab']].map(([type, title]) => ({ id: createId('view'), type, title, workspaceId, state: type === 'image-generator' ? { count: 1, autoTitle: false } : {} }))],
       activeViewId: initialView.id,
     };
     set((state) => ({

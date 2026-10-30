@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogTrigger, GridList, GridListItem, Heading, Modal, ModalOverlay, TextArea, TextField, Label } from "react-aria-components";
 import type { SourceControlChange } from "../../../shared/models";
 import { errorMessage } from "../../core/errors";
@@ -20,6 +20,27 @@ export function SourceControlPanel({ workspace }: PanelProps) {
   const root = activeRoot(workspace);
   const entry = useSourceControlStatus(root, true);
   const status = entry?.status;
+  const [branches, setBranches] = useState<string[]>([]);
+  const [branch, setBranch] = useState('');
+  const [newBranch, setNewBranch] = useState('');
+  const [switching, setSwitching] = useState(false);
+  useEffect(() => {
+    let current = true;
+    window.workbench.sourceControl.branches(root).then(items => { if (current) setBranches(items); }).catch(() => {});
+    return () => { current = false; };
+  }, [root, status]);
+  const changeBranch = async (worktree: boolean) => {
+    setSwitching(true); setError('');
+    try {
+      if (worktree) {
+        const result = await window.workbench.sourceControl.createWorktree(root, newBranch.trim());
+        useWorkbenchStore.getState().addWorkspace(result.path);
+        setNewBranch('');
+      } else { await window.workbench.sourceControl.checkout(root, branch); setBranch(''); }
+      await refreshSourceControl(root);
+    } catch (error) { setError(errorMessage(error)); }
+    finally { setSwitching(false); }
+  };
   const [message, setMessage] = useState("");
   const [committing, setCommitting] = useState(false);
   const [error, setError] = useState("");
@@ -41,6 +62,16 @@ export function SourceControlPanel({ workspace }: PanelProps) {
         <BranchIcon size={14} /><span className="branch-name">{status.branch ?? "Detached HEAD"}</span>
         {(status.ahead > 0 || status.behind > 0) && <small>↑{status.ahead} ↓{status.behind}</small>}
         <small className="branch-provider">{status.providerLabel}</small>
+      </div>
+      <div className="commit-area">
+        <label>Branch<select aria-label="Checkout branch" value={branch} onChange={event => setBranch(event.target.value)}>
+          <option value="">Choose a branch…</option>
+          {branches.map(name => <option key={name} value={name}>{name}</option>)}
+        </select></label>
+        <Button isDisabled={!branch || switching || branch === status.branch || count > 0} onPress={() => void changeBranch(false)}>Switch branch</Button>
+        {count > 0 && <p>Commit changes or create a worktree to switch branches.</p>}
+        <label>New worktree branch<input aria-label="New worktree branch" value={newBranch} onChange={event => setNewBranch(event.target.value)} /></label>
+        <Button isDisabled={!newBranch.trim() || switching} onPress={() => void changeBranch(true)}>Create worktree</Button>
       </div>
       <div className="commit-area">
         <TextField aria-label="Commit message" value={message} onChange={setMessage}>

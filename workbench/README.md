@@ -13,11 +13,36 @@ npm run studio
 
 The launcher compiles Electron, starts the game at `http://127.0.0.1:5174` and the studio renderer at
 `http://127.0.0.1:5175`, then opens Electron. It refuses occupied ports. Close the studio window, use Cmd+Q, or press Ctrl+C
-in the launching terminal to stop the servers. Normal game development can still use port 5173. This is a source-run
-local app; packaging/distribution is not part of this migration. Node 22.12+ (24 recommended), npm, installed and signed-in `claude` and/or
+in the launching terminal to stop the servers. Normal game development can still use port 5173. Node 22.12+ (24 recommended), npm, installed and signed-in `claude` and/or
 `codex` CLIs are required for AI. Their existing login/config is used; the studio needs no API key of its own.
 
-The current checkout opens automatically, with four views:
+To build and open a macOS app (like agent-workbench's `dist:dir`), run from the game repo:
+
+```sh
+npm run studio:dist:dir
+# Or build a DMG as well:
+npm run studio:dist
+```
+
+The app is written to `workbench/release/mac-arm64/Kaylee Gamepack Studio.app` on Apple Silicon
+(`release/mac/` on Intel). You can copy it to Applications and open it from Finder or the Dock.
+`npm --prefix workbench run open:app` opens the last build again. Quit an already running Studio before rebuilding.
+These are local, ad-hoc-signed builds, not notarized distribution builds.
+
+The packaged app opens independently of any game checkout. Use **Add workspace** to open your local Gamepack repository;
+it remembers your workspaces for the next launch. In the **Source control** sidebar, choose a local or remote tracking
+branch and **Switch branch**, or enter a new branch name and **Create worktree** to keep existing work separate.
+Switching requires a clean working tree; Studio never stashes or discards edits for you. The worktree starts from the
+current HEAD. The existing agent launcher can also create a worktree for a session.
+
+Open that workspace's camera, feel or character lab to start its live game server on loopback port 5174.
+Switching workspaces and opening a lab restarts the server for that checkout. The built interface stays on port 5175,
+so the labs retain their exact-origin checks. Quit Studio to stop both servers. Each checkout needs `npm ci` once
+(use a Studio terminal), Node 22.12+ and your signed-in AI CLIs. If a branch is missing, run `git fetch` in its terminal
+and reopen the sidebar. The app uses Electron’s bundled Node runtime for the game server. It doesn't bundle a game checkout, npm, AI CLIs or Blender; only changes to Studio itself
+require rebuilding the `.app`. Game changes reload in the labs.
+
+Source-run Studio opens the current checkout automatically. Each added workspace includes four Studio views:
 
 - **3D character lab**: the actual lab, poses, voices, outfits, lineups and exports. Prepare a character builder prompt
   or open Character concepts. The game and its existing lab stay available on iPad and PR previews.
@@ -44,6 +69,7 @@ Family photos stay out of Git. Private mesh/.blend working files remain under
 `~/repos/KayleeGamepack-planning-assets/models/<id>/`; only approved runtime GLBs enter the game repo.
 
 ```sh
+npm --prefix workbench run qa:packaged # after dist:dir, with Studio closed; no model calls
 npm run studio:check          # renderer/main build + Node contract tests
 npm run verify                # normal game checks; no Electron install required in game CI
 npm --prefix workbench run qa:labs  # with studio running; fixture CLIs, no model calls

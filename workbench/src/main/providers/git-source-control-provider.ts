@@ -72,6 +72,19 @@ export class GitSourceControlProvider implements SourceControlProvider {
     return parsePorcelainV2(await this.git(root, ["-c", "core.quotePath=false", "status", "--porcelain=v2", "--branch", "--untracked-files=all", "-z"]));
   }
 
+  async branches(root: string): Promise<string[]> {
+    return (await this.git(root, ['for-each-ref', '--format=%(refname:short)', 'refs/heads', 'refs/remotes']))
+      .trim().split('\n').filter(branch => branch && !branch.endsWith('/HEAD'));
+  }
+
+  async checkout(root: string, branch: string): Promise<void> {
+    if (!isValidBranchName(branch)) throw new Error('Invalid branch name.');
+    if ((await this.status(root)).changes.length) throw new Error('Commit your changes or open a new worktree before switching branches.');
+    // Remote refs become local tracking branches; local branches switch directly.
+    const local = await this.git(root, ['show-ref', '--verify', '--quiet', `refs/heads/${branch}`]).then(() => true, () => false);
+    await this.git(root, local ? ['switch', '--', branch] : ['switch', '--track', '--', branch]);
+  }
+
   async commit(root: string, message: string): Promise<{ commitId: string }> {
     await this.git(root, ["add", "--all"]);
     await this.git(root, ["commit", "--quiet", "-m", message]);

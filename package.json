@@ -20,7 +20,9 @@
     "art": "node scripts/optimize-art.mjs",
     "studio": "npm --prefix workbench run dev",
     "studio:install": "npm --prefix workbench ci",
-    "studio:check": "npm --prefix workbench run build && npm --prefix workbench test"
+    "studio:check": "npm --prefix workbench run build && npm --prefix workbench test",
+    "studio:dist:dir": "npm --prefix workbench run dist:dir",
+    "studio:dist": "npm --prefix workbench run dist"
   },
   "dependencies": {
     "@fontsource/fredoka": "^5.3.0",

@@ -87,9 +87,14 @@ export function registerIpc(ptyManager: PtyManager, agentSessionManager: AgentSe
     workspace.roots.replace(state.workspaces.map((item) => item.path));
     return state;
   });
-  handle(IPC.persistenceSave, async (_event, input: unknown) => {
-    const state = await saveState(persistedStateSchema.parse(input));
+  let saving: Promise<unknown> = Promise.resolve();
+  handle(IPC.persistenceSave, (_event, input: unknown) => {
+    const state = persistedStateSchema.parse(input);
+    // Grant/revoke in message order; an older disk write must not revoke a newly opened folder.
     workspace.roots.replace(state.workspaces.map((item) => item.path));
+    const next = saving.catch(() => {}).then(() => saveState(state));
+    saving = next;
+    return next.then(() => undefined);
   });
   handle(IPC.workspaceChooseDirectory, async () => {
     const result = await dialog.showOpenDialog({
@@ -118,6 +123,12 @@ export function registerIpc(ptyManager: PtyManager, agentSessionManager: AgentSe
   });
   listen(IPC.filesWatch, (event, input: unknown) => watches.watch(event.sender, workspaceRootSchema.parse(input).root));
   listen(IPC.filesUnwatch, (event, input: unknown) => watches.unwatch(event.sender, workspaceRootSchema.parse(input).root));
+  handle(IPC.sourceControlBranches, async (_event, input: unknown) =>
+    workspace.sourceControl.branches(await allowedRoot(workspaceRootSchema.parse(input).root)));
+  handle(IPC.sourceControlCheckout, async (_event, input: unknown) => {
+    const { root, branch } = createWorktreeSchema.parse(input);
+    return workspace.sourceControl.checkout(await allowedRoot(root), branch);
+  });
   handle(IPC.sourceControlDetect, async (_event, input: unknown) => {
     const root = await allowedRoot(workspaceRootSchema.parse(input).root);
     return Boolean(await workspace.sourceControl.providerFor(root));
