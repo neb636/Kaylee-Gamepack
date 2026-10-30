@@ -1,12 +1,4 @@
-// Canada's home base: the toy-table map and the Maple Leaf Train (map/map.ts). She pushes the train across the country;
-// at a stop, that stop's two activities pop up over the station as big round bubbles (in the works: they wiggle; Ottawa's
-// 🏒 opens the finale once the whole team is there). The address bar follows the train (sections.ts: where it stopped).
-//
-// The first visit: Maple waits on Quebec City's platform and tells the story in two lines (tap anywhere skips), hops
-// into the train, and Sparkle says to push it. Then Maple says hello at each stop and reacts to what they ride through,
-// Sparkle gives a hint (and a hand points) after a while with nothing touched, and every animal she pokes goes into
-// Maple's book (meet()). Her hockey team skates on Ottawa's canal: one friend per stamp. This file does the talking;
-// the world (map.ts) only says what happened.
+// Direct activity selection on Canada’s 3D map.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { lineText, lineVoice, say, stopSpeaking, useAlive, wait, type Line } from '../../../../../sdk'
@@ -25,17 +17,6 @@ import { CanadaMap, MAP_ANCHORS, type MapEvents } from '../../map/map'
 import { Guide, type GuideHandle } from './Guide'
 import HUB_SECTIONS from './sections'
 
-const WHERE: Record<Region, string> = {
-  msa: '⛰️ Mont-Sainte-Anne',
-  quebec: '🏰 Quebec City',
-  ottawa: '🏒 Ottawa',
-  forest: '🌲 The forests and lakes',
-  prairies: '🌾 The prairies',
-  rockies: '🏔️ The Rocky Mountains',
-  banff: '🛶 Banff',
-  bc: '🐋 Vancouver, by the Pacific Ocean',
-}
-
 /** Who goes into Maple's book when she pokes them on the map. */
 const MEETS: Record<string, AnimalId> = {
   'animal:moose': 'moose',
@@ -48,10 +29,10 @@ const MEETS: Record<string, AnimalId> = {
   'poke:mountie': 'mountie-horse',
 }
 
-// Per visit to the app (not every time she comes back to the train from an activity).
+// Keep the invitation to once per visit to the app.
 const session = {
   told: false,
-  /** Where the train was when she left for an activity: she comes back to the same stop. */
+  /** The destination she most recently selected. */
   lastAt: null as Region | null,
   stamps: null as number | null,
   said: new Set<string>(),
@@ -63,32 +44,33 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
   const alive = useAlive()
   const [initial] = useState(() => {
     const back = !start && session.lastAt
-    return { at: (back ? session.lastAt : param('at')) as Region, intro: !start && !back, story: !start && !back && !session.told }
+    return { at: (back ? session.lastAt : param('at')) as Region }
   })
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
-  const [where, setWhere] = useState<Region>(initial.at)
   const worldRef = useRef<CanadaMap | null>(null)
   const at = useRef(initial.at)
   const [book, setBook] = useState(start === 'book')
   useEffect(() => enter(book ? 'book' : 'map', { at: at.current, team: teamParam }), [book])
 
   const allDone = meta.activities.every((a) => stamps.includes(a.id))
-  const ready = useRef(new Set([...meta.activities.map((a) => a.id), ...(allDone ? ['party'] : [])]))
+  const ready = useRef(new Set<string>())
+  ready.current.clear()
+  for (const activity of meta.activities) ready.current.add(activity.id)
+  if (allDone) ready.current.add('party')
   // Her hockey team: one friend per stamp (or the link's `team`, to see it without playing everything).
   const teamParam = param('team')
   const team = useRef(teamParam ? teamParam.split(',').filter(Boolean) : stamps.slice())
   const icons = Object.fromEntries([...meta.activities, ...(meta.inTheWorks ?? [])].map((a) => [a.id, { icon: a.icon, name: a.name }]))
-  icons.party = { icon: '🏒', name: 'Animal Homes + Pond Hockey' }
+  icons.party = { icon: '🏒', name: 'Pond Hockey' }
 
   // ---- Talking: one line at a time, Sparkle's words beside her, a friend's at the bottom.
   const guide = useRef<GuideHandle>(null)
   const [sparkleLine, setSparkleLine] = useState<Line | null>(null)
   const [friendLine, setFriendLine] = useState<Line | null>(null)
-  const lastSparkle = useRef<Line>(L.hub.push)
+  const lastSparkle = useRef<Line>(L.hub.bubbles)
   const gen = useRef(0)
   const queue = useRef<Promise<void>>(Promise.resolve())
-  const lastTalk = useRef(0)
   const talk = (l: Line, now = false) => {
     if (now) {
       gen.current++
@@ -107,49 +89,24 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
       }
       // (Long enough to read if a clip is missing.)
       await Promise.all([say(l, { interrupt: false }), wait(700 + lineText(l).length * 40)])
-      lastTalk.current = performance.now()
       setTimeout(() => show((cur) => (cur === l ? null : cur)), 1400)
     }
     queue.current = queue.current.then(run)
     return queue.current
   }
 
-  // ---- The story (the first visit).
-  const story = useRef({ on: initial.story, talking: false })
-  const endStory = (skipped: boolean) => {
-    if (!story.current.on) return
-    story.current.on = false
-    if (skipped) {
-      gen.current++
-      stopSpeaking()
-      setFriendLine(null)
-    }
-    worldRef.current?.board()
-    window.setTimeout(() => {
-      if (!alive() || worldRef.current?.pushing) return
-      worldRef.current?.hint('train')
-      void talk(L.hub.push)
-    }, skipped ? 200 : 0)
-  }
+  // One short invitation per visit; all pins are already available while she hears it.
   useEffect(() => {
-    if (!initial.story) return
-    session.told = true
-    const play = async () => {
-      // The whole country first, then the camera glides down to the train and Maple.
-      await wait(2700)
-      if (!story.current.on || !alive()) return
-      story.current.talking = true
-      worldRef.current?.mapleDoes('wave')
-      await talk(L.hub.story[0])
-      if (!story.current.on) return
-      worldRef.current?.mapleDoes('hop')
-      endStory(false)
-    }
-    void play()
-    // Tap anywhere skips (once Maple is talking).
-    const skip = () => story.current.talking && endStory(true)
-    window.addEventListener('pointerdown', skip, true)
-    return () => window.removeEventListener('pointerdown', skip, true)
+    if (session.told) return
+    const timer = window.setTimeout(() => {
+      session.told = true
+      void talk(L.hub.bubbles)
+    }, 0)
+    return () => window.clearTimeout(timer)
+  }, [])
+  useEffect(() => () => {
+    gen.current++
+    stopSpeaking()
   }, [])
 
   // ---- Back from an activity with a new stamp: a new friend on the team.
@@ -158,21 +115,12 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
     session.stamps = stamps.length
   }, [])
 
-  const hints = useRef(0)
   const mapleTaps = useRef(0)
   const lastSoon = useRef(0)
   const events = useRef<MapEvents>({
-    where: (r) => {
-      setWhere(r)
-      const ride = L.hub.ride[r as keyof typeof L.hub.ride]
-      if (ride && !story.current.on && once(`ride:${r}`)) void talk(ride)
-    },
-    stopped: (r) => {
-      at.current = r
-      enter('map', { at: r, team: teamParam })
-    },
     open: (id) => {
-      session.lastAt = worldRef.current?.litStopId ?? at.current
+      const stop = STOPS.find((s) => s.acts.includes(id))
+      session.lastAt = stop?.id ?? at.current
       gen.current++
       stopSpeaking()
       openActivity(id)
@@ -182,25 +130,7 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
       lastSoon.current = performance.now()
       void talk(act === 'party' ? L.hub.locked : L.hub.soon, true)
     },
-    arrived: (stop) => {
-      if (story.current.on) return
-      const line = L.hub.arrive[stop as keyof typeof L.hub.arrive]
-      if (line && once(`arrive:${stop}`)) void talk(line)
-      if (stop === 'ottawa' && team.current.length && once('team')) void talk(allDone ? L.hub.teamAll : L.hub.teamHere)
-      if (once('bubbles')) {
-        worldRef.current?.hint('bubble')
-        void talk(L.hub.bubbles)
-      }
-    },
-    tunnel: () => {
-      if (once('ride:tunnel')) void talk(L.hub.ride.tunnel)
-    },
-    blocked: (kind) => {
-      if (once(`blocked:${kind}`)) void talk(L.hub.blocked[kind])
-      if (once('tapIt')) void talk(L.hub.tapIt)
-    },
     poked: (id) => {
-      if (id === 'animal:moose') void talk(L.hub.sorry, true)
       const animal = MEETS[id.replace(/:off$/, '')]
       if (animal) meet(animal)
       const fact = L.hub.pokes[id.slice(5) as keyof typeof L.hub.pokes]
@@ -211,31 +141,21 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
       }
       if (id === 'maple') void talk(L.hub.maple[mapleTaps.current++ % L.hub.maple.length], true)
     },
-    // Nobody playing: the train toots and glows (or the bubbles do). No voice: it's a toy map, and she heard how once.
-    idle: (what) => {
-      if (story.current.on || performance.now() - lastTalk.current < 6000 || hints.current >= 5) return
-      hints.current++
-      worldRef.current?.hint(what)
-    },
-    pushed: () => {
-      if (story.current.talking) endStory(true)
-    },
   })
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#E3F3FF', overflow: 'clip' }}>
       <View3D
         key={engine}
-        name="The train map"
+        name="Canada’s map"
         qaKey="__canadaMapQA"
         worldRef={worldRef}
         onMode={setMode}
-        make={(renderer) => new CanadaMap(renderer, { at: at.current, intro: initial.intro, story: story.current.on, team: team.current }, events.current, ready.current)}
+        make={(renderer) => new CanadaMap(renderer, { at: at.current, team: team.current }, events.current, ready.current)}
         anchors={(input, els) => (
           <>
             <Anchors list={MAP_ANCHORS} els={els} {...input} />
-            <Bubbles input={input} els={els} icons={icons} />
-            <Hand els={els} />
+            <Pins input={input} els={els} icons={icons} stamps={stamps} allDone={allDone} />
           </>
         )}
       />
@@ -247,7 +167,7 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
           }}
           style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(227,243,255,.88)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}
         >
-          🚂 Tap to wake the train
+          🍁 Tap to wake the map
         </button>
       )}
       <Guide ref={guide} line={sparkleLine} onTap={() => void talk(lastSparkle.current, true)} />
@@ -267,8 +187,8 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
               {lineText(friendLine)}
             </motion.div>
           ) : (
-            <motion.div key={where} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-              {WHERE[where]}
+            <motion.div key="canada" initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
+              🍁 Canada
             </motion.div>
           )}
         </AnimatePresence>
@@ -277,47 +197,34 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
   )
 }
 
-/** Each stop's activities, as big round bubbles over the station (the world places them while that stop is lit). */
-function Bubbles({ input, els, icons }: { input: AnchorInput; els: Map<string, HTMLElement>; icons: Record<string, { icon: string; name: string }> }) {
+// Every activity has a visible pin, with a check for a stamp already earned.
+function Pins({ input, els, icons, stamps, allDone }: { input: AnchorInput; els: Map<string, HTMLElement>; icons: Record<string, { icon: string; name: string }>; stamps: string[]; allDone: boolean }) {
   return (
     <>
       {STOPS.flatMap((s) => s.acts).map((id) => (
-        <button
-          key={id}
-          ref={(el) => {
-            if (el) els.set(`go:${id}`, el)
-            else els.delete(`go:${id}`)
-          }}
-          aria-label={icons[id]?.name ?? id}
-          data-anchor={`go:${id}`}
-          onPointerDown={(e) => {
-            e.preventDefault()
-            input.onDown(e, `go:${id}`)
-          }}
-          onClick={(e) => e.detail === 0 && input.onKey(`go:${id}`)}
-          style={{ position: 'absolute', left: 0, top: 0, display: 'none', padding: 0, border: '5px solid var(--hotpink)', borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 'clamp(34px, 5vmin, 48px)', lineHeight: 1, touchAction: 'none', cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}
-        >
-          {icons[id]?.icon ?? '❓'}
-        </button>
+        <div key={id}>
+          <div ref={(el) => { if (el) els.set(`line:${id}`, el); else els.delete(`line:${id}`) }} aria-hidden style={{ position: 'absolute', left: 0, top: 0, height: 3, background: '#A783B8', transformOrigin: '0 50%', pointerEvents: 'none', opacity: 0.7 }} />
+          <button
+            ref={(el) => {
+              if (el) els.set(`go:${id}`, el)
+              else els.delete(`go:${id}`)
+            }}
+            aria-label={icons[id]?.name ?? id}
+            data-anchor={`go:${id}`}
+            onPointerDown={(e) => {
+              e.preventDefault()
+              input.onDown(e, `go:${id}`)
+            }}
+            onClick={(e) => e.detail === 0 && input.onKey(`go:${id}`)}
+            style={{ position: 'absolute', left: 0, top: 0, display: 'none', padding: 0, border: '5px solid var(--hotpink)', borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 'clamp(34px, 5vmin, 48px)', lineHeight: 1, touchAction: 'none', cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}
+          >
+            {icons[id]?.icon ?? '❓'}
+            <span style={{ position: 'absolute', top: -8, right: -5, fontSize: 24 }}>{stamps.includes(id) ? '✅' : id === 'party' && !allDone ? '🔒' : ''}</span>
+            <span style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: 6, width: 'max-content', maxWidth: 'min(110px, 18vw)', padding: '3px 5px', borderRadius: 10, background: 'rgba(255,255,255,.95)', fontSize: 'clamp(11px, 1.8vmin, 16px)', lineHeight: 1.05, fontWeight: 600, color: 'var(--ink)', pointerEvents: 'none' }}>{icons[id]?.name}</span>
+          </button>
+        </div>
       ))}
     </>
-  )
-}
-
-/** The hint: a hand that points down at the train (or the bubbles), bobbing. The world moves it; it never takes a tap. */
-function Hand({ els }: { els: Map<string, HTMLElement> }) {
-  return (
-    <div
-      ref={(el) => {
-        if (el) els.set('hint', el)
-        else els.delete('hint')
-      }}
-      aria-hidden
-      style={{ position: 'absolute', left: 0, top: 0, display: 'none', pointerEvents: 'none', zIndex: 9800 }}
-    >
-      <div style={{ transform: 'translate(-50%, -115%)', fontSize: 'clamp(44px, 7vmin, 64px)', filter: 'drop-shadow(0 3px 4px rgba(43,35,48,.3))', animation: 'canada-hand 0.9s ease-in-out infinite' }}>👇</div>
-      <style>{'@keyframes canada-hand { 0%,100% { translate: 0 0 } 50% { translate: 0 14px } }'}</style>
-    </div>
   )
 }
 

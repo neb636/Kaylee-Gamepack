@@ -313,11 +313,7 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 
 ### Canada
 
-**Home base**
-
-- [The whole country, then the train in Quebec City](https://neb636.github.io/Kaylee-Gamepack/#/world/canada)
-- [Push the train](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map) ([Mont-Sainte-Anne](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=msa), [Ottawa](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=ottawa), [Ottawa with a hockey team](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=ottawa&team=bike,campfire,canoe,whales), [the forests](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=forest), [the prairies](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=prairies), [Banff](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=banff), [out of the Spiral Tunnel](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=rockies), [Vancouver](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?at=bc))
-- [Maple's animal book (every animal she's met, grey shapes for the rest)](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/book)
+**Home base**: [Choose any activity on the 3D map](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map) · [With the hockey team in Ottawa](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/map?team=bike,campfire,canoe,whales) · [Maple's animal book (every animal she's met, grey shapes for the rest)](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/hub/book)
 
 **Sugar Snow**
 
