@@ -8,6 +8,10 @@ Thailand to Agong's house, where she walks around as a unicorn, and to the place
 **Play:** https://neb636.github.io/Kaylee-Gamepack/ · [Jump to a game section](#jump-to-a-game-section)
 (iPad: open in Safari → Share → **Add to Home Screen**. It opens full-screen like a real app.)
 
+**Gameplay field guide:** [Interactive iPad reference report](https://neb636.github.io/Kaylee-Gamepack/docs/gameplay-reference-report.html)
+([HTML source](docs/gameplay-reference-report.html)): game-by-game references, app screenshots, mechanic filters,
+and a saved shortlist with notes and export. Documentation is available online and is not included in game downloads.
+
 **The world map** comes in two views (the two buttons in its top bar; she keeps the one she used last):
 - [The map](https://neb636.github.io/Kaylee-Gamepack/#/world?view=map)
 - [The game shelf](https://neb636.github.io/Kaylee-Gamepack/#/world?view=list) (every game as a picture card, a row per country and per Thailand trip; ❤️ favorites, 🎁 surprise)
