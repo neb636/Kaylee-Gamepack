@@ -2,18 +2,33 @@ import { motion } from 'motion/react'
 import type { CSSProperties, ReactNode } from 'react'
 import { sounds } from '../../sdk'
 
-/** Round back button + optional extras, floating over the top-left like the game shell's 🏠 bar. */
-export function TopBar({ icon, label, onBack, children }: { icon: ReactNode; label: string; onBack: () => void; children?: ReactNode }) {
+/**
+ * Round back button + optional extras, floating over the top-left like the game shell's 🏠 bar.
+ * `tile` turns the button into a colored dock-style tile with a press lip (the world-map globe), so it matches the
+ * country's puzzle and theater tiles beside it.
+ */
+export function TopBar({ icon, tile, label, onBack, children }: { icon: ReactNode; tile?: { color: string; shade: string }; label: string; onBack: () => void; children?: ReactNode }) {
   return (
     <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', left: 16, right: 16, display: 'flex', alignItems: 'center', gap: 'clamp(8px, 2vw, 16px)', pointerEvents: 'none', zIndex: 50 }}>
       <motion.button
         aria-label={label}
-        whileTap={{ scale: 0.85 }}
+        whileTap={tile ? { scale: 0.88, y: 3 } : { scale: 0.85 }}
         onClick={() => {
           sounds.pop()
           onBack()
         }}
-        style={{ pointerEvents: 'auto', position: 'relative', flex: '0 0 var(--btn)', width: 'var(--btn)', height: 'var(--btn)', borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 'calc(var(--btn) * 0.5)', display: 'grid', placeItems: 'center' }}
+        style={{
+          pointerEvents: 'auto',
+          position: 'relative',
+          flex: '0 0 var(--btn)',
+          width: 'var(--btn)',
+          height: 'var(--btn)',
+          display: 'grid',
+          placeItems: 'center',
+          ...(tile
+            ? { borderRadius: 'calc(var(--btn) * 0.28)', background: tile.color, boxShadow: `0 5px 0 ${tile.shade}`, padding: 'calc(var(--btn) * 0.14)' }
+            : { borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow)', fontSize: 'calc(var(--btn) * 0.5)' }),
+        }}
       >
         {icon}
       </motion.button>

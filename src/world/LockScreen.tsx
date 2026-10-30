@@ -3,6 +3,7 @@ import { motion, useAnimationControls } from 'motion/react'
 import { useState } from 'react'
 import { go } from '../router'
 import { BigButton, sounds } from '../sdk'
+import { worldBack } from './HomeIcons'
 import { TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { tryCode } from './lock'
@@ -33,7 +34,7 @@ export function LockScreen({ place, onUnlock }: { place: string; onUnlock: () =>
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(#FFD6E7, #D9CCFF)', display: 'grid', placeItems: 'center', padding: 'calc(var(--top-clear, 96px) + 8px) 16px 16px', overflow: 'auto' }}>
-      <TopBar icon="🌍" label="World map" onBack={() => go.world()} />
+      <TopBar {...worldBack} label="World map" onBack={() => go.world()} />
       <motion.form
         animate={shake}
         onSubmit={(e) => {

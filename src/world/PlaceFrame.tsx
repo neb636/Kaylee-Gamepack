@@ -5,7 +5,7 @@ import { go } from '../router'
 import { motion } from 'motion/react'
 import { Mascot, sounds, StarProgress, stopSpeaking, useOnline, type GameMeta } from '../sdk'
 import { WinCeremony } from '../shell/WinCeremony'
-import { DOCK, DockGlyph, MapIcon, ShelfIcon, type DockKind } from './HomeIcons'
+import { DOCK, DockGlyph, MapIcon, ShelfIcon, worldBack, type DockKind } from './HomeIcons'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { HUB, SectionLinkProvider, type SectionLink } from './kit/sections'
@@ -157,7 +157,7 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
           )}
         </TopBar>
       ) : (
-        <TopBar icon="🌍" label="World map" onBack={() => go.world()}>
+        <TopBar {...worldBack} label="World map" onBack={() => go.world()}>
           {meta.activities.length > 0 && (
             <BarPill>
               <DockGlyph kind="passport" /> {stamps.length}/{meta.activities.length}

@@ -86,7 +86,7 @@ function exitFullscreen() {
   void (d.exitFullscreen ? d.exitFullscreen().catch(() => {}) : d.webkitExitFullscreen?.())
 }
 
-export function Theater({ places, onExit, exitIcon, exitLabel, title }: { places: PlaceMeta[]; onExit: () => void; exitIcon: string; exitLabel: string; title: ReactNode }) {
+export function Theater({ places, onExit, exitIcon, exitTile, exitLabel, title }: { places: PlaceMeta[]; onExit: () => void; exitIcon: ReactNode; exitTile?: { color: string; shade: string }; exitLabel: string; title: ReactNode }) {
   const [playing, setPlaying] = useState<PlaceVideo | null>(null)
   const [full, setFull] = useFullMode()
   const online = useOnline()
@@ -103,7 +103,7 @@ export function Theater({ places, onExit, exitIcon, exitLabel, title }: { places
     <Stage
       full={full}
       bar={
-        <TopBar icon={playing ? '🎟️' : exitIcon} label={playing ? 'All videos' : exitLabel} onBack={playing ? close : onExit}>
+        <TopBar icon={playing ? '🎟️' : exitIcon} tile={playing ? undefined : exitTile} label={playing ? 'All videos' : exitLabel} onBack={playing ? close : onExit}>
           {!playing && <BarPill>{title}</BarPill>}
         </TopBar>
       }

@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { go } from '../router'
 import { BigButton, JigsawPuzzle, SayButton, SparklePuppet, say, sounds, useSayOnMount, type PuppetHandle } from '../sdk'
-import { DockGlyph } from './HomeIcons'
+import { DockGlyph, MapIcon, worldBack } from './HomeIcons'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { WORLD_LINES as L } from './lines'
@@ -21,7 +21,7 @@ function Shelf({ country }: { country?: string }) {
   const groups = places.filter(({ meta }) => meta.puzzles?.length && (!country || meta.id === country))
   const shown = groups.length ? groups : places.filter(({ meta }) => meta.puzzles?.length)
   return <div className="screen decorated" style={{ padding: 0, overflow: 'hidden' }}>
-    <TopBar icon={groups.length && country ? '🗺️' : '🌍'} label={groups.length && country ? 'Back to the country' : 'World map'} onBack={() => go.world(groups.length && country ? country : '')}>
+    <TopBar {...(groups.length && country ? { icon: <span style={{ width: '58%', height: '58%' }}><MapIcon color="var(--lavender-dark)" /></span> } : worldBack)} label={groups.length && country ? 'Back to the country' : 'World map'} onBack={() => go.world(groups.length && country ? country : '')}>
       <BarPill><DockGlyph kind="puzzles" /> Puzzles</BarPill><SayButton text={L.puzzlePick} />
     </TopBar>
     <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: 'var(--bar-clear) max(16px, 3vw) 24px' }}>

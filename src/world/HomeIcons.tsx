@@ -1,3 +1,5 @@
+import { useId } from 'react'
+
 // The home screen's button pictures: one flat style for all of them (white shapes, details in the button's darker
 // shade, no outlines, no gloss), so the dock reads as one set instead of four unrelated stickers.
 type Icon = { shade: string }
@@ -54,6 +56,29 @@ export function TheaterIcon({ shade }: Icon) {
   )
 }
 
+/** A desk globe on its stand: the "back to the world map" button. */
+export function GlobeIcon({ shade }: Icon) {
+  const clip = useId()
+  return (
+    <svg {...SVG}>
+      <defs>
+        <clipPath id={clip}>
+          <circle cx="50" cy="44" r="29" />
+        </clipPath>
+      </defs>
+      <circle cx="50" cy="44" r="29" fill="#fff" />
+      <g clipPath={`url(#${clip})`} fill={shade}>
+        <path d="M24 22c6-5 15-6 20-2 3 3-1 7 2 11 2 3-2 6-6 6-3 0-4 4-7 6-4 2-8-1-10-5-3-5-3-11 1-16z" />
+        <path d="M38 52c4-1 8 2 8 6 0 5-3 9-4 14-1 3-4 3-5 0-2-6-4-11-3-16 0-2 2-4 4-4z" />
+        <path d="M56 20c5-3 13-2 18 3 3 3 1 6-2 6-3 0-4 3-1 5 4 3 6 8 3 12-2 3-6 2-8 5-2 4-6 5-8 1-2-5 1-9-1-13-1-3-5-3-6-7-1-5 2-10 5-12z" />
+      </g>
+      <path d="M22 26A33 33 0 0 0 52 79" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" />
+      <rect x="47" y="77" width="6" height="8" fill="#fff" />
+      <rect x="32" y="83" width="36" height="8" rx="4" fill="#fff" />
+    </svg>
+  )
+}
+
 export function MapIcon({ color }: { color: string }) {
   return (
     <svg {...SVG}>
@@ -87,6 +112,9 @@ export const DOCK = {
 } as const
 export type DockKind = keyof typeof DOCK
 
+/** The way back to the world map: a sky-blue tile with the globe, built like the dock's buttons so it sits with them. */
+export const WORLD = { color: '#5ab4f0', shade: '#3893d6', Icon: GlobeIcon } as const
+
 /** A dock picture on its own little colored tile, sized to the text around it (for title pills and counts). */
 export function DockGlyph({ kind, size = '1.25em' }: { kind: DockKind; size?: string }) {
   const { color, shade, Icon } = DOCK[kind]
@@ -96,3 +124,6 @@ export function DockGlyph({ kind, size = '1.25em' }: { kind: DockKind; size?: st
     </span>
   )
 }
+
+/** Spread into a `TopBar` for the "back to the world map" button: `<TopBar {...worldBack} label="World map" ...>`. */
+export const worldBack = { icon: <GlobeIcon shade={WORLD.shade} />, tile: WORLD }

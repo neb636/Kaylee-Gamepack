@@ -3,7 +3,7 @@ import { motion } from 'motion/react'
 import type { CSSProperties, ReactNode } from 'react'
 import { go } from '../router'
 import { Mascot, say, sounds, useSayOnMount } from '../sdk'
-import { DockGlyph } from './HomeIcons'
+import { DockGlyph, worldBack } from './HomeIcons'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { WORLD_LINES } from './lines'
@@ -81,7 +81,7 @@ export function Passport() {
   useSayOnMount(WORLD_LINES.passport, { once: true })
   return (
     <div className="screen decorated" style={{ paddingTop: 'var(--top-clear)', gap: 20 }}>
-      <TopBar icon="🌍" label="World map" onBack={() => go.world()}>
+      <TopBar {...worldBack} label="World map" onBack={() => go.world()}>
         <BarPill>
           <DockGlyph kind="passport" /> My Passport
         </BarPill>

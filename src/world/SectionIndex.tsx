@@ -3,6 +3,7 @@
 // the camera lab instead (?cam=1, for the 3D scenes).
 import { useState } from 'react'
 import { go, worldLink } from '../router'
+import { worldBack } from './HomeIcons'
 import { TopBar } from './kit/Chrome'
 import { HUB } from './kit/sections'
 import { places, sectionsFor } from './registry'
@@ -14,7 +15,7 @@ export function SectionIndex() {
   const lab: Record<string, string> = cam ? { cam: '1' } : {}
   return (
     <div style={{ position: 'absolute', inset: 0, overflow: 'auto', background: 'var(--cream)', padding: 'calc(var(--safe-top) + 100px) 16px 40px' }}>
-      <TopBar icon="🌍" label="World map" onBack={() => go.world()} />
+      <TopBar {...worldBack} label="World map" onBack={() => go.world()} />
       <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 24 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           <a href="#/world/characters" style={chip}>
