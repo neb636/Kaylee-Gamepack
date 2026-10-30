@@ -1,4 +1,4 @@
-// Decorate a Snowman (plan: planning/around-the-world/canada.html), greybox: the snowy park below Quebec City's castle
+// Decorate a Snowman (plan: planning/around-the-world/canada.html): the snowy park below Quebec City's castle
 // hotel at the Winter Carnival, the same park the snowball game had. Maple's friends need snowmen for the carnival
 // parade, and Kaylee decorates them like she styles hair at the mall's Barber Salon (Thailand's barber/salon.ts).
 //
@@ -12,13 +12,15 @@
 //   - the red tuque, the woven sash, a pink scarf: let go anywhere on him and it goes where it belongs (tuques
 //     stack up to three; a fourth lands on Maple)
 // Rounds: (face) coal, carrot, sticks, snow; (dress) the paint, the tuque, the sash and the scarf join them, still on
-// the same snowman; (friends) Maple holds up a picture from a friend (a tuque and sash, a rainbow one, a silly one):
-// a fresh snowman each time, and whatever she makes is "Ta-da!". After a handful of touches of decorating the parade
+// the same snowman; (friends) a friend walks in with a picture of the snowman they want (Maple's cousin: a tuque and
+// sash; the moose: a rainbow one; the raccoon: a silly one; friend.ts), Maple pats a fresh snowman together each time,
+// and whatever she makes, they love it. After a handful of touches of decorating the parade
 // drum pops up: a tap and he wakes up, wiggles, hops and says hello, Maple's photo flashes, and he hops off to the
 // parade line. After the friends' three, the parade. A tap on a tool does a short go with it by itself, so dragging is
 // never a must. Nothing fails.
 //
-// park.ts / props.ts / castle.ts build the park, maple.ts Maple, critters.ts the carriage, trumpet, fox and geese;
+// park.ts / props.ts / castle.ts build the park, maple.ts Maple, friend.ts the friends, critters.ts the carriage,
+// trumpet, fox and geese; the parade marches to Maple's drum.
 // studio.ts has where everything stands, tools.ts the tools and what they leave on him. Built for engine3d/View3D.tsx.
 // The feel numbers are knobs (?feel=1).
 import { BufferAttribute, Color, Fog, Group, Matrix4, Mesh, Plane, Ray, Raycaster, Scene, Sphere, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
@@ -36,6 +38,7 @@ import type { World3D } from '../../../../engine3d/View3D'
 import { meet } from '../../book/met'
 import { L } from '../../lines'
 import { Carriage, Fox, Geese, honk, Trumpet, whinny, yip } from './critters'
+import { Friend } from './friend'
 import { Maple } from './maple'
 import { CASTLE, CLIFF_Y } from './park'
 import { buildPark, Drum, Owl, Sled, SKY, type Park } from './props'
@@ -121,6 +124,8 @@ const toot = () => {
   tone(659, 659, 0.18, 0.05, 'sawtooth', 0.2)
   tone(784, 784, 0.32, 0.05, 'sawtooth', 0.4)
 }
+/** The parade's march, one note per beat (0: a rest). */
+const MARCH = [392, 523, 523, 659, 784, 0, 659, 523, 587, 494, 392, 494, 587, 0, 523, 0]
 const chime = () => [0, 0.08, 0.16].forEach((d, i) => tone(1600 + i * 400, 2200 + i * 400, 0.25, 0.03, 'sine', d))
 const wake = () => [0, 0.1, 0.2, 0.32].forEach((d, i) => tone(500 + i * 180, 700 + i * 220, 0.12, 0.05, 'sine', d))
 const shutter = () => {
@@ -188,6 +193,11 @@ export class DecorateSnowman implements World3D {
   private man: Snowman | null = null
   private round: Round = 'face'
   private card = -1
+  /** The friend who brought this picture (walking in, waiting, or walking off beside their snowman). */
+  private friend: { f: Friend; x: number; z: number; goal: { x: number; z: number }; state: 'in' | 'wait' } | null = null
+  private leaving: { f: Friend; x: number; z: number }[] = []
+  private beat = 0
+  private beatAt = 0
   private made = 0
   /** Touches of decorating this round (the drum pops up at `enough`), and the stroke going on now. */
   private work = 0
@@ -322,7 +332,7 @@ export class DecorateSnowman implements World3D {
     if (s === 'dress') this.giveFace(m, 1)
     if (s === 'friends') {
       this.card = made - 1
-      this.later.push({ t: 0.4, f: () => this.events.card(CARDS[this.card]) })
+      this.comeIn(true)
     }
     this.setTray()
   }
@@ -995,10 +1005,16 @@ export class DecorateSnowman implements World3D {
     const top = m.balls[2].g.getWorldPosition(new Vector3())
     this.sparkle.burst(top.x, top.y + 0.3, top.z, 26, 2, 2, 0.12)
     const friend = this.round === 'friends'
-    this.after(0.5, () => this.talk(friend ? L.snowman.made[this.card % L.snowman.made.length] : this.round === 'face' ? L.snowman.wake[0] : L.snowman.wake[2], true))
+    this.after(0.5, () => this.talk(friend ? L.snowman.wake[1] : this.round === 'face' ? L.snowman.wake[0] : L.snowman.wake[2], true))
     this.after(1.0, () => {
       this.maple.cheer()
       sounds.correct()
+      // The friend loves it (whatever it looks like).
+      const fr = this.friend
+      if (friend && fr) {
+        fr.f.cheer()
+        this.talk(L.snowman.friend[fr.f.card].love, true)
+      } else if (!friend) this.talk(L.snowman.made[this.counts.reveals % L.snowman.made.length])
     })
     this.after(1.9, () => {
       this.events.flash()
@@ -1018,9 +1034,15 @@ export class DecorateSnowman implements World3D {
         this.enter('dress')
         return
       }
-      // Off he hops to the parade line; the next friend's snowman (or the parade).
+      // Off he hops to the parade line (the friend walks off beside him); the next friend's snowman (or the parade).
       this.events.card(null)
       this.toLine(m)
+      this.talk(L.snowman.bye)
+      const fr = this.friend
+      if (fr) {
+        this.leaving.push({ f: fr.f, x: fr.x, z: fr.z })
+        this.friend = null
+      }
       if (this.round === 'dress') {
         this.round = 'friends'
         this.card = 0
@@ -1055,7 +1077,71 @@ export class DecorateSnowman implements World3D {
     pat()
     this.puff.burst(SPOT.x, 0.3, SPOT.z, 30, 2.4, 2.4, 0.18)
     this.setTray()
-    this.after(0.6, () => this.events.card(CARDS[this.card]))
+    this.comeIn(false)
+  }
+
+  /** Where the friend stands while she decorates their snowman: beside him, in front of the parade line. */
+  private get friendSpot() {
+    return this.tall ? { x: 1.1, z: SPOT.z + 0.75 } : { x: 1.6, z: SPOT.z + 0.9 }
+  }
+
+  /** The next friend walks in from the right with their picture, waves and says hello (`now`: a link, already there). */
+  private comeIn(now: boolean) {
+    const card = CARDS[this.card]
+    if (!card) return
+    const f = new Friend(card, this.bag)
+    this.scene.add(f.root)
+    const spot = this.friendSpot
+    const from = now ? spot : { x: 8.5, z: spot.z }
+    this.friend = { f, x: from.x, z: from.z, goal: spot, state: now ? 'wait' : 'in' }
+    f.root.rotation.y = now ? -0.45 : -Math.PI / 2
+    f.root.position.set(from.x, 0, from.z)
+    if (now) this.later.push({ t: 1.6, f: () => this.arrived() })
+  }
+
+  private arrived() {
+    const fr = this.friend
+    if (!fr) return
+    fr.state = 'wait'
+    fr.f.wave()
+    this.talk(L.snowman.friend[fr.f.card].hi, true)
+    this.events.card(fr.f.card)
+  }
+
+  /** The friends walk (in, and off with their snowman), turning to where they go and then to her. */
+  private walkFriends(dt: number, t: number) {
+    const walk = (w: { f: Friend; x: number; z: number }, goal: { x: number; z: number }) => {
+      const dx = goal.x - w.x
+      const dz = goal.z - w.z
+      const d = Math.hypot(dx, dz)
+      const speed = 1.6
+      if (d < 0.05) return 0
+      const s = Math.min(d, speed * dt)
+      w.x += (dx / d) * s
+      w.z += (dz / d) * s
+      w.f.root.rotation.y = turn(w.f.root.rotation.y, Math.atan2(dx, dz), dt * 8)
+      return speed
+    }
+    const fr = this.friend
+    if (fr) {
+      const v = fr.state === 'in' ? walk(fr, fr.goal) : 0
+      if (fr.state === 'in' && !v) this.arrived()
+      // Waiting: facing her, a little toward the snowman, watching the tool.
+      if (!v) fr.f.root.rotation.y = turn(fr.f.root.rotation.y, -0.45, dt * 5)
+      const look = this.held || this.auto ? this.tipWorld : null
+      fr.f.look(look ? clamp(Math.atan2(look.x - fr.x, look.z - fr.z) - fr.f.root.rotation.y, -1, 1) : 0)
+      fr.f.root.position.set(fr.x, 0, fr.z)
+      fr.f.update(dt, t, v)
+    }
+    for (const w of [...this.leaving]) {
+      const v = walk(w, { x: 9.5, z: w.z })
+      w.f.root.position.set(w.x, 0, w.z)
+      w.f.update(dt, t, v)
+      if (!v) {
+        w.f.root.removeFromParent()
+        this.leaving.splice(this.leaving.indexOf(w), 1)
+      }
+    }
   }
 
   private startParade() {
@@ -1065,6 +1151,9 @@ export class DecorateSnowman implements World3D {
     this.paradeT = 0
     this.setTray()
     this.talk(L.snowman.parade, true)
+    this.maple.drumming = true
+    this.trumpet.toot()
+    toot()
     const line = this.men.filter((m) => m.state === 'line' || m.state === 'walk').sort((a, b) => a.slot - b.slot)
     line.forEach((m, i) => {
       m.state = 'parade'
@@ -1161,6 +1250,19 @@ export class DecorateSnowman implements World3D {
       if (p.t >= 1) this.pops.splice(this.pops.indexOf(p), 1)
     }
     for (const m of this.men) this.updateMan(m, dt, t)
+    this.walkFriends(dt, t)
+    // The parade's march: Maple drums, one note a beat, and the trumpet toots now and then.
+    if (this.paradeT >= 0 && this.doneT < 0 && t >= this.beatAt) {
+      this.beatAt = t + 0.3
+      const n = MARCH[this.beat++ % MARCH.length]
+      if (n) tone(n, n, 0.2, 0.05, 'triangle')
+      if (this.beat % 2 === 0) noise(0.08, 0.1, 'lowpass', 300, 120)
+      if (this.beat % 16 === 0) {
+        this.trumpet.toot()
+        toot()
+      }
+    }
+    if (this.doneT >= 0) this.maple.drumming = false
     // ---- Maple ----
     if (this.hatOnMaple > 0 && (this.hatOnMaple -= dt) <= 0) this.maple.hat.visible = false
     const look = tool ? this.tipWorld : this.man ? this.man.balls[2].g.getWorldPosition(tmp) : null
@@ -1401,10 +1503,11 @@ export class DecorateSnowman implements World3D {
       else if (id === 'geese') place(el, this.geese.flying ? this.geese.center(tmp3).setY(this.geese.root.position.y - 0.6).clone() : null, 1.2, 2)
       el.style.zIndex = id === 'drum' ? '3' : id === 'castle' ? '0' : '1'
     }
-    // Maple's friend's picture, held up over her head.
+    // The friend's picture, held up over their head.
     if (this.cardEl) {
-      const c = this.toScreen(tmp.copy(this.maple.root.position).setY(this.maple.height + 0.15))
-      this.cardEl.style.display = this.card >= 0 && this.round === 'friends' && this.paradeT < 0 ? '' : 'none'
+      const fr = this.friend
+      const c = fr ? this.toScreen(tmp.set(fr.x, fr.f.height + 0.2, fr.z)) : { x: -999, y: -999 }
+      this.cardEl.style.display = fr && fr.state === 'wait' && this.paradeT < 0 ? '' : 'none'
       this.cardEl.style.transform = `translate3d(${c.x.toFixed(1)}px, ${c.y.toFixed(1)}px, 0)`
     }
   }
@@ -1442,4 +1545,9 @@ export class DecorateSnowman implements World3D {
     this.scene.clear()
     this.bag.dispose()
   }
+}
+
+function turn(from: number, to: number, k: number) {
+  const d = Math.atan2(Math.sin(to - from), Math.cos(to - from))
+  return from + d * Math.min(1, k)
 }

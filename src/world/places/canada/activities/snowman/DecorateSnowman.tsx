@@ -1,34 +1,32 @@
 // Decorate a Snowman: Kaylee decorates snowmen for the Winter Carnival in the snowy park below Quebec City's castle
 // hotel, with whatever she grabs off Maple's red toboggan (decorate.ts is the world). The bare link opens with Maple's
-// hello (a touch skips it). Sparkle, in the corner, shows the one instruction for each part, the friend's picture card
-// floats over Maple's head, Maple's camera flashes when a snowman wakes up. The address bar follows her from part to
-// part (sections.ts). After the parade the stamp (onDone); "again" starts fresh.
-//
-// Greybox: the new instructions below are shown, not spoken yet (the voice gate moves them into lines.ts and records
-// them). The lines Maple and the snowmen say come from lines.ts (L.snowman) and are recorded already.
+// hello (a touch skips it). Sparkle, in the corner, says the one instruction for each part (tap her or the bubble to
+// hear it again), the friend's picture card floats over their head, Maple's camera flashes when a snowman wakes up.
+// The address bar follows her from part to part (sections.ts). After the parade the stamp (onDone); "again" starts
+// fresh.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, SparklePuppet, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, burst, lineText, say, SparklePuppet, spendHint, type Line, type PuppetHandle } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
+import { L } from '../../lines'
 import type { CanadaActivityProps } from '../props'
 import { CardPicture } from './Card'
 import { DecorateSnowman as World, STUDIO_ANCHORS, type HintKind, type StudioEvents } from './decorate'
 import SNOWMAN_SECTIONS, { type SnowmanSection } from './sections'
 import type { Card } from './studio'
 
-/** What Sparkle shows as each part begins (not recorded yet: greybox). */
-const SHOW: Record<SnowmanSection, string> = {
-  story: 'Maple needs snowmen for the carnival parade!',
-  face: 'Give him a face! Drag the coal and the carrot onto him.',
-  dress: 'Now dress him for the carnival!',
-  friends: "Make the snowman in Maple's picture!",
-  parade: 'Here comes the parade!',
+/** What Sparkle says (and the bubble shows) as each part begins. The story and the parade are Maple's. */
+const SAY: Record<SnowmanSection, Line> = {
+  story: L.snowman.story[0],
+  face: L.snowman.face,
+  dress: L.snowman.dress,
+  friends: L.snowman.friends,
+  parade: L.snowman.parade,
 }
-const READY = 'Tap the drum to wake him up!'
-const HINTS: Record<HintKind, string> = { tool: 'Grab something and put it on him!', drum: 'Tap the big drum!' }
+const HINTS: Record<HintKind, Line> = { tool: L.snowman.face, drum: L.snowman.drum }
 const ICON: Record<SnowmanSection, string> = { story: '🎪', face: '⛄', dress: '🎩', friends: '🖼️', parade: '🎺' }
 const PARTS: SnowmanSection[] = ['face', 'dress', 'friends', 'parade']
 /** How many snowmen wait in the line when a link doesn't say (the world sets up the same). */
@@ -43,7 +41,7 @@ export function DecorateSnowman({ onDone, setProgress }: Partial<CanadaActivityP
   const [section, setSection] = useState<SnowmanSection>(run.section)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [done, setDone] = useState(false)
-  const [line, setLine] = useState(SHOW[run.section])
+  const [line, setLine] = useState<Line>(SAY[run.section])
   const [card, setCard] = useState<Card | null>(null)
   const [flash, setFlash] = useState(0)
   const worldRef = useRef<World | null>(null)
@@ -61,22 +59,30 @@ export function DecorateSnowman({ onDone, setProgress }: Partial<CanadaActivityP
     progress(run.section)
   }, [run])
 
-  const show = (text: string) => {
-    setLine(text)
+  /** Sparkle says it (after whoever is talking), and the bubble shows it. */
+  const guide = (l: Line, voice = true) => {
+    setLine(l)
     sparkle.current?.play('wave')
+    if (voice) void say(l, { interrupt: false })
   }
+  // A section link that starts past the story: Sparkle says what to do there.
+  useEffect(() => {
+    if (run.section !== 'story' && run.section !== 'parade') guide(SAY[run.section])
+  }, [run])
 
   const events = useRef<StudioEvents>({
     section: (s, made) => {
       setSection(s)
       enter(s, state(s, made))
       progress(s)
-      show(SHOW[s])
+      // (The parade's line is Maple's, and she says it herself.)
+      if (s === 'parade') setLine(SAY.parade)
+      else guide(SAY[s])
     },
     card: setCard,
-    ready: () => show(READY),
+    ready: () => guide(L.snowman.drum),
     flash: () => setFlash((f) => f + 1),
-    hint: (kind) => show(HINTS[kind]),
+    hint: (kind) => guide(HINTS[kind], spendHint(HINTS[kind])),
     done: () => {
       setDone(true)
       burst()
@@ -99,7 +105,7 @@ export function DecorateSnowman({ onDone, setProgress }: Partial<CanadaActivityP
     setDone(false)
     setCard(null)
     setSection(s)
-    setLine(SHOW[s])
+    setLine(SAY[s])
     setRun((r) => ({ section: s, made: 0, n: r.n + 1 }))
   }
 
@@ -156,15 +162,22 @@ export function DecorateSnowman({ onDone, setProgress }: Partial<CanadaActivityP
       <AnimatePresence>{flash > 0 && <motion.div key={flash} initial={{ opacity: 0.95 }} animate={{ opacity: 0 }} transition={{ duration: 0.6 }} style={{ position: 'absolute', inset: 0, background: '#fff', pointerEvents: 'none', zIndex: 55 }} />}</AnimatePresence>
       {/* Sparkle in the corner: she gives the instructions. */}
       {section !== 'story' && (
-        <div aria-hidden style={{ position: 'absolute', left: 'max(8px, env(safe-area-inset-left))', bottom: 'calc(var(--safe-bottom) + 4px)', width: 'var(--target, 88px)', height: 'calc(var(--target, 88px) * 1.25)', zIndex: 21, pointerEvents: 'none' }}>
+        <button
+          aria-label="Hear it again"
+          onClick={() => {
+            sparkle.current?.play('nod')
+            void say(line)
+          }}
+          style={{ position: 'absolute', left: 'max(8px, env(safe-area-inset-left))', bottom: 'calc(var(--safe-bottom) + 4px)', width: 'var(--target, 88px)', height: 'calc(var(--target, 88px) * 1.25)', zIndex: 21, background: 'none', border: 'none', padding: 0 }}
+        >
           <SparklePuppet ref={sparkle} height="100%" lookToward={0.6} />
-        </div>
+        </button>
       )}
       <div style={{ position: 'absolute', left: 'calc(var(--target, 88px) + 16px)', right: 'calc(var(--target, 88px) + 16px)', top: 'calc(var(--top-clear, 104px) + 6px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, pointerEvents: 'none', zIndex: 20 }}>
         <AnimatePresence mode="popLayout">
-          <motion.div key={line} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL}>
-            {ICON[section]} {line}
-          </motion.div>
+          <motion.button key={lineText(line)} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} style={PILL} onClick={() => void say(line)} aria-label="Hear it again">
+            {ICON[section]} {lineText(line)}
+          </motion.button>
         </AnimatePresence>
         {done && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 3, type: 'spring' }} style={{ pointerEvents: 'auto' }}>
@@ -188,4 +201,7 @@ const PILL = {
   boxShadow: 'var(--shadow)',
   textAlign: 'center' as const,
   maxWidth: '100%',
+  border: 'none',
+  fontFamily: 'inherit',
+  pointerEvents: 'auto' as const,
 }

@@ -1,4 +1,4 @@
-// Decorate a Snowman's tools as toy props (greybox: simple shapes in the toon look), and the decorations they leave on
+// Decorate a Snowman's tools as toy props in the park's toon look (flat bands, ink outlines), and the decorations they leave on
 // him. Each tool is built with its working end at the origin (the coal at the bottom of the scoop, the carrot's tip,
 // the stick's end, the snow mitten's palm, the paint's nozzle, the hat's brim) and the rest above it, so wherever she
 // holds it, that end is where it works. Decorations are built the same way: their root goes on his surface and +y

@@ -22,7 +22,7 @@
     "tone": "mint"
   },
   "pitch": "Sparkle's balloon lands in snowy **Quebec City**, where **Maple the beaver** wants to see all of Canada and gather a hockey team on the way. Kaylee pushes the red **Maple Leaf Train** across a 3D map of the country to four stops: **Quebec City** (maple taffy on snow, decorating carnival snowmen), **Mont-Sainte-Anne** (biking down the mountain, a campfire night with a flashlight), **Banff** (a red canoe on Moraine Lake, the animal bridge over the highway) and **British Columbia** (whales and sea otters off Tofino, salmon and the white spirit bear). Every stop has one 3D and one 2D activity, and about 40 animals to meet and collect in Maple's book. The finale is a pond hockey game on Ottawa's frozen canal.",
-  "next": "Dad plays the new **Decorate a Snowman** greybox on the iPad from the PR's links ([give him a face](#/world/canada/snowman/face), [dress him](#/world/canada/snowman/dress), [friends' pictures](#/world/canada/snowman/friends)): is decorating fun the way the Barber Salon is? Then the voice gate records Sparkle's new instructions.",
+  "next": "Dad plays **Decorate a Snowman** on the iPad from the PR's links ([give him a face](#/world/canada/snowman/face), [dress him](#/world/canada/snowman/dress), [friends' pictures](#/world/canada/snowman/friends), [the parade](#/world/canada/snowman/parade)): is it as fun as the Barber Salon? Tune the tools in the feel lab (`?feel=1`) if something feels off.",
   "facts": [
     {
       "icon": "🚂",
@@ -546,7 +546,7 @@
             {
               "n": 3,
               "title": "Friends' pictures",
-              "md": "Maple holds up a picture from a friend (a tuque and sash, a rainbow one, a silly one with carrots everywhere) and pats a fresh snowman together. Whatever she makes: “Ta-da!”. Three friends, then the parade."
+              "md": "Three friends walk in one by one with a picture of the snowman they want, held up over their head: Maple's cousin (a tuque and sash), the moose (a rainbow one), the raccoon (a silly one with carrots everywhere). Maple pats a fresh snowman together each time. Whatever she makes, they love it. Then the parade hops past the castle to Maple's drum."
             }
           ]
         },
@@ -628,8 +628,8 @@
         {
           "type": "callout",
           "tone": "note",
-          "title": "Greybox (2026-10-30)",
-          "md": "Built from simple shapes in the toon look. Sparkle's new instructions are shown in the bubble but not recorded yet (the voice gate puts them in `lines.ts`): “Give him a face! Drag the coal and the carrot onto him.”, “Now dress him for the carnival!”, “Make the snowman in Maple's picture!”, “Tap the drum to wake him up!”, “Grab something and put it on him!”. Maple and the snowmen already talk with recorded lines (“Bonjour!”, “To the parade!”, “A snowman! Ta-da!”, “Hee hee, that tickles!”). The old rolling lines (roll, stack, dress, hints, big, climb, ride, dodge, upside, bye, ice moose) are unused now; prune them at the voice gate."
+          "title": "Voices",
+          "md": "Every line is recorded already. Sparkle reuses her own recordings from other places (“Put on anything you like!”, “Spray on some colors!”, “Copy the picture!”, “Tap the big drum!”), Maple, the snowmen and the friends (Maple's cousin, the moose, the raccoon) say their own recorded lines."
         }
       ]
     },
@@ -1985,10 +1985,11 @@
             },
             {
               "n": 15,
-              "title": "Greybox: Decorate a Snowman (replaces the snowball rolling)",
-              "status": "doing",
+              "title": "Decorate a Snowman (replaces the snowball rolling)",
+              "status": "done",
               "date": "2026-10-30",
-              "md": "Dad found the snowball rolling awkward and not fun; Kaylee loved the Barber Salon. The snowman stop becomes a decorating toy in the same park: grab coal, a carrot, sticks, snow, rainbow paint, the tuque, the sash or a scarf off Maple's toboggan and work it on him. Face, dress, then friends' pictures; the drum wakes each one up; then the parade. Dad plays it on the iPad; the voice gate records Sparkle's new instructions."
+              "md": "Dad found the snowball rolling awkward and not fun; Kaylee loved the Barber Salon. The snowman stop is now a decorating toy in the same park: grab coal, a carrot, sticks, snow, rainbow paint, the tuque, the sash or a scarf off Maple's toboggan and work it on him. Face, dress, then three friends bring pictures (Maple's cousin, the moose, the raccoon); the drum wakes each one up; then the parade to Maple's drum. Built in one go (Dad, 2026-10-30: “no more grey boxes”).",
+              "pr": 288
             }
           ]
         },
@@ -2403,17 +2404,18 @@
               ]
             },
             {
-              "title": "Decorate a Snowman replaces the snowball rolling (greybox)",
+              "title": "Decorate a Snowman replaces the snowball rolling",
               "date": "2026-10-30",
               "status": "done",
               "summary": "Dad: the make-a-snowman game was awkward and not fun, and Kaylee loved the mall's Barber Salon in Thailand. So the snowman stop is now a decorating toy built the barber's way, in the same park below the castle.",
               "items": [
                 "**Gone:** the snowball rolling (`carnival.ts`, `CarnivalSnowballs.tsx`): pushing, growing, stacking, the hat and sash boxes, Maple climbing the huge ball. The park, Maple, the castle, the critters and the drum stay (`props.ts`, `castle.ts`, `maple.ts`, `critters.ts`).",
                 "**The toy** (`decorate.ts`, `tools.ts`, `studio.ts`): one snowman of three lumpy balls (each its own geometry, so the paint stays on him), Maple beside him, her red toboggan of tools along the bottom (two rows on a tall screen). The held tool's working end sits above her finger; what's under it on screen is found by a ray against his three balls (a little outside his edge counts). Coal dots and snow pats every few pixels she drags; carrots and sticks poke in where she lets go; the paint recolors the vertices of his snow under the spray; the tuque, sash and scarf snap to his head, middle and neck. A tap on a tool does a short go (eyes, a smile, buttons; a carrot nose; an arm; a hat).",
-                "**Rounds:** face (coal, carrot, stick, snow; 8 touches) → the drum pops up, a tap wakes him (hops, “Bonjour!”, Maple's photo flash) → dress (+ paint, tuque, sash, scarf; same snowman) → the drum: “To the parade!”, he hops into the line → friends: Maple holds up a picture card (tuque, rainbow, silly) over her head and pats a fresh snowman together, 5 touches each → the parade hops past the castle → the stamp.",
                 "**Knobs** `snowDecorate`: the tool's lift above her finger, coal and snow spacing, paint spray size, rainbow speed, how far outside him still counts.",
-                "**Voices:** reused recorded lines only (Maple's hello, the snowmen's “Bonjour!”/“To the parade!”, “A snowman! Ta-da!”, “Hee hee, that tickles!”, the hat on Maple, the parade and the payoff). Sparkle's new instructions are shown, not spoken, until the voice gate."
-              ]
+                "**Rounds:** face (coal, carrot, stick, snow; 8 touches) → the drum pops up, a tap wakes him (hops, “Bonjour!”, Maple cheers, her photo flashes) → dress (+ paint, tuque, sash, scarf; same snowman) → the drum: “To the parade!”, he hops into the line → friends: three walk in from the side one by one with a picture card over their head (`friend.ts`: Maple's cousin wants a tuque and sash, the moose a rainbow one, the raccoon a silly one), Maple pats a fresh snowman together, 5 touches each; their snowman wakes and they love it (“Ooh, so pretty!”, “Mmm. Nice one.”, “Mine! I mean, yours!”), then walk off beside it → the parade hops past the castle to Maple's drum, a march and the trumpet → the stamp.",
+                "**Voices:** every line is recorded. Sparkle's instructions reuse her recordings from other places (“Put on anything you like!”, “Spray on some colors!”, “Copy the picture!”, “Tap the big drum!”), copied into Canada's clips; the friends and the snowmen use their own recorded lines. The old rolling lines are gone from `lines.ts` and their clips removed."
+              ],
+              "pr": 288
             }
           ]
         }

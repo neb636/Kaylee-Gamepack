@@ -203,35 +203,30 @@ export const L = {
     thanks: maple(`Merci, ${NAME}! Best taffy ever!`),
   },
   snowman: {
-    // The story (Maple, in the park below the castle), then Sparkle's one instruction per part.
-    story: [maple("Bonjour! It's the Winter Carnival!"), maple("Let's roll snowmen!")],
-    roll: 'Push the snowball! Watch it grow!',
-    stack: 'Now roll the little ball into the big one!',
-    dress: 'Roll a snowball into a box!',
-    ready: 'Tap the drum for the parade, or make more snowmen!',
-    // Stuck for a while: Sparkle helps (the hand shows it too).
-    hint: {
-      roll: 'Put your finger on the snowball and push!',
-      stack: 'Push the little ball into the big one!',
-      hat: 'Roll a snowball into the hat box!',
-      sash: 'Roll a snowball into the sash box!',
-      drum: 'Tap the big drum!',
-    },
-    // Tap-to-hear facts, the first time she pokes them.
+    // Decorate a Snowman. Maple's hello, then Sparkle's one instruction per part (the same words as Sparkle's lines in
+    // other places, so they share their recordings).
+    story: [maple("Bonjour! It's the Winter Carnival!")],
+    face: 'Put on anything you like!',
+    dress: 'Spray on some colors!',
+    friends: 'Copy the picture!',
+    // The drum pops up when he's decorated enough (also her hint when she's stuck).
+    drum: 'Tap the big drum!',
+    // Tap-to-hear fact, the first time she pokes the castle.
     castle: 'This castle is really a big hotel!',
-    iceMoose: 'A moose made of ice!',
     // Maple acting it out.
-    big: maple('Wow, a big one!'),
     made: [maple('A snowman! Ta-da!'), maple('Another snowman!'), maple("He's so wobbly!")],
-    climb: maple("Whee! I'm on top!"),
-    ride: maple('Look at me!'),
+    pretty: maple('Ooh, so pretty!'),
     mapleHat: maple("Hee hee! That's for a snowman!"),
-    dodge: maple('Eek! Watch out!'),
     poke: [maple('Hee hee!'), maple('Bonjour!')],
     parade: maple('Here comes the parade!'),
+    // The friends who bring a picture: hello as they come in, and what they say when their snowman wakes up.
+    friend: {
+      tuque: { hi: by('cousin')('Hi hi!'), love: maple('Ooh, so pretty!') },
+      rainbow: { hi: by('moose')('Mmm. Hello there.'), love: by('moose')('Mmm. Nice one.') },
+      silly: { hi: by('raccoon')('Hee hee! You found me!'), love: by('raccoon')('Mine! I mean, yours!') },
+    },
     // The snowmen wake up and talk.
     wake: [by('snowman')('Bonjour!'), by('snowman')('Hello, hello!'), by('snowman')('To the parade!')],
-    upside: by('snowman')('Hello! Why is the sky down there?'),
     tickle: by('snowman')('Hee hee, that tickles!'),
     bye: by('snowman')('Merci! Bye bye!'),
     // The payoff (the stamp comes next).

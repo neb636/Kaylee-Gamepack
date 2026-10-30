@@ -315,25 +315,11 @@
     "text": "Bonjour! It's the Winter Carnival!",
     "voice": "maple"
   },
-  {
-    "text": "Let's roll snowmen!",
-    "voice": "maple"
-  },
-  "Push the snowball! Watch it grow!",
-  "Now roll the little ball into the big one!",
-  "Roll a snowball into a box!",
-  "Tap the drum for the parade, or make more snowmen!",
-  "Put your finger on the snowball and push!",
-  "Push the little ball into the big one!",
-  "Roll a snowball into the hat box!",
-  "Roll a snowball into the sash box!",
+  "Put on anything you like!",
+  "Spray on some colors!",
+  "Copy the picture!",
   "Tap the big drum!",
   "This castle is really a big hotel!",
-  "A moose made of ice!",
-  {
-    "text": "Wow, a big one!",
-    "voice": "maple"
-  },
   {
     "text": "A snowman! Ta-da!",
     "voice": "maple"
@@ -347,19 +333,7 @@
     "voice": "maple"
   },
   {
-    "text": "Whee! I'm on top!",
-    "voice": "maple"
-  },
-  {
-    "text": "Look at me!",
-    "voice": "maple"
-  },
-  {
     "text": "Hee hee! That's for a snowman!",
-    "voice": "maple"
-  },
-  {
-    "text": "Eek! Watch out!",
     "voice": "maple"
   },
   {
@@ -371,6 +345,22 @@
     "voice": "maple"
   },
   {
+    "text": "Mmm. Hello there.",
+    "voice": "moose"
+  },
+  {
+    "text": "Mmm. Nice one.",
+    "voice": "moose"
+  },
+  {
+    "text": "Hee hee! You found me!",
+    "voice": "raccoon"
+  },
+  {
+    "text": "Mine! I mean, yours!",
+    "voice": "raccoon"
+  },
+  {
     "text": "Bonjour!",
     "voice": "snowman"
   },
@@ -380,10 +370,6 @@
   },
   {
     "text": "To the parade!",
-    "voice": "snowman"
-  },
-  {
-    "text": "Hello! Why is the sky down there?",
     "voice": "snowman"
   },
   {
@@ -570,10 +556,6 @@
     "voice": "owl"
   },
   {
-    "text": "Hee hee! You found me!",
-    "voice": "raccoon"
-  },
-  {
     "text": "Ouch! Prickly!",
     "voice": "maple"
   },
@@ -583,10 +565,6 @@
   },
   {
     "text": "Ahh. Sunglasses. Much better.",
-    "voice": "moose"
-  },
-  {
-    "text": "Mmm. Hello there.",
     "voice": "moose"
   },
   {
@@ -965,10 +943,6 @@
     "voice": "maple"
   },
   {
-    "text": "Mmm. Nice one.",
-    "voice": "moose"
-  },
-  {
     "text": "Bonk. Not today, geese.",
     "voice": "moose"
   },
@@ -988,10 +962,6 @@
   {
     "text": "Hoo! Pass to me!",
     "voice": "owl"
-  },
-  {
-    "text": "Mine! I mean, yours!",
-    "voice": "raccoon"
   },
   {
     "text": "Wheee! Look, I spin!",
