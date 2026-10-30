@@ -11,7 +11,7 @@ import { firstTime as firstTimeHere, lineText, Mascot, say, sounds, useOnline, u
 import { useTrophies } from '../sdk/trophies'
 import balloon from './assets/balloon.webp'
 import mapArt from './assets/bg-world-map.webp'
-import { CrayonIcon, MapIcon, PassportIcon, PuzzleIcon, ShelfIcon, TheaterIcon } from './HomeIcons'
+import { DOCK, MapIcon, ShelfIcon } from './HomeIcons'
 import { FitBox } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
 import { places, type PlaceEntry } from './registry'
@@ -240,10 +240,10 @@ export function WorldMap({ view: linked }: { view?: string }) {
           <div className="world-side-mascot">
             <Mascot pose="wave" size={Math.min(170, window.innerHeight * 0.12)} />
           </div>
-          <DockButton label="My passport" word="Passport" color="#ff6fa8" shade="#e2508c" badge={totalStamps(passport)} onClick={() => go.world('passport')} icon={PassportIcon} />
-          <DockButton label="Coloring book" word="Coloring" color="#ffab4c" shade="#e88c2a" onClick={() => go.world('coloring')} icon={CrayonIcon} />
-          <DockButton label="Puzzle book" word="Puzzles" color="#3fc6a4" shade="#25a686" onClick={() => go.world('puzzles')} icon={PuzzleIcon} />
-          {online && <DockButton label="Theater" word="Movies" color="#9d82f2" shade="#7c60d8" onClick={() => go.world('theater')} icon={TheaterIcon} />}
+          <DockButton label="My passport" word="Passport" {...DOCK.passport} badge={totalStamps(passport)} onClick={() => go.world('passport')} />
+          <DockButton label="Coloring book" word="Coloring" {...DOCK.coloring} onClick={() => go.world('coloring')} />
+          <DockButton label="Puzzle book" word="Puzzles" {...DOCK.puzzles} onClick={() => go.world('puzzles')} />
+          {online && <DockButton label="Theater" word="Movies" {...DOCK.theater} onClick={() => go.world('theater')} />}
         </div>
       </div>
 
@@ -271,7 +271,7 @@ function ViewButton({ icon, label, on, onClick }: { icon: (color: string) => Rea
 }
 
 /** One of the home dock's buttons: a matte colored tile with a white picture and its word under it (the word is for Dad). */
-function DockButton({ icon: Icon, label, word, color, shade, onClick, badge }: { icon: (p: { shade: string }) => ReactNode; label: string; word: string; color: string; shade: string; onClick: () => void; badge?: number }) {
+function DockButton({ Icon, label, word, color, shade, onClick, badge }: { Icon: (p: { shade: string }) => ReactNode; label: string; word: string; color: string; shade: string; onClick: () => void; badge?: number }) {
   return (
     <motion.button
       aria-label={label}

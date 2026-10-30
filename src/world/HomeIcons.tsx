@@ -73,3 +73,26 @@ export function ShelfIcon({ color }: { color: string }) {
     </svg>
   )
 }
+
+/**
+ * The dock's four places, each with its tile color, the darker shade for its details and press lip, and its picture.
+ * Everything that stands for one of them (the dock, a screen's title, a country's top-bar buttons) uses these, so the
+ * passport always looks like the passport.
+ */
+export const DOCK = {
+  passport: { color: '#ff6fa8', shade: '#e2508c', Icon: PassportIcon },
+  coloring: { color: '#ffab4c', shade: '#e88c2a', Icon: CrayonIcon },
+  puzzles: { color: '#3fc6a4', shade: '#25a686', Icon: PuzzleIcon },
+  theater: { color: '#9d82f2', shade: '#7c60d8', Icon: TheaterIcon },
+} as const
+export type DockKind = keyof typeof DOCK
+
+/** A dock picture on its own little colored tile, sized to the text around it (for title pills and counts). */
+export function DockGlyph({ kind, size = '1.25em' }: { kind: DockKind; size?: string }) {
+  const { color, shade, Icon } = DOCK[kind]
+  return (
+    <span aria-hidden style={{ display: 'inline-block', flex: '0 0 auto', width: size, height: size, borderRadius: '28%', background: color, padding: `calc(${size} * 0.08)`, boxSizing: 'border-box', verticalAlign: 'middle' }}>
+      <Icon shade={shade} />
+    </span>
+  )
+}

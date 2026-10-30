@@ -1,12 +1,11 @@
 // Runs one country: loads its Place component, draws the top bar, saves stamps, and shows the trophy ceremony.
-import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
 import { go } from '../router'
 import { motion } from 'motion/react'
 import { Mascot, sounds, StarProgress, stopSpeaking, useOnline, type GameMeta } from '../sdk'
 import { WinCeremony } from '../shell/WinCeremony'
-import listIcon from './assets/icon-view-list.webp'
-import theaterArt from './assets/theater.webp'
+import { DOCK, DockGlyph, MapIcon, ShelfIcon, type DockKind } from './HomeIcons'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { HUB, SectionLinkProvider, type SectionLink } from './kit/sections'
@@ -26,6 +25,18 @@ declare global {
 const capture = (event: string, props: Record<string, unknown>) => {
   if (isPostHogEnabled) posthog.capture(event, props)
 }
+
+/** A country's top-bar shortcut to one of the home dock's places, drawn as a small copy of that dock tile. */
+const barTile = (kind: DockKind): CSSProperties => ({
+  pointerEvents: 'auto',
+  flex: '0 0 var(--btn)',
+  width: 'var(--btn)',
+  height: 'var(--btn)',
+  borderRadius: 'calc(var(--btn) * 0.28)',
+  background: DOCK[kind].color,
+  boxShadow: `0 5px 0 ${DOCK[kind].shade}`,
+  padding: 'calc(var(--btn) * 0.16)',
+})
 
 /** The shell's trophy ceremony takes a GameMeta; a country trophy only needs the name parts. */
 const trophyMeta = (meta: PlaceMeta): GameMeta => ({
@@ -119,7 +130,7 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
             exitLabel="Back to the map"
             title={
               <>
-                <Flag id={meta.flag} width="1.6em" style={{ borderRadius: 4 }} /> 🎬
+                <Flag id={meta.flag} width="1.6em" style={{ borderRadius: 4 }} /> <DockGlyph kind="theater" />
               </>
             }
           />
@@ -135,7 +146,7 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
       {/* The theater draws its own top bar (its back button goes to the shelf while a video plays). */}
       {activity === 'theater' ? null : activity || (meta.hubHome && section && section !== meta.hubHome) ? (
         <TopBar
-          icon={fromShelf ? <img src={listIcon} alt="" style={{ width: '70%', height: '70%', objectFit: 'contain' }} /> : '🗺️'}
+          icon={<span style={{ width: '58%', height: '58%' }}>{fromShelf ? <ShelfIcon color="var(--lavender-dark)" /> : <MapIcon color="var(--lavender-dark)" />}</span>}
           label={fromShelf ? 'Back to the games' : 'Back to the map'}
           onBack={fromShelf ? () => (location.hash = '#/world?view=list') : backToMap}
         >
@@ -149,13 +160,13 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
         <TopBar icon="🌍" label="World map" onBack={() => go.world()}>
           {meta.activities.length > 0 && (
             <BarPill>
-              📕 {stamps.length}/{meta.activities.length}
+              <DockGlyph kind="passport" /> {stamps.length}/{meta.activities.length}
             </BarPill>
           )}
           {!!meta.puzzles?.length && (
-            <motion.button aria-label="Puzzle book" whileTap={{ scale: 0.85 }}
+            <motion.button aria-label="Puzzle book" whileTap={{ scale: 0.88, y: 3 }}
               onClick={() => { sounds.pop(); go.world('puzzles', meta.id) }}
-              style={{ pointerEvents: 'auto', width: 'var(--btn)', height: 'var(--btn)', flexShrink: 0, borderRadius: '50%', background: 'var(--mint)', border: '4px solid #fff', fontSize: 'calc(var(--btn) * .5)', boxShadow: 'var(--shadow)' }}>🧩</motion.button>
+              style={barTile('puzzles')}><DOCK.puzzles.Icon shade={DOCK.puzzles.shade} /></motion.button>
           )}
           {!!meta.videos?.length && online && (
             <motion.button
@@ -168,9 +179,9 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
                 sounds.pop()
                 openActivity('theater')
               }}
-              style={{ pointerEvents: 'auto', flex: '0 0 var(--btn)', width: 'var(--btn)', height: 'var(--btn)', borderRadius: '50%', background: 'var(--lavender)', border: '4px solid #fff', boxShadow: 'var(--shadow)', padding: 6 }}
+              style={barTile('theater')}
             >
-              <img src={theaterArt} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              <DOCK.theater.Icon shade={DOCK.theater.shade} />
             </motion.button>
           )}
         </TopBar>

@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import type { CSSProperties, ReactNode } from 'react'
 import { go } from '../router'
 import { Mascot, say, sounds, useSayOnMount } from '../sdk'
+import { DockGlyph } from './HomeIcons'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { WORLD_LINES } from './lines'
@@ -81,7 +82,9 @@ export function Passport() {
   return (
     <div className="screen decorated" style={{ paddingTop: 'var(--top-clear)', gap: 20 }}>
       <TopBar icon="🌍" label="World map" onBack={() => go.world()}>
-        <BarPill>📕 My Passport</BarPill>
+        <BarPill>
+          <DockGlyph kind="passport" /> My Passport
+        </BarPill>
       </TopBar>
       <div style={{ width: '100%', maxWidth: 980, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 20 }}>
         {places.map(({ meta }) => (
