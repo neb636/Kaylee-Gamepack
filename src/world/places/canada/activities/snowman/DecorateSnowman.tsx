@@ -31,10 +31,15 @@ const READY = 'Tap the drum to wake him up!'
 const HINTS: Record<HintKind, string> = { tool: 'Grab something and put it on him!', drum: 'Tap the big drum!' }
 const ICON: Record<SnowmanSection, string> = { story: '🎪', face: '⛄', dress: '🎩', friends: '🖼️', parade: '🎺' }
 const PARTS: SnowmanSection[] = ['face', 'dress', 'friends', 'parade']
+/** How many snowmen wait in the line when a link doesn't say (the world sets up the same). */
+const DEFAULT_MADE: Partial<Record<SnowmanSection, number>> = { friends: 1, parade: 4 }
 
 export function DecorateSnowman({ onDone, setProgress }: Partial<CanadaActivityProps> = {}) {
   const { start, param, enter } = useSections(SNOWMAN_SECTIONS)
-  const [run, setRun] = useState(() => ({ section: (start ?? 'story') as SnowmanSection, made: Number(param('made')) || 0, n: 0 }))
+  const [run, setRun] = useState(() => {
+    const section = (start ?? 'story') as SnowmanSection
+    return { section, made: Number(param('made')) || DEFAULT_MADE[section] || 0, n: 0 }
+  })
   const [section, setSection] = useState<SnowmanSection>(run.section)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [done, setDone] = useState(false)
