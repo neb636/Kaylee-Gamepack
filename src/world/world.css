@@ -290,7 +290,8 @@
 /* The game shelf (Shelf.tsx): the whole screen scrolls as one page of cards, one per place: its banner, then a white
    sheet over the banner's bottom edge with the place's name and a grid of game icons (pictures: shelf/STYLE.md). The
    home dock floats over it: a bar along the bottom when the screen is tall, a column beside it when it's wide. */
-.world .world-list {
+.world .world-list,
+.world .world-map {
   --dock-tile: clamp(64px, min(15vw, 8.5vh), 96px);
   --dock-h: calc(var(--dock-tile) + 30px);
   --dock-w: 0px;
@@ -299,16 +300,27 @@
   --sheet-overlap: clamp(18px, 3vmin, 28px);
 }
 @media (orientation: landscape) {
-  .world .world-list {
+  .world .world-list,
+  .world .world-map {
     --dock-tile: clamp(64px, min(9vw, 12vh), 100px);
     --dock-h: 0px;
     --dock-w: calc(var(--dock-tile) + 24px);
   }
 }
 @media (orientation: landscape) and (max-height: 560px) {
-  .world .world-list {
+  .world .world-list,
+  .world .world-map {
     --dock-tile: 64px;
     --dock-w: calc(2 * var(--dock-tile) + 36px);
+  }
+}
+/* The world map leaves room for the same floating dock: below it when tall, beside it when wide. */
+.world .world-map.screen {
+  padding: var(--top-clear) 16px calc(var(--safe-bottom) + var(--dock-h) + 24px);
+}
+@media (orientation: landscape) {
+  .world .world-map.screen {
+    padding: var(--top-clear) calc(var(--dock-w) + 28px) calc(var(--safe-bottom) + 12px) 16px;
   }
 }
 .world .shelf-scroll {
