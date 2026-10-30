@@ -35,6 +35,8 @@ export default defineConfig({
     // (its 3D house is the family's real home). Unset (dev, tests) nothing is locked. scripts/vite-lock.ts
     lockPlace('thailand'),
   ],
-  server: { host: true },
+  // The nested Electron renderer has its own Vite process. Do not scan it as a game entry or reload play when it builds.
+  optimizeDeps: { entries: ['index.html'] },
+  server: { host: true, watch: { ignored: ['**/workbench/index.html', '**/workbench/dist/**', '**/workbench/dist-electron/**', '**/workbench/release/**'] } },
   preview: { host: true },
 })

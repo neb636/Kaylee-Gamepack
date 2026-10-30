@@ -1,6 +1,14 @@
 # Architecture
 
-Agent Workbench is a generic, local Electron workbench. Concrete harnesses live behind provider adapters; the renderer has no Node access. First-party features use the same registries and prompt contributions available to future extensions.
+Kaylee Gamepack Studio is this repo’s local Electron builder app, imported from Agent Workbench. It opens the current game checkout, embeds the existing character/Camera/Feel labs, and adds AI numeric preview and the character recipe from `docs/3d-characters.md`. Concrete harnesses live behind provider adapters; the renderer has no Node access. Existing registries and prompt contributions are retained.
+
+## Game labs
+
+The launcher owns two loopback Vite servers, game on 5174 and studio on 5175. The game shares only the dependency-free `shared/labs.ts` protocol; Electron never enters the web build. A development-only bridge in the labs accepts messages from the exact studio origin and parent window. Each request reads fresh state. Numeric proposals are checked atomically and rejected after a route, mode, frame or value changes. Preview updates the live controls and URL; Undo restores the previous values. Links persist across view switches. Preparing a save prompt reads the live state again and opens the normal CLI composer for review.
+
+The main-process LabAi runner uses fixed executable names, argument arrays, a scratch directory, response schemas, ownership checks, cancellation, output bounds and a three-minute deadline. Claude tuning disables tools/MCP; Codex tuning uses read-only sandbox. Interactive coding sessions retain normal CLI permissions. All native IPC rejects child frames.
+
+Character concepts use one image per iteration, real pixel-based 1024×1024/transparency checks, same-character refinement, and prompts for the manual Tripo, Blender and game-integration stages. Chosen image paths accompany the handoff. Private inputs stay in local app data; runtime GLBs are integrated only after Dad approves.
 
 ## Views and runtime resources
 
