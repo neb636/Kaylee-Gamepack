@@ -40,7 +40,7 @@ import { Maple } from './maple'
 import { CASTLE, CLIFF_Y } from './park'
 import { buildPark, Drum, Owl, Sled, SKY, type Park } from './props'
 import type { SnowmanSection } from './sections'
-import { ALL_TOOLS, BALL_RS, CARDS, DRUM_AT, ENOUGH, ENOUGH_FRIEND, LIFT_PX, lineSpot, MAPLE_AT, MAX, SINK, SPOT, TOOL_LABELS, TRAYS, type Card, type Round, type ToolId } from './studio'
+import { ALL_TOOLS, BALL_RS, CARDS, DRUM_AT, DRUM_TALL, ENOUGH, ENOUGH_FRIEND, LIFT_PX, lineSpot, MAPLE_AT, MAX, SINK, SPOT, TOOL_LABELS, TRAYS, type Card, type Round, type ToolId } from './studio'
 import { buildTool, decorTemplates, RAINBOW, type Decor, type Tool } from './tools'
 
 const FILE = 'src/world/places/canada/activities/snowman/decorate.ts'
@@ -218,6 +218,7 @@ export class DecorateSnowman implements World3D {
   private maple: Maple
   private hatOnMaple = 0
   private drum: Drum
+  private drumAt = new Group()
   private owl: Owl
   private carriage: Carriage
   private carriageT = 9
@@ -269,7 +270,7 @@ export class DecorateSnowman implements World3D {
     this.maple.root.rotation.y = MAPLE_AT.yaw
     this.drum = new Drum(bag)
     // (A bit smaller than the parade's, so it doesn't hide Maple.)
-    const drumAt = new Group()
+    const drumAt = this.drumAt
     drumAt.position.set(DRUM_AT.x, 0, DRUM_AT.z)
     drumAt.rotation.y = 0.5
     drumAt.scale.setScalar(0.75)
@@ -473,6 +474,9 @@ export class DecorateSnowman implements World3D {
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
     if (was !== this.tall) this.layout()
+    const d = this.drumSpot
+    this.drumAt.position.set(d.x, 0, d.z)
+    this.drumAt.rotation.y = this.tall ? -0.5 : 0.5
     this.rig.setShot(this.shot(), true)
   }
   setAnchorElements(els: Map<string, HTMLElement>) {
@@ -765,6 +769,9 @@ export class DecorateSnowman implements World3D {
     this.lastDot.set(NaN, NaN)
   }
 
+  private get drumSpot() {
+    return this.tall ? DRUM_TALL : DRUM_AT
+  }
   private get enough() {
     return this.round === 'friends' ? ENOUGH_FRIEND : ENOUGH
   }
@@ -1328,7 +1335,7 @@ export class DecorateSnowman implements World3D {
     let at: Vector3 | null = null
     let kind: HintKind = 'tool'
     if (playing && this.drum.ready && idle > 4) {
-      at = tmp.set(DRUM_AT.x, 1.2, DRUM_AT.z)
+      at = tmp.set(this.drumSpot.x, 1.2, this.drumSpot.z)
       kind = 'drum'
     } else if (playing && (idle > HINT_S || (this.counts.touches === 0 && this.counts.autos === 0 && idle > 3))) {
       const id = this.trayIds.find((i) => !this.used.has(i)) ?? this.trayIds[0]
@@ -1414,7 +1421,7 @@ export class DecorateSnowman implements World3D {
       made: this.made,
       work: this.work,
       enough: this.enough,
-      drum: this.drum.ready ? scr(new Vector3(DRUM_AT.x, 1.0, DRUM_AT.z)) : null,
+      drum: this.drum.ready ? scr(new Vector3(this.drumSpot.x, 1.0, this.drumSpot.z)) : null,
       /** Where to drag a tool to: his head, middle and bottom on screen. */
       man: m ? { head: scr(m.balls[2].g.getWorldPosition(new Vector3())), middle: scr(m.balls[1].g.getWorldPosition(new Vector3())), bottom: scr(m.balls[0].g.getWorldPosition(new Vector3())), state: m.state } : null,
       tools: Object.fromEntries(this.trayIds.map((id) => [id, scr(this.homes.get(id)!.clone().setY(this.homes.get(id)!.y + 0.1))])),

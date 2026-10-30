@@ -17,6 +17,8 @@ export const SINK = 0.16
 export const MAPLE_AT = { x: -1.6, z: 2.5, yaw: 0.35 }
 /** The parade drum: it pops up when he's decorated enough (tap it and he wakes up). */
 export const DRUM_AT = { x: -2.9, z: 0.6 }
+/** On a tall screen there's no room out to the left: the drum stands just behind him on the right. */
+export const DRUM_TALL = { x: 1.3, z: 0.35 }
 /** The parade line: finished snowmen wait to the right, a little further back. */
 export const LINE = { x0: 2.4, gap: 1.35, z: 0.4 }
 export const lineSpot = (slot: number) => ({ x: LINE.x0 + slot * LINE.gap, z: LINE.z - slot * 0.35 })
