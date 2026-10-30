@@ -16,7 +16,7 @@ export function PuzzleBook({ page }: { page?: string }) {
 }
 
 function Shelf({ country }: { country?: string }) {
-  useSayOnMount(L.puzzlePick)
+  useSayOnMount(L.puzzlePick, { once: true })
   const groups = places.filter(({ meta }) => meta.puzzles?.length && (!country || meta.id === country))
   const shown = groups.length ? groups : places.filter(({ meta }) => meta.puzzles?.length)
   return <div className="screen decorated" style={{ padding: 0, overflow: 'hidden' }}>

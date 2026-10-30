@@ -3,7 +3,7 @@
 // the Bullet Train and the Dragon Parade finale. Every lantern is open from the start; each stamp brings a friend to the parade.
 import { motion } from 'motion/react'
 import { useEffect, useState, type ComponentType } from 'react'
-import { say, sounds } from '../../../sdk'
+import { firstTime, say, sounds } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
@@ -116,7 +116,8 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
     unrolled = true
   }, [])
   useEffect(() => {
-    if (intro) return
+    // Only when something is new (her first look, a new stamp, the party): coming back with nothing new is quiet.
+    if (intro || !firstTime(`china:hub:${allDone ? 'party' : stamps.length}`)) return
     void say(allDone ? L.hubParty : stamps.length === 0 ? L.hubFirst : L.hubNext)
   }, [intro, allDone, stamps.length])
 

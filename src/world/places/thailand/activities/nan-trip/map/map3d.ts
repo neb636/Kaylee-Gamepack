@@ -21,7 +21,7 @@
 // after all three, Mommy says it's time to fly home and the airport glows. Laos's flag: Sparkle says it's another
 // country.
 import { Color, IcosahedronGeometry, OctahedronGeometry, Vector3, type WebGLRenderer } from 'three'
-import { bell, clamp, speakingVoice } from '../../../../../../sdk'
+import { bell, clamp, firstTime, speakingVoice, spendHint } from '../../../../../../sdk'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../engine3d/camera'
 import { PAL } from '../../../../../engine3d/toon'
@@ -133,7 +133,8 @@ export class NanMap extends Stage {
     else if (count >= this.stops.length) this.after(t0, () => this.say('home', M.home))
     else if (count >= HOME_AFTER)
       this.after(t0, () => {
-        this.say('more', M.more)
+        // (Mommy asks out loud once a visit; coming back to the map after that, her question just shows.)
+        if (firstTime('nan.map.more')) this.say('more', M.more)
         this.setAsking(true)
       })
     this.quietFrom = t0 + 3
@@ -172,7 +173,7 @@ export class NanMap extends Stage {
     if (speakingVoice()) return
     this.lastSay = this.time
     this.sayN++
-    this.ev.say(M.hint)
+    if (spendHint(M.hint)) this.ev.say(M.hint)
   }
 
   // ---------------------------------------------------------------- which places are open

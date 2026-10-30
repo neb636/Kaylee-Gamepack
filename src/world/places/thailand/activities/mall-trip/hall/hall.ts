@@ -16,7 +16,7 @@
 // she comes near them, Mommy's and Daddy's lines when she taps them (in turn), Daddy's tummy, and Sparkle's hint when
 // the finger shows. Nothing when she walks up to a way in (the mini game's own first line comes right after).
 import { Color, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, sounds, wobble, type Line } from '../../../../../../sdk'
+import { clamp, sounds, spendHint, wobble, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { LOOKS } from '../../../characters/looks'
 import type { Member } from '../../../characters/member'
@@ -657,7 +657,8 @@ export class Hall extends Stage {
     }
     if (stuck && this.hintedAt !== this.lastTouch && (near || nudge)) {
       this.hintedAt = this.lastTouch
-      this.hev.say(near ? L.mall.hall.hint : L.mall.hall.hintMap)
+      const line = near ? L.mall.hall.hint : L.mall.hall.hintMap
+      if (spendHint(line)) this.hev.say(line)
     }
   }
 

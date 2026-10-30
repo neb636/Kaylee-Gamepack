@@ -7,7 +7,7 @@
 //
 // Things to poke (tap them): the elephant, the rain cloud over Nan, the gibbon, the buffalo, the hornbill, the tuk-tuk,
 // the dolphins, the longtail boat, the coconut palm. Sparkle says something true the first time she meets each
-// (lines.ts L.map), welcomes her once a session and hints after ~8 s with nothing touched.
+// (lines.ts L.map), welcomes her once a session and glows the pins after ~8 s with nothing touched.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { sounds, useElementSize } from '../../../../../../sdk'
@@ -95,13 +95,9 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
           setTimeout(() => sounds.sparkle(), 250)
         }, 900)
       : undefined
-    // A hint after ~8 s with nothing touched (at most three): Sparkle says it and the pins glow.
-    let hints = 0
+    // After ~8 s with nothing touched the pins glow. No voice: it's a toy map, and she just heard the welcome.
     const idle = setInterval(() => {
-      if (hints >= 3 || performance.now() - lastTouch.current < 8000) return
-      hints++
-      lastTouch.current = performance.now() + 4000
-      guide.current?.speak(L.map.hint)
+      if (performance.now() - lastTouch.current < 8000) return
       setHint(true)
     }, 1000)
     return () => {

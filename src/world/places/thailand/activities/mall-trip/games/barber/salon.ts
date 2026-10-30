@@ -16,7 +16,7 @@
 // the chair spins round to it, Daddy poses and Mommy takes a photo. Daddy keeps the hairdo (the `hair` param).
 // A tap on a tool does a short go with it, so dragging is never a must. Nothing fails.
 import { CapsuleGeometry, Color, IcosahedronGeometry, OctahedronGeometry, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, wobble, type Line } from '../../../../../../../sdk'
+import { bell, spendHint, wobble, type Line } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
 import { LOOKS } from '../../../../characters/looks'
 import { L } from '../../../../lines'
@@ -816,7 +816,7 @@ export class Salon extends Stage {
   private hint(l: Line) {
     if (this.hintFor === this.lastTouch) return
     this.hintFor = this.lastTouch
-    this.bev.say(l)
+    if (spendHint(l)) this.bev.say(l)
   }
   private ready(key: string, every: number) {
     if (this.time - (this.cool.get(key) ?? -99) < every) return false

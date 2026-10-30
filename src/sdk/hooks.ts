@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
-import { say, type Line } from './speech'
+import { firstTime } from './hints'
+import { lineText, say, type Line } from './speech'
 
 /**
  * Returns a function that tells you if the component is still on screen.
@@ -16,9 +17,11 @@ export function useAlive() {
   return useCallback(() => ref.current, [])
 }
 
-/** Say something when a screen first appears. */
-export function useSayOnMount(text: Line) {
+/** Say something when a screen first appears. `once`: only the first time in this visit to the app (a menu she
+ *  comes back to often). */
+export function useSayOnMount(text: Line, opts: { once?: boolean } = {}) {
   useEffect(() => {
+    if (opts.once && !firstTime(`mount:${lineText(text)}`)) return
     void say(text)
   }, [text])
 }

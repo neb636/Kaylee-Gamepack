@@ -107,7 +107,7 @@ export function WhaleWatch({ onDone, setProgress }: CanadaActivityProps) {
         onDone()
       }, STAMP_AFTER_S * 1000)
     },
-    say: (l) => void guide.current?.speak(l),
+    say: (l, voice = true) => (voice ? void guide.current?.speak(l) : guide.current?.show(l)),
     progress: (n) => setProgress(n, 3),
   })
 

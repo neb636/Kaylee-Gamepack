@@ -30,7 +30,7 @@
 // the first time it eats, what's new (the wishes, Lamyai, the splash), counts a wish of three, and after ~8 s with
 // nothing done says what to do next (stuckLine).
 import { Color, Vector3, type Object3D, type PerspectiveCamera, type WebGLRenderer } from 'three'
-import { bell, clamp, pick, sounds, speakingVoice, type Line } from '../../../../../../sdk'
+import { bell, clamp, pick, sounds, speakingVoice, spendHint, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import type { Member } from '../../../characters/member'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -1415,7 +1415,7 @@ export class Chang extends Stage {
     if (!l) return
     this.lastStuck = this.time
     this.stuckN++
-    this.events.say(l)
+    if (spendHint(l)) this.events.say(l)
   }
   private stuckLine(): Line | null {
     switch (this.at) {

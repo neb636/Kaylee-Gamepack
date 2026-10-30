@@ -4,7 +4,7 @@
 // A few olives bonk Spina and stick to her quills: tap her and she shakes them into the basket.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { burst, say, SparklePuppet, sounds, useAlive, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, spendHint, SparklePuppet, sounds, useAlive, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { art } from '../../art'
 import { L } from '../../lines'
@@ -332,7 +332,7 @@ export function Grove({ onBranch, onDone }: { onBranch: (n: number) => void; onD
     const id = setInterval(() => {
       if (Date.now() - lastTouch.current > 10000 && !dragging.current) {
         lastTouch.current = Date.now()
-        void say(O.combHint)
+        if (spendHint(O.combHint)) void say(O.combHint)
       }
     }, 1000)
     return () => clearInterval(id)

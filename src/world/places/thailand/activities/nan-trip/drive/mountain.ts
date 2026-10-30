@@ -32,7 +32,7 @@
 // The screen (Drive.tsx) draws the steering wheel, the count's big numbers, Sparkle and the end card; the wheel's place
 // and turn, the hint finger and the tap targets are written here every frame.
 import { Color, Fog, Group, Scene, Vector3, type WebGLRenderer } from 'three'
-import { clamp, sounds, speakingVoice, type Line } from '../../../../../../sdk'
+import { clamp, sounds, speakingVoice, spendHint, type Line } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
@@ -1270,7 +1270,7 @@ export class NanDrive implements World3D {
     if (this.phase !== 'drive') return
     this.hintSaid = t
     this.hintN++
-    this.speak(D.steer)
+    if (spendHint(D.steer)) this.speak(D.steer)
   }
 
   // ---------------------------------------------------------------- the 3 from above

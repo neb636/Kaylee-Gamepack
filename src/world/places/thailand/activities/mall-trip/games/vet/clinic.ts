@@ -15,7 +15,7 @@
 // the window, onto the waiting room's bench. A tap on a tool uses it for her (a short go), so dragging is never a must.
 // Nothing fails: a tool anywhere does something (a giggle, a yip, Daddy hamming it up).
 import { BackSide, Color, Group, IcosahedronGeometry, OctahedronGeometry, Raycaster, Vector2, Vector3, type Mesh, type Object3D, type WebGLRenderer } from 'three'
-import { bell, wobble, type Line } from '../../../../../../../sdk'
+import { bell, spendHint, wobble, type Line } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
 import type { Member } from '../../../../characters/member'
 import { PATIENT_LOOKS } from '../../../../characters/looks'
@@ -1227,7 +1227,7 @@ export class VetClinic extends Stage {
     // Sparkle says what's next, once each time the 👆 shows.
     if (this.hintFor !== this.lastTouch) {
       this.hintFor = this.lastTouch
-      this.vev.say(V.hint[n])
+      if (spendHint(V.hint[n])) this.vev.say(V.hint[n])
     }
     const held = this.held?.moved ? this.held.tool : null
     if (held?.item.tool === want) {

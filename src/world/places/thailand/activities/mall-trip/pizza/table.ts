@@ -20,7 +20,7 @@
 //      and snaps onto his nose.
 // Nothing is wrong: any plate is fine, the box takes a slice any time, and slices on plates can be moved again.
 import { Color, Euler, IcosahedronGeometry, OctahedronGeometry, PlaneGeometry, Quaternion, Vector2, Vector3, type Group, type Mesh, type MeshBasicMaterial, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, wobble, type Line } from '../../../../../../sdk'
+import { bell, clamp, spendHint, wobble, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { FaceLife } from '../../../../../engine3d/characters/face'
 import { LOOKS } from '../../../characters/looks'
@@ -937,7 +937,7 @@ export class PizzaTable extends Stage {
       const hint = this.phase === 'menu' ? L.mall.pizza.hint.menu : this.hintAt() ? (box ? L.mall.pizza.hint.box : L.mall.pizza.hint.slice) : null
       if (hint) {
         this.hintedAt = this.lastTouch
-        this.pev.say(hint)
+        if (spendHint(hint)) this.pev.say(hint)
       }
     }
     // ---- The server ----

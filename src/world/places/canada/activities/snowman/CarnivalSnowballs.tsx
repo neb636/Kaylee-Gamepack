@@ -7,7 +7,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, lineText, say, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, burst, lineText, say, SparklePuppet, spendHint, type Line, type PuppetHandle } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
@@ -59,10 +59,10 @@ export function CarnivalSnowballs({ onDone, setProgress }: Partial<CanadaActivit
   }, [run])
 
   /** Sparkle says it (after whoever is talking), and the line shows it. */
-  const guide = (l: Line) => {
+  const guide = (l: Line, voice = true) => {
     setLine(l)
     sparkle.current?.play('wave')
-    void say(l, { interrupt: false })
+    if (voice) void say(l, { interrupt: false })
   }
   // A section link that starts past the story: Sparkle says what to do there.
   useEffect(() => {
@@ -85,7 +85,7 @@ export function CarnivalSnowballs({ onDone, setProgress }: Partial<CanadaActivit
       const now = performance.now() / 1000
       if (now - lastHint.current < HINT_GAP) return
       lastHint.current = now
-      guide(S.hint[kind])
+      guide(S.hint[kind], spendHint(S.hint[kind]))
     },
     done: () => {
       setDone(true)

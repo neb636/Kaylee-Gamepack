@@ -8,6 +8,7 @@ export function TrophyRoom() {
     trophies.length === 0
       ? `Play a game to win your very first trophy, ${KID_NAME}!`
       : `Wow, ${KID_NAME}! Look at all your trophies!`,
+    { once: true },
   )
   return (
     <div className="screen" style={{ background: 'linear-gradient(var(--lavender), var(--cream))', gap: 24 }}>

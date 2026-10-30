@@ -211,11 +211,11 @@ export function Hub({ meta, openActivity, stamps }: PlaceProps) {
       }
       if (id === 'maple') void talk(L.hub.maple[mapleTaps.current++ % L.hub.maple.length], true)
     },
+    // Nobody playing: the train toots and glows (or the bubbles do). No voice: it's a toy map, and she heard how once.
     idle: (what) => {
       if (story.current.on || performance.now() - lastTalk.current < 6000 || hints.current >= 5) return
       hints.current++
       worldRef.current?.hint(what)
-      void talk(what === 'train' ? L.hub.push : L.hub.bubbles)
     },
     pushed: () => {
       if (story.current.talking) endStory(true)

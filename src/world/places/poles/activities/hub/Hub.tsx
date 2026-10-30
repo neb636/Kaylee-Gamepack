@@ -20,9 +20,10 @@ import { ACTIVITY_POLE } from '../../meta'
 import { GLOBE_ANCHORS, PolesGlobe, type GlobeEvents, type Side } from '../../globe/globe'
 import HUB_SECTIONS, { type HubSection } from './sections'
 
-// Per visit to the app: the welcome, and which friend lines come next when she taps them.
+// Per visit to the app: the welcome, the friends' hellos, and which friend lines come next when she taps them.
 let welcomed = false
 const taps = { pola: 0, pebble: 0 }
+const said = new Set<string>()
 
 export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
@@ -58,19 +59,17 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     return () => clearTimeout(t)
   }, [])
 
-  // Which friends have said hello in this hub.
-  const said = useRef(new Set<string>())
   const events = useRef<GlobeEvents>({
     side: (s) => {
       now.current.side = s
       setSide(s)
       show()
       // The first time each friend's side comes round: their hello, then where to tap to play.
-      if (s === 'north' && !said.current.has('polaHi')) {
-        said.current.add('polaHi')
+      if (s === 'north' && !said.has('polaHi')) {
+        said.add('polaHi')
         friend(L.hub.polaHi)
-      } else if (s === 'south' && !said.current.has('pebbleHi')) {
-        said.current.add('pebbleHi')
+      } else if (s === 'south' && !said.has('pebbleHi')) {
+        said.add('pebbleHi')
         friend(L.hub.pebbleHi)
       }
       if (spotsOn(s)) guide.current?.once('spots', L.hub.spots, true)
@@ -79,7 +78,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       now.current.section = 'sun'
       setSunOut(true)
       show()
-      guide.current?.speak(L.hub.sunOut)
+      guide.current?.once('sunOut', L.hub.sunOut)
     },
     summer: (s) => {
       now.current.summer = s
@@ -93,7 +92,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       now.current.section = 'lost'
       now.current.who = kind
       show()
-      guide.current?.speak(L.hub.lost[kind], true)
+      // Said the first time each one turns up; after that she knows what to do.
+      guide.current?.once(`lost:${kind}`, L.hub.lost[kind], true)
     },
     saved: (kind, home) => {
       friend(home ? L.hub.home[kind] : L.hub.wrong[kind])
@@ -106,7 +106,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       } else if (id in L.hub.pokes) guide.current?.once(`poke:${id}`, L.hub.pokes[id as keyof typeof L.hub.pokes])
     },
   })
-  // What she's stuck on, for Sparkle's hint.
+  // What she's stuck on, for Sparkle's hint (shown in her bubble, not said: the globe is a toy).
   const hint: Line | null = lost && side === 'middle' ? L.hub.carry : !sunOut ? L.hub.spin : summer === 'middle' ? L.hub.sun : party ? L.hub.party : spotsOn(side) ? L.hub.spots : L.hub.spin
 
   return (
@@ -132,7 +132,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
         </button>
       )}
       <Spots meta={meta} stamps={stamps} side={side} openActivity={openActivity} />
-      <Guide ref={guide} hint={hint} />
+      <Guide ref={guide} hint={hint} voice={false} />
     </div>
   )
 }

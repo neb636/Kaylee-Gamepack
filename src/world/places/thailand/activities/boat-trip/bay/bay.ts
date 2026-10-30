@@ -19,7 +19,7 @@
 // and the photo), sunset.ts (the ride home) and race-gate.ts (the rainbow gate into the boat race, race/). The soft bumps
 // are bumps.ts, the tap targets and arrows overlay.ts.
 import { Color, Fog, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type PerspectiveCamera, type WebGLRenderer } from 'three'
-import { bell, clamp, type Line } from '../../../../../../sdk'
+import { bell, clamp, spendHint, type Line } from '../../../../../../sdk'
 import { Avatar } from '../../../characters/avatar'
 import { wearing } from '../../../trip/packing'
 import { FAMILY } from '../../../characters/family'
@@ -1067,7 +1067,7 @@ export class Bay implements World3D {
     if (!line) return
     this.lastStuck = this.time
     this.stuckCount++
-    this.say(line)
+    if (spendHint(line)) this.say(line)
   }
 
   /** Bumps: rocks, the pier, the stops' own (houses, cliffs, buoys...), the tour boat, the shore and the bay's edge. */

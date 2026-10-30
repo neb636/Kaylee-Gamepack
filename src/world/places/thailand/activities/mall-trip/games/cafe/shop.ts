@@ -16,7 +16,7 @@
 // milk jug, poured the same way) and a coconut shake. Each finished drink lines up on the shelf.
 // Things to poke: the fridge, the coffee machine, the bread baskets, the cake stand, the tea set, the family.
 import { Color, Group, IcosahedronGeometry, Mesh, MeshBasicMaterial, OctahedronGeometry, Quaternion, Vector2, Vector3, type BufferGeometry, type Object3D, type WebGLRenderer } from 'three'
-import { bell, wobble, type Line } from '../../../../../../../sdk'
+import { bell, spendHint, wobble, type Line } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
 import type { Member } from '../../../../characters/member'
 import type { AnchorInfo } from '../../../../../../engine3d/Anchors'
@@ -1184,7 +1184,7 @@ export class CafeStage extends Stage {
   private hint(l: Line, at: Vector3 | null) {
     if (at && this.hintFor !== this.lastTouch) {
       this.hintFor = this.lastTouch
-      this.cev.say(l)
+      if (spendHint(l)) this.cev.say(l)
     }
     return at
   }

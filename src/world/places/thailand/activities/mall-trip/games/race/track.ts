@@ -12,7 +12,7 @@
 // winner's ribbon on the board, and Daddy lands in the balls head first, legs kicking. The camera frames the steps and
 // the top, follows her down, then the pit. Then round again (after the third, the 🛝 shows and she can keep racing).
 import { Color, IcosahedronGeometry, OctahedronGeometry, Vector3, type Group, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, wobble } from '../../../../../../../sdk'
+import { bell, clamp, spendHint, wobble } from '../../../../../../../sdk'
 import type { AnchorInfo } from '../../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../../engine3d/camera'
 import { PAL } from '../../../../../../engine3d/toon'
@@ -826,7 +826,7 @@ export class RaceSlide extends Stage {
   private hint(l: string) {
     if (this.hintFor === this.lastTouch) return
     this.hintFor = this.lastTouch
-    this.rev.say(l)
+    if (spendHint(l)) this.rev.say(l)
   }
 
   placeAnchors() {
