@@ -21,7 +21,7 @@
 //   round mountains comes up under the plane, and after the claps the trip goes on to the Nan map (`events.done`).
 // Every part moves on by itself (about 35 s in all), whatever she does, and the ⏩ button skips ahead (`skip`).
 import { CanvasTexture, CatmullRomCurve3, Color, ConeGeometry, ExtrudeGeometry, Fog, Group, Matrix4, Mesh, MeshBasicMaterial, Path, PlaneGeometry, Shape, ShapeGeometry, Sprite, SpriteMaterial, SRGBColorSpace, TextureLoader, TubeGeometry, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, sounds } from '../../../../../sdk'
+import { bell, clamp, sounds, spendHint } from '../../../../../sdk'
 import type { Avatar } from '../../characters/avatar'
 import { buildAnimal, type Rig } from '../../../../engine3d/characters/animal'
 import { FaceLife } from '../../../../engine3d/characters/face'
@@ -818,7 +818,7 @@ export class PlaneRide extends Stage {
       // A hint once, if she hasn't found the tray.
       if (!this.trayOpen && this.time - this.lastTouch > 8 && this.secT > 4 && !this.told.has('hint')) {
         this.told.add('hint')
-        this.events.say(L.trip.hint.tray)
+        if (spendHint(L.trip.hint.tray)) this.events.say(L.trip.hint.tray)
       }
       // The clouds part, and the camera leans out of the window: Thailand, an elephant's head with a long trunk.
       // (It doesn't wait for the seat-back screen: she'd miss it playing with the cartoons.)
@@ -1168,7 +1168,7 @@ export class PlaneRide extends Stage {
       if (!this.forkGo) {
         this.forkWait += dt
         // Still deciding a while later: Sparkle says it's her pick (once).
-        if (this.forkWait > 9 && this.forkWait - dt <= 9 && this.time - this.lastTouch > 6) this.events.say(L.chang.hint.fork)
+        if (this.forkWait > 9 && this.forkWait - dt <= 9 && this.time - this.lastTouch > 6 && spendHint(L.chang.hint.fork)) this.events.say(L.chang.hint.fork)
       } else {
         this.forkT += dt
         const t = this.forkT

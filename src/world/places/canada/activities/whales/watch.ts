@@ -24,7 +24,7 @@
 // engine3d/water.ts. Built for engine3d/View3D.tsx; nothing here comes from Thailand. The
 // steering and the bounce are feel-lab knobs (?feel=1), with a graph of her finger against what the boat does.
 import { Color, Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, sounds, type Line } from '../../../../../sdk'
+import { clamp, sounds, spendHint, type Line } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -100,8 +100,9 @@ export interface WhaleEvents {
   section(s: WhaleSection): void
   /** The orca family's big jump. */
   done(): void
-  /** Someone says something (Sparkle's hints, Maple's and the otters' reactions). */
-  say(line: Line): void
+  /** Someone says something (Sparkle's hints, Maple's and the otters' reactions). `voice` false: only show it (a hint
+   *  the budget in sdk/hints.ts doesn't let her say). */
+  say(line: Line, voice?: boolean): void
   /** The parts she's finished (the otters home, the four whales, the orca family), for the stars in the top bar. */
   progress(done: number): void
 }
@@ -616,7 +617,8 @@ export class WhaleWatch implements World3D {
   /** Stuck for a while (nothing new happening): Sparkle helps, out loud. */
   private speakHint(t: number) {
     if (this.section === 'story' || this.listening || this.doneT >= 0 || this.hintsHere >= 3) return
-    if (t - this.lastProgress < STUCK_S || t - this.lastHint < HINT_EVERY_S) return
+    // (Steering counts as doing something: no nagging while her finger is on the sea.)
+    if (this.finger || t - Math.max(this.lastProgress, this.lastTouch) < STUCK_S || t - this.lastHint < HINT_EVERY_S) return
     const h = L.whales.hint
     const dr = this.activeDrifter
     // (With the orcas, the first time, the tap-to-listen microphone: the side verb she may not have found yet.)
@@ -625,7 +627,7 @@ export class WhaleWatch implements World3D {
     const line = mic ? h.mic : this.section === 'harbour' ? h.harbour : this.section === 'otters' ? (dr?.state === 'towed' ? h.tow : h.otters) : this.section === 'spouts' ? h.spouts : h.orcas
     this.lastHint = t
     this.hintsHere++
-    this.events.say(line)
+    this.events.say(line, spendHint(line))
   }
 
   // ---------------------------------------------------------------- her finger: steering

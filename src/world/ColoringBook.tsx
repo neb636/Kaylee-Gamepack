@@ -16,7 +16,7 @@ export function ColoringBook({ page }: { page?: string }) {
 }
 
 function Shelf() {
-  useSayOnMount(WORLD_LINES.coloringPick)
+  useSayOnMount(WORLD_LINES.coloringPick, { once: true })
   let i = 0 // running index across countries, for the staggered entrance
   return (
     <div className="screen decorated" style={{ padding: 0, overflow: 'hidden' }}>

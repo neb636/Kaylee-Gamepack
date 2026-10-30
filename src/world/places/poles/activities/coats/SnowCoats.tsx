@@ -19,7 +19,7 @@
 import { getStroke } from 'perfect-freehand'
 import { motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, burst, sounds, useAlive, useElementSize, type Line } from '../../../../../sdk'
+import { BigButton, burst, firstTime, sounds, useAlive, useElementSize, type Line } from '../../../../../sdk'
 import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
@@ -1123,7 +1123,10 @@ export function SnowCoats({ onDone }: ActivityProps) {
       },
       phase: (p) => {
         setPhase(p)
-        if (p === 'bear') guide.current?.speak(L.coats.hide.bear)
+        // (She hears the bear warning once per visit; after that the bear comes quietly.)
+        if (p === 'bear') {
+          if (firstTime('poles:coats:bear')) guide.current?.speak(L.coats.hide.bear)
+        }
         else if (p === 'dusk') guide.current?.speak(L.coats.hide.gone)
         else if (p === 'end') {
           guide.current?.speak(L.coats.summer.end)

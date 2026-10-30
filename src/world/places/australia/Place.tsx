@@ -2,7 +2,7 @@
 // Once every stamp is collected, the sunset party at the Sydney Opera House is the finale.
 import { motion } from 'motion/react'
 import { createElement, useEffect, useState, type ComponentType, type ReactNode, type Ref } from 'react'
-import { Buddy, say, sounds, type Line, type PuppetHandle } from '../../../sdk'
+import { Buddy, firstTime, say, sounds, type Line, type PuppetHandle } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
@@ -113,7 +113,8 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const allDone = meta.activities.every((a) => stamps.includes(a.id))
 
   useEffect(() => {
-    if (intro) return
+    // Only when something is new (her first look, a new stamp, the party): coming back with nothing new is quiet.
+    if (intro || !firstTime(`australia:hub:${allDone ? 'party' : stamps.length}`)) return
     void say(allDone ? L.hubParty : stamps.length === 0 ? L.hubFirst : L.hubNext)
   }, [intro, allDone, stamps.length])
 

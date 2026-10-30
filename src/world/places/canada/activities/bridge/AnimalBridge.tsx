@@ -21,7 +21,7 @@
 // are knobs (herd.ts), with the planting and the highway's here (?feel=1). 2D only: one SVG written every frame.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, bigCelebration, burst, lineText, say as speak, sounds, speechLevel, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, lineText, say as speak, sounds, speechLevel, spendHint, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { sfx } from '../../../../kit/sfx'
@@ -119,8 +119,9 @@ interface Info {
 }
 interface Events {
   info: (i: Info) => void
-  /** Speak a line (and show its words for Dad). `queue` waits for the line playing now (a book card's) to finish. */
-  say: (line: Line, queue: boolean) => void
+  /** Speak a line (and show its words for Dad). `queue` waits for the line playing now (a book card's) to finish.
+   *  `voice` false: only show the words (a hint the budget in sdk/hints.ts keeps quiet). */
+  say: (line: Line, queue: boolean, voice?: boolean) => void
   album: (photos: Snapshot[]) => void
   /** Maple in the meadow: an action. */
   maple: (action: 'cheer' | 'hop' | 'wave' | 'wiggle' | 'slap') => void
@@ -250,13 +251,13 @@ class BridgeWorld {
     this.ev.info({ section, crossed: [...this.crossed], green: this.green(), seeds: this.seedsOn })
   }
 
-  private say(line: Line, minGap = 0) {
+  private say(line: Line, minGap = 0, voice = true) {
     const text = lineText(line)
     if (text === this.lastSay && this.now - this.sayAt < minGap) return
     this.lastSay = text
     this.sayAt = this.now
     // Right after a book card pops up, Sparkle is naming the animal: wait for her.
-    this.ev.say(line, this.now - this.metAt < 3)
+    this.ev.say(line, this.now - this.metAt < 3, voice)
   }
   /** Say it only the first time this run. */
   private sayOnce(key: string, line: Line) {
@@ -719,7 +720,8 @@ class BridgeWorld {
     if (stuck && !this.hintSaid) {
       this.hintSaid = true
       const calf = this.herd.fams.elk.m.find((m) => m.lost)
-      this.say(calf ? B.fetch : this.lead === 'bears' && this.herd.fams.bears.shy && this.seedsOn ? B.seeds : this.lead ? SAY[this.lead] : B.lead.elk)
+      const line = calf ? B.fetch : this.lead === 'bears' && this.herd.fams.bears.shy && this.seedsOn ? B.seeds : this.lead ? SAY[this.lead] : B.lead.elk
+      this.say(line, 0, spendHint(line))
     }
     this.cars_(dt)
     this.ambient(dt)
@@ -1150,9 +1152,9 @@ export function AnimalBridge({ onDone, setProgress }: CanadaActivityProps) {
         // The bridge's green counts in every section (she can plant it while leading any family).
         if (!storyOn.current) enter(i.section, { crossed: crossedParam(i.crossed, i.section), green: greenParam(i.green) })
       },
-      say: (line, queue) => {
+      say: (line, queue, voice = true) => {
         setSay(line)
-        void speak(line, { interrupt: !queue })
+        if (voice) void speak(line, { interrupt: !queue })
       },
       album: setAlbum,
       maple: (a) => void maple.current?.play(a),

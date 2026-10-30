@@ -4,7 +4,7 @@
 // prow too. Real Thai boats wear them for the boat's spirit (Mae Ya Nang) and good luck. Then Daddy steps in (the boat
 // tips: whoa-oa-oa), Mommy, and Kaylee hops to the tiller. The first time she drives off, Daddy says "Pai!" (bay.ts).
 import { Group, Vector3 } from 'three'
-import { bell } from '../../../../../../sdk'
+import { bell, firstTime, spendHint } from '../../../../../../sdk'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import type { Shot } from '../../../../../engine3d/camera'
 import { merge, P, solid } from '../../../../../engine3d/geo'
@@ -210,8 +210,9 @@ export class PierStop implements BayPart {
             this.tying = false
             this.boarding = -1
             bay.setPhase('drive')
-            // (Tilting the phone, the gas pedal shows how instead of the finger line.)
-            if (!bay.tilting) bay.say(L.bay.hint.drive)
+            // (Tilting the phone, the gas pedal shows how instead of the finger line. Said the first boarding of the visit;
+            // after that it's a hint like any other, from the shared budget.)
+            if (!bay.tilting && (spendHint(L.bay.hint.drive) || firstTime('bay.hint.drive'))) bay.say(L.bay.hint.drive)
           }
         })
       })

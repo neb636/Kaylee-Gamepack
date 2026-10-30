@@ -1,7 +1,7 @@
 // Who says what in a mini game, kept short ("Talk short, play long", AGENTS.md): a reaction in a character's own voice
 // only now and then, a count that never talks over anyone, a fact or a first-time line once, and Sparkle's hint once
 // each time the 👆 shows. Little Land, the Golden Mountain, Muay Thai and the Sky Pod use it (lines: lines.ts `L.mall`).
-import { speakingVoice, type Line } from '../../../../../../../sdk'
+import { speakingVoice, spendHint, type Line } from '../../../../../../../sdk'
 
 /** The 👆 shows after this long with nothing touched (trip/legs/stage.ts). */
 export const HINT_S = 7
@@ -39,12 +39,12 @@ export class Talk {
     if (l && !speakingVoice()) this.out(l)
   }
   /** Every frame: when the 👆 shows (nothing touched for HINT_S, and something to point at), Sparkle says what to
-   *  touch, once each time it shows. */
+   *  touch, once each time it shows (out loud only while the visit's hint budget lasts, sdk/hints.ts). */
   hint(time: number, lastTouch: number, showing: () => boolean, line: () => Line | null) {
     if (time - lastTouch <= HINT_S || this.hintFor === lastTouch || !showing()) return
     const l = line()
     if (!l) return
     this.hintFor = lastTouch
-    this.out(l)
+    if (spendHint(l)) this.out(l)
   }
 }

@@ -34,7 +34,7 @@
 // thing once; a first tap on the buffalo, a duck, the view or the kratip tells a fact. Now and then, when nobody's
 // talking, far-off farm life: a frog, a bird, a duck, a chime, the buffalo.
 import { Color, Group, IcosahedronGeometry, Matrix4, MeshBasicMaterial, OctahedronGeometry, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, speakingVoice, type Line } from '../../../../../../sdk'
+import { bell, clamp, speakingVoice, spendHint, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { Member } from '../../../characters/member'
 import { L } from '../../../lines'
@@ -1720,7 +1720,7 @@ export class RiceFarm extends Stage {
     if (!l) return
     this.lastSay = this.time
     this.sayN++
-    this.ev.say(l)
+    if (spendHint(l)) this.ev.say(l)
   }
   private stuckLine(): Line | null {
     if (this.phase === 'deck') return this.photos ? null : !this.eaten && !this.sips ? R.hint.eat : R.hint.photo

@@ -6,7 +6,7 @@
 // her own zodiac year, this year's horse galloping past, and the sleepy cat who missed the race.
 import { motion } from 'motion/react'
 import { forwardRef, useEffect, useRef, useState, type ReactNode } from 'react'
-import { burst, Buddy, Piece, PlayArea, say, shuffle, sounds, Target, useAlive, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, Buddy, Piece, PlayArea, say, shuffle, spendHint, sounds, Target, useAlive, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
 import { sfx } from '../../../../kit/sfx'
@@ -105,6 +105,11 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
     setPrompt(l)
     await say(l)
   }
+  /** A timed "stuck" hint: the prompt always shows it, the voice only while the shared hint budget allows. */
+  const hint = (l: Line) => {
+    setPrompt(l)
+    if (spendHint(l)) void say(l)
+  }
   const nudge = useRef<ReturnType<typeof setTimeout>>(undefined)
   const armNudge = (fn: () => void, ms = 9000) => {
     clearTimeout(nudge.current)
@@ -170,7 +175,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
       await say(R.oxHi)
       if (!alive()) return
       await speak(R.paddle)
-      armNudge(() => void speak(R.paddle))
+      armNudge(() => hint(R.paddle))
     })()
   }
   const mouseH = () => Math.max(96, BASE.mouse * size.current.U)
@@ -197,7 +202,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
     addFx('splash', p.x, p.y - 0.02)
     if (k === 2) void say(R.oxHalf, { interrupt: false })
     if (k === 4) void arriveOx()
-    else armNudge(() => void speak(R.paddle))
+    else armNudge(() => hint(R.paddle))
   }
 
   const arriveOx = async () => {
@@ -261,7 +266,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
     await speak(R.stonesHelp)
     armNudge(() => {
       setSpotHint(true)
-      void speak(R.stonesHint)
+      hint(R.stonesHint)
     })
   }
   const placeStone = (stone: number, spot: number) => {
@@ -279,7 +284,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
     else
       armNudge(() => {
         setSpotHint(true)
-        void speak(R.stonesHint)
+        hint(R.stonesHint)
       })
     return true
   }
@@ -327,7 +332,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
     await speak(R.rainHelp)
     armNudge(() => {
       setCloudHint(true)
-      void speak(R.rainHint)
+      hint(R.rainHint)
     })
   }
   const tapCloud = (i: number) => {
@@ -344,7 +349,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
     else
       armNudge(() => {
         setCloudHint(true)
-        void speak(R.rainHint)
+        hint(R.rainHint)
       })
   }
   const flyDragon = async () => {
@@ -412,10 +417,10 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
     if (k <= 4) {
       setGlowId(ORDER[k])
       setGlowStep(k)
-      void speak(R.hintOrder[k])
+      hint(R.hintOrder[k])
     } else {
       setGlowId('tiger')
-      void speak(R.afterHint)
+      hint(R.afterHint)
     }
   }
   const wrong = (id: Id) => {
@@ -433,7 +438,9 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
       setGlowId('tiger')
       void speak(R.afterHint)
     }
-    armNudge(() => void say(R.tryGlow), 11000)
+    armNudge(() => {
+      if (spendHint(R.tryGlow)) void say(R.tryGlow)
+    }, 11000)
   }
   const tryPlace = (id: Id, step: number | null) => {
     const k = qRef.current
@@ -546,7 +553,9 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
     setPhase('cat')
     setCatOn(true)
     await speak(R.catAsk)
-    armNudge(() => void say(R.catAsk), 10000)
+    armNudge(() => {
+      if (spendHint(R.catAsk)) void say(R.catAsk)
+    }, 10000)
   }
   const tapCat = async () => {
     if (catAwake || phaseRef.current !== 'cat') return
@@ -591,7 +600,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
       mv('mouse', { x: rp.x, y: rp.y, ms: 0 })
       setPhase('paddle')
       void speak(R.paddle)
-      armNudge(() => void speak(R.paddle))
+      armNudge(() => hint(R.paddle))
     } else if (from === 'tiger') {
       setPhase('tiger')
       void startTiger()
@@ -613,7 +622,9 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
         setPhase('cat')
         setCatOn(true)
         void speak(R.catAsk)
-        armNudge(() => void say(R.catAsk), 10000)
+        armNudge(() => {
+          if (spendHint(R.catAsk)) void say(R.catAsk)
+        }, 10000)
       }
     }
   }
@@ -628,7 +639,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
     void speak(R.mouseHelp)
     armNudge(() => {
       setMisses(2)
-      void speak(R.mouseHint)
+      hint(R.mouseHint)
     })
   }, [story, W === 0])
 

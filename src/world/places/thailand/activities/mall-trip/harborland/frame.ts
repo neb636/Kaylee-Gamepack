@@ -16,7 +16,7 @@
 // Phi Ta Khon fact the first time she pokes a mask, and Sparkle's hint when the finger shows. The camera is a dollhouse view
 // from the front, a little above, following her up and down; on a tall screen it shows more of the tower.
 import { Color, Raycaster, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, sounds, type Line } from '../../../../../../sdk'
+import { clamp, sounds, spendHint, type Line } from '../../../../../../sdk'
 import type { Avatar } from '../../../characters/avatar'
 import { LOOKS } from '../../../characters/looks'
 import type { Member } from '../../../characters/member'
@@ -610,7 +610,7 @@ export class BigFrame extends Stage {
     }
     if (this.time - this.lastTouch > STUCK_S && this.hintedAt !== this.lastTouch && this.hintAt()) {
       this.hintedAt = this.lastTouch
-      this.fev.say(L.mall.frame.hint)
+      if (spendHint(L.mall.frame.hint)) this.fev.say(L.mall.frame.hint)
     }
   }
 

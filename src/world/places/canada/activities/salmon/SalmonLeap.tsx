@@ -24,7 +24,7 @@
 // (?feel=1). 2D only: the SVGs are written every frame, no three.js or Phaser.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent, type RefObject } from 'react'
-import { BigButton, bigCelebration, burst, lineText, say, speakingVoice, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, lineText, say, speakingVoice, spendHint, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -742,7 +742,8 @@ class SalmonWorld {
     const idle = now - Math.max(this.lastTouch, this.lastFlick, this.phase === 'hatch' ? this.phaseAt : 0)
     if (!this.finger && idle > HINT.after && this.hinted < 0 && (this.phase === 'play' || this.phase === 'lay' || this.phase === 'hatch')) {
       this.hinted = now
-      void say(this.phase === 'hatch' ? T.hatch : SAY[this.section])
+      const line = this.phase === 'hatch' ? T.hatch : SAY[this.section]
+      if (spendHint(line)) void say(line)
     }
     // Rain comes and goes by itself too (it's a rainforest).
     if (now > this.rain.next) this.toggleRain()

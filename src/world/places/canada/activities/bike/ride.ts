@@ -20,7 +20,7 @@
 // can fall (a roller's crest, a rock hop, the kicker), it flies. Built for engine3d/View3D.tsx; nothing here comes from
 // Thailand. The steering, the lean and the bounce are feel-lab knobs (?feel=1).
 import { Color, Fog, Group, Mesh, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp, pick, sounds, type Line } from '../../../../../sdk'
+import { clamp, pick, sounds, spendHint, type Line } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -82,8 +82,9 @@ export interface BikeEvents {
   /** At the bottom by the waterfall. */
   done(): void
   /** Someone speaks: Sparkle (a plain string: an instruction, a hint) or a friend in their own voice. `chat` lines are
-   *  Maple's whoops and the animals' words: they never cut anyone off. */
-  say(line: Line, chat: boolean): void
+   *  Maple's whoops and the animals' words: they never cut anyone off. `voice` false: only show it (a hint the budget
+   *  in sdk/hints.ts doesn't let her say). */
+  say(line: Line, chat: boolean, voice?: boolean): void
   /** How far down she's got: one part per stretch (green, berms, creek, falls). */
   progress(done: number): void
 }
@@ -692,7 +693,7 @@ export class MountainBike implements World3D {
     if (stuck && idle > HINT_S && t - this.hintAt > 25 && this.told.has('steer')) {
       this.hintAt = t
       this.chatAt = t
-      this.events.say(L.bike.hint, false)
+      this.events.say(L.bike.hint, false, spendHint(L.bike.hint))
     }
   }
 

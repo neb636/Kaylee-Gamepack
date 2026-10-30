@@ -61,11 +61,10 @@ export const L = {
   },
 
   // The family (their voices in cast.json; their animals in characters/looks.ts).
-  // Sparkle on the Thailand map (activities/hub/map/): the welcome, a hint when nothing's touched, and something true
-  // the first time she taps each thing on the map.
+  // Sparkle on the Thailand map (activities/hub/map/): the welcome (once a visit; after that the pins only glow), and
+  // something true the first time she taps each thing on the map.
   map: {
     hello: 'This is Thailand! Tap a picture to explore.',
-    hint: 'This is Thailand! Tap a picture to explore.',
     pokes: {
       elephant: 'Elephants live in the north of Thailand!',
       clouds: "It rains a lot in Nan's mountains!",

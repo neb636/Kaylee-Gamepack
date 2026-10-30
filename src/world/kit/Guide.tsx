@@ -4,7 +4,7 @@
 // Sparkle only says what to do. Thailand's house has its own (thailand/activities/hub/Guide.tsx).
 import { AnimatePresence, motion } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, say, speakingVoice, SparklePuppet, type Line, type PuppetHandle } from '../../sdk'
+import { lineText, say, speakingVoice, spendHint, SparklePuppet, type Line, type PuppetHandle } from '../../sdk'
 
 export interface GuideHandle {
   /** Say a line now. `after`: wait for the line before to finish instead of cutting it off. */
@@ -33,20 +33,23 @@ export function afterTalk(fn: () => void, maxMs = 12000): () => void {
 const told = new Set<string>()
 
 export interface GuideProps {
-  /** What to say when she's stuck (the current step's instruction). Changing it restarts the reminders. */
+  /** What to say when she's stuck (the current step's instruction). Changing it restarts the reminders; whether one
+   *  is said out loud or only shown in the bubble is `spendHint`'s call (sdk/hints.ts), counted per visit. */
   hint?: Line | null
   /** Seconds with nothing touched (and nobody talking) before the hint. */
   stuckS?: number
   /** Seconds between the reminders after the first, and how many there are for one hint. */
   againS?: number
   maxHints?: number
+  /** false: hints only show in the bubble, never said (a hub or a free-play toy). */
+  voice?: boolean
   /** No hints (a cutscene, the stamp screen). */
   quiet?: boolean
   /** Which bottom corner she stands in. */
   corner?: 'left' | 'right'
 }
 
-export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint = null, stuckS = 8, againS = 20, maxHints = 4, quiet = false, corner = 'left' }, ref) {
+export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint = null, stuckS = 10, againS = 25, maxHints = 3, voice = true, quiet = false, corner = 'left' }, ref) {
   const sparkle = useRef<PuppetHandle>(null)
   const [line, setLine] = useState<Line | null>(null)
   const last = useRef<Line | null>(hint)
@@ -67,6 +70,14 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
       lastTalk.current = performance.now()
       hide.current = setTimeout(() => setLine((cur) => (cur === l ? null : cur)), 2200)
     })
+  }
+  /** A hint without the voice: she waves and the bubble shows it for a moment (tap her to hear it). */
+  const show = (l: Line) => {
+    last.current = l
+    setLine(l)
+    void sparkle.current?.play('wave')
+    clearTimeout(hide.current)
+    hide.current = setTimeout(() => setLine((cur) => (cur === l ? null : cur)), 4000)
   }
   useImperativeHandle(ref, () => ({
     speak,
@@ -102,7 +113,8 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
       if (r.count >= maxHints || (r.count > 0 && now - r.last < againS * 1000)) return
       r.count++
       r.last = now
-      speak(h)
+      if (voice && spendHint(h)) speak(h)
+      else show(h)
     }, 500)
     return () => {
       window.removeEventListener('pointerdown', touch, true)
@@ -110,7 +122,7 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
       clearInterval(timer)
       clearTimeout(hide.current)
     }
-  }, [quiet, stuckS, againS, maxHints])
+  }, [quiet, voice, stuckS, againS, maxHints])
 
   const right = corner === 'right'
   return (

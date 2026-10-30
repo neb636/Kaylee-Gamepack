@@ -13,7 +13,7 @@
 //    glows: tap it and in they go (`hall?from=in`).
 // No voices yet: the lines (words.ts) show in the guide's bubble.
 import { Color, Group, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { bell, clamp, sounds, wobble } from '../../../../../sdk'
+import { bell, clamp, sounds, spendHint, wobble } from '../../../../../sdk'
 import type { Avatar } from '../../characters/avatar'
 import { buildAnimal, type Rig } from '../../../../engine3d/characters/animal'
 import { buildShoes } from '../../characters/closet/shoes'
@@ -761,7 +761,7 @@ export class Arrive extends Stage {
     const idle = this.time - this.lastTouch
     if (idle > 7 && ph === 'lift' && !this.hinted.has('lift')) {
       this.hinted.add('lift')
-      this.events.say(W.arrive.lift)
+      if (spendHint(W.arrive.lift)) this.events.say(W.arrive.lift)
     }
   }
 

@@ -14,7 +14,7 @@ import SECTIONS from './sections'
 // Per-frame work (the tool, particles, Paco's scoot, Abuela's snores, the idle hint) runs in refs and one game loop.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
-import { burst, say, shuffle, sounds, SparklePuppet, useAlive, useGameLoop, useSaved, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { burst, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, useGameLoop, useSaved, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -766,7 +766,8 @@ export function FluffyDay({ onDone, setProgress }: ActivityProps) {
     const quiet = Math.max(G.lastProgress, idleKey === 'brush' || idleKey === 'clip' ? 0 : G.lastTouch)
     if (idleKey && !G.busy && !G.hat && now - quiet > 8000 && now - G.lastHint > 12000 && !G.pondReady) {
       G.lastHint = now
-      void say(G.phase === 'yarn' && pinkRef.current ? F.dropGo : F.idle[idleKey])
+      const line = G.phase === 'yarn' && pinkRef.current ? F.dropGo : F.idle[idleKey]
+      if (spendHint(line)) void say(line)
       if (idleKey === 'brush' || idleKey === 'clip') {
         // Show exactly what's left: things still stuck, the bangs, or a fluffy spot.
         setHints(hintSpots())

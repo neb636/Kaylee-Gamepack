@@ -1279,7 +1279,8 @@ export function EmperorHuddle({ onDone }: ActivityProps) {
       section: (s, p) => enter(s, p),
       cue: (c, speak) => {
         const line = L.huddle[c]
-        if (c !== 'turned' && c !== 'done') setHint(line)
+        // (The sunrise is a remark, not something to do: no hint then.)
+        if (c !== 'turned' && c !== 'done') setHint(c === 'sunrise' ? null : line)
         if (speak && fresh(`cue:${c}`)) guide.current?.speak(line, true)
       },
       talk: (who, what) => {

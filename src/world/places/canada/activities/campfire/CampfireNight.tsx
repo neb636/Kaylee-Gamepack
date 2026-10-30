@@ -22,7 +22,7 @@
 // drawn once and slid under her finger (only the compositor moves it).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent, type RefObject } from 'react'
-import { BigButton, bell as bellIn, bigCelebration, burst, lerp, lineText, say, smooth, sounds, span, useElementSize, wobble, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bell as bellIn, bigCelebration, burst, lerp, lineText, say, smooth, sounds, span, spendHint, useElementSize, wobble, type Line, type PuppetHandle } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { sfx } from '../../../../kit/sfx'
@@ -1424,7 +1424,7 @@ class CampWorld {
       // Sparkle says the hint once each time she gets stuck.
       if (at && !this.hinted) {
         this.hinted = true
-        this.ev.speak(HINT[this.section])
+        if (spendHint(HINT[this.section])) this.ev.speak(HINT[this.section])
       }
     }
     put(h, 'opacity', at ? '1' : '0')

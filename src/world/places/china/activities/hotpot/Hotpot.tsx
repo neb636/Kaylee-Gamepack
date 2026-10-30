@@ -5,7 +5,7 @@
 // and the right thing glows. Payoff: everyone eats together, Hong stands up and cheers.
 import { animate, motion, useMotionValue, useTransform } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { Buddy, burst, say, sounds, useAlive, useElementSize, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { Buddy, burst, say, sounds, spendHint, useAlive, useElementSize, useLandscape, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Stage } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -133,7 +133,7 @@ export function Hotpot({ onDone, setProgress }: ActivityProps) {
     nudge.current = setTimeout(() => {
       if (!alive()) return
       setGlow(glowWhat)
-      void say(line)
+      if (spendHint(line)) void say(line)
       armNudge(line, glowWhat)
     }, 9000)
   }

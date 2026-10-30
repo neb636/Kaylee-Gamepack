@@ -5,7 +5,7 @@ import BALLOON_SECTIONS from './activities/BalloonSoon.sections'
 // (route `party`) waits until all five exist.
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType } from 'react'
-import { BigButton, say, SparklePuppet, sounds, useSaved, type PuppetHandle } from '../../../sdk'
+import { BigButton, firstTime, say, SparklePuppet, sounds, useSaved, type PuppetHandle } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
@@ -101,11 +101,10 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const [hats] = useSaved<Record<string, string | null> | null>(HATS_KEY, null)
 
   useEffect(() => {
-    if (intro) return
-    void (async () => {
-      if (stamps.length) await say(L.hubNext)
-      void say(L.hub, { interrupt: false })
-    })()
+    // Only when something is new (her first look, a new stamp, the party): coming back with nothing new is quiet.
+    if (intro || !firstTime(`peru:hub:${stamps.length}`)) return
+    // Her first look: how to play. Back with a new stamp: just the cheer.
+    void say(stamps.length ? L.hubNext : L.hub)
   }, [intro])
 
   return (

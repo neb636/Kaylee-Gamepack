@@ -6,7 +6,7 @@
 // Nothing can fail. If she stops, Long Long says a hint and then parades on his own.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { bell, burst, bigCelebration, lineText, say, sounds, span, stopSpeaking, useAlive, useElementSize, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { bell, burst, bigCelebration, lineText, say, sounds, span, spendHint, stopSpeaking, useAlive, useElementSize, useGameLoop, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { Flag } from '../../../../kit/Flag'
 import { useSections } from '../../../../kit/sections'
 import { PromptBubble } from '../../../../kit/Stage'
@@ -207,7 +207,8 @@ export function Parade({ onDone, setProgress }: ActivityProps) {
       lp.idle += dt
       if (lp.idle > 5 && !lp.hinted) {
         lp.hinted = true
-        void speak(P.hint)
+        setPrompt(P.hint)
+        if (spendHint(P.hint)) void say(P.hint)
       }
       if (lp.idle > 10) auto.current.on = true
     }

@@ -14,7 +14,7 @@ import SECTIONS from './sections'
 // re-render per move).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
-import { BigButton, burst, Buddy, say, shuffle, sounds, SparklePuppet, useAlive, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, burst, Buddy, say, shuffle, sounds, spendHint, SparklePuppet, useAlive, wait, type Line, type PuppetHandle } from '../../../../../sdk'
 import { sfx } from '../../../../kit/sfx'
 import { PromptBubble } from '../../../../kit/Stage'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -651,13 +651,13 @@ export function Terraces({ onDone, setProgress }: ActivityProps) {
         G.lastHint = now
         const left = orders[G.k].find((id) => !G.placed.has(keyOf(G.k, id)))
         if (left) setGlow(left)
-        say1(T.idle.stone)
+        if (spendHint(T.idle.stone)) say1(T.idle.stone)
       } else if (G.phase === 'seeds') {
         G.lastHint = now
-        say1(T.idle.seed)
+        if (spendHint(T.idle.seed)) say1(T.idle.seed)
       } else if (G.phase === 'photo') {
         G.lastHint = now
-        say1(T.idle.photo)
+        if (spendHint(T.idle.photo)) say1(T.idle.photo)
       }
     }, 600)
     return () => clearInterval(t)

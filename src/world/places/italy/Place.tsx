@@ -2,7 +2,7 @@
 // Pizzeria in Naples came first; arches whose activities aren't built yet say "coming soon".
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react'
-import { BigButton, say, SparklePuppet, sounds, type PuppetHandle } from '../../../sdk'
+import { BigButton, firstTime, say, SparklePuppet, sounds, type PuppetHandle } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { sfx } from '../../kit/sfx'
 import { StampEarned } from '../../kit/StampEarned'
@@ -104,7 +104,8 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const playable = new Set(meta.activities.map((a) => a.id))
 
   useEffect(() => {
-    if (intro) return
+    // Only when something is new (her first look, a new stamp, the party): coming back with nothing new is quiet.
+    if (intro || stamps.length === 0 || !firstTime(`italy:hub:${stamps.length}`)) return
     void say(L.hubNext)
   }, [intro, stamps.length])
 

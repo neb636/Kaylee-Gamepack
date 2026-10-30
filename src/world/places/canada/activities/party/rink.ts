@@ -11,7 +11,7 @@
 // goal against her), and eases off after every miss: slower, then diving the wrong way (rule 2).
 // Who skates: Maple, the moose in goal, and one friend per stamp (sections.ts teamOf). Finale.tsx carries the words.
 import { Color, Fog, Group, Mesh, MeshBasicMaterial, TorusGeometry, Vector3, type WebGLRenderer } from 'three'
-import { burst, clamp, say, sounds, wobble } from '../../../../../sdk'
+import { burst, clamp, say, sounds, spendHint, wobble } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { noise, sfx, tone } from '../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
@@ -406,7 +406,7 @@ export class RinkWorld extends Base3D implements World3D {
     if (idle && !this.hinted) {
       this.hinted = true
       this.events.hint()
-      void say(L.party.rinkHint)
+      if (spendHint(L.party.rinkHint)) void say(L.party.rinkHint)
     }
     this.drawHint(idle ? tmp.set(p.x, 0.2, p.z) : null, idle ? tmp2.set(0, 0.4, RINK.zG + 0.5) : undefined)
 
