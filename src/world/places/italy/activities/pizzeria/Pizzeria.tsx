@@ -164,7 +164,7 @@ function Break({ onNext }: { onNext: () => void }) {
   }, [])
   return (
     <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(rgba(255,247,240,.4), rgba(255,247,240,.4)), url(${art.bgPizzeriaFront}) center / cover`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 'min(24px, 3vh)', padding: 'var(--top-clear) 20px 20px' }}>
-      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ background: '#fff', borderRadius: 'var(--radius)', padding: '12px 26px', boxShadow: 'var(--shadow)', fontSize: 'clamp(22px, min(4vw, 5vh), 38px)', fontWeight: 600, textAlign: 'center' }}>
+      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ background: '#fff', borderRadius: 'var(--radius)', padding: '12px 26px', border: '3px solid var(--ink)', boxShadow: 'var(--talk-drop)', fontSize: 'clamp(22px, min(4vw, 5vh), 38px)', fontWeight: 600, textAlign: 'center' }}>
         ⭐ {P.serviceDone}
       </motion.div>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'min(20px, 3vw)' }}>

@@ -304,7 +304,7 @@ function BalloonSoon({ backToMap }: { backToMap: () => void }) {
   }, [])
   return (
     <div style={{ position: 'absolute', inset: 0, background: `url(${art.bgAndes}) center / cover`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', gap: 'min(20px, 3vh)', padding: 'var(--top-clear) 20px calc(var(--safe-bottom) + 28px)' }}>
-      <div style={{ background: '#fff', borderRadius: 'var(--radius)', padding: '12px 26px', boxShadow: 'var(--shadow)', fontSize: 'clamp(22px, min(4vw, 5vh), 38px)', fontWeight: 600, textAlign: 'center' }}>🎈 {L.balloonSoon}</div>
+      <div style={{ background: '#fff', borderRadius: 'var(--radius)', padding: '12px 26px', border: '3px solid var(--ink)', boxShadow: 'var(--talk-drop)', fontSize: 'clamp(22px, min(4vw, 5vh), 38px)', fontWeight: 600, textAlign: 'center' }}>🎈 {L.balloonSoon}</div>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'min(20px, 3vw)' }}>
         <SparklePuppet ref={sparkle} height="min(300px, 34vh, 40vw)" lookToward={0.5} />
         <Alpaca ref={luna} kind="luna" height="min(300px, 34vh, 40vw)" onTap={() => void luna.current?.play('giggle')} label="Luna" />

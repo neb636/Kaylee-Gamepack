@@ -36,14 +36,11 @@ export function PromptBubble({ text, speak = true }: { text: Line; speak?: boole
   return (
     <motion.div
       key={lineText(text)}
-      className="stage-prompt"
+      className="stage-prompt talk-bubble"
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       style={{
-        background: 'rgba(255,255,255,0.94)',
-        borderRadius: 'var(--radius)',
-        padding: '8px 10px 8px 22px',
-        boxShadow: 'var(--shadow)',
+        padding: '6px 8px 6px 22px',
         display: 'flex',
         alignItems: 'center',
         gap: 12,

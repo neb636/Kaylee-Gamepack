@@ -73,7 +73,7 @@ export function Vet({ patient, onPatient, onHealed, onPlay }: Props) {
                     animate={{ scale: 1, y: [0, -6, 0] }}
                     exit={{ scale: 0 }}
                     transition={{ y: { repeat: Infinity, duration: 1.6 }, scale: { type: 'spring', stiffness: 400, damping: 14 } }}
-                    style={{ translate: '-10% -100%', width: 'clamp(56px, 9vmin, 84px)', height: 'clamp(56px, 9vmin, 84px)', borderRadius: '50%', background: '#fff', border: '4px solid var(--lavender-dark)', display: 'grid', placeItems: 'center', fontSize: 'clamp(30px, 5vmin, 46px)', boxShadow: '0 4px 10px rgba(43,35,48,.18)' }}
+                    style={{ translate: '-10% -100%', width: 'clamp(56px, 9vmin, 84px)', height: 'clamp(56px, 9vmin, 84px)', borderRadius: '50%', background: '#fff', border: '3px solid var(--ink)', display: 'grid', placeItems: 'center', fontSize: 'clamp(30px, 5vmin, 46px)', boxShadow: 'var(--talk-drop)' }}
                   >
                     {need}
                   </motion.div>

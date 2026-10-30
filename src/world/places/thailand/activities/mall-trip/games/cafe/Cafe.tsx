@@ -126,7 +126,7 @@ function OrderBubble({ b }: { b: Bubble }) {
       animate={{ scale: 1, y: [0, -6, 0] }}
       exit={{ scale: 0 }}
       transition={{ y: { repeat: Infinity, duration: 1.6 }, scale: { type: 'spring', stiffness: 400, damping: 14 } }}
-      style={{ translate: '-50% -100%', display: 'flex', alignItems: 'center', gap: 'clamp(2px, 0.6vmin, 6px)', padding: 'clamp(5px, 1vmin, 9px) clamp(8px, 1.5vmin, 14px)', borderRadius: 999, background: '#fff', border: '4px solid var(--lavender-dark)', fontSize: 'clamp(24px, 4.2vmin, 40px)', lineHeight: 1, boxShadow: '0 4px 10px rgba(43,35,48,.18)', whiteSpace: 'nowrap' }}
+      style={{ translate: '-50% -100%', display: 'flex', alignItems: 'center', gap: 'clamp(2px, 0.6vmin, 6px)', padding: 'clamp(5px, 1vmin, 9px) clamp(8px, 1.5vmin, 14px)', borderRadius: 999, background: '#fff', border: '3px solid var(--ink)', fontSize: 'clamp(24px, 4.2vmin, 40px)', lineHeight: 1, boxShadow: 'var(--talk-drop)', whiteSpace: 'nowrap' }}
     >
       {b.icons.map((icon, i) => (
         <span key={i}>{icon}</span>

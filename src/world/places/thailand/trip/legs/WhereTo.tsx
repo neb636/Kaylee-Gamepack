@@ -4,7 +4,7 @@
 // or the boat). The question is spoken by the leg; tapping the bubble says it again. No three.js here.
 import { AnimatePresence, motion } from 'motion/react'
 import type { ReactNode } from 'react'
-import { lineText, say, sounds, type Line } from '../../../../../sdk'
+import { Avatar, lineText, say, sounds, TalkBubble, type Line } from '../../../../../sdk'
 
 /** A place on the card: its id, a name (for Dad and VoiceOver), its frame color and its picture (3:2, shown whole). */
 export interface Postcard {
@@ -39,17 +39,16 @@ export function WhereTo({ open, who, whoColor, line, cards, onPick }: Props) {
         >
           <motion.button
             aria-label={`${who}: ${lineText(line)}`}
+            initial={{ scale: 0.85 }}
+            animate={{ scale: 1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => void say(line)}
-            style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 10, maxWidth: 'calc(100% - 32px)', background: 'rgba(255,255,255,0.97)', border: 'none', borderRadius: 999, padding: '6px 18px 6px 6px', boxShadow: 'var(--shadow)', color: 'var(--ink)', font: 'inherit' }}
+            style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'flex-end', gap: 12, maxWidth: 'calc(100% - 32px)', padding: 0, border: 'none', background: 'none', font: 'inherit', color: 'var(--ink)' }}
           >
-            <span aria-hidden style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 48, height: 48, borderRadius: 24, background: whoColor, fontSize: 26, border: '3px solid #fff' }}>
-              🔊
-            </span>
-            <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.1 }}>
-              <small style={{ fontWeight: 700, opacity: 0.6, fontSize: 13 }}>{who}</small>
-              <span style={{ fontWeight: 700, fontSize: 'clamp(18px, min(3vw, 3.4vh), 26px)' }}>{lineText(line)}</span>
-            </span>
+            <Avatar who={{ name: who, icon: '🦄', color: whoColor }} size={56} />
+            <TalkBubble who={{ name: who, color: whoColor }} tail="left" style={{ textAlign: 'left' }}>
+              {lineText(line)}
+            </TalkBubble>
           </motion.button>
           {/* (Centered while they fit; past that the row scrolls, a postcard at a time.) */}
           <div style={{ pointerEvents: 'auto', maxWidth: '100%', overflowX: 'auto', scrollSnapType: 'x mandatory', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
@@ -66,9 +65,9 @@ export function WhereTo({ open, who, whoColor, line, cards, onPick }: Props) {
                     sounds.pop()
                     onPick(c.id)
                   }}
-                  style={{ scrollSnapAlign: 'center', flexShrink: 0, width: W, padding: 8, paddingBottom: 4, border: 'none', borderRadius: 18, background: '#fff', boxShadow: 'var(--shadow)', display: 'flex', flexDirection: 'column', gap: 4, color: 'var(--ink)', font: 'inherit' }}
+                  style={{ scrollSnapAlign: 'center', flexShrink: 0, width: W, padding: 8, paddingBottom: 4, border: '3px solid var(--ink)', borderRadius: 20, background: '#fff', boxShadow: '0 6px 0 rgba(43,35,48,.22)', display: 'flex', flexDirection: 'column', gap: 4, color: 'var(--ink)', font: 'inherit' }}
                 >
-                  <span aria-hidden style={{ display: 'block', width: '100%', aspectRatio: '3 / 2', borderRadius: 12, overflow: 'hidden', background: c.color }}>
+                  <span aria-hidden style={{ display: 'block', width: '100%', aspectRatio: '3 / 2', borderRadius: 12, overflow: 'hidden', background: c.color, outline: '2px solid rgba(43,35,48,.12)' }}>
                     {c.picture}
                   </span>
                   <span style={{ alignSelf: 'center', fontWeight: 700, fontSize: 'clamp(15px, min(2.4vw, 2.6vh), 20px)', padding: '2px 0' }}>{c.label}</span>
