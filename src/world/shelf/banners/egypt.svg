@@ -80,9 +80,9 @@
   <!-- the green bank of the Nile with its date palms -->
   <path d="M0 304C160 298 320 302 480 304C700 307 940 300 1200 304V318H0Z" fill="#9fd89c"/>
   <path d="M0 311C200 308 420 312 600 312C800 312 1000 308 1200 311V318H0Z" fill="#78c28c"/>
-  <use href="#palm" transform="translate(58 310)"/>
-  <use href="#palm" transform="translate(108 312) scale(0.82)"/>
-  <use href="#palm" transform="translate(150 311) scale(0.66)"/>
+  <use href="#palm" transform="translate(84 310)"/>
+  <use href="#palm" transform="translate(130 312) scale(0.82)"/>
+  <use href="#palm" transform="translate(170 311) scale(0.66)"/>
 
   <!-- the Nile -->
   <rect y="314" width="1200" height="136" fill="url(#nile)"/>
@@ -136,10 +136,10 @@
     <ellipse cx="-58" cy="-122" rx="19" ry="15.5" fill="#ddab7c"/>
     <ellipse cx="-74" cy="-115" rx="14" ry="11" fill="#f0c99d"/>
     <circle cx="-59" cy="-137" r="5.5" fill="#c99266"/><circle cx="-50" cy="-135" r="4.5" fill="#c99266"/>
-    <ellipse cx="-59" cy="-125" rx="3.2" ry="3.9" fill="#2b2330"/>
-    <circle cx="-57.8" cy="-126.4" r="1.2" fill="#fff"/>
+    <ellipse cx="-59" cy="-125" rx="3" ry="4" fill="#2b2330"/>
+    <circle cx="-58" cy="-126.5" r="1" fill="#fff"/>
     <path d="M-62 -128l-3.5 -3M-59.5 -129.5l-1 -4" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>
-    <ellipse cx="-53" cy="-113" rx="4.5" ry="2.6" fill="#ff8fb8" opacity="0.55"/>
+    <ellipse cx="-53" cy="-113" rx="4.5" ry="2.5" fill="#ff8fb8" opacity="0.55"/>
     <path d="M-85 -119q2 -2 4 0" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>
     <path d="M-83 -109q4 3 8 0" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>
   </g>

@@ -16,6 +16,12 @@
   <rect y="90" width="120" height="3" fill="#effcff" opacity="0.8"/>
   <ellipse cx="40" cy="98" rx="46" ry="4" fill="#1f9cb3" opacity="0.4"/>
 
+  <!-- the pier's boards behind the post -->
+  <rect x="90" y="76" width="32" height="7" fill="#c99266"/>
+  <rect x="90" y="76" width="32" height="2.6" fill="#e5b78f"/>
+  <rect x="90" y="83" width="32" height="2.6" fill="#a46e4b"/>
+  <path d="M114 85.5V96" stroke="#8a5b3d" stroke-width="4" stroke-linecap="round"/>
+
   <!-- the pier post with its rope -->
   <g clip-path="url(#post)">
     <rect x="95" y="40" width="13" height="80" fill="#6b432e"/>

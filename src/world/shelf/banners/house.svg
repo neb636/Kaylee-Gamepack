@@ -34,7 +34,7 @@
       <rect x="2" y="20" width="164" height="10" fill="#4b3a8c" opacity="0.14"/>
       <g clip-path="url(#awC)">
         <rect width="168" height="24" fill="#fff"/>
-        <path d="M0 12h168" stroke-width="30" stroke-dasharray="14 14"/>
+        <path d="M0 12h168" stroke="currentColor" stroke-width="30" stroke-dasharray="14 14"/>
         <rect y="10" width="168" height="14" fill="#4b3a8c" opacity="0.08"/>
         <rect width="168" height="3" fill="#fff" opacity="0.5"/>
       </g>
@@ -128,7 +128,7 @@
     <rect x="12" y="292" width="144" height="4" fill="#9790ba"/>
     <g fill="#c7bcf0"><rect x="20" y="300" width="40" height="3"/><rect x="108" y="300" width="40" height="3"/></g>
     <g><rect x="24" y="304" width="7" height="8" fill="#ff8fb8"/><rect x="34" y="306" width="7" height="6" fill="#fbea9a"/><rect x="44" y="304" width="8" height="8" fill="#8fe3c8"/><rect x="112" y="305" width="8" height="7" fill="#8ccfff"/><rect x="123" y="303" width="7" height="9" fill="#ffc83d"/><rect x="133" y="305" width="9" height="7" fill="#ff8fb8"/></g>
-    <use href="#awn" stroke="#8fe3c8" y="262"/>
+    <use href="#awn" color="#8fe3c8" y="262"/>
   </g>
 
   <!-- house B: mint, a stepped crest, an air conditioner, a pink awning -->
@@ -150,7 +150,7 @@
     <path d="M84 274v28" stroke="#d9d4ec" stroke-width="144"/>
     <path d="M84 274v28" stroke="#c0b9dc" stroke-width="144" stroke-dasharray="2.5 3.5"/>
     <rect x="12" y="300" width="144" height="4" fill="#9790ba"/>
-    <use href="#awn" stroke="#ff8fb8" y="262"/>
+    <use href="#awn" color="#ff8fb8" y="262"/>
   </g>
 
   <!-- house C: pink, an arched crest, a balcony with washing, open to the street -->
@@ -176,7 +176,7 @@
     <rect x="34" y="296" width="44" height="6" rx="2" fill="#e5b78f"/><rect x="38" y="302" width="5" height="18" fill="#c99266"/><rect x="69" y="302" width="5" height="18" fill="#c99266"/>
     <circle cx="56" cy="291" r="5" fill="#fff7f0"/><circle cx="66" cy="292" r="4" fill="#ffc4da"/>
     <rect x="108" y="290" width="30" height="30" rx="4" fill="#ddd2ff"/><rect x="108" y="290" width="30" height="6" rx="3" fill="#fff"/>
-    <use href="#awn" stroke="#b9a6f5" y="262"/>
+    <use href="#awn" color="#b9a6f5" y="262"/>
   </g>
 
   <!-- house D: butter, a water tank on the roof, flower boxes -->
@@ -222,7 +222,7 @@
     <path d="M84 274v24" stroke="#d9d4ec" stroke-width="144"/>
     <path d="M84 274v24" stroke="#c0b9dc" stroke-width="144" stroke-dasharray="2.5 3.5"/>
     <rect x="12" y="296" width="144" height="4" fill="#9790ba"/>
-    <use href="#awn" stroke="#ff8fb8" y="262"/>
+    <use href="#awn" color="#ff8fb8" y="262"/>
   </g>
 
   <!-- the tree on the right -->
@@ -235,14 +235,14 @@
   </g>
 
   <!-- the sidewalk, a pink and white kerb, the road -->
-  <rect y="320" width="1200" height="14" fill="#f3e2d6"/>
+  <rect y="320" width="1200" height="11" fill="#f3e2d6"/>
   <rect y="320" width="1200" height="3" fill="#fdf3ea"/>
-  <path d="M0 327h1200" stroke="#e8d3c4" stroke-width="14" stroke-dasharray="2 58"/>
-  <rect y="334" width="1200" height="8" fill="#fff"/>
-  <path d="M0 338h1200" stroke="#ff8fb8" stroke-width="8" stroke-dasharray="36 36"/>
-  <rect y="342" width="1200" height="108" fill="url(#road)"/>
-  <rect y="342" width="1200" height="4" fill="#4b3a8c" opacity="0.1"/>
-  <path d="M0 404h1200" stroke="#fff" stroke-width="5" stroke-dasharray="60 50" opacity="0.7"/>
+  <path d="M0 325.5h1200" stroke="#e8d3c4" stroke-width="11" stroke-dasharray="2 58"/>
+  <rect y="331" width="1200" height="7" fill="#fff"/>
+  <path d="M0 334.5h1200" stroke="#ff8fb8" stroke-width="7" stroke-dasharray="36 36"/>
+  <rect y="338" width="1200" height="112" fill="url(#road)"/>
+  <rect y="338" width="1200" height="4" fill="#4b3a8c" opacity="0.1"/>
+  <path d="M0 400h1200" stroke="#fff" stroke-width="5" stroke-dasharray="60 50" opacity="0.7"/>
 
   <!-- the electric pole and its tangle of wires -->
   <g fill="none" stroke="#6e6290" stroke-width="2.5" stroke-linecap="round">
@@ -250,8 +250,8 @@
     <path d="M136 100C200 150 260 156 330 146M128 100C210 164 300 172 360 160"/>
     <ellipse cx="96" cy="200" rx="22" ry="8"/><ellipse cx="92" cy="208" rx="18" ry="7"/><ellipse cx="100" cy="214" rx="24" ry="8"/><path d="M76 214c-2 14 4 24 14 30M116 212c6 12 4 22-4 30"/>
   </g>
-  <path d="M86 336L90 70h12l4 266z" fill="#bcb6d6"/>
-  <path d="M96 336V70h6l4 266z" fill="#9790ba"/>
+  <path d="M86 332L90 70h12l4 262z" fill="#bcb6d6"/>
+  <path d="M96 332V70h6l4 262z" fill="#9790ba"/>
   <rect x="90.5" y="76" width="3" height="250" fill="#dedaf0"/>
   <rect x="56" y="96" width="84" height="7" rx="3.5" fill="#9790ba"/>
   <rect x="64" y="124" width="64" height="6" rx="3" fill="#9790ba"/>
@@ -263,11 +263,11 @@
   <!-- two little birds on the wire -->
   <g transform="translate(48 120)">
     <ellipse cx="0" cy="-8" rx="9" ry="8" fill="#b9a6f5"/><path d="M-9-6l-7 4 7 1z" fill="#937ee0"/><path d="M1 0a9 7 0 0 0 8-8" fill="none" stroke="#937ee0" stroke-width="3"/>
-    <circle cx="4" cy="-10" r="1.8" fill="#2b2330"/><path d="M9-10l5 2-5 2z" fill="#ffc83d"/>
+    <circle cx="4" cy="-10" r="2" fill="#2b2330"/><path d="M9-10l5 2-5 2z" fill="#ffc83d"/>
   </g>
   <g transform="translate(166 129)">
     <ellipse cx="0" cy="-8" rx="9" ry="8" fill="#ffc4da"/><path d="M9-6l7 4-7 1z" fill="#ff8fb8"/><path d="M-1 0a9 7 0 0 1-8-8" fill="none" stroke="#ff8fb8" stroke-width="3"/>
-    <circle cx="-4" cy="-10" r="1.8" fill="#2b2330"/><path d="M-9-10l-5 2 5 2z" fill="#ffc83d"/>
+    <circle cx="-4" cy="-10" r="2" fill="#2b2330"/><path d="M-9-10l-5 2 5 2z" fill="#ffc83d"/>
   </g>
 
   <!-- pots on the sidewalk -->
@@ -290,22 +290,22 @@
     <circle cx="0" cy="-40" r="16" fill="#ffae70"/>
     <path d="M8-53a16 16 0 0 1 4 26c-3-8-4-18-4-26z" fill="#ec8a4d"/>
     <path d="M-4-55c2 3 2 5 0 7M4-55c-2 3-2 5 0 7" fill="none" stroke="#ec8a4d" stroke-width="2.5" stroke-linecap="round"/>
-    <ellipse cx="-6" cy="-41" rx="2.4" ry="3" fill="#2b2330"/><ellipse cx="6" cy="-41" rx="2.4" ry="3" fill="#2b2330"/>
-    <circle cx="-5.2" cy="-42.2" r="0.9" fill="#fff"/><circle cx="6.8" cy="-42.2" r="0.9" fill="#fff"/>
-    <ellipse cx="-10" cy="-35" rx="3.2" ry="2" fill="#ff8fb8" opacity="0.55"/><ellipse cx="10" cy="-35" rx="3.2" ry="2" fill="#ff8fb8" opacity="0.55"/>
-    <path d="M-1.5-37h3l-1.5 1.8z" fill="#ff8fb8"/>
-    <path d="M-3-33.5q1.5 1.5 3 0q1.5 1.5 3 0" fill="none" stroke="#2b2330" stroke-width="1.5" stroke-linecap="round"/>
+    <ellipse cx="-6" cy="-41" rx="2.5" ry="3" fill="#2b2330"/><ellipse cx="6" cy="-41" rx="2.5" ry="3" fill="#2b2330"/>
+    <circle cx="-5" cy="-42" r="1" fill="#fff"/><circle cx="7" cy="-42" r="1" fill="#fff"/>
+    <ellipse cx="-10" cy="-35" rx="3" ry="2" fill="#ff8fb8" opacity="0.55"/><ellipse cx="10" cy="-35" rx="3" ry="2" fill="#ff8fb8" opacity="0.55"/>
+    <path d="M-2-37h4l-2 2z" fill="#ff8fb8"/>
+    <path d="M-3-33.5q1.5 1.5 3 0q1.5 1.5 3 0" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>
     <ellipse cx="-6" cy="-1" rx="5" ry="3.5" fill="#fff7f0"/><ellipse cx="6" cy="-1" rx="5" ry="3.5" fill="#fff7f0"/>
   </g>
 
   <!-- the pink tuk-tuk, facing left: a scooter front, open sides, a canopy roof -->
-  <g transform="translate(772 348)">
+  <g transform="translate(772 343)">
     <ellipse cx="4" cy="0" rx="104" ry="5.5" fill="#4b3a8c" opacity="0.16"/>
     <rect x="-3" y="-108" width="5" height="54" fill="#fff7f0"/>
     <rect x="90" y="-104" width="5" height="50" fill="#efdccd"/>
     <rect x="80" y="-96" width="12" height="42" rx="5" fill="#937ee0"/>
     <rect x="16" y="-64" width="72" height="9" rx="4.5" fill="#b9a6f5"/>
-    <rect x="16" y="-64" width="72" height="3.5" rx="1.75" fill="#ddd2ff"/>
+    <rect x="16" y="-64" width="72" height="3.5" rx="1.5" fill="#ddd2ff"/>
     <rect x="-40" y="-62" width="30" height="8" rx="4" fill="#b9a6f5"/>
     <rect x="-17" y="-80" width="8" height="24" rx="4" fill="#937ee0"/>
     <g clip-path="url(#tukC)">
@@ -317,7 +317,7 @@
     <path d="M-56-18H-86C-94-18-97-24-95-31L-86-66C-84-74-78-80-70-80H-62C-58-80-55-77-55-73Z" fill="#ff8fb8"/>
     <path d="M-56-18H-86C-94-18-97-24-95-31L-94-34C-84-34-66-40-55-48Z" fill="#e7699c"/>
     <path d="M-88-60l4-12c2-3 5-5 9-5" fill="none" stroke="#ffc4da" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="-89" cy="-52" r="7" fill="#fff6cc"/><circle cx="-90.5" cy="-53.5" r="2.8" fill="#fff"/>
+    <circle cx="-89" cy="-52" r="7" fill="#fff6cc"/><circle cx="-90.5" cy="-53.5" r="3" fill="#fff"/>
     <path d="M-72-80L-66-110h7l-6 30z" fill="#c9e9ff" opacity="0.9"/>
     <path d="M-69-86l4-19 2.5-.5-4 19.5z" fill="#fff"/>
     <path d="M-60-82h-16" stroke="#9790ba" stroke-width="4" stroke-linecap="round"/>
@@ -326,7 +326,7 @@
     <path d="M-76-104H98L102-92C104-89 108-90 108-94V-104C102-104 100-106 100-110V-104Z" fill="#d8367f"/>
     <path d="M-70-116H96" stroke="#ff8fc0" stroke-width="4" stroke-linecap="round"/>
     <rect x="-76" y="-101" width="176" height="3" fill="#fff"/>
-    <circle cx="-76" cy="-13" r="13" fill="#5d5078"/><circle cx="-76" cy="-13" r="6" fill="#dedaf0"/><circle cx="-76" cy="-13" r="2.4" fill="#bcb6d6"/>
-    <circle cx="58" cy="-15" r="15" fill="#5d5078"/><circle cx="58" cy="-15" r="7" fill="#dedaf0"/><circle cx="58" cy="-15" r="2.8" fill="#bcb6d6"/>
+    <circle cx="-76" cy="-13" r="13" fill="#5d5078"/><circle cx="-76" cy="-13" r="6" fill="#dedaf0"/><circle cx="-76" cy="-13" r="2.5" fill="#bcb6d6"/>
+    <circle cx="58" cy="-15" r="15" fill="#5d5078"/><circle cx="58" cy="-15" r="7" fill="#dedaf0"/><circle cx="58" cy="-15" r="3" fill="#bcb6d6"/>
   </g>
 </svg>

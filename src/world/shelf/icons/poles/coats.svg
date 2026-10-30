@@ -2,10 +2,10 @@
   <title>Snow Coats</title>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ece6ff"/><stop offset="1" stop-color="#cdbfff"/></linearGradient>
-    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-    <path id="headShape" d="M60 30C71 30 79 36 81.5 45L87 50.5C84.5 52.5 82.5 54.5 81.5 56.5L85 61C78.5 66.5 70 69.5 60 69.5C50 69.5 41.5 66.5 35 61L38.5 56.5C37.5 54.5 35.5 52.5 33 50.5L38.5 45C41 36 49 30 60 30Z"/>
-    <path id="bodyShape" d="M43 103C38.5 91 40 77 49 68.5H71C80 77 81.5 91 77 103Z"/>
-    <path id="tailShape" d="M74 101C86 101 97 96 101 86C104 78 102 70 97 66C98 72 96 79 90 83C85 86.5 79 88 73 88Z"/>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.4"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <path id="headShape" d="M60 25C71.5 25 80 31.5 82.5 41L90 45C87.5 48 85.5 50 84.5 52.5L89.5 55.5C82.5 63.5 72 67.5 60 67.5C48 67.5 37.5 63.5 30.5 55.5L35.5 52.5C34.5 50 32.5 48 30 45L37.5 41C40 31.5 48.5 25 60 25Z"/>
+    <path id="bodyShape" d="M40 100C35.5 88 37.5 74 47 65H73C82.5 74 84.5 88 80 100Z"/>
+    <path id="tailShape" d="M72 101C88 104 103 97 107 82C110 70 106 56 96 49C92 46.5 87 47.5 86.5 52C90 58 92 66 90.5 74C89 82 82 87 72 87Z"/>
     <path id="flake" d="M0-5V5M-4.3-2.5L4.3 2.5M-4.3 2.5L4.3-2.5"/>
     <clipPath id="head"><use href="#headShape"/></clipPath>
     <clipPath id="body"><use href="#bodyShape"/></clipPath>
@@ -16,62 +16,67 @@
 
   <!-- falling snow -->
   <g fill="#fff">
-    <circle cx="18" cy="24" r="2.2"/><circle cx="30" cy="44" r="1.5"/><circle cx="14" cy="62" r="1.8"/><circle cx="24" cy="80" r="1.3"/>
-    <circle cx="102" cy="20" r="1.6"/><circle cx="92" cy="40" r="2"/><circle cx="108" cy="58" r="1.5"/><circle cx="34" cy="14" r="1.3"/>
+    <circle cx="16" cy="26" r="2.2"/><circle cx="27" cy="48" r="1.5"/><circle cx="13" cy="66" r="1.8"/>
+    <circle cx="104" cy="17" r="1.6"/><circle cx="99" cy="40" r="1.4"/><circle cx="34" cy="13" r="1.3"/><circle cx="85" cy="12" r="1.2"/><circle cx="108" cy="60" r="1.5"/>
   </g>
   <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
-    <use href="#flake" transform="translate(100 33)"/>
-    <use href="#flake" transform="translate(21 41) scale(0.8)"/>
+    <use href="#flake" transform="translate(103 30)"/>
+    <use href="#flake" transform="translate(19 39) scale(0.8)"/>
   </g>
 
   <!-- the snowdrift -->
-  <path d="M-2 98C20 91 44 92 60 94C80 96 100 90 122 94V122H-2Z" fill="#f7f4ff"/>
-  <path d="M-2 110C24 106 52 108 74 112C92 115 108 111 122 108V122H-2Z" fill="#ddd2ff"/>
-  <path d="M8 96C20 93 32 92.5 42 93.5" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
-  <ellipse cx="62" cy="104" rx="34" ry="5" fill="#4b3a8c" opacity="0.12"/>
+  <path d="M-2 97C20 91 44 92 60 94C80 96 100 90 122 93V122H-2Z" fill="#f7f4ff"/>
+  <path d="M-2 111C24 107 52 109 74 112C92 114.5 108 111 122 108V122H-2Z" fill="#ddd2ff"/>
+  <path d="M5 95.5C15 93 25 92.3 33 92.8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="66" cy="107" rx="42" ry="4.5" fill="#4b3a8c" opacity="0.13"/>
 
-  <!-- the fluffy tail curled round in front, lavender on its underside -->
+  <!-- the big bushy winter tail, swept up behind -->
   <g clip-path="url(#tail)">
-    <rect x="70" y="62" width="36" height="42" fill="#e4ddf6"/>
-    <use href="#tailShape" transform="translate(-2 -3)" fill="#fff"/>
+    <rect x="66" y="44" width="46" height="62" fill="#d6ccf3"/>
+    <use href="#tailShape" transform="translate(-4 -3)" fill="#fff"/>
   </g>
-  <path d="M97 66C101 70 103 76 102 82M100.5 74.5L104 76.5M97 84L101 87" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M96 49.5C99.5 52 102 55.5 103.5 59.5M101.5 66.5L106.5 67.5M102 79L107.5 80.5M97 91.5L101.5 94.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
 
   <!-- body: white, shaded lavender on the right -->
   <g clip-path="url(#body)">
-    <rect x="36" y="64" width="48" height="42" fill="#e4ddf6"/>
-    <use href="#bodyShape" transform="translate(-4 -2)" fill="#fff"/>
+    <rect x="34" y="60" width="52" height="44" fill="#d6ccf3"/>
+    <use href="#bodyShape" transform="translate(-4.5 -2)" fill="#fff"/>
   </g>
+
+  <!-- front legs, a soft gap between them, and paws -->
+  <rect x="46.5" y="79" width="12.5" height="24" rx="6.25" fill="#fff"/>
+  <rect x="61" y="79" width="12.5" height="24" rx="6.25" fill="#f1edff"/>
+  <path d="M60 86V99" stroke="#dcd3f5" stroke-width="2.4" stroke-linecap="round"/>
+  <ellipse cx="52.5" cy="102.5" rx="7" ry="4.5" fill="#fff"/>
+  <ellipse cx="67.5" cy="102.5" rx="7" ry="4.5" fill="#f1edff"/>
+  <path d="M50 104.5v1.4M55 104.5v1.4M65 104.5v1.4M70 104.5v1.4" stroke="#cfc4ef" stroke-width="1.7" stroke-linecap="round"/>
+
   <!-- the fluffy ruff on its chest -->
-  <path d="M48 68C48 76 51 81 54 84C55 82 56.5 81 57.5 83C58.5 81 61.5 81 62.5 83C63.5 81 65 82 66 84C69 81 72 76 72 68Z" fill="#fff"/>
-  <path d="M54 84C55 82 56.5 81 57.5 83C58.5 81 61.5 81 62.5 83C63.5 81 65 82 66 84" fill="none" stroke="#e4ddf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- front paws -->
-  <ellipse cx="52.5" cy="102.5" rx="6.5" ry="4.5" fill="#fff"/>
-  <ellipse cx="67" cy="102.5" rx="6.5" ry="4.5" fill="#fff"/>
-  <path d="M62 104a6.5 4.5 0 0 0 11-1.5" fill="none" stroke="#e4ddf6" stroke-width="2.4" stroke-linecap="round"/>
-  <path d="M50.5 105v1M54.5 105v1M65 105v1M69 105v1" stroke="#d2c8f0" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M46 64C45.5 72 47.5 79 51 83.5C52.5 81 54.5 80.5 56 83C57.5 80 62.5 80 64 83C65.5 80.5 67.5 81 69 83.5C72.5 79 74.5 72 74 64Z" fill="#fff"/>
+  <path d="M51 83.5C52.5 81 54.5 80.5 56 83C57.5 80 62.5 80 64 83C65.5 80.5 67.5 81 69 83.5" fill="none" stroke="#ebe6fb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- pointed ears, pink inside -->
-  <path d="M39 42C38 32 40.5 24 45 18.5C50.5 22.5 54.5 28 56 34Z" fill="#fff"/>
-  <path d="M42.5 37.5C42.5 31.5 44 26.5 46.5 23.5C49.5 26 51.5 29.5 52.5 33Z" fill="#ffc4da"/>
-  <path d="M81 42C82 32 79.5 24 75 18.5C69.5 22.5 65.5 28 64 34Z" fill="#efeaff"/>
-  <path d="M77.5 37.5C77.5 31.5 76 26.5 73.5 23.5C70.5 26 68.5 29.5 67.5 33Z" fill="#ff8fb8"/>
+  <!-- tall pointed ears, pink inside -->
+  <path d="M37.5 40C35.5 28.5 38 19 43.5 12.5C50 16.5 55 23 56.5 30Z" fill="#fff"/>
+  <path d="M41 35.5C40.5 28 42 22 45 18C49 21 51.5 25 52.8 29.5Z" fill="#ffc4da"/>
+  <path d="M82.5 40C84.5 28.5 82 19 76.5 12.5C70 16.5 65 23 63.5 30Z" fill="#ece6fb"/>
+  <path d="M79 35.5C79.5 28 78 22 75 18C71 21 68.5 25 67.2 29.5Z" fill="#ff8fb8"/>
 
-  <!-- head: white with fluffy cheeks, a lavender crescent bottom-right -->
+  <!-- head: white with fluffy cheek tufts, a lavender crescent bottom-right -->
   <g clip-path="url(#head)">
-    <rect x="30" y="26" width="60" height="48" fill="#e4ddf6"/>
-    <use href="#headShape" transform="translate(-3 -2.5)" fill="#fff"/>
+    <rect x="28" y="22" width="64" height="48" fill="#d6ccf3"/>
+    <use href="#headShape" transform="translate(-3.5 -3)" fill="#fff"/>
   </g>
-  <path d="M42 41C44 36 48.5 32.5 54 31.5" fill="none" stroke="#f4f0ff" stroke-width="2.6" stroke-linecap="round"/>
+  <!-- a soft snout -->
+  <ellipse cx="60" cy="56" rx="9" ry="6.5" fill="#f6f3ff"/>
 
   <!-- eyes, nose, smile, blush -->
-  <ellipse cx="50.5" cy="49" rx="3.4" ry="4.1" fill="#2b2330"/>
-  <ellipse cx="69.5" cy="49" rx="3.4" ry="4.1" fill="#2b2330"/>
-  <circle cx="51.7" cy="47.5" r="1.35" fill="#fff"/>
-  <circle cx="70.7" cy="47.5" r="1.35" fill="#fff"/>
-  <path d="M56.6 56Q60 54 63.4 56Q62.2 59.2 60 59.4Q57.8 59.2 56.6 56Z" fill="#2b2330"/>
-  <ellipse cx="58.8" cy="55.8" rx="1.1" ry="0.6" fill="#fff"/>
-  <path d="M60 59.4V61M56.6 61Q58.3 63.2 60 61Q61.7 63.2 63.4 61" fill="none" stroke="#2b2330" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-  <ellipse cx="44" cy="57" rx="4.2" ry="2.5" fill="#ff8fb8" opacity="0.55"/>
-  <ellipse cx="76" cy="57" rx="4.2" ry="2.5" fill="#ff8fb8" opacity="0.55"/>
+  <ellipse cx="50" cy="45.5" rx="3.6" ry="4.4" fill="#2b2330"/>
+  <ellipse cx="70" cy="45.5" rx="3.6" ry="4.4" fill="#2b2330"/>
+  <circle cx="51.3" cy="43.9" r="1.4" fill="#fff"/>
+  <circle cx="71.3" cy="43.9" r="1.4" fill="#fff"/>
+  <path d="M56.4 52.6Q60 50.6 63.6 52.6Q62.3 56 60 56.2Q57.7 56 56.4 52.6Z" fill="#2b2330"/>
+  <ellipse cx="58.7" cy="52.4" rx="1.1" ry="0.6" fill="#fff"/>
+  <path d="M60 56.2V58M56.4 57.8Q58.2 60.2 60 58Q61.8 60.2 63.6 57.8" fill="none" stroke="#2b2330" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="43" cy="54" rx="4.4" ry="2.6" fill="#ff8fb8" opacity="0.55"/>
+  <ellipse cx="77" cy="54" rx="4.4" ry="2.6" fill="#ff8fb8" opacity="0.55"/>
 </svg>

@@ -34,14 +34,19 @@
   </g>
 
   <!-- Etna far away: a wide snowy volcano puffing a little cloud -->
-  <path d="M80 290C140 256 196 210 238 178L250 170H300L312 178C354 210 410 256 470 290Z" fill="#cdc6ec"/>
-  <path d="M300 170L312 178C354 210 410 256 470 290H330C326 240 314 200 300 170Z" fill="#b9b0e2"/>
-  <path d="M238 178L250 170H300L312 178C326 188 336 196 346 204C336 208 328 202 320 208C310 200 300 210 290 204C280 212 270 202 260 208C250 202 240 210 228 204C222 200 214 204 206 200C216 192 228 186 238 178Z" fill="#fff"/>
-  <path d="M300 170L312 178C326 188 336 196 346 204C336 208 328 202 320 208C314 204 308 204 304 206C308 194 306 182 300 170Z" fill="#e6e0f8"/>
-  <path d="M244 184C252 178 260 175 270 174" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
-  <g fill="#fbf9ff" opacity="0.95">
-    <circle cx="280" cy="156" r="10"/><circle cx="294" cy="142" r="13"/><circle cx="312" cy="130" r="11"/><circle cx="327" cy="120" r="8"/>
+  <path d="M30 292C100 272 170 240 214 212C232 200 244 188 252 180H266Q282 188 298 180H312C320 188 332 200 350 212C394 240 464 272 540 292Z" fill="#cdc6ec"/>
+  <path d="M312 180C320 188 332 200 350 212C394 240 464 272 540 292H340C338 250 326 208 312 180Z" fill="#b9b0e2"/>
+  <path d="M214 212C232 200 244 188 252 180H266Q282 188 298 180H312C320 188 332 200 350 212C342 218 334 212 326 218C318 212 308 222 298 216C288 224 278 214 268 220C258 214 248 222 238 216C230 220 222 214 214 212Z" fill="#fff"/>
+  <path d="M312 180C320 188 332 200 350 212C342 218 334 212 326 218C322 216 318 216 316 217C318 204 316 190 312 180Z" fill="#e6e0f8"/>
+  <path d="M266 180Q282 188 298 180Q282 184 266 180Z" fill="#b9b0e2"/>
+  <path d="M226 202C236 194 244 188 250 184" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+  <g fill="#fff" opacity="0.95">
+    <circle cx="283" cy="170" r="6"/><circle cx="291" cy="158" r="8.5"/>
+    <circle cx="306" cy="140" r="11"/><circle cx="326" cy="128" r="15"/><circle cx="350" cy="134" r="11"/>
+    <rect x="296" y="134" width="66" height="14" rx="7"/>
   </g>
+  <path d="M316 124a15 15 0 0 1 14 -9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M302 147H360" stroke="#e6e0f8" stroke-width="3" stroke-linecap="round"/>
 
   <!-- far hills in the haze -->
   <path d="M0 262C80 250 160 248 240 256C320 264 380 250 460 248C560 246 620 262 720 258C820 254 880 240 960 242C1060 246 1120 256 1200 250V310H0Z" fill="#d4e3e6"/>
@@ -155,11 +160,11 @@
     <path d="M13 -66a18 18 0 0 1 -1 30a20 20 0 0 0 1 -30Z" fill="#e57a35"/>
     <path d="M-3 -69l1 6M2 -70v7M7 -69l-1 6" stroke="#e57a35" stroke-width="2.5" stroke-linecap="round"/>
     <ellipse cx="2" cy="-44" rx="9" ry="6" fill="#ffe2d4"/>
-    <ellipse cx="-5" cy="-53" rx="2.8" ry="3.4" fill="#2b2330"/><ellipse cx="9" cy="-53" rx="2.8" ry="3.4" fill="#2b2330"/>
-    <circle cx="-4" cy="-54.3" r="1" fill="#fff"/><circle cx="10" cy="-54.3" r="1" fill="#fff"/>
-    <ellipse cx="-11" cy="-45" rx="3.8" ry="2.2" fill="#ff8fb8" opacity="0.55"/><ellipse cx="15" cy="-45" rx="3.8" ry="2.2" fill="#ff8fb8" opacity="0.55"/>
+    <ellipse cx="-5" cy="-53" rx="3" ry="3.5" fill="#2b2330"/><ellipse cx="9" cy="-53" rx="3" ry="3.5" fill="#2b2330"/>
+    <circle cx="-4" cy="-54.5" r="1" fill="#fff"/><circle cx="10" cy="-54.5" r="1" fill="#fff"/>
+    <ellipse cx="-11" cy="-45" rx="4" ry="2" fill="#ff8fb8" opacity="0.55"/><ellipse cx="15" cy="-45" rx="4" ry="2" fill="#ff8fb8" opacity="0.55"/>
     <path d="M0 -47.5h4l-2 2.5z" fill="#e7699c"/>
-    <path d="M2 -45v1.5M-1 -42q1.5 1.5 3 0q1.5 1.5 3 0" fill="none" stroke="#2b2330" stroke-width="1.6" stroke-linecap="round"/>
-    <path d="M-8 -45h-9M-8 -42.5l-8 2M12 -45h9M12 -42.5l8 2" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M2 -45v1.5M-1 -42q1.5 1.5 3 0q1.5 1.5 3 0" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>
+    <path d="M-8 -45h-9M-8 -42.5l-8 2M12 -45h9M12 -42.5l8 2" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
   </g>
 </svg>

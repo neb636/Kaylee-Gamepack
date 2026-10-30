@@ -39,12 +39,12 @@
 
   <!-- the clump fanning out of the bag's mouth: stems, then caps, back to front -->
   <g fill="none" stroke-linecap="round">
-    <path d="M60 60V38M55 60C52 55 46 51.5 41 50M65 60C68 55 74 51.5 79 50" stroke="#f3c6d6" stroke-width="7"/>
-    <path d="M59 58V40M54 58C51 54 46 51 42.5 49.5M64 58C67 54 72 51 76 49.5" stroke="#fff3f7" stroke-width="3"/>
+    <path d="M60 60V42M56 60C53 56 49 53 44 51.5M64 60C67 56 71 53 76 51.5" stroke="#f3c6d6" stroke-width="9"/>
+    <path d="M58.5 58V44M54.5 57.5C52 54.5 49 52.5 46 51.5M62.5 57.5C65 54.5 68 52.5 71 51.5" stroke="#fff3f7" stroke-width="3.5"/>
   </g>
-  <use href="#shroom" transform="translate(60 31) scale(1.08)"/>
-  <use href="#shroom" transform="translate(37 45) rotate(-30) scale(0.92)"/>
-  <use href="#shroom" transform="translate(83 45) rotate(30) scale(0.92)"/>
+  <use href="#shroom" transform="translate(60 34) scale(1.1)"/>
+  <use href="#shroom" transform="translate(39 46) rotate(-28) scale(0.95)"/>
+  <use href="#shroom" transform="translate(81 46) rotate(28) scale(0.95)"/>
 
   <!-- the pink collar round the bag's mouth -->
   <rect x="48" y="55" width="24" height="8" rx="3" fill="#ff4f9a"/>

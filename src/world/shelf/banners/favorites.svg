@@ -13,7 +13,7 @@
     <g id="hHot"><g clip-path="url(#hc)"><use href="#ht" fill="#d8367f"/><use href="#ht" fill="#ff4f9a" x="-7" y="-9"/></g><use href="#hl" stroke="#ff8fc0"/></g>
     <g id="hLav"><g clip-path="url(#hc)"><use href="#ht" fill="#937ee0"/><use href="#ht" fill="#b9a6f5" x="-7" y="-9"/></g><use href="#hl" stroke="#ddd2ff"/></g>
     <!-- a little gold star and a sparkle -->
-    <path id="st" d="M0-15L4.1-5.7 14.3-4.6 6.7 2.2 8.8 12.1 0 7-8.8 12.1-6.7 2.2-14.3-4.6-4.1-5.7Z" stroke-linejoin="round" stroke-width="4"/>
+    <path id="st" d="M0-15L4-5.5 14.5-4.5 6.5 2 9 12 0 7-9 12-6.5 2-14.5-4.5-4-5.5Z" stroke-linejoin="round" stroke-width="4"/>
     <g id="star"><use href="#st" fill="#eba123" stroke="#eba123"/><use href="#st" fill="#ffc83d" stroke="#ffc83d" transform="translate(-1 -1.5) scale(.84)"/></g>
     <path id="sp" d="M0-10l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>
     <!-- the clouds the rainbow stands in -->
@@ -69,7 +69,6 @@
 
   <!-- the clouds at the rainbow's feet -->
   <g clip-path="url(#feetC)"><use href="#feet" fill="#e4ddf6"/><use href="#feet" fill="#fff" x="-7" y="-9"/></g>
-  <path d="M166 304C174 294 186 290 196 292M612 310C620 302 630 298 640 300" fill="none" stroke="#f1ecfc" stroke-width="5" stroke-linecap="round"/>
 
   <!-- floating hearts -->
   <use href="#hHot" transform="translate(430 248) rotate(-6) scale(1.02)"/>
@@ -88,7 +87,7 @@
     <use href="#sp" transform="translate(54 168) scale(.8)"/>
   </g>
   <g fill="#fff" opacity="0.75">
-    <circle cx="150" cy="178" r="3"/><circle cx="476" cy="168" r="3"/><circle cx="626" cy="232" r="3"/><circle cx="760" cy="268" r="3.5"/><circle cx="40" cy="240" r="3"/>
+    <circle cx="150" cy="178" r="3"/><circle cx="476" cy="168" r="3"/><circle cx="626" cy="232" r="3"/><circle cx="744" cy="274" r="3.5"/><circle cx="40" cy="240" r="3"/>
   </g>
 
   <!-- the sea of clouds -->
@@ -96,6 +95,5 @@
 
   <!-- the mascot's cloud: a flat top, puffy shoulders, shaded on the right -->
   <g clip-path="url(#perchC)"><use href="#perch" fill="#e4ddf6"/><use href="#perch" fill="url(#fluff)" x="-8" y="-9"/></g>
-  <path d="M826 344C830 332 840 326 852 326" fill="none" stroke="#f3eefe" stroke-width="5" stroke-linecap="round"/>
   <g clip-path="url(#tuckC)"><use href="#tuck" fill="#e4ddf6"/><use href="#tuck" fill="url(#fluff)" x="-7" y="-9"/></g>
 </svg>

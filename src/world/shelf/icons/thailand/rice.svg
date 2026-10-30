@@ -51,9 +51,9 @@
   <!-- the golden rice sheaf: drooping ears, stalks tied with a pink bow -->
   <ellipse cx="60" cy="105" rx="22" ry="4" fill="#4b3a8c" opacity="0.16"/>
   <use href="#ear" transform="translate(62 45) rotate(12) scale(0.9)"/>
-  <use href="#ear" transform="translate(63 46) rotate(42) scale(0.82)"/>
+  <use href="#ear" transform="translate(63 46) rotate(42) scale(0.8)"/>
   <use href="#ear" transform="translate(58 45) scale(-0.9 0.9) rotate(12)"/>
-  <use href="#ear" transform="translate(57 46) scale(-0.82 0.82) rotate(42)"/>
+  <use href="#ear" transform="translate(57 46) scale(-0.8 0.8) rotate(42)"/>
   <use href="#ear" transform="translate(60 44) rotate(-30) scale(0.95)"/>
   <path d="M50 72L47 42H73L70 72Z" fill="#f3cd6a"/>
   <path d="M64 72L66 42H73L70 72Z" fill="#dcae4a"/>

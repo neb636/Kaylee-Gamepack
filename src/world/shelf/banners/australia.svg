@@ -113,10 +113,10 @@
     <path d="M-44-84a18 18 0 0 1 4 26C-44-64-46-76-44-84Z" fill="#a46e4b"/>
     <ellipse cx="-74" cy="-64" rx="14" ry="10.5" fill="#c99266"/>
     <ellipse cx="-74" cy="-60" rx="10" ry="6" fill="#e5b78f"/>
-    <ellipse cx="-86" cy="-67" rx="4" ry="3.2" fill="#2b2330"/>
-    <ellipse cx="-61" cy="-74" rx="3.2" ry="3.9" fill="#2b2330"/>
-    <circle cx="-59.8" cy="-75.4" r="1.2" fill="#fff"/>
-    <ellipse cx="-62" cy="-61" rx="4.2" ry="2.5" fill="#ff8fb8" opacity="0.55"/>
+    <ellipse cx="-86" cy="-67" rx="4" ry="3" fill="#2b2330"/>
+    <ellipse cx="-61" cy="-74" rx="3" ry="4" fill="#2b2330"/>
+    <circle cx="-60" cy="-75.5" r="1" fill="#fff"/>
+    <ellipse cx="-62" cy="-61" rx="4" ry="2.5" fill="#ff8fb8" opacity="0.55"/>
     <path d="M-82-58q3 3 6 0" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>
     <path d="M-66-86C-62-90-56-90-52-88" fill="none" stroke="#e5b78f" stroke-width="4" stroke-linecap="round"/>
   </g>

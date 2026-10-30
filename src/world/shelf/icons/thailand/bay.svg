@@ -49,8 +49,8 @@
 
   <!-- the longtail boat: tail pole and splash, engine, hull, ribbons -->
   <ellipse cx="58" cy="95" rx="42" ry="3" fill="#1f9cb3" opacity="0.5"/>
-  <path d="M93 76L111 93" stroke="#6b5d73" stroke-width="3" stroke-linecap="round"/>
-  <g fill="#fff" opacity="0.9"><ellipse cx="111" cy="95" rx="6.5" ry="2.4"/><circle cx="106" cy="91" r="1.8"/><circle cx="114.5" cy="90.5" r="1.5"/></g>
+  <path d="M93 76L108 91" stroke="#6b5d73" stroke-width="3" stroke-linecap="round"/>
+  <g fill="#fff" opacity="0.9"><ellipse cx="108" cy="93" rx="6.5" ry="2.4"/><circle cx="103" cy="89" r="1.8"/><circle cx="111.5" cy="88.5" r="1.5"/></g>
   <rect x="84" y="70" width="13" height="10" rx="2.5" fill="#9790ba"/>
   <rect x="84" y="70" width="13" height="3.5" rx="1.75" fill="#bcb6d6"/>
   <g clip-path="url(#hull)">

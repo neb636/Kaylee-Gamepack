@@ -16,6 +16,8 @@
     <clipPath id="farC"><use href="#far"/></clipPath>
     <clipPath id="r2C"><use href="#r2"/></clipPath>
     <clipPath id="r1C"><use href="#r1"/></clipPath>
+    <!-- a faint far stretch of the wall -->
+    <path id="wfar" d="M580 166C605 172.5 623.5 180.5 650 176C676.5 171.5 706.5 148 740 140C773.5 132 818.5 125 850 128C881.5 131 903.5 151 930 158"/>
     <!-- a watchtower, 60 wide, its foot at 0,0 -->
     <g id="tower">
       <rect x="-30" y="-58" width="60" height="62" fill="#ecdfc9"/>
@@ -76,28 +78,28 @@
   <!-- the far hills in the haze, shaded on the right -->
   <g clip-path="url(#farC)">
     <use href="#far" fill="#b6bfe9"/>
-    <use href="#far" fill="url(#hf)" transform="translate(-30 7)"/>
+    <use href="#far" fill="url(#hf)" transform="translate(-30 4)"/>
   </g>
   <!-- a faint far stretch of the wall on the far ridge -->
-  <path id="wfar" d="M580 166C605 172.5 623.5 180.5 650 176C676.5 171.5 706.5 148 740 140C773.5 132 818.5 125 850 128C881.5 131 903.5 151 930 158" fill="none" stroke="#cfcbe6" stroke-width="6" stroke-linecap="round"/>
-  <use href="#wfar" stroke="#e6e2f2" stroke-width="4" stroke-dasharray="4 4" transform="translate(0 -4)"/>
+  <use href="#wfar" fill="none" stroke="#cfcbe6" stroke-width="6" stroke-linecap="round"/>
+  <use href="#wfar" fill="none" stroke="#e6e2f2" stroke-width="4" stroke-dasharray="4 4" transform="translate(0 -4)"/>
   <g fill="#e6e2f2"><path d="M732 142v-18h4v3h3v-3h4v3h3v-3h4v18z"/><path d="M842 130v-18h4v3h3v-3h4v3h3v-3h4v18z"/></g>
   <g fill="#cfcbe6"><rect x="744" y="124" width="6" height="18"/><rect x="854" y="112" width="6" height="18"/></g>
   <g fill="#fff" opacity="0.72">
-    <rect x="-20" y="222" width="360" height="16" rx="8"/><rect x="520" y="206" width="320" height="16" rx="8"/><rect x="960" y="196" width="260" height="16" rx="8"/>
+    <rect x="-20" y="222" width="360" height="16" rx="8"/><rect x="650" y="190" width="250" height="14" rx="7"/><rect x="960" y="196" width="260" height="16" rx="8"/>
   </g>
 
   <!-- the middle ridge on the right: the wall climbs it to the far towers -->
   <g clip-path="url(#r2C)">
     <use href="#r2" fill="#78bb93"/>
-    <use href="#r2" fill="url(#h2)" transform="translate(-32 7)"/>
+    <use href="#r2" fill="url(#h2)" transform="translate(-32 3)"/>
     <path d="M600 246C640 222 680 206 714 204M900 186C914 178 926 176 940 178" fill="none" stroke="#d3f2dc" stroke-width="6" stroke-linecap="round"/>
   </g>
 
   <!-- the near ridge on the left: the wall comes down it toward the front -->
   <g clip-path="url(#r1C)">
     <use href="#r1" fill="#62bb7c"/>
-    <use href="#r1" fill="url(#h1)" transform="translate(-32 7)"/>
+    <use href="#r1" fill="url(#h1)" transform="translate(-30 2)"/>
     <path d="M150 268C200 246 244 236 290 234" fill="none" stroke="#cdf2d3" stroke-width="7" stroke-linecap="round"/>
   </g>
 
@@ -150,7 +152,7 @@
   <use href="#lantern" transform="translate(1026 138) scale(.85)"/>
 
   <!-- the panda, sitting in the meadow with a bamboo stick -->
-  <g transform="translate(560 350)">
+  <g transform="translate(560 337)">
     <ellipse cx="0" cy="2" rx="64" ry="7" fill="#4b3a8c" opacity="0.16"/>
     <g clip-path="url(#pbodyC)">
       <use href="#pbody" fill="#e4ddf6"/>
@@ -174,9 +176,9 @@
     </g>
     <ellipse cx="-15" cy="-86" rx="10" ry="12.5" fill="#3a3046" transform="rotate(26 -15 -86)"/>
     <ellipse cx="15" cy="-86" rx="10" ry="12.5" fill="#2b2330" transform="rotate(-26 15 -86)"/>
-    <ellipse cx="-14" cy="-87" rx="3.4" ry="4.2" fill="#fff"/><ellipse cx="14" cy="-87" rx="3.4" ry="4.2" fill="#fff"/>
-    <ellipse cx="-13.4" cy="-86.4" rx="2.4" ry="3" fill="#2b2330"/><ellipse cx="14.6" cy="-86.4" rx="2.4" ry="3" fill="#2b2330"/>
-    <circle cx="-12.4" cy="-88" r="1" fill="#fff"/><circle cx="15.6" cy="-88" r="1" fill="#fff"/>
+    <ellipse cx="-14" cy="-87" rx="3.5" ry="4" fill="#fff"/><ellipse cx="14" cy="-87" rx="3.5" ry="4" fill="#fff"/>
+    <ellipse cx="-13.5" cy="-86.5" rx="2.5" ry="3" fill="#2b2330"/><ellipse cx="14.5" cy="-86.5" rx="2.5" ry="3" fill="#2b2330"/>
+    <circle cx="-12.5" cy="-88" r="1" fill="#fff"/><circle cx="15.5" cy="-88" r="1" fill="#fff"/>
     <ellipse cx="0" cy="-73" rx="14" ry="10" fill="#fff"/>
     <path d="M-5-77Q0-80 5-77Q4-73 0-72.5Q-4-73-5-77Z" fill="#2b2330"/>
     <path d="M0-72.5V-70M-4-69Q-2-67 0-69Q2-67 4-69" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

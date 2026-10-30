@@ -9,7 +9,7 @@
     <path id="puff2" d="M28 40C24 35 29 29 35 30C39 25 47 25 50 29C56 28 63 32 60 38C54 42 34 43 28 40Z"/>
     <path id="puff3" d="M35 31C33 25 39 21 45 21C46 17 50 14 54 13C53 16 54 18 56 21C60 23 60 29 56 31C49 34 40 34 35 31Z"/>
     <clipPath id="head"><circle cx="102" cy="80" r="19"/></clipPath>
-    <path id="trunkP" d="M90 94C80 94 72 87 71 75C70 63 72 49 75 37L74 29C76 26 81 25 84 27L82 37C80 49 79 61 80 71C81 77 85 81 91 82Z"/>
+    <path id="trunkP" d="M92 95C80 96 69 89 68 76C67 64 70 50 73 39C74 34 74 30 73.5 27C75.5 24 81 23.5 83.5 26C83 31 82 35 81 40C78 51 77 62 78.5 71C80 78 84 81 90 81.5Z"/>
     <clipPath id="trunk"><use href="#trunkP"/></clipPath>
   </defs>
   <rect width="120" height="120" fill="url(#bg)"/>
@@ -64,8 +64,9 @@
     <rect x="68" y="22" width="26" height="74" fill="#9790ba"/>
     <use href="#trunkP" fill="#bcb6d6" transform="translate(-3 -1)"/>
   </g>
-  <path d="M72 50h7.5M71.5 60h8M71.5 70l8 1" stroke="#a9a3cc" stroke-width="2" stroke-linecap="round"/>
-  <ellipse cx="79" cy="27.5" rx="3.2" ry="1.6" fill="#857eab" transform="rotate(-8 79 27.5)"/>
+  <path d="M75.5 48.5l4.5 0.5M74.5 58h5M74.5 67.5l5.5 1" stroke="#a9a3cc" stroke-width="2" stroke-linecap="round"/>
+  <path d="M70.5 70C70 62 71 54 73 46" fill="none" stroke="#dedaf0" stroke-width="2.4" stroke-linecap="round"/>
+  <ellipse cx="78.5" cy="26.5" rx="3.4" ry="1.7" fill="#857eab" transform="rotate(-10 78.5 26.5)"/>
 
   <path d="M90 104v5M87.5 106.5h5M14 26v4M12 28h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
 </svg>
