@@ -166,6 +166,35 @@ tail root (0.016, 0.077, 0.22), eyes (0, −0.222, 0.588), hips (±0.072, −0.0
 - **Try it:** the lab entry `kaylee` (`#/world/characters/kaylee?lineup=kaylee,kaylee-code`) shows her next to the
   code-built Kaylee (`kaylee-code`, kept to compare).
 
+## Daddy, the second one (2026-10-30)
+
+A mint unicorn in his brown tee and khaki shorts (`characters/dad-model.ts`, `models/dad.glb`, 1.7 m). What was
+different from Kaylee, for the next family member:
+- **Tripo split him already:** arms, legs, ears, brows, nose, horn, tail and the eye domes came as separate loose
+  parts, so nothing was cut (no caps, `inkPieces(meshes, bag, null)`). Check the loose parts before cutting.
+- **He talks, so the face was painted out** (`paint_out.py` next to `dad-rig.blend` in the planning assets, run inside
+  Blender): it maps every texel of the face texture back to its 3D point, then fills the painted mouth and the eyes
+  painted under the glossy domes from the skin around them (inside each dome's footprint everything, around it only
+  what isn't mint or muzzle cream, so the muzzle's edge stays). The domes carry the eyes, so the usual squash of
+  `eyes` blinks (no lids), and the code draws a smile on the muzzle (beads along the painted curve, each on the
+  surface: a flat torus floats off where the face curves back) and the talking mouth.
+- **Same arm turn as Kaylee** (`swingForward`, model.ts): his head is wider than his reach.
+- **Sitting** (member.ts): a rig with legs drops its body onto its hips and swings the legs forward over the seat.
+- Blender numbers (meters, Z up, front −Y, 1.0 tall): neck (0, −0.021, 0.462), shoulders (±0.175, −0.005, 0.405),
+  hips (±0.086, −0.009, 0.175), eyes (0, −0.164, 0.627), tail root (0.022, 0.105, 0.23).
+- `Member` builds him whenever the look is his own (`LOOKS.nick`); the lab's `nick-code` keeps the code-built Daddy
+  to compare (`#/world/characters/nick?lineup=nick,nick-code`).
+- **His pivots are in meters.** Unlike Kaylee's, his root isn't scaled: the pivots sit where they are at full size and
+  only the meshes are scaled up, so head-local, body-local and leg-local positions are meters, as on the code-built
+  rig. The trips already hang things on Daddy (the boat's sunglasses, the rice field's straw, the mall's socks, the
+  ball on his horn, the cafe's cream, the vet's suds, the barber's strands), and they all land right that way.
+- **Say where things go.** A head that isn't a ball doesn't fit the code-built formulas (`face.R`, `face.headY`), so
+  the rig gives `spots` (eyes, brow, nose, crown, horn tip, the shin below the shorts), measured in Blender, and those
+  consumers use them when they're there. His hair, brows and horn are their own (`hair`, `brows`, `horn`,
+  `hairColors`): the barber swaps them for strands in his browns and its own horn, and the vet's suds puff the hair
+  up (less than a mane, or it lifts off). A new modelled member: give the same fields, then check each trip that
+  dresses them.
+
 ## Open questions
 
 - A GLB of a family member is OK in this repo (Dad, 2026-10-25); photos never are.

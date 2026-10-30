@@ -413,7 +413,9 @@ export class RiceFarm extends Stage {
     kaylee.rig.body.add(this.mud)
     // Straw on Daddy's head (the harvest's silly moment).
     this.nickHat = solid(merge([P.sphere(0.2, STRAW, { scale: [1.2, 0.45, 1.1] }, 12), ...Array.from({ length: 8 }, (_, k) => P.cone(0.025, 0.24, k % 2 ? '#D9AE52' : STRAW, { at: [Math.cos(k) * 0.16, 0.02, Math.sin(k) * 0.14], rot: [Math.sin(k * 1.7) * 1.2, 0, Math.cos(k * 1.7) * 1.2] }, 4))]), bag, 1.5)
-    this.nickHat.position.set(0, this.nick.rig.face.headY + this.nick.rig.face.R * 0.95, 0)
+    const crown = this.nick.rig.spots?.crown
+    if (crown) this.nickHat.position.set(crown[0], crown[1] - 0.04, crown[2])
+    else this.nickHat.position.set(0, this.nick.rig.face.headY + this.nick.rig.face.R * 0.95, 0)
     this.nickHat.visible = false
     this.nick.rig.head.add(this.nickHat)
     // Lung Kham, in his own ngob.

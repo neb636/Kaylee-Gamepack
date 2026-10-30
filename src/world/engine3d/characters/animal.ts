@@ -10,7 +10,7 @@
 //
 // Sizes are fractions of the character's height H, so the same recipe makes Agong and little Putter; `chub` makes the
 // body rounder (Mommy, and Jum the elephant).
-import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry } from 'three'
+import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry, type Object3D } from 'three'
 import type { Bag } from '../dispose'
 import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
 import { WEARABLES, type Look, type PaintColor, type PaintPart, type Wearable } from './look'
@@ -61,6 +61,30 @@ export interface Rig {
   waist?: { y: number; z: number; rx: number; rz: number }
   /** How far forward the front of the body is at (x, y), body-local z, for things stuck on it (mud). */
   front?: (x: number, y: number) => number
+  /** A modelled toy's own hairdo in one piece (the modelled Daddy), pivoting at its middle: the barber's strands
+   *  replace it and the vet's suds fluff it up. Unlike `mane`, the wind leaves it be. */
+  hair?: Group
+  /** The colors of that hairdo (the barber's strands start out in them, and so do the brows). */
+  hairColors?: string[]
+  /** A modelled toy's own eyebrows (the barber's strands grow new ones over them). */
+  brows?: Group
+  /** A modelled toy's own horn: the barber's horn (one a snip can boing) stands in for it. */
+  horn?: Object3D
+  /** Where things sit on a modelled head whose shape isn't the code-built ball (head-local meters): between the eyes
+   *  on the face (sunglasses), the middle of the left eyebrow (the barber's brows; the right one is mirrored), the tip
+   *  of the nose (a dab of cream), the top of the hair (a hat, straw), the tip of the horn (a ball stuck on it), and the
+   *  legs (socks). */
+  spots?: { eyes: V3; brow: V3; nose: V3; crown: V3; horn: V3; leg: Shin }
+}
+
+/** A modelled leg below the shorts, in its hip pivot's space (meters, the left leg; the right is mirrored): its middle
+ *  across and front-to-back, how thick it is, and the heights of the sole and of the hem it disappears under. */
+export interface Shin {
+  x: number
+  z: number
+  r: number
+  sole: number
+  hem: number
 }
 
 /** One worn thing, a group for each pivot it rides on (null where there's nothing). */
