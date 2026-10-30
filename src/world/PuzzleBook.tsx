@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { go } from '../router'
 import { BigButton, JigsawPuzzle, SayButton, SparklePuppet, say, sounds, useSayOnMount, type PuppetHandle } from '../sdk'
+import { DockGlyph } from './HomeIcons'
 import { BarPill, TopBar } from './kit/Chrome'
 import { Flag } from './kit/Flag'
 import { WORLD_LINES as L } from './lines'
@@ -21,7 +22,7 @@ function Shelf({ country }: { country?: string }) {
   const shown = groups.length ? groups : places.filter(({ meta }) => meta.puzzles?.length)
   return <div className="screen decorated" style={{ padding: 0, overflow: 'hidden' }}>
     <TopBar icon={groups.length && country ? '🗺️' : '🌍'} label={groups.length && country ? 'Back to the country' : 'World map'} onBack={() => go.world(groups.length && country ? country : '')}>
-      <BarPill>🧩 Puzzles</BarPill><SayButton text={L.puzzlePick} />
+      <BarPill><DockGlyph kind="puzzles" /> Puzzles</BarPill><SayButton text={L.puzzlePick} />
     </TopBar>
     <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: 'var(--bar-clear) max(16px, 3vw) 24px' }}>
       <div style={{ maxWidth: 1100, margin: 'auto', display: 'grid', gap: 24 }}>
@@ -53,8 +54,8 @@ function Puzzle({ picture }: { picture: typeof pictures[number] }) {
   useSayOnMount(L.puzzlePieces)
   const instruction = size === null ? L.puzzlePieces : done ? L.puzzleDone : L.puzzleHow
   return <div className="screen decorated" style={{ padding: 'var(--bar-clear) 16px calc(var(--safe-bottom) + 12px)', overflow: 'hidden' }}>
-    <TopBar icon="🧩" label="Back to puzzles" onBack={() => { mounted.current = false; go.world('puzzles', picture.place.id) }}>
-      <BarPill>{size === null ? '🧩' : `${placed}/${counts[size].rows * counts[size].cols}`}<SayButton text={instruction} /></BarPill>
+    <TopBar icon={<DockGlyph kind="puzzles" size="calc(var(--btn) * 0.62)" />} label="Back to puzzles" onBack={() => { mounted.current = false; go.world('puzzles', picture.place.id) }}>
+      <BarPill>{size === null ? <DockGlyph kind="puzzles" /> : `${placed}/${counts[size].rows * counts[size].cols}`}<SayButton text={instruction} /></BarPill>
     </TopBar>
     {size === null ? <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 'min(24px, 3vh)' }}>
       <img src={picture.img} alt={picture.name} style={{ width: 'min(760px, 90vw, 70vh)', maxHeight: '48%', objectFit: 'contain', borderRadius: 24, boxShadow: 'var(--shadow)' }} />
@@ -69,7 +70,7 @@ function Puzzle({ picture }: { picture: typeof pictures[number] }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, flexShrink: 0, minHeight: 96 }}>
         <SparklePuppet ref={puppet} height="96px" />
         {done ? <BigButton onClick={() => { setDone(false); setPlaced(0); setRound(n => n + 1); void say(L.puzzleHow) }}>↻ Play again</BigButton> : <SayButton text={L.puzzleHint} />}
-        <BigButton onClick={() => { generation.current++; setSize(null); setDone(false); setPlaced(0); setRound(n => n + 1); void say(L.puzzlePieces) }}>🧩 Pieces</BigButton>
+        <BigButton onClick={() => { generation.current++; setSize(null); setDone(false); setPlaced(0); setRound(n => n + 1); void say(L.puzzlePieces) }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><DockGlyph kind="puzzles" /> Pieces</span></BigButton>
       </div>
     </>}
   </div>

@@ -2,6 +2,7 @@
 import { motion } from 'motion/react'
 import { go } from '../router'
 import { say, sounds, useSayOnMount } from '../sdk'
+import { DockGlyph } from './HomeIcons'
 import { BarPill, TopBar } from './kit/Chrome'
 import { ColoringPage } from './kit/ColoringPage'
 import { Flag } from './kit/Flag'
@@ -21,7 +22,9 @@ function Shelf() {
   return (
     <div className="screen decorated" style={{ padding: 0, overflow: 'hidden' }}>
       <TopBar icon="🌍" label="World map" onBack={() => go.world()}>
-        <BarPill>🖍️ Coloring Book</BarPill>
+        <BarPill>
+          <DockGlyph kind="coloring" /> Coloring Book
+        </BarPill>
       </TopBar>
       {/* Only the pages scroll, so the back button always stays put. */}
       <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch', display: 'flex', flexDirection: 'column', padding: 'var(--bar-clear) max(16px, 3vw) calc(var(--safe-bottom) + 24px)' }}>
@@ -66,10 +69,10 @@ function Painting({ src }: { src: string }) {
   useSayOnMount(WORLD_LINES.coloringHow)
   return (
     <div className="screen decorated" style={{ padding: 'var(--bar-clear) max(12px, 2vw) calc(var(--safe-bottom) + 12px)', overflow: 'hidden' }}>
-      <TopBar icon="📚" label="Coloring book" onBack={() => go.world('coloring')}>
+      <TopBar icon={<DockGlyph kind="coloring" size="calc(var(--btn) * 0.62)" />} label="Coloring book" onBack={() => go.world('coloring')}>
         <BarPill>
-          <button aria-label="Hear it again" onClick={() => void say(WORLD_LINES.coloringHow)} style={{ fontSize: 'inherit' }}>
-            🖍️ 🔊
+          <button aria-label="Hear it again" onClick={() => void say(WORLD_LINES.coloringHow)} style={{ fontSize: 'inherit', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <DockGlyph kind="coloring" /> 🔊
           </button>
         </BarPill>
       </TopBar>
