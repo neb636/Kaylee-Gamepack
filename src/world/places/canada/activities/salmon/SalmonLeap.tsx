@@ -24,7 +24,7 @@
 // (?feel=1). 2D only: the SVGs are written every frame, no three.js or Phaser.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent, type RefObject } from 'react'
-import { BigButton, bigCelebration, burst, lineText, say, speakingVoice, spendHint, useElementSize, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, lineText, say, speakingVoice, spendHint, useElementSize, wait, type Line, type PuppetHandle, CAPTION } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { StoryBeat } from '../../../../kit/StoryBeat'
@@ -1814,17 +1814,7 @@ const CHIP = {
 const DOT = { width: 12, height: 12, borderRadius: 99, border: '2px solid rgba(74,59,87,.25)' }
 
 const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  border: 'none',
-  borderRadius: 999,
-  padding: '8px 20px',
+  ...CAPTION,
   minHeight: 44,
-  fontFamily: 'inherit',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
   pointerEvents: 'auto' as const,
 }

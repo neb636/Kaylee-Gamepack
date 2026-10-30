@@ -21,7 +21,7 @@
 // are knobs (herd.ts), with the planting and the highway's here (?feel=1). 2D only: one SVG written every frame.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent } from 'react'
-import { BigButton, bigCelebration, burst, lineText, say as speak, sounds, speechLevel, spendHint, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, lineText, say as speak, sounds, speechLevel, spendHint, useElementSize, type Line, type PuppetHandle, CAPTION } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { sfx } from '../../../../kit/sfx'
@@ -1757,16 +1757,6 @@ const CHIP = {
 }
 
 const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  padding: '8px 20px',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
-  border: 'none',
-  font: 'inherit',
+  ...CAPTION,
   pointerEvents: 'auto' as const,
 }

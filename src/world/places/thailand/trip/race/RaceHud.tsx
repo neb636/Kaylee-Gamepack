@@ -41,7 +41,7 @@ export interface Face {
 const MEDALS = ['#FFC83D', '#D9DDEA', '#E8A87C', '#C9C3D8']
 const SUFFIX = ['st', 'nd', 'rd', 'th']
 
-export const pill = { display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.92)', borderRadius: 999, padding: '4px 14px', boxShadow: 'var(--shadow)', fontWeight: 700, color: 'var(--ink)', fontSize: 'clamp(22px, 4vmin, 34px)' } as const
+export const pill = { display: 'flex', alignItems: 'center', gap: 6, background: '#fff', borderRadius: 999, padding: '3px 14px', border: '3px solid var(--ink)', boxShadow: 'var(--talk-drop)', fontWeight: 700, color: 'var(--ink)', fontSize: 'clamp(22px, 4vmin, 34px)' } as const
 
 export function Standings<Id extends string>({ hud, faces, me }: { hud: RaceHud<Id>; faces: Record<Id, Face>; me: Id }) {
   const i = Math.min(hud.place, MEDALS.length) - 1

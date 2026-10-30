@@ -7,7 +7,8 @@
 // instead (`who="nick"`, tap him), so a trip can start right where the tuk-tuk drops her off.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { lineText, say, sounds, type Line } from '../../../../../sdk'
+import { ChoiceCard, Dialogue, lineText, say, sounds, type Line } from '../../../../../sdk'
+import { WHO } from '../../who'
 import { L } from '../../lines'
 import meta from '../../meta'
 
@@ -72,7 +73,7 @@ export function Ask({ open, onYes, onNotYet, trips, who = 'ji' }: Props) {
   const picks = where ? trips.map((t) => ({ id: t.id, label: t.label, icon: t.icon, extra: '', color: t.color, on: yes(t.id) })) : [{ id: 'yes', label: 'Yes', icon: '👍', extra: one ? one.icon : '🧳', color: one ? one.color : 'var(--mint)', on: yes(one?.id) }]
   const buttons = [
     ...picks,
-    { id: 'not-yet', label: 'Not yet', icon: '✋', extra: '⏳', color: 'var(--lavender)', on: () => {
+    { id: 'not-yet', label: 'Not yet', icon: '✋\uFE0F', extra: '⏳\uFE0F', color: 'var(--lavender)', on: () => {
       sounds.pop()
       setLater(true)
       timer.current = setTimeout(onNotYet, 1300)
@@ -86,46 +87,26 @@ export function Ask({ open, onYes, onNotYet, trips, who = 'ji' }: Props) {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
-          style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom) + 16px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, padding: '0 16px', zIndex: 50, pointerEvents: 'none' }}
+          style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom) + 22px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(18px, 3vh, 28px)', padding: '0 16px', zIndex: 50, pointerEvents: 'none' }}
         >
-          <motion.div
-            key={lineText(line)}
-            initial={{ scale: 0.85 }}
-            animate={{ scale: 1 }}
-            style={{ display: 'flex', alignItems: 'center', gap: 12, maxWidth: 'min(620px, 100%)', background: 'rgba(255,255,255,0.97)', borderRadius: 'var(--radius)', padding: '10px 20px 10px 10px', boxShadow: 'var(--shadow)' }}
-          >
-            <motion.span
-              animate={{ rotate: [0, -12, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 1.8, repeatDelay: 1 }}
-              style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 64, height: 64, borderRadius: 32, background: asker.color, fontSize: 34, border: '3px solid #fff' }}
-              title={asker.name}
-            >
-              🦄
-            </motion.span>
-            <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
-              <small style={{ fontWeight: 700, opacity: 0.6, fontSize: 14 }}>{asker.name}</small>
-              <span style={{ fontWeight: 700, fontSize: 'clamp(20px, min(3.4vw, 3.6vh), 30px)' }}>{lineText(line)}</span>
-            </span>
-          </motion.div>
+          <Dialogue who={who === 'ji' ? WHO.ji : WHO.nick} size="lg" avatar={72}>
+            {lineText(line)}
+          </Dialogue>
           {!later && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'clamp(16px, 4vw, 40px)', pointerEvents: 'auto' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'clamp(16px, 4vw, 36px)', pointerEvents: 'auto' }}>
               {buttons.map((b, i) => (
-                <motion.button
+                <ChoiceCard
                   key={b.id}
                   aria-label={b.label}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: i < picks.length ? [1, 1.07, 1] : 1 }}
-                  transition={i < picks.length ? { repeat: Infinity, duration: 1.4, ease: 'easeInOut', delay: i * 0.3 } : { type: 'spring' }}
-                  whileTap={{ scale: 0.88 }}
+                  icon={`${b.icon}${b.extra}`}
+                  label={b.label}
+                  color={b.color}
+                  big={!where}
+                  initial={{ scale: 0, rotate: i % 2 ? 4 : -4 }}
+                  animate={{ scale: i < picks.length ? [1, 1.05, 1] : 1, rotate: 0 }}
+                  transition={i < picks.length ? { scale: { repeat: Infinity, duration: 1.4, ease: 'easeInOut', delay: 0.4 + i * 0.3 }, rotate: { type: 'spring' } } : { type: 'spring', delay: 0.1 }}
                   onClick={b.on}
-                  style={{ minWidth: where ? 'min(180px, 28vw)' : 'min(200px, 40vw)', minHeight: 'max(88px, min(150px, 22vh))', padding: '10px 18px', borderRadius: 36, border: '5px solid #fff', background: b.color, boxShadow: 'var(--shadow)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2, color: 'var(--ink)' }}
-                >
-                  <span style={{ fontSize: 'clamp(48px, min(9vw, 9vh), 72px)', lineHeight: 1 }} aria-hidden>
-                    {b.icon}
-                    {b.extra}
-                  </span>
-                  <span style={{ fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: 700 }}>{b.label}</span>
-                </motion.button>
+                />
               ))}
             </div>
           )}

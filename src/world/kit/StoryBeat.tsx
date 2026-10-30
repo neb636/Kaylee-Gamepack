@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { Buddy, lineText, lineVoice, say, SparklePuppet, stopSpeaking, useAlive, wait, type Line, type PuppetHandle } from '../../sdk'
+import { Buddy, lineText, lineVoice, say, SparklePuppet, stopSpeaking, TalkBubble, useAlive, wait, type Line, type PuppetHandle } from '../../sdk'
 
 /**
  * A tiny bit of story: a friend says 1-2 short lines, then the play starts.
@@ -60,14 +60,17 @@ export function StoryBeat({ lines, img, friend, onDone, bg }: { lines: Line[]; i
         background: bg ? `linear-gradient(rgba(255,247,240,0.35), rgba(255,247,240,0.35)), url(${bg}) center / cover` : 'rgba(217, 204, 255, 0.85)',
       }}
     >
-      <motion.div
+      {/* The tail points down at whoever says this line: Sparkle on the left (or in the middle alone), the friend on the right. */}
+      <TalkBubble
         key={index}
+        size="lg"
+        tail={lineVoice(lines[index]) !== 'sparkle' && (friend || img) ? 'down-right' : friend || img ? 'down' : 'down-center'}
         initial={{ scale: 0.7, y: 20, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
-        style={{ background: '#fff', borderRadius: 'var(--radius)', padding: 'min(18px, 3vh) 28px', boxShadow: 'var(--shadow)', fontSize: 'clamp(22px, min(4vw, 5vh), 40px)', fontWeight: 600, maxWidth: 'min(760px, 100%)', textAlign: 'center', lineHeight: 1.2 }}
+        style={{ maxWidth: 'min(760px, 100%)', textAlign: 'center', marginBottom: 6 }}
       >
         {lineText(lines[index])}
-      </motion.div>
+      </TalkBubble>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 'min(16px, 2vw)', maxWidth: '100%' }}>
         <SparklePuppet ref={sparkle} height={img || friend ? 'min(290px, 30vh, 40vw)' : 'min(380px, 34vh, 62vw)'} lookToward={img || friend ? 0.6 : 0} />
         {(friend || img) && (
@@ -76,7 +79,7 @@ export function StoryBeat({ lines, img, friend, onDone, bg }: { lines: Line[]; i
           </motion.div>
         )}
       </div>
-      <motion.div animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1 }} style={{ background: 'var(--hotpink)', color: '#fff', borderRadius: 999, padding: '10px 30px', fontSize: 30, fontWeight: 700, boxShadow: 'var(--shadow)' }}>
+      <motion.div animate={{ scale: [1, 1.12, 1] }} transition={{ repeat: Infinity, duration: 1 }} style={{ background: 'var(--hotpink)', color: '#fff', border: '3px solid var(--ink)', borderRadius: 999, padding: '8px 30px', fontSize: 30, fontWeight: 700, boxShadow: '0 5px 0 #b8306f' }}>
         ▶
       </motion.div>
     </motion.button>

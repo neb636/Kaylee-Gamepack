@@ -21,7 +21,7 @@
 // voices (lines.ts, L.taffy). A short line at the bottom shows what's said, for Dad.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent, type Ref } from 'react'
-import { BigButton, bigCelebration, burst, say, sounds, spendHint, useElementSize, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, say, sounds, spendHint, useElementSize, type Line, type PuppetHandle, CAPTION } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { noise, sfx, tone } from '../../../../kit/sfx'
@@ -1955,13 +1955,5 @@ const CSS = `
 const CORNER = { position: 'fixed' as const, right: 'calc(var(--safe-right, 0px) + 20px)', top: 'calc(var(--top-clear) + 12px)', pointerEvents: 'auto' as const }
 
 const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  padding: '8px 20px',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
+  ...CAPTION,
 }

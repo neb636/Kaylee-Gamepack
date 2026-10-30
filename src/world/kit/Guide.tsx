@@ -2,9 +2,9 @@
 // live Sparkle who gives the instructions, with the line in a bubble beside her (for Dad), and a hint when nothing has
 // been touched for a while. Tap her to hear the last line again. The friends speak for themselves (their own voices);
 // Sparkle only says what to do. Thailand's house has its own (thailand/activities/hub/Guide.tsx).
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, say, speakingVoice, spendHint, SparklePuppet, type Line, type PuppetHandle } from '../../sdk'
+import { lineText, say, speakingVoice, spendHint, SparklePuppet, TalkBubble, type Line, type PuppetHandle } from '../../sdk'
 
 export interface GuideHandle {
   /** Say a line now. `after`: wait for the line before to finish instead of cutting it off. */
@@ -127,14 +127,12 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
   const right = corner === 'right'
   return (
     <div
+      className="talk-guide"
+      data-corner={corner}
       style={{
         position: 'absolute',
         [right ? 'right' : 'left']: `calc(var(--safe-${right ? 'right' : 'left'}, 0px) + 8px)`,
         bottom: 'calc(var(--safe-bottom) + 6px)',
-        display: 'flex',
-        flexDirection: right ? 'row-reverse' : 'row',
-        alignItems: 'flex-end',
-        gap: 6,
         zIndex: 25,
         pointerEvents: 'none',
         maxWidth: 'calc(100% - 120px)',
@@ -152,15 +150,17 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
       </button>
       <AnimatePresence>
         {line && (
-          <motion.div
+          <TalkBubble
             key={lineText(line)}
+            tail={right ? 'right' : 'left'}
+            size="sm"
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            style={{ marginBottom: 'min(64px, 8vh)', background: 'rgba(255,255,255,0.95)', color: 'var(--ink)', borderRadius: 'var(--radius)', padding: '10px 16px', boxShadow: 'var(--shadow)', fontSize: 'clamp(16px, min(2.8vw, 3.2vh), 26px)', fontWeight: 600, lineHeight: 1.15, transformOrigin: right ? 'bottom right' : 'bottom left' }}
+            style={{ marginBottom: 'min(64px, 8vh)', transformOrigin: right ? 'bottom right' : 'bottom left' }}
           >
             {lineText(line)}
-          </motion.div>
+          </TalkBubble>
         )}
       </AnimatePresence>
     </div>

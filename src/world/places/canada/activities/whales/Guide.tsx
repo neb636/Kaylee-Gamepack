@@ -2,9 +2,9 @@
 // corner (the few instructions and hints; tap her to hear her last one again), Maple (her 3D mouth moves with her voice)
 // and the sea otters. A short bubble shows the words for Dad, with who said them. Bottom right, so it never sits under
 // Maple's book card (bottom left).
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
+import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, type Line, type PuppetHandle, TalkBubble } from '../../../../../sdk'
 
 export interface WhaleGuideHandle {
   /** Says it; resolves when it's done. */
@@ -64,7 +64,7 @@ export const WhaleGuide = forwardRef<WhaleGuideHandle, { hidden?: boolean }>(fun
 
   const who = line ? WHO[lineVoice(line.l)] : undefined
   return (
-    <div style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 8px)', bottom: 'calc(var(--safe-bottom) + 6px)', display: hidden ? 'none' : 'flex', flexDirection: 'row-reverse', alignItems: 'flex-end', gap: 6, zIndex: 33, pointerEvents: 'none', maxWidth: 'calc(100% - 24px)' }}>
+    <div className="talk-guide" data-corner="right" style={{ position: 'absolute', right: 'calc(var(--safe-right, 0px) + 8px)', bottom: 'calc(var(--safe-bottom) + 6px)', display: hidden ? 'none' : undefined, zIndex: 33, pointerEvents: 'none', maxWidth: 'calc(100% - 24px)' }}>
       <button
         aria-label="Sparkle"
         onClick={() => {
@@ -80,21 +80,19 @@ export const WhaleGuide = forwardRef<WhaleGuideHandle, { hidden?: boolean }>(fun
       </button>
       <AnimatePresence>
         {line && (
-          <motion.div
+          <TalkBubble
             key={line.n}
             aria-live="polite"
+            who={who}
+            tail={who ? 'none' : 'right'}
+            size="sm"
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 'min(56px, 8vh)', background: 'rgba(255,255,255,0.95)', borderRadius: 'var(--radius)', padding: who ? '6px 14px 6px 6px' : '10px 16px', boxShadow: 'var(--shadow)', transformOrigin: 'bottom right' }}
+            style={{ marginBottom: 'min(56px, 8vh)', transformOrigin: 'bottom right' }}
           >
-            {who && (
-              <span title={who.name} style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 44, height: 44, borderRadius: 22, background: who.color, fontSize: 24, border: '3px solid #fff' }}>
-                {who.icon}
-              </span>
-            )}
-            <span style={{ fontSize: 'clamp(16px, min(3vw, 3.4vh), 24px)', fontWeight: 600, lineHeight: 1.15 }}>{lineText(line.l)}</span>
-          </motion.div>
+            {lineText(line.l)}
+          </TalkBubble>
         )}
       </AnimatePresence>
     </div>

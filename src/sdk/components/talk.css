@@ -1,0 +1,269 @@
+/* One look for everything that talks or labels (sdk/components/Talk.tsx): speech bubbles with a tail that points at
+   whoever is talking, the speaker's name tab, captions, name tags over characters, and the big choice cards.
+   The same ink outline as the art (art/STYLE.md), flat fills, a hard drop under each thing like a toy sticker. */
+:root {
+  --talk-line: var(--ink);
+  --talk-edge: 3px;
+  --talk-drop: 0 5px 0 rgba(43, 35, 48, 0.18);
+  --emoji: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Fredoka', sans-serif;
+}
+
+/* ---- Speech bubble ---- */
+.talk-bubble {
+  --bubble: #fff;
+  position: relative;
+  background: var(--bubble);
+  color: var(--ink);
+  border: var(--talk-edge) solid var(--talk-line);
+  border-radius: 26px;
+  padding: 10px 18px 11px;
+  box-shadow: var(--talk-drop);
+  font-weight: 600;
+  line-height: 1.18;
+  text-wrap: balance;
+  font-size: clamp(18px, min(3.2vw, 3.6vh), 28px);
+}
+.talk-bubble[data-size='sm'] {
+  font-size: clamp(16px, min(2.8vw, 3.2vh), 24px);
+  padding: 8px 16px 9px;
+  border-radius: 22px;
+}
+.talk-bubble[data-size='lg'] {
+  font-size: clamp(22px, min(4vw, 5vh), 38px);
+  padding: 14px 26px 15px;
+  border-radius: 30px;
+}
+.talk-bubble[data-who] {
+  margin-top: 16px;
+  padding-top: 16px;
+}
+button.talk-bubble {
+  font-family: inherit;
+  text-align: left;
+  pointer-events: auto;
+}
+
+/* The tail: a square turned 45°, two edges outlined, half of it over the bubble's own border so the join is seamless. */
+.talk-bubble[data-tail]:not([data-tail='none'])::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  background: var(--bubble);
+  border: 0 solid var(--talk-line);
+  transform: rotate(45deg);
+  border-bottom-left-radius: 3px;
+}
+.talk-bubble[data-tail='left']::after {
+  left: -11px;
+  bottom: 16px;
+  border-left-width: var(--talk-edge);
+  border-bottom-width: var(--talk-edge);
+}
+.talk-bubble[data-tail='right']::after {
+  right: -11px;
+  bottom: 16px;
+  border-top-width: var(--talk-edge);
+  border-right-width: var(--talk-edge);
+  border-radius: 0 3px 0 0;
+}
+.talk-bubble[data-tail='down']::after,
+.talk-bubble[data-tail='down-right']::after {
+  bottom: -11px;
+  left: 30px;
+  border-right-width: var(--talk-edge);
+  border-bottom-width: var(--talk-edge);
+  border-radius: 0 0 3px 0;
+}
+.talk-bubble[data-tail='down-right']::after {
+  left: auto;
+  right: 30px;
+}
+.talk-bubble[data-tail='down-center']::after {
+  bottom: -11px;
+  left: calc(50% - 9px);
+  border-right-width: var(--talk-edge);
+  border-bottom-width: var(--talk-edge);
+  border-radius: 0 0 3px 0;
+}
+
+/* Who's talking: a tab in their color sitting on the bubble's top edge. */
+.talk-who {
+  position: absolute;
+  top: 0;
+  left: 14px;
+  transform: translateY(-62%);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 12px 2px 6px;
+  border-radius: 999px;
+  background: var(--who, var(--pink));
+  border: var(--talk-edge) solid var(--talk-line);
+  font-size: clamp(13px, 1.6vmin + 4px, 17px);
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.talk-bubble[data-tail='down-right'] .talk-who,
+.talk-bubble[data-tail='right'] .talk-who {
+  left: auto;
+  right: 14px;
+}
+.talk-who > .talk-emoji {
+  font-size: 1.15em;
+}
+.talk-emoji {
+  font-family: var(--emoji);
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* A round portrait of who's talking (the dialogue card's face). */
+.talk-avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--who, var(--pink));
+  border: var(--talk-edge) solid var(--talk-line);
+  box-shadow: var(--talk-drop), inset 0 -6px 0 rgba(43, 35, 48, 0.1);
+  font-family: var(--emoji);
+  line-height: 1;
+}
+
+/* ---- Guide in a corner (Sparkle and her bubble) ----
+   Beside her where there's room; on a tall narrow screen the bubble sits above her instead, so it never gets squeezed
+   between the corner controls into a skinny column of words. */
+.talk-guide {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+.talk-guide[data-corner='right'] {
+  flex-direction: row-reverse;
+}
+@media (max-width: 700px) and (orientation: portrait) {
+  .talk-guide {
+    flex-direction: column-reverse !important;
+    align-items: flex-start !important;
+    gap: 2px !important;
+    max-width: calc(100vw - 24px - var(--roam-left, 0px)) !important;
+  }
+  .talk-guide[data-corner='right'] {
+    align-items: flex-end !important;
+  }
+  .talk-guide .talk-bubble {
+    margin-bottom: 0 !important;
+    margin-left: 8px;
+    max-width: min(420px, calc(100vw - 32px - var(--roam-left, 0px)));
+  }
+  .talk-guide .talk-bubble[data-tail='left']::after {
+    left: 34px;
+    bottom: -11px;
+    border-width: 0 var(--talk-edge) var(--talk-edge) 0;
+    border-radius: 0 0 3px 0;
+  }
+  .talk-guide .talk-bubble[data-tail='right']::after {
+    right: 34px;
+    bottom: -11px;
+    border-width: 0 var(--talk-edge) var(--talk-edge) 0;
+    border-radius: 0 0 3px 0;
+  }
+}
+
+/* ---- Name tag over a character ---- */
+.talk-tag {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+  background: var(--who, #fff);
+  color: var(--ink);
+  border: 2.5px solid var(--talk-line);
+  border-radius: 999px;
+  padding: 1px 12px 2px;
+  font-size: clamp(13px, 1.6vw, 18px);
+  font-weight: 700;
+  line-height: 1.3;
+  box-shadow: 0 3px 0 rgba(43, 35, 48, 0.2);
+}
+.talk-tag::after {
+  content: '';
+  position: absolute;
+  left: calc(50% - 6px);
+  bottom: -7px;
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
+  background: var(--who, #fff);
+  border: 0 solid var(--talk-line);
+  border-right-width: 2.5px;
+  border-bottom-width: 2.5px;
+  border-radius: 0 0 2px 0;
+  transform: rotate(45deg);
+}
+.talk-tag small {
+  font-weight: 600;
+  opacity: 0.7;
+  font-family: Thonburi, 'Noto Sans Thai', sans-serif;
+}
+
+/* ---- Choice card: a big chunky button to pick with (no reading needed: the picture says it) ---- */
+.talk-choice {
+  --c: var(--butter);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px 14px;
+  border-radius: 32px;
+  background: var(--c);
+  border: var(--talk-edge) solid var(--talk-line);
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--c) 50%, #2b2330);
+  color: var(--ink);
+  font-family: inherit;
+  overflow: visible;
+  transition: translate 0.08s ease-out, box-shadow 0.08s ease-out;
+  pointer-events: auto;
+}
+.talk-choice::before {
+  /* A soft shine across the top, like a jelly button. */
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 6px;
+  height: 34%;
+  border-radius: 24px 24px 50% 50% / 24px 24px 36% 36%;
+  background: rgba(255, 255, 255, 0.32);
+  pointer-events: none;
+}
+.talk-choice:active {
+  translate: 0 6px;
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--c) 50%, #2b2330);
+}
+.talk-choice-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 1.5em;
+  padding: 0.12em 0.28em;
+  border-radius: 0.42em;
+  background: rgba(255, 255, 255, 0.72);
+  font-family: var(--emoji);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.talk-choice-label {
+  position: relative;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
+}

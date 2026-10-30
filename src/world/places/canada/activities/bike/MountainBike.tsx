@@ -8,7 +8,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, lineText, say, SayButton, SparklePuppet, speakingVoice, stopSpeaking, useAlive, wait, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, burst, lineText, say, SayButton, SparklePuppet, speakingVoice, stopSpeaking, useAlive, wait, type Line, type PuppetHandle, CAPTION } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { SteerHint, SteerWheel } from '../../../../engine3d/SteerWheel'
@@ -206,13 +206,5 @@ export function MountainBike({ onDone, setProgress }: Partial<CanadaActivityProp
 }
 
 const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  padding: '8px 20px',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
+  ...CAPTION,
 }

@@ -2,35 +2,16 @@
 // (the few instructions and the facts; tap her to hear her last line again), and the family, Aunty Sri, the officer,
 // the flight attendant and the village kids (their 3D mouths move with their voice). A short bubble shows the words
 // for Dad, with who said them.
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
+import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, TalkBubble, type Line, type PuppetHandle } from '../../../../../sdk'
+import { WHO } from '../../who'
 
 export interface TripGuideHandle {
   /** Says it (`mute`: a greybox's line that isn't recorded yet, so only its bubble shows, for a while). */
   speak(line: Line, mute?: boolean): void
 }
 
-const WHO: Record<string, { name: string; icon: string; color: string }> = {
-  ji: { name: 'Mommy', icon: '🦄', color: '#FF8FB8' },
-  nick: { name: 'Daddy', icon: '🦄', color: '#7FD1B9' },
-  agong: { name: 'Agong', icon: '🐼', color: '#B9A6F5' },
-  jum: { name: 'Jum', icon: '🐘', color: '#FFB3CF' },
-  gan: { name: 'Gan', icon: '🦊', color: '#7CC4F2' },
-  ken: { name: 'Ken', icon: '🦊', color: '#8FE3C8' },
-  bb: { name: 'BB', icon: '🐃', color: '#FFB3D6' },
-  sri: { name: 'Aunty Sri', icon: '🐦', color: '#FFC83D' },
-  officer: { name: 'Officer', icon: '🐘', color: '#A8B4E8' },
-  attendant: { name: 'Flight attendant', icon: '🐧', color: '#FFD3E6' },
-  kids: { name: 'The kids', icon: '⚽', color: '#FFD27A' },
-  coach: { name: 'Coach', icon: '🐒', color: '#FF8A8A' },
-  staff: { name: 'HarborLand', icon: '🐃', color: '#FFD27A' },
-  server: { name: 'The Pizza Company', icon: '🦊', color: '#8FD9A8' },
-  kid: { name: 'A friend', icon: '🧒', color: '#A8DCFF' },
-  farmer: { name: 'Mushroom aunty', icon: '🐃', color: '#8FE3C8' },
-  saltaunty: { name: 'Salt aunty', icon: '🐴', color: '#9FD3F7' },
-  lung: { name: 'Lung Kham', icon: '🐒', color: '#7FA8E0' },
-}
 
 interface Props {
   hidden?: boolean
@@ -77,9 +58,11 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
   }))
   useEffect(() => () => clearTimeout(hide.current), [])
 
-  const who = line ? WHO[lineVoice(line.l)] : undefined
+  const voice = line ? lineVoice(line.l) : undefined
+  // Sparkle's own lines need no name tab: she's the one the bubble points at.
+  const who = voice && voice !== 'sparkle' ? WHO[voice] : undefined
   return (
-    <div style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 8px + var(--roam-left, 0px))', bottom: 'calc(var(--safe-bottom) + 6px)', display: hidden ? 'none' : 'flex', alignItems: 'flex-end', gap: 6, zIndex: 33, pointerEvents: 'none', maxWidth: 'calc(100% - 140px - var(--roam-left, 0px) - var(--roam-right, 0px))' }}>
+    <div className="talk-guide" style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 8px + var(--roam-left, 0px))', bottom: 'calc(var(--safe-bottom) + 6px)', display: hidden ? 'none' : undefined, zIndex: 33, pointerEvents: 'none', maxWidth: 'calc(100% - 140px - var(--roam-left, 0px) - var(--roam-right, 0px))' }}>
       <button
         aria-label="Sparkle"
         onClick={() => {
@@ -98,22 +81,20 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
       </button>
       <AnimatePresence>
         {line && (
-          <motion.div
+          <TalkBubble
             key={line.n}
             aria-live="polite"
+            who={who}
+            tail={who ? 'none' : 'left'}
+            size="sm"
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            style={{ display: 'flex', alignItems: 'center', gap: 8, // Over the pose buttons (on a narrow phone they sit higher, above Sparkle).
-            marginBottom: raised ? (window.innerWidth < 600 ? 'calc(min(150px, 20vh, 30vw) + 96px)' : 'clamp(80px, 14vmin, 128px)') : 'min(60px, 8vh)', background: 'rgba(255,255,255,0.95)', borderRadius: 'var(--radius)', padding: who ? '6px 14px 6px 6px' : '10px 16px', boxShadow: 'var(--shadow)', transformOrigin: 'bottom left' }}
+            // Over the pose buttons (on a narrow phone they sit higher, above Sparkle).
+            style={{ marginBottom: raised ? (window.innerWidth < 600 ? 'calc(min(150px, 20vh, 30vw) + 96px)' : 'clamp(80px, 14vmin, 128px)') : 'min(60px, 8vh)', transformOrigin: 'bottom left' }}
           >
-            {who && (
-              <span title={who.name} style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 46, height: 46, borderRadius: 23, background: who.color, fontSize: 24, border: '3px solid #fff' }}>
-                {who.icon}
-              </span>
-            )}
-            <span style={{ fontSize: 'clamp(16px, min(3vw, 3.4vh), 26px)', fontWeight: 600, lineHeight: 1.15 }}>{lineText(line.l)}</span>
-          </motion.div>
+            {lineText(line.l)}
+          </TalkBubble>
         )}
       </AnimatePresence>
     </div>

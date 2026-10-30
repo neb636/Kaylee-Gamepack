@@ -299,7 +299,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           />
         )}
       </AnimatePresence>
-      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing} />}
+      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing} hush={asking} />}
       {trips.length > 0 && <Ask open={asking && !arriving && mode !== 'lost'} who={asker} trips={trips} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />}
       {debug && <Debug houseRef={houseRef} />}
     </div>
