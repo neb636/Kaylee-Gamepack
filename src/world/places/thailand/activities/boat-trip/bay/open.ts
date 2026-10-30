@@ -168,10 +168,11 @@ export class OpenWater implements BayPart {
     scene.add(this.crab.root)
     // ---- Daddy's sunglasses and Mommy's sun hat, on their heads ----
     const nick = bay.rider('nick').char
-    const R = 0.24 * nick.height
+    // Sized to his head and set on his eyes (the rig's own numbers: the modelled Daddy's head isn't the code-built one).
+    const R = nick.rig.face.R
     this.shades = new Group()
     this.shades.add(solid(merge([...[-1, 1].flatMap((s) => [P.rbox(0.19, 0.13, 0.04, 0.04, '#3A3350', { at: [s * 0.37 * R, 0, 0], rot: [0, s * 0.35, 0] }), P.box(0.05, 0.03, 0.03, PAL.hotpink, { at: [s * 0.48 * R, 0.05, -0.02] })]), P.box(0.1, 0.03, 0.03, PAL.hotpink, { at: [0, 0.03, 0.01] })]), bag, 1.5))
-    this.shades.position.set(0, R * 0.92 + 0.12 * R, R * 0.93)
+    this.shades.position.set(0, nick.rig.eyes.position.y, R * 0.93)
     nick.rig.head.add(this.shades)
     const ji = bay.rider('ji').char
     const Rj = 0.24 * ji.height

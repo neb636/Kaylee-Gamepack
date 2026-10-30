@@ -10,7 +10,7 @@
 //
 // Sizes are fractions of the character's height H, so the same recipe makes Agong and little Putter; `chub` makes the
 // body rounder (Mommy, and Jum the elephant).
-import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry } from 'three'
+import { Euler, Group, Matrix4, Quaternion, Vector3, type BufferGeometry, type Object3D } from 'three'
 import type { Bag } from '../dispose'
 import { blobShadow, P, solidMix, type PartOpts, type V3 } from '../geo'
 import { WEARABLES, type Look, type PaintColor, type PaintPart, type Wearable } from './look'
@@ -32,6 +32,12 @@ export interface Rig {
   /** A unicorn's mane locks (down the back and sides), pivoting at the top of the back of the head: the wind swings
    *  them (Wind). */
   mane: Group | null
+  /** A modelled toy's own hair (the modelled Daddy's): the barber's strands replace it, so it hides under them. */
+  hair?: Object3D
+  /** And its colors, for the strands that replace it (a code-built toy's come from its look's mane). */
+  hairColors?: string[]
+  /** A modelled toy's own horn: the barber's horn (one a snip can boing) stands in for it. */
+  horn?: Object3D
   height: number
   /** Body radius (lying down lifts the body by this). */
   radius: number

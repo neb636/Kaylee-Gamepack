@@ -140,6 +140,8 @@ export class Mane {
   private bowShapes = new Map<BowId, BufferGeometry>()
 
   constructor(rig: Rig, private look: Look, private bag: Bag, hairdo: Hairdo | string = '') {
+    // A modelled toy's strands start in its modelled hair's colors (the modelled Daddy's browns).
+    if (rig.hairColors) this.look = look = { ...look, mane: rig.hairColors, dark: rig.hairColors[0] }
     this.scalp = scalpOf(rig, look)
     this.R = rig.face.R
     const n = (TUFTS * PER + 2 * BROW) * SEG
@@ -164,8 +166,9 @@ export class Mane {
     this.makeStrands()
     this.set(typeof hairdo === 'string' ? decodeHair(hairdo) : hairdo)
     rig.head.add(this.root)
-    // The toy's own back locks give way to the strands.
+    // The toy's own back locks (or a modelled toy's own hair) give way to the strands.
     if (rig.mane) rig.mane.visible = false
+    if (rig.hair) rig.hair.visible = false
   }
 
   /** Length in meters of a step (0..LEN_STEPS): a step past his own is a lot longer. */

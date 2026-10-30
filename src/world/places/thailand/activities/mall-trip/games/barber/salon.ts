@@ -19,6 +19,7 @@ import { CapsuleGeometry, Color, IcosahedronGeometry, OctahedronGeometry, Vector
 import { bell, spendHint, wobble, type Line } from '../../../../../../../sdk'
 import type { Avatar } from '../../../../characters/avatar'
 import { LOOKS } from '../../../../characters/looks'
+import { DAD_HAIR } from '../../../../characters/dad-model'
 import { L } from '../../../../lines'
 import type { Member } from '../../../../characters/member'
 import type { AnchorInfo } from '../../../../../../engine3d/Anchors'
@@ -73,7 +74,7 @@ const B = L.mall.barber
 
 const tmp = new Vector3()
 const right = new Vector3()
-const FALL_COLORS = [...new Set([...(LOOKS.nick.mane ?? []), ...Object.values(HAIR_COLORS), ...CUSTOMERS.flatMap((c) => c.look.mane ?? [c.look.dark])])]
+const FALL_COLORS = [...new Set([...(LOOKS.nick.mane ?? []), ...DAD_HAIR, ...Object.values(HAIR_COLORS), ...CUSTOMERS.flatMap((c) => c.look.mane ?? [c.look.dark])])]
 
 export class Salon extends Stage {
   private room: Room
@@ -166,6 +167,7 @@ export class Salon extends Stage {
     horn.position.set(0, nr.face.headY + 0.72 * R, 0.14 * R)
     horn.rotation.x = 0.28
     nr.head.add(horn)
+    if (nr.horn) nr.horn.visible = false
     this.horn = { g: horn, k: 1 }
     this.mane = new Mane(nr, LOOKS.nick, bag, start.hair)
     // ---- Effects ----

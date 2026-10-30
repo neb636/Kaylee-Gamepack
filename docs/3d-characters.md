@@ -179,6 +179,12 @@ different from Kaylee, for the next family member:
   `eyes` blinks (no lids), and the code draws a smile on the muzzle (beads along the painted curve, each on the
   surface: a flat torus floats off where the face curves back) and the talking mouth.
 - **Same arm turn as Kaylee** (`swingForward`, model.ts): his head is wider than his reach.
+- **His pivots are in meters** (only the meshes are scaled up from the 1 m model, unlike Kaylee's scaled root), so
+  what the scenes hang on a family member's head or body (the boat's sunglasses, the mall's socks, the ball on his
+  horn) fits him as it fits the code-built toys. Props read `rig.face` (here a sphere round his head and hair) and
+  `rig.eyes`, never sizes worked out from the height.
+- **The barber** hides `Rig.hair` and `Rig.horn` (the model's own) under its strands and its horn, and starts the
+  strands in `Rig.hairColors`.
 - **Sitting** (member.ts): a rig with legs drops its body onto its hips and swings the legs forward over the seat.
 - Blender numbers (meters, Z up, front −Y, 1.0 tall): neck (0, −0.021, 0.462), shoulders (±0.175, −0.005, 0.405),
   hips (±0.086, −0.009, 0.175), eyes (0, −0.164, 0.627), tail root (0.022, 0.105, 0.23).
