@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import posthog from '@posthog/rollup-plugin'
 import { offline } from './scripts/vite-offline'
 import { plans } from './scripts/vite-plans'
+import { docs } from './scripts/vite-docs'
 import { lockPlace } from './scripts/vite-lock'
 
 // BASE_PATH is set by the deploy workflows:
@@ -19,6 +20,7 @@ export default defineConfig({
   plugins: [
     react(),
     plans(), // dist/planning/: the plan pages, readable on the iPad (scripts/vite-plans.ts)
+    docs(), // dist/docs/: the gameplay reference report and its local images
     offline(), // dist/sw.js: plays offline on the iPad (src/offline/sw.js)
     !!(POSTHOG_API_KEY && POSTHOG_PROJECT_ID) &&
       posthog({

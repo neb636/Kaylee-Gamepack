@@ -48,9 +48,9 @@ self.addEventListener('fetch', (event) => {
   const req = event.request
   if (req.method !== 'GET' || req.headers.has('range')) return
   const url = req.url.split('#')[0]
-  // Main's folder contains the PR previews' folders: leave those to their own worker. The plan pages (planning/) are
+  // Main's folder contains the PR previews' folders: leave those to their own worker. Plans and documentation are
   // for reading online: never answer them with the app, and never save them over it.
-  if (!url.startsWith(scope) || url.startsWith(scope + 'pr-preview/') || url.startsWith(scope + 'planning/')) return
+  if (!url.startsWith(scope) || url.startsWith(scope + 'pr-preview/') || url.startsWith(scope + 'planning/') || url.startsWith(scope + 'docs/')) return
   if (req.mode === 'navigate') event.respondWith(networkFirst(event, fetch(url, { cache: 'no-cache' }), INDEX))
   else if (WANTED.has(url)) event.respondWith(networkFirst(event, fetch(req), url))
 })
