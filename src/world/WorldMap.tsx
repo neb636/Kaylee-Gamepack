@@ -147,7 +147,7 @@ export function WorldMap({ view: linked }: { view?: string }) {
 
   if (view === 'list') {
     // The shelf is the whole screen and scrolls as one page; the toggle and the dock float over it (Sparkle waves
-    // from the favorites card instead of beside the dock).
+    // from the favorites card instead of under the map). The map view floats the same dock.
     return (
       <div className="screen decorated world-list" style={{ padding: 0, overflow: 'hidden' }}>
         <Shelf />
@@ -159,7 +159,7 @@ export function WorldMap({ view: linked }: { view?: string }) {
   }
 
   return (
-    <div className="screen decorated" style={{ padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 12px)', overflow: 'hidden' }}>
+    <div className="screen decorated world-map" style={{ overflow: 'hidden' }}>
       {toggle}
 
       <div className="world-split" style={{ flex: 1, minHeight: 0, gap: 'min(16px, 2vh)', alignItems: 'center' }}>
@@ -259,9 +259,11 @@ export function WorldMap({ view: linked }: { view?: string }) {
           <div className="world-side-mascot">
             <Mascot pose="wave" size={Math.min(170, window.innerHeight * 0.12)} />
           </div>
-          {dock}
         </div>
       </div>
+
+      {/* The same floating dock as the game list. */}
+      <div className="shelf-dock">{dock}</div>
 
       {travelTo && <Travel entry={travelTo} onDone={() => go.world(travelTo.meta.id)} />}
     </div>
