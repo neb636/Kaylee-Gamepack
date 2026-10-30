@@ -84,7 +84,6 @@ function RunningGame({ entry }: { entry: GameEntry }) {
             setRound((r) => r + 1)
           }}
           onHome={go.home}
-          onTrophies={go.trophies}
         />
       )}
     </div>

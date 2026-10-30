@@ -43,7 +43,7 @@ for (const viewport of [{ width: 820, height: 1180 }, { width: 1180, height: 820
       await expect(page.getByRole('heading', { name: /you did it, kaylee/i })).toBeVisible()
 
       // Visibility alone misses overlays intercepting touches (the original bug).
-      for (const name of ['Play again', 'My trophies', 'Home']) {
+      for (const name of ['Play again', 'Home']) {
         const button = page.getByRole('button', { name, exact: true })
         await expect.poll(() => button.evaluate((el) => {
           const r = el.getBoundingClientRect()
@@ -57,12 +57,6 @@ for (const viewport of [{ width: 820, height: 1180 }, { width: 1180, height: 820
       await page.evaluate(() => window.__kaylee?.win())
       await page.getByRole('button', { name: 'Home', exact: true }).tap()
       await expect(page.getByRole('button', { name: 'My passport', exact: true })).toBeVisible()
-      await page.goto('./#/world/china/party')
-      await expect(page.getByRole('button', { name: 'Skip', exact: true })).toBeVisible()
-      await page.evaluate(() => window.__kaylee?.win())
-      await page.getByRole('button', { name: 'My trophies', exact: true }).tap()
-      await expect(page.getByRole('heading', { name: "Kaylee's Trophies" })).toBeVisible()
-      await expect(page.getByText('China Explorer', { exact: true })).toBeVisible()
       expect(errors).toEqual([])
     })
   })

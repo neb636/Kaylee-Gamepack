@@ -24,7 +24,7 @@ src/world/kit/           # shared country pieces: Stage, StoryBeat, StampEarned,
 src/world/engine3d/      # the shared 3D engine (toon look, camera, View3D, water) and the chibi rig in characters/
 src/world/labs/          # the camera lab (?cam=1) and the feel lab (?feel=1), for any country
 src/sdk/                 # shared building blocks: say, sounds, puppets, drag and drop, ... (see "SDK")
-src/shell/               # the app wrapper: splash, trophy ceremony, trophy room ("Let's play!" lands on the world map)
+src/shell/               # the app wrapper: splash, trophy ceremony ("Let's play!" lands on the world map)
 src/games/<id>/          # the original school-paper games (just the tea party, the 🏡 pin on the map), found automatically
 planning/around-the-world/  # country plans, ACTIVITY-TEMPLATE.md, Thailand's trip plans and known issues
 planning/viewer/            # draws the plan pages (*.html: the plan as JSON inside, see the plan-page skill)

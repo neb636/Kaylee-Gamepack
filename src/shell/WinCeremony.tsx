@@ -4,7 +4,7 @@ import posthog, { isPostHogEnabled } from '../posthog'
 import { awardTrophy, bigCelebration, BigButton, KID_NAME, Mascot, say, sounds, Trophy, type GameMeta } from './sdk-internal'
 
 /** The same big, happy ending for every game: confetti + a trophy with her name on it. */
-export function WinCeremony({ meta, onPlayAgain, onHome, onTrophies }: { meta: GameMeta; onPlayAgain: () => void; onHome: () => void; onTrophies: () => void }) {
+export function WinCeremony({ meta, onPlayAgain, onHome }: { meta: GameMeta; onPlayAgain: () => void; onHome: () => void }) {
   const awarded = useRef(false)
   useEffect(() => {
     if (awarded.current) return
@@ -48,9 +48,6 @@ export function WinCeremony({ meta, onPlayAgain, onHome, onTrophies }: { meta: G
           ariaLabel="Play again"
         >
           🔁 Again
-        </BigButton>
-        <BigButton color="butter" onClick={onTrophies} ariaLabel="My trophies">
-          🏆 Trophies
         </BigButton>
         <BigButton color="pink" onClick={onHome} ariaLabel="Home">
           🏠 Home

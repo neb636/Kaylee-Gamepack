@@ -59,7 +59,7 @@ function watchFirstTouch([target, source]) {
 }
 
 /** The stamp screen or the trophy ceremony (not the top bar's own "Back to the map" button). */
-const finishedScreen = () => [...document.querySelectorAll('button')].some((b) => /back to the map|my trophies/i.test(b.getAttribute('aria-label') ?? '') && b.getBoundingClientRect().top > 100)
+const finishedScreen = () => [...document.querySelectorAll('button')].some((b) => /back to the map|^play again$/i.test(b.getAttribute('aria-label') ?? '') && b.getBoundingClientRect().top > 100)
 
 const secs = (ms) => (ms / 1000).toFixed(1)
 const results = []

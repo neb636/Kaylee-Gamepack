@@ -1,21 +1,18 @@
 // The world map, and the app's home screen: tap continents to hear their names, tap a country pin to fly there,
 // tap home for Sparkle's tea party. The two buttons in the top bar swap the map for the game shelf (Shelf.tsx: every
 // game as a picture card, straight in); she keeps whichever she used last (#/world?view=list or map opens one).
+// No title and no trophy room here (Dad, 2026-10-29): the map is the picture, the dock beside it is the way in.
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
 import { gameLogger } from '../posthog-logger'
 import { go } from '../router'
 import { firstTime as firstTimeHere, lineText, Mascot, say, sounds, useOnline, useSaved } from '../sdk'
 import { useTrophies } from '../sdk/trophies'
 import balloon from './assets/balloon.webp'
-import crayons from './assets/crayon-box.webp'
 import mapArt from './assets/bg-world-map.webp'
-import passportArt from './assets/passport.webp'
-import listIcon from './assets/icon-view-list.webp'
-import mapIcon from './assets/icon-view-map.webp'
-import theaterArt from './assets/theater.webp'
-import { BarPill, FitBox, TopBar } from './kit/Chrome'
+import { CrayonIcon, MapIcon, PassportIcon, PuzzleIcon, ShelfIcon, TheaterIcon } from './HomeIcons'
+import { FitBox } from './kit/Chrome'
 import { WORLD_LINES } from './lines'
 import { places, type PlaceEntry } from './registry'
 import { FROM_SHELF, Shelf } from './Shelf'
@@ -134,24 +131,10 @@ export function WorldMap({ view: linked }: { view?: string }) {
 
   return (
     <div className="screen decorated" style={{ padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 12px)', overflow: 'hidden' }}>
-      <TopBar
-        icon={
-          <>
-            🏆
-            {trophies.length > 0 && <span style={BADGE}>{trophies.length}</span>}
-          </>
-        }
-        label="My trophies"
-        onBack={go.trophies}
-      >
-        <BarPill>
-          🌍<span className="world-title-text"> Around the World</span>
-        </BarPill>
-        <div style={{ marginLeft: 'auto', pointerEvents: 'auto', display: 'flex', gap: 4, borderRadius: 999, background: 'rgba(255,255,255,0.9)', boxShadow: 'var(--shadow)' }}>
-          <ViewButton img={mapIcon} label="Map" on={view === 'map'} onClick={() => switchTo('map')} />
-          <ViewButton img={listIcon} label="All the games" on={view === 'list'} onClick={() => switchTo('list')} />
-        </div>
-      </TopBar>
+      <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', right: 16, display: 'flex', borderRadius: 999, padding: 4, gap: 4, background: 'rgba(255,255,255,0.92)', boxShadow: 'var(--shadow)', zIndex: 50 }}>
+        <ViewButton label="Map" on={view === 'map'} onClick={() => switchTo('map')} icon={(c) => <MapIcon color={c} />} />
+        <ViewButton label="All the games" on={view === 'list'} onClick={() => switchTo('list')} icon={(c) => <ShelfIcon color={c} />} />
+      </div>
 
       <div className="world-split" style={{ flex: 1, minHeight: 0, gap: 'min(16px, 2vh)', alignItems: 'center' }}>
         {view === 'list' ? (
@@ -257,10 +240,10 @@ export function WorldMap({ view: linked }: { view?: string }) {
           <div className="world-side-mascot">
             <Mascot pose="wave" size={Math.min(170, window.innerHeight * 0.12)} />
           </div>
-          <SideButton img={passportArt} label="My passport" color="var(--pink)" badge={totalStamps(passport)} onClick={() => go.world('passport')} />
-          <SideButton img={crayons} label="Coloring book" color="var(--butter)" onClick={() => go.world('coloring')} />
-          <SideButton icon="🧩" label="Puzzle book" color="var(--mint)" onClick={() => go.world('puzzles')} />
-          {online && <SideButton img={theaterArt} label="Theater" color="var(--lavender)" onClick={() => go.world('theater')} />}
+          <DockButton label="My passport" word="Passport" color="#ff6fa8" shade="#e2508c" badge={totalStamps(passport)} onClick={() => go.world('passport')} icon={PassportIcon} />
+          <DockButton label="Coloring book" word="Coloring" color="#ffab4c" shade="#e88c2a" onClick={() => go.world('coloring')} icon={CrayonIcon} />
+          <DockButton label="Puzzle book" word="Puzzles" color="#3fc6a4" shade="#25a686" onClick={() => go.world('puzzles')} icon={PuzzleIcon} />
+          {online && <DockButton label="Theater" word="Movies" color="#9d82f2" shade="#7c60d8" onClick={() => go.world('theater')} icon={TheaterIcon} />}
         </div>
       </div>
 
@@ -269,38 +252,61 @@ export function WorldMap({ view: linked }: { view?: string }) {
   )
 }
 
-const BADGE: CSSProperties = { position: 'absolute', top: -8, right: -8, background: 'var(--hotpink)', color: '#fff', borderRadius: 999, minWidth: 34, height: 34, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 20, boxShadow: 'var(--shadow)', padding: '0 6px' }
-
-function ViewButton({ img, label, on, onClick }: { img: string; label: string; on: boolean; onClick: () => void }) {
+function ViewButton({ icon, label, on, onClick }: { icon: (color: string) => ReactNode; label: string; on: boolean; onClick: () => void }) {
   // The button keeps the full touch size (88 px on iPad, 72 on phones); only the picture shrinks when it's off.
   const size = 'calc(var(--btn) + 12px)'
   return (
     <motion.button
       aria-label={label}
       aria-pressed={on}
-      whileTap={{ scale: 0.85 }}
+      whileTap={{ scale: 0.88 }}
       onClick={onClick}
-      style={{ width: size, height: size, borderRadius: '50%', background: on ? 'var(--pink)' : 'transparent', boxShadow: on ? 'inset 0 0 0 4px #fff' : 'none', padding: 'calc(var(--btn) * 0.14)', display: 'grid', placeItems: 'center' }}
+      style={{ width: size, height: size, borderRadius: '50%', background: on ? 'var(--hotpink)' : 'transparent', padding: 'calc(var(--btn) * 0.28)', display: 'grid', placeItems: 'center', transition: 'background 0.2s' }}
     >
-      <motion.img src={img} alt="" draggable={false} animate={{ scale: on ? 1 : 0.86, opacity: on ? 1 : 0.7 }} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+      <motion.div animate={{ scale: on ? 1 : 0.86 }} style={{ width: '100%', height: '100%' }}>
+        {icon(on ? '#fff' : 'var(--lavender-dark)')}
+      </motion.div>
     </motion.button>
   )
 }
 
-function SideButton({ img, icon, label, color, onClick, badge }: { img?: string; icon?: string; label: string; color: string; onClick: () => void; badge?: number }) {
+/** One of the home dock's buttons: a matte colored tile with a white picture and its word under it (the word is for Dad). */
+function DockButton({ icon: Icon, label, word, color, shade, onClick, badge }: { icon: (p: { shade: string }) => ReactNode; label: string; word: string; color: string; shade: string; onClick: () => void; badge?: number }) {
   return (
     <motion.button
       aria-label={label}
-      whileTap={{ scale: 0.9 }}
+      whileTap={{ scale: 0.92, y: 4 }}
       onClick={() => {
         sounds.pop()
         onClick()
       }}
-      style={{ position: 'relative', width: 'clamp(88px, min(18vw, 13vh), 150px)', aspectRatio: '1', borderRadius: 32, background: color, boxShadow: 'var(--shadow)', border: '5px solid #fff', display: 'grid', placeItems: 'center', padding: 8 }}
+      style={{
+        // An explicit width and height: WebKit ignores aspect-ratio on a flex button and stretches it.
+        ['--tile' as string]: 'clamp(88px, min(17vw, 12.5vh), 140px)',
+        position: 'relative',
+        flex: '0 0 auto',
+        width: 'var(--tile)',
+        height: 'var(--tile)',
+        borderRadius: 'clamp(22px, 3.4vmin, 34px)',
+        background: color,
+        boxShadow: `0 6px 0 ${shade}`,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 'calc(var(--tile) * 0.04)',
+        padding: 0,
+        color: '#fff',
+      }}
     >
-      {icon ? <span style={{ fontSize: 'clamp(40px, 8vmin, 80px)' }}>{icon}</span> : <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
+      <span style={{ display: 'block', width: 'calc(var(--tile) * 0.56)', height: 'calc(var(--tile) * 0.56)' }}>
+        <Icon shade={shade} />
+      </span>
+      <span className="world-dock-word" style={{ fontWeight: 700, fontSize: 'clamp(13px, 2.1vmin, 20px)', lineHeight: 1, letterSpacing: 0.3 }}>
+        {word}
+      </span>
       {badge !== undefined && badge > 0 && (
-        <span style={{ position: 'absolute', top: -10, right: -10, background: 'var(--hotpink)', color: '#fff', borderRadius: 999, minWidth: 44, height: 44, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 24, boxShadow: 'var(--shadow)', padding: '0 8px' }}>{badge}</span>
+        <span style={{ position: 'absolute', top: -8, right: -8, background: '#fff', color: shade, borderRadius: 999, minWidth: 38, height: 38, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 21, boxShadow: `0 3px 0 ${shade}55`, padding: '0 8px' }}>{badge}</span>
       )}
     </motion.button>
   )
