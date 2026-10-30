@@ -67,8 +67,37 @@
 <p>Build a small set of shared mechanics: steering, launching, tool strokes and placement. Keep the art, characters and story around those controls, and reuse the successful interaction patterns across countries.</p>
 <p class="small">Strong = especially close control model. Close = a useful activity reference with adaptation. Partial = one interaction only; the whole game is not equivalent. These labels describe fit, not a quality score.</p>
 </section>
+<section id="libraries-guides">
+<div class="eyebrow">02 / Libraries &amp; practical guides</div>
+<h2>Start from a working interaction.</h2>
+<p class="lead">Runnable examples with source give an AI agent a concrete starting point. Pick the example closest to the mechanic, adapt its behavior to Kaylee’s game, and expose the settings for an iPad feel check.</p>
+<div class="callout">
+<strong>What does “a small shared prototype” mean?</strong>
+<p>For a boat: choose how a reference follows your finger, turns and stops. Recreate just that control in a plain scene with a simple boat. Tune responsiveness, turning, drifting and stopping on the iPad, then reuse the working controller in Venice, Whale Watch and other boat activities. “Shared” means reusable code across mini-games.</p>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Open-source resource</th><th>What it provides</th><th>Best fit in KayleeGamepack</th></tr></thead>
+<tbody>
+<tr><td><a href="https://phaser.io/oss/examples" target="_blank" rel="noopener noreferrer">Phaser examples ↗</a></td><td>Runnable examples with source for input, dragging, snapping, cameras, movement and physics. Start with the <a href="https://phaser.io/oss/examples/v4.1.0/input/dragging" target="_blank" rel="noopener noreferrer">dragging examples</a> and <a href="https://phaser.io/oss/docs/phaser/concepts/input" target="_blank" rel="noopener noreferrer">input guide</a>.</td><td>The first place to look for 2D mechanics. Phaser is already installed in this repo; keep it scoped to a suitable play field rather than replacing the React shell.</td></tr>
+<tr><td><a href="https://github.com/liabru/matter-js" target="_blank" rel="noopener noreferrer">Matter.js ↗</a></td><td>A 2D physics engine with demos for launching, stacking, friction, bouncing, constraints and vehicles. Try the <a href="https://brm.io/matter-js/demo/#slingshot" target="_blank" rel="noopener noreferrer">slingshot demo</a> and its <a href="https://github.com/liabru/matter-js/blob/master/examples/slingshot.js" target="_blank" rel="noopener noreferrer">source</a>.</td><td>Penguin launches, salmon jumps, blocks and snowballs. Use a demo to establish predictable behavior; a slingshot and a velocity-based flick still need different input mappings.</td></tr>
+<tr><td><a href="https://github.com/taye/interact.js" target="_blank" rel="noopener noreferrer">interact.js ↗</a></td><td>Drag interactions, <a href="https://interactjs.io/docs/modifiers/" target="_blank" rel="noopener noreferrer">snapping and movement restrictions</a>, multitouch, and <a href="https://interactjs.io/docs/inertia/" target="_blank" rel="noopener noreferrer">inertia after release</a>.</td><td>HTML/SVG puzzle pieces, toppings, dressing and movable props. Evaluate it against the existing interaction kit before replacing working controls; it does not supply 3D world physics.</td></tr>
+<tr><td><a href="https://rapier.rs/docs/" target="_blank" rel="noopener noreferrer">Rapier ↗</a></td><td>Open-source 2D and 3D physics, with JavaScript bindings for rigid bodies, collisions and joints. See the <a href="https://rapier.rs/docs/user_guides/javascript/getting_started_js/" target="_blank" rel="noopener noreferrer">JavaScript getting-started guide</a>.</td><td>Three.js activities that need physical stacking or collisions. Rapier handles physics; the touch controls and assistance still need to be designed.</td></tr>
+<tr><td><a href="https://github.com/Mugen87/yuka" target="_blank" rel="noopener noreferrer">Yuka ↗</a></td><td>Game-AI movement behaviors including seeking, arriving, following and obstacle avoidance. The <a href="https://mugen87.github.io/yuka/docs/ArriveBehavior.html" target="_blank" rel="noopener noreferrer">arrival behavior</a> approaches a target.</td><td>Animals following a leader, companions and race opponents. Primarily an AI movement library: study its behaviors before considering them for player steering.</td></tr>
+</tbody>
+</table>
+</div>
+<h3 style="margin-top:28px">Three guides for the controls themselves</h3>
+<ul class="source-list">
+<li><a href="https://www.red3d.com/cwr/steer/gdc99/" target="_blank" rel="noopener noreferrer">Craig Reynolds: Steering Behaviors for Autonomous Characters</a> explains approaching targets, following leaders and avoiding obstacles. The <a href="https://www.red3d.com/cwr/steer/Arrival.html" target="_blank" rel="noopener noreferrer">arrival example</a> is relevant to slowing a boat near a finger target instead of endlessly overshooting it.</li>
+<li><a href="https://gafferongames.com/post/fix_your_timestep/" target="_blank" rel="noopener noreferrer">Fix Your Timestep!</a> explains keeping simulation behavior consistent as rendering frame rate changes. Use it when jumps, collisions or steering differ between devices.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events" target="_blank" rel="noopener noreferrer">MDN: Pointer Events</a> covers pointer capture, browser gesture handling and cancellation. Use it when dragging works with a mouse but becomes unreliable on an iPad.</li>
+</ul>
+<p><strong>Recommended starting point:</strong> Phaser’s examples and Matter.js’s slingshot for 2D interactions; Reynolds’ arrival and steering guidance for the existing Three.js boat controller. Choose a resource for the problem at hand rather than adding all five libraries.</p>
+<p class="small">Agent brief: “Adapt this working example’s interaction to our game, expose its tuning values, and preserve our visuals.” Use the <a href="#workflow">reference-to-prototype workflow</a> below for the full brief. A library supplies building blocks; the final control settings still need a real iPad check.</p>
+</section>
 <section id="start-here">
-<div class="eyebrow">02 / Download shortlist</div>
+<div class="eyebrow">03 / Download shortlist</div>
 <h2>Five apps cover a lot of ground.</h2>
 <p class="lead">Try these first. Reference labels below name activities inside a collection when applicable. Availability was checked through US App Store listings; access and subscriptions can change.</p>
 <div class="mini-grid">
@@ -112,7 +141,7 @@
 <p class="small">Sonic Racing, Riptide, Touchgrind and Good Pizza are primarily adult study references here. Adapt their feedback and control ideas to Kaylee; their difficulty, reading and business systems need not carry over.</p>
 </section>
 <section id="gallery">
-<div class="eyebrow">03 / From her game</div>
+<div class="eyebrow">04 / From her game</div>
 <h2>The worlds you already built.</h2>
 <p class="lead">Actual app screens captured from this checkout at 1180 × 820 in desktop Chromium with touch emulation. They are not physical-iPad screenshots or proof of gameplay quality. Tap a screen to enlarge it.</p>
 <div class="gallery">
@@ -200,7 +229,7 @@
 <p class="small">Card thumbnails below use existing app cover art, labeled as cover art; Poles cards use a labeled Penguin Slide gameplay capture. The gallery above shows rendered gameplay. Capture provenance is recorded in <a href="gameplay-reference-assets/screenshots.json">screenshots.json</a>.</p>
 </section>
 <section id="catalog">
-<div class="eyebrow">04 / Game-by-game reference map</div>
+<div class="eyebrow">05 / Game-by-game reference map</div>
 <h2>Find the interaction you want to improve.</h2>
 <p class="lead">Search a game, country, reference or verb. Save promising matches and jot down what felt good after playing the reference. Each card links to the app and to a relevant game section.</p>
 <noscript>
@@ -2818,7 +2847,7 @@
 </div>
 </section>
 <section id="shortlist">
-<div class="eyebrow">05 / Your decisions</div>
+<div class="eyebrow">06 / Your decisions</div>
 <h2>A shortlist you can hand to an agent.</h2>
 <p id="storage-note" class="small">Choices stay in this browser when storage is available.</p>
 <p id="shortlist-empty">No references saved yet. Use “Save” on any activity card.</p>
@@ -2829,7 +2858,7 @@
 </p>
 </section>
 <section id="playwright">
-<div class="eyebrow">06 / Why automated tweaking stalls</div>
+<div class="eyebrow">07 / Why automated tweaking stalls</div>
 <h2>Completion is not the same as control.</h2>
 <p class="lead">A successful playthrough establishes that a mechanic can be completed. It does not establish that controlling it is enjoyable.</p>
 <div class="table-wrap">
@@ -2867,7 +2896,7 @@
 <p class="small">Evidence: <a href="https://github.com/neb636/Kaylee-Gamepack/blob/b64d641905bf17df2964e0e05f6eb4cba97137a2/playwright.config.ts">playwright.config.ts</a> · <a href="https://github.com/neb636/Kaylee-Gamepack/blob/b64d641905bf17df2964e0e05f6eb4cba97137a2/tests/smoke.spec.ts">tests/smoke.spec.ts</a> · <a href="https://github.com/neb636/Kaylee-Gamepack/blob/b64d641905bf17df2964e0e05f6eb4cba97137a2/src/world/engine3d/loop.ts">src/world/engine3d/loop.ts</a> · <a href="https://github.com/neb636/Kaylee-Gamepack/blob/b64d641905bf17df2964e0e05f6eb4cba97137a2/scripts/qa-lib.mjs">scripts/qa-lib.mjs</a> · <a href="https://github.com/neb636/Kaylee-Gamepack/blob/b64d641905bf17df2964e0e05f6eb4cba97137a2/docs/play-design.md">docs/play-design.md</a> · </p>
 </section>
 <section id="platform">
-<div class="eyebrow">07 / Web versus native</div>
+<div class="eyebrow">08 / Web versus native</div>
 <h2>There are tradeoffs. No rewrite required yet.</h2>
 <p class="lead">Source-based judgment: the web platform adds constraints, but there is no measured evidence here that it is the main cause of the gameplay problems.</p>
 <div class="table-wrap">
@@ -2916,7 +2945,7 @@
 </p>
 </section>
 <section id="workflow">
-<div class="eyebrow">08 / Turn a reference into better play</div>
+<div class="eyebrow">09 / Turn a reference into better play</div>
 <h2>One verb. A clear target. A real finger.</h2>
 <ol class="steps">
 <li>
@@ -2959,7 +2988,7 @@ I will choose the feel on an actual iPad before the full activity is built.</pre
 </p>
 </section>
 <section id="references">
-<div class="eyebrow">09 / Sources &amp; scope</div>
+<div class="eyebrow">10 / Sources &amp; scope</div>
 <h2>Reference shelf and reading notes.</h2>
 <p class="small">US App Store links were checked during the original comparison on 30 October 2026. Recommendations and fit labels are design judgments based on the repo’s mechanics and reference descriptions; every reference was not hands-on playtested in this session. This report retains partial matches explicitly rather than pretending a thematic match is a mechanical equivalent.</p>
 <ul class="reference-index">
@@ -3067,6 +3096,7 @@ I will choose the feel on an actual iPad before the full activity is built.</pre
 <nav>
 <a href="#overview">The field guide</a>
 <a href="#verdict">The recommendation</a>
+<a href="#libraries-guides">Libraries &amp; guides</a>
 <a href="#start-here">Five apps to try</a>
 <a href="#gallery">Gameplay captures</a>
 <a href="#catalog">Find a mechanic</a>
