@@ -1036,67 +1036,25 @@
     "file": "bb3562e575d3.mp3"
   },
   {
-    "text": "Let's roll snowmen!",
-    "voice": "maple",
-    "sig": "3b837164b7",
-    "ms": 1680,
-    "file": "99e2e94acd47.mp3"
-  },
-  {
-    "text": "Push the snowball! Watch it grow!",
+    "text": "Put on anything you like!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2960,
-    "file": "2194afe1dafa.mp3"
+    "ms": 2750,
+    "file": "14cc50e28cf8.mp3"
   },
   {
-    "text": "Now roll the little ball into the big one!",
+    "text": "Spray on some colors!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2943,
-    "file": "529d9b22d198.mp3"
+    "ms": 2033,
+    "file": "49517484e095.mp3"
   },
   {
-    "text": "Roll a snowball into a box!",
+    "text": "Copy the picture!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 2968,
-    "file": "ee4d1858fe13.mp3"
-  },
-  {
-    "text": "Tap the drum for the parade, or make more snowmen!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4330,
-    "file": "da187c6c14a1.mp3"
-  },
-  {
-    "text": "Put your finger on the snowball and push!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3004,
-    "file": "e34ae81c23e6.mp3"
-  },
-  {
-    "text": "Push the little ball into the big one!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3141,
-    "file": "4bb1ca15ff63.mp3"
-  },
-  {
-    "text": "Roll a snowball into the hat box!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3290,
-    "file": "b93c5a674a9d.mp3"
-  },
-  {
-    "text": "Roll a snowball into the sash box!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3464,
-    "file": "aabe9fbc6be7.mp3"
+    "ms": 2001,
+    "file": "39dec9e60a62.mp3"
   },
   {
     "text": "Tap the big drum!",
@@ -1111,20 +1069,6 @@
     "sig": "ed7dbdac3d",
     "ms": 3325,
     "file": "ef073ac5623d.mp3"
-  },
-  {
-    "text": "A moose made of ice!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1970,
-    "file": "524493fb67ca.mp3"
-  },
-  {
-    "text": "Wow, a big one!",
-    "voice": "maple",
-    "sig": "3b837164b7",
-    "ms": 1655,
-    "file": "0cee0ad6f8c8.mp3"
   },
   {
     "text": "A snowman! Ta-da!",
@@ -1148,32 +1092,11 @@
     "file": "e1ad637d0166.mp3"
   },
   {
-    "text": "Whee! I'm on top!",
-    "voice": "maple",
-    "sig": "3b837164b7",
-    "ms": 1955,
-    "file": "c77c81c8ae92.mp3"
-  },
-  {
-    "text": "Look at me!",
-    "voice": "maple",
-    "sig": "3b837164b7",
-    "ms": 736,
-    "file": "a7f9b9f53121.mp3"
-  },
-  {
     "text": "Hee hee! That's for a snowman!",
     "voice": "maple",
     "sig": "3b837164b7",
     "ms": 2153,
     "file": "62b3a093a6b3.mp3"
-  },
-  {
-    "text": "Eek! Watch out!",
-    "voice": "maple",
-    "sig": "3b837164b7",
-    "ms": 1566,
-    "file": "f3e0c9ad24e0.mp3"
   },
   {
     "text": "Hee hee!",
@@ -1188,6 +1111,34 @@
     "sig": "3b837164b7",
     "ms": 1242,
     "file": "796f74b44045.mp3"
+  },
+  {
+    "text": "Mmm. Hello there.",
+    "voice": "moose",
+    "sig": "1d4626e380",
+    "ms": 1988,
+    "file": "505ac030aeab.mp3"
+  },
+  {
+    "text": "Mmm. Nice one.",
+    "voice": "moose",
+    "sig": "1d4626e380",
+    "ms": 2759,
+    "file": "8c7e633c93b7.mp3"
+  },
+  {
+    "text": "Hee hee! You found me!",
+    "voice": "raccoon",
+    "sig": "24ac8d43c3",
+    "ms": 2187,
+    "file": "383a5399efb0.mp3"
+  },
+  {
+    "text": "Mine! I mean, yours!",
+    "voice": "raccoon",
+    "sig": "24ac8d43c3",
+    "ms": 2786,
+    "file": "1e8325585dd0.mp3"
   },
   {
     "text": "Bonjour!",
@@ -1209,13 +1160,6 @@
     "sig": "605a3c7267",
     "ms": 1439,
     "file": "b0b2a53ab670.mp3"
-  },
-  {
-    "text": "Hello! Why is the sky down there?",
-    "voice": "snowman",
-    "sig": "605a3c7267",
-    "ms": 3482,
-    "file": "99d18811f617.mp3"
   },
   {
     "text": "Hee hee, that tickles!",
@@ -1617,13 +1561,6 @@
     "file": "bc1462fea14f.mp3"
   },
   {
-    "text": "Hee hee! You found me!",
-    "voice": "raccoon",
-    "sig": "24ac8d43c3",
-    "ms": 2187,
-    "file": "383a5399efb0.mp3"
-  },
-  {
     "text": "Ouch! Prickly!",
     "voice": "maple",
     "sig": "3b837164b7",
@@ -1643,13 +1580,6 @@
     "sig": "1d4626e380",
     "ms": 2714,
     "file": "3364f3805fe7.mp3"
-  },
-  {
-    "text": "Mmm. Hello there.",
-    "voice": "moose",
-    "sig": "1d4626e380",
-    "ms": 1988,
-    "file": "505ac030aeab.mp3"
   },
   {
     "text": "Shh! Someone is sleeping.",
@@ -2744,13 +2674,6 @@
     "file": "9a7986e62a20.mp3"
   },
   {
-    "text": "Mmm. Nice one.",
-    "voice": "moose",
-    "sig": "1d4626e380",
-    "ms": 2759,
-    "file": "8c7e633c93b7.mp3"
-  },
-  {
     "text": "Bonk. Not today, geese.",
     "voice": "moose",
     "sig": "1d4626e380",
@@ -2791,13 +2714,6 @@
     "sig": "ea2e6e5659",
     "ms": 2369,
     "file": "589267eb8ef5.mp3"
-  },
-  {
-    "text": "Mine! I mean, yours!",
-    "voice": "raccoon",
-    "sig": "24ac8d43c3",
-    "ms": 2786,
-    "file": "1e8325585dd0.mp3"
   },
   {
     "text": "Wheee! Look, I spin!",

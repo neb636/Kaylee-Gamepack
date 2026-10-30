@@ -1,34 +1,35 @@
-// Carnival Snowballs' own QA scenarios (canada/qa.mjs has the screens of each part): the story from the bare link,
-// the park a while into dressing (the horse and carriage on the terrace, the geese over the park, the fox in to watch),
-// and the end of the parade (the last snowman waves). Not part of the app: Node runs it, Vite never sees it.
+// Decorate a Snowman's own QA scenarios (canada/qa.mjs has the screens of each part and the decorating run): Maple's
+// hello from the bare link, the park a while into the face round (the carriage on the terrace, the fox in to watch),
+// and the end of the parade. Not part of the app: Node runs it, Vite never sees it.
 import { vp } from '../../../../../../scripts/qa-lib.mjs'
 
 export const screens = [
   { name: 'snowman-story', hash: '#/world/canada/snowman', reset: true, wait: 1800 },
-  { name: 'snowman-after-story', hash: '#/world/canada/snowman', reset: true, wait: 9000 },
-  { name: 'snowman-park-life', hash: '#/world/canada/snowman/dress?snowmen=3', reset: true, wait: 24000 },
-  { name: 'snowman-parade-end', hash: '#/world/canada/snowman/parade?snowmen=5', reset: true, wait: 16000 },
+  { name: 'snowman-after-story', hash: '#/world/canada/snowman', reset: true, wait: 7000 },
+  { name: 'snowman-park-life', hash: '#/world/canada/snowman/face', reset: true, wait: 24000 },
+  { name: 'snowman-parade-end', hash: '#/world/canada/snowman/parade?made=5', reset: true, wait: 12000 },
 ]
 
-// Maple acts it out: a snowman stacked from the stack link (she cheers), then the fox poked if she's in.
+// The wake-up: a few tool taps (each does a short go), then the drum, and he hops and says hello.
 export const motion = [
   {
-    name: 'snowman-maple-cheer',
-    seconds: 6,
+    name: 'snowman-wake-up',
+    seconds: 8,
     setup: async (page, base) => {
-      await page.goto(`${base}#/world/canada/snowman/stack`)
-      await page.waitForFunction(() => window.__canadaSnowmanQA?.().section, null, { timeout: 20000 })
-      await page.waitForTimeout(1500)
+      await page.goto(`${base}#/world/canada/snowman/face`)
+      await page.waitForFunction(() => window.__canadaSnowmanQA?.().man, null, { timeout: 20000 })
+      await page.waitForTimeout(1200)
+      for (let i = 0; i < 8; i++) {
+        const { tools, drum } = await page.evaluate(() => window.__canadaSnowmanQA())
+        if (drum) break
+        const t = Object.values(tools)[i % 4]
+        await page.mouse.click(t.x, t.y)
+        await page.waitForTimeout(2000)
+      }
     },
     act: async (page) => {
-      const { ball, loose } = await page.evaluate(() => window.__canadaSnowmanQA())
-      const big = loose.find((b) => b.r > 0.5)
-      if (!ball || !big) return
-      await page.mouse.move(ball.x, ball.y)
-      await page.mouse.down()
-      await page.mouse.move(big.x, big.y, { steps: 18 })
-      await page.waitForTimeout(500)
-      await page.mouse.up()
+      const { drum } = await page.evaluate(() => window.__canadaSnowmanQA())
+      if (drum) await page.mouse.click(drum.x, drum.y)
       void vp
     },
   },

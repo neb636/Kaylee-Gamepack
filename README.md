@@ -324,13 +324,13 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - [Orders](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/orders) ([the chipmunk fed](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/orders?made=7&fed=chipmunk))
 - [Everyone crunches](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/taffy/share)
 
-**Carnival Snowballs**
+**Decorate a Snowman**
 
-- [Maple asks for snowmen](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/story)
-- [Roll one](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/roll)
-- [Stack a snowman](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/stack) ([the huge ball, Maple on top](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/stack?size=huge))
-- [Dress it for the carnival](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/dress) ([two already in the parade line](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/dress?snowmen=3))
-- [The parade](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/parade) ([a long one](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/parade?snowmen=5))
+- [Maple asks for carnival snowmen](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/story)
+- [Give him a face (coal, a carrot, sticks, more snow)](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/face)
+- [Dress him for the carnival (snow paint, the tuque, the sash, a scarf)](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/dress)
+- [Friends bring a picture](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/friends) ([the second picture](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/friends?made=2), [the last picture](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/friends?made=3))
+- [The parade](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/parade) ([a long one](https://neb636.github.io/Kaylee-Gamepack/#/world/canada/snowman/parade?made=5))
 
 **Mountain Bike**
 

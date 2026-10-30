@@ -1,4 +1,4 @@
-// Carnival Snowballs' park in the toon look: the snowy ground (softer patches, footprints), the parade path with its red
+// The carnival park's in the toon look: the snowy ground (softer patches, footprints), the parade path with its red
 // flags and bunting between the lamp posts (the snowy owl sits on one), Old Quebec up on the cliff (castle.ts: the wall,
 // the terrace and the castle hotel), spruces with snow on them, the ice moose, the toboggan slide and its sled, the
 // carnival's hat box and sash box, the parade drum, and what the snowmen wear. Maple is maple.ts, the other animals

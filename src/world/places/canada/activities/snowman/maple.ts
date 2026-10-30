@@ -1,5 +1,5 @@
 // Maple the beaver at the Winter Carnival, on the chibi rig (engine3d/characters/animal.ts, her look in
-// characters/looks.ts) in a pink knitted tuque for the cold, over her own pink scarf. The world (carnival.ts) walks her
+// characters/looks.ts) in a pink knitted tuque for the cold, over her own pink scarf. The world (decorate.ts) walks her
 // around; this file owns her little actions, each eased in and out (a wave, a cheer with a hop, a giggle, a tail slap
 // on top of a giant snowball, patting a snowball together, drumming in the parade) and her face (blinks, and her mouth
 // moving with her voice).
