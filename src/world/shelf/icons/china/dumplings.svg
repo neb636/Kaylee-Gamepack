@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Dumpling House</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ddf7ee"/><stop offset="1" stop-color="#a9e8d2"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <!-- the steamer: the side and front lip, the lip's top, the inside -->
+    <path id="sideP" d="M18 64V88A42 12.5 0 0 0 102 88V64H97A37 10 0 0 1 23 64Z"/>
+    <clipPath id="side"><use href="#sideP"/></clipPath>
+    <clipPath id="inside"><ellipse cx="60" cy="64" rx="37" ry="10"/></clipPath>
+    <!-- a plump dumpling, its foot at 0,0 -->
+    <path id="dP" d="M-13 0C-14.5-9-8-17.5 0-19.5C8-17.5 14.5-9 13 0Z"/>
+    <clipPath id="dC"><use href="#dP"/></clipPath>
+    <g id="dump">
+      <g clip-path="url(#dC)"><use href="#dP" fill="#efdccd"/><use href="#dP" fill="#fff7f0" transform="translate(-2.5 -2)"/></g>
+      <path d="M0-18C-4-15-7-10-8-4M0-18C-1-14-1.5-9-2-3M0-18C3-14 5.5-10 6.5-4" fill="none" stroke="#efdccd" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-9-8C-8.5-11.5-6.5-14.5-4-16.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="0" cy="-19.5" rx="3" ry="2" fill="#fff7f0"/>
+    </g>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="68" r="52" fill="url(#glow)"/>
+  <ellipse cx="60" cy="100" rx="44" ry="6" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the back of the rim and the inside: a dark wall, a green leaf on the floor -->
+  <path d="M18 64A42 12.5 0 0 1 102 64H97A37 10 0 0 0 23 64Z" fill="#fdeecc"/>
+  <g clip-path="url(#inside)">
+    <rect x="20" y="52" width="80" height="24" fill="#c99266"/>
+    <ellipse cx="60" cy="67.5" rx="35" ry="8.5" fill="#73cf86"/>
+    <path d="M30 66C44 62 76 62 90 66" fill="none" stroke="#aee8b7" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- the dumplings -->
+  <use href="#dump" transform="translate(60 69) scale(1.25)"/>
+  <use href="#dump" transform="translate(42 74) scale(1.2)"/>
+  <use href="#dump" transform="translate(78 74) scale(1.2)"/>
+
+  <!-- the bamboo side: lit on the left, shaded on the right, two binding rings, stitches -->
+  <g clip-path="url(#side)">
+    <rect x="16" y="50" width="88" height="52" fill="#e3bb7a"/>
+    <use href="#sideP" fill="#f5dba8" transform="translate(-6 -2)"/>
+    <path d="M14 77A42 12.5 0 0 0 98 77" fill="none" stroke="#fdeecc" stroke-width="3"/>
+    <path d="M18 92A42 12.5 0 0 0 102 92" fill="none" stroke="#e3bb7a" stroke-width="3"/>
+    <path d="M18 80A42 12.5 0 0 0 102 80" fill="none" stroke="#e3bb7a" stroke-width="2.5"/>
+    <g stroke="#e3bb7a" stroke-width="2.5" stroke-linecap="round"><path d="M30 84v6M44 87.5v6M60 89v6M76 87.5v6"/></g>
+    <path d="M90 84v6" stroke="#c99266" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <path d="M18 64A42 12.5 0 0 0 102 64H97A37 10 0 0 1 23 64Z" fill="#fdeecc"/>
+
+  <!-- chopsticks resting in front -->
+  <path d="M60 109L108 94" stroke="#c99266" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M64 112.5L110 99" stroke="#a46e4b" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M108 94L102.5 95.7M110 99L104.5 100.6" stroke="#ff8fb8" stroke-width="3.4" stroke-linecap="round"/>
+
+  <!-- curls of steam -->
+  <path d="M50 42c-4-4 4-7 0-11s4-7 0-11M70 40c-4-4 4-7 0-11s4-7 0-11" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/>
+</svg>

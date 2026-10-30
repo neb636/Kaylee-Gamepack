@@ -39,14 +39,11 @@
   <path d="M214 212C232 200 244 188 252 180H266Q282 188 298 180H312C320 188 332 200 350 212C342 218 334 212 326 218C318 212 308 222 298 216C288 224 278 214 268 220C258 214 248 222 238 216C230 220 222 214 214 212Z" fill="#fff"/>
   <path d="M312 180C320 188 332 200 350 212C342 218 334 212 326 218C322 216 318 216 316 217C318 204 316 190 312 180Z" fill="#e6e0f8"/>
   <path d="M266 180Q282 188 298 180Q282 184 266 180Z" fill="#b9b0e2"/>
-  <path d="M226 202C236 194 244 188 250 184" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
   <g fill="#fff" opacity="0.95">
     <circle cx="283" cy="170" r="6"/><circle cx="291" cy="158" r="8.5"/>
     <circle cx="306" cy="140" r="11"/><circle cx="326" cy="128" r="15"/><circle cx="350" cy="134" r="11"/>
     <rect x="296" y="134" width="66" height="14" rx="7"/>
   </g>
-  <path d="M316 124a15 15 0 0 1 14 -9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-  <path d="M302 147H360" stroke="#e6e0f8" stroke-width="3" stroke-linecap="round"/>
 
   <!-- far hills in the haze -->
   <path d="M0 262C80 250 160 248 240 256C320 264 380 250 460 248C560 246 620 262 720 258C820 254 880 240 960 242C1060 246 1120 256 1200 250V310H0Z" fill="#d4e3e6"/>

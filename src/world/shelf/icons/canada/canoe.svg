@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Red Canoe</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0f2ff"/><stop offset="1" stop-color="#b3dbff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="lake" x1="0" y1="72" x2="0" y2="120" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8fe3ea"/><stop offset="0.4" stop-color="#45c3d2"/><stop offset="1" stop-color="#1f9cb3"/></linearGradient>
+    <clipPath id="mtA"><path d="M-2 72L24 43L31 46L52 16L65.5 37L73 34.5L106 72Z"/></clipPath>
+    <clipPath id="mtB"><path d="M62 72L80 49L85 51L96 31L108 46L113 44L126 60V72Z"/></clipPath>
+    <path id="hullP" d="M20 72C22 83 30 92.5 43 93.5H77C90 92.5 98 83 100 72C94 80.5 86 84 75 84.5H45C34 84 26 80.5 20 72Z"/>
+    <clipPath id="hull"><use href="#hullP"/></clipPath>
+    <!-- a pine standing at 0,0 -->
+    <g id="pine">
+      <rect x="-1.5" y="-3" width="3" height="4" rx="1" fill="#8a5b3d"/>
+      <path d="M0-13L-8-3Q0-1.5 8-3Z" fill="#3e9e78"/>
+      <path d="M0-13L8-3Q4-2.2 0-2.2Z" fill="#2b7a5f"/>
+      <path d="M0-19L-6-9Q0-8 6-9Z" fill="#3e9e78"/>
+      <path d="M0-19L6-9Q3-8.5 0-8.5Z" fill="#2b7a5f"/>
+      <path d="M0-24L-4.5-15Q0-14.2 4.5-15Z" fill="#3e9e78"/>
+      <path d="M0-24L4.5-15Q2.2-14.6 0-14.6Z" fill="#2b7a5f"/>
+      <path d="M-2-20L-3-17.5M-3-14L-5-11M-4-7.5L-6.5-4.5" stroke="#69c19a" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+
+  <!-- a cloud -->
+  <g fill="#fff" opacity="0.92">
+    <circle cx="92" cy="20" r="4.5"/><circle cx="98.5" cy="16.5" r="6"/><circle cx="105" cy="20.5" r="4"/>
+    <rect x="87.5" y="20" width="22" height="4.5" rx="2.25"/>
+  </g>
+
+  <!-- far peaks in the haze -->
+  <path d="M-2 60L12 36L22 46L30 40L40 54H70L86 37L98 50L112 40L122 48V72H-2Z" fill="#d6d9f5"/>
+  <path d="M12 36L22 46L30 40L40 54H26L18 48ZM86 37L98 50L112 40L122 48V60L98 54Z" fill="#c6c9ef"/>
+
+  <!-- the big snowy peak: lit on the left, shaded on the right -->
+  <g clip-path="url(#mtA)">
+    <rect x="-4" y="12" width="112" height="62" fill="#9c9ed4"/>
+    <path d="M-2 72L24 43L31 46L52 16L55.5 32L59 50L62 72Z" fill="#c8caef"/>
+    <path d="M38 50L33 58M45 46L41 55" stroke="#eceaff" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M70 48L74 56M82 54L86 62" stroke="#8b8dc6" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M30 10H70V36L66 38.5L62 34L58.5 38.5L55 34.5L51.5 39L48 33.5L44 37.5L40.5 33L36 38.5L30 36Z" fill="#fff"/>
+    <path d="M52 16L56 34.5L58.5 38.5L62 34L66 38.5L70 36V10H52Z" fill="#e4ddf6"/>
+  </g>
+  <!-- the peak on the right -->
+  <g clip-path="url(#mtB)">
+    <rect x="60" y="28" width="68" height="46" fill="#9c9ed4"/>
+    <path d="M62 72L80 49L85 51L96 31L98.5 46L101 60L103 72Z" fill="#c8caef"/>
+    <path d="M110 54L114 62" stroke="#8b8dc6" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M84 26H112V43L107 43.5L104 39.5L100.5 43L97.5 39.5L94.5 43.5L91.5 40L88 44L84 42Z" fill="#fff"/>
+    <path d="M96 31L98 40L100.5 43L104 39.5L107 43.5L112 43V26H96Z" fill="#e4ddf6"/>
+  </g>
+
+  <!-- the pine forest along the far shore: a hazy row, then a richer one -->
+  <path d="M-2 74V66L1 62L4 66.5L7 60.5L10 66.5L13 62L16 66.5L19 60.5L22 66.5L25 62L28 66.5L31 60.5L34 66.5L37 62L40 66.5L43 60.5L46 66.5L49 62L52 66.5L55 60.5L58 66.5L61 62L64 66.5L67 60.5L70 66.5L73 62L76 66.5L79 60.5L82 66.5L85 62L88 66.5L91 60.5L94 66.5L97 62L100 66.5L103 60.5L106 66.5L109 62L112 66.5L115 60.5L118 66.5L121 62V74Z" fill="#8cc5ad"/>
+  <path d="M-2 75V70L2 64.5L5.5 70L9 66L12.5 70.5L16 64L19.5 70L23 66.5L26.5 70.5L30 64.5L33.5 70L37 66L40.5 70.5L44 64L47.5 70L51 66.5L54.5 70.5L58 64.5L61.5 70L65 66L68.5 70.5L72 64L75.5 70L79 66.5L82.5 70.5L86 64.5L89.5 70L93 66L96.5 70.5L100 64L103.5 70L107 66.5L110.5 70.5L114 64.5L117.5 70L121 66V75Z" fill="#4fa583"/>
+
+  <!-- the turquoise lake, the peaks mirrored in it -->
+  <rect y="72" width="120" height="48" fill="url(#lake)"/>
+  <path d="M-2 72L24 86.5L31 85L52 100L65.5 89.5L73 90.5L86 84L96 92.5L108 85L113 86L122 80V72Z" fill="#c9f1f4" opacity="0.35"/>
+  <rect y="72" width="120" height="2" fill="#effcff" opacity="0.8"/>
+  <g fill="#fff" opacity="0.6">
+    <rect x="6" y="104" width="16" height="2.4" rx="1.2"/><rect x="84" y="108" width="22" height="2.4" rx="1.2"/><rect x="30" y="112" width="20" height="2.4" rx="1.2"/><rect x="102" y="86" width="12" height="2.2" rx="1.1"/><rect x="4" y="84" width="10" height="2.2" rx="1.1"/>
+  </g>
+
+  <!-- pines on the near shores -->
+  <path d="M-2 71C6 71 13 72.5 18 76C12 78 4 78 -2 78Z" fill="#5cbd78"/>
+  <path d="M122 71C114 71 107 72.5 102 76C108 78 116 78 122 78Z" fill="#5cbd78"/>
+  <use href="#pine" transform="translate(7 76) scale(1.5)"/>
+  <use href="#pine" transform="translate(16 76) scale(1.05)"/>
+  <use href="#pine" transform="translate(112 76) scale(1.35)"/>
+  <use href="#pine" transform="translate(104 76.5) scale(1)"/>
+
+  <!-- the red canoe: its reflection, the inside with wooden seats, the hull -->
+  <path d="M24 93.5C34 98 46 99.5 60 99.5C74 99.5 86 98 96 93.5Z" fill="#d9485e" opacity="0.3"/>
+  <path d="M20 72C27 76 36 78 47 78.5H73C84 78 93 76 100 72C94 80.5 86 84 75 84.5H45C34 84 26 80.5 20 72Z" fill="#c43f58"/>
+  <rect x="34" y="77.5" width="5" height="6" rx="1" fill="#c99266"/>
+  <rect x="58.5" y="78" width="3.5" height="6.5" rx="1" fill="#c99266"/>
+  <rect x="81" y="77.5" width="5" height="6" rx="1" fill="#c99266"/>
+  <path d="M20 72C27 76 36 78 47 78.5H73C84 78 93 76 100 72" fill="none" stroke="#c99266" stroke-width="2" stroke-linecap="round"/>
+  <g clip-path="url(#hull)">
+    <rect x="18" y="70" width="84" height="26" fill="#d9485e"/>
+    <use href="#hullP" fill="#ff6b6b" transform="translate(-1 -3.5)"/>
+    <path d="M25 83C30 87 36 88.5 43 89" fill="none" stroke="#ffa3a3" stroke-width="2.4" stroke-linecap="round"/>
+  </g>
+  <path d="M20 72C26 80.5 34 84 45 84.5H75C86 84 94 80.5 100 72" fill="none" stroke="#e5b78f" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- the paddle, its blade dipping in the water -->
+  <g transform="translate(90 50) rotate(36)">
+    <rect x="-1.75" y="0" width="3.5" height="44" fill="#e5b78f"/>
+    <rect x="0.25" y="0" width="1.5" height="44" fill="#c99266"/>
+    <rect x="-4.5" y="-2.5" width="9" height="4.5" rx="2.25" fill="#c99266"/>
+    <path d="M0 41C4.5 43 6 48 6 54C6 60 3.5 64 0 64C-3.5 64-6 60-6 54C-6 48-4.5 43 0 41Z" fill="#e5b78f"/>
+    <path d="M0 41C4.5 43 6 48 6 54C6 60 3.5 64 0 64Z" fill="#c99266"/>
+  </g>
+  <ellipse cx="53" cy="98.5" rx="7" ry="2" fill="#fff" opacity="0.85"/>
+  <path d="M22 96H32M88 96H98" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity="0.7"/>
+</svg>

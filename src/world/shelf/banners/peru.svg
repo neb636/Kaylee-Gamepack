@@ -132,8 +132,8 @@
   <!-- the green mountainside below the ruins, terraced -->
   <path d="M260 450V318C420 308 600 310 780 312C900 314 1000 322 1200 334V450Z" fill="url(#slope)"/>
   <g fill="none" stroke-linecap="round">
-    <path d="M300 337C440 350 700 352 900 331M340 364C480 378 720 380 960 355" stroke="#bcb6d6" stroke-width="6"/>
-    <path d="M300 334C440 347 700 349 900 328M340 361C480 375 720 377 960 352" stroke="#c7f3e4" stroke-width="2.5"/>
+    <path d="M300 337C440 350 720 352 962 324M340 364C480 378 720 380 960 355" stroke="#bcb6d6" stroke-width="6"/>
+    <path d="M300 334C440 347 720 349 962 321M340 361C480 375 720 377 960 352" stroke="#c7f3e4" stroke-width="2.5"/>
   </g>
   <use href="#tree" transform="translate(936 332) scale(0.9)"/>
   <use href="#tree" transform="translate(964 338)"/>
@@ -169,7 +169,7 @@
   <g fill="#ffc83d"><circle cx="958" cy="376" r="3.5"/><circle cx="1116" cy="366" r="3.5"/></g>
 
   <!-- a white llama in a striped blanket, looking at the ruins -->
-  <g transform="translate(1066 342)">
+  <g transform="translate(1066 338)">
     <ellipse cx="2" cy="1" rx="46" ry="5" fill="#4b3a8c" opacity="0.15"/>
     <ellipse cx="40" cy="-66" rx="7" ry="9" fill="#e4ddf6"/>
     <rect x="-22" y="-42" width="10" height="42" rx="5" fill="#e4ddf6"/>

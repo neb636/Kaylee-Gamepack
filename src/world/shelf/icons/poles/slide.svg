@@ -12,7 +12,8 @@
   <circle cx="60" cy="50" r="50" fill="url(#glow)"/>
 
   <!-- the sun, a far snowy hill -->
-  <circle cx="22" cy="22" r="8.5" fill="#fff6cc"/>
+  <circle cx="22" cy="22" r="13" fill="#fff" opacity="0.4"/>
+  <circle cx="22" cy="22" r="8.5" fill="#fff"/>
   <path d="M62 66C70 52 78 44 88 44C98 44 108 52 124 60V80H62Z" fill="#e9e3fb"/>
   <path d="M88 44C98 44 108 52 124 60V80H96C97 66 95 54 88 44Z" fill="#d9d0f5"/>
   <path d="M74 52C78 48 82 46 87 45.5" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
