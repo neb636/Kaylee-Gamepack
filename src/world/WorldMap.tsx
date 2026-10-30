@@ -1,6 +1,7 @@
 // The world map, and the app's home screen: tap continents to hear their names, tap a country pin to fly there,
-// tap home for Sparkle's tea party. The two buttons in the top bar swap the map for the game shelf (Shelf.tsx: every
-// game as a picture card, straight in); she keeps whichever she used last (#/world?view=list or map opens one).
+// tap home for Sparkle's tea party. The two buttons in the top bar swap the map for the game shelf (Shelf.tsx: a card
+// per place with every game as an icon, straight in, filling the screen with the dock floating over it); she keeps
+// whichever she used last (#/world?view=list or map opens one).
 // No title and no trophy room here (Dad, 2026-10-29): the map is the picture, the dock beside it is the way in.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState, type ReactNode } from 'react'
@@ -129,20 +130,39 @@ export function WorldMap({ view: linked }: { view?: string }) {
     void say(text)
   }
 
+  const dock = (
+    <>
+      <DockButton label="My passport" word="Passport" {...DOCK.passport} badge={totalStamps(passport)} onClick={() => go.world('passport')} />
+      <DockButton label="Coloring book" word="Coloring" {...DOCK.coloring} onClick={() => go.world('coloring')} />
+      <DockButton label="Puzzle book" word="Puzzles" {...DOCK.puzzles} onClick={() => go.world('puzzles')} />
+      {online && <DockButton label="Theater" word="Movies" {...DOCK.theater} onClick={() => go.world('theater')} />}
+    </>
+  )
+  const toggle = (
+    <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', right: 16, display: 'flex', borderRadius: 999, padding: 4, gap: 4, background: 'rgba(255,255,255,0.92)', boxShadow: 'var(--shadow)', zIndex: 50 }}>
+      <ViewButton label="Map" on={view === 'map'} onClick={() => switchTo('map')} icon={(c) => <MapIcon color={c} />} />
+      <ViewButton label="All the games" on={view === 'list'} onClick={() => switchTo('list')} icon={(c) => <ShelfIcon color={c} />} />
+    </div>
+  )
+
+  if (view === 'list') {
+    // The shelf is the whole screen and scrolls as one page; the toggle and the dock float over it (Sparkle waves
+    // from the favorites card instead of beside the dock).
+    return (
+      <div className="screen decorated world-list" style={{ padding: 0, overflow: 'hidden' }}>
+        <Shelf />
+        <div className="shelf-topfade" />
+        {toggle}
+        <div className="shelf-dock">{dock}</div>
+      </div>
+    )
+  }
+
   return (
     <div className="screen decorated" style={{ padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 12px)', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', right: 16, display: 'flex', borderRadius: 999, padding: 4, gap: 4, background: 'rgba(255,255,255,0.92)', boxShadow: 'var(--shadow)', zIndex: 50 }}>
-        <ViewButton label="Map" on={view === 'map'} onClick={() => switchTo('map')} icon={(c) => <MapIcon color={c} />} />
-        <ViewButton label="All the games" on={view === 'list'} onClick={() => switchTo('list')} icon={(c) => <ShelfIcon color={c} />} />
-      </div>
+      {toggle}
 
       <div className="world-split" style={{ flex: 1, minHeight: 0, gap: 'min(16px, 2vh)', alignItems: 'center' }}>
-        {view === 'list' ? (
-          // The shelf is as wide as the screen, so on short screens (where the map sits beside the top bar) it starts below the bar.
-          <div style={{ position: 'relative', flex: 1, alignSelf: 'stretch', minWidth: 0, minHeight: 0, marginTop: 'max(0px, calc(var(--bar-clear) - var(--top-clear)))' }}>
-            <Shelf />
-          </div>
-        ) : (
         <FitBox ratio={1.5}>
           <div style={{ position: 'absolute', inset: 0, borderRadius: 28, overflow: 'hidden', boxShadow: 'var(--shadow)', border: '5px solid #fff', background: `url(${mapArt}) center / cover` }} onClick={() => setLabel(null)}>
             {CONTINENTS.map((c) => (
@@ -234,16 +254,12 @@ export function WorldMap({ view: linked }: { view?: string }) {
             )}
           </AnimatePresence>
         </FitBox>
-        )}
 
         <div className="world-side" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'min(20px, 3vw)', flexShrink: 0 }}>
           <div className="world-side-mascot">
             <Mascot pose="wave" size={Math.min(170, window.innerHeight * 0.12)} />
           </div>
-          <DockButton label="My passport" word="Passport" {...DOCK.passport} badge={totalStamps(passport)} onClick={() => go.world('passport')} />
-          <DockButton label="Coloring book" word="Coloring" {...DOCK.coloring} onClick={() => go.world('coloring')} />
-          <DockButton label="Puzzle book" word="Puzzles" {...DOCK.puzzles} onClick={() => go.world('puzzles')} />
-          {online && <DockButton label="Theater" word="Movies" {...DOCK.theater} onClick={() => go.world('theater')} />}
+          {dock}
         </div>
       </div>
 
@@ -275,14 +291,15 @@ function DockButton({ Icon, label, word, color, shade, onClick, badge }: { Icon:
   return (
     <motion.button
       aria-label={label}
+      className="world-dock-tile"
       whileTap={{ scale: 0.92, y: 4 }}
       onClick={() => {
         sounds.pop()
         onClick()
       }}
       style={{
-        // An explicit width and height: WebKit ignores aspect-ratio on a flex button and stretches it.
-        ['--tile' as string]: 'clamp(88px, min(17vw, 12.5vh), 140px)',
+        // An explicit width and height: WebKit ignores aspect-ratio on a flex button and stretches it. The size (--tile)
+        // comes from world.css: smaller in the shelf's floating dock.
         position: 'relative',
         flex: '0 0 auto',
         width: 'var(--tile)',

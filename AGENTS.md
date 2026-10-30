@@ -29,6 +29,7 @@ src/games/<id>/          # the original school-paper games (just the tea party, 
 planning/around-the-world/  # country plans, ACTIVITY-TEMPLATE.md, Thailand's trip plans and known issues
 planning/viewer/            # draws the plan pages (*.html: the plan as JSON inside, see the plan-page skill)
 art/STYLE.md             # the art style prompt; art/source/ holds full-size originals
+src/world/shelf/         # the game shelf's banners and icons, SVG drawn by hand (shelf/STYLE.md)
 docs/                    # play-design.md (what makes it fun), interactions.md (which tool), sparkle.md
 ```
 
@@ -331,7 +332,8 @@ offers one, skippable, right after that activity's stamp); a country with videos
 and the world map's Theater shows every country's videos.
 
 Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),
-write its plan in `planning/around-the-world/`, generate backgrounds, props and character reference pictures with Codex
+write its plan in `planning/around-the-world/`, draw its shelf banner and an icon per activity (`src/world/shelf/STYLE.md`),
+generate backgrounds, props and character reference pictures with Codex
 (`codex exec -m gpt-6.1-sol -c model_reasoning_effort="medium" ...`, style rules from `art/STYLE.md`; tell Codex never
 to run git or gh), build the friend's characters, cast their voices, then
 `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`, `npm run verify`, and QA (below).
@@ -339,7 +341,8 @@ to run git or gh), build the friend's characters, cast their voices, then
 ## Art
 
 Follow `art/STYLE.md` exactly (style prompt, sprites on pure white, backgrounds named `scene*`/`cover*`/`bg*`).
-Generate with Codex (above). In 3D, the world and the characters are built from code; generated pictures are for 2D
+Generate with Codex (above). The game shelf is the exception: its banners and icons are SVG drawn by hand in the flat
+travel-app look of `src/world/shelf/STYLE.md`, never generated (Dad, 2026-10-30). In 3D, the world and the characters are built from code; generated pictures are for 2D
 screens, stickers and character references.
 - Save to `art/source/world/<id>/<name>.png`, run `npm run art -- world`, then
   `node scripts/contact-sheet.mjs src/world/places/<id>/assets` and **look at** `/tmp/contact-sheet.png`.
