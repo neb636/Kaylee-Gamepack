@@ -44,9 +44,9 @@
       <path d="M-35 10C-22 14 4 14.5 22 7V20H-37Z" fill="#e4ddf6"/>
     </g>
     <path d="M-26-7C-19-11-9-12.5-1-12.2" fill="none" stroke="#7a70a3" stroke-width="2.6" stroke-linecap="round"/>
-    <!-- the near flipper held up and back -->
-    <path d="M7-8C-1-14-13-21-26-24C-25-19-16-11.5-3-4.5Z" fill="#3f3659"/>
-    <path d="M-23-21.5C-14-18.5-6-14 2-8.5" fill="none" stroke="#6e6494" stroke-width="2.2" stroke-linecap="round"/>
+    <!-- the near flipper swept back like a wing -->
+    <path d="M8-6C-1-10.5-13-14.5-27-16.5C-25-11.5-15-6.5-1-2.5Z" fill="#3f3659"/>
+    <path d="M-24-14.5C-15-12.5-6-9.5 3-5.5" fill="none" stroke="#6e6494" stroke-width="2.2" stroke-linecap="round"/>
     <!-- the round head: dark, lit on the top-left -->
     <g clip-path="url(#head)">
       <rect x="8" y="-25" width="28" height="28" fill="#3f3659"/>
