@@ -205,7 +205,7 @@ export class HomeGlobe implements World3D {
     private events: GlobeEvents,
   ) {
     makeLights(this.scene)
-    this.scene.background = new Color('#F6EEFF')
+    this.scene.background = new Color('#EDCAF6')
     this.scene.add(this.sky.mesh, this.root)
     this.root.add(this.tilt)
     this.tilt.add(this.spin)
