@@ -10,7 +10,7 @@ import { lockedPlace, needsCode } from './lock'
 import { LockScreen } from './LockScreen'
 import { PlaceFrame } from './PlaceFrame'
 import { PuppetLab } from './PuppetLab'
-import { DockGlyph } from './HomeIcons'
+import { DockGlyph, worldBack } from './HomeIcons'
 import { SectionIndex } from './SectionIndex'
 import { isFeelParam } from './kit/knobs'
 import { places } from './registry'
@@ -50,7 +50,7 @@ export function World({ place, activity, section, params = {} }: { place?: strin
   else if (place === 'sections') screen = <SectionIndex />
   else if (place === 'puzzles') screen = <PuzzleBook page={activity} />
   else if (place === 'coloring') screen = <ColoringBook page={activity} />
-  else if (place === 'theater') screen = <Theater places={places.map((p) => p.meta).filter((m) => m.videos?.length)} onExit={() => go.world()} exitIcon="🌍" exitLabel="World map" title={<><DockGlyph kind="theater" /> Theater</>} />
+  else if (place === 'theater') screen = <Theater places={places.map((p) => p.meta).filter((m) => m.videos?.length)} onExit={() => go.world()} exitIcon={worldBack.icon} exitTile={worldBack.tile} exitLabel="World map" title={<><DockGlyph kind="theater" /> Theater</>} />
   else if (place) {
     screen = <PlaceFrame id={place} activity={activity} section={section} params={gameParams} />
     lab = params.cam !== undefined

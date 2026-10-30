@@ -2,7 +2,7 @@
 import { motion } from 'motion/react'
 import { go } from '../router'
 import { say, sounds, useSayOnMount } from '../sdk'
-import { DockGlyph } from './HomeIcons'
+import { DockGlyph, worldBack } from './HomeIcons'
 import { BarPill, TopBar } from './kit/Chrome'
 import { ColoringPage } from './kit/ColoringPage'
 import { Flag } from './kit/Flag'
@@ -21,7 +21,7 @@ function Shelf() {
   let i = 0 // running index across countries, for the staggered entrance
   return (
     <div className="screen decorated" style={{ padding: 0, overflow: 'hidden' }}>
-      <TopBar icon="🌍" label="World map" onBack={() => go.world()}>
+      <TopBar {...worldBack} label="World map" onBack={() => go.world()}>
         <BarPill>
           <DockGlyph kind="coloring" /> Coloring Book
         </BarPill>
