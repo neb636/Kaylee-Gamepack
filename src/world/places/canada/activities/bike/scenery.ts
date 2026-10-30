@@ -597,16 +597,22 @@ export interface Cabin {
 /** A cabin: the grip and hanger, an open cabin with a roof, its color's lower half. */
 function cabinShape(color: string, bag: Bag) {
   const g = new Group()
-  const post = (x: number, z: number) => P.cyl(0.05, 0.05, 1.5, '#FFFFFF', { at: [x, -HANG + 1.25, z] }, 6)
+  const roofY = -1.36
+  const roofHeight = 0.3
+  const rimY = -HANG + 0.84
+  // Sink each support into both the rim and the roof, so the cabin stays joined from every angle.
+  const postBottom = rimY - 0.05
+  const postTop = roofY - roofHeight / 2 + 0.05
+  const post = (x: number, z: number) => P.cyl(0.05, 0.05, postTop - postBottom, '#FFFFFF', { at: [x, (postTop + postBottom) / 2, z] }, 6)
   g.add(
     solid(
       merge([
         P.rbox(0.35, 0.3, 0.6, 0.06, PAL.ink, { at: [0, 0, 0] }),
         P.cyl(0.05, 0.05, 1.2, '#BFB8CC', { at: [0, -0.6, 0] }, 6),
         P.rbox(0.9, 0.12, 0.3, 0.04, '#BFB8CC', { at: [0, -1.2, 0] }),
-        P.rbox(2.4, 0.3, 2.2, 0.12, '#FFFFFF', { at: [0, -1.36, 0] }),
+        P.rbox(2.4, roofHeight, 2.2, 0.12, '#FFFFFF', { at: [0, roofY, 0] }),
         P.rbox(2.2, 0.85, 2.0, 0.14, color, { at: [0, -HANG + 0.42, 0] }),
-        P.rbox(2.24, 0.1, 2.04, 0.04, '#FFFFFF', { at: [0, -HANG + 0.84, 0] }),
+        P.rbox(2.24, 0.1, 2.04, 0.04, '#FFFFFF', { at: [0, rimY, 0] }),
         post(1.02, 0.92),
         post(-1.02, 0.92),
         post(1.02, -0.92),
@@ -908,8 +914,13 @@ export function buildProps(course: Course, bag: Bag) {
     const g = course.ground(s, lat)
     parts.push(P.cyl(0.07 * big, 0.08 * big, 1.3 * big, '#9A6B4F', { at: at(s, lat, g + 0.65 * big) }, 6))
     const sign = at(s, lat, g + 1.25 * big)
+    // Mount the face on the uphill side of the post, with a little overlap at the back.
+    const heading = t.heading(s)
+    const faceOffset = 0.08 * big + 0.03 - 0.02
+    sign[0] -= Math.sin(heading) * faceOffset
+    sign[2] += Math.cos(heading) * faceOffset
     if (blue) parts.push(P.rbox(0.42 * big, 0.42 * big, 0.06, 0.04, '#4C8FE0', { at: sign, rot: [0, -t.heading(s), 0] }))
-    else parts.push(P.cyl(0.24 * big, 0.24 * big, 0.06, '#5DBB63', { at: sign, rot: [Math.PI / 2, -t.heading(s), 0] }, 16))
+    else parts.push(P.cyl(0.24 * big, 0.24 * big, 0.06, '#5DBB63', { at: sign, rot: [Math.PI / 2, 0, heading] }, 16))
   }
   for (let s = 18; s < GREEN_END; s += 46) marker(s, (s / 46) % 2 < 1 ? -(half(s) + 1.3) : half(s) + 1.3, false)
   marker(SPLIT.from + 4, -0.6, false, 1.5)
