@@ -17,7 +17,10 @@
     "sections-readme": "node scripts/sections-readme.mjs",
     "qa:sheets": "node scripts/qa-sheets.mjs",
     "icons": "node scripts/build-icons.mjs",
-    "art": "node scripts/optimize-art.mjs"
+    "art": "node scripts/optimize-art.mjs",
+    "studio": "npm --prefix workbench run dev",
+    "studio:install": "npm --prefix workbench ci",
+    "studio:check": "npm --prefix workbench run build && npm --prefix workbench test"
   },
   "dependencies": {
     "@fontsource/fredoka": "^5.3.0",

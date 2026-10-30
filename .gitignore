@@ -11,3 +11,8 @@ art/source/games/
 art/source/world/
 # QA screenshots and reports
 qa-output/
+
+# Local Electron studio builds and private character scratch data
+workbench/dist-electron/
+workbench/release/
+workbench/.local/
