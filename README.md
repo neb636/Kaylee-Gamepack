@@ -421,7 +421,7 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   and one folder per country in `src/world/places/<id>/`. Thailand is 3D (three.js); the others are 2D.
 - `src/sdk/`: shared building blocks: speech (`say`), sounds, confetti, puppets, drag and drop, puzzles and more.
   Try them at `#/playground`.
-- `src/shell/`: the app wrapper (splash, trophy ceremony, trophy room); the world map is the home screen.
+- `src/shell/`: the app wrapper (splash, trophy ceremony); the world map is the home screen.
 - `src/games/<id>/`: the original school-paper games (the unicorn tea party, opened from the 🏡 pin on the world map).
 - `planning/around-the-world/`: country and activity plans (`ACTIVITY-TEMPLATE.md`, `thailand.md`, ...). Newer plans
   are pages (`thailand/baan-chang.html`, `thailand/nan-trip.html`), also published with the app at

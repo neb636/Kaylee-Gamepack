@@ -23,11 +23,11 @@ async function start(page: Page, hash = '') {
   await page.getByRole('button', { name: /let's play/i }).click()
 }
 
-test("Let's play lands on the world map, with trophies and the tea party", async ({ page }) => {
+test("Let's play lands on the world map, with the dock and the tea party", async ({ page }) => {
   const errors = trackErrors(page)
   await start(page)
   await expect(page.getByRole('button', { name: 'My passport' })).toBeVisible()
-  await expect(page.getByRole('button', { name: /my trophies/i })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Coloring book' })).toBeVisible()
   expect(gameIds.length).toBeGreaterThan(0)
   await page.getByRole('button', { name: 'Tea party' }).click({ force: true })
   await expect(page).toHaveURL(/#\/game\/unicorn-tea-party/)
@@ -113,16 +113,9 @@ for (const id of gameIds) {
     expect(await page.locator('button').count()).toBeGreaterThan(1)
     expect(errors).toEqual([])
 
-    // Jump to the end through the test hook and check the trophy ceremony + trophy room.
+    // Jump to the end through the test hook and check the trophy ceremony.
     await page.evaluate(() => window.__kaylee?.win())
     await expect(page.getByRole('heading', { name: /you did it, kaylee/i })).toBeVisible()
-    await page.getByRole('button', { name: 'My trophies' }).click()
-    await expect(page.getByRole('heading', { name: "Kaylee's Trophies" })).toBeVisible()
-    await expect(page.getByText('KAYLEE').first()).toBeVisible()
-
-    // Trophies survive a reload.
-    await page.reload()
-    await page.getByRole('button', { name: /let's play/i }).click()
     await expect(page.getByText('KAYLEE').first()).toBeVisible()
     expect(errors).toEqual([])
   })
@@ -190,7 +183,6 @@ for (const id of placeIds) {
 
     await page.evaluate(() => window.__kaylee?.win())
     await expect(page.getByRole('heading', { name: /you did it, kaylee/i })).toBeVisible()
-    await page.getByRole('button', { name: 'My trophies' }).click()
     await expect(page.getByText('KAYLEE').first()).toBeVisible()
     expect(errors).toEqual([])
   })

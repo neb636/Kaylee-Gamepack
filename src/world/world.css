@@ -85,6 +85,16 @@
     display: none;
   }
 }
+/* Phones on their side: four tiles don't fit in one column under the map/list toggle, so they go two by two below it. */
+@media (max-height: 560px) and (orientation: landscape) {
+  .world .world-side {
+    display: grid !important;
+    grid-template-columns: repeat(2, auto);
+    align-content: center;
+    gap: 14px !important;
+    padding-top: var(--bar-clear);
+  }
+}
 /* Phones held upright: Sparkle and three buttons don't fit in one row, so Sparkle waves from her own row above them. */
 @media (orientation: portrait) and (max-width: 600px) {
   .world .world-side {
@@ -291,10 +301,5 @@
 @media (orientation: landscape) {
   .world .shelf-page {
     flex-direction: row;
-  }
-}
-@media (max-width: 600px) {
-  .world .world-title-text {
-    display: none;
   }
 }

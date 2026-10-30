@@ -184,7 +184,6 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
             backToMap()
           }}
           onHome={() => go.world()}
-          onTrophies={go.trophies}
         />
       )}
     </div>

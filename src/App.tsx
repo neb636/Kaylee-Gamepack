@@ -3,7 +3,6 @@ import { useRoute } from './router'
 import { GameFrame } from './shell/GameFrame'
 import { Playground } from './shell/Playground'
 import { Splash } from './shell/Splash'
-import { TrophyRoom } from './shell/TrophyRoom'
 import { World } from './world/World'
 
 export default function App() {
@@ -14,8 +13,6 @@ export default function App() {
   switch (route.name) {
     case 'game':
       return <GameFrame id={route.id} />
-    case 'trophies':
-      return <TrophyRoom />
     case 'playground':
       return <Playground />
     case 'world':
