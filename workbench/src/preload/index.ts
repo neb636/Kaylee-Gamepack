@@ -15,6 +15,7 @@ const api: WorkbenchApi = {
   platform: process.platform,
   studio: {
     repoRoot: () => ipcRenderer.invoke('studio:repo-root'),
+    useCheckout: root => ipcRenderer.invoke('studio:use-checkout', root),
     tune: input => ipcRenderer.invoke('studio:tune', input),
     cancel: id => ipcRenderer.send('studio:cancel', id),
   },
@@ -41,6 +42,8 @@ const api: WorkbenchApi = {
     },
   },
   sourceControl: {
+    branches: root => ipcRenderer.invoke(IPC.sourceControlBranches, { root }),
+    checkout: (root, branch) => ipcRenderer.invoke(IPC.sourceControlCheckout, { root, branch }),
     detect: (root) => ipcRenderer.invoke(IPC.sourceControlDetect, { root }),
     status: (root) => ipcRenderer.invoke(IPC.sourceControlStatus, { root }),
     commit: (root, message) => ipcRenderer.invoke(IPC.sourceControlCommit, { root, message }),

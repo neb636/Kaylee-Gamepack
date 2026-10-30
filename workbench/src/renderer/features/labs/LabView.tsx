@@ -26,6 +26,13 @@ export function LabView({ view, workspace }: ViewComponentProps) {
   const patch = (value: Partial<State>) => useWorkbenchStore.getState().updateViewState(workspace.id, view.id, value);
   const [input, setInput] = useState(state.link ?? DEFAULTS[view.type]);
   const [src, setSrc] = useState(() => labLink(state.link ?? DEFAULTS[view.type], view.type));
+  const [checkoutReady, setCheckoutReady] = useState(false);
+  useEffect(() => {
+    let current = true;
+    setCheckoutReady(false);
+    window.workbench.studio.useCheckout(workspace.path).then(() => { if (current) setCheckoutReady(true); }).catch(error => { if (current) setMessage(String(error)); });
+    return () => { current = false; };
+  }, [workspace.path]);
   const [snapshot, setSnapshot] = useState<LabSnapshot>();
   const [message, setMessage] = useState('Open a section, then describe what you want to change.');
   const [busy, setBusy] = useState(false);
@@ -108,7 +115,7 @@ export function LabView({ view, workspace }: ViewComponentProps) {
       <button type="submit" disabled={busy}>Open section</button>
       <button type="button" disabled={busy} onClick={() => { setInput('#/world/sections'); setSrc(`${GAME_ORIGIN}/?studio=1#/world/sections`); }}>Browse sections</button>
     </form>
-    <iframe ref={frame} title={view.title} src={src}  allow="autoplay" />
+    {checkoutReady && <iframe ref={frame} title={view.title} src={src} allow="autoplay" />}
     <div className="studio-composer">
       <label>{character ? 'Character builder note' : 'What should feel or look different?'}
         <textarea aria-label="Lab prompt" value={state.draft ?? ''} placeholder={character ? 'Describe the character or rig change. The builder will use docs/3d-characters.md…' : 'The car is too twitchy when I make a small turn. Make it gentler…'} onChange={event => patch({ draft: event.target.value })} />
@@ -116,10 +123,10 @@ export function LabView({ view, workspace }: ViewComponentProps) {
       <div className="studio-actions">
         {!character && <>
           <select aria-label="AI provider" value={state.provider ?? 'claude'} onChange={event => patch({ provider: event.target.value as State['provider'] })}><option value="claude">Claude Code</option><option value="codex">Codex CLI</option></select>
-          <button disabled={busy || !state.draft?.trim()} onClick={() => void tune()}>Ask AI & preview controls</button>
+          <button disabled={busy || !checkoutReady || !state.draft?.trim()} onClick={() => void tune()}>Ask AI & preview controls</button>
           <button disabled={!busy} onClick={() => { if (job.current) window.workbench.studio.cancel(job.current); job.current = undefined; setMessage('Cancelled'); }}>Cancel</button>
           <button disabled={busy || !undo} onClick={() => void restore()}>Undo AI change</button>
-          <button disabled={busy} onClick={() => void refresh()}>Read controls</button>
+          <button disabled={busy || !checkoutReady} onClick={() => void refresh()}>Read controls</button>
         </>}
         <button disabled={busy || (!character && !snapshot)} onClick={() => void openAgent()}>{character ? 'Prepare character builder prompt' : 'Prepare prompt to save in game'}</button>
         {character && <button onClick={() => void services.commands.execute('view.create', { workspaceId: workspace.id, viewType: 'image-generator' })}>Create character concept</button>}

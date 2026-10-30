@@ -16,3 +16,5 @@ This folder is the local Electron builder app for the game in the parent directo
 - Semantic `--wb-*` CSS variables; reuse the inherited accessible controls and CLI/session lifecycle.
 - `npm run build` checks both TypeScript projects. `npm test` here runs Node contract tests (not the game’s prohibited local Playwright suite).
 - Launch from the root with `npm run studio`; it owns both loopback servers and Electron and stops them together.
+
+- `npm run studio:dist:dir` builds a macOS app. The packaged renderer is independent of the opened repository; Git branches/worktrees choose the editable checkout. Labs lazily start that workspace’s Vite server using Electron’s bundled Node runtime. Keep the renderer/game origins exact and stop owned servers on quit.

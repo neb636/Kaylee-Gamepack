@@ -30,6 +30,8 @@ export const IPC = {
   filesWatch: "files:watch",
   filesUnwatch: "files:unwatch",
   filesChanged: "files:changed",
+  sourceControlBranches: "source-control:branches",
+  sourceControlCheckout: "source-control:checkout",
   sourceControlDetect: "source-control:detect",
   sourceControlStatus: "source-control:status",
   sourceControlCommit: "source-control:commit",

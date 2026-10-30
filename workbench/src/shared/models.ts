@@ -260,7 +260,8 @@ export interface AgentSessionSnapshot {
 
 export interface WorkbenchApi {
   studio: {
-    repoRoot: () => Promise<string>;
+    repoRoot: () => Promise<string | null>;
+    useCheckout: (root: string) => Promise<void>;
     tune: (input: { id: string; provider: 'claude' | 'codex'; prompt: string; snapshot: import('./labs').LabSnapshot }) => Promise<import('./labs').LabProposal>;
     cancel: (id: string) => void;
   };
@@ -284,6 +285,8 @@ export interface WorkbenchApi {
     onChanged: (listener: (event: FilesChangedEvent) => void) => () => void;
   };
   sourceControl: {
+    branches: (root: string) => Promise<string[]>;
+    checkout: (root: string, branch: string) => Promise<void>;
     detect: (root: string) => Promise<boolean>;
     status: (root: string) => Promise<SourceControlStatus | null>;
     commit: (root: string, message: string) => Promise<{ commitId: string }>;
