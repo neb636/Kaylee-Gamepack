@@ -255,6 +255,7 @@ export class DecorateSnowman implements World3D {
   private sillySaid = -99
   private hintFor = -1
   private told = { castle: false }
+  private gone = false
   private counts = { touches: 0, strokes: 0, coal: 0, carrots: 0, sticks: 0, snow: 0, paint: 0, tuques: 0, sashes: 0, scarves: 0, mapleHats: 0, taps: 0, pokes: 0, autos: 0, reveals: 0 }
 
   constructor(
@@ -1005,16 +1006,21 @@ export class DecorateSnowman implements World3D {
     const top = m.balls[2].g.getWorldPosition(new Vector3())
     this.sparkle.burst(top.x, top.y + 0.3, top.z, 26, 2, 2, 0.12)
     const friend = this.round === 'friends'
-    this.after(0.5, () => this.talk(friend ? L.snowman.wake[1] : this.round === 'face' ? L.snowman.wake[0] : L.snowman.wake[2], true))
+    // He says hello; then the friend loves it (whatever it looks like), once his hello has finished.
+    const fr = friend ? this.friend : null
+    this.after(0.5, () => {
+      this.quietUntil = this.time + 1.2
+      void say(friend ? L.snowman.wake[1] : this.round === 'face' ? L.snowman.wake[0] : L.snowman.wake[2], { interrupt: true }).then(() => {
+        if (fr && !this.gone) {
+          fr.f.cheer()
+          void say(L.snowman.friend[fr.f.card].love, { interrupt: false })
+        }
+      })
+    })
     this.after(1.0, () => {
       this.maple.cheer()
       sounds.correct()
-      // The friend loves it (whatever it looks like).
-      const fr = this.friend
-      if (friend && fr) {
-        fr.f.cheer()
-        this.talk(L.snowman.friend[fr.f.card].love, true)
-      } else if (!friend) this.talk(L.snowman.made[this.counts.reveals % L.snowman.made.length])
+      if (!friend) this.talk(L.snowman.made[this.counts.reveals % L.snowman.made.length])
     })
     this.after(1.9, () => {
       this.events.flash()
@@ -1542,6 +1548,7 @@ export class DecorateSnowman implements World3D {
   }
 
   dispose() {
+    this.gone = true
     this.scene.clear()
     this.bag.dispose()
   }
