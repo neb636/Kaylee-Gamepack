@@ -13,6 +13,7 @@ import { worldLink } from '../../../router'
 import { useSections } from '../../kit/sections'
 import type { PlaceProps } from '../../types'
 import { BoatTrip } from './activities/boat-trip/BoatTrip'
+import { dadReady } from './characters/dad-model'
 import { kayleeReady } from './characters/model'
 import { Hub } from './activities/hub/Hub'
 import { ThaiMap } from './activities/hub/map/ThaiMap'
@@ -25,9 +26,10 @@ import { MALL_FACTS, NAN_FACTS, TRIP_FACTS } from './trip/facts'
 
 export default function Place(props: PlaceProps) {
   const { meta, activity, earnStamp, backToMap, openActivity } = props
-  // Kaylee is the modelled vinyl toy: her GLB loads before any scene builds (PlaceFrame's Suspense shows Sparkle
-  // thinking meanwhile), so every Avatar is her from the first frame.
+  // Kaylee and Daddy are modelled vinyl toys: their GLBs load before any scene builds (PlaceFrame's Suspense shows
+  // Sparkle thinking meanwhile), so every Avatar is her and every Daddy is him from the first frame.
   use(kayleeReady())
+  use(dadReady())
   const [justEarned, setJustEarned] = useState<string | null>(null)
   if (activity === 'party') return <PartySoon backToMap={backToMap} />
   // The boat and Nan trips end on the Thailand map: the stamp, then the plane flies home and the stamp lands on the

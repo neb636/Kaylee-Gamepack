@@ -59,8 +59,8 @@ export function kayleeReady(): Promise<GLTF | null> {
 }
 
 const materials = new Map<Texture, MeshToonMaterial>()
-/** One toon material per texture, shared by every Kaylee (like toon.ts's palette materials). */
-function toonFor(map: Texture) {
+/** One toon material per texture, shared by every Kaylee (like toon.ts's palette materials; Daddy's model too). */
+export function toonFor(map: Texture) {
   let m = materials.get(map)
   if (!m) {
     m = new MeshToonMaterial({ map, gradientMap: toonGradient() })
@@ -182,10 +182,14 @@ export function paintedToon(map: Texture, parts: PaintPart[], colors: Record<Pai
   return m
 }
 
+/** Her cut caps (the shoulders and the hips, in model meters): no ink on them. */
+const onHerCuts = (x: number, y: number) => (Math.abs(Math.abs(x) - SHOULDER_CUT) < 0.002 && y > 0.34 && y < 0.46) || Math.abs(y - HIP_CUT) < 0.001
+
 /** The outline hull for a scanned-looking mesh: outline.ts's welded copy, smoothed (Taubin: a shrink step and a
  *  slightly bigger grow step, so it keeps its size). The ink then follows the shape instead of every low-poly zigzag
- *  on the hair tips and bangs, and its normals stop pointing every which way in tight creases. */
-function smoothHull(geometry: BufferGeometry, rounds = 6, lift = 0) {
+ *  on the hair tips and bangs, and its normals stop pointing every which way in tight creases. `onCut` (x, y in the
+ *  mesh's own space) marks the flat caps left where a limb was cut off, which get no ink. */
+export function smoothHull(geometry: BufferGeometry, rounds = 6, lift = 0, onCut: ((x: number, y: number) => boolean) | null = onHerCuts) {
   const g = hullGeometry(geometry)
   const pos = g.attributes.position.array as Float32Array
   const original = pos.slice()
@@ -230,16 +234,55 @@ function smoothHull(geometry: BufferGeometry, rounds = 6, lift = 0) {
   }
   // No ink on the flat caps where the arms and legs were cut off: at rest the sleeve reads as one piece, and a raised
   // arm shows the shoulder (a leg out in front, the hip) without a line across it.
-  const onCut = (v: number) => {
-    const [x, y] = [original[v * 3], original[v * 3 + 1]]
-    return (Math.abs(Math.abs(x) - SHOULDER_CUT) < 0.002 && y > 0.34 && y < 0.46) || Math.abs(y - HIP_CUT) < 0.001
-  }
+  if (!onCut) return g
+  const cut = (v: number) => onCut(original[v * 3], original[v * 3 + 1])
   const kept: number[] = []
   for (let i = 0; i < idx.length; i += 3) {
-    if (!(onCut(idx[i]) && onCut(idx[i + 1]) && onCut(idx[i + 2]))) kept.push(idx[i], idx[i + 1], idx[i + 2])
+    if (!(cut(idx[i]) && cut(idx[i + 1]) && cut(idx[i + 2]))) kept.push(idx[i], idx[i + 1], idx[i + 2])
   }
   g.setIndex(kept)
   return g
+}
+
+/** The toon look on a modelled toy's pieces: each texture lit with the shared toon bands, and an ink hull on every
+ *  piece except the glossy eye domes (names starting with "eye"). `onCut` as in smoothHull. */
+export function inkPieces(meshes: Mesh[], bag: Bag, onCut: ((x: number, y: number) => boolean) | null = onHerCuts) {
+  for (const m of meshes) {
+    const map = (m.material as { map?: Texture | null }).map
+    if (map) {
+      m.material = toonFor(map)
+      m.userData.map = map
+    }
+    // The eye domes are glossy pieces sitting in the face: no ink ring around them.
+    if (!m.name.startsWith('eye')) {
+      // The hair's line is drawn a little nearer, so the bangs keep their line where they rest on the forehead (only
+      // the hair: on the face it would bring ink up through the creases around the nose and eyes).
+      const bias = m.name.startsWith('hair') ? HULL_BIAS : 0
+      // The face gets extra rounds and stands off: the sculpted mouth's dimples otherwise poke ink ticks through.
+      const shape = m.name.startsWith('face') ? smoothHull(m.geometry, 18, HULL_LIFT, onCut) : smoothHull(m.geometry, 6, 0, onCut)
+      const hull = new Mesh(bag.add(shape), outlineMaterial(PX, undefined, bias))
+      hull.userData.hull = PX
+      hull.userData.hullBias = bias
+      m.add(hull)
+    }
+  }
+}
+
+/** Turns an arm's swing plane forward by `tilt` (radians; `s` -1 left, 1 right): a tilted frame around the pivot and the
+ *  opposite turn inside it, so the rest pose is unchanged and an arm raised the code-built way (rotation.z, out to the
+ *  side) comes up in front instead of into big hair or a big head. Returns the inner group (turned like the body). */
+export function swingForward(arm: Group, s: -1 | 1, tilt: number): Group {
+  const frame = new Group()
+  frame.position.copy(arm.position)
+  frame.rotation.y = -s * tilt
+  arm.parent!.add(frame)
+  arm.position.set(0, 0, 0)
+  frame.add(arm)
+  const inner = new Group()
+  inner.rotation.y = s * tilt
+  inner.add(...arm.children)
+  arm.add(inner)
+  return inner
 }
 
 /** A rig like buildAnimal's, from the model. */
@@ -254,25 +297,7 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
   scene.traverse((o: Object3D) => {
     if (o instanceof Mesh) meshes.push(o)
   })
-  for (const m of meshes) {
-    const map = (m.material as { map?: Texture | null }).map
-    if (map) {
-      m.material = toonFor(map)
-      m.userData.map = map
-    }
-    // The eye domes are glossy pieces sitting in the face: no ink ring around them.
-    if (!m.name.startsWith('eye')) {
-      // The hair's line is drawn a little nearer, so the bangs keep their line where they rest on the forehead (only
-      // the hair: on the face it would bring ink up through the creases around the nose and eyes).
-      const bias = m.name.startsWith('hair') ? HULL_BIAS : 0
-      // The face gets extra rounds and stands off: the sculpted mouth's dimples otherwise poke ink ticks through.
-      const shape = m.name.startsWith('face') ? smoothHull(m.geometry, 18, HULL_LIFT) : smoothHull(m.geometry)
-      const hull = new Mesh(bag.add(shape), outlineMaterial(PX, undefined, bias))
-      hull.userData.hull = PX
-      hull.userData.hullBias = bias
-      m.add(hull)
-    }
-  }
+  inkPieces(meshes, bag)
 
   const root = new Group()
   const [body, head, eyes, armL, armR, tail, legL, legR] = ['body', 'head', 'eyes', 'armL', 'armR', 'tail', 'legL', 'legR'].map(node)
@@ -284,19 +309,9 @@ export function buildModelRig(gltf: GLTF, bag: Bag): Rig {
   // A held thing goes in a group at each hoof, inside that turn back (so it's turned like her body at rest).
   const hands: Group[] = []
   for (const [arm, s] of [[armL, -1], [armR, 1]] as const) {
-    const tilt = new Group()
-    tilt.position.copy(arm.position)
-    tilt.rotation.y = -s * ARM_TILT
-    arm.parent!.add(tilt)
-    arm.position.set(0, 0, 0)
-    tilt.add(arm)
-    const inner = new Group()
-    inner.rotation.y = s * ARM_TILT
-    inner.add(...arm.children)
-    arm.add(inner)
     const hand = new Group()
     hand.position.set(...along(s, HOOF))
-    inner.add(hand)
+    swingForward(arm, s, ARM_TILT).add(hand)
     hands.push(hand)
   }
 
