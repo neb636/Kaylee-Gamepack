@@ -1,11 +1,10 @@
-// Canada (plan: planning/around-the-world/canada.html): ocean to ocean on the Maple Leaf Train. The home base is the 3D
-// toy-table map (activities/hub/, map/): push the train from Quebec to the Pacific, stop at a station and its two
-// activities pop up. Each activity is its own folder in activities/ (the 3D ones and the 2D ones that bring a big piece
+// Canada (plan: planning/around-the-world/canada.html): ocean to ocean on a 3D map. The home base is the 3D
+// toy-table map (activities/hub/, map/): tap any activity pin from Quebec to the Pacific and play immediately. Each activity is its own folder in activities/ (the 3D ones and the 2D ones that bring a big piece
 // load on their own, so the hub brings no more than it needs): Sugar Snow (taffy/, 2D), Carnival Snowballs (snowman/,
 // 3D), Mountain Bike (bike/, 3D), Campfire Night (campfire/, 2D), Red Canoe (canoe/, 3D), Animal Bridge (bridge/, 2D),
 // Whale Watch (whales/, 3D), Salmon Leap (salmon/, 2D), and the finale in Ottawa (party/). Every activity gets
 // CanadaActivityProps (activities/props.ts): `onDone` at its payoff shows the stamp and the sticker, then the video,
-// then the train. Maple's animal book (book/) is over everything: meet(id) pops its card up from any activity.
+// then the map. Maple's animal book (book/) is over everything: meet(id) pops its card up from any activity.
 import { lazy, Suspense, useState, type ComponentType, type LazyExoticComponent } from 'react'
 import { StampEarned } from '../../kit/StampEarned'
 import { VideoBreak } from '../../kit/Theater'
@@ -66,7 +65,7 @@ export default function Place(props: PlaceProps) {
           closeIcon="🚂 ▶"
           onClose={() => {
             setJustEarned(null)
-            // A real-world video about what she just played comes next (skippable), then the train.
+            // A real-world video about what she just played comes next (skippable), then the map.
             const video = meta.videos?.find((v) => v.after === info.id)
             if (video) {
               setProgress(0, 0)

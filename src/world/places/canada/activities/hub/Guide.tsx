@@ -1,4 +1,4 @@
-// Sparkle in the corner of the train map: she waves as she says the few things there are to say (push the train, tap a
+// Sparkle in the corner of the 3D map: she waves as she says the few things there are to say (tap a
 // bubble, a landmark's name the first time she pokes it), with the words in a bubble beside her for Dad. Tap her to
 // hear the last line again. The hub (Hub.tsx) decides what she says and when.
 import { AnimatePresence, motion } from 'motion/react'

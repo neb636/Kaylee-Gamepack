@@ -1,23 +1,6 @@
-// Canada's hub: the toy-table map of Canada and the red Maple Leaf Train. Her finger grabs the train and pushes it along
-// the track: slowly and it creeps, hard and it whooshes, chuffs, puffs and whistles, and the camera rides along. Let go
-// and it rolls on and slows down. Tap a stop and it drives there by itself; tap the land and it drives to the nearest bit
-// of track. At a stop the station's lamp lights up and that stop's two activities pop up over it.
-//
-// How it deepens: (1) push it back and forth in Quebec, whistle and smoke; (2) push it across the country: forests,
-// the yellow prairies, the Rockies rising, a loop inside the Spiral Tunnel's mountain, the Pacific; (3) sometimes an
-// animal sits on the track (the moose, a bison, a goose family): the train slows by itself and stops, she taps the
-// animal and it ambles off. Never a crash.
-//
-// Maple the beaver (the chibi rig) waits on Quebec City's platform the first time, tells the story, then hops into the
-// open car and rides along: she waves at every stop. Her hockey team gathers on Ottawa's frozen canal, one animal per
-// stamp. Things to poke: the CN Tower's elevator, Niagara Falls' rainbow, Montmorency Falls, a polar bear on the ice in
-// James Bay (Hudson Bay's south end), an orca and a beluga that jump, the ferry on the St. Lawrence, a V of geese, the
-// Mountie on his horse who waves his hat, the bison that rolls in the dust, snow off a mountain, a tree, the sea.
-// The world says what happened (MapEvents); the hub (activities/hub/Hub.tsx) does the talking. Nothing here comes from
-// Thailand.
-import { Color, Group, Mesh, Plane, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
+// Canada’s 3D map: activity pins open immediately; scenery and animals remain touchable.
+import { Color, Group, Mesh, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { bell, clamp, sounds, span } from '../../../../sdk'
-import { knobs, watch } from '../../../kit/knobs'
 import { noise, sfx, tone } from '../../../kit/sfx'
 import type { AnchorInfo } from '../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../engine3d/camera'
@@ -30,68 +13,27 @@ import type { World3D } from '../../../engine3d/View3D'
 import { Water } from '../../../engine3d/water'
 import { CANADA_LOOKS } from '../characters/looks'
 import { Actor } from './actor'
-import { proj, regionAt, SPIRAL, STOPS, unproj, type LL, type Region } from './canada'
+import { proj, STOPS, unproj, type LL, type Region } from './canada'
 import { beluga, bison, cnTower, ferry, goose, montmorency, mountie, niagara, orca, type Bison, type Goose, type Mountie } from './critters'
 import { buildLand, buildMountains, buildPortals, buildTrees, type Peak } from './land'
-import { Smoke } from './smoke'
 import { CANAL, stationParts, TRACK_X } from './stations'
 import { TEAMMATE } from './team'
-import { LAND_TOP, RAIL_Y, Track } from './track'
-import { buildTrain, CHIMNEY, turnRods } from './train'
-
-const FILE = 'src/world/places/canada/map/map.ts'
-/** How the train feels under her finger (live in the feel lab: ?feel=1 on the map's links). */
-const PUSH = knobs('train', 'Push the train', FILE, {
-  follow: { value: 5, min: 1, max: 15, step: 0.5, label: 'Follow', unit: '/s', note: 'how eagerly the train catches up with her finger (higher = stuck to it)' },
-  top: { value: 4.5, min: 1, max: 10, step: 0.25, label: 'Top speed', unit: 'm/s', note: 'the fastest a push can make it go (the map is about 40 m of track)' },
-  accel: { value: 9, min: 1, max: 30, step: 0.5, label: 'Pick-up', unit: 'm/s²', note: 'how quickly it speeds up and slows down under her finger' },
-  coast: { value: 0.7, min: 0.1, max: 4, step: 0.05, label: 'Roll on', unit: '/s', note: 'how quickly it slows down after she lets go (lower = rolls further)' },
-  whistle: { value: 2.8, min: 0.5, max: 8, step: 0.1, label: 'Whistle speed', unit: 'm/s', note: 'push it faster than this and the whistle blows' },
-  cruise: { value: 3.2, min: 0.5, max: 8, step: 0.1, label: 'Drive-there speed', unit: 'm/s', note: 'how fast it goes by itself to a stop or a spot she tapped' },
-  grab: { value: 80, min: 30, max: 200, step: 5, label: 'Grab reach', unit: 'px', note: 'how far from the train her finger can land and still grab it' },
-})
+import { LAND_TOP, Track } from './track'
 
 export interface MapStart {
-  /** Where the train is. */
   at: Region
-  /** A fresh visit: show the whole country first, then glide down to the train. */
-  intro: boolean
-  /** Maple waits on Quebec City's platform to tell the story (the first visit); otherwise she's already in the train. */
-  story?: boolean
-  /** Her hockey team on Ottawa's canal: the activities she has stamps for (map/team.ts). */
   team?: string[]
 }
-/** Somebody on the track, a poke, or a friend she tapped. */
 export type Blocker = 'moose' | 'bison' | 'geese'
 export type Poke = 'cn' | 'niagara' | 'montmorency' | 'polar' | 'orca' | 'beluga' | 'ferry' | 'flock' | 'mountie'
 export interface MapEvents {
-  /** The train rode into another region (for the line at the bottom). */
-  where(r: Region): void
-  /** The train came to a stop (for the address bar). */
-  stopped(r: Region): void
-  /** She tapped an activity's bubble at a lit stop, and it's ready. */
-  open(activity: string): void
-  /** She tapped a bubble that isn't ready (still in the works, or the finale before the team is all there). */
-  soon?(activity: string): void
-  /** The train pulled in at a stop (its lamp lit up). */
-  arrived?(stop: Region): void
-  /** The train went into the Spiral Tunnel. */
-  tunnel?(): void
-  /** The train stopped short of an animal on the track. */
-  blocked?(kind: Blocker): void
-  /** She tapped something alive or a landmark: `animal:moose`, `animal:moose:off` (once it's off the track),
-   *  `poke:orca`, `team:bike`, `maple`. */
+  open(id: string): void
+  soon?(act: string): void
   poked?(id: string): void
-  /** Nothing touched for a while: what to point at (the train, or the bubbles when it's at a stop). */
-  idle?(what: 'train' | 'bubble'): void
-  /** Her finger grabbed the train. */
-  pushed?(): void
 }
 
 export const MAP_ANCHORS: AnchorInfo[] = [
-  { id: 'train', label: 'The Maple Leaf Train: push it', kind: 'thing' },
   { id: 'maple', label: 'Maple the beaver', kind: 'thing' },
-  ...STOPS.map((s) => ({ id: `stop:${s.id}`, label: `The ${s.id} stop`, kind: 'thing' as const })),
   { id: 'animal:moose', label: 'A moose on the track', kind: 'thing' },
   { id: 'animal:bison', label: 'A bison on the track', kind: 'thing' },
   { id: 'animal:geese', label: 'A goose family on the track', kind: 'thing' },
@@ -108,21 +50,11 @@ export const MAP_ANCHORS: AnchorInfo[] = [
   { id: 'team', label: 'Your hockey team on the frozen canal', kind: 'thing' },
 ]
 
-/** Where the train waits when a link starts somewhere that isn't a stop. */
-const START_AT: Partial<Record<Region, LL>> = { forest: [-86.5, 49.1], prairies: [-104.6, 50.5], rockies: [-121.0, 50.6] }
-/** The train: the engine's middle at `s`, two cars behind it (toward the east). */
-const CAR_GAP = 0.72
-const TRAIN_LEN = CAR_GAP * 2
-/** Somebody on the track: the train stops this far before them. */
-const STOP_GAP = 0.6
-const BRAKE = 4
-/** No touch for this long: the train toots ("push me") and the hub may give a hint. */
-const INVITE_S = 8
 const SKY = '#E3F3FF'
 /** Maple's and the moose's heights on the map. */
 const MAPLE_H = 0.36
 const MOOSE_H = 0.46
-/** The polar bear's floe in James Bay: the camera leans north to show it as the train passes below. */
+/** The polar bear's floe in James Bay. */
 const POLAR_AT: LL = [-80.0, 51.75]
 
 const tmp = new Vector3()
@@ -135,10 +67,7 @@ interface Stop {
   acts: string[]
   at: Vector3
   root: Group
-  lamp: Mesh
   top: number
-  lit: boolean
-  ringT: number
 }
 
 interface OnTrack {
@@ -161,8 +90,6 @@ interface OnTrack {
   hopT: number
   /** The bison's roll in the dust (s), -1 when it isn't rolling. */
   rollT: number
-  /** The train stopped for it and told the hub (once per time it's on the track). */
-  told: boolean
 }
 
 interface PokeThing {
@@ -194,44 +121,13 @@ export class CanadaMap implements World3D {
   private h = 1
   private tall = false
   private time = 0
-  private lastTouch = 0
   private touches = 0
   private anchorEls = new Map<string, HTMLElement>()
   private raycaster = new Raycaster()
-  private ground = new Plane(new Vector3(0, 1, 0), -RAIL_Y)
-  private unwatch: () => void
-
-  // ---- The train: where the engine is along the track (m) and how fast it goes (m/s, + = west).
-  private s = 0
-  private v = 0
-  private mode: 'idle' | 'push' | 'goto' = 'idle'
-  private goal = 0
-  private grabOffset = 0
-  private finger: { x: number; y: number } | null = null
-  private fingerGap = 0
-  private chuffAt = 0
-  private whistleT = 9
-  private wheelTurn = 0
-  private engine: Group
-  private cars: Group[]
-  private wheels: Object3D[]
-  private rods: Object3D[]
-  private seat: Vector3
-  private hidden: readonly [number, number]
-  private wasInTunnel = false
-  private intro: number
+  private top = 0
   private region: Region
-  private resting = true
-  private inviteAt = INVITE_S
-  private lookNorth = 0
 
-  // ---- Maple: on the platform (the story), hopping in, or riding in the open car.
   private maple: Actor
-  private mapleMode: 'platform' | 'boarding' | 'riding'
-  private boardT = 0
-  private boardFrom = new Vector3()
-  private hintKind: 'train' | 'bubble' | null = null
-
   // ---- What's on the map.
   private stops: Stop[] = []
   private blockers: OnTrack[] = []
@@ -239,12 +135,11 @@ export class CanadaMap implements World3D {
   private mountains: Group
   private trees: Group
   private land: Group
-  private smoke: Smoke
   private puffs: Particles
   private dust: Particles
   private foam: Particles
-  /** The whole country (the first look, before it glides down to the train). */
-  private overview: Shot = { center: new Vector3(), half: new Vector3(), yaw: 0, pitch: 62 }
+  /** Keep the whole country in view. */
+  private overview: Shot = { center: new Vector3(), half: new Vector3(), yaw: 0, pitch: 62, maxDist: 240 }
   private pokes = new Map<Poke, PokeThing>()
   private rainbow = new Group()
   private flock: Goose[] = []
@@ -256,7 +151,6 @@ export class CanadaMap implements World3D {
   private mountie: Mountie
   private team: Mate[] = []
   private lampOn = toon(PAL.gold)
-  private lampOff = toon('#8E87A8')
 
   constructor(
     private renderer: WebGLRenderer,
@@ -282,27 +176,15 @@ export class CanadaMap implements World3D {
     this.peaks = mountains.peaks
     this.scene.add(this.mountains)
     const portals = buildPortals(this.bag, this.track)
-    this.hidden = portals.inside
     this.scene.add(portals.group)
     this.buildStops()
     const stopAt = this.stops.map((s) => s.at)
     this.trees = buildTrees(this.bag, this.track, (x, z) => stopAt.some((p) => Math.hypot(x - p.x, z - p.z) < 0.9) || this.peaks.some((p) => Math.hypot(x - p.x, z - p.z) < p.r * 0.9) || this.nearPoke(x, z))
     this.scene.add(this.trees)
 
-    const train = buildTrain(this.bag)
-    this.engine = train.engine
-    this.cars = train.cars
-    this.wheels = train.wheels
-    this.rods = train.rods
-    this.seat = new Vector3(...train.seat)
-    this.scene.add(this.engine, ...this.cars)
     this.maple = new Actor(this.bag, CANADA_LOOKS.maple, MAPLE_H, 'maple')
-    this.mapleMode = start.story ? 'platform' : 'riding'
-    if (this.mapleMode === 'riding') {
-      this.cars[0].add(this.maple.root)
-      this.maple.root.position.copy(this.seat)
-    } else this.scene.add(this.maple.root)
-    this.maple.root.children[0].visible = this.mapleMode !== 'riding'
+    this.maple.root.position.copy(this.stops.find((s) => s.id === 'quebec')!.at).add(new Vector3(0, 0, 0.5))
+    this.scene.add(this.maple.root)
 
     this.buildBlockers()
     this.buildPokes()
@@ -310,60 +192,12 @@ export class CanadaMap implements World3D {
     this.mountie = this.buildMountie()
     this.buildTeam(start.team ?? [])
 
-    this.smoke = new Smoke(70, this.bag)
     this.puffs = new Particles({ kind: 'spray', count: 60, colors: ['#FFFFFF', '#E4F1EC', '#FBEA9A'], gravity: 3 }, this.bag)
     this.dust = new Particles({ kind: 'spray', count: 40, colors: ['#E8D3A6', '#D9BE8C', '#F3E2BC'], gravity: 1.2 }, this.bag)
     this.foam = new Particles({ kind: 'foam', count: 40, opacity: 0.9 }, this.bag)
-    this.scene.add(this.smoke.mesh, this.puffs.mesh, this.dust.mesh, this.foam.mesh)
+    this.scene.add(this.puffs.mesh, this.dust.mesh, this.foam.mesh)
 
-    // Where the link starts.
-    const stop = this.stops.find((s) => s.id === start.at)
-    const ll = START_AT[start.at]
-    const s0 = stop ? stop.s : ll ? this.sAt(ll) : this.stops[1].s
-    this.s = this.track.clampS(Math.max(TRAIN_LEN + 0.05, s0 + CAR_GAP))
-    this.region = this.regionNow()
-    // Anybody the train would be sitting on (or stuck against) has already wandered off.
-    for (const b of this.blockers) if (b.s > this.s - TRAIN_LEN - STOP_GAP - 0.1 && b.s < this.s + STOP_GAP + 0.1) this.wander(b)
-    this.intro = start.intro ? 2.4 : 0
-    this.placeTrain()
-    this.placeMaple(0)
-
-    // The feel lab's graph: how far her finger is ahead of the train, and the train's speed.
-    this.unwatch = watch('train', () => ({
-      'finger ahead (m)': [this.fingerGap, 4],
-      'speed (m/s)': [this.v, PUSH.top],
-    }))
-  }
-
-  // ---------------------------------------------------------------- the hub's handles
-
-  /** Maple acts something out (the hub calls this as she talks). */
-  mapleDoes(a: 'wave' | 'hop' | 'cheer') {
-    this.maple.play(a)
-  }
-
-  /** Maple hops from the platform into the open car (after the story, or as soon as the train moves). */
-  board() {
-    if (this.mapleMode !== 'platform') return
-    this.mapleMode = 'boarding'
-    this.boardT = 0
-    this.boardFrom.copy(this.maple.root.position)
-    sfx.boing()
-  }
-
-  /** A hand points at the train or at the bubbles until her next touch. */
-  hint(what: 'train' | 'bubble' | null) {
-    this.hintKind = what
-  }
-
-  /** Her finger is on the train. */
-  get pushing() {
-    return this.mode === 'push'
-  }
-
-  /** Is the train standing at a stop (and which)? */
-  get litStopId(): Region | null {
-    return this.stops.find((s) => s.lit)?.id ?? null
+    this.region = start.at
   }
 
   // ---------------------------------------------------------------- building
@@ -403,11 +237,11 @@ export class CanadaMap implements World3D {
       root.rotation.y = Math.atan2(-nz, nx)
       const look = stationParts(st.id)
       root.add(solid(merge(look.parts), this.bag, 2))
-      const lamp = new Mesh(this.bag.add(P.sphere(0.05, '#ffffff', {}, 12)), this.lampOff)
+      const lamp = new Mesh(this.bag.add(P.sphere(0.05, '#ffffff', {}, 12)), this.lampOn)
       lamp.position.set(...look.lamp)
       root.add(lamp)
       this.scene.add(root)
-      this.stops.push({ id: st.id, s, acts: st.acts, at: root.position, root, lamp, top: look.top, lit: false, ringT: -1 })
+      this.stops.push({ id: st.id, s, acts: st.acts, at: root.position, root, top: look.top })
     }
   }
 
@@ -419,7 +253,7 @@ export class CanadaMap implements World3D {
       this.track.tangent(s, tan)
       const yaw = Math.atan2(tan.x, tan.z)
       const root = new Group()
-      const b: OnTrack = { kind, s, root, home: p.clone().setY(LAND_TOP), away: new Vector3(), yaw: 0, state: 'on', t: 0, nudge: -1, hopT: -1, rollT: -1, told: false }
+      const b: OnTrack = { kind, s, root, home: p.clone().setY(LAND_TOP), away: new Vector3(), yaw: 0, state: 'on', t: 0, nudge: -1, hopT: -1, rollT: -1 }
       if (kind === 'moose') {
         b.moose = new Actor(this.bag, CANADA_LOOKS.moose, MOOSE_H, 'moose')
         root.add(b.moose.root)
@@ -524,27 +358,14 @@ export class CanadaMap implements World3D {
   // ---------------------------------------------------------------- World3D
 
   private shot(): Shot {
-    if (this.intro > 0) return this.overview
-    // The story: close in on Maple on Quebec City's platform, the train beside her.
-    if (this.mapleMode === 'platform') {
-      const at = this.maple.root.position
-      return { center: new Vector3(at.x, LAND_TOP + 0.25, at.z - 0.1), half: this.tall ? new Vector3(1.0, 0.5, 1.2) : new Vector3(1.5, 0.5, 0.9), yaw: 0, pitch: 42 }
-    }
-    const mid = this.track.at(this.s - CAR_GAP + clamp(this.v * 0.3, -1.2, 1.2), tmp)
-    // Passing below James Bay, the camera leans north so she can see the polar bear on the ice.
-    const north = this.lookNorth * (this.tall ? 1.1 : 1.3)
-    return {
-      center: new Vector3(mid.x, LAND_TOP + 0.25, mid.z - (this.tall ? 0.7 : 0.35) - north),
-      half: this.tall ? new Vector3(2.1, 0.6, 2.6) : new Vector3(3.4, 0.6, 2.1),
-      yaw: 0,
-      pitch: 50,
-    }
+    return this.overview
   }
 
   setSize(w: number, h: number, top: number) {
     this.w = w
     this.h = h
     this.tall = h > w
+    this.top = top
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
     this.rig.setShot(this.shot(), true)
@@ -555,273 +376,23 @@ export class CanadaMap implements World3D {
   }
 
   get calm() {
-    // The friends breathe and skate all the time, so the frame loop never drops to 30 while they're on screen... but
-    // that's fine for a map this size; nothing else here needs 60 when still.
-    return this.v === 0 && this.mode !== 'push' && this.intro <= 0 && !this.rig.moving && !this.busy()
-  }
-
-  private busy() {
-    return (
-      this.whistleT < 1.2 ||
-      this.mapleMode === 'boarding' ||
-      this.maple.busy ||
-      this.smoke.busy ||
-      this.stops.some((s) => s.ringT >= 0) ||
-      this.blockers.some((b) => b.state === 'leaving' || b.state === 'back' || b.hopT >= 0 || b.nudge >= 0 || b.rollT >= 0) ||
-      [...this.pokes.values()].some((p) => p.t >= 0)
-    )
+    return !this.rig.moving && !this.maple.busy && !this.blockers.some((b) => b.state === 'leaving' || b.state === 'back' || b.rollT >= 0) && ![...this.pokes.values()].some((p) => p.t >= 0)
   }
 
   update(dt: number) {
     const t = (this.time += dt)
-    if (this.intro > 0) {
-      this.intro -= dt
-      if (this.intro <= 0) this.rig.lag = 0.9
-    } else if (this.rig.lag > 0.45 && !this.rig.moving) this.rig.lag = 0.45
-    this.moveTrain(dt)
-    this.placeTrain()
-    this.placeMaple(dt)
-    this.updateStops(dt)
+    this.maple.update(dt, t, { up: 0.25 })
     this.updateBlockers(dt, t)
     this.updatePokes(dt, t)
     this.updateTeam(dt, t)
-    this.updateInvite(dt)
-    this.smoke.update(dt)
     this.puffs.update(dt)
     this.dust.update(dt)
     this.foam.update(dt)
     this.water.update(t)
-    const c = this.track.at(this.s - CAR_GAP, tmp)
-    const [px] = proj(POLAR_AT)
-    const want = this.region === 'forest' || this.region === 'ottawa' ? clamp(1 - Math.abs(c.x - px) / 4.5, 0, 1) : 0
-    this.lookNorth += (smoothstep(want) - this.lookNorth) * (1 - Math.exp(-1.5 * dt))
+    const c = this.overview.center
     this.lights.follow(c.x, c.y, c.z)
     this.rig.setShot(this.shot())
     this.rig.update(dt)
-  }
-
-  // ---------------------------------------------------------------- the train
-
-  private moveTrain(dt: number) {
-    let want: number | null = null
-    if (this.mode === 'push' && this.finger) {
-      const hit = this.groundAt(this.finger.x, this.finger.y)
-      if (hit) {
-        const target = this.track.nearest(hit.x, hit.z, this.s - this.grabOffset, 2.5).s + this.grabOffset
-        this.fingerGap = target - this.s
-        want = clamp(this.fingerGap * PUSH.follow, -PUSH.top, PUSH.top)
-      }
-    } else if (this.mode === 'goto') {
-      const d = this.goal - this.s
-      if (Math.abs(d) < 0.03 && Math.abs(this.v) < 0.3) {
-        this.mode = 'idle'
-        this.v = 0
-      } else want = Math.sign(d) * Math.min(PUSH.cruise, Math.abs(d) * 2.2 + 0.15)
-    }
-    if (want !== null) this.v += clamp(want - this.v, -PUSH.accel * dt, PUSH.accel * dt)
-    else {
-      this.v *= Math.exp(-PUSH.coast * dt)
-      if (Math.abs(this.v) < 0.03) this.v = 0
-    }
-    // Somebody on the track: slow down by itself and stop short of them.
-    const lo = TRAIN_LEN + 0.05
-    let min = lo
-    let max = this.track.length
-    for (const b of this.blockers) {
-      if (b.state === 'off' || b.state === 'leaving') continue
-      if (b.s > this.s) max = Math.min(max, b.s - STOP_GAP)
-      else if (b.s < this.s - TRAIN_LEN) min = Math.max(min, b.s + STOP_GAP + TRAIN_LEN)
-    }
-    if (this.v > 0) this.v = Math.min(this.v, Math.sqrt(2 * BRAKE * Math.max(0, max - this.s)))
-    if (this.v < 0) this.v = Math.max(this.v, -Math.sqrt(2 * BRAKE * Math.max(0, this.s - min)))
-    const before = this.s
-    this.s += this.v * dt
-    // The ends of the line: a soft bump.
-    if (this.s <= lo || this.s >= this.track.length) {
-      if (Math.abs(this.v) > 1) sfx.thump()
-      this.s = clamp(this.s, lo, this.track.length)
-      this.v = -this.v * 0.15
-    }
-    this.s = clamp(this.s, Math.min(min, before), Math.max(max, before))
-    // Pressed up against an animal: it gets a nudge (and a snort). Stopped next to one: the hub hears about it once.
-    for (const b of this.blockers) {
-      if (b.state !== 'on') continue
-      const gap = b.s > this.s ? b.s - STOP_GAP - this.s : this.s - TRAIN_LEN - STOP_GAP - b.s
-      if (gap < 0.12 && !b.told && Math.abs(this.v) < 0.2) {
-        b.told = true
-        this.events.blocked?.(b.kind)
-      }
-      if (b.nudge >= 0) continue
-      const pushing = this.mode === 'push' ? Math.sign(this.fingerGap) === Math.sign(b.s - this.s) && Math.abs(this.fingerGap) > 0.2 : this.mode === 'goto'
-      if (gap < 0.03 && pushing) {
-        b.nudge = 0
-        snort(b.kind)
-      }
-    }
-    const moved = this.s - before
-    this.wheelTurn += moved
-    // Chuff-chuff, quicker the faster it goes; puffs of smoke; the whistle when she pushes it fast.
-    const speed = Math.abs(this.v)
-    this.chuffAt += Math.abs(moved)
-    if (this.chuffAt > 0.32 && speed > 0.15) {
-      this.chuffAt = 0
-      noise(0.08, Math.min(0.09, 0.025 + speed * 0.012), 'bandpass', 520, 260, 0, 1.6)
-      this.puff(0.16 + Math.min(0.12, speed * 0.03), 1)
-    }
-    this.whistleT += dt
-    if (speed > PUSH.whistle && this.whistleT > 2.5 && this.mode === 'push') this.whistle()
-    if (this.mode !== 'push') this.fingerGap = 0
-    // Maple hops in as soon as the train moves.
-    if (speed > 0.05 && this.mapleMode === 'platform') this.board()
-    // Into the Spiral Tunnel.
-    const inside = this.inTunnel(this.s - CAR_GAP)
-    if (inside && !this.wasInTunnel) this.events.tunnel?.()
-    this.wasInTunnel = inside
-    // Where it is now (the line at the bottom), and where it stopped (the address bar).
-    const r = this.regionNow()
-    if (r !== this.region) {
-      this.region = r
-      this.events.where(r)
-    }
-    const resting = this.v === 0 && this.mode !== 'push'
-    if (resting && !this.resting) this.events.stopped(this.litStop()?.id ?? r)
-    this.resting = resting
-  }
-
-  private regionNow(): Region {
-    const p = this.track.at(this.s - CAR_GAP, tmp)
-    return regionAt(unproj(p.x, p.z))
-  }
-
-  /** Inside the Spiral Tunnel's mountain (hidden). */
-  private inTunnel(s: number) {
-    return s > this.hidden[0] + 0.1 && s < this.hidden[1] - 0.1
-  }
-
-  private placeTrain() {
-    const parts = [this.engine, ...this.cars]
-    parts.forEach((g, i) => {
-      const s = this.s - i * CAR_GAP
-      this.track.at(s, g.position)
-      g.position.y = LAND_TOP + 0.05
-      this.track.tangent(s, tan)
-      g.rotation.y = Math.atan2(tan.x, tan.z)
-      // A little rock at speed.
-      g.rotation.z = Math.sin(this.time * 9 + i) * Math.min(0.03, Math.abs(this.v) * 0.008)
-      // The whole train hides inside the tunnel (the mountain is hollow only in our heads).
-      g.visible = !this.inTunnel(s)
-    })
-    for (const w of this.wheels) w.rotation.x = this.wheelTurn / (w.userData.r ?? 0.065)
-    turnRods(this.rods, this.wheelTurn / 0.085)
-  }
-
-  /** Maple: on the platform, hopping into the car in an arc, or sitting in it. */
-  private placeMaple(dt: number) {
-    const m = this.maple
-    if (this.mapleMode === 'platform') {
-      // Beside the open car, on the side nearer her, turned to face her.
-      const car = this.cars[0]
-      const a = car.localToWorld(tmp.set(0.36, 0, 0)).clone()
-      const b = car.localToWorld(tmp.set(-0.36, 0, 0))
-      m.root.position.copy(a.z > b.z ? a : b).setY(LAND_TOP)
-      m.root.rotation.y = 0
-      m.update(dt, this.time, { look: 0, up: 0.25 })
-      return
-    }
-    if (this.mapleMode === 'boarding') {
-      this.boardT += dt
-      const p = Math.min(1, this.boardT / 0.7)
-      const to = this.cars[0].localToWorld(tmp.copy(this.seat))
-      m.root.position.lerpVectors(this.boardFrom, to, smoothstep(p))
-      m.root.position.y += Math.sin(p * Math.PI) * 0.35
-      m.update(dt, this.time, { lift: 0, sit: p > 0.85 })
-      if (p >= 1) {
-        this.mapleMode = 'riding'
-        this.cars[0].add(m.root)
-        m.root.position.copy(this.seat)
-        m.root.rotation.set(0, 0, 0)
-        m.root.children[0].visible = false
-        sfx.thump()
-      }
-      return
-    }
-    // Riding: she faces the way they're going, and turns to look at her when the train stands still.
-    const still = Math.abs(this.v) < 0.05
-    m.root.rotation.y += ((still ? this.towardCamera(this.cars[0]) : 0) - m.root.rotation.y) * (1 - Math.exp(-4 * dt))
-    m.update(dt, this.time, { sit: true, up: still ? 0.35 : 0.1, look: still ? 0 : Math.sin(this.time * 0.7) * 0.3 })
-  }
-
-  /** The turn (in the car's frame) that faces the camera. */
-  private towardCamera(car: Group) {
-    const world = Math.atan2(this.rig.camera.position.x - car.position.x, this.rig.camera.position.z - car.position.z)
-    let a = world - car.rotation.y
-    while (a > Math.PI) a -= Math.PI * 2
-    while (a < -Math.PI) a += Math.PI * 2
-    return clamp(a, -1.4, 1.4)
-  }
-
-  /** The chimney's spot (or the mountain's top while the train is in the tunnel). */
-  private chimney(out: Vector3) {
-    if (this.inTunnel(this.s)) {
-      const [x, z] = proj(SPIRAL)
-      return out.set(x, LAND_TOP + 2.0, z)
-    }
-    return this.engine.localToWorld(out.set(...CHIMNEY))
-  }
-
-  private puff(size: number, n: number) {
-    const c = this.chimney(tmp2)
-    // The smoke drifts back behind the train as it goes.
-    this.track.tangent(this.s, tan)
-    const back = -Math.sign(this.v || 1) * Math.min(1.2, Math.abs(this.v) * 0.35)
-    for (let i = 0; i < n; i++) this.smoke.emit(c.x, c.y, c.z, tan.x * back + (Math.random() - 0.5) * 0.12, 0.5 + Math.random() * 0.25, tan.z * back + (Math.random() - 0.5) * 0.12, 1.6 + Math.random() * 0.6, size * (0.8 + Math.random() * 0.5))
-  }
-
-  private whistle() {
-    this.whistleT = 0
-    const echo = this.inTunnel(this.s) ? 0.4 : 1
-    tone(740, 760, 0.42, 0.09 * echo, 'triangle')
-    tone(932, 950, 0.42, 0.06 * echo, 'triangle')
-    tone(740, 760, 0.55, 0.09 * echo, 'triangle', 0.5)
-    tone(932, 950, 0.55, 0.06 * echo, 'triangle', 0.5)
-    this.puff(0.3, 5)
-  }
-
-  // ---------------------------------------------------------------- the stops
-
-  private litStop(): Stop | undefined {
-    let best: Stop | undefined
-    let bd = Infinity
-    for (const st of this.stops) {
-      const d = Math.min(...[0, 1, 2].map((i) => Math.abs(this.s - i * CAR_GAP - st.s)))
-      if (d < bd) {
-        bd = d
-        best = st
-      }
-    }
-    return bd < 0.75 ? best : undefined
-  }
-
-  private updateStops(dt: number) {
-    const near = Math.abs(this.v) < 0.5 && this.mode !== 'push' && this.intro <= 0 ? this.litStop() : undefined
-    for (const st of this.stops) {
-      const lit = st === near
-      if (lit && !st.lit) {
-        st.ringT = 0
-        tone(1320, 1320, 0.7, 0.07)
-        tone(1760, 1760, 0.6, 0.04, 'sine', 0.08)
-        if (this.mapleMode === 'riding') this.maple.play('wave')
-        if (st.id === 'ottawa') this.team.forEach((m, i) => (m.cheerAt = this.time + 0.2 + i * 0.18))
-        this.events.arrived?.(st.id)
-      }
-      st.lit = lit
-      st.lamp.material = lit ? this.lampOn : this.lampOff
-      if (st.ringT >= 0) {
-        st.ringT += dt
-        st.lamp.scale.setScalar(1 + 0.6 * bell(Math.min(1, st.ringT / 0.5)))
-        if (st.ringT > 0.5) st.ringT = -1
-      }
-    }
   }
 
   // ---------------------------------------------------------------- her hockey team
@@ -860,16 +431,14 @@ export class CanadaMap implements World3D {
         if (p >= 1) {
           b.state = b.state === 'leaving' ? 'off' : 'on'
           b.t = 0
-          b.told = false
           b.root.rotation.y = b.yaw
           // Off the track, the bison has a good roll in the dust.
           if (b.state === 'off' && b.bison) this.roll(b)
         }
       } else if (b.state === 'off') {
-        // Back on the track after a while, once the train is far away (so she meets them again on another trip), but
-        // only once each: three forced taps on every crossing got old (playtest, 2026-10-28).
+        // Wander back once after a while, ready for another hello.
         b.t += dt
-        if (!b.returned && b.t > 40 && Math.abs(b.s - (this.s - CAR_GAP)) > 7) {
+        if (!b.returned && b.t > 40) {
           b.state = 'back'
           b.t = 0
           b.returned = true
@@ -887,7 +456,7 @@ export class CanadaMap implements World3D {
         else y += bell(span(p, 0.15, 0.8)) * 0.1
       }
       if (b.moose) {
-        // The moose looks at the train when it's close, and chews.
+        // The moose looks around and chews.
         b.moose.update(dt, t, { walk: walking, look: b.state === 'on' ? Math.sin(t * 0.6) * 0.3 : 0 })
         b.moose.rig.body.scale.x *= 1 + sq
         b.moose.rig.mouth.scale.y = 1 + 0.25 * Math.abs(Math.sin(t * 5))
@@ -929,14 +498,6 @@ export class CanadaMap implements World3D {
     if (b.rollT >= 0) return
     b.rollT = 0
     noise(0.6, 0.06, 'lowpass', 600, 200, 0.2, 0.8)
-  }
-
-  /** Already off the track (no walk). */
-  private wander(b: OnTrack) {
-    b.state = 'off'
-    b.t = 0
-    b.root.position.copy(b.away)
-    b.root.rotation.y = b.yaw
   }
 
   // ---------------------------------------------------------------- pokes
@@ -1034,8 +595,8 @@ export class CanadaMap implements World3D {
     const f = p.root
     if (!f.visible) {
       this.flockT -= dt
-      if (this.flockT > 0 || this.intro > 0) return
-      const c = this.track.at(this.s - CAR_GAP, tmp)
+      if (this.flockT > 0) return
+      const c = this.overview.center
       const dir = Math.random() < 0.5 ? 1 : -1
       this.flockFrom.set(c.x + 7 * dir, LAND_TOP + 2.0, c.z - 1.5)
       this.flockTo.set(c.x - 7 * dir, LAND_TOP + 2.0, c.z - 0.5)
@@ -1098,26 +659,6 @@ export class CanadaMap implements World3D {
     }
   }
 
-  // ---------------------------------------------------------------- the nudge when nobody plays
-
-  private updateInvite(dt: number) {
-    if (this.intro > 0 || this.mode === 'push' || this.v !== 0 || this.mapleMode !== 'riding') {
-      this.inviteAt = INVITE_S
-      return
-    }
-    this.inviteAt -= dt
-    if (this.inviteAt <= 0) {
-      this.inviteAt = INVITE_S * 1.5
-      const lit = this.stops.find((s) => s.lit)
-      if (!lit) {
-        // A little toot and a puff: "push me".
-        tone(740, 760, 0.25, 0.05, 'triangle')
-        this.puff(0.22, 2)
-      }
-      this.events.idle?.(lit ? 'bubble' : 'train')
-    }
-  }
-
   render() {
     this.renderer.render(this.scene, this.rig.camera)
     this.stats.calls = this.renderer.info.render.calls
@@ -1129,11 +670,6 @@ export class CanadaMap implements World3D {
   private ray(x: number, y: number) {
     this.raycaster.setFromCamera(new Vector2((x / this.w) * 2 - 1, -(y / this.h) * 2 + 1), this.rig.camera)
     return this.raycaster
-  }
-
-  /** Where her finger points on the rails' level. */
-  private groundAt(x: number, y: number) {
-    return this.ray(x, y).ray.intersectPlane(this.ground, new Vector3())
   }
 
   private toScreen(v: Vector3) {
@@ -1148,62 +684,17 @@ export class CanadaMap implements World3D {
     return Math.hypot(b.x - a.x, b.y - a.y)
   }
 
-  /** Is her finger on (or near) the train? */
-  private nearTrain(x: number, y: number) {
-    if (this.inTunnel(this.s - CAR_GAP)) return false
-    return [this.engine, ...this.cars].some((g) => {
-      const p = this.toScreen(g.getWorldPosition(tmp))
-      return Math.hypot(p.x - x, p.y - y) < PUSH.grab
-    })
-  }
-
-  pointerDown(x: number, y: number, id?: string) {
-    this.lastTouch = this.time
-    this.inviteAt = INVITE_S
-    this.hintKind = null
-    if (this.intro > 0) this.intro = 0
-    if (id === 'train' || (!id && this.nearTrain(x, y))) {
-      const hit = this.groundAt(x, y)
-      // Where along the train she grabbed it (the engine or a car), so that spot stays under her finger.
-      this.grabOffset = hit ? this.s - this.track.nearest(hit.x, hit.z, this.s - CAR_GAP, 1.6).s : CAR_GAP
-      this.finger = { x, y }
-      this.mode = 'push'
-      sounds.pickup()
-      this.events.pushed?.()
-    }
-  }
-
-  pointerMove(x: number, y: number, _dx: number, _dy: number, held: boolean) {
-    if (held && this.mode === 'push') this.finger = { x, y }
-  }
-
-  pointerUp() {
-    if (this.mode === 'push') {
-      this.mode = 'idle'
-      this.finger = null
-    }
-  }
+  pointerDown() {}
+  pointerMove() {}
+  pointerUp() {}
 
   tap(x: number, y: number, id?: string) {
-    this.lastTouch = this.time
     this.touches++
-    this.hintKind = null
-    if (this.intro > 0) this.intro = 0
-    if (this.mode === 'push') this.pointerUp()
     if (id?.startsWith('go:')) return this.tapBubble(id.slice(3))
     if (id === 'maple') {
       this.maple.play('hop')
       sfx.boing()
       this.events.poked?.('maple')
-      return
-    }
-    if (id === 'train' || (!id && this.nearTrain(x, y))) return this.whistle()
-    if (id?.startsWith('stop:')) {
-      const st = this.stops.find((s) => s.id === id.slice(5))!
-      if (st.lit) {
-        st.ringT = 0
-        sounds.sparkle()
-      } else this.driveTo(st.s + CAR_GAP)
       return
     }
     if (id === 'team') {
@@ -1264,16 +755,7 @@ export class CanadaMap implements World3D {
       this.foam.burst(at.x, 0.02, at.z, 5, 0.6, 0, 0.2)
       return
     }
-    // The land: the train drives to the nearest bit of track (if it's anywhere near).
-    const near = this.track.nearest(at.x, at.z, this.s - CAR_GAP, 12)
-    if (near.d < 2.5) this.driveTo(near.s + CAR_GAP)
-    else sfx.fwip()
-  }
-
-  private driveTo(s: number) {
-    this.goal = this.track.clampS(Math.max(TRAIN_LEN + 0.05, s))
-    this.mode = 'goto'
-    sounds.whoosh()
+    sfx.fwip()
   }
 
   private tapBubble(act: string) {
@@ -1292,44 +774,38 @@ export class CanadaMap implements World3D {
 
   placeAnchors() {
     const min = Math.min(this.w, this.h) < 500 ? 64 : 88
-    const lit = this.stops.find((s) => s.lit)
-    let bubbleAt: { x: number; y: number } | null = null
+    // A pair of pins per destination, west to east. Leader lines keep nearby Quebec destinations distinct.
+    // Lay them out in screen space so every activity stays visible and targets never overlap.
+    const order = ['bc', 'banff', 'ottawa', 'quebec', 'msa']
+    const left = min / 2 + (this.w < 500 ? 10 : 24)
+    const right = this.w - left
+    const top = Math.max(this.top + min / 2 + 28, this.h * (this.tall ? 0.38 : 0.34))
+    const bottom = Math.max(top + min + 32, Math.min(this.h * 0.76, this.h - (min === 64 ? 140 : 190)))
     for (const [id, el] of this.anchorEls) {
-      let spot: { x: number; y: number; size: number; h?: number; z: number; glow?: boolean } | null = null
-      if (id === 'hint') continue
-      if (id === 'train') {
-        if (!this.inTunnel(this.s - CAR_GAP)) {
-          const at = this.track.at(this.s - CAR_GAP, tmp).setY(LAND_TOP + 0.25)
-          const s = this.toScreen(at)
-          spot = { x: s.x, y: s.y, size: Math.max(min, this.pxPerM(at) * 1.1), z: 9000 }
+      let spot: { x: number; y: number; size: number; h?: number; z: number } | null = null
+      if (id.startsWith('line:')) continue
+      if (id.startsWith('go:')) {
+        const act = id.slice(3)
+        const stop = this.stops.find((s) => s.acts.includes(act))!
+        const col = order.indexOf(stop.id)
+        const row = stop.acts.indexOf(act)
+        const x = left + (right - left) * col / 4
+        const y = stop.acts.length === 1 ? (top + bottom) / 2 : row ? bottom : top
+        spot = { x, y, size: min, z: 9500 }
+        const origin = this.toScreen(tmp.copy(stop.at).setY(LAND_TOP + stop.top))
+        const line = this.anchorEls.get(`line:${act}`)
+        if (line) {
+          line.style.transform = `translate3d(${origin.x}px, ${origin.y}px, 0) rotate(${Math.atan2(y - origin.y, x - origin.x)}rad)`
+          line.style.width = `${Math.hypot(y - origin.y, x - origin.x)}px`
         }
       } else if (id === 'maple') {
-        if (this.mapleMode !== 'boarding' && !(this.mapleMode === 'riding' && this.inTunnel(this.s - CAR_GAP))) {
-          const at = this.maple.center(tmp).add(new Vector3(0, 0.08, 0))
-          const s = this.toScreen(at)
-          // Smaller than the train's target and on top of it, so the rest of the train still grabs.
-          spot = { x: s.x, y: s.y - min * 0.25, size: min * 0.8, z: 9100 }
-        }
-      } else if (id.startsWith('stop:')) {
-        const st = this.stops.find((s) => s.id === id.slice(5))!
-        const at = tmp.copy(st.at).setY(LAND_TOP + 0.2)
-        const s = this.toScreen(at)
-        spot = { x: s.x, y: s.y, size: Math.max(min, this.pxPerM(at) * 0.6), z: 7000 }
-      } else if (id.startsWith('go:')) {
-        const act = id.slice(3)
-        const i = lit ? lit.acts.indexOf(act) : -1
-        if (lit && i >= 0 && this.intro <= 0 && this.mapleMode === 'riding') {
-          const s = this.toScreen(tmp.copy(lit.at).setY(LAND_TOP + lit.top))
-          const size = min * 1.1
-          const n = lit.acts.length
-          spot = { x: s.x + (i - (n - 1) / 2) * size * 1.15, y: Math.max(s.y - size * 0.6, size * 0.6 + min), size, z: 9500 }
-          if (i === 0) bubbleAt = spot
-        }
+        const p = this.toScreen(this.maple.center(tmp))
+        spot = { x: p.x, y: p.y, size: min, z: 4000 }
       } else if (id.startsWith('animal:')) {
         const b = this.blockers.find((k) => k.kind === id.slice(7))!
         const at = tmp.copy(b.root.position).setY(LAND_TOP + (b.moose ? 0.22 : 0.15))
         const s = this.toScreen(at)
-        spot = { x: s.x, y: s.y, size: Math.max(min, this.pxPerM(at) * 0.5), z: 8000, glow: b.state === 'on' && Math.abs(this.v) < 0.05 && Math.abs(b.s - this.s) < 1.2 + TRAIN_LEN && this.closeTo(b) }
+        spot = { x: s.x, y: s.y, size: Math.max(min, this.pxPerM(at) * 0.5), z: 8000 }
       } else if (id === 'team') {
         if (this.team.length) {
           const ottawa = this.stops.find((s) => s.id === 'ottawa')!
@@ -1346,57 +822,26 @@ export class CanadaMap implements World3D {
           spot = { x: s.x, y: s.y, size: Math.max(min, this.pxPerM(at) * p.r * 2), z: id === 'poke:flock' ? 8500 : 5000 }
         }
       }
-      const show = !!spot && this.intro <= 0 && spot.x > -spot.size / 2 && spot.x < this.w + spot.size / 2 && spot.y > -spot.size / 2 && spot.y < this.h + spot.size / 2
+      const show = !!spot && spot.x >= 0 && spot.x <= this.w && spot.y >= this.top && spot.y <= this.h
       if (show && spot) {
         const h = spot.h ?? spot.size
-        el.style.transform = `translate3d(${(spot.x - spot.size / 2).toFixed(1)}px, ${(spot.y - h / 2).toFixed(1)}px, 0)`
-        el.style.width = `${spot.size.toFixed(0)}px`
-        el.style.height = `${h.toFixed(0)}px`
+        el.style.transform = `translate3d(${spot.x - spot.size / 2}px, ${spot.y - h / 2}px, 0)`
+        el.style.width = `${spot.size}px`
+        el.style.height = `${h}px`
         el.style.zIndex = String(spot.z)
-        const shadow = spot.glow ? '0 0 0 6px rgba(255,79,154,.55), 0 0 26px 10px rgba(255,200,61,.7)' : ''
-        if (!id.startsWith('go:') && el.style.boxShadow !== shadow) el.style.boxShadow = shadow
       }
-      const want = show ? '' : 'none'
-      if (el.style.display !== want) el.style.display = want
+      el.style.display = show ? '' : 'none'
     }
-    // The pointing hand (a hint): over the train, or over the first bubble.
-    const hand = this.anchorEls.get('hint')
-    if (hand) {
-      let at: { x: number; y: number } | null = null
-      if (this.hintKind === 'bubble' && bubbleAt) at = bubbleAt
-      else if (this.hintKind === 'train' && !this.inTunnel(this.s - CAR_GAP)) at = this.toScreen(this.track.at(this.s - CAR_GAP * 0.5, tmp).setY(LAND_TOP + 0.3))
-      if (at) hand.style.transform = `translate3d(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px, 0)`
-      const want = at && this.intro <= 0 ? '' : 'none'
-      if (hand.style.display !== want) hand.style.display = want
-    }
-  }
-
-  /** The train is stopped right next to this animal. */
-  private closeTo(b: OnTrack) {
-    return b.s > this.s ? b.s - STOP_GAP - this.s < 0.1 : this.s - TRAIN_LEN - STOP_GAP - b.s < 0.1
   }
 
   // ---------------------------------------------------------------- QA
 
   qa() {
-    const lit = this.stops.find((s) => s.lit)
     return {
-      s: +this.s.toFixed(2),
-      length: +this.track.length.toFixed(1),
-      speed: +this.v.toFixed(2),
-      mode: this.mode,
+      mode: 'pins',
       region: this.region,
-      lit: lit?.id ?? null,
-      inTunnel: this.inTunnel(this.s - CAR_GAP),
-      tunnel: this.hidden.map((v) => +v.toFixed(2)),
-      intro: this.intro > 0,
-      maple: this.mapleMode,
-      hint: this.hintKind,
       team: this.team.map((m) => m.act),
-      animals: Object.fromEntries(this.blockers.map((b) => [b.kind, `${b.state} @${b.s.toFixed(1)}`])),
-      stops: Object.fromEntries(this.stops.map((s) => [s.id, +s.s.toFixed(2)])),
       touches: this.touches,
-      idle: +(this.time - this.lastTouch).toFixed(1),
     }
   }
 
@@ -1405,7 +850,6 @@ export class CanadaMap implements World3D {
   }
 
   dispose() {
-    this.unwatch()
     this.scene.clear()
     this.bag.dispose()
   }

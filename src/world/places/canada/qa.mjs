@@ -5,8 +5,7 @@ import { vp } from '../../../../scripts/qa-lib.mjs'
 
 /** Screenshots (scripts/qa-screens.mjs): how to get to each screen from a fresh start. */
 export const screens = [
-  // Canada: the train map: the whole country first, then the train at each stop and on the way (the
-  // prairies, just out of the Spiral Tunnel); then an activity's and the finale's "coming soon" cards.
+  // Canada: all activity pins on the 3D country map, including older region links.
   { name: 'canada-intro', hash: '#/world/canada', reset: true, wait: 900 },
   ...['msa', 'quebec', 'ottawa', 'prairies', 'banff', 'rockies', 'bc'].map((at) => ({ name: `canada-map-${at}`, hash: `#/world/canada/hub/map?at=${at}`, reset: true, wait: 2200 })),
   // Mountain Bike: the gondola, each stretch from its link (berms: both ways), the waterfall at the end.
@@ -34,7 +33,7 @@ export const screens = [
 
 /** Auto-played runs (scripts/qa-pacing.mjs): talk before the first touch, talk per touch, the play strip. */
 export const pacing = [
-  { name: 'canada train map', id: 'canada', hash: '#/world/canada', reset: true },
+  { name: 'canada pin map', id: 'canada', hash: '#/world/canada', reset: true },
   { name: 'canada mountain bike', id: 'bike', hash: '#/world/canada/bike', reset: true },
   { name: 'canada sugar snow', id: 'taffy', hash: '#/world/canada/taffy', reset: true },
   // Campfire Night: a tap moves the flashlight there and a tap on eyes finds the animal at once,
@@ -60,44 +59,6 @@ export const pacing = [
 
 /** Filmed moments (scripts/qa-motion.mjs): the core verbs, driven the way a child would. */
 export const motion = []
-
-// Canada's train map: the train grabbed in Quebec and pushed west hard (it chugs, puffs and whistles, the
-// camera rides along), let go to roll on; then by Ottawa a tap sends the moose on the track ambling off with a snort, and
-// a second tap makes it hop where it stands.
-motion.push(
-  {
-    name: 'canada-push',
-    seconds: 7,
-    setup: async (page, base) => {
-      await page.goto(`${base}#/world/canada/hub/map?at=quebec`)
-      await page.waitForFunction(() => window.__canadaMapQA?.().mode, null, { timeout: 20000 })
-      await page.waitForTimeout(1500)
-    },
-    act: async (page) => {
-      const b = await page.locator('[data-anchor="train"]').boundingBox()
-      if (!b) throw new Error('no train')
-      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2)
-      await page.mouse.down()
-      await page.mouse.move(vp.width * 0.08, b.y + b.height / 2, { steps: 25 })
-      await page.waitForTimeout(2500)
-      await page.mouse.up()
-    },
-  },
-  {
-    name: 'canada-moose',
-    seconds: 8,
-    setup: async (page, base) => {
-      await page.goto(`${base}#/world/canada/hub/map?at=ottawa`)
-      await page.waitForFunction(() => window.__canadaMapQA?.().mode, null, { timeout: 20000 })
-      await page.waitForTimeout(1500)
-    },
-    act: async (page) => {
-      await page.locator('[data-anchor="animal:moose"]').click({ force: true })
-      await page.waitForTimeout(400)
-      await page.locator('[data-anchor="animal:moose"]').click({ force: true })
-    },
-  },
-)
 
 // Sugar Snow: her finger tips the pot and pours a wave of syrup across the snow (thin where she moves,
 // a puddle where she stops), it steams and sets, then the stick rolls it back up into a lollipop that flies to Maple.
