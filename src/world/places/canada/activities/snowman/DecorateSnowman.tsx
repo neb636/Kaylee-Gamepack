@@ -49,6 +49,8 @@ export function DecorateSnowman({ onDone, setProgress }: Partial<CanadaActivityP
   const cardRef = useRef<HTMLDivElement>(null)
   const sparkle = useRef<PuppetHandle>(null)
   const finished = useRef(false)
+  const said = useRef<SnowmanSection>(run.section)
+  const drums = useRef(0)
   const cb = useRef({ onDone, setProgress })
   cb.current = { onDone, setProgress }
 
@@ -72,15 +74,19 @@ export function DecorateSnowman({ onDone, setProgress }: Partial<CanadaActivityP
 
   const events = useRef<StudioEvents>({
     section: (s, made) => {
+      // Each friend's picture keeps the address bar up to date, but Sparkle only says what to do once per part.
+      const fresh = s !== said.current
+      said.current = s
       setSection(s)
       enter(s, state(s, made))
       progress(s)
       // (The parade's line is Maple's, and she says it herself.)
       if (s === 'parade') setLine(SAY.parade)
-      else guide(SAY[s])
+      else if (fresh) guide(SAY[s])
     },
     card: setCard,
-    ready: () => guide(L.snowman.drum),
+    // The drum: Sparkle says it the first time; after that it only shows (and bounces).
+    ready: () => guide(L.snowman.drum, drums.current++ === 0),
     flash: () => setFlash((f) => f + 1),
     hint: (kind) => guide(HINTS[kind], spendHint(HINTS[kind])),
     done: () => {
@@ -106,6 +112,8 @@ export function DecorateSnowman({ onDone, setProgress }: Partial<CanadaActivityP
     setCard(null)
     setSection(s)
     setLine(SAY[s])
+    said.current = s
+    drums.current = 0
     setRun((r) => ({ section: s, made: 0, n: r.n + 1 }))
   }
 

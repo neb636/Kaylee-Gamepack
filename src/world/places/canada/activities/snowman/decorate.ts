@@ -613,7 +613,13 @@ export class DecorateSnowman implements World3D {
 
   /** A tap on a tool: it goes and does a short go by itself (a smile in coal, a carrot nose, an arm, a hat on). */
   private tapTool(t: Tool) {
-    if (this.auto || !t.root.visible) return
+    if (!t.root.visible || this.auto?.tool === t) return
+    // A tap on another tool while one is doing its go: that one finishes where it is, and this one starts.
+    if (this.auto) {
+      const a = this.auto.tool
+      this.auto = null
+      this.letGo(a)
+    }
     if (this.reveal >= 0 || !this.man || this.man.state !== 'play') {
       this.toolPops.set(t, 0)
       sfx.boing()
@@ -773,8 +779,9 @@ export class DecorateSnowman implements World3D {
   }
 
   private leave() {
-    // A stroke that touched him counts (a long one a bit more).
-    if (this.stroke.hit) this.addWork(1 + Math.floor(this.stroke.n / 8))
+    // A stroke that touched him counts (a long one a bit more, but never more than two: one sweep of paint mustn't
+    // finish a round).
+    if (this.stroke.hit) this.addWork(Math.min(2, 1 + Math.floor(this.stroke.n / 8)))
     this.stroke = { hit: false, n: 0 }
     this.tip.set(NaN, NaN)
     this.lastDot.set(NaN, NaN)
@@ -789,7 +796,13 @@ export class DecorateSnowman implements World3D {
   private addWork(n: number) {
     this.work += n
     this.counts.strokes++
-    if (this.work >= this.enough && !this.drum.ready && this.reveal < 0) {
+    this.drumIfReady()
+  }
+
+  /** Enough decorating: the drum pops up (in a friend's round, only once the friend is there with their picture). */
+  private drumIfReady() {
+    const waiting = this.round === 'friends' && this.friend?.state !== 'wait'
+    if (this.work >= this.enough && !this.drum.ready && this.reveal < 0 && !waiting) {
       this.drum.root.scale.setScalar(0.001)
       this.drum.appear()
       this.drum.ready = true
@@ -1112,6 +1125,7 @@ export class DecorateSnowman implements World3D {
     fr.f.wave()
     this.talk(L.snowman.friend[fr.f.card].hi, true)
     this.events.card(fr.f.card)
+    this.drumIfReady()
   }
 
   /** The friends walk (in, and off with their snowman), turning to where they go and then to her. */
@@ -1157,6 +1171,11 @@ export class DecorateSnowman implements World3D {
     this.paradeT = 0
     this.setTray()
     this.talk(L.snowman.parade, true)
+    // Maple drums the parade on the carnival drum.
+    this.drum.root.scale.setScalar(0.001)
+    this.drum.root.visible = false
+    this.drum.appear()
+    this.drum.ready = false
     this.maple.drumming = true
     this.trumpet.toot()
     toot()
@@ -1295,7 +1314,7 @@ export class DecorateSnowman implements World3D {
     if (this.paradeT >= 0) {
       this.paradeT += dt
       const left = this.men.filter((m) => m.state === 'parade')
-      if (this.doneT < 0 && (left.length === 0 || this.paradeT > 14)) {
+      if (this.doneT < 0 && (left.length === 0 || this.paradeT > 10)) {
         this.doneT = 0
         this.maple.cheer()
         sounds.fanfare()
@@ -1332,6 +1351,12 @@ export class DecorateSnowman implements World3D {
       } else if (k < 1.6) {
         const h = ((k - 0.4) / 0.6) % 1
         y = Math.sin(h * Math.PI) * 0.45
+        // He lands with a squash.
+        if (h > 0.85 || h < 0.08) {
+          const q = h > 0.85 ? (h - 0.85) / 0.15 : 1 - h / 0.08
+          sy = 1 - q * 0.12
+          sx = 1 + q * 0.07
+        }
         if (h > 0.9 && this.ready('wake-land', 0.3)) pat()
       } else if (k < 2.6) m.wob = Math.sin((k - 1.6) * 18) * 0.12 * (1 - (k - 1.6))
     } else if (m.state === 'walk' || m.state === 'parade') {
@@ -1340,7 +1365,7 @@ export class DecorateSnowman implements World3D {
         const dx = to.x - m.x
         const dz = to.z - m.z
         const d = Math.hypot(dx, dz)
-        const speed = m.state === 'parade' ? 2.2 : 1.8
+        const speed = m.state === 'parade' ? 3 : 1.8
         if (d < 0.05) m.route.shift()
         else {
           const s = Math.min(d, speed * dt)

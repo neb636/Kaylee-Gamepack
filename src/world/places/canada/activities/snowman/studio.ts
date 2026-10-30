@@ -16,7 +16,7 @@ export const SINK = 0.16
 /** Maple, beside him, facing him. */
 export const MAPLE_AT = { x: -1.6, z: 2.5, yaw: 0.35 }
 /** The parade drum: it pops up when he's decorated enough (tap it and he wakes up). */
-export const DRUM_AT = { x: -3.0, z: -0.2 }
+export const DRUM_AT = { x: -3.1, z: -0.8 }
 /** On a tall screen there's no room out to the left: the drum stands just behind him on the right. */
 export const DRUM_TALL = { x: 1.5, z: 0.05 }
 /** The parade line: finished snowmen wait to the right, a little further back. */
