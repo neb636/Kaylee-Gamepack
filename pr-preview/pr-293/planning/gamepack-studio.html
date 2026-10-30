@@ -199,7 +199,7 @@
               "n": 5,
               "title": "Verify build and local flows",
               "status": "done",
-              "md": "Game npm run verify; studio builds; 49 Node contracts; deterministic Electron lab smoke (preview, Undo, stale response, cancellation, tab persistence, source/character handoffs and iframe isolation); single-concept generation/refinement with actual pixel validation. Real Codex camera and feel requests passed. Claude returned a clear sign-in error; its adapter passed fixture contracts.",
+              "md": "Game npm run verify; studio builds; 50 Node contracts; deterministic Electron lab smoke (preview, Undo, stale response, cancellation, tab persistence, source/character handoffs and iframe isolation); single-concept generation/refinement with actual pixel validation. Real Codex camera and feel requests passed. Claude returned a clear sign-in error; its adapter passed fixture contracts.",
               "date": "2026-10-30"
             },
             {
@@ -219,6 +219,13 @@
               "status": "done",
               "summary": "The local studio is built and tested: three live labs, AI control previews and Undo, one-concept creation and five character-workflow handoffs.",
               "md": "The game’s web labs remain available for iPad and PR testing. Electron 45 runs locally, and its dependencies currently report zero audit vulnerabilities. No generated art, new family facts or runtime model changes are part of the migration. Claude needs /login on this machine; Tripo generation and Blender setup remain explicit handoffs. AI tuning receives structured scene/control context, without an automatic screenshot. The desktop window and macOS Dock reuse the game’s existing 512px icon export, from the same artwork as the iOS home-screen icon."
+            },
+            {
+              "title": "Review: keep Undo usable and scoped to its scene",
+              "date": "2026-10-30",
+              "status": "done",
+              "summary": "Confirmed and fixed both review findings: unsuccessful follow-ups preserve the last Undo snapshot, and Undo checks the hash section plus game parameters before restoring.",
+              "md": "Regression coverage includes failed, cancelled, stale and no-change requests after a successful preview, navigation within the game to another section and back, and hash query parameters such as road/round while ignoring the outer studio query and lab slider values."
             }
           ]
         }
