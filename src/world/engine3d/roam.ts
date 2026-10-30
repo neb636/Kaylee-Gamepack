@@ -1,6 +1,6 @@
 // Roblox's iPad controls, for any 3D world where Kaylee walks around (she plays Roblox a lot, and her fingers already
-// know them): a drag that starts on the left half of the screen is a thumbstick that walks her (it appears under her
-// finger; one also rests bottom left), a jump button bottom right hops, a one-finger drag on the right half
+// know them): a drag that starts on the left half of the screen is a thumbstick that walks her (a compact hint appears bottom left
+// for two seconds when the drag starts), a jump button bottom right hops, a one-finger drag on the right half
 // swings the camera around her and a two-finger pinch moves it in and out. Taps still poke things and walk her there.
 //
 // A world opts in with `roam()` (View3D.tsx shows the stick and the button, RoamPad.tsx) and a shot with `roam` limits

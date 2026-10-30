@@ -161,3 +161,7 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
 - `?debug=1` shows a tuning panel (camera, light bands, outlines, walk), and `?fps=N` overrides the frame-rate cap.
   Every screen is WebGL2 only: there are no flat fallbacks.
 - `window.__thaiHouseQA()` is read-only state for tests. There are no jump hooks: tests open section links.
+
+**Movement hint (2026-10-30).** The walking indicator is now a 72–88px hint fixed bottom left. It starts hidden,
+shows for two seconds when a walking drag begins, then fades even during a long drag. Left-half drag origins and
+walking sensitivity stay the same. Next: Dad checks the house and mall on the iPad PR preview.
