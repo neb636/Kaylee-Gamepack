@@ -14,11 +14,13 @@ import { WorkspaceFiles, WorkspaceRoots } from "./workspace-files";
 import { StudioServer } from './studio-server';
 import { STUDIO_ORIGIN } from '../shared/labs';
 import { GameServer, validateGameCheckout } from './game-server';
+import { createQuitHandler } from './quit-handler';
 import { LabAi } from './lab-ai';
 const labAi = new LabAi();
 const repoRoot = app.isPackaged ? null : process.env.STUDIO_REPO_ROOT || path.resolve(__dirname, '../../..');
 let servingRoot: string | undefined;
 let serverQueue = Promise.resolve();
+let quitting = false;
 // Same artwork as iOS Add to Home Screen, using its larger existing web export for the Dock.
 const appIcon = app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.resolve(__dirname, '../../../public/icons/icon-512.png');
 const gameServer = new GameServer();
@@ -104,6 +106,7 @@ app.whenReady().then(async () => {
   ipcMain.handle('studio:repo-root', event => { trusted(event); if (repoRoot) roots.add(repoRoot); return repoRoot; });
   ipcMain.handle('studio:use-checkout', (event, root: unknown) => {
     trusted(event);
+    if (quitting) throw new Error('Studio is quitting.');
     const next = serverQueue.catch(() => {}).then(async () => {
       if (typeof root !== 'string') throw new Error('Choose a checkout.');
       await roots.resolve(root);
@@ -136,9 +139,12 @@ app.on("window-all-closed", () => {
   app.quit();
 });
 
-app.on("before-quit", () => {
-  gameServer.stop();
+app.on("before-quit", createQuitHandler(async () => {
+  quitting = true;
   studioServer.stop();
   agentSessionManager.terminateAll();
   ptyManager.terminateAll();
-});
+  // A checkout switch may still be starting a server. Drain it before the final stop.
+  await serverQueue.catch(() => {});
+  await gameServer.stop();
+}, () => app.quit(), error => console.error('Studio cleanup failed', error)));
