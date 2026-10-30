@@ -13,6 +13,9 @@ import { WorkspaceFiles, WorkspaceRoots } from "./workspace-files";
 
 import { LabAi } from './lab-ai';
 const labAi = new LabAi();
+const repoRoot = process.env.STUDIO_REPO_ROOT || path.resolve(__dirname, '../../..');
+// Same artwork as iOS Add to Home Screen, using its larger existing web export for the Dock.
+const appIcon = path.resolve(__dirname, '../../../public/icons/icon-512.png');
 app.setName('Kaylee Gamepack Studio');
 app.setPath('userData', path.join(app.getPath('appData'), 'Kaylee Gamepack Studio'));
 if (process.env.WORKBENCH_USER_DATA_DIR) app.setPath("userData", process.env.WORKBENCH_USER_DATA_DIR);
@@ -43,6 +46,7 @@ function createWindow(): BrowserWindow {
     minHeight: 640,
     backgroundColor: "#f8f7f7",
     title: "Kaylee Gamepack Studio",
+    icon: appIcon,
     titleBarStyle: "hiddenInset",
     trafficLightPosition: { x: 22, y: 22 },
     webPreferences: {
@@ -76,8 +80,8 @@ function createWindow(): BrowserWindow {
 }
 
 app.whenReady().then(() => {
+  app.dock?.setIcon(appIcon);
   registerIpc(ptyManager, agentSessionManager, workspaceServices);
-  const repoRoot = process.env.STUDIO_REPO_ROOT || path.resolve(__dirname, '../../..');
   const trusted = (event: Electron.IpcMainInvokeEvent | Electron.IpcMainEvent) => {
     if (event.senderFrame !== event.sender.mainFrame) throw new Error('Only the studio can use native APIs');
   };
