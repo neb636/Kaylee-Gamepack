@@ -156,7 +156,8 @@ button.talk-bubble {
     align-items: flex-end !important;
   }
   .talk-guide .talk-bubble {
-    margin-bottom: 0 !important;
+    /* Right above her head; a guide whose corner has buttons over her (the boat trip's pose row) sets --guide-lift. */
+    margin-bottom: var(--guide-lift, 0px) !important;
     margin-left: 8px;
     max-width: min(420px, calc(100vw - 32px - var(--roam-left, 0px)));
   }

@@ -3,7 +3,7 @@
 // the flight attendant and the village kids (their 3D mouths move with their voice). A short bubble shows the words
 // for Dad, with who said them.
 import { AnimatePresence } from 'motion/react'
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type CSSProperties } from 'react'
 import { lineText, lineVoice, say, sounds, speakingVoice, SparklePuppet, TalkBubble, type Line, type PuppetHandle } from '../../../../../sdk'
 import { WHO } from '../../who'
 
@@ -91,7 +91,7 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9 }}
             // Over the pose buttons (on a narrow phone they sit higher, above Sparkle).
-            style={{ marginBottom: raised ? (window.innerWidth < 600 ? 'calc(min(150px, 20vh, 30vw) + 96px)' : 'clamp(80px, 14vmin, 128px)') : 'min(60px, 8vh)', transformOrigin: 'bottom left' }}
+            style={{ marginBottom: raised ? (window.innerWidth < 600 ? 'calc(min(150px, 20vh, 30vw) + 96px)' : 'clamp(80px, 14vmin, 128px)') : 'min(60px, 8vh)', transformOrigin: 'bottom left', ...(raised ? { '--guide-lift': '96px' } : {}) } as CSSProperties}
           >
             {lineText(line.l)}
           </TalkBubble>
