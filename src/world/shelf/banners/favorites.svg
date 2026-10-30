@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 450" preserveAspectRatio="xMidYMid slice">
+  <title>My favorites</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="345" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#a9b4f7"/><stop offset="1" stop-color="#f7d6ee"/></linearGradient>
+    <radialGradient id="glow" cx="430" cy="330" r="420" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff6fb" stop-opacity="0.85"/><stop offset="0.45" stop-color="#fff0f8" stop-opacity="0.35"/><stop offset="1" stop-color="#fff0f8" stop-opacity="0"/></radialGradient>
+    <radialGradient id="halo" cx="940" cy="240" r="210" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0.5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="fluff" x1="0" y1="330" x2="0" y2="450" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#f4effd"/></linearGradient>
+    <!-- a heart, 100 wide, centred on 0,0 -->
+    <path id="ht" d="M0 46C-26 30-50 10-50-14C-50-32-36-44-22-44C-11-44-4-38 0-29C4-38 11-44 22-44C36-44 50-32 50-14C50 10 26 30 0 46Z"/>
+    <clipPath id="hc"><use href="#ht"/></clipPath>
+    <path id="hl" d="M-37-16C-38-27-31-35-22-35" fill="none" stroke-width="7" stroke-linecap="round"/>
+    <g id="hPink"><g clip-path="url(#hc)"><use href="#ht" fill="#e7699c"/><use href="#ht" fill="#ff8fb8" x="-7" y="-9"/></g><use href="#hl" stroke="#ffc4da"/></g>
+    <g id="hHot"><g clip-path="url(#hc)"><use href="#ht" fill="#d8367f"/><use href="#ht" fill="#ff4f9a" x="-7" y="-9"/></g><use href="#hl" stroke="#ff8fc0"/></g>
+    <g id="hLav"><g clip-path="url(#hc)"><use href="#ht" fill="#937ee0"/><use href="#ht" fill="#b9a6f5" x="-7" y="-9"/></g><use href="#hl" stroke="#ddd2ff"/></g>
+    <!-- a little gold star and a sparkle -->
+    <path id="st" d="M0-15L4.1-5.7 14.3-4.6 6.7 2.2 8.8 12.1 0 7-8.8 12.1-6.7 2.2-14.3-4.6-4.1-5.7Z" stroke-linejoin="round" stroke-width="4"/>
+    <g id="star"><use href="#st" fill="#eba123" stroke="#eba123"/><use href="#st" fill="#ffc83d" stroke="#ffc83d" transform="translate(-1 -1.5) scale(.84)"/></g>
+    <path id="sp" d="M0-10l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>
+    <!-- the clouds the rainbow stands in -->
+    <path id="feet" d="M120 346a26 26 0 0 1 52 0a26 26 0 0 1-52 0zM152 322a34 34 0 0 1 68 0a34 34 0 0 1-68 0zM198 314a38 38 0 0 1 76 0a38 38 0 0 1-76 0zM250 332a28 28 0 0 1 56 0a28 28 0 0 1-56 0zM288 350a20 20 0 0 1 40 0a20 20 0 0 1-40 0zM120 344h208v40h-208zM566 348a20 20 0 0 1 40 0a20 20 0 0 1-40 0zM590 328a32 32 0 0 1 64 0a32 32 0 0 1-64 0zM630 316a38 38 0 0 1 76 0a38 38 0 0 1-76 0zM684 332a28 28 0 0 1 56 0a28 28 0 0 1-56 0zM722 350a20 20 0 0 1 40 0a20 20 0 0 1-40 0zM566 346h196v40h-196z"/>
+    <clipPath id="feetC"><use href="#feet"/></clipPath>
+    <!-- the sea of clouds -->
+    <path id="sea" d="M-10 392a44 44 0 0 1 88 0a44 44 0 0 1-88 0zM62 376a38 38 0 0 1 76 0a38 38 0 0 1-76 0zM128 390a36 36 0 0 1 72 0a36 36 0 0 1-72 0zM190 372a40 40 0 0 1 80 0a40 40 0 0 1-80 0zM262 388a38 38 0 0 1 76 0a38 38 0 0 1-76 0zM326 368a40 40 0 0 1 80 0a40 40 0 0 1-80 0zM398 384a38 38 0 0 1 76 0a38 38 0 0 1-76 0zM462 368a42 42 0 0 1 84 0a42 42 0 0 1-84 0zM538 386a36 36 0 0 1 72 0a36 36 0 0 1-72 0zM598 372a40 40 0 0 1 80 0a40 40 0 0 1-80 0zM668 388a38 38 0 0 1 76 0a38 38 0 0 1-76 0zM730 380a40 40 0 0 1 80 0a40 40 0 0 1-80 0zM1100 386a40 40 0 0 1 80 0a40 40 0 0 1-80 0zM1150 370a44 44 0 0 1 88 0a44 44 0 0 1-88 0zM-10 390h1220v70h-1220z"/>
+    <clipPath id="seaC"><use href="#sea"/></clipPath>
+    <!-- the flat-topped cloud the mascot stands on: flat from x 852 to 1028 at y 318, round shoulders, puffs stepping down -->
+    <path id="perch" d="M814 356a38 38 0 0 1 76 0a38 38 0 0 1-76 0zM990 356a38 38 0 0 1 76 0a38 38 0 0 1-76 0zM852 318h176v100h-176zM776 384a32 32 0 0 1 64 0a32 32 0 0 1-64 0zM1040 382a34 34 0 0 1 68 0a34 34 0 0 1-68 0zM800 356h260v80h-260z"/>
+    <clipPath id="perchC"><use href="#perch"/></clipPath>
+    <!-- puffs that tuck the mascot's cloud into the sea -->
+    <path id="tuck" d="M746 414a34 34 0 0 1 68 0a34 34 0 0 1-68 0zM800 426a36 36 0 0 1 72 0a36 36 0 0 1-72 0zM1004 428a36 36 0 0 1 72 0a36 36 0 0 1-72 0zM1062 414a36 36 0 0 1 72 0a36 36 0 0 1-72 0zM1124 424a38 38 0 0 1 76 0a38 38 0 0 1-76 0zM1180 408a40 40 0 0 1 80 0a40 40 0 0 1-80 0zM746 424h500v40h-500z"/>
+    <clipPath id="tuckC"><use href="#tuck"/></clipPath>
+  </defs>
+
+  <!-- the dreamy sky, a glow low in the middle, a soft halo where the mascot stands -->
+  <rect width="1200" height="450" fill="url(#sky)"/>
+  <circle cx="430" cy="330" r="420" fill="url(#glow)"/>
+  <circle cx="940" cy="240" r="210" fill="url(#halo)"/>
+
+  <!-- little clouds up high -->
+  <g fill="#fff" opacity="0.85">
+    <circle cx="96" cy="112" r="18"/><circle cx="126" cy="96" r="27"/><circle cx="160" cy="105" r="20"/><circle cx="182" cy="116" r="12"/>
+    <rect x="76" y="110" width="118" height="20" rx="10"/>
+  </g>
+  <g fill="#fff" opacity="0.7">
+    <circle cx="1112" cy="96" r="13"/><circle cx="1134" cy="86" r="19"/><circle cx="1158" cy="95" r="13"/>
+    <rect x="1098" y="94" width="74" height="14" rx="7"/>
+  </g>
+  <g fill="#fff" opacity="0.8">
+    <circle cx="590" cy="84" r="15"/><circle cx="614" cy="72" r="21"/><circle cx="640" cy="82" r="15"/>
+    <rect x="574" y="82" width="82" height="16" rx="8"/>
+  </g>
+
+  <!-- far clouds in the pink haze -->
+  <g fill="#f9e1f3">
+    <circle cx="330" cy="338" r="30"/><circle cx="378" cy="322" r="36"/><circle cx="436" cy="334" r="30"/><circle cx="488" cy="320" r="38"/><circle cx="546" cy="338" r="28"/>
+    <circle cx="1090" cy="340" r="28"/><circle cx="1140" cy="324" r="38"/><circle cx="1190" cy="336" r="28"/>
+    <rect x="300" y="336" width="280" height="50"/><rect x="1062" y="334" width="140" height="50"/>
+  </g>
+
+  <!-- the rainbow -->
+  <g fill="none" stroke-width="15.5" opacity="0.92">
+    <path d="M162 372A268 268 0 0 1 698 372" stroke="#ffb3cf"/>
+    <path d="M177 372A253 253 0 0 1 683 372" stroke="#ffcfae"/>
+    <path d="M192 372A238 238 0 0 1 668 372" stroke="#fff0a6"/>
+    <path d="M207 372A223 223 0 0 1 653 372" stroke="#b8f0d8"/>
+    <path d="M222 372A208 208 0 0 1 638 372" stroke="#bfe0ff"/>
+    <path d="M237 372A193 193 0 0 1 623 372" stroke="#d3c6ff"/>
+  </g>
+  <path d="M174 279A272 272 0 0 1 315 126" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- the clouds at the rainbow's feet -->
+  <g clip-path="url(#feetC)"><use href="#feet" fill="#e4ddf6"/><use href="#feet" fill="#fff" x="-7" y="-9"/></g>
+  <path d="M166 304C174 294 186 290 196 292M612 310C620 302 630 298 640 300" fill="none" stroke="#f1ecfc" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- floating hearts -->
+  <use href="#hHot" transform="translate(430 248) rotate(-6) scale(1.02)"/>
+  <use href="#hPink" transform="translate(110 224) rotate(-16) scale(.36)"/>
+  <use href="#hLav" transform="translate(330 282) rotate(-10) scale(.3)"/>
+  <use href="#hPink" transform="translate(540 290) rotate(12) scale(.26)"/>
+  <use href="#hLav" transform="translate(720 200) rotate(14) scale(.4)"/>
+
+  <!-- little stars and sparkles -->
+  <use href="#star" transform="translate(262 112) rotate(-10) scale(.7)"/>
+  <use href="#star" transform="translate(700 124) rotate(12) scale(.6)"/>
+  <use href="#star" transform="translate(70 300) rotate(8) scale(.5)"/>
+  <g fill="#fff">
+    <use href="#sp" transform="translate(186 268)"/><use href="#sp" transform="translate(372 196) scale(.8)"/>
+    <use href="#sp" transform="translate(520 140)"/><use href="#sp" transform="translate(676 268) scale(.7)"/>
+    <use href="#sp" transform="translate(54 168) scale(.8)"/>
+  </g>
+  <g fill="#fff" opacity="0.75">
+    <circle cx="150" cy="178" r="3"/><circle cx="476" cy="168" r="3"/><circle cx="626" cy="232" r="3"/><circle cx="760" cy="268" r="3.5"/><circle cx="40" cy="240" r="3"/>
+  </g>
+
+  <!-- the sea of clouds -->
+  <g clip-path="url(#seaC)"><use href="#sea" fill="#e4ddf6"/><use href="#sea" fill="url(#fluff)" x="-7" y="-9"/></g>
+
+  <!-- the mascot's cloud: a flat top, puffy shoulders, shaded on the right -->
+  <g clip-path="url(#perchC)"><use href="#perch" fill="#e4ddf6"/><use href="#perch" fill="url(#fluff)" x="-8" y="-9"/></g>
+  <path d="M826 344C830 332 840 326 852 326" fill="none" stroke="#f3eefe" stroke-width="5" stroke-linecap="round"/>
+  <g clip-path="url(#tuckC)"><use href="#tuck" fill="#e4ddf6"/><use href="#tuck" fill="url(#fluff)" x="-7" y="-9"/></g>
+</svg>
