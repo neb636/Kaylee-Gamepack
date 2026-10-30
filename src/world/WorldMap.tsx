@@ -202,7 +202,7 @@ export function WorldMap({ view: linked, face }: { view?: string; face?: string 
 
   const globe = view === 'map'
   return (
-    <div className={globe ? 'screen' : 'screen decorated'} style={{ padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 12px)', overflow: 'hidden', background: globe ? '#F4EEFF' : undefined }}>
+    <div className={globe ? 'screen' : 'screen decorated'} style={{ padding: 'var(--top-clear) 16px calc(var(--safe-bottom) + 12px)', overflow: 'hidden', background: globe ? 'linear-gradient(#BDB0F8, #EDCAF6 45%, #FFD1E5 75%, #FFE6DA)' : undefined }}>
       {globe && (
         <Suspense fallback={<GlobeLoading />}>
           <HomeGlobe visited={passport.visited} teaParty={trophies.some((t) => t.gameId === TEA_PARTY)} face={arrival.face} long={arrival.long} slot={slot} events={globeEvents} />
