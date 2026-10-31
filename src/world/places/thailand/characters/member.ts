@@ -6,20 +6,12 @@ import { bell, clamp, span } from '../../../../sdk'
 import type { Bag } from '../../../engine3d/dispose'
 import { buildAnimal, Wind, type Rig } from '../../../engine3d/characters/animal'
 import { FaceLife } from '../../../engine3d/characters/face'
-import { buildDadRig, DAD_SIT, dadModel } from './dad-model'
 import type { FamilyMember } from './family'
 import { LOOKS, type Look } from './looks'
 import type { Character, Pose } from './types'
 
 const deg = Math.PI / 180
 const tmp = new Vector3()
-
-/** The modelled vinyl toy for whoever has one (docs/3d-characters.md: Daddy so far), once it's loaded; null: the
- *  code-built toy. Only for their own look (a trip's extra in the lab borrowing a look stays code-built). */
-function modelRig(id: string, look: Look, bag: Bag): Rig | null {
-  const gltf = id === 'nick' && look === LOOKS.nick ? dadModel() : null
-  return gltf ? buildDadRig(gltf, bag) : null
-}
 
 export class Member implements Character {
   readonly id: string
@@ -47,7 +39,7 @@ export class Member implements Character {
   /** `look` and `voice` default to the family member's own; the character lab (lab/) gives a trip's extras theirs. */
   constructor(readonly member: FamilyMember, bag: Bag, look: Look = LOOKS[member.id], voice: string | undefined = member.id) {
     this.id = member.id
-    this.chibi = modelRig(member.id, look, bag) ?? buildAnimal(look, bag)
+    this.chibi = buildAnimal(look, bag)
     this.root = this.chibi.root
     this.height = this.chibi.height
     this.life = new FaceLife(this.chibi, voice)
@@ -80,15 +72,9 @@ export class Member implements Character {
 
   setPose(pose: Pose) {
     this.pose = pose
-    const { body, legL, legR } = this.chibi
+    const { body } = this.chibi
     body.rotation.set(pose === 'lie' ? -Math.PI / 2 : 0, 0, 0)
     body.position.set(0, pose === 'lie' ? this.chibi.radius : 0, 0)
-    // A toy with legs of its own (the modelled Daddy) sits on its hips with its legs out over the seat.
-    if (legL && legR) {
-      const sit = pose === 'sit'
-      if (sit) body.position.y = -DAD_SIT.drop
-      legL.rotation.x = legR.rotation.x = sit ? DAD_SIT.legs : 0
-    }
   }
 
   react(kind: 'hop' | 'wiggle' | 'wave') {
