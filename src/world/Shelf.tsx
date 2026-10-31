@@ -45,7 +45,6 @@ export function Shelf() {
 
   const play = (g: ShelfGame) => {
     sounds.whoosh()
-    void say(L.go)
     if (!played.includes(g.key)) setPlayed([...played, g.key])
     if (isPostHogEnabled) posthog.capture('world_shelf_play', { game: g.key, favorite: favorites.includes(g.key) })
     if (g.game) {
