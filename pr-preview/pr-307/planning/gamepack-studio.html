@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gamepack Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap">
+<link rel="stylesheet" href="viewer/plan.css">
+</head>
+<body>
+<div id="app"><noscript>This plan is drawn by planning/viewer/plan.js. Read it as Markdown with: node scripts/plan.mjs md &lt;this file&gt;</noscript></div>
+<script type="application/json" id="plan">
+{
+  "schema": 1,
+  "title": "Gamepack Studio: build beside the game",
+  "icon": "🦄",
+  "kind": "Local builder app",
+  "updated": "2026-10-30",
+  "status": {
+    "label": "Built locally · ready for Dad",
+    "tone": "mint"
+  },
+  "pitch": "The character, Camera and Feel labs live together in a local Electron studio. Describe what is wrong, try AI changes in the real game, and save the result through Claude Code or Codex on this checkout.",
+  "next": "Run npm run studio on this machine. Try a real Camera and Feel adjustment with Codex; sign Claude Code in with /login before using its provider. Then use Character concepts for the next approved family member.",
+  "facts": [
+    {
+      "icon": "🧪",
+      "value": "3 labs",
+      "label": "one real game renderer"
+    },
+    {
+      "icon": "🤖",
+      "value": "2 CLIs",
+      "label": "Claude Code and Codex"
+    },
+    {
+      "icon": "🎨",
+      "value": "1 concept",
+      "label": "per iteration"
+    },
+    {
+      "icon": "💻",
+      "value": "Local",
+      "label": "runs only on this machine"
+    }
+  ],
+  "related": [
+    {
+      "label": "Character recipe",
+      "href": "../docs/3d-characters.md"
+    },
+    {
+      "label": "Launch instructions",
+      "href": "../workbench/README.md"
+    }
+  ],
+  "sections": [
+    {
+      "id": "workflow",
+      "title": "Describe it, try it, keep it",
+      "icon": "🎛️",
+      "blocks": [
+        {
+          "type": "flow",
+          "rows": [
+            {
+              "steps": [
+                {
+                  "icon": "🔗",
+                  "label": "Open a section",
+                  "note": "The real game and existing lab controls"
+                },
+                {
+                  "icon": "💬",
+                  "label": "Explain the problem",
+                  "note": "Current values, frame and section accompany your words"
+                },
+                {
+                  "icon": "🤖",
+                  "label": "Claude or Codex",
+                  "note": "Returns bounded numeric values and a reason"
+                },
+                {
+                  "icon": "🕹️",
+                  "label": "Play the preview",
+                  "note": "Controls update; Undo restores them"
+                },
+                {
+                  "icon": "💾",
+                  "label": "Save in the game",
+                  "note": "Review and send the prepared coding-agent prompt"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "title": "Camera",
+              "md": "Choose a section, screen shape and camera mode. Freeze the moment. Ask for a wider view, more headroom or a different angle; AI changes only the available sliders. Keep the other screen shape and rounds unchanged."
+            },
+            {
+              "title": "Feel",
+              "md": "Play a toy with knobs. Describe twitchiness, slowness or a difficult turn. AI uses the current activity’s knob labels, bounds, notes and a sample of watched input/output. Dad’s finger judges the result."
+            },
+            {
+              "title": "Characters",
+              "md": "Keep the existing poses, actions, filmstrips, outfits, voices and code-built comparisons. Prepare builder prompts in this checkout; concepts become an input to the same Rig."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "title": "One live implementation",
+          "md": "The desktop embeds the existing local game. The web labs remain usable on iPad and PR previews. No second camera, character renderer or feel implementation to drift out of sync. Electron and its CLIs never ship in the child’s app."
+        }
+      ]
+    },
+    {
+      "id": "characters",
+      "title": "A picture becomes the same game rig",
+      "icon": "🦄",
+      "blocks": [
+        {
+          "type": "ladder",
+          "items": [
+            {
+              "n": 1,
+              "title": "One vinyl concept",
+              "md": "Describe the family member in words; Dad chooses the animal. Front-facing symmetrical A-pose, head one third of height, one animal color, 1024 square PNG with real alpha. Refine the same character with one change; no batch variants. Private photos are only narrow detail references."
+            },
+            {
+              "n": 2,
+              "title": "Tripo handoff",
+              "md": "Manual generation: Smart Mesh, Quad, 5000 polycount, four untextured candidates, private if allowed, no auto-rig. Compare before texturing only the winner at 1k; export GLB. No automatic credit spending."
+            },
+            {
+              "n": 3,
+              "title": "Compare in Blender",
+              "md": "Use the selected CLI’s Blender MCP. Front, three-quarter, side and back renders; count triangles, loose parts and non-manifold edges. Inspect invented backs and limb gaps. Dad chooses the mesh."
+            },
+            {
+              "n": 4,
+              "title": "Split and rig",
+              "md": "Inspect loose parts before cutting. Clean capped planes only where necessary. Named rigid pivots for body, head, arms, legs, eyes and tail, no skeleton. Paint out the face where a talking member needs it. Test poses, save .blend privately; export GLB with JPEG 92 textures."
+            },
+            {
+              "n": 5,
+              "title": "Integrate and inspect",
+              "md": "Reuse the shared Rig, lazy GLB loading, toon bands, smooth ink hulls and code-built fallback. Measure wardrobe and attachment spots. Add the catalog entry; inspect walk, sit, lie, wave, wai, blink, voice, outfits and trip attachments with filmstrips."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "dad",
+          "title": "Dad decides",
+          "md": "No new family identities or animals are invented. Tripo and Blender remain explicit handoffs through prepared prompts; this is not a bundled mesh generator or Blender replacement."
+        }
+      ]
+    },
+    {
+      "id": "migration",
+      "title": "Migration and what is built",
+      "icon": "🧱",
+      "blocks": [
+        {
+          "type": "build",
+          "items": [
+            {
+              "n": 1,
+              "title": "Bring active workbench source into workbench/",
+              "status": "done",
+              "md": "Keep the upstream license, typed preload, CLI adapters, PTY lifecycle, gallery, files and source control. Isolated dependencies and lockfile; no sibling-repo runtime dependency. Use the currently checked out branch."
+            },
+            {
+              "n": 2,
+              "title": "Launch both local apps together",
+              "status": "done",
+              "md": "npm run studio compiles Electron, owns the game and studio loopback servers, and opens this repo automatically. Separate app-data state. Ports 5174 and 5175; fail clearly if occupied."
+            },
+            {
+              "n": 3,
+              "title": "Connect live tuning and prompt composers",
+              "status": "done",
+              "md": "Local-only typed message bridge; AI CLI response schema; bounded numeric preview; reject stale replies; cancel, timeout and Undo; prepare a separate prompt to save defaults."
+            },
+            {
+              "n": 4,
+              "title": "Tailor the character flow",
+              "status": "done",
+              "md": "Single concept, same-character refinement, private local image library and five recipe stages with agent prompt handoffs."
+            },
+            {
+              "n": 5,
+              "title": "Verify build and local flows",
+              "status": "done",
+              "md": "Game npm run verify; studio builds; 50 Node contracts; deterministic Electron lab smoke (preview, Undo, stale response, cancellation, tab persistence, source/character handoffs and iframe isolation); single-concept generation/refinement with actual pixel validation. Real Codex camera and feel requests passed. Claude returned a clear sign-in error; its adapter passed fixture contracts.",
+              "date": "2026-10-30"
+            },
+            {
+              "n": 6,
+              "title": "Dad’s next iteration",
+              "status": "next",
+              "md": "Use the app on a real framing and steering problem, then pick the next character. Tune the workflow based on those results. Optional later: automatically attach screenshots/filmstrips and add an explicit reviewed source-diff save flow."
+            }
+          ]
+        },
+        {
+          "type": "log",
+          "items": [
+            {
+              "title": "Initial local studio migration",
+              "date": "2026-10-30",
+              "status": "done",
+              "summary": "The local studio is built and tested: three live labs, AI control previews and Undo, one-concept creation and five character-workflow handoffs.",
+              "md": "The game’s web labs remain available for iPad and PR testing. Electron 45 runs locally, and its dependencies currently report zero audit vulnerabilities. No generated art, new family facts or runtime model changes are part of the migration. Claude needs /login on this machine; Tripo generation and Blender setup remain explicit handoffs. AI tuning receives structured scene/control context, without an automatic screenshot. The desktop window and macOS Dock reuse the game’s existing 512px icon export, from the same artwork as the iOS home-screen icon."
+            },
+            {
+              "title": "Review: keep Undo usable and scoped to its scene",
+              "date": "2026-10-30",
+              "status": "done",
+              "summary": "Confirmed and fixed both review findings: unsuccessful follow-ups preserve the last Undo snapshot, and Undo checks the hash section plus game parameters before restoring.",
+              "md": "Regression coverage includes failed, cancelled, stale and no-change requests after a successful preview, navigation within the game to another section and back, and hash query parameters such as road/round while ignoring the outer studio query and lab slider values."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": "Files and boundaries",
+      "icon": "🛠️",
+      "for": "build",
+      "group": "For the builder",
+      "blocks": [
+        {
+          "type": "table",
+          "head": [
+            "Where",
+            "Responsibility"
+          ],
+          "rows": [
+            [
+              "`workbench/src/main`",
+              "Electron, native processes, persistence, files, existing agent providers and bounded AI tuning runner"
+            ],
+            [
+              "`workbench/src/preload`",
+              "Typed APIs exposed only to the studio top frame"
+            ],
+            [
+              "`workbench/src/shared/labs.ts`",
+              "Dependency-free protocol and atomic value validation, shared with the game"
+            ],
+            [
+              "`workbench/src/renderer/features/labs`",
+              "Embedded game, prompt composer, AI preview, Undo and source-save handoff"
+            ],
+            [
+              "`src/world/labs/workbench.ts`",
+              "Development-only exact-origin/source bridge mounted only by Camera and Feel labs"
+            ],
+            [
+              "`workbench/src/renderer/features/image-generator`",
+              "One-image recipe, local gallery, refinement and stage prompt builder"
+            ],
+            [
+              "`workbench/scripts/dev.mjs`",
+              "Single local launcher and child-process cleanup"
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Tuning jobs spawn fixed CLI executables with argument arrays, no shell. Claude has no tools or MCP in tuning mode; Codex uses read-only sandbox. Both must return the same JSON proposal shape. Existing interactive agents retain their own trust and permission UI.",
+            "Validate every proposed control and range before changing anything. A reply for an old route, mode, frame or values is rejected. Source saving is separate and reviewable. Telemetry is context, not a stale-response key.",
+            "No screenshot is sent automatically in this first version. AI must not claim to see the scene. It gets the current shot/state/knobs and Dad’s description.",
+            "Private sources and generated images stay in Application Support/Kaylee Gamepack Studio. Models and .blend files stay in the private planning-assets folder; approved GLBs may enter Thailand as documented.",
+            "Keep game npm run verify independent of Electron installation. The studio has its own build and Node contract suite; a dedicated CI job now runs both studio builds and contracts.",
+            "The original workbench’s build outputs, node_modules and old reconstruction archives are not copied. All active application source, tests and scripts are imported."
+          ]
+        }
+      ]
+    }
+  ]
+}
+</script>
+<script src="viewer/plan.js"></script>
+</body>
+</html>
