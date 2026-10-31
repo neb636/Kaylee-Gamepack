@@ -18,6 +18,8 @@ import { WORLD_LINES } from './lines'
 import { places, type PlaceEntry } from './registry'
 import { FROM_SHELF, Shelf } from './Shelf'
 import { totalStamps, usePassport } from './stamps'
+import { useHalloween } from '../shell/season'
+import { HalloweenArt } from '../shell/Halloween'
 import { Travel } from './Travel'
 
 // Hotspots in % of the map picture (x, y = centre; w, h = size).
@@ -89,6 +91,7 @@ function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number
 type View = 'map' | 'list'
 
 export function WorldMap({ view: linked }: { view?: string }) {
+  const halloween = useHalloween()
   const passport = usePassport()
   const trophies = useTrophies()
   const online = useOnline() // the Theater needs the internet
@@ -149,7 +152,7 @@ export function WorldMap({ view: linked }: { view?: string }) {
     // The shelf is the whole screen and scrolls as one page; the toggle and the dock float over it (Sparkle waves
     // from the favorites card instead of under the map). The map view floats the same dock.
     return (
-      <div className="screen decorated world-list" style={{ padding: 0, overflow: 'hidden' }}>
+      <div className={`screen decorated world-list${halloween ? ' halloween' : ''}`} style={{ padding: 0, overflow: 'hidden' }}>
         <Shelf />
         <div className="shelf-topfade" />
         {toggle}
@@ -159,7 +162,7 @@ export function WorldMap({ view: linked }: { view?: string }) {
   }
 
   return (
-    <div className="screen decorated world-map" style={{ overflow: 'hidden' }}>
+    <div className={`screen decorated world-map${halloween ? ' halloween' : ''}`} style={{ overflow: 'hidden' }}>
       {toggle}
 
       <div className="world-split" style={{ flex: 1, minHeight: 0, gap: 'min(16px, 2vh)', alignItems: 'center' }}>
@@ -256,8 +259,10 @@ export function WorldMap({ view: linked }: { view?: string }) {
         </FitBox>
 
         <div className="world-side" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'min(20px, 3vw)', flexShrink: 0 }}>
-          <div className="world-side-mascot">
+          <div className={`world-side-mascot${halloween ? ' halloween-map-friends' : ''}`}>
+            {halloween && <span aria-hidden="true"><HalloweenArt kind="pumpkin" /></span>}
             <Mascot pose="wave" size={Math.min(170, window.innerHeight * 0.12)} />
+            {halloween && <span aria-hidden="true"><HalloweenArt kind="ghost" /></span>}
           </div>
         </div>
       </div>

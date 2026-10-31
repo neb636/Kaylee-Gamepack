@@ -17,6 +17,9 @@ import { Flag } from './kit/Flag'
 import { WORLD_LINES } from './lines'
 import { usePassport } from './stamps'
 
+import { useHalloween } from '../shell/season'
+import { HalloweenBanner } from '../shell/Halloween'
+
 const L = WORLD_LINES.shelf
 /** Set when a game opens from the shelf, so its top bar's back button comes back here (PlaceFrame). */
 export const FROM_SHELF = 'kaylee-gamepack:from-shelf'
@@ -27,6 +30,7 @@ const speak = (key: string) => {
 }
 
 export function Shelf() {
+  const halloween = useHalloween()
   const passport = usePassport()
   const trophies = useTrophies()
   const [favorites, setFavorites] = useSaved<string[]>('world:favorites', [])
@@ -89,10 +93,10 @@ export function Shelf() {
               void say(L.hello)
             }}
           >
-            All the games
+            {halloween && <span aria-hidden="true">🎃 </span>}All the games
           </motion.button>
 
-          <Card index={0} id="favorites" title="My favorites" chip={<span className="shelf-heart">❤️</span>} art={banner('favorites')} onTitle={() => void say(L.favorites)} friend>
+          <Card index={0} id="favorites" title="My favorites" chip={<span className="shelf-heart">❤️</span>} art={banner('favorites')} onTitle={() => void say(L.favorites)} friend halloween={halloween}>
             <SurpriseTile onTap={() => setSpinning(true)} />
             {tile(TEA_PARTY)}
             {fav.length ? fav.map(tile) : <EmptyHeart />}
@@ -126,7 +130,7 @@ export function Shelf() {
 }
 
 /** A place's card: its banner, and the white sheet over the banner's bottom edge with the name and the games. */
-function Card({ id, title, chip, art, onTitle, index, friend, children }: { id: string; title: string; chip?: ReactNode; art?: string; onTitle: () => void; index: number; friend?: boolean; children: ReactNode }) {
+function Card({ id, title, chip, art, onTitle, index, friend, halloween, children }: { id: string; title: string; chip?: ReactNode; art?: string; onTitle: () => void; index: number; friend?: boolean; halloween?: boolean; children: ReactNode }) {
   const tap = () => {
     sounds.pop()
     onTitle()
@@ -135,6 +139,7 @@ function Card({ id, title, chip, art, onTitle, index, friend, children }: { id: 
     <motion.section className="shelf-card" data-row={id} initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(index, 5) * 0.07 }}>
       <div className="shelf-banner">
         {art ? <img src={art} alt="" draggable={false} /> : <span className="shelf-banner-blank" />}
+        {friend && halloween && <HalloweenBanner />}
         <button className="shelf-banner-hit" aria-label={title} onClick={tap} />
         {friend && <BannerSparkle />}
       </div>
