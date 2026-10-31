@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Wardrobe</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9de"/><stop offset="1" stop-color="#ffc3a8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="inside" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a74d6"/><stop offset="1" stop-color="#a592ec"/></linearGradient>
+    <clipPath id="skirt"><path d="M45 57H57L66.5 80.5Q61 83.5 56 81Q51 83.5 46 81Q41 83.5 35.5 80.5Z"/></clipPath>
+    <clipPath id="coat"><path d="M68 44Q75 41 82 44L86.5 76Q77 79 67 76L64 46Z"/></clipPath>
+    <clipPath id="crown"><path d="M14 52C14 40 18 35 25 35C32 35 36 40 36 52Z"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <ellipse cx="60" cy="103" rx="40" ry="5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the wardrobe: lavender, an arched top with a heart, little gold feet -->
+  <rect x="35" y="96" width="6" height="7" rx="2" fill="#eba123"/>
+  <rect x="79" y="96" width="6" height="7" rx="2" fill="#eba123"/>
+  <path d="M29 26C29 21 34 19 40 19C47 19 52 15 60 15C68 15 73 19 80 19C86 19 91 21 91 26V98H29Z" fill="#b9a6f5"/>
+  <path d="M86 21C89 22 91 23.5 91 26V98H86Z" fill="#937ee0"/>
+  <path d="M33 23C36 21 39 20.5 41 20.5C47 20.5 52 17 58 16.5" fill="none" stroke="#ddd2ff" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M60 27C56 24 54.5 21.5 56 20C57.3 18.8 59 19.3 60 20.6C61 19.3 62.7 18.8 64 20C65.5 21.5 64 24 60 27Z" fill="#ff4f9a"/>
+
+  <!-- inside: the back wall, the rail, a drawer below -->
+  <rect x="33" y="28" width="54" height="58" rx="2" fill="url(#inside)"/>
+  <rect x="33" y="28" width="54" height="5" fill="#7d68cc"/>
+  <rect x="33" y="85" width="54" height="11" fill="#ddd2ff"/>
+  <rect x="33" y="93" width="54" height="3" fill="#c4b4f8"/>
+  <rect x="56" y="88.5" width="8" height="3" rx="1.5" fill="#937ee0"/>
+  <path d="M34 37H86" stroke="#fff7f0" stroke-width="2.6" stroke-linecap="round"/>
+
+  <!-- the open doors: the lit one on the left, the shaded one on the right -->
+  <path d="M29 24L14 18V104L29 98Z" fill="#ddd2ff"/>
+  <path d="M26 31L17 27.5V94L26 91Z" fill="#c9b9f7"/>
+  <path d="M91 24L106 18V104L91 98Z" fill="#937ee0"/>
+  <path d="M94 31L103 27.5V94L94 91Z" fill="#a592ec"/>
+  <ellipse cx="98.5" cy="54" rx="3.6" ry="10" fill="#c9e9ff"/>
+  <path d="M97.5 48.5V55" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+
+  <!-- the little raincoat, sunny yellow with a hood and buttons -->
+  <path d="M71 40.5Q75 37.5 79 40.5" fill="none" stroke="#fff7f0" stroke-width="2" stroke-linecap="round"/>
+  <path d="M75 37V40" stroke="#fff7f0" stroke-width="2" stroke-linecap="round"/>
+  <g clip-path="url(#coat)">
+    <rect x="62" y="40" width="26" height="40" fill="#eba123"/>
+    <path d="M68 44Q75 41 80 43L78.5 78Q72 78 67 76L64 46Z" fill="#ffc83d"/>
+    <path d="M66 49L67 72" stroke="#ffe189" stroke-width="2.4" stroke-linecap="round"/>
+  </g>
+  <path d="M68 44Q75 50 82 44Q80 40.5 75 40.5Q70 40.5 68 44Z" fill="#eba123"/>
+  <path d="M75 48V76" stroke="#eba123" stroke-width="2"/>
+  <g fill="#fff7f0"><circle cx="77.5" cy="54" r="1.5"/><circle cx="77.5" cy="61" r="1.5"/><circle cx="77.5" cy="68" r="1.5"/></g>
+  <rect x="79.5" y="64" width="5" height="4" rx="1.5" fill="#eba123"/>
+
+  <!-- the pink dress: puffy sleeves, a hot-pink bow, polka dots -->
+  <path d="M43.5 44.5L51 39.5L58.5 44.5Z" fill="none" stroke="#fff7f0" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M51 36V39.5" stroke="#fff7f0" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="43" cy="47" r="4.5" fill="#ff8fb8"/>
+  <circle cx="59" cy="47" r="4.5" fill="#e7699c"/>
+  <path d="M44.5 43.5Q51 46 57.5 43.5L56.5 58H45.5Z" fill="#ff8fb8"/>
+  <path d="M53 44.5Q55.5 44 57.5 43.5L56.5 58H53.5Z" fill="#e7699c"/>
+  <path d="M46.5 44Q51 47.5 55.5 44" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+  <g clip-path="url(#skirt)">
+    <rect x="34" y="56" width="34" height="28" fill="#ff8fb8"/>
+    <path d="M56 56L68 56V84H57Z" fill="#e7699c"/>
+    <path d="M45 57L36 80" stroke="#ffc4da" stroke-width="2.6" stroke-linecap="round"/>
+    <g fill="#fff" opacity="0.9"><circle cx="45" cy="66" r="1.4"/><circle cx="52" cy="63" r="1.4"/><circle cx="49" cy="73" r="1.4"/><circle cx="42" cy="76" r="1.4"/><circle cx="57" cy="70" r="1.4"/><circle cx="62" cy="77" r="1.4"/><circle cx="55" cy="77.5" r="1.4"/></g>
+  </g>
+  <rect x="44.5" y="56.5" width="13" height="3.5" rx="1.5" fill="#ff4f9a"/>
+  <path d="M51 58L46.5 55V61ZM51 58L55.5 55V61Z" fill="#ff4f9a" stroke="#ff4f9a" stroke-width="1.4" stroke-linejoin="round"/>
+  <circle cx="51" cy="58" r="1.6" fill="#ff8fc0"/>
+
+  <!-- the sun hat on a hook inside the left door -->
+  <circle cx="23" cy="37" r="1.6" fill="#eba123"/>
+  <path d="M23 37L25 45" stroke="#ff8fb8" stroke-width="1.8" stroke-linecap="round"/>
+  <ellipse cx="25" cy="54" rx="13" ry="5" fill="#e3bb7a"/>
+  <ellipse cx="25" cy="53" rx="13" ry="4.5" fill="#f5dba8"/>
+  <g clip-path="url(#crown)">
+    <rect x="12" y="34" width="26" height="20" fill="#e3bb7a"/>
+    <ellipse cx="23.5" cy="50" rx="9.5" ry="13" fill="#f5dba8"/>
+  </g>
+  <path d="M17 48Q25 51 33 48V45.5Q25 48.5 17 45.5Z" fill="#ff8fb8"/>
+  <path d="M18 43a7.5 7.5 0 0 1 3-5" fill="none" stroke="#fdeecc" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="33" cy="47" r="2.4" fill="#ff4f9a"/>
+  <path d="M33.5 48.5L36 55M32 49L32.5 55.5" stroke="#ff8fb8" stroke-width="2" stroke-linecap="round"/>
+</svg>
