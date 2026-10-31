@@ -18,7 +18,8 @@ export function HalloweenMusic({ started, route }: { started: boolean; route: Ro
   const ownAudio = route.name === 'playground' || (route.name === 'world' && (
     route.place === 'theater' || route.activity === 'theater' ||
     route.place === 'characters' || route.place === 'puppets' ||
-    route.activity === 'boat-trip' || route.activity === 'nan-trip'
+    route.activity === 'boat-trip' || route.activity === 'nan-trip' ||
+    (route.place === 'italy' && route.activity === 'party')
   ))
   const enabled = halloween && !muted && !ownAudio && !videoOpen
   useEffect(() => {
@@ -31,14 +32,18 @@ export function HalloweenMusic({ started, route }: { started: boolean; route: Ro
     const visibility = () => refresh()
     const hide = () => music.stop()
     refresh()
-    window.addEventListener('pointerdown', tap)
+    // Safari unlocks audio on a completed tap. A touch pointerdown alone can
+    // leave the context suspended even though the music button shows "on".
+    window.addEventListener('click', tap)
+    window.addEventListener('touchend', tap, { passive: true })
     window.addEventListener('keydown', tap)
     window.addEventListener('pagehide', hide)
     window.addEventListener('pageshow', visibility)
     document.addEventListener('visibilitychange', visibility)
     return () => {
       music.stop()
-      window.removeEventListener('pointerdown', tap)
+      window.removeEventListener('click', tap)
+      window.removeEventListener('touchend', tap)
       window.removeEventListener('keydown', tap)
       window.removeEventListener('pagehide', hide)
       window.removeEventListener('pageshow', visibility)

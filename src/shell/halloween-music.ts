@@ -28,7 +28,8 @@ export class HalloweenScore {
       this.master = this.ctx.createGain()
       this.master.connect(this.ctx.destination)
     }
-    if (gesture && this.ctx.state === 'suspended') void this.ctx.resume().catch(() => {})
+    // iOS can also interrupt a running context after locking the screen.
+    if (gesture && this.ctx.state !== 'running') void this.ctx.resume().catch(() => {})
     if (this.timer !== undefined) return
     this.next = this.ctx.currentTime + 0.05
     this.timer = window.setInterval(() => this.schedule(), 50)
@@ -65,7 +66,7 @@ export class HalloweenScore {
       if (beat === 2 || beat === 4) for (const n of chord) this.note(n, this.next, 0.22, 0.009, 'triangle')
       const n = MELODY[i]
       if (n !== null) {
-        this.note(n, this.next, 0.65, 0.035, 'sine')
+        this.note(n, this.next, 0.65, 0.075, 'sine')
         this.note(n + 12, this.next, 0.3, 0.006, 'sine')
       }
       this.step++
@@ -81,6 +82,8 @@ export class HalloweenScore {
     o.frequency.value = hz(midi)
     g.gain.setValueAtTime(0.0001, at)
     g.gain.exponentialRampToValueAtTime(volume, at + 0.012)
+    // Keep the body of each bell audible on phone speakers, then fade its tail.
+    g.gain.exponentialRampToValueAtTime(volume * 0.15, at + duration - 0.04)
     g.gain.exponentialRampToValueAtTime(0.0001, at + duration)
     o.connect(g).connect(this.master!)
     this.notes.add(o)
