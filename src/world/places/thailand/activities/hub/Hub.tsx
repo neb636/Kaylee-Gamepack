@@ -14,11 +14,12 @@ import { WallPlugin, WALL_LINES, WALL_SLOTS, wallAnchorId } from '../../trip/wal
 import { newestByTrip, useWallPhotos } from '../../trip/wall-photos'
 import { Debug } from './Debug'
 import { Guide, type GuideHandle } from './Guide'
-import { BARE, formatLook, LOOK_KEY, type Style } from '../../characters/style'
+import { BARE, formatLook, lookKey, type Style } from '../../characters/style'
 import { bothPlugins, type House, type HousePlugin, type Spot, type Start } from './house'
 import { HouseView, type RenderMode } from './HouseView'
 import HUB_SECTIONS from './sections'
 import type { DrawerId } from './wardrobe/furniture'
+import { isHalloweenDay, useHalloween } from '../../../../../shell/season'
 import { cleanDoor, DOOR_KEY, parseDoor, type DoorPhoto } from './wardrobe/door'
 import { WARDROBE_ANCHORS, WardrobePlugin } from './wardrobe/plugin'
 
@@ -31,7 +32,13 @@ const remember = () => (tripSession.house = arrivedThisVisit ? lastSpot : 'arriv
 // street, tap Daddy and he asks right away: no need to go upstairs.
 let askedThisVisit = false
 
-export function Hub({ meta, stamps, openActivity }: PlaceProps) {
+export function Hub(props: PlaceProps) {
+  const halloween = useHalloween(true)
+  // Remount at the date boundary: the house and wardrobe return to her regular look without overwriting it.
+  return <SeasonHub key={halloween ? 'halloween' : 'regular'} {...props} />
+}
+
+function SeasonHub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
   const [initial] = useState<Start>(() => ({ section: (start && start !== 'map' ? start : null) ?? (arrivedThisVisit ? lastSpot : 'arrive'), at: param('at') || undefined, who: param('who') || undefined }))
   const [mode, setMode] = useState<RenderMode>('webgl')
@@ -44,11 +51,15 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const photo = initial.section === 'family'
   const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' || initial.section === 'family' ? 'street' : initial.section === 'wardrobe' ? 'upstairs' : initial.section)
   // Her wardrobe (wardrobe/): her look is saved on the iPad as she changes it, and a link's ?look= follows along.
-  const [, saveLook] = useSaved<Style>(LOOK_KEY, BARE)
+  const [, saveLook] = useSaved<Style>(lookKey(), BARE)
   const [dressing, setDressing] = useState(initial.section === 'wardrobe')
   // The pictures on its door (the mirror takes them): saved on the iPad; a link's ?door= puts its own there.
-  const [savedDoor, saveDoor] = useSaved<DoorPhoto[]>(DOOR_KEY, [])
-  const [startDoor] = useState(() => (param('door') ? parseDoor(param('door')) : cleanDoor(savedDoor)))
+  const [savedDoor, saveDoor] = useSaved<DoorPhoto[]>(isHalloweenDay() ? `${DOOR_KEY}-halloween` : DOOR_KEY, [])
+  const [startDoor] = useState(() => {
+    const linked = param('door')
+    // A holiday deep link must not replace her everyday photo door when the season ends.
+    return linked && (isHalloweenDay() || !linked.includes('halloween-')) ? parseDoor(linked) : cleanDoor(savedDoor)
+  })
   // The pictures and the drawer as the address bar shows them (so a copied link reproduces the door).
   const doorNow = useRef<{ photos: DoorPhoto[]; drawer: DrawerId | null }>({ photos: startDoor, drawer: null })
   const wardrobeState = () => ({ ...(doorNow.current.drawer ? { drawer: doorNow.current.drawer } : {}), ...(doorNow.current.photos.length ? { door: doorNow.current.photos.map((p) => p.look || 'bare').join(';') } : {}) })

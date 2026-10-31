@@ -7,6 +7,7 @@
 //
 // Built facing +z around its own base, then turned to face into the room (+x) at layout.ts's DIM.wardrobe.
 import { CylinderGeometry, Group, Vector3, type BufferGeometry } from 'three'
+import { isHalloweenDay } from '../../../../../../shell/season'
 import { heart } from '../../../characters/closet/fit'
 import { bake, P, type V3 } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
@@ -28,9 +29,6 @@ export const DRAWERS: { id: DrawerId; name: string; color: string }[] = [
 const W = DIM.wardrobe.w
 const D = DIM.wardrobe.d
 const H = DIM.wardrobe.h
-const WOOD = '#FBD3E3'
-const TRIM = '#B9A6F5'
-const INSIDE = '#FFF1F6'
 /** The drawers' size and where each sits (local: its front face's center). */
 const DW = 0.44
 const DH = 0.28
@@ -98,6 +96,10 @@ function icon(id: DrawerId) {
 /** Builds the wardrobe into her room. Its moving parts are in kit.parts: `wardrobe.doorL`, `wardrobe.doorR` and
  *  `wardrobe.drawer.<id>`; `wardrobe.inside` is where the toy stands the things. */
 export function buildWardrobe(kit: Kit): Group {
+  const halloween = isHalloweenDay()
+  const WOOD = halloween ? '#FFD1A6' : '#FBD3E3'
+  const TRIM = halloween ? '#9670C7' : '#B9A6F5'
+  const INSIDE = halloween ? '#FFF2DE' : '#FFF1F6'
   // Polka dots on the back inside, little scallops along the shelves' fronts and the base.
   const dots: BufferGeometry[] = []
   for (let r = 0; r < 6; r++) {
@@ -136,6 +138,18 @@ export function buildWardrobe(kit: Kit): Group {
     [DIM.left + D / 2, DIM.g0, DIM.wardrobe.z],
     { rotY: Math.PI / 2 },
   )
+  if (halloween) {
+    // A smiling pumpkin and a friendly ghost perched on the cupboard, clear of the drawers and mirror.
+    const deco: BufferGeometry[] = []
+    for (const [x, ghost] of [[-0.53, false], [0.53, true]] as const) {
+      const y = H + 0.15
+      deco.push(P.sphere(0.14, ghost ? '#FFF7EC' : '#FFAB67', { at: [x, y, 0.08], scale: [1, ghost ? 1.15 : 0.8, 0.75] }, 18))
+      if (!ghost) deco.push(P.capsule(0.022, 0.06, '#9DD58F', { at: [x, y + 0.13, 0.08], rot: [0, 0, -0.2] }))
+      for (const s of [-1, 1]) deco.push(P.sphere(0.012, '#514263', { at: [x + s * 0.04, y + 0.01, 0.185] }, 8))
+      deco.push(P.torus(0.03, 0.007, '#514263', { at: [x, y - 0.025, 0.19], rot: [0, 0, Math.PI] }, Math.PI))
+    }
+    root.add(scenery(kit, deco, 1))
+  }
   // The doors: hinged at the outside edges, a heart on each. Inside the right one, a long mirror: when the doors are
   // open it faces the room, and she sees herself.
   for (const [name, s] of [['doorL', -1], ['doorR', 1]] as const) {
@@ -164,11 +178,14 @@ export function buildWardrobe(kit: Kit): Group {
     root.add(door)
   }
   DRAWERS.forEach((d, i) => {
+    if (halloween && d.id !== 'outfit') return
+    const width = halloween ? W - 0.12 : DW
+    const height = halloween ? 0.5 : DH
     const drawer = part(
       kit,
       `wardrobe.drawer.${d.id}`,
-      [P.rbox(DW, DH, 0.04, 0.015, d.color), P.box(DW - 0.04, DH - 0.06, 0.4, INSIDE, { at: [0, -0.01, -0.22] }), heartOn(0.03, 0.022, PAL.gold, [0, -DH / 2 + 0.055, 0.03]), ...icon(d.id)],
-      drawerAt(i),
+      [P.rbox(width, height, 0.04, 0.015, d.color), P.box(width - 0.04, height - 0.06, 0.4, INSIDE, { at: [0, -0.01, -0.22] }), heartOn(0.03, 0.022, PAL.gold, [0, -height / 2 + 0.055, 0.03]), ...icon(d.id)],
+      halloween ? [0, 0.4, D / 2 - 0.015] : drawerAt(i),
     )
     drawer.userData.pick = 'wardrobe'
     drawer.userData.base = drawer.position.clone()

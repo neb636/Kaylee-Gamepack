@@ -5,11 +5,14 @@ import { unlockSpeech } from '../sdk/speech'
 import { unlockSounds } from '../sdk/sounds'
 import { Balloon, Cloud, HiKaylee, Pill, Rainbow, Sky, Wave } from './Sky'
 
-const CREAM = '#fff7f0'
+import { useHalloween } from './season'
+import { HalloweenGuest } from './Halloween'
 const TRICKS: SparkleAction[] = ['hop', 'dance', 'wiggle', 'cheer']
 
 /** First screen: Sparkle on a cloud under a rainbow. Its big button is the tap iPad needs before we can play sounds and talk. */
 export function Splash({ onStart }: { onStart: () => void }) {
+  const halloween = useHalloween()
+  const CREAM = halloween ? '#fff3e3' : '#fff7f0'
   const landscape = useLandscape()
   const sparkle = useRef<PuppetHandle>(null)
   useEffect(() => {
@@ -20,10 +23,15 @@ export function Splash({ onStart }: { onStart: () => void }) {
   // Sparkle's height; the rainbow and her cloud are sized from it.
   const h = landscape ? 'min(44vh, 380px, 34vw)' : 'min(39vh, 440px, 60vw)'
   return (
-    <div className="screen" style={{ padding: 0, overflow: 'hidden', background: CREAM }}>
+    <div className={`screen${halloween ? ' halloween' : ''}`} style={{ padding: 0, overflow: 'hidden', background: CREAM }}>
       <Sky>
+        {halloween ? <>
+          <HalloweenGuest kind="pumpkin" style={{ left: '3%', top: landscape ? '15%' : '22%' }} />
+          <HalloweenGuest kind="ghost" style={{ right: '3%', top: landscape ? '14%' : '30%' }} />
+        </> : <>
         <Balloon width="clamp(46px, 7vw, 86px)" style={{ left: '5%', top: landscape ? '12%' : '22%' }} />
         <Balloon width="clamp(36px, 5.5vw, 64px)" delay={1.2} style={{ right: '7%', top: landscape ? '40%' : '34%' }} />
+        </>}
       </Sky>
 
       <div

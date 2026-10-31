@@ -7,6 +7,7 @@ import { Box3, type Group } from 'three'
 import type { Bag } from '../../../../engine3d/dispose'
 import type { Worn } from '../../../../engine3d/characters/animal'
 import { itemById } from '../style'
+import { buildHalloweenItem } from './halloween'
 import { buildBack } from './back'
 import { buildFace } from './glasses'
 import { buildHat } from './hats'
@@ -22,6 +23,7 @@ export const none = (): Worn => ({ head: null, body: null, armL: null, armR: nul
 export function buildClosetItem(id: string, bag: Bag, armTilt: number): Worn | null {
   const item = itemById(id)
   if (!item) return null
+  if (item.halloween) return buildHalloweenItem(id, bag, armTilt)
   if (item.slot === 'head') {
     const hat = buildHat(id, bag)
     // The horn rule, checked while building (npm run dev): a hat taller than her horn would poke through the roofs.

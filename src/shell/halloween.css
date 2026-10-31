@@ -1,0 +1,37 @@
+/* Scoped to the welcome/home menus: the countries keep their own art and colors. */
+.halloween {
+  --hotpink: #9b4b99;
+  --pink: #ffc1a1;
+  --lavender-dark: #ad81ca;
+  --butter: #ffe3a0;
+}
+.halloween .sky {
+  background: radial-gradient(circle at 80% 16%, #ffe9af 0 5%, transparent 5.2%), linear-gradient(180deg, #71619f, #b79bd5 45%, #f8c6d5 85%, #ffe1c2);
+}
+.world .halloween.screen.decorated {
+  background: radial-gradient(ellipse at 10% 80%, #ffd8b8, transparent 65%), linear-gradient(155deg, #7768aa, #c4a9de 55%, #f9cad5);
+}
+.world .halloween .shelf-topfade {
+  background: linear-gradient(180deg, #7768aa 55%, transparent);
+}
+.world .halloween .shelf-sheet { background: #fff8ed; }
+.world .halloween .shelf-card { border: 3px solid #ffe0bc; }
+.world .halloween .shelf-surprise .shelf-art { background: #ffdbb6; }
+.halloween-guest {
+  position: absolute;
+  width: clamp(88px, 12vw, 150px);
+  height: clamp(88px, 12vw, 150px);
+}
+.halloween-float { display: block; width: 100%; height: 100%; animation: halloween-float 3.5s ease-in-out infinite alternate; }
+.halloween-guest:active { scale: 0.9; }
+.halloween-banner { position: absolute; inset: 0; overflow: hidden; pointer-events: none; background: linear-gradient(150deg, #8270b0, #c3a5df 60%, #ffcba7); }
+.halloween-moon { position: absolute; width: 14%; aspect-ratio: 1; border-radius: 50%; background: #fff0bd; left: 7%; top: 10%; box-shadow: 0 0 35px #fff0bd88; }
+.halloween-bunting { position: absolute; inset: 0 0 auto; height: 23%; border-bottom: 3px solid #624773; border-radius: 0 0 50% 50%; background: repeating-linear-gradient(110deg, #ffd4ac 0 28px, #e6b5ed 28px 56px, #fff2c8 56px 84px); clip-path: polygon(0 0, 100% 0, 100% 60%, 95% 100%, 90% 60%, 85% 100%, 80% 60%, 75% 100%, 70% 60%, 65% 100%, 60% 60%, 55% 100%, 50% 60%, 45% 100%, 40% 60%, 35% 100%, 30% 60%, 25% 100%, 20% 60%, 15% 100%, 10% 60%, 5% 100%, 0 60%); }
+.halloween-banner-pumpkin { position: absolute; left: 18%; bottom: 12%; width: 22%; height: 80%; }
+.halloween-banner-ghost { position: absolute; left: 44%; top: 8%; width: 19%; height: 70%; }
+.halloween-banner-candy { position: absolute; left: 4%; bottom: 9%; width: 12%; height: 40%; rotate: -15deg; }
+.halloween-map-friends { display: flex; gap: 12px; align-items: center; }
+.halloween-map-friends > span { width: clamp(48px, 8vmin, 90px); height: clamp(48px, 8vmin, 90px); }
+@keyframes halloween-float { from { transform: translateY(-4px) rotate(-4deg); } to { transform: translateY(4px) rotate(4deg); } }
+@media (prefers-reduced-motion: reduce) { .halloween-float { animation: none; } }
+@media (orientation: landscape) and (max-height: 560px) { .halloween-map-friends > span { display: none; } }
