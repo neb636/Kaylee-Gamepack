@@ -62,6 +62,7 @@ const PAINT_HEX = PAINT_COLORS.map((c) => PAINTS[c].hex)
 
 /** What's in a drawer: her things for that spot, or the pots of paint. */
 export function drawerThings(d: DrawerId): string[] {
+  if (isHalloweenDay() && d !== 'outfit') return []
   return d === 'paint' ? PAINT_COLORS.map((c) => `pot-${c}`) : wardrobeItems().filter((i) => i.slot === d).map((i) => i.id)
 }
 const thingDrawer = (id: string): DrawerId | null => (id.startsWith('pot-') ? 'paint' : (itemById(id)?.slot ?? null))
@@ -166,7 +167,10 @@ export class WardrobePlugin implements HousePlugin {
     this.inside = parts.get('wardrobe.inside') as Group
     this.doors = ['wardrobe.doorL', 'wardrobe.doorR'].map((n) => parts.get(n)!)
     this.mirror = parts.get('wardrobe.mirror')!
-    for (const d of DRAWERS) this.drawers.set(d.id, parts.get(`wardrobe.drawer.${d.id}`)!)
+    for (const d of DRAWERS) {
+      const drawer = parts.get(`wardrobe.drawer.${d.id}`)
+      if (drawer) this.drawers.set(d.id, drawer)
+    }
     this.sparkle = new Particles({ kind: 'spray', count: 160, colors: SPARKLE, gravity: 2.5 }, house.kit.bag)
     this.paint = new Particles({ kind: 'spray', count: 120, colors: PAINT_HEX, gravity: 6 }, house.kit.bag)
     house.scene.add(this.sparkle.mesh, this.paint.mesh)
@@ -257,6 +261,7 @@ export class WardrobePlugin implements HousePlugin {
 
   /** Pulls a drawer out (its things pop up on the shelves), or pushes it back if it's the one already out. */
   private pull(id: DrawerId, now = false) {
+    if (isHalloweenDay() && id !== 'outfit') return
     if (this.drawer === id) {
       this.drawer = null
       sfx.thump()
@@ -387,6 +392,7 @@ export class WardrobePlugin implements HousePlugin {
 
   /** A new picture on the door: it flies from the mirror to its pin (the oldest goes when all four are taken). */
   private addPhoto(ph: DoorPhoto, fromMirror: boolean) {
+    if (isHalloweenDay() && ph.look && !HALLOWEEN_LOOKS[parseLook(ph.look).on.outfit ?? '']) return
     let slot = this.door.findIndex((p) => !p)
     if (slot < 0) {
       slot = this.age.shift()!
@@ -492,7 +498,7 @@ export class WardrobePlugin implements HousePlugin {
   private surprise(): Style {
     const now = formatLook(this.style)
     if (isHalloweenDay()) {
-      const costumes = Object.values(HALLOWEEN_LOOKS).map((look) => formatLook(parseLook(look))).filter((look) => look !== now)
+      const costumes = Object.values(HALLOWEEN_LOOKS).map((look) => formatLook(parseLook(look))).filter((look) => look !== this.style.on.outfit)
       return parseLook(costumes[Math.floor(Math.random() * costumes.length)])
     }
     for (let tries = 0; tries < 8; tries++) {
@@ -551,7 +557,7 @@ export class WardrobePlugin implements HousePlugin {
     if (!item) return
     const old = this.style.on[item.slot]
     const costume = isHalloweenDay() ? HALLOWEEN_LOOKS[id] : undefined
-    this.setStyle(costume ? { ...parseLook(costume), paint: { ...this.style.paint } } : withItem(this.style, id, true), true)
+    this.setStyle(costume ? parseLook(costume) : withItem(this.style, id, true), true)
     sfx.pop()
     this.dressed++
     this.sparkle.burst(at.x, at.y, at.z, 22, 1.4, 1.8, 0.05)
@@ -1150,7 +1156,8 @@ export class WardrobePlugin implements HousePlugin {
     this.hints++
     const h = L.wardrobe.hint
     if (!this.drawer) {
-      const first = DRAWERS[this.hints === 1 ? 0 : Math.floor(Math.random() * DRAWERS.length)].id
+      const drawers = [...this.drawers.keys()]
+      const first = drawers[this.hints === 1 ? 0 : Math.floor(Math.random() * drawers.length)]
       this.events.say(h.drawer)
       this.glints.push({ at: () => this.drawers.get(first)?.getWorldPosition(new Vector3()) ?? null, t: 0, next: 0 })
       sfx.plink()

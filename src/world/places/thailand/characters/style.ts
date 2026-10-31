@@ -71,34 +71,19 @@ export const ITEMS: readonly Item[] = [
   { id: 'boots', slot: 'feet', name: 'Rain boots', color: '#FF8FB8', pose: 'stomp' },
   { id: 'sandals', slot: 'feet', name: 'Sandals', color: '#8FE3C8', pose: 'bunny' },
 ]
-/** A seasonal drawer of real 3D costumes, not replacements for her ordinary clothes. */
+/** Five complete costumes: every hat and prop is part of its outfit, not a separate choice. */
 export const HALLOWEEN_ITEMS: readonly Item[] = [
-  { id: 'halloween-witch-hat', slot: 'head', name: 'Witch hat', color: '#9670C7', pose: 'twirl', halloween: true },
-  { id: 'halloween-leaf', slot: 'head', name: 'Pumpkin leaf hat', color: '#9DD58F', pose: 'cute', halloween: true },
-  { id: 'halloween-antennae', slot: 'head', name: 'Bumblebee antennae', color: '#FBE27A', pose: 'bunny', halloween: true },
-  { id: 'halloween-mask', slot: 'face', name: 'Superhero mask', color: '#8FE3C8', pose: 'cool', halloween: true },
-  { id: 'halloween-bat-wings', slot: 'back', name: 'Bat wings', color: '#9B80C8', pose: 'flutter', halloween: true },
   { id: 'halloween-witch', slot: 'outfit', name: 'Witch costume', color: '#9670C7', pose: 'twirl', halloween: true },
+  { id: 'halloween-paw-patrol', slot: 'outfit', name: 'Paw Patrol costume (Skye)', color: '#FF8FB8', pose: 'cheer', halloween: true },
+  { id: 'halloween-princess', slot: 'outfit', name: 'Princess costume', color: '#FBEA9A', pose: 'curtsy', halloween: true },
+  { id: 'halloween-ghost', slot: 'outfit', name: 'Ghost costume', color: '#FFF7EC', pose: 'peek', halloween: true },
   { id: 'halloween-pumpkin', slot: 'outfit', name: 'Pumpkin costume', color: '#FFAB67', pose: 'cute', halloween: true },
-  { id: 'halloween-ghost', slot: 'outfit', name: 'Friendly ghost costume', color: '#FFF7EC', pose: 'peek', halloween: true },
-  { id: 'halloween-skeleton', slot: 'outfit', name: 'Skeleton costume', color: '#68568D', pose: 'stomp', halloween: true },
-  { id: 'halloween-hero', slot: 'outfit', name: 'Superhero costume', color: '#8EC9F5', pose: 'cheer', halloween: true },
-  { id: 'halloween-bee', slot: 'outfit', name: 'Bumblebee costume', color: '#FBE27A', pose: 'flutter', halloween: true },
 ]
-/** Tap an outfit for a complete costume, then mix accessories freely. The wand picks from the same sets. */
-export const HALLOWEEN_LOOKS: Record<string, string> = {
-  'halloween-witch': 'halloween-witch-hat,halloween-witch,party',
-  'halloween-pumpkin': 'halloween-leaf,halloween-pumpkin,boots',
-  'halloween-ghost': 'bow,halloween-ghost,party',
-  'halloween-skeleton': 'halloween-bat-wings,halloween-skeleton,boots',
-  'halloween-hero': 'halloween-mask,cape,halloween-hero,sneakers',
-  'halloween-bee': 'halloween-antennae,fairy,halloween-bee,sandals',
-}
-/** Keep every item registered for saved photos and anchors, regardless of today's drawer. */
+/** The wand chooses the same five complete outfits as the shelf. */
+export const HALLOWEEN_LOOKS: Record<string, string> = Object.fromEntries(HALLOWEEN_ITEMS.map((item) => [item.id, item.id]))
 export const ALL_ITEMS = [...ITEMS, ...HALLOWEEN_ITEMS]
 export function wardrobeItems(halloween = isHalloweenDay()): readonly Item[] {
-  if (!halloween) return ITEMS
-  return [...ITEMS.filter((i) => i.slot !== 'outfit' && (i.slot !== 'head' || ['kitty', 'crown', 'bow'].includes(i.id))), ...HALLOWEEN_ITEMS]
+  return halloween ? HALLOWEEN_ITEMS : ITEMS
 }
 export const itemById = (id: string) => ALL_ITEMS.find((i) => i.id === id)
 
@@ -135,6 +120,13 @@ export const lookKey = (halloween = isHalloweenDay()) => halloween ? 'thailand-h
 /** The color of a part, her own if it isn't painted. */
 export const paintOf = (s: Style, part: PaintPart): PaintColor => s.paint[part] ?? DEFAULT_PAINT[part]
 
+/** Old holiday saves and photo links also become one complete costume, with no everyday accessories mixed in. */
+function seasonalStyle(style: Style): Style {
+  if (!isHalloweenDay()) return style
+  const outfit = style.on.outfit
+  return { v: 1, on: outfit && HALLOWEEN_LOOKS[outfit] ? { outfit } : {}, paint: {} }
+}
+
 /** Cleans up anything (a saved look from an older build, a hand-written link): unknown things and colors are dropped,
  *  so old saves keep working when the closet changes. */
 export function normalize(raw: unknown): Style {
@@ -150,7 +142,7 @@ export function normalize(raw: unknown): Style {
     const c = r.paint?.[part]
     if (typeof c === 'string' && c in PAINTS && c !== DEFAULT_PAINT[part]) out.paint[part] = c as PaintColor
   }
-  return out
+  return seasonalStyle(out)
 }
 
 /** `crown,hearts,dress-mint` → a look. */
@@ -165,7 +157,7 @@ export function parseLook(text: string): Style {
     const [part, color] = word.split('-') as [PaintPart, PaintColor]
     if (PAINT_PARTS.includes(part) && color in PAINTS && color !== DEFAULT_PAINT[part]) out.paint[part] = color
   }
-  return out
+  return seasonalStyle(out)
 }
 
 /** A look → `crown,hearts,dress-mint` (empty for today's Kaylee). */

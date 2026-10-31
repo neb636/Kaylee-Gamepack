@@ -178,11 +178,14 @@ export function buildWardrobe(kit: Kit): Group {
     root.add(door)
   }
   DRAWERS.forEach((d, i) => {
+    if (halloween && d.id !== 'outfit') return
+    const width = halloween ? W - 0.12 : DW
+    const height = halloween ? 0.5 : DH
     const drawer = part(
       kit,
       `wardrobe.drawer.${d.id}`,
-      [P.rbox(DW, DH, 0.04, 0.015, d.color), P.box(DW - 0.04, DH - 0.06, 0.4, INSIDE, { at: [0, -0.01, -0.22] }), heartOn(0.03, 0.022, PAL.gold, [0, -DH / 2 + 0.055, 0.03]), ...icon(d.id)],
-      drawerAt(i),
+      [P.rbox(width, height, 0.04, 0.015, d.color), P.box(width - 0.04, height - 0.06, 0.4, INSIDE, { at: [0, -0.01, -0.22] }), heartOn(0.03, 0.022, PAL.gold, [0, -height / 2 + 0.055, 0.03]), ...icon(d.id)],
+      halloween ? [0, 0.4, D / 2 - 0.015] : drawerAt(i),
     )
     drawer.userData.pick = 'wardrobe'
     drawer.userData.base = drawer.position.clone()
