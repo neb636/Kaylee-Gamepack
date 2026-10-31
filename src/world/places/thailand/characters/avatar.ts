@@ -262,8 +262,6 @@ export class Dress {
         if (how === 'pocket' && mine.has(id)) this.pocketing.set(id, 0)
         else for (const g of groups) this.rest(g, false)
       } else if (!want) for (const g of groups) if (!this.pocketing.has(id)) g.visible = false
-      // A complete dress-up costume may include its own hat; a game's hat takes only that piece.
-      if (want && !this.pocketing.has(id)) for (const g of groups) if (g.userData.costumeHat) g.visible = !taken.has('head')
     }
   }
 
@@ -294,7 +292,6 @@ export class Dress {
         if (!g || !pivot) continue
         pivot.add(g)
         g.userData.closet = id
-        g.userData.costumeHat = pivot === c.head && itemById(id)?.slot === 'outfit'
         g.traverse((o) => o.userData.blink && (this.lights.get(id) ?? this.lights.set(id, []).get(id)!).push(o))
         homeOf(g)
         if (pivot === c.head) midOf(g)
@@ -399,7 +396,6 @@ export class Dress {
         k = e < 0.6 ? (e / 0.6) * 1.18 : 1.18 - 0.18 * span(e, 0.6, 1)
       }
       for (const g of gs) {
-        const spot = g.userData.costumeHat ? 'head' : slot
         const h = homeOf(g)
         if (!g.visible && out === undefined) continue
         g.position.copy(h.pos)
@@ -407,7 +403,7 @@ export class Dress {
         let sx = 1
         let sy = 1
         let sz = 1
-        if (spot === 'back') {
+        if (slot === 'back') {
           if (g.userData.wings) {
             // Folded flat against her back (inside her walking circle), spread standing still, a flutter on a hop.
             sx = (1 - 0.6 * fold) * (1 + flap)
@@ -418,17 +414,17 @@ export class Dress {
             sy = 1 - 0.18 * fold
             sz = 1 - 0.25 * fold
           }
-        } else if (spot === 'face' && this.up) {
+        } else if (slot === 'face' && this.up) {
           g.position.y += up.y
           g.position.z += up.z
           g.rotation.x += up.tilt
-        } else if (spot === 'head' && wai > 0) {
+        } else if (slot === 'head' && wai > 0) {
           this.bodyPoint(g, HAT_HELD, v1).sub(midOf(g))
           g.position.lerp(v1, wai)
           g.position.y += bell(wai) * 0.08
           g.rotation.x = h.rot.x - 1.1 * wai
         }
-        if (spot === 'head' && this.flipK >= 0) flipped(g, g.rotation.x, this.flipK, v1)
+        if (slot === 'head' && this.flipK >= 0) flipped(g, g.rotation.x, this.flipK, v1)
         if (out !== undefined) {
           // Into her pocket: smaller and smaller, toward her hip, then gone.
           const e = ease(out)
