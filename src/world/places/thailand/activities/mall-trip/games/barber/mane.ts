@@ -78,9 +78,7 @@ function scalpOf(rig: Rig, look: Look): Scalp {
   const eyeX = 0.37 * R
   const eyeY = look.species === 'unicorn' || look.species === 'pony' ? 0.12 * R : 0.05 * R
   const on = (x: number, y: number) => new Vector3(x, headY + y, Math.sqrt(Math.max(0, R * R - x * x - y * y)))
-  // A modelled head says where its own brows are (rig.spots).
-  const b = rig.spots?.brow
-  const brows = [-1, 1].map((s) => (b ? new Vector3(s * Math.abs(b[0]), b[1], b[2]) : on(s * eyeX, eyeY + 0.3 * R)))
+  const brows = [-1, 1].map((s) => on(s * eyeX, eyeY + 0.3 * R))
   // Strands grow from the head itself, from the crown down to `low` (a unicorn's down the back and sides too).
   const scalp = { c: head.c.clone(), r: new Vector3(R, R, R).multiplyScalar(look.species === 'elephant' || look.species === 'puppy' ? 1.05 : 0.99) }
   const avoid = [head]
@@ -141,12 +139,7 @@ export class Mane {
   private bows: { tuft: number; bow: BowId; g: Group; k: number }[] = []
   private bowShapes = new Map<BowId, BufferGeometry>()
 
-  private look: Look
-
-  constructor(rig: Rig, look: Look, private bag: Bag, hairdo: Hairdo | string = '') {
-    // A modelled toy's strands start out the color of its own hair (rig.hairColors), brows too.
-    const own = rig.hairColors
-    this.look = own ? { ...look, mane: own, dark: own[0] } : look
+  constructor(rig: Rig, private look: Look, private bag: Bag, hairdo: Hairdo | string = '') {
     this.scalp = scalpOf(rig, look)
     this.R = rig.face.R
     const n = (TUFTS * PER + 2 * BROW) * SEG
@@ -171,8 +164,8 @@ export class Mane {
     this.makeStrands()
     this.set(typeof hairdo === 'string' ? decodeHair(hairdo) : hairdo)
     rig.head.add(this.root)
-    // The toy's own back locks (a modelled toy's whole hairdo and brows) give way to the strands.
-    for (const g of [rig.mane, rig.hair, rig.brows]) if (g) g.visible = false
+    // The toy's own back locks give way to the strands.
+    if (rig.mane) rig.mane.visible = false
   }
 
   /** Length in meters of a step (0..LEN_STEPS): a step past his own is a lot longer. */

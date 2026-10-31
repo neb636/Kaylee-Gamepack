@@ -235,9 +235,7 @@ export class CafeStage extends Stage {
       const cream = new Group()
       cream.add(new Mesh(bag.add(P.sphere(1, '#FFFDF8', { scale: [1, 0.8, 0.8] }, 12)), bag.add(new MeshBasicMaterial({ color: '#FFFDF8' }))))
       const f = m.rig.face
-      const nose = m.rig.spots?.nose
-      if (nose) cream.position.set(nose[0], nose[1], nose[2] + 0.01)
-      else cream.position.set(0, f.headY - 0.05 * f.R, 1.02 * f.R)
+      cream.position.set(0, f.headY - 0.05 * f.R, 1.02 * f.R)
       cream.scale.setScalar(0.0001)
       m.rig.head.add(cream)
       this.guests.set(id, { m, id, drinking: null, freeze: 0, arm: 0, cream, creamT: 0 })

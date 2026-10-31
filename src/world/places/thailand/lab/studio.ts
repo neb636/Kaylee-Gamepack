@@ -10,7 +10,6 @@ import { clamp, say } from '../../../../sdk'
 import { applyPose, clearPose } from '../activities/boat-trip/bay/poses'
 import { buildBird, buildCat, buildCrab, buildLizard, buildMacaque, buildMudskipper, buildNeedlefish, buildPorpoise, type Blink, type CritterId } from '../activities/boat-trip/bay/critters'
 import { Avatar, SHOW_SECS } from '../characters/avatar'
-import { dadModel, dadReady } from '../characters/dad-model'
 import { kayleeModel, loadKayleeModel } from '../characters/model'
 import { Member } from '../characters/member'
 import type { Wearable } from '../characters/looks'
@@ -162,7 +161,7 @@ export class Studio implements World3D {
       this.rig.setSize(this.w, this.h, 0)
     }
     // Who's on stage: build the new ones, drop the ones that left, keep the rest as they are.
-    const keyOf = (id: string) => `${id}|${v.phone ? 'phone' : ''}|${castById(id)?.model && (id === 'nick' ? dadModel() : kayleeModel()) ? 'model' : ''}`
+    const keyOf = (id: string) => `${id}|${v.phone ? 'phone' : ''}|${castById(id)?.model && kayleeModel() ? 'model' : ''}`
     const keep = new Map(this.actors.map((a) => [a.key, a]))
     const next: Actor[] = []
     for (const id of v.ids) {
@@ -195,8 +194,6 @@ export class Studio implements World3D {
       k.place(0, 0, 0, 0)
       char = k
     } else if (entry.kind === 'member' && entry.look) {
-      // Daddy's vinyl toy the same way: the code-built one until his model has loaded.
-      if (entry.model && !dadModel()) void dadReady().then(() => !this.disposed && this.view && this.apply(this.view))
       char = new Member({ id: entry.id, name: entry.name, who: entry.who, height: entry.look.height, spot: null, pitch: 300 }, bag, entry.look, entry.voice)
       char.place(0, 0, 0, 0)
     } else if (entry.critter) critter = buildCritter(entry.critter, bag)

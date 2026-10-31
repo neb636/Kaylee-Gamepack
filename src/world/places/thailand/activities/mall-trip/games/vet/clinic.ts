@@ -979,7 +979,7 @@ export class VetClinic extends Stage {
       g: this.treatMesh,
       t: 0,
       from,
-      to: () => (p ? p.zoneWorld(p.zones.find((z) => z.id === 'mouth')!, new Vector3()) : this.nick.rig.head.localToWorld(this.nick.rig.spots ? new Vector3(...this.nick.rig.face.mouth) : new Vector3(0, this.nick.rig.face.headY - 0.2, 0.3))),
+      to: () => (p ? p.zoneWorld(p.zones.find((z) => z.id === 'mouth')!, new Vector3()) : this.nick.rig.head.localToWorld(new Vector3(0, this.nick.rig.face.headY - 0.2, 0.3))),
       done: () => {
         sfx.munch()
         if (p) {
@@ -1132,9 +1132,8 @@ export class VetClinic extends Stage {
     this.nick.update(dt, t)
     this.stethoscope(dt, tool)
     this.daddy.suds?.update(dt, t)
-    const dm = this.nick.rig.hair ?? this.nick.rig.mane
-    // A modelled Daddy's hair is one shell round his head: it puffs up less, or it lifts off his head.
-    if (dm) dm.scale.setScalar(1 + (this.nick.rig.hair ? 0.2 : 0.4) * this.daddy.fluff)
+    const dm = this.nick.rig.mane
+    if (dm) dm.scale.setScalar(1 + 0.4 * this.daddy.fluff)
     // ---- The pokeables ----
     const r = this.room
     this.xrayLit = Math.max(0, this.xrayLit - dt)
