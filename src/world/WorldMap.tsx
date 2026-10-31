@@ -271,15 +271,15 @@ export function WorldMap({ view: linked }: { view?: string }) {
 }
 
 function ViewButton({ icon, label, on, onClick }: { icon: (color: string) => ReactNode; label: string; on: boolean; onClick: () => void }) {
-  // The button keeps the full touch size (88 px on iPad, 72 on phones); only the picture shrinks when it's off.
-  const size = 'calc(var(--btn) + 12px)'
+  // Match the dock tiles in both views and every orientation; only the inactive icon shrinks.
+  const size = 'var(--dock-tile)'
   return (
     <motion.button
       aria-label={label}
       aria-pressed={on}
       whileTap={{ scale: 0.88 }}
       onClick={onClick}
-      style={{ width: size, height: size, borderRadius: '50%', background: on ? 'var(--hotpink)' : 'transparent', padding: 'calc(var(--btn) * 0.28)', display: 'grid', placeItems: 'center', transition: 'background 0.2s' }}
+      style={{ width: size, height: size, borderRadius: '50%', background: on ? 'var(--hotpink)' : 'transparent', padding: 'calc(var(--dock-tile) * 0.24)', display: 'grid', placeItems: 'center', transition: 'background 0.2s' }}
     >
       <motion.div animate={{ scale: on ? 1 : 0.86 }} style={{ width: '100%', height: '100%' }}>
         {icon(on ? '#fff' : 'var(--lavender-dark)')}
