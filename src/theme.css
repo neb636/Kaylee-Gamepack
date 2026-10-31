@@ -34,11 +34,27 @@ body,
   overscroll-behavior: none;
 }
 
+/* Keep the document itself out of iOS's scroll/rotation recovery. Screens that
+   scroll (the shelf, passport, etc.) own their scroll position inside #root. */
 body {
+  position: fixed;
+  inset: 0;
+  width: 100%;
   touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+}
+
+/* Percentage height can retain the old layout viewport during an iPhone rotation.
+   Pin the app to the live viewport; safe-area padding stays inside each screen.
+   The fallback is for browsers without dynamic viewport units. */
+#root {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
 }
 
 img {
