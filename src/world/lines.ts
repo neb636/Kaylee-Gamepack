@@ -47,7 +47,6 @@ export const WORLD_LINES = {
     showList: 'All the games!',
     hello: 'Pick any game!',
     surprise: 'Surprise!',
-    go: "Let's play!",
     loved: 'Yay, a favorite!',
     favorites: 'Your favorites!',
     rows: {
