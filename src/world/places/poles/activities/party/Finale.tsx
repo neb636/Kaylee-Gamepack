@@ -4,7 +4,7 @@
 // (kit/Guide) says how to steer, asks each question (🔊 by the stars to hear it again) and cheers or helps.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, bigCelebration, burst, pick, say, SayButton, type Line } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, pick, say, SayButton, type Line, CAPTION } from '../../../../../sdk'
 import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
@@ -198,13 +198,5 @@ export function Finale({ onWin }: { onWin: () => void }) {
 }
 
 const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  padding: '8px 20px',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
+  ...CAPTION,
 }

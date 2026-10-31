@@ -7,7 +7,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, lineText, say, SparklePuppet, spendHint, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, burst, lineText, say, SparklePuppet, spendHint, type Line, type PuppetHandle, CAPTION } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../engine3d/View3D'
@@ -175,17 +175,7 @@ export function CarnivalSnowballs({ onDone, setProgress }: Partial<CanadaActivit
 }
 
 const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  border: 'none',
-  padding: '8px 20px',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  fontFamily: 'inherit',
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
+  ...CAPTION,
   pointerEvents: 'auto' as const,
 }
 

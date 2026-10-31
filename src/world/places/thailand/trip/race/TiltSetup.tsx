@@ -24,7 +24,7 @@ export function PhoneIcon({ size }: { size: string }) {
 // (It fades out under the top bar and lets taps through but for its own buttons, so the way out stays clear.)
 const fade = 'linear-gradient(to bottom, transparent calc(var(--bar-clear) - 28px), #000 calc(var(--bar-clear) + 24px))'
 const veil = { position: 'absolute', inset: 0, zIndex: 58, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 'clamp(14px, 3vmin, 26px)', background: 'rgba(255, 244, 250, 0.9)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', maskImage: fade, WebkitMaskImage: fade, pointerEvents: 'none' } as const
-const forDad = { background: 'rgba(255,255,255,.95)', borderRadius: 999, padding: '6px 18px', boxShadow: 'var(--shadow)', color: 'var(--ink)', fontWeight: 600, fontSize: 'clamp(16px, 2.6vmin, 22px)' } as const
+const forDad = { background: '#fff', borderRadius: 999, padding: '5px 18px', border: '3px solid var(--ink)', boxShadow: 'var(--talk-drop)', color: 'var(--ink)', fontWeight: 600, fontSize: 'clamp(16px, 2.6vmin, 22px)' } as const
 
 export function TiltSetup({ stage, onAsk, onSkip }: { stage: 'turn' | 'ask' | null; onAsk: () => void; onSkip: () => void }) {
   return <AnimatePresence>{stage && (stage === 'turn' ? <TurnIt key="turn" onSkip={onSkip} /> : <AskIt key="ask" onAsk={onAsk} />)}</AnimatePresence>

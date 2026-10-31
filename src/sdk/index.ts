@@ -23,6 +23,7 @@ export { TapCounter } from './components/TapCounter'
 export { Mascot, type MascotPose } from './components/Mascot'
 export { StarProgress } from './components/StarProgress'
 export { SayButton } from './components/SayButton'
+export { TalkBubble, WhoTab, Avatar, Dialogue, NameTag, ChoiceCard, CAPTION, type Speaker, type TailSide, type TalkBubbleProps, type ChoiceCardProps } from './components/Talk'
 export { Scene } from './components/Scene'
 export { Trophy } from './components/Trophy'
 

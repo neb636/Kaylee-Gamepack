@@ -22,7 +22,7 @@
 // drawn once and slid under her finger (only the compositor moves it).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as RPointerEvent, type RefObject } from 'react'
-import { BigButton, bell as bellIn, bigCelebration, burst, lerp, lineText, say, smooth, sounds, span, spendHint, useElementSize, wobble, type Line, type PuppetHandle } from '../../../../../sdk'
+import { BigButton, bell as bellIn, bigCelebration, burst, lerp, lineText, say, smooth, sounds, span, spendHint, useElementSize, wobble, type Line, type PuppetHandle, CAPTION } from '../../../../../sdk'
 import { knobs, watch } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { sfx } from '../../../../kit/sfx'
@@ -2227,17 +2227,7 @@ const CHIP = {
 }
 
 const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  border: 'none',
-  fontFamily: 'inherit',
-  borderRadius: 999,
-  padding: '10px 22px',
+  ...CAPTION,
   minHeight: 64,
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
   pointerEvents: 'auto' as const,
 }

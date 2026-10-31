@@ -8,7 +8,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
-import { BigButton, burst, lineText, say, type Line } from '../../../../../sdk'
+import { BigButton, burst, lineText, say, type Line, CAPTION } from '../../../../../sdk'
 import { isFeelParam } from '../../../../kit/knobs'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
@@ -151,19 +151,9 @@ export function RedCanoe({ onDone, setProgress }: CanadaActivityProps) {
 }
 
 const PILL = {
+  ...CAPTION,
   pointerEvents: 'auto' as const,
-  border: 'none',
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  padding: '8px 20px',
   minHeight: 48,
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  fontFamily: 'inherit',
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
 }
 
 /** The hint's hand: a stroke drawn back beside the canoe, or a press on the water ahead of it. */

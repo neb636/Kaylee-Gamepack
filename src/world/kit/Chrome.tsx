@@ -40,7 +40,7 @@ export function TopBar({ icon, tile, label, onBack, children }: { icon: ReactNod
 /** A pill that sits in the top bar (stamp counts, titles). */
 export function BarPill({ children, style }: { children: ReactNode; style?: CSSProperties }) {
   return (
-    <div style={{ background: 'rgba(255,255,255,0.9)', borderRadius: 999, padding: '6px clamp(10px, 2vw, 20px)', boxShadow: 'var(--shadow)', fontSize: 'clamp(20px, min(3.4vw, 5vh), 32px)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap', ...style }}>
+    <div style={{ background: '#fff', borderRadius: 999, padding: '4px clamp(10px, 2vw, 20px)', border: '3px solid var(--ink)', boxShadow: 'var(--talk-drop)', fontSize: 'clamp(20px, min(3.4vw, 5vh), 32px)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap', ...style }}>
       {children}
     </div>
   )

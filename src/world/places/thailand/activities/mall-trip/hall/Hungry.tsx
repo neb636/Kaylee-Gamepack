@@ -4,7 +4,8 @@
 // to More play; the card shows the words for Dad.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect } from 'react'
-import { lineText, sounds } from '../../../../../../sdk'
+import { ChoiceCard, Dialogue, lineText, sounds } from '../../../../../../sdk'
+import { WHO } from '../../../who'
 import { L } from '../../../lines'
 import { mallVoice } from '../voice'
 
@@ -37,34 +38,24 @@ export function Hungry({ open, onPizza, onPlay }: Props) {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
-          style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom, 0px) + 16px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, padding: '0 16px', zIndex: 50, pointerEvents: 'none' }}
+          style={{ position: 'absolute', left: 0, right: 0, bottom: 'calc(var(--safe-bottom, 0px) + 22px)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(18px, 3vh, 28px)', padding: '0 16px', zIndex: 50, pointerEvents: 'none' }}
         >
-          <motion.div initial={{ scale: 0.85 }} animate={{ scale: 1 }} style={{ display: 'flex', alignItems: 'center', gap: 12, maxWidth: 'min(620px, 100%)', background: 'rgba(255,255,255,0.97)', borderRadius: 'var(--radius)', padding: '10px 20px 10px 10px', boxShadow: 'var(--shadow)' }}>
-            <motion.span animate={{ rotate: [0, -12, 10, 0] }} transition={{ repeat: Infinity, duration: 1.8, repeatDelay: 1 }} style={{ flexShrink: 0, display: 'grid', placeItems: 'center', width: 64, height: 64, borderRadius: 32, background: '#FF8FB8', fontSize: 34, border: '3px solid #fff' }} title="Mommy">
-              🦄
-            </motion.span>
-            <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
-              <small style={{ fontWeight: 700, opacity: 0.6, fontSize: 14 }}>Mommy</small>
-              <span style={{ fontWeight: 700, fontSize: 'clamp(20px, min(3.4vw, 3.6vh), 30px)' }}>{lineText(L.mall.hall.pizza)}</span>
-            </span>
-          </motion.div>
-          <div style={{ display: 'flex', gap: 'clamp(16px, 4vw, 40px)', pointerEvents: 'auto' }}>
+          <Dialogue who={WHO.ji} size="lg" avatar={72}>
+            {lineText(L.mall.hall.pizza)}
+          </Dialogue>
+          <div style={{ display: 'flex', gap: 'clamp(16px, 4vw, 36px)', pointerEvents: 'auto' }}>
             {buttons.map((b, i) => (
-              <motion.button
+              <ChoiceCard
                 key={b.id}
                 aria-label={b.label}
-                initial={{ scale: 0 }}
-                animate={{ scale: i === 0 ? [1, 1.07, 1] : 1 }}
-                transition={i === 0 ? { repeat: Infinity, duration: 1.4, ease: 'easeInOut' } : { type: 'spring' }}
-                whileTap={{ scale: 0.88 }}
+                icon={b.icon}
+                label={b.label}
+                color={b.color}
+                initial={{ scale: 0, rotate: i % 2 ? 4 : -4 }}
+                animate={{ scale: i === 0 ? [1, 1.05, 1] : 1, rotate: 0 }}
+                transition={i === 0 ? { scale: { repeat: Infinity, duration: 1.4, ease: 'easeInOut', delay: 0.4 }, rotate: { type: 'spring' } } : { type: 'spring', delay: 0.1 }}
                 onClick={b.on}
-                style={{ minWidth: 'min(200px, 40vw)', minHeight: 'min(150px, 22vh)', padding: '10px 18px', borderRadius: 36, border: '5px solid #fff', background: b.color, boxShadow: 'var(--shadow)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2, color: 'var(--ink)' }}
-              >
-                <span style={{ fontSize: 'clamp(48px, min(9vw, 9vh), 72px)', lineHeight: 1 }} aria-hidden>
-                  {b.icon}
-                </span>
-                <span style={{ fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: 700 }}>{b.label}</span>
-              </motion.button>
+              />
             ))}
           </div>
         </motion.div>

@@ -2,9 +2,9 @@
 // Kaylee when the tuk-tuk stops, says what to do the first time she's somewhere new, tells her something true about
 // Thailand the first time she pokes certain things, and after a while with nothing touched waves with a hint in her bubble
 // (no voice: the house is a toy, there's nothing to be stuck on). Tap Sparkle to hear the last line again. The house's family speak for themselves (house.ts).
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { lineText, say, SparklePuppet, type Line, type PuppetHandle } from '../../../../../sdk'
+import { lineText, say, SparklePuppet, TalkBubble, type Line, type PuppetHandle } from '../../../../../sdk'
 import { L } from '../../lines'
 import type { Spot } from './house'
 
@@ -23,7 +23,8 @@ const STUCK_S = 12
 const REMINDER_S = 60
 const MAX_REMINDERS = 3
 
-export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(function Guide({ spot, quiet }, ref) {
+/** `hush`: something else is talking with her (Mommy's card), so her bubble steps aside. */
+export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean; hush?: boolean }>(function Guide({ spot, quiet, hush = false }, ref) {
   const sparkle = useRef<PuppetHandle>(null)
   const [line, setLine] = useState<Line | null>(null)
   const last = useRef<Line>(L.house.door)
@@ -106,7 +107,7 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
   }, [quiet])
 
   return (
-    <div style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 8px + var(--roam-left, 0px))', bottom: 'calc(var(--safe-bottom) + 6px)', display: 'flex', alignItems: 'flex-end', gap: 6, zIndex: 15, pointerEvents: 'none', maxWidth: 'calc(100% - 120px - var(--roam-left, 0px) - var(--roam-right, 0px))' }}>
+    <div className="talk-guide" style={{ position: 'absolute', left: 'calc(var(--safe-left, 0px) + 8px + var(--roam-left, 0px))', bottom: 'calc(var(--safe-bottom) + 6px)', zIndex: 15, pointerEvents: 'none', maxWidth: 'calc(100% - 120px - var(--roam-left, 0px) - var(--roam-right, 0px))' }}>
       <button
         aria-label="Sparkle"
         onClick={() => {
@@ -118,16 +119,17 @@ export const Guide = forwardRef<GuideHandle, { spot: Spot; quiet: boolean }>(fun
         <SparklePuppet ref={sparkle} height="100%" lookToward={0.4} />
       </button>
       <AnimatePresence>
-        {line && (
-          <motion.div
+        {line && !hush && (
+          <TalkBubble
             key={lineText(line)}
+            tail="left"
             initial={{ opacity: 0, scale: 0.8, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            style={{ marginBottom: 'min(70px, 9vh)', background: 'rgba(255,255,255,0.95)', borderRadius: 'var(--radius)', padding: '10px 16px', boxShadow: 'var(--shadow)', fontSize: 'clamp(18px, min(3.2vw, 3.6vh), 28px)', fontWeight: 600, lineHeight: 1.15, transformOrigin: 'bottom left' }}
+            style={{ marginBottom: 'min(70px, 9vh)', transformOrigin: 'bottom left' }}
           >
             {lineText(line)}
-          </motion.div>
+          </TalkBubble>
         )}
       </AnimatePresence>
     </div>

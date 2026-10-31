@@ -5,7 +5,7 @@
 // line at the bottom says what's on screen (for Dad) with a button to hear it again.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, SayButton, type Line } from '../../../../../sdk'
+import { BigButton, SayButton, type Line, CAPTION } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
 import { View3D, type QAKey, type RenderMode } from '../../../../engine3d/View3D'
@@ -197,15 +197,7 @@ export function Finale({ onDone, setProgress, stamps }: CanadaActivityProps) {
 }
 
 const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  padding: '8px 20px',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
+  ...CAPTION,
 }
 
 /** The hint's hand: a drag from the animal (or the puck) toward where it should go (--dx, --dy). */

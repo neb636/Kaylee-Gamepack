@@ -61,7 +61,7 @@ export function StampEarned({ activity, onClose, facts, closeIcon = '🗺️ ▶
           </motion.div>
         )}
       </div>
-      <p style={{ fontSize: 'clamp(22px, min(4vw, 5vh), 36px)', fontWeight: 600, textAlign: 'center', maxWidth: 720, background: '#fff', borderRadius: 'var(--radius)', padding: '12px 24px', boxShadow: 'var(--shadow)' }}>
+      <p className="talk-bubble" data-size="lg" style={{ textAlign: 'center', maxWidth: 720 }}>
         {lineText(activity.sticker.fact)}
       </p>
       {facts && facts.length > 0 && (

@@ -77,7 +77,7 @@ export function Barber({ round, hair, onRound, onHair, onRevealed, onPlay }: Pro
                     animate={{ scale: 1, rotate: [-4, 4, -4] }}
                     exit={{ scale: 0 }}
                     transition={{ rotate: { repeat: Infinity, duration: 2.2 }, scale: { type: 'spring', stiffness: 400, damping: 14 } }}
-                    style={{ translate: '0 -100%', padding: 6, borderRadius: 18, background: '#fff', border: '4px solid var(--lavender-dark)', boxShadow: '0 4px 10px rgba(43,35,48,.18)', width: 'clamp(70px, 12vmin, 104px)', height: 'clamp(70px, 12vmin, 104px)', display: 'grid', placeItems: 'center' }}
+                    style={{ translate: '0 -100%', padding: 6, borderRadius: 18, background: '#fff', border: '3px solid var(--ink)', boxShadow: 'var(--talk-drop)', width: 'clamp(70px, 12vmin, 104px)', height: 'clamp(70px, 12vmin, 104px)', display: 'grid', placeItems: 'center' }}
                   >
                     <CardPicture card={card} size="100%" />
                   </motion.div>

@@ -1,7 +1,7 @@
 // Direct activity selection on Canada’s 3D map.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { lineText, lineVoice, say, stopSpeaking, useAlive, wait, type Line } from '../../../../../sdk'
+import { lineText, lineVoice, say, stopSpeaking, useAlive, wait, type Line, CAPTION } from '../../../../../sdk'
 import { useSections } from '../../../../kit/sections'
 import type { PlaceProps } from '../../../../types'
 import { Anchors } from '../../../../engine3d/Anchors'
@@ -220,7 +220,7 @@ function Pins({ input, els, icons, stamps, allDone }: { input: AnchorInput; els:
           >
             {icons[id]?.icon ?? '❓'}
             <span style={{ position: 'absolute', top: -8, right: -5, fontSize: 24 }}>{stamps.includes(id) ? '✅' : id === 'party' && !allDone ? '🔒' : ''}</span>
-            <span style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: 6, width: 'max-content', maxWidth: 'min(110px, 18vw)', padding: '3px 5px', borderRadius: 10, background: 'rgba(255,255,255,.95)', fontSize: 'clamp(11px, 1.8vmin, 16px)', lineHeight: 1.05, fontWeight: 600, color: 'var(--ink)', pointerEvents: 'none' }}>{icons[id]?.name}</span>
+            <span style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: 6, width: 'max-content', maxWidth: 'min(110px, 18vw)', padding: '2px 8px', borderRadius: 12, background: '#fff', border: '2.5px solid var(--ink)', boxShadow: '0 3px 0 rgba(43,35,48,.2)', fontSize: 'clamp(11px, 1.8vmin, 16px)', lineHeight: 1.05, fontWeight: 600, color: 'var(--ink)', pointerEvents: 'none' }}>{icons[id]?.name}</span>
           </button>
         </div>
       ))}
@@ -229,13 +229,5 @@ function Pins({ input, els, icons, stamps, allDone }: { input: AnchorInput; els:
 }
 
 const PILL = {
-  background: 'rgba(255,255,255,.92)',
-  color: 'var(--ink)',
-  borderRadius: 999,
-  padding: '8px 20px',
-  fontSize: 'clamp(16px, 2.4vmin, 22px)',
-  fontWeight: 600,
-  boxShadow: 'var(--shadow)',
-  textAlign: 'center' as const,
-  maxWidth: '100%',
+  ...CAPTION,
 }

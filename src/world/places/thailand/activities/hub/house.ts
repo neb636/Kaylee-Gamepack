@@ -15,6 +15,7 @@ import { Group, PerspectiveCamera, Plane, Raycaster, Scene, Vector2, Vector3, ty
 import { Avatar } from '../../characters/avatar'
 import { formatLook } from '../../characters/style'
 import { FAMILY, type FamilyMember } from '../../characters/family'
+import { WHO } from '../../who'
 import { Member } from '../../characters/member'
 import type { AnchorInfo } from '../../../../engine3d/Anchors'
 import { CameraRig, type Roam, type Shot } from '../../../../engine3d/camera'
@@ -133,8 +134,8 @@ const tmp2 = new Vector3()
 
 export const ANCHORS: AnchorInfo[] = [
   ...PICKABLES.map((p) => ({ id: p.id, label: p.label, kind: 'thing' as const })),
-  ...FAMILY.map((m) => ({ id: `family:${m.id}`, label: m.name, name: m.name, thai: m.thai, kind: 'family' as const })),
-  { id: 'family:kaylee', label: 'Kaylee', name: 'Kaylee', kind: 'family' },
+  ...FAMILY.map((m) => ({ id: `family:${m.id}`, label: m.name, name: m.name, thai: m.thai, color: WHO[m.id]?.color, kind: 'family' as const })),
+  { id: 'family:kaylee', label: 'Kaylee', name: 'Kaylee', color: WHO.kaylee.color, kind: 'family' },
 ]
 
 export class House implements World3D {

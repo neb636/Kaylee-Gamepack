@@ -27,7 +27,7 @@ export function PackCard({ open, packed, sitting, onClose }: Props) {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', right: 'calc(var(--safe-right, 0px) + 12px)', maxWidth: 'calc(100vw - 200px)', display: 'flex', alignItems: 'center', gap: 8, padding: 8, borderRadius: 999, background: 'rgba(255,255,255,0.95)', boxShadow: 'var(--shadow)', zIndex: 44, pointerEvents: 'none' }}
+          style={{ position: 'absolute', top: 'calc(var(--safe-top) + 12px)', right: 'calc(var(--safe-right, 0px) + 12px)', maxWidth: 'calc(100vw - 200px)', display: 'flex', alignItems: 'center', gap: 8, padding: 8, borderRadius: 999, background: '#fff', border: '3px solid var(--ink)', boxShadow: 'var(--talk-drop)', zIndex: 44, pointerEvents: 'none' }}
         >
           <span aria-hidden style={{ fontSize: 'clamp(30px, 5vmin, 42px)', lineHeight: 1, padding: '0 2px 0 6px' }}>
             🧳
