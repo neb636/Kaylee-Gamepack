@@ -7,7 +7,6 @@
 // and a costume takes only the spots it needs (avatar.ts's Dress).
 //
 // Pure data (no three.js): the closet (closet/) builds the things, model.ts paints the colors.
-import { isHalloweenDay } from '../../../../shell/season'
 import { savedKey } from '../../../../sdk/hooks'
 import type { PaintColor, PaintPart } from '../../../engine3d/characters/look'
 import { flag } from '../../../engine3d/flags'
@@ -35,8 +34,6 @@ export interface Item {
   pose: ShowPose
   /** A shady hat: it counts as a sun hat on a sunny trip (greybox 2's sun smarts). */
   shade?: boolean
-  /** Available in the costume box on October 31. */
-  halloween?: boolean
   /** Tinted glasses: they count as sunglasses. */
   tinted?: boolean
 }
@@ -71,21 +68,7 @@ export const ITEMS: readonly Item[] = [
   { id: 'boots', slot: 'feet', name: 'Rain boots', color: '#FF8FB8', pose: 'stomp' },
   { id: 'sandals', slot: 'feet', name: 'Sandals', color: '#8FE3C8', pose: 'bunny' },
 ]
-/** Five complete costumes: every hat and prop is part of its outfit, not a separate choice. */
-export const HALLOWEEN_ITEMS: readonly Item[] = [
-  { id: 'halloween-witch', slot: 'outfit', name: 'Witch costume', color: '#9670C7', pose: 'twirl', halloween: true },
-  { id: 'halloween-paw-patrol', slot: 'outfit', name: 'Paw Patrol costume (Skye)', color: '#FF8FB8', pose: 'cheer', halloween: true },
-  { id: 'halloween-princess', slot: 'outfit', name: 'Princess costume', color: '#FBEA9A', pose: 'curtsy', halloween: true },
-  { id: 'halloween-ghost', slot: 'outfit', name: 'Ghost costume', color: '#FFF7EC', pose: 'peek', halloween: true },
-  { id: 'halloween-pumpkin', slot: 'outfit', name: 'Pumpkin costume', color: '#FFAB67', pose: 'cute', halloween: true },
-]
-/** The wand chooses the same five complete outfits as the shelf. */
-export const HALLOWEEN_LOOKS: Record<string, string> = Object.fromEntries(HALLOWEEN_ITEMS.map((item) => [item.id, item.id]))
-export const ALL_ITEMS = [...ITEMS, ...HALLOWEEN_ITEMS]
-export function wardrobeItems(halloween = isHalloweenDay()): readonly Item[] {
-  return halloween ? HALLOWEEN_ITEMS : ITEMS
-}
-export const itemById = (id: string) => ALL_ITEMS.find((i) => i.id === id)
+export const itemById = (id: string) => ITEMS.find((i) => i.id === id)
 
 /** The pots of paint, in the order they stand in the paint drawer. Any pot works anywhere (brown fur is silly, and
  *  fine). `hsl` is what the recolor aims for: hue in degrees, saturation and lightness 0..1. */
@@ -115,17 +98,9 @@ export const BARE: Style = { v: 1, on: {}, paint: {} }
 
 /** The saved look's key (useSaved('thailand-look') writes it). */
 export const LOOK_KEY = 'thailand-look'
-export const lookKey = (halloween = isHalloweenDay()) => halloween ? 'thailand-halloween-look' : LOOK_KEY
 
 /** The color of a part, her own if it isn't painted. */
 export const paintOf = (s: Style, part: PaintPart): PaintColor => s.paint[part] ?? DEFAULT_PAINT[part]
-
-/** Old holiday saves and photo links also become one complete costume, with no everyday accessories mixed in. */
-function seasonalStyle(style: Style): Style {
-  if (!isHalloweenDay()) return style
-  const outfit = style.on.outfit
-  return { v: 1, on: outfit && HALLOWEEN_LOOKS[outfit] ? { outfit } : {}, paint: {} }
-}
 
 /** Cleans up anything (a saved look from an older build, a hand-written link): unknown things and colors are dropped,
  *  so old saves keep working when the closet changes. */
@@ -136,13 +111,13 @@ export function normalize(raw: unknown): Style {
   for (const slot of SLOTS) {
     const id = r.on?.[slot]
     const item = typeof id === 'string' ? itemById(id) : undefined
-    if (item && item.slot === slot && (!item.halloween || isHalloweenDay())) out.on[slot] = item.id
+    if (item && item.slot === slot) out.on[slot] = item.id
   }
   for (const part of PAINT_PARTS) {
     const c = r.paint?.[part]
     if (typeof c === 'string' && c in PAINTS && c !== DEFAULT_PAINT[part]) out.paint[part] = c as PaintColor
   }
-  return seasonalStyle(out)
+  return out
 }
 
 /** `crown,hearts,dress-mint` → a look. */
@@ -150,14 +125,14 @@ export function parseLook(text: string): Style {
   const out: Style = { v: 1, on: {}, paint: {} }
   for (const word of text.split(',').map((w) => w.trim()).filter(Boolean)) {
     const item = itemById(word)
-    if (item && (!item.halloween || isHalloweenDay())) {
+    if (item) {
       out.on[item.slot] = item.id
       continue
     }
     const [part, color] = word.split('-') as [PaintPart, PaintColor]
     if (PAINT_PARTS.includes(part) && color in PAINTS && color !== DEFAULT_PAINT[part]) out.paint[part] = color
   }
-  return seasonalStyle(out)
+  return out
 }
 
 /** A look → `crown,hearts,dress-mint` (empty for today's Kaylee). */
@@ -190,7 +165,7 @@ export function withPaint(s: Style, part: PaintPart, color: PaintColor): Style {
 /** The saved look on this iPad (BARE if none, or if it can't be read). */
 export function savedLook(): Style {
   try {
-    const raw = localStorage.getItem(savedKey(lookKey()))
+    const raw = localStorage.getItem(savedKey(LOOK_KEY))
     return raw === null ? BARE : normalize(JSON.parse(raw))
   } catch {
     return BARE
@@ -201,8 +176,6 @@ export function savedLook(): Style {
  *  browsers start with nothing saved, so they get today's Kaylee. */
 export function currentLook(): Style {
   const link = flag('look')
-  // A Halloween link opened in November must not keep her in a costume (or its paint colors).
-  if (link !== null && !isHalloweenDay() && link.split(',').some((id) => itemById(id.trim())?.halloween)) return savedLook()
   return link !== null ? parseLook(link) : savedLook()
 }
 
