@@ -35,3 +35,7 @@
 @keyframes halloween-float { from { transform: translateY(-4px) rotate(-4deg); } to { transform: translateY(4px) rotate(4deg); } }
 @media (prefers-reduced-motion: reduce) { .halloween-float { animation: none; } }
 @media (orientation: landscape) and (max-height: 560px) { .halloween-map-friends > span { display: none; } }
+.halloween-music { width: 88px; height: 88px; }
+@media (max-width: 600px), (max-height: 500px) {
+  .halloween-music { width: 64px; height: 64px; }
+}

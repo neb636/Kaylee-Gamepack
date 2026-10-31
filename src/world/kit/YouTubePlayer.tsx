@@ -71,6 +71,10 @@ type State = 'poster' | 'loading' | 'tap-video' | 'playing' | 'paused' | 'ended'
  * YouTube's "more videos" panels with our own pause and end screens.
  */
 export function YouTubePlayer({ video, onDone, full, onFull }: { video: PlaceVideo; onDone: () => void; full: boolean; onFull: (full: boolean) => void }) {
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('kaylee:video-open', { detail: true }))
+    return () => { window.dispatchEvent(new CustomEvent('kaylee:video-open', { detail: false })) }
+  }, [])
   const [state, setState] = useState<State>('poster')
   const [thumbOk, setThumbOk] = useState(true)
   const wrap = useRef<HTMLDivElement>(null)
