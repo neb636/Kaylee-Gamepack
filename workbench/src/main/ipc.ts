@@ -19,6 +19,9 @@ import {
   ptyInputSchema,
   ptyResizeSchema,
   ptyTerminateSchema,
+  workCreateSchema,
+  workListSchema,
+  workRemoveSchema,
   workspaceRootSchema,
 } from "../shared/schemas";
 import type { FilesChangedEvent } from "../shared/models";
@@ -28,12 +31,14 @@ import { loadState, saveState } from "./persistence";
 import { PtyManager } from "./pty-manager";
 import type { SourceControlService } from "./source-control/source-control-provider";
 import type { WorkspaceFiles, WorkspaceRoots } from "./workspace-files";
+import type { WorkService } from "./work";
 
 export interface WorkspaceServices {
   roots: WorkspaceRoots;
   files: WorkspaceFiles;
   sourceControl: SourceControlService;
   images: ImageLibrary;
+  work: WorkService;
 }
 
 /** File watches are owned by the window that asked for them and end with it. */
@@ -84,23 +89,23 @@ export function registerIpc(ptyManager: PtyManager, agentSessionManager: AgentSe
   const allowedRoot = async (root: string) => { await workspace.roots.resolve(root); return root; };
   handle(IPC.persistenceLoad, async () => {
     const state = await loadState();
-    workspace.roots.replace(state.workspaces.map((item) => item.path));
+    workspace.roots.replace([...state.workspaces.map((item) => item.path), ...(state.repoRoot ? [state.repoRoot] : [])]);
     return state;
   });
   let saving: Promise<unknown> = Promise.resolve();
   handle(IPC.persistenceSave, (_event, input: unknown) => {
     const state = persistedStateSchema.parse(input);
     // Grant/revoke in message order; an older disk write must not revoke a newly opened folder.
-    workspace.roots.replace(state.workspaces.map((item) => item.path));
+    workspace.roots.replace([...state.workspaces.map((item) => item.path), ...(state.repoRoot ? [state.repoRoot] : [])]);
     const next = saving.catch(() => {}).then(() => saveState(state));
     saving = next;
     return next.then(() => undefined);
   });
   handle(IPC.workspaceChooseDirectory, async () => {
     const result = await dialog.showOpenDialog({
-      title: "Add workspace",
-      properties: ["openDirectory", "createDirectory"],
-      buttonLabel: "Add workspace",
+      title: "Open the Gamepack repo",
+      properties: ["openDirectory"],
+      buttonLabel: "Open",
     });
     const chosen = result.canceled ? null : result.filePaths[0] ?? null;
     if (chosen) workspace.roots.add(chosen);
@@ -142,6 +147,18 @@ export function registerIpc(ptyManager: PtyManager, agentSessionManager: AgentSe
   handle(IPC.sourceControlCreateWorktree, async (_event, input: unknown) => {
     const { root, branch } = createWorktreeSchema.parse(input);
     return workspace.sourceControl.createWorktree(await allowedRoot(root), branch);
+  });
+  handle(IPC.workList, async (_event, input: unknown) => {
+    const { root, refresh } = workListSchema.parse(input);
+    return workspace.work.list(await allowedRoot(root), refresh);
+  });
+  handle(IPC.workCreate, async (_event, input: unknown) => {
+    const { root, name } = workCreateSchema.parse(input);
+    return workspace.work.create(await allowedRoot(root), name);
+  });
+  handle(IPC.workRemove, async (_event, input: unknown) => {
+    const { root, path } = workRemoveSchema.parse(input);
+    return workspace.work.remove(await allowedRoot(root), path);
   });
   handle(IPC.imagesFolder, (_event, input: unknown) => workspace.images.folder(imageViewSchema.parse(input).viewId));
   handle(IPC.imagesImportData, (_event, input: unknown) => {

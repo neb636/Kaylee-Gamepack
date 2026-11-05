@@ -22,9 +22,9 @@ After application restart, Start launches a new CLI; Resume launches the selecte
 
 The shell is three resizable, collapsible cards over the app canvas plus a status bar, all built on accessible primitives:
 
-- Left sidebar: workspaces as a tree, with views whose definition sets `listInSidebar` nested beneath each one. Rows show `{status} · {provider}` from the generic view-status store. The `sidebar.workspace.meta` and `sidebar.footer` widget slots supply extra row detail and navigation.
+- Left sidebar: the **Work list**. `PersistedState.repoRoot` is the one Gamepack checkout; `WorkService` (`main/work.ts`) reads `git worktree list --porcelain` and `gh pr list --json` (cached a minute, missing `gh` means no PR info) and returns main plus every worktree with branch, PR, CI and change count. Each listed worktree becomes a readable root. A Workspace record is the views of one piece of work, keyed by its path; selecting a row opens it. Groups: main, in progress, finished (merged, closed or missing; collapsed, with Clean up). New work is `<login>/<name>` from `origin/main` in `<repo>-worktrees/<name>`, followed by `npm ci`. Removal refuses main, locked or dirty worktrees, and unpushed commits unless the PR's head is the local head; it never forces and keeps the branch. Session rows show `{status} · {provider}` from the generic view-status store; the `sidebar.footer` slot supplies navigation.
 - Center: a tab strip over the active view. Tabs that do not fit move into a "+N more" menu, and the active tab always stays visible.
-- Right sidebar: panels from `PanelRegistry` (Active views, Files, Source control), switched from an activity bar.
+- Right sidebar: panels from `PanelRegistry` (Files, Source control), switched from an activity bar.
 - Status bar: the `statusbar.start` and `statusbar.end` widget slots.
 
 Panel sizes, collapsed flags, and the active panel persist in `PersistedState.layout`. Features publish live view status (label, tone, detail, unseen completion) through `publishViewStatus`; a ViewDefinition may supply `idleStatus` for views without a live resource. The shell never inspects agent runtimes directly.
@@ -59,7 +59,7 @@ Composer menus are declared with the prompt-option DSL in `shared/prompt-options
 - Definitions are plain data and validated by `promptOptionDefinitionSchema`, so built-in and user-managed options share one schema.
 - `PromptMenuRegistry` entries declare a placement, a reset-after-send default (options may override it), a contribution kind, an options function, and an optional manager.
 - The generic `prompt-menus` contributor resolves every menu against the view's selections. Options hidden by `when` contribute nothing, and conditions on hidden options are false.
-- First-party menus are Persona (a list select of stored personas, prepended, cleared after each send) and Instructions (built-in options plus stored `instructionOptions`, appended, kept between sends).
+- The first-party menu is Instructions: built-in options plus stored `instructionOptions`, appended, kept between sends. Personas were dropped for now; stored personas stay in the state file.
 - Older `appendedInstructions` state migrates to workspace-scoped toggles on load. Preview and Send use the same assembly path. TerminalSurface exposes selected text and a focus handle without leaking xterm to the composer. Quotations capture selected text only; Workbench does not reconstruct assistant messages from terminal output.
 
 The agent composer registers quote, preview, recall, and send commands through CommandRegistry. Its feature-owned store tracks delivery and up to 20 recent submissions/saved drafts per view, bounded to 2 million serialized characters. History remains in memory until the view closes or the app restarts. Recall saves the current draft before restoring text, quotations, and intent, then uses current persona/instruction contributions on the next send. It refuses to replace a draft too large to save. Revision checks protect edits made during asynchronous delivery, including when the view is detached.
@@ -118,14 +118,14 @@ After `npm run build`, `npm run qa:composer` runs deterministic Electron checks 
 
 - the three-pane shell and nested sessions;
 - the launcher with a new worktree;
-- the Persona and Instructions menus, including a conditional option and a migrated instruction;
+- the Instructions menu, including a conditional option and a migrated instruction;
 - the exact composed prompt and the folder it was delivered in;
 - the title taken from the first prompt;
 - quote, preview, and recall;
 - uncertain delivery handoff;
 - the Files tree, search, and read-only viewer;
 - Source control commit;
-- Active views and tab overflow;
+- the Work list (main row, the launcher's worktree appearing under Work in progress) and tab overflow;
 - layout persistence across restart. Screenshots are saved in the printed temporary directory.
 
 `node scripts/qa-electron.mjs --plan` sends harmless no-tools planning checks to installed CLIs, twice to cover an already-planning session. Native account/permission gates remain untouched and are reported as unverified. Use `--claude-only` to target Claude during diagnosis.

@@ -6,10 +6,10 @@ import { join, resolve } from "node:path";
 import assert from "node:assert/strict";
 import { Buffer } from "node:buffer";
 
-// QA inventory: shell layout and sidebar sessions, launcher with a new worktree, Persona and
-// Instructions menus (including a conditional option and a migrated instruction), composed
+// QA inventory: shell layout and the Work list with nested sessions, launcher with a new worktree,
+// the Instructions menu (including a conditional option and a migrated instruction), composed
 // prompt order, title from the first prompt, quote/preview/recall, uncertain delivery handoff,
-// Files tree and read-only viewer, Source control commit, Active views, tab overflow, and
+// Files tree and read-only viewer, Source control commit, tab overflow, and
 // layout persistence across restart. Runs against a deterministic fake CLI; no model calls.
 const directory = await realpath(await mkdtemp(join(tmpdir(), "workbench-composer-qa-")));
 const repo = join(directory, "repo");
@@ -34,8 +34,6 @@ await writeFile(join(directory, "workbench-state.json"), JSON.stringify({
     { id: "agent", workspaceId: "qa", type: "agent", title: "Untitled", state: { autoTitle: true } },
     { id: "other", workspaceId: "qa", type: "agent", title: "Other", state: { providerId: "codex.cli" } },
   ] }], activeWorkspaceId: "qa",
-  personas: [{ id: "p", name: "Concise", instructions: "Be concise.", description: "Brief answers", scope: "global" }],
-  selectedPersonaByWorkspace: { qa: "p" },
   appendedInstructions: [{ id: "i", workspaceId: "qa", content: "Explain the tradeoffs.", enabled: true }],
 }));
 
@@ -65,10 +63,10 @@ try {
   const prompts = async () => (await readFile(log, "utf8")).trim().split("\n").map((line) => JSON.parse(line));
   const prompt = () => page.getByRole("textbox", { name: "Prompt", exact: true });
   const waitFeedback = (value) => page.waitForFunction((text) => document.querySelector(".composer-feedback")?.textContent.includes(text), value);
-  const sidebar = page.getByRole("treegrid", { name: "Workspaces" });
+  const sidebar = page.getByRole("treegrid", { name: "Main checkout" });
 
-  // Shell: three panes, nested sessions, and the launcher for a session that has not started.
-  await sidebar.getByRole("row", { name: /Composer QA/ }).waitFor();
+  // Shell: three panes, the one repo's main checkout with nested sessions, and the launcher for a session that has not started.
+  await sidebar.getByRole("row", { name: /^main/ }).waitFor();
   assert.match(await sidebar.getByRole("row", { name: /Untitled/ }).innerText(), /Setup/);
   await page.getByRole("heading", { name: "Start a new session" }).waitFor();
   assert.match(await page.locator(".harness-option").filter({ hasText: "Claude Code" }).innerText(), /Not installed/);
@@ -78,12 +76,7 @@ try {
   assert.match(await page.locator(".launcher-location").innerText(), /repo-worktrees\/wb-qa-task$/);
   await shot("launcher");
 
-  // Persona menu: a list select from stored personas, prepended, cleared after send.
-  await page.getByRole("button", { name: "Persona", exact: true }).click();
-  await page.getByRole("option", { name: /Concise/ }).click();
-  await shot("persona-menu");
-  await page.keyboard.press("Escape");
-  await page.getByRole("button", { name: "Persona: Concise" }).waitFor();
+  assert.equal(await page.getByRole("button", { name: "Persona", exact: true }).count(), 0, "Personas are dropped for now");
 
   // Instructions menu: built-ins, the migrated instruction, and a conditional text option.
   await page.getByRole("button", { name: "Instructions: 1" }).click();
@@ -101,12 +94,14 @@ try {
   await page.getByRole("button", { name: "Send prompt", exact: true }).click();
   await waitFeedback("Prompt handed");
   const [first] = await prompts();
-  assert.equal(first.prompt, ["Be concise.", "Explain this failure.", OPEN_PR, WRITE_TESTS, "Focus the new tests on error handling.", "Explain the tradeoffs."].join("\n\n"));
+  assert.equal(first.prompt, ["Explain this failure.", OPEN_PR, WRITE_TESTS, "Focus the new tests on error handling.", "Explain the tradeoffs."].join("\n\n"));
   assert.equal(first.cwd, join(directory, "repo-worktrees", "wb-qa-task"));
   assert.equal(git("worktree", "list").includes("wb-qa-task"), true);
   assert.equal(await prompt().inputValue(), "");
-  await page.getByRole("button", { name: "Persona", exact: true }).waitFor();
   await page.getByRole("button", { name: "Instructions: 4" }).waitFor();
+  // The launcher's new worktree shows up in the Work list by itself.
+  await page.getByRole("button", { name: "Refresh worktrees and PRs" }).click();
+  await page.getByRole("treegrid", { name: "Work in progress" }).getByRole("row", { name: /wb-qa-task/ }).waitFor();
   await page.getByRole("tab", { name: "Explain this failure." }).waitFor();
   assert.match(await sidebar.getByRole("row", { name: /Explain this failure\./ }).innerText(), /Ready · Codex/);
   await shot("session");
@@ -162,10 +157,8 @@ try {
   await page.getByText("No uncommitted changes.").waitFor();
   assert.equal(git("log", "-1", "--format=%s").trim(), "QA commit");
 
-  // Active views panel and the tab overflow menu.
-  await page.getByRole("radio", { name: "Active views" }).click();
-  await page.getByRole("grid", { name: "Agent session" }).getByRole("row").first().waitFor();
-  assert.equal(await page.getByRole("grid", { name: "File" }).getByRole("row").count(), 1);
+  // The tab overflow menu.
+  assert.equal(await page.getByRole("radio", { name: "Active views" }).count(), 0, "Active views is gone");
   await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(1100, 760));
   for (let index = 0; index < 5; index += 1) {
     await page.getByRole("button", { name: "Create view" }).click();
@@ -185,6 +178,6 @@ try {
   await app.close();
   page = await launch();
   await page.getByRole("button", { name: "Show sidebar" }).click();
-  await page.getByRole("treegrid", { name: "Workspaces" }).getByRole("row", { name: /Explain this failure\./ }).waitFor();
+  await page.getByRole("treegrid", { name: "Main checkout" }).getByRole("row", { name: /Explain this failure\./ }).waitFor();
   console.log("Composer QA passed. Artifacts:", directory);
 } finally { if (app) await app.close(); console.log("QA artifacts:", directory); }

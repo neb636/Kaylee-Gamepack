@@ -53,6 +53,8 @@ export interface LayoutState {
 }
 
 export interface PersistedState {
+  /** The one Gamepack checkout (the main worktree). Every workspace is this repo or one of its worktrees. */
+  repoRoot?: string;
   workspaces: Workspace[];
   activeWorkspaceId?: string;
   personas: Persona[];
@@ -224,6 +226,38 @@ export interface SourceControlStatus {
   truncated: boolean;
 }
 
+export interface PullRequestInfo {
+  number: number;
+  state: "OPEN" | "MERGED" | "CLOSED";
+  title: string;
+  url: string;
+  isDraft: boolean;
+  headSha?: string;
+  checks?: "passing" | "failing" | "pending";
+}
+
+/** One piece of work: the main checkout or a worktree, with its branch and PR. */
+export interface WorkItemInfo {
+  path: string;
+  name: string;
+  branch?: string;
+  head?: string;
+  main: boolean;
+  /** Git still lists it, but the folder is gone. */
+  missing: boolean;
+  locked: boolean;
+  changes?: number;
+  pr?: PullRequestInfo;
+  install?: "installing" | "failed";
+  installMessage?: string;
+}
+
+export interface WorkList {
+  repoRoot: string;
+  items: WorkItemInfo[];
+  github: "ok" | "unavailable";
+}
+
 export interface WorktreeResult {
   path: string;
   branch: string;
@@ -264,6 +298,11 @@ export interface WorkbenchApi {
     useCheckout: (root: string) => Promise<void>;
     tune: (input: { id: string; provider: 'claude' | 'codex'; prompt: string; snapshot: import('./labs').LabSnapshot }) => Promise<import('./labs').LabProposal>;
     cancel: (id: string) => void;
+  };
+  work: {
+    list: (root: string, refresh?: boolean) => Promise<WorkList>;
+    create: (root: string, name: string) => Promise<WorktreeResult>;
+    remove: (root: string, path: string) => Promise<void>;
   };
   platform: NodeJS.Platform;
   persistence: {

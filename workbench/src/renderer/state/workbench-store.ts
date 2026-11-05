@@ -12,7 +12,9 @@ import { createId } from "../core/id";
 interface WorkbenchStore extends PersistedState {
   isHydrated: boolean;
   hydrate: () => Promise<void>;
-  addWorkspace: (path: string) => string;
+  setRepoRoot: (path: string | undefined) => void;
+  /** Opens (or selects) the views for one piece of work. The main checkout gets the labs too. */
+  addWorkspace: (path: string, options?: { name?: string; views?: "all" | "agent" }) => string;
   removeWorkspace: (workspaceId: string) => void;
   selectWorkspace: (workspaceId: string) => void;
   createView: (workspaceId: string, type: string, title: string, state?: unknown) => string;
@@ -48,15 +50,31 @@ export const useWorkbenchStore = create<WorkbenchStore>((set, get) => ({
   hydrate: async () => {
     const persisted = await window.workbench.persistence.load();
     set({ ...persisted, isHydrated: true });
-    const root = await window.workbench.studio.repoRoot();
-    if (root) get().addWorkspace(root);
+    // Source-run Studio opens its own checkout; the app reopens the repo it opened last time.
+    const launched = await window.workbench.studio.repoRoot();
+    const candidate = launched ?? persisted.repoRoot ?? persisted.workspaces[0]?.path;
+    if (!candidate) return;
+    try {
+      const { repoRoot } = await window.workbench.work.list(candidate);
+      get().setRepoRoot(repoRoot);
+      const active = get().workspaces.find((workspace) => workspace.id === get().activeWorkspaceId);
+      // Source-run Studio serves only the checkout it was launched from (maybe a worktree), so open that one.
+      const initial = launched ?? repoRoot;
+      if (!active) get().addWorkspace(initial, { name: initial === repoRoot ? "main" : workspaceName(initial), views: "all" });
+    } catch (error) {
+      // A moved or deleted checkout: forget it so the sidebar offers the repo chooser again.
+      console.warn("Could not open the Gamepack repo", String(error));
+      set({ repoRoot: undefined });
+    }
   },
-  addWorkspace: (path) => {
+  setRepoRoot: (repoRoot) => set({ repoRoot }),
+  addWorkspace: (path, options = {}) => {
     const existing = get().workspaces.find((workspace) => workspace.path === path);
     if (existing) {
       set({ activeWorkspaceId: existing.id });
       return existing.id;
     }
+    const labs = (options.views ?? "all") === "all";
     const workspaceId = createId("workspace");
     const initialView: WorkbenchView = {
       id: createId("view"),
@@ -67,9 +85,9 @@ export const useWorkbenchStore = create<WorkbenchStore>((set, get) => ({
     };
     const workspace: Workspace = {
       id: workspaceId,
-      name: workspaceName(path),
+      name: options.name ?? workspaceName(path),
       path,
-      views: [initialView, ...[['image-generator', 'Character concepts'], ['feel-lab', 'Feel lab'], ['camera-lab', 'Camera lab'], ['character-lab', '3D character lab']].map(([type, title]) => ({ id: createId('view'), type, title, workspaceId, state: type === 'image-generator' ? { count: 1, autoTitle: false } : {} }))],
+      views: [initialView, ...(labs ? [['image-generator', 'Character concepts'], ['feel-lab', 'Feel lab'], ['camera-lab', 'Camera lab'], ['character-lab', '3D character lab']].map(([type, title]) => ({ id: createId('view'), type, title, workspaceId, state: type === 'image-generator' ? { count: 1, autoTitle: false } : {} })) : [])],
       activeViewId: initialView.id,
     };
     set((state) => ({
@@ -152,6 +170,7 @@ export const useWorkbenchStore = create<WorkbenchStore>((set, get) => ({
 
 function persistedSnapshot(state: WorkbenchStore): PersistedState {
   return {
+    repoRoot: state.repoRoot,
     workspaces: state.workspaces,
     activeWorkspaceId: state.activeWorkspaceId,
     personas: state.personas,
