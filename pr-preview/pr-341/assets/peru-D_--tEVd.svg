@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Peru</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ece6ff"/><stop offset="1" stop-color="#cdbfff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <!-- the fluffy topknot: a cloud of puffs -->
+    <path id="tuftP" d="M47 34a6 6 0 1 0 12 0a6 6 0 1 0 -12 0ZM53 30a7 7 0 1 0 14 0a7 7 0 1 0 -14 0ZM61 34a6 6 0 1 0 12 0a6 6 0 1 0 -12 0ZM50 39a5.5 5.5 0 1 0 11 0a5.5 5.5 0 1 0 -11 0ZM59 39a5.5 5.5 0 1 0 11 0a5.5 5.5 0 1 0 -11 0Z"/>
+    <clipPath id="tuft"><use href="#tuftP"/></clipPath>
+    <clipPath id="head"><path d="M60 34C72 34 79 42 79 54C79 60 77 64 76 68C75 76 69 82 60 82C51 82 45 76 44 68C43 64 41 60 41 54C41 42 48 34 60 34Z"/></clipPath>
+    <clipPath id="neck"><path d="M40 122V84C40 74 48 70 60 70C72 70 80 74 80 84V122Z"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+
+  <!-- the Andes: hazy far peaks with snow, a green near slope -->
+  <path d="M-2 82L20 54L34 66L52 44L68 64L84 48L104 68L122 56V122H-2Z" fill="#c3b5f3"/>
+  <path d="M20 54L26 62L21.5 63.5L17 58ZM84 48L91 56L86 58L80.5 53Z" fill="#fff"/>
+  <path d="M84 48L104 68H92L86 56Z" fill="#ad9cec"/>
+  <circle cx="60" cy="58" r="48" fill="url(#glow)"/>
+  <path d="M-2 96Q28 84 60 90Q92 84 122 92V122H-2Z" fill="#8fe3c8"/>
+
+  <!-- the long neck in a striped woven blanket -->
+  <g clip-path="url(#neck)">
+    <rect x="38" y="68" width="44" height="56" fill="#efdccd"/>
+    <path d="M40 122V84C40 74 48 70 58 70C64 70 68 74 68 80V122Z" fill="#fff7f0"/>
+    <rect x="38" y="94" width="44" height="7" fill="#ff4f9a"/>
+    <rect x="38" y="101" width="44" height="4" fill="#ffc83d"/>
+    <rect x="38" y="105" width="44" height="5" fill="#3fc1cf"/>
+    <rect x="38" y="110" width="44" height="4" fill="#ffc83d"/>
+    <rect x="38" y="114" width="44" height="8" fill="#8b78e6"/>
+    <path d="M42 107.5h4M50 107.5h4M58 107.5h4M66 107.5h4M74 107.5h4" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <rect x="68" y="94" width="14" height="28" fill="#4b3a8c" opacity="0.16"/>
+  </g>
+
+  <!-- long ears, pink inside -->
+  <path d="M47 41C41 34 39 24 41 16C47 19 52 27 53 36Z" fill="#fff7f0"/>
+  <path d="M47.5 36C44.5 31 43.5 25.5 44.2 21C47.5 23.5 50 28 50.5 33.5Z" fill="#ffc4da"/>
+  <path d="M73 41C79 34 81 24 79 16C73 19 68 27 67 36Z" fill="#efdccd"/>
+  <path d="M72.5 36C75.5 31 76.5 25.5 75.8 21C72.5 23.5 70 28 69.5 33.5Z" fill="#ff8fb8"/>
+
+  <!-- the bright yarn tassels tied to her ears -->
+  <g>
+    <path d="M42 30C37 34 35 40 35 46" fill="none" stroke="#ff4f9a" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="35" cy="47" r="4.4" fill="#ff4f9a"/><circle cx="34" cy="46" r="1.6" fill="#ff8fc0"/>
+    <circle cx="39" cy="34" r="3.6" fill="#ff9c57"/><circle cx="38.2" cy="33.2" r="1.3" fill="#ffc595"/>
+    <circle cx="36" cy="39.5" r="3.4" fill="#8b78e6"/>
+    <path d="M78 30C83 34 85 40 85 46" fill="none" stroke="#d8367f" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="85" cy="47" r="4.4" fill="#ff4f9a"/><circle cx="84" cy="46" r="1.6" fill="#ff8fc0"/>
+    <circle cx="81" cy="34" r="3.6" fill="#ff9c57"/><circle cx="80.2" cy="33.2" r="1.3" fill="#ffc595"/>
+    <circle cx="84" cy="39.5" r="3.4" fill="#3fc1cf"/>
+  </g>
+
+  <!-- the head: cream, a shaded crescent bottom right -->
+  <g clip-path="url(#head)">
+    <rect x="38" y="30" width="44" height="54" fill="#efdccd"/>
+    <path d="M58 34C70 34 76 42 76 53C76 60 74 64 72 68C70 74 66 80 58 80C50 80 44 74 43 68C42 64 41 60 41 54C41 42 47 34 58 34Z" fill="#fff7f0"/>
+  </g>
+
+  <!-- the fluffy topknot -->
+  <g clip-path="url(#tuft)">
+    <rect x="44" y="22" width="32" height="24" fill="#efdccd"/>
+    <use href="#tuftP" fill="#fff" transform="translate(-1.5 -2)"/>
+  </g>
+
+  <!-- eyes, the long muzzle, nose, smile, blush -->
+  <ellipse cx="52" cy="54" rx="3.2" ry="4" fill="#2b2330"/>
+  <ellipse cx="68" cy="54" rx="3.2" ry="4" fill="#2b2330"/>
+  <circle cx="53.3" cy="52.5" r="1.4" fill="#fff"/>
+  <circle cx="69.3" cy="52.5" r="1.4" fill="#fff"/>
+  <ellipse cx="60" cy="69" rx="10" ry="8" fill="#ffe2d4"/>
+  <path d="M56.8 65.5Q60 63.8 63.2 65.5Q62.2 68.5 60 68.8Q57.8 68.5 56.8 65.5Z" fill="#2b2330"/>
+  <path d="M60 68.8V71M56.6 70.6Q58.3 73.4 60 71Q61.7 73.4 63.4 70.6" fill="none" stroke="#2b2330" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="46" cy="62" rx="3.8" ry="2.2" fill="#ff8fb8" opacity="0.55"/>
+  <ellipse cx="74" cy="62" rx="3.8" ry="2.2" fill="#ff8fb8" opacity="0.55"/>
+
+  <!-- sparkles -->
+  <path d="M100 22v6M97 25h6" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M18 30v5M15.5 32.5h5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

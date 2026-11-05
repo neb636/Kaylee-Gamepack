@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>The Poles</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0f7f8"/><stop offset="1" stop-color="#a6e3ea"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="sea" x1="0" y1="88" x2="0" y2="120" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8fe3ea"/><stop offset="1" stop-color="#3fc1cf"/></linearGradient>
+    <clipPath id="body"><path d="M60 30C76 30 84 44 85 62C86 80 82 96 72 100C66 102 54 102 48 100C38 96 34 80 35 62C36 44 44 30 60 30Z"/></clipPath>
+    <clipPath id="belly"><path d="M60 48C66 44 74 48 74 58C76 70 76 84 70 92C66 96 54 96 50 92C44 84 44 70 46 58C46 48 54 44 60 48Z"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+
+  <!-- icebergs behind: white, lavender shade on their right faces -->
+  <path d="M4 90L14 60L22 66L30 50L42 90Z" fill="#fff"/>
+  <path d="M30 50L42 90H32L27 62Z" fill="#e4ddf6"/>
+  <path d="M84 90L94 56L102 64L108 54L118 90Z" fill="#fff"/>
+  <path d="M108 54L118 90H108L104 66Z" fill="#e4ddf6"/>
+  <path d="M94 56L102 64L98 66Z" fill="#e4ddf6"/>
+
+  <!-- the icy sea and the floe she stands on -->
+  <rect y="88" width="120" height="34" fill="url(#sea)"/>
+  <path d="M8 112h14M96 114h14" stroke="#c9f2f5" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M24 100Q60 92 96 100Q100 106 92 108Q60 112 28 108Q20 106 24 100Z" fill="#fff"/>
+  <path d="M28 108Q60 112 92 108Q98 107 96.5 103Q60 108 25 104Q24 107 28 108Z" fill="#e4ddf6"/>
+  <ellipse cx="60" cy="101" rx="22" ry="3" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- orange feet -->
+  <ellipse cx="52" cy="100" rx="7" ry="3.5" fill="#ff9c57"/>
+  <ellipse cx="68" cy="100" rx="7" ry="3.5" fill="#e57a35"/>
+
+  <!-- the body: deep grape-ink feathers, shaded on the right -->
+  <g clip-path="url(#body)">
+    <rect x="32" y="28" width="56" height="76" fill="#3b3348"/>
+    <path d="M58 30C72 30 79 44 80 62C81 80 76 96 66 100C60 101 52 101 48 100C38 96 34 80 35 62C36 44 44 30 58 30Z" fill="#4a4058"/>
+  </g>
+  <path d="M44 44C47 37 52 33 58 32" fill="none" stroke="#6a5f7d" stroke-width="2.8" stroke-linecap="round"/>
+
+  <!-- flippers out in a happy flap -->
+  <path d="M38 60C30 64 24 72 23 80C27 80 33 76 38 70Z" fill="#4a4058"/>
+  <path d="M82 60C90 64 96 72 97 80C93 80 87 76 82 70Z" fill="#3b3348"/>
+
+  <!-- the white tummy and face -->
+  <g clip-path="url(#belly)">
+    <rect x="42" y="42" width="36" height="56" fill="#e4ddf6"/>
+    <path d="M58 48C64 44 70 48 70 58C72 70 72 84 66 92C62 95 54 95 50 92C44 84 44 70 46 58C46 48 52 44 58 48Z" fill="#fff"/>
+  </g>
+  <!-- golden cheek patches -->
+  <ellipse cx="44" cy="56" rx="4" ry="6" transform="rotate(-18 44 56)" fill="#ffc83d"/>
+  <ellipse cx="76" cy="56" rx="4" ry="6" transform="rotate(18 76 56)" fill="#eba123"/>
+
+  <!-- eyes, beak, blush -->
+  <ellipse cx="53" cy="55" rx="3.2" ry="4" fill="#2b2330"/>
+  <ellipse cx="67" cy="55" rx="3.2" ry="4" fill="#2b2330"/>
+  <circle cx="54.3" cy="53.5" r="1.4" fill="#fff"/>
+  <circle cx="68.3" cy="53.5" r="1.4" fill="#fff"/>
+  <path d="M55 62Q60 59.5 65 62L60 68Z" fill="#ff9c57"/>
+  <path d="M60 60.8Q63 61 65 62L60 68Z" fill="#e57a35"/>
+  <ellipse cx="49" cy="64" rx="3.6" ry="2.1" fill="#ff8fb8" opacity="0.6"/>
+  <ellipse cx="71" cy="64" rx="3.6" ry="2.1" fill="#ff8fb8" opacity="0.6"/>
+
+  <!-- snowflakes -->
+  <g stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+    <path d="M24 22v8M20 26h8M21.2 23.2l5.6 5.6M26.8 23.2l-5.6 5.6"/>
+    <path d="M96 30v6M93 33h6"/>
+    <path d="M80 16v5M77.5 18.5h5"/>
+  </g>
+</svg>

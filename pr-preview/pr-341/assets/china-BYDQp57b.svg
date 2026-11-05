@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>China</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ddf7ee"/><stop offset="1" stop-color="#a9e8d2"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="head"><ellipse cx="60" cy="66" rx="31" ry="28"/></clipPath>
+    <clipPath id="lantern"><ellipse cx="94" cy="34" rx="10" ry="8.5"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+
+  <!-- bamboo stalks far behind -->
+  <g fill="#c4f0df">
+    <rect x="14" y="-1" width="8" height="122"/>
+    <rect x="28" y="-1" width="5" height="122"/>
+  </g>
+  <g fill="#aee6d0"><rect x="13" y="30" width="10" height="3" rx="1.5"/><rect x="27" y="52" width="7" height="3" rx="1.5"/><rect x="13" y="92" width="10" height="3" rx="1.5"/></g>
+  <circle cx="60" cy="62" r="48" fill="url(#glow)"/>
+
+  <!-- the red paper lantern, hanging in the top right -->
+  <g transform="translate(-34 -15)">
+  <path d="M94 12V24" stroke="#8a5b3d" stroke-width="2" stroke-linecap="round"/>
+  <rect x="88.5" y="23" width="11" height="4" rx="1.5" fill="#eba123"/>
+  <g clip-path="url(#lantern)">
+    <rect x="82" y="24" width="24" height="20" fill="#d9485e"/>
+    <ellipse cx="92" cy="33" rx="9" ry="8" fill="#ff6b6b"/>
+    <path d="M89 26Q87 34 89 42M99 26Q101 34 99 42" fill="none" stroke="#d9485e" stroke-width="1.6"/>
+  </g>
+  <ellipse cx="90" cy="30" rx="2.5" ry="1.8" fill="#ffa3a3"/>
+  <rect x="88.5" y="41" width="11" height="4" rx="1.5" fill="#eba123"/>
+  <path d="M94 45V52" stroke="#ffc83d" stroke-width="2.6" stroke-linecap="round"/>
+  </g>
+
+  <!-- bamboo leaves peeking out on the left -->
+  <path d="M0 0C7-5 18-5 27 0C18 4 7 4 0 0Z" transform="translate(30 76) rotate(200)" fill="#48a96c"/>
+  <path d="M0 0C7-5 18-5 27 0C18 4 7 4 0 0Z" transform="translate(31 80) rotate(170)" fill="#73cf86"/>
+
+  <ellipse cx="60" cy="100" rx="30" ry="4.5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- ears -->
+  <circle cx="35" cy="42" r="11.5" fill="#4a4058"/>
+  <circle cx="85" cy="42" r="11.5" fill="#3b3348"/>
+  <path d="M28.5 41a8 8 0 0 1 6.5 -6.5" fill="none" stroke="#6a5f7d" stroke-width="2.6" stroke-linecap="round"/>
+  <circle cx="85" cy="43" r="5.5" fill="#4a4058"/>
+  <circle cx="35" cy="43" r="5.5" fill="#5d5270"/>
+
+  <!-- the head: white, a lavender crescent bottom right -->
+  <g clip-path="url(#head)">
+    <rect x="26" y="36" width="68" height="60" fill="#e4ddf6"/>
+    <ellipse cx="56.5" cy="62.5" rx="31" ry="28" fill="#fff"/>
+  </g>
+
+  <!-- eye patches drooping outward, and the eyes -->
+  <ellipse cx="46.5" cy="64" rx="8" ry="11" transform="rotate(32 46.5 64)" fill="#4a4058"/>
+  <ellipse cx="73.5" cy="64" rx="8" ry="11" transform="rotate(-32 73.5 64)" fill="#4a4058"/>
+  <ellipse cx="48" cy="62.5" rx="3.8" ry="4.7" fill="#2b2330"/>
+  <ellipse cx="72" cy="62.5" rx="3.8" ry="4.7" fill="#2b2330"/>
+  <circle cx="49.5" cy="60.8" r="1.7" fill="#fff"/>
+  <circle cx="73.5" cy="60.8" r="1.7" fill="#fff"/>
+
+  <!-- nose, mouth, blush -->
+  <path d="M56 73Q60 70.5 64 73Q62.7 76.6 60 77Q57.3 76.6 56 73Z" fill="#2b2330"/>
+  <ellipse cx="58.4" cy="72.4" rx="1.5" ry="0.8" fill="#fff"/>
+  <path d="M60 77V79M55.8 78.8Q57.9 81.8 60 79Q62.1 81.8 64.2 78.8" fill="none" stroke="#2b2330" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="40" cy="77" rx="5" ry="2.8" fill="#ff8fb8" opacity="0.55"/>
+  <ellipse cx="80" cy="77" rx="5" ry="2.8" fill="#ff8fb8" opacity="0.55"/>
+
+  <!-- paws holding a bamboo shoot under the chin -->
+  <g transform="translate(60 98) rotate(-70)">
+    <rect x="-3.5" y="-26" width="7" height="44" rx="2" fill="#73cf86"/>
+    <rect x="1" y="-26" width="2.5" height="44" fill="#48a96c"/>
+    <rect x="-4" y="-8" width="8" height="2.6" rx="1.3" fill="#48a96c"/>
+    <rect x="-4" y="8" width="8" height="2.6" rx="1.3" fill="#48a96c"/>
+  </g>
+  <circle cx="45" cy="94" r="7.5" fill="#4a4058"/>
+  <circle cx="75" cy="92" r="7.5" fill="#3b3348"/>
+  <path d="M40 92a6 6 0 0 1 4.5 -4" fill="none" stroke="#6a5f7d" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

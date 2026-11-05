@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Egypt</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff5d1"/><stop offset="1" stop-color="#ffe08f"/></linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="dune" x1="0" y1="80" x2="0" y2="120" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffd9a0"/><stop offset="1" stop-color="#f3b971"/></linearGradient>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+
+  <!-- the hot desert sun -->
+  <circle cx="84" cy="30" r="26" fill="url(#sun)"/>
+  <circle cx="84" cy="30" r="10" fill="#ffc83d"/>
+  <circle cx="81" cy="27" r="3.5" fill="#ffe189"/>
+
+  <!-- the small pyramid behind, hazy -->
+  <path d="M26 86L46 56L66 86Z" fill="#f6dfb5"/>
+  <path d="M46 56L66 86H50Z" fill="#e8c792"/>
+
+  <!-- the big pyramid: the lit face on the left, the shaded face on the right -->
+  <ellipse cx="68" cy="90" rx="38" ry="4.5" fill="#4b3a8c" opacity="0.14"/>
+  <path d="M30 90L68 30L74 90Z" fill="#f5dba8"/>
+  <path d="M68 30L106 90H74Z" fill="#e3bb7a"/>
+  <!-- the rows of stone blocks -->
+  <g fill="none" stroke-linecap="round" stroke-width="2">
+    <path d="M60.5 42H69M53 54H70.5M45.5 66H71.5M38 78H72.5" stroke="#fdeecc"/>
+    <path d="M69 42H75.5M70.5 54H83M71.5 66H90.5M72.5 78H98" stroke="#d6a866"/>
+  </g>
+  <!-- the gold cap shining at the top -->
+  <path d="M68 30L63.5 37H69.5Z" fill="#ffe189"/>
+  <path d="M68 30L73.5 37H69.5Z" fill="#ffc83d"/>
+
+  <!-- the sand dunes in front -->
+  <path d="M-2 92Q30 84 62 92Q92 99 122 90V122H-2Z" fill="url(#dune)"/>
+  <path d="M8 100Q30 94 48 99" fill="none" stroke="#fff3d9" stroke-width="2.4" stroke-linecap="round"/>
+
+  <!-- a palm tree by the river -->
+  <path d="M20 96C21 86 21.5 78 24 70" fill="none" stroke="#a46e4b" stroke-width="4" stroke-linecap="round"/>
+  <path d="M24 70C18 66 11 67 7 72C13 70 18 70 24 71Z" fill="#48a96c"/>
+  <path d="M24 70C29 64 36 64 40 68C34 67 29 68 24 71Z" fill="#73cf86"/>
+  <path d="M24 70C20 63 14 61 9 63C15 64 19 66 24 71Z" fill="#73cf86"/>
+  <path d="M24 70C27 63 32 60 37 60C32 63 28 66 24 71Z" fill="#48a96c"/>
+
+  <!-- birds in the sky -->
+  <path d="M28 26q3 -3 6 0q3 -3 6 0M40 36q2.5 -2.5 5 0q2.5 -2.5 5 0" fill="none" stroke="#c99266" stroke-width="2" stroke-linecap="round"/>
+</svg>

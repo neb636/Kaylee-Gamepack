@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Australia</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9de"/><stop offset="1" stop-color="#ffb995"/></linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="rock"><path d="M4 90C6 75 13 62 27 59.5C46 56.5 76 56.5 94 59.5C107 62 114 75 116 90Z"/></clipPath>
+    <clipPath id="body"><path d="M54 56C64 52 76 58 78 72C80 84 76 94 66 96C56 97 49 90 48 78C47 68 48 60 54 56Z"/></clipPath>
+    <clipPath id="head"><path d="M38 40C38 32 46 27 54 29C61 30.5 65 36 64 43C63 49 58 53 51 53C45 53 41 51 36 50C31 49 29 46 30 43C31 40 34 40 38 40Z"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="34" cy="34" r="30" fill="url(#sun)"/>
+  <circle cx="86" cy="28" r="8.5" fill="#ffe189"/>
+
+  <!-- Uluru, the big red rock, lit on top, grooves down its side -->
+  <g clip-path="url(#rock)">
+    <rect x="2" y="54" width="116" height="38" fill="#c65a45"/>
+    <path d="M4 86C6 73 13 62 27 59.5C46 56.5 76 56.5 94 59.5C102 61 107 66 110 72C80 68 36 70 4 86Z" fill="#e9785a"/>
+    <path d="M22 64C40 60 72 59.5 92 62.5" fill="none" stroke="#f6a283" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M90 74V82M100 74V84M110 78V86" fill="none" stroke="#a9473a" stroke-width="2.2" stroke-linecap="round"/>
+  </g>
+
+  <!-- the red desert -->
+  <path d="M-2 88Q60 82 122 88V122H-2Z" fill="#f6a283"/>
+  <path d="M-2 98Q60 92 122 98V122H-2Z" fill="#e9a06a"/>
+  <!-- spinifex tufts -->
+  <path d="M14 96l-3 -7M14 96l0 -8M14 96l3 -7M104 97l-3 -7M104 97l0 -8M104 97l3 -7" stroke="#48a96c" stroke-width="2.2" stroke-linecap="round"/>
+  <ellipse cx="66" cy="104" rx="30" ry="4.5" fill="#4b3a8c" opacity="0.16"/>
+
+  <!-- the kangaroo, sitting up tall: the thick tail first -->
+  <path d="M70 90C80 92 90 96 100 102C103 104 102 106.5 99 106C88 104 76 101 66 98Z" fill="#a46e4b"/>
+  <!-- the big back feet -->
+  <path d="M44 104C44 100 50 98 60 98H74C78 98 79 104 75 105H47C45 105 44 105 44 104Z" fill="#a46e4b"/>
+  <ellipse cx="70" cy="88" rx="12" ry="11" fill="#a46e4b"/>
+  <!-- the body, a cream tummy -->
+  <g clip-path="url(#body)">
+    <rect x="44" y="50" width="38" height="48" fill="#a46e4b"/>
+    <path d="M54 56C62 53 70 58 72 70C74 82 70 92 62 94C54 95 49 88 48 78C47 68 48 60 54 56Z" fill="#c99266"/>
+    <ellipse cx="56" cy="78" rx="7" ry="13" fill="#fff7f0"/>
+  </g>
+  <path d="M52 62C54 58 58 56 62 56" fill="none" stroke="#e5b78f" stroke-width="2.4" stroke-linecap="round"/>
+  <!-- the haunch over the body, lit at the top -->
+  <path d="M60 88C60 80 66 76 72 77C79 78 83 84 82 91C81 97 75 100 69 99C63 98 60 94 60 88Z" fill="#c99266"/>
+  <path d="M64 82C66 79 70 78 74 79" fill="none" stroke="#e5b78f" stroke-width="2.4" stroke-linecap="round"/>
+  <!-- little front paws held up -->
+  <path d="M50 64C46 66 44 70 45 73C46 74.5 48 74 49 72C50 70 52 68 54 67Z" fill="#a46e4b"/>
+  <path d="M55 66C51 68 50 72 51 75C52 76.5 54 76 55 74C56 72 57.5 70 59 69Z" fill="#c99266"/>
+
+  <!-- the long ears, pink inside -->
+  <path d="M52 32C50 24 51 16 55 11C59 16 59 24 57 32Z" fill="#c99266"/>
+  <path d="M53.5 29C52.5 23 53 18 55 15C57 18 57.3 23 56 29Z" fill="#ffc4da"/>
+  <path d="M58 33C59 25 63 18 68 15C70 21 67 28 62 34Z" fill="#a46e4b"/>
+  <path d="M60 31C61 26 63.5 21.5 66.5 19C67 23 65.5 27 62 31Z" fill="#ff8fb8"/>
+
+  <!-- the head: a long soft snout to the left -->
+  <g clip-path="url(#head)">
+    <rect x="28" y="26" width="38" height="28" fill="#a46e4b"/>
+    <path d="M38 40C38 32 46 27 54 29C60 30.5 62 35 61 41C60 46 56 49 50 49C44 49 40 48 35 47C31 46.5 29 45 30 43C31 40 34 40 38 40Z" fill="#c99266"/>
+  </g>
+  <path d="M42 36C44 33 48 31 52 31" fill="none" stroke="#e5b78f" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- eye, nose, smile, blush -->
+  <ellipse cx="48" cy="39.5" rx="2.9" ry="3.6" fill="#2b2330"/>
+  <circle cx="49.1" cy="38.2" r="1.2" fill="#fff"/>
+  <ellipse cx="31.5" cy="43" rx="2.6" ry="2" fill="#2b2330"/>
+  <path d="M35 47.5Q38 49.5 41 48" fill="none" stroke="#2b2330" stroke-width="1.8" stroke-linecap="round"/>
+  <ellipse cx="51" cy="46" rx="3.6" ry="2.1" fill="#ff8fb8" opacity="0.6"/>
+
+  <!-- birds over the rock -->
+  <path d="M90 44q3 -3 6 0q3 -3 6 0M78 50q2.5 -2.5 5 0q2.5 -2.5 5 0" fill="none" stroke="#c65a45" stroke-width="2" stroke-linecap="round"/>
+</svg>
