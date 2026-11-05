@@ -25,7 +25,7 @@ const PIPELINE = 2 // bump to regenerate everything after changing the audio pro
 
 // --- Find every folder with spoken lines ---------------------------------------------------------------------------
 const subfolders = async (dir) => (await readdir(path.join(root, dir), { withFileTypes: true })).filter((e) => e.isDirectory()).map((e) => path.join(root, dir, e.name))
-const folders = [path.join(root, 'src/shell'), ...(await subfolders('src/games')), path.join(root, 'src/world'), ...(await subfolders('src/world/places'))]
+const folders = [path.join(root, 'src/shell'), ...(existsSync(path.join(root, 'src/games')) ? await subfolders('src/games') : []), path.join(root, 'src/world'), ...(await subfolders('src/world/places'))]
 
 const readJson = async (file, fallback) => {
   try {

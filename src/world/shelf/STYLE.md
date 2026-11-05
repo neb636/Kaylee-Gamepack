@@ -7,7 +7,7 @@ generated thumbnails looked bad); follow the flat travel-app illustrations he pi
 ```
 src/world/shelf/banners/<row>.svg          # favorites, house, mall, krabi, nan, or a country's id
 src/world/shelf/icons/<place>/<card>.svg   # card = the part after "<place>/" in the game's key (thailand/vet -> icons/thailand/vet.svg)
-src/world/shelf/icons/tea-party.svg, surprise.svg
+src/world/shelf/icons/surprise.svg
 ```
 
 A game without an icon still shows (its activity emoji on a pastel tile), but every new game and place gets its

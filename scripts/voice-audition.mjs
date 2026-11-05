@@ -20,6 +20,7 @@ let speaker = cast.speakers[name]
 const samples = []
 const dirs = [path.join(root, 'src/shell'), path.join(root, 'src/world')]
 for (const parent of ['src/games', 'src/world/places']) {
+  if (!existsSync(path.join(root, parent))) continue
   for (const e of await readdir(path.join(root, parent), { withFileTypes: true })) if (e.isDirectory()) dirs.push(path.join(root, parent, e.name))
 }
 for (const dir of dirs) {

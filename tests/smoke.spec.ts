@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 import { existsSync, readdirSync } from 'node:fs'
 
 // Every folder in src/games with a meta.ts + Game.tsx is a game.
-const gameIds = readdirSync('src/games', { withFileTypes: true })
+const gameIds = (existsSync('src/games') ? readdirSync('src/games', { withFileTypes: true }) : [])
   .filter((d) => d.isDirectory() && existsSync(`src/games/${d.name}/meta.ts`) && existsSync(`src/games/${d.name}/Game.tsx`))
   .map((d) => d.name)
 
@@ -23,16 +23,13 @@ async function start(page: Page, hash = '') {
   await page.getByRole('button', { name: /let's play/i }).click()
 }
 
-test("Let's play lands on the world map, with the dock and the tea party", async ({ page }) => {
+test("Let's play lands on the world map, with the dock and country pins", async ({ page }) => {
   const errors = trackErrors(page)
   await start(page)
   await expect(page.getByRole('button', { name: 'My passport' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Coloring book' })).toBeVisible()
-  expect(gameIds.length).toBeGreaterThan(0)
-  await page.getByRole('button', { name: 'Tea party' }).click({ force: true })
-  await expect(page).toHaveURL(/#\/game\/unicorn-tea-party/)
-  await page.getByRole('button', { name: 'Home' }).click()
-  await expect(page.getByRole('button', { name: 'My passport' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Australia', exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: /tea party/i })).toHaveCount(0)
   expect(errors).toEqual([])
 })
 

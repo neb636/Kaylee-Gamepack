@@ -17,7 +17,6 @@ export const WORLD_LINES = {
     australia: "That's Australia! It's a country and a continent.",
     antarctica: "That's Antarctica! Brrr, it's icy!",
   },
-  teaParty: `Tea party at my house, ${NAME}!`,
   soon: {
     egypt: "We'll fly to Egypt soon! It has pyramids!",
     china: "We'll fly to China soon! It has pandas!",
@@ -62,7 +61,6 @@ export const WORLD_LINES = {
       canada: 'Canada!',
     },
     games: {
-      teaParty: 'A tea party with me!',
       'thailand/street': "Agong's house!",
       'thailand/upstairs': 'Your room!',
       'thailand/wardrobe': 'Your wardrobe!',
