@@ -55,14 +55,14 @@ export function buildRoom(bag: Bag): Room {
   add(solid(merge([
     P.box(7, 0.1, 6, '#C99A6E', { at: [0, FLOOR_Y - 0.05, -0.8] }),
     // The back wall, built round the window opening.
-    P.box(3.5 - W.w / 2, 3.4, 0.12, CREAM, { at: [-(3.5 + W.w / 2) / 2, FLOOR_Y + 1.7, backZ - 0.06] }),
-    P.box(3.5 - W.w / 2, 3.4, 0.12, CREAM, { at: [(3.5 + W.w / 2) / 2, FLOOR_Y + 1.7, backZ - 0.06] }),
+    P.box(3.5 - W.w / 2, 6, 0.12, CREAM, { at: [-(3.5 + W.w / 2) / 2, FLOOR_Y + 3, backZ - 0.06] }),
+    P.box(3.5 - W.w / 2, 6, 0.12, CREAM, { at: [(3.5 + W.w / 2) / 2, FLOOR_Y + 3, backZ - 0.06] }),
     P.box(W.w, W.y - W.h / 2 - FLOOR_Y, 0.12, CREAM, { at: [0, (W.y - W.h / 2 + FLOOR_Y) / 2, backZ - 0.06] }),
-    P.box(W.w, FLOOR_Y + 3.4 - (W.y + W.h / 2), 0.12, CREAM, { at: [0, (FLOOR_Y + 3.4 + W.y + W.h / 2) / 2, backZ - 0.06] }),
+    P.box(W.w, FLOOR_Y + 6 - (W.y + W.h / 2), 0.12, CREAM, { at: [0, (FLOOR_Y + 6 + W.y + W.h / 2) / 2, backZ - 0.06] }),
     P.box(7, 0.22, 0.16, RED_DARK, { at: [0, FLOOR_Y + 0.11, backZ + 0.02] }),
     // Side walls.
-    P.box(0.12, 3.4, 4.6, CREAM, { at: [-3.2, FLOOR_Y + 1.7, -0.6] }),
-    P.box(0.12, 3.4, 4.6, CREAM, { at: [3.2, FLOOR_Y + 1.7, -0.6] }),
+    P.box(0.12, 6, 4.6, CREAM, { at: [-3.2, FLOOR_Y + 3, -0.6] }),
+    P.box(0.12, 6, 4.6, CREAM, { at: [3.2, FLOOR_Y + 3, -0.6] }),
     // Dark wood beams along the ceiling line.
     P.box(7, 0.14, 0.16, WOOD_DARK, { at: [0, W.y + W.h / 2 + 0.55, backZ + 0.06] }),
   ]), bag, 0))

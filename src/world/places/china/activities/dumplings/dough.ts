@@ -354,7 +354,7 @@ export class Dough {
         const rad = ct < 0 ? pr : pr - wall
         let rho = rad * Math.sin(psi)
         const ty = rad * (1 - Math.cos(psi)) * 0.8
-        if (ct < 0 && psi > 0.35 * Math.PI) rho += pl * r * 0.12 * (0.5 + 0.5 * Math.cos(nP * u)) * smooth(0.35 * Math.PI, 0.85 * Math.PI, psi)
+        if (ct < 0 && psi > 0.35 * Math.PI) rho += pl * r * 0.2 * (0.5 + 0.5 * Math.cos(nP * u)) * smooth(0.35 * Math.PI, 0.85 * Math.PI, psi)
         const uu = u + this.twist * (psi / Math.PI) ** 3
         const tx = rho * Math.cos(uu)
         const tz = rho * Math.sin(uu)

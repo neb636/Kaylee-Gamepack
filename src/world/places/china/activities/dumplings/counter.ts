@@ -30,7 +30,7 @@ import type { World3D } from '../../../../engine3d/View3D'
 import { L } from '../../lines'
 import { DOUGH, DOUGH_COLORS, Dough, PLEAT, type DoughColor, type Kind } from './dough'
 import { Friend } from './friends'
-import { BALL_R, BASKET_H, BELL, BOARD, CHEF, CHOPSTICKS, COLOR_BOWLS, FILLING, FISH, FLOUR, LANTERNS, LUMP, SEATS, SERVE_Z, TEAPOT, WINDOW, WOK, WORK, type Seat } from './layout'
+import { BALL_R, BASKET_H, BELL, BOARD, CHEF, CHEF_TALL, CHOPSTICKS, COLOR_BOWLS, FILLING, FISH, FLOUR, LANTERNS, LUMP, SEATS, SERVE_Z, TEAPOT, WINDOW, WOK, WORK, type Seat } from './layout'
 import { buildBasket, buildBlob, buildLid, buildPuff, buildRoom, type Room } from './room'
 import type { DumplingSection, Step } from './sections'
 
@@ -375,8 +375,12 @@ export class DumplingCounter implements World3D {
       for (let i = 0; i < total; i++) {
         const p = this.makePiece(this.defaultColor(i), this.kindFor(i), this.def.source === 'lump' && i === 1 ? 1.9 : 1)
         p.dough.finish()
+        // The next order's basket, once this one is full.
+        if (!this.current && this.baskets.filter((b) => b.state === 'stack').length < this.def.orders.length) this.newBasket()
         this.toBasket(p, true)
       }
+      // Settled on the wok at once (a new basket drops in from above, and would carry the dumplings down with it).
+      for (const b of this.baskets) if (b.state === 'stack') b.root.position.set(b.x, b.y, b.z)
       this.stage = 'lid'
       this.lidReady()
       if (at === 'serve') {
@@ -444,7 +448,7 @@ export class DumplingCounter implements World3D {
       this.piece = p
       p.stage = 'arrive'
       this.chef.play('toss')
-      const from = new Vector3(CHEF.x + 0.35, 0.45, CHEF.z + 0.1)
+      const from = this.chef.root.position.clone().add(new Vector3(0.35, 1.37, 0.1))
       p.dough.root.position.copy(from)
       setTimeout(() => {
         if (this.gone) return
@@ -545,7 +549,7 @@ export class DumplingCounter implements World3D {
     this.stage = 'lid'
     const top = this.baskets.filter((b) => b.state === 'stack').reduce((a, b) => (b.level > a.level ? b : a))
     this.lid = buildLid(this.bag, this.def.basketR)
-    this.lid.position.set(WOK[0] + 0.32, top.y + BASKET_H + 0.35, WOK[2] - 0.1)
+    this.lid.position.set(WOK[0], top.y + BASKET_H + 0.4, WOK[2] - 0.05)
     this.scene.add(this.lid)
     this.lidState = 'ready'
     this.lastProgress = this.time
@@ -681,6 +685,9 @@ export class DumplingCounter implements World3D {
     this.w = w
     this.h = h
     this.tall = h > w
+    const c = this.tall ? CHEF_TALL : CHEF
+    this.chef.root.position.set(c.x, -0.92, c.z)
+    this.chef.root.rotation.y = this.chef.yaw = c.yaw
     this.rig.setSize(w, h, top)
     setOutlineResolution(w, h)
     this.rig.setShot(this.shot(), true)
@@ -697,11 +704,15 @@ export class DumplingCounter implements World3D {
 
   private shot(): Shot {
     if (this.stage === 'payoff') {
-      return { center: new Vector3(0, 0.55, -1.4), half: this.tall ? new Vector3(1.7, 1.2, 1.4) : new Vector3(2.1, 0.9, 1.2), yaw: 0, pitch: 18 }
+      return { center: new Vector3(0, 0.5, -1.4), half: this.tall ? new Vector3(1.75, 0.8, 1.3) : new Vector3(2.1, 0.9, 1.2), yaw: 0, pitch: this.tall ? 24 : 18 }
     }
     // The board fills the bottom, the friends across the counter above it, the bowls and the wok at the sides.
-    if (this.tall) return { center: new Vector3(0, 0.12, -0.2), half: new Vector3(1.12, 0.5, 0.85), yaw: 0, pitch: 52 }
-    return { center: new Vector3(0, 0.22, -0.3), half: new Vector3(1.32, 0.45, 0.72), yaw: 0, pitch: 40 }
+    // Tall: a little wider (Chef Fu at the left, Dou Dou at the right) and looking further down, so the red counter
+    // front doesn't fill the bottom.
+    if (this.tall) return { center: new Vector3(-0.05, 0.12, -0.55), half: new Vector3(1.02, 0.5, 0.7), yaw: 0, pitch: 54 }
+    // A short phone: the board sits a little higher, clear of the line at the bottom.
+    if (this.h < 500) return { center: new Vector3(0, 0.2, -0.22), half: new Vector3(1.28, 0.45, 0.8), yaw: 0, pitch: 42 }
+    return { center: new Vector3(0, 0.22, -0.3), half: new Vector3(1.3, 0.45, 0.72), yaw: 0, pitch: 40 }
   }
 
   update(dt: number) {
@@ -786,7 +797,7 @@ export class DumplingCounter implements World3D {
     if (this.lid) {
       if (this.lidState === 'on' || this.lidState === 'ready') {
         const top = this.baskets.filter((b) => b.state === 'stack').reduce((a, b) => (b.level > a.level ? b : a), this.baskets[0])
-        const want = this.lidState === 'on' ? tmp.set(top.x, top.y + BASKET_H, top.z) : tmp.set(WOK[0] + 0.32, top.y + BASKET_H + 0.35 + Math.sin(t * 3) * 0.03, WOK[2] - 0.1)
+        const want = this.lidState === 'on' ? tmp.set(top.x, top.y + BASKET_H, top.z) : tmp.set(WOK[0], top.y + BASKET_H + 0.4 + Math.sin(t * 3) * 0.03, WOK[2] - 0.05)
         this.lid.position.lerp(want, ease(dt, 10))
         if (this.lidState === 'on') this.lid.position.y += Math.max(0, Math.sin(t * 22)) * 0.006
       }
@@ -940,8 +951,17 @@ export class DumplingCounter implements World3D {
         return
       }
     }
-    // The dumpling on the board: squish it, stretch it, fold it, pleat it; a finished one is carried.
+    // A finger right on the filling bowl takes a meatball (even when a giant wrapper reaches over to it).
     const pc = this.piece
+    if (pc && (pc.stage === 'wrapper' || pc.stage === 'filled') && this.near(x, y, tmp.set(...FILLING).setY(0.08), 0.13) < 0) {
+      const g = buildBlob(this.bag)
+      g.position.set(FILLING[0], 0.12, FILLING[2])
+      this.scene.add(g)
+      this.grab = { kind: 'blob', g }
+      sounds.pickup()
+      return
+    }
+    // The dumpling on the board: squish it, stretch it, fold it, pleat it; a finished one is carried.
     if (pc && (pc.stage === 'ball' || pc.stage === 'wrapper' || pc.stage === 'filled' || pc.stage === 'done')) {
       const c = pc.dough.root.position
       const reach = pc.stage === 'filled' && pc.dough.kind === 'pouch' ? pc.dough.footprint * PLEAT.reach : pc.dough.footprint
@@ -1498,7 +1518,7 @@ export class DumplingCounter implements World3D {
       case 'flour':
         this.flourPuff = 1
         this.flour.burst(FLOUR[0], 0.35, FLOUR[2], 18, 0.5, 0.6, 0.05)
-        this.flour.burst(CHEF.x + 0.1, 0.45, CHEF.z + 0.1, 16, 0.3, 0.4, 0.06)
+        this.flour.burst(this.chef.root.position.x + 0.1, 0.45, this.chef.root.position.z + 0.1, 16, 0.3, 0.4, 0.06)
         this.chef.play('sneeze')
         setTimeout(() => !this.gone && sounds.whoosh(), 800)
         this.talk(D.floury)
