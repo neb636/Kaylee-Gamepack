@@ -8,6 +8,9 @@
 // to the sea (the moat fills); filmed: digging a moat round and a channel to the sea, and burying Daddy.
 // Greybox 5, snorkeling at Ko Kudi: the splash in, the parrotfish arriving, the garden; filmed: leading Kaylee over the
 // reef (the damselfish parting round her) and following the parrotfish toward the gap.
+// Greybox 6, lunch and hide and seek at Ao Prao: the deck with a roll eaten and the coconut sipped, hide and seek's
+// count, a seek, the trickier round and her turn hiding; filmed: finding Daddy behind the tree, and Daddy searching
+// the wrong places while she hides behind the chairs.
 // Not part of the app: Node runs it, Vite never sees it.
 
 const ready = (page) => page.waitForFunction(() => window.__thaiSametQA?.().phase, null, { timeout: 20000 })
@@ -59,6 +62,42 @@ export const screens = [
     act: async (page) => {
       await sandChannel(page)
       await page.waitForTimeout(5000)
+    },
+  },
+  {
+    name: 'thailand-samet-deck-lunch',
+    hash: '#/world/thailand/samet-trip/deck',
+    reset: true,
+    wait: 2500,
+    act: async (page) => {
+      // A roll from the basket and three bites, then hold a finger on the coconut until it's gone.
+      await page.locator('[data-anchor="basket"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(1200)
+      for (let i = 0; i < 3; i++) {
+        await page.locator('[data-anchor="kaylee"]').click({ force: true }).catch(() => {})
+        await page.waitForTimeout(400)
+      }
+      await page.waitForTimeout(800)
+      const c = (await page.evaluate(() => window.__thaiSametQA?.()))?.cup
+      if (c) {
+        await page.mouse.move(c.x, c.y - 20)
+        await page.mouse.down()
+        await page.waitForTimeout(4000)
+        await page.mouse.up()
+      }
+    },
+  },
+  { name: 'thailand-samet-hideseek-count', hash: '#/world/thailand/samet-trip/hideseek?round=1', reset: true, wait: 2600 },
+  { name: 'thailand-samet-hideseek-seek', hash: '#/world/thailand/samet-trip/hideseek?round=1', reset: true, wait: 6000 },
+  { name: 'thailand-samet-hideseek-tricky', hash: '#/world/thailand/samet-trip/hideseek?round=2', reset: true, wait: 6000 },
+  {
+    name: 'thailand-samet-hideseek-hide',
+    hash: '#/world/thailand/samet-trip/hideseek?round=hide',
+    reset: true,
+    wait: 2000,
+    act: async (page) => {
+      await page.locator('[data-anchor="hide:chairs"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(6500)
     },
   },
   { name: 'thailand-samet-snorkel-float', hash: '#/world/thailand/samet-trip/snorkel?round=float', reset: true, wait: 3500 },
@@ -137,6 +176,34 @@ export const motion = [
       await page.waitForTimeout(3000)
     },
     act: async (page) => snorkelLead(page, 'parrotAt', 9000),
+  },
+  {
+    name: 'thailand-samet-hideseek-find',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/hideseek?round=1`)
+      await ready(page)
+      await page.waitForTimeout(5200)
+    },
+    act: async (page) => {
+      // Peek behind the umbrella (not there: he giggles from the tree), then the tree: "Found you!", he jumps out.
+      await page.locator('[data-anchor="hide:umbrella"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(3500)
+      await page.locator('[data-anchor="hide:tree"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(5000)
+    },
+  },
+  {
+    name: 'thailand-samet-hideseek-search',
+    seconds: 12,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/hideseek?round=hide`)
+      await ready(page)
+      await page.waitForTimeout(1500)
+      await page.locator('[data-anchor="hide:chairs"]').click({ force: true }).catch(() => {})
+      await page.waitForTimeout(5000)
+    },
+    act: async (page) => page.waitForTimeout(12000),
   },
   {
     name: 'thailand-samet-sand-dig',

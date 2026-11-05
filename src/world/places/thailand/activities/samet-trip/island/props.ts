@@ -380,29 +380,11 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
     lamp(null, p.x, y, p.z, k % 2 === 1, 1.6)
   }
 
-  // ---- The resort deck above Ao Prao: wood on stilts, a dark rail, tables and rattan chairs with green cushions.
+  // ---- The resort deck above Ao Prao (resortDeck below).
   {
     const D = DECK
-    const ground0 = Math.max(...[[-1, -1], [1, -1], [-1, 1], [1, 1], [0, 0]].map(([u, v]) => yOf(at(D, (u * D.w) / 2, (v * D.d) / 2))))
-    const y = ground0 + 0.9
-    const L = (u: number, v: number, dy: number): V3 => {
-      const p = at(D, u, v)
-      return [p.x, y + dy, p.z]
-    }
-    place.push(P.rbox(D.d, 0.22, D.w, 0.05, '#B07D52', { at: L(0, 0, -0.11), rot: [0, D.face + Math.PI / 2, 0] }))
-    for (let u = -D.w / 2 + 0.3; u <= D.w / 2; u += 2.1) for (const v of [-D.d / 2 + 0.3, D.d / 2 - 0.3]) {
-      const p = at(D, u, v)
-      place.push(P.cyl(0.12, 0.12, y - yOf(p) + 0.5, '#8A5E3C', { at: [p.x, (y + yOf(p)) / 2 - 0.25, p.z] }, 7))
-    }
-    // The rail on the sea side and the two ends (the land side is open, with steps down to the sand).
-    place.push(P.box(0.1, 0.1, D.w, '#5A3D2A', { at: L(0, D.d / 2 - 0.1, 0.95), rot: [0, D.face + Math.PI / 2, 0] }))
-    for (let u = -D.w / 2; u <= D.w / 2 + 0.01; u += 1) place.push(P.box(0.07, 0.95, 0.07, '#5A3D2A', { at: L(u, D.d / 2 - 0.1, 0.47) }))
-    for (const s of [-1, 1]) place.push(P.box(0.1, 0.1, D.d, '#5A3D2A', { at: L((s * D.w) / 2, 0, 0.95), rot: [0, D.face, 0] }))
-    for (const [u, v] of [[-2.5, 0.8], [2.5, 0.8]]) {
-      place.push(P.cyl(0.6, 0.6, 0.06, '#F6EEDD', { at: L(u, v, 0.75) }, 14), P.cyl(0.06, 0.06, 0.72, '#5A3D2A', { at: L(u, v, 0.37) }, 6))
-      for (const du of [-0.85, 0.85]) place.push(P.rbox(0.55, 0.5, 0.55, 0.12, '#C79A62', { at: L(u + du, v, 0.25) }), P.rbox(0.5, 0.12, 0.5, 0.06, du < 0 ? '#7CC46A' : '#C6E36A', { at: L(u + du, v, 0.55) }))
-      place.push(P.sphere(0.18, '#D9A55C', { at: L(u + 0.15, v, 0.85), scale: [1.2, 0.6, 1] }, 10))
-    }
+    const { parts, y } = resortDeck(yOf)
+    place.push(...parts)
     decks.push({ x: D.x, z: D.z, t: D.t, n: D.n, hw: D.w / 2 - 0.2, hd: D.d / 2 - 0.25, y, ramp: 2.5 })
     for (const id of ['deckbrella:0', 'deckbrella:1']) {
       const p = pokes.get(id)
@@ -455,27 +437,7 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
     const y = yOf(s)
     const g = new Group()
     g.position.set(s.x, y, s.z)
-    const wood = ['#CFC8C0', '#BDB5AD', '#DAD4CC']
-    const parts: BufferGeometry[] = []
-    const R2 = rng(77)
-    const trunk0 = new Vector3(0, 0.2, 0)
-    const trunk1 = new Vector3(0.6, 2.6, 0.3)
-    parts.push(stick(trunk0, trunk1, 0.75, 0.45, wood[0]))
-    for (let k = 0; k < 9; k++) {
-      const a = (k / 9) * Math.PI * 2 + R2() * 0.4
-      const l = 1.6 + R2() * 1.4
-      const end = new Vector3(Math.sin(a) * l, 0.05 + R2() * 0.5, Math.cos(a) * l)
-      const knee = new Vector3(Math.sin(a) * l * 0.45, 0.7 + R2() * 0.5, Math.cos(a) * l * 0.45)
-      parts.push(stick(new Vector3(0, 0.6, 0), knee, 0.32, 0.22, wood[k % 3]), stick(knee, end, 0.22, 0.1, wood[(k + 1) % 3]))
-    }
-    for (let k = 0; k < 5; k++) {
-      const a = k * 1.3 + 0.4
-      const end = trunk1.clone().add(new Vector3(Math.sin(a) * (1.8 + R2()), 0.8 + R2() * 1.4, Math.cos(a) * (1.8 + R2())))
-      parts.push(stick(trunk1, end, 0.28, 0.1, wood[k % 3]))
-      const tw = end.clone().add(new Vector3(Math.sin(a + 0.8) * 0.9, 0.5, Math.cos(a + 0.8) * 0.9))
-      parts.push(stick(end, tw, 0.1, 0.05, wood[(k + 2) % 3]))
-    }
-    g.add(solid(merge(parts), bag, 2))
+    g.add(solid(driftwoodGeo(), bag, 2))
     root.add(g)
     blockers.add(s.x, s.z, 1.4)
     stops.hideseek = g
@@ -535,3 +497,57 @@ export function buildProps(bag: Bag, root: Group, ground: Ground, blockers: Bloc
   }
 }
 
+/** The resort deck above Ao Prao (photo 2): wood on stilts over the slope, a dark rail on the sea side and the ends
+ *  (the land side is open, steps down to the sand), two tables with rattan chairs and green and lime cushions. Its
+ *  parts in world coordinates, and its top's height. `basket`: a bread basket on each table (the lunch brings its own). */
+export function resortDeck(yOf: (p: XZ) => number, basket = true): { parts: BufferGeometry[]; y: number } {
+  const D = DECK
+  const place: BufferGeometry[] = []
+  const ground0 = Math.max(...[[-1, -1], [1, -1], [-1, 1], [1, 1], [0, 0]].map(([u, v]) => yOf(at(D, (u * D.w) / 2, (v * D.d) / 2))))
+  const y = ground0 + 0.9
+  const L = (u: number, v: number, dy: number): V3 => {
+    const p = at(D, u, v)
+    return [p.x, y + dy, p.z]
+  }
+  place.push(P.rbox(D.d, 0.22, D.w, 0.05, '#B07D52', { at: L(0, 0, -0.11), rot: [0, D.face + Math.PI / 2, 0] }))
+  for (let u = -D.w / 2 + 0.3; u <= D.w / 2; u += 2.1) for (const v of [-D.d / 2 + 0.3, D.d / 2 - 0.3]) {
+    const p = at(D, u, v)
+    place.push(P.cyl(0.12, 0.12, y - yOf(p) + 0.5, '#8A5E3C', { at: [p.x, (y + yOf(p)) / 2 - 0.25, p.z] }, 7))
+  }
+  // The rail on the sea side and the two ends (the land side is open, with steps down to the sand).
+  place.push(P.box(0.1, 0.1, D.w, '#5A3D2A', { at: L(0, D.d / 2 - 0.1, 0.95), rot: [0, D.face + Math.PI / 2, 0] }))
+  for (let u = -D.w / 2; u <= D.w / 2 + 0.01; u += 1) place.push(P.box(0.07, 0.95, 0.07, '#5A3D2A', { at: L(u, D.d / 2 - 0.1, 0.47) }))
+  for (const s of [-1, 1]) place.push(P.box(0.1, 0.1, D.d, '#5A3D2A', { at: L((s * D.w) / 2, 0, 0.95), rot: [0, D.face, 0] }))
+  for (const [u, v] of [[-2.5, 0.8], [2.5, 0.8]]) {
+    place.push(P.cyl(0.6, 0.6, 0.06, '#F6EEDD', { at: L(u, v, 0.75) }, 14), P.cyl(0.06, 0.06, 0.72, '#5A3D2A', { at: L(u, v, 0.37) }, 6))
+    for (const du of [-0.85, 0.85]) place.push(P.rbox(0.55, 0.5, 0.55, 0.12, '#C79A62', { at: L(u + du, v, 0.25) }), P.rbox(0.5, 0.12, 0.5, 0.06, du < 0 ? '#7CC46A' : '#C6E36A', { at: L(u + du, v, 0.55) }))
+    if (basket) place.push(P.sphere(0.18, '#D9A55C', { at: L(u + 0.15, v, 0.85), scale: [1.2, 0.6, 1] }, 10))
+  }
+  return { parts: place, y }
+}
+
+/** The big driftwood tree from Dad's sunset photo, silver-grey with a tangle of roots and reaching branches: one
+ *  geometry, its foot at the origin (shared with hide and seek, hideseek/). */
+export function driftwoodGeo(): BufferGeometry {
+  const wood = ['#CFC8C0', '#BDB5AD', '#DAD4CC']
+  const parts: BufferGeometry[] = []
+  const R2 = rng(77)
+  const trunk0 = new Vector3(0, 0.2, 0)
+  const trunk1 = new Vector3(0.6, 2.6, 0.3)
+  parts.push(stick(trunk0, trunk1, 0.75, 0.45, wood[0]))
+  for (let k = 0; k < 9; k++) {
+    const a = (k / 9) * Math.PI * 2 + R2() * 0.4
+    const l = 1.6 + R2() * 1.4
+    const end = new Vector3(Math.sin(a) * l, 0.05 + R2() * 0.5, Math.cos(a) * l)
+    const knee = new Vector3(Math.sin(a) * l * 0.45, 0.7 + R2() * 0.5, Math.cos(a) * l * 0.45)
+    parts.push(stick(new Vector3(0, 0.6, 0), knee, 0.32, 0.22, wood[k % 3]), stick(knee, end, 0.22, 0.1, wood[(k + 1) % 3]))
+  }
+  for (let k = 0; k < 5; k++) {
+    const a = k * 1.3 + 0.4
+    const end = trunk1.clone().add(new Vector3(Math.sin(a) * (1.8 + R2()), 0.8 + R2() * 1.4, Math.cos(a) * (1.8 + R2())))
+    parts.push(stick(trunk1, end, 0.28, 0.1, wood[k % 3]))
+    const tw = end.clone().add(new Vector3(Math.sin(a + 0.8) * 0.9, 0.5, Math.cos(a + 0.8) * 0.9))
+    parts.push(stick(end, tw, 0.1, 0.05, wood[(k + 2) % 3]))
+  }
+  return merge(parts)
+}

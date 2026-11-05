@@ -17,9 +17,9 @@
   "icon": "🏝️",
   "kind": "Family trip: an open island",
   "updated": "2026-11-05",
-  "status": { "label": "Greyboxes 1-5 built: the jet ski, the island, Mommy’s phone and the animal book, the sandcastle, the snorkel", "tone": "pink" },
+  "status": { "label": "Greyboxes 1-6 built: the jet ski, the island, Mommy’s phone and the animal book, the sandcastle, the snorkel, lunch and hide and seek", "tone": "pink" },
   "pitch": "Mommy, Daddy and Kaylee take the speedboat to **Koh Samet**, a little island of white sand off Rayong. The whole island is **one world she roams by herself** (in the spirit of cozy island games like Alba): sandy paths, five real beaches, the green taxi, the sea all round, and real island animals to snap with Mommy's phone for her animal book. On the beaches she **rides the jet ski** with Daddy, builds a sandcastle the waves fill, snorkels with the fish at Ko Kudi and plays hide and seek by the big driftwood tree. At night the fire dancers light up the beach for her. Every word is spoken.",
-  "next": "Dad plays **[the snorkel](#/world/thailand/samet-trip/snorkel?round=float)** on the iPad: she splashes in off the boat’s ladder; hold a finger ahead of her and she swims after it (far ahead: she kicks fast, bubbles streaming), the blue damselfish part round her, bump a coral head (a little fish tells her off) or an urchin (boing!), swim up to Daddy (a bubble ring). Then **[follow the parrotfish](#/world/thailand/samet-trip/snorkel?round=follow)** through the gap between the rocks to the garden, and **[the cuttlefish](#/world/thailand/samet-trip/snorkel?round=cuttle)** (swim closer: rainbow, stripes, pink; 📷 snaps the fish for her book). Tune the swimming, the fish and the half-under camera with **[?feel=1](#/world/thailand/samet-trip/snorkel?round=float&feel=1)**. Then **greybox 6: lunch and hide and seek**.",
+  "next": "Dad plays **[lunch on the deck](#/world/thailand/samet-trip/deck)** on the iPad: tap the basket and Daddy passes a roll (tap Kaylee for each bite), hold a finger on the coconut to sip it dry, tap the mango sticky rice. Then **[hide and seek](#/world/thailand/samet-trip/hideseek?round=1)**: Kaylee counts by the driftwood tree (tap to peek), then lead her round to find Daddy (his place wiggles and giggles when she’s close; tap it). **[The trickier hides](#/world/thailand/samet-trip/hideseek?round=2)** (roots, towel, sea, pandanus) and **[her turn to hide](#/world/thailand/samet-trip/hideseek?round=hide)** (lead her to a glowing place; Daddy searches the wrong ones and gives up). Tune the walking, the hides, Daddy’s search and the cameras with **[?feel=1](#/world/thailand/samet-trip/hideseek?round=1&feel=1)**. Then **greybox 7: getting there and the trip frame**.",
   "facts": [
     { "icon": "⏱️", "value": "15-25 min", "label": "a whole day on the island, all four stops and the fire show" },
     { "icon": "👆", "value": "230-350", "label": "touches" },
@@ -428,8 +428,8 @@
           { "n": 5, "id": "jetski", "name": "Jet ski: ride", "query": "round=ride" },
           { "n": 6, "id": "sandcastle", "name": "Sandcastle: dig", "query": "round=dig" },
           { "n": 7, "id": "snorkel", "name": "Snorkel: float and look", "query": "round=float" },
-          { "n": 8, "id": "deck", "name": "Lunch on the deck at Ao Prao", "status": "todo" },
-          { "n": 9, "id": "hideseek", "name": "Hide and seek: easy hides", "query": "round=1", "status": "todo" },
+          { "n": 8, "id": "deck", "name": "Lunch on the deck at Ao Prao" },
+          { "n": 9, "id": "hideseek", "name": "Hide and seek: easy hides", "query": "round=1" },
           { "n": 10, "id": "sunset", "name": "Finale: sunset at the driftwood tree", "query": "flags=all", "status": "todo" },
           { "n": 11, "id": "fireshow", "name": "Finale: the fire show", "query": "flags=all", "status": "todo" },
           { "n": 12, "id": "home", "name": "Home: a photo for Agong's wall", "status": "todo" }
@@ -449,7 +449,10 @@
           { "id": "snorkel", "name": "Snorkel: follow the parrotfish through the gap", "query": "round=follow" },
           { "id": "snorkel", "name": "Snorkel: the cuttlefish", "query": "round=cuttle" },
           { "id": "snorkel", "name": "Snorkel: tune the swimming, the fish and the half-under camera", "query": "round=float&feel=1" },
-          { "id": "hideseek", "name": "Hide and seek: her turn to hide", "query": "round=hide", "status": "todo" },
+          { "id": "hideseek", "name": "Hide and seek: her turn to hide", "query": "round=hide" },
+          { "id": "hideseek", "name": "Hide and seek: the trickier hides (roots, towel, sea, pandanus)", "query": "round=2" },
+          { "id": "hideseek", "name": "Hide and seek: tune the walking, the hides, Daddy’s search", "query": "round=1&feel=1" },
+          { "id": "deck", "name": "Lunch: tune the sipping, the bites, the camera", "query": "feel=1" },
           { "id": "book", "name": "The animal book, nearly full", "query": "book=monitor,squirrel,macaque,hornbill,heron,tern,crab,parrotfish,damselfish,cuttlefish,urchin,coral" },
           { "id": "island", "name": "Mommy’s phone out at Ao Wong Duan (the hornbill, the fish, the cuttlefish)", "query": "at=wongduan&phone=1" },
           { "id": "island", "name": "Mommy’s phone at Ao Prao at dusk (the flying fox flying)", "query": "at=prao&phone=1&time=golden" },
@@ -488,8 +491,8 @@
           { "n": 3, "title": "Greybox 3: Mommy's phone and the animal book", "status": "done", "date": "2026-11-04", "md": "The camera mode, the 14 animals with simple behaviors (wander, flee, perch, swim), the book pages, the beach clean." },
           { "n": 4, "title": "Greybox 4: the sandcastle", "status": "done", "date": "2026-11-04", "md": "The diggable sand patch (a deforming height field), bucket towers, the tide and the channel, burying Daddy." },
           { "n": 5, "title": "Greybox 5: the snorkel", "status": "done", "date": "2026-11-05", "md": "The snorkel boat ride, Ko Kudi's reef (its own scene), the half-underwater camera, the fish crowd, the parrotfish to follow, the cuttlefish." },
-          { "n": 6, "title": "Greybox 6: lunch and hide and seek", "status": "next", "md": "The resort deck at Ao Prao, the driftwood tree, Daddy's hides and his silly search." },
-          { "n": 7, "title": "Greybox 7: getting there and the trip frame", "status": "todo", "md": "The 🏝️ pin on the Thailand map, packing, the speedboat, saving and coming back, `home` and Agong's wall." },
+          { "n": 6, "title": "Greybox 6: lunch and hide and seek", "status": "done", "date": "2026-11-05", "md": "The resort deck at Ao Prao, the driftwood tree, Daddy's hides and his silly search." },
+          { "n": 7, "title": "Greybox 7: getting there and the trip frame", "status": "next", "md": "The 🏝️ pin on the Thailand map, packing, the speedboat, saving and coming back, `home` and Agong's wall." },
           { "n": 8, "title": "The look", "status": "todo", "md": "The island made beautiful: the real sand and water colors, palms, samet trees, pandanus, boulders, the umbrellas, the deck, the sky through the day, the reef. The characters (the jet ski man, the boat captain, the fire dancers). See “The look”." },
           { "n": 9, "title": "The finale: sunset and the fire show", "status": "todo", "md": "Greybox, then its look." },
           { "n": 10, "title": "The full loop", "status": "todo", "md": "Every line in `lines.ts`, the new voices in `cast.json`, clips generated, hints, the facts, the sticker, full QA (layout-qa + playtest-qa) on the trip's sections, then out of `inTheWorks` and onto the Thailand map." }
@@ -649,7 +652,7 @@
             "title": "Greybox 5: snorkeling at Ko Kudi",
             "date": "2026-11-05",
             "status": "done",
-            "open": true,
+            "open": false,
             "summary": "Her finger leads Kaylee over Ko Kudi’s reef, face down on the surface in a pink mask and flippers, with the camera half under the water and half above. Three rounds that move on by themselves: float (the damselfish crowd parting round her), follow (the parrotfish leads her through the gap to the garden) and the cuttlefish that changes color as she comes close. Opened from the snorkel boat at Ao Wong Duan; back there with the pink flag up and the fish she snapped in her book.",
             "blocks": [
               {
@@ -683,6 +686,49 @@
                   "What Mommy’s camera snaps reaches the book when she goes back to the island (not on the reef).",
                   "Face down, mostly her hair and back show from behind; the look gate may swing the camera a little to her side.",
                   "Automated browsers run at 30 fps: check the frame rate on the iPad (two passes a frame, the air pass skips the reef)."
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Greybox 6: lunch on the deck and hide and seek at Ao Prao",
+            "date": "2026-11-05",
+            "status": "done",
+            "open": true,
+            "summary": "Two pieces on the island’s real Ao Prao. Lunch on the resort deck (a place, no stamp): rolls from Daddy, a coconut to sip, mango sticky rice, the cove below. Hide and seek by the driftwood tree (the stop): she counts, leads Kaylee round the beach to find Daddy in seven hiding places over two rounds, then hides herself while Daddy searches all the wrong places. Lunch opens from the deck’s table on the island (a new tap target), hide and seek from the tree; back to the island with the pink flag up once she has won her turn to hide.",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "**The beach** (`hideseek/hideseek.ts`): the island itself (`buildIsland`) framed on Ao Prao, the driftwood tree shared with the island (`island/props.ts` `driftwoodGeo`; the island’s deck is `resortDeck` now too), and the hiding places in `hideseek/props.ts`: a pink umbrella tipped over like a shield, a stack of red chairs, a striped towel, a pandanus on stilt roots, two thin palms by the water, Mommy in her red chair.",
+                  "**Walk and look** (the island’s verb): hold a finger and she trots after it, gallops when it’s far; tap the sand and she walks there; tap a hiding place and she walks up and peeks behind it. A high camera looking out to sea follows her and leans toward the beach’s middle (and fits Daddy in while he searches).",
+                  "**Round 1** (`?round=1`): the photo for a moment (Kaylee’s hooves over her eyes in front of the tree, Daddy leaning on it), then a lavender blind with 1… 2… 3 while he runs off (tap to peek through it: he’s still running). Behind the tree (his head pokes out), behind the umbrella (crouched, feet showing), behind the chairs. Close by, his place wiggles and giggles every 1.5 s; a wrong place gets a silly little reaction and a giggle from the right one. Tap it, tap him or walk right up: “Found you!”, he jumps out beside her, she twirls, confetti.",
+                  "**Round 2** (`?round=2`): lying in the roots, under the towel (the lump breathes, his toes stick out), in the sea with only his cap floating (bubbles), up in the pandanus. Still for 8 s: he gives himself away (a sneeze, a giggle, a splash; the place shakes hard); after 16 s it glows and the finger points.",
+                  "**Her turn** (`?round=hide`): Daddy covers his eyes at the tree and counts to five (tap him: he peeks, “No peeking!”). The hiding places glow; standing still in one, she crouches in it (under the towel she’s a little lump). Daddy searches the places furthest from her first, then the one right beside her looking the wrong way, and gives up: “Kaylee wins!”. In the open he spots her the first time (never twice in a row); wandering out while he’s close gets her spotted too; tap her while he searches: “Boo!”, he jumps and she wins. The first win puts up the flag (🙈 🏆 and the way back); it keeps going round after that.",
+                  "**Lunch** (`hideseek/lunch.ts`, `deck`): Kaylee and Daddy across the table on rattan chairs, Mommy at the end of the deck with her phone (tap: the photo flash), cream umbrellas by the rail. Tap the basket (or Daddy): he passes a roll; tap Kaylee (or the roll): a bite, three to a roll. The coconut arrives after 5 s (or her first roll): hold a finger on it to sip, it tips toward her as it empties, the last drops are a big slurp. The rice arrives at 14 s (or the coconut half gone): five bites fly to her. A monitor lizard strolls the sand below (tap: tongue out, it hurries), a squirrel on the pandanus (tap: it runs up), the sea splashes. Done: 🍽️ with 🙈 (straight down to hide and seek) and 🏝️.",
+                  "**Knobs** (`?feel=1`): walking (trot, gallop, from, stop), finding Daddy (her count, how near the wiggle starts and how often, the walk-up distance, the give-away and glow times, his jump), her turn (his count, how close counts as hidden, his search speed, how many wrong places, how long at each, how close he spots her), the beach camera, and lunch (sip rate, bites, the toss, when the coconut and the rice come, its camera). The graph: how far she is from Daddy, and her speed."
+                ]
+              },
+              {
+                "type": "callout",
+                "tone": "note",
+                "title": "Changed from the plan",
+                "items": [
+                  "Daddy doesn’t hide in the ice cream cart (there isn’t one at Ao Prao); his wrong places are the other hiding places, Mommy and the thin palms.",
+                  "Lunch opens from a tap target on the deck’s table on the island (she walks up the steps to it), rather than by walking onto the deck.",
+                  "In her turn she wins whenever she’s hidden; only the open sand gets her found, and only once in a row.",
+                  "One umbrella on Ao Prao’s sand stood inside the driftwood tree on the island: moved along the beach."
+                ]
+              },
+              {
+                "type": "callout",
+                "tone": "warn",
+                "title": "Known small things",
+                "items": [
+                  "No voices yet (greybox): the counting, “Found you!” and “Kaylee wins!” show in a bubble for Dad.",
+                  "Daddy walks straight through things while her eyes are shut (nobody sees), and round the front of them while he searches.",
+                  "Hooves over the eyes (hers and his) are rough arm poses on top of the rig; the look gate can make them nicer.",
+                  "Mommy’s photo of the two of them at the tree isn’t in the book yet."
                 ]
               }
             ]

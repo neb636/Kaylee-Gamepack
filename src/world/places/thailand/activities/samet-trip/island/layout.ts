@@ -389,7 +389,7 @@ for (const [id, us] of [['saikaew', [-20, 4, 26]], ['hinkhok', [-6, 6]], ['phai'
   for (const u of us) add('palm', at(FRAMES[id], u, id === 'saikaew' ? -12.5 : -11.5))
 for (const [id, u] of [['saikaew', -10], ['hinkhok', 0], ['prao', 9], ['wongduan', 1]] as const) add('samet', at(FRAMES[id], u, -13.5))
 // Pink umbrellas (spin; poke one three times and it takes off like a kite with Kaylee holding on) and red chairs (fold up).
-for (const [id, us] of [['hinkhok', [-4, 3]], ['phai', [0]], ['wongduan', [-4, 4]], ['prao', [-7, -1, 4]]] as const) for (const u of us) add('umbrella', at(FRAMES[id], u, -6))
+for (const [id, us] of [['hinkhok', [-4, 3]], ['phai', [0]], ['wongduan', [-4, 4]], ['prao', [-7, -1, 10]]] as const) for (const u of us) add('umbrella', at(FRAMES[id], u, -6))
 for (const u of [-6, -2, 3, 7]) add('chair', at(FRAMES.prao, u, -3.6))
 add('ball', at(FRAMES.hinkhok, 3, -2.5))
 add('icecream', bay(-14, -10))
