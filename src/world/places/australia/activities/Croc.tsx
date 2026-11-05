@@ -15,7 +15,8 @@ import { L } from '../lines'
 import type { ActivityProps } from '../Place'
 import { Chompy } from '../puppets/Chompy'
 
-const EGGS = 3
+/** How many babies hatch; the party's Chompy carries them all. */
+export const EGGS = 3
 const SNAPS = 3
 
 const landscapeQuery = typeof matchMedia === 'undefined' ? undefined : matchMedia('(orientation: landscape)')

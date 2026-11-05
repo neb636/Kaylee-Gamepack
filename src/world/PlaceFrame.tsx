@@ -61,12 +61,18 @@ function RunningPlace({ entry, activity: route, section, params }: { entry: Plac
   const activity = route === HUB ? undefined : route
   const Place = useMemo(() => lazy(entry.load), [entry])
   // A test link to a finale (#/world/<place>/party?stamps=all) collects every stamp first, before the passport is read.
-  useState(() => params.stamps === 'all' && setStamps(meta.id, meta.activities.map((a) => a.id)))
+  // The initializer covers the first mount; the effect covers a later hash change inside the same country (RunningPlace
+  // stays mounted), and `stamps` below reads as full right away so a gated finale never falls back to the hub.
+  const seedAll = params.stamps === 'all'
+  useState(() => seedAll && setStamps(meta.id, meta.activities.map((a) => a.id)))
+  useEffect(() => {
+    if (seedAll) setStamps(meta.id, meta.activities.map((a) => a.id))
+  }, [seedAll, meta])
   const query = new URLSearchParams(params).toString()
   const link: SectionLink = useMemo(() => ({ place: meta.id, activity: route, section, params }), [meta.id, route, section, query])
   const passport = usePassport()
   const online = useOnline() // videos need the internet
-  const stamps = passport.stamps[meta.id] ?? []
+  const stamps = useMemo(() => (seedAll ? meta.activities.map((a) => a.id) : passport.stamps[meta.id] ?? []), [seedAll, meta, passport])
   const [won, setWon] = useState(false)
   const [progress, setProgressState] = useState({ done: 0, total: 0 })
 

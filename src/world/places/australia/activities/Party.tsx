@@ -1,7 +1,7 @@
 // The finale: a sunset party at the Sydney Opera House with every friend she helped. Each friend is a live character:
 // tap one and they dance and say hello in their own voice. When everyone has danced: fireworks and a big group dance.
 import { AnimatePresence, motion } from 'motion/react'
-import { createRef, useEffect, useLayoutEffect, useMemo, useState, type ReactNode, type RefObject } from 'react'
+import { createRef, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { bigCelebration, burst, say, sounds, SparklePuppet, useAlive, wait, type PuppetHandle } from '../../../../sdk'
 import { sfx } from '../../../kit/sfx'
 import { Stage } from '../../../kit/Stage'
@@ -162,7 +162,7 @@ export function Party({ guests, onDone, setProgress }: { guests: Guest[]; onDone
     return () => clearInterval(id)
   }, [fireworks, refs, pip, sparkle])
 
-  const dance = async (i: number) => {
+  const dance = (i: number) => {
     if (fireworks) return
     sounds.note(i * 2)
     void refs[i].current?.play('dance')
@@ -171,11 +171,21 @@ export function Party({ guests, onDone, setProgress }: { guests: Guest[]; onDone
     const next = [...danced, i]
     setDanced(next)
     setDanceAt(DANCERS.find((_, j) => !next.includes(j)) ?? DANCERS[i])
-    if (next.length < guests.length) return
-    await wait(2400)
-    if (!alive()) return
-    await finish()
   }
+
+  // Once everyone has danced, the fireworks start after a beat. This reads the state, not the last tap, so a reload in
+  // that pause (the URL already lists all six dancers) still ends in the fireworks instead of stalling.
+  const finished = useRef(false)
+  const allDanced = !story && danced.length === guests.length
+  useEffect(() => {
+    if (!allDanced || fireworks || finished.current) return
+    const id = setTimeout(() => {
+      if (finished.current) return
+      finished.current = true
+      void finish()
+    }, 2400)
+    return () => clearTimeout(id)
+  }, [allDanced, fireworks])
 
   const finish = async () => {
     setFireworks(true)
@@ -189,12 +199,16 @@ export function Party({ guests, onDone, setProgress }: { guests: Guest[]; onDone
     if (alive()) onDone()
   }
 
-  useEffect(() => { if (start === 'fireworks') void finish() }, [start])
+  useEffect(() => {
+    if (start !== 'fireworks' || finished.current) return
+    finished.current = true
+    void finish()
+  }, [start])
 
   const actors: Actor[] = [
     { key: 'sparkle', box: [0.87, 1], row: 'back', label: 'Sparkle', glow: false, node: (h) => <SparklePuppet ref={sparkle} height={h} />, onTap: () => (sounds.pop(), void sparkle.current?.play('dance')) },
     { key: 'pip', box: [0.83, 1], row: 'back', label: 'Pip', glow: false, node: (h) => <Pip ref={pip} height={h} />, onTap: () => (sounds.pop(), void pip.current?.play('cheer')) },
-    ...guests.map((g, i) => ({ key: g.name, box: g.box, row: g.row, label: g.name, glow: !danced.includes(i) && !fireworks, node: (h: string) => g.render(refs[i], h), onTap: () => void dance(i) })),
+    ...guests.map((g, i) => ({ key: g.name, box: g.box, row: g.row, label: g.name, glow: !danced.includes(i) && !fireworks, node: (h: string) => g.render(refs[i], h), onTap: () => dance(i) })),
   ]
   // Keep the prompt bubble clear: it sits under the top bar.
   const topClear = Math.min(size.h * 0.3, (size.w > size.h ? 96 : 150) + size.h * 0.06)
