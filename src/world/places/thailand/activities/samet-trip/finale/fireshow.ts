@@ -18,7 +18,7 @@
 //
 // Greybox: simple shapes in the toon look, no voices (the full loop adds Mommy's "Look! Fire dancers!"); the words show
 // in a bubble for Dad. Every number that decides the feel is a knob (?feel=1), with a graph of her spin against theirs.
-import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, Fog, Group, InstancedMesh, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, Object3D, Plane, Raycaster, Scene, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
+import { AdditiveBlending, BufferAttribute, BufferGeometry, Color, CylinderGeometry, Fog, Group, InstancedMesh, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, Object3D, Plane, Quaternion, Raycaster, Scene, SphereGeometry, TorusGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import { tone } from '../../../../../kit/sfx'
@@ -38,7 +38,8 @@ import { sfx } from '../../../sfx'
 import { FIRE_DANCERS, JETSKI_MAN } from '../cast'
 import { BAY, bay, SEAWARD, type StopId } from '../island/layout'
 import { buildProps, type Props } from '../island/props'
-import { buildIsland, DAY, glowMaterial, type Island } from '../island/scenery'
+import { buildIsland, DAY, glowMaterial, type Island, type Key } from '../island/scenery'
+import { Flames, Glows } from './flame'
 import { Ribbon } from './ribbon'
 import { LoopTracker, SHAPE_IDS, shapePoints, type Pt, type ShapeId } from './shapes'
 
@@ -73,6 +74,12 @@ const BIG = knobs('fireBig', 'The big finish', FILE, {
   need: { value: 0.55, min: 0.2, max: 1, step: 0.05, label: 'Her loop counts from', note: '× the big ring' },
   flames: { value: 2.6, min: 0.8, max: 6, step: 0.1, label: 'The ring of fire lights in', unit: 's' },
   pop: { value: 0.75, min: 0.25, max: 3, step: 0.05, label: 'A firework every', unit: 's' },
+})
+const LOOK = knobs('fireLook', 'The night of the fire show', FILE, {
+  dark: { value: 1, min: 0, max: 1, step: 0.05, label: 'How dark the beach is', note: '0 = the island’s usual night, 1 = dark for the fire (the ribbons and the flames glow)' },
+  firelight: { value: 1, min: 0, max: 2, step: 0.05, label: 'Firelight on the sand ×' },
+  flame: { value: 1, min: 0.5, max: 2, step: 0.05, label: 'Flame size ×' },
+  chain: { value: 1, min: 0, max: 1, step: 1, label: 'Chains on the fire poi', note: '1 = on' },
 })
 const CAM = knobs('fireCam', 'The fire show camera', FILE, {
   pitch: { value: 11, min: 0, max: 40, step: 1, label: 'Looks down', unit: '°' },
@@ -117,10 +124,39 @@ const CASTLE = { u: -11.6, v: -5.6 }
 const RING = { u: -5.5, v: -4.6, ru: 13, rv: 4.8, n: 44 }
 const SHOW_AT = { u: -5.5, v: -10, y: 4.6, size: 1.6 }
 
+/** The night of the fire show: darker than the island's usual night (DAY.night), so the fire is the brightest thing on
+ *  the beach. The bars' lamps stay lit. */
+const SHOW_NIGHT: Key = {
+  ...DAY.night,
+  top: '#0C0A24',
+  mid: '#17133C',
+  horizon: '#35285A',
+  haze: '#1E1840',
+  glow: '#A6A8E6',
+  amb: '#5C54A8',
+  ambK: 0.4,
+  light: '#9098DC',
+  lightK: 0.15,
+  cloud: '#2C2856',
+  belly: '#1E1A42',
+  water: ['#30527A', '#26466E', '#1D3962', '#172E56', '#112448'],
+  far: '#1C2244',
+  hills: ['#1A183C', '#221F48'],
+  lamps: 1,
+}
+/** Links in each fire poi's chain. */
+const LINKS = 9
+/** Where the hand is in a chibi arm (animal.ts: the paw sphere). */
+const HAND = new Vector3(0.05, -0.15, 0.01)
+const PAPER = ['#FFCF8F', '#FFB4DA', '#D8C2FF']
+
 const DEG = 180 / Math.PI
 const HINT_S = 6
 const tmp = new Vector3()
 const tmp2 = new Vector3()
+const tmp3 = new Vector3()
+const tmpC = new Color()
+const tmpQ = new Quaternion()
 const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const UP = new Vector3(0, 1, 0)
 
@@ -160,7 +196,9 @@ interface Dancer {
   ringT: number
   hop: number
   trails: Ribbon[]
+  /** The wicks (the balls of the poi) and where they were last frame (their flames stream back from where they go). */
   balls: Mesh[]
+  prev: Vector3[]
 }
 interface Gift {
   id: StopId
@@ -234,7 +272,16 @@ export class FireShow implements World3D {
   private lastHit = 0
   private showRib: Ribbon
   private showBall: Mesh
-  private lanterns: { m: InstancedMesh; t: number; from: Vector3 }[] = []
+  /** Her shapes, lifted into the sky as paper lanterns: each dot a lantern (offsets from the shape's middle). */
+  private lanterns: { pts: Vector3[]; color: string; t: number; from: Vector3; seed: number }[] = []
+  private lanternBody: InstancedMesh
+  /** The fire (every flame on the beach in one draw), the firelight on the sand, the lanterns' soft halos. */
+  private fire: Flames
+  private pools: Glows
+  private halos: Glows
+  private chains: InstancedMesh
+  private darkNow = -1
+  private showPrev = new Vector3()
 
   // ---- The finish.
   private gifts: Gift[] = []
@@ -242,7 +289,6 @@ export class FireShow implements World3D {
   private castleCandles: Mesh[] = []
   private ski: { root: Group; rider: Rig; wake: Ribbon; s: number } | null = null
   private fish: { root: Group; glow: Mesh; s: number; r: number; speed: number; jump: number }[] = []
-  private flames: InstancedMesh
   private flameK: number[] = []
   private rockets: { p: Vector3; v: Vector3; t: number; m: Mesh }[] = []
   private nextPop = 0
@@ -272,7 +318,7 @@ export class FireShow implements World3D {
     // ---- Sai Kaew at night: the island, its bars, lanterns and umbrellas.
     this.isl = buildIsland(bag)
     scene.add(this.isl.root)
-    this.isl.setTime('night')
+    this.applyDark()
     this.isl.lagoon.waves.height = 0.12
     this.props = buildProps(bag, this.isl.root, this.isl.ground, this.isl.blockers, this.isl.cullable)
     for (const id of Object.keys(this.props.flags) as StopId[]) this.props.flags[id].visible = false
@@ -347,7 +393,8 @@ export class FireShow implements World3D {
     }
 
     // ---- The fire dancers.
-    const flame = '#FFB347'
+    const wickGeo = bag.add(new SphereGeometry(0.075, 10, 8))
+    const wickMat = bag.add(new MeshBasicMaterial({ color: '#4A3230' }))
     FIRE_DANCERS.forEach((look, i) => {
       const rig = buildAnimal(look, bag)
       const p = this.L(DANCE[i][0], DANCE[i][1])
@@ -363,18 +410,18 @@ export class FireShow implements World3D {
         const tr = new Ribbon(bag, { n: 40, head: '#FFB347', tail: '#FF3A10', life: 0.35, width: 0.12 })
         scene.add(tr.mesh)
         trails.push(tr)
-        const ball = new Mesh(ballGeo, glowMaterial(bag, flame))
-        ;(ball.material as MeshBasicMaterial).opacity = 1
-        ball.scale.setScalar(1.6)
-        const core = new Mesh(ballGeo, glowMaterial(bag, '#FFF4C8'))
-        ;(core.material as MeshBasicMaterial).opacity = 1
-        core.scale.setScalar(0.55)
-        ball.add(core)
+        // The wick: a dark ball on its chain, the flame drawn round it (flame.ts).
+        const ball = new Mesh(wickGeo, wickMat)
+        ball.renderOrder = 5
         scene.add(ball)
         balls.push(ball)
       }
-      this.dancers.push({ rig, spin: COPY.min, theta: i * 1.3, r: 0.42, ring: 0, ringR: 1, ringT: 0, hop: 0, trails, balls })
+      this.dancers.push({ rig, spin: COPY.min, theta: i * 1.3, r: 0.42, ring: 0, ringR: 1, ringT: 0, hop: 0, trails, balls, prev: [new Vector3(), new Vector3()] })
     })
+    // Their chains: little steel links from the hand to the wick, catching the firelight.
+    this.chains = new InstancedMesh(bag.add(new TorusGeometry(0.02, 0.0065, 4, 8)), bag.add(new MeshBasicMaterial({ color: '#E6CFAE' })), this.dancers.length * 2 * LINKS)
+    this.chains.frustumCulled = false
+    scene.add(this.chains)
 
     // ---- The shapes: her dots, the dancers' stroke of fire over the sea.
     const dotGeo = bag.add(new SphereGeometry(0.07, 8, 6))
@@ -387,16 +434,20 @@ export class FireShow implements World3D {
     this.showRib = new Ribbon(bag, { n: 120, head: '#FFE7A0', tail: '#FF6A2E', life: 3, width: 0.22 })
     this.showBall = new Mesh(ballGeo, glowMaterial(bag, '#FFD27A'))
     ;(this.showBall.material as MeshBasicMaterial).opacity = 1
-    this.showBall.scale.setScalar(2.2)
+    this.showBall.scale.setScalar(1.1)
     this.showBall.visible = false
     scene.add(this.showRib.mesh, this.showBall)
 
-    // ---- The ring of fire round the beach (hidden until the end).
-    const flameGeo = bag.add(new SphereGeometry(0.3, 10, 8))
-    this.flames = new InstancedMesh(flameGeo, bag.add(new MeshBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: 0.92, depthWrite: false, fog: false })), RING.n)
-    this.flames.frustumCulled = false
-    this.flames.count = 0
-    scene.add(this.flames)
+    // ---- The fire: the dancers' poi, the ball that draws the shapes, the candles, the ring of fire round the beach
+    // (hidden until the end); the firelight on the sand; the lanterns' halos.
+    this.fire = new Flames(bag, 96)
+    this.pools = new Glows(bag, 96, { flat: true, soft: 1.6 })
+    this.halos = new Glows(bag, 3 * 48 * 2 + 16, { soft: 2.4 })
+    const lanternGeo = bag.add(new CylinderGeometry(0.075, 0.06, 0.15, 10))
+    this.lanternBody = new InstancedMesh(lanternGeo, bag.add(new MeshBasicMaterial({ color: '#FFFFFF', fog: false })), 3 * 48)
+    this.lanternBody.frustumCulled = false
+    this.lanternBody.count = 0
+    scene.add(this.fire.mesh, this.pools.mesh, this.halos.mesh, this.lanternBody)
     for (let i = 0; i < RING.n; i++) this.flameK.push(0)
 
     this.sparkle = new Particles({ kind: 'spray', count: 320, colors: ['#FFFFFF', '#FFF6B8', PAL.gold, PAL.pink, PAL.hotpink], gravity: -0.4 }, bag)
@@ -474,6 +525,12 @@ export class FireShow implements World3D {
       if (this.phase === 'big') this.showBigRing()
     }
   }
+  /** The beach as dark as the knob says (the island's usual night .. SHOW_NIGHT). */
+  private applyDark() {
+    const k = (this.darkNow = LOOK.dark)
+    this.isl.setTime({ from: 'night', to: SHOW_NIGHT, k })
+    ;(this.scene.fog as Fog).color.set(DAY.night.haze).lerp(tmpC.set(SHOW_NIGHT.haze), k)
+  }
   private setPhase(p: Phase) {
     this.phase = p
     this.phaseT = 0
@@ -482,10 +539,17 @@ export class FireShow implements World3D {
   update(dt: number) {
     const t = (this.time += dt)
     this.phaseT += dt
+    if (LOOK.dark !== this.darkNow) this.applyDark()
+    this.fire.begin(t)
+    this.pools.begin()
+    this.halos.begin()
     this.play(dt, t)
     this.drive(dt, t)
     this.dance(dt, t)
     this.life(dt, t)
+    this.fire.commit()
+    this.pools.commit()
+    this.halos.commit()
     for (const p of [this.sparkle, this.fireworks, this.embers]) p.update(dt)
 
     const c = this.L(KAY.u, KAY.v + 2)
@@ -522,9 +586,12 @@ export class FireShow implements World3D {
         this.showBall.visible = k < 1
         this.showBall.position.copy(tmp)
         if (k < 1) {
+          // A ball of fire, its flame streaming back from where it's going.
+          this.fireball(tmp, this.showPrev, dt, 0.7)
           this.showRib.push(tmp, t, 0.01)
           if (Math.random() < 0.4) this.embers.emit(tmp.x, tmp.y, tmp.z, (Math.random() - 0.5) * 0.6, 0.4, (Math.random() - 0.5) * 0.6, 0.7, 0.1)
         }
+        this.showPrev.copy(tmp)
         if (k >= 1 && this.phaseT > SHAPE.show + 0.4) {
           // Her turn: the dots wait in front of her.
           this.setGuide(this.shapeId, SHAPE.size)
@@ -599,13 +666,7 @@ export class FireShow implements World3D {
         this.rockets.splice(i, 1)
       }
     }
-    for (const l of this.lanterns) {
-      l.t += dt
-      const k = Math.min(1, l.t / 6)
-      const e = 1 - (1 - k) * (1 - k)
-      l.m.position.copy(l.from).addScaledVector(this.fwd, e * 26).add(tmp.set(0, e * 11, 0))
-      l.m.scale.setScalar(1 + e * 1.4)
-    }
+    this.drawLanterns(dt, t)
   }
 
   private rocket(to: Vector3) {
@@ -672,23 +733,14 @@ export class FireShow implements World3D {
   }
   private shapeDone() {
     // It sparkles and lifts into the sky like a lantern of light (and stays up there).
+    // Each dot becomes a little paper lantern, glowing softly from the light inside.
     const s = this.guideSize
-    const m = new InstancedMesh(this.guide.geometry, this.guide.material, this.guidePts.length)
-    m.frustumCulled = false
-    m.renderOrder = 6
-    const o = new Object3D()
-    this.guidePts.forEach((q, i) => {
-      o.position.set(0, 0, 0).addScaledVector(this.right, q.x * s).addScaledVector(UP, q.y * s)
-      o.scale.setScalar(1.3)
-      o.updateMatrix()
-      m.setMatrixAt(i, o.matrix)
-      m.setColorAt(i, new Color(['#FFE68A', '#FF9AD8', '#C9A8FF'][this.shapeIdx % 3]))
-      const w = this.planePoint(q.x * s, q.y * s, tmp)
+    const pts = this.guidePts.map((q) => new Vector3().addScaledVector(this.right, q.x * s).addScaledVector(UP, q.y * s))
+    pts.forEach((o, i) => {
+      const w = tmp.copy(this.O).add(o)
       if (i % 2 === 0) this.sparkle.emit(w.x, w.y, w.z, (Math.random() - 0.5) * 1.5, 1 + Math.random(), (Math.random() - 0.5) * 1.5, 1.2, 0.12)
     })
-    m.position.copy(this.O)
-    this.scene.add(m)
-    this.lanterns.push({ m, t: 0, from: this.O.clone() })
+    this.lanterns.push({ pts, color: PAPER[this.shapeIdx % 3], t: 0, from: this.O.clone(), seed: Math.random() * 10 })
     this.guide.count = 0
     this.counts.shapes++
     lift()
@@ -766,7 +818,8 @@ export class FireShow implements World3D {
       root.add(solid(merge(parts), bag, 1.5))
       for (const [x, y, z] of tops) {
         const c = new Mesh(this.ballA.geometry, glowMaterial(bag, '#FFD27A'))
-        c.position.set(x, y + 0.12, z)
+        c.scale.setScalar(0.6)
+        c.position.set(x, y + 0.06, z)
         root.add(c)
         this.castleCandles.push(c)
       }
@@ -855,6 +908,10 @@ export class FireShow implements World3D {
     this.ribA.update(t, tmp, drawing ? 1 : 0.75)
     this.ribB.update(t, tmp, drawing ? 1 : 0.75)
 
+    // Her poi's light on the sand round her.
+    const kp = this.kaylee.root.position
+    this.pools.add(tmp3.set(kp.x, kp.y + 0.04, kp.z), 3, '#FF6FC8', (drawing ? 0.32 : 0.22) * LOOK.firelight)
+
     const loc = this.planeLocal(this.poiA)
     if (drawing) {
       const loop = this.tracker.add(loc, dt, POI.loopR)
@@ -938,35 +995,113 @@ export class FireShow implements World3D {
       rig.body.rotation.z = Math.sin(s * 0.5) * 0.12
       rig.body.position.y = Math.abs(Math.sin(s * 0.5)) * 0.04 + hy
       rig.head.rotation.y = Math.sin(s * 0.25) * 0.3
-      // Their poi: one circle by each hand (a butterfly), or one big ring over their head (the ring of fire).
-      const c = tmp2.copy(p).addScaledVector(UP, 0.78 * rig.height + hy).addScaledVector(this.fwd, -0.35)
+      // Their poi on chains: a circle round each hand (a butterfly), or one big ring over their head (the ring of fire).
       const ringK = d.ring
+      rig.armL.rotation.set(-1.25 - ringK * 1.0 + Math.sin(d.theta) * 0.25 * (1 - ringK), 0, -0.45)
+      rig.armR.rotation.set(-1.25 - ringK * 1.0 - Math.sin(d.theta) * 0.25 * (1 - ringK), 0, 0.45)
+      rig.root.updateMatrixWorld(true)
+      const c = tmp2.copy(p).addScaledVector(UP, 0.78 * rig.height + hy).addScaledVector(this.fwd, -0.35)
+      // The firelight round their feet, brighter with the ring.
+      const fl0 = 0.85 + Math.sin(t * 11 + i * 2) * 0.08 + Math.sin(t * 27 + i) * 0.07
+      this.pools.add(tmp3.copy(p).setY(p.y + 0.04), 5 + ringK * 2, '#FF8A3A', (0.5 + ringK * 0.25) * LOOK.firelight * fl0)
       d.balls.forEach((ball, k) => {
         const sign = k ? -1 : 1
+        const arm = k ? rig.armR : rig.armL
+        const hand = arm.localToWorld(tmp3.set((k ? 1 : -1) * HAND.x * rig.height, HAND.y * rig.height, HAND.z * rig.height))
         const a = d.theta * sign + (k ? Math.PI : 0)
-        // Butterfly.
-        const bx = sign * 0.32 + Math.sin(a) * d.r
+        // Butterfly: round the hand.
+        const bx = Math.sin(a) * d.r
         const by = Math.cos(a) * d.r
-        // The ring.
+        // The ring: one big circle over the head.
         const ra = d.theta * 1.3 + k * Math.PI
-        const rx = Math.sin(ra) * d.ringR
-        const ry = 0.35 + Math.cos(ra) * d.ringR
-        const x = bx + (rx - bx) * ringK
-        const y = by + (ry - by) * ringK
-        ball.position.copy(c).addScaledVector(this.right, x).addScaledVector(UP, y)
-        const fl = 0.85 + Math.sin(t * 31 + i * 3 + k) * 0.15
-        ball.scale.setScalar(1.6 * fl * (1 + ringK * 0.4))
+        tmp.copy(c).addScaledVector(this.right, Math.sin(ra) * d.ringR).addScaledVector(UP, 0.35 + Math.cos(ra) * d.ringR)
+        ball.position.copy(hand).addScaledVector(this.right, bx).addScaledVector(UP, by).lerp(tmp, ringK)
+        this.fireball(ball.position, d.prev[k], dt, 1 + ringK * 0.3)
+        d.prev[k].copy(ball.position)
+        this.chain((i * 2 + k) * LINKS, hand, ball.position)
         const tr = d.trails[k]
-        tr.life = 0.35 + ringK * 0.7
-        tr.width = 0.12 + ringK * 0.05
+        tr.life = 0.3 + ringK * 0.7
+        tr.width = 0.1 + ringK * 0.05
         tr.push(ball.position, t, 0.02)
         tr.update(t, n)
-        if (Math.random() < 0.12 + ringK * 0.3) this.embers.emit(ball.position.x, ball.position.y, ball.position.z, (Math.random() - 0.5) * 0.4, 0.3, (Math.random() - 0.5) * 0.4, 0.6, 0.07)
+        if (Math.random() < 0.12 + ringK * 0.3) this.embers.emit(ball.position.x, ball.position.y + 0.1, ball.position.z, (Math.random() - 0.5) * 0.4, 0.5, (Math.random() - 0.5) * 0.4, 0.6, 0.06)
       })
-      rig.armL.rotation.set(-1.0 - ringK * 1.2 + Math.sin(d.theta) * 0.3 * (1 - ringK), 0, -0.4)
-      rig.armR.rotation.set(-1.0 - ringK * 1.2 - Math.sin(d.theta) * 0.3 * (1 - ringK), 0, 0.4)
     })
+    this.chains.count = LOOK.chain ? this.dancers.length * 2 * LINKS : 0
+    this.chains.instanceMatrix.needsUpdate = true
   }
+
+  /** A ball of fire at `p` (it was at `prev` a frame ago): its flame streams back from where it's going and up. */
+  private fireball(p: Vector3, prev: Vector3, dt: number, size: number) {
+    const F = LOOK.flame * size
+    // (Its own vector: `p` may be the shared tmp.)
+    const v = this.fireV.subVectors(p, prev).divideScalar(Math.max(dt, 1 / 120))
+    const vx = v.dot(this.right)
+    const vy = v.y
+    const speed = prev.lengthSq() === 0 ? 0 : Math.min(Math.hypot(vx, vy), 14)
+    // Back from the motion, and fire rises: the faster, the more it streams.
+    const dx = -vx * 0.14
+    const dy = -vy * 0.14 + 1
+    const lean = Math.atan2(-dx, dy)
+    const w = 0.42 * F
+    this.fire.add(p, w, w * (1.1 + Math.min(1.4, speed * 0.16)), lean, (p.x * 3.1 + p.z * 1.7) % 1)
+  }
+
+  /** The links of a chain from `a` (the hand) to `b` (the wick), each turned 90° to the last. */
+  private chain(i0: number, a: Vector3, b: Vector3) {
+    const m = this.chainObj
+    tmp.subVectors(b, a)
+    const len = tmp.length()
+    tmp.divideScalar(len || 1)
+    tmpQ.setFromUnitVectors(UP, tmp)
+    for (let j = 0; j < LINKS; j++) {
+      m.position.copy(a).addScaledVector(tmp, ((j + 0.5) / LINKS) * len)
+      m.quaternion.copy(tmpQ)
+      m.rotateY(j % 2 ? Math.PI / 2 : 0)
+      m.scale.set(1, Math.max(1, len / LINKS / 0.04), 1)
+      m.updateMatrix()
+      this.chains.setMatrixAt(i0 + j, m.matrix)
+    }
+  }
+  private chainObj = new Object3D()
+  private fireV = new Vector3()
+
+  /** Her shapes in the sky: paper lanterns drifting up and away, bobbing, glowing softly from the light inside. */
+  private drawLanterns(dt: number, t: number) {
+    const o = this.lanternObj
+    let n = 0
+    for (const l of this.lanterns) {
+      l.t += dt
+      const k = Math.min(1, l.t / 6)
+      const e = 1 - (1 - k) * (1 - k)
+      const base = tmp2.copy(l.from).addScaledVector(this.fwd, e * 26).add(tmp.set(0, e * 11, 0))
+      // Bigger as they go, so the shape still reads far away; they loosen a little as they rise.
+      const grow = 1 + e * 1.4
+      const sz = 1.5 * (1 + e * 1.1)
+      l.pts.forEach((q, i) => {
+        if (n >= this.lanternBody.instanceMatrix.count) return
+        const sd = l.seed + i * 1.37
+        o.position
+          .copy(base)
+          .addScaledVector(q, grow)
+          .add(tmp.set(Math.sin(t * 0.6 + sd) * 0.12 * e, Math.sin(t * 1.1 + sd * 2) * 0.06 + Math.sin(sd) * 0.1 * e, 0))
+        o.rotation.set(Math.sin(t * 0.9 + sd) * 0.12, 0, Math.sin(t * 0.7 + sd) * 0.12)
+        o.scale.setScalar(sz)
+        o.updateMatrix()
+        this.lanternBody.setMatrixAt(n, o.matrix)
+        this.lanternBody.setColorAt(n, tmpC.set(l.color))
+        n++
+        // The soft glow round the paper, and the little flame's light at its bottom.
+        const flick = 0.85 + Math.sin(t * 6 + sd * 3) * 0.08 + Math.sin(t * 13 + sd) * 0.05
+        this.halos.add(o.position, 1.0 * sz, l.color, 0.42 * flick)
+        this.halos.add(tmp.copy(o.position).setY(o.position.y - 0.05 * sz), 0.32 * sz, '#FFF0C0', 0.8 * flick)
+      })
+    }
+    this.lanternBody.count = n
+    this.lanternBody.instanceMatrix.needsUpdate = true
+    if (this.lanternBody.instanceColor) this.lanternBody.instanceColor.needsUpdate = true
+  }
+  private lanternObj = new Object3D()
 
   private life(dt: number, t: number) {
     // Kaylee turns a little toward her poi and holds her hooves up.
@@ -1001,8 +1136,11 @@ export class FireShow implements World3D {
       if (g.id === 'sandcastle') g.root.scale.setScalar(pop < 1 ? pop * (1.25 - 0.25 * pop) : 1)
     }
     this.castleCandles.forEach((c, i) => {
-      ;(c.material as MeshBasicMaterial).opacity = 0.75 + Math.sin(t * 23 + i * 2) * 0.2
-      c.scale.setScalar(0.9 + Math.sin(t * 17 + i) * 0.12)
+      // A candle flame on each tower, and its little pool of light.
+      ;(c.material as MeshBasicMaterial).opacity = 0.6 + Math.sin(t * 23 + i * 2) * 0.2
+      const p = c.getWorldPosition(tmp)
+      this.fire.add(p, 0.16, 0.24, 0, i * 0.31 + 0.5)
+      this.halos.add(p.setY(p.y + 0.06), 0.9, '#FFB060', 0.5)
     })
     if (this.ski) {
       // Back and forth past the beach, its lights and its wake.
@@ -1040,26 +1178,18 @@ export class FireShow implements World3D {
       ;(f.glow.material as MeshBasicMaterial).opacity = 0.45 + Math.sin(t * 3 + f.r) * 0.2
     }
     // The ring of fire.
-    if (this.flameK.some((v) => v > 0)) {
-      const m = new Object3D()
-      let n = 0
-      for (let i = 0; i < RING.n; i++) {
-        if (this.flameK[i] <= 0) continue
-        this.flameK[i] = Math.min(1, this.flameK[i] + dt * 3)
-        const e = this.flameK[i]
-        const p = this.ringPoint(i, m.position)
-        const fl = 0.8 + Math.sin(t * 19 + i * 1.7) * 0.2
-        m.scale.set(1.1 * e, 2.4 * e * fl, 1.1 * e)
-        p.y += 0.6 * e * fl
-        m.updateMatrix()
-        this.flames.setMatrixAt(n, m.matrix)
-        this.flames.setColorAt(n, new Color(i % 2 ? '#FF6A1F' : '#FFA41F'))
-        n++
-        if (Math.random() < 0.04) this.embers.emit(m.position.x, m.position.y + 0.5, m.position.z, 0, 0.8, 0, 0.9, 0.09)
-      }
-      this.flames.count = n
-      this.flames.instanceMatrix.needsUpdate = true
-      if (this.flames.instanceColor) this.flames.instanceColor.needsUpdate = true
+    const F = LOOK.flame
+    for (let i = 0; i < RING.n; i++) {
+      if (this.flameK[i] <= 0) continue
+      this.flameK[i] = Math.min(1, this.flameK[i] + dt * 3)
+      const e = this.flameK[i]
+      const p = this.ringPoint(i, tmp3)
+      const fl = 0.85 + Math.sin(t * 7 + i * 1.7) * 0.15
+      const w = (i % 2 ? 0.95 : 1.15) * e * F
+      this.pools.add(tmp.copy(p).setY(p.y + 0.04), 3.2 * e, '#FF7A30', 0.42 * LOOK.firelight * fl)
+      p.y += 0.22 * w
+      this.fire.add(p, w, w * 1.5 * fl, Math.sin(t * 1.3 + i) * 0.06, i * 0.618)
+      if (Math.random() < 0.04) this.embers.emit(p.x, p.y + 1, p.z, 0, 0.8, 0, 0.9, 0.09)
     }
     // The dots she draws over twinkle; the big ring breathes.
     if (this.guide.count) {
@@ -1296,9 +1426,9 @@ export class FireShow implements World3D {
   }
   dispose() {
     this.unwatch()
-    for (const l of this.lanterns) l.m.dispose()
     this.guide.dispose()
-    this.flames.dispose()
+    this.chains.dispose()
+    this.lanternBody.dispose()
     this.scene.clear()
     this.bag.dispose()
   }
