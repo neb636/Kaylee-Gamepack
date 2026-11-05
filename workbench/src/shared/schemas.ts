@@ -74,6 +74,7 @@ export const layoutStateSchema = z.object({
 });
 
 export const persistedStateSchema = z.object({
+  repoRoot: z.string().optional(),
   workspaces: z.array(workspaceSchema).default([]),
   activeWorkspaceId: z.string().optional(),
   personas: z.array(personaSchema).default([]),
@@ -160,3 +161,7 @@ export const imageRunManifestSchema = z.object({
     error: z.string().max(4_000).optional(),
   })).max(16),
 });
+
+export const workListSchema = z.object({ root: z.string().min(1), refresh: z.boolean().optional() });
+export const workCreateSchema = z.object({ root: z.string().min(1), name: z.string().min(1).max(80) });
+export const workRemoveSchema = z.object({ root: z.string().min(1), path: z.string().min(1) });

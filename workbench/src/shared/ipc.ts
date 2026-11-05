@@ -36,4 +36,7 @@ export const IPC = {
   sourceControlStatus: "source-control:status",
   sourceControlCommit: "source-control:commit",
   sourceControlCreateWorktree: "source-control:create-worktree",
+  workList: "work:list",
+  workCreate: "work:create",
+  workRemove: "work:remove",
 } as const;

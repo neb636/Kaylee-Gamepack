@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from "react-resizable-panels";
 import { services } from "../core/services";
 import { useWorkbenchStore } from "../state/workbench-store";
-import { AgentIcon, FolderIcon, PlusIcon, TerminalIcon } from "../ui/icons";
+import { AgentIcon, FolderIcon, TerminalIcon } from "../ui/icons";
 import { Button } from "../ui/controls";
 import { LeftSidebar } from "./LeftSidebar";
 import { RightSidebar } from "./RightSidebar";
@@ -49,7 +49,7 @@ export function WorkbenchShell() {
         onCollapse={() => updateLayout({ leftCollapsed: true })} onExpand={() => updateLayout({ leftCollapsed: false })}>
         <LeftSidebar onCollapse={() => updateLayout({ leftCollapsed: true })} />
       </Panel>
-      <PanelResizeHandle className="shell-resize" aria-label="Resize workspaces sidebar" />
+      <PanelResizeHandle className="shell-resize" aria-label="Resize work sidebar" />
       <Panel id="center" order={2} className="shell-panel" minSize={36}>
         <main className="center-column">
           <ViewTabs workspace={activeWorkspace} showLeftToggle={layout.leftCollapsed} showRightToggle={layout.rightCollapsed}
@@ -58,9 +58,9 @@ export function WorkbenchShell() {
             {!activeWorkspace ? (
               <div className="welcome-view">
                 <div className="welcome-icon"><FolderIcon size={25} /></div>
-                <h1>Bring your work into one place</h1>
-                <p>Add a local folder to create a workspace. Everything stays on this machine.</p>
-                <Button className="primary-button" onPress={() => void services.commands.execute("workspace.add")}><PlusIcon size={16} /> Add workspace</Button>
+                <h1>Open Kaylee's Gamepack</h1>
+                <p>Pick your Kaylee-Gamepack checkout once. Studio lists its worktrees and PRs by itself.</p>
+                <Button className="primary-button" onPress={() => void services.commands.execute("repo.open")}><FolderIcon size={16} /> Open the Gamepack repo</Button>
               </div>
             ) : activeView && definition ? (
               <definition.component key={activeView.id} view={activeView} workspace={activeWorkspace} />

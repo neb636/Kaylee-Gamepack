@@ -18,11 +18,11 @@
   "kind": "Local builder app: layout plan",
   "updated": "2026-11-04",
   "status": {
-    "label": "Plan answered, step 1 next",
+    "label": "Step 1 built, step 2 next",
     "tone": "mint"
   },
   "pitch": "Studio still looks like Agent Workbench: a left tree of *workspaces* (folders), a tab strip of generic views and an IDE side panel. But there is only ever **one** Gamepack checkout, and the real unit of work is **a piece of work on a branch** (a worktree, its agent, its PR, its preview). The new layout puts the **game in the middle**, the **list of pieces of work on the left**, and the **agent on the right**, with the labs as switches on the game instead of separate tabs.",
-  "next": "Build step 1 as its own PR: one repo, the Work list, worktrees in the shared `Kaylee-Gamepack-worktrees/` folder, Personas and Active views removed.",
+  "next": "Dad opens Studio (`npm run studio`), looks at the Work list, makes one piece of work and cleans up the 9 finished ones. Then step 2: the game in the middle, with the Sections tree.",
   "facts": [
     {
       "icon": "📁",
@@ -307,13 +307,14 @@
             {
               "n": 1,
               "title": "One repo, and the Work list",
-              "status": "next",
-              "md": "Studio opens the Gamepack repo it was launched from (the app remembers that one path; no Add workspace). The left column lists main + every worktree from `git worktree list --porcelain`, with PR state from `gh pr list --json` and changed-file counts. Selecting one switches every view to it. New piece of work (branch from `origin/main`, worktree in `~/repos/Kaylee-Gamepack-worktrees/<name>`, `npm ci`), and Clean up for merged or closed ones (always asks, never deletes a worktree with uncommitted changes). Old persisted workspaces migrate: their views move to the matching worktree. Remove Personas (menu, manager, persisted personas kept on disk but unused) and the Active views panel."
+              "status": "done",
+              "md": "Studio opens the Gamepack repo it was launched from (the app remembers that one path; no Add workspace). The left column lists main + every worktree from `git worktree list --porcelain`, with PR state from `gh pr list --json` and changed-file counts. Selecting one switches every view to it. New piece of work (branch from `origin/main`, worktree in `~/repos/Kaylee-Gamepack-worktrees/<name>`, `npm ci`), and Clean up for merged or closed ones (always asks, never deletes a worktree with uncommitted changes). Old persisted workspaces migrate: their views move to the matching worktree. Remove Personas (menu, manager, persisted personas kept on disk but unused) and the Active views panel.",
+              "date": "2026-11-04"
             },
             {
               "n": 2,
               "title": "The game in the middle, with Sections",
-              "status": "todo",
+              "status": "next",
               "md": "One game pane with breadcrumb, device frames and reload. A small game script writes a sections index (every `sections.ts`, the same data the README directory uses) as JSON the Studio reads; the left Sections tree opens links in the pane. Camera, Feel and Character become toggles on the pane; the three lab tabs go away (their links migrate)."
             },
             {
@@ -333,6 +334,39 @@
               "title": "Compare and polish",
               "status": "todo",
               "md": "Side-by-side branch vs main (needs a second game server), known issues, the pastel theme. Drop what's left over: Active views panel, Personas, the file tree if Dad never opens it."
+            }
+          ]
+        },
+        {
+          "type": "log",
+          "title": "What's built",
+          "items": [
+            {
+              "title": "Step 1: one repo and the Work list",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "Studio opens the one Gamepack repo and lists main plus every worktree, wherever it lives, named by branch, with its PR, CI, changed files and agents. New piece of work and Clean up are built.",
+              "items": [
+                "Left column **Work**: main, *in progress* (ones with open views first, then ones with a PR), and *Finished* (PR merged or closed, or the folder is gone), folded away with **Clean up all**. Refreshes every 45 s while the window is visible, on focus and with ↻.",
+                "**+ New piece of work**: a short name becomes `neb636/<name>` from the freshest `origin/main` in `~/repos/Kaylee-Gamepack-worktrees/<name>`, then `npm ci` runs there (the row says *installing…*) and an agent opens in it.",
+                "**Clean up** asks first, removes only the folder (the branch stays), and refuses the main checkout, locked or changed worktrees, and commits that only exist on this Mac, unless the PR's head is exactly the local head (a squash-merged PR whose remote branch is gone).",
+                "Personas and the Active views panel are gone; Settings keeps Instructions. *Add workspace* is now *Open the Gamepack repo* (packaged app, once) and *Open a different checkout…* in main's ⋯ menu.",
+                "Old saved workspaces keep their views (they're keyed by path); folders that aren't part of the repo show under *Other folders* with Remove."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "Rows are named by **branch**, not folder: agent folders are random (`agent-a07…`), the branch says what the work is. Worktrees other than main open with just an agent (labs from the ⋯ menu): in source-run Studio the labs only serve the launch checkout until step 2's per-work game servers."
+                },
+                {
+                  "type": "callout",
+                  "tone": "note",
+                  "title": "Checked",
+                  "md": "Studio `npm test`: 60 pass, including a new suite against temporary repos (worktree parsing, PR mapping, new work from `origin/main`, every clean-up refusal, squash-merge clean-up). Studio build and typecheck pass, and lint has no new errors. Electron `qa:composer` was updated (no Persona menu, Work list rows, the launcher's worktree appearing under Work in progress); it passes except a Ctrl+C step at the end that also fails 2 runs in 3 on the unchanged code. Screenshot against this repo: 17 in progress, 9 finished."
+                }
+              ]
             }
           ]
         }

@@ -19,6 +19,11 @@ const api: WorkbenchApi = {
     tune: input => ipcRenderer.invoke('studio:tune', input),
     cancel: id => ipcRenderer.send('studio:cancel', id),
   },
+  work: {
+    list: (root, refresh) => ipcRenderer.invoke(IPC.workList, { root, refresh }),
+    create: (root, name) => ipcRenderer.invoke(IPC.workCreate, { root, name }),
+    remove: (root, path) => ipcRenderer.invoke(IPC.workRemove, { root, path }),
+  },
   persistence: {
     load: () => ipcRenderer.invoke(IPC.persistenceLoad) as Promise<PersistedState>,
     save: (state) => ipcRenderer.invoke(IPC.persistenceSave, state) as Promise<void>,

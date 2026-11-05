@@ -7,18 +7,17 @@ import { TerminalView } from "../features/terminal/TerminalView";
 import { localTerminalProvider } from "../features/terminal/terminal-provider";
 import { clearComposerRuntime, registerComposerContributions } from "../features/agent/composer-state";
 import { agentIdleStatus, publishAgentStatuses } from "../features/agent/session-status";
-import { personaMenu } from "../features/personas/persona-menu";
 import { instructionsMenu } from "../features/instructions/instructions-menu";
 import { FileView } from "../features/files/FileView";
 import { ImageGeneratorView } from "../features/image-generator/ImageGeneratorView";
 import { clearImageRuntime, DEFAULT_COUNT, DEFAULT_PROVIDER, registerImageGeneratorCommands } from "../features/image-generator/image-generator-state";
 import { FilesPanel } from "../features/files/FilesPanel";
 import { registerFileCommands } from "../features/files/file-commands";
-import { ActiveViewsPanel } from "../features/views/ActiveViewsPanel";
-import { SourceControlPanel, StatusBranch, WorkspaceBranch } from "../features/source-control/SourceControlPanel";
+import { SourceControlPanel, StatusBranch } from "../features/source-control/SourceControlPanel";
 import { MemoryUsage, SessionSummary, TerminalCount } from "../features/status/StatusItems";
 import { SettingsButton } from "../features/settings/SettingsButton";
 import { AgentIcon, BranchIcon, FileIcon, FilesIcon, ImageIcon, LayersIcon, TerminalIcon } from "../ui/icons";
+import { useWorkList } from "../features/work/work-store";
 
 import { LabView } from "../features/labs/LabView";
 
@@ -74,27 +73,29 @@ export function registerFirstPartyContributions(): void {
   services.sessions.register(cliAgentProvider("codex.cli", "Codex", "OpenAI"));
   services.sessions.register(localTerminalProvider);
 
-  services.panels.register({ id: "views", label: "Active views", icon: LayersIcon, order: 10, component: ActiveViewsPanel });
   services.panels.register({ id: "files", label: "Files", icon: FilesIcon, order: 20, component: FilesPanel });
   services.panels.register({ id: "source-control", label: "Source control", icon: BranchIcon, order: 30, component: SourceControlPanel });
 
-  services.promptMenus.register(personaMenu);
   services.promptMenus.register(instructionsMenu);
   registerComposerContributions();
   registerImageGeneratorCommands();
   publishAgentStatuses();
 
   services.widgets.register({ id: "settings", slot: "sidebar.footer", order: 100, component: SettingsButton });
-  services.widgets.register({ id: "workspace-branch", slot: "sidebar.workspace.meta", component: WorkspaceBranch });
   services.widgets.register({ id: "sessions", slot: "statusbar.start", order: 10, component: SessionSummary });
   services.widgets.register({ id: "branch", slot: "statusbar.end", order: 10, component: StatusBranch });
   services.widgets.register({ id: "terminals", slot: "statusbar.end", order: 20, component: TerminalCount });
   services.widgets.register({ id: "memory", slot: "statusbar.end", order: 30, component: MemoryUsage });
 
   registerFileCommands();
-  services.commands.register("workspace.add", async () => {
+  // One repo: Studio finds its worktrees itself (the packaged app asks for the checkout once).
+  services.commands.register("repo.open", async () => {
     const path = await window.workbench.workspace.chooseDirectory();
-    if (path) useWorkbenchStore.getState().addWorkspace(path);
+    if (!path) return;
+    const { repoRoot } = await window.workbench.work.list(path);
+    useWorkbenchStore.getState().setRepoRoot(repoRoot);
+    useWorkbenchStore.getState().addWorkspace(repoRoot, { name: "main", views: "all" });
+    await useWorkList.getState().refresh(true);
   });
   services.commands.register<string>("workspace.select", (workspaceId) => {
     useWorkbenchStore.getState().selectWorkspace(workspaceId);
