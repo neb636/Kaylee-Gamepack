@@ -18,11 +18,11 @@
   "kind": "Local builder app: layout plan",
   "updated": "2026-11-04",
   "status": {
-    "label": "Step 1 built, step 2 next",
+    "label": "Step 2 built, step 3 next",
     "tone": "mint"
   },
   "pitch": "Studio still looks like Agent Workbench: a left tree of *workspaces* (folders), a tab strip of generic views and an IDE side panel. But there is only ever **one** Gamepack checkout, and the real unit of work is **a piece of work on a branch** (a worktree, its agent, its PR, its preview). The new layout puts the **game in the middle**, the **list of pieces of work on the left**, and the **agent on the right**, with the labs as switches on the game instead of separate tabs.",
-  "next": "Dad opens Studio (`npm run studio`), looks at the Work list, makes one piece of work and cleans up the 9 finished ones. Then step 2: the game in the middle, with the Sections tree.",
+  "next": "Dad opens Studio, taps a few sections in the left tree, tries the iPad frames and switches 🎛️ Feel on and off on the Nan drive. Then step 3: the agent column on the right.",
   "facts": [
     {
       "icon": "📁",
@@ -314,13 +314,14 @@
             {
               "n": 2,
               "title": "The game in the middle, with Sections",
-              "status": "next",
-              "md": "One game pane with breadcrumb, device frames and reload. A small game script writes a sections index (every `sections.ts`, the same data the README directory uses) as JSON the Studio reads; the left Sections tree opens links in the pane. Camera, Feel and Character become toggles on the pane; the three lab tabs go away (their links migrate)."
+              "status": "done",
+              "md": "One game pane with breadcrumb, device frames and reload. A small game script writes a sections index (every `sections.ts`, the same data the README directory uses) as JSON the Studio reads; the left Sections tree opens links in the pane. Camera, Feel and Character become toggles on the pane; the three lab tabs go away (their links migrate).",
+              "date": "2026-11-04"
             },
             {
               "n": 3,
               "title": "The agent column",
-              "status": "todo",
+              "status": "next",
               "md": "The agent for the selected piece of work on the right, extra agents and terminals as tabs inside it. 📎 this section (link, params, lab snapshot if a lab is on). Prompt starters that follow AGENTS.md gates: Plan, Greybox, Art, Full loop, Fix, Bake lab values, Address review. Done and needs-answer badges per piece of work."
             },
             {
@@ -365,6 +366,34 @@
                   "tone": "note",
                   "title": "Checked",
                   "md": "Studio `npm test`: 60 pass, including a new suite against temporary repos (worktree parsing, PR mapping, new work from `origin/main`, every clean-up refusal, squash-merge clean-up). Studio build and typecheck pass, and lint has no new errors. Electron `qa:composer` was updated (no Persona menu, Work list rows, the launcher's worktree appearing under Work in progress); it passes except a Ctrl+C step at the end that also fails 2 runs in 3 on the unchanged code. Screenshot against this repo: 17 in progress, 9 finished."
+                }
+              ]
+            },
+            {
+              "title": "Step 2: the game in the middle, with Sections",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "Each piece of work has one game pane, pinned as the first tab, with a breadcrumb, device frames, reload and the labs as switches. A Sections tree under Work opens any section in it.",
+              "items": [
+                "**🎮 Game** is always the first tab and stays loaded behind the others (its scene and the lab's Undo survive a look at an agent).",
+                "**Breadcrumb**: country ▸ activity ▸ section and its params, read from what the game reports (twice a second, since `enter()` rewrites the address quietly). Click it to paste any `#/world/…` or PR preview link.",
+                "**Device frames**: fill the pane, iPad wide 1180×820, iPad portrait 820×1180, iPhone wide and tall, at real size and scaled down to fit. The camera lab keeps its own frames.",
+                "**🎥 Camera, 🎛️ Feel, 🦄 Character** are switches: Camera and Feel add `?cam=1` / `?feel=1` to the section on screen (tuned values stay in the link when switched off and on); Character opens the character lab and returns to the section after. The tuning panel (AI preview, Undo, the save prompt) shows under the game while one is on. The three lab tabs are gone; their last links moved onto the pane.",
+                "**Sections** under Work: every country ▸ activity ▸ section of *that* checkout, with round and variant links and a filter. The section on screen is highlighted; a lab that's on stays on. It comes from a new game script, `scripts/sections-index.mjs` (the README directory's data as JSON); a branch older than that says “merge main”.",
+                "**A game server per piece of work**, the last 2 kept running (5174, 5176, …; a port someone else is using is skipped). So every worktree has a game now, not just the launch checkout."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "The game is a pinned tab in the middle for now, so agents still open beside it as tabs; step 3 moves them to the right column. *Compare with main* is still step 5, but the 2-server pool it needs is in."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "Studio `npm test`: the new pool and migration tests pass (LRU of 2, the launcher's server never stopped, one start for two requests, busy port skipped, lab tabs migrate). The old game-server test needs port 5174 free (it failed only because Dad's Studio was open). `qa:composer` passes, Ctrl+C step included. Live look: Nan map in the iPad wide frame with 🎛️ Feel on and its panel below."
                 }
               ]
             }
