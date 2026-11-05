@@ -15,7 +15,15 @@ export function AgentColumn({ workspace, onHide }: { workspace?: Workspace; onHi
     <ViewTabs workspace={workspace} showLeftToggle={false} showRightToggle={false} onShowLeft={() => {}} onShowRight={() => {}} onHide={onHide} />
     <div className="active-view-region">
       {!workspace ? <p className="panel-empty">Open the Gamepack repo to start an agent.</p>
-        : active && definition ? <definition.component key={active.id} view={active} workspace={workspace} />
+        : active && definition ? <>
+          {/* Terminals stay mounted (in one stable list) behind other tabs, so a Ship command keeps running while Dad
+              looks at the agent; their PTY lives as long as the component. */}
+          {workspace.views.filter((view) => view.type === "terminal").map((view) => {
+            const Terminal = services.views.get("terminal")?.component;
+            return Terminal ? <div key={view.id} className="kept-view" hidden={view.id !== active.id}><Terminal view={view} workspace={workspace} /></div> : null;
+          })}
+          {active.type !== "terminal" && <definition.component key={active.id} view={active} workspace={workspace} />}
+        </>
         : active ? <div className="missing-view"><h2>View unavailable</h2><p>No view is registered for <code>{active.type}</code>.</p></div>
         : <div className="empty-workspace">
           <h2>No agent yet</h2><p>Start one for {workspace.name}.</p>

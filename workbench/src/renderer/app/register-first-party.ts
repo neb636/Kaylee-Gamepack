@@ -20,6 +20,7 @@ import { AgentIcon, BranchIcon, FileIcon, FilesIcon, ImageIcon, TerminalIcon } f
 import { useWorkList } from "../features/work/work-store";
 import { StudioComposerTools } from "../features/agent/StudioComposerTools";
 import { watchAttention } from "../features/agent/attention";
+import { ShipPanel } from "../features/ship/ShipPanel";
 
 let registered = false;
 
@@ -75,6 +76,7 @@ export function registerFirstPartyContributions(): void {
   services.views.register({ id: "source-control", label: "Commit changes", description: "This checkout's changes and a commit box.", icon: BranchIcon, component: SourceControlPanel, defaultTitle: "Changes" });
   services.widgets.register({ id: "studio-tools", slot: "agent.composer.toolbar", order: 10, component: StudioComposerTools });
   watchAttention();
+  services.widgets.register({ id: "ship", slot: "agent.column.footer", order: 10, component: ShipPanel });
 
   services.promptMenus.register(instructionsMenu);
   registerComposerContributions();

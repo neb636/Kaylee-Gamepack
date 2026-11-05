@@ -170,6 +170,15 @@ try {
   await page.getByText("No uncommitted changes.").waitFor();
   assert.equal(git("log", "-1", "--format=%s").trim(), "QA commit");
 
+  // Ship: Verify runs in this piece of work's Ship terminal, a tab in the agent column; the QR opens and closes.
+  await page.getByRole("region", { name: "Ship" }).getByRole("button", { name: /Verify/ }).click();
+  await page.getByRole("tab", { name: "Ship: verify" }).waitFor();
+  await page.waitForFunction(() => [...document.querySelectorAll(".kept-view:not([hidden]) .xterm-rows")].some((rows) => rows.textContent.includes("npm run verify")));
+  await page.getByRole("region", { name: "Ship" }).getByRole("button", { name: "QR" }).click();
+  await page.getByRole("img", { name: /QR code for https:\/\/neb636\.github\.io\/Kaylee-Gamepack\// }).waitFor();
+  await shot("ship");
+  await page.getByRole("tab", { name: "Ship: verify" }).getByRole("button", { name: /Close/ }).click();
+
   // The tab overflow menu.
   assert.equal(await page.getByRole("radio", { name: "Active views" }).count(), 0, "Active views is gone");
   await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(1100, 760));
