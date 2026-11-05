@@ -319,37 +319,45 @@ test("a draft held while Codex finishes startup is confirmed once it submits", a
 });
 
 for (const Provider of [CodexAgentProvider, ClaudeAgentProvider]) {
-  test(`${Provider.name}: settings are confirmed before planning and prompt delivery`, async () => {
-    const provider = Object.assign(new Provider(), { startupSettleMs: 0 });
-    const settings = provider.id === "codex.cli" ? { model: "gpt-6-astra", effort: "high" } : { model: "opus", effort: "high" };
-    const s = setup(provider);
-    s.manager.resize(s.id, 42, 24, s.owner); // Command and confirmation wrap in narrow agent panes.
-    const marker = provider.id === "codex.cli" ? "›" : "❯";
-    const render = text => s.output(`\x1b[2J\x1b[H\x1b[?2004h${text}`);
-    let command = "";
-    s.processes[0].write = data => {
-      s.writes.push(data);
-      if (data.startsWith("/model") || data.startsWith("/effort")) { command = data; render(`${marker} ${data}`); }
-      else if (data === "\r" && command) {
-        const message = provider.id === "codex.cli" ? "Model changed to gpt-6-astra high for this session only"
-          : command.startsWith("/model") ? "Set model to Opus 5.5 and saved as your default for new sessions"
-            : "Set effort level to high (saved as your default for new sessions)";
-        command = "";
-        // Chunking and ANSI positioning must still produce a fresh confirmation.
-        s.output(`\x1b[2J\x1b[H${message.slice(0, 8)}`);
-        s.output(`${message.slice(8)}\r\n${marker} `);
-      } else if (data === "/plan ") render(`${marker} /plan `);
-      else if (data.includes("\x1b[200~")) render(`${marker} pasted draft`);
-      else if (data === "\r") render(`${marker} `);
-    };
-    try {
-      render(`${marker} `); await s.manager.attach(s.id, s.owner);
-      const result = await s.manager.sendPrompt(s.id, { ...request("task", "plan"), settings }, s.owner);
-      assert.equal(result.outcome, "submitted", result.message);
-      const commands = provider.id === "codex.cli" ? ["/model gpt-6-astra --reasoning=high", "\r"] : ["/model opus", "\r", "/effort high", "\r"];
-      assert.deepEqual(s.writes, [...commands, "/plan ", pastePrompt("task"), "\r"]);
-    } finally { s.manager.terminateAll(); }
-  });
+  for (const placeholder of [false, true]) {
+    test(`${Provider.name}: settings are confirmed before planning and prompt delivery (placeholder=${placeholder})`, async () => {
+      const provider = Object.assign(new Provider(), { startupSettleMs: 0 });
+      const settings = provider.id === "codex.cli" ? { model: "gpt-6-astra", effort: "high" } : { model: "opus", effort: "high" };
+      const s = setup(provider);
+      s.manager.resize(s.id, 42, 24, s.owner); // Command and confirmation wrap in narrow agent panes.
+      const marker = provider.id === "codex.cli" ? "›" : "❯";
+      const emptyEditor = placeholder
+        ? `${marker} \x1b[2m${provider.id === "codex.cli" ? "Ask Codex to do anything" : 'Try "fix lint errors"'}\x1b[22m\r\x1b[2C`
+        : `${marker} `;
+      const render = text => s.output(`\x1b[2J\x1b[H\x1b[?2004h${text}`);
+      let command = "";
+      s.processes[0].write = data => {
+        s.writes.push(data);
+        if (data.startsWith("/model") || data.startsWith("/effort")) { command = data; render(`${marker} ${data}`); }
+        else if (data === "\r" && command) {
+          const message = provider.id === "codex.cli" ? "Model changed to gpt-6-astra high for this session only"
+            : command.startsWith("/model") ? "Set model to Opus 5.5 and saved as your default for new sessions"
+              : "Set effort level to high (saved as your default for new sessions)";
+          command = "";
+          // Chunking and ANSI positioning must still produce a fresh confirmation.
+          s.output(`\x1b[2J\x1b[H${message.slice(0, 8)}`);
+          s.output(`${message.slice(8)}\r\n${emptyEditor}`);
+        } else if (data === "/plan ") render(`${marker} /plan `);
+        else if (data.includes("\x1b[200~")) render(`${marker} pasted draft`);
+        else if (data === "\r") render(emptyEditor);
+      };
+      try {
+        render(emptyEditor); await s.manager.attach(s.id, s.owner);
+        const result = await s.manager.sendPrompt(s.id, { ...request("task", "plan"), settings }, s.owner);
+        assert.equal(result.outcome, "submitted", result.message);
+        const commands = provider.id === "codex.cli" ? ["/model gpt-6-astra --reasoning=high", "\r"] : ["/model opus", "\r", "/effort high", "\r"];
+        assert.deepEqual(s.writes, [...commands, "/plan ", pastePrompt("task"), "\r"]);
+        const next = await s.manager.sendPrompt(s.id, request("next task"), s.owner);
+        assert.equal(next.outcome, "submitted", next.message);
+        assert.deepEqual(s.writes.slice(-2), [pastePrompt("next task"), "\r"]);
+      } finally { s.manager.terminateAll(); }
+    });
+  }
 }
 
 test("settings reject invalid values and working sessions without writing commands", async () => {

@@ -238,6 +238,7 @@ export class AgentSessionManager {
     s.settingOutput = output;
     try {
       s.process.write("\r");
+      s.inputWasEdited = false;
       await waitFor(() => {
         const buffer = output.buffer.active;
         const text = Array.from({ length: buffer.length }, (_, i) => {
