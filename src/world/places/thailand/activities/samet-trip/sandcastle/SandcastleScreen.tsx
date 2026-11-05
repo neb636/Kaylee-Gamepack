@@ -1,7 +1,7 @@
 // The sandcastle at Ao Hin Khok, on screen (sandcastle.ts is the world): the 3D beach with its tap targets, the
 // pressing finger after a while with nothing touched, and once the moat has filled from the sea a little 🏰 badge with
 // the way back to the island (the stop's pink flag up). With ?feel=1 Dad also gets round chips (dig, towers, tide).
-// Greybox: no voices yet (the full loop adds Daddy's "Let's build a sandcastle!" and Sparkle's few lines).
+// Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks in their own voice (lines.ts L.samet.sandcastle).
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
@@ -9,6 +9,7 @@ import { BigButton, burst } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import type { TimeOfDay } from '../island/scenery'
 import { SAND_ANCHORS, SAND_ROUND_IDS, Sandcastle as World, type SandEvents, type SandRound } from './sandcastle'
 
@@ -32,12 +33,14 @@ export function SandcastleScreen({ round: first, time, onRound, onIsland }: Prop
   const [feel] = useState(feelOn)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   const onRoundRef = useRef(onRound)
   onRoundRef.current = onRound
 
   useEffect(() => onRoundRef.current(run.round), [run])
 
   const events = useRef<SandEvents>({
+    say: (l, mute) => guideRef.current?.speak(l, mute),
     round: (r) => {
       setRound(r)
       onRoundRef.current(r)
@@ -90,6 +93,7 @@ export function SandcastleScreen({ round: first, time, onRound, onIsland }: Prop
           </motion.div>
         )}
       </AnimatePresence>
+      {mode === 'webgl' && <TripGuide ref={guideRef} />}
       {feel && (
         <div className="sand-chips">
           {SAND_ROUND_IDS.map((r) => (

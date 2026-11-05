@@ -16,7 +16,9 @@
 // Things to poke: Kaylee (hooves up, whee), Mommy (her sun hat flies up, she catches it), Daddy (his cap blows off and
 // he catches it), the captain (the horn, and the boat wiggles), the pink flag at the stern, the life ring.
 //
-// Greybox: simple shapes in the toon look, no voices (the captain is the pelican from cast.ts). Its feel numbers are knobs (?feel=1).
+// Talk (lines.ts L.samet.trip.boat): the captain (the pelican from cast.ts, her mouth with her own voice) says hello and
+// Sparkle the one instruction; then only reactions (the first flying fish, the first jump, Mommy soaked, the pokes), and
+// after a while with no hoof in the water the finger, then (spendHint) Sparkle's hint. Its feel numbers are knobs (?feel=1).
 //
 // ?cine=1 films the ride like a game's cutscene instead (engine3d/cinema.ts, the camera lab's "Cinema camera" switch):
 // a crane up off Ban Phe pier, then cuts between a chase, a low hero shot skimming the water, over her shoulder at the
@@ -25,7 +27,9 @@
 // shot that shows her hoof and holds it while she splashes.
 import { CAPTAIN } from '../cast'
 import { Color, Fog, Group, Mesh, MeshBasicMaterial, CatmullRomCurve3, Plane, Raycaster, Scene, TorusGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp } from '../../../../../../sdk'
+import { clamp, spendHint, type Line } from '../../../../../../sdk'
+import { L } from '../../../lines'
+import { FaceLife } from '../../../../../engine3d/characters/face'
 import { knobs, watch } from '../../../../../kit/knobs'
 import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -121,7 +125,11 @@ export interface BoatStart {
 export interface BoatEvents {
   /** They're on the pier at Na Dan: the island next. */
   done(): void
+  /** Someone says something (the screen's TripGuide speaks it; `mute`: a hint shown, not said). */
+  say?(line: Line, mute?: boolean): void
 }
+
+const B = L.samet.trip.boat
 
 export const BOAT_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'Kaylee', kind: 'thing' },
@@ -367,6 +375,8 @@ export class SametSpeedboat implements World3D {
   private fishT = 0
   private hissT = 0
   private lastTouch = 0
+  private captainLife: FaceLife
+  private talk = { captain: 0, nick: 0, ji: 0, soak: 0, hello: false, fish: false, jump: false, hinted: false }
   private spray: Particles
   private splash: Particles
   private sparkle: Particles
@@ -423,6 +433,7 @@ export class SametSpeedboat implements World3D {
     this.captain = buildAnimal(CAPTAIN_LOOK, bag)
     this.captain.root.position.set(0.45, FLOOR, 0.62)
     this.boat.body.add(this.captain.root)
+    this.captainLife = new FaceLife(this.captain, 'pelican')
     const fam = (id: string) => new Member({ ...FAMILY.find((m) => m.id === id)!, spot: null }, bag)
     this.nick = fam('nick')
     this.ji = fam('ji')
@@ -527,7 +538,14 @@ export class SametSpeedboat implements World3D {
     this.hoof(dt)
     this.others(dt, t)
     this.people(dt, t)
+    this.captainLife.update(dt)
     for (const p of [this.spray, this.splash, this.sparkle]) p.update(dt)
+    // The captain's hello as the motors start, then Sparkle's one instruction (she waits her turn).
+    if (!this.talk.hello && t > 0.4) {
+      this.talk.hello = true
+      this.events.say?.(B.hi)
+      this.events.say?.(B.go)
+    }
 
     const c = this.pos
     this.isl.lagoon.waves.height = BOAT.waves * clamp((this.len - this.s) / 160, 0.35, 1)
@@ -574,6 +592,7 @@ export class SametSpeedboat implements World3D {
         this.v = 0
         this.setPhase('dock')
         sfx.thump()
+        this.events.say?.(B.here)
         tone(300, 220, 0.2, 0.05, 'triangle')
       }
       // The motors' hum, a little higher the faster it goes.
@@ -641,6 +660,10 @@ export class SametSpeedboat implements World3D {
     this.lift = 0.001
     this.counts.bumps++
     tone(520, 880, 0.18, 0.05, 'sine')
+    if (!this.talk.jump && k > 0.6) {
+      this.talk.jump = true
+      this.events.say?.(B.jump)
+    }
   }
   private land(hard: number) {
     const p = this.pos
@@ -655,6 +678,7 @@ export class SametSpeedboat implements World3D {
       const m = this.ji.root.getWorldPosition(tmp)
       this.splash.burst(m.x, m.y + 1.6, m.z, 26, 1.2, 0.5, 0.18)
       this.ji.react('wiggle')
+      this.events.say?.(B.soak[this.talk.soak++ % B.soak.length])
       this.hatT = 0
       window.setTimeout(() => sfx.boing(), 300)
     }
@@ -801,6 +825,10 @@ export class SametSpeedboat implements World3D {
     f.root.visible = true
     this.counts.fish++
     tone(900, 1400, 0.12, 0.03, 'sine')
+    if (!this.talk.fish) {
+      this.talk.fish = true
+      this.events.say?.(B.fish)
+    }
   }
 
   // ---------------------------------------------------------------- the boats coming the other way
@@ -973,16 +1001,19 @@ export class SametSpeedboat implements World3D {
       if (this.capT < 0) this.capT = 0
       this.nick.react('wiggle')
       tone(400, 700, 0.2, 0.04, 'triangle')
+      this.events.say?.(B.nick[this.talk.nick++ % B.nick.length])
     } else if (id === 'family:ji') {
       if (this.hatT < 0) this.hatT = 0
       this.ji.react('wave')
       tone(700, 900, 0.2, 0.04, 'sine')
+      this.events.say?.(B.ji[this.talk.ji++ % B.ji.length])
     } else if (id === 'captain') {
       // The horn, and a wiggle on the water.
       tone(330, 330, 0.35, 0.07, 'square')
       tone(415, 415, 0.35, 0.05, 'square', 0.4)
       if (this.phase === 'ride' && this.wiggleT < 0) this.wiggleT = 0
       this.captain.armR.rotation.z = -2
+      this.events.say?.(B.captain[this.talk.captain++ % B.captain.length])
     } else if (id === 'flag') {
       sfx.fwip()
       this.boat.cloth.rotation.y = 1.2
@@ -1065,6 +1096,12 @@ export class SametSpeedboat implements World3D {
     const idle = !this.finger && t - this.lastTouch > HINT_S && this.phase === 'ride'
     const want = idle ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
+    // Each time the finger comes up: Sparkle's hint (shown the first time, then said at most twice a visit).
+    if (idle && !this.talk.hinted) {
+      this.talk.hinted = true
+      this.events.say?.(B.hint, !spendHint(B.hint))
+    }
+    if (!idle) this.talk.hinted = false
     if (!idle) return
     const s = this.toScreen(this.handPoint(tmp).add(tmp2.copy(this.xAxis).multiplyScalar(this.side * 0.8)))
     el.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0)`

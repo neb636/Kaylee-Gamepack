@@ -1,6 +1,6 @@
 // Hide and seek at Ao Prao, on screen (hideseek.ts is the world): the beach with its tap targets, a lavender blind
-// with the numbers while Kaylee counts with her eyes shut (a tap peeks through it), a speech bubble over whoever is
-// talking (the words for Dad: the voices come with the full loop), the pressing finger when she needs it, Mommy's
+// with the numbers while Kaylee counts with her eyes shut (a tap peeks through it), Sparkle in the corner and everyone's
+// voices (trip/legs/Guide.tsx: the words show by her, for Dad), the pressing finger when she needs it, Mommy's
 // photo flash, and once she has won her turn a 🙈 badge with the way back to the island (the stop's pink flag up).
 // With ?feel=1 Dad also gets round chips (1, 2, hide).
 import { useEffect, useRef, useState } from 'react'
@@ -10,6 +10,7 @@ import { BigButton, bigCelebration, burst } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import type { TimeOfDay } from '../island/scenery'
 import { HIDE_ANCHORS, HIDE_ROUND_IDS, HideSeek as World, type HideEvents, type HideRound } from './hideseek'
 
@@ -36,7 +37,7 @@ export function HideSeekScreen({ round: first, time, onRound, onIsland }: Props)
   const [feel] = useState(feelOn)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
-  const bubbleRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   const onRoundRef = useRef(onRound)
   onRoundRef.current = onRound
 
@@ -50,6 +51,7 @@ export function HideSeekScreen({ round: first, time, onRound, onIsland }: Props)
     count: (n) => setCount(n),
     peek: () => setPeek((p) => p + 1),
     photo: () => setFlash((f) => f + 1),
+    say: (l, mute) => guideRef.current?.speak(l, mute),
     won: (firstWin) => {
       burst()
       if (firstWin) {
@@ -62,7 +64,6 @@ export function HideSeekScreen({ round: first, time, onRound, onIsland }: Props)
   const make = (renderer: WebGLRenderer) => {
     const w = new World(renderer, { round: run.round, time }, events.current)
     w.setHintElement(hintRef.current)
-    w.setBubbleElement(bubbleRef.current)
     return w
   }
   const jump = (r: HideRound) => {
@@ -88,7 +89,6 @@ export function HideSeekScreen({ round: first, time, onRound, onIsland }: Props)
             <div ref={hintRef} className="hs-hint" style={{ display: 'none' }}>
               <span>👆</span>
             </div>
-            <div className="hs-bubble-at" style={{ display: 'none' }} ref={bubbleRef} />
           </>
         )}
       />
@@ -104,6 +104,7 @@ export function HideSeekScreen({ round: first, time, onRound, onIsland }: Props)
           </motion.div>
         )}
       </AnimatePresence>
+      {mode === 'webgl' && <TripGuide ref={guideRef} />}
       <AnimatePresence>
         {flash > 0 && <motion.div key={flash} className="hs-flash" initial={{ opacity: 0.85 }} animate={{ opacity: 0 }} transition={{ duration: 0.45 }} />}
       </AnimatePresence>
@@ -141,8 +142,6 @@ const CSS = `
 .hs-hint { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 4; }
 .hs-hint span { position: absolute; left: -26px; top: -10px; font-size: 52px; line-height: 1; filter: drop-shadow(0 3px 4px rgba(43,35,48,.3)); animation: hs-press 1.4s ease-in-out infinite; }
 @keyframes hs-press { 0%, 100% { transform: scale(1); } 45% { transform: scale(0.82) translateY(6px); } }
-.hs-bubble-at { position: absolute; left: 0; top: 0; z-index: 5; pointer-events: none; white-space: nowrap; translate: -50% -100%;
-  padding: 8px 16px; border-radius: 999px; background: #fff; box-shadow: var(--shadow); font-size: clamp(18px, 3.2vmin, 26px); font-weight: 700; color: var(--ink); }
 .hs-blind { position: absolute; inset: 0; z-index: 8; pointer-events: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
 .hs-blind-fill { position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, #E9DEFF 0, var(--lavender) 45%, var(--lavender-dark) 100%); }
 .hs-eyes { position: relative; font-size: clamp(64px, 14vmin, 120px); line-height: 1; }

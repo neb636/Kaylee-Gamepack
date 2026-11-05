@@ -2,8 +2,9 @@
 // animals she can snap with Mommy's phone, and the book's pages. Plain data, no three.js: the sections file, the book
 // screen and the QA scripts read it.
 //
-// Greybox 3: the names and facts are shown as text for Dad (the full loop records them in lines.ts: Sparkle says the
-// name once, a tap on the photo plays the fact).
+// The words are lines.ts L.samet.book (recorded in Sparkle's voice): she says the name once when it's first snapped, a
+// tap on its photo plays the fact, a tap on its silhouette where to look.
+import { L } from '../../../lines'
 
 export type AnimalId = 'monitor' | 'squirrel' | 'macaque' | 'mousedeer' | 'hornbill' | 'flyingfox' | 'heron' | 'tern' | 'crab' | 'parrotfish' | 'damselfish' | 'cuttlefish' | 'urchin' | 'coral'
 
@@ -23,21 +24,22 @@ export interface Animal {
   rare?: boolean
 }
 
+const B = L.samet.book
 export const ANIMALS: Record<AnimalId, Animal> = {
-  tern: { id: 'tern', name: 'A tern!', fact: 'Terns fold their wings and dive into the sea to catch little fish.', where: 'Flying over the sea at Hat Sai Kaew', behavior: 'perch' },
-  crab: { id: 'crab', name: 'A crab!', fact: 'Ghost crabs dig holes in the sand to hide from the hot sun. Hermit crabs carry a shell for a house.', where: 'In the little holes on every beach', behavior: 'flee' },
-  heron: { id: 'heron', name: 'A reef heron!', fact: 'The reef heron stands very still on the rocks, then grabs a fish with its long beak.', where: 'On the rocks by the mermaid', behavior: 'flee' },
-  urchin: { id: 'urchin', name: 'A sea urchin!', fact: 'Sea urchins are very prickly. Look, but don’t touch!', where: 'In the shallow water by the rocks', behavior: 'still' },
-  coral: { id: 'coral', name: 'Coral!', fact: 'Coral looks like rocks and plants, but it is alive! Fish live in it like people in a town.', where: 'Under the water at Ao Hin Khok', behavior: 'still' },
-  hornbill: { id: 'hornbill', name: 'A hornbill!', fact: 'The hornbill has a giant yellow beak with a bump on top, called a casque.', where: 'In the tamarind tree at Ao Wong Duan', behavior: 'perch', rare: true },
-  parrotfish: { id: 'parrotfish', name: 'A parrotfish!', fact: 'Parrotfish crunch on coral with their beaks, and the bits become white sand!', where: 'Swimming in the water at Ao Wong Duan', behavior: 'swim' },
-  damselfish: { id: 'damselfish', name: 'Blue damselfish!', fact: 'Little blue damselfish swim together in a big crowd to stay safe.', where: 'In a crowd in the water at Ao Wong Duan', behavior: 'swim' },
-  cuttlefish: { id: 'cuttlefish', name: 'A cuttlefish!', fact: 'A cuttlefish can change its color in a blink, to talk and to hide.', where: 'Hiding in the water by the snorkel boat', behavior: 'swim' },
-  monitor: { id: 'monitor', name: 'A monitor lizard!', fact: 'Monitor lizards smell with their tongue! Flick, flick.', where: 'Waddling round Ao Prao', behavior: 'wander' },
-  mousedeer: { id: 'mousedeer', name: 'A mouse-deer!', fact: 'The mouse-deer is the smallest deer in the world, as small as a cat. Walk slowly, it’s shy!', where: 'At the edge of the forest by Ao Prao. Walk slowly!', behavior: 'flee', rare: true },
-  flyingfox: { id: 'flyingfox', name: 'A flying fox!', fact: 'A flying fox is a big bat that eats fruit. It sleeps upside down all day!', where: 'Sleeping upside down in a tree at Ao Prao', behavior: 'perch', rare: true },
-  squirrel: { id: 'squirrel', name: 'A squirrel!', fact: 'Squirrels run up the palm trees and chatter: chk chk chk!', where: 'On the palm trees by the beaches', behavior: 'flee' },
-  macaque: { id: 'macaque', name: 'A monkey!', fact: 'Long-tailed macaques live in the trees. Hold on to your sunglasses!', where: 'By the road over the hill', behavior: 'wander' },
+  tern: { id: 'tern', name: B.name.tern, fact: B.fact.tern, where: B.where.tern, behavior: 'perch' },
+  crab: { id: 'crab', name: B.name.crab, fact: B.fact.crab, where: B.where.crab, behavior: 'flee' },
+  heron: { id: 'heron', name: B.name.heron, fact: B.fact.heron, where: B.where.heron, behavior: 'flee' },
+  urchin: { id: 'urchin', name: B.name.urchin, fact: B.fact.urchin, where: B.where.urchin, behavior: 'still' },
+  coral: { id: 'coral', name: B.name.coral, fact: B.fact.coral, where: B.where.coral, behavior: 'still' },
+  hornbill: { id: 'hornbill', name: B.name.hornbill, fact: B.fact.hornbill, where: B.where.hornbill, behavior: 'perch', rare: true },
+  parrotfish: { id: 'parrotfish', name: B.name.parrotfish, fact: B.fact.parrotfish, where: B.where.parrotfish, behavior: 'swim' },
+  damselfish: { id: 'damselfish', name: B.name.damselfish, fact: B.fact.damselfish, where: B.where.damselfish, behavior: 'swim' },
+  cuttlefish: { id: 'cuttlefish', name: B.name.cuttlefish, fact: B.fact.cuttlefish, where: B.where.cuttlefish, behavior: 'swim' },
+  monitor: { id: 'monitor', name: B.name.monitor, fact: B.fact.monitor, where: B.where.monitor, behavior: 'wander' },
+  mousedeer: { id: 'mousedeer', name: B.name.mousedeer, fact: B.fact.mousedeer, where: B.where.mousedeer, behavior: 'flee', rare: true },
+  flyingfox: { id: 'flyingfox', name: B.name.flyingfox, fact: B.fact.flyingfox, where: B.where.flyingfox, behavior: 'perch', rare: true },
+  squirrel: { id: 'squirrel', name: B.name.squirrel, fact: B.fact.squirrel, where: B.where.squirrel, behavior: 'flee' },
+  macaque: { id: 'macaque', name: B.name.macaque, fact: B.fact.macaque, where: B.where.macaque, behavior: 'wander' },
 }
 export const ANIMAL_IDS = Object.keys(ANIMALS) as AnimalId[]
 

@@ -2,7 +2,8 @@
 // the two views meet, the pressing finger after a while with nothing touched, Mommy's waterproof camera (📷) once the
 // cuttlefish round begins, and once the cuttlefish has turned pink a 🐠 badge with the way back to the island (the stop's
 // pink flag up). With ?feel=1 Dad also gets round chips (float, follow, cuttle).
-// Greybox: no voices yet (the full loop adds the captain's "Masks on! Jump in!" and Sparkle's few lines).
+// Sparkle sits in the corner (trip/legs/Guide.tsx) and plays everyone's lines (lines.ts L.samet.snorkel); Mommy's
+// camera sits above her.
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
@@ -10,6 +11,7 @@ import { BigButton, burst } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import type { AnimalId } from '../book/animals'
 import { Snorkel as World, SNORKEL_ANCHORS, SNORKEL_ROUND_IDS, type SnorkelEvents, type SnorkelRound } from './snorkel'
 
@@ -38,6 +40,7 @@ export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const lineRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   const onRoundRef = useRef(onRound)
   onRoundRef.current = onRound
 
@@ -52,6 +55,7 @@ export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props
       setDone(true)
       burst()
     },
+    say: (l, mute) => guideRef.current?.speak(l, mute),
   })
 
   const make = (renderer: WebGLRenderer) => {
@@ -94,6 +98,7 @@ export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props
           </>
         )}
       />
+      {mode === 'webgl' && <TripGuide ref={guideRef} />}
       <AnimatePresence>
         {flash > 0 && <motion.div key={flash} className="reef-flash" initial={{ opacity: 0.85 }} animate={{ opacity: 0 }} transition={{ duration: 0.45 }} />}
       </AnimatePresence>
@@ -151,7 +156,7 @@ const CSS = `
 .reef-hint span { position: absolute; left: -26px; top: -10px; font-size: 52px; line-height: 1; filter: drop-shadow(0 3px 4px rgba(43,35,48,.3)); animation: reef-press 1.4s ease-in-out infinite; }
 @keyframes reef-press { 0%, 100% { transform: scale(1); } 45% { transform: scale(0.82) translateY(6px); } }
 .reef-flash { position: absolute; inset: 0; background: #fff; pointer-events: none; z-index: 15; }
-.reef-cam { position: absolute; left: 16px; bottom: calc(var(--safe-bottom, 0px) + 18px); z-index: 12; display: flex; gap: 10px; align-items: center; }
+.reef-cam { position: absolute; left: 16px; bottom: calc(var(--safe-bottom, 0px) + min(140px, 19vh, 28vw) + 18px); z-index: 12; display: flex; gap: 10px; align-items: center; }
 .reef-snaps { display: flex; gap: 6px; font-size: clamp(26px, 4.5vmin, 38px); }
 .reef-snaps span { display: inline-block; background: rgba(255,255,255,.88); border-radius: 14px; padding: 4px 8px; box-shadow: var(--shadow); }
 .reef-over { position: absolute; right: 16px; bottom: calc(var(--safe-bottom, 0px) + 18px); z-index: 12; display: flex; gap: 14px; align-items: center; pointer-events: none; }

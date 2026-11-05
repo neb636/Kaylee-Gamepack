@@ -15,11 +15,12 @@
 // The side verb, any time: bury Daddy. He lies beside the castle; rub sand over him and it heaps up, shins to chest,
 // until only his head and toes stick out. Tap his toes: they wiggle. Tap his head: he sneezes and the sand flies off.
 //
-// Greybox: simple shapes in the toon look, no voices (the full loop adds Daddy's "Let's build a sandcastle!" and
-// Sparkle's few lines). Every number that decides the feel is a knob (?feel=1), with a graph of her finger against the
-// sand.
+// Talk (lines.ts L.samet.sandcastle): Daddy's "Let's build a sandcastle!", Sparkle's one line as each round begins,
+// Daddy's and Mommy's reactions, Sparkle's tide fact once the moat fills; after a while with nothing done the finger
+// shows and Sparkle says what to do (spendHint). Every number that decides the feel is a knob (?feel=1), with a graph
+// of her finger against the sand.
 import { Fog, Group, Mesh, MeshBasicMaterial, Plane, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp } from '../../../../../../sdk'
+import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -33,6 +34,7 @@ import type { World3D } from '../../../../../engine3d/View3D'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
+import { L as LINES } from '../../../lines'
 import { hermitModel, type Model } from '../book/models'
 import { groundColor } from '../island/ground'
 import { FRAMES } from '../island/layout'
@@ -90,7 +92,11 @@ export interface SandEvents {
   round(r: SandRound): void
   /** The moat filled from the sea (the stop's flag). */
   filled(): void
+  /** Someone says a line (lines.ts L.samet.sandcastle; `mute`: a hint's first time, only its bubble shows). */
+  say(l: Line, mute?: boolean): void
 }
+
+const S = LINES.samet.sandcastle
 
 /** Where the moulds wait (bottom left, by the castle) and the shells lie (washed up along the water's edge). */
 const MOULD_HOMES = [
@@ -262,6 +268,13 @@ export class Sandcastle implements World3D {
   private spray: Particles
   private sparkle: Particles
   private splash: Particles
+  // ---- Talk: when each key last talked, lists said in turn, lines said once, a line waiting a moment.
+  private talkAt = new Map<string, number>()
+  private turn = new Map<string, number>()
+  private told = new Set<string>()
+  private later: { at: number; fn: () => void }[] = []
+  private hinted = false
+
   private counts = { strokes: 0, taps: 0, pokes: 0, dug: 0, pats: 0, flips: 0, towers: 0, slumps: 0, shells: 0, crabs: 0, buried: 0, sneezes: 0, toes: 0, filled: 0, washed: 0 }
 
   constructor(
@@ -444,6 +457,24 @@ export class Sandcastle implements World3D {
     return false
   }
 
+  /** Says `l` (a list: the next one in turn), unless this key talked less than `cool` seconds ago. */
+  private talk(key: string, l: Line | readonly Line[], cool = 4) {
+    const last = this.talkAt.get(key)
+    if (last !== undefined && this.time - last < cool) return
+    this.talkAt.set(key, this.time)
+    if (Array.isArray(l)) {
+      const n = this.turn.get(key) ?? 0
+      this.turn.set(key, n + 1)
+      this.events.say(l[n % l.length])
+    } else this.events.say(l as Line)
+  }
+  /** Once per visit to the sandcastle. */
+  private once(key: string, l: Line) {
+    if (this.told.has(key)) return
+    this.told.add(key)
+    this.events.say(l)
+  }
+
   setRound(r: SandRound) {
     if (r === this.round) return
     const was = this.round
@@ -451,6 +482,7 @@ export class Sandcastle implements World3D {
     this.roundT = 0
     this.towersThisRound = 0
     this.events.round(r)
+    if (r !== 'dig') this.events.say(S[r])
     if (r !== 'dig' && was === 'dig') {
       // The moulds bounce in from the side.
       this.moulds.forEach((m, i) => {
@@ -470,6 +502,16 @@ export class Sandcastle implements World3D {
   update(dt: number) {
     const t = (this.time += dt)
     this.readFeel()
+    if (this.later.length) {
+      const due = this.later.filter((l) => l.at <= t)
+      this.later = this.later.filter((l) => l.at > t)
+      for (const l of due) l.fn()
+    }
+    // The opening, a beat after it appears: Daddy, then Sparkle (she waits her turn) with the round's line.
+    if (t - dt < 0.6 && t >= 0.6) {
+      if (this.round === 'dig') this.events.say(S.hi)
+      this.events.say(S[this.round])
+    }
     this.roundT += dt
     this.progress(dt)
     this.tide(dt, t)
@@ -554,6 +596,8 @@ export class Sandcastle implements World3D {
     this.kaylee.react('hop')
     this.sendHermit()
     this.events.filled()
+    this.events.say(S.filled)
+    this.later.push({ at: this.time + 2.6, fn: () => this.once('tideFact', S.tideFact) })
   }
 
   private sendHermit() {
@@ -768,6 +812,7 @@ export class Sandcastle implements World3D {
       if (d.buried.every((b) => b >= 1)) {
         this.counts.buried++
         giggle()
+        this.talk('buried', S.buried, 20)
         twinkle()
         const h = this.nick.root.position
         for (let j = 0; j < 14; j++) this.sparkle.emit(h.x + (Math.random() - 0.5) * 1.2, h.y + 0.5, h.z + (Math.random() - 0.5) * 1.2, 0, 1 + Math.random(), 0, 1.1, 0.06)
@@ -869,15 +914,18 @@ export class Sandcastle implements World3D {
         const d = this.dad
         if (d.buried.some((b) => b > 0.3)) return this.sneeze()
         this.nick.react('wiggle')
+        this.talk('dad', S.dad, 3)
         return giggle()
       }
       case 'toes':
         this.dad.toesT = 0
         this.counts.toes++
         this.nick.react('wiggle')
+        this.talk('toes', S.toes, 3)
         return giggle()
       case 'family:ji':
         this.ji.react('wave')
+        this.talk('mommy', S.mommy, 3)
         return tone(880, 1100, 0.15, 0.05, 'triangle')
       case 'umbrella':
         this.umbSpin += 9
@@ -913,6 +961,7 @@ export class Sandcastle implements World3D {
     d.sneezeT = 0
     this.counts.sneezes++
     sneeze()
+    this.talk('sneeze', S.sneeze, 4)
   }
 
   // ---------------------------------------------------------------- the moulds and the towers
@@ -1012,6 +1061,7 @@ export class Sandcastle implements World3D {
     if (!tw) return
     this.counts.washed++
     this.slump(tw, true)
+    this.talk('washed', S.washed, 10)
     sadSlide()
     const p = tw.m.root.position
     this.spray.burst(p.x, tw.y + 0.2, p.z, 24, 1.6, 2.2, 0.07)
@@ -1029,6 +1079,7 @@ export class Sandcastle implements World3D {
     this.crabsPopped++
     this.counts.crabs++
     sfx.chirp()
+    this.once('crab', S.crab)
   }
 
   // ---------------------------------------------------------------- everyone's life
@@ -1242,6 +1293,7 @@ export class Sandcastle implements World3D {
             this.hermit.root.visible = false
             sfx.pop()
             twinkle()
+            this.once('hermit', S.hermit)
           } else hs.state = 'swim'
           hs.t = 0
         }
@@ -1320,6 +1372,12 @@ export class Sandcastle implements World3D {
         at = { a: from.a, v: from.v + (this.edgeV(from.a) + 0.3 - from.v) * k }
       }
     }
+    // Once each time she goes quiet: Sparkle's hint (only shown the first time, then said at most twice a visit).
+    if (at && !this.hinted) {
+      this.hinted = true
+      const l = S.hint[this.round]
+      this.events.say(l, !spendHint(l))
+    } else if (!idle) this.hinted = false
     const want = at ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
     if (!at) return

@@ -10,10 +10,11 @@
 //     behind them (the photo for Agong's wall; if she never takes it, Mommy snaps one as the sun touches the sea).
 // After dark, a tap on the sky makes a star twinkle (now and then a shooting star).
 //
-// Greybox: simple shapes in the toon look, no voices; the words show in a bubble for Dad. The feel numbers are knobs
-// (?feel=1).
+// Talk (lines.ts L.samet.finale.sunset): Daddy as it opens, then Sparkle's one instruction; the fact the first time she
+// taps the sun; Mommy's photo; after a while with nothing done Sparkle says what to do (spendHint). The screen's
+// TripGuide speaks them and shows the words for Dad. The feel numbers are knobs (?feel=1).
 import { CircleGeometry, Color, Euler, Fog, Group, Mesh, MeshBasicMaterial, Quaternion, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp } from '../../../../../../sdk'
+import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { knobs } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
@@ -26,6 +27,7 @@ import type { World3D } from '../../../../../engine3d/View3D'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
+import { L as LINES } from '../../../lines'
 import { sfx } from '../../../sfx'
 import { phoneCamera, snap } from '../book/photo'
 import { at as atFrame, FRAMES, STOPS, type StopId } from '../island/layout'
@@ -33,6 +35,7 @@ import { buildProps, type Props } from '../island/props'
 import { buildIsland, DAY, glowMaterial, type Island } from '../island/scenery'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/finale/sunset.ts'
+const S = LINES.samet.finale.sunset
 const SUN = knobs('sunsetSun', 'Pulling the sun down', FILE, {
   start: { value: 9, min: 4, max: 25, step: 0.5, label: 'It starts this high', unit: '°' },
   grab: { value: 150, min: 60, max: 300, step: 10, label: 'Grab it within', unit: 'px', note: 'her finger this close to the sun picks it up' },
@@ -55,6 +58,8 @@ export interface SunsetEvents {
   photo(src: string): void
   /** The night has fallen: the way to the fire show. */
   night(): void
+  /** Someone says a line (the screen's TripGuide speaks it). */
+  say?(l: Line): void
 }
 type Phase = 'day' | 'sinking' | 'dusk' | 'night'
 
@@ -63,6 +68,8 @@ const tmpQ = new Quaternion()
 const phoneQ = new Quaternion()
 const phoneE = new Euler()
 const HINT_S = 6
+/** Sparkle says what to do after this long with nothing done (and no sooner again). */
+const SAY_S = 9
 const SUN_DIST = 260
 const SUN_GOLD = new Color('#FFD27A')
 const SUN_PINK = new Color('#FF7A8C')
@@ -99,7 +106,6 @@ export class Sunset implements World3D {
   private props: Props
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
-  private bubbleEl: HTMLElement | null = null
   private raycaster = new Raycaster()
   private w = 1
   private h = 1
@@ -133,7 +139,12 @@ export class Sunset implements World3D {
   private lastTouch = 0
   private sparkle: Particles
   private glint: Particles
-  private bubble: { who: 'kaylee' | 'nick' | 'ji'; text: string; until: number } | null = null
+  /** The last line said (for QA), and when. */
+  private said: { text: string; at: number } | null = null
+  private lastSay = 0
+  private greeted = false
+  private facts = 0
+  private nickTap = 0
   private counts = { taps: 0, pokes: 0, grabs: 0, photos: 0, stars: 0 }
 
   constructor(
@@ -232,9 +243,6 @@ export class Sunset implements World3D {
   }
   setHintElement(el: HTMLElement | null) {
     this.hintEl = el
-  }
-  setBubbleElement(el: HTMLElement | null) {
-    this.bubbleEl = el
   }
   get calm() {
     return false
@@ -336,7 +344,13 @@ export class Sunset implements World3D {
     this.sunAt(this.elev, this.sun.position)
     this.sun.lookAt(this.rig.camera.position)
     this.sun.scale.setScalar(SUN.size)
-    if (this.bubble && this.time > this.bubble.until) this.bubble = null
+    if (!this.greeted && t > 0.6) {
+      // Daddy, then Sparkle's one instruction (she waits her turn behind him).
+      this.greeted = true
+      this.say(S.look)
+      this.say(S.pull)
+    }
+    this.stuck()
     this.drawHint(t)
   }
 
@@ -351,14 +365,18 @@ export class Sunset implements World3D {
     this.glint.burst(near.x, 0.2, near.z, 40, 6, 5, 0.6)
     this.kaylee.react('hop')
     // No photo yet: Mommy snaps one as the sun touches the sea.
-    if (!this.photos) this.photoPending = true
+    if (!this.photos) {
+      this.photoPending = true
+      this.say(S.photo)
+    } else this.say(S.plop)
   }
   private toNight() {
     this.setPhase('night')
     this.dark = 1
     sfx.chime()
     this.nick.react('wave')
-    this.say('nick', 'Fire show time!', 3)
+    this.lastTouch = this.time
+    this.say(S.night)
     this.events.night()
   }
 
@@ -429,6 +447,8 @@ export class Sunset implements World3D {
       sfx.boop()
       const s = this.sun.position
       this.sparkle.burst(s.x, s.y, s.z, 20, 10, 2, 2.5)
+      // The first time she pokes it: a tap-to-hear fact.
+      if (!this.facts++) this.say(S.west)
     } else if (id === 'family:ji') this.takePhoto()
     else if (id === 'kaylee') {
       this.kaylee.react('hop')
@@ -436,6 +456,7 @@ export class Sunset implements World3D {
     } else if (id === 'family:nick') {
       this.nick.react('hop')
       sfx.haha()
+      this.say(S.tap[this.nickTap++ % S.tap.length])
     } else if (id === 'tree') {
       this.treeShake = 1
       sfx.creak()
@@ -446,12 +467,20 @@ export class Sunset implements World3D {
     this.posing = 0
     this.ji.react('wave')
     sfx.giggle()
-    this.say('ji', 'Sunset photo!', 2)
+    this.say(S.photo)
   }
 
-  private say(who: 'kaylee' | 'nick' | 'ji', text: string, secs: number) {
-    this.bubble = { who, text, until: this.time + secs }
-    if (this.bubbleEl) this.bubbleEl.textContent = text
+  private say(l: Line) {
+    this.said = { text: typeof l === 'string' ? l : l.text, at: this.time }
+    this.events.say?.(l)
+  }
+  /** After a while with nothing done, Sparkle says what to do (spendHint: shown first, said at most twice a visit). */
+  private stuck() {
+    if (this.finger || this.posing >= 0 || this.phase === 'dusk') return
+    if (this.time - this.lastTouch < SAY_S || this.time - this.lastSay < SAY_S) return
+    this.lastSay = this.time
+    const l = this.phase === 'night' ? S.hint.fire : S.hint.pull
+    if (spendHint(l)) this.say(l)
   }
 
   // ---------------------------------------------------------------- camera
@@ -535,18 +564,6 @@ export class Sunset implements World3D {
       else if (id === 'tree') place(el, this.props.stops.hideseek.getWorldPosition(v), 2.6, 0.7)
       el.style.zIndex = id === 'sun' ? '2' : id === 'tree' ? '0' : '1'
     }
-    const b = this.bubbleEl
-    if (b) {
-      const who = this.bubble?.who
-      const m = who === 'kaylee' ? this.kaylee : who === 'nick' ? this.nick : who === 'ji' ? this.ji : null
-      if (m) {
-        const p = m.root.getWorldPosition(v)
-        const s = this.toScreen(p.setY(p.y + m.height + 0.25))
-        b.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0)`
-      }
-      const want = m ? '' : 'none'
-      if (b.style.display !== want) b.style.display = want
-    }
   }
 
   qa() {
@@ -559,7 +576,7 @@ export class Sunset implements World3D {
       sun: sc(this.sun.position),
       horizon: sc(this.sunAt(0)),
       posing: this.posing >= 0,
-      bubble: this.bubble?.text ?? null,
+      bubble: this.said && this.time - this.said.at < 3 ? this.said.text : null,
       kaylee: sc(this.kaylee.root.position.clone().setY(this.kaylee.root.position.y + 0.6)),
       mommy: sc(this.ji.root.position.clone().setY(this.ji.root.position.y + 1)),
       phone: sc(this.phone.getWorldPosition(new Vector3())),

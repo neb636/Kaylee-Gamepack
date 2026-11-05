@@ -1,5 +1,5 @@
 // The sunset at the driftwood tree, on screen (sunset.ts is the world): Ao Prao with its tap targets, the pressing
-// finger on the sun, a speech bubble over whoever is talking (the words for Dad: the voices come with the full loop),
+// finger on the sun, Sparkle in the corner speaking everyone's lines (trip/legs/Guide.tsx, the words for Dad too),
 // Mommy's photo flashing and landing in the corner, and once night has fallen the 🔥 button to the fire show.
 import { useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
@@ -7,6 +7,7 @@ import type { WebGLRenderer } from 'three'
 import { BigButton } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import type { StopId } from '../island/layout'
 import { FINALE_CSS } from './FireShowScreen'
 import { Sunset as World, SUNSET_ANCHORS } from './sunset'
@@ -26,7 +27,7 @@ export function SunsetScreen({ flags, onPhoto, onFireShow }: Props) {
   const [night, setNight] = useState(false)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
-  const bubbleRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   const cb = useRef({ onPhoto })
   cb.current = { onPhoto }
 
@@ -37,9 +38,9 @@ export function SunsetScreen({ flags, onPhoto, onFireShow }: Props) {
         cb.current.onPhoto(src)
       },
       night: () => setNight(true),
+      say: (l) => guideRef.current?.speak(l),
     })
     w.setHintElement(hintRef.current)
-    w.setBubbleElement(bubbleRef.current)
     return w
   }
 
@@ -59,10 +60,10 @@ export function SunsetScreen({ flags, onPhoto, onFireShow }: Props) {
             <div ref={hintRef} className="fin-hint" style={{ display: 'none' }}>
               <span>👆</span>
             </div>
-            <div className="fin-bubble" style={{ display: 'none' }} ref={bubbleRef} />
           </>
         )}
       />
+      {mode === 'webgl' && <TripGuide ref={guideRef} />}
       <AnimatePresence>
         {photo && <motion.div key={`f${photo.n}`} className="fin-flash" initial={{ opacity: 0.85 }} animate={{ opacity: 0 }} transition={{ duration: 0.45 }} />}
       </AnimatePresence>

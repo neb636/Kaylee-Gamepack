@@ -31,6 +31,7 @@ export const WALL_SLOTS: Record<string, V3> = {
 export const WALL_LINES: Record<string, Line> = {
   'boat-trip': L.home.wall,
   'nan-trip': L.nan.trip.wall,
+  'samet-trip': L.samet.trip.wall,
 }
 /** The photo inside the frame (4:3, like the photos), and the frame around it. */
 const PW = 0.72

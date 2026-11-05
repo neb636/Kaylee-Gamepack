@@ -1,8 +1,8 @@
 // The jet ski at Hat Sai Kaew, on screen (jetski.ts is the world): the 3D bay with its tap targets, the pressing finger
 // after a while with nothing touched, the race's countdown (big 3, 2, 1, go), the race's end (🏆 and 🔁 when she wins;
 // "So close!" and straight into the next race when he wins by a nose), and spray on the camera after a big landing.
+// Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks in their own voice (lines.ts L.samet.jetski).
 // With ?feel=1 Dad also gets round chips (ride, waves, race) to jump between rounds while he tunes the knobs.
-// Greybox: no voices yet (the full loop adds Sparkle's few lines and the jet ski man's).
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
@@ -10,6 +10,7 @@ import { BigButton, burst } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import type { RoundId } from '../island/layout'
 import { JET_ANCHORS, JetSki as World, type JetEvents } from './jetski'
 
@@ -33,12 +34,14 @@ export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const sprayRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   const onRoundRef = useRef(onRound)
   onRoundRef.current = onRound
 
   useEffect(() => onRoundRef.current(run.round), [run])
 
   const events = useRef<JetEvents>({
+    say: (l, mute) => guideRef.current?.speak(l, mute),
     round: (r) => {
       setRound(r)
       setOver(null)
@@ -122,6 +125,7 @@ export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
           </motion.div>
         )}
       </AnimatePresence>
+      {mode === 'webgl' && <TripGuide ref={guideRef} />}
       {feel && (
         <div className="jet-chips">
           {(['ride', 'waves', 'race'] as const).map((r) => (

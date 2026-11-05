@@ -1389,6 +1389,725 @@
   "Rice grows standing in water!",
   "Bo Kluea makes salt from a well!",
   "Long ago the sea was here, and it left its salt!",
+  {
+    "text": "Sawasdee ka! Hold on tight!",
+    "voice": "pelican"
+  },
+  "Put your hoof in the water!",
+  "Touch the water by the boat!",
+  "Flying fish!",
+  {
+    "text": "Whoa! We flew!",
+    "voice": "nick"
+  },
+  {
+    "text": "Hey! I'm all wet!",
+    "voice": "ji"
+  },
+  {
+    "text": "Splash! Ha ha!",
+    "voice": "ji"
+  },
+  {
+    "text": "Not again!",
+    "voice": "ji"
+  },
+  {
+    "text": "Beep beep!",
+    "voice": "pelican"
+  },
+  {
+    "text": "Wiggle wiggle! Ha ha!",
+    "voice": "pelican"
+  },
+  {
+    "text": "Hold on to your hats!",
+    "voice": "pelican"
+  },
+  {
+    "text": "My cap!",
+    "voice": "nick"
+  },
+  {
+    "text": "So windy!",
+    "voice": "nick"
+  },
+  {
+    "text": "My sun hat!",
+    "voice": "ji"
+  },
+  {
+    "text": "Whee! So fast!",
+    "voice": "ji"
+  },
+  {
+    "text": "Koh Samet! Here we are!",
+    "voice": "pelican"
+  },
+  {
+    "text": "Our trip to Koh Samet!",
+    "voice": "ji"
+  },
+  "Pink mermaid sticker! A mermaid sits on the rocks!",
+  "Koh means island in Thai!",
+  "The samet tree gave the island its name!",
+  "Sai Kaew means crystal sand!",
+  "The mermaid is from an old Thai poem!",
+  "Koh Samet is a national park, a home for animals!",
+  "Always wear a life jacket on the water!",
+  "The sun sets in the west, over Ao Prao!",
+  "Take a photo of an animal, then let it be!",
+  "Koh Samet! Let's explore the island!",
+  "Hat Sai Kaew! The jet ski beach!",
+  "Ao Hin Khok! Build a sandcastle!",
+  "Ao Phai! A quiet little bay!",
+  "Ao Wong Duan! The snorkel boat!",
+  "Ao Prao! The big driftwood tree!",
+  "Ao Noi Na! Look at the boats!",
+  "The jet ski is yours now! Hop on!",
+  {
+    "text": "Sunset time! To the big tree!",
+    "voice": "nick"
+  },
+  "Tap an animal to take its photo!",
+  {
+    "text": "Thank you for cleaning the beach!",
+    "voice": "ji"
+  },
+  {
+    "text": "Sawasdee krap! Hop in!",
+    "voice": "sunbear"
+  },
+  {
+    "text": "Beep beep!",
+    "voice": "sunbear"
+  },
+  {
+    "text": "Hold on! Bumpy road!",
+    "voice": "sunbear"
+  },
+  {
+    "text": "Next stop, the beach!",
+    "voice": "sunbear"
+  },
+  {
+    "text": "Hi, sweetie!",
+    "voice": "nick"
+  },
+  {
+    "text": "I love this beach!",
+    "voice": "nick"
+  },
+  {
+    "text": "Race you to the sea!",
+    "voice": "nick"
+  },
+  {
+    "text": "Huh? I was sleeping!",
+    "voice": "nick"
+  },
+  {
+    "text": "So pretty here!",
+    "voice": "ji"
+  },
+  {
+    "text": "Sunscreen on, sweetie!",
+    "voice": "ji"
+  },
+  {
+    "text": "Mommy loves you!",
+    "voice": "ji"
+  },
+  {
+    "text": "Ow! A coconut!",
+    "voice": "nick"
+  },
+  {
+    "text": "Whoa! Hold on tight!",
+    "voice": "ji"
+  },
+  {
+    "text": "Smile! Bye bye, Koh Samet!",
+    "voice": "ji"
+  },
+  "A tern!",
+  "A crab!",
+  "A reef heron!",
+  "A sea urchin!",
+  "Coral!",
+  "A hornbill!",
+  "A parrotfish!",
+  "Blue damselfish!",
+  "A cuttlefish!",
+  "A monitor lizard!",
+  "A mouse-deer!",
+  "A flying fox!",
+  "A squirrel!",
+  "A monkey!",
+  "Terns dive into the sea to catch fish!",
+  "Ghost crabs dig holes to hide from the sun!",
+  "The reef heron stands still, then grabs a fish!",
+  "Sea urchins are prickly. Look, but don't touch!",
+  "Coral looks like rock, but it's alive!",
+  "The hornbill has a giant yellow beak!",
+  "Parrotfish nibble coral, and it turns into sand!",
+  "Damselfish swim in a big crowd to stay safe!",
+  "A cuttlefish can change color in a blink!",
+  "Monitor lizards smell with their tongue!",
+  "The mouse-deer is as small as a cat!",
+  "A flying fox is a big bat that eats fruit!",
+  "Squirrels run up the palm trees!",
+  "Monkeys! Hold on to your sunglasses!",
+  "Look up over the sea at Sai Kaew!",
+  "Look for little holes in the sand!",
+  "Look on the rocks by the mermaid!",
+  "Look in the water by the rocks!",
+  "Look under the water at Hin Khok!",
+  "Look up in the big tree at Wong Duan!",
+  "Look in the water at Wong Duan!",
+  "Look for a crowd of little blue fish!",
+  "Look by the snorkel boat!",
+  "Look on the sand at Ao Prao!",
+  "By the forest at Ao Prao. Walk slowly!",
+  "Look up in the trees at Ao Prao!",
+  "Look up the palm trees!",
+  "Look by the road over the hill!",
+  "Kaylee, your animal book is full!",
+  {
+    "text": "Sawasdee krap! Life jacket first!",
+    "voice": "otter"
+  },
+  {
+    "text": "Hold on tight! Off you go!",
+    "voice": "otter"
+  },
+  "Steer it with your finger!",
+  "Big waves! Drive over them!",
+  "Race the jet ski man!",
+  {
+    "text": "Catch me if you can!",
+    "voice": "otter"
+  },
+  {
+    "text": "Wow! You are fast!",
+    "voice": "otter"
+  },
+  {
+    "text": "You win again! Ha ha!",
+    "voice": "otter"
+  },
+  {
+    "text": "Ha! Just a nose!",
+    "voice": "otter"
+  },
+  "So close! Again!",
+  {
+    "text": "Kaylee wins!",
+    "voice": "nick"
+  },
+  {
+    "text": "Wheee!",
+    "voice": "nick"
+  },
+  {
+    "text": "We can fly!",
+    "voice": "nick"
+  },
+  {
+    "text": "Yee-haw!",
+    "voice": "nick"
+  },
+  {
+    "text": "A spin! Whoa!",
+    "voice": "nick"
+  },
+  {
+    "text": "Look! The fish!",
+    "voice": "nick"
+  },
+  {
+    "text": "A heart! For Mommy!",
+    "voice": "nick"
+  },
+  {
+    "text": "Round and round! I'm dizzy!",
+    "voice": "nick"
+  },
+  {
+    "text": "Oops! Sandy jet ski!",
+    "voice": "nick"
+  },
+  {
+    "text": "Whoa! Not the beach!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ha ha! Again?",
+    "voice": "nick"
+  },
+  {
+    "text": "Back in the water!",
+    "voice": "otter"
+  },
+  {
+    "text": "Ha ha! Boats go in the sea!",
+    "voice": "otter"
+  },
+  {
+    "text": "Not again!",
+    "voice": "nick"
+  },
+  {
+    "text": "Go, go, go!",
+    "voice": "ji"
+  },
+  {
+    "text": "Wave to Mommy!",
+    "voice": "ji"
+  },
+  {
+    "text": "Sawasdee krap!",
+    "voice": "otter"
+  },
+  {
+    "text": "Zoom zoom!",
+    "voice": "otter"
+  },
+  {
+    "text": "Nice driving!",
+    "voice": "otter"
+  },
+  "The rope keeps the swimmers safe!",
+  "Tap the life jacket!",
+  "Hold your finger on the water!",
+  {
+    "text": "Let's build a sandcastle!",
+    "voice": "nick"
+  },
+  "Dig the sand with your finger!",
+  "Tap a bucket to make a tower!",
+  "The sea is coming! Dig a river to it!",
+  {
+    "text": "Water in the moat! Hooray!",
+    "voice": "nick"
+  },
+  "The sea comes up the beach and goes back, twice a day!",
+  {
+    "text": "Oh no! Build it again!",
+    "voice": "nick"
+  },
+  "A ghost crab! It runs sideways!",
+  "A hermit crab moved in!",
+  {
+    "text": "Help! I'm a sandcastle!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ah... ah... choo!",
+    "voice": "nick"
+  },
+  {
+    "text": "Hee hee! That tickles!",
+    "voice": "nick"
+  },
+  {
+    "text": "My toes!",
+    "voice": "nick"
+  },
+  {
+    "text": "Bury me in sand!",
+    "voice": "nick"
+  },
+  {
+    "text": "Great castle!",
+    "voice": "nick"
+  },
+  {
+    "text": "So pretty!",
+    "voice": "ji"
+  },
+  {
+    "text": "A princess castle!",
+    "voice": "ji"
+  },
+  "Drag your finger in the sand!",
+  "Tap a bucket!",
+  "Dig a line down to the sea!",
+  {
+    "text": "Masks on! Jump in!",
+    "voice": "pelican"
+  },
+  "Hold your finger in the water to swim!",
+  "Follow the parrotfish!",
+  "Swim close to the cuttlefish!",
+  "It turned pink, just for you!",
+  "Tap the camera for a photo!",
+  "Coral is alive! Fish live in it.",
+  "Cuttlefish change color to talk!",
+  {
+    "text": "Boing! Prickly!",
+    "voice": "nick"
+  },
+  {
+    "text": "A bubble ring for you!",
+    "voice": "nick"
+  },
+  {
+    "text": "Wow! A pink one!",
+    "voice": "nick"
+  },
+  {
+    "text": "Blub blub!",
+    "voice": "nick"
+  },
+  {
+    "text": "Look at all the fish!",
+    "voice": "nick"
+  },
+  {
+    "text": "Swim, swim, swim!",
+    "voice": "nick"
+  },
+  {
+    "text": "Toot toot! Ha ha!",
+    "voice": "pelican"
+  },
+  {
+    "text": "Good swimming, little one!",
+    "voice": "pelican"
+  },
+  {
+    "text": "My boat waits for you, ka!",
+    "voice": "pelican"
+  },
+  "Swim after the parrotfish!",
+  "Swim to the cuttlefish!",
+  {
+    "text": "Lunch time! Who wants bread?",
+    "voice": "nick"
+  },
+  "Tap the bread basket!",
+  {
+    "text": "Here you go!",
+    "voice": "nick"
+  },
+  {
+    "text": "Catch!",
+    "voice": "nick"
+  },
+  {
+    "text": "Another one? Ha ha!",
+    "voice": "nick"
+  },
+  {
+    "text": "A coconut! Sip it!",
+    "voice": "ji"
+  },
+  {
+    "text": "What a big slurp!",
+    "voice": "nick"
+  },
+  {
+    "text": "Mango sticky rice!",
+    "voice": "ji"
+  },
+  {
+    "text": "Aroi mak! So yummy!",
+    "voice": "ji"
+  },
+  {
+    "text": "Full tummy! Hide and seek?",
+    "voice": "nick"
+  },
+  {
+    "text": "Smile!",
+    "voice": "ji"
+  },
+  {
+    "text": "Cheese!",
+    "voice": "ji"
+  },
+  {
+    "text": "So cute!",
+    "voice": "ji"
+  },
+  {
+    "text": "A big lizard! Hello!",
+    "voice": "nick"
+  },
+  {
+    "text": "A squirrel! Up it goes!",
+    "voice": "ji"
+  },
+  "Tap the roll to take a bite!",
+  "Hold your finger on the coconut!",
+  "Tap the mango sticky rice!",
+  {
+    "text": "Close your eyes and count!",
+    "voice": "nick"
+  },
+  "Four!",
+  "Five!",
+  "Six!",
+  "Seven!",
+  "Eight!",
+  "Nine!",
+  "Ten!",
+  {
+    "text": "One!",
+    "voice": "nick"
+  },
+  {
+    "text": "Two!",
+    "voice": "nick"
+  },
+  {
+    "text": "Three!",
+    "voice": "nick"
+  },
+  {
+    "text": "Four!",
+    "voice": "nick"
+  },
+  {
+    "text": "Five!",
+    "voice": "nick"
+  },
+  {
+    "text": "Six!",
+    "voice": "nick"
+  },
+  {
+    "text": "Seven!",
+    "voice": "nick"
+  },
+  {
+    "text": "Eight!",
+    "voice": "nick"
+  },
+  {
+    "text": "Nine!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ten!",
+    "voice": "nick"
+  },
+  {
+    "text": "Eleven!",
+    "voice": "nick"
+  },
+  {
+    "text": "Twelve!",
+    "voice": "nick"
+  },
+  "Find Daddy!",
+  "Daddy hides better now!",
+  "Not here!",
+  "Hmm, not there!",
+  {
+    "text": "You found me!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ha ha! Found!",
+    "voice": "nick"
+  },
+  {
+    "text": "Good finding!",
+    "voice": "nick"
+  },
+  {
+    "text": "Hee hee hee!",
+    "voice": "nick"
+  },
+  {
+    "text": "My turn to count! Go hide!",
+    "voice": "nick"
+  },
+  "Hide in a glowing spot!",
+  {
+    "text": "Oops! No peeking!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ready or not!",
+    "voice": "nick"
+  },
+  {
+    "text": "Is she here?",
+    "voice": "nick"
+  },
+  {
+    "text": "Not here!",
+    "voice": "nick"
+  },
+  {
+    "text": "Hmm, where is she?",
+    "voice": "nick"
+  },
+  {
+    "text": "Behind Mommy?",
+    "voice": "nick"
+  },
+  {
+    "text": "Hmm... not here!",
+    "voice": "nick"
+  },
+  {
+    "text": "Where is she? I give up!",
+    "voice": "nick"
+  },
+  {
+    "text": "You win! Super hider!",
+    "voice": "nick"
+  },
+  "Kaylee wins hide and seek!",
+  {
+    "text": "Found you!",
+    "voice": "nick"
+  },
+  {
+    "text": "Peekaboo! I see you!",
+    "voice": "nick"
+  },
+  {
+    "text": "Waah! You scared me!",
+    "voice": "nick"
+  },
+  "Where is Daddy? Listen!",
+  "Walk to a hiding place!",
+  {
+    "text": "Look! The sun is going to sleep!",
+    "voice": "nick"
+  },
+  "Pull the sun down into the sea!",
+  "The sun always sets in the west!",
+  {
+    "text": "Sunset photo! Smile!",
+    "voice": "ji"
+  },
+  {
+    "text": "Plop! Into the sea!",
+    "voice": "nick"
+  },
+  {
+    "text": "Fire show time!",
+    "voice": "nick"
+  },
+  {
+    "text": "So pretty!",
+    "voice": "nick"
+  },
+  {
+    "text": "Bye bye, sun!",
+    "voice": "nick"
+  },
+  {
+    "text": "Ooh, the stars!",
+    "voice": "nick"
+  },
+  "Tap the fire for the show!",
+  {
+    "text": "Look! Fire dancers!",
+    "voice": "ji"
+  },
+  "Swirl your lights with your finger!",
+  "Fire is for grown-ups. Yours are lights!",
+  {
+    "text": "Whoa! Big circle!",
+    "voice": "gecko"
+  },
+  {
+    "text": "Faster! Faster!",
+    "voice": "gecko"
+  },
+  {
+    "text": "Wow! You are good!",
+    "voice": "gecko"
+  },
+  {
+    "text": "Watch us! Now you!",
+    "voice": "gecko"
+  },
+  "Draw over the dots!",
+  {
+    "text": "A circle!",
+    "voice": "gecko"
+  },
+  {
+    "text": "A star!",
+    "voice": "gecko"
+  },
+  {
+    "text": "A heart!",
+    "voice": "gecko"
+  },
+  "It floats up like a lantern!",
+  "Swirl a loop! Something is coming!",
+  {
+    "text": "Woo hoo! Lights on!",
+    "voice": "otter"
+  },
+  {
+    "text": "Your sandcastle is glowing!",
+    "voice": "ji"
+  },
+  {
+    "text": "The fish are glowing!",
+    "voice": "nick"
+  },
+  {
+    "text": "Daddy can dance too!",
+    "voice": "nick"
+  },
+  "Now one giant circle!",
+  {
+    "text": "Ring of fire!",
+    "voice": "gecko"
+  },
+  "Kaylee, what a show!",
+  {
+    "text": "Time to go home!",
+    "voice": "ji"
+  },
+  {
+    "text": "Sawasdee!",
+    "voice": "gecko"
+  },
+  {
+    "text": "Tukkae! Tukkae!",
+    "voice": "gecko"
+  },
+  {
+    "text": "Hot, hot fire!",
+    "voice": "gecko"
+  },
+  {
+    "text": "So beautiful!",
+    "voice": "ji"
+  },
+  {
+    "text": "My little fire dancer!",
+    "voice": "ji"
+  },
+  {
+    "text": "Twirl, twirl!",
+    "voice": "nick"
+  },
+  {
+    "text": "Wow!",
+    "voice": "nick"
+  },
+  {
+    "text": "Do a big one!",
+    "voice": "nick"
+  },
+  "Swirl your finger in the sky!",
+  "Follow the dots with your finger!",
+  "Swirl a loop!",
+  "Draw one giant circle!",
+  "Tap the sky for fireworks!",
   "Welcome to HarborLand, Kaylee! Tap a place to play!",
   {
     "text": "Sawasdee ka, Kaylee!",
@@ -1697,10 +2416,6 @@
     "voice": "nick"
   },
   {
-    "text": "Ah... ah... choo!",
-    "voice": "nick"
-  },
-  {
     "text": "Taller than me, Kaylee!",
     "voice": "nick"
   },
@@ -1709,10 +2424,6 @@
   "Tap the tower to push it!",
   "A chedi is a Thai temple tower!",
   "Climb the Golden Mountain, Kaylee! Count the holds!",
-  "Four!",
-  "Five!",
-  "Six!",
-  "Seven!",
   "You made it, Kaylee!",
   "Only the pink ones!",
   "Race Daddy to the top!",
@@ -1788,9 +2499,6 @@
     "voice": "nick"
   },
   "Slap the lights!",
-  "Eight!",
-  "Nine!",
-  "Ten!",
   "Listen!",
   "Now you play it!",
   {
