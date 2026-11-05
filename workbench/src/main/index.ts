@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain, dialog } from "electron";
+import { app, BrowserWindow, shell, ipcMain, dialog, Menu, MenuItem } from "electron";
 import path from "node:path";
 import { AgentSessionManager } from "./agent-session-manager";
 import { ImageLibrary } from "./image-library";
@@ -23,7 +23,7 @@ const repoRoot = app.isPackaged ? null : process.env.STUDIO_REPO_ROOT || path.re
 let quitting = false;
 // Window icon on Windows/Linux. macOS uses the native icon from the app bundle.
 const appIcon = app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.resolve(__dirname, '../../../public/icons/icon-512.png');
-// `npm run studio` already serves its own checkout (STUDIO_GAME_PORT); every other piece of work gets its own server.
+// Every piece of work gets its own server when its game opens. STUDIO_GAME_PORT is for a server someone else runs.
 const launcherPort = !app.isPackaged && repoRoot ? Number(process.env.STUDIO_GAME_PORT) || undefined : undefined;
 const gameServers = new GameServerPool(GAME_PORTS.filter(port => port !== launcherPort), {
   keep: 2,
@@ -58,6 +58,22 @@ const workspaceServices = {
   images,
   work: new WorkService(git, roots),
 };
+
+/**
+ * View ▸ Show/Hide Game (⌘G). A menu accelerator, so it works wherever focus is, the game's own frame included
+ * (that frame keeps its key events from Studio's page). Added to Electron's default menu, keeping Edit/Window roles.
+ */
+function addGameMenuItem(): void {
+  const menu = Menu.getApplicationMenu();
+  const view = menu?.items.find((item) => item.role === "viewMenu" || item.label === "View")?.submenu;
+  if (!menu || !view) return;
+  view.insert(0, new MenuItem({ type: "separator" }));
+  view.insert(0, new MenuItem({
+    id: "toggle-game", label: "Show/Hide Game", accelerator: "CmdOrCtrl+G",
+    click: () => BrowserWindow.getFocusedWindow()?.webContents.send("studio:toggle-game") ?? BrowserWindow.getAllWindows()[0]?.webContents.send("studio:toggle-game"),
+  }));
+  Menu.setApplicationMenu(menu);
+}
 
 function createWindow(): BrowserWindow {
   const window = new BrowserWindow({
@@ -131,6 +147,7 @@ app.whenReady().then(async () => {
   });
   ipcMain.handle('studio:tune', (event, input: unknown) => { trusted(event); return labAi.run(input, event.sender.id); });
   ipcMain.on('studio:cancel', (event, id: unknown) => { trusted(event); if (typeof id === 'string') labAi.cancel(id, event.sender.id); });
+  addGameMenuItem();
   createWindow();
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

@@ -57,14 +57,10 @@ export function WorkbenchShell() {
   }, [gameOpen]);
 
   const toggleGame = () => { if (activeWorkspace) patchGame(activeWorkspace.id, { open: !gameOpen }); };
-  // ⌘G shows or hides the game.
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && !event.shiftKey && !event.altKey && event.key.toLowerCase() === "g") { event.preventDefault(); toggleGame(); }
-    };
-    addEventListener("keydown", onKey);
-    return () => removeEventListener("keydown", onKey);
-  });
+  // ⌘G shows or hides the game (main catches it for the whole window, game frame included).
+  const toggleRef = useRef(toggleGame);
+  toggleRef.current = toggleGame;
+  useEffect(() => window.workbench.studio.onToggleGame(() => toggleRef.current()), []);
 
   if (!isHydrated) return <div className="launch-screen"><div className="brand-mark large"><span>KG</span></div><p>Opening Gamepack Studio…</p></div>;
 

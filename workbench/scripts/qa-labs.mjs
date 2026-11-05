@@ -6,7 +6,7 @@ import path from 'node:path';
 import { tmpdir } from 'node:os';
 const profile = await mkdtemp(path.join(tmpdir(), 'gamepack-labs-qa-'));
 const repo = path.resolve('..');
-await fetch('http://127.0.0.1:5175'); await fetch('http://127.0.0.1:5174');
+await fetch('http://127.0.0.1:5175');
 const fixture = `#!${process.execPath}\nconst fs=require('node:fs');let text='';process.stdin.on('data',b=>text+=b);process.stdin.on('end',()=>{const feel=text.includes('"kind":"feel"');const fail=text.includes('FAIL_PREVIEW');const none=text.includes('NO_CHANGES');const p={explanation:none?'Fixture no changes':'Fixture control update',changes:none?[]:[{key:feel?'steer.slide':'zoom',value:feel?5.5:.9}]};setTimeout(()=>{if(fail){process.stderr.write('Fixture failed');process.exitCode=1;return;}const i=process.argv.indexOf('--output-last-message');if(i>=0)fs.writeFileSync(process.argv[i+1],JSON.stringify(p));else process.stdout.write(JSON.stringify({structured_output:p}));},900);});`;
 for(const name of ['claude','codex']) await writeFile(path.join(profile,name),fixture,{mode:0o755});
 let app;

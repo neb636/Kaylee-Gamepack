@@ -35,14 +35,14 @@ async function ready(origin) {
 process.on('SIGINT', () => shutdown());
 process.on('SIGTERM', () => shutdown());
 try {
-  const gameOrigin = 'http://127.0.0.1:5174', studioOrigin = 'http://127.0.0.1:5175';
-  await unused(gameOrigin); await unused(studioOrigin);
+  // The game isn't served here: Studio starts a checkout's game server when its game panel opens, and stops it after.
+  const studioOrigin = 'http://127.0.0.1:5175';
+  await unused(studioOrigin);
   // Build Electron before opening its window.
   const compiler = spawn(process.execPath, [require.resolve('typescript/bin/tsc'), '-p', 'tsconfig.electron.json'], { cwd: studio, stdio: 'inherit' });
   const result = await new Promise(resolve => compiler.on('exit', resolve));
   if (result !== 0) throw new Error('Electron compilation failed');
-  launch(process.execPath, [path.join(repo, 'node_modules/vite/bin/vite.js'), '--host', '127.0.0.1', '--port', '5174', '--strictPort'], repo);
   launch(process.execPath, [path.join(studio, 'node_modules/vite/bin/vite.js'), '--host', '127.0.0.1', '--port', '5175', '--strictPort'], studio);
-  await Promise.all([ready(gameOrigin), ready(studioOrigin)]);
-  if (!process.argv.includes('--servers-only')) launch(require('electron'), ['.'], studio, { VITE_DEV_SERVER_URL: studioOrigin, STUDIO_REPO_ROOT: repo, STUDIO_GAME_PORT: '5174' });
+  await ready(studioOrigin);
+  if (!process.argv.includes('--servers-only')) launch(require('electron'), ['.'], studio, { VITE_DEV_SERVER_URL: studioOrigin, STUDIO_REPO_ROOT: repo });
 } catch (error) { console.error(error); shutdown(1); }

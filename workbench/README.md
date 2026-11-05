@@ -11,8 +11,8 @@ npm run studio:install       # isolated Electron dependencies + native PTY rebui
 npm run studio
 ```
 
-The launcher compiles Electron, starts the game at `http://127.0.0.1:5174` and the studio renderer at
-`http://127.0.0.1:5175`, then opens Electron. It refuses occupied ports. Close the studio window, use Cmd+Q, or press Ctrl+C
+The launcher compiles Electron, starts the studio renderer at `http://127.0.0.1:5175`, then opens Electron. It refuses an
+occupied port. No game server runs until a game panel opens (ports 5174, 5176, 5178, 5180). Close the studio window, use Cmd+Q, or press Ctrl+C
 in the launching terminal to stop the servers. Normal game development can still use port 5173. Node 22.12+ (24 recommended), npm, installed and signed-in `claude` and/or
 `codex` CLIs are required for AI. Their existing login/config is used; the studio needs no API key of its own.
 
