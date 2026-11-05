@@ -17,12 +17,19 @@
 // he catches it), the captain (the horn, and the boat wiggles), the pink flag at the stern, the life ring.
 //
 // Greybox: simple shapes in the toon look, no voices (the captain is a stand-in). Its feel numbers are knobs (?feel=1).
+//
+// ?cine=1 films the ride like a game's cutscene instead (engine3d/cinema.ts, the camera lab's "Cinema camera" switch):
+// a crane up off Ban Phe pier, then cuts between a chase, a low hero shot skimming the water, over her shoulder at the
+// rail, a fixed camera the boat roars past and a high wide one; a two-shot with each boat coming the other way, a crane
+// up as they slow in to Na Dan, and back to the game's camera on the pier. Her finger still plays: a touch cuts to a
+// shot that shows her hoof and holds it while she splashes.
 import { Color, Fog, Group, Mesh, MeshBasicMaterial, CatmullRomCurve3, Plane, Raycaster, Scene, TorusGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
+import { cinemaOn, Director, Letterbox, type CineMove } from '../../../../../engine3d/cinema'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import type { Look } from '../../../../../engine3d/characters/look'
 import { Bag } from '../../../../../engine3d/dispose'
@@ -68,6 +75,32 @@ const CAM = knobs('sametBoatCam', 'The speedboat camera', FILE, {
   side: { value: 16, min: -60, max: 60, step: 1, label: 'From the side', unit: '°', note: 'how far round from behind the boat (her side of it)' },
   far: { value: 110, min: 60, max: 400, step: 10, label: 'Draws plants out to', unit: 'm', note: 'further trees are left to the haze (fewer draw calls on the iPad)' },
 })
+
+const CINE = knobs('sametBoatCine', 'The speedboat cinema camera (?cine=1)', FILE, {
+  pace: { value: 1, min: 0.4, max: 2.5, step: 0.05, label: 'Shot length ×', note: 'how long each shot runs before the next cut' },
+})
+
+/** The cinema camera's shots (?cine=1), in the boat's frame: x to its right, y up from the water, z toward the bow
+ *  (the boat is 7.2 m, stern at -3.3; Kaylee sits on the side bench at about x 0.8, z -0.4). In the rotation in this
+ *  order; `event` ones are cut to when something happens. */
+const MOVES: CineMove[] = [
+  // Leaving Ban Phe: a crane up and round, the sea opening out ahead.
+  { id: 'open', event: true, dur: 6, from: { eye: [10, 2.2, 14], look: [0, 1.2, 0], fov: 36 }, to: { eye: [18, 9, 2], look: [0, 1.2, 3], fov: 42 } },
+  // A chase from behind and above: both sides of the boat, the island ahead.
+  { id: 'chase', playable: true, dur: 7, from: { eye: [-2, 2.6, -11], look: [0, 1.4, 3], fov: 50 }, to: { eye: [1.5, 3.2, -10], look: [0, 1.2, 4], fov: 48 } },
+  // The hero shot: low over the water ahead of the bow, the boat bearing down on the lens.
+  { id: 'skim', dur: 5, from: { eye: [4, 1, 16], look: [0, 1.3, 0], fov: 34 }, to: { eye: [2.6, 0.9, 11], look: [0, 1.4, 0], fov: 36 }, sway: 0.08 },
+  // Over her shoulder at the rail: her hoof, the spray, the sea going by.
+  { id: 'rail', playable: true, mirror: true, dur: 6, from: { eye: [3.6, 2.4, -4.5], look: [1, 0.8, 1.8], fov: 52 }, to: { eye: [3.2, 2.1, -3.2], look: [1, 0.7, 2.2], fov: 50 } },
+  // A camera set down on the water ahead: the boat roars past it and away.
+  { id: 'flyby', anchor: 'fixed', mirror: true, dur: 5.5, from: { eye: [6, 1.4, 34], look: [0, 1.3, 0], fov: 40 }, sway: 0.03 },
+  // High and wide, drifting across: the whole crossing, the island growing ahead.
+  { id: 'aerial', dur: 7, from: { eye: [-14, 18, -10], look: [0, 0.5, 6], fov: 42 }, to: { eye: [12, 15, -4], look: [0, 0.5, 8], fov: 40 }, sway: 0.1 },
+  // A boat coming the other way: from the far side of hers, looking past the family at it.
+  { id: 'pass', event: true, mirror: true, twoShot: 0.5, dur: 5.5, from: { eye: [-2.5, 2.2, -9], look: [0, 1.4, 4], fov: 48 }, to: { eye: [-2, 2.5, -7], look: [0, 1.4, 4], fov: 46 } },
+  // Slowing in to Na Dan: a crane up from the front quarter, the pier and the beach behind.
+  { id: 'arrive', event: true, dur: 9, from: { eye: [8, 1.8, 10], look: [0, 1, 0], fov: 40 }, to: { eye: [12, 7, 3], look: [0, 1, -1], fov: 42 } },
+]
 
 /** The captain: a placeholder animal on the shared chibi rig, in a white shirt and cap (Dad hasn't picked who yet). */
 const CAPTAIN_LOOK: Look = { species: 'puppy', height: 1.25, chub: 1.1, fur: '#D9B48A', light: '#FFF1DE', dark: '#8E6A4C', ear: '#B98E62', outfit: { kind: 'shirt', color: '#FFFFFF', shorts: '#3F6FB8' }, extras: ['cap'], open: true }
@@ -138,6 +171,7 @@ const DEG = 180 / Math.PI
 const HINT_S = 8
 const tmp = new Vector3()
 const tmp2 = new Vector3()
+const tmp3 = new Vector3()
 const ease = (dt: number, k: number) => 1 - Math.exp(-dt * k)
 
 /** The family's speedboat: white with a pink stripe, a blue sun canopy over the back, a console up front. */
@@ -339,6 +373,12 @@ export class SametSpeedboat implements World3D {
   private rainbow: ReturnType<typeof buildRainbow>
   private fish: FlyFish[] = []
   private passers: Passer[] = []
+  // ---- The cinema camera (?cine=1).
+  private dir = new Director(MOVES, 'open')
+  private bars = new Letterbox()
+  private filmed = new Set<PassId>()
+  private filming: PassId | null = null
+  private arrived = false
   private counts = { sprays: 0, splashes: 0, fish: 0, fishTaps: 0, waves: 0, bumps: 0, soaks: 0, pokes: 0, skips: 0 }
   private skipped = false
 
@@ -477,6 +517,7 @@ export class SametSpeedboat implements World3D {
     }
     this.placeBoat(0)
     this.rig.setShot(this.shot(), true)
+    this.dir.cut('skim')
   }
 
   update(dt: number) {
@@ -498,7 +539,9 @@ export class SametSpeedboat implements World3D {
     }
     this.isl.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.rig.setShot(this.shot())
+    this.film(dt)
     this.rig.update(dt)
+    this.bars.update(dt, this.rig.cinema)
     this.drawHint(t)
   }
 
@@ -965,6 +1008,35 @@ export class SametSpeedboat implements World3D {
 
   // ---------------------------------------------------------------- the camera
 
+  /** The cinema camera (?cine=1): cut on what happens, hold a shot that shows her hoof while she plays. Off the boat
+   *  (Kaylee hops onto the pier) the game's camera takes over again. */
+  private film(dt: number) {
+    const on = cinemaOn() && (this.phase === 'pier' || this.phase === 'ride' || (this.phase === 'dock' && this.kaylee.root.parent === this.boat.body))
+    if (!on) {
+      this.rig.setCine(null)
+      return
+    }
+    const d = this.dir
+    d.side = this.side
+    d.play(!!this.finger)
+    if (!this.finger) {
+      // A boat coming the other way: the two-shot (once each).
+      const p = this.passers.find((q) => q.root.visible && !this.filmed.has(q.id) && q.root.position.distanceTo(this.pos) < 55)
+      if (p) {
+        this.filmed.add(p.id)
+        this.filming = p.id
+        d.cut('pass', p.side)
+      }
+      if (!this.arrived && this.phase === 'ride' && this.len - this.s < 45) {
+        this.arrived = true
+        d.cut('arrive')
+      }
+    }
+    d.aspect = this.w / Math.max(1, this.h)
+    const near = d.move.id === 'pass' ? this.passers.find((q) => q.id === this.filming && q.root.visible) : undefined
+    this.rig.setCine(d.update(dt / CINE.pace, { pos: this.pos, fwd: this.fwd }, near ? tmp3.copy(near.root.position).setY(near.h + 1) : null))
+  }
+
   private shot(): Shot {
     const center = new Vector3(this.pos.x + this.fwd.x * CAM.ahead, this.pos.y + 1.2, this.pos.z + this.fwd.z * CAM.ahead)
     const b = CAM.box
@@ -981,7 +1053,7 @@ export class SametSpeedboat implements World3D {
   }
 
   render() {
-    this.renderer.render(this.scene, this.rig.camera)
+    this.bars.render(this.renderer, this.scene, this.rig.camera, this.w, this.h)
     this.stats.calls = this.renderer.info.render.calls
     this.stats.tris = this.renderer.info.render.triangles
   }
@@ -1044,6 +1116,8 @@ export class SametSpeedboat implements World3D {
     return {
       section: 'speedboat',
       phase: this.phase,
+      cine: this.rig.cinema ? this.dir.move.id : null,
+      cuts: this.dir.cuts,
       along: +(this.s / this.len).toFixed(3),
       routeM: Math.round(this.len),
       speed: +this.v.toFixed(1),

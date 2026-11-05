@@ -11,7 +11,12 @@
 // Kaylee can turn it herself, the way Roblox does on the iPad (`turn`, `pinch`, from View3D and roam.ts): a shot that
 // says how far (`roam`) lets a one-finger drag swing the camera around and a pinch move it in and out. Her turn stays
 // put between shots (like Roblox's), only clamped to whatever the new shot allows.
+//
+// A cutscene can take the camera outright (`setCine`, from cinema.ts's Director): an eye, a look-at point and a lens
+// every frame, no box to fit. Given null again, the rig picks up from wherever the cinema camera was and glides back to
+// the game's shot.
 import { PerspectiveCamera, Vector3 } from 'three'
+import type { CineFrame } from './cinema'
 import { TUNE } from './tune'
 
 export interface Shot {
@@ -71,6 +76,8 @@ export interface Framed {
 }
 
 const deg = Math.PI / 180
+/** Seconds the glide back from the cinema camera takes to settle in. */
+const HAND_BACK = 1.2
 
 export class CameraRig {
   readonly camera = new PerspectiveCamera(TUNE.fov, 1, 0.3, 300)
@@ -92,6 +99,40 @@ export class CameraRig {
   private quick = 0
   /** Her own turn (drag and pinch), clamped to each shot's `roam`. */
   readonly user: UserTurn = { yaw: 0, pitch: 0, zoom: 1 }
+  /** The cinema camera's pose this frame (null: the game's shots). */
+  private cine: CineFrame | null = null
+  /** Seconds left of the slow glide from the cinema camera back to the game's shot. */
+  private handBack = 0
+
+  /** A cutscene takes the camera: this eye, look-at point and lens (null: back to the game's shots, gliding there from
+   *  where the cinema camera was). Call it every frame the cinema camera is on. */
+  setCine(f: CineFrame | null) {
+    if (!f) {
+      if (!this.cine) return
+      // Pick up from the cinema camera's pose, so the glide back starts where it was.
+      const c = this.cine
+      const d = c.eye.clone().sub(c.look)
+      const dist = Math.max(0.5, d.length())
+      let yaw = Math.atan2(d.x, d.z) / deg
+      const goal = this.goal ? this.aim(this.goal).yaw : yaw
+      yaw += Math.round((goal - yaw) / 360) * 360
+      this.cur.center.copy(c.look)
+      this.cur.yaw = yaw
+      this.cur.pitch = Math.asin(Math.max(-1, Math.min(1, d.y / dist))) / deg
+      this.cur.dist = dist
+      this.cine = null
+      // (The lens stays the cinema camera's for now and blends back in update(): no pop.)
+      this.handBack = HAND_BACK
+      this.place()
+      return
+    }
+    this.cine = f
+  }
+
+  /** The cinema camera has the shot. */
+  get cinema() {
+    return !!this.cine
+  }
 
   /** The lens in use: the lab's, the game's, or the house default. */
   get lens() {
@@ -140,6 +181,12 @@ export class CameraRig {
 
   /** Where the camera is aiming now, after the lab's change (null: no shot yet). */
   framed(): Framed | null {
+    if (this.cine) {
+      const c = this.cine
+      const d = c.eye.clone().sub(c.look)
+      const dist = d.length()
+      return { center: c.look.clone(), yaw: Math.atan2(d.x, d.z) / deg, pitch: Math.asin(d.y / Math.max(1e-6, dist)) / deg, dist, fov: c.fov }
+    }
     if (!this.goal) return null
     return { ...this.aim(this.goal), fov: this.lens }
   }
@@ -184,11 +231,21 @@ export class CameraRig {
 
   update(dt: number) {
     const g = this.goal
-    if (!g) return
+    if (!g) {
+      if (this.cine) this.place()
+      return
+    }
     // Right after a lab slider moved, the camera follows it at once (the game's own glides stay as they are).
-    const lag = this.quick > 0 ? Math.min(this.lag, 0.06) : this.lag
+    // Back from a cutscene: a slow, eased glide (as long as the letterbox takes to open), not a snap.
+    const lag = this.quick > 0 ? Math.min(this.lag, 0.06) : this.handBack > 0 ? Math.max(this.lag, 0.32 + 0.5 * (this.handBack / HAND_BACK)) : this.lag
     this.quick = Math.max(0, this.quick - dt)
+    this.handBack = Math.max(0, this.handBack - dt)
     const k = 1 - Math.exp(-dt / Math.max(0.01, lag))
+    // The lens blends back to the game's after a cutscene (and snaps once the glide is over).
+    if (!this.cine && Math.abs(this.camera.fov - this.lens) > 1e-3) {
+      this.camera.fov = this.handBack > 0 ? this.camera.fov + (this.lens - this.camera.fov) * k : this.lens
+      this.camera.updateProjectionMatrix()
+    }
     const a = this.aim(g)
     this.cur.center.lerp(a.center, k)
     this.cur.yaw += (a.yaw - this.cur.yaw) * k
@@ -204,6 +261,7 @@ export class CameraRig {
 
   /** True while the camera is still noticeably moving toward its shot. */
   get moving() {
+    if (this.cine) return true
     const g = this.goal
     if (!g) return false
     const a = this.aim(g)
@@ -241,6 +299,19 @@ export class CameraRig {
   }
 
   private place() {
+    const c = this.cine
+    if (c) {
+      // The lab's lens still wins (so a lens can be tried on a cutscene too).
+      const fov = this.over?.fov ?? c.fov
+      if (Math.abs(this.camera.fov - fov) > 1e-3) {
+        this.camera.fov = fov
+        this.camera.updateProjectionMatrix()
+      }
+      this.camera.position.copy(c.eye)
+      this.camera.lookAt(c.look)
+      if (c.roll) this.camera.rotateZ(c.roll)
+      return
+    }
     const { center, yaw, pitch, dist } = this.cur
     this.camera.position.copy(center).add(offset(yaw, pitch, dist))
     this.camera.lookAt(center)
@@ -253,7 +324,7 @@ export class CameraRig {
     const cached = this.fits.get(key)
     if (cached !== undefined) return cached
     const p = this.probe
-    p.fov = this.camera.fov
+    p.fov = this.lens
     p.aspect = this.camera.aspect
     p.updateProjectionMatrix()
     // The part of the (extended) view below the top bar, in normalized device coordinates.

@@ -267,7 +267,7 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 
 - **Getting there (greybox)**
   - [Pack for the island (greybox): the swimsuit, the sun hat, the floaties, the bucket](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/pack)
-  - [The speedboat from Ban Phe: her hoof in the spray, the flying fish, the boats coming the other way, then Na Dan pier](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/speedboat) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/speedboat?feel=1))
+  - [The speedboat from Ban Phe: her hoof in the spray, the flying fish, the boats coming the other way, then Na Dan pier](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/speedboat) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/speedboat?feel=1), [the cinema camera: cutscene shots, letterbox](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/speedboat?cine=1))
 - **The island (greybox)**
   - [Land at Na Dan pier in the morning: walk, swim, the green taxi](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan&feel=1))
   - [Sai Kaew at noon, the jet ski done: a jet ski on every beach](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=saikaew&flags=jetski)

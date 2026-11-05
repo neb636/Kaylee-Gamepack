@@ -5,6 +5,7 @@
 //           from the Thailand map's 🏝️ pin packs; later ones go straight to the island, or the speedboat for a new trip).
 //   speedboat  greybox 7, the speedboat from Ban Phe pier to Na Dan pier (about a minute across the real sea): her hoof
 //           in the spray beside the boat, the flying fish, the boats coming the other way; it ties up where she lands.
+//           ?cine=1 films it like a cutscene (engine3d/cinema.ts).
 //   island  greybox 2, the island to roam (island?at=nadan|saikaew|hinkhok|phai|wongduan|prao|deck|aonoina): lead
 //           Kaylee with a finger round the north half of Koh Samet, swim in the floatie, ride the green taxi round the
 //           road, poke everything; `flags` puts up the pink flags (and moves the day on), `time` sets the light.
@@ -60,7 +61,7 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
       name: 'The speedboat from Ban Phe to Na Dan pier (greybox): her hoof in the spray',
       params: ['packed', 'time'],
       group: 'Getting there (greybox)',
-      links: [{ label: 'The speedboat from Ban Phe: her hoof in the spray, the flying fish, the boats coming the other way, then Na Dan pier', also: [{ label: 'tune the feel', flags: { feel: '1' } }] }],
+      links: [{ label: 'The speedboat from Ban Phe: her hoof in the spray, the flying fish, the boats coming the other way, then Na Dan pier', also: [{ label: 'tune the feel', flags: { feel: '1' } }, { label: 'the cinema camera: cutscene shots, letterbox', flags: { cine: '1' } }] }],
     },
     {
       id: 'island',
