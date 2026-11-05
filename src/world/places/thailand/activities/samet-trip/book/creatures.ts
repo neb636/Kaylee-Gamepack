@@ -209,7 +209,9 @@ abstract class Walker extends Creature {
         const step = Math.min(l, this.speed * dt)
         const nx = this.x + Math.sin(this.yaw) * step
         const nz = this.z + Math.cos(this.yaw) * step
-        if (this.stand(c, nx, nz, this.state !== 'roam')) {
+        // (Still in the trees on its way back out: the forest is fine until it's out of it.)
+        const out = this.state !== 'roam' || !!this.o.hideIn?.includes(c.ground.surfaceAt(this.x, this.z))
+        if (this.stand(c, nx, nz, out)) {
           this.x = nx
           this.z = nz
         } else if (Math.abs(wrap(ty - this.yaw)) < 0.3) this.goal = null

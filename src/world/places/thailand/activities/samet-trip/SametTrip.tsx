@@ -9,6 +9,7 @@ import { IslandScreen } from './island/IslandScreen'
 import type { RoundId, SpotId, StopId } from './island/layout'
 import type { TimeOfDay } from './island/scenery'
 import { bookParam, readBook, type AnimalId } from './book/animals'
+import type { BookPhoto } from './book/Book'
 import { JetSkiScreen } from './jetski/JetSkiScreen'
 import SAMET_SECTIONS, { FLAGS } from './sections'
 
@@ -20,12 +21,11 @@ export function SametTrip() {
   const time = (param('time') || null) as TimeOfDay | null
   const flagParam = (f: StopId[]) => (f.length === FLAGS.length ? 'all' : f.join(',') || undefined)
   // Where she is and what's in her book (the address bar follows both).
-  const here = useRef({ at: sec.at, book: readBook(param('book')) })
-  const phone = param('phone') === '1'
+  const here = useRef({ at: sec.at, book: readBook(param('book')), phone: param('phone') === '1', photos: {} as Partial<Record<AnimalId, BookPhoto>> })
   const island = (open: boolean, at = here.current.at, book: AnimalId[] = here.current.book) => {
-    here.current = { at, book }
+    here.current = { ...here.current, at, book }
     if (open) enter('book', { at, flags: flagParam(sec.flags), book: bookParam(book) })
-    else enter('island', { at, flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(book), phone: phone ? '1' : undefined })
+    else enter('island', { at, flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(book), phone: here.current.phone ? '1' : undefined })
   }
   // The island (or the book) says where it is when it opens (the jet ski says its round itself).
   useEffect(() => {
@@ -48,7 +48,13 @@ export function SametTrip() {
   return (
     <IslandScreen
       key={sec.n}
-      start={{ at: sec.at, flags: sec.flags, time, book: here.current.book, phone }}
+      start={{ at: here.current.at, flags: sec.flags, time, book: here.current.book, phone: here.current.phone }}
+      photos={here.current.photos}
+      onPhotos={(p) => (here.current.photos = p)}
+      onPhone={(on) => {
+        here.current.phone = on
+        island(false)
+      }}
       bookOpen={sec.id === 'book'}
       onAt={(at) => island(false, at)}
       onBook={(book, open) => island(open, here.current.at, book)}

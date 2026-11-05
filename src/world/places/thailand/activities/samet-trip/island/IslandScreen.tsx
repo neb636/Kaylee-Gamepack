@@ -22,9 +22,14 @@ interface Props {
   onOpen(stop: StopId): void
   /** The animals in her book changed (the address bar follows), or the book opened or closed. */
   onBook?(found: AnimalId[], open: boolean): void
+  /** Her photos so far this visit (kept by the trip, so a trip to the jet ski doesn't lose them). */
+  photos?: Partial<Record<AnimalId, BookPhoto>>
+  onPhotos?(p: Partial<Record<AnimalId, BookPhoto>>): void
+  /** Mommy's phone out or away (the address bar follows). */
+  onPhone?(on: boolean): void
 }
 
-export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook }: Props) {
+export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, photos: kept, onPhotos, onPhone }: Props) {
   const [n, setN] = useState(0)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const worldRef = useRef<World | null>(null)
@@ -32,7 +37,7 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook }: 
   const [phone, setPhone] = useState(!!start.phone)
   const [open, setOpen] = useState(bookOpen)
   const [found, setFound] = useState<AnimalId[]>(start.book ?? [])
-  const [photos, setPhotos] = useState<Partial<Record<AnimalId, BookPhoto>>>({})
+  const [photos, setPhotos] = useState<Partial<Record<AnimalId, BookPhoto>>>(kept ?? {})
   const [portraits, setPortraits] = useState<Partial<Record<AnimalId, string>> | null>(null)
   const [flash, setFlash] = useState(0)
   const [flyer, setFlyer] = useState<Flyer | null>(null)
@@ -42,8 +47,8 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook }: 
   foundRef.current = found
   const openRef = useRef(open)
   openRef.current = open
-  const cb = useRef({ onAt, onOpen, onBook })
-  cb.current = { onAt, onOpen, onBook }
+  const cb = useRef({ onAt, onOpen, onBook, onPhotos })
+  cb.current = { onAt, onOpen, onBook, onPhotos }
   const make = (renderer: WebGLRenderer) => {
     const w = new World(renderer, start, {
       at: (a) => cb.current.onAt(a),
@@ -58,7 +63,11 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook }: 
         if (s.animal) {
           const a = s.animal
           // A gold photo always stays; otherwise the newest one.
-          setPhotos((ph) => (ph[a]?.gold && !s.gold ? ph : { ...ph, [a]: { src: s.src, gold: s.gold } }))
+          setPhotos((ph) => {
+            const next = ph[a]?.gold && !s.gold ? ph : { ...ph, [a]: { src: s.src, gold: s.gold } }
+            cb.current.onPhotos?.(next)
+            return next
+          })
           if (isNew) {
             const next = [...foundRef.current, a]
             setFound(next)
@@ -98,6 +107,7 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook }: 
         onPhone={(on) => {
           setPhone(on)
           worldRef.current?.setPhone(on)
+          onPhone?.(on)
         }}
         glow={glow}
         open={open}
