@@ -1954,23 +1954,9 @@ export class SametIsland implements World3D {
   private useStop(id: StopId) {
     const g = this.props.stops[id]
     if (id === 'jetski') return this.events.open('jetski')
-    // The other stops' greyboxes come next: for now a little show, then (Dad) the section link.
-    if (id === 'sandcastle') {
-      // Each tap: the bucket flips and leaves a little tower round the mound.
-      const n = (this.towers = (this.towers ?? 0) + 1)
-      const a = n * 1.1
-      const tw = solid(merge([P.cyl(0.24, 0.3, 0.42, '#E2C996', { at: [0, 0.21, 0] }, 10), P.cone(0.27, 0.3, '#E2C996', { at: [0, 0.57, 0] }, 10), P.box(0.1, 0.14, 0.02, '#BFA678', { at: [0, 0.16, 0.27] })]), this.bag, 2)
-      tw.position.set(g.position.x + Math.sin(a) * 1.9, g.position.y, g.position.z + Math.cos(a) * 1.9)
-      tw.scale.setScalar(0.01)
-      this.scene.add(tw)
-      this.grow.push({ g: tw, t: 0 })
-      if (this.grow.length > 7) {
-        const old = this.grow.shift()!
-        this.scene.remove(old.g)
-      }
-      sfx.thump()
-      this.puffs.burst(tw.position.x, tw.position.y + 0.2, tw.position.z, 10, 1.2, 1.5, 0.1)
-    } else if (id === 'snorkel') {
+    // The other stops' greyboxes come next: for now a little show, then (Dad) the section link. The sandcastle has its own.
+    if (id === 'sandcastle') return this.events.open('sandcastle')
+    if (id === 'snorkel') {
       toot()
       this.spray.burst(g.position.x, 0.3, g.position.z, 20, 2, 2.4, 0.16)
     } else if (id === 'hideseek') {
@@ -1984,7 +1970,6 @@ export class SametIsland implements World3D {
     }
     this.events.open(id)
   }
-  private towers = 0
   private grow: { g: Group; t: number }[] = []
 
   private pokeThing(p: PokeThing) {

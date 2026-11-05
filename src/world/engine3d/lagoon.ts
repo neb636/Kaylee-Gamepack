@@ -12,6 +12,10 @@
 // Two meshes share one material: a fine grid around the action (it follows `center`, snapped to its own cells so the
 // water never swims) and a flat sheet with a matching square hole out to the horizon. The waves fade out before the
 // grid's edge, so the two always meet. One draw call each.
+//
+// Opt-in, for a scene that needs them (Koh Samet's sandcastle): `tide` lifts the whole sea (the shallows and the swash
+// creep up the beach with it), and `setCut()` leaves a box out (a finer water of the scene's own fills it in, so dug
+// sand above the sea's level stays dry until a channel lets the water through).
 import { Color, Mesh, PlaneGeometry, Shape, ShapeGeometry, Path, ShaderMaterial, Vector2, Vector4, type ColorRepresentation, type Texture } from 'three'
 import type { Bag } from './dispose'
 
@@ -54,6 +58,7 @@ const vertexShader = /* glsl */ `
   uniform vec2 uFade;
   uniform vec4 uWave;   // height, length, speed, chop
   uniform vec2 uDir;
+  uniform vec2 uTide;   // how high the sea is lifted (m), meters of beach it creeps up per meter
   varying vec3 vWorld;
   varying float vCrest;
   varying float vFace;
@@ -83,9 +88,10 @@ const vertexShader = /* glsl */ `
     vec4 w = modelMatrix * vec4(position, 1.0);
     vec2 p = w.xz;
     vec2 sea = seaAt(p);
+    sea += vec2(uTide.x, uTide.x * uTide.y);
     float h = heightAt(p, uTime, sea.y);
     float h2 = heightAt(p + uDir * 0.8, uTime, sea.y);
-    w.y += h;
+    w.y += h + uTide.x;
     vWorld = w.xyz;
     vSea = sea;
     vCrest = uWave.x > 0.01 ? crestAt(p, uTime) * smoothstep(1.0, 16.0, sea.y) * fadeAt(p) : 0.0;
@@ -108,6 +114,8 @@ const fragmentShader = /* glsl */ `
   uniform float uHazeFar;
   uniform vec4 uWave;
   uniform float uCaustics;
+  uniform vec4 uCut;    // a box left out: its center (x, z) and its along-axis (unit x, z)
+  uniform vec2 uCutHalf; // half its size along and across (0: no box)
   varying vec3 vWorld;
   varying float vCrest;
   varying float vFace;
@@ -116,6 +124,10 @@ const fragmentShader = /* glsl */ `
   float band(float d, float at) { return smoothstep(at - 0.25, at + 0.25, d); }
   void main() {
     vec2 p = vWorld.xz;
+    if (uCutHalf.x > 0.0) {
+      vec2 dc = p - uCut.xy;
+      if (abs(dot(dc, uCut.zw)) < uCutHalf.x && abs(dot(dc, vec2(-uCut.w, uCut.z))) < uCutHalf.y) discard;
+    }
     float depth = vSea.x;
     float shore = vSea.y;
     // A little wobble in the band edges, so they read as water and not as contour lines.
@@ -171,6 +183,8 @@ export class Lagoon {
   readonly near: Mesh
   readonly far: Mesh
   readonly waves: Waves = { height: 0, length: 14, speed: 4, dir: { x: -1, z: 0 }, chop: 1 }
+  /** The tide (opt-in): the sea lifted `level` meters, creeping `reach` meters up the beach per meter. */
+  readonly tide = { level: 0, reach: 10 }
   private mat: ShaderMaterial
   private grid: number
   private cell: number
@@ -202,6 +216,9 @@ export class Lagoon {
           uHazeNear: { value: o.hazeNear },
           uHazeFar: { value: o.hazeFar },
           uCaustics: { value: o.caustics ?? 0 },
+          uTide: { value: new Vector2() },
+          uCut: { value: new Vector4(0, 0, 1, 0) },
+          uCutHalf: { value: new Vector2() },
         },
         vertexShader,
         fragmentShader,
@@ -234,6 +251,16 @@ export class Lagoon {
     ;(u.uWave.value as Vector4).set(w.height, w.length, w.speed, w.chop)
     const l = Math.hypot(w.dir.x, w.dir.z) || 1
     ;(u.uDir.value as Vector2).set(w.dir.x / l, w.dir.z / l)
+    ;(u.uTide.value as Vector2).set(this.tide.level, this.tide.reach)
+  }
+
+  /** Leaves a box out of the water (a scene's own finer water fills it): its center, the unit direction of its `along`
+   *  side, and half its size along and across. `null` puts the water back. */
+  setCut(cut: { x: number; z: number; ax: number; az: number; along: number; across: number } | null) {
+    const u = this.mat.uniforms
+    if (!cut) return void (u.uCutHalf.value as Vector2).set(0, 0)
+    ;(u.uCut.value as Vector4).set(cut.x, cut.z, cut.ax, cut.az)
+    ;(u.uCutHalf.value as Vector2).set(cut.along, cut.across)
   }
 
   /** How high the rolling waves' crest is here (0..1 of their height), for white water and jumps. */
@@ -256,7 +283,7 @@ export class Lagoon {
     const w = this.waves
     const chop = 0.05 * Math.sin(x * 0.21 + t * 1.3) + 0.04 * Math.sin(z * 0.17 - t * 1.1) + 0.02 * Math.sin((x - z) * 0.5 + t * 2.1)
     const fade = this.fade(x, z)
-    return fade * w.chop * chop * (0.35 + 0.65 * smooth(0, 6, shore)) + w.height * this.crestAt(x, z, t, shore)
+    return fade * w.chop * chop * (0.35 + 0.65 * smooth(0, 6, shore)) + w.height * this.crestAt(x, z, t, shore) + this.tide.level
   }
 
   /** New colors (a golden afternoon, the night). */

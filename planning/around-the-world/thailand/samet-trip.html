@@ -17,9 +17,9 @@
   "icon": "🏝️",
   "kind": "Family trip: an open island",
   "updated": "2026-11-04",
-  "status": { "label": "Greyboxes 1-3 built: the jet ski, the island, Mommy’s phone and the animal book", "tone": "pink" },
+  "status": { "label": "Greyboxes 1-4 built: the jet ski, the island, Mommy’s phone and the animal book, the sandcastle", "tone": "pink" },
   "pitch": "Mommy, Daddy and Kaylee take the speedboat to **Koh Samet**, a little island of white sand off Rayong. The whole island is **one world she roams by herself** (in the spirit of cozy island games like Alba): sandy paths, five real beaches, the green taxi, the sea all round, and real island animals to snap with Mommy's phone for her animal book. On the beaches she **rides the jet ski** with Daddy, builds a sandcastle the waves fill, snorkels with the fish at Ko Kudi and plays hide and seek by the big driftwood tree. At night the fire dancers light up the beach for her. Every word is spoken.",
-  "next": "Dad plays **[Mommy’s phone at Ao Prao](#/world/thailand/samet-trip/island?at=prao&phone=1)** on the iPad: tap the pink phone, tap the monitor lizard, the squirrel on the palm, the flying fox asleep in the samet tree; walk up close for a gold photo. Then **[Ao Wong Duan](#/world/thailand/samet-trip/island?at=wongduan&phone=1)** (the hornbill in the tamarind; swim out for the parrotfish, the damselfish and the cuttlefish), the **[book](#/world/thailand/samet-trip/book?at=saikaew)**, and the beach clean (tap the bottle on the wet sand, carry it to the green bin). Tune the phone with **[?feel=1](#/world/thailand/samet-trip/island?at=prao&phone=1&feel=1)**. Then **greybox 4: the sandcastle**.",
+  "next": "Dad plays **[the sandcastle](#/world/thailand/samet-trip/sandcastle?round=dig)** on the iPad: drag through the sand to dig a moat (the walls pile up beside it), start on a pile to pat it taller, dig deep for the ghost crab, and rub sand over Daddy until only his head and toes stick out (tap his head: he sneezes). Then **[the towers](#/world/thailand/samet-trip/sandcastle?round=towers)** (tap a mould: it hops onto the castle and flips; drag one anywhere first; drag shells into a tower) and **[the tide](#/world/thailand/samet-trip/sandcastle?round=tide)** (dig a channel from the moat to the sea and the water rushes in). Tune how the sand digs and the water runs with **[?feel=1](#/world/thailand/samet-trip/sandcastle?round=dig&feel=1)**. Then **greybox 5: the snorkel**.",
   "facts": [
     { "icon": "⏱️", "value": "15-25 min", "label": "a whole day on the island, all four stops and the fire show" },
     { "icon": "👆", "value": "230-350", "label": "touches" },
@@ -418,7 +418,7 @@
       "id": "sections",
       "title": "Sections: tap to play",
       "icon": "🔗",
-      "lede": "None built yet. Each greybox adds its own.",
+      "lede": "Built so far: the island, the book, the jet ski and the sandcastle. Each greybox adds its own.",
       "blocks": [
         { "type": "sections", "base": "#/world/thailand/samet-trip/", "items": [
           { "n": 1, "id": "pack", "name": "Pack for the island (sunny: swimsuit, sun hat, floaties, bucket)", "status": "todo" },
@@ -426,7 +426,7 @@
           { "n": 3, "id": "island", "name": "The island (land at Na Dan)", "query": "at=nadan" },
           { "n": 4, "id": "book", "name": "The animal book" },
           { "n": 5, "id": "jetski", "name": "Jet ski: ride", "query": "round=ride" },
-          { "n": 6, "id": "sandcastle", "name": "Sandcastle: dig", "query": "round=dig", "status": "todo" },
+          { "n": 6, "id": "sandcastle", "name": "Sandcastle: dig", "query": "round=dig" },
           { "n": 7, "id": "snorkel", "name": "Snorkel: float and look", "query": "round=float", "status": "todo" },
           { "n": 8, "id": "deck", "name": "Lunch on the deck at Ao Prao", "status": "todo" },
           { "n": 9, "id": "hideseek", "name": "Hide and seek: easy hides", "query": "round=1", "status": "todo" },
@@ -443,7 +443,9 @@
           { "id": "jetski", "name": "Jet ski: waves", "query": "round=waves" },
           { "id": "jetski", "name": "Jet ski: race the jet ski man", "query": "round=race" },
           { "id": "jetski", "name": "Jet ski: tune the feel", "query": "round=ride&feel=1" },
-          { "id": "sandcastle", "name": "Sandcastle: the tide comes in", "query": "round=tide", "status": "todo" },
+          { "id": "sandcastle", "name": "Sandcastle: bucket towers and shells (a moat already dug)", "query": "round=towers" },
+          { "id": "sandcastle", "name": "Sandcastle: the tide comes in (dig a channel, the moat fills)", "query": "round=tide" },
+          { "id": "sandcastle", "name": "Sandcastle: tune the sand, the water and the tide", "query": "round=dig&feel=1" },
           { "id": "snorkel", "name": "Snorkel: the cuttlefish", "query": "round=cuttle", "status": "todo" },
           { "id": "hideseek", "name": "Hide and seek: her turn to hide", "query": "round=hide", "status": "todo" },
           { "id": "book", "name": "The animal book, nearly full", "query": "book=monitor,squirrel,macaque,hornbill,heron,tern,crab,parrotfish,damselfish,cuttlefish,urchin,coral" },
@@ -482,8 +484,8 @@
           { "n": 1, "title": "Greybox 1: the jet ski", "status": "done", "date": "2026-11-04", "pr": 322, "md": "Sai Kaew bay in the toon look with placeholder shapes: the beach strip, the hut, the buoy rope, the box jet ski with Kaylee and Daddy on it. The three rounds (`ride`, `waves`, `race`), the wake loop, silly beaching. **Feel on knobs** (`?feel=1`). Built in the island's real coordinates from day one (`island/layout.ts`) so it drops straight into step 2. The riskiest-for-fun piece, and Dad's must-have, so it goes first." },
           { "n": 2, "title": "Greybox 2: the island to roam", "status": "done", "date": "2026-11-04", "pr": 326, "md": "The open world itself, in blocks: the coastline and hills at 1:10, the five beaches, the paths over the rocks, the green taxi, Na Dan pier. Lead-to-walk, gallop, the floatie swim, Mommy and Daddy following, the day's light moving with `flags`, 20+ pokes, the pink flags. **The riskiest tech:** a world ~10× the house's size at 60 fps on the iPad (see the tech plan)." },
           { "n": 3, "title": "Greybox 3: Mommy's phone and the animal book", "status": "done", "date": "2026-11-04", "md": "The camera mode, the 14 animals with simple behaviors (wander, flee, perch, swim), the book pages, the beach clean." },
-          { "n": 4, "title": "Greybox 4: the sandcastle", "status": "next", "md": "The diggable sand patch (a deforming height field), bucket towers, the tide and the channel, burying Daddy." },
-          { "n": 5, "title": "Greybox 5: the snorkel", "status": "todo", "md": "The snorkel boat ride, Ko Kudi's reef (its own scene), the half-underwater camera, the fish crowd, the parrotfish to follow, the cuttlefish." },
+          { "n": 4, "title": "Greybox 4: the sandcastle", "status": "done", "date": "2026-11-04", "md": "The diggable sand patch (a deforming height field), bucket towers, the tide and the channel, burying Daddy." },
+          { "n": 5, "title": "Greybox 5: the snorkel", "status": "next", "md": "The snorkel boat ride, Ko Kudi's reef (its own scene), the half-underwater camera, the fish crowd, the parrotfish to follow, the cuttlefish." },
           { "n": 6, "title": "Greybox 6: lunch and hide and seek", "status": "todo", "md": "The resort deck at Ao Prao, the driftwood tree, Daddy's hides and his silly search." },
           { "n": 7, "title": "Greybox 7: getting there and the trip frame", "status": "todo", "md": "The 🏝️ pin on the Thailand map, packing, the speedboat, saving and coming back, `home` and Agong's wall." },
           { "n": 8, "title": "The look", "status": "todo", "md": "The island made beautiful: the real sand and water colors, palms, samet trees, pandanus, boulders, the umbrellas, the deck, the sky through the day, the reef. The characters (the jet ski man, the boat captain, the fire dancers). See “The look”." },
@@ -559,7 +561,7 @@
             "title": "Greybox 3: Mommy’s phone and the animal book",
             "date": "2026-11-04",
             "status": "done",
-            "open": true,
+            "open": false,
             "summary": "Mommy’s phone turns the island into a camera: tap an animal and it does something cute for the photo, which flies into Kaylee’s animal book. Fourteen real Samet animals live on the island with their own ways (wander, flee, perch, swim), and the beach clean is the side verb.",
             "blocks": [
               {
@@ -594,6 +596,50 @@
                   "Photos stay only for the visit (saving the book is greybox 7’s trip frame); an animal found from a link shows its portrait instead of a photo.",
                   "The fish live out in the water: from the beach they’re behind the camera, so she swims out to see them.",
                   "Animals far from her are paused and hidden (knob “Animals live out to”, 70 m); measure the frame rate on the iPad with `?fps=1`."
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Greybox 4: the sandcastle at Ao Hin Khok",
+            "date": "2026-11-04",
+            "status": "done",
+            "open": true,
+            "summary": "Her finger moves the real sand on Ao Hin Khok’s beach: dig moats and holes (the sand piles up beside them), pat walls taller, flip three moulds into towers, push shells into them, dig a channel and watch the tide fill the moat, and bury Daddy. Opened from the sandcastle stop on the island; back to the island with its pink flag once the moat has filled.",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "**The sand** (`sandcastle/sand.ts`): a 12 × 13 m height field (12.5 cm cells) laid over the island’s real beach, matching its colors and heights exactly (the island’s ground under it is sunk out of sight). Dragging digs a trench under her finger (a quick swipe still digs a trench, not dots) and the dug sand lands beside it, wet and dark, so a moat dug round leaves a wall on each side; dug sand never lands back in a hole, so a channel across the moat doesn’t dam it. Starting on a pile pats it up into a wall. **Dry sand runs, wet sand sticks:** steep slopes slide down a little every frame, gently for dug (wet) sand, more for dry; the wet sand dries back slowly.",
+                  "**The water** (`sand.ts` `flow`): a little water simulation on the same grid. Every point the beach has under the tide is the open sea, held at the sea’s level (the tide plus a surge every few seconds); water flows downhill from there, up any channel she digs and into the moat in under a second, and a pool cut off from the sea slowly soaks away. The lagoon got two opt-in pieces (`engine3d/lagoon.ts`): `tide` lifts the whole sea (its shallows creep up the beach) and `setCut()` leaves the patch’s inland part to the patch’s own water.",
+                  "**Dig** (`?round=dig`): the bare beach. Kaylee walks over and sits on the sea side of her finger (facing the camera) and digs along, sand flying. A ghost crab pops up out of a deep hole and scuttles off sideways (tap it: it waves its claws). After 30 s of digging the moulds bounce in.",
+                  "**Towers** (`?round=towers`, starts with a moat dug): her pink bucket, a square lavender mould and a mint unicorn mould. Tap one and it hops onto the castle and flips (up, over, slam, pat pat, lift off) to leave a tower: round with battlements, square, or a unicorn head with a horn and ears. Drag one anywhere first and tap it there. Six shells and coral bits wash up by the water: drag one onto a tower and it sticks in its side, onto the sand and it lies there. Tap a tower: a little pink flag pops up on it. Dig under a tower and it slumps into a heap. After 4 towers (or 80 s) the tide comes in.",
+                  "**Tide** (`?round=tide`, starts with the moat and four towers): the sea rises 20 cm over 30 s, wave after wave up the beach. Dig a channel from the moat to the water and the sea rushes in and fills it: a rush of water, sparkles, a fanfare, Daddy wiggles, Mommy waves, Kaylee hops, and a hermit crab walks up out of the sea and moves into a tower’s door (its eyes peek out; tap the tower). One big wave washes the tower nearest the sea half away. When the tide is in and the moat still dry, the pressing finger traces the way a channel would go. The 🏰 badge and a 🏝️ button back to the island (with the sandcastle’s pink flag) appear once the moat has filled.",
+                  "**Bury Daddy** (any round): he lies beside the castle. Rub sand over him and it heaps up, one mound each for his shins, knees, tummy and chest, until only his head and toes stick out (a giggle and sparkles). Tap his toes: they wiggle. Tap his head: he sneezes and the sand flies off.",
+                  "**Pokes:** Kaylee (hop), Daddy, his toes, Mommy under her pink umbrella (she waves), the umbrella (it spins), the beach ball (it bounces), the ghost crab, the hermit crab, a longtail going by out on the bay (toot), every mould, shell and tower, the sea (a splash).",
+                  "**Feel on knobs** (`?feel=1`, “Digging the sand”, “The tide and the water”, “Rounds, towers and Daddy”): the finger’s width, how fast it digs, how deep, where the sand lands and how much, patting, the tallest wall, how steep dry and wet sand stand, where Kaylee sits; the high tide, how long it takes, each wave, the big wave, how fast water runs and soaks away, what counts as filled; how long each round lasts, how far under a tower makes it slump, how fast Daddy gets buried, how deep a hole for the crab, the camera’s angle. The lab graphs her finger’s speed against how deep it dug, the sea and the water in the moat. Round chips (🖐️ 🪣 🌊) at the top right with `?feel=1`."
+                ]
+              },
+              {
+                "type": "callout",
+                "tone": "note",
+                "title": "Changed from the plan",
+                "items": [
+                  "Kaylee sits on the sea side of her finger, facing the camera (behind it she showed only the back of her hair).",
+                  "A tapped mould flips by itself on the castle; dragging it first picks the spot. “Drag then tap” is still there, but one tap already makes a tower.",
+                  "The rounds move on by themselves (30 s of digging, then 4 towers), like the jet ski.",
+                  "Saving her castle on the beach (`castle` param) waits for greybox 7’s trip frame."
+                ]
+              },
+              {
+                "type": "callout",
+                "tone": "warn",
+                "title": "Known small things",
+                "items": [
+                  "No voices yet (greybox): Daddy’s “Let’s build a sandcastle!” and the crab fact come with the full loop.",
+                  "The walls are a little spiky where a ring of strokes piles up; the look gate smooths them.",
+                  "Daddy’s blanket is four soft mounds, not real sand on the height field.",
+                  "Automated browsers run at 30 fps: measure the water’s rush on the iPad with `?fps=1`."
                 ]
               }
             ]

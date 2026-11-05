@@ -4,6 +4,8 @@
 // afternoon, the night; filmed: leading Kaylee down the beach into the sea (the gallop, the floatie), and the umbrella
 // kite. Greybox 3, Mommy's phone and the animal book: the phone out at Ao Wong Duan and Ao Prao, the book nearly full;
 // filmed: snapping the animals at Ao Prao with the phone, and the beach clean (lift the bottle, the hermit crab, the bin).
+// Greybox 4, the sandcastle at Ao Hin Khok: the bare beach, the towers round with its moat, the tide with a channel dug
+// to the sea (the moat fills); filmed: digging a moat round and a channel to the sea, and burying Daddy.
 // Not part of the app: Node runs it, Vite never sees it.
 
 const ready = (page) => page.waitForFunction(() => window.__thaiSametQA?.().phase, null, { timeout: 20000 })
@@ -32,10 +34,98 @@ export const screens = [
     },
   },
   { name: 'thailand-samet-jetski-race', hash: '#/world/thailand/samet-trip/jetski?round=race', reset: true, wait: 2500 },
+  { name: 'thailand-samet-sand-dig', hash: '#/world/thailand/samet-trip/sandcastle?round=dig', reset: true, wait: 2500 },
+  {
+    name: 'thailand-samet-sand-towers',
+    hash: '#/world/thailand/samet-trip/sandcastle?round=towers',
+    reset: true,
+    wait: 2500,
+    act: async (page) => {
+      // Tap each mould where it waits: it hops onto the castle and flips to leave its tower.
+      for (const i of [0, 1, 2]) {
+        const m = (await page.evaluate(() => window.__thaiSametQA?.()))?.moulds?.[i]
+        if (m) await page.mouse.click(m.x, m.y)
+        await page.waitForTimeout(1800)
+      }
+    },
+  },
+  {
+    name: 'thailand-samet-sand-tide',
+    hash: '#/world/thailand/samet-trip/sandcastle?round=tide&feel.sandTide.time=4',
+    reset: true,
+    wait: 3000,
+    act: async (page) => {
+      await sandChannel(page)
+      await page.waitForTimeout(5000)
+    },
+  },
 ]
+
+/** Digs a channel from the moat's sea side down to the water (the castle and the sea's screen points from QA). */
+async function sandChannel(page) {
+  const q = await page.evaluate(() => window.__thaiSametQA?.())
+  if (!q?.castle) return
+  const c = q.castle
+  const s = q.sea0
+  const pm = Math.abs(s.y - c.y) / 5.3
+  const y0 = c.y - 0.85 * pm
+  for (let r = 0; r < 3; r++) {
+    await page.mouse.move(c.x + 0.7 * pm, y0)
+    await page.mouse.down()
+    for (let i = 1; i <= 17; i++) {
+      await page.mouse.move(c.x + 0.7 * pm, y0 + (i / 17) * (s.y - 25 - y0))
+      await page.waitForTimeout(45)
+    }
+    await page.mouse.up()
+  }
+}
 
 /** Filmed moments (scripts/qa-motion.mjs). */
 export const motion = [
+  {
+    name: 'thailand-samet-sand-dig',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sandcastle?round=dig`)
+      await ready(page)
+    },
+    act: async (page) => {
+      // A moat round the castle (the walls pile up on both sides, Kaylee digs along), twice round, then bury Daddy.
+      const q = await page.evaluate(() => window.__thaiSametQA?.())
+      const c = q.castle
+      const pm = Math.abs(q.sea0.y - c.y) / 5.3
+      await page.mouse.move(c.x + 1.25 * pm, c.y)
+      await page.mouse.down()
+      for (let i = 1; i <= 80; i++) {
+        const t = (i / 40) * Math.PI * 2
+        await page.mouse.move(c.x + Math.cos(t) * 1.25 * pm, c.y + Math.sin(t) * 0.8 * pm)
+        await page.waitForTimeout(45)
+      }
+      await page.mouse.up()
+      const d = q.dad
+      await page.mouse.move(d.x - 30, d.y - 40)
+      await page.mouse.down()
+      for (let i = 1; i <= 30; i++) {
+        await page.mouse.move(d.x + (i % 2 ? 30 : -30), d.y - 40 + (i % 10) * 10)
+        await page.waitForTimeout(50)
+      }
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'thailand-samet-sand-fill',
+    seconds: 8,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/sandcastle?round=tide&feel.sandTide.time=3`)
+      await ready(page)
+      await page.waitForTimeout(3000)
+    },
+    act: async (page) => {
+      // The channel to the sea: the water rushes in and fills the moat, the hermit crab walks up to a tower.
+      await sandChannel(page)
+      await page.waitForTimeout(4000)
+    },
+  },
   {
     name: 'thailand-samet-island-lead',
     seconds: 10,

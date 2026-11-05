@@ -262,7 +262,7 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
   - [Home: the flight, Agong's photo, the frame on his wall, the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/home)
 
-**Koh Samet Island** (in the works) (In the works (greyboxes 1 to 3 of the plan). Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi and the jet ski; ?fps=1 or ?debug=1 shows the frame rate.)
+**Koh Samet Island** (in the works) (In the works (greyboxes 1 to 4 of the plan). Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski and the sand; ?fps=1 or ?debug=1 shows the frame rate.)
 
 - **The island (greybox)**
   - [Land at Na Dan pier in the morning: walk, swim, the green taxi](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan&feel=1))
@@ -282,6 +282,10 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [Ride the calm bay: the life jacket, then carve, spray and close a loop of wake](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=ride) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=ride&feel=1))
   - [Big waves roll in: steer into them to jump](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=waves)
   - [Race the jet ski man round the big orange buoy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=race)
+- **The sandcastle at Ao Hin Khok (greybox)**
+  - [Dig: drag through the sand, pile walls, a crab in a deep hole; bury Daddy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/sandcastle?round=dig) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/sandcastle?round=dig&feel=1))
+  - [Bucket towers: drag a mould, tap it to flip; shells into the walls](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/sandcastle?round=towers)
+  - [The tide comes in: dig a channel to fill the moat](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/sandcastle?round=tide)
 
 **Finale**: [Family party (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/party/soon?stamps=all)
 
