@@ -8,7 +8,7 @@ import { StampEarned } from '../../kit/StampEarned'
 import { StoryBeat } from '../../kit/StoryBeat'
 import { VideoBreak } from '../../kit/Theater'
 import type { PlaceProps, PlaceVideo } from '../../types'
-import { Croc } from './activities/Croc'
+import { Croc, EGGS as CROC_BABIES } from './activities/Croc'
 import { Forest } from './activities/Forest'
 import { Outback } from './activities/Outback'
 import { Party } from './activities/Party'
@@ -49,7 +49,7 @@ export const GUESTS: Record<string, Guest> = {
   forest: { img: art.koalaAwake, line: L.party.koko, name: 'Koko', row: 'back', box: [1.02, 1], render: (ref, height) => createElement(Koko, { ref, height }) },
   reef: { img: art.turtle, line: L.party.shelly, name: 'Shelly', row: 'front', box: [1.38, 1], render: buddy(art.turtle, 'shelly') },
   stars: { img: art.kookaburra, line: L.party.kooky, name: 'Kooky', row: 'back', box: [0.96, 1], render: buddy(art.kookaburra, 'kooky') },
-  croc: { img: art.croc, line: L.party.chompy, name: 'Chompy', row: 'front', box: [1.44, 0.8], render: (ref, height) => createElement(Chompy, { ref, height: `calc(${height} * 0.8)`, babies: 2 }) },
+  croc: { img: art.croc, line: L.party.chompy, name: 'Chompy', row: 'front', box: [1.44, 0.8], render: (ref, height) => createElement(Chompy, { ref, height: `calc(${height} * 0.8)`, babies: CROC_BABIES }) },
   postcard: { img: art.platypus, line: L.party.pat, name: 'Pat', row: 'front', box: [1.15, 1], render: buddy(art.platypus, 'pat') },
 }
 
@@ -143,7 +143,8 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   left: `${a.pos.x}%`,
                   top: `${a.pos.y}%`,
                   translate: '-50% -50%',
-                  width: 'clamp(60px, 13cqw, 118px)',
+                  // At least 64 px on a phone, 88 px once the map is iPad-sized (13cqw takes over from there).
+                  width: 'clamp(64px, 13cqw, 118px)',
                   aspectRatio: '1',
                   borderRadius: '50%',
                   background: done ? 'var(--cream)' : '#fff',

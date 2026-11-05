@@ -150,7 +150,9 @@ function BuildFlag({ onDone }: { onDone: () => void }) {
       <DragArea style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 'min(24px, 3vh)', width: '100%', height: '100%' }}>
         <div style={{ position: 'relative', width: `min(${flagW}, 100%)`, aspectRatio: '2' }}>
           <Flag id="australia" width="100%" parts={{ crossStars: stars, bigStar: placed, bigStarSlot: ready }} />
-          <DropZone id="slot" style={{ position: 'absolute', left: `${((c.x - c.r * 1.4) / 10080) * 100}%`, top: `${((c.y - c.r * 1.4) / 5040) * 100}%`, width: `${((c.r * 2.8) / 10080) * 100}%`, height: `${((c.r * 2.8) / 5040) * 100}%` }} />
+          {/* The drop target is centered on the star's slot and never smaller than a touch target, even when the flag is
+              small (iPhone landscape), while the star itself keeps its true size on the flag. */}
+          <DropZone id="slot" style={{ position: 'absolute', left: `${(c.x / 10080) * 100}%`, top: `${(c.y / 5040) * 100}%`, translate: '-50% -50%', width: `max(${((c.r * 2.8) / 10080) * 100}%, calc(var(--target) * 1.2))`, aspectRatio: '1' }} />
         </div>
         {ready && !placed && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
