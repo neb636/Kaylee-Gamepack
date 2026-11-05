@@ -587,6 +587,51 @@ export const L = {
     },
   },
 
+  // The Koh Samet island trip (activities/samet-trip/, plan: thailand/samet-trip.html). Talk short, play long: Sparkle
+  // says what's new (the first time she reaches each beach, a new round) and, after a while with nothing done, what to
+  // do (spendHint, so at most twice a visit); the family and the islanders react in their own voices (cast.json): the
+  // jet ski man (an otter), the captain (a pelican, both boats), the taxi driver (a sun bear) and the fire dancers (two
+  // tokay geckos, one voice). Kaylee never talks: she giggles. The island and the book are a hub: no idle hints spoken.
+  samet: {
+    // Getting there and home (PackScreen, speedboat/, the trip frame), the sticker and the stamp screen's facts.
+    trip: {
+      // @samet-trip
+    },
+    // The island to roam (island/): Sparkle's first line, each beach the first time, the taxi, the pokes, home.
+    island: {
+      // @samet-island
+    },
+    // Mommy's phone and the animal book (book/): Sparkle says the name once when it's snapped; a tap on its photo plays
+    // the fact.
+    book: {
+      // @samet-book
+    },
+    // The jet ski at Hat Sai Kaew (jetski/): ride, waves, race the jet ski man.
+    jetski: {
+      // @samet-jetski
+    },
+    // The sandcastle at Ao Hin Khok (sandcastle/): dig, towers, the tide.
+    sandcastle: {
+      // @samet-sandcastle
+    },
+    // Snorkeling at Ko Kudi (snorkel/): the captain's boat, float, follow the parrotfish, the cuttlefish.
+    snorkel: {
+      // @samet-snorkel
+    },
+    // Lunch on the deck at Ao Prao (hideseek/lunch.ts).
+    lunch: {
+      // @samet-lunch
+    },
+    // Hide and seek by the driftwood tree (hideseek/).
+    hideseek: {
+      // @samet-hideseek
+    },
+    // The finale (finale/): the sunset at the driftwood tree, then the fire show on Sai Kaew.
+    finale: {
+      // @samet-finale
+    },
+  },
+
   // The mall day at ICONSIAM (activities/mall-trip/, plan: thailand/mall-trip.md). Talk short, play long: Sparkle's one
   // line when a mini game opens (and when something new starts, or after a while with nothing touched), the family's
   // and the friends' short reactions in their own voices (the monkey coach, the HarborLand staff, the pizza server, the

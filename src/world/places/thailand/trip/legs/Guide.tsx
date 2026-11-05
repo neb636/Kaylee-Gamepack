@@ -30,6 +30,10 @@ const WHO: Record<string, { name: string; icon: string; color: string }> = {
   farmer: { name: 'Mushroom aunty', icon: '🐃', color: '#8FE3C8' },
   saltaunty: { name: 'Salt aunty', icon: '🐴', color: '#9FD3F7' },
   lung: { name: 'Lung Kham', icon: '🐒', color: '#7FA8E0' },
+  otter: { name: 'The jet ski man', icon: '🦦', color: '#FFB067' },
+  pelican: { name: 'The captain', icon: '🐦', color: '#8FB4F2' },
+  sunbear: { name: 'The taxi driver', icon: '🐻', color: '#7FD6A3' },
+  gecko: { name: 'The fire dancers', icon: '🦎', color: '#FF9A6B' },
 }
 
 interface Props {
