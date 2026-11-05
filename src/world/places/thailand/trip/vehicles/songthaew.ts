@@ -7,10 +7,10 @@ import type { Bag } from '../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../engine3d/geo'
 import { PAL } from '../../../../engine3d/toon'
 
-const BODY = '#FF6F8E'
-const STRIPE = PAL.cream
-const ROOF = PAL.butter
-const SEAT = '#C9B5F7'
+const BODY0 = '#FF6F8E'
+const STRIPE0 = PAL.cream
+const ROOF0 = PAL.butter
+const SEAT0 = '#C9B5F7'
 const GLASS = '#CDEBFF'
 /** The roof's middle (its underside 0.05 lower): Daddy, sitting on the bench, comes up to about 2.4 m. */
 const ROOF_Y = 2.85
@@ -27,7 +27,20 @@ export interface Songthaew {
   length: number
 }
 
-export function buildSongthaew(bag: Bag): Songthaew {
+/** Its paint: Krabi's coral pink by default; Koh Samet's taxis are island green. */
+export interface SongthaewPaint {
+  body: string
+  stripe: string
+  roof: string
+  seat: string
+}
+export const SAMET_GREEN: SongthaewPaint = { body: '#4FBF7A', stripe: PAL.cream, roof: '#FFFFFF', seat: '#FFE08A' }
+
+export function buildSongthaew(bag: Bag, paint?: SongthaewPaint): Songthaew {
+  const BODY = paint?.body ?? BODY0
+  const STRIPE = paint?.stripe ?? STRIPE0
+  const ROOF = paint?.roof ?? ROOF0
+  const SEAT = paint?.seat ?? SEAT0
   const root = new Group()
   const body = new Group()
   root.add(body)

@@ -213,3 +213,196 @@ export const WAVE_DIR = { x: -BAY.n.x * 0.97 - BAY.t.x * 0.24, z: -BAY.n.z * 0.9
 /** Far islands on the horizon (Ko Kudi and its neighbors, 5 km east, so 520 game meters) and the mainland's hills. */
 export const KO_KUDI = toGame(12.5842, 101.5096)
 export const BAN_PHE = toGame(12.6266, 101.4424)
+
+
+// ---------------------------------------------------------------- the island to roam (greybox 2)
+//
+// The ways across the island (in OSM's spirit, not traced: the real roads are a tangle of concrete and dirt): the
+// concrete road from Na Dan pier down to Sai Kaew, over the spine to Ao Prao and down the middle to Ao Wong Duan (the
+// green taxi's), and the sandy paths over the rocks between the east coast's beaches, along the north shore to Ao Noi
+// Na and out to the sunset viewpoint. Control points are rough; `inland()` pushes any that fall in the sea (or on the
+// sand's front edge) back onto the land, and the ways are smoothed and sampled every 2 m at load.
+
+export type WayKind = 'road' | 'path'
+export interface Way {
+  id: string
+  kind: WayKind
+  /** Meters wide (the walkable strip; the ground is flattened a little wider). */
+  width: number
+  pts: XZ[]
+}
+
+/** Moves a point along the shore's slope until it's `depth` meters inland (if it isn't already). */
+export function inland(p: XZ, depth: number): XZ {
+  let { x, z } = p
+  for (let i = 0; i < 6; i++) {
+    const s = shoreDistance(x, z)
+    if (s <= -depth + 0.25) break
+    const gx = (shoreDistance(x + 0.5, z) - shoreDistance(x - 0.5, z)) / 1
+    const gz = (shoreDistance(x, z + 0.5) - shoreDistance(x, z - 0.5)) / 1
+    const l = Math.hypot(gx, gz) || 1
+    const k = s + depth
+    x -= (gx / l) * k
+    z -= (gz / l) * k
+  }
+  return { x, z }
+}
+
+/** Catmull-Rom through the points, sampled about every `step` meters. */
+function smoothLine(pts: XZ[], step = 2): XZ[] {
+  const out: XZ[] = []
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)]
+    const p1 = pts[i]
+    const p2 = pts[i + 1]
+    const p3 = pts[Math.min(pts.length - 1, i + 2)]
+    const n = Math.max(1, Math.round(Math.hypot(p2.x - p1.x, p2.z - p1.z) / step))
+    for (let k = 0; k < n; k++) {
+      const t = k / n
+      const t2 = t * t
+      const t3 = t2 * t
+      const f = (a: number, b: number, c: number, d: number) => 0.5 * (2 * b + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * t2 + (-a + 3 * b - 3 * c + d) * t3)
+      out.push({ x: f(p0.x, p1.x, p2.x, p3.x), z: f(p0.z, p1.z, p2.z, p3.z) })
+    }
+  }
+  out.push(pts[pts.length - 1])
+  return out
+}
+
+const way = (id: string, kind: WayKind, width: number, depth: number, raw: [number, number][]): Way => ({ id, kind, width, pts: smoothLine(raw.map(([x, z]) => inland({ x, z }, depth))) })
+
+/** The road's ends and corners, shared by the taxi's route. */
+const J = { nadan: [-14, -74], saikaew: [-6, -17], north: [-14, -40], spine: [-85, -46], prao: [-153, -37], wongduan: [-146, 121] } as const
+
+export const WAYS: Way[] = [
+  way('road-nadan', 'road', 3.4, 3, [[...J.nadan], [-13, -62], [-12, -52], [...J.north], [-11, -27], [...J.saikaew]]),
+  way('road-prao', 'road', 3.4, 3, [[...J.north], [-36, -43], [-60, -45], [...J.spine], [-110, -44], [-134, -40], [...J.prao]]),
+  way('road-wongduan', 'road', 3.4, 3, [[...J.spine], [-95, -20], [-104, 10], [-111, 40], [-121, 70], [-134, 100], [...J.wongduan]]),
+  way('path-east', 'path', 2.4, 6, [[-30, 9], [-46, 16], [-60, 20], [-72, 27], [-80, 36], [-90, 50], [-98, 62], [-104, 74], [-108, 86], [-116, 98], [-124, 108], [-130, 120], [-138, 130]]),
+  way('path-noina', 'path', 2.4, 5, [[-12, -80], [-30, -80], [-45, -80], [-60, -82], [-74, -84]]),
+  way('path-view', 'path', 2.4, 4, [[-134, 100], [-160, 112], [-180, 124], [-194, 131]]),
+  way('path-prao', 'path', 2.4, 7, [[-153, -37], [-160, -40], [-166, -46]]),
+]
+
+/** Open grass the forest keeps clear of (a beach bar's yard, the resort, the village by the pier): center and radius. */
+export const CLEARINGS: (XZ & { r: number })[] = [
+  { ...inland({ x: -14, z: -72 }, 6), r: 9 },
+  { x: -6, z: -22, r: 7 },
+  { x: -152, z: -38, r: 7 },
+  { x: -146, z: 120, r: 7 },
+  { x: -194, z: 131, r: 5 },
+]
+
+/** The stops (any order), each with its pink flag's beach and the thing that opens it. */
+export type StopId = 'jetski' | 'sandcastle' | 'snorkel' | 'hideseek'
+export const STOPS: Record<StopId, { place: PlaceId; at: XZ; name: string }> = {
+  jetski: { place: 'saikaew', at: bay(0, 1.2), name: 'The jet ski at Hat Sai Kaew' },
+  sandcastle: { place: 'hinkhok', at: inland({ x: -55, z: 17 }, 5), name: 'The sandcastle at Ao Hin Khok' },
+  snorkel: { place: 'wongduan', at: { x: -150, z: 136 }, name: 'The snorkel boat at Ao Wong Duan' },
+  hideseek: { place: 'prao', at: inland({ x: -172, z: -28 }, 6), name: 'The driftwood tree at Ao Prao' },
+}
+export const STOP_IDS = Object.keys(STOPS) as StopId[]
+
+/** A beach's frame where it meets the sea: a waterline point, along the sand and out to sea. */
+export interface Frame extends XZ {
+  t: XZ
+  n: XZ
+}
+/** The frame at the coast nearest a point. */
+export function frameNear(p: XZ): Frame {
+  const g = (x: number, z: number) => shoreDistance(x, z)
+  let q = { ...p }
+  for (let i = 0; i < 5; i++) {
+    const s = g(q.x, q.z)
+    const gx = g(q.x + 0.5, q.z) - g(q.x - 0.5, q.z)
+    const gz = g(q.x, q.z + 0.5) - g(q.x, q.z - 0.5)
+    const l = Math.hypot(gx, gz) || 1
+    q = { x: q.x - (gx / l) * s, z: q.z - (gz / l) * s }
+  }
+  const gx = g(q.x + 2, q.z) - g(q.x - 2, q.z)
+  const gz = g(q.x, q.z + 2) - g(q.x, q.z - 2)
+  const l = Math.hypot(gx, gz) || 1
+  const n = { x: gx / l, z: gz / l }
+  return { x: q.x, z: q.z, n, t: { x: n.z, z: -n.x } }
+}
+/** A point in a frame: `u` along the sand, `v` out to sea (negative: up the beach). */
+export function at(f: Frame, u: number, v: number): XZ {
+  return { x: f.x + f.t.x * u + f.n.x * v, z: f.z + f.t.z * u + f.n.z * v }
+}
+
+/** Where she can land on a deep link (`at`), and the beaches' frames (the camera looks out to sea from each). */
+export type SpotId = 'nadan' | 'saikaew' | 'hinkhok' | 'phai' | 'wongduan' | 'prao' | 'deck' | 'aonoina'
+export const SPOT_IDS: SpotId[] = ['nadan', 'saikaew', 'hinkhok', 'phai', 'wongduan', 'prao', 'deck', 'aonoina']
+export const FRAMES: Record<Exclude<SpotId, 'deck'>, Frame> = {
+  nadan: frameNear({ x: -11, z: -80 }),
+  saikaew: { x: BAY.x, z: BAY.z, t: BAY.t, n: BAY.n },
+  hinkhok: frameNear({ x: -55, z: 16 }),
+  phai: frameNear({ x: -80, z: 33 }),
+  wongduan: frameNear({ x: -150, z: 140 }),
+  prao: frameNear({ x: -171, z: -32 }),
+  aonoina: frameNear({ x: -76, z: -85 }),
+}
+
+/** The resort deck above Ao Prao (lunch: a place, not a stop yet), up the slope behind the sand. */
+export const DECK = { ...at(FRAMES.prao, 10, -16.5), t: FRAMES.prao.t, n: FRAMES.prao.n, face: Math.atan2(FRAMES.prao.n.x, FRAMES.prao.n.z), w: 9, d: 6, y: 2.2 }
+/** Na Dan pier: from the sand out into the bay (where the speedboat ties up). */
+export const PIER = { from: at(FRAMES.nadan, -4, -1), to: at(FRAMES.nadan, -4, 26), w: 3.2, y: 1.1 }
+
+/** Where she stands on arrival at each spot (a few meters up the sand, looking out to sea). */
+export function spotStart(id: SpotId): XZ & { face: number } {
+  if (id === 'deck') return { x: DECK.x, z: DECK.z, face: DECK.face }
+  if (id === 'nadan') {
+    const p = at(FRAMES.nadan, -4, 18)
+    return { ...p, face: Math.atan2(-FRAMES.nadan.n.x, -FRAMES.nadan.n.z) }
+  }
+  const f = FRAMES[id]
+  const p = at(f, id === 'saikaew' ? -6 : id === 'hinkhok' ? -7 : id === 'prao' ? -4 : 0, -3)
+  return { ...p, face: Math.atan2(f.n.x, f.n.z) }
+}
+
+/** The green taxi's stops, in the order it drives round, and the road it takes between them. */
+export const TAXI_STOPS: { id: SpotId; at: XZ }[] = [
+  { id: 'nadan', at: { x: J.nadan[0], z: J.nadan[1] } },
+  { id: 'saikaew', at: { x: J.saikaew[0], z: J.saikaew[1] } },
+  { id: 'prao', at: { x: J.prao[0], z: J.prao[1] } },
+  { id: 'wongduan', at: { x: J.wongduan[0], z: J.wongduan[1] } },
+]
+
+/** Jet skis waiting at the water's edge on every beach once the jet ski is hers. */
+export const PARKED: { id: SpotId; at: XZ; face: number }[] = (['saikaew', 'hinkhok', 'phai', 'wongduan', 'prao', 'nadan'] as const).map((id) => {
+  const f = FRAMES[id]
+  const p = id === 'saikaew' ? bay(-3, 1.4) : at(f, id === 'nadan' ? 6 : 4, id === 'nadan' ? 3 : 1.2)
+  return { id, at: p, face: Math.atan2(f.n.x, f.n.z) }
+})
+
+/** The things to poke, island-wide (each a tap target when she's near). `at` is on the ground. */
+export type PokeKind = 'palm' | 'samet' | 'umbrella' | 'chair' | 'ball' | 'icecream' | 'beads' | 'crab' | 'bush' | 'longtail' | 'speedboat' | 'hammock' | 'telescope' | 'tamarind' | 'deckbrella' | 'lantern'
+export interface Poke {
+  id: string
+  kind: PokeKind
+  at: XZ
+}
+const pokes: Poke[] = []
+const add = (kind: PokeKind, p: XZ) => pokes.push({ id: `${kind}:${pokes.filter((q) => q.kind === kind).length}`, kind, at: p })
+// Coconut palms (bonk: a coconut drops) and samet trees (the papery bark peels), at the back of the sand on each beach.
+for (const [id, us] of [['saikaew', [-20, 4, 26]], ['hinkhok', [-6, 6]], ['phai', [-3, 5]], ['wongduan', [-8, 6]], ['prao', [-4, 6]], ['nadan', [8]], ['aonoina', [-3, 4]]] as const)
+  for (const u of us) add('palm', at(FRAMES[id], u, id === 'saikaew' ? -12.5 : -11.5))
+for (const [id, u] of [['saikaew', -10], ['hinkhok', 0], ['prao', 9], ['wongduan', 1]] as const) add('samet', at(FRAMES[id], u, -13.5))
+// Pink umbrellas (spin; poke one three times and it takes off like a kite with Kaylee holding on) and red chairs (fold up).
+for (const [id, us] of [['hinkhok', [-4, 3]], ['phai', [0]], ['wongduan', [-4, 4]], ['prao', [-7, -1, 4]]] as const) for (const u of us) add('umbrella', at(FRAMES[id], u, -6))
+for (const u of [-6, -2, 3, 7]) add('chair', at(FRAMES.prao, u, -3.6))
+add('ball', at(FRAMES.hinkhok, 3, -2.5))
+add('icecream', bay(-14, -10))
+add('beads', bay(12, -3.5))
+for (const [id, u, v] of [['saikaew', -24, -3], ['saikaew', 30, -2.5], ['hinkhok', -3, -1.5], ['phai', 2, -2], ['wongduan', 2, -2], ['prao', 0, -2.5], ['aonoina', 0, -2]] as const) add('crab', at(FRAMES[id], u, v))
+// Pink bougainvillea along the paths (petals burst).
+for (const p of [{ x: -9, z: -36 }, { x: -60, z: -48 }, { x: -120, z: 64 }, { x: -136, z: -44 }, { x: -86, z: 44 }]) add('bush', inland(p, 4))
+add('longtail', at(FRAMES.nadan, 4, 7))
+add('longtail', at(FRAMES.wongduan, -9, 7))
+add('speedboat', at(FRAMES.nadan, -7.5, 22))
+add('hammock', at(FRAMES.aonoina, 0, -9))
+add('telescope', { x: -193, z: 132 })
+add('tamarind', at(FRAMES.wongduan, -2, -16))
+add('deckbrella', at(DECK, -2.5, 0))
+add('deckbrella', at(DECK, 2.5, 0))
+export const POKES: Poke[] = pokes

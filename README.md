@@ -262,8 +262,15 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
   - [Home: the flight, Agong's photo, the frame on his wall, the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/home)
 
-**Koh Samet Island** (in the works) (In the works (greybox 1 of the plan). Add ?feel=1 to any jet ski link to tune how it steers, jumps and races.)
+**Koh Samet Island** (in the works) (In the works (greyboxes 1 and 2 of the plan). Add ?feel=1 to tune how Kaylee walks and swims, the camera, the taxi and the jet ski; ?fps=1 or ?debug=1 shows the frame rate.)
 
+- **The island (greybox)**
+  - [Land at Na Dan pier in the morning: walk, swim, the green taxi](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan&feel=1))
+  - [Sai Kaew at noon, the jet ski done: a jet ski on every beach](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=saikaew&flags=jetski)
+  - [Ao Prao in the afternoon, three flags](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=prao&flags=jetski,sandcastle,snorkel)
+  - [Ao Hin Khok (the sandcastle spot, the beach ball)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=hinkhok)
+  - [Ao Wong Duan (the snorkel boat)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=wongduan)
+  - [Sai Kaew at night (the lanterns and the stars)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=saikaew&flags=all&time=night)
 - **The jet ski at Sai Kaew (greybox)**
   - [Ride the calm bay: the life jacket, then carve, spray and close a loop of wake](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=ride) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=ride&feel=1))
   - [Big waves roll in: steer into them to jump](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=waves)
