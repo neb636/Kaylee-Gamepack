@@ -3,7 +3,7 @@
 // like Australia's map. Bangkok is Agong's house (the mall day starts in there). Krabi is the boat trip and the
 // elephants, Nan the road trip: the first of them each session packs and rides the window seat (trip/session.ts); after
 // that she goes straight there (Krabi airport, or the Nan map). A trip ends back here (`stamp=<trip>`): the stamp lands
-// on its pin. Each pin wears its trip's stamp. Koh Samet's 🏝️ (in the works: it shows with ?samet=1) packs the first
+// on its pin. Each pin wears its trip's stamp. Koh Samet's 🏝️ packs the first
 // time too and takes the speedboat; later it goes back to the island where she left it (saved), or the speedboat.
 //
 // Things to poke (tap them): the elephant, the rain cloud over Nan, the gibbon, the buffalo, the hornbill, the tuk-tuk,
@@ -19,7 +19,6 @@ import type { PlaceProps } from '../../../../../types'
 import { L } from '../../../lines'
 import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { tripSession } from '../../../trip/session'
-import { flag } from '../../../../../engine3d/flags'
 import { readSametSave } from '../../samet-trip/trip'
 import HUB_SECTIONS from '../sections'
 import { ANDAMAN, CHAO_PHRAYA, GULF, HILLS, ISLANDS, MEKONG, PINS, POKES, STAGE, THAILAND, type Pin, type PinId, type PokeId, type XY } from './geo'
@@ -32,8 +31,6 @@ const SW = 5
 
 // Once a session: Sparkle's welcome, and each thing's fact.
 let welcomed = false
-/** Koh Samet's pin, while it's in the works: shown once a link has `samet=1` (or its stamp lands), for the session. */
-let sametShown = false
 const told = new Set<PokeId>()
 
 /** A smooth closed (or open) curve through the points, as an SVG path. */
@@ -83,8 +80,7 @@ export function ThaiMap({ meta, stamps, openActivity }: PlaceProps) {
   // The stamp that lands: hidden on its pin until it drops in.
   const [landed, setLanded] = useState(!arriving)
 
-  if (flag('samet') || arriving === 'samet-trip') sametShown = true
-  const live = (pin: Pin) => pin.id === 'bangkok' || meta.activities.some((a) => a.id === pin.activity) || (pin.id === 'samet' && sametShown)
+  const live = (pin: Pin) => pin.id === 'bangkok' || meta.activities.some((a) => a.id === pin.activity)
   const stamped = (pin: Pin) => stamps.includes(pin.activity) && (landed || pin.activity !== arriving)
   const allStamps = meta.activities.length > 0 && meta.activities.every((a) => stamps.includes(a.id))
 

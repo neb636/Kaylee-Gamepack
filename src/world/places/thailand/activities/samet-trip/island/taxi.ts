@@ -5,6 +5,7 @@
 import { Group, Vector3 } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
+import { FaceLife } from '../../../../../engine3d/characters/face'
 import { TAXI_DRIVER } from '../cast'
 import { SAMET_GREEN, buildSongthaew, type Songthaew } from '../../../trip/vehicles/songthaew'
 import { TAXI_STOPS, WAYS, type XZ } from './layout'
@@ -71,6 +72,8 @@ export class Taxi {
   private bounceV = 0
   private wave = -1
   private last = new Vector3()
+  /** His blinks, and his mouth with his own voice ('sunbear'). */
+  private life: FaceLife
 
   constructor(bag: Bag, start = 0) {
     this.st = buildSongthaew(bag, SAMET_GREEN)
@@ -79,6 +82,7 @@ export class Taxi {
     this.driver.root.position.set(this.st.length / 2 - 1.0, 0.55, 0.42)
     this.driver.root.rotation.y = Math.PI / 2
     this.st.body.add(this.driver.root)
+    this.life = new FaceLife(this.driver, 'sunbear')
     this.root.userData.pick = 'taxi'
     this.stop = start
     this.place(LEGS[start], 0, 0)
@@ -108,6 +112,7 @@ export class Taxi {
   }
 
   update(dt: number, ground: (x: number, z: number) => number, speed: number) {
+    this.life.update(dt)
     if (this.state === 'wait') {
       this.speed = 0
       if (!this.hold) this.waitT -= dt

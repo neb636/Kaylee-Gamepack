@@ -1,13 +1,17 @@
 // The island to roam, on screen (island.ts is the world): the 3D island with its tap targets, the pink flag arrow that
 // points at the nearest stop without a flag after a while with nothing touched (on the stop itself when it's on
 // screen, at the screen's edge pointing that way when it isn't), and Mommy's phone and the animal book (../book/).
-// Greybox: no voices yet.
+// Sparkle sits in the corner (trip/legs/Guide.tsx): she says what's new (lines.ts L.samet.island, L.samet.book), the
+// family and the taxi driver react in their own voices. A hub: no idle hints spoken (the flag arrow glows).
 import { useRef, useState } from 'react'
 import type { WebGLRenderer } from 'three'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
+import { firstTime, type Line } from '../../../../../../sdk'
+import { L } from '../../../lines'
 import { sfx } from '../../../sfx'
-import type { AnimalId } from '../book/animals'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
+import { ANIMAL_IDS, type AnimalId } from '../book/animals'
 import { PhoneAndBook, type BookPhoto, type Flyer } from '../book/Book'
 import { ISLAND_ANCHORS, SametIsland as World, type IslandStart } from './island'
 import type { SpotId, StopId } from './layout'
@@ -36,6 +40,8 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
   const [mode, setMode] = useState<RenderMode>('webgl')
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
+  const speak = (l: Line) => guideRef.current?.speak(l)
   const [phone, setPhone] = useState(!!start.phone)
   const [open, setOpen] = useState(bookOpen)
   const [found, setFound] = useState<AnimalId[]>(start.book ?? [])
@@ -75,11 +81,18 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
             setFound(next)
             cb.current.onBook?.(next, openRef.current)
             setTimeout(() => sfx.giggle(), 300)
+            // Sparkle says its name (once: it's new), and when the book is full, that too.
+            setTimeout(() => speak(L.samet.book.name[a]), 500)
+            if (next.length === ANIMAL_IDS.length) setTimeout(() => speak(L.samet.book.full), 1700)
           }
         }
       },
       near: setGlow,
-      cleaned: setCleaned,
+      cleaned: (c) => {
+        setCleaned(c)
+        if (c > 0 && firstTime('samet-clean')) speak(L.samet.island.clean)
+      },
+      say: speak,
       home: onHome ? (src) => cb.current.onHome?.(src) : undefined,
     })
     w.setHintElement(hintRef.current)
@@ -110,6 +123,7 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
         onPhone={(on) => {
           setPhone(on)
           worldRef.current?.setPhone(on)
+          if (on && firstTime('samet-phone')) speak(L.samet.island.phone)
           onPhone?.(on)
         }}
         glow={glow}
@@ -130,6 +144,7 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
         flyer={flyer}
         cleaned={cleaned}
       />
+      {mode === 'webgl' && <TripGuide ref={guideRef} hidden={open} />}
       {mode === 'lost' && (
         <button onClick={() => { setMode('webgl'); setN((v) => v + 1) }} style={{ position: 'absolute', inset: 0, zIndex: 30, background: 'rgba(213,238,250,.9)', border: 'none', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 700, color: 'var(--ink)' }}>
           🏝️ Tap to wake the island

@@ -145,7 +145,6 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - **The Thailand map**
   - [The map](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand)
   - [Home from a trip: the stamp lands on Krabi](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/map?stamp=boat-trip)
-  - [With the Koh Samet pin (in the works)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/map?samet=1)
 - **Agong's house**
   - [Arrive by tuk-tuk](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/arrive)
   - [In front of Agong's house](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/street)
@@ -263,7 +262,7 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
   - [Home: the flight, Agong's photo, the frame on his wall, the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/home)
 
-**Koh Samet Island** (in the works) (In the works (greyboxes 1 to 7 of the plan). The Thailand map's 🏝️ pin shows with ?samet=1. Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski, the sand, the snorkel, lunch and hide and seek; ?fps=1 or ?debug=1 shows the frame rate.)
+**Koh Samet Island** (The Thailand map's 🏝️ pin opens it. Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski, the sand, the snorkel, lunch and hide and seek; ?fps=1 or ?debug=1 shows the frame rate.)
 
 - **Getting there (greybox)**
   - [Pack for the island (greybox): the swimsuit, the sun hat, the floaties, the bucket](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/pack)

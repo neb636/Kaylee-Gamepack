@@ -1,6 +1,6 @@
 // The fire show, on screen (fireshow.ts is the world): Sai Kaew at night with its tap targets, the pressing finger
-// (drawing a circle before she starts, round the dots she still needs when she's stuck), a speech bubble over whoever
-// is talking (the words for Dad: the voices come with the full loop), and once the fireworks go up a 🔥 🏆 badge with
+// (drawing a circle before she starts, round the dots she still needs when she's stuck), Sparkle in the corner speaking
+// everyone's lines (trip/legs/Guide.tsx, the words for Dad too), and once the fireworks go up a 🔥 🏆 badge with
 // the way home (Mommy's photo goes on Agong's wall, the stamp). With ?feel=1 Dad also gets round chips.
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
@@ -9,6 +9,7 @@ import { BigButton, bigCelebration, burst } from '../../../../../../sdk'
 import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import type { StopId } from '../island/layout'
 import { FIRE_ANCHORS, FIRE_ROUND_IDS, FireShow as World, type FireEvents, type FireRound } from './fireshow'
 
@@ -32,7 +33,7 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
   const [feel] = useState(feelOn)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
-  const bubbleRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   const onRoundRef = useRef(onRound)
   onRoundRef.current = onRound
 
@@ -45,6 +46,7 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
     },
     shape: () => burst(),
     gift: () => burst(),
+    say: (l) => guideRef.current?.speak(l),
     done: (photo) => {
       bigCelebration()
       setDone(photo)
@@ -54,7 +56,6 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
   const make = (renderer: WebGLRenderer) => {
     const w = new World(renderer, { round: run.round, flags }, events.current)
     w.setHintElement(hintRef.current)
-    w.setBubbleElement(bubbleRef.current)
     return w
   }
   const jump = (r: FireRound) => {
@@ -79,10 +80,10 @@ export function FireShowScreen({ round: first, flags, onRound, onHome }: Props) 
             <div ref={hintRef} className="fin-hint" style={{ display: 'none' }}>
               <span>👆</span>
             </div>
-            <div className="fin-bubble" style={{ display: 'none' }} ref={bubbleRef} />
           </>
         )}
       />
+      {mode === 'webgl' && <TripGuide ref={guideRef} />}
       <AnimatePresence>
         {done !== null && (
           <motion.div initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} className="fin-over">
@@ -117,10 +118,9 @@ export const FINALE_CSS = `
 .fin-hint { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 4; }
 .fin-hint span { position: absolute; left: -26px; top: -10px; font-size: 52px; line-height: 1; filter: drop-shadow(0 3px 4px rgba(43,35,48,.3)); animation: fin-press 1.4s ease-in-out infinite; }
 @keyframes fin-press { 0%, 100% { transform: scale(1); } 45% { transform: scale(0.85) translateY(4px); } }
-.fin-bubble { position: absolute; left: 0; top: 0; z-index: 5; pointer-events: none; white-space: nowrap; translate: -50% -100%;
-  padding: 8px 16px; border-radius: 999px; background: #fff; box-shadow: var(--shadow); font-size: clamp(18px, 3.2vmin, 26px); font-weight: 700; color: var(--ink); }
 .fin-flash { position: absolute; inset: 0; background: #fff; pointer-events: none; z-index: 15; }
-.fin-photo { position: absolute; left: 16px; bottom: calc(var(--safe-bottom, 0px) + 16px); z-index: 12; width: clamp(120px, 22vmin, 220px); border: 8px solid #fff; border-bottom-width: 22px; border-radius: 6px; box-shadow: var(--shadow); pointer-events: none; }
+/* (Top left: Sparkle sits bottom left.) */
+.fin-photo { position: absolute; left: calc(var(--safe-left, 0px) + 16px); top: calc(var(--top-clear) + 10px); z-index: 12; width: clamp(120px, 22vmin, 220px); border: 8px solid #fff; border-bottom-width: 22px; border-radius: 6px; box-shadow: var(--shadow); pointer-events: none; }
 .fin-over { position: absolute; right: 16px; bottom: calc(var(--safe-bottom, 0px) + 18px); z-index: 12; display: flex; gap: 14px; align-items: center; pointer-events: none; }
 .fin-over > * { pointer-events: auto; }
 .fin-badge { padding: 12px 22px; border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: var(--shadow); font-size: clamp(24px, 4.5vmin, 40px); font-weight: 700; color: var(--ink); }

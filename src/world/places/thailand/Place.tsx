@@ -6,8 +6,8 @@
 // (activities/mall-trip/, greyboxes so far, still in the works: Mommy's question, the Veloz, ICONSIAM, HarborLand's
 // hall of mini games, the pizza table, and home with the pizza box for Agong, then its stamp and the pizza slice
 // sticker); the third is the Nan road trip (activities/nan-trip/, in the works: greyboxes from Mommy's question to the
-// photo on Agong's wall, then its stamp); the fourth is the Koh Samet island trip (activities/samet-trip/, in the
-// works: greybox 1 is the jet ski at Sai Kaew). The finale (route `party`) is the family party, coming soon.
+// photo on Agong's wall, then its stamp); the fourth is the Koh Samet island trip (activities/samet-trip/: the
+// speedboat, the island to roam, four stops and the fire show, the pink mermaid sticker). The finale (route `party`) is the family party, coming soon.
 import { use, useState } from 'react'
 import { StampEarned } from '../../kit/StampEarned'
 import { worldLink } from '../../../router'
@@ -23,7 +23,7 @@ import { NanTrip } from './activities/nan-trip/NanTrip'
 import { PartySoon } from './PartySoon'
 import { SametTrip } from './activities/samet-trip/SametTrip'
 import { saidYes } from './trip/legs/Ask'
-import { MALL_FACTS, NAN_FACTS, TRIP_FACTS } from './trip/facts'
+import { MALL_FACTS, NAN_FACTS, SAMET_FACTS, TRIP_FACTS } from './trip/facts'
 
 export default function Place(props: PlaceProps) {
   const { meta, activity, earnStamp, backToMap, openActivity } = props
@@ -46,8 +46,7 @@ export default function Place(props: PlaceProps) {
       <div style={{ position: 'absolute', inset: 0, zIndex: 100 }}>
         <StampEarned
           activity={info}
-          // (Koh Samet's facts come with its full loop.)
-          facts={info.id === 'boat-trip' ? TRIP_FACTS : info.id === 'nan-trip' ? NAN_FACTS : info.id === 'samet-trip' ? undefined : MALL_FACTS}
+          facts={info.id === 'boat-trip' ? TRIP_FACTS : info.id === 'nan-trip' ? NAN_FACTS : info.id === 'samet-trip' ? SAMET_FACTS : MALL_FACTS}
           // (An activity still in the works has no recorded sticker line.)
           quiet={!live}
           closeIcon="🏠 ▶"
@@ -86,7 +85,7 @@ export default function Place(props: PlaceProps) {
       </>
     )
   }
-  // The Koh Samet trip: in the works (greyboxes 1-7); only its links and the map's pin with ?samet=1 open it. Home from
+  // The Koh Samet trip, from the map's 🏝️ pin. Home from
   // the island (Mommy's photo on Agong's wall), the stamp, then the map: the stamp lands on the 🏝️ pin.
   if (activity === 'samet-trip' && info) {
     if (window.__kayleeWorld) window.__kayleeWorld.finish = finish

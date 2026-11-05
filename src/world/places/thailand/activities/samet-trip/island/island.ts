@@ -26,9 +26,12 @@
 // without the phone too. The beach clean (../book/clean.ts) is the side verb: lift the rubbish on the wet sand (an
 // animal pops out where it was), carry it to the green bin, plonk.
 // Quiet hub: no idle lines. After ~8 s with nothing touched, a pink flag arrow points at the nearest stop without a
-// flag. Greybox: no voices yet. Its feel numbers are knobs (?feel=1).
+// flag. Talk (lines.ts L.samet.island): Sparkle only when something is new (her first landing this visit, each beach the
+// first time, the jet ski becoming hers, a fact the first time she pokes the mermaid or a samet tree), the family and the
+// taxi driver react to her taps in their own voices. Its feel numbers are knobs (?feel=1).
 import { Color, DynamicDrawUsage, Fog, Frustum, Object3D, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, Quaternion, Raycaster, RingGeometry, Scene, CircleGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp } from '../../../../../../sdk'
+import { clamp, firstTime, type Line } from '../../../../../../sdk'
+import { L } from '../../../lines'
 import { knobs, watch } from '../../../../../kit/knobs'
 import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -136,7 +139,11 @@ export interface IslandEvents {
   /** All four pink flags up and she tapped the speedboat at Na Dan pier: Mommy's photo of the island (for Agong's
    *  wall), and home. */
   home?(photo: string): void
+  /** Someone says something (lines.ts L.samet.island): the screen's TripGuide speaks it. */
+  say?(line: Line): void
 }
+
+const I = L.samet.island
 
 const DEG = 180 / Math.PI
 const HINT_S = 8
@@ -330,6 +337,8 @@ export class SametIsland implements World3D {
   private wctx!: WildCtx
   private counts = { snaps: 0, animalSnaps: 0, golds: 0, cleaned: 0, lifted: 0, boings: 0, taps: 0, pokes: 0, swims: 0, spins: 0, taxiRides: 0, skiRides: 0, kites: 0, coconuts: 0, bonks: 0, kicks: 0, gallops: 0, beaches: 0 }
   private seen = new Set<SpotId>()
+  private greeted = false
+  private talk = { nick: 0, ji: 0, taxi: 0 }
 
   constructor(
     private renderer: WebGLRenderer,
@@ -620,6 +629,7 @@ export class SametIsland implements World3D {
   }
 
   update(dt: number) {
+    if (!this.greeted && this.time > 0.8) this.greet()
     const t = (this.time += dt)
     this.rig.lag = CAM.lag
     this.feel.top = RIDE.top
@@ -768,6 +778,18 @@ export class SametIsland implements World3D {
       }
     }
     this.lastPos.copy(k)
+  }
+
+  /** Once a visit: Sparkle's hello on the island, the jet ski hers (its flag up), Daddy calling everyone to the
+   *  driftwood tree (all four flags). */
+  private greet() {
+    this.greeted = true
+    const say = (l: Line) => this.events.say?.(l)
+    if (firstTime('samet-island-hi')) say(I.hi)
+    // (The beach she lands on counts as seen: its line would only repeat the hello.)
+    firstTime(`samet-beach-${this.spot}`)
+    if (this.flags.has('jetski') && firstTime('samet-ski-hers')) say(I.hers)
+    if (this.flags.size === STOP_IDS.length && firstTime('samet-sunset-call')) say(I.sunset)
   }
 
   /** She got where a tap sent her: use what she walked to. */
@@ -997,6 +1019,7 @@ export class SametIsland implements World3D {
     this.target = null
     this.counts.taxiRides++
     sfx.boing()
+    this.events.say?.(firstTime('samet-taxi-hi') ? I.taxi.hi : I.taxi.ride[this.talk.taxi++ % I.taxi.ride.length])
     const seat = (c: Avatar | Member, g: Group) => {
       g.add(c.root)
       if (c instanceof Avatar) {
@@ -1215,6 +1238,9 @@ export class SametIsland implements World3D {
           this.seen.add(best)
           this.counts.beaches++
         }
+        // Sparkle, the first time she reaches each beach this visit.
+        const line = (I.beach as Partial<Record<SpotId, string>>)[best]
+        if (line && this.greeted && firstTime(`samet-beach-${best}`)) this.events.say?.(line)
       }
       if (this.mode !== 'taxi') this.camGoal = this.spotYaw(best)!
       return
@@ -1381,6 +1407,7 @@ export class SametIsland implements World3D {
         this.counts.bonks++
         this.nick.m.react('wiggle')
         if (this.nick.m.pose === 'lie') this.nick.lie = 0
+        this.events.say?.(I.bonk)
         for (let s = 0; s < 8; s++) this.stars.emit(n.x, head + 0.25, n.z, Math.cos(s) * 0.6, 0.4, Math.sin(s) * 0.6, 1.4, 0.1)
       }
       const g = Math.max(0, this.isl.ground.heightAt(c.g.position.x, c.g.position.z)) + 0.18
@@ -1645,6 +1672,7 @@ export class SametIsland implements World3D {
       this.kaylee.faceToward(HOME_PIER.x - FRAMES.nadan.t.x * 3, HOME_PIER.z - FRAMES.nadan.t.z * 3)
       this.kaylee.react('wave')
       this.nick.m.react('wave')
+      this.events.say?.(I.home)
       window.setTimeout(() => (this.homeSnap = true), 700)
       return
     }
@@ -1656,16 +1684,19 @@ export class SametIsland implements World3D {
     }
     if (id === 'family:nick') {
       const n = this.nick
-      if (n.m.pose === 'lie') {
+      const asleep = n.m.pose === 'lie'
+      if (asleep) {
         n.lie = 0
         n.m.setPose('stand')
       }
       n.m.react('hop')
       sfx.boing()
+      this.events.say?.(asleep ? I.wake : I.nick[this.talk.nick++ % I.nick.length])
       return
     }
     if (id === 'family:ji') {
       this.ji.m.react('wave')
+      this.events.say?.(I.ji[this.talk.ji++ % I.ji.length])
       return
     }
     if (id === 'taxi') {
@@ -1711,6 +1742,7 @@ export class SametIsland implements World3D {
     if (id === 'mermaid') {
       flute()
       this.tailT = 0
+      if (firstTime('samet-fact-mermaid')) this.events.say?.(L.samet.trip.facts.mermaid)
       const m = this.props.saikaew.mermaid.position
       this.spray.burst(m.x + 1.4, 0.4, m.z + 1.5, 16, 1.6, 2.6, 0.15)
       return
@@ -2042,6 +2074,7 @@ export class SametIsland implements World3D {
       case 'samet': {
         this.kick(p.id, 5)
         hiss(0.25, 0.05, 'highpass', 2200, 1200)
+        if (firstTime('samet-fact-samet')) this.events.say?.(L.samet.trip.facts.samet)
         for (let i = 0; i < 12; i++) this.petals.emit(p.at.x + (Math.random() - 0.5) * 0.4, p.y + 0.8 + Math.random() * 1.5, p.at.z + (Math.random() - 0.5) * 0.4, (Math.random() - 0.5) * 1.5, 0.6 + Math.random(), (Math.random() - 0.5) * 1.5, 2.6, 0.1, 3)
         break
       }
@@ -2075,6 +2108,7 @@ export class SametIsland implements World3D {
           this.target = null
           this.counts.kites++
           whee()
+          this.events.say?.(I.kite)
         }
         break
       }

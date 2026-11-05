@@ -19,11 +19,12 @@
 //         spots her too. Tap Kaylee while he searches: "Boo!", he jumps, and she wins.
 // The pink flag: the first time she wins her turn (the way back to the island shows).
 //
-// Greybox: simple shapes in the toon look, no voices (the full loop adds Daddy's "Close your eyes and count!", the
-// counting and "Found you!"); the words show in a bubble for Dad. Every number that decides the feel is a knob
+// Talk (lines.ts L.samet.hideseek): Daddy plays it up in his own voice, Sparkle counts with her and says what to do
+// once a round (and, through spendHint, when she's stuck); the screen's TripGuide plays each line and shows its words. Every number that decides the feel is a knob
 // (?feel=1), with a graph of how far she is from Daddy.
 import { Fog, Group, Mesh, MeshBasicMaterial, Raycaster, RingGeometry, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
-import { clamp } from '../../../../../../sdk'
+import { clamp, lineText, spendHint, type Line } from '../../../../../../sdk'
+import { L } from '../../../lines'
 import { knobs, watch } from '../../../../../kit/knobs'
 import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -95,7 +96,11 @@ export interface HideEvents {
   photo(): void
   /** She won her turn to hide (the first time: the stop's flag). */
   won(first: boolean): void
+  /** Someone talks (`mute`: a stuck hint shown without its voice). */
+  say(line: Line, mute?: boolean): void
 }
+
+const H = L.samet.hideseek
 
 type SpotId = 'tree' | 'umbrella' | 'chairs' | 'roots' | 'towel' | 'sea' | 'pandanus' | 'mommy' | 'palmL' | 'palmR'
 type DadPose = 'stand' | 'sit' | 'lie'
@@ -148,12 +153,8 @@ const smoothK = (a: number, b: number, x: number) => {
 }
 const angleTo = (from: number, to: number) => Math.atan2(Math.sin(to - from), Math.cos(to - from))
 
-// ---- Sounds (synthesized; the voices come at the full-loop gate).
+// ---- Sounds (synthesized; the voices are lines.ts's).
 const giggle = (d = 0) => [0, 0.1, 0.2].forEach((x, i) => tone(700 + i * 90, 900 + i * 90, 0.08, 0.05, 'triangle', d + x))
-const sneeze = () => {
-  tone(500, 900, 0.35, 0.05, 'triangle')
-  hiss(0.3, 0.25, 'bandpass', 1800, 900, 0.38, 0.8)
-}
 const countNote = (n: number) => tone(523 * 2 ** ((n * 2) / 12), 523 * 2 ** ((n * 2) / 12), 0.22, 0.06, 'triangle')
 const ready = () => [0, 0.12, 0.24].forEach((d, i) => tone(660 + i * 220, 700 + i * 220, 0.14, 0.06, 'square', d))
 const fanfare = () => [523, 659, 784, 1047].forEach((f, i) => tone(f, f, 0.22, 0.07, 'triangle', i * 0.13))
@@ -209,7 +210,6 @@ export class HideSeek implements World3D {
   private isl: Island
   private anchorEls = new Map<string, HTMLElement>()
   private hintEl: HTMLElement | null = null
-  private bubbleEl: HTMLElement | null = null
   private raycaster = new Raycaster()
   private unwatch: () => void
   private w = 1
@@ -266,7 +266,11 @@ export class HideSeek implements World3D {
   private sparkle: Particles
   private spray: Particles
   private bubbles: Particles
-  private bubble: { who: 'kaylee' | 'nick' | 'ji'; text: string; until: number } | null = null
+  /** The last line said (for QA), until it's had its moment. */
+  private bubble: { text: string; until: number } | null = null
+  private turn = { found: 0, look: 0, spotted: 0, notHere: 0 }
+  private notHereAt = -99
+  private hintOn = false
   private counts = { leads: 0, taps: 0, pokes: 0, peeks: 0, wrong: 0, finds: 0, giveaways: 0, hides: 0, wins: 0, caught: 0, boos: 0, photos: 0 }
 
   constructor(
@@ -454,9 +458,6 @@ export class HideSeek implements World3D {
   setHintElement(el: HTMLElement | null) {
     this.hintEl = el
   }
-  setBubbleElement(el: HTMLElement | null) {
-    this.bubbleEl = el
-  }
   get calm() {
     return false
   }
@@ -471,8 +472,12 @@ export class HideSeek implements World3D {
     this.round = r
     this.hideIdx = 0
     if (!first || was !== r) this.events.round(r)
-    if (r === 'hide') this.toDadCount()
-    else {
+    if (r === 'hide') {
+      this.say(H.myTurn)
+      this.say(H.hide)
+      this.toDadCount()
+    } else {
+      this.say(H.close)
       this.hide = ROUND_HIDES[r][0]
       if (first) this.setPhase('intro')
       else this.toCount()
@@ -523,11 +528,13 @@ export class HideSeek implements World3D {
           this.lastNum = n
           countNote(n)
           this.events.count(n)
+          this.say(H.count[Math.min(n, H.count.length) - 1])
         }
         if (this.phaseT > 0.3 + SEEK.count * SEEK.gap + 0.2) {
           ready()
           this.events.count(0)
           this.placeDadHidden()
+          if (this.hideIdx === 0) this.say(this.round === '2' ? H.tricky : H.find)
           this.setPhase('seek')
           this.wiggleT = 0
           this.giveT = 0
@@ -580,12 +587,12 @@ export class HideSeek implements World3D {
         if (n > this.lastNum && n <= DAD.count) {
           this.lastNum = n
           countNote(n)
-          this.say('nick', `${n}…`, DAD.gap)
+          this.say(H.dadCount[Math.min(n, H.dadCount.length) - 1])
         }
         this.settleHiding()
         if (this.phaseT > 0.4 + DAD.count * DAD.gap + 0.2) {
           ready()
-          this.say('nick', 'Ready or not!', 1.4)
+          this.say(H.ready)
           this.startSearch()
         }
         break
@@ -602,7 +609,7 @@ export class HideSeek implements World3D {
           this.setPhase('giveup')
           this.dad.pose = 'stand'
           this.nick.react('wiggle')
-          this.say('nick', 'Where’s Kaylee?', 2)
+          this.say(H.giveUp)
           hmm()
           break
         }
@@ -692,7 +699,7 @@ export class HideSeek implements World3D {
     this.dad.hop = { from, to, t: 0, dur: SEEK.hop }
     this.setPhase('found')
     this.glowing = false
-    this.say('nick', 'Found you!', 1.8)
+    this.say(H.found[this.turn.found++ % H.found.length])
     tone(700, 1200, 0.2, 0.06, 'triangle')
     window.setTimeout(() => fanfare(), 350)
     this.kaylee.faceToward(to.x, to.z)
@@ -714,8 +721,8 @@ export class HideSeek implements World3D {
       sfx.splash()
     } else if (id === 'towel' || id === 'roots') {
       giggle()
-      giggle(0.35)
-    } else sneeze()
+      this.say(H.hehe)
+    } else this.say(H.achoo)
     if (id === 'pandanus') rustle()
     const p = this.dadPoint(BYID[id])
     this.puffs.burst(p.x, p.y + 0.4, p.z, 6, 0.8, 1, 0.08)
@@ -736,7 +743,11 @@ export class HideSeek implements World3D {
       sfx.fwip()
       this.towelParts.flat.rotation.z = 0.3
     } else sfx.boing()
-    this.say('kaylee', 'Not here!', 1.2)
+    // (Sparkle says so now and then, not at every peek.)
+    if (this.time - this.notHereAt > 6) {
+      this.notHereAt = this.time
+      this.say(H.notHere[this.turn.notHere++ % H.notHere.length])
+    }
     // A giggle from where he really is: a clue.
     window.setTimeout(() => {
       if (this.phase !== 'seek') return
@@ -860,7 +871,7 @@ export class HideSeek implements World3D {
       this.shake(at, 0.6)
       hmm()
       this.dad.yaw = look.wrongWay ? this.seaYaw + Math.PI : Math.atan2(t.x - this.dad.x, t.z - this.dad.z)
-      this.say('nick', look.wrongWay ? 'Hmm… not here!' : at === 'mommy' ? 'Behind Mommy?' : 'Hmm…', DAD.look)
+      this.say(look.wrongWay ? H.wrongWay : at === 'mommy' ? H.mommy : H.look[this.turn.look++ % H.look.length])
       if (at === 'chairs') clatter()
     })
   }
@@ -878,7 +889,7 @@ export class HideSeek implements World3D {
     this.dad.path = []
     this.dad.yaw = Math.atan2(k.x - this.dad.x, k.z - this.dad.z)
     this.nick.react('hop')
-    this.say('nick', 'Found you!', 2)
+    this.say(H.spotted[this.turn.spotted++ % H.spotted.length])
     tone(700, 1200, 0.2, 0.06, 'triangle')
     this.kaylee.twirl()
     giggle(0.2)
@@ -898,7 +909,9 @@ export class HideSeek implements World3D {
     this.kaylee.root.visible = true
     this.kaylee.setPose('stand')
     this.kaylee.twirl()
-    this.say('kaylee', 'Kaylee wins!', 3)
+    this.say(H.win)
+    // (Her name only for the big one: the first win puts up the flag.)
+    if (this.wins === 1) this.say(H.first)
     fanfare()
     this.sparkle.burst(k.x, k.y + 0.9, k.z, 60, 2.8, 2.8, 0.14)
     this.dad.yaw = Math.atan2(k.x - this.dad.x, k.z - this.dad.z)
@@ -910,7 +923,7 @@ export class HideSeek implements World3D {
   private boo() {
     this.counts.boos++
     boo()
-    this.say('kaylee', 'Boo!', 1.2)
+    this.say(H.boo)
     this.nick.react('hop')
     this.puffs.burst(this.dad.x, this.dadY() + 0.2, this.dad.z, 10, 1.4, 1.6, 0.1)
     window.setTimeout(() => {
@@ -1220,7 +1233,7 @@ export class HideSeek implements World3D {
         // He peeks! Then back to counting.
         this.dad.peekT = 0.9
         this.dad.yaw = Math.atan2(k.x - this.dad.x, k.z - this.dad.z)
-        this.say('kaylee', 'No peeking!', 1.3)
+        this.say(H.peek)
         giggle()
         window.setTimeout(() => {
           if (this.phase === 'dadcount') this.dad.yaw = this.seaYaw
@@ -1284,9 +1297,14 @@ export class HideSeek implements World3D {
     t.wob = 0
     t.big = Math.max(t.big, k)
   }
-  private say(who: 'kaylee' | 'nick' | 'ji', text: string, secs: number) {
-    this.bubble = { who, text, until: this.time + secs }
-    if (this.bubbleEl) this.bubbleEl.textContent = text
+  private say(line: Line, mute = false) {
+    this.bubble = { text: lineText(line), until: this.time + 1.5 + lineText(line).length * 0.06 }
+    this.events.say(line, mute)
+  }
+  /** The finger has just come up (she's stuck): the hint, spoken only if the budget allows (spendHint). */
+  private stuck() {
+    const l = this.phase === 'seek' ? H.hint.seek : this.phase === 'dadcount' ? H.hint.hide : null
+    if (l) this.say(l, !spendHint(l))
   }
 
   private life(dt: number, t: number) {
@@ -1397,6 +1415,10 @@ export class HideSeek implements World3D {
       }
       if (best) at = this.kayPoint(best)
     }
+    if (!!at !== this.hintOn) {
+      this.hintOn = !!at
+      if (at) this.stuck()
+    }
     const want = at ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
     if (!at) return
@@ -1437,21 +1459,6 @@ export class HideSeek implements World3D {
         place(el, p, hh, sid === 'tree' ? 0.7 : 1.1)
       }
       el.style.zIndex = id === 'family:nick' && hidingNow ? '4' : id === 'kaylee' ? '3' : id === 'hide:roots' || id === 'hide:towel' ? '2' : '1'
-    }
-    // The speech bubble over whoever is talking.
-    const b = this.bubbleEl
-    if (b) {
-      const who = this.bubble?.who
-      const m = who === 'kaylee' ? this.kaylee.root : who === 'nick' ? this.nick.root : who === 'ji' ? this.ji.root : null
-      const H = who === 'kaylee' ? this.kaylee.height : who === 'nick' ? this.nick.height : this.ji.height
-      const showB = !!m && (who !== 'kaylee' || m.visible)
-      if (showB && m) {
-        const p = m.getWorldPosition(v)
-        const s = this.toScreen(p.setY(Math.max(p.y, 0) + H + 0.25))
-        b.style.transform = `translate3d(${s.x.toFixed(1)}px, ${s.y.toFixed(1)}px, 0)`
-      }
-      const want = showB ? '' : 'none'
-      if (b.style.display !== want) b.style.display = want
     }
   }
 

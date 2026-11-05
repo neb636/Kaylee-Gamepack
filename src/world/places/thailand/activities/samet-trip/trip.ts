@@ -27,6 +27,7 @@ export const SAMET_TRIP: TripDef = {
     cousins: { gan: L.home.gan, ken: L.home.ken, bb: L.home.bb },
     pick: L.home.pick,
     give: L.home.give,
+    wall: L.samet.trip.wall,
   },
 }
 

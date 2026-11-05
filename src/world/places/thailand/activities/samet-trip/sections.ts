@@ -25,8 +25,8 @@
 //           sea, Mommy's photo of the three of them), then night falls.
 //   fireshow  step 9, the fire show on Sai Kaew at night (fireshow?round=twirl|shapes|finish): twirl the glowing poi.
 // With all four flags up, the driftwood tree opens the finale; at the end of the fire show they go home: Mommy's photo
-// goes on Agong's wall, the stamp lands on the 🏝️ pin (the speedboat at Na Dan pier takes them home too). The trip is saved on the iPad as she plays (trip.ts). In the
-// works: only these links (and the map's pin with ?samet=1) reach it. Loaded at startup: keep three.js (and the island's coastline data) out of this file.
+// goes on Agong's wall, the stamp lands on the 🏝️ pin (the speedboat at Na Dan pier takes them home too). The trip is saved on the iPad as she plays (trip.ts). The Thailand
+// map's 🏝️ pin opens it. Loaded at startup: keep three.js (and the island's coastline data) out of this file.
 import { defineSections } from '../../../../kit/sections'
 import { ITEMS } from '../../trip/packing'
 import { ANIMAL_IDS } from './book/animals'
@@ -49,7 +49,7 @@ export const FLAGS = ['jetski', 'sandcastle', 'snorkel', 'hideseek'] as const
 export const TIMES = ['morning', 'noon', 'afternoon', 'golden', 'night'] as const
 
 const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
-  note: "In the works (greyboxes 1 to 7 of the plan). The Thailand map's 🏝️ pin shows with ?samet=1. Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski, the sand, the snorkel, lunch and hide and seek; ?fps=1 or ?debug=1 shows the frame rate.",
+  note: "The Thailand map's 🏝️ pin opens it. Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski, the sand, the snorkel, lunch and hide and seek; ?fps=1 or ?debug=1 shows the frame rate.",
   params: {
     packed: { default: SAMET_PACKED, doc: `what's in her suitcase, a comma list of ${ITEMS.map((i) => i.id).join(', ')} (Mommy always tucks in the sunscreen; her sun hat and sunglasses go on). A link without it opens what the iPad saved` },
     at: { default: 'nadan', values: SPOTS, doc: 'where she stands on the island: nadan (the pier, where the speedboat lands), saikaew (the jet ski beach), hinkhok (the sandcastle beach), phai, wongduan (the snorkel boat), prao (the sunset beach and the driftwood tree), deck (the resort deck above Ao Prao), aonoina (the quiet north beach)' },

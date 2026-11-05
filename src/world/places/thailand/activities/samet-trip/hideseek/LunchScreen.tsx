@@ -1,13 +1,14 @@
 // Lunch on the deck at Ao Prao, on screen (lunch.ts is the world): the table with its tap targets, the pressing finger
 // when she's been still a while, Mommy's photo flash, and once she has had a roll, the coconut and the rice a 🍽️ badge
 // with the ways on: back to the island, or down the steps to hide and seek at the driftwood tree.
-// Greybox: no voices yet.
+// Sparkle sits in the corner (trip/legs/Guide.tsx) and plays everyone's lines (lines.ts L.samet.lunch).
 import { useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
 import { BigButton, burst } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import type { TimeOfDay } from '../island/scenery'
 import { Lunch as World, LUNCH_ANCHORS, type LunchEvents } from './lunch'
 
@@ -26,9 +27,11 @@ export function LunchScreen({ time, onIsland, onHideSeek }: Props) {
   const [flash, setFlash] = useState(0)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
 
   const events = useRef<LunchEvents>({
     photo: () => setFlash((f) => f + 1),
+    say: (l, mute) => guideRef.current?.speak(l, mute),
     done: () => {
       setDone(true)
       burst()
@@ -59,6 +62,7 @@ export function LunchScreen({ time, onIsland, onHideSeek }: Props) {
           </>
         )}
       />
+      {mode === 'webgl' && <TripGuide ref={guideRef} />}
       <AnimatePresence>
         {flash > 0 && <motion.div key={flash} className="ln-flash" initial={{ opacity: 0.85 }} animate={{ opacity: 0 }} transition={{ duration: 0.45 }} />}
       </AnimatePresence>

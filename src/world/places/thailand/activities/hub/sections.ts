@@ -24,7 +24,7 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
     },
   },
   sections: [
-    { id: 'map', name: 'The Thailand map: tap a pin to go there', params: ['stamp'], group: 'The Thailand map', links: [{ label: 'The map', bare: true }, { label: 'Home from a trip: the stamp lands on Krabi', params: { stamp: 'boat-trip' } }, { label: 'With the Koh Samet pin (in the works)', flags: { samet: '1' } }] },
+    { id: 'map', name: 'The Thailand map: tap a pin to go there', params: ['stamp'], group: 'The Thailand map', links: [{ label: 'The map', bare: true }, { label: 'Home from a trip: the stamp lands on Krabi', params: { stamp: 'boat-trip' } }] },
     { id: 'arrive', name: 'Arrive by tuk-tuk', group: "Agong's house" },
     { id: 'street', name: "In front of Agong's house", params: ['at'], group: "Agong's house" },
     { id: 'downstairs', name: 'Downstairs', params: ['at'], group: "Agong's house" },

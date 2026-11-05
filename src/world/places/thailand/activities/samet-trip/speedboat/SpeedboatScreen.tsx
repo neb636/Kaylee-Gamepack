@@ -1,6 +1,6 @@
 // The speedboat to Koh Samet, on screen (speedboat.ts is the world): the boat with its tap targets, a finger pressing
 // on the water beside Kaylee when she's had no hoof in it for a while, and ⏩ to skip ahead to the pier once the ride
-// has gone on a bit. Greybox: no voices yet.
+// has gone on a bit. Sparkle sits in the corner (trip/legs/Guide.tsx) and everyone talks through her bubble.
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
@@ -8,6 +8,7 @@ import { sounds } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import type { TimeOfDay } from '../island/scenery'
+import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
 import { BOAT_ANCHORS, SametSpeedboat as World } from './speedboat'
 
 interface Props {
@@ -23,10 +24,11 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
   const [skip, setSkip] = useState(false)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const guideRef = useRef<TripGuideHandle>(null)
   const cb = useRef(onIsland)
   cb.current = onIsland
   const make = (renderer: WebGLRenderer) => {
-    const w = new World(renderer, { time, packed }, { done: () => cb.current() })
+    const w = new World(renderer, { time, packed }, { done: () => cb.current(), say: (l, mute) => guideRef.current?.speak(l, mute) })
     w.setHintElement(hintRef.current)
     return w
   }
@@ -71,6 +73,7 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
           ⏩
         </motion.button>
       )}
+      {mode === 'webgl' && <TripGuide ref={guideRef} />}
       {mode === 'lost' && (
         <button
           onClick={() => {

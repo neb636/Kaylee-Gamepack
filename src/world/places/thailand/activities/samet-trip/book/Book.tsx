@@ -4,10 +4,12 @@
 // name pops up over it ("A hornbill!") and a good photo (the animal big in the middle) gets a gold frame. The book has a
 // page per beach: a lavender silhouette for each animal still to find (tap it: where to look), her photo once she has
 // it (tap it: its fact), the stop's sticker in the corner once its pink flag is up, and a gold star on the book when
-// it's full. Greybox: the names, hints and facts are text for now (the full loop speaks them).
+// it's full. The names, hints and facts are lines.ts L.samet.book, spoken in Sparkle's voice
+// (the book says them itself: the island's TripGuide hides while it's open).
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { sounds } from '../../../../../../sdk'
+import { say, sounds } from '../../../../../../sdk'
+import { L } from '../../../lines'
 import { sfx } from '../../../sfx'
 import { ANIMALS, ANIMAL_IDS, PAGES, type AnimalId } from './animals'
 
@@ -210,9 +212,11 @@ function BookPages(p: Props) {
                       if (has) {
                         sfx.pop()
                         setBig(a)
+                        void say(L.samet.book.fact[a])
                       } else {
                         sfx.boop()
                         setHint(a)
+                        void say(L.samet.book.where[a])
                       }
                     }}
                   >

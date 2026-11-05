@@ -57,7 +57,7 @@ const th = (card: string, name: string, activity: string, section: string, emoji
   section,
 })
 
-// Thailand: the house and its three trips, each game its own card. (The Nan Mountain Cup joins when it's out of greybox.)
+// Thailand: the house and its four trips, each game its own card. (The Nan Mountain Cup joins when it's out of greybox.)
 const THAILAND: ShelfRow[] = [
   {
     id: 'house',
@@ -109,6 +109,21 @@ const THAILAND: ShelfRow[] = [
     flag: 'thailand',
     emoji: '🏔️',
     games: [th('drive', 'Mountain road', 'nan-trip', 'drive', '🚙'), th('mushrooms', 'Mushrooms', 'nan-trip', 'mushrooms', '🍄'), th('rice', 'Rice farm', 'nan-trip', 'rice', '🌾'), th('salt', 'Salt wells', 'nan-trip', 'salt', '🧂')],
+  },
+  {
+    id: 'samet',
+    banner: banner('samet'),
+    title: 'Koh Samet',
+    flag: 'thailand',
+    emoji: '🏝️',
+    games: [
+      th('island', 'The island', 'samet-trip', 'island', '🏝️'),
+      th('jetski', 'Jet ski', 'samet-trip', 'jetski', '🛥️'),
+      th('sandcastle', 'Sandcastle', 'samet-trip', 'sandcastle', '🏰'),
+      th('snorkel', 'Snorkel', 'samet-trip', 'snorkel', '🐠'),
+      th('hideseek', 'Hide and seek', 'samet-trip', 'hideseek', '🙈'),
+      th('fireshow', 'Fire show', 'samet-trip', 'fireshow', '🔥'),
+    ],
   },
 ]
 

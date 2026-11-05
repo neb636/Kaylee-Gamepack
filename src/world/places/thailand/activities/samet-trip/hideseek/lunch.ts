@@ -13,9 +13,12 @@
 // When she has had a roll, the coconut and the rice: a 🍽️ badge, the way back to the island and a way down to hide
 // and seek at the driftwood tree.
 //
-// Greybox: simple shapes in the toon look, no voices. Every number that decides the feel is a knob (?feel=1).
+// Talk (lines.ts L.samet.lunch): Daddy and Mommy in their own voices, Sparkle's one line and the stuck hints
+// (spendHint), played by the screen's TripGuide. Every number that decides the feel is a knob (?feel=1).
 import { Fog, Group, Raycaster, Scene, Vector2, Vector3, type Object3D, type WebGLRenderer } from 'three'
+import { spendHint, type Line } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
+import { L } from '../../../lines'
 import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
@@ -55,7 +58,11 @@ export interface LunchEvents {
   photo(): void
   /** She had a roll, the coconut and the rice. */
   done(): void
+  /** Someone talks (`mute`: a stuck hint shown without its voice). */
+  say(line: Line, mute?: boolean): void
 }
+
+const T_ = L.samet.lunch
 
 export const LUNCH_ANCHORS: AnchorInfo[] = [
   { id: 'kaylee', label: 'Kaylee', kind: 'thing' },
@@ -146,6 +153,10 @@ export class Lunch implements World3D {
   private sparkle: Particles
   private spray: Particles
   private doneAt = -1
+  private turn = { pass: 0, photo: 0 }
+  private said = new Set<string>()
+  private fullAt = -1
+  private hintOn = false
   private counts = { taps: 0, pokes: 0, rolls: 0, bites: 0, sips: 0, sipSecs: 0, rice: 0, photos: 0, splashes: 0 }
 
   constructor(
@@ -278,17 +289,35 @@ export class Lunch implements World3D {
 
   // ---------------------------------------------------------------- lunch
 
+  /** Says it once a visit to the deck. */
+  private once(key: string, l: Line) {
+    if (this.said.has(key)) return
+    this.said.add(key)
+    this.events.say(l)
+  }
+
   private meal(dt: number, t: number) {
+    if (t > 0.6) {
+      this.once('hi', T_.hi)
+      this.once('start', T_.start)
+    }
     // The coconut and the rice arrive (a pop and a ding).
     if (this.cocoK < 0 && (t > LUNCH.coconutAt || this.rollsEaten > 0)) {
       this.cocoK = 0
       this.coco.root.visible = true
       ding()
+      this.once('coconut', T_.coconut)
     }
     if (this.plateK < 0 && (t > LUNCH.riceAt || (this.cocoK >= 0 && this.milk < 0.5))) {
       this.plateK = 0
       this.plate.root.visible = true
       ding()
+      this.once('rice', T_.rice)
+    }
+    // (Daddy's "hide and seek?" waits for Mommy's "aroi" to finish.)
+    if (this.fullAt > 0 && t > this.fullAt) {
+      this.fullAt = -1
+      this.events.say(T_.full)
     }
     for (const [k, g] of [[this.cocoK, this.coco.root], [this.plateK, this.plate.root]] as const) {
       if (k < 0 || k >= 1) continue
@@ -311,6 +340,7 @@ export class Lunch implements World3D {
         slurp(true)
         this.cocoWob = 1
         this.kaylee.react('wiggle')
+        this.once('slurp', T_.slurp)
         this.sparkle.burst(this.coco.root.position.x, this.coco.root.position.y + 0.4, this.coco.root.position.z, 14, 1, 1.2, 0.08)
       }
     }
@@ -350,6 +380,7 @@ export class Lunch implements World3D {
     if (this.doneAt < 0 && this.rollsEaten > 0 && this.milk <= 0 && this.riceLeft <= 0) {
       this.doneAt = t
       this.events.done()
+      this.fullAt = t + 2.4
     }
   }
 
@@ -372,6 +403,8 @@ export class Lunch implements World3D {
     this.reachT = 0
     this.nick.react('wiggle')
     sfx.fwip()
+    // (The first few rolls; after that he just passes them.)
+    if (this.turn.pass < T_.pass.length) this.events.say(T_.pass[this.turn.pass++])
     // (A roll goes out of the basket while it's flying; it refills.)
     const shown = this.basket.rolls.filter((x) => x.visible)
     if (shown.length) shown[shown.length - 1].visible = false
@@ -434,6 +467,7 @@ export class Lunch implements World3D {
           const p = this.plate.root.position
           this.sparkle.burst(p.x, p.y + 0.1, p.z, 20, 1, 1.2, 0.08)
           tone(880, 1320, 0.3, 0.06, 'triangle')
+          this.once('aroi', T_.aroi)
         }
       },
     })
@@ -534,6 +568,7 @@ export class Lunch implements World3D {
       shutter()
       this.counts.photos++
       this.events.photo()
+      this.events.say(T_.photo[this.turn.photo++ % T_.photo.length])
       return
     }
     if (id.startsWith('umbrella:')) {
@@ -545,12 +580,14 @@ export class Lunch implements World3D {
       this.liz.flick = 0.6
       this.liz.hurry = 1
       hiss(0.2, 0.06, 'bandpass', 2500, 1800)
+      this.once('lizard', T_.lizard)
       return
     }
     if (id === 'squirrel') {
       this.sq.goal = this.sq.k > 0.6 ? 0.15 : 1
       this.sq.chit = 0.5
       chitter()
+      this.once('squirrel', T_.squirrel)
     }
   }
 
@@ -601,6 +638,12 @@ export class Lunch implements World3D {
       else if (this.rollsEaten === 0) at = this.basket.root.position.clone()
       else if (this.cocoK >= 1 && this.milk > 0) at = this.coco.root.position.clone()
       else if (this.plateK >= 1 && this.riceLeft > 0) at = this.plate.root.position.clone()
+    }
+    if (!!at !== this.hintOn) {
+      this.hintOn = !!at
+      // The finger has just come up: the hint, spoken only if the budget allows (spendHint).
+      const l = !at ? null : this.held ? T_.hint.roll : this.rollsEaten === 0 ? T_.hint.basket : this.cocoK >= 1 && this.milk > 0 ? T_.hint.coconut : T_.hint.rice
+      if (l) this.events.say(l, !spendHint(l))
     }
     const want = at ? '' : 'none'
     if (el.style.display !== want) el.style.display = want

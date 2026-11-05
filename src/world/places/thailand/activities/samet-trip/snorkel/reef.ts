@@ -257,7 +257,7 @@ export function boat(bag: Bag) {
   const captain = rig.root
   const arm = rig.armR
   root.add(captain)
-  return { root, body, ladder, captain, arm }
+  return { root, body, ladder, captain, arm, rig }
 }
 
 /** The giant clam: two wavy shells with a blue-purple mantle; the top shell closes. */

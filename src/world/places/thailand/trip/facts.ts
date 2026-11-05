@@ -40,3 +40,15 @@ export const NAN_FACTS = [
   { icon: '🧂', label: 'Salt well', say: L.nan.trip.facts.salt },
   { icon: '🌊', label: 'An old sea', say: L.nan.trip.facts.sea },
 ]
+
+// The Koh Samet trip's tap-to-hear facts (plan: thailand/samet-trip.html), for its stamp screen and the passport.
+export const SAMET_FACTS = [
+  { icon: '🏝️', label: 'Koh', say: L.samet.trip.facts.island },
+  { icon: '🌳', label: 'Samet tree', say: L.samet.trip.facts.samet },
+  { icon: '✨', label: 'Crystal sand', say: L.samet.trip.facts.sand },
+  { icon: '🧜‍♀️', label: 'The mermaid', say: L.samet.trip.facts.mermaid },
+  { icon: '🐒', label: 'National park', say: L.samet.trip.facts.park },
+  { icon: '🦺', label: 'Life jacket', say: L.samet.trip.facts.jacket },
+  { icon: '🌅', label: 'Sunset', say: L.samet.trip.facts.sunset },
+  { icon: '📷', label: 'Look, then let it be', say: L.samet.trip.facts.look },
+]

@@ -587,6 +587,340 @@ export const L = {
     },
   },
 
+  // The Koh Samet island trip (activities/samet-trip/, plan: thailand/samet-trip.html). Talk short, play long: Sparkle
+  // says what's new (the first time she reaches each beach, a new round) and, after a while with nothing done, what to
+  // do (spendHint, so at most twice a visit); the family and the islanders react in their own voices (cast.json): the
+  // jet ski man (an otter), the captain (a pelican, both boats), the taxi driver (a sun bear) and the fire dancers (two
+  // tokay geckos, one voice). Kaylee never talks: she giggles. The island and the book are a hub: no idle hints spoken.
+  samet: {
+    // Getting there and home (PackScreen, speedboat/, the trip frame), the sticker and the stamp screen's facts.
+    trip: {
+      // The speedboat from Ban Phe (speedboat/): the captain (a pelican) says hello, Sparkle the one instruction, then
+      // only reactions to what happens; the stuck hint once the finger has shown.
+      boat: {
+        hi: by('pelican')('Sawasdee ka! Hold on tight!'),
+        go: 'Put your hoof in the water!',
+        hint: 'Touch the water by the boat!',
+        fish: 'Flying fish!',
+        jump: nick('Whoa! We flew!'),
+        // A bump with her hoof in the water soaks Mommy (in turn).
+        soak: [ji("Hey! I'm all wet!"), ji('Splash! Ha ha!'), ji('Not again!')],
+        // Tap the captain, Daddy (his cap blows off), Mommy (her sun hat flies up) (each in turn).
+        captain: [by('pelican')('Beep beep!'), by('pelican')('Wiggle wiggle! Ha ha!'), by('pelican')('Hold on to your hats!')],
+        nick: [nick('My cap!'), nick('So windy!')],
+        ji: [ji('My sun hat!'), ji('Whee! So fast!')],
+        // Tied up at Na Dan pier.
+        here: by('pelican')('Koh Samet! Here we are!'),
+      },
+      // The photo on Agong's wall, tapped in the house.
+      wall: ji('Our trip to Koh Samet!'),
+      // The stamp screen's sticker.
+      sticker: 'Pink mermaid sticker! A mermaid sits on the rocks!',
+      // The stamp screen's tap-to-hear facts (and the passport), in Sparkle's voice.
+      facts: {
+        island: 'Koh means island in Thai!',
+        samet: 'The samet tree gave the island its name!',
+        sand: 'Sai Kaew means crystal sand!',
+        mermaid: 'The mermaid is from an old Thai poem!',
+        park: 'Koh Samet is a national park, a home for animals!',
+        jacket: 'Always wear a life jacket on the water!',
+        sunset: 'The sun sets in the west, over Ao Prao!',
+        look: 'Take a photo of an animal, then let it be!',
+      },
+    },
+    // The island to roam (island/): Sparkle's first line, each beach the first time, the taxi, the pokes, home.
+    island: {
+      // Sparkle, the first time she lands on the island this visit.
+      hi: "Koh Samet! Let's explore the island!",
+      // Sparkle, the first time she reaches each beach this visit.
+      beach: {
+        saikaew: 'Hat Sai Kaew! The jet ski beach!',
+        hinkhok: 'Ao Hin Khok! Build a sandcastle!',
+        phai: 'Ao Phai! A quiet little bay!',
+        wongduan: 'Ao Wong Duan! The snorkel boat!',
+        prao: 'Ao Prao! The big driftwood tree!',
+        aonoina: 'Ao Noi Na! Look at the boats!',
+      },
+      // The jet ski is hers (once a visit, with its flag up); all four flags: Daddy calls everyone to the tree.
+      hers: 'The jet ski is yours now! Hop on!',
+      sunset: nick('Sunset time! To the big tree!'),
+      // Mommy's phone out for the first time this visit; the first rubbish in the bin.
+      phone: 'Tap an animal to take its photo!',
+      clean: ji('Thank you for cleaning the beach!'),
+      // The green taxi's driver (a sun bear): the first ride, then each ride in turn.
+      taxi: {
+        hi: by('sunbear')('Sawasdee krap! Hop in!'),
+        ride: [by('sunbear')('Beep beep!'), by('sunbear')('Hold on! Bumpy road!'), by('sunbear')('Next stop, the beach!')],
+      },
+      // Tap Daddy (in turn; asleep on the sand he wakes up), tap Mommy (in turn).
+      nick: [nick('Hi, sweetie!'), nick('I love this beach!'), nick('Race you to the sea!')],
+      wake: nick('Huh? I was sleeping!'),
+      ji: [ji('So pretty here!'), ji('Sunscreen on, sweetie!'), ji('Mommy loves you!')],
+      // A coconut on Daddy's head, the umbrella kite.
+      bonk: nick('Ow! A coconut!'),
+      kite: ji('Whoa! Hold on tight!'),
+      // On Na Dan pier going home: Mommy's photo.
+      home: ji('Smile! Bye bye, Koh Samet!'),
+    },
+    // Mommy's phone and the animal book (book/): Sparkle says the name once when it's snapped; a tap on its photo plays
+    // the fact.
+    book: {
+      // Sparkle says its name when it's snapped for the first time; a tap on its photo in the book plays the fact, a tap on
+      // its silhouette where to look.
+      name: {
+        tern: 'A tern!',
+        crab: 'A crab!',
+        heron: 'A reef heron!',
+        urchin: 'A sea urchin!',
+        coral: 'Coral!',
+        hornbill: 'A hornbill!',
+        parrotfish: 'A parrotfish!',
+        damselfish: 'Blue damselfish!',
+        cuttlefish: 'A cuttlefish!',
+        monitor: 'A monitor lizard!',
+        mousedeer: 'A mouse-deer!',
+        flyingfox: 'A flying fox!',
+        squirrel: 'A squirrel!',
+        macaque: 'A monkey!',
+      },
+      fact: {
+        tern: 'Terns dive into the sea to catch fish!',
+        crab: 'Ghost crabs dig holes to hide from the sun!',
+        heron: 'The reef heron stands still, then grabs a fish!',
+        urchin: "Sea urchins are prickly. Look, but don't touch!",
+        coral: "Coral looks like rock, but it's alive!",
+        hornbill: 'The hornbill has a giant yellow beak!',
+        parrotfish: 'Parrotfish nibble coral, and it turns into sand!',
+        damselfish: 'Damselfish swim in a big crowd to stay safe!',
+        cuttlefish: 'A cuttlefish can change color in a blink!',
+        monitor: 'Monitor lizards smell with their tongue!',
+        mousedeer: 'The mouse-deer is as small as a cat!',
+        flyingfox: 'A flying fox is a big bat that eats fruit!',
+        squirrel: 'Squirrels run up the palm trees!',
+        macaque: 'Monkeys! Hold on to your sunglasses!',
+      },
+      where: {
+        tern: 'Look up over the sea at Sai Kaew!',
+        crab: 'Look for little holes in the sand!',
+        heron: 'Look on the rocks by the mermaid!',
+        urchin: 'Look in the water by the rocks!',
+        coral: 'Look under the water at Hin Khok!',
+        hornbill: 'Look up in the big tree at Wong Duan!',
+        parrotfish: 'Look in the water at Wong Duan!',
+        damselfish: 'Look for a crowd of little blue fish!',
+        cuttlefish: 'Look by the snorkel boat!',
+        monitor: 'Look on the sand at Ao Prao!',
+        mousedeer: 'By the forest at Ao Prao. Walk slowly!',
+        flyingfox: 'Look up in the trees at Ao Prao!',
+        squirrel: 'Look up the palm trees!',
+        macaque: 'Look by the road over the hill!',
+      },
+      // The book full (a fanfare and a gold star).
+      full: `${NAME}, your animal book is full!`,
+    },
+    // The jet ski at Hat Sai Kaew (jetski/): ride, waves, race the jet ski man.
+    jetski: {
+      // The jet ski man (an otter) as the bare link waits for her life jacket, then Sparkle's line once it's on.
+      jacket: by('otter')('Sawasdee krap! Life jacket first!'),
+      ready: by('otter')('Hold on tight! Off you go!'),
+      // Sparkle, as each round begins (the jacket's tap and the waves and the race moving on by themselves).
+      ride: 'Steer it with your finger!',
+      waves: 'Big waves! Drive over them!',
+      race: 'Race the jet ski man!',
+      // Sparkle's countdown (3, 2, 1, go).
+      count: ['Three!', 'Two!', 'One!', 'Go!'],
+      // The jet ski man in the race: his tease at the start, the bell (she won, he's a good sport; he won by a nose).
+      tease: by('otter')('Catch me if you can!'),
+      won: [by('otter')('Wow! You are fast!'), by('otter')('You win again! Ha ha!')],
+      lost: by('otter')('Ha! Just a nose!'),
+      // Sparkle, when he wins by a nose (straight into the next race), and Daddy at her win.
+      close: 'So close! Again!',
+      champ: nick(`${NAME} wins!`),
+      // Daddy on the jet ski (each list in turn): a jump, a spin in the air, the loop (and the heart), dizzy circles,
+      // Mommy soaked, onto the sand.
+      jump: [nick('Wheee!'), nick('We can fly!'), nick('Yee-haw!')],
+      spin: nick('A spin! Whoa!'),
+      loop: nick('Look! The fish!'),
+      heart: nick('A heart! For Mommy!'),
+      dizzy: nick("Round and round! I'm dizzy!"),
+      soaked: ji("Hey! I'm all wet!"),
+      beached: [nick('Oops! Sandy jet ski!'), nick('Whoa! Not the beach!'), nick('Ha ha! Again?')],
+      push: [by('otter')('Back in the water!'), by('otter')('Ha ha! Boats go in the sea!')],
+      // Pokes, in turn: Daddy (his cap blows off), Mommy on the sand, the jet ski man.
+      cap: [nick('My cap!'), nick('Not again!')],
+      mommy: [ji('Go, go, go!'), ji('Wave to Mommy!')],
+      man: [by('otter')('Sawasdee krap!'), by('otter')('Zoom zoom!'), by('otter')('Nice driving!')],
+      // Sparkle's facts, the first time she pokes them: the buoy rope, the life jacket.
+      rope: 'The rope keeps the swimmers safe!',
+      // Sparkle, after a while with nothing done (spendHint: shown first, then said at most twice a visit).
+      hint: {
+        jacket: 'Tap the life jacket!',
+        steer: 'Hold your finger on the water!',
+      },
+    },
+    // The sandcastle at Ao Hin Khok (sandcastle/): dig, towers, the tide.
+    sandcastle: {
+      // Daddy as it opens, then Sparkle's line for each round (dig at once; the moulds and the tide move on by
+      // themselves).
+      hi: nick("Let's build a sandcastle!"),
+      dig: 'Dig the sand with your finger!',
+      towers: 'Tap a bucket to make a tower!',
+      tide: 'The sea is coming! Dig a river to it!',
+      // The moat fills from the sea; the tide fact (Sparkle, after the fill).
+      filled: nick('Water in the moat! Hooray!'),
+      tideFact: 'The sea comes up the beach and goes back, twice a day!',
+      // The big wave takes a tower's front; a crab pops out of a hole; the hermit crab moves in.
+      washed: nick('Oh no! Build it again!'),
+      crab: 'A ghost crab! It runs sideways!',
+      hermit: 'A hermit crab moved in!',
+      // Burying Daddy (the first time he's all covered), his sneeze, his toes (in turn).
+      buried: nick("Help! I'm a sandcastle!"),
+      sneeze: nick('Ah... ah... choo!'),
+      toes: [nick('Hee hee! That tickles!'), nick('My toes!')],
+      // Pokes, in turn: Daddy, Mommy on the blanket.
+      dad: [nick('Bury me in sand!'), nick('Great castle!')],
+      mommy: [ji('So pretty!'), ji('A princess castle!')],
+      // Sparkle, after a while with nothing done.
+      hint: {
+        dig: 'Drag your finger in the sand!',
+        towers: 'Tap a bucket!',
+        tide: 'Dig a line down to the sea!',
+      },
+    },
+    // Snorkeling at Ko Kudi (snorkel/): the captain's boat, float, follow the parrotfish, the cuttlefish.
+    snorkel: {
+      // The captain (the pelican) toots and sends her in; Sparkle says what each round is for (the first two before
+      // her first touch), the facts the first time (coral when she first bumps or pokes one, the cuttlefish when it
+      // first flashes), and after a while with nothing done what to do. Daddy blows bubble rings.
+      jump: by('pelican')('Masks on! Jump in!'),
+      float: 'Hold your finger in the water to swim!',
+      follow: 'Follow the parrotfish!',
+      cuttle: 'Swim close to the cuttlefish!',
+      pink: 'It turned pink, just for you!',
+      camera: 'Tap the camera for a photo!',
+      coral: 'Coral is alive! Fish live in it.',
+      colors: 'Cuttlefish change color to talk!',
+      urchin: by('nick')('Boing! Prickly!'),
+      ring: by('nick')('A bubble ring for you!'),
+      // Tap Daddy (after his first ring), tap the captain (each list in turn).
+      dad: [by('nick')('Blub blub!'), by('nick')('Look at all the fish!'), by('nick')('Swim, swim, swim!')],
+      captain: [by('pelican')('Toot toot! Ha ha!'), by('pelican')('Good swimming, little one!'), by('pelican')('My boat waits for you, ka!')],
+      // Sparkle, after a while with nothing done.
+      hint: {
+        float: 'Hold your finger in the water to swim!',
+        follow: 'Swim after the parrotfish!',
+        cuttle: 'Swim to the cuttlefish!',
+      },
+    },
+    // Lunch on the deck at Ao Prao (hideseek/lunch.ts).
+    lunch: {
+      // Daddy passes the rolls, Mommy brings the coconut and the mango sticky rice; Sparkle's one line, and what to do
+      // after a while with nothing done.
+      hi: by('nick')('Lunch time! Who wants bread?'),
+      start: 'Tap the bread basket!',
+      // Daddy passing a roll (in turn), then the coconut, the rice, the last slurp and the last bite.
+      pass: [by('nick')('Here you go!'), by('nick')('Catch!'), by('nick')('Another one? Ha ha!')],
+      coconut: ji('A coconut! Sip it!'),
+      slurp: by('nick')('What a big slurp!'),
+      rice: ji('Mango sticky rice!'),
+      aroi: ji('Aroi mak! So yummy!'),
+      full: by('nick')('Full tummy! Hide and seek?'),
+      // Tap Mommy (her photo, in turn); the lizard and the squirrel below, the first time.
+      photo: [ji('Smile!'), ji('Cheese!'), ji('So cute!')],
+      lizard: by('nick')('A big lizard! Hello!'),
+      squirrel: ji('A squirrel! Up it goes!'),
+      hint: {
+        basket: 'Tap the bread basket!',
+        roll: 'Tap the roll to take a bite!',
+        coconut: 'Hold your finger on the coconut!',
+        rice: 'Tap the mango sticky rice!',
+      },
+    },
+    // Hide and seek by the driftwood tree (hideseek/).
+    hideseek: {
+      // Daddy says what's happening and plays it up in his own voice; Sparkle counts with Kaylee (her eyes shut), says
+      // what to do once a round, and after a while with nothing done; Kaylee never talks (she giggles).
+      close: by('nick')('Close your eyes and count!'),
+      // Sparkle counting with her (round 1 and 2), Daddy counting in her turn (up to his count knob's most).
+      count: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!', 'Nine!', 'Ten!'],
+      dadCount: ['One!', 'Two!', 'Three!', 'Four!', 'Five!', 'Six!', 'Seven!', 'Eight!', 'Nine!', 'Ten!', 'Eleven!', 'Twelve!'].map(by('nick')),
+      find: 'Find Daddy!',
+      tricky: 'Daddy hides better now!',
+      notHere: ['Not here!', 'Hmm, not there!'],
+      // Daddy found (in turn), giving himself away (a sneeze, a giggle).
+      found: [by('nick')('You found me!'), by('nick')('Ha ha! Found!'), by('nick')('Good finding!')],
+      achoo: by('nick')('Ah... ah... choo!'),
+      hehe: by('nick')('Hee hee hee!'),
+      // Her turn: Daddy counts at the tree (tap him: he peeks), searches the wrong places, gives up.
+      myTurn: by('nick')('My turn to count! Go hide!'),
+      hide: 'Hide in a glowing spot!',
+      peek: by('nick')('Oops! No peeking!'),
+      ready: by('nick')('Ready or not!'),
+      look: [by('nick')('Is she here?'), by('nick')('Not here!'), by('nick')('Hmm, where is she?')],
+      mommy: by('nick')('Behind Mommy?'),
+      wrongWay: by('nick')('Hmm... not here!'),
+      giveUp: by('nick')('Where is she? I give up!'),
+      win: by('nick')('You win! Super hider!'),
+      first: `${NAME} wins hide and seek!`,
+      spotted: [by('nick')('Found you!'), by('nick')('Peekaboo! I see you!')],
+      boo: by('nick')('Waah! You scared me!'),
+      hint: {
+        seek: 'Where is Daddy? Listen!',
+        hide: 'Walk to a hiding place!',
+      },
+    },
+    // The finale (finale/): the sunset at the driftwood tree, then the fire show on Sai Kaew.
+    finale: {
+      // The sunset (finale/sunset.ts): Daddy as it opens, Sparkle's one instruction, the fact the first time she taps
+      // the sun, Mommy's photo (when she taps Mommy, or by herself as the sun touches the sea), the plop, the night.
+      sunset: {
+        look: nick('Look! The sun is going to sleep!'),
+        pull: 'Pull the sun down into the sea!',
+        west: 'The sun always sets in the west!',
+        photo: ji('Sunset photo! Smile!'),
+        plop: nick('Plop! Into the sea!'),
+        night: nick('Fire show time!'),
+        // Tap Daddy (in turn).
+        tap: [nick('So pretty!'), nick('Bye bye, sun!'), nick('Ooh, the stars!')],
+        // Sparkle, after a while with nothing done (spendHint).
+        hint: { pull: 'Pull the sun down into the sea!', fire: 'Tap the fire for the show!' },
+      },
+      // The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and
+      // show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.
+      fire: {
+        look: ji('Look! Fire dancers!'),
+        twirl: 'Swirl your lights with your finger!',
+        // Once, the first time the dancers answer her with a ring of fire.
+        grownups: 'Fire is for grown-ups. Yours are lights!',
+        // Big loops of hers (in turn, now and then).
+        big: [by('gecko')('Whoa! Big circle!'), by('gecko')('Faster! Faster!'), by('gecko')('Wow! You are good!')],
+        // The shapes: they draw one in fire, then it's her turn; each one lifting off (circle, star, heart, in order).
+        watch: by('gecko')('Watch us! Now you!'),
+        dots: 'Draw over the dots!',
+        shapes: [by('gecko')('A circle!'), by('gecko')('A star!'), by('gecko')('A heart!')],
+        lantern: 'It floats up like a lantern!',
+        // The finish: Sparkle's line, each flag's surprise, the big ring, the ring of fire, the fireworks.
+        loops: 'Swirl a loop! Something is coming!',
+        gift: {
+          jetski: by('otter')('Woo hoo! Lights on!'),
+          sandcastle: ji('Your sandcastle is glowing!'),
+          snorkel: nick('The fish are glowing!'),
+          hideseek: nick('Daddy can dance too!'),
+        },
+        giant: 'Now one giant circle!',
+        ring: by('gecko')('Ring of fire!'),
+        wow: `${NAME}, what a show!`,
+        home: ji('Time to go home!'),
+        // Tap a dancer, Mommy, Daddy (each in turn).
+        dancer: [by('gecko')('Sawasdee!'), by('gecko')('Tukkae! Tukkae!'), by('gecko')('Hot, hot fire!')],
+        jiTap: [ji('So beautiful!'), ji('My little fire dancer!')],
+        nickTap: [nick('Twirl, twirl!'), nick('Wow!'), nick('Do a big one!')],
+        // Sparkle, after a while with nothing done (spendHint).
+        hint: { twirl: 'Swirl your finger in the sky!', dots: 'Follow the dots with your finger!', loops: 'Swirl a loop!', giant: 'Draw one giant circle!', sky: 'Tap the sky for fireworks!' },
+      },
+    },
+  },
+
   // The mall day at ICONSIAM (activities/mall-trip/, plan: thailand/mall-trip.md). Talk short, play long: Sparkle's one
   // line when a mini game opens (and when something new starts, or after a while with nothing touched), the family's
   // and the friends' short reactions in their own voices (the monkey coach, the HarborLand staff, the pizza server, the

@@ -18,10 +18,12 @@
 // it back; spin tight circles and Daddy goes dizzy; splash Mommy on the shore; push into the rope and it stretches
 // like a rubber band and boings her back. Life jacket first: the bare link waits for her tap on the jacket.
 //
-// Greybox: placeholder toon shapes, no voices (the full loop adds them). Every number that decides the feel is a knob
-// (?feel=1), with a graph of her finger against what the jet ski does.
+// Talk (lines.ts L.samet.jetski): the jet ski man says the life jacket goes on, Sparkle says what each round is for and
+// counts the race in, Daddy whoops now and then (never after every jump), the jet ski man teases and is a good sport.
+// After a while with nothing done a finger shows, and Sparkle says what to do (spendHint). Every number that decides
+// the feel is a knob (?feel=1), with a graph of her finger against what the jet ski does.
 import { DynamicDrawUsage, Fog, Group, InstancedMesh, Matrix4, Mesh, MeshBasicMaterial, Object3D, Plane, Raycaster, RingGeometry, Scene, SphereGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
-import { clamp } from '../../../../../../sdk'
+import { clamp, spendHint, type Line } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
 import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -36,6 +38,7 @@ import type { World3D } from '../../../../../engine3d/View3D'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
+import { L as LINES } from '../../../lines'
 import { JETSKI_MAN } from '../cast'
 import { BANANA, BAY, bay, FAR_BUOY, HUT, LAUNCH, MOMMY, RACE, ROPE, SEAWARD, SWIMMERS, toBay, WAVE_DIR, type RoundId } from '../island/layout'
 import { BananaBoat, Fish, Swimmer, Tern } from './critters'
@@ -105,7 +108,11 @@ export interface JetEvents {
   count(n: number): void
   /** Spray on the camera after a big landing (0..1). */
   spray(k: number): void
+  /** Someone says a line (lines.ts L.samet.jetski; `mute`: a hint's first time, only its bubble shows). */
+  say(l: Line, mute?: boolean): void
 }
+
+const J = LINES.samet.jetski
 
 const DEG = 180 / Math.PI
 const HINT_S = 8
@@ -118,7 +125,7 @@ const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const easeOut = (k: number) => 1 - (1 - clamp(k, 0, 1)) ** 3
 const bellK = (k: number) => Math.sin(Math.PI * clamp(k, 0, 1))
 
-// ---- Sounds (synthesized; the voices come at the full-loop gate).
+// ---- Sounds (synthesized; the voices are lines.ts L.samet.jetski).
 const engine = (k: number, air: boolean) => tone(air ? 210 + k * 120 : 95 + k * 120, air ? 230 + k * 120 : 90 + k * 115, 0.07, 0.018 + k * 0.014, 'sawtooth')
 const splashBig = (k: number) => {
   hiss(0.5 + k * 0.3, 0.12 + k * 0.12, 'lowpass', 1400, 300)
@@ -274,6 +281,15 @@ export class JetSki implements World3D {
   private sparkle: Particles
   private stars: Particles
 
+  // ---- Talk: who said what last (each key waits a few seconds before it talks again), lists said in turn, lines
+  // waiting their turn (so one voice doesn't cut off the one before it).
+  private talkAt = new Map<string, number>()
+  private turn = new Map<string, number>()
+  private later: { at: number; fn: () => void }[] = []
+  private hinted = false
+  private teased = false
+  private told = new Set<string>()
+
   private rideT = 0
   private counts = { steers: 0, taps: 0, pokes: 0, jumps: 0, spins: 0, loops: 0, hearts: 0, beachings: 0, dizzy: 0, soaked: 0, boings: 0, races: 0, wins: 0, losses: 0, bells: 0, bonks: 0, squeals: 0, tips: 0 }
 
@@ -331,7 +347,7 @@ export class JetSki implements World3D {
 
     // Mommy on the sand at the water's edge, the jet ski man by his hut (or on his own jet ski in the race).
     this.ji.place(MOMMY.x, this.groundY(MOMMY.x, MOMMY.z), MOMMY.z, SEAWARD * DEG, 'stand')
-    this.man = new Member({ id: 'jetski-man', name: 'The jet ski man', who: 'runs the jet skis on Sai Kaew', height: MAN_LOOK.height, spot: null, pitch: 300 }, bag, MAN_LOOK, undefined)
+    this.man = new Member({ id: 'jetski-man', name: 'The jet ski man', who: 'runs the jet skis on Sai Kaew', height: MAN_LOOK.height, spot: null, pitch: 300 }, bag, MAN_LOOK, 'otter')
     scene.add(this.ji.root, this.man.root)
     this.man.rig.body.add(lifeJacket(bag, this.man.rig.radius * 1.12, this.man.height * 0.3, this.man.height * 0.22, '#FF8A2E', '#FFE07A'))
     this.rivalSki = buildSki(bag, HIS)
@@ -380,7 +396,7 @@ export class JetSki implements World3D {
 
     // ---- Where the link starts.
     if (this.phase === 'jacket') this.d.place(LAUNCH.x, LAUNCH.z, SEAWARD)
-    else if (this.round === 'race') this.startRace(true)
+    else if (this.round === 'race') this.startRace(true, 1.4)
     else {
       const p = bay(0, 8)
       this.d.place(p.x, p.z, SEAWARD)
@@ -441,6 +457,29 @@ export class JetSki implements World3D {
     this.man.place(m.x, this.groundY(m.x, m.z), m.z, (SEAWARD + 0.4) * DEG, 'stand')
   }
 
+  // ---------------------------------------------------------------- talk
+
+  /** Says `l` (a list: the next one in turn), unless this key talked less than `cool` seconds ago. */
+  private talk(key: string, l: Line | readonly Line[], cool = 4) {
+    const last = this.talkAt.get(key)
+    if (last !== undefined && this.time - last < cool) return
+    this.talkAt.set(key, this.time)
+    if (Array.isArray(l)) {
+      const n = this.turn.get(key) ?? 0
+      this.turn.set(key, n + 1)
+      this.events.say(l[n % l.length])
+    } else this.events.say(l as Line)
+  }
+  /** Once per visit to the jet ski. */
+  private once(key: string, l: Line) {
+    if (this.told.has(key)) return
+    this.told.add(key)
+    this.events.say(l)
+  }
+  private after(secs: number, fn: () => void) {
+    this.later.push({ at: this.time + secs, fn })
+  }
+
   // ---------------------------------------------------------------- World3D
 
   setSize(w: number, h: number, top: number) {
@@ -466,9 +505,12 @@ export class JetSki implements World3D {
     if (r === this.round && !snap) return
     this.round = r
     this.events.round(r)
+    if (r === 'waves') this.events.say(J.waves)
+    else if (r === 'race') this.events.say(J.race)
     this.rideT = 0
     this.counts.jumps = r === 'waves' ? 0 : this.counts.jumps
-    if (r === 'race') this.startRace(false)
+    // (A little longer before the count, so Sparkle's line comes first.)
+    if (r === 'race') this.startRace(false, 1.6)
     else if (this.phase === 'countdown' || this.phase === 'racing' || this.phase === 'raceEnd') {
       this.phase = 'ride'
       this.events.count(-1)
@@ -479,6 +521,17 @@ export class JetSki implements World3D {
   update(dt: number) {
     const t = (this.time += dt)
     this.readFeel()
+    if (this.later.length) {
+      const due = this.later.filter((l) => l.at <= t)
+      this.later = this.later.filter((l) => l.at > t)
+      for (const l of due) l.fn()
+    }
+    // The opening line, a beat after it appears: the jet ski man and the life jacket, or the round's own line.
+    if (t - dt < 0.6 && t >= 0.6) {
+      if (this.phase === 'jacket') this.events.say(J.jacket)
+      else if (this.round === 'waves') this.events.say(J.waves)
+      else if (this.round === 'race') this.events.say(J.race)
+    }
     const lag = this.s.lagoon
     lag.waves.height += (this.waveGoal() - lag.waves.height) * ease(dt, 0.4)
     lag.waves.length = WAVES.length
@@ -604,6 +657,7 @@ export class JetSki implements World3D {
       this.spinSum = 0
       this.counts.dizzy++
       wobble()
+      this.talk('dizzy', J.dizzy, 10)
     }
 
     this.collide(dt, shore)
@@ -650,6 +704,8 @@ export class JetSki implements World3D {
     }
     tone(260, 520, 0.4, 0.04, 'sawtooth')
     this.kaylee.react('wiggle')
+    if (this.spinT === 0) this.talk('jump', J.spin, 6)
+    else if (this.phase !== 'racing') this.talk('jump', J.jump, 9)
     for (const t of this.terns) if (!t.diving && Math.random() < 0.5) t.diveAt(d.x + Math.sin(d.heading) * 8 + (Math.random() - 0.5) * 8, d.z + Math.cos(d.heading) * 8 + (Math.random() - 0.5) * 8)
   }
   private land(v: number) {
@@ -689,6 +745,7 @@ export class JetSki implements World3D {
         this.boingCool = 1.2
         sfx.boing()
         this.counts.boings++
+        if (this.counts.boings === 2) this.once('rope', J.rope)
       }
     }
     this.boingCool -= dt
@@ -784,7 +841,9 @@ export class JetSki implements World3D {
       }
       sfx.thump()
       this.kaylee.react('wiggle')
+      this.talk('beached', J.beached, 0)
     }
+    if (t >= 2.9 && t - dt < 2.9) this.talk('push', J.push, 0)
     if (t >= 0.3 && t < 2.4) {
       const k = clamp((t - 0.3) / 0.55, 0, 1)
       for (const c of [this.kaylee, this.nick]) {
@@ -850,6 +909,8 @@ export class JetSki implements World3D {
     this.fillT = 0
     this.fillFish = 0
     twinkle(loop.heart)
+    if (loop.heart) this.talk('loop', J.heart, 5)
+    else if (this.counts.loops <= 2) this.talk('loop', J.loop, 5)
     this.kaylee.react('wiggle')
     this.nick.react('hop')
     if (this.round === 'ride') this.rideT += 20
@@ -876,9 +937,10 @@ export class JetSki implements World3D {
 
   // ---------------------------------------------------------------- the race
 
-  private startRace(snap: boolean) {
+  private startRace(snap: boolean, wait = 0) {
     this.phase = 'countdown'
-    this.countT = snap ? 3.6 : 3.2
+    this.countT = (snap ? 3.6 : 3.2) + wait
+    this.teased = false
     this.lastCount = 99
     this.leg = [0, 0]
     this.rivalWp = 0
@@ -917,9 +979,11 @@ export class JetSki implements World3D {
         if (n >= 1) {
           this.events.count(n)
           beep(false)
+          this.events.say(J.count[3 - n])
         } else {
           this.events.count(0)
           beep(true)
+          this.events.say(J.count[3])
           this.phase = 'racing'
           this.lastTouch = this.time
           window.setTimeout(() => this.events.count(-1), 900)
@@ -964,6 +1028,10 @@ export class JetSki implements World3D {
       // The rubber band: he eases off while he's ahead, catches up when she's well ahead (so it's close), and if she
       // stops altogether he still only wins by a nose.
       const gap = pHim - pHer
+      if (!this.teased && gap > 0.04 && this.raceT > 3) {
+        this.teased = true
+        this.talk('tease', J.tease, 8)
+      }
       r.cap = gap > 0.03 ? RACEK.ahead : gap < -0.1 ? RACEK.catchUp : 1
       if (pHer > 0.9 && gap < 0.02) r.cap = Math.min(r.cap, 0.85)
       if (gap > 0.12 && pHim > 0.85) r.cap = 0.35
@@ -1004,11 +1072,18 @@ export class JetSki implements World3D {
       this.nick.react('hop')
       this.ji.react('hop')
       this.sparkle.burst(this.d.x, 1.5, this.d.z, 40, 3, 4, 0.3)
+      // Daddy says her name at her first win only; after that the jet ski man's good-sport lines.
+      if (this.counts.wins === 1) {
+        this.events.say(J.champ)
+        this.after(1.8, () => this.talk('won', J.won, 0))
+      } else this.talk('won', J.won, 0)
     } else {
       this.counts.losses++
       this.losses++
       this.ringBell()
       this.man.react('wave')
+      this.events.say(J.lost)
+      this.events.say(J.close)
     }
     this.events.raceOver(who === 'her')
   }
@@ -1042,6 +1117,7 @@ export class JetSki implements World3D {
       this.mommyCool = 4
       this.soakT = 0
       this.counts.soaked++
+      this.talk('soaked', J.soaked, 12)
       const dx = (MOMMY.x - d.x) / (md || 1)
       const dz = (MOMMY.z - d.z) / (md || 1)
       for (let i = 0; i < 30; i++) this.spray.emit(d.x, 0.3, d.z, dx * (4 + Math.random() * 3) + (Math.random() - 0.5) * 2, 3 + Math.random() * 3, dz * (4 + Math.random() * 3) + (Math.random() - 0.5) * 2, 0.9, 0.22)
@@ -1179,6 +1255,9 @@ export class JetSki implements World3D {
         this.phase = 'push'
         this.beachT = 0
         this.man.react('wave')
+        // He says hold on; Sparkle (waiting her turn) says how to steer.
+        this.events.say(J.ready)
+        this.events.say(J.ride)
       }
     }
   }
@@ -1412,16 +1491,19 @@ export class JetSki implements World3D {
       if (this.capT < 0) {
         this.capT = 0
         hiss(0.4, 0.08, 'bandpass', 1500, 600)
+        this.talk('cap', J.cap, 3)
       }
       return
     }
     if (id === 'family:ji') {
       this.ji.react('wave')
+      this.talk('mommy', J.mommy, 3)
       return
     }
     if (id === 'man') {
       this.man.react(this.man.root.parent === this.scene ? 'hop' : 'wave')
       toot()
+      this.talk('man', J.man, 3)
       return
     }
     if (id === 'bell') return this.ringBell()
@@ -1467,6 +1549,12 @@ export class JetSki implements World3D {
     const el = this.hintEl
     if (!el) return
     const idle = !this.finger && t - this.lastTouch > HINT_S && (this.phase === 'ride' || this.phase === 'jacket')
+    // Once each time she goes quiet: Sparkle's hint (only shown the first time, then said at most twice a visit).
+    if (idle && !this.hinted) {
+      this.hinted = true
+      const l = this.phase === 'jacket' ? J.hint.jacket : J.hint.steer
+      this.events.say(l, !spendHint(l))
+    } else if (!idle) this.hinted = false
     const want = idle ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
     if (!idle) return

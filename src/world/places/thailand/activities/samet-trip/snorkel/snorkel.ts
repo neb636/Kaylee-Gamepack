@@ -19,10 +19,12 @@
 //           her book.
 // Daddy swims along behind her; swim up to him and he ducks under and blows her a bubble ring.
 //
-// Greybox: simple shapes in the toon look, no voices (the full loop adds the captain's "Masks on! Jump in!" and Sparkle's
-// few lines). Every number that decides the feel is a knob (?feel=1), with a graph of her finger against her swimming.
+// Talk (lines.ts L.samet.snorkel): the captain sends her in, Sparkle says what each round is for, the facts the first
+// time and (spendHint) what to do when she's stuck; Daddy and the captain react. The screen's TripGuide plays them. Every number that decides the feel is a knob (?feel=1), with a graph of her finger against her swimming.
 import { Color, Fog, Group, InstancedMesh, Matrix4, Mesh, Object3D, Quaternion, Scene, Vector3, type WebGLRenderer } from 'three'
-import { clamp } from '../../../../../../sdk'
+import { clamp, spendHint, type Line } from '../../../../../../sdk'
+import { L } from '../../../lines'
+import { FaceLife } from '../../../../../engine3d/characters/face'
 import { knobs, watch } from '../../../../../kit/knobs'
 import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
@@ -95,7 +97,11 @@ export interface SnorkelEvents {
   round(r: SnorkelRound): void
   /** The cuttlefish turned pink for her (the stop is done: the way back shows). */
   done(): void
+  /** Someone talks (`mute`: a stuck hint shown without its voice). */
+  say(line: Line, mute?: boolean): void
 }
+
+const S = L.samet.snorkel
 
 const HINT_S = 8
 const DEG = 180 / Math.PI
@@ -218,6 +224,11 @@ export class Snorkel implements World3D {
   private best = 0
   private flashT = -1
   private doneAt = -1
+  /** The captain's face (her beak opens with her voice). */
+  private capFace: FaceLife
+  private said = new Set<string>()
+  private turn = { dad: 0, captain: 0 }
+  private hintOn = false
   private crowd: InstancedMesh
   private cPts: Float32Array
   private cVel: Float32Array
@@ -399,6 +410,8 @@ export class Snorkel implements World3D {
     }
     this.placeKaylee(0)
 
+    this.capFace = new FaceLife(this.boat.rig, 'pelican')
+
     this.unwatch = watch('snorkel', () => ({
       'her finger is ahead (m)': [this.lead, 15],
       'she swims (m/s)': [this.vel.length(), 4],
@@ -434,6 +447,7 @@ export class Snorkel implements World3D {
     this.round = r
     this.roundT = 0
     this.events.round(r)
+    this.once(r, S[r])
     if (r === 'follow') this.startFollow()
     if (r === 'cuttle') twinkle(4)
   }
@@ -447,9 +461,22 @@ export class Snorkel implements World3D {
     tone(600, 900, 0.25, 0.05, 'triangle')
   }
 
+  /** Says it once a visit to the reef. */
+  private once(key: string, l: Line) {
+    if (this.said.has(key)) return
+    this.said.add(key)
+    this.events.say(l)
+  }
+
   update(dt: number) {
     const t = (this.time += dt)
     this.roundT += dt
+    // Her first moment here: the captain sends her in (off the ladder), then what this round is for.
+    if (this.time > 0.3 && !this.said.has('hi')) {
+      this.said.add('hi')
+      if (this.round === 'float') this.events.say(S.jump)
+      this.once(this.round, S[this.round])
+    }
     this.progress()
     this.swim(dt)
     this.daddy(dt, t)
@@ -643,6 +670,7 @@ export class Snorkel implements World3D {
           prickle()
           this.spin = 0
           this.counts.boings++
+          this.once('urchin', S.urchin)
           const u = this.urchins.find((x) => x.o === o)
           if (u) u.wob = 1
           this.bubbles.burst(p.x - nx * 0.4, -0.4, p.z - nz * 0.4, 10, 0.8, 0.6, 0.06)
@@ -655,6 +683,7 @@ export class Snorkel implements World3D {
           this.bumpT = 0.6
           thud()
           this.counts.bumps++
+          this.once('coral', S.coral)
           this.peek(CORALS.findIndex((c) => c.i === i), true)
         }
       } else {
@@ -738,6 +767,7 @@ export class Snorkel implements World3D {
     d.dip = 0
     d.cool = 9
     this.counts.rings++
+    this.once('ring', S.ring)
     this.bubbles.burst(d.x, -0.5, d.z, 8, 0.4, 0.8, 0.05)
   }
 
@@ -896,9 +926,12 @@ export class Snorkel implements World3D {
       if (stage > this.best) {
         this.counts.stages++
         this.best = stage
+        if (stage === 1) this.once('colors', S.colors)
         if (stage === 3) {
           twinkle(6)
           this.burstAt(c, 40)
+          this.once('pink', S.pink)
+          this.once('camera', S.camera)
         }
       }
     }
@@ -963,6 +996,7 @@ export class Snorkel implements World3D {
     }
     // The boat rocks; the captain waves.
     const b = this.boat
+    this.capFace.update(dt)
     b.body.rotation.z = Math.sin(t * 1.1) * 0.03
     b.root.position.y = Math.sin(t * 1.4) * 0.05
     if (this.wave >= 0) {
@@ -1066,10 +1100,13 @@ export class Snorkel implements World3D {
       blub()
       this.bubbles.burst(this.pos.x, -0.3, this.pos.z, 12, 0.5, 0.8, 0.06)
       this.spray.burst(this.pos.x, 0.25, this.pos.z, 6, 0.6, 2.4, 0.06)
-    } else if (id === 'family:nick') this.blowRing()
-    else if (id === 'captain') {
+    } else if (id === 'family:nick') {
+      if (this.said.has('ring') && this.dad.dip < 0) this.events.say(S.dad[this.turn.dad++ % S.dad.length])
+      this.blowRing()
+    } else if (id === 'captain') {
       toot()
       this.wave = 0
+      this.events.say(S.captain[this.turn.captain++ % S.captain.length])
     } else if (id === 'parrot') {
       this.pWiggle = 1
       tone(800, 1200, 0.15, 0.05, 'triangle')
@@ -1090,7 +1127,10 @@ export class Snorkel implements World3D {
       const u = this.urchins[+id.slice(7)]
       if (u) u.wob = 1
       prickle()
-    } else if (id.startsWith('coral:')) this.peek(+id.slice(6), false)
+    } else if (id.startsWith('coral:')) {
+      this.peek(+id.slice(6), false)
+      this.once('coral', S.coral)
+    }
   }
 
   // ---------------------------------------------------------------- camera and drawing
@@ -1170,6 +1210,12 @@ export class Snorkel implements World3D {
         at = tmp2.set(this.pos.x, -0.6, this.pos.z - 1.5 - k * 3)
       } else if (this.pState === 'lead' || this.pState === 'arrive') at = tmp2.copy(this.pPos)
       else if (this.round === 'cuttle' && this.best < 3) at = tmp2.copy(this.cuttle.root.position)
+    }
+    if (!!at !== this.hintOn) {
+      this.hintOn = !!at
+      // The finger has just come up: the hint, spoken only if the budget allows (spendHint).
+      const l = at ? S.hint[this.round] : null
+      if (l) this.events.say(l, !spendHint(l))
     }
     const want = at ? '' : 'none'
     if (el.style.display !== want) el.style.display = want

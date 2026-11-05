@@ -1,7 +1,7 @@
 import type { PlaceMeta } from '../../types'
 import { art } from './art'
 import { L } from './lines'
-import { MALL_FACTS, NAN_FACTS, TRIP_FACTS } from './trip/facts'
+import { MALL_FACTS, NAN_FACTS, SAMET_FACTS, TRIP_FACTS } from './trip/facts'
 
 // Thailand is Kaylee's family's country, built in 3D (plan: planning/around-the-world/thailand.md). She lands on the
 // Thailand map (thailand/thailand-map.html) and taps Agong's shophouse in Bangkok, where she walks
@@ -9,7 +9,8 @@ import { MALL_FACTS, NAN_FACTS, TRIP_FACTS } from './trip/facts'
 // the boat trip (thailand/boat-trip.md), the whole loop from Mommy's question to her photo on Agong's wall: it earns
 // the fiddler crab sticker, and its tap-to-hear facts are on the stamp screen and the passport. The second is the mall
 // day at ICONSIAM (thailand/mall-trip.md): it earns the pizza slice sticker. The third is the Nan road trip
-// (thailand/nan-trip.html), the pink mushroom sticker. Krabi's and Nan's pins on the map start those two; the mall starts in the house.
+// (thailand/nan-trip.html), the pink mushroom sticker. The fourth is the Koh Samet island trip (thailand/samet-trip.html),
+// the pink mermaid sticker. Krabi's, Nan's and Koh Samet's pins on the map start those three; the mall starts in the house.
 const meta: PlaceMeta = {
   id: 'thailand',
   name: 'Thailand',
@@ -24,11 +25,8 @@ const meta: PlaceMeta = {
     { id: 'boat-trip', name: "Captain Kaylee's Boat Trip", icon: '🚤', pos: { x: 27, y: 81 }, sticker: { name: 'Fiddler crab', img: art.crab, fact: L.home.sticker } },
     { id: 'mall-trip', name: 'Mall Day at ICONSIAM', icon: '🛝', pos: { x: 43, y: 45 }, sticker: { name: 'Pizza slice', img: art.pizza, fact: L.mall.trip.sticker } },
     { id: 'nan-trip', name: 'Road Trip to Nan', icon: '🚙', pos: { x: 45, y: 14 }, sticker: { name: 'Pink mushroom', img: art.mushroom, fact: L.nan.trip.sticker } },
+    { id: 'samet-trip', name: 'Koh Samet Island', icon: '🏝️', pos: { x: 52, y: 62 }, sticker: { name: 'Pink mermaid', img: art.mermaid, fact: L.samet.trip.sticker } },
   ],
-  // The Koh Samet island trip (thailand/samet-trip.html): greyboxes 1-7, from packing and the speedboat to the four stops
-  // and home (the map's 🏝️ pin shows with ?samet=1). The sticker (the plan's pick, a pink mermaid) has no picture yet,
-  // so it borrows the crab's until the full loop.
-  inTheWorks: [{ id: 'samet-trip', name: 'Koh Samet Island', icon: '🏝️', pos: { x: 52, y: 62 }, sticker: { name: 'Pink mermaid', img: art.crab, fact: L.home.sticker } }],
   facts: [
     { icon: '👋', label: 'Sawasdee!', say: L.facts.hello },
     { icon: '🐘', label: 'Elephants', say: L.facts.elephant },
@@ -39,6 +37,7 @@ const meta: PlaceMeta = {
     ...MALL_FACTS.filter((f) => f.label !== 'Elephants'),
     // (The passport already has driving on the left.)
     ...NAN_FACTS.filter((f) => f.label !== 'Drive on the left'),
+    ...SAMET_FACTS,
   ],
   coloringPages: [],
   passportLine: L.passport,
