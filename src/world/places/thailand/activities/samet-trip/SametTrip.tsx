@@ -26,6 +26,7 @@ export function SametTrip() {
   const { start, param, enter } = useSections(SAMET_SECTIONS)
   const [sec, setSec] = useState(() => ({ id: start ?? 'island', n: 0, at: param('at') as SpotId, flags: readFlags(param('flags')), round: param('round') as RoundId | SandRound | SnorkelRound }))
   const time = (param('time') || null) as TimeOfDay | null
+  const reefRound = useRef<SnorkelRound>('float')
   const flagParam = (f: StopId[]) => (f.length === FLAGS.length ? 'all' : f.join(',') || undefined)
   // Where she is and what's in her book (the address bar follows both).
   const here = useRef({ at: sec.at, book: readBook(param('book')), phone: param('phone') === '1', photos: {} as Partial<Record<AnimalId, BookPhoto>> })
@@ -61,7 +62,14 @@ export function SametTrip() {
       <SnorkelScreen
         key={sec.n}
         round={reef}
-        onRound={(round) => enter('snorkel', { round, flags: flagParam(sec.flags), book: bookParam(here.current.book) })}
+        onRound={(round) => {
+          reefRound.current = round
+          enter('snorkel', { round, flags: flagParam(sec.flags), book: bookParam(here.current.book) })
+        }}
+        onSnap={(animals) => {
+          here.current.book = [...here.current.book, ...animals.filter((a) => !here.current.book.includes(a))]
+          enter('snorkel', { round: reefRound.current, flags: flagParam(sec.flags), book: bookParam(here.current.book) })
+        }}
         onIsland={(snapped) => {
           const flags = sec.flags.includes('snorkel') ? sec.flags : [...sec.flags, 'snorkel' as StopId]
           here.current.at = 'wongduan'

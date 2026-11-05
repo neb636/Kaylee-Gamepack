@@ -21,11 +21,13 @@ interface Props {
   round: SnorkelRound
   /** The round on screen changed (the address bar follows). */
   onRound(r: SnorkelRound): void
+  /** She snapped animals new to this visit (her book takes them at once; the address bar follows). */
+  onSnap?(animals: AnimalId[]): void
   /** Back to the island, the snorkel's flag up, with the animals she snapped for her book. */
   onIsland?(snapped: AnimalId[]): void
 }
 
-export function SnorkelScreen({ round: first, onRound, onIsland }: Props) {
+export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props) {
   const [run, setRun] = useState({ round: first, n: 0 })
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [round, setRound] = useState<SnorkelRound>(first)
@@ -66,7 +68,10 @@ export function SnorkelScreen({ round: first, onRound, onIsland }: Props) {
   const snap = () => {
     const got = worldRef.current?.snap() ?? []
     setFlash((f) => f + 1)
-    if (got.some((a) => !snapped.includes(a))) setSnapped((s) => [...s, ...got.filter((a) => !s.includes(a))])
+    const fresh = got.filter((a) => !snapped.includes(a))
+    if (!fresh.length) return
+    setSnapped((s) => [...s, ...fresh.filter((a) => !s.includes(a))])
+    onSnap?.(fresh)
   }
 
   return (
