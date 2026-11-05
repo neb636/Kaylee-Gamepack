@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { LAB_CHANNEL, type LabSnapshot } from "../../../shared/labs";
 import type { GameFrame, Workspace } from "../../../shared/models";
-import { RefreshIcon } from "../../ui/icons";
+import { RefreshIcon, SidebarLeftIcon, SidebarRightIcon } from "../../ui/icons";
+import { IconButton } from "../../ui/controls";
 import { crumbFor, DEFAULT_CHARACTER, DEFAULT_LINK, FRAMES, hashOf, labOf, loadSections, patchGame, useGameLive, withLab } from "./game-store";
 import { LabPanel, type LabRequest } from "./LabPanel";
 import { useWorkList } from "../work/work-store";
@@ -32,7 +33,7 @@ function useStageScale(frame: GameFrame) {
  * The game for one piece of work, always in the middle: its own loopback server, a breadcrumb of the section on
  * screen, device frames, reload, and the Camera / Feel / Character labs as switches with their tuning panel below.
  */
-export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?: boolean }) {
+export function GamePane({ workspace, hidden, onShowLeft, onShowRight }: { workspace: Workspace; hidden?: boolean; onShowLeft?: () => void; onShowRight?: () => void }) {
   const game = workspace.game ?? {};
   const origin = useGameLive((state) => state.origin[workspace.id]);
   const href = useGameLive((state) => state.href[workspace.id]);
@@ -125,6 +126,7 @@ export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?:
   const src = origin ? `${origin}/?studio=1${target.nonce ? `&v=${target.nonce}` : ""}${target.hash}` : undefined;
   return <section className={`game-pane ${hidden ? "is-hidden" : ""}`} aria-label="Game" aria-hidden={hidden}>
     <div className="game-toolbar">
+      {onShowLeft && <IconButton label="Show sidebar" onPress={onShowLeft}><SidebarLeftIcon size={16} /></IconButton>}
       {editing !== undefined ? <form className="game-goto" onSubmit={(event) => {
         event.preventDefault();
         const value = editing.trim();
@@ -153,6 +155,7 @@ export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?:
             <span aria-hidden="true">{item.emoji}</span>{item.label}
           </button>)}
         </span>
+        {onShowRight && <IconButton label="Show agent column" onPress={onShowRight}><SidebarRightIcon size={16} /></IconButton>}
       </div>
     </div>
     <div className="game-stage" ref={stage.ref}>

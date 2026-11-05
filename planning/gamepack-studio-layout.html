@@ -18,11 +18,11 @@
   "kind": "Local builder app: layout plan",
   "updated": "2026-11-04",
   "status": {
-    "label": "Step 2 built, step 3 next",
+    "label": "Step 3 built, step 4 next",
     "tone": "mint"
   },
   "pitch": "Studio still looks like Agent Workbench: a left tree of *workspaces* (folders), a tab strip of generic views and an IDE side panel. But there is only ever **one** Gamepack checkout, and the real unit of work is **a piece of work on a branch** (a worktree, its agent, its PR, its preview). The new layout puts the **game in the middle**, the **list of pieces of work on the left**, and the **agent on the right**, with the labs as switches on the game instead of separate tabs.",
-  "next": "Dad opens Studio, taps a few sections in the left tree, tries the iPad frames and switches 🎛️ Feel on and off on the Nan drive. Then step 3: the agent column on the right.",
+  "next": "Dad starts an agent from a piece of work, opens a section in the game, taps 📎 Section and Starters ▸ Fix, and hears the chime when it finishes. Then step 4: the Ship panel under the agent.",
   "facts": [
     {
       "icon": "📁",
@@ -321,13 +321,14 @@
             {
               "n": 3,
               "title": "The agent column",
-              "status": "next",
-              "md": "The agent for the selected piece of work on the right, extra agents and terminals as tabs inside it. 📎 this section (link, params, lab snapshot if a lab is on). Prompt starters that follow AGENTS.md gates: Plan, Greybox, Art, Full loop, Fix, Bake lab values, Address review. Done and needs-answer badges per piece of work."
+              "status": "done",
+              "md": "The agent for the selected piece of work on the right, extra agents and terminals as tabs inside it. 📎 this section (link, params, lab snapshot if a lab is on). Prompt starters that follow AGENTS.md gates: Plan, Greybox, Art, Full loop, Fix, Bake lab values, Address review. Done and needs-answer badges per piece of work.",
+              "date": "2026-11-04"
             },
             {
               "n": 4,
               "title": "Ship",
-              "status": "todo",
+              "status": "next",
               "md": "Buttons that run in that worktree's terminal so their output stays visible: Verify, Screens for this route, Voices (`world-voice-lines` + `generate-voice` with the main repo's `.env`), Open PR (asks the agent to run the open-pr skill), the PR preview link and QR, CI status, and the plan page."
             },
             {
@@ -394,6 +395,33 @@
                   "tone": "done",
                   "title": "Checked",
                   "md": "Studio `npm test`: the new pool and migration tests pass (LRU of 2, the launcher's server never stopped, one start for two requests, busy port skipped, lab tabs migrate). The old game-server test needs port 5174 free (it failed only because Dad's Studio was open). `qa:composer` passes, Ctrl+C step included. Live look: Nan map in the iPad wide frame with 🎛️ Feel on and its panel below."
+                }
+              ]
+            },
+            {
+              "title": "Step 3: the agent column",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "The game has the whole middle now. The selected piece of work's agents, terminals and tools are small tabs in a column on the right, and the composer knows about the game.",
+              "items": [
+                "**Three jobs**: Work + Sections on the left, the game in the middle, the agent on the right (34% wide, 22–60%, hides with its own button; the game's toolbar shows it again).",
+                "**Tabs inside the agent column**: agents, terminals, Character concepts. *Files* and *Commit changes* were side panels and are tabs from its **+** menu now.",
+                "**📎 Section** (composer toolbar): attaches the section on screen as a labelled chip: the link, its names and params, where its sections.ts lives, the local and preview URLs, and the lab's live snapshot when a lab is on.",
+                "**Starters ▾**: Plan, Greybox, Art, Full loop, Fix, Bake lab values, Address review, each following AGENTS.md's gates (plan page and stop; greybox with knobs and ?feel=1; art with qa-art and both QA agents; and so on). Fix and Bake attach the section by themselves; Address review names the branch's PR.",
+                "**Badges**: each Work row says *needs answer*, *done* or *working…* from its agents. The Dock badge counts the pieces of work waiting on Dad, and two soft notes chime when one finishes (rising) or asks (falling)."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "The Dock badge and chime were in step 5's small things; they came with the badges here. The game is no longer a tab: Codex's review of step 2 also made the pane wait for its own server, apply each Sections click once and keep lab Undo per lab."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "`qa:composer` passes with new steps: 📎 Section adds a *Game* chip, Starters ▸ Fix fills the prompt and attaches the section, Files and Commit changes open as tabs from +, then the old commit, overflow and restart checks."
                 }
               ]
             }

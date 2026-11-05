@@ -52,3 +52,20 @@
 .section-link small { color: var(--wb-text-muted); }
 .section-variants { display: flex; flex-wrap: wrap; gap: 2px 4px; padding-left: 10px; }
 .section-variant { width: auto; color: var(--wb-text-secondary); font-size: 11.5px; }
+
+/* The game column fills the middle; the agent column holds the views as tabs. */
+.game-column { padding: 10px; }
+.game-column .game-pane { border: 0; border-radius: var(--wb-radius-md); }
+.game-column.has-traffic-lights .game-toolbar { padding-left: 78px; }
+.game-toolbar { -webkit-app-region: drag; }
+.game-toolbar button, .game-toolbar select, .game-toolbar input { -webkit-app-region: no-drag; }
+.agent-column { display: flex; flex-direction: column; min-width: 0; height: 100%; }
+.agent-column .tab-strip { padding-left: 8px; }
+.agent-column .view-tab { width: 142px; }
+.agent-column .active-view-region { padding: 0 8px 8px; }
+.work-badge { margin-left: 6px; padding: 1px 6px; border-radius: 999px; font-size: 10px; font-weight: 600; vertical-align: 1px; }
+.work-badge.is-ask { background: #fde3ea; color: #c2335e; }
+.work-badge.is-done { background: #ddf5e4; color: #23824a; }
+.work-badge.is-working { background: var(--wb-accent-soft); color: var(--wb-accent); }
+.composer-toolbar .composer-chip { white-space: nowrap; }
+.agent-column .composer-toolbar { flex-wrap: wrap; row-gap: 6px; }

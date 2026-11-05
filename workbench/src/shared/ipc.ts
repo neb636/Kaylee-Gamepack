@@ -18,6 +18,7 @@ export const IPC = {
   agentTerminate: "agent:terminate",
   agentEvent: "agent:event",
   appMetrics: "app:metrics",
+  appBadge: "app:badge",
   imagesFolder: "images:folder",
   imagesImportData: "images:import-data",
   imagesPrepareRun: "images:prepare-run",

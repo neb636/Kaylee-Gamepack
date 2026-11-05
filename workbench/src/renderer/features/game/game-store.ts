@@ -1,11 +1,10 @@
 import { create } from "zustand";
 import type { GameFrame, GameState, SectionEntry, SectionsIndex } from "../../../shared/models";
 import type { LabKind, LabSnapshot } from "../../../shared/labs";
-import { GAME_TAB, useWorkbenchStore } from "../../state/workbench-store";
+import { useWorkbenchStore } from "../../state/workbench-store";
 
 export const DEFAULT_LINK = "#/world";
 export const DEFAULT_CHARACTER = "#/world/characters/nick?lineup=nick,nick-code";
-export { GAME_TAB };
 
 export const FRAMES: { id: GameFrame; label: string; width?: number; height?: number }[] = [
   { id: "fit", label: "Fill the pane" },
@@ -91,10 +90,9 @@ export function patchGame(workspaceId: string, patch: Partial<GameState>): void 
   }));
 }
 
-/** Opens a link in a workspace's game pane and brings the Game tab forward. */
+/** Opens a link in a workspace's game pane. */
 export function openInGame(workspaceId: string, hash: string): void {
   useGameLive.setState((state) => ({ go: { ...state.go, [workspaceId]: { hash: hashOf(hash), nonce: ++nonce } } }));
-  useWorkbenchStore.getState().selectView(workspaceId, GAME_TAB);
 }
 
 /** The game's current link for a workspace: what it last reported, else where it was left. */
