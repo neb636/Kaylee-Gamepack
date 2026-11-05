@@ -346,6 +346,7 @@ export interface AgentSessionSnapshot {
 
 export interface WorkbenchApi {
   studio: {
+    copyText: (text: string) => Promise<void>;
     repoRoot: () => Promise<string | null>;
     /** Starts (or reuses) this checkout's game server and returns its origin. */
     useCheckout: (root: string) => Promise<string>;

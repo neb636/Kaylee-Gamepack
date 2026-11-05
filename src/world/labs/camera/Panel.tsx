@@ -1,5 +1,6 @@
 // The camera lab's side panel: which scene, which screen, the camera itself (nudge the game's camera or lock your own),
 // freeze and orbit, the guides, what the camera is doing now, and the hand-off (a link, a note for an agent, a PNG).
+import { inStudio, shareLab } from '../share'
 import { useEffect, useState } from 'react'
 import type { Vector3 } from 'three'
 import { worldLink } from '../../../router'
@@ -86,9 +87,8 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
     tick((n) => n + 1)
   }
 
-  const copy = (text: string, done: string) => {
-    if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => toast(done), () => toast('Copy it from the address bar'))
-    else toast('Copy it from the address bar')
+  const copy = (text: string, label: string, agent = false) => {
+    void shareLab(text, label, agent ? 'agent' : 'copy').then(toast, error => toast(String(error)))
   }
 
   const forAgent = () => {
@@ -268,11 +268,11 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
         </Section>
       </div>
       <div className="cm-actions">
-        <button className="cl-btn" onClick={() => copy(`${location.origin}${location.pathname}${location.hash}`, 'Link copied')}>
+        <button className="cl-btn" onClick={() => copy(`${location.origin}${location.pathname}${location.hash}`, 'Link')}>
           Copy link
         </button>
-        <button className="cl-btn" disabled={!shot} onClick={() => copy(forAgent(), 'Copied for an agent')}>
-          Copy for agent
+        <button className="cl-btn" disabled={!shot} onClick={() => copy(forAgent(), 'Camera lab changes', inStudio())}>
+          {inStudio() ? 'Send to agent' : 'Copy for agent'}
         </button>
         <IconButton icon="download" label="Save a PNG" onClick={png} disabled={!world} />
       </div>

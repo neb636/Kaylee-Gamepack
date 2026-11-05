@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Workspace } from "../../../shared/models";
-import { services } from "../../core/services";
-import { useWorkbenchStore } from "../../state/workbench-store";
+import { handleLabShare } from "./lab-share";
 
 export interface KnownIssue { title: string; text: string }
 
@@ -35,24 +34,18 @@ export function useKnownIssues(workspace: Workspace, place?: string, activity?: 
   return issues;
 }
 
-/** Hands one issue to this piece of work's agent (the open one, else the first, else a new one). */
-function sendToAgent(workspace: Workspace, issue: KnownIssue): void {
-  const store = useWorkbenchStore.getState();
-  const current = store.workspaces.find((item) => item.id === workspace.id) ?? workspace;
-  const viewId = current.views.find((view) => view.id === current.activeViewId && view.type === "agent")?.id
-    ?? current.views.find((view) => view.type === "agent")?.id
-    ?? store.createView(workspace.id, "agent", "Known issue", { autoTitle: false });
-  void services.commands.execute("agent.composer.attach", { workspaceId: workspace.id, viewId, label: `Known issue: ${issue.title}`, content: `From known-issues.md (fix it, then tick it off there):\n${issue.text}` });
-  store.selectView(workspace.id, viewId);
-}
 
 export function KnownIssuesList({ workspace, issues, onClose }: { workspace: Workspace; issues: KnownIssue[]; onClose: () => void }) {
+  const [error, setError] = useState("");
   return <div className="known-issues" role="dialog" aria-label="Known issues for this activity">
     <div className="known-issues-head"><strong>Known issues here</strong><button className="game-tool" onClick={onClose}>Close</button></div>
+    {error && <p role="alert">{error}</p>}
     <ul>
       {issues.map((issue) => <li key={issue.title}>
         <details><summary>{issue.title}</summary><pre>{issue.text}</pre></details>
-        <button className="game-tool" onClick={() => { sendToAgent(workspace, issue); onClose(); }}>Send to agent</button>
+        <button className="game-tool" onClick={() => {
+          void handleLabShare(workspace, { action: "agent", label: `Known issue: ${issue.title}`, text: `From known-issues.md (fix it, then tick it off there):\n${issue.text}` }).then(onClose).catch(error => setError(String(error)));
+        }}>Send to agent</button>
       </li>)}
     </ul>
   </div>;

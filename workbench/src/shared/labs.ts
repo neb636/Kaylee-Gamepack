@@ -44,3 +44,11 @@ export function undoSceneKey(snapshot: LabSnapshot): string {
   state.sort();
   return JSON.stringify({ kind: snapshot.kind, origin: url.origin, path: url.pathname, route, state: state.toString(), mode: snapshot.context.mode, frame: snapshot.context.frame });
 }
+
+/** A user-initiated handoff from an embedded lab. Text only; never commands or executable paths. */
+export interface LabShare { action: 'copy' | 'agent'; text: string; label: string; }
+export function validateLabShare(input: unknown): LabShare {
+  const value = input as LabShare | null;
+  if (!value || !['copy', 'agent'].includes(value.action) || typeof value.text !== 'string' || !value.text.trim() || value.text.length > 200_000 || typeof value.label !== 'string' || !value.label.trim() || value.label.length > 200) throw new Error('Invalid lab handoff');
+  return { action: value.action, text: value.text, label: value.label };
+}

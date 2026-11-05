@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain, dialog, Menu, MenuItem } from "electron";
+import { app, BrowserWindow, shell, ipcMain, dialog, Menu, MenuItem, clipboard } from "electron";
 import path from "node:path";
 import { AgentSessionManager } from "./agent-session-manager";
 import { ImageLibrary } from "./image-library";
@@ -128,6 +128,11 @@ app.whenReady().then(async () => {
   const trusted = (event: Electron.IpcMainInvokeEvent | Electron.IpcMainEvent) => {
     if (event.senderFrame !== event.sender.mainFrame) throw new Error('Only the studio can use native APIs');
   };
+  ipcMain.handle('studio:copy-text', (event, text: unknown) => {
+    trusted(event);
+    if (typeof text !== 'string' || text.length > 200_000) throw new Error('Invalid clipboard text');
+    clipboard.writeText(text);
+  });
   ipcMain.handle('studio:repo-root', event => { trusted(event); if (repoRoot) roots.add(repoRoot); return repoRoot; });
   // The game for one piece of work: its own loopback server (the last 2 stay running). Returns that server's origin.
   ipcMain.handle('studio:use-checkout', async (event, root: unknown) => {
