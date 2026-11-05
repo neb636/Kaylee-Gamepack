@@ -51,6 +51,10 @@ export interface PartyStart {
   stars: number
   /** Countries she has been to (for the pins and Terry's way). */
   visited: string[]
+  /** GPU recovery: exact flight position, catch count and remaining quiz order. */
+  along?: number
+  fish?: number
+  questions?: Question[]
 }
 export interface PartyEvents {
   section(s: PartySection, state?: Record<string, string>): void
@@ -167,7 +171,9 @@ export class PartyWorld implements World3D {
   // ---- Fly.
   private route: Route
   private s = 0
-  private speed = 0
+  private fishSpacing = FLY.fishEvery
+  private scatterBag = new Bag()
+  private visited: string[]
   private leg: Leg = 'north'
   private terry = new Group()
   private terryX = 0
@@ -261,7 +267,8 @@ export class PartyWorld implements World3D {
     this.floesS = buildSouth(kit)
 
     this.route = new Route(start.visited)
-    this.speed = Math.max(FLY.speed * DEG, this.route.length / FLY.minTime)
+    this.visited = start.visited
+    this.caught = start.fish ?? 0
     this.streakMat = this.bag.add(new SpriteMaterial({ map: this.bag.add(streakTexture()), transparent: true, depthWrite: false }))
     this.puffMat = this.bag.add(new SpriteMaterial({ map: this.bag.add(puffTexture()), transparent: true, depthWrite: false }))
     this.makeTerry()
@@ -313,14 +320,15 @@ export class PartyWorld implements World3D {
     // Where the link starts.
     this.section = start.section
     if (start.section === 'fly') {
-      this.s = start.leg === 'warm' ? this.sAtLat(35) : start.leg === 'south' ? this.sAtLat(-40) : 0
+      this.leg = start.leg
+      this.s = start.along ?? (start.leg === 'warm' ? this.sAtLat(35) : start.leg === 'south' ? this.sAtLat(-40) : 0)
       this.orientFly(1)
     } else {
       this.s = this.route.length
       this.orientFly(1)
       this.terry.visible = false
       if (start.section === 'deliver') this.startDeliver(true)
-      else if (start.section === 'quiz') this.startQuiz(start.q, start.stars, true)
+      else if (start.section === 'quiz') this.startQuiz(start.q, start.stars, true, start.questions)
       else this.startQuiz('bear', QUIZ_N, true)
     }
 
@@ -334,12 +342,12 @@ export class PartyWorld implements World3D {
 
   // ---------------------------------------------------------------- building
 
-  private prop(geometry: BufferGeometry, px = 2) {
+  private prop(geometry: BufferGeometry, px = 2, bag = this.bag) {
     const g = new Group()
-    g.add(new Mesh(this.bag.add(geometry), this.mats.props))
+    g.add(new Mesh(bag.add(geometry), this.mats.props))
     if (px > 0) {
       const hull = makeHull(geometry, px)
-      this.bag.add(hull.geometry)
+      bag.add(hull.geometry)
       g.add(hull)
     }
     return g
@@ -377,6 +385,13 @@ export class PartyWorld implements World3D {
 
   /** The fish, the clouds and the pins along the way. */
   private scatter(visited: string[]) {
+    for (const item of [...this.fish, ...this.clouds, ...this.pins]) item.o.removeFromParent()
+    this.scatterBag.dispose()
+    this.fish = []
+    this.clouds = []
+    this.pins = []
+    this.fishSpacing = FLY.fishEvery
+    const prop = (g: BufferGeometry, px: number) => this.prop(g, px, this.scatterBag)
     let r = 7
     const rand = () => ((r = (r * 9301 + 49297) % 233280) / 233280)
     for (let s = 5 * DEG; s < this.route.length - 4 * DEG; s += FLY.fishEvery * DEG) {
@@ -391,7 +406,7 @@ export class PartyWorld implements World3D {
         const o = new Group()
         const body = new Group()
         const pink = lat < -40 ? '#FF8FB8' : lat < 40 ? '#FFB24D' : '#B9C7FF'
-        body.add(this.prop(merge([P.sphere(0.009, pink, { scale: [0.7, 1, 1.8] }), P.cone(0.007, 0.012, pink, { at: [0, 0, 0.019], rot: [Math.PI / 2, 0, 0] }), P.sphere(0.0018, PAL.ink, { at: [0.005, 0.003, -0.01] })]), 1))
+        body.add(prop(merge([P.sphere(0.009, pink, { scale: [0.7, 1, 1.8] }), P.cone(0.007, 0.012, pink, { at: [0, 0, 0.019], rot: [Math.PI / 2, 0, 0] }), P.sphere(0.0018, PAL.ink, { at: [0.005, 0.003, -0.01] })]), 1))
         o.add(body)
         standOn(o, 0, 0, 1)
         o.position.copy(at).multiplyScalar(1.004)
@@ -402,7 +417,7 @@ export class PartyWorld implements World3D {
       if (Math.abs(lat) < 38 && rand() < 0.35) {
         const off = (rand() * 2 - 1) * FLY.reach
         const at = rp.p.clone().addScaledVector(rp.side, off).normalize()
-        const o = this.prop(merge([P.sphere(0.013, '#FFFFFF'), P.sphere(0.01, '#FFFFFF', { at: [0.013, -0.003, 0.002] }), P.sphere(0.0095, '#FFFFFF', { at: [-0.013, -0.003, -0.002] })]), 1.5)
+        const o = prop(merge([P.sphere(0.013, '#FFFFFF'), P.sphere(0.01, '#FFFFFF', { at: [0.013, -0.003, 0.002] }), P.sphere(0.0095, '#FFFFFF', { at: [-0.013, -0.003, -0.002] })]), 1.5)
         o.position.copy(at).multiplyScalar(1 + ALT + 0.004)
         o.quaternion.setFromUnitVectors(UP, at)
         this.earth.add(o)
@@ -412,7 +427,7 @@ export class PartyWorld implements World3D {
     for (const id of visited) {
       const ll0 = PINS[id]
       if (!ll0) continue
-      const o = this.prop(merge([P.cyl(0.003, 0.003, 0.05, PAL.ink, { at: [0, 0.025, 0] }), P.sphere(0.012, '#FF4F9A', { at: [0, 0.055, 0] })]), 1.5)
+      const o = prop(merge([P.cyl(0.003, 0.003, 0.05, PAL.ink, { at: [0, 0.025, 0] }), P.sphere(0.012, '#FF4F9A', { at: [0, 0.055, 0] })]), 1.5)
       standOn(o, ll0[0], ll0[1], 1)
       this.earth.add(o)
       this.pins.push({ id, o, at: ll(ll0[0], ll0[1]), popped: -1 })
@@ -580,7 +595,8 @@ export class PartyWorld implements World3D {
   }
 
   private updateFly(dt: number, t: number) {
-    this.s += this.speed * dt
+    if (this.fishSpacing !== FLY.fishEvery) this.scatter(this.visited)
+    this.s += Math.max(FLY.speed * DEG, this.route.length / FLY.minTime) * dt
     this.orientFly(1 - Math.exp(-dt * 2.5))
     const lat = latOf(this.route.at(this.s, rp).p)
     const leg: Leg = lat > 40 ? 'north' : lat < -40 ? 'south' : 'warm'
@@ -745,7 +761,7 @@ export class PartyWorld implements World3D {
 
   // ---------------------------------------------------------------- the quiz
 
-  private startQuiz(first: Question, stars: number, snap: boolean) {
+  private startQuiz(first: Question, stars: number, snap: boolean, questions?: Question[]) {
     this.section = 'quiz'
     this.card.visible = false
     this.terry.visible = false
@@ -757,7 +773,7 @@ export class PartyWorld implements World3D {
     this.quizT = snap ? 9 : 0
     this.yaw = 0.6
     this.stars = Math.min(QUIZ_N, stars)
-    this.questions = pickQuestions(first, this.stars)
+    this.questions = questions ?? pickQuestions(first, this.stars)
     this.qi = 0
     if (this.stars >= QUIZ_N) return this.finish()
     if (snap) this.rig.setShot(this.shot(), true)
@@ -814,6 +830,7 @@ export class PartyWorld implements World3D {
   }
 
   private finish() {
+    this.section = 'badge'
     this.qState = 'done'
     for (const p of Object.values(this.pieces)) p.o.visible = false
     this.events.section('badge')
@@ -1213,6 +1230,22 @@ export class PartyWorld implements World3D {
     this.stats.tris = this.renderer.info.render.triangles
   }
 
+  /** Resume at the current toy checkpoint, including a star earned during an answer animation. */
+  checkpoint(): PartyStart {
+    const answered = this.qState === 'right' || this.qState === 'next'
+    const questions = this.questions.slice(this.qi + (answered ? 1 : 0))
+    return {
+      section: this.stars >= QUIZ_N ? 'badge' : this.section,
+      leg: this.leg,
+      along: this.s,
+      fish: this.caught,
+      q: questions[0] ?? this.q,
+      stars: this.stars,
+      questions: questions.length ? questions : undefined,
+      visited: this.visited,
+    }
+  }
+
   qa() {
     return {
       section: this.section,
@@ -1220,6 +1253,7 @@ export class PartyWorld implements World3D {
       along: +(this.s / Math.max(1e-6, this.route.length)).toFixed(2),
       terry: +this.terryX.toFixed(3),
       fish: this.caught,
+      fishAvailable: this.fish.length,
       pins: this.pins.map((p) => `${p.id}${p.popped >= 0 ? '!' : ''}`),
       question: this.section === 'quiz' ? this.q : null,
       questions: this.questions,
@@ -1236,6 +1270,7 @@ export class PartyWorld implements World3D {
   dispose() {
     this.unwatch()
     this.scene.clear()
+    this.scatterBag.dispose()
     this.bag.dispose()
   }
 }

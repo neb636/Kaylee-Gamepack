@@ -4,7 +4,7 @@
 // (kit/Guide) says how to steer, asks each question (🔊 by the stars to hear it again) and cheers or helps.
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BigButton, bigCelebration, burst, pick, say, SayButton, type Line } from '../../../../../sdk'
+import { BigButton, bigCelebration, burst, pick, say, SayButton, useAlive, type Line } from '../../../../../sdk'
 import { Guide, type GuideHandle } from '../../../../kit/Guide'
 import { useSections } from '../../../../kit/sections'
 import { Anchors } from '../../../../engine3d/Anchors'
@@ -12,7 +12,7 @@ import { View3D, type RenderMode } from '../../../../engine3d/View3D'
 import { places } from '../../../../registry'
 import { usePassport } from '../../../../stamps'
 import { L } from '../../lines'
-import { PARTY_ANCHORS, PartyWorld, type Leg, type PartyEvents } from './party'
+import { PARTY_ANCHORS, PartyWorld, type Leg, type PartyEvents, type PartyStart } from './party'
 import PARTY_SECTIONS, { QUESTIONS, type PartySection, type Question } from './sections'
 
 /** The questions whose miss is said by the friend she put in the wrong place (the others, Sparkle). */
@@ -31,6 +31,8 @@ export function Finale({ onWin }: { onWin: () => void }) {
     stars: Math.max(0, Math.min(STARS - 1, Math.floor(+param('stars')) || 0)),
     visited: passport.visited.filter((id) => id !== 'poles'),
   }))
+  const restart = useRef<PartyStart>(initial)
+  const alive = useAlive()
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
   const [section, setSection] = useState<PartySection>(initial.section)
@@ -60,10 +62,17 @@ export function Finale({ onWin }: { onWin: () => void }) {
   }, [])
 
   const win = () => {
-    if (won.current) return
+    if (!alive() || won.current) return
     won.current = true
     onWin()
   }
+
+  // The badge owns its timer: leaving it or losing the GPU cancels the transition.
+  useEffect(() => {
+    if (section !== 'badge' || mode !== 'webgl') return
+    const timer = setTimeout(win, 4500)
+    return () => clearTimeout(timer)
+  }, [section, mode])
 
   const events = useRef<PartyEvents>({
     section: (s, state) => {
@@ -88,7 +97,8 @@ export function Finale({ onWin }: { onWin: () => void }) {
       const hello = L.party.hello[id]
       if (hello) void friend(hello)
     },
-    question: (qq) => {
+    question: (qq, n) => {
+      setStars(n)
       setQ(qq)
       setMissed(0)
       // The first question starts the quiz.
@@ -116,7 +126,6 @@ export function Finale({ onWin }: { onWin: () => void }) {
       setSection('badge')
       bigCelebration()
       guide.current?.speak(L.party.badge)
-      setTimeout(win, 4500)
     },
   })
 
@@ -133,13 +142,20 @@ export function Finale({ onWin }: { onWin: () => void }) {
         name="Pole to Pole"
         qaKey="__polesPartyQA"
         worldRef={worldRef}
-        onMode={setMode}
-        make={(renderer) => new PartyWorld(renderer, initial, events.current)}
+        onMode={(next) => {
+          if (next === 'lost' && worldRef.current) restart.current = worldRef.current.checkpoint()
+          setMode(next)
+        }}
+        make={(renderer) => new PartyWorld(renderer, restart.current, events.current)}
         anchors={(input, els) => <Anchors list={PARTY_ANCHORS} els={els} {...input} />}
       />
       {mode === 'lost' && (
         <button
           onClick={() => {
+            setSection(restart.current.section)
+            setFish(restart.current.fish ?? 0)
+            setStars(restart.current.stars)
+            setPin(null)
             setMode('webgl')
             setEngine((n) => n + 1)
           }}
