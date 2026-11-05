@@ -7,7 +7,7 @@
 //   where it's going).
 // - `Glows`: soft round glows: turned to the camera (a paper lantern's halo) or lying flat on the sand (the pool of
 //   firelight under a dancer, round a flame of the ring).
-import { AdditiveBlending, BufferAttribute, Color, DynamicDrawUsage, InstancedBufferAttribute, InstancedBufferGeometry, Mesh, ShaderMaterial, type ColorRepresentation, type Vector3 } from 'three'
+import { AdditiveBlending, BufferAttribute, Color, DoubleSide, DynamicDrawUsage, InstancedBufferAttribute, InstancedBufferGeometry, Mesh, ShaderMaterial, type ColorRepresentation, type Vector3 } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 
 const quad = (bag: Bag, x0: number, x1: number, y0: number, y1: number) => {
@@ -202,6 +202,8 @@ export class Glows {
     const mat = bag.add(
       new ShaderMaterial({
         uniforms: { uFlat: { value: opts.flat ? 1 : 0 }, uSoft: { value: opts.soft ?? 2 } },
+        // (Lying flat, the quad faces down: draw both sides.)
+        side: DoubleSide,
         vertexShader: GLOW_VERT,
         fragmentShader: GLOW_FRAG,
         transparent: true,

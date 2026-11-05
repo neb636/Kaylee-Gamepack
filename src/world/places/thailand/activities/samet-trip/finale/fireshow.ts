@@ -1034,9 +1034,10 @@ export class FireShow implements World3D {
   /** A ball of fire at `p` (it was at `prev` a frame ago): its flame streams back from where it's going and up. */
   private fireball(p: Vector3, prev: Vector3, dt: number, size: number) {
     const F = LOOK.flame * size
-    tmp.subVectors(p, prev).divideScalar(Math.max(dt, 1 / 120))
-    const vx = tmp.dot(this.right)
-    const vy = tmp.y
+    // (Its own vector: `p` may be the shared tmp.)
+    const v = this.fireV.subVectors(p, prev).divideScalar(Math.max(dt, 1 / 120))
+    const vx = v.dot(this.right)
+    const vy = v.y
     const speed = prev.lengthSq() === 0 ? 0 : Math.min(Math.hypot(vx, vy), 14)
     // Back from the motion, and fire rises: the faster, the more it streams.
     const dx = -vx * 0.14
@@ -1063,6 +1064,7 @@ export class FireShow implements World3D {
     }
   }
   private chainObj = new Object3D()
+  private fireV = new Vector3()
 
   /** Her shapes in the sky: paper lanterns drifting up and away, bobbing, glowing softly from the light inside. */
   private drawLanterns(dt: number, t: number) {
