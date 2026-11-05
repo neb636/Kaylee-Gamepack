@@ -157,7 +157,7 @@ interface Puff {
 }
 type Grab =
   | { kind: 'dough'; piece: Piece; gx: number; gz: number; sx: number; sy: number; moved: boolean; lastAngle: number | null; foldZ: number }
-  | { kind: 'carry'; piece: Piece }
+  | { kind: 'carry'; piece: Piece; sx: number; sy: number }
   | { kind: 'blob'; g: Group }
   | { kind: 'ball'; color: DoughColor; g: Group }
   | { kind: 'lump'; g: Group; size: number }
@@ -1029,7 +1029,7 @@ export class DumplingCounter implements World3D {
     this.lastProgress = this.time
     if (p.stage === 'done') {
       // A finished one: a press on a soup dumpling squirts (silly); otherwise she carries it.
-      this.grab = { kind: 'carry', piece: p }
+      this.grab = { kind: 'carry', piece: p, sx: x, sy: y }
       p.dough.poke(0.8)
       sounds.pickup()
       return
@@ -1190,6 +1190,7 @@ export class DumplingCounter implements World3D {
   pointerUp() {
     const g = this.grab
     this.grab = null
+    const f = this.finger
     this.finger = null
     if (!g) return
     this.lastProgress = this.time
@@ -1215,7 +1216,10 @@ export class DumplingCounter implements World3D {
       const p = g.piece
       const b = this.current
       const pos = p.dough.root.position
-      if (b && Math.hypot(pos.x - b.x, pos.z - b.z) < b.r + MOVE.drop) this.toBasket(p)
+      // A tap (no drag) on a finished dumpling: it hops into the basket by itself.
+      const tapped = !f || Math.hypot(f.x - g.sx, f.y - g.sy) < 14
+      if (b && tapped) this.toBasket(p)
+      else if (b && Math.hypot(pos.x - b.x, pos.z - b.z) < b.r + MOVE.drop) this.toBasket(p)
       else if (b && pos.distanceTo(new Vector3(...WORK)) > 0.35 && pos.x > 0.3) this.toBasket(p)
       else {
         // Back down on the board.
