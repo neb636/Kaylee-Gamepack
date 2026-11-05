@@ -25,9 +25,15 @@ interface GameLive {
   /** A navigation request for a workspace's pane (the nonce reloads even the same link). */
   go: Record<string, { hash: string; nonce: number }>;
   sections: Record<string, { index?: SectionsIndex; error?: string; loading?: boolean }>;
+  /** The controls before the last AI preview, by `<workspace id>:<lab>`, so Undo survives switching a lab off and on. */
+  undo: Record<string, LabSnapshot | undefined>;
 }
 
-export const useGameLive = create<GameLive>(() => ({ href: {}, snapshot: {}, origin: {}, go: {}, sections: {} }));
+export const useGameLive = create<GameLive>(() => ({ href: {}, snapshot: {}, origin: {}, go: {}, sections: {}, undo: {} }));
+
+export function setLabUndo(key: string, snapshot: LabSnapshot | undefined): void {
+  useGameLive.setState((state) => ({ undo: { ...state.undo, [key]: snapshot } }));
+}
 
 let nonce = 0;
 

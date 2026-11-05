@@ -3,7 +3,7 @@ import { snapshotKey, undoSceneKey, validateProposal, type LabKind, type LabProp
 import type { Workspace } from "../../../shared/models";
 import { services } from "../../core/services";
 import { useWorkbenchStore } from "../../state/workbench-store";
-import { patchGame } from "./game-store";
+import { patchGame, setLabUndo, useGameLive } from "./game-store";
 
 export type LabRequest = (action: "snapshot" | "apply", values?: { expected: string; proposal: LabProposal }) => Promise<LabSnapshot>;
 
@@ -16,7 +16,10 @@ export function LabPanel({ workspace, kind, request, snapshot }: { workspace: Wo
   const character = kind === "character";
   const [message, setMessage] = useState(character ? "Pick a character and pose in the lab, then describe the change." : "Describe what should feel or look different.");
   const [busy, setBusy] = useState(false);
-  const [undo, setUndo] = useState<LabSnapshot>();
+  // Kept outside the panel, so switching the lab off and on (or to another lab and back) keeps Undo.
+  const undoKey = `${workspace.id}:${kind}`;
+  const undo = useGameLive((state) => state.undo[undoKey]);
+  const setUndo = (value: LabSnapshot | undefined) => setLabUndo(undoKey, value);
   const job = useRef<string | undefined>(undefined);
   const alive = useRef(true);
   useEffect(() => {

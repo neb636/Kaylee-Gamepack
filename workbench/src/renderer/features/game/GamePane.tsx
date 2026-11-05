@@ -54,6 +54,8 @@ export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?:
   useEffect(() => {
     let active = true;
     setError(undefined);
+    // A remembered origin may be stale (that server was evicted and its port reused): wait for this checkout's server.
+    useGameLive.setState((state) => ({ origin: { ...state.origin, [workspace.id]: "" } }));
     window.workbench.studio.useCheckout(workspace.path)
       .then((value) => { if (active) useGameLive.setState((state) => ({ origin: { ...state.origin, [workspace.id]: value } })); })
       .catch((caught) => { if (active) setError(String(caught).replace(/^Error: (Error invoking remote method '[^']+': )?(Error: )?/, "")); });
@@ -61,8 +63,10 @@ export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?:
   }, [workspace.id, workspace.path]);
 
   const forget = () => useGameLive.setState((state) => ({ href: { ...state.href, [workspace.id]: "" }, snapshot: { ...state.snapshot, [workspace.id]: undefined } }));
+  // Only requests made while this pane is mounted: an old Sections click must not replay when switching back.
+  const seen = useRef(go?.nonce);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { if (go) { forget(); setTarget(go); } }, [go]);
+  useEffect(() => { if (go && go.nonce !== seen.current) { seen.current = go.nonce; forget(); setTarget(go); } }, [go]);
 
   useEffect(() => {
     if (!origin) return;
