@@ -494,7 +494,6 @@ class CoatsWorld {
     const dt = Math.max(1 / 120, this.now - f.tl)
     if (f.last) this.speed = this.speed * 0.6 + (Math.hypot(x - f.x, y - f.y) / dt) * 0.4
     f.tl = this.now
-    const prev = f.last ?? [x, y]
     f.x = x
     f.y = y
     f.last = [x, y]
@@ -512,9 +511,10 @@ class CoatsWorld {
       }
       if (!c.seg) c.seg = this.newSeg(c.els.strokes)
       if (!c.seg) continue
+      // A re-entry starts with a dab: count only the segment the mask actually draws.
+      const [px, py] = c.seg.pts.at(-1) ?? [lx, ly]
       c.seg.pts.push([lx, ly])
       c.seg.el.setAttribute('d', outline(c.seg.pts, BRUSH.size / c.s, false))
-      const [px, py] = this.local(c, prev[0], prev[1])
       this.markCoat(c, px, py, lx, ly, rl * BRUSH.reach)
       this.lastTouched = c
     }
@@ -525,9 +525,10 @@ class CoatsWorld {
       const gy = y - g.gy
       if (!g.seg) g.seg = this.newSeg(g.strokes)
       if (g.seg) {
+        const [px, py] = g.seg.pts.at(-1) ?? [gx, gy]
         g.seg.pts.push([gx, gy])
         g.seg.el.setAttribute('d', outline(g.seg.pts, BRUSH.size, false))
-        this.markGround(prev[0] - g.gx, prev[1] - g.gy, gx, gy, r * BRUSH.reach)
+        this.markGround(px, py, gx, gy, r * BRUSH.reach)
       }
     } else this.endSeg(g.seg, BRUSH.size, () => (g.seg = null))
     // The snowy owl stays white: rubbing sunshine on it gets a head shake.

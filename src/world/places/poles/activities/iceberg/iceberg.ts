@@ -1257,7 +1257,8 @@ export class IcebergMaker implements World3D {
     const b = g.trail[g.trail.length - 1]
     // (At least a frame long: a robot's flick can be a few milliseconds.)
     const dt = Math.max(1 / 60, b.t - a.t)
-    if (b !== a) {
+    f.vx = f.vz = 0
+    if (b !== a && performance.now() / 1000 - b.t <= 0.09) {
       f.vx = clamp(((b.x - a.x) / dt) * FLOAT.flick, -12, 12)
       f.vz = clamp(((b.z - a.z) / dt) * FLOAT.flick, -12, 12)
     }

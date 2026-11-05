@@ -814,6 +814,18 @@ class HuddleWorld {
     this.now += dt
     const now = this.now
     const st = this.stage
+    // Dad tunes the current huddle, including its progress dots, without restarting.
+    if (this.step === 'small' || this.step === 'blizzard') {
+      const goal = this.step === 'small' ? WARM.small : WARM.big
+      if (goal !== this.goal) {
+        this.goal = goal
+        this.ev.dots(this.warmups, this.goal)
+        if (this.warmups >= this.goal) {
+          if (this.step === 'small') this.toBlizzard()
+          else this.toEgg()
+        }
+      }
+    }
     // Things waiting their turn.
     if (this.later.length) {
       const due = this.later.filter((l) => l.at <= now)
