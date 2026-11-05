@@ -118,3 +118,23 @@ test("a file at the last commit or where the branch left main; ignored folders",
   await assert.rejects(git.fileAt(root, "../x", "head"), /relative/);
   assert.deepEqual(await git.ignored(root), ["dist"]);
 });
+
+test("an edit landing while a save is written is never overwritten; competing saves serialize", async () => {
+  const { root, files } = await fixture();
+  const opened = await files.read(root, "src/kart.ts");
+  // Two saves of the same opened version: the first wins, the second finds the file moved on.
+  const [first, second] = await Promise.all([files.write(root, "src/kart.ts", "one\n", opened.hash), files.write(root, "src/kart.ts", "two\n", opened.hash)]);
+  assert.equal(first.ok, true);
+  assert.equal(second.ok, false);
+  assert.equal(await readFile(join(root, "src", "kart.ts"), "utf8"), "one\n");
+  // An outside write after the check but before the replace: the save backs off.
+  const fsPromises = (await import("node:fs")).promises;
+  const original = fsPromises.writeFile;
+  fsPromises.writeFile = async (...args) => { await original(...args); if (String(args[0]).includes(".studio-")) await original(join(root, "src", "kart.ts"), "agent\n"); };
+  try {
+    const raced = await files.write(root, "src/kart.ts", "mine\n", first.hash);
+    assert.equal(raced.ok, false);
+    assert.equal(raced.disk.content, "agent\n");
+  } finally { fsPromises.writeFile = original; }
+  assert.equal(await readFile(join(root, "src", "kart.ts"), "utf8"), "agent\n");
+});

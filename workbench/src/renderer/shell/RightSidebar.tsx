@@ -28,7 +28,7 @@ export function RightSidebar({ workspace }: { workspace: Workspace }) {
       {TABS.map((item) => {
         const Icon = item.icon;
         const selected = item.id === tab;
-        return <button key={item.id} role="tab" aria-selected={selected} className={`explorer-tab ${selected ? "is-selected" : ""}`}
+        return <button key={item.id} role="tab" aria-selected={selected} aria-label={item.label} className={`explorer-tab ${selected ? "is-selected" : ""}`}
           title={item.label} onClick={() => openExplorer(item.id)}>
           <Icon size={15} /><span>{item.label}</span>
           {item.id === "changes" && changes > 0 && <span className="count-badge">{changes}</span>}

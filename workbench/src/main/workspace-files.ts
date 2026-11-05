@@ -136,6 +136,7 @@ export class WorkspaceFiles {
   private readonly indexes = new Map<string, { files: string[]; at: number }>();
   private readonly watches = new Map<string, Watch>();
   private readonly searches = new Map<string, ChildProcess>();
+  private readonly saving = new Map<string, Promise<FileWriteResult>>();
 
   /** `trash` moves a path to the Trash (Electron's shell.trashItem); tests pass their own. */
   constructor(private readonly roots: WorkspaceRoots, private readonly trashItem: (absolute: string) => Promise<void> = async () => { throw new Error("Trash is not available."); }) {}
@@ -177,6 +178,15 @@ export class WorkspaceFiles {
    * exist yet). When the file changed on disk since, nothing is written and the disk version comes back instead.
    */
   async write(root: string, relative: string, content: string, expectedHash: string | null): Promise<FileWriteResult> {
+    // One save per file at a time: a second save waits, then finds the hash moved on and returns a conflict.
+    const key = `${root}\0${relative}`;
+    const previous = this.saving.get(key) ?? Promise.resolve();
+    const next = previous.catch(() => undefined).then(() => this.writeNow(root, relative, content, expectedHash));
+    this.saving.set(key, next);
+    try { return await next; } finally { if (this.saving.get(key) === next) this.saving.delete(key); }
+  }
+
+  private async writeNow(root: string, relative: string, content: string, expectedHash: string | null): Promise<FileWriteResult> {
     const base = await this.roots.resolve(root);
     const bytes = Buffer.from(content, "utf8");
     if (bytes.length > WRITE_LIMIT) throw new Error("Files over 2 MB can't be saved from Studio.");
@@ -199,6 +209,12 @@ export class WorkspaceFiles {
     // Write beside it, then rename: a crash never leaves half a file, and the mode stays.
     const temporary = `${file}.studio-${process.pid}-${Date.now()}`;
     await fs.writeFile(temporary, bytes, current ? { mode: current.mode } : {});
+    // Check again right before replacing it: an agent may have written while the new version was being written.
+    const now = await fs.readFile(file).then((value) => contentHash(value), () => null);
+    if (now !== (disk ? contentHash(disk) : null)) {
+      await fs.rm(temporary, { force: true });
+      return { ok: false, disk: now === null ? null : await this.read(root, relative) };
+    }
     await fs.rename(temporary, file).catch(async (error) => { await fs.rm(temporary, { force: true }); throw error; });
     this.indexes.delete(base);
     return { ok: true, hash: contentHash(bytes) };

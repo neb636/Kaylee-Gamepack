@@ -15,7 +15,7 @@ import { registerFileCommands } from "../features/files/file-commands";
 import { StatusBranch } from "../features/source-control/SourceControlPanel";
 import { currentLink, GAME_TABS, openGameTab } from "../features/game/game-store";
 import { openExplorer } from "../features/explorer/explorer-store";
-import { isViewDirty, setViewDirty } from "../core/dirty-views";
+import { fileBuffers, isViewDirty, setViewDirty } from "../core/dirty-views";
 import type { AgentViewState, FileViewState } from "../../shared/models";
 import { MemoryUsage, SessionSummary, TerminalCount } from "../features/status/StatusItems";
 import { SettingsButton } from "../features/settings/SettingsButton";
@@ -157,6 +157,7 @@ export function registerFirstPartyContributions(): void {
     const view = useWorkbenchStore.getState().workspaces.find((item) => item.id === workspaceId)?.views.find((item) => item.id === viewId);
     if (view && isViewDirty(viewId) && !window.confirm(`${view.title} has unsaved changes. Close it and lose them?`)) return;
     setViewDirty(viewId, false);
+    fileBuffers.delete(viewId);
     closeAgentRuntime(viewId);
     clearComposerRuntime(viewId);
     clearImageRuntime(viewId);

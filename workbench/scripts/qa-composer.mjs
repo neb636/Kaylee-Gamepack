@@ -163,6 +163,12 @@ try {
   await page.keyboard.type("\n// Edited in Studio.");
   await page.locator(".view-tab:not(.is-preview)").filter({ hasText: "app.ts" }).waitFor();
   await page.getByRole("button", { name: "Close app.ts (unsaved)" }).waitFor();
+  // Over to the agent and back: the unsaved edit is still there (the editor doesn't outlive its tab, its text does).
+  await page.getByRole("tab", { name: "Explain this failure." }).click();
+  await page.getByRole("tab", { name: "app.ts" }).click();
+  await page.waitForFunction(() => document.querySelector(".cm-content")?.textContent.includes("Edited in Studio."));
+  await page.getByRole("button", { name: "Close app.ts (unsaved)" }).waitFor();
+  await page.locator(".cm-content").click();
   await page.keyboard.press("Meta+s");
   await page.getByRole("button", { name: "Close app.ts", exact: true }).waitFor();
   assert.match(await readFile(join(repo, "src", "app.ts"), "utf8"), /\/\/ Edited in Studio\.\n?$/);

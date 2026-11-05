@@ -8,7 +8,7 @@ import { LanguageDescription } from "@codemirror/language";
 import { languages } from "@codemirror/language-data";
 import type { DiffBase, FileContent, FileViewState } from "../../../shared/models";
 import { errorMessage } from "../../core/errors";
-import { setViewDirty } from "../../core/dirty-views";
+import { fileBuffers, setViewDirty } from "../../core/dirty-views";
 import type { ViewComponentProps } from "../../core/view-registry";
 import { watchWorkspace } from "../../core/workspace-watch";
 import { useWorkbenchStore } from "../../state/workbench-store";
@@ -71,7 +71,6 @@ export function FileView({ view, workspace }: ViewComponentProps) {
   const picture = PICTURE.test(path);
   const update = (patch: Partial<FileViewState>) => useWorkbenchStore.getState().updateViewState(workspace.id, view.id, patch);
   const markDirty = (value: boolean) => { setDirty(value); setViewDirty(view.id, value); };
-  useEffect(() => () => setViewDirty(view.id, false), [view.id]);
 
   // Load once per file; later disk changes go through the watcher below.
   useEffect(() => {
@@ -107,6 +106,7 @@ export function FileView({ view, workspace }: ViewComponentProps) {
         baseHash.current = result.hash;
         saved.current = doc;
         markDirty(!editor.state.doc.eq(doc));
+        fileBuffers.delete(view.id);
         setConflict(undefined);
         setNotice("Saved");
         if (previewRef.current) update({ preview: false });
@@ -138,9 +138,18 @@ export function FileView({ view, workspace }: ViewComponentProps) {
     const host = hostRef.current;
     if (!host || !file || file.binary) return;
     saved.current = Text.of(file.content.split(/\r?\n/));
+    // Edits made before this tab was last hidden come back (the editor doesn't outlive its tab).
+    const kept = fileBuffers.get(view.id);
+    if (kept) {
+      saved.current = Text.of(kept.saved.split(/\r?\n/));
+      baseHash.current = kept.hash;
+      markDirty(true);
+      // The file changed on disk while the tab was away: ask, as when it changes on screen.
+      if (kept.hash !== file.hash) setConflict({ disk: file, saving: false });
+    }
     const editor = new EditorView({
       parent: host,
-      state: EditorState.create({ doc: file.content, extensions: [
+      state: EditorState.create({ doc: kept?.text ?? file.content, extensions: [
         lineNumbers(), highlightActiveLineGutter(), highlightActiveLine(), drawSelection(), history(), search({ top: true }), highlightSelectionMatches(),
         keymap.of([{ key: "Mod-s", preventDefault: true, run: () => { void saveRef.current(); return true; } }, ...searchKeymap, ...historyKeymap, indentWithTab, ...defaultKeymap]),
         readOnly.current.of(EditorState.readOnly.of(file.truncated)),
@@ -163,7 +172,12 @@ export function FileView({ view, workspace }: ViewComponentProps) {
     const description = LanguageDescription.matchFilename(languages, path.split("/").at(-1) ?? path);
     let active = true;
     void description?.load().then((support) => { if (active) editor.dispatch({ effects: language.current.reconfigure(support) }); });
-    return () => { active = false; editor.destroy(); editorRef.current = null; };
+    return () => {
+      active = false;
+      if (editor.state.doc.eq(saved.current)) fileBuffers.delete(view.id);
+      else fileBuffers.set(view.id, { text: editor.state.doc.toString(), saved: saved.current.toString(), hash: baseHash.current });
+      editor.destroy(); editorRef.current = null;
+    };
     // The editor is made once per opened file; reloads replace its text in place.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file === undefined, file?.binary, path]);

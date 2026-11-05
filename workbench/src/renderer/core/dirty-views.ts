@@ -11,3 +11,15 @@ export function setViewDirty(viewId: string, dirty: boolean): void {
 export function isViewDirty(viewId: string): boolean {
   return Boolean(useDirtyViews.getState()[viewId]);
 }
+
+/**
+ * Unsaved text of file tabs that aren't on screen (another tab, another piece of work): the editor goes away with its
+ * tab, so its edits wait here until the tab comes back. Cleared when the tab is closed or saved. Not persisted.
+ */
+export interface FileBuffer { text: string; saved: string; hash: string | null }
+const buffers = new Map<string, FileBuffer>();
+export const fileBuffers = {
+  get: (viewId: string) => buffers.get(viewId),
+  set: (viewId: string, buffer: FileBuffer) => { buffers.set(viewId, buffer); },
+  delete: (viewId: string) => { buffers.delete(viewId); },
+};
