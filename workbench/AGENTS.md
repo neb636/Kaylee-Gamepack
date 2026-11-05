@@ -7,7 +7,11 @@ This folder is the local Electron builder app for the game in the parent directo
 - Keep Electron dependencies and builds isolated here. The published game must not import native APIs or this renderer.
   The one shared dependency is `src/shared/labs.ts`, a dependency-free protocol and numeric validator.
 - Reuse the live game labs; do not fork their controls, character renderer or camera implementation. They are switches on the one game pane (`features/game/`), not tabs.
-- One game server per piece of work (`GameServerPool`, last 2 kept). The Sections tree comes from the checkout's own `scripts/sections-index.mjs`; never import game source here.
+- One game server per piece of work (`GameServerPool`, last 2 kept, trimmed to the one on screen after 3 minutes unless comparing with main).
+- Performance (Dad's Mac has 8 GB): the game pane slows to ~8 fps behind other apps (`src/world/labs/studio-pace.ts`, `{ studioFocused }`),
+  the 3D engine caps at 30 fps and 1.5x pixels under `?studio=1`. Keep git off the idle path: the Work list polls only while Studio is in
+  front with at most 3 git processes at once, file watches drop build output and `.git` noise (`isWatchedChange`), agent output goes out
+  once per frame. New work clones main's `node_modules` (`cp -c`) when the lockfile matches. Measure with `scripts/perf-sample.mjs`. The Sections tree comes from the checkout's own `scripts/sections-index.mjs`; never import game source here.
 - Native processes belong in main, behind typed preload APIs. Only the top frame receives native capabilities.
   Lab messages must match the exact local origin and iframe source. Never accept arbitrary executable paths or shell commands from lab output.
 - AI tuning previews bounded numbers only. Reject stale replies and unknown/non-finite controls atomically. Preserve Undo.

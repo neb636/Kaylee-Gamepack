@@ -30,11 +30,12 @@ test('one game server per piece of work, the last two kept, the external one nev
   assert.equal(await pool.origin('/c'), 'http://127.0.0.1:5178');
   assert.deepEqual(log, ['start 5176 /a', 'start 5178 /b', 'stop 5178', 'start 5178 /c']);
   assert.deepEqual(pool.running().map(item => item.root), ['/repo', '/c', '/a']);
-  await pool.trim(1);
-  assert.deepEqual(pool.running().map(item => item.root), ['/repo', '/c']);
+  // The one on screen is kept even when another was used more recently (main, after compare is switched off).
+  await pool.trim(1, '/a');
+  assert.deepEqual(pool.running().map(item => item.root), ['/repo', '/a']);
   await pool.stopAll();
   assert.deepEqual(pool.running().map(item => item.root), ['/repo']);
-  assert.equal(log.at(-1), 'stop 5178');
+  assert.equal(log.at(-1), 'stop 5176');
 });
 
 test('concurrent requests for the same checkout start one server', async () => {

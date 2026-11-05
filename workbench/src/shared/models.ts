@@ -342,7 +342,8 @@ export interface WorkbenchApi {
     useCheckout: (root: string) => Promise<string>;
     sections: (root: string, refresh?: boolean) => Promise<SectionsIndex>;
     /** Stops all but the `keep` most recently used game servers. */
-    trimServers: (keep: number) => Promise<void>;
+    /** Stops all but `keep` game servers; `root` (the one on screen) is kept first. */
+    trimServers: (keep: number, root?: string) => Promise<void>;
     tune: (input: { id: string; provider: 'claude' | 'codex'; prompt: string; snapshot: import('./labs').LabSnapshot }) => Promise<import('./labs').LabProposal>;
     cancel: (id: string) => void;
   };

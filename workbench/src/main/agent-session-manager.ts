@@ -28,7 +28,16 @@ interface Session {
   lastOutputAt: number;
   settled: boolean;
   settleTimer?: ReturnType<typeof setTimeout>;
+  /** Output parsed but not yet sent to the window, sent in one message per frame. */
+  pendingData: string;
+  dataTimer?: ReturnType<typeof setTimeout>;
+  detectTimer?: ReturnType<typeof setTimeout>;
 }
+
+// A CLI's spinner alone writes about ten chunks a second. Sending each one to the window, and reading the whole
+// screen again after each, kept Electron's main thread busy: one message per frame, one status read per 100 ms.
+const DATA_BATCH_MS = 16;
+const DETECT_EVERY_MS = 100;
 
 export class AgentSessionManager {
   private readonly sessions = new Map<string, Session>();
@@ -60,7 +69,7 @@ export class AgentSessionManager {
     const session: Session = {
       id: randomUUID(), viewId: options.viewId, owner, provider, process: processInstance, terminal, serialize,
       sequence: 0, interrupted: false, working: false, sending: false, disposed: false, inputWasEdited: false,
-      lastOutputAt: Date.now(), settled: false,
+      lastOutputAt: Date.now(), settled: false, pendingData: "",
       status: { lifecycle: "starting", activity: "unknown", canSubmit: false, inputState: "unavailable", reason: "Starting CLI…", rule: "startup", observedAt: Date.now(), completed: 0 },
     };
     this.sessions.set(session.id, session);
@@ -68,11 +77,13 @@ export class AgentSessionManager {
     terminal.onData((data) => { if (!session.disposed && session.status.lifecycle !== "exited") processInstance.write(data); });
     processInstance.onData((data) => { session.lastOutputAt = Date.now(); terminal.write(data, () => {
       if (session.disposed) return;
-      this.emit(session, { type: "data", data });
-      this.detect(session);
+      session.pendingData += data;
+      session.dataTimer ??= setTimeout(() => this.emitPending(session), DATA_BATCH_MS);
+      session.detectTimer ??= setTimeout(() => { session.detectTimer = undefined; this.detect(session); }, DETECT_EVERY_MS);
     }); });
     processInstance.onExit(({ exitCode }) => {
       if (session.disposed) return;
+      this.emitPending(session);
       session.status = { ...session.status, lifecycle: exitCode === 0 ? "exited" : "failed", activity: "unknown", canSubmit: false, inputState: "unavailable",
         reason: `CLI exited with code ${exitCode}.`, rule: "process.exit", observedAt: Date.now(), exitCode };
       this.emit(session, { type: "status", status: session.status });
@@ -83,6 +94,10 @@ export class AgentSessionManager {
   async attach(id: string, owner: WebContents): Promise<AgentSessionSnapshot> {
     const s = this.owned(id, owner);
     await this.flush(s);
+    // The snapshot below already shows this output: send it first so its sequence is one the window skips.
+    this.emitPending(s);
+    // And a status read that was waiting: the snapshot's status is never older than its screen.
+    if (s.detectTimer) { clearTimeout(s.detectTimer); s.detectTimer = undefined; this.detect(s); }
     return { sessionId: id, sequence: s.sequence, screen: s.serialize.serialize(), cols: s.terminal.cols, rows: s.terminal.rows, status: s.status };
   }
 
@@ -180,6 +195,8 @@ export class AgentSessionManager {
     if (!s) return;
     s.disposed = true;
     clearTimeout(s.settleTimer);
+    clearTimeout(s.dataTimer);
+    clearTimeout(s.detectTimer);
     this.sessions.delete(id);
     if (s.status.lifecycle !== "exited" && s.status.lifecycle !== "failed") s.process.kill();
     s.terminal.dispose();
@@ -227,6 +244,14 @@ export class AgentSessionManager {
     return { lines, cursorLine: lines[buffer.cursorY] ?? "", cursorX: buffer.cursorX, cursorY: buffer.cursorY,
       cursorCellDim: Boolean(buffer.getLine(buffer.baseY + buffer.cursorY)?.getCell(buffer.cursorX)?.isDim()),
       inputWasEdited: s.inputWasEdited, bracketedPaste: s.terminal.modes.bracketedPasteMode };
+  }
+  private emitPending(s: Session): void {
+    clearTimeout(s.dataTimer);
+    s.dataTimer = undefined;
+    if (!s.pendingData || s.disposed) return;
+    const data = s.pendingData;
+    s.pendingData = "";
+    this.emit(s, { type: "data", data });
   }
   private emit(s: Session, event: { type: "data"; data: string } | { type: "status"; status: AgentSessionStatus }): void {
     const payload: AgentSessionEvent = { ...event, sessionId: s.id, sequence: ++s.sequence };

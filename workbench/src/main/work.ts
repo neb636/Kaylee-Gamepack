@@ -6,7 +6,11 @@ import { executablePath } from "./executables";
 import { isValidBranchName, type GitSourceControlProvider } from "./providers/git-source-control-provider";
 import { worktreeContainer, type WorkspaceRoots } from "./workspace-files";
 
-const PR_TTL = 60_000;
+// GitHub's list (300 PRs with their checks) is the slowest call here: reuse it for 5 minutes; ↻ asks again.
+const PR_TTL = 5 * 60_000;
+// `git status` in 30+ worktrees at once pinned every core: a few at a time, and finished work only every 10 minutes.
+const STATUS_CONCURRENCY = 3;
+const FINISHED_TTL = 10 * 60_000;
 const NAME_PATTERN = /^[a-z0-9][a-z0-9-]{0,47}$/;
 
 /** Runs a fixed executable with an argument array (no shell). */
@@ -48,6 +52,35 @@ export function pullRequestsByBranch(raw: RawPullRequest[]): Map<string, PullReq
   return byBranch;
 }
 
+interface LockPackage { version?: string; optional?: boolean; devOptional?: boolean; link?: boolean }
+interface Lockfile { packages?: Record<string, LockPackage> }
+
+/**
+ * True when `installed` (a checkout's node_modules/.package-lock.json, what npm actually put there) is exactly what
+ * `lock` (another checkout's package-lock.json) would install: same packages at the same versions. Packages only
+ * missing because they're optional (another platform's binaries) don't count.
+ */
+export function dependenciesMatch(lock: Lockfile, installed: Lockfile): boolean {
+  const wanted = lock.packages, have = installed.packages;
+  if (!wanted || !have) return false;
+  for (const [key, entry] of Object.entries(wanted)) {
+    if (!key) continue; // the project itself
+    const got = have[key];
+    if (!got) { if (entry.optional || entry.devOptional) continue; return false; }
+    if (got.version !== entry.version || Boolean(got.link) !== Boolean(entry.link)) return false;
+  }
+  return Object.keys(have).every((key) => !key || key in wanted);
+}
+
+/** Maps `items` with at most `limit` running at once, keeping their order. */
+export async function mapLimited<T, R>(items: T[], limit: number, map: (item: T, index: number) => Promise<R>): Promise<R[]> {
+  const results = new Array<R>(items.length);
+  let next = 0;
+  const worker = async () => { while (next < items.length) { const index = next++; results[index] = await map(items[index], index); } };
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
+
 /** Safe for a five-year-old's dad: lowercase words and dashes, used as both the folder and the branch name. */
 export function workName(input: string): string {
   const name = input.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48);
@@ -63,6 +96,8 @@ export class WorkService {
   private prs?: { at: number; root: string; value: Promise<Map<string, PullRequestInfo> | undefined> };
   private loginValue?: Promise<string | undefined>;
   private readonly installs = new Map<string, { state: "installing" | "failed"; message?: string }>();
+  /** Change counts of finished work (merged or closed PRs), which rarely change: by path, with the HEAD they were read at. */
+  private readonly finishedChanges = new Map<string, { head?: string; at: number; value?: number }>();
 
   constructor(
     private readonly git: GitSourceControlProvider,
@@ -83,9 +118,10 @@ export class WorkService {
     if (!repoRoot) throw new Error("That folder is not a Git checkout.");
     this.roots.setWorktrees(records.map((record) => record.path));
     const prs = await this.pullRequests(repoRoot, refreshPullRequests);
-    const items: WorkItemInfo[] = await Promise.all(records.map(async (record, index) => {
+    const items: WorkItemInfo[] = await mapLimited(records, STATUS_CONCURRENCY, async (record, index) => {
       const exists = await fs.access(record.path).then(() => true, () => false);
       const install = this.installs.get(path.resolve(record.path));
+      const pr = record.branch && index !== 0 ? prs?.get(record.branch) : undefined;
       return {
         path: record.path,
         // Agents name folders randomly (agent-a07…); the branch says what the work is.
@@ -95,13 +131,24 @@ export class WorkService {
         main: index === 0,
         missing: !exists || record.prunable,
         locked: record.locked,
-        changes: exists ? await this.git.changeCount(record.path).catch(() => undefined) : undefined,
-        pr: record.branch && index !== 0 ? prs?.get(record.branch) : undefined,
+        // Not while npm ci is writing thousands of files into it.
+        changes: exists && install?.state !== "installing" ? await this.changes(record.path, record.head, pr?.state === "MERGED" || pr?.state === "CLOSED") : undefined,
+        pr,
         install: install?.state,
         installMessage: install?.message,
       };
-    }));
+    });
     return { repoRoot, items, github: prs ? "ok" : "unavailable" };
+  }
+
+  private async changes(folder: string, head: string | undefined, finished: boolean): Promise<number | undefined> {
+    const key = path.resolve(folder);
+    const cached = this.finishedChanges.get(key);
+    if (finished && cached && cached.head === head && Date.now() - cached.at < FINISHED_TTL) return cached.value;
+    const value = await this.git.changeCount(folder).catch(() => undefined);
+    if (finished) this.finishedChanges.set(key, { head, at: Date.now(), value });
+    else this.finishedChanges.delete(key);
+    return value;
   }
 
   /** Branch from the freshest main into `<repo>-worktrees/<name>`, then install the game's dependencies there. */
@@ -115,7 +162,7 @@ export class WorkService {
     if (await fs.access(target).then(() => true, () => false)) throw new Error(`${target} already exists. Pick another name.`);
     const created = await this.git.createWorktree(root, branch, target, "main");
     this.roots.setWorktrees([...this.roots.worktreeList(), created.path]);
-    this.installing = this.install(created.path);
+    this.installing = this.install(created.path, root);
     return created;
   }
 
@@ -150,14 +197,39 @@ export class WorkService {
   /** Resolves when a started `npm ci` has finished (for tests and the next list). */
   installing?: Promise<void>;
 
-  private async install(target: string): Promise<void> {
+  private async install(target: string, main: string): Promise<void> {
     const key = path.resolve(target);
     this.installs.set(key, { state: "installing" });
     try {
+      if (await this.cloneDependencies(main, target)) { this.installs.delete(key); return; }
       await this.run("npm", ["ci", "--no-audit", "--no-fund"], target, 15 * 60_000);
       this.installs.delete(key);
     } catch (error) {
       this.installs.set(key, { state: "failed", message: String(error).slice(-600) });
+    }
+  }
+
+  /**
+   * npm ci writes ~14,000 files (400 MB) and took minutes on an 8 GB Mac. When main's node_modules was installed from
+   * the same lockfile, copy it as an APFS clone instead (cp -c: about 10 s, shares the disk blocks). False = use npm ci.
+   */
+  private async cloneDependencies(main: string, target: string): Promise<boolean> {
+    if (process.platform !== "darwin" || path.resolve(main) === path.resolve(target)) return false;
+    const source = path.join(main, "node_modules"), destination = path.join(target, "node_modules");
+    try {
+      const [lock, installed] = await Promise.all([
+        fs.readFile(path.join(target, "package-lock.json"), "utf8"),
+        fs.readFile(path.join(source, ".package-lock.json"), "utf8"),
+      ]);
+      if (!dependenciesMatch(JSON.parse(lock) as Lockfile, JSON.parse(installed) as Lockfile)) return false;
+      if (await fs.access(destination).then(() => true, () => false)) return false;
+      // /bin/cp: a GNU cp earlier on PATH has no -c.
+      await this.run("/bin/cp", ["-c", "-R", source, destination], target, 5 * 60_000);
+      return true;
+    } catch (error) {
+      console.warn("Could not clone node_modules, running npm ci", String(error));
+      await fs.rm(destination, { recursive: true, force: true }).catch(() => undefined);
+      return false;
     }
   }
 

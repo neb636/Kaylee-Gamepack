@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import posthog from '@posthog/rollup-plugin'
@@ -13,6 +14,7 @@ import { lockPlace } from './scripts/vite-lock'
 // maps to PostHog error tracking (and deletes them, so they aren't published) and tags exceptions
 // with the commit.
 // LOCK_CODE (the THAILAND_CODE secret) locks Thailand behind the family code: see scripts/vite-lock.ts.
+const here = fileURLToPath(new URL('.', import.meta.url))
 const { POSTHOG_API_KEY, POSTHOG_PROJECT_ID, VITE_POSTHOG_HOST, GITHUB_SHA } = process.env
 
 export default defineConfig({
@@ -39,6 +41,13 @@ export default defineConfig({
   ],
   // The nested Electron renderer has its own Vite process. Do not scan it as a game entry or reload play when it builds.
   optimizeDeps: { entries: ['index.html'] },
-  server: { host: true, watch: { ignored: ['**/workbench/index.html', '**/workbench/dist/**', '**/workbench/dist-electron/**', '**/workbench/release/**'] } },
+  // Folders the game never imports aren't watched: QA screenshots, art originals and the Studio's own code would
+  // otherwise keep every dev server (one per piece of work in the Studio) busy. workbench/src/shared is imported.
+  server: { host: true, watch: { ignored: [
+    '**/workbench/index.html', '**/workbench/dist/**', '**/workbench/dist-electron/**', '**/workbench/release/**',
+    '**/workbench/src/main/**', '**/workbench/src/renderer/**', '**/workbench/scripts/**', '**/workbench/tests/**',
+    ...['art', 'qa-output', 'reports', 'prototypes', 'app-styling-inspiration-images', 'example-lesson-plan', 'tests', 'playwright-report']
+      .map((folder) => `${here}${folder}/**`),
+  ] } },
   preview: { host: true },
 })

@@ -91,7 +91,7 @@ export function ShipPanel({ workspaceId }: WidgetProps) {
   const screens = async () => {
     if (!activity) return;
     // QA wants the CPU: only this piece of work's game server keeps running.
-    await window.workbench.studio.trimServers(1).catch(() => undefined);
+    await window.workbench.studio.trimServers(1, workspace.path).catch(() => undefined);
     runInShip(workspace, `screens ${activity}`, `npm run build && node scripts/qa-screens.mjs --only=ipad-portrait,ipad-landscape --routes=${activity}`);
   };
   const voices = () => {

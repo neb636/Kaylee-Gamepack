@@ -15,6 +15,8 @@ const LABS = [
   { id: "character", label: "Character", emoji: "🦄", hint: "The 3D character lab (#/world/characters)" },
 ] as const;
 
+const SERVER_GRACE_MS = 3 * 60_000;
+
 /** Fits a device-sized frame into the pane, never larger than real size. */
 function useStageScale(frame: GameFrame, columns = 1) {
   const ref = useRef<HTMLDivElement>(null);
@@ -57,6 +59,7 @@ export function GamePane({ workspace, hidden, onShowLeft, onShowRight }: { works
   // A new piece of work is still running npm ci: start its game once that finishes.
   const installing = useWorkList((state) => state.list?.items.find((item) => item.path.replace(/\/+$/, "") === workspace.path.replace(/\/+$/, ""))?.install === "installing");
   const frame = useRef<HTMLIFrameElement>(null);
+  const mainFrame = useRef<HTMLIFrameElement>(null);
   const pending = useRef(new Map<string, { resolve: (s: LabSnapshot) => void; reject: (e: Error) => void; timer: ReturnType<typeof setTimeout> }>());
   const current = hashOf(href || target.hash);
   const lab = labOf(current);
@@ -75,7 +78,35 @@ export function GamePane({ workspace, hidden, onShowLeft, onShowRight }: { works
   // Main follows every navigation made here (a section, a pasted link, a lab switch, reload).
   useEffect(() => { if (comparing) setMainTarget((before) => before && before.nonce === target.nonce ? before : { hash: target.hash, nonce: target.nonce || Date.now() }); }, [comparing, target]);
 
-  useEffect(() => { void loadSections(workspace.path); }, [workspace.path]);
+  // Not while npm ci is still writing node_modules: the sections script would fail halfway (and stay failed).
+  useEffect(() => { if (!installing) void loadSections(workspace.path); }, [workspace.path, installing]);
+
+  // The game slows to a crawl while Studio is behind other apps (the game's studio-pace.ts): tell its frames.
+  useEffect(() => {
+    if (!origin) return;
+    const tell = () => {
+      const focused = document.visibilityState === "visible" && document.hasFocus();
+      for (const [element, target] of [[frame.current, origin], [mainFrame.current, mainOrigin]] as const) {
+        if (element?.contentWindow && target) element.contentWindow.postMessage({ channel: LAB_CHANNEL, studioFocused: focused }, target);
+      }
+    };
+    // Focus moving into the game frame blurs this window too: hasFocus() is still true then, so check after it settles.
+    const soon = () => setTimeout(tell, 0);
+    addEventListener("focus", soon);
+    addEventListener("blur", soon);
+    document.addEventListener("visibilitychange", soon);
+    // A frame that just (re)loaded hears it within a couple of seconds.
+    const timer = setInterval(tell, 2000);
+    return () => { removeEventListener("focus", soon); removeEventListener("blur", soon); document.removeEventListener("visibilitychange", soon); clearInterval(timer); };
+  }, [origin, mainOrigin]);
+
+  // One game server at a time on an 8 GB Mac: after a few minutes on this piece of work, stop the one before it
+  // (switching back restarts it in a few seconds). Compare with main needs both, so not while comparing.
+  useEffect(() => {
+    if (!origin || comparing) return;
+    const timer = setTimeout(() => void window.workbench.studio.trimServers(1, workspace.path).catch(() => undefined), SERVER_GRACE_MS);
+    return () => clearTimeout(timer);
+  }, [origin, comparing, workspace.path]);
 
   useEffect(() => {
     let active = true;
@@ -198,7 +229,7 @@ export function GamePane({ workspace, hidden, onShowLeft, onShowRight }: { works
             <figcaption>main</figcaption>
             {mainOrigin && mainTarget ? <div className={`game-device ${stage.device ? "is-framed" : ""}`} style={stage.device ? { width: stage.device.width * stage.scale, height: stage.device.height * stage.scale } : undefined}>
               {/* Main's frame is only looked at: its messages never reach this pane (another origin and source). */}
-              <iframe title="Game: main" src={`${mainOrigin}/?studio=1&v=${mainTarget.nonce}${mainTarget.hash}`} allow="autoplay"
+              <iframe ref={mainFrame} title="Game: main" src={`${mainOrigin}/?studio=1&v=${mainTarget.nonce}${mainTarget.hash}`} allow="autoplay"
                 style={stage.device ? { width: stage.device.width, height: stage.device.height, transform: `scale(${stage.scale})` } : undefined} />
             </div> : <div className="game-message"><p>Starting main's game…</p></div>}
           </figure>}

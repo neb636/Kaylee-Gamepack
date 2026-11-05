@@ -12,6 +12,7 @@ import { workAttention } from "../features/agent/attention";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 const POLL_MS = 45_000;
+const FOCUS_REFRESH_MS = 60_000;
 
 function sidebarViews(workspace?: Workspace) {
   return workspace?.views.filter((view) => services.views.get(view.type)?.listInSidebar) ?? [];
@@ -170,10 +171,13 @@ export function LeftSidebar({ onCollapse }: { onCollapse: () => void }) {
   useEffect(() => {
     if (!repoRoot) return;
     void refresh(true);
-    const tick = () => { if (document.visibilityState === "visible") void refresh(); };
-    const timer = setInterval(tick, POLL_MS);
-    addEventListener("focus", tick);
-    return () => { clearInterval(timer); removeEventListener("focus", tick); };
+    // Each refresh runs git in every worktree: only while Studio is in front, and coming back refreshes at most once a minute.
+    let last = Date.now();
+    const tick = () => { last = Date.now(); void refresh(); };
+    const timer = setInterval(() => { if (document.visibilityState === "visible" && document.hasFocus()) tick(); }, POLL_MS);
+    const back = () => { if (Date.now() - last > FOCUS_REFRESH_MS) tick(); };
+    addEventListener("focus", back);
+    return () => { clearInterval(timer); removeEventListener("focus", back); };
   }, [repoRoot, refresh]);
 
   const groups = useMemo(() => {

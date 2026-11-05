@@ -106,9 +106,13 @@ export class GameServerPool {
     return external ? [{ root: path.resolve(external.root), origin: gameOrigin(external.port) }, ...owned] : owned;
   }
 
-  /** Stop all but the `keep` most recently used owned servers (QA wants the CPU). */
-  trim(keep: number): Promise<void> {
-    const next = this.queue.catch(() => {}).then(() => this.evict(keep));
+  /** Stop all but the `keep` most recently used owned servers (QA wants the CPU). `root`, on screen, counts as just used. */
+  trim(keep: number, root?: string): Promise<void> {
+    const next = this.queue.catch(() => {}).then(() => {
+      const shown = root ? this.served.find(item => item.root === path.resolve(root)) : undefined;
+      if (shown) shown.usedAt = ++this.clock;
+      return this.evict(keep);
+    });
     this.queue = next;
     return next;
   }
