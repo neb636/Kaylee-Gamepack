@@ -300,6 +300,11 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [Easy hides: count by the driftwood tree, find Daddy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/hideseek?round=1) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/hideseek?round=1&feel=1))
   - [Trickier hides: the roots, the towel, the sea, the pandanus](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/hideseek?round=2)
   - [Her turn to hide: Daddy counts and searches the wrong places](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/hideseek?round=hide)
+- **The finale: sunset and the fire show (greybox)**
+  - [The sunset at the driftwood tree: pull the sun down into the sea, Mommy’s photo of the three of them, night falls](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/sunset?flags=all) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/sunset?flags=all&feel=1))
+  - [Twirl the glowing poi: ribbons of light, the fire dancers copy her](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/fireshow?round=twirl&flags=all) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/fireshow?round=twirl&flags=all&feel=1))
+  - [Shapes in the sky: a circle, a star, a heart](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/fireshow?round=shapes&flags=all)
+  - [The big finish: what each flag adds, the ring of fire, fireworks](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/fireshow?round=finish&flags=all) ([with only the jet ski flag](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/fireshow?round=finish&flags=jetski))
 
 **Finale**: [Family party (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/party/soon?stamps=all)
 

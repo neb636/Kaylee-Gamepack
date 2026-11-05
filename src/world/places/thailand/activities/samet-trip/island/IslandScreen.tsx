@@ -19,7 +19,7 @@ interface Props {
   /** She reached another beach (the address bar follows). */
   onAt(at: SpotId): void
   /** She opened a stop. */
-  onOpen(stop: StopId | 'lunch'): void
+  onOpen(stop: StopId | 'lunch' | 'sunset'): void
   /** The animals in her book changed (the address bar follows), or the book opened or closed. */
   onBook?(found: AnimalId[], open: boolean): void
   /** Her photos so far this visit (kept by the trip, so a trip to the jet ski doesn't lose them). */

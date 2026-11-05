@@ -121,8 +121,9 @@ export interface Snap {
   gold: boolean
 }
 export interface IslandEvents {
-  /** She opened a stop (tapped its thing up close), or sat down for lunch at the deck's table. */
-  open(stop: StopId | 'lunch'): void
+  /** She opened a stop (tapped its thing up close), or sat down for lunch at the deck's table, or (all four flags up)
+   *  the driftwood tree: the finale's sunset. */
+  open(stop: StopId | 'lunch' | 'sunset'): void
   /** She reached a new beach (the address bar follows `at`). */
   at(spot: SpotId): void
   /** The shutter clicked (the screen flashes); the photo itself follows in `snap`. */
@@ -2000,6 +2001,11 @@ export class SametIsland implements World3D {
     if (id === 'snorkel') {
       toot()
       this.spray.burst(g.position.x, 0.3, g.position.z, 20, 2, 2.4, 0.16)
+    } else if (id === 'hideseek' && this.flags.size === STOP_IDS.length) {
+      // All four flags up: the driftwood tree is where they watch the sunset (the finale).
+      this.kick('stop:hideseek', 5)
+      tone(660, 990, 0.3, 0.05, 'triangle')
+      return this.events.open('sunset')
     } else if (id === 'hideseek') {
       // The driftwood tree rustles, and Daddy pops out from behind it.
       this.kick('stop:hideseek', 5)
@@ -2146,14 +2152,15 @@ export class SametIsland implements World3D {
         best = id
       }
     }
-    // All four flags up: the way home, the speedboat at Na Dan pier.
+    // All four flags up: the way to the finale, the driftwood tree at Ao Prao (the sunset, then the fire show).
     const home = best === null && this.goingHome === false
-    const hb = Math.hypot(HOME_PIER.x - k.x, HOME_PIER.z - k.z)
-    const idle = !this.finger && !this.target && t - this.lastTouch > HINT_S && this.mode === 'walk' && (home ? hb > 4 : best !== null && bd > 6)
+    const END = STOPS.hideseek.at
+    const hb = Math.hypot(END.x - k.x, END.z - k.z)
+    const idle = !this.finger && !this.target && t - this.lastTouch > HINT_S && this.mode === 'walk' && (home ? hb > 6 : best !== null && bd > 6)
     const want = idle ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
     if (!idle || (!best && !home)) return
-    const a = best ? STOPS[best].at : HOME_PIER
+    const a = best ? STOPS[best].at : END
     const s = this.toScreen(tmp.set(a.x, this.heightAt(a.x, a.z) + 2.5, a.z))
     const m = 54
     const inside = s.z < 1 && s.x > m && s.x < this.w - m && s.y > m && s.y < this.h - m
