@@ -17,9 +17,9 @@
   "icon": "🏝️",
   "kind": "Family trip: an open island",
   "updated": "2026-11-05",
-  "status": { "label": "Greyboxes 1-6 built: the jet ski, the island, Mommy’s phone and the animal book, the sandcastle, the snorkel, lunch and hide and seek", "tone": "pink" },
+  "status": { "label": "Greyboxes 1-7 built: the jet ski, the island, Mommy’s phone and the animal book, the sandcastle, the snorkel, lunch and hide and seek, and getting there (packing, the speedboat, home)", "tone": "pink" },
   "pitch": "Mommy, Daddy and Kaylee take the speedboat to **Koh Samet**, a little island of white sand off Rayong. The whole island is **one world she roams by herself** (in the spirit of cozy island games like Alba): sandy paths, five real beaches, the green taxi, the sea all round, and real island animals to snap with Mommy's phone for her animal book. On the beaches she **rides the jet ski** with Daddy, builds a sandcastle the waves fill, snorkels with the fish at Ko Kudi and plays hide and seek by the big driftwood tree. At night the fire dancers light up the beach for her. Every word is spoken.",
-  "next": "Dad plays **[lunch on the deck](#/world/thailand/samet-trip/deck)** on the iPad: tap the basket and Daddy passes a roll (tap Kaylee for each bite), hold a finger on the coconut to sip it dry, tap the mango sticky rice. Then **[hide and seek](#/world/thailand/samet-trip/hideseek?round=1)**: Kaylee counts by the driftwood tree (tap to peek), then lead her round to find Daddy (his place wiggles and giggles when she’s close; tap it). **[The trickier hides](#/world/thailand/samet-trip/hideseek?round=2)** (roots, towel, sea, pandanus) and **[her turn to hide](#/world/thailand/samet-trip/hideseek?round=hide)** (lead her to a glowing place; Daddy searches the wrong ones and gives up). Tune the walking, the hides, Daddy’s search and the cameras with **[?feel=1](#/world/thailand/samet-trip/hideseek?round=1&feel=1)**. Then **greybox 7: getting there and the trip frame**.",
+  "next": "Dad plays **getting there** on the iPad: open **[the Thailand map with the 🏝️ pin](#/world/thailand/hub/map?samet=1)** and tap it: pack for the sea in Kaylee’s room, then down the stairs onto **[the speedboat](#/world/thailand/samet-trip/speedboat)** from Ban Phe: hold a finger on the water beside the boat and Kaylee trails her hoof in the sea (spray, a rainbow, flying fish), tap the boats coming the other way, ride their wakes; it ties up at Na Dan pier. Leave with 🏠 and tap the pin again: she’s back on the beach she left. **[With all four flags](#/world/thailand/samet-trip/island?at=nadan&flags=all)**, tap the speedboat at Na Dan: Mommy’s photo goes on Agong’s wall and the stamp lands on the pin. Tune the boat and the spray with **[?feel=1](#/world/thailand/samet-trip/speedboat?feel=1)**. Then **step 8: the look**.",
   "facts": [
     { "icon": "⏱️", "value": "15-25 min", "label": "a whole day on the island, all four stops and the fire show" },
     { "icon": "👆", "value": "230-350", "label": "touches" },
@@ -418,11 +418,11 @@
       "id": "sections",
       "title": "Sections: tap to play",
       "icon": "🔗",
-      "lede": "Built so far: the island, the book, the jet ski and the sandcastle. Each greybox adds its own.",
+      "lede": "Built so far: getting there, the island, the book, the four stops and lunch. The finale comes with step 9.",
       "blocks": [
         { "type": "sections", "base": "#/world/thailand/samet-trip/", "items": [
-          { "n": 1, "id": "pack", "name": "Pack for the island (sunny: swimsuit, sun hat, floaties, bucket)", "status": "todo" },
-          { "n": 2, "id": "speedboat", "name": "The speedboat from Ban Phe", "status": "todo" },
+          { "n": 1, "id": "pack", "name": "Pack for the island (sunny: the swimsuit, the sun hat, the floaties, the bucket)" },
+          { "n": 2, "id": "speedboat", "name": "The speedboat from Ban Phe to Na Dan pier: her hoof in the spray" },
           { "n": 3, "id": "island", "name": "The island (land at Na Dan)", "query": "at=nadan" },
           { "n": 4, "id": "book", "name": "The animal book" },
           { "n": 5, "id": "jetski", "name": "Jet ski: ride", "query": "round=ride" },
@@ -432,7 +432,7 @@
           { "n": 9, "id": "hideseek", "name": "Hide and seek: easy hides", "query": "round=1" },
           { "n": 10, "id": "sunset", "name": "Finale: sunset at the driftwood tree", "query": "flags=all", "status": "todo" },
           { "n": 11, "id": "fireshow", "name": "Finale: the fire show", "query": "flags=all", "status": "todo" },
-          { "n": 12, "id": "home", "name": "Home: a photo for Agong's wall", "status": "todo" }
+          { "n": 12, "id": "island", "name": "Home: all four flags, the speedboat at Na Dan pier takes them home (Mommy’s photo for Agong’s wall, the stamp)", "query": "at=nadan&flags=all" }
         ] },
         { "type": "sections", "title": "Handy cases", "base": "#/world/thailand/samet-trip/", "items": [
           { "id": "island", "name": "Sai Kaew at noon, jet ski done (the jet ski on every beach)", "query": "at=saikaew&flags=jetski" },
@@ -492,8 +492,8 @@
           { "n": 4, "title": "Greybox 4: the sandcastle", "status": "done", "date": "2026-11-04", "md": "The diggable sand patch (a deforming height field), bucket towers, the tide and the channel, burying Daddy." },
           { "n": 5, "title": "Greybox 5: the snorkel", "status": "done", "date": "2026-11-05", "md": "The snorkel boat ride, Ko Kudi's reef (its own scene), the half-underwater camera, the fish crowd, the parrotfish to follow, the cuttlefish." },
           { "n": 6, "title": "Greybox 6: lunch and hide and seek", "status": "done", "date": "2026-11-05", "md": "The resort deck at Ao Prao, the driftwood tree, Daddy's hides and his silly search." },
-          { "n": 7, "title": "Greybox 7: getting there and the trip frame", "status": "next", "md": "The 🏝️ pin on the Thailand map, packing, the speedboat, saving and coming back, `home` and Agong's wall." },
-          { "n": 8, "title": "The look", "status": "todo", "md": "The island made beautiful: the real sand and water colors, palms, samet trees, pandanus, boulders, the umbrellas, the deck, the sky through the day, the reef. The characters (the jet ski man, the boat captain, the fire dancers). See “The look”." },
+          { "n": 7, "title": "Greybox 7: getting there and the trip frame", "status": "done", "date": "2026-11-05", "md": "The 🏝️ pin on the Thailand map (with `?samet=1` while it’s in the works), packing in Kaylee’s room, the speedboat from Ban Phe with her hoof in the spray, the island saved on the iPad, and home: the speedboat at Na Dan, Mommy’s photo on Agong’s wall, the stamp on the pin." },
+          { "n": 8, "title": "The look", "status": "next", "md": "The island made beautiful: the real sand and water colors, palms, samet trees, pandanus, boulders, the umbrellas, the deck, the sky through the day, the reef. The characters (the jet ski man, the boat captain, the fire dancers). See “The look”." },
           { "n": 9, "title": "The finale: sunset and the fire show", "status": "todo", "md": "Greybox, then its look." },
           { "n": 10, "title": "The full loop", "status": "todo", "md": "Every line in `lines.ts`, the new voices in `cast.json`, clips generated, hints, the facts, the sticker, full QA (layout-qa + playtest-qa) on the trip's sections, then out of `inTheWorks` and onto the Thailand map." }
         ] }
@@ -729,6 +729,52 @@
                   "Daddy walks straight through things while her eyes are shut (nobody sees), and round the front of them while he searches.",
                   "Hooves over the eyes (hers and his) are rough arm poses on top of the rig; the look gate can make them nicer.",
                   "Mommy’s photo of the two of them at the tree isn’t in the book yet."
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Greybox 7: getting there and the trip frame",
+            "date": "2026-11-05",
+            "status": "done",
+            "open": true,
+            "summary": "The way onto the island and home again. The Thailand map gets a 🏝️ pin; the first trip of a session packs in Kaylee’s room and walks down the stairs onto the speedboat at Ban Phe; the speedboat crosses the real sea to Na Dan pier in about a minute while her hoof trails in the spray; the island is saved on the iPad as she plays; and with all four flags up the speedboat at Na Dan takes them home, Mommy’s photo goes on Agong’s wall and the stamp lands on the pin.",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "**The 🏝️ pin** (`activities/hub/map/geo.ts` `PINS`, `ISLANDS`; `ThaiMap.tsx`): a butter-yellow pin just below Koh Samet off Rayong, and the island itself drawn in the Gulf. While the trip is in the works it shows only once a link has `?samet=1` (or its stamp lands), for the session. Tap it: the first trip of a session goes to `pack`; later ones go straight back to the island where she left it (saved), or to the speedboat for a new trip.",
+                  "**Packing** (`PackScreen.tsx`, the trip kit’s `trip/legs/house-plugin.ts` told by `trip.ts` `SAMET_TRIP`): Kaylee’s room, the suitcase open, Mommy’s sunny hint (already recorded), the pack card; sit on it, click, her sun hat and sunglasses go on, and down the stairs with the suitcase, bonk, bonk. New in the trip kit: `TripDef.afterPack` (where packing goes next; the flying trips keep `takeoff`).",
+                  "**The speedboat** (`speedboat/speedboat.ts`, `SpeedboatScreen.tsx`, section `speedboat`): the real island and Na Dan pier (`buildIsland`, `buildProps`) and a little Ban Phe on the mainland (a strip of shore, sweet shophouses, palms, the pier with a ticket hut, two longtails; no temples or shrines). The route is the real 570 m at 1:10, about a minute at 12 m/s, easing out of the pier and slowing in to tie up beside Na Dan pier, where they hop off onto it and the island takes over. The family’s speedboat: white with a pink stripe, pink cushions, two outboards, a small blue sun top over the console (forward, so the camera sees the family), the captain (a stand-in puppy in a white shirt and cap) at the wheel, Mommy and Daddy on the back bench, Kaylee on the side bench.",
+                  "**The toy, her hoof in the spray:** hold a finger on the water beside the boat and Kaylee slides along the side bench to that side, leans over the rail and trails her hoof in the sea where her finger is: a fan of spray flies up and back along the hull, more the faster the boat goes, double for a fast drag. At speed a rainbow shows in the spray and a flying fish skips out of it every ~3 s (tap one: it flips and sparkles). A quick tap on the water: one splash.",
+                  "**The boats coming the other way:** the big ferry, a longtail, a jet ski cutting across her way, another speedboat (mint stripe). Tap one: it toots and its people bounce and wave, Kaylee waves back. Their wakes bounce the boat into the air; landing splashes everyone, and a bump while her hoof is in the water sends a wave over Mommy (she wiggles and holds her hat).",
+                  "**Pokes:** Kaylee (hop, whee), Daddy (his cap blows off and he catches it), Mommy (holds her sun hat), the captain (the horn, and the boat wiggles an S on the water), the pink flag at the stern, the life ring (spins). ⏩ after 12 s skips to the turquoise water by the pier. Quiet: no idle lines; after 8 s with no hoof in the water a finger presses on the water beside her.",
+                  "**Saving and coming back** (`trip.ts` `SametProgress`, `useSaved('thailand-samet-trip')`): where she was, the pink flags, the animals in her book and what she packed, saved each time she reaches a beach, earns a flag or snaps an animal. A link’s own params win over it (`at`, `flags`, `book`, `packed`), so a bare section link opens where the iPad left off. Her photos stay for the visit only (they’re big).",
+                  "**Home** (`island/island.ts` `HOME_BOAT`): with all four flags up, the pink flag arrow points at the speedboat at Na Dan pier after a while. Tap it: she walks to the end of the pier and waves, Mommy takes the photo (a flash), it goes on Agong’s wall by itself (`trip/wall.ts`, a slot beside Nan’s), the trip starts afresh next time (her book stays), then the stamp and the map, where the stamp lands on the 🏝️ pin (`hub/map?stamp=samet-trip`).",
+                  "**Knobs** (`?feel=1`): the ride (top speed, speeding up, slowing in, the waves, the wake bump, the bow lifting, when ⏩ shows), her hoof in the spray (drops a second, height, size, the fast drag, how far along the side, the lean, the flying fish, the rainbow) and the camera (looks down, in portrait, how much round the boat, ahead, from the side, how far plants draw). The graph: her finger’s speed, the spray and the boat’s speed."
+                ]
+              },
+              {
+                "type": "callout",
+                "tone": "warn",
+                "title": "Changed from the plan",
+                "items": [
+                  "**No `home` section in the house:** the trips end on the Thailand map now (Dad, 2026-10-27), and Mommy’s photo goes on Agong’s wall by itself. See it at [the house’s photo wall](#/world/thailand/hub/downstairs?at=photos). The sections list’s home link is the island with all four flags.",
+                  "**The way home is the speedboat at Na Dan** for now: the finale (the sunset and the fire show, step 9) will come between the fourth flag and the boat home.",
+                  "**No car ride to Ban Phe:** Mommy drives (the trip’s `car` leg), but like every trip from the map, packing goes straight to the first ride; the speedboat starts at Ban Phe pier.",
+                  "**A replay starts afresh** (the flags down, her book kept); “the jet ski always hers” on a replay and the 🌙 night start wait for the full loop."
+                ]
+              },
+              {
+                "type": "callout",
+                "tone": "open",
+                "title": "Known small things",
+                "items": [
+                  "No voices yet (greybox): no lines on the boat (the captain’s and Sparkle’s come with the full loop).",
+                  "The stamp screen shows the placeholder fiddler crab sticker until the mermaid sticker is drawn (full loop).",
+                  "**Frame rate, measure on the iPad:** WebKit on a Mac draws ~130 calls in portrait and up to ~360 in landscape out at sea (the whole island’s ground and buildings in view at once, ~530k triangles). Open [the speedboat](#/world/thailand/samet-trip/speedboat?fps=1) with `?fps=1` on the iPad; if it’s slow, the island’s far buildings and ground can hide until the boat is closer.",
+                  "Kaylee’s hoof in the water is a rough arm pose on top of the rig (the look gate can make it nicer); saving her sandcastle (`castle`) still waits.",
+                  "The captain is a stand-in (Dad hasn’t picked who drives the boat)."
                 ]
               }
             ]
