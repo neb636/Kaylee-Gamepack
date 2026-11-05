@@ -12,13 +12,13 @@
 //
 // Greybox: simple shapes in the toon look, no voices; the words show in a bubble for Dad. The feel numbers are knobs
 // (?feel=1).
-import { CircleGeometry, Color, Fog, Mesh, MeshBasicMaterial, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
+import { CircleGeometry, Color, Euler, Fog, Group, Mesh, MeshBasicMaterial, Quaternion, Raycaster, Scene, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp } from '../../../../../../sdk'
 import { knobs } from '../../../../../kit/knobs'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { Bag } from '../../../../../engine3d/dispose'
-import { blobShadow } from '../../../../../engine3d/geo'
+import { blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
 import { setOutlineResolution } from '../../../../../engine3d/outline'
 import { Particles } from '../../../../../engine3d/particles'
 import { applyBands, makeLights, PAL } from '../../../../../engine3d/toon'
@@ -59,6 +59,9 @@ export interface SunsetEvents {
 type Phase = 'day' | 'sinking' | 'dusk' | 'night'
 
 const DEG = 180 / Math.PI
+const tmpQ = new Quaternion()
+const phoneQ = new Quaternion()
+const phoneE = new Euler()
 const HINT_S = 6
 const SUN_DIST = 260
 const SUN_GOLD = new Color('#FFD27A')
@@ -110,6 +113,8 @@ export class Sunset implements World3D {
   private kaylee: Avatar
   private ji: Member
   private nick: Member
+  /** Mommy's phone, in her right hand: down at her side while they watch, up at arm's length for the selfie. */
+  private phone: Group
   /** Turned round for the photo (0 = watching the sunset, 1 = facing the phone). */
   private turn = 0
   private posing = -1
@@ -164,6 +169,20 @@ export class Sunset implements World3D {
     const n = this.L(SPOTS.nick.u, SPOTS.nick.v)
     this.nick.place(n.x, n.y, n.z, this.seaYaw * DEG)
     scene.add(this.kaylee.root, this.ji.root, this.nick.root)
+    // Mommy's phone in her hand (a lavender case, the camera on the back, the screen toward her).
+    const H = this.ji.height
+    this.phone = solid(
+      merge([
+        P.rbox(0.13, 0.22, 0.024, 0.02, '#9C82DC', {}),
+        P.rbox(0.112, 0.196, 0.006, 0.016, '#2B2330', { at: [0, 0, 0.013] }),
+        P.rbox(0.05, 0.05, 0.008, 0.012, '#3A3048', { at: [-0.03, 0.07, -0.014] }),
+        P.cyl(0.013, 0.013, 0.01, '#FFFFFF', { at: [-0.03, 0.078, -0.018], rot: [Math.PI / 2, 0, 0] }, 10),
+      ]),
+      bag,
+      1.2,
+    )
+    this.phone.position.set(0.05 * H, -0.2 * H, 0.04 * H)
+    this.ji.rig.armR.add(this.phone)
     for (const [p, r] of [
       [k, 0.42],
       [j, 0.5],
@@ -284,7 +303,14 @@ export class Sunset implements World3D {
     if (this.turn > 0.05) {
       // Mommy's phone up at arm's length; everyone smiles at it.
       const r = this.ji.rig
-      r.armR.rotation.set(-2.2 * this.turn, 0, -0.3 * this.turn)
+      // Out to the side and up, at arm's length, so the phone clears her (and their heads fit in its picture).
+      r.armR.rotation.set(-1.75 * this.turn, 0, 0.85 * this.turn)
+      // The phone turns upright, its screen to the three of them (the game's camera sees its back): its turn in the
+      // world, undone by the arm's.
+      r.armR.updateWorldMatrix(true, false)
+      r.armR.getWorldQuaternion(tmpQ).invert()
+      phoneQ.setFromEuler(phoneE.set(-0.2 * this.turn, this.ji.root.rotation.y + Math.PI * this.turn, 0))
+      this.phone.quaternion.copy(tmpQ).multiply(phoneQ)
       const ph = this.ji.root.position
       const cam = this.rig.camera.position
       this.ji.lookAt(cam.x, ph.y + 1.5, cam.z)
@@ -536,6 +562,8 @@ export class Sunset implements World3D {
       bubble: this.bubble?.text ?? null,
       kaylee: sc(this.kaylee.root.position.clone().setY(this.kaylee.root.position.y + 0.6)),
       mommy: sc(this.ji.root.position.clone().setY(this.ji.root.position.y + 1)),
+      phone: sc(this.phone.getWorldPosition(new Vector3())),
+      turn: +this.turn.toFixed(2),
       ...this.counts,
     }
   }

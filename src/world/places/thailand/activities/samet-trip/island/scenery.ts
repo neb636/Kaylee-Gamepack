@@ -156,7 +156,8 @@ function boulderGeo(R: () => number, x: number, y: number, z: number, r: number,
 
 export type TimeOfDay = 'morning' | 'noon' | 'afternoon' | 'golden' | 'night'
 export const TIMES: TimeOfDay[] = ['morning', 'noon', 'afternoon', 'golden', 'night']
-interface Key {
+/** A look for the time of day (DAY's keys, or a scene's own: the fire show's darker night). */
+export interface Key {
   top: string
   mid: string
   horizon: string
@@ -212,7 +213,7 @@ export interface Island {
   lagoon: Lagoon
   blockers: Blockers
   /** The light: the house's lights, colored and dimmed by the day (call after makeLights' follow()). */
-  setTime(k: TimeOfDay | { from: TimeOfDay; to: TimeOfDay; k: number }): void
+  setTime(k: TimeOfDay | Key | { from: TimeOfDay | Key; to: TimeOfDay | Key; k: number }): void
   /** How lit the night lamps should be now (0..1). */
   readonly lamps: number
   /** Hides the plant tiles further than `r` meters from (x, z) (the haze hides the bare hills there). */
@@ -552,7 +553,8 @@ export function buildIsland(bag: Bag): Island {
       for (const c of tileList) c.g.visible = Math.hypot(c.x - x, c.z - z) < r + TILE * 0.71
     },
     setTime(t) {
-      apply(typeof t === 'string' ? DAY[t] : mixKey(DAY[t.from], DAY[t.to], t.k))
+      const key = (x: TimeOfDay | Key) => (typeof x === 'string' ? DAY[x] : x)
+      apply(typeof t === 'string' ? DAY[t] : 'from' in t ? mixKey(key(t.from), key(t.to), t.k) : t)
     },
     update(dt, t, cx, cz, lights) {
       LOOK.uTime.value = t
