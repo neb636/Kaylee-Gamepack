@@ -4,7 +4,7 @@ import { defineSections, HUB } from '../../../../kit/sections'
 
 const HUB_SECTIONS = defineSections('thailand', HUB, {
   params: {
-    stamp: { default: '', values: ['', 'boat-trip', 'nan-trip', 'mall-trip'], doc: "the map: this trip's stamp lands on its pin (the end of a trip: Krabi's for boat-trip, Nan's for nan-trip, Bangkok's for mall-trip)" },
+    stamp: { default: '', values: ['', 'boat-trip', 'nan-trip', 'mall-trip', 'samet-trip'], doc: "the map: this trip's stamp lands on its pin (the end of a trip: Krabi's for boat-trip, Nan's for nan-trip, Bangkok's for mall-trip, Koh Samet's for samet-trip)" },
     at: {
       default: '',
       doc: 'start already using a thing on that floor: table, ground-couch, altar, desk, fridge, photos (downstairs); mattress, pillows, couch, suitcase, balcony (upstairs); motorbike, spirit-house, cat (street)',
@@ -24,7 +24,7 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
     },
   },
   sections: [
-    { id: 'map', name: 'The Thailand map: tap a pin to go there', params: ['stamp'], group: 'The Thailand map', links: [{ label: 'The map', bare: true }, { label: 'Home from a trip: the stamp lands on Krabi', params: { stamp: 'boat-trip' } }] },
+    { id: 'map', name: 'The Thailand map: tap a pin to go there', params: ['stamp'], group: 'The Thailand map', links: [{ label: 'The map', bare: true }, { label: 'Home from a trip: the stamp lands on Krabi', params: { stamp: 'boat-trip' } }, { label: 'With the Koh Samet pin (in the works)', flags: { samet: '1' } }] },
     { id: 'arrive', name: 'Arrive by tuk-tuk', group: "Agong's house" },
     { id: 'street', name: "In front of Agong's house", params: ['at'], group: "Agong's house" },
     { id: 'downstairs', name: 'Downstairs', params: ['at'], group: "Agong's house" },

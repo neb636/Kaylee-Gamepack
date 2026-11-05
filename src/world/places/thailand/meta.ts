@@ -25,9 +25,9 @@ const meta: PlaceMeta = {
     { id: 'mall-trip', name: 'Mall Day at ICONSIAM', icon: '🛝', pos: { x: 43, y: 45 }, sticker: { name: 'Pizza slice', img: art.pizza, fact: L.mall.trip.sticker } },
     { id: 'nan-trip', name: 'Road Trip to Nan', icon: '🚙', pos: { x: 45, y: 14 }, sticker: { name: 'Pink mushroom', img: art.mushroom, fact: L.nan.trip.sticker } },
   ],
-  // The Koh Samet island trip (thailand/samet-trip.html): greyboxes 1-2, the jet ski at Sai Kaew and the island to roam.
-  // No pin on the map yet;
-  // the sticker (the plan's pick, a pink mermaid) has no picture yet, so it borrows the crab's until the full loop.
+  // The Koh Samet island trip (thailand/samet-trip.html): greyboxes 1-7, from packing and the speedboat to the four stops
+  // and home (the map's 🏝️ pin shows with ?samet=1). The sticker (the plan's pick, a pink mermaid) has no picture yet,
+  // so it borrows the crab's until the full loop.
   inTheWorks: [{ id: 'samet-trip', name: 'Koh Samet Island', icon: '🏝️', pos: { x: 52, y: 62 }, sticker: { name: 'Pink mermaid', img: art.crab, fact: L.home.sticker } }],
   facts: [
     { icon: '👋', label: 'Sawasdee!', say: L.facts.hello },

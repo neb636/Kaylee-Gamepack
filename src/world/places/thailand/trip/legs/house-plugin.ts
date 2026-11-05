@@ -850,9 +850,10 @@ export class TripHouse implements HousePlugin {
   private leave() {
     if (this.phase !== 'leaving') return
     this.setPhase('gone')
-    // Down the stairs with the suitcase and straight to the window seat: the trips start on the Thailand map now, so
-    // the goodbye at the shutter and the x-ray belt are out of the way there (Dad, 2026-10-27; their links still work).
-    this.events.done('takeoff')
+    // Down the stairs with the suitcase and straight to the window seat (or the trip's own first leg, Koh Samet's
+    // speedboat): the trips start on the Thailand map now, so the goodbye at the shutter and the x-ray belt are out of
+    // the way there (Dad, 2026-10-27; their links still work).
+    this.events.done(this.trip.afterPack ?? 'takeoff')
   }
 
   // ---------------------------------------------------------------- the goodbye

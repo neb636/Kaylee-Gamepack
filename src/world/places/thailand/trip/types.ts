@@ -44,6 +44,9 @@ export interface TripDef {
   caps: { fly: number; replayFly?: number }
   /** The trip's own activity starts at this section. */
   arrive: string
+  /** Where packing goes next (she walks down the stairs with the suitcase): the window seat (`takeoff`, the trips
+   *  that fly) unless the trip says otherwise (Koh Samet: straight to the speedboat at Ban Phe). */
+  afterPack?: string
   /** Who sees them off at the shutter: just Mommy, Daddy and Kaylee wait there (the boat trip), or the whole family
    *  who live here gather to wave goodbye (the mall day). */
   goodbye: 'parents' | 'family'
