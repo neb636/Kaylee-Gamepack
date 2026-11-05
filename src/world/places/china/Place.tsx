@@ -2,7 +2,7 @@
 // Shanghai Dumpling House came first, then the Bamboo Forest and the Great Wall, then Hotpot Night, the Magic Brush, the Great Race,
 // the Bullet Train and the Dragon Parade finale. Every lantern is open from the start; each stamp brings a friend to the parade.
 import { motion } from 'motion/react'
-import { useEffect, useState, type ComponentType } from 'react'
+import { lazy, Suspense, useEffect, useState, type ComponentType } from 'react'
 import { firstTime, say, sounds } from '../../../sdk'
 import { FitBox } from '../../kit/Chrome'
 import { StampEarned } from '../../kit/StampEarned'
@@ -11,7 +11,6 @@ import { VideoBreak } from '../../kit/Theater'
 import type { PlaceProps, PlaceVideo } from '../../types'
 import { BambooForest } from './activities/bamboo/BambooForest'
 import { MagicBrush } from './activities/brush/MagicBrush'
-import { DumplingHouse } from './activities/dumplings/DumplingHouse'
 import { Hotpot } from './activities/hotpot/Hotpot'
 import { Parade } from './activities/parade/Parade'
 import { GreatRace } from './activities/race/GreatRace'
@@ -26,6 +25,9 @@ export interface ActivityProps {
   onDone: () => void
   setProgress: (done: number, total: number) => void
 }
+
+// The Dumpling House is 3D: loaded only when she opens it, so the rest of China never downloads three.js.
+const DumplingHouse = lazy(() => import('./activities/dumplings/DumplingHouse').then((m) => ({ default: m.DumplingHouse })))
 
 const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = {
   bamboo: BambooForest,
@@ -70,7 +72,9 @@ export default function Place(props: PlaceProps) {
     if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
     return (
       <>
-        <Activity key={activity} setProgress={setProgress} onDone={finish} />
+        <Suspense fallback={null}>
+          <Activity key={activity} setProgress={setProgress} onDone={finish} />
+        </Suspense>
         {justEarned === info.id && (
           <StampEarned
             activity={info}

@@ -13,13 +13,14 @@ import { LUNG } from '../activities/nan-trip/rice/farm'
 import { FAMILY } from '../characters/family'
 import { POLES_LOOKS } from '../../poles/characters/looks'
 import { CANADA_LOOKS } from '../../canada/characters/looks'
+import { CHINA_LOOKS } from '../../china/characters/looks'
 import { COACH_LOOK, LOOKS, PATIENT_LOOKS, type Look, type Wearable } from '../characters/looks'
 import cast from '../cast.json'
 import { L } from '../lines'
 import { ATTENDANT } from '../trip/legs/plane'
 import { OFFICER } from '../trip/legs/airport'
 
-export type CastGroup = 'family' | 'trip' | 'mall' | 'nan' | 'critters' | 'poles' | 'canada'
+export type CastGroup = 'family' | 'trip' | 'mall' | 'nan' | 'critters' | 'poles' | 'canada' | 'china'
 export const GROUPS: { id: CastGroup; name: string }[] = [
   { id: 'family', name: 'Kaylee & family' },
   { id: 'trip', name: 'Boat trip' },
@@ -28,6 +29,7 @@ export const GROUPS: { id: CastGroup; name: string }[] = [
   { id: 'critters', name: 'Bay critters' },
   { id: 'poles', name: 'The Poles' },
   { id: 'canada', name: 'Canada' },
+  { id: 'china', name: 'China: the Dumpling House' },
 ]
 
 /** One choice in a character's variations popover: another look in their group, or an outfit for Kaylee. */
@@ -120,7 +122,19 @@ const canada: CastEntry[] = [
   person('raccoon', 'Raccoon', 'Canada: the marshmallow bandit of the campsite', 'canada', CANADA_LOOKS.raccoon, '../canada/characters/looks.ts'),
 ]
 
-export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...nan, ...critters, ...poles, ...canada]
+const CHINA_SRC = '../china/characters/looks.ts'
+const china: CastEntry[] = [
+  person('cheffu', 'Chef Fu', 'China: the jolly pig chef of the Dumpling House', 'china', CHINA_LOOKS.cheffu, CHINA_SRC),
+  person('doudou', 'Dou Dou', 'China: the Pekingese puppy who brings Kaylee to Shanghai', 'china', CHINA_LOOKS.doudou, CHINA_SRC),
+  person('grandpa-turtle', 'Grandpa Turtle', 'China: the first friend at the counter', 'china', CHINA_LOOKS.grandpa, CHINA_SRC),
+  person('bunny-pink', 'Bunny Twin (pink)', 'China: one of the Bunny Twins', 'china', CHINA_LOOKS.bunny, CHINA_SRC, undefined, 'bunny-twins'),
+  person('bunny-mint', 'Bunny Twin (mint)', 'China: the other Bunny Twin', 'china', CHINA_LOOKS.bunny2, CHINA_SRC, undefined, 'bunny-twins'),
+  person('mrs-goose', 'Mrs Goose', 'China: the elegant lady at the counter', 'china', CHINA_LOOKS.goose, CHINA_SRC),
+  person('baobao', 'Bao Bao', 'China: the hungry baby panda', 'china', CHINA_LOOKS.baobao, CHINA_SRC),
+  person('houhou', 'Hou Hou', 'China: the cheeky snub-nosed monkey who sneaks a dumpling', 'china', CHINA_LOOKS.houhou, CHINA_SRC),
+]
+
+export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...nan, ...critters, ...poles, ...canada, ...china]
 export const castById = (id: string | undefined) => CAST.find((c) => c.id === id)
 
 /** Kaylee's outfits (what she wears on each trip and at each HarborLand game). */
