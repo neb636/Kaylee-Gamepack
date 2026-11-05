@@ -15,6 +15,14 @@ export const workspaceSchema = z.object({
   path: z.string(),
   views: z.array(workbenchViewSchema),
   activeViewId: z.string().optional(),
+  game: z.object({
+    link: z.string().max(4000).optional(),
+    frame: z.enum(["fit", "ipad-portrait", "ipad-wide", "iphone-wide", "iphone-tall"]).optional(),
+    characterLink: z.string().max(4000).optional(),
+    beforeCharacter: z.string().max(4000).optional(),
+    draft: z.string().max(20_000).optional(),
+    provider: z.enum(["claude", "codex"]).optional(),
+  }).optional(),
 });
 
 export const personaSchema = z.object({
@@ -84,8 +92,38 @@ export const persistedStateSchema = z.object({
 
 const legacyInstructionSchema = z.object({ id: z.string(), workspaceId: z.string(), content: z.string(), enabled: z.boolean() });
 
+const LAB_VIEWS: Record<string, "camera" | "feel" | "character"> = { "camera-lab": "camera", "feel-lab": "feel", "character-lab": "character" };
+
+/**
+ * The Camera, Feel and Character labs used to be tabs; now they are switches on each piece of work's game pane.
+ * Their tabs go away and their last links move onto the pane (a Feel or Camera link becomes where the game opens).
+ */
+export function migrateLabViews(input: unknown): unknown {
+  if (typeof input !== "object" || input === null || !Array.isArray((input as { workspaces?: unknown }).workspaces)) return input;
+  const source = input as { workspaces: unknown[] } & Record<string, unknown>;
+  const workspaces = source.workspaces.map((value) => {
+    if (typeof value !== "object" || value === null || !Array.isArray((value as { views?: unknown }).views)) return value;
+    const workspace = value as { views: { id?: unknown; type?: unknown; state?: unknown }[]; activeViewId?: unknown; game?: Record<string, unknown> };
+    const labs = workspace.views.filter((view) => typeof view?.type === "string" && LAB_VIEWS[view.type]);
+    if (!labs.length) return value;
+    const game: Record<string, unknown> = { ...(workspace.game ?? {}) };
+    for (const view of labs) {
+      const link = (view.state as { link?: unknown } | undefined)?.link;
+      if (typeof link !== "string" || !link.includes("#/world/")) continue;
+      const hash = link.slice(link.indexOf("#"));
+      if (view.type === "character-lab") game.characterLink ??= hash;
+      else game.link ??= hash.replace(/([?&])(cam|feel)=1(&|$)/g, (_, before, _key, after) => (after ? before : "")).replace(/[?&]$/, "");
+    }
+    const views = workspace.views.filter((view) => !labs.includes(view));
+    const activeViewId = labs.some((view) => view.id === workspace.activeViewId) ? views[0]?.id : workspace.activeViewId;
+    return { ...workspace, views, activeViewId, game };
+  });
+  return { ...source, workspaces };
+}
+
 /** Converts state written before prompt options existed; unknown shapes pass through to normal validation. */
 export function migratePersistedState(input: unknown): unknown {
+  input = migrateLabViews(input);
   if (typeof input !== "object" || input === null) return input;
   const source = input as Record<string, unknown>;
   if (source.instructionOptions !== undefined || !Array.isArray(source.appendedInstructions)) return input;

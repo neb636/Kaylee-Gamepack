@@ -13,18 +13,24 @@ import { WorkspaceFiles, WorkspaceRoots } from "./workspace-files";
 import { WorkService } from "./work";
 
 import { StudioServer } from './studio-server';
-import { STUDIO_ORIGIN } from '../shared/labs';
-import { GameServer, validateGameCheckout } from './game-server';
+import { GAME_PORTS, STUDIO_ORIGIN } from '../shared/labs';
+import { GameServerPool } from './game-server';
+import { SectionsService } from './sections';
 import { createQuitHandler } from './quit-handler';
 import { LabAi } from './lab-ai';
 const labAi = new LabAi();
 const repoRoot = app.isPackaged ? null : process.env.STUDIO_REPO_ROOT || path.resolve(__dirname, '../../..');
-let servingRoot: string | undefined;
-let serverQueue = Promise.resolve();
 let quitting = false;
 // Same artwork as iOS Add to Home Screen, using its larger existing web export for the Dock.
 const appIcon = app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.resolve(__dirname, '../../../public/icons/icon-512.png');
-const gameServer = new GameServer();
+// `npm run studio` already serves its own checkout (STUDIO_GAME_PORT); every other piece of work gets its own server.
+const launcherPort = !app.isPackaged && repoRoot ? Number(process.env.STUDIO_GAME_PORT) || undefined : undefined;
+const gameServers = new GameServerPool(GAME_PORTS.filter(port => port !== launcherPort), {
+  keep: 2,
+  external: launcherPort && repoRoot ? { root: repoRoot, port: launcherPort } : undefined,
+  onFailure: (root, message) => dialog.showErrorBox('Game server stopped', `${root}\n\n${message}`),
+});
+const sections = new SectionsService();
 const studioServer = new StudioServer();
 app.setName('Kaylee Gamepack Studio');
 app.setPath('userData', path.join(app.getPath('appData'), 'Kaylee Gamepack Studio'));
@@ -107,25 +113,22 @@ app.whenReady().then(async () => {
     if (event.senderFrame !== event.sender.mainFrame) throw new Error('Only the studio can use native APIs');
   };
   ipcMain.handle('studio:repo-root', event => { trusted(event); if (repoRoot) roots.add(repoRoot); return repoRoot; });
-  ipcMain.handle('studio:use-checkout', (event, root: unknown) => {
+  // The game for one piece of work: its own loopback server (the last 2 stay running). Returns that server's origin.
+  ipcMain.handle('studio:use-checkout', async (event, root: unknown) => {
     trusted(event);
     if (quitting) throw new Error('Studio is quitting.');
-    const next = serverQueue.catch(() => {}).then(async () => {
-      if (typeof root !== 'string') throw new Error('Choose a checkout.');
-      await roots.resolve(root);
-      if (!app.isPackaged) {
-        if (path.resolve(root) !== repoRoot) throw new Error('Use the packaged Studio app to preview another checkout.');
-        return;
-      }
-      if (servingRoot === root) return;
-      await validateGameCheckout(root);
-      await gameServer.stop();
-      servingRoot = undefined;
-      await gameServer.start(root, message => { servingRoot = undefined; dialog.showErrorBox('Game server stopped', message); });
-      servingRoot = root;
-    });
-    serverQueue = next;
-    return next;
+    if (typeof root !== 'string') throw new Error('Choose a checkout.');
+    return gameServers.origin(await roots.resolve(root));
+  });
+  ipcMain.handle('studio:sections', async (event, input: unknown) => {
+    trusted(event);
+    const { root, refresh } = (input ?? {}) as { root?: unknown; refresh?: unknown };
+    if (typeof root !== 'string') throw new Error('Choose a checkout.');
+    return sections.get(await roots.resolve(root), refresh === true);
+  });
+  ipcMain.handle('studio:trim-servers', async (event, keep: unknown) => {
+    trusted(event);
+    await gameServers.trim(typeof keep === 'number' && keep >= 0 ? Math.floor(keep) : 1);
   });
   ipcMain.handle('studio:tune', (event, input: unknown) => { trusted(event); return labAi.run(input, event.sender.id); });
   ipcMain.on('studio:cancel', (event, id: unknown) => { trusted(event); if (typeof id === 'string') labAi.cancel(id, event.sender.id); });
@@ -147,7 +150,6 @@ app.on("before-quit", createQuitHandler(async () => {
   studioServer.stop();
   agentSessionManager.terminateAll();
   ptyManager.terminateAll();
-  // A checkout switch may still be starting a server. Drain it before the final stop.
-  await serverQueue.catch(() => {});
-  await gameServer.stop();
+  // A switch may still be starting a server: stopAll drains it before the final stop.
+  await gameServers.stopAll();
 }, () => app.quit(), error => console.error('Studio cleanup failed', error)));

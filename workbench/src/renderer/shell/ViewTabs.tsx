@@ -3,7 +3,7 @@ import { Button as AriaButton, Menu, MenuItem, MenuTrigger, Popover, Tab, TabLis
 import type { WorkbenchView, Workspace } from "../../shared/models";
 import { services } from "../core/services";
 import { useViewStatuses, viewStatus } from "../core/view-status";
-import { useWorkbenchStore } from "../state/workbench-store";
+import { GAME_TAB, useWorkbenchStore } from "../state/workbench-store";
 import { IconButton } from "../ui/controls";
 import { ChevronDownIcon, CloseIcon, PlusIcon, SidebarLeftIcon, SidebarRightIcon } from "../ui/icons";
 
@@ -37,16 +37,20 @@ export function ViewTabs({ workspace, showLeftToggle, showRightToggle, onShowLef
     return () => observer.disconnect();
   }, []);
   const views = workspace?.views ?? [];
-  const { visible, hidden } = splitTabs(views, workspace?.activeViewId, capacity);
+  const activeId = workspace?.activeViewId && views.some((view) => view.id === workspace.activeViewId) ? workspace.activeViewId : GAME_TAB;
+  // The game is always the first tab and can't be closed.
+  const { visible, hidden } = splitTabs(views, activeId, Math.max(1, capacity - 1));
+  const gameTab: WorkbenchView = { id: GAME_TAB, type: GAME_TAB, workspaceId: workspace?.id ?? "", title: "Game" };
   const close = (view: WorkbenchView) => void services.commands.execute("view.close", { workspaceId: view.workspaceId, viewId: view.id });
 
   return <div className={`tab-strip ${showLeftToggle ? "has-traffic-lights" : ""}`}>
     {showLeftToggle && <IconButton label="Show sidebar" onPress={onShowLeft}><SidebarLeftIcon size={16} /></IconButton>}
     <div className="tab-strip-tabs" ref={stripRef}>
-      {workspace && <Tabs className="view-tabs" selectedKey={workspace.activeViewId}
+      {workspace && <Tabs className="view-tabs" selectedKey={activeId}
         onSelectionChange={(key) => selectView(workspace.id, String(key))}>
-        <TabList aria-label="Open views" className="view-tab-list" items={visible} dependencies={[statuses]}>
+        <TabList aria-label="Open views" className="view-tab-list" items={[gameTab, ...visible]} dependencies={[statuses]}>
           {(view) => {
+            if (view.id === GAME_TAB) return <Tab id={GAME_TAB} className="view-tab is-game" aria-label="Game"><span aria-hidden="true">🎮</span><span className="view-tab-title">Game</span></Tab>;
             const Icon = services.views.get(view.type)?.icon;
             const status = viewStatus(view, statuses);
             return <Tab id={view.id} className="view-tab" aria-label={view.title}>

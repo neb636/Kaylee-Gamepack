@@ -14,8 +14,10 @@ try {
   app = await electron.launch({args:['.'],env:{...process.env,VITE_DEV_SERVER_URL:'http://127.0.0.1:5175',STUDIO_REPO_ROOT:repo,WORKBENCH_USER_DATA_DIR:profile,PATH:`${profile}${path.delimiter}${process.env.PATH}`}});
   const page=await app.firstWindow(); page.setDefaultTimeout(15000);
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  const select = name=>page.locator('.left-sidebar').getByText(name,{exact:true}).click();
-  await select('Camera lab');
+  // The labs are switches on the game pane; a pasted link opens a section with one on.
+  const goto = async link=>{await page.getByRole('button',{name:'Current section'}).click();await page.getByLabel('Game link').fill(link);await page.keyboard.press('Enter');};
+  const toggle = name=>page.getByRole('group',{name:'Labs'}).getByRole('button',{name}).click();
+  await goto('#/world/thailand/hub/downstairs?cam=1&cam.frame=ipad-wide');
   const frame=()=>page.frames().find(f=>f.url().startsWith('http://127.0.0.1:5174'));
   await page.getByRole('button',{name:'Read controls',exact:true}).click();
   await page.getByText(/6 live controls/).waitFor();
@@ -72,24 +74,25 @@ try {
   await page.getByText('Asking codex…',{exact:true}).waitFor();
   await page.getByRole('button',{name:'Cancel',exact:true}).click();
   await page.getByRole('button',{name:'Ask AI & preview controls'}).waitFor({state:'visible'});
-  await select('Feel lab');
+  await goto('#/world/thailand/nan-trip/drive?feel=1');
   await page.getByRole('button',{name:'Read controls',exact:true}).click();
   await page.getByText(/38 live controls/).waitFor();
   await page.getByLabel('Lab prompt').fill('Gentler steering');
   await page.getByRole('button',{name:'Ask AI & preview controls'}).click();
   await page.getByText('Fixture control update',{exact:true}).waitFor();
   assert.match(frame().url(),/feel\.steer\.slide=5.5/);
-  await select('Camera lab'); await select('Feel lab');
+  // Off and on again keeps the tuned values in the link.
+  await toggle(/Feel/); await toggle(/Feel/);
   await page.getByRole('button',{name:'Read controls',exact:true}).click();
   assert.match(frame().url(),/feel\.steer\.slide=5.5/);
   await page.getByRole('button',{name:'Prepare prompt to save in game'}).click();
   const draft=page.getByRole('textbox',{name:'Prompt',exact:true}); await draft.waitFor();
   assert.match(await draft.inputValue(),/feel\.steer\.slide=5.5/);
   assert.match(await draft.inputValue(),/mountain\.ts/);
-  await select('3D character lab');
+  await toggle(/Character/);
   await page.getByRole('button',{name:'Prepare character builder prompt'}).click();
   await draft.waitFor(); assert.match(await draft.inputValue(),/"kind": "character"/);
   assert.match(await draft.inputValue(),/nick-code/);
   assert.deepEqual(errors,[]);
-  console.log('Camera/Feel preview and Undo, Undo retained after failed/cancelled/stale/no-change follow-ups, cross-section Undo guard, tab persistence, handoffs and native isolation passed.');
+  console.log('Camera/Feel preview and Undo, Undo retained after failed/cancelled/stale/no-change follow-ups, cross-section Undo guard, link persistence, handoffs and native isolation passed.');
 } finally {await app?.close();}

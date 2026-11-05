@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from "react-resizable-panels";
 import { services } from "../core/services";
-import { useWorkbenchStore } from "../state/workbench-store";
-import { AgentIcon, FolderIcon, TerminalIcon } from "../ui/icons";
+import { GAME_TAB, useWorkbenchStore } from "../state/workbench-store";
+import { GamePane } from "../features/game/GamePane";
+import { FolderIcon } from "../ui/icons";
 import { Button } from "../ui/controls";
 import { LeftSidebar } from "./LeftSidebar";
 import { RightSidebar } from "./RightSidebar";
@@ -30,7 +31,7 @@ export function WorkbenchShell() {
   const leftRef = useCollapsible(layout.leftCollapsed);
   const rightRef = useCollapsible(layout.rightCollapsed);
   const activeWorkspace = workspaces.find((workspace) => workspace.id === activeWorkspaceId) ?? workspaces[0];
-  const activeView = activeWorkspace?.views.find((view) => view.id === activeWorkspace.activeViewId);
+  const activeView = activeWorkspace?.activeViewId === GAME_TAB ? undefined : activeWorkspace?.views.find((view) => view.id === activeWorkspace.activeViewId);
   const definition = activeView ? services.views.get(activeView.type) : undefined;
 
   useEffect(() => { void hydrate(); }, [hydrate]);
@@ -62,19 +63,15 @@ export function WorkbenchShell() {
                 <p>Pick your Kaylee-Gamepack checkout once. Studio lists its worktrees and PRs by itself.</p>
                 <Button className="primary-button" onPress={() => void services.commands.execute("repo.open")}><FolderIcon size={16} /> Open the Gamepack repo</Button>
               </div>
-            ) : activeView && definition ? (
-              <definition.component key={activeView.id} view={activeView} workspace={activeWorkspace} />
-            ) : activeView ? (
-              <div className="missing-view"><h2>View unavailable</h2><p>No view is registered for <code>{activeView.type}</code>.</p></div>
-            ) : (
-              <div className="empty-workspace">
-                <h2>Open a view</h2><p>Nothing is open in {activeWorkspace.name}.</p>
-                <div className="empty-actions">
-                  <Button onPress={() => void services.commands.execute("view.create", { workspaceId: activeWorkspace.id, viewType: "agent" })}><AgentIcon size={16} />Agent session</Button>
-                  <Button onPress={() => void services.commands.execute("view.create", { workspaceId: activeWorkspace.id, viewType: "terminal" })}><TerminalIcon size={16} />Terminal</Button>
-                </div>
-              </div>
-            )}
+            ) : <>
+              {/* The game stays mounted behind other tabs, so its scene and lab Undo survive a look at an agent. */}
+              <GamePane key={activeWorkspace.id} workspace={activeWorkspace} hidden={Boolean(activeView)} />
+              {activeView && definition ? (
+                <definition.component key={activeView.id} view={activeView} workspace={activeWorkspace} />
+              ) : activeView ? (
+                <div className="missing-view"><h2>View unavailable</h2><p>No view is registered for <code>{activeView.type}</code>.</p></div>
+              ) : null}
+            </>}
           </div>
         </main>
       </Panel>

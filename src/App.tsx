@@ -5,11 +5,14 @@ import { Playground } from './shell/Playground'
 import { Splash } from './shell/Splash'
 import { World } from './world/World'
 import { HalloweenMusic } from './shell/HalloweenMusic'
+import { useStudioLocation } from './shell/studio-location'
 
 export default function App() {
   const route = useRoute()
-  // The local desktop studio opens straight into its lab; deployed builds keep the normal audio-unlock splash.
-  const [started, setStarted] = useState(() => import.meta.env.DEV && location.origin === 'http://127.0.0.1:5174' && new URLSearchParams(location.search).get('studio') === '1')
+  // The local desktop studio opens straight into its game pane (one loopback Vite server per piece of work, so any port);
+  // deployed builds keep the normal audio-unlock splash.
+  const [started, setStarted] = useState(() => import.meta.env.DEV && location.hostname === '127.0.0.1' && new URLSearchParams(location.search).get('studio') === '1')
+  useStudioLocation()
 
   return <>
     <HalloweenMusic started={started} route={route} />

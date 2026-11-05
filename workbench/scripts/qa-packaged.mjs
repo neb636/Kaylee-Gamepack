@@ -49,7 +49,10 @@ try {
   await page.getByRole('treegrid', { name: 'Main checkout' }).getByRole('button', { name: 'main actions' }).click();
   await page.getByRole('menuitem', { name: 'Open a different checkout…' }).click();
   await page.getByRole('treegrid', { name: 'Main checkout' }).getByRole('row', { name: /^main/ }).waitFor();
-  await page.getByRole('tab', { name: 'Camera lab', exact: true }).click();
+  await page.getByRole('tab', { name: 'Game', exact: true }).click();
+  await page.getByRole('button', { name: 'Current section' }).click();
+  await page.getByLabel('Game link').fill('#/world/thailand/hub/downstairs?cam=1&cam.frame=ipad-wide');
+  await page.keyboard.press('Enter');
   await page.locator('iframe').waitFor();
   await page.frameLocator('iframe').getByRole('slider').nth(5).waitFor();
   await page.getByRole('button', { name: 'Read controls', exact: true }).click();

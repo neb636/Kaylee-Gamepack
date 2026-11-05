@@ -16,6 +16,45 @@ export interface Workspace {
   path: string;
   views: WorkbenchView[];
   activeViewId?: string;
+  /** The game pane for this piece of work: where it is, which lab is on, which device frame. */
+  game?: GameState;
+}
+
+export type GameLab = "camera" | "feel" | "character";
+export type GameFrame = "fit" | "ipad-portrait" | "ipad-wide" | "iphone-wide" | "iphone-tall";
+
+export interface GameState {
+  /** The game's hash (`#/world/...`), kept up to date from what the game reports. */
+  link?: string;
+  frame?: GameFrame;
+  /** Where the Character lab was, so its toggle returns there. */
+  characterLink?: string;
+  /** The section to go back to when the Character lab is switched off. */
+  beforeCharacter?: string;
+  /** The lab panel's note and AI provider. */
+  draft?: string;
+  provider?: "claude" | "codex";
+}
+
+/** One section link of the game, from `scripts/sections-index.mjs` in that checkout. */
+export interface SectionEntry {
+  id: string;
+  name: string;
+  group?: string;
+  link: string;
+  links: { label: string; link: string }[];
+}
+
+export interface SectionsIndex {
+  version: 1;
+  places: {
+    id: string;
+    name: string;
+    emoji: string;
+    activities: { id: string; name: string; icon: string; kind: "hub" | "live" | "works" | "finale"; sections: SectionEntry[] }[];
+  }[];
+  /** Why there are no sections for this checkout (an older branch, no npm ci). */
+  missing?: string;
 }
 
 export interface Persona {
@@ -113,6 +152,8 @@ export interface AgentDeliveryResult {
 export interface PromptQuotation {
   id: string;
   content: string;
+  /** What the chip says; terminal selections leave it out. */
+  label?: string;
 }
 
 export interface AgentViewState {
@@ -295,7 +336,11 @@ export interface AgentSessionSnapshot {
 export interface WorkbenchApi {
   studio: {
     repoRoot: () => Promise<string | null>;
-    useCheckout: (root: string) => Promise<void>;
+    /** Starts (or reuses) this checkout's game server and returns its origin. */
+    useCheckout: (root: string) => Promise<string>;
+    sections: (root: string, refresh?: boolean) => Promise<SectionsIndex>;
+    /** Stops all but the `keep` most recently used game servers. */
+    trimServers: (keep: number) => Promise<void>;
     tune: (input: { id: string; provider: 'claude' | 'codex'; prompt: string; snapshot: import('./labs').LabSnapshot }) => Promise<import('./labs').LabProposal>;
     cancel: (id: string) => void;
   };

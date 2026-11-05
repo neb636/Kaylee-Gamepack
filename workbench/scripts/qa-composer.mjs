@@ -101,7 +101,7 @@ try {
   await page.getByRole("button", { name: "Instructions: 4" }).waitFor();
   // The launcher's new worktree shows up in the Work list by itself.
   await page.getByRole("button", { name: "Refresh worktrees and PRs" }).click();
-  await page.getByRole("treegrid", { name: "Work in progress" }).getByRole("row", { name: /wb-qa-task/ }).waitFor();
+  await page.getByRole("treegrid", { name: "Work in progress" }).getByRole("row", { name: /qa-task/ }).waitFor();
   await page.getByRole("tab", { name: "Explain this failure." }).waitFor();
   assert.match(await sidebar.getByRole("row", { name: /Explain this failure\./ }).innerText(), /Ready · Codex/);
   await shot("session");
