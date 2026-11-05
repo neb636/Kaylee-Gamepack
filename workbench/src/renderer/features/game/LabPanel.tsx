@@ -5,6 +5,9 @@ import { services } from "../../core/services";
 import { useWorkbenchStore } from "../../state/workbench-store";
 import { patchGame, setLabUndo, useGameLive } from "./game-store";
 
+/** The scene without its server's origin: this piece of work may come back on another port after the pool evicts it. */
+const sceneKey = (snapshot: LabSnapshot) => undoSceneKey({ ...snapshot, href: snapshot.href.replace(/^https?:\/\/[^/]+/, "http://game") });
+
 export type LabRequest = (action: "snapshot" | "apply", values?: { expected: string; proposal: LabProposal }) => Promise<LabSnapshot>;
 
 /**
@@ -55,7 +58,7 @@ export function LabPanel({ workspace, kind, request, snapshot }: { workspace: Wo
     if (!undo) return;
     try {
       const now = await request("snapshot");
-      if (undoSceneKey(now) !== undoSceneKey(undo)) throw new Error("Return to the original scene, mode and frame before undoing.");
+      if (sceneKey(now) !== sceneKey(undo)) throw new Error("Return to the original scene, mode and frame before undoing.");
       await request("apply", { expected: snapshotKey(now), proposal: { explanation: "Undo AI tuning", changes: undo.controls.map((c) => ({ key: c.key, value: c.value })) } });
       setUndo(undefined); setMessage("Restored the controls from before AI tuning."); await refresh();
     } catch (error) { setMessage(String(error)); }
