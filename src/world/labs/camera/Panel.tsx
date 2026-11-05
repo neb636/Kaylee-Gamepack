@@ -6,6 +6,7 @@ import { worldLink } from '../../../router'
 import { HUB } from '../../kit/sections'
 import { findPlace, sectionsFor } from '../../registry'
 import { camLab } from '../../engine3d/camLab'
+import { cinemaOn } from '../../engine3d/cinema'
 import { TUNE } from '../../engine3d/tune'
 import { IconButton, Section, Segmented, Select, Slider, Toggle, Field } from '../ui'
 import { camParams, FRAMES, STATE_KEYS, frameById, freshCamera, GUIDES, untouched, withoutCam, type CamView } from './link'
@@ -72,6 +73,18 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
   }
 
   const reset = () => set(freshCamera(view))
+
+  // The cinema camera (engine3d/cinema.ts): ?cine=1 in the address bar, read by the world every frame, so it's live.
+  const cine = cinemaOn()
+  const setCine = (on: boolean) => {
+    const [path, query = ''] = location.hash.split('?')
+    const q = new URLSearchParams(query)
+    if (on) q.set('cine', '1')
+    else q.delete('cine')
+    const qs = q.toString().replace(/%2C/g, ',')
+    history.replaceState(history.state, '', qs ? `${path}?${qs}` : path)
+    tick((n) => n + 1)
+  }
 
   const copy = (text: string, done: string) => {
     if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => toast(done), () => toast('Copy it from the address bar'))
@@ -195,6 +208,19 @@ export function CamPanel({ place, view, set, ab, setAb, orbit, setOrbit, frozen,
           <Slider label="Lens °" value={view.fov || gameLens} min={15} max={80} step={1} digits={0} onChange={(fov) => set({ fov: fov === gameLens ? 0 : fov })} />
           <Slider label="Pan →" value={view.px} min={-reach} max={reach} step={reach / 200} onChange={(px) => set({ px })} />
           <Slider label="Pan ↑" value={view.py} min={-reach} max={reach} step={reach / 200} onChange={(py) => set({ py })} />
+        </Section>
+
+        <Section title="Cinema">
+          <Field label="Cinema camera">
+            <Toggle on={cine} onChange={setCine} label="Cinema camera" />
+          </Field>
+          <div className="cl-sub" style={{ marginTop: 4 }}>
+            {cine
+              ? world?.rig.cinema
+                ? `Cutscene shots with letterbox bars: now “${String(world.qa().cine ?? '')}”. The sliders above wait until it hands back (the lens still works).`
+                : 'On, but this scene has no cutscene shots yet (or it has handed back to the game’s camera).'
+              : 'Film it like a game’s cutscene: cuts between moving shots, letterbox bars. Scenes that have one: the speedboat to Koh Samet.'}
+          </div>
         </Section>
 
         <Section title="Hands">

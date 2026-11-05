@@ -54,7 +54,7 @@ export default function CameraLab({ place, params, host }: { place: string; para
     const v = viewRef.current
     return {
       kind: 'camera', href: location.href,
-      context: { place, mode: v.mode, frame: v.frame, frozen: camLab.frozen, ab, shot, framed: world?.rig.framed(), state: world?.qa(), instruction: 'Adjust only this shot and screen shape. Pan is in meters, angles in degrees. Preserve targets at 64px or larger. Values preview here; source is unchanged.' },
+      context: { place, mode: v.mode, frame: v.frame, frozen: camLab.frozen, ab, cinema: world?.rig.cinema ? String(world.qa().cine ?? 'on') : false, shot, framed: world?.rig.framed(), state: world?.qa(), instruction: 'Adjust only this shot and screen shape. Pan is in meters, angles in degrees. Preserve targets at 64px or larger. Values preview here; source is unchanged.' },
       controls: world ? [
         { key: 'yaw', label: 'Yaw', value: v.yaw, min: -180, max: 180, step: 1 },
         { key: 'pitch', label: 'Pitch', value: v.pitch, min: v.mode === 'lock' ? -10 : -60, max: v.mode === 'lock' ? 89 : 60, step: 1 },

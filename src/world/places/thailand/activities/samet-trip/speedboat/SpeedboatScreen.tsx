@@ -1,11 +1,12 @@
 // The speedboat to Koh Samet, on screen (speedboat.ts is the world): the boat with its tap targets, a finger pressing
 // on the water beside Kaylee when she's had no hoof in it for a while, and ⏩ to skip ahead to the pier once the ride
-// has gone on a bit. Greybox: no voices yet.
+// has gone on a bit, and the letterbox bars while the cinema camera (?cine=1) films it. Greybox: no voices yet.
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import type { WebGLRenderer } from 'three'
 import { sounds } from '../../../../../../sdk'
 import { Anchors } from '../../../../../engine3d/Anchors'
+import { Letterbox } from '../../../../../engine3d/Letterbox'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import type { TimeOfDay } from '../island/scenery'
 import { BOAT_ANCHORS, SametSpeedboat as World } from './speedboat'
@@ -21,6 +22,7 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
   const [n, setN] = useState(0)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [skip, setSkip] = useState(false)
+  const [cine, setCine] = useState(false)
   const worldRef = useRef<World | null>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const cb = useRef(onIsland)
@@ -32,7 +34,10 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
   }
   // ⏩ once the ride has gone on a while (and not once it's slowing in to the pier).
   useEffect(() => {
-    const id = setInterval(() => setSkip(!!worldRef.current?.canSkip), 500)
+    const id = setInterval(() => {
+      setSkip(!!worldRef.current?.canSkip)
+      setCine(!!worldRef.current?.cinematic)
+    }, 250)
     return () => clearInterval(id)
   }, [])
 
@@ -55,6 +60,7 @@ export function SpeedboatScreen({ time, packed, onIsland }: Props) {
           </>
         )}
       />
+      <Letterbox on={cine && mode === 'webgl'} />
       {skip && mode === 'webgl' && (
         <motion.button
           aria-label="Skip ahead"

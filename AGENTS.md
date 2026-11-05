@@ -230,9 +230,14 @@ what's next; PR bodies end with the next prompt.
   `window.__thaiHouseQA()` is read-only state for tests (no jump hooks: tests open section links).
 - **The camera lab:** `?cam=1` on any 3D section link opens it (`src/world/labs/camera/`): the real game in an iPad
   or iPhone frame, a panel that nudges the game's camera or locks one of your own (`CameraRig.setOverride`, so no game code
-  changes), freeze, orbit by hand, guides (the fit box, the top bar, tap-target sizes). When Dad sends a lab link or a
+  changes), freeze, orbit by hand, guides (the fit box, the top bar, tap-target sizes), and a Cinema switch. When Dad sends a lab link or a
   "Copy for agent" note, bake it into that world's `shot()` for that round and screen shape (tall or wide) and its
   `rig.fov`. Leave the other branches alone unless he says otherwise, and check the targets stay at 64 px or more.
+- **The cinema camera (cutscenes):** `engine3d/cinema.ts` films a moment like a game's cinematic: a `Director` cuts
+  between authored, eased camera moves round a moving subject (crane, chase, low hero shot, a fixed camera it drives
+  past, a two-shot), `rig.setCine()` takes the camera and hands back smoothly, `engine3d/Letterbox.tsx` adds the bars.
+  `?cine=1` (sticky) turns it on; the speedboat to Koh Samet is the reference. Reuse it for any ride or cutscene
+  instead of scripting camera paths by hand, and keep a `playable` shot for when her finger is down.
 - **The feel lab:** `?feel=1` on any section link (2D or 3D, `src/world/labs/feel/`) puts sliders over the real, playable game
   for every number the scene declares with `knobs()` (`src/world/kit/knobs.ts`), and a live graph of whatever it
   `watch()`es (her finger against what the car does). Playwright can check that a mechanic *works*; only Dad's finger
