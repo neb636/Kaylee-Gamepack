@@ -70,7 +70,8 @@ function addGameMenuItem(): void {
   view.insert(0, new MenuItem({ type: "separator" }));
   view.insert(0, new MenuItem({
     id: "toggle-game", label: "Show/Hide Game", accelerator: "CmdOrCtrl+G",
-    click: () => BrowserWindow.getFocusedWindow()?.webContents.send("studio:toggle-game") ?? BrowserWindow.getAllWindows()[0]?.webContents.send("studio:toggle-game"),
+    // One window gets it once: the focused one, else the first.
+    click: () => (BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0])?.webContents.send("studio:toggle-game"),
   }));
   Menu.setApplicationMenu(menu);
 }
