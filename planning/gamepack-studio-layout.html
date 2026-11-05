@@ -18,11 +18,11 @@
   "kind": "Local builder app: layout plan",
   "updated": "2026-11-04",
   "status": {
-    "label": "Step 3 built, step 4 next",
+    "label": "Step 4 built, step 5 next",
     "tone": "mint"
   },
   "pitch": "Studio still looks like Agent Workbench: a left tree of *workspaces* (folders), a tab strip of generic views and an IDE side panel. But there is only ever **one** Gamepack checkout, and the real unit of work is **a piece of work on a branch** (a worktree, its agent, its PR, its preview). The new layout puts the **game in the middle**, the **list of pieces of work on the left**, and the **agent on the right**, with the labs as switches on the game instead of separate tabs.",
-  "next": "Dad starts an agent from a piece of work, opens a section in the game, taps 📎 Section and Starters ▸ Fix, and hears the chime when it finishes. Then step 4: the Ship panel under the agent.",
+  "next": "Dad presses ✅ Verify on a piece of work and scans the 📱 QR with the iPad. Then step 5: compare with main, known issues, the pastel theme.",
   "facts": [
     {
       "icon": "📁",
@@ -328,13 +328,14 @@
             {
               "n": 4,
               "title": "Ship",
-              "status": "next",
-              "md": "Buttons that run in that worktree's terminal so their output stays visible: Verify, Screens for this route, Voices (`world-voice-lines` + `generate-voice` with the main repo's `.env`), Open PR (asks the agent to run the open-pr skill), the PR preview link and QR, CI status, and the plan page."
+              "status": "done",
+              "md": "Buttons that run in that worktree's terminal so their output stays visible: Verify, Screens for this route, Voices (`world-voice-lines` + `generate-voice` with the main repo's `.env`), Open PR (asks the agent to run the open-pr skill), the PR preview link and QR, CI status, and the plan page.",
+              "date": "2026-11-04"
             },
             {
               "n": 5,
               "title": "Compare and polish",
-              "status": "todo",
+              "status": "next",
               "md": "Side-by-side branch vs main (needs a second game server), known issues, the pastel theme. Drop what's left over: Active views panel, Personas, the file tree if Dad never opens it."
             }
           ]
@@ -422,6 +423,32 @@
                   "tone": "done",
                   "title": "Checked",
                   "md": "`qa:composer` passes with new steps: 📎 Section adds a *Game* chip, Starters ▸ Fix fills the prompt and attaches the section, Files and Commit changes open as tabs from +, then the old commit, overflow and restart checks."
+                }
+              ]
+            },
+            {
+              "title": "Step 4: Ship",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "A Ship panel under the agent does what this repo does before a PR, one button each, for the selected piece of work.",
+              "items": [
+                "**✅ Verify** (`npm run verify`), **📸 Screens** for the activity on screen (`npm run build && qa-screens --only=ipad-portrait,ipad-landscape --routes=<activity>`, after stopping the other game server so QA gets the CPU), **🎙️ Voices** (`world-voice-lines` + `generate-voice` with the main checkout's `.env`, since worktrees don't have one).",
+                "They run in that piece of work's **Ship** terminal, a tab in the agent column that keeps running behind the agent (terminals no longer stop when you switch tabs).",
+                "**🚀 Open PR** (or *Update PR*) prefills the agent: verify, commit, open the PR with the open-pr skill and its 🔗 Test this links, start the Codex watcher; the section on screen is attached.",
+                "**📱 Preview ↗** for the section on screen (the PR's preview, or the main build without one) with a **QR** for the iPad, **CI ↗** and **PR ↗** with the CI state in the header, and **📋 Plan page ↗** for the activity (or its country) from the local game server."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "The QR code uses `qrcode-generator` (MIT, no dependencies), added to the Studio only: the game never loads it. The Ship panel folds away and remembers it."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "`qa:composer` passes with a Ship step: Verify opens a *Ship: verify* tab whose terminal received `npm run verify`, and the QR for the main build renders."
                 }
               ]
             }

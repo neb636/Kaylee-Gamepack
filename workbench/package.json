@@ -2,7 +2,7 @@
   "name": "kaylee-gamepack-workbench",
   "version": "0.1.0",
   "private": true,
-  "description": "Local character, camera and feel studio for Kaylee\u2019s Gamepack",
+  "description": "Local character, camera and feel studio for Kaylee’s Gamepack",
   "main": "dist-electron/main/index.js",
   "scripts": {
     "dev": "node scripts/dev.mjs",
@@ -33,6 +33,7 @@
     "@xterm/headless": "^5.5.0",
     "@xterm/xterm": "^5.5.0",
     "node-pty": "^1.0.0",
+    "qrcode-generator": "^1.4.4",
     "react": "^19.1.1",
     "react-aria-components": "^1.12.1",
     "react-dom": "^19.1.1",
