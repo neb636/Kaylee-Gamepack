@@ -18,11 +18,11 @@
   "kind": "Local builder app: layout plan",
   "updated": "2026-11-04",
   "status": {
-    "label": "Step 4 built, step 5 next",
+    "label": "All 5 steps built",
     "tone": "mint"
   },
   "pitch": "Studio still looks like Agent Workbench: a left tree of *workspaces* (folders), a tab strip of generic views and an IDE side panel. But there is only ever **one** Gamepack checkout, and the real unit of work is **a piece of work on a branch** (a worktree, its agent, its PR, its preview). The new layout puts the **game in the middle**, the **list of pieces of work on the left**, and the **agent on the right**, with the labs as switches on the game instead of separate tabs.",
-  "next": "Dad presses ✅ Verify on a piece of work and scans the 📱 QR with the iPad. Then step 5: compare with main, known issues, the pastel theme.",
+  "next": "Dad lives in Studio for a few pieces of work and says what still gets in the way. Known small things: main's half of ⇆ Main shows the splash until the main checkout has #313; Files and Commit changes stay as + tabs unless Dad wants them gone.",
   "facts": [
     {
       "icon": "📁",
@@ -335,8 +335,9 @@
             {
               "n": 5,
               "title": "Compare and polish",
-              "status": "next",
-              "md": "Side-by-side branch vs main (needs a second game server), known issues, the pastel theme. Drop what's left over: Active views panel, Personas, the file tree if Dad never opens it."
+              "status": "done",
+              "md": "Side-by-side branch vs main (needs a second game server), known issues, the pastel theme. Drop what's left over: Active views panel, Personas, the file tree if Dad never opens it.",
+              "date": "2026-11-04"
             }
           ]
         },
@@ -449,6 +450,32 @@
                   "tone": "done",
                   "title": "Checked",
                   "md": "`qa:composer` passes with a Ship step: Verify opens a *Ship: verify* tab whose terminal received `npm run verify`, and the QR for the main build renders."
+                }
+              ]
+            },
+            {
+              "title": "Step 5: compare and polish",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "This branch beside main, the known issues for the section on screen, and the game's own pastels and Fredoka. This PR also re-lands steps 3 and 4: #314 and #315 merged into their stacked base branches after #313 had already reached main.",
+              "items": [
+                "**⇆ Main**: on any piece of work but main, the stage splits: this branch on the left, main's own game server on the right at the same section and params, both in the device frame. Main follows every section, link, lab switch and reload made here; **Sync main** sends it the moment on screen.",
+                "**🐞 N**: the open entries of the country's `known-issues.md` that link to this activity (Thailand's boat trip has 11). Each one unfolds to its Check / Code lines; **Send to agent** attaches it to the agent.",
+                "**Pink, not grey**: cream background, pink accents, lavender selection, ink text, Fredoka everywhere outside the terminals, flat and matte (the glossy inset highlights are gone).",
+                "Left over: Personas and Active views were already gone in step 1; the side-panel registry has no panels any more (Files and Commit changes are + tabs). A fresh Studio opens with the agent column showing."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "The file tree stays as a tab from the agent column's + menu rather than being removed: it costs nothing until it's opened. Dock badge and chime came in step 3."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "Live look on Thailand's boat trip sunset: ⇆ Main split with both games running, 🐞 11 with the list open, the pastel theme. `qa:composer` passes on the new theme."
                 }
               ]
             }
