@@ -262,6 +262,13 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
   - [Home: the flight, Agong's photo, the frame on his wall, the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/home)
 
+**Koh Samet Island** (in the works) (In the works (greybox 1 of the plan). Add ?feel=1 to any jet ski link to tune how it steers, jumps and races.)
+
+- **The jet ski at Sai Kaew (greybox)**
+  - [Ride the calm bay: the life jacket, then carve, spray and close a loop of wake](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=ride) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=ride&feel=1))
+  - [Big waves roll in: steer into them to jump](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=waves)
+  - [Race the jet ski man round the big orange buoy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=race)
+
 **Finale**: [Family party (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/party/soon?stamps=all)
 
 ### The Poles
