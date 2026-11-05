@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio Layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap">
+<link rel="stylesheet" href="viewer/plan.css">
+</head>
+<body>
+<div id="app"><noscript>This plan is drawn by planning/viewer/plan.js. Read it as Markdown with: node scripts/plan.mjs md &lt;this file&gt;</noscript></div>
+<script type="application/json" id="plan">
+{
+  "schema": 1,
+  "title": "Gamepack Studio, rebuilt around the game",
+  "icon": "🦄",
+  "kind": "Local builder app: layout plan",
+  "updated": "2026-11-05",
+  "status": {
+    "label": "Agent first: step 6 of 8 built",
+    "tone": "butter"
+  },
+  "pitch": "Studio still looks like Agent Workbench: a left tree of *workspaces* (folders), a tab strip of generic views and an IDE side panel. But there is only ever **one** Gamepack checkout, and the real unit of work is **a piece of work on a branch** (a worktree, its agent, its PR, its preview). The new layout puts the **game in the middle**, the **list of pieces of work on the left**, and the **agent on the right**, with the labs as switches on the game instead of separate tabs.",
+  "next": "Dad tries the agent-first layout (step 6): open a worktree, work with the agent, press ▶ Game or ⌘G only when needed. Next: step 7, start typing at once (no setup form, the CLI starts right away, the composer holds a prompt until the CLI is ready).",
+  "facts": [
+    {
+      "icon": "📁",
+      "value": "1",
+      "label": "repo, always (no more “Add workspace”)"
+    },
+    {
+      "icon": "🌿",
+      "value": "27",
+      "label": "worktrees today, Studio sees none of them"
+    },
+    {
+      "icon": "🧹",
+      "value": "9",
+      "label": "of those already merged or closed"
+    },
+    {
+      "icon": "🧱",
+      "value": "5",
+      "label": "PRs, one per step"
+    }
+  ],
+  "related": [
+    {
+      "label": "← Studio today (what's built)",
+      "href": "gamepack-studio.html"
+    },
+    {
+      "label": "Launch instructions",
+      "href": "../workbench/README.md"
+    },
+    {
+      "label": "Studio architecture",
+      "href": "../workbench/docs/architecture.md"
+    }
+  ],
+  "sections": [
+    {
+      "id": "why",
+      "title": "What stinks today",
+      "icon": "😖",
+      "blocks": [
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "📁",
+              "title": "Workspaces for one repo",
+              "md": "The left sidebar is a tree of folders you *add*. There is only one Gamepack, so it's a list of one, with every session nested under it."
+            },
+            {
+              "icon": "🌿",
+              "title": "Blind to the real worktrees",
+              "md": "Agents make worktrees in `.claude/worktrees/` (25) and orca (2). Studio only knows worktrees it made itself in `<repo>-worktrees/`. None of today's 27 show up, and 9 of them are already merged or closed."
+            },
+            {
+              "icon": "🗂️",
+              "title": "Everything is a tab",
+              "md": "Camera lab, Feel lab, Character lab, agents, terminals and files all sit in one tab strip. The three labs are the *same game* with a different `?cam=1` / `?feel=1` switch, but each is its own tab with its own pasted link."
+            },
+            {
+              "icon": "🔗",
+              "title": "You paste links to get anywhere",
+              "md": "To look at a section you type `#/world/...` into a text box, or open `#/world/sections` inside the iframe. Studio knows nothing about countries, activities or sections."
+            },
+            {
+              "icon": "🧰",
+              "title": "IDE panels nobody needs here",
+              "md": "The right side is Active views (a copy of the tabs), a file tree and a commit box. The things this repo actually does (verify, QA for one route, voices, open the PR, the preview link, CI, the plan page) are not there."
+            },
+            {
+              "icon": "🔁",
+              "title": "One game server, restarted on switch",
+              "md": "Switching checkout restarts Vite on port 5174 (several seconds). Comparing a branch with main means waiting each way."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout",
+      "title": "The new layout",
+      "icon": "🖼️",
+      "lede": "Three columns, each with one job. The game is always the biggest thing on screen.",
+      "blocks": [
+        {
+          "type": "code",
+          "title": "Studio window",
+          "text": "┌─ Work ───────────┬─ Game ─────────────────────────────────┬─ Agent ────────────────┐\n│ ● main           │ Thailand ▸ Nan trip ▸ drive  ?road=2   │ Claude · working…      │\n│                  │ [iPad ▾] [⟳] [🎥 Camera] [🎛️ Feel]    │                        │\n│ ▸ nan-trees-lush │ ┌───────────────────────────────────┐  │  (the native CLI)      │\n│   PR #312 ✅ CI  │ │                                   │  │                        │\n│   2 agents · 4 ✎ │ │      the real game, in an         │  │                        │\n│ ▸ canada-whales  │ │      iPad / iPhone frame          │  │                        │\n│   no PR · idle   │ │                                   │  ├────────────────────────┤\n│ ▸ mall-voices-a  │ │                                   │  │ [📎 this section]      │\n│   #137 merged 🧹 │ └───────────────────────────────────┘  │ [Greybox][Fix][Bake]   │\n│                  │ Lab panel (only when 🎥/🎛️ is on):     │ ┌────────────────────┐ │\n│ + New piece of   │ sliders · “make it gentler” · Undo     │ │ composer           │ │\n│   work           │                                        │ └────────────────────┘ │\n├─ Sections ───────┤                                        ├─ Ship ─────────────────┤\n│ 🇹🇭 Thailand      │                                        │ verify ✅  QA ▶  voices │\n│  ▸ Nan trip      │                                        │ Open PR · Preview ↗    │\n│    · drive  ←    │                                        │ Plan page ↗ · issues   │\n└──────────────────┴────────────────────────────────────────┴────────────────────────┘\n status: nan-trees-lush · game :5174 · 2 agents working · CI green"
+        },
+        {
+          "type": "cards",
+          "items": [
+            {
+              "icon": "🌿",
+              "title": "Left: Work, then Sections",
+              "md": "**Work** lists main plus every worktree from `git worktree list`, wherever it lives, each with its branch, PR number and state, CI, its agents' status and how many files changed. Click one and *everything* (game, agent, ship panel) switches to it. Below it, **Sections**: the country ▸ activity ▸ section tree from every `sections.ts`, so a click opens that moment in the game."
+            },
+            {
+              "icon": "🎮",
+              "title": "Middle: the game",
+              "md": "One game pane, always there. A breadcrumb shows the current section and its params (from the address bar the game already keeps up to date). A device picker (iPad portrait, iPad wide, iPhone) frames it at real size. **🎥 Camera**, **🎛️ Feel** and **🦄 Character** are toggles on this pane, not tabs: switching one on adds `?cam=1` or `?feel=1` and opens the lab panel under the game, with the AI tuning that exists today."
+            },
+            {
+              "icon": "🤖",
+              "title": "Right: the agent, then Ship",
+              "md": "The agent for the selected piece of work (Claude or Codex, the native CLI with the composer under it, as now). Extra agents and terminals are small tabs *inside* this column. **Ship** sits below: the things this repo does before a PR, one button each."
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "icon": "💡",
+          "title": "A piece of work, not a workspace",
+          "md": "Studio's main thing becomes a **piece of work**: one worktree + its branch + its agents + its PR + its preview. Starting one asks for a short name (“canada-whales”), makes the branch and worktree from main, runs `npm ci` there, and opens an agent in it. That's the whole “new task” flow."
+        }
+      ]
+    },
+    {
+      "id": "moments",
+      "title": "What Dad does with it",
+      "icon": "🕹️",
+      "blocks": [
+        {
+          "type": "flow",
+          "rows": [
+            {
+              "label": "Start",
+              "steps": [
+                {
+                  "icon": "➕",
+                  "label": "New piece of work",
+                  "note": "name it"
+                },
+                {
+                  "icon": "🌿",
+                  "label": "Worktree from main",
+                  "note": "npm ci in it"
+                },
+                {
+                  "icon": "🤖",
+                  "label": "Agent opens there",
+                  "note": "prompt starter: Plan / Greybox / Fix",
+                  "hl": true
+                }
+              ]
+            },
+            {
+              "label": "Look",
+              "steps": [
+                {
+                  "icon": "🗺️",
+                  "label": "Tap a section",
+                  "note": "left tree"
+                },
+                {
+                  "icon": "🎮",
+                  "label": "Game opens there",
+                  "note": "in the iPad frame"
+                },
+                {
+                  "icon": "📎",
+                  "label": "Send it to the agent",
+                  "note": "link + state + what's wrong",
+                  "hl": true
+                }
+              ]
+            },
+            {
+              "label": "Tune",
+              "steps": [
+                {
+                  "icon": "🎛️",
+                  "label": "Feel on",
+                  "note": "sliders under the game"
+                },
+                {
+                  "icon": "💬",
+                  "label": "“Gentler steering”",
+                  "note": "AI previews values"
+                },
+                {
+                  "icon": "💾",
+                  "label": "Bake",
+                  "note": "agent writes the knob values",
+                  "hl": true
+                }
+              ]
+            },
+            {
+              "label": "Ship",
+              "steps": [
+                {
+                  "icon": "✅",
+                  "label": "Verify",
+                  "note": "npm run verify"
+                },
+                {
+                  "icon": "📸",
+                  "label": "Screens for this route",
+                  "note": "qa-screens --routes"
+                },
+                {
+                  "icon": "🚀",
+                  "label": "Open PR",
+                  "note": "open-pr skill",
+                  "hl": true
+                },
+                {
+                  "icon": "📱",
+                  "label": "Preview link",
+                  "note": "QR for the iPad"
+                }
+              ]
+            },
+            {
+              "label": "Tidy",
+              "steps": [
+                {
+                  "icon": "🟣",
+                  "label": "PR merged",
+                  "note": "row turns purple"
+                },
+                {
+                  "icon": "🧹",
+                  "label": "Clean up",
+                  "note": "removes the worktree after asking",
+                  "hl": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "chips",
+          "title": "Small things that make it feel made for this game",
+          "items": [
+            {
+              "icon": "🔀",
+              "label": "Compare with main",
+              "md": "Split the game pane: this branch on the left, main on the right, same section and params."
+            },
+            {
+              "icon": "📋",
+              "label": "Plan page",
+              "md": "The activity's plan page opens beside the game (it's already HTML)."
+            },
+            {
+              "icon": "🐞",
+              "label": "Known issues",
+              "md": "Thailand's `known-issues.md` entries for the open section, one tap to send one to the agent."
+            },
+            {
+              "icon": "📱",
+              "label": "QR code",
+              "md": "The PR preview link for this section as a QR code, to open on the iPad."
+            },
+            {
+              "icon": "🔔",
+              "label": "Agent done",
+              "md": "A Dock badge and a chime when an agent in any piece of work finishes or needs an answer."
+            },
+            {
+              "icon": "🦄",
+              "label": "Pink, not grey",
+              "md": "The game's pastel theme and Fredoka, flat matte buttons (no gloss)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "title": "Build plan",
+      "icon": "🧱",
+      "lede": "One PR per step. Each one leaves Studio usable.",
+      "blocks": [
+        {
+          "type": "build",
+          "items": [
+            {
+              "n": 1,
+              "title": "One repo, and the Work list",
+              "status": "done",
+              "md": "Studio opens the Gamepack repo it was launched from (the app remembers that one path; no Add workspace). The left column lists main + every worktree from `git worktree list --porcelain`, with PR state from `gh pr list --json` and changed-file counts. Selecting one switches every view to it. New piece of work (branch from `origin/main`, worktree in `~/repos/Kaylee-Gamepack-worktrees/<name>`, `npm ci`), and Clean up for merged or closed ones (always asks, never deletes a worktree with uncommitted changes). Old persisted workspaces migrate: their views move to the matching worktree. Remove Personas (menu, manager, persisted personas kept on disk but unused) and the Active views panel.",
+              "date": "2026-11-04"
+            },
+            {
+              "n": 2,
+              "title": "The game in the middle, with Sections",
+              "status": "done",
+              "md": "One game pane with breadcrumb, device frames and reload. A small game script writes a sections index (every `sections.ts`, the same data the README directory uses) as JSON the Studio reads; the left Sections tree opens links in the pane. Camera, Feel and Character become toggles on the pane; the three lab tabs go away (their links migrate).",
+              "date": "2026-11-04",
+              "pr": 313
+            },
+            {
+              "n": 3,
+              "title": "The agent column",
+              "status": "done",
+              "md": "The agent for the selected piece of work on the right, extra agents and terminals as tabs inside it. 📎 this section (link, params, lab snapshot if a lab is on). Prompt starters that follow AGENTS.md gates: Plan, Greybox, Art, Full loop, Fix, Bake lab values, Address review. Done and needs-answer badges per piece of work.",
+              "date": "2026-11-04",
+              "pr": [
+                314,
+                316
+              ]
+            },
+            {
+              "n": 4,
+              "title": "Ship",
+              "status": "done",
+              "md": "Buttons that run in that worktree's terminal so their output stays visible: Verify, Screens for this route, Voices (`world-voice-lines` + `generate-voice` with the main repo's `.env`), Open PR (asks the agent to run the open-pr skill), the PR preview link and QR, CI status, and the plan page.",
+              "date": "2026-11-04",
+              "pr": [
+                315,
+                316
+              ]
+            },
+            {
+              "n": 5,
+              "title": "Compare and polish",
+              "status": "done",
+              "md": "Side-by-side branch vs main (needs a second game server), known issues, the pastel theme. Drop what's left over: Active views panel, Personas, the file tree if Dad never opens it.",
+              "date": "2026-11-04",
+              "pr": 316
+            },
+            {
+              "n": 6,
+              "title": "Agent first, the game when wanted",
+              "status": "done",
+              "date": "2026-11-05",
+              "md": "Dad (2026-11-05): 80% of Studio is a Claude Code or Codex session; the labs are occasional. The agent (terminal + composer, tabs for other agents and terminals) becomes the main column. The game moves to a right panel, **closed by default** and remembered per piece of work (`game.open`), opened with **▶ Game** or ⌘G. Its toolbar keeps the device frame, Camera / Feel / Character, ⇆ Main and known issues, plus **⤢ Big** (the game takes most of the width, for lab sessions) and ✕. The Sections tree leaves the left column for a **☰ Sections** drawer over the game. The game's server starts only when the panel opens and stops a minute after it closes."
+            },
+            {
+              "n": 7,
+              "title": "Start typing at once",
+              "status": "todo",
+              "md": "No setup form: opening a worktree or **+** starts the last-used CLI straight away (a Claude / Codex dropdown on the tab switches it). Run in and Location go (the worktree is what's picked on the left); Resume previous moves into the **+** menu. The composer holds a prompt until the CLI is ready instead of “Not sent”. A session is named from its first prompt instead of “Untitled · Setup”."
+            },
+            {
+              "n": 8,
+              "title": "Tidy the edges",
+              "status": "todo",
+              "md": "Ship becomes a **Ship ▾** menu in the header instead of a permanent footer (its output still opens in a terminal tab). “Dependencies are missing” shows on the worktree's row with an **npm ci** button. Work rows get **+ Claude** / **+ Codex** on hover."
+            }
+          ]
+        },
+        {
+          "type": "log",
+          "title": "What's built",
+          "items": [
+            {
+              "title": "Step 1: one repo and the Work list",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "Studio opens the one Gamepack repo and lists main plus every worktree, wherever it lives, named by branch, with its PR, CI, changed files and agents. New piece of work and Clean up are built.",
+              "items": [
+                "Left column **Work**: main, *in progress* (ones with open views first, then ones with a PR), and *Finished* (PR merged or closed, or the folder is gone), folded away with **Clean up all**. Refreshes every 45 s while the window is visible, on focus and with ↻.",
+                "**+ New piece of work**: a short name becomes `neb636/<name>` from the freshest `origin/main` in `~/repos/Kaylee-Gamepack-worktrees/<name>`, then `npm ci` runs there (the row says *installing…*) and an agent opens in it.",
+                "**Clean up** asks first, removes only the folder (the branch stays), and refuses the main checkout, locked or changed worktrees, and commits that only exist on this Mac, unless the PR's head is exactly the local head (a squash-merged PR whose remote branch is gone).",
+                "Personas and the Active views panel are gone; Settings keeps Instructions. *Add workspace* is now *Open the Gamepack repo* (packaged app, once) and *Open a different checkout…* in main's ⋯ menu.",
+                "Old saved workspaces keep their views (they're keyed by path); folders that aren't part of the repo show under *Other folders* with Remove."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "Rows are named by **branch**, not folder: agent folders are random (`agent-a07…`), the branch says what the work is. Worktrees other than main open with just an agent (labs from the ⋯ menu): in source-run Studio the labs only serve the launch checkout until step 2's per-work game servers."
+                },
+                {
+                  "type": "callout",
+                  "tone": "note",
+                  "title": "Checked",
+                  "md": "Studio `npm test`: 60 pass, including a new suite against temporary repos (worktree parsing, PR mapping, new work from `origin/main`, every clean-up refusal, squash-merge clean-up). Studio build and typecheck pass, and lint has no new errors. Electron `qa:composer` was updated (no Persona menu, Work list rows, the launcher's worktree appearing under Work in progress); it passes except a Ctrl+C step at the end that also fails 2 runs in 3 on the unchanged code. Screenshot against this repo: 17 in progress, 9 finished."
+                }
+              ]
+            },
+            {
+              "title": "Step 2: the game in the middle, with Sections",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "Each piece of work has one game pane, pinned as the first tab, with a breadcrumb, device frames, reload and the labs as switches. A Sections tree under Work opens any section in it.",
+              "items": [
+                "**🎮 Game** is always the first tab and stays loaded behind the others (its scene and the lab's Undo survive a look at an agent).",
+                "**Breadcrumb**: country ▸ activity ▸ section and its params, read from what the game reports (twice a second, since `enter()` rewrites the address quietly). Click it to paste any `#/world/…` or PR preview link.",
+                "**Device frames**: fill the pane, iPad wide 1180×820, iPad portrait 820×1180, iPhone wide and tall, at real size and scaled down to fit. The camera lab keeps its own frames.",
+                "**🎥 Camera, 🎛️ Feel, 🦄 Character** are switches: Camera and Feel add `?cam=1` / `?feel=1` to the section on screen (tuned values stay in the link when switched off and on); Character opens the character lab and returns to the section after. The tuning panel (AI preview, Undo, the save prompt) shows under the game while one is on. The three lab tabs are gone; their last links moved onto the pane.",
+                "**Sections** under Work: every country ▸ activity ▸ section of *that* checkout, with round and variant links and a filter. The section on screen is highlighted; a lab that's on stays on. It comes from a new game script, `scripts/sections-index.mjs` (the README directory's data as JSON); a branch older than that says “merge main”.",
+                "**A game server per piece of work**, the last 2 kept running (5174, 5176, …; a port someone else is using is skipped). So every worktree has a game now, not just the launch checkout."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "The game is a pinned tab in the middle for now, so agents still open beside it as tabs; step 3 moves them to the right column. *Compare with main* is still step 5, but the 2-server pool it needs is in."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "Studio `npm test`: the new pool and migration tests pass (LRU of 2, the launcher's server never stopped, one start for two requests, busy port skipped, lab tabs migrate). The old game-server test needs port 5174 free (it failed only because Dad's Studio was open). `qa:composer` passes, Ctrl+C step included. Live look: Nan map in the iPad wide frame with 🎛️ Feel on and its panel below."
+                }
+              ],
+              "pr": 313
+            },
+            {
+              "title": "Step 3: the agent column",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "The game has the whole middle now. The selected piece of work's agents, terminals and tools are small tabs in a column on the right, and the composer knows about the game.",
+              "items": [
+                "**Three jobs**: Work + Sections on the left, the game in the middle, the agent on the right (34% wide, 22–60%, hides with its own button; the game's toolbar shows it again).",
+                "**Tabs inside the agent column**: agents, terminals, Character concepts. *Files* and *Commit changes* were side panels and are tabs from its **+** menu now.",
+                "**📎 Section** (composer toolbar): attaches the section on screen as a labelled chip: the link, its names and params, where its sections.ts lives, the local and preview URLs, and the lab's live snapshot when a lab is on.",
+                "**Starters ▾**: Plan, Greybox, Art, Full loop, Fix, Bake lab values, Address review, each following AGENTS.md's gates (plan page and stop; greybox with knobs and ?feel=1; art with qa-art and both QA agents; and so on). Fix and Bake attach the section by themselves; Address review names the branch's PR.",
+                "**Badges**: each Work row says *needs answer*, *done* or *working…* from its agents. The Dock badge counts the pieces of work waiting on Dad, and two soft notes chime when one finishes (rising) or asks (falling)."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "The Dock badge and chime were in step 5's small things; they came with the badges here. The game is no longer a tab: Codex's review of step 2 also made the pane wait for its own server, apply each Sections click once and keep lab Undo per lab."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "`qa:composer` passes with new steps: 📎 Section adds a *Game* chip, Starters ▸ Fix fills the prompt and attaches the section, Files and Commit changes open as tabs from +, then the old commit, overflow and restart checks."
+                }
+              ],
+              "pr": [
+                314,
+                316
+              ]
+            },
+            {
+              "title": "Step 4: Ship",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "A Ship panel under the agent does what this repo does before a PR, one button each, for the selected piece of work.",
+              "items": [
+                "**✅ Verify** (`npm run verify`), **📸 Screens** for the activity on screen (`npm run build && qa-screens --only=ipad-portrait,ipad-landscape --routes=<activity>`, after stopping the other game server so QA gets the CPU), **🎙️ Voices** (`world-voice-lines` + `generate-voice` with the main checkout's `.env`, since worktrees don't have one).",
+                "They run in that piece of work's **Ship** terminal, a tab in the agent column that keeps running behind the agent (terminals no longer stop when you switch tabs).",
+                "**🚀 Open PR** (or *Update PR*) prefills the agent: verify, commit, open the PR with the open-pr skill and its 🔗 Test this links, start the Codex watcher; the section on screen is attached.",
+                "**📱 Preview ↗** for the section on screen (the PR's preview, or the main build without one) with a **QR** for the iPad, **CI ↗** and **PR ↗** with the CI state in the header, and **📋 Plan page ↗** for the activity (or its country) from the local game server."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "The QR code uses `qrcode-generator` (MIT, no dependencies), added to the Studio only: the game never loads it. The Ship panel folds away and remembers it."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "`qa:composer` passes with a Ship step: Verify opens a *Ship: verify* tab whose terminal received `npm run verify`, and the QR for the main build renders."
+                }
+              ],
+              "pr": [
+                315,
+                316
+              ]
+            },
+            {
+              "title": "Step 5: compare and polish",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "This branch beside main, the known issues for the section on screen, and the game's own pastels and Fredoka. This PR also re-lands steps 3 and 4: #314 and #315 merged into their stacked base branches after #313 had already reached main.",
+              "items": [
+                "**⇆ Main**: on any piece of work but main, the stage splits: this branch on the left, main's own game server on the right at the same section and params, both in the device frame. Main follows every section, link, lab switch and reload made here; **Sync main** sends it the moment on screen.",
+                "**🐞 N**: the open entries of the country's `known-issues.md` that link to this activity (Thailand's boat trip has 11). Each one unfolds to its Check / Code lines; **Send to agent** attaches it to the agent.",
+                "**Pink, not grey**: cream background, pink accents, lavender selection, ink text, Fredoka everywhere outside the terminals, flat and matte (the glossy inset highlights are gone).",
+                "Left over: Personas and Active views were already gone in step 1; the side-panel registry has no panels any more (Files and Commit changes are + tabs). A fresh Studio opens with the agent column showing."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "The file tree stays as a tab from the agent column's + menu rather than being removed: it costs nothing until it's opened. Dock badge and chime came in step 3."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "Live look on Thailand's boat trip sunset: ⇆ Main split with both games running, 🐞 11 with the list open, the pastel theme. `qa:composer` passes on the new theme."
+                }
+              ],
+              "pr": 316
+            },
+            {
+              "title": "Step 6: agent first, the game when wanted",
+              "date": "2026-11-05",
+              "status": "done",
+              "summary": "The agent fills the middle; the game is a right panel Dad opens with ▶ Game or ⌘G, closed by default and remembered per piece of work.",
+              "items": [
+                "`WorkbenchShell`: work | agent | game (only mounted when `game.open`). Panel widths saved as `layout.gameSize` / `gameBigSize`.",
+                "`GamePane`: ☰ Sections drawer (the old left-column tree), ⤢ Big, ✕. `openInGame` opens a closed panel at that link.",
+                "Game servers: none start until the panel opens; with no game on screen, `trimServers(0)` after 60 s.",
+                "`qa:labs` opens ▶ Game first, finds the game frame by `?studio=1` (the pool's port, not 5174), retries Read controls while a cold server builds, waits for prepared prompts, and expects the character lab's current link (the `nick-code` lineup is gone from the game)."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "questions",
+      "title": "Dad's answers",
+      "icon": "✅",
+      "blocks": [
+        {
+          "type": "qa",
+          "items": [
+            {
+              "q": "Where should new worktrees live?",
+              "a": "Not in `.claude/`: Dad uses both Claude Code and Codex. New ones go in the tool-neutral sibling folder `~/repos/Kaylee-Gamepack-worktrees/<name>` (where Studio already makes them). Studio still *shows* worktrees anywhere else (`.claude/worktrees/`, orca) so old ones can be cleaned up. (2026-11-04)"
+            },
+            {
+              "q": "One game server or one per piece of work?",
+              "a": "Builder's call: keep the last 2 running (LRU), so switching back is instant and compare-with-main works. The second one stops when QA is running. (2026-11-04)"
+            },
+            {
+              "q": "Agent on the right, or under the game?",
+              "a": "Right. (2026-11-04)"
+            },
+            {
+              "q": "What can go?",
+              "a": "Personas are dropped for now (can come back later). Active views goes too (it's a copy of the Work list). Files and the commit box move under a ⋯ menu. (2026-11-04)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tech",
+      "title": "Tech plan",
+      "icon": "🛠️",
+      "for": "build",
+      "group": "For the builder",
+      "blocks": [
+        {
+          "type": "table",
+          "head": [
+            "Where",
+            "Change"
+          ],
+          "rows": [
+            [
+              "`workbench/src/shared/models.ts`",
+              "`Workspace[]` becomes `repo: { path }` + `work: WorkItem[]` (`id`, `branch`, `path`, `views`, `activeViewId`). `PersistedState` version bump with a migration in `main/persistence.ts`."
+            ],
+            [
+              "`workbench/src/main/providers/git-source-control-provider.ts`",
+              "Add `listWorktrees()` (parse `worktree list --porcelain`), `removeWorktree()` (refuses when dirty, fixed args). `createWorktree` always uses `<repo>-worktrees/<name>` (tool-neutral, Dad's answer) and starts from `origin/main`, not HEAD."
+            ],
+            [
+              "`workbench/src/main/` (new `github.ts`)",
+              "`gh pr list --state all --json number,state,headRefName,statusCheckRollup` with execFile, cached ~60 s, refreshed on focus. Missing `gh` = rows without PR info, never an error."
+            ],
+            [
+              "`workbench/src/main/workspace-files.ts`",
+              "`WorkspaceRoots` allows the repo and every listed worktree (they're all under known parents)."
+            ],
+            [
+              "`workbench/src/main/game-server.ts`",
+              "Server per work item on 5174, 5176, ... (LRU of 2). `GAME_ORIGIN` in `shared/labs.ts` becomes a function of the port; the game's bridge (`src/world/labs/workbench.ts`) already checks the studio origin, so only the studio's target origin changes."
+            ],
+            [
+              "`workbench/src/renderer/shell/`",
+              "`LeftSidebar` → `WorkList` + `SectionTree`; `WorkbenchShell` → three fixed jobs (work, game, agent) instead of tabs + panels; `RightSidebar` → `AgentColumn` + `ShipPanel`. `ViewTabs` survives only inside the agent column."
+            ],
+            [
+              "`workbench/src/renderer/features/labs/LabView.tsx`",
+              "Becomes `GamePane` (iframe, frame picker, breadcrumb from the lab snapshot's `href`) + `LabPanel` (the current tuning UI, shown when a toggle is on)."
+            ],
+            [
+              "`scripts/` (game, new)",
+              "`sections-index.mjs` writes the sections directory as JSON (reuse what `npm run sections-readme` already gathers). Studio runs it in the selected worktree; no Studio code imports game source."
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "items": [
+            "Keep the safety rules from the first build: fixed executables and argument arrays, no shell, child frames get no IPC, AI tuning stays bounded and undoable.",
+            "Never delete a worktree with changes or an unpushed branch; Clean up shows what it will remove and asks.",
+            "Game `npm run verify` stays independent of Electron. Studio's own `npm run studio:check` gains tests for worktree parsing, PR mapping and the state migration.",
+            "Each step updates `qa:composer` (the Electron smoke) for the new shell, with screenshots in the printed temp folder."
+          ]
+        }
+      ]
+    }
+  ]
+}
+</script>
+<script src="viewer/plan.js"></script>
+</body>
+</html>
