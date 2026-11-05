@@ -23,3 +23,14 @@ export const fileBuffers = {
   set: (viewId: string, buffer: FileBuffer) => { buffers.set(viewId, buffer); },
   delete: (viewId: string) => { buffers.delete(viewId); },
 };
+
+/** Before a piece of work goes away: asks once about its unsaved tabs. False = keep everything. */
+export function confirmDiscard(views: { id: string; title: string }[]): boolean {
+  const unsaved = views.filter((view) => isViewDirty(view.id));
+  if (!unsaved.length) return true;
+  return window.confirm(`${unsaved.map((view) => view.title).join(", ")} ${unsaved.length === 1 ? "has" : "have"} unsaved changes. Close and lose them?`);
+}
+
+export function discardViews(views: { id: string }[]): void {
+  for (const view of views) { setViewDirty(view.id, false); fileBuffers.delete(view.id); }
+}

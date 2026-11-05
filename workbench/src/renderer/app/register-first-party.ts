@@ -15,7 +15,7 @@ import { registerFileCommands } from "../features/files/file-commands";
 import { StatusBranch } from "../features/source-control/SourceControlPanel";
 import { currentLink, GAME_TABS, openGameTab } from "../features/game/game-store";
 import { openExplorer } from "../features/explorer/explorer-store";
-import { fileBuffers, isViewDirty, setViewDirty } from "../core/dirty-views";
+import { confirmDiscard, discardViews, fileBuffers, isViewDirty, setViewDirty } from "../core/dirty-views";
 import type { AgentViewState, FileViewState } from "../../shared/models";
 import { MemoryUsage, SessionSummary, TerminalCount } from "../features/status/StatusItems";
 import { SettingsButton } from "../features/settings/SettingsButton";
@@ -140,8 +140,12 @@ export function registerFirstPartyContributions(): void {
   });
   services.commands.register<string>("workspace.remove", async (workspaceId) => {
     const workspace = useWorkbenchStore.getState().workspaces.find((item) => item.id === workspaceId);
+    // One question for all its unsaved tabs; Cancel keeps the piece of work as it is.
+    if (!confirmDiscard(workspace?.views ?? [])) return false;
+    discardViews(workspace?.views ?? []);
     for (const view of workspace?.views ?? []) await services.commands.execute("view.close", { workspaceId, viewId: view.id });
     useWorkbenchStore.getState().removeWorkspace(workspaceId);
+    return true;
   });
   services.commands.register<{ workspaceId: string; viewType: string }>("view.create", ({ workspaceId, viewType }) => {
     const definition = services.views.get(viewType);

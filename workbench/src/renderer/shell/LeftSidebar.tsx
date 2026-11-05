@@ -10,6 +10,7 @@ import { shortBranch, useWorkList, workGroup } from "../features/work/work-store
 import { workAttention } from "../features/agent/attention";
 import { newAgent } from "../features/agent/new-agent";
 import { useAgentRuntimes } from "../core/agent-runtimes";
+import { confirmDiscard, discardViews } from "../core/dirty-views";
 
 const POLL_MS = 45_000;
 const FOCUS_REFRESH_MS = 60_000;
@@ -235,6 +236,10 @@ export function LeftSidebar({ onCollapse }: { onCollapse: () => void }) {
     if (!window.confirm(question)) return;
     const skipped: string[] = [];
     for (const item of targets) {
+      // Unsaved file tabs there: ask before the folder goes, and keep it on Cancel.
+      const open = useWorkbenchStore.getState().workspaces.find((candidate) => samePath(candidate.path, item.path));
+      if (open && !confirmDiscard(open.views)) { skipped.push(`${item.name}: it has unsaved file tabs`); continue; }
+      if (open) discardViews(open.views);
       try {
         await window.workbench.work.remove(repoRoot, item.path);
         const workspace = useWorkbenchStore.getState().workspaces.find((candidate) => samePath(candidate.path, item.path));

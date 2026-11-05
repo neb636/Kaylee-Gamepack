@@ -79,8 +79,17 @@ export function FileView({ view, workspace }: ViewComponentProps) {
     window.workbench.files.read(root, path).then((content) => {
       if (!active) return;
       setFile(content); setError(""); baseHash.current = content.hash;
-    }).catch((e: unknown) => { if (active) setError(errorMessage(e)); });
+    }).catch((e: unknown) => {
+      if (!active) return;
+      // The file is gone (an agent deleted or renamed it) but this tab has unsaved edits: show them, and say so.
+      const kept = fileBuffers.get(view.id);
+      if (kept) {
+        setFile({ path, content: kept.saved, size: kept.text.length, truncated: false, binary: false, hash: kept.hash ?? "" });
+        setConflict({ disk: null, saving: false });
+      } else setError(errorMessage(e));
+    });
     return () => { active = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [root, path, picture]);
 
   const replaceDoc = (content: FileContent) => {
@@ -150,7 +159,7 @@ export function FileView({ view, workspace }: ViewComponentProps) {
       baseHash.current = kept.hash;
       markDirty(true);
       // The file changed on disk while the tab was away: ask, as when it changes on screen.
-      if (kept.hash !== file.hash) setConflict({ disk: file, saving: false });
+      if (kept.hash !== file.hash && file.hash) setConflict({ disk: file, saving: false });
     }
     const editor = new EditorView({
       parent: host,
