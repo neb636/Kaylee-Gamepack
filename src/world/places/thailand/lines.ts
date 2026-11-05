@@ -802,7 +802,6 @@ export const L = {
       colors: 'Cuttlefish change color to talk!',
       urchin: by('nick')('Boing! Prickly!'),
       ring: by('nick')('A bubble ring for you!'),
-      wow: by('nick')('Wow! A pink one!'),
       // Tap Daddy (after his first ring), tap the captain (each list in turn).
       dad: [by('nick')('Blub blub!'), by('nick')('Look at all the fish!'), by('nick')('Swim, swim, swim!')],
       captain: [by('pelican')('Toot toot! Ha ha!'), by('pelican')('Good swimming, little one!'), by('pelican')('My boat waits for you, ka!')],

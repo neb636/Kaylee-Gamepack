@@ -1072,8 +1072,11 @@ export class JetSki implements World3D {
       this.nick.react('hop')
       this.ji.react('hop')
       this.sparkle.burst(this.d.x, 1.5, this.d.z, 40, 3, 4, 0.3)
-      this.events.say(J.champ)
-      this.after(1.8, () => this.talk('won', J.won, 0))
+      // Daddy says her name at her first win only; after that the jet ski man's good-sport lines.
+      if (this.counts.wins === 1) {
+        this.events.say(J.champ)
+        this.after(1.8, () => this.talk('won', J.won, 0))
+      } else this.talk('won', J.won, 0)
     } else {
       this.counts.losses++
       this.losses++

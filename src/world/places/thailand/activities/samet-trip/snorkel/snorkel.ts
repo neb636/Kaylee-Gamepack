@@ -931,7 +931,6 @@ export class Snorkel implements World3D {
           twinkle(6)
           this.burstAt(c, 40)
           this.once('pink', S.pink)
-          this.once('wow', S.wow)
           this.once('camera', S.camera)
         }
       }

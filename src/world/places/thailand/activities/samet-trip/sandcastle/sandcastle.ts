@@ -1061,7 +1061,8 @@ export class Sandcastle implements World3D {
     if (!tw) return
     this.counts.washed++
     this.slump(tw, true)
-    this.talk('washed', S.washed, 10)
+    // (Not once the moat has filled: that's the payoff, and Daddy's cheer shouldn't turn into an oh no.)
+    if (!this.counts.filled) this.talk('washed', S.washed, 10)
     sadSlide()
     const p = tw.m.root.position
     this.spray.burst(p.x, tw.y + 0.2, p.z, 24, 1.6, 2.2, 0.07)

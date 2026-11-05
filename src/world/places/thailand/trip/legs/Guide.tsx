@@ -51,6 +51,8 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
   const hide = useRef<ReturnType<typeof setTimeout>>(undefined)
   /** Whose line was asked for last and hasn't finished: it counts as talking while its clip is still loading. */
   const asked = useRef<{ voice: string } | null>(null)
+  /** Sparkle's lines queued behind someone else's, not played yet. */
+  const waiting = useRef(0)
 
   useImperativeHandle(ref, () => ({
     speak(l, mute) {
@@ -69,11 +71,16 @@ export const TripGuide = forwardRef<TripGuideHandle, Props>(function TripGuide({
       // The family's reactions cut in on each other ("My horn!" right away), but Sparkle's lines and anything said
       // while Sparkle talks wait their turn, so a fact is never cut off.
       // (A line still loading counts too, so a friend's line then Sparkle's, back to back, play in that order.)
+      // A Sparkle line still waiting its turn counts too: a reaction then queues behind it instead of cancelling it
+      // (playtest QA 2026-11-05: her first instruction was dropped when she poked Daddy at once).
       const now = speakingVoice() ?? asked.current?.voice
-      const interrupt = !now || (voice !== 'sparkle' && now !== 'sparkle')
+      const interrupt = waiting.current === 0 && (!now || (voice !== 'sparkle' && now !== 'sparkle'))
       const mine = { voice }
       asked.current = mine
+      const queued = !interrupt && voice === 'sparkle'
+      if (queued) waiting.current++
       void say(l, { interrupt }).then(() => {
+        if (queued) waiting.current--
         if (asked.current === mine) asked.current = null
         hide.current = setTimeout(() => setLine((cur) => (cur?.l === l ? null : cur)), 1600)
       })

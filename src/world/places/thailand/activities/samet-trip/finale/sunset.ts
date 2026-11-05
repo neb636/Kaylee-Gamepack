@@ -33,6 +33,7 @@ import { phoneCamera, snap } from '../book/photo'
 import { at as atFrame, FRAMES, STOPS, type StopId } from '../island/layout'
 import { buildProps, type Props } from '../island/props'
 import { buildIsland, DAY, glowMaterial, type Island } from '../island/scenery'
+import { makeSeeThrough, SEE } from '../island/seethrough'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/finale/sunset.ts'
 const S = LINES.samet.finale.sunset
@@ -166,6 +167,9 @@ export class Sunset implements World3D {
     this.isl.setTime('golden')
     this.isl.lagoon.waves.height = 0.14
     this.props = buildProps(bag, this.isl.root, this.isl.ground, this.isl.blockers, this.isl.cullable)
+    // The resort deck's posts and roof stand between the camera and the three of them on some screens: like the
+    // island, whatever is in the way melts into a see-through dither (QA 2026-11-05: the sun was behind a post).
+    makeSeeThrough(this.isl.root, bag, new Set([...this.isl.fine.meshes, ...this.isl.coarse.meshes]))
     for (const id of Object.keys(this.props.flags) as StopId[]) this.props.flags[id].visible = start.flags.includes(id)
 
     // ---- The three of them, watching the sea.
@@ -340,6 +344,8 @@ export class Sunset implements World3D {
     this.isl.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.rig.setShot(this.shot())
     this.rig.update(dt)
+    SEE.uEye.value.copy(this.rig.camera.position)
+    SEE.uFocus.value.copy(this.camCenter())
     // The sun faces the camera.
     this.sunAt(this.elev, this.sun.position)
     this.sun.lookAt(this.rig.camera.position)
