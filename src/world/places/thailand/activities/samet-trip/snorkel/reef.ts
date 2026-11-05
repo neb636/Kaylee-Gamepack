@@ -7,6 +7,8 @@ import { AdditiveBlending, BufferAttribute, DoubleSide, Group, Mesh, MeshBasicMa
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid, solidMix } from '../../../../../engine3d/geo'
 import { PAL, toon } from '../../../../../engine3d/toon'
+import { buildAnimal } from '../../../../../engine3d/characters/animal'
+import { CAPTAIN } from '../cast'
 import { coralModel, urchinModel, type Model } from '../book/models'
 import { palmGeo, rng } from '../island/scenery'
 
@@ -161,7 +163,18 @@ export function bommie(bag: Bag, o: Obstacle, i: number) {
   const by = bedHeight(o.x, o.z)
   root.position.set(o.x, 0, o.z)
   const h = o.top - by
-  root.add(solid(merge([P.cyl(o.r * 0.85, o.r * 1.15, h, '#A9A08F', { at: [0, by + h / 2 - 0.1, 0] }, 9), P.sphere(o.r * 0.9, '#BDB29E', { at: [0, o.top - 0.3, 0], scale: [1, 0.45, 1] }, 10)]), bag, 2))
+  // Living reef all the way down, not bare stone: a rosy reef rock, crusted with round brain corals and little plate
+  // corals in the reef's pastels (each bommie its own mix).
+  const knobs = ['#FF9EC4', '#FFB38A', '#C9A8FF', '#8FE3C8', '#FFD27A']
+  const crust = []
+  for (let k = 0; k < 9; k++) {
+    const a = k * 2.4 + i * 1.3
+    const y = by + h * (0.2 + ((k * 0.37 + i * 0.11) % 0.75))
+    const rr = o.r * (0.22 + ((k * 0.53) % 0.18))
+    crust.push(P.sphere(rr, knobs[(k + i) % knobs.length], { at: [Math.sin(a) * o.r * 0.92, y, Math.cos(a) * o.r * 0.92], scale: [1, 0.8, 1] }, 8))
+    if (k % 3 === 0) crust.push(P.cyl(rr * 1.4, rr * 1.2, 0.06, knobs[(k + i + 2) % knobs.length], { at: [Math.sin(a + 1.2) * o.r * 1.02, y + 0.25, Math.cos(a + 1.2) * o.r * 1.02], rot: [0.15, 0, 0.2] }, 10))
+  }
+  root.add(solid(merge([P.cyl(o.r * 0.85, o.r * 1.15, h, '#C8A6A8', { at: [0, by + h / 2 - 0.1, 0] }, 9), P.sphere(o.r * 0.9, '#D9B9B6', { at: [0, o.top - 0.3, 0], scale: [1, 0.45, 1] }, 10), ...crust]), bag, 2))
   const top = coralModel(bag, 7 + i)
   top.root.position.y = o.top - 0.45
   top.root.scale.setScalar(o.r * 0.95)
@@ -179,7 +192,7 @@ export function bommie(bag: Bag, o: Obstacle, i: number) {
   return { root, urchins }
 }
 
-/** A big grey rock out of the water. */
+/** A big granite rock out of the water (Samet's warm pinkish granite). */
 export function rock(bag: Bag, o: Obstacle, i: number) {
   const root = new Group()
   const by = bedHeight(o.x, o.z)
@@ -188,9 +201,9 @@ export function rock(bag: Bag, o: Obstacle, i: number) {
   root.add(
     solid(
       merge([
-        P.sphere(o.r, '#9C968E', { at: [0, by + h * 0.5, 0], scale: [1, (h / o.r) * 0.62, 1.05] }, 9),
-        P.sphere(o.r * 0.7, '#B1ABA2', { at: [o.r * 0.35, o.top - o.r * 0.35, -o.r * 0.2], scale: [1, 0.8, 1] }, 8),
-        P.sphere(o.r * 0.5, '#8E8880', { at: [-o.r * 0.6, by + h * 0.3, o.r * 0.3] }, 7),
+        P.sphere(o.r, '#B3A7A6', { at: [0, by + h * 0.5, 0], scale: [1, (h / o.r) * 0.62, 1.05] }, 9),
+        P.sphere(o.r * 0.7, '#C9BEBA', { at: [o.r * 0.35, o.top - o.r * 0.35, -o.r * 0.2], scale: [1, 0.8, 1] }, 8),
+        P.sphere(o.r * 0.5, '#A0938F', { at: [-o.r * 0.6, by + h * 0.3, o.r * 0.3] }, 7),
       ]),
       bag,
       2,
@@ -236,21 +249,13 @@ export function boat(bag: Bag) {
   // The anchor rope from the bow down to the sand.
   const ropeLen = 0.4 - BED + 0.2
   root.add(solid(merge([P.cyl(0.025, 0.025, ropeLen, '#E8D8A8', { at: [0, 0.4 - ropeLen / 2, -4.6], rot: [-0.35, 0, 0] }, 5), P.torus(0.16, 0.04, '#7A7A82', { at: [0, BED + 0.2, -5.6], rot: [0, 0, 0] })]), bag, 1.5))
-  // The captain: a cheerful round figure in a cap at the motor.
-  const captain = new Group()
-  captain.position.set(0, 0.55, 3.0)
-  const arm = new Group()
-  arm.position.set(0.28, 0.95, 0)
-  arm.add(solid(P.capsule(0.07, 0.4, '#C98B5E', { at: [0, -0.22, 0] }), bag, 1.5))
-  captain.add(
-    solidMix(
-      [P.capsule(0.27, 0.45, '#F28C6A', { at: [0, 0.55, 0] }), P.sphere(0.24, '#C98B5E', { at: [0, 1.25, 0] }, 14), P.cyl(0.25, 0.26, 0.12, '#3F8FE8', { at: [0, 1.42, 0] }, 14), P.box(0.3, 0.04, 0.22, '#3F8FE8', { at: [0, 1.38, -0.18] })],
-      [P.sphere(0.035, PAL.ink, { at: [0.08, 1.28, -0.21] }, 6), P.sphere(0.035, PAL.ink, { at: [-0.08, 1.28, -0.21] }, 6), P.sphere(0.05, '#FF9DB8', { at: [0.14, 1.2, -0.17], scale: [1, 0.6, 0.5] }, 6), P.sphere(0.05, '#FF9DB8', { at: [-0.14, 1.2, -0.17], scale: [1, 0.6, 0.5] }, 6)],
-      bag,
-      2,
-    ),
-  )
-  captain.add(arm)
+  // The captain at the motor: the pelican in her navy cap (cast.ts), facing forward (−z) over the boat.
+  const rig = buildAnimal(CAPTAIN, bag)
+  rig.root.position.set(0, 0.55, 3.0)
+  rig.root.rotation.y = Math.PI
+  rig.armL.rotation.x = -0.9
+  const captain = rig.root
+  const arm = rig.armR
   root.add(captain)
   return { root, body, ladder, captain, arm }
 }

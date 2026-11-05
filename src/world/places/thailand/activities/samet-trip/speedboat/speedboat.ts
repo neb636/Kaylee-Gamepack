@@ -16,13 +16,14 @@
 // Things to poke: Kaylee (hooves up, whee), Mommy (her sun hat flies up, she catches it), Daddy (his cap blows off and
 // he catches it), the captain (the horn, and the boat wiggles), the pink flag at the stern, the life ring.
 //
-// Greybox: simple shapes in the toon look, no voices (the captain is a stand-in). Its feel numbers are knobs (?feel=1).
+// Greybox: simple shapes in the toon look, no voices (the captain is the pelican from cast.ts). Its feel numbers are knobs (?feel=1).
 //
 // ?cine=1 films the ride like a game's cutscene instead (engine3d/cinema.ts, the camera lab's "Cinema camera" switch):
 // a crane up off Ban Phe pier, then cuts between a chase, a low hero shot skimming the water, over her shoulder at the
 // rail, a fixed camera the boat roars past and a high wide one; a two-shot with each boat coming the other way, a crane
 // up as they slow in to Na Dan, and back to the game's camera on the pier. Her finger still plays: a touch cuts to a
 // shot that shows her hoof and holds it while she splashes.
+import { CAPTAIN } from '../cast'
 import { Color, Fog, Group, Mesh, MeshBasicMaterial, CatmullRomCurve3, Plane, Raycaster, Scene, TorusGeometry, Vector2, Vector3, type WebGLRenderer } from 'three'
 import { clamp } from '../../../../../../sdk'
 import { knobs, watch } from '../../../../../kit/knobs'
@@ -31,7 +32,6 @@ import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
 import { cinemaOn, Director, Letterbox, type CineMove } from '../../../../../engine3d/cinema'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
-import type { Look } from '../../../../../engine3d/characters/look'
 import { Bag } from '../../../../../engine3d/dispose'
 import { blobShadow, merge, P, solid } from '../../../../../engine3d/geo'
 import { setOutlineResolution } from '../../../../../engine3d/outline'
@@ -102,8 +102,8 @@ const MOVES: CineMove[] = [
   { id: 'arrive', event: true, dur: 9, from: { eye: [8, 1.8, 10], look: [0, 1, 0], fov: 40 }, to: { eye: [12, 7, 3], look: [0, 1, -1], fov: 42 } },
 ]
 
-/** The captain: a placeholder animal on the shared chibi rig, in a white shirt and cap (Dad hasn't picked who yet). */
-const CAPTAIN_LOOK: Look = { species: 'puppy', height: 1.25, chub: 1.1, fur: '#D9B48A', light: '#FFF1DE', dark: '#8E6A4C', ear: '#B98E62', outfit: { kind: 'shirt', color: '#FFFFFF', shorts: '#3F6FB8' }, extras: ['cap'], open: true }
+/** The captain: a pelican in a navy captain's cap (cast.ts). */
+const CAPTAIN_LOOK = CAPTAIN
 
 /** The boat: 7.2 m, faces +z. Where the hull's sides are (local x), its floor, and the seats. */
 const HALF_W = 1.2

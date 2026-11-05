@@ -149,22 +149,26 @@ const fragmentShader = /* glsl */ `
     col = mix(col, col * 0.86, smoothstep(0.02, 0.12, vFace) * min(1.0, uWave.x));
     col = mix(col, mix(col, vec3(1.0), 0.22), smoothstep(0.6, 0.8, vCrest) * min(1.0, uWave.x * 1.4));
     // White water: a thin broken line along the top of the big crests (never blocks).
-    float cap = smoothstep(0.88, 0.95, vCrest) * step(0.45, uWave.x) * step(0.1, sin(p.x * 0.8 + p.y * 0.5) + sin(p.x * 0.23 - p.y * 0.31) + 0.4);
+    // (Torn into little patches of foam by a finer noise, drifting with the wave, so the caps never read as dashes.)
+    float tear = sin(p.x * 2.1 + sin(p.y * 1.7 + uTime) * 1.5) * sin(p.y * 1.9 - sin(p.x * 1.3 - uTime * 0.8) * 1.5);
+    float cap = smoothstep(0.9, 0.97, vCrest) * step(0.45, uWave.x) * step(0.1, sin(p.x * 0.8 + p.y * 0.5) + sin(p.x * 0.23 - p.y * 0.31) + 0.4) * smoothstep(-0.1, 0.35, tear) * 0.85;
     // The swash: a foam line that slides up the sand and back; thin foam bands following the shore behind it.
     float swash = 0.55 + 0.45 * sin(uTime * 0.9 + p.x * 0.05 + p.y * 0.04);
     float edge = 1.0 - step(swash, shore);
-    float rows = step(0.86, fract(shore * 0.42 - uTime * 0.22)) * (1.0 - smoothstep(2.0, 6.5, shore)) * step(0.4, hash(floor(p * 0.5)));
+    // (Broken up by a soft noise along the shore, so they read as lacy foam, never as painted lines.)
+    float lace = sin(p.x * 0.9 + sin(p.y * 0.6) * 2.0) * sin(p.y * 0.8 - sin(p.x * 0.5) * 2.0);
+    float rows = smoothstep(0.9, 0.95, fract(shore * 0.42 - uTime * 0.22)) * (1.0 - smoothstep(1.5, 5.0, shore)) * smoothstep(0.05, 0.45, lace);
     // Sun glints: little white dashes fixed to the world (going fast makes them stream past).
     vec2 q = vec2(p.x * 0.7 + uTime * 0.3, p.y * 0.9);
     vec2 cell = floor(q / vec2(3.0, 1.0));
     vec2 f = fract(q / vec2(3.0, 1.0));
-    float dash = step(0.88, hash(cell)) * step(0.2, f.x) * step(f.x, 0.6) * step(0.4, f.y) * step(f.y, 0.6) * smoothstep(1.5, 4.0, depth);
+    float dash = step(0.9, hash(cell)) * smoothstep(0.2, 0.05, length((f - vec2(0.4, 0.5)) * vec2(1.0, 2.2))) * smoothstep(1.5, 4.0, depth) * (0.5 + 0.5 * sin(uTime * 3.0 + hash(cell) * 30.0));
     float dist = distance(cameraPosition.xz, p);
     dash *= 1.0 - smoothstep(16.0, 48.0, dist);
-    float foam = max(max(edge, rows), max(cap, dash * 0.75));
+    float foam = max(max(edge, rows * 0.3), max(cap, dash * 0.75));
     col = mix(col, uFoam, foam);
     // See-through in the shallows (the sand shows), solid out deep.
-    float alpha = mix(0.55, 1.0, smoothstep(0.1, uSteps.y + 0.6, depth));
+    float alpha = mix(0.6, 1.0, smoothstep(0.1, uSteps.y + 0.6, depth));
     alpha = max(alpha, foam);
     float haze = smoothstep(uHazeNear, uHazeFar, dist);
     col = mix(col, uHaze, haze);

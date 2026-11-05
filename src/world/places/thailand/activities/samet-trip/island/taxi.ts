@@ -5,12 +5,12 @@
 import { Group, Vector3 } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
-import type { Look } from '../../../../../engine3d/characters/look'
+import { TAXI_DRIVER } from '../cast'
 import { SAMET_GREEN, buildSongthaew, type Songthaew } from '../../../trip/vehicles/songthaew'
 import { TAXI_STOPS, WAYS, type XZ } from './layout'
 
-/** The driver: a placeholder animal on the shared chibi rig, in a green island shirt (Dad hasn't picked who yet). */
-const DRIVER_LOOK: Look = { species: 'puppy', height: 1.25, chub: 1.05, fur: '#E9C9A0', light: '#FFF1DE', dark: '#A9825C', ear: '#C79A6B', outfit: { kind: 'shirt', color: '#5FC48A', shorts: '#3F6FB8' }, extras: ['cap'], open: true }
+/** The driver: a sun bear in an island-green shirt (cast.ts). */
+const DRIVER_LOOK = TAXI_DRIVER
 
 const road = (id: string) => WAYS.find((w) => w.id === id)!.pts
 const nearest = (pts: XZ[], p: XZ) => {

@@ -36,7 +36,7 @@ import type { World3D } from '../../../../../engine3d/View3D'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
-import type { Look } from '../../../../../engine3d/characters/look'
+import { JETSKI_MAN } from '../cast'
 import { BANANA, BAY, bay, FAR_BUOY, HUT, LAUNCH, MOMMY, RACE, ROPE, SEAWARD, SWIMMERS, toBay, WAVE_DIR, type RoundId } from '../island/layout'
 import { BananaBoat, Fish, Swimmer, Tern } from './critters'
 import { buildScenery, SKY, type Scenery } from './scenery'
@@ -139,9 +139,8 @@ const wobble = () => tone(520, 260, 1.1, 0.05, 'triangle')
 const beep = (go: boolean) => tone(go ? 990 : 660, go ? 990 : 660, go ? 0.45 : 0.2, 0.08, 'square')
 const click = () => [0, 0.08].forEach((d) => hiss(0.04, 0.25, 'highpass', 2800, 2800, d))
 
-/** The jet ski man: a placeholder animal on the shared chibi rig, in an orange life vest and a cap (the plan's pick
- *  is an otter; Dad hasn't said yet, so a brown, round-eared stand-in). */
-const MAN_LOOK: Look = { species: 'beaver', height: 1.3, chub: 1.05, fur: '#A06F48', light: '#EBD3B4', dark: '#6A4A33', ear: '#D2A27E', outfit: { kind: 'tee', color: '#FF8A2E', shorts: '#3F6FB8' }, extras: ['cap'], open: true }
+/** The jet ski man: an otter in an orange life vest and a cap (cast.ts). */
+const MAN_LOOK = JETSKI_MAN
 
 export const JET_ANCHORS: AnchorInfo[] = [
   { id: 'jacket', label: 'The life jacket', kind: 'thing' },
