@@ -121,7 +121,11 @@ export class Wake {
   /** Lays the line on the water (each point at the water's height now) and fades the old end. */
   update(t: number, heading: number, height: (x: number, z: number) => number) {
     const p = this.pts
-    while (p.length && t - p[0].t > this.life) p.shift()
+    while (p.length && t - p[0].t > this.life) {
+      p.shift()
+      // (The loop search's cursor counts from the oldest point: keep it on the same point.)
+      this.from = Math.max(0, this.from - 1)
+    }
     const n = Math.min(p.length, MAX)
     for (let i = 0; i < n; i++) {
       const q = p[i]
