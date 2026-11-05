@@ -1,14 +1,13 @@
 import { useEffect, useRef } from "react";
 import { Panel, PanelGroup, PanelResizeHandle, type ImperativePanelHandle } from "react-resizable-panels";
 import { services } from "../core/services";
-import { GAME_TAB, useWorkbenchStore } from "../state/workbench-store";
+import { useWorkbenchStore } from "../state/workbench-store";
 import { GamePane } from "../features/game/GamePane";
 import { FolderIcon } from "../ui/icons";
 import { Button } from "../ui/controls";
 import { LeftSidebar } from "./LeftSidebar";
-import { RightSidebar } from "./RightSidebar";
+import { AgentColumn } from "./AgentColumn";
 import { StatusBar } from "./StatusBar";
-import { ViewTabs } from "./ViewTabs";
 
 /** Keeps a collapsible panel in step with its persisted collapsed flag. */
 function useCollapsible(collapsed: boolean) {
@@ -31,13 +30,12 @@ export function WorkbenchShell() {
   const leftRef = useCollapsible(layout.leftCollapsed);
   const rightRef = useCollapsible(layout.rightCollapsed);
   const activeWorkspace = workspaces.find((workspace) => workspace.id === activeWorkspaceId) ?? workspaces[0];
-  const activeView = activeWorkspace?.activeViewId === GAME_TAB ? undefined : activeWorkspace?.views.find((view) => view.id === activeWorkspace.activeViewId);
-  const definition = activeView ? services.views.get(activeView.type) : undefined;
 
   useEffect(() => { void hydrate(); }, [hydrate]);
 
   if (!isHydrated) return <div className="launch-screen"><div className="brand-mark large"><span>KG</span></div><p>Opening Gamepack Studio…</p></div>;
 
+  // Three jobs: the work on the left, the game in the middle (always the biggest), the agent on the right.
   return <div className={`app-shell ${layout.leftCollapsed ? "is-left-collapsed" : ""}`}>
     <PanelGroup direction="horizontal" className="shell-panels" onLayout={([left, , right]) => {
       const patch: { leftSize?: number; rightSize?: number } = {};
@@ -51,35 +49,25 @@ export function WorkbenchShell() {
         <LeftSidebar onCollapse={() => updateLayout({ leftCollapsed: true })} />
       </Panel>
       <PanelResizeHandle className="shell-resize" aria-label="Resize work sidebar" />
-      <Panel id="center" order={2} className="shell-panel" minSize={36}>
-        <main className="center-column">
-          <ViewTabs workspace={activeWorkspace} showLeftToggle={layout.leftCollapsed} showRightToggle={layout.rightCollapsed}
-            onShowLeft={() => updateLayout({ leftCollapsed: false })} onShowRight={() => updateLayout({ rightCollapsed: false })} />
-          <div className="active-view-region">
-            {!activeWorkspace ? (
-              <div className="welcome-view">
-                <div className="welcome-icon"><FolderIcon size={25} /></div>
-                <h1>Open Kaylee's Gamepack</h1>
-                <p>Pick your Kaylee-Gamepack checkout once. Studio lists its worktrees and PRs by itself.</p>
-                <Button className="primary-button" onPress={() => void services.commands.execute("repo.open")}><FolderIcon size={16} /> Open the Gamepack repo</Button>
-              </div>
-            ) : <>
-              {/* The game stays mounted behind other tabs, so its scene and lab Undo survive a look at an agent. */}
-              <GamePane key={activeWorkspace.id} workspace={activeWorkspace} hidden={Boolean(activeView)} />
-              {activeView && definition ? (
-                <definition.component key={activeView.id} view={activeView} workspace={activeWorkspace} />
-              ) : activeView ? (
-                <div className="missing-view"><h2>View unavailable</h2><p>No view is registered for <code>{activeView.type}</code>.</p></div>
-              ) : null}
-            </>}
-          </div>
+      <Panel id="center" order={2} className="shell-panel" minSize={30}>
+        <main className={`center-column game-column ${layout.leftCollapsed ? "has-traffic-lights" : ""}`}>
+          {!activeWorkspace ? (
+            <div className="welcome-view">
+              <div className="welcome-icon"><FolderIcon size={25} /></div>
+              <h1>Open Kaylee's Gamepack</h1>
+              <p>Pick your Kaylee-Gamepack checkout once. Studio lists its worktrees and PRs by itself.</p>
+              <Button className="primary-button" onPress={() => void services.commands.execute("repo.open")}><FolderIcon size={16} /> Open the Gamepack repo</Button>
+            </div>
+          ) : <GamePane key={activeWorkspace.id} workspace={activeWorkspace}
+            onShowLeft={layout.leftCollapsed ? () => updateLayout({ leftCollapsed: false }) : undefined}
+            onShowRight={layout.rightCollapsed ? () => updateLayout({ rightCollapsed: false }) : undefined} />}
         </main>
       </Panel>
-      <PanelResizeHandle className="shell-resize" aria-label="Resize side panel" />
-      <Panel id="right" order={3} ref={rightRef} className="shell-panel" collapsible collapsedSize={0} minSize={16} maxSize={36}
-        defaultSize={layout.rightCollapsed ? 0 : layout.rightSize ?? 21}
+      <PanelResizeHandle className="shell-resize" aria-label="Resize agent column" />
+      <Panel id="right" order={3} ref={rightRef} className="shell-panel" collapsible collapsedSize={0} minSize={22} maxSize={60}
+        defaultSize={layout.rightCollapsed ? 0 : layout.rightSize ?? 34}
         onCollapse={() => updateLayout({ rightCollapsed: true })} onExpand={() => updateLayout({ rightCollapsed: false })}>
-        <RightSidebar workspace={activeWorkspace} onCollapse={() => updateLayout({ rightCollapsed: true })} />
+        <AgentColumn workspace={activeWorkspace} onHide={() => updateLayout({ rightCollapsed: true })} />
       </Panel>
     </PanelGroup>
     <StatusBar />

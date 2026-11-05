@@ -114,6 +114,11 @@ export function registerIpc(ptyManager: PtyManager, agentSessionManager: AgentSe
   handle(IPC.appMetrics, () => ({
     memoryBytes: app.getAppMetrics().reduce((total, metric) => total + metric.memory.workingSetSize * 1024, 0),
   }));
+  // The Dock badge: how many pieces of work have an agent that finished or asks something.
+  listen(IPC.appBadge, (_event, input) => {
+    const count = typeof input === "number" && Number.isFinite(input) ? Math.max(0, Math.min(99, Math.floor(input))) : 0;
+    app.setBadgeCount(count);
+  });
   handle(IPC.filesList, (_event, input: unknown) => {
     const { root, path } = fileLocationSchema.parse(input);
     return workspace.files.list(root, path);

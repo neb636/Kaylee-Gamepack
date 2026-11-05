@@ -359,6 +359,7 @@ export interface WorkbenchApi {
   };
   app: {
     metrics: () => Promise<AppMetrics>;
+    badge: (count: number) => void;
   };
   files: {
     list: (root: string, path: string) => Promise<FileEntry[]>;

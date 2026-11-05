@@ -106,8 +106,14 @@ export function registerComposerContributions(): void {
     })));
   } });
   services.promptContributors.register({ id: "terminal-quotations", contributions: (target) =>
-    (stateFor(target)?.quotations ?? []).map((quote, index) => ({ id: quote.id, kind: "context", source: `Terminal selection ${index + 1}`,
-      enabled: true, content: `Terminal selection ${index + 1}:\n${quote.content.split("\n").map((line) => `> ${line}`).join("\n")}` })),
+    (stateFor(target)?.quotations ?? []).map((quote, index) => ({ id: quote.id, kind: "context", source: quote.label ?? `Terminal selection ${index + 1}`,
+      enabled: true, content: quote.label ? `${quote.label}:\n${quote.content}` : `Terminal selection ${index + 1}:\n${quote.content.split("\n").map((line) => `> ${line}`).join("\n")}` })),
+  });
+  // Context from the Studio itself (📎 this section): labelled, replacing an earlier one with the same label.
+  services.commands.register<ComposerTarget & { label: string; content: string }>("agent.composer.attach", (target) => {
+    if (!exists(target) || !target.content.trim()) return;
+    const quotations = [...(stateFor(target)?.quotations ?? []).filter((quote) => quote.label !== target.label), { id: createId("quote"), label: target.label, content: target.content }];
+    patchComposer(target, { quotations });
   });
   services.commands.register<ComposerTarget, PromptPreview>("agent.composer.preview", previewFor);
   services.commands.register<ComposerTarget & { text: string }>("agent.composer.quote", (target) => {
