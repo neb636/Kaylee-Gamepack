@@ -56,6 +56,7 @@ import { buildIsland, DAY, TIMES, type Island, type TimeOfDay } from './scenery'
 import type { Surface } from './ground'
 import { makeSeeThrough, SEE } from './seethrough'
 import { Taxi } from './taxi'
+import { FireDancers } from './dancers'
 
 const FILE = 'src/world/places/thailand/activities/samet-trip/island/island.ts'
 /** Leading Kaylee (and the floatie). */
@@ -238,6 +239,8 @@ export class SametIsland implements World3D {
   private mode: Mode = 'walk'
   private flags: Set<StopId>
   private timeKey: TimeOfDay
+  /** The fire dancers on Sai Kaew, out after dark. */
+  private dancers: FireDancers
   private spot: SpotId
 
   // ---- Kaylee, Mommy, Daddy.
@@ -347,6 +350,7 @@ export class SametIsland implements World3D {
     this.props = buildProps(bag, this.isl.root, this.isl.ground, this.isl.blockers, this.isl.cullable)
     makeSeeThrough(this.isl.root, bag, new Set([...this.isl.fine.meshes, ...this.isl.coarse.meshes]))
     this.setTime(this.timeKey)
+    this.dancers = new FireDancers(bag, scene, (x, z) => this.heightAt(x, z))
 
     // ---- Kaylee and her floatie (a pink and white ring round her middle, only in the sea).
     this.kaylee = new Avatar(bag)
@@ -648,6 +652,7 @@ export class SametIsland implements World3D {
     this.lights.follow(cx, 0, cz)
     this.isl.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.props.setLamps(this.isl.lamps, t)
+    this.dancers.update(dt, t, this.isl.lamps)
     for (const p of [this.spray, this.puffs, this.petals, this.stars, this.bubbles]) p.update(dt)
     this.camera(dt)
     this.rig.update(dt)

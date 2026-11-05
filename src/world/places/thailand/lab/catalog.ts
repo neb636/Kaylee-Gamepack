@@ -10,6 +10,7 @@ import { KID_C, STAFF_LOOKS } from '../activities/mall-trip/hall/kids'
 import { SERVER } from '../activities/mall-trip/pizza/room'
 import { RIVAL_LOOKS } from '../activities/nan-trip/cup/rivals'
 import { LUNG } from '../activities/nan-trip/rice/farm'
+import { CAPTAIN, FIRE_DANCERS, JETSKI_MAN, TAXI_DRIVER } from '../activities/samet-trip/cast'
 import { FAMILY } from '../characters/family'
 import { POLES_LOOKS } from '../../poles/characters/looks'
 import { CANADA_LOOKS } from '../../canada/characters/looks'
@@ -19,12 +20,13 @@ import { L } from '../lines'
 import { ATTENDANT } from '../trip/legs/plane'
 import { OFFICER } from '../trip/legs/airport'
 
-export type CastGroup = 'family' | 'trip' | 'mall' | 'nan' | 'critters' | 'poles' | 'canada'
+export type CastGroup = 'family' | 'trip' | 'mall' | 'nan' | 'samet' | 'critters' | 'poles' | 'canada'
 export const GROUPS: { id: CastGroup; name: string }[] = [
   { id: 'family', name: 'Kaylee & family' },
   { id: 'trip', name: 'Boat trip' },
   { id: 'mall', name: 'Mall day' },
   { id: 'nan', name: 'Nan trip' },
+  { id: 'samet', name: 'Koh Samet' },
   { id: 'critters', name: 'Bay critters' },
   { id: 'poles', name: 'The Poles' },
   { id: 'canada', name: 'Canada' },
@@ -91,6 +93,13 @@ const nan: CastEntry[] = [
   person('moon', 'Moon', 'Nan Mountain Cup: the sun bear honey seller', 'nan', RIVAL_LOOKS.moon, 'activities/nan-trip/cup/rivals.ts', 'moon', 'cup-rivals'),
 ]
 
+const samet: CastEntry[] = [
+  person('jetski-man', 'The jet ski man', 'Koh Samet: runs the jet skis on Sai Kaew, an otter', 'samet', JETSKI_MAN, 'activities/samet-trip/cast.ts'),
+  person('samet-captain', 'The captain', 'Koh Samet: drives the speedboat and the snorkel boat, a pelican', 'samet', CAPTAIN, 'activities/samet-trip/cast.ts'),
+  person('taxi-driver', 'The taxi driver', 'Koh Samet: drives the green taxi, a sun bear', 'samet', TAXI_DRIVER, 'activities/samet-trip/cast.ts'),
+  ...FIRE_DANCERS.map((look, i) => person(`fire-dancer-${i + 1}`, `Fire dancer ${i + 1}`, 'Koh Samet: dances with fire on Sai Kaew at night, a tokay gecko', 'samet', look, 'activities/samet-trip/cast.ts', undefined, 'fire-dancers')),
+]
+
 const poles: CastEntry[] = [
   person('pola', 'Pola', 'The Poles: the polar bear cub (north)', 'poles', POLES_LOOKS.pola, '../poles/characters/looks.ts', undefined, 'polar-bears'),
   person('mama-bear', 'Mama Bear', 'The Poles: Pola\'s mama', 'poles', POLES_LOOKS.mama, '../poles/characters/looks.ts', undefined, 'polar-bears'),
@@ -120,7 +129,7 @@ const canada: CastEntry[] = [
   person('raccoon', 'Raccoon', 'Canada: the marshmallow bandit of the campsite', 'canada', CANADA_LOOKS.raccoon, '../canada/characters/looks.ts'),
 ]
 
-export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...nan, ...critters, ...poles, ...canada]
+export const CAST: CastEntry[] = [...family, ...trip, ...mall, ...nan, ...samet, ...critters, ...poles, ...canada]
 export const castById = (id: string | undefined) => CAST.find((c) => c.id === id)
 
 /** Kaylee's outfits (what she wears on each trip and at each HarborLand game). */

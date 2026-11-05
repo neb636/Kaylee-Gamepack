@@ -178,10 +178,10 @@ interface Key {
   lamps: number
 }
 export const DAY: Record<TimeOfDay, Key> = {
-  morning: { top: '#6FBDF0', mid: '#ACDDF8', horizon: '#FCE9DC', haze: '#E4EEF4', sun: [0.75, 0.32, -0.1], glow: '#FFF0D6', amb: '#FFF4EE', ambK: 1, light: '#FFF1DE', lightK: 0.98, cloud: '#FFFFFF', belly: '#EBDDFF', water: ['#A3F2E4', '#68DFD5', '#3BC9D5', '#26AED6', '#238FCC'], far: '#94CBAE', hills: ['#ADBCE6', '#BBC6EC'], lamps: 0 },
-  noon: { top: '#5FB8F2', mid: '#9ED6FA', horizon: '#E2F4FD', haze: '#D5EEFA', sun: [0.35, 0.55, 0.76], glow: '#FFFAE6', amb: '#FFF7F0', ambK: 1, light: '#FFF7F0', lightK: 1, cloud: '#FFFFFF', belly: '#E6DDFF', water: ['#9DF0E2', '#62DDD3', '#38C8D4', '#24AED6', '#2190D0'], far: '#8FC9A8', hills: ['#A9B8E2', '#B7C3EA'], lamps: 0 },
-  afternoon: { top: '#5BAFEB', mid: '#A2D3F4', horizon: '#F6EEDC', haze: '#E2E7EA', sun: [-0.55, 0.42, 0.5], glow: '#FFEFCF', amb: '#FFF3E6', ambK: 1, light: '#FFEBD2', lightK: 1, cloud: '#FFFBF4', belly: '#E9D9F4', water: ['#A4EFDC', '#66DACB', '#3BC3CC', '#28A8CF', '#2689C6'], far: '#93C6A4', hills: ['#B0B5DC', '#BEC0E2'], lamps: 0 },
-  golden: { top: '#7F98DE', mid: '#F2B7AA', horizon: '#FFD49A', haze: '#F5CFB2', sun: [-0.9, 0.12, 0.15], glow: '#FFD08A', amb: '#FFE3D3', ambK: 0.92, light: '#FFC994', lightK: 0.95, cloud: '#FFE0CF', belly: '#E6B3C8', water: ['#B4E9CF', '#7FD1C2', '#5AB7C2', '#4F96BE', '#5A7AB5'], far: '#A9B79A', hills: ['#B79EC6', '#C7AACB'], lamps: 0.35 },
+  morning: { top: '#6FBDF0', mid: '#ACDDF8', horizon: '#FCE9DC', haze: '#E4EEF4', sun: [0.75, 0.32, -0.1], glow: '#FFF0D6', amb: '#FFF4EE', ambK: 1, light: '#FFF1DE', lightK: 0.98, cloud: '#FFFFFF', belly: '#EBDDFF', water: ['#A6F5EA', '#52E2D8', '#1FC9D8', '#119FD6', '#1C7CCB'], far: '#94CBAE', hills: ['#ADBCE6', '#BBC6EC'], lamps: 0 },
+  noon: { top: '#5FB8F2', mid: '#9ED6FA', horizon: '#E2F4FD', haze: '#D5EEFA', sun: [0.35, 0.55, 0.76], glow: '#FFFAE6', amb: '#FFF7F0', ambK: 1, light: '#FFF7F0', lightK: 1, cloud: '#FFFFFF', belly: '#E6DDFF', water: ['#A2F6EA', '#4CE4D9', '#17CADB', '#0FA2DA', '#1A7ED0'], far: '#8FC9A8', hills: ['#A9B8E2', '#B7C3EA'], lamps: 0 },
+  afternoon: { top: '#5BAFEB', mid: '#A2D3F4', horizon: '#F6EEDC', haze: '#E2E7EA', sun: [-0.55, 0.42, 0.5], glow: '#FFEFCF', amb: '#FFF3E6', ambK: 1, light: '#FFEBD2', lightK: 1, cloud: '#FFFBF4', belly: '#E9D9F4', water: ['#A8F2E2', '#58DDCF', '#25C3D0', '#169DD0', '#1F7CC4'], far: '#93C6A4', hills: ['#B0B5DC', '#BEC0E2'], lamps: 0 },
+  golden: { top: '#7F98DE', mid: '#F2B7AA', horizon: '#FFD49A', haze: '#F5CFB2', sun: [-0.9, 0.12, 0.15], glow: '#FFD08A', amb: '#FFE3D3', ambK: 0.92, light: '#FFC994', lightK: 0.95, cloud: '#FFE0CF', belly: '#E6B3C8', water: ['#B2F0DA', '#62D9C9', '#34BDC8', '#2F95C2', '#4874B4'], far: '#A9B79A', hills: ['#B79EC6', '#C7AACB'], lamps: 0.35 },
   night: { top: '#1F1D4A', mid: '#3B3478', horizon: '#7C64A8', haze: '#4E4380', sun: [0.4, 0.5, -0.6], glow: '#D9DCFF', amb: '#A49EE6', ambK: 0.78, light: '#C9D0FF', lightK: 0.45, cloud: '#5E5896', belly: '#3E3878', water: ['#5F8FB0', '#46769E', '#335F8E', '#294B7C', '#22396A'], far: '#3E4A72', hills: ['#3A3770', '#44407A'], lamps: 1 },
 }
 
@@ -240,7 +240,7 @@ export function buildIsland(bag: Bag): Island {
   }
 
   const lagoon = new Lagoon(
-    { sea: coarse.sea, seaBox: coarse.seaBox, bands: DAY.noon.water, steps: [0.8, 2.6, 5.5, 9.5], haze: DAY.noon.haze, hazeNear: 160, hazeFar: 900, grid: 224, cell: 1.75, caustics: 1 },
+    { sea: coarse.sea, seaBox: coarse.seaBox, bands: DAY.noon.water, steps: [0.55, 1.9, 4.6, 8.5], haze: DAY.noon.haze, hazeNear: 160, hazeFar: 900, grid: 224, cell: 1.75, caustics: 1 },
     bag,
   )
   root.add(lagoon.near, lagoon.far)

@@ -204,7 +204,7 @@ export function surfaceAt(x: number, z: number): Surface {
 export function groundColor(x: number, z: number, h: number, shore: number, slope: number): string {
   if (shore > 0) {
     // The sea floor (seen through the shallows): pale sand, a little darker deeper down.
-    return h > -1.2 ? '#F6EAD0' : h > -3.5 ? '#E6D8B6' : '#CDBF9C'
+    return h > -1.2 ? '#FCF7EA' : h > -3.5 ? '#EDE4CC' : '#D3CAB0'
   }
   const d = -shore
   const sand = sandiness(x, z)
@@ -212,14 +212,14 @@ export function groundColor(x: number, z: number, h: number, shore: number, slop
   if (d < W) {
     if (sand < 0.4) return slope > 0.25 ? '#BFB5AC' : '#D8CBB8'
     // Wet sand by the water, then the crystal sand (blended, so the grid's triangles don't show as a sawtooth).
-    return '#' + tint.set('#EBD5AA').lerp(tint2.set('#FFF4DE'), smooth(0.4, 2.8, d)).lerp(tint2.set('#F4E8CB'), smooth(W - 3, W, d)).getHexString()
+    return '#' + tint.set('#E6D9BF').lerp(tint2.set('#FFFCF5'), smooth(0.4, 2.8, d)).lerp(tint2.set('#F8F0DF'), smooth(W - 3, W, d)).getHexString()
   }
   const w = wayAt(x, z)
   if (w.d < w.width / 2 + 1.1) {
     if (w.kind === 'road') return w.d < w.width / 2 - 0.15 ? (Math.floor((x + z) * 0.25) % 7 === 0 ? '#DDD6C9' : '#E9E3D8') : '#C8BFAF'
-    return w.d < w.width / 2 ? '#F4E2BD' : '#E3CB9A'
+    return w.d < w.width / 2 ? '#F8EDD6' : '#E8D7B4'
   }
-  if (d < W + 5 && sand > 0.4) return '#' + tint.set('#F4E8CB').lerp(tint2.set('#D3E3A2'), smooth(W + 1, W + 4.5, d)).getHexString()
+  if (d < W + 5 && sand > 0.4) return '#' + tint.set('#F8F0DF').lerp(tint2.set('#D3E3A2'), smooth(W + 1, W + 4.5, d)).getHexString()
   if (d < W + 2.5) return '#C9BFB4'
   if (w.d < w.width / 2 + 2.5) return '#A9DA86'
   for (const c of CLEARINGS) if (Math.hypot(x - c.x, z - c.z) < c.r) return '#A3D684'

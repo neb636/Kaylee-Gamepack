@@ -142,6 +142,19 @@ stop after the city road) are fixed.
 - [ ] **Listen:** the clerk, the mushroom aunty, the salt aunty (new voices, northern Thai accent), Daddy's "Whoa! Beep
   beep!" (heard as Chinese by the transcription check), "Wheee! Bumpy!", and whether the sky road talks too much.
 
+## Koh Samet: the look (step 8, PR #342)
+
+Found by layout QA (WebKit, iPad and iPhone landscape). None of these block play.
+
+- [ ] **The pelican captain is hard to see on both boats.** On the snorkel boat she stands at the motor (`snorkel/reef.ts`,
+  z = 3), past the right edge of the float camera. On the speedboat the canopy post and Mommy's sun hat hide most of her.
+  - Check: `#/world/thailand/samet-trip/snorkel?round=float`, `#/world/thailand/samet-trip/speedboat`
+- [ ] **The green taxi waits off screen at Sai Kaew.** Its stop sits past the right edge on the iPad and above the top on
+  the iPhone, so the sun bear driver never shows on landing (framing from greybox 2).
+  - Check: `#/world/thailand/samet-trip/island?at=saikaew`
+- [ ] **QA's night screen shoots too soon.** The fire dancers take 3-6 s to fade in, and the night screen waits 2.5 s.
+  Raise its `wait` in `samet-trip/qa.mjs` to about 7 s.
+
 ## Listen on the iPad (automated checks can't hear)
 - [ ] **The mall trip's new voices** (2026-10-21): the transcription check flagged Thai words written back in Thai
   ("Sawasdee ka", "Khob khun ka"), "Kaylee" heard as "Kaley", Daddy's "Ooh, strong!" heard in Japanese, the coach's
