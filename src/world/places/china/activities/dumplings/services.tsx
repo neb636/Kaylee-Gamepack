@@ -230,7 +230,8 @@ export function Service2({ chef, onDone, start, onAt }: ServiceProps) {
   }, [step])
 
   const pickBowl = (c: DoughColor) => {
-    if (step !== 'color') return
+    // All four wrappers chosen: the step changes in a moment, so extra taps wait for it.
+    if (step !== 'color' || wrappers.length >= BUNNY.length) return
     if (c !== want) {
       sounds.oops()
       setWrong(c)
@@ -420,7 +421,7 @@ export function Service3({ chef, onDone, start, onAt, made: seeded }: ServicePro
   const alive = useAlive()
   const basket: Basket = { id: 'baobao', colors: made, ribbon: RIBBON.baobao }
   const cook = useCook(() => onDone([basket]), first === 'cook' ? 'fire' : 'idle')
-  useEffect(() => onAt?.(step, made), [step])
+  useEffect(() => onAt?.(step, made), [step, made.join()]) // the link keeps each dumpling she makes
 
   useEffect(() => {
     if (first !== 'order') return // a deep link past the order
