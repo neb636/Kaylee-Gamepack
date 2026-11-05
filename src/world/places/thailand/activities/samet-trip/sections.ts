@@ -109,14 +109,14 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
     {
       id: 'deck',
       name: 'Lunch on the deck at Ao Prao (greybox): rolls, a coconut, mango sticky rice',
-      params: ['flags', 'time'],
+      params: ['flags', 'time', 'book'],
       group: 'Lunch and hide and seek at Ao Prao (greybox)',
       links: [{ label: 'Lunch on the deck: Daddy passes the rolls, sip the coconut, the mango sticky rice', params: {}, also: [{ label: 'tune the feel', params: {}, flags: { feel: '1' } }] }],
     },
     {
       id: 'hideseek',
       name: 'Hide and seek at Ao Prao (greybox): find Daddy, then hide',
-      params: ['round', 'flags', 'time'],
+      params: ['round', 'flags', 'time', 'book'],
       group: 'Lunch and hide and seek at Ao Prao (greybox)',
       links: [
         { label: 'Easy hides: count by the driftwood tree, find Daddy', params: { round: '1' }, also: [{ label: 'tune the feel', params: { round: '1' }, flags: { feel: '1' } }] },

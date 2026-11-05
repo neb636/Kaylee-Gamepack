@@ -72,7 +72,7 @@ export function SametTrip() {
         }}
         onHideSeek={() => {
           setSec((s) => ({ ...s, id: 'hideseek', n: s.n + 1, round: '1' }))
-          enter('hideseek', { round: '1', flags: flagParam(sec.flags), time: time ?? undefined })
+          enter('hideseek', { round: '1', flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(here.current.book) })
         }}
       />
     )
@@ -83,7 +83,7 @@ export function SametTrip() {
         key={sec.n}
         round={hs}
         time={time ?? undefined}
-        onRound={(round) => enter('hideseek', { round, flags: flagParam(sec.flags), time: time ?? undefined })}
+        onRound={(round) => enter('hideseek', { round, flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(here.current.book) })}
         onIsland={() => {
           const flags = sec.flags.includes('hideseek') ? sec.flags : [...sec.flags, 'hideseek' as StopId]
           here.current.at = 'prao'
@@ -144,11 +144,11 @@ export function SametTrip() {
       onOpen={(stop) => {
         if (stop === 'lunch') {
           setSec((s) => ({ ...s, id: 'deck', n: s.n + 1 }))
-          return enter('deck', { flags: flagParam(sec.flags), time: time ?? undefined })
+          return enter('deck', { flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(here.current.book) })
         }
         if (stop === 'hideseek') {
           setSec((s) => ({ ...s, id: 'hideseek', n: s.n + 1, round: '1' }))
-          return enter('hideseek', { round: '1', flags: flagParam(sec.flags), time: time ?? undefined })
+          return enter('hideseek', { round: '1', flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(here.current.book) })
         }
         if (stop === 'sandcastle') {
           setSec((s) => ({ ...s, id: 'sandcastle', n: s.n + 1, round: 'dig' }))
