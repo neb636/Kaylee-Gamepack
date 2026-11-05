@@ -262,7 +262,7 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
   - [Home: the flight, Agong's photo, the frame on his wall, the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/home)
 
-**Koh Samet Island** (in the works) (In the works (greyboxes 1 and 2 of the plan). Add ?feel=1 to tune how Kaylee walks and swims, the camera, the taxi and the jet ski; ?fps=1 or ?debug=1 shows the frame rate.)
+**Koh Samet Island** (in the works) (In the works (greyboxes 1 to 3 of the plan). Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi and the jet ski; ?fps=1 or ?debug=1 shows the frame rate.)
 
 - **The island (greybox)**
   - [Land at Na Dan pier in the morning: walk, swim, the green taxi](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan&feel=1))
@@ -271,6 +271,13 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [Ao Hin Khok (the sandcastle spot, the beach ball)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=hinkhok)
   - [Ao Wong Duan (the snorkel boat)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=wongduan)
   - [Sai Kaew at night (the lanterns and the stars)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=saikaew&flags=all&time=night)
+  - [Mommy's phone out at Ao Wong Duan: the hornbill in the tamarind, the fish, the cuttlefish](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=wongduan&phone=1) ([tune the phone](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=wongduan&phone=1&feel=1))
+  - [Mommy's phone at Ao Prao: the monitor lizards, the flying fox asleep in the samet tree](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=prao&phone=1) ([at dusk, the flying fox flying](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=prao&phone=1&time=golden))
+  - [Hin Khok and the mermaid: the heron, the urchins, the coral, a squirrel; the beach clean](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=hinkhok&phone=1)
+- **Mommy's phone and the animal book (greybox)**
+  - [The empty book (silhouettes to find)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/book?at=saikaew)
+  - [Nearly full, three stickers](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/book?at=saikaew&flags=jetski,sandcastle,snorkel&book=monitor,squirrel,macaque,hornbill,heron,tern,crab,parrotfish,damselfish,cuttlefish,urchin,coral)
+  - [All fourteen: the gold star](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/book?at=saikaew&flags=all&book=all)
 - **The jet ski at Sai Kaew (greybox)**
   - [Ride the calm bay: the life jacket, then carve, spray and close a loop of wake](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=ride) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=ride&feel=1))
   - [Big waves roll in: steer into them to jump](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/jetski?round=waves)
