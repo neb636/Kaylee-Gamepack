@@ -4,7 +4,9 @@
 // animal book (book/, on the island; the `book` section opens it); greybox 4 is the sandcastle at Ao Hin Khok
 // (sandcastle/, opened from its stop, and back to the island with its flag up once the moat has filled); greybox 5 is
 // snorkeling at Ko Kudi (snorkel/, opened from the snorkel boat at Ao Wong Duan, and back there with its flag up and the
-// fish she snapped in her book once the cuttlefish has turned pink). The other
+// fish she snapped in her book once the cuttlefish has turned pink); greybox 6 is lunch on the deck at Ao Prao and hide
+// and seek by the driftwood tree (hideseek/: lunch opens from the deck's table, hide and seek from the tree, back to
+// the island with its flag up once she has won her turn to hide). The other
 // stops and the trip frame (packing, the speedboat, home) come one greybox at a time.
 import { useEffect, useRef, useState } from 'react'
 import { useSections } from '../../../../kit/sections'
@@ -16,15 +18,18 @@ import type { BookPhoto } from './book/Book'
 import { JetSkiScreen } from './jetski/JetSkiScreen'
 import { SandcastleScreen } from './sandcastle/SandcastleScreen'
 import { SnorkelScreen } from './snorkel/SnorkelScreen'
+import { HideSeekScreen } from './hideseek/HideSeekScreen'
+import { LunchScreen } from './hideseek/LunchScreen'
+import type { HideRound } from './hideseek/hideseek'
 import type { SnorkelRound } from './snorkel/snorkel'
 import type { SandRound } from './sandcastle/sandcastle'
-import SAMET_SECTIONS, { FLAGS, SAND_ROUNDS, SNORKEL_ROUNDS } from './sections'
+import SAMET_SECTIONS, { FLAGS, HIDE_ROUNDS, SAND_ROUNDS, SNORKEL_ROUNDS } from './sections'
 
 const readFlags = (s: string): StopId[] => (s === 'all' ? [...FLAGS] : (s.split(',').filter((f) => (FLAGS as readonly string[]).includes(f)) as StopId[]))
 
 export function SametTrip() {
   const { start, param, enter } = useSections(SAMET_SECTIONS)
-  const [sec, setSec] = useState(() => ({ id: start ?? 'island', n: 0, at: param('at') as SpotId, flags: readFlags(param('flags')), round: param('round') as RoundId | SandRound | SnorkelRound }))
+  const [sec, setSec] = useState(() => ({ id: start ?? 'island', n: 0, at: param('at') as SpotId, flags: readFlags(param('flags')), round: param('round') as RoundId | SandRound | SnorkelRound | HideRound }))
   const time = (param('time') || null) as TimeOfDay | null
   const reefRound = useRef<SnorkelRound>('float')
   const flagParam = (f: StopId[]) => (f.length === FLAGS.length ? 'all' : f.join(',') || undefined)
@@ -52,6 +57,37 @@ export function SametTrip() {
           const flags = sec.flags.includes('sandcastle') ? sec.flags : [...sec.flags, 'sandcastle' as StopId]
           here.current.at = 'hinkhok'
           setSec((s) => ({ ...s, id: 'island', n: s.n + 1, at: 'hinkhok', flags }))
+        }}
+      />
+    )
+  }
+  if (sec.id === 'deck')
+    return (
+      <LunchScreen
+        key={sec.n}
+        time={time ?? undefined}
+        onIsland={() => {
+          here.current.at = 'deck'
+          setSec((s) => ({ ...s, id: 'island', n: s.n + 1, at: 'deck' }))
+        }}
+        onHideSeek={() => {
+          setSec((s) => ({ ...s, id: 'hideseek', n: s.n + 1, round: '1' }))
+          enter('hideseek', { round: '1', flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(here.current.book) })
+        }}
+      />
+    )
+  if (sec.id === 'hideseek') {
+    const hs = ((HIDE_ROUNDS as readonly string[]).includes(sec.round) ? sec.round : '1') as HideRound
+    return (
+      <HideSeekScreen
+        key={sec.n}
+        round={hs}
+        time={time ?? undefined}
+        onRound={(round) => enter('hideseek', { round, flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(here.current.book) })}
+        onIsland={() => {
+          const flags = sec.flags.includes('hideseek') ? sec.flags : [...sec.flags, 'hideseek' as StopId]
+          here.current.at = 'prao'
+          setSec((s) => ({ ...s, id: 'island', n: s.n + 1, at: 'prao', flags }))
         }}
       />
     )
@@ -106,6 +142,14 @@ export function SametTrip() {
       onAt={(at) => island(false, at)}
       onBook={(book, open) => island(open, here.current.at, book)}
       onOpen={(stop) => {
+        if (stop === 'lunch') {
+          setSec((s) => ({ ...s, id: 'deck', n: s.n + 1 }))
+          return enter('deck', { flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(here.current.book) })
+        }
+        if (stop === 'hideseek') {
+          setSec((s) => ({ ...s, id: 'hideseek', n: s.n + 1, round: '1' }))
+          return enter('hideseek', { round: '1', flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(here.current.book) })
+        }
         if (stop === 'sandcastle') {
           setSec((s) => ({ ...s, id: 'sandcastle', n: s.n + 1, round: 'dig' }))
           return enter('sandcastle', { round: 'dig', flags: flagParam(sec.flags) })

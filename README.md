@@ -262,7 +262,7 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
   - [Home: the flight, Agong's photo, the frame on his wall, the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/home)
 
-**Koh Samet Island** (in the works) (In the works (greyboxes 1 to 5 of the plan). Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski, the sand and the snorkel; ?fps=1 or ?debug=1 shows the frame rate.)
+**Koh Samet Island** (in the works) (In the works (greyboxes 1 to 6 of the plan). Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski, the sand, the snorkel, lunch and hide and seek; ?fps=1 or ?debug=1 shows the frame rate.)
 
 - **The island (greybox)**
   - [Land at Na Dan pier in the morning: walk, swim, the green taxi](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan&feel=1))
@@ -290,6 +290,11 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [Float: splash in, lead her over the coral, the damselfish part round her](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/snorkel?round=float) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/snorkel?round=float&feel=1))
   - [Follow the parrotfish through the gap to the garden](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/snorkel?round=follow)
   - [The cuttlefish changes color; snap the fish](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/snorkel?round=cuttle)
+- **Lunch and hide and seek at Ao Prao (greybox)**
+  - [Lunch on the deck: Daddy passes the rolls, sip the coconut, the mango sticky rice](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/deck) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/deck?feel=1))
+  - [Easy hides: count by the driftwood tree, find Daddy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/hideseek?round=1) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/hideseek?round=1&feel=1))
+  - [Trickier hides: the roots, the towel, the sea, the pandanus](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/hideseek?round=2)
+  - [Her turn to hide: Daddy counts and searches the wrong places](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/hideseek?round=hide)
 
 **Finale**: [Family party (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/party/soon?stamps=all)
 

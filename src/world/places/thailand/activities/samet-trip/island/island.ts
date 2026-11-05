@@ -13,7 +13,7 @@
 // Mommy and Daddy follow at a little distance, stop at the water's edge when she swims, and do their own thing when she
 // stops (Daddy lies down on the sand: tap him and he jumps up). The stops (any order) are the jet ski at Sai Kaew
 // (opens its section), the sandcastle at Ao Hin Khok, the snorkel boat at Ao Wong Duan and the driftwood tree at Ao
-// Prao (their greyboxes come next: for now a tap gets a little show). Each stop's pink flag (`flags`) stands on its
+// Prao (each opens its own world: the driftwood tree opens hide and seek, the deck's table lunch). Each stop's pink flag (`flags`) stands on its
 // beach, and the day moves on with them: morning, noon, afternoon, golden (and `time=night` for the fire show's
 // night). Things to poke everywhere (props.ts): palms drop coconuts (on Daddy's head, if he's under one), samet bark
 // peels, umbrellas spin (three pokes and one takes off like a kite with Kaylee holding on), chairs fold, the beach
@@ -49,7 +49,7 @@ import { BeachClean, BIN_IDS, JUNK_IDS } from '../book/clean'
 import { WILD, Wildlife, type Creature, type PalmInfo, type WildCtx } from '../book/creatures'
 import { framing, phoneCamera, portraits, snap } from '../book/photo'
 import { buildSki, type Ski } from '../jetski/ski'
-import { bay, FRAMES, PARKED, POKES, spotStart, STOP_IDS, STOPS, SWIMMERS, WAVE_DIR, WAYS, type SpotId, type StopId, type XZ } from './layout'
+import { at as atFrame, bay, DECK, FRAMES, PARKED, POKES, spotStart, STOP_IDS, STOPS, SWIMMERS, WAVE_DIR, WAYS, type SpotId, type StopId, type XZ } from './layout'
 import { buildProps, type PokeThing, type Props } from './props'
 import { buildIsland, DAY, TIMES, type Island, type TimeOfDay } from './scenery'
 import type { Surface } from './ground'
@@ -117,8 +117,8 @@ export interface Snap {
   gold: boolean
 }
 export interface IslandEvents {
-  /** She opened a stop (tapped its thing up close). */
-  open(stop: StopId): void
+  /** She opened a stop (tapped its thing up close), or sat down for lunch at the deck's table. */
+  open(stop: StopId | 'lunch'): void
   /** She reached a new beach (the address bar follows `at`). */
   at(spot: SpotId): void
   /** The shutter clicked (the screen flashes); the photo itself follows in `snap`. */
@@ -132,6 +132,8 @@ export interface IslandEvents {
 
 const DEG = 180 / Math.PI
 const HINT_S = 8
+/** The table on the resort deck where the family has lunch (resortDeck's first table). */
+const LUNCH_TABLE = atFrame(DECK, -2.5, 0.8)
 /** How much the beach camera looks inland (vs along the sand): 0.6 ≈ 35° off the sand's line. */
 const SIDE = 0.32
 const tmp = new Vector3()
@@ -198,6 +200,7 @@ export const ISLAND_ANCHORS: AnchorInfo[] = [
   ...[0, 1, 2].map((i) => ({ id: `tern:${i}`, label: 'A tern', kind: 'thing' as const })),
   ...[0, 1, 2, 3, 4, 5, 6, 7].map((i) => ({ id: `umbrella-sk:${i}`, label: 'A beach umbrella', kind: 'thing' as const })),
   ...STOP_IDS.map((id) => ({ id: `stop:${id}`, label: STOPS[id].name, kind: 'thing' as const })),
+  { id: 'lunch', label: 'Lunch on the deck', kind: 'thing' },
   ...STOP_IDS.map((id) => ({ id: `flag:${id}`, label: 'A pink flag', kind: 'thing' as const })),
   ...PARKED.map((p) => ({ id: `ski:${p.id}`, label: 'A jet ski', kind: 'thing' as const })),
   ...POKES.map((p) => ({ id: p.id, label: LABELS[p.kind], kind: 'thing' as const })),
@@ -1661,6 +1664,12 @@ export class SametIsland implements World3D {
       if (!near(at.x, at.z, 9)) return this.goTo(id, at.x, at.z)
       return this.useStop(sid)
     }
+    if (id === 'lunch') {
+      // The deck's table: walk up the steps to it, then sit down for lunch.
+      const tb = LUNCH_TABLE
+      if (!near(tb.x, tb.z, 2.5)) return this.goTo(id, tb.x, tb.z, 1)
+      return void this.events.open('lunch')
+    }
     if (id.startsWith('flag:')) {
       this.kick(id, 6)
       sfx.fwip()
@@ -1954,7 +1963,7 @@ export class SametIsland implements World3D {
   private useStop(id: StopId) {
     const g = this.props.stops[id]
     if (id === 'jetski') return this.events.open('jetski')
-    // The other stops' greyboxes come next: for now a little show, then (Dad) the section link. The sandcastle has its own.
+    // A little show, then the stop opens (the jet ski and the sandcastle open at once).
     if (id === 'sandcastle') return this.events.open('sandcastle')
     if (id === 'snorkel') {
       toot()
@@ -2227,6 +2236,12 @@ export class SametIsland implements World3D {
         const at = sid === 'jetski' ? within(this.skis[0].x, 0, this.skis[0].z) : sid === 'snorkel' ? within(g.position.x, 0, g.position.z, 30) : within(a.x, this.heightAt(a.x, a.z), a.z)
         // (The jet ski stop is the jet ski man's jet ski, until it's hers: then it's a jet ski like the others.)
         place(el, riding || (sid === 'jetski' && this.flags.has('jetski')) ? null : at, sid === 'hideseek' ? 3.4 : 1.6, 1)
+        // (Over the pokes and bins round it: the stop is what she came for.)
+        z = '3'
+      } else if (id === 'lunch') {
+        const d = this.props.decks.find((q) => Math.hypot(q.x - DECK.x, q.z - DECK.z) < 0.5)
+        place(el, riding || !d ? null : within(LUNCH_TABLE.x, d.y, LUNCH_TABLE.z, 40), 1.1, 1.2)
+        z = '3'
       } else if (id.startsWith('flag:')) {
         const g = this.props.flags[id.slice(5) as StopId]
         place(el, riding || !g.visible ? null : within(g.position.x, g.position.y, g.position.z), 4.4, 0.5)
