@@ -1,6 +1,7 @@
 // The character lab's panels around the 3D studio: the cast and scene lists (left), the toolbar over the canvas, the
 // design and animation controls (right) and the line bar (bottom). CharacterLab.tsx owns the state; these only draw it
 // and call back.
+import { shareLab } from '../../../labs/share'
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import { go } from '../../../../router'
 import { lineText, stopSpeaking, type Line } from '../../../../sdk'
@@ -479,10 +480,7 @@ function DesignTab({ lab }: { lab: LabApi }) {
     bump((n) => n + 1)
   }
   const copy = (text: string, what: string) => {
-    void navigator.clipboard?.writeText(text).then(
-      () => lab.toast(`${what} copied`),
-      () => lab.toast(text),
-    )
+    void shareLab(text, what).then(lab.toast, error => lab.toast(String(error)))
   }
   return (
     <>

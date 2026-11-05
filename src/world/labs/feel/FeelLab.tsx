@@ -5,6 +5,7 @@
 // link that reproduces the feel, and a note listing the changed numbers for an agent to bake in. What changed stays in
 // the address bar (feel.<group>.<knob>=n). Not something Kaylee plays: World.tsx loads it lazily, only when the link
 // asks for it.
+import { inStudio, shareLab } from '../share'
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { feelLab, isFeelParam, type KnobGroup } from '../../kit/knobs'
 import { IconButton, Section } from '../ui'
@@ -72,9 +73,8 @@ export default function FeelLab() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
-  const copy = (text: string, done: string) => {
-    if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => say(done), () => say('Copy it from the address bar'))
-    else say('Copy it from the address bar')
+  const copy = (text: string, label: string, agent = false) => {
+    void shareLab(text, label, agent ? 'agent' : 'copy').then(say, error => say(String(error)))
   }
   const link = () => `${location.origin}${location.pathname}${location.hash}`
   const forAgent = () => {
@@ -143,11 +143,11 @@ export default function FeelLab() {
         >
           Reset
         </button>
-        <button className="cl-btn" onClick={() => copy(link(), 'Link copied')}>
-          Link
+        <button className="cl-btn" onClick={() => copy(link(), 'Link')}>
+          Copy link
         </button>
-        <button className="cl-btn" onClick={() => copy(forAgent(), 'Copied for an agent')}>
-          For agent
+        <button className="cl-btn" onClick={() => copy(forAgent(), 'Feel lab changes', inStudio())}>
+          {inStudio() ? 'Send to agent' : 'Copy for agent'}
         </button>
       </div>
       {toast && <div className="cl-toast feel-toast">{toast}</div>}

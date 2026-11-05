@@ -16,6 +16,7 @@
     "qa:composer": "node scripts/qa-composer.mjs",
     "qa:images": "node scripts/qa-image-generator.mjs",
     "postinstall": "node node_modules/electron/install.js && electron-rebuild -f -w node-pty",
+    "qa:share": "node scripts/qa-lab-share.mjs",
     "qa:labs": "node scripts/qa-labs.mjs",
     "dist:dir": "npm run build && node scripts/package.mjs --dir && npm run open:app",
     "dist": "npm run build && node scripts/package.mjs && npm run open:app",

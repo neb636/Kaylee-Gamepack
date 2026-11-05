@@ -4,6 +4,7 @@
 // their own voice, dress Kaylee, change the light, the backdrop and the lens, and export a PNG. Everything you set is
 // in the address bar, so a link opens the same view. Not something Kaylee plays: World.tsx loads it lazily, so only
 // this route downloads three.js.
+import { shareLab } from '../../../labs/share'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { stopSpeaking } from '../../../../sdk'
 import type { Wearable } from '../characters/looks'
@@ -256,13 +257,7 @@ export default function CharacterLab({ id, params = {} }: { id?: string; params?
     showToast('PNG saved')
   }
   const onShare = () => {
-    const link = location.href
-    if (navigator.clipboard)
-      navigator.clipboard.writeText(link).then(
-        () => showToast('Link copied'),
-        () => showToast('Copy the link from the address bar'),
-      )
-    else showToast('Copy the link from the address bar')
+    void shareLab(location.href, 'Link').then(showToast, error => showToast(String(error)))
   }
 
   const hint = view.tool === 'pan' ? 'Drag to pan · pinch or scroll to zoom' : view.tool === 'look' ? 'Move the pointer: they look at it' : 'Tap someone to say hi · drag to orbit · pinch or scroll to zoom'

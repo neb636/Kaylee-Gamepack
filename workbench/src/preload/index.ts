@@ -14,6 +14,7 @@ import type {
 const api: WorkbenchApi = {
   platform: process.platform,
   studio: {
+    copyText: text => ipcRenderer.invoke("studio:copy-text", text),
     repoRoot: () => ipcRenderer.invoke('studio:repo-root'),
     useCheckout: root => ipcRenderer.invoke('studio:use-checkout', root),
     sections: (root, refresh) => ipcRenderer.invoke('studio:sections', { root, refresh }),

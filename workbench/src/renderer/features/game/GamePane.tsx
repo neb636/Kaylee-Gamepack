@@ -8,6 +8,7 @@ import { LabPanel, type LabRequest } from "./LabPanel";
 import { useWorkList } from "../work/work-store";
 import { useWorkbenchStore } from "../../state/workbench-store";
 import { KnownIssuesList, useKnownIssues } from "./KnownIssues";
+import { handleLabShare } from "./lab-share";
 import { SectionTree } from "./SectionTree";
 
 const LABS = [
@@ -48,6 +49,7 @@ export function GamePane({ workspace, onClose, big, onToggleBig }: { workspace: 
   const sections = useGameLive((state) => state.sections[workspace.path]);
   const [target, setTarget] = useState(() => ({ hash: hashOf(game.link ?? DEFAULT_LINK), nonce: 0 }));
   const [error, setError] = useState<string>();
+  const [shareStatus, setShareStatus] = useState("");
   const [editing, setEditing] = useState<string>();
   const [attempt, setAttempt] = useState(0);
   const repoRoot = useWorkbenchStore((state) => state.repoRoot);
@@ -131,6 +133,18 @@ export function GamePane({ workspace, onClose, big, onToggleBig }: { workspace: 
     if (!origin) return;
     const receive = (event: MessageEvent) => {
       if (event.origin !== origin || event.source !== frame.current?.contentWindow || event.data?.channel !== LAB_CHANNEL) return;
+      if (typeof event.data.shareId === "string" && event.data.share) {
+        const source = frame.current!.contentWindow!;
+        const shareId = event.data.shareId;
+        void handleLabShare(workspace, event.data.share).then(() => {
+          if (frame.current?.contentWindow === source) source.postMessage({ channel: LAB_CHANNEL, shareId }, origin);
+          setShareStatus(event.data.share.action === "agent" ? "Added to agent composer — review and send" : "Copied to clipboard");
+        }).catch((error) => {
+          if (frame.current?.contentWindow === source) source.postMessage({ channel: LAB_CHANNEL, shareId, error: String(error) }, origin);
+          setShareStatus(String(error));
+        });
+        return;
+      }
       if (typeof event.data.location === "string") {
         const location = event.data.location as string;
         useGameLive.setState((state) => ({ href: { ...state.href, [workspace.id]: location } }));
@@ -209,6 +223,12 @@ export function GamePane({ workspace, onClose, big, onToggleBig }: { workspace: 
           {FRAMES.map((item) => <option key={item.id} value={item.id}>{item.label}{item.width ? ` · ${item.width}×${item.height}` : ""}</option>)}
         </select>
         <button className="game-tool" aria-label="Reload the game" title="Reload this section" onClick={() => navigate(current)}><RefreshIcon size={14} /></button>
+        <button className="game-tool" disabled={!origin} title="Copy a link to the current section and settings" onClick={() => {
+          void handleLabShare(workspace, { action: "copy", label: "Link", text: `${origin}/${current}` }).then(() => setShareStatus("Link copied")).catch(error => setShareStatus(String(error)));
+        }}>Copy link</button>
+        <button className="game-tool" disabled={!origin} title="Attach the current section and settings to the agent composer for review" onClick={() => {
+          void handleLabShare(workspace, { action: "agent", label: "Game section", text: `Game section: ${origin}/${current}${snapshot ? `\n${JSON.stringify(snapshot, null, 2)}` : ""}` }).then(() => setShareStatus("Added to agent composer — review and send")).catch(error => setShareStatus(String(error)));
+        }}>Send to agent</button>
         <span className="lab-toggles" role="group" aria-label="Labs">
           {LABS.map((item) => <button key={item.id} className={`lab-toggle ${lab === item.id ? "is-on" : ""}`} aria-pressed={lab === item.id} title={item.hint} onClick={() => toggle(item.id)}>
             <span aria-hidden="true">{item.emoji}</span>{item.label}
@@ -219,6 +239,7 @@ export function GamePane({ workspace, onClose, big, onToggleBig }: { workspace: 
         {issues.length > 0 && <button className={`lab-toggle ${showIssues ? "is-on" : ""}`} aria-pressed={showIssues} title="Known issues for this activity (known-issues.md)" onClick={() => setShowIssues(!showIssues)}>🐞 {issues.length}</button>}
       </div>
     </div>
+    {shareStatus && <p role="status" style={{ margin: "4px 12px", fontSize: 12 }}>{shareStatus}</p>}
     <div className="game-stage" ref={stage.ref}>
       {installing ? <div className="game-message"><p>Installing the game's dependencies for {workspace.name} (npm ci)… The game starts when it's done.</p></div>
         : error ? <div className="game-message" role="alert"><strong>The game can't start here</strong><p>{error}</p><button className="game-tool" onClick={() => setAttempt((value) => value + 1)}>Try again</button></div>
