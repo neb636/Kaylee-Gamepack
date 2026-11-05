@@ -12,7 +12,7 @@ import { isFeelParam } from '../../../../../kit/knobs'
 import { Anchors } from '../../../../../engine3d/Anchors'
 import { View3D, type RenderMode } from '../../../../../engine3d/View3D'
 import { TripGuide, type TripGuideHandle } from '../../../trip/legs/Guide'
-import type { AnimalId } from '../book/animals'
+import { ANIMALS, type AnimalId } from '../book/animals'
 import { Snorkel as World, SNORKEL_ANCHORS, SNORKEL_ROUND_IDS, type SnorkelEvents, type SnorkelRound } from './snorkel'
 
 const feelOn = () => [...new URLSearchParams(location.hash.split('?')[1] ?? '').keys()].some(isFeelParam)
@@ -75,6 +75,8 @@ export function SnorkelScreen({ round: first, onRound, onSnap, onIsland }: Props
     const fresh = got.filter((a) => !snapped.includes(a))
     if (!fresh.length) return
     setSnapped((s) => [...s, ...fresh.filter((a) => !s.includes(a))])
+    // Sparkle says its name, the first time it's snapped on this dive (like Mommy's phone on the island).
+    guideRef.current?.speak(ANIMALS[fresh[0]].name)
     onSnap?.(fresh)
   }
 
