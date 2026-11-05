@@ -29,7 +29,7 @@ import { knobs, watch } from '../../../../../kit/knobs'
 import { noise as hiss, sfx, tone } from '../../../../../kit/sfx'
 import type { AnchorInfo } from '../../../../../engine3d/Anchors'
 import { CameraRig, type Shot } from '../../../../../engine3d/camera'
-import { cinemaOn, Director, type CineMove } from '../../../../../engine3d/cinema'
+import { cinemaOn, Director, Letterbox, type CineMove } from '../../../../../engine3d/cinema'
 import { buildAnimal, type Rig } from '../../../../../engine3d/characters/animal'
 import type { Look } from '../../../../../engine3d/characters/look'
 import { Bag } from '../../../../../engine3d/dispose'
@@ -375,6 +375,7 @@ export class SametSpeedboat implements World3D {
   private passers: Passer[] = []
   // ---- The cinema camera (?cine=1).
   private dir = new Director(MOVES, 'open')
+  private bars = new Letterbox()
   private filmed = new Set<PassId>()
   private filming: PassId | null = null
   private arrived = false
@@ -519,11 +520,6 @@ export class SametSpeedboat implements World3D {
     this.dir.cut('skim')
   }
 
-  /** The cinema camera has the shot now (the letterbox bars show). */
-  get cinematic() {
-    return this.rig.cinema
-  }
-
   update(dt: number) {
     const t = (this.time += dt)
     this.phaseT += dt
@@ -545,6 +541,7 @@ export class SametSpeedboat implements World3D {
     this.rig.setShot(this.shot())
     this.film(dt)
     this.rig.update(dt)
+    this.bars.update(dt, this.rig.cinema)
     this.drawHint(t)
   }
 
@@ -1056,7 +1053,7 @@ export class SametSpeedboat implements World3D {
   }
 
   render() {
-    this.renderer.render(this.scene, this.rig.camera)
+    this.bars.render(this.renderer, this.scene, this.rig.camera, this.w, this.h)
     this.stats.calls = this.renderer.info.render.calls
     this.stats.tris = this.renderer.info.render.triangles
   }

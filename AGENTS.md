@@ -235,7 +235,7 @@ what's next; PR bodies end with the next prompt.
   `rig.fov`. Leave the other branches alone unless he says otherwise, and check the targets stay at 64 px or more.
 - **The cinema camera (cutscenes):** `engine3d/cinema.ts` films a moment like a game's cinematic: a `Director` cuts
   between authored, eased camera moves round a moving subject (crane, chase, low hero shot, a fixed camera it drives
-  past, a two-shot), `rig.setCine()` takes the camera and hands back smoothly, `engine3d/Letterbox.tsx` adds the bars.
+  past, a two-shot), `rig.setCine()` takes the camera and hands back smoothly (the lens too), its `Letterbox` draws the bars in the frame.
   `?cine=1` (sticky) turns it on; the speedboat to Koh Samet is the reference. Reuse it for any ride or cutscene
   instead of scripting camera paths by hand, and keep a `playable` shot for when her finger is down.
 - **The feel lab:** `?feel=1` on any section link (2D or 3D, `src/world/labs/feel/`) puts sliders over the real, playable game

@@ -2,18 +2,20 @@
 // follow camera framing a box, a Director cuts between authored camera moves around a moving subject (a boat, a car,
 // Kaylee): a crane up off the pier, a low chase skimming the water, a fixed camera the boat roars past, a two-shot with
 // whatever comes the other way. Each move is a slow eased dolly from one pose to another over a few seconds, with a
-// little handheld sway, and the screen gets letterbox bars (Letterbox.tsx).
+// little handheld sway, and the screen gets letterbox bars (`Letterbox` below, drawn in the frame itself).
 //
 // Using it in a world:
 //   const dir = new Director(MOVES, 'open')
 //   every frame:  rig.setCine(cinemaOn() ? dir.update(dt, { pos, fwd }, focus) : null)
 //   on an event:  dir.cut('pass')         (a named move, say a boat coming the other way)
 //   under her finger: dir.play()          (cuts to a `playable` move if this one isn't, and holds it while she plays)
+//   the bars:     bars.update(dt, rig.cinema), then bars.render(renderer, scene, rig.camera, w, h) instead of
+//                 renderer.render(scene, camera)
 // The rig hands back to the normal follow camera smoothly when it's given null again.
 //
 // Poses are in the subject's own frame: x to its right, y up, z forward (meters). `mirror` moves flip x to `side`.
 // ?cine=1 (sticky, also the camera lab's "Cinema camera" switch) turns it on for the worlds that have one.
-import { Vector3 } from 'three'
+import { Color, Vector3, type Camera, type Object3D, type WebGLRenderer } from 'three'
 import { flag } from './flags'
 
 export type V3 = [x: number, y: number, z: number]
@@ -193,6 +195,45 @@ export class Director {
   }
 }
 
+/** The letterbox: two dark bars that close in at the top and bottom while a cutscene has the camera, and open again
+ *  when the game's camera is back. Drawn by WebGL in the same frame as the picture (a scissor round the scene), so
+ *  the bars and the camera always move together: HTML bars over the canvas lagged the hand-back and, in Safari, could
+ *  leave one bar behind for a moment. Taps aren't affected (they go to the canvas and its tap targets as ever). */
+export class Letterbox {
+  private k = 0
+  /** Seconds the bars take to close or open. */
+  time = 0.8
+
+  update(dt: number, on: boolean) {
+    this.k = Math.max(0, Math.min(1, this.k + (on ? dt : -dt) / this.time))
+  }
+  /** 0..1: how far closed the bars are now (eased). */
+  get amount() {
+    return EASE.inOut(this.k)
+  }
+
+  /** Draws the scene with the bars (`w`, `h`: the canvas in CSS pixels). */
+  render(renderer: WebGLRenderer, scene: Object3D, camera: Camera, w: number, h: number) {
+    const bar = Math.round(this.amount * Math.min(h * 0.09, 96))
+    if (bar < 1) {
+      renderer.render(scene, camera)
+      return
+    }
+    renderer.getClearColor(prevColor)
+    const prevAlpha = renderer.getClearAlpha()
+    renderer.setScissorTest(false)
+    renderer.setClearColor(BAR, 1)
+    renderer.clear(true, true, false)
+    renderer.setClearColor(prevColor, prevAlpha)
+    renderer.setScissor(0, bar, w, h - 2 * bar)
+    renderer.setScissorTest(true)
+    renderer.render(scene, camera)
+    renderer.setScissorTest(false)
+  }
+}
+
+const BAR = new Color('#1B1622')
+const prevColor = new Color()
 const lerp = (a: number, b: number, k: number) => a + (b - a) * k
 const tmpR = new Vector3()
 const tmpP = new Vector3()
