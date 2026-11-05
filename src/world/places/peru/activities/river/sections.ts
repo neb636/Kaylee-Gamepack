@@ -4,7 +4,7 @@ export default defineSections('peru', 'river', {
   params: {
     plants: { default: 'auto', doc: 'Three plant growth levels 0 to 3; auto uses the section' },
     frog: { default: 'auto', doc: 'Frog awake: 0 or 1; auto uses the section' },
-    sloth: { default: 'auto', doc: 'Sloth eyes 0 to 1; auto uses the section' },
+    sloth: { default: 'auto', doc: 'Sloth eyes open: 0 asleep, 1 one eye, 2 wide awake; auto uses the section' },
     river: { default: 'auto', doc: 'River level 0 to 1; auto uses the section' },
     lagoon: { default: 'auto', doc: 'Lagoon level 0 to 1; auto uses the section' },
     buds: { default: 'auto', doc: 'Three lily growth levels 0 to 2; auto uses the section' },
