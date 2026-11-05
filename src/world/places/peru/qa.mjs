@@ -160,7 +160,8 @@ const penguinLaunch = (name, seconds, jump, pull) => ({
   setup: async (page, base) => {
     await page.goto(`${base}#/world/peru/penguins/${jump || 'splash'}`)
     await page.waitForTimeout(600)
-    await page.waitForSelector('[aria-label="penguin"]', { timeout: 20000 })
+    // The chicks' swim hides every adult: wait for a chick there, an adult everywhere else.
+    await page.waitForSelector(jump === 'swim' ? '[aria-label="penguin chick"]' : '[aria-label="penguin"]', { timeout: 20000 })
     await page.waitForTimeout(jump === 'swim' ? 3200 : 900)
   },
   act: async (page) => {

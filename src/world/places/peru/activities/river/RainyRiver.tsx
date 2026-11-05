@@ -78,6 +78,9 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
   const [umbrella, setUmbrella] = useState(false)
   const [puddle, setPuddle] = useState(0)
   const [slothEyes, setSlothEyes] = useState(0)
+  /** Water levels in twentieths: changing it re-writes the address, so a copied link keeps the filling so far. */
+  const [waterKey, setWaterKey] = useState(0)
+  const waterKeyRef = useRef(0)
   const [fluff, setFluff] = useState(0)
   const [fruits, setFruits] = useState<{ gone: boolean; at?: { x: number; y: number }; fish: number }[]>([0, 1, 2].map(() => ({ gone: false, fish: 0 })))
   const [babyOnBack, setBabyOnBack] = useState(false)
@@ -658,11 +661,13 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
     const [rl, rr] = waterSpan(S0.river, riverY)
     const [ll, lr] = waterSpan(S0.lagoon, lagoonY)
     /** Where a drop lands at x: the first thing it meets, else the water, else the ground. */
+    /** The one rule for what the rain can touch: the drops and the soaking both use it (never a bird above the cloud). */
+    const rainReaches = (tg: { top: number; low?: number }) => tg.top > c.y + 60 || (tg.low !== undefined && tg.low > c.y + 20)
     const surface = (x: number) => {
       let y = groundAt(S0, x)
       if (x > rl && x < rr) y = Math.min(y, riverY)
       if (x > ll && x < lr) y = Math.min(y, lagoonY)
-      for (const tg of targets) if (x > tg.x0 && x < tg.x1 && tg.top > c.y + 60) y = Math.min(y, tg.top)
+      for (const tg of targets) if (x > tg.x0 && x < tg.x1 && rainReaches(tg)) y = Math.min(y, Math.max(tg.top, c.y + 60))
       return y
     }
 
@@ -683,7 +688,7 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
       }
       for (const tg of targets) {
         const over = Math.min(col1, tg.x1) - Math.max(col0, tg.x0)
-        if (over <= 0) continue
+        if (over <= 0 || !rainReaches(tg)) continue
         const share = Math.min(1, over / Math.min(tg.x1 - tg.x0, col1 - col0))
         const w = (G.wet[tg.id] = (G.wet[tg.id] ?? 0) + dt * G.rain * share)
         if (w >= tg.need && tg.ok()) tg.fire()
@@ -718,6 +723,11 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
     for (const id of Object.keys(G.wet) as Wet[]) if ((G.wet[id] ?? 0) > 0 && !(G.rain > 0)) G.wet[id] = Math.max(0, (G.wet[id] ?? 0) - dt * 0.15)
 
     // Water levels glide toward what's fallen (so a big squeeze rises smoothly), and climb the trunks.
+    const wk = Math.round(G.river * 20) * 100 + Math.round(G.lagoon * 20)
+    if (wk !== waterKeyRef.current) {
+      waterKeyRef.current = wk
+      setWaterKey(wk)
+    }
     G.shownRiver += (G.river - G.shownRiver) * Math.min(1, dt * 1.5)
     G.shownLagoon += (G.lagoon - G.shownLagoon) * Math.min(1, dt * 1.5)
     const wave = (y: number, x0: number, x1: number, ph: number) => {
@@ -872,18 +882,18 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
   }
 
   // The things under the rain, in world units (rebuilt each render; cheap).
-  const targets: { id: Wet; x0: number; x1: number; top: number; need: number; ok: () => boolean; fire: () => void }[] = []
+  const targets: { id: Wet; x0: number; x1: number; top: number; low?: number; need: number; ok: () => boolean; fire: () => void }[] = []
   if (S) {
     const always = () => true
-    const add = (id: Wet, x0: number, x1: number, top: number, need: number, ok = always) => targets.push({ id, x0, x1, top, need, ok, fire: () => soaked(id) })
+    const add = (id: Wet, x0: number, x1: number, top: number, need: number, ok = always, low?: number) => targets.push({ id, x0, x1, top, low, need, ok, fire: () => soaked(id) })
     S.plants.forEach((p, i) => add(`plant${i}` as Wet, p.x - p.h * 0.3, p.x + p.h * 0.3, S.bank - p.h * [0.35, 0.6, 0.85, 1][plants[i]], 0.7))
     add('frog', S.frog.x - S.frog.h, S.frog.x + S.frog.h, S.bank - S.frog.h * 1.5, 0.5)
     add('ants', S.ants.x0, S.ants.x1, S.bank - 30, 0.5)
     add('sloth', S.sloth.x - S.sloth.h * 0.75, S.sloth.x + S.sloth.h * 0.35, S.sloth.y + 20, 0.8)
-    add('macaws', S.macaws[0].x - 50, S.macaws[1].x + 50, Math.min(...S.macaws.map((m) => m.y - m.h)), 0.5)
-    add('toucan', S.toucan.x - 60, S.toucan.x + 60, S.toucan.y - S.toucan.h, 0.5)
+    add('macaws', S.macaws[0].x - 50, S.macaws[1].x + 50, Math.min(...S.macaws.map((m) => m.y - m.h)), 0.5, always, Math.max(...S.macaws.map((m) => m.y)) + 40)
+    add('toucan', S.toucan.x - 60, S.toucan.x + 60, S.toucan.y - S.toucan.h, 0.5, always, S.toucan.y + 40)
     add('sparkle', S.sparkle.x[cam] - S.sparkle.h * 0.35, S.sparkle.x[cam] + S.sparkle.h * 0.35, S.bank - S.sparkle.h * 0.8, 0.6, () => g.current.phase !== 'pads')
-    add('lbirds', S.lagoonBirds[0].x - 60, S.lagoonBirds[1].x + 60, Math.min(...S.lagoonBirds.map((b) => b.y - b.h)), 0.5)
+    add('lbirds', S.lagoonBirds[0].x - 60, S.lagoonBirds[1].x + 60, Math.min(...S.lagoonBirds.map((b) => b.y - b.h)), 0.5, always, Math.max(...S.lagoonBirds.map((b) => b.y)) + 40)
     add('monkeys', S.monkeys[0].x - 60, S.monkeys[1].x + 60, S.monkeys[0].y - S.monkeys[0].h, 0.6)
     add('capys', S.capys[0].x - S.capys[0].h * 0.7, S.capys[1].x + S.capys[1].h * 0.6, groundAt(S, S.capys[0].x) - S.capys[0].h, 0.7)
     // Each soaking opens a lily bud one more step (a half-open pad, then the whole pad and its flower), once there's
@@ -923,7 +933,7 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
     G.plants = listParam(param('plants'), to === 'forest' ? [0, 0, 0] : [3, 2, 3], 0, 3)
     setPlants(G.plants)
     setFrogUp(numberParam(param('frog'), to === 'forest' ? 0 : 1, 0, 1) === 1)
-    G.slothEyes = numberParam(param('sloth'), to === 'forest' ? 0 : 1, 0, 1); setSlothEyes(G.slothEyes)
+    G.slothEyes = Math.round(numberParam(param('sloth'), to === 'forest' ? 0 : 1, 0, 2)); setSlothEyes(G.slothEyes)
     G.river = G.shownRiver = numberParam(param('river'), later ? 1 : 0, 0, 1)
     G.lagoon = G.shownLagoon = numberParam(param('lagoon'), pads ? 1 : 0, 0, 1)
     G.buds = listParam(param('buds'), pads ? [2, 2, 2] : [0, 0, 0], 0, 2); setBuds(G.buds)
@@ -945,7 +955,11 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
     if (to === 'rainbow') {
       if (param('seats') === 'none') { G.seats = [0, 1, 2]; setSeats(G.seats) }
       setPhase('pads'); void finale()
-    } else { setPhase(to as Phase); setPrompt(to === 'forest' ? R.squeeze : to === 'river' ? R.river : pads ? R.pads : R.lagoon) }
+    } else {
+      setPhase(to as Phase); setPrompt(to === 'forest' ? R.squeeze : to === 'river' ? R.river : pads ? R.pads : R.lagoon)
+      // Everyone already on a pad (an address saved during the pause): on to the rainbow.
+      if (to === 'pads' && G.seats.every((n) => n !== null)) void finale()
+    }
     G.lastTouch = performance.now()
   }
 
@@ -958,7 +972,7 @@ export function RainyRiver({ onDone, setProgress }: ActivityProps) {
   useEffect(() => {
     if ((!seeded.current && phase !== 'story') || (phase === 'story' && start && start !== 'story')) return
     if (phase !== 'done') enter(phase, { plants: plants.join(','), frog: frogUp ? '1' : '0', sloth: String(slothEyes), river: String(g.current.river), lagoon: String(g.current.lagoon), buds: buds.join(','), seats: seats.map((n) => n ?? 'none').join(','), critters: padCritters.join(',') })
-  }, [phase, plants, frogUp, slothEyes, buds, seats, size.W])
+  }, [phase, plants, frogUp, slothEyes, buds, seats, waterKey, size.W])
   // ---- QA helpers: rain at a spot and read state ----
   useEffect(() => {
     window.__peruRiverQA = {

@@ -439,7 +439,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
   }
 
   /** One flying bird, steered toward (tx, ty) or gliding on its own. */
-  const fly = (b: Flyer, dt: number, target: { x: number; y: number } | null, k: { speed: number; sink: number; sinkTrying: number; rise: number }) => {
+  const fly = (b: Flyer, dt: number, target: { x: number; y: number } | null, k: { speed: number; sink: number; sinkTrying: number; rise: number; follow?: boolean }) => {
     const { lift } = liftAt(b.x, b.y)
     b.lift = lift
     let vxT: number
@@ -448,7 +448,10 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
     if (target) {
       vxT = clamp((target.x - b.x) * 1.8, -k.speed, k.speed)
       const dy = target.y - b.y
-      if (dy > 90) vyT = Math.min(dy * 1.6, FEEL.dive) - lift * k.rise * 0.6
+      if (k.follow) {
+        // An automatic follower (Coco beside Pluma, the finale's circle) flies straight to its spot, up or down.
+        vyT = clamp(dy * 1.6, -FEEL.rise * 1.3, FEEL.dive)
+      } else if (dy > 90) vyT = Math.min(dy * 1.6, FEEL.dive) - lift * k.rise * 0.6
       else {
         trying = dy < -90 && lift < 0.15
         vyT = (trying ? k.sinkTrying : k.sink) * (1 - lift) - k.rise * lift
@@ -545,7 +548,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
       // Pluma's turn: Coco flies beside her (or circles with the others at the end).
       const big = SWIRLS.find((q) => q.id === 'big')!
       const tgt = G.phase === 'finale' ? { x: big.x + Math.sin(t * 0.9) * 300, y: big.top + 260 + Math.cos(t * 0.9) * 60 } : { x: pl.x - pl.face * 230, y: pl.y - 70 }
-      fly(c, dt, tgt, { speed: 520, sink: 0, sinkTrying: 0, rise: 0 })
+      fly(c, dt, tgt, { speed: 520, sink: 0, sinkTrying: 0, rise: 0, follow: true })
     } else {
       const speed = G.waiting ? FEEL.waitSpeed : FEEL.speed
       trying = fly(c, dt, G.finger && G.steer === 'coco' ? fingerWorld : null, { speed, sink: FEEL.sink, sinkTrying: FEEL.sinkTrying, rise: FEEL.rise })
@@ -563,7 +566,7 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
       fly(pl, dt, G.finger ? fingerWorld : null, { speed: 470, sink: 60, sinkTrying: 35, rise: 300 })
     } else if (G.phase === 'finale') {
       const big = SWIRLS.find((q) => q.id === 'big')!
-      fly(pl, dt, { x: big.x + Math.sin(t * 0.9 + 1.2) * 260, y: big.top + 300 + Math.cos(t * 0.9 + 1.2) * 60 }, { speed: 420, sink: 0, sinkTrying: 0, rise: 0 })
+      fly(pl, dt, { x: big.x + Math.sin(t * 0.9 + 1.2) * 260, y: big.top + 300 + Math.cos(t * 0.9 + 1.2) * 60 }, { speed: 420, sink: 0, sinkTrying: 0, rise: 0, follow: true })
     } else {
       // Following: where Dad was a moment ago, a little behind and below.
       const back = G.trail.find((q) => q.t >= t - 0.7) ?? G.trail[0]
@@ -872,7 +875,11 @@ export function CanyonGlide({ onDone, setProgress }: ActivityProps) {
     G.pluma.y = solo ? PLACES.ridge.y + 60 : later ? 900 : G.coco.y + 80
     G.cam = { x: G.coco.x - G.viewW / 2, y: G.coco.y - G.viewH / 2 }
     star(solo ? 5 : later ? 4 : 2)
-    if (to === 'follow') { showSwirls('follow'); setRings(true); setPhase('follow'); setPrompt(C.lead) }
+    if (to === 'follow') {
+      showSwirls('follow'); setRings(true); setPhase('follow'); setPrompt(C.lead)
+      // All three places already visited (the address normal play writes during the pause): carry on to the ridge.
+      if ((['falls', 'condors', 'lookout'] as PlaceId[]).every((id) => G.places[id])) setTimeout(() => alive() && g.current.phase === 'follow' && void toRidge(), 1200)
+    }
     else {
       setSun({ left: 0.15, right: 1 })
       showSwirls(solo ? 'solo' : 'afternoon')

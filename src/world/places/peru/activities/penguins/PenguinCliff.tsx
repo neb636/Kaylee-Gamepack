@@ -240,6 +240,10 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     order: 0,
     need: 0,
     filled: 0,
+    /** Fish that have actually reached the burrow shelf (filled counts them the moment a diver is back). */
+    arrived: 0,
+    /** Bumped for every new order, so a late arrival from the last order can't touch this one. */
+    gen: 0,
     feeding: false,
     fed: [0, 0, 0],
     chicks: 2,
@@ -321,6 +325,16 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       // Wide <-> tall: everyone in the queue jumps to their spot; anything mid-flight lands home.
       G.sw.forEach((s) => {
         if (s.state === 'off') return
+        // The parade is already crossing the bay; leave it alone.
+        if (G.phase === 'parade' || G.phase === 'done') return
+        // The chicks' turn: adults still walking off (or swimming back) are retired, never put back in the queue.
+        if (G.phase === 'swim' && s.kind !== 'chick') {
+          const qi = G.queue.indexOf(s.id)
+          if (qi >= 0) G.queue.splice(qi, 1)
+          s.state = 'off'
+          s.shown = false
+          return
+        }
         const i = G.queue.indexOf(s.id)
         if (i >= 0 || s.state !== 'queue') {
           s.state = 'queue'
@@ -336,6 +350,7 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
         }
       })
       if (G.schools.length) placeSchools(true)
+      setFrontId(G.queue[0])
       prevS.current = S
     }
   }, [S])
@@ -715,13 +730,16 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     const T = SR.current!
     if (G.need && G.filled < G.need && !G.feeding) {
       const i = G.filled++
+      const gen = G.gen
       fly({ x: s.x, y: s.y - 30 }, T.burrow.fish[i])
       setTimeout(() => {
-        if (!alive()) return
+        if (!alive() || gen !== G.gen) return
+        G.arrived++
         setOrder({ need: G.need, filled: G.filled })
         sounds.note(2 + i * 2)
         void say(P.count[i], { interrupt: false })
-        if (G.filled === G.need) startFeeding()
+        // Feeding opens once, when the last fish of this order has landed.
+        if (G.arrived >= G.need && G.need > 0 && !G.feeding) startFeeding()
       }, 650)
       G.lastProgress = performance.now()
     } else {
@@ -751,6 +769,8 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     if (G.order >= ORDERS.length) return
     G.need = ORDERS[G.order]
     G.filled = 0
+    G.arrived = 0
+    G.gen++
     setOrder({ need: G.need, filled: 0 })
     void pepa.current?.play('flap')
     await sayKey(P.orders[G.need - 1], 2.2)
@@ -803,6 +823,8 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     setQuiet(true)
     setPrompt(P.fishGo)
     G.need = 0
+    G.arrived = 0
+    G.gen++
     G.busy = true
     await wait(800)
     if (!alive()) return
@@ -1378,13 +1400,16 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
     const late = ['twist', 'swim', 'parade'].includes(to)
     const payoff = to === 'swim' || to === 'parade'
     G.splashes = SPLASHES
-    G.chicks = Math.round(numberParam(param('chicks'), late ? 3 : 2, 2, 3))
+    // The chicks' swim and parade are always the three of them (the third hatches in the twist).
+    G.chicks = payoff ? 3 : Math.round(numberParam(param('chicks'), late ? 3 : 2, 2, 3))
     G.fed = listParam(param('fed'), payoff ? [4, 4, 4] : late ? [2, 1, 0] : [0, 0, 0], 0, 12)
     setChickCount(G.chicks); setEggCrack(G.chicks === 3 ? 3 : 0)
     setFull(G.fed.map((n) => Math.min(1, n / ROUND)))
     G.order = Math.round(numberParam(param('order'), payoff ? ORDERS.length : late ? TWIST_AT : to === 'feed' ? 1 : 0, 0, ORDERS.length))
     G.need = ORDERS[G.order] ?? 0
     G.filled = Math.round(numberParam(param('filled'), to === 'feed' ? G.need : 0, 0, G.need))
+    G.arrived = G.filled
+    G.gen++
     setOrder(payoff ? null : { need: G.need, filled: G.filled })
     placeSchools(); setSchoolsOn(!payoff)
     G.twist = late && !payoff
@@ -1407,7 +1432,8 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
       }
     } else {
       setPhase('fish'); setPrompt(P.fishGo)
-      if (to === 'feed') startFeeding()
+      // A full order is ready to feed whichever section it was saved in.
+      if (to === 'feed' || (G.need > 0 && G.filled >= G.need)) startFeeding()
     }
     G.lastTouch = performance.now()
   }
@@ -1502,12 +1528,20 @@ export function PenguinCliff({ onDone, setProgress }: ActivityProps) {
             if (!chickHome[i]) return null
             const hungry = [0, 1, 2].find((j) => j < chickCount && full[j] < 1) ?? 0
             // A tall hit column per chick (from the burrow's roof down to the sea), so small fingers can't miss.
-            const colW = (S.burrow.right - S.burrow.left) * 0.25
+            // Three chicks fit in a burrow only ~60 stage units apart, so each column is at least 88 screen px wide
+            // (they overlap) and a tap goes to the chick nearest the finger, not to whichever button is on top.
+            const colW = Math.max((S.burrow.right - S.burrow.left) * 0.25, 88 / scale)
             return (
               <motion.button
                 key={`chick${i}`}
                 aria-label={`chick ${i + 1}`}
-                onClick={() => tapChick(i)}
+                onClick={(e) => {
+                  const r = e.currentTarget.getBoundingClientRect()
+                  const x = r.width > 0 && (e.clientX || e.clientY) ? c.x - colW / 2 + ((e.clientX - r.left) * colW) / r.width : c.x
+                  let best = i
+                  for (let j = 0; j < chickCount; j++) if (chickHome[j] && Math.abs(S.chicks[j].x - x) < Math.abs(S.chicks[best].x - x)) best = j
+                  tapChick(best)
+                }}
                 style={{ position: 'absolute', left: c.x - colW / 2, top: S.burrow.top, width: colW, height: S.sea - S.burrow.top, padding: 0, background: 'none', border: 'none', zIndex: 6 }}
               >
                 <motion.div
