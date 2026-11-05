@@ -867,7 +867,8 @@ export class HideSeek implements World3D {
 
   private caught() {
     this.counts.caught++
-    if (this.kWhere === 'open') this.openFinds++
+    // (Any catch, in the open or wandering out of hiding, counts: he never finds her twice in a row.)
+    this.openFinds++
     this.setPhase('caught')
     this.looks = []
     this.hiddenAt = null
