@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Tie ribbons on the longtail boat</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ece6ff"/><stop offset="1" stop-color="#cdbfff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fe3ea"/><stop offset="1" stop-color="#3fc1cf"/></linearGradient>
+    <path id="hullP" d="M-2 76H52C63 76 71 70 74 58C76 50 76 40 75 31C75 26 76 21 80 19C84 17 89 19 89 24C90 46 88 70 80 86C77 92 72 96 64 97H-2Z"/>
+    <clipPath id="hull"><use href="#hullP"/></clipPath>
+    <clipPath id="post"><rect x="95" y="40" width="13" height="80" rx="6.5"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+
+  <!-- the water -->
+  <rect y="90" width="120" height="30" fill="url(#sea)"/>
+  <rect y="90" width="120" height="3" fill="#effcff" opacity="0.8"/>
+  <ellipse cx="40" cy="98" rx="46" ry="4" fill="#1f9cb3" opacity="0.4"/>
+
+  <!-- the pier's boards behind the post -->
+  <rect x="90" y="76" width="32" height="7" fill="#c99266"/>
+  <rect x="90" y="76" width="32" height="2.6" fill="#e5b78f"/>
+  <rect x="90" y="83" width="32" height="2.6" fill="#a46e4b"/>
+  <path d="M114 85.5V96" stroke="#8a5b3d" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- the pier post with its rope -->
+  <g clip-path="url(#post)">
+    <rect x="95" y="40" width="13" height="80" fill="#6b432e"/>
+    <rect x="92" y="40" width="12" height="80" rx="6" fill="#8a5b3d"/>
+    <path d="M98 48V86" stroke="#b17d56" stroke-width="2.4" stroke-linecap="round"/>
+  </g>
+  <ellipse cx="101.5" cy="44" rx="5.5" ry="2.6" fill="#b17d56"/>
+  <path d="M95 58l13-3M95 63l13-3M95 68l13-3" stroke="#f5dba8" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M95 64C92 70 88 74 84 76" fill="none" stroke="#e3bb7a" stroke-width="2.6" stroke-linecap="round"/>
+  <ellipse cx="101.5" cy="93" rx="10" ry="2.4" fill="none" stroke="#fff" stroke-width="2" opacity="0.7"/>
+
+  <!-- the longtail's tall bow: wood, a pink stripe, shaded down the front -->
+  <g clip-path="url(#hull)">
+    <rect x="-2" y="16" width="94" height="84" fill="#a46e4b"/>
+    <use href="#hullP" fill="#c99266" transform="translate(-4 -4)"/>
+    <path d="M-2 79H52C62 79 70 73 73 62C75 54 75 42 74 33" fill="none" stroke="#e5b78f" stroke-width="3" stroke-linecap="round"/>
+    <path d="M-2 85H55C66 85 74 79 78 68" fill="none" stroke="#ff8fb8" stroke-width="5"/>
+    <path d="M10 91H58" stroke="#a46e4b" stroke-width="2.4" stroke-linecap="round"/>
+  </g>
+
+  <!-- ribbons tied round the bow -->
+  <g clip-path="url(#hull)">
+    <path d="M70 28L92 24V30L70 34Z" fill="#ff4f9a"/>
+    <path d="M70 35L92 31V37L70 41Z" fill="#ffc83d"/>
+    <path d="M70 42L92 38V44L70 48Z" fill="#8fe3c8"/>
+    <path d="M70 49L92 45V51L70 55Z" fill="#8ccfff"/>
+    <rect x="84" y="22" width="8" height="36" fill="#4b3a8c" opacity="0.14"/>
+  </g>
+  <!-- their ends, fluttering back in the breeze -->
+  <path d="M76 29C68 22 60 27 52 21C46 16 40 19 33 14L32 20C39 23 45 21 51 26C59 32 68 28 76 35Z" fill="#ff4f9a"/>
+  <path d="M51 26C45 21 41 22 37 21L33 14C40 19 46 16 52 21Z" fill="#d8367f"/>
+  <path d="M76 36C67 34 61 30 52 32C44 34 38 30 29 32L31 38C38 36 45 40 53 38C61 36 67 41 76 42Z" fill="#ffc83d"/>
+  <path d="M53 38C47 39 41 36 31 38L29 32C38 30 44 34 52 32Z" fill="#eba123"/>
+  <path d="M76 43C69 46 62 43 55 47C48 51 42 49 35 53L39 58C45 54 52 56 58 52C64 48 70 50 76 49Z" fill="#8fe3c8"/>
+  <path d="M58 52C52 56 45 54 39 58L42 53C47 51 51 52 56 49Z" fill="#5cc6a6"/>
+  <path d="M76 50C71 55 66 55 62 60C58 65 54 66 49 70L54 73C58 69 62 68 66 64C70 60 73 59 76 56Z" fill="#8ccfff"/>
+  <path d="M66 64C62 68 58 69 54 73L53 68C57 66 60 64 63 61Z" fill="#5fb0ea"/>
+
+  <!-- a jasmine garland -->
+  <g fill="#fff">
+    <circle cx="77" cy="58" r="2.3"/><circle cx="78.5" cy="62.5" r="2.3"/><circle cx="81" cy="66.5" r="2.3"/><circle cx="85.5" cy="66" r="2.3"/><circle cx="88" cy="62" r="2.3"/>
+  </g>
+  <circle cx="83.5" cy="70" r="3.2" fill="#ff8fb8"/>
+  <circle cx="83" cy="69.4" r="1.2" fill="#ffc4da"/>
+
+  <path d="M20 66v5M17.5 68.5h5M100 22v4M98 24h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
