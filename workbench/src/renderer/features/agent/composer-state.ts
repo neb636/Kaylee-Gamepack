@@ -1,3 +1,4 @@
+import { modelSettings } from "../../../shared/agent-models";
 import { create } from "zustand";
 import type { AgentDeliveryResult, AgentPromptRequest, AgentViewState, PromptQuotation } from "../../../shared/models";
 import { resetSelections, resolveOptions, type PromptSelections } from "../../../shared/prompt-options";
@@ -35,7 +36,7 @@ function stateFor({ workspaceId, viewId }: ComposerTarget): AgentViewState | und
 function patchView(target: ComposerTarget, patch: Partial<AgentViewState>): void {
   useWorkbenchStore.getState().updateViewState(target.workspaceId, target.viewId, patch);
 }
-export function patchComposer(target: ComposerTarget, patch: Pick<AgentViewState, "draft" | "quotations" | "intent">): void {
+export function patchComposer(target: ComposerTarget, patch: Pick<AgentViewState, "draft" | "quotations" | "intent" | "modelSettings">): void {
   patchView(target, { ...patch, composerRevision: (stateFor(target)?.composerRevision ?? 0) + 1 });
 }
 export function setPromptSelections(target: ComposerTarget, promptSelections: PromptSelections): void {
@@ -151,7 +152,7 @@ export function registerComposerContributions(): void {
     const revision = state.composerRevision ?? 0;
     updateRuntime(target.viewId, { sending: true, result: undefined });
     let result: AgentDeliveryResult;
-    try { result = await runtime.controller.sendPrompt({ prompt: entry.preview.content, intent: entry.preview.intent }); }
+    try { result = await runtime.controller.sendPrompt({ prompt: entry.preview.content, intent: entry.preview.intent, settings: modelSettings(runtime.providerId, state.modelSettings?.[runtime.providerId]) }); }
     catch { result = { outcome: "uncertain", stage: "unknown", message: "Delivery could not be confirmed. Inspect the terminal before retrying." }; }
     if (!exists(target)) return;
     remember(target.viewId, { ...entry, outcome: result.outcome, message: result.message });

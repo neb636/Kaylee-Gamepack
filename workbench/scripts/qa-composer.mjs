@@ -89,12 +89,19 @@ try {
   await shot("instructions-menu");
   await page.keyboard.press("Escape");
 
+  await page.getByRole("button", { name: /Model/ }).click();
+  await page.getByRole("option", { name: "gpt-6-astra", exact: true }).click();
+  await page.getByRole("button", { name: /Effort/ }).click();
+  await page.getByRole("option", { name: "high", exact: true }).click();
+
   // First send creates the worktree, starts the CLI, waits for its input, and delivers the composed prompt.
   await prompt().fill("Explain this failure.");
   await page.getByRole("button", { name: "Send prompt", exact: true }).click();
   await waitFeedback("Prompt handed");
   const [first] = await prompts();
   assert.equal(first.prompt, ["Explain this failure.", OPEN_PR, WRITE_TESTS, "Focus the new tests on error handling.", "Explain the tradeoffs."].join("\n\n"));
+  assert.equal(first.model, "gpt-6-astra");
+  assert.equal(first.effort, "high");
   assert.equal(first.cwd, join(directory, "repo-worktrees", "wb-qa-task"));
   assert.equal(git("worktree", "list").includes("wb-qa-task"), true);
   assert.equal(await prompt().inputValue(), "");

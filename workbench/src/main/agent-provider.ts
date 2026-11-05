@@ -14,6 +14,7 @@ export type AgentDetection = Pick<AgentSessionStatus, "activity" | "canSubmit" |
 
 export interface AgentSubmission {
   paste: string;
+  settings?: { command: string; acknowledged: (output: string) => boolean }[];
   prefix?: { input: string; acknowledged: (screen: ScreenObservation) => boolean };
 }
 
