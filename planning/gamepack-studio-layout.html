@@ -18,31 +18,31 @@
   "kind": "Local builder app: layout plan",
   "updated": "2026-11-05",
   "status": {
-    "label": "Agent first: step 6 of 8 built",
+    "label": "Agent first: step 6 of 11 built",
     "tone": "butter"
   },
-  "pitch": "Studio still looks like Agent Workbench: a left tree of *workspaces* (folders), a tab strip of generic views and an IDE side panel. But there is only ever **one** Gamepack checkout, and the real unit of work is **a piece of work on a branch** (a worktree, its agent, its PR, its preview). The new layout puts the **game in the middle**, the **list of pieces of work on the left**, and the **agent on the right**, with the labs as switches on the game instead of separate tabs.",
-  "next": "Dad tries the agent-first layout (step 6): open a worktree, work with the agent, press ▶ Game or ⌘G only when needed. Next: step 7, start typing at once (no setup form, the CLI starts right away, the composer holds a prompt until the CLI is ready).",
+  "pitch": "Studio started as Agent Workbench and became a builder made for this game: one repo, the **pieces of work** (worktrees) on the left, the **agent** as the main thing, the game when wanted. Dad still opens **Orca** beside it to read, edit and review files. The next steps make Studio enough on its own: **everything in the middle is a tab** (agents, terminals, the game and each lab, open files), the middle can **split in two**, and a **file explorer** sits on the right like Orca's.",
+  "next": "Dad reads the new plan (**Next: tabs in the middle, files on the right**, steps 7-9) and answers the four open questions at the bottom. Then step 7: the game and the labs become tabs, and the middle splits in two.",
   "facts": [
     {
-      "icon": "📁",
-      "value": "1",
-      "label": "repo, always (no more “Add workspace”)"
-    },
-    {
-      "icon": "🌿",
-      "value": "27",
-      "label": "worktrees today, Studio sees none of them"
-    },
-    {
-      "icon": "🧹",
-      "value": "9",
-      "label": "of those already merged or closed"
-    },
-    {
       "icon": "🧱",
-      "value": "5",
-      "label": "PRs, one per step"
+      "value": "6 of 11",
+      "label": "steps built"
+    },
+    {
+      "icon": "🐳",
+      "value": "2 → 1",
+      "label": "apps open while building (Studio, no more Orca)"
+    },
+    {
+      "icon": "🗂️",
+      "value": "3",
+      "label": "PRs for tabs, split and files (steps 7-9)"
+    },
+    {
+      "icon": "🎮",
+      "value": "1",
+      "label": "game running per piece of work, whichever tab shows it"
     }
   ],
   "related": [
@@ -61,8 +61,173 @@
   ],
   "sections": [
     {
+      "id": "tabs-and-files",
+      "title": "Next: tabs in the middle, files on the right",
+      "icon": "🗂️",
+      "lede": "Dad (2026-11-05): the labs in the right sidebar are weird, and he wants to stop using Orca completely.",
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "dad",
+          "icon": "💬",
+          "title": "What Dad asked for",
+          "md": "“Camera lab, Feel, etc. could be an active center tab. Then on the right I can have a file explorer like Orca. I still sometimes need to manually edit and review files. An open file can be a tab as well.”"
+        },
+        {
+          "type": "cards",
+          "title": "What stinks now",
+          "items": [
+            {
+              "icon": "🧱",
+              "title": "Labs squeezed into a side panel",
+              "md": "Game, Camera, Feel and Character share a right panel about a quarter of the window wide. Its toolbar wraps onto five lines (Sections, Big, Fill the pane, reload, Copy link, Send to agent, the three labs) before the game starts."
+            },
+            {
+              "icon": "🐳",
+              "title": "Two apps",
+              "md": "To read a file, edit a number, see what an agent changed or search the code, Dad switches to Orca, then back to Studio for the agent and the game."
+            },
+            {
+              "icon": "🙈",
+              "title": "Files hidden behind +",
+              "md": "Files and Commit changes are tabs from the **+** menu that take the agent's place, and file tabs are read-only."
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "title": "The window after steps 7-9 (split in two, Feel lab on the right half)",
+          "text": "┌─ Work ────────┬─[Claude ●][Kart.tsx ●][+]──┬─[Feel lab][Game][+]─────┬─ Files  Changes 3  Sections ─┐\n│ ● main        │                            │ Thailand ▸ Nan ▸ kart   │ [ Names | Contents ]         │\n│ ▸ nan-kart  ● │  Claude Code               │ [iPad ▾] [⟳] [→ agent]  │ [ Find files…             ]  │\n│   PR #340 ok  │  (the native CLI)          │ ┌─────────────────────┐ │ ▸ planning                   │\n│ ▸ koh-samet   │                            │ │                     │ │ ▾ src/world/places/thailand  │\n│               │                            │ │  the real game,     │ │     Kart.tsx              M  │\n│               │                            │ │  ?feel=1            │ │     knobs.ts              M  │\n│               ├────────────────────────────┤ │                     │ │ ▸ qa-output         (dim)    │\n│               │ composer                   │ └─────────────────────┘ │                              │\n│ + New work    │ [Section] [Starters ▾]     │ sliders · AI · Undo     │                              │\n├───────────────┴────────────────────────────┴─────────────────────────┴──────────────────────────────┤\n│ Ship (under the agent until step 11)                       nan-kart · game :5176 · 1 agent working  │\n└─────────────────────────────────────────────────────────────────────────────────────────────────────┘\n       left half of the middle ◂── split, ⌘\\ or drag a tab ──▸ right half"
+        },
+        {
+          "type": "cards",
+          "title": "The pieces",
+          "items": [
+            {
+              "icon": "🗂️",
+              "title": "One tab strip in the middle",
+              "md": "Everything for the selected piece of work is a tab: agents, terminals, **🎮 Game**, **🎥 Camera**, **🎛️ Feel**, **🦄 Character**, open files and diffs, Character concepts. The **+** menu lists them all. ▶ Game, ⤢ Big and the game's right panel go away; ⌘G opens (or brings forward) the Game tab."
+            },
+            {
+              "icon": "🎮",
+              "title": "The game and each lab, a tab each",
+              "md": "The real game with the whole width, so its toolbar fits on one line. A lab tab opens at the section on screen (the Feel tab is that section with `?feel=1`). Its tuning panel (AI preview, Undo, the save prompt) sits beside the device frame when there's room and under it when not. ⇆ Main, 🐞 issues, Copy link and Send to agent stay on its toolbar."
+            },
+            {
+              "icon": "◫",
+              "title": "The middle splits in two",
+              "md": "Two halves side by side, each with its own tabs, like Orca and VS Code: *Open to the side* in a tab's menu, ⌘\\, or drag a tab onto the other half. A lab opened while the agent is on screen opens beside it by itself, so Dad talks to the agent and tunes at once. Closing the last tab of a half joins them. Remembered per piece of work."
+            },
+            {
+              "icon": "📁",
+              "title": "Explorer on the right",
+              "md": "Orca's right side for the selected piece of work, with icons on top: **Files** (the tree, *Names | Contents* search, changed files marked M / A / U, build output dimmed), **Changes** (what's changed, a click opens its diff, the commit box) and **Sections** (the ☰ drawer's tree moves here; a click opens it in the Game tab). Hides with its own button or ⌘⌥B."
+            },
+            {
+              "icon": "✏️",
+              "title": "Files you can edit, as tabs",
+              "md": "One click opens a *preview* tab (in italics, replaced by the next click); a double click or typing keeps it. Real editing: undo, ⌘F, ⌘S and a dot while unsaved. Agents change files all the time, so a tab without edits reloads by itself, and one with edits says *Changed on disk: Reload / Keep mine* and never overwrites quietly. A ⇄ switch shows the diff. Pictures (sprites, contact sheets in `qa-output/`) show as pictures."
+            },
+            {
+              "icon": "🔎",
+              "title": "Getting to a file fast",
+              "md": "⌘P opens a file by name, ⇧⌘F searches inside files, a path in the agent's or a terminal's output (`src/…/Kart.tsx:42`) opens that line, and the file on screen is shown in the tree."
+            }
+          ]
+        },
+        {
+          "type": "flow",
+          "title": "What Dad does with it",
+          "rows": [
+            {
+              "label": "Tune",
+              "steps": [
+                {
+                  "icon": "🤖",
+                  "label": "Talking to the agent"
+                },
+                {
+                  "icon": "🎛️",
+                  "label": "+ Feel lab",
+                  "note": "opens beside the agent, at the section on screen",
+                  "hl": true
+                },
+                {
+                  "icon": "💬",
+                  "label": "Sliders, or “make it gentler”"
+                },
+                {
+                  "icon": "💾",
+                  "label": "Save prompt",
+                  "note": "lands in the agent on the left"
+                }
+              ]
+            },
+            {
+              "label": "Review",
+              "steps": [
+                {
+                  "icon": "🌿",
+                  "label": "Changes 3",
+                  "note": "right sidebar"
+                },
+                {
+                  "icon": "⇄",
+                  "label": "Kart.tsx diff",
+                  "note": "a tab",
+                  "hl": true
+                },
+                {
+                  "icon": "✏️",
+                  "label": "Fix a number, ⌘S"
+                },
+                {
+                  "icon": "🎮",
+                  "label": "The Game tab updates",
+                  "note": "Vite hot reload"
+                }
+              ]
+            },
+            {
+              "label": "Find",
+              "steps": [
+                {
+                  "icon": "🔍",
+                  "label": "⌘P “knobs”"
+                },
+                {
+                  "icon": "📄",
+                  "label": "knobs.ts",
+                  "note": "preview tab"
+                },
+                {
+                  "icon": "🔗",
+                  "label": "Or click a path in the agent's output",
+                  "note": "opens at that line"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "warn",
+          "icon": "🧠",
+          "title": "One game at a time (8 GB Mac)",
+          "md": "Every game or lab tab is the same game with a different link, and each running copy is a WebGL game. So only one runs per piece of work: the game tab on screen. The last one shown stays loaded while Dad looks at the agent or a file (its scene and Undo survive, like today), and going from one game tab to another reloads the game at that tab's link, in a second or two. ⇆ Main still adds main's copy beside it."
+        },
+        {
+          "type": "callout",
+          "tone": "note",
+          "icon": "📌",
+          "title": "What stays the same",
+          "md": "The Work list on the left, the agent and its composer, Ship under the agent (until step 11), the lab protocol and the AI tuning rules, and the safety rules: files are read and written only inside the selected worktree, nothing runs through a shell."
+        }
+      ]
+    },
+    {
       "id": "why",
-      "title": "What stinks today",
+      "title": "What stank at the start (2026-11-04)",
       "icon": "😖",
       "blocks": [
         {
@@ -104,7 +269,7 @@
     },
     {
       "id": "layout",
-      "title": "The new layout",
+      "title": "The first layout (steps 1-5)",
       "icon": "🖼️",
       "lede": "Three columns, each with one job. The game is always the biggest thing on screen.",
       "blocks": [
@@ -358,15 +523,33 @@
             },
             {
               "n": 7,
+              "title": "The middle is tabs, and splits in two",
+              "status": "next",
+              "md": "Game, Camera, Feel and Character become tabs (one `game` tab type, its lab in the tab's state), opened from **+** or ⌘G; the right game panel, ▶ Game and ⤢ Big go. The middle splits into two halves (*Open to the side*, ⌘\\, drag a tab across), and a lab opens beside the agent by itself. One running game per piece of work. A piece of work whose game panel was open gets its Game tab on the right half. `qa:composer` and `qa:labs` reach the labs through their tabs."
+            },
+            {
+              "n": 8,
+              "title": "Explorer on the right",
+              "status": "todo",
+              "md": "A right sidebar with **Files** (the tree with M / A / U marks and dimmed build output, *Names | Contents* search), **Changes** (from Commit changes; a click opens the diff as a tab) and **Sections** (from the ☰ drawer). The Files and Commit changes tabs and the drawer go; their open tabs move into the sidebar. Hides with its button or ⌘⌥B, width remembered."
+            },
+            {
+              "n": 9,
+              "title": "Edit and review files",
+              "status": "todo",
+              "md": "File tabs you can edit: preview tabs, ⌘S, a dot while unsaved, *Changed on disk* when an agent edits the same file, ⌘F. ⇄ Diff against the last commit or main. Pictures as pictures. ⌘P, ⇧⌘F, clickable paths in agent and terminal output, the file on screen shown in the tree. The tree's menu: New file, Rename, Move to Trash (asks), Copy path, Reveal in Finder."
+            },
+            {
+              "n": 10,
               "title": "Start typing at once",
               "status": "todo",
               "md": "No setup form: opening a worktree or **+** starts the last-used CLI straight away (a Claude / Codex dropdown on the tab switches it). Run in and Location go (the worktree is what's picked on the left); Resume previous moves into the **+** menu. The composer holds a prompt until the CLI is ready instead of “Not sent”. A session is named from its first prompt instead of “Untitled · Setup”."
             },
             {
-              "n": 8,
+              "n": 11,
               "title": "Tidy the edges",
               "status": "todo",
-              "md": "Ship becomes a **Ship ▾** menu in the header instead of a permanent footer (its output still opens in a terminal tab). “Dependencies are missing” shows on the worktree's row with an **npm ci** button. Work rows get **+ Claude** / **+ Codex** on hover."
+              "md": "Ship becomes a **Ship ▾** menu in the header instead of a permanent footer, or a tab in the right sidebar beside Changes (an open question below); its output still opens in a terminal tab. “Dependencies are missing” shows on the worktree's row with an **npm ci** button. Work rows get **+ Claude** / **+ Codex** on hover."
             }
           ]
         },
@@ -558,6 +741,32 @@
             {
               "q": "What can go?",
               "a": "Personas are dropped for now (can come back later). Active views goes too (it's a copy of the Work list). Files and the commit box move under a ⋯ menu. (2026-11-04)"
+            },
+            {
+              "q": "Where do the labs and files go? (2026-11-05)",
+              "a": "Camera, Feel and the others become tabs in the middle, a file explorer like Orca's goes on the right, and an open file is a tab too. Dad wants to edit and review files in Studio and stop using Orca."
+            }
+          ]
+        },
+        {
+          "type": "qa",
+          "title": "Still open (steps 7-9)",
+          "items": [
+            {
+              "q": "The game and the labs: a tab each (🎮 Game, 🎥 Camera, 🎛️ Feel, 🦄 Character), or one Game tab with a Play | Camera | Feel | Character switch on it?",
+              "why": "Builder's pick: a tab each, as asked. It's easy to see which lab is open and to put one beside the agent. The cost: only one game runs at a time, so going from the Feel tab to the Camera tab reloads the game (a second or two)."
+            },
+            {
+              "q": "Ship: stay under the agent, become a Ship ▾ menu (step 11), or a 🚀 tab in the right sidebar beside Changes?",
+              "why": "Builder's pick: a right-sidebar tab beside Changes. Commit, verify and open the PR live in one place, and the agent gets its full height back."
+            },
+            {
+              "q": "A diff shows changes against what: the last commit, or main (everything this branch changed)?",
+              "why": "Builder's pick: a switch on the diff tab, starting on main for a worktree (what the PR will show) and on the last commit for main."
+            },
+            {
+              "q": "OK to add three small CodeMirror packages to Studio only: @codemirror/commands (undo, keys), @codemirror/search (⌘F) and @codemirror/merge (diffs)?",
+              "why": "They're the same family as the CodeMirror Studio already uses to show files, about 100 KB together, and the game never loads them. Without them, editing has no undo or find, and diffs would be hand-built."
             }
           ]
         }
@@ -618,6 +827,58 @@
             "Never delete a worktree with changes or an unpushed branch; Clean up shows what it will remove and asks.",
             "Game `npm run verify` stays independent of Electron. Studio's own `npm run studio:check` gains tests for worktree parsing, PR mapping and the state migration.",
             "Each step updates `qa:composer` (the Electron smoke) for the new shell, with screenshots in the printed temp folder."
+          ]
+        },
+        {
+          "type": "table",
+          "title": "Steps 7-9: tabs, the split and the explorer",
+          "head": [
+            "Where",
+            "Change"
+          ],
+          "rows": [
+            [
+              "`workbench/src/shared/models.ts`",
+              "`Workspace.groups?: { viewIds: string[]; activeViewId?: string }[]` (one or two) + `focusedGroup` and `splitSize`; `activeViewId` stays as the focused half's tab for older code. New `GameViewState { lab?: GameLab; link?: string }`. `GameState` keeps link, frame, draft and provider; `open` / `big` migrate in `main/persistence.ts` (version bump): `open: true` becomes a `game` tab on the right half. `LayoutState.explorer { collapsed, size, tab }` (`files`, `changes`, `sections`)."
+            ],
+            [
+              "`workbench/src/renderer/shell/`",
+              "`WorkbenchShell`: work · middle · explorer. `AgentColumn` becomes `CenterArea`: one or two `TabGroup`s, each a `ViewTabs` and its active view, split by a resize handle. `ViewTabs` gets dragging between halves and a tab menu (Close, Close others, Open to the side, Copy path). Terminals and the live game stay mounted behind other tabs, as now. New `RightSidebar` with an icon bar."
+            ],
+            [
+              "`workbench/src/renderer/features/game/`",
+              "`GamePane` becomes the `game` view's component: its `lab` picks Camera, Feel or Character, the toolbar fits one line, `LabPanel` sits beside or under the frame by width (container query). `game-store` keeps a `liveViewId` per piece of work: the game tab on screen takes the one frame, the last one stays mounted hidden. ⌘G (`onToggleGame`) becomes `game.focus`: bring the Game tab forward or open one to the side. `openInGame` (Sections, Ship, known issues) targets the live game tab. `SectionTree` moves into the explorer unchanged."
+            ],
+            [
+              "`workbench/src/renderer/features/files/`",
+              "`FilesPanel` becomes the explorer's Files tab: *Names | Contents*, git marks from `sourceControl.status`, ignored folders dimmed (`git ls-files --others --ignored --exclude-standard --directory`, cached with the status). `FileView` edits: `@codemirror/commands` history and keys, `@codemirror/search`, `preview` and `dirty` on the view, save through the new IPC. New `file-diff` view with `@codemirror/merge`. Image files show as an `<img>`."
+            ],
+            [
+              "`workbench/src/main/workspace-files.ts`, `ipc.ts`, preload",
+              "`read` also returns a `hash`. `files.write(root, path, content, expectedHash)`: inside the root only (`resolveInside`), text only, up to 2 MB, refused when the file on disk no longer matches `expectedHash` (returns the disk version instead). `files.search(root, query, options)`: `git grep -n -I --untracked --no-color -z` with fixed arguments, at most 500 matches or 2 s, a new query cancels the last. `files.image(root, path)`: up to 8 MB as a data URL. Step 9: create, rename and Move to Trash (`shell.trashItem`), each inside the root."
+            ],
+            [
+              "`workbench/src/main/providers/git-source-control-provider.ts`",
+              "`fileAt(root, path, base)`: `git show <ref>:<path>` where the ref is only `HEAD` or the merge base with `origin/main`, for diffs; `ignored(root)` for the dimmed tree."
+            ],
+            [
+              "`workbench/src/renderer/features/terminal/TerminalSurface.tsx`",
+              "xterm `registerLinkProvider` for `path(:line(:col))` that exists in the worktree's file index: a click runs `file.open` at that line (agent and shell terminals)."
+            ],
+            [
+              "tests",
+              "`npm test`: the state migration (`game.open` to a split, Files / Commit changes tabs to the explorer), write refusals (outside the root, stale hash, binary, too big), search limits. `qa:composer`: open a Feel tab beside the agent, split and join, open a file from the tree, edit and ⌘S, a diff tab. `qa:labs`: reach each lab through its tab."
+            ]
+          ]
+        },
+        {
+          "type": "list",
+          "title": "Steps 7-9: rules",
+          "items": [
+            "Still one running game per piece of work (plus main's for ⇆ Main), whatever tabs are open.",
+            "The renderer never names a path outside the selected worktree; main checks every read, write and search against it.",
+            "An agent's edit always wins over a stale tab: Studio never saves over a file that changed on disk since it was opened.",
+            "Update `workbench/AGENTS.md` (the labs are tabs now, not switches on one pane) and `docs/architecture.md` in step 7."
           ]
         }
       ]
