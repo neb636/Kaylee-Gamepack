@@ -29,9 +29,6 @@ interface WorkbenchStore extends PersistedState {
   updateLayout: (patch: Partial<LayoutState>) => void;
 }
 
-/** The pinned Game tab's id in a workspace's tab strip (not a view record). */
-export const GAME_TAB = "game";
-
 const initialState: PersistedState = {
   workspaces: [],
   personas: [],
@@ -92,7 +89,7 @@ export const useWorkbenchStore = create<WorkbenchStore>((set, get) => ({
       path,
       // The labs are switches on the game pane now; the main checkout also gets Character concepts.
       views: [initialView, ...(labs ? [{ id: createId("view"), type: "image-generator", title: "Character concepts", workspaceId, state: { count: 1, autoTitle: false } }] : [])],
-      activeViewId: labs ? GAME_TAB : initialView.id,
+      activeViewId: initialView.id,
     };
     set((state) => ({
       workspaces: [...state.workspaces, workspace],
