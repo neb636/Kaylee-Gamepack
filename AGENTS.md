@@ -335,7 +335,7 @@ offers one, skippable, right after that activity's stamp); a country with videos
 and the world map's Theater shows every country's videos.
 
 Adding a country: make the folder, add its pin in `meta.ts` (and remove it from `COMING_SOON` in `WorldMap.tsx`),
-write its plan in `planning/around-the-world/`, draw its shelf banner and an icon per activity (`src/world/shelf/STYLE.md`),
+write its plan in `planning/around-the-world/`, draw its shelf banner, its world-map pin and an icon per activity (`src/world/shelf/STYLE.md`),
 generate backgrounds, props and character reference pictures with Codex
 (`codex exec -m gpt-6.1-sol -c model_reasoning_effort="medium" ...`, style rules from `art/STYLE.md`; tell Codex never
 to run git or gh), build the friend's characters, cast their voices, then

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Thailand</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe1ee"/><stop offset="1" stop-color="#ffbcd8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="head"><path d="M60 26C76 26 86 38 86 54C86 64 81 71 74 75C71 77 69 80 69 84V93C69 99 73 101 77 99C80 97.5 82 98.5 82 101C81.5 106 76 109 71 108.5C63.5 107.5 59 102 59 94V84C59 80 56 77 50 75C41 71 34 64 34 54C34 38 44 26 60 26Z"/></clipPath>
+    <clipPath id="earL"><path d="M38 40C24 30 10 38 10 54C10 70 20 80 32 78C38 77 42 71 42 64Z"/></clipPath>
+    <clipPath id="earR"><path d="M82 40C96 30 110 38 110 54C110 70 100 80 88 78C82 77 78 71 78 64Z"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="58" r="50" fill="url(#glow)"/>
+
+  <!-- jasmine flowers floating in the corners -->
+  <g fill="#fff">
+    <circle cx="20" cy="22" r="3"/><circle cx="25" cy="22" r="3"/><circle cx="22.5" cy="17.5" r="3"/><circle cx="19" cy="26.5" r="2.6"/><circle cx="26" cy="26.5" r="2.6"/>
+    <circle cx="98" cy="96" r="2.6"/><circle cx="102" cy="96" r="2.6"/><circle cx="100" cy="92.5" r="2.6"/><circle cx="97.5" cy="99.5" r="2.3"/><circle cx="102.5" cy="99.5" r="2.3"/>
+  </g>
+  <circle cx="22.5" cy="23" r="1.8" fill="#ffc83d"/>
+  <circle cx="100" cy="96.5" r="1.5" fill="#ffc83d"/>
+
+  <ellipse cx="60" cy="108" rx="26" ry="4" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the big ears: stone grey-lavender, pink inside -->
+  <g clip-path="url(#earL)">
+    <rect x="8" y="30" width="36" height="52" fill="#bcb6d6"/>
+    <path d="M36 44C26 38 16 43 15.5 54C15 66 22 73 31 72C35 71.5 38 67 38 62Z" fill="#ffc4da"/>
+  </g>
+  <path d="M14 46C17 38 24 35 31 37" fill="none" stroke="#dedaf0" stroke-width="2.6" stroke-linecap="round"/>
+  <g clip-path="url(#earR)">
+    <rect x="76" y="30" width="36" height="52" fill="#9790ba"/>
+    <path d="M84 44C94 38 104 43 104.5 54C105 66 98 73 89 72C85 71.5 82 67 82 62Z" fill="#ff8fb8"/>
+  </g>
+
+  <!-- the head and the trunk, curling up at the tip -->
+  <g clip-path="url(#head)">
+    <rect x="30" y="22" width="60" height="90" fill="#9790ba"/>
+    <path d="M58 24C72 24 80 36 80 52C80 62 75 69 68 73C65 75 64 79 64 84V100C64 104 62 108 58 108C48 100 30 70 32 52C32 36 44 24 58 24Z" fill="#bcb6d6"/>
+    <path d="M40 46C42 36 50 30 58 30" fill="none" stroke="#dedaf0" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <!-- the trunk's wrinkles -->
+  <path d="M60 86h8M59.5 92h9M61 98h7" stroke="#9790ba" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- little cream tusks -->
+  <path d="M50 76C50 82 47 86 43 87C45 83 46 79 46.5 75Z" fill="#fff7f0"/>
+  <path d="M70 76C70 82 73 86 77 87C75 83 74 79 73.5 75Z" fill="#efdccd"/>
+
+  <!-- the festival headdress: a pink and gold cloth with a flower -->
+  <path d="M48 30Q60 24 72 30L66 46Q60 50 54 46Z" fill="#ff4f9a"/>
+  <path d="M60 26Q66 26 72 30L66 46Q63 48.5 60 49Z" fill="#d8367f"/>
+  <path d="M50.5 34Q60 29.5 69.5 34" fill="none" stroke="#ffc83d" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="60" cy="42" r="3.2" fill="#ffc83d"/>
+  <circle cx="59" cy="41" r="1.2" fill="#fff6cc"/>
+  <path d="M55 47.5L60 53L65 47.5" fill="none" stroke="#ffc83d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- eyes and blush -->
+  <ellipse cx="49" cy="59" rx="3.6" ry="4.4" fill="#2b2330"/>
+  <ellipse cx="71" cy="59" rx="3.6" ry="4.4" fill="#2b2330"/>
+  <circle cx="50.4" cy="57.4" r="1.6" fill="#fff"/>
+  <circle cx="72.4" cy="57.4" r="1.6" fill="#fff"/>
+  <ellipse cx="43" cy="68" rx="4.6" ry="2.6" fill="#ff8fb8" opacity="0.55"/>
+  <ellipse cx="77" cy="68" rx="4.6" ry="2.6" fill="#ff8fb8" opacity="0.55"/>
+  <path d="M55 66Q60 70 65 66" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round"/>
+</svg>

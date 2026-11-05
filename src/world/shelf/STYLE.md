@@ -8,6 +8,7 @@ generated thumbnails looked bad); follow the flat travel-app illustrations he pi
 src/world/shelf/banners/<row>.svg          # favorites, house, mall, krabi, nan, or a country's id
 src/world/shelf/icons/<place>/<card>.svg   # card = the part after "<place>/" in the game's key (thailand/vet -> icons/thailand/vet.svg)
 src/world/shelf/icons/surprise.svg
+src/world/shelf/pins/<place>.svg           # the place's pin on the world map (WorldMap.tsx)
 ```
 
 A game without an icon still shows (its activity emoji on a pastel tile), but every new game and place gets its
@@ -102,6 +103,14 @@ Start from this template:
   <!-- the subject, back to front -->
 </svg>
 ```
+
+## Map pins (one per place)
+
+The world map's pins (`src/world/WorldMap.tsx`) use the same look: `viewBox="0 0 120 120"`, cropped to a **circle**
+with a gold or white ring, about 70 px on the iPad. Keep the subject inside a circle of radius 46 around the centre.
+A pin names the whole place at a glance, so it is the country's best-known animal or landmark with one local touch
+(the panda's red lantern, the llama's yarn tassels, the elephant's festival headdress), not one of its games. Each
+pin gets its own tint so neighbours on the map look different. Check them with `node scripts/shelf-sheet.mjs pins`.
 
 ## Banners (one per place)
 
