@@ -69,3 +69,23 @@
 .work-badge.is-working { background: var(--wb-accent-soft); color: var(--wb-accent); }
 .composer-toolbar .composer-chip { white-space: nowrap; }
 .agent-column .composer-toolbar { flex-wrap: wrap; row-gap: 6px; }
+.kept-view { display: flex; flex: 1; flex-direction: column; min-height: 0; }
+.kept-view[hidden] { display: none; }
+
+/* Ship: under the agent, one button each. */
+.ship-panel { flex: none; margin: 0 8px 8px; border: 1px solid var(--wb-border-subtle); border-radius: var(--wb-radius-lg); background: var(--wb-bg-raised); }
+.ship-header { display: flex; align-items: center; gap: 6px; width: 100%; padding: 8px 10px; border: 0; background: none; color: var(--wb-text-primary); font: inherit; font-size: 12.5px; text-align: left; cursor: pointer; }
+.ship-summary { margin-left: auto; color: var(--wb-text-secondary); font-size: 11.5px; }
+.ship-body { display: grid; gap: 8px; padding: 0 10px 10px; }
+.ship-buttons { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 6px; }
+.ship-buttons button, .ship-link-button { padding: 7px 8px; border: 1px solid var(--wb-border); border-radius: var(--wb-radius-sm); background: var(--wb-bg-panel); color: var(--wb-text-primary); font: inherit; font-size: 12px; text-align: left; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ship-buttons button:hover, .ship-link-button:hover { background: var(--wb-bg-hover); }
+.ship-buttons button:disabled { opacity: .45; cursor: default; }
+.ship-links { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: 12px; }
+.ship-links a { color: var(--wb-accent); text-decoration: none; }
+.ship-link-button { padding: 2px 8px; }
+.ship-link-button[aria-pressed="true"] { border-color: var(--wb-accent); color: var(--wb-accent); }
+.ship-qr-row { display: flex; align-items: center; gap: 10px; }
+.ship-qr { width: 112px; height: 112px; flex: none; padding: 4px; border-radius: var(--wb-radius-sm); background: #fff; }
+.ship-qr svg { width: 100%; height: 100%; }
+.ship-qr-row small { color: var(--wb-text-secondary); }

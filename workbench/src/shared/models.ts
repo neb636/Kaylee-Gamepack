@@ -89,6 +89,8 @@ export interface LayoutState {
   leftCollapsed: boolean;
   rightCollapsed: boolean;
   rightPanel?: string;
+  /** The Ship panel under the agent is folded away. */
+  shipCollapsed?: boolean;
 }
 
 export interface PersistedState {
