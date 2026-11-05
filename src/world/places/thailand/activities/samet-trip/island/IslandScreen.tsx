@@ -27,9 +27,11 @@ interface Props {
   onPhotos?(p: Partial<Record<AnimalId, BookPhoto>>): void
   /** Mommy's phone out or away (the address bar follows). */
   onPhone?(on: boolean): void
+  /** All four flags up and the speedboat home tapped: Mommy's photo of the island (for Agong's wall). */
+  onHome?(photo: string): void
 }
 
-export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, photos: kept, onPhotos, onPhone }: Props) {
+export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, photos: kept, onPhotos, onPhone, onHome }: Props) {
   const [n, setN] = useState(0)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const worldRef = useRef<World | null>(null)
@@ -47,8 +49,8 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
   foundRef.current = found
   const openRef = useRef(open)
   openRef.current = open
-  const cb = useRef({ onAt, onOpen, onBook, onPhotos })
-  cb.current = { onAt, onOpen, onBook, onPhotos }
+  const cb = useRef({ onAt, onOpen, onBook, onPhotos, onHome })
+  cb.current = { onAt, onOpen, onBook, onPhotos, onHome }
   const make = (renderer: WebGLRenderer) => {
     const w = new World(renderer, start, {
       at: (a) => cb.current.onAt(a),
@@ -78,6 +80,7 @@ export function IslandScreen({ start, bookOpen = false, onAt, onOpen, onBook, ph
       },
       near: setGlow,
       cleaned: setCleaned,
+      home: onHome ? (src) => cb.current.onHome?.(src) : undefined,
     })
     w.setHintElement(hintRef.current)
     w.requestPortraits(setPortraits)

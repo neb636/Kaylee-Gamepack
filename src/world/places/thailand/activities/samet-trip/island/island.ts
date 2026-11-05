@@ -43,6 +43,7 @@ import type { World3D } from '../../../../../engine3d/View3D'
 import { Avatar } from '../../../characters/avatar'
 import { FAMILY } from '../../../characters/family'
 import { Member } from '../../../characters/member'
+import { wearing } from '../../../trip/packing'
 import { BananaBoat, Fish, Swimmer, Tern } from '../jetski/critters'
 import { ANIMALS, type AnimalId } from '../book/animals'
 import { BeachClean, BIN_IDS, JUNK_IDS } from '../book/clean'
@@ -108,6 +109,8 @@ export interface IslandStart {
   book?: AnimalId[]
   /** Mommy's phone out from the start. */
   phone?: boolean
+  /** What she packed for the trip (her sun hat and sunglasses go on). */
+  packed?: string[]
 }
 /** A photo from Mommy's phone. */
 export interface Snap {
@@ -128,6 +131,9 @@ export interface IslandEvents {
   near?(on: boolean): void
   /** Something went in a bin (the beach clean's count). */
   cleaned?(n: number): void
+  /** All four pink flags up and she tapped the speedboat at Na Dan pier: Mommy's photo of the island (for Agong's
+   *  wall), and home. */
+  home?(photo: string): void
 }
 
 const DEG = 180 / Math.PI
@@ -138,6 +144,10 @@ const LUNCH_TABLE = atFrame(DECK, -2.5, 0.8)
 const SIDE = 0.32
 const tmp = new Vector3()
 const tmp2 = new Vector3()
+/** The speedboat at Na Dan pier (layout.ts POKES): once all four flags are up, it takes them home. */
+const HOME_BOAT = 'speedboat:0'
+/** Where she stands on the pier for Mommy's photo before they go (beside the speedboat). */
+const HOME_PIER = atFrame(FRAMES.nadan, -4, 22)
 const wrap = (a: number) => Math.atan2(Math.sin(a), Math.cos(a))
 const ease = (dt: number, rate: number) => 1 - Math.exp(-dt * rate)
 const smooth = (a: number, b: number, x: number) => {
@@ -307,6 +317,9 @@ export class SametIsland implements World3D {
   private phoneProp: Group
   private found: Set<AnimalId>
   private pendingSnap: { c: SnapTarget | null; t: number } | null = null
+  /** Going home: null before all four flags are up (or with no way home), false waiting, true on the way. */
+  private goingHome: boolean | null = null
+  private homeSnap = false
   private wantPortraits: ((p: Record<AnimalId, string>) => void) | null = null
   private nearAnimal = false
   private bumpV = { x: 0, z: 0, t: 0 }
@@ -325,6 +338,7 @@ export class SametIsland implements World3D {
     this.rig.lag = CAM.lag
     this.rig.camera.far = 3200
     this.flags = new Set(start.flags)
+    this.goingHome = this.flags.size === STOP_IDS.length && events.home ? false : null
     this.timeKey = start.time ?? TIMES[Math.min(3, this.flags.size === 4 ? 3 : this.flags.size === 3 ? 2 : this.flags.size)]
     this.spot = start.at
 
@@ -336,6 +350,7 @@ export class SametIsland implements World3D {
 
     // ---- Kaylee and her floatie (a pink and white ring round her middle, only in the sea).
     this.kaylee = new Avatar(bag)
+    if (start.packed?.length) this.kaylee.wear(wearing(start.packed).filter((w) => w !== 'floaties'))
     scene.add(this.kaylee.root)
     this.kShadow = blobShadow(0.45, bag)
     scene.add(this.kShadow)
@@ -1615,6 +1630,18 @@ export class SametIsland implements World3D {
   private poke(id: string) {
     const k = this.kaylee.root.position
     const near = (x: number, z: number, r = RIDE.near) => Math.hypot(k.x - x, k.z - z) < r
+    if (id === HOME_BOAT && this.goingHome !== null) {
+      // The whole island done: the speedboat at Na Dan pier takes them home. She walks to the end of the pier, Mommy
+      // takes their photo (for Agong's wall), and off they go.
+      if (this.goingHome || this.mode !== 'walk') return
+      if (!near(HOME_PIER.x, HOME_PIER.z, 2.5)) return this.goTo(id, HOME_PIER.x, HOME_PIER.z, 1)
+      this.goingHome = true
+      this.kaylee.faceToward(HOME_PIER.x - FRAMES.nadan.t.x * 3, HOME_PIER.z - FRAMES.nadan.t.z * 3)
+      this.kaylee.react('wave')
+      this.nick.m.react('wave')
+      window.setTimeout(() => (this.homeSnap = true), 700)
+      return
+    }
     if (id === 'kaylee') {
       if (this.mode === 'taxi') return void this.leaveTaxi()
       this.kaylee.react('hop')
@@ -2114,11 +2141,14 @@ export class SametIsland implements World3D {
         best = id
       }
     }
-    const idle = !this.finger && !this.target && t - this.lastTouch > HINT_S && this.mode === 'walk' && best !== null && bd > 6
+    // All four flags up: the way home, the speedboat at Na Dan pier.
+    const home = best === null && this.goingHome === false
+    const hb = Math.hypot(HOME_PIER.x - k.x, HOME_PIER.z - k.z)
+    const idle = !this.finger && !this.target && t - this.lastTouch > HINT_S && this.mode === 'walk' && (home ? hb > 4 : best !== null && bd > 6)
     const want = idle ? '' : 'none'
     if (el.style.display !== want) el.style.display = want
-    if (!idle || !best) return
-    const a = STOPS[best].at
+    if (!idle || (!best && !home)) return
+    const a = best ? STOPS[best].at : HOME_PIER
     const s = this.toScreen(tmp.set(a.x, this.heightAt(a.x, a.z) + 2.5, a.z))
     const m = 54
     const inside = s.z < 1 && s.x > m && s.x < this.w - m && s.y > m && s.y < this.h - m
@@ -2150,6 +2180,15 @@ export class SametIsland implements World3D {
   // ---------------------------------------------------------------- tap targets
 
   render() {
+    if (this.homeSnap) {
+      // Mommy's photo of the island and the family on the pier, for Agong's wall.
+      this.homeSnap = false
+      this.events.shutter?.()
+      this.scene.updateMatrixWorld()
+      const src = snap(this.renderer, this.scene, phoneCamera(this.rig.camera, null, 0, 1.05))
+      tone(500, 900, 0.3, 0.05, 'triangle')
+      window.setTimeout(() => this.events.home?.(src), 1100)
+    }
     if (this.wantPortraits) {
       const cb = this.wantPortraits
       this.wantPortraits = null
@@ -2287,6 +2326,7 @@ export class SametIsland implements World3D {
       deck: this.deckOn,
       time: this.timeKey,
       flags: [...this.flags],
+      goingHome: this.goingHome,
       taxi: { stop: this.taxi.stopId, state: this.taxi.state, aboard: this.aboard, ...sc(this.taxi.root.position.clone().setY(this.taxi.root.position.y + 1.5)) },
       riding: this.riding >= 0 ? this.skis[this.riding].id : null,
       skis: Object.fromEntries(this.skis.map((s) => [s.id, sc(new Vector3(s.x, s.ski.root.position.y + 0.6, s.z))])),

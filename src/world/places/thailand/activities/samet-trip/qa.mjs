@@ -11,12 +11,19 @@
 // Greybox 6, lunch and hide and seek at Ao Prao: the deck with a roll eaten and the coconut sipped, hide and seek's
 // count, a seek, the trickier round and her turn hiding; filmed: finding Daddy behind the tree, and Daddy searching
 // the wrong places while she hides behind the chairs.
+// Greybox 7, getting there and the trip frame: packing in Kaylee's room, the speedboat leaving Ban Phe and out at sea
+// (her hoof in the spray), the island with every flag up (the way home); filmed: her hoof in the spray out at sea,
+// dragging along the side.
 // Not part of the app: Node runs it, Vite never sees it.
 
 const ready = (page) => page.waitForFunction(() => window.__thaiSametQA?.().phase, null, { timeout: 20000 })
 
 /** Screenshots (scripts/qa-screens.mjs). */
 export const screens = [
+  { name: 'thailand-samet-pack', hash: '#/world/thailand/samet-trip/pack', reset: true, wait: 3500 },
+  { name: 'thailand-samet-speedboat-pier', hash: '#/world/thailand/samet-trip/speedboat', reset: true, wait: 2500 },
+  { name: 'thailand-samet-speedboat-sea', hash: '#/world/thailand/samet-trip/speedboat', reset: true, wait: 9000, act: async (page) => boatSpray(page, 3000) },
+  { name: 'thailand-samet-island-home', hash: '#/world/thailand/samet-trip/island?at=nadan&flags=all', reset: true, wait: 2500 },
   { name: 'thailand-samet-island-nadan', hash: '#/world/thailand/samet-trip/island?at=nadan', reset: true, wait: 2500 },
   { name: 'thailand-samet-island-saikaew', hash: '#/world/thailand/samet-trip/island?at=saikaew&flags=jetski', reset: true, wait: 2500 },
   { name: 'thailand-samet-island-prao', hash: '#/world/thailand/samet-trip/island?at=prao&flags=jetski,sandcastle,snorkel', reset: true, wait: 2500 },
@@ -145,8 +152,33 @@ async function sandChannel(page) {
   }
 }
 
+/** Holds a finger on the water beside the speedboat (QA's `water` point), dragging along the side and back. */
+async function boatSpray(page, ms) {
+  const vp = page.viewportSize()
+  const q = await page.evaluate(() => window.__thaiSametQA?.())
+  if (!q?.water) return
+  const at = (x, y) => [Math.max(5, Math.min(vp.width - 5, x)), Math.max(120, Math.min(vp.height - 5, y))]
+  await page.mouse.move(...at(q.water.x, q.water.y))
+  await page.mouse.down()
+  for (let t = 0; t < ms; t += 120) {
+    await page.mouse.move(...at(q.water.x + Math.sin(t / 400) * vp.width * 0.06, q.water.y + Math.sin(t / 300) * vp.height * 0.08))
+    await page.waitForTimeout(120)
+  }
+  await page.mouse.up()
+}
+
 /** Filmed moments (scripts/qa-motion.mjs). */
 export const motion = [
+  {
+    name: 'thailand-samet-speedboat-spray',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/speedboat`)
+      await ready(page)
+      await page.waitForTimeout(9000)
+    },
+    act: async (page) => boatSpray(page, 9000),
+  },
   {
     name: 'thailand-samet-snorkel-lead',
     seconds: 10,

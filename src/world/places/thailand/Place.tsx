@@ -46,7 +46,8 @@ export default function Place(props: PlaceProps) {
       <div style={{ position: 'absolute', inset: 0, zIndex: 100 }}>
         <StampEarned
           activity={info}
-          facts={info.id === 'boat-trip' ? TRIP_FACTS : info.id === 'nan-trip' ? NAN_FACTS : MALL_FACTS}
+          // (Koh Samet's facts come with its full loop.)
+          facts={info.id === 'boat-trip' ? TRIP_FACTS : info.id === 'nan-trip' ? NAN_FACTS : info.id === 'samet-trip' ? undefined : MALL_FACTS}
           // (An activity still in the works has no recorded sticker line.)
           quiet={!live}
           closeIcon="🏠 ▶"
@@ -85,8 +86,17 @@ export default function Place(props: PlaceProps) {
       </>
     )
   }
-  // The Koh Samet trip: in the works (greybox 1, the jet ski at Sai Kaew); only its links open it.
-  if (activity === 'samet-trip' && info) return <SametTrip />
+  // The Koh Samet trip: in the works (greyboxes 1-7); only its links and the map's pin with ?samet=1 open it. Home from
+  // the island (Mommy's photo on Agong's wall), the stamp, then the map: the stamp lands on the 🏝️ pin.
+  if (activity === 'samet-trip' && info) {
+    if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
+    return (
+      <>
+        <SametTrip onDone={finish} />
+        {stamp}
+      </>
+    )
+  }
   if (activity === 'boat-trip' && info) {
     if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
     return (

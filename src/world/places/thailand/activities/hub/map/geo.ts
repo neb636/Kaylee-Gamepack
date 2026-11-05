@@ -57,7 +57,7 @@ export const HILLS: [XY, number][] = (
     [98.9, 15.4], [99.2, 14.4], [99.6, 12.4], [98.9, 9.3], [99.6, 8.6],
   ] as ([LonLat, number] | LonLat)[]
 ).map((h) => (Array.isArray(h[0]) ? [proj(h[0] as LonLat), h[1] as number] : [proj(h as LonLat), 42]))
-/** Islands in the Andaman: Phuket, the bay's rock towers, and in the Gulf: Samui. [centre, rx, ry]. */
+/** Islands in the Andaman: Phuket, the bay's rock towers, and in the Gulf: Samui and Koh Samet (off Rayong). [centre, rx, ry]. */
 export const ISLANDS: [XY, number, number][] = [
   [proj([98.33, 7.95]), 14, 26],
   [proj([98.55, 8.25]), 8, 8],
@@ -65,10 +65,11 @@ export const ISLANDS: [XY, number, number][] = [
   [proj([98.75, 7.75]), 9, 7],
   [proj([100.0, 9.5]), 14, 13],
   [proj([99.95, 9.75]), 9, 8],
+  [proj([101.455, 12.54]), 4, 7],
 ]
 
 /** A pin she taps to go there: where it is, which activity's stamp it wears, its picture. */
-export type PinId = 'bangkok' | 'krabi' | 'nan'
+export type PinId = 'bangkok' | 'krabi' | 'nan' | 'samet'
 export interface Pin {
   id: PinId
   at: XY
@@ -82,6 +83,8 @@ export const PINS: Pin[] = [
   { id: 'nan', at: proj([100.78, 18.78]), activity: 'nan-trip', icon: '🏔️', label: 'Nan, the mountains', color: 'var(--mint)' },
   { id: 'bangkok', at: proj([100.52, 13.75]), activity: 'mall-trip', icon: '🏠', label: "Bangkok, Agong's house", color: 'var(--pink)' },
   { id: 'krabi', at: proj([98.9, 8.08]), activity: 'boat-trip', icon: '🚤', label: 'Krabi, the boat and the elephants', color: 'var(--sky)' },
+  // (Just below the island itself, so the pin doesn't cover the coast at Rayong.)
+  { id: 'samet', at: proj([101.5, 12.4]), activity: 'samet-trip', icon: '🏝️', label: 'Koh Samet, the island', color: 'var(--butter)' },
 ]
 
 /** Things to poke (tap them). */

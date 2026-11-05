@@ -23,6 +23,8 @@ export const WALL_SLOTS: Record<string, V3> = {
   'mall-trip': [DIM.left + 0.04, 2.3, -0.92],
   // The next trips in a row above (the door is next): the Nan road trip over the first two.
   'nan-trip': [DIM.left + 0.04, 3.05, -1.41],
+  // Koh Samet beside it, toward the door.
+  'samet-trip': [DIM.left + 0.04, 3.05, -0.43],
 }
 /** What Mommy says when Kaylee taps a trip's photo on the wall. (The mall day's "Our mall day!" isn't recorded yet:
  *  its voice pass adds it here.) */
