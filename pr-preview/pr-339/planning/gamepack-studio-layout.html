@@ -21,8 +21,8 @@
     "label": "Agent first: step 6 of 11 built",
     "tone": "butter"
   },
-  "pitch": "Studio started as Agent Workbench and became a builder made for this game: one repo, the **pieces of work** (worktrees) on the left, the **agent** as the main thing, the game when wanted. Dad still opens **Orca** beside it to read, edit and review files. The next steps make Studio enough on its own: **everything in the middle is a tab** (agents, terminals, the game and each lab, open files), the middle can **split in two**, and a **file explorer** sits on the right like Orca's.",
-  "next": "Dad reads the new plan (**Next: tabs in the middle, files on the right**, steps 7-9) and answers the four open questions at the bottom. Then step 7: the game and the labs become tabs, and the middle splits in two.",
+  "pitch": "Studio started as Agent Workbench and became a builder made for this game: one repo, the **pieces of work** (worktrees) on the left, the **agent** as the main thing, the game when wanted. Dad still opens **Orca** beside it to read, edit and review files. The next steps make Studio enough on its own: **everything in the middle is a tab** (agents, terminals, the game and each lab, open files), one on screen at a time, and a **file explorer** sits on the right like Orca's.",
+  "next": "Dad reads the new plan (**Next: tabs in the middle, files on the right**, steps 7-9) and answers the four open questions at the bottom. Then step 7: the game and the labs become tabs in the middle.",
   "facts": [
     {
       "icon": "🧱",
@@ -37,7 +37,7 @@
     {
       "icon": "🗂️",
       "value": "3",
-      "label": "PRs for tabs, split and files (steps 7-9)"
+      "label": "PRs for tabs and files (steps 7-9)"
     },
     {
       "icon": "🎮",
@@ -96,8 +96,8 @@
         },
         {
           "type": "code",
-          "title": "The window after steps 7-9 (split in two, Feel lab on the right half)",
-          "text": "┌─ Work ────────┬─[Claude ●][Kart.tsx ●][+]──┬─[Feel lab][Game][+]─────┬─ Files  Changes 3  Sections ─┐\n│ ● main        │                            │ Thailand ▸ Nan ▸ kart   │ [ Names | Contents ]         │\n│ ▸ nan-kart  ● │  Claude Code               │ [iPad ▾] [⟳] [→ agent]  │ [ Find files…             ]  │\n│   PR #340 ok  │  (the native CLI)          │ ┌─────────────────────┐ │ ▸ planning                   │\n│ ▸ koh-samet   │                            │ │                     │ │ ▾ src/world/places/thailand  │\n│               │                            │ │  the real game,     │ │     Kart.tsx              M  │\n│               │                            │ │  ?feel=1            │ │     knobs.ts              M  │\n│               ├────────────────────────────┤ │                     │ │ ▸ qa-output         (dim)    │\n│               │ composer                   │ └─────────────────────┘ │                              │\n│ + New work    │ [Section] [Starters ▾]     │ sliders · AI · Undo     │                              │\n├───────────────┴────────────────────────────┴─────────────────────────┴──────────────────────────────┤\n│ Ship (under the agent until step 11)                       nan-kart · game :5176 · 1 agent working  │\n└─────────────────────────────────────────────────────────────────────────────────────────────────────┘\n       left half of the middle ◂── split, ⌘\\ or drag a tab ──▸ right half"
+          "title": "The window after steps 7-9 (the Feel lab tab on screen)",
+          "text": "┌─ Work ────────┬─[Claude ●][Feel lab][Kart.tsx ●][Game][+]──────────────┬─ Files  Changes 3  Sections ─┐\n│ ● main        │ Thailand ▸ Nan ▸ kart  ?feel=1   [iPad ▾] [⟳] [→ agent]│ [ Names | Contents ]         │\n│ ▸ nan-kart  ● │ ┌───────────────────────────────┐  What should feel    │ [ Find files…             ]  │\n│   PR #340 ok  │ │                               │  different?          │ ▸ planning                   │\n│ ▸ koh-samet   │ │                               │  [ gentler turns  ]  │ ▾ src/world/places/thailand  │\n│               │ │   the real game, in the       │                      │     Kart.tsx              M  │\n│               │ │   iPad frame, with the        │  [Ask AI & preview]  │     knobs.ts              M  │\n│               │ │   feel lab's sliders          │  [Undo] [Save in     │ ▸ qa-output         (dim)    │\n│               │ │                               │   game → agent tab]  │                              │\n│ + New work    │ └───────────────────────────────┘                      │                              │\n├───────────────┴────────────────────────────────────────────────────────┴──────────────────────────────┤\n│ Ship (under the agent until step 11)                         nan-kart · game :5176 · 1 agent working  │\n└───────────────────────────────────────────────────────────────────────────────────────────────────────┘\n        one tab on screen at a time: click Claude to talk to the agent, Feel lab to tune"
         },
         {
           "type": "cards",
@@ -106,17 +106,12 @@
             {
               "icon": "🗂️",
               "title": "One tab strip in the middle",
-              "md": "Everything for the selected piece of work is a tab: agents, terminals, **🎮 Game**, **🎥 Camera**, **🎛️ Feel**, **🦄 Character**, open files and diffs, Character concepts. The **+** menu lists them all. ▶ Game, ⤢ Big and the game's right panel go away; ⌘G opens (or brings forward) the Game tab."
+              "md": "Everything for the selected piece of work is a tab, one on screen at a time: agents, terminals, **🎮 Game**, **🎥 Camera**, **🎛️ Feel**, **🦄 Character**, open files and diffs, Character concepts. The **+** menu lists them all. ▶ Game, ⤢ Big and the game's right panel go away; ⌘G opens (or brings forward) the Game tab. Tabs can be dragged to reorder, and a tab's menu has Close, Close others and Copy path."
             },
             {
               "icon": "🎮",
               "title": "The game and each lab, a tab each",
-              "md": "The real game with the whole width, so its toolbar fits on one line. A lab tab opens at the section on screen (the Feel tab is that section with `?feel=1`). Its tuning panel (AI preview, Undo, the save prompt) sits beside the device frame when there's room and under it when not. ⇆ Main, 🐞 issues, Copy link and Send to agent stay on its toolbar."
-            },
-            {
-              "icon": "◫",
-              "title": "The middle splits in two",
-              "md": "Two halves side by side, each with its own tabs, like Orca and VS Code: *Open to the side* in a tab's menu, ⌘\\, or drag a tab onto the other half. A lab opened while the agent is on screen opens beside it by itself, so Dad talks to the agent and tunes at once. Closing the last tab of a half joins them. Remembered per piece of work."
+              "md": "The real game with the whole width, so its toolbar fits on one line. A lab tab opens at the section on screen (the Feel tab is that section with `?feel=1`). Its tuning panel (AI preview, Undo, the save prompt) sits beside the device frame when there's room and under it when not. ⇆ Main, 🐞 issues, Copy link and Send to agent stay on its toolbar. Dad switches between the lab and the agent with the tabs."
             },
             {
               "icon": "📁",
@@ -149,7 +144,7 @@
                 {
                   "icon": "🎛️",
                   "label": "+ Feel lab",
-                  "note": "opens beside the agent, at the section on screen",
+                  "note": "a tab, at the section on screen",
                   "hl": true
                 },
                 {
@@ -159,7 +154,7 @@
                 {
                   "icon": "💾",
                   "label": "Save prompt",
-                  "note": "lands in the agent on the left"
+                  "note": "prefills an agent tab to review and send"
                 }
               ]
             },
@@ -214,7 +209,7 @@
           "tone": "warn",
           "icon": "🧠",
           "title": "One game at a time (8 GB Mac)",
-          "md": "Every game or lab tab is the same game with a different link, and each running copy is a WebGL game. So only one runs per piece of work: the game tab on screen. The last one shown stays loaded while Dad looks at the agent or a file (its scene and Undo survive, like today), and going from one game tab to another reloads the game at that tab's link, in a second or two. ⇆ Main still adds main's copy beside it."
+          "md": "Every game or lab tab is the same game with a different link, and each running copy is a WebGL game. So only one runs per piece of work: the game tab on screen. The last one shown stays loaded while Dad switches to the agent or a file (its scene and Undo survive, like today), and going from one game tab to another reloads the game at that tab's link, in a second or two. ⇆ Main still adds main's copy beside it."
         },
         {
           "type": "callout",
@@ -523,9 +518,9 @@
             },
             {
               "n": 7,
-              "title": "The middle is tabs, and splits in two",
+              "title": "The middle is tabs",
               "status": "next",
-              "md": "Game, Camera, Feel and Character become tabs (one `game` tab type, its lab in the tab's state), opened from **+** or ⌘G; the right game panel, ▶ Game and ⤢ Big go. The middle splits into two halves (*Open to the side*, ⌘\\, drag a tab across), and a lab opens beside the agent by itself. One running game per piece of work. A piece of work whose game panel was open gets its Game tab on the right half. `qa:composer` and `qa:labs` reach the labs through their tabs."
+              "md": "Game, Camera, Feel and Character become tabs (one `game` tab type, its lab in the tab's state), opened from **+** or ⌘G, one tab on screen at a time; the right game panel, ▶ Game and ⤢ Big go. Tabs drag to reorder and get a menu (Close, Close others). One running game per piece of work. A piece of work whose game panel was open gets a Game tab after its agent. `qa:composer` and `qa:labs` reach the labs through their tabs."
             },
             {
               "n": 8,
@@ -745,6 +740,10 @@
             {
               "q": "Where do the labs and files go? (2026-11-05)",
               "a": "Camera, Feel and the others become tabs in the middle, a file explorer like Orca's goes on the right, and an open file is a tab too. Dad wants to edit and review files in Studio and stop using Orca."
+            },
+            {
+              "q": "Split the middle in two, so a lab sits beside the agent? (2026-11-05)",
+              "a": "No: one screen. Dad switches between tabs himself."
             }
           ]
         },
@@ -754,7 +753,7 @@
           "items": [
             {
               "q": "The game and the labs: a tab each (🎮 Game, 🎥 Camera, 🎛️ Feel, 🦄 Character), or one Game tab with a Play | Camera | Feel | Character switch on it?",
-              "why": "Builder's pick: a tab each, as asked. It's easy to see which lab is open and to put one beside the agent. The cost: only one game runs at a time, so going from the Feel tab to the Camera tab reloads the game (a second or two)."
+              "why": "Builder's pick: a tab each, as asked: easy to see which lab is open and to switch to it. The cost: only one game runs at a time, so going from the Feel tab to the Camera tab reloads the game (a second or two)."
             },
             {
               "q": "Ship: stay under the agent, become a Ship ▾ menu (step 11), or a 🚀 tab in the right sidebar beside Changes?",
@@ -831,7 +830,7 @@
         },
         {
           "type": "table",
-          "title": "Steps 7-9: tabs, the split and the explorer",
+          "title": "Steps 7-9: tabs and the explorer",
           "head": [
             "Where",
             "Change"
@@ -839,15 +838,15 @@
           "rows": [
             [
               "`workbench/src/shared/models.ts`",
-              "`Workspace.groups?: { viewIds: string[]; activeViewId?: string }[]` (one or two) + `focusedGroup` and `splitSize`; `activeViewId` stays as the focused half's tab for older code. New `GameViewState { lab?: GameLab; link?: string }`. `GameState` keeps link, frame, draft and provider; `open` / `big` migrate in `main/persistence.ts` (version bump): `open: true` becomes a `game` tab on the right half. `LayoutState.explorer { collapsed, size, tab }` (`files`, `changes`, `sections`)."
+              "New `GameViewState { lab?: GameLab; link?: string }` for `game` tabs. `GameState` keeps link, frame, draft and provider; `open` / `big` migrate in `main/persistence.ts` (version bump): `open: true` becomes a `game` tab after the agent. `LayoutState.explorer { collapsed, size, tab }` (`files`, `changes`, `sections`). No split: `Workspace.views` and `activeViewId` stay as they are."
             ],
             [
               "`workbench/src/renderer/shell/`",
-              "`WorkbenchShell`: work · middle · explorer. `AgentColumn` becomes `CenterArea`: one or two `TabGroup`s, each a `ViewTabs` and its active view, split by a resize handle. `ViewTabs` gets dragging between halves and a tab menu (Close, Close others, Open to the side, Copy path). Terminals and the live game stay mounted behind other tabs, as now. New `RightSidebar` with an icon bar."
+              "`WorkbenchShell`: work · middle · explorer. `AgentColumn` becomes `CenterArea`: the one `ViewTabs` and its active view. `ViewTabs` gets drag to reorder and a tab menu (Close, Close others, Copy path). Terminals and the live game stay mounted behind other tabs, as now. New `RightSidebar` with an icon bar."
             ],
             [
               "`workbench/src/renderer/features/game/`",
-              "`GamePane` becomes the `game` view's component: its `lab` picks Camera, Feel or Character, the toolbar fits one line, `LabPanel` sits beside or under the frame by width (container query). `game-store` keeps a `liveViewId` per piece of work: the game tab on screen takes the one frame, the last one stays mounted hidden. ⌘G (`onToggleGame`) becomes `game.focus`: bring the Game tab forward or open one to the side. `openInGame` (Sections, Ship, known issues) targets the live game tab. `SectionTree` moves into the explorer unchanged."
+              "`GamePane` becomes the `game` view's component: its `lab` picks Camera, Feel or Character, the toolbar fits one line, `LabPanel` sits beside or under the frame by width (container query). `game-store` keeps a `liveViewId` per piece of work: the game tab on screen takes the one frame, the last one stays mounted hidden. ⌘G (`onToggleGame`) becomes `game.focus`: bring the Game tab forward or open one. `openInGame` (Sections, Ship, known issues) targets the live game tab. `SectionTree` moves into the explorer unchanged."
             ],
             [
               "`workbench/src/renderer/features/files/`",
@@ -867,7 +866,7 @@
             ],
             [
               "tests",
-              "`npm test`: the state migration (`game.open` to a split, Files / Commit changes tabs to the explorer), write refusals (outside the root, stale hash, binary, too big), search limits. `qa:composer`: open a Feel tab beside the agent, split and join, open a file from the tree, edit and ⌘S, a diff tab. `qa:labs`: reach each lab through its tab."
+              "`npm test`: the state migration (`game.open` to a Game tab, Files / Commit changes tabs to the explorer), write refusals (outside the root, stale hash, binary, too big), search limits. `qa:composer`: open a Feel tab and switch back to the agent, open a file from the tree, edit and ⌘S, a diff tab. `qa:labs`: reach each lab through its tab."
             ]
           ]
         },
