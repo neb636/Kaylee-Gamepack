@@ -432,35 +432,50 @@ export function Hotpot({ onDone, setProgress }: ActivityProps) {
   }
 
   // ---- tray dragging (food and chopsticks: tap it, or drag it) --------------------------------------------------
+  /** Removes the window listeners of the drag in progress (also when she leaves mid-drag). */
+  const endDrag = useRef<(() => void) | null>(null)
+  useEffect(() => () => endDrag.current?.(), [])
   const startDrag = (e: RPointerEvent, kind: 'food' | 'chop', food?: FoodKind) => {
     if (phaseRef.current === 'story' || phaseRef.current === 'serve' || phaseRef.current === 'finale' || phaseRef.current === 'spin') return
     e.preventDefault()
+    endDrag.current?.()
     const sx = e.clientX
     const sy = e.clientY
     let dragged = false
     const local = (x: number, y: number) => {
-      const r = box.current!.getBoundingClientRect()
-      return { x: x - r.left, y: y - r.top }
+      const r = box.current?.getBoundingClientRect()
+      return r ? { x: x - r.left, y: y - r.top } : null
     }
     const move = (ev: PointerEvent) => {
       if (!dragged && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 12) {
         dragged = true
         sounds.pickup()
       }
-      if (dragged) setDrag({ kind, food, ...local(ev.clientX, ev.clientY) })
+      const at = dragged && local(ev.clientX, ev.clientY)
+      if (at) setDrag({ kind, food, ...at })
     }
-    const up = (ev: PointerEvent) => {
+    const stop = () => {
       window.removeEventListener('pointermove', move)
       window.removeEventListener('pointerup', up)
-      window.removeEventListener('pointercancel', up)
+      window.removeEventListener('pointercancel', cancel)
+      if (endDrag.current === stop) endDrag.current = null
+    }
+    /** The system took the finger away: drop nothing, just let go. */
+    const cancel = () => {
+      stop()
       setDrag(null)
+    }
+    const up = (ev: PointerEvent) => {
+      stop()
+      setDrag(null)
+      if (!box.current || !potBox.current) return // she left the hotpot mid-drag
       if (!dragged) {
         if (kind === 'food' && food) tapFood(food)
         else tapChop()
         return
       }
-      const p = local(ev.clientX, ev.clientY)
-      const pr = potBox.current!.getBoundingClientRect()
+      const p = local(ev.clientX, ev.clientY)!
+      const pr = potBox.current.getBoundingClientRect()
       const pl = { x: (ev.clientX - pr.left) / pr.width, y: (ev.clientY - pr.top) / pr.height }
       if (kind === 'food' && food) {
         if (pl.x > 0.05 && pl.x < 0.95 && pl.y > 0.1 && pl.y < 0.8) dropFood(food, pl.x < 0.5 ? 'spicy' : 'mild')
@@ -482,7 +497,8 @@ export function Hotpot({ onDone, setProgress }: ActivityProps) {
     }
     window.addEventListener('pointermove', move)
     window.addEventListener('pointerup', up)
-    window.addEventListener('pointercancel', up)
+    window.addEventListener('pointercancel', cancel)
+    endDrag.current = stop
   }
   const potBoxLeft = () => cx - potW / 2
   const potBoxTop = () => cy - potW / 2

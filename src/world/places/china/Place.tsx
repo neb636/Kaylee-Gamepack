@@ -39,15 +39,22 @@ const ACTIVITIES: Record<string, ComponentType<ActivityProps>> = {
 
 /** The seven lantern spots on the scroll map (the painted cream circles in scene-china-map), in % of the picture.
  *  `face` is the friend who shows in the lantern once it's lit. Only activities listed in meta.activities are playable. */
+/**
+ * The pins sit on the pads painted on the map. Each touch target is a --pin square (88 px on iPad, 64 px on iPhone),
+ * a little wider than the lantern drawn in it, and they never overlap: neighbors are at least 12.2% apart across or 18.3%
+ * up and down (the iPad mini's map). Check the spacing when moving one.
+ */
 const LANTERNS = [
-  { id: 'wall', name: 'The Great Wall', icon: '🧱', x: 51.4, y: 25.6, face: art.houhou },
-  { id: 'bamboo', name: 'Bamboo Forest', icon: '🎋', x: 44, y: 42.7, face: art.baobao },
-  { id: 'hotpot', name: 'Hotpot Night', icon: '🍲', x: 52.7, y: 47.1, face: art.hong },
-  { id: 'brush', name: 'The Magic Brush', icon: '🖌️', x: 58, y: 58.8, face: art.crane },
-  { id: 'race', name: 'The Great Race', icon: '🐭', x: 73.6, y: 61.7, face: art.mouse },
+  { id: 'wall', name: 'The Great Wall', icon: '🧱', x: 51.4, y: 24.3, face: art.houhou },
+  { id: 'bamboo', name: 'Bamboo Forest', icon: '🎋', x: 42, y: 42.7, face: art.baobao },
+  { id: 'hotpot', name: 'Hotpot Night', icon: '🍲', x: 54.3, y: 44, face: art.hong },
+  { id: 'brush', name: 'The Magic Brush', icon: '🖌️', x: 58, y: 62.6, face: art.crane },
+  { id: 'race', name: 'The Great Race', icon: '🐭', x: 72.8, y: 61.7, face: art.mouse },
   { id: 'train', name: 'Bullet Train', icon: '🚄', x: 79.4, y: 14.8, face: art.tiger },
-  { id: 'dumplings', name: 'Dumpling House', icon: '🥟', x: 84.4, y: 47.6, face: art.doudou },
+  { id: 'dumplings', name: 'Dumpling House', icon: '🥟', x: 85.2, y: 47.6, face: art.doudou },
 ]
+/** The smallest touch target on the map: 88 px on iPad, 64 px on iPhone (its map is too small for more without overlaps). */
+const PIN = 'max(64px, min(88px, 13cqw, calc(var(--target) - 8px)))'
 
 export default function Place(props: PlaceProps) {
   const { meta, activity, stamps, earnStamp, setProgress, backToMap, onWin } = props
@@ -163,8 +170,11 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   position: 'absolute',
                   left: `${spot.x}%`,
                   top: `${spot.y}%`,
-                  translate: '-50% -52%',
-                  width: big ? 'clamp(76px, 12cqw, 124px)' : 'clamp(62px, 9cqw, 96px)',
+                  translate: '-50% -50%',
+                  width: PIN,
+                  height: PIN, // the lantern is taller and spills out (it lets taps through)
+                  display: 'grid',
+                  placeItems: 'center',
                   padding: 0,
                   background: 'none',
                   border: 'none',
@@ -173,15 +183,15 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
                   filter: open ? 'drop-shadow(0 6px 0 rgba(110,59,36,.25))' : 'saturate(0.55)',
                 }}
               >
-                <Lantern lit={done} dim={!open}>
+                <Lantern lit={done} dim={!open} style={{ width: big ? 'clamp(76px, 12cqw, 124px)' : 'clamp(62px, 9cqw, 96px)', flexShrink: 0, pointerEvents: 'none' }}>
                   {done ? (
                     <img src={spot.face ?? art.doudou} alt="" style={{ width: '120%', objectFit: 'contain' }} />
                   ) : (
                     <span style={{ fontSize: big ? 'clamp(28px, 4.6cqw, 50px)' : 'clamp(22px, 3.4cqw, 38px)', opacity: open ? 1 : 0.6 }}>{spot.icon}</span>
                   )}
                 </Lantern>
-                {!open && <span style={{ position: 'absolute', right: '-10%', bottom: '4%', fontSize: 'clamp(16px, 2.6cqw, 26px)' }}>☁️</span>}
-                {done && <span style={{ position: 'absolute', right: '-12%', top: '10%', fontSize: 'clamp(16px, 2.6cqw, 26px)' }}>✅</span>}
+                {!open && <span style={{ position: 'absolute', right: '0%', bottom: '4%', pointerEvents: 'none', fontSize: 'clamp(16px, 2.6cqw, 26px)' }}>☁️</span>}
+                {done && <span style={{ position: 'absolute', right: '-2%', top: '10%', pointerEvents: 'none', fontSize: 'clamp(16px, 2.6cqw, 26px)' }}>✅</span>}
               </motion.button>
             )
           })}
@@ -211,7 +221,7 @@ function Hub({ meta, stamps, openActivity }: PlaceProps) {
 const POSTCARDS = [
   { video: 'harbin', x: 67, y: 8 }, // the snowy northeast: Harbin's ice city
   { video: 'dragon-dance', x: 85, y: 84 }, // the South China Sea corner: a New Year dragon dance
-  { video: 'shanghai', x: 70, y: 31 }, // the Shanghai skyline at night
+  { video: 'shanghai', x: 70, y: 33.2 }, // the Shanghai skyline at night
   { video: 'li-river', x: 41.5, y: 62 }, // Guilin's pointy hills and the Li River
   { video: 'overview', x: 14, y: 84 }, // the empty corner of the scroll: where is China?
 ]
@@ -233,20 +243,34 @@ function Postcard({ video, x, y, delay, onOpen }: { video: PlaceVideo; x: number
         left: `${x}%`,
         top: `${y}%`,
         translate: '-50% -50%',
-        width: 'clamp(42px, 6.2cqw, 66px)',
-        aspectRatio: '1.15',
+        // The touch target is a pin square; the postcard drawn in it keeps its size.
+        width: PIN,
+        height: PIN,
         padding: 0,
-        borderRadius: 12,
-        border: `4px solid ${INK}`,
-        background: '#FFF7F0',
-        boxShadow: '0 5px 0 rgba(110,59,36,.25)',
+        border: 'none',
+        background: 'none',
         display: 'grid',
         placeItems: 'center',
-        fontSize: 'clamp(18px, 3cqw, 32px)',
       }}
     >
-      {video.icon}
-      <span style={{ position: 'absolute', right: '-18%', bottom: '-18%', width: '52%', aspectRatio: '1', borderRadius: '50%', background: '#E8504F', border: `3px solid ${INK}`, color: '#fff', fontSize: 'clamp(11px, 1.6cqw, 16px)', display: 'grid', placeItems: 'center' }}>▶</span>
+      <span
+        style={{
+          position: 'relative',
+          width: 'clamp(42px, 6.2cqw, 66px)',
+          aspectRatio: '1.15',
+          pointerEvents: 'none',
+          borderRadius: 12,
+          border: `4px solid ${INK}`,
+          background: '#FFF7F0',
+          boxShadow: '0 5px 0 rgba(110,59,36,.25)',
+          display: 'grid',
+          placeItems: 'center',
+          fontSize: 'clamp(18px, 3cqw, 32px)',
+        }}
+      >
+        {video.icon}
+        <span style={{ position: 'absolute', right: '-18%', bottom: '-18%', width: '52%', aspectRatio: '1', borderRadius: '50%', background: '#E8504F', border: `3px solid ${INK}`, color: '#fff', fontSize: 'clamp(11px, 1.6cqw, 16px)', display: 'grid', placeItems: 'center' }}>▶</span>
+      </span>
     </motion.button>
   )
 }

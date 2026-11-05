@@ -102,6 +102,8 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const { start, param, enter } = useSections(SECTIONS)
   /** A deep link to a gap: earlier gaps are already fixed. */
   const linkGap = start === 'follow' || start === 'brick' ? Number(param('gap')) - 1 : start === 'beacon' || start === 'fire' ? 3 : 0
+  /** Gap 3 has two holes: a link can say the first one is already fixed. */
+  const linkHole = start === 'brick' && linkGap === 2 && param('hole') === '2' ? 1 : 0
   const box = useRef<HTMLDivElement>(null)
   const { width: W, height: H } = useElementSize(box)
   const alive = useAlive()
@@ -118,6 +120,8 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const phase = useRef<Phase>('story')
   const round = useRef(0)
   const hole = useRef(0)
+  /** Set while a fixed gap's cheer plays, so extra taps on the brick can't finish the same gap again. */
+  const completing = useRef(false)
   const arrived = useRef(false)
   const wrongs = useRef(0)
   const beaconSaid = useRef(false)
@@ -130,9 +134,12 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const [story, setStory] = useState(!start || start === 'story')
   const [, setPhaseState] = useState<Phase>('story')
   const [rnd, setRnd] = useState(0)
-  const [holeIdx, setHoleIdx] = useState(0)
+  const [holeIdx, setHoleIdx] = useState(linkHole)
   const [filled, setFilled] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(GAPS.slice(0, linkGap).flatMap((gp, gi) => gp.missing.map((k) => [`${gi}-${k}`, true]))),
+    Object.fromEntries([
+      ...GAPS.slice(0, linkGap).flatMap((gp, gi) => gp.missing.map((k) => [`${gi}-${k}`, true])),
+      ...GAPS[2].missing.slice(0, linkHole).map((k) => [`2-${k}`, true]),
+    ]),
   )
   const [hint, setHint] = useState(false)
   const [glow, setGlow] = useState<BrickColor | null>(null)
@@ -311,15 +318,16 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
     round.current = saved
     return x
   }
-  const startRound = async (r: number, linkedBrick = false) => {
+  const startRound = async (r: number, linkedBrick = false, startHole = 0) => {
     if (!linkedBrick) enter('follow', { gap: String(r + 1) })
+    completing.current = false
     round.current = r
-    hole.current = 0
+    hole.current = startHole
     wrongs.current = 0
     arrived.current = false
     patternSaid.current = false
     setRnd(r)
-    setHoleIdx(0)
+    setHoleIdx(startHole)
     setHint(false)
     setGlow(null)
     setHidden([])
@@ -336,17 +344,18 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
   const beginBricks = async () => {
     if (phase.current !== 'follow') return
     setPhase('brick')
-    enter('brick', { gap: String(round.current + 1) })
+    enter('brick', brickState())
     clearTimeout(nudge.current)
     void hou.current?.play('point')
     if (round.current === 0 && !patternSaid.current) void sounds.pop()
     patternSaid.current = true
     await sayPattern()
   }
+  const brickState = () => ({ gap: String(round.current + 1), hole: String(hole.current + 1) })
   const sayPattern = () => speak(round.current === 2 && hole.current === 1 ? W_.pattern3b : W_.pattern[round.current])
 
   const tryBrick = (c: BrickColor): boolean => {
-    if (phase.current !== 'follow' && phase.current !== 'brick') return false
+    if (completing.current || (phase.current !== 'follow' && phase.current !== 'brick')) return false
     if (where() !== 0) {
       sounds.pop()
       void goToTarget()
@@ -355,7 +364,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
     // The hole is on screen: she can fix it right away, even before Hou Hou has finished pointing it out.
     if (phase.current === 'follow') {
       setPhase('brick')
-      enter('brick', { gap: String(round.current + 1) })
+      enter('brick', brickState())
       clearTimeout(nudge.current)
     }
     const gp = GAPS[round.current]
@@ -385,9 +394,13 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
     if (hole.current + 1 < gp.missing.length) {
       hole.current++
       setHoleIdx(hole.current)
+      enter('brick', brickState())
       void hou.current?.play('nod')
       setTimeout(() => alive() && void sayPattern(), 500)
-    } else void finishGap(round.current)
+    } else {
+      completing.current = true
+      void finishGap(round.current)
+    }
     return true
   }
   const finishGap = async (r: number) => {
@@ -477,7 +490,7 @@ export function GreatWall({ onDone, setProgress }: ActivityProps) {
       void startRound(linkGap)
     } else if (start === 'brick') {
       place(spotFor(linkGap), linkGap)
-      void startRound(linkGap, true)
+      void startRound(linkGap, true, linkHole)
     } else {
       place(spotFor(2), 2)
       if (start === 'beacon') void startBeacon()

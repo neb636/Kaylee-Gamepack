@@ -580,7 +580,7 @@ export function GreatRace({ onDone, setProgress }: ActivityProps) {
   const seed = (from: Exclude<Phase, 'story' | 'board'>) => {
     const across = ORDER.slice(0, { paddle: 0, tiger: 2, stones: 3, rain: 4, steps: 5, wheel: 5, cat: 5 }[from])
     for (const id of across) mv(id, { x: FAR_X[id], y: G.FAR, show: true, ms: 0 })
-    if (from === 'stones' || from === 'rain' || from === 'steps' || from === 'wheel' || from === 'cat') {
+    if (from === 'rain' || from === 'steps' || from === 'wheel' || from === 'cat') {
       filledRef.current = [true, true, true]
       setFilled(filledRef.current)
     }
