@@ -4,7 +4,6 @@ import type { SourceControlChange } from "../../../shared/models";
 import { errorMessage } from "../../core/errors";
 import type { PanelProps } from "../../core/panel-registry";
 import { services } from "../../core/services";
-import type { WidgetProps } from "../../core/widget-registry";
 import { useWorkbenchStore } from "../../state/workbench-store";
 import { Button, IconButton } from "../../ui/controls";
 import { BranchIcon, CheckIcon, FileIcon, RefreshIcon } from "../../ui/icons";
@@ -107,13 +106,6 @@ export function SourceControlPanel({ workspace }: PanelProps) {
       </GridList>
     </>}
   </div>;
-}
-
-/** Branch name for a workspace row in the sidebar. */
-export function WorkspaceBranch({ workspaceId }: WidgetProps) {
-  const path = useWorkbenchStore((state) => state.workspaces.find((item) => item.id === workspaceId)?.path);
-  const branch = useSourceControlStatus(path, false)?.status?.branch;
-  return branch ? <span className="workspace-branch">{branch}</span> : null;
 }
 
 /** Branch of the active view's folder in the status bar. */

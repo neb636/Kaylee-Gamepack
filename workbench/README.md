@@ -29,20 +29,29 @@ The app is written to `workbench/release/mac-arm64/Kaylee Gamepack Studio.app` o
 `npm --prefix workbench run open:app` opens the last build again. Quit an already running Studio before rebuilding.
 These are local, ad-hoc-signed builds, not notarized distribution builds.
 
-The packaged app opens independently of any game checkout. Use **Add workspace** to open your local Gamepack repository;
-it remembers your workspaces for the next launch. In the **Source control** sidebar, choose a local or remote tracking
-branch and **Switch branch**, or enter a new branch name and **Create worktree** to keep existing work separate.
-Switching requires a clean working tree; Studio never stashes or discards edits for you. The worktree starts from the
-current HEAD. The existing agent launcher can also create a worktree for a session.
+Studio works on **one** Gamepack repo. The packaged app asks for your checkout once (**Open the Gamepack repo**) and
+remembers it; source-run Studio uses the checkout it runs from. The left **Work** list shows main and every worktree
+git knows about, wherever it lives (`.claude/worktrees/`, orca, `Kaylee-Gamepack-worktrees/`), named by branch, with
+its PR (open, draft, merged, closed), CI and changed-file count from `gh` (sign in with `gh auth login`). Click one to
+open its agent and views; its sessions nest under it.
 
-Open that workspace's camera, feel or character lab to start its live game server on loopback port 5174.
-Switching workspaces and opening a lab restarts the server for that checkout. The built interface stays on port 5175,
+- **+ New piece of work**: type a short name (`canada-whales`). Studio fetches main, makes the branch
+  `<your GitHub login>/canada-whales` in `~/repos/Kaylee-Gamepack-worktrees/canada-whales` (a folder Claude Code and
+  Codex share), runs `npm ci` there and opens an agent in it.
+- **Finished** groups worktrees whose PR is merged or closed, or whose folder is gone. **Clean up…** (a row's ⋯ menu)
+  or **Clean up all** removes the folder after asking. It never touches the main checkout, a worktree with changes, or
+  commits that exist only on this Mac (unless the PR has exactly that head, as after a squash merge). Branches stay.
+- The **Source control** panel still switches branches and commits; switching needs a clean tree, and Studio never
+  stashes or discards edits for you. Personas are gone for now; Instructions stay in Settings.
+
+Open a piece of work's camera, feel or character lab to start its live game server on loopback port 5174.
+Switching work and opening a lab restarts the server for that checkout. The built interface stays on port 5175,
 so the labs retain their exact-origin checks. Quit Studio to stop both servers. Each checkout needs `npm ci` once
 (use a Studio terminal), Node 22.12+ and your signed-in AI CLIs. If a branch is missing, run `git fetch` in its terminal
 and reopen the sidebar. The app uses Electron’s bundled Node runtime for the game server. It doesn't bundle a game checkout, npm, AI CLIs or Blender; only changes to Studio itself
 require rebuilding the `.app`. Game changes reload in the labs.
 
-Source-run Studio opens the current checkout automatically. Each added workspace includes four Studio views:
+The main checkout opens with four Studio views (other work opens with an agent; add labs from its ⋯ menu):
 
 - **3D character lab**: the actual lab, poses, voices, outfits, lineups and exports. Prepare a character builder prompt
   or open Character concepts. The game and its existing lab stay available on iPad and PR previews.

@@ -10,6 +10,7 @@ import { PtyManager } from "./pty-manager";
 import { adoptLoginShellPath } from "./shell-environment";
 import { SourceControlService } from "./source-control/source-control-provider";
 import { WorkspaceFiles, WorkspaceRoots } from "./workspace-files";
+import { WorkService } from "./work";
 
 import { StudioServer } from './studio-server';
 import { STUDIO_ORIGIN } from '../shared/labs';
@@ -43,11 +44,13 @@ const agentSessionManager = new AgentSessionManager([
   { id: "image-generator", root: images.root, allowCommands: ["codex exec"], allowWritesInCwd: true },
 ]);
 const roots = new WorkspaceRoots();
+const git = new GitSourceControlProvider();
 const workspaceServices = {
   roots,
   files: new WorkspaceFiles(roots),
-  sourceControl: new SourceControlService([new GitSourceControlProvider()]),
+  sourceControl: new SourceControlService([git]),
   images,
+  work: new WorkService(git, roots),
 };
 
 function createWindow(): BrowserWindow {

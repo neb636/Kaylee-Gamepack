@@ -53,6 +53,35 @@ export function parsePorcelainV2(output: string): ProviderStatus {
   return status;
 }
 
+/** One entry of `git worktree list --porcelain`. The first entry is the main checkout. */
+export interface WorktreeRecord {
+  path: string;
+  head?: string;
+  branch?: string;
+  detached: boolean;
+  locked: boolean;
+  prunable: boolean;
+}
+
+/** Parses `git worktree list --porcelain` (newline separated; one blank line between entries). */
+export function parseWorktreeList(output: string): WorktreeRecord[] {
+  const records: WorktreeRecord[] = [];
+  let current: WorktreeRecord | undefined;
+  for (const line of output.split("\n")) {
+    if (line.startsWith("worktree ")) {
+      current = { path: line.slice(9), detached: false, locked: false, prunable: false };
+      records.push(current);
+    } else if (!current) continue;
+    else if (line.startsWith("HEAD ")) current.head = line.slice(5);
+    else if (line.startsWith("branch ")) current.branch = line.slice(7).replace(/^refs\/heads\//, "");
+    else if (line === "detached") current.detached = true;
+    else if (line === "locked" || line.startsWith("locked ")) current.locked = true;
+    else if (line === "prunable" || line.startsWith("prunable ")) current.prunable = true;
+    else if (line === "bare") records.pop();
+  }
+  return records;
+}
+
 export function isValidBranchName(branch: string): boolean {
   return BRANCH_PATTERN.test(branch) && branch !== "@" && branch !== "HEAD";
 }
@@ -91,12 +120,43 @@ export class GitSourceControlProvider implements SourceControlProvider {
     return { commitId: (await this.git(root, ["rev-parse", "HEAD"])).trim() };
   }
 
-  async createWorktree(root: string, branch: string, target: string): Promise<{ path: string; branch: string }> {
+  async createWorktree(root: string, branch: string, target: string, base?: string): Promise<{ path: string; branch: string }> {
     if (!isValidBranchName(branch)) throw new Error(`"${branch}" is not a valid branch name.`);
     await this.git(root, ["check-ref-format", "--branch", branch]);
     await mkdir(path.dirname(target), { recursive: true });
-    await this.git(root, ["worktree", "add", "-b", branch, "--", target]);
+    let start: string | undefined;
+    if (base) {
+      // Start from the freshest main we can reach; offline falls back to the local copy.
+      await this.git(root, ["fetch", "--quiet", "origin", base]).catch(() => undefined);
+      for (const candidate of [`origin/${base}`, base]) {
+        if (await this.git(root, ["rev-parse", "--verify", "--quiet", `${candidate}^{commit}`]).then(() => true, () => false)) { start = candidate; break; }
+      }
+      if (!start) throw new Error(`Could not find ${base} to start from.`);
+    }
+    // --no-track: a new piece of work is its own branch, not a copy that pulls from main.
+    await this.git(root, ["worktree", "add", ...(start ? ["--no-track"] : []), "-b", branch, "--", target, ...(start ? [start] : [])]);
     return { path: target, branch };
+  }
+
+  async worktrees(root: string): Promise<WorktreeRecord[]> {
+    return parseWorktreeList(await this.git(root, ["worktree", "list", "--porcelain"]));
+  }
+
+  /** Files changed in a worktree (tracked and untracked, not ignored). */
+  async changeCount(root: string): Promise<number> {
+    const output = await this.git(root, ["status", "--porcelain=v1", "--untracked-files=normal", "-z"]);
+    return output.split("\0").filter(Boolean).filter((record) => /^[ MADRCU?!]{2} /.test(record)).length;
+  }
+
+  /** Commits on `branch` that no remote branch has. */
+  async unpushedCount(root: string, branch: string): Promise<number> {
+    if (!isValidBranchName(branch)) throw new Error("Invalid branch name.");
+    return Number((await this.git(root, ["rev-list", "--count", `refs/heads/${branch}`, "--not", "--remotes"])).trim()) || 0;
+  }
+
+  /** git itself refuses a worktree with changes or untracked files (no --force, ever). The branch is kept. */
+  async removeWorktree(root: string, target: string): Promise<void> {
+    await this.git(root, ["worktree", "remove", "--", target]);
   }
 
   private git(cwd: string, args: string[]): Promise<string> {

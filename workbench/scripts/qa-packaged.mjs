@@ -33,7 +33,7 @@ try {
   assert.equal(new URL(page.url()).origin, 'http://127.0.0.1:5175');
   assert.equal(await page.evaluate(() => window.workbench.studio.repoRoot()), null);
   await app.evaluate(({ dialog }, root) => { dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [root] }); }, gitFixture);
-  await page.getByRole('button', { name: 'Add workspace', exact: true }).first().click();
+  await page.getByRole('button', { name: 'Open the Gamepack repo', exact: true }).first().click();
   const showPanel = page.getByRole('button', { name: 'Show side panel', exact: true });
   if (await showPanel.isVisible()) await showPanel.click();
   await page.getByRole('radio', { name: 'Source control' }).click();
@@ -46,8 +46,9 @@ try {
   await page.locator('.branch-name').filter({ hasText: 'feature/separate' }).waitFor();
   assert.equal(git('branch', '--show-current').trim(), 'feature/chosen');
   await app.evaluate(({ dialog }, root) => { dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [root] }); }, path.dirname(studio));
-  await page.getByRole('button', { name: 'Add workspace', exact: true }).first().click();
-  await page.getByRole('heading', { name: path.basename(path.dirname(studio)), exact: true }).waitFor();
+  await page.getByRole('treegrid', { name: 'Main checkout' }).getByRole('button', { name: 'main actions' }).click();
+  await page.getByRole('menuitem', { name: 'Open a different checkout…' }).click();
+  await page.getByRole('treegrid', { name: 'Main checkout' }).getByRole('row', { name: /^main/ }).waitFor();
   await page.getByRole('tab', { name: 'Camera lab', exact: true }).click();
   await page.locator('iframe').waitFor();
   await page.frameLocator('iframe').getByRole('slider').nth(5).waitFor();

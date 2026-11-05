@@ -29,6 +29,16 @@ export function worktreeContainer(root: string): string {
  */
 export class WorkspaceRoots {
   private roots = new Set<string>();
+  /** Every worktree of the repo, wherever git keeps it (refreshed each time the Work list is read). */
+  private worktrees = new Set<string>();
+
+  setWorktrees(paths: string[]): void {
+    this.worktrees = new Set(paths.map((item) => path.resolve(item)));
+  }
+
+  worktreeList(): string[] {
+    return [...this.worktrees];
+  }
 
   replace(paths: string[]): void {
     this.roots = new Set(paths.map((item) => path.resolve(item)));
@@ -40,6 +50,7 @@ export class WorkspaceRoots {
 
   isAllowed(root: string): boolean {
     const requested = path.resolve(root);
+    if (this.worktrees.has(requested)) return true;
     return [...this.roots].some((allowed) => requested === allowed || isInside(requested, worktreeContainer(allowed)));
   }
 
