@@ -219,7 +219,10 @@ export function LeftSidebar({ onCollapse }: { onCollapse: () => void }) {
     </div>
     <div className="work-scroll">
       {creating && <NewWork onDone={() => setCreating(false)} />}
-      {error && <p className="sidebar-empty work-bad" role="alert">{error}</p>}
+      {error && <>
+        <p className="sidebar-empty work-bad" role="alert">{error}</p>
+        <div className="new-work-actions"><Button className="small-button" onPress={() => void services.commands.execute("repo.open")}>Open a different checkout…</Button></div>
+      </>}
       {list?.github === "unavailable" && <p className="sidebar-empty">PRs unavailable: sign in with <code>gh auth login</code>.</p>}
       {notice && <p className="sidebar-empty work-notice" role="status" onClick={() => setNotice(undefined)}>{notice}</p>}
       <WorkTree label="Main checkout" items={groups.main} workspaces={workspaces} onCleanUp={(item) => void cleanUp([item])} />

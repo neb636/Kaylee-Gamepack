@@ -12,7 +12,7 @@ import { createId } from "../core/id";
 interface WorkbenchStore extends PersistedState {
   isHydrated: boolean;
   hydrate: () => Promise<void>;
-  setRepoRoot: (path: string) => void;
+  setRepoRoot: (path: string | undefined) => void;
   /** Opens (or selects) the views for one piece of work. The main checkout gets the labs too. */
   addWorkspace: (path: string, options?: { name?: string; views?: "all" | "agent" }) => string;
   removeWorkspace: (workspaceId: string) => void;
@@ -51,15 +51,20 @@ export const useWorkbenchStore = create<WorkbenchStore>((set, get) => ({
     const persisted = await window.workbench.persistence.load();
     set({ ...persisted, isHydrated: true });
     // Source-run Studio opens its own checkout; the app reopens the repo it opened last time.
-    const candidate = (await window.workbench.studio.repoRoot()) ?? persisted.repoRoot ?? persisted.workspaces[0]?.path;
+    const launched = await window.workbench.studio.repoRoot();
+    const candidate = launched ?? persisted.repoRoot ?? persisted.workspaces[0]?.path;
     if (!candidate) return;
     try {
       const { repoRoot } = await window.workbench.work.list(candidate);
       get().setRepoRoot(repoRoot);
       const active = get().workspaces.find((workspace) => workspace.id === get().activeWorkspaceId);
-      if (!active) get().addWorkspace(repoRoot, { name: "main", views: "all" });
+      // Source-run Studio serves only the checkout it was launched from (maybe a worktree), so open that one.
+      const initial = launched ?? repoRoot;
+      if (!active) get().addWorkspace(initial, { name: initial === repoRoot ? "main" : workspaceName(initial), views: "all" });
     } catch (error) {
+      // A moved or deleted checkout: forget it so the sidebar offers the repo chooser again.
       console.warn("Could not open the Gamepack repo", String(error));
+      set({ repoRoot: undefined });
     }
   },
   setRepoRoot: (repoRoot) => set({ repoRoot }),
