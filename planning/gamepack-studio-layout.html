@@ -18,15 +18,15 @@
   "kind": "Local builder app: layout plan",
   "updated": "2026-11-05",
   "status": {
-    "label": "Agent first: step 6 of 11 built",
-    "tone": "butter"
+    "label": "Tabs and the explorer: all 11 steps built",
+    "tone": "mint"
   },
   "pitch": "Studio started as Agent Workbench and became a builder made for this game: one repo, the **pieces of work** (worktrees) on the left, the **agent** as the main thing, the game when wanted. Dad still opens **Orca** beside it to read, edit and review files. The next steps make Studio enough on its own: **everything in the middle is a tab** (agents, terminals, the game and each lab, open files), one on screen at a time, and a **file explorer** sits on the right like Orca's.",
-  "next": "Dad reads the new plan (**Next: tabs in the middle, files on the right**, steps 7-9) and answers the four open questions at the bottom. Then step 7: the game and the labs become tabs in the middle.",
+  "next": "Dad tries steps 7-11 in Studio (`npm run studio` on this branch): a Feel lab tab and back to the agent, a file from the explorer edited and saved with ⌘S, a diff from **Changes**, ⌘P. Then he says whether the four builder's picks below (a tab per lab, Ship in the explorer, diffs against main, the three CodeMirror packages) can stay, and whether Studio is enough to stop opening Orca.",
   "facts": [
     {
       "icon": "🧱",
-      "value": "6 of 11",
+      "value": "11 of 11",
       "label": "steps built"
     },
     {
@@ -36,8 +36,8 @@
     },
     {
       "icon": "🗂️",
-      "value": "3",
-      "label": "PRs for tabs and files (steps 7-9)"
+      "value": "1",
+      "label": "PR for steps 7-11 (no stacking)"
     },
     {
       "icon": "🎮",
@@ -519,32 +519,37 @@
             {
               "n": 7,
               "title": "The middle is tabs",
-              "status": "next",
-              "md": "Game, Camera, Feel and Character become tabs (one `game` tab type, its lab in the tab's state), opened from **+** or ⌘G, one tab on screen at a time; the right game panel, ▶ Game and ⤢ Big go. Tabs drag to reorder and get a menu (Close, Close others). One running game per piece of work. A piece of work whose game panel was open gets a Game tab after its agent. `qa:composer` and `qa:labs` reach the labs through their tabs."
+              "status": "done",
+              "md": "Game, Camera, Feel and Character become tabs (one `game` tab type, its lab in the tab's state), opened from **+** or ⌘G, one tab on screen at a time; the right game panel, ▶ Game and ⤢ Big go. Tabs drag to reorder and get a menu (Close, Close others). One running game per piece of work. A piece of work whose game panel was open gets a Game tab after its agent. `qa:composer` and `qa:labs` reach the labs through their tabs.",
+              "date": "2026-11-05"
             },
             {
               "n": 8,
               "title": "Explorer on the right",
-              "status": "todo",
-              "md": "A right sidebar with **Files** (the tree with M / A / U marks and dimmed build output, *Names | Contents* search), **Changes** (from Commit changes; a click opens the diff as a tab) and **Sections** (from the ☰ drawer). The Files and Commit changes tabs and the drawer go; their open tabs move into the sidebar. Hides with its button or ⌘⌥B, width remembered."
+              "status": "done",
+              "md": "A right sidebar with **Files** (the tree with M / A / U marks and dimmed build output, *Names | Contents* search), **Changes** (from Commit changes; a click opens the diff as a tab) and **Sections** (from the ☰ drawer). The Files and Commit changes tabs and the drawer go; their open tabs move into the sidebar. Hides with its button or ⌘⌥B, width remembered.",
+              "date": "2026-11-05"
             },
             {
               "n": 9,
               "title": "Edit and review files",
-              "status": "todo",
-              "md": "File tabs you can edit: preview tabs, ⌘S, a dot while unsaved, *Changed on disk* when an agent edits the same file, ⌘F. ⇄ Diff against the last commit or main. Pictures as pictures. ⌘P, ⇧⌘F, clickable paths in agent and terminal output, the file on screen shown in the tree. The tree's menu: New file, Rename, Move to Trash (asks), Copy path, Reveal in Finder."
+              "status": "done",
+              "md": "File tabs you can edit: preview tabs, ⌘S, a dot while unsaved, *Changed on disk* when an agent edits the same file, ⌘F. ⇄ Diff against the last commit or main. Pictures as pictures. ⌘P, ⇧⌘F, clickable paths in agent and terminal output, the file on screen shown in the tree. The tree's menu: New file, Rename, Move to Trash (asks), Copy path, Reveal in Finder.",
+              "date": "2026-11-05"
             },
             {
               "n": 10,
               "title": "Start typing at once",
-              "status": "todo",
-              "md": "No setup form: opening a worktree or **+** starts the last-used CLI straight away (a Claude / Codex dropdown on the tab switches it). Run in and Location go (the worktree is what's picked on the left); Resume previous moves into the **+** menu. The composer holds a prompt until the CLI is ready instead of “Not sent”. A session is named from its first prompt instead of “Untitled · Setup”."
+              "status": "done",
+              "md": "No setup form: opening a worktree or **+** starts the last-used CLI straight away (a Claude / Codex dropdown on the tab switches it). Run in and Location go (the worktree is what's picked on the left); Resume previous moves into the **+** menu. The composer holds a prompt until the CLI is ready instead of “Not sent”. A session is named from its first prompt instead of “Untitled · Setup”.",
+              "date": "2026-11-05"
             },
             {
               "n": 11,
               "title": "Tidy the edges",
-              "status": "todo",
-              "md": "Ship becomes a **Ship ▾** menu in the header instead of a permanent footer, or a tab in the right sidebar beside Changes (an open question below); its output still opens in a terminal tab. “Dependencies are missing” shows on the worktree's row with an **npm ci** button. Work rows get **+ Claude** / **+ Codex** on hover."
+              "status": "done",
+              "md": "Ship becomes a **Ship ▾** menu in the header instead of a permanent footer, or a tab in the right sidebar beside Changes (an open question below); its output still opens in a terminal tab. “Dependencies are missing” shows on the worktree's row with an **npm ci** button. Work rows get **+ Claude** / **+ Codex** on hover.",
+              "date": "2026-11-05"
             }
           ]
         },
@@ -708,6 +713,70 @@
                 "Game servers: none start until the panel opens; with no game on screen, `trimServers(0)` after 60 s.",
                 "`qa:labs` opens ▶ Game first, finds the game frame by `?studio=1` (the pool's port, not 5174), retries Read controls while a cold server builds, waits for prepared prompts, and expects the character lab's current link (the `nick-code` lineup is gone from the game)."
               ]
+            },
+            {
+              "title": "Steps 7-11: tabs in the middle, the explorer on the right, edit files, start typing at once",
+              "date": "2026-11-05",
+              "status": "done",
+              "summary": "Everything in the middle is a tab (agents, terminals, the game and each lab, files); the explorer on the right has Files, Changes, Sections and Ship; file tabs edit, save and diff; new agents start their CLI at once.",
+              "blocks": [
+                {
+                  "type": "list",
+                  "title": "Step 7: the middle is tabs",
+                  "items": [
+                    "One `game` view type, its lab in `GameViewState.lab`: **🎮 Game**, **🎥 Camera lab**, **🎛️ Feel lab**, **🦄 Character lab**, each its own line in the **+** menu. A lab tab opens the section on screen with `?cam=1` / `?feel=1` (`tabLink`).",
+                    "One `GamePane` per piece of work for the game tab on screen or the last one shown (`useGameLive.liveView`): hidden behind other tabs, slowed to the background pace, its scene and Undo kept. Going to another game tab reloads the same frame at that lab.",
+                    "The toolbar fits one line (breadcrumb, frame, reload, ⇆ Main, 🐞, Copy link, → Agent); `LabPanel` sits beside the frame from 1100 px wide, under it below that.",
+                    "▶ Game, ⤢ Big and the right game panel are gone. ⌘G (`focusGame`) brings a game tab forward or opens one. `migrateStudioTabs` turns a saved open panel into a Game tab after the first agent.",
+                    "Tabs drag to reorder (`moveView`), and right-click gives Close, Close others and the tab's own items (Copy path, Reveal in Finder, Copy game link, Switch to Codex)."
+                  ]
+                },
+                {
+                  "type": "list",
+                  "title": "Step 8: the explorer",
+                  "items": [
+                    "`RightSidebar`: **Files**, **Changes** (with its count), **Sections**, **🚀 Ship**; ⌘⌥B or its button hides it; `layout.explorer` keeps collapsed, width and tab. Icons only when narrow, except the open tab.",
+                    "Files: M / A / U marks from git status (a dot on folders with changes), ignored paths dimmed (`git ls-files --others --ignored --directory`), *Names | Contents* search (match case, regex), the file on screen opened and highlighted in the tree.",
+                    "Changes: a click opens the diff; the commit box; branch switching folded under a details line.",
+                    "The old Files and Commit changes tabs migrate away (the explorer opens on the one that was on screen)."
+                  ]
+                },
+                {
+                  "type": "list",
+                  "title": "Step 9: edit and review files",
+                  "items": [
+                    "File tabs edit: undo, ⌘F (`@codemirror/search`), ⌘S, a dot on the tab while unsaved, and closing an unsaved tab asks.",
+                    "Preview tabs: one click opens one in italics, the next one-click open takes its place; a double click, an edit or a save keeps it.",
+                    "`files.write` saves only over the hash the tab opened: a clean tab reloads by itself when an agent edits the file, an edited one shows *Changed on disk: Reload / Keep mine*.",
+                    "**⇄ Diff** in the same editor (`@codemirror/merge`), *vs main (the PR)* by default on a worktree, *vs last commit* on main.",
+                    "Pictures as pictures (up to 8 MB). ⌘P Go to File, ⇧⌘F search inside files (`git grep`, 500 matches or 2 s). A `path:line` in an agent's or a terminal's output is a link when it's a file of the checkout.",
+                    "Each row's ⋯ menu: New file, New folder, Rename, Copy path, Reveal in Finder, Move to Trash (asks; `shell.trashItem`)."
+                  ]
+                },
+                {
+                  "type": "list",
+                  "title": "Steps 10-11: start typing at once, tidy the edges",
+                  "items": [
+                    "New agent tabs (+, a new piece of work, a Work row's **+ Claude** / **+ Codex** on hover) start the last-used CLI as soon as they're shown. Run in and Location are gone; the + menu has Claude Code, Codex and *Resume a previous session*.",
+                    "A saved tab whose CLI isn't running shows a small card: CLI picker, Start, Resume previous. The status says *Not running* instead of *Setup*.",
+                    "The composer takes a prompt while the CLI is still starting and sends it once it's ready, instead of *Not sent*. A tab is named after its CLI until the first prompt names it.",
+                    "Ship is the explorer's last tab (the agent gets its full height back); its commands still run in the Ship terminal tab.",
+                    "A worktree without `node_modules` shows **npm ci ▸** on its row (a clone of main's when the lockfile matches)."
+                  ]
+                },
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "- One PR for steps 7-11 instead of one per step: stacked PRs stranded before (#314/#315).\n- The four open questions were built with the builder's picks (below); Dad can still change them.\n- Diffs are a mode of the file tab (⇄) rather than a separate `file-diff` view, so the diff stays editable.\n- The game tab has no per-tab link: every tab opens the section on screen with its lab on, and the Character lab keeps its own link.\n- The tab menu is a right-click (and middle-click closes); the Claude / Codex switch is in that menu, not a dropdown on the tab."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "Studio `npm test`: 81 pass, new `studio-tabs.test.mjs` (the migration, saves only over the opened version, write refusals outside the root, into .git, binary and over 2 MB, create / rename / trash inside the root, git grep search and its limits, `fileAt` for head and main, ignored folders). `qa:composer` passes with the new steps (restart card, explorer tree and both searches, preview tab, edit and ⌘S, reload when the file changes on disk, a diff, Changes and commit, Ship, a Game and a Feel tab sharing one game kept behind the agent). `qa:labs` passes, reaching the Camera, Feel and Character labs through their tabs. Live look: the Feel lab tab on Nan's mountain road, toolbar on one line, explorer narrow."
+                }
+              ]
             }
           ]
         }
@@ -744,28 +813,22 @@
             {
               "q": "Split the middle in two, so a lab sits beside the agent? (2026-11-05)",
               "a": "No: one screen. Dad switches between tabs himself."
-            }
-          ]
-        },
-        {
-          "type": "qa",
-          "title": "Still open (steps 7-9)",
-          "items": [
+            },
             {
               "q": "The game and the labs: a tab each (🎮 Game, 🎥 Camera, 🎛️ Feel, 🦄 Character), or one Game tab with a Play | Camera | Feel | Character switch on it?",
-              "why": "Builder's pick: a tab each, as asked: easy to see which lab is open and to switch to it. The cost: only one game runs at a time, so going from the Feel tab to the Camera tab reloads the game (a second or two)."
+              "a": "Built as asked: a tab each (🎮 Game, 🎥 Camera lab, 🎛️ Feel lab, 🦄 Character lab), one running game; going between game tabs reloads it in a second or two. Builder's pick, waiting on Dad."
             },
             {
               "q": "Ship: stay under the agent, become a Ship ▾ menu (step 11), or a 🚀 tab in the right sidebar beside Changes?",
-              "why": "Builder's pick: a right-sidebar tab beside Changes. Commit, verify and open the PR live in one place, and the agent gets its full height back."
+              "a": "Built as a 🚀 Ship tab in the explorer beside Changes. Builder's pick, waiting on Dad."
             },
             {
               "q": "A diff shows changes against what: the last commit, or main (everything this branch changed)?",
-              "why": "Builder's pick: a switch on the diff tab, starting on main for a worktree (what the PR will show) and on the last commit for main."
+              "a": "Built as a switch on the diff: *vs main* on a worktree, *vs last commit* on main. Builder's pick, waiting on Dad."
             },
             {
               "q": "OK to add three small CodeMirror packages to Studio only: @codemirror/commands (undo, keys), @codemirror/search (⌘F) and @codemirror/merge (diffs)?",
-              "why": "They're the same family as the CodeMirror Studio already uses to show files, about 100 KB together, and the game never loads them. Without them, editing has no undo or find, and diffs would be hand-built."
+              "a": "Added to Studio only (`workbench/package.json`): @codemirror/commands, @codemirror/search, @codemirror/merge. The game never loads them. Waiting on Dad's OK."
             }
           ]
         }

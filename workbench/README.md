@@ -42,17 +42,20 @@ open its agent and views; its sessions nest under it.
 - **Finished** groups worktrees whose PR is merged or closed, or whose folder is gone. **Clean up…** (a row's ⋯ menu)
   or **Clean up all** removes the folder after asking. It never touches the main checkout, a worktree with changes, or
   commits that exist only on this Mac (unless the PR has exactly that head, as after a squash merge). Branches stay.
-- The **Source control** panel still switches branches and commits; switching needs a clean tree, and Studio never
-  stashes or discards edits for you. Personas are gone for now; Instructions stay in Settings.
+- Rows get **+ Claude** / **+ Codex** on hover, and a worktree without dependencies shows **npm ci ▸**.
+- Personas are gone for now; Instructions stay in Settings.
 
-**Layout.** The agent fills the middle: its terminal on top, the composer under it, other agents and terminals as
-tabs. The game stays closed until you press **▶ Game** (or ⌘G); it opens on the right, with ☰ Sections, the device
-frame, the Camera / Feel / Character switches, ⇆ Main and **⤢ Big** (the game takes most of the width, for lab
-sessions). Studio remembers per piece of work whether its game was open. The game server starts only when the game
-opens and stops a minute after it closes.
+**Layout.** Everything for the selected piece of work is a tab in the middle, one on screen at a time: agents,
+terminals, **🎮 Game**, **🎥 Camera lab**, **🎛️ Feel lab**, **🦄 Character lab** and open files (the **+** menu lists
+them; drag to reorder, right-click for Close others). The game tabs share one running game: the last one shown stays
+loaded behind the agent, and going from one game tab to another reopens the game at that lab. ⌘G brings the game
+forward. The **explorer** on the right (⌘⌥B) has **Files** (tree, search by name or inside files, ⌘P, ⇧⌘F),
+**Changes** (a click shows the diff; commit), **Sections** and **Ship**. File tabs are editable: one click opens a
+preview tab, ⌘S saves, and a file an agent changed reloads by itself or asks when you have edits. New agent tabs start
+their CLI at once; type straight away.
 
-Open a piece of work's game (then its camera, feel or character lab) to start its live game server on a loopback port.
-Switching work and opening a lab restarts the server for that checkout. The built interface stays on port 5175,
+Open a piece of work's Game tab (or one of its lab tabs) to start its live game server on a loopback port; it stops a
+minute after the last game tab there closes. The built interface stays on port 5175,
 so the labs retain their exact-origin checks. Quit Studio to stop both servers. Each checkout needs `npm ci` once
 (use a Studio terminal), Node 22.12+ and your signed-in AI CLIs. If a branch is missing, run `git fetch` in its terminal
 and reopen the sidebar. The app uses Electron’s bundled Node runtime for the game server. It doesn't bundle a game checkout, npm, AI CLIs or Blender; only changes to Studio itself

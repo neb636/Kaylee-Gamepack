@@ -154,6 +154,31 @@ export class GitSourceControlProvider implements SourceControlProvider {
     return Number((await this.git(root, ["rev-list", "--count", `refs/heads/${branch}`, "--not", "--remotes"])).trim()) || 0;
   }
 
+  /**
+   * A file's text at the last commit (`head`) or where this branch left main (`main`: the merge base with origin/main,
+   * else main). Null when it didn't exist there. The ref is never taken from the renderer.
+   */
+  async fileAt(root: string, file: string, base: "head" | "main"): Promise<string | null> {
+    if (!file || file.startsWith("/") || file.split("/").includes("..")) throw new Error("Paths must be relative to the workspace.");
+    let ref = "HEAD";
+    if (base === "main") {
+      ref = "";
+      for (const candidate of ["origin/main", "main"]) {
+        ref = (await this.git(root, ["merge-base", "HEAD", candidate]).catch(() => "")).trim();
+        if (ref) break;
+      }
+      if (!/^[0-9a-f]{7,64}$/.test(ref)) throw new Error("Could not find where this branch left main.");
+    }
+    // The path is from the repo's top, as the tree and status show it.
+    return this.git(root, ["show", `${ref}:${file}`]).catch(() => null);
+  }
+
+  /** What git ignores, folded to the top folder (build output, node_modules, qa-output), to dim in the file tree. */
+  async ignored(root: string): Promise<string[]> {
+    const output = await this.git(root, ["ls-files", "--others", "--ignored", "--exclude-standard", "--directory", "-z"]);
+    return output.split("\0").filter(Boolean).map((entry) => entry.replace(/\/$/, "")).slice(0, 5_000);
+  }
+
   /** git itself refuses a worktree with changes or untracked files (no --force, ever). The branch is kept. */
   async removeWorktree(root: string, target: string): Promise<void> {
     await this.git(root, ["worktree", "remove", "--", target]);

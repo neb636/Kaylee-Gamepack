@@ -14,10 +14,10 @@ try {
   app = await electron.launch({args:['.'],env:{...process.env,VITE_DEV_SERVER_URL:'http://127.0.0.1:5175',STUDIO_REPO_ROOT:repo,WORKBENCH_USER_DATA_DIR:profile,PATH:`${profile}${path.delimiter}${process.env.PATH}`}});
   const page=await app.firstWindow(); page.setDefaultTimeout(15000);
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  // The game is closed until ▶ Game; the labs are switches on it, and a pasted link opens a section with one on.
-  await page.getByRole('button',{name:'Game',exact:true}).click();
+  // The game and each lab are tabs in the middle (one running game); a pasted link opens a section with a lab on.
+  const tab = async name=>{await page.getByRole('button',{name:'New tab'}).click();await page.getByRole('menuitem',{name}).click();};
+  await tab(/Camera lab/);
   const goto = async link=>{await page.getByRole('button',{name:'Current section'}).click();await page.getByLabel('Game link').fill(link);await page.keyboard.press('Enter');};
-  const toggle = name=>page.getByRole('group',{name:'Labs'}).getByRole('button',{name}).click();
   await goto('#/world/thailand/hub/downstairs?cam=1&cam.frame=ipad-wide');
   // This checkout's game runs on whichever loopback port Studio's server pool gave it.
   const frame=()=>page.frames().find(f=>/^http:\/\/127\.0\.0\.1:\d+\/\?studio=1/.test(f.url()));
@@ -86,8 +86,8 @@ try {
   await page.getByRole('button',{name:'Ask AI & preview controls'}).click();
   await page.getByText('Fixture control update',{exact:true}).waitFor();
   assert.match(frame().url(),/feel\.steer\.slide=5.5/);
-  // Off and on again keeps the tuned values in the link.
-  await toggle(/Feel/); await toggle(/Feel/);
+  // Over to the Game tab and back to the Feel lab tab keeps the tuned values in the link.
+  await tab(/^🎮 Game/); await tab(/Feel lab/);
   await page.getByRole('button',{name:'Read controls',exact:true}).click();
   assert.match(frame().url(),/feel\.steer\.slide=5.5/);
   await page.getByRole('button',{name:'Prepare prompt to save in game'}).click();
@@ -96,7 +96,7 @@ try {
   const prepared=async re=>{for(let i=0;i<40&&!re.test(await draft.inputValue());i++) await page.waitForTimeout(250);return draft.inputValue();};
   assert.match(await prepared(/feel\.steer\.slide=5.5/),/feel\.steer\.slide=5.5/);
   assert.match(await draft.inputValue(),/mountain\.ts/);
-  await toggle(/Character/);
+  await tab(/Character lab/);
   await page.getByRole('button',{name:'Prepare character builder prompt'}).click();
   await draft.waitFor(); assert.match(await prepared(/"kind": "character"/),/"kind": "character"/);
   assert.match(await draft.inputValue(),/#\/world\/characters\/nick/);

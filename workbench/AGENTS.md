@@ -6,8 +6,9 @@ This folder is the local Electron builder app for the game in the parent directo
 - Follow the root AGENTS.md for family privacy, character identities, art, game changes and validation.
 - Keep Electron dependencies and builds isolated here. The published game must not import native APIs or this renderer.
   The one shared dependency is `src/shared/labs.ts`, a dependency-free protocol and numeric validator.
-- Layout: the agent (terminal + composer) is the main column. The game is a right panel, closed by default and remembered per piece of work (`game.open`, ▶ Game or ⌘G, `⤢ Big` for lab sessions). Its servers start only when it opens and stop a minute after it closes. Sections open from the game's ☰ Sections drawer.
-- Reuse the live game labs; do not fork their controls, character renderer or camera implementation. They are switches on the one game pane (`features/game/`), not tabs.
+- Layout: work list | the middle | explorer. Everything in the middle is a tab, one on screen: agents, terminals, the game and each lab (one `game` view type, `GameViewState.lab`), files. The explorer on the right (⌘⌥B) holds Files, Changes, Sections and Ship. The game tabs share one running game per piece of work (`useGameLive.liveView`); the last one shown stays mounted hidden. Its servers start with the first game tab and stop a minute after the last closes.
+- Reuse the live game labs; do not fork their controls, character renderer or camera implementation. They are tabs over the one game pane (`features/game/`), each opening the section on screen with its lab on.
+- File tabs edit: never save over a file that changed on disk since the tab opened it (`files.write` checks the hash); the renderer never names a path outside the selected worktree, and main checks every read, write and search.
 - One game server per piece of work (`GameServerPool`, last 2 kept, trimmed to the one on screen after 3 minutes unless comparing with main).
 - Performance (Dad's Mac has 8 GB): the game pane slows to ~8 fps behind other apps (`src/world/labs/studio-pace.ts`, `{ studioFocused }`),
   the 3D engine caps at 30 fps and 1.5x pixels under `?studio=1`. Keep git off the idle path: the Work list polls only while Studio is in

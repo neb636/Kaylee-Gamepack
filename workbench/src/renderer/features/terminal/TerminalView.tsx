@@ -34,6 +34,7 @@ export function TerminalView({ view, workspace }: ViewComponentProps) {
   }, [controller, state.command, state.commandNonce, state.ranNonce, workspace.id, view.id]);
   return <section className="terminal-view" aria-label="Terminal session">
     <div className="view-toolbar"><div className="view-toolbar-title"><TerminalIcon size={15} />Local terminal</div><div className="session-status">{status}</div></div>
-    {controller && <TerminalSurface controller={controller} />}
+    {controller && <TerminalSurface controller={controller} root={workspace.path}
+      onOpenPath={(path, line) => void services.commands.execute("file.open", { workspaceId: workspace.id, root: workspace.path, path, line, preview: true })} />}
   </section>;
 }

@@ -21,6 +21,8 @@ interface WorkbenchStore extends PersistedState {
   selectView: (workspaceId: string, viewId: string) => void;
   closeView: (workspaceId: string, viewId: string) => void;
   renameView: (workspaceId: string, viewId: string, title: string) => void;
+  /** Moves a tab to just before another (or to the end). */
+  moveView: (workspaceId: string, viewId: string, beforeViewId: string | undefined) => void;
   updateViewState: (workspaceId: string, viewId: string, patch: Record<string, unknown>) => void;
   upsertPersona: (persona: Persona) => void;
   deletePersona: (personaId: string) => void;
@@ -81,7 +83,8 @@ export const useWorkbenchStore = create<WorkbenchStore>((set, get) => ({
       type: "agent",
       workspaceId,
       title: "Untitled",
-      state: { autoTitle: true },
+      // Its CLI starts as soon as it's shown: opening a piece of work is ready to type.
+      state: { autoTitle: true, autoStart: true },
     };
     const workspace: Workspace = {
       id: workspaceId,
@@ -140,6 +143,16 @@ export const useWorkbenchStore = create<WorkbenchStore>((set, get) => ({
           views,
           activeViewId: workspace.activeViewId === viewId ? replacement?.id : workspace.activeViewId,
         };
+      }),
+    })),
+  moveView: (workspaceId, viewId, beforeViewId) =>
+    set((state) => ({
+      workspaces: mapWorkspace(state.workspaces, workspaceId, (workspace) => {
+        const moving = workspace.views.find((view) => view.id === viewId);
+        if (!moving || viewId === beforeViewId) return workspace;
+        const rest = workspace.views.filter((view) => view.id !== viewId);
+        const at = beforeViewId ? rest.findIndex((view) => view.id === beforeViewId) : -1;
+        return { ...workspace, views: at < 0 ? [...rest, moving] : [...rest.slice(0, at), moving, ...rest.slice(at)] };
       }),
     })),
   renameView: (workspaceId, viewId, title) =>

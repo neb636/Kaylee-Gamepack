@@ -136,6 +136,8 @@ export class WorkService {
         pr,
         install: install?.state,
         installMessage: install?.message,
+        // The game can't start without them (an older worktree, or an install that never ran).
+        dependencies: exists && !install && !(await fs.access(path.join(record.path, "node_modules/vite/bin/vite.js")).then(() => true, () => false)) ? "missing" : undefined,
       };
     });
     return { repoRoot, items, github: prs ? "ok" : "unavailable" };
@@ -192,6 +194,15 @@ export class WorkService {
     }
     await this.git.removeWorktree(root, record.path);
     this.roots.setWorktrees(this.roots.worktreeList().filter((item) => path.resolve(item) !== path.resolve(record.path)));
+  }
+
+  /** Installs the game's dependencies in a worktree of this repo that has none (the row's npm ci button). */
+  async installDependencies(repoRoot: string, target: string): Promise<void> {
+    const records = await this.git.worktrees(repoRoot);
+    const record = records.find((item) => path.resolve(item.path) === path.resolve(target));
+    if (!record) throw new Error("That folder is not a worktree of this repo.");
+    if (this.installs.get(path.resolve(record.path))?.state === "installing") return;
+    this.installing = this.install(record.path, records[0].path);
   }
 
   /** Resolves when a started `npm ci` has finished (for tests and the next list). */

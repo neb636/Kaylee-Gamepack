@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import { Dialog, DialogTrigger, GridList, GridListItem, Heading, Modal, ModalOverlay, TextArea, TextField, Label } from "react-aria-components";
-import type { SourceControlChange } from "../../../shared/models";
 import { errorMessage } from "../../core/errors";
 import type { PanelProps } from "../../core/panel-registry";
 import { services } from "../../core/services";
 import { useWorkbenchStore } from "../../state/workbench-store";
 import { Button, IconButton } from "../../ui/controls";
 import { BranchIcon, CheckIcon, FileIcon, RefreshIcon } from "../../ui/icons";
-import { activeRoot, refreshSourceControl, useSourceControlStatus } from "./source-control-store";
+import { activeRoot, CHANGE_LETTERS as LETTERS, refreshSourceControl, useSourceControlStatus } from "./source-control-store";
 
-const LETTERS: Record<SourceControlChange["kind"], string> = { modified: "M", added: "A", deleted: "D", renamed: "R", untracked: "U", conflicted: "C" };
 
 function folderName(path: string): string {
   return path.split(/[\\/]/).filter(Boolean).at(-1) ?? path;
@@ -62,7 +60,8 @@ export function SourceControlPanel({ workspace }: PanelProps) {
         {(status.ahead > 0 || status.behind > 0) && <small>↑{status.ahead} ↓{status.behind}</small>}
         <small className="branch-provider">{status.providerLabel}</small>
       </div>
-      <div className="commit-area">
+      <details className="commit-area branch-area">
+        <summary>Switch branch or make a worktree</summary>
         <label>Branch<select aria-label="Checkout branch" value={branch} onChange={event => setBranch(event.target.value)}>
           <option value="">Choose a branch…</option>
           {branches.map(name => <option key={name} value={name}>{name}</option>)}
@@ -71,7 +70,7 @@ export function SourceControlPanel({ workspace }: PanelProps) {
         {count > 0 && <p>Commit changes or create a worktree to switch branches.</p>}
         <label>New worktree branch<input aria-label="New worktree branch" value={newBranch} onChange={event => setNewBranch(event.target.value)} /></label>
         <Button isDisabled={!newBranch.trim() || switching} onPress={() => void changeBranch(true)}>Create worktree</Button>
-      </div>
+      </details>
       <div className="commit-area">
         <TextField aria-label="Commit message" value={message} onChange={setMessage}>
           <TextArea placeholder="Commit message" rows={3} />
@@ -92,10 +91,10 @@ export function SourceControlPanel({ workspace }: PanelProps) {
         </DialogTrigger>
         {error && <p role="alert" className="agent-error">{error}</p>}
       </div>
-      <div className="panel-section-header"><Label>Changes</Label><span className="count-badge">{count}{status.truncated ? "+" : ""}</span></div>
+      <div className="panel-section-header"><Label>Changes</Label><small className="panel-hint">click for the diff</small><span className="count-badge">{count}{status.truncated ? "+" : ""}</span></div>
       <GridList aria-label="Changes" className="panel-list change-list" items={status.changes.map((change) => ({ ...change, id: change.path }))}
         disabledKeys={status.changes.filter((change) => change.kind === "deleted").map((change) => change.path)}
-        onAction={(key) => void services.commands.execute("file.open", { workspaceId: workspace.id, root, path: String(key) })}
+        onAction={(key) => void services.commands.execute("file.open", { workspaceId: workspace.id, root, path: String(key), diff: true, preview: true })}
         renderEmptyState={() => <p className="panel-empty">No uncommitted changes.</p>}>
         {(change) => <GridListItem id={change.id} textValue={change.path} className="panel-list-item">
           <FileIcon size={14} />
