@@ -15,6 +15,8 @@ export interface SourceControlProvider {
   /** Records every working change in one commit. */
   commit: (root: string, message: string) => Promise<{ commitId: string }>;
   createWorktree: (root: string, branch: string, target: string) => Promise<WorktreeResult>;
+  fileAt?: (root: string, path: string, base: "head" | "main") => Promise<string | null>;
+  ignored?: (root: string) => Promise<string[]>;
 }
 
 export class SourceControlService {
@@ -50,6 +52,23 @@ export class SourceControlService {
     const provider = await this.require(root);
     const target = path.join(worktreeContainer(root), branch.replace(/[^A-Za-z0-9._-]+/g, "-"));
     return provider.createWorktree(root, branch, target);
+  }
+
+  async fileAt(root: string, file: string, base: "head" | "main"): Promise<string | null> {
+    const provider = await this.require(root);
+    if (!provider.fileAt) throw new Error(`${provider.label} can't show older versions.`);
+    return provider.fileAt(root, file, base);
+  }
+
+  /** Cached for a few seconds: the tree asks again on every file change. */
+  private readonly ignoredCache = new Map<string, { at: number; value: Promise<string[]> }>();
+  async ignored(root: string): Promise<string[]> {
+    const cached = this.ignoredCache.get(root);
+    if (cached && Date.now() - cached.at < 15_000) return cached.value;
+    const provider = await this.providerFor(root);
+    const value = provider?.ignored ? provider.ignored(root).catch(() => []) : Promise.resolve([]);
+    this.ignoredCache.set(root, { at: Date.now(), value });
+    return value;
   }
 
   private async require(root: string): Promise<SourceControlProvider> {

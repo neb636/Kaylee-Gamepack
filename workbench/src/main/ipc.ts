@@ -7,8 +7,14 @@ import {
   agentSessionCreateOptionsSchema,
   commitSchema,
   createWorktreeSchema,
+  fileAtSchema,
+  fileCreateSchema,
+  fileExistsSchema,
   fileFindSchema,
   fileLocationSchema,
+  fileRenameSchema,
+  fileSearchSchema,
+  fileWriteSchema,
   imageFileSchema,
   imageImportSchema,
   imagePrepareRunSchema,
@@ -131,6 +137,38 @@ export function registerIpc(ptyManager: PtyManager, agentSessionManager: AgentSe
     const { root, query } = fileFindSchema.parse(input);
     return workspace.files.find(root, query);
   });
+  handle(IPC.filesWrite, (_event, input: unknown) => {
+    const { root, path, content, expectedHash } = fileWriteSchema.parse(input);
+    return workspace.files.write(root, path, content, expectedHash);
+  });
+  handle(IPC.filesSearch, (_event, input: unknown) => {
+    const { root, query, caseSensitive, regex } = fileSearchSchema.parse(input);
+    return workspace.files.search(root, query, { caseSensitive, regex });
+  });
+  handle(IPC.filesImage, (_event, input: unknown) => {
+    const { root, path } = fileLocationSchema.parse(input);
+    return workspace.files.image(root, path);
+  });
+  handle(IPC.filesExists, (_event, input: unknown) => {
+    const { root, paths } = fileExistsSchema.parse(input);
+    return workspace.files.exists(root, paths);
+  });
+  handle(IPC.filesCreate, (_event, input: unknown) => {
+    const { root, path, kind } = fileCreateSchema.parse(input);
+    return workspace.files.create(root, path, kind);
+  });
+  handle(IPC.filesRename, (_event, input: unknown) => {
+    const { root, from, to } = fileRenameSchema.parse(input);
+    return workspace.files.rename(root, from, to);
+  });
+  handle(IPC.filesTrash, (_event, input: unknown) => {
+    const { root, path } = fileLocationSchema.parse(input);
+    return workspace.files.trash(root, path);
+  });
+  listen(IPC.filesReveal, (_event, input: unknown) => {
+    const { root, path } = fileLocationSchema.parse(input);
+    void workspace.files.locate(root, path).then((target) => shell.showItemInFolder(target)).catch((error: unknown) => console.warn("Could not reveal file", String(error)));
+  });
   listen(IPC.filesWatch, (event, input: unknown) => watches.watch(event.sender, workspaceRootSchema.parse(input).root));
   listen(IPC.filesUnwatch, (event, input: unknown) => watches.unwatch(event.sender, workspaceRootSchema.parse(input).root));
   handle(IPC.sourceControlBranches, async (_event, input: unknown) =>
@@ -153,6 +191,12 @@ export function registerIpc(ptyManager: PtyManager, agentSessionManager: AgentSe
     const { root, branch } = createWorktreeSchema.parse(input);
     return workspace.sourceControl.createWorktree(await allowedRoot(root), branch);
   });
+  handle(IPC.sourceControlFileAt, async (_event, input: unknown) => {
+    const { root, path, base } = fileAtSchema.parse(input);
+    return workspace.sourceControl.fileAt(await allowedRoot(root), path, base);
+  });
+  handle(IPC.sourceControlIgnored, async (_event, input: unknown) =>
+    workspace.sourceControl.ignored(await allowedRoot(workspaceRootSchema.parse(input).root)));
   handle(IPC.workList, async (_event, input: unknown) => {
     const { root, refresh } = workListSchema.parse(input);
     return workspace.work.list(await allowedRoot(root), refresh);
@@ -164,6 +208,10 @@ export function registerIpc(ptyManager: PtyManager, agentSessionManager: AgentSe
   handle(IPC.workRemove, async (_event, input: unknown) => {
     const { root, path } = workRemoveSchema.parse(input);
     return workspace.work.remove(await allowedRoot(root), path);
+  });
+  handle(IPC.workInstall, async (_event, input: unknown) => {
+    const { root, path } = workRemoveSchema.parse(input);
+    return workspace.work.installDependencies(await allowedRoot(root), path);
   });
   handle(IPC.imagesFolder, (_event, input: unknown) => workspace.images.folder(imageViewSchema.parse(input).viewId));
   handle(IPC.imagesImportData, (_event, input: unknown) => {

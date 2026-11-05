@@ -138,8 +138,20 @@ export function registerComposerContributions(): void {
   });
   services.commands.register<ComposerTarget>("agent.composer.send", async (target) => {
     const runtime = useAgentRuntimes.getState().sessions[target.viewId];
+    if (!runtime || !stateFor(target)?.draft?.trim() || useComposerState.getState().views[target.viewId]?.sending) return;
+    // The CLI is still starting (or answering a trust prompt): hold the prompt until it can take one.
+    if (!runtime.status?.canSubmit) {
+      const lifecycle = runtime.status?.lifecycle;
+      if (lifecycle === "exited" || lifecycle === "failed") { notSent(target.viewId, runtime.status?.reason ?? "The CLI stopped."); return; }
+      if (useComposerState.getState().views[target.viewId]?.launching) return;
+      updateRuntime(target.viewId, { launching: true, result: undefined });
+      try { await untilSubmittable(runtime.controller); }
+      catch (error) { updateRuntime(target.viewId, { launching: false }); notSent(target.viewId, errorMessage(error)); return; }
+      updateRuntime(target.viewId, { launching: false });
+      if (!exists(target)) return;
+    }
     const state = stateFor(target);
-    if (!runtime || !state?.draft?.trim() || useComposerState.getState().views[target.viewId]?.sending) return;
+    if (!state?.draft?.trim()) return;
     const entry = entryFor(target, "not-sent", "");
     if (entry.preview.content.length > 500_000) {
       notSent(target.viewId, "The composed prompt exceeds 500,000 characters. Shorten the prompt or remove quoted context.");
@@ -176,7 +188,8 @@ export function registerComposerContributions(): void {
     if (!workspace || !state?.draft?.trim() || composer?.launching || composer?.sending) return;
     const provider = services.sessions.get(providerId ?? state.providerId ?? "");
     if (provider?.kind !== "agent") { notSent(target.viewId, "Choose an available harness first."); return; }
-    if (state.providerId !== provider.id) patchView(target, { providerId: provider.id });
+    patchView(target, { providerId: provider.id, autoStart: false });
+    useWorkbenchStore.getState().updateLayout({ lastAgentProvider: provider.id });
     updateRuntime(target.viewId, { launching: true, result: undefined });
     try {
       const cwd = await prepareSessionFolder(target);

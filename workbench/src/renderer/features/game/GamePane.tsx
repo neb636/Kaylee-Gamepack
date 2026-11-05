@@ -1,21 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { LAB_CHANNEL, type LabSnapshot } from "../../../shared/labs";
-import type { GameFrame, Workspace } from "../../../shared/models";
-import { CloseIcon, RefreshIcon } from "../../ui/icons";
-import { IconButton } from "../../ui/controls";
-import { crumbFor, DEFAULT_CHARACTER, DEFAULT_LINK, FRAMES, hashOf, labOf, loadSections, patchGame, useGameLive, withLab } from "./game-store";
+import type { GameFrame, WorkbenchView, Workspace } from "../../../shared/models";
+import { RefreshIcon } from "../../ui/icons";
+import { crumbFor, FRAMES, hashOf, labOf, labOfView, loadSections, patchGame, tabLink, useGameLive } from "./game-store";
 import { LabPanel, type LabRequest } from "./LabPanel";
 import { useWorkList } from "../work/work-store";
 import { useWorkbenchStore } from "../../state/workbench-store";
 import { KnownIssuesList, useKnownIssues } from "./KnownIssues";
 import { handleLabShare } from "./lab-share";
-import { SectionTree } from "./SectionTree";
-
-const LABS = [
-  { id: "camera", label: "Camera", emoji: "🎥", hint: "The camera lab: nudge or lock the 3D camera (?cam=1)" },
-  { id: "feel", label: "Feel", emoji: "🎛️", hint: "The feel lab: sliders for every knob the scene declares (?feel=1)" },
-  { id: "character", label: "Character", emoji: "🦄", hint: "The 3D character lab (#/world/characters)" },
-] as const;
+import { useElementWidth } from "../../ui/use-element-width";
 
 const SERVER_GRACE_MS = 3 * 60_000;
 
@@ -36,18 +29,23 @@ function useStageScale(frame: GameFrame, columns = 1) {
   return { ref, device: { width: device.width, height: device.height }, scale: Math.min(1, width / device.width, (size.height - 48) / device.height) };
 }
 
+/** Beside the frame when the tab is at least this wide; under it when narrower. */
+const PANEL_BESIDE_WIDTH = 1100;
+
 /**
- * The game for one piece of work, always in the middle: its own loopback server, a breadcrumb of the section on
- * screen, device frames, reload, and the Camera / Feel / Character labs as switches with their tuning panel below.
+ * The one game of a piece of work, shown by its game tabs (Game, Camera, Feel, Character): its own loopback server, a
+ * breadcrumb of the section on screen, device frames, reload, and the lab's tuning panel beside or under the frame.
+ * It stays mounted while another tab is on screen; going to another game tab opens that tab's link in the same frame.
  */
-export function GamePane({ workspace, onClose, big, onToggleBig }: { workspace: Workspace; onClose: () => void; big: boolean; onToggleBig: () => void }) {
+export function GamePane({ workspace, view, visible }: { workspace: Workspace; view: WorkbenchView; visible: boolean }) {
   const game = workspace.game ?? {};
+  const tabLab = labOfView(view);
   const origin = useGameLive((state) => state.origin[workspace.id]);
   const href = useGameLive((state) => state.href[workspace.id]);
   const snapshot = useGameLive((state) => state.snapshot[workspace.id]);
   const go = useGameLive((state) => state.go[workspace.id]);
   const sections = useGameLive((state) => state.sections[workspace.path]);
-  const [target, setTarget] = useState(() => ({ hash: hashOf(game.link ?? DEFAULT_LINK), nonce: 0 }));
+  const [target, setTarget] = useState(() => ({ hash: hashOf(tabLink(game, tabLab)), nonce: 0 }));
   const [error, setError] = useState<string>();
   const [shareStatus, setShareStatus] = useState("");
   const [editing, setEditing] = useState<string>();
@@ -59,7 +57,8 @@ export function GamePane({ workspace, onClose, big, onToggleBig }: { workspace: 
   const [mainOrigin, setMainOrigin] = useState<string>();
   const [mainTarget, setMainTarget] = useState<{ hash: string; nonce: number }>();
   const [showIssues, setShowIssues] = useState(false);
-  const [showSections, setShowSections] = useState(false);
+  const paneRef = useRef<HTMLElement>(null);
+  const beside = useElementWidth(paneRef) >= PANEL_BESIDE_WIDTH;
   // A new piece of work is still running npm ci: start its game once that finishes.
   const installing = useWorkList((state) => state.list?.items.find((item) => item.path.replace(/\/+$/, "") === workspace.path.replace(/\/+$/, ""))?.install === "installing");
   const frame = useRef<HTMLIFrameElement>(null);
@@ -85,11 +84,19 @@ export function GamePane({ workspace, onClose, big, onToggleBig }: { workspace: 
   // Not while npm ci is still writing node_modules: the sections script would fail halfway (and stay failed).
   useEffect(() => { if (!installing) void loadSections(workspace.path); }, [workspace.path, installing]);
 
-  // The game slows to a crawl while Studio is behind other apps (the game's studio-pace.ts): tell its frames.
+  // The game slows to a crawl while Studio is behind other apps or its tab is hidden (the game's studio-pace.ts).
+  const visibleRef = useRef(visible);
+  visibleRef.current = visible;
+  useEffect(() => {
+    for (const [element, target] of [[frame.current, origin], [mainFrame.current, mainOrigin]] as const) {
+      if (element?.contentWindow && target) element.contentWindow.postMessage({ channel: LAB_CHANNEL, studioFocused: visible && document.hasFocus() }, target);
+    }
+  }, [visible, origin, mainOrigin]);
   useEffect(() => {
     if (!origin) return;
     const tell = () => {
-      const focused = document.visibilityState === "visible" && document.hasFocus();
+      // A hidden tab's game runs at the background pace too.
+      const focused = visibleRef.current && document.visibilityState === "visible" && document.hasFocus();
       for (const [element, target] of [[frame.current, origin], [mainFrame.current, mainOrigin]] as const) {
         if (element?.contentWindow && target) element.contentWindow.postMessage({ channel: LAB_CHANNEL, studioFocused: focused }, target);
       }
@@ -181,21 +188,19 @@ export function GamePane({ workspace, onClose, big, onToggleBig }: { workspace: 
     forget();
     setTarget({ hash: hashOf(hash), nonce: Date.now() });
   };
-  const toggle = (id: (typeof LABS)[number]["id"]) => {
-    if (id === "character") {
-      if (lab === "character") navigate(game.beforeCharacter ?? game.link ?? DEFAULT_LINK);
-      else { patchGame(workspace.id, { beforeCharacter: current }); navigate(game.characterLink ?? DEFAULT_CHARACTER); }
-      return;
-    }
-    const base = lab === "character" ? game.beforeCharacter ?? game.link ?? DEFAULT_LINK : current;
-    navigate(withLab(base, lab === id ? undefined : id));
-  };
+  // Another game tab took the frame: open its lab at the section on screen (one game runs; a second or two to reload).
+  const shownTab = useRef(view.id);
+  useEffect(() => {
+    if (shownTab.current === view.id) return;
+    shownTab.current = view.id;
+    navigate(tabLink(useWorkbenchStore.getState().workspaces.find((item) => item.id === workspace.id)?.game, tabLab));
+    // Only when another tab takes the frame: the rest is read fresh from the store.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view.id]);
 
   const src = origin ? `${origin}/?studio=1${target.nonce ? `&v=${target.nonce}` : ""}${target.hash}` : undefined;
-  return <section className="game-pane" aria-label="Game">
+  return <section ref={paneRef} className={`game-pane ${lab && beside ? "has-panel-beside" : ""}`} aria-label="Game">
     <div className="game-toolbar">
-      <button className={`lab-toggle ${showSections ? "is-on" : ""}`} aria-pressed={showSections} title="Every country ▸ activity ▸ section: open one in the game"
-        onClick={() => setShowSections(!showSections)}>☰ Sections</button>
       {editing !== undefined ? <form className="game-goto" onSubmit={(event) => {
         event.preventDefault();
         const value = editing.trim();
@@ -212,34 +217,28 @@ export function GamePane({ workspace, onClose, big, onToggleBig }: { workspace: 
           {crumb.section && <><span className="crumb-sep">▸</span><strong>{crumb.section}</strong></>}
         </> : <strong>{lab === "character" ? "🦄 Character lab" : current.startsWith("#/world") ? "🌍 World" : current}</strong>}
         {crumb.params.map(([key, value]) => <code key={key} className="crumb-param">{key}={value}</code>)}
+        {lab === "camera" && <code className="crumb-param is-lab">?cam=1</code>}
+        {lab === "feel" && <code className="crumb-param is-lab">?feel=1</code>}
       </button>}
-      <span className="game-panel-actions">
-          <button className={`lab-toggle ${big ? "is-on" : ""}`} aria-pressed={big} title="Game big: the game takes most of the width, the agent stays beside it" onClick={onToggleBig}>⤢ Big</button>
-          <IconButton label="Hide the game (⌘G)" onPress={onClose}><CloseIcon size={14} /></IconButton>
-      </span>
       <div className="game-tools">
         <select aria-label="Device frame" value={frameId} disabled={lab === "camera"} title={lab === "camera" ? "The camera lab has its own iPad and iPhone frames" : "Device frame"}
           onChange={(event) => patchGame(workspace.id, { frame: event.target.value as GameFrame })}>
           {FRAMES.map((item) => <option key={item.id} value={item.id}>{item.label}{item.width ? ` · ${item.width}×${item.height}` : ""}</option>)}
         </select>
         <button className="game-tool" aria-label="Reload the game" title="Reload this section" onClick={() => navigate(current)}><RefreshIcon size={14} /></button>
+        {!isMain && <button className={`lab-toggle ${comparing ? "is-on" : ""}`} aria-pressed={comparing} title="This branch beside main, at the same section" onClick={() => setCompare(!compare)}>⇆ Main</button>}
+        {comparing && <button className="game-tool" title="Open the section on screen in main too" onClick={() => setMainTarget({ hash: current, nonce: Date.now() })}>Sync main</button>}
+        {issues.length > 0 && <button className={`lab-toggle ${showIssues ? "is-on" : ""}`} aria-pressed={showIssues} title="Known issues for this activity (known-issues.md)" onClick={() => setShowIssues(!showIssues)}>🐞 {issues.length}</button>}
         <button className="game-tool" disabled={!origin} title="Copy a link to the current section and settings" onClick={() => {
           void handleLabShare(workspace, { action: "copy", label: "Link", text: `${origin}/${current}` }).then(() => setShareStatus("Link copied")).catch(error => setShareStatus(String(error)));
         }}>Copy link</button>
         <button className="game-tool" disabled={!origin} title="Attach the current section and settings to the agent composer for review" onClick={() => {
           void handleLabShare(workspace, { action: "agent", label: "Game section", text: `Game section: ${origin}/${current}${snapshot ? `\n${JSON.stringify(snapshot, null, 2)}` : ""}` }).then(() => setShareStatus("Added to agent composer — review and send")).catch(error => setShareStatus(String(error)));
-        }}>Send to agent</button>
-        <span className="lab-toggles" role="group" aria-label="Labs">
-          {LABS.map((item) => <button key={item.id} className={`lab-toggle ${lab === item.id ? "is-on" : ""}`} aria-pressed={lab === item.id} title={item.hint} onClick={() => toggle(item.id)}>
-            <span aria-hidden="true">{item.emoji}</span>{item.label}
-          </button>)}
-        </span>
-        {!isMain && <button className={`lab-toggle ${comparing ? "is-on" : ""}`} aria-pressed={comparing} title="This branch beside main, at the same section" onClick={() => setCompare(!compare)}>⇆ Main</button>}
-        {comparing && <button className="game-tool" title="Open the section on screen in main too" onClick={() => setMainTarget({ hash: current, nonce: Date.now() })}>Sync main</button>}
-        {issues.length > 0 && <button className={`lab-toggle ${showIssues ? "is-on" : ""}`} aria-pressed={showIssues} title="Known issues for this activity (known-issues.md)" onClick={() => setShowIssues(!showIssues)}>🐞 {issues.length}</button>}
+        }}>→ Agent</button>
       </div>
     </div>
     {shareStatus && <p role="status" style={{ margin: "4px 12px", fontSize: 12 }}>{shareStatus}</p>}
+    <div className="game-body">
     <div className="game-stage" ref={stage.ref}>
       {installing ? <div className="game-message"><p>Installing the game's dependencies for {workspace.name} (npm ci)… The game starts when it's done.</p></div>
         : error ? <div className="game-message" role="alert"><strong>The game can't start here</strong><p>{error}</p><button className="game-tool" onClick={() => setAttempt((value) => value + 1)}>Try again</button></div>
@@ -261,9 +260,9 @@ export function GamePane({ workspace, onClose, big, onToggleBig }: { workspace: 
             </div> : <div className="game-message"><p>Starting main's game…</p></div>}
           </figure>}
         </div>}
-      {showSections && <div className="section-drawer"><SectionTree workspace={workspace} onClose={() => setShowSections(false)} /></div>}
       {showIssues && <KnownIssuesList workspace={workspace} issues={issues} onClose={() => setShowIssues(false)} />}
     </div>
     {lab && src && <LabPanel key={lab} workspace={workspace} kind={lab} request={request} snapshot={snapshot} />}
+    </div>
   </section>;
 }

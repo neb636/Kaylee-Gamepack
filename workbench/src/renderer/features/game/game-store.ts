@@ -1,10 +1,26 @@
 import { create } from "zustand";
-import type { GameFrame, GameState, SectionEntry, SectionsIndex } from "../../../shared/models";
+import type { GameFrame, GameLab, GameState, GameViewState, SectionEntry, SectionsIndex, WorkbenchView, Workspace } from "../../../shared/models";
 import type { LabKind, LabSnapshot } from "../../../shared/labs";
 import { useWorkbenchStore } from "../../state/workbench-store";
 
 export const DEFAULT_LINK = "#/world";
-export const DEFAULT_CHARACTER = "#/world/characters/nick?lineup=nick,nick-code";
+export const DEFAULT_CHARACTER = "#/world/characters/nick";
+
+/** The game tabs: one `game` view type, its lab in the tab's state. */
+export const GAME_TABS: { lab?: GameLab; title: string; label: string; emoji: string; description: string }[] = [
+  { title: "Game", label: "Game", emoji: "🎮", description: "The real game for this piece of work (⌘G)." },
+  { lab: "camera", title: "Camera lab", label: "Camera lab", emoji: "🎥", description: "Nudge or lock the 3D camera of the section on screen (?cam=1)." },
+  { lab: "feel", title: "Feel lab", label: "Feel lab", emoji: "🎛️", description: "Sliders for every knob of the section on screen (?feel=1)." },
+  { lab: "character", title: "Character lab", label: "Character lab", emoji: "🦄", description: "The 3D character lab (#/world/characters)." },
+];
+
+export function gameTabFor(lab?: GameLab) {
+  return GAME_TABS.find((tab) => tab.lab === lab) ?? GAME_TABS[0];
+}
+
+export function labOfView(view: WorkbenchView): GameLab | undefined {
+  return (view.state as GameViewState | undefined)?.lab;
+}
 
 export const FRAMES: { id: GameFrame; label: string; width?: number; height?: number }[] = [
   { id: "fit", label: "Fill the pane" },
@@ -26,9 +42,19 @@ interface GameLive {
   sections: Record<string, { index?: SectionsIndex; error?: string; loading?: boolean }>;
   /** The controls before the last AI preview, by `<workspace id>:<lab>`, so Undo survives switching a lab off and on. */
   undo: Record<string, LabSnapshot | undefined>;
+  /**
+   * The game tab that owns each piece of work's one running game: the game tab on screen, else the last one shown
+   * (it stays loaded, hidden, while Dad looks at the agent or a file). Unset until a game tab is first shown.
+   */
+  liveView: Record<string, string | undefined>;
 }
 
-export const useGameLive = create<GameLive>(() => ({ href: {}, snapshot: {}, origin: {}, go: {}, sections: {}, undo: {} }));
+export const useGameLive = create<GameLive>(() => ({ href: {}, snapshot: {}, origin: {}, go: {}, sections: {}, undo: {}, liveView: {} }));
+
+export function setLiveView(workspaceId: string, viewId: string | undefined): void {
+  if (useGameLive.getState().liveView[workspaceId] === viewId) return;
+  useGameLive.setState((state) => ({ liveView: { ...state.liveView, [workspaceId]: viewId } }));
+}
 
 export function setLabUndo(key: string, snapshot: LabSnapshot | undefined): void {
   useGameLive.setState((state) => ({ undo: { ...state.undo, [key]: snapshot } }));
@@ -90,12 +116,55 @@ export function patchGame(workspaceId: string, patch: Partial<GameState>): void 
   }));
 }
 
-/** Opens a link in a workspace's game pane (and shows the pane if it was closed). */
+/** Where a game tab opens: the section on screen with its lab switched on (the Character lab keeps its own link). */
+export function tabLink(game: GameState | undefined, lab: GameLab | undefined): string {
+  if (lab === "character") return game?.characterLink ?? DEFAULT_CHARACTER;
+  return withLab(game?.link ?? DEFAULT_LINK, lab);
+}
+
+function workspaceById(workspaceId: string): Workspace | undefined {
+  return useWorkbenchStore.getState().workspaces.find((candidate) => candidate.id === workspaceId);
+}
+
+/** Brings the game tab for a lab (or the plain Game tab) forward, opening one if there isn't one. Returns its id. */
+export function openGameTab(workspaceId: string, lab?: GameLab): string | undefined {
+  const workspace = workspaceById(workspaceId);
+  if (!workspace) return undefined;
+  const store = useWorkbenchStore.getState();
+  const existing = workspace.views.find((view) => view.type === "game" && labOfView(view) === lab);
+  if (existing) { store.selectView(workspaceId, existing.id); return existing.id; }
+  const tab = gameTabFor(lab);
+  return store.createView(workspaceId, "game", tab.title, { ...(lab ? { lab } : {}) } satisfies GameViewState);
+}
+
+/** ⌘G: the game tab on screen stays; else the one that's loaded, else the first, else a new Game tab. */
+export function focusGame(workspaceId: string): void {
+  const workspace = workspaceById(workspaceId);
+  if (!workspace) return;
+  const active = workspace.views.find((view) => view.id === workspace.activeViewId);
+  if (active?.type === "game") return;
+  const live = useGameLive.getState().liveView[workspaceId];
+  const target = workspace.views.find((view) => view.id === live && view.type === "game") ?? workspace.views.find((view) => view.type === "game");
+  if (target) useWorkbenchStore.getState().selectView(workspaceId, target.id);
+  else openGameTab(workspaceId);
+}
+
+/** Opens a link in a piece of work's game: in the game tab that's loaded, else in a game tab for that link's lab. */
 export function openInGame(workspaceId: string, hash: string): void {
-  const workspace = useWorkbenchStore.getState().workspaces.find((candidate) => candidate.id === workspaceId);
-  // A closed pane mounts fresh and opens at its saved link (it ignores requests made before it was there).
-  if (workspace && !workspace.game?.open) { patchGame(workspaceId, { open: true, link: hashOf(hash) }); return; }
-  useGameLive.setState((state) => ({ go: { ...state.go, [workspaceId]: { hash: hashOf(hash), nonce: ++nonce } } }));
+  const workspace = workspaceById(workspaceId);
+  if (!workspace) return;
+  const target = hashOf(hash);
+  const live = useGameLive.getState().liveView[workspaceId];
+  const loaded = workspace.views.find((view) => view.id === live && view.type === "game");
+  if (loaded) {
+    useGameLive.setState((state) => ({ go: { ...state.go, [workspaceId]: { hash: target, nonce: ++nonce } } }));
+    useWorkbenchStore.getState().selectView(workspaceId, loaded.id);
+    return;
+  }
+  // No game loaded yet: the tab mounts fresh and opens at its saved link.
+  const lab = labOf(target);
+  patchGame(workspaceId, lab === "character" ? { characterLink: target } : { link: withLab(target, undefined) });
+  openGameTab(workspaceId, lab);
 }
 
 /** The game's current link for a workspace: what it last reported, else where it was left. */

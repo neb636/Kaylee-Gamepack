@@ -4,6 +4,7 @@ import type {
   AgentSessionCreateOptions,
   AgentSessionEvent,
   FilesChangedEvent,
+  MenuCommand,
   PersistedState,
   PtyCreateOptions,
   PtyDataEvent,
@@ -21,16 +22,17 @@ const api: WorkbenchApi = {
     trimServers: (keep, root) => ipcRenderer.invoke('studio:trim-servers', keep, root),
     tune: input => ipcRenderer.invoke('studio:tune', input),
     cancel: id => ipcRenderer.send('studio:cancel', id),
-    onToggleGame: listener => {
-      const handler = () => listener();
-      ipcRenderer.on('studio:toggle-game', handler);
-      return () => { ipcRenderer.removeListener('studio:toggle-game', handler); };
+    onMenu: listener => {
+      const handler = (_event: Electron.IpcRendererEvent, command: MenuCommand) => listener(command);
+      ipcRenderer.on('studio:menu', handler);
+      return () => { ipcRenderer.removeListener('studio:menu', handler); };
     },
   },
   work: {
     list: (root, refresh) => ipcRenderer.invoke(IPC.workList, { root, refresh }),
     create: (root, name) => ipcRenderer.invoke(IPC.workCreate, { root, name }),
     remove: (root, path) => ipcRenderer.invoke(IPC.workRemove, { root, path }),
+    install: (root, path) => ipcRenderer.invoke(IPC.workInstall, { root, path }),
   },
   persistence: {
     load: () => ipcRenderer.invoke(IPC.persistenceLoad) as Promise<PersistedState>,
@@ -47,6 +49,14 @@ const api: WorkbenchApi = {
     list: (root, path) => ipcRenderer.invoke(IPC.filesList, { root, path }),
     read: (root, path) => ipcRenderer.invoke(IPC.filesRead, { root, path }),
     find: (root, query) => ipcRenderer.invoke(IPC.filesFind, { root, query }),
+    write: (root, path, content, expectedHash) => ipcRenderer.invoke(IPC.filesWrite, { root, path, content, expectedHash }),
+    search: (root, query, options) => ipcRenderer.invoke(IPC.filesSearch, { root, query, ...options }),
+    image: (root, path) => ipcRenderer.invoke(IPC.filesImage, { root, path }),
+    exists: (root, paths) => ipcRenderer.invoke(IPC.filesExists, { root, paths }),
+    create: (root, path, kind) => ipcRenderer.invoke(IPC.filesCreate, { root, path, kind }),
+    rename: (root, from, to) => ipcRenderer.invoke(IPC.filesRename, { root, from, to }),
+    trash: (root, path) => ipcRenderer.invoke(IPC.filesTrash, { root, path }),
+    reveal: (root, path) => ipcRenderer.send(IPC.filesReveal, { root, path }),
     watch: (root) => ipcRenderer.send(IPC.filesWatch, { root }),
     unwatch: (root) => ipcRenderer.send(IPC.filesUnwatch, { root }),
     onChanged: (listener) => {
@@ -62,6 +72,8 @@ const api: WorkbenchApi = {
     status: (root) => ipcRenderer.invoke(IPC.sourceControlStatus, { root }),
     commit: (root, message) => ipcRenderer.invoke(IPC.sourceControlCommit, { root, message }),
     createWorktree: (root, branch) => ipcRenderer.invoke(IPC.sourceControlCreateWorktree, { root, branch }),
+    fileAt: (root, path, base) => ipcRenderer.invoke(IPC.sourceControlFileAt, { root, path, base }),
+    ignored: (root) => ipcRenderer.invoke(IPC.sourceControlIgnored, { root }),
   },
   pty: {
     create: (options: PtyCreateOptions) => ipcRenderer.invoke(IPC.ptyCreate, options) as Promise<string>,

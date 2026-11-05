@@ -62,12 +62,12 @@ function Qr({ text }: { text: string }) {
 
 /**
  * Ship: what this repo does before a PR, one button each, for the selected piece of work. Commands run in its Ship
- * terminal (a tab in the agent column); Open PR hands the open-pr skill to its agent.
+ * terminal (a tab in the middle); Open PR hands the open-pr skill to its agent. It's the explorer's 🚀 Ship tab.
  */
-export function ShipPanel({ workspaceId }: WidgetProps) {
+export function ShipPanel({ workspaceId, docked }: WidgetProps & { docked?: boolean }) {
   const workspace = useWorkbenchStore((state) => state.workspaces.find((item) => item.id === workspaceId));
   const repoRoot = useWorkbenchStore((state) => state.repoRoot);
-  const open = useWorkbenchStore((state) => !state.layout.shipCollapsed);
+  const open = useWorkbenchStore((state) => docked || !state.layout.shipCollapsed);
   const updateLayout = useWorkbenchStore((state) => state.updateLayout);
   const item = useWorkList((state) => state.list?.items.find((candidate) => workspace && samePath(candidate.path, workspace.path)));
   const href = useGameLive((state) => (workspaceId ? state.href[workspaceId] : undefined));
@@ -110,10 +110,10 @@ export function ShipPanel({ workspaceId }: WidgetProps) {
     useWorkbenchStore.getState().selectView(workspace.id, viewId);
   };
 
-  return <section className={`ship-panel ${open ? "is-open" : ""}`} aria-label="Ship">
-    <button className="ship-header" aria-expanded={open} onClick={() => updateLayout({ shipCollapsed: open })}>
-      {open ? <ChevronDownIcon size={12} /> : <ChevronRightIcon size={12} />}
-      <strong>Ship</strong>
+  return <section className={`ship-panel ${open ? "is-open" : ""} ${docked ? "is-docked" : ""}`} aria-label="Ship">
+    <button className="ship-header" aria-expanded={open} disabled={docked} onClick={() => updateLayout({ shipCollapsed: open })}>
+      {!docked && (open ? <ChevronDownIcon size={12} /> : <ChevronRightIcon size={12} />)}
+      <strong>{docked ? workspace.name : "Ship"}</strong>
       <span className="ship-summary">
         {pr ? <>PR #{pr.number} {pr.state === "OPEN" ? (pr.isDraft ? "draft" : "open") : pr.state.toLowerCase()}{pr.checks && <span className={`work-ci is-${pr.checks}`}> · CI {pr.checks === "passing" ? "✓" : pr.checks === "failing" ? "✗" : "…"}</span>}</> : item?.main ? "main checkout" : "no PR yet"}
       </span>

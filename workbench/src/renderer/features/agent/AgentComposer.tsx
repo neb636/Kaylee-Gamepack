@@ -59,8 +59,11 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
   const choices = AGENT_MODELS[providerId] ?? [];
   const setSettings = (model: string, effort: string) => patch({ modelSettings: { ...state.modelSettings, [providerId]: { model, effort } } });
   const hasDraft = Boolean(state.draft?.trim());
+  // A CLI that's still starting takes the prompt too: it's held until the CLI is ready.
+  const starting = Boolean(session && !status?.canSubmit && status?.lifecycle !== "exited" && status?.lifecycle !== "failed");
   const canSend = session
-    ? Boolean(hasDraft && status?.canSubmit && (!settings || status.activity === "ready") && !busy && (!wantsPlan || (planning && status.activity === "ready")))
+    ? starting ? Boolean(hasDraft && !busy && !wantsPlan)
+      : Boolean(hasDraft && status?.canSubmit && (!settings || status.activity === "ready") && !busy && (!wantsPlan || (planning && status.activity === "ready")))
     : Boolean(hasDraft && canLaunch && !busy && !wantsPlan);
   const historyEntry = runtime.history.find((entry) => entry.id === historyId) ?? runtime.history[0];
   const assembly = () => services.commands.execute<PromptPreview>("agent.composer.preview", target);
@@ -73,9 +76,9 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
     await services.commands.execute("agent.composer.quote", { ...target, text: session?.selection ?? "" });
     promptRef.current?.focus();
   };
-  const feedback = error || (runtime.launching ? "Starting the CLI…" : runtime.sending ? "Applying model and effort, then delivering prompt…" : runtime.result?.outcome === "uncertain"
+  const feedback = error || (runtime.launching ? (session ? "Waiting for the CLI to be ready, then sending…" : "Starting the CLI…") : runtime.sending ? "Applying model and effort, then delivering prompt…" : runtime.result?.outcome === "uncertain"
     ? `Delivery uncertain. ${runtime.result.message}` : runtime.result?.outcome === "not-sent"
-      ? `Not sent. ${runtime.result.message}` : !session ? "" : !status?.canSubmit ? status?.reason
+      ? `Not sent. ${runtime.result.message}` : !session ? "" : starting ? "The CLI is starting: send now and it goes as soon as it's ready." : !status?.canSubmit ? status?.reason
         : settings && status.activity !== "ready" ? "Wait until the CLI is ready to apply model and effort."
           : wantsPlan && status.activity !== "ready" ? "Wait until the CLI is ready to send for planning."
           : runtime.result?.message || status?.reason);

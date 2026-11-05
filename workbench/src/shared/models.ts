@@ -34,10 +34,19 @@ export interface GameState {
   /** The lab panel's note and AI provider. */
   draft?: string;
   provider?: "claude" | "codex";
-  /** The game panel is showing beside the agent (closed by default; remembered per piece of work). */
-  open?: boolean;
-  /** "Game big": the game takes most of the width, for lab sessions. */
-  big?: boolean;
+}
+
+/** A `game` tab: the one game of its piece of work, with a lab (or none). Every game tab shares one running frame. */
+export interface GameViewState {
+  lab?: GameLab;
+}
+
+export type ExplorerTab = "files" | "changes" | "sections" | "ship";
+
+export interface ExplorerLayout {
+  collapsed?: boolean;
+  size?: number;
+  tab?: ExplorerTab;
 }
 
 /** One section link of the game, from `scripts/sections-index.mjs` in that checkout. */
@@ -92,12 +101,13 @@ export interface LayoutState {
   rightSize?: number;
   leftCollapsed: boolean;
   rightCollapsed: boolean;
-  /** Width (%) of the game panel beside the agent, and when it is "big". */
-  gameSize?: number;
-  gameBigSize?: number;
   rightPanel?: string;
   /** The Ship panel under the agent is folded away. */
   shipCollapsed?: boolean;
+  /** The right sidebar: Files, Changes, Sections and Ship. */
+  explorer?: ExplorerLayout;
+  /** The CLI a new agent tab starts with (the last one used). */
+  lastAgentProvider?: string;
 }
 
 export interface PersistedState {
@@ -181,6 +191,10 @@ export interface AgentViewState {
   /** The title is replaced by the first sent prompt. */
   autoTitle?: boolean;
   composerCollapsed?: boolean;
+  /** A new tab: its CLI starts as soon as it's shown (the last-used one unless `providerId` says). */
+  autoStart?: boolean;
+  /** Start by resuming a previous session (the CLI's own picker). */
+  resume?: boolean;
 }
 
 export interface ImageAttachment {
@@ -237,7 +251,18 @@ export interface ImageRunSnapshot {
 export interface FileViewState {
   root: string;
   path: string;
+  /** A preview tab (one click in the tree): the next one click replaces it; a double click or an edit keeps it. */
+  preview?: boolean;
+  /** Showing the changes against `diffBase` instead of plain editing. */
+  diff?: boolean;
+  diffBase?: DiffBase;
+  /** Open at this line (from a path in an agent's output); a new nonce jumps again. */
+  line?: number;
+  lineNonce?: number;
 }
+
+/** What a diff compares with: the last commit, or where this branch left main (what the PR will show). */
+export type DiffBase = "head" | "main";
 
 export interface FileEntry {
   name: string;
@@ -252,6 +277,25 @@ export interface FileContent {
   size: number;
   truncated: boolean;
   binary: boolean;
+  /** sha1 of the bytes on disk, for saving only over the version that was opened. */
+  hash: string;
+}
+
+export type FileWriteResult =
+  | { ok: true; hash: string }
+  /** The file changed on disk since it was opened: nothing was written; here is what's there now. */
+  | { ok: false; disk: FileContent | null };
+
+export interface SearchMatch {
+  path: string;
+  line: number;
+  text: string;
+}
+
+export interface SearchResult {
+  matches: SearchMatch[];
+  /** Stopped at the match or time limit. */
+  limited: boolean;
 }
 
 export interface FilesChangedEvent {
@@ -302,6 +346,8 @@ export interface WorkItemInfo {
   pr?: PullRequestInfo;
   install?: "installing" | "failed";
   installMessage?: string;
+  /** No node_modules: the game can't start until npm ci runs. */
+  dependencies?: "missing";
 }
 
 export interface WorkList {
@@ -344,6 +390,8 @@ export interface AgentSessionSnapshot {
   status: AgentSessionStatus;
 }
 
+export type MenuCommand = "game" | "explorer" | "quick-open" | "find-in-files";
+
 export interface WorkbenchApi {
   studio: {
     copyText: (text: string) => Promise<void>;
@@ -356,13 +404,18 @@ export interface WorkbenchApi {
     trimServers: (keep: number, root?: string) => Promise<void>;
     tune: (input: { id: string; provider: 'claude' | 'codex'; prompt: string; snapshot: import('./labs').LabSnapshot }) => Promise<import('./labs').LabProposal>;
     cancel: (id: string) => void;
-    /** ⌘G anywhere in the window (also inside the game frame, which keeps its own key events). Returns unsubscribe. */
-    onToggleGame: (listener: () => void) => () => void;
+    /**
+     * A menu shortcut anywhere in the window (also inside the game frame, which keeps its own key events): ⌘G the game,
+     * ⌘⌥B the explorer, ⌘P go to file, ⇧⌘F find in files. Returns unsubscribe.
+     */
+    onMenu: (listener: (command: MenuCommand) => void) => () => void;
   };
   work: {
     list: (root: string, refresh?: boolean) => Promise<WorkList>;
     create: (root: string, name: string) => Promise<WorktreeResult>;
     remove: (root: string, path: string) => Promise<void>;
+    /** npm ci (or a clone of main's node_modules) in a worktree without dependencies. */
+    install: (root: string, path: string) => Promise<void>;
   };
   platform: NodeJS.Platform;
   persistence: {
@@ -380,6 +433,18 @@ export interface WorkbenchApi {
     list: (root: string, path: string) => Promise<FileEntry[]>;
     read: (root: string, path: string) => Promise<FileContent>;
     find: (root: string, query: string) => Promise<string[]>;
+    /** Saves text over the version with `expectedHash` (null: a file that must not exist yet). */
+    write: (root: string, path: string, content: string, expectedHash: string | null) => Promise<FileWriteResult>;
+    /** Searches inside files (`git grep`), at most 500 matches or 2 s; a new search cancels the last. */
+    search: (root: string, query: string, options: { caseSensitive?: boolean; regex?: boolean }) => Promise<SearchResult>;
+    /** A picture as a data URL (up to 8 MB). */
+    image: (root: string, path: string) => Promise<string>;
+    /** Which of these relative paths are files in the root (for clickable paths in terminals). */
+    exists: (root: string, paths: string[]) => Promise<string[]>;
+    create: (root: string, path: string, kind: "file" | "directory") => Promise<void>;
+    rename: (root: string, from: string, to: string) => Promise<void>;
+    trash: (root: string, path: string) => Promise<void>;
+    reveal: (root: string, path: string) => void;
     watch: (root: string) => void;
     unwatch: (root: string) => void;
     onChanged: (listener: (event: FilesChangedEvent) => void) => () => void;
@@ -391,6 +456,10 @@ export interface WorkbenchApi {
     status: (root: string) => Promise<SourceControlStatus | null>;
     commit: (root: string, message: string) => Promise<{ commitId: string }>;
     createWorktree: (root: string, branch: string) => Promise<WorktreeResult>;
+    /** A file's text at the last commit or at the merge base with origin/main (null when it didn't exist there). */
+    fileAt: (root: string, path: string, base: DiffBase) => Promise<string | null>;
+    /** Ignored folders and files at the top of what git ignores (build output, node_modules), to dim in the tree. */
+    ignored: (root: string) => Promise<string[]>;
   };
   pty: {
     create: (options: PtyCreateOptions) => Promise<string>;

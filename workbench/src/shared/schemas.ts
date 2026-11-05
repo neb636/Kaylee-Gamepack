@@ -22,8 +22,6 @@ export const workspaceSchema = z.object({
     beforeCharacter: z.string().max(4000).optional(),
     draft: z.string().max(20_000).optional(),
     provider: z.enum(["claude", "codex"]).optional(),
-    open: z.boolean().optional(),
-    big: z.boolean().optional(),
   }).optional(),
 });
 
@@ -80,10 +78,14 @@ export const layoutStateSchema = z.object({
   rightSize: z.number().min(0).max(100).optional(),
   leftCollapsed: z.boolean().default(false),
   rightCollapsed: z.boolean().default(false),
-  gameSize: z.number().min(0).max(100).optional(),
-  gameBigSize: z.number().min(0).max(100).optional(),
   rightPanel: z.string().optional(),
   shipCollapsed: z.boolean().optional(),
+  explorer: z.object({
+    collapsed: z.boolean().optional(),
+    size: z.number().min(0).max(100).optional(),
+    tab: z.enum(["files", "changes", "sections", "ship"]).optional(),
+  }).optional(),
+  lastAgentProvider: z.string().max(100).optional(),
 });
 
 export const persistedStateSchema = z.object({
@@ -126,9 +128,53 @@ export function migrateLabViews(input: unknown): unknown {
   return { ...source, workspaces };
 }
 
+const SIDEBAR_VIEWS: Record<string, "files" | "changes"> = { files: "files", "source-control": "changes" };
+
+/**
+ * Step 7-8 of the layout plan: the game was a right panel (`game.open`, `game.big`); now it's a tab in the middle, so a
+ * piece of work whose panel was open gets a Game tab after its first agent. The Files and Commit changes tabs moved
+ * into the explorer on the right: their tabs go, and the explorer opens on the one that was on screen.
+ */
+export function migrateStudioTabs(input: unknown): unknown {
+  if (typeof input !== "object" || input === null || !Array.isArray((input as { workspaces?: unknown }).workspaces)) return input;
+  const source = input as { workspaces: unknown[]; layout?: Record<string, unknown> } & Record<string, unknown>;
+  let explorerTab: "files" | "changes" | undefined;
+  const workspaces = source.workspaces.map((value) => {
+    if (typeof value !== "object" || value === null || !Array.isArray((value as { views?: unknown }).views)) return value;
+    const workspace = value as { id?: unknown; views: { id?: unknown; type?: unknown; workspaceId?: unknown }[]; activeViewId?: unknown; game?: Record<string, unknown> };
+    let views = workspace.views;
+    let activeViewId = workspace.activeViewId;
+    const moved = views.filter((view) => typeof view?.type === "string" && SIDEBAR_VIEWS[view.type]);
+    if (moved.length) {
+      const active = moved.find((view) => view.id === activeViewId);
+      if (active) explorerTab = SIDEBAR_VIEWS[active.type as string];
+      views = views.filter((view) => !moved.includes(view));
+      if (active) activeViewId = views[0]?.id;
+    }
+    let game = workspace.game;
+    if (game && ("open" in game || "big" in game)) {
+      const open = game.open;
+      game = { ...game };
+      delete game.open;
+      delete game.big;
+      if (open === true && !views.some((view) => view.type === "game")) {
+        const at = views.findIndex((view) => view.type === "agent");
+        const tab = { id: `view-game-${String(workspace.id ?? "work")}`, type: "game", workspaceId: workspace.id, title: "Game", state: {} };
+        views = [...views.slice(0, at + 1), tab, ...views.slice(at + 1)];
+      }
+    }
+    if (views === workspace.views && game === workspace.game) return value;
+    return { ...workspace, views, activeViewId, game };
+  });
+  const layout = source.layout && typeof source.layout === "object" ? { ...source.layout } : source.layout;
+  if (layout) { delete layout.gameSize; delete layout.gameBigSize; }
+  if (explorerTab && layout) layout.explorer = { ...(layout.explorer as object | undefined), tab: explorerTab, collapsed: false };
+  return { ...source, workspaces, ...(layout ? { layout } : {}) };
+}
+
 /** Converts state written before prompt options existed; unknown shapes pass through to normal validation. */
 export function migratePersistedState(input: unknown): unknown {
-  input = migrateLabViews(input);
+  input = migrateStudioTabs(migrateLabViews(input));
   if (typeof input !== "object" || input === null) return input;
   const source = input as Record<string, unknown>;
   if (source.instructionOptions !== undefined || !Array.isArray(source.appendedInstructions)) return input;
@@ -182,6 +228,12 @@ export const agentSessionActionSchema = z.object({ sessionId: z.string().min(1) 
 
 export const fileLocationSchema = z.object({ root: z.string().min(1), path: z.string().max(4096) });
 export const fileFindSchema = z.object({ root: z.string().min(1), query: z.string().max(256) });
+export const fileWriteSchema = z.object({ root: z.string().min(1), path: z.string().min(1).max(4096), content: z.string().max(2 * 1024 * 1024), expectedHash: z.string().max(64).nullable() });
+export const fileSearchSchema = z.object({ root: z.string().min(1), query: z.string().min(1).max(256), caseSensitive: z.boolean().optional(), regex: z.boolean().optional() });
+export const fileExistsSchema = z.object({ root: z.string().min(1), paths: z.array(z.string().min(1).max(1024)).max(200) });
+export const fileCreateSchema = z.object({ root: z.string().min(1), path: z.string().min(1).max(4096), kind: z.enum(["file", "directory"]) });
+export const fileRenameSchema = z.object({ root: z.string().min(1), from: z.string().min(1).max(4096), to: z.string().min(1).max(4096) });
+export const fileAtSchema = z.object({ root: z.string().min(1), path: z.string().min(1).max(4096), base: z.enum(["head", "main"]) });
 export const workspaceRootSchema = z.object({ root: z.string().min(1) });
 export const commitSchema = z.object({ root: z.string().min(1), message: z.string().trim().min(1).max(10_000) });
 export const createWorktreeSchema = z.object({ root: z.string().min(1), branch: z.string().min(1).max(200) });

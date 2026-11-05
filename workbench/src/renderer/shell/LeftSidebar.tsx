@@ -8,6 +8,8 @@ import { Button, IconButton } from "../ui/controls";
 import { BranchIcon, ChevronRightIcon, FolderIcon, MoreIcon, PlusIcon, RefreshIcon, SidebarLeftIcon } from "../ui/icons";
 import { shortBranch, useWorkList, workGroup } from "../features/work/work-store";
 import { workAttention } from "../features/agent/attention";
+import { newAgent } from "../features/agent/new-agent";
+import { useAgentRuntimes } from "../core/agent-runtimes";
 
 const POLL_MS = 45_000;
 const FOCUS_REFRESH_MS = 60_000;
@@ -27,6 +29,7 @@ function WorkMeta({ item }: { item: WorkItemInfo }) {
   if (item.missing) parts.push(<span key="gone">folder gone</span>);
   if (item.install === "installing") parts.push(<span key="install">installing…</span>);
   if (item.install === "failed") parts.push(<span key="install" className="work-bad" title={item.installMessage}>npm ci failed</span>);
+  if (item.dependencies === "missing" || item.install === "failed") parts.push(<NpmCi key="npm-ci" item={item} />);
   if (item.pr) {
     const state = item.pr.state === "OPEN" ? (item.pr.isDraft ? "draft" : "open") : item.pr.state.toLowerCase();
     parts.push(<span key="pr" className={`work-pr is-${state}`} title={item.pr.title}>#{item.pr.number} {state}</span>);
@@ -35,6 +38,41 @@ function WorkMeta({ item }: { item: WorkItemInfo }) {
   if (item.changes) parts.push(<span key="changes">{item.changes} changed</span>);
   if (!parts.length) parts.push(<span key="branch">{shortBranch(item.branch) ?? "detached"}</span>);
   return <small className="work-meta">{parts}</small>;
+}
+
+/** The game can't start in a worktree without node_modules: one button installs them (a clone of main's when it can). */
+function NpmCi({ item }: { item: WorkItemInfo }) {
+  const repoRoot = useWorkbenchStore((state) => state.repoRoot);
+  const [busy, setBusy] = useState(false);
+  return <>
+    <button className="work-inline-button work-bad" disabled={busy || !repoRoot} title={`${item.dependencies === "missing" ? "Dependencies are missing: the game can't start. " : ""}Install them here (npm ci, or a copy of main's when the lockfile matches)`}
+      onClick={(event) => {
+        event.stopPropagation();
+        if (!repoRoot) return;
+        setBusy(true);
+        void window.workbench.work.install(repoRoot, item.path).then(() => useWorkList.getState().refresh()).finally(() => setBusy(false));
+      }}>{busy ? "installing…" : "npm ci ▸"}</button>
+  </>;
+}
+
+/** + Claude / + Codex on a row's hover: a new agent there, ready to type. */
+function QuickAgents({ item }: { item: WorkItemInfo }) {
+  if (item.missing) return null;
+  const start = (providerId: string) => {
+    const workspaceId = useWorkbenchStore.getState().addWorkspace(item.path, { name: item.name, views: item.main ? "all" : "agent" });
+    const workspace = useWorkbenchStore.getState().workspaces.find((candidate) => candidate.id === workspaceId);
+    // A piece of work opened just now already has a new agent that hasn't started: use it rather than make a second.
+    const fresh = workspace?.views.find((view) => view.type === "agent" && (view.state as { autoStart?: boolean } | undefined)?.autoStart && !useAgentRuntimes.getState().sessions[view.id]);
+    if (fresh) {
+      useWorkbenchStore.getState().updateViewState(workspaceId, fresh.id, { providerId });
+      useWorkbenchStore.getState().selectView(workspaceId, fresh.id);
+    } else newAgent(workspaceId, providerId);
+    void services.commands.execute("workspace.select", workspaceId);
+  };
+  return <span className="work-quick">
+    <AriaButton className="work-quick-button" aria-label={`New Claude Code agent in ${item.name}`} onPress={() => start("claude.cli")}>+ Claude</AriaButton>
+    <AriaButton className="work-quick-button" aria-label={`New Codex agent in ${item.name}`} onPress={() => start("codex.cli")}>+ Codex</AriaButton>
+  </span>;
 }
 
 function WorkMenu({ item, workspace, onCleanUp }: { item: WorkItemInfo; workspace?: Workspace; onCleanUp: () => void }) {
@@ -130,6 +168,7 @@ function WorkTree({ label, items, workspaces, onCleanUp }: { label: string; item
               })()}</strong>
               <WorkMeta item={item} />
             </span>
+            <QuickAgents item={item} />
             <WorkMenu item={item} workspace={workspace} onCleanUp={() => onCleanUp(item)} />
           </div>}
         </TreeItemContent>

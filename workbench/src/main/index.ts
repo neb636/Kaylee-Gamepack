@@ -14,6 +14,7 @@ import { WorkService } from "./work";
 
 import { StudioServer } from './studio-server';
 import { GAME_PORTS, STUDIO_ORIGIN } from '../shared/labs';
+import type { MenuCommand } from '../shared/models';
 import { GameServerPool } from './game-server';
 import { SectionsService } from './sections';
 import { createQuitHandler } from './quit-handler';
@@ -53,26 +54,31 @@ const roots = new WorkspaceRoots();
 const git = new GitSourceControlProvider();
 const workspaceServices = {
   roots,
-  files: new WorkspaceFiles(roots),
+  files: new WorkspaceFiles(roots, (target) => shell.trashItem(target)),
   sourceControl: new SourceControlService([git]),
   images,
   work: new WorkService(git, roots),
 };
 
 /**
- * View ▸ Show/Hide Game (⌘G). A menu accelerator, so it works wherever focus is, the game's own frame included
- * (that frame keeps its key events from Studio's page). Added to Electron's default menu, keeping Edit/Window roles.
+ * View ▸ Game (⌘G), Explorer (⌘⌥B), Go to File (⌘P), Find in Files (⇧⌘F). Menu accelerators, so they work wherever
+ * focus is, the game's own frame included (that frame keeps its key events from Studio's page). Added to Electron's
+ * default menu, keeping its Edit/Window roles.
  */
-function addGameMenuItem(): void {
+function addStudioMenuItems(): void {
   const menu = Menu.getApplicationMenu();
   const view = menu?.items.find((item) => item.role === "viewMenu" || item.label === "View")?.submenu;
   if (!menu || !view) return;
+  // One window gets each once: the focused one, else the first.
+  const send = (command: MenuCommand) => (BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0])?.webContents.send("studio:menu", command);
+  const items: { id: MenuCommand; label: string; accelerator: string }[] = [
+    { id: "game", label: "Game", accelerator: "CmdOrCtrl+G" },
+    { id: "explorer", label: "Show/Hide Explorer", accelerator: "CmdOrCtrl+Alt+B" },
+    { id: "quick-open", label: "Go to File…", accelerator: "CmdOrCtrl+P" },
+    { id: "find-in-files", label: "Find in Files", accelerator: "CmdOrCtrl+Shift+F" },
+  ];
   view.insert(0, new MenuItem({ type: "separator" }));
-  view.insert(0, new MenuItem({
-    id: "toggle-game", label: "Show/Hide Game", accelerator: "CmdOrCtrl+G",
-    // One window gets it once: the focused one, else the first.
-    click: () => (BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0])?.webContents.send("studio:toggle-game"),
-  }));
+  for (const item of items.reverse()) view.insert(0, new MenuItem({ id: `studio-${item.id}`, label: item.label, accelerator: item.accelerator, click: () => send(item.id) }));
   Menu.setApplicationMenu(menu);
 }
 
@@ -153,7 +159,7 @@ app.whenReady().then(async () => {
   });
   ipcMain.handle('studio:tune', (event, input: unknown) => { trusted(event); return labAi.run(input, event.sender.id); });
   ipcMain.on('studio:cancel', (event, id: unknown) => { trusted(event); if (typeof id === 'string') labAi.cancel(id, event.sender.id); });
-  addGameMenuItem();
+  addStudioMenuItems();
   createWindow();
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

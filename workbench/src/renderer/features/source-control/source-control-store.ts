@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { create } from "zustand";
-import type { SourceControlStatus, Workspace } from "../../../shared/models";
+import type { SourceControlChange, SourceControlStatus, Workspace } from "../../../shared/models";
 import { errorMessage } from "../../core/errors";
 import { watchWorkspace } from "../../core/workspace-watch";
 
@@ -54,3 +54,5 @@ export function activeRoot(workspace: Workspace): string {
   const cwd = (active?.state as { cwd?: unknown } | undefined)?.cwd;
   return typeof cwd === "string" && cwd ? cwd : workspace.path;
 }
+
+export const CHANGE_LETTERS: Record<SourceControlChange["kind"], string> = { modified: "M", added: "A", deleted: "D", renamed: "R", untracked: "U", conflicted: "C" };
