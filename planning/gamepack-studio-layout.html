@@ -18,11 +18,11 @@
   "kind": "Local builder app: layout plan",
   "updated": "2026-11-04",
   "status": {
-    "label": "Step 2 built, step 3 next",
+    "label": "All 5 steps built",
     "tone": "mint"
   },
   "pitch": "Studio still looks like Agent Workbench: a left tree of *workspaces* (folders), a tab strip of generic views and an IDE side panel. But there is only ever **one** Gamepack checkout, and the real unit of work is **a piece of work on a branch** (a worktree, its agent, its PR, its preview). The new layout puts the **game in the middle**, the **list of pieces of work on the left**, and the **agent on the right**, with the labs as switches on the game instead of separate tabs.",
-  "next": "Dad opens Studio, taps a few sections in the left tree, tries the iPad frames and switches 🎛️ Feel on and off on the Nan drive. Then step 3: the agent column on the right.",
+  "next": "Dad lives in Studio for a few pieces of work and says what still gets in the way. Known small things: main's half of ⇆ Main shows the splash until the main checkout has #313; Files and Commit changes stay as + tabs unless Dad wants them gone.",
   "facts": [
     {
       "icon": "📁",
@@ -316,25 +316,38 @@
               "title": "The game in the middle, with Sections",
               "status": "done",
               "md": "One game pane with breadcrumb, device frames and reload. A small game script writes a sections index (every `sections.ts`, the same data the README directory uses) as JSON the Studio reads; the left Sections tree opens links in the pane. Camera, Feel and Character become toggles on the pane; the three lab tabs go away (their links migrate).",
-              "date": "2026-11-04"
+              "date": "2026-11-04",
+              "pr": 313
             },
             {
               "n": 3,
               "title": "The agent column",
-              "status": "next",
-              "md": "The agent for the selected piece of work on the right, extra agents and terminals as tabs inside it. 📎 this section (link, params, lab snapshot if a lab is on). Prompt starters that follow AGENTS.md gates: Plan, Greybox, Art, Full loop, Fix, Bake lab values, Address review. Done and needs-answer badges per piece of work."
+              "status": "done",
+              "md": "The agent for the selected piece of work on the right, extra agents and terminals as tabs inside it. 📎 this section (link, params, lab snapshot if a lab is on). Prompt starters that follow AGENTS.md gates: Plan, Greybox, Art, Full loop, Fix, Bake lab values, Address review. Done and needs-answer badges per piece of work.",
+              "date": "2026-11-04",
+              "pr": [
+                314,
+                316
+              ]
             },
             {
               "n": 4,
               "title": "Ship",
-              "status": "todo",
-              "md": "Buttons that run in that worktree's terminal so their output stays visible: Verify, Screens for this route, Voices (`world-voice-lines` + `generate-voice` with the main repo's `.env`), Open PR (asks the agent to run the open-pr skill), the PR preview link and QR, CI status, and the plan page."
+              "status": "done",
+              "md": "Buttons that run in that worktree's terminal so their output stays visible: Verify, Screens for this route, Voices (`world-voice-lines` + `generate-voice` with the main repo's `.env`), Open PR (asks the agent to run the open-pr skill), the PR preview link and QR, CI status, and the plan page.",
+              "date": "2026-11-04",
+              "pr": [
+                315,
+                316
+              ]
             },
             {
               "n": 5,
               "title": "Compare and polish",
-              "status": "todo",
-              "md": "Side-by-side branch vs main (needs a second game server), known issues, the pastel theme. Drop what's left over: Active views panel, Personas, the file tree if Dad never opens it."
+              "status": "done",
+              "md": "Side-by-side branch vs main (needs a second game server), known issues, the pastel theme. Drop what's left over: Active views panel, Personas, the file tree if Dad never opens it.",
+              "date": "2026-11-04",
+              "pr": 316
             }
           ]
         },
@@ -395,7 +408,96 @@
                   "title": "Checked",
                   "md": "Studio `npm test`: the new pool and migration tests pass (LRU of 2, the launcher's server never stopped, one start for two requests, busy port skipped, lab tabs migrate). The old game-server test needs port 5174 free (it failed only because Dad's Studio was open). `qa:composer` passes, Ctrl+C step included. Live look: Nan map in the iPad wide frame with 🎛️ Feel on and its panel below."
                 }
+              ],
+              "pr": 313
+            },
+            {
+              "title": "Step 3: the agent column",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "The game has the whole middle now. The selected piece of work's agents, terminals and tools are small tabs in a column on the right, and the composer knows about the game.",
+              "items": [
+                "**Three jobs**: Work + Sections on the left, the game in the middle, the agent on the right (34% wide, 22–60%, hides with its own button; the game's toolbar shows it again).",
+                "**Tabs inside the agent column**: agents, terminals, Character concepts. *Files* and *Commit changes* were side panels and are tabs from its **+** menu now.",
+                "**📎 Section** (composer toolbar): attaches the section on screen as a labelled chip: the link, its names and params, where its sections.ts lives, the local and preview URLs, and the lab's live snapshot when a lab is on.",
+                "**Starters ▾**: Plan, Greybox, Art, Full loop, Fix, Bake lab values, Address review, each following AGENTS.md's gates (plan page and stop; greybox with knobs and ?feel=1; art with qa-art and both QA agents; and so on). Fix and Bake attach the section by themselves; Address review names the branch's PR.",
+                "**Badges**: each Work row says *needs answer*, *done* or *working…* from its agents. The Dock badge counts the pieces of work waiting on Dad, and two soft notes chime when one finishes (rising) or asks (falling)."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "The Dock badge and chime were in step 5's small things; they came with the badges here. The game is no longer a tab: Codex's review of step 2 also made the pane wait for its own server, apply each Sections click once and keep lab Undo per lab."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "`qa:composer` passes with new steps: 📎 Section adds a *Game* chip, Starters ▸ Fix fills the prompt and attaches the section, Files and Commit changes open as tabs from +, then the old commit, overflow and restart checks."
+                }
+              ],
+              "pr": [
+                314,
+                316
               ]
+            },
+            {
+              "title": "Step 4: Ship",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "A Ship panel under the agent does what this repo does before a PR, one button each, for the selected piece of work.",
+              "items": [
+                "**✅ Verify** (`npm run verify`), **📸 Screens** for the activity on screen (`npm run build && qa-screens --only=ipad-portrait,ipad-landscape --routes=<activity>`, after stopping the other game server so QA gets the CPU), **🎙️ Voices** (`world-voice-lines` + `generate-voice` with the main checkout's `.env`, since worktrees don't have one).",
+                "They run in that piece of work's **Ship** terminal, a tab in the agent column that keeps running behind the agent (terminals no longer stop when you switch tabs).",
+                "**🚀 Open PR** (or *Update PR*) prefills the agent: verify, commit, open the PR with the open-pr skill and its 🔗 Test this links, start the Codex watcher; the section on screen is attached.",
+                "**📱 Preview ↗** for the section on screen (the PR's preview, or the main build without one) with a **QR** for the iPad, **CI ↗** and **PR ↗** with the CI state in the header, and **📋 Plan page ↗** for the activity (or its country) from the local game server."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "The QR code uses `qrcode-generator` (MIT, no dependencies), added to the Studio only: the game never loads it. The Ship panel folds away and remembers it."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "`qa:composer` passes with a Ship step: Verify opens a *Ship: verify* tab whose terminal received `npm run verify`, and the QR for the main build renders."
+                }
+              ],
+              "pr": [
+                315,
+                316
+              ]
+            },
+            {
+              "title": "Step 5: compare and polish",
+              "date": "2026-11-04",
+              "status": "done",
+              "summary": "This branch beside main, the known issues for the section on screen, and the game's own pastels and Fredoka. This PR also re-lands steps 3 and 4: #314 and #315 merged into their stacked base branches after #313 had already reached main.",
+              "items": [
+                "**⇆ Main**: on any piece of work but main, the stage splits: this branch on the left, main's own game server on the right at the same section and params, both in the device frame. Main follows every section, link, lab switch and reload made here; **Sync main** sends it the moment on screen.",
+                "**🐞 N**: the open entries of the country's `known-issues.md` that link to this activity (Thailand's boat trip has 11). Each one unfolds to its Check / Code lines; **Send to agent** attaches it to the agent.",
+                "**Pink, not grey**: cream background, pink accents, lavender selection, ink text, Fredoka everywhere outside the terminals, flat and matte (the glossy inset highlights are gone).",
+                "Left over: Personas and Active views were already gone in step 1; the side-panel registry has no panels any more (Files and Commit changes are + tabs). A fresh Studio opens with the agent column showing."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "md": "The file tree stays as a tab from the agent column's + menu rather than being removed: it costs nothing until it's opened. Dock badge and chime came in step 3."
+                },
+                {
+                  "type": "callout",
+                  "tone": "done",
+                  "title": "Checked",
+                  "md": "Live look on Thailand's boat trip sunset: ⇆ Main split with both games running, 🐞 11 with the list open, the pastel theme. `qa:composer` passes on the new theme."
+                }
+              ],
+              "pr": 316
             }
           ]
         }

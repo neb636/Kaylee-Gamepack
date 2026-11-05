@@ -35,6 +35,7 @@ const api: WorkbenchApi = {
   },
   app: {
     metrics: () => ipcRenderer.invoke(IPC.appMetrics),
+    badge: (count) => ipcRenderer.send(IPC.appBadge, count),
   },
   files: {
     list: (root, path) => ipcRenderer.invoke(IPC.filesList, { root, path }),

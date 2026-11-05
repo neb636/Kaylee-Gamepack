@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { LAB_CHANNEL, type LabSnapshot } from "../../../shared/labs";
 import type { GameFrame, Workspace } from "../../../shared/models";
-import { RefreshIcon } from "../../ui/icons";
+import { RefreshIcon, SidebarLeftIcon, SidebarRightIcon } from "../../ui/icons";
+import { IconButton } from "../../ui/controls";
 import { crumbFor, DEFAULT_CHARACTER, DEFAULT_LINK, FRAMES, hashOf, labOf, loadSections, patchGame, useGameLive, withLab } from "./game-store";
 import { LabPanel, type LabRequest } from "./LabPanel";
 import { useWorkList } from "../work/work-store";
+import { useWorkbenchStore } from "../../state/workbench-store";
+import { KnownIssuesList, useKnownIssues } from "./KnownIssues";
 
 const LABS = [
   { id: "camera", label: "Camera", emoji: "🎥", hint: "The camera lab: nudge or lock the 3D camera (?cam=1)" },
@@ -13,7 +16,7 @@ const LABS = [
 ] as const;
 
 /** Fits a device-sized frame into the pane, never larger than real size. */
-function useStageScale(frame: GameFrame) {
+function useStageScale(frame: GameFrame, columns = 1) {
   const ref = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   useEffect(() => {
@@ -25,14 +28,15 @@ function useStageScale(frame: GameFrame) {
   }, []);
   const device = FRAMES.find((item) => item.id === frame);
   if (!device?.width || !device.height || !size.width) return { ref, device: undefined, scale: 1 };
-  return { ref, device: { width: device.width, height: device.height }, scale: Math.min(1, (size.width - 24) / device.width, (size.height - 24) / device.height) };
+  const width = (size.width - 24 - (columns - 1) * 16) / columns;
+  return { ref, device: { width: device.width, height: device.height }, scale: Math.min(1, width / device.width, (size.height - 48) / device.height) };
 }
 
 /**
  * The game for one piece of work, always in the middle: its own loopback server, a breadcrumb of the section on
  * screen, device frames, reload, and the Camera / Feel / Character labs as switches with their tuning panel below.
  */
-export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?: boolean }) {
+export function GamePane({ workspace, hidden, onShowLeft, onShowRight }: { workspace: Workspace; hidden?: boolean; onShowLeft?: () => void; onShowRight?: () => void }) {
   const game = workspace.game ?? {};
   const origin = useGameLive((state) => state.origin[workspace.id]);
   const href = useGameLive((state) => state.href[workspace.id]);
@@ -43,6 +47,13 @@ export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?:
   const [error, setError] = useState<string>();
   const [editing, setEditing] = useState<string>();
   const [attempt, setAttempt] = useState(0);
+  const repoRoot = useWorkbenchStore((state) => state.repoRoot);
+  const isMain = !repoRoot || repoRoot.replace(/\/+$/, "") === workspace.path.replace(/\/+$/, "");
+  // Compare with main: main's own game server beside this one, at the same section and params.
+  const [compare, setCompare] = useState(false);
+  const [mainOrigin, setMainOrigin] = useState<string>();
+  const [mainTarget, setMainTarget] = useState<{ hash: string; nonce: number }>();
+  const [showIssues, setShowIssues] = useState(false);
   // A new piece of work is still running npm ci: start its game once that finishes.
   const installing = useWorkList((state) => state.list?.items.find((item) => item.path.replace(/\/+$/, "") === workspace.path.replace(/\/+$/, ""))?.install === "installing");
   const frame = useRef<HTMLIFrameElement>(null);
@@ -50,8 +61,19 @@ export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?:
   const current = hashOf(href || target.hash);
   const lab = labOf(current);
   const frameId: GameFrame = lab === "camera" ? "fit" : game.frame ?? "fit";
-  const stage = useStageScale(frameId);
+  const comparing = compare && !isMain;
+  const stage = useStageScale(frameId, comparing ? 2 : 1);
   const crumb = crumbFor(current, sections?.index);
+  const issues = useKnownIssues(workspace, crumb.placeId, crumb.activityId);
+
+  useEffect(() => {
+    if (!comparing || !repoRoot) return;
+    let active = true;
+    window.workbench.studio.useCheckout(repoRoot).then((value) => { if (active) setMainOrigin(value); }).catch((caught) => { if (active) setError(`Main's game can't start: ${String(caught).replace(/^Error: (Error invoking remote method '[^']+': )?(Error: )?/, "")}`); });
+    return () => { active = false; setMainOrigin(undefined); };
+  }, [comparing, repoRoot]);
+  // Main follows every navigation made here (a section, a pasted link, a lab switch, reload).
+  useEffect(() => { if (comparing) setMainTarget((before) => before && before.nonce === target.nonce ? before : { hash: target.hash, nonce: target.nonce || Date.now() }); }, [comparing, target]);
 
   useEffect(() => { void loadSections(workspace.path); }, [workspace.path]);
 
@@ -125,6 +147,7 @@ export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?:
   const src = origin ? `${origin}/?studio=1${target.nonce ? `&v=${target.nonce}` : ""}${target.hash}` : undefined;
   return <section className={`game-pane ${hidden ? "is-hidden" : ""}`} aria-label="Game" aria-hidden={hidden}>
     <div className="game-toolbar">
+      {onShowLeft && <IconButton label="Show sidebar" onPress={onShowLeft}><SidebarLeftIcon size={16} /></IconButton>}
       {editing !== undefined ? <form className="game-goto" onSubmit={(event) => {
         event.preventDefault();
         const value = editing.trim();
@@ -153,16 +176,34 @@ export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?:
             <span aria-hidden="true">{item.emoji}</span>{item.label}
           </button>)}
         </span>
+        {!isMain && <button className={`lab-toggle ${comparing ? "is-on" : ""}`} aria-pressed={comparing} title="This branch beside main, at the same section" onClick={() => setCompare(!compare)}>⇆ Main</button>}
+        {comparing && <button className="game-tool" title="Open the section on screen in main too" onClick={() => setMainTarget({ hash: current, nonce: Date.now() })}>Sync main</button>}
+        {issues.length > 0 && <button className={`lab-toggle ${showIssues ? "is-on" : ""}`} aria-pressed={showIssues} title="Known issues for this activity (known-issues.md)" onClick={() => setShowIssues(!showIssues)}>🐞 {issues.length}</button>}
+        {onShowRight && <IconButton label="Show agent column" onPress={onShowRight}><SidebarRightIcon size={16} /></IconButton>}
       </div>
     </div>
     <div className="game-stage" ref={stage.ref}>
       {installing ? <div className="game-message"><p>Installing the game's dependencies for {workspace.name} (npm ci)… The game starts when it's done.</p></div>
         : error ? <div className="game-message" role="alert"><strong>The game can't start here</strong><p>{error}</p><button className="game-tool" onClick={() => setAttempt((value) => value + 1)}>Try again</button></div>
         : !src ? <div className="game-message"><p>Starting the game for {workspace.name}…</p></div>
-        : <div className={`game-device ${stage.device ? "is-framed" : ""}`} style={stage.device ? { width: stage.device.width * stage.scale, height: stage.device.height * stage.scale } : undefined}>
-          <iframe ref={frame} title={`Game: ${workspace.name}`} src={src} allow="autoplay"
-            style={stage.device ? { width: stage.device.width, height: stage.device.height, transform: `scale(${stage.scale})` } : undefined} />
+        : <div className={`game-compare ${comparing ? "is-split" : ""}`}>
+          <figure className="game-column-view">
+            {comparing && <figcaption>{workspace.name}</figcaption>}
+            <div className={`game-device ${stage.device ? "is-framed" : ""}`} style={stage.device ? { width: stage.device.width * stage.scale, height: stage.device.height * stage.scale } : undefined}>
+              <iframe ref={frame} title={`Game: ${workspace.name}`} src={src} allow="autoplay"
+                style={stage.device ? { width: stage.device.width, height: stage.device.height, transform: `scale(${stage.scale})` } : undefined} />
+            </div>
+          </figure>
+          {comparing && <figure className="game-column-view">
+            <figcaption>main</figcaption>
+            {mainOrigin && mainTarget ? <div className={`game-device ${stage.device ? "is-framed" : ""}`} style={stage.device ? { width: stage.device.width * stage.scale, height: stage.device.height * stage.scale } : undefined}>
+              {/* Main's frame is only looked at: its messages never reach this pane (another origin and source). */}
+              <iframe title="Game: main" src={`${mainOrigin}/?studio=1&v=${mainTarget.nonce}${mainTarget.hash}`} allow="autoplay"
+                style={stage.device ? { width: stage.device.width, height: stage.device.height, transform: `scale(${stage.scale})` } : undefined} />
+            </div> : <div className="game-message"><p>Starting main's game…</p></div>}
+          </figure>}
         </div>}
+      {showIssues && <KnownIssuesList workspace={workspace} issues={issues} onClose={() => setShowIssues(false)} />}
     </div>
     {lab && src && <LabPanel key={lab} workspace={workspace} kind={lab} request={request} snapshot={snapshot} />}
   </section>;

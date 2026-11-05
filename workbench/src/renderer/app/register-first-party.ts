@@ -18,6 +18,9 @@ import { MemoryUsage, SessionSummary, TerminalCount } from "../features/status/S
 import { SettingsButton } from "../features/settings/SettingsButton";
 import { AgentIcon, BranchIcon, FileIcon, FilesIcon, ImageIcon, TerminalIcon } from "../ui/icons";
 import { useWorkList } from "../features/work/work-store";
+import { StudioComposerTools } from "../features/agent/StudioComposerTools";
+import { watchAttention } from "../features/agent/attention";
+import { ShipPanel } from "../features/ship/ShipPanel";
 
 let registered = false;
 
@@ -68,8 +71,12 @@ export function registerFirstPartyContributions(): void {
   services.sessions.register(cliAgentProvider("codex.cli", "Codex", "OpenAI"));
   services.sessions.register(localTerminalProvider);
 
-  services.panels.register({ id: "files", label: "Files", icon: FilesIcon, order: 20, component: FilesPanel });
-  services.panels.register({ id: "source-control", label: "Source control", icon: BranchIcon, order: 30, component: SourceControlPanel });
+  // The old side panels are tabs in the agent column now, opened from its + menu when needed.
+  services.views.register({ id: "files", label: "Files", description: "Browse and search this checkout's files.", icon: FilesIcon, component: FilesPanel, defaultTitle: "Files" });
+  services.views.register({ id: "source-control", label: "Commit changes", description: "This checkout's changes and a commit box.", icon: BranchIcon, component: SourceControlPanel, defaultTitle: "Changes" });
+  services.widgets.register({ id: "studio-tools", slot: "agent.composer.toolbar", order: 10, component: StudioComposerTools });
+  watchAttention();
+  services.widgets.register({ id: "ship", slot: "agent.column.footer", order: 10, component: ShipPanel });
 
   services.promptMenus.register(instructionsMenu);
   registerComposerContributions();

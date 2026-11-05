@@ -8,6 +8,7 @@ import { Button, IconButton } from "../ui/controls";
 import { BranchIcon, ChevronRightIcon, FolderIcon, MoreIcon, PlusIcon, RefreshIcon, SidebarLeftIcon } from "../ui/icons";
 import { shortBranch, useWorkList, workGroup } from "../features/work/work-store";
 import { SectionTree } from "../features/game/SectionTree";
+import { workAttention } from "../features/agent/attention";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 const POLL_MS = 45_000;
@@ -122,7 +123,12 @@ function WorkTree({ label, items, workspaces, onCleanUp }: { label: string; item
               : <span className="tree-chevron-spacer" />}
             <span className="workspace-icon">{item.main ? <FolderIcon size={15} /> : <BranchIcon size={15} />}</span>
             <span className="workspace-copy">
-              <strong>{item.name}</strong>
+              <strong>{item.name}{(() => {
+                const attention = workAttention(workspace, statuses);
+                return attention === "needs-answer" ? <span className="work-badge is-ask" title="An agent here is asking something">needs answer</span>
+                  : attention === "done" ? <span className="work-badge is-done" title="An agent here finished">done</span>
+                  : attention === "working" ? <span className="work-badge is-working" title="An agent here is working">working…</span> : null;
+              })()}</strong>
               <WorkMeta item={item} />
             </span>
             <WorkMenu item={item} workspace={workspace} onCleanUp={() => onCleanUp(item)} />

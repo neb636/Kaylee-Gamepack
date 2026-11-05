@@ -132,21 +132,34 @@ try {
   await page.keyboard.press("Control+c");
   await page.waitForFunction(() => document.querySelector(".session-pill")?.textContent.includes("Ready"));
 
-  // Files: lazy tree and a read-only file view with no session.
-  await page.getByRole("radio", { name: "Files" }).click();
+  // 📎 this section and the prompt starters, from the composer toolbar.
+  await prompt().fill("");
+  await page.getByRole("button", { name: "Attach this game section" }).click();
+  await page.locator(".composer-quotation summary").filter({ hasText: /^Game/ }).waitFor();
+  await page.getByRole("button", { name: "Prompt starters" }).click();
+  await page.getByRole("menuitem", { name: /^Fix/ }).click();
+  assert.match(await prompt().inputValue(), /What's wrong: $/);
+  assert.match((await page.evaluate(() => document.querySelector(".composer-quotation pre")?.textContent)) ?? "", /The game section Dad is looking at/);
+  await shot("starter-fix");
+  await prompt().fill("");
+
+  // Files: a tab in the agent column, with a lazy tree and a read-only file view with no session.
+  await page.getByRole("button", { name: "Create view" }).click();
+  await page.getByRole("menuitem", { name: /^Files/ }).click();
   const tree = page.getByRole("treegrid", { name: "Files in Composer QA" });
   await tree.getByRole("row", { name: "src" }).waitFor();
+  await page.getByRole("searchbox", { name: "Search files" }).fill("notes");
+  await page.getByRole("grid", { name: "Matching files" }).getByRole("row", { name: /notes\.md/ }).waitFor();
+  await page.getByRole("searchbox", { name: "Search files" }).fill("");
   await tree.getByRole("button", { name: "Expand src" }).click();
   await tree.getByRole("row", { name: "app.ts" }).click();
   await page.getByRole("tab", { name: "app.ts" }).waitFor();
   await page.waitForFunction(() => document.querySelector(".cm-content")?.textContent.includes("export const answer"));
-  await page.getByRole("searchbox", { name: "Search files" }).fill("notes");
-  await page.getByRole("grid", { name: "Matching files" }).getByRole("row", { name: /notes\.md/ }).waitFor();
-  await page.getByRole("searchbox", { name: "Search files" }).fill("");
   await shot("file-view");
 
-  // Source control for the workspace checkout: list changes, commit them all.
-  await page.getByRole("radio", { name: "Source control" }).click();
+  // Commit changes, also a tab: list changes, commit them all.
+  await page.getByRole("button", { name: "Create view" }).click();
+  await page.getByRole("menuitem", { name: /^Commit changes/ }).click();
   const changes = page.getByRole("grid", { name: "Changes" });
   await changes.getByRole("row", { name: /tracked\.txt/ }).waitFor();
   assert.match(await changes.getByRole("row", { name: /notes\.md/ }).innerText(), /U/);
@@ -157,10 +170,19 @@ try {
   await page.getByText("No uncommitted changes.").waitFor();
   assert.equal(git("log", "-1", "--format=%s").trim(), "QA commit");
 
+  // Ship: Verify runs in this piece of work's Ship terminal, a tab in the agent column; the QR opens and closes.
+  await page.getByRole("region", { name: "Ship" }).getByRole("button", { name: /Verify/ }).click();
+  await page.getByRole("tab", { name: "Ship: verify" }).waitFor();
+  await page.waitForFunction(() => [...document.querySelectorAll(".kept-view:not([hidden]) .xterm-rows")].some((rows) => rows.textContent.includes("npm run verify")));
+  await page.getByRole("region", { name: "Ship" }).getByRole("button", { name: "QR" }).click();
+  await page.getByRole("img", { name: /QR code for https:\/\/neb636\.github\.io\/Kaylee-Gamepack\// }).waitFor();
+  await shot("ship");
+  await page.getByRole("tab", { name: "Ship: verify" }).getByRole("button", { name: /Close/ }).click();
+
   // The tab overflow menu.
   assert.equal(await page.getByRole("radio", { name: "Active views" }).count(), 0, "Active views is gone");
   await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(1100, 760));
-  for (let index = 0; index < 5; index += 1) {
+  for (let index = 0; index < 3; index += 1) {
     await page.getByRole("button", { name: "Create view" }).click();
     await page.getByRole("menuitem", { name: /Agent session/ }).click();
   }

@@ -52,3 +52,54 @@
 .section-link small { color: var(--wb-text-muted); }
 .section-variants { display: flex; flex-wrap: wrap; gap: 2px 4px; padding-left: 10px; }
 .section-variant { width: auto; color: var(--wb-text-secondary); font-size: 11.5px; }
+
+/* The game column fills the middle; the agent column holds the views as tabs. */
+.game-column { padding: 10px; }
+.game-column .game-pane { border: 0; border-radius: var(--wb-radius-md); }
+.game-column.has-traffic-lights .game-toolbar { padding-left: 78px; }
+.game-toolbar { -webkit-app-region: drag; }
+.game-toolbar button, .game-toolbar select, .game-toolbar input { -webkit-app-region: no-drag; }
+.agent-column { display: flex; flex-direction: column; min-width: 0; height: 100%; }
+.agent-column .tab-strip { padding-left: 8px; }
+.agent-column .view-tab { width: 142px; }
+.agent-column .active-view-region { padding: 0 8px 8px; }
+.work-badge { margin-left: 6px; padding: 1px 6px; border-radius: 999px; font-size: 10px; font-weight: 600; vertical-align: 1px; }
+.work-badge.is-ask { background: #fde3ea; color: #c2335e; }
+.work-badge.is-done { background: #ddf5e4; color: #23824a; }
+.work-badge.is-working { background: var(--wb-accent-soft); color: var(--wb-accent); }
+.composer-toolbar .composer-chip { white-space: nowrap; }
+.agent-column .composer-toolbar { flex-wrap: wrap; row-gap: 6px; }
+.kept-view { display: flex; flex: 1; flex-direction: column; min-height: 0; }
+.kept-view[hidden] { display: none; }
+
+/* Ship: under the agent, one button each. */
+.ship-panel { flex: none; margin: 0 8px 8px; border: 1px solid var(--wb-border-subtle); border-radius: var(--wb-radius-lg); background: var(--wb-bg-raised); }
+.ship-header { display: flex; align-items: center; gap: 6px; width: 100%; padding: 8px 10px; border: 0; background: none; color: var(--wb-text-primary); font: inherit; font-size: 12.5px; text-align: left; cursor: pointer; }
+.ship-summary { margin-left: auto; color: var(--wb-text-secondary); font-size: 11.5px; }
+.ship-body { display: grid; gap: 8px; padding: 0 10px 10px; }
+.ship-buttons { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 6px; }
+.ship-buttons button, .ship-link-button { padding: 7px 8px; border: 1px solid var(--wb-border); border-radius: var(--wb-radius-sm); background: var(--wb-bg-panel); color: var(--wb-text-primary); font: inherit; font-size: 12px; text-align: left; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ship-buttons button:hover, .ship-link-button:hover { background: var(--wb-bg-hover); }
+.ship-buttons button:disabled { opacity: .45; cursor: default; }
+.ship-links { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: 12px; }
+.ship-links a { color: var(--wb-accent); text-decoration: none; }
+.ship-link-button { padding: 2px 8px; }
+.ship-link-button[aria-pressed="true"] { border-color: var(--wb-accent); color: var(--wb-accent); }
+.ship-qr-row { display: flex; align-items: center; gap: 10px; }
+.ship-qr { width: 112px; height: 112px; flex: none; padding: 4px; border-radius: var(--wb-radius-sm); background: #fff; }
+.ship-qr svg { width: 100%; height: 100%; }
+.ship-qr-row small { color: var(--wb-text-secondary); }
+
+/* Compare with main, and known issues. */
+.game-compare { display: flex; align-items: center; justify-content: center; gap: 16px; width: 100%; height: 100%; }
+.game-column-view { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 6px; height: 100%; min-width: 0; margin: 0; }
+.game-compare:not(.is-split) .game-column-view { gap: 0; }
+.game-column-view figcaption { color: var(--wb-text-secondary); font-size: 12px; font-weight: 600; }
+.game-compare.is-split .game-device:not(.is-framed) { flex: 1; border-radius: var(--wb-radius-sm); overflow: hidden; }
+.known-issues { position: absolute; top: 10px; right: 10px; width: min(420px, calc(100% - 20px)); max-height: calc(100% - 20px); overflow: auto; padding: 12px; border: 1px solid var(--wb-border); border-radius: var(--wb-radius-lg); background: var(--wb-bg-raised); box-shadow: var(--wb-shadow-popover); }
+.known-issues-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.known-issues ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.known-issues li { display: grid; gap: 6px; padding-bottom: 8px; border-bottom: 1px solid var(--wb-border-subtle); }
+.known-issues summary { cursor: pointer; font-weight: 600; }
+.known-issues pre { margin: 6px 0 0; white-space: pre-wrap; font-size: 11px; color: var(--wb-text-secondary); }
+.known-issues li > .game-tool { justify-self: start; }

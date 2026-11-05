@@ -17,7 +17,7 @@ const emptyState: PersistedState = {
     },
   ],
   instructionOptions: [],
-  layout: { leftCollapsed: false, rightCollapsed: true },
+  layout: { leftCollapsed: false, rightCollapsed: false },
 };
 
 function statePath() {

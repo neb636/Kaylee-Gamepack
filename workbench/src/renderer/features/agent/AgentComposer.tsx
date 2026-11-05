@@ -120,8 +120,8 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
       <div className="composer-box-top">
         {!!state.quotations?.length && <div className="composer-quotations" aria-label={`Quoted context: ${state.quotations.length} selections`}>
           {state.quotations.map((item, index) => <div className="composer-quotation" key={item.id}>
-            <details><summary>Terminal selection {index + 1}</summary><pre>{item.content}</pre></details>
-            <IconButton label={`Remove terminal selection ${index + 1}`} onPress={() => patch({ quotations: state.quotations?.filter((quote) => quote.id !== item.id) })}><CloseIcon size={11} /></IconButton>
+            <details><summary>{item.label ?? `Terminal selection ${index + 1}`}</summary><pre>{item.content}</pre></details>
+            <IconButton label={`Remove ${item.label ?? `terminal selection ${index + 1}`}`} onPress={() => patch({ quotations: state.quotations?.filter((quote) => quote.id !== item.id) })}><CloseIcon size={11} /></IconButton>
           </div>)}
         </div>}
         <span className="kbd-hint">⌘/Ctrl + Enter</span>

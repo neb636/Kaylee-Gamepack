@@ -79,6 +79,7 @@ export const layoutStateSchema = z.object({
   leftCollapsed: z.boolean().default(false),
   rightCollapsed: z.boolean().default(false),
   rightPanel: z.string().optional(),
+  shipCollapsed: z.boolean().optional(),
 });
 
 export const persistedStateSchema = z.object({
