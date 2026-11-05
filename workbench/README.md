@@ -37,7 +37,8 @@ open its agent and views; its sessions nest under it.
 
 - **+ New piece of work**: type a short name (`canada-whales`). Studio fetches main, makes the branch
   `<your GitHub login>/canada-whales` in `~/repos/Kaylee-Gamepack-worktrees/canada-whales` (a folder Claude Code and
-  Codex share), runs `npm ci` there and opens an agent in it.
+  Codex share), copies main's `node_modules` there as an APFS clone (seconds, no extra disk) when the lockfile matches,
+  otherwise runs `npm ci`, and opens an agent in it.
 - **Finished** groups worktrees whose PR is merged or closed, or whose folder is gone. **Clean up…** (a row's ⋯ menu)
   or **Clean up all** removes the folder after asking. It never touches the main checkout, a worktree with changes, or
   commits that exist only on this Mac (unless the PR has exactly that head, as after a squash merge). Branches stay.

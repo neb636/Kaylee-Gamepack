@@ -125,9 +125,9 @@ app.whenReady().then(async () => {
     if (typeof root !== 'string') throw new Error('Choose a checkout.');
     return sections.get(await roots.resolve(root), refresh === true);
   });
-  ipcMain.handle('studio:trim-servers', async (event, keep: unknown) => {
+  ipcMain.handle('studio:trim-servers', async (event, keep: unknown, root: unknown) => {
     trusted(event);
-    await gameServers.trim(typeof keep === 'number' && keep >= 0 ? Math.floor(keep) : 1);
+    await gameServers.trim(typeof keep === 'number' && keep >= 0 ? Math.floor(keep) : 1, typeof root === 'string' ? await roots.resolve(root) : undefined);
   });
   ipcMain.handle('studio:tune', (event, input: unknown) => { trusted(event); return labAi.run(input, event.sender.id); });
   ipcMain.on('studio:cancel', (event, id: unknown) => { trusted(event); if (typeof id === 'string') labAi.cancel(id, event.sender.id); });

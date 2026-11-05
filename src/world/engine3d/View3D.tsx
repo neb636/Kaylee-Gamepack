@@ -9,7 +9,7 @@ import { useEffect, useRef, type MutableRefObject, type PointerEvent as ReactPoi
 import type { Scene, WebGLRenderer } from 'three'
 import type { CameraRig } from './camera'
 import { camLab, type LabWorld } from './camLab'
-import { automated } from './flags'
+import { automated, inStudio } from './flags'
 import { frameLoop } from './loop'
 import { acquireRenderer, dropRenderer, releaseRenderer } from './renderer'
 import { ROAM, type Roamable } from './roam'
@@ -127,7 +127,8 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
     camLab.attach(lab)
 
     // ---- Size: the canvas fills the screen; the camera keeps the framing below the top bar ----
-    let dpr = Math.min(window.devicePixelRatio || 1, 2)
+    // The desktop Studio draws at 1.5x at most (a Retina pane at 2x costs nearly twice the GPU for little Dad can see).
+    let dpr = Math.min(window.devicePixelRatio || 1, inStudio ? 1.5 : 2)
     // (Drawing has begun, after the shaders compiled; the view is going away.)
     let started = false
     let gone = false
@@ -178,7 +179,8 @@ export function View3D<W extends World3D>({ make, name, qaKey, onMode, worldRef,
           const sorted = [...times].sort((a, b) => a - b)
           world.stats.fps = Math.round(1000 / (times.reduce((a, b) => a + b, 0) / times.length))
           world.stats.p95 = Math.round(sorted[Math.floor(sorted.length * 0.95)] ?? 0)
-          if (!automated && !world.calm) {
+          // (Not in the Studio: its 30 fps cap would read as a slow device.)
+          if (!automated && !inStudio && !world.calm) {
             slow = dt > 0.02 ? slow + 1 : Math.max(0, slow - 2)
             if (slow > 90 && dpr > 1) {
               dpr = Math.max(1, dpr - 0.25)

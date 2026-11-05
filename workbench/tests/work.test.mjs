@@ -4,13 +4,14 @@ import { access, mkdtemp, realpath, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { setTimeout } from "node:timers";
 import gitModule from "../dist-electron/main/providers/git-source-control-provider.js";
 import workModule from "../dist-electron/main/work.js";
 import filesModule from "../dist-electron/main/workspace-files.js";
 
 const { GitSourceControlProvider, parseWorktreeList } = gitModule;
-const { WorkService, checksSummary, pullRequestsByBranch, workName, runExecutable } = workModule;
-const { WorkspaceRoots } = filesModule;
+const { WorkService, checksSummary, pullRequestsByBranch, workName, runExecutable, dependenciesMatch, mapLimited } = workModule;
+const { WorkspaceRoots, isWatchedChange } = filesModule;
 const git = (cwd, ...args) => execFileSync("git", args, { cwd, encoding: "utf8" });
 
 async function repository() {
@@ -68,6 +69,33 @@ test("summarises checks and keeps the newest PR per branch", () => {
   ]);
   assert.deepEqual(map.get("b"), { number: 9, state: "OPEN", title: "new", url: "u9", isDraft: false, headSha: "x", checks: "passing" });
   assert.equal(map.get("c").checks, undefined, "finished PRs don't show CI");
+});
+
+test("reuses main's node_modules only when it was installed from the same lockfile", () => {
+  const lock = { packages: { "": { name: "game" }, "node_modules/vite": { version: "8.3.0" }, "node_modules/@rolldown/binding-linux-x64-gnu": { version: "1.0.0", optional: true } } };
+  const installed = { packages: { "node_modules/vite": { version: "8.3.0" } } };
+  assert.equal(dependenciesMatch(lock, installed), true, "another platform's optional binary may be missing");
+  assert.equal(dependenciesMatch(lock, { packages: { "node_modules/vite": { version: "8.2.0" } } }), false, "a different version");
+  assert.equal(dependenciesMatch({ packages: { ...lock.packages, "node_modules/three": { version: "0.180.0" } } }, installed), false, "a missing package");
+  assert.equal(dependenciesMatch(lock, { packages: { ...installed.packages, "node_modules/left-pad": { version: "1.0.0" } } }), false, "an extra package");
+  assert.equal(dependenciesMatch(lock, {}), false);
+});
+
+test("runs at most a few at once, in order", async () => {
+  let running = 0, most = 0;
+  const out = await mapLimited([5, 1, 4, 2, 3], 2, async (value) => {
+    running++; most = Math.max(most, running);
+    await new Promise((resolve) => setTimeout(resolve, value * 3));
+    running--;
+    return value * 10;
+  });
+  assert.deepEqual(out, [50, 10, 40, 20, 30]);
+  assert.equal(most, 2);
+});
+
+test("file watching ignores build output and other worktrees' git activity", () => {
+  for (const quiet of ["node_modules/vite/index.js", "qa-output/webkit-ipad/shot.png", "dist/index.html", "workbench/release/x", ".git/worktrees/canada/index", ".git/objects/ab/cd", ".git/logs/HEAD", ".git/FETCH_HEAD", "src/.DS_Store"]) assert.equal(isWatchedChange(quiet), false, quiet);
+  for (const loud of ["", "src/App.tsx", ".git/HEAD", ".git/index", ".git/refs/heads/main", ".git/packed-refs", "distance.ts"]) assert.equal(isWatchedChange(loud), true, loud);
 });
 
 test("work names become safe folder and branch names", () => {

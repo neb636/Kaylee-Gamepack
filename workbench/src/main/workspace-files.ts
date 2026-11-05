@@ -18,6 +18,20 @@ function toPortable(relative: string): string {
   return relative.split(path.sep).join("/");
 }
 
+// Build output, dependencies and QA screenshots change by the thousand during npm ci, builds and QA; nothing in the
+// Studio shows them live. Inside .git only what changes the status or branch counts: every other worktree's git
+// activity lands in the main checkout's .git/worktrees and objects, and used to restart git status non-stop.
+const QUIET_FOLDERS = new Set(["node_modules", "dist", "dist-electron", "release", "qa-output", "test-results", "playwright-report", ".vite", ".cache"]);
+const GIT_SIGNALS = /^\.git\/(HEAD|index|packed-refs|MERGE_HEAD|refs\/.*)$/;
+
+/** True for a changed path (relative, portable) the Studio's file and source control views care about. */
+export function isWatchedChange(changed: string): boolean {
+  if (!changed) return true;
+  if (changed === ".DS_Store" || changed.endsWith("/.DS_Store")) return false;
+  if (changed === ".git" || changed.startsWith(".git/")) return GIT_SIGNALS.test(changed);
+  return !changed.split("/").some((segment) => QUIET_FOLDERS.has(segment));
+}
+
 /** Worktrees for a workspace are created beside it, in `<workspace>-worktrees/`. */
 export function worktreeContainer(root: string): string {
   return `${path.resolve(root)}-worktrees`;
@@ -132,6 +146,7 @@ export class WorkspaceFiles {
     if (!entry) {
       const created: Watch = { listeners: new Set(), pending: new Set(), watcher: watch(base, { recursive: true }, (_type, name) => {
         const changed = name ? toPortable(String(name)) : "";
+        if (!isWatchedChange(changed)) return;
         created.pending.add(changed.startsWith(".git/") ? ".git" : changed);
         this.indexes.delete(base);
         clearTimeout(created.timer);
