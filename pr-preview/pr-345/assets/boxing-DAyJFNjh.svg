@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Muay Thai</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ddf7ee"/><stop offset="1" stop-color="#a9e8d2"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="bag"><rect x="62" y="26" width="30" height="64" rx="13"/></clipPath>
+    <clipPath id="fist"><path d="M-16-15C-6-16.5 0-17 8-17C22-17 31-8 31 3C31 14 22 21 8 21C0 21-8 20-16 19Z"/></clipPath>
+    <clipPath id="cuff"><rect x="-34" y="-13" width="21" height="28" rx="5.5"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <ellipse cx="66" cy="104" rx="30" ry="5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the heavy bag on its chain, swinging away from the punch -->
+  <g transform="rotate(-7 77 2)">
+    <path d="M77-6V13" stroke="#9790ba" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="77" cy="16.5" r="3.2" fill="none" stroke="#9790ba" stroke-width="2.5"/>
+    <path d="M75 19L67 28.5M79 19L87 28.5" stroke="#9790ba" stroke-width="2.5" stroke-linecap="round"/>
+    <g clip-path="url(#bag)">
+      <rect x="60" y="24" width="34" height="68" fill="#d9485e"/>
+      <rect x="55" y="24" width="30" height="68" rx="13" fill="#ff6b6b"/>
+      <path d="M60 41Q77 44.5 94 41V46.5Q77 50 60 46.5ZM60 71Q77 74.5 94 71V76.5Q77 80 60 76.5Z" fill="#fff7f0"/>
+      <path d="M85 42.5Q90 42 94 41V46.5Q90 47.5 85 48ZM85 72.5Q90 72 94 71V76.5Q90 77.5 85 78Z" fill="#efdccd"/>
+    </g>
+    <path d="M67 38C67 34 69 31 72.5 29.5M67 53V66" fill="none" stroke="#ffa3a3" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <!-- it swings: motion arcs -->
+  <path d="M100 48C103 54 103 62 100 68M106 52C108 56 108 61 106 65" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- the punch: a white burst where the glove lands -->
+  <path d="M72 44L75.5 51L83 47.5L80.5 55.5L88.5 58L80.5 61L84 68.5L76 66L73 73.5L69 66.5Z" fill="#fff"/>
+
+  <!-- the pink glove, punching -->
+  <g transform="translate(46 63) rotate(-8)">
+    <!-- the cuff, a white strap round it -->
+    <g clip-path="url(#cuff)">
+      <rect x="-36" y="-15" width="25" height="32" fill="#e7699c"/>
+      <rect x="-37" y="-17" width="25" height="27" rx="6" fill="#ff8fb8"/>
+      <rect x="-27" y="-15" width="7" height="32" fill="#efdccd"/>
+      <rect x="-27" y="-17" width="7" height="27" fill="#fff7f0"/>
+    </g>
+    <!-- the fist: shaded bottom-right -->
+    <g clip-path="url(#fist)">
+      <rect x="-18" y="-19" width="52" height="42" fill="#e7699c"/>
+      <ellipse cx="5" cy="-1" rx="24" ry="17.5" fill="#ff8fb8"/>
+    </g>
+    <path d="M17-12.5C22.5-10.5 26-6 26.5-1" fill="none" stroke="#ffc4da" stroke-width="3" stroke-linecap="round"/>
+    <!-- the thumb along the top, its crease below it -->
+    <path d="M-9-11.5C-10-18.5-4-22.5 3-22.5C10-22.5 17-21.5 21-18.5C25-15.5 24-9.5 19-9C12-8.5 4-8.5-3-8C-6.5-7.8-8.8-9-9-11.5Z" fill="#e7699c"/>
+    <path d="M-9-14C-10-21-4-25 3-25C10-25 17-24 21-21C25-18 24-12 19-11.5C12-11 4-11-3-10.5C-6.5-10.3-8.8-11.5-9-14Z" fill="#ff8fb8"/>
+    <path d="M-4.5-19C-1.5-21.5 4-22 9-21.5" fill="none" stroke="#ffc4da" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <!-- speed lines behind it -->
+  <path d="M8 56H15M6 64H12M9 72H15" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- impact stars -->
+  <g transform="translate(64 36) rotate(-12) scale(1.2)" stroke-linejoin="round" stroke-width="1.5">
+    <path d="M0-6L1.5-2.5L5.5-2L2.5 1L3.5 5L0 3L-3.5 5L-2.5 1L-5.5-2L-1.5-2.5Z" fill="#ffc83d" stroke="#ffc83d"/>
+    <path d="M0-6L1.5-2.5L5.5-2L2.5 1L3.5 5L0 3Z" fill="#eba123" stroke="#eba123"/>
+  </g>
+  <g transform="translate(66 86) rotate(15) scale(0.95)" stroke-linejoin="round" stroke-width="1.5">
+    <path d="M0-6L1.5-2.5L5.5-2L2.5 1L3.5 5L0 3L-3.5 5L-2.5 1L-5.5-2L-1.5-2.5Z" fill="#ffc83d" stroke="#ffc83d"/>
+    <path d="M0-6L1.5-2.5L5.5-2L2.5 1L3.5 5L0 3Z" fill="#eba123" stroke="#eba123"/>
+  </g>
+  <g transform="translate(52 27) rotate(10) scale(0.7)" stroke-linejoin="round" stroke-width="1.5">
+    <path d="M0-6L1.5-2.5L5.5-2L2.5 1L3.5 5L0 3L-3.5 5L-2.5 1L-5.5-2L-1.5-2.5Z" fill="#ff8fb8" stroke="#ff8fb8"/>
+    <path d="M0-6L1.5-2.5L5.5-2L2.5 1L3.5 5L0 3Z" fill="#e7699c" stroke="#e7699c"/>
+  </g>
+  <path d="M30 30l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z" fill="#fff"/>
+</svg>
