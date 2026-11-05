@@ -9,6 +9,8 @@
 //           the water, Daddy sits behind her.
 //   sandcastle  greybox 4, the sandcastle at Ao Hin Khok (sandcastle?round=dig|towers|tide): dig the sand with her
 //           finger, flip bucket towers, dig a channel for the tide to fill the moat, bury Daddy.
+//   snorkel greybox 5, snorkeling at Ko Kudi (snorkel?round=float|follow|cuttle): her finger leads Kaylee over the reef,
+//           half under the water; the damselfish crowd, the parrotfish to follow, the cuttlefish that changes color.
 // The other stops, the fire show and the trip frame get their sections with their greyboxes. In the
 // works: only these links reach it. Loaded at startup: keep three.js (and the island's coastline data) out of this file.
 import { defineSections } from '../../../../kit/sections'
@@ -18,6 +20,8 @@ import { ANIMAL_IDS } from './book/animals'
 export const JET_ROUNDS = ['ride', 'waves', 'race'] as const
 /** The sandcastle's rounds (sandcastle/sandcastle.ts SAND_ROUND_IDS). */
 export const SAND_ROUNDS = ['dig', 'towers', 'tide'] as const
+/** The snorkel's rounds (snorkel/snorkel.ts SNORKEL_ROUND_IDS). */
+export const SNORKEL_ROUNDS = ['float', 'follow', 'cuttle'] as const
 /** Where she can land on the island (island/layout.ts SPOT_IDS). */
 export const SPOTS = ['nadan', 'saikaew', 'hinkhok', 'phai', 'wongduan', 'prao', 'deck', 'aonoina'] as const
 /** The stops, each with its pink flag (island/layout.ts STOPS). */
@@ -25,14 +29,14 @@ export const FLAGS = ['jetski', 'sandcastle', 'snorkel', 'hideseek'] as const
 export const TIMES = ['morning', 'noon', 'afternoon', 'golden', 'night'] as const
 
 const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
-  note: "In the works (greyboxes 1 to 4 of the plan). Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski and the sand; ?fps=1 or ?debug=1 shows the frame rate.",
+  note: "In the works (greyboxes 1 to 5 of the plan). Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski, the sand and the snorkel; ?fps=1 or ?debug=1 shows the frame rate.",
   params: {
     at: { default: 'nadan', values: SPOTS, doc: 'where she stands on the island: nadan (the pier, where the speedboat lands), saikaew (the jet ski beach), hinkhok (the sandcastle beach), phai, wongduan (the snorkel boat), prao (the sunset beach and the driftwood tree), deck (the resort deck above Ao Prao), aonoina (the quiet north beach)' },
     flags: { default: '', doc: `the pink flags she has earned, a comma list of ${FLAGS.join(', ')} (or all): each stands on its beach, and the day moves on with them (morning, noon, afternoon, golden). With jetski, a jet ski waits on every beach for her to ride` },
     time: { default: '', values: ['', ...TIMES], doc: 'the light, overriding the flags: morning, noon, afternoon, golden or night (the beach bars and lanterns glow, the stars come out)' },
     book: { default: '', doc: `the animals already in her book (snapped with Mommy's phone), a comma list of ${ANIMAL_IDS.join(', ')} (or all)` },
     phone: { default: '', values: ['', '1'], doc: "1: Mommy's phone is out from the start (every tap is a photo)" },
-    round: { default: 'ride', values: [...JET_ROUNDS, ...SAND_ROUNDS], doc: 'the round of a stop. The sandcastle: dig (dig holes and moats with her finger, the sand piling up beside them; a ghost crab pops out of a deep hole), towers (the moulds arrive: drag one, tap it and it flips to leave a tower; shells to push into the walls) or tide (the tide creeps in: dig a channel and the sea fills the moat, a hermit crab moves in, the big wave). The jet ski: ride (the calm bay inside the buoy rope: the life jacket first, then carve, spray, splash the swimmers, close a loop of wake for the jumping fish), waves (bigger waves roll in from the open sea: steer into them to jump, a spin on the biggest) or race (out round the big orange buoy and back to the flags against the jet ski man; the winner rings the bell)' },
+    round: { default: 'ride', values: [...JET_ROUNDS, ...SAND_ROUNDS, ...SNORKEL_ROUNDS], doc: 'the round of a stop. The snorkel: float (splash in off the boat\'s ladder and lead Kaylee over the coral, the damselfish crowd parting round her; bump a coral head and a little fish pops out, the urchins boing her off), follow (the parrotfish swims ahead and waits: through the gap between the rocks, over the sand with the giant clam, into the garden) or cuttle (the cuttlefish in the garden changes color as she comes close, rainbow, stripes, pink; Mommy\'s camera snaps the fish for her book). The sandcastle: dig (dig holes and moats with her finger, the sand piling up beside them; a ghost crab pops out of a deep hole), towers (the moulds arrive: drag one, tap it and it flips to leave a tower; shells to push into the walls) or tide (the tide creeps in: dig a channel and the sea fills the moat, a hermit crab moves in, the big wave). The jet ski: ride (the calm bay inside the buoy rope: the life jacket first, then carve, spray, splash the swimmers, close a loop of wake for the jumping fish), waves (bigger waves roll in from the open sea: steer into them to jump, a spin on the biggest) or race (out round the big orange buoy and back to the flags against the jet ski man; the winner rings the bell)' },
   },
   sections: [
     {
@@ -83,6 +87,17 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
         { label: 'Dig: drag through the sand, pile walls, a crab in a deep hole; bury Daddy', params: { round: 'dig' }, also: [{ label: 'tune the feel', params: { round: 'dig' }, flags: { feel: '1' } }] },
         { label: 'Bucket towers: drag a mould, tap it to flip; shells into the walls', params: { round: 'towers' } },
         { label: 'The tide comes in: dig a channel to fill the moat', params: { round: 'tide' } },
+      ],
+    },
+    {
+      id: 'snorkel',
+      name: 'Snorkeling at Ko Kudi (greybox): lead Kaylee over the reef, half under the water',
+      params: ['round', 'flags', 'book'],
+      group: 'Snorkeling at Ko Kudi (greybox)',
+      links: [
+        { label: 'Float: splash in, lead her over the coral, the damselfish part round her', params: { round: 'float' }, also: [{ label: 'tune the feel', params: { round: 'float' }, flags: { feel: '1' } }] },
+        { label: 'Follow the parrotfish through the gap to the garden', params: { round: 'follow' } },
+        { label: 'The cuttlefish changes color; snap the fish', params: { round: 'cuttle' } },
       ],
     },
   ],

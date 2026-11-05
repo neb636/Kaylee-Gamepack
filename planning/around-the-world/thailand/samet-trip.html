@@ -16,10 +16,10 @@
   "title": "Koh Samet: Kaylee's island",
   "icon": "🏝️",
   "kind": "Family trip: an open island",
-  "updated": "2026-11-04",
-  "status": { "label": "Greyboxes 1-4 built: the jet ski, the island, Mommy’s phone and the animal book, the sandcastle", "tone": "pink" },
+  "updated": "2026-11-05",
+  "status": { "label": "Greyboxes 1-5 built: the jet ski, the island, Mommy’s phone and the animal book, the sandcastle, the snorkel", "tone": "pink" },
   "pitch": "Mommy, Daddy and Kaylee take the speedboat to **Koh Samet**, a little island of white sand off Rayong. The whole island is **one world she roams by herself** (in the spirit of cozy island games like Alba): sandy paths, five real beaches, the green taxi, the sea all round, and real island animals to snap with Mommy's phone for her animal book. On the beaches she **rides the jet ski** with Daddy, builds a sandcastle the waves fill, snorkels with the fish at Ko Kudi and plays hide and seek by the big driftwood tree. At night the fire dancers light up the beach for her. Every word is spoken.",
-  "next": "Dad plays **[the sandcastle](#/world/thailand/samet-trip/sandcastle?round=dig)** on the iPad: drag through the sand to dig a moat (the walls pile up beside it), start on a pile to pat it taller, dig deep for the ghost crab, and rub sand over Daddy until only his head and toes stick out (tap his head: he sneezes). Then **[the towers](#/world/thailand/samet-trip/sandcastle?round=towers)** (tap a mould: it hops onto the castle and flips; drag one anywhere first; drag shells into a tower) and **[the tide](#/world/thailand/samet-trip/sandcastle?round=tide)** (dig a channel from the moat to the sea and the water rushes in). Tune how the sand digs and the water runs with **[?feel=1](#/world/thailand/samet-trip/sandcastle?round=dig&feel=1)**. Then **greybox 5: the snorkel**.",
+  "next": "Dad plays **[the snorkel](#/world/thailand/samet-trip/snorkel?round=float)** on the iPad: she splashes in off the boat’s ladder; hold a finger ahead of her and she swims after it (far ahead: she kicks fast, bubbles streaming), the blue damselfish part round her, bump a coral head (a little fish tells her off) or an urchin (boing!), swim up to Daddy (a bubble ring). Then **[follow the parrotfish](#/world/thailand/samet-trip/snorkel?round=follow)** through the gap between the rocks to the garden, and **[the cuttlefish](#/world/thailand/samet-trip/snorkel?round=cuttle)** (swim closer: rainbow, stripes, pink; 📷 snaps the fish for her book). Tune the swimming, the fish and the half-under camera with **[?feel=1](#/world/thailand/samet-trip/snorkel?round=float&feel=1)**. Then **greybox 6: lunch and hide and seek**.",
   "facts": [
     { "icon": "⏱️", "value": "15-25 min", "label": "a whole day on the island, all four stops and the fire show" },
     { "icon": "👆", "value": "230-350", "label": "touches" },
@@ -427,7 +427,7 @@
           { "n": 4, "id": "book", "name": "The animal book" },
           { "n": 5, "id": "jetski", "name": "Jet ski: ride", "query": "round=ride" },
           { "n": 6, "id": "sandcastle", "name": "Sandcastle: dig", "query": "round=dig" },
-          { "n": 7, "id": "snorkel", "name": "Snorkel: float and look", "query": "round=float", "status": "todo" },
+          { "n": 7, "id": "snorkel", "name": "Snorkel: float and look", "query": "round=float" },
           { "n": 8, "id": "deck", "name": "Lunch on the deck at Ao Prao", "status": "todo" },
           { "n": 9, "id": "hideseek", "name": "Hide and seek: easy hides", "query": "round=1", "status": "todo" },
           { "n": 10, "id": "sunset", "name": "Finale: sunset at the driftwood tree", "query": "flags=all", "status": "todo" },
@@ -446,7 +446,9 @@
           { "id": "sandcastle", "name": "Sandcastle: bucket towers and shells (a moat already dug)", "query": "round=towers" },
           { "id": "sandcastle", "name": "Sandcastle: the tide comes in (dig a channel, the moat fills)", "query": "round=tide" },
           { "id": "sandcastle", "name": "Sandcastle: tune the sand, the water and the tide", "query": "round=dig&feel=1" },
-          { "id": "snorkel", "name": "Snorkel: the cuttlefish", "query": "round=cuttle", "status": "todo" },
+          { "id": "snorkel", "name": "Snorkel: follow the parrotfish through the gap", "query": "round=follow" },
+          { "id": "snorkel", "name": "Snorkel: the cuttlefish", "query": "round=cuttle" },
+          { "id": "snorkel", "name": "Snorkel: tune the swimming, the fish and the half-under camera", "query": "round=float&feel=1" },
           { "id": "hideseek", "name": "Hide and seek: her turn to hide", "query": "round=hide", "status": "todo" },
           { "id": "book", "name": "The animal book, nearly full", "query": "book=monitor,squirrel,macaque,hornbill,heron,tern,crab,parrotfish,damselfish,cuttlefish,urchin,coral" },
           { "id": "island", "name": "Mommy’s phone out at Ao Wong Duan (the hornbill, the fish, the cuttlefish)", "query": "at=wongduan&phone=1" },
@@ -485,8 +487,8 @@
           { "n": 2, "title": "Greybox 2: the island to roam", "status": "done", "date": "2026-11-04", "pr": 326, "md": "The open world itself, in blocks: the coastline and hills at 1:10, the five beaches, the paths over the rocks, the green taxi, Na Dan pier. Lead-to-walk, gallop, the floatie swim, Mommy and Daddy following, the day's light moving with `flags`, 20+ pokes, the pink flags. **The riskiest tech:** a world ~10× the house's size at 60 fps on the iPad (see the tech plan)." },
           { "n": 3, "title": "Greybox 3: Mommy's phone and the animal book", "status": "done", "date": "2026-11-04", "md": "The camera mode, the 14 animals with simple behaviors (wander, flee, perch, swim), the book pages, the beach clean." },
           { "n": 4, "title": "Greybox 4: the sandcastle", "status": "done", "date": "2026-11-04", "md": "The diggable sand patch (a deforming height field), bucket towers, the tide and the channel, burying Daddy." },
-          { "n": 5, "title": "Greybox 5: the snorkel", "status": "next", "md": "The snorkel boat ride, Ko Kudi's reef (its own scene), the half-underwater camera, the fish crowd, the parrotfish to follow, the cuttlefish." },
-          { "n": 6, "title": "Greybox 6: lunch and hide and seek", "status": "todo", "md": "The resort deck at Ao Prao, the driftwood tree, Daddy's hides and his silly search." },
+          { "n": 5, "title": "Greybox 5: the snorkel", "status": "done", "date": "2026-11-05", "md": "The snorkel boat ride, Ko Kudi's reef (its own scene), the half-underwater camera, the fish crowd, the parrotfish to follow, the cuttlefish." },
+          { "n": 6, "title": "Greybox 6: lunch and hide and seek", "status": "next", "md": "The resort deck at Ao Prao, the driftwood tree, Daddy's hides and his silly search." },
           { "n": 7, "title": "Greybox 7: getting there and the trip frame", "status": "todo", "md": "The 🏝️ pin on the Thailand map, packing, the speedboat, saving and coming back, `home` and Agong's wall." },
           { "n": 8, "title": "The look", "status": "todo", "md": "The island made beautiful: the real sand and water colors, palms, samet trees, pandanus, boulders, the umbrellas, the deck, the sky through the day, the reef. The characters (the jet ski man, the boat captain, the fire dancers). See “The look”." },
           { "n": 9, "title": "The finale: sunset and the fire show", "status": "todo", "md": "Greybox, then its look." },
@@ -604,7 +606,6 @@
             "title": "Greybox 4: the sandcastle at Ao Hin Khok",
             "date": "2026-11-04",
             "status": "done",
-            "open": true,
             "summary": "Her finger moves the real sand on Ao Hin Khok’s beach: dig moats and holes (the sand piles up beside them), pat walls taller, flip three moulds into towers, push shells into them, dig a channel and watch the tide fill the moat, and bury Daddy. Opened from the sandcastle stop on the island; back to the island with its pink flag once the moat has filled.",
             "blocks": [
               {
@@ -640,6 +641,48 @@
                   "The walls are a little spiky where a ring of strokes piles up; the look gate smooths them.",
                   "Daddy’s blanket is four soft mounds, not real sand on the height field.",
                   "Automated browsers run at 30 fps: measure the water’s rush on the iPad with `?fps=1`."
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Greybox 5: snorkeling at Ko Kudi",
+            "date": "2026-11-05",
+            "status": "done",
+            "open": true,
+            "summary": "Her finger leads Kaylee over Ko Kudi’s reef, face down on the surface in a pink mask and flippers, with the camera half under the water and half above. Three rounds that move on by themselves: float (the damselfish crowd parting round her), follow (the parrotfish leads her through the gap to the garden) and the cuttlefish that changes color as she comes close. Opened from the snorkel boat at Ao Wong Duan; back there with the pink flag up and the fish she snapped in her book.",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "**The half-under camera** (`snorkel/snorkel.ts` `render`): one camera just over the surface, drawn twice with a scissor. Above the waterline: the sky, the sea’s top out to the horizon, the boat, the rocks and Ko Kudi. Below it: the same view with the sea’s top taken away, the reef in the water’s blue fog, sunbeams. The line sits where the surface is at her distance, so it runs right through her, and a wavy DOM line plus a blue tint over the water part (`SnorkelScreen.tsx`) sell it. The air pass skips everything under the water.",
+                  "**The swim** (the island’s verb): hold a finger and she swims after it, slow when it’s near her, a fast kick when it’s far ahead (a dead zone round her); tap a spot and she swims there; let go and she glides to a stop. Her finger is read on the screen (an offset from her, up the screen counting for more because the camera is low). Kaylee is the modelled toy tipped face down, its walk kicking her legs; a mask and snorkel on her head, pink flippers on her feet.",
+                  "**Float** (`?round=float`): the captain toots, she hops off the ladder and splashes in (any touch skips it). 90 blue damselfish swirl round her, part where she swims and close behind. Coral patches and swaying soft corals over the sand; coral heads come up to just under the surface: bump one and a little orange fish pops out with cross bubbles; the prickly ones with urchins boing her off like a bouncy ball (she spins). After 28 m of swimming and 25 s (or 60 s) the parrotfish comes.",
+                  "**Follow** (`?round=follow`): the big rainbow parrotfish swims up to say hello, then leads from the first spot ahead of her: past the coral heads, through the gap between two rocks out of the water, over the sandy patch (a giant clam that shuts as she passes, a sea cucumber that wiggles), to the garden. It swims on only while she’s close, waits facing her with a come-on wiggle, and comes back for her if she wanders off.",
+                  "**The cuttlefish** (`?round=cuttle`): it hovers sand-colored in the middle of the garden (little yellow, orange and pink fish round it). Closer: rainbow flashes, closer: purple and yellow stripes, closest: pink, with sparkles; then the 🐠 badge and the way back. Mommy’s camera (📷) snaps whatever is in view under the water (the parrotfish, the damselfish, the cuttlefish, urchins, coral) into her book.",
+                  "**Daddy** swims along behind her and catches up off screen if she leaves him far behind; swim up to him (or tap him) and he ducks under and blows a bubble ring her way. Pokes: Kaylee (a twirl and bubbles), the captain (toot and a wave), the parrotfish, the cuttlefish (a rainbow flash), the clam, the sea cucumber, the urchins, the coral heads.",
+                  "**Knobs** (`?feel=1`): swimming (speeds, dead zone, full speed distance, up-the-screen gain, getting going, glide, turn, kick rate, bump size, boing, bounce, float height), the fish (how far and fast the crowd parts, swirl, size, how closely it follows; the parrotfish’s speed, how close she must be, when it comes back; the cuttlefish’s three distances) and the rounds and camera (distance, height over the water, pitch, how far ahead, how far she sees under water). The graph: her finger’s lead against her speed and how far ahead the parrotfish is."
+                ]
+              },
+              {
+                "type": "callout",
+                "tone": "note",
+                "title": "Changed from the plan",
+                "items": [
+                  "No snorkel boat ride yet: the boat waits at the reef, and the ride out and back come with greybox 7’s trip frame.",
+                  "The rounds move on by themselves (28 m of swimming and 25 s, then the parrotfish; the garden, then the cuttlefish), like the jet ski and the sandcastle.",
+                  "Her finger is read on the screen (an offset from her) rather than a point on the water: with the camera this low, a point on the water jumps about."
+                ]
+              },
+              {
+                "type": "callout",
+                "tone": "warn",
+                "title": "Known small things",
+                "items": [
+                  "No voices yet (greybox): the captain’s “Masks on! Jump in!” and the cuttlefish fact come with the full loop.",
+                  "What Mommy’s camera snaps reaches the book when she goes back to the island (not on the reef).",
+                  "Face down, mostly her hair and back show from behind; the look gate may swing the camera a little to her side.",
+                  "Automated browsers run at 30 fps: check the frame rate on the iPad (two passes a frame, the air pass skips the reef)."
                 ]
               }
             ]
