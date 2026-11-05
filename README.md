@@ -262,7 +262,7 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [The "number 3" from the viewpoint: one, two, three, Mommy's photo, ✈️🏠](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/three?stops=mushrooms,rice,salt)
   - [Home: the flight, Agong's photo, the frame on his wall, the stamp](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/nan-trip/home)
 
-**Koh Samet Island** (in the works) (In the works (greyboxes 1 to 4 of the plan). Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski and the sand; ?fps=1 or ?debug=1 shows the frame rate.)
+**Koh Samet Island** (in the works) (In the works (greyboxes 1 to 5 of the plan). Add ?feel=1 to tune how Kaylee walks and swims, the camera, Mommy's phone, the taxi, the jet ski, the sand and the snorkel; ?fps=1 or ?debug=1 shows the frame rate.)
 
 - **The island (greybox)**
   - [Land at Na Dan pier in the morning: walk, swim, the green taxi](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/island?at=nadan&feel=1))
@@ -286,6 +286,10 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [Dig: drag through the sand, pile walls, a crab in a deep hole; bury Daddy](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/sandcastle?round=dig) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/sandcastle?round=dig&feel=1))
   - [Bucket towers: drag a mould, tap it to flip; shells into the walls](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/sandcastle?round=towers)
   - [The tide comes in: dig a channel to fill the moat](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/sandcastle?round=tide)
+- **Snorkeling at Ko Kudi (greybox)**
+  - [Float: splash in, lead her over the coral, the damselfish part round her](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/snorkel?round=float) ([tune the feel](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/snorkel?round=float&feel=1))
+  - [Follow the parrotfish through the gap to the garden](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/snorkel?round=follow)
+  - [The cuttlefish changes color; snap the fish](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/samet-trip/snorkel?round=cuttle)
 
 **Finale**: [Family party (coming soon)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/party/soon?stamps=all)
 

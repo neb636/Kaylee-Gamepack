@@ -6,6 +6,8 @@
 // filmed: snapping the animals at Ao Prao with the phone, and the beach clean (lift the bottle, the hermit crab, the bin).
 // Greybox 4, the sandcastle at Ao Hin Khok: the bare beach, the towers round with its moat, the tide with a channel dug
 // to the sea (the moat fills); filmed: digging a moat round and a channel to the sea, and burying Daddy.
+// Greybox 5, snorkeling at Ko Kudi: the splash in, the parrotfish arriving, the garden; filmed: leading Kaylee over the
+// reef (the damselfish parting round her) and following the parrotfish toward the gap.
 // Not part of the app: Node runs it, Vite never sees it.
 
 const ready = (page) => page.waitForFunction(() => window.__thaiSametQA?.().phase, null, { timeout: 20000 })
@@ -59,7 +61,31 @@ export const screens = [
       await page.waitForTimeout(5000)
     },
   },
+  { name: 'thailand-samet-snorkel-float', hash: '#/world/thailand/samet-trip/snorkel?round=float', reset: true, wait: 3500 },
+  { name: 'thailand-samet-snorkel-follow', hash: '#/world/thailand/samet-trip/snorkel?round=follow', reset: true, wait: 3500 },
+  {
+    name: 'thailand-samet-snorkel-cuttle',
+    hash: '#/world/thailand/samet-trip/snorkel?round=cuttle',
+    reset: true,
+    wait: 2500,
+    act: async (page) => snorkelLead(page, 'cuttleAt', 5000),
+  },
 ]
+
+/** Holds a finger on something the snorkel's QA reports a screen point for (`parrotAt`, `cuttleAt`), following it. */
+async function snorkelLead(page, key, ms) {
+  const vp = page.viewportSize()
+  let q = await page.evaluate(() => window.__thaiSametQA?.())
+  const at = (p) => [Math.max(5, Math.min(vp.width - 5, p.x)), Math.max(120, Math.min(vp.height - 5, p.y))]
+  await page.mouse.move(...at(q[key]))
+  await page.mouse.down()
+  for (let t = 0; t < ms; t += 250) {
+    q = await page.evaluate(() => window.__thaiSametQA?.())
+    await page.mouse.move(...at(q[key]))
+    await page.waitForTimeout(250)
+  }
+  await page.mouse.up()
+}
 
 /** Digs a channel from the moat's sea side down to the water (the castle and the sea's screen points from QA). */
 async function sandChannel(page) {
@@ -82,6 +108,36 @@ async function sandChannel(page) {
 
 /** Filmed moments (scripts/qa-motion.mjs). */
 export const motion = [
+  {
+    name: 'thailand-samet-snorkel-lead',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/snorkel?round=float`)
+      await ready(page)
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      // Lead her over the reef, weaving left and right (the crowd parts round her, bubbles stream off her flippers).
+      const vp = page.viewportSize()
+      await page.mouse.move(vp.width / 2, vp.height * 0.25)
+      await page.mouse.down()
+      for (let i = 0; i < 36; i++) {
+        await page.mouse.move(vp.width / 2 + Math.sin(i / 5) * vp.width * 0.25, vp.height * 0.25)
+        await page.waitForTimeout(250)
+      }
+      await page.mouse.up()
+    },
+  },
+  {
+    name: 'thailand-samet-snorkel-follow',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/snorkel?round=follow`)
+      await ready(page)
+      await page.waitForTimeout(3000)
+    },
+    act: async (page) => snorkelLead(page, 'parrotAt', 9000),
+  },
   {
     name: 'thailand-samet-sand-dig',
     seconds: 10,
