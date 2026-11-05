@@ -955,9 +955,18 @@ export class Sandcastle implements World3D {
   }
 
   private addTower(kind: MouldKind, a: number, v: number, now = false) {
+    // Slumped towers leave the list (their slot, and its tap target, goes to the next one); past MAX_TOWERS the
+    // oldest standing one slumps and goes at once.
+    const gone = (tw: Tower) => {
+      this.scene.remove(tw.m.root)
+      if (this.hermitState.tower === tw) this.hermitState.tower = null
+    }
+    this.towers = this.towers.filter((tw) => (tw.slump < 0 ? true : (gone(tw), false)))
     if (this.towers.length >= MAX_TOWERS) {
-      const old = this.towers.find((tw) => tw.slump < 0)
-      if (old) this.slump(old)
+      const old = this.towers[0]
+      this.slump(old)
+      gone(old)
+      this.towers.shift()
     }
     const m = towerModel(this.bag, kind)
     const y = this.sand.heightAt(a, v)
