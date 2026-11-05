@@ -21,7 +21,7 @@ import { LabAi } from './lab-ai';
 const labAi = new LabAi();
 const repoRoot = app.isPackaged ? null : process.env.STUDIO_REPO_ROOT || path.resolve(__dirname, '../../..');
 let quitting = false;
-// Same artwork as iOS Add to Home Screen, using its larger existing web export for the Dock.
+// Window icon on Windows/Linux. macOS uses the native icon from the app bundle.
 const appIcon = app.isPackaged ? path.join(process.resourcesPath, 'icon.png') : path.resolve(__dirname, '../../../public/icons/icon-512.png');
 // `npm run studio` already serves its own checkout (STUDIO_GAME_PORT); every other piece of work gets its own server.
 const launcherPort = !app.isPackaged && repoRoot ? Number(process.env.STUDIO_GAME_PORT) || undefined : undefined;
@@ -107,7 +107,6 @@ app.whenReady().then(async () => {
   if (app.isPackaged) {
     await studioServer.start(path.join(__dirname, "../../dist"));
   }
-  app.dock?.setIcon(appIcon);
   registerIpc(ptyManager, agentSessionManager, workspaceServices);
   const trusted = (event: Electron.IpcMainInvokeEvent | Electron.IpcMainEvent) => {
     if (event.senderFrame !== event.sender.mainFrame) throw new Error('Only the studio can use native APIs');
