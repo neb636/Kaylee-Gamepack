@@ -27,6 +27,7 @@ interface Session {
   inputWasEdited: boolean;
   lastOutputAt: number;
   settled: boolean;
+  settingOutput?: Terminal;
   settleTimer?: ReturnType<typeof setTimeout>;
   /** Output parsed but not yet sent to the window, sent in one message per frame. */
   pendingData: string;
@@ -75,7 +76,7 @@ export class AgentSessionManager {
     this.sessions.set(session.id, session);
     // Headless parsing owns terminal replies, including when no renderer is attached.
     terminal.onData((data) => { if (!session.disposed && session.status.lifecycle !== "exited") processInstance.write(data); });
-    processInstance.onData((data) => { session.lastOutputAt = Date.now(); terminal.write(data, () => {
+    processInstance.onData((data) => { session.settingOutput?.write(data); session.lastOutputAt = Date.now(); terminal.write(data, () => {
       if (session.disposed) return;
       session.pendingData += data;
       session.dataTimer ??= setTimeout(() => this.emitPending(session), DATA_BATCH_MS);
@@ -115,6 +116,13 @@ export class AgentSessionManager {
       this.detect(s);
       if (!s.status.canSubmit || s.disposed) throw new Error(s.status.reason);
       if (request.intent === "plan" && s.status.activity !== "ready") throw new Error("Wait until the CLI is ready before sending for planning.");
+      if (submission.settings?.length) {
+        if (s.status.activity !== "ready") throw new Error("Wait until the CLI is ready before applying model and effort.");
+        for (const setting of submission.settings) {
+          stage = "settings";
+          await this.applySetting(s, setting);
+        }
+      }
       if (submission.prefix) {
         stage = "prefix";
         s.process.write(submission.prefix.input);
@@ -203,6 +211,44 @@ export class AgentSessionManager {
   }
   terminateForOwner(owner: WebContents): void { for (const s of this.sessions.values()) if (s.owner === owner) this.terminate(s.id); }
   terminateAll(): void { for (const id of this.sessions.keys()) this.terminate(id); }
+
+  /** Observe only output produced by this command, never a confirmation left in the transcript. */
+  private async applySetting(s: Session, setting: NonNullable<ReturnType<AgentProviderAdapter["submit"]>["settings"]>[number]): Promise<void> {
+    const waitFor = async (check: () => boolean) => {
+      const deadline = Date.now() + 5000;
+      do {
+        await new Promise(resolve => setTimeout(resolve, 50));
+        await this.flush(s);
+        if (s.settingOutput) await new Promise<void>(resolve => s.settingOutput!.write("", resolve));
+        this.detect(s);
+        if (s.status.lifecycle !== "alive" || s.status.activity === "waiting-for-input") break;
+        if (check()) return;
+      } while (Date.now() < deadline);
+      throw new Error("Model or effort could not be confirmed. Prompt was not sent. Inspect the terminal before retrying.");
+    };
+    s.inputWasEdited = true;
+    s.process.write(setting.command);
+    await waitFor(() => {
+      const screen = this.observe(s);
+      const editor = [...screen.lines.slice(Math.max(0, screen.cursorY - 12), screen.cursorY), screen.cursorLine.slice(0, screen.cursorX)].join("");
+      return s.status.inputState === "draft" && editor.replace(/\s/g, "").endsWith(setting.command.replace(/\s/g, ""));
+    });
+    // A separate parser handles ANSI cursor positioning without inheriting old confirmations.
+    const output = new Terminal({ cols: s.terminal.cols, rows: s.terminal.rows, scrollback: 100, allowProposedApi: true });
+    s.settingOutput = output;
+    try {
+      s.process.write("\r");
+      s.inputWasEdited = false;
+      await waitFor(() => {
+        const buffer = output.buffer.active;
+        const text = Array.from({ length: buffer.length }, (_, i) => {
+          const wrapped = buffer.getLine(i + 1)?.isWrapped;
+          return (buffer.getLine(i)?.translateToString(!wrapped) ?? "") + (wrapped ? "" : "\n");
+        }).join("").replace(/\s+/g, " ");
+        return s.status.canSubmit && s.status.activity === "ready" && setting.acknowledged(text);
+      });
+    } finally { s.settingOutput = undefined; output.dispose(); }
+  }
 
   private flush(s: Session): Promise<void> {
     if (s.disposed) return Promise.reject(new Error("Session was closed."));

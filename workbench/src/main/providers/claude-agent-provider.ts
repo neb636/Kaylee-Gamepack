@@ -1,3 +1,4 @@
+import { validateModelSettings } from "../../shared/agent-models";
 import type { AgentProviderAdapter, AgentSubmission } from "../agent-provider";
 import type { AgentLaunchProfile } from "../agent-launch-profiles";
 import { detectCliScreen, pastePrompt } from "./cli-screen";
@@ -16,9 +17,17 @@ export class ClaudeAgentProvider implements AgentProviderAdapter {
   }
   detect = detectCliScreen("claude");
   readonly capabilities = { planning: true };
-  submit = (request: AgentPromptRequest): AgentSubmission => ({ paste: pastePrompt(request.prompt),
-    prefix: request.intent === "plan" ? { input: "/plan ", acknowledged: (screen) =>
-      /^\s*[❯>]\s+\/plan(?:\s|$)/.test(screen.cursorLine) && screen.cursorX === screen.cursorLine.indexOf("/plan") + 6,
-    } : undefined,
-  });
+  submit = (request: AgentPromptRequest): AgentSubmission => {
+    if (request.settings) validateModelSettings(this.id, request.settings);
+    return {
+      paste: pastePrompt(request.prompt),
+      settings: request.settings ? [
+        { command: `/model ${request.settings.model}`, acknowledged: output => new RegExp(`Set model to ${request.settings!.model}\\b`, "i").test(output) },
+        { command: `/effort ${request.settings.effort}`, acknowledged: output => output.includes(`Set effort level to ${request.settings!.effort} `) },
+      ] : undefined,
+      prefix: request.intent === "plan" ? { input: "/plan ", acknowledged: (screen) =>
+        /^\s*[❯>]\s+\/plan(?:\s|$)/.test(screen.cursorLine) && screen.cursorX === screen.cursorLine.indexOf("/plan") + 6,
+      } : undefined,
+    };
+  };
 }

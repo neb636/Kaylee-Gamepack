@@ -148,13 +148,14 @@ export interface AgentProviderInfo {
 }
 
 export interface AgentPromptRequest {
+  settings?: import("./agent-models").AgentModelSettings;
   prompt: string;
   intent: "default" | "plan";
 }
 
 export interface AgentDeliveryResult {
   outcome: "submitted" | "not-sent" | "uncertain";
-  stage: "none" | "prefix" | "paste" | "enter" | "unknown";
+  stage: "none" | "settings" | "prefix" | "paste" | "enter" | "unknown";
   message: string;
 }
 
@@ -171,6 +172,7 @@ export interface AgentViewState {
   split?: number;
   quotations?: PromptQuotation[];
   intent?: AgentPromptRequest["intent"];
+  modelSettings?: Record<string, import("./agent-models").AgentModelSettings>;
   composerRevision?: number;
   promptSelections?: PromptSelections;
   runIn?: { kind: "checkout" } | { kind: "worktree"; branch: string };

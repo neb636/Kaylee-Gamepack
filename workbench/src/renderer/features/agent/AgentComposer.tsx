@@ -1,3 +1,4 @@
+import { AGENT_MODELS, modelSettings } from "../../../shared/agent-models";
 import { useRef, useState } from "react";
 import {
   Button as AriaButton,
@@ -43,7 +44,7 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
 }) {
   const target = { workspaceId, viewId };
   const runtime = useComposerState((s) => s.views[viewId] ?? emptyComposerRuntime);
-  const patch = (value: Pick<AgentViewState, "draft" | "quotations" | "intent">) => patchComposer(target, value);
+  const patch = (value: Pick<AgentViewState, "draft" | "quotations" | "intent" | "modelSettings">) => patchComposer(target, value);
   const promptRef = useRef<HTMLTextAreaElement>(null);
   const [preview, setPreview] = useState<PromptPreview>();
   const [historyId, setHistoryId] = useState<string>();
@@ -53,9 +54,13 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
   const planning = session?.planning ?? false;
   const wantsPlan = state.intent === "plan";
   const busy = runtime.sending || runtime.launching;
+  const providerId = state.providerId ?? "";
+  const settings = modelSettings(providerId, state.modelSettings?.[providerId]);
+  const choices = AGENT_MODELS[providerId] ?? [];
+  const setSettings = (model: string, effort: string) => patch({ modelSettings: { ...state.modelSettings, [providerId]: { model, effort } } });
   const hasDraft = Boolean(state.draft?.trim());
   const canSend = session
-    ? Boolean(hasDraft && status?.canSubmit && !busy && (!wantsPlan || (planning && status.activity === "ready")))
+    ? Boolean(hasDraft && status?.canSubmit && (!settings || status.activity === "ready") && !busy && (!wantsPlan || (planning && status.activity === "ready")))
     : Boolean(hasDraft && canLaunch && !busy && !wantsPlan);
   const historyEntry = runtime.history.find((entry) => entry.id === historyId) ?? runtime.history[0];
   const assembly = () => services.commands.execute<PromptPreview>("agent.composer.preview", target);
@@ -68,10 +73,11 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
     await services.commands.execute("agent.composer.quote", { ...target, text: session?.selection ?? "" });
     promptRef.current?.focus();
   };
-  const feedback = error || (runtime.launching ? "Starting the CLI…" : runtime.sending ? "Delivering prompt…" : runtime.result?.outcome === "uncertain"
+  const feedback = error || (runtime.launching ? "Starting the CLI…" : runtime.sending ? "Applying model and effort, then delivering prompt…" : runtime.result?.outcome === "uncertain"
     ? `Delivery uncertain. ${runtime.result.message}` : runtime.result?.outcome === "not-sent"
       ? `Not sent. ${runtime.result.message}` : !session ? "" : !status?.canSubmit ? status?.reason
-        : wantsPlan && status.activity !== "ready" ? "Wait until the CLI is ready to send for planning."
+        : settings && status.activity !== "ready" ? "Wait until the CLI is ready to apply model and effort."
+          : wantsPlan && status.activity !== "ready" ? "Wait until the CLI is ready to send for planning."
           : runtime.result?.message || status?.reason);
   const needsHandoff = session && (!status?.canSubmit || runtime.result?.outcome === "uncertain" || runtime.result?.outcome === "not-sent");
 
@@ -142,6 +148,18 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
             const Widget = widget.component;
             return <Widget key={widget.id} workspaceId={workspaceId} viewId={viewId} />;
           })}
+          {settings && <>
+            <Select aria-label="Model" selectedKey={settings.model} isDisabled={busy}
+              onSelectionChange={key => { const model = choices.find(m => m.id === key); if (model) setSettings(model.id, model.efforts.includes(settings.effort) ? settings.effort : "medium"); }}>
+              <AriaButton className="composer-chip"><SelectValue /><ChevronDownIcon size={12} /></AriaButton>
+              <Popover className="wb-popover" placement="top end"><ListBox>{choices.map(model => <ListBoxItem key={model.id} id={model.id}>{model.label}</ListBoxItem>)}</ListBox></Popover>
+            </Select>
+            <Select aria-label="Effort" selectedKey={settings.effort} isDisabled={busy}
+              onSelectionChange={key => { if (key) setSettings(settings.model, String(key)); }}>
+              <AriaButton className="composer-chip"><SelectValue /><ChevronDownIcon size={12} /></AriaButton>
+              <Popover className="wb-popover" placement="top end"><ListBox>{choices.find(m => m.id === settings.model)?.efforts.map(effort => <ListBoxItem key={effort} id={effort}>{effort}</ListBoxItem>)}</ListBox></Popover>
+            </Select>
+          </>}
           <Select aria-label="Mode" className="mode-select" selectedKey={wantsPlan ? "plan" : "default"}
             disabledKeys={planning || wantsPlan ? [] : ["plan"]} onSelectionChange={(key) => patch({ intent: key === "plan" ? "plan" : "default" })}>
             <AriaButton className="composer-chip"><SelectValue>{({ selectedText }) => selectedText}</SelectValue><ChevronDownIcon size={12} /></AriaButton>
