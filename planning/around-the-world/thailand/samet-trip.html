@@ -17,9 +17,9 @@
   "icon": "🏝️",
   "kind": "Family trip: an open island",
   "updated": "2026-11-04",
-  "status": { "label": "Greyboxes 1-2 built: the jet ski and the island to roam", "tone": "pink" },
+  "status": { "label": "Greyboxes 1-3 built: the jet ski, the island, Mommy’s phone and the animal book", "tone": "pink" },
   "pitch": "Mommy, Daddy and Kaylee take the speedboat to **Koh Samet**, a little island of white sand off Rayong. The whole island is **one world she roams by herself** (in the spirit of cozy island games like Alba): sandy paths, five real beaches, the green taxi, the sea all round, and real island animals to snap with Mommy's phone for her animal book. On the beaches she **rides the jet ski** with Daddy, builds a sandcastle the waves fill, snorkels with the fish at Ko Kudi and plays hide and seek by the big driftwood tree. At night the fire dancers light up the beach for her. Every word is spoken.",
-  "next": "Dad plays **[the island](#/world/thailand/samet-trip/island?at=nadan)** on the iPad: lead Kaylee off Na Dan pier, along the sand, into the sea in her floatie, onto the green taxi over the hill to Ao Prao; then **[Sai Kaew with the jet ski hers](#/world/thailand/samet-trip/island?at=saikaew&flags=jetski)** to ride round the coast. Tune how she walks and swims with **[?feel=1](#/world/thailand/samet-trip/island?at=saikaew&feel=1)** and check the frame rate with **[?fps=1](#/world/thailand/samet-trip/island?at=saikaew&fps=1)**. The **[open questions](#questions)** still stand (who drove the jet ski, the jet ski man's and the taxi driver's animals). Then **greybox 3: Mommy's phone and the animal book**.",
+  "next": "Dad plays **[Mommy’s phone at Ao Prao](#/world/thailand/samet-trip/island?at=prao&phone=1)** on the iPad: tap the pink phone, tap the monitor lizard, the squirrel on the palm, the flying fox asleep in the samet tree; walk up close for a gold photo. Then **[Ao Wong Duan](#/world/thailand/samet-trip/island?at=wongduan&phone=1)** (the hornbill in the tamarind; swim out for the parrotfish, the damselfish and the cuttlefish), the **[book](#/world/thailand/samet-trip/book?at=saikaew)**, and the beach clean (tap the bottle on the wet sand, carry it to the green bin). Tune the phone with **[?feel=1](#/world/thailand/samet-trip/island?at=prao&phone=1&feel=1)**. Then **greybox 4: the sandcastle**.",
   "facts": [
     { "icon": "⏱️", "value": "15-25 min", "label": "a whole day on the island, all four stops and the fire show" },
     { "icon": "👆", "value": "230-350", "label": "touches" },
@@ -424,7 +424,7 @@
           { "n": 1, "id": "pack", "name": "Pack for the island (sunny: swimsuit, sun hat, floaties, bucket)", "status": "todo" },
           { "n": 2, "id": "speedboat", "name": "The speedboat from Ban Phe", "status": "todo" },
           { "n": 3, "id": "island", "name": "The island (land at Na Dan)", "query": "at=nadan" },
-          { "n": 4, "id": "book", "name": "The animal book", "status": "todo" },
+          { "n": 4, "id": "book", "name": "The animal book" },
           { "n": 5, "id": "jetski", "name": "Jet ski: ride", "query": "round=ride" },
           { "n": 6, "id": "sandcastle", "name": "Sandcastle: dig", "query": "round=dig", "status": "todo" },
           { "n": 7, "id": "snorkel", "name": "Snorkel: float and look", "query": "round=float", "status": "todo" },
@@ -446,7 +446,12 @@
           { "id": "sandcastle", "name": "Sandcastle: the tide comes in", "query": "round=tide", "status": "todo" },
           { "id": "snorkel", "name": "Snorkel: the cuttlefish", "query": "round=cuttle", "status": "todo" },
           { "id": "hideseek", "name": "Hide and seek: her turn to hide", "query": "round=hide", "status": "todo" },
-          { "id": "book", "name": "The animal book, nearly full", "query": "book=monitor,squirrel,macaque,hornbill,heron,tern,crab,parrotfish,damselfish,cuttlefish,urchin,coral", "status": "todo" }
+          { "id": "book", "name": "The animal book, nearly full", "query": "book=monitor,squirrel,macaque,hornbill,heron,tern,crab,parrotfish,damselfish,cuttlefish,urchin,coral" },
+          { "id": "island", "name": "Mommy’s phone out at Ao Wong Duan (the hornbill, the fish, the cuttlefish)", "query": "at=wongduan&phone=1" },
+          { "id": "island", "name": "Mommy’s phone at Ao Prao at dusk (the flying fox flying)", "query": "at=prao&phone=1&time=golden" },
+          { "id": "island", "name": "Hin Khok and the mermaid: the heron, the urchins, the coral; the beach clean", "query": "at=hinkhok&phone=1" },
+          { "id": "island", "name": "Tune Mommy’s phone", "query": "at=prao&phone=1&feel=1" },
+          { "id": "book", "name": "The book, all fourteen (the gold star)", "query": "at=saikaew&flags=all&book=all" }
         ] }
       ]
     },
@@ -476,8 +481,8 @@
           { "n": 0, "title": "This plan", "status": "done", "date": "2026-11-04", "pr": 312, "md": "Dad reads it and answers the open questions." },
           { "n": 1, "title": "Greybox 1: the jet ski", "status": "done", "date": "2026-11-04", "pr": 322, "md": "Sai Kaew bay in the toon look with placeholder shapes: the beach strip, the hut, the buoy rope, the box jet ski with Kaylee and Daddy on it. The three rounds (`ride`, `waves`, `race`), the wake loop, silly beaching. **Feel on knobs** (`?feel=1`). Built in the island's real coordinates from day one (`island/layout.ts`) so it drops straight into step 2. The riskiest-for-fun piece, and Dad's must-have, so it goes first." },
           { "n": 2, "title": "Greybox 2: the island to roam", "status": "done", "date": "2026-11-04", "pr": 326, "md": "The open world itself, in blocks: the coastline and hills at 1:10, the five beaches, the paths over the rocks, the green taxi, Na Dan pier. Lead-to-walk, gallop, the floatie swim, Mommy and Daddy following, the day's light moving with `flags`, 20+ pokes, the pink flags. **The riskiest tech:** a world ~10× the house's size at 60 fps on the iPad (see the tech plan)." },
-          { "n": 3, "title": "Greybox 3: Mommy's phone and the animal book", "status": "next", "md": "The camera mode, the 14 animals with simple behaviors (wander, flee, perch, swim), the book pages, the beach clean." },
-          { "n": 4, "title": "Greybox 4: the sandcastle", "status": "todo", "md": "The diggable sand patch (a deforming height field), bucket towers, the tide and the channel, burying Daddy." },
+          { "n": 3, "title": "Greybox 3: Mommy's phone and the animal book", "status": "done", "date": "2026-11-04", "md": "The camera mode, the 14 animals with simple behaviors (wander, flee, perch, swim), the book pages, the beach clean." },
+          { "n": 4, "title": "Greybox 4: the sandcastle", "status": "next", "md": "The diggable sand patch (a deforming height field), bucket towers, the tide and the channel, burying Daddy." },
           { "n": 5, "title": "Greybox 5: the snorkel", "status": "todo", "md": "The snorkel boat ride, Ko Kudi's reef (its own scene), the half-underwater camera, the fish crowd, the parrotfish to follow, the cuttlefish." },
           { "n": 6, "title": "Greybox 6: lunch and hide and seek", "status": "todo", "md": "The resort deck at Ao Prao, the driftwood tree, Daddy's hides and his silly search." },
           { "n": 7, "title": "Greybox 7: getting there and the trip frame", "status": "todo", "md": "The 🏝️ pin on the Thailand map, packing, the speedboat, saving and coming back, `home` and Agong's wall." },
@@ -493,7 +498,7 @@
       "icon": "✅",
       "blocks": [
         { "type": "log", "items": [
-          { "title": "Greybox 1: the jet ski at Hat Sai Kaew", "date": "2026-11-04", "status": "done", "pr": 322, "open": true, "summary": "Kaylee steers the jet ski with her finger, Daddy behind her, in the island's real coordinates: the calm bay, the waves, the race, the wake loop and the silly beaching, its feel on knobs.", "blocks": [
+          { "title": "Greybox 1: the jet ski at Hat Sai Kaew", "date": "2026-11-04", "status": "done", "pr": 322, "open": false, "summary": "Kaylee steers the jet ski with her finger, Daddy behind her, in the island's real coordinates: the calm bay, the waves, the race, the wake loop and the silly beaching, its feel on knobs.", "blocks": [
             { "type": "list", "items": [
               "**The island from the real map:** `island/layout.ts` holds OSM's real coastline of Ko Samet (way 26609854, 394 points at 1:10) and every beach's sand outline (OSM `natural=beach`), the plan's places from their lat/lon, and the bay laid out in the beach's own frame (`bay(u, v)`: along the sand, out to sea). `island/ground.ts` turns it into ground: wide crystal sand on the beaches, granite boulders and a quick rise elsewhere, a green spine of hills, shallows that slope away gently off the sand.",
               "**New in the engine, opt-in so the bay and Canada don't change:** `engine3d/terrain.ts` (a height field from data, toon vertex colors, `heightAt`/`shoreAt`, and a sea texture of depth and shore distance) and `engine3d/lagoon.ts` (tropical water: see-through mint shallows to turquoise, teal and blue in soft bands, a swash line sliding up the sand, rolling waves in the vertex shader that the jet ski rides exactly, lighter crests and white water on big ones, sun glints).",
@@ -520,7 +525,7 @@
               "WebKit on a Mac counts about 100 draw calls and ~420k triangles: measure on the iPad with `?fps` and `?debug=1` before greybox 2 makes the island bigger."
             ] }
           ] },
-          { "title": "Greybox 2: the island to roam", "date": "2026-11-04", "status": "done", "pr": 326, "open": true, "summary": "Kaylee roams the north half of Koh Samet by herself: she follows her finger along the sand, gallops, swims in her floatie, rides the green taxi round the road and the jet ski round the coast, and pokes everything; Mommy and Daddy follow, the pink flags stand on their beaches and the day moves with them.", "blocks": [
+          { "title": "Greybox 2: the island to roam", "date": "2026-11-04", "status": "done", "pr": 326, "open": false, "summary": "Kaylee roams the north half of Koh Samet by herself: she follows her finger along the sand, gallops, swims in her floatie, rides the green taxi round the road and the jet ski round the coast, and pokes everything; Mommy and Daddy follow, the pink flags stand on their beaches and the day moves with them.", "blocks": [
             { "type": "list", "items": [
               "**The island to roam** (`island/island.ts`, `?at=` one of nadan, saikaew, hinkhok, phai, wongduan, prao, deck, aonoina): the north half of Koh Samet at 1:10 as one world. **Lead-to-walk:** hold a finger and Kaylee trots after it, hold it far ahead and she gallops (sand puffs, hoofprints that the swash wipes off the wet sand), tap a spot and she walks there; she steers round loungers, palms and the forest's edge instead of stopping. Tap something far away (the taxi, a jet ski, a stop) and she walks to it, then uses it.",
               "**The floatie swim:** walk into the sea and she's in her pink-and-white floatie (her arm floaties pop on too), bobbing on the swell, paddling slower than she walks, out to 26 m from the shore. A big wave lifts her and spins the floatie round (“whee”).",
@@ -549,7 +554,50 @@
               "Mommy and Daddy hop along rather than walk (the code-built family toys have no legs).",
               "`time=night` is a first pass (the fire show's PR gives the night its look)."
             ] }
-          ] }
+          ] },
+          {
+            "title": "Greybox 3: Mommy’s phone and the animal book",
+            "date": "2026-11-04",
+            "status": "done",
+            "open": true,
+            "summary": "Mommy’s phone turns the island into a camera: tap an animal and it does something cute for the photo, which flies into Kaylee’s animal book. Fourteen real Samet animals live on the island with their own ways (wander, flee, perch, swim), and the beach clean is the side verb.",
+            "blocks": [
+              {
+                "type": "list",
+                "items": [
+                  "**The phone** (`book/Book.tsx`, `?phone=1`): a big pink phone button bottom right. Out, the screen gets a pink phone frame and focus corners, the camera comes in closer and leans toward the nearest animal, and Kaylee holds the phone up. **Every tap is a photo:** tap an animal (or near one) and it turns and poses, the flash, the shutter, and the photo flies into the book with its name (“A hornbill!”, a ✨ when it’s new). Tap anything else and it’s a photo of the island (into the phone). Dragging still leads her.",
+                  "**Gold photos:** the photo turns toward the animal and zooms in more the closer Kaylee is to it (`book/photo.ts`); the animal tall in the frame and near its middle earns a gold frame (about 3.5 m or closer). A gold photo is never replaced by a plain one.",
+                  "**The animals** (`book/models.ts` built from code in the toy look, `book/creatures.ts` alive): monitor lizards waddling in an S and flicking their tongues (Ao Prao, the Sai Kaew bar); squirrels that run up their palm when she comes close and peek round the trunk at her (Sai Kaew, Hin Khok, Ao Prao); a macaque mother and baby on the hill road (the mother reaches for Daddy’s sunglasses as he passes); the shy **mouse-deer** at the forest’s edge on the road into Ao Prao that bounds into the trees if she gallops (walk slowly!); the **hornbill** hopping on its tamarind branch at Ao Wong Duan and flying between its perches; the **flying fox** asleep upside down in a samet tree at Ao Prao, stretching its wings, flapping round the sky at dusk; the reef heron fishing on the mermaid’s rocks (it flies to the next rock); hermit crabs on the wet sand that pop into their shells; the parrotfish nosing round the coral, two crowds of blue damselfish that part round her when she swims, the cuttlefish whose colors change as she comes near (pink up close); urchins (she boings off them, never hurt) and coral in the shallows. The terns and the crab holes’ ghost crabs snap too.",
+                  "**Rare ones** (the mouse-deer, the hornbill, the flying fox) sparkle when she’s near and haven’t been snapped; their book slots are sparkly gold.",
+                  "**The book** (`book/animals.ts`, `#/world/thailand/samet-trip/book?book=...`): a page per beach (Sai Kaew, Hin Khok and the mermaid’s rocks, Ao Wong Duan, Ao Prao, the forest road) with tabs and dots for what’s found. A lavender silhouette for each animal still to find (tap: where to look), her photo once she has it (tap: its fact), the stop’s sticker in the page’s corner once its flag is up, a gold star and a fanfare when all fourteen are in. Silhouettes and stickers are portraits of the 3D models, drawn once when the island opens.",
+                  "**The beach clean** (`book/clean.ts`): a bottle, a plastic bag and a flip-flop wash up on the wet sand (four out at a time on nine spots). Tap one: she walks over and lifts it over her head, and a hermit crab climbs out of the bottle (or from under the flip-flop), a fish jumps where the bag was. Walk up to the beach’s green bin (all seven beaches have one, they glow while she carries): plonk, the lid flaps, sparkles. Another bit washes up 25 s later. Never required.",
+                  "**Quiet hints:** an animal she hasn’t snapped close by and the phone away: the phone button glows. No lines.",
+                  "**Feel on knobs** (`?feel=1`, “Mommy’s phone”): how far the camera comes in, how much it leans to an animal, how much the photo turns to it, the zoom and the distance it zooms in from, what counts as gold, how far from her finger a tap finds an animal, how far the animals live from the camera."
+                ]
+              },
+              {
+                "type": "callout",
+                "tone": "warn",
+                "title": "Changed from the plan",
+                "items": [
+                  "**All fourteen are on the island now:** the reef animals (parrotfish, damselfish, cuttlefish, coral) live in the clear shallows at Ao Wong Duan and Hin Khok, so the book can fill before the snorkel; greybox 5 adds Ko Kudi’s reef with the same models.",
+                  "**Ghost crabs and hermit crabs share one page slot** (“crab”), as in the plan’s 14.",
+                  "**The book is a section** (`book`), and `book` and `phone` are params of `island` too, so a link opens the island with the phone out and her book as it was."
+                ]
+              },
+              {
+                "type": "callout",
+                "tone": "note",
+                "title": "Known small things",
+                "items": [
+                  "No voices yet (greybox): the names, the hints and the facts are text in `book/animals.ts`; the full loop moves them to `lines.ts` (Sparkle says the name once, a tap on the photo plays the fact).",
+                  "Photos stay only for the visit (saving the book is greybox 7’s trip frame); an animal found from a link shows its portrait instead of a photo.",
+                  "The fish live out in the water: from the beach they’re behind the camera, so she swims out to see them.",
+                  "Animals far from her are paused and hidden (knob “Animals live out to”, 70 m); measure the frame rate on the iPad with `?fps=1`."
+                ]
+              }
+            ]
+          }
         ] }
       ]
     },
