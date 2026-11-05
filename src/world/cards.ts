@@ -19,11 +19,10 @@ export interface ShelfGame {
   /** Its picture (shelf/icons/), or none yet: then `emoji` on a pastel tile. */
   icon?: string
   emoji: string
-  /** Where it opens: a country's activity (or one section of it), or a game from src/games/ (the tea party). */
+  /** Where it opens: a country's activity (or one section of it). */
   place?: string
   activity?: string
   section?: string
-  game?: string
 }
 
 export interface ShelfRow {
@@ -45,7 +44,6 @@ const banners = import.meta.glob<string>('./shelf/banners/*.svg', { eager: true,
 const icon = (path: string): string | undefined => icons[`./shelf/icons/${path}.svg`]
 export const banner = (row: string): string | undefined => banners[`./shelf/banners/${row}.svg`]
 
-export const TEA_PARTY: ShelfGame = { key: 'teaParty', name: 'Tea party', icon: icon('tea-party'), emoji: '🫖', game: 'unicorn-tea-party' }
 export const SURPRISE_ICON = icon('surprise')
 
 /** One Thailand card: a section of a trip (or of the house, `hub`). */
@@ -129,4 +127,4 @@ export const SHELF: ShelfRow[] = [
     })),
 ]
 
-export const ALL_GAMES: ShelfGame[] = [TEA_PARTY, ...SHELF.flatMap((r) => r.games)]
+export const ALL_GAMES: ShelfGame[] = SHELF.flatMap((r) => r.games)

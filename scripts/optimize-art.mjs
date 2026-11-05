@@ -14,7 +14,7 @@
 //
 // Usage:
 //   npm run art                  # all images
-//   npm run art -- unicorn-tea-party   # only paths containing this text
+//   npm run art -- australia   # only paths containing this text
 import sharp from 'sharp'
 import { mkdirSync, readdirSync, statSync } from 'node:fs'
 import { basename, dirname, join, relative } from 'node:path'

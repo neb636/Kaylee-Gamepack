@@ -1,6 +1,6 @@
 // Playground demos for the advanced interaction kit (src/sdk/interact). Small, real examples an AI builder can copy.
 import { useState } from 'react'
-import scene from '../games/unicorn-tea-party/assets/scene.webp'
+import scene from '../world/assets/bg-world-map.webp'
 import { burst, countByKind, DressUpStudio, JigsawPuzzle, StickerBoard, Swatch, useSaved, type DressSlot, type Placed } from './sdk-internal'
 
 const box = { width: '100%', height: 'min(72vh, 680px)' }

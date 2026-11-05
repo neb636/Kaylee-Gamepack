@@ -4,7 +4,7 @@
 
 `src/sdk/puppet/Sparkle.tsx` is the single live drawing. All four countries use it directly
 or through shared story/stamp components. The older `Mascot` API wraps it for the shell,
-passport, video controls, trophy ceremony and unicorn tea party. Its square `size` layout
+passport, video controls and trophy ceremony. Its square `size` layout
 and `wave` / `cheer` / `think` expressions remain compatible with existing callers.
 New activities should use `SparklePuppet` and its awaitable actions.
 

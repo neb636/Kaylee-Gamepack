@@ -8,11 +8,9 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import posthog, { isPostHogEnabled } from '../posthog'
-import { gameLogger } from '../posthog-logger'
-import { go, worldLink } from '../router'
+import { worldLink } from '../router'
 import { burst, Mascot, say, sounds, useElementSize, useSaved } from '../sdk'
-import { useTrophies } from '../sdk/trophies'
-import { ALL_GAMES, banner, nameLine, SHELF, SURPRISE_ICON, TEA_PARTY, type ShelfGame } from './cards'
+import { ALL_GAMES, banner, nameLine, SHELF, SURPRISE_ICON, type ShelfGame } from './cards'
 import { Flag } from './kit/Flag'
 import { WORLD_LINES } from './lines'
 import { usePassport } from './stamps'
@@ -32,7 +30,6 @@ const speak = (key: string) => {
 export function Shelf() {
   const halloween = useHalloween()
   const passport = usePassport()
-  const trophies = useTrophies()
   const [favorites, setFavorites] = useSaved<string[]>('world:favorites', [])
   const [played, setPlayed] = useSaved<string[]>('world:played', [])
   const [open, setOpen] = useState<ShelfGame | null>(null)
@@ -51,13 +48,6 @@ export function Shelf() {
     sounds.whoosh()
     if (!played.includes(g.key)) setPlayed([...played, g.key])
     if (isPostHogEnabled) posthog.capture('world_shelf_play', { game: g.key, favorite: favorites.includes(g.key) })
-    if (g.game) {
-      const won = trophies.some((t) => t.gameId === g.game)
-      if (isPostHogEnabled) posthog.capture('game_session_started', { game_id: g.game, previously_completed: won })
-      gameLogger.sessionStarted(g.game, won)
-      go.game(g.game)
-      return
-    }
     try {
       sessionStorage.setItem(FROM_SHELF, g.place!)
     } catch {
@@ -97,7 +87,6 @@ export function Shelf() {
 
           <Card index={0} id="favorites" title="My favorites" chip={<span className="shelf-heart">❤️</span>} art={banner('favorites')} onTitle={() => void say(L.favorites)} friend halloween={halloween}>
             <SurpriseTile onTap={() => setSpinning(true)} />
-            {tile(TEA_PARTY)}
             {fav.length ? fav.map(tile) : <EmptyHeart />}
           </Card>
 

@@ -1,7 +1,7 @@
 export interface GameMeta {
-  /** Must match the folder name, e.g. "unicorn-tea-party". */
+  /** Must match the folder name, e.g. "my-game". */
   id: string
-  /** Shown on the game card, e.g. "Unicorn Tea Party". */
+  /** Shown on the game card, e.g. "My Game". */
   title: string
   /** One emoji for the card and trophy, e.g. "🫖". */
   emoji: string
@@ -13,9 +13,9 @@ export interface GameMeta {
   skills: string[]
   /** Vocabulary words from the school paper that the game says out loud. */
   vocabulary: string[]
-  /** The core game mechanic, e.g. "tap to count, drag into teapot". Used so new games do something different. */
+  /** The core game mechanic, e.g. "tap to count, drag into place". Used so new games do something different. */
   mechanic: string
-  /** The world/theme, e.g. "unicorn tea party in the clouds". */
+  /** The world/theme, e.g. "a garden in the clouds". */
   setting: string
   /** Where the lesson came from. */
   source: { issue?: number; pages: string[] }
