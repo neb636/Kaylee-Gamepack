@@ -4,6 +4,7 @@ import type { GameFrame, Workspace } from "../../../shared/models";
 import { RefreshIcon } from "../../ui/icons";
 import { crumbFor, DEFAULT_CHARACTER, DEFAULT_LINK, FRAMES, hashOf, labOf, loadSections, patchGame, useGameLive, withLab } from "./game-store";
 import { LabPanel, type LabRequest } from "./LabPanel";
+import { useWorkList } from "../work/work-store";
 
 const LABS = [
   { id: "camera", label: "Camera", emoji: "🎥", hint: "The camera lab: nudge or lock the 3D camera (?cam=1)" },
@@ -41,6 +42,9 @@ export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?:
   const [target, setTarget] = useState(() => ({ hash: hashOf(game.link ?? DEFAULT_LINK), nonce: 0 }));
   const [error, setError] = useState<string>();
   const [editing, setEditing] = useState<string>();
+  const [attempt, setAttempt] = useState(0);
+  // A new piece of work is still running npm ci: start its game once that finishes.
+  const installing = useWorkList((state) => state.list?.items.find((item) => item.path.replace(/\/+$/, "") === workspace.path.replace(/\/+$/, ""))?.install === "installing");
   const frame = useRef<HTMLIFrameElement>(null);
   const pending = useRef(new Map<string, { resolve: (s: LabSnapshot) => void; reject: (e: Error) => void; timer: ReturnType<typeof setTimeout> }>());
   const current = hashOf(href || target.hash);
@@ -60,7 +64,7 @@ export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?:
       .then((value) => { if (active) useGameLive.setState((state) => ({ origin: { ...state.origin, [workspace.id]: value } })); })
       .catch((caught) => { if (active) setError(String(caught).replace(/^Error: (Error invoking remote method '[^']+': )?(Error: )?/, "")); });
     return () => { active = false; };
-  }, [workspace.id, workspace.path]);
+  }, [workspace.id, workspace.path, installing, attempt]);
 
   const forget = () => useGameLive.setState((state) => ({ href: { ...state.href, [workspace.id]: "" }, snapshot: { ...state.snapshot, [workspace.id]: undefined } }));
   // Only requests made while this pane is mounted: an old Sections click must not replay when switching back.
@@ -152,7 +156,8 @@ export function GamePane({ workspace, hidden }: { workspace: Workspace; hidden?:
       </div>
     </div>
     <div className="game-stage" ref={stage.ref}>
-      {error ? <div className="game-message" role="alert"><strong>The game can't start here</strong><p>{error}</p></div>
+      {installing ? <div className="game-message"><p>Installing the game's dependencies for {workspace.name} (npm ci)… The game starts when it's done.</p></div>
+        : error ? <div className="game-message" role="alert"><strong>The game can't start here</strong><p>{error}</p><button className="game-tool" onClick={() => setAttempt((value) => value + 1)}>Try again</button></div>
         : !src ? <div className="game-message"><p>Starting the game for {workspace.name}…</p></div>
         : <div className={`game-device ${stage.device ? "is-framed" : ""}`} style={stage.device ? { width: stage.device.width * stage.scale, height: stage.device.height * stage.scale } : undefined}>
           <iframe ref={frame} title={`Game: ${workspace.name}`} src={src} allow="autoplay"
