@@ -16,6 +16,8 @@ const api: WorkbenchApi = {
   studio: {
     repoRoot: () => ipcRenderer.invoke('studio:repo-root'),
     useCheckout: root => ipcRenderer.invoke('studio:use-checkout', root),
+    sections: (root, refresh) => ipcRenderer.invoke('studio:sections', { root, refresh }),
+    trimServers: keep => ipcRenderer.invoke('studio:trim-servers', keep),
     tune: input => ipcRenderer.invoke('studio:tune', input),
     cancel: id => ipcRenderer.send('studio:cancel', id),
   },

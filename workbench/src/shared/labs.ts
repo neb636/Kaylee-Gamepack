@@ -9,8 +9,14 @@ export interface LabSnapshot {
 }
 export interface LabProposal { explanation: string; changes: { key: string; value: number }[]; }
 export const LAB_CHANNEL = 'kaylee-studio-v1';
+/** The first game server's origin. Each piece of work gets its own server (see GAME_PORTS), so prefer gameOrigin(port). */
 export const GAME_ORIGIN = 'http://127.0.0.1:5174';
 export const STUDIO_ORIGIN = 'http://127.0.0.1:5175';
+/** Game servers, one per piece of work: 5174 first (the one `npm run studio` starts), then every other port above 5175. */
+export const GAME_PORTS = [5174, 5176, 5178, 5180];
+export function gameOrigin(port: number): string { return `http://127.0.0.1:${port}`; }
+/** True for an origin one of the Studio's game servers could be serving. */
+export function isGameOrigin(origin: string): boolean { return GAME_PORTS.some(port => gameOrigin(port) === origin); }
 
 /** Reject the whole proposal before changing anything. Never accept invented knobs or non-finite numbers. */
 export function validateProposal(snapshot: LabSnapshot, input: unknown): LabProposal {

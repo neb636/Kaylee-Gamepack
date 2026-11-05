@@ -13,7 +13,7 @@ interface WorkbenchStore extends PersistedState {
   isHydrated: boolean;
   hydrate: () => Promise<void>;
   setRepoRoot: (path: string | undefined) => void;
-  /** Opens (or selects) the views for one piece of work. The main checkout gets the labs too. */
+  /** Opens (or selects) the views for one piece of work. The main checkout opens on its game. */
   addWorkspace: (path: string, options?: { name?: string; views?: "all" | "agent" }) => string;
   removeWorkspace: (workspaceId: string) => void;
   selectWorkspace: (workspaceId: string) => void;
@@ -28,6 +28,9 @@ interface WorkbenchStore extends PersistedState {
   deleteInstructionOption: (optionId: string) => void;
   updateLayout: (patch: Partial<LayoutState>) => void;
 }
+
+/** The pinned Game tab's id in a workspace's tab strip (not a view record). */
+export const GAME_TAB = "game";
 
 const initialState: PersistedState = {
   workspaces: [],
@@ -87,8 +90,9 @@ export const useWorkbenchStore = create<WorkbenchStore>((set, get) => ({
       id: workspaceId,
       name: options.name ?? workspaceName(path),
       path,
-      views: [initialView, ...(labs ? [['image-generator', 'Character concepts'], ['feel-lab', 'Feel lab'], ['camera-lab', 'Camera lab'], ['character-lab', '3D character lab']].map(([type, title]) => ({ id: createId('view'), type, title, workspaceId, state: type === 'image-generator' ? { count: 1, autoTitle: false } : {} })) : [])],
-      activeViewId: initialView.id,
+      // The labs are switches on the game pane now; the main checkout also gets Character concepts.
+      views: [initialView, ...(labs ? [{ id: createId("view"), type: "image-generator", title: "Character concepts", workspaceId, state: { count: 1, autoTitle: false } }] : [])],
+      activeViewId: labs ? GAME_TAB : initialView.id,
     };
     set((state) => ({
       workspaces: [...state.workspaces, workspace],

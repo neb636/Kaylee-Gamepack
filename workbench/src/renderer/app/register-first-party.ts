@@ -16,10 +16,8 @@ import { registerFileCommands } from "../features/files/file-commands";
 import { SourceControlPanel, StatusBranch } from "../features/source-control/SourceControlPanel";
 import { MemoryUsage, SessionSummary, TerminalCount } from "../features/status/StatusItems";
 import { SettingsButton } from "../features/settings/SettingsButton";
-import { AgentIcon, BranchIcon, FileIcon, FilesIcon, ImageIcon, LayersIcon, TerminalIcon } from "../ui/icons";
+import { AgentIcon, BranchIcon, FileIcon, FilesIcon, ImageIcon, TerminalIcon } from "../ui/icons";
 import { useWorkList } from "../features/work/work-store";
-
-import { LabView } from "../features/labs/LabView";
 
 let registered = false;
 
@@ -27,9 +25,6 @@ export function registerFirstPartyContributions(): void {
   if (registered) return;
   registered = true;
 
-  for (const [id, label] of [['character-lab', '3D character lab'], ['camera-lab', 'Camera lab'], ['feel-lab', 'Feel lab']]) {
-    services.views.register({ id, label, description: `Gamepack ${label} with AI assistance.`, icon: LayersIcon, component: LabView, defaultTitle: label, listInSidebar: true });
-  }
   services.views.register({
     id: "agent",
     label: "Agent session",

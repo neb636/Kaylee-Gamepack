@@ -44,5 +44,5 @@ try {
   launch(process.execPath, [path.join(repo, 'node_modules/vite/bin/vite.js'), '--host', '127.0.0.1', '--port', '5174', '--strictPort'], repo);
   launch(process.execPath, [path.join(studio, 'node_modules/vite/bin/vite.js'), '--host', '127.0.0.1', '--port', '5175', '--strictPort'], studio);
   await Promise.all([ready(gameOrigin), ready(studioOrigin)]);
-  if (!process.argv.includes('--servers-only')) launch(require('electron'), ['.'], studio, { VITE_DEV_SERVER_URL: studioOrigin, STUDIO_REPO_ROOT: repo });
+  if (!process.argv.includes('--servers-only')) launch(require('electron'), ['.'], studio, { VITE_DEV_SERVER_URL: studioOrigin, STUDIO_REPO_ROOT: repo, STUDIO_GAME_PORT: '5174' });
 } catch (error) { console.error(error); shutdown(1); }
