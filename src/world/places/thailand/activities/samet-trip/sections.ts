@@ -92,7 +92,7 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
     {
       id: 'snorkel',
       name: 'Snorkeling at Ko Kudi (greybox): lead Kaylee over the reef, half under the water',
-      params: ['round', 'flags'],
+      params: ['round', 'flags', 'book'],
       group: 'Snorkeling at Ko Kudi (greybox)',
       links: [
         { label: 'Float: splash in, lead her over the coral, the damselfish part round her', params: { round: 'float' }, also: [{ label: 'tune the feel', params: { round: 'float' }, flags: { feel: '1' } }] },

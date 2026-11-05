@@ -61,7 +61,7 @@ export function SametTrip() {
       <SnorkelScreen
         key={sec.n}
         round={reef}
-        onRound={(round) => enter('snorkel', { round, flags: flagParam(sec.flags) })}
+        onRound={(round) => enter('snorkel', { round, flags: flagParam(sec.flags), book: bookParam(here.current.book) })}
         onIsland={(snapped) => {
           const flags = sec.flags.includes('snorkel') ? sec.flags : [...sec.flags, 'snorkel' as StopId]
           here.current.at = 'wongduan'
@@ -104,7 +104,7 @@ export function SametTrip() {
         }
         if (stop === 'snorkel') {
           setSec((s) => ({ ...s, id: 'snorkel', n: s.n + 1, round: 'float' }))
-          return enter('snorkel', { round: 'float', flags: flagParam(sec.flags) })
+          return enter('snorkel', { round: 'float', flags: flagParam(sec.flags), book: bookParam(here.current.book) })
         }
         if (stop !== 'jetski') return
         setSec((s) => ({ ...s, id: 'jetski', n: s.n + 1, round: 'ride' }))
