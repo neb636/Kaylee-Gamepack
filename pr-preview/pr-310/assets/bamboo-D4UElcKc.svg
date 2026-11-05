@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Bamboo Forest</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ddf7ee"/><stop offset="1" stop-color="#a9e8d2"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="head"><circle cx="56" cy="46" r="25"/></clipPath>
+    <clipPath id="body"><path d="M30 104C26 88 34 69 56 67C78 69 86 88 82 104Z"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+
+  <!-- the forest: two pale stalks far behind -->
+  <g fill="#c4f0df">
+    <rect x="12" y="-1" width="7" height="122"/>
+    <rect x="102" y="-1" width="6" height="122"/>
+  </g>
+  <g fill="#aee6d0">
+    <rect x="11" y="38" width="9" height="3" rx="1.5"/><rect x="11" y="76" width="9" height="3" rx="1.5"/>
+    <rect x="101" y="24" width="8" height="3" rx="1.5"/><rect x="101" y="62" width="8" height="3" rx="1.5"/>
+  </g>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <ellipse cx="60" cy="105" rx="34" ry="5.5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- bamboo leaves fanning out behind the head -->
+  <path d="M0 0C7-5 18-5 27 0C18 4 7 4 0 0Z" transform="translate(70 66) rotate(-38)" fill="#48a96c"/>
+  <path d="M0 0C7-5 18-5 27 0C18 4 7 4 0 0Z" transform="translate(71 68) rotate(-12)" fill="#73cf86"/>
+  <path d="M0 0C6-4 15-4 22 0C15 3.5 6 3.5 0 0Z" transform="translate(72 70) rotate(16)" fill="#73cf86"/>
+
+  <!-- ears -->
+  <circle cx="37" cy="26" r="9.5" fill="#4a4058"/>
+  <circle cx="75" cy="26" r="9.5" fill="#3b3348"/>
+  <path d="M31.5 25a6.5 6.5 0 0 1 5.5-5.5" fill="none" stroke="#6a5f7d" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- body: white fur, a lavender shade on the right -->
+  <g clip-path="url(#body)">
+    <rect x="26" y="64" width="60" height="42" fill="#e4ddf6"/>
+    <path d="M30 104C26 88 34 69 56 67C66 68 72 72 75 78C71 87 68 96 68 104Z" fill="#fff"/>
+  </g>
+
+  <!-- feet, soles out, with pink beans -->
+  <ellipse cx="41" cy="99" rx="10.5" ry="8.5" fill="#4a4058"/>
+  <ellipse cx="71" cy="99" rx="10.5" ry="8.5" fill="#3b3348"/>
+  <g fill="#ffc4da">
+    <ellipse cx="41" cy="101" rx="5" ry="3.8"/><circle cx="35.5" cy="95.5" r="1.9"/><circle cx="41" cy="93.8" r="1.9"/><circle cx="46.5" cy="95.5" r="1.9"/>
+    <ellipse cx="71" cy="101" rx="5" ry="3.8"/><circle cx="65.5" cy="95.5" r="1.9"/><circle cx="71" cy="93.8" r="1.9"/><circle cx="76.5" cy="95.5" r="1.9"/>
+  </g>
+
+  <!-- head: white, a lavender crescent bottom-right -->
+  <g clip-path="url(#head)">
+    <rect x="30" y="20" width="52" height="52" fill="#e4ddf6"/>
+    <circle cx="52.5" cy="42.5" r="25" fill="#fff"/>
+  </g>
+  <!-- eye patches, drooping outward, and the eyes -->
+  <ellipse cx="45.5" cy="47" rx="7" ry="9.5" transform="rotate(32 45.5 47)" fill="#4a4058"/>
+  <ellipse cx="66.5" cy="47" rx="7" ry="9.5" transform="rotate(-32 66.5 47)" fill="#4a4058"/>
+  <ellipse cx="46.8" cy="45.5" rx="3.4" ry="4.2" fill="#2b2330"/>
+  <ellipse cx="65.2" cy="45.5" rx="3.4" ry="4.2" fill="#2b2330"/>
+  <circle cx="48.1" cy="44" r="1.5" fill="#fff"/>
+  <circle cx="66.5" cy="44" r="1.5" fill="#fff"/>
+
+  <!-- nose, mouth, blush -->
+  <path d="M52.5 54Q56 51.8 59.5 54Q58.4 57.2 56 57.6Q53.6 57.2 52.5 54Z" fill="#2b2330"/>
+  <ellipse cx="54.6" cy="53.4" rx="1.4" ry="0.8" fill="#fff"/>
+  <path d="M56 57.6V59.4M52.4 59.2Q54.2 61.8 56 59.4Q57.8 61.8 59.6 59.2" fill="none" stroke="#2b2330" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="39" cy="57" rx="4.5" ry="2.6" fill="#ff8fb8" opacity="0.55"/>
+  <ellipse cx="73" cy="57" rx="4.5" ry="2.6" fill="#ff8fb8" opacity="0.55"/>
+
+  <!-- the bamboo stalk, up to the mouth -->
+  <g transform="translate(91 106) rotate(-32)">
+    <rect x="-4" y="-53" width="8" height="57" rx="2" fill="#73cf86"/>
+    <rect x="1.5" y="-53" width="2.5" height="57" fill="#48a96c"/>
+    <rect x="-2.5" y="-51" width="2" height="53" rx="1" fill="#aee8b7"/>
+    <g fill="#48a96c"><rect x="-4.5" y="-38" width="9" height="3" rx="1.5"/><rect x="-4.5" y="-20" width="9" height="3" rx="1.5"/></g>
+    <ellipse cy="-53" rx="4" ry="1.8" fill="#c7f3e4"/>
+  </g>
+
+  <!-- arms hugging the stalk -->
+  <path d="M76 74C78 68 86 69 87 76C88 81 85 86 80 88C76 88 74 84 75 80Z" fill="#3b3348"/>
+  <circle cx="78.5" cy="85.5" r="6" fill="#3b3348"/>
+  <path d="M36 78C37 71 44 69 52 70.5C59 71.5 65 70 71 69C77 68.5 78 78 72 79C64 80 57 80 50 81C42 82 35 83 36 78Z" fill="#4a4058"/>
+  <circle cx="71" cy="74" r="6" fill="#4a4058"/>
+  <path d="M40 74.5C45 72 51 72.5 56 73.5" fill="none" stroke="#6a5f7d" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
