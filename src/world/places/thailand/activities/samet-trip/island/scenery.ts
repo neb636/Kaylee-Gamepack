@@ -115,7 +115,7 @@ function pandanusGeo(R: () => number, x: number, y: number, z: number, s: number
   out.push(stick(knee, top, 0.12 * s, 0.1 * s, '#A98868', 6))
   for (let k = 0; k < 9; k++) {
     const yaw = (k / 9) * Math.PI * 2 + R() * 0.3
-    const g = recolor(P.prism([[0, 0], [0.12, 0.5], [0.05, 1.5], [0, 1.7], [-0.05, 1.5], [-0.12, 0.5]], 0.03, '#ffffff'), k % 3 ? '#6FAE5E' : '#87BF6A')
+    const g = recolor(P.prism([[0, 0], [0.12, 0.5], [0.05, 1.5], [0, 1.7], [-0.05, 1.5], [-0.12, 0.5]], 0.07, '#ffffff'), k % 3 ? '#6FAE5E' : '#87BF6A')
     out.push(xf(g, top, new Quaternion().setFromEuler(new Euler(0.5 + (k % 3) * 0.35, yaw, 0, 'YXZ')), s))
   }
   return out
@@ -182,7 +182,7 @@ export const DAY: Record<TimeOfDay, Key> = {
   noon: { top: '#5FB8F2', mid: '#9ED6FA', horizon: '#E2F4FD', haze: '#D5EEFA', sun: [0.35, 0.55, 0.76], glow: '#FFFAE6', amb: '#FFF7F0', ambK: 1, light: '#FFF7F0', lightK: 1, cloud: '#FFFFFF', belly: '#E6DDFF', water: ['#9DF0E2', '#62DDD3', '#38C8D4', '#24AED6', '#2190D0'], far: '#8FC9A8', hills: ['#A9B8E2', '#B7C3EA'], lamps: 0 },
   afternoon: { top: '#5BAFEB', mid: '#A2D3F4', horizon: '#F6EEDC', haze: '#E2E7EA', sun: [-0.55, 0.42, 0.5], glow: '#FFEFCF', amb: '#FFF3E6', ambK: 1, light: '#FFEBD2', lightK: 1, cloud: '#FFFBF4', belly: '#E9D9F4', water: ['#A4EFDC', '#66DACB', '#3BC3CC', '#28A8CF', '#2689C6'], far: '#93C6A4', hills: ['#B0B5DC', '#BEC0E2'], lamps: 0 },
   golden: { top: '#7F98DE', mid: '#F2B7AA', horizon: '#FFD49A', haze: '#F5CFB2', sun: [-0.9, 0.12, 0.15], glow: '#FFD08A', amb: '#FFE3D3', ambK: 0.92, light: '#FFC994', lightK: 0.95, cloud: '#FFE0CF', belly: '#E6B3C8', water: ['#B4E9CF', '#7FD1C2', '#5AB7C2', '#4F96BE', '#5A7AB5'], far: '#A9B79A', hills: ['#B79EC6', '#C7AACB'], lamps: 0.35 },
-  night: { top: '#1F1D4A', mid: '#3B3478', horizon: '#7C64A8', haze: '#4E4380', sun: [0.4, 0.5, -0.6], glow: '#D9DCFF', amb: '#8C86D8', ambK: 0.55, light: '#BFC6FF', lightK: 0.35, cloud: '#5E5896', belly: '#3E3878', water: ['#5F8FB0', '#46769E', '#335F8E', '#294B7C', '#22396A'], far: '#3E4A72', hills: ['#3A3770', '#44407A'], lamps: 1 },
+  night: { top: '#1F1D4A', mid: '#3B3478', horizon: '#7C64A8', haze: '#4E4380', sun: [0.4, 0.5, -0.6], glow: '#D9DCFF', amb: '#A49EE6', ambK: 0.78, light: '#C9D0FF', lightK: 0.45, cloud: '#5E5896', belly: '#3E3878', water: ['#5F8FB0', '#46769E', '#335F8E', '#294B7C', '#22396A'], far: '#3E4A72', hills: ['#3A3770', '#44407A'], lamps: 1 },
 }
 
 const lerpHex = (a: string, b: string, k: number, out = new Color()) => out.set(a).lerp(new Color(b), k)

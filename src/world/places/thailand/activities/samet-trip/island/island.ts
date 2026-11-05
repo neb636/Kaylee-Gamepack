@@ -499,6 +499,8 @@ export class SametIsland implements World3D {
     this.feel.turn = RIDE.turnRate
     this.feel.grip = RIDE.grip
     const k = this.kaylee.root.position
+    // A finger held still is still playing (no hint while she holds it down).
+    if (this.finger) this.lastTouch = t
     if (this.mode === 'walk') this.lead(dt)
     else if (this.mode === 'ski') this.rideSki(dt)
     else if (this.mode === 'kite') this.flyKite(dt)
@@ -1153,7 +1155,8 @@ export class SametIsland implements World3D {
     this.seaShift.x += (f.n.x * sea - this.seaShift.x) * 0.05
     this.seaShift.z += (f.n.z * sea - this.seaShift.z) * 0.05
     return {
-      center: new Vector3(k.x + hx * CAM.ahead * run + this.seaShift.x, Math.max(k.y, 0) + 0.7, k.z + hz * CAM.ahead * run + this.seaShift.z),
+      // (Flying under the umbrella, the camera stays down: she rises up the screen.)
+      center: new Vector3(k.x + hx * CAM.ahead * run + this.seaShift.x, Math.max(this.kite ? this.kite.from.y : k.y, 0) + 0.7, k.z + hz * CAM.ahead * run + this.seaShift.z),
       half: tall ? new Vector3(b * 0.62, 2, b * 0.9) : new Vector3(b, 2, b * 0.62),
       yaw,
       pitch: CAM.pitch + (tall ? 4 : 0) + (CAM.forest - CAM.pitch) * this.inland,
