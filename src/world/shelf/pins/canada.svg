@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Canada</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0f2ff"/><stop offset="1" stop-color="#b3dbff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <path id="leafP" d="M60 12L67.5 26L74 22.5L71 45L82 32.5L85 39L96.5 36.5L92 49L98.5 52.5L78.5 67L81.5 75L63 71.5V93H57V71.5L38.5 75L41.5 67L21.5 52.5L28 49L23.5 36.5L35 39L38 32.5L49 45L46 22.5L52.5 26Z"/>
+    <clipPath id="leaf"><use href="#leafP"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="52" r="50" fill="url(#glow)"/>
+
+  <!-- the Rockies far behind: pale lavender peaks with snowy caps -->
+  <path d="M-2 98L24 66L38 80L56 58L76 82L92 68L122 98V122H-2Z" fill="#cfc6f2"/>
+  <path d="M24 66L30 73L26 75L21 71ZM56 58L63 66.5L58 69L53 65L49 66.5ZM92 68L98 74L94 76L89 72Z" fill="#fff"/>
+  <path d="M56 58L76 82H66L60 70Z" fill="#b8acec"/>
+
+  <!-- pine trees on the near hills -->
+  <path d="M-2 104Q30 92 60 100Q90 92 122 104V122H-2Z" fill="#73cf86"/>
+  <path d="M60 100Q90 92 122 104V122H60Z" fill="#48a96c" opacity="0.5"/>
+  <g>
+    <path d="M17 74L26 88H21L28 99H6L13 88H8Z" fill="#3e9e78"/>
+    <path d="M17 74L26 88H21L28 99H17Z" fill="#2b7a5f"/>
+    <rect x="15" y="98" width="4" height="5" fill="#8a5b3d"/>
+    <path d="M103 78L111 90H107L113 100H93L99 90H95Z" fill="#3e9e78"/>
+    <path d="M103 78L111 90H107L113 100H103Z" fill="#2b7a5f"/>
+    <rect x="101" y="99" width="4" height="5" fill="#8a5b3d"/>
+  </g>
+
+  <!-- a soft shadow under the floating leaf -->
+  <ellipse cx="60" cy="104" rx="20" ry="3.5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- the maple leaf: red, folded down the middle (the right half in shade) -->
+  <g clip-path="url(#leaf)">
+    <rect x="18" y="10" width="84" height="86" fill="#ff6b6b"/>
+    <rect x="60" y="10" width="42" height="86" fill="#d9485e"/>
+    <path d="M23.5 36.5L35 39L38 32.5L49 45L46 22.5L52.5 26L60 12L56 30L50 50L36 44Z" fill="#ffa3a3" opacity="0.8"/>
+  </g>
+  <!-- the veins -->
+  <g fill="none" stroke-linecap="round" stroke-width="2.2">
+    <path d="M60 24V86" stroke="#ffa3a3"/>
+    <path d="M60 60L36 46M60 64L36 64" stroke="#ffa3a3"/>
+    <path d="M60 60L84 46M60 64L84 64" stroke="#ff8f8f"/>
+  </g>
+
+  <!-- sparkles -->
+  <path d="M95 20v6M92 23h6" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M22 22v5M19.5 24.5h5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

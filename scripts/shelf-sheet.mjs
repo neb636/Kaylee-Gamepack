@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // The game shelf's pictures on one sheet, to look at before the real shelf (style: src/world/shelf/STYLE.md).
 //   node scripts/shelf-sheet.mjs icons [files...]    the icons as shelf tiles, big (200 px) and small (90 px)
+//   node scripts/shelf-sheet.mjs pins [files...]     the world map's pins as round badges, big (200 px) and map size (70 px)
 //   node scripts/shelf-sheet.mjs banners [files...]  the banners cropped the ways the shelf shows them: phone upright
 //                                                    (2.6:1), iPad on its side (3.4:1), phone on its side (4:1), with
 //                                                    the white sheet over the bottom edge
@@ -15,8 +16,8 @@ const args = process.argv.slice(2)
 const outAt = args.indexOf('--out')
 const out = outAt >= 0 ? args.splice(outAt, 2)[1] : null
 const kind = args.shift()
-if (kind !== 'icons' && kind !== 'banners') {
-  console.error('usage: node scripts/shelf-sheet.mjs icons|banners [files...] [--out file.png]')
+if (kind !== 'icons' && kind !== 'banners' && kind !== 'pins') {
+  console.error('usage: node scripts/shelf-sheet.mjs icons|pins|banners [files...] [--out file.png]')
   process.exit(1)
 }
 
@@ -40,6 +41,31 @@ async function tile(file, size) {
   const mask = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><rect width="${size}" height="${size}" rx="${r}"/></svg>`)
   const ring = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><rect x="${rim / 2}" y="${rim / 2}" width="${size - rim}" height="${size - rim}" rx="${r - rim / 2}" fill="none" stroke="#fff" stroke-width="${rim}"/></svg>`)
   return sharp(art).composite([{ input: mask, blend: 'dest-in' }, { input: ring }]).png().toBuffer()
+}
+
+/** A map pin as the world map draws it: a circle with a white rim. */
+async function pin(file, size) {
+  const rim = Math.max(3, Math.round(size * 0.06))
+  const art = await sharp(file, { density: (72 * size * 2) / 120 }).resize(size, size).png().toBuffer()
+  const mask = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}"/></svg>`)
+  const ring = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${(size - rim) / 2}" fill="none" stroke="#ffc83d" stroke-width="${rim}"/></svg>`)
+  return sharp(art).composite([{ input: mask, blend: 'dest-in' }, { input: ring }]).png().toBuffer()
+}
+
+async function pins() {
+  const cellW = 300
+  const cellH = 250
+  const cols = Math.min(4, files.length)
+  const rows = Math.ceil(files.length / cols)
+  const parts = []
+  for (const [i, f] of files.entries()) {
+    const x = (i % cols) * cellW
+    const y = Math.floor(i / cols) * cellH
+    parts.push({ input: await pin(f, 200), left: x + 12, top: y + 12 })
+    parts.push({ input: await pin(f, 70), left: x + 222, top: y + 12 })
+    parts.push({ input: label(relative(join(ROOT, 'pins'), f).replace(/\.svg$/, ''), cellW), left: x, top: y + 216 })
+  }
+  return sharp({ create: { width: cols * cellW, height: rows * cellH, channels: 4, background: { r: 140, g: 207, b: 255, alpha: 1 } } }).composite(parts)
 }
 
 async function icons() {
@@ -88,5 +114,5 @@ async function banners() {
 
 const target = out ?? `qa-output/shelf/${kind}.png`
 mkdirSync(dirname(target), { recursive: true })
-await (await (kind === 'icons' ? icons() : banners())).png().toFile(target)
+await (await (kind === 'icons' ? icons() : kind === 'pins' ? pins() : banners())).png().toFile(target)
 console.log(`${files.length} ${kind} -> ${target}`)

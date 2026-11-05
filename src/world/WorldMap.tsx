@@ -36,6 +36,15 @@ const COMING_SOON: { id: keyof typeof WORLD_LINES.soon; emoji: string; x: number
 ]
 const HOME = { x: 19, y: 33 }
 
+// Each place's pin picture (shelf/pins/<id>.svg, drawn by hand like the shelf: shelf/STYLE.md). A place without one
+// shows its emoji.
+const pins = import.meta.glob<string>('./shelf/pins/*.svg', { eager: true, import: 'default', query: '?no-inline' })
+function PinArt({ id, emoji }: { id: string; emoji: string }) {
+  const src = pins[`./shelf/pins/${id}.svg`]
+  if (!src) return <>{emoji}</>
+  return <img src={src} alt="" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', borderRadius: '50%', pointerEvents: 'none' }} />
+}
+
 function Pin({ x, y, children, label, onTap, glow, dim }: { x: number; y: number; children: ReactNode; label: string; onTap: () => void; glow?: boolean; dim?: boolean }) {
   return (
     <motion.button
@@ -196,12 +205,14 @@ export function WorldMap({ view: linked }: { view?: string }) {
                 setTravelTo(places.find((p) => p.meta.id === meta.id) ?? null)
               }}
             >
-              {meta.emoji}
+              <PinArt id={meta.id} emoji={meta.emoji} />
             </Pin>
           ))}
           {COMING_SOON.filter((c) => !places.some((p) => p.meta.id === c.id)).map((c) => (
             <Pin key={c.id} x={c.x} y={c.y} label={`${c.id} coming soon`} dim onTap={() => show(WORLD_LINES.soon[c.id], c.x, c.y)}>
-              <span style={{ opacity: 0.55 }}>{c.emoji}</span>
+              <span style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', opacity: 0.55 }}>
+                <PinArt id={c.id} emoji={c.emoji} />
+              </span>
               <span style={{ position: 'absolute', right: '-14%', bottom: '-14%', fontSize: '55%' }}>☁️</span>
             </Pin>
           ))}
