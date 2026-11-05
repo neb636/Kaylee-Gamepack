@@ -28,6 +28,8 @@ export interface LagoonOpts {
   /** The fine grid's size and cell (m). */
   grid?: number
   cell?: number
+  /** Ripples of light over the sand in the shallows (0 = none, 1 = bright). */
+  caustics?: number
 }
 
 /** The waves right now (lagoon.ts and whoever rides them read the same numbers). */
@@ -105,6 +107,7 @@ const fragmentShader = /* glsl */ `
   uniform float uHazeNear;
   uniform float uHazeFar;
   uniform vec4 uWave;
+  uniform float uCaustics;
   varying vec3 vWorld;
   varying float vCrest;
   varying float vFace;
@@ -123,6 +126,13 @@ const fragmentShader = /* glsl */ `
     col = mix(col, uB2, band(d, uSteps.y));
     col = mix(col, uB3, band(d, uSteps.z));
     col = mix(col, uB4, band(d, uSteps.w));
+    // Light ripples over the sand in the shallows (the sun through the little waves), fading out with depth.
+    if (uCaustics > 0.0) {
+      float a = sin(p.x * 1.15 + sin(p.y * 0.8 + uTime * 0.9) * 1.4 + uTime * 0.7);
+      float b = sin(p.y * 1.05 + sin(p.x * 0.7 - uTime * 0.8) * 1.4 - uTime * 0.6);
+      float cau = pow(1.0 - abs(a * b), 10.0);
+      col = mix(col, vec3(1.0), cau * uCaustics * 0.32 * (1.0 - smoothstep(0.4, uSteps.y + 0.4, depth)) * smoothstep(0.02, 0.25, depth));
+    }
     // The rolling waves: the face toward the beach a shade darker, the crest lighter, white caps on big ones.
     col = mix(col, col * 0.86, smoothstep(0.02, 0.12, vFace) * min(1.0, uWave.x));
     col = mix(col, mix(col, vec3(1.0), 0.22), smoothstep(0.6, 0.8, vCrest) * min(1.0, uWave.x * 1.4));
@@ -191,6 +201,7 @@ export class Lagoon {
           uFoam: col('#FFFFFF'),
           uHazeNear: { value: o.hazeNear },
           uHazeFar: { value: o.hazeFar },
+          uCaustics: { value: o.caustics ?? 0 },
         },
         vertexShader,
         fragmentShader,
@@ -251,5 +262,11 @@ export class Lagoon {
   /** New colors (a golden afternoon, the night). */
   setHaze(haze: ColorRepresentation) {
     ;(this.mat.uniforms.uHaze.value as Color).set(haze)
+  }
+  /** New depth bands (the time of day: warmer at golden hour, deep indigo at night), and the foam's color. */
+  setBands(bands: readonly ColorRepresentation[], foam: ColorRepresentation = '#FFFFFF') {
+    const u = this.mat.uniforms
+    bands.forEach((b, i) => (u[`uB${i}`].value as Color).set(b))
+    ;(u.uFoam.value as Color).set(foam)
   }
 }

@@ -499,8 +499,8 @@ export class JetSki implements World3D {
     this.progress(dt)
 
     lag.update(t, this.d.x, this.d.z)
-    this.s.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z)
     this.lights.follow(this.d.x, 0, this.d.z)
+    this.s.update(dt, t, this.rig.camera.position.x, this.rig.camera.position.z, this.lights)
     this.camYaw += wrap(this.d.heading - this.camYaw) * ease(dt, 0.3 + HELM.camera * 4) * (this.beachT >= 0 ? 0.2 : 1)
     this.rig.setShot(this.shot())
     this.rig.update(dt)

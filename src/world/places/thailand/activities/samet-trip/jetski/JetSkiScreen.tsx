@@ -19,9 +19,11 @@ interface Props {
   round: RoundId
   /** The round on screen changed (the address bar follows). */
   onRound(r: RoundId): void
+  /** Back to the island (after a race she won), the jet ski hers. */
+  onIsland?(): void
 }
 
-export function JetSkiScreen({ round: first, onRound }: Props) {
+export function JetSkiScreen({ round: first, onRound, onIsland }: Props) {
   const [run, setRun] = useState({ round: first, n: 0 })
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [count, setCount] = useState(-1)
@@ -108,6 +110,11 @@ export function JetSkiScreen({ round: first, onRound }: Props) {
                 <BigButton onClick={() => { setOver(null); worldRef.current?.raceAgain() }} ariaLabel="Race again">
                   🔁 🏁
                 </BigButton>
+                {onIsland && (
+                  <BigButton color="mint" onClick={onIsland} ariaLabel="Back to the island">
+                    🏝️
+                  </BigButton>
+                )}
               </>
             ) : (
               <div className="jet-badge">So close! 🔁</div>
