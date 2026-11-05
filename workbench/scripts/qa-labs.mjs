@@ -14,13 +14,18 @@ try {
   app = await electron.launch({args:['.'],env:{...process.env,VITE_DEV_SERVER_URL:'http://127.0.0.1:5175',STUDIO_REPO_ROOT:repo,WORKBENCH_USER_DATA_DIR:profile,PATH:`${profile}${path.delimiter}${process.env.PATH}`}});
   const page=await app.firstWindow(); page.setDefaultTimeout(15000);
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  // The labs are switches on the game pane; a pasted link opens a section with one on.
+  // The game is closed until ▶ Game; the labs are switches on it, and a pasted link opens a section with one on.
+  await page.getByRole('button',{name:'Game',exact:true}).click();
   const goto = async link=>{await page.getByRole('button',{name:'Current section'}).click();await page.getByLabel('Game link').fill(link);await page.keyboard.press('Enter');};
   const toggle = name=>page.getByRole('group',{name:'Labs'}).getByRole('button',{name}).click();
   await goto('#/world/thailand/hub/downstairs?cam=1&cam.frame=ipad-wide');
-  const frame=()=>page.frames().find(f=>f.url().startsWith('http://127.0.0.1:5174'));
-  await page.getByRole('button',{name:'Read controls',exact:true}).click();
-  await page.getByText(/6 live controls/).waitFor();
+  // This checkout's game runs on whichever loopback port Studio's server pool gave it.
+  const frame=()=>page.frames().find(f=>/^http:\/\/127\.0\.0\.1:\d+\/\?studio=1/.test(f.url()));
+  // The first game start in a fresh profile builds its dependencies: read again until the lab answers.
+  for(let tries=0;;tries++){
+    await page.getByRole('button',{name:'Read controls',exact:true}).click();
+    try{await page.getByText(/6 live controls/).waitFor({timeout:5000});break;}catch(e){if(tries>=12)throw e;}
+  }
   assert.equal(await frame().evaluate(()=>typeof window.workbench),'undefined');
   await page.getByLabel('Lab prompt').fill('Wider please');
   await page.getByLabel('AI provider').selectOption('codex');
@@ -87,12 +92,14 @@ try {
   assert.match(frame().url(),/feel\.steer\.slide=5.5/);
   await page.getByRole('button',{name:'Prepare prompt to save in game'}).click();
   const draft=page.getByRole('textbox',{name:'Prompt',exact:true}); await draft.waitFor();
-  assert.match(await draft.inputValue(),/feel\.steer\.slide=5.5/);
+  // The prepared prompt opens a new agent tab: wait until its composer shows it.
+  const prepared=async re=>{for(let i=0;i<40&&!re.test(await draft.inputValue());i++) await page.waitForTimeout(250);return draft.inputValue();};
+  assert.match(await prepared(/feel\.steer\.slide=5.5/),/feel\.steer\.slide=5.5/);
   assert.match(await draft.inputValue(),/mountain\.ts/);
   await toggle(/Character/);
   await page.getByRole('button',{name:'Prepare character builder prompt'}).click();
-  await draft.waitFor(); assert.match(await draft.inputValue(),/"kind": "character"/);
-  assert.match(await draft.inputValue(),/nick-code/);
+  await draft.waitFor(); assert.match(await prepared(/"kind": "character"/),/"kind": "character"/);
+  assert.match(await draft.inputValue(),/#\/world\/characters\/nick/);
   assert.deepEqual(errors,[]);
   console.log('Camera/Feel preview and Undo, Undo retained after failed/cancelled/stale/no-change follow-ups, cross-section Undo guard, link persistence, handoffs and native isolation passed.');
 } finally {await app?.close();}

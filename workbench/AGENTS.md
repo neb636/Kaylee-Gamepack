@@ -6,6 +6,7 @@ This folder is the local Electron builder app for the game in the parent directo
 - Follow the root AGENTS.md for family privacy, character identities, art, game changes and validation.
 - Keep Electron dependencies and builds isolated here. The published game must not import native APIs or this renderer.
   The one shared dependency is `src/shared/labs.ts`, a dependency-free protocol and numeric validator.
+- Layout: the agent (terminal + composer) is the main column. The game is a right panel, closed by default and remembered per piece of work (`game.open`, ▶ Game or ⌘G, `⤢ Big` for lab sessions). Its servers start only when it opens and stop a minute after it closes. Sections open from the game's ☰ Sections drawer.
 - Reuse the live game labs; do not fork their controls, character renderer or camera implementation. They are switches on the one game pane (`features/game/`), not tabs.
 - One game server per piece of work (`GameServerPool`, last 2 kept, trimmed to the one on screen after 3 minutes unless comparing with main).
 - Performance (Dad's Mac has 8 GB): the game pane slows to ~8 fps behind other apps (`src/world/labs/studio-pace.ts`, `{ studioFocused }`),

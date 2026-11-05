@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { LAB_CHANNEL, type LabSnapshot } from "../../../shared/labs";
 import type { GameFrame, Workspace } from "../../../shared/models";
-import { RefreshIcon, SidebarLeftIcon, SidebarRightIcon } from "../../ui/icons";
+import { CloseIcon, RefreshIcon } from "../../ui/icons";
 import { IconButton } from "../../ui/controls";
 import { crumbFor, DEFAULT_CHARACTER, DEFAULT_LINK, FRAMES, hashOf, labOf, loadSections, patchGame, useGameLive, withLab } from "./game-store";
 import { LabPanel, type LabRequest } from "./LabPanel";
 import { useWorkList } from "../work/work-store";
 import { useWorkbenchStore } from "../../state/workbench-store";
 import { KnownIssuesList, useKnownIssues } from "./KnownIssues";
+import { SectionTree } from "./SectionTree";
 
 const LABS = [
   { id: "camera", label: "Camera", emoji: "🎥", hint: "The camera lab: nudge or lock the 3D camera (?cam=1)" },
@@ -38,7 +39,7 @@ function useStageScale(frame: GameFrame, columns = 1) {
  * The game for one piece of work, always in the middle: its own loopback server, a breadcrumb of the section on
  * screen, device frames, reload, and the Camera / Feel / Character labs as switches with their tuning panel below.
  */
-export function GamePane({ workspace, hidden, onShowLeft, onShowRight }: { workspace: Workspace; hidden?: boolean; onShowLeft?: () => void; onShowRight?: () => void }) {
+export function GamePane({ workspace, onClose, big, onToggleBig }: { workspace: Workspace; onClose: () => void; big: boolean; onToggleBig: () => void }) {
   const game = workspace.game ?? {};
   const origin = useGameLive((state) => state.origin[workspace.id]);
   const href = useGameLive((state) => state.href[workspace.id]);
@@ -56,6 +57,7 @@ export function GamePane({ workspace, hidden, onShowLeft, onShowRight }: { works
   const [mainOrigin, setMainOrigin] = useState<string>();
   const [mainTarget, setMainTarget] = useState<{ hash: string; nonce: number }>();
   const [showIssues, setShowIssues] = useState(false);
+  const [showSections, setShowSections] = useState(false);
   // A new piece of work is still running npm ci: start its game once that finishes.
   const installing = useWorkList((state) => state.list?.items.find((item) => item.path.replace(/\/+$/, "") === workspace.path.replace(/\/+$/, ""))?.install === "installing");
   const frame = useRef<HTMLIFrameElement>(null);
@@ -176,9 +178,10 @@ export function GamePane({ workspace, hidden, onShowLeft, onShowRight }: { works
   };
 
   const src = origin ? `${origin}/?studio=1${target.nonce ? `&v=${target.nonce}` : ""}${target.hash}` : undefined;
-  return <section className={`game-pane ${hidden ? "is-hidden" : ""}`} aria-label="Game" aria-hidden={hidden}>
+  return <section className="game-pane" aria-label="Game">
     <div className="game-toolbar">
-      {onShowLeft && <IconButton label="Show sidebar" onPress={onShowLeft}><SidebarLeftIcon size={16} /></IconButton>}
+      <button className={`lab-toggle ${showSections ? "is-on" : ""}`} aria-pressed={showSections} title="Every country ▸ activity ▸ section: open one in the game"
+        onClick={() => setShowSections(!showSections)}>☰ Sections</button>
       {editing !== undefined ? <form className="game-goto" onSubmit={(event) => {
         event.preventDefault();
         const value = editing.trim();
@@ -196,6 +199,10 @@ export function GamePane({ workspace, hidden, onShowLeft, onShowRight }: { works
         </> : <strong>{lab === "character" ? "🦄 Character lab" : current.startsWith("#/world") ? "🌍 World" : current}</strong>}
         {crumb.params.map(([key, value]) => <code key={key} className="crumb-param">{key}={value}</code>)}
       </button>}
+      <span className="game-panel-actions">
+          <button className={`lab-toggle ${big ? "is-on" : ""}`} aria-pressed={big} title="Game big: the game takes most of the width, the agent stays beside it" onClick={onToggleBig}>⤢ Big</button>
+          <IconButton label="Hide the game (⌘G)" onPress={onClose}><CloseIcon size={14} /></IconButton>
+      </span>
       <div className="game-tools">
         <select aria-label="Device frame" value={frameId} disabled={lab === "camera"} title={lab === "camera" ? "The camera lab has its own iPad and iPhone frames" : "Device frame"}
           onChange={(event) => patchGame(workspace.id, { frame: event.target.value as GameFrame })}>
@@ -210,7 +217,6 @@ export function GamePane({ workspace, hidden, onShowLeft, onShowRight }: { works
         {!isMain && <button className={`lab-toggle ${comparing ? "is-on" : ""}`} aria-pressed={comparing} title="This branch beside main, at the same section" onClick={() => setCompare(!compare)}>⇆ Main</button>}
         {comparing && <button className="game-tool" title="Open the section on screen in main too" onClick={() => setMainTarget({ hash: current, nonce: Date.now() })}>Sync main</button>}
         {issues.length > 0 && <button className={`lab-toggle ${showIssues ? "is-on" : ""}`} aria-pressed={showIssues} title="Known issues for this activity (known-issues.md)" onClick={() => setShowIssues(!showIssues)}>🐞 {issues.length}</button>}
-        {onShowRight && <IconButton label="Show agent column" onPress={onShowRight}><SidebarRightIcon size={16} /></IconButton>}
       </div>
     </div>
     <div className="game-stage" ref={stage.ref}>
@@ -234,6 +240,7 @@ export function GamePane({ workspace, hidden, onShowLeft, onShowRight }: { works
             </div> : <div className="game-message"><p>Starting main's game…</p></div>}
           </figure>}
         </div>}
+      {showSections && <div className="section-drawer"><SectionTree workspace={workspace} onClose={() => setShowSections(false)} /></div>}
       {showIssues && <KnownIssuesList workspace={workspace} issues={issues} onClose={() => setShowIssues(false)} />}
     </div>
     {lab && src && <LabPanel key={lab} workspace={workspace} kind={lab} request={request} snapshot={snapshot} />}

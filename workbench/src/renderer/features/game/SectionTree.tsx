@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Workspace } from "../../../shared/models";
 import { IconButton } from "../../ui/controls";
-import { RefreshIcon } from "../../ui/icons";
+import { CloseIcon, RefreshIcon } from "../../ui/icons";
 import { crumbFor, hashOf, labOf, loadSections, openInGame, useGameLive, withLab } from "./game-store";
 
 /**
  * Every country ▸ activity ▸ section of the selected piece of work (from its own sections.ts files), so a click opens
  * that moment in the game. The section on screen is highlighted; a lab that is on stays on.
  */
-export function SectionTree({ workspace }: { workspace?: Workspace }) {
+export function SectionTree({ workspace, onClose }: { workspace?: Workspace; onClose?: () => void }) {
   const root = workspace?.path;
   const sections = useGameLive((state) => (root ? state.sections[root] : undefined));
   const href = useGameLive((state) => (workspace ? state.href[workspace.id] : undefined));
@@ -30,6 +30,7 @@ export function SectionTree({ workspace }: { workspace?: Workspace }) {
   const open = (link: string) => {
     const lab = labOf(current);
     openInGame(workspace.id, lab === "camera" || lab === "feel" ? withLab(link, lab) : link);
+    onClose?.();
   };
 
   return <div className="section-tree" aria-label="Sections">
@@ -37,9 +38,10 @@ export function SectionTree({ workspace }: { workspace?: Workspace }) {
       <span>Sections</span>
       <span className="header-actions">
         <IconButton label="Read the sections again" isDisabled={sections?.loading} onPress={() => void loadSections(workspace.path, true)}><RefreshIcon size={14} /></IconButton>
+        {onClose && <IconButton label="Close sections" onPress={onClose}><CloseIcon size={13} /></IconButton>}
       </span>
     </div>
-    <input className="section-filter" aria-label="Find a section" placeholder="Find a section…" value={filter} onChange={(event) => setFilter(event.target.value)} />
+    <input className="section-filter" autoFocus={Boolean(onClose)} aria-label="Find a section" placeholder="Find a section…" value={filter} onChange={(event) => setFilter(event.target.value)} />
     <div className="section-scroll">
       {sections?.loading && !sections.index && <p className="sidebar-empty">Reading sections…</p>}
       {sections?.error && <p className="sidebar-empty work-bad" role="alert">{sections.error}</p>}

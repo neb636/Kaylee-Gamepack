@@ -34,6 +34,10 @@ export interface GameState {
   /** The lab panel's note and AI provider. */
   draft?: string;
   provider?: "claude" | "codex";
+  /** The game panel is showing beside the agent (closed by default; remembered per piece of work). */
+  open?: boolean;
+  /** "Game big": the game takes most of the width, for lab sessions. */
+  big?: boolean;
 }
 
 /** One section link of the game, from `scripts/sections-index.mjs` in that checkout. */
@@ -88,6 +92,9 @@ export interface LayoutState {
   rightSize?: number;
   leftCollapsed: boolean;
   rightCollapsed: boolean;
+  /** Width (%) of the game panel beside the agent, and when it is "big". */
+  gameSize?: number;
+  gameBigSize?: number;
   rightPanel?: string;
   /** The Ship panel under the agent is folded away. */
   shipCollapsed?: boolean;

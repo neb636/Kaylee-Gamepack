@@ -16,13 +16,13 @@
   "title": "Gamepack Studio, rebuilt around the game",
   "icon": "🦄",
   "kind": "Local builder app: layout plan",
-  "updated": "2026-11-04",
+  "updated": "2026-11-05",
   "status": {
-    "label": "All 5 steps built",
-    "tone": "mint"
+    "label": "Agent first: step 6 of 8 built",
+    "tone": "butter"
   },
   "pitch": "Studio still looks like Agent Workbench: a left tree of *workspaces* (folders), a tab strip of generic views and an IDE side panel. But there is only ever **one** Gamepack checkout, and the real unit of work is **a piece of work on a branch** (a worktree, its agent, its PR, its preview). The new layout puts the **game in the middle**, the **list of pieces of work on the left**, and the **agent on the right**, with the labs as switches on the game instead of separate tabs.",
-  "next": "Dad lives in Studio for a few pieces of work and says what still gets in the way. Known small things: main's half of ⇆ Main shows the splash until the main checkout has #313; Files and Commit changes stay as + tabs unless Dad wants them gone.",
+  "next": "Dad tries the agent-first layout (step 6): open a worktree, work with the agent, press ▶ Game or ⌘G only when needed. Next: step 7, start typing at once (no setup form, the CLI starts right away, the composer holds a prompt until the CLI is ready).",
   "facts": [
     {
       "icon": "📁",
@@ -348,6 +348,25 @@
               "md": "Side-by-side branch vs main (needs a second game server), known issues, the pastel theme. Drop what's left over: Active views panel, Personas, the file tree if Dad never opens it.",
               "date": "2026-11-04",
               "pr": 316
+            },
+            {
+              "n": 6,
+              "title": "Agent first, the game when wanted",
+              "status": "done",
+              "date": "2026-11-05",
+              "md": "Dad (2026-11-05): 80% of Studio is a Claude Code or Codex session; the labs are occasional. The agent (terminal + composer, tabs for other agents and terminals) becomes the main column. The game moves to a right panel, **closed by default** and remembered per piece of work (`game.open`), opened with **▶ Game** or ⌘G. Its toolbar keeps the device frame, Camera / Feel / Character, ⇆ Main and known issues, plus **⤢ Big** (the game takes most of the width, for lab sessions) and ✕. The Sections tree leaves the left column for a **☰ Sections** drawer over the game. The game's server starts only when the panel opens and stops a minute after it closes."
+            },
+            {
+              "n": 7,
+              "title": "Start typing at once",
+              "status": "todo",
+              "md": "No setup form: opening a worktree or **+** starts the last-used CLI straight away (a Claude / Codex dropdown on the tab switches it). Run in and Location go (the worktree is what's picked on the left); Resume previous moves into the **+** menu. The composer holds a prompt until the CLI is ready instead of “Not sent”. A session is named from its first prompt instead of “Untitled · Setup”."
+            },
+            {
+              "n": 8,
+              "title": "Tidy the edges",
+              "status": "todo",
+              "md": "Ship becomes a **Ship ▾** menu in the header instead of a permanent footer (its output still opens in a terminal tab). “Dependencies are missing” shows on the worktree's row with an **npm ci** button. Work rows get **+ Claude** / **+ Codex** on hover."
             }
           ]
         },
@@ -498,6 +517,18 @@
                 }
               ],
               "pr": 316
+            },
+            {
+              "title": "Step 6: agent first, the game when wanted",
+              "date": "2026-11-05",
+              "status": "done",
+              "summary": "The agent fills the middle; the game is a right panel Dad opens with ▶ Game or ⌘G, closed by default and remembered per piece of work.",
+              "items": [
+                "`WorkbenchShell`: work | agent | game (only mounted when `game.open`). Panel widths saved as `layout.gameSize` / `gameBigSize`.",
+                "`GamePane`: ☰ Sections drawer (the old left-column tree), ⤢ Big, ✕. `openInGame` opens a closed panel at that link.",
+                "Game servers: none start until the panel opens; with no game on screen, `trimServers(0)` after 60 s.",
+                "`qa:labs` opens ▶ Game first, finds the game frame by `?studio=1` (the pool's port, not 5174), retries Read controls while a cold server builds, waits for prepared prompts, and expects the character lab's current link (the `nick-code` lineup is gone from the game)."
+              ]
             }
           ]
         }
