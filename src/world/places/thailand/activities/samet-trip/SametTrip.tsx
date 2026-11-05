@@ -10,7 +10,9 @@
 // (pack, the first trip of a session from the Thailand map's 🏝️ pin), the speedboat from Ban Phe to Na Dan pier
 // (speedboat/), the island saved on the iPad as she plays (where she was, the flags, her book, what she packed: a link's
 // params win over it), and home: with all four flags up the speedboat at Na Dan takes them home, Mommy's photo goes on
-// Agong's wall and the stamp lands on the 🏝️ pin (the fire show comes before it with the finale).
+// Agong's wall and the stamp lands on the 🏝️ pin. Step 9 is the finale (finale/): with all four flags up the
+// driftwood tree opens the sunset at Ao Prao (Mommy's photo of the three of them), then the fire show on Sai Kaew at
+// night, and its 🏠 takes them home (the sunset photo on Agong's wall, the stamp).
 import { useEffect, useRef, useState } from 'react'
 import { useSaved } from '../../../../../sdk'
 import { flag } from '../../../../engine3d/flags'
@@ -33,7 +35,10 @@ import { LunchScreen } from './hideseek/LunchScreen'
 import type { HideRound } from './hideseek/hideseek'
 import type { SnorkelRound } from './snorkel/snorkel'
 import type { SandRound } from './sandcastle/sandcastle'
-import SAMET_SECTIONS, { FLAGS, HIDE_ROUNDS, SAND_ROUNDS, SNORKEL_ROUNDS, SPOTS } from './sections'
+import { SunsetScreen } from './finale/SunsetScreen'
+import { FireShowScreen } from './finale/FireShowScreen'
+import type { FireRound } from './finale/fireshow'
+import SAMET_SECTIONS, { FIRE_ROUNDS, FLAGS, HIDE_ROUNDS, SAND_ROUNDS, SNORKEL_ROUNDS, SPOTS } from './sections'
 
 const readFlags = (s: string): StopId[] => (s === 'all' ? [...FLAGS] : (s.split(',').filter((f) => (FLAGS as readonly string[]).includes(f)) as StopId[]))
 
@@ -53,9 +58,11 @@ export function SametTrip({ onDone }: Props = {}) {
     // (A new packing starts with an empty suitcase.)
     packed: parsePacked(flag('packed') ?? (start === 'pack' ? '' : saved.packed || SAMET_PACKED)),
   }))
-  const [sec, setSec] = useState(() => ({ id: start ?? 'island', n: 0, at: (SPOTS as readonly string[]).includes(first.at) ? (first.at as SpotId) : 'nadan', flags: readFlags(first.flags), round: param('round') as RoundId | SandRound | SnorkelRound | HideRound }))
+  const [sec, setSec] = useState(() => ({ id: start ?? 'island', n: 0, at: (SPOTS as readonly string[]).includes(first.at) ? (first.at as SpotId) : 'nadan', flags: readFlags(first.flags), round: param('round') as RoundId | SandRound | SnorkelRound | HideRound | FireRound }))
   const time = (param('time') || null) as TimeOfDay | null
   const reefRound = useRef<SnorkelRound>('float')
+  /** Mommy's photo of the three of them at sunset (for Agong's wall). */
+  const sunsetPhoto = useRef<string | null>(null)
   const flagParam = (f: StopId[]) => (f.length === FLAGS.length ? 'all' : f.join(',') || undefined)
   const [packed, setPacked] = useState<string[]>(first.packed)
   const packedRef = useRef(packed)
@@ -76,6 +83,7 @@ export function SametTrip({ onDone }: Props = {}) {
     if (sec.id === 'island' || sec.id === 'book') island(sec.id === 'book', sec.at)
     else if (sec.id === 'pack') enter('pack', { packed: formatPacked(packedRef.current) })
     else if (sec.id === 'speedboat') enter('speedboat', { packed: formatPacked(packedRef.current), time: time ?? undefined })
+    else if (sec.id === 'sunset') enter('sunset', { flags: flagParam(sec.flags) })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sec.n])
 
@@ -114,6 +122,30 @@ export function SametTrip({ onDone }: Props = {}) {
         }}
       />
     )
+  if (sec.id === 'sunset')
+    return (
+      <SunsetScreen
+        key={sec.n}
+        flags={sec.flags}
+        onPhoto={(src) => (sunsetPhoto.current = src)}
+        onFireShow={() => {
+          setSec((s) => ({ ...s, id: 'fireshow', n: s.n + 1, round: 'twirl' }))
+          enter('fireshow', { round: 'twirl', flags: flagParam(sec.flags) })
+        }}
+      />
+    )
+  if (sec.id === 'fireshow') {
+    const fr = ((FIRE_ROUNDS as readonly string[]).includes(sec.round) ? sec.round : 'twirl') as FireRound
+    return (
+      <FireShowScreen
+        key={sec.n}
+        round={fr}
+        flags={sec.flags}
+        onRound={(round) => enter('fireshow', { round, flags: flagParam(sec.flags) })}
+        onHome={(photo) => home(sunsetPhoto.current ?? photo)}
+      />
+    )
+  }
   if (sec.id === 'sandcastle') {
     const sand = ((SAND_ROUNDS as readonly string[]).includes(sec.round) ? sec.round : 'dig') as SandRound
     return (
@@ -213,6 +245,10 @@ export function SametTrip({ onDone }: Props = {}) {
       onAt={(at) => island(false, at)}
       onBook={(book, open) => island(open, here.current.at, book)}
       onOpen={(stop) => {
+        if (stop === 'sunset') {
+          setSec((s) => ({ ...s, id: 'sunset', n: s.n + 1 }))
+          return enter('sunset', { flags: flagParam(sec.flags) })
+        }
         if (stop === 'lunch') {
           setSec((s) => ({ ...s, id: 'deck', n: s.n + 1 }))
           return enter('deck', { flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(here.current.book) })

@@ -21,8 +21,11 @@
 //           mango sticky rice.
 //   hideseek  greybox 6, hide and seek by the driftwood tree at Ao Prao (hideseek?round=1|2|hide): she counts, then
 //           leads Kaylee round the beach to find Daddy; then her turn to hide while he searches the wrong places.
-// With all four flags up, the speedboat at Na Dan pier takes them home: Mommy's photo goes on Agong's wall, the stamp
-// lands on the 🏝️ pin (the fire show will come before it). The trip is saved on the iPad as she plays (trip.ts). In the
+//   sunset  step 9, the finale's first beat: the sunset at the driftwood tree on Ao Prao (pull the sun down into the
+//           sea, Mommy's photo of the three of them), then night falls.
+//   fireshow  step 9, the fire show on Sai Kaew at night (fireshow?round=twirl|shapes|finish): twirl the glowing poi.
+// With all four flags up, the driftwood tree opens the finale; at the end of the fire show they go home: Mommy's photo
+// goes on Agong's wall, the stamp lands on the 🏝️ pin (the speedboat at Na Dan pier takes them home too). The trip is saved on the iPad as she plays (trip.ts). In the
 // works: only these links (and the map's pin with ?samet=1) reach it. Loaded at startup: keep three.js (and the island's coastline data) out of this file.
 import { defineSections } from '../../../../kit/sections'
 import { ITEMS } from '../../trip/packing'
@@ -37,6 +40,8 @@ export const SAND_ROUNDS = ['dig', 'towers', 'tide'] as const
 export const SNORKEL_ROUNDS = ['float', 'follow', 'cuttle'] as const
 /** Hide and seek's rounds (hideseek/hideseek.ts HIDE_ROUND_IDS). */
 export const HIDE_ROUNDS = ['1', '2', 'hide'] as const
+/** The fire show's rounds (finale/fireshow.ts FIRE_ROUND_IDS). */
+export const FIRE_ROUNDS = ['twirl', 'shapes', 'finish'] as const
 /** Where she can land on the island (island/layout.ts SPOT_IDS). */
 export const SPOTS = ['nadan', 'saikaew', 'hinkhok', 'phai', 'wongduan', 'prao', 'deck', 'aonoina'] as const
 /** The stops, each with its pink flag (island/layout.ts STOPS). */
@@ -52,7 +57,7 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
     time: { default: '', values: ['', ...TIMES], doc: 'the light, overriding the flags: morning, noon, afternoon, golden or night (the beach bars and lanterns glow, the stars come out)' },
     book: { default: '', doc: `the animals already in her book (snapped with Mommy's phone), a comma list of ${ANIMAL_IDS.join(', ')} (or all)` },
     phone: { default: '', values: ['', '1'], doc: "1: Mommy's phone is out from the start (every tap is a photo)" },
-    round: { default: 'ride', values: [...JET_ROUNDS, ...SAND_ROUNDS, ...SNORKEL_ROUNDS, ...HIDE_ROUNDS], doc: 'the round of a stop. Hide and seek: 1 (easy hides: Kaylee covers her eyes by the driftwood tree and counts, then finds Daddy behind the tree, behind the tipped-over pink umbrella with his feet showing, behind the stack of red chairs; tap his hiding place, or walk right up), 2 (trickier: in the roots, under the towel that breathes, in the sea with only his cap floating, up the pandanus tree; stuck a while and he gives himself away) or hide (her turn: Daddy counts at the tree, she leads Kaylee to a glowing hiding place, he searches the wrong places and gives up, Kaylee wins). The snorkel: float (splash in off the boat\'s ladder and lead Kaylee over the coral, the damselfish crowd parting round her; bump a coral head and a little fish pops out, the urchins boing her off), follow (the parrotfish swims ahead and waits: through the gap between the rocks, over the sand with the giant clam, into the garden) or cuttle (the cuttlefish in the garden changes color as she comes close, rainbow, stripes, pink; Mommy\'s camera snaps the fish for her book). The sandcastle: dig (dig holes and moats with her finger, the sand piling up beside them; a ghost crab pops out of a deep hole), towers (the moulds arrive: drag one, tap it and it flips to leave a tower; shells to push into the walls) or tide (the tide creeps in: dig a channel and the sea fills the moat, a hermit crab moves in, the big wave). The jet ski: ride (the calm bay inside the buoy rope: the life jacket first, then carve, spray, splash the swimmers, close a loop of wake for the jumping fish), waves (bigger waves roll in from the open sea: steer into them to jump, a spin on the biggest) or race (out round the big orange buoy and back to the flags against the jet ski man; the winner rings the bell)' },
+    round: { default: 'ride', values: [...JET_ROUNDS, ...SAND_ROUNDS, ...SNORKEL_ROUNDS, ...HIDE_ROUNDS, ...FIRE_ROUNDS], doc: 'the round of a stop (or of the fire show). The fire show: twirl (her finger draws in the air and her glowing poi follow it, ribbons of pink and gold light; the fire dancers copy her speed and size, a big circle and they swing a ring of fire), shapes (the dancers draw a circle, a star, a heart in fire over the sea; she draws over the dots and it lifts into the sky like a lantern of light) or finish (each pink flag adds something, one per loop she draws: the jet ski man rides by with lights, her sandcastle glows with candles, the parrotfish and cuttlefish light up in the waves, Daddy dances; then one huge circle lights a ring of fire round the beach, and fireworks). Hide and seek: 1 (easy hides: Kaylee covers her eyes by the driftwood tree and counts, then finds Daddy behind the tree, behind the tipped-over pink umbrella with his feet showing, behind the stack of red chairs; tap his hiding place, or walk right up), 2 (trickier: in the roots, under the towel that breathes, in the sea with only his cap floating, up the pandanus tree; stuck a while and he gives himself away) or hide (her turn: Daddy counts at the tree, she leads Kaylee to a glowing hiding place, he searches the wrong places and gives up, Kaylee wins). The snorkel: float (splash in off the boat\'s ladder and lead Kaylee over the coral, the damselfish crowd parting round her; bump a coral head and a little fish pops out, the urchins boing her off), follow (the parrotfish swims ahead and waits: through the gap between the rocks, over the sand with the giant clam, into the garden) or cuttle (the cuttlefish in the garden changes color as she comes close, rainbow, stripes, pink; Mommy\'s camera snaps the fish for her book). The sandcastle: dig (dig holes and moats with her finger, the sand piling up beside them; a ghost crab pops out of a deep hole), towers (the moulds arrive: drag one, tap it and it flips to leave a tower; shells to push into the walls) or tide (the tide creeps in: dig a channel and the sea fills the moat, a hermit crab moves in, the big wave). The jet ski: ride (the calm bay inside the buoy rope: the life jacket first, then carve, spray, splash the swimmers, close a loop of wake for the jumping fish), waves (bigger waves roll in from the open sea: steer into them to jump, a spin on the biggest) or race (out round the big orange buoy and back to the flags against the jet ski man; the winner rings the bell)' },
   },
   sections: [
     { id: 'pack', name: 'Pack for the island (greybox): the swimsuit, the sun hat, the floaties, the bucket', params: ['packed'], group: 'Getting there (greybox)' },
@@ -141,6 +146,24 @@ const SAMET_SECTIONS = defineSections('thailand', 'samet-trip', {
         { label: 'Easy hides: count by the driftwood tree, find Daddy', params: { round: '1' }, also: [{ label: 'tune the feel', params: { round: '1' }, flags: { feel: '1' } }] },
         { label: 'Trickier hides: the roots, the towel, the sea, the pandanus', params: { round: '2' } },
         { label: 'Her turn to hide: Daddy counts and searches the wrong places', params: { round: 'hide' } },
+      ],
+    },
+    {
+      id: 'sunset',
+      name: 'Finale: the sunset at the driftwood tree (greybox): pull the sun down into the sea, Mommy’s photo',
+      params: ['flags'],
+      group: 'The finale: sunset and the fire show (greybox)',
+      links: [{ label: 'The sunset at the driftwood tree: pull the sun down into the sea, Mommy’s photo of the three of them, night falls', params: { flags: 'all' }, also: [{ label: 'tune the feel', params: { flags: 'all' }, flags: { feel: '1' } }] }],
+    },
+    {
+      id: 'fireshow',
+      name: 'Finale: the fire show on Sai Kaew (greybox): twirl the glowing poi',
+      params: ['round', 'flags'],
+      group: 'The finale: sunset and the fire show (greybox)',
+      links: [
+        { label: 'Twirl the glowing poi: ribbons of light, the fire dancers copy her', params: { round: 'twirl', flags: 'all' }, also: [{ label: 'tune the feel', params: { round: 'twirl', flags: 'all' }, flags: { feel: '1' } }] },
+        { label: 'Shapes in the sky: a circle, a star, a heart', params: { round: 'shapes', flags: 'all' } },
+        { label: 'The big finish: what each flag adds, the ring of fire, fireworks', params: { round: 'finish', flags: 'all' }, also: [{ label: 'with only the jet ski flag', params: { round: 'finish', flags: 'jetski' } }] },
       ],
     },
   ],

@@ -14,6 +14,9 @@
 // Greybox 7, getting there and the trip frame: packing in Kaylee's room, the speedboat leaving Ban Phe and out at sea
 // (her hoof in the spray), the island with every flag up (the way home); filmed: her hoof in the spray out at sea,
 // dragging along the side.
+// Step 9, the finale: the sunset at the driftwood tree, the sun pulled down into the sea (night), the fire show's
+// twirl, a shape to draw over and the big finish (the ring of fire, fireworks); filmed: twirling the glowing poi in
+// circles (the ribbons, the dancers copying her), and drawing the big ring for the ring of fire.
 // Not part of the app: Node runs it, Vite never sees it.
 
 const ready = (page) => page.waitForFunction(() => window.__thaiSametQA?.().phase, null, { timeout: 20000 })
@@ -116,6 +119,11 @@ export const screens = [
     wait: 2500,
     act: async (page) => snorkelLead(page, 'cuttleAt', 5000),
   },
+  { name: 'thailand-samet-sunset', hash: '#/world/thailand/samet-trip/sunset?flags=all', reset: true, wait: 3000 },
+  { name: 'thailand-samet-sunset-night', hash: '#/world/thailand/samet-trip/sunset?flags=all', reset: true, wait: 2500, act: async (page) => { await pullSun(page); await page.waitForTimeout(4500) } },
+  { name: 'thailand-samet-fireshow-twirl', hash: '#/world/thailand/samet-trip/fireshow?round=twirl&flags=all', reset: true, wait: 3000, act: async (page) => { await poiCircles(page, 1, 2); } },
+  { name: 'thailand-samet-fireshow-shape', hash: '#/world/thailand/samet-trip/fireshow?round=shapes&flags=all', reset: true, wait: 4000 },
+  { name: 'thailand-samet-fireshow-finish', hash: '#/world/thailand/samet-trip/fireshow?round=finish&flags=all', reset: true, wait: 2500, act: async (page) => { for (let i = 0; i < 4; i++) await poiCircles(page, 0.8, 1.15, 30); await page.waitForTimeout(2000); await poiCircles(page, (q) => q.bigR, 1.15, 40); await page.waitForTimeout(5000) } },
 ]
 
 /** Holds a finger on something the snorkel's QA reports a screen point for (`parrotAt`, `cuttleAt`), following it. */
@@ -167,8 +175,69 @@ async function boatSpray(page, ms) {
   await page.mouse.up()
 }
 
+/** Her finger drawing circles round the middle of the fire show's drawing plane (`r` meters, `loops` times). */
+async function poiCircles(page, r, loops, steps = 36) {
+  const q = await page.evaluate(() => window.__thaiSametQA?.())
+  if (!q?.plane) return
+  const { x, y, ppm } = q.plane
+  const R = (typeof r === 'function' ? r(q) : r) * ppm
+  await page.mouse.move(x + R, y)
+  await page.mouse.down()
+  for (let i = 0; i <= loops * steps; i++) {
+    const a = (i / steps) * Math.PI * 2
+    await page.mouse.move(x + Math.cos(a) * R, y + Math.sin(a) * R)
+    await page.waitForTimeout(18)
+  }
+  await page.mouse.up()
+}
+/** Pulls the sun down to the sea. */
+async function pullSun(page) {
+  const q = await page.evaluate(() => window.__thaiSametQA?.())
+  if (!q?.sun) return
+  await page.mouse.move(q.sun.x, q.sun.y)
+  await page.mouse.down()
+  for (let i = 0; i <= 30; i++) {
+    await page.mouse.move(q.sun.x, q.sun.y + ((q.horizon.y + 60 - q.sun.y) * i) / 30)
+    await page.waitForTimeout(40)
+  }
+  await page.mouse.up()
+}
+
 /** Filmed moments (scripts/qa-motion.mjs). */
 export const motion = [
+  {
+    name: 'thailand-samet-fireshow-twirl',
+    seconds: 10,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/fireshow?round=twirl&flags=all`)
+      await ready(page)
+      await page.waitForTimeout(2500)
+    },
+    act: async (page) => {
+      // Small quick circles, then big slow ones (the dancers copy her, then swing a ring of fire).
+      await poiCircles(page, 0.6, 3, 24)
+      await poiCircles(page, 1.3, 2, 48)
+      await page.waitForTimeout(1500)
+    },
+  },
+  {
+    name: 'thailand-samet-fireshow-finish',
+    seconds: 12,
+    setup: async (page, base) => {
+      await page.goto(`${base}#/world/thailand/samet-trip/fireshow?round=finish&flags=all`)
+      await ready(page)
+      await page.waitForTimeout(2000)
+      for (let i = 0; i < 4; i++) {
+        await poiCircles(page, 0.8, 1.15, 30)
+        await page.waitForTimeout(500)
+      }
+      await page.waitForTimeout(1600)
+    },
+    act: async (page) => {
+      await poiCircles(page, (q) => q.bigR, 1.15, 40)
+      await page.waitForTimeout(9000)
+    },
+  },
   {
     name: 'thailand-samet-speedboat-spray',
     seconds: 10,
