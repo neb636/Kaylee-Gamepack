@@ -17,9 +17,9 @@
   "icon": "🏝️",
   "kind": "Family trip: an open island",
   "updated": "2026-11-04",
-  "status": { "label": "Planned: waiting for Dad", "tone": "lav" },
+  "status": { "label": "Greybox 1 built: the jet ski", "tone": "pink" },
   "pitch": "Mommy, Daddy and Kaylee take the speedboat to **Koh Samet**, a little island of white sand off Rayong. The whole island is **one world she roams by herself** (in the spirit of cozy island games like Alba): sandy paths, five real beaches, the green taxi, the sea all round, and real island animals to snap with Mommy's phone for her animal book. On the beaches she **rides the jet ski** with Daddy, builds a sandcastle the waves fill, snorkels with the fish at Ko Kudi and plays hide and seek by the big driftwood tree. At night the fire dancers light up the beach for her. Every word is spoken.",
-  "next": "Dad reads this plan and answers the **[open questions](#questions)** (who drove the jet ski, how you got to Ban Phe, where lunch and the driftwood tree were). Then **greybox 1: the jet ski** in Sai Kaew bay, its feel on knobs (a `?feel=1` link in the PR).",
+  "next": "Dad plays **[the jet ski](#/world/thailand/samet-trip/jetski?round=ride)** on the iPad (then [the waves](#/world/thailand/samet-trip/jetski?round=waves) and [the race](#/world/thailand/samet-trip/jetski?round=race)) and tunes how it steers with **[?feel=1](#/world/thailand/samet-trip/jetski?round=ride&feel=1)**; the **[open questions](#questions)** still stand (who drove the jet ski, the jet ski man's animal). Then **greybox 2: the island to roam**, built on the same `island/layout.ts`, `engine3d/terrain.ts` and `engine3d/lagoon.ts`.",
   "facts": [
     { "icon": "⏱️", "value": "15-25 min", "label": "a whole day on the island, all four stops and the fire show" },
     { "icon": "👆", "value": "230-350", "label": "touches" },
@@ -425,7 +425,7 @@
           { "n": 2, "id": "speedboat", "name": "The speedboat from Ban Phe", "status": "todo" },
           { "n": 3, "id": "island", "name": "The island (land at Na Dan)", "query": "at=nadan", "status": "todo" },
           { "n": 4, "id": "book", "name": "The animal book", "status": "todo" },
-          { "n": 5, "id": "jetski", "name": "Jet ski: ride", "query": "round=ride", "status": "todo" },
+          { "n": 5, "id": "jetski", "name": "Jet ski: ride", "query": "round=ride" },
           { "n": 6, "id": "sandcastle", "name": "Sandcastle: dig", "query": "round=dig", "status": "todo" },
           { "n": 7, "id": "snorkel", "name": "Snorkel: float and look", "query": "round=float", "status": "todo" },
           { "n": 8, "id": "deck", "name": "Lunch on the deck at Ao Prao", "status": "todo" },
@@ -437,9 +437,9 @@
         { "type": "sections", "title": "Handy cases", "base": "#/world/thailand/samet-trip/", "items": [
           { "id": "island", "name": "Sai Kaew at noon, jet ski done (the jet ski on every beach)", "query": "at=saikaew&flags=jetski", "status": "todo" },
           { "id": "island", "name": "Ao Prao in the golden afternoon, three flags", "query": "at=prao&flags=jetski,sandcastle,snorkel", "status": "todo" },
-          { "id": "jetski", "name": "Jet ski: waves", "query": "round=waves", "status": "todo" },
-          { "id": "jetski", "name": "Jet ski: race the jet ski man", "query": "round=race", "status": "todo" },
-          { "id": "jetski", "name": "Jet ski: tune the feel", "query": "round=ride&feel=1", "status": "todo" },
+          { "id": "jetski", "name": "Jet ski: waves", "query": "round=waves" },
+          { "id": "jetski", "name": "Jet ski: race the jet ski man", "query": "round=race" },
+          { "id": "jetski", "name": "Jet ski: tune the feel", "query": "round=ride&feel=1" },
           { "id": "sandcastle", "name": "Sandcastle: the tide comes in", "query": "round=tide", "status": "todo" },
           { "id": "snorkel", "name": "Snorkel: the cuttlefish", "query": "round=cuttle", "status": "todo" },
           { "id": "hideseek", "name": "Hide and seek: her turn to hide", "query": "round=hide", "status": "todo" },
@@ -470,9 +470,9 @@
       "lede": "One PR per step; Dad plays each greybox on the iPad before the next. Until the whole trip is ready it's in `inTheWorks`: links work, Kaylee can't get there.",
       "blocks": [
         { "type": "build", "items": [
-          { "n": 0, "title": "This plan", "status": "doing", "date": "2026-11-04", "md": "Dad reads it and answers the open questions." },
-          { "n": 1, "title": "Greybox 1: the jet ski", "status": "next", "md": "Sai Kaew bay in the toon look with placeholder shapes: the beach strip, the hut, the buoy rope, the box jet ski with Kaylee and Daddy on it. The three rounds (`ride`, `waves`, `race`), the wake loop, silly beaching. **Feel on knobs** (`?feel=1`). Built in the island's real coordinates from day one (`island/layout.ts`) so it drops straight into step 2. The riskiest-for-fun piece, and Dad's must-have, so it goes first." },
-          { "n": 2, "title": "Greybox 2: the island to roam", "status": "todo", "md": "The open world itself, in blocks: the coastline and hills at 1:10, the five beaches, the paths over the rocks, the green taxi, Na Dan pier. Lead-to-walk, gallop, the floatie swim, Mommy and Daddy following, the day's light moving with `flags`, 20+ pokes, the pink flags. **The riskiest tech:** a world ~10× the house's size at 60 fps on the iPad (see the tech plan)." },
+          { "n": 0, "title": "This plan", "status": "done", "date": "2026-11-04", "pr": 312, "md": "Dad reads it and answers the open questions." },
+          { "n": 1, "title": "Greybox 1: the jet ski", "status": "done", "date": "2026-11-04", "pr": 322, "md": "Sai Kaew bay in the toon look with placeholder shapes: the beach strip, the hut, the buoy rope, the box jet ski with Kaylee and Daddy on it. The three rounds (`ride`, `waves`, `race`), the wake loop, silly beaching. **Feel on knobs** (`?feel=1`). Built in the island's real coordinates from day one (`island/layout.ts`) so it drops straight into step 2. The riskiest-for-fun piece, and Dad's must-have, so it goes first." },
+          { "n": 2, "title": "Greybox 2: the island to roam", "status": "next", "md": "The open world itself, in blocks: the coastline and hills at 1:10, the five beaches, the paths over the rocks, the green taxi, Na Dan pier. Lead-to-walk, gallop, the floatie swim, Mommy and Daddy following, the day's light moving with `flags`, 20+ pokes, the pink flags. **The riskiest tech:** a world ~10× the house's size at 60 fps on the iPad (see the tech plan)." },
           { "n": 3, "title": "Greybox 3: Mommy's phone and the animal book", "status": "todo", "md": "The camera mode, the 14 animals with simple behaviors (wander, flee, perch, swim), the book pages, the beach clean." },
           { "n": 4, "title": "Greybox 4: the sandcastle", "status": "todo", "md": "The diggable sand patch (a deforming height field), bucket towers, the tide and the channel, burying Daddy." },
           { "n": 5, "title": "Greybox 5: the snorkel", "status": "todo", "md": "The snorkel boat ride, Ko Kudi's reef (its own scene), the half-underwater camera, the fish crowd, the parrotfish to follow, the cuttlefish." },
@@ -481,6 +481,42 @@
           { "n": 8, "title": "The look", "status": "todo", "md": "The island made beautiful: the real sand and water colors, palms, samet trees, pandanus, boulders, the umbrellas, the deck, the sky through the day, the reef. The characters (the jet ski man, the boat captain, the fire dancers). See “The look”." },
           { "n": 9, "title": "The finale: sunset and the fire show", "status": "todo", "md": "Greybox, then its look." },
           { "n": 10, "title": "The full loop", "status": "todo", "md": "Every line in `lines.ts`, the new voices in `cast.json`, clips generated, hints, the facts, the sticker, full QA (layout-qa + playtest-qa) on the trip's sections, then out of `inTheWorks` and onto the Thailand map." }
+        ] }
+      ]
+    },
+    {
+      "id": "built",
+      "title": "What's built",
+      "icon": "✅",
+      "blocks": [
+        { "type": "log", "items": [
+          { "title": "Greybox 1: the jet ski at Hat Sai Kaew", "date": "2026-11-04", "status": "done", "pr": 322, "open": true, "summary": "Kaylee steers the jet ski with her finger, Daddy behind her, in the island's real coordinates: the calm bay, the waves, the race, the wake loop and the silly beaching, its feel on knobs.", "blocks": [
+            { "type": "list", "items": [
+              "**The island from the real map:** `island/layout.ts` holds OSM's real coastline of Ko Samet (way 26609854, 394 points at 1:10) and every beach's sand outline (OSM `natural=beach`), the plan's places from their lat/lon, and the bay laid out in the beach's own frame (`bay(u, v)`: along the sand, out to sea). `island/ground.ts` turns it into ground: wide crystal sand on the beaches, granite boulders and a quick rise elsewhere, a green spine of hills, shallows that slope away gently off the sand.",
+              "**New in the engine, opt-in so the bay and Canada don't change:** `engine3d/terrain.ts` (a height field from data, toon vertex colors, `heightAt`/`shoreAt`, and a sea texture of depth and shore distance) and `engine3d/lagoon.ts` (tropical water: see-through mint shallows to turquoise, teal and blue in soft bands, a swash line sliding up the sand, rolling waves in the vertex shader that the jet ski rides exactly, lighter crests and white water on big ones, sun glints).",
+              "**The look, pushed past a greybox (Dad: “make it visually impressive, best graphics in game so far”):** a gradient sky with the sun's glow, fat toon clouds with lavender bellies, Ko Kudi and its neighbors on the eastern horizon, the mainland's blue hills to the north, coconut palms leaning out over the sand, samet trees and forest up the hill, the pink umbrellas and red chairs, the thatched jet ski hut with its bell, and the mermaid on her rocks. All code-built shapes, no generated art.",
+              "**The jet ski** (`jetski/ski.ts`): white with red and yellow stripes and a black seat like the photo, Kaylee up front, Daddy behind with his hands forward, both in life jackets; the jet ski man's has blue stripes.",
+              "**The toy** (`jetski/jetski.ts`): finger on the water and it heads there (the shared `engine3d/drive.ts`), a rooster tail of spray, side spray on hard turns, a lean, a slide, the nose lifting, a white wake that stays ~20 s (`jetski/wake.ts`).",
+              "**Ride** (`?round=ride`): the life jacket floats by the jet ski and waits for her tap, then the jet ski man pushes them off. The buoy rope stretches like a rubber band where she pushes and boings her back. **The loop secret:** close a loop of wake and it sparkles and fills with jumping fish (a rough heart test makes the sparkles pink).",
+              "**Waves** (`?round=waves`): bigger waves roll in from the open sea; a wave lifting it fast then dropping away throws it in the air, a hard throw spins it, a big landing sprays the camera. Terns dive beside her.",
+              "**Race** (`?round=race`): 3, 2, 1, 🏁, out round the big orange buoy and back between the pink flags against the jet ski man. He eases off while he's ahead, catches up when she's far ahead, and if she stops he still only wins by a nose; he goes a little slower after each race she loses. The winner rings the bell; 🏆 🔁 after a win, “So close! 🔁” and straight into the next race after a loss.",
+              "**Silly, never failing:** fast onto the sand and it skids, Kaylee and Daddy tumble off and lie giggling, the jet ski man walks over and pushes it back out; doughnuts make Daddy dizzy (stars round his head); zooming past Mommy at the water's edge soaks her (she hops, twice); swimmers squeal and wave as she zooms past.",
+              "**Pokes:** the bell, the big buoy, the banana boat (everyone falls off and climbs back on), the four swimmers, the three terns, the eight umbrellas (they spin), Daddy (his cap blows off and he catches it), Mommy, the jet ski man, Kaylee (toot toot).",
+              "**Feel on knobs** (`?feel=1`): steering (top speed, speeding up, gliding, turn rate, grip, crawl/full-speed distances, the straight-ahead zone, lean, nose lift, camera turn, height, side and look-ahead), the waves and jumps (heights per round, crest spacing, speed, jump threshold and strength, spin, squash, jumps before the race), the rope, the sand and the silly things, and the race's rubber band. The lab graphs her finger against the jet ski. Round chips (🛥️ 🌊 🏁) show at the top right with `?feel=1`."
+            ] },
+            { "type": "callout", "tone": "warn", "title": "Changed from the plan", "items": [
+              "**Sai Kaew faces south-south-east, not east:** OSM's sand outline runs west-north-west to east-south-east, from the mermaid's rocks to a little headland. The bay, the camera and the waves follow the real beach.",
+              "**The sand is widened:** at 1:10 a real beach would be a 3 m strip, too thin for a hut, umbrellas and people, so beach sand is 15 m deep (the waterline stays where OSM has it).",
+              "**More than placeholder blocks:** Dad asked for the best-looking scene so far, so the island, water and sky are already near the look gate. Characters other than the family are still stand-ins.",
+              "**The rounds move on by themselves:** ride → waves after ~70 s of riding (sooner after a loop), waves → race after 8 jumps. Knobs `jetSilly.ride` and `jetWaves.jumps`."
+            ] },
+            { "type": "callout", "tone": "open", "title": "Known small things", "items": [
+              "No voices yet (greybox): no spoken lines, only the 🏁 countdown and the end badges. The full loop adds Sparkle's few lines and the jet ski man's.",
+              "The jet ski man is a stand-in (a brown, round-eared animal in an orange vest and a cap) until Dad picks his animal (the plan's pick is an otter).",
+              "The heart test for the pink loop is rough: a generous one-dent-and-a-point check.",
+              "WebKit on a Mac counts about 100 draw calls and ~420k triangles: measure on the iPad with `?fps` and `?debug=1` before greybox 2 makes the island bigger."
+            ] }
+          ] }
         ] }
       ]
     },

@@ -6,7 +6,8 @@
 // (activities/mall-trip/, greyboxes so far, still in the works: Mommy's question, the Veloz, ICONSIAM, HarborLand's
 // hall of mini games, the pizza table, and home with the pizza box for Agong, then its stamp and the pizza slice
 // sticker); the third is the Nan road trip (activities/nan-trip/, in the works: greyboxes from Mommy's question to the
-// photo on Agong's wall, then its stamp). The finale (route `party`) is the family party, coming soon.
+// photo on Agong's wall, then its stamp); the fourth is the Koh Samet island trip (activities/samet-trip/, in the
+// works: greybox 1 is the jet ski at Sai Kaew). The finale (route `party`) is the family party, coming soon.
 import { use, useState } from 'react'
 import { StampEarned } from '../../kit/StampEarned'
 import { worldLink } from '../../../router'
@@ -20,6 +21,7 @@ import HUB_SECTIONS from './activities/hub/sections'
 import { MallTrip } from './activities/mall-trip/MallTrip'
 import { NanTrip } from './activities/nan-trip/NanTrip'
 import { PartySoon } from './PartySoon'
+import { SametTrip } from './activities/samet-trip/SametTrip'
 import { saidYes } from './trip/legs/Ask'
 import { MALL_FACTS, NAN_FACTS, TRIP_FACTS } from './trip/facts'
 
@@ -83,6 +85,8 @@ export default function Place(props: PlaceProps) {
       </>
     )
   }
+  // The Koh Samet trip: in the works (greybox 1, the jet ski at Sai Kaew); only its links open it.
+  if (activity === 'samet-trip' && info) return <SametTrip />
   if (activity === 'boat-trip' && info) {
     if (window.__kayleeWorld) window.__kayleeWorld.finish = finish
     return (
