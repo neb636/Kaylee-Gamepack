@@ -34,6 +34,10 @@ export interface GameState {
   /** The lab panel's note and AI provider. */
   draft?: string;
   provider?: "claude" | "codex";
+  /** The game panel is showing beside the agent (closed by default; remembered per piece of work). */
+  open?: boolean;
+  /** "Game big": the game takes most of the width, for lab sessions. */
+  big?: boolean;
 }
 
 /** One section link of the game, from `scripts/sections-index.mjs` in that checkout. */
@@ -88,6 +92,9 @@ export interface LayoutState {
   rightSize?: number;
   leftCollapsed: boolean;
   rightCollapsed: boolean;
+  /** Width (%) of the game panel beside the agent, and when it is "big". */
+  gameSize?: number;
+  gameBigSize?: number;
   rightPanel?: string;
   /** The Ship panel under the agent is folded away. */
   shipCollapsed?: boolean;
@@ -346,6 +353,8 @@ export interface WorkbenchApi {
     trimServers: (keep: number, root?: string) => Promise<void>;
     tune: (input: { id: string; provider: 'claude' | 'codex'; prompt: string; snapshot: import('./labs').LabSnapshot }) => Promise<import('./labs').LabProposal>;
     cancel: (id: string) => void;
+    /** ⌘G anywhere in the window (also inside the game frame, which keeps its own key events). Returns unsubscribe. */
+    onToggleGame: (listener: () => void) => () => void;
   };
   work: {
     list: (root: string, refresh?: boolean) => Promise<WorkList>;

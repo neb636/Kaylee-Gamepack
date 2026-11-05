@@ -7,9 +7,7 @@ import { useWorkbenchStore } from "../state/workbench-store";
 import { Button, IconButton } from "../ui/controls";
 import { BranchIcon, ChevronRightIcon, FolderIcon, MoreIcon, PlusIcon, RefreshIcon, SidebarLeftIcon } from "../ui/icons";
 import { shortBranch, useWorkList, workGroup } from "../features/work/work-store";
-import { SectionTree } from "../features/game/SectionTree";
 import { workAttention } from "../features/agent/attention";
-import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 const POLL_MS = 45_000;
 const FOCUS_REFRESH_MS = 60_000;
@@ -162,7 +160,6 @@ function WorkTree({ label, items, workspaces, onCleanUp }: { label: string; item
 export function LeftSidebar({ onCollapse }: { onCollapse: () => void }) {
   const repoRoot = useWorkbenchStore((state) => state.repoRoot);
   const workspaces = useWorkbenchStore((state) => state.workspaces);
-  const activeWorkspace = useWorkbenchStore((state) => state.workspaces.find((workspace) => workspace.id === state.activeWorkspaceId));
   const { list, error, loading, refresh } = useWorkList();
   const [creating, setCreating] = useState(false);
   const [showFinished, setShowFinished] = useState(false);
@@ -223,8 +220,6 @@ export function LeftSidebar({ onCollapse }: { onCollapse: () => void }) {
     <div className="sidebar-titlebar">
       <IconButton label="Hide sidebar" onPress={onCollapse}><SidebarLeftIcon size={16} /></IconButton>
     </div>
-    <PanelGroup direction="vertical" autoSaveId="studio-left-split" className="left-split">
-    <Panel minSize={20} defaultSize={55} className="left-split-panel">
     <div className="sidebar-section-header">
       <span>Work <span className="count-muted">{groups.active.length}</span></span>
       <span className="header-actions">
@@ -260,12 +255,6 @@ export function LeftSidebar({ onCollapse }: { onCollapse: () => void }) {
         </div>)}
       </>}
     </div>
-    </Panel>
-    <PanelResizeHandle className="dock-resize" aria-label="Resize work and sections"><span /></PanelResizeHandle>
-    <Panel minSize={15} defaultSize={45} className="left-split-panel">
-      <SectionTree workspace={activeWorkspace} />
-    </Panel>
-    </PanelGroup>
     <nav className="sidebar-footer" aria-label="App">
       {services.widgets.forSlot("sidebar.footer").map((widget) => {
         const Widget = widget.component;

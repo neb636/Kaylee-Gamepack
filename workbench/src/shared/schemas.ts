@@ -22,6 +22,8 @@ export const workspaceSchema = z.object({
     beforeCharacter: z.string().max(4000).optional(),
     draft: z.string().max(20_000).optional(),
     provider: z.enum(["claude", "codex"]).optional(),
+    open: z.boolean().optional(),
+    big: z.boolean().optional(),
   }).optional(),
 });
 
@@ -78,6 +80,8 @@ export const layoutStateSchema = z.object({
   rightSize: z.number().min(0).max(100).optional(),
   leftCollapsed: z.boolean().default(false),
   rightCollapsed: z.boolean().default(false),
+  gameSize: z.number().min(0).max(100).optional(),
+  gameBigSize: z.number().min(0).max(100).optional(),
   rightPanel: z.string().optional(),
   shipCollapsed: z.boolean().optional(),
 });

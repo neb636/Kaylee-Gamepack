@@ -11,8 +11,8 @@ npm run studio:install       # isolated Electron dependencies + native PTY rebui
 npm run studio
 ```
 
-The launcher compiles Electron, starts the game at `http://127.0.0.1:5174` and the studio renderer at
-`http://127.0.0.1:5175`, then opens Electron. It refuses occupied ports. Close the studio window, use Cmd+Q, or press Ctrl+C
+The launcher compiles Electron, starts the studio renderer at `http://127.0.0.1:5175`, then opens Electron. It refuses an
+occupied port. No game server runs until a game panel opens (ports 5174, 5176, 5178, 5180). Close the studio window, use Cmd+Q, or press Ctrl+C
 in the launching terminal to stop the servers. Normal game development can still use port 5173. Node 22.12+ (24 recommended), npm, installed and signed-in `claude` and/or
 `codex` CLIs are required for AI. Their existing login/config is used; the studio needs no API key of its own.
 
@@ -45,7 +45,13 @@ open its agent and views; its sessions nest under it.
 - The **Source control** panel still switches branches and commits; switching needs a clean tree, and Studio never
   stashes or discards edits for you. Personas are gone for now; Instructions stay in Settings.
 
-Open a piece of work's camera, feel or character lab to start its live game server on loopback port 5174.
+**Layout.** The agent fills the middle: its terminal on top, the composer under it, other agents and terminals as
+tabs. The game stays closed until you press **▶ Game** (or ⌘G); it opens on the right, with ☰ Sections, the device
+frame, the Camera / Feel / Character switches, ⇆ Main and **⤢ Big** (the game takes most of the width, for lab
+sessions). Studio remembers per piece of work whether its game was open. The game server starts only when the game
+opens and stops a minute after it closes.
+
+Open a piece of work's game (then its camera, feel or character lab) to start its live game server on a loopback port.
 Switching work and opening a lab restarts the server for that checkout. The built interface stays on port 5175,
 so the labs retain their exact-origin checks. Quit Studio to stop both servers. Each checkout needs `npm ci` once
 (use a Studio terminal), Node 22.12+ and your signed-in AI CLIs. If a branch is missing, run `git fetch` in its terminal

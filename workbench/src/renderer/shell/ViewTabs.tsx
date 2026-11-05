@@ -5,7 +5,7 @@ import { services } from "../core/services";
 import { useViewStatuses, viewStatus } from "../core/view-status";
 import { useWorkbenchStore } from "../state/workbench-store";
 import { IconButton } from "../ui/controls";
-import { ChevronDownIcon, CloseIcon, PlusIcon, SidebarLeftIcon, SidebarRightIcon } from "../ui/icons";
+import { ChevronDownIcon, CloseIcon, PlusIcon, SidebarLeftIcon } from "../ui/icons";
 
 const TAB_WIDTH = 146;
 
@@ -18,14 +18,12 @@ function splitTabs(views: WorkbenchView[], activeId: string | undefined, capacit
   return { visible, hidden: views.filter((view) => !visible.includes(view)) };
 }
 
-export function ViewTabs({ workspace, showLeftToggle, showRightToggle, onShowLeft, onShowRight, onHide }: {
+export function ViewTabs({ workspace, showLeftToggle, onShowLeft, trailing }: {
   workspace?: Workspace;
   showLeftToggle: boolean;
-  showRightToggle: boolean;
   onShowLeft: () => void;
-  onShowRight: () => void;
-  /** The agent column's own hide button. */
-  onHide?: () => void;
+  /** Buttons at the right end of the strip (the ▶ Game toggle). */
+  trailing?: React.ReactNode;
 }) {
   const statuses = useViewStatuses();
   const selectView = useWorkbenchStore((state) => state.selectView);
@@ -84,7 +82,6 @@ export function ViewTabs({ workspace, showLeftToggle, showRightToggle, onShowLef
         </Menu>
       </Popover>
     </MenuTrigger>}
-    {showRightToggle && <IconButton label="Show side panel" onPress={onShowRight}><SidebarRightIcon size={16} /></IconButton>}
-    {onHide && <IconButton label="Hide agent column" onPress={onHide}><SidebarRightIcon size={16} /></IconButton>}
+    {trailing}
   </div>;
 }

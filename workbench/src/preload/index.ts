@@ -20,6 +20,11 @@ const api: WorkbenchApi = {
     trimServers: (keep, root) => ipcRenderer.invoke('studio:trim-servers', keep, root),
     tune: input => ipcRenderer.invoke('studio:tune', input),
     cancel: id => ipcRenderer.send('studio:cancel', id),
+    onToggleGame: listener => {
+      const handler = () => listener();
+      ipcRenderer.on('studio:toggle-game', handler);
+      return () => { ipcRenderer.removeListener('studio:toggle-game', handler); };
+    },
   },
   work: {
     list: (root, refresh) => ipcRenderer.invoke(IPC.workList, { root, refresh }),

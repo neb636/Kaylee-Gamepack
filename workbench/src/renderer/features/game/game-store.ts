@@ -90,8 +90,11 @@ export function patchGame(workspaceId: string, patch: Partial<GameState>): void 
   }));
 }
 
-/** Opens a link in a workspace's game pane. */
+/** Opens a link in a workspace's game pane (and shows the pane if it was closed). */
 export function openInGame(workspaceId: string, hash: string): void {
+  const workspace = useWorkbenchStore.getState().workspaces.find((candidate) => candidate.id === workspaceId);
+  // A closed pane mounts fresh and opens at its saved link (it ignores requests made before it was there).
+  if (workspace && !workspace.game?.open) { patchGame(workspaceId, { open: true, link: hashOf(hash) }); return; }
   useGameLive.setState((state) => ({ go: { ...state.go, [workspaceId]: { hash: hashOf(hash), nonce: ++nonce } } }));
 }
 
