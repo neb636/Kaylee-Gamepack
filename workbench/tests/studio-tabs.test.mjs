@@ -138,3 +138,16 @@ test("an edit landing while a save is written is never overwritten; competing sa
   } finally { fsPromises.writeFile = original; }
   assert.equal(await readFile(join(root, "src", "kart.ts"), "utf8"), "agent\n");
 });
+
+test("trash and rename act on a symlink itself, not its target", async () => {
+  const { root, files, trashed } = await fixture();
+  await symlink(join(root, "src"), join(root, "alias"));
+  await files.trash(root, "alias");
+  assert.deepEqual(trashed, [join(root, "alias")]);
+  await files.rename(root, "alias", "alias2");
+  assert.equal((await readFile(join(root, "alias2", "kart.ts"), "utf8")).includes("steer"), true);
+  assert.equal((await readFile(join(root, "src", "kart.ts"), "utf8")).includes("steer"), true);
+  // The escaping link can be removed as a link, never its outside target.
+  await files.trash(root, "escape.txt");
+  assert.equal(trashed.at(-1), join(root, "escape.txt"));
+});

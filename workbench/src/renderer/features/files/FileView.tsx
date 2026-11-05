@@ -105,8 +105,13 @@ export function FileView({ view, workspace }: ViewComponentProps) {
       if (result.ok) {
         baseHash.current = result.hash;
         saved.current = doc;
-        markDirty(!editor.state.doc.eq(doc));
-        fileBuffers.delete(view.id);
+        if (editorRef.current === editor) { markDirty(!editor.state.doc.eq(doc)); fileBuffers.delete(view.id); }
+        else {
+          // The tab was left before the save finished: its newer edits wait in the buffer, now against this version.
+          const kept = fileBuffers.get(view.id);
+          if (!kept || kept.text === text) { fileBuffers.delete(view.id); setViewDirty(view.id, false); }
+          else fileBuffers.set(view.id, { ...kept, saved: text, hash: result.hash });
+        }
         setConflict(undefined);
         setNotice("Saved");
         if (previewRef.current) update({ preview: false });

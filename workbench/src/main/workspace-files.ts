@@ -111,6 +111,18 @@ async function resolveNew(base: string, relative: string): Promise<string> {
   return resolved;
 }
 
+/** An existing entry itself (a symlink stays the link, not its target): its folder must be inside the base. */
+async function resolveEntry(base: string, relative: string): Promise<string> {
+  if (path.isAbsolute(relative)) throw new Error("Paths must be relative to the workspace.");
+  const target = path.resolve(base, relative || ".");
+  if (target === base) return base;
+  const parent = await fs.realpath(path.dirname(target));
+  if (parent !== base && !isInside(parent, base)) throw new Error("Path is outside the workspace.");
+  const entry = path.join(parent, path.basename(target));
+  await fs.lstat(entry);
+  return entry;
+}
+
 /** Parses `git grep -n -z` output: `path\0line\0text` per line. */
 export function parseGrep(output: string, limit = SEARCH_MATCHES): SearchMatch[] {
   const matches: SearchMatch[] = [];
@@ -279,7 +291,7 @@ export class WorkspaceFiles {
 
   async rename(root: string, from: string, to: string): Promise<void> {
     const base = await this.roots.resolve(root);
-    const source = await resolveInside(base, from);
+    const source = await resolveEntry(base, from);
     if (source === base) throw new Error("The checkout itself can't be renamed.");
     if (toPortable(path.relative(base, source)).split("/")[0] === ".git") throw new Error("Studio never changes .git.");
     const target = await resolveNew(base, to);
@@ -290,7 +302,7 @@ export class WorkspaceFiles {
 
   async trash(root: string, relative: string): Promise<void> {
     const base = await this.roots.resolve(root);
-    const target = await resolveInside(base, relative);
+    const target = await resolveEntry(base, relative);
     if (target === base) throw new Error("The checkout itself can't be moved to the Trash.");
     if (toPortable(path.relative(base, target)).split("/")[0] === ".git") throw new Error("Studio never changes .git.");
     await this.trashItem(target);
