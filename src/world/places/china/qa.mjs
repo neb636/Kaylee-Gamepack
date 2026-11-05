@@ -8,11 +8,7 @@ export const screens = [
   { name: 'china-intro', hash: '#/world/china', reset: true, wait: 300 },
   { name: 'china-hub', hash: '#/world/china', act: skip },
   // China: open the exact section instead of replaying earlier rounds.
-  { name: 'dumplings-arrive', hash: '#/world/china/dumplings/arrive', reset: true, wait: 400 },
-  { name: 'dumplings-oldtown', hash: '#/world/china/dumplings/walk', reset: true },
-  { name: 'dumplings-kitchen', hash: '#/world/china/dumplings/k1', reset: true, wait: 2200 },
-  { name: 'dumplings-kitchen3', hash: '#/world/china/dumplings/k3?at=make&baskets=baobao:pink-green-yellow', reset: true, wait: 1500 },
-  { name: 'dumplings-dining2', hash: '#/world/china/dumplings/d2', reset: true, wait: 1500 },
+  // The Dumpling House (3D) keeps its own screens and filmed moments in activities/dumplings/qa.mjs.
   { name: 'bamboo-story', hash: '#/world/china/bamboo/story', reset: true, wait: 400 },
   { name: 'bamboo-round1', hash: '#/world/china/bamboo/r1', reset: true },
   {

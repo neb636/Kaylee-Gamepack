@@ -10,7 +10,6 @@ const cheffu = as('cheffu')
 const grandpa = as('grandpa')
 const bunnies = as('bunnies')
 const goose = as('goose')
-const lulu = as('lulu')
 const baobao = as('baobao')
 const houhou = as('houhou')
 const nainai = as('nainai')
@@ -39,97 +38,78 @@ export const L = {
   trophyRoom: `${NAME}, China Explorer! From China.`,
 
   dumplings: {
-    // Arrival on the Bund, then a walk through the old town.
-    arrive: [doudou(`Nong how, ${NAME}!`), doudou('Chef Fu needs our help!')],
-    bridge: 'Tap the zig-zag bridge!',
-    zigzag: 'Zig-zag bridges keep bad luck away!',
-    door: 'Tap the dumpling house door!',
-    aiyo: cheffu('Aiyo! So many hungry customers, and no helper!'),
+    // The opening, at Chef Fu's counter (the dough is already under her finger while they talk).
+    open: [doudou('Chef Fu needs our help!'), cheffu('Aiyo! So many hungry friends, and no helper!')],
 
-    // Service 1: Grandpa Turtle's four dumplings. Each step is one finger move.
-    order4: grandpa('Just four dumplings, please.'),
-    knead: 'Push the dough three times!',
-    kneadCount: [cheffu('Ee!'), cheffu('Are!'), cheffu('San!')],
-    kneadDone: cheffu('Smooth and shiny! Ee, are, san means one, two, three!'),
-    snake: 'Swipe the dough to make a long snake!',
-    chop: 'Tap to cut the snake into four pieces!',
-    count: COUNT,
-    roll: 'Roll the rolling pin back and forth!',
-    rolled: cheffu('A perfect round wrapper!'),
-    fill: 'Tap the bowl for one spoonful!',
-    blorp: cheffu('Ho ho ho! Just one spoonful!'),
-    pleat: 'Draw a circle around the dumpling to fold it!',
-    pleated: cheffu('Beautiful! Real chefs make eighteen folds!'),
-    quickHands: cheffu('Watch my quick hands!'),
-    pleatMore: 'Fold these dumplings too!',
-    counted4: 'One, two, three, four dumplings!',
-    steamer: 'Put each dumpling in the basket, on the cabbage leaf!',
-    leaf: 'The cabbage leaf keeps them from sticking!',
-    lid: 'Tap the lid to close the basket!',
-    fire: 'Tap the knob to heat the water!',
+    // Sparkle, only when something new appears.
+    squish: 'Squish the dough flat!',
+    fill: 'Plop in the filling!',
+    fold: 'Fold it over!',
+    pleat: 'Pinch all the way round!',
+    basket: 'Pop it in the basket!',
+    lid: 'Put the lid on!',
+    puffs: 'Pop the steam puffs!',
+    serve: 'Slide the basket to your friend!',
+    color: 'Pick a color!',
+    pull: 'Pull off a piece. Big or small?',
     steamFact: 'Hot water makes steam. Steam cooks dumplings!',
-    popSteam: 'Pop the steam puffs!',
-    lift: 'Tap the lid to peek!',
+    // When she's stuck for a while (shown first, said at most twice: spendHint).
+    hint: {
+      squish: 'Press the dough!',
+      fill: 'Drag the filling onto the dough!',
+      fold: 'Push the edge over!',
+      pleat: 'Run your finger round the edge!',
+      basket: 'Drag the dumpling to the basket!',
+      lid: 'Tap the basket!',
+      serve: 'Drag the basket to your friend!',
+      color: 'Drag a dough ball to the board!',
+      pull: 'Pull the big dough!',
+      houhou: 'Tap the monkey!',
+    },
+
+    // Chef Fu counts each pleat in Chinese (yi, er, san...), and cheers her on.
+    count: [cheffu('Ee!'), cheffu('Are!'), cheffu('San!'), cheffu('Sih!'), cheffu('Woo!'), cheffu('Lyo!'), cheffu('Chee!'), cheffu('Bah!'), cheffu('Jyo!'), cheffu('Shir!')],
+    wrapper: cheffu('A perfect wrapper!'),
+    blorp: cheffu('Ho ho! Too much filling!'),
+    sealed: cheffu('Beautiful!'),
+    pleated: cheffu('Real chefs make eighteen folds!'),
+    pancake: cheffu('Ho ho ho! A dumpling pancake!'),
     tada: cheffu('Ta-da! Soup dumplings!'),
-    serve: "Carry the basket to Grandpa Turtle's table!",
-    eatHow: grandpa('Hot soup inside! Nibble, sip, eat.'),
-    nibble: 'Tap the dumpling to take a little nibble!',
-    sip: 'Tap again to sip the soup!',
-    eat: 'Now eat it all up!',
-    haochi: grandpa('How chir! Delicious!'),
+    squirt: cheffu('Aiyo! The soup!'),
+    floury: cheffu('Ah... ah... choo!'),
 
-    // Service 2: the lunch rush.
-    rush: cheffu('Aiyo! The lunch rush!'),
-    orderBunnies: bunnies('Two pink and two green, please!'),
-    orderGoose: goose("I'll have two yellow, please, dear."),
-    pickColor: {
-      pink: 'Tap the pink dough!',
-      green: 'Tap the green dough!',
+    // The friends at the counter.
+    order: {
+      grandpa: grandpa('Three dumplings, please.'),
+      bunnies: bunnies('Pink and green, please!'),
+      goose: goose('Yellow for me, please, dear.'),
+      baobao: [baobao('Five! No, six!'), baobao('No... the biggest one!')],
     },
-    notThat: {
-      pink: 'That one is not pink. Find the pink dough!',
-      green: 'That one is not green. Find the green dough!',
+    yum: {
+      grandpa: grandpa('How chir! Delicious!'),
+      bunnies: bunnies('Yay! Thank you!'),
+      goose: goose('Nibble, sip, eat. Splendid!'),
+      baobao: baobao('Mmm! How chir! I love dumplings!'),
     },
-    colorName: { cream: 'Cream!', pink: 'Pink!', green: 'Green!', yellow: 'Yellow!' },
-    fillFold: 'Now fill it and fold it!',
-    gooseMine: cheffu("I'll make Mrs. Goose's dumplings!"),
-    stack: 'Stack the baskets on the wok!',
-    stackFact: 'Dumpling chefs stack their baskets up high!',
-    serveBunnies: 'Take the pink ribbon basket to the Bunny Twins!',
-    serveGoose: 'Take the yellow ribbon basket to Mrs. Goose!',
-    notMine: [grandpa('Not mine, dear!'), goose('Not mine, dear!'), bunnies('Not ours!')],
-    bunniesYum: bunnies('Yay! Pink and green! Thank you!'),
-    gooseYum: goose('Splendid! Thank you, dear.'),
-    tea: 'Tap the table two times to say thank you for the tea!',
-    teaFact: 'In China, a tap tap on the table means thank you!',
-    teaPour: doudou('More tea?'),
-
-    // Service 3: Bao Bao's big surprise order.
-    jingle: 'Ding ding! Someone is here!',
-    baobao: [baobao('Five dumplings, please!'), baobao('No, six!')],
-    make6: 'Tap the colors to make six dumplings!',
+    notMine: {
+      grandpa: grandpa('Not mine... but yum!'),
+      bunnies: bunnies('Ooh, not ours... but yum!'),
+      goose: goose('Not mine, dear... but lovely!'),
+      baobao: baobao('Yum anyway!'),
+    },
+    baoGiant: baobao('So big!'),
     sneak: 'Uh oh! Tap the sneaky monkey!',
     sorry: houhou('Hee hee! Sorry!'),
-    six: 'Six dumplings! Now steam them!',
-    serveBao: "Take the basket to Bao Bao's table!",
-    baoYum: baobao('Mmm! How chir! I love dumplings!'),
+    teaPour: doudou('More tea?'),
+    knock: 'Tap tap on the table means thank you for the tea!',
+    xiexie: doudou('Shyeh shyeh!'),
 
-    // Between services, and the payoff.
-    serviceDone: 'Great cooking! Ready for the next customers?',
+    // The payoff.
     clap: 'Everyone is clapping for you!',
-    hat: cheffu(`Shyeh shyeh, Chef ${NAME}! A chef hat for you!`),
-    lulu: lulu(`Achoo! Thank you, ${NAME}!`),
-    doudouBye: doudou('Take some dumplings to the New Year parade!'),
+    thanks: cheffu(`Shyeh shyeh, Chef ${NAME}!`),
+    window: cheffu('Your dumplings go in the window!'),
 
-    // Things she can tap for fun in the dining room.
-    dimsum: {
-      harGow: 'Har gow! Shrimp dumplings!',
-      charSiuBao: 'Char siu bao! A fluffy bun!',
-      eggTart: 'An egg tart! Sweet and yummy!',
-      sesameBall: 'A sesame ball! Crunchy and chewy!',
-      springRoll: 'Spring rolls! Crispy!',
-    },
-    dimsumCart: 'Dim sum means lots of little dishes to share!',
+    // Things she can tap for fun.
     tickle: {
       doudou: [doudou('Hee hee! Woof!'), doudou('Shanghai is the biggest city in China!')],
       cheffu: [cheffu('Ho ho ho!'), cheffu('Dumplings make everyone happy!')],
@@ -137,8 +117,9 @@ export const L = {
       bunnies: [bunnies('Hee hee hee!'), bunnies("We're twins!")],
       goose: [goose('Oh, how lovely.'), goose('Honk! Pardon me.')],
       baobao: [baobao('More dumplings, please!'), baobao('Hee hee! I love you!')],
-      dumpling: ['Squishy!', 'Hello, little dumpling!'],
+      houhou: [houhou('Hee hee!')],
     },
+    pearl: 'The Pearl Tower! It looks like pink pearls on a stick!',
   },
 
   // Bamboo Forest (activities/bamboo) and the Great Wall (activities/wall).

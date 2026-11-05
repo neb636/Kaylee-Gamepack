@@ -77,13 +77,6 @@
     "file": "3f86eb62bc39.mp3"
   },
   {
-    "text": "Nong how, Kaylee!",
-    "voice": "doudou",
-    "sig": "98f57b3ad8",
-    "ms": 1673,
-    "file": "6a79c4d7425f.mp3"
-  },
-  {
     "text": "Chef Fu needs our help!",
     "voice": "doudou",
     "sig": "98f57b3ad8",
@@ -91,46 +84,158 @@
     "file": "6ec75f10113d.mp3"
   },
   {
-    "text": "Tap the zig-zag bridge!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2216,
-    "file": "03403455ba9e.mp3"
-  },
-  {
-    "text": "Zig-zag bridges keep bad luck away!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3488,
-    "file": "160c810eb7ef.mp3"
-  },
-  {
-    "text": "Tap the dumpling house door!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2293,
-    "file": "f6f2ac843234.mp3"
-  },
-  {
-    "text": "Aiyo! So many hungry customers, and no helper!",
+    "text": "Aiyo! So many hungry friends, and no helper!",
     "voice": "cheffu",
-    "sig": "bb2b623567",
-    "ms": 4684,
-    "file": "0b34297a00d6.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "011552ea0baf.mp3"
   },
   {
-    "text": "Just four dumplings, please.",
-    "voice": "grandpa",
-    "sig": "1476215005",
-    "ms": 1854,
-    "file": "c08e6356a669.mp3"
+    "text": "Squish the dough flat!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "f4e311ee0c28.mp3"
   },
   {
-    "text": "Push the dough three times!",
+    "text": "Plop in the filling!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "b11fa245e79a.mp3"
+  },
+  {
+    "text": "Fold it over!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "ca2cf9a19b7b.mp3"
+  },
+  {
+    "text": "Pinch all the way round!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "228ee9b30e33.mp3"
+  },
+  {
+    "text": "Pop it in the basket!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "4223b45326e0.mp3"
+  },
+  {
+    "text": "Put the lid on!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "815f5bf026fc.mp3"
+  },
+  {
+    "text": "Pop the steam puffs!",
     "voice": "sparkle",
     "sig": "ed7dbdac3d",
-    "ms": 3189,
-    "file": "1423edce6097.mp3"
+    "ms": 1760,
+    "file": "a39dc86eac27.mp3"
+  },
+  {
+    "text": "Slide the basket to your friend!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "fdee58d33e61.mp3"
+  },
+  {
+    "text": "Pick a color!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "29226cd1d621.mp3"
+  },
+  {
+    "text": "Pull off a piece. Big or small?",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "899c0839a38d.mp3"
+  },
+  {
+    "text": "Hot water makes steam. Steam cooks dumplings!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 5747,
+    "file": "a6a53f197371.mp3"
+  },
+  {
+    "text": "Press the dough!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "0959d11267c6.mp3"
+  },
+  {
+    "text": "Drag the filling onto the dough!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "568e65aaf5d7.mp3"
+  },
+  {
+    "text": "Push the edge over!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "c61f729b429f.mp3"
+  },
+  {
+    "text": "Run your finger round the edge!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "7fc94e63a895.mp3"
+  },
+  {
+    "text": "Drag the dumpling to the basket!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "04fcd01f92ea.mp3"
+  },
+  {
+    "text": "Tap the basket!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "7fded83ad92a.mp3"
+  },
+  {
+    "text": "Drag the basket to your friend!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "a8673333f0bf.mp3"
+  },
+  {
+    "text": "Drag a dough ball to the board!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "55381c08988d.mp3"
+  },
+  {
+    "text": "Pull the big dough!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "c8046b494c57.mp3"
+  },
+  {
+    "text": "Tap the monkey!",
+    "voice": "sparkle",
+    "sig": "pending",
+    "ms": 0,
+    "file": "284f3470a690.mp3"
   },
   {
     "text": "Ee!",
@@ -154,179 +259,88 @@
     "file": "0d1f8eddca3a.mp3"
   },
   {
-    "text": "Smooth and shiny! Ee, are, san means one, two, three!",
+    "text": "Sih!",
     "voice": "cheffu",
-    "sig": "bb2b623567",
-    "ms": 5614,
-    "file": "36d308eb4b70.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "9c44cf080da9.mp3"
   },
   {
-    "text": "Swipe the dough to make a long snake!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3051,
-    "file": "3f8d17e962ea.mp3"
-  },
-  {
-    "text": "Tap to cut the snake into four pieces!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4047,
-    "file": "518cdea5efe6.mp3"
-  },
-  {
-    "text": "One!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 506,
-    "file": "87ed107b16cf.mp3"
-  },
-  {
-    "text": "Two!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 561,
-    "file": "e53b779eaf65.mp3"
-  },
-  {
-    "text": "Three!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 680,
-    "file": "b98340c9d88a.mp3"
-  },
-  {
-    "text": "Four!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 692,
-    "file": "6ce079912c83.mp3"
-  },
-  {
-    "text": "Five!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 800,
-    "file": "8580303dc1c5.mp3"
-  },
-  {
-    "text": "Six!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 796,
-    "file": "a38f93f70592.mp3"
-  },
-  {
-    "text": "Roll the rolling pin back and forth!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2788,
-    "file": "742eeead58c9.mp3"
-  },
-  {
-    "text": "A perfect round wrapper!",
+    "text": "Woo!",
     "voice": "cheffu",
-    "sig": "bb2b623567",
-    "ms": 1916,
-    "file": "b2048b6d2f59.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "60b5fb394383.mp3"
   },
   {
-    "text": "Tap the bowl for one spoonful!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2753,
-    "file": "0bd75d7cf80d.mp3"
-  },
-  {
-    "text": "Ho ho ho! Just one spoonful!",
+    "text": "Lyo!",
     "voice": "cheffu",
-    "sig": "bb2b623567",
-    "ms": 3309,
-    "file": "a3b138eea7e0.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "798f751598db.mp3"
   },
   {
-    "text": "Draw a circle around the dumpling to fold it!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2852,
-    "file": "8c7f69fe4104.mp3"
-  },
-  {
-    "text": "Beautiful! Real chefs make eighteen folds!",
+    "text": "Chee!",
     "voice": "cheffu",
-    "sig": "bb2b623567",
-    "ms": 4348,
-    "file": "1bdd3db934a1.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "8e3485498c98.mp3"
   },
   {
-    "text": "Watch my quick hands!",
+    "text": "Bah!",
     "voice": "cheffu",
-    "sig": "bb2b623567",
-    "ms": 2171,
-    "file": "0b8f54ab8cc5.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "69eb1927bc11.mp3"
   },
   {
-    "text": "Fold these dumplings too!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2187,
-    "file": "66f396f0c0b4.mp3"
+    "text": "Jyo!",
+    "voice": "cheffu",
+    "sig": "pending",
+    "ms": 0,
+    "file": "1561399c2f7d.mp3"
   },
   {
-    "text": "One, two, three, four dumplings!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4412,
-    "file": "a9412fed82e0.mp3"
+    "text": "Shir!",
+    "voice": "cheffu",
+    "sig": "pending",
+    "ms": 0,
+    "file": "5716e42b8134.mp3"
   },
   {
-    "text": "Put each dumpling in the basket, on the cabbage leaf!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4317,
-    "file": "5f1158c28101.mp3"
+    "text": "A perfect wrapper!",
+    "voice": "cheffu",
+    "sig": "pending",
+    "ms": 0,
+    "file": "243b1b7d894f.mp3"
   },
   {
-    "text": "The cabbage leaf keeps them from sticking!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3061,
-    "file": "c39a0eb7e968.mp3"
+    "text": "Ho ho! Too much filling!",
+    "voice": "cheffu",
+    "sig": "pending",
+    "ms": 0,
+    "file": "d0c7c956493b.mp3"
   },
   {
-    "text": "Tap the lid to close the basket!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3042,
-    "file": "53d69b6864a6.mp3"
+    "text": "Beautiful!",
+    "voice": "cheffu",
+    "sig": "pending",
+    "ms": 0,
+    "file": "6a1bb75de8a4.mp3"
   },
   {
-    "text": "Tap the knob to heat the water!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2446,
-    "file": "eded7bedf3f5.mp3"
+    "text": "Real chefs make eighteen folds!",
+    "voice": "cheffu",
+    "sig": "pending",
+    "ms": 0,
+    "file": "29ce6267dd26.mp3"
   },
   {
-    "text": "Hot water makes steam. Steam cooks dumplings!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 5747,
-    "file": "a6a53f197371.mp3"
-  },
-  {
-    "text": "Pop the steam puffs!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1760,
-    "file": "a39dc86eac27.mp3"
-  },
-  {
-    "text": "Tap the lid to peek!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2272,
-    "file": "fc5cc9a1035d.mp3"
+    "text": "Ho ho ho! A dumpling pancake!",
+    "voice": "cheffu",
+    "sig": "pending",
+    "ms": 0,
+    "file": "9e87a2945f49.mp3"
   },
   {
     "text": "Ta-da! Soup dumplings!",
@@ -336,39 +350,53 @@
     "file": "6211531fd143.mp3"
   },
   {
-    "text": "Carry the basket to Grandpa Turtle's table!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3621,
-    "file": "7ed628477de7.mp3"
+    "text": "Aiyo! The soup!",
+    "voice": "cheffu",
+    "sig": "pending",
+    "ms": 0,
+    "file": "f62f68e6a6b9.mp3"
   },
   {
-    "text": "Hot soup inside! Nibble, sip, eat.",
+    "text": "Ah... ah... choo!",
+    "voice": "cheffu",
+    "sig": "pending",
+    "ms": 0,
+    "file": "4bcc7ae4c5a9.mp3"
+  },
+  {
+    "text": "Three dumplings, please.",
     "voice": "grandpa",
-    "sig": "1476215005",
-    "ms": 3698,
-    "file": "c40920711d65.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "ef0b4455ee55.mp3"
   },
   {
-    "text": "Tap the dumpling to take a little nibble!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3116,
-    "file": "a609f1e5e9d9.mp3"
+    "text": "Pink and green, please!",
+    "voice": "bunnies",
+    "sig": "pending",
+    "ms": 0,
+    "file": "d584d571f6ff.mp3"
   },
   {
-    "text": "Tap again to sip the soup!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1847,
-    "file": "f6783c0e4dcd.mp3"
+    "text": "Yellow for me, please, dear.",
+    "voice": "goose",
+    "sig": "pending",
+    "ms": 0,
+    "file": "a34c9477ea73.mp3"
   },
   {
-    "text": "Now eat it all up!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2241,
-    "file": "cbc966babb93.mp3"
+    "text": "Five! No, six!",
+    "voice": "baobao",
+    "sig": "pending",
+    "ms": 0,
+    "file": "ba6622310353.mp3"
+  },
+  {
+    "text": "No... the biggest one!",
+    "voice": "baobao",
+    "sig": "pending",
+    "ms": 0,
+    "file": "97a348446b06.mp3"
   },
   {
     "text": "How chir! Delicious!",
@@ -378,207 +406,60 @@
     "file": "c696f46dfd80.mp3"
   },
   {
-    "text": "Aiyo! The lunch rush!",
-    "voice": "cheffu",
-    "sig": "bb2b623567",
-    "ms": 2175,
-    "file": "28cc9c8fd669.mp3"
-  },
-  {
-    "text": "Two pink and two green, please!",
+    "text": "Yay! Thank you!",
     "voice": "bunnies",
-    "sig": "46c690960b",
-    "ms": 2227,
-    "file": "0cd7a0f7e404.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "1706513d9a46.mp3"
   },
   {
-    "text": "I'll have two yellow, please, dear.",
+    "text": "Nibble, sip, eat. Splendid!",
     "voice": "goose",
-    "sig": "bc225f7bca",
-    "ms": 2763,
-    "file": "f800085f17eb.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "2e9ba505b712.mp3"
   },
   {
-    "text": "Tap the pink dough!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2018,
-    "file": "5e817c59bd02.mp3"
+    "text": "Mmm! How chir! I love dumplings!",
+    "voice": "baobao",
+    "sig": "84ccf586ba",
+    "ms": 3680,
+    "file": "19105ce6b6f1.mp3"
   },
   {
-    "text": "Tap the green dough!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1820,
-    "file": "5bb9b0d106d3.mp3"
-  },
-  {
-    "text": "That one is not pink. Find the pink dough!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4346,
-    "file": "e49a9f9e5730.mp3"
-  },
-  {
-    "text": "That one is not green. Find the green dough!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4445,
-    "file": "e589d1a88d49.mp3"
-  },
-  {
-    "text": "Cream!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1912,
-    "file": "61198e421d27.mp3"
-  },
-  {
-    "text": "Pink!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 607,
-    "file": "bfbd67beaa08.mp3"
-  },
-  {
-    "text": "Green!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1164,
-    "file": "83769a2a17b3.mp3"
-  },
-  {
-    "text": "Yellow!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 824,
-    "file": "5144235b8cef.mp3"
-  },
-  {
-    "text": "Now fill it and fold it!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2709,
-    "file": "2c13f008fae8.mp3"
-  },
-  {
-    "text": "I'll make Mrs. Goose's dumplings!",
-    "voice": "cheffu",
-    "sig": "bb2b623567",
-    "ms": 2469,
-    "file": "9247164e1ebb.mp3"
-  },
-  {
-    "text": "Stack the baskets on the wok!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2626,
-    "file": "9cc15815843d.mp3"
-  },
-  {
-    "text": "Dumpling chefs stack their baskets up high!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3851,
-    "file": "e765e9c4aba1.mp3"
-  },
-  {
-    "text": "Take the pink ribbon basket to the Bunny Twins!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4470,
-    "file": "3187f45b7de9.mp3"
-  },
-  {
-    "text": "Take the yellow ribbon basket to Mrs. Goose!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2913,
-    "file": "bcf1d2043d1d.mp3"
-  },
-  {
-    "text": "Not mine, dear!",
+    "text": "Not mine... but yum!",
     "voice": "grandpa",
-    "sig": "1476215005",
-    "ms": 2380,
-    "file": "b2b9d3bb3b2d.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "c6916b272480.mp3"
   },
   {
-    "text": "Not mine, dear!",
-    "voice": "goose",
-    "sig": "bc225f7bca",
-    "ms": 2147,
-    "file": "0fb0e090a36b.mp3"
-  },
-  {
-    "text": "Not ours!",
+    "text": "Ooh, not ours... but yum!",
     "voice": "bunnies",
-    "sig": "46c690960b",
-    "ms": 979,
-    "file": "36077e457cb7.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "c10943d8e09b.mp3"
   },
   {
-    "text": "Yay! Pink and green! Thank you!",
-    "voice": "bunnies",
-    "sig": "46c690960b",
-    "ms": 2961,
-    "file": "079c104825c7.mp3"
-  },
-  {
-    "text": "Splendid! Thank you, dear.",
+    "text": "Not mine, dear... but lovely!",
     "voice": "goose",
-    "sig": "bc225f7bca",
-    "ms": 2420,
-    "file": "35b1e52b92fc.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "c527e7608d26.mp3"
   },
   {
-    "text": "Tap the table two times to say thank you for the tea!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4740,
-    "file": "e3feb330091b.mp3"
-  },
-  {
-    "text": "In China, a tap tap on the table means thank you!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4583,
-    "file": "1547c9104daa.mp3"
-  },
-  {
-    "text": "More tea?",
-    "voice": "doudou",
-    "sig": "98f57b3ad8",
-    "ms": 1093,
-    "file": "621eb15ff744.mp3"
-  },
-  {
-    "text": "Ding ding! Someone is here!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2249,
-    "file": "93f13ee61693.mp3"
-  },
-  {
-    "text": "Five dumplings, please!",
+    "text": "Yum anyway!",
     "voice": "baobao",
-    "sig": "84ccf586ba",
-    "ms": 1802,
-    "file": "1d225a92d2ca.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "57729e800403.mp3"
   },
   {
-    "text": "No, six!",
+    "text": "So big!",
     "voice": "baobao",
-    "sig": "84ccf586ba",
-    "ms": 1704,
-    "file": "042fbfa7e343.mp3"
-  },
-  {
-    "text": "Tap the colors to make six dumplings!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2873,
-    "file": "21e1aeeb4f59.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "9806b63c7158.mp3"
   },
   {
     "text": "Uh oh! Tap the sneaky monkey!",
@@ -595,32 +476,25 @@
     "file": "f873442a16f6.mp3"
   },
   {
-    "text": "Six dumplings! Now steam them!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3450,
-    "file": "d19fccc99b9b.mp3"
+    "text": "More tea?",
+    "voice": "doudou",
+    "sig": "98f57b3ad8",
+    "ms": 1093,
+    "file": "621eb15ff744.mp3"
   },
   {
-    "text": "Take the basket to Bao Bao's table!",
+    "text": "Tap tap on the table means thank you for the tea!",
     "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 4117,
-    "file": "3ac94be46a49.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "fdd8722ad71b.mp3"
   },
   {
-    "text": "Mmm! How chir! I love dumplings!",
-    "voice": "baobao",
-    "sig": "84ccf586ba",
-    "ms": 3680,
-    "file": "19105ce6b6f1.mp3"
-  },
-  {
-    "text": "Great cooking! Ready for the next customers?",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3147,
-    "file": "2c71c2ac467c.mp3"
+    "text": "Shyeh shyeh!",
+    "voice": "doudou",
+    "sig": "pending",
+    "ms": 0,
+    "file": "849fd3567c77.mp3"
   },
   {
     "text": "Everyone is clapping for you!",
@@ -630,67 +504,18 @@
     "file": "4f3edd0a4e8b.mp3"
   },
   {
-    "text": "Shyeh shyeh, Chef Kaylee! A chef hat for you!",
+    "text": "Shyeh shyeh, Chef Kaylee!",
     "voice": "cheffu",
-    "sig": "bb2b623567",
-    "ms": 4518,
-    "file": "12f2076e220b.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "c384ab285594.mp3"
   },
   {
-    "text": "Achoo! Thank you, Kaylee!",
-    "voice": "lulu",
-    "sig": "a660f33aaa",
-    "ms": 2229,
-    "file": "f9c0b0af3722.mp3"
-  },
-  {
-    "text": "Take some dumplings to the New Year parade!",
-    "voice": "doudou",
-    "sig": "98f57b3ad8",
-    "ms": 2398,
-    "file": "aa317d87075a.mp3"
-  },
-  {
-    "text": "Har gow! Shrimp dumplings!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2751,
-    "file": "7617f9f7ed73.mp3"
-  },
-  {
-    "text": "Char siu bao! A fluffy bun!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2826,
-    "file": "a46e7f5c6e24.mp3"
-  },
-  {
-    "text": "An egg tart! Sweet and yummy!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3445,
-    "file": "98899c058fbb.mp3"
-  },
-  {
-    "text": "A sesame ball! Crunchy and chewy!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 3215,
-    "file": "8bf6609e84c5.mp3"
-  },
-  {
-    "text": "Spring rolls! Crispy!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2091,
-    "file": "d761e052f218.mp3"
-  },
-  {
-    "text": "Dim sum means lots of little dishes to share!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2906,
-    "file": "f1403986562a.mp3"
+    "text": "Your dumplings go in the window!",
+    "voice": "cheffu",
+    "sig": "pending",
+    "ms": 0,
+    "file": "572010b0672c.mp3"
   },
   {
     "text": "Hee hee! Woof!",
@@ -777,18 +602,18 @@
     "file": "80699a0dbcc9.mp3"
   },
   {
-    "text": "Squishy!",
-    "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 1843,
-    "file": "4f2d789b6723.mp3"
+    "text": "Hee hee!",
+    "voice": "houhou",
+    "sig": "52d59a76fc",
+    "ms": 764,
+    "file": "2bea6eb60ef7.mp3"
   },
   {
-    "text": "Hello, little dumpling!",
+    "text": "The Pearl Tower! It looks like pink pearls on a stick!",
     "voice": "sparkle",
-    "sig": "ed7dbdac3d",
-    "ms": 2386,
-    "file": "fd6402987a38.mp3"
+    "sig": "pending",
+    "ms": 0,
+    "file": "1afdfd8a77bb.mp3"
   },
   {
     "text": "My tummy is rumbling!",
@@ -810,6 +635,27 @@
     "sig": "ed7dbdac3d",
     "ms": 4194,
     "file": "0705a67969c3.mp3"
+  },
+  {
+    "text": "One!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 506,
+    "file": "87ed107b16cf.mp3"
+  },
+  {
+    "text": "Two!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 561,
+    "file": "e53b779eaf65.mp3"
+  },
+  {
+    "text": "Three!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 680,
+    "file": "b98340c9d88a.mp3"
   },
   {
     "text": "Three tall! Wow!",
@@ -1078,13 +924,6 @@
     "file": "576779e30d2e.mp3"
   },
   {
-    "text": "Hee hee!",
-    "voice": "houhou",
-    "sig": "52d59a76fc",
-    "ms": 764,
-    "file": "2bea6eb60ef7.mp3"
-  },
-  {
     "text": "Tickles!",
     "voice": "houhou",
     "sig": "52d59a76fc",
@@ -1209,6 +1048,27 @@
     "sig": "ed7dbdac3d",
     "ms": 2776,
     "file": "b100a2d371ca.mp3"
+  },
+  {
+    "text": "Four!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 692,
+    "file": "6ce079912c83.mp3"
+  },
+  {
+    "text": "Five!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 800,
+    "file": "8580303dc1c5.mp3"
+  },
+  {
+    "text": "Six!",
+    "voice": "sparkle",
+    "sig": "ed7dbdac3d",
+    "ms": 796,
+    "file": "a38f93f70592.mp3"
   },
   {
     "text": "Shyeh shyeh!",
