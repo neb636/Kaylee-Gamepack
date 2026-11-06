@@ -38,6 +38,15 @@ export const screens = [
     reset: true,
     wait: 1800,
   })),
+  // The game table (game-table.html, greybox 1): the table and the unicorn bag in her room, the picker, and the Unicorn
+  // Dice Game from the start, midgame (Gan), sharing a space, and finished (her win, and a kind loss with Again).
+  ...['upstairs?at=game-table', 'table', 'table?vs=gan', 'unicorn', 'unicorn?vs=gan&me=12&them=14', 'unicorn?vs=ken&me=9&them=9', 'unicorn?me=22&them=20&rolls=6', 'unicorn?me=20&them=23&turn=cousin&rolls=2'].map((to) => ({
+    name: `thailand-${to.replace(/[?=&,;]/g, '-')}`.slice(0, 60),
+    hash: `#/world/thailand/hub/${to}`,
+    reset: true,
+    wait: to.includes('rolls=6') ? 1500 : to.includes('rolls=2') ? 6500 : 1800,
+    ...(to.includes('rolls=6') ? { act: async (page) => (await page.locator('[data-anchor="trip:table:die"]').click({ force: true }), await page.waitForTimeout(5000)) } : {}),
+  })),
   // The family photo (everyone, then a few alone on the turntable, in the three-quarter view it rests on first).
   { name: 'thailand-family', hash: '#/world/thailand/hub/family', reset: true, wait: 1800 },
   ...['kaylee', 'agong', 'ja', 'sri'].map((who) => ({ name: `thailand-family-${who}`, hash: `#/world/thailand/hub/family?who=${who}`, reset: true, wait: 1500 })),
@@ -891,6 +900,11 @@ motion.push(
   thaiHouse('wardrobe-mirror', 5, 'wardrobe?drawer=head&look=cowboy,fairy', [['trip:ward:mirror', 3800]]),
   thaiHouse('wardrobe-wand', 4, 'wardrobe', [['trip:ward:wand', 3000]]),
   thaiHouse('wardrobe-door', 4, 'wardrobe?door=crown,hearts,tutu;bow,fairy,dress-mint', [['trip:ward:thing:photo-1', 2500]]),
+  // The game table (game-table.html, greybox 1): she taps the die, it tumbles and settles, her unicorn hops five spaces,
+  // then BB rolls; a 4 (her unicorn naps, Ken rolls); and the last roll into the castle.
+  thaiHouse('table-roll', 7, 'unicorn?rolls=5,3', [['trip:table:die', 6500]]),
+  thaiHouse('table-rest', 6, 'unicorn?vs=ken&me=7&them=9&rolls=4,3', [['trip:table:die', 5500]]),
+  thaiHouse('table-castle', 5, 'unicorn?me=22&them=20&rolls=6', [['trip:table:die', 4500]]),
 )
 
 // Roblox controls (engine3d/roam.ts) in the house: a drag on the right swings the camera round, a drag on the left is

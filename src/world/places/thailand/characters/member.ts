@@ -96,6 +96,19 @@ export class Member implements Character {
     this.phoneDown = 0
     this.glance = 1
   }
+  /** The phone comes back out (a game at the table is over): both hands on it, head down at the screen. Only for those
+   *  who had one. */
+  pickPhoneUp() {
+    const ph = this.chibi.phone
+    if (this.onPhone || !ph) return
+    this.onPhone = true
+    this.phoneDown = -1
+    this.glance = 1
+    ph.visible = true
+    ph.scale.setScalar(1)
+    this.chibi.armL.rotation.set(-1.2, 0, 0.75)
+    this.chibi.armR.rotation.set(-1.2, 0, -0.75)
+  }
   /** Wind in a unicorn's mane and tail: 0 still, 1 strong (it eases there). */
   setWind(k: number) {
     this.wind.goal = k

@@ -44,6 +44,7 @@ import { buildUpper } from './build/upper'
 import { DIM, NAV, PHOTO, PICKABLES, SHUTTER_RECT, STAIRS_FOOT, STAIRS_TOP, STARTS, stairSteps, type Pickable } from './layout'
 import type { HubSection } from './sections'
 import { ShoeRack } from './shoes'
+import { isTableSection } from './board-games/list'
 
 /** How far she may turn the camera herself (Roblox-style drag and pinch, on top of the game's view). It's a cutaway
  *  dollhouse: inside, the camera stays on the open side (the right walls and the front come down for it, the left is
@@ -289,8 +290,8 @@ export class House implements World3D {
   private begin(start: Start) {
     if (start.section === 'family') return this.beginPhoto(start.who)
     const s = STARTS[start.section]
-    // The wardrobe is in her room upstairs (its plugin opens it).
-    const section = start.section === 'wardrobe' ? 'upstairs' : start.section
+    // The wardrobe and the game table are in her room upstairs (their plugins open them).
+    const section = start.section === 'wardrobe' || isTableSection(start.section) ? 'upstairs' : start.section
     this.kaylee.floor = s.floor
     this.kaylee.place(s.x, s.floor * DIM.g0, s.z, s.face)
     this.reactor.setShutter(section === 'downstairs' || section === 'upstairs', true)

@@ -17,10 +17,14 @@ import { Guide, type GuideHandle } from './Guide'
 import { BARE, formatLook, LOOK_KEY, type Style } from '../../characters/style'
 import { bothPlugins, type House, type HousePlugin, type Spot, type Start } from './house'
 import { HouseView, type RenderMode } from './HouseView'
-import HUB_SECTIONS from './sections'
+import HUB_SECTIONS, { type HubSection } from './sections'
 import type { DrawerId } from './wardrobe/furniture'
 import { cleanDoor, DOOR_KEY, parseDoor, type DoorPhoto } from './wardrobe/door'
 import { WARDROBE_ANCHORS, WardrobePlugin } from './wardrobe/plugin'
+import { isTableSection, type CousinId, type GameId, type UnicornColor } from './board-games/list'
+import { TABLE_ANCHORS, TablePlugin, type TableStart, type TableView } from './board-games/plugin'
+import { clampPos, parseRolls } from './board-games/rules/turns'
+import { TableUI } from './board-games/TableUI'
 
 // Per visit to the app: the tuk-tuk brings her the first time; after that she's back where she left off.
 let arrivedThisVisit = false
@@ -33,7 +37,12 @@ let askedThisVisit = false
 
 export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const { start, param, enter } = useSections(HUB_SECTIONS)
-  const [initial] = useState<Start>(() => ({ section: (start && start !== 'map' ? start : null) ?? (arrivedThisVisit ? lastSpot : 'arrive'), at: param('at') || undefined, who: param('who') || undefined }))
+  const [initial] = useState<Start>(() => {
+    const section = (start && start !== 'map' ? start : null) ?? (arrivedThisVisit ? lastSpot : 'arrive')
+    // The game table's links start her already sitting on her stool.
+    return { section, at: isTableSection(section) ? 'game-table' : param('at') || undefined, who: param('who') || undefined }
+  })
+  const atTable = isTableSection(initial.section)
   const [mode, setMode] = useState<RenderMode>('webgl')
   const [engine, setEngine] = useState(0)
   const [arriving, setArriving] = useState(initial.section === 'arrive')
@@ -42,7 +51,27 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const askTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   useEffect(() => () => clearTimeout(askTimer.current), [])
   const photo = initial.section === 'family'
-  const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' || initial.section === 'family' ? 'street' : initial.section === 'wardrobe' ? 'upstairs' : initial.section)
+  const [spot, setSpot] = useState<Spot>(initial.section === 'arrive' || initial.section === 'family' ? 'street' : initial.section === 'wardrobe' || isTableSection(initial.section) ? 'upstairs' : initial.section)
+  // The game table (board-games/): what it shows over the house, and whether she's sitting at it with a game open.
+  const table = useRef<TablePlugin | null>(null)
+  const [tableView, setTableView] = useState<TableView | null>(null)
+  const playing = !!tableView?.open
+  const playingRef = useRef(false)
+  playingRef.current = playing
+  const [tableStart] = useState<TableStart | undefined>(() =>
+    isTableSection(initial.section)
+      ? {
+          section: initial.section,
+          vs: param('vs') as CousinId,
+          game: (initial.section === 'table' ? param('game') : initial.section) as GameId,
+          piece: param('piece') as UnicornColor,
+          me: clampPos(param('me'), 99),
+          them: clampPos(param('them'), 99),
+          turn: param('turn') === 'cousin' ? 1 : 0,
+          rolls: parseRolls(param('rolls')),
+        }
+      : undefined,
+  )
   // Her wardrobe (wardrobe/): her look is saved on the iPad as she changes it, and a link's ?look= follows along.
   const [, saveLook] = useSaved<Style>(LOOK_KEY, BARE)
   const [dressing, setDressing] = useState(initial.section === 'wardrobe')
@@ -75,12 +104,34 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
 
   useEffect(() => {
     doorNow.current.drawer = startDrawer
-    enter(initial.section, initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : initial.section === 'wardrobe' ? wardrobeState() : {})
+    enter(initial.section, tableStart ? tableState(table.current?.view()) : initial.at ? { at: initial.at } : initial.who ? { who: initial.who } : initial.section === 'wardrobe' ? wardrobeState() : {})
     if (initial.section !== 'arrive') arrivedThisVisit = true
-    if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section === 'wardrobe' ? 'upstairs' : initial.section
+    if (initial.section !== 'arrive' && initial.section !== 'family') lastSpot = initial.section === 'wardrobe' || isTableSection(initial.section) ? 'upstairs' : initial.section
     remember()
     if (initial.section === 'upstairs' && !askedThisVisit) ask(4000)
   }, [])
+  /** The address bar follows the table: the picker, or the game with the pieces where they are now. */
+  const tableState = (v: TableView | undefined | null): Record<string, string> => {
+    if (!v) return tableStart ? { vs: tableStart.vs } : {}
+    if (v.picking) return { vs: v.vs, game: v.game }
+    return { vs: v.vs, ...(v.game === 'unicorn' ? { piece: v.piece } : {}), me: String(v.pos[0]), them: String(v.pos[1]), turn: v.turn === 0 ? 'kaylee' : 'cousin' }
+  }
+  const onTable = (v: TableView) => {
+    const was = playingRef.current
+    setTableView(v)
+    if (v.open) {
+      // Nobody asks about the mall while she plays.
+      clearTimeout(askTimer.current)
+      setAsking(false)
+      if (v.phase === 'picking' || v.phase === 'awaiting' || v.phase === 'cousin' || v.phase === 'finished') {
+        const id = v.picking ? 'table' : v.game
+        // (A game whose greybox isn't built has no section yet.)
+        if (HUB_SECTIONS.sections.some((x) => x.id === id)) enter(id as HubSection, tableState(v))
+      }
+    } else if (was) enter('upstairs')
+  }
+  const tableEvents = useRef({ onTable })
+  tableEvents.current = { onTable }
 
   const arrived = () => {
     arrivedThisVisit = true
@@ -96,7 +147,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     setSpot(s)
     enter(s, at ? { at } : {})
     guide.current?.arrivedAt(s)
-    if (s === 'upstairs' && !askedThisVisit && !photo) ask(4000)
+    if (s === 'upstairs' && !askedThisVisit && !photo && !playingRef.current) ask(4000)
   }
   /** The wardrobe opened or closed, or she pulled out another drawer. */
   const onWardrobe = (open: boolean, drawer: DrawerId | null) => {
@@ -144,7 +195,9 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       { open: initial.section === 'wardrobe', drawer: startDrawer, door: startDoor },
     )
     wardrobe.current = w
-    return onWall.size ? bothPlugins(w, new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos')) : w
+    const t = new TablePlugin({ onView: (v) => tableEvents.current.onTable(v) }, { preview: atTable, start: tableStart })
+    table.current = t
+    return onWall.size ? bothPlugins(w, t, new WallPlugin(onWall, look, initial.section === 'downstairs' && initial.at === 'photos')) : bothPlugins(w, t)
   }
   // Tap Mommy and she asks after her hello; tap Daddy and he asks instead of saying hello.
   const onGreet = (id: string, noticed = false) => {
@@ -160,7 +213,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
     askedThisVisit = true
     clearTimeout(askTimer.current)
     setAsker(who)
-    askTimer.current = setTimeout(() => setAsking(true), after)
+    askTimer.current = setTimeout(() => !playingRef.current && setAsking(true), after)
   }
   const yes = (trip = 'mall-trip') => {
     saidYes.at = performance.now()
@@ -173,7 +226,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
 
   return (
     <div style={{ position: 'absolute', inset: 0, background: '#A8DCFF', overflow: 'clip' }}>
-      <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} plugin={makePlugin} extraAnchors={[...WARDROBE_ANCHORS, ...wallAnchors]} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet }} />
+      <HouseView key={engine} start={initial} houseRef={houseRef} onMode={setMode} plugin={makePlugin} extraAnchors={[...WARDROBE_ANCHORS, ...TABLE_ANCHORS, ...wallAnchors]} events={{ onSpot, onArrived: arrived, onPoke: (id) => guide.current?.poked(id), onGreet }} />
       {mode === 'lost' && (
         <button
           onClick={() => {
@@ -199,7 +252,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           Skip ⏩
         </motion.button>
       )}
-      {allStamps && (
+      {allStamps && !playing && (
         <motion.button
           aria-label="Party"
           whileTap={{ scale: 0.88 }}
@@ -263,7 +316,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
       </AnimatePresence>
       {/* The mirror button, in the house's top bar on every floor and the street: tap it and she's at her wardrobe. */}
       <AnimatePresence>
-        {!photo && !arriving && !dressing && !asking && mode !== 'lost' && (
+        {!photo && !arriving && !dressing && !asking && !playing && mode !== 'lost' && (
           <motion.button
             key="mirror"
             aria-label="Dress up"
@@ -299,7 +352,8 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           />
         )}
       </AnimatePresence>
-      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing} />}
+      {!photo && <Guide ref={guide} spot={spot} quiet={arriving || mode === 'lost' || asking || dressing || playing} />}
+      {tableView?.open && mode !== 'lost' && <TableUI view={tableView} table={table} />}
       {trips.length > 0 && <Ask open={asking && !arriving && mode !== 'lost'} who={asker} trips={trips} onYes={(t) => yes(t)} onNotYet={() => setAsking(false)} />}
       {debug && <Debug houseRef={houseRef} />}
     </div>
