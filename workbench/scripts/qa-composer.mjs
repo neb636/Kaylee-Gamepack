@@ -28,7 +28,7 @@ git("add", ".");
 git("commit", "--quiet", "-m", "initial");
 await writeFile(join(repo, "tracked.txt"), "two\n");
 await writeFile(join(repo, "notes.md"), "# Notes\n");
-await writeFile(executable, `#!/bin/sh\nexec ${shellQuote(process.execPath)} ${shellQuote(resolve("scripts/fixtures/composer-cli.mjs"))}\n`, { mode: 0o755 });
+await writeFile(executable, `#!/bin/sh\nexec ${shellQuote(process.execPath)} ${shellQuote(resolve("scripts/fixtures/composer-cli.mjs"))} "$@"\n`, { mode: 0o755 });
 // Written in the pre-prompt-options format, so loading also exercises the migration.
 await writeFile(join(directory, "workbench-state.json"), JSON.stringify({
   workspaces: [{ id: "qa", name: "Composer QA", path: repo, activeViewId: "agent", views: [
@@ -63,7 +63,8 @@ try {
   };
   const prompts = async () => (await readFile(log, "utf8")).trim().split("\n").map((line) => JSON.parse(line));
   const prompt = () => page.getByRole("textbox", { name: "Prompt", exact: true });
-  const waitFeedback = (value) => page.waitForFunction((text) => document.querySelector(".composer-feedback")?.textContent.includes(text), value);
+  const waitFeedback = (value) => page.waitForFunction((text) => document.querySelector(".composer-feedback")?.textContent.includes(text), value)
+    .catch(async (error) => { throw new Error(`Waiting for "${value}", the composer says "${await page.locator(".composer-feedback").first().textContent().catch(() => "?")}": ${error.message}`); });
   const sidebar = page.getByRole("treegrid", { name: "Main checkout" });
 
   // Shell: work, the middle, the explorer; the main checkout with nested sessions. A saved session from before has no
@@ -134,6 +135,20 @@ try {
   await page.locator(".xterm-helper-textarea").focus();
   await page.keyboard.press("Control+c");
   await page.waitForFunction(() => document.querySelector(".session-pill")?.textContent.includes("Ready"));
+
+  // Model and effort are launch arguments: changing them after a prompt offers a restart that keeps the draft.
+  await page.getByRole("button", { name: /Model/ }).click();
+  await page.getByRole("option", { name: "gpt-6-luna", exact: true }).click();
+  await waitFeedback("Restart to use gpt-6-luna high");
+  await shot("restart-model");
+  await page.getByRole("button", { name: "Restart with gpt-6-luna high" }).click();
+  await prompt().fill("After the restart");
+  await page.getByRole("button", { name: "Send prompt", exact: true }).click();
+  await waitFeedback("Prompt handed");
+  const restarted = (await prompts()).at(-1);
+  assert.match(restarted.prompt, /^After the restart/);
+  assert.equal(restarted.model, "gpt-6-luna");
+  assert.equal(restarted.effort, "high");
 
   // 📎 this section and the prompt starters, from the composer toolbar.
   await prompt().fill("");

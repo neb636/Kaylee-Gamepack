@@ -263,7 +263,7 @@ export function registerIpc(ptyManager: PtyManager, agentSessionManager: AgentSe
   });
   handle(IPC.agentSendPrompt, (event, input: unknown) => {
     const parsed = agentPromptSchema.parse(input);
-    return agentSessionManager.sendPrompt(parsed.sessionId, { prompt: parsed.prompt, intent: parsed.intent, settings: parsed.settings }, event.sender);
+    return agentSessionManager.sendPrompt(parsed.sessionId, { prompt: parsed.prompt, intent: parsed.intent }, event.sender);
   });
   listen(IPC.agentInterrupt, (event, input: unknown) => {
     agentSessionManager.interrupt(agentSessionActionSchema.parse(input).sessionId, event.sender);

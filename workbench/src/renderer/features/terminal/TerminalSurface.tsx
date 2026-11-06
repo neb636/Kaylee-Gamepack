@@ -99,6 +99,8 @@ export function TerminalSurface({ controller, ref, onSelectionChange, root, onOp
       for (const identifier of [{ final: "c" }, { prefix: ">", final: "c" }, { final: "n" }, { prefix: "?", final: "n" }, { final: "t" }]) {
         terminal.parser.registerCsiHandler(identifier, () => true);
       }
+      // Colour queries too (Codex asks for the foreground and background): answering them here sent a second reply.
+      for (const ident of [10, 11, 12]) terminal.parser.registerOscHandler(ident, (data) => data.split(";").includes("?"));
       // The headless terminal answers protocol queries; this surface only forwards user input.
       detach = controller.attach((snapshot) => {
         terminal.resize(snapshot.cols, snapshot.rows);

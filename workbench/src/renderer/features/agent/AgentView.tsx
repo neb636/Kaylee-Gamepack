@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { modelSettings } from "../../../shared/agent-models";
 import type { AgentProviderInfo, AgentViewState } from "../../../shared/models";
 import { services } from "../../core/services";
 import { acknowledgeAgentCompletion, startAgentRuntime, useAgentRuntimes } from "../../core/agent-runtimes";
@@ -56,7 +57,9 @@ export function AgentView({ view, workspace }: ViewComponentProps) {
     useWorkbenchStore.getState().updateLayout({ lastAgentProvider: provider.id });
     // Until the first prompt names it, the tab says which CLI it is.
     if (state.autoTitle && (view.title === "Untitled" || services.sessions.list().some((item) => item.label === view.title))) useWorkbenchStore.getState().renameView(workspace.id, view.id, provider.label);
-    try { await startAgentRuntime(view.id, provider, { workspacePath: await prepareSessionFolder({ workspaceId: workspace.id, viewId: view.id }), resume }); }
+    // A new conversation launches with the composer's model and effort; a resumed one keeps its own.
+    const settings = resume ? undefined : modelSettings(provider.id, state.modelSettings?.[provider.id]);
+    try { await startAgentRuntime(view.id, provider, { workspacePath: await prepareSessionFolder({ workspaceId: workspace.id, viewId: view.id }), resume, settings }); }
     catch (e) { if (alive.current) setError(errorMessage(e)); }
     finally { if (alive.current) setBusy(false); }
   };

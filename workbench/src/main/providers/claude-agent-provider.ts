@@ -1,7 +1,7 @@
-import { validateModelSettings } from "../../shared/agent-models";
-import type { AgentProviderAdapter, AgentSubmission } from "../agent-provider";
+import { validateModelSettings, type AgentModelSettings } from "../../shared/agent-models";
+import type { AgentProviderAdapter, AgentSubmission, ScreenObservation } from "../agent-provider";
 import type { AgentLaunchProfile } from "../agent-launch-profiles";
-import { detectCliScreen, pastePrompt } from "./cli-screen";
+import { claudeMode, detectCliScreen, pasteChunks } from "./cli-screen";
 import type { AgentPromptRequest } from "../../shared/models";
 
 export class ClaudeAgentProvider implements AgentProviderAdapter {
@@ -10,6 +10,10 @@ export class ClaudeAgentProvider implements AgentProviderAdapter {
   readonly executable = process.env.WORKBENCH_CLAUDE_PATH ?? "claude";
   readonly interrupt = "\u001b";
   args(resume: boolean) { return resume ? ["--resume"] : []; }
+  modelArgs(settings: AgentModelSettings) {
+    validateModelSettings(this.id, settings);
+    return ["--model", settings.model, "--effort", settings.effort];
+  }
   // `--allowedTools` takes every following argument, so it comes last.
   profileArgs(profile: AgentLaunchProfile) {
     return [...(profile.allowWritesInCwd ? ["--permission-mode", "acceptEdits"] : []),
@@ -17,17 +21,9 @@ export class ClaudeAgentProvider implements AgentProviderAdapter {
   }
   detect = detectCliScreen("claude");
   readonly capabilities = { planning: true };
-  submit = (request: AgentPromptRequest): AgentSubmission => {
-    if (request.settings) validateModelSettings(this.id, request.settings);
-    return {
-      paste: pastePrompt(request.prompt),
-      settings: request.settings ? [
-        { command: `/model ${request.settings.model}`, acknowledged: output => new RegExp(`Set model to ${request.settings!.model}\\b`, "i").test(output) },
-        { command: `/effort ${request.settings.effort}`, acknowledged: output => output.includes(`Set effort level to ${request.settings!.effort} `) },
-      ] : undefined,
-      prefix: request.intent === "plan" ? { input: "/plan ", acknowledged: (screen) =>
-        /^\s*[❯>]\s+\/plan(?:\s|$)/.test(screen.cursorLine) && screen.cursorX === screen.cursorLine.indexOf("/plan") + 6,
-      } : undefined,
-    };
-  };
+  // Shift+Tab cycles the modes (auto → manual → accept edits → plan → ...). `/plan` plus a paste can lose what follows.
+  readonly enterPlan = { cycle: "\x1b[Z" };
+  readonly leavePlan = { cycle: "\x1b[Z" };
+  mode = (screen: ScreenObservation) => { const mode = claudeMode(screen); return mode === "plan mode on" ? "plan" : mode; };
+  submit = (request: AgentPromptRequest): AgentSubmission => ({ paste: pasteChunks(request.prompt) });
 }

@@ -20,7 +20,8 @@ import { services } from "../../core/services";
 import type { ViewStatus } from "../../core/view-status";
 import { Button, IconButton } from "../../ui/controls";
 import { ArrowUpIcon, ChevronDownIcon, CloseIcon, EyeIcon, HistoryIcon, NewChatIcon, QuoteIcon, StopIcon } from "../../ui/icons";
-import { emptyComposerRuntime, patchComposer, useComposerState, type PromptPreview } from "./composer-state";
+import { isUnusedConversation, useAgentRuntimes } from "../../core/agent-runtimes";
+import { clearComposerResult, emptyComposerRuntime, patchComposer, pendingSettings, useComposerState, type PromptPreview } from "./composer-state";
 import { PromptMenuBar } from "./prompt-menus/PromptMenuBar";
 
 export interface ComposerSession {
@@ -44,6 +45,7 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
 }) {
   const target = { workspaceId, viewId };
   const runtime = useComposerState((s) => s.views[viewId] ?? emptyComposerRuntime);
+  const agent = useAgentRuntimes((s) => s.sessions[viewId]);
   const patch = (value: Pick<AgentViewState, "draft" | "quotations" | "intent" | "modelSettings">) => patchComposer(target, value);
   const promptRef = useRef<HTMLTextAreaElement>(null);
   const [preview, setPreview] = useState<PromptPreview>();
@@ -57,13 +59,16 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
   const providerId = state.providerId ?? "";
   const settings = modelSettings(providerId, state.modelSettings?.[providerId]);
   const choices = AGENT_MODELS[providerId] ?? [];
-  const setSettings = (model: string, effort: string) => patch({ modelSettings: { ...state.modelSettings, [providerId]: { model, effort } } });
+  const setSettings = (model: string, effort: string) => { clearComposerResult(viewId); patch({ modelSettings: { ...state.modelSettings, [providerId]: { model, effort } } }); };
   const hasDraft = Boolean(state.draft?.trim());
+  // Model and effort are launch arguments: a change waits for a new conversation (before the first prompt, Send restarts it).
+  const pending = session ? pendingSettings(agent, state) : undefined;
+  const restartLabel = pending && `${choices.find((m) => m.id === pending.model)?.label ?? pending.model} ${pending.effort}`;
   // A CLI that's still starting takes the prompt too: it's held until the CLI is ready.
   const starting = Boolean(session && !status?.canSubmit && status?.lifecycle !== "exited" && status?.lifecycle !== "failed");
   const canSend = session
-    ? starting ? Boolean(hasDraft && !busy && !wantsPlan)
-      : Boolean(hasDraft && status?.canSubmit && (!settings || status.activity === "ready") && !busy && (!wantsPlan || (planning && status.activity === "ready")))
+    ? starting ? Boolean(hasDraft && !busy)
+      : Boolean(hasDraft && status?.canSubmit && !busy && (!wantsPlan || planning))
     : Boolean(hasDraft && canLaunch && !busy && !wantsPlan);
   const historyEntry = runtime.history.find((entry) => entry.id === historyId) ?? runtime.history[0];
   const assembly = () => services.commands.execute<PromptPreview>("agent.composer.preview", target);
@@ -76,12 +81,18 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
     await services.commands.execute("agent.composer.quote", { ...target, text: session?.selection ?? "" });
     promptRef.current?.focus();
   };
-  const feedback = error || (runtime.launching ? (session ? "Waiting for the CLI to be ready, then sending…" : "Starting the CLI…") : runtime.sending ? "Applying model and effort, then delivering prompt…" : runtime.result?.outcome === "uncertain"
-    ? `Delivery uncertain. ${runtime.result.message}` : runtime.result?.outcome === "not-sent"
-      ? `Not sent. ${runtime.result.message}` : !session ? "" : starting ? "The CLI is starting: send now and it goes as soon as it's ready." : !status?.canSubmit ? status?.reason
-        : settings && status.activity !== "ready" ? "Wait until the CLI is ready to apply model and effort."
-          : wantsPlan && status.activity !== "ready" ? "Wait until the CLI is ready to send for planning."
-          : runtime.result?.message || status?.reason);
+  const waiting = status?.activity === "waiting-for-input" ? "Answer the question in the terminal: your prompt goes as soon as the CLI is ready."
+    : status?.rule.endsWith("native-draft") ? "There’s a draft in the terminal. Send or clear it there, then this prompt goes."
+      : "Waiting for the CLI to be ready, then sending…";
+  const feedback = error || (runtime.launching ? (session ? waiting : "Starting the CLI…")
+    : runtime.sending ? (wantsPlan ? "Switching to Plan mode if needed, then delivering…" : "Delivering prompt…")
+      : runtime.result?.outcome === "uncertain" ? `Delivery uncertain. ${runtime.result.message}`
+        : runtime.result?.outcome === "not-sent" ? `Not sent. ${runtime.result.message}`
+          : !session ? ""
+            : pending ? (!isUnusedConversation(agent!) ? `This conversation runs ${agent.settings?.model} ${agent.settings?.effort}. Restart to use ${restartLabel}.` : `Sending restarts the CLI with ${restartLabel}.`)
+              : starting ? "The CLI is starting: send now and it goes as soon as it's ready." : !status?.canSubmit ? status?.reason
+                : wantsPlan && status.activity !== "ready" ? "Plan mode switches once the CLI is ready."
+                  : runtime.result?.message || status?.reason);
   const needsHandoff = session && (!status?.canSubmit || runtime.result?.outcome === "uncertain" || runtime.result?.outcome === "not-sent");
 
   return <div className="composer-dock">
@@ -112,7 +123,7 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
                   </ListBoxItem>)}
                 </ListBox>
                 {historyEntry && <>
-                  <p className="composer-note" title={historyEntry.message}>{historyEntry.preview.intent === "plan" ? "Planning request" : "Uses the CLI’s current mode"}</p>
+                  <p className="composer-note" title={historyEntry.message}>{historyEntry.preview.intent === "plan" ? "Planning request" : "Code mode"}</p>
                   <pre className="prompt-preview-text">{historyEntry.preview.content}</pre>
                   <Button onPress={() => { void services.commands.execute("agent.composer.recall", { ...target, entryId: historyEntry.id }).then(() => {
                     close(); promptRef.current?.focus();
@@ -140,6 +151,9 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
         onChange={(event) => patch({ draft: event.currentTarget.value })}
         onKeyDown={(event) => { if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) { event.preventDefault(); send(); } }} />
       <div className="composer-feedback" aria-live="polite">{feedback}</div>
+      {pending && agent && !isUnusedConversation(agent) && !busy && <div className="composer-handoff">
+        <Button onPress={() => { void services.commands.execute("agent.session.restart", target).catch((e: unknown) => setError(String(e))); }}>Restart with {restartLabel}</Button>
+      </div>}
       {needsHandoff && <div className="composer-handoff">
         <Button onPress={session.focusTerminal}>Focus terminal</Button>
         <Button onPress={() => { void assembly().then((value) => navigator.clipboard.writeText(value.content)).then(() => setCopiedRevision(state.composerRevision ?? 0)).catch(() => setError("Could not copy. Open Preview to select the prompt text.")); }}>{copiedRevision === (state.composerRevision ?? 0) ? "Copied prompt" : "Copy composed prompt"}</Button>
@@ -168,7 +182,7 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
             <AriaButton className="composer-chip"><SelectValue>{({ selectedText }) => selectedText}</SelectValue><ChevronDownIcon size={12} /></AriaButton>
             <Popover className="wb-popover" placement="top end">
               <ListBox>
-                <ListBoxItem id="default" textValue="Code"><div><span>Code</span><small>Keeps the CLI’s current mode</small></div></ListBoxItem>
+                <ListBoxItem id="default" textValue="Code"><div><span>Code</span><small>Leaves the CLI’s Plan mode if it’s on</small></div></ListBoxItem>
                 <ListBoxItem id="plan" textValue="Plan"><div><span>Plan</span><small>{planning ? "Enters the CLI’s Plan mode" : "Start the session to plan"}</small></div></ListBoxItem>
               </ListBox>
             </Popover>
@@ -180,11 +194,11 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
       </div>
     </div>
     {wantsPlan && <p className="composer-plan-note" id={`plan-note-${viewId}`}>{planning
-      ? "Enters the CLI’s Plan mode. The CLI may stay in that mode afterward."
+      ? "Enters the CLI’s Plan mode. Sending with Code leaves it again."
       : "This provider does not support planning submissions. Switch to Code to send normally."}</p>}
     <ModalOverlay className="wb-modal-overlay" isDismissable isOpen={Boolean(preview)} onOpenChange={(open) => { if (!open) setPreview(undefined); }}>
       <Modal className="wb-modal composer-preview-modal"><Dialog aria-label="Prompt preview" className="wb-dialog">
-        <div className="dialog-header"><div><h2>Prompt preview</h2><p>{preview?.intent === "plan" ? "Send for planning · enters the CLI’s Plan mode" : "Send · keeps the CLI’s current mode"}</p></div><Button onPress={() => setPreview(undefined)}>Close</Button></div>
+        <div className="dialog-header"><div><h2>Prompt preview</h2><p>{preview?.intent === "plan" ? "Send for planning · enters the CLI’s Plan mode" : "Send · Code mode (leaves Plan mode if it’s on)"}</p></div><Button onPress={() => setPreview(undefined)}>Close</Button></div>
         <div className="composer-preview-body">
           <div className="prompt-sources" aria-label="Included context">
             {preview?.contributions.filter((item) => item.placement !== "append").map((item) => <span key={`${item.kind}-${item.id}`}>{item.source}</span>)}
