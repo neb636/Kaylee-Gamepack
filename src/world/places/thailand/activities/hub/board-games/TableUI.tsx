@@ -137,14 +137,14 @@ function Picker({ view, table }: { view: TableView; table: MutableRefObject<Tabl
       {/* The cousins (BB first). */}
       <div style={{ display: 'flex', gap: 'clamp(10px, 2vmin, 18px)', alignItems: 'center' }}>
         {COUSINS.map((c) => (
-          <button key={c} aria-label={FACES[c].name} aria-pressed={view.vs === c} onClick={() => (sounds.pop(), t()?.chooseCousin(c))} style={{ border: 'none', background: 'none', padding: 4, display: 'grid', justifyItems: 'center', gap: 2 }}>
+          <button key={c} aria-label={FACES[c].name} aria-pressed={view.vs === c} onClick={() => (sounds.pop(), t()?.chooseCousin(c))} style={{ border: 'none', background: 'none', padding: 4, display: 'grid', justifyItems: 'center', alignContent: 'center', gap: 2, minWidth: 'var(--target)', minHeight: 'var(--target)' }}>
             <Face who={c} size={face} active={view.vs === c} />
             <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>{FACES[c].name}</span>
           </button>
         ))}
       </div>
-      <div style={{ display: 'flex', gap: 'clamp(8px, 1.6vmin, 14px)', alignItems: 'center' }}>
-        {/* Her unicorn (the Unicorn game): the cousin takes another. */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 'clamp(2px, 1vmin, 8px)', alignItems: 'center' }}>
+        {/* Her unicorn (the Unicorn game): the cousin takes another. A full-size tap target round each smaller circle. */}
         {view.game === 'unicorn' &&
           UNICORNS.map((c) => (
             <motion.button
@@ -154,9 +154,9 @@ function Picker({ view, table }: { view: TableView; table: MutableRefObject<Tabl
               animate={{ scale: view.piece === c ? 1.15 : 1 }}
               whileTap={{ scale: 0.85 }}
               onClick={() => (sounds.pop(), t()?.choosePiece(c))}
-              style={{ ...round(sw, UNICORN_HEX[c].body, view.piece === c ? 'var(--hotpink)' : '#fff'), fontSize: `calc(${sw} * .5)` }}
+              style={{ width: 'var(--target)', height: 'var(--target)', border: 'none', background: 'none', padding: 0, display: 'grid', placeItems: 'center', flex: 'none' }}
             >
-              🦄
+              <span style={{ ...round(sw, UNICORN_HEX[c].body, view.piece === c ? 'var(--hotpink)' : '#fff'), fontSize: `calc(${sw} * .5)` }}>🦄</span>
             </motion.button>
           ))}
         <motion.button

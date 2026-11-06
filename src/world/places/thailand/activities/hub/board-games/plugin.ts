@@ -249,8 +249,11 @@ export class TablePlugin implements HousePlugin {
   private begin(s: { me: number; them: number; turn: Who; rolls: number[] }) {
     this.cancel()
     this.showBoard(true)
+    // (A link copied from a finished game keeps its winner: a piece on the castle has won.)
     const end = UNICORN_END
-    this.state = startTurns(Math.min(end - 1, s.me), Math.min(end - 1, s.them), s.turn)
+    this.state = startTurns(Math.min(end, s.me), Math.min(end, s.them), s.turn)
+    if (this.state.pos[0] >= end) this.state = { ...this.state, turn: 0, winner: 0 }
+    else if (this.state.pos[1] >= end) this.state = { ...this.state, turn: 1, winner: 1 }
     this.roll = makeDie(s.rolls)
     this.layout(true)
     this.die.place(CORNER[s.turn])
@@ -283,7 +286,8 @@ export class TablePlugin implements HousePlugin {
     const sharing = at[0] === at[1]
     this.pieces.forEach((p, i) => {
       p.at = at[i]
-      const to = this.board!.spot(at[i], i as Who, sharing)
+      // The winner stands in the castle's gate.
+      const to = fromState && this.state.winner === i ? this.board!.gate() : this.board!.spot(at[i], i as Who, sharing)
       if (fromState) p.place(to)
       else if (p.root.position.distanceTo(to) > 0.002) p.hop(to, 0.18, 0.015)
     })
@@ -495,6 +499,14 @@ export class TablePlugin implements HousePlugin {
       sfx.giggle()
     } else if (id === 'unicorn-bag') this.house.pokeThing('unicorn-bag')
     return true
+  }
+
+  /** While she plays, a finger that drags across the board is the table's too: it never walks her off her stool. */
+  pointerDown() {
+    return this.open
+  }
+  pointerMove() {
+    return this.open
   }
 
   hides(id: string) {
