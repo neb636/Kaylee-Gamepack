@@ -27,13 +27,13 @@ import { CardDeck } from './deck'
 import { Die } from './die'
 import { COUSINS, cousinUnicorn, GAMES, type CousinId, type GameId, type UnicornColor } from './list'
 import { pawnParts, Piece, unicornParts } from './pieces'
-import { CANDY_SPACES, candyDraw, newDeck, type Card, type Deck } from './rules/candy'
+import { CANDY_FINISH, candyDraw, newDeck, type Card, type Deck } from './rules/candy'
 import { makeDie, other, startTurns, type Step, type Turns, type Who } from './rules/turns'
 import { unicornRoll, UNICORN_END } from './rules/unicorn'
 
 type Board = UnicornBoard | CandyBoard
-/** The last space a piece can start a game on from a link (one before the finish). */
-const LAST: Record<GameId, number> = { unicorn: UNICORN_END - 1, candy: CANDY_SPACES, chutes: 35 }
+/** Each game's finish (a piece there has won). */
+const FINISH: Record<GameId, number> = { unicorn: UNICORN_END, candy: CANDY_FINISH, chutes: 36 }
 
 const FILE = 'src/world/places/thailand/activities/hub/board-games/plugin.ts'
 const FEEL = knobs('gameTable', 'Game table', FILE, {
@@ -276,8 +276,11 @@ export class TablePlugin implements HousePlugin {
   private begin(s: { me: number; them: number; turn: Who; rolls: number[]; deck: Card[] }) {
     this.cancel()
     this.showBoard(true)
-    const last = LAST[this.game]
-    this.state = startTurns(Math.min(last, s.me), Math.min(last, s.them), s.turn)
+    // (A link copied from a finished game keeps its winner: a piece on the finish has won.)
+    const end = FINISH[this.game]
+    this.state = startTurns(Math.min(end, s.me), Math.min(end, s.them), s.turn)
+    if (this.state.pos[0] >= end) this.state = { ...this.state, turn: 0, winner: 0 }
+    else if (this.state.pos[1] >= end) this.state = { ...this.state, turn: 1, winner: 1 }
     this.roll = makeDie(s.rolls)
     this.deck = newDeck(s.deck)
     this.cards.reset()
@@ -339,7 +342,8 @@ export class TablePlugin implements HousePlugin {
     const sharing = at[0] === at[1]
     this.pieces.forEach((p, i) => {
       p.at = at[i]
-      const to = this.board!.spot(at[i], i as Who, sharing)
+      // The winner stands in the castle's gate.
+      const to = fromState && this.state.winner === i ? this.board!.gate() : this.board!.spot(at[i], i as Who, sharing)
       if (fromState) p.place(to)
       else if (p.root.position.distanceTo(to) > 0.002) p.hop(to, 0.18, 0.015)
     })
@@ -581,6 +585,14 @@ export class TablePlugin implements HousePlugin {
       sfx.giggle()
     } else if (id === 'unicorn-bag') this.house.pokeThing('unicorn-bag')
     return true
+  }
+
+  /** While she plays, a finger that drags across the board is the table's too: it never walks her off her stool. */
+  pointerDown() {
+    return this.open
+  }
+  pointerMove() {
+    return this.open
   }
 
   hides(id: string) {
