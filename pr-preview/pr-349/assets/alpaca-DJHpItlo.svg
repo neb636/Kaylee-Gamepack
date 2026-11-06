@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Luna's Fluffy Day</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe1ee"/><stop offset="1" stop-color="#ffbcd8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <!-- the fleece: body, neck and tail as one cloud of round puffs -->
+    <path id="fleeceP" d="M25 77a9 9 0 1 0 18 0a9 9 0 1 0 -18 0ZM30 67a10 10 0 1 0 20 0a10 10 0 1 0 -20 0ZM41 63a11 11 0 1 0 22 0a11 11 0 1 0 -22 0ZM53 62a11 11 0 1 0 22 0a11 11 0 1 0 -22 0ZM65 63a11 11 0 1 0 22 0a11 11 0 1 0 -22 0ZM77 67a10 10 0 1 0 20 0a10 10 0 1 0 -20 0ZM83.5 77a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0 -17 0ZM77 85a8 8 0 1 0 16 0a8 8 0 1 0 -16 0ZM65 87a8 8 0 1 0 16 0a8 8 0 1 0 -16 0ZM53 87a8 8 0 1 0 16 0a8 8 0 1 0 -16 0ZM41 87a8 8 0 1 0 16 0a8 8 0 1 0 -16 0ZM30 84a8 8 0 1 0 16 0a8 8 0 1 0 -16 0ZM37 76a26 12 0 1 0 52 0a26 12 0 1 0 -52 0ZM30 57a10 10 0 1 0 20 0a10 10 0 1 0 -20 0ZM31.5 48a9.5 9.5 0 1 0 19 0a9.5 9.5 0 1 0 -19 0ZM92 65a5 5 0 1 0 10 0a5 5 0 1 0 -10 0Z"/>
+    <clipPath id="fleece"><use href="#fleeceP"/></clipPath>
+    <clipPath id="head"><ellipse cx="42" cy="36" rx="15.5" ry="14"/></clipPath>
+    <!-- the pink-dyed topknot and fringe -->
+    <path id="tuftP" d="M27.5 25a6 6 0 1 0 12 0a6 6 0 1 0 -12 0ZM34 20.5a7.5 7.5 0 1 0 15 0a7.5 7.5 0 1 0 -15 0ZM44 24a6.5 6.5 0 1 0 13 0a6.5 6.5 0 1 0 -13 0ZM30.5 29.5a5.5 5.5 0 1 0 11 0a5.5 5.5 0 1 0 -11 0ZM38.5 28.5a6 6 0 1 0 12 0a6 6 0 1 0 -12 0ZM47.5 30a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0 -9 0Z"/>
+    <clipPath id="tuft"><use href="#tuftP"/></clipPath>
+    <!-- a scissor ring handle -->
+    <path id="ringP" d="M-5.5 0a5.5 5.5 0 1 0 11 0a5.5 5.5 0 1 0 -11 0ZM-2.8 0a2.8 2.8 0 1 1 5.6 0a2.8 2.8 0 1 1 -5.6 0Z" fill-rule="evenodd"/>
+    <!-- the wool puff -->
+    <path id="puffP" d="M66.5 37a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0 -9 0ZM70.5 33.5a5.5 5.5 0 1 0 11 0a5.5 5.5 0 1 0 -11 0ZM77 36.5a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0 -9 0ZM71 39.5a5 5 0 1 0 10 0a5 5 0 1 0 -10 0Z"/>
+    <clipPath id="puff"><use href="#puffP"/></clipPath>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <ellipse cx="62" cy="104" rx="34" ry="4.5" fill="#4b3a8c" opacity="0.14"/>
+
+  <!-- legs under the fleece: the far pair in shade, little brown hooves -->
+  <rect x="45" y="86" width="7" height="17" rx="3.5" fill="#e8d2c2"/>
+  <rect x="84.5" y="86" width="7" height="17" rx="3.5" fill="#e8d2c2"/>
+  <rect x="45" y="99.5" width="7" height="3.5" rx="1.75" fill="#6b432e"/>
+  <rect x="84.5" y="99.5" width="7" height="3.5" rx="1.75" fill="#6b432e"/>
+  <rect x="35.5" y="86" width="7" height="18" rx="3.5" fill="#fff7f0"/>
+  <rect x="74" y="86" width="7" height="18" rx="3.5" fill="#fff7f0"/>
+  <rect x="35.5" y="100.5" width="7" height="3.5" rx="1.75" fill="#8a5b3d"/>
+  <rect x="74" y="100.5" width="7" height="3.5" rx="1.75" fill="#8a5b3d"/>
+
+  <!-- the fleece: cream puffs, each shaded on its lower right, a shadow under the chin -->
+  <g clip-path="url(#fleece)">
+    <rect x="20" y="36" width="86" height="64" fill="#efdccd"/>
+    <use href="#fleeceP" fill="#fff7f0" transform="translate(-2.5 -3)"/>
+    <ellipse cx="44" cy="51" rx="13" ry="5" fill="#efdccd"/>
+  </g>
+  <path d="M33 62a10 10 0 0 1 6 -5M45 56a11 11 0 0 1 7 -4M58 52a11 11 0 0 1 6 -1" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- long ears, pink inside -->
+  <path d="M29.5 27C24 22 22 14 23.5 7.5C29 10 34 16 36 23Z" fill="#fff7f0"/>
+  <path d="M30 23.5C27 19.5 26 15 26.5 11C29.5 13 32 17 33 21.5Z" fill="#ffc4da"/>
+  <path d="M54.5 27C60 22 62 14 60.5 7.5C55 10 50 16 48 23Z" fill="#efdccd"/>
+  <path d="M54 23.5C57 19.5 58 15 57.5 11C54.5 13 52 17 51 21.5Z" fill="#ff8fb8"/>
+
+  <!-- head: cream, a shaded crescent bottom-right -->
+  <g clip-path="url(#head)">
+    <rect x="25" y="20" width="34" height="32" fill="#efdccd"/>
+    <ellipse cx="40" cy="33.5" rx="15.5" ry="14" fill="#fff7f0"/>
+  </g>
+
+  <!-- the pink topknot and fringe -->
+  <g clip-path="url(#tuft)">
+    <rect x="26" y="12" width="32" height="24" fill="#e7699c"/>
+    <use href="#tuftP" fill="#ff8fb8" transform="translate(-1.5 -2)"/>
+  </g>
+  <circle cx="38.5" cy="16.5" r="2.4" fill="#ffc4da"/>
+  <circle cx="31" cy="22" r="1.7" fill="#ffc4da"/>
+
+  <!-- eyes, muzzle, nose, smile, blush -->
+  <ellipse cx="36" cy="39.5" rx="2.8" ry="3.5" fill="#2b2330"/>
+  <ellipse cx="48" cy="39.5" rx="2.8" ry="3.5" fill="#2b2330"/>
+  <circle cx="37.1" cy="38.2" r="1.15" fill="#fff"/>
+  <circle cx="49.1" cy="38.2" r="1.15" fill="#fff"/>
+  <ellipse cx="42" cy="46.5" rx="7" ry="5" fill="#ffe2d4"/>
+  <path d="M39.8 44.4Q42 43.2 44.2 44.4Q43.5 46.4 42 46.6Q40.5 46.4 39.8 44.4Z" fill="#2b2330"/>
+  <path d="M42 46.6V48M39.6 47.8Q40.8 49.6 42 48Q43.2 49.6 44.4 47.8" fill="none" stroke="#2b2330" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="31.5" cy="45" rx="3.4" ry="2" fill="#ff8fb8" opacity="0.55"/>
+  <ellipse cx="52.5" cy="45" rx="3.4" ry="2" fill="#ff8fb8" opacity="0.55"/>
+
+  <!-- the scissors, snipping her back: silver blades, pink ring handles -->
+  <g transform="translate(94 44) rotate(-38)">
+    <path d="M3 2.5C-6 5 -15 6.5 -23 6.5C-21 4 -10 1 2.5 -2Z" fill="#9790ba"/>
+    <path d="M3 -2.5C-6 -5 -15 -6.5 -23 -6.5C-21 -4 -10 -1 2.5 2Z" fill="#bcb6d6"/>
+    <path d="M0 -3C-7 -5 -14 -6 -19 -6.2" fill="none" stroke="#dedaf0" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M1.5 -1.5L7 -4.5L8.5 -2L3 1.5ZM1.5 1.5L7 4.5L8.5 2L3 -1.5Z" fill="#d8367f"/>
+    <use href="#ringP" transform="translate(10.5 -6.5)" fill="#d8367f"/>
+    <use href="#ringP" transform="translate(9.6 -7.4)" fill="#ff4f9a"/>
+    <use href="#ringP" transform="translate(10.5 6.5)" fill="#d8367f"/>
+    <use href="#ringP" transform="translate(9.6 5.6)" fill="#ff4f9a"/>
+    <circle r="2.2" fill="#6a57c7"/>
+    <circle cx="-0.6" cy="-0.6" r="0.9" fill="#b3a5f2"/>
+  </g>
+
+  <!-- a puff of snipped wool floating up -->
+  <g clip-path="url(#puff)">
+    <rect x="64" y="26" width="24" height="20" fill="#efdccd"/>
+    <use href="#puffP" fill="#fff7f0" transform="translate(-1.5 -2)"/>
+  </g>
+  <path d="M90 22v5M87.5 24.5h5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M16 30v4M14 32h4" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+</svg>

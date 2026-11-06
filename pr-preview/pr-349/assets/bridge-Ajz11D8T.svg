@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Animal Bridge</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe1ee"/><stop offset="1" stop-color="#ffbcd8"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.4" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <clipPath id="face"><path d="M2 64H118V100H86V92C86 78 76 70 60 70C44 70 34 78 34 92V100H2Z"/></clipPath>
+    <clipPath id="deer"><ellipse cx="64" cy="47" rx="9.5" ry="5.6"/></clipPath>
+    <path id="pine" d="M0 0L-5 0L-1.5 -5H-3.5L0 -11L3.5 -5H1.5L5 0Z"/>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="44" r="52" fill="url(#glow)"/>
+
+  <!-- snowy mountains and the forest far behind -->
+  <path d="M-2 62L18 38L30 48L46 26L62 46L76 32L94 50L106 40L122 56V70H-2Z" fill="#c8bdf0"/>
+  <path d="M46 26L62 46L54 40L48 44ZM76 32L94 50L86 44L80 46Z" fill="#a99ce0"/>
+  <path d="M46 26L52 33.5L48 32L44 34L40.5 32.5ZM76 32L81 38.5L77.5 37.5L74 39L71.5 37.5ZM18 38L22 43L19 42L16 43.5L14 42Z" fill="#fff"/>
+  <g fill="#3e9e78">
+    <use href="#pine" x="6" y="66"/><use href="#pine" x="14" y="65"/><use href="#pine" x="24" y="66"/><use href="#pine" x="96" y="66"/><use href="#pine" x="106" y="65"/><use href="#pine" x="115" y="66"/>
+  </g>
+
+  <!-- the green bridge: grass and pines on top, the road through its arch -->
+  <g clip-path="url(#face)">
+    <rect x="0" y="60" width="120" height="42" fill="#dedaf0"/>
+    <rect x="92" y="60" width="28" height="42" fill="#c9c3e0"/>
+    <path d="M2 69H118" stroke="#bcb6d6" stroke-width="2"/>
+    <path d="M34 92C34 78 44 70 60 70C76 70 86 78 86 92" fill="none" stroke="#fff7f0" stroke-width="3"/>
+  </g>
+  <path d="M34 100V92C34 78 44 70 60 70C76 70 86 78 86 92V100Z" fill="#7d75a6"/>
+  <path d="M46 100V95C46 86 52 82 60 82C68 82 74 86 74 95V100Z" fill="#c8bdf0"/>
+  <path d="M0 66C20 56 44 54 60 55C78 54 100 56 120 66V69H0Z" fill="#73cf86"/>
+  <path d="M0 66C20 58 44 56 60 57C78 56 100 58 120 66" fill="none" stroke="#aee8b7" stroke-width="2.4"/>
+  <g fill="#48a96c"><circle cx="34" cy="60" r="4"/><circle cx="40" cy="59" r="3"/><circle cx="88" cy="59.5" r="3.6"/></g>
+  <g fill="#3e9e78"><use href="#pine" x="20" y="63" transform="translate(-4 -1) scale(1.2)"/><use href="#pine" x="96" y="61" transform="translate(-10 -6) scale(1.2)"/><use href="#pine" x="104" y="62"/></g>
+
+  <!-- the road -->
+  <path d="M44 100H76L96 122H24Z" fill="#9790ba"/>
+  <path d="M44 100L24 122M76 100L96 122" stroke="#bcb6d6" stroke-width="2"/>
+  <path d="M60 102V107M60 111V118" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M-2 100H44L24 122H-2Z" fill="#8fd99a"/>
+  <path d="M76 100H122V122H96Z" fill="#8fd99a"/>
+
+  <!-- a fawn walking across the top -->
+  <ellipse cx="64" cy="57" rx="11" ry="2" fill="#4b3a8c" opacity="0.15"/>
+  <rect x="58.5" y="49" width="2.4" height="8" rx="1.2" fill="#a46e4b"/>
+  <rect x="68.5" y="49" width="2.4" height="8" rx="1.2" fill="#a46e4b"/>
+  <circle cx="55" cy="45" r="2" fill="#fff7f0"/>
+  <g clip-path="url(#deer)">
+    <rect x="54" y="40" width="20" height="14" fill="#a46e4b"/>
+    <ellipse cx="63" cy="46" rx="9.5" ry="5.4" fill="#c99266"/>
+    <ellipse cx="63" cy="51" rx="7" ry="2.6" fill="#e5b78f"/>
+  </g>
+  <g fill="#fff7f0"><circle cx="60" cy="44.5" r="0.9"/><circle cx="64" cy="43.6" r="0.9"/><circle cx="67" cy="45" r="0.9"/><circle cx="62" cy="47" r="0.8"/></g>
+  <rect x="56" y="49" width="2.6" height="8.5" rx="1.3" fill="#c99266"/>
+  <rect x="66" y="49" width="2.6" height="8.5" rx="1.3" fill="#c99266"/>
+  <path d="M69 46C70 41 71 38 73 36L76.5 38C74.5 40.5 73 43.5 72.5 47Z" fill="#c99266"/>
+  <path d="M71.5 33C70 30 70 27 71.5 25.5C73 27.5 73.5 30 73 33Z" fill="#c99266"/>
+  <path d="M75.5 32.5C76.5 29.5 78.5 27.5 80.5 27C80.5 29.5 79 31.5 77 33.5Z" fill="#a46e4b"/>
+  <ellipse cx="75" cy="35.5" rx="4.6" ry="4" fill="#c99266"/>
+  <ellipse cx="78.6" cy="37.4" rx="2.6" ry="2" fill="#e5b78f"/>
+  <circle cx="80.6" cy="36.8" r="0.95" fill="#2b2330"/>
+  <ellipse cx="75.6" cy="34.4" rx="1.2" ry="1.4" fill="#2b2330"/>
+  <circle cx="76" cy="34" r="0.45" fill="#fff"/>
+  <ellipse cx="74.6" cy="37.6" rx="1.6" ry="1" fill="#ff8fb8" opacity="0.7"/>
+</svg>
