@@ -82,7 +82,7 @@ export function TableUI({ view, table }: { view: TableView; table: MutableRefObj
                 transition={{ scale: { repeat: Infinity, duration: 1.4 } }}
                 whileTap={{ scale: 0.85 }}
                 onClick={tap(() => t()?.again())}
-                style={{ position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 18px)', translate: '-50% 0', ...iconBtn('var(--mint)'), width: 'calc(var(--target) * 1.25)', height: 'calc(var(--target) * 1.25)', fontSize: 'calc(var(--target) * .6)', zIndex: 40 }}
+                style={{ ...iconBtn('var(--mint)'), position: 'absolute', left: '50%', bottom: 'calc(var(--safe-bottom) + 18px)', translate: '-50% 0', width: 'calc(var(--target) * 1.25)', height: 'calc(var(--target) * 1.25)', fontSize: 'calc(var(--target) * .6)', zIndex: 40 }}
               >
                 🔁
               </motion.button>
