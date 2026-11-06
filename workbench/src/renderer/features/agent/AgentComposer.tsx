@@ -20,7 +20,7 @@ import { services } from "../../core/services";
 import type { ViewStatus } from "../../core/view-status";
 import { Button, IconButton } from "../../ui/controls";
 import { ArrowUpIcon, ChevronDownIcon, CloseIcon, EyeIcon, HistoryIcon, NewChatIcon, QuoteIcon, StopIcon } from "../../ui/icons";
-import { useAgentRuntimes } from "../../core/agent-runtimes";
+import { isUnusedConversation, useAgentRuntimes } from "../../core/agent-runtimes";
 import { clearComposerResult, emptyComposerRuntime, patchComposer, pendingSettings, useComposerState, type PromptPreview } from "./composer-state";
 import { PromptMenuBar } from "./prompt-menus/PromptMenuBar";
 
@@ -89,7 +89,7 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
       : runtime.result?.outcome === "uncertain" ? `Delivery uncertain. ${runtime.result.message}`
         : runtime.result?.outcome === "not-sent" ? `Not sent. ${runtime.result.message}`
           : !session ? ""
-            : pending ? (agent?.prompted ? `This conversation runs ${agent.settings?.model} ${agent.settings?.effort}. Restart to use ${restartLabel}.` : `Sending restarts the CLI with ${restartLabel}.`)
+            : pending ? (!isUnusedConversation(agent!) ? `This conversation runs ${agent.settings?.model} ${agent.settings?.effort}. Restart to use ${restartLabel}.` : `Sending restarts the CLI with ${restartLabel}.`)
               : starting ? "The CLI is starting: send now and it goes as soon as it's ready." : !status?.canSubmit ? status?.reason
                 : wantsPlan && status.activity !== "ready" ? "Plan mode switches once the CLI is ready."
                   : runtime.result?.message || status?.reason);
@@ -151,7 +151,7 @@ export function AgentComposer({ workspaceId, viewId, agentLabel, state, session,
         onChange={(event) => patch({ draft: event.currentTarget.value })}
         onKeyDown={(event) => { if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) { event.preventDefault(); send(); } }} />
       <div className="composer-feedback" aria-live="polite">{feedback}</div>
-      {pending && agent?.prompted && !busy && <div className="composer-handoff">
+      {pending && agent && !isUnusedConversation(agent) && !busy && <div className="composer-handoff">
         <Button onPress={() => { void services.commands.execute("agent.session.restart", target).catch((e: unknown) => setError(String(e))); }}>Restart with {restartLabel}</Button>
       </div>}
       {needsHandoff && <div className="composer-handoff">

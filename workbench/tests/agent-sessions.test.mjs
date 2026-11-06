@@ -497,3 +497,15 @@ test("recorded Claude Code 2.1: ready with its placeholder, Shift+Tab cycles thr
   });
   assert.deepEqual(modes, { ready: "auto mode on", mouse: "auto mode on", cycle1: "manual mode on", cycle2: "accept edits on", plan: "plan", cycle4: "auto mode on" });
 });
+
+test("a planning follow-up while the CLI is still working in Plan mode is refused before any paste", async () => {
+  const s = setup();
+  try {
+    s.output("\x1b[2J\x1b[H\x1b[?2004h• Working (esc to interrupt)\r\n› \r\n\r\n  GPT-6.1-Sol medium         Plan mode (⇧tab to cycle)\x1b[2;3H");
+    await sleep(350);
+    const result = await s.manager.sendPrompt(s.id, request("follow up", "plan"), s.owner);
+    assert.equal(result.outcome, "not-sent");
+    assert.equal(result.stage, "none");
+    assert.deepEqual(s.writes, []);
+  } finally { s.manager.terminateAll(); }
+});

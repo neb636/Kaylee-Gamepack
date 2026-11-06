@@ -6,7 +6,7 @@ import type { AssembledPrompt } from "../../core/prompt-assembler";
 import { createId } from "../../core/id";
 import { errorMessage } from "../../core/errors";
 import { services } from "../../core/services";
-import { closeAgentRuntime, markAgentPrompted, startAgentRuntime, untilSubmittable, useAgentRuntimes, type AgentRuntime } from "../../core/agent-runtimes";
+import { closeAgentRuntime, isUnusedConversation, markAgentPrompted, startAgentRuntime, untilSubmittable, useAgentRuntimes, type AgentRuntime } from "../../core/agent-runtimes";
 import { useWorkbenchStore } from "../../state/workbench-store";
 
 export interface ComposerTarget { workspaceId: string; viewId: string; }
@@ -156,7 +156,7 @@ export function registerComposerContributions(): void {
     if (!runtime || !stateFor(target)?.draft?.trim() || useComposerState.getState().views[target.viewId]?.sending) return;
     // Model and effort are launch arguments. Nothing has gone to this conversation yet, so start it again with the
     // ones chosen in the composer, then send.
-    if (!runtime.prompted && pendingSettings(runtime, stateFor(target))) {
+    if (isUnusedConversation(runtime) && pendingSettings(runtime, stateFor(target))) {
       closeAgentRuntime(target.viewId);
       await services.commands.execute("agent.session.launch", { ...target, providerId: runtime.providerId });
       return;

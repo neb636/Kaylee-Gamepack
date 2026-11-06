@@ -148,6 +148,8 @@ export class AgentSessionManager {
       if (!s.status.canSubmit || s.disposed) throw new Error(s.status.reason);
       // The composer's mode is the truth: Plan enters the CLI's Plan mode, Code leaves it. Read from the footer, never remembered.
       const plan = request.intent === "plan";
+      // Planning needs a ready CLI even when it is already in Plan mode: a paste into a working turn would be left behind.
+      if (plan && s.status.activity !== "ready") throw new Error("Wait until the CLI is ready before sending for planning.");
       if (s.provider.mode && (s.provider.mode(this.observe(s)) === "plan") !== plan) {
         if (s.status.activity !== "ready") throw new Error(plan ? "Wait until the CLI is ready before sending for planning." : "Wait until the CLI finishes before leaving Plan mode.");
         stage = "mode";
@@ -168,7 +170,6 @@ export class AgentSessionManager {
       if (s.status.lifecycle !== "alive" || s.status.activity === "waiting-for-input" || s.status.inputState !== "draft") {
         throw new Error("Prompt may be pasted. Inspect the terminal before sending again.");
       }
-      if (plan && s.status.activity !== "ready") throw new Error("CLI activity changed while pasting. Inspect the terminal before sending for planning.");
       stage = "enter";
       s.process.write("\r");
       s.inputWasEdited = false;

@@ -46,6 +46,12 @@ export function markAgentPrompted(viewId: string): void {
   useAgentRuntimes.setState((state) => ({ sessions: { ...state.sessions, [viewId]: { ...runtime, prompted: true } } }));
 }
 
+/** Nothing has happened in this conversation yet, from the composer or typed in the terminal, so restarting it loses nothing. */
+export function isUnusedConversation(runtime: AgentRuntime): boolean {
+  const status = runtime.status;
+  return !runtime.prompted && Boolean(status) && status!.completed === 0 && status!.activity !== "working" && status!.inputState !== "draft";
+}
+
 export function acknowledgeAgentCompletion(viewId: string): void {
   const runtime = useAgentRuntimes.getState().sessions[viewId];
   if (!runtime || runtime.seenCompletion === runtime.status?.completed) return;
