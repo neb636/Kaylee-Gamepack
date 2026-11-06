@@ -18,11 +18,11 @@
   "kind": "Toy in Agong's house",
   "updated": "2026-11-06",
   "status": {
-    "label": "Greybox 1 built: the table and the Unicorn Dice Game",
+    "label": "Greyboxes 1 and 2 built: the Unicorn game and Candy Land",
     "tone": "mint"
   },
   "pitch": "A little game table stands on the right side of Kaylee's room upstairs, past the couch, with a pink unicorn bag sitting beside it. She taps the table, sits down, picks a game from three big pictures and a cousin from three faces (BB is ready by default), and that cousin really comes and sits across from her. Then they play: **Kaylee's Unicorn Dice Game** (her own rules), **Candy Land** and **Chutes and Ladders**, on boards made for this house, taking turns until someone wins and it's “Again!”.",
-  "next": "Dad plays greybox 1 on the iPad: tap the table, pick BB, Gan or Ken, and play the Unicorn Dice Game (the 🔗 links in the PR open a 4, a castle win and a kind loss). Is rolling fun, is the turn rhythm right (the feel lab has the numbers)? Then greybox 2: Candy Land.",
+  "next": "Dad plays greyboxes 1 and 2 on the iPad: the Unicorn Dice Game and Candy Land with BB, Gan or Ken (the 🔗 links in each PR open a 4, a double card, a reshuffle and the finishes). Is rolling fun, does drawing a card feel different, is the turn rhythm right (the feel lab has the numbers)? Then greybox 3: Chutes and Ladders.",
   "facts": [
     {
       "icon": "🎲",
@@ -904,8 +904,7 @@
             {
               "n": 5,
               "id": "candy",
-              "name": "Candy Land with BB, from the start",
-              "status": "todo"
+              "name": "Candy Land with BB, from the start"
             },
             {
               "n": 6,
@@ -942,27 +941,23 @@
             },
             {
               "id": "candy",
-              "name": "Candy: a single green card",
-              "query": "me=10&them=8&deck=green",
-              "status": "todo"
+              "name": "Candy: a single green card: to the next green space (then BB's double blue)",
+              "query": "me=10&them=8&deck=green,blue2"
             },
             {
               "id": "candy",
               "name": "Candy: a double blue card",
-              "query": "me=10&them=8&deck=blue2",
-              "status": "todo"
+              "query": "me=10&them=8&deck=blue2"
             },
             {
               "id": "candy",
               "name": "Candy: a double card near the end with one match left: to the finish, she wins",
-              "query": "me=31&them=28&deck=orange2",
-              "status": "todo"
+              "query": "me=31&them=28&deck=orange2"
             },
             {
               "id": "candy",
               "name": "Candy: a two-card deck runs out on the third draw and the discards are reshuffled",
-              "query": "me=4&them=4&deck=pink,yellow",
-              "status": "todo"
+              "query": "me=4&them=4&deck=pink,yellow"
             },
             {
               "id": "chutes",
@@ -1026,13 +1021,14 @@
             {
               "n": 2,
               "title": "Greybox 2: Candy Land",
-              "status": "next",
-              "md": "The candy path (36 spaces, six colors with their shapes), the deck that flips a card and the trail to where it's going, the pawns, the finish. Section `candy` and its cases. Rules tests (single, double, past the end, the deck running out)."
+              "status": "done",
+              "md": "The candy path (36 spaces, six colors with their shapes), the deck that flips a card and the trail to where it's going, the pawns, the finish. Section `candy` and its cases. Rules tests (single, double, past the end, the deck running out).",
+              "date": "2026-11-06"
             },
             {
               "n": 3,
               "title": "Greybox 3: Chutes and Ladders",
-              "status": "todo",
+              "status": "next",
               "md": "The 6 by 6 board, the three ladders and three slides drawn on it, climbing and sliding. Section `chutes` and its cases. Rules tests (the snake numbering, ladders and slides, no chaining, the finish)."
             },
             {
@@ -1053,8 +1049,8 @@
           "type": "callout",
           "tone": "note",
           "icon": "📋",
-          "title": "The prompt for greybox 2",
-          "md": "Work in neb636/Kaylee-Gamepack. Read AGENTS.md, then `planning/around-the-world/thailand/game-table.html` (`node scripts/plan.mjs md planning/around-the-world/thailand/game-table.html`), including its builder sections, the greybox 1 log and Dad's answers. Build **greybox 2 only: Candy Land**, on the table and turn engine greybox 1 built in `activities/hub/board-games/`: `rules/candy.ts` (36 spaces in six colors, a 24-card deck with singles and doubles, too few left goes to the finish, the discard pile reshuffled when the deck runs out), the candy path board with each color's shape, the deck she taps (a card flips up big, the space it means glows, the piece hops along the lit trail), pawns with the players' faces, the cupcake-house finish. Set `built: true` for candy (keep `ready: false`), add the hub section `candy` and the `deck` param with the plan's handy cases, rules tests in `tests/thailand-board-games.spec.ts`, knobs for the card flip, and screens and a motion scenario in `thailand/qa.mjs`. No voices, no art. Run `npm run verify`, screenshot the game at iPad portrait and landscape and iPhone landscape, update this plan (build step 2, a log entry, the sections), and open the PR with the `open-pr` skill. Stop for Dad."
+          "title": "The prompt for greybox 3",
+          "md": "Work in neb636/Kaylee-Gamepack. Read AGENTS.md, then `planning/around-the-world/thailand/game-table.html` (`node scripts/plan.mjs md planning/around-the-world/thailand/game-table.html`), including its builder sections, the greybox logs and Dad's answers. Build **greybox 3 only: Chutes and Ladders**, on the table, turn engine, die and face pawns greyboxes 1 and 2 built in `activities/hub/board-games/`: `rules/chutes.ts` (the 6 by 6 snake numbering, the plan's three ladders and three slides as data, only the space the die lands on counts, reach or pass 36 to win), the board with its ladders and slides drawn so both ends show, climbing rung by rung and spinning down the slides (the highlight; a slide is playful, never a failure). Set `built: true` for chutes (keep `ready: false`), add the hub section `chutes` with the plan's handy cases, rules tests in `tests/thailand-board-games.spec.ts`, knobs for the climb and slide, and screens and a motion scenario in `thailand/qa.mjs`. No voices, no art. Run `npm run verify`, screenshot the game at iPad portrait and landscape and iPhone landscape, update this plan (build step 3, a log entry, the sections), and open the PR with the `open-pr` skill. Stop for Dad."
         },
         {
           "type": "log",
@@ -1100,6 +1096,39 @@
                 }
               ],
               "pr": 348
+            },
+            {
+              "title": "Greybox 2: Candy Land",
+              "date": "2026-11-06",
+              "status": "done",
+              "summary": "Candy Land on the same table and turn engine: the candy path, the deck she taps, the big card, the glowing space, pawns with the players' faces, the cupcake house.",
+              "items": [
+                "**The rules** (`rules/candy.ts`, pure): 36 spaces in six colors in order, a 24-card deck (3 singles and 1 double of each color), `destination()` (the next or second space of the color, else the finish, 37), `candyDraw()` (reshuffles the discards when the deck is empty, returns the steps `reshuffle`, `draw`, `move`, `win`, `pass`). A link's `deck=` is the draw pile exactly, top first.",
+                "**The board** (`boards/candy.ts`): rounded tiles painted on the board's top, each color with its own white candy shape (heart, star, lemon drop, leaf, moon, flower), a white path winding through them, a gumdrop gate at the start and a cupcake house with sprinkles and a cherry at the finish; a white ring pulses on the space a card points to.",
+                "**The deck** (`deck.ts`): a stack in front of the board (it breathes on her turn, ruffles when tapped off-turn); a draw lifts the top card, flips it over in the air and lays it face up on the discard pile; a reshuffle squashes the pile back into the deck with a swish. The Hub shows the card big over the table while it plays out (`view.card`).",
+                "**Pawns** (`pieces.ts` `pawnParts`): her lilac unicorn head with a gold horn, BB's buffalo calf with a pink bow, Gan's fox in a blue cap, Ken's fox in green glasses, each on a little cone body.",
+                "**The plugin** now holds a board per game and dispatches the move (`unicornRoll` or `candyDraw`); the die or the deck is the thing she taps (`trip:table:die`, `trip:table:deck`). Candy hops are quicker (knob `candyHop`), and a sparkle lights each space the pawn passes.",
+                "**Links**: section `candy`, param `deck`; handy cases for a single, a double, the finish with too few left, and a reshuffle. **Tests**: colors and the deck, single and double, the finish, alternating turns, a reshuffle, whole games that never lose a card; on the page, three quick taps draw one card, it shows big, and both pawns land right. **QA**: screens and the motion scenario `table-candy`. Knobs: `flipTime`, `cardShow`, `candyHop`."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "items": [
+                    "The drawn card shows big as a picture over the top of the table (the Hub) while the 3D card flips onto the pile: the 3D card alone was too small to read from the camera.",
+                    "The Again button now sits at the bottom middle in both games (it was at the top: fixed in greybox 1's PR too)."
+                  ]
+                },
+                {
+                  "type": "list",
+                  "title": "Known small things",
+                  "items": [
+                    "The pawns' faces are small from the table camera (fine for telling them apart; bigger at the look gate).",
+                    "The candy path's white ribbon mostly hides under the tiles."
+                  ]
+                }
+              ]
             }
           ]
         }

@@ -24,6 +24,7 @@ import { WARDROBE_ANCHORS, WardrobePlugin } from './wardrobe/plugin'
 import { isTableSection, type CousinId, type GameId, type UnicornColor } from './board-games/list'
 import { TABLE_ANCHORS, TablePlugin, type TableStart, type TableView } from './board-games/plugin'
 import { clampPos, parseRolls } from './board-games/rules/turns'
+import { parseDeck } from './board-games/rules/candy'
 import { TableUI } from './board-games/TableUI'
 
 // Per visit to the app: the tuk-tuk brings her the first time; after that she's back where she left off.
@@ -69,6 +70,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           them: clampPos(param('them'), 99),
           turn: param('turn') === 'cousin' ? 1 : 0,
           rolls: parseRolls(param('rolls')),
+          deck: parseDeck(param('deck')),
         }
       : undefined,
   )

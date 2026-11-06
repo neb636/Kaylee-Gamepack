@@ -6,7 +6,7 @@ import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'
 import { PAL } from '../../../../../engine3d/toon'
 import { bell } from '../../../../../../sdk'
-import type { UnicornColor } from './list'
+import type { CousinId, UnicornColor } from './list'
 
 export const UNICORN_HEX: Record<UnicornColor, { body: string; mane: string }> = {
   pink: { body: '#FF9CC4', mane: PAL.hotpink },
@@ -16,7 +16,7 @@ export const UNICORN_HEX: Record<UnicornColor, { body: string; mane: string }> =
 }
 
 /** A little unicorn figure on a round base, about 9 cm tall, facing +x (its head to the side, so it reads from above). */
-function unicornParts(c: UnicornColor): BufferGeometry[] {
+export function unicornParts(c: UnicornColor): BufferGeometry[] {
   const { body, mane } = UNICORN_HEX[c]
   return [
     P.cyl(0.026, 0.028, 0.01, '#FFFFFF', { at: [0, 0.005, 0] }, 14),
@@ -30,6 +30,24 @@ function unicornParts(c: UnicornColor): BufferGeometry[] {
     P.sphere(0.011, mane, { at: [-0.032, 0.045, 0], scale: [1, 1.3, 1] }, 8),
     ...[-1, 1].map((s) => P.sphere(0.0035, PAL.ink, { at: [0.033, 0.07, s * 0.012] }, 6)),
   ]
+}
+
+/** Candy Land and Chutes and Ladders: a pawn topped with its player's face (so she knows whose is whose): her lilac
+ *  unicorn head with its gold horn, BB's buffalo calf with a pink bow, Gan's fox in a cap, Ken's fox in green glasses. */
+export function pawnParts(who: 'kaylee' | CousinId): BufferGeometry[] {
+  const base = [P.cyl(0.024, 0.028, 0.01, '#FFFFFF', { at: [0, 0.005, 0] }, 14)]
+  const head = (c: string) => P.sphere(0.024, c, { at: [0, 0.07, 0] }, 14)
+  const eyes = [-1, 1].map((s) => P.sphere(0.004, PAL.ink, { at: [0.021, 0.074, s * 0.009] }, 6))
+  const body = (c: string) => P.cone(0.022, 0.06, c, { at: [0, 0.035, 0] }, 14)
+  if (who === 'kaylee')
+    return [...base, body('#FF9CC4'), head('#D9C2FF'), ...eyes, P.sphere(0.01, '#F2E6FF', { at: [0.02, 0.064, 0] }, 8), P.cone(0.006, 0.03, PAL.gold, { at: [0.008, 0.103, 0], rot: [0, 0, -0.3] }, 8), P.sphere(0.012, '#8A5A3C', { at: [-0.014, 0.08, 0] }, 8), ...[-1, 1].map((s) => P.cone(0.007, 0.016, '#D9C2FF', { at: [-0.004, 0.095, s * 0.014] }, 6))]
+  if (who === 'bb')
+    return [...base, body('#FF8FB8'), head('#8E93B5'), ...eyes, P.sphere(0.011, '#C8CBE0', { at: [0.02, 0.064, 0] }, 8), ...[-1, 1].map((s) => P.cone(0.005, 0.022, PAL.cream, { at: [-0.002, 0.094, s * 0.016], rot: [s * 0.6, 0, 0] }, 6)), P.sphere(0.009, PAL.hotpink, { at: [-0.012, 0.09, 0.012] }, 8), P.sphere(0.009, PAL.hotpink, { at: [-0.012, 0.09, 0.024] }, 8)]
+  const fox = '#FF9A4D'
+  const ears = [-1, 1].map((s) => P.cone(0.009, 0.022, fox, { at: [-0.002, 0.095, s * 0.013] }, 6))
+  const snout = P.sphere(0.01, '#FFF2E6', { at: [0.02, 0.064, 0] }, 8)
+  if (who === 'gan') return [...base, body('#6FA8E8'), head(fox), ...eyes, snout, ...ears, P.sphere(0.02, '#3D6FD1', { at: [-0.004, 0.085, 0], scale: [1.1, 0.5, 1.1] }, 10), P.box(0.02, 0.004, 0.022, '#3D6FD1', { at: [-0.024, 0.083, 0] })]
+  return [...base, body('#8FE3C8'), head(fox), ...eyes, snout, ...ears, ...[-1, 1].map((s) => P.torus(0.006, 0.0018, '#2E9E6A', { at: [0.022, 0.075, s * 0.009], rot: [0, Math.PI / 2, 0] }))]
 }
 
 interface Hop {
@@ -56,10 +74,12 @@ export class Piece {
 
   constructor(
     bag: Bag,
-    readonly color: UnicornColor,
+    /** What it looks like (the table builds a new piece when this changes). */
+    readonly key: string,
+    parts: BufferGeometry[],
     id: string,
   ) {
-    this.body.add(solid(merge(unicornParts(color)), bag, 1.5))
+    this.body.add(solid(merge(parts), bag, 1.5))
     this.root.add(this.body)
     this.root.userData.pick = id
   }

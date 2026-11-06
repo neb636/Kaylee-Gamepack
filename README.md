@@ -163,6 +163,12 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [Midgame with Gan](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/unicorn?vs=gan&me=12&them=14)
   - [She is on 22 and rolls a 6: into the castle, she wins](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/unicorn?me=22&them=20&rolls=6)
   - [BB's turn on 23: she rolls a 2 and wins (a kind loss, Again!)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/unicorn?me=20&them=23&turn=cousin&rolls=2)
+  - [Candy Land with BB, from the start](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/candy) ([Gan](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/candy?vs=gan), [Ken](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/candy?vs=ken))
+  - [A single green card: to the next green space](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/candy?me=10&them=8&deck=green)
+  - [A double blue card: to the second blue space](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/candy?me=10&them=8&deck=blue2)
+  - [A double orange near the end with one orange left: to the cupcake house, she wins](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/candy?me=31&them=28&deck=orange2)
+  - [A two-card deck runs out: the third draw reshuffles the discards](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/candy?me=4&them=4&deck=pink,yellow)
+  - [Midgame with Ken](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/candy?vs=ken&me=14&them=17)
 
 **Captain Kaylee's Boat Trip**
 
