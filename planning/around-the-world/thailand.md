@@ -50,6 +50,12 @@ rest of the family the same way, one at a time.
 maker she loves, and the look is saved and worn everywhere in Thailand; a game's costume (the chef's hat, the vet's cap)
 goes on top for that game only. Plan, with every clash and its fix: `thailand/wardrobe.html`.
 
+**The game table (planned 2026-11-06).** Kaylee asked for a game table on the right side of her room, past the couch,
+with a pink unicorn bag sitting beside it. She sits down, picks a game and a cousin (BB, Gan or Ken; BB first, her
+pick), the real cousin comes and sits across from her, and they play her own Unicorn Dice Game, Candy Land or Chutes
+and Ladders on boards made for the house. A toy like the wardrobe: no stamps. Plan, rules, links and gates:
+`thailand/game-table.html`.
+
 Open questions for Dad: Does Sparkle keep guiding here (2D, in the prompt bubble as everywhere
 else), or does a family member (Mom, Agong) give the instructions? What is each person like (for their voices)?
 
