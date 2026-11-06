@@ -18,11 +18,11 @@
   "kind": "Toy in Agong's house",
   "updated": "2026-11-06",
   "status": {
-    "label": "Greyboxes 1 and 2 built: the Unicorn game and Candy Land",
+    "label": "All three greyboxes built: Unicorn Dice, Candy Land, Chutes and Ladders",
     "tone": "mint"
   },
   "pitch": "A little game table stands on the right side of Kaylee's room upstairs, past the couch, with a pink unicorn bag sitting beside it. She taps the table, sits down, picks a game from three big pictures and a cousin from three faces (BB is ready by default), and that cousin really comes and sits across from her. Then they play: **Kaylee's Unicorn Dice Game** (her own rules), **Candy Land** and **Chutes and Ladders**, on boards made for this house, taking turns until someone wins and it's “Again!”.",
-  "next": "Dad plays greyboxes 1 and 2 on the iPad: the Unicorn Dice Game and Candy Land with BB, Gan or Ken (the 🔗 links in each PR open a 4, a double card, a reshuffle and the finishes). Is rolling fun, does drawing a card feel different, is the turn rhythm right (the feel lab has the numbers)? Then greybox 3: Chutes and Ladders.",
+  "next": "Dad plays the three greyboxes on the iPad (PRs #348, #349 and greybox 3's), with BB, Gan and Ken: is rolling fun, does drawing feel different, are the ladders and slides the highlight, is the turn rhythm right (the feel lab has every number)? His notes go into each game. Then the look gate: the table, the bag, the boards, the pieces and the picker's pictures made pretty.",
   "facts": [
     {
       "icon": "🎲",
@@ -909,8 +909,7 @@
             {
               "n": 6,
               "id": "chutes",
-              "name": "Chutes and Ladders with BB, from the start",
-              "status": "todo"
+              "name": "Chutes and Ladders with BB, from the start"
             }
           ]
         },
@@ -962,32 +961,27 @@
             {
               "id": "chutes",
               "name": "Chutes: she rolls a 2 from the start: up the ladder 2 to 14",
-              "query": "rolls=2",
-              "status": "todo"
+              "query": "rolls=2,1"
             },
             {
               "id": "chutes",
               "name": "Chutes: she's on 31 and rolls a 2: down the slide 33 to 22",
-              "query": "me=31&them=25&rolls=2",
-              "status": "todo"
+              "query": "me=31&them=25&rolls=2"
             },
             {
               "id": "chutes",
               "name": "Chutes: Ken's turn on 12, he rolls a 6: up the ladder 18 to 30",
-              "query": "vs=ken&me=10&them=12&turn=cousin&rolls=6",
-              "status": "todo"
+              "query": "vs=ken&me=10&them=12&turn=cousin&rolls=6"
             },
             {
               "id": "chutes",
               "name": "Chutes: she's on 33 and rolls a 5: to 36, she wins",
-              "query": "me=33&them=30&rolls=5",
-              "status": "todo"
+              "query": "me=33&them=30&rolls=5"
             },
             {
               "id": "chutes",
               "name": "Chutes: midgame with Gan",
-              "query": "vs=gan&me=13&them=17",
-              "status": "todo"
+              "query": "vs=gan&me=13&them=17"
             }
           ]
         }
@@ -1029,13 +1023,14 @@
             {
               "n": 3,
               "title": "Greybox 3: Chutes and Ladders",
-              "status": "next",
-              "md": "The 6 by 6 board, the three ladders and three slides drawn on it, climbing and sliding. Section `chutes` and its cases. Rules tests (the snake numbering, ladders and slides, no chaining, the finish)."
+              "status": "done",
+              "md": "The 6 by 6 board, the three ladders and three slides drawn on it, climbing and sliding. Section `chutes` and its cases. Rules tests (the snake numbering, ladders and slides, no chaining, the finish).",
+              "date": "2026-11-06"
             },
             {
               "n": 4,
               "title": "The look",
-              "status": "todo",
+              "status": "next",
               "md": "The table, stools and unicorn bag made pretty; the three boards, the castle, the cupcake house, the pieces and pawns, the die and the cards; the picker's three picture cards (hand-drawn SVG, like the game shelf) and the cousins' faces from their real 3D selves; the cousin's walk over; the small win party. Can split into one PR per game if it's big."
             },
             {
@@ -1050,8 +1045,8 @@
           "type": "callout",
           "tone": "note",
           "icon": "📋",
-          "title": "The prompt for greybox 3",
-          "md": "Work in neb636/Kaylee-Gamepack. Read AGENTS.md, then `planning/around-the-world/thailand/game-table.html` (`node scripts/plan.mjs md planning/around-the-world/thailand/game-table.html`), including its builder sections, the greybox logs and Dad's answers. Build **greybox 3 only: Chutes and Ladders**, on the table, turn engine, die and face pawns greyboxes 1 and 2 built in `activities/hub/board-games/`: `rules/chutes.ts` (the 6 by 6 snake numbering, the plan's three ladders and three slides as data, only the space the die lands on counts, reach or pass 36 to win), the board with its ladders and slides drawn so both ends show, climbing rung by rung and spinning down the slides (the highlight; a slide is playful, never a failure). Set `built: true` for chutes (keep `ready: false`), add the hub section `chutes` with the plan's handy cases, rules tests in `tests/thailand-board-games.spec.ts`, knobs for the climb and slide, and screens and a motion scenario in `thailand/qa.mjs`. No voices, no art. Run `npm run verify`, screenshot the game at iPad portrait and landscape and iPhone landscape, update this plan (build step 3, a log entry, the sections), and open the PR with the `open-pr` skill. Stop for Dad."
+          "title": "The prompt for gate 4: the look",
+          "md": "Work in neb636/Kaylee-Gamepack. Read AGENTS.md, then `planning/around-the-world/thailand/game-table.html` (`node scripts/plan.mjs md planning/around-the-world/thailand/game-table.html`), including its builder sections, the three greybox logs, their known small things and Dad's notes from playing them. Build **gate 4 only: the look**: the table, stools and unicorn bag made pretty (the bag gets a little jingle and a twinkle on its horn); the three boards (a sparkly unicorn castle, the candy world and cupcake house, the ladders and slides) and their pieces and pawns at a size that reads from the table camera; the picker's three game cards as hand-drawn SVG in the game shelf's style (`src/world/shelf/STYLE.md`) and the cousins' faces as pictures of their real 3D selves (`snapPhoto`, like the wardrobe's door); the cousin walking or hopping over to the stool; the small win party at the table. Keep every game `ready: false`. No voices yet (gate 5). Run full QA for the table sections (both QA agents, `--only=ipad-portrait,ipad-landscape,iphone-landscape`), `npm run verify`, update this plan (build step 4, a log entry), and open the PR with the `open-pr` skill. Stop for Dad."
         },
         {
           "type": "log",
@@ -1131,6 +1126,37 @@
                 }
               ],
               "pr": 349
+            },
+            {
+              "title": "Greybox 3: Chutes and Ladders",
+              "date": "2026-11-06",
+              "status": "done",
+              "summary": "Chutes and Ladders on the same table, die and face pawns: the 6 by 6 snake board, three golden ladders and three candy-striped slides, climbing rung by rung and spinning down.",
+              "items": [
+                "**The rules** (`rules/chutes.ts`, pure): `square(n)` for the snake numbering, `LADDERS` {2→14, 8→20, 18→30} and `CHUTES` {15→3, 33→22, 35→24} as data, `chutesRoll()` (only the space the die lands on counts, one ladder or slide at most; reach or pass 36 to win, clamped).",
+                "**The board** (`boards/chutes.ts`): pastel squares with their numbers painted on the board's top, a ring where each ladder starts (mint) and each slide starts (pink), the ladders as two gold rails and rungs lying straight up their columns, the slides as striped tubes curving down (they never cross a ladder), a start spot before 1 and a gold star on 36 that spins at a win.",
+                "**The highlight** (`plugin.ts`, `pieces.ts` `glide()`): up a ladder the pawn climbs rung by rung with rising notes and a chime, then sparkles and a cheer; down a slide it spins and speeds up with a whoosh and a giggle, the cousin hops and laughs, and the game goes straight on. Knobs `climbTime` and `slideTime`.",
+                "**Links**: section `chutes`; handy cases for a ladder from the start, a slide from 33, Ken's ladder from 18, the win and a midgame. **Tests**: the snake numbering, the ladders and slides (no shared ends, ladders straight up a column, no ending on 36), climbing, sliding, passing over without effect, no chaining, the clamp and one winner over 200 random games. **QA**: screens and the motion scenarios `table-ladder` and `table-slide`."
+              ],
+              "blocks": [
+                {
+                  "type": "callout",
+                  "tone": "warn",
+                  "title": "Changed from the plan",
+                  "items": [
+                    "The ladders and slides lie flat on the board (the table camera looks down at it); the rings at their starting squares show where each begins and the rails or stripes show where it ends.",
+                    "The win is marked by a gold star on 36 that spins, since this board has no castle or house."
+                  ]
+                },
+                {
+                  "type": "list",
+                  "title": "Known small things",
+                  "items": [
+                    "The slides cover part of a few squares' numbers.",
+                    "On an iPhone in landscape the board is small (the squares still read)."
+                  ]
+                }
+              ]
             }
           ]
         }

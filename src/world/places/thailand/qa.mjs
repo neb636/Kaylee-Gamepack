@@ -39,13 +39,13 @@ export const screens = [
     wait: 1800,
   })),
   // The game table (game-table.html): the table and the unicorn bag in her room, the picker, the Unicorn Dice Game from
-  // the start, midgame (Gan), sharing a space, finished (her win, and a kind loss with Again), and Candy Land.
-  ...['upstairs?at=game-table', 'table', 'table?vs=gan', 'unicorn', 'unicorn?vs=gan&me=12&them=14', 'unicorn?vs=ken&me=9&them=9', 'unicorn?me=22&them=20&rolls=6', 'unicorn?me=20&them=23&turn=cousin&rolls=2', 'candy', 'candy?vs=ken&me=14&them=17', 'candy?me=31&them=28&deck=orange2'].map((to) => ({
+  // the start, midgame (Gan), sharing a space, finished (her win, and a kind loss with Again), Candy Land, and Chutes and Ladders.
+  ...['upstairs?at=game-table', 'table', 'table?vs=gan', 'unicorn', 'unicorn?vs=gan&me=12&them=14', 'unicorn?vs=ken&me=9&them=9', 'unicorn?me=22&them=20&rolls=6', 'unicorn?me=20&them=23&turn=cousin&rolls=2', 'candy', 'candy?vs=ken&me=14&them=17', 'candy?me=31&them=28&deck=orange2', 'chutes', 'chutes?vs=gan&me=13&them=17', 'chutes?me=33&them=30&rolls=5'].map((to) => ({
     name: `thailand-${to.replace(/[?=&,;]/g, '-')}`.slice(0, 60),
     hash: `#/world/thailand/hub/${to}`,
     reset: true,
-    wait: to.includes('rolls=6') || to.includes('deck=') ? 1500 : to.includes('rolls=2') ? 6500 : 1800,
-    ...(to.includes('rolls=6') ? { act: async (page) => (await page.locator('[data-anchor="trip:table:die"]').click({ force: true }), await page.waitForTimeout(5000)) } : {}),
+    wait: to.includes('rolls=6') || to.includes('rolls=5') || to.includes('deck=') ? 1500 : to.includes('rolls=2') ? 6500 : 1800,
+    ...(to.includes('rolls=6') || to.includes('rolls=5') ? { act: async (page) => (await page.locator('[data-anchor="trip:table:die"]').click({ force: true }), await page.waitForTimeout(5000)) } : {}),
     ...(to.includes('deck=') ? { act: async (page) => (await page.locator('[data-anchor="trip:table:deck"]').click({ force: true }), await page.waitForTimeout(6000)) } : {}),
   })),
   // The family photo (everyone, then a few alone on the turntable, in the three-quarter view it rests on first).
@@ -908,6 +908,9 @@ motion.push(
   thaiHouse('table-castle', 5, 'unicorn?me=22&them=20&rolls=6', [['trip:table:die', 4500]]),
   // Candy Land (greybox 2): a double card flips up big, the space glows, her pawn hops along the lit trail.
   thaiHouse('table-candy', 7, 'candy?me=10&them=8&deck=blue2,green', [['trip:table:deck', 6500]]),
+  // Chutes and Ladders (greybox 3): up the ladder from 2 to 14, and whee, down the slide from 33 to 22.
+  thaiHouse('table-ladder', 6, 'chutes?rolls=2,1', [['trip:table:die', 5500]]),
+  thaiHouse('table-slide', 6, 'chutes?me=31&them=25&rolls=2,1', [['trip:table:die', 5500]]),
 )
 
 // Roblox controls (engine3d/roam.ts) in the house: a drag on the right swings the camera round, a drag on the left is

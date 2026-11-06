@@ -169,6 +169,12 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [A double orange near the end with one orange left: to the cupcake house, she wins](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/candy?me=31&them=28&deck=orange2)
   - [A two-card deck runs out: the third draw reshuffles the discards](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/candy?me=4&them=4&deck=pink,yellow)
   - [Midgame with Ken](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/candy?vs=ken&me=14&them=17)
+  - [Chutes and Ladders with BB, from the start](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/chutes) ([Gan](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/chutes?vs=gan), [Ken](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/chutes?vs=ken))
+  - [She rolls a 2 from the start: up the ladder from 2 to 14](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/chutes?rolls=2)
+  - [She is on 31 and rolls a 2: whee, down the slide from 33 to 22](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/chutes?me=31&them=25&rolls=2)
+  - [Ken's turn on 12: he rolls a 6, up the ladder from 18 to 30](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/chutes?vs=ken&me=10&them=12&turn=cousin&rolls=6)
+  - [She is on 33 and rolls a 5: to 36, she wins](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/chutes?me=33&them=30&rolls=5)
+  - [Midgame with Gan](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/chutes?vs=gan&me=13&them=17)
 
 **Captain Kaylee's Boat Trip**
 

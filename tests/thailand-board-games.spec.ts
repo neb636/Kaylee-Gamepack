@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { makeDie, parseRolls, startTurns } from '../src/world/places/thailand/activities/hub/board-games/rules/turns'
 import { UNICORN_END, unicornRoll } from '../src/world/places/thailand/activities/hub/board-games/rules/unicorn'
+import { CHUTES, CHUTES_END, chutesRoll, LADDERS, square } from '../src/world/places/thailand/activities/hub/board-games/rules/chutes'
 import { CANDY_FINISH, candyDraw, colorOf, destination, fullDeck, newDeck, parseDeck } from '../src/world/places/thailand/activities/hub/board-games/rules/candy'
 
 // The game table in Kaylee's room (planning/around-the-world/thailand/game-table.html). The rules are pure, so most of
@@ -132,6 +133,67 @@ test.describe('Candy Land rules', () => {
         expect(deck.draw.length + deck.discard.length).toBe(24)
       }
       expect(s.winner).not.toBeNull()
+    }
+  })
+})
+
+test.describe('Chutes and Ladders rules', () => {
+  test('the 6 by 6 board is numbered like a snake', () => {
+    expect([1, 6, 7, 12, 13, 18, 31, 36].map(square)).toEqual([
+      { row: 0, col: 0 },
+      { row: 0, col: 5 },
+      { row: 1, col: 5 },
+      { row: 1, col: 0 },
+      { row: 2, col: 0 },
+      { row: 2, col: 5 },
+      { row: 5, col: 5 },
+      { row: 5, col: 0 },
+    ])
+    // Every square once.
+    const seen = new Set(Array.from({ length: 36 }, (_, i) => { const q = square(i + 1); return q.row * 6 + q.col }))
+    expect(seen.size).toBe(36)
+  })
+
+  test('ladders go up and slides go down, no two share an end, and the ladders run straight up a column', () => {
+    const ends = [...Object.entries(LADDERS), ...Object.entries(CHUTES)].flatMap(([a, b]) => [+a, +b])
+    expect(new Set(ends).size).toBe(ends.length)
+    for (const [a, b] of Object.entries(LADDERS)) {
+      expect(b).toBeGreaterThan(+a)
+      expect(square(b).col).toBe(square(+a).col)
+    }
+    for (const [a, b] of Object.entries(CHUTES)) expect(b).toBeLessThan(+a)
+    expect(ends).not.toContain(CHUTES_END)
+  })
+
+  test('landing on a ladder climbs, on a slide slides, and only once', () => {
+    let r = chutesRoll(startTurns(0, 0, 0), 2)
+    expect(r.state.pos[0]).toBe(14)
+    expect(r.steps.map((x) => x.kind)).toEqual(['roll', 'move', 'ladder', 'pass'])
+    r = chutesRoll(startTurns(31, 25, 0), 2)
+    expect(r.state.pos[0]).toBe(22)
+    expect(r.steps).toContainEqual({ kind: 'chute', who: 0, from: 33, to: 22 })
+    // The cousin climbs too.
+    r = chutesRoll(startTurns(10, 12, 1), 6)
+    expect(r.state.pos).toEqual([10, 30])
+    // Passing over a ladder or slide does nothing: only the landing space counts.
+    r = chutesRoll(startTurns(13, 0, 0), 3)
+    expect(r.state.pos[0]).toBe(16)
+    // No chaining: a ladder top (14) next to a slide top (15) is never followed on.
+    expect(chutesRoll(startTurns(12, 0, 0), 2).state.pos[0]).toBe(14)
+  })
+
+  test('reach or pass 36 to win, clamped, one winner', () => {
+    const r = chutesRoll(startTurns(33, 30, 0), 5)
+    expect(r.state.pos[0]).toBe(CHUTES_END)
+    expect(r.state.winner).toBe(0)
+    expect(chutesRoll(r.state, 3).steps).toEqual([])
+    for (let g = 0; g < 200; g++) {
+      const roll = makeDie()
+      let s = startTurns()
+      let n = 0
+      while (s.winner === null && n++ < 2000) s = chutesRoll(s, roll()).state
+      expect(s.winner).not.toBeNull()
+      expect(s.pos.filter((p) => p >= CHUTES_END)).toHaveLength(1)
     }
   })
 })
