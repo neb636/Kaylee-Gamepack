@@ -158,14 +158,13 @@ export interface AgentProviderInfo {
 }
 
 export interface AgentPromptRequest {
-  settings?: import("./agent-models").AgentModelSettings;
   prompt: string;
   intent: "default" | "plan";
 }
 
 export interface AgentDeliveryResult {
   outcome: "submitted" | "not-sent" | "uncertain";
-  stage: "none" | "settings" | "prefix" | "paste" | "enter" | "unknown";
+  stage: "none" | "mode" | "paste" | "enter" | "unknown";
   message: string;
 }
 
@@ -374,6 +373,8 @@ export interface AgentSessionCreateOptions {
   resume?: boolean;
   /** A main-process launch profile granting the session extra permissions. */
   profile?: string;
+  /** Model and effort for a new conversation; a resumed one keeps its own. */
+  settings?: import("./agent-models").AgentModelSettings;
 }
 
 export type AgentSessionEvent = { sessionId: string; sequence: number } & (

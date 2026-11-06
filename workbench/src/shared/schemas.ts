@@ -215,10 +215,10 @@ export const agentSessionCreateOptionsSchema = z.object({
   rows: z.number().int().min(1).max(1000),
   resume: z.boolean().optional(),
   profile: z.string().min(1).max(64).optional(),
+  settings: z.object({ model: z.string().min(1).max(100), effort: z.string().min(1).max(20) }).optional(),
 });
 
 export const agentPromptSchema = z.object({
-  settings: z.object({ model: z.string().min(1).max(100), effort: z.string().min(1).max(20) }).optional(),
   sessionId: z.string().min(1),
   prompt: z.string().min(1).max(500_000),
   intent: z.enum(["default", "plan"]),

@@ -1,4 +1,4 @@
-import { modelSettings } from "../../../shared/agent-models";
+import { modelSettings, type AgentModelSettings } from "../../../shared/agent-models";
 import { create } from "zustand";
 import type { AgentDeliveryResult, AgentPromptRequest, AgentViewState, PromptQuotation } from "../../../shared/models";
 import { resetSelections, resolveOptions, type PromptSelections } from "../../../shared/prompt-options";
@@ -6,7 +6,7 @@ import type { AssembledPrompt } from "../../core/prompt-assembler";
 import { createId } from "../../core/id";
 import { errorMessage } from "../../core/errors";
 import { services } from "../../core/services";
-import { closeAgentRuntime, startAgentRuntime, untilSubmittable, useAgentRuntimes } from "../../core/agent-runtimes";
+import { closeAgentRuntime, markAgentPrompted, startAgentRuntime, untilSubmittable, useAgentRuntimes, type AgentRuntime } from "../../core/agent-runtimes";
 import { useWorkbenchStore } from "../../state/workbench-store";
 
 export interface ComposerTarget { workspaceId: string; viewId: string; }
@@ -47,6 +47,10 @@ function exists({ workspaceId, viewId }: ComposerTarget): boolean {
 }
 function updateRuntime(viewId: string, patch: Partial<ComposerRuntime>): void {
   useComposerState.setState((state) => ({ views: { ...state.views, [viewId]: { ...(state.views[viewId] ?? emptyRuntime), ...patch } } }));
+}
+/** A new choice (model, effort) makes the last delivery's message stale. */
+export function clearComposerResult(viewId: string): void {
+  if (useComposerState.getState().views[viewId]?.result) updateRuntime(viewId, { result: undefined });
 }
 export function clearComposerRuntime(viewId: string): void {
   useComposerState.setState((state) => { const views = { ...state.views }; delete views[viewId]; return { views }; });
@@ -89,6 +93,17 @@ export async function prepareSessionFolder(target: ComposerTarget): Promise<stri
     : workspace.path;
   patchView(target, { cwd });
   return cwd;
+}
+
+export const sameSettings = (a?: AgentModelSettings, b?: AgentModelSettings) => a?.model === b?.model && a?.effort === b?.effort;
+/** The composer's model and effort when they differ from what the running conversation was launched with. */
+export function pendingSettings(runtime: AgentRuntime | undefined, state: AgentViewState | undefined): AgentModelSettings | undefined {
+  if (!runtime?.settings) return undefined;
+  const wanted = modelSettings(runtime.providerId, state?.modelSettings?.[runtime.providerId]);
+  return wanted && !sameSettings(wanted, runtime.settings) ? wanted : undefined;
+}
+function launchSettings(providerId: string, target: ComposerTarget): AgentModelSettings | undefined {
+  return modelSettings(providerId, stateFor(target)?.modelSettings?.[providerId]);
 }
 
 function titleFromPrompt(draft: string): string {
@@ -139,6 +154,13 @@ export function registerComposerContributions(): void {
   services.commands.register<ComposerTarget>("agent.composer.send", async (target) => {
     const runtime = useAgentRuntimes.getState().sessions[target.viewId];
     if (!runtime || !stateFor(target)?.draft?.trim() || useComposerState.getState().views[target.viewId]?.sending) return;
+    // Model and effort are launch arguments. Nothing has gone to this conversation yet, so start it again with the
+    // ones chosen in the composer, then send.
+    if (!runtime.prompted && pendingSettings(runtime, stateFor(target))) {
+      closeAgentRuntime(target.viewId);
+      await services.commands.execute("agent.session.launch", { ...target, providerId: runtime.providerId });
+      return;
+    }
     // The CLI is still starting (or answering a trust prompt): hold the prompt until it can take one.
     if (!runtime.status?.canSubmit) {
       const lifecycle = runtime.status?.lifecycle;
@@ -164,9 +186,10 @@ export function registerComposerContributions(): void {
     const revision = state.composerRevision ?? 0;
     updateRuntime(target.viewId, { sending: true, result: undefined });
     let result: AgentDeliveryResult;
-    try { result = await runtime.controller.sendPrompt({ prompt: entry.preview.content, intent: entry.preview.intent, settings: modelSettings(runtime.providerId, state.modelSettings?.[runtime.providerId]) }); }
+    try { result = await runtime.controller.sendPrompt({ prompt: entry.preview.content, intent: entry.preview.intent }); }
     catch { result = { outcome: "uncertain", stage: "unknown", message: "Delivery could not be confirmed. Inspect the terminal before retrying." }; }
     if (!exists(target)) return;
+    if (result.outcome !== "not-sent") markAgentPrompted(target.viewId);
     remember(target.viewId, { ...entry, outcome: result.outcome, message: result.message });
     updateRuntime(target.viewId, { sending: false, result });
     if (result.outcome !== "submitted") return;
@@ -193,7 +216,7 @@ export function registerComposerContributions(): void {
     updateRuntime(target.viewId, { launching: true, result: undefined });
     try {
       const cwd = await prepareSessionFolder(target);
-      await untilSubmittable(await startAgentRuntime(target.viewId, provider, { workspacePath: cwd }));
+      await untilSubmittable(await startAgentRuntime(target.viewId, provider, { workspacePath: cwd, settings: launchSettings(provider.id, target) }));
     } catch (error) {
       updateRuntime(target.viewId, { launching: false });
       notSent(target.viewId, errorMessage(error));
@@ -201,6 +224,16 @@ export function registerComposerContributions(): void {
     }
     updateRuntime(target.viewId, { launching: false });
     await services.commands.execute("agent.composer.send", target);
+  });
+  // A new conversation with the composer's model and effort; the draft stays.
+  services.commands.register<ComposerTarget>("agent.session.restart", async (target) => {
+    const runtime = useAgentRuntimes.getState().sessions[target.viewId];
+    const provider = services.sessions.get(runtime?.providerId ?? "");
+    if (!runtime || provider?.kind !== "agent" || useComposerState.getState().views[target.viewId]?.sending) return;
+    closeAgentRuntime(target.viewId);
+    updateRuntime(target.viewId, { result: undefined });
+    try { await startAgentRuntime(target.viewId, provider, { workspacePath: await prepareSessionFolder(target), settings: launchSettings(provider.id, target) }); }
+    catch (error) { notSent(target.viewId, errorMessage(error)); }
   });
   services.commands.register<ComposerTarget>("agent.session.reset", (target) => {
     closeAgentRuntime(target.viewId);
