@@ -57,6 +57,8 @@ export interface TableView {
   turn: Who
   winner: Who | null
   pos: [number, number]
+  /** The link's scripted rolls still to come (kept in the address bar). */
+  rolls: number[]
   /** The games the picker offers: built ones from Dad's links, ready ones in her own house. */
   offered: GameId[]
   /** Opened from Dad's link: the picker also shows the games still to build (dimmed). */
@@ -100,7 +102,9 @@ export class TablePlugin implements HousePlugin {
   private piece: UnicornColor
   private seated: CousinId | null = null
   private state: Turns = startTurns()
-  private roll: () => number = makeDie()
+  private roll = makeDie()
+  /** Whose turn the table shows: the rules' turn moves on at once, this one at the pass, once the move has played. */
+  private shown: Who = 0
   private token = 0
   private die!: Die
   private board: UnicornBoard | null = null
@@ -295,6 +299,7 @@ export class TablePlugin implements HousePlugin {
 
   private startTurn() {
     const s = this.state
+    this.shown = s.winner ?? s.turn
     if (s.winner !== null) {
       this.phase = 'finished'
       this.emit()
@@ -469,7 +474,7 @@ export class TablePlugin implements HousePlugin {
     this.events.onView(this.view())
   }
   view(): TableView {
-    return { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, turn: this.state.turn, winner: this.state.winner, pos: [this.state.pos[0], this.state.pos[1]], offered: this.offered, preview: this.opts.preview }
+    return { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, turn: this.shown, winner: this.state.winner, pos: [this.state.pos[0], this.state.pos[1]], rolls: this.roll.left(), offered: this.offered, preview: this.opts.preview }
   }
 
   // ---------------------------------------------------------------- the house's hooks
@@ -600,7 +605,7 @@ export class TablePlugin implements HousePlugin {
     // The ring under whoever's turn it is.
     const playing = this.open && !this.picking && this.phase !== 'finished'
     this.rings.forEach((r, i) => {
-      const on = playing && this.state.turn === i
+      const on = playing && this.shown === i
       r.visible = on
       if (on) {
         ;(r.material as MeshBasicMaterial).opacity = 0.45 + Math.sin(t * 4) * 0.2
@@ -611,7 +616,7 @@ export class TablePlugin implements HousePlugin {
 
   qa() {
     return {
-      table: { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, me: this.state.pos[0], them: this.state.pos[1], turn: this.state.turn === 0 ? 'kaylee' : 'cousin', winner: this.state.winner === null ? null : this.state.winner === 0 ? 'kaylee' : 'cousin', token: this.token, die: this.die.value },
+      table: { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, me: this.state.pos[0], them: this.state.pos[1], turn: this.shown === 0 ? 'kaylee' : 'cousin', winner: this.state.winner === null ? null : this.state.winner === 0 ? 'kaylee' : 'cousin', token: this.token, die: this.die.value },
     }
   }
 }

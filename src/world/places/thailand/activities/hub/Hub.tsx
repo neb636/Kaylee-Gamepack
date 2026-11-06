@@ -114,7 +114,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const tableState = (v: TableView | undefined | null): Record<string, string> => {
     if (!v) return tableStart ? { vs: tableStart.vs } : {}
     if (v.picking) return { vs: v.vs, game: v.game }
-    return { vs: v.vs, ...(v.game === 'unicorn' ? { piece: v.piece } : {}), me: String(v.pos[0]), them: String(v.pos[1]), turn: v.turn === 0 ? 'kaylee' : 'cousin' }
+    return { vs: v.vs, ...(v.game === 'unicorn' ? { piece: v.piece } : {}), me: String(v.pos[0]), them: String(v.pos[1]), turn: v.turn === 0 ? 'kaylee' : 'cousin', ...(v.rolls.length ? { rolls: v.rolls.join(',') } : {}) }
   }
   const onTable = (v: TableView) => {
     const was = playingRef.current
