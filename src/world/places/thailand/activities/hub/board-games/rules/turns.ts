@@ -35,7 +35,8 @@ export function startTurns(me = 0, them = 0, turn: Who = 0): Turns {
  */
 export function makeDie(scripted: readonly number[] = [], random: () => number = Math.random) {
   const queue = scripted.filter((n) => Number.isInteger(n) && n >= 1 && n <= 6)
-  return () => queue.shift() ?? 1 + Math.floor(random() * 6)
+  // (`left()`: the scripted rolls still to come, so the address bar keeps reproducing the case.)
+  return Object.assign(() => queue.shift() ?? 1 + Math.floor(random() * 6), { left: () => queue.slice() })
 }
 
 /** A comma list from a link (`4,3,2`) as numbers; anything else is dropped. */

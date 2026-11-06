@@ -28,7 +28,7 @@ import { CardDeck } from './deck'
 import { Die } from './die'
 import { COUSINS, cousinUnicorn, GAMES, type CousinId, type GameId, type UnicornColor } from './list'
 import { pawnParts, Piece, unicornParts } from './pieces'
-import { CANDY_FINISH, candyDraw, newDeck, type Card, type Deck } from './rules/candy'
+import { CANDY_FINISH, candyDraw, cardToken, newDeck, type Card, type Deck } from './rules/candy'
 import { chutesRoll } from './rules/chutes'
 import { makeDie, other, startTurns, type Step, type Turns, type Who } from './rules/turns'
 import { unicornRoll, UNICORN_END } from './rules/unicorn'
@@ -73,6 +73,10 @@ export interface TableView {
   pos: [number, number]
   /** Candy Land: the card just drawn (`green`, `blue2`), shown big while it plays out. */
   card: string | null
+  /** The link's scripted rolls still to come (kept in the address bar). */
+  rolls: number[]
+  /** Candy Land: the link's scripted draw pile still to come (kept in the address bar). */
+  deck: string[]
   /** The games the picker offers: built ones from Dad's links, ready ones in her own house. */
   offered: GameId[]
   /** Opened from Dad's link: the picker also shows the games still to build (dimmed). */
@@ -124,11 +128,15 @@ export class TablePlugin implements HousePlugin {
   private piece: UnicornColor
   private seated: CousinId | null = null
   private state: Turns = startTurns()
-  private roll: () => number = makeDie()
+  private roll = makeDie()
+  /** Whose turn the table shows: the rules' turn moves on at once, this one at the pass, once the move has played. */
+  private shown: Who = 0
   private token = 0
   private die!: Die
   private cards!: CardDeck
   private deck: Deck = { draw: [], discard: [] }
+  /** The deck came from a link (deck=): its draw pile stays in the address bar until it's used up. */
+  private scriptedDeck = false
   private card: string | null = null
   private boards = new Map<GameId, Board>()
   private board: Board | null = null
@@ -287,6 +295,7 @@ export class TablePlugin implements HousePlugin {
     else if (this.state.pos[1] >= end) this.state = { ...this.state, turn: 1, winner: 1 }
     this.roll = makeDie(s.rolls)
     this.deck = newDeck(s.deck)
+    this.scriptedDeck = s.deck.length > 0
     this.cards.reset()
     this.layout(true)
     this.die.place(CORNER[s.turn])
@@ -355,6 +364,7 @@ export class TablePlugin implements HousePlugin {
 
   private startTurn() {
     const s = this.state
+    this.shown = s.winner ?? s.turn
     if (s.winner !== null) {
       this.phase = 'finished'
       this.emit()
@@ -594,7 +604,7 @@ export class TablePlugin implements HousePlugin {
     this.events.onView(this.view())
   }
   view(): TableView {
-    return { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, turn: this.state.turn, winner: this.state.winner, pos: [this.state.pos[0], this.state.pos[1]], card: this.card, offered: this.offered, preview: this.opts.preview }
+    return { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, turn: this.shown, winner: this.state.winner, pos: [this.state.pos[0], this.state.pos[1]], card: this.card, rolls: this.roll.left(), deck: this.scriptedDeck ? this.deck.draw.map(cardToken) : [], offered: this.offered, preview: this.opts.preview }
   }
 
   // ---------------------------------------------------------------- the house's hooks
@@ -729,7 +739,7 @@ export class TablePlugin implements HousePlugin {
     // The ring under whoever's turn it is.
     const playing = this.open && !this.picking && this.phase !== 'finished'
     this.rings.forEach((r, i) => {
-      const on = playing && this.state.turn === i
+      const on = playing && this.shown === i
       r.visible = on
       if (on) {
         ;(r.material as MeshBasicMaterial).opacity = 0.45 + Math.sin(t * 4) * 0.2
@@ -740,7 +750,7 @@ export class TablePlugin implements HousePlugin {
 
   qa() {
     return {
-      table: { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, me: this.state.pos[0], them: this.state.pos[1], turn: this.state.turn === 0 ? 'kaylee' : 'cousin', winner: this.state.winner === null ? null : this.state.winner === 0 ? 'kaylee' : 'cousin', token: this.token, die: this.die.value, card: this.card, deck: this.deck.draw.length, discard: this.deck.discard.length },
+      table: { open: this.open, picking: this.picking, phase: this.phase, game: this.game, vs: this.vs, piece: this.piece, seated: this.seated, me: this.state.pos[0], them: this.state.pos[1], turn: this.shown === 0 ? 'kaylee' : 'cousin', winner: this.state.winner === null ? null : this.state.winner === 0 ? 'kaylee' : 'cousin', token: this.token, die: this.die.value, card: this.card, deck: this.deck.draw.length, discard: this.deck.discard.length },
     }
   }
 }
