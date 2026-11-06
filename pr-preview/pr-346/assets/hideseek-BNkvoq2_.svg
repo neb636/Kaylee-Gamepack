@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <title>Hide and seek</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ece6ff"/><stop offset="1" stop-color="#cdbfff"/></linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="120" height="120" fill="url(#bg)"/>
+  <circle cx="60" cy="56" r="50" fill="url(#glow)"/>
+  <!-- the sea and the sand behind -->
+  <rect x="0" y="80" width="120" height="10" fill="#8fe3ea"/>
+  <path d="M0 88C30 84 90 84 120 88V120H0Z" fill="#fdeecc"/>
+  <ellipse cx="60" cy="104" rx="30" ry="5" fill="#4b3a8c" opacity="0.14"/>
+  <!-- the unicorn peeking out from behind the tree, on the right -->
+  <g transform="translate(76 58)">
+    <!-- mane -->
+    <path d="M-8-18C-2-26 10-24 14-16C10-16 8-12 8-8Z" fill="#ff8fb8"/>
+    <!-- head -->
+    <ellipse cx="2" cy="0" rx="16" ry="15" fill="#fff"/>
+    <path d="M14-6C17 0 16 8 10 12C12 4 12-2 14-6Z" fill="#e4ddf6"/>
+    <!-- horn -->
+    <path d="M2-14L8-32L12-12Z" fill="#ffc83d"/>
+    <path d="M8-32L12-12H8Z" fill="#eba123"/>
+    <!-- ear -->
+    <path d="M10-12L18-20L17-8Z" fill="#fff"/><path d="M12-12L17-18L16-10Z" fill="#ffc4da"/>
+    <!-- muzzle, eye, blush -->
+    <ellipse cx="6" cy="8" rx="9" ry="6" fill="#ffe2d4"/>
+    <circle cx="4" cy="7" r="1.3" fill="#c65a45"/><circle cx="9" cy="7" r="1.3" fill="#c65a45"/>
+    <ellipse cx="2" cy="-3" rx="3" ry="3.8" fill="#2b2330"/><circle cx="3.2" cy="-4.5" r="1.2" fill="#fff"/>
+    <ellipse cx="10" cy="2" rx="3.5" ry="2.2" fill="#ff8fb8" opacity="0.55"/>
+  </g>
+  <!-- the driftwood tree: a fat pale trunk, bent, with two bare branches -->
+  <path d="M38 100C40 80 42 58 40 40C38 30 34 24 30 20L38 18C44 26 50 34 52 46C54 60 54 82 58 100Z" fill="#e5b78f"/>
+  <path d="M48 32C52 40 52 46 54 56C54 72 54 86 58 100H50C52 82 52 60 48 32Z" fill="#c99266"/>
+  <path d="M41 40C38 52 40 72 40 92" fill="none" stroke="#fdeecc" stroke-width="3" stroke-linecap="round"/>
+  <path d="M44 54C36 46 28 44 18 46" fill="none" stroke="#e5b78f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M50 38C58 30 64 26 72 26" fill="none" stroke="#c99266" stroke-width="5" stroke-linecap="round"/>
+  <path d="M30 20C28 16 26 14 22 12" fill="none" stroke="#e5b78f" stroke-width="5" stroke-linecap="round"/>
+  <!-- roots in the sand -->
+  <path d="M38 100C32 98 26 100 22 104M58 100C64 98 70 100 74 104" fill="none" stroke="#c99266" stroke-width="5" stroke-linecap="round"/>
+  <!-- the unicorn's hoof holding the trunk -->
+  <ellipse cx="56" cy="66" rx="5" ry="4" fill="#fff"/><path d="M53 69H59" stroke="#b9a6f5" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- a giggle -->
+  <g fill="none" stroke="#ff4f9a" stroke-width="2.5" stroke-linecap="round"><path d="M100 36v8M96 40h8"/><path d="M96 26l4-4M104 30l4-2"/></g>
+</svg>
