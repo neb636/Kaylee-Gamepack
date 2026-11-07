@@ -1,5 +1,5 @@
 // Thailand: Kaylee's family's country, in 3D (plan: planning/around-the-world/thailand.md). She lands on the Thailand
-// map (activities/hub/map/, plan: thailand/thailand-map.html) and taps Bangkok, Krabi or Nan. Bangkok
+// map (activities/hub/map/, plan: thailand/thailand-map.md) and taps Bangkok, Krabi or Nan. Bangkok
 // is Agong's shophouse (activities/hub/), where she walks around, meets her family and pokes everything. The places the family
 // loves become activities, one per PR: the first is the boat trip (activities/boat-trip/), which ends with her photo on
 // Agong's wall and the stamp (the fiddler crab sticker, and the trip's facts to tap); the second is the mall day

@@ -113,6 +113,7 @@ export const Guide = forwardRef<GuideHandle, GuideProps>(function Guide({ hint =
       if (r.count >= maxHints || (r.count > 0 && now - r.last < againS * 1000)) return
       r.count++
       r.last = now
+      if (!voice) dispatchEvent(new Event('kaylee:hint')) // spendHint counts the others (the play diary, world/diary.ts)
       if (voice && spendHint(h)) speak(h)
       else show(h)
     }, 500)

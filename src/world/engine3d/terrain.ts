@@ -1,7 +1,7 @@
 // Land from data: a height field sampled once on a grid (an island's hills and beaches, a reef), meshed with vertex
 // colors (sand, wet sand, grass, rock bands in the toon palette) and toon-shaded like everything else. heightAt() reads
 // the same grid back for whatever walks, drives or lands on it. Built for Koh Samet (the plan's tech plan:
-// planning/around-the-world/thailand/samet-trip.html), kept in the engine so any 3D country can use it.
+// planning/around-the-world/thailand/samet-trip.md), kept in the engine so any 3D country can use it.
 //
 // The grid also carries the sea's numbers (`sea`): how deep the water is and how far it is to the shore, packed into a
 // small texture the lagoon water reads (lagoon.ts), so the shallows turn turquoise and the foam runs along the sand.

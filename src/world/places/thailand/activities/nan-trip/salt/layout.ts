@@ -1,4 +1,4 @@
-// Bo Kluea's salt hut (plan: planning/around-the-world/thailand/nan-trip.html, "4. Bo Kluea salt wells"), in meters:
+// Bo Kluea's salt hut (plan: planning/around-the-world/thailand/nan-trip.md, "4. Bo Kluea salt wells"), in meters:
 // where everything stands, the rounds and their numbers. Pure data (no three.js): sections.ts can read it at startup.
 // The hut is built in hut.ts, the street and the house with the mural behind it in village.ts.
 //

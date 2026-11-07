@@ -14,7 +14,7 @@ export const L = {
   trophyWin: `${NAME}, you did it! You won the Canada Champion trophy!`,
   trophyRoom: `${NAME}, Canada Champion! From Canada.`,
   passport: 'This is Canada! It goes all the way from one ocean to the other.',
-  // The passport's tap-to-hear facts (planning/around-the-world/canada.html, "Passport facts").
+  // The passport's tap-to-hear facts (planning/around-the-world/canada.md, "Passport facts").
   facts: {
     flag: "Canada's flag is red and white, with a red maple leaf in the middle.",
     bonjour: 'People in Canada speak English and French. In Quebec, hello is Bonjour!',

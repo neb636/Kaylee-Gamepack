@@ -1,4 +1,4 @@
-// Animal Bridge (plan: planning/around-the-world/canada.html): the green wildlife bridge over the Trans-Canada
+// Animal Bridge (plan: planning/around-the-world/canada.md): the green wildlife bridge over the Trans-Canada
 // Highway in Banff in summer, seen straight down the road like a theater stage. One verb, lead the herd: her finger
 // leads a family's mama and the rest follow in a wobbly line (herd.ts), up the forest bank, over the bridge while the
 // cars and trucks zoom under it, and down into the meadow where Maple the beaver watches and cheers. It gets richer three

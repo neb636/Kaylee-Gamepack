@@ -52,7 +52,7 @@ for (const folder of ['/Kaylee-Gamepack/', '/Kaylee-Gamepack/pr-preview/pr-298/'
     expect(await (await cache.match(index))?.text()).toBe('GAME')
     expect(report).toBeUndefined()
     const beforeDocs = requests.length
-    for (const path of ['docs/gameplay-reference-report.html', 'docs/gameplay-reference-report.html?view=all', 'docs/gameplay-reference-assets/canoe.webp', 'planning/around-the-world/canada.html', 'pr-preview/pr-999/']) {
+    for (const path of ['docs/gameplay-reference-report.html', 'docs/gameplay-reference-report.html?view=all', 'docs/gameplay-reference-assets/canoe.webp', 'review/index.html', 'pr-preview/pr-999/']) {
       expect(await request(path, path.endsWith('.webp') ? 'cors' : 'navigate')).toBeUndefined()
     }
     expect(requests).toHaveLength(beforeDocs)

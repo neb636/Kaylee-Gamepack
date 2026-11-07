@@ -1,4 +1,4 @@
-// Mommy's phone and Kaylee's animal book, on screen (greybox 3 of samet-trip.html). Two big buttons in the bottom-right
+// Mommy's phone and Kaylee's animal book, on screen (greybox 3 of samet-trip.md). Two big buttons in the bottom-right
 // corner: the pink phone (tap: the screen becomes the phone's camera, a pink frame round it; tap again to put it away)
 // and the book. A photo flashes, then flies into the book (or, with no animal in it, into the phone); a new animal's
 // name pops up over it ("A hornbill!") and a good photo (the animal big in the middle) gets a gold frame. The book has a

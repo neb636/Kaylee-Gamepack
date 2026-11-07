@@ -1,4 +1,4 @@
-// Kaylee's Unicorn Dice Game: her own rules, exactly as she said yes to them (2026-11-06, game-table.html).
+// Kaylee's Unicorn Dice Game: her own rules, exactly as she said yes to them (2026-11-06, game-table.md).
 // - Two players, Kaylee and the cousin. Both start before space 1 (position 0). Kaylee goes first.
 // - Roll one die (1-6). On 1, 2, 3, 5 or 6: move forward that many spaces.
 // - On 4: stay where you are; this turn is over. (Just this turn: no extra skipped turn later.)

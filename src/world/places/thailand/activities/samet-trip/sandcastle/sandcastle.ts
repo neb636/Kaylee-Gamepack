@@ -1,4 +1,4 @@
-// The sandcastle at Ao Hin Khok (plan: planning/around-the-world/thailand/samet-trip.html, greybox 4), on the island's
+// The sandcastle at Ao Hin Khok (plan: planning/around-the-world/thailand/samet-trip.md, greybox 4), on the island's
 // real beach (island/layout.ts FRAMES.hinkhok), close and steep over the sand with the sea at the top of the screen.
 //
 // The toy (core verb): dig the sand with her finger. Drag through it and a trench opens under her finger, the sand

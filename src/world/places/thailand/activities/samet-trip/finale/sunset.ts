@@ -1,4 +1,4 @@
-// The sunset at the driftwood tree on Ao Prao (plan: planning/around-the-world/thailand/samet-trip.html, step 9, the
+// The sunset at the driftwood tree on Ao Prao (plan: planning/around-the-world/thailand/samet-trip.md, step 9, the
 // finale's first beat), on the island's real sunset beach (island/layout.ts FRAMES.prao) after all four pink flags.
 //
 // Kaylee, Mommy and Daddy stand by the big driftwood tree watching the sun go down over the sea. Two things to do, in

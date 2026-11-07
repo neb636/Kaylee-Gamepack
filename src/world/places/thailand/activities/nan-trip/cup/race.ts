@@ -1,4 +1,4 @@
-// The Nan Mountain Cup's race (section `race`, plan: planning/around-the-world/thailand/nan-cup.html; greybox 1: the
+// The Nan Mountain Cup's race (section `race`, plan: planning/around-the-world/thailand/nan-cup.md; greybox 1: the
 // kart toy, greybox 2: the other two tracks, step 4: the look). Kaylee drives her pink kart against Grandma
 // Taeng, Pao and Moon (toy animals on the chibi rig, riders.ts) from the start line to the finish, one run along a track (track.ts: `forest`, `steps`, `cloud`), not
 // laps.

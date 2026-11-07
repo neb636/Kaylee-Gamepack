@@ -1,4 +1,4 @@
-// Iceberg Maker (greybox 4, plan: planning/around-the-world/poles.html): where icebergs come from, why most of one is
+// Iceberg Maker (greybox 4, plan: planning/around-the-world/poles.md): where icebergs come from, why most of one is
 // hidden, and how the north's and the south's are different.
 //
 // The toy (core verb): tap a crack in the ice cliff. It creaks, the crack grows round a chunk, the chunk shakes and

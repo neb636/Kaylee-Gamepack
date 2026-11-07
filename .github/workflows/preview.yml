@@ -20,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          # The merge commit and its base, so the review page can tell which spoken lines this PR changed.
+          fetch-depth: 2
       - uses: actions/setup-node@v5
         if: github.event.action != 'closed'
         with:
@@ -33,6 +36,27 @@ jobs:
           BASE_PATH: /${{ github.event.repository.name }}/pr-preview/pr-${{ github.event.number }}/
           # Previews are public too: Thailand opens only with the family code (scripts/vite-lock.ts).
           LOCK_CODE: ${{ secrets.THAILAND_CODE }}
+      # The review page Dad opens from the PR (scripts/review.mjs), at <preview>/review/: what the agent published for
+      # this branch to the review-pages branch (reels, table reads, questions), plus the script sheet of every group of
+      # spoken lines this PR changes. A failure here never blocks the preview.
+      # It can never hold up the preview (or main's deploys, which share the gh-pages lane): every command is timed out.
+      - if: github.event.action != 'closed'
+        name: Review page
+        continue-on-error: true
+        timeout-minutes: 5
+        env:
+          BRANCH: ${{ github.head_ref }}
+          PR: ${{ github.event.number }}
+        run: |
+          slug="${BRANCH//\//--}"
+          mkdir -p dist/review
+          if timeout 60 git fetch --depth=1 origin review-pages && git cat-file -e "FETCH_HEAD:$slug" 2>/dev/null; then
+            git archive FETCH_HEAD "$slug" | tar -x -C dist/review --strip-components=1
+          fi
+          # No ffmpeg here (installing it took over 12 minutes on the runner), so a table read CI adds for changed lines
+          # is the script sheet without audio; the agent records and publishes the audio (table-read skill).
+          timeout 120 node scripts/review.mjs --out=dist/review --changed=HEAD^1 --keep --pr="$PR" < /dev/null || echo "The review page step failed; the preview goes out without it."
+          [ -n "$(ls -A dist/review)" ] || rmdir dist/review
       - uses: rossjrw/pr-preview-action@v1
         with:
           source-dir: dist

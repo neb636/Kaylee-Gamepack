@@ -9,6 +9,3 @@ export function flag(name: string): string | null {
 
 /** Playwright and friends: cap the frame rate so a headless tab doesn't pin the machine. */
 export const automated = typeof navigator !== 'undefined' && navigator.webdriver === true
-
-/** Inside the desktop Studio's game pane (local dev, `?studio=1`): 30 fps and fewer pixels, so Dad's Mac stays cool. */
-export const inStudio = import.meta.env.DEV && typeof window !== 'undefined' && window.parent !== window && new URLSearchParams(location.search).get('studio') === '1'

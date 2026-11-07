@@ -14,6 +14,7 @@
 import { createContext, createElement, useCallback, useContext, useMemo, type ReactNode } from 'react'
 import { worldLink } from '../../router'
 import { isFeelParam } from './knobs'
+import { diaryEnter } from '../diary'
 
 /** The activity id of a country's hub sections (`hub`, `party` and `theater` are never real activity ids). */
 export const HUB = 'hub'
@@ -158,7 +159,10 @@ export function useSections<P extends string, S extends string>(def: ActivitySec
       const page = location.hash.split('?')[0]
       const here = location.hash.startsWith(worldLink(def.place, def.activity)) || (def.activity === HUB && page === `#/world/${def.place}`)
       const kept = [...new URLSearchParams(location.hash.split('?')[1] ?? '')].filter(([k]) => sticky(k))
-      if (here) history.replaceState(history.state, '', worldLink(def.place, def.activity, id, { ...shown, ...Object.fromEntries(kept) }))
+      if (here) {
+        history.replaceState(history.state, '', worldLink(def.place, def.activity, id, { ...shown, ...Object.fromEntries(kept) }))
+        diaryEnter(def.place, def.activity, id)
+      }
     },
     [def],
   )

@@ -19,7 +19,7 @@ async function slideTo(page, until, taps = 0, after = 0) {
 
 /** Screenshots (scripts/qa-screens.mjs): how to get to each screen from a fresh start. */
 export const screens = [
-  // Thailand: the Thailand map (thailand-map.html: where she lands; home from a trip with a stamp landing, every stamp
+  // Thailand: the Thailand map (thailand-map.md: where she lands; home from a trip with a stamp landing, every stamp
   // in), then Agong's house in 3D (the arrival mid-ride, each spot, a few things in
   // use), and the party card.
   { name: 'thailand-map', hash: '#/world/thailand', reset: true, wait: 1500 },
@@ -31,14 +31,14 @@ export const screens = [
     reset: true,
     wait: 1800,
   })),
-  // Her wardrobe (wardrobe.html): the doors open, the hats drawer, the paint drawer, her room in a look, and the door with its 4 pictures.
+  // Her wardrobe (wardrobe.md): the doors open, the hats drawer, the paint drawer, her room in a look, and the door with its 4 pictures.
   ...['wardrobe', 'wardrobe?drawer=head', 'wardrobe?drawer=paint&look=crown,hearts,fairy,tutu,sneakers,hair-pink', 'upstairs?look=cap,stars,cape,gown,fur-mint', 'wardrobe?drawer=outfit&look=bow,fairy,tutu&door=crown,hearts,tutu;bow,fairy,dress-mint;cap,stars,cape;overalls,boots,hair-pink,fur-sky'].map((to) => ({
     name: `thailand-${to.replace(/[?=&,;]/g, '-')}`.slice(0, 60),
     hash: `#/world/thailand/hub/${to}`,
     reset: true,
     wait: 1800,
   })),
-  // The game table (game-table.html): the table and the unicorn bag in her room, the picker, the Unicorn Dice Game from
+  // The game table (game-table.md): the table and the unicorn bag in her room, the picker, the Unicorn Dice Game from
   // the start, midgame (Gan), sharing a space, finished (her win, and a kind loss with Again), Candy Land, and Chutes and Ladders.
   ...['upstairs?at=game-table', 'table', 'table?vs=gan', 'unicorn', 'unicorn?vs=gan&me=12&them=14', 'unicorn?vs=ken&me=9&them=9', 'unicorn?me=22&them=20&rolls=6', 'unicorn?me=20&them=23&turn=cousin&rolls=2', 'candy', 'candy?vs=ken&me=14&them=17', 'candy?me=31&them=28&deck=orange2', 'chutes', 'chutes?vs=gan&me=13&them=17', 'chutes?me=33&them=30&rolls=5'].map((to) => ({
     name: `thailand-${to.replace(/[?=&,;]/g, '-')}`.slice(0, 60),
@@ -895,13 +895,13 @@ motion.push(
   thaiHouse('thai-walk', 2.6, 'downstairs', [['floor', 0]]),
   thaiHouse('thai-stairs', 6, 'downstairs?at=fridge', [['stairs-up', 0]]),
   thaiHouse('thai-bounce', 5, 'upstairs?at=mattress', [['mattress', 900], ['mattress', 1100], ['mattress', 1300]]),
-  // Her wardrobe (wardrobe.html, gate 4): two things on in turn (each pops on and she shows it off), the mirror's picture
+  // Her wardrobe (wardrobe.md, gate 4): two things on in turn (each pops on and she shows it off), the mirror's picture
   // flying to the door, Sparkle's wand (a surprise look), and a picture tapped on the door (the whole look at once).
   thaiHouse('wardrobe-dress', 5, 'wardrobe?drawer=head', [['trip:ward:thing:crown', 1600], ['trip:ward:thing:cowboy', 2200]]),
   thaiHouse('wardrobe-mirror', 5, 'wardrobe?drawer=head&look=cowboy,fairy', [['trip:ward:mirror', 3800]]),
   thaiHouse('wardrobe-wand', 4, 'wardrobe', [['trip:ward:wand', 3000]]),
   thaiHouse('wardrobe-door', 4, 'wardrobe?door=crown,hearts,tutu;bow,fairy,dress-mint', [['trip:ward:thing:photo-1', 2500]]),
-  // The game table (game-table.html, greybox 1): she taps the die, it tumbles and settles, her unicorn hops five spaces,
+  // The game table (game-table.md, greybox 1): she taps the die, it tumbles and settles, her unicorn hops five spaces,
   // then BB rolls; a 4 (her unicorn naps, Ken rolls); and the last roll into the castle.
   thaiHouse('table-roll', 7, 'unicorn?rolls=5,3', [['trip:table:die', 6500]]),
   thaiHouse('table-rest', 6, 'unicorn?vs=ken&me=7&them=9&rolls=4,3', [['trip:table:die', 5500]]),

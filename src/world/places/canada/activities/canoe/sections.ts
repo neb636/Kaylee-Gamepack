@@ -1,4 +1,4 @@
-// Red Canoe (plan: planning/around-the-world/canada.html): Maple wonders why Moraine Lake is so blue; Kaylee paddles the
+// Red Canoe (plan: planning/around-the-world/canada.md): Maple wonders why Moraine Lake is so blue; Kaylee paddles the
 // red canoe across it, finds where the blue comes from (the glacier stream's rock flour) and follows the loon to the
 // glacier. #/world/canada/canoe/<section>?paddle=pull. A section link sets the lake up as if she had played to there
 // (and skips Maple's question). Loaded at startup by the section index (keep three.js out of this file).

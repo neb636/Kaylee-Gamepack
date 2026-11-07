@@ -1,4 +1,4 @@
-// Penguin Slide (plan: planning/around-the-world/poles.html): Antarctica is land, a giant mountain of ice
+// Penguin Slide (plan: planning/around-the-world/poles.md): Antarctica is land, a giant mountain of ice
 // that slopes down to the sea. Pebble is hungry; Kaylee steers Pebble's papa on his belly down the ice and into the sea
 // to catch krill for her.
 //

@@ -1,4 +1,4 @@
-// Red Canoe (greybox 5, plan: planning/around-the-world/canada.html): a glacier lake in Banff, bright turquoise among
+// Red Canoe (greybox 5, plan: planning/around-the-world/canada.md): a glacier lake in Banff, bright turquoise among
 // the snowy peaks. Maple wants to know why the lake is such a magic blue; Kaylee paddles the red canoe across it to the
 // glacier to find out.
 //

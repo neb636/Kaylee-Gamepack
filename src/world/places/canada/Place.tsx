@@ -1,4 +1,4 @@
-// Canada (plan: planning/around-the-world/canada.html): ocean to ocean on a 3D map. The home base is the 3D
+// Canada (plan: planning/around-the-world/canada.md): ocean to ocean on a 3D map. The home base is the 3D
 // toy-table map (activities/hub/, map/): tap any activity pin from Quebec to the Pacific and play immediately. Each activity is its own folder in activities/ (the 3D ones and the 2D ones that bring a big piece
 // load on their own, so the hub brings no more than it needs): Sugar Snow (taffy/, 2D), Carnival Snowballs (snowman/,
 // 3D), Mountain Bike (bike/, 3D), Campfire Night (campfire/, 2D), Red Canoe (canoe/, 3D), Animal Bridge (bridge/, 2D),

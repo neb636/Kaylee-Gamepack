@@ -1,4 +1,4 @@
-// The gifts on Kaylee's kart (plan: thailand/nan-cup.html, "Losing a race"): the rival who wins the race she loses gives
+// The gifts on Kaylee's kart (plan: thailand/nan-cup.md, "Losing a race"): the rival who wins the race she loses gives
 // her something that goes on her kart for the rest of the Cup. Greybox: simple shapes in the toon look.
 // - Grandma Taeng's lucky pink ribbon: a big bow tied on the seat's back, its tails fluttering.
 // - Pao's feather: a long orange feather with a white tip, stuck up behind the seat.

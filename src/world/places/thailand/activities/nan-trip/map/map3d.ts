@@ -1,4 +1,4 @@
-// The Nan map (section `map`, plan: thailand/nan-trip.html, "The Nan map"): the trip's hub, a toy diorama of Nan on a
+// The Nan map (section `map`, plan: thailand/nan-trip.md, "The Nan map"): the trip's hub, a toy diorama of Nan on a
 // table (diorama.ts), seen from above at a slant (north up the screen; on a tall screen the camera swings round to the
 // west side, so the board's long side runs up the screen and Laos is at the top). The little silver Pajero sits on its
 // roads: where she last drove from (`from`: the stop she came back from, Nan town after the city road), else at the

@@ -1,8 +1,10 @@
-# Activity plan template
+# Toy notes template
 
-Copy this for each activity in a country plan (or for a rebuild). Read `docs/play-design.md` first. If a field is hard
-to fill in, the activity isn't ready to build yet. Keep it short: a plan that reads like a story can hide play that is
-thin, so the **verbs** and **numbers** matter more than the prose.
+The builder's notes for one toy (an activity, a stop on a trip, a rebuild), written by the agent after Dad picks its
+pitch card (the `pitch` skill). **Dad doesn't read these:** he sees the pitch card, the table read and the reel. The
+notes are for you and the next agent, in `planning/around-the-world/<country>/<toy>.md`. Read `docs/play-design.md`
+first. If a field is hard to fill in, the toy isn't ready to build yet. Keep it short: notes that read like a story can
+hide play that is thin, so the **verbs** and **numbers** matter more than the prose.
 
 ```markdown
 ### <n>. <Name> <emoji> (<place>: <what it teaches>)
@@ -46,18 +48,14 @@ Puppets: <who>. Anything she touches or follows is in the art, not drawn over it
 
 **Sections and carried state:** the sections in play order (each gets a deep link,
 `#/world/<place>/<activity>/<section>`), and every value a later section needs from an earlier one (a color she picked,
-the toppings, how many she caught) as a URL param with a default. See "Deep links" in AGENTS.md.
+the toppings, how many she caught) as a URL param with a default. See "Screens, scenes and deep links" in `docs/building.md`.
 
 **Tech:** DOM + `useGameLoop` / `PlayArea` / Phaser (say why), and the riskiest piece to prototype first.
 ```
 
-## Build gates (one activity per PR)
+## How it gets built
 
-1. **Plan** with this template. Dad reads it.
-2. **Greybox toy:** the core verb with placeholder shapes, no generated art and no voices, on the PR preview, with its
-   `sections.ts` so the PR links to each section.
-   **Stop: Dad plays it on the iPad.** If it isn't fun yet, change the toy, not the decoration.
-3. **Art and puppets:** layered scene and sprites in one camera, puppets next to their references.
-4. **Full loop:** story, voices, payoff, facts; run QA including the fun check; fix and repeat.
-
-An approval to "build it in one go" applies to that one activity, not to the ones after it.
+The toy loop in `AGENTS.md`: Dad picks the pitch, hears the table read, watches Kaylee play it, and ships it after the
+reel. Between those check-ins you build, robot-play and fix on your own, on one branch with one PR. Log what you built
+and what changed from these notes at the bottom of this file as you go (date, what, why), so the next agent can pick
+it up.

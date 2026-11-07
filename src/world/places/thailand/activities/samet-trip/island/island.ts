@@ -1,4 +1,4 @@
-// Koh Samet, the island to roam (plan: planning/around-the-world/thailand/samet-trip.html, greybox 2): the north half
+// Koh Samet, the island to roam (plan: planning/around-the-world/thailand/samet-trip.md, greybox 2): the north half
 // of the island at 1:10 (layout.ts, from OpenStreetMap), one open world she walks round by herself.
 //
 // The toy (core verb): lead Kaylee with her finger. Hold a finger anywhere and she trots after it; hold it far ahead

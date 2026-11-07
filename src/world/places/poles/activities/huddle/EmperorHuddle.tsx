@@ -1,4 +1,4 @@
-// Emperor Huddle (plan: planning/around-the-world/poles.html): winter night in Antarctica. One verb, drag a
+// Emperor Huddle (plan: planning/around-the-world/poles.md): winter night in Antarctica. One verb, drag a
 // penguin into the huddle, that gets richer three times:
 //   small     five emperor dads, each with an egg on his feet. The ones on the windy edge slowly get cold: they shiver,
 //             go blue and snow piles on their backs. Her finger lifts one (he paddles his feet), carries him into the

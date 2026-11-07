@@ -1,4 +1,4 @@
-// The wardrobe toy in Kaylee's room (planning/around-the-world/thailand/wardrobe.html). One verb: put it on her. Tap the
+// The wardrobe toy in Kaylee's room (planning/around-the-world/thailand/wardrobe.md). One verb: put it on her. Tap the
 // wardrobe (or the mirror button in the house's top bar, anywhere in the house: openHere) and she's on the rug beside
 // it, facing you, and its doors swing open. Tap a drawer
 // and it slides out, its things popping up on the shelves. Drag a thing onto her (or just tap it: it flies over) and it

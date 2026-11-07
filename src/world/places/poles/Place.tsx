@@ -1,4 +1,4 @@
-// The Poles (plan: planning/around-the-world/poles.html): the top and the bottom of the world in one place. The home
+// The Poles (plan: planning/around-the-world/poles.md): the top and the bottom of the world in one place. The home
 // base is the 3D globe (activities/hub/, globe/): spin it to the Arctic or Antarctica, drag the sun so day and night
 // swap, and tap an activity's spot on that side. Ice Floe Hop (activities/floe/), Penguin Slide (activities/slide/),
 // Iceberg Maker (activities/iceberg/), and Snow Coats (activities/coats/) and Emperor Huddle (activities/huddle/), both

@@ -1,4 +1,4 @@
-// Ice Floe Hop (plan: planning/around-the-world/poles.html): the North Pole is frozen sea, and the ice
+// Ice Floe Hop (plan: planning/around-the-world/poles.md): the North Pole is frozen sea, and the ice
 // floats. Pola the polar bear cub is far from Mama Bear across the floating sea ice; Kaylee flings him floe to floe.
 //
 // The toy (core verb): grab Pola, pull back and let go. He crouches deeper the further she pulls (a dotted arc and a

@@ -16,9 +16,6 @@ and a saved shortlist with notes and export. Documentation is available online a
 - [The map](https://neb636.github.io/Kaylee-Gamepack/#/world?view=map)
 - [The game shelf](https://neb636.github.io/Kaylee-Gamepack/#/world?view=list) (every game as a picture card, a row per country and per Thailand trip; ❤️ favorites, 🎁 surprise)
 
-**Local Gamepack Studio:** `npm run studio:install` once, then `npm run studio` (or `npm run studio:dist:dir` for a macOS `.app`). The Electron app brings the three labs,
-Claude/Codex prompt composers and the character concept → Tripo → Blender workflow together. [Setup](workbench/README.md) · [Migration plan](planning/gamepack-studio.html).
-
 **3D character lab** (development tool, every 3D character on a turntable: poses, actions, lines, outfits, lighting): 
 - [Kaylee](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee)
 - [Kaylee in a look from her wardrobe](https://neb636.github.io/Kaylee-Gamepack/#/world/characters/kaylee?look=crown,stars,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky) (the Look panel: her things and the paint)
@@ -455,11 +452,15 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 
 ## How new things get made
 
-1. Dad asks an AI agent (Claude Code or Codex) for one piece: a plan, a greybox toy, art, the full loop, or a fix.
-   `AGENTS.md` holds the rules it follows.
-2. It opens a **pull request** with "🔗 Test this" links straight to the sections that changed.
-3. The PR gets a **preview link**. Try it on the iPad.
-4. **Merge** → it deploys automatically.
+One toy at a time, and Dad never has to read a plan or play a grey box (`AGENTS.md`, "How we work"):
+
+1. **Pick:** the AI makes three one-page pitch cards; Dad picks one.
+2. **Hear:** the AI builds the toy and makes a **table read** (every line in the real voices, in play order); Dad
+   listens and says what to change.
+3. **Watch Kaylee:** she plays it on the PR preview while Dad watches (and screen-records); the AI turns that into fixes.
+4. **Ship:** the PR's **review page** has a reel of the finished toy and at most three questions. **Merge** → it deploys.
+
+Fixes go faster: Dad asks, the AI fixes it with a short before-and-after clip, Dad merges.
 
 ## One-time setup
 
@@ -488,16 +489,17 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
 - `src/sdk/`: shared building blocks: speech (`say`), sounds, confetti, puppets, drag and drop, puzzles and more.
   Try them at `#/playground`.
 - `src/shell/`: the app wrapper (splash, trophy ceremony); the world map is the home screen.
-- `planning/around-the-world/`: country and activity plans (`ACTIVITY-TEMPLATE.md`, `thailand.md`, ...). Newer plans
-  are pages (`thailand/baan-chang.html`, `thailand/nan-trip.html`), also published with the app at
-  [`planning/around-the-world/thailand/nan-trip.html`](https://neb636.github.io/Kaylee-Gamepack/planning/around-the-world/thailand/nan-trip.html).
-- `AGENTS.md`: the rules AI agents follow when building (read this to change how activities are designed).
-  `docs/play-design.md` says what makes an activity fun.
+- `planning/around-the-world/`: the builder's notes per country and trip (`thailand.md`, `thailand/nan-trip.md`, ...)
+  and `ACTIVITY-TEMPLATE.md` for a new toy's notes. They're for the agents; Dad sees pitch cards, table reads and reels.
+- `AGENTS.md`: how we work and the rules AI agents follow (read this to change how toys are made).
+  `docs/play-design.md` says what makes an activity fun; `docs/building.md` is the technical guide.
+- `scripts/table-read.mjs`, `scripts/reel.mjs`, `scripts/review.mjs`: the review tools (hear the script, watch the
+  game, one review page per PR).
 - `art/STYLE.md`: the art style prompt. `art/source/`: full-size art (per-country originals are git-ignored scratch;
   the app uses small webp copies).
 - `.github/workflows/`:
   - `ci.yml`: typecheck, build, smoke tests
-  - `preview.yml`: PR previews
+  - `preview.yml`: PR previews, with the review page at `<preview>/review/`
   - `deploy.yml`: main → Pages
 
 ## Local development

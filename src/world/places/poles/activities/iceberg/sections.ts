@@ -1,4 +1,4 @@
-// Iceberg Maker (greybox 4, plan: planning/around-the-world/poles.html): pick a pole, tap the cracks in the ice cliff to
+// Iceberg Maker (greybox 4, plan: planning/around-the-world/poles.md): pick a pole, tap the cracks in the ice cliff to
 // break off bits, crack the giant one off and push it under the water, then push the bergs out to sea.
 // #/world/poles/iceberg/<section>?pole=south. A section link sets the cliff up as if she had played to there.
 // Loaded at startup by the section index (keep three.js out of this file).

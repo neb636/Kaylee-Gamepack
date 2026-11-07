@@ -1,4 +1,4 @@
-// Chutes and Ladders at the game table (our own small board for short games; game-table.html).
+// Chutes and Ladders at the game table (our own small board for short games; game-table.md).
 // - A 6 by 6 board numbered 1-36 like a snake: 1-6 left to right along the bottom row, 7-12 right to left above it,
 //   and so on up to 36 at the top left. Both pieces start before space 1 (position 0); Kaylee starts.
 // - Roll one die and move forward that many spaces.

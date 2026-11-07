@@ -1,4 +1,4 @@
-// Koh Samet in game meters (plan: planning/around-the-world/thailand/samet-trip.html, "The island, from the real map").
+// Koh Samet in game meters (plan: planning/around-the-world/thailand/samet-trip.md, "The island, from the real map").
 // One source of truth for every piece of the trip: the jet ski bay now (greybox 1), the island to roam next.
 //
 // Real positions from OpenStreetMap (© OpenStreetMap contributors, ODbL), shrunk to 1:10 so walking between two

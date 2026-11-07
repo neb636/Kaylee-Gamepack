@@ -1,4 +1,4 @@
-// The Koh Samet trip (plan: planning/around-the-world/thailand/samet-trip.html). In the works: greybox 2 is the island
+// The Koh Samet trip (plan: planning/around-the-world/thailand/samet-trip.md). In the works: greybox 2 is the island
 // to roam (island/), the hub a bare link opens; greybox 1 is the jet ski at Hat Sai Kaew (jetski/), opened from its
 // stop on the island (and back to the island, its flag up, after a race she wins); greybox 3 is Mommy's phone and the
 // animal book (book/, on the island; the `book` section opens it); greybox 4 is the sandcastle at Ao Hin Khok

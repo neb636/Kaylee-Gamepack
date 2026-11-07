@@ -5,12 +5,11 @@
 // link that reproduces the feel, and a note listing the changed numbers for an agent to bake in. What changed stays in
 // the address bar (feel.<group>.<knob>=n). Not something Kaylee plays: World.tsx loads it lazily, only when the link
 // asks for it.
-import { inStudio, shareLab } from '../share'
+import { shareLab } from '../share'
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { feelLab, isFeelParam, type KnobGroup } from '../../kit/knobs'
 import { IconButton, Section } from '../ui'
 import '../lab.css'
-import { useStudioBridge } from '../workbench'
 
 const COLORS = ['#ff5fa2', '#7a5cff', '#20a39e', '#f2a541', '#8a8a93', '#3b82f6']
 const SPAN = 6
@@ -36,18 +35,6 @@ export default function FeelLab() {
   const here = (g: KnobGroup) => (activity && g.file.includes(`/places/${place}/activities/${activity}/`) ? 0 : 1)
   const groups = feelLab.groups().sort((a, b) => here(a) - here(b))
   const watchers = feelLab.watchers()
-  useStudioBridge(() => ({
-    kind: 'feel', href: location.href,
-    context: { place, activity, viewport: { width: innerWidth, height: innerHeight }, watched: Object.fromEntries(feelLab.watchers().map(([id, read]) => [id, read()])), instruction: 'Only tune controls for the current activity. Preview values; keep knobs and watchers in code. Dad judges feel by playing.' },
-    controls: feelLab.groups().filter(g => here(g) === 0 || feelLab.watchers().some(([id]) => id === g.id)).flatMap(g => Object.entries(g.specs).map(([key, spec]) => ({
-      key: `${g.id}.${key}`, label: `${g.title}: ${spec.label}`, value: g.values[key], defaultValue: spec.value, min: spec.min, max: spec.max, step: spec.step ?? 0.01, note: spec.note, file: g.file,
-    }))),
-  }), proposal => {
-    for (const { key, value } of proposal.changes) {
-      const dot = key.indexOf('.')
-      feelLab.set(key.slice(0, dot), key.slice(dot + 1), value)
-    }
-  })
   const [open, setOpen] = useState(true)
   const [notes, setNotes] = useState(true)
   const [toast, setToast] = useState<string | null>(null)
@@ -73,8 +60,8 @@ export default function FeelLab() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
-  const copy = (text: string, label: string, agent = false) => {
-    void shareLab(text, label, agent ? 'agent' : 'copy').then(say, error => say(String(error)))
+  const copy = (text: string, label: string) => {
+    void shareLab(text, label).then(say, error => say(String(error)))
   }
   const link = () => `${location.origin}${location.pathname}${location.hash}`
   const forAgent = () => {
@@ -146,8 +133,8 @@ export default function FeelLab() {
         <button className="cl-btn" onClick={() => copy(link(), 'Link')}>
           Copy link
         </button>
-        <button className="cl-btn" onClick={() => copy(forAgent(), 'Feel lab changes', inStudio())}>
-          {inStudio() ? 'Send to agent' : 'Copy for agent'}
+        <button className="cl-btn" onClick={() => copy(forAgent(), 'Feel lab changes')}>
+          Copy for agent
         </button>
       </div>
       {toast && <div className="cl-toast feel-toast">{toast}</div>}

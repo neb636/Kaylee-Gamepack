@@ -1,4 +1,4 @@
-// The Nan Mountain Cup as a whole (plan: planning/around-the-world/thailand/nan-cup.html, greybox 3), pure data and
+// The Nan Mountain Cup as a whole (plan: planning/around-the-world/thailand/nan-cup.md, greybox 3), pure data and
 // functions, so the board, the race, the podium and the ceremony all agree. Loaded at startup (sections.ts): no
 // three.js here.
 //

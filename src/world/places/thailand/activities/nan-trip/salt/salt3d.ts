@@ -1,4 +1,4 @@
-// Bo Kluea's salt wells (plan: planning/around-the-world/thailand/nan-trip.html, "Bo Kluea salt wells"), built: the
+// Bo Kluea's salt wells (plan: planning/around-the-world/thailand/nan-trip.md, "Bo Kluea salt wells"), built: the
 // look, the sounds and the voices. One open-sided salt hut seen from the front (hut.ts), the wet village street and the
 // house with the painted couple behind it (village.ts): the well on the left, the big pan on its mud stove on the right,
 // a bamboo beam over both with the bucket hanging from it on a rope.

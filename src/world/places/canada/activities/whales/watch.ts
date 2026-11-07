@@ -1,4 +1,4 @@
-// Whale Watch (plan: planning/around-the-world/canada.html): Tofino, on the Pacific side of Canada, in summer. Maple has
+// Whale Watch (plan: planning/around-the-world/canada.md): Tofino, on the Pacific side of Canada, in summer. Maple has
 // never seen a whale; Kaylee steers the little boat out of the harbour to find the otters, the whales and the orcas.
 // The story opens at the dock: Maple (on the chibi rig, maple.ts) waves from the wheel and says so, then the boat is
 // Kaylee's. Sparkle gives the few instructions (events.say, WhaleWatch.tsx speaks them); Maple and the otters react in

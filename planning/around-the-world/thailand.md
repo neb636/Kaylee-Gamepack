@@ -48,13 +48,13 @@ rest of the family the same way, one at a time.
 
 **Her own look (planned 2026-10-26).** Kaylee dresses her unicorn at a wardrobe in her room, like the Roblox avatar
 maker she loves, and the look is saved and worn everywhere in Thailand; a game's costume (the chef's hat, the vet's cap)
-goes on top for that game only. Plan, with every clash and its fix: `thailand/wardrobe.html`.
+goes on top for that game only. Plan, with every clash and its fix: `thailand/wardrobe.md`.
 
 **The game table (planned 2026-11-06).** Kaylee asked for a game table on the right side of her room, past the couch,
 with a pink unicorn bag sitting beside it. She sits down, picks a game and a cousin (BB, Gan or Ken; BB first, her
 pick), the real cousin comes and sits across from her, and they play her own Unicorn Dice Game, Candy Land or Chutes
 and Ladders on boards made for the house. A toy like the wardrobe: no stamps. Plan, rules, links and gates:
-`thailand/game-table.html`.
+`thailand/game-table.md`.
 
 Open questions for Dad: Does Sparkle keep guiding here (2D, in the prompt bubble as everywhere
 else), or does a family member (Mom, Agong) give the instructions? What is each person like (for their voices)?
@@ -92,7 +92,7 @@ her bounce higher with each tap until she flops down. Tap someone in the family 
 and they hop together. Sacred things (the altar, the shrines, the spirit house) never wobble: their candles glow, a
 curl of incense rises, a soft bell rings, and she does a wai.
 
-**The Thailand map (built 2026-10-27, greybox).** Thailand has outgrown starting every trip in the house: Kaylee lands on a map of Thailand and taps Bangkok (the house), Krabi or Nan (since 2026-10-28 a plain tap map like Australia's: Dad found flying the toy plane confusing), and the boat and Nan trips end back on the map. Only the mall day still starts in the house, so Mommy and Daddy only ask about the mall now. Plan: `thailand/thailand-map.html`.
+**The Thailand map (built 2026-10-27, greybox).** Thailand has outgrown starting every trip in the house: Kaylee lands on a map of Thailand and taps Bangkok (the house), Krabi or Nan (since 2026-10-28 a plain tap map like Australia's: Dad found flying the toy plane confusing), and the boat and Nan trips end back on the map. Only the mall day still starts in the house, so Mommy and Daddy only ask about the mall now. Plan: `thailand/thailand-map.md`.
 
 **Trips from the house.** Mommy asks in Kaylee's room (on her own the first time she comes up, then whenever she's
 tapped). Daddy asks on the street too (Dad, 2026-10-25): tap him where the tuk-tuk drops her off and he says "Where do
@@ -140,12 +140,12 @@ using a thing, e.g. `downstairs?at=table` or `upstairs?at=mattress`; `who` shows
    The third family trip (Dad, 2026-10-24) is a road trip in Nan, from the family's real trip in June 2024: they fly
    north, Mommy drives a silver rental Pajero Sport over the mountain roads (Kaylee steers), and they stop at
    Baan Huanam Mushroom Farm, Stop Time Cafe above Sapan's rice terraces and Bo Kluea's salt wells,
-   coming home by the "number 3" road (`thailand/nan-trip.html`; built and in the game 2026-10-25).
+   coming home by the "number 3" road (`thailand/nan-trip.md`; built and in the game 2026-10-25).
    The fourth family trip (Dad, 2026-11-04) is Koh Samet, the family's island vacation off Rayong, and the first
    **open world**: one island she roams freely (five real beaches at their real map positions, shrunk to 1:10), with
    Mommy's phone to snap the island's animals for a book, the jet ski at Sai Kaew, a sandcastle at Ao Hin Khok,
    snorkeling at Ko Kudi, hide and seek at Ao Prao's driftwood tree, and a fire show finale
-   (`thailand/samet-trip.html`; planned, greybox 1 is the jet ski).
+   (`thailand/samet-trip.md`; planned, greybox 1 is the jet ski).
 
 ## Tech notes
 

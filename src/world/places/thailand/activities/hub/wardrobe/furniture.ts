@@ -1,4 +1,4 @@
-// Kaylee's wardrobe in her room (wardrobe.html): a pastel toy wardrobe against the left wall, a crown-shaped top with a
+// Kaylee's wardrobe in her room (wardrobe.md): a pastel toy wardrobe against the left wall, a crown-shaped top with a
 // heart, two doors with a heart on each (a long mirror inside the right one, so she sees herself when it's open), three
 // rows of shelves on a polka-dot back, a hanging rail with two hangers, and six drawers below, one per drawer of things
 // (hats, glasses, wings, outfits, shoes, paint), each a different color with a little picture of what's inside on its

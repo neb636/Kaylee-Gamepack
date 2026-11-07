@@ -1,6 +1,6 @@
 // The family's rental for the Nan road trip (Dad, 2026-10-24): a silver Mitsubishi Pajero Sport, the big seven-seat
 // SUV that's made in Thailand. A chunky toy model in the house's toon look that still reads as the real car (plan:
-// thailand/nan-trip.html, step 8): its "Dynamic Shield" face (a black grille with chrome bars between slim high
+// thailand/nan-trip.md, step 8): its "Dynamic Shield" face (a black grille with chrome bars between slim high
 // headlights, chrome swooshes curving down from them to the bumper's corners, black corner intakes with tall fog
 // lamps, a silver skid plate), a long flat hood, a tall glasshouse on black pillars, chunky black arches and side steps,
 // roof rails, big six-spoke alloys, and at the back its tall tail lamps running down the corners either side of the

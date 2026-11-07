@@ -1,4 +1,4 @@
-// The island's animals, alive (greybox 3 of samet-trip.html): where each lives and what it does when Kaylee comes by.
+// The island's animals, alive (greybox 3 of samet-trip.md): where each lives and what it does when Kaylee comes by.
 // Four simple ways of living, each with its own character on top:
 //   wander: the monitor lizards waddle round Ao Prao flicking their tongues, the macaques mooch along the hill road
 //           (the mother reaches for Daddy as he passes), hermit crabs potter on the wet sand;

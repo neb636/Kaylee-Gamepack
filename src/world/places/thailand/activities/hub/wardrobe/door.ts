@@ -1,4 +1,4 @@
-// The pictures on the wardrobe's door (wardrobe.html, gate 4): the mirror takes a picture of her look and pins it to the
+// The pictures on the wardrobe's door (wardrobe.md, gate 4): the mirror takes a picture of her look and pins it to the
 // left door (up to 4, the oldest goes when a fifth comes). Drop a picture on her and she wears that whole look.
 // Pure data (no three.js): the Hub saves it on the iPad.
 import { formatLook, parseLook } from '../../../characters/style'

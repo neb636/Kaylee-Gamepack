@@ -1,4 +1,4 @@
-// Salmon Leap (greybox 8, plan: planning/around-the-world/canada.html): flick the salmon up the falls in BC's Great Bear
+// Salmon Leap (greybox 8, plan: planning/around-the-world/canada.md): flick the salmon up the falls in BC's Great Bear
 // Rainforest. #/world/canada/salmon/<section>?home=7&spirit=low
 // A section is one stretch of the river; a link starts there as if she had played to there (`home` salmon are already up
 // in the stream where they were born). Loaded at startup by the section index.

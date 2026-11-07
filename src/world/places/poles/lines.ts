@@ -19,7 +19,7 @@ export const L = {
   trophyWin: `${NAME}, you did it! You won the Polar Explorer trophy!`,
   trophyRoom: `${NAME}, Polar Explorer! From The Poles.`,
   passport: 'These are the Poles! The top and the bottom of the world.',
-  // The passport's tap-to-hear facts (planning/around-the-world/poles.html, "Passport facts").
+  // The passport's tap-to-hear facts (planning/around-the-world/poles.md, "Passport facts").
   facts: {
     ocean: 'The North Pole is a frozen ocean. The South Pole is a frozen land.',
     neverMeet: 'Polar bears live in the north, and penguins live in the south. They never meet!',

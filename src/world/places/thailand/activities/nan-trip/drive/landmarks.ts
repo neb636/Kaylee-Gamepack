@@ -1,4 +1,4 @@
-// What stands at the end of each Nan road, and along the way, as toys in the toon look (plan: thailand/nan-trip.html,
+// What stands at the end of each Nan road, and along the way, as toys in the toon look (plan: thailand/nan-trip.md,
 // step 8, the look): Nan's market square (stalls under striped pitched awnings round a big pink umbrella, baskets of
 // fruit, a string of paper lanterns), Baan Huanam's mushroom farm (a dark plank house in the trees with a tin roof, the
 // big pink mushroom on top, rows of sawdust bags through its open door, a table out front under an umbrella, mushroom
