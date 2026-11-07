@@ -5,14 +5,11 @@ import { Playground } from './shell/Playground'
 import { Splash } from './shell/Splash'
 import { World } from './world/World'
 import { HalloweenMusic } from './shell/HalloweenMusic'
-import { useStudioLocation } from './shell/studio-location'
 
 export default function App() {
   const route = useRoute()
-  // The local desktop studio opens straight into its game pane (one loopback Vite server per piece of work, so any port);
-  // deployed builds keep the normal audio-unlock splash.
-  const [started, setStarted] = useState(() => import.meta.env.DEV && location.hostname === '127.0.0.1' && new URLSearchParams(location.search).get('studio') === '1')
-  useStudioLocation()
+  // The splash's tap unlocks audio on the iPad, so every build starts there.
+  const [started, setStarted] = useState(false)
 
   return <>
     <HalloweenMusic started={started} route={route} />

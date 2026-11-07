@@ -8,9 +8,6 @@ import './posthog'
 import './offline/register'
 import App from './App'
 
-// The desktop Studio's game pane (local dev only): slow every animation down while the Studio is in the background.
-if (import.meta.env.DEV && window.parent !== window && new URLSearchParams(location.search).get('studio') === '1') void import('./world/labs/studio-pace')
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

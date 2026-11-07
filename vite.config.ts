@@ -39,15 +39,10 @@ export default defineConfig({
     // (its 3D house is the family's real home). Unset (dev, tests) nothing is locked. scripts/vite-lock.ts
     lockPlace('thailand'),
   ],
-  // The nested Electron renderer has its own Vite process. Do not scan it as a game entry or reload play when it builds.
   optimizeDeps: { entries: ['index.html'] },
-  // Folders the game never imports aren't watched: QA screenshots, art originals and the Studio's own code would
-  // otherwise keep every dev server (one per piece of work in the Studio) busy. workbench/src/shared is imported.
-  server: { host: true, watch: { ignored: [
-    '**/workbench/index.html', '**/workbench/dist/**', '**/workbench/dist-electron/**', '**/workbench/release/**',
-    '**/workbench/src/main/**', '**/workbench/src/renderer/**', '**/workbench/scripts/**', '**/workbench/tests/**',
-    ...['art', 'qa-output', 'reports', 'prototypes', 'app-styling-inspiration-images', 'example-lesson-plan', 'tests', 'playwright-report']
-      .map((folder) => `${here}${folder}/**`),
-  ] } },
+  // Folders the game never imports aren't watched: QA screenshots, review media and art originals would otherwise keep
+  // the dev server busy.
+  server: { host: true, watch: { ignored: ['art', 'qa-output', 'review', 'app-styling-inspiration-images', 'tests', 'playwright-report']
+    .map((folder) => `${here}${folder}/**`) } },
   preview: { host: true },
 })
