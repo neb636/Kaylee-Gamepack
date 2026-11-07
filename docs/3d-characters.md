@@ -28,7 +28,7 @@ What worked:
 - **Transparent background works:** say "WITH A TRANSPARENT BACKGROUND (the PNG must have a real alpha channel)".
   Codex writes a real alpha PNG. Check it (`sharp(...).metadata()` → `hasAlpha: true`).
 
-Run it like the 2D art (see AGENTS.md "Art"), from a scratch folder:
+Run it like the 2D art (see `docs/art.md`), from a scratch folder:
 
 ```
 codex exec -m gpt-6.1-sol -c model_reasoning_effort="low" --sandbox workspace-write --skip-git-repo-check \

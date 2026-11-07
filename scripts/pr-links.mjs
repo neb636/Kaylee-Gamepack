@@ -1,4 +1,4 @@
-// Drafts the "🔗 Test this" links for a PR from the files it changes (used by the open-pr skill, .agents/skills/open-pr).
+// Drafts the "🔗 Test this" links for a PR from the files it changes (used by the ship skill, .agents/skills/ship).
 //   node scripts/pr-links.mjs              links on http://localhost:5173 (npm run dev)
 //   node scripts/pr-links.mjs --pr 81      links on that PR's GitHub Pages preview
 //   node scripts/pr-links.mjs --base main  compare against another branch (default: origin/main)

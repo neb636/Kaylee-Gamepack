@@ -16,7 +16,14 @@
 //     "questions": ["Is the kids' 'Close enough!' funny or mean?", "..."],   // at most three, each answerable in a tap
 //     "tableReads": [["thailand", "mall.barber"]],
 //     "reels": [{ "name": "barber", "moments": ["barber"] }],      // reel.mjs names: qa.mjs motion runs or #/links~s
-//     "links": [{ "label": "Play it", "hash": "#/world/thailand/mall-trip/barber" }]
+//     "links": [{ "label": "Play it", "hash": "#/world/thailand/mall-trip/barber" }],
+//     "pitches": [{                                                 // check-in 1 only: three cards, Dad picks one
+//       "title": "Snow Cones with Pip", "image": "pitch/snow-cones.png",   // a picture, relative to review/
+//       "finger": "Tilt the syrup bottle and paint the ice.",
+//       "grows": [["🍧", "one cone"], ["🌈", "stripes to order"], ["🐨", "a koala queue"]],
+//       "learns": "Hot days melt ice: she races the sun.", "silly": "Overfill it and it's a fountain.",
+//       "why": "She replays the cafe's pouring every day.", "minutes": "2-3", "touches": "30"
+//     }]
 //   }
 //
 // Publishing: the media never goes into git history on main or the toy branch. `--publish` commits review/ to the
@@ -83,6 +90,16 @@ function readSummaries(dir, kind) {
 
 function page({ brief, reels, reads, pr }) {
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
+  const pitches = (brief.pitches ?? []).slice(0, 3)
+  const pitchHtml = pitches
+    .map((p, i) => `<article class="pitch">${p.image ? `<img src="${esc(p.image)}" alt="">` : ''}
+<div class="pbody"><h3>${esc(p.title)}</h3>
+<p class="finger">👆 ${esc(p.finger)}</p>
+<ol class="grows">${(p.grows ?? []).map(([icon, words]) => `<li><span>${esc(icon)}</span>${esc(words)}</li>`).join('')}</ol>
+${p.learns ? `<p><b>She learns:</b> ${esc(p.learns)}</p>` : ''}${p.silly ? `<p><b>Silly:</b> ${esc(p.silly)}</p>` : ''}${p.why ? `<p><b>Why her:</b> ${esc(p.why)}</p>` : ''}
+<p class="meta">${esc(p.minutes ?? '')}${p.minutes ? ' min' : ''}${p.touches ? ` · about ${esc(p.touches)} touches` : ''}</p>
+<button class="pick" data-p="${i}">Pick this one</button></div></article>`)
+    .join('\n')
   const title = brief.title ?? (reads.length ? `Script check: ${reads.map((r) => r.title).join(', ')}` : 'Review')
   const reelHtml = reels
     .map((r) => {
@@ -123,17 +140,26 @@ figure{margin:0 0 14px}video{width:100%;border-radius:16px;background:#000;displ
 ol{padding-left:22px}li p{margin:0 0 6px;font-weight:600}textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--card);color:inherit}
 button,.pill{font:inherit;font-weight:700;border:0;border-radius:99px;padding:10px 18px;background:var(--pink);color:#fff;text-decoration:none;display:inline-block;margin:4px 6px 4px 0}
 .pill{background:var(--lav);color:var(--ink)}a{color:var(--pink)}
+.pitch{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin:0 0 16px}
+.pitch img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--lav)}.pbody{padding:14px 16px}
+.pitch h3{font-size:20px}.finger{font-size:18px;font-weight:600;margin:6px 0}.pitch p{margin:6px 0}
+.grows{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;counter-reset:g}
+.grows li{background:var(--lav);border-radius:12px;padding:8px;font-size:14px;text-align:center}.grows span{display:block;font-size:28px}
+@media (min-width:900px){main{max-width:1100px}.pitches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}}
 </style></head><body><main>
 ${brief.checkIn ? `<span class="chip">Check-in ${esc(brief.checkIn)}</span>` : ''}
 <h1>${esc(title)}</h1>
 ${brief.kaylee ? `<p class="kaylee">${esc(brief.kaylee)}</p>` : ''}
+${pitchHtml ? `<h2>Pick one</h2><div class="pitches">${pitchHtml}</div><p class="meta" id="picked"></p>` : ''}
 ${reelHtml ? `<h2>Watch</h2>${reelHtml}` : ''}
 ${readHtml ? `<h2>Hear the script</h2>${readHtml}` : ''}
 ${qHtml ? `<h2>Your call</h2><ol>${qHtml}</ol><button id="copy">Copy my answers</button>${prLink ? `<a class="pill" href="${prLink}">Open the PR to paste them</a>` : ''}<p class="meta" id="done"></p>` : ''}
 ${links ? `<h2>Play it yourself (optional)</h2><p>${links}</p>` : ''}
 </main>
 <script>
-const qs=${JSON.stringify(qs)}
+const qs=${JSON.stringify(qs)},titles=${JSON.stringify(pitches.map((p) => p.title))}
+document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p]
+  try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied \u201c'+t+'\u201d. Paste it on the PR, or just say it in chat.'}catch{prompt('Copy your pick:',t)}}))
 document.getElementById('copy')?.addEventListener('click',async()=>{
   const a=[...document.querySelectorAll('textarea')].map((t,i)=>(i+1)+'. '+qs[i]+'\\n   '+(t.value.trim()||'(no answer)')).join('\\n')
   try{await navigator.clipboard.writeText(a);document.getElementById('done').textContent='Copied. Paste it as a comment on the PR.'}catch{prompt('Copy your answers:',a)}})
