@@ -67,6 +67,8 @@ export class Piece {
   private restDur = 1
   private danceT = -1
   private pokeT = -1
+  /** Up a ladder or down a slide: along `pts` over `dur` seconds (a slide spins). */
+  private glideTo: { pts: Vector3[]; dur: number; t: number; spin: boolean; climb: boolean; done?: () => void } | null = null
   /** Its player's turn: it bobs. */
   active = false
   /** The space it's on (what the table shows; the rules' state may already be ahead while it hops). */
@@ -85,10 +87,16 @@ export class Piece {
   }
 
   get busy() {
-    return this.hops.length > 0 || this.restT >= 0 || this.danceT >= 0 || this.pokeT >= 0
+    return !!this.glideTo || this.hops.length > 0 || this.restT >= 0 || this.danceT >= 0 || this.pokeT >= 0
   }
   get moving() {
-    return this.hops.length > 0
+    return this.hops.length > 0 || !!this.glideTo
+  }
+
+  /** Follows a path: rung by rung up a ladder (little steps), or spinning down a slide. */
+  glide(pts: Vector3[], dur: number, kind: 'climb' | 'slide', done?: () => void) {
+    this.hops = []
+    this.glideTo = { pts: pts.map((p) => p.clone()), dur, t: 0, spin: kind === 'slide', climb: kind === 'climb', done }
   }
 
   place(at: Vector3) {
@@ -118,6 +126,8 @@ export class Piece {
   stop() {
     const last = this.hops[this.hops.length - 1]
     if (last) this.root.position.copy(last.to)
+    if (this.glideTo) this.root.position.copy(this.glideTo.pts[this.glideTo.pts.length - 1])
+    this.glideTo = null
     this.hops = []
     this.restT = -1
     this.danceT = -1
@@ -129,6 +139,22 @@ export class Piece {
     b.position.set(0, 0, 0)
     b.rotation.set(0, 0, 0)
     b.scale.set(1, 1, 1)
+    const g = this.glideTo
+    if (g) {
+      g.t = Math.min(1, g.t + dt / g.dur)
+      // A slide speeds up as it goes; a climb is steady.
+      const e = g.spin ? g.t * g.t * (3 - 2 * g.t) * 0.4 + g.t * g.t * 0.6 : g.t
+      const f = e * (g.pts.length - 1)
+      const i = Math.min(g.pts.length - 2, Math.floor(f))
+      this.root.position.lerpVectors(g.pts[i], g.pts[i + 1], f - i)
+      if (g.climb) b.position.y = Math.abs(Math.sin(f * Math.PI)) * 0.012
+      if (g.spin) b.rotation.y = g.t * Math.PI * 4
+      if (g.t >= 1) {
+        this.glideTo = null
+        g.done?.()
+      }
+      return
+    }
     const h = this.hops[0]
     if (h) {
       if (!h.from) h.from = this.root.position.clone()

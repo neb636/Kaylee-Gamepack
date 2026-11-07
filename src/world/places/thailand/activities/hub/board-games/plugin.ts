@@ -22,16 +22,18 @@ import { sfx } from '../../../sfx'
 import type { House, HousePlugin } from '../house'
 import { DIM, GAME_SEAT } from '../layout'
 import { CandyBoard } from './boards/candy'
+import { ChutesBoard } from './boards/chutes'
 import { UnicornBoard } from './boards/unicorn'
 import { CardDeck } from './deck'
 import { Die } from './die'
 import { COUSINS, cousinUnicorn, GAMES, type CousinId, type GameId, type UnicornColor } from './list'
 import { pawnParts, Piece, unicornParts } from './pieces'
 import { CANDY_FINISH, candyDraw, cardToken, newDeck, type Card, type Deck } from './rules/candy'
+import { chutesRoll } from './rules/chutes'
 import { makeDie, other, startTurns, type Step, type Turns, type Who } from './rules/turns'
 import { unicornRoll, UNICORN_END } from './rules/unicorn'
 
-type Board = UnicornBoard | CandyBoard
+type Board = UnicornBoard | CandyBoard | ChutesBoard
 /** Each game's finish (a piece there has won). */
 const FINISH: Record<GameId, number> = { unicorn: UNICORN_END, candy: CANDY_FINISH, chutes: 36 }
 
@@ -48,6 +50,8 @@ const FEEL = knobs('gameTable', 'Game table', FILE, {
   camFit: { value: 1, min: 0.6, max: 1.6, step: 0.05, label: 'Camera fit', note: 'below 1: closer' },
   flipTime: { value: 0.7, min: 0.3, max: 1.6, step: 0.05, label: 'Card flip', unit: 's', note: 'Candy Land: from the deck to face up on the pile' },
   cardShow: { value: 0.6, min: 0.2, max: 1.6, step: 0.05, label: 'Card shown', unit: 's', note: 'Candy Land: how long the card and the glowing space show before the piece goes' },
+  climbTime: { value: 1.1, min: 0.4, max: 3, step: 0.05, label: 'Ladder climb', unit: 's', note: 'Chutes and Ladders: rung by rung to the top' },
+  slideTime: { value: 0.9, min: 0.3, max: 3, step: 0.05, label: 'Slide down', unit: 's', note: 'Chutes and Ladders: whee, down the slide' },
   candyHop: { value: 0.17, min: 0.08, max: 0.5, step: 0.01, label: 'Candy hop per space', unit: 's', note: 'Candy Land moves further, so a bit quicker' },
 })
 
@@ -311,7 +315,7 @@ export class TablePlugin implements HousePlugin {
       this.state = r.state
       return r.steps
     }
-    const r = unicornRoll(this.state, this.roll())
+    const r = (this.game === 'chutes' ? chutesRoll : unicornRoll)(this.state, this.roll())
     this.state = r.state
     return r.steps
   }
@@ -322,7 +326,7 @@ export class TablePlugin implements HousePlugin {
     if (on) {
       let b = this.boards.get(this.game)
       if (!b) {
-        b = this.game === 'candy' ? new CandyBoard(bag) : new UnicornBoard(bag)
+        b = this.game === 'candy' ? new CandyBoard(bag) : this.game === 'chutes' ? new ChutesBoard(bag) : new UnicornBoard(bag)
         this.boards.set(this.game, b)
         this.top.add(b.root)
       }
@@ -478,6 +482,41 @@ export class TablePlugin implements HousePlugin {
         this.card = null
         // The other piece scoots over if they now share a space (or back to the middle if they don't).
         this.layout(false)
+        return
+      }
+      case 'ladder':
+      case 'chute': {
+        // The highlight: up the ladder rung by rung with rising notes, or whee down the slide (never a failure).
+        this.phase = 'special'
+        this.emit()
+        const b = board as ChutesBoard
+        const p = pieces[s.who]
+        const climb = s.kind === 'ladder'
+        const pts = climb ? b.ladderPath(s.from, s.to) : b.slidePath(s.from)
+        const m = this.seated ? this.house.family.get(this.seated) : undefined
+        if (climb) {
+          pts.forEach((_, i) => this.after((FEEL.climbTime * i) / pts.length, () => sounds.note(Math.min(10, i))))
+          sfx.chime()
+        } else {
+          sfx.whoosh(FEEL.slideTime)
+          this.after(0.15, () => (sfx.giggle(), m?.react('hop')))
+        }
+        let done = false
+        p.glide(pts, climb ? FEEL.climbTime : FEEL.slideTime, climb ? 'climb' : 'slide', () => {
+          p.at = s.to
+          done = true
+        })
+        await this.until(() => done)
+        if (token !== this.token) return
+        const at = this.top.localToWorld(b.spot(s.to, s.who, false))
+        this.sparkle.burst(at.x, at.y + 0.03, at.z, climb ? 24 : 12, 0.7, 1, 0.018)
+        if (climb) {
+          sfx.boing()
+          if (s.who === 1) m?.react('hop')
+          else this.house.kaylee.react('wave')
+        } else sfx.haha()
+        this.layout(false)
+        await this.sleep(0.3)
         return
       }
       case 'rest': {
