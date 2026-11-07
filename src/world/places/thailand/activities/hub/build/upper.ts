@@ -2,7 +2,7 @@
 // half of the house is open, two floors high), and glass sliding doors lead back into the room Kaylee sleeps in, at
 // the back of the house. In her room (Dad, 2026-10-19): one big mattress on the floor in the back left corner, its long
 // side across the room (Dad, 2026-10-20), her drawings taped above its head and a mini-split air conditioner on the back wall;
-// the grey couch on the right just inside the glass doors; her suitcase; a fan; and the bathroom door at the
+// the grey couch on the right just inside the glass doors; the game table past it, with the unicorn bag; her suitcase; a fan; and the bathroom door at the
 // back on the right, aluminium like the real one (Dad's photo, 2026-10-18). It's locked: it only rattles. The floor is
 // pale grey terrazzo tiles like the real one (tiles.ts). The house gecko lives on the back wall (gecko.ts).
 import { Group, Mesh, MeshBasicMaterial, type BufferGeometry } from 'three'
@@ -14,6 +14,7 @@ import { part, poke, scenery, type Kit } from './kit'
 import { railing } from './stairs'
 import { upstairsFloor } from './tiles'
 import { buildWardrobe } from '../wardrobe/furniture'
+import { buildGameTable } from '../board-games/table'
 
 const FLOOR = '#E2E0DC'
 const WALL = '#F4F1EC'
@@ -151,6 +152,8 @@ export function buildUpper(kit: Kit): Upper {
   room.add(glassWall)
   // ---- Her wardrobe against the left wall, and the rug in front of it (wardrobe/furniture.ts) ----
   room.add(buildWardrobe(kit))
+  // ---- The game table on the right, past the couch, and the unicorn bag beside it (board-games/table.ts) ----
+  room.add(buildGameTable(kit))
 
   return { room, rightWall, glassWall }
 }

@@ -78,6 +78,20 @@ export const DIM = {
    *  mattress, its front facing into the room (+x). `z` is its middle, `w` its width along the wall, `d` its depth,
    *  `h` its height. The round rug beside it (toward the mattress, clear of the open door) is where she stands to dress up (`rug`, `r`), facing the camera. */
   wardrobe: { z: -15.15, w: 1.5, d: 0.6, h: 2.05, rug: { x: -1.45, z: -16.3, r: 0.55 } },
+  /** The game table (game-table.html, greybox 1, 2026-11-06): a child-sized table on the right side of her room, past
+   *  the couch, `w` across the room (x) by `d` along the wall (z), its top `h` high. Her stool on the room side (`me`),
+   *  the cousin's against the right wall (`them`), facing each other across it (`seat` = seat height). The unicorn bag
+   *  sits on the floor by the wall between the couch and the cousin's stool (`bag`, an ordinary bag: it never moves). */
+  gameTable: {
+    x: 2.3,
+    z: -16.75,
+    w: 0.7,
+    d: 0.92,
+    h: 0.56,
+    me: { x: 1.62, r: 0.17, seat: 0.36 },
+    them: { x: 2.93, r: 0.15, seat: 0.38 },
+    bag: { x: 2.9, z: -15.7, r: 0.18 },
+  },
 }
 
 export type Area = 'street' | 'inside'
@@ -160,6 +174,10 @@ export const PICKABLES: Pickable[] = [
   { id: 'aircon', label: 'Air conditioner', floor: 1, area: 'inside', at: [-1.0, U + 2.45, B + 0.16], r: 0.6, react: 'beep' },
   // Her wardrobe: the toy (activities/hub/wardrobe/) walks her onto the rug in front of it and opens its doors.
   { id: 'wardrobe', label: 'Wardrobe', floor: 1, area: 'inside', at: [DIM.left + DIM.wardrobe.d / 2, U + 1.05, DIM.wardrobe.z], r: 0.75, react: 'jelly' },
+  // The game table (activities/hub/board-games/): she walks up and sits on her stool; with a game ready (or from a
+  // board-game link) the games open. The unicorn bag beside it only wobbles.
+  { id: 'game-table', label: 'Game table', floor: 1, area: 'inside', at: [DIM.gameTable.x, U + DIM.gameTable.h, DIM.gameTable.z], r: 0.5, react: 'jelly', use: { x: 1.15, z: DIM.gameTable.z, face: 90, pose: 'sit', snap: { x: DIM.gameTable.me.x, z: DIM.gameTable.z, y: DIM.gameTable.me.seat } } },
+  { id: 'unicorn-bag', label: 'Unicorn bag', floor: 1, area: 'inside', at: [DIM.gameTable.bag.x, U + 0.2, DIM.gameTable.bag.z], r: 0.3, react: 'jelly' },
   { id: 'gecko', label: 'Gecko', floor: 1, area: 'inside', at: [0.5, U + 2.3, B + 0.04], r: 0.35, react: 'gecko', moves: true },
 ]
 
@@ -220,8 +238,12 @@ export const NAV: Record<0 | 1, { bounds: Rect; carve: Rect[]; block: Rect[]; ci
       [2.425, DIM.right, -15.25, -12.85], // couch
       [-0.05, 0.65, B, -20.198], // suitcase
       [DIM.left, DIM.left + DIM.wardrobe.d + 0.05, DIM.wardrobe.z - DIM.wardrobe.w / 2, DIM.wardrobe.z + DIM.wardrobe.w / 2], // her wardrobe
+      [DIM.gameTable.x - DIM.gameTable.w / 2, DIM.gameTable.x + DIM.gameTable.w / 2, DIM.gameTable.z - DIM.gameTable.d / 2, DIM.gameTable.z + DIM.gameTable.d / 2], // the game table
     ],
     circles: [
+      [DIM.gameTable.me.x, DIM.gameTable.z, DIM.gameTable.me.r], // her stool at the game table
+      [DIM.gameTable.them.x, DIM.gameTable.z, DIM.gameTable.them.r], // the cousin's stool
+      [DIM.gameTable.bag.x, DIM.gameTable.bag.z, DIM.gameTable.bag.r], // the unicorn bag
       [0.4, -16.798, 0.2], // fan
       [2.1, -5.65, 0.2], // plant
       [1.42, B + 0.32, 0.24], // laundry basket
@@ -241,7 +263,14 @@ export const STARTS = {
   family: { floor: 0 as const, x: 1.05, z: 1.75, face: 0 },
   /** On the rug in front of her wardrobe, facing the wardrobe's camera (WARDROBE_YAW). */
   wardrobe: { floor: 1 as const, x: DIM.wardrobe.rug.x, z: DIM.wardrobe.rug.z, face: 52 },
+  /** The game table's sections: at its use spot (the Hub starts her seated on her stool, `at=game-table`). */
+  table: { floor: 1 as const, x: 1.15, z: DIM.gameTable.z, face: 90 },
+  unicorn: { floor: 1 as const, x: 1.15, z: DIM.gameTable.z, face: 90 },
+  candy: { floor: 1 as const, x: 1.15, z: DIM.gameTable.z, face: 90 },
+  chutes: { floor: 1 as const, x: 1.15, z: DIM.gameTable.z, face: 90 },
 }
+/** Where the cousin sits at the game table (a family spot for House.placeFamily). */
+export const GAME_SEAT = { floor: 1 as const, x: DIM.gameTable.them.x, z: DIM.gameTable.z, face: -90, pose: 'sit' as const, seat: DIM.gameTable.them.seat }
 /** Degrees: where the wardrobe's camera looks from (camera.ts's yaw: from the right, across her room toward the left
  *  wall), and so the way she faces to show off. */
 export const WARDROBE_YAW = 52

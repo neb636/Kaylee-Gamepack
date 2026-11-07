@@ -155,6 +155,14 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   - [Her wardrobe: the paint drawer out](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/wardrobe?drawer=paint)
   - [Her wardrobe: four pictures of looks on the door](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/wardrobe?drawer=head&door=crown,hearts,tutu;bow,fairy,dress-mint;cap,stars,cape;overalls,boots,hair-pink,fur-sky)
   - [Family photo](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/family)
+- **The game table (in the works: its games open from these links only)**
+  - [Sitting at the table: pick a game and a cousin (BB ready)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/table)
+  - [The picker with Gan picked](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/table?vs=gan)
+  - [Kaylee's Unicorn Dice Game with BB, from the start](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/unicorn) ([Gan](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/unicorn?vs=gan), [Ken](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/unicorn?vs=ken))
+  - [She is on 7 and rolls a 4: a rest, Ken rolls, then her turn as usual](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/unicorn?vs=ken&me=7&them=9&rolls=4,3,2)
+  - [Midgame with Gan](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/unicorn?vs=gan&me=12&them=14)
+  - [She is on 22 and rolls a 6: into the castle, she wins](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/unicorn?me=22&them=20&rolls=6)
+  - [BB's turn on 23: she rolls a 2 and wins (a kind loss, Again!)](https://neb636.github.io/Kaylee-Gamepack/#/world/thailand/hub/unicorn?me=20&them=23&turn=cousin&rolls=2)
 
 **Captain Kaylee's Boat Trip**
 

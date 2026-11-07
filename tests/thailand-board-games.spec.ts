@@ -1,0 +1,110 @@
+import { expect, test, type Page } from '@playwright/test'
+import { makeDie, parseRolls, startTurns } from '../src/world/places/thailand/activities/hub/board-games/rules/turns'
+import { UNICORN_END, unicornRoll } from '../src/world/places/thailand/activities/hub/board-games/rules/unicorn'
+
+// The game table in Kaylee's room (planning/around-the-world/thailand/game-table.html). The rules are pure, so most of
+// this runs without a page: Kaylee's Unicorn Dice Game exactly as she agreed to it. The page tests check that a turn
+// can't be taken twice and that leaving or starting over mid-move leaves nothing behind, through section links and
+// window.__thaiHouseQA() (no jump hooks).
+
+test.describe("Kaylee's Unicorn Dice Game rules", () => {
+  test('a 4 keeps the piece where it is and passes the turn, with no extra skipped turn later', () => {
+    let s = startTurns(7, 9, 0)
+    const rest = unicornRoll(s, 4)
+    expect(rest.state.pos).toEqual([7, 9])
+    expect(rest.state.turn).toBe(1)
+    expect(rest.steps.map((x) => x.kind)).toEqual(['roll', 'rest', 'pass'])
+    s = unicornRoll(rest.state, 3).state // the cousin moves 9 -> 12
+    expect(s.pos).toEqual([7, 12])
+    expect(s.turn).toBe(0) // straight back to Kaylee: her next turn is normal
+    s = unicornRoll(s, 2).state
+    expect(s.pos).toEqual([9, 12])
+  })
+
+  test('1, 2, 3, 5 and 6 move that many spaces', () => {
+    for (const n of [1, 2, 3, 5, 6]) {
+      const r = unicornRoll(startTurns(10, 0, 0), n)
+      expect(r.state.pos[0]).toBe(10 + n)
+      expect(r.steps).toContainEqual({ kind: 'move', who: 0, from: 10, to: 10 + n })
+    }
+  })
+
+  test('reaching or passing 25 wins, clamped to the castle, and nobody moves after', () => {
+    const exact = unicornRoll(startTurns(22, 0, 0), 3)
+    expect(exact.state.pos[0]).toBe(UNICORN_END)
+    expect(exact.state.winner).toBe(0)
+    const over = unicornRoll(startTurns(22, 20, 0), 6)
+    expect(over.state.pos[0]).toBe(UNICORN_END)
+    expect(over.state.winner).toBe(0)
+    expect(over.steps.at(-1)).toEqual({ kind: 'win', who: 0 })
+    // A finished game ignores further rolls: one winner.
+    const after = unicornRoll(over.state, 5)
+    expect(after.state).toEqual(over.state)
+    expect(after.steps).toEqual([])
+    // The cousin can win too.
+    const cousin = unicornRoll(startTurns(20, 23, 1), 2)
+    expect(cousin.state.winner).toBe(1)
+    expect(cousin.state.pos).toEqual([20, 25])
+  })
+
+  test('a 4 never wins and never moves, even near the castle', () => {
+    const r = unicornRoll(startTurns(24, 0, 0), 4)
+    expect(r.state.pos[0]).toBe(24)
+    expect(r.state.winner).toBeNull()
+  })
+
+  test('a whole game always ends with exactly one winner, Kaylee first', () => {
+    for (let g = 0; g < 300; g++) {
+      const roll = makeDie()
+      let s = startTurns()
+      expect(s.turn).toBe(0)
+      let turns = 0
+      while (s.winner === null && turns < 500) {
+        s = unicornRoll(s, roll()).state
+        turns++
+      }
+      expect(s.winner).not.toBeNull()
+      expect(s.pos.filter((p) => p >= UNICORN_END)).toHaveLength(1)
+    }
+  })
+
+  test("the link's scripted rolls come first, in order, then fair rolls 1-6", () => {
+    const roll = makeDie(parseRolls('4,3,x,9,2'), () => 0.99)
+    expect([roll(), roll(), roll(), roll()]).toEqual([4, 3, 2, 6])
+    const fair = makeDie([], Math.random)
+    for (let i = 0; i < 200; i++) expect(fair()).toBeGreaterThanOrEqual(1)
+  })
+})
+
+async function open(page: Page, hash: string) {
+  await page.goto(`./${hash}`)
+  await page.getByRole('button', { name: /let's play/i }).click()
+  await page.waitForFunction(() => !!window.__thaiHouseQA?.()?.table, null, { timeout: 15000 })
+}
+const table = (page: Page) => page.evaluate(() => (window.__thaiHouseQA?.() as { table: Record<string, unknown> }).table)
+
+test.describe('the game table', () => {
+  test('rapid taps on the die roll once: a 4 rests, the cousin rolls, then her turn as usual', async ({ page }) => {
+    test.setTimeout(60000)
+    await open(page, '#/world/thailand/hub/unicorn?vs=ken&me=7&them=9&rolls=4,3')
+    expect(await table(page)).toMatchObject({ phase: 'awaiting', me: 7, them: 9, seated: 'ken' })
+    const die = page.getByRole('button', { name: 'Die', exact: true })
+    for (let i = 0; i < 5; i++) await die.click({ force: true })
+    await expect.poll(() => table(page), { timeout: 20000 }).toMatchObject({ phase: 'awaiting', turn: 'kaylee', me: 7, them: 12 })
+  })
+
+  test('Again during the cousin turn starts a clean game, and leaving mid-move puts everyone back', async ({ page }) => {
+    test.setTimeout(60000)
+    await open(page, '#/world/thailand/hub/unicorn?vs=gan&me=3&them=4&turn=cousin&rolls=6,6,6')
+    await page.getByRole('button', { name: 'Games' }).click()
+    await page.getByRole('button', { name: 'Play', exact: true }).click({ force: true })
+    // The old cousin turn can't move anything in the new game.
+    await page.waitForTimeout(3000)
+    expect(await table(page)).toMatchObject({ phase: 'awaiting', me: 0, them: 0, turn: 'kaylee', seated: 'gan' })
+    await page.getByRole('button', { name: 'Die', exact: true }).click({ force: true })
+    await page.waitForTimeout(500)
+    await page.getByRole('button', { name: 'Leave the table' }).click()
+    await expect.poll(() => table(page)).toMatchObject({ open: false, seated: null, phase: 'off' })
+    await expect(page).toHaveURL(/hub\/upstairs/)
+  })
+})
