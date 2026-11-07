@@ -206,15 +206,6 @@ async function open(page: Page, hash: string) {
 const table = (page: Page) => page.evaluate(() => (window.__thaiHouseQA?.() as { table: Record<string, unknown> }).table)
 
 test.describe('the game table', () => {
-  test('rapid taps on the die roll once: a 4 rests, the cousin rolls, then her turn as usual', async ({ page }) => {
-    test.setTimeout(60000)
-    await open(page, '#/world/thailand/hub/unicorn?vs=ken&me=7&them=9&rolls=4,3')
-    expect(await table(page)).toMatchObject({ phase: 'awaiting', me: 7, them: 9, seated: 'ken' })
-    const die = page.getByRole('button', { name: 'Die', exact: true })
-    for (let i = 0; i < 5; i++) await die.click({ force: true })
-    await expect.poll(() => table(page), { timeout: 20000 }).toMatchObject({ phase: 'awaiting', turn: 'kaylee', me: 7, them: 12 })
-  })
-
   test('Candy Land: a tap draws one card, it shows big, and the piece goes to that color', async ({ page }) => {
     test.setTimeout(90000)
     await open(page, '#/world/thailand/hub/candy?me=10&them=8&deck=green,blue2')

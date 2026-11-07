@@ -84,6 +84,8 @@ export function SametTrip({ onDone }: Props = {}) {
     else if (sec.id === 'pack') enter('pack', { packed: formatPacked(packedRef.current) })
     else if (sec.id === 'speedboat') enter('speedboat', { packed: formatPacked(packedRef.current), time: time ?? undefined })
     else if (sec.id === 'sunset') enter('sunset', { flags: flagParam(sec.flags) })
+    // A link straight to lunch on the deck lands here too, not only a walk up the steps from the island.
+    else if (sec.id === 'deck') enter('deck', { flags: flagParam(sec.flags), time: time ?? undefined, book: bookParam(here.current.book) })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sec.n])
 

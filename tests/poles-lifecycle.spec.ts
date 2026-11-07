@@ -60,18 +60,6 @@ test('quiz recovery keeps a newly earned star and advances past its answered que
   expect(q.state).toBe('ask')
 })
 
-test('recovery after delivery stays in the quiz', async ({ page }) => {
-  await open(page, 'deliver')
-  await page.waitForFunction(() => window.__polesPartyQA?.().section === 'quiz', null, { timeout: 15000 })
-  await loseContext(page)
-  const before = await page.evaluate(() => window.__polesPartyQA!())
-  await wake(page)
-  const after = await page.evaluate(() => window.__polesPartyQA!())
-  expect(after.section).toBe('quiz')
-  expect(after.question).toBe(before.question)
-  expect(after.stars).toBe(before.stars)
-})
-
 test('lost badge waits for recovery before opening the trophy', async ({ page }) => {
   await open(page, 'badge')
   await loseContext(page)

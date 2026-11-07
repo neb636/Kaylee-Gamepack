@@ -144,6 +144,9 @@ test('Around the World: map, passport and coloring book open', async ({ page }) 
 
 for (const id of placeIds) {
   test(`place "${id}": every activity loads, stamps save, and the finale awards a trophy`, async ({ page }) => {
+    // A 3D country (Canada's map, the Poles' globe, Thailand) opens 8-10 activities here, each a 3D scene in a test
+    // browser with no GPU: 30 s isn't enough for that, while a 2D country takes a few.
+    test.setTimeout(3 * 60_000)
     const errors = trackErrors(page)
     await start(page, `#/world/${id}`)
     await expect(page.getByRole('button', { name: 'World map' })).toBeVisible()

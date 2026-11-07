@@ -29,7 +29,7 @@ test('Agong\'s house renders in 3D', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
-test('going to the party and back leaves no GPU memory behind', async ({ page }) => {
+test('@behavior going to the party and back leaves no GPU memory behind', async ({ page }) => {
   test.setTimeout(120_000)
   const errors = trackErrors(page)
   await open(page, 'hub/downstairs')
