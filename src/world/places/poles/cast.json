@@ -1,5 +1,5 @@
 {
-  "_about": "The Poles' friends (characters/looks.ts, plan planning/around-the-world/poles.html). Sparkle comes from src/sdk/cast.json. Nobody lives at the poles for good, so no local accent: each voice is the animal's personality. Change a voice here and regenerate; audition with node scripts/voice-audition.mjs <speaker> <voice> <voice>...",
+  "_about": "The Poles' friends (characters/looks.ts, plan planning/around-the-world/poles.md). Sparkle comes from src/sdk/cast.json. Nobody lives at the poles for good, so no local accent: each voice is the animal's personality. Change a voice here and regenerate; audition with node scripts/voice-audition.mjs <speaker> <voice> <voice>...",
   "speakers": {
     "pola": {
       "voice": "ballad",

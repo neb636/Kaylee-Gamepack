@@ -1,4 +1,4 @@
-// Snorkeling at Ko Kudi (plan: planning/around-the-world/thailand/samet-trip.html, greybox 5), its own little world
+// Snorkeling at Ko Kudi (plan: planning/around-the-world/thailand/samet-trip.md, greybox 5), its own little world
 // out at the reef the snorkel boat goes to from Ao Wong Duan.
 //
 // The toy (core verb): her finger leads Kaylee through the water, the island's verb again. She floats face down on the

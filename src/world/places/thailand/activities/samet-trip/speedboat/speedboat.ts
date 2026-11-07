@@ -1,4 +1,4 @@
-// The speedboat from Ban Phe to Koh Samet (plan: planning/around-the-world/thailand/samet-trip.html, greybox 7): the
+// The speedboat from Ban Phe to Koh Samet (plan: planning/around-the-world/thailand/samet-trip.md, greybox 7): the
 // way onto the island. A ride, so Kaylee doesn't steer: the captain drives the family's hired speedboat from Ban Phe
 // pier on the mainland across the real 5.7 km (570 game meters at the island's 1:10) to Na Dan pier, about a minute,
 // while the island grows ahead. It's the real island (island/scenery.ts buildIsland and props.ts), so the boat ties up

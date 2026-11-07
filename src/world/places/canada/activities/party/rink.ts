@@ -1,4 +1,4 @@
-// Pond Hockey on the frozen Rideau Canal (the finale's game, plan: planning/around-the-world/canada.html), seen from a
+// Pond Hockey on the frozen Rideau Canal (the finale's game, plan: planning/around-the-world/canada.md), seen from a
 // low camera behind her own net, looking up the ice at the geese's.
 //
 // The toy (core verb): flick the puck. Maple skates with the puck on her stick wherever Kaylee's finger drags her (in her

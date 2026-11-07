@@ -19,7 +19,7 @@ async function slideTo(page, until, taps = 0, after = 0) {
 
 /** Screenshots (scripts/qa-screens.mjs): how to get to each screen from a fresh start. */
 export const screens = [
-  // Thailand: the Thailand map (thailand-map.html: where she lands; home from a trip with a stamp landing, every stamp
+  // Thailand: the Thailand map (thailand-map.md: where she lands; home from a trip with a stamp landing, every stamp
   // in), then Agong's house in 3D (the arrival mid-ride, each spot, a few things in
   // use), and the party card.
   { name: 'thailand-map', hash: '#/world/thailand', reset: true, wait: 1500 },
@@ -31,7 +31,7 @@ export const screens = [
     reset: true,
     wait: 1800,
   })),
-  // Her wardrobe (wardrobe.html): the doors open, the hats drawer, the paint drawer, her room in a look, and the door with its 4 pictures.
+  // Her wardrobe (wardrobe.md): the doors open, the hats drawer, the paint drawer, her room in a look, and the door with its 4 pictures.
   ...['wardrobe', 'wardrobe?drawer=head', 'wardrobe?drawer=paint&look=crown,hearts,fairy,tutu,sneakers,hair-pink', 'upstairs?look=cap,stars,cape,gown,fur-mint', 'wardrobe?drawer=outfit&look=bow,fairy,tutu&door=crown,hearts,tutu;bow,fairy,dress-mint;cap,stars,cape;overalls,boots,hair-pink,fur-sky'].map((to) => ({
     name: `thailand-${to.replace(/[?=&,;]/g, '-')}`.slice(0, 60),
     hash: `#/world/thailand/hub/${to}`,
@@ -895,7 +895,7 @@ motion.push(
   thaiHouse('thai-walk', 2.6, 'downstairs', [['floor', 0]]),
   thaiHouse('thai-stairs', 6, 'downstairs?at=fridge', [['stairs-up', 0]]),
   thaiHouse('thai-bounce', 5, 'upstairs?at=mattress', [['mattress', 900], ['mattress', 1100], ['mattress', 1300]]),
-  // Her wardrobe (wardrobe.html, gate 4): two things on in turn (each pops on and she shows it off), the mirror's picture
+  // Her wardrobe (wardrobe.md, gate 4): two things on in turn (each pops on and she shows it off), the mirror's picture
   // flying to the door, Sparkle's wand (a surprise look), and a picture tapped on the door (the whole look at once).
   thaiHouse('wardrobe-dress', 5, 'wardrobe?drawer=head', [['trip:ward:thing:crown', 1600], ['trip:ward:thing:cowboy', 2200]]),
   thaiHouse('wardrobe-mirror', 5, 'wardrobe?drawer=head&look=cowboy,fairy', [['trip:ward:mirror', 3800]]),

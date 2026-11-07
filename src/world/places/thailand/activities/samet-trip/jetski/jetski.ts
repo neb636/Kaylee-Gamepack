@@ -1,4 +1,4 @@
-// The jet ski at Hat Sai Kaew (plan: planning/around-the-world/thailand/samet-trip.html, greybox 1): Kaylee steers,
+// The jet ski at Hat Sai Kaew (plan: planning/around-the-world/thailand/samet-trip.md, greybox 1): Kaylee steers,
 // Daddy sits behind her, in the island's real coordinates (island/layout.ts), so the bay drops straight into the island
 // of greybox 2.
 //

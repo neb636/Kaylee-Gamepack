@@ -1,4 +1,4 @@
-// The Nan Mountain Cup's racers (plan: thailand/nan-cup.html, "The rivals"), pure data: Kaylee in her pink kart and three
+// The Nan Mountain Cup's racers (plan: thailand/nan-cup.md, "The rivals"), pure data: Kaylee in her pink kart and three
 // Nan locals in theirs, toy animals on the chibi rig (riders.ts builds them from RIVAL_LOOKS). Each drives its own way, and each track tells its own story through the scripts: where each rival wants
 // to be against her (meters ahead of her) from the start line (0) to the finish (1), for a race she wins and for the
 // one she loses, when the home rival edges past on the last stretch and wins by a nose.

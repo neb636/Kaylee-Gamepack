@@ -1,4 +1,4 @@
-// The family notice her look (planning/around-the-world/thailand/wardrobe.html, "being seen"): the first time she walks
+// The family notice her look (planning/around-the-world/thailand/wardrobe.md, "being seen"): the first time she walks
 // up to someone in a new look they say so in their own voice ("Ooh, a crown, Kaylee!"), once per change. What they
 // notice is the newest thing she changed (the wardrobe tells us: markNew), else the first thing she's wearing. Pure data
 // and memory for the visit (no three.js): the house asks for the line when she taps someone.

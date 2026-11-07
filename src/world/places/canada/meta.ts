@@ -17,7 +17,7 @@ import puzzleOrcas from './assets/scene-puzzle-orcas.webp'
 import type { PlaceMeta } from '../../types'
 import { L } from './lines'
 
-// Canada, ocean to ocean (plan: planning/around-the-world/canada.html). The hub is a 3D toy-table map of the country:
+// Canada, ocean to ocean (plan: planning/around-the-world/canada.md). The hub is a 3D toy-table map of the country:
 // Kaylee taps activity pins from Quebec to the Pacific, and each of the four destinations has one
 // 3D and one 2D activity. Collecting all eight stamps opens the finale in Ottawa (Animal Homes, then pond hockey on the
 // frozen canal), and the hockey win is the Canada Champion trophy.

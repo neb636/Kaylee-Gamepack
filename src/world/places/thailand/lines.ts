@@ -94,7 +94,7 @@ export const L = {
     putter: hello('putter', 'Hi Kaylee! Hee hee!', ['Peep peep!']),
   } as Record<string, { hi: Line; again: Line[] }>,
 
-  // Kaylee's wardrobe in her room (activities/hub/wardrobe/, plan: thailand/wardrobe.html). Sparkle says what to do the
+  // Kaylee's wardrobe in her room (activities/hub/wardrobe/, plan: thailand/wardrobe.md). Sparkle says what to do the
   // first time and the name of each thing the first time she touches it; the family notice her new look in their own
   // voices (activities/hub/notice.ts).
   wardrobe: {
@@ -338,7 +338,7 @@ export const L = {
     goodRace: kids('Good race, Kaylee!'),
   },
 
-  // Baan Chang Cafe in Krabi (activities/boat-trip/chang/, plan: thailand/baan-chang.html): the sign, the chocolate milk,
+  // Baan Chang Cafe in Krabi (activities/boat-trip/chang/, plan: thailand/baan-chang.md): the sign, the chocolate milk,
   // the boardwalk and the elephants. The elephants don't talk (rumbles, trumpets, squeals); Daddy and Mommy react in
   // their own voices, and Sparkle says the names, what's new, and what to do after a while with nothing done. Daddy's
   // "Where to, Captain Kaylee?", "Everybody, pose!", "One, two, three, cheese!" and "Pai!" are the bay's.
@@ -409,7 +409,7 @@ export const L = {
     again: 'Pack again, or go straight to the boat?',
   },
 
-  // The Nan road trip (planning/around-the-world/thailand/nan-trip.html). The stops fill in as each one gets its voices.
+  // The Nan road trip (planning/around-the-world/thailand/nan-trip.md). The stops fill in as each one gets its voices.
   nan: {
     // The rice farm under Stop Time Cafe (activities/nan-trip/rice/, plan: thailand/nan-rice.md). Lung Kham, the farmer
     // (a monkey: "lung" is uncle), needs a helper: he says what each round is for, Sparkle then says what to do and, after
@@ -587,7 +587,7 @@ export const L = {
     },
   },
 
-  // The Koh Samet island trip (activities/samet-trip/, plan: thailand/samet-trip.html). Talk short, play long: Sparkle
+  // The Koh Samet island trip (activities/samet-trip/, plan: thailand/samet-trip.md). Talk short, play long: Sparkle
   // says what's new (the first time she reaches each beach, a new round) and, after a while with nothing done, what to
   // do (spendHint, so at most twice a visit); the family and the islanders react in their own voices (cast.json): the
   // jet ski man (an otter), the captain (a pelican, both boats), the taxi driver (a sun bear) and the fire dancers (two

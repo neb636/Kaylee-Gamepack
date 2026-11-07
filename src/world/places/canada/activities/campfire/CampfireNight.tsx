@@ -1,4 +1,4 @@
-// Campfire Night (plan: planning/around-the-world/canada.html): a dark campsite at the foot of Mont-Sainte-Anne in the
+// Campfire Night (plan: planning/around-the-world/canada.md): a dark campsite at the foot of Mont-Sainte-Anne in the
 // fall. One verb, shine the flashlight: a circle of light follows her finger over the night forest, and it gets richer
 // three times:
 //   story        Maple, on her log by the fire with the flashlight: "Shh! Something is out there in the dark."

@@ -1,4 +1,4 @@
-// Animal Bridge (plan: planning/around-the-world/canada.html): the green wildlife bridge over the highway in
+// Animal Bridge (plan: planning/around-the-world/canada.md): the green wildlife bridge over the highway in
 // Banff. #/world/canada/bridge/<section>?crossed=elk,sheep&green=0.5
 // `story` is Maple's opening line (the bare link); after it, a section is the family she leads next. A link sets the
 // scene up as if she had played to there (the families in `crossed` already graze in the meadow across the highway).

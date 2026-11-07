@@ -1,4 +1,4 @@
-// The Koh Samet trip (plan: planning/around-the-world/thailand/samet-trip.html), as deep-linkable sections:
+// The Koh Samet trip (plan: planning/around-the-world/thailand/samet-trip.md), as deep-linkable sections:
 // #/world/thailand/samet-trip/<section>?... So far:
 //   pack    greybox 7, packing for the island in Kaylee's room (pack?packed=...): the trip kit's packing, Mommy's hint
 //           for the sun; down the stairs with the suitcase, straight onto the speedboat (the first trip of a session

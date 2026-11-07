@@ -1,4 +1,4 @@
-// Carnival Snowballs (plan: planning/around-the-world/canada.html): roll snowballs in the snowy park below
+// Carnival Snowballs (plan: planning/around-the-world/canada.md): roll snowballs in the snowy park below
 // Quebec City's castle hotel, stack them into snowmen, dress them for the Winter Carnival and march them in its parade.
 // #/world/canada/snowman/<section>?size=huge&snowmen=3. A section link sets the park up as if she had played to there.
 // Loaded at startup by the section index (keep three.js out of this file).

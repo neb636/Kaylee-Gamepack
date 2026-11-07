@@ -1,4 +1,4 @@
-// The Nan Mountain Cup's tracks (plan: planning/around-the-world/thailand/nan-cup.html, "The three tracks"), one source
+// The Nan Mountain Cup's tracks (plan: planning/around-the-world/thailand/nan-cup.md, "The three tracks"), one source
 // of truth in meters, pure math (no three.js): each is a road from the road kit (trip/road/road.ts: `s` along it from
 // its start, `lat` meters to the left of its middle), raced point to point, not laps. The race (race.ts), the scene
 // and the minimap all read it.

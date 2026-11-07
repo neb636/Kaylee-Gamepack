@@ -486,8 +486,8 @@ from each activity's `sections.ts` by `npm run sections-readme` (edit those, not
   Try them at `#/playground`.
 - `src/shell/`: the app wrapper (splash, trophy ceremony); the world map is the home screen.
 - `planning/around-the-world/`: country and activity plans (`ACTIVITY-TEMPLATE.md`, `thailand.md`, ...). Newer plans
-  are pages (`thailand/baan-chang.html`, `thailand/nan-trip.html`), also published with the app at
-  [`planning/around-the-world/thailand/nan-trip.html`](https://neb636.github.io/Kaylee-Gamepack/planning/around-the-world/thailand/nan-trip.html).
+  are pages (`thailand/baan-chang.md`, `thailand/nan-trip.md`), also published with the app at
+  [`planning/around-the-world/thailand/nan-trip.md`](https://neb636.github.io/Kaylee-Gamepack/planning/around-the-world/thailand/nan-trip.md).
 - `AGENTS.md`: the rules AI agents follow when building (read this to change how activities are designed).
   `docs/play-design.md` says what makes an activity fun.
 - `art/STYLE.md`: the art style prompt. `art/source/`: full-size art (per-country originals are git-ignored scratch;

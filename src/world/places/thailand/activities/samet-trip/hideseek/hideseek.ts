@@ -1,4 +1,4 @@
-// Hide and seek at Ao Prao (plan: planning/around-the-world/thailand/samet-trip.html, greybox 6), on the island's real
+// Hide and seek at Ao Prao (plan: planning/around-the-world/thailand/samet-trip.md, greybox 6), on the island's real
 // sunset beach (island/layout.ts FRAMES.prao) by the big driftwood tree from Dad's photo.
 //
 // The toy (core verb): walk and look, the island's verb. Hold a finger and Kaylee trots after it (gallops when it's far

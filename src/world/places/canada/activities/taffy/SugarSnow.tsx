@@ -1,4 +1,4 @@
-// Sugar Snow (plan: planning/around-the-world/canada.html): maple taffy on snow (tire d'érable) at a Quebec sugar shack
+// Sugar Snow (plan: planning/around-the-world/canada.md): maple taffy on snow (tire d'érable) at a Quebec sugar shack
 // in winter. Maple's cousins are coming for a treat (the story beat). One verb, pour, that gets richer three times, and
 // the stick that rolls up what she poured:
 //   pour    tip the pot over the tray of snow: a little tilt pours a thin golden line, more tilt gushes, and standing

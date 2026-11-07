@@ -1,4 +1,4 @@
-// The Thailand map (plan: planning/around-the-world/thailand/thailand-map.html, greybox): where Kaylee lands in
+// The Thailand map (plan: planning/around-the-world/thailand/thailand-map.md, greybox): where Kaylee lands in
 // Thailand. A map of the whole country (drawn in code for now: geo.ts) with a pin for each place: tap one and it opens,
 // like Australia's map. Bangkok is Agong's house (the mall day starts in there). Krabi is the boat trip and the
 // elephants, Nan the road trip: the first of them each session packs and rides the window seat (trip/session.ts); after

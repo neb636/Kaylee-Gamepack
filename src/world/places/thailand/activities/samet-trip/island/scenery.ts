@@ -1,6 +1,6 @@
 // Koh Samet's look, island-wide, built from code in the toon look (no generated art): shared by the island to roam
 // (island.ts) and the jet ski bay (jetski/scenery.ts adds the bay's own pieces). Plan:
-// planning/around-the-world/thailand/samet-trip.html ("The look", "Tech plan").
+// planning/around-the-world/thailand/samet-trip.md ("The look", "Tech plan").
 //
 // - The ground (island/ground.ts) as two Terrains: a fine one (1.25 m) over the north half where she walks, with what's
 //   underfoot kept per point (surfaceAt), and a coarse one (2.5 m) for the south half and the sea floor, with a hole

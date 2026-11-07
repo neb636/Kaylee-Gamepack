@@ -1,4 +1,4 @@
-// Ko Kudi's reef (plan: samet-trip.html, "Snorkel at Ko Kudi"): the layout in meters and the props, built from code in
+// Ko Kudi's reef (plan: samet-trip.md, "Snorkel at Ko Kudi"): the layout in meters and the props, built from code in
 // the island's toy look. The sea's surface is y = 0; the sandy bed lies about 2.6 m down. x runs across the screen,
 // and the reef runs away from the camera toward −z: the snorkel boat at the start, the coral heads, the two big rocks
 // with the gap between them, the sandy patch (the clam, the sea cucumber), and the hidden garden of soft corals where

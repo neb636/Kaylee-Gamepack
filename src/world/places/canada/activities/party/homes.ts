@@ -1,4 +1,4 @@
-// Animal Homes (the finale's quiz, plan: planning/around-the-world/canada.html): the hub's toy map of Canada (map/land.ts,
+// Animal Homes (the finale's quiz, plan: planning/around-the-world/canada.md): the hub's toy map of Canada (map/land.ts,
 // the painted slab with its mountains and trees, read only) with a home for each of nine animals on it: the polar bear's
 // ice floe in Hudson Bay, the orca's Pacific, the bison's prairie, the moose's forest pond, the beaver's lodge on the
 // river, the loon's forest lake, the grizzly's Rockies, the spirit bear's rainforest and the puffin's rock in the

@@ -1,4 +1,4 @@
-// Sugar Snow (plan: planning/around-the-world/canada.html): tip the pot to pour hot maple syrup on a tray of
+// Sugar Snow (plan: planning/around-the-world/canada.md): tip the pot to pour hot maple syrup on a tray of
 // snow, watch it steam and set, then roll it up on a stick. #/world/canada/taffy/<section>?made=3&fed=chipmunk&tip=hold
 // A section link sets the scene up as if she had played to there. Loaded at startup by the section index (keep
 // perfect-freehand out of this file).

@@ -1,4 +1,4 @@
-// The Nan Mountain Cup's race ground (plan: planning/around-the-world/thailand/nan-cup.html, greybox 3): Nan town's
+// The Nan Mountain Cup's race ground (plan: planning/around-the-world/thailand/nan-cup.md, greybox 3): Nan town's
 // market square at the end of the city road, dressed for the Cup. One 3D world in the toon look, simple shapes, no
 // voices; the camera glides between its three places:
 // - The board (section `cup`): a big board with the three tracks (the Mushroom Forest, the Rice Steps, the Cloud Top),

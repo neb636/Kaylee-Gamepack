@@ -1,4 +1,4 @@
-// Salmon Leap (plan: planning/around-the-world/canada.html): the salmon swimming home up a river in BC's Great Bear
+// Salmon Leap (plan: planning/around-the-world/canada.md): the salmon swimming home up a river in BC's Great Bear
 // Rainforest in late summer, seen from the side like a theater stage. Maple says what's happening (kit/StoryBeat), then
 // one verb, flick the salmon: her finger grabs a sockeye in its pool and flicks it (fish.ts), it leaps in an arc,
 // splashes into the pool it comes down in and wiggles. It gets richer three times:

@@ -74,7 +74,7 @@ export const DIM = {
    *  Kaylee's room, with its doorway. (Dad, 2026-10-19: stairs, railing and glass all 2.2 m further forward than at
    *  first, so the overlook is smaller and her room bigger.) */
   hall: { zFront: -5.2, zGlass: -12.79, door0: 1.3, door1: 2.4 },
-  /** Kaylee's wardrobe (wardrobe.html, greybox 1): against the left wall of her room between the glass doors and the
+  /** Kaylee's wardrobe (wardrobe.md, greybox 1): against the left wall of her room between the glass doors and the
    *  mattress, its front facing into the room (+x). `z` is its middle, `w` its width along the wall, `d` its depth,
    *  `h` its height. The round rug beside it (toward the mattress, clear of the open door) is where she stands to dress up (`rug`, `r`), facing the camera. */
   wardrobe: { z: -15.15, w: 1.5, d: 0.6, h: 2.05, rug: { x: -1.45, z: -16.3, r: 0.55 } },

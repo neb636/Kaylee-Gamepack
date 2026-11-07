@@ -1,4 +1,4 @@
-// Mountain Bike (plan: planning/around-the-world/canada.html): Maple wants to ride all the way down to the waterfall (the
+// Mountain Bike (plan: planning/around-the-world/canada.md): Maple wants to ride all the way down to the waterfall (the
 // story, in the gondola at the bottom), up Mont-Sainte-Anne in the gondola, then steer her bike down the forest trail.
 // #/world/canada/bike/<section>?trail=blue. A section link starts her at the beginning of that stretch.
 // Loaded at startup by the section index (keep three.js out of this file).

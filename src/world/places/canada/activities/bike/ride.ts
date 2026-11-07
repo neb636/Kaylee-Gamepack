@@ -1,4 +1,4 @@
-// Mountain Bike (plan: planning/around-the-world/canada.html): Mont-Sainte-Anne in the fall. Maple wants to ride all the
+// Mountain Bike (plan: planning/around-the-world/canada.md): Mont-Sainte-Anne in the fall. Maple wants to ride all the
 // way down the mountain to the waterfall: she tells Kaylee in her gondola cabin at the bottom (the story), the gondola
 // carries her and her bike up, then Kaylee steers the bike down the forest trail. Maple is the chibi rig on a pink
 // kids' mountain bike (rider.ts); the moose in his pond is the rig too, and the chipmunk, woodpecker, porcupine, spring

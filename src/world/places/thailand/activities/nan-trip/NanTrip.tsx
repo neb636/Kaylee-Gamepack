@@ -1,4 +1,4 @@
-// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.html), Thailand's third trip (meta.ts
+// The Nan road trip (plan: planning/around-the-world/thailand/nan-trip.md), Thailand's third trip (meta.ts
 // `activities`), with its look and voices. The whole trip:
 //   the way there and home (Loop.tsx, the trip kit's legs): Mommy asks where to (invite, 🏔️🚙), packing for the
 //   mountains (pack), the goodbye and Aunty Sri's van (goodbye), the x-ray belt (airport), the window seat north to Nan

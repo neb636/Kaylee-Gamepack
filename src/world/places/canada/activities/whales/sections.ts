@@ -1,4 +1,4 @@
-// Whale Watch (plan: planning/around-the-world/canada.html): Maple has never seen a whale; steer the little boat out of Tofino's harbour
+// Whale Watch (plan: planning/around-the-world/canada.md): Maple has never seen a whale; steer the little boat out of Tofino's harbour
 // to the sea otters in the kelp, follow the spouts to the whales, swim with the orca family, and listen under the water.
 // #/world/canada/whales/<section>?steer=wheel&found=2. A section link sets the sea up as if she had played to there.
 // Loaded at startup by the section index (keep three.js out of this file).

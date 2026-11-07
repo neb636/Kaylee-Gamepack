@@ -1,4 +1,4 @@
-// Penguin Slide (greybox 3, plan: planning/around-the-world/poles.html): steer Pebble's papa on his belly down the ice,
+// Penguin Slide (greybox 3, plan: planning/around-the-world/poles.md): steer Pebble's papa on his belly down the ice,
 // over bumps and a crack, off the edge into the sea, through the krill and home to Pebble.
 // #/world/poles/slide/<section>?run=left&krill=12. A section link starts him at the beginning of that stretch.
 // Loaded at startup by the section index (keep three.js out of this file).

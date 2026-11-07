@@ -1,4 +1,4 @@
-// The beach clean (the island's side verb, greybox 3 of samet-trip.html): bits of rubbish wash up on the wet sand (a
+// The beach clean (the island's side verb, greybox 3 of samet-trip.md): bits of rubbish wash up on the wet sand (a
 // bottle, a plastic bag, a flip-flop). Tap one and Kaylee walks over and lifts it up over her head, and an animal pops
 // out where it was: a hermit crab climbs out of the bottle, a crab scuttles from under the flip-flop, a fish jumps where
 // the bag was. Carry it to the green bin at the back of the beach: walk up to it and plonk, in it goes, the lid flaps

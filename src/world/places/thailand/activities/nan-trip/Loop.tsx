@@ -1,4 +1,4 @@
-// The Nan road trip's legs around the stops (plan: thailand/nan-trip.html, build plan step 7), the trip kit's, in three
+// The Nan road trip's legs around the stops (plan: thailand/nan-trip.md, build plan step 7), the trip kit's, in three
 // 3D worlds in one shared view:
 //
 //   invite, pack, goodbye, home   Agong's own house (activities/hub/house.ts) with the trip kit's plugin

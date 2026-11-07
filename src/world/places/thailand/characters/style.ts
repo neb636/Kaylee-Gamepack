@@ -1,4 +1,4 @@
-// Kaylee's own look (planning/around-the-world/thailand/wardrobe.html): what she picked in her wardrobe at Agong's, one
+// Kaylee's own look (planning/around-the-world/thailand/wardrobe.md): what she picked in her wardrobe at Agong's, one
 // thing per spot on her (a hat, glasses, wings or a cape, an outfit, shoes) and the color of her dress, her hair and her
 // fur. Saved on the iPad (the wardrobe writes it with useSaved('thailand-look')), and any link can set it with
 // `?look=crown,hearts,fairy,tutu,sneakers,dress-mint,hair-pink,fur-sky` (a sticky param, kit/sections.ts).

@@ -1,4 +1,4 @@
-// The fire show on Hat Sai Kaew at night (plan: planning/around-the-world/thailand/samet-trip.html, step 9, the finale),
+// The fire show on Hat Sai Kaew at night (plan: planning/around-the-world/thailand/samet-trip.md, step 9, the finale),
 // on the island's real beach (island/layout.ts BAY) by the lanterns, after the sunset at Ao Prao (sunset.ts).
 //
 // The toy (core verb): twirl the glowing poi. Kaylee stands on the sand behind the rope with a pair of light-up poi;

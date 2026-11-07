@@ -1,4 +1,4 @@
-// Kaylee's animal book (plan: samet-trip.html, "Mommy's phone and the animal book"): the fourteen real Koh Samet
+// Kaylee's animal book (plan: samet-trip.md, "Mommy's phone and the animal book"): the fourteen real Koh Samet
 // animals she can snap with Mommy's phone, and the book's pages. Plain data, no three.js: the sections file, the book
 // screen and the QA scripts read it.
 //

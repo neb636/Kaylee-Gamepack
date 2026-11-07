@@ -200,7 +200,7 @@ Fredoka. Animations: `motion` (`import { motion, AnimatePresence } from 'motion/
 ## Thailand: the 3D country (the reference for new work)
 
 Read `planning/around-the-world/thailand.md` (the family, the house, the gates so far), then the plan of the trip you're
-working on: `thailand/nan-trip.html` (a road trip in the mountains, the road kit). The finished boat and mall trips
+working on: `thailand/nan-trip.md` (a road trip in the mountains, the road kit). The finished boat and mall trips
 (and Baan Chang) have no plan left; read their code in `trip/` and `activities/`.
 `thailand/known-issues.md` lists small things QA found, with links and code paths. Plans end with what's built and
 what's next; PR bodies end with the next prompt.
@@ -217,7 +217,7 @@ what's next; PR bodies end with the next prompt.
 - **The hub is a toy:** tap the floor and Kaylee walks there; tap a thing and it reacts at once, then she uses it; tap
   someone and they hop and say hello. Sacred things (the altar, the spirit house) never wobble: they glow, a bell rings,
   she does a wai.
-- **The Thailand map** (`activities/hub/map/`, 2D, plan `thailand/thailand-map.html`) is where she lands: a tap map like
+- **The Thailand map** (`activities/hub/map/`, 2D, plan `thailand/thailand-map.md`) is where she lands: a tap map like
   Australia's, where tapping a pin opens that place. Bangkok opens the house; a trip somewhere else gets a pin, starts there and ends there
   (the stamp lands on its pin, the trip's photo goes on Agong's wall by itself). Only the first trip of a session packs
   and rides the window seat (`trip/session.ts`); later ones go straight to their landing spot. The mall day, in Bangkok,

@@ -1,4 +1,4 @@
-// The diggable sand at Ao Hin Khok (plan: planning/around-the-world/thailand/samet-trip.html, "Sandcastle"): a fine
+// The diggable sand at Ao Hin Khok (plan: planning/around-the-world/thailand/samet-trip.md, "Sandcastle"): a fine
 // height field laid over the island's beach, where her finger moves the real sand.
 //
 // - Digging lowers the sand under her finger and piles what it took up beside the stroke (wet and dark), so a moat

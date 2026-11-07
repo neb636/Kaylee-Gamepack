@@ -1,4 +1,4 @@
-// The Thailand map (plan: planning/around-the-world/thailand/thailand-map.html): where everything sits, in stage units
+// The Thailand map (plan: planning/around-the-world/thailand/thailand-map.md): where everything sits, in stage units
 // (100 to a degree of longitude or latitude, north up). Pure data: no React, no three.js, so sections.ts can read it.
 //
 // The outline is Thailand's border and coasts, simplified (good enough for a five-year-old's map: the head in the

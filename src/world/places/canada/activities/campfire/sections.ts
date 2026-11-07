@@ -1,4 +1,4 @@
-// Campfire Night (plan: planning/around-the-world/canada.html): a dark campsite at the foot of Mont-Sainte-Anne, lit
+// Campfire Night (plan: planning/around-the-world/canada.md): a dark campsite at the foot of Mont-Sainte-Anne, lit
 // only by the flashlight that follows her finger. #/world/canada/campfire/<section>?found=4
 // A section link sets the scene up as if she had played to there. Loaded at startup by the section index.
 import { defineSections } from '../../../../kit/sections'

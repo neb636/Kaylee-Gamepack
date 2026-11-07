@@ -1,4 +1,4 @@
-// Each track's scenery (plan: thailand/nan-cup.html, "The three tracks"; the look step), built in the toon look from
+// Each track's scenery (plan: thailand/nan-cup.md, "The three tracks"; the look step), built in the toon look from
 // simple shapes along the track's road (track.ts says where):
 // - 🍄 The Mushroom Forest: a giant hollow log lying across the road (she drives right through it: bark outside, pale
 //   wood inside, tree rings at its ends, moss and little mushrooms on top); a stream winding through the trees and across

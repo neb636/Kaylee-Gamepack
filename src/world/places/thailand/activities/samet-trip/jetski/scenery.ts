@@ -1,7 +1,7 @@
 // Sai Kaew's scenery for the jet ski, built from code in the toon look (no generated art): the whole island's look
 // (island/scenery.ts: the ground from the real coastline, the lagoon water, the sky, the horizon, the plants), Sai
 // Kaew's own pieces (island/props.ts: the pink umbrellas and red chairs, the jet ski hut with its bell, the mermaid on
-// her rocks), and the bay's buoys. Plan: planning/around-the-world/thailand/samet-trip.html ("The look").
+// her rocks), and the bay's buoys. Plan: planning/around-the-world/thailand/samet-trip.md ("The look").
 import { Group } from 'three'
 import type { Bag } from '../../../../../engine3d/dispose'
 import { merge, P, solid } from '../../../../../engine3d/geo'

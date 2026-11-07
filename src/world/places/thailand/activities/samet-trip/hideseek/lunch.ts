@@ -1,4 +1,4 @@
-// Lunch on the deck at Ao Prao (plan: planning/around-the-world/thailand/samet-trip.html, greybox 6): Dad's photo 2, on
+// Lunch on the deck at Ao Prao (plan: planning/around-the-world/thailand/samet-trip.md, greybox 6): Dad's photo 2, on
 // the resort deck above the cove (island/layout.ts DECK, the island's own deck from island/props.ts resortDeck). A place,
 // not a stop: no stamp, 45-90 s, 8-15 touches.
 //

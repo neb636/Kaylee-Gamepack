@@ -1,4 +1,4 @@
-// Snow Coats (plan: planning/around-the-world/poles.html): Arctic animals change coats with the seasons.
+// Snow Coats (plan: planning/around-the-world/poles.md): Arctic animals change coats with the seasons.
 // One verb, rub with her finger, that gets richer three times:
 //   fox    one Arctic fox, brown in late summer. Snow starts to fall; where her finger goes the coat turns white (and
 //          fluffier at the edges). The ground slowly goes white by itself, and she can rub snow onto it too.
