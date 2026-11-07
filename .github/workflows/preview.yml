@@ -20,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          # The merge commit and its base, so the review page can tell which spoken lines this PR changed.
+          fetch-depth: 2
       - uses: actions/setup-node@v5
         if: github.event.action != 'closed'
         with:
@@ -33,6 +36,24 @@ jobs:
           BASE_PATH: /${{ github.event.repository.name }}/pr-preview/pr-${{ github.event.number }}/
           # Previews are public too: Thailand opens only with the family code (scripts/vite-lock.ts).
           LOCK_CODE: ${{ secrets.THAILAND_CODE }}
+      # The review page Dad opens from the PR (scripts/review.mjs), at <preview>/review/: what the agent published for
+      # this branch to the review-pages branch (reels, table reads, questions), plus a table read of every group of
+      # spoken lines this PR changes. A failure here never blocks the preview.
+      - if: github.event.action != 'closed'
+        name: Review page
+        continue-on-error: true
+        env:
+          BRANCH: ${{ github.head_ref }}
+          PR: ${{ github.event.number }}
+        run: |
+          slug="${BRANCH//\//--}"
+          mkdir -p dist/review
+          if git fetch --depth=1 origin review-pages && git cat-file -e "FETCH_HEAD:$slug" 2>/dev/null; then
+            git archive FETCH_HEAD "$slug" | tar -x -C dist/review --strip-components=1
+          fi
+          command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+          node scripts/review.mjs --out=dist/review --changed=HEAD^1 --pr="$PR"
+          [ -n "$(ls -A dist/review)" ] || rmdir dist/review
       - uses: rossjrw/pr-preview-action@v1
         with:
           source-dir: dist
