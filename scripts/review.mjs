@@ -6,7 +6,7 @@
 //   node scripts/review.mjs --reels               also film the reels it lists (needs npm run build; a Mac for 3D)
 //   node scripts/review.mjs --changed[=<ref>]     also add a table read for every group of lines that changed
 //   node scripts/review.mjs --publish             push review/ to the review-pages branch (see below)
-//   --out=<dir> (default review/)   --pr=<n> (links "Open the PR")
+//   --out=<dir> (default review/)   --pr=<n> (links "Open the PR")   --keep (CI: keep published table reads)
 //
 // review/review.json (the agent writes it; it's the brief for this check-in):
 //   {
@@ -70,12 +70,12 @@ if (opt('changed')) {
     else jobs.push(c)
   }
 }
-// A table read the agent already published (with its audio) is kept as it is, unless this PR changed its lines: CI may
-// have no ffmpeg, and remaking it there would drop the audio.
+// --keep (CI): a table read the agent already published, with its audio, is kept as it is unless this PR changed its
+// lines. CI may have no ffmpeg, and remaking it there would drop the audio. Locally every table read is remade.
 const reads = []
 for (const j of jobs) {
   const made = path.join(out, 'table-read', `${j.place}-${(j.group || 'all').replace(/\./g, '-')}.json`)
-  if (!j.before && existsSync(made)) reads.push(JSON.parse(readFileSync(made, 'utf8')))
+  if (opt('keep') && !j.before && existsSync(made)) reads.push(JSON.parse(readFileSync(made, 'utf8')))
   else reads.push(await tableRead(j.place, j.group, { out: path.join(out, 'table-read'), before: j.before }))
 }
 
@@ -133,18 +133,21 @@ ${r.audio ? `<audio controls preload="metadata" src="table-read/${esc(r.audio)}"
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title>
 <style>
-:root{--ink:#3b2a4a;--soft:#7a6a88;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#ff5fa2;--lav:#efe6ff}
-@media (prefers-color-scheme:dark){:root{--ink:#f6eefb;--soft:#bfaecc;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--lav:#33264a}}
+:root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a;--lav:#efe6ff;--warn:#b0124f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;--lav:#33264a;--warn:#ff8fb8;color-scheme:dark}
 *{box-sizing:border-box}body{margin:0;font:17px/1.45 ui-rounded,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
-main{max-width:720px;margin:0 auto;padding:16px 16px 64px}h1{font-size:24px;line-height:1.2;margin:4px 0 6px}
+main{max-width:720px;margin:0 auto;padding-block:16px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}h1{font-size:24px;line-height:1.2;margin:4px 0 6px}
 h2{font-size:14px;letter-spacing:.05em;text-transform:uppercase;color:var(--soft);margin:28px 0 8px}h3{margin:0 0 4px;font-size:17px}
 .chip{display:inline-block;background:var(--lav);border-radius:99px;padding:2px 12px;font-size:14px;font-weight:600}
 .kaylee{font-size:19px;margin:10px 0 0}
 figure{margin:0 0 14px}video{width:100%;border-radius:16px;background:#000;display:block}figcaption{font-size:14px;color:var(--soft);margin-top:6px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0 0 12px}
-.card audio{width:100%;margin:8px 0 0}.meta{font-size:14px;color:var(--soft);margin:0}.warn{color:#c2185b}
+.card audio{width:100%;margin:8px 0 0}.meta{font-size:14px;color:var(--soft);margin:0}.warn{color:var(--warn)}
+#answers{display:none;margin-top:8px}
 ol{padding-left:22px}li p{margin:0 0 6px;font-weight:600}textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--card);color:inherit}
-button,.pill{font:inherit;font-weight:700;border:0;border-radius:99px;padding:10px 18px;background:var(--pink);color:#fff;text-decoration:none;display:inline-block;margin:4px 6px 4px 0}
+button,.pill{font:inherit;font-weight:700;border:0;border-radius:99px;padding:10px 18px;background:var(--pink);color:var(--bg);text-decoration:none;display:inline-block;margin:4px 6px 4px 0;cursor:pointer}
+button:focus-visible,.pill:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 .pill{background:var(--lav);color:var(--ink)}a{color:var(--pink)}
 .pitch{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin:0 0 16px}
 .pitch img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--lav)}.pbody{padding:14px 16px}
@@ -159,16 +162,17 @@ ${brief.kaylee ? `<p class="kaylee">${esc(brief.kaylee)}</p>` : ''}
 ${pitchHtml ? `<h2>Pick one</h2><div class="pitches">${pitchHtml}</div><p class="meta" id="picked"></p>` : ''}
 ${reelHtml ? `<h2>Watch</h2>${reelHtml}` : ''}
 ${readHtml ? `<h2>Hear the script</h2>${readHtml}` : ''}
-${qHtml ? `<h2>Your call</h2><ol>${qHtml}</ol><button id="copy">Copy my answers</button>${prLink ? `<a class="pill" href="${prLink}">Open the PR to paste them</a>` : ''}<p class="meta" id="done"></p>` : ''}
+${qHtml ? `<h2>Your call</h2><ol>${qHtml}</ol><button id="copy">Copy my answers</button>${prLink ? `<a class="pill" href="${prLink}">Open the PR to paste them</a>` : ''}<p class="meta" id="done"></p><textarea id="answers" rows="5" readonly aria-label="Your answers, to copy"></textarea>` : ''}
 ${links ? `<h2>Play it yourself (optional)</h2><p>${links}</p>` : ''}
 </main>
 <script>
 const qs=${JSON.stringify(qs)},titles=${JSON.stringify(pitches.map((p) => p.title))}
 document.querySelectorAll('.pick').forEach(b=>b.addEventListener('click',async()=>{const t='Pick: '+titles[+b.dataset.p]
-  try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied \u201c'+t+'\u201d. Paste it on the PR, or just say it in chat.'}catch{prompt('Copy your pick:',t)}}))
+  try{await navigator.clipboard.writeText(t);document.getElementById('picked').textContent='Copied \u201c'+t+'\u201d. Paste it on the PR, or just say it in chat.'}catch{document.getElementById('picked').textContent=t+': say it on the PR or in chat.'}}))
 document.getElementById('copy')?.addEventListener('click',async()=>{
   const a=[...document.querySelectorAll('textarea')].map((t,i)=>(i+1)+'. '+qs[i]+'\\n   '+(t.value.trim()||'(no answer)')).join('\\n')
-  try{await navigator.clipboard.writeText(a);document.getElementById('done').textContent='Copied. Paste it as a comment on the PR.'}catch{prompt('Copy your answers:',a)}})
+  try{await navigator.clipboard.writeText(a);document.getElementById('done').textContent='Copied. Paste it as a comment on the PR.'}
+  catch{const t=document.getElementById('answers');t.value=a;t.style.display='block';t.select();document.getElementById('done').textContent='Copy the text below, then paste it on the PR.'}})
 </script></body></html>
 `
 }

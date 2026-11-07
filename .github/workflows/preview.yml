@@ -58,7 +58,7 @@ jobs:
           if ! command -v ffmpeg >/dev/null; then
             (timeout 90 sudo -E apt-get -o DPkg::Lock::Timeout=20 update -qq && timeout 150 sudo -E apt-get -o DPkg::Lock::Timeout=20 install -y -qq --no-install-recommends ffmpeg) < /dev/null || echo "No ffmpeg: changed lines get a script sheet without audio."
           fi
-          timeout 120 node scripts/review.mjs --out=dist/review --changed=HEAD^1 --pr="$PR" < /dev/null || echo "The review page step failed; the preview goes out without it."
+          timeout 120 node scripts/review.mjs --out=dist/review --changed=HEAD^1 --keep --pr="$PR" < /dev/null || echo "The review page step failed; the preview goes out without it."
           [ -n "$(ls -A dist/review)" ] || rmdir dist/review
       - uses: rossjrw/pr-preview-action@v1
         with:
