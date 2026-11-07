@@ -19,7 +19,7 @@ here it's one child's diary, so read it with care: a week is small, and a bad da
 
 | Event | Properties | From |
 |---|---|---|
-| `world_section_entered` / `world_section_left` | `place`, `activity`, `section`; on leave `seconds`, `taps`, `stuck`, `why` (`next`, `away`, `hidden`) | `src/world/diary.ts` |
+| `world_section_entered` / `world_section_left` | `place`, `activity`, `section`; on leave `seconds`, `taps`, `hints`, `why` (`next`, `away`, `hidden`) | `src/world/diary.ts` |
 | `world_activity_started` / `world_activity_completed` | `place_id`, `activity_id` | `src/world/PlaceFrame.tsx` |
 | `world_place_opened`, `world_trophy_won`, `world_shelf_play` | the place, or the shelf game and whether it's a favorite | `PlaceFrame.tsx`, `Shelf.tsx` |
 
@@ -36,7 +36,8 @@ with HogQL in `query.json` (`{"query": {"kind": "HogQLQuery", "query": "..."}}`)
 - **Replays:** `world_activity_started` per activity, against `world_activity_completed`.
 - **Where she quits:** `world_section_left` with `why = 'away'` or `'hidden'`, grouped by section; the last section
   before she left an activity without its stamp.
-- **Stuck:** sections with the most `stuck` per minute.
+- **Stuck:** sections with the most `hints` per minute. A soft sign: most hints follow a while with nothing touched,
+  but a few are scripted (one plays right after she boards the boat), so compare a section with itself over weeks.
 - **Never opened:** activities in the countries' `meta.ts` with no `world_activity_started` this week (and last).
 
 ## Tell Dad (one screen, no tables he has to read)
