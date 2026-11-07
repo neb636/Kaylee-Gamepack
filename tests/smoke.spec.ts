@@ -181,7 +181,8 @@ for (const id of placeIds) {
     // The finale's button: "Party" on most maps; on the 3D ones it's named for the place (Canada's Pond Hockey pin,
     // the Poles' "Pole to Pole" spot), so find it by its activity id there.
     const finale = page.locator('button[aria-label="Party"], button[data-anchor="go:party"], button[data-activity="party"]').first()
-    await expect(finale).toBeAttached()
+    // Canada's pins stay hidden until the 3D scene has compiled its shaders: wait for it to show, not just exist.
+    await expect(finale).toBeVisible({ timeout: 20_000 })
     await finale.click({ force: true })
     await expect(page.getByRole('button', { name: 'Back to the map' })).toBeVisible()
 
