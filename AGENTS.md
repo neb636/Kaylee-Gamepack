@@ -151,7 +151,8 @@ fixes), `kaylee-week` (the play diary). **Agent:** `fresh-eyes` reviews a toy it
 
 - `npm run verify` must pass before every PR: voice clips for every line, heavy libraries (three, phaser) only inside
   a country or game folder, no file names that differ only in case, the README's section directory, typecheck, build.
-  Changed lines? `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs` first, and commit the clips.
+  Changed lines? Push them: the PR records them for you: its preview workflow's voices job uses the `OPENAI_API_KEY` repository secret, commits the clips to your branch and re-runs CI. `git pull` to get the clips. With a key of your own you can record
+  them first (`node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs`); you don't need one.
 - Every section of every activity opens from a link, with its state in the URL (`tests/sections.spec.ts`).
 - Ask Dad before adding a package (`docs/building.md`, Dependencies).
 - Don't run `npm run test` or `npm run check` locally; CI runs the specs on the PR.

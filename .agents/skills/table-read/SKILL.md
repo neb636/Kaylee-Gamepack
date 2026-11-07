@@ -14,9 +14,10 @@ they're locked: anything new or reworded goes in the next table read, marked as 
 - Write `lines.ts` in **play order**, with a comment above each line or list saying when it plays ("Sparkle, when the
   👆 shows", "each kid, as they sit down"). The table read plays the lines in the file's order and shows those
   comments, so the order and the comments are the script's stage directions.
-- Record them: `node scripts/world-voice-lines.mjs && node scripts/generate-voice.mjs` (needs `OPENAI_API_KEY`: `.env`
-  on the Mac, the environment's secret in a cloud session). A key that fails (401) is a blocker to tell Dad about in
-  one line, not something to work around: unrecorded lines play silent on her iPad.
+- Record them: push the branch. The PR preview workflow's `voices` job records every line without a clip (the
+  `OPENAI_API_KEY` repository secret), commits the clips and re-runs CI; then `git pull`. With a key in `.env` you
+  can record locally instead. If the voices job fails (a bad key: 401), tell Dad in one line: unrecorded lines play
+  silent on her iPad.
 
 ## 2. Make the table read and fix the easy flags
 

@@ -82,8 +82,9 @@ until it prints and stops by itself after 7 minutes): `node scripts/watch-codex-
 
 ## 5. Small rules
 
-- `npm run verify` before every push (`docs/qa.md`). A failing voice check means unrecorded lines: record them or say
-  so at the top of the PR; never leave it for Dad to discover on the iPad.
+- `npm run verify` before every push (`docs/qa.md`). A failing voice check means unrecorded lines: the voices job
+  records them after you push. If that job fails, say so at the top of the PR; never leave it for Dad to discover
+  on the iPad.
 - Deep links for the review page come from `node scripts/pr-links.mjs --pr <n>` and the section's address bar; put the
   one or two that matter in `links`, not in the PR body.
 - Never `--draft` a fix, never mark a toy ready before check-in 4, never merge yourself.
