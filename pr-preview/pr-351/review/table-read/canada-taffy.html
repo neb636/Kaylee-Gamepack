@@ -2,21 +2,23 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Table read: Canada › Taffy</title>
 <style>
-:root{--ink:#3b2a4a;--soft:#7a6a88;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#ff5fa2}
-@media (prefers-color-scheme:dark){:root{--ink:#f6eefb;--soft:#bfaecc;--bg:#1d1524;--card:#271d30;--line:#3a2c45}}
+:root{--ink:#3b2a4a;--soft:#6f5f7d;--bg:#fff8fc;--card:#fff;--line:#f1e4f2;--pink:#e2468a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#f6eefb;--soft:#c3b3d0;--bg:#1d1524;--card:#271d30;--line:#3a2c45;--pink:#ff7ab4;color-scheme:dark}
 *{box-sizing:border-box}body{margin:0;font:16px/1.4 ui-rounded,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
-header{padding:16px 16px 4px;max-width:760px;margin:0 auto}
-.player{position:sticky;top:0;z-index:2;background:var(--bg);padding:8px 16px;border-bottom:1px solid var(--line)}
+header{padding-block:16px 4px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:760px;margin:0 auto}
+.player{position:sticky;top:env(safe-area-inset-top,0px);z-index:2;background:var(--bg);padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
 .player audio{display:block;max-width:728px;margin:0 auto}
 h1{font-size:20px;margin:0 0 4px}.sum{color:var(--soft);font-size:14px;margin:0 0 10px}.intro{font-size:14px;margin:0 0 6px}
-audio{width:100%}main{padding:4px 16px 48px;max-width:760px;margin:0 auto}
+audio{width:100%}main{padding-block:4px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:760px;margin:0 auto}
 h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft);margin:22px 0 6px}
 .cast{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:6px}
 .cast li{font-size:13px;padding:3px 10px;border-radius:99px;background:hsl(var(--h) 80% 50% / .14)}
 .cast small{color:var(--soft)}
 .line{display:grid;grid-template-columns:88px 1fr;gap:2px 10px;width:100%;text-align:left;font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-left:5px solid hsl(var(--h) 75% 58%);border-radius:12px;padding:10px 12px;margin:6px 0;cursor:pointer}
 .line.playing{outline:3px solid var(--pink)}.line.silent{opacity:.6;border-left-style:dashed}
-.who{font-weight:700;font-size:14px;color:hsl(var(--h) 60% 45%)}@media (prefers-color-scheme:dark){.who{color:hsl(var(--h) 80% 72%)}}
+.who{font-weight:700;font-size:14px;color:hsl(var(--h) 60% 42%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .who{color:hsl(var(--h) 80% 74%)}}:root[data-theme="dark"] .who{color:hsl(var(--h) 80% 74%)}
 .text{font-size:17px}.text s{display:block;color:var(--soft);font-size:14px}
 .when,.meta{grid-column:2;font-size:13px;color:var(--soft)}
 .flag{display:inline-block;font-weight:600;font-size:11.5px;padding:1px 7px;border-radius:99px;margin-left:6px;background:#ffe2a8;color:#5a3d00}
@@ -248,7 +250,7 @@ h2{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--soft
 </button>
 </main>
 <script>
-const spans=[[0,3.63],[5.25,8.42],[8.77,11.77],[12.12,15.07],[15.42,16.77],[17.12,21.01],[21.36,24.73],[25.08,27.61],[27.96,30.95],[31.3,32.56],[34.18,35.59],[35.94,37.15],[37.5,38.48],[38.83,39.86],[41.48,43.09],[44.71,46.53],[46.88,48.35],[48.7,49.8],[51.42,52.69],[53.04,54.6],[54.95,56.58],[56.93,59.66],[60.01,60.9],[61.25,63.4],[63.75,65.37],[65.72,67.74],[68.09,69.2],[69.55,71.39],[71.74,74.6],[74.95,76.3],[76.65,79.09],[79.44,83.48],[83.83,85.95],[86.3,88.02],[88.37,90.09],[90.44,93.16]];const a=document.querySelector('audio');let stop=null,cur=null
+const spans=[[0,3.53],[5.21,8.3],[8.69,11.6],[11.99,14.85],[15.23,16.58],[16.98,20.75],[21.14,24.41],[24.8,27.27],[27.66,30.56],[30.95,32.21],[33.9,35.29],[35.69,36.9],[37.29,38.27],[38.66,39.69],[41.38,42.96],[44.65,46.46],[46.85,48.31],[48.7,49.8],[51.49,52.75],[53.14,54.67],[55.06,56.68],[57.07,59.72],[60.11,61.03],[61.42,63.53],[63.92,65.52],[65.9,67.89],[68.28,69.41],[69.79,71.6],[71.99,74.75],[75.14,76.5],[76.88,79.26],[79.65,83.56],[83.95,86.03],[86.42,88.12],[88.51,90.19],[90.59,93.22]];const a=document.querySelector('audio');let stop=null,cur=null
 const mark=(el)=>{cur?.classList.remove('playing');cur=el;el?.classList.add('playing')}
 document.querySelectorAll('.line').forEach(el=>el.addEventListener('click',()=>{const s=spans[+el.dataset.i];if(!a||!s)return;a.currentTime=s[0];stop=s[1];mark(el);a.play()}))
 a?.addEventListener('timeupdate',()=>{if(stop!==null&&a.currentTime>=stop){a.pause();stop=null}
