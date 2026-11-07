@@ -4,7 +4,7 @@ import { UNICORN_END, unicornRoll } from '../src/world/places/thailand/activitie
 import { CHUTES, CHUTES_END, chutesRoll, LADDERS, square } from '../src/world/places/thailand/activities/hub/board-games/rules/chutes'
 import { CANDY_FINISH, candyDraw, colorOf, destination, fullDeck, newDeck, parseDeck } from '../src/world/places/thailand/activities/hub/board-games/rules/candy'
 
-// The game table in Kaylee's room (planning/around-the-world/thailand/game-table.html). The rules are pure, so most of
+// The game table in Kaylee's room (planning/around-the-world/thailand/game-table.md). The rules are pure, so most of
 // this runs without a page: Kaylee's Unicorn Dice Game exactly as she agreed to it. The page tests check that a turn
 // can't be taken twice and that leaving or starting over mid-move leaves nothing behind, through section links and
 // window.__thaiHouseQA() (no jump hooks).

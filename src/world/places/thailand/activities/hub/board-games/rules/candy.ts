@@ -1,4 +1,4 @@
-// Candy Land at the game table (our own version: Kaylee asked for the game, not an edition; game-table.html).
+// Candy Land at the game table (our own version: Kaylee asked for the game, not an edition; game-table.md).
 // - A path of 36 spaces in six colors that repeat in order (pink, orange, yellow, green, blue, purple); a gate before
 //   space 1 (position 0) and the finish after space 36 (position 37).
 // - Kaylee starts, then turns alternate. Draw one card: one color goes to the next space of that color; two of a color

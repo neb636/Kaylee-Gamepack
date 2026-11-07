@@ -1,4 +1,4 @@
-// The game table's games and cousins (planning/around-the-world/thailand/game-table.html). Pure data, loaded at startup
+// The game table's games and cousins (planning/around-the-world/thailand/game-table.md). Pure data, loaded at startup
 // by the hub's sections.ts: no three.js, and nothing about the house (the table's place is in layout.ts).
 //
 // `built`: the game is in the code (the picker shows it on Dad's links). `ready`: Dad played its full loop on the iPad,

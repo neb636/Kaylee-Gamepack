@@ -54,7 +54,7 @@ goes on top for that game only. Plan, with every clash and its fix: `thailand/wa
 with a pink unicorn bag sitting beside it. She sits down, picks a game and a cousin (BB, Gan or Ken; BB first, her
 pick), the real cousin comes and sits across from her, and they play her own Unicorn Dice Game, Candy Land or Chutes
 and Ladders on boards made for the house. A toy like the wardrobe: no stamps. Plan, rules, links and gates:
-`thailand/game-table.html`.
+`thailand/game-table.md`.
 
 Open questions for Dad: Does Sparkle keep guiding here (2D, in the prompt bubble as everywhere
 else), or does a family member (Mom, Agong) give the instructions? What is each person like (for their voices)?

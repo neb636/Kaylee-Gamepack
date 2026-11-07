@@ -1,4 +1,4 @@
-// The game table in Kaylee's room (game-table.html, greybox: simple shapes in the toon look): a small low table along
+// The game table in Kaylee's room (game-table.md, greybox: simple shapes in the toon look): a small low table along
 // the right wall past the couch, her pink stool on the room side and the cousin's lavender one against the wall, and
 // the unicorn bag sitting on the floor beside it. Where they stand is layout.ts's DIM.gameTable (the walk grid and the
 // tap targets read the same numbers). When nobody plays, a folded board, a die and three pieces sit on the table, so it

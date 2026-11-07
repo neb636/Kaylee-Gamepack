@@ -1,4 +1,4 @@
-// The game table in Kaylee's room (planning/around-the-world/thailand/game-table.html): a house plugin, like her
+// The game table in Kaylee's room (planning/around-the-world/thailand/game-table.md): a house plugin, like her
 // wardrobe. Tap the table and she walks over and sits on her stool; when a game is on for her (or the house was opened
 // from a board-game link, for Dad) the picker opens: a game, a cousin (BB first), Play. The real cousin (never a copy)
 // puts their phone away and sits on the stool across from her, the board goes out on the table, and they take turns:

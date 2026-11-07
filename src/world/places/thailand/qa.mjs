@@ -38,7 +38,7 @@ export const screens = [
     reset: true,
     wait: 1800,
   })),
-  // The game table (game-table.html): the table and the unicorn bag in her room, the picker, the Unicorn Dice Game from
+  // The game table (game-table.md): the table and the unicorn bag in her room, the picker, the Unicorn Dice Game from
   // the start, midgame (Gan), sharing a space, finished (her win, and a kind loss with Again), Candy Land, and Chutes and Ladders.
   ...['upstairs?at=game-table', 'table', 'table?vs=gan', 'unicorn', 'unicorn?vs=gan&me=12&them=14', 'unicorn?vs=ken&me=9&them=9', 'unicorn?me=22&them=20&rolls=6', 'unicorn?me=20&them=23&turn=cousin&rolls=2', 'candy', 'candy?vs=ken&me=14&them=17', 'candy?me=31&them=28&deck=orange2', 'chutes', 'chutes?vs=gan&me=13&them=17', 'chutes?me=33&them=30&rolls=5'].map((to) => ({
     name: `thailand-${to.replace(/[?=&,;]/g, '-')}`.slice(0, 60),
@@ -901,7 +901,7 @@ motion.push(
   thaiHouse('wardrobe-mirror', 5, 'wardrobe?drawer=head&look=cowboy,fairy', [['trip:ward:mirror', 3800]]),
   thaiHouse('wardrobe-wand', 4, 'wardrobe', [['trip:ward:wand', 3000]]),
   thaiHouse('wardrobe-door', 4, 'wardrobe?door=crown,hearts,tutu;bow,fairy,dress-mint', [['trip:ward:thing:photo-1', 2500]]),
-  // The game table (game-table.html, greybox 1): she taps the die, it tumbles and settles, her unicorn hops five spaces,
+  // The game table (game-table.md, greybox 1): she taps the die, it tumbles and settles, her unicorn hops five spaces,
   // then BB rolls; a 4 (her unicorn naps, Ken rolls); and the last roll into the castle.
   thaiHouse('table-roll', 7, 'unicorn?rolls=5,3', [['trip:table:die', 6500]]),
   thaiHouse('table-rest', 6, 'unicorn?vs=ken&me=7&them=9&rolls=4,3', [['trip:table:die', 5500]]),
