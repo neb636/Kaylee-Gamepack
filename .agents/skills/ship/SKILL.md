@@ -27,7 +27,7 @@ below. Never paste fifteen links or a page of prose at him.
 2. `npm run build && node scripts/review.mjs --reels` (`--chromium` where WebKit isn't installed; film 3D on the Mac,
    `reel` skill). Then open `review/index.html` at phone width and look at it: does it make sense in ten seconds?
 3. `node scripts/review.mjs --publish` (to the `review-pages` branch, never into main), **then** push your branch.
-   The PR preview copies the page to `<preview>/review/` and adds a table read for any lines the PR changes.
+   The PR preview copies the page to `<preview>/review/` and adds the script sheet of any lines the PR changes.
 
 ## 3. The PR body
 

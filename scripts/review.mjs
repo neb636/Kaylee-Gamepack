@@ -28,7 +28,8 @@
 //
 // Publishing: the media never goes into git history on main or the toy branch. `--publish` commits review/ to the
 // `review-pages` branch in a folder named after the current branch, and the PR preview workflow copies that folder to
-// <preview>/review/ (and adds a table read for any changed lines by itself). So: publish, then push the toy branch.
+// <preview>/review/ (and adds the script sheet of any changed lines by itself, without audio: the runner has no
+// ffmpeg). So: publish, then push the toy branch.
 import { execFileSync, spawnSync } from 'node:child_process'
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import path from 'node:path'

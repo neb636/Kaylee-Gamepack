@@ -39,8 +39,8 @@ after at most two lines? Does Sparkle nag (`spendHint`)? Does each character sou
 ## 3. Put it in front of Dad
 
 Add it to `review/review.json` (`"tableReads": [["<place>", "<group>"]]`), build and publish the review page (`ship`
-skill). The PR preview also adds a table read for every group of lines a PR changes, by itself, so a script change
-never reaches main unheard.
+skill). The PR preview also adds the script sheet of every group of lines a PR changes, by itself (without audio:
+the runner has no ffmpeg), so a script change never reaches main unseen. The audio is yours to record and publish.
 
 His questions here are about taste only, at most three, answerable in a word: "Is the kids' 'Close enough!' funny or
 mean?", "Too much Sparkle before the first snip?" When he answers, change the lines, re-record, and mark the toy notes:
