@@ -52,7 +52,7 @@ test('the bay renders in 3D and every section link lands', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
-test('going back and forth to Agong\'s house leaves no GPU memory behind', async ({ page }) => {
+test('@behavior going back and forth to Agong\'s house leaves no GPU memory behind', async ({ page }) => {
   test.setTimeout(120_000)
   const errors = trackErrors(page)
   await open(page, 'bay')

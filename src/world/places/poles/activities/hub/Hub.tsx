@@ -162,6 +162,7 @@ function Spots({ meta, stamps, side, openActivity }: Pick<PlaceProps, 'meta' | '
           <motion.button
             key={`${side}-${s.id}`}
             aria-label={s.name}
+            data-activity={s.id}
             initial={{ scale: 0 }}
             animate={{ scale: 1, y: s.done ? 0 : [0, -8, 0] }}
             exit={{ scale: 0 }}

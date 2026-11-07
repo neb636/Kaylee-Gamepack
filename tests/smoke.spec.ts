@@ -144,10 +144,14 @@ test('Around the World: map, passport and coloring book open', async ({ page }) 
 
 for (const id of placeIds) {
   test(`place "${id}": every activity loads, stamps save, and the finale awards a trophy`, async ({ page }) => {
+    // A 3D country opens 8-10 activities here, each a 3D scene in a browser with no GPU.
+    test.setTimeout(2 * 60_000)
     const errors = trackErrors(page)
     await start(page, `#/world/${id}`)
     await expect(page.getByRole('button', { name: 'World map' })).toBeVisible()
-    await page.getByRole('button', { name: 'Skip' }).click({ force: true }).catch(() => {})
+    // A country with an opening story shows Skip; the 3D ones (Canada, the Poles, Thailand) open on their map, so
+    // don't wait for it (with no timeout this click waited out the whole test).
+    await page.getByRole('button', { name: 'Skip' }).click({ force: true, timeout: 3000 }).catch(() => {})
 
     // Open each activity spot (the glowing buttons on the country map) and come back.
     await page.waitForTimeout(800)
@@ -174,8 +178,12 @@ for (const id of placeIds) {
     await page.evaluate(() => window.__kayleeWorld?.stampAll())
     await page.reload()
     await page.getByRole('button', { name: /let's play/i }).click()
-    await expect(page.getByRole('button', { name: 'Party' })).toBeVisible()
-    await page.getByRole('button', { name: 'Party' }).click({ force: true })
+    // The finale's button: "Party" on most maps; on the 3D ones it's named for the place (Canada's Pond Hockey pin,
+    // the Poles' "Pole to Pole" spot), so find it by its activity id there.
+    const finale = page.locator('button[aria-label="Party"], button[data-anchor="go:party"], button[data-activity="party"]').first()
+    // Canada's pins stay hidden until the 3D scene has compiled its shaders: wait for it to show, not just exist.
+    await expect(finale).toBeVisible({ timeout: 20_000 })
+    await finale.click({ force: true })
     await expect(page.getByRole('button', { name: 'Back to the map' })).toBeVisible()
 
     await page.evaluate(() => window.__kaylee?.win())
