@@ -144,13 +144,14 @@ test('Around the World: map, passport and coloring book open', async ({ page }) 
 
 for (const id of placeIds) {
   test(`place "${id}": every activity loads, stamps save, and the finale awards a trophy`, async ({ page }) => {
-    // A 3D country (Canada's map, the Poles' globe, Thailand) opens 8-10 activities here, each a 3D scene in a test
-    // browser with no GPU: 30 s isn't enough for that, while a 2D country takes a few.
-    test.setTimeout(3 * 60_000)
+    // A 3D country opens 8-10 activities here, each a 3D scene in a browser with no GPU.
+    test.setTimeout(2 * 60_000)
     const errors = trackErrors(page)
     await start(page, `#/world/${id}`)
     await expect(page.getByRole('button', { name: 'World map' })).toBeVisible()
-    await page.getByRole('button', { name: 'Skip' }).click({ force: true }).catch(() => {})
+    // A country with an opening story shows Skip; the 3D ones (Canada, the Poles, Thailand) open on their map, so
+    // don't wait for it (with no timeout this click waited out the whole test).
+    await page.getByRole('button', { name: 'Skip' }).click({ force: true, timeout: 3000 }).catch(() => {})
 
     // Open each activity spot (the glowing buttons on the country map) and come back.
     await page.waitForTimeout(800)
