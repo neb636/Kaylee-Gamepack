@@ -60,7 +60,8 @@ jobs:
             commit -q -m "Record the voice clips for new and changed lines" -m "Recorded by the PR preview workflow (scripts/generate-voice.mjs)."
           # Someone may have pushed meanwhile: put the clips on top of their commit.
           for try in 1 2 3; do git push origin "HEAD:$BRANCH" && break; git pull -q --rebase origin "$BRANCH"; done
-          git diff --name-only HEAD~1 > "$RUNNER_TEMP/clips.txt"
+          # Only the files that exist: a reworded line's old clip was deleted, and the preview can keep it (unused).
+          git diff --name-only --diff-filter=d HEAD~1 > "$RUNNER_TEMP/clips.txt"
           tar -czf "$RUNNER_TEMP/clips.tgz" -T "$RUNNER_TEMP/clips.txt"
           echo "recorded=true" >> "$GITHUB_OUTPUT"
       - if: steps.record.outputs.recorded == 'true'
