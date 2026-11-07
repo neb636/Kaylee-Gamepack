@@ -1,6 +1,8 @@
 name: PR preview
 
-# Builds every PR and publishes it to .../pr-preview/pr-<number>/ so it can be tried on the iPad.
+# Builds every PR and publishes it to .../pr-preview/pr-<number>/ so it can be tried on the iPad. First, the voices job
+# records any spoken line that has no clip yet (OPENAI_API_KEY secret) and commits the clips to the PR's branch, so no
+# agent needs the key and no line reaches main silent.
 on:
   pull_request:
     types: [opened, reopened, synchronize, closed]
@@ -8,15 +10,82 @@ on:
 permissions:
   contents: write
   pull-requests: write
-
-concurrency:
-  # The main deploy writes to this same branch. A shared group prevents push races.
-  group: gh-pages-publish
-  cancel-in-progress: false
-  queue: max
+  actions: write
 
 jobs:
+  voices:
+    # Only branches of this repo: a fork's PR gets no secrets and can't be pushed to.
+    if: github.event.action != 'closed' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # A newer push to the same PR replaces a run still recording.
+    concurrency:
+      group: voices-${{ github.event.number }}
+      cancel-in-progress: true
+    outputs:
+      recorded: ${{ steps.record.outputs.recorded }}
+    env:
+      BRANCH: ${{ github.head_ref }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - name: Any lines without a clip?
+        id: need
+        run: |
+          # voice-lines.json is written from each lines.ts, so an agent that forgot to run this is covered too.
+          node scripts/world-voice-lines.mjs
+          if node scripts/generate-voice.mjs --check; then echo "missing=false" >> "$GITHUB_OUTPUT"; else echo "missing=true" >> "$GITHUB_OUTPUT"; fi
+      - name: ffmpeg, a static build (apt took 12 minutes)
+        if: steps.need.outputs.missing == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/ffmpeg"
+          curl -sSfL https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz | tar -xJ -C "$RUNNER_TEMP/ffmpeg" --strip-components=1
+          echo "$RUNNER_TEMP/ffmpeg" >> "$GITHUB_PATH"
+      - name: Record the missing clips
+        id: record
+        if: steps.need.outputs.missing == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          : "${OPENAI_API_KEY:?Add the OPENAI_API_KEY repository secret (Settings > Secrets and variables > Actions)}"
+          ffmpeg -version | head -1
+          node scripts/generate-voice.mjs
+          node scripts/generate-voice.mjs --check
+          git add -A src
+          git -c user.name='github-actions[bot]' -c user.email='41898099+github-actions[bot]@users.noreply.github.com' \
+            commit -q -m "Record the voice clips for new and changed lines" -m "Recorded by the PR preview workflow (scripts/generate-voice.mjs)."
+          # Someone may have pushed meanwhile: put the clips on top of their commit.
+          for try in 1 2 3; do git push origin "HEAD:$BRANCH" && break; git pull -q --rebase origin "$BRANCH"; done
+          git diff --name-only HEAD~1 > "$RUNNER_TEMP/clips.txt"
+          tar -czf "$RUNNER_TEMP/clips.tgz" -T "$RUNNER_TEMP/clips.txt"
+          echo "recorded=true" >> "$GITHUB_OUTPUT"
+      - if: steps.record.outputs.recorded == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-clips
+          path: ${{ runner.temp }}/clips.tgz
+          retention-days: 3
+      # A push made with the workflow's own token starts no workflows, so CI is started by hand on the commit with the
+      # clips (a workflow_dispatch run's checks show on the PR like any other).
+      - name: Run CI on the commit with the clips
+        if: steps.record.outputs.recorded == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run ci.yml --ref "$BRANCH"
+
   preview:
+    needs: voices
+    # Also when voices is skipped (a fork, or the PR closing) or fails: the preview never waits on the voices.
+    if: always()
+    # The main deploy writes to gh-pages too. A shared group prevents push races.
+    concurrency:
+      group: gh-pages-publish
+      cancel-in-progress: false
+      queue: max
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -28,6 +97,14 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      # The clips the voices job just recorded (this checkout is the PR as it was pushed, before that commit).
+      - if: github.event.action != 'closed' && needs.voices.outputs.recorded == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: voice-clips
+          path: ${{ runner.temp }}
+      - if: github.event.action != 'closed' && needs.voices.outputs.recorded == 'true'
+        run: tar -xzf "$RUNNER_TEMP/clips.tgz"
       - if: github.event.action != 'closed'
         run: |
           : "${LOCK_CODE:?Set the THAILAND_CODE repository secret to the family code (Thailand is locked behind it)}"

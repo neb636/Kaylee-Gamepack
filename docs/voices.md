@@ -23,9 +23,11 @@ world feel alive and helps a child who can't read know who is talking:
   welcome or menu line plays once per visit (`useSayOnMount(line, { once: true })`, `firstTime(key)`), and a hub only
   talks when something is new (her first look, a new stamp, the party).
 - `node scripts/voice-audition.mjs <speaker> <voice> <voice>...` renders samples to compare. Generation trims silence,
-  matches loudness, and transcribes each new clip to flag ones that don't say the right words. Locally it needs
-  `OPENAI_API_KEY` in `.env` and ffmpeg (in a cloud session, the environment's secret). Run it once per batch of
-  lines, not after every line.
+  matches loudness, and transcribes each new clip to flag ones that don't say the right words. **On a PR it
+  runs by itself:** the PR preview workflow's `voices` job writes `voice-lines.json`, records every line without a clip
+  with the `OPENAI_API_KEY` repository secret, commits the clips to the branch, gives them to the preview build and
+  re-runs CI. So agents need no key. Locally (auditions, or to hear lines before pushing) it needs `OPENAI_API_KEY` in
+  `.env` and ffmpeg.
 
 ## The table read
 

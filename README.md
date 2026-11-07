@@ -480,7 +480,8 @@ Fixes go faster: Dad asks, the AI fixes it with a short before-and-after clip, D
   Trophies are saved on the iPad (localStorage).
 - Spoken lines are pre-recorded with OpenAI text-to-speech, one voice per character (`src/sdk/cast.json` plus a
   `cast.json` per country). `node scripts/generate-voice.mjs` records the clips from each folder's `voice-lines.json`
-  (put `OPENAI_API_KEY` in `.env`) and they're committed; the iPad plays bundled audio files.
+  and they're committed; the iPad plays bundled audio files. On a PR the preview workflow records new lines by itself
+  (the `OPENAI_API_KEY` repository secret); locally, put the key in `.env`.
 - Characters are live: SVG puppets in the 2D countries (`src/sdk/puppet/`, try them at `#/world/puppets`), and a toon
   3D family in Thailand (`src/world/places/thailand/characters/`, inspect them all at `#/world/characters`). They blink, watch her finger, talk with moving
   mouths, and act things out.
