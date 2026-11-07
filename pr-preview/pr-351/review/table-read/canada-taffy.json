@@ -1,0 +1,684 @@
+{
+  "kind": "table-read",
+  "place": "canada",
+  "group": "taffy",
+  "title": "Canada › Taffy",
+  "intro": "",
+  "page": "canada-taffy.html",
+  "audio": "canada-taffy.mp3",
+  "lines": 36,
+  "seconds": 75,
+  "missing": 0,
+  "names": 1,
+  "flags": [
+    {
+      "key": "taffy.story.0",
+      "text": "Bonjour! My cousins want maple taffy!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "taffy.pour",
+      "text": "Tip the pot and pour syrup on the snow!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "taffy.empty",
+      "text": "The pot is empty! Tap the maple tree.",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "taffy.tree",
+      "text": "Sap from the maple tree makes the syrup!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "taffy.mooseFull",
+      "text": "Mmm. Giant. Thank you.",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "taffy",
+        "story",
+        "0"
+      ],
+      "text": "Bonjour! My cousins want maple taffy!",
+      "voice": "maple",
+      "key": "taffy.story.0",
+      "part": "taffy › story",
+      "when": "The story beat (Maple, then her little cousin).",
+      "ms": 3629,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        0,
+        3.63
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "pour"
+      ],
+      "text": "Tip the pot and pour syrup on the snow!",
+      "voice": "sparkle",
+      "key": "taffy.pour",
+      "part": "taffy",
+      "when": "Sparkle: one line when something new starts, and the hints when she's stuck (~8 s).",
+      "ms": 3170,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        5.25,
+        8.42
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "set"
+      ],
+      "text": "It's set! Roll it up on a stick.",
+      "voice": "sparkle",
+      "key": "taffy.set",
+      "part": "taffy",
+      "when": "",
+      "ms": 2998,
+      "flags": [],
+      "span": [
+        8.77,
+        11.77
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "hot"
+      ],
+      "text": "Still hot! Let it set.",
+      "voice": "sparkle",
+      "key": "taffy.hot",
+      "part": "taffy",
+      "when": "",
+      "ms": 2952,
+      "flags": [],
+      "span": [
+        12.12,
+        15.07
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "rest"
+      ],
+      "text": "Roll up the rest!",
+      "voice": "sparkle",
+      "key": "taffy.rest",
+      "part": "taffy",
+      "when": "",
+      "ms": 1346,
+      "flags": [],
+      "span": [
+        15.42,
+        16.77
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "empty"
+      ],
+      "text": "The pot is empty! Tap the maple tree.",
+      "voice": "sparkle",
+      "key": "taffy.empty",
+      "part": "taffy",
+      "when": "",
+      "ms": 3893,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        17.12,
+        21.01
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "tree"
+      ],
+      "text": "Sap from the maple tree makes the syrup!",
+      "voice": "sparkle",
+      "key": "taffy.tree",
+      "part": "taffy",
+      "when": "",
+      "ms": 3370,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        21.36,
+        24.73
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "shapes"
+      ],
+      "text": "Pour the shape on Maple's card!",
+      "voice": "sparkle",
+      "key": "taffy.shapes",
+      "part": "taffy",
+      "when": "",
+      "ms": 2529,
+      "flags": [],
+      "span": [
+        25.08,
+        27.61
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "orders"
+      ],
+      "text": "Make each friend the size they want!",
+      "voice": "sparkle",
+      "key": "taffy.orders",
+      "part": "taffy",
+      "when": "",
+      "ms": 2991,
+      "flags": [],
+      "span": [
+        27.96,
+        30.95
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "give"
+      ],
+      "text": "Who gets this one?",
+      "voice": "sparkle",
+      "key": "taffy.give",
+      "part": "taffy",
+      "when": "",
+      "ms": 1266,
+      "flags": [],
+      "span": [
+        31.3,
+        32.56
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "card",
+        "heart"
+      ],
+      "text": "A heart, please!",
+      "voice": "maple",
+      "key": "taffy.card.heart",
+      "part": "taffy › card",
+      "when": "Maple's cards (shapes), and her crunches.",
+      "ms": 1403,
+      "flags": [],
+      "span": [
+        34.18,
+        35.59
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "card",
+        "leaf"
+      ],
+      "text": "A maple leaf!",
+      "voice": "maple",
+      "key": "taffy.card.leaf",
+      "part": "taffy › card",
+      "when": "Maple's cards (shapes), and her crunches.",
+      "ms": 1214,
+      "flags": [],
+      "span": [
+        35.94,
+        37.15
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "card",
+        "loop"
+      ],
+      "text": "A big loop!",
+      "voice": "maple",
+      "key": "taffy.card.loop",
+      "part": "taffy › card",
+      "when": "Maple's cards (shapes), and her crunches.",
+      "ms": 983,
+      "flags": [],
+      "span": [
+        37.5,
+        38.48
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "card",
+        "k"
+      ],
+      "text": "The letter K!",
+      "voice": "maple",
+      "key": "taffy.card.k",
+      "part": "taffy › card",
+      "when": "Maple's cards (shapes), and her crunches.",
+      "ms": 1029,
+      "flags": [],
+      "span": [
+        38.83,
+        39.86
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "pretty"
+      ],
+      "text": "Ooh, so pretty!",
+      "voice": "maple",
+      "key": "taffy.pretty",
+      "part": "taffy",
+      "when": "",
+      "ms": 1606,
+      "flags": [],
+      "span": [
+        41.48,
+        43.09
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "crunch",
+        "0"
+      ],
+      "text": "Mmm, crunchy!",
+      "voice": "maple",
+      "key": "taffy.crunch.0",
+      "part": "taffy › crunch",
+      "when": "",
+      "ms": 1826,
+      "flags": [],
+      "span": [
+        44.71,
+        46.53
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "crunch",
+        "1"
+      ],
+      "text": "Miam miam!",
+      "voice": "maple",
+      "key": "taffy.crunch.1",
+      "part": "taffy › crunch",
+      "when": "",
+      "ms": 1467,
+      "flags": [],
+      "span": [
+        46.88,
+        48.35
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "crunch",
+        "2"
+      ],
+      "text": "So sweet!",
+      "voice": "maple",
+      "key": "taffy.crunch.2",
+      "part": "taffy › crunch",
+      "when": "",
+      "ms": 1096,
+      "flags": [],
+      "span": [
+        48.7,
+        49.8
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "tooBig"
+      ],
+      "text": "Too big for me!",
+      "voice": "maple",
+      "key": "taffy.tooBig",
+      "part": "taffy",
+      "when": "",
+      "ms": 1271,
+      "flags": [],
+      "span": [
+        51.42,
+        52.69
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "mapleHi"
+      ],
+      "text": "Hee hee! That tickles!",
+      "voice": "maple",
+      "key": "taffy.mapleHi",
+      "part": "taffy",
+      "when": "",
+      "ms": 1560,
+      "flags": [],
+      "span": [
+        53.04,
+        54.6
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "cousinYum"
+      ],
+      "text": "Yummy yummy!",
+      "voice": "cousin",
+      "key": "taffy.cousinYum",
+      "part": "taffy",
+      "when": "The friends at the table (orders), in their own voices.",
+      "ms": 1634,
+      "flags": [],
+      "span": [
+        54.95,
+        56.58
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "cousinFull"
+      ],
+      "text": "Merci! My tummy is full!",
+      "voice": "cousin",
+      "key": "taffy.cousinFull",
+      "part": "taffy",
+      "when": "",
+      "ms": 2725,
+      "flags": [],
+      "span": [
+        56.93,
+        59.66
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "cousinHi"
+      ],
+      "text": "Hi hi!",
+      "voice": "cousin",
+      "key": "taffy.cousinHi",
+      "part": "taffy",
+      "when": "",
+      "ms": 898,
+      "flags": [],
+      "span": [
+        60.01,
+        60.9
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "chipYum"
+      ],
+      "text": "Ooh! More, please!",
+      "voice": "chipmunk",
+      "key": "taffy.chipYum",
+      "part": "taffy",
+      "when": "",
+      "ms": 2145,
+      "flags": [],
+      "span": [
+        61.25,
+        63.4
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "chipFull"
+      ],
+      "text": "Tiny and perfect!",
+      "voice": "chipmunk",
+      "key": "taffy.chipFull",
+      "part": "taffy",
+      "when": "",
+      "ms": 1625,
+      "flags": [],
+      "span": [
+        63.75,
+        65.37
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "chipBig"
+      ],
+      "text": "Whoa! Too big!",
+      "voice": "chipmunk",
+      "key": "taffy.chipBig",
+      "part": "taffy",
+      "when": "",
+      "ms": 2018,
+      "flags": [],
+      "span": [
+        65.72,
+        67.74
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "chipHi"
+      ],
+      "text": "Hello hello!",
+      "voice": "chipmunk",
+      "key": "taffy.chipHi",
+      "part": "taffy",
+      "when": "",
+      "ms": 1107,
+      "flags": [],
+      "span": [
+        68.09,
+        69.2
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "owlYum"
+      ],
+      "text": "Hoo! I like swirls.",
+      "voice": "owl",
+      "key": "taffy.owlYum",
+      "part": "taffy",
+      "when": "",
+      "ms": 1846,
+      "flags": [],
+      "span": [
+        69.55,
+        71.39
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "owlFull"
+      ],
+      "text": "Hoo hoo! A swirl!",
+      "voice": "owl",
+      "key": "taffy.owlFull",
+      "part": "taffy",
+      "when": "",
+      "ms": 2855,
+      "flags": [],
+      "span": [
+        71.74,
+        74.6
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "owlHi"
+      ],
+      "text": "Whooo is that?",
+      "voice": "owl",
+      "key": "taffy.owlHi",
+      "part": "taffy",
+      "when": "",
+      "ms": 1350,
+      "flags": [],
+      "span": [
+        74.95,
+        76.3
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "mooseYum"
+      ],
+      "text": "Mmm. Bigger, please.",
+      "voice": "moose",
+      "key": "taffy.mooseYum",
+      "part": "taffy",
+      "when": "",
+      "ms": 2440,
+      "flags": [],
+      "span": [
+        76.65,
+        79.09
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "mooseFull"
+      ],
+      "text": "Mmm. Giant. Thank you.",
+      "voice": "moose",
+      "key": "taffy.mooseFull",
+      "part": "taffy",
+      "when": "",
+      "ms": 4038,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        79.44,
+        83.48
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "mooseGulp"
+      ],
+      "text": "Gulp! Yum.",
+      "voice": "moose",
+      "key": "taffy.mooseGulp",
+      "part": "taffy",
+      "when": "",
+      "ms": 2123,
+      "flags": [],
+      "span": [
+        83.83,
+        85.95
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "mooseHi"
+      ],
+      "text": "Hello, little one.",
+      "voice": "moose",
+      "key": "taffy.mooseHi",
+      "part": "taffy",
+      "when": "",
+      "ms": 1721,
+      "flags": [],
+      "span": [
+        86.3,
+        88.02
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "share"
+      ],
+      "text": "Everybody, crunch!",
+      "voice": "maple",
+      "key": "taffy.share",
+      "part": "taffy",
+      "when": "Everyone crunches (the stamp moment: her name once).",
+      "ms": 1723,
+      "flags": [],
+      "span": [
+        88.37,
+        90.09
+      ]
+    },
+    {
+      "path": [
+        "taffy",
+        "thanks"
+      ],
+      "text": "Merci, Kaylee! Best taffy ever!",
+      "voice": "maple",
+      "key": "taffy.thanks",
+      "part": "taffy",
+      "when": "",
+      "ms": 2712,
+      "flags": [
+        "name"
+      ],
+      "span": [
+        90.44,
+        93.16
+      ]
+    }
+  ]
+}
