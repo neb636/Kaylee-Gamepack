@@ -1,0 +1,26 @@
+{
+  "kind": "reel",
+  "name": "sugar-snow",
+  "title": "Sugar snow",
+  "video": "sugar-snow.mp4",
+  "gif": "sugar-snow.gif",
+  "seconds": 16,
+  "browser": "chromium",
+  "viewport": "ipad-landscape",
+  "moments": [
+    {
+      "name": "canada-taffy-pour",
+      "where": "canada-taffy-pour",
+      "seconds": 9,
+      "fps": 17.4,
+      "status": "ok"
+    },
+    {
+      "name": "Canada taffy share",
+      "where": "#/world/canada/taffy/share",
+      "seconds": 4,
+      "fps": 15.7,
+      "status": "ok"
+    }
+  ]
+}
