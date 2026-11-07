@@ -1,0 +1,422 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "samet.sandcastle",
+  "title": "Thailand › Samet › Sandcastle",
+  "intro": "The sandcastle at Ao Hin Khok (sandcastle/): dig, towers, the tide.",
+  "page": "thailand-samet-sandcastle.html",
+  "audio": "thailand-samet-sandcastle.mp3",
+  "lines": 20,
+  "seconds": 49,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "samet.sandcastle.tide",
+      "text": "The sea is coming! Dig a river to it!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.sandcastle.tideFact",
+      "text": "The sea comes up the beach and goes back, twice a day!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.sandcastle.crab",
+      "text": "A ghost crab! It runs sideways!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.sandcastle.sneeze",
+      "text": "Ah... ah... choo!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "hi"
+      ],
+      "text": "Let's build a sandcastle!",
+      "voice": "nick",
+      "key": "samet.sandcastle.hi",
+      "part": "samet › sandcastle",
+      "when": "Daddy as it opens, then Sparkle's line for each round (dig at once; the moulds and the tide move on by themselves).",
+      "ms": 2064,
+      "flags": [],
+      "span": [
+        0,
+        1.97
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "dig"
+      ],
+      "text": "Dig the sand with your finger!",
+      "voice": "sparkle",
+      "key": "samet.sandcastle.dig",
+      "part": "samet › sandcastle",
+      "when": "",
+      "ms": 2208,
+      "flags": [],
+      "span": [
+        2.36,
+        4.48
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "towers"
+      ],
+      "text": "Tap a bucket to make a tower!",
+      "voice": "sparkle",
+      "key": "samet.sandcastle.towers",
+      "part": "samet › sandcastle",
+      "when": "",
+      "ms": 2688,
+      "flags": [],
+      "span": [
+        4.87,
+        7.45
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "tide"
+      ],
+      "text": "The sea is coming! Dig a river to it!",
+      "voice": "sparkle",
+      "key": "samet.sandcastle.tide",
+      "part": "samet › sandcastle",
+      "when": "",
+      "ms": 4152,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        7.83,
+        11.81
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "filled"
+      ],
+      "text": "Water in the moat! Hooray!",
+      "voice": "nick",
+      "key": "samet.sandcastle.filled",
+      "part": "samet › sandcastle",
+      "when": "The moat fills from the sea; the tide fact (Sparkle, after the fill).",
+      "ms": 2688,
+      "flags": [],
+      "span": [
+        12.19,
+        14.77
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "tideFact"
+      ],
+      "text": "The sea comes up the beach and goes back, twice a day!",
+      "voice": "sparkle",
+      "key": "samet.sandcastle.tideFact",
+      "part": "samet › sandcastle",
+      "when": "",
+      "ms": 4536,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        15.16,
+        19.51
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "washed"
+      ],
+      "text": "Oh no! Build it again!",
+      "voice": "nick",
+      "key": "samet.sandcastle.washed",
+      "part": "samet › sandcastle",
+      "when": "The big wave takes a tower's front; a crab pops out of a hole; the hermit crab moves in.",
+      "ms": 2280,
+      "flags": [],
+      "span": [
+        19.89,
+        22.07
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "crab"
+      ],
+      "text": "A ghost crab! It runs sideways!",
+      "voice": "sparkle",
+      "key": "samet.sandcastle.crab",
+      "part": "samet › sandcastle",
+      "when": "",
+      "ms": 3192,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        22.46,
+        25.52
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "hermit"
+      ],
+      "text": "A hermit crab moved in!",
+      "voice": "sparkle",
+      "key": "samet.sandcastle.hermit",
+      "part": "samet › sandcastle",
+      "when": "",
+      "ms": 2016,
+      "flags": [],
+      "span": [
+        25.91,
+        27.84
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "buried"
+      ],
+      "text": "Help! I'm a sandcastle!",
+      "voice": "nick",
+      "key": "samet.sandcastle.buried",
+      "part": "samet › sandcastle",
+      "when": "Burying Daddy (the first time he's all covered), his sneeze, his toes (in turn).",
+      "ms": 2040,
+      "flags": [],
+      "span": [
+        28.23,
+        30.19
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "sneeze"
+      ],
+      "text": "Ah... ah... choo!",
+      "voice": "nick",
+      "key": "samet.sandcastle.sneeze",
+      "part": "samet › sandcastle",
+      "when": "",
+      "ms": 3694,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        30.57,
+        34.16
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "toes",
+        "0"
+      ],
+      "text": "Hee hee! That tickles!",
+      "voice": "nick",
+      "key": "samet.sandcastle.toes.0",
+      "part": "samet › sandcastle › toes",
+      "when": "",
+      "ms": 2472,
+      "flags": [],
+      "span": [
+        35.85,
+        38.23
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "toes",
+        "1"
+      ],
+      "text": "My toes!",
+      "voice": "nick",
+      "key": "samet.sandcastle.toes.1",
+      "part": "samet › sandcastle › toes",
+      "when": "",
+      "ms": 1440,
+      "flags": [],
+      "span": [
+        38.61,
+        39.99
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "dad",
+        "0"
+      ],
+      "text": "Bury me in sand!",
+      "voice": "nick",
+      "key": "samet.sandcastle.dad.0",
+      "part": "samet › sandcastle › dad",
+      "when": "Pokes, in turn: Daddy, Mommy on the blanket.",
+      "ms": 1872,
+      "flags": [],
+      "span": [
+        41.69,
+        43.48
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "dad",
+        "1"
+      ],
+      "text": "Great castle!",
+      "voice": "nick",
+      "key": "samet.sandcastle.dad.1",
+      "part": "samet › sandcastle › dad",
+      "when": "",
+      "ms": 1056,
+      "flags": [],
+      "span": [
+        43.87,
+        44.89
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "mommy",
+        "0"
+      ],
+      "text": "So pretty!",
+      "voice": "ji",
+      "key": "samet.sandcastle.mommy.0",
+      "part": "samet › sandcastle › mommy",
+      "when": "",
+      "ms": 1104,
+      "flags": [],
+      "span": [
+        46.58,
+        47.64
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "mommy",
+        "1"
+      ],
+      "text": "A princess castle!",
+      "voice": "ji",
+      "key": "samet.sandcastle.mommy.1",
+      "part": "samet › sandcastle › mommy",
+      "when": "",
+      "ms": 2736,
+      "flags": [],
+      "span": [
+        48.03,
+        50.65
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "hint",
+        "dig"
+      ],
+      "text": "Drag your finger in the sand!",
+      "voice": "sparkle",
+      "key": "samet.sandcastle.hint.dig",
+      "part": "samet › sandcastle › hint",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2424,
+      "flags": [],
+      "span": [
+        52.35,
+        54.67
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "hint",
+        "towers"
+      ],
+      "text": "Tap a bucket!",
+      "voice": "sparkle",
+      "key": "samet.sandcastle.hint.towers",
+      "part": "samet › sandcastle › hint",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 1440,
+      "flags": [],
+      "span": [
+        55.06,
+        56.44
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "sandcastle",
+        "hint",
+        "tide"
+      ],
+      "text": "Dig a line down to the sea!",
+      "voice": "sparkle",
+      "key": "samet.sandcastle.hint.tide",
+      "part": "samet › sandcastle › hint",
+      "when": "Sparkle, after a while with nothing done.",
+      "ms": 2712,
+      "flags": [],
+      "span": [
+        56.83,
+        59.43
+      ]
+    }
+  ]
+}

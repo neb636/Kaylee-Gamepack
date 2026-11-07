@@ -1,0 +1,396 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "samet.lunch",
+  "title": "Thailand › Samet › Lunch",
+  "intro": "Lunch on the deck at Ao Prao (hideseek/lunch.ts).",
+  "page": "thailand-samet-lunch.html",
+  "audio": "thailand-samet-lunch.mp3",
+  "lines": 19,
+  "seconds": 35,
+  "missing": 0,
+  "names": 0,
+  "flags": [
+    {
+      "key": "samet.lunch.start",
+      "text": "Tap the bread basket!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.lunch.aroi",
+      "text": "Aroi mak! So yummy!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.lunch.hint.basket",
+      "text": "Tap the bread basket!",
+      "flags": [
+        "twice"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "hi"
+      ],
+      "text": "Lunch time! Who wants bread?",
+      "voice": "nick",
+      "key": "samet.lunch.hi",
+      "part": "samet › lunch",
+      "when": "Daddy passes the rolls, Mommy brings the coconut and the mango sticky rice; Sparkle's one line, and what to do after a while with nothing done.",
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        0,
+        2.06
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "start"
+      ],
+      "text": "Tap the bread basket!",
+      "voice": "sparkle",
+      "key": "samet.lunch.start",
+      "part": "samet › lunch",
+      "when": "",
+      "ms": 1560,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        2.45,
+        3.92
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "pass",
+        "0"
+      ],
+      "text": "Here you go!",
+      "voice": "nick",
+      "key": "samet.lunch.pass.0",
+      "part": "samet › lunch › pass",
+      "when": "Daddy passing a roll (in turn), then the coconut, the rice, the last slurp and the last bite.",
+      "ms": 792,
+      "flags": [],
+      "span": [
+        5.61,
+        6.36
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "pass",
+        "1"
+      ],
+      "text": "Catch!",
+      "voice": "nick",
+      "key": "samet.lunch.pass.1",
+      "part": "samet › lunch › pass",
+      "when": "",
+      "ms": 576,
+      "flags": [],
+      "span": [
+        6.74,
+        7.28
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "pass",
+        "2"
+      ],
+      "text": "Another one? Ha ha!",
+      "voice": "nick",
+      "key": "samet.lunch.pass.2",
+      "part": "samet › lunch › pass",
+      "when": "",
+      "ms": 1560,
+      "flags": [],
+      "span": [
+        7.67,
+        9.15
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "coconut"
+      ],
+      "text": "A coconut! Sip it!",
+      "voice": "ji",
+      "key": "samet.lunch.coconut",
+      "part": "samet › lunch",
+      "when": "",
+      "ms": 1896,
+      "flags": [],
+      "span": [
+        10.83,
+        12.62
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "slurp"
+      ],
+      "text": "What a big slurp!",
+      "voice": "nick",
+      "key": "samet.lunch.slurp",
+      "part": "samet › lunch",
+      "when": "",
+      "ms": 2328,
+      "flags": [],
+      "span": [
+        13,
+        15.21
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "rice"
+      ],
+      "text": "Mango sticky rice!",
+      "voice": "ji",
+      "key": "samet.lunch.rice",
+      "part": "samet › lunch",
+      "when": "",
+      "ms": 1536,
+      "flags": [],
+      "span": [
+        15.6,
+        17.04
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "aroi"
+      ],
+      "text": "Aroi mak! So yummy!",
+      "voice": "ji",
+      "key": "samet.lunch.aroi",
+      "part": "samet › lunch",
+      "when": "",
+      "ms": 3024,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        17.43,
+        20.3
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "full"
+      ],
+      "text": "Full tummy! Hide and seek?",
+      "voice": "nick",
+      "key": "samet.lunch.full",
+      "part": "samet › lunch",
+      "when": "",
+      "ms": 2856,
+      "flags": [],
+      "span": [
+        20.67,
+        23.38
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "photo",
+        "0"
+      ],
+      "text": "Smile!",
+      "voice": "ji",
+      "key": "samet.lunch.photo.0",
+      "part": "samet › lunch › photo",
+      "when": "Tap Mommy (her photo, in turn); the lizard and the squirrel below, the first time.",
+      "ms": 1032,
+      "flags": [],
+      "span": [
+        25.06,
+        26.04
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "photo",
+        "1"
+      ],
+      "text": "Cheese!",
+      "voice": "ji",
+      "key": "samet.lunch.photo.1",
+      "part": "samet › lunch › photo",
+      "when": "",
+      "ms": 840,
+      "flags": [],
+      "span": [
+        26.42,
+        27.22
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "photo",
+        "2"
+      ],
+      "text": "So cute!",
+      "voice": "ji",
+      "key": "samet.lunch.photo.2",
+      "part": "samet › lunch › photo",
+      "when": "",
+      "ms": 1680,
+      "flags": [],
+      "span": [
+        27.6,
+        29.19
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "lizard"
+      ],
+      "text": "A big lizard! Hello!",
+      "voice": "nick",
+      "key": "samet.lunch.lizard",
+      "part": "samet › lunch",
+      "when": "",
+      "ms": 2496,
+      "flags": [],
+      "span": [
+        30.87,
+        33.23
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "squirrel"
+      ],
+      "text": "A squirrel! Up it goes!",
+      "voice": "ji",
+      "key": "samet.lunch.squirrel",
+      "part": "samet › lunch",
+      "when": "",
+      "ms": 2544,
+      "flags": [],
+      "span": [
+        33.61,
+        36.02
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "hint",
+        "basket"
+      ],
+      "text": "Tap the bread basket!",
+      "voice": "sparkle",
+      "key": "samet.lunch.hint.basket",
+      "part": "samet › lunch › hint",
+      "when": "",
+      "ms": 1560,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        37.7,
+        39.17
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "hint",
+        "roll"
+      ],
+      "text": "Tap the roll to take a bite!",
+      "voice": "sparkle",
+      "key": "samet.lunch.hint.roll",
+      "part": "samet › lunch › hint",
+      "when": "",
+      "ms": 2040,
+      "flags": [],
+      "span": [
+        39.56,
+        41.49
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "hint",
+        "coconut"
+      ],
+      "text": "Hold your finger on the coconut!",
+      "voice": "sparkle",
+      "key": "samet.lunch.hint.coconut",
+      "part": "samet › lunch › hint",
+      "when": "",
+      "ms": 2256,
+      "flags": [],
+      "span": [
+        41.88,
+        44.02
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "lunch",
+        "hint",
+        "rice"
+      ],
+      "text": "Tap the mango sticky rice!",
+      "voice": "sparkle",
+      "key": "samet.lunch.hint.rice",
+      "part": "samet › lunch › hint",
+      "when": "",
+      "ms": 2160,
+      "flags": [],
+      "span": [
+        44.39,
+        46.44
+      ]
+    }
+  ]
+}

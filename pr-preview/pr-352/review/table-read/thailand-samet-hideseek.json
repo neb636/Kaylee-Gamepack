@@ -1,0 +1,1151 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "samet.hideseek",
+  "title": "Thailand › Samet › Hideseek",
+  "intro": "Hide and seek by the driftwood tree (hideseek/).",
+  "page": "thailand-samet-hideseek.html",
+  "audio": "thailand-samet-hideseek.mp3",
+  "lines": 49,
+  "seconds": 67,
+  "missing": 0,
+  "names": 1,
+  "flags": [
+    {
+      "key": "samet.hideseek.count.0",
+      "text": "One!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.count.1",
+      "text": "Two!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.count.2",
+      "text": "Three!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.count.3",
+      "text": "Four!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.count.4",
+      "text": "Five!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.count.5",
+      "text": "Six!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.count.6",
+      "text": "Seven!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.count.7",
+      "text": "Eight!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.count.8",
+      "text": "Nine!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.count.9",
+      "text": "Ten!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.dadCount.0",
+      "text": "One!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.dadCount.1",
+      "text": "Two!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.dadCount.2",
+      "text": "Three!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.dadCount.3",
+      "text": "Four!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.dadCount.4",
+      "text": "Five!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.dadCount.5",
+      "text": "Six!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.dadCount.6",
+      "text": "Seven!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.dadCount.7",
+      "text": "Eight!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.dadCount.8",
+      "text": "Nine!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.dadCount.9",
+      "text": "Ten!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.notHere.0",
+      "text": "Not here!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.achoo",
+      "text": "Ah... ah... choo!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.hideseek.look.1",
+      "text": "Not here!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.hideseek.hint.seek",
+      "text": "Where is Daddy? Listen!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "close"
+      ],
+      "text": "Close your eyes and count!",
+      "voice": "nick",
+      "key": "samet.hideseek.close",
+      "part": "samet › hideseek",
+      "when": "Daddy says what's happening and plays it up in his own voice; Sparkle counts with Kaylee (her eyes shut), says what to do once a round, and after a while with nothing done; Kaylee never talks (she giggles).",
+      "ms": 2376,
+      "flags": [],
+      "span": [
+        0,
+        2.22
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "count",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.count.0",
+      "part": "samet › hideseek › count",
+      "when": "Sparkle counting with her (round 1 and 2), Daddy counting in her turn (up to his count knob's most).",
+      "ms": 701,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        3.88,
+        4.6
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "count",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.count.1",
+      "part": "samet › hideseek › count",
+      "when": "",
+      "ms": 501,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        4.98,
+        5.49
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "count",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.count.2",
+      "part": "samet › hideseek › count",
+      "when": "The Racing Slide (games/race/). Sparkle says what's new each race and counts down; Daddy races her and dives into the balls head first; she always wins.",
+      "ms": 589,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        5.88,
+        6.49
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "count",
+        "3"
+      ],
+      "text": "Four!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.count.3",
+      "part": "samet › hideseek › count",
+      "when": "The count, one number as each hold pops (up to round 3's seven).",
+      "ms": 642,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        6.86,
+        7.51
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "count",
+        "4"
+      ],
+      "text": "Five!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.count.4",
+      "part": "samet › hideseek › count",
+      "when": "The count as her score climbs (rounds 1 and 3).",
+      "ms": 854,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        7.9,
+        8.75
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "count",
+        "5"
+      ],
+      "text": "Six!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.count.5",
+      "part": "samet › hideseek › count",
+      "when": "",
+      "ms": 844,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        9.13,
+        9.98
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "count",
+        "6"
+      ],
+      "text": "Seven!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.count.6",
+      "part": "samet › hideseek › count",
+      "when": "",
+      "ms": 765,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        10.36,
+        11.12
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "count",
+        "7"
+      ],
+      "text": "Eight!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.count.7",
+      "part": "samet › hideseek › count",
+      "when": "",
+      "ms": 549,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        11.5,
+        12.06
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "count",
+        "8"
+      ],
+      "text": "Nine!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.count.8",
+      "part": "samet › hideseek › count",
+      "when": "",
+      "ms": 644,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        12.45,
+        13.1
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "count",
+        "9"
+      ],
+      "text": "Ten!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.count.9",
+      "part": "samet › hideseek › count",
+      "when": "",
+      "ms": 657,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        13.47,
+        14.15
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "0"
+      ],
+      "text": "One!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.0",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 576,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        15.81,
+        16.35
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "1"
+      ],
+      "text": "Two!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.1",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 576,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        16.73,
+        17.27
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "2"
+      ],
+      "text": "Three!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.2",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 768,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        17.65,
+        18.37
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "3"
+      ],
+      "text": "Four!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.3",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 768,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        18.75,
+        19.46
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "4"
+      ],
+      "text": "Five!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.4",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 720,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        19.85,
+        20.52
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "5"
+      ],
+      "text": "Six!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.5",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 792,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        20.9,
+        21.64
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "6"
+      ],
+      "text": "Seven!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.6",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 696,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        22.03,
+        22.67
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "7"
+      ],
+      "text": "Eight!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.7",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 360,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        23.05,
+        23.39
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "8"
+      ],
+      "text": "Nine!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.8",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 864,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        23.77,
+        24.58
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "9"
+      ],
+      "text": "Ten!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.9",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 696,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        24.96,
+        25.61
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "10"
+      ],
+      "text": "Eleven!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.10",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 864,
+      "flags": [],
+      "span": [
+        26,
+        26.8
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "dadCount",
+        "11"
+      ],
+      "text": "Twelve!",
+      "voice": "nick",
+      "key": "samet.hideseek.dadCount.11",
+      "part": "samet › hideseek › dadCount",
+      "when": "",
+      "ms": 768,
+      "flags": [],
+      "span": [
+        27.18,
+        27.9
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "find"
+      ],
+      "text": "Find Daddy!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.find",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 1464,
+      "flags": [],
+      "span": [
+        29.56,
+        30.93
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "tricky"
+      ],
+      "text": "Daddy hides better now!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.tricky",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 2208,
+      "flags": [],
+      "span": [
+        31.3,
+        33.37
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "notHere",
+        "0"
+      ],
+      "text": "Not here!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.notHere.0",
+      "part": "samet › hideseek › notHere",
+      "when": "",
+      "ms": 1224,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        35.03,
+        36.17
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "notHere",
+        "1"
+      ],
+      "text": "Hmm, not there!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.notHere.1",
+      "part": "samet › hideseek › notHere",
+      "when": "",
+      "ms": 1776,
+      "flags": [],
+      "span": [
+        36.56,
+        38.22
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "found",
+        "0"
+      ],
+      "text": "You found me!",
+      "voice": "nick",
+      "key": "samet.hideseek.found.0",
+      "part": "samet › hideseek › found",
+      "when": "",
+      "ms": 1008,
+      "flags": [],
+      "span": [
+        39.87,
+        40.82
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "found",
+        "1"
+      ],
+      "text": "Ha ha! Found!",
+      "voice": "nick",
+      "key": "samet.hideseek.found.1",
+      "part": "samet › hideseek › found",
+      "when": "",
+      "ms": 2664,
+      "flags": [],
+      "span": [
+        41.2,
+        43.69
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "found",
+        "2"
+      ],
+      "text": "Good finding!",
+      "voice": "nick",
+      "key": "samet.hideseek.found.2",
+      "part": "samet › hideseek › found",
+      "when": "",
+      "ms": 1128,
+      "flags": [],
+      "span": [
+        44.07,
+        45.12
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "achoo"
+      ],
+      "text": "Ah... ah... choo!",
+      "voice": "nick",
+      "key": "samet.hideseek.achoo",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 3694,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        46.78,
+        50.28
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "hehe"
+      ],
+      "text": "Hee hee hee!",
+      "voice": "nick",
+      "key": "samet.hideseek.hehe",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 768,
+      "flags": [],
+      "span": [
+        50.67,
+        51.38
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "myTurn"
+      ],
+      "text": "My turn to count! Go hide!",
+      "voice": "nick",
+      "key": "samet.hideseek.myTurn",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 2712,
+      "flags": [],
+      "span": [
+        51.76,
+        54.29
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "hide"
+      ],
+      "text": "Hide in a glowing spot!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.hide",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 2736,
+      "flags": [],
+      "span": [
+        54.68,
+        57.24
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "peek"
+      ],
+      "text": "Oops! No peeking!",
+      "voice": "nick",
+      "key": "samet.hideseek.peek",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 1704,
+      "flags": [],
+      "span": [
+        57.62,
+        59.21
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "ready"
+      ],
+      "text": "Ready or not!",
+      "voice": "nick",
+      "key": "samet.hideseek.ready",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 1584,
+      "flags": [],
+      "span": [
+        59.59,
+        61.07
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "look",
+        "0"
+      ],
+      "text": "Is she here?",
+      "voice": "nick",
+      "key": "samet.hideseek.look.0",
+      "part": "samet › hideseek › look",
+      "when": "",
+      "ms": 864,
+      "flags": [],
+      "span": [
+        62.73,
+        63.53
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "look",
+        "1"
+      ],
+      "text": "Not here!",
+      "voice": "nick",
+      "key": "samet.hideseek.look.1",
+      "part": "samet › hideseek › look",
+      "when": "",
+      "ms": 1056,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        63.92,
+        64.91
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "look",
+        "2"
+      ],
+      "text": "Hmm, where is she?",
+      "voice": "nick",
+      "key": "samet.hideseek.look.2",
+      "part": "samet › hideseek › look",
+      "when": "",
+      "ms": 1584,
+      "flags": [],
+      "span": [
+        65.28,
+        66.77
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "mommy"
+      ],
+      "text": "Behind Mommy?",
+      "voice": "nick",
+      "key": "samet.hideseek.mommy",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 1224,
+      "flags": [],
+      "span": [
+        68.42,
+        69.57
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "wrongWay"
+      ],
+      "text": "Hmm... not here!",
+      "voice": "nick",
+      "key": "samet.hideseek.wrongWay",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 2904,
+      "flags": [],
+      "span": [
+        69.95,
+        72.66
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "giveUp"
+      ],
+      "text": "Where is she? I give up!",
+      "voice": "nick",
+      "key": "samet.hideseek.giveUp",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 2088,
+      "flags": [],
+      "span": [
+        73.05,
+        75
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "win"
+      ],
+      "text": "You win! Super hider!",
+      "voice": "nick",
+      "key": "samet.hideseek.win",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 2496,
+      "flags": [],
+      "span": [
+        75.37,
+        77.71
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "first"
+      ],
+      "text": "Kaylee wins hide and seek!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.first",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 1824,
+      "flags": [
+        "name"
+      ],
+      "span": [
+        78.09,
+        79.79
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "spotted",
+        "0"
+      ],
+      "text": "Found you!",
+      "voice": "nick",
+      "key": "samet.hideseek.spotted.0",
+      "part": "samet › hideseek › spotted",
+      "when": "",
+      "ms": 1032,
+      "flags": [],
+      "span": [
+        81.46,
+        82.42
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "spotted",
+        "1"
+      ],
+      "text": "Peekaboo! I see you!",
+      "voice": "nick",
+      "key": "samet.hideseek.spotted.1",
+      "part": "samet › hideseek › spotted",
+      "when": "",
+      "ms": 2016,
+      "flags": [],
+      "span": [
+        82.8,
+        84.68
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "boo"
+      ],
+      "text": "Waah! You scared me!",
+      "voice": "nick",
+      "key": "samet.hideseek.boo",
+      "part": "samet › hideseek",
+      "when": "",
+      "ms": 2616,
+      "flags": [],
+      "span": [
+        86.34,
+        88.79
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "hint",
+        "seek"
+      ],
+      "text": "Where is Daddy? Listen!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.hint.seek",
+      "part": "samet › hideseek › hint",
+      "when": "",
+      "ms": 3312,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        90.45,
+        93.54
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "hideseek",
+        "hint",
+        "hide"
+      ],
+      "text": "Walk to a hiding place!",
+      "voice": "sparkle",
+      "key": "samet.hideseek.hint.hide",
+      "part": "samet › hideseek › hint",
+      "when": "",
+      "ms": 2016,
+      "flags": [],
+      "span": [
+        93.92,
+        95.81
+      ]
+    }
+  ]
+}

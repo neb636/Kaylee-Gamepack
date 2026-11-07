@@ -1,0 +1,965 @@
+{
+  "kind": "table-read",
+  "place": "thailand",
+  "group": "samet.finale",
+  "title": "Thailand › Samet › Finale",
+  "intro": "The finale (finale/): the sunset at the driftwood tree, then the fire show on Sai Kaew.",
+  "page": "thailand-samet-finale.html",
+  "audio": "thailand-samet-finale.mp3",
+  "lines": 45,
+  "seconds": 93,
+  "missing": 0,
+  "names": 1,
+  "flags": [
+    {
+      "key": "samet.finale.sunset.pull",
+      "text": "Pull the sun down into the sea!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.finale.sunset.west",
+      "text": "The sun always sets in the west!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.finale.sunset.hint.pull",
+      "text": "Pull the sun down into the sea!",
+      "flags": [
+        "twice"
+      ]
+    },
+    {
+      "key": "samet.finale.fire.twirl",
+      "text": "Swirl your lights with your finger!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.finale.fire.grownups",
+      "text": "Fire is for grown-ups. Yours are lights!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.finale.fire.loops",
+      "text": "Swirl a loop! Something is coming!",
+      "flags": [
+        "long"
+      ]
+    },
+    {
+      "key": "samet.finale.fire.hint.twirl",
+      "text": "Swirl your finger in the sky!",
+      "flags": [
+        "long"
+      ]
+    }
+  ],
+  "script": [
+    {
+      "path": [
+        "samet",
+        "finale",
+        "sunset",
+        "look"
+      ],
+      "text": "Look! The sun is going to sleep!",
+      "voice": "nick",
+      "key": "samet.finale.sunset.look",
+      "part": "samet › finale › sunset",
+      "when": "The sunset (finale/sunset.ts): Daddy as it opens, Sparkle's one instruction, the fact the first time she taps the sun, Mommy's photo (when she taps Mommy, or by herself as the sun touches the sea), the plop, the night.",
+      "ms": 2640,
+      "flags": [],
+      "span": [
+        0,
+        2.51
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "sunset",
+        "pull"
+      ],
+      "text": "Pull the sun down into the sea!",
+      "voice": "sparkle",
+      "key": "samet.finale.sunset.pull",
+      "part": "samet › finale › sunset",
+      "when": "The sunset (finale/sunset.ts): Daddy as it opens, Sparkle's one instruction, the fact the first time she taps the sun, Mommy's photo (when she taps Mommy, or by herself as the sun touches the sea), the plop, the night.",
+      "ms": 2376,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        2.9,
+        5.15
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "sunset",
+        "west"
+      ],
+      "text": "The sun always sets in the west!",
+      "voice": "sparkle",
+      "key": "samet.finale.sunset.west",
+      "part": "samet › finale › sunset",
+      "when": "The sunset (finale/sunset.ts): Daddy as it opens, Sparkle's one instruction, the fact the first time she taps the sun, Mommy's photo (when she taps Mommy, or by herself as the sun touches the sea), the plop, the night.",
+      "ms": 3024,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        5.54,
+        8.42
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "sunset",
+        "photo"
+      ],
+      "text": "Sunset photo! Smile!",
+      "voice": "ji",
+      "key": "samet.finale.sunset.photo",
+      "part": "samet › finale › sunset",
+      "when": "The sunset (finale/sunset.ts): Daddy as it opens, Sparkle's one instruction, the fact the first time she taps the sun, Mommy's photo (when she taps Mommy, or by herself as the sun touches the sea), the plop, the night.",
+      "ms": 2064,
+      "flags": [],
+      "span": [
+        8.8,
+        10.77
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "sunset",
+        "plop"
+      ],
+      "text": "Plop! Into the sea!",
+      "voice": "nick",
+      "key": "samet.finale.sunset.plop",
+      "part": "samet › finale › sunset",
+      "when": "The sunset (finale/sunset.ts): Daddy as it opens, Sparkle's one instruction, the fact the first time she taps the sun, Mommy's photo (when she taps Mommy, or by herself as the sun touches the sea), the plop, the night.",
+      "ms": 2208,
+      "flags": [],
+      "span": [
+        11.16,
+        13.25
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "sunset",
+        "night"
+      ],
+      "text": "Fire show time!",
+      "voice": "nick",
+      "key": "samet.finale.sunset.night",
+      "part": "samet › finale › sunset",
+      "when": "The sunset (finale/sunset.ts): Daddy as it opens, Sparkle's one instruction, the fact the first time she taps the sun, Mommy's photo (when she taps Mommy, or by herself as the sun touches the sea), the plop, the night.",
+      "ms": 1440,
+      "flags": [],
+      "span": [
+        13.64,
+        15.01
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "sunset",
+        "tap",
+        "0"
+      ],
+      "text": "So pretty!",
+      "voice": "nick",
+      "key": "samet.finale.sunset.tap.0",
+      "part": "samet › finale › sunset › tap",
+      "when": "Tap Daddy (in turn).",
+      "ms": 912,
+      "flags": [],
+      "span": [
+        16.7,
+        17.56
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "sunset",
+        "tap",
+        "1"
+      ],
+      "text": "Bye bye, sun!",
+      "voice": "nick",
+      "key": "samet.finale.sunset.tap.1",
+      "part": "samet › finale › sunset › tap",
+      "when": "",
+      "ms": 1632,
+      "flags": [],
+      "span": [
+        17.95,
+        19.5
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "sunset",
+        "tap",
+        "2"
+      ],
+      "text": "Ooh, the stars!",
+      "voice": "nick",
+      "key": "samet.finale.sunset.tap.2",
+      "part": "samet › finale › sunset › tap",
+      "when": "",
+      "ms": 2304,
+      "flags": [],
+      "span": [
+        19.89,
+        22.08
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "sunset",
+        "hint",
+        "pull"
+      ],
+      "text": "Pull the sun down into the sea!",
+      "voice": "sparkle",
+      "key": "samet.finale.sunset.hint.pull",
+      "part": "samet › finale › sunset › hint",
+      "when": "Sparkle, after a while with nothing done (spendHint).",
+      "ms": 2376,
+      "flags": [
+        "twice"
+      ],
+      "span": [
+        23.77,
+        26.02
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "sunset",
+        "hint",
+        "fire"
+      ],
+      "text": "Tap the fire for the show!",
+      "voice": "sparkle",
+      "key": "samet.finale.sunset.hint.fire",
+      "part": "samet › finale › sunset › hint",
+      "when": "",
+      "ms": 2088,
+      "flags": [],
+      "span": [
+        26.41,
+        28.39
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "look"
+      ],
+      "text": "Look! Fire dancers!",
+      "voice": "ji",
+      "key": "samet.finale.fire.look",
+      "part": "samet › finale › fire",
+      "when": "The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.",
+      "ms": 2352,
+      "flags": [],
+      "span": [
+        30.09,
+        32.32
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "twirl"
+      ],
+      "text": "Swirl your lights with your finger!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.twirl",
+      "part": "samet › finale › fire",
+      "when": "The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.",
+      "ms": 3072,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        32.71,
+        35.63
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "grownups"
+      ],
+      "text": "Fire is for grown-ups. Yours are lights!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.grownups",
+      "part": "samet › finale › fire",
+      "when": "Once, the first time the dancers answer her with a ring of fire.",
+      "ms": 4104,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        36.02,
+        39.91
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "big",
+        "0"
+      ],
+      "text": "Whoa! Big circle!",
+      "voice": "gecko",
+      "key": "samet.finale.fire.big.0",
+      "part": "samet › finale › fire › big",
+      "when": "Big loops of hers (in turn, now and then).",
+      "ms": 2064,
+      "flags": [],
+      "span": [
+        41.6,
+        43.56
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "big",
+        "1"
+      ],
+      "text": "Faster! Faster!",
+      "voice": "gecko",
+      "key": "samet.finale.fire.big.1",
+      "part": "samet › finale › fire › big",
+      "when": "",
+      "ms": 1872,
+      "flags": [],
+      "span": [
+        43.95,
+        45.73
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "big",
+        "2"
+      ],
+      "text": "Wow! You are good!",
+      "voice": "gecko",
+      "key": "samet.finale.fire.big.2",
+      "part": "samet › finale › fire › big",
+      "when": "",
+      "ms": 2208,
+      "flags": [],
+      "span": [
+        46.12,
+        48.22
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "watch"
+      ],
+      "text": "Watch us! Now you!",
+      "voice": "gecko",
+      "key": "samet.finale.fire.watch",
+      "part": "samet › finale › fire",
+      "when": "The shapes: they draw one in fire, then it's her turn; each one lifting off (circle, star, heart, in order).",
+      "ms": 2112,
+      "flags": [],
+      "span": [
+        49.9,
+        51.9
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "dots"
+      ],
+      "text": "Draw over the dots!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.dots",
+      "part": "samet › finale › fire",
+      "when": "The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.",
+      "ms": 2280,
+      "flags": [],
+      "span": [
+        52.29,
+        54.46
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "shapes",
+        "0"
+      ],
+      "text": "A circle!",
+      "voice": "gecko",
+      "key": "samet.finale.fire.shapes.0",
+      "part": "samet › finale › fire › shapes",
+      "when": "The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.",
+      "ms": 672,
+      "flags": [],
+      "span": [
+        56.15,
+        56.79
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "shapes",
+        "1"
+      ],
+      "text": "A star!",
+      "voice": "gecko",
+      "key": "samet.finale.fire.shapes.1",
+      "part": "samet › finale › fire › shapes",
+      "when": "",
+      "ms": 888,
+      "flags": [],
+      "span": [
+        57.18,
+        58.02
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "shapes",
+        "2"
+      ],
+      "text": "A heart!",
+      "voice": "gecko",
+      "key": "samet.finale.fire.shapes.2",
+      "part": "samet › finale › fire › shapes",
+      "when": "",
+      "ms": 984,
+      "flags": [],
+      "span": [
+        58.4,
+        59.35
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "lantern"
+      ],
+      "text": "It floats up like a lantern!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.lantern",
+      "part": "samet › finale › fire",
+      "when": "The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.",
+      "ms": 2568,
+      "flags": [],
+      "span": [
+        61.03,
+        63.47
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "loops"
+      ],
+      "text": "Swirl a loop! Something is coming!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.loops",
+      "part": "samet › finale › fire",
+      "when": "The finish: Sparkle's line, each flag's surprise, the big ring, the ring of fire, the fireworks.",
+      "ms": 3168,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        63.86,
+        66.87
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "gift",
+        "jetski"
+      ],
+      "text": "Woo hoo! Lights on!",
+      "voice": "otter",
+      "key": "samet.finale.fire.gift.jetski",
+      "part": "samet › finale › fire › gift",
+      "when": "",
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        68.55,
+        70.63
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "gift",
+        "sandcastle"
+      ],
+      "text": "Your sandcastle is glowing!",
+      "voice": "ji",
+      "key": "samet.finale.fire.gift.sandcastle",
+      "part": "samet › finale › fire › gift",
+      "when": "",
+      "ms": 2592,
+      "flags": [],
+      "span": [
+        71.02,
+        73.49
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "gift",
+        "snorkel"
+      ],
+      "text": "The fish are glowing!",
+      "voice": "nick",
+      "key": "samet.finale.fire.gift.snorkel",
+      "part": "samet › finale › fire › gift",
+      "when": "",
+      "ms": 2184,
+      "flags": [],
+      "span": [
+        73.88,
+        75.95
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "gift",
+        "hideseek"
+      ],
+      "text": "Daddy can dance too!",
+      "voice": "nick",
+      "key": "samet.finale.fire.gift.hideseek",
+      "part": "samet › finale › fire › gift",
+      "when": "",
+      "ms": 2016,
+      "flags": [],
+      "span": [
+        76.34,
+        78.25
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "giant"
+      ],
+      "text": "Now one giant circle!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.giant",
+      "part": "samet › finale › fire",
+      "when": "The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.",
+      "ms": 2808,
+      "flags": [],
+      "span": [
+        79.94,
+        82.61
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "ring"
+      ],
+      "text": "Ring of fire!",
+      "voice": "gecko",
+      "key": "samet.finale.fire.ring",
+      "part": "samet › finale › fire",
+      "when": "The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.",
+      "ms": 2016,
+      "flags": [],
+      "span": [
+        83,
+        84.91
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "wow"
+      ],
+      "text": "Kaylee, what a show!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.wow",
+      "part": "samet › finale › fire",
+      "when": "The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.",
+      "ms": 2208,
+      "flags": [
+        "name"
+      ],
+      "span": [
+        85.3,
+        87.4
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "home"
+      ],
+      "text": "Time to go home!",
+      "voice": "ji",
+      "key": "samet.finale.fire.home",
+      "part": "samet › finale › fire",
+      "when": "The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.",
+      "ms": 1752,
+      "flags": [],
+      "span": [
+        87.79,
+        89.45
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "dancer",
+        "0"
+      ],
+      "text": "Sawasdee!",
+      "voice": "gecko",
+      "key": "samet.finale.fire.dancer.0",
+      "part": "samet › finale › fire › dancer",
+      "when": "Tap a dancer, Mommy, Daddy (each in turn).",
+      "ms": 1080,
+      "flags": [],
+      "span": [
+        91.13,
+        92.16
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "dancer",
+        "1"
+      ],
+      "text": "Tukkae! Tukkae!",
+      "voice": "gecko",
+      "key": "samet.finale.fire.dancer.1",
+      "part": "samet › finale › fire › dancer",
+      "when": "",
+      "ms": 1800,
+      "flags": [],
+      "span": [
+        92.55,
+        94.26
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "dancer",
+        "2"
+      ],
+      "text": "Hot, hot fire!",
+      "voice": "gecko",
+      "key": "samet.finale.fire.dancer.2",
+      "part": "samet › finale › fire › dancer",
+      "when": "",
+      "ms": 1896,
+      "flags": [],
+      "span": [
+        94.65,
+        96.45
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "jiTap",
+        "0"
+      ],
+      "text": "So beautiful!",
+      "voice": "ji",
+      "key": "samet.finale.fire.jiTap.0",
+      "part": "samet › finale › fire › jiTap",
+      "when": "The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.",
+      "ms": 1560,
+      "flags": [],
+      "span": [
+        98.14,
+        99.62
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "jiTap",
+        "1"
+      ],
+      "text": "My little fire dancer!",
+      "voice": "ji",
+      "key": "samet.finale.fire.jiTap.1",
+      "part": "samet › finale › fire › jiTap",
+      "when": "",
+      "ms": 2064,
+      "flags": [],
+      "span": [
+        100.01,
+        101.97
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "nickTap",
+        "0"
+      ],
+      "text": "Twirl, twirl!",
+      "voice": "nick",
+      "key": "samet.finale.fire.nickTap.0",
+      "part": "samet › finale › fire › nickTap",
+      "when": "The fire show (finale/fireshow.ts): Mommy as it opens, then Sparkle; the gecko fire dancers (one voice) cheer and show off; each pink flag's surprise in the finish gets its friend's line; the big finish is a big moment.",
+      "ms": 1896,
+      "flags": [],
+      "span": [
+        103.66,
+        105.46
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "nickTap",
+        "1"
+      ],
+      "text": "Wow!",
+      "voice": "nick",
+      "key": "samet.finale.fire.nickTap.1",
+      "part": "samet › finale › fire › nickTap",
+      "when": "",
+      "ms": 696,
+      "flags": [],
+      "span": [
+        105.84,
+        106.51
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "nickTap",
+        "2"
+      ],
+      "text": "Do a big one!",
+      "voice": "nick",
+      "key": "samet.finale.fire.nickTap.2",
+      "part": "samet › finale › fire › nickTap",
+      "when": "",
+      "ms": 1368,
+      "flags": [],
+      "span": [
+        106.9,
+        108.2
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "hint",
+        "twirl"
+      ],
+      "text": "Swirl your finger in the sky!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.hint.twirl",
+      "part": "samet › finale › fire › hint",
+      "when": "Sparkle, after a while with nothing done (spendHint).",
+      "ms": 3072,
+      "flags": [
+        "long"
+      ],
+      "span": [
+        109.88,
+        112.8
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "hint",
+        "dots"
+      ],
+      "text": "Follow the dots with your finger!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.hint.dots",
+      "part": "samet › finale › fire › hint",
+      "when": "",
+      "ms": 2328,
+      "flags": [],
+      "span": [
+        113.19,
+        115.4
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "hint",
+        "loops"
+      ],
+      "text": "Swirl a loop!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.hint.loops",
+      "part": "samet › finale › fire › hint",
+      "when": "",
+      "ms": 1512,
+      "flags": [],
+      "span": [
+        115.79,
+        117.23
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "hint",
+        "giant"
+      ],
+      "text": "Draw one giant circle!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.hint.giant",
+      "part": "samet › finale › fire › hint",
+      "when": "",
+      "ms": 2592,
+      "flags": [],
+      "span": [
+        117.62,
+        120.08
+      ]
+    },
+    {
+      "path": [
+        "samet",
+        "finale",
+        "fire",
+        "hint",
+        "sky"
+      ],
+      "text": "Tap the sky for fireworks!",
+      "voice": "sparkle",
+      "key": "samet.finale.fire.hint.sky",
+      "part": "samet › finale › fire › hint",
+      "when": "",
+      "ms": 2136,
+      "flags": [],
+      "span": [
+        120.47,
+        122.49
+      ]
+    }
+  ]
+}
