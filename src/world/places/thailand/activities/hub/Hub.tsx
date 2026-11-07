@@ -24,6 +24,7 @@ import { WARDROBE_ANCHORS, WardrobePlugin } from './wardrobe/plugin'
 import { isTableSection, type CousinId, type GameId, type UnicornColor } from './board-games/list'
 import { TABLE_ANCHORS, TablePlugin, type TableStart, type TableView } from './board-games/plugin'
 import { clampPos, parseRolls } from './board-games/rules/turns'
+import { parseDeck } from './board-games/rules/candy'
 import { TableUI } from './board-games/TableUI'
 
 // Per visit to the app: the tuk-tuk brings her the first time; after that she's back where she left off.
@@ -69,6 +70,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
           them: clampPos(param('them'), 99),
           turn: param('turn') === 'cousin' ? 1 : 0,
           rolls: parseRolls(param('rolls')),
+          deck: parseDeck(param('deck')),
         }
       : undefined,
   )
@@ -114,7 +116,7 @@ export function Hub({ meta, stamps, openActivity }: PlaceProps) {
   const tableState = (v: TableView | undefined | null): Record<string, string> => {
     if (!v) return tableStart ? { vs: tableStart.vs } : {}
     if (v.picking) return { vs: v.vs, game: v.game }
-    return { vs: v.vs, ...(v.game === 'unicorn' ? { piece: v.piece } : {}), me: String(v.pos[0]), them: String(v.pos[1]), turn: v.turn === 0 ? 'kaylee' : 'cousin', ...(v.rolls.length ? { rolls: v.rolls.join(',') } : {}) }
+    return { vs: v.vs, ...(v.game === 'unicorn' ? { piece: v.piece } : {}), me: String(v.pos[0]), them: String(v.pos[1]), turn: v.turn === 0 ? 'kaylee' : 'cousin', ...(v.rolls.length ? { rolls: v.rolls.join(',') } : {}), ...(v.deck.length ? { deck: v.deck.join(',') } : {}) }
   }
   const onTable = (v: TableView) => {
     const was = playingRef.current

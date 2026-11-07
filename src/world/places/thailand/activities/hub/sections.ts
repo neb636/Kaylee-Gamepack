@@ -25,6 +25,7 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
     them: { default: '0', doc: "the game table: where the cousin's piece starts (0 = before space 1)" },
     turn: { default: 'kaylee', values: ['kaylee', 'cousin'], doc: 'the game table: whose turn comes first from this state' },
     rolls: { default: '', doc: 'the game table: the next die results in order (e.g. 4,3,2), then random' },
+    deck: { default: '', doc: 'Candy Land: the draw pile exactly, top first (green, blue2: a 2 is a double), then the discards reshuffled' },
     who: {
       default: '',
       doc: 'the family photo with one person alone, turning slowly: kaylee, agong, ji, nick, jum, joy, bird, ja, sri, gan, ken, bb, putto, putter',
@@ -50,6 +51,20 @@ const HUB_SECTIONS = defineSections('thailand', HUB, {
         { label: 'Midgame with Gan', params: { vs: 'gan', me: '12', them: '14' } },
         { label: 'She is on 22 and rolls a 6: into the castle, she wins', params: { me: '22', them: '20', rolls: '6' } },
         { label: "BB's turn on 23: she rolls a 2 and wins (a kind loss, Again!)", params: { me: '20', them: '23', turn: 'cousin', rolls: '2' } },
+      ],
+    },
+    {
+      id: 'candy',
+      name: 'Candy Land',
+      params: ['vs', 'me', 'them', 'turn', 'deck'],
+      group: 'The game table (in the works: its games open from these links only)',
+      links: [
+        { label: 'Candy Land with BB, from the start', also: [{ label: 'Gan', params: { vs: 'gan' } }, { label: 'Ken', params: { vs: 'ken' } }] },
+        { label: 'A single green card: to the next green space', params: { me: '10', them: '8', deck: 'green' } },
+        { label: 'A double blue card: to the second blue space', params: { me: '10', them: '8', deck: 'blue2' } },
+        { label: 'A double orange near the end with one orange left: to the cupcake house, she wins', params: { me: '31', them: '28', deck: 'orange2' } },
+        { label: 'A two-card deck runs out: the third draw reshuffles the discards', params: { me: '4', them: '4', deck: 'pink,yellow' } },
+        { label: 'Midgame with Ken', params: { vs: 'ken', me: '14', them: '17' } },
       ],
     },
   ],

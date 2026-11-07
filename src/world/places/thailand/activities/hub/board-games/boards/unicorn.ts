@@ -70,6 +70,8 @@ export class UnicornBoard {
     return this.castle.position.clone().setY(BOARD.thick + 0.12)
   }
 
+  /** (Candy Land marks the space a card sends a piece to; the die games don't.) */
+  markSpace(_i: number | null) {}
   /** The towers bounce and light up (a win, or a tap). */
   cheer() {
     this.castleT = 0
@@ -79,7 +81,7 @@ export class UnicornBoard {
     return this.castleT >= 0
   }
 
-  update(dt: number) {
+  update(dt: number, _t = 0) {
     if (this.castleT < 0) return
     this.castleT += dt / 0.9
     const p = Math.min(1, this.castleT)

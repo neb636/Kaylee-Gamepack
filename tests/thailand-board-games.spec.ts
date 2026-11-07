@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { makeDie, parseRolls, startTurns } from '../src/world/places/thailand/activities/hub/board-games/rules/turns'
 import { UNICORN_END, unicornRoll } from '../src/world/places/thailand/activities/hub/board-games/rules/unicorn'
+import { CANDY_FINISH, candyDraw, colorOf, destination, fullDeck, newDeck, parseDeck } from '../src/world/places/thailand/activities/hub/board-games/rules/candy'
 
 // The game table in Kaylee's room (planning/around-the-world/thailand/game-table.html). The rules are pure, so most of
 // this runs without a page: Kaylee's Unicorn Dice Game exactly as she agreed to it. The page tests check that a turn
@@ -76,6 +77,65 @@ test.describe("Kaylee's Unicorn Dice Game rules", () => {
   })
 })
 
+test.describe('Candy Land rules', () => {
+  test('the path repeats six colors in order, and the deck has 24 cards: 3 singles and 1 double of each', () => {
+    expect([1, 2, 3, 4, 5, 6, 7, 36].map(colorOf)).toEqual(['pink', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'purple'])
+    const deck = fullDeck()
+    expect(deck).toHaveLength(24)
+    for (const c of ['pink', 'orange', 'yellow', 'green', 'blue', 'purple']) {
+      expect(deck.filter((d) => d.color === c && !d.double)).toHaveLength(3)
+      expect(deck.filter((d) => d.color === c && d.double)).toHaveLength(1)
+    }
+  })
+
+  test('one color goes to the next space of it, two to the second, from the start too', () => {
+    expect(destination(10, { color: 'green', double: false })).toBe(16)
+    expect(destination(10, { color: 'blue', double: true })).toBe(17)
+    expect(destination(0, { color: 'pink', double: false })).toBe(1)
+    expect(destination(0, { color: 'pink', double: true })).toBe(7)
+    // The same color as the space it's on: the next one along, never staying put.
+    expect(destination(4, { color: 'green', double: false })).toBe(10)
+  })
+
+  test('too few of the color left goes all the way to the finish, and that wins', () => {
+    expect(destination(31, { color: 'orange', double: true })).toBe(CANDY_FINISH)
+    expect(destination(35, { color: 'pink', double: false })).toBe(CANDY_FINISH)
+    const r = candyDraw(startTurns(31, 28, 0), newDeck(parseDeck('orange2')))
+    expect(r.state.pos[0]).toBe(CANDY_FINISH)
+    expect(r.state.winner).toBe(0)
+    expect(r.steps.map((x) => x.kind)).toEqual(['draw', 'move', 'win'])
+    expect(candyDraw(r.state, r.deck).steps).toEqual([])
+  })
+
+  test('turns alternate, and a deck that runs out shuffles its discards back in', () => {
+    let s = startTurns(4, 4, 0)
+    let deck = newDeck(parseDeck('pink,yellow'))
+    let r = candyDraw(s, deck)
+    expect(r.state.pos).toEqual([7, 4])
+    expect(r.state.turn).toBe(1)
+    r = candyDraw(r.state, r.deck)
+    expect(r.state.pos).toEqual([7, 9])
+    expect(r.deck).toEqual({ draw: [], discard: [{ color: 'pink', double: false }, { color: 'yellow', double: false }] })
+    r = candyDraw(r.state, r.deck, () => 0)
+    expect(r.steps[0]).toEqual({ kind: 'reshuffle' })
+    expect(r.deck.draw.length + r.deck.discard.length).toBe(2)
+    expect(r.deck.discard).toHaveLength(1)
+    // A whole game with a real deck always ends with one winner, the cards never lost.
+    for (let g = 0; g < 200; g++) {
+      s = startTurns()
+      deck = newDeck()
+      let n = 0
+      while (s.winner === null && n++ < 400) {
+        const m = candyDraw(s, deck)
+        s = m.state
+        deck = m.deck
+        expect(deck.draw.length + deck.discard.length).toBe(24)
+      }
+      expect(s.winner).not.toBeNull()
+    }
+  })
+})
+
 async function open(page: Page, hash: string) {
   await page.goto(`./${hash}`)
   await page.getByRole('button', { name: /let's play/i }).click()
@@ -91,6 +151,15 @@ test.describe('the game table', () => {
     const die = page.getByRole('button', { name: 'Die', exact: true })
     for (let i = 0; i < 5; i++) await die.click({ force: true })
     await expect.poll(() => table(page), { timeout: 20000 }).toMatchObject({ phase: 'awaiting', turn: 'kaylee', me: 7, them: 12 })
+  })
+
+  test('Candy Land: a tap draws one card, it shows big, and the piece goes to that color', async ({ page }) => {
+    test.setTimeout(90000)
+    await open(page, '#/world/thailand/hub/candy?me=10&them=8&deck=green,blue2')
+    const deck = page.getByRole('button', { name: 'Cards', exact: true })
+    for (let i = 0; i < 3; i++) await deck.click({ force: true })
+    await expect(page.getByRole('img', { name: 'green card' })).toBeVisible({ timeout: 20000 })
+    await expect.poll(() => table(page), { timeout: 60000 }).toMatchObject({ phase: 'awaiting', turn: 'kaylee', me: 16, them: 17 })
   })
 
   test('Again during the cousin turn starts a clean game, and leaving mid-move puts everyone back', async ({ page }) => {

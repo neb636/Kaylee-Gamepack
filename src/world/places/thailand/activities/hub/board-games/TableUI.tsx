@@ -3,8 +3,9 @@
 // turn it is grows and glows), 🎲 back to the games and 👋 to get up, and a big 🔁 when someone has won. No words to
 // read: pictures, faces and big targets (var(--target): 96 px on iPad, 72 px on a short iPhone).
 import { AnimatePresence, motion } from 'motion/react'
-import type { CSSProperties, MutableRefObject } from 'react'
+import { useMemo, type CSSProperties, type MutableRefObject } from 'react'
 import { sounds, useLandscape } from '../../../../../../sdk'
+import { faceCanvas } from './deck'
 import { UNICORN_HEX } from './pieces'
 import { COUSINS, GAMES, UNICORNS, type CousinId } from './list'
 import type { TablePlugin, TableView } from './plugin'
@@ -71,6 +72,8 @@ export function TableUI({ view, table }: { view: TableView; table: MutableRefObj
               <Face who={view.seated} size={size} active={view.phase !== 'finished' && view.turn === 1} crown={view.winner === 1} />
             </div>
           )}
+          {/* Candy Land: the card just drawn, big over the table, while its piece goes. */}
+          <AnimatePresence>{view.card && <BigCard key={view.card + view.turn} token={view.card} />}</AnimatePresence>
           <AnimatePresence>
             {view.phase === 'finished' && (
               <motion.button
@@ -172,5 +175,20 @@ function Picker({ view, table }: { view: TableView; table: MutableRefObject<Tabl
         </motion.button>
       </div>
     </motion.div>
+  )
+}
+
+function BigCard({ token }: { token: string }) {
+  const src = useMemo(() => faceCanvas(token).toDataURL(), [token])
+  return (
+    <motion.img
+      src={src}
+      alt={`${token.replace('2', ' double')} card`}
+      initial={{ scale: 0.3, rotateY: 180, opacity: 0 }}
+      animate={{ scale: 1, rotateY: 0, opacity: 1 }}
+      exit={{ scale: 0.4, opacity: 0, y: 40 }}
+      transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+      style={{ position: 'absolute', left: '50%', top: 'var(--bar-clear)', translate: '-50% 0', width: 'min(36vw, 36vh, 240px)', borderRadius: 18, border: '6px solid #fff', boxShadow: 'var(--shadow)', zIndex: 35, pointerEvents: 'none' }}
+    />
   )
 }
