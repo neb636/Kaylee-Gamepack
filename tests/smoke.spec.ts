@@ -178,8 +178,11 @@ for (const id of placeIds) {
     await page.evaluate(() => window.__kayleeWorld?.stampAll())
     await page.reload()
     await page.getByRole('button', { name: /let's play/i }).click()
-    await expect(page.getByRole('button', { name: 'Party' })).toBeVisible()
-    await page.getByRole('button', { name: 'Party' }).click({ force: true })
+    // The finale's button: "Party" on most maps; on the 3D ones it's named for the place (Canada's Pond Hockey pin,
+    // the Poles' "Pole to Pole" spot), so find it by its activity id there.
+    const finale = page.locator('button[aria-label="Party"], button[data-anchor="go:party"], button[data-activity="party"]').first()
+    await expect(finale).toBeAttached()
+    await finale.click({ force: true })
     await expect(page.getByRole('button', { name: 'Back to the map' })).toBeVisible()
 
     await page.evaluate(() => window.__kaylee?.win())
